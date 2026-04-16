@@ -1,0 +1,20 @@
+{
+  "/api/v1/legislation/{id}": {
+    "get": {
+      "operationId": "get-legislation",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "in": "path",
+          "default": null,
+          "required": true,
+          "descriptions": {
+            "de": "The unique identifier (`@id`) of a legislation.",
+            "en": "The unique identifier (`@id`) of a legislation."
+          }
+        }
+      ]
+    }
+  }
+}

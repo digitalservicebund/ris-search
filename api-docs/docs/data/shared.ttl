@@ -1,0 +1,9 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix recht: <http://example.com/ns/1.0#> .
+@prefix schema: <http://schema.org/> .
+
+recht:TocEntry a rdfs:Class ;
+  rdfs:label "Table of contents entry"@en ;
+  rdfs:comment "Represents an item within a table of contents of a document."@en ;
+  rdfs:subClassOf schema:CreativeWork .

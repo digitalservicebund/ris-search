@@ -1,0 +1,57 @@
+.link-anchor {
+  @apply relative;
+  @apply text-brand-primary;
+}
+
+.header-anchor,
+.link-anchor:before {
+  @apply absolute;
+  @apply px-6;
+  @apply bg-background-primary border border-gray-300;
+  @apply rounded-full;
+  @apply opacity-0;
+  top: 50%;
+  left: -1.75rem;
+  height: 1.75rem;
+  width: 1.75rem;
+  transform: translateY(-50%);
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 75%;
+  background-image: url('data:image/svg+xml,%3Csvg xmlns="http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg" width="24" height="24" viewBox="0 0 24 24"%3E%3Cstyle%3E@media%20(prefers-color-scheme:%20dark)%20%7B%20path%20%7B%20fill:%20white;%20%7D%20%7D%3C/style%3E%3Cpath fill="currentColor" d="M11 17H7q-2.075 0-3.537-1.463T2 12q0-2.075 1.463-3.537T7 7h4v2H7q-1.25 0-2.125.875T4 12q0 1.25.875 2.125T7 15h4zm-3-4v-2h8v2zm5 4v-2h4q1.25 0 2.125-.875T20 12q0-1.25-.875-2.125T17 9h-4V7h4q2.075 0 3.538 1.463T22 12q0 2.075-1.463 3.538T17 17z"%2F%3E%3C%2Fsvg%3E');
+}
+
+.header-anchor:before,
+.link-anchor:before {
+  content: "";
+}
+
+h1:hover .header-anchor,
+h1 .header-anchor:focus,
+h2:hover .header-anchor,
+h2 .header-anchor:focus,
+h3:hover .header-anchor,
+h3 .header-anchor:focus,
+h4:hover .header-anchor,
+h4 .header-anchor:focus,
+h5:hover .header-anchor,
+h5 .header-anchor:focus,
+h6:hover .header-anchor,
+h6 .header-anchor:focus {
+  @apply opacity-100;
+}
+
+.link-anchor:hover:before,
+.link-anchor:focus:before {
+  @apply opacity-100;
+}
+
+/* prevent the navbar from covering visited anchors */
+.prose [id]::before,
+.openapi [id]::before {
+  content: "";
+  display: block;
+  height: 30px;
+  margin-top: -30px;
+  visibility: hidden;
+}

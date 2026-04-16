@@ -1,0 +1,51 @@
+{
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "vitepress dev",
+    "build": "vitepress build",
+    "preview": "vitepress preview"
+  },
+  "devDependencies": {
+    "@digitalservice4germany/angie": "^2.4.0",
+    "@digitalservice4germany/style-dictionary": "^2.0.0",
+    "@frogcat/ttl2jsonld": "^0.0.9",
+    "@iconify-json/ic": "^1.2.4",
+    "@iconify-json/material-symbols": "^1.2.64",
+    "@iconify-json/mdi": "^1.2.3",
+    "@tailwindcss/typography": "0.5.19",
+    "@types/markdown-it": "^14.1.2",
+    "@types/node": "25.5.0",
+    "@vue/tsconfig": "0.9.1",
+    "autoprefixer": "^10.4.27",
+    "deepmerge": "^4.3.1",
+    "dotenv": "17.4.0",
+    "globby": "^16.2.0",
+    "got": "^14.6.6",
+    "markdown-it": "^14.1.1",
+    "postcss": "8.5.8",
+    "svg-sprite": "^2.0.4",
+    "tailwindcss": "3.4.10",
+    "typescript": "6.0.2",
+    "vitepress": "1.6.4"
+  },
+  "dependencies": {
+    "@digitalservicebund/ris-ui": "^2.0.0",
+    "@headlessui/vue": "1.7.23",
+    "posthog-js": "^1.364.6",
+    "primeicons": "^7.0.0",
+    "primevue": "^4.5.4",
+    "unplugin-icons": "23.0.1",
+    "unplugin-vue-components": "^28.8.0",
+    "vitepress-openapi": "0.0.3-alpha.81",
+    "vue": "^3.5.31"
+  },
+  "pnpm": {
+    "overrides": {
+      "esbuild": "0.25.0",
+      "brace-expansion": "2.0.3"
+    }
+  },
+  "packageManager": "pnpm@9.15.0+sha512.76e2379760a4328ec4415815bcd6628dee727af3779aaa4c914e3944156c4299921a89f976381ee107d41f12cfa4b66681ca9c718f0668fa0831ed4c6d8ba56c"
+}

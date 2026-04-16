@@ -1,0 +1,44 @@
+{
+  "@id": "/v1/legislation?pageIndex=0",
+  "@type": "hydra:Collection",
+  "totalItems": 2,
+  "member": [
+    {
+      "@id": "/legislation/d543dd38-01de-4f67-86c0-174c60749f67",
+      "@type": "Legislation",
+      "legislationIdentifier": "eli/bgbl-1/2022/2357",
+      "name": "Gesetz zur Zahlung einer einmaligen Energiepreispauschale für Studierende, ....",
+      "legislationDate": "2022-12-16",
+      "legislationDateVersion": "2022-12-16",
+      "legislationResponsible": "Bundesministerium für Bildung und Forschung",
+      "legislationLegalForce": "InForce",
+      "inLanguage": "de",
+      "alternateName": "Studierenden-Energiepreispauschalengesetz",
+      "abbreviation": "EPPSG",
+      "legislationType": "law",
+      "fna": "2212-8"
+    },
+    {
+      "@id": "/legislation/799928c5-e98c-4737-bbbc-a348207932c7",
+      "@type": "Legislation",
+      "legislationIdentifier": "eli/bgbl-1/2004/1857",
+      "name": "Gesetz über die Erhebung einer Sondersteuer auf alkoholhaltige Süßgetränke (Alkopops) zum Schutz junger Menschen",
+      "legislationDate": "2004-07-23",
+      "legislationDateVersion": "2021-03-30",
+      "legislationResponsible": "Bundesfinanzministerium",
+      "legislationLegalForce": "InForce",
+      "inLanguage": "de",
+      "alternateName": "Alkopopsteuergesetz",
+      "abbreviation": "AlkopopStG",
+      "legislationType": "law",
+      "fna": "612-31"
+    }
+  ],
+  "view": {
+    "@type": "hydra:PartialCollectionView",
+    "first": "/v1/legislation?pageIndex=0",
+    "previous": null,
+    "next": null,
+    "last": "/v1/legislation?pageIndex=0"
+  }
+}

@@ -1,0 +1,559 @@
+@prefix meta: <http://example.com/ns/1.0-meta#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix recht: <http://example.com/ns/1.0#> .
+@prefix schema: <http://schema.org/> .
+
+# TODO: Titelzeile vs. Name? (alternativeHeadline)
+# TODO: Dokumentnummer -> ? (is this needed at all?)
+# TODO: Amtliche Fundstellen und/oder Nichtamtliche Fundstellen -> ?
+# TODO: Sachgebiet und/oder Sachgebiet (neu) -> ?
+# TODO: Gerichtsbarkeit -> ?
+# TODO: Gesetzeskraft/Allgemeinverbindlichkeit -> ?
+# TODO: Streitjahr/Zeitpunkt der Rechtsanwendung -> ?
+# TODO: Problemkreisgliederung Steuerrecht -> ?
+# TODO: Zuordnungen -> ?
+# TODO: <region> -> https://schema.org/spatialCoverage
+# TODO: <vorinstanz> -> ?
+# TODO: <mitwirkung> -> ?
+# TODO: <sonstosatz> -> ?
+# TODO: <sonstlt> (Sonstiger Langtext) -> ?
+# TODO: <coverage> -> ?
+# TODO: <publisher> -> ?
+# TODO: <identifier> -> https://schema.org/url
+# TODO: <accessRights> -> ?
+# NOTE: <titlezeile> -> https://schema.org/name
+recht:Decision a rdfs:Class ;
+  rdfs:label "Decision"@en ;
+  # rdfs:label "Entscheidung"@de ;
+  rdfs:comment "A decision documented by the documentation units of the Federal Government."@en ;
+  # rdfs:comment "Ein Entscheidung welche durch die Dokumentationsstellen des Bundes dokumentiert wurde."@de ;
+  rdfs:subClassOf schema:CreativeWork .
+
+recht:name a rdf:Property ;
+  rdfs:label "name"@en ;
+  rdfs:comment "The name of the decision."@en ;
+  # rdfs:comment "Der Name des Entscheidung."@de ;
+  rdfs:domain recht:Decision ;
+  rdfs:range schema:Text ;
+  rdfs:subPropertyOf schema:name .
+
+recht:encoding a rdf:Property ;
+  rdfs:label "encoding"@en ;
+  rdfs:comment "The payload of the decision in different formats: JSON-LD (default), LegalDocML, plain text, PDF and HTML."@en ;
+  # rdfs:comment "Die Daten der Entscheidung in verschiedenen Formaten: JSON-LD (Standard), LegalDocML, Text, PDF und HTML."@de ;
+  rdfs:domain recht:Decision ;
+  rdfs:subPropertyOf schema:encoding .
+
+recht:keywords a rdf:Property ;
+  rdfs:label "keywords"@en ;
+  # rdfs:label "Schlagwörter"@de ;
+  rdfs:comment "A set of keywords for the decision."@en ;
+  # rdfs:comment "Schlagwörter für die Entscheidung."@de ;
+  rdfs:domain recht:Decision ;
+  rdfs:subPropertyOf schema:keywords .
+
+recht:mentions a rdf:Property ;
+  rdfs:label "mentions"@en ;
+  # rdfs:label "Referenzen"@de ;
+  rdfs:comment "A list of mentions of other documents."@en ;
+  # rdfs:comment "Eine Liste mit Zitierungen von anderen Dokumenten."@de ;
+  rdfs:domain recht:Decision ;
+  rdfs:subPropertyOf schema:mentions .
+
+recht:inLanguage a rdf:Property ;
+  rdfs:label "inLanguage"@en ;
+  # rdfs:label "Sprache"@de ;
+  rdfs:comment "The language of the decision as a [IETF BCP 47 language tag](https://en.wikipedia.org/wiki/IETF_language_tag)."@en ;
+  # rdfs:comment "Die Sprache der Entscheidung als [IETF BCP 47 Code](https://en.wikipedia.org/wiki/IETF_language_tag)."@de ;
+  rdfs:domain recht:Decision ;
+  rdfs:subPropertyOf schema:inLanguage .
+
+recht:decisionBy a rdf:Property ;
+  rdfs:label "decisionBy"@en ;
+  rdfs:comment "The entity that made the decision."@en ;
+  # rdfs:comment "Die Entität welche die Entscheidung getroffen hat."@de ;
+  rdfs:domain recht:Decision .
+
+recht:decisionDate a rdf:Property ;
+  rdfs:label "decisionDate"@en ;
+  rdfs:comment "The date of the decision."@en ;
+  # rdfs:comment "Das Datum der Entscheidung."@de ;
+  rdfs:subPropertyOf schema:dateCreated ;
+  rdfs:domain recht:Decision ;
+  rdfs:range schema:Date .
+
+recht:decisionIdentifier a rdf:Property ;
+  rdfs:label "decisionIdentifier"@en ;
+  rdfs:comment "The offical [European Case Law Identifier (ECLI)](https://en.wikipedia.org/wiki/European_Case_Law_Identifier) of the decision."@en ;
+  # rdfs:comment "Der offizielle [European Case Law Identifier (ECLI)](https://de.wikipedia.org/wiki/European_Case_Law_Identifier) der Entscheidung."@de ;
+  rdfs:domain recht:Decision ;
+  rdfs:range schema:Text .
+
+recht:decisionReference a rdf:Property ;
+  rdfs:label "decisionReference"@en ;
+  # rdfs:label "Aktenzeichen"@de ;
+  rdfs:comment "The offical reference number of the decision."@en ;
+  # rdfs:comment "Das Aktenzeichen der Entscheidung."@de ;
+  rdfs:domain recht:Decision ;
+  rdfs:range schema:Text .
+
+recht:judicialBody a rdf:Property ;
+  rdfs:label "judicialBody"@en ;
+  # rdfs:label "Spruchkörper"@de ;
+  rdfs:comment "The judicial body that made the decision."@en ;
+  # rdfs:comment "Der Spruchkörper eines Gerichts der die Entscheidung gefällt hat."@de ;
+  rdfs:domain recht:Decision ;
+  rdfs:range schema:Text .
+
+# TODO: In schema.org/Legislation they prefix properties with `legislation`. Do we need to do it here as well?
+# At the moment some properties have `decision`, some don't.
+recht:chainOfNorms a rdf:Property ;
+  rdfs:label "chainOfNorms"@en ;
+  # rdfs:label "Normenkette"@de ;
+  rdfs:comment "A list of norms or provisions that are cited or referenced in this decision."@en ;
+  # rdfs:comment "Eine Liste von Normen, die in dieser Entscheidung zitiert werden oder auf die verwiesen wird."@de ;
+  rdfs:domain recht:Decision ;
+  rdfs:subPropertyOf schema:mentions .
+
+recht:legalForce a rdf:Property;
+  rdfs:label "legalForce"@en ;
+  # rdfs:label "Rechtskraft"@de ;
+  rdfs:comment "Indicates if a decision is final and binding."@en ;
+  # rdfs:comment "Gibt an, ob eine Entscheidung rechtskräftig ist."@de ;
+  rdfs:domain recht:Decision ;
+  rdfs:range schema:Boolean .
+
+recht:precedingDecisions a rdf:Property;
+  rdfs:label "precedingDecisions"@en ;
+  # rdfs:label "Vorgehende Entscheidungen"@de ;
+  rdfs:comment "A list of preceding decisions."@en ;
+  # rdfs:comment "Eine Liste von vorgehenden Entscheidungen."@de ;
+  rdfs:domain recht:Decision ;
+  rdfs:range recht:PrecedingDecision .
+
+recht:subsequentDecisions a rdf:Property;
+  rdfs:label "subsequentDecisions"@en ;
+  # rdfs:label "Nachgehende Entscheidungen"@de ;
+  rdfs:comment "A list of subsequent decisions."@en ;
+  # rdfs:comment "Eine Liste von nachgehenden Entscheidungen."@de ;
+  rdfs:domain recht:Decision ;
+  rdfs:range recht:SubsequentDecision .
+
+recht:hasPart a rdf:Property ;
+  rdfs:label "hasPart"@en ;
+  rdfs:comment "The content of a decision."@en ;
+  # rdfs:comment "Der Inhalt einer Entscheidung."@de ;
+  rdfs:domain recht:Decision ;
+  rdfs:range
+    recht:DecisionPartDissentingOpinion,
+    recht:DecisionPartFacts,
+    recht:DecisionPartGroundsOfTheDecision,
+    recht:DecisionPartGroundsOfTheJudgment,
+    recht:DecisionPartGuidingPrinciple,
+    recht:DecisionPartHeadnote,
+    recht:DecisionPartOperativePartOfTheJudgment ,
+    recht:DecisionPartOtherHeadnote;
+  rdfs:subPropertyOf schema:hasPart .
+
+recht:text a rdf:Property ;
+  rdfs:label "text"@en ;
+  rdfs:comment "The textual content of the part of a decision."@en ;
+  # rdfs:comment "Der Textinhalt des Teils einer Entscheidung."@de ;
+  rdfs:domain
+    recht:DecisionPartDissentingOpinion,
+    recht:DecisionPartFacts,
+    recht:DecisionPartGroundsOfTheDecision,
+    recht:DecisionPartGroundsOfTheJudgment,
+    recht:DecisionPartGuidingPrinciple,
+    recht:DecisionPartHeadnote,
+    recht:DecisionPartOperativePartOfTheJudgment ,
+    recht:DecisionPartOtherHeadnote;
+  rdfs:range schema:Text ;
+  rdfs:subPropertyOf schema:text .
+
+recht:DecisionPartGuidingPrinciple a rdfs:Class ;
+  rdfs:label "Guiding Principle"@en ;
+  # rdfs:label "Leitsatz"@de ;
+  rdfs:comment "The guiding principles of the decision."@en ;
+  # rdfs:comment "Der Leitsatz einer Entscheidung."@de ;
+  rdfs:subClassOf schema:CreativeWork .
+
+recht:DecisionPartHeadnote a rdfs:Class ;
+  rdfs:label "Headnote"@en ;
+  # rdfs:label "Orientierungssatz"@de ;
+  rdfs:comment "The headnote of a decision."@en ;
+  # rdfs:comment "Der Orientierungssatz einer Entscheidung."@de ;
+  rdfs:subClassOf schema:CreativeWork .
+
+recht:DecisionPartOtherHeadnote a rdfs:Class ;
+  rdfs:label "Other Headnote"@en ;
+  # rdfs:label "Sonstiger Orientierungssatz"@de ;
+  rdfs:comment "The other headnote of a decision."@en ;
+  # rdfs:comment "Der sonstige Orientierungssatz einer Entscheidung."@de ;
+  rdfs:subClassOf schema:CreativeWork .
+
+recht:DecisionPartOperativePartOfTheJudgment a rdfs:Class ;
+  rdfs:label "Operative Part Of The Judgment"@en ;
+  # rdfs:label "Tenor"@de ;
+  rdfs:comment "The operative part of a decision."@en ;
+  # rdfs:comment "Der Tenor einer Entscheidung."@de ;
+  rdfs:subClassOf schema:CreativeWork .
+
+recht:DecisionPartFacts a rdfs:Class ;
+  rdfs:label "Facts"@en ;
+  # rdfs:label "Tatbestand"@de ;
+  rdfs:comment "The facts of a decision."@en ;
+  # rdfs:comment "Der Tatbestand einer Entscheidung."@de ;
+  rdfs:subClassOf schema:CreativeWork .
+
+recht:DecisionPartGroundsOfTheDecision a rdfs:Class ;
+  rdfs:label "Grounds of the Decision"@en ;
+  # rdfs:label "Entscheidungsgründe"@de ;
+  rdfs:comment "The grounds of the decision."@en ;
+  # rdfs:comment "Die Entscheidungsgründe einer Entscheidung."@de ;
+  rdfs:subClassOf schema:CreativeWork .
+
+recht:DecisionPartGroundsOfTheJudgment a rdfs:Class ;
+  rdfs:label "Grounds Of The Judgment"@en ;
+  # rdfs:label "Gründe"@de ;
+  rdfs:comment "The grounds of the judgment."@en ;
+  # rdfs:comment "Die Gründe eines Urteils."@de ;
+  rdfs:subClassOf schema:CreativeWork .
+
+recht:DecisionPartDissentingOpinion a rdfs:Class ;
+  rdfs:label "Dissenting Opinion"@en ;
+  # rdfs:label "Abweichende Meinung"@de ;
+  rdfs:comment "The dissenting opinion of the decision."@en ;
+  # rdfs:comment "Die Gründe einer Entscheidung."@de ;
+  rdfs:subClassOf schema:CreativeWork .
+
+recht:PrecedingDecision a rdfs:Class ;
+  rdfs:label "Preceding Decisions"@en ;
+  # rdfs:label "Vorhergehende Entscheidung"@de ;
+  rdfs:comment "A preceding decision of another decision."@en ;
+  # rdfs:comment "Eine vorhergehende Entscheidung zu einer anderen Entscheidung."@de ;
+  rdfs:subClassOf recht:Decision .
+
+recht:SubsequentDecision a rdfs:Class ;
+  rdfs:label "Subsequent Decisions"@en ;
+  # rdfs:label "Nachgehende Entscheidung"@de ;
+  rdfs:comment "A subsequent decision of another decision."@en ;
+  # rdfs:comment "Eine Nachgehende Entscheidung zu einer anderen Entscheidung."@de ;
+  rdfs:subClassOf recht:Decision .
+
+recht:isPendingDecision a rdf:Property ;
+  rdfs:label "isPending"@en ;
+  # rdfs:label "anhängig"@de ;
+  rdfs:comment "An indicator of a pending decision."@en ;
+  # rdfs:comment "Ein Indikator für eine anhängige Entscheidung."@de ;
+  rdfs:domain recht:SubsequentDecision ;
+  rdfs:range schema:Boolean .
+
+# TODO: What is this?
+recht:ObjectionInterimOrder a rdfs:Class ;
+  rdfs:label "Objection Interim Order"@en ;
+  # rdfs:label "Ablehnung einstweilige Anordnung"@de ;
+  # rdfs:comment "An objection interim order."@en ;
+  # rdfs:comment "Eine Ablehnung einstweilige Anordnung"@de ;
+  rdfs:subClassOf schema:Decision .
+
+recht:ValueDeterminationInConstitutionalCourtProceedings a rdfs:Class ;
+  rdfs:label "Value Determination In Constitutional Court Proceedings"@en ;
+  # rdfs:label "Gegenstandswertfestsetzung im verfassungsgerichtlichen Verfahren"@de ;
+  # rdfs:comment "A determination of the subject matter value in constitutional court proceedings."@en ;
+  # rdfs:comment "Eine Gegenstandswertfestsetzung im verfassungsgerichtlichen Verfahren."@de ;
+  rdfs:subClassOf schema:Decision .
+
+recht:PendingProceeding a rdfs:Class ;
+  rdfs:label "Pending Proceeding"@en ;
+  # rdfs:label "Anhängiges Verfahren"@de ;
+  # rdfs:comment "A pending proceeding."@en ;
+  # rdfs:comment "Eine anhängiges Verfahren."@de ;
+  rdfs:subClassOf schema:Decision .
+
+recht:ExpertReport a rdfs:Class ;
+  rdfs:label "Expert Report"@en ;
+  # rdfs:label "Gutachten"@de ;
+  # rdfs:comment "An expert report."@en ;
+  # rdfs:comment "Ein Gutachten."@de ;
+  rdfs:subClassOf schema:Decision .
+
+recht:JudgmentByAdmission a rdfs:Class ;
+  rdfs:label "Judgment By Admission"@en ;
+  # rdfs:label "Anerkenntnisurteil"@de ;
+  # rdfs:comment "A judgment by admission."@en ;
+  # rdfs:comment "Eine Anerkenntnisurteil."@de ;
+  rdfs:subClassOf schema:Decision .
+
+# Orders
+recht:InterimOrder a rdfs:Class ;
+  rdfs:label "Interim Order"@en ;
+  # rdfs:label "Einstweilige Anordnung"@de ;
+  # rdfs:comment "An interim order."@en ;
+  # rdfs:comment "Eine einstweilige Anordnung."@de ;
+  rdfs:subClassOf recht:Decision .
+
+# Notices (Bescheid)
+recht:PenaltyNotice a rdfs:Class ;
+  rdfs:label "Penalty Notice"@en ;
+  # rdfs:label "Bußgeldbescheid"@de ;
+  # rdfs:comment "A penalty notice."@en ;
+  # rdfs:comment "Ein Bußgeldbescheid."@de ;
+  rdfs:subClassOf recht:Decision .
+
+# Decisions (Beschlüsse, Entscheidungen)
+recht:Ruling a rdfs:Class ;
+  rdfs:label "Decision"@en ;
+  # rdfs:label "Entscheidung"@de ;
+  # rdfs:comment "A decision."@en ;
+  # rdfs:comment "Eine Entscheidung."@de ;
+  rdfs:subClassOf recht:Decision .
+
+recht:Order a rdfs:Class ;
+  rdfs:label "Order"@en ;
+  # rdfs:label "Beschluss"@de ;
+  # rdfs:comment "An order."@en ;
+  # rdfs:comment "Ein Beschluss."@de ;
+  rdfs:subClassOf schema:Decision .
+
+recht:DisputeValueDecision a rdfs:Class ;
+  rdfs:label "Despute Value Decision"@en ;
+  # rdfs:label "Streitwertbeschluss"@de ;
+  # rdfs:comment "An despute value decision."@en ;
+  # rdfs:comment "Ein Streitwertbeschluss."@de ;
+  rdfs:subClassOf schema:Decision .
+
+recht:ThreeMemberCommitteeDecision a rdfs:Class ;
+  rdfs:label "Three-member Committee Decision"@en ;
+  # rdfs:label "Dreierausschussbeschluss"@de ;
+  # rdfs:comment "A three-member committee decision."@en ;
+  # rdfs:comment "Ein Dreierausschussbeschluss."@de ;
+  rdfs:subClassOf schema:Decision .
+
+recht:InterimDecision a rdfs:Class ;
+  rdfs:label "Interim Decision"@en ;
+  # rdfs:label "Zwischenbeschluss"@de ;
+  # rdfs:comment "An interim decision."@en ;
+  # rdfs:comment "Ein Zwischenbeschluss."@de ;
+  rdfs:subClassOf recht:Decision .
+
+recht:CourtDecision a rdfs:Class ;
+  rdfs:label "Court Decision"@en ;
+  # rdfs:label "Gerichtsbescheid"@de ;
+  # rdfs:comment "A court decision."@en ;
+  # rdfs:comment "Ein Gerichtsbescheid."@de ;
+  rdfs:subClassOf recht:Decision .
+
+recht:InterimCourtDecision a rdfs:Class ;
+  rdfs:label "Interim Court Decision"@en ;
+  # rdfs:label "Zwischengerichtsbescheid"@de ;
+  # rdfs:comment "An interim court decision."@en ;
+  # rdfs:comment "Ein Zwischengerichtsbescheid."@de ;
+  rdfs:subClassOf recht:Decision .
+
+recht:PartialDecision a rdfs:Class ;
+  rdfs:label "Partial Decision"@en ;
+  # rdfs:label "Teilbeschluss"@de ;
+  # rdfs:comment "An partial order."@en ;
+  # rdfs:comment "Ein Teilbeschluss."@de ;
+  rdfs:subClassOf schema:Decision .
+
+recht:ChamberDecision a rdfs:Class ;
+  rdfs:label "Chamber Decision"@en ;
+  # rdfs:label "Kammerbeschluss"@de ;
+  # rdfs:comment "A chamber decision."@en ;
+  # rdfs:comment "Ein Kammerbeschluss."@de ;
+  rdfs:subClassOf recht:Decision .
+
+recht:ChamberDecisionWithoutReasoning a rdfs:Class ;
+  rdfs:label "Chamber Decision Without Reasoning"@en ;
+  # rdfs:label "Kammerbeschluss ohne Begründung"@de ;
+  # rdfs:comment "A chamber decision without reasoning."@en ;
+  # rdfs:comment "Ein Kammerbeschluss ohne Begründung."@de ;
+  rdfs:subClassOf recht:Decision .
+
+recht:AffirmativeChamberDecision a rdfs:Class ;
+  rdfs:label "Affirmative Chamber Decision"@en ;
+  # rdfs:label "Stattgebender Kammerbeschluss"@de ;
+  # rdfs:comment "An affirmative chamber decision."@en ;
+  # rdfs:comment "Ein stattgebender Kammerbeschluss."@de ;
+  rdfs:subClassOf recht:Decision .
+
+recht:ArbitrationDecision a rdfs:Class ;
+  rdfs:label "Arbitration Decision"@en ;
+  # rdfs:label "Schiedsgerichtsentscheidung"@de ;
+  # rdfs:comment "An arbitration decision."@en ;
+  # rdfs:comment "Eine Schiedsgerichtsentscheidung."@de ;
+  rdfs:subClassOf recht:Decision .
+
+recht:LegalAidDecision a rdfs:Class ;
+  rdfs:label "Legal Aid Decision"@en ;
+  # rdfs:label "Prozesskostenhilfebeschluss"@de ;
+  # rdfs:comment "A legal aid decision."@en ;
+  # rdfs:comment "Ein Prozesskostenhilfebeschluss."@de ;
+  rdfs:subClassOf recht:Decision .
+
+recht:TenancyMatterDecision a rdfs:Class ;
+  rdfs:label "Tenancy Matter Decision"@en ;
+  # rdfs:label "Rechtsentscheid in Mietsachen"@de ;
+  # rdfs:comment "A legal decision in tenancy matters."@en ;
+  # rdfs:comment "Ein Rechtsentscheid in Mietsachen."@de ;
+  rdfs:subClassOf recht:Decision .
+
+recht:CostAssessmentDecision a rdfs:Class ;
+  rdfs:label "Cost Assessment Decision"@en ;
+  # rdfs:label "Kostenfestsetzungsbeschluss"@de ;
+  # rdfs:comment "A cost assessment decision."@en ;
+  # rdfs:comment "Ein Kostenfestsetzungsbeschluss."@de ;
+  rdfs:subClassOf recht:Decision .
+
+recht:NonAdmittanceDecision a rdfs:Class ;
+  rdfs:label "Non-admittance Decision"@en ;
+  # rdfs:label "Nichtannahmebeschluss"@de ;
+  # rdfs:comment "A non-admittance decision."@en ;
+  # rdfs:comment "Ein Nichtannahmebeschluss."@de ;
+  rdfs:subClassOf recht:Decision .
+
+recht:BoardOfAppealDecision a rdfs:Class ;
+  rdfs:label "Board of Appeal Dcision"@en ;
+  # rdfs:label "Beschwerdekammerbeschluss"@de ;
+  # rdfs:comment "A board of appeal decision."@en ;
+  # rdfs:comment "Ein Beschwerdekammerbeschluss."@de ;
+  rdfs:subClassOf recht:Decision .
+
+# Judgments (Urteile)
+recht:Judgment a rdfs:Class ;
+  rdfs:label "Judgment"@en ;
+  # rdfs:label "Urteil"@de ;
+  # rdfs:comment "A judgment."@en ;
+  # rdfs:comment "Ein Urteil."@de ;
+  rdfs:subClassOf recht:Decision .
+
+recht:FinalJudgment a rdfs:Class ;
+  rdfs:label "Final Judgment"@en ;
+  # rdfs:label "Endurteil"@de ;
+  # rdfs:comment "A final judgment."@en ;
+  # rdfs:comment "Ein Endurteil."@de ;
+  rdfs:subClassOf recht:Decision .
+
+recht:SupplementaryJudgment a rdfs:Class ;
+  rdfs:label "Supplementary Judgment"@en ;
+  # rdfs:label "Ergänzungsurteil"@de ;
+  # rdfs:comment "A supplementary judgment."@en ;
+  # rdfs:comment "Ein Ergänzungsurteil."@de ;
+  rdfs:subClassOf recht:Decision .
+
+recht:PartialJudgment a rdfs:Class ;
+  rdfs:label "Partial Judgment"@en ;
+  # rdfs:label "Teilurteil"@de ;
+  # rdfs:comment "A partial judgment."@en ;
+  # rdfs:comment "Ein Teilurteil."@de ;
+  rdfs:subClassOf recht:Decision .
+
+recht:DefaultJudgment a rdfs:Class ;
+  rdfs:label "Judgment By Default"@en ;
+  # rdfs:label "Versäumnisurteil"@de ;
+  # rdfs:comment "A judgment by default."@en ;
+  # rdfs:comment "Ein Versäumnisurteil."@de ;
+  rdfs:subClassOf recht:Decision .
+
+recht:PartialDefaultJudgment a rdfs:Class ;
+  rdfs:label "Judgment By Default In Part"@en ;
+  # rdfs:label "Teilversäumnisurteil"@de ;
+  # rdfs:comment "A judgment by default in part."@en ;
+  # rdfs:comment "Ein Teilversäumnisurteil."@de ;
+  rdfs:subClassOf recht:Decision .
+
+recht:WaiverJudgment a rdfs:Class ;
+  rdfs:label "Waiver Judgment"@en ;
+  # rdfs:label "Verzichtsurteil"@de ;
+  # rdfs:comment "A waiver judgment."@en ;
+  # rdfs:comment "Ein Verzichtsurteil."@de ;
+  rdfs:subClassOf recht:Decision .
+
+recht:SecondDefaultJudgment a rdfs:Class ;
+  rdfs:label "Second Judgment By Default"@en ;
+  # rdfs:label "Zweites Versäumnisurteil"@de ;
+  # rdfs:comment "A second judgment by default."@en ;
+  # rdfs:comment "Ein zweites Versäumnisurteil."@de ;
+  rdfs:subClassOf recht:Decision .
+
+recht:InterimJudgment a rdfs:Class ;
+  rdfs:label "InterimJudgment"@en ;
+  # rdfs:label "Zwischenurteil"@de ;
+  # rdfs:comment "An interim judgment."@en ;
+  # rdfs:comment "Ein Zwischenurteil."@de ;
+  rdfs:subClassOf recht:Decision .
+
+# Others
+recht:Disposition a rdfs:Class ;
+  rdfs:label "Disposition"@en ;
+  # rdfs:label "Verfügung"@de ;
+  # rdfs:comment "A disposition."@en ;
+  # rdfs:comment "Eine Verfügung."@de ;
+  rdfs:subClassOf recht:Decision .
+
+recht:Settlement a rdfs:Class ;
+  rdfs:label "Settlement"@en ;
+  # rdfs:label "Vergleich"@de ;
+  # rdfs:comment "An interim order."@en ;
+  # rdfs:comment "Ein Vergleich."@de ;
+  rdfs:subClassOf recht:Decision .
+
+# TODO: Check the translation in relation to Äußerung
+recht:Answer a rdfs:Class ;
+  rdfs:label "Answer"@en ;
+  # rdfs:label "Stellungnahme"@de ;
+  # rdfs:comment "An answer."@en ;
+  # rdfs:comment "Eine Stellungnahme."@de ;
+  rdfs:subClassOf schema:Decision .
+
+recht:Statement a rdfs:Class ;
+  rdfs:label "Statement"@en ;
+  # rdfs:label "Äußerung"@de ;
+  # rdfs:comment "A statement."@en ;
+  # rdfs:comment "Eine Äußerung."@de ;
+  rdfs:subClassOf schema:Decision .
+
+recht:ReferenceDecision a rdfs:Class ;
+  rdfs:label "Reference Decision"@en ;
+  # rdfs:label "Vorlagebeschluss"@de ;
+  # rdfs:comment "A reference decision."@en ;
+  # rdfs:comment "Ein Vorlagebeschluss."@de ;
+  rdfs:subClassOf recht:Decision .
+
+recht:ECJReference a rdfs:Class ;
+  rdfs:label "European Court of Justice Reference"@en ;
+  # rdfs:label "EuGH-Vorlage"@de ;
+  # rdfs:comment "A reference to the European Court of Justice."@en ;
+  # rdfs:comment "Eine Vorlage für den Europäischen Gerichtshof"@de ;
+  rdfs:subClassOf schema:Decision .
+
+recht:RequestForPreliminaryRuling a rdfs:Class ;
+  rdfs:label "Request For Preliminary Ruling"@en ;
+  # rdfs:label "Ersuchen um Vorabentscheidung"@de ;
+  # rdfs:comment "A request for a preliminary ruling."@en ;
+  # rdfs:comment "Ein Ersuchen um Vorabentscheidung."@de ;
+  rdfs:subClassOf recht:Decision .
+
+recht:PublicProsecutorsGeneralDecision a rdfs:Class ;
+  rdfs:label "Public Prosecutors General Decision"@en ;
+  # rdfs:label "Bescheid der Generalstaatsanwaltschaft"@de ;
+  # rdfs:comment "A decision of the public prosecutor general."@en ;
+  # rdfs:comment "Eine Bescheid der Generalstaatsanwaltschaft"@de ;
+  rdfs:subClassOf schema:Decision .
+
+recht:PublicProsecutorsOfficeDecision a rdfs:Class ;
+  rdfs:label "Public Prosecutor's Office Decision"@en ;
+  # rdfs:label "Bescheid der Staatsanwaltschaft"@de ;
+  # rdfs:comment "A decision by the public prosecutor's office."@en ;
+  # rdfs:comment "Eine Bescheid der Staatsanwaltschaft."@de ;
+  rdfs:subClassOf schema:Decision .
+
+recht:PublicProsecutorsOfficeDismissalOrder a rdfs:Class ;
+  rdfs:label "Public Prosecutor's Office Dismissal Order"@en ;
+  # rdfs:label "Einstellungsverfügung der Staatsanwaltschaft"@de ;
+  # rdfs:comment "A public prosecutor's office dismissal order."@en ;
+  # rdfs:comment "Eine Einstellungsverfügung der Staatsanwaltschaft."@de ;
+  rdfs:subClassOf schema:Decision .

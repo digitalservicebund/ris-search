@@ -1,0 +1,95 @@
+{
+  "@context": "http://example.com/ns/1.0",
+  "@type": "Decision",
+  "@id": "/case-law/ecli/de/bag2022201222u9azr266200",
+  "name": "Anspruch auf Mindesturlaub - Verjährung",
+  "decisionDate": "2022-12-20",
+  "decisionIdentifier": "ECLI:DE:BAG:2022:201222.U.9AZR266.20.0",
+  "decisionReference": "9 AZR 266/20",
+  "decisionBy": "BAG",
+  "judicialBody": "9. Senat",
+  "inLanguage": "de",
+  "keywords": [],
+  "encoding": [
+    {
+      "@id": "/case-law/ecli/de/bag2022201222u9azr266200",
+      "@type": "DecisionObject",
+      "contentUrl": "/case-law/ecli/de/bag2022201222u9azr266200",
+      "encodingFormat": "json",
+      "inLanguage": "de"
+    },
+    {
+      "@id": "/case-law/ecli/de/bag2022201222u9azr266200.pdf",
+      "@type": "DecisionObject",
+      "contentUrl": "/case-law/ecli/de/bag2022201222u9azr266200.pdf",
+      "encodingFormat": "pdf",
+      "inLanguage": "de"
+    },
+    {
+      "@id": "/case-law/ecli/de/bag2022201222u9azr266200.xml",
+      "@type": "DecisionObject",
+      "contentUrl": "/case-law/ecli/de/bag2022201222u9azr266200.xml",
+      "encodingFormat": "xml",
+      "inLanguage": "de"
+    },
+    {
+      "@id": "/case-law/ecli/de/bag2022201222u9azr266200.html",
+      "@type": "DecisionObject",
+      "contentUrl": "/case-law/ecli/de/bag2022201222u9azr266200.html",
+      "encodingFormat": "html",
+      "inLanguage": "de"
+    }
+  ],
+  "tableOfContents": [
+    {
+      "@type": "TocEntry",
+      "position": 1,
+      "name": "Tenor",
+      "identifier": "6f6649fc-f829-4790-ba5a-eff128c1aaf0",
+      "url": "/case-law/ecli/de/bag2022201222u9azr266200/6f6649fc-f829-4790-ba5a-eff128c1aaf0"
+    },
+    {
+      "@type": "TocEntry",
+      "position": 2,
+      "name": "Leitsatz",
+      "identifier": "68b975b4-8e67-4795-b9a4-69d31281533f",
+      "url": "/case-law/ecli/de/bag2022201222u9azr266200/68b975b4-8e67-4795-b9a4-69d31281533f"
+    },
+    {
+      "@type": "TocEntry",
+      "position": 3,
+      "name": "Tatbestand",
+      "identifier": "76f8f9cd-00e5-46fc-8998-1a311a6aaa0a",
+      "url": "/case-law/ecli/de/bag2022201222u9azr266200/76f8f9cd-00e5-46fc-8998-1a311a6aaa0a"
+    },
+    {
+      "@type": "TocEntry",
+      "position": 4,
+      "name": "Entscheidungsgründe",
+      "identifier": "0f0490a0-e523-48a2-afd9-9c71c6e5998a",
+      "url": "/case-law/ecli/de/bag2022201222u9azr266200/0f0490a0-e523-48a2-afd9-9c71c6e5998a"
+    }
+  ],
+  "hasPart": [
+    {
+      "@type": "DecisionPartOperativePartOfTheJudgment",
+      "@id": "/case-law/ecli/de/bag2022201222u9azr266200/6f6649fc-f829-4790-ba5a-eff128c1aaf0",
+      "text": "1. Die Revision des Beklagten…"
+    },
+    {
+      "@type": "DecisionPartGuidingPrinciple",
+      "@id": "/case-law/ecli/de/bag2022201222u9azr266200/68b975b4-8e67-4795-b9a4-69d31281533f",
+      "text": "1. Der Anspruch des Arbeitnehmers…"
+    },
+    {
+      "@type": "DecisionPartFacts",
+      "@id": "/case-law/ecli/de/bag2022201222u9azr266200/76f8f9cd-00e5-46fc-8998-1a311a6aaa0a",
+      "text": "Die Parteien streiten…"
+    },
+    {
+      "@type": "DecisionPartFacts",
+      "@id": "/case-law/ecli/de/bag2022201222u9azr266200/0f0490a0-e523-48a2-afd9-9c71c6e5998a",
+      "text": "Die zulässige Revision des Beklagten…"
+    }
+  ]
+}
