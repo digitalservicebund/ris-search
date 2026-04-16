@@ -63,7 +63,9 @@ const article: Ref<Article | undefined> = computed(() =>
   // is encoded in the XML but will automatically be decoded by the router).
   // For this reason, we need to also decode the eId in the data to make them
   // comparable.
-  leafParts.value?.find((part) => decodeURIComponent(part.eId) == eId.value),
+  singleViewParts.value?.find(
+    (part) => decodeURIComponent(part.eId) == eId.value,
+  ),
 );
 
 const previousArticleUrl: Ref<RouteLocationRaw | undefined> = computed(() =>
@@ -74,9 +76,12 @@ const nextArticleUrl: Ref<RouteLocationRaw | undefined> = computed(() =>
   getRouteForSiblingArticle(article.value, 1),
 );
 
-const leafParts = computed(() => getLeafParts(norm.value?.hasPart ?? []));
+const singleViewParts = computed(() =>
+  getPartsLeafNodes(norm.value?.hasPart ?? []),
+);
 
-function getLeafParts(
+// Get all leaf nodes from the hasPart Tree.
+function getPartsLeafNodes(
   parts: LegislationExpressionPartSchema[],
 ): LegislationExpressionPartSchema[] {
   const leaves: LegislationExpressionPartSchema[] = [];
@@ -85,7 +90,7 @@ function getLeafParts(
     if (!part.hasPart || part.hasPart.length === 0) {
       leaves.push(part);
     } else {
-      leaves.push(...getLeafParts(part.hasPart));
+      leaves.push(...getPartsLeafNodes(part.hasPart));
     }
   }
 
@@ -98,7 +103,7 @@ function getRouteForSiblingArticle(
 ): RouteLocationRaw | undefined {
   if (!norm.value || !self || !norm.value.hasPart) return undefined;
 
-  const hasPart = leafParts.value;
+  const hasPart = singleViewParts.value;
   const newIndex = hasPart.findIndex((item) => item.eId === self?.eId) + offset;
 
   if (!hasPart[newIndex]) return undefined;
