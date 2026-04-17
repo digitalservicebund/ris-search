@@ -54,8 +54,8 @@ describe("tableOfContents", () => {
             {
               "@id": "art-1",
               eId: "art-1",
-              headline: "§ 1",
-              name: "Scope",
+              headline: "Scope",
+              name: "§ 1",
               encoding: [],
               temporalCoverage: "../..",
               hasPart: [],

@@ -930,9 +930,15 @@ export interface components {
        * @example hauptteitel-para-1
        */
       eId: string;
-      /** @example § 1 */
+      /**
+       * @description Numerical identifier of a specific legislation part
+       * @example § 1
+       */
       name: string;
-      /** @example Zulassungsvorraussetzung */
+      /**
+       * @description Headline of a specific legislation part
+       * @example Beginn der Rechtsfähigkeit
+       */
       headline: string;
       /**
        * @description Textual string indicating a time period in [ISO 8601 time interval format](https://en.wikipedia.org/wiki/ISO_8601#Time_intervals)
@@ -979,7 +985,7 @@ export interface components {
        */
       legislationLegalForce: "InForce" | "NotInForce" | "PartiallyInForce";
       /** @description List of components (articles, preambles, conclusions, attachments, …) that form this legislation item. */
-      hasPart?: components["schemas"]["LegislationExpressionPartSchema"][];
+      hasPart: components["schemas"]["LegislationExpressionPartSchema"][];
       encoding: components["schemas"]["LegislationObjectSchema"][];
     };
     StreamingResponseBody: unknown;

@@ -2354,10 +2354,15 @@
             "description": "Expression-level identifier, uniquely identifying this element in an FRBR expression",
             "example": "hauptteitel-para-1"
           },
-          "name": { "type": "string", "example": "§ 1" },
+          "name": {
+            "type": "string",
+            "description": "Numerical identifier of a specific legislation part",
+            "example": "§ 1"
+          },
           "headline": {
             "type": "string",
-            "example": "Zulassungsvorraussetzung"
+            "description": "Headline of a specific legislation part",
+            "example": "Beginn der Rechtsfähigkeit"
           },
           "temporalCoverage": {
             "type": "string",
@@ -2437,6 +2442,7 @@
           "alternateName",
           "encoding",
           "exampleOfWork",
+          "hasPart",
           "legislationIdentifier",
           "legislationLegalForce",
           "name",

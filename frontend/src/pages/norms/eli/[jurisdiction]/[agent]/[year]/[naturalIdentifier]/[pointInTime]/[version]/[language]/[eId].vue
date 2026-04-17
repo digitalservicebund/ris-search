@@ -45,7 +45,7 @@ const normPath: string = route.fullPath.replace(/\/[^/]*$/, "");
 const tableOfContents = computed(() => {
   if (!norm.value?.hasPart) return [];
   return tocItemsToTreeViewItems(
-    norm.value.hasPart!,
+    norm.value.hasPart,
     (id) => ({ path: normPath, hash: `#${id}` }),
     (id) => ({ path: `${normPath}/${id}` }),
   );

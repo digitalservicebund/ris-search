@@ -119,9 +119,9 @@ public class NormSchemaMapper {
   }
 
   /**
-   * Builds a single legislation expression part. It uses a combination of the tableOfCOntents and
-   * articles array to construct the object, depending if it is a leaf node that is part of the
-   * articles array, or if it is a parent node
+   * Builds a single legislation expression component. It combines the table of contents and the
+   * articles array to construct the result, depending on whether the node is a leaf (present in the
+   * articles array) or an internal node.
    *
    * @param articles articles array
    * @param tocItem tableOfContentsItem that is supposed to be mapped to a part
