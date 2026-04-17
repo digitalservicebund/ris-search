@@ -17,7 +17,8 @@ public record LegislationWorkSchema(
             example = ApiConfig.Paths.LEGISLATION + "/eli/bund/bgbl-1/1975",
             requiredMode = Schema.RequiredMode.REQUIRED)
         String id,
-    @Schema(example = "eli/bund/bgbl-1/1975/s1760") String legislationIdentifier,
+    @Schema(example = "eli/bund/bgbl-1/1975/s1760", requiredMode = Schema.RequiredMode.REQUIRED)
+        String legislationIdentifier,
     @Schema(
             example = "2003-12-15",
             description =

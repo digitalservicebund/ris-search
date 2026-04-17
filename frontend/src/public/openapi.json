@@ -2311,7 +2311,12 @@
           },
           "isPartOf": { "$ref": "#/components/schemas/PublicationIssueSchema" }
         },
-        "required": ["@id", "datePublished", "legislationDate"]
+        "required": [
+          "@id",
+          "datePublished",
+          "legislationDate",
+          "legislationIdentifier"
+        ]
       },
       "PublicationIssueSchema": {
         "type": "object",
