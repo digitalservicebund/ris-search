@@ -892,7 +892,7 @@ export interface components {
       /** @example /v1/legislation/eli/bund/bgbl-1/1975 */
       "@id": string;
       /** @example eli/bund/bgbl-1/1975/s1760 */
-      legislationIdentifier?: string;
+      legislationIdentifier: string;
       /**
        * Format: date
        * @description Ausfertigungsdatum (The date of adoption or signature of the legislation. This is the date at which the text is officially acknowledged to be a legislation, even though it might not even be published or in force.)
