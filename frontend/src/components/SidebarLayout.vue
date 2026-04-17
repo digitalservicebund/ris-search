@@ -13,9 +13,13 @@ defineSlots<{
 
     <div
       v-if="$slots.sidebar"
-      class="col-span-1 row-start-1 lg:sticky lg:top-0 lg:row-start-auto lg:h-[calc(min(100%,100dvh))] lg:border-l lg:border-gray-400 print:hidden"
+      class="col-span-1 row-start-1 lg:row-start-auto lg:h-full lg:border-l lg:border-gray-400 print:hidden"
     >
-      <slot name="sidebar" />
+      <div
+        class="overflow-auto lg:sticky lg:top-0 lg:max-h-[calc(min(100%,100dvh))]"
+      >
+        <slot name="sidebar" />
+      </div>
     </div>
   </div>
 </template>
