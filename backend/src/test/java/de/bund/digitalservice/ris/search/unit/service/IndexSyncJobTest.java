@@ -1,7 +1,9 @@
 package de.bund.digitalservice.ris.search.unit.service;
 
+import static de.bund.digitalservice.ris.search.service.NormIndexSyncJob.NORM_STATUS_FILENAME;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -9,15 +11,14 @@ import static org.mockito.Mockito.when;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
+import de.bund.digitalservice.ris.search.service.ChangelogService;
 import de.bund.digitalservice.ris.search.service.IndexNormsService;
 import de.bund.digitalservice.ris.search.service.IndexStatusService;
 import de.bund.digitalservice.ris.search.service.IndexSyncJob;
 import de.bund.digitalservice.ris.search.service.IndexingState;
 import de.bund.digitalservice.ris.search.service.Job;
-import de.bund.digitalservice.ris.search.service.NormIndexSyncJob;
 import java.time.Instant;
 import java.util.List;
-import java.util.Optional;
 import org.assertj.core.util.Sets;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,12 +36,19 @@ class IndexSyncJobTest {
   @Mock IndexStatusService indexStatusService;
   @Mock NormsBucket normsBucket;
   @Mock IndexNormsService indexNormsService;
+  @Mock ChangelogService changelogService;
 
-  NormIndexSyncJob normIndexSyncJob;
+  IndexSyncJob normIndexSyncJob;
 
   @BeforeEach
   void setup() {
-    normIndexSyncJob = new NormIndexSyncJob(indexStatusService, normsBucket, indexNormsService);
+    normIndexSyncJob =
+        new IndexSyncJob(
+            indexStatusService,
+            changelogService,
+            normsBucket,
+            indexNormsService,
+            NORM_STATUS_FILENAME);
   }
 
   @Test
@@ -54,16 +62,19 @@ class IndexSyncJobTest {
     when(indexStatusService.loadStatus(any()))
         .thenReturn(
             new IndexingState(time.minusSeconds(10).toString(), time.toString(), time.toString()));
-    when(normsBucket.getAllKeysByPrefix(IndexSyncJob.CHANGELOGS_PREFIX)).thenReturn(changelogs);
-    String changeAll = "{\"change_all\" : true}";
-    when(normsBucket.getFileAsString(changelogFileName)).thenReturn(Optional.of(changeAll));
+
+    when(changelogService.getNewChangelogsPaths(eq(normsBucket), any())).thenReturn(changelogs);
+    Changelog changelog = new Changelog();
+    changelog.setChangeAll(true);
+    when(changelogService.parseOneChangelog(normsBucket, changelogs.getFirst()))
+        .thenReturn(changelog);
 
     normIndexSyncJob.runJob();
 
     verify(indexStatusService, times(1)).lockIndex(any(), any());
     verify(indexStatusService, times(1)).unlockIndex(any());
     verify(indexStatusService, times(1))
-        .updateLastProcessedChangelog(NormIndexSyncJob.NORM_STATUS_FILENAME, changelogFileName);
+        .updateLastProcessedChangelog(NORM_STATUS_FILENAME, changelogFileName);
   }
 
   @Test

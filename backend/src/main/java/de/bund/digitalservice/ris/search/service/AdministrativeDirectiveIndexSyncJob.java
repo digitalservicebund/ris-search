@@ -11,8 +11,10 @@ public class AdministrativeDirectiveIndexSyncJob extends IndexSyncJob {
 
   public AdministrativeDirectiveIndexSyncJob(
       IndexStatusService indexStatusService,
+      ChangelogService changelogService,
       AdministrativeDirectiveBucket bucket,
       IndexAdministrativeDirectiveService service) {
-    super(indexStatusService, bucket, service, STATUS_FILENAME);
+
+    super(indexStatusService, changelogService, bucket, service, STATUS_FILENAME);
   }
 }

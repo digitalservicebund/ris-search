@@ -6,10 +6,10 @@ import static org.mockito.Mockito.when;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
+import de.bund.digitalservice.ris.search.service.ChangelogService;
 import de.bund.digitalservice.ris.search.service.IndexNormsService;
 import de.bund.digitalservice.ris.search.service.IndexStatusService;
 import de.bund.digitalservice.ris.search.service.IndexSyncJob;
-import de.bund.digitalservice.ris.search.service.NormIndexSyncJob;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -28,18 +28,18 @@ class ChangelogServiceTest {
   @Mock NormsBucket normsBucket;
   @Mock IndexNormsService indexNormsService;
 
-  NormIndexSyncJob normIndexSyncJob;
+  ChangelogService changelogService;
 
   @BeforeEach
   void setup() {
-    normIndexSyncJob = new NormIndexSyncJob(indexStatusService, normsBucket, indexNormsService);
+    changelogService = new ChangelogService() {};
   }
 
   @Test
   void itSkipsInvalidChangelogContent() throws ObjectStoreServiceException {
 
     when(normsBucket.getFileAsString(any())).thenReturn(Optional.of("you shall not parse"));
-    Changelog changelog = normIndexSyncJob.parseOneChangelog(normsBucket, "mockFileName");
+    Changelog changelog = changelogService.parseOneChangelog(normsBucket, "mockFileName");
     Assertions.assertNull(changelog);
   }
 
@@ -48,7 +48,7 @@ class ChangelogServiceTest {
 
     when(normsBucket.getFileAsString(any())).thenReturn(Optional.empty());
 
-    Changelog changelog = normIndexSyncJob.parseOneChangelog(normsBucket, "mockFileName");
+    Changelog changelog = changelogService.parseOneChangelog(normsBucket, "mockFileName");
     Assertions.assertNull(changelog);
   }
 
@@ -64,7 +64,7 @@ class ChangelogServiceTest {
     when(normsBucket.getAllKeysByPrefix(IndexSyncJob.CHANGELOGS_PREFIX))
         .thenReturn(List.of(changelogFile2, changelogFile1));
 
-    List<String> changelogs = normIndexSyncJob.getNewChangelogs(normsBucket, lastSuccess);
+    List<String> changelogs = changelogService.getNewChangelogsPaths(normsBucket, lastSuccess);
     Assertions.assertEquals(changelogs.toArray()[0], changelogFile1);
     Assertions.assertEquals(changelogs.toArray()[1], changelogFile2);
   }

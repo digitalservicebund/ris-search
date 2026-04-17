@@ -11,8 +11,10 @@ public class NormIndexSyncJob extends IndexSyncJob {
 
   public NormIndexSyncJob(
       IndexStatusService indexStatusService,
+      ChangelogService changelogService,
       NormsBucket normsBucket,
       IndexNormsService indexNormsService) {
-    super(indexStatusService, normsBucket, indexNormsService, NORM_STATUS_FILENAME);
+    super(
+        indexStatusService, changelogService, normsBucket, indexNormsService, NORM_STATUS_FILENAME);
   }
 }

@@ -6,11 +6,10 @@ import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
 import de.bund.digitalservice.ris.search.service.BulkChangelogParser;
-import de.bund.digitalservice.ris.search.service.CaseLawIndexSyncJob;
+import de.bund.digitalservice.ris.search.service.ChangelogService;
 import de.bund.digitalservice.ris.search.service.Job;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,9 +23,9 @@ public class EcliSitemapJob implements Job {
 
   PortalBucket portalBucket;
 
-  CaseLawBucket caselawbucket;
+  CaseLawBucket caseLawBucket;
 
-  CaseLawIndexSyncJob indexJob;
+  ChangelogService changelogService;
 
   EcliCrawlerDocumentService ecliCrawlerDocumentService;
   private final LocalDate today = LocalDate.now();
@@ -40,8 +39,7 @@ public class EcliSitemapJob implements Job {
    *
    * @param service EcliSitemapWriter service for writing sitemaps.
    * @param portalBucket PortalBucket for storing portal-related files.
-   * @param caselawbucket CaseLawBucket for accessing case law data.
-   * @param indexJob CaseLawIndexSyncJob for synchronizing case law index.
+   * @param changelogService CaseLawChangelogService to manage caselaw changelogs.
    * @param ecliCrawlerDocumentService EcliCrawlerDocumentService for handling ECLI crawler
    *     documents.
    * @param frontEndUrl Front-end URL from application properties.
@@ -49,14 +47,14 @@ public class EcliSitemapJob implements Job {
   public EcliSitemapJob(
       EcliSitemapWriter service,
       PortalBucket portalBucket,
-      CaseLawBucket caselawbucket,
-      CaseLawIndexSyncJob indexJob,
+      CaseLawBucket caseLawBucket,
+      ChangelogService changelogService,
       EcliCrawlerDocumentService ecliCrawlerDocumentService,
       @Value("${server.front-end-url}") String frontEndUrl) {
     this.sitemapWriter = service;
     this.portalBucket = portalBucket;
-    this.caselawbucket = caselawbucket;
-    this.indexJob = indexJob;
+    this.caseLawBucket = caseLawBucket;
+    this.changelogService = changelogService;
     this.ecliCrawlerDocumentService = ecliCrawlerDocumentService;
     this.apiUrl = frontEndUrl + "v1/eclicrawler/";
   }
@@ -77,12 +75,14 @@ public class EcliSitemapJob implements Job {
       if (isInitialRun) {
         logger.info("initial run, publish all");
         sitemapWriter.writeRobotsTxt();
-        String newestChangelog = indexJob.getNewChangelogs(caselawbucket, "0").getLast();
+        String newestChangelog =
+            changelogService.getNewChangelogsPaths(caseLawBucket, "0").getLast();
         ecliCrawlerDocumentService.writeFullDiff(apiUrl, today);
         portalBucket.save(LAST_PROCESSED_CHANGELOG, newestChangelog);
       } else {
         var lastProcessed = getLastProcessedChangelog();
-        List<String> changelogPaths = indexJob.getNewChangelogs(caselawbucket, lastProcessed);
+        List<String> changelogPaths =
+            changelogService.getNewChangelogsPaths(caseLawBucket, lastProcessed);
         if (changelogPaths.isEmpty()) {
           logger.info("no new changelogs to parse");
           return ReturnCode.SUCCESS;
@@ -115,17 +115,10 @@ public class EcliSitemapJob implements Job {
   }
 
   private List<Changelog> getNewChangelogs(List<String> changelogPaths) {
-
-    return changelogPaths.stream()
-        .map(
-            path -> {
-              try {
-                return this.indexJob.parseOneChangelog(caselawbucket, path);
-              } catch (ObjectStoreServiceException e) {
-                throw new FatalEcliSitemapJobException(e.getMessage());
-              }
-            })
-        .filter(changelog -> !Objects.isNull(changelog))
-        .toList();
+    try {
+      return changelogService.parseChangelogs(caseLawBucket, changelogPaths);
+    } catch (ObjectStoreServiceException e) {
+      throw new FatalEcliSitemapJobException(e.getMessage());
+    }
   }
 }

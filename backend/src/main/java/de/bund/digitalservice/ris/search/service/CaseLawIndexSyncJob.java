@@ -11,8 +11,10 @@ public class CaseLawIndexSyncJob extends IndexSyncJob {
 
   public CaseLawIndexSyncJob(
       IndexStatusService indexStatusService,
-      CaseLawBucket caseLawBucket,
+      ChangelogService changelogService,
+      CaseLawBucket bucket,
       IndexCaselawService indexCaselawService) {
-    super(indexStatusService, caseLawBucket, indexCaselawService, CASELAW_STATUS_FILENAME);
+    super(
+        indexStatusService, changelogService, bucket, indexCaselawService, CASELAW_STATUS_FILENAME);
   }
 }

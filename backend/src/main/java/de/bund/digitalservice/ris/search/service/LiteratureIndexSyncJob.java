@@ -11,8 +11,14 @@ public class LiteratureIndexSyncJob extends IndexSyncJob {
 
   public LiteratureIndexSyncJob(
       IndexStatusService indexStatusService,
-      LiteratureBucket literatureBucket,
+      ChangelogService changelogService,
+      LiteratureBucket bucket,
       IndexLiteratureService indexLiteratureService) {
-    super(indexStatusService, literatureBucket, indexLiteratureService, LITERATURE_STATUS_FILENAME);
+    super(
+        indexStatusService,
+        changelogService,
+        bucket,
+        indexLiteratureService,
+        LITERATURE_STATUS_FILENAME);
   }
 }
