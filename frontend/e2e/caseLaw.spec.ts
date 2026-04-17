@@ -104,7 +104,7 @@ test("jumps to Randnummern", async ({ page }) => {
 
   await link.click();
 
-  await expect(page).toHaveURL(/#border-number-link-1$/);
+  await expect(page).toHaveURL(/#randnummer-1$/);
 
   await expect(
     page.getByText(

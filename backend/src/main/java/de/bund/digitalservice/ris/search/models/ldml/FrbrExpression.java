@@ -1,6 +1,5 @@
 package de.bund.digitalservice.ris.search.models.ldml;
 
-import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.FrbrLanguage;
 import de.bund.digitalservice.ris.search.models.ldml.literature.LiteratureNamespaces;
 import jakarta.xml.bind.annotation.XmlElement;
 import java.util.List;

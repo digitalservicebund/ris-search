@@ -1,6 +1,6 @@
 package de.bund.digitalservice.ris.search.models.api.parameters;
 
-import de.bund.digitalservice.ris.search.caselawhandover.model.LegalEffect;
+import de.bund.digitalservice.ris.search.models.ldml.LegalEffect;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.Arrays;
 import lombok.Getter;

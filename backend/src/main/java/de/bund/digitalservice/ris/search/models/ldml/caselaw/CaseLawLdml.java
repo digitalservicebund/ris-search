@@ -1,0 +1,30 @@
+package de.bund.digitalservice.ris.search.models.ldml.caselaw;
+
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlAttribute;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+/** Represents the root element of a Case Law LDML document. */
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Builder
+@XmlRootElement(name = "akomaNtoso", namespace = CaseLawLdmlNamespaces.AKN_NS)
+@XmlAccessorType(XmlAccessType.FIELD)
+public class CaseLawLdml {
+
+  @Builder.Default
+  @XmlAttribute(name = "xsi:schemaLocation")
+  private String schemaLocation =
+      "http://docs.oasis-open.org/legaldocml/ns/akn/3.0 "
+          + "https://docs.oasis-open.org/legaldocml/akn-core/v1.0/os/part2-specs/schemas/akomantoso30.xsd";
+
+  @XmlElement(name = "judgment", namespace = CaseLawLdmlNamespaces.AKN_NS)
+  private Judgment judgment;
+}
