@@ -17,6 +17,7 @@ definePageMeta({
 });
 
 const route = useRoute();
+
 const privateFeaturesEnabled = usePrivateFeaturesFlag();
 
 const expressionEli = Object.values(route.params).slice(0, -1).join("/");
@@ -50,12 +51,6 @@ const tableOfContents = computed(() => {
     (id) => ({ path: `${normPath}/${id}` }),
   );
 });
-
-const expressionValidityInterval = computed(() =>
-  privateFeaturesEnabled
-    ? temporalCoverageToValidityInterval(norm?.value?.temporalCoverage)
-    : undefined,
-);
 
 const article: Ref<Article | undefined> = computed(() =>
   // The eId is taken from the router, which always automatically decodes URIs.
@@ -119,16 +114,18 @@ function getRouteForSiblingArticle(
   };
 }
 
-const currentNodePath = computed(() =>
-  findNodePath(tableOfContents.value, eId.value ?? ""),
-);
-
-const normBreadcrumbTitle = computed(() => getNormBreadcrumbTitle(norm.value));
-
 const breadcrumbItems: Ref<BreadcrumbItem[]> = computed(() => {
-  const validFrom = dateFormattedDDMMYYYY(
-    expressionValidityInterval.value?.from,
-  );
+  const currentNodePath = eId.value
+    ? (findNodePath(tableOfContents.value, eId.value) ?? [])
+    : [];
+
+  const title = getNormBreadcrumbTitle(norm.value);
+
+  const expressionValidityInterval = privateFeaturesEnabled
+    ? temporalCoverageToValidityInterval(norm?.value?.temporalCoverage)
+    : undefined;
+
+  const validFrom = dateFormattedDDMMYYYY(expressionValidityInterval?.from);
   const validFromDisplay = validFrom ? ` vom ${validFrom}` : "";
 
   const list: BreadcrumbItem[] = [
@@ -136,18 +133,18 @@ const breadcrumbItems: Ref<BreadcrumbItem[]> = computed(() => {
       label: formatDocumentKind(DocumentKind.Norm),
       route: `/search?documentKind=${DocumentKind.Norm}`,
     },
-    {
-      label: normBreadcrumbTitle.value + validFromDisplay,
-      route: normPath,
-    },
+    { label: title + validFromDisplay, route: normPath },
   ];
 
-  currentNodePath.value?.forEach((node) =>
-    list.push({
-      label: [node.title, node.subtitle].filter(Boolean).join(" "),
-      route: typeof node.to === "string" ? node.to : undefined,
-    } as BreadcrumbItem),
-  );
+  currentNodePath.forEach((node) => {
+    const label =
+      node === currentNodePath.at(-1)
+        ? [node.title, node.subtitle].filter(Boolean).join(" ")
+        : (node.title ?? "");
+
+    list.push({ label, route: node.to });
+  });
+
   return list;
 });
 
@@ -292,7 +289,7 @@ useDynamicSeo({ title, description });
         <template #sidebar>
           <DocumentsNormsNormTableOfContents
             v-if="tableOfContents.length"
-            :subheading="normBreadcrumbTitle"
+            :subheading="getNormBreadcrumbTitle(norm)"
             :subheading-to="normPath"
             :table-of-contents="tableOfContents"
             :selected-key="eId"

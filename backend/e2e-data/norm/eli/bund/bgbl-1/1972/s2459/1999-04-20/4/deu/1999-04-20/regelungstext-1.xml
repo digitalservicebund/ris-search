@@ -210,6 +210,58 @@
                     </akn:paragraph>
                 </akn:article>
             </akn:section>
+            <akn:section GUID="77777777-aaaa-bbbb-cccc-ddddddddddee" eId="hauptteil-n1_abschnitt-n3">
+                <akn:num GUID="88888888-aaaa-bbbb-cccc-ddddddddddee" eId="hauptteil-n1_abschnitt-n3_bezeichnung-n1">
+                    Dritter Abschnitt
+                </akn:num>
+                <akn:heading GUID="99999999-aaaa-bbbb-cccc-ddddddddddee" eId="hauptteil-n1_abschnitt-n3_überschrift-n1">
+                    Datenschutz und Datensicherheit bei Wahlgeräten
+                </akn:heading>
+                <akn:subsection GUID="aaaaaaaa-1111-2222-3333-ddddddddddee" eId="hauptteil-n1_abschnitt-n3_uabschnitt-n1">
+                    <akn:num GUID="bbbbbbbb-1111-2222-3333-ddddddddddee" eId="hauptteil-n1_abschnitt-n3_uabschnitt-n1_bezeichnung-n1">
+                        Erster Unterabschnitt
+                    </akn:num>
+                    <akn:heading GUID="cccccccc-1111-2222-3333-ddddddddddee" eId="hauptteil-n1_abschnitt-n3_uabschnitt-n1_überschrift-n1">
+                        Anforderungen an die Datenspeicherung
+                    </akn:heading>
+                    <akn:article GUID="dddddddd-1111-2222-3333-ddddddddddee" eId="art-z3" period="#meta-n1_geltzeiten-n1_geltungszeitgr-n3" refersTo="stammform">
+                        <akn:num GUID="eeeeeeee-1111-2222-3333-ddddddddddee" eId="art-z3_bezeichnung-n1">§ 9</akn:num>
+                        <akn:heading GUID="ffffffff-1111-2222-3333-ddddddddddee" eId="art-z3_überschrift-n1">
+                            Datenschutzanforderungen
+                        </akn:heading>
+                        <akn:paragraph GUID="11111111-aaaa-bbbb-cccc-eeeeeeeeeeff" eId="art-z3_abs-z1">
+                            <akn:num GUID="22222222-aaaa-bbbb-cccc-eeeeeeeeeeff" eId="art-z3_abs-z1_bezeichnung-n1">(1)</akn:num>
+                            <akn:content GUID="33333333-aaaa-bbbb-cccc-eeeeeeeeeeff" eId="art-z3_abs-z1_inhalt-n1">
+                                <akn:p GUID="44444444-aaaa-bbbb-cccc-eeeeeeeeeeff" eId="art-z3_abs-z1_inhalt-n1_text-n1">
+                                    Wahlgeräte dürfen keine personenbezogenen Daten der Wählerinnen und Wähler speichern.
+                                </akn:p>
+                            </akn:content>
+                        </akn:paragraph>
+                    </akn:article>
+                </akn:subsection>
+                <akn:subsection GUID="55555555-aaaa-bbbb-cccc-eeeeeeeeeeff" eId="hauptteil-n1_abschnitt-n3_uabschnitt-n2">
+                    <akn:num GUID="66666666-aaaa-bbbb-cccc-eeeeeeeeeeff" eId="hauptteil-n1_abschnitt-n3_uabschnitt-n2_bezeichnung-n1">
+                        Zweiter Unterabschnitt
+                    </akn:num>
+                    <akn:heading GUID="77777777-aaaa-bbbb-cccc-eeeeeeeeeeff" eId="hauptteil-n1_abschnitt-n3_uabschnitt-n2_überschrift-n1">
+                        Technische Sicherheitsmaßnahmen
+                    </akn:heading>
+                    <akn:article GUID="88888888-aaaa-bbbb-cccc-eeeeeeeeeeff" eId="art-z4" period="#meta-n1_geltzeiten-n1_geltungszeitgr-n3" refersTo="stammform">
+                        <akn:num GUID="99999999-aaaa-bbbb-cccc-eeeeeeeeeeff" eId="art-z4_bezeichnung-n1">§ 10</akn:num>
+                        <akn:heading GUID="aabbccdd-1122-3344-5566-778899aabbcc" eId="art-z4_überschrift-n1">
+                            Verschlüsselung und Zugriffsschutz
+                        </akn:heading>
+                        <akn:paragraph GUID="bbccddee-1122-3344-5566-778899aabbcc" eId="art-z4_abs-z1">
+                            <akn:num GUID="ccddeeff-1122-3344-5566-778899aabbcc" eId="art-z4_abs-z1_bezeichnung-n1">(1)</akn:num>
+                            <akn:content GUID="ddeeff00-1122-3344-5566-778899aabbcc" eId="art-z4_abs-z1_inhalt-n1">
+                                <akn:p GUID="eeff0011-1122-3344-5566-778899aabbcc" eId="art-z4_abs-z1_inhalt-n1_text-n1">
+                                    Die in Wahlgeräten gespeicherten Daten sind durch geeignete technische Maßnahmen gegen unbefugten Zugriff zu schützen.
+                                </akn:p>
+                            </akn:content>
+                        </akn:paragraph>
+                    </akn:article>
+                </akn:subsection>
+            </akn:section>
         </akn:body>
     </akn:act>
 </akn:akomaNtoso>
