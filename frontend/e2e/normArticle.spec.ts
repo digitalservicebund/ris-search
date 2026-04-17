@@ -374,6 +374,39 @@ test.describe("can view metadata of norm articles", () => {
   });
 });
 
+test("shows correct breadcrumbs for a nested article", async ({
+  page,
+  privateFeaturesEnabled,
+}) => {
+  test.skip(!privateFeaturesEnabled);
+
+  await navigate(
+    page,
+    "/norms/eli/bund/bgbl-1/1972/s2459/1999-04-20/4/deu/art-z3",
+  );
+
+  const breadcrumb = page.getByRole("navigation", { name: "Pfadnavigation" });
+
+  await expect(
+    breadcrumb.getByRole("link", { name: "Startseite" }),
+  ).toBeVisible();
+  await expect(
+    breadcrumb.getByRole("link", { name: "Gesetze & Verordnungen" }),
+  ).toBeVisible();
+  await expect(
+    breadcrumb.getByRole("link", { name: "BWahlGV vom 24.04.1999" }),
+  ).toBeVisible();
+  await expect(
+    breadcrumb.getByRole("link", { name: "Dritter Abschnitt" }),
+  ).toBeVisible();
+  await expect(
+    breadcrumb.getByRole("link", { name: "Erster Unterabschnitt" }),
+  ).toBeVisible();
+  await expect(
+    breadcrumb.getByText("§ 9 Datenschutzanforderungen"),
+  ).toBeVisible();
+});
+
 test("sets up meta tags for article page", async ({ page }) => {
   await navigate(
     page,
