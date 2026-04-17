@@ -51,7 +51,7 @@ function getNorms(params: LegislationSearchParams) {
   return { status, data };
 }
 
-export function useValidNormVersions(eli: string) {
+export function useValidNormVersions(eli: string | undefined) {
   const today = getCurrentDateInGermanyFormatted();
   return getNorms({
     eli: eli,

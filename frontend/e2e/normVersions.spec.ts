@@ -130,6 +130,58 @@ test.describe("displays metadata correctly", async () => {
   });
 });
 
+test("shows an info about future versions on a historic norm article", async ({
+  page,
+  privateFeaturesEnabled,
+}) => {
+  test.skip(!privateFeaturesEnabled);
+
+  await navigate(
+    page,
+    "/norms/eli/bund/bgbl-1/2020/s1126/2020-08-04/1/deu/art-z1",
+  );
+
+  await expect(
+    page.getByText("Sie lesen einen Paragrafen einer historischen Fassung."),
+  ).toBeVisible();
+
+  await page
+    .getByRole("link", { name: "Zur aktuell gültigen Fassung" })
+    .click();
+
+  await expect(
+    page.getByRole("heading", {
+      name: "Zum Testen von Fassungen - Aktuelle Fassung",
+    }),
+  ).toBeVisible();
+});
+
+test("shows an info about previous versions on a future norm article", async ({
+  page,
+  privateFeaturesEnabled,
+}) => {
+  test.skip(!privateFeaturesEnabled);
+
+  await navigate(
+    page,
+    "/norms/eli/bund/bgbl-1/2020/s1126/2920-08-04/1/deu/art-z1",
+  );
+
+  await expect(
+    page.getByText("Sie lesen einen Paragrafen einer zukünftigen Fassung."),
+  ).toBeVisible();
+
+  await page
+    .getByRole("link", { name: "Zur aktuell gültigen Fassung" })
+    .click();
+
+  await expect(
+    page.getByRole("heading", {
+      name: "Zum Testen von Fassungen - Aktuelle Fassung",
+    }),
+  ).toBeVisible();
+});
+
 test("displays validity in breadcrumb navigation", async ({
   page,
   privateFeaturesEnabled,

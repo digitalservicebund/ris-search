@@ -76,7 +76,7 @@
             </akn:formula>
         </akn:preamble>
         <akn:body GUID="c7d8e9f0-a1b2-4890-abcd-6789abcde123" eId="hauptteil-n1">
-            <akn:article GUID="d8e9f0a1-b2c3-4890-abcd-7890abcde123" eId="art-z1" period="#meta-n1_geltzeiten-n1_geltungszeitgr-n1" refersTo="stammform">
+            <akn:article GUID="d8e9f0a1-b2c3-4890-abcd-7890abcde123" eId="art-z1" period="#meta-n1_geltzeiten-n1_geltungszeitgr-n3" refersTo="stammform">
                 <akn:num GUID="e9f0a1b2-c3d4-4890-abcd-890abcdef123" eId="art-z1_bezeichnung-n1">Art 1</akn:num>
                 <akn:heading GUID="f0a1b2c3-d4e5-4890-abcd-901abcdef123" eId="art-z1_überschrift-n1">Fiktive Bestimmungen zur Einführung</akn:heading>
                 <akn:paragraph GUID="a1b2c3d4-e5f6-4890-abcd-0123456789ac" eId="art-z1_abs-z1">
