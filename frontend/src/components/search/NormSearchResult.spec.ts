@@ -28,7 +28,6 @@ const mockSearchResult: SearchResult<LegislationExpression> = {
       },
     },
     encoding: [],
-    tableOfContents: [],
     legislationLegalForce: "InForce",
     temporalCoverage: "2000-01-01/..",
   },

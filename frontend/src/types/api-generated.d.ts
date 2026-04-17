@@ -919,6 +919,7 @@ export interface components {
       item: components["schemas"]["LegislationExpressionSearchSchema"];
       textMatches: components["schemas"]["TextMatchSchema"][];
     };
+    /** @description A specific part of a legislation expression */
     LegislationExpressionPartSchema: {
       /** @example Legislation */
       "@type"?: string;
@@ -929,8 +930,16 @@ export interface components {
        * @example hauptteitel-para-1
        */
       eId: string;
-      /** @example § 1 */
+      /**
+       * @description Numerical identifier of a specific legislation part
+       * @example § 1
+       */
       name: string;
+      /**
+       * @description Headline of a specific legislation part
+       * @example Beginn der Rechtsfähigkeit
+       */
+      headline: string;
       /**
        * @description Textual string indicating a time period in [ISO 8601 time interval format](https://en.wikipedia.org/wiki/ISO_8601#Time_intervals)
        * @example 1998-02-06/..
@@ -938,6 +947,7 @@ export interface components {
       temporalCoverage: string;
       /** @description The source data for this part, if available on its own */
       encoding?: components["schemas"]["LegislationObjectSchema"][];
+      hasPart?: components["schemas"]["LegislationExpressionPartSchema"][];
     };
     /** @description A legislation expression and references to its manifestations. */
     LegislationExpressionSchema: {
@@ -974,21 +984,9 @@ export interface components {
        * @enum {string}
        */
       legislationLegalForce: "InForce" | "NotInForce" | "PartiallyInForce";
-      tableOfContents?: components["schemas"]["TableOfContentsSchema"][];
       /** @description List of components (articles, preambles, conclusions, attachments, …) that form this legislation item. */
-      hasPart?: components["schemas"]["LegislationExpressionPartSchema"][];
+      hasPart: components["schemas"]["LegislationExpressionPartSchema"][];
       encoding: components["schemas"]["LegislationObjectSchema"][];
-    };
-    TableOfContentsSchema: {
-      /** @example TocEntry */
-      "@type"?: string;
-      /** @example hauptteil-1_para-1 */
-      id: string;
-      /** @example 1 */
-      marker: string;
-      /** @example Art 1 */
-      heading: string;
-      children: components["schemas"]["TableOfContentsSchema"][];
     };
     StreamingResponseBody: unknown;
     AbstractDocumentSchema: {

@@ -38,10 +38,10 @@ export type LegislationManifestation =
 export type LegislationExpression =
   components["schemas"]["LegislationExpressionSchema"];
 
-export type Article = components["schemas"]["LegislationExpressionPartSchema"];
+export type LegislationExpressionPartSchema =
+  components["schemas"]["LegislationExpressionPartSchema"];
 
-export type TableOfContentsItem =
-  components["schemas"]["TableOfContentsSchema"];
+export type Article = components["schemas"]["LegislationExpressionPartSchema"];
 
 // Literature
 export type Literature = components["schemas"]["LiteratureSchema"];

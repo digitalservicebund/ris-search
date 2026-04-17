@@ -3,53 +3,65 @@ import { screen } from "@testing-library/vue";
 import { userEvent } from "@testing-library/user-event";
 import { beforeEach, describe, expect, it } from "vitest";
 import NormTableOfContents from "./NormTableOfContents.vue";
-import type { TableOfContentsItem } from "~/types/api";
+import type { LegislationExpressionPartSchema } from "~/types/api";
 import { tocItemsToTreeViewItems } from "~/utils/tableOfContents";
 
 describe("NormTableOfContents", () => {
-  const mockTocItems: TableOfContentsItem[] = [
+  const mockTocItems: LegislationExpressionPartSchema[] = [
     {
-      "@type": "TocEntry",
-      id: "chapter1",
-      marker: "1",
-      heading: "Chapter 1",
-      children: [
+      "@id": "chapter1",
+      eId: "chapter1",
+      name: "1",
+      headline: "Chapter 1",
+      encoding: [],
+      temporalCoverage: "../..",
+      hasPart: [
         {
-          "@type": "TocEntry",
-          id: "section1-1",
-          marker: "1.1",
-          heading: "Section 1.1",
-          children: [],
+          "@id": "section1-1",
+          eId: "section1-1",
+          name: "1.1",
+          headline: "Section 1.1",
+          encoding: [],
+          temporalCoverage: "../..",
+          hasPart: [],
         },
         {
-          "@type": "TocEntry",
-          id: "section1-2",
-          marker: "1.2",
-          heading: "Section 1.2",
-          children: [
+          "@id": "section1-2",
+          eId: "section1-2",
+          name: "1.2",
+          headline: "Section 1.2",
+          encoding: [],
+          temporalCoverage: "../..",
+          hasPart: [
             {
-              "@type": "TocEntry",
-              id: "subsection1-2-1",
-              marker: "1.2.1",
-              heading: "Subsection 1.2.1",
-              children: [],
+              "@id": "subsection1-2-1",
+              eId: "subsection1-2-1",
+              name: "1.2.1",
+              headline: "Subsection 1.2.1",
+              encoding: [],
+              temporalCoverage: "../..",
+              hasPart: [],
             },
           ],
         },
       ],
     },
     {
-      "@type": "TocEntry",
-      id: "chapter2",
-      marker: "2",
-      heading: "Chapter 2",
-      children: [
+      "@id": "chapter2",
+      eId: "chapter2",
+      name: "2",
+      headline: "Chapter 2",
+      encoding: [],
+      temporalCoverage: "../..",
+      hasPart: [
         {
-          "@type": "TocEntry",
-          id: "section2-1",
-          marker: "2.1",
-          heading: "Section 2.1",
-          children: [],
+          "@id": "section2-1",
+          eId: "section2-1",
+          name: "2.1",
+          headline: "Section 2.1",
+          encoding: [],
+          temporalCoverage: "../..",
+          hasPart: [],
         },
       ],
     },

@@ -1,10 +1,10 @@
 import type { TreeItem } from "~/components/TreeView.vue";
-import type { TableOfContentsItem } from "~/types/api";
+import type { LegislationExpressionPartSchema } from "~/types/api";
 
 type TocTargetBuilder = (id: string) => TreeItem["to"];
 
 export function tocItemsToTreeViewItems(
-  items: TableOfContentsItem[],
+  items: LegislationExpressionPartSchema[],
   getHeadingTarget: TocTargetBuilder,
   getLeafTarget: TocTargetBuilder,
 ): TreeItem[] {
@@ -14,19 +14,19 @@ export function tocItemsToTreeViewItems(
       // frontend router automatically de-/encodes values that are used as
       // parameters in routes. "Normalize" the value by decoding to prevent
       // double encoding/decoding and make them comparable.
-      key: decodeURIComponent(child.id),
-      title: child.marker,
-      subtitle: child.heading,
-      to: getLeafTarget(child.id),
+      key: decodeURIComponent(child.eId),
+      title: child.name,
+      subtitle: child.headline,
+      to: getLeafTarget(child.eId),
     };
 
-    return !child.children || child.children.length === 0
+    return !child.hasPart || child.hasPart.length === 0
       ? childTreeItem
       : {
           ...childTreeItem,
-          to: getHeadingTarget(child.id),
+          to: getHeadingTarget(child.eId),
           children: tocItemsToTreeViewItems(
-            child.children,
+            child.hasPart,
             getHeadingTarget,
             getLeafTarget,
           ),

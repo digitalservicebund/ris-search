@@ -72,11 +72,10 @@ public record LegislationExpressionSchema(
             description = "Whether the legislation expression is currently in force.",
             requiredMode = Schema.RequiredMode.REQUIRED)
         LegalForceStatus legislationLegalForce,
-    @Nullable List<TableOfContentsSchema> tableOfContents,
     @Schema(
             description =
-                "List of components (articles, preambles, conclusions, attachments, …) that form this legislation item.")
-        @Nullable
+                "List of components (articles, preambles, conclusions, attachments, …) that form this legislation item.",
+            requiredMode = Schema.RequiredMode.REQUIRED)
         List<LegislationExpressionPartSchema> hasPart,
     @Schema(requiredMode = Schema.RequiredMode.REQUIRED) List<LegislationObjectSchema> encoding)
     implements JsonldResource {

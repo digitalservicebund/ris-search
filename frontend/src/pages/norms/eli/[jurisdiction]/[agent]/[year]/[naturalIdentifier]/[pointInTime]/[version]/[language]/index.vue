@@ -52,10 +52,10 @@ if (error.value) {
 }
 
 const tableOfContents = computed(() => {
-  if (!metadata.value?.tableOfContents) return [];
+  if (!metadata.value?.hasPart) return [];
   const normPath = route.path;
   return tocItemsToTreeViewItems(
-    metadata.value.tableOfContents,
+    metadata.value.hasPart,
     (id) => ({ path: normPath, hash: `#${id}` }),
     (id) => ({ path: normPath, hash: `#${id}` }),
   );
@@ -243,7 +243,7 @@ const fassungenTabPanelTitleId = useId();
             </DocumentsNormsLegislationContent>
           </template>
 
-          <template #sidebar v-if="metadata.tableOfContents?.length">
+          <template #sidebar v-if="tableOfContents?.length">
             <client-only>
               <DocumentsNormsNormTableOfContents
                 :subheading="normBreadcrumbTitle"

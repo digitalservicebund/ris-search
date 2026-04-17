@@ -10,7 +10,6 @@ import de.bund.digitalservice.ris.search.schema.LegislationExpressionSchema;
 import de.bund.digitalservice.ris.search.schema.LegislationObjectSchema;
 import de.bund.digitalservice.ris.search.schema.LegislationWorkSchema;
 import de.bund.digitalservice.ris.search.schema.PublicationIssueSchema;
-import de.bund.digitalservice.ris.search.schema.TableOfContentsSchema;
 import de.bund.digitalservice.ris.search.utils.DateUtils;
 import java.util.Collections;
 import java.util.List;
@@ -72,8 +71,7 @@ public class NormSchemaMapper {
         .legislationLegalForce(legislationLegalForce)
         .temporalCoverage(temporalCoverage)
         .encoding(encodings)
-        .tableOfContents(buildTableOfContents(norm.getTableOfContents()))
-        .hasPart(buildPartList(norm, expressionId))
+        .hasPart(buildNestedHasPart(norm.getTableOfContents(), expressionId, norm.getArticles()))
         .build();
   }
 
@@ -95,35 +93,69 @@ public class NormSchemaMapper {
     return EncodingSchemaFactory.legislationEncodingSchemas(encodingBaseUrl, encodingZipBaseUrl);
   }
 
-  private static List<TableOfContentsSchema> buildTableOfContents(
-      @Nullable List<TableOfContentsItem> tableOfContentsItems) {
+  /**
+   * Builds the hasPart structure for a legislation expression.
+   *
+   * <p>The resulting list represents the hierarchical structure of the norm, where each entry
+   * corresponds to a structural element derived from the structure of the table of contents. Each
+   * part includes its identifiers and may contain nested subparts.
+   *
+   * @param tableOfContentsItems the table of contents entries describing the structure of the norm;
+   *     may be {@code null}
+   * @param idPrefix the prefix used to generate unique identifiers for each part in the hierarchy
+   * @param articles the list of articles used to enrich or resolve the corresponding parts
+   * @return a list of {@link LegislationExpressionPartSchema}
+   */
+  private static List<LegislationExpressionPartSchema> buildNestedHasPart(
+      @Nullable List<TableOfContentsItem> tableOfContentsItems,
+      String idPrefix,
+      List<Article> articles) {
     if (tableOfContentsItems == null) {
       return List.of();
     }
     return tableOfContentsItems.stream()
-        .map(
-            item ->
-                new TableOfContentsSchema(
-                    item.id(),
-                    item.marker(),
-                    item.heading(),
-                    buildTableOfContents(item.children())))
+        .map(item -> buildLegislationExpressionPart(articles, item, idPrefix))
         .toList();
   }
 
-  private static List<LegislationExpressionPartSchema> buildPartList(Norm norm, String idPrefix) {
-    if (norm.getArticles() == null) return Collections.emptyList();
-    return norm.getArticles().stream().map(article -> buildPart(article, idPrefix)).toList();
+  /**
+   * Builds a single legislation expression component. It combines the table of contents and the
+   * articles array to construct the result, depending on whether the node is a leaf (present in the
+   * articles array) or an internal node.
+   *
+   * @param articles articles array
+   * @param tocItem tableOfContentsItem that is supposed to be mapped to a part
+   * @param idPrefix the prefix used to generate unique identifiers for each part in the hierarchy
+   * @return {@link LegislationExpressionPartSchema}
+   */
+  private static LegislationExpressionPartSchema buildLegislationExpressionPart(
+      List<Article> articles, TableOfContentsItem tocItem, String idPrefix) {
+    var article = articles.stream().filter(a -> tocItem.id().equals(a.eId())).findFirst();
+
+    if (article.isPresent()) {
+      return buildPart(article.get(), idPrefix, tocItem.marker(), tocItem.heading());
+    } else {
+      return new LegislationExpressionPartSchema(
+          idPrefix + "#" + tocItem.id(),
+          tocItem.id(),
+          tocItem.marker(),
+          tocItem.heading(),
+          "",
+          List.of(),
+          buildNestedHasPart(tocItem.children(), idPrefix, articles));
+    }
   }
 
   /**
-   * This maps articles and attachments of a norm. Both are currently part of the articles array.
+   * This maps articles, preamble formula, conclusions formula and attachments of a norm. All are
+   * currently part of the articles array.
    *
    * @param article Article or Attachment of a norm
    * @param idPrefix idPrefix referencing the corresponding norm
    * @return LegislationExpressionPartSchema object
    */
-  private static LegislationExpressionPartSchema buildPart(Article article, String idPrefix) {
+  private static LegislationExpressionPartSchema buildPart(
+      Article article, String idPrefix, String marker, String heading) {
     List<LegislationObjectSchema> encoding;
     // Only attachments have their own manifestationELi and receive an encoding object.
     if (article.manifestationEli() != null) {
@@ -134,15 +166,17 @@ public class NormSchemaMapper {
               .build();
       encoding = List.of(encodingItem);
     } else {
-      encoding = null;
+      encoding = List.of();
     }
     return LegislationExpressionPartSchema.builder()
         .id(idPrefix + "#" + article.eId())
-        .name(article.name())
+        .name(marker)
         .eId(article.eId())
+        .headline(heading)
         .temporalCoverage(
             DateUtils.toDateIntervalString(article.entryIntoForceDate(), article.expiryDate()))
         .encoding(encoding)
+        .hasPart(List.of())
         .build();
   }
 }

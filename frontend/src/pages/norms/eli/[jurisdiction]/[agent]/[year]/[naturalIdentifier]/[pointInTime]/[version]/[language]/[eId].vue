@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import type { RouteLocationRaw } from "#vue-router";
 import type { BreadcrumbItem } from "~/components/Breadcrumbs.vue";
-import { type Article, DocumentKind } from "~/types/api";
+import {
+  type Article,
+  DocumentKind,
+  type LegislationExpressionPartSchema,
+} from "~/types/api";
 import IcBaselineArrowBack from "~icons/ic/baseline-arrow-back";
 import IcBaselineArrowForward from "~icons/ic/baseline-arrow-Forward";
 
@@ -39,9 +43,9 @@ if (error.value) {
 const normPath: string = route.fullPath.replace(/\/[^/]*$/, "");
 
 const tableOfContents = computed(() => {
-  if (!norm.value?.tableOfContents) return [];
+  if (!norm.value?.hasPart) return [];
   return tocItemsToTreeViewItems(
-    norm.value.tableOfContents,
+    norm.value.hasPart,
     (id) => ({ path: normPath, hash: `#${id}` }),
     (id) => ({ path: `${normPath}/${id}` }),
   );
@@ -59,7 +63,7 @@ const article: Ref<Article | undefined> = computed(() =>
   // is encoded in the XML but will automatically be decoded by the router).
   // For this reason, we need to also decode the eId in the data to make them
   // comparable.
-  norm.value?.hasPart?.find(
+  singleViewParts.value?.find(
     (part) => decodeURIComponent(part.eId) == eId.value,
   ),
 );
@@ -72,13 +76,34 @@ const nextArticleUrl: Ref<RouteLocationRaw | undefined> = computed(() =>
   getRouteForSiblingArticle(article.value, 1),
 );
 
+const singleViewParts = computed(() =>
+  getPartsLeafNodes(norm.value?.hasPart ?? []),
+);
+
+// Get all leaf nodes from the hasPart Tree.
+function getPartsLeafNodes(
+  parts: LegislationExpressionPartSchema[],
+): LegislationExpressionPartSchema[] {
+  const leaves: LegislationExpressionPartSchema[] = [];
+
+  for (const part of parts) {
+    if (!part.hasPart || part.hasPart.length === 0) {
+      leaves.push(part);
+    } else {
+      leaves.push(...getPartsLeafNodes(part.hasPart));
+    }
+  }
+
+  return leaves;
+}
+
 function getRouteForSiblingArticle(
   self: Article | undefined,
   offset: number,
 ): RouteLocationRaw | undefined {
   if (!norm.value || !self || !norm.value.hasPart) return undefined;
 
-  const hasPart = norm.value.hasPart;
+  const hasPart = singleViewParts.value;
   const newIndex = hasPart.findIndex((item) => item.eId === self?.eId) + offset;
 
   if (!hasPart[newIndex]) return undefined;
@@ -266,7 +291,7 @@ useDynamicSeo({ title, description });
         </template>
         <template #sidebar>
           <DocumentsNormsNormTableOfContents
-            v-if="norm.tableOfContents?.length"
+            v-if="tableOfContents.length"
             :subheading="normBreadcrumbTitle"
             :subheading-to="normPath"
             :table-of-contents="tableOfContents"

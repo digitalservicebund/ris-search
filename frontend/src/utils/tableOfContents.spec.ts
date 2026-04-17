@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { findNodePath, tocItemsToTreeViewItems } from "./tableOfContents";
-import type { TableOfContentsItem } from "~/types/api";
+import type { LegislationExpressionPartSchema } from "~/types/api";
 
 const getHeadingTarget = (id: string, headingPath = "/heading") => ({
   path: headingPath,
@@ -14,13 +14,16 @@ const getLeafTarget = (id: string, leafPath = "/leaf") => ({
 describe("tableOfContents", () => {
   describe("tocItemsToTreeViewItems", () => {
     it("converts leaf items correctly", () => {
-      const items: TableOfContentsItem[] = [
+      const items: LegislationExpressionPartSchema[] = [
         {
           "@type": "TocEntry",
-          id: "art-1",
-          marker: "§ 1",
-          heading: "Title",
-          children: [],
+          "@id": "art-1",
+          eId: "art-1",
+          name: "§ 1",
+          headline: "Title",
+          encoding: [],
+          temporalCoverage: "../..",
+          hasPart: [],
         },
       ];
 
@@ -39,19 +42,23 @@ describe("tableOfContents", () => {
     });
 
     it("converts items with children correctly", () => {
-      const items: TableOfContentsItem[] = [
+      const items: LegislationExpressionPartSchema[] = [
         {
-          "@type": "TocEntry",
-          id: "chapter-1",
-          marker: "Chapter 1",
-          heading: "Introduction",
-          children: [
+          "@id": "chapter-1",
+          eId: "chapter-1",
+          name: "Chapter 1",
+          headline: "Introduction",
+          encoding: [],
+          temporalCoverage: "../..",
+          hasPart: [
             {
-              "@type": "TocEntry",
-              id: "art-1",
-              marker: "§ 1",
-              heading: "Scope",
-              children: [],
+              "@id": "art-1",
+              eId: "art-1",
+              headline: "Scope",
+              name: "§ 1",
+              encoding: [],
+              temporalCoverage: "../..",
+              hasPart: [],
             },
           ],
         },
@@ -73,13 +80,15 @@ describe("tableOfContents", () => {
     });
 
     it("uses raw IDs in generated URLs", () => {
-      const items: TableOfContentsItem[] = [
+      const items: LegislationExpressionPartSchema[] = [
         {
-          "@type": "TocEntry",
-          id: "Präöü ÄÖÜ §1",
-          marker: "§ 1",
-          heading: "Encoded Title",
-          children: [],
+          "@id": "Präöü ÄÖÜ §1",
+          eId: "Präöü ÄÖÜ §1",
+          name: "§ 1",
+          headline: "Encoded Title",
+          encoding: [],
+          temporalCoverage: "../..",
+          hasPart: [],
         },
       ];
 
@@ -94,13 +103,15 @@ describe("tableOfContents", () => {
     });
 
     it("decodes percent-encoded IDs for use as selection key", () => {
-      const items: TableOfContentsItem[] = [
+      const items: LegislationExpressionPartSchema[] = [
         {
-          "@type": "TocEntry",
-          id: "art-z%c2%a7%c2%a7%2018%20bis%2021",
-          marker: "§§ 18 bis 21",
-          heading: "Pre-encoded eId",
-          children: [],
+          "@id": "v1/legislation/eli/art-z%c2%a7%c2%a7%2018%20bis%2021",
+          eId: "art-z%c2%a7%c2%a7%2018%20bis%2021",
+          name: "§§ 18 bis 21",
+          headline: "Pre-encoded eId",
+          hasPart: [],
+          encoding: [],
+          temporalCoverage: "../..",
         },
       ];
 
@@ -119,13 +130,15 @@ describe("tableOfContents", () => {
     });
 
     it("keeps raw IDs for selection and encodes hash links for router navigation", () => {
-      const items: TableOfContentsItem[] = [
+      const items: LegislationExpressionPartSchema[] = [
         {
-          "@type": "TocEntry",
-          id: "art-z§§ 18 bis 21",
-          marker: "§§ 18 bis 21",
-          heading: "Encoded hash target",
-          children: [],
+          "@id": "art-z§§ 18 bis 21",
+          eId: "art-z§§ 18 bis 21",
+          name: "§§ 18 bis 21",
+          headline: "Encoded hash target",
+          encoding: [],
+          temporalCoverage: "../..",
+          hasPart: [],
         },
       ];
 
