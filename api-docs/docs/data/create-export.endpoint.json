@@ -1,0 +1,42 @@
+{
+  "/api/v1/exports": {
+    "post": {
+      "operationId": "create-export",
+      "parameters": [
+        {
+          "name": "types",
+          "type": "list",
+          "in": "body",
+          "default": null,
+          "required": true,
+          "descriptions": {
+            "en": "The entity types that should be included in the export: `Legislation` or `Decision`",
+            "de": "The entity types that should be included in the export: `Legislation` or `Decision`"
+          }
+        },
+        {
+          "name": "encodings",
+          "type": "list",
+          "in": "body",
+          "default": ["xml"],
+          "required": true,
+          "descriptions": {
+            "en": "The encodings that should be included in the export: `json`, `xml`, `pdf`, `text`, and `html`",
+            "de": "The encodings that should be included in the export: `json`, `xml`, `pdf`, `text`, and `html`"
+          }
+        },
+        {
+          "name": "dateModified",
+          "type": "date",
+          "in": "body",
+          "default": null,
+          "required": false,
+          "descriptions": {
+            "en": "Filter entities based on the date of the modification. When no date is given, the full dataset will be exported",
+            "de": "Filter entities based on the date of the modification. When no date is given, the full dataset will be exported"
+          }
+        }
+      ]
+    }
+  }
+}

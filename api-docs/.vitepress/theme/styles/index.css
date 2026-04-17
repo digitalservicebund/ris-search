@@ -1,0 +1,157 @@
+@import "./colors.css";
+
+@font-face {
+  font-family: "BundesSansWeb";
+  src: url("/fonts/bundessans-web-light.woff2") format("woff2");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "BundesSansWeb";
+  src: url("/fonts/bundessans-web-lightitalic.woff2") format("woff2");
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "BundesSansWeb";
+  src: url("/fonts/bundessans-web-regular.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "BundesSansWeb";
+  src: url("/fonts/bundessans-web-regularitalic.woff2") format("woff2");
+  font-weight: normal;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "BundesSansWeb";
+  src: url("/fonts/bundessans-web-medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "BundesSansWeb";
+  src: url("/fonts/bundessans-web-mediumitalic.woff2") format("woff2");
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "BundesSansWeb";
+  src: url("/fonts/bundessans-web-bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "BundesSansWeb";
+  src: url("/fonts/bundessans-web-bolditalic.woff2") format("woff2");
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "BundesSansWeb";
+  src: url("/fonts/bundessans-web-black.woff2") format("woff2");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "BundesSansWeb";
+  src: url("/fonts/bundessans-web-blackitalic.woff2") format("woff2");
+  font-weight: 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --font-size-min: 100%;
+    --font-size-max: 18px;
+    --font-size-scaler: calc(1rem + 2vw);
+    --spacing-prose: 560px;
+    --sidebar-width: 252px;
+    --container-max-width: calc(var(--spacing-prose) - var(--sidebar-width));
+    --container-padding: 2rem;
+  }
+
+  html {
+    line-height: 1.25;
+    font-size: clamp(
+      var(--font-size-min),
+      var(--font-size-scaler),
+      var(--font-size-max)
+    );
+
+    background-color: var(--vp-c-bg);
+  }
+
+  body {
+    min-width: 320px;
+  }
+
+  .max-w-prose {
+      max-width: var(--spacing-prose);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply relative;
+    @apply text-black dark:text-white;
+    @apply hyphens-auto;
+  }
+
+  a {
+    @apply underline;
+  }
+
+  a:hover,
+  a:focus {
+    @apply text-brand-primary;
+  }
+
+  code {
+    font-size: 0.9em;
+  }
+
+  pre {
+    text-wrap: auto;
+  }
+
+  textarea {
+    background: var(--vp-c-bg);
+    @apply p-8;
+  }
+
+  h2 {
+    @apply ris-heading2-bold;
+  }
+
+  h3 {
+    @apply ris-heading3-bold;
+  }
+}

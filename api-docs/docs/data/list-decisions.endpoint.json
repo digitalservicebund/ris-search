@@ -1,0 +1,140 @@
+{
+  "/api/v1/case-law": {
+    "get": {
+      "operationId": "list-decisions",
+      "parameters": [
+        {
+          "name": "page",
+          "type": "number",
+          "in": "query",
+          "default": null,
+          "required": false,
+          "descriptions": {
+            "de": "Navigate through paginated results by specifying the desired page number.",
+            "en": "Navigate through paginated results by specifying the desired page number."
+          }
+        },
+        {
+          "name": "limit",
+          "type": "number",
+          "in": "query",
+          "default": 100,
+          "required": false,
+          "descriptions": {
+            "de": "Controls the number of items returned.",
+            "en": "Controls the number of items returned."
+          }
+        },
+        {
+          "name": "decisionBy",
+          "type": "string",
+          "in": "query",
+          "required": false,
+          "descriptions": {
+            "de": "Filters by the court.",
+            "en": "Filters by the court."
+          }
+        },
+        {
+          "name": "decisionDate",
+          "type": "date",
+          "in": "query",
+          "required": false,
+          "descriptions": {
+            "de": "Filters by the date of a decision.",
+            "en": "Filters by the date of a decision."
+          }
+        },
+        {
+          "name": "keywords",
+          "type": "string",
+          "in": "query",
+          "required": false,
+          "descriptions": {
+            "de": "Filters by the `keywords` field.",
+            "en": "Filters by the `keywords` field."
+          }
+        },
+        {
+          "name": "reference",
+          "type": "string",
+          "in": "query",
+          "required": false,
+          "descriptions": {
+            "de": "Filters by the `decisionReference` field.",
+            "en": "Filters by the `decisionReference` field."
+          }
+        },
+        {
+          "name": "type",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "in": "query",
+          "required": false,
+          "descriptions": {
+            "de": "Filters by decision type.",
+            "en": "Filters by decision type."
+          },
+          "enum": [
+            "ObjectionInterimOrder",
+            "ValueDeterminationInConstitutionalCourtProceedings",
+            "PendingProceeding",
+            "ExpertReport",
+            "JudgmentByAdmission",
+            "InterimOrder",
+            "PenaltyNotice",
+            "Ruling",
+            "Order",
+            "DisputeValueDecision",
+            "ThreeMemberCommitteeDecision",
+            "InterimDecision",
+            "CourtDecision",
+            "InterimCourtDecision",
+            "PartialDecision",
+            "ChamberDecision",
+            "ChamberDecisionWithoutReasoning",
+            "AffirmativeChamberDecision",
+            "ArbitrationDecision",
+            "LegalAidDecision",
+            "TenancyMatterDecision",
+            "CostAssessmentDecision",
+            "NonAdmittanceDecision",
+            "BoardOfAppealDecision",
+            "Judgment",
+            "FinalJudgment",
+            "SupplementaryJudgment",
+            "PartialJudgment",
+            "DefaultJudgment",
+            "PartialDefaultJudgment",
+            "WaiverJudgment",
+            "SecondDefaultJudgment",
+            "InterimJudgment",
+            "Disposition",
+            "Settlement",
+            "Answer",
+            "Statement",
+            "ReferenceDecision",
+            "ECJReference",
+            "RequestForPreliminaryRuling",
+            "PublicProsecutorsGeneralDecision",
+            "PublicProsecutorsOfficeDecision",
+            "PublicProsecutorsOfficeDismissalOrder"
+          ]
+        },
+        {
+          "name": "sort",
+          "type": "string",
+          "enum": ["decisionDate", "name"],
+          "in": "query",
+          "required": false,
+          "descriptions": {
+            "de": "Sorts the list by `name` or `decisionDate`.",
+            "en": "Sorts the list by `name` or `decisionDate`."
+          }
+        }
+      ]
+    }
+  }
+}

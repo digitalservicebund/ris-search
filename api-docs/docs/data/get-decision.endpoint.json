@@ -1,0 +1,20 @@
+{
+  "/api/v1/case-law/{id}": {
+    "get": {
+      "operationId": "get-decision",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "in": "path",
+          "default": null,
+          "required": true,
+          "descriptions": {
+            "en": "The unique identifier (`@id`) of a decision.",
+            "de": "Der eindeutige Identifikator (`@id`) einer Entscheidung."
+          }
+        }
+      ]
+    }
+  }
+}

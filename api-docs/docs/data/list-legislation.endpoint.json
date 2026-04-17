@@ -1,0 +1,65 @@
+{
+  "/api/v1/legislation": {
+    "get": {
+      "operationId": "list-legislation",
+      "parameters": [
+        {
+          "name": "legislationType",
+          "type": "string",
+          "in": "query",
+          "default": null,
+          "required": false,
+          "descriptions": {
+            "de": "Filter by legislation type: `law`, `act`, `directive`, or `decree`",
+            "en": "Filter by legislation type: `law`, `act`, `directive`, or `decree`"
+          }
+        },
+        {
+          "name": "legislationLegalForce",
+          "type": "string",
+          "in": "query",
+          "default": null,
+          "required": false,
+          "descriptions": {
+            "de": "Filter by status: `InForce`, `NotInForce`, or `PartiallyInForce`",
+            "en": "Filter by status: `InForce`, `NotInForce`, or `PartiallyInForce`"
+          }
+        },
+        {
+          "name": "limit",
+          "type": "number",
+          "in": "query",
+          "default": 100,
+          "required": false,
+          "descriptions": {
+            "de": "Controls the number of items returned.",
+            "en": "Controls the number of items returned."
+          }
+        },
+        {
+          "name": "page",
+          "type": "number",
+          "in": "query",
+          "default": 1,
+          "required": false,
+          "descriptions": {
+            "de": "Navigate through paginated results by specifying the desired page number.",
+            "en": "Navigate through paginated results by specifying the desired page number."
+          }
+        },
+        {
+          "name": "sort",
+          "type": "string",
+          "enum": ["legislationDate", "legislationIdentifier"],
+          "in": "query",
+          "default": null,
+          "required": false,
+          "descriptions": {
+            "de": "Sort the list by `legislationDate` or `legislationIdentifier`",
+            "en": "Sort the list by `legislationDate` or `legislationIdentifier`"
+          }
+        }
+      ]
+    }
+  }
+}

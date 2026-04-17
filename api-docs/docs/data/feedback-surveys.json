@@ -1,0 +1,62 @@
+[
+  {
+    "id": "018c252c-e5e6-0000-d66d-acd5f06b9541",
+    "name": "Feedback General",
+    "type": "api",
+    "questions": [
+      {
+        "type": "open",
+        "question": {
+          "en": "Do you have feedback or questions you want share?",
+          "de": "Haben Sie Feedback für das Schema für Gesetze & Verordnungen?"
+        }
+      }
+    ],
+    "createdAt": "2023-12-01T11:39:08.646638Z"
+  },
+  {
+    "id": "018c3a38-41d7-0000-7fb9-05976294ce4e",
+    "name": "Feedback Class Property",
+    "type": "api",
+    "createdAt": "2023-12-05T13:43:34.615953Z",
+    "questions": [
+      {
+        "type": "open",
+        "question": {
+          "en": "Do you have feedback or questions about this schema field?",
+          "de": "Do you have feedback?"
+        }
+      }
+    ]
+  },
+  {
+    "id": "018c3a3a-5fb9-0000-ec8f-74ebc8be23b6",
+    "name": "Feedback Class",
+    "type": "api",
+    "createdAt": "2023-12-05T13:45:53.338006Z",
+    "questions": [
+      {
+        "type": "open",
+        "question": {
+          "en": "Do you have feedback or questions about this schema?",
+          "de": "Do you have feedback or questions about this schema?"
+        }
+      }
+    ]
+  },
+  {
+    "id": "018c3b1a-68ee-0000-9a63-96227789cece",
+    "name": "Feedback Request Parameters",
+    "type": "api",
+    "createdAt": "2023-12-05T17:50:35.758757Z",
+    "questions": [
+      {
+        "type": "open",
+        "question": {
+          "en": "Do you have feedback or questions about this request parameter?",
+          "de": "Do you have feedback or questions about this request parameter?"
+        }
+      }
+    ]
+  }
+]

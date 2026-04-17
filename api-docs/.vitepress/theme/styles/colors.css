@@ -1,0 +1,41 @@
+@layer base {
+  :root {
+    --color-primary: 0 0 0;
+    --color-secondary: 17, 24, 39; /* Tailwind gray-900 */
+    --color-brand-secondary: rgb(0 75 118); /* Tailwind blue-800 */
+    --color-alert-secondary: rgb(254, 252, 239);
+
+    --vp-c-border-hard: #B8BDC3;
+    --vp-c-text-1: rgb(60, 60, 67);
+
+    --vp-c-bg: #ffffff; /* The background color used for main screen */
+    --vp-c-bg-alt: #f6f6f7;
+    --vp-c-bg-elv: #ffffff;
+    --vp-c-bg-soft: #f6f6f7;
+
+    --vp-c-accent: rgb(0 75 118); /* Tailwind blue-800 */
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-primary: 255 255 255;
+      --color-secondary: 209, 213, 219; /* Tailwind gray-300 */
+      --color-brand-secondary: rgb(0 51 80); /* Tailwind blue-900 */
+      --color-alert-secondary: rgb(110, 92, 1);
+
+      --vp-c-border-hard: rgb(78 89 106);
+      --vp-c-text-1: rgb(246, 247, 248);
+
+      --vp-c-bg: #1b1b1f;
+      --vp-c-bg-alt: #090909;
+      --vp-c-bg-elv: #202127;
+      --vp-c-bg-soft: #202127;
+
+      --vp-c-accent: #00a4f7;
+      @apply text-gray-100;
+    }
+    .ris-body1-regular, .ris-body2-regular, .ris-label1-regular, .ris-label2-regular {
+      @apply text-gray-100;
+    }
+  }
+}
