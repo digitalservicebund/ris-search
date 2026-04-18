@@ -1,4 +1,5 @@
-import { mount, RouterLinkStub } from "@vue/test-utils";
+import { renderSuspended } from "@nuxt/test-utils/runtime";
+import { fireEvent, screen } from "@testing-library/vue";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import ConsentBanner from "./ConsentBanner.vue";
 
@@ -15,20 +16,20 @@ vi.mock("~/composables/usePostHog", () => ({
   }),
 }));
 
-const factory = (userConsent: boolean | undefined) => {
+const factory = async (userConsent: boolean | undefined) => {
   mockUserConsent.value = userConsent;
-  return mount(ConsentBanner, {
+  return renderSuspended(ConsentBanner, {
     global: {
       stubs: {
-        NuxtLink: RouterLinkStub,
+        NuxtLink: { template: "<a><slot /></a>" },
       },
     },
   });
 };
 
 describe("ConsentBanner", () => {
-  const cookieBanner = '[data-testid="cookie-banner"]';
-  const declineButton = '[data-testid="decline-cookie"]';
+  const cookieBannerTestId = "cookie-banner";
+  const declineButtonTestId = "decline-cookie";
 
   beforeEach(() => {
     mockUserConsent.value = undefined;
@@ -36,22 +37,19 @@ describe("ConsentBanner", () => {
   });
 
   it("shows the banner when user has not given consent yet", async () => {
-    const wrapper = factory(undefined);
-    expect(wrapper.find(cookieBanner).exists()).toBe(true);
+    await factory(undefined);
+    expect(screen.queryByTestId(cookieBannerTestId)).toBeInTheDocument();
   });
 
   it("hides the banner when user has already given consent", async () => {
-    const wrapper = factory(true);
-    expect(wrapper.find(cookieBanner).exists()).toBe(false);
+    await factory(true);
+    expect(screen.queryByTestId(cookieBannerTestId)).not.toBeInTheDocument();
   });
 
   it("sets tracking when clicking the Decline button", async () => {
-    const wrapper = factory(undefined);
-
-    const forms = wrapper.findAll("form");
-    const declineForm = forms.find((form) => form.find(declineButton).exists());
-    await declineForm?.trigger("submit");
-
+    await factory(undefined);
+    const declineButton = screen.getByTestId(declineButtonTestId);
+    await fireEvent.submit(declineButton.closest("form")!);
     expect(mockSetTracking).toHaveBeenCalledWith(false);
   });
 });

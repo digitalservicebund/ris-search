@@ -1,4 +1,5 @@
-import { mount, RouterLinkStub } from "@vue/test-utils";
+import { renderSuspended } from "@nuxt/test-utils/runtime";
+import { fireEvent, screen } from "@testing-library/vue";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import ConsentStatus from "./ConsentStatus.global.vue";
 
@@ -16,75 +17,71 @@ vi.mock("~/composables/usePostHog", () => ({
   }),
 }));
 
-const factory = (userConsent: boolean | undefined) => {
+const factory = async (userConsent: boolean | undefined) => {
   mockUserConsent.value = userConsent;
-  return mount(ConsentStatus, {
+  return renderSuspended(ConsentStatus, {
     global: {
       stubs: {
-        NuxtLink: RouterLinkStub,
-        ClientOnly: {
-          template: "<slot />",
-        },
+        NuxtLink: { template: "<a><slot /></a>" },
+        ClientOnly: { template: "<slot />" },
       },
     },
   });
 };
 
 describe("ConsentStatus", () => {
-  const acceptButton = '[data-testid="settings-accept-cookie"]';
-  const declineButton = '[data-testid="settings-decline-cookie"]';
+  const acceptButtonTestId = "settings-accept-cookie";
+  const declineButtonTestId = "settings-decline-cookie";
 
   beforeEach(() => {
     mockUserConsent.value = undefined;
     vi.clearAllMocks();
   });
 
-  it("renders without error", () => {
-    const wrapper = factory(undefined);
-    expect(
-      wrapper.find('[data-testid="consent-status-wrapper"]').exists(),
-    ).toBe(true);
+  it("renders without error", async () => {
+    await factory(undefined);
+    expect(screen.queryByTestId("consent-status-wrapper")).toBeInTheDocument();
   });
 
-  it("shows accept button when consent is not given", () => {
-    const wrapper = factory(false);
-    expect(wrapper.find(acceptButton).exists()).toBe(true);
-    expect(wrapper.find(declineButton).exists()).toBe(false);
+  it("shows accept button when consent is not given", async () => {
+    await factory(false);
+    expect(screen.queryByTestId(acceptButtonTestId)).toBeInTheDocument();
+    expect(screen.queryByTestId(declineButtonTestId)).not.toBeInTheDocument();
   });
 
-  it("shows decline button when consent is given", () => {
-    const wrapper = factory(true);
-    expect(wrapper.find(declineButton).exists()).toBe(true);
-    expect(wrapper.find(acceptButton).exists()).toBe(false);
+  it("shows decline button when consent is given", async () => {
+    await factory(true);
+    expect(screen.queryByTestId(declineButtonTestId)).toBeInTheDocument();
+    expect(screen.queryByTestId(acceptButtonTestId)).not.toBeInTheDocument();
   });
 
-  it("displays declined message when consent is false", () => {
-    const wrapper = factory(false);
-    expect(wrapper.text()).toContain("nicht einverstanden");
+  it("displays declined message when consent is false", async () => {
+    await factory(false);
+    expect(screen.getByTestId("consent-status-wrapper").textContent).toContain(
+      "nicht einverstanden",
+    );
   });
 
-  it("displays accepted message when consent is true", () => {
-    const wrapper = factory(true);
-    expect(wrapper.text()).toContain(
+  it("displays accepted message when consent is true", async () => {
+    await factory(true);
+    expect(screen.getByTestId("consent-status-wrapper").textContent).toContain(
       "Ich bin mit der Nutzung von Analyse-Cookies einverstanden",
     );
   });
 
   it("calls setTracking(true) when clicking accept button", async () => {
-    const wrapper = factory(false);
-
-    const form = wrapper.find("form");
-    await form.trigger("submit");
-
+    await factory(false);
+    await fireEvent.submit(
+      screen.getByTestId(acceptButtonTestId).closest("form")!,
+    );
     expect(mockSetTracking).toHaveBeenCalledWith(true);
   });
 
   it("calls setTracking(false) when clicking decline button", async () => {
-    const wrapper = factory(true);
-
-    const form = wrapper.find("form");
-    await form.trigger("submit");
-
+    await factory(true);
+    await fireEvent.submit(
+      screen.getByTestId(declineButtonTestId).closest("form")!,
+    );
     expect(mockSetTracking).toHaveBeenCalledWith(false);
   });
 });
