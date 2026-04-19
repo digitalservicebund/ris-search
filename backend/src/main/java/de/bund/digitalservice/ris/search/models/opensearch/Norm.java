@@ -150,6 +150,8 @@ public final class Norm implements AbstractSearchEntity {
     public static final String EXPRESSION_ELI = "expression_eli";
     public static final String EXPRESSION_ELI_KEYWORD = "expression_eli.keyword";
     public static final String LATEST_MANIFESTATION_ELI = "latest_manifestation_eli";
+    public static final String LATEST_MANIFESTATION_ELI_KEYWORD =
+        "latest_manifestation_eli.keyword";
     public static final String TABLE_OF_CONTENTS = "table_of_contents";
     public static final String CONCLUSIONS_FORMULA = "conclusions_formula";
     public static final String PREAMBLE_FORMULA = "preamble_formula";
