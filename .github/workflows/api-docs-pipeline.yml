@@ -5,10 +5,12 @@ on:
     branches: [main]
     paths:
       - 'api-docs/**'
+      - '.github/workflows/**'
   pull_request:
     branches: [main]
     paths:
       - 'api-docs/**'
+      - '.github/workflows/**'
   # Allow to run this workflow manually
   workflow_dispatch:
 
