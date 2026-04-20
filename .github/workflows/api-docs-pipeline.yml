@@ -98,3 +98,13 @@ jobs:
       # Use image digest instead of tag to uniquely identify the image
       image-reference: ghcr.io/${{ github.repository }}/api-docs@${{ needs.build-and-push-image.outputs.image-digest }}
       app: api-docs
+
+  deploy:
+    needs:
+      - scan-attest-and-sign-image
+    uses: ./.github/workflows/deploy.yml
+    secrets: inherit
+    with:
+      image-tag: ${{ github.sha }}
+      deployment-environment: prototype
+      deploying-apps: 'ris-search/api-docs'
