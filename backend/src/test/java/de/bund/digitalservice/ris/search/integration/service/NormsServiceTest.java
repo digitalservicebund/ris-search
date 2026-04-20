@@ -46,15 +46,29 @@ class NormsServiceTest extends ContainersIntegrationBase {
             .entryIntoForceDate(LocalDate.of(2025, 5, 5))
             .expiryDate(null)
             .expressionEli("eli/bund/bgbl-1/2020/s1126/2025-05-05/deu")
+            .manifestationEliExample(
+                "eli/bund/bgbl-1/2020/s1126/2025-05-05/deu/2920-08-04/regelungstext-1.xml")
+            .officialTitle("latest title")
+            .datePublished(LocalDate.of(2022, 1, 1))
+            .officialShortTitle("latest short title")
+            .normsDate(LocalDate.of(2022, 1, 1))
+            .officialAbbreviation("latest abbr")
             .workEli("eli/bund/bgbl-1/2020/s1126")
             .build();
 
     var olderExpression =
         Norm.builder()
-            .id("eli/bund/bgbl-1/2020/s1126/2020-05-05/deu")
-            .entryIntoForceDate(LocalDate.of(2020, 5, 5))
+            .id("eli/bund/bgbl-1/2022/s1126/2022-05-05/deu")
+            .entryIntoForceDate(LocalDate.of(2022, 5, 5))
             .expiryDate(LocalDate.of(2025, 5, 5))
-            .expressionEli("eli/bund/bgbl-1/2020/s1126/2020-05-05/deu")
+            .expressionEli("eli/bund/bgbl-1/2022/s1126/2022-05-05/deu")
+            .manifestationEliExample(
+                "eli/bund/bgbl-1/2022/s1126/2025-05-05/deu/2920-08-04/regelungstext-1.xml")
+            .officialTitle("oldest title")
+            .datePublished(LocalDate.of(2020, 1, 1))
+            .officialShortTitle("oldest short title")
+            .normsDate(LocalDate.of(2020, 1, 1))
+            .officialAbbreviation("oldest abbr")
             .workEli("eli/bund/bgbl-1/2020/s1126")
             .build();
     repository.save(olderExpression);
@@ -66,19 +80,9 @@ class NormsServiceTest extends ContainersIntegrationBase {
 
     assertThat(test.getTotalElements()).isEqualTo(2);
     assertThat(test.getTotalPages()).isEqualTo(1);
-    assertThat(test.getContent().getFirst().getExpressionEli())
-        .isEqualTo(latestExpression.getExpressionEli());
-    assertThat(test.getContent().getFirst().getExpiryDate())
-        .isEqualTo(latestExpression.getExpiryDate());
-    assertThat(test.getContent().getFirst().getEntryIntoForceDate())
-        .isEqualTo(latestExpression.getEntryIntoForceDate());
 
-    assertThat(test.getContent().getLast().getExpressionEli())
-        .isEqualTo(olderExpression.getExpressionEli());
-    assertThat(test.getContent().getLast().getExpiryDate())
-        .isEqualTo(olderExpression.getExpiryDate());
-    assertThat(test.getContent().getLast().getEntryIntoForceDate())
-        .isEqualTo(olderExpression.getEntryIntoForceDate());
+    assertThat(test.getContent().getFirst()).isEqualTo(latestExpression);
+    assertThat(test.getContent().getLast()).isEqualTo(olderExpression);
   }
 
   @Test
