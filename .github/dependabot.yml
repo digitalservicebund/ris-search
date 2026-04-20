@@ -21,7 +21,7 @@ updates:
           - minor
           - patch
   - package-ecosystem: "npm"
-    directory:
+    directories:
       - "/frontend"
       - "/api-docs"
     schedule:
