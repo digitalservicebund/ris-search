@@ -3,8 +3,12 @@ name: CI-CD-Pipeline
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - 'api-docs/**'
   pull_request:
     branches: [main]
+    paths-ignore:
+      - 'api-docs/**'
   # Allow to run this workflow manually
   workflow_dispatch:
 
