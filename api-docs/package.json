@@ -7,6 +7,10 @@
     "build": "vitepress build",
     "preview": "vitepress preview"
   },
+  "engines": {
+    "node": "<=24",
+    "pnpm": "<=10"
+  },
   "devDependencies": {
     "@digitalservice4germany/angie": "^2.4.0",
     "@digitalservice4germany/style-dictionary": "^2.0.0",
