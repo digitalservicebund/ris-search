@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { RisSingleAccordion } from "@digitalservicebund/ris-ui/components";
-
 /**
  * Wrapper component for legislation content that provides scoped styling
  * for server-rendered AKN (Akoma Ntoso) HTML content.
@@ -13,14 +11,14 @@ defineProps<{
 </script>
 
 <template>
-  <RisSingleAccordion
+  <SingleAccordion
     v-if="officialToc"
     class="mt-24"
     header-expanded="Amtliches Inhaltsverzeichnis ausblenden"
     header-collapsed="Amtliches Inhaltsverzeichnis einblenden"
   >
     <div v-html="officialToc" />
-  </RisSingleAccordion>
+  </SingleAccordion>
   <div :class="['legislation', { 'single-article': singleArticle }]">
     <slot />
   </div>

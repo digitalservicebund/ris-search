@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { RisExpandableText } from "@digitalservicebund/ris-ui/components";
 import NormHeadingFootnotes from "./NormHeadingFootnotes.vue";
 import type { NormContent } from "~/composables/useNormData";
 import type { LegislationExpression } from "~/types/api";
@@ -30,7 +29,7 @@ const normTitle = computed(() => getNormTitle(props.metadata));
       </p>
 
       <client-only>
-        <RisExpandableText :length="6">
+        <ExpandableText :length="6">
           <div
             v-if="hasHeading"
             :data-longTitle="isLongTitle || null"
@@ -40,7 +39,7 @@ const normTitle = computed(() => getNormTitle(props.metadata));
           <div v-else class="titel wrap-break-word max-sm:text-2xl">
             {{ normTitle }}
           </div>
-        </RisExpandableText>
+        </ExpandableText>
 
         <template #fallback>
           <div

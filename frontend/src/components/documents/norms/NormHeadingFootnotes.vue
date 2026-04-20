@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { RisSingleAccordion } from "@digitalservicebund/ris-ui/components";
-
 const props = defineProps<{ html: string; textLength?: number }>();
 
 const threshold = 3 * 60;
@@ -12,14 +10,14 @@ const wrapFootnote = computed(
 
 <template>
   <div class="dokumentenkopf-fussnoten">
-    <RisSingleAccordion
+    <SingleAccordion
       v-if="wrapFootnote"
       class="print:hidden"
       header-expanded="Fußnote ausblenden"
       header-collapsed="Fußnote anzeigen"
     >
       <div v-html="props.html"></div>
-    </RisSingleAccordion>
+    </SingleAccordion>
 
     <div
       :data-show="!wrapFootnote"

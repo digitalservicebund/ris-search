@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { RisSingleAccordion } from "@digitalservicebund/ris-ui/components";
-
 const data = [
   {
     operator: "AND",
@@ -29,7 +27,7 @@ const isExpanded = ref(true);
 </script>
 
 <template>
-  <RisSingleAccordion
+  <SingleAccordion
     v-model="isExpanded"
     header-collapsed="Hilfestellung zu Suchoperatoren"
     header-expanded="Hilfestellung zu Suchoperatoren"
@@ -63,5 +61,5 @@ const isExpanded = ref(true);
         </tbody>
       </table>
     </div>
-  </RisSingleAccordion>
+  </SingleAccordion>
 </template>

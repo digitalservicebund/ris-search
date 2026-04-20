@@ -17,15 +17,6 @@ const createDefaultProps = () => ({
   } as LegislationExpression,
 });
 
-vi.mock("@digitalservicebund/ris-ui/components", () => ({
-  RisExpandableText: {
-    name: "RisExpandableText",
-    props: ["length"],
-    template:
-      '<div data-testid="ris-expandable-text" class="mock-expandable-text"><slot /></div>',
-  },
-}));
-
 vi.mock("./titles", () => ({
   getNormTitle: vi.fn(() => `getNormTitle title`),
 }));
@@ -52,7 +43,6 @@ describe("HeadingGroup", () => {
     expect(document.querySelector(".ris-heading3-regular")).toHaveTextContent(
       "Test Alternate Name",
     );
-    expect(screen.getAllByTestId("ris-expandable-text")).toHaveLength(1);
 
     const notesStub = screen.getByTestId("norm-heading-footnotes");
     expect(notesStub.dataset.html).toBe("<p>Test Notes</p>");
@@ -75,7 +65,7 @@ describe("HeadingGroup", () => {
     expect(headingWrapper).toHaveAttribute("data-longtitle", "true");
   });
 
-  it("renders just one RisExpandableText if no headingAuthorialNotes are provided", async () => {
+  it("still renders heading when no headingAuthorialNotes are provided", async () => {
     const props = createDefaultProps();
     props.htmlParts.headingAuthorialNotes = "";
 
@@ -85,8 +75,9 @@ describe("HeadingGroup", () => {
 
     await nextTick();
 
-    // Should only have one RisExpandableText component
-    expect(screen.getAllByTestId("ris-expandable-text")).toHaveLength(1);
+    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
+      "Test Heading",
+    );
   });
 
   it("renders the client-only fallback content correctly", async () => {
