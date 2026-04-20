@@ -15,6 +15,11 @@ on:
         description: 'Name of the argoCD app. If not provided will be "ris-search-<deployment-environment>"'
         required: false
         type: string
+      deploying-apps:
+        description: 'The application image names to deploy. Can be a comma separated mix of "ris-search" (backend), "ris-search/frontend", "ris-search/api-docs".'
+        default: ris-search,ris-search/frontend
+        required: false
+        type: string
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -28,7 +33,7 @@ jobs:
         with:
           environment: ${{ inputs.deployment-environment}}
           version: ${{ inputs.image-tag }}
-          deploying_repo: ris-search,ris-search/frontend
+          deploying_repo: $${{ inputs.deploying-apps }}
           infra_repo: ris-search-infra
           github_app_id: ${{ secrets.GITOPS_NEURIS_APP_ID }}
           github_app_private_key: ${{ secrets.GITOPS_NEURIS_APP_PRIVATE_KEY }}
