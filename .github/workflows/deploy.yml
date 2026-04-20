@@ -28,12 +28,12 @@ jobs:
       # Make sure that the deploy-step is always executed in series (this applies across multiple workflows)
       group: ${{ inputs.deployment-environment }}
     steps:
-      - name: Deploy backend and frontend images to ${{ inputs.deployment-environment}}
+      - name: Deploy ${{ inputs.deploying-apps }} to ${{ inputs.deployment-environment}}
         uses: digitalservicebund/argocd-deploy@6033da861398e0d7fcffe1b195f8d58f10b62c4e # Use the auth-token branch for STACKIT
         with:
           environment: ${{ inputs.deployment-environment}}
           version: ${{ inputs.image-tag }}
-          deploying_repo: $${{ inputs.deploying-apps }}
+          deploying_repo: ${{ inputs.deploying-apps }}
           infra_repo: ris-search-infra
           github_app_id: ${{ secrets.GITOPS_NEURIS_APP_ID }}
           github_app_private_key: ${{ secrets.GITOPS_NEURIS_APP_PRIVATE_KEY }}
