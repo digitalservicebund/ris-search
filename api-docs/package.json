@@ -37,7 +37,6 @@
   "dependencies": {
     "@digitalservicebund/ris-ui": "^2.0.0",
     "@headlessui/vue": "1.7.23",
-    "posthog-js": "^1.364.6",
     "primeicons": "^7.0.0",
     "primevue": "^4.5.4",
     "unplugin-icons": "23.0.1",

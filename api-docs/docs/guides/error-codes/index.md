@@ -120,5 +120,3 @@ The service might return a 503 status code if it is overloaded or under maintena
 
 You might also get this staus code after making too many requests in a short time.
 See [Rate Limiting](/guides/rate-limiting/) for more information.
-
-<FeedbackSurvey id="018c252c-e5e6-0000-d66d-acd5f06b9541" context="en-guides-error-codes" />

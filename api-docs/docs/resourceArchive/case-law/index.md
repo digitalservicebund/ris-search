@@ -71,8 +71,6 @@ hero:
 
 The endpoint returns a list of decisions from our database. The list is [paginated](/guides/pagination/index.md) and can be [filtered](/guides/filters/index.md) and sorted.
 
-<FeedbackInlineSurvey id="018c252c-e5e6-0000-d66d-acd5f06b9541" context="en-resources-case-law-list-decisions" />
-
 #### Parameters
 
 <RequestParams method="get" path="/api/v1/case-law" />
@@ -92,8 +90,6 @@ curl -G https://testphase.rechtsinformationen.bund.de/v1/case-law
 ### Get a single decision
 
 The endpoint returns a single decision from our database.
-
-<FeedbackInlineSurvey id="018c252c-e5e6-0000-d66d-acd5f06b9541" context="en-resources-case-law-get-decision" />
 
 #### Parameters
 

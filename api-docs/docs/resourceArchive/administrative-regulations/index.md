@@ -6,5 +6,3 @@ hero:
 ---
 
 We are currently doing user research for the administrative regulations domain and would appreciate your input on your needs and use cases.
-
-<FeedbackSurvey id="018c252c-e5e6-0000-d66d-acd5f06b9541" context="en-resources-administrative-regulations" />

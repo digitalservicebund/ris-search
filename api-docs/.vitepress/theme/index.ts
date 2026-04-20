@@ -5,8 +5,6 @@ import CardGroup from "./components/CardGroup.vue";
 import CardLink from "./components/CardLink.vue";
 import ClassContainer from "./components/ClassContainer.vue";
 import CodeBadge from "./components/CodeBadge.vue";
-import FeedbackInlineSurvey from "./components/FeedbackInlineSurvey.vue";
-import FeedbackSurvey from "./components/FeedbackSurvey.vue";
 import FileExplorer from "./components/FileExplorer.vue";
 import FileExplorerItem from "./components/FileExplorerItem.vue";
 import Icon from "./components/Icon.vue";
@@ -17,7 +15,7 @@ import DocsPart from "./components/DocsPart.vue";
 import CodePart from "./components/CodePart.vue";
 import Layout from "./layout/Layout.vue";
 import PrimeVue from "primevue/config";
-import {theme, useOpenapi} from "vitepress-openapi/client";
+import { theme, useOpenapi } from "vitepress-openapi/client";
 import spec from "./openapi";
 
 import "./styles/anchors.css";
@@ -32,8 +30,8 @@ import "./styles/index.css";
 import "./styles/openapi.css";
 import "./styles/prose.css";
 
-import {Button} from "primevue";
-import {RisUiLocale} from "@digitalservicebund/ris-ui/primevue";
+import { Button } from "primevue";
+import { RisUiLocale } from "@digitalservicebund/ris-ui/primevue";
 import InfoPanel from "./components/InfoPanel.vue";
 import FeedbackForm from "./components/FeedbackForm.vue";
 
@@ -46,15 +44,13 @@ export default {
     app.component("CardLink", CardLink);
     app.component("ClassContainer", ClassContainer);
     app.component("CodeBadge", CodeBadge);
-    app.component("FeedbackInlineSurvey", FeedbackInlineSurvey);
-    app.component("FeedbackSurvey", FeedbackSurvey);
-    app.component("FeedbackForm", FeedbackForm)
+    app.component("FeedbackForm", FeedbackForm);
     app.component("FileExplorer", FileExplorer);
     app.component("FileExplorerItem", FileExplorerItem);
-    app.component("Button", Button)
+    app.component("Button", Button);
     app.component("Icon", Icon);
     app.component("Note", Note);
-    app.component("InfoPanel", InfoPanel)
+    app.component("InfoPanel", InfoPanel);
     app.component("RequestParams", RequestParams);
     app.component("DocumentedCodeExampleSection", DocumentedCodeExampleSection);
     app.component("DocsPart", DocsPart);
@@ -62,7 +58,7 @@ export default {
 
     app.use(PrimeVue, {
       unstyled: true,
-      locale: RisUiLocale.deDE
+      locale: RisUiLocale.deDE,
     });
 
     // Set the OpenAPI specification.
@@ -76,7 +72,7 @@ export default {
         codeSamples: {
           defaultHeaders: {},
         },
-      }
+      },
     });
 
     // Use the theme.

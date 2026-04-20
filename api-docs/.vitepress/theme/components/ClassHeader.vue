@@ -2,7 +2,6 @@
 import { useData } from "vitepress";
 import type { Class } from "../utils/classes";
 import CodeBadge from "./CodeBadge.vue";
-import FeedbackInlineSurvey from "./FeedbackInlineSurvey.vue";
 import Icon from "./Icon.vue";
 
 const { lang } = useData();
@@ -33,13 +32,6 @@ const cls = props.cls;
         class="text-gray-800 text-sm"
         v-html="cls.descriptions[lang]"
         v-if="!!cls.descriptions[lang]"
-      />
-    </div>
-    <div class="self-center flex-shrink-0">
-      <FeedbackInlineSurvey
-        id="018c3a3a-5fb9-0000-ec8f-74ebc8be23b6"
-        minimal
-        :context="cls.slug"
       />
     </div>
   </div>

@@ -40,5 +40,3 @@ The response does include the following fields:
 | `view.previous` | The URL of the previous page                   |
 | `view.next`     | The URL of the next page                       |
 | `view.last`     | The URL of the last page                       |
-
-<FeedbackSurvey id="018c252c-e5e6-0000-d66d-acd5f06b9541" context="en-guides-pagination" />

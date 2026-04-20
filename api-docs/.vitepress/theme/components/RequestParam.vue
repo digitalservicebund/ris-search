@@ -11,7 +11,7 @@ const { lang } = useData();
 
 const param = props.param;
 const type = computed(() =>
-  param.type === "array" ? `array[${param.items!.type}]` : param.type
+  param.type === "array" ? `array[${param.items!.type}]` : param.type,
 );
 </script>
 
@@ -69,13 +69,6 @@ const type = computed(() =>
         {{ JSON.stringify(param.default) }}
       </code>
       <span v-else> - </span>
-    </td>
-    <td class="py-8">
-      <FeedbackInlineSurvey
-        id="018c3b1a-68ee-0000-9a63-96227789cece"
-        :context="param.id"
-        :minimal="true"
-      />
     </td>
   </tr>
 </template>
