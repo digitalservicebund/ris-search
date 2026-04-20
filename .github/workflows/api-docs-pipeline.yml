@@ -14,7 +14,6 @@ on:
 
 env:
   API_DOCS_ROOT: ./api-docs
-  GH_CONTAINER_REGISTRY: ghcr.io
 
 jobs:
   build:
@@ -67,7 +66,7 @@ jobs:
       - name: Log into container registry
         uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121 # v4
         with:
-          registry: ${{ env.GH_CONTAINER_REGISTRY }}
+          registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
@@ -77,7 +76,7 @@ jobs:
         with:
           file: ${{ env.API_DOCS_ROOT }}/Dockerfile
           context: ${{ env.API_DOCS_ROOT }}
-          tags: ${{ env.GH_CONTAINER_REGISTRY }}/${{ github.repository }}/api-docs:${{ github.sha }}
+          tags: ghcr.io/${{ github.repository }}/api-docs:${{ github.sha }}
           push: true
           cache-from: type=gha
           cache-to: type=gha,mode=max
@@ -95,5 +94,5 @@ jobs:
     secrets: inherit
     with:
       # Use image digest instead of tag to uniquely identify the image
-      image-reference: ${{ env.GH_CONTAINER_REGISTRY }}/${{ github.repository }}/api-docs@${{ needs.build-and-push-image.outputs.image-digest }}
+      image-reference: ghcr.io/${{ github.repository }}/api-docs@${{ needs.build-and-push-image.outputs.image-digest }}
       app: api-docs
