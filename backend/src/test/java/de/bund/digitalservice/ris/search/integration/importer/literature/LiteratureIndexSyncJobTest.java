@@ -13,11 +13,13 @@ import de.bund.digitalservice.ris.search.repository.opensearch.LiteratureReposit
 import de.bund.digitalservice.ris.search.service.LiteratureIndexSyncJob;
 import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
+@Tag("integration")
 class LiteratureIndexSyncJobTest extends ContainersIntegrationBase {
 
   @Autowired LiteratureBucket bucket;
