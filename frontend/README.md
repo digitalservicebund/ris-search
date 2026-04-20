@@ -134,3 +134,16 @@ All icons in the [Google Material](https://icon-sets.iconify.design/ic) sets can
 ```js
 import IcBaselineAccessAlarms from "~icons/ic/baseline-access-alarms";
 ```
+
+## Connect dev frontend to the staging backend
+
+Sometimes you want to test new frontend features against the actual staging backend. To do so, you can start a reverse-proxy locally by running (from the `frontend` directory):
+
+```bash
+./staging-proxy/run.sh
+```
+
+This will forward calls to `localhost:8090` to the actual staging backend.
+
+> [!NOTE]
+> Make sure you have `NUXT_PUBLIC_RIS_BACKEND_URL=http:///localhost:8090` in you `.env` file.
