@@ -15,9 +15,11 @@ jobs:
     env:
       FRONTEND_IMAGE_REFERENCE_BY_TAG: ghcr.io/${{ github.repository }}/frontend:${{ github.sha }}
       BACKEND_IMAGE_REFERENCE_BY_TAG: ghcr.io/${{ github.repository }}:${{ github.sha }}
+      API_DOCS_IMAGE_REFERENCE_BY_TAG: ghcr.io/${{ github.repository }}/api-docs:${{ github.sha }}
     outputs:
       frontend-image-digest: ${{ steps.resolve-tags.outputs.frontend-image-digest }}
       backend-image-digest: ${{ steps.resolve-tags.outputs.backend-image-digest }}
+      api-docs-image-digest: ${{ steps.resolve-tags.outputs.api-docs-image-digest }}
     steps:
       # Attestation and signing should be done on the actual image digest and
       # not a tag (because the image "behind" a tag can change). Therefore, we need to
@@ -33,6 +35,9 @@ jobs:
           
           BACKEND_IMAGE_DIGEST=$(docker buildx imagetools inspect ${{ env.BACKEND_IMAGE_REFERENCE_BY_TAG }} --format "{{json .Manifest.Digest}}" | tr -d '"')
           echo "backend-image-digest=$BACKEND_IMAGE_DIGEST" >> $GITHUB_OUTPUT
+          
+          API_DOCS_IMAGE_DIGEST=$(docker buildx imagetools inspect ${{ env.API_DOCS_IMAGE_REFERENCE_BY_TAG }} --format "{{json .Manifest.Digest}}" | tr -d '"')
+          echo "api-docs-image-digest=$API_DOCS_IMAGE_DIGEST" >> $GITHUB_OUTPUT
 
       - name: Send status to Slack
         if: ${{ failure() && github.ref == 'refs/heads/main' }}
@@ -59,3 +64,11 @@ jobs:
       trivy-db-repository: ghcr.io/aquasecurity/trivy-db,public.ecr.aws/aquasecurity/trivy-db
       trivy-java-db-repository: ghcr.io/aquasecurity/trivy-java-db,public.ecr.aws/aquasecurity/trivy-java-db
       trivy-offile-scan: true
+
+  scan-attest-and-sign-api-docs-image:
+    needs: resolve-image-tags
+    uses: ./.github/workflows/scan-attest-sign-image.yml
+    secrets: inherit
+    with:
+      image-reference: ghcr.io/${{ github.repository }}/api-docs@${{ needs.resolve-image-tags.outputs.api-docs-image-digest }}
+      app: api-docs
