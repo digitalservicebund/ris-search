@@ -39,6 +39,7 @@ updates:
       - "/"
       - "/backend"
       - "/frontend"
+      - "/api-docs"
     schedule:
       interval: "weekly"
       day: "sunday"
