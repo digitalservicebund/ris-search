@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import {
-  RisAutoComplete,
-  type AutoCompleteSuggestion,
-} from "@digitalservicebund/ris-ui/components";
+import type { AutoCompleteSuggestion } from "~/components/AutoComplete.vue";
 import _ from "lodash";
-import type { AutoCompleteDropdownClickEvent } from "primevue/autocomplete";
+import type {
+  AutoCompleteCompleteEvent,
+  AutoCompleteDropdownClickEvent,
+} from "primevue/autocomplete";
 import useBackendUrl from "~/composables/useBackendUrl";
 import type { CourtSearchResult, CourtsSearchParams } from "~/types/api";
 import { courtFilterDefaultSuggestions } from "~/utils/search/courtFilter";
@@ -36,7 +36,10 @@ but only onDropdownClick is called on close.
 See https://github.com/primefaces/primevue/issues/5601 for further information.
  */
 const onComplete = (
-  event: AutoCompleteDropdownClickEvent | { query: undefined },
+  event:
+    | AutoCompleteCompleteEvent
+    | AutoCompleteDropdownClickEvent
+    | { query: undefined },
 ) => {
   if (event.query) {
     // normal search for entered prefix
@@ -86,7 +89,7 @@ const id = useId();
 <template>
   <div class="flex flex-col gap-8">
     <label :for="id" class="ris-label2-regular">Bundesgericht</label>
-    <RisAutoComplete
+    <AutoComplete
       v-model="model"
       :input-id="id"
       :suggestions

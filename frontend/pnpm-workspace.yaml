@@ -10,4 +10,4 @@ publicHoistPattern:
 
 overrides:
 
-saveExact: true
+savePrefix: ""

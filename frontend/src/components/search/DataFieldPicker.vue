@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { RisSingleAccordion } from "@digitalservicebund/ris-ui/components";
 import { Button, InputGroup, InputGroupAddon, InputText } from "primevue";
 import OperatorsHelp from "./OperatorsHelp.vue";
 import DataFieldList from "~/components/search/DataFieldList.vue";
@@ -137,7 +136,7 @@ function submitUnlessLoading() {
     </div>
 
     <div class="mt-8 mb-16 lg:hidden">
-      <RisSingleAccordion
+      <SingleAccordion
         header-collapsed="Auswahl für gezielte Suche"
         header-expanded="Auswahl für gezielte Suche"
       >
@@ -146,7 +145,7 @@ function submitUnlessLoading() {
           :label-id="dataFieldListId"
           @click-data-field="insertInQuery"
         />
-      </RisSingleAccordion>
+      </SingleAccordion>
     </div>
   </search>
 
