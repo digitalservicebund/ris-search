@@ -1,0 +1,5 @@
+{
+  "extends": "@vue/tsconfig/tsconfig.json",
+  "include": ["env.d.ts", ".vitepress/**/*", "docs/**/*", "docs/**/*.md"],
+  "exclude": ["node_modules/"]
+}

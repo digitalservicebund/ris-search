@@ -1,0 +1,56 @@
+{
+  "/api/v1/search": {
+    "get": {
+      "operationId": "search",
+      "parameters": [
+        {
+          "name": "type",
+          "type": "array",
+          "items": { "type": "string" },
+          "enum": ["Legislation", "Decision"],
+          "in": "query",
+          "default": ["Legislation", "Decision"],
+          "required": false,
+          "descriptions": {
+            "en": "One or more values of the following: `Legislation` or `Decision`",
+            "de": "Einen der folgenden Werte: `Legislation` oder `Decision`"
+          }
+        },
+        {
+          "name": "searchTerm",
+          "type": "string",
+          "in": "query",
+          "default": null,
+          "required": true,
+          "descriptions": {
+            "en": "Searches for the given search term, if search term contains more then one string, all strings have to be found",
+            "de": "Sucht nach dem Suchbegriff im Dokumentnamen und -inhalt, wenn der Suchbegriff mehr als eine Zeichenkette enthält, müssen alle Zeichenketten gefunden werden"
+          }
+        },
+        {
+          "name": "datePublished",
+          "type": "date",
+          "in": "query",
+          "default": null,
+          "required": false,
+          "descriptions": {
+            "en": "Restrict the search to a given publication date with support for [filtering](/en/guides/filters/#date-filters)",
+            "de": "Restrict the search to a given publication date with support for [filtering](/en/guides/filters/#date-filters)"
+          }
+        },
+        {
+          "name": "sort",
+          "type": "string",
+          "enum": ["datePublished", "name"],
+          "in": "query",
+          "default": null,
+          "required": false,
+          "descriptions": {
+            "en": "Sort list of results by `datePublished` or `name`. The client may also specify reverse orderings by prefixing the field name with a minus sign, like `-datePublished`",
+            "de": "Sortieren der Listenergebnisse nach Publikationsdatum oder Name. Der Kunde kann auch eine umgekehrte Reihenfolge angeben, indem er dem Feldnamen ein '-' voranstellt, z. B. -publicationDate. Es können auch mehrere Sortierungen angegeben werden, indem eine durch Komma getrennte Liste hinzugefügt wird."
+          }
+        }
+      ]
+    }
+  }
+}

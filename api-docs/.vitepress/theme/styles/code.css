@@ -1,0 +1,37 @@
+/* Code Examples */
+.vp-adaptive-theme[class*="language-"] {
+  @apply bg-gray-100 dark:bg-[initial];
+  @apply border border-gray-400;
+  @apply rounded-md;
+  @apply relative;
+}
+
+.vp-adaptive-theme[class*="language-"] pre {
+  @apply py-20 px-16;
+}
+
+.vp-adaptive-theme[class*="language-"] pre,
+.vp-adaptive-theme[class*="language-"] code {
+  @apply hyphens-none;
+  @apply text-left;
+  @apply whitespace-pre;
+  @apply overflow-auto;
+  tab-size: 2;
+}
+
+.vp-adaptive-theme[class*="language-"] .lang {
+  @apply font-mono text-xs;
+  @apply absolute right-8 top-4;
+  @apply select-none;
+}
+
+/* TODO: Implement copy button */
+.vp-adaptive-theme[class*="language-"] .copy {
+  @apply hidden;
+}
+
+@media (prefers-color-scheme: dark) {
+  .vp-adaptive-theme[class*="language-"] {
+    background-color: var(--vp-c-bg-alt);
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "@context": "http://example.com/ns/1.0",
+  "@id": "/legislation/d543dd38-01de-4f67-86c0-174c60749f67",
+  "@type": "Legislation",
+  "legislationIdentifier": "eli/bgbl-1/2022/102",
+  "name": "Gesetz zur Zahlung einer einmaligen Energiepreispauschale für Studierende…",
+  "legislationDate": "2022-12-16",
+  "legislationDateVersion": "2022-12-16",
+  "legislationResponsible": "Bundesministerium für Bildung und Forschung",
+  "legislationLegalForce": "InForce",
+  "inLanguage": "de",
+  "alternateName": "Studierenden-Energiepreispauschalengesetz",
+  "abbreviation": "EPPSG",
+  "legislationType": "law",
+  "fna": "2212-8",
+  "encoding": [
+    {
+      "@id": "/legislation/d543dd38-01de-4f67-86c0-174c60749f67",
+      "@type": "LegislationObject",
+      "contentUrl": "/legislation/d543dd38-01de-4f67-86c0-174c60749f67",
+      "encodingFormat": "json",
+      "inLanguage": "de"
+    },
+    {
+      "@id": "/legislation/d543dd38-01de-4f67-86c0-174c60749f67",
+      "@type": "LegislationObject",
+      "contentUrl": "https://example.com/v1/legislation/d543dd38-01de-4f67-86c0-174c60749f67/regelungstext.pdf",
+      "encodingFormat": "pdf",
+      "inLanguage": "de"
+    },
+    {
+      "@id": "/legislation/d543dd38-01de-4f67-86c0-174c60749f67",
+      "@type": "LegislationObject",
+      "contentUrl": "/legislation/d543dd38-01de-4f67-86c0-174c60749f67/regelungstext.xml",
+      "encodingFormat": "xml",
+      "inLanguage": "de"
+    },
+    {
+      "@id": "/legislation/d543dd38-01de-4f67-86c0-174c60749f67",
+      "@type": "LegislationObject",
+      "contentUrl": "/legislation/d543dd38-01de-4f67-86c0-174c60749f67/regelungstext.html",
+      "encodingFormat": "html",
+      "inLanguage": "de"
+    }
+  ],
+  "tableOfContents": [
+    {
+      "@type": "TocEntry",
+      "position": "§ 1",
+      "name": "Anspruchsberechtigung, Höhe der Energiepreispauschale",
+      "identifier": "90dd786c-263f-464f-b80a-40757eb924fe",
+      "url": "/legislation/d543dd38-01de-4f67-86c0-174c60749f67/90dd786c-263f-464f-b80a-40757eb924fe"
+    },
+    {
+      "@type": "TocEntry",
+      "position": "§ 2",
+      "name": "Zuständigkeit, Verordnungsermächtigung, Antragserfordernis",
+      "identifier": "d3e32e0d-60e9-49f5-9c2c-6224dc9533b4",
+      "url": "/legislation/d543dd38-01de-4f67-86c0-174c60749f67/d3e32e0d-60e9-49f5-9c2c-6224dc9533b4"
+    }
+  ],
+  "workExample": {
+    "@id": "/legislation/d543dd38-01de-4f67-86c0-174c60749f67",
+    "@type": "Legislation",
+    "legislationIdentifier": "eli/bgbl-1/2022/102",
+    "legislationLegalForce": "InForce",
+    "inLanguage": "de",
+    "hasPart": [
+      {
+        "@id": "/legislation/d543dd38-01de-4f67-86c0-174c60749f67/90dd786c-263f-464f-b80a-40757eb924fe",
+        "@type": "Legislation",
+        "class": "article",
+        "name": "§ 1 Anspruchsberechtigung, Höhe der Energiepreispauschale",
+        "legislationIdentifier": "EPPSG §1",
+        "text": "(1) Ein Anspruch auf Zahlung einer einmaligen…"
+      },
+      {
+        "@id": "/legislation/d543dd38-01de-4f67-86c0-174c60749f67/d3e32e0d-60e9-49f5-9c2c-6224dc9533b4",
+        "@type": "Legislation",
+        "class": "article",
+        "name": "§ 2 Zuständigkeit, Verordnungsermächtigung, Antragserfordernis",
+        "legislationIdentifier": "EPPSG §2",
+        "text": "(1) Zuständig für die Durchführung dieses Gesetzes…"
+      }
+    ]
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "@type": "hydra:Collection",
+  "totalItems": 2,
+  "member": [
+    {
+      "@type": "SearchResult",
+      "item": {
+        "@type": "Legislation",
+        "@id": "/legislation/7cc635f5-86a4-4d05-b12b-758abe6d338f",
+        "publicationDate": "2023-12-04",
+        "name": "Gesetz über die Erhebung einer Sondersteuer auf alkoholhaltige Süßgetränke (Alkopops)…"
+      },
+      "textMatches": [
+        {
+          "@type": "SearchResultMatch",
+          "@id": "/legislation/7cc635f5-86a4-4d05-b12b-758abe6d338f/758e2b69-66ee-49e0-b5ca-cfcb9f7012d8",
+          "name": "§ 1 Steuergebiet, Steuergegenstand",
+          "text": "Gebiet Büsingen und ohne die Insel <em>Helgoland</em>. Die Alkopopsteuer…"
+        }
+      ]
+    },
+    {
+      "@type": "SearchResult",
+      "item": {
+        "@type": "Decision",
+        "@id": "/case-law/5dd94dbd-1f8a-46ba-8f43-fb7511a99e28",
+        "publicationDate": "2023-12-04",
+        "name": "Anspruch auf Mindesturlaub - Verjährung"
+      },
+      "textMatches": [
+        {
+          "@type": "SearchResultMatch",
+          "@id": "/case-law/5dd94dbd-1f8a-46ba-8f43-fb7511a99e28/tenor",
+          "name": "Tenor",
+          "text": "1. Die Revision des Beklagten in <em>Helgoland</em> ..."
+        }
+      ]
+    }
+  ],
+  "view": {
+    "@type": "hydra:PartialCollectionView",
+    "first": "/v1/search?searchTerm=Helgoland&pageIndex=0",
+    "last": "/v1/search?searchTerm=Helgoland&pageIndex=0",
+    "next": null,
+    "previous": null
+  }
+}

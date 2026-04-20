@@ -1,0 +1,54 @@
+@prefix meta: <http://example.com/ns/1.0-meta#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix recht: <http://example.com/ns/1.0#> .
+@prefix schema: <http://schema.org/> .
+@prefix hydra: <http://www.w3.org/ns/hydra/context.jsonld> .
+
+recht:SearchResults a rdfs:Class ;
+  rdfs:label "searchResults"@en ;
+  # rdfs:label "Suchergebnisse"@de ;
+  rdfs:comment "The result of an search action."@en ;
+  # rdfs:comment "Das Ergebnis einer Suche über alle Entitäten oder eine Teilmenge von Entitäten."@de ;
+  rdfs:subClassOf hydra:Collection .
+
+recht:member a rdf:Property ;
+  rdfs:label "results"@en ;
+  # rdfs:label "Ergebnisse"@de ;
+  rdfs:comment "A list of entities which match the search request."@en ;
+  # rdfs:comment "Eine Liste von Entitäten, die der Suchanfrage entsprechen."@de ;
+  rdfs:subPropertyOf hydra:member ;
+  rdfs:range recht:SearchResult ;
+  rdfs:domain recht:SearchResults .
+
+recht:SearchResult a rdfs:Class ;
+  rdfs:label "searchResult"@en ;
+  # rdfs:label "Suchergebnis"@de ;
+  rdfs:comment "A specific entity which matches the search request."@en ;
+  rdfs:comment "Eine Entität die dem Suchanfrage entspricht."@de .
+
+recht:item a rdf:Property ;
+  rdfs:label "item"@en ;
+  rdfs:comment "The entity that holds the text snippets in which the search string was found" ;
+  rdfs:domain recht:SearchResult ;
+  rdfs:range recht:Legislation, recht:Decision .
+
+recht:datePublished a rdf:Property ;
+  rdfs:label "datePublished"@en ;
+  rdfs:comment "The date on which the item was published."@en ;
+  rdfs:domain recht:SearchResult .
+
+recht:textMatches a rdf:Property ;
+  rdfs:label "textMatches"@en ;
+  # rdfs:label "TextTreffer"@de ;
+  rdfs:comment "A list of text snippets within the document in which the search request string is present."@en ;
+  # rdfs:comment "Eine Liste von Textausschnitten, in denen die Suchanfrage enthalten ist"@de ;
+  rdfs:domain recht:SearchResult .
+
+recht:SearchResultMatch a rdfs:Class ;
+  rdfs:label "textMatch"@en ;
+  # rdfs:label "TextTreffer"@de ;
+  rdfs:comment "A text snippet in which the search request string is present and marked in an `<em>` tag."@en ;
+  # rdfs:comment "Ein Textausschnitt, in denen die Suchanfrage enthalten ist"@de ;
+  rdfs:subClassOf recht:Legislation, recht:Decision ;
+  rdfs:domain recht:textMatches .

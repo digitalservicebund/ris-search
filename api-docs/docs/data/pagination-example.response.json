@@ -1,0 +1,13 @@
+{
+  "@id": "/v1/case-law?pageIndex=0",
+  "@type": "hydra:Collection",
+  "totalItems": 10000,
+  "member": ["…a list of entities…"],
+  "view": {
+    "@type": "hydra:PartialCollectionView",
+    "first": "/v1/case-law?pageIndex=0&size=100",
+    "previous": null,
+    "next": "/v1/case-law?pageIndex=1&size=100",
+    "last": "/v1/case-law?pageIndex=99&size=100"
+  }
+}

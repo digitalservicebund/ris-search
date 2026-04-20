@@ -1,0 +1,98 @@
+{
+  "@id": "/v1/case-law?pageIndex=0",
+  "@type": "hydra:Collection",
+  "totalItems": 2,
+  "member": [
+    {
+      "@type": "Judgment",
+      "@id": "/case-law/ecli/de/bag2022201222u9azr266200",
+      "name": "Anspruch auf Mindesturlaub - Verjährung",
+      "decisionDate": "2022-12-20",
+      "decisionIdentifier": "ECLI:DE:BAG:2022:201222.U.9AZR266.20.0",
+      "decisionReference": "9 AZR 266/20",
+      "decisionBy": "BAG",
+      "judicialBody": "9. Senat",
+      "inLanguage": "de",
+      "keywords": [],
+      "encoding": [
+        {
+          "@id": "/case-law/ecli/de/bag2022201222u9azr266200",
+          "@type": "DecisionObject",
+          "contentUrl": "/case-law/ecli/de/bag2022201222u9azr266200",
+          "encodingFormat": "json",
+          "inLanguage": "de"
+        },
+        {
+          "@id": "/case-law/ecli/de/bag2022201222u9azr266200.pdf",
+          "@type": "DecisionObject",
+          "contentUrl": "/case-law/ecli/de/bag2022201222u9azr266200.pdf",
+          "encodingFormat": "pdf",
+          "inLanguage": "de"
+        },
+        {
+          "@id": "/case-law/ecli/de/bag2022201222u9azr266200.xml",
+          "@type": "DecisionObject",
+          "contentUrl": "/case-law/ecli/de/bag2022201222u9azr266200.xml",
+          "encodingFormat": "xml",
+          "inLanguage": "de"
+        },
+        {
+          "@id": "/case-law/ecli/de/bag2022201222u9azr266200.html",
+          "@type": "DecisionObject",
+          "contentUrl": "/case-law/ecli/de/bag2022201222u9azr266200.html",
+          "encodingFormat": "html",
+          "inLanguage": "de"
+        }
+      ]
+    },
+    {
+      "@type": "Judgment",
+      "@id": "/case-law/ecli/de/bag2023250723u9azr43220",
+      "name": "Arbeitnehmerbegriff im Urlaubsrecht - Fremdgeschäftsführer einer GmbH",
+      "decisionDate": "2023-07-25",
+      "decisionIdentifier": "ECLI:DE:BAG:2023:250723.U.9AZR43.22.0",
+      "decisionReference": "9 AZR 43/22",
+      "decisionBy": "BAG",
+      "judicialBody": "9. Senat",
+      "inLanguage": "de",
+      "keywords": [],
+      "encoding": [
+        {
+          "@id": "/case-law/ecli/de/bag2023250723u9azr43220.jsonld",
+          "@type": "DecisionObject",
+          "contentUrl": "/case-law/ecli/de/bag2023250723u9azr43220",
+          "encodingFormat": "json",
+          "inLanguage": "de"
+        },
+        {
+          "@id": "/case-law/ecli/de/bag2023250723u9azr43220.pdf",
+          "@type": "DecisionObject",
+          "contentUrl": "/case-law/ecli/de/bag2023250723u9azr43220.pdf",
+          "encodingFormat": "pdf",
+          "inLanguage": "de"
+        },
+        {
+          "@id": "/case-law/ecli/de/bag2023250723u9azr43220.xml",
+          "@type": "DecisionObject",
+          "contentUrl": "/case-law/ecli/de/bag2023250723u9azr43220.xml",
+          "encodingFormat": "xml",
+          "inLanguage": "de"
+        },
+        {
+          "@id": "/case-law/ecli/de/bag2023250723u9azr43220.html",
+          "@type": "DecisionObject",
+          "contentUrl": "/case-law/ecli/de/bag2023250723u9azr43220.html",
+          "encodingFormat": "html",
+          "inLanguage": "de"
+        }
+      ]
+    }
+  ],
+  "view": {
+    "@type": "hydra:PartialCollectionView",
+    "first": "/v1/case-law?pageIndex=0",
+    "previous": null,
+    "next": null,
+    "last": "/v1/case-law?pageIndex=0"
+  }
+}

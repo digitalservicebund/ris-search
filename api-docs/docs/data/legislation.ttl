@@ -1,0 +1,209 @@
+@prefix meta: <http://example.com/ns/1.0-meta#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix recht: <http://example.com/ns/1.0#> .
+@prefix schema: <http://schema.org/> .
+
+recht:Legislation a rdfs:Class ;
+  rdfs:label "Legislation"@en ;
+  # rdfs:label "Gesetze & Verordnungen"@de ;
+  rdfs:comment "The legislation documented by the documentation units of the Federal Government."@en ;
+  # rdfs:comment "Die Gesetze & Verordnungen die durch die Dokumentationstellen des Bundes dokumentiert wurde."@de ;
+  rdfs:subClassOf schema:CreativeWork .
+
+recht:legislationIdentifier a rdf:Property ;
+  rdfs:label "legislationIdentifier"@en ;
+  # rdfs:label "legislationIdentifier"@de ;
+  rdfs:comment "Number for the act."@en ;
+  # rdfs:comment "Number for the act."@de ;
+  rdfs:domain recht:Legislation ;
+  rdfs:range schema:Text ;
+  rdfs:subPropertyOf schema:legislationIdentifier.
+
+recht:name a rdf:Property ;
+  rdfs:label "name"@en ;
+  # rdfs:label "name"@de ;
+  rdfs:comment "Long title of the legislation."@en ;
+  # rdfs:comment "Long title of the legislation."@de ;
+  rdfs:domain recht:Legislation ;
+  rdfs:range schema:Text ;
+  rdfs:subPropertyOf schema:name.
+
+recht:legislationDate a rdf:Property ;
+  rdfs:label "legislationDate"@en ;
+  # rdfs:label "legislationDate"@de ;
+  rdfs:comment "Date at which the legislation became an act."@en ;
+  # rdfs:comment "Date at which the legislation became an act."@de ;
+  rdfs:domain recht:Legislation ;
+  rdfs:range schema:Date ;
+  rdfs:subPropertyOf schema:legislationDate .
+
+recht:legislationDateVersion a rdf:Property ;
+  rdfs:label "legislationDateVersion"@en ;
+  # rdfs:label "legislationDateVersion"@de ;
+  rdfs:comment "Date at which the legislation became a valid act."@en ;
+  # rdfs:comment "Date at which the legislation became a valid act."@de ;
+  rdfs:domain recht:Legislation ;
+  rdfs:range schema:Date ;
+  rdfs:subPropertyOf schema:legislationDateVersion .
+
+recht:legislationResponsible a rdf:Property ;
+  rdfs:label "legislationResponsible"@en ;
+  # rdfs:label "legislationResponsible"@de ;
+  rdfs:comment "An individual or organization that has some kind of responsibility for the legislation."@en ;
+  # rdfs:comment "An individual or organization that has some kind of responsibility for the legislation."@de ;
+  rdfs:domain recht:Legislation ;
+  rdfs:range schema:Text ;
+  rdfs:subPropertyOf schema:legislationResponsible .
+
+recht:legislationLegalForce a rdf:Property ;
+  rdfs:label "legislationLegalForce"@en ;
+  # rdfs:label "legislationLegalForce"@de ;
+  rdfs:comment "Whether the legislation is currently `InForce`, `NotInForce`, or `PartiallyInForce`."@en ;
+  # rdfs:comment "Whether the legislation is currently `InForce`, `NotInForce`, or `PartiallyInForce`."@de ;
+  rdfs:subClassOf schema:Enumeration ;
+  schema:itemListElement
+    [
+      schema:identifier "https://schema.org/InForce" ;
+      schema:name "InForce" ;
+      schema:alternateName "InForce" ;
+      schema:value "InForce"
+    ],
+    [
+      schema:identifier "https://schema.org/NotInForce" ;
+      schema:name "NotInForce" ;
+      schema:alternateName "NotInForce" ;
+      schema:value "NotInForce"
+    ],
+    [
+      schema:identifier "https://schema.org/PartiallyInForce" ;
+      schema:name "PartiallyInForce" ;
+      schema:alternateName "PartiallyInForce" ;
+      schema:value "PartiallyInForce"
+    ] ;
+  rdfs:domain recht:Legislation ;
+  rdfs:subPropertyOf schema:legislationLegalForce .
+
+recht:inLanguage a rdf:Property ;
+  rdfs:label "inLanguage"@en ;
+  # rdfs:label "Sprache"@de ;
+  rdfs:comment "The language of the decision as a [IETF BCP 47 language tag](https://en.wikipedia.org/wiki/IETF_language_tag)."@en ;
+  # rdfs:comment "Die Sprache der Gesetze & Verordnungen als [IETF BCP 47 Code](https://en.wikipedia.org/wiki/IETF_language_tag)."@de ;
+  rdfs:domain recht:Legislation ;
+  rdfs:subPropertyOf schema:inLanguage .
+
+recht:alternateName a rdf:Property ;
+  rdfs:label "alternateName"@en ;
+  rdfs:comment "Short title of the legislation."@en ;
+  # rdfs:comment "Short title of the legislation."@de ;
+  rdfs:domain recht:Legislation ;
+  rdfs:range schema:Text ;
+  rdfs:subPropertyOf schema:alternateName .
+
+recht:abbreviation a rdf:Property ;
+  rdfs:label "abbreviation"@en ;
+  rdfs:comment "Abbreviation name of the legislation."@en ;
+  # rdfs:comment "Abbreviation name of the legislation."@de ;
+  rdfs:domain recht:Legislation ;
+  rdfs:range schema:Text ;
+  rdfs:subPropertyOf schema:abbreviation .
+
+recht:legislationType a rdf:Property ;
+  rdfs:label "legislationType"@en ;
+  rdfs:comment "Type of the legislation: `law` or `decree`."@en ;
+  rdfs:comment "Type of the legislation: `law` or `decree`."@en ;
+  rdfs:domain recht:Legislation ;
+  rdfs:range schema:Text ;
+  rdfs:subPropertyOf schema:legislationType ;
+  rdfs:subClassOf schema:Enumeration ;
+  schema:itemListElement
+    [
+      schema:identifier "" ;
+      schema:name "law" ;
+      schema:alternateName "law" ;
+      schema:value "law"
+    ],
+  # [
+  #   schema:identifier "" ;
+  #   schema:name "act" ;
+  #   schema:alternateName "act" ;
+  #   schema:value "act"
+  # ],
+  # [
+  #   schema:identifier "" ;
+  #   schema:name "directive" ;
+  #   schema:alternateName "directive" ;
+  #   schema:value "directive"
+  # ],
+    [
+      schema:identifier "" ;
+      schema:name "decreee" ;
+      schema:alternateName "decreee" ;
+      schema:value "decreee"
+    ] .
+
+
+# recht:locationReference a rdf:Property ;
+#   rdfs:label "locationReference" ;
+#   rdfs:comment "Legislation location reference."@en ;
+#   rdfs:comment "Legislation location reference."@de ;
+#   rdfs:domain recht:Legislation ;
+#   rdfs:range schema:Text .
+
+recht:encoding a rdf:Property ;
+  rdfs:label "encoding"@en ;
+  rdfs:comment "The payload in different formats: JSON-LD (default), LegalDocML, plain text, PDF and HTML."@en ;
+  # rdfs:comment "The payload in different formats: JSON-LD (default), LegalDocML, plain text, PDF and HTML."@de ;
+  rdfs:domain recht:Legislation ;
+  rdfs:subPropertyOf schema:encoding .
+
+recht:tableOfContents a rdf:Property ;
+  rdfs:label "tableOfContents"@en ;
+  rdfs:comment "The non-official table of contents of the legislation."@en ;
+  # rdfs:comment "The non-official table of contents of the legislation."@de ;
+  rdfs:domain recht:Legislation ;
+  rdfs:range recht:TocEntry .
+
+recht:fna a rdf:Property ;
+  rdfs:label "fna"@en ;
+  rdfs:comment "The directory reference number (Fundstellennachweis)."@en ;
+  # rdfs:comment "The directory reference number (Fundstellennachweis)."@de ;
+  rdfs:domain recht:Legislation ;
+  rdfs:range schema:Text .
+
+recht:workExample a rdf:Property ;
+  rdfs:label "workExample"@en ;
+  rdfs:comment "Refers to specific versions of this legislation."@en ;
+  # rdfs:comment "Refers to specific versions of this legislation."@de ;
+  rdfs:domain recht:Legislation ;
+  rdfs:range recht:Legislation;
+  rdfs:subPropertyOf schema:CreativeWork .
+
+recht:hasPart a rdf:Property ;
+  rdfs:label "hasPart"@en ;
+  rdfs:comment "Points to the articles or other subdivisions in this legislation version."@en ;
+  # rdfs:comment "Points to the articles or other subdivisions in this legislation version."@de ;
+  # rdfs:domain recht:Legislation ;
+  rdfs:range recht:Legislation ;
+  rdfs:subPropertyOf schema:hasPart .
+
+# recht:class a rdfs:Class ;
+#   rdfs:label "class"@en ;
+#   rdfs:label "class"@de ;
+#   rdfs:comment "What class this point refers to the legislation. Possible values: `book`, `chapter`, `section`, `subsection`, and `article`."@en ;
+#   rdfs:comment "What class this point refers to the legislation. Possible values: `book`, `chapter`, `section`, `subsection`, and `article`."@de ;
+#   rdfs:subClassOf schema:Text .
+
+# recht:courtDecision a rdfs:Class ;
+#   rdfs:label "courtDecision"@en ;
+#   rdfs:label "courtDecision"@de ;
+#   rdfs:comment "Only available for the classes articles"@en ;
+#   rdfs:comment "Only available for the classes articles"@de ;
+#   rdfs:subClassOf schema:Text .
+
+# recht:text a rdfs:Class ;
+#   rdfs:label "text"@en ;
+#   rdfs:label "text"@de ;
+#   rdfs:comment "May contain the textual content of the individual provision."@en ;
+#   rdfs:comment "May contain the textual content of the individual provision."@de ;
+#   rdfs:subClassOf schema:Text .

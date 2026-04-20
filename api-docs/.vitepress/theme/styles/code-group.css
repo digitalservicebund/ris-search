@@ -1,0 +1,57 @@
+.vp-code-group {
+  @apply border border-gray-400 rounded-md;
+  @apply my-20;
+}
+
+.vp-code-group .tabs {
+  @apply relative;
+  @apply flex;
+  @apply px-12 py-12;
+  @apply overflow-x-auto overflow-y-hidden;
+  @apply border-b border-gray-400;
+}
+
+.vp-code-group .tabs input {
+  @apply fixed;
+  @apply opacity-0;
+  @apply pointer-events-none;
+}
+
+.vp-code-group .tabs label {
+  @apply relative;
+  @apply inline-block;
+  @apply font-medium;
+  @apply whitespace-nowrap;
+  @apply cursor-pointer;
+  @apply text-sm;
+}
+
+.vp-code-group .vp-block {
+  @apply p-0;
+}
+
+.vp-code-group div[class*="language-"],
+.vp-block {
+  @apply hidden;
+  @apply rounded-none rounded-b-md;
+  @apply mb-0;
+  @apply min-w-full;
+  @apply border-none;
+}
+
+.vp-code-group div[class*="language-"].active,
+.vp-block.active {
+  @apply block;
+}
+
+.vp-code-group label:hover {
+  @apply text-blue-600;
+}
+
+.vp-code-group input:checked + label {
+  @apply text-blue-800 dark:text-blue-600;
+}
+
+.vp-code-group input:checked + label::after {
+  @apply bg-blue-800 dark:bg-blue-600;
+}
