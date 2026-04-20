@@ -1,6 +1,5 @@
-import { mockNuxtImport } from "@nuxt/test-utils/runtime";
-import { mount } from "@vue/test-utils";
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { mockNuxtImport, mountSuspended } from "@nuxt/test-utils/runtime";
+import { describe, it, expect, vi, beforeEach, beforeAll } from "vitest";
 import { useIntersectionObserver } from "./useIntersectionObserver";
 
 mockNuxtImport("useRoute", () => {
@@ -34,6 +33,7 @@ describe("useIntersectionObserver", () => {
       scrollY: 0,
       addEventListener: vi.fn(),
       removeEventListener: vi.fn(),
+      location: originalWindow.location,
     } as any;
 
     Object.defineProperty(import.meta, "client", {
@@ -48,14 +48,14 @@ describe("useIntersectionObserver", () => {
   });
 
   it("initializes with hash from route", async () => {
-    const wrapper = mount(TestComponent, {
+    const wrapper = await mountSuspended(TestComponent, {
       global: { mocks: { $router: undefined } },
     });
 
     expect(wrapper.vm.selectedEntry).toBe("section1");
   });
 
-  it("handles intersection observation", () => {
+  it("handles intersection observation", async () => {
     const mockObserver = {
       observe: vi.fn(),
       disconnect: vi.fn(),
@@ -66,7 +66,7 @@ describe("useIntersectionObserver", () => {
       return mockObserver;
     });
 
-    const wrapper = mount(TestComponent, {});
+    const wrapper = await mountSuspended(TestComponent, {});
     const { vObserveElements } = wrapper.vm;
 
     // Mock HTMLElement and IntersectionObserver
@@ -83,7 +83,7 @@ describe("useIntersectionObserver", () => {
     expect(mockObserver.observe).toHaveBeenCalledTimes(2);
   });
 
-  it("updates observation on element updates", () => {
+  it("updates observation on element updates", async () => {
     const mockObserver = {
       observe: vi.fn(),
       disconnect: vi.fn(),
@@ -93,7 +93,7 @@ describe("useIntersectionObserver", () => {
       return mockObserver;
     });
 
-    const wrapper = mount(TestComponent, {});
+    const wrapper = await mountSuspended(TestComponent, {});
 
     const { vObserveElements } = wrapper.vm;
 
@@ -114,11 +114,15 @@ describe("useIntersectionObserver", () => {
   });
 
   describe("handles intersection entries", () => {
-    const wrapper = mount(TestComponent, {});
-    const { handleIntersection } = wrapper.vm;
+    let wrapper: Awaited<
+      ReturnType<typeof mountSuspended<typeof TestComponent>>
+    >;
 
-    // Simulate scrolling down
-    window.scrollY = 100;
+    beforeAll(async () => {
+      wrapper = await mountSuspended(TestComponent, {});
+      // Simulate scrolling down
+      window.scrollY = 100;
+    });
 
     const mockEntries = [
       {
@@ -132,22 +136,22 @@ describe("useIntersectionObserver", () => {
     ] as IntersectionObserverEntry[];
 
     it("ignores the initial intersection if a section was provided by hash", () => {
-      handleIntersection(mockEntries);
+      wrapper.vm.handleIntersection(mockEntries);
       expect(wrapper.vm.selectedEntry).toBe("section1");
     });
 
     it("considers the values on subsequent events", () => {
-      handleIntersection(mockEntries);
+      wrapper.vm.handleIntersection(mockEntries);
       expect(wrapper.vm.selectedEntry).toBe("section2");
     });
   });
 
-  it("handles server-side rendering scenario", () => {
+  it("handles server-side rendering scenario", async () => {
     Object.defineProperty(import.meta, "server", {
       value: true,
       writable: false,
     });
-    const wrapper = mount(TestComponent, {});
+    const wrapper = await mountSuspended(TestComponent, {});
     const { vObserveElements } = wrapper.vm;
 
     const mockElement = document.createElement("div");
