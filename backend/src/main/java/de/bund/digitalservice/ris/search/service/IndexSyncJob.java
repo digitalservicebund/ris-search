@@ -39,6 +39,7 @@ public class IndexSyncJob implements Job {
    *
    * @param indexStatusService the service to manage index status
    * @param changelogService the object storage for changelog files
+   * @param changelogBucket the object storage for changelog files
    * @param indexService the service to perform indexing operations
    * @param statusFileName the name of the status
    */

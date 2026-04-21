@@ -5,7 +5,6 @@ import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
-import de.bund.digitalservice.ris.search.service.BulkChangelogParser;
 import de.bund.digitalservice.ris.search.service.ChangelogService;
 import de.bund.digitalservice.ris.search.service.Job;
 import java.time.LocalDate;
@@ -88,11 +87,11 @@ public class EcliSitemapJob implements Job {
           return ReturnCode.SUCCESS;
         }
         var changelogs = getNewChangelogs(changelogPaths);
-        if (BulkChangelogParser.containsChangeAll(changelogs)) {
+        if (ChangelogService.containsChangeAll(changelogs)) {
           ecliCrawlerDocumentService.writeFullDiff(apiUrl, today);
         } else {
           ecliCrawlerDocumentService.writeFromChangelog(
-              apiUrl, today, BulkChangelogParser.mergeChangelogs(changelogs));
+              apiUrl, today, ChangelogService.mergeChangelogs(changelogs));
         }
         portalBucket.save(LAST_PROCESSED_CHANGELOG, changelogPaths.getLast());
       }
