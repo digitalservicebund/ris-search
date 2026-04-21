@@ -146,4 +146,4 @@ Sometimes you want to test new frontend features against the actual staging back
 This will forward calls to `localhost:8090` to the actual staging backend.
 
 > [!NOTE]
-> Make sure you have `NUXT_PUBLIC_RIS_BACKEND_URL=http:///localhost:8090` in you `.env` file.
+> Make sure you have `NUXT_PUBLIC_RIS_BACKEND_URL=http:///localhost:8090` in your `.env` file.
