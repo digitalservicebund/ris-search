@@ -5,9 +5,9 @@ server {
         proxy_set_header Authorization "${BACKEND_AUTH_TOKEN}";
         proxy_pass https://ris-portal-staging.dev.tech.digitalservice.dev;
 
-        proxy_set_header Host ris-portal-staging.dev.tech.digitalservice.dev;
         proxy_set_header Origin https://ris-portal-staging.dev.tech.digitalservice.dev;
-        proxy_set_header Referer https://ris-portal-staging.dev.tech.digitalservice.dev/;
         proxy_ssl_server_name on;
+
+        add_header Access-Control-Allow-Origin *;
     }
 }
