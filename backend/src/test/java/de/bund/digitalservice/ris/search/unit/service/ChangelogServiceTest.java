@@ -9,7 +9,6 @@ import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import de.bund.digitalservice.ris.search.service.ChangelogService;
 import de.bund.digitalservice.ris.search.service.IndexNormsService;
 import de.bund.digitalservice.ris.search.service.IndexStatusService;
-import de.bund.digitalservice.ris.search.service.IndexSyncJob;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
@@ -56,14 +55,19 @@ class ChangelogServiceTest {
   @Test
   void itReturnsChangelogsSortedByTimestamp() {
     Instant now = Instant.now();
-    String lastSuccess = now.minus(2, ChronoUnit.HOURS).toString();
+    String lastSuccess =
+        ChangelogService.CHANGELOGS_PREFIX
+            + now.minus(2, ChronoUnit.HOURS).toString()
+            + "-changelog.json";
+    String olderChangelogFile =
+        ChangelogService.CHANGELOGS_PREFIX + now.minus(3, ChronoUnit.HOURS) + "-changelog.json";
     String changelogFile1 =
-        IndexSyncJob.CHANGELOGS_PREFIX + now.plus(1, ChronoUnit.HOURS) + "-changelog.json";
+        ChangelogService.CHANGELOGS_PREFIX + now.plus(1, ChronoUnit.HOURS) + "-changelog.json";
     String changelogFile2 =
-        IndexSyncJob.CHANGELOGS_PREFIX + now.plus(2, ChronoUnit.HOURS) + "-changelog.json";
+        ChangelogService.CHANGELOGS_PREFIX + now.plus(2, ChronoUnit.HOURS) + "-changelog.json";
 
-    when(normsBucket.getAllKeysByPrefix(IndexSyncJob.CHANGELOGS_PREFIX))
-        .thenReturn(List.of(changelogFile2, changelogFile1));
+    when(normsBucket.getAllKeysByPrefix(ChangelogService.CHANGELOGS_PREFIX))
+        .thenReturn(List.of(olderChangelogFile, changelogFile2, changelogFile1));
 
     List<String> changelogs = changelogService.getNewChangelogsPaths(normsBucket, lastSuccess);
     Assertions.assertEquals(changelogs.toArray()[0], changelogFile1);

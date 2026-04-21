@@ -26,8 +26,6 @@ public class IndexSyncJob implements Job {
 
   private static final Logger logger = LogManager.getLogger(IndexSyncJob.class);
 
-  public static final String CHANGELOGS_PREFIX = "changelogs/";
-
   private final IndexStatusService indexStatusService;
   private final ChangelogService changelogService;
   private final ObjectStorage changelogBucket;
@@ -121,7 +119,7 @@ public class IndexSyncJob implements Job {
       logger.info("Reindexing all due to missing previous lastProcessedChangelogFile");
       indexService.reindexAll(state.startTime());
       indexStatusService.updateLastProcessedChangelog(
-          statusFileName, CHANGELOGS_PREFIX + state.startTime());
+          statusFileName, ChangelogService.CHANGELOGS_PREFIX + state.startTime());
       alertOnNumberMismatch(state);
     } else {
       List<String> unprocessedChangelogs =

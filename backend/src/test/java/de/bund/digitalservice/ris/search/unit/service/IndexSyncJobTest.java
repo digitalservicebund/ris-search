@@ -55,7 +55,7 @@ class IndexSyncJobTest {
   void lockIsAcquiredAndReleasedOnSuccessfulProcess() throws ObjectStoreServiceException {
 
     Instant time = Instant.now();
-    String changelogFileName = IndexSyncJob.CHANGELOGS_PREFIX + time + "-changelog.json";
+    String changelogFileName = ChangelogService.CHANGELOGS_PREFIX + time + "-changelog.json";
     List<String> changelogs = List.of(changelogFileName);
 
     when(indexStatusService.lockIndex(any(), any())).thenReturn(true);
