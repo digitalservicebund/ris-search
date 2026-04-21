@@ -9,6 +9,14 @@ public class NormIndexSyncJob extends IndexSyncJob {
 
   public static final String NORM_STATUS_FILENAME = "norm_status.json";
 
+  /**
+   * Scheduled Job to index legislation files
+   *
+   * @param indexStatusService service to manage the status of an index job
+   * @param changelogService service to manage changelogs
+   * @param normsBucket root bucket for legislation files
+   * @param indexNormsService service to index legislation files
+   */
   public NormIndexSyncJob(
       IndexStatusService indexStatusService,
       ChangelogService changelogService,

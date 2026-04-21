@@ -9,6 +9,14 @@ public class CaseLawIndexSyncJob extends IndexSyncJob {
 
   public static final String CASELAW_STATUS_FILENAME = "caselaw_status.json";
 
+  /**
+   * Scheduled Job to index caselaw files
+   *
+   * @param indexStatusService service to manage the status of an index job
+   * @param changelogService service to manage changelogs
+   * @param bucket root bucket for caselaw files
+   * @param indexCaselawService service to index caselawfiles
+   */
   public CaseLawIndexSyncJob(
       IndexStatusService indexStatusService,
       ChangelogService changelogService,

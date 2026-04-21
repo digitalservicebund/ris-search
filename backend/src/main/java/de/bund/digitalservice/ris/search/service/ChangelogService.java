@@ -17,6 +17,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.stereotype.Service;
 
+/** Service to retrieve and parse changelog files */
 @Service
 public class ChangelogService {
 
@@ -33,6 +34,7 @@ public class ChangelogService {
    * that are lexicographically older or equal to the `lastProcessedChangelog` and sorts the
    * remaining file names in ascending order.
    *
+   * @param bucket bucket containing chainlogs
    * @param lastProcessedChangelog the filename of the last processed changelog; files with
    *     lexicographically greater names will be included
    * @return a sorted list of file names representing unprocessed changelog files
