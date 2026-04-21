@@ -2,7 +2,7 @@
 import IcBaselineKeyboardArrowDown from "~icons/ic/baseline-keyboard-arrow-down";
 import IcBaselineClose from "~icons/ic/baseline-close";
 import AutoCompleteComponent, {
-  type AutoCompleteProps,
+  type AutoCompleteProps as BaseAutoCompleteProps,
 } from "primevue/autocomplete";
 import ProgressSpinner from "primevue/progressspinner";
 import { ref } from "vue";
@@ -19,8 +19,8 @@ even though they are only passed through.
 Ideally, they would be passed on using v-bind="mergeProps($attrs, props)" instead of being declared one-by-one,
 but using this approach broke the forwarding of emits.
 */
-export type RisAutoCompleteProps = Pick<
-  AutoCompleteProps,
+export type AutoCompleteProps = Pick<
+  BaseAutoCompleteProps,
   | "dropdown"
   | "ariaLabel"
   | "ariaLabelledby"
@@ -44,7 +44,7 @@ export type RisAutoCompleteProps = Pick<
   initialLabel?: string;
 };
 
-const props = defineProps<RisAutoCompleteProps>();
+const props = defineProps<AutoCompleteProps>();
 const model = defineModel<string>();
 
 const isActiveOption = (option: AutoCompleteSuggestion) => {

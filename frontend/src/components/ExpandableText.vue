@@ -19,12 +19,6 @@ const expanded = defineModel<boolean>("expanded", { default: false });
 
 const canExpand = ref(false);
 
-// Note that the variable name must be different than the ref name, otherwise
-// the compiled version of this component will trigger a warning in development
-// mode of the applications using RIS UI. While this doesn't break anything, it
-// adds a lot of noise to the console and test output.
-//
-// See https://github.com/vuejs/core/issues/12852
 const textContentRef = useTemplateRef("textContent");
 
 const textId = useId();
