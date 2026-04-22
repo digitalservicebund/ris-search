@@ -21,6 +21,7 @@ public class EncodingSchemaFactory {
 
   private static final String LANGUAGE = "de";
 
+  /** valid schemaTypes to appear in an encoding array */
   public enum SchemaType {
     HTML("html"),
     XML("xml"),
@@ -49,6 +50,14 @@ public class EncodingSchemaFactory {
     };
   }
 
+  /**
+   * Generates a legislation encoding schema based on the provided base URL and SchemaType
+   *
+   * @param type the SchemaType for the requested encoding schema
+   * @param baseUrl the base URL to be used for constructing the encoding schema attributes for HTML
+   *     and XML formats
+   * @return {@code LegislationObjectSchema} according to the given SchemaType
+   */
   public static LegislationObjectSchema legislationEncodingSchema(SchemaType type, String baseUrl) {
     return LegislationObjectSchema.builder()
         .id(id(type, baseUrl))
