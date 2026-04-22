@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
+import de.bund.digitalservice.ris.search.service.ChangelogService;
 import de.bund.digitalservice.ris.search.service.IndexStatusService;
 import de.bund.digitalservice.ris.search.service.IndexingState;
 import de.bund.digitalservice.ris.search.service.NormIndexSyncJob;
@@ -95,7 +96,7 @@ class NormsImporterTest extends ContainersIntegrationBase {
 
     IndexingState mockState =
         getMockState()
-            .withLastProcessedChangelogFile(NormIndexSyncJob.CHANGELOGS_PREFIX + lastSuccess);
+            .withLastProcessedChangelogFile(ChangelogService.CHANGELOGS_PREFIX + lastSuccess);
 
     normsImporter.fetchAndProcessChanges(mockState);
 
@@ -141,7 +142,7 @@ class NormsImporterTest extends ContainersIntegrationBase {
 
     IndexingState mockState =
         getMockState()
-            .withLastProcessedChangelogFile(NormIndexSyncJob.CHANGELOGS_PREFIX + lastSuccess);
+            .withLastProcessedChangelogFile(ChangelogService.CHANGELOGS_PREFIX + lastSuccess);
 
     normsImporter.fetchAndProcessChanges(mockState);
 

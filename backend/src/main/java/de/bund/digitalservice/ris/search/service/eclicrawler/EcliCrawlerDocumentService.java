@@ -11,7 +11,7 @@ import de.bund.digitalservice.ris.search.models.opensearch.EcliCrawlerDocument;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.EcliCrawlerDocumentRepository;
 import de.bund.digitalservice.ris.search.service.CaseLawService;
-import de.bund.digitalservice.ris.search.service.IndexSyncJob;
+import de.bund.digitalservice.ris.search.service.ChangelogService;
 import jakarta.xml.bind.JAXBException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -127,7 +127,7 @@ public class EcliCrawlerDocumentService {
   public void writeFullDiff(String apiUrl, LocalDate day) {
     List<String> allFiles =
         caselawBucket.getAllKeys().stream()
-            .filter(s -> s.endsWith(".xml") && !s.contains(IndexSyncJob.CHANGELOGS_PREFIX))
+            .filter(s -> s.endsWith(".xml") && !s.contains(ChangelogService.CHANGELOGS_PREFIX))
             .toList();
 
     List<String> toBeDeleted;

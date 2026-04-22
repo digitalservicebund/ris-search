@@ -9,10 +9,24 @@ public class LiteratureIndexSyncJob extends IndexSyncJob {
 
   public static final String LITERATURE_STATUS_FILENAME = "literature_status.json";
 
+  /**
+   * Scheduled Job to index literature files
+   *
+   * @param indexStatusService service to manage the status of an index job
+   * @param changelogService service to manage changelogs
+   * @param bucket root bucket for literature files
+   * @param indexLiteratureService service to index literature files
+   */
   public LiteratureIndexSyncJob(
       IndexStatusService indexStatusService,
-      LiteratureBucket literatureBucket,
+      ChangelogService changelogService,
+      LiteratureBucket bucket,
       IndexLiteratureService indexLiteratureService) {
-    super(indexStatusService, literatureBucket, indexLiteratureService, LITERATURE_STATUS_FILENAME);
+    super(
+        indexStatusService,
+        changelogService,
+        bucket,
+        indexLiteratureService,
+        LITERATURE_STATUS_FILENAME);
   }
 }

@@ -1,18 +1,13 @@
 package de.bund.digitalservice.ris.search.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
 import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.springframework.scheduling.annotation.Async;
 
 /**
@@ -31,9 +26,8 @@ public class IndexSyncJob implements Job {
 
   private static final Logger logger = LogManager.getLogger(IndexSyncJob.class);
 
-  public static final String CHANGELOGS_PREFIX = "changelogs/";
-
   private final IndexStatusService indexStatusService;
+  private final ChangelogService changelogService;
   private final ObjectStorage changelogBucket;
   private final IndexService indexService;
   private final String statusFileName;
@@ -42,19 +36,22 @@ public class IndexSyncJob implements Job {
    * Constructs an IndexSyncJob with the specified services and status file *
    *
    * @param indexStatusService the service to manage index status
+   * @param changelogService the object storage for changelog files
    * @param changelogBucket the object storage for changelog files
    * @param indexService the service to perform indexing operations
    * @param statusFileName the name of the status
    */
   public IndexSyncJob(
       IndexStatusService indexStatusService,
+      ChangelogService changelogService,
       ObjectStorage changelogBucket,
       IndexService indexService,
       String statusFileName) {
     this.indexStatusService = indexStatusService;
-    this.changelogBucket = changelogBucket;
+    this.changelogService = changelogService;
     this.indexService = indexService;
     this.statusFileName = statusFileName;
+    this.changelogBucket = changelogBucket;
   }
 
   @Async
@@ -99,30 +96,6 @@ public class IndexSyncJob implements Job {
   }
 
   /**
-   * Retrieves a list of new changelog file names from the specified object storage, filtered by
-   * those that are newer than the specified last processed changelog.
-   *
-   * <p>The method fetches all file keys from the changelog bucket with the prefix defined by
-   * `CHANGELOGS_PREFIX` and excludes the prefix itself from the results. It then filters out files
-   * that are lexicographically older or equal to the `lastProcessedChangelog` and sorts the
-   * remaining file names in ascending order.
-   *
-   * @param changelogBucket the object storage instance containing the changelog files
-   * @param lastProcessedChangelog the filename of the last processed changelog; files with
-   *     lexicographically greater names will be included
-   * @return a sorted list of file names representing unprocessed changelog files
-   */
-  public List<String> getNewChangelogs(
-      ObjectStorage changelogBucket, @NotNull String lastProcessedChangelog) {
-
-    return changelogBucket.getAllKeysByPrefix(CHANGELOGS_PREFIX).stream()
-        .filter(e -> !CHANGELOGS_PREFIX.equals(e))
-        .filter(e -> e.compareTo(lastProcessedChangelog) > 0)
-        .sorted()
-        .toList();
-  }
-
-  /**
    * Fetches and processes changes from the changelog bucket based on the given indexing state.
    *
    * <p>If the `lastProcessedChangelogFile` in the provided state is null, a full reindexing
@@ -146,11 +119,13 @@ public class IndexSyncJob implements Job {
       logger.info("Reindexing all due to missing previous lastProcessedChangelogFile");
       indexService.reindexAll(state.startTime());
       indexStatusService.updateLastProcessedChangelog(
-          statusFileName, CHANGELOGS_PREFIX + state.startTime());
+          statusFileName, ChangelogService.CHANGELOGS_PREFIX + state.startTime());
       alertOnNumberMismatch(state);
     } else {
       List<String> unprocessedChangelogs =
-          getNewChangelogs(changelogBucket, state.lastProcessedChangelogFile()).stream()
+          changelogService
+              .getNewChangelogsPaths(changelogBucket, state.lastProcessedChangelogFile())
+              .stream()
               .sorted()
               .toList();
       processChangelogs(state, unprocessedChangelogs);
@@ -165,42 +140,12 @@ public class IndexSyncJob implements Job {
   private void processChangelogs(IndexingState state, List<String> unprocessedChangelogs)
       throws ObjectStoreServiceException {
     for (String fileName : unprocessedChangelogs) {
-      Changelog changelogContent = parseOneChangelog(changelogBucket, fileName);
+      Changelog changelogContent = changelogService.parseOneChangelog(changelogBucket, fileName);
       if (changelogContent != null) {
         logger.info("Processing changelog {}", fileName);
         importChangelogContent(changelogContent, state.startTime());
         indexStatusService.updateLastProcessedChangelog(statusFileName, fileName);
         logger.info("Processed changelog {}", fileName);
-      }
-    }
-  }
-
-  /**
-   * Parses a single changelog file from the given object storage and converts its content to a
-   * {@link Changelog} object.
-   *
-   * <p>The method fetches the file content from the object storage using the provided filename. If
-   * no content is found, or if there is an error during parsing, the method logs an error and
-   * returns null.
-   *
-   * @param changelogBucket The object storage instance to fetch the changelog file from.
-   * @param filename The name of the file to be fetched and parsed as a changelog.
-   * @return A {@link Changelog} object if parsing is successful, or null if the file could not be
-   *     retrieved or parsed.
-   * @throws ObjectStoreServiceException If an error occurs while accessing the object storage.
-   */
-  public @Nullable Changelog parseOneChangelog(ObjectStorage changelogBucket, String filename)
-      throws ObjectStoreServiceException {
-    Optional<String> changelogContent = changelogBucket.getFileAsString(filename);
-    if (changelogContent.isEmpty()) {
-      logger.error("Changelog file {} could not be fetched during import.", filename);
-      return null;
-    } else {
-      try {
-        return new ObjectMapper().readValue(changelogContent.get(), Changelog.class);
-      } catch (JsonProcessingException e) {
-        logger.error("Error while parsing changelog file {}", filename, e);
-        return null;
       }
     }
   }
@@ -249,7 +194,7 @@ public class IndexSyncJob implements Job {
       return;
     }
     List<String> unprocessedChangelogs =
-        getNewChangelogs(changelogBucket, state.lastProcessedChangelogFile());
+        changelogService.getNewChangelogsPaths(changelogBucket, state.lastProcessedChangelogFile());
     if (unprocessedChangelogs.isEmpty()) {
       int numberOfFilesInBucket = indexService.getNumberOfIndexableDocumentsInBucket();
       int numberOfIndexedDocuments = indexService.getNumberOfIndexedEntities();

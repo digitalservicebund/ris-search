@@ -104,7 +104,7 @@ public abstract class BaseIndexService<T> implements IndexService {
 
   protected List<String> getAllIndexableFilenames() {
     return objectStorage.getAllKeys().stream()
-        .filter(s -> s.endsWith(".xml") && !s.contains(IndexSyncJob.CHANGELOGS_PREFIX))
+        .filter(s -> s.endsWith(".xml") && !s.contains(ChangelogService.CHANGELOGS_PREFIX))
         .toList();
   }
 
