@@ -87,6 +87,21 @@ public class CorsConfig {
             .allowedMethods("GET", "HEAD", "OPTIONS")
             .allowedOrigins(CorsConfiguration.ALL)
             .allowedHeaders(CorsConfiguration.ALL);
+
+        registry
+            .addMapping("/swagger-ui/**")
+            .allowedMethods("GET")
+            .allowedOriginPatterns(docsUrl)
+            .allowedHeaders(CorsConfiguration.ALL);
+
+        // Note: this has nothing to do with our api docs
+        // but is a path used by swagger to serve/access the
+        // openapi specification for the endpoints.
+        registry
+            .addMapping("/v3/api-docs/**")
+            .allowedMethods("GET")
+            .allowedOriginPatterns(docsUrl)
+            .allowedHeaders(CorsConfiguration.ALL);
       }
     };
   }
