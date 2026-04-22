@@ -85,11 +85,20 @@ public class NormSchemaMapper {
       return Collections.emptyList();
     }
 
-    var encodingBaseUrl = CONTENT_BASE_URL + manifestationEli.replace(".xml", "");
-    var encodingZipBaseUrl =
-        CONTENT_BASE_URL + manifestationEli.substring(0, manifestationEli.lastIndexOf('/'));
+    var encodingBaseUrl = getEncodingBaseUrlFromManifestationEli(manifestationEli);
+    var encodingZipBaseUrl = encodingBaseUrl.substring(0, encodingBaseUrl.lastIndexOf('/'));
 
     return EncodingSchemaFactory.legislationEncodingSchemas(encodingBaseUrl, encodingZipBaseUrl);
+  }
+
+  /**
+   * construct the baseUrl for encoding objects from the manifestationEli
+   *
+   * @param manifestationEli of a legislation object
+   * @return contentBaseUrl of a legislation object
+   */
+  private static String getEncodingBaseUrlFromManifestationEli(String manifestationEli) {
+    return CONTENT_BASE_URL + manifestationEli.replace(".xml", "");
   }
 
   /**
@@ -161,7 +170,7 @@ public class NormSchemaMapper {
       final LegislationObjectSchema encodingItem =
           EncodingSchemaFactory.legislationEncodingSchema(
               EncodingSchemaFactory.SchemaType.XML,
-              CONTENT_BASE_URL + article.manifestationEli().replace(".xml", ""));
+              getEncodingBaseUrlFromManifestationEli(article.manifestationEli()));
       encoding = List.of(encodingItem);
     } else {
       encoding = List.of();
