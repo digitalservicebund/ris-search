@@ -73,6 +73,8 @@ public class SecurityConfig {
                 .permitAll()
                 .requestMatchers("/v1/**")
                 .permitAll()
+                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**")
+                .permitAll()
                 .anyRequest()
                 .authenticated());
     applyCommonConfiguration(http);
