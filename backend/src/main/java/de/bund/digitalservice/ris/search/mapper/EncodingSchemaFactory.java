@@ -21,7 +21,7 @@ public class EncodingSchemaFactory {
 
   private static final String LANGUAGE = "de";
 
-  private enum SchemaType {
+  public enum SchemaType {
     HTML("html"),
     XML("xml"),
     ZIP("zip");
@@ -49,8 +49,7 @@ public class EncodingSchemaFactory {
     };
   }
 
-  private static LegislationObjectSchema legislationEncodingSchema(
-      SchemaType type, String baseUrl) {
+  public static LegislationObjectSchema legislationEncodingSchema(SchemaType type, String baseUrl) {
     return LegislationObjectSchema.builder()
         .id(id(type, baseUrl))
         .contentUrl(contentUrl(type, baseUrl))

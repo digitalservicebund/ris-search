@@ -14,7 +14,6 @@ import de.bund.digitalservice.ris.search.utils.DateUtils;
 import java.util.Collections;
 import java.util.List;
 import javax.annotation.Nullable;
-import org.springframework.http.MediaType;
 
 /**
  * Utility class for mapping {@link Norm} domain objects to a {@link LegislationExpressionSchema}.
@@ -160,10 +159,9 @@ public class NormSchemaMapper {
     // Only attachments have their own manifestationELi and receive an encoding object.
     if (article.manifestationEli() != null) {
       final LegislationObjectSchema encodingItem =
-          LegislationObjectSchema.builder()
-              .encodingFormat(MediaType.APPLICATION_XML_VALUE)
-              .contentUrl(CONTENT_BASE_URL + article.manifestationEli())
-              .build();
+          EncodingSchemaFactory.legislationEncodingSchema(
+              EncodingSchemaFactory.SchemaType.XML,
+              CONTENT_BASE_URL + article.manifestationEli().replace(".xml", ""));
       encoding = List.of(encodingItem);
     } else {
       encoding = List.of();

@@ -90,7 +90,9 @@ class NormSchemaMapperTest {
                         .encoding(
                             List.of(
                                 LegislationObjectSchema.builder()
-                                    .contentUrl(ApiConfig.Paths.LEGISLATION + "/eli")
+                                    .id("/v1/legislation/eli/xml")
+                                    .inLanguage("de")
+                                    .contentUrl(ApiConfig.Paths.LEGISLATION + "/eli.xml")
                                     .encodingFormat("application/xml")
                                     .build()))
                         .build()))
@@ -228,8 +230,11 @@ class NormSchemaMapperTest {
                                         .encoding(
                                             List.of(
                                                 LegislationObjectSchema.builder()
-                                                    .contentUrl("/v1/legislation/attachment/eli")
+                                                    .id("/v1/legislation/attachment/eli/xml")
+                                                    .contentUrl(
+                                                        "/v1/legislation/attachment/eli.xml")
                                                     .encodingFormat("application/xml")
+                                                    .inLanguage("de")
                                                     .build()))
                                         .build()))
                             .build()))
