@@ -11,6 +11,9 @@ on:
     paths:
       - 'api-docs/**'
       - '.github/workflows/**'
+  schedule:
+    # This ensures that the applications container image is built, signed and deployed regularly.
+    - cron: '0 8 * * 1,3' # Runs at 8:00am UTC (9am winter time/10am summer time in Germany) on Mondays and Wednesdays
   # Allow to run this workflow manually
   workflow_dispatch:
 
