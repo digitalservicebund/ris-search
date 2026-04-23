@@ -147,9 +147,9 @@
         <ris:decisionNames>
             <ris:decisionName>Test decision name</ris:decisionName>
         </ris:decisionNames>
-        <ris:aktenzeichenListe domainTerm="Gericht" akn:refersTo="#gericht">
-            <ris:aktenzeichen domainTerm="Aktenzeichen" akn:refersTo="#aktenzeichen">Test file number 1</ris:aktenzeichen>
-            <ris:aktenzeichen domainTerm="Aktenzeichen" akn:refersTo="#aktenzeichen">Test file number 2</ris:aktenzeichen>
+        <ris:aktenzeichenListe domainTerm="Gericht">
+            <ris:aktenzeichen domainTerm="Aktenzeichen" refersTo="#aktenzeichen">Test file number 1</ris:aktenzeichen>
+            <ris:aktenzeichen domainTerm="Aktenzeichen" refersTo="#aktenzeichen">Test file number 2</ris:aktenzeichen>
         </ris:aktenzeichenListe>
         <ris:dokumenttyp domainTerm="Dokumenttyp">{% if documentType %}{{ documentType }}{% else %}Test document type{% endif %}</ris:dokumenttyp>
         <ris:gericht domainTerm="Gericht" refersTo="#gericht">
