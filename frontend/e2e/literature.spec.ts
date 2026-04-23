@@ -240,6 +240,52 @@ test("sidebar TOC is not shown when document has no text sections", async ({
   ).not.toBeVisible();
 });
 
+test.describe("mobile table of contents", () => {
+  test("floating button for the TOC is visible", async ({
+    page,
+    isMobileTest,
+  }) => {
+    test.skip(!isMobileTest);
+    await navigate(page, "/literature/XXLU000000001");
+
+    await expect(page.getByRole("button", { name: "Inhalte" })).toBeVisible();
+  });
+
+  test("clicking the floating button opens the TOC", async ({
+    page,
+    isMobileTest,
+  }) => {
+    test.skip(!isMobileTest);
+    await navigate(page, "/literature/XXLU000000001");
+
+    await page.getByRole("button", { name: "Inhalte" }).click();
+
+    await expect(page.getByRole("dialog", { name: "Inhalte" })).toBeVisible();
+  });
+
+  test("clicking a TOC link closes the TOC and scrolls to the element", async ({
+    page,
+    isMobileTest,
+  }) => {
+    test.skip(!isMobileTest);
+    await navigate(page, "/literature/XXLU000000001");
+
+    await page.getByRole("button", { name: "Inhalte" }).click();
+
+    const dialog = page.getByRole("dialog", { name: "Inhalte" });
+    await expect(dialog).toBeVisible();
+
+    await dialog.getByRole("link", { name: "Kurzreferat" }).click();
+    await expect(dialog).not.toBeVisible();
+
+    const targetHeading = page
+      .getByRole("main")
+      .getByRole("heading", { name: "Kurzreferat" });
+
+    await expect(targetHeading).toBeInViewport();
+  });
+});
+
 test("can navigate to search via breadcrumb", async ({ page }) => {
   await navigate(page, "/literature/XXLU000000001");
 

@@ -1,12 +1,12 @@
 import { renderSuspended } from "@nuxt/test-utils/runtime";
-import { screen } from "@testing-library/vue";
+import { screen, within } from "@testing-library/vue";
 import { userEvent } from "@testing-library/user-event";
 import { beforeEach, describe, expect, it } from "vitest";
-import NormTableOfContents from "./NormTableOfContents.vue";
+import TableOfContents from "./TableOfContents.vue";
 import type { LegislationExpressionPartSchema } from "~/types/api";
 import { tocItemsToTreeViewItems } from "~/utils/tableOfContents";
 
-describe("NormTableOfContents", () => {
+describe("TableOfContents", () => {
   const mockTocItems: LegislationExpressionPartSchema[] = [
     {
       "@id": "chapter1",
@@ -84,7 +84,7 @@ describe("NormTableOfContents", () => {
     selectionEnabled?: boolean;
     subheading?: string;
   }) {
-    return renderSuspended(NormTableOfContents, {
+    return renderSuspended(TableOfContents, {
       props: {
         tableOfContents: props?.items ?? createItems(),
         selectedKey: props?.selectedKey,
@@ -112,7 +112,7 @@ describe("NormTableOfContents", () => {
   it("renders the navigation subtitle", async () => {
     await renderComponent({ subheading: "Norm abbreviation" });
 
-    expect(screen.getByText("Norm abbreviation")).toBeInTheDocument();
+    expect(screen.getAllByText("Norm abbreviation").length).toBeGreaterThan(0);
   });
 
   it("does not expand any nodes by default", async () => {
@@ -153,38 +153,40 @@ describe("NormTableOfContents", () => {
     ).not.toBeInTheDocument();
   });
 
-  it("toggles the mobile drawer", async () => {
-    const user = userEvent.setup();
-    const { container } = await renderComponent();
+  it("shows the floating button before the drawer is opened", async () => {
+    await renderComponent({ subheading: "Test Norm" });
 
-    const toc = container.querySelector('[data-testid="table-of-contents"]');
-    expect(toc).toHaveAttribute("data-selected", "false");
-
-    await user.click(screen.getByTestId("mobile-toc-button"));
-    expect(toc).toHaveAttribute("data-selected", "true");
-
-    await user.click(
-      screen.getByRole("button", { name: "Inhaltsverzeichnis schließen" }),
-    );
-    expect(toc).toHaveAttribute("data-selected", "false");
+    const openButton = screen.getByRole("button", {
+      name: "Inhalte Test Norm",
+    });
+    expect(openButton).toBeVisible();
   });
 
-  it("closes the mobile drawer when an item is clicked", async () => {
+  it("opens the mobile drawer when the floating button is clicked", async () => {
     const user = userEvent.setup();
-    const { container } = await renderComponent();
+    await renderComponent({ subheading: "Test Norm" });
 
-    await user.click(screen.getByTestId("mobile-toc-button"));
-    await user.click(screen.getByText("1"));
+    await user.click(screen.getByRole("button", { name: "Inhalte Test Norm" }));
 
-    const toc = container.querySelector('[data-testid="table-of-contents"]');
-    expect(toc).toHaveAttribute("data-selected", "false");
+    const dialog = screen.getByRole("dialog", { name: "Inhalte" });
+    expect(dialog).toBeVisible();
   });
 
-  it("keeps the responsive overlay classes on the container", async () => {
+  it("renders a TOC tree inside the mobile drawer", async () => {
+    const user = userEvent.setup();
+    await renderComponent({ subheading: "Test Norm" });
+
+    await user.click(screen.getByRole("button", { name: "Inhalte Test Norm" }));
+
+    const dialog = screen.getByRole("dialog", { name: "Inhalte" });
+    expect(within(dialog).getByRole("tree", { name: "Inhalte" })).toBeVisible();
+  });
+
+  it("keeps the desktop TOC hidden on mobile and visible on desktop", async () => {
     const { container } = await renderComponent();
 
-    const toc = container.querySelector('[data-testid="table-of-contents"]');
-    expect(toc).toHaveClass("max-lg:fixed");
-    expect(toc).toHaveClass("max-lg:left-0");
+    // The desktop TreeView has the hidden md:block class
+    const desktopToc = container.querySelector(String.raw`.hidden.md\:block`);
+    expect(desktopToc).toBeInTheDocument();
   });
 });

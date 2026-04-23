@@ -112,12 +112,9 @@ const detailItems = computed(() =>
 
         <template #sidebar>
           <client-only>
-            <TreeView
+            <DocumentsTableOfContents
               v-if="tocEntries?.length"
-              :items="tocEntries"
-              :selection-enabled="false"
-              class="h-full lg:pt-16"
-              heading="Inhalte"
+              :table-of-contents="tocEntries"
             />
           </client-only>
         </template>
