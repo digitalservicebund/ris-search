@@ -14,7 +14,6 @@ import de.bund.digitalservice.ris.search.utils.DateUtils;
 import java.util.Collections;
 import java.util.List;
 import javax.annotation.Nullable;
-import org.springframework.http.MediaType;
 
 /**
  * Utility class for mapping {@link Norm} domain objects to a {@link LegislationExpressionSchema}.
@@ -86,11 +85,20 @@ public class NormSchemaMapper {
       return Collections.emptyList();
     }
 
-    var encodingBaseUrl = CONTENT_BASE_URL + manifestationEli.replace(".xml", "");
-    var encodingZipBaseUrl =
-        CONTENT_BASE_URL + manifestationEli.substring(0, manifestationEli.lastIndexOf('/'));
+    var encodingBaseUrl = getEncodingBaseUrlFromManifestationEli(manifestationEli);
+    var encodingZipBaseUrl = encodingBaseUrl.substring(0, encodingBaseUrl.lastIndexOf('/'));
 
     return EncodingSchemaFactory.legislationEncodingSchemas(encodingBaseUrl, encodingZipBaseUrl);
+  }
+
+  /**
+   * construct the baseUrl for encoding objects from the manifestationEli
+   *
+   * @param manifestationEli of a legislation object
+   * @return contentBaseUrl of a legislation object
+   */
+  private static String getEncodingBaseUrlFromManifestationEli(String manifestationEli) {
+    return CONTENT_BASE_URL + manifestationEli.replace(".xml", "");
   }
 
   /**
@@ -160,10 +168,9 @@ public class NormSchemaMapper {
     // Only attachments have their own manifestationELi and receive an encoding object.
     if (article.manifestationEli() != null) {
       final LegislationObjectSchema encodingItem =
-          LegislationObjectSchema.builder()
-              .encodingFormat(MediaType.APPLICATION_XML_VALUE)
-              .contentUrl(CONTENT_BASE_URL + article.manifestationEli())
-              .build();
+          EncodingSchemaFactory.legislationEncodingSchema(
+              EncodingSchemaFactory.SchemaType.XML,
+              getEncodingBaseUrlFromManifestationEli(article.manifestationEli()));
       encoding = List.of(encodingItem);
     } else {
       encoding = List.of();
