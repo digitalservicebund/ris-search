@@ -24,8 +24,6 @@ The `searchTerm` parameter searches across multiple fields of an entity at the s
 
 Results are sorted by best match in descending order unless another sort option is provided as a query parameter. Multiple factors are combined to boost the most relevant item to the top of the result list.
 
-<FeedbackInlineSurvey id="018c252c-e5e6-0000-d66d-acd5f06b9541" context="en-resources-search" />
-
 #### Parameters
 
 <RequestParams method="get" path="/api/v1/search" />

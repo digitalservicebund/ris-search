@@ -16,5 +16,3 @@ To ensure fair usage and protect our infrastructure from abuse, we enforce rate 
 ### Best Practices to Avoid Rate Limiting
 - Implement **exponential backoff**.
 - Optimize API usage by **caching** responses where applicable.
-
-<FeedbackSurvey id="018c252c-e5e6-0000-d66d-acd5f06b9541" context="en-guides-limits" />

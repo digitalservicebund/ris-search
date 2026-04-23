@@ -34,5 +34,3 @@ We plan to make the bulk downloads available as XML soon. You can then:
 ### Planned feature: Versions of norms
 
 We are continuously working on expanding the features of our API to provide you with even more comprehensive access to legal information. An important part of our future development is the versioning of norms.
-
-<FeedbackSurvey id="018c252c-e5e6-0000-d66d-acd5f06b9541" context="en-index" />

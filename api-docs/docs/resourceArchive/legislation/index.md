@@ -15,8 +15,6 @@ hero:
 
 List all legislation in our database with support for [filtering](../../guides/filters/index.md) and [pagination](../../guides/pagination/index.md).
 
-<FeedbackInlineSurvey id="018c252c-e5e6-0000-d66d-acd5f06b9541" context="en-resources-legislation-list-legislation" />
-
 #### Parameters
 
 <RequestParams method="get" path="/api/v1/legislation" />
@@ -51,8 +49,6 @@ curl -G https://testphase.rechtsinformationen.bund.de/v1/legislation?pageIndex=3
 ### Get a single legislation
 
 Retrieve single a legislation by `@id`.
-
-<FeedbackInlineSurvey id="018c252c-e5e6-0000-d66d-acd5f06b9541" context="en-resources-legislation-get-legislation" />
 
 #### Parameters
 

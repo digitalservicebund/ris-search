@@ -36,15 +36,11 @@ The exported dataset is returned as a ZIP file with the following structure.
   </FileExplorerItem>
 </FileExplorer>
 
-<FeedbackInlineSurvey id="018c252c-e5e6-0000-d66d-acd5f06b9541" context="en-resources-archive" />
-
 ## Endpoints
 
 ### Export entities
 
 Request a data export as an archive, which is returned as a binary stream. Please note that the `dateModified` refers to the last modification of an expression. The modification can be triggered by many events, such as a lifecycle event (e.g., legislation went into effect) or an internal re-export of the encoding. We advise you to build your ingestion pipeline with incremental updates in mind.
-
-<FeedbackInlineSurvey id="018c252c-e5e6-0000-d66d-acd5f06b9541" context="en-resources-export" />
 
 #### Parameters
 

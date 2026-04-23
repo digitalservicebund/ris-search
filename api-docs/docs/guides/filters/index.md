@@ -73,7 +73,3 @@ All date fields implement similar query parameters for filtering.
 curl -G https://testphase.rechtsinformationen.bund.de/v1/case-law?dateFrom=2023-12-30
 curl -G https://testphase.rechtsinformationen.bund.de/v1/case-law?dateTo=2021-12-30
 ```
-
-:::
-
-<FeedbackSurvey id="018c252c-e5e6-0000-d66d-acd5f06b9541" context="en-guides-filters" />

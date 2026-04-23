@@ -2,10 +2,6 @@ export interface ThemeConfig {
   secondaryNav: NavItem[];
   contactEmail: string;
   outline: [number, number];
-  posthog: {
-    token: string;
-    host: string;
-  };
 }
 
 export interface NavItem {
