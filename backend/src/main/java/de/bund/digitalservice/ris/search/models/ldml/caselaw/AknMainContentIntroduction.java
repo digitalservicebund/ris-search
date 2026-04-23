@@ -61,4 +61,15 @@ public abstract class AknMainContentIntroduction extends AknMainContent {
       return NAME;
     }
   }
+
+  @NoArgsConstructor
+  @XmlDiscriminatorValue("EmptyContent")
+  public static class EmptyContent extends AknMainContentIntroduction {
+    public static final String NAME = "EmptyContent";
+
+    @Override
+    public String getName() {
+      return "";
+    }
+  }
 }

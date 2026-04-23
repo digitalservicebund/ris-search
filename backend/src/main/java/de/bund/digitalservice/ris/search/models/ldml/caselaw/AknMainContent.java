@@ -19,6 +19,7 @@ import org.eclipse.persistence.oxm.annotations.XmlDiscriminatorNode;
 @XmlSeeAlso({
   AknMainContentIntroduction.GuidingPrinciple.class,
   AknMainContentIntroduction.Outline.class,
+  AknMainContentIntroduction.EmptyContent.class,
   AknMainContentMotivation.DecisionGrounds.class,
   AknMainContentMotivation.Grounds.class,
   AknMainContentMotivation.OtherLongText.class,

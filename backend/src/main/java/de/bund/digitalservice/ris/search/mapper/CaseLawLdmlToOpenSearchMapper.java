@@ -124,8 +124,14 @@ public class CaseLawLdmlToOpenSearchMapper {
    */
   public CaseLawDocumentationUnit fromString(String ldmlFile) {
     try {
-      StreamSource ldmlStreamSource = new StreamSource(new StringReader(ldmlFile));
+      String patchedLdml =
+          ldmlFile.replaceAll(
+              "(<(akn:introduction|akn:motivation))(?![^>]*ris:domainTerm)([^>]*)>",
+              "$1 ris:domainTerm=\"EmptyContent\"$3>");
+
+      StreamSource ldmlStreamSource = new StreamSource(new StringReader(patchedLdml));
       CaseLawLdml ldml = JAXB.unmarshal(ldmlStreamSource, CaseLawLdml.class);
+
       return mapToEntity(ldml);
     } catch (DescriptorException | DataBindingException | ValidationException e) {
       throw new OpenSearchMapperException("unable to parse file to DocumentationUnit", e);

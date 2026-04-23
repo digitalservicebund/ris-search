@@ -30,18 +30,18 @@ public class JudgmentBody {
    *
    * <p>Contains the binding ruling of the court.
    */
-  @XmlElement(name = "decision", namespace = CaseLawLdmlNamespaces.AKN_NS)
+  @XmlElement(name = "decision", namespace = CaseLawLdmlNamespaces.AKN_NS, required = false)
   private JaxbHtml decision;
 
   /** The factual background or history of the case (the "Tatbestand"). */
-  @XmlElement(name = "background", namespace = CaseLawLdmlNamespaces.AKN_NS)
+  @XmlElement(name = "background", namespace = CaseLawLdmlNamespaces.AKN_NS, required = false)
   private JaxbHtml background;
 
   /**
    * A list of legal reasoning blocks (Motivations), which may include formal grounds or dissenting
    * opinions.
    */
-  @XmlElement(name = "motivation", namespace = CaseLawLdmlNamespaces.AKN_NS)
+  @XmlElement(name = "motivation", namespace = CaseLawLdmlNamespaces.AKN_NS, required = false)
   private List<AknMainContent> motivations;
 
   /**
@@ -51,7 +51,7 @@ public class JudgmentBody {
    * @return an {@link Optional} containing the HTML content if found, otherwise empty
    */
   public Optional<JaxbHtml> getIntroductionEntryContentByName(String name) {
-    if (introductions == null) {
+    if (introductions == null || name == null) {
       return Optional.empty();
     }
 
@@ -68,7 +68,7 @@ public class JudgmentBody {
    * @return an {@link Optional} containing the HTML content if found, otherwise empty
    */
   public Optional<JaxbHtml> getMotivationEntryContentByName(String name) {
-    if (motivations == null) {
+    if (motivations == null || name == null) {
       return Optional.empty();
     }
 
