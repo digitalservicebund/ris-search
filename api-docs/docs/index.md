@@ -13,6 +13,8 @@ Analyze trends or integrate legal texts into your applications.
   <span class="font-bold">This is a trial service.</span> The dataset is not yet complete. We will also provide more functions in the future.
 </InfoPanel>
 
+<SwaggerButton />
+
 ## What you can do with this API
 
 ### Search API and retrieve single documents
