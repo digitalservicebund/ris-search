@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"
-                xmlns:ris="http://example.com/0.1/"
+                xmlns:ris="http://rechtsinformationen.bund.de/schema/ris/0.1/"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                 xsi:schemaLocation="http://docs.oasis-open.org/legaldocml/ns/akn/3.0 https://docs.oasis-open.org/legaldocml/akn-core/v1.0/os/part2-specs/schemas/akomantoso30.xsd">
 
@@ -39,10 +39,10 @@
             <akn:analysis source="#ris">
                 <akn:otherAnalysis source="#ris">
                     <ris:dokumentarischeKurztexte domainTerm="Dokumentarische Kurztexte">
-                        <ris:titelzeile akn:eId="titelzeile" ris:domainTerm="Titelzeile">
+                        <ris:titelzeile domainTerm="Titelzeile" eId="titelzeile">
                             <akn:p>Urteil 7.</akn:p>
                         </ris:titelzeile>
-                        <ris:orientierungssatz ris:domainTerm="Orientierungssatz">
+                        <ris:orientierungssatz domainTerm="Orientierungssatz">
                             <akn:p>1. Fiktive Darstellung des Sachverhalts im Bereich Urlaubsanspruch.</akn:p>
                             <akn:p>2. Weitere Testangaben zur Prozessförderung werden exemplarisch aufgeführt.</akn:p>
                             <akn:p>3. Berufung und weitere Schritte sind eingeleitet.</akn:p>
@@ -67,11 +67,11 @@
                     <ris:aktenzeichenListe domainTerm="Liste der Aktenzeichen">
                         <ris:aktenzeichen domainTerm="Aktenzeichen" akn:refersTo="#aktenzeichen">AB 5678/90</ris:aktenzeichen>
                     </ris:aktenzeichenListe>
-                    <ris:dokumenttyp akn:eId="dokumenttyp" domainTerm="Dokumenttyp">Urteil</ris:dokumenttyp>
-                    <ris:gericht domainTerm="Gericht" akn:refersTo="#gericht">
+                    <ris:dokumenttyp domainTerm="Dokumenttyp">Urteil</ris:dokumenttyp>
+                    <ris:gericht domainTerm="Gericht" refersTo="#gericht">
                         <ris:gerichtstyp domainTerm="Gerichtstyp">ArbG</ris:gerichtstyp>
                         <ris:gerichtsort domainTerm="Gerichtsort">Köln</ris:gerichtsort>
-                        <ris:spruchkoerper domainTerm="Spruchkörper" akn:refersTo="#spruchkoerper">5. Kammer</ris:spruchkoerper>
+                        <ris:spruchkoerper domainTerm="Spruchkörper" refersTo="#spruchkoerper">5. Kammer</ris:spruchkoerper>
                     </ris:gericht>
                     <ris:rechtskraft domainTerm="Rechtskraft">Keine Angabe</ris:rechtskraft>
                     <ris:sachgebiete domainTerm="Sachgebiete">
@@ -80,7 +80,7 @@
                         <ris:sachgebiet domainTerm="Sachgebiet" notation="neu">Testprozess (Testfall)</ris:sachgebiet>
                         <ris:sachgebiet domainTerm="Sachgebiet" notation="neu">Testurlaub</ris:sachgebiet>
                     </ris:sachgebiete>
-                    <ris:dokumentationsstelle domainTerm="Dokumentationsstelle" akn:refersTo="#bag-dokumentationsstelle">BAG</ris:dokumentationsstelle>
+                    <ris:dokumentationsstelle domainTerm="Dokumentationsstelle" refersTo="#bag-dokumentationsstelle">BAG</ris:dokumentationsstelle>
                     <ris:vorgehendeEntscheidungen domainTerm="Vorgehende Entscheidungen">
                         <ris:vorgehendeEntscheidung>
                             <ris:aktenzeichen domainTerm="Aktenzeichen">XY Z 12/34</ris:aktenzeichen>
@@ -95,7 +95,7 @@
             <akn:p>Aktenzeichen: <akn:docNumber refersTo="#aktenzeichen">AB 5678/90</akn:docNumber></akn:p>
             <akn:p>Entscheidungsdatum: <akn:docDate date="2025-04-09" refersTo="#entscheidungsdatum">09.04.2025</akn:docDate></akn:p>
             <akn:p>Gericht: <akn:courtType refersTo="#gericht">ArbG</akn:courtType></akn:p>
-            <akn:p>Dokumenttyp: <akn:docType refersTo="#dokumenttyp">Urteil</akn:docType></akn:p>
+            <akn:p>Dokumenttyp: <akn:docType>Urteil</akn:docType></akn:p>
             <akn:p>Kurztitel: <akn:shortTitle>
                 <akn:embeddedStructure>
                     <akn:p>Testheader für Urteil 7.</akn:p>

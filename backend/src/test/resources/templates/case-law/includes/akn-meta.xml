@@ -98,7 +98,7 @@
 <akn:otherAnalysis source="#ris">
     <ris:dokumentarischeKurztexte domainTerm="Dokumentarische Kurztexte">
         {% if not hideTitle %}
-        <ris:titelzeile akn:eId="titelzeile" ris:domainTerm="Titelzeile">
+        <ris:titelzeile domainTerm="Titelzeile" eId="titelzeile">
             {% if title %}
             {{ title | raw }}
             {% else %}
@@ -107,7 +107,7 @@
         </ris:titelzeile>
         {% endif %}
         {% if not hideHeadnote %}
-        <ris:orientierungssatz ris:domainTerm="Orientierungssatz">
+        <ris:orientierungssatz domainTerm="Orientierungssatz">
             {% if headnote %}
             {{ headnote | raw }}
             {% else %}
@@ -116,7 +116,7 @@
         </ris:orientierungssatz>
         {% endif %}
         {% if not hideOtherHeadnote %}
-        <ris:sonstigerOrientierungssatz ris:domainTerm="Sonstiger Orientierungssatz">
+        <ris:sonstigerOrientierungssatz domainTerm="Sonstiger Orientierungssatz">
             {% if otherHeadnote %}
             {{ otherHeadnote | raw }}
             {% else %}
@@ -151,11 +151,11 @@
             <ris:aktenzeichen domainTerm="Aktenzeichen" akn:refersTo="#aktenzeichen">Test file number 1</ris:aktenzeichen>
             <ris:aktenzeichen domainTerm="Aktenzeichen" akn:refersTo="#aktenzeichen">Test file number 2</ris:aktenzeichen>
         </ris:aktenzeichenListe>
-        <ris:dokumenttyp akn:eId="dokumenttyp" domainTerm="Dokumenttyp">{% if documentType %}{{ documentType }}{% else %}Test document type{% endif %}</ris:dokumenttyp>
-        <ris:gericht domainTerm="Gericht" akn:refersTo="#gericht">
+        <ris:dokumenttyp domainTerm="Dokumenttyp">{% if documentType %}{{ documentType }}{% else %}Test document type{% endif %}</ris:dokumenttyp>
+        <ris:gericht domainTerm="Gericht" refersTo="#gericht">
             <ris:gerichtstyp domainTerm="Gerichtstyp">{% if courtType %}{{ courtType }}{% else %}Test court type{% endif %}</ris:gerichtstyp>
             <ris:gerichtsort domainTerm="Gerichtsort">{% if location %}{{ location }}{% else %}Test court location{% endif%}</ris:gerichtsort>
-            <ris:spruchkoerper domainTerm="Spruchkörper" akn:refersTo="#spruchkoerper">Test judicial body</ris:spruchkoerper>
+            <ris:spruchkoerper domainTerm="Spruchkörper" refersTo="#spruchkoerper">Test judicial body</ris:spruchkoerper>
         </ris:gericht>
         <ris:legalForces>
             <ris:legalForce>Test legal force</ris:legalForce>
@@ -183,7 +183,7 @@
         <ris:regionen domainTerm="Regionen">
             <ris:region domainTerm="Region">NW</ris:region>
         </ris:regionen>
-        <ris:dokumentationsstelle domainTerm="Dokumentationsstelle" akn:refersTo="#documentationoffice-dokumentationsstelle">documentationOffice</ris:dokumentationsstelle>
+        <ris:dokumentationsstelle domainTerm="Dokumentationsstelle" refersTo="#documentationoffice-dokumentationsstelle">documentationOffice</ris:dokumentationsstelle>
     </ris:meta>
 </akn:proprietary>
 <akn:classification source="#ris">

@@ -3,8 +3,8 @@
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:math="http://www.w3.org/1998/Math/MathML"
                 xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"
-                xmlns:ris="http://example.com/0.1/"
-                xmlns:local="http://example.com/ns/1.0"
+                xmlns:ris="http://rechtsinformationen.bund.de/schema/ris/0.1/"
+                xmlns:local="http://rechtsinformationen.bund.de/schema/ris/0.1/"
                 exclude-result-prefixes="ris xs math akn local xsi"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                 xsi:schemaLocation="http://docs.oasis-open.org/legaldocml/ns/akn/3.0 https://docs.oasis-open.org/legaldocml/akn-core/v1.0/os/part2-specs/schemas/akomantoso30.xsd">
