@@ -40,4 +40,13 @@ public class RisGericht {
   /** The specific judicial body or chamber (Spruchkörper) within the court. */
   @XmlElement(name = "spruchkoerper", namespace = CaseLawLdmlNamespaces.RIS_NS)
   private Spruchkoerper spruchkoerper;
+
+  /**
+   * Safely retrieves the value of the Spruchkoerper if it exists.
+   *
+   * @return The value, or null if Spruchkoerper is null.
+   */
+  public String getSpruchkoerperValue() {
+    return this.spruchkoerper != null ? this.spruchkoerper.getValue() : null;
+  }
 }

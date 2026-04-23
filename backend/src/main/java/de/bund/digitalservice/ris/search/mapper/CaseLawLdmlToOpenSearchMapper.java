@@ -80,7 +80,7 @@ public class CaseLawLdmlToOpenSearchMapper {
         .courtType(risGericht.getGerichtstyp())
         .location(risGericht.getGerichtsort())
         .documentType(judgment.getName())
-        .judicialBody(risGericht.getSpruchkoerper().getValue())
+        .judicialBody(risGericht.getSpruchkoerperValue())
         .courtKeyword(risMeta.getCourtKeyword())
         .keywords(extractKeywords(meta))
         .decisionName(extractDecisionNames(meta))
