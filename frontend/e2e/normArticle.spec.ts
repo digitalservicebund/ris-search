@@ -462,3 +462,110 @@ test("sets up meta tags for article page", async ({ page }) => {
     "Die in Anlage 1 aufgeführten Erzeugnisse unterliegen dieser Verordnung, soweit sie zum gewerbsmäßigen Vertrieb bestimmt sind.",
   );
 });
+
+test.describe("mobile table of contents", () => {
+  test("floating button for the TOC is visible", async ({
+    page,
+    isMobileTest,
+  }) => {
+    test.skip(!isMobileTest);
+    await navigate(
+      page,
+      "/norms/eli/bund/bgbl-1/1972/s2459/1999-04-20/4/deu/art-z3",
+    );
+
+    await expect(
+      page.getByRole("button", { name: "Inhalte BWahlGV" }),
+    ).toBeVisible();
+  });
+
+  test("clicking the floating button opens the TOC", async ({
+    page,
+    isMobileTest,
+  }) => {
+    test.skip(!isMobileTest);
+    await navigate(
+      page,
+      "/norms/eli/bund/bgbl-1/1972/s2459/1999-04-20/4/deu/art-z3",
+    );
+
+    await page.getByRole("button", { name: "Inhalte BWahlGV" }).click();
+
+    await expect(page.getByRole("dialog", { name: "Inhalte" })).toBeVisible();
+  });
+
+  test("collapsing a TOC item does not close the TOC", async ({
+    page,
+    isMobileTest,
+  }) => {
+    test.skip(!isMobileTest);
+    await navigate(
+      page,
+      "/norms/eli/bund/bgbl-1/1972/s2459/1999-04-20/4/deu/art-z3",
+    );
+
+    await page.getByRole("button", { name: "Inhalte BWahlGV" }).click();
+
+    const dialog = page.getByRole("dialog", { name: "Inhalte" });
+    await expect(dialog).toBeVisible();
+
+    await dialog
+      .getByRole("button", { name: "Ebene schließen" })
+      .first()
+      .click();
+
+    await expect(dialog).toBeVisible();
+  });
+
+  test("clicking a TOC link closes the TOC and navigates to the article", async ({
+    page,
+    isMobileTest,
+  }) => {
+    test.skip(!isMobileTest);
+    await navigate(
+      page,
+      "/norms/eli/bund/bgbl-1/1972/s2459/1999-04-20/4/deu/art-z3",
+    );
+
+    await page.getByRole("button", { name: "Inhalte BWahlGV" }).click();
+
+    const dialog = page.getByRole("dialog", { name: "Inhalte" });
+    await expect(dialog).toBeVisible();
+
+    await dialog
+      .getByRole("treeitem", { name: /Dritter Abschnitt/ })
+      .getByRole("treeitem", { name: /Erster Unterabschnitt/ })
+      .getByRole("link", { name: "§ 9" })
+      .click();
+
+    await expect(dialog).not.toBeVisible();
+
+    await expect(
+      page.getByRole("heading", {
+        level: 1,
+        name: "§ 9 Datenschutzanforderungen",
+      }),
+    ).toBeVisible();
+  });
+
+  test("current article is highlighted as selected in the TOC", async ({
+    page,
+    isMobileTest,
+  }) => {
+    test.skip(!isMobileTest);
+    await navigate(
+      page,
+      "/norms/eli/bund/bgbl-1/1972/s2459/1999-04-20/4/deu/art-z3",
+    );
+
+    await page.getByRole("button", { name: "Inhalte BWahlGV" }).click();
+
+    const dialog = page.getByRole("dialog", { name: "Inhalte" });
+    await expect(dialog).toBeVisible();
+
+    await expect(dialog.getByRole("treeitem", { name: /§ 9/ })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+  });
+});
