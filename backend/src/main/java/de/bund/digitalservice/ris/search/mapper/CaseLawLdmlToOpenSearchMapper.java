@@ -11,7 +11,6 @@ import de.bund.digitalservice.ris.search.models.ldml.caselaw.Analysis;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.CaseLawLdml;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.DocumentaryShortTexts;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.FrbrElement;
-import de.bund.digitalservice.ris.search.models.ldml.caselaw.FrbrThis;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.ImplicitReference;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.JaxbHtml;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.Judgment;
@@ -20,7 +19,6 @@ import de.bund.digitalservice.ris.search.models.ldml.caselaw.LinkedJudgement;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.Meta;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.OtherAnalysis;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.OtherReferences;
-import de.bund.digitalservice.ris.search.models.ldml.caselaw.Proprietary;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.RisGericht;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.RisMeta;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
@@ -69,7 +67,7 @@ public class CaseLawLdmlToOpenSearchMapper {
     Meta meta = judgment.getMeta();
     RisMeta risMeta = meta.getProprietary().getRisMeta();
     FrbrElement work = meta.getIdentification().getFrbrWork();
-    String uniqueId = extractUniqueIdentifier(work);
+    String uniqueId = work.getFrbrThis().getValue();
     RisGericht risGericht = risMeta.getRisGericht();
     JudgmentBody judgmentBody = judgment.getJudgmentBody();
 
@@ -164,14 +162,6 @@ public class CaseLawLdmlToOpenSearchMapper {
     }
   }
 
-  private static String extractUniqueIdentifier(FrbrElement frbrWork) throws ValidationException {
-    return Optional.ofNullable(frbrWork)
-        .map(FrbrElement::getFrbrThis)
-        .map(FrbrThis::getValue)
-        .filter(s -> !s.isBlank())
-        .orElseThrow(() -> new ValidationException("Case Law LDML has no documentNumber"));
-  }
-
   private static Optional<DocumentaryShortTexts> extractDocumentaryShortTexts(Meta meta) {
     return Optional.ofNullable(meta.getAnalysis())
         .map(Analysis::getOtherAnalysis)
@@ -216,16 +206,6 @@ public class CaseLawLdmlToOpenSearchMapper {
         .filter(Objects::nonNull)
         .map(LinkedJudgement::asString)
         .collect(Collectors.toList());
-  }
-
-  private static RisMeta getRisMeta(CaseLawLdml ldml) throws ValidationException {
-    return Optional.ofNullable(ldml)
-        .map(CaseLawLdml::getJudgment)
-        .map(Judgment::getMeta)
-        .map(Meta::getProprietary)
-        .map(Proprietary::getRisMeta)
-        .orElseThrow(
-            () -> new ValidationException("Metadata structure (Proprietary/RisMeta) is missing"));
   }
 
   private List<String> extractKeywords(Meta meta) {
