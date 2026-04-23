@@ -32,6 +32,7 @@ import "./styles/prose.css";
 
 import { Button } from "primevue";
 import { RisUiLocale } from "@digitalservicebund/ris-ui/primevue";
+import SwaggerButton from "./components/SwaggerButton.vue";
 import InfoPanel from "./components/InfoPanel.vue";
 import FeedbackForm from "./components/FeedbackForm.vue";
 
@@ -50,7 +51,8 @@ export default {
     app.component("Button", Button);
     app.component("Icon", Icon);
     app.component("Note", Note);
-    app.component("InfoPanel", InfoPanel);
+    app.component("InfoPanel", InfoPanel)
+    app.component("SwaggerButton", SwaggerButton)
     app.component("RequestParams", RequestParams);
     app.component("DocumentedCodeExampleSection", DocumentedCodeExampleSection);
     app.component("DocsPart", DocsPart);

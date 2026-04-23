@@ -7,11 +7,12 @@ import Logo from "../components/Logo.vue";
 
 <template>
   <div>
-    <div class="pt-24 px-24 h-fit max-h-full overflow-y-auto">
+    <div class="pt-24 px-24 h-fit max-h-full overflow-y-auto flex flex-col">
       <Logo />
       <nav class="mt-96 overflow-y h-full w-full py-8">
         <SidebarMenu :model="menuItems" />
       </nav>
+      <SwaggerButton />
     </div>
   </div>
 </template>

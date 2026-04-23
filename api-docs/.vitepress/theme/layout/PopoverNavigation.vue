@@ -24,6 +24,7 @@ import Logo from "../components/Logo.vue";
     >
       <div>
         <SidebarMenu :model="menuItems" @selectLeaf="close" />
+        <SwaggerButton />
       </div>
     </PopoverPanel>
   </Popover>

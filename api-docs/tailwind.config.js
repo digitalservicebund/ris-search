@@ -3,7 +3,7 @@ import { RisUiPreset, RisUiPlugin } from "@digitalservicebund/ris-ui/tailwind";
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["node_modules/vitepress-openapi/dist/**/*.{js,css}", "content/**/*.md", ".vitepress/theme/**/*.{vue,ts}"],
+  content: ["node_modules/vitepress-openapi/dist/**/*.{js,css}", "docs/**/*.md", ".vitepress/theme/**/*.{vue,ts}"],
   presets: [RisUiPreset],
   theme: {
     container: {
