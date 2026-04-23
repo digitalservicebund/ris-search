@@ -62,6 +62,12 @@ public abstract class AknMainContentIntroduction extends AknMainContent {
     }
   }
 
+  /**
+   * Represents an empty or placeholder content section.
+   *
+   * <p>Used to handle cases where an introductory section is structurally expected but contains no
+   * substantive content.
+   */
   @NoArgsConstructor
   @XmlDiscriminatorValue("EmptyContent")
   public static class EmptyContent extends AknMainContentIntroduction {
