@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import Button from "primevue/button";
 import type { RouteLocationRaw } from "#vue-router";
+import { Drawer } from "primevue";
 import type { TreeItem } from "~/components/TreeView.vue";
-import IcBaselineClose from "~icons/ic/baseline-close";
-import IcBaselineFormatListBulleted from "~icons/ic/baseline-format-list-bulleted";
+import IcOutlineArrowUpward from "~icons/ic/outline-arrow-upward";
 
 interface Props {
   tableOfContents: TreeItem[];
@@ -14,57 +13,71 @@ interface Props {
 
 const props = defineProps<Props>();
 
-const isTocVisible = ref(false);
+const mobileTocVisible = ref(false);
 
-const responsiveStyles =
-  "z-10 max-lg:fixed max-lg:left-0 max-lg:top-0 max-lg:h-full max-lg:w-full max-lg:bg-gray-100 max-lg:py-16";
-
-function toggleTableOfContents() {
-  isTocVisible.value = !isTocVisible.value;
-}
-
-function hideTableOfContents() {
-  isTocVisible.value = false;
-}
+const drawerId = useId();
 </script>
 
 <template>
-  <Button
-    v-if="!isTocVisible"
-    class="visible mt-16 w-full lg:hidden"
-    data-testid="mobile-toc-button"
-    severity="secondary"
-    @click="toggleTableOfContents"
+  <Transition
+    enter-active-class="transition-transform duration-300 ease-in-out delay-150"
+    enter-from-class="translate-y-full"
+    leave-active-class="transition-transform duration-150 ease-in-out"
+    leave-to-class="translate-y-full"
   >
-    <IcBaselineFormatListBulleted />
-    Inhaltsverzeichnis
-  </Button>
-  <div
-    :data-selected="isTocVisible"
-    :class="responsiveStyles"
-    class="flex h-full flex-col max-lg:data-[selected=false]:hidden max-lg:data-[selected=true]:flex"
-    data-testid="table-of-contents"
+    <button
+      v-if="!mobileTocVisible"
+      class="shadow-gray-1000/15 fixed inset-x-0 bottom-0 z-10 flex cursor-pointer items-center justify-between gap-8 bg-white p-16 shadow-[0_0_0.5rem] -outline-offset-4 outline-blue-800 focus-visible:outline-4 md:hidden"
+      :aria-expanded="mobileTocVisible"
+      :aria-controls="drawerId"
+      @click="mobileTocVisible = true"
+    >
+      <div class="line-clamp-1">
+        <span class="ris-subhead-bold">Inhalte</span>{{ " " }}
+        <span class="ris-subhead-regular">{{ subheading }}</span>
+      </div>
+
+      <IcOutlineArrowUpward class="ris-body2-regular text-blue-800" />
+    </button>
+  </Transition>
+
+  <Drawer
+    v-model:visible="mobileTocVisible"
+    aria-label="Inhalte"
+    position="bottom"
+    :id="drawerId"
+    :close-button-props="{
+      size: 'small',
+      label: 'Schließen',
+      iconPos: 'right',
+    }"
   >
-    <div class="flex flex-row items-center justify-between">
-      <Button
-        class="visible bg-transparent hover:bg-transparent lg:hidden"
-        aria-label="Inhaltsverzeichnis schließen"
-        @click="toggleTableOfContents"
-      >
-        <IcBaselineClose class="text-gray-900 hover:text-black" />
-      </Button>
-    </div>
+    <template #header>
+      <div class="line-clamp-1">
+        <span class="ris-subhead-bold">Inhalte</span>{{ " " }}
+        <span class="ris-subhead-regular">{{ subheading }}</span>
+      </div>
+    </template>
 
     <TreeView
       :items="tableOfContents"
       :selected="selectedKey"
       :expand-to-key="selectedKey"
       :selection-enabled="!!selectedKey"
-      :subheading="subheading"
-      :subheading-to="subheadingTo"
-      heading="Inhalte"
-      class="h-full lg:pt-16"
-      @click="hideTableOfContents"
+      label="Inhalte"
+      class="-mx-16 h-full"
+      @click="mobileTocVisible = false"
     />
-  </div>
+  </Drawer>
+
+  <TreeView
+    :items="tableOfContents"
+    :selected="selectedKey"
+    :expand-to-key="selectedKey"
+    :selection-enabled="!!selectedKey"
+    :subheading="subheading"
+    :subheading-to="subheadingTo"
+    heading="Inhalte"
+    class="hidden h-full md:block md:pt-16"
+  />
 </template>
