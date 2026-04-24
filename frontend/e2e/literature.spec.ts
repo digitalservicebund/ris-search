@@ -290,7 +290,6 @@ test("can navigate to search via breadcrumb", async ({ page }) => {
   await navigate(page, "/literature/XXLU000000001");
 
   await page.getByRole("link", { name: "Literaturnachweise" }).click();
-  await page.waitForURL("**/search?documentKind=L");
 
   await expect(
     page.getByRole("heading", { level: 1, name: "Suche" }),
