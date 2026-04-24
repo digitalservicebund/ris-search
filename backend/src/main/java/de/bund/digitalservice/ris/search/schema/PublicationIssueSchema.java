@@ -11,8 +11,8 @@ public record PublicationIssueSchema(
     implements JsonldResource {
 
   @Override
-  @Schema(example = "PublicationIssue")
+  @Schema(example = JsonldTypes.PUBLICATION_ISSUE)
   public String getType() {
-    return "PublicationIssue";
+    return JsonldTypes.PUBLICATION_ISSUE;
   }
 }

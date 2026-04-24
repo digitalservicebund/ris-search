@@ -6,9 +6,14 @@ import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.exception.FileNotFoundException;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.mapper.CaseLawSchemaMapper;
+import de.bund.digitalservice.ris.search.mapper.ChangelogResponseMapper;
+import de.bund.digitalservice.ris.search.models.DocumentKind;
+import de.bund.digitalservice.ris.search.models.api.parameters.ChangelogParams;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.schema.CaseLawSchema;
+import de.bund.digitalservice.ris.search.schema.ChangelogResponse;
 import de.bund.digitalservice.ris.search.service.CaseLawService;
+import de.bund.digitalservice.ris.search.service.ChangelogService;
 import de.bund.digitalservice.ris.search.service.xslt.CaselawXsltTransformerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -16,11 +21,14 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import java.io.IOException;
 import java.net.URLConnection;
 import java.util.List;
 import java.util.Optional;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
@@ -30,6 +38,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 /**
  * CaseLawController provides endpoints for managing and retrieving case law documentation in
@@ -53,6 +62,7 @@ public class CaseLawController {
 
   private final CaseLawService caseLawService;
   private final CaselawXsltTransformerService xsltTransformerService;
+  private final ChangelogService changelogService;
 
   /**
    * Constructor for the CaseLawController class.
@@ -62,9 +72,12 @@ public class CaseLawController {
    */
   @Autowired
   public CaseLawController(
-      CaseLawService caseLawService, CaselawXsltTransformerService xsltTransformerService) {
+      CaseLawService caseLawService,
+      CaselawXsltTransformerService xsltTransformerService,
+      @Qualifier("caseLawChangelogService") ChangelogService changelogService) {
     this.caseLawService = caseLawService;
     this.xsltTransformerService = xsltTransformerService;
+    this.changelogService = changelogService;
   }
 
   /**
@@ -249,5 +262,17 @@ public class CaseLawController {
    */
   private String getResourceBasePath(String documentNumber) {
     return ApiConfig.Paths.CASELAW + "/" + documentNumber + "/";
+  }
+
+  @GetMapping(path = ApiConfig.Paths.CASELAW_CHANGELOGS)
+  public ResponseEntity<ChangelogResponse> getChangelogs(
+      @ParameterObject @Valid ChangelogParams params) {
+
+    var changelog =
+        changelogService.parseAndMergeChangelogsBetween(
+            params.getFrom().toInstant(), params.getTo().toInstant());
+    var baseUrl = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
+    return ResponseEntity.ok(
+        ChangelogResponseMapper.mapChangelog(changelog, baseUrl, DocumentKind.CASE_LAW));
   }
 }

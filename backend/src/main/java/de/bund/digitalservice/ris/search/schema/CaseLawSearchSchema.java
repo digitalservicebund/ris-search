@@ -43,8 +43,8 @@ public record CaseLawSearchSchema(
     implements AbstractDocumentSchema, JsonldResource {
 
   @Override
-  @Schema(example = "Decision")
+  @Schema(example = JsonldTypes.DECISION)
   public String getType() {
-    return "Decision";
+    return JsonldTypes.DECISION;
   }
 }

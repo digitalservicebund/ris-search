@@ -246,6 +246,30 @@
         }
       }
     },
+    "/v1/literature/changelogs": {
+      "get": {
+        "tags": ["Literature"],
+        "operationId": "getChangelogs",
+        "parameters": [
+          {
+            "name": "since",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string", "format": "date-time" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ChangelogResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/legislation": {
       "get": {
         "tags": ["Legislation"],
@@ -920,6 +944,30 @@
             }
           },
           "404": { "description": "Not Found" }
+        }
+      }
+    },
+    "/v1/legislation/changelogs": {
+      "get": {
+        "tags": ["Legislation"],
+        "operationId": "getChangelogs_1",
+        "parameters": [
+          {
+            "name": "since",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string", "format": "date-time" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ChangelogResponse" }
+              }
+            }
+          }
         }
       }
     },
@@ -1664,6 +1712,30 @@
         }
       }
     },
+    "/v1/case-law/changelogs": {
+      "get": {
+        "tags": ["Case Law"],
+        "operationId": "getChangelogs_2",
+        "parameters": [
+          {
+            "name": "since",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string", "format": "date-time" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ChangelogResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/administrative-directive": {
       "get": {
         "tags": ["AdministrativeDirective"],
@@ -1836,6 +1908,30 @@
             "content": { "text/html": { "schema": { "type": "string" } } }
           },
           "404": { "description": "Not Found" }
+        }
+      }
+    },
+    "/v1/administrative-directive/changelogs": {
+      "get": {
+        "tags": ["AdministrativeDirective"],
+        "operationId": "getChangelogs_3",
+        "parameters": [
+          {
+            "name": "since",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string", "format": "date-time" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ChangelogResponse" }
+              }
+            }
+          }
         }
       }
     }
@@ -2183,6 +2279,30 @@
           "volumes",
           "yearsOfPublication"
         ]
+      },
+      "ChangelogDocument": {
+        "type": "object",
+        "properties": {
+          "@id": { "type": "string" },
+          "@type": { "type": "string" }
+        }
+      },
+      "ChangelogResponse": {
+        "type": "object",
+        "properties": {
+          "@context": { "type": "object", "additionalProperties": {} },
+          "changed": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/ChangelogDocument" },
+            "uniqueItems": true
+          },
+          "deleted": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/ChangelogDocument" },
+            "uniqueItems": true
+          },
+          "allChanged": { "type": "boolean" }
+        }
       },
       "CollectionSchemaSearchMemberSchemaLegislationExpressionSearchSchema": {
         "type": "object",

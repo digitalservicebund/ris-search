@@ -80,8 +80,8 @@ public record LiteratureSearchSchema(
     implements AbstractDocumentSchema, JsonldResource {
 
   @Override
-  @Schema(example = "Literature")
+  @Schema(example = JsonldTypes.LITERATURE)
   public String getType() {
-    return "Literature";
+    return JsonldTypes.LITERATURE;
   }
 }

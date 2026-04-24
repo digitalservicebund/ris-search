@@ -4,17 +4,22 @@ import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.exception.CustomValidationException;
 import de.bund.digitalservice.ris.search.mapper.AdministrativeDirectiveSchemaMapper;
 import de.bund.digitalservice.ris.search.mapper.AdministrativeDirectiveSearchSchemaMapper;
+import de.bund.digitalservice.ris.search.mapper.ChangelogResponseMapper;
 import de.bund.digitalservice.ris.search.mapper.SortParamsConverter;
+import de.bund.digitalservice.ris.search.models.DocumentKind;
 import de.bund.digitalservice.ris.search.models.api.parameters.AdministrativeDirectiveSearchParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.AdministrativeDirectiveSortParam;
+import de.bund.digitalservice.ris.search.models.api.parameters.ChangelogParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.PaginationParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
 import de.bund.digitalservice.ris.search.schema.AdministrativeDirectiveSchema;
 import de.bund.digitalservice.ris.search.schema.AdministrativeDirectiveSearchSchema;
+import de.bund.digitalservice.ris.search.schema.ChangelogResponse;
 import de.bund.digitalservice.ris.search.schema.CollectionSchema;
 import de.bund.digitalservice.ris.search.schema.SearchMemberSchema;
 import de.bund.digitalservice.ris.search.service.AdministrativeDirectiveService;
+import de.bund.digitalservice.ris.search.service.ChangelogService;
 import de.bund.digitalservice.ris.search.service.xslt.AdministrativeDirectiveXsltTransformerService;
 import de.bund.digitalservice.ris.search.utils.LuceneQueryTools;
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,6 +33,7 @@ import java.util.List;
 import java.util.Optional;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.UncategorizedElasticsearchException;
@@ -37,6 +43,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 /**
  * Controller for managing administrative directives. It provides endpoints to retrieve, search,
@@ -49,6 +56,7 @@ public class AdministrativeDirectiveController {
 
   private final AdministrativeDirectiveService service;
   private final AdministrativeDirectiveXsltTransformerService transformerService;
+  private final ChangelogService changelogService;
 
   /**
    * Constructor for the AdministrativeDirectiveController, used to initialize the controller with
@@ -61,9 +69,11 @@ public class AdministrativeDirectiveController {
   @Autowired
   public AdministrativeDirectiveController(
       AdministrativeDirectiveService service,
-      AdministrativeDirectiveXsltTransformerService transformerService) {
+      AdministrativeDirectiveXsltTransformerService transformerService,
+      @Qualifier("administrativeDirectiveChangelogService") ChangelogService changelogService) {
     this.service = service;
     this.transformerService = transformerService;
+    this.changelogService = changelogService;
   }
 
   /**
@@ -190,5 +200,19 @@ public class AdministrativeDirectiveController {
         .map(transformerService::transform)
         .map(ResponseEntity::ok)
         .orElseGet(() -> ResponseEntity.notFound().build());
+  }
+
+  @GetMapping(path = ApiConfig.Paths.ADMINISTRATIVE_DIRECTIVE_CHANGELOGS)
+  public ResponseEntity<ChangelogResponse> getChangelogs(
+      @ParameterObject @Valid ChangelogParams params) {
+
+    var changelog =
+        changelogService.parseAndMergeChangelogsBetween(
+            params.getFrom().toInstant(), params.getTo().toInstant());
+    var baseUrl = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
+
+    return ResponseEntity.ok(
+        ChangelogResponseMapper.mapChangelog(
+            changelog, baseUrl, DocumentKind.ADMINISTRATIVE_DIRECTIVE));
   }
 }

@@ -107,6 +107,22 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/v1/literature/changelogs": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations["getChangelogs"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/v1/legislation": {
     parameters: {
       query?: never;
@@ -299,6 +315,22 @@ export interface paths {
      * parameter.
      */
     get: operations["getLegislationSubtypeAsZip"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/v1/legislation/changelogs": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations["getChangelogs_1"];
     put?: never;
     post?: never;
     delete?: never;
@@ -573,6 +605,22 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/v1/case-law/changelogs": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations["getChangelogs_2"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/v1/administrative-directive": {
     parameters: {
       query?: never;
@@ -652,6 +700,22 @@ export interface paths {
      * Renders and returns an administrative directive as HTML.
      */
     get: operations["getAdministrativeDirectiveAsHtml"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/v1/administrative-directive/changelogs": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations["getChangelogs_3"];
     put?: never;
     post?: never;
     delete?: never;
@@ -966,6 +1030,18 @@ export interface components {
        */
       literatureType: string;
       encoding: components["schemas"]["LiteratureEncodingSchema"][];
+    };
+    ChangelogDocument: {
+      "@id"?: string;
+      "@type"?: string;
+    };
+    ChangelogResponse: {
+      "@context"?: {
+        [key: string]: unknown;
+      };
+      changed?: components["schemas"]["ChangelogDocument"][];
+      deleted?: components["schemas"]["ChangelogDocument"][];
+      allChanged?: boolean;
     };
     CollectionSchemaSearchMemberSchemaLegislationExpressionSearchSchema: {
       /**
@@ -1928,6 +2004,28 @@ export interface operations {
       };
     };
   };
+  getChangelogs: {
+    parameters: {
+      query: {
+        since: string;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["ChangelogResponse"];
+        };
+      };
+    };
+  };
   searchAndFilter_1: {
     parameters: {
       query?: {
@@ -2520,6 +2618,28 @@ export interface operations {
           [name: string]: unknown;
         };
         content?: never;
+      };
+    };
+  };
+  getChangelogs_1: {
+    parameters: {
+      query: {
+        since: string;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["ChangelogResponse"];
+        };
       };
     };
   };
@@ -3146,6 +3266,28 @@ export interface operations {
       };
     };
   };
+  getChangelogs_2: {
+    parameters: {
+      query: {
+        since: string;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["ChangelogResponse"];
+        };
+      };
+    };
+  };
   searchAndFilter_4: {
     parameters: {
       query?: {
@@ -3308,6 +3450,28 @@ export interface operations {
           [name: string]: unknown;
         };
         content?: never;
+      };
+    };
+  };
+  getChangelogs_3: {
+    parameters: {
+      query: {
+        since: string;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["ChangelogResponse"];
+        };
       };
     };
   };

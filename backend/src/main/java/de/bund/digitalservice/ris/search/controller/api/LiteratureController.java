@@ -3,19 +3,24 @@ package de.bund.digitalservice.ris.search.controller.api;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.exception.CustomValidationException;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
+import de.bund.digitalservice.ris.search.mapper.ChangelogResponseMapper;
 import de.bund.digitalservice.ris.search.mapper.LiteratureSchemaMapper;
 import de.bund.digitalservice.ris.search.mapper.LiteratureSearchSchemaMapper;
 import de.bund.digitalservice.ris.search.mapper.SortParamsConverter;
+import de.bund.digitalservice.ris.search.models.DocumentKind;
+import de.bund.digitalservice.ris.search.models.api.parameters.ChangelogParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.LiteratureSearchParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.LiteratureSortParam;
 import de.bund.digitalservice.ris.search.models.api.parameters.PaginationParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.models.ldml.literature.LiteratureType;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
+import de.bund.digitalservice.ris.search.schema.ChangelogResponse;
 import de.bund.digitalservice.ris.search.schema.CollectionSchema;
 import de.bund.digitalservice.ris.search.schema.LiteratureSchema;
 import de.bund.digitalservice.ris.search.schema.LiteratureSearchSchema;
 import de.bund.digitalservice.ris.search.schema.SearchMemberSchema;
+import de.bund.digitalservice.ris.search.service.ChangelogService;
 import de.bund.digitalservice.ris.search.service.LiteratureService;
 import de.bund.digitalservice.ris.search.service.xslt.LiteratureXsltTransformerService;
 import de.bund.digitalservice.ris.search.service.xslt.SliLiteratureXsltTransformerService;
@@ -31,6 +36,7 @@ import java.util.List;
 import java.util.Optional;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.UncategorizedElasticsearchException;
@@ -40,6 +46,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 /** Controller responsible for handling literature-related endpoints. */
 @Tag(name = "Literature")
@@ -50,6 +57,7 @@ public class LiteratureController {
   private final LiteratureService literatureService;
   private final LiteratureXsltTransformerService xsltTransformerService;
   private final SliLiteratureXsltTransformerService sliXsltTransformerService;
+  private final ChangelogService changelogService;
 
   /**
    * Constructor for LiteratureController.
@@ -62,10 +70,12 @@ public class LiteratureController {
   public LiteratureController(
       LiteratureService literatureService,
       LiteratureXsltTransformerService literatureXsltTransformerService,
-      SliLiteratureXsltTransformerService sliLiteratureXsltTransformerService) {
+      SliLiteratureXsltTransformerService sliLiteratureXsltTransformerService,
+      @Qualifier("literatureChangelogService") ChangelogService changelogService) {
     this.literatureService = literatureService;
     this.xsltTransformerService = literatureXsltTransformerService;
     this.sliXsltTransformerService = sliLiteratureXsltTransformerService;
+    this.changelogService = changelogService;
   }
 
   /**
@@ -204,5 +214,18 @@ public class LiteratureController {
       LuceneQueryTools.checkForInvalidQuery(e);
       throw e;
     }
+  }
+
+  @GetMapping(path = ApiConfig.Paths.LITERATURE_CHANGELOGS)
+  public ResponseEntity<ChangelogResponse> getChangelogs(
+      @ParameterObject @Valid ChangelogParams params) {
+
+    var changelog =
+        changelogService.parseAndMergeChangelogsBetween(
+            params.getFrom().toInstant(), params.getTo().toInstant());
+
+    var baseUrl = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
+    return ResponseEntity.ok(
+        ChangelogResponseMapper.mapChangelog(changelog, baseUrl, DocumentKind.LITERATURE));
   }
 }

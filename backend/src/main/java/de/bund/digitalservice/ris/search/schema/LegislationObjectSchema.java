@@ -27,8 +27,8 @@ public record LegislationObjectSchema(
     implements JsonldResource {
 
   @Override
-  @Schema(example = "LegislationObject")
+  @Schema(example = JsonldTypes.LEGISLATION_OBJECT)
   public String getType() {
-    return "LegislationObject";
+    return JsonldTypes.LEGISLATION_OBJECT;
   }
 }

@@ -11,8 +11,8 @@ public record PartialCollectionViewSchema(
     implements JsonldResource {
 
   @Override
-  @Schema(example = "hydra:PartialCollectionView")
+  @Schema(example = JsonldTypes.HYDRA_PARTIAL_COLLECTION_VIEW)
   public String getType() {
-    return "hydra:PartialCollectionView";
+    return JsonldTypes.HYDRA_PARTIAL_COLLECTION_VIEW;
   }
 }

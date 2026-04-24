@@ -20,8 +20,8 @@ public record CollectionSchema<T>(
     implements JsonldResource {
 
   @Override
-  @Schema(example = "hydra:Collection")
+  @Schema(example = JsonldTypes.HYDRA_COLLECTION)
   public String getType() {
-    return "hydra:Collection";
+    return JsonldTypes.HYDRA_COLLECTION;
   }
 }

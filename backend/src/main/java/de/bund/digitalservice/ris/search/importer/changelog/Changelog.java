@@ -2,8 +2,9 @@ package de.bund.digitalservice.ris.search.importer.changelog;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.HashSet;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * Represents a changelog payload used during imports.
@@ -11,8 +12,9 @@ import lombok.Setter;
  * <p>Contains sets of changed and deleted identifiers and a flag indicating whether all items
  * changed.
  */
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Changelog {
 
   @JsonProperty("changed")

@@ -28,8 +28,8 @@ public record SearchMemberSchema<T extends AbstractDocumentSchema>(
     implements JsonldResource {
 
   @Override
-  @Schema(example = "SearchResult")
+  @Schema(example = JsonldTypes.SEARCH_RESULT)
   public String getType() {
-    return "SearchResult";
+    return JsonldTypes.SEARCH_RESULT;
   }
 }
