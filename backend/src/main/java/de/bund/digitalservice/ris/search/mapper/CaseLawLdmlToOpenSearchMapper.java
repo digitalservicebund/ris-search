@@ -89,18 +89,17 @@ public class CaseLawLdmlToOpenSearchMapper {
         .legalEffect(risMeta.getRisRechtskraft())
         .headline(sanitize(judgment.getHeader().findShortTitle()))
         .guidingPrinciple(
-            extractContent(judgmentBody, AknMainContentIntroduction.GuidingPrinciple.NAME))
+            extractContent(judgmentBody, AknMainContentIntroduction.GUIDING_PRINCIPLE))
         .headnote(sanitize(extractHeadnote(meta).orElse(null)))
         .otherHeadnote(sanitize(extractOtherHeadnote(meta).orElse(null)))
-        .outline(extractContent(judgmentBody, AknMainContentIntroduction.Outline.NAME))
+        .outline(extractContent(judgmentBody, AknMainContentIntroduction.OUTLINE))
         .tenor(sanitize(judgmentBody.getDecision()))
         .caseFacts(sanitize(judgmentBody.getBackground()))
-        .decisionGrounds(
-            extractContent(judgmentBody, AknMainContentMotivation.DecisionGrounds.NAME))
-        .grounds(extractContent(judgmentBody, AknMainContentMotivation.Grounds.NAME))
-        .otherLongText(extractContent(judgmentBody, AknMainContentMotivation.OtherLongText.NAME))
+        .decisionGrounds(extractContent(judgmentBody, AknMainContentMotivation.DECISION_GROUNDS))
+        .grounds(extractContent(judgmentBody, AknMainContentMotivation.GROUNDS))
+        .otherLongText(extractContent(judgmentBody, AknMainContentMotivation.OTHER_LONGTEXT))
         .dissentingOpinion(
-            extractContent(judgmentBody, AknMainContentMotivation.DissentingOpinion.NAME))
+            extractContent(judgmentBody, AknMainContentMotivation.DISSENTING_OPINION))
         .previousDecisions(
             getLinkedJudgements(
                 meta, refs -> refs.getReferencesByType(ImplicitReference::getPrecedingJudgement)))
@@ -124,12 +123,7 @@ public class CaseLawLdmlToOpenSearchMapper {
    */
   public CaseLawDocumentationUnit fromString(String ldmlFile) {
     try {
-      String patchedLdml =
-          ldmlFile.replaceAll(
-              "(<(akn:introduction|akn:motivation))(?![^>]*ris:domainTerm)([^>]*)>",
-              "$1 ris:domainTerm=\"EmptyContent\"$3>");
-
-      StreamSource ldmlStreamSource = new StreamSource(new StringReader(patchedLdml));
+      StreamSource ldmlStreamSource = new StreamSource(new StringReader(ldmlFile));
       CaseLawLdml ldml = JAXB.unmarshal(ldmlStreamSource, CaseLawLdml.class);
 
       return mapToEntity(ldml);

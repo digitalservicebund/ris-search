@@ -1,8 +1,12 @@
 package de.bund.digitalservice.ris.search.models.ldml.caselaw;
 
-import jakarta.xml.bind.annotation.XmlSeeAlso;
+import static de.bund.digitalservice.ris.search.models.ldml.caselaw.CaseLawLdmlNamespaces.RIS_NS;
+
+import jakarta.xml.bind.annotation.XmlAttribute;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.eclipse.persistence.oxm.annotations.XmlDiscriminatorNode;
+import org.eclipse.persistence.oxm.annotations.XmlPath;
 
 /**
  * The abstract base class for all main content sections within an Akoma Ntoso (AKN) document.
@@ -15,29 +19,18 @@ import org.eclipse.persistence.oxm.annotations.XmlDiscriminatorNode;
  * @see AknMainContentMotivation
  */
 @NoArgsConstructor
-@XmlDiscriminatorNode("@ris:domainTerm")
-@XmlSeeAlso({
-  AknMainContentIntroduction.GuidingPrinciple.class,
-  AknMainContentIntroduction.Outline.class,
-  AknMainContentIntroduction.EmptyContent.class,
-  AknMainContentMotivation.DecisionGrounds.class,
-  AknMainContentMotivation.Grounds.class,
-  AknMainContentMotivation.OtherLongText.class,
-  AknMainContentMotivation.DissentingOpinion.class
-})
-public abstract class AknMainContent {
+@Getter
+public class AknMainContent {
 
   /**
-   * Returns the domain-specific name of the content section.
+   * The actual HTML-formatted legal reasoning text.
    *
-   * @return a {@code String} representing the section type (e.g., "Leitsatz", "Gründe").
+   * <p>Mapped to the current node content via {@link
+   * org.eclipse.persistence.oxm.annotations.XmlPath}.
    */
-  public abstract String getName();
+  @XmlPath(".")
+  private JaxbHtml content;
 
-  /**
-   * Provides access to the HTML-formatted content of the section.
-   *
-   * @return the {@link JaxbHtml} object containing the rendered legal text.
-   */
-  public abstract JaxbHtml getContent();
+  @XmlAttribute(namespace = RIS_NS, name = "domainTerm")
+  private String domainTerm;
 }

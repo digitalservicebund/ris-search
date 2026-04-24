@@ -56,7 +56,7 @@ public class JudgmentBody {
     }
 
     return introductions.stream()
-        .filter(item -> name.equals(item.getName()))
+        .filter(item -> name.equals(item.getDomainTerm()))
         .map(AknMainContent::getContent)
         .findFirst();
   }
@@ -73,7 +73,7 @@ public class JudgmentBody {
     }
 
     return motivations.stream()
-        .filter(item -> name.equals(item.getName()))
+        .filter(item -> name.equals(item.getDomainTerm()))
         .map(AknMainContent::getContent)
         .findFirst();
   }
