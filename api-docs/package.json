@@ -26,7 +26,7 @@
     "deepmerge": "^4.3.1",
     "dotenv": "17.4.2",
     "globby": "^16.2.0",
-    "got": "^14.6.6",
+    "got": "^15.0.3",
     "markdown-it": "^14.1.1",
     "postcss": "8.5.10",
     "svg-sprite": "^2.0.4",
