@@ -723,7 +723,7 @@ export interface components {
       "@type"?: string;
       name: string;
       text: string;
-      location?: string;
+      location?: string | null;
     };
     LiteratureSchema: {
       /** @example Literature */
@@ -1086,9 +1086,6 @@ export interface components {
       "@id": string;
       /** @example de */
       inLanguage: string;
-      highlightedFields: {
-        [key: string]: string[];
-      };
     });
     CollectionSchemaSearchMemberSchemaAbstractDocumentSchema: {
       /** @example hydra:Collection */
@@ -1232,9 +1229,6 @@ export interface components {
       /** @example de */
       inLanguage: string;
       encoding: components["schemas"]["CaseLawEncodingSchema"][];
-      highlightedFields: {
-        [key: string]: string[];
-      };
     };
     CourtSearchResult: {
       /** @example BGH Karlsruhe */

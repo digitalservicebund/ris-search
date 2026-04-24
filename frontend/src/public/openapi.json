@@ -2021,7 +2021,7 @@
           "@type": { "type": "string", "example": "SearchResultMatch" },
           "name": { "type": "string" },
           "text": { "type": "string" },
-          "location": { "type": "string" }
+          "location": { "type": ["string", "null"] }
         },
         "required": ["name", "text"]
       },
@@ -2585,14 +2585,7 @@
                 "type": "string",
                 "example": "/v1/case-law/ECLI:DE:FGRLP:1969:0905.IV85.68.0A"
               },
-              "inLanguage": { "type": "string", "example": "de" },
-              "highlightedFields": {
-                "type": "object",
-                "additionalProperties": {
-                  "type": "array",
-                  "items": { "type": "string" }
-                }
-              }
+              "inLanguage": { "type": "string", "example": "de" }
             }
           }
         ],
@@ -2605,7 +2598,6 @@
           "ecli",
           "encoding",
           "fileNumbers",
-          "highlightedFields",
           "inLanguage"
         ]
       },
@@ -2802,13 +2794,6 @@
           "encoding": {
             "type": "array",
             "items": { "$ref": "#/components/schemas/CaseLawEncodingSchema" }
-          },
-          "highlightedFields": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "array",
-              "items": { "type": "string" }
-            }
           }
         },
         "required": [
@@ -2820,7 +2805,6 @@
           "ecli",
           "encoding",
           "fileNumbers",
-          "highlightedFields",
           "inLanguage",
           "keywords"
         ]
