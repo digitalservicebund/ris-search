@@ -2549,10 +2549,6 @@
                 "example": "ECLI:DE:FGRLP:1969:0905.IV85.68.0A"
               },
               "headline": { "type": "string", "example": "Überschrift" },
-              "otherLongText": {
-                "type": "string",
-                "example": "Sonstiger Langtext"
-              },
               "decisionDate": { "type": "string", "format": "date" },
               "fileNumbers": {
                 "type": "array",
@@ -2562,7 +2558,6 @@
               "courtType": { "type": "string", "example": "FG" },
               "location": { "type": "string", "example": "Berlin" },
               "documentType": { "type": "string", "example": "Urteil" },
-              "outline": { "type": "string", "example": "Leitsatz" },
               "judicialBody": { "type": "string", "example": "Gericht" },
               "courtName": { "type": "string", "example": "LArbG Hamm" },
               "decisionName": {
@@ -2717,16 +2712,6 @@
             "description": "European Case Law Identifier",
             "example": "ECLI:DE:FGRLP:1969:0905.IV85.68.0A"
           },
-          "caseFacts": { "type": "string", "description": "Tatbestand" },
-          "decisionGrounds": {
-            "type": "string",
-            "description": "Entscheidungsgründe"
-          },
-          "dissentingOpinion": {
-            "type": "string",
-            "description": "Abweichende Meinung"
-          },
-          "grounds": { "type": "string", "description": "Gründe" },
           "guidingPrinciple": { "type": "string", "description": "Leitsatz" },
           "headline": { "type": "string", "description": "Überschrift" },
           "headnote": { "type": "string", "description": "Orientierungssatz" },
@@ -2734,11 +2719,6 @@
             "type": "string",
             "description": "Sonstiger Orientierungssatz"
           },
-          "otherLongText": {
-            "type": "string",
-            "description": "Sonstiger Langtext"
-          },
-          "tenor": { "type": "string", "description": "Tenor" },
           "decisionDate": {
             "type": "string",
             "format": "date",
@@ -2761,7 +2741,6 @@
             "example": "Berlin"
           },
           "documentType": { "type": "string", "example": "Urteil" },
-          "outline": { "type": "string", "description": "Leitsatz" },
           "judicialBody": {
             "type": "string",
             "description": "Spruchkörper",
