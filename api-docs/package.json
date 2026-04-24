@@ -30,7 +30,7 @@
     "markdown-it": "^14.1.1",
     "postcss": "8.5.10",
     "svg-sprite": "^2.0.4",
-    "tailwindcss": "3.4.10",
+    "tailwindcss": "3.4.19",
     "typescript": "6.0.3",
     "vitepress": "1.6.4"
   },
