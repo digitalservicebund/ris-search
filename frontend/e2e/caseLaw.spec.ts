@@ -55,43 +55,49 @@ test("sidebar TOC renders on desktop and clicking a link scrolls to the section"
   expect(box!.y).toBeLessThan(100);
 });
 
-test.describe("responsive", () => {
-  test.beforeEach(({ isMobileTest }) => {
+test.describe("mobile table of contents", () => {
+  test("floating button for the TOC is visible", async ({
+    page,
+    isMobileTest,
+  }) => {
     test.skip(!isMobileTest);
+    await navigate(page, "/case-law/JURE200030030");
+
+    await expect(page.getByRole("button", { name: "Inhalte" })).toBeVisible();
   });
 
-  test("can view a single case law documentation unit", async ({ page }) => {
-    for (const sectionName of ["Tenor", "Orientierungssatz", "Tatbestand"]) {
-      await test.step(`jumps straight to a specific section, ${sectionName}`, async () => {
-        await navigate(page, "/search?documentKind=R&query=fiktiv");
-        const link = page.getByRole("link", { name: sectionName }).first();
-        await link.click();
+  test("clicking the floating button opens the TOC", async ({
+    page,
+    isMobileTest,
+  }) => {
+    test.skip(!isMobileTest);
+    await navigate(page, "/case-law/JURE200030030");
 
-        const expectedHash: Record<string, string> = {
-          Tenor: "tenor",
-          Orientierungssatz: "orientierungssatz",
-          Tatbestand: "tatbestand",
-        };
+    await page.getByRole("button", { name: "Inhalte" }).click();
 
-        // Verify sidebar is visible and there but skip aria-current check
-        // (its flaky due to Intersection Observer timing during hydration)
-        // Once fixed, enable aria-current check here (was flaky due to
-        // Intersection Observer timing during hydration)
-        await getSidebar(page);
+    await expect(page.getByRole("dialog", { name: "Inhalte" })).toBeVisible();
+  });
 
-        const heading = page
-          .getByRole("main")
-          .getByRole("heading", { name: sectionName })
-          .first();
+  test("clicking a TOC link closes the TOC and scrolls to the element", async ({
+    page,
+    isMobileTest,
+  }) => {
+    test.skip(!isMobileTest);
+    await navigate(page, "/case-law/JURE200030030");
 
-        await expect(page).toHaveURL(
-          new RegExp(`#${expectedHash[sectionName]}$`, "i"),
-        );
-        await heading.scrollIntoViewIfNeeded();
-        await expect(heading).toBeVisible();
-        await expect(heading).toBeInViewport();
-      });
-    }
+    await page.getByRole("button", { name: "Inhalte" }).click();
+
+    const dialog = page.getByRole("dialog", { name: "Inhalte" });
+    await expect(dialog).toBeVisible();
+
+    await dialog.getByRole("link", { name: "Tatbestand" }).click();
+    await expect(dialog).not.toBeVisible();
+
+    const targetHeading = page
+      .getByRole("main")
+      .getByRole("heading", { name: "Tatbestand" });
+
+    await expect(targetHeading).toBeInViewport();
   });
 });
 

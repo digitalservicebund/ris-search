@@ -245,7 +245,7 @@ const fassungenTabPanelTitleId = useId();
 
           <template #sidebar v-if="tableOfContents?.length">
             <client-only>
-              <DocumentsNormsNormTableOfContents
+              <DocumentsTableOfContents
                 :subheading="normBreadcrumbTitle"
                 :table-of-contents="tableOfContents"
               />

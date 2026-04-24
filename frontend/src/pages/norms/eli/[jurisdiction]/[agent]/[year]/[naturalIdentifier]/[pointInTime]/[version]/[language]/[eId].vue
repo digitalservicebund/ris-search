@@ -287,7 +287,7 @@ useDynamicSeo({ title, description });
           </div>
         </template>
         <template #sidebar>
-          <DocumentsNormsNormTableOfContents
+          <DocumentsTableOfContents
             v-if="tableOfContents.length"
             :subheading="getNormBreadcrumbTitle(norm)"
             :subheading-to="normPath"

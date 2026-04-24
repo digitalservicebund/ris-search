@@ -393,3 +393,80 @@ test("sets up meta tags for norm page when private features are disabled", async
     .getAttribute("content");
   expect(twitterTitle).toBe("FrSaftErfrischV");
 });
+
+test.describe("mobile table of contents", () => {
+  test("floating button for the TOC is visible", async ({
+    page,
+    isMobileTest,
+  }) => {
+    test.skip(!isMobileTest);
+    await navigate(page, "/norms/eli/bund/bgbl-1/1972/s2459/1999-04-20/4/deu");
+
+    await expect(
+      page.getByRole("button", { name: "Inhalte BWahlGV" }),
+    ).toBeVisible();
+  });
+
+  test("clicking the floating button opens the TOC", async ({
+    page,
+    isMobileTest,
+  }) => {
+    test.skip(!isMobileTest);
+    await navigate(page, "/norms/eli/bund/bgbl-1/1972/s2459/1999-04-20/4/deu");
+
+    await page.getByRole("button", { name: "Inhalte BWahlGV" }).click();
+
+    await expect(page.getByRole("dialog", { name: "Inhalte" })).toBeVisible();
+  });
+
+  test("expanding a TOC item does not close the TOC", async ({
+    page,
+    isMobileTest,
+  }) => {
+    test.skip(!isMobileTest);
+    await navigate(page, "/norms/eli/bund/bgbl-1/1972/s2459/1999-04-20/4/deu");
+
+    await page.getByRole("button", { name: "Inhalte BWahlGV" }).click();
+
+    const dialog = page.getByRole("dialog", { name: "Inhalte" });
+    await expect(dialog).toBeVisible();
+
+    await dialog.getByRole("button", { name: "Ebene öffnen" }).first().click();
+
+    await expect(dialog.getByRole("link", { name: "§ 1" })).toBeVisible();
+    await expect(dialog).toBeVisible();
+  });
+
+  test("clicking a TOC link closes the TOC and scrolls to the element", async ({
+    page,
+    isMobileTest,
+  }) => {
+    test.skip(!isMobileTest);
+    await navigate(page, "/norms/eli/bund/bgbl-1/1972/s2459/1999-04-20/4/deu");
+
+    await page.getByRole("button", { name: "Inhalte BWahlGV" }).click();
+
+    const dialog = page.getByRole("dialog", { name: "Inhalte" });
+    await expect(dialog).toBeVisible();
+
+    await dialog
+      .getByRole("treeitem", { name: /Dritter Abschnitt/ })
+      .getByRole("button", { name: "Ebene öffnen" })
+      .first()
+      .click();
+
+    await dialog
+      .getByRole("treeitem", { name: /Erster Unterabschnitt/ })
+      .getByRole("button", { name: "Ebene öffnen" })
+      .first()
+      .click();
+
+    await dialog.getByRole("link", { name: /§ 9/ }).click();
+    await expect(dialog).not.toBeVisible();
+    const targetHeading = page
+      .getByRole("main")
+      .getByRole("heading", { name: "§ 9 Datenschutzanforderungen" });
+
+    await expect(targetHeading).toBeInViewport();
+  });
+});
