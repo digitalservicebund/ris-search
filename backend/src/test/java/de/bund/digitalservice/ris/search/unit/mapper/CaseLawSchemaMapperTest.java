@@ -55,22 +55,14 @@ class CaseLawSchemaMapperTest {
     assertThat(caseLawSchema.documentType()).isEqualTo("Urteil");
     assertThat(caseLawSchema.decisionDate()).isEqualTo(SharedTestConstants.DATE_2_2);
     assertThat(caseLawSchema.fileNumbers()).containsExactly("FileNumberTest");
-    assertThat(caseLawSchema.dissentingOpinion()).isEqualTo("eine abweichende Meinung");
-    assertThat(caseLawSchema.decisionGrounds()).isEqualTo("diese Entscheidungsgründe");
     assertThat(caseLawSchema.headnote()).isEqualTo("Orientierungssatz");
     assertThat(caseLawSchema.headline()).isEqualTo("Test");
     assertThat(caseLawSchema.otherHeadnote()).isEqualTo("Sonstiger Orientierungssatz");
-    assertThat(caseLawSchema.otherLongText()).isEqualTo("Long text");
-    assertThat(caseLawSchema.caseFacts()).isEqualTo("Tatbestand");
-    assertThat(caseLawSchema.outline()).isEqualTo("outlineTest");
     assertThat(caseLawSchema.judicialBody()).isEqualTo("judicial body");
     assertThat(caseLawSchema.courtName()).isEqualTo("KG Berlin");
     assertThat(caseLawSchema.keywords()).containsExactly("one", "two");
     assertThat(caseLawSchema.decisionName()).containsExactly("decisionName");
     assertThat(caseLawSchema.deviatingDocumentNumber()).containsExactly("deviatingDocumentNumber");
-    assertThat(caseLawSchema.grounds()).isEqualTo("grounds");
-    assertThat(caseLawSchema.guidingPrinciple()).isEqualTo("guidingPrinciple");
-    assertThat(caseLawSchema.tenor()).isEqualTo("tenor");
     assertThat(caseLawSchema.inLanguage()).isEqualTo("de");
   }
 

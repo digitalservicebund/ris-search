@@ -16,14 +16,12 @@ public record CaseLawSearchSchema(
             requiredMode = Schema.RequiredMode.REQUIRED)
         String ecli,
     @Schema(example = "Überschrift") String headline,
-    @Schema(example = "Sonstiger Langtext") String otherLongText,
     @Schema(requiredMode = Schema.RequiredMode.REQUIRED) LocalDate decisionDate,
     @Schema(example = "BGH 123/23", requiredMode = Schema.RequiredMode.REQUIRED)
         List<String> fileNumbers,
     @Schema(example = "FG") String courtType,
     @Schema(example = "Berlin") String location,
     @Schema(example = "Urteil") String documentType,
-    @Schema(example = "Leitsatz") String outline,
     @Schema(example = "Gericht") String judicialBody,
     @Schema(example = "LArbG Hamm") String courtName, // corresponds to courtKeyword
     @Schema(
