@@ -1,6 +1,6 @@
 import { renderSuspended } from "@nuxt/test-utils/runtime";
 import { userEvent } from "@testing-library/user-event";
-import { screen } from "@testing-library/vue";
+import { screen, waitFor } from "@testing-library/vue";
 import Tooltip from "primevue/tooltip";
 import { vi } from "vitest";
 import ActionMenu, {
@@ -21,10 +21,12 @@ const actions: ActionMenuItem[] = [
   },
 ];
 
-// NOTE: only testing the "desktop" variant here as testing the different
-// variants which are based on the screen size is not reliably doable
-// without a real browser
-describe("ActionMenu", () => {
+const nuxtLinkStub = {
+  template: '<a :href="to"><slot /></a>',
+  props: ["to"],
+};
+
+describe("ActionMenu (desktop)", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
@@ -39,10 +41,7 @@ describe("ActionMenu", () => {
       global: {
         directives: { tooltip: Tooltip },
         stubs: {
-          NuxtLink: {
-            template: '<a :href="to"><slot /></a>',
-            props: ["to"],
-          },
+          NuxtLink: nuxtLinkStub,
         },
       },
     });
@@ -116,5 +115,82 @@ describe("ActionMenu", () => {
     expect(mockCommand).not.toHaveBeenCalled();
     await user.click(disabledButton);
     expect(mockCommand).not.toHaveBeenCalled();
+  });
+});
+
+describe("ActionMenu (mobile)", () => {
+  const renderDrawer = (drawerActions: ActionMenuItem[]) =>
+    renderSuspended(ActionMenu, {
+      props: { actions: drawerActions },
+      global: { stubs: { NuxtLink: nuxtLinkStub } },
+    });
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("opens when the trigger button is clicked", async () => {
+    const user = userEvent.setup();
+    await renderDrawer([]);
+
+    expect(
+      screen.queryByRole("dialog", { name: "Aktionen" }),
+    ).not.toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: "Aktionen anzeigen" }));
+
+    expect(screen.getByRole("dialog", { name: "Aktionen" })).toBeVisible();
+  });
+
+  it("closes after a command item is clicked", async () => {
+    const user = userEvent.setup();
+    await renderDrawer([
+      { label: "Do Something", iconComponent: h("span"), command: mockCommand },
+    ]);
+
+    await user.click(screen.getByRole("button", { name: "Aktionen anzeigen" }));
+    await user.click(screen.getByRole("button", { name: "Do Something" }));
+
+    expect(mockCommand).toHaveBeenCalledOnce();
+    await waitFor(() =>
+      expect(
+        screen.queryByRole("dialog", { name: "Aktionen" }),
+      ).not.toBeInTheDocument(),
+    );
+  });
+
+  it("stays open when keepDrawerOpen is true", async () => {
+    const user = userEvent.setup();
+    await renderDrawer([
+      {
+        label: "Copy Something",
+        iconComponent: h("span"),
+        command: mockCommand,
+        keepDrawerOpen: true,
+      },
+    ]);
+
+    await user.click(screen.getByRole("button", { name: "Aktionen anzeigen" }));
+    await user.click(screen.getByRole("button", { name: "Copy Something" }));
+
+    expect(mockCommand).toHaveBeenCalledOnce();
+    expect(screen.getByRole("dialog", { name: "Aktionen" })).toBeVisible();
+  });
+
+  it("renders navigate items as links with the correct href", async () => {
+    const user = userEvent.setup();
+    await renderDrawer([
+      {
+        label: "Go Somewhere",
+        iconComponent: h("span"),
+        url: "https://example.com",
+      },
+    ]);
+
+    await user.click(screen.getByRole("button", { name: "Aktionen anzeigen" }));
+
+    const link = screen.getByRole("link", { name: "Go Somewhere" });
+    expect(link).toBeVisible();
+    expect(link).toHaveAttribute("href", "https://example.com");
   });
 });
