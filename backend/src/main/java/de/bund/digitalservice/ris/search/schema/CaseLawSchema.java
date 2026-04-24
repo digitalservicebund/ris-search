@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 import lombok.Builder;
 
 /** A DTO for court decisions in a specific encoding, following schema.org naming guidelines. */
@@ -62,9 +61,7 @@ public record CaseLawSchema(
         @JsonProperty("@id")
         String id,
     @Schema(example = "de", requiredMode = Schema.RequiredMode.REQUIRED) String inLanguage,
-    @Schema(requiredMode = Schema.RequiredMode.REQUIRED) List<CaseLawEncodingSchema> encoding,
-    @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
-        Map<String, List<String>> highlightedFields)
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED) List<CaseLawEncodingSchema> encoding)
     implements JsonldResource {
 
   @Override

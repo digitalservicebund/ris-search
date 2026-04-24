@@ -26,7 +26,6 @@ const searchResult: SearchResult<CaseLaw> = {
     fileNumbers: ["123", "testing highlighted file number is here"],
     decisionName: ["Decision Name"],
     documentType: "Document Type",
-    highlightedFields: {},
   },
   textMatches: [],
 };
