@@ -15,8 +15,7 @@ import org.eclipse.persistence.oxm.annotations.XmlPath;
  * MOXy's {@link XmlDiscriminatorNode}, the specific subclass is determined at runtime based on the
  * value of the {@code ris:domainTerm} attribute in the XML.
  *
- * @see AknMainContentIntroduction
- * @see AknMainContentMotivation
+ * @see DomainTerm
  */
 @NoArgsConstructor
 @Getter
@@ -32,5 +31,5 @@ public class AknMainContent {
   private JaxbHtml content;
 
   @XmlAttribute(namespace = RIS_NS, name = "domainTerm")
-  private String domainTerm;
+  private DomainTerm domainTerm;
 }
