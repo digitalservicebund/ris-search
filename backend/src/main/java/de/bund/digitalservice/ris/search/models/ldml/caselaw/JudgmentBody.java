@@ -1,6 +1,7 @@
 package de.bund.digitalservice.ris.search.models.ldml.caselaw;
 
 import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElements;
 import java.util.List;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
@@ -21,9 +22,21 @@ import lombok.NoArgsConstructor;
 @Builder
 public class JudgmentBody {
 
-  /** A list of introductory elements such as headnotes (Leitsätze) or outlines (Gliederungen). */
-  @XmlElement(name = "introduction", namespace = CaseLawLdmlNamespaces.AKN_NS)
-  private List<AknMainContent> introductions;
+  /**
+   * A list of introductory elements such as headnotes (Leitsätze) or outlines (Gliederungen) and
+   * motivations
+   */
+  @XmlElements({
+    @XmlElement(
+        name = "introduction",
+        namespace = CaseLawLdmlNamespaces.AKN_NS,
+        type = AknMainContent.class),
+    @XmlElement(
+        name = "motivation",
+        namespace = CaseLawLdmlNamespaces.AKN_NS,
+        type = AknMainContent.class)
+  })
+  private List<AknMainContent> contentBlocks;
 
   /**
    * The operative part of the judgment (the "Tenor").
@@ -38,42 +51,18 @@ public class JudgmentBody {
   private JaxbHtml background;
 
   /**
-   * A list of legal reasoning blocks (Motivations), which may include formal grounds or dissenting
-   * opinions.
-   */
-  @XmlElement(name = "motivation", namespace = CaseLawLdmlNamespaces.AKN_NS, required = false)
-  private List<AknMainContent> motivations;
-
-  /**
-   * Searches the introductory sections for a specific entry by its domain name.
-   *
-   * @param name the name of the section to find (e.g., "Leitsatz")
-   * @return an {@link Optional} containing the HTML content if found, otherwise empty
-   */
-  public Optional<JaxbHtml> getIntroductionEntryContentByName(String name) {
-    if (introductions == null || name == null) {
-      return Optional.empty();
-    }
-
-    return introductions.stream()
-        .filter(item -> name.equals(item.getName()))
-        .map(AknMainContent::getContent)
-        .findFirst();
-  }
-
-  /**
    * Searches the motivation sections for a specific entry by its domain name.
    *
-   * @param name the name of the section to find (e.g., "Entscheidungsgründe")
+   * @param term the domain term of the section to find (e.g., "Entscheidungsgründe")
    * @return an {@link Optional} containing the HTML content if found, otherwise empty
    */
-  public Optional<JaxbHtml> getMotivationEntryContentByName(String name) {
-    if (motivations == null || name == null) {
+  public Optional<JaxbHtml> getContentByDomainTerm(DomainTerm term) {
+    if (contentBlocks == null || term == null) {
       return Optional.empty();
     }
 
-    return motivations.stream()
-        .filter(item -> name.equals(item.getName()))
+    return contentBlocks.stream()
+        .filter(item -> term.equals(item.getDomainTerm()))
         .map(AknMainContent::getContent)
         .findFirst();
   }
