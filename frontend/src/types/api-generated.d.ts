@@ -1059,8 +1059,6 @@ export interface components {
       ecli: string;
       /** @example Überschrift */
       headline?: string;
-      /** @example Sonstiger Langtext */
-      otherLongText?: string;
       /** Format: date */
       decisionDate: string;
       /** @example BGH 123/23 */
@@ -1071,8 +1069,6 @@ export interface components {
       location?: string;
       /** @example Urteil */
       documentType?: string;
-      /** @example Leitsatz */
-      outline?: string;
       /** @example Gericht */
       judicialBody?: string;
       /** @example LArbG Hamm */
@@ -1158,14 +1154,6 @@ export interface components {
        * @example ECLI:DE:FGRLP:1969:0905.IV85.68.0A
        */
       ecli: string;
-      /** @description Tatbestand */
-      caseFacts?: string;
-      /** @description Entscheidungsgründe */
-      decisionGrounds?: string;
-      /** @description Abweichende Meinung */
-      dissentingOpinion?: string;
-      /** @description Gründe */
-      grounds?: string;
       /** @description Leitsatz */
       guidingPrinciple?: string;
       /** @description Überschrift */
@@ -1174,10 +1162,6 @@ export interface components {
       headnote?: string;
       /** @description Sonstiger Orientierungssatz */
       otherHeadnote?: string;
-      /** @description Sonstiger Langtext */
-      otherLongText?: string;
-      /** @description Tenor */
-      tenor?: string;
       /**
        * Format: date
        * @description Entscheidungsdatum
@@ -1200,8 +1184,6 @@ export interface components {
       location?: string;
       /** @example Urteil */
       documentType?: string;
-      /** @description Leitsatz */
-      outline?: string;
       /**
        * @description Spruchkörper
        * @example Gericht

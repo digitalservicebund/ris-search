@@ -16,16 +16,10 @@ public record CaseLawSchema(
             description = "European Case Law Identifier",
             requiredMode = Schema.RequiredMode.REQUIRED)
         String ecli,
-    @Schema(description = "Tatbestand") String caseFacts,
-    @Schema(description = "Entscheidungsgründe") String decisionGrounds,
-    @Schema(description = "Abweichende Meinung") String dissentingOpinion,
-    @Schema(description = "Gründe") String grounds,
     @Schema(description = "Leitsatz") String guidingPrinciple,
     @Schema(description = "Überschrift") String headline,
     @Schema(description = "Orientierungssatz") String headnote,
     @Schema(description = "Sonstiger Orientierungssatz") String otherHeadnote,
-    @Schema(description = "Sonstiger Langtext") String otherLongText,
-    @Schema(description = "Tenor") String tenor,
     @Schema(description = "Entscheidungsdatum", requiredMode = Schema.RequiredMode.REQUIRED)
         LocalDate decisionDate,
     @Schema(
@@ -36,7 +30,6 @@ public record CaseLawSchema(
     @Schema(example = "FG", description = "Gerichtstyp") String courtType,
     @Schema(example = "Berlin", description = "Gerichtssitz") String location,
     @Schema(example = "Urteil") String documentType,
-    @Schema(description = "Leitsatz") String outline,
     @Schema(example = "Gericht", description = "Spruchkörper") String judicialBody,
     @Schema(
             example = "3. Kammer",
