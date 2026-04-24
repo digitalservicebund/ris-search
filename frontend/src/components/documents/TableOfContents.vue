@@ -13,7 +13,7 @@ interface Props {
 
 const props = defineProps<Props>();
 
-const mobileTocVisible = ref(false);
+const { visible: mobileTocVisible, triggerRef: openButtonRef } = useDrawer();
 
 const drawerId = useId();
 </script>
@@ -27,6 +27,7 @@ const drawerId = useId();
   >
     <button
       v-if="!mobileTocVisible"
+      ref="openButtonRef"
       class="shadow-gray-1000/15 fixed inset-x-0 bottom-0 z-10 flex cursor-pointer items-center justify-between gap-8 bg-white p-16 shadow-[0_0_0.5rem] -outline-offset-4 outline-blue-800 focus-visible:outline-4 md:hidden"
       :aria-expanded="mobileTocVisible"
       :aria-controls="drawerId"
@@ -44,6 +45,7 @@ const drawerId = useId();
   <Drawer
     v-model:visible="mobileTocVisible"
     aria-label="Inhalte"
+    block-scroll
     position="bottom"
     :id="drawerId"
     :close-button-props="{
