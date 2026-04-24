@@ -14,7 +14,7 @@ importers:
     dependencies:
       '@digitalservicebund/ris-ui':
         specifier: ^2.0.0
-        version: 2.0.0(primevue@4.5.5(vue@3.5.32(typescript@6.0.3)))(tailwindcss@3.4.10)(vue@3.5.32(typescript@6.0.3))
+        version: 2.0.0(primevue@4.5.5(vue@3.5.32(typescript@6.0.3)))(tailwindcss@3.4.19(yaml@2.8.3))(vue@3.5.32(typescript@6.0.3))
       '@headlessui/vue':
         specifier: 1.7.23
         version: 1.7.23(vue@3.5.32(typescript@6.0.3))
@@ -57,7 +57,7 @@ importers:
         version: 1.2.3
       '@tailwindcss/typography':
         specifier: 0.5.19
-        version: 0.5.19(tailwindcss@3.4.10)
+        version: 0.5.19(tailwindcss@3.4.19(yaml@2.8.3))
       '@types/markdown-it':
         specifier: ^14.1.2
         version: 14.1.2
@@ -92,8 +92,8 @@ importers:
         specifier: ^2.0.4
         version: 2.0.4
       tailwindcss:
-        specifier: 3.4.10
-        version: 3.4.10
+        specifier: 3.4.19
+        version: 3.4.19(yaml@2.8.3)
       typescript:
         specifier: 6.0.3
         version: 6.0.3
@@ -1202,6 +1202,10 @@ packages:
     resolution: {integrity: sha512-TWrgLOFUQTH994YUyl1yT4uyavY5nNB5muff+RtWaqNVCAK408b5ZnnbNAUEWLTCpum9w6arT70i1XdQ4UeOPA==}
     engines: {node: '>=0.12'}
 
+  es-errors@1.3.0:
+    resolution: {integrity: sha512-Zf5H2Kxt2xjTvbJvP2ZWLEICxA6j+hAmMzIlypy4xcBg1vKVnx89Wy0GbS+kf5cwCVFFzdCFh2XSCFNULS6csw==}
+    engines: {node: '>= 0.4'}
+
   esbuild@0.25.0:
     resolution: {integrity: sha512-BXq5mqc8ltbaN34cDqWuYKyNhX8D/Z0J1xdtdQ8UcIIIyJyz+ZMKUt58tF3SrZ85jcfN/PZYhjR5uDQAYNVbuw==}
     engines: {node: '>=18'}
@@ -1292,8 +1296,8 @@ packages:
     resolution: {integrity: sha512-QLV1qeYSo5l13mQzWgP/y0LbMr5Plr5fJilgAIwgnwseproEbtNym8xpLsDzeZ6MWXgNE6kdWGBjdh3zT/Qerg==}
     engines: {node: '>=20'}
 
-  hasown@2.0.2:
-    resolution: {integrity: sha512-0hJU9SCPvmMzIBdZFqNPXWa6dqh7WdH0cII9y+CyS8rG3nL48Bclra9HmKhVVUHyPWNH5Y7xDwAB7bfgSjkUMQ==}
+  hasown@2.0.3:
+    resolution: {integrity: sha512-ej4AhfhfL2Q2zpMmLo7U1Uv9+PyhIZpgQLGT1F9miIGmiCJIoCgSmczFdrc97mWT4kVY72KA+WnnhJ5pghSvSg==}
     engines: {node: '>= 0.4'}
 
   hast-util-to-html@9.0.5:
@@ -1382,10 +1386,6 @@ packages:
 
   kuler@2.0.0:
     resolution: {integrity: sha512-Xq9nH7KlWZmXAtodXDDRE7vs6DU1gTU8zYDHDiWLSip45Egwq3plLHzPn27NgvzL2r1LMPC1vdqh98sQxtqj4A==}
-
-  lilconfig@2.1.0:
-    resolution: {integrity: sha512-utWOt/GHzuUxnLKxB6dk81RoOeoNeHgbrXiuGk4yyF5qlRz+iIVWu56E2fqGHFrXz0QNUhLB/8nKqvRH66JKGQ==}
-    engines: {node: '>=10'}
 
   lilconfig@3.1.3:
     resolution: {integrity: sha512-/vlFKAoH5Cgt3Ie+JLhRbwOsCQePABiU3tJ1egGvyQ+33R/vcwM2Zl2QR/LzjsBeItPt3oSVXapn+m4nQDvpzw==}
@@ -1590,16 +1590,22 @@ packages:
     peerDependencies:
       postcss: ^8.4.21
 
-  postcss-load-config@4.0.2:
-    resolution: {integrity: sha512-bSVhyJGL00wMVoPUzAVAnbEoWyqRxkjv64tUl427SKnPrENtq6hJwUojroMz2VB+Q1edmi4IfrAPpami5VVgMQ==}
-    engines: {node: '>= 14'}
+  postcss-load-config@6.0.1:
+    resolution: {integrity: sha512-oPtTM4oerL+UXmx+93ytZVN82RrlY/wPUV8IeDxFrzIjXOLF1pN+EmKPLbubvKHT2HC20xXsCAH2Z+CKV6Oz/g==}
+    engines: {node: '>= 18'}
     peerDependencies:
+      jiti: '>=1.21.0'
       postcss: '>=8.0.9'
-      ts-node: '>=9.0.0'
+      tsx: ^4.8.1
+      yaml: ^2.4.2
     peerDependenciesMeta:
+      jiti:
+        optional: true
       postcss:
         optional: true
-      ts-node:
+      tsx:
+        optional: true
+      yaml:
         optional: true
 
   postcss-nested@6.2.0:
@@ -1698,8 +1704,8 @@ packages:
   resolve-alpn@1.2.1:
     resolution: {integrity: sha512-0a1F4l73/ZFZOakJnQ3FvkJ2+gSTQWz/r2KE5OdDY0TxPm5h4GkqkWWfM47T7HsbnOtcJVEF4epCVy6u7Q3K+g==}
 
-  resolve@1.22.11:
-    resolution: {integrity: sha512-RfqAvLnMl313r7c9oclB1HhUEAezcpLjz95wFH4LVuhk9JF/r22qmVP9AMmOU4vMX7Q8pN8jwNg/CSpdFnMjTQ==}
+  resolve@1.22.12:
+    resolution: {integrity: sha512-TyeJ1zif53BPfHootBGwPRYT1RUt6oGWsaQr8UyZW/eAm9bKoijtvruSDEmZHm92CwS9nj7/fWttqPCgzep8CA==}
     engines: {node: '>= 0.4'}
     hasBin: true
 
@@ -1811,8 +1817,8 @@ packages:
   tabbable@6.4.0:
     resolution: {integrity: sha512-05PUHKSNE8ou2dwIxTngl4EzcnsCDZGJ/iCLtDflR/SHB/ny14rXc+qU5P4mG9JkusiV7EivzY9Mhm55AzAvCg==}
 
-  tailwindcss@3.4.10:
-    resolution: {integrity: sha512-KWZkVPm7yJRhdu4SRSl9d4AK2wM3a50UsvgHZO7xY77NQr2V+fIrEuoDGQcbvswWvFGbS2f6e+jC/6WJm1Dl0w==}
+  tailwindcss@3.4.19:
+    resolution: {integrity: sha512-3ofp+LL8E+pK/JuPLPggVAIaEuhvIz4qNcf3nA1Xn2o/7fb7s/TYpHhwGDv1ZU3PkBluUVaF8PyCHcm48cKLWQ==}
     engines: {node: '>=14.0.0'}
     hasBin: true
 
@@ -1832,6 +1838,10 @@ packages:
 
   tinyglobby@0.2.15:
     resolution: {integrity: sha512-j2Zq4NyQYG5XMST4cbs02Ak8iJUdxRM0XI5QyxXuZOzKOINmWurp3smXu3y5wDcJrptwpSjgXHzIQxR0omXljQ==}
+    engines: {node: '>=12.0.0'}
+
+  tinyglobby@0.2.16:
+    resolution: {integrity: sha512-pn99VhoACYR8nFHhxqix+uvsbXineAasWm5ojXoN8xEwK5Kd3/TrhNn1wByuD52UxWRLy8pu+kRMniEi6Eq9Zg==}
     engines: {node: '>=12.0.0'}
 
   to-regex-range@5.0.1:
@@ -2202,10 +2212,10 @@ snapshots:
 
   '@digitalservice4germany/style-dictionary@2.0.0': {}
 
-  '@digitalservicebund/ris-ui@2.0.0(primevue@4.5.5(vue@3.5.32(typescript@6.0.3)))(tailwindcss@3.4.10)(vue@3.5.32(typescript@6.0.3))':
+  '@digitalservicebund/ris-ui@2.0.0(primevue@4.5.5(vue@3.5.32(typescript@6.0.3)))(tailwindcss@3.4.19(yaml@2.8.3))(vue@3.5.32(typescript@6.0.3))':
     dependencies:
       primevue: 4.5.5(vue@3.5.32(typescript@6.0.3))
-      tailwindcss: 3.4.10
+      tailwindcss: 3.4.19(yaml@2.8.3)
       vue: 3.5.32(typescript@6.0.3)
 
   '@docsearch/css@3.8.2': {}
@@ -2603,10 +2613,10 @@ snapshots:
     dependencies:
       tslib: 2.8.1
 
-  '@tailwindcss/typography@0.5.19(tailwindcss@3.4.10)':
+  '@tailwindcss/typography@0.5.19(tailwindcss@3.4.19(yaml@2.8.3))':
     dependencies:
       postcss-selector-parser: 6.0.10
-      tailwindcss: 3.4.10
+      tailwindcss: 3.4.19(yaml@2.8.3)
 
   '@tanstack/virtual-core@3.13.23': {}
 
@@ -3038,6 +3048,8 @@ snapshots:
 
   entities@7.0.1: {}
 
+  es-errors@1.3.0: {}
+
   esbuild@0.25.0:
     optionalDependencies:
       '@esbuild/aix-ppc64': 0.25.0
@@ -3159,7 +3171,7 @@ snapshots:
       responselike: 4.0.2
       type-fest: 4.41.0
 
-  hasown@2.0.2:
+  hasown@2.0.3:
     dependencies:
       function-bind: 1.1.2
 
@@ -3207,7 +3219,7 @@ snapshots:
 
   is-core-module@2.16.1:
     dependencies:
-      hasown: 2.0.2
+      hasown: 2.0.3
 
   is-extglob@2.1.1: {}
 
@@ -3240,8 +3252,6 @@ snapshots:
       '@keyv/serialize': 1.1.1
 
   kuler@2.0.0: {}
-
-  lilconfig@2.1.0: {}
 
   lilconfig@3.1.3: {}
 
@@ -3433,19 +3443,20 @@ snapshots:
       postcss: 8.5.10
       postcss-value-parser: 4.2.0
       read-cache: 1.0.0
-      resolve: 1.22.11
+      resolve: 1.22.12
 
   postcss-js@4.1.0(postcss@8.5.10):
     dependencies:
       camelcase-css: 2.0.1
       postcss: 8.5.10
 
-  postcss-load-config@4.0.2(postcss@8.5.10):
+  postcss-load-config@6.0.1(jiti@1.21.7)(postcss@8.5.10)(yaml@2.8.3):
     dependencies:
       lilconfig: 3.1.3
-      yaml: 2.8.3
     optionalDependencies:
+      jiti: 1.21.7
       postcss: 8.5.10
+      yaml: 2.8.3
 
   postcss-nested@6.2.0(postcss@8.5.10):
     dependencies:
@@ -3556,8 +3567,9 @@ snapshots:
 
   resolve-alpn@1.2.1: {}
 
-  resolve@1.22.11:
+  resolve@1.22.12:
     dependencies:
+      es-errors: 1.3.0
       is-core-module: 2.16.1
       path-parse: 1.0.7
       supports-preserve-symlinks-flag: 1.0.0
@@ -3670,7 +3682,7 @@ snapshots:
       lines-and-columns: 1.2.4
       mz: 2.7.0
       pirates: 4.0.7
-      tinyglobby: 0.2.15
+      tinyglobby: 0.2.16
       ts-interface-checker: 0.1.13
 
   superjson@2.2.6:
@@ -3711,7 +3723,7 @@ snapshots:
 
   tabbable@6.4.0: {}
 
-  tailwindcss@3.4.10:
+  tailwindcss@3.4.19(yaml@2.8.3):
     dependencies:
       '@alloc/quick-lru': 5.2.0
       arg: 5.0.2
@@ -3722,7 +3734,7 @@ snapshots:
       glob-parent: 6.0.2
       is-glob: 4.0.3
       jiti: 1.21.7
-      lilconfig: 2.1.0
+      lilconfig: 3.1.3
       micromatch: 4.0.8
       normalize-path: 3.0.0
       object-hash: 3.0.0
@@ -3730,13 +3742,14 @@ snapshots:
       postcss: 8.5.10
       postcss-import: 15.1.0(postcss@8.5.10)
       postcss-js: 4.1.0(postcss@8.5.10)
-      postcss-load-config: 4.0.2(postcss@8.5.10)
+      postcss-load-config: 6.0.1(jiti@1.21.7)(postcss@8.5.10)(yaml@2.8.3)
       postcss-nested: 6.2.0(postcss@8.5.10)
       postcss-selector-parser: 6.1.2
-      resolve: 1.22.11
+      resolve: 1.22.12
       sucrase: 3.35.1
     transitivePeerDependencies:
-      - ts-node
+      - tsx
+      - yaml
 
   text-hex@1.0.0: {}
 
@@ -3751,6 +3764,11 @@ snapshots:
   tinyexec@1.0.4: {}
 
   tinyglobby@0.2.15:
+    dependencies:
+      fdir: 6.5.0(picomatch@4.0.4)
+      picomatch: 4.0.4
+
+  tinyglobby@0.2.16:
     dependencies:
       fdir: 6.5.0(picomatch@4.0.4)
       picomatch: 4.0.4
@@ -3986,7 +4004,8 @@ snapshots:
 
   y18n@5.0.8: {}
 
-  yaml@2.8.3: {}
+  yaml@2.8.3:
+    optional: true
 
   yargs-parser@21.1.1: {}
 
