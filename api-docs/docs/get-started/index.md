@@ -7,6 +7,11 @@ hero:
    text: Learn how to quickly connect to our legal information API and start building applications with German federal legislation and decisions by federal courts.
 ---
 
+<script setup>
+import { useData } from "vitepress";
+const { theme } = useData();
+</script>
+
 ## Introduction
 
 Welcome to the API documentation for accessing legal information and court decisions in Germany.
@@ -34,7 +39,8 @@ The following example shows how to retrieve a single case law document from our 
 curl -G https://testphase.rechtsinformationen.bund.de/v1/case-law/KVRE461542501
 ```
 
-You can discover more endpoints with examples in different programming languages in the <a href="/endpoints">endpoints</a> section.
+You can discover more endpoints with examples in <a :href="theme.swaggerUiUrl"
+target="_blank">Swagger</a>.
 
 ## Exploring the API
 
@@ -42,7 +48,7 @@ After your first request, check out the following sections for more detailed inf
 
 * API Overview: Learn about the API operations and data formats from the <a href="/">Home page</a>.
 * Guides: Get detailed instructions on topics such as <a href="/guides/formats">Formats</a>, <a href="/guides/pagination">Pagination</a>, <a href="/guides/filters">Filters</a>, <a href="/guides/rate-limiting">Rate Limiting</a>, and <a href="/guides/error-codes">Error Codes</a>.
-* Resource Archive: Explore the endpoints available for <a href="/endpoints/#legislation">Legislation</a>, <a href="/endpoints/#case-law">Case Law</a>, <a href="/endpoints/#all-documents">All Documents</a>.
+* Resource Archive: Explore the endpoints available for <a :href="theme.swaggerUiUrl + '#/Legislation'" target="_blank">Legislation</a>, <a :href="theme.swaggerUiUrl + '#/Case Law'" target="_blank">Case Law</a>, <a :href="theme.swaggerUiUrl + '#/All documents'" target="_blank">All Documents</a>.
 * Standards: Read more about the data formats and standards like LegalDocML in <a href="/standards">Standards</a>.
 * Feedback: Share your thoughts via our <a href="/feedback">Feedback</a> page.
 * Changelog: Stay updated with changes in our <a href="/changelog">Changelog</a>.
