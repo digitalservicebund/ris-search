@@ -5,11 +5,10 @@ import static de.bund.digitalservice.ris.search.utils.MappingUtils.validateNotNu
 
 import de.bund.digitalservice.ris.search.exception.OpenSearchMapperException;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.AknKeyword;
-import de.bund.digitalservice.ris.search.models.ldml.caselaw.AknMainContentIntroduction;
-import de.bund.digitalservice.ris.search.models.ldml.caselaw.AknMainContentMotivation;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.Analysis;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.CaseLawLdml;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.DocumentaryShortTexts;
+import de.bund.digitalservice.ris.search.models.ldml.caselaw.DomainTerm;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.FrbrElement;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.ImplicitReference;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.JaxbHtml;
@@ -88,19 +87,16 @@ public class CaseLawLdmlToOpenSearchMapper {
         .documentationOffice(risMeta.getRisDokumentationsstelle())
         .legalEffect(risMeta.getRisRechtskraft())
         .headline(sanitize(judgment.getHeader().findShortTitle()))
-        .guidingPrinciple(
-            extractContent(judgmentBody, AknMainContentIntroduction.GuidingPrinciple.NAME))
+        .guidingPrinciple(extractContent(judgmentBody, DomainTerm.GUIDING_PRINCIPLE))
         .headnote(sanitize(extractHeadnote(meta).orElse(null)))
         .otherHeadnote(sanitize(extractOtherHeadnote(meta).orElse(null)))
-        .outline(extractContent(judgmentBody, AknMainContentIntroduction.Outline.NAME))
+        .outline(extractContent(judgmentBody, DomainTerm.OUTLINE))
         .tenor(sanitize(judgmentBody.getDecision()))
         .caseFacts(sanitize(judgmentBody.getBackground()))
-        .decisionGrounds(
-            extractContent(judgmentBody, AknMainContentMotivation.DecisionGrounds.NAME))
-        .grounds(extractContent(judgmentBody, AknMainContentMotivation.Grounds.NAME))
-        .otherLongText(extractContent(judgmentBody, AknMainContentMotivation.OtherLongText.NAME))
-        .dissentingOpinion(
-            extractContent(judgmentBody, AknMainContentMotivation.DissentingOpinion.NAME))
+        .decisionGrounds(extractContent(judgmentBody, DomainTerm.DECISION_GROUNDS))
+        .grounds(extractContent(judgmentBody, DomainTerm.GROUNDS))
+        .otherLongText(extractContent(judgmentBody, DomainTerm.OTHER_LONGTEXT))
+        .dissentingOpinion(extractContent(judgmentBody, DomainTerm.DISSENTING_OPINION))
         .previousDecisions(
             getLinkedJudgements(
                 meta, refs -> refs.getReferencesByType(ImplicitReference::getPrecedingJudgement)))
@@ -124,12 +120,7 @@ public class CaseLawLdmlToOpenSearchMapper {
    */
   public CaseLawDocumentationUnit fromString(String ldmlFile) {
     try {
-      String patchedLdml =
-          ldmlFile.replaceAll(
-              "(<(akn:introduction|akn:motivation))(?![^>]*ris:domainTerm)([^>]*)>",
-              "$1 ris:domainTerm=\"EmptyContent\"$3>");
-
-      StreamSource ldmlStreamSource = new StreamSource(new StringReader(patchedLdml));
+      StreamSource ldmlStreamSource = new StreamSource(new StringReader(ldmlFile));
       CaseLawLdml ldml = JAXB.unmarshal(ldmlStreamSource, CaseLawLdml.class);
 
       return mapToEntity(ldml);
@@ -220,12 +211,8 @@ public class CaseLawLdmlToOpenSearchMapper {
         .orElse(Collections.emptyList());
   }
 
-  private String extractContent(JudgmentBody judgmentBody, String name) {
-    return judgmentBody
-        .getIntroductionEntryContentByName(name)
-        .or(() -> judgmentBody.getMotivationEntryContentByName(name))
-        .map(this::sanitize)
-        .orElse(null);
+  private String extractContent(JudgmentBody judgmentBody, DomainTerm term) {
+    return judgmentBody.getContentByDomainTerm(term).map(this::sanitize).orElse(null);
   }
 
   private String sanitize(JaxbHtml html) {
