@@ -138,6 +138,8 @@ export default defineConfigWithTheme<ThemeConfig>({
     ],
   ],
   themeConfig: {
+    swaggerUiUrl:
+      "https://docs.rechtsinformationen.bund.de/swagger-ui/index.html",
     secondaryNav: [
       {
         text: "Legal Notice",
