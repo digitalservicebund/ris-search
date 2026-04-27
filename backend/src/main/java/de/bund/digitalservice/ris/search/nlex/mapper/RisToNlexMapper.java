@@ -39,7 +39,8 @@ public abstract class RisToNlexMapper {
 
   /**
    * Transforms the given search results for norms into a {@link RequestResult} object, mapped
-   * according to the application's search schema.
+   * according to the application's search schema. Translates the page numbers of the search results
+   * to be 1-based
    *
    * @param requestId the unique identifier for the request, used for navigation purposes
    * @param frontendUrl the base URL for constructing external links to norms
@@ -82,14 +83,13 @@ public abstract class RisToNlexMapper {
     RequestResult result = new RequestResult().setStatus(ResultStatus.OK);
     ResultList rl = new ResultList();
     rl.setDocuments(documents);
+
+    int oneBasedPageNumber = searchPage.getNumber() + 1;
     rl.setNavigation(
         new Navigation()
             .setRequestId(requestId)
             .setHits(searchPage.getTotalElements())
-            .setPage(
-                new Page()
-                    .setSize(searchPage.getNumberOfElements())
-                    .setNumber(searchPage.getNumber())));
+            .setPage(new Page().setSize(searchPage.getSize()).setNumber(oneBasedPageNumber)));
 
     result.setResultList(rl);
 

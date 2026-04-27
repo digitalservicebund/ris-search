@@ -1,5 +1,7 @@
 package de.bund.digitalservice.ris.search.nlex.service;
 
+import static de.bund.digitalservice.ris.search.nlex.schema.result.Error.PAGE_SMALLER_THAN_ONE;
+
 import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.nlex.mapper.RisToNlexMapper;
@@ -17,7 +19,6 @@ import java.util.Objects;
 import java.util.Optional;
 import org.jose4j.base64url.Base64;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.SearchPage;
 import org.springframework.stereotype.Service;
@@ -56,30 +57,33 @@ public class NlexService {
    * @return RequestResult
    */
   public RequestResult runRequestQuery(Query query) {
-    return getSearchTerm(query)
-        .map(
-            searchTerm -> {
-              var pageNumber =
-                  Optional.ofNullable(query.getNavigation().getPage())
-                      .map(Page::getNumber)
-                      .orElse(0);
+    Optional<String> searchTermOpt = getSearchTerm(query);
 
-              return runQuery(searchTerm, PageRequest.of(pageNumber, 20));
-            })
-        .orElse(
-            new RequestResult()
-                .setErrors(List.of(new Error().setCause(Error.STANDARD_ERROR_NO_SEARCHTERM))));
+    if (searchTermOpt.isEmpty()) {
+      return new RequestResult()
+          .setErrors(List.of(new Error().setCause(Error.STANDARD_ERROR_NO_SEARCHTERM)));
+    }
+
+    String searchTerm = searchTermOpt.get();
+
+    int pageNumber =
+        Optional.ofNullable(query.getNavigation().getPage()).map(Page::getNumber).orElse(1);
+    if (pageNumber < 1) {
+      return new RequestResult().setErrors(List.of(new Error().setCause(PAGE_SMALLER_THAN_ONE)));
+    }
+    return runQuery(searchTerm, pageNumber);
   }
 
   /**
    * @param searchTerm searchTerm to query for
-   * @param pageable pagination parameters
+   * @param pageNumber number of the page to be returned, starting at 1
    * @return RequestResult
    */
-  private RequestResult runQuery(String searchTerm, Pageable pageable) {
+  private RequestResult runQuery(String searchTerm, int pageNumber) {
     UniversalSearchParams searchParams = new UniversalSearchParams();
     searchParams.setSearchTerm(searchTerm);
-    SearchPage<Norm> normPage = normsService.simpleSearchNorms(searchParams, null, pageable);
+    Pageable page = Pageable.ofSize(20).withPage(pageNumber - 1);
+    SearchPage<Norm> normPage = normsService.simpleSearchNorms(searchParams, null, page);
 
     String requestId = Base64.encode(searchTerm.getBytes());
     return RisToNlexMapper.normsToNlexRequestResult(requestId, frontendUrl, normPage);
