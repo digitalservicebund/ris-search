@@ -37,13 +37,9 @@ export function testCopyLinkButton(
 
     await page.getByRole("button", { name: "Aktionen anzeigen" }).click();
 
-    await page
-      .getByRole("menuitem", {
-        name: buttonName,
-      })
-      .click();
+    await page.getByRole("button", { name: buttonName }).click();
 
-    await expect(page.getByText("Kopiert!")).toBeVisible();
+    await expect(page.getByText("Link kopiert")).toBeVisible();
 
     expect(await page.evaluate(() => navigator.clipboard.readText())).toMatch(
       linkRegex,
@@ -79,7 +75,7 @@ export function testPrintButton(onPageUrl: string) {
 
     await page.getByRole("button", { name: "Aktionen anzeigen" }).click();
 
-    const button = page.getByRole("menuitem", { name: "Drucken" });
+    const button = page.getByRole("button", { name: "Drucken" });
     await button.click();
     await page.waitForFunction("window.waitForPrintDialog");
   });
@@ -96,9 +92,7 @@ export function testPdfButton(pageUrl: string) {
     await button.hover();
     await expect(
       page.getByRole("tooltip", { name: "Als PDF speichern" }),
-    ).toBeVisible({
-      timeout: 15000,
-    });
+    ).toBeVisible({ timeout: 15000 });
 
     await expect(button).toBeDisabled();
   });
@@ -110,7 +104,7 @@ export function testPdfButton(pageUrl: string) {
     await page.getByRole("button", { name: "Aktionen anzeigen" }).click();
 
     await expect(
-      page.getByRole("menuitem", { name: "Als PDF speichern" }),
+      page.getByRole("button", { name: "Als PDF speichern" }),
     ).toBeDisabled();
   });
 }
@@ -126,9 +120,7 @@ export function testXmlButton(pageUrl: string, expectedXmlUrl: string) {
     await button.hover();
     await expect(
       page.getByRole("tooltip", { name: "XML anzeigen" }),
-    ).toBeVisible({
-      timeout: 15000,
-    });
+    ).toBeVisible({ timeout: 15000 });
 
     await button.click();
     await page.waitForURL(expectedXmlUrl, { waitUntil: "commit" });
@@ -138,7 +130,7 @@ export function testXmlButton(pageUrl: string, expectedXmlUrl: string) {
     test.skip(!isMobileTest);
     await navigate(page, pageUrl);
     await page.getByRole("button", { name: "Aktionen anzeigen" }).click();
-    await page.getByRole("menuitem", { name: "XML anzeigen" }).click();
+    await page.getByRole("link", { name: "XML anzeigen" }).click();
     await page.waitForURL(expectedXmlUrl, { waitUntil: "commit" });
   });
 }

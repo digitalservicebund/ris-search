@@ -151,7 +151,7 @@ test.describe("responsive", () => {
       ).toBeVisible();
 
       await page.getByLabel("Aktionen anzeigen").click();
-      const translationButton = page.getByRole("menuitem", {
+      const translationButton = page.getByRole("link", {
         name: "Zur englischen Übersetzung",
       });
 

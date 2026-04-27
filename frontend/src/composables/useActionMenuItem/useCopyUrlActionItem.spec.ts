@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { useCopyUrlActionItem } from "~/composables/useActionMenuItem/useCopyUrlActionItem";
 import PdfIcon from "~icons/custom/pdf";
+import IcBaselineCheck from "~icons/ic/baseline-check";
 import IconLink from "~icons/ic/outline-link";
 
 const { mockToastAdd } = vi.hoisted(() => ({
@@ -61,5 +62,45 @@ describe("useCopyUrlActionItem", () => {
         summary: "Kopiert!",
       }),
     );
+  });
+
+  it("reactively switches label and icon to confirmation state after copying", async () => {
+    vi.useFakeTimers();
+    const item = useCopyUrlActionItem("https://example.com", "Copy!", PdfIcon);
+
+    expect(item.label).toEqual("Copy!");
+    expect(item.iconComponent).toEqual(PdfIcon);
+
+    await item.command?.();
+
+    expect(item.label).toEqual("Link kopiert");
+    expect(item.iconComponent).toEqual(IcBaselineCheck);
+
+    vi.runAllTimers();
+
+    expect(item.label).toEqual("Copy!");
+    expect(item.iconComponent).toEqual(PdfIcon);
+
+    vi.useRealTimers();
+  });
+
+  it("reactively switches label and icon to confirmation state using default values", async () => {
+    vi.useFakeTimers();
+    const item = useCopyUrlActionItem("https://example.com");
+
+    expect(item.label).toEqual("Link kopieren");
+    expect(item.iconComponent).toEqual(IconLink);
+
+    await item.command?.();
+
+    expect(item.label).toEqual("Link kopiert");
+    expect(item.iconComponent).toEqual(IcBaselineCheck);
+
+    vi.runAllTimers();
+
+    expect(item.label).toEqual("Link kopieren");
+    expect(item.iconComponent).toEqual(IconLink);
+
+    vi.useRealTimers();
   });
 });

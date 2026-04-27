@@ -240,7 +240,7 @@ test.describe("actions menu", () => {
 
       await page.getByLabel("Aktionen anzeigen").click();
 
-      const button = page.getByRole("menuitem", {
+      const button = page.getByRole("link", {
         name: "Zur englischen Übersetzung",
       });
 
@@ -270,7 +270,7 @@ test.describe("actions menu", () => {
       await page.getByLabel("Aktionen anzeigen").click();
 
       await expect(
-        page.getByRole("menuitem", {
+        page.getByRole("link", {
           name: "Zur englischen Übersetzung",
         }),
       ).toHaveCount(0);
