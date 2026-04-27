@@ -45,10 +45,7 @@ public record CaseLawDocumentationUnit(
     @ElementCollection @Field(name = Fields.DECISION_NAME) List<String> decisionName,
     @ElementCollection @Field(name = Fields.DEVIATING_DOCUMENT_NUMBER)
         List<String> deviatingDocumentNumber,
-    @JsonIgnore @Field(name = Fields.PUBLICATION_STATUS) String publicationStatus,
-    @JsonIgnore @Field(type = FieldType.Boolean, name = Fields.ERROR) Boolean error,
     @JsonIgnore @Field(name = Fields.DOCUMENTATION_OFFICE) String documentationOffice,
-    @JsonIgnore @ElementCollection @Field(name = Fields.PROCEDURES) List<String> procedures,
     @JsonIgnore @Field(name = Fields.LEGAL_EFFECT) String legalEffect,
     @JsonIgnore @ElementCollection @Field(name = Fields.PREVIOUS_DECISIONS)
         List<String> previousDecisions,

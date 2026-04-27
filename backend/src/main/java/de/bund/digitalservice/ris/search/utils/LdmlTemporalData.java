@@ -1,7 +1,7 @@
 package de.bund.digitalservice.ris.search.utils;
 
-import de.bund.digitalservice.ris.search.caselawhandover.shared.XmlUtils;
 import de.bund.digitalservice.ris.search.models.ldml.TimeInterval;
+import de.bund.digitalservice.ris.search.models.ldml.XmlUtils;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

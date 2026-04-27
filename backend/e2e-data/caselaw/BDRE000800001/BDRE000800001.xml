@@ -1,85 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
-<akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD17"
-                xmlns:ris="http://example.com/0.1/"
+<akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"
+                xmlns:ris="http://rechtsinformationen.bund.de/schema/ris/0.1/"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xsi:schemaLocation="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD17
-                     https://docs.oasis-open.org/legaldocml/akn-core/v1.0/csprd02/part2-specs/schemas/akomantoso30.xsd">
-   <akn:judgment name="Beispielurteil10">
+                xsi:schemaLocation="http://docs.oasis-open.org/legaldocml/ns/akn/3.0 https://docs.oasis-open.org/legaldocml/akn-core/v1.0/os/part2-specs/schemas/akomantoso30.xsd">
+
+   <akn:judgment name="Urteil">
       <akn:meta>
-         <akn:identification source="Testquelle10">
+         <akn:identification source="#ris">
             <akn:FRBRWork>
                <akn:FRBRthis value="BDRE000800001"/>
                <akn:FRBRuri value="BDRE000800001"/>
-               <akn:FRBRalias name="uebergreifende-id" value="fake-uuid-0010"/>
-               <akn:FRBRdate date="2025-04-09" name="entscheidungsdatum"/>
-               <akn:FRBRauthor href="Testautor10"/>
+               <akn:FRBRalias name="Übergreifende ID" value="fake-uuid-0010"/>
+               <akn:FRBRalias name="Dokumentnummer" value="BDRE000800001" />
+                <akn:FRBRdate eId="Entscheidungsdatum" date="2025-04-09" name="Entscheidungsdatum"/>
+                <akn:FRBRauthor href="#gericht"/>
                <akn:FRBRcountry value="de"/>
             </akn:FRBRWork>
             <akn:FRBRExpression>
                <akn:FRBRthis value="BDRE000800001/dokument"/>
                <akn:FRBRuri value="BDRE000800001/dokument"/>
-               <akn:FRBRdate date="2025-04-09" name="entscheidungsdatum"/>
-               <akn:FRBRauthor href="Testautor10"/>
+               <akn:FRBRdate date="2025-04-09" name="Entscheidungsdatum"/>
+               <akn:FRBRauthor href="#gericht"/>
                <akn:FRBRlanguage language="deu"/>
             </akn:FRBRExpression>
             <akn:FRBRManifestation>
                <akn:FRBRthis value="BDRE000800001/dokument.xml"/>
                <akn:FRBRuri value="BDRE000800001/dokument.xml"/>
-               <akn:FRBRdate date="2025-04-09" name="entscheidungsdatum"/>
-               <akn:FRBRauthor href="Testautor10"/>
+               <akn:FRBRdate date="2025-04-09" name="XML Transformation"/>
+               <akn:FRBRauthor href="#documentationoffice-dokumentationsstelle"/>
             </akn:FRBRManifestation>
          </akn:identification>
-         <akn:classification source="Testquelle10">
-            <akn:keyword dictionary="TestDict10" showAs="Beispiel" value="Dienstverhalten"/>
-            <akn:keyword dictionary="TestDict10" showAs="Beispiel" value="Urlaubsregelung"/>
-            <akn:keyword dictionary="TestDict10" showAs="Beispiel" value="Beamtenpflichten"/>
-            <akn:keyword dictionary="TestDict10" showAs="Beispiel" value="Disziplinarwert"/>
+         <akn:classification source="#ris">
+            <akn:keyword ris:domainTerm="Schlagwort" dictionary="" showAs="Dienstverhalten" value="Dienstverhalten"/>
+            <akn:keyword ris:domainTerm="Schlagwort" dictionary="" showAs="Urlaubsregelung" value="Urlaubsregelung"/>
+            <akn:keyword ris:domainTerm="Schlagwort" dictionary="" showAs="Beamtenpflichten" value="Beamtenpflichten"/>
+            <akn:keyword ris:domainTerm="Schlagwort" dictionary="" showAs="Disziplinarwert" value="Disziplinarwert"/>
          </akn:classification>
-         <akn:proprietary source="Testquelle10">
+         <akn:analysis source="#ris">
+             <akn:otherAnalysis source="#ris">
+                 <ris:dokumentarischeKurztexte domainTerm="Dokumentarische Kurztexte">
+                     <ris:titelzeile domainTerm="Titelzeile" eId="titelzeile">
+                         <akn:p>Urteil 10.</akn:p>
+                     </ris:titelzeile>
+                     <ris:orientierungssatz domainTerm="Orientierungssatz">
+                         <akn:p>1. Fiktiver Einleitungssatz für den Fall der Dienstvergehen.</akn:p>
+                         <akn:p>2. Weitere Testinformationen zur Urlaubs- und Dienstregelung werden aufgeführt.</akn:p>
+                     </ris:orientierungssatz>
+                 </ris:dokumentarischeKurztexte>
+             </akn:otherAnalysis>
+         </akn:analysis>
+          <akn:references source="#ris">
+              <akn:TLCOrganization eId="ris" href="" showAs="Rechtsinformationssystem des Bundes"/>
+              <akn:TLCOrganization eId="OVGNW-dokumentationsstelle" href="" showAs="OVGNW"/>
+              <akn:TLCOrganization eId="gericht" href="" showAs="BDiG"/>
+              <akn:TLCOrganization eId="spruchkoerper" href="" showAs="16. Kammer"/>
+          </akn:references>
+         <akn:proprietary source="ris">
             <ris:meta>
-               <ris:fileNumbers>
-                  <ris:fileNumber>XVI VL 34/99</ris:fileNumber>
-               </ris:fileNumbers>
-               <ris:documentType>Urteil</ris:documentType>
-               <ris:courtLocation>Frankfurt</ris:courtLocation>
-               <ris:courtType>BDiG</ris:courtType>
-               <ris:legalEffect>JA</ris:legalEffect>
-               <ris:fieldOfLaws>
-                  <ris:fieldOfLaw>Testbeamtenpflicht</ris:fieldOfLaw>
-                  <ris:fieldOfLaw>Testverwaltungsrecht</ris:fieldOfLaw>
-                  <ris:fieldOfLaw>Testdisziplinarrecht</ris:fieldOfLaw>
-                  <ris:fieldOfLaw>Testbeendigung</ris:fieldOfLaw>
-               </ris:fieldOfLaws>
-               <ris:judicialBody>16. Kammer</ris:judicialBody>
-               <ris:publicationStatus>PUBLISHED</ris:publicationStatus>
-               <ris:error>false</ris:error>
-               <ris:documentationOffice>OVGNW</ris:documentationOffice>
-               <ris:procedures>
-                  <ris:procedure>RE.BDIG5-00</ris:procedure>
-               </ris:procedures>
+                <ris:aktenzeichenListe domainTerm="Liste der Aktenzeichen">
+                    <ris:aktenzeichen domainTerm="Aktenzeichen" akn:refersTo="#aktenzeichen">XVI VL 34/99</ris:aktenzeichen>
+                </ris:aktenzeichenListe>
+                <ris:dokumenttyp domainTerm="Dokumenttyp">Urteil</ris:dokumenttyp>
+                <ris:gericht domainTerm="Gericht" refersTo="#gericht">
+                    <ris:gerichtstyp domainTerm="Gerichtstyp">BDiG</ris:gerichtstyp>
+                    <ris:gerichtsort domainTerm="Gerichtsort">Frankfurt</ris:gerichtsort>
+                    <ris:spruchkoerper domainTerm="Spruchkörper" refersTo="#spruchkoerper">16. Kammer</ris:spruchkoerper>
+                </ris:gericht>
+                <ris:rechtskraft domainTerm="Rechtskraft">Ja</ris:rechtskraft>
+                <ris:sachgebiete domainTerm="Sachgebiete">
+                    <ris:sachgebiet domainTerm="Sachgebiet" notation="neu" sachgebiet-id="123">Testbeamtenpflicht</ris:sachgebiet>
+                    <ris:sachgebiet domainTerm="Sachgebiet" notation="neu" sachgebiet-id="456">Testverwaltungsrecht</ris:sachgebiet>
+                    <ris:sachgebiet domainTerm="Sachgebiet" notation="neu" sachgebiet-id="789">Testdisziplinarrecht</ris:sachgebiet>
+                    <ris:sachgebiet domainTerm="Sachgebiet" notation="neu" sachgebiet-id="1011">Testbeendigung</ris:sachgebiet>
+                </ris:sachgebiete>
+                <ris:dokumentationsstelle domainTerm="Dokumentationsstelle" refersTo="#OVGNW-dokumentationsstelle">OVGNW</ris:dokumentationsstelle>
             </ris:meta>
          </akn:proprietary>
       </akn:meta>
       <akn:header>
          <akn:p>Testheader für Urteil 10.</akn:p>
+          <akn:p>Aktenzeichen: <akn:docNumber refersTo="#aktenzeichen">XVI VL 34/99</akn:docNumber>
+          </akn:p>
+          <akn:p>Entscheidungsdatum: <akn:docDate date="2025-04-09" refersTo="#entscheidungsdatum">09.04.2025</akn:docDate>
+          </akn:p>
+          <akn:p>Gericht: <akn:courtType refersTo="#gericht">BFH</akn:courtType>
+          </akn:p>
+          <akn:p>Dokumenttyp: <akn:docType>Urteil</akn:docType>
+          </akn:p>
+          <akn:p>Kurztitel: <akn:shortTitle>
+              <akn:embeddedStructure>
+                  <akn:p>Testheader für Urteil 10.</akn:p>
+              </akn:embeddedStructure>
+          </akn:shortTitle>
+          </akn:p>
       </akn:header>
       <akn:judgmentBody>
-         <akn:introduction>
-            <akn:block name="Orientierungssatz">
-               <akn:embeddedStructure>
-                  <akn:p>1. Fiktiver Einleitungssatz für den Fall der Dienstvergehen.</akn:p>
-                  <akn:p>2. Weitere Testinformationen zur Urlaubs- und Dienstregelung werden aufgeführt.</akn:p>
-               </akn:embeddedStructure>
-            </akn:block>
-            <akn:block name="Tenor">
-               <akn:embeddedStructure>
-                  <akn:p>Der Beklagte wird zur Zahlung von Schadensersatz verurteilt.</akn:p>
-                  <akn:p>Die Verfahrenskosten werden zu 100% dem Beklagten auferlegt.</akn:p>
-               </akn:embeddedStructure>
-            </akn:block>
-         </akn:introduction>
-         <akn:background>
-            <akn:hcontainer name="randnummer">
+          <akn:decision ris:domainTerm="Tenor">
+              <akn:p>Der Beklagte wird zur Zahlung von Schadensersatz verurteilt.</akn:p>
+              <akn:p>Die Verfahrenskosten werden zu 100% dem Beklagten auferlegt.</akn:p>
+          </akn:decision>
+          <akn:background ris:domainTerm="Tatbestand">
+              <akn:hcontainer ris:domainTerm="Randnummer" eId="randnummer-1" name="Randnummer">
                <akn:num>1</akn:num>
                <akn:content>
                   <akn:p>Ein fiktiver Hintergrundtext rund um Beamtenpflichten wird als Testfall dargestellt.</akn:p>

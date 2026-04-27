@@ -27,7 +27,7 @@ class CaselawXsltTransformerServiceTest {
     var expectedHeader =
         """
         <h1 id="title">
-          <p>Title</p>
+          the title
         </h1>
         """;
     assertTrue(deleteWhitespace(actualHtml).contains(deleteWhitespace(expectedHeader)));
@@ -41,7 +41,7 @@ class CaselawXsltTransformerServiceTest {
     var expectedBorderNumber =
         """
             <dl class="border-number">
-              <dt class="number" id="border-number-link-1">1</dt>
+              <dt class="number" id="randnummer-1">1</dt>
               <dd class="content"><p>Example Tatbestand/CaseFacts. More background</p></dd>
             </dl>
             """;
@@ -51,7 +51,7 @@ class CaselawXsltTransformerServiceTest {
     var otherBorderNumber =
         """
             <dl class="border-number">
-               <dt class="number" id="border-number-link-2">2</dt>
+               <dt class="number" id="randnummer-2">2</dt>
                <dd class="content">
                   <p>even more background</p>
                </dd>
@@ -133,5 +133,29 @@ class CaselawXsltTransformerServiceTest {
             <img src="api/v1/bild1.jpg" alt="Abbildung" title="bild1.jpg">
             """;
     assertTrue(deleteWhitespace(actualHtml).contains(deleteWhitespace(expectedImage)));
+  }
+
+  @Test
+  void testReturnsDissentingDecisionCorrectly() throws IOException {
+    var actualXml = caseLawLdmlTemplateUtils.getXmlFromTemplate(null);
+    var actualHtml =
+        service.transformCaseLaw(actualXml.getBytes(StandardCharsets.UTF_8), "api/v1/");
+    var expectedDissentingOpinionSection =
+        """
+                    <section id="abweichendeMeinung">
+                                  <h2>Abweichende Meinung</h2>
+
+                                  <p>dissenting test</p>
+
+                                  <p><strong>Mitwirkende Richter:</strong></p>
+
+                                  <p class="opinion-entry"><strong>Dr. Phil. Max Mustermann</strong>: referenced opinions test 1</p>
+
+                                  <p class="opinion-entry"><strong>Richterin Maxima Mustermann</strong>: referenced opinions test 2</p>
+
+                                  </section>
+            """;
+    assertTrue(
+        deleteWhitespace(actualHtml).contains(deleteWhitespace(expectedDissentingOpinionSection)));
   }
 }

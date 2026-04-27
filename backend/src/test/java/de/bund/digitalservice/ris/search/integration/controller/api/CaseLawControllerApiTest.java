@@ -64,16 +64,14 @@ class CaseLawControllerApiTest extends ContainersIntegrationBase {
     context.put("location", "Berlin");
     context.put("documentType", "Urteil");
     context.put("decisionDate", decisionDate.toString());
-    context.put("motivation", "Das ist der Leitsatz");
+    context.put("leitsatz", "Das ist der Leitsatz");
     context.put("otherLongText", "Sonstiger Langtext");
     context.put("otherHeadnote", "Sonstiger Orientierungssatz");
     context.put("publicationStatus", PublicationStatus.UNPUBLISHED.toString());
-    context.put("documentationOffice", "DS");
-    context.put("error", false);
     context.put(
         "background",
         """
-                <akn:hcontainer name="randnummer">
+                <akn:hcontainer ris:domainTerm="Randnummer" eId="randnummer-1" name="Randnummer">
                     <akn:num>1</akn:num>
                     <akn:content>
                         <akn:p>Example Tatbestand/CaseFacts. More background</akn:p>
