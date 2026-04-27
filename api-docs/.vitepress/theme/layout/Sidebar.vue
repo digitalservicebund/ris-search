@@ -12,7 +12,7 @@ import Logo from "../components/Logo.vue";
       <nav class="mt-96 overflow-y h-full w-full py-8">
         <SidebarMenu :model="menuItems" />
       </nav>
-      <SwaggerButton />
+      <SwaggerButton class="mb-8" />
     </div>
   </div>
 </template>
