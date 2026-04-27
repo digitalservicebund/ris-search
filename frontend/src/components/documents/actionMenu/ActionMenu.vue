@@ -51,7 +51,7 @@ const handleDrawerItemClick = async (item: ActionMenuItem) => {
         iconPos: 'right',
       }"
     >
-      <ul class="-mt-12">
+      <ul class="-mt-8">
         <li v-for="item in actions">
           <button
             v-if="item.disabled"
