@@ -229,7 +229,13 @@ useDynamicSeo({ title, description });
 
   <template v-if="!!norm">
     <div class="container">
-      <Breadcrumbs :items="breadcrumbItems" />
+      <div class="md:hidden">
+        <Breadcrumbs :items="breadcrumbItems" collapse />
+      </div>
+      <div class="hidden md:block">
+        <Breadcrumbs :items="breadcrumbItems" />
+      </div>
+
       <div>
         <h1
           class="ris-heading2-bold my-24 mb-24 inline-block"
