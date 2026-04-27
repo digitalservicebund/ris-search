@@ -1,28 +1,21 @@
 <script setup lang="ts">
-import { Breadcrumb } from "primevue";
 import { NuxtLink } from "#components";
 import type { RouteLocationRaw } from "#vue-router";
+import { Breadcrumb } from "primevue";
 import ChevronRightIcon from "~icons/ic/outline-chevron-right";
 
-export interface BreadcrumbItem {
+export type BreadcrumbItem = {
   label: string;
   route?: RouteLocationRaw;
-  type?: string;
-}
+};
 
-interface Props {
+const props = defineProps<{
   items?: BreadcrumbItem[];
-}
-
-const props = defineProps<Props>();
+}>();
 
 const items = computed(() => {
   const breadcrumbItems: BreadcrumbItem[] = [
-    {
-      label: "Startseite",
-      type: "home",
-      route: "/",
-    },
+    { label: "Startseite", route: "/" },
     ...(props.items ?? []),
   ];
 
@@ -45,8 +38,7 @@ const items = computed(() => {
           class="ris-link2-regular link-hover"
           @click="navigate"
         >
-          <template v-if="item.type === 'home'">Startseite</template>
-          <span v-else class="ris-body2-regular line-clamp-1">
+          <span class="ris-body2-regular line-clamp-1">
             {{ item.label }}
           </span>
         </a>
