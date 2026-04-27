@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { NuxtLink } from "#components";
 import type { RouteLocationRaw } from "#vue-router";
-import { Breadcrumb } from "primevue";
+import { Breadcrumb, Drawer } from "primevue";
+import type { MenuItem } from "primevue/menuitem";
+import IcBaselineMoreHoriz from "~icons/ic/baseline-more-horiz";
 import ChevronRightIcon from "~icons/ic/outline-chevron-right";
 
 export type BreadcrumbItem = {
@@ -9,46 +11,114 @@ export type BreadcrumbItem = {
   route?: RouteLocationRaw;
 };
 
-const props = defineProps<{
+const {
+  collapse = false,
+  items = [],
+  label = "Pfadnavigation",
+} = defineProps<{
+  /**
+   * When set, the breadcrumbs will show a maximum of 4 items, after which
+   * all items between the first and the last item will be tucked away in a
+   * drawer that can be opened with a button.
+   */
+  collapse?: boolean;
   items?: BreadcrumbItem[];
+  label?: string;
 }>();
 
-const items = computed(() => {
-  const breadcrumbItems: BreadcrumbItem[] = [
-    { label: "Startseite", route: "/" },
-    ...(props.items ?? []),
-  ];
+const itemsWithHome = computed(() => [
+  { label: "Startseite", route: { name: "index" } },
+  ...items,
+]);
 
-  return breadcrumbItems;
+const effectiveItems = computed(() => {
+  const collapseAfter = 3;
+
+  const all = [...itemsWithHome.value];
+  const shouldCollapse = collapse && all.length > collapseAfter;
+  let result: MenuItem[] = all;
+
+  if (shouldCollapse) {
+    const drawerMenuItem: MenuItem = {
+      label: "Navigiere zu...",
+      command: () => (drawerVisible.value = true),
+    };
+    result = [all[0]!, drawerMenuItem, all.at(-1)!];
+  }
+
+  return result;
 });
+
+const {
+  visible: drawerVisible,
+  triggerRef: drawerTriggerRef,
+  drawerCloseButton,
+} = useDrawer();
+
+const drawerId = useId();
 </script>
 
 <template>
-  <Breadcrumb :model="items" aria-label="Pfadnavigation">
-    <template #item="{ item, props: breadcrumbProps }">
-      <NuxtLink
-        v-if="item.route && item != items[items.length - 1]"
-        v-slot="{ href, navigate }"
-        :to="item.route"
-        custom
+  <Breadcrumb :model="effectiveItems" :aria-label="label" v-bind="$attrs">
+    <template #item="slot">
+      <button
+        v-if="slot.item.command"
+        ref="drawerTriggerRef"
+        class="ris-body2-regular flex h-32 w-32 items-center justify-center rounded-[2px] border border-blue-500 bg-blue-200 text-blue-800 outline-offset-4 outline-blue-800 focus-visible:outline-4 active:bg-blue-400"
+        :aria-controls="drawerId"
+        :aria-expanded="drawerVisible"
+        @click="
+          (e) => slot.item.command?.({ item: slot.item, originalEvent: e })
+        "
       >
-        <a
-          :href="href"
-          v-bind="breadcrumbProps.action"
-          class="ris-link2-regular link-hover"
-          @click="navigate"
-        >
-          <span class="ris-body2-regular line-clamp-1">
-            {{ item.label }}
-          </span>
-        </a>
+        <IcBaselineMoreHoriz />
+        <span class="sr-only">{{ slot.item.label }}</span>
+      </button>
+
+      <NuxtLink
+        v-else-if="slot.item.route && slot.item !== effectiveItems.at(-1)"
+        class="ris-link2-regular link-hover"
+        :to="slot.item.route"
+      >
+        {{ slot.item.label }}
       </NuxtLink>
-      <span v-else class="ris-body2-regular line-clamp-1 text-gray-900">{{
-        item.label
-      }}</span>
+
+      <span v-else class="ris-body2-regular text-gray-900">
+        {{ slot.item.label }}
+      </span>
     </template>
+
     <template #separator>
       <ChevronRightIcon />
     </template>
   </Breadcrumb>
+
+  <Drawer
+    v-model:visible="drawerVisible"
+    block-scroll
+    header="Navigiere zu..."
+    position="bottom"
+    :id="drawerId"
+    :close-button-props="drawerCloseButton"
+  >
+    <ul class="-mt-8">
+      <li v-for="i in itemsWithHome" :key="i.label">
+        <NuxtLink
+          v-if="i.route && i !== itemsWithHome.at(-1)"
+          :to="i.route"
+          @click="drawerVisible = false"
+          class="body-font-link link-hover flex py-12"
+        >
+          {{ i.label }}
+        </NuxtLink>
+
+        <span
+          v-else
+          class="body-font flex cursor-not-allowed py-12 text-gray-900"
+        >
+          {{ i.label }}
+        </span>
+      </li>
+    </ul>
+  </Drawer>
 </template>
