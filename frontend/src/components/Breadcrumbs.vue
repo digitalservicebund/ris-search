@@ -77,13 +77,13 @@ const drawerId = useId();
 
       <NuxtLink
         v-else-if="slot.item.route && slot.item !== effectiveItems.at(-1)"
-        class="ris-link2-regular link-hover"
+        class="ris-link2-regular link-hover line-clamp-1"
         :to="slot.item.route"
       >
         {{ slot.item.label }}
       </NuxtLink>
 
-      <span v-else class="ris-body2-regular text-gray-900">
+      <span v-else class="ris-body2-regular line-clamp-1 text-gray-900">
         {{ slot.item.label }}
       </span>
     </template>
@@ -107,14 +107,14 @@ const drawerId = useId();
           v-if="i.route && i !== itemsWithHome.at(-1)"
           :to="i.route"
           @click="drawerVisible = false"
-          class="body-font-link link-hover flex py-12"
+          class="body-font-link link-hover line-clamp-1 flex py-12"
         >
           {{ i.label }}
         </NuxtLink>
 
         <span
           v-else
-          class="body-font flex cursor-not-allowed py-12 text-gray-900"
+          class="body-font line-clamp-1 flex cursor-not-allowed py-12 text-gray-900"
         >
           {{ i.label }}
         </span>
