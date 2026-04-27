@@ -13,7 +13,11 @@ export type ActionMenuItem = Omit<MenuItem, "icon"> & {
 
 const { actions } = defineProps<{ actions: ActionMenuItem[] }>();
 
-const { visible: drawerVisible, triggerRef: drawerTriggerRef } = useDrawer();
+const {
+  visible: drawerVisible,
+  triggerRef: drawerTriggerRef,
+  drawerCloseButton,
+} = useDrawer();
 
 const drawerId = useId();
 
@@ -45,11 +49,7 @@ const handleDrawerItemClick = async (item: ActionMenuItem) => {
       block-scroll
       header="Aktionen"
       position="bottom"
-      :close-button-props="{
-        size: 'small',
-        label: 'Schließen',
-        iconPos: 'right',
-      }"
+      :close-button-props="drawerCloseButton"
     >
       <ul class="-mt-8">
         <li v-for="item in actions">

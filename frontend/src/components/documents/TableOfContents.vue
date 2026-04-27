@@ -13,7 +13,11 @@ interface Props {
 
 const props = defineProps<Props>();
 
-const { visible: mobileTocVisible, triggerRef: openButtonRef } = useDrawer();
+const {
+  visible: mobileTocVisible,
+  triggerRef: openButtonRef,
+  drawerCloseButton,
+} = useDrawer();
 
 const drawerId = useId();
 </script>
@@ -48,11 +52,7 @@ const drawerId = useId();
     block-scroll
     position="bottom"
     :id="drawerId"
-    :close-button-props="{
-      size: 'small',
-      label: 'Schließen',
-      iconPos: 'right',
-    }"
+    :close-button-props="drawerCloseButton"
   >
     <template #header>
       <div class="line-clamp-1">
