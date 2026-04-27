@@ -28,6 +28,13 @@
   @apply no-underline hover:underline;
 }
 
+/* Added as part of RISDEV-11283 (mobile action menu) for initial responsive
+typography. Should be moved to RIS UI when implementing all of responsive
+typography (RISDEV-10826). */
+@utility body-font {
+  @apply ris-body2-regular sm:ris-body1-regular;
+}
+
 mark {
   @apply bg-yellow-200;
 }
