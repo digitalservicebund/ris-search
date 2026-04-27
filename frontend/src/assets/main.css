@@ -7,6 +7,15 @@
 
 @theme {
   --max-width-prose: 45rem;
+
+  /* Added as part of RISDEV-11283 (mobile action menu) for initial responsive
+  typography. Should be moved to RIS UI when implementing RISDEV-10822 (new
+  breakpoints) */
+  --breakpoint-xs: 384px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
 }
 
 @layer base {
@@ -26,6 +35,13 @@
 
 @utility link-hover {
   @apply no-underline hover:underline;
+}
+
+/* Added as part of RISDEV-11283 (mobile action menu) for initial responsive
+typography. Should be moved to RIS UI when implementing all of responsive
+typography (RISDEV-10826). */
+@utility body-font {
+  @apply ris-body2-regular xs:ris-body1-regular;
 }
 
 mark {
