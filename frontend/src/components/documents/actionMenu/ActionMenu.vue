@@ -51,12 +51,12 @@ const handleDrawerItemClick = async (item: ActionMenuItem) => {
         iconPos: 'right',
       }"
     >
-      <ul class="-mt-8">
+      <ul class="-mt-12">
         <li v-for="item in actions">
           <button
             v-if="item.disabled"
             type="button"
-            class="body-font flex w-full cursor-not-allowed items-center gap-8 py-12 text-gray-800"
+            class="ris-body2-regular flex w-full cursor-not-allowed items-center gap-8 py-12 text-gray-800"
             disabled
           >
             <component :is="item.iconComponent" class="shrink-0" />
@@ -65,7 +65,7 @@ const handleDrawerItemClick = async (item: ActionMenuItem) => {
 
           <NuxtLink
             v-else-if="item.url"
-            class="body-font flex items-center gap-8 py-12 no-underline"
+            class="ris-body2-regular flex items-center gap-8 py-12 no-underline"
             external
             :data-attr="(item as ActionMenuItem).analyticsId"
             :to="item.url"
@@ -78,7 +78,7 @@ const handleDrawerItemClick = async (item: ActionMenuItem) => {
           <button
             v-else
             type="button"
-            class="body-font flex w-full items-center gap-8 py-12"
+            class="ris-body2-regular flex w-full items-center gap-8 py-12"
             :data-attr="(item as ActionMenuItem).analyticsId"
             @click="handleDrawerItemClick(item)"
           >
