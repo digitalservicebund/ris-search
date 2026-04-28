@@ -2,7 +2,7 @@
 import type { RouteLocationRaw } from "#vue-router";
 import { Drawer } from "primevue";
 import type { TreeItem } from "~/components/TreeView.vue";
-import IcOutlineArrowUpward from "~icons/ic/outline-arrow-upward";
+import IcBaselineList from "~icons/ic/baseline-list";
 
 interface Props {
   tableOfContents: TreeItem[];
@@ -42,7 +42,7 @@ const drawerId = useId();
         <span class="ris-subhead-regular">{{ subheading }}</span>
       </div>
 
-      <IcOutlineArrowUpward class="ris-body2-regular text-blue-800" />
+      <IcBaselineList class="ris-body2-regular flex-none text-blue-800" />
     </button>
   </Transition>
 

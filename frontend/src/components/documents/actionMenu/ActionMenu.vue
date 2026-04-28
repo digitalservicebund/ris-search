@@ -56,7 +56,7 @@ const handleDrawerItemClick = async (item: ActionMenuItem) => {
           <button
             v-if="item.disabled"
             type="button"
-            class="body-font flex w-full cursor-not-allowed items-center gap-8 py-12 text-gray-800"
+            class="body-font flex w-full cursor-not-allowed items-center gap-8 py-12 text-left text-gray-800"
             disabled
           >
             <component :is="item.iconComponent" class="shrink-0" />
@@ -78,7 +78,7 @@ const handleDrawerItemClick = async (item: ActionMenuItem) => {
           <button
             v-else
             type="button"
-            class="body-font flex w-full items-center gap-8 py-12"
+            class="body-font flex w-full items-center gap-8 py-12 text-left"
             :data-attr="(item as ActionMenuItem).analyticsId"
             @click="handleDrawerItemClick(item)"
           >
