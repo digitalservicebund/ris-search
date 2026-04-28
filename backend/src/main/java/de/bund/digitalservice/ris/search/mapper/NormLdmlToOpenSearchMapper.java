@@ -151,8 +151,11 @@ public class NormLdmlToOpenSearchMapper {
 
       final String officialAbbreviation = getOfficialAbbreviationByXmlDocument(xmlDocument);
 
+      String indexedAt = Instant.now().toString();
+
       List<Article> articles =
-          getArticlesByXmlDocument(xmlDocument, attachments, officialAbbreviation, expressionEli);
+          getArticlesByXmlDocument(
+              xmlDocument, attachments, officialAbbreviation, expressionEli, indexedAt);
       List<String> articleNames = articles.stream().map(Article::getName).toList();
       List<String> articleTexts = articles.stream().map(Article::getText).toList();
       String fullCitation = xmlDocument.getElementByXpath(X_PATH_FULL_CITATION);
@@ -194,7 +197,7 @@ public class NormLdmlToOpenSearchMapper {
               .articleNames(articleNames)
               .articleTexts(articleTexts)
               .officialFootNotes(getOfficialFootNotes(xmlDocument, attachments))
-              .indexedAt(Instant.now().toString())
+              .indexedAt(indexedAt)
               .build());
     } catch (Exception e) {
       logger.warn("Error to create Norms from XML content.", e);
@@ -388,7 +391,8 @@ public class NormLdmlToOpenSearchMapper {
       XmlDocument xmlDocument,
       List<Attachment> attachments,
       String officialAbbreviation,
-      String expressionEli) {
+      String expressionEli,
+      String indexedAt) {
 
     NodeList nodes = null;
     try {
@@ -406,7 +410,7 @@ public class NormLdmlToOpenSearchMapper {
         LdmlTemporalData.getTemporalDataWithDatesMapping(xmlDocument);
     xmlDocument
         .getFirstMatchedNodeByXpath(X_PATH_PREAMBLE_FORMULA)
-        .map(node -> getNodeAsArticle(node, EINGANGSFORMEL))
+        .map(node -> getNodeAsArticle(node, EINGANGSFORMEL, indexedAt))
         .ifPresent(articles::add);
 
     for (int i = 0; i < nodes.getLength(); i++) {
@@ -416,7 +420,7 @@ public class NormLdmlToOpenSearchMapper {
     }
     xmlDocument
         .getFirstMatchedNodeByXpath(X_PATH_CONCLUSIONS_FORMULA)
-        .map(node -> getNodeAsArticle(node, SCHLUSSFORMEL))
+        .map(node -> getNodeAsArticle(node, SCHLUSSFORMEL, indexedAt))
         .ifPresent(articles::add);
 
     var attachmentsAsArticles =
@@ -430,6 +434,7 @@ public class NormLdmlToOpenSearchMapper {
                   return Article.builder()
                       .name(name)
                       .eId(a.eId())
+                      .indexedAt(indexedAt)
                       .text(a.textContent())
                       .manifestationEli(a.manifestationEli())
                       .build();
@@ -512,7 +517,7 @@ public class NormLdmlToOpenSearchMapper {
     }
   }
 
-  private static Article getNodeAsArticle(Node node, String name) {
+  private static Article getNodeAsArticle(Node node, String name, String indexedAt) {
     return Article.builder()
         .eId(
             Optional.ofNullable(node.getAttributes().getNamedItem("eId"))
@@ -520,6 +525,7 @@ public class NormLdmlToOpenSearchMapper {
                 .orElse(null))
         .text(cleanText(node.getTextContent()))
         .name(cleanText(name))
+        .indexedAt(indexedAt)
         .build();
   }
 
