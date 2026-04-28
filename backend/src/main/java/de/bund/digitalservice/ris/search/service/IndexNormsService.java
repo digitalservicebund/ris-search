@@ -3,8 +3,11 @@ package de.bund.digitalservice.ris.search.service;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.mapper.NormLdmlToOpenSearchMapper;
+import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
+import de.bund.digitalservice.ris.search.models.opensearch.StandaloneArticle;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
+import de.bund.digitalservice.ris.search.repository.opensearch.ArticlesRepository;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
 import de.bund.digitalservice.ris.search.utils.DateUtils;
 import de.bund.digitalservice.ris.search.utils.eli.EliFile;
@@ -41,6 +44,7 @@ public class IndexNormsService implements IndexService {
 
   private final Environment environment;
   private final NormsRepository normsRepository;
+  private final ArticlesRepository articlesRepository;
   private final NormsBucket normsBucket;
 
   // We can't use LocalDate.MIN or LocalDate.MAX because opensearch min and max differ from java
@@ -55,10 +59,14 @@ public class IndexNormsService implements IndexService {
    */
   @Autowired
   public IndexNormsService(
-      Environment environment, NormsBucket normsBucket, NormsRepository normsRepository) {
+      Environment environment,
+      NormsBucket normsBucket,
+      NormsRepository normsRepository,
+      ArticlesRepository articlesRepository) {
     this.environment = environment;
     this.normsBucket = normsBucket;
     this.normsRepository = normsRepository;
+    this.articlesRepository = articlesRepository;
   }
 
   /**
@@ -132,10 +140,30 @@ public class IndexNormsService implements IndexService {
       // saving norms in a batch caused an error due to opensearch request being too large
       //noinspection UseBulkOperation
       normsRepository.save(norm);
+      List<StandaloneArticle> articles = new ArrayList<>();
+      for (Article article : norm.getArticles()) {
+        String id = norm.getExpressionEli() + "/" + article.eId();
+        articles.add(
+            new StandaloneArticle(
+                id,
+                article.eId(),
+                norm.getExpressionEli(),
+                norm.getWorkEli(),
+                article.name(),
+                article.text(),
+                article.entryIntoForceDate(),
+                article.expiryDate(),
+                article.guid(),
+                article.manifestationEli(),
+                article.searchKeyword(),
+                Instant.now().toString()));
+      }
+      articlesRepository.saveAll(articles);
     }
 
     // delete the expressions from this work that were indexed before the start time
     normsRepository.deleteByWorkEliAndIndexedAtBefore(workEli.toString(), startingTimestamp);
+    articlesRepository.deleteByWorkEliAndIndexedAtBefore(workEli.toString(), startingTimestamp);
   }
 
   private void addTimeRelevanceWindows(String workEli, List<Norm> norms) {
@@ -262,6 +290,7 @@ public class IndexNormsService implements IndexService {
   private void clearOldNorms(String timestamp) {
     normsRepository.deleteByIndexedAtBefore(timestamp);
     normsRepository.deleteByIndexedAtIsNull();
+    articlesRepository.deleteByIndexedAtIsNull();
   }
 
   @Override
