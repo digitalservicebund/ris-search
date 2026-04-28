@@ -31,5 +31,7 @@ import lombok.experimental.Accessors;
 public class Error {
   public static final String STANDARD_ERROR_NO_SEARCHTERM = "1";
 
+  public static final String PAGE_SMALLER_THAN_ONE = "Page index must be at least 1";
+
   @XmlAttribute String cause;
 }

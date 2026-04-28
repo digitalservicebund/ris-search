@@ -61,8 +61,10 @@ public class NlexWebServiceEndpoint {
   }
 
   /**
-   * Processes the provided {@code Request} by unmarshalling its query, executing the query through
-   * the service layer, and marshalling the result into a {@code RequestResponse}.
+   * Retrieves Documents based on the given request.
+   *
+   * <p>The page size is fixed at 20 results per request. Pagination is 1-based (i.e., the first
+   * page is 1).
    *
    * @param request the input {@code Request} object containing a query to be processed
    * @return a {@code RequestResponse} object containing the result of the executed query
