@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
+import de.bund.digitalservice.ris.search.repository.opensearch.ArticlesRepository;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
 import de.bund.digitalservice.ris.search.service.IndexNormsService;
 import java.time.ZoneOffset;
@@ -31,10 +32,11 @@ class IndexNormsServiceTest {
   @Mock NormsBucket bucket;
   @Mock Environment environment;
   @Mock NormsRepository repo;
+  @Mock ArticlesRepository articlesRepository;
 
   @BeforeEach()
   void setup() {
-    this.service = new IndexNormsService(environment, bucket, repo);
+    this.service = new IndexNormsService(environment, bucket, repo, articlesRepository);
   }
 
   private final String testContent =

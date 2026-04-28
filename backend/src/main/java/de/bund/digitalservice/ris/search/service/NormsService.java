@@ -4,6 +4,7 @@ import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.models.api.parameters.NormsSearchParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
+import de.bund.digitalservice.ris.search.models.opensearch.StandaloneArticle;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
 import de.bund.digitalservice.ris.search.service.helper.ZipManager;
@@ -25,12 +26,20 @@ import org.jspecify.annotations.Nullable;
 import org.opensearch.OpenSearchException;
 import org.opensearch.action.search.SearchRequest;
 import org.opensearch.action.search.SearchResponse;
+import org.opensearch.action.search.SearchType;
 import org.opensearch.client.RequestOptions;
 import org.opensearch.client.RestHighLevelClient;
 import org.opensearch.common.document.DocumentField;
 import org.opensearch.data.client.orhlc.NativeSearchQuery;
+import org.opensearch.data.client.orhlc.NativeSearchQueryBuilder;
+import org.opensearch.index.query.BoolQueryBuilder;
+import org.opensearch.index.query.InnerHitBuilder;
+import org.opensearch.index.query.MultiMatchQueryBuilder;
+import org.opensearch.index.query.Operator;
 import org.opensearch.index.query.QueryBuilders;
+import org.opensearch.index.search.MatchQuery;
 import org.opensearch.search.builder.SearchSourceBuilder;
+import org.opensearch.search.collapse.CollapseBuilder;
 import org.opensearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -38,6 +47,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
+import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.SearchPage;
 import org.springframework.stereotype.Service;
@@ -100,8 +110,47 @@ public class NormsService {
         simpleSearchQueryBuilder.buildQuery(
             List.of(new NormSimpleSearchType(normsSearchParams)), params, pageable);
     SearchHits<Norm> searchHits = operations.search(query, Norm.class);
+    List<String> expressionElis =
+        searchHits.getSearchHits().stream().map(SearchHit::getId).toList();
+
+    BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
+    boolQuery.filter(QueryBuilders.termsQuery("expression_eli", expressionElis));
+    boolQuery.must(buildOneClause(params.getSearchTerm(), false));
+
+    InnerHitBuilder innerHitBuilder =
+        new InnerHitBuilder()
+            .setName("top_three_articles")
+            .setSize(3); // This retrieves the top 3 per group
+
+    CollapseBuilder collapseBuilder =
+        new CollapseBuilder("expression_eli").setInnerHits(innerHitBuilder);
+
+    NativeSearchQuery articleQuery =
+        new NativeSearchQueryBuilder()
+            .withSearchType(SearchType.DFS_QUERY_THEN_FETCH)
+            .withQuery(boolQuery)
+            .withCollapseBuilder(collapseBuilder)
+            .build();
+    SearchHits<StandaloneArticle> articleHits =
+        operations.search(articleQuery, StandaloneArticle.class);
 
     return PageUtils.unwrapSearchHits(searchHits, pageable);
+  }
+
+  private MultiMatchQueryBuilder buildOneClause(String searchedText, boolean phraseMatch) {
+    // Use a Multi-Match query to search across multiple fields.
+    // ZeroTermsQuery.ALL ensures that if the analyzer removes all terms (e.g., stop words),
+    // the query still matches all documents instead of returning an empty result set.
+    MultiMatchQueryBuilder result =
+        new MultiMatchQueryBuilder(searchedText)
+            .zeroTermsQuery(MatchQuery.ZeroTermsQuery.ALL)
+            .operator(Operator.OR);
+    if (phraseMatch) {
+      result.type(MultiMatchQueryBuilder.Type.PHRASE);
+    } else {
+      result.type(MultiMatchQueryBuilder.Type.BEST_FIELDS);
+    }
+    return result;
   }
 
   /**
