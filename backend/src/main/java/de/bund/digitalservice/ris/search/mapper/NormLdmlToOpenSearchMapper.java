@@ -406,30 +406,17 @@ public class NormLdmlToOpenSearchMapper {
         LdmlTemporalData.getTemporalDataWithDatesMapping(xmlDocument);
     xmlDocument
         .getFirstMatchedNodeByXpath(X_PATH_PREAMBLE_FORMULA)
-        .flatMap(
-            node ->
-                getNodeAsArticle(
-                    node,
-                    temporalGroupsWithDates,
-                    officialAbbreviation,
-                    EINGANGSFORMEL,
-                    expressionEli))
+        .map(node -> getNodeAsArticle(node, EINGANGSFORMEL))
         .ifPresent(articles::add);
+
     for (int i = 0; i < nodes.getLength(); i++) {
-      getNodeAsArticle(
+      getArticleNodeAsArticle(
               nodes.item(i), temporalGroupsWithDates, officialAbbreviation, null, expressionEli)
           .ifPresent(articles::add);
     }
     xmlDocument
         .getFirstMatchedNodeByXpath(X_PATH_CONCLUSIONS_FORMULA)
-        .flatMap(
-            node ->
-                getNodeAsArticle(
-                    node,
-                    temporalGroupsWithDates,
-                    officialAbbreviation,
-                    SCHLUSSFORMEL,
-                    expressionEli))
+        .map(node -> getNodeAsArticle(node, SCHLUSSFORMEL))
         .ifPresent(articles::add);
 
     var attachmentsAsArticles =
@@ -469,7 +456,7 @@ public class NormLdmlToOpenSearchMapper {
     return "%s %s".formatted(marker, officialAbbreviation);
   }
 
-  private static Optional<Article> getNodeAsArticle(
+  private static Optional<Article> getArticleNodeAsArticle(
       Node articleNode,
       Map<String, TimeInterval> temporalGroupsWithDates,
       String officialAbbreviation,
@@ -523,6 +510,17 @@ public class NormLdmlToOpenSearchMapper {
       logger.warn("Error parsing xml", e);
       return Optional.empty();
     }
+  }
+
+  private static Article getNodeAsArticle(Node node, String name) {
+    return Article.builder()
+        .eId(
+            Optional.ofNullable(node.getAttributes().getNamedItem("eId"))
+                .map(Node::getTextContent)
+                .orElse(null))
+        .text(cleanText(node.getTextContent()))
+        .name(cleanText(name))
+        .build();
   }
 
   private static String buildArticleHeader(String articleMarker, String articleHeading) {
