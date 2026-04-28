@@ -3,9 +3,10 @@ package de.bund.digitalservice.ris.search.service;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.models.api.parameters.NormsSearchParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
+import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
-import de.bund.digitalservice.ris.search.models.opensearch.StandaloneArticle;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
+import de.bund.digitalservice.ris.search.repository.opensearch.ArticlesRepository;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
 import de.bund.digitalservice.ris.search.service.helper.ZipManager;
 import de.bund.digitalservice.ris.search.utils.DateUtils;
@@ -26,20 +27,12 @@ import org.jspecify.annotations.Nullable;
 import org.opensearch.OpenSearchException;
 import org.opensearch.action.search.SearchRequest;
 import org.opensearch.action.search.SearchResponse;
-import org.opensearch.action.search.SearchType;
 import org.opensearch.client.RequestOptions;
 import org.opensearch.client.RestHighLevelClient;
 import org.opensearch.common.document.DocumentField;
 import org.opensearch.data.client.orhlc.NativeSearchQuery;
-import org.opensearch.data.client.orhlc.NativeSearchQueryBuilder;
-import org.opensearch.index.query.BoolQueryBuilder;
-import org.opensearch.index.query.InnerHitBuilder;
-import org.opensearch.index.query.MultiMatchQueryBuilder;
-import org.opensearch.index.query.Operator;
 import org.opensearch.index.query.QueryBuilders;
-import org.opensearch.index.search.MatchQuery;
 import org.opensearch.search.builder.SearchSourceBuilder;
-import org.opensearch.search.collapse.CollapseBuilder;
 import org.opensearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -60,8 +53,10 @@ import org.springframework.stereotype.Service;
 public class NormsService {
 
   private final NormsRepository normsRepository;
+  private final ArticlesRepository articlesRepository;
   private final ElasticsearchOperations operations;
   private final SimpleSearchQueryBuilder simpleSearchQueryBuilder;
+  private final ArticleSearchQueryBuilder articleSearchQueryBuilder;
   private final RestHighLevelClient openSearchRestClient;
   private final NormsBucket normsBucket;
   private final String normsIndexName;
@@ -78,17 +73,21 @@ public class NormsService {
   @Autowired
   public NormsService(
       NormsRepository normsRepository,
+      ArticlesRepository articlesRepository,
       NormsBucket normsBucket,
       ElasticsearchOperations operations,
       RestHighLevelClient openSearchRestClient,
       SimpleSearchQueryBuilder simpleSearchQueryBuilder,
+      ArticleSearchQueryBuilder articleSearchQueryBuilder,
       @Value("${opensearch.norms-index-name}") String normsIndexName) {
     this.normsRepository = normsRepository;
+    this.articlesRepository = articlesRepository;
     this.normsBucket = normsBucket;
     this.operations = operations;
     this.openSearchRestClient = openSearchRestClient;
     this.simpleSearchQueryBuilder = simpleSearchQueryBuilder;
     this.normsIndexName = normsIndexName;
+    this.articleSearchQueryBuilder = articleSearchQueryBuilder;
   }
 
   /**
@@ -113,44 +112,10 @@ public class NormsService {
     List<String> expressionElis =
         searchHits.getSearchHits().stream().map(SearchHit::getId).toList();
 
-    BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
-    boolQuery.filter(QueryBuilders.termsQuery("expression_eli", expressionElis));
-    boolQuery.must(buildOneClause(params.getSearchTerm(), false));
-
-    InnerHitBuilder innerHitBuilder =
-        new InnerHitBuilder()
-            .setName("top_three_articles")
-            .setSize(3); // This retrieves the top 3 per group
-
-    CollapseBuilder collapseBuilder =
-        new CollapseBuilder("expression_eli").setInnerHits(innerHitBuilder);
-
-    NativeSearchQuery articleQuery =
-        new NativeSearchQueryBuilder()
-            .withSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-            .withQuery(boolQuery)
-            .withCollapseBuilder(collapseBuilder)
-            .build();
-    SearchHits<StandaloneArticle> articleHits =
-        operations.search(articleQuery, StandaloneArticle.class);
+    SearchHits<Article> articleTexts =
+        articleSearchQueryBuilder.getArticleTextMatches(expressionElis, params.getSearchTerm());
 
     return PageUtils.unwrapSearchHits(searchHits, pageable);
-  }
-
-  private MultiMatchQueryBuilder buildOneClause(String searchedText, boolean phraseMatch) {
-    // Use a Multi-Match query to search across multiple fields.
-    // ZeroTermsQuery.ALL ensures that if the analyzer removes all terms (e.g., stop words),
-    // the query still matches all documents instead of returning an empty result set.
-    MultiMatchQueryBuilder result =
-        new MultiMatchQueryBuilder(searchedText)
-            .zeroTermsQuery(MatchQuery.ZeroTermsQuery.ALL)
-            .operator(Operator.OR);
-    if (phraseMatch) {
-      result.type(MultiMatchQueryBuilder.Type.PHRASE);
-    } else {
-      result.type(MultiMatchQueryBuilder.Type.BEST_FIELDS);
-    }
-    return result;
   }
 
   /**
@@ -161,6 +126,10 @@ public class NormsService {
    */
   public Optional<Norm> getByExpressionEli(final ExpressionEli expressionEli) {
     Norm result = normsRepository.getByExpressionEli(expressionEli.toString());
+    if (result != null) {
+      List<Article> articles = articlesRepository.findAllByExpressionEli(expressionEli.toString());
+      result.setArticles(articles);
+    }
     return Optional.ofNullable(result);
   }
 

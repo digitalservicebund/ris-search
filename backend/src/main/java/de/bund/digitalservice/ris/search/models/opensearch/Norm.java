@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.elasticsearch.annotations.DateFormat;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
@@ -89,8 +90,7 @@ public final class Norm implements AbstractSearchEntity {
   @Field(name = Fields.TIME_RELEVANCE_END_DATE, type = FieldType.Date, format = DateFormat.date)
   private LocalDate timeRelevanceEndDate;
 
-  @Field(name = Fields.ARTICLES, type = FieldType.Nested)
-  private List<Article> articles;
+  @Transient private List<Article> articles;
 
   @Field(name = Fields.ARTICLE_NAMES)
   private List<String> articleNames;

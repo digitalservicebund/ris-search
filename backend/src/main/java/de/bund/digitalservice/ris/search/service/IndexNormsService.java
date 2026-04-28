@@ -3,9 +3,7 @@ package de.bund.digitalservice.ris.search.service;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.mapper.NormLdmlToOpenSearchMapper;
-import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
-import de.bund.digitalservice.ris.search.models.opensearch.StandaloneArticle;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.ArticlesRepository;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
@@ -140,25 +138,7 @@ public class IndexNormsService implements IndexService {
       // saving norms in a batch caused an error due to opensearch request being too large
       //noinspection UseBulkOperation
       normsRepository.save(norm);
-      List<StandaloneArticle> articles = new ArrayList<>();
-      for (Article article : norm.getArticles()) {
-        String id = norm.getExpressionEli() + "/" + article.eId();
-        articles.add(
-            new StandaloneArticle(
-                id,
-                article.eId(),
-                norm.getExpressionEli(),
-                norm.getWorkEli(),
-                article.name(),
-                article.text(),
-                article.entryIntoForceDate(),
-                article.expiryDate(),
-                article.guid(),
-                article.manifestationEli(),
-                article.searchKeyword(),
-                Instant.now().toString()));
-      }
-      articlesRepository.saveAll(articles);
+      articlesRepository.saveAll(norm.getArticles());
     }
 
     // delete the expressions from this work that were indexed before the start time

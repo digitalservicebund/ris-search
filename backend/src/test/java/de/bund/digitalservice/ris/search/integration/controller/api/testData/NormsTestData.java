@@ -151,6 +151,9 @@ public class NormsTestData {
    */
   public static List<Norm> setupCommonNormEntities() {
 
+    String workEli = "eli/bund/bgbl-1/1000/test";
+    String expressionEli = workEli + "/2000-10-06/2/deu";
+    String manifestationEli = expressionEli + "/2010-04-27/offenestruktur-1.xml";
     var normTestOne =
         Norm.builder()
             .id("n1")
@@ -158,8 +161,8 @@ public class NormsTestData {
             .officialTitle("Test Gesetz")
             .officialShortTitle("TestG")
             .officialShortTitle("TestG1")
-            .workEli("eli/bund/bgbl-1/1000/test")
-            .expressionEli("eli/bund/bgbl-1/1000/test/2000-10-06/2/deu")
+            .workEli(workEli)
+            .expressionEli(expressionEli)
             .normsDate(DATE_2_2)
             .datePublished(DATE_2_2.plusDays(1))
             .articleTexts(List.of("example text 1", "example text 2"))
@@ -169,23 +172,31 @@ public class NormsTestData {
             .articles(
                 List.of(
                     new Article(
+                        expressionEli + "/" + "art-z1",
+                        "art-z1",
+                        expressionEli,
+                        workEli,
                         "§ 1 Example article",
                         "example text 1",
                         LocalDate.of(2023, 12, 31),
                         LocalDate.of(3000, 1, 2),
-                        "art-z1",
                         "guid1",
-                        null,
-                        "§ 1 TeG"),
+                        manifestationEli,
+                        "§ 1 TeG",
+                        null),
                     new Article(
+                        expressionEli + "/" + "art-z2",
+                        "art-z2",
+                        expressionEli,
+                        workEli,
                         "§ 2 Example article",
                         "example text 2",
                         null,
                         LocalDate.of(2024, 1, 2),
-                        "art-z2",
                         "guid2",
-                        null,
-                        "§ 2 TeG")))
+                        manifestationEli,
+                        "§ 2 TeG",
+                        null)))
             .tableOfContents(nestedToC)
             .build();
 

@@ -1,7 +1,8 @@
 package de.bund.digitalservice.ris.search.repository.opensearch;
 
+import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
-import de.bund.digitalservice.ris.search.models.opensearch.StandaloneArticle;
+import java.util.List;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 
 /**
@@ -9,14 +10,8 @@ import org.springframework.data.elasticsearch.repository.ElasticsearchRepository
  * interface extends {@link ElasticsearchRepository} and focuses on operations related to {@link
  * Norm}.
  */
-public interface ArticlesRepository extends ElasticsearchRepository<StandaloneArticle, String> {
-
-  /**
-   * Delete all articles that were indexed before the provided timestamp.
-   *
-   * @param indexedAt ISO-8601 timestamp string cutoff
-   */
-  void deleteByIndexedAtBefore(String indexedAt);
+public interface ArticlesRepository extends ElasticsearchRepository<Article, String> {
+  List<Article> findAllByExpressionEli(String expressionEli);
 
   /**
    * Delete articles for the given workEli that were indexed before the provided timestamp.
