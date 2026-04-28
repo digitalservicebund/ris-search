@@ -407,6 +407,32 @@ test("shows correct breadcrumbs for a nested article", async ({
   await expect(breadcrumb.getByText("§ 9")).toBeVisible();
 });
 
+test("shows correct breadcrumbs for an Eingangsformel", async ({
+  page,
+  privateFeaturesEnabled,
+  isMobileTest,
+}) => {
+  test.skip(!privateFeaturesEnabled || isMobileTest);
+
+  await navigate(
+    page,
+    "norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu/präambel-n1_formel-n1",
+  );
+
+  const breadcrumb = page.getByRole("navigation", { name: "Pfadnavigation" });
+
+  await expect(
+    breadcrumb.getByRole("link", { name: "Startseite" }),
+  ).toBeVisible();
+  await expect(
+    breadcrumb.getByRole("link", { name: "Gesetze & Verordnungen" }),
+  ).toBeVisible();
+  await expect(
+    breadcrumb.getByRole("link", { name: "MFG vom 23.12.2024" }),
+  ).toBeVisible();
+  await expect(breadcrumb.getByText("Eingangsformel")).toBeVisible();
+});
+
 test("sets up meta tags for article page", async ({ page }) => {
   await navigate(
     page,

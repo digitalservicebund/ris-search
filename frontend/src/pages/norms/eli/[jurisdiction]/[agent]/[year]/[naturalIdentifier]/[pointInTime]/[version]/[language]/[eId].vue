@@ -148,7 +148,7 @@ const breadcrumbItems: Ref<BreadcrumbItem[]> = computed(() => {
   ];
 
   currentNodePath.forEach((node) => {
-    list.push({ label: node.title ?? "", route: node.to });
+    list.push({ label: node.title || node.subtitle || "", route: node.to });
   });
 
   return list;
