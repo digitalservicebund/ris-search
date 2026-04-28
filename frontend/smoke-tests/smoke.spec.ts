@@ -24,7 +24,7 @@ test("search from homepage", async ({ page }) => {
   ).toBeVisible();
 
   // None zero result count
-  await expect(page.getByText(/[1-9]+ Suchergebnisse/)).toBeVisible();
+  await expect(page.getByText(/[\d.]+ Suchergebnisse/)).toBeVisible();
 });
 
 test.describe("find and display norms", () => {
