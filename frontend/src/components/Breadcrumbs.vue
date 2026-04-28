@@ -1,62 +1,132 @@
 <script setup lang="ts">
-import { Breadcrumb } from "primevue";
 import { NuxtLink } from "#components";
 import type { RouteLocationRaw } from "#vue-router";
+import { Breadcrumb, Drawer } from "primevue";
+import type { MenuItem } from "primevue/menuitem";
+import IcBaselineMoreHoriz from "~icons/ic/baseline-more-horiz";
 import ChevronRightIcon from "~icons/ic/outline-chevron-right";
 
-export interface BreadcrumbItem {
+export type BreadcrumbItem = {
+  /** Default label of the item */
   label: string;
+  /**
+   * Optional label with more information. Will be shown instead of the label in
+   * places where there's more space available (currently: the drawer)
+   */
+  extendedLabel?: string;
+  /** Navigation target of the item */
   route?: RouteLocationRaw;
-  type?: string;
-}
+};
 
-interface Props {
+const {
+  collapse = false,
+  items = [],
+  label = "Pfadnavigation",
+} = defineProps<{
+  /**
+   * When set, the breadcrumbs will show a maximum of 4 items, after which
+   * all items between the first and the last item will be tucked away in a
+   * drawer that can be opened with a button.
+   */
+  collapse?: boolean;
   items?: BreadcrumbItem[];
-}
+  label?: string;
+}>();
 
-const props = defineProps<Props>();
+const itemsWithHome = computed(() => [
+  { label: "Startseite", route: { name: "index" } },
+  ...items,
+]);
 
-const items = computed(() => {
-  const breadcrumbItems: BreadcrumbItem[] = [
-    {
-      label: "Startseite",
-      type: "home",
-      route: "/",
-    },
-    ...(props.items ?? []),
-  ];
+const effectiveItems = computed(() => {
+  const collapseAfter = 3;
 
-  return breadcrumbItems;
+  const all = [...itemsWithHome.value];
+  const shouldCollapse = collapse && all.length > collapseAfter;
+  let result: MenuItem[] = all;
+
+  if (shouldCollapse) {
+    const drawerMenuItem: MenuItem = {
+      label: "Navigiere zu...",
+      command: () => (drawerVisible.value = true),
+    };
+    result = [all[0]!, drawerMenuItem, all.at(-1)!];
+  }
+
+  return result;
 });
+
+const {
+  visible: drawerVisible,
+  triggerRef: drawerTriggerRef,
+  drawerCloseButton,
+} = useDrawer();
+
+const drawerId = useId();
 </script>
 
 <template>
-  <Breadcrumb :model="items" aria-label="Pfadnavigation">
-    <template #item="{ item, props: breadcrumbProps }">
-      <NuxtLink
-        v-if="item.route && item != items[items.length - 1]"
-        v-slot="{ href, navigate }"
-        :to="item.route"
-        custom
+  <Breadcrumb :model="effectiveItems" :aria-label="label" v-bind="$attrs">
+    <template #item="slot">
+      <button
+        v-if="slot.item.command"
+        ref="drawerTriggerRef"
+        class="ris-body2-regular flex h-32 w-32 items-center justify-center rounded-[2px] border border-blue-500 bg-blue-200 text-blue-800 outline-offset-4 outline-blue-800 focus-visible:outline-4 active:bg-blue-400"
+        :aria-controls="drawerId"
+        :aria-expanded="drawerVisible"
+        @click="
+          (e) => slot.item.command?.({ item: slot.item, originalEvent: e })
+        "
       >
-        <a
-          :href="href"
-          v-bind="breadcrumbProps.action"
-          class="ris-link2-regular link-hover"
-          @click="navigate"
-        >
-          <template v-if="item.type === 'home'">Startseite</template>
-          <span v-else class="ris-body2-regular line-clamp-1">
-            {{ item.label }}
-          </span>
-        </a>
+        <IcBaselineMoreHoriz />
+        <span class="sr-only">{{ slot.item.label }}</span>
+      </button>
+
+      <NuxtLink
+        v-else-if="slot.item.route && slot.item !== effectiveItems.at(-1)"
+        class="ris-link2-regular link-hover line-clamp-1"
+        :to="slot.item.route"
+      >
+        {{ slot.item.label }}
       </NuxtLink>
-      <span v-else class="ris-body2-regular line-clamp-1 text-gray-900">{{
-        item.label
-      }}</span>
+
+      <span v-else class="ris-body2-regular line-clamp-1 text-gray-900">
+        {{ slot.item.label }}
+      </span>
     </template>
+
     <template #separator>
-      <ChevronRightIcon />
+      <ChevronRightIcon width="1rem" height="1rem" />
     </template>
   </Breadcrumb>
+
+  <Drawer
+    v-model:visible="drawerVisible"
+    aria-label="Navigiere zu..."
+    block-scroll
+    header="Navigiere zu..."
+    position="bottom"
+    :id="drawerId"
+    :close-button-props="drawerCloseButton"
+  >
+    <ul class="-mt-8">
+      <li v-for="i in itemsWithHome" :key="i.label">
+        <NuxtLink
+          v-if="i.route && i !== itemsWithHome.at(-1)"
+          :to="i.route"
+          @click="drawerVisible = false"
+          class="body-font-link link-hover line-clamp-1 flex py-12"
+        >
+          {{ i.extendedLabel ?? i.label }}
+        </NuxtLink>
+
+        <span
+          v-else
+          class="body-font line-clamp-1 flex cursor-not-allowed py-12 text-gray-900"
+        >
+          {{ i.extendedLabel ?? i.label }}
+        </span>
+      </li>
+    </ul>
+  </Drawer>
 </template>

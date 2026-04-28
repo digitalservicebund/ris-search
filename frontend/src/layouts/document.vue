@@ -33,7 +33,7 @@ const currentView = computed(
     <div class="pt-32 lg:pt-64">
       <!-- Header -->
       <div class="container text-left">
-        <div class="flex items-center gap-8 print:hidden">
+        <div class="flex items-center gap-4 md:gap-16 print:hidden">
           <Breadcrumbs :items="breadcrumbs" class="grow" />
           <slot name="actionMenu" />
         </div>

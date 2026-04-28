@@ -80,7 +80,7 @@ const translationsListId = useId();
 </script>
 
 <template>
-  <div class="flex items-center gap-8 print:hidden">
+  <div class="flex items-center gap-4 md:gap-16 print:hidden">
     <Breadcrumbs :items="breadcrumbItems" />
   </div>
 

@@ -35,6 +35,13 @@ typography (RISDEV-10826). */
   @apply ris-body2-regular sm:ris-body1-regular;
 }
 
+/* Added as part of RISDEV-11282 (mobile breadcrumbs) for initial responsive
+typography. Should be moved to RIS UI when implementing all of responsive
+typography (RISDEV-10826). */
+@utility body-font-link {
+  @apply ris-link2-regular sm:ris-link1-regular;
+}
+
 mark {
   @apply bg-yellow-200;
 }
@@ -42,7 +49,7 @@ mark {
 input[type="search"] {
   &[data-size="large"] {
     &::-webkit-search-cancel-button {
-      @apply -mr-[1.125rem] h-48 w-48;
+      @apply mr-[-1.125rem] h-48 w-48;
     }
   }
 

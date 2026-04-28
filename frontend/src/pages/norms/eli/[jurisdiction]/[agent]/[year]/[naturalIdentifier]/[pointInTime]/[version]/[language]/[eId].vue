@@ -35,6 +35,20 @@ const { data, error, status } = await useFetchNormArticleContent(
 );
 
 const norm = computed(() => data.value?.legislation);
+
+const normTitle = computed(() => getNormBreadcrumbTitle(norm.value));
+
+const normTitleWithValidity = computed(() => {
+  const expressionValidityInterval = privateFeaturesEnabled
+    ? temporalCoverageToValidityInterval(norm.value?.temporalCoverage)
+    : undefined;
+
+  const validFrom = dateFormattedDDMMYYYY(expressionValidityInterval?.from);
+  const validFromDisplay = validFrom ? ` vom ${validFrom}` : "";
+
+  return normTitle.value + validFromDisplay;
+});
+
 const articleHtml = computed(() => data.value?.htmlBody);
 
 if (error.value) {
@@ -119,30 +133,22 @@ const breadcrumbItems: Ref<BreadcrumbItem[]> = computed(() => {
     ? (findNodePath(tableOfContents.value, eId.value) ?? [])
     : [];
 
-  const title = getNormBreadcrumbTitle(norm.value);
-
-  const expressionValidityInterval = privateFeaturesEnabled
-    ? temporalCoverageToValidityInterval(norm?.value?.temporalCoverage)
-    : undefined;
-
-  const validFrom = dateFormattedDDMMYYYY(expressionValidityInterval?.from);
-  const validFromDisplay = validFrom ? ` vom ${validFrom}` : "";
+  const title = truncateAtWord(normTitleWithValidity.value, 23, true);
 
   const list: BreadcrumbItem[] = [
     {
       label: formatDocumentKind(DocumentKind.Norm),
       route: `/search?documentKind=${DocumentKind.Norm}`,
     },
-    { label: title + validFromDisplay, route: normPath },
+    {
+      label: title,
+      route: normPath,
+      extendedLabel: normTitleWithValidity.value,
+    },
   ];
 
   currentNodePath.forEach((node) => {
-    const label =
-      node === currentNodePath.at(-1)
-        ? [node.title, node.subtitle].filter(Boolean).join(" ")
-        : (node.title ?? "");
-
-    list.push({ label, route: node.to });
+    list.push({ label: node.title ?? "", route: node.to });
   });
 
   return list;
@@ -229,12 +235,18 @@ useDynamicSeo({ title, description });
 
   <template v-if="!!norm">
     <div class="container">
-      <Breadcrumbs :items="breadcrumbItems" />
-      <div>
-        <h1
-          class="ris-heading2-bold my-24 mb-24 inline-block"
-          v-html="htmlTitle"
-        />
+      <div class="md:hidden">
+        <Breadcrumbs :items="breadcrumbItems" collapse />
+      </div>
+      <div class="hidden md:block">
+        <Breadcrumbs :items="breadcrumbItems" />
+      </div>
+
+      <div class="my-24 mb-24">
+        <p class="ris-label1-regular md:ris-subhead-regular mb-8">
+          {{ normTitleWithValidity }}
+        </p>
+        <h1 class="ris-heading2-bold" v-html="htmlTitle" />
       </div>
 
       <DocumentsNormsArticleVersionWarning
@@ -289,7 +301,7 @@ useDynamicSeo({ title, description });
         <template #sidebar>
           <DocumentsTableOfContents
             v-if="tableOfContents.length"
-            :subheading="getNormBreadcrumbTitle(norm)"
+            :subheading="normTitle"
             :subheading-to="normPath"
             :table-of-contents="tableOfContents"
             :selected-key="eId"

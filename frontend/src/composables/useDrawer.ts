@@ -1,3 +1,4 @@
+import type { DrawerProps } from "primevue";
 import type { ComponentPublicInstance } from "vue";
 
 /**
@@ -7,6 +8,7 @@ import type { ComponentPublicInstance } from "vue";
  * - Returns `visible` ref to bind to the drawer's open state
  * - Place focus on an element when the drawer is closed. This should be set
  *   to the element that originally opened the drawer (accessibility requirement)
+ * - Returns reusable default props for the close button
  */
 export function useDrawer() {
   const visible = ref(false);
@@ -27,5 +29,11 @@ export function useDrawer() {
     }
   });
 
-  return { visible, triggerRef };
+  const drawerCloseButton: DrawerProps["closeButtonProps"] = {
+    size: "small",
+    label: "Schließen",
+    iconPos: "right",
+  };
+
+  return { visible, triggerRef, drawerCloseButton };
 }
