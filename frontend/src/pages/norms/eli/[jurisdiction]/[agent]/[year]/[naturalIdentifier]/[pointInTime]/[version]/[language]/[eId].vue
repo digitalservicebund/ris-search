@@ -140,7 +140,11 @@ const breadcrumbItems: Ref<BreadcrumbItem[]> = computed(() => {
       label: formatDocumentKind(DocumentKind.Norm),
       route: `/search?documentKind=${DocumentKind.Norm}`,
     },
-    { label: title, route: normPath },
+    {
+      label: title,
+      route: normPath,
+      extendedLabel: normTitleWithValidity.value,
+    },
   ];
 
   currentNodePath.forEach((node) => {

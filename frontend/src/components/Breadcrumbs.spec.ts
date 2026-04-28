@@ -143,5 +143,30 @@ describe("Breadcrumbs", () => {
         within(dialog).queryByRole("link", { name: "Last" }),
       ).not.toBeInTheDocument();
     });
+
+    it("shows extended label instead of label for links in the drawer", async () => {
+      const user = userEvent.setup();
+      await renderSuspended(RisBreadcrumb, {
+        props: {
+          collapse: true,
+          items: [
+            { label: "A", extendedLabel: "A extended", route: "/a" },
+            { label: "B", route: "/b" },
+            { label: "Last", extendedLabel: "Last extended" },
+          ],
+        },
+        global: { stubs: { NuxtLink: nuxtLinkStub } },
+      });
+
+      await user.click(screen.getByRole("button", { name: "Navigiere zu..." }));
+
+      const dialog = screen.getByRole("dialog");
+      expect(
+        within(dialog).getByRole("link", { name: "A extended" }),
+      ).toBeVisible();
+      expect(
+        within(dialog).queryByRole("link", { name: "A" }),
+      ).not.toBeInTheDocument();
+    });
   });
 });

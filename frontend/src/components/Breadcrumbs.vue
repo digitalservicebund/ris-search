@@ -7,7 +7,14 @@ import IcBaselineMoreHoriz from "~icons/ic/baseline-more-horiz";
 import ChevronRightIcon from "~icons/ic/outline-chevron-right";
 
 export type BreadcrumbItem = {
+  /** Default label of the item */
   label: string;
+  /**
+   * Optional label with more information. Will be shown instead of the label in
+   * places where there's more space available (currently: the drawer)
+   */
+  extendedLabel?: string;
+  /** Navigation target of the item */
   route?: RouteLocationRaw;
 };
 
@@ -109,14 +116,14 @@ const drawerId = useId();
           @click="drawerVisible = false"
           class="body-font-link link-hover line-clamp-1 flex py-12"
         >
-          {{ i.label }}
+          {{ i.extendedLabel ?? i.label }}
         </NuxtLink>
 
         <span
           v-else
           class="body-font line-clamp-1 flex cursor-not-allowed py-12 text-gray-900"
         >
-          {{ i.label }}
+          {{ i.extendedLabel ?? i.label }}
         </span>
       </li>
     </ul>
