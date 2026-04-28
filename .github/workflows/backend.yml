@@ -73,20 +73,24 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with:
           fetch-depth: 0
+
       - name: Set up JDK
         uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5
         with:
           java-version: "21.0"
           distribution: "temurin"
           cache: gradle
+
       - name: Cache SonarQube packages
         uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
         with:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
+
       - name: Grant execute permission for gradlew
         working-directory: ./backend
         run: chmod +x gradlew
+
       - name: Run Tests and Scan with SonarQube
         if: ${{ github.actor != 'dependabot[bot]' }}
         id: sonarqube-tests
@@ -94,25 +98,10 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         working-directory: ./backend
+        # Running sonar includes unit and integration test
         run: ./gradlew sonar
-      - name: Upload OpenAPI specification
-        if: ${{ steps.sonarqube-tests.outcome == 'success' }}
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
-        with:
-          name: openapi.json
-          retention-days: 3
-          path: backend/out/openapi.json
-      - name: Run unit tests ( without SonarQube)
-        if: ${{ github.actor != 'dependabot[bot]' }}
-        working-directory: ./backend
-        run: ./gradlew integrationTest
-      - name: Run integration tests (without SonarQube, for dependabot)
-        if: ${{ github.actor == 'dependabot[bot]' }}
-        working-directory: ./backend
-        run: ./gradlew integrationTest
+
       - name: Check SonarQube Quality Gate
-        # Third-party action, pin to commit SHA!
-        # See https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions
         uses: sonarsource/sonarqube-quality-gate-action@cf038b0e0cdecfa9e56c198bbb7d21d751d62c3b # v1.2.0
         if: ${{ github.actor != 'dependabot[bot]' }}
         with:
@@ -120,6 +109,14 @@ jobs:
         timeout-minutes: 3 # Force to fail step after specific time
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+        # Dependabot does not have access to org tokens like SONAR_TOKEN
+        # thus run the tests without sonar in dependabot PRs
+      - name: Run unit and integration tests
+        if: ${{ github.actor == 'dependabot[bot]' }}
+        working-directory: ./backend
+        run: ./gradlew integrationTest
+
       - name: Send status to Slack
         uses: digitalservicebund/notify-on-failure-gha@671832f192aee0a068fd92b2f6deb975df794a84 # v1.6.1
         if: ${{ failure() && github.ref == 'refs/heads/main' }}
@@ -187,7 +184,6 @@ jobs:
       trivy-java-db-repository: ghcr.io/aquasecurity/trivy-java-db,public.ecr.aws/aquasecurity/trivy-java-db
       trivy-offile-scan: true
 
-
   generate-backend-code-documentation:
     runs-on: ubuntu-latest
     steps:
@@ -247,37 +243,3 @@ jobs:
               -m "From commit: ${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}" &&
             git push origin main &&
             echo "Pushed reports to ${{ github.server_url }}/${{ env.reports-repo }}" >> $GITHUB_STEP_SUMMARY
-
-  push-openapi-spec:
-    runs-on: ubuntu-latest
-    env:
-      documentation-repo: digitalservicebund/ris-portal-docs
-    needs:
-      - backend-tests-and-code-quality
-    if: ${{ github.ref == 'refs/heads/main' }}
-    steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
-        with:
-          repository: ${{ env.documentation-repo }}
-          token: ${{ secrets.DOCS_REPO_GITHUB_TOKEN }}
-      - name: Setup git config
-        run: |
-          git config user.name "${{ github.repository }}"
-          # This email identifies the commit as GitHub Actions - see https://github.com/orgs/community/discussions/26560
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-      - name: Download OpenAPI spec artifact
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
-        with:
-          path: docs/data/
-          name: openapi.json
-      - name: Push reports
-        env:
-          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
-        run: |
-          git add docs/data/openapi.json &&
-          git diff-index --cached --quiet HEAD ||
-            git commit \
-              -m "$COMMIT_MESSAGE" \
-              -m "From commit: ${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}" &&
-            git push origin main &&
-            echo "Pushed documentation to ${{ github.server_url }}/${{ env.documentation-repo }}" >> $GITHUB_STEP_SUMMARY
