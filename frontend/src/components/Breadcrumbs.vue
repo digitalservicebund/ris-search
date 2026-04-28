@@ -89,7 +89,7 @@ const drawerId = useId();
     </template>
 
     <template #separator>
-      <ChevronRightIcon />
+      <ChevronRightIcon width="1rem" height="1rem" />
     </template>
   </Breadcrumb>
 
