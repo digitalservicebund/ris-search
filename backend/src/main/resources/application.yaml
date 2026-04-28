@@ -32,9 +32,6 @@ swagger:
     url: http://localhost:8090
     description: Local development server
 
-feature-flags:
-  advanced-search: true
-
 springdoc:
   swagger-ui:
     supportedSubmitMethods: ["get"]
