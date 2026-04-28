@@ -102,6 +102,7 @@ const drawerId = useId();
 
   <Drawer
     v-model:visible="drawerVisible"
+    aria-label="Navigiere zu..."
     block-scroll
     header="Navigiere zu..."
     position="bottom"
