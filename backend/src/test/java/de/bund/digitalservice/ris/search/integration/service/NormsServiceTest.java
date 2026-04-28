@@ -139,6 +139,6 @@ class NormsServiceTest extends ContainersIntegrationBase {
     assertThat(textHighlight2.getFirst()).isEqualTo("example <mark>text</mark> 2");
 
     Article firstArticle = (Article) searchHits.getFirst().getContent();
-    assertThat(firstArticle.name()).contains(articleName);
+    assertThat(firstArticle.getName()).contains(articleName);
   }
 }

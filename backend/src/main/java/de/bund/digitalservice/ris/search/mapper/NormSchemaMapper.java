@@ -138,7 +138,7 @@ public class NormSchemaMapper {
    */
   private static LegislationExpressionPartSchema buildLegislationExpressionPart(
       List<Article> articles, TableOfContentsItem tocItem, String idPrefix) {
-    var article = articles.stream().filter(a -> tocItem.id().equals(a.eId())).findFirst();
+    var article = articles.stream().filter(a -> tocItem.id().equals(a.getEId())).findFirst();
 
     if (article.isPresent()) {
       return buildPart(article.get(), idPrefix, tocItem.marker(), tocItem.heading());
@@ -166,22 +166,23 @@ public class NormSchemaMapper {
       Article article, String idPrefix, String marker, String heading) {
     List<LegislationObjectSchema> encoding;
     // Only attachments have their own manifestationELi and receive an encoding object.
-    if (article.manifestationEli() != null) {
+    if (article.getManifestationEli() != null) {
       final LegislationObjectSchema encodingItem =
           EncodingSchemaFactory.legislationEncodingSchema(
               EncodingSchemaFactory.SchemaType.XML,
-              getEncodingBaseUrlFromManifestationEli(article.manifestationEli()));
+              getEncodingBaseUrlFromManifestationEli(article.getManifestationEli()));
       encoding = List.of(encodingItem);
     } else {
       encoding = List.of();
     }
     return LegislationExpressionPartSchema.builder()
-        .id(idPrefix + "#" + article.eId())
+        .id(idPrefix + "#" + article.getId())
         .name(marker)
-        .eId(article.eId())
+        .eId(article.getEId())
         .headline(heading)
         .temporalCoverage(
-            DateUtils.toDateIntervalString(article.entryIntoForceDate(), article.expiryDate()))
+            DateUtils.toDateIntervalString(
+                article.getEntryIntoForceDate(), article.getExpiryDate()))
         .encoding(encoding)
         .hasPart(List.of())
         .build();
