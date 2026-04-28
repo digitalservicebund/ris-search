@@ -67,9 +67,9 @@ public class NormSearchResponseMapper {
             .orElse("");
     if (articleHitContent instanceof Article article) {
       return toTextMatchSchema(
-          articleMatchingName.isEmpty() ? article.name() : articleMatchingName,
-          articleMatchingText.isEmpty() ? article.text() : articleMatchingText,
-          article.eId());
+          articleMatchingName.isEmpty() ? article.getName() : articleMatchingName,
+          articleMatchingText.isEmpty() ? article.getText() : articleMatchingText,
+          article.getEId());
     }
     if (articleHitContent instanceof Map<?, ?> hit
         && hit.containsKey("name")
