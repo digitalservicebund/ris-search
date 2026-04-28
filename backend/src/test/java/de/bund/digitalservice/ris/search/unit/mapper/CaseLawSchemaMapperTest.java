@@ -62,6 +62,7 @@ class CaseLawSchemaMapperTest {
     assertThat(caseLawSchema.keywords()).containsExactly("one", "two");
     assertThat(caseLawSchema.decisionName()).containsExactly("decisionName");
     assertThat(caseLawSchema.deviatingDocumentNumber()).containsExactly("deviatingDocumentNumber");
+    assertThat(caseLawSchema.guidingPrinciple()).isEqualTo("guidingPrinciple");
     assertThat(caseLawSchema.inLanguage()).isEqualTo("de");
   }
 

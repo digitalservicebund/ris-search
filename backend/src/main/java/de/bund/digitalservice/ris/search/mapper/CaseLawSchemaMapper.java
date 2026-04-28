@@ -38,6 +38,7 @@ public class CaseLawSchemaMapper {
         // equivalent fields
         .documentNumber(doc.documentNumber())
         .ecli(doc.ecli())
+        .guidingPrinciple(doc.guidingPrinciple())
         .headline(doc.headline())
         .headnote(doc.headnote())
         .otherHeadnote(doc.otherHeadnote())

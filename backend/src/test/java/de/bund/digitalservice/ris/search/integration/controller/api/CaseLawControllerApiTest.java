@@ -117,6 +117,7 @@ class CaseLawControllerApiTest extends ContainersIntegrationBase {
             jsonPath("$.location", Matchers.is("Berlin")),
             jsonPath("$.documentType", Matchers.is("Urteil")),
             jsonPath("$.decisionDate", Matchers.is("2023-01-02")),
+            jsonPath("$.guidingPrinciple", Matchers.is("Das ist der Leitsatz")),
             jsonPath("$.otherHeadnote", Matchers.is("Sonstiger Orientierungssatz")),
             jsonPath("$.publicationStatus").doesNotExist(),
             jsonPath("$.error").doesNotExist(),

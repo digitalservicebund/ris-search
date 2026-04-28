@@ -14,6 +14,7 @@ const searchResult: SearchResult<CaseLaw> = {
     keywords: [],
     documentNumber: "123",
     headline: "(Test Headline)",
+    guidingPrinciple: "Guiding Principle",
     headnote: "Headnote",
     otherHeadnote: "Other Headnote",
     courtName: "Test Court",
