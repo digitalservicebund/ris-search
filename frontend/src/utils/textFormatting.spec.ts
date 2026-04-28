@@ -117,6 +117,22 @@ describe("truncateAtWord", () => {
     expect(truncateAtWord("Über schöne Dinge", 8)).toBe("Über");
     expect(truncateAtWord("Äpfel Birnen Kirschen", 12)).toBe("Äpfel Birnen");
   });
+
+  describe("with ellipsis", () => {
+    it("appends ellipsis when truncated", () => {
+      expect(truncateAtWord("Hello brave world", 13, true)).toBe(
+        "Hello brave…",
+      );
+    });
+
+    it("does not append ellipsis when not truncated", () => {
+      expect(truncateAtWord("Hello world", 20, true)).toBe("Hello world");
+    });
+
+    it("falls back to a hard cut with ellipsis when no space fits", () => {
+      expect(truncateAtWord("Supercalifragilistic", 5, true)).toBe("Super…");
+    });
+  });
 });
 
 describe("removePrefix", () => {

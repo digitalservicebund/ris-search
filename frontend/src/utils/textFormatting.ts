@@ -62,19 +62,26 @@ export function normalizeSpaces(text: string): string {
   return text.trim().split(/\s+/).join(" ");
 }
 
-export function truncateAtWord(text: string, maxLength: number): string {
+export function truncateAtWord(
+  text: string,
+  maxLength: number,
+  ellipsis = false,
+): string {
   const cleanText = normalizeSpaces(text);
   if (cleanText.length <= maxLength) return cleanText;
 
   const cut = cleanText.slice(0, maxLength);
 
   const nextChar = cleanText.charAt(maxLength);
+  let truncated: string;
   if (nextChar === "" || nextChar === " ") {
-    return cut.trimEnd();
+    truncated = cut.trimEnd();
+  } else {
+    const lastSpace = cut.lastIndexOf(" ");
+    truncated = lastSpace === -1 ? cut : cut.slice(0, lastSpace);
   }
 
-  const lastSpace = cut.lastIndexOf(" ");
-  return lastSpace === -1 ? cut : cut.slice(0, lastSpace);
+  return ellipsis ? truncated + "…" : truncated;
 }
 
 export function removePrefix(str: string | undefined, prefix: string) {
