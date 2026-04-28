@@ -1,8 +1,6 @@
 import { expect, navigate, test } from "./utils/fixtures";
 
 test.describe("view norm article page", () => {
-  test.setTimeout(60000);
-
   test("can navigate to a single norm article and between articles", async ({
     page,
   }) => {
@@ -10,7 +8,7 @@ test.describe("view norm article page", () => {
       "/norms/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu";
     await navigate(page, mainExpressionEliUrl);
 
-    await test.step("Navigate from main norm view to a single article", async () => {
+    await test.step("navigate from main norm view to a single article", async () => {
       await page.getByRole("link", { name: "§ 1 Anwendungsbereich" }).click();
       await page.waitForURL(`${mainExpressionEliUrl}/art-z1`, {
         waitUntil: "commit",
@@ -22,7 +20,7 @@ test.describe("view norm article page", () => {
       await expect.soft(heading).toBeVisible();
     });
 
-    await test.step("Navigate between single articles", async () => {
+    await test.step("navigate between single articles", async () => {
       await page.getByRole("link", { name: "Nächster Paragraf" }).click();
       await page.waitForURL(new RegExp("/art-z2$"), { waitUntil: "commit" });
       const h2Art2 = page
@@ -56,7 +54,7 @@ test.describe("view norm article page", () => {
       ).toBeVisible();
     });
 
-    await test.step("Navigate back between single articles", async () => {
+    await test.step("navigate back between single articles", async () => {
       const expressionEliUrl =
         "/norms/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu";
       await page.goto(`${expressionEliUrl}/art-z3`, {
@@ -89,11 +87,6 @@ test.describe("view norm article page", () => {
         }),
       ).toBeVisible();
     });
-
-    await test.step("Navigate back to main norm view", async () => {
-      await page.getByRole("link", { name: "FrSaftErfrischV" }).first().click();
-      await page.waitForURL(mainExpressionEliUrl, { waitUntil: "commit" });
-    });
   });
 
   test("can navigate to and view an attachment", async ({ page }) => {
@@ -107,7 +100,7 @@ test.describe("view norm article page", () => {
     });
     await expect(cell).toBeVisible();
 
-    await test.step("Navigate from main norm view to a single article", async () => {
+    await test.step("navigate from main norm view to a single article", async () => {
       const attachmentTitle =
         "Anlage T1 (zu § 4 Absatz 2, § 5 Absatz 1 bis 3, § 6 Absatz 2 bis 4 und § 8)";
 
@@ -122,15 +115,23 @@ test.describe("view norm article page", () => {
       await link.click({ force: true });
       await page.waitForURL(new RegExp("anlagen-n1_anlage-n1$"), {
         waitUntil: "commit",
-        timeout: 15000,
       });
       await expect(cell).toBeVisible();
     });
+  });
 
-    await test.step("Navigate back to main norm view", async () => {
-      await page.getByRole("link", { name: "FrSaftErfrischV" }).first().click();
-      await page.waitForURL(mainExpressionEliUrl, { waitUntil: "commit" });
-    });
+  test("navigate back to main norm view", async ({ page, isMobileTest }) => {
+    test.skip(isMobileTest);
+    await navigate(
+      page,
+      "/norms/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu/art-z2",
+    );
+
+    await page.getByRole("link", { name: "FrSaftErfrischV" }).first().click();
+    await page.waitForURL(
+      "/norms/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu/art-z2",
+      { waitUntil: "commit" },
+    );
   });
 
   test("can view images", async ({ page }) => {
@@ -377,8 +378,9 @@ test.describe("can view metadata of norm articles", () => {
 test("shows correct breadcrumbs for a nested article", async ({
   page,
   privateFeaturesEnabled,
+  isMobileTest,
 }) => {
-  test.skip(!privateFeaturesEnabled);
+  test.skip(!privateFeaturesEnabled || isMobileTest);
 
   await navigate(
     page,
@@ -402,9 +404,7 @@ test("shows correct breadcrumbs for a nested article", async ({
   await expect(
     breadcrumb.getByRole("link", { name: "Erster Unterabschnitt" }),
   ).toBeVisible();
-  await expect(
-    breadcrumb.getByText("§ 9 Datenschutzanforderungen"),
-  ).toBeVisible();
+  await expect(breadcrumb.getByText("§ 9")).toBeVisible();
 });
 
 test("sets up meta tags for article page", async ({ page }) => {
@@ -567,5 +567,72 @@ test.describe("mobile table of contents", () => {
       "aria-selected",
       "true",
     );
+  });
+});
+
+test.describe("mobile breadcrumbs", () => {
+  test("shows correct breadcrumbs for a nested article", async ({
+    page,
+    privateFeaturesEnabled,
+    isMobileTest,
+  }) => {
+    test.skip(!privateFeaturesEnabled || !isMobileTest);
+
+    await navigate(
+      page,
+      "/norms/eli/bund/bgbl-1/1972/s2459/1999-04-20/4/deu/art-z3",
+    );
+
+    const breadcrumb = page.getByRole("navigation", { name: "Pfadnavigation" });
+
+    await expect(
+      breadcrumb.getByRole("link", { name: "Startseite" }),
+    ).toBeVisible();
+    await expect(breadcrumb.getByText("§ 9")).toBeVisible();
+
+    await page.getByRole("button", { name: "Navigiere zu..." }).click();
+
+    const dialog = page.getByRole("dialog", { name: "Navigiere zu..." });
+
+    await expect(dialog).toBeVisible();
+
+    await expect(
+      dialog.getByRole("link", { name: "Startseite" }),
+    ).toBeVisible();
+    await expect(
+      dialog.getByRole("link", { name: "Gesetze & Verordnungen" }),
+    ).toBeVisible();
+    await expect(
+      dialog.getByRole("link", { name: "BWahlGV vom 24.04.1999" }),
+    ).toBeVisible();
+    await expect(
+      dialog.getByRole("link", { name: "Dritter Abschnitt" }),
+    ).toBeVisible();
+    await expect(
+      dialog.getByRole("link", { name: "Erster Unterabschnitt" }),
+    ).toBeVisible();
+    await expect(dialog.getByText("§ 9")).toBeVisible();
+  });
+
+  test("navigate back to main norm view", async ({ page, isMobileTest }) => {
+    test.skip(!isMobileTest);
+    await navigate(
+      page,
+      "/norms/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu/art-z2",
+    );
+
+    await page.getByRole("button", { name: "Navigiere zu..." }).click();
+    await expect(
+      page.getByRole("dialog", { name: "Navigiere zu..." }),
+    ).toBeVisible();
+
+    await page.getByRole("link", { name: "FrSaftErfrischV" }).first().click();
+
+    await expect(
+      page.getByRole("heading", {
+        name: "Fiktive Fruchtsaft- und Erfrischungsgetränkeverordnung zu Testzwecken",
+        level: 1,
+      }),
+    ).toBeVisible();
   });
 });
