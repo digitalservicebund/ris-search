@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
 import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc";
-import _ from "lodash";
+import { without } from "lodash-es";
 import { describe, expect, vi } from "vitest";
 import { parseDateGermanLocalTime } from "./dateFormatting";
 import type { LegislationExpression } from "~/types/api";
@@ -166,7 +166,7 @@ describe("getMostRelevantExpression", () => {
   });
 
   it("picks the nearest future expression if there is no current expression", () => {
-    const testCase = transform(_.without(allExpressions, currentExpression));
+    const testCase = transform(without(allExpressions, currentExpression));
     expect(getMostRelevantExpression(testCase)).toBe("upcomingExpression");
   });
 

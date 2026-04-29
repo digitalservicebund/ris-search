@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { AutoCompleteSuggestion } from "~/components/AutoComplete.vue";
-import _ from "lodash";
+import { debounce } from "lodash-es";
 import type {
   AutoCompleteCompleteEvent,
   AutoCompleteDropdownClickEvent,
@@ -23,7 +23,7 @@ const search = async (prefix?: string) => {
   );
 };
 
-const searchDebounced = _.debounce(search, 250);
+const searchDebounced = debounce(search, 250);
 
 /*
 Workaround for loading prop being ignored in PrimeVue AutoComplete:

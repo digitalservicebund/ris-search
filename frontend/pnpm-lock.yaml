@@ -26,7 +26,7 @@ importers:
       dayjs:
         specifier: 1.11.20
         version: 1.11.20
-      lodash:
+      lodash-es:
         specifier: 4.18.1
         version: 4.18.1
       minisearch:
@@ -78,9 +78,9 @@ importers:
       '@types/jsdom':
         specifier: 28.0.1
         version: 28.0.1
-      '@types/lodash':
-        specifier: 4.17.24
-        version: 4.17.24
+      '@types/lodash-es':
+        specifier: 4.17.12
+        version: 4.17.12
       '@types/node':
         specifier: 25.6.0
         version: 25.6.0
@@ -2540,6 +2540,9 @@ packages:
 
   '@types/jsdom@28.0.1':
     resolution: {integrity: sha512-GJq2QE4TAZ5ajSoCasn5DOFm8u1mI3tIFvM5tIq3W5U/RTB6gsHwc6Yhpl91X9VSDOUVblgXmG+2+sSvFQrdlw==}
+
+  '@types/lodash-es@4.17.12':
+    resolution: {integrity: sha512-0NgftHUcV4v34VhXm8QBSftKVXtbkBG3ViCjs6+eJ5a6y6Mi/jiFGPc1sC7QK+9BFhWrURE3EOggmWaSxL9OzQ==}
 
   '@types/lodash@4.17.24':
     resolution: {integrity: sha512-gIW7lQLZbue7lRSWEFql49QJJWThrTFFeIMJdp3eH4tKoxm1OvEPg02rm4wCCSHS0cL3/Fizimb35b7k8atwsQ==}
@@ -9098,6 +9101,10 @@ snapshots:
       '@types/tough-cookie': 4.0.5
       parse5: 7.3.0
       undici-types: 7.25.0
+
+  '@types/lodash-es@4.17.12':
+    dependencies:
+      '@types/lodash': 4.17.24
 
   '@types/lodash@4.17.24': {}
 

@@ -1,5 +1,5 @@
 import dayjs, { type Dayjs } from "dayjs";
-import _ from "lodash";
+import { partition, sortBy } from "lodash-es";
 import type { MetadataItem } from "~/components/Metadata.vue";
 import type { LegislationExpression } from "~/types/api";
 import {
@@ -104,16 +104,16 @@ export function getMostRelevantExpression(
     return activeExpressions[0]?.legislationIdentifier;
   }
   const referenceDate = getCurrentDateInGermanyFormatted();
-  const [future, past] = _.partition(
+  const [future, past] = partition(
     expressions,
     (item) => item.temporalCoverage >= referenceDate,
   );
   if (future.length > 0) {
-    return _.sortBy(future, "legislationLegalForce")[0]?.legislationIdentifier;
+    return sortBy(future, "legislationLegalForce")[0]?.legislationIdentifier;
   }
   if (past.length > 0) {
     return (
-      _.sortBy(past, "legislationLegalForce").at(-1)?.legislationIdentifier ??
+      sortBy(past, "legislationLegalForce").at(-1)?.legislationIdentifier ??
       null
     );
   }
