@@ -182,7 +182,11 @@ const detailsSectionId = useId();
             label="Spruchkörper:"
             :value="detailsMetadata.judicialBody"
           />
-          <DetailsListEntry label="ECLI:" :value="detailsMetadata.ecli" />
+          <DetailsListEntry
+            label="ECLI:"
+            :value="detailsMetadata.ecli"
+            valueClass="break-all"
+          />
           <DetailsListEntry label="Normen:" value="" />
           <DetailsListEntry
             label="Entscheidungsname:"
