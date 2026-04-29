@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import PrimeVueButton from "primevue/button";
+import { Button } from "primevue";
 import { usePostHog } from "~/composables/usePostHog";
 
 const { userConsent, isBannerVisible, setTracking } = usePostHog();
@@ -44,7 +44,7 @@ const handleSetTracking = async (value: boolean) => {
           @submit.prevent="handleSetTracking(true)"
         >
           <input type="hidden" name="consent" value="true" />
-          <PrimeVueButton
+          <Button
             label="Akzeptieren"
             data-testid="accept-cookie"
             type="submit"
@@ -57,11 +57,7 @@ const handleSetTracking = async (value: boolean) => {
           @submit.prevent="handleSetTracking(false)"
         >
           <input type="hidden" name="consent" value="false" />
-          <PrimeVueButton
-            label="Ablehnen"
-            data-testid="decline-cookie"
-            type="submit"
-          />
+          <Button label="Ablehnen" data-testid="decline-cookie" type="submit" />
         </form>
         <NuxtLink :to="{ name: 'data-protection' }" class="ris-link1-regular">
           Datenschutzerklärung

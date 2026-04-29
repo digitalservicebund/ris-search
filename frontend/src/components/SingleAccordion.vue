@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import Accordion from "primevue/accordion";
-import AccordionContent from "primevue/accordioncontent";
-import AccordionHeader from "primevue/accordionheader";
-import AccordionPanel from "primevue/accordionpanel";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionHeader,
+  AccordionPanel,
+} from "primevue";
 import { computed } from "vue";
 import IcOutlineExpandCircleDown from "~icons/ic/outline-expand-circle-down";
 

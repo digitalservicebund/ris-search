@@ -1,6 +1,7 @@
 import { renderSuspended } from "@nuxt/test-utils/runtime";
 import { userEvent } from "@testing-library/user-event";
 import { screen, waitFor } from "@testing-library/vue";
+// oxlint-disable-next-line no-restricted-imports
 import Tooltip from "primevue/tooltip";
 import { vi } from "vitest";
 import ActionMenu, {

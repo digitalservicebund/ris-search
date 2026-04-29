@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import Message from "primevue/message";
 import type { RouteLocationRaw } from "#vue-router";
+import { Message } from "primevue";
 import type { LegislationExpression } from "~/types/api";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
 import type { ValidityStatus } from "~/utils/norm";
