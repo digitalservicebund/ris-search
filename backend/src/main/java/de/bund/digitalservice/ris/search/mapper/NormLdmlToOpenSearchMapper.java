@@ -9,6 +9,7 @@ import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.models.opensearch.TableOfContentsItem;
 import de.bund.digitalservice.ris.search.utils.LdmlTemporalData;
 import de.bund.digitalservice.ris.search.utils.XmlDocument;
+import jakarta.xml.bind.ValidationException;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -392,7 +393,8 @@ public class NormLdmlToOpenSearchMapper {
       List<Attachment> attachments,
       String officialAbbreviation,
       String expressionEli,
-      String indexedAt) {
+      String indexedAt)
+      throws ValidationException {
 
     NodeList nodes = null;
     try {
@@ -408,20 +410,25 @@ public class NormLdmlToOpenSearchMapper {
 
     Map<String, TimeInterval> temporalGroupsWithDates =
         LdmlTemporalData.getTemporalDataWithDatesMapping(xmlDocument);
-    xmlDocument
-        .getFirstMatchedNodeByXpath(X_PATH_PREAMBLE_FORMULA)
-        .map(node -> getNodeAsArticle(node, EINGANGSFORMEL, indexedAt))
-        .ifPresent(articles::add);
 
+    Optional<Node> preambleFormulaNode =
+        xmlDocument.getFirstMatchedNodeByXpath(X_PATH_PREAMBLE_FORMULA);
+    if (preambleFormulaNode.isPresent()) {
+      articles.add(
+          getNodeAsArticle(preambleFormulaNode.get(), EINGANGSFORMEL, indexedAt, expressionEli));
+    }
     for (int i = 0; i < nodes.getLength(); i++) {
       getArticleNodeAsArticle(
               nodes.item(i), temporalGroupsWithDates, officialAbbreviation, null, expressionEli)
           .ifPresent(articles::add);
     }
-    xmlDocument
-        .getFirstMatchedNodeByXpath(X_PATH_CONCLUSIONS_FORMULA)
-        .map(node -> getNodeAsArticle(node, SCHLUSSFORMEL, indexedAt))
-        .ifPresent(articles::add);
+
+    Optional<Node> conclusionsFormulaNode =
+        xmlDocument.getFirstMatchedNodeByXpath(X_PATH_CONCLUSIONS_FORMULA);
+    if (conclusionsFormulaNode.isPresent()) {
+      articles.add(
+          getNodeAsArticle(conclusionsFormulaNode.get(), SCHLUSSFORMEL, indexedAt, expressionEli));
+    }
 
     var attachmentsAsArticles =
         attachments.stream()
@@ -517,8 +524,17 @@ public class NormLdmlToOpenSearchMapper {
     }
   }
 
-  private static Article getNodeAsArticle(Node node, String name, String indexedAt) {
+  private static Article getNodeAsArticle(
+      Node node, String name, String indexedAt, String expressionEli) throws ValidationException {
+    Node eIdAttribute = node.getAttributes().getNamedItem("eId");
+    if (Objects.isNull(eIdAttribute)) {
+      throw new ValidationException(
+          String.format(
+              "missing eId in node with name %s and expressionEli %s", name, expressionEli));
+    }
+
     return Article.builder()
+        .id(expressionEli + "/" + eIdAttribute.getTextContent())
         .eId(
             Optional.ofNullable(node.getAttributes().getNamedItem("eId"))
                 .map(Node::getTextContent)
