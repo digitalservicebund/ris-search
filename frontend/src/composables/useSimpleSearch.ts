@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { isEqual } from "lodash-es";
 import type { Page } from "~/components/Pagination.vue";
 import { extendOnRequest } from "~/plugins/risBackend";
 import { DocumentKind, type DocumentSearchParams } from "~/types/api";
@@ -132,7 +132,7 @@ export async function useSimpleSearch(
         );
 
         // De-duplicate reporting of identical queries
-        if (previousQuery && _.isEqual(newQuery, previousQuery)) return;
+        if (previousQuery && isEqual(newQuery, previousQuery)) return;
 
         searchPerformed("simple", newQuery, previousQuery);
         previousQuery = newQuery;

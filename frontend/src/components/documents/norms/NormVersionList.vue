@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import _ from "lodash";
+import { orderBy } from "lodash-es";
 import { Column, DataTable } from "primevue";
 import Badge from "~/components/Badge.vue";
 import type { LegislationExpression } from "~/types/api";
@@ -25,7 +25,7 @@ interface TableRowData {
 const selectedVersion = ref<TableRowData>();
 
 const tableRowData = computed<TableRowData[]>(() => {
-  const versionsSorted = _.orderBy(
+  const versionsSorted = orderBy(
     props.versions,
     [(version) => version.temporalCoverage],
     ["desc"],

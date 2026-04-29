@@ -64,16 +64,6 @@
             "allowTypeImports": true,
             "message": "Import PrimeVue components from \"primevue\""
           }
-        ],
-        "paths": [
-          // Importing individual utilities from lodash fails in the production
-          // build, see https://github.com/nuxt/nuxt/issues/21034. This requires
-          // some additional setup to fix; in the meantime enforce the default
-          // import to prevent accidents.
-          {
-            "name": "lodash",
-            "allowImportNames": ["default"]
-          }
         ]
       }
     ]
