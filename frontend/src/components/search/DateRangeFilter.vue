@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import PrimevueSelect from "primevue/select";
+import { Select } from "primevue";
 import type { ValidationError } from "~/components/DateInput.vue";
 import type {
   DateFilterValue,
@@ -78,7 +78,7 @@ const toDate = computed({
   <div class="flex flex-col gap-16">
     <span class="flex flex-col gap-8">
       <label :for="dateModeSelectId" class="ris-label2-regular">Zeitraum</label>
-      <PrimevueSelect
+      <Select
         :id="dateModeSelectId"
         v-model="selectedType"
         :options="items"

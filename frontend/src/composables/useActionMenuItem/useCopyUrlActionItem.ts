@@ -1,3 +1,4 @@
+// oxlint-disable-next-line no-restricted-imports
 import { useToast } from "primevue/usetoast";
 import type { ActionMenuItem } from "~/components/documents/actionMenu/ActionMenu.vue";
 import IcBaselineCheck from "~icons/ic/baseline-check";

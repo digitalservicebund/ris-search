@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import PrimevueSelect from "primevue/select";
+import { Select } from "primevue";
 
 const model = defineModel<number>({ required: true });
 
@@ -27,7 +27,7 @@ const itemsPerPageSelectId = useId();
     <label :for="itemsPerPageSelectId" class="ris-label2-regular"
       >Einträge pro Seite</label
     >
-    <PrimevueSelect
+    <Select
       :id="itemsPerPageSelectId"
       v-model="itemsPerPage"
       option-label="label"

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import PrimevueSelect from "primevue/select";
+import { Select } from "primevue";
 import YearInput from "~/components/YearInput.vue";
 import type {
   DateFilterValue,
@@ -168,7 +168,7 @@ const hasMultipleInputs = computed(() => show.value.after && show.value.before);
   <div class="flex flex-col gap-16">
     <span class="flex flex-col gap-8">
       <label :for="yearModeSelectId" class="ris-label2-regular">Zeitraum</label>
-      <PrimevueSelect
+      <Select
         :id="yearModeSelectId"
         :model-value="mode"
         :options="items"

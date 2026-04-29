@@ -1,5 +1,6 @@
 import "@testing-library/jest-dom";
 import { config } from "@vue/test-utils";
+// oxlint-disable-next-line no-restricted-imports
 import PrimeVue from "primevue/config";
 import { vi } from "vitest";
 import "~/tests/cookieStoreMock";

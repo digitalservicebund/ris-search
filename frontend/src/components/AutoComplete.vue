@@ -1,11 +1,9 @@
 <script lang="ts" setup>
-import IcBaselineKeyboardArrowDown from "~icons/ic/baseline-keyboard-arrow-down";
-import IcBaselineClose from "~icons/ic/baseline-close";
-import AutoCompleteComponent, {
-  type AutoCompleteProps as BaseAutoCompleteProps,
-} from "primevue/autocomplete";
-import ProgressSpinner from "primevue/progressspinner";
+import { AutoComplete as BaseAutoComplete, ProgressSpinner } from "primevue";
+import { type AutoCompleteProps as BaseAutoCompleteProps } from "primevue/autocomplete";
 import { ref } from "vue";
+import IcBaselineClose from "~icons/ic/baseline-close";
+import IcBaselineKeyboardArrowDown from "~icons/ic/baseline-keyboard-arrow-down";
 
 export interface AutoCompleteSuggestion {
   id: string;
@@ -85,7 +83,7 @@ const dropdownButtonFocus = ref(false);
 </script>
 
 <template>
-  <AutoCompleteComponent
+  <BaseAutoComplete
     ref="autoCompleteRef"
     v-bind="$attrs"
     :suggestions="props.suggestions"
@@ -158,5 +156,5 @@ const dropdownButtonFocus = ref(false);
         </div>
       </div>
     </template>
-  </AutoCompleteComponent>
+  </BaseAutoComplete>
 </template>

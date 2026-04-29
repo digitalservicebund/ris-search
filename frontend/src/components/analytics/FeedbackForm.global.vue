@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { Button } from "primevue";
-import PrimevueTextarea from "primevue/textarea";
 import { NuxtLink } from "#components";
+import { Button, Textarea } from "primevue";
 import { usePostHog } from "~/composables/usePostHog";
 import { isStringEmpty } from "~/utils/textFormatting";
 import ErrorOutline from "~icons/ic/outline-error-outline";
@@ -120,7 +119,7 @@ watch(
           <label :for="feedbackMessageId" class="ris-label2-regular">
             Feedback
           </label>
-          <PrimevueTextarea
+          <Textarea
             :id="feedbackMessageId"
             v-model="feedback"
             :invalid="!isStringEmpty(errorMessage)"

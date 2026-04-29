@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import PrimeVueButton from "primevue/button";
-import Message from "primevue/message";
+import { Button, Message } from "primevue";
 import { CONSENT_COOKIE_NAME, usePostHog } from "~/composables/usePostHog";
 import IconCheck from "~icons/ic/check";
 import IconClose from "~icons/ic/close";
@@ -69,7 +68,7 @@ async function handleSetTracking(value: boolean) {
       @submit.prevent="handleSetTracking(false)"
     >
       <input type="hidden" name="consent" value="false" />
-      <PrimeVueButton
+      <Button
         label="Cookies ablehnen"
         data-testid="settings-decline-cookie"
         type="submit"
@@ -82,7 +81,7 @@ async function handleSetTracking(value: boolean) {
       @submit.prevent="handleSetTracking(true)"
     >
       <input type="hidden" name="consent" value="true" />
-      <PrimeVueButton
+      <Button
         label="Cookies akzeptieren"
         data-testid="settings-accept-cookie"
         type="submit"

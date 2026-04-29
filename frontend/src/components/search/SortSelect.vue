@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import PrimevueSelect from "primevue/select";
+import { Select } from "primevue";
 import { computed } from "vue";
 import { DocumentKind } from "~/types/api";
 import { sortMode } from "~/utils/search/sortMode";
@@ -67,7 +67,7 @@ const sortSelectId = useId();
 <template>
   <span class="flex w-auto items-center gap-8">
     <label :for="sortSelectId" class="ris-label2-regular">Sortieren nach</label>
-    <PrimevueSelect
+    <Select
       :id="sortSelectId"
       v-model="model"
       scroll-height="20rem"

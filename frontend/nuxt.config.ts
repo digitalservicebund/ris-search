@@ -55,6 +55,9 @@ export default defineNuxtConfig({
         },
       }),
     ],
+    optimizeDeps: {
+      include: ["primevue", "@digitalservicebund/ris-ui/primevue"],
+    },
   },
   typescript: {
     typeCheck: process.env.CI !== "true",

@@ -2,7 +2,7 @@
 // This is an old version of the help page that is not currently in use, but will
 // be reworked at some point.
 
-import Select from "primevue/select";
+import { Select } from "primevue";
 import { usePrivateFeaturesFlag } from "~/composables/usePrivateFeaturesFlag";
 import {
   type FieldType,

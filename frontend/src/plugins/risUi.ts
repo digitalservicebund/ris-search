@@ -1,3 +1,4 @@
+// oxlint-disable no-restricted-imports -- PrimeVue plugins/directives are not exported from the main entry
 import "@digitalservicebund/ris-ui/fonts.css";
 import { RisUiLocale, RisUiTheme } from "@digitalservicebund/ris-ui/primevue";
 import PrimeVue from "primevue/config";

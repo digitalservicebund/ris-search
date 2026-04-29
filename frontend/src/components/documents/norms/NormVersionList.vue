@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import _ from "lodash";
-import Column from "primevue/column";
-import DataTable from "primevue/datatable";
+import { Column, DataTable } from "primevue";
 import Badge from "~/components/Badge.vue";
 import type { LegislationExpression } from "~/types/api";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";

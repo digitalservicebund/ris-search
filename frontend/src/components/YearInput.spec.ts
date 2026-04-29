@@ -1,6 +1,6 @@
 import { userEvent } from "@testing-library/user-event";
 import { render, screen } from "@testing-library/vue";
-import InputText from "primevue/inputtext";
+import { InputText } from "primevue";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { nextTick } from "vue";
 import YearInput from "./YearInput.vue";

@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { Tab, TabList, Tabs } from "primevue";
-import Message from "primevue/message";
-import { computed } from "vue";
 import { NuxtLink } from "#components";
+import { Message, Tab, TabList, Tabs } from "primevue";
+import { computed } from "vue";
 import type { BreadcrumbItem } from "~/components/Breadcrumbs.vue";
 import DetailsList from "~/components/DetailsList.vue";
 import DetailsListEntry from "~/components/DetailsListEntry.vue";
