@@ -419,7 +419,12 @@ public class NormLdmlToOpenSearchMapper {
     }
     for (int i = 0; i < nodes.getLength(); i++) {
       getArticleNodeAsArticle(
-              nodes.item(i), temporalGroupsWithDates, officialAbbreviation, null, expressionEli)
+              nodes.item(i),
+              temporalGroupsWithDates,
+              officialAbbreviation,
+              null,
+              expressionEli,
+              indexedAt)
           .ifPresent(articles::add);
     }
 
@@ -473,7 +478,8 @@ public class NormLdmlToOpenSearchMapper {
       Map<String, TimeInterval> temporalGroupsWithDates,
       String officialAbbreviation,
       String optionalName,
-      String expressionEli) {
+      String expressionEli,
+      String indexedAt) {
     try {
       var articleXml = new XmlDocument(articleNode);
       String marker = cleanText(articleXml.getSimpleElementByXpath(X_PATH_ARTICLE_NUM));
@@ -517,6 +523,7 @@ public class NormLdmlToOpenSearchMapper {
               .entryIntoForceDate(entryIntoForceDate)
               .expiryDate(expiryDate)
               .searchKeyword(searchKeyword)
+              .indexedAt(indexedAt)
               .build());
     } catch (XPathExpressionException | ParserConfigurationException e) {
       logger.warn("Error parsing xml", e);
