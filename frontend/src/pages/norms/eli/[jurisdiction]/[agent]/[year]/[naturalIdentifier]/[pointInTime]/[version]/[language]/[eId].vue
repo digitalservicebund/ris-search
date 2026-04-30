@@ -237,7 +237,10 @@ useDynamicSeo({ title, description });
         <p class="ris-label1-regular md:ris-subhead-regular mb-8">
           {{ normTitle }}
         </p>
-        <h1 class="ris-heading2-bold" v-html="htmlTitle" />
+        <h1
+          class="ris-heading2-bold wrap-break-word hyphens-auto max-md:text-2xl"
+          v-html="htmlTitle"
+        />
       </div>
 
       <DocumentsNormsArticleVersionWarning

@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { isEmpty } from "lodash-es";
 import { isStringEmpty } from "~/utils/textFormatting";
+import type { HTMLAttributes } from "vue";
+
 const props = defineProps<{
   label: string;
   value?: string;
   placeholder?: string;
   valueList?: string[];
+  valueClass?: HTMLAttributes["class"];
 }>();
 
 const emptyProp = computed(() =>
@@ -25,6 +28,7 @@ const emptyValuePlaceholder = "nicht vorhanden";
     <dd
       v-if="$slots.default"
       class="ris-label1-regular max-w-prose md:col-span-3"
+      :class="valueClass"
     >
       <div>
         <slot />
@@ -35,6 +39,7 @@ const emptyValuePlaceholder = "nicht vorhanden";
       v-else-if="valueList?.length"
       :key="listItem"
       class="ris-label1-regular max-w-prose md:col-span-3 md:col-start-2"
+      :class="valueClass"
     >
       {{ listItem }}
     </dd>
@@ -42,6 +47,7 @@ const emptyValuePlaceholder = "nicht vorhanden";
       v-else
       class="ris-label1-regular max-w-prose data-empty:text-gray-900 md:col-span-3"
       :data-empty="emptyProp"
+      :class="valueClass"
     >
       {{ value || placeholder || emptyValuePlaceholder }}
     </dd>

@@ -36,7 +36,7 @@ const normTitle = computed(() => getNormTitle(props.metadata));
             class="wrap-break-word hyphens-auto max-sm:text-2xl"
             v-html="props.htmlParts?.heading"
           />
-          <div v-else class="titel wrap-break-word max-sm:text-2xl">
+          <div v-else class="titel wrap-break-word">
             {{ normTitle }}
           </div>
         </ExpandableText>
@@ -48,7 +48,7 @@ const normTitle = computed(() => getNormTitle(props.metadata));
             class="wrap-break-word hyphens-auto max-sm:text-2xl"
             v-html="props.htmlParts.heading"
           ></div>
-          <div v-else class="titel wrap-break-word max-sm:text-2xl">
+          <div v-else class="titel wrap-break-word">
             {{ normTitle }}
           </div>
         </template>
