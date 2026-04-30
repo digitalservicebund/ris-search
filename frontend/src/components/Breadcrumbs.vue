@@ -47,7 +47,7 @@ const effectiveItems = computed(() => {
 
   if (shouldCollapse) {
     const drawerMenuItem: MenuItem = {
-      label: "Navigiere zu...",
+      label: "Navigiere zu",
       command: () => (drawerVisible.value = true),
     };
     result = [all[0]!, drawerMenuItem, all.at(-1)!];
@@ -102,9 +102,9 @@ const drawerId = useId();
 
   <Drawer
     v-model:visible="drawerVisible"
-    aria-label="Navigiere zu..."
+    aria-label="Navigiere zu"
     block-scroll
-    header="Navigiere zu..."
+    header="Navigiere zu"
     position="bottom"
     :id="drawerId"
     :close-button-props="drawerCloseButton"

@@ -616,9 +616,9 @@ test.describe("mobile breadcrumbs", () => {
     ).toBeVisible();
     await expect(breadcrumb.getByText("§ 9")).toBeVisible();
 
-    await page.getByRole("button", { name: "Navigiere zu..." }).click();
+    await page.getByRole("button", { name: "Navigiere zu" }).click();
 
-    const dialog = page.getByRole("dialog", { name: "Navigiere zu..." });
+    const dialog = page.getByRole("dialog", { name: "Navigiere zu" });
 
     await expect(dialog).toBeVisible();
 
@@ -647,9 +647,9 @@ test.describe("mobile breadcrumbs", () => {
       "/norms/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu/art-z2",
     );
 
-    await page.getByRole("button", { name: "Navigiere zu..." }).click();
+    await page.getByRole("button", { name: "Navigiere zu" }).click();
     await expect(
-      page.getByRole("dialog", { name: "Navigiere zu..." }),
+      page.getByRole("dialog", { name: "Navigiere zu" }),
     ).toBeVisible();
 
     await page.getByRole("link", { name: "FrSaftErfrischV" }).first().click();
