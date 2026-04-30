@@ -4,8 +4,6 @@ import type { BreadcrumbItem } from "~/components/Breadcrumbs.vue";
 import SimpleSearchInput from "~/components/search/SimpleSearchInput.vue";
 import { fetchTranslationList } from "~/composables/useTranslationData";
 import type { TranslationContent } from "~/composables/useTranslationData";
-import { DocumentKind } from "~/types/api";
-import { formatDocumentKind } from "~/utils/displayValues";
 
 useHead({
   htmlAttrs: { lang: "en" },
@@ -16,11 +14,7 @@ const activeSearchTerm = ref("");
 const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
   return [
     {
-      label: formatDocumentKind(DocumentKind.Norm),
-      route: `/search?documentKind=${DocumentKind.Norm}`,
-    },
-    {
-      label: "Translations",
+      label: "English translations",
       route: "/tranlsations",
     },
   ];

@@ -53,11 +53,7 @@ const germanOriginalWorkEli = computed(() => {
 const breadcrumbItems = computed(() => {
   const items: BreadcrumbItem[] = [
     {
-      label: formatDocumentKind(DocumentKind.Norm),
-      route: `/search?documentKind=${DocumentKind.Norm}`,
-    },
-    {
-      label: "Translations",
+      label: "English translations",
       route: "/translations",
     },
   ];
