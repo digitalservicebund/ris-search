@@ -28,11 +28,12 @@ const handleDrawerItemClick = async (item: ActionMenuItem) => {
 </script>
 
 <template>
-  <div class="md:hidden">
+  <div class="md:hidden" v-bind="$attrs">
     <Button
       ref="drawerTriggerRef"
       aria-label="Aktionen anzeigen"
       text
+      size="small"
       :aria-controls="drawerId"
       :aria-expanded="drawerVisible"
       @click="drawerVisible = true"

@@ -80,6 +80,7 @@ const detailItems = computed(() =>
   >
     <template #actionMenu>
       <DocumentsActionMenuAdministrativeDirectiveActionMenu
+        class="mb-auto"
         :administrative-directive="data"
       />
     </template>

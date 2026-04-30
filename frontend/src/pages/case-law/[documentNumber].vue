@@ -170,7 +170,7 @@ const detailsSectionId = useId();
     :views
   >
     <template #actionMenu>
-      <DocumentsActionMenuCaseLawActionMenu :case-law />
+      <DocumentsActionMenuCaseLawActionMenu :case-law class="mb-auto" />
     </template>
 
     <template #details>

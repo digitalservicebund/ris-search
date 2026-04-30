@@ -76,7 +76,10 @@ const detailItems = computed(() => getLiteratureDetailItems(literature.value));
     :views
   >
     <template #actionMenu>
-      <DocumentsActionMenuLiteratureActionMenu :literature="literature" />
+      <DocumentsActionMenuLiteratureActionMenu
+        :literature="literature"
+        class="mb-auto"
+      />
     </template>
 
     <template #details>

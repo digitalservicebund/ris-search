@@ -127,7 +127,7 @@ const detailsTabPanelTitleId = useId();
   <div v-if="currentTranslation" class="container">
     <div class="flex items-center gap-8 print:hidden">
       <Breadcrumbs :items="breadcrumbItems" class="grow" />
-      <NormTranslationActionMenu />
+      <NormTranslationActionMenu class="mb-auto" />
     </div>
 
     <hgroup class="dokumentenkopf mt-24 mb-48">

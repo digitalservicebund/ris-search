@@ -194,7 +194,11 @@ const fassungenTabPanelTitleId = useId();
     <div class="container">
       <div class="flex items-center gap-4 md:gap-16 print:hidden">
         <Breadcrumbs :items="breadcrumbItems" class="grow" />
-        <DocumentsActionMenuNormActionMenu :metadata :translation-url />
+        <DocumentsActionMenuNormActionMenu
+          :metadata
+          :translation-url
+          class="mb-auto"
+        />
       </div>
       <DocumentsNormsNormHeadingGroup
         :metadata="metadata"
