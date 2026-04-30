@@ -196,8 +196,8 @@ test("displays validity in breadcrumb navigation", async ({
   await expect(breadcrumbLinks).toContainText([
     "Startseite",
     "", // Empty items are separators
-    "Gesetze & Verordnungen",
+    "Suche",
     "",
-    "FrSaftErfrischV vom 29.04.2023",
+    "FrSaftErfrischV",
   ]);
 });

@@ -128,7 +128,7 @@ const breadcrumbItems: Ref<BreadcrumbItem[]> = computed(() => {
 
   const list: BreadcrumbItem[] = [
     {
-      label: formatDocumentKind(DocumentKind.Norm),
+      label: "Suche",
       route: `/search?documentKind=${DocumentKind.Norm}`,
     },
     {

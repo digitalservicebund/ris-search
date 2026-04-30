@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { DocumentView } from "~/layouts/document.vue";
 import type { TreeItem } from "~/components/TreeView.vue";
+import type { DocumentView } from "~/layouts/document.vue";
 import { type AdministrativeDirective, DocumentKind } from "~/types/api";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineInfo from "~icons/ic/outline-info";
@@ -51,7 +51,7 @@ const tocEntries = computed<TreeItem[] | null>(() => {
 
 const breadcrumbs = computed(() => [
   {
-    label: formatDocumentKind(DocumentKind.AdministrativeDirective),
+    label: "Suche",
     route: {
       name: "search",
       query: { documentKind: DocumentKind.AdministrativeDirective },

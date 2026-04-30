@@ -24,7 +24,7 @@ test("displays literature page with metadata and text tab by default", async ({
   await expect(breadcrumb).toBeVisible();
   await expect(breadcrumb.getByRole("link")).toContainText([
     "Startseite",
-    "Literaturnachweise",
+    "Suche",
   ]);
 
   // Main title
@@ -289,7 +289,10 @@ test.describe("mobile table of contents", () => {
 test("can navigate to search via breadcrumb", async ({ page }) => {
   await navigate(page, "/literature/XXLU000000001");
 
-  await page.getByRole("link", { name: "Literaturnachweise" }).click();
+  await page
+    .getByLabel("Pfadnavigation")
+    .getByRole("link", { name: "Suche" })
+    .click();
 
   await expect(
     page.getByRole("heading", { level: 1, name: "Suche" }),

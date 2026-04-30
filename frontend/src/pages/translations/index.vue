@@ -2,8 +2,8 @@
 import MiniSearch from "minisearch";
 import type { BreadcrumbItem } from "~/components/Breadcrumbs.vue";
 import SimpleSearchInput from "~/components/search/SimpleSearchInput.vue";
-import { fetchTranslationList } from "~/composables/useTranslationData";
 import type { TranslationContent } from "~/composables/useTranslationData";
+import { fetchTranslationList } from "~/composables/useTranslationData";
 
 useHead({
   htmlAttrs: { lang: "en" },

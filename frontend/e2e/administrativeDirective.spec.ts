@@ -24,7 +24,7 @@ test("displays administrative directive page with metadata and text tab by defau
   await expect(breadcrumb).toBeVisible();
   await expect(breadcrumb.getByRole("link")).toContainText([
     "Startseite",
-    "Verwaltungsvorschriften",
+    "Suche",
   ]);
   const expectedTitle =
     "Verwaltungsvorschrift für das Testen des Portals zur Darstellung von Verwaltungsvorschriften";
@@ -188,7 +188,10 @@ test.describe("mobile table of contents", () => {
 test("can navigate to search via breadcrumb", async ({ page }) => {
   await navigate(page, "/administrative-directives/KSNR000000001");
 
-  await page.getByRole("link", { name: "Verwaltungsvorschriften" }).click();
+  await page
+    .getByLabel("Pfadnavigation")
+    .getByRole("link", { name: "Suche" })
+    .click();
 
   await expect(
     page.getByRole("heading", { level: 1, name: "Suche" }),
