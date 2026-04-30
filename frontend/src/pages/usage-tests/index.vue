@@ -9,7 +9,7 @@ useStaticPageSeo("nutzungstests");
 <template>
   <NuxtLayout name="markdown-page" :static-content="text">
     <template #breadcrumb>
-      <Breadcrumbs :items="[{ label: 'Für Nutzungstests registrieren' }]" />
+      <Breadcrumbs :items="[{ label: 'Nutzungstests' }]" />
     </template>
   </NuxtLayout>
 </template>
