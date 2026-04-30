@@ -144,7 +144,7 @@ const detailItems = computed(() =>
 }
 
 :deep(.administrative-directive p) {
-  @apply mb-16 overflow-x-auto;
+  @apply mb-16 wrap-break-word hyphens-auto;
 }
 
 :deep(.administrative-directive ul) {
