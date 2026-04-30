@@ -68,29 +68,29 @@ const drawerId = useId();
 <template>
   <Breadcrumb :model="effectiveItems" :aria-label="label" v-bind="$attrs">
     <template #item="slot">
-      <button
-        v-if="slot.item.command"
-        ref="drawerTriggerRef"
-        class="ris-body2-regular flex h-32 w-32 items-center justify-center rounded-[2px] border border-blue-500 bg-blue-200 text-blue-800 outline-offset-4 outline-blue-800 focus-visible:outline-4 active:bg-blue-400"
-        :aria-controls="drawerId"
-        :aria-expanded="drawerVisible"
-        @click="
-          (e) => slot.item.command?.({ item: slot.item, originalEvent: e })
-        "
-      >
-        <IcBaselineMoreHoriz />
-        <span class="sr-only">{{ slot.item.label }}</span>
-      </button>
+      <span v-if="slot.item.command">
+        <button
+          ref="drawerTriggerRef"
+          class="ris-body2-regular flex h-32 w-32 items-center justify-center rounded-xs border border-blue-500 bg-blue-200 text-blue-800 outline-offset-4 outline-blue-800 focus-visible:outline-4 active:bg-blue-400"
+          :aria-controls="drawerId"
+          :aria-expanded="drawerVisible"
+          @click="
+            (e) => slot.item.command?.({ item: slot.item, originalEvent: e })
+          "
+        >
+          <IcBaselineMoreHoriz />
+          <span class="sr-only">{{ slot.item.label }}</span>
+        </button>
+      </span>
 
       <NuxtLink
         v-else-if="slot.item.route && slot.item !== effectiveItems.at(-1)"
-        class="ris-link2-regular link-hover line-clamp-1"
         :to="slot.item.route"
       >
         {{ slot.item.label }}
       </NuxtLink>
 
-      <span v-else class="ris-body2-regular line-clamp-1 text-gray-900">
+      <span v-else>
         {{ slot.item.label }}
       </span>
     </template>
@@ -115,14 +115,14 @@ const drawerId = useId();
           v-if="i.route && i !== itemsWithHome.at(-1)"
           :to="i.route"
           @click="drawerVisible = false"
-          class="body-font-link link-hover line-clamp-1 flex py-12"
+          class="body-font-link link-hover flex py-12"
         >
           {{ i.extendedLabel ?? i.label }}
         </NuxtLink>
 
         <span
           v-else
-          class="body-font line-clamp-1 flex cursor-not-allowed py-12 text-gray-900"
+          class="body-font flex cursor-not-allowed py-12 text-gray-900"
         >
           {{ i.extendedLabel ?? i.label }}
         </span>
