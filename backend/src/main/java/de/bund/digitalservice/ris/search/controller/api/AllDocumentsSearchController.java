@@ -13,6 +13,7 @@ import de.bund.digitalservice.ris.search.schema.AbstractDocumentSchema;
 import de.bund.digitalservice.ris.search.schema.CollectionSchema;
 import de.bund.digitalservice.ris.search.schema.SearchMemberSchema;
 import de.bund.digitalservice.ris.search.service.AllDocumentsService;
+import de.bund.digitalservice.ris.search.service.ArticleService;
 import de.bund.digitalservice.ris.search.utils.LuceneQueryTools;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -41,9 +42,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class AllDocumentsSearchController {
 
   private final AllDocumentsService allDocumentsService;
+  private final ArticleService articleService;
 
-  public AllDocumentsSearchController(AllDocumentsService allDocumentsService) {
+  public AllDocumentsSearchController(
+      AllDocumentsService allDocumentsService, ArticleService articleService) {
     this.allDocumentsService = allDocumentsService;
+    this.articleService = articleService;
   }
 
   /**
@@ -95,6 +99,7 @@ public class AllDocumentsSearchController {
     try {
       SearchPage<AbstractSearchEntity> searchResult =
           allDocumentsService.simpleSearchAllDocuments(request, sortedPageRequest, mostRelevantOn);
+      articleService.populateArticleTextMatches(searchResult, request.getSearchTerm());
 
       return ResponseEntity.ok()
           .contentType(MediaType.APPLICATION_JSON)

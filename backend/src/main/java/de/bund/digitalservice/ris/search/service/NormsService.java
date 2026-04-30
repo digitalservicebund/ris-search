@@ -40,7 +40,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
-import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.SearchPage;
 import org.springframework.stereotype.Service;
@@ -56,7 +55,7 @@ public class NormsService {
   private final ArticlesRepository articlesRepository;
   private final ElasticsearchOperations operations;
   private final SimpleSearchQueryBuilder simpleSearchQueryBuilder;
-  private final ArticleSearchQueryBuilder articleSearchQueryBuilder;
+  private final ArticleService articleService;
   private final RestHighLevelClient openSearchRestClient;
   private final NormsBucket normsBucket;
   private final String normsIndexName;
@@ -78,7 +77,7 @@ public class NormsService {
       ElasticsearchOperations operations,
       RestHighLevelClient openSearchRestClient,
       SimpleSearchQueryBuilder simpleSearchQueryBuilder,
-      ArticleSearchQueryBuilder articleSearchQueryBuilder,
+      ArticleService articleService,
       @Value("${opensearch.norms-index-name}") String normsIndexName) {
     this.normsRepository = normsRepository;
     this.articlesRepository = articlesRepository;
@@ -87,7 +86,7 @@ public class NormsService {
     this.openSearchRestClient = openSearchRestClient;
     this.simpleSearchQueryBuilder = simpleSearchQueryBuilder;
     this.normsIndexName = normsIndexName;
-    this.articleSearchQueryBuilder = articleSearchQueryBuilder;
+    this.articleService = articleService;
   }
 
   /**
@@ -109,11 +108,7 @@ public class NormsService {
         simpleSearchQueryBuilder.buildQuery(
             List.of(new NormSimpleSearchType(normsSearchParams)), params, pageable);
     SearchHits<Norm> searchHits = operations.search(query, Norm.class);
-    List<String> expressionElis =
-        searchHits.getSearchHits().stream().map(SearchHit::getId).toList();
-
-    SearchHits<Article> articleTexts =
-        articleSearchQueryBuilder.getArticleTextMatches(expressionElis, params.getSearchTerm());
+    articleService.populateArticleTextMatches(searchHits, params.getSearchTerm());
 
     return PageUtils.unwrapSearchHits(searchHits, pageable);
   }
