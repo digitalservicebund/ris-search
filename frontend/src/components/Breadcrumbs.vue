@@ -24,7 +24,7 @@ const {
   label = "Pfadnavigation",
 } = defineProps<{
   /**
-   * When set, the breadcrumbs will show a maximum of 4 items, after which
+   * When set, the breadcrumbs will show a maximum of 3 items, after which
    * all items between the first and the last item will be tucked away in a
    * drawer that can be opened with a button.
    */

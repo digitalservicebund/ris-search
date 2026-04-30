@@ -117,12 +117,14 @@ function getRouteForSiblingArticle(
   };
 }
 
+const NORM_INFO_MAX_LENGTH = 23;
+
 const breadcrumbItems: Ref<BreadcrumbItem[]> = computed(() => {
   const currentNodePath = eId.value
     ? (findNodePath(tableOfContents.value, eId.value) ?? [])
     : [];
 
-  const title = truncateAtWord(normTitle.value, 23, true);
+  const title = truncateAtWord(normTitle.value, NORM_INFO_MAX_LENGTH, true);
 
   const list: BreadcrumbItem[] = [
     {
