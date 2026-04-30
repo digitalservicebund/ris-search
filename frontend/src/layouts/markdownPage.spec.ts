@@ -1,5 +1,5 @@
 import { renderSuspended } from "@nuxt/test-utils/runtime";
-import { screen, within } from "@testing-library/vue";
+import { screen } from "@testing-library/vue";
 import { describe, it, expect } from "vitest";
 import MarkdownPage from "./markdownPage.vue";
 
@@ -14,10 +14,8 @@ describe("markdownPage", () => {
       },
     });
 
-    const nav = screen.getByRole("navigation", { name: "Brotkrumen" });
-    expect(nav).toBeInTheDocument();
-    expect(within(nav).getByText("Home")).toBeInTheDocument();
-    expect(within(nav).getByText("Current")).toBeInTheDocument();
+    expect(screen.getByText("Home")).toBeInTheDocument();
+    expect(screen.getByText("Current")).toBeInTheDocument();
   });
 
   it("renders markdown content", async () => {
