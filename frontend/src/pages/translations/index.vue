@@ -15,7 +15,7 @@ const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
   return [
     {
       label: "English translations",
-      route: "/tranlsations",
+      route: "/translations",
     },
   ];
 });
