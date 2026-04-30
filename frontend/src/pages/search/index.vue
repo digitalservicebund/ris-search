@@ -180,7 +180,9 @@ useHead({ title });
 </script>
 
 <template>
-  <div class="pb-24">
+  <Breadcrumbs :items="[{ label: 'Suche' }]" />
+
+  <div class="py-24">
     <h1 class="ris-heading2-bold inline-block">Suche</h1>
   </div>
 
