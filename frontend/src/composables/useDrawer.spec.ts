@@ -50,6 +50,6 @@ describe("useDrawer", () => {
   });
 
   it("returns a default value for the drawer close button", () => {
-    expect(useDrawer().drawerCloseButton).toBeTruthy();
+    expect(useDrawer().closeButtonProps).toBeTruthy();
   });
 });

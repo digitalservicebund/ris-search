@@ -2,10 +2,8 @@
 import MiniSearch from "minisearch";
 import type { BreadcrumbItem } from "~/components/Breadcrumbs.vue";
 import SimpleSearchInput from "~/components/search/SimpleSearchInput.vue";
-import { fetchTranslationList } from "~/composables/useTranslationData";
 import type { TranslationContent } from "~/composables/useTranslationData";
-import { DocumentKind } from "~/types/api";
-import { formatDocumentKind } from "~/utils/displayValues";
+import { fetchTranslationList } from "~/composables/useTranslationData";
 
 useHead({
   htmlAttrs: { lang: "en" },
@@ -16,12 +14,8 @@ const activeSearchTerm = ref("");
 const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
   return [
     {
-      label: formatDocumentKind(DocumentKind.Norm),
-      route: `/search?documentKind=${DocumentKind.Norm}`,
-    },
-    {
-      label: "Translations",
-      route: "/tranlsations",
+      label: "English translations",
+      route: "/translations",
     },
   ];
 });
@@ -80,7 +74,7 @@ const translationsListId = useId();
 </script>
 
 <template>
-  <div class="flex items-center gap-4 md:gap-16 print:hidden">
+  <div class="print:hidden">
     <Breadcrumbs :items="breadcrumbItems" />
   </div>
 

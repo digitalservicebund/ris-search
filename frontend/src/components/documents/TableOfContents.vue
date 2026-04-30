@@ -16,7 +16,7 @@ const props = defineProps<Props>();
 const {
   visible: mobileTocVisible,
   triggerRef: openButtonRef,
-  drawerCloseButton,
+  closeButtonProps,
 } = useDrawer();
 
 const drawerId = useId();
@@ -52,7 +52,7 @@ const drawerId = useId();
     block-scroll
     position="bottom"
     :id="drawerId"
-    :close-button-props="drawerCloseButton"
+    :close-button-props="closeButtonProps"
   >
     <template #header>
       <div class="line-clamp-1">

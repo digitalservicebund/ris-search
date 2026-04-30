@@ -13,6 +13,11 @@ test.describe("view norm article page", () => {
       await page.waitForURL(`${mainExpressionEliUrl}/art-z1`, {
         waitUntil: "commit",
       });
+      await expect
+        .soft(
+          page.getByRole("paragraph").filter({ hasText: "FrSaftErfrischV" }),
+        )
+        .toBeVisible();
       const heading = page.getByRole("heading", {
         level: 1,
         name: "§ 1 Anwendungsbereich",
@@ -392,12 +397,8 @@ test("shows correct breadcrumbs for a nested article", async ({
   await expect(
     breadcrumb.getByRole("link", { name: "Startseite" }),
   ).toBeVisible();
-  await expect(
-    breadcrumb.getByRole("link", { name: "Gesetze & Verordnungen" }),
-  ).toBeVisible();
-  await expect(
-    breadcrumb.getByRole("link", { name: "BWahlGV vom 24.04.1999" }),
-  ).toBeVisible();
+  await expect(breadcrumb.getByRole("link", { name: "Suche" })).toBeVisible();
+  await expect(breadcrumb.getByRole("link", { name: "BWahlGV" })).toBeVisible();
   await expect(
     breadcrumb.getByRole("link", { name: "Dritter Abschnitt" }),
   ).toBeVisible();
@@ -424,12 +425,8 @@ test("shows correct breadcrumbs for an Eingangsformel", async ({
   await expect(
     breadcrumb.getByRole("link", { name: "Startseite" }),
   ).toBeVisible();
-  await expect(
-    breadcrumb.getByRole("link", { name: "Gesetze & Verordnungen" }),
-  ).toBeVisible();
-  await expect(
-    breadcrumb.getByRole("link", { name: "MFG vom 23.12.2024" }),
-  ).toBeVisible();
+  await expect(breadcrumb.getByRole("link", { name: "Suche" })).toBeVisible();
+  await expect(breadcrumb.getByRole("link", { name: "MFG" })).toBeVisible();
   await expect(breadcrumb.getByText("Eingangsformel")).toBeVisible();
 });
 
@@ -616,21 +613,17 @@ test.describe("mobile breadcrumbs", () => {
     ).toBeVisible();
     await expect(breadcrumb.getByText("§ 9")).toBeVisible();
 
-    await page.getByRole("button", { name: "Navigiere zu..." }).click();
+    await page.getByRole("button", { name: "Navigiere zu" }).click();
 
-    const dialog = page.getByRole("dialog", { name: "Navigiere zu..." });
+    const dialog = page.getByRole("dialog", { name: "Navigiere zu" });
 
     await expect(dialog).toBeVisible();
 
     await expect(
       dialog.getByRole("link", { name: "Startseite" }),
     ).toBeVisible();
-    await expect(
-      dialog.getByRole("link", { name: "Gesetze & Verordnungen" }),
-    ).toBeVisible();
-    await expect(
-      dialog.getByRole("link", { name: "BWahlGV vom 24.04.1999" }),
-    ).toBeVisible();
+    await expect(dialog.getByRole("link", { name: "Suche" })).toBeVisible();
+    await expect(dialog.getByRole("link", { name: "BWahlGV" })).toBeVisible();
     await expect(
       dialog.getByRole("link", { name: "Dritter Abschnitt" }),
     ).toBeVisible();
@@ -647,9 +640,9 @@ test.describe("mobile breadcrumbs", () => {
       "/norms/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu/art-z2",
     );
 
-    await page.getByRole("button", { name: "Navigiere zu..." }).click();
+    await page.getByRole("button", { name: "Navigiere zu" }).click();
     await expect(
-      page.getByRole("dialog", { name: "Navigiere zu..." }),
+      page.getByRole("dialog", { name: "Navigiere zu" }),
     ).toBeVisible();
 
     await page.getByRole("link", { name: "FrSaftErfrischV" }).first().click();

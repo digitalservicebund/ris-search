@@ -11,8 +11,6 @@ import {
   fetchTranslationAndHTML,
   getGermanOriginal,
 } from "~/composables/useTranslationData";
-import { DocumentKind } from "~/types/api";
-import { formatDocumentKind } from "~/utils/displayValues";
 import { removePrefix, truncateAtWord } from "~/utils/textFormatting";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineInfo from "~icons/ic/outline-info";
@@ -53,11 +51,7 @@ const germanOriginalWorkEli = computed(() => {
 const breadcrumbItems = computed(() => {
   const items: BreadcrumbItem[] = [
     {
-      label: formatDocumentKind(DocumentKind.Norm),
-      route: `/search?documentKind=${DocumentKind.Norm}`,
-    },
-    {
-      label: "Translations",
+      label: "English translations",
       route: "/translations",
     },
   ];
@@ -127,7 +121,7 @@ const detailsTabPanelTitleId = useId();
   <div v-if="currentTranslation" class="container">
     <div class="flex items-center gap-8 print:hidden">
       <Breadcrumbs :items="breadcrumbItems" class="grow" />
-      <NormTranslationActionMenu />
+      <NormTranslationActionMenu class="mb-auto" />
     </div>
 
     <hgroup class="dokumentenkopf mt-24 mb-48">

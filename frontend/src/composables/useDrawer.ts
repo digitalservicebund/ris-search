@@ -29,11 +29,11 @@ export function useDrawer() {
     }
   });
 
-  const drawerCloseButton: DrawerProps["closeButtonProps"] = {
+  const closeButtonProps: DrawerProps["closeButtonProps"] = {
     size: "small",
     label: "Schließen",
     iconPos: "right",
   };
 
-  return { visible, triggerRef, drawerCloseButton };
+  return { visible, triggerRef, closeButtonProps };
 }

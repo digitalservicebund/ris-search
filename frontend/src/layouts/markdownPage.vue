@@ -10,10 +10,9 @@ const breadcrumbHeadingId = useId();
 
 <template>
   <DefaultLayout>
-    <nav :aria-labelledby="breadcrumbHeadingId">
-      <h2 :id="breadcrumbHeadingId" class="sr-only">Brotkrumen</h2>
+    <div>
       <slot name="breadcrumb" />
-    </nav>
+    </div>
 
     <div class="prose">
       <MDC :value="staticContent"></MDC>

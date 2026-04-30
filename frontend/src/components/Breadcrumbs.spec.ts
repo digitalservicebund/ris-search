@@ -65,7 +65,7 @@ describe("Breadcrumbs", () => {
       });
 
       expect(
-        screen.queryByRole("button", { name: "Navigiere zu..." }),
+        screen.queryByRole("button", { name: "Navigiere zu" }),
       ).not.toBeInTheDocument();
       expect(screen.getByRole("link", { name: "A" })).toBeVisible();
       expect(screen.getByRole("link", { name: "B" })).toBeVisible();
@@ -82,7 +82,7 @@ describe("Breadcrumbs", () => {
       });
 
       expect(
-        screen.queryByRole("button", { name: "Navigiere zu..." }),
+        screen.queryByRole("button", { name: "Navigiere zu" }),
       ).not.toBeInTheDocument();
       expect(screen.getByRole("link", { name: "A" })).toBeVisible();
     });
@@ -101,7 +101,7 @@ describe("Breadcrumbs", () => {
       });
 
       expect(
-        screen.getByRole("button", { name: "Navigiere zu..." }),
+        screen.getByRole("button", { name: "Navigiere zu" }),
       ).toBeVisible();
       expect(screen.getByRole("link", { name: "Startseite" })).toBeVisible();
       expect(screen.getByText("Last")).toBeVisible();
@@ -123,7 +123,7 @@ describe("Breadcrumbs", () => {
         global: { stubs: { NuxtLink: nuxtLinkStub } },
       });
 
-      await user.click(screen.getByRole("button", { name: "Navigiere zu..." }));
+      await user.click(screen.getByRole("button", { name: "Navigiere zu" }));
 
       const dialog = screen.getByRole("dialog");
       expect(dialog).toBeVisible();
@@ -158,7 +158,7 @@ describe("Breadcrumbs", () => {
         global: { stubs: { NuxtLink: nuxtLinkStub } },
       });
 
-      await user.click(screen.getByRole("button", { name: "Navigiere zu..." }));
+      await user.click(screen.getByRole("button", { name: "Navigiere zu" }));
 
       const dialog = screen.getByRole("dialog");
       expect(

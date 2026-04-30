@@ -38,17 +38,6 @@ const norm = computed(() => data.value?.legislation);
 
 const normTitle = computed(() => getNormBreadcrumbTitle(norm.value));
 
-const normTitleWithValidity = computed(() => {
-  const expressionValidityInterval = privateFeaturesEnabled
-    ? temporalCoverageToValidityInterval(norm.value?.temporalCoverage)
-    : undefined;
-
-  const validFrom = dateFormattedDDMMYYYY(expressionValidityInterval?.from);
-  const validFromDisplay = validFrom ? ` vom ${validFrom}` : "";
-
-  return normTitle.value + validFromDisplay;
-});
-
 const articleHtml = computed(() => data.value?.htmlBody);
 
 if (error.value) {
@@ -128,22 +117,24 @@ function getRouteForSiblingArticle(
   };
 }
 
+const NORM_INFO_MAX_LENGTH = 23;
+
 const breadcrumbItems: Ref<BreadcrumbItem[]> = computed(() => {
   const currentNodePath = eId.value
     ? (findNodePath(tableOfContents.value, eId.value) ?? [])
     : [];
 
-  const title = truncateAtWord(normTitleWithValidity.value, 23, true);
+  const title = truncateAtWord(normTitle.value, NORM_INFO_MAX_LENGTH, true);
 
   const list: BreadcrumbItem[] = [
     {
-      label: formatDocumentKind(DocumentKind.Norm),
+      label: "Suche",
       route: `/search?documentKind=${DocumentKind.Norm}`,
     },
     {
       label: title,
       route: normPath,
-      extendedLabel: normTitleWithValidity.value,
+      extendedLabel: normTitle.value,
     },
   ];
 
@@ -244,7 +235,7 @@ useDynamicSeo({ title, description });
 
       <div class="my-24 mb-24">
         <p class="ris-label1-regular md:ris-subhead-regular mb-8">
-          {{ normTitleWithValidity }}
+          {{ normTitle }}
         </p>
         <h1 class="ris-heading2-bold" v-html="htmlTitle" />
       </div>

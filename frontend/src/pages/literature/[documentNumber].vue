@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { DocumentView } from "~/layouts/document.vue";
 import type { TreeItem } from "~/components/TreeView.vue";
+import type { DocumentView } from "~/layouts/document.vue";
 import { DocumentKind, type Literature } from "~/types/api";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineInfo from "~icons/ic/outline-info";
@@ -55,7 +55,7 @@ const tocEntries = computed<TreeItem[] | null>(() => {
 
 const breadcrumbs = computed(() => [
   {
-    label: formatDocumentKind(DocumentKind.Literature),
+    label: "Suche",
     route: `/search?documentKind=${DocumentKind.Literature}`,
   },
   { label: title.value ?? "Titelzeile nicht vorhanden" },
@@ -76,7 +76,10 @@ const detailItems = computed(() => getLiteratureDetailItems(literature.value));
     :views
   >
     <template #actionMenu>
-      <DocumentsActionMenuLiteratureActionMenu :literature="literature" />
+      <DocumentsActionMenuLiteratureActionMenu
+        :literature="literature"
+        class="mb-auto"
+      />
     </template>
 
     <template #details>

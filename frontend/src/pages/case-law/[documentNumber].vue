@@ -116,7 +116,7 @@ const title = computed(() => {
 
 const breadcrumbs = computed(() => [
   {
-    label: formatDocumentKind(DocumentKind.CaseLaw),
+    label: "Suche",
     route: `/search?documentKind=${DocumentKind.CaseLaw}`,
   },
   { label: title.value ?? "Titelzeile nicht vorhanden" },
@@ -170,7 +170,7 @@ const detailsSectionId = useId();
     :views
   >
     <template #actionMenu>
-      <DocumentsActionMenuCaseLawActionMenu :case-law />
+      <DocumentsActionMenuCaseLawActionMenu :case-law class="mb-auto" />
     </template>
 
     <template #details>

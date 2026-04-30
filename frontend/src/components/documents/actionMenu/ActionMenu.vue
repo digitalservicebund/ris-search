@@ -16,7 +16,7 @@ const { actions } = defineProps<{ actions: ActionMenuItem[] }>();
 const {
   visible: drawerVisible,
   triggerRef: drawerTriggerRef,
-  drawerCloseButton,
+  closeButtonProps,
 } = useDrawer();
 
 const drawerId = useId();
@@ -28,11 +28,12 @@ const handleDrawerItemClick = async (item: ActionMenuItem) => {
 </script>
 
 <template>
-  <div class="md:hidden">
+  <div class="md:hidden" v-bind="$attrs">
     <Button
       ref="drawerTriggerRef"
       aria-label="Aktionen anzeigen"
       text
+      size="small"
       :aria-controls="drawerId"
       :aria-expanded="drawerVisible"
       @click="drawerVisible = true"
@@ -49,7 +50,7 @@ const handleDrawerItemClick = async (item: ActionMenuItem) => {
       block-scroll
       header="Aktionen"
       position="bottom"
-      :close-button-props="drawerCloseButton"
+      :close-button-props="closeButtonProps"
     >
       <ul class="-mt-8">
         <li v-for="item in actions">
