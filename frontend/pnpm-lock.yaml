@@ -12,8 +12,8 @@ importers:
   .:
     dependencies:
       '@digitalservicebund/ris-ui':
-        specifier: 4.1.2
-        version: 4.1.2(primevue@4.5.5(vue@3.5.32(typescript@5.9.3)))(tailwindcss@4.2.3)(vue@3.5.32(typescript@5.9.3))
+        specifier: 4.2.0
+        version: 4.2.0(primevue@4.5.5(vue@3.5.32(typescript@5.9.3)))(tailwindcss@4.2.3)(vue@3.5.32(typescript@5.9.3))
       '@nuxtjs/mdc':
         specifier: 0.21.1
         version: 0.21.1(magicast@0.5.2)
@@ -353,8 +353,8 @@ packages:
     resolution: {integrity: sha512-QxULHAm7cNu72w97JUNCBFODFaXpbDg+dP8b/oWFAZ2MTRppA3U00Y2L1HqaS4J6yBqxwa/Y3nMBaxVKbB/NsA==}
     engines: {node: '>=20.19.0'}
 
-  '@digitalservicebund/ris-ui@4.1.2':
-    resolution: {integrity: sha512-r7lEe/jECe8+yzonkDHLmcKNkCTwnYOhnppzI1F8fjO3WGHr/L2bjTetxsozljGylM02rla/PyLYYWzXD8apbg==}
+  '@digitalservicebund/ris-ui@4.2.0':
+    resolution: {integrity: sha512-B95TRWF+Uo1ogFulP23NejYEquqohYzD3iFaHn6KRW4aQc9JL/Tu6+3QvDqA4hO87er3FosljH07SZhCG6OXVg==}
     peerDependencies:
       primevue: ^4.0.0
       tailwindcss: ^4.0.0
@@ -6797,7 +6797,7 @@ snapshots:
 
   '@csstools/css-tokenizer@4.0.0': {}
 
-  '@digitalservicebund/ris-ui@4.1.2(primevue@4.5.5(vue@3.5.32(typescript@5.9.3)))(tailwindcss@4.2.3)(vue@3.5.32(typescript@5.9.3))':
+  '@digitalservicebund/ris-ui@4.2.0(primevue@4.5.5(vue@3.5.32(typescript@5.9.3)))(tailwindcss@4.2.3)(vue@3.5.32(typescript@5.9.3))':
     dependencies:
       primevue: 4.5.5(vue@3.5.32(typescript@5.9.3))
       tailwindcss: 4.2.3
