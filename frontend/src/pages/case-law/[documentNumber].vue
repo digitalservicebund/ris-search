@@ -261,7 +261,7 @@ const detailsSectionId = useId();
 }
 
 :deep(.case-law .border-number .content) {
-  @apply min-w-0 flex-1;
+  @apply min-w-0 flex-1 wrap-break-word hyphens-auto;
 }
 
 :deep(.case-law .border-number-link) {
@@ -293,7 +293,7 @@ const detailsSectionId = useId();
 }
 
 :deep(.case-law p) {
-  @apply mb-16 wrap-break-word;
+  @apply mb-16 wrap-break-word hyphens-auto;
   unicode-bidi: isolate;
 }
 </style>

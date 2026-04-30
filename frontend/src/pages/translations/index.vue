@@ -124,6 +124,7 @@ const translationsListId = useId();
       >
         <div class="flex max-w-prose flex-col gap-8">
           <SearchResultHeader
+            lang="de"
             :items="[{ value: t['@id'] }, { value: t.translationOfWork ?? '' }]"
           />
 

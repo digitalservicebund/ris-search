@@ -142,7 +142,7 @@ const detailItems = computed(() => getLiteratureDetailItems(literature.value));
 }
 
 :deep(.literature p) {
-  @apply mb-16 overflow-x-auto;
+  @apply wrap mb-16 wrap-break-word hyphens-auto;
 }
 
 :deep(.literature ul) {
