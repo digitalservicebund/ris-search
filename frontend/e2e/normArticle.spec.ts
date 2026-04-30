@@ -13,6 +13,11 @@ test.describe("view norm article page", () => {
       await page.waitForURL(`${mainExpressionEliUrl}/art-z1`, {
         waitUntil: "commit",
       });
+      await expect
+        .soft(
+          page.getByRole("paragraph").filter({ hasText: "FrSaftErfrischV" }),
+        )
+        .toBeVisible();
       const heading = page.getByRole("heading", {
         level: 1,
         name: "§ 1 Anwendungsbereich",
