@@ -59,7 +59,7 @@ const effectiveItems = computed(() => {
 const {
   visible: drawerVisible,
   triggerRef: drawerTriggerRef,
-  drawerCloseButton,
+  closeButtonProps,
 } = useDrawer();
 
 const drawerId = useId();
@@ -107,7 +107,7 @@ const drawerId = useId();
     header="Navigiere zu"
     position="bottom"
     :id="drawerId"
-    :close-button-props="drawerCloseButton"
+    :close-button-props="closeButtonProps"
   >
     <ul class="-mt-8">
       <li v-for="i in itemsWithHome" :key="i.label">
