@@ -10,7 +10,7 @@ COPY .vitepress ./.vitepress
 COPY docs ./docs
 RUN pnpm build
 
-FROM nginxinc/nginx-unprivileged:1.29.8-alpine3.23@sha256:ede1d5af209ef9d29c902e0775ae850ce231d810a6980b1762f81110e757aa96
+FROM nginxinc/nginx-unprivileged:1.29.8-alpine3.23@sha256:f35982400455b4f359083ba9d1ef573fbbe4221a6a8a194dc7a14beb4e2cd3dc
 COPY --from=builder /app/dist /usr/share/nginx/html
 # Replace the default server configuration of the base nginx image.
 COPY nginx.conf /etc/nginx/conf.d/default.conf
