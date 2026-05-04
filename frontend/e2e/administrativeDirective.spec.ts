@@ -53,7 +53,7 @@ test("displays administrative directive page with metadata and text tab by defau
   ]);
 
   // Text section
-  const textSection = page.getByRole("region", { name: "Text" });
+  const textSection = page.getByRole("tabpanel", { name: "Text" });
   await expect(textSection.getByRole("alert")).toContainText(
     "Dieser Service befindet sich in der Testphase",
   );
@@ -324,7 +324,7 @@ test("displays references", async ({ page }) => {
   // Text section
   // Make sure the text section with references is displayed even when
   // references are the only "text" content
-  const textSection = page.getByRole("region", { name: "Text" });
+  const textSection = page.getByRole("tabpanel", { name: "Text" });
 
   await expect(
     textSection.getByRole("heading", {

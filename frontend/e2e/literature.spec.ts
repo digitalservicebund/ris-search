@@ -52,7 +52,7 @@ test("displays literature page with metadata and text tab by default", async ({
   ]);
 
   // Text section
-  const textSection = page.getByRole("region", { name: "Text" });
+  const textSection = page.getByRole("tabpanel", { name: "Text" });
   await expect(textSection.getByRole("alert")).toContainText(
     "Dieser Service befindet sich in der Testphase",
   );
@@ -147,7 +147,7 @@ test("displays sli footnotes in text section", async ({ page }) => {
       .first(),
   ).toBeVisible();
 
-  const textSection = page.getByRole("region", { name: "Text" });
+  const textSection = page.getByRole("tabpanel", { name: "Text" });
   await expect(
     textSection.getByRole("heading", {
       level: 2,
@@ -170,7 +170,7 @@ test("displays all titles", async ({ page }) => {
       .first(),
   ).toBeVisible();
 
-  const textSection = page.getByRole("region", { name: "Text" });
+  const textSection = page.getByRole("tabpanel", { name: "Text" });
   await expect(
     textSection.getByRole("heading", {
       level: 2,
@@ -192,7 +192,7 @@ test("displays all sli titles", async ({ page }) => {
       .first(),
   ).toBeVisible();
 
-  const textSection = page.getByRole("region", { name: "Text" });
+  const textSection = page.getByRole("tabpanel", { name: "Text" });
   await expect(
     textSection.getByRole("heading", {
       level: 2,
@@ -474,7 +474,7 @@ test("displays references", async ({ page }) => {
   // Text section
   // Make sure the text section with references is displayed even when
   // references are the only "text" content
-  const textSection = page.getByRole("region", { name: "Text" });
+  const textSection = page.getByRole("tabpanel", { name: "Text" });
 
   await expect(
     textSection.getByRole("heading", {
