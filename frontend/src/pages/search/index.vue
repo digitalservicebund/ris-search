@@ -5,6 +5,8 @@ import { isStrictDateFilterValue } from "~/utils/search/dateFilterType";
 
 useStaticPageSeo("suche");
 
+const filterHeadingId = useId();
+
 const {
   court,
   dateFilter,
@@ -203,8 +205,16 @@ useHead({ title });
   </p>
 
   <div class="mt-24 flex flex-col gap-48 lg:flex-row">
-    <fieldset class="top-8 flex w-full flex-col gap-24 pb-10 lg:w-3/12">
-      <legend class="ris-label1-regular flex h-48 items-center">Filter</legend>
+    <aside
+      class="top-8 flex w-full flex-col pb-10 lg:w-3/12"
+      :aria-labelledby="filterHeadingId"
+    >
+      <h2
+        :id="filterHeadingId"
+        class="ris-label1-regular flex h-48 items-center"
+      >
+        Filter
+      </h2>
 
       <SearchCategoryFilter v-model="categoryFilterValue" />
 
@@ -225,7 +235,7 @@ useHead({ title });
         v-else-if="documentKind === DocumentKind.Literature"
         v-model="dateFilter"
       />
-    </fieldset>
+    </aside>
 
     <div
       :id="mainSectionId"
