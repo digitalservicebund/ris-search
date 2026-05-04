@@ -4,16 +4,16 @@ on:
   push:
     branches: [main]
     paths:
-      - 'api-docs/**'
-      - '.github/workflows/**'
+      - "api-docs/**"
+      - ".github/workflows/**"
   pull_request:
     branches: [main]
     paths:
-      - 'api-docs/**'
-      - '.github/workflows/**'
+      - "api-docs/**"
+      - ".github/workflows/**"
   schedule:
     # This ensures that the applications container image is built, signed and deployed regularly.
-    - cron: '0 8 * * 1,3' # Runs at 8:00am UTC (9am winter time/10am summer time in Germany) on Mondays and Wednesdays
+    - cron: "0 8 * * 1,3" # Runs at 8:00am UTC (9am winter time/10am summer time in Germany) on Mondays and Wednesdays
   # Allow to run this workflow manually
   workflow_dispatch:
 
@@ -39,7 +39,7 @@ jobs:
           cache-dependency-path: ${{ env.API_DOCS_ROOT }}/pnpm-lock.yaml
 
       - name: Install Node modules
-        run: pnpm install --frozen-lockfile
+        run: pnpm ci
         working-directory: ${{ env.API_DOCS_ROOT }}
 
       - name: Build
@@ -110,4 +110,4 @@ jobs:
     with:
       image-tag: ${{ github.sha }}
       deployment-environment: prototype
-      deploying-apps: 'ris-search/api-docs'
+      deploying-apps: "ris-search/api-docs"

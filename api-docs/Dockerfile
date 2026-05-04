@@ -5,7 +5,7 @@ RUN apk add git
 RUN npm install -g pnpm@10.28.2
 WORKDIR /app
 COPY package.json pnpm-lock.yaml env.d.ts tailwind.config.js ./
-RUN pnpm install --frozen-lockfile
+RUN pnpm ci
 COPY .vitepress ./.vitepress
 COPY docs ./docs
 RUN pnpm build

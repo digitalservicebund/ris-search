@@ -5,7 +5,7 @@ RUN apk update && apk upgrade
 RUN npm install -g pnpm@10.28.2
 WORKDIR /app
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-RUN pnpm install --frozen-lockfile
+RUN pnpm ci
 COPY playwright.config.ts nuxt.config.ts nuxt.config.d.ts tsconfig.json \
   .oxlintrc.json sentry.server.config.ts sentry.client.config.ts ./
 COPY config ./config

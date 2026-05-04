@@ -30,7 +30,7 @@ jobs:
           cache: "pnpm"
           cache-dependency-path: ./frontend/pnpm-lock.yaml
       - name: Install Node modules
-        run: pnpm install --frozen-lockfile
+        run: pnpm ci
         working-directory: ./frontend
       - name: Prepare Nuxt
         run: pnpm run prepare
@@ -85,7 +85,7 @@ jobs:
           cache: "pnpm"
           cache-dependency-path: ./frontend/pnpm-lock.yaml
       - name: Install Node modules
-        run: pnpm install --frozen-lockfile
+        run: pnpm ci
         working-directory: ./frontend
       - name: Run licence scanner
         run: pnpm audit:licences
@@ -228,5 +228,3 @@ jobs:
       # Use image digest instead of tag to uniquely identify the image
       image-reference: ${{ inputs.container-registry}}/${{ github.repository }}/frontend@${{ needs.build-and-push-image.outputs.image-digest }}
       app: frontend
-
-
