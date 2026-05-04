@@ -97,10 +97,7 @@ public class AdvancedSearchService {
 
     highlightfields.forEach(highlightBuilder::field);
     var searchResults = callOpenSearch(search, highlightBuilder, null, pageable, Document.class);
-    var searchPage = pageUtils.unwrapMixedSearchHits(searchResults, pageable);
-
-    this.articleService.populateArticleTextMatches(searchPage, search.replace("AND", "OR"));
-    return searchPage;
+    return pageUtils.unwrapMixedSearchHits(searchResults, pageable);
   }
 
   /**
