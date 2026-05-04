@@ -23,8 +23,6 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
     if: ${{ github.ref == 'refs/heads/main' }}
     concurrency:
       # Make sure that the deploy-step is always executed in series (this applies across multiple workflows)
