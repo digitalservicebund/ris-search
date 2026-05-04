@@ -3,6 +3,7 @@ package de.bund.digitalservice.ris.search.service;
 import de.bund.digitalservice.ris.search.models.opensearch.AbstractSearchEntity;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
+import de.bund.digitalservice.ris.search.repository.opensearch.ArticlesRepository;
 import de.bund.digitalservice.ris.search.utils.RisHighlightBuilder;
 import java.util.List;
 import java.util.Map;
@@ -29,9 +30,11 @@ import org.springframework.stereotype.Service;
 public class ArticleService {
 
   private final ElasticsearchOperations operations;
+  private final ArticlesRepository articlesRepository;
 
-  public ArticleService(ElasticsearchOperations operations) {
+  public ArticleService(ElasticsearchOperations operations, ArticlesRepository articlesRepository) {
     this.operations = operations;
+    this.articlesRepository = articlesRepository;
   }
 
   private SearchHits<Article> searchArticles(List<String> expressionElis, String searchTerm) {
@@ -106,5 +109,9 @@ public class ArticleService {
       String expressionEli = articleSearchHit.getContent().getExpressionEli();
       normInnerHitsMap.get(expressionEli).putAll(articleSearchHit.getInnerHits());
     }
+  }
+
+  public void populateArticles(Norm norm, String expressionEli) {
+    norm.setArticles(articlesRepository.findAllByExpressionEli(expressionEli));
   }
 }

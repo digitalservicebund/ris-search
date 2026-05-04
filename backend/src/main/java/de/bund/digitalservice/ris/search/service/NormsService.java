@@ -3,10 +3,8 @@ package de.bund.digitalservice.ris.search.service;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.models.api.parameters.NormsSearchParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
-import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
-import de.bund.digitalservice.ris.search.repository.opensearch.ArticlesRepository;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
 import de.bund.digitalservice.ris.search.service.helper.ZipManager;
 import de.bund.digitalservice.ris.search.utils.DateUtils;
@@ -52,7 +50,6 @@ import org.springframework.stereotype.Service;
 public class NormsService {
 
   private final NormsRepository normsRepository;
-  private final ArticlesRepository articlesRepository;
   private final ElasticsearchOperations operations;
   private final SimpleSearchQueryBuilder simpleSearchQueryBuilder;
   private final ArticleService articleService;
@@ -72,7 +69,6 @@ public class NormsService {
   @Autowired
   public NormsService(
       NormsRepository normsRepository,
-      ArticlesRepository articlesRepository,
       NormsBucket normsBucket,
       ElasticsearchOperations operations,
       RestHighLevelClient openSearchRestClient,
@@ -80,7 +76,6 @@ public class NormsService {
       ArticleService articleService,
       @Value("${opensearch.norms-index-name}") String normsIndexName) {
     this.normsRepository = normsRepository;
-    this.articlesRepository = articlesRepository;
     this.normsBucket = normsBucket;
     this.operations = operations;
     this.openSearchRestClient = openSearchRestClient;
@@ -122,8 +117,7 @@ public class NormsService {
   public Optional<Norm> getByExpressionEli(final ExpressionEli expressionEli) {
     Norm result = normsRepository.getByExpressionEli(expressionEli.toString());
     if (result != null) {
-      List<Article> articles = articlesRepository.findAllByExpressionEli(expressionEli.toString());
-      result.setArticles(articles);
+      articleService.populateArticles(result, result.getExpressionEli());
     }
     return Optional.ofNullable(result);
   }

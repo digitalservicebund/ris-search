@@ -71,8 +71,7 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
 
   @BeforeEach
   void setUpSearchControllerApiTest() {
-    clearRepositoryData();
-    normsRepository.saveAll(NormsTestData.allDocuments);
+    reset();
   }
 
   @Test
@@ -280,7 +279,7 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
   @Test
   @DisplayName("Should return list of norms")
   void shouldReturnListOfNorms() throws Exception {
-    int expectedSize = NormsTestData.allDocuments.size();
+    int expectedSize = NormsTestData.allNorms.size();
     mockMvc
         .perform(get(ApiConfig.Paths.LEGISLATION).contentType(MediaType.APPLICATION_JSON))
         .andDo(print())
@@ -360,7 +359,7 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
   @Test
   @DisplayName("Should find a norm when searching for its expression ELI explicitly")
   void shouldFindNormByExpressionEli() throws Exception {
-    final String eli = NormsTestData.allDocuments.getFirst().getExpressionEli();
+    final String eli = NormsTestData.allNorms.getFirst().getExpressionEli();
     final String uri = ApiConfig.Paths.LEGISLATION + "?searchTerm=\"%s\"".formatted(eli);
     mockMvc
         .perform(get(uri).contentType(MediaType.APPLICATION_JSON))

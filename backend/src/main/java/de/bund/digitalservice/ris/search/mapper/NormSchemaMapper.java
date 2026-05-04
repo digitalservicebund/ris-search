@@ -176,7 +176,7 @@ public class NormSchemaMapper {
       encoding = List.of();
     }
     return LegislationExpressionPartSchema.builder()
-        .id(idPrefix + "#" + article.getId())
+        .id(idPrefix + "#" + article.getEId())
         .name(marker)
         .eId(article.getEId())
         .headline(heading)

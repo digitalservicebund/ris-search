@@ -11,9 +11,11 @@ import de.bund.digitalservice.ris.search.utils.eli.EliFile;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /** Test data for norms used in integration tests. */
 public class NormsTestData {
@@ -26,7 +28,8 @@ public class NormsTestData {
   public static Map<String, String> s102WorkExpressions = createS102Work();
   public static Map<String, String> allNormXml = new HashMap<>(s102WorkExpressions);
   public static List<TableOfContentsItem> nestedToC = setupNestedToC();
-  public static List<Norm> allDocuments = setupCommonNormEntities();
+  public static List<Norm> allNorms = setupCommonNormEntities();
+  public static List<Article> allArticles = setupCommonArticleEntities();
 
   /**
    * Creates the S102 work with its expressions and attachments for testing purposes.
@@ -145,6 +148,19 @@ public class NormsTestData {
   }
 
   /**
+   * Sets up some common Article entities for testing purposes.
+   *
+   * @return list of common Article entities
+   */
+  public static List<Article> setupCommonArticleEntities() {
+    return allNorms.stream()
+        .map(Norm::getArticles)
+        .filter(Objects::nonNull)
+        .flatMap(Collection::stream)
+        .toList();
+  }
+
+  /**
    * Sets up some common Norm entities for testing purposes.
    *
    * @return list of common Norm entities
@@ -156,7 +172,7 @@ public class NormsTestData {
     String manifestationEli = expressionEli + "/2010-04-27/offenestruktur-1.xml";
     var normTestOne =
         Norm.builder()
-            .id("n1")
+            .id(expressionEli)
             .officialAbbreviation("TeG")
             .officialTitle("Test Gesetz")
             .officialShortTitle("TestG")
@@ -202,7 +218,7 @@ public class NormsTestData {
 
     var normTestTwo =
         Norm.builder()
-            .id("id2")
+            .id("eli/2024/teg/2/exp")
             .tableOfContents(new ArrayList<>())
             .officialAbbreviation("TeG2")
             .officialTitle("Test Gesetz Nr. 2")
@@ -219,7 +235,7 @@ public class NormsTestData {
 
     var normTestThree =
         Norm.builder()
-            .id("id3")
+            .id("eli/2024/teg/3/exp")
             .tableOfContents(new ArrayList<>())
             .officialAbbreviation("TeG3")
             .officialTitle("Test Gesetz Nr. 3")
