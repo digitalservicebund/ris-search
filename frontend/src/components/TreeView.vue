@@ -28,8 +28,8 @@ const {
   /** When set, the subheading becomes a link to this route */
   subheadingTo?: RouteLocationRaw;
   /**
-   * Accessible lable of the tree. If undefined, the tree will be labelled by
-   * the heading. Make sure that at least one of them is set.
+   * Accessible lable of the tree. Used as a fallback if the tree doesn't have
+   * a visible heading. Make sure that either heading or label is set.
    */
   label?: string;
   /**
@@ -273,7 +273,7 @@ function onKeydown(event: KeyboardEvent) {
 <template>
   <nav
     :aria-labelledby="heading ? headingId : undefined"
-    :aria-label="label"
+    :aria-label="heading ? undefined : label"
     class="flex flex-col"
   >
     <div
@@ -296,7 +296,7 @@ function onKeydown(event: KeyboardEvent) {
     <ul
       ref="treeRef"
       role="tree"
-      :aria-label="label"
+      :aria-label="heading ? undefined : label"
       :aria-labelledby="heading ? headingId : undefined"
       class="overflow-y-auto pb-16"
       @keydown="onKeydown"
