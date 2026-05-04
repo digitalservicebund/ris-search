@@ -39,7 +39,6 @@ const emit = defineEmits<{
 
 const queryInputEl = useTemplateRef("queryInputEl");
 const queryInputId = useId();
-const queryDescriptionId = useId();
 
 const dataFieldListId = useId();
 
@@ -88,12 +87,8 @@ function submitUnlessLoading() {
 </script>
 
 <template>
-  <search class="flex flex-col gap-8" :aria-labelledby="queryDescriptionId">
-    <p
-      :id="queryDescriptionId"
-      class="ris-label2-bold lg:ris-label1-regular"
-      aria-hidden="true"
-    >
+  <search class="flex flex-col gap-8">
+    <p class="ris-label2-bold lg:ris-label1-regular" aria-hidden="true">
       In {{ formattedCount }} {{ formattedDocumentKind }} suchen
     </p>
 
