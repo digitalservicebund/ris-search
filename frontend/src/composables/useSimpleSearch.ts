@@ -139,6 +139,8 @@ export async function useSimpleSearch(
       }),
 
       onResponse({ response }) {
+        // _data is a standard nuxt/ofetch FetchResponse property, not a custom private field
+        // oxlint-disable-next-line no-underscore-dangle
         if (!response._data?.totalItems) {
           noSearchResults(toPostHogParams(combinedQuery.value));
         }
