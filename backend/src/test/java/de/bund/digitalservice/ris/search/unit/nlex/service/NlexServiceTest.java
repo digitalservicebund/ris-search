@@ -161,7 +161,7 @@ class NlexServiceTest {
             1,
             null,
             null,
-            Collections.singletonMap("articles", innerHits),
+            Collections.singletonMap("top_three_articles", innerHits),
             null,
             null,
             null,

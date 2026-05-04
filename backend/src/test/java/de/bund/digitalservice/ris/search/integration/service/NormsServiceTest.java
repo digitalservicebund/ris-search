@@ -33,9 +33,8 @@ class NormsServiceTest extends ContainersIntegrationBase {
   @Autowired private NormsRepository repository;
 
   @BeforeEach
-  void reset() {
-    clearRepositoryData();
-    resetRepositories();
+  void setup() {
+    reset();
   }
 
   @Test
@@ -127,7 +126,8 @@ class NormsServiceTest extends ContainersIntegrationBase {
     SearchPage<Norm> result =
         normsService.simpleSearchNorms(universalSearchParams, normsSearchParams, pageable);
     assertThat(result.getContent()).hasSize(1);
-    var searchHits = result.getContent().getFirst().getInnerHits().get("articles").getSearchHits();
+    var searchHits =
+        result.getContent().getFirst().getInnerHits().get("top_three_articles").getSearchHits();
     assertThat(searchHits).hasSize(2);
 
     var textHighlight = searchHits.getFirst().getHighlightField("text");
