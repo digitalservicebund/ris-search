@@ -83,7 +83,11 @@ const detailItems = computed(() => getLiteratureDetailItems(literature.value));
     </template>
 
     <template #details>
-      <section :aria-labelledby="detailsSectionId" class="pt-32 pb-32 lg:pb-56">
+      <section
+        :role="isEmptyDocument ? undefined : 'tabpanel'"
+        :aria-labelledby="detailsSectionId"
+        class="pt-32 pb-32 lg:pb-56"
+      >
         <h2 :id="detailsSectionId" class="ris-heading3-bold">Details</h2>
         <DocumentsIncompleteDataMessage class="my-24" />
         <DetailsList>
@@ -101,7 +105,7 @@ const detailItems = computed(() => getLiteratureDetailItems(literature.value));
     <template #text>
       <SidebarLayout>
         <template #content>
-          <section :aria-labelledby="textSectionId">
+          <section role="tabpanel" :aria-labelledby="textSectionId">
             <h2 :id="textSectionId" class="sr-only">Text</h2>
             <DocumentsIncompleteDataMessage />
             <div

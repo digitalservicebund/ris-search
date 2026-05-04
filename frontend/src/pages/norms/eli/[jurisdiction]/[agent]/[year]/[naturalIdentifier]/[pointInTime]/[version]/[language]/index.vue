@@ -183,6 +183,7 @@ const currentView = computed(
 
 useDynamicSeo({ title, description });
 
+const textTabPanelTitleId = useId();
 const detailsTabPanelTitleId = useId();
 const fassungenTabPanelTitleId = useId();
 </script>
@@ -235,10 +236,14 @@ const fassungenTabPanelTitleId = useId();
     </div>
 
     <div class="min-h-96 bg-white print:py-0">
-      <section v-if="currentView === 'text'">
+      <section
+        v-if="currentView === 'text'"
+        role="tabpanel"
+        :aria-labelledby="textTabPanelTitleId"
+      >
         <SidebarLayout class="container">
           <template #content>
-            <h2 class="sr-only">Text</h2>
+            <h2 :id="textTabPanelTitleId" class="sr-only">Text</h2>
             <DocumentsIncompleteDataMessage />
             <DocumentsNormsLegislationContent
               :official-toc="htmlParts.officialToc"
@@ -260,6 +265,7 @@ const fassungenTabPanelTitleId = useId();
 
       <section
         v-else-if="currentView === 'details'"
+        role="tabpanel"
         :aria-labelledby="detailsTabPanelTitleId"
       >
         <div class="container pt-32 pb-32 lg:pb-56">
@@ -311,6 +317,7 @@ const fassungenTabPanelTitleId = useId();
 
       <section
         v-else-if="currentView === 'versions'"
+        role="tabpanel"
         :aria-labelledby="
           privateFeaturesEnabled ? fassungenTabPanelTitleId : undefined
         "

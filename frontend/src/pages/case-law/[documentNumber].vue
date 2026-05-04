@@ -158,6 +158,7 @@ const detailsMetadata = computed(() => {
   };
 });
 
+const textSectionId = useId();
 const detailsSectionId = useId();
 </script>
 
@@ -174,7 +175,11 @@ const detailsSectionId = useId();
     </template>
 
     <template #details>
-      <section :aria-labelledby="detailsSectionId" class="pt-32 pb-32 lg:pb-56">
+      <section
+        role="tabpanel"
+        :aria-labelledby="detailsSectionId"
+        class="pt-32 pb-32 lg:pb-56"
+      >
         <h2 :id="detailsSectionId" class="ris-heading3-bold">Details</h2>
         <DocumentsIncompleteDataMessage class="my-24" />
         <DetailsList>
@@ -212,12 +217,15 @@ const detailsSectionId = useId();
     <template #text>
       <SidebarLayout>
         <template #content>
-          <DocumentsIncompleteDataMessage />
-          <div
-            v-if="document"
-            class="case-law"
-            v-html="document.body.innerHTML"
-          ></div>
+          <section role="tabpanel" :aria-labelledby="textSectionId">
+            <h2 :id="textSectionId" class="sr-only">Text</h2>
+            <DocumentsIncompleteDataMessage />
+            <div
+              v-if="document"
+              class="case-law"
+              v-html="document.body.innerHTML"
+            ></div>
+          </section>
         </template>
 
         <template #sidebar v-if="tocEntries?.length">
