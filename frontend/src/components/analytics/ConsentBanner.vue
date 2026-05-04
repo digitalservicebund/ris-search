@@ -12,17 +12,19 @@ if (import.meta.server) {
 const handleSetTracking = async (value: boolean) => {
   await setTracking(value);
 };
+
+const headingId = useId();
 </script>
 
 <template>
   <section
     v-if="isBannerVisible"
     class="ris-body2-regular lg:ris-body1-regular flex flex-col gap-24 bg-blue-200 px-8 py-16 lg:p-24"
-    aria-label="Cookie-Einstellungen akzeptieren oder ablehnen"
+    :aria-labelledby="headingId"
     data-testid="cookie-banner"
   >
     <div class="container">
-      <h2 class="ris-heading3-bold text-xl lg:text-2xl">
+      <h2 :id="headingId" class="ris-heading3-bold text-xl lg:text-2xl">
         Cookie-Einstellungen akzeptieren oder ablehnen
       </h2>
 
