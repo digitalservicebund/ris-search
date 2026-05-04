@@ -2,7 +2,7 @@ FROM node:24.14.1-alpine3.22@sha256:4f33c7804fa7775b87875f512e25e515692210bfdeaf
 RUN apk update && apk upgrade
 # Needed for vitepress to calulcate the last updated date for files
 RUN apk add git
-RUN npm install -g pnpm@11.0.4
+RUN corepack enable
 WORKDIR /app
 COPY package.json pnpm-lock.yaml env.d.ts tailwind.config.js ./
 RUN pnpm ci

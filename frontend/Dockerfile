@@ -2,7 +2,7 @@ FROM node:24.14.1-alpine3.22@sha256:4f33c7804fa7775b87875f512e25e515692210bfdeaf
 ARG NUXT_PUBLIC_SENTRY_DSN
 ARG SENTRY_RELEASE
 RUN apk update && apk upgrade
-RUN npm install -g pnpm@11.0.4
+RUN corepack enable
 WORKDIR /app
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 RUN pnpm ci
