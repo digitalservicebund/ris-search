@@ -6,7 +6,6 @@ import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.CaseLawTestData;
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.LiteratureTestData;
-import de.bund.digitalservice.ris.search.integration.controller.api.testData.NormsTestData;
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.TestDataGenerator;
 import de.bund.digitalservice.ris.search.mapper.DocumentResponseMapper;
 import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
@@ -41,14 +40,14 @@ class AllDocumentsServiceTest extends ContainersIntegrationBase {
   void courtSynonymTest() {
     caseLawRepository.save(CaseLawTestData.simple("caselaw1", "Bundessozialgericht"));
     caseLawRepository.save(CaseLawTestData.simple("caselaw2", "no match"));
-    normsRepository.save(NormsTestData.simple("norm1", "Bundessozialgericht"));
-    normsRepository.save(NormsTestData.simple("norm2", "other no match"));
+    saveSimpleNorm("norm1", "Bundessozialgericht");
+    saveSimpleNorm("norm2", "other no match");
     List<AbstractSearchEntity> searchResults =
         TestDataGenerator.searchAll(allDocumentsService, "BSG");
     List<String> caselaws = TestDataGenerator.getCaseLawIds(searchResults);
     List<String> norms = TestDataGenerator.getNormIds(searchResults);
     assertThat(caselaws).containsExactly("caselaw1");
-    assertThat(norms).containsExactly("norm1");
+    assertThat(norms).containsExactly("ExpressionPrefixnorm1");
   }
 
   @Test
@@ -56,14 +55,14 @@ class AllDocumentsServiceTest extends ContainersIntegrationBase {
   void golemThesaurusSynonymTest() {
     caseLawRepository.save(CaseLawTestData.simple("caselaw1", "Abgasreduzierend"));
     caseLawRepository.save(CaseLawTestData.simple("caselaw2", "no match"));
-    normsRepository.save(NormsTestData.simple("norm1", "Abgasreduzierend"));
-    normsRepository.save(NormsTestData.simple("norm2", "other no match"));
+    saveSimpleNorm("norm1", "Abgasreduzierend");
+    saveSimpleNorm("norm2", "other no match");
     List<AbstractSearchEntity> searchResults =
         TestDataGenerator.searchAll(allDocumentsService, "Abgas reduzierend");
     List<String> caselaws = TestDataGenerator.getCaseLawIds(searchResults);
     List<String> norms = TestDataGenerator.getNormIds(searchResults);
     assertThat(caselaws).containsExactly("caselaw1");
-    assertThat(norms).containsExactly("norm1");
+    assertThat(norms).containsExactly("ExpressionPrefixnorm1");
   }
 
   @Test
@@ -86,7 +85,7 @@ class AllDocumentsServiceTest extends ContainersIntegrationBase {
   void threeDifferentDocumentKindsAreAllFoundTest() {
     caseLawRepository.save(CaseLawTestData.simple("caselaw1", "urlaub"));
     literatureRepository.save(LiteratureTestData.simple("literature1", "urlaub"));
-    normsRepository.save(NormsTestData.simple("norm1", "urlaub"));
+    saveSimpleNorm("norm1", "urlaub");
     List<AbstractSearchEntity> searchResults =
         TestDataGenerator.searchAll(allDocumentsService, "urlaub");
     List<String> caselawIds = TestDataGenerator.getCaseLawIds(searchResults);
@@ -94,7 +93,7 @@ class AllDocumentsServiceTest extends ContainersIntegrationBase {
     List<String> literatureIds = TestDataGenerator.getLiteratureIds(searchResults);
     assertThat(literatureIds).containsExactlyInAnyOrder("literature1");
     List<String> normIds = TestDataGenerator.getNormIds(searchResults);
-    assertThat(normIds).containsExactlyInAnyOrder("norm1");
+    assertThat(normIds).containsExactlyInAnyOrder("ExpressionPrefixnorm1");
   }
 
   @Test
