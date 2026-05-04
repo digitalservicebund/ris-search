@@ -12,10 +12,9 @@ const mobileMenuId = useId();
 </script>
 
 <template>
-  <AppBanner />
-
   <header id="top" class="border-b border-b-gray-400 bg-white print:hidden">
-    <div class="container flex flex-col gap-24 py-20">
+  <AppBanner />
+    <nav class="container flex flex-col gap-24 py-20" aria-label="Hauptmenü">
       <div class="flex items-center justify-between gap-16">
         <AppLogo />
 
@@ -46,6 +45,6 @@ const mobileMenuId = useId();
         list-class="items-center gap-y-8"
         @select-item="toggleMenu()"
       />
-    </div>
+    </nav>
   </header>
 </template>

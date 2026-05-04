@@ -7,7 +7,7 @@ defineEmits<{ selectItem: [] }>();
 </script>
 
 <template>
-  <nav aria-label="Hauptnavigation">
+  <div>
     <ul
       class="flex flex-col justify-end gap-x-28 md:flex-row md:items-center"
       :class="listClass"
@@ -40,7 +40,7 @@ defineEmits<{ selectItem: [] }>();
         </NuxtLink>
       </li>
     </ul>
-  </nav>
+  </div>
 </template>
 
 <style lang="css" scoped>
