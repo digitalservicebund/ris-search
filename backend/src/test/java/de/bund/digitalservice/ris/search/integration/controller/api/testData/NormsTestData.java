@@ -235,21 +235,4 @@ public class NormsTestData {
 
     return new ArrayList<>(List.of(normTestOne, normTestTwo, normTestThree));
   }
-
-  /**
-   * Creates a simple Norm with one article for testing purposes.
-   *
-   * @param id the id of the norm
-   * @param content the content of the single article
-   * @return the created Norm
-   */
-  public static Norm simple(String id, String content) {
-    return Norm.builder()
-        .id(id)
-        .workEli("WorkEli" + id)
-        .expressionEli("ExpressionEli" + id)
-        .articleTexts(List.of(content))
-        .articles(List.of(Article.builder().name("Article 1").text(content).build()))
-        .build();
-  }
 }

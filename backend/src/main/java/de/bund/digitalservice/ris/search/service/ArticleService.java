@@ -7,6 +7,7 @@ import de.bund.digitalservice.ris.search.utils.RisHighlightBuilder;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.apache.commons.lang3.StringUtils;
 import org.opensearch.action.search.SearchType;
 import org.opensearch.data.client.orhlc.NativeSearchQuery;
 import org.opensearch.data.client.orhlc.NativeSearchQueryBuilder;
@@ -66,6 +67,9 @@ public class ArticleService {
   }
 
   public void populateArticleTextMatches(SearchHits<Norm> normSearchHits, String searchTerm) {
+    if (StringUtils.isEmpty(searchTerm)) {
+      return;
+    }
     List<String> expressionElis =
         normSearchHits.getSearchHits().stream().map(SearchHit::getId).toList();
 
@@ -83,6 +87,9 @@ public class ArticleService {
 
   public void populateArticleTextMatches(
       SearchPage<AbstractSearchEntity> searchHits, String searchTerm) {
+    if (StringUtils.isEmpty(searchTerm)) {
+      return;
+    }
     List<SearchHit<AbstractSearchEntity>> normSearchHits =
         searchHits.getSearchHits().stream()
             .filter(e -> e.getContent().getClass().equals(Norm.class))

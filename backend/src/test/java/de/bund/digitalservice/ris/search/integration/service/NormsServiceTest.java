@@ -130,11 +130,11 @@ class NormsServiceTest extends ContainersIntegrationBase {
     var searchHits = result.getContent().getFirst().getInnerHits().get("articles").getSearchHits();
     assertThat(searchHits).hasSize(2);
 
-    var textHighlight = searchHits.getFirst().getHighlightField("articles.text");
+    var textHighlight = searchHits.getFirst().getHighlightField("text");
     assertThat(textHighlight).hasSize(1);
     assertThat(textHighlight.getFirst()).isEqualTo("example <mark>text</mark> 1");
 
-    var textHighlight2 = searchHits.get(1).getHighlightField("articles.text");
+    var textHighlight2 = searchHits.get(1).getHighlightField("text");
     assertThat(textHighlight).hasSize(1);
     assertThat(textHighlight2.getFirst()).isEqualTo("example <mark>text</mark> 2");
 
