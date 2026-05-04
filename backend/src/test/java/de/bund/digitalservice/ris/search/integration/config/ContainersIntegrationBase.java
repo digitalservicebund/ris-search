@@ -86,7 +86,7 @@ public class ContainersIntegrationBase {
   }
 
   @BeforeAll
-  void reset() {
+  protected void reset() {
     resetBuckets();
     resetRepositories();
   }
@@ -113,7 +113,8 @@ public class ContainersIntegrationBase {
     clearRepositoryData();
     caseLawRepository.saveAll(CaseLawTestData.allDocuments);
     literatureRepository.saveAll(LiteratureTestData.allDocuments);
-    normsRepository.saveAll(NormsTestData.allDocuments);
+    normsRepository.saveAll(NormsTestData.allNorms);
+    articlesRepository.saveAll(NormsTestData.allArticles);
     administrativeDirectiveRepository.saveAll(AdministrativeDirectiveTestData.allDocuments);
   }
 

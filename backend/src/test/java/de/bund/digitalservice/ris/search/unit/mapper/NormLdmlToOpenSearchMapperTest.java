@@ -201,7 +201,7 @@ class NormLdmlToOpenSearchMapperTest {
     assertThat(attachment)
         .isEqualTo(
             new Article(
-                expressionEli + eid,
+                expressionEli + "/" + eid,
                 eid,
                 expressionEli,
                 workEli,
@@ -212,7 +212,7 @@ class NormLdmlToOpenSearchMapperTest {
                 null,
                 manifestationEli,
                 null,
-                null));
+                attachment.getIndexedAt()));
   }
 
   @Test

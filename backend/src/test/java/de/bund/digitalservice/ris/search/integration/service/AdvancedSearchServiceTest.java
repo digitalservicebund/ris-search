@@ -43,10 +43,13 @@ class AdvancedSearchServiceTest extends ContainersIntegrationBase {
     Literature literature = (Literature) searchHits.getSearchHit(0).getContent();
     assertThat(literature.documentNumber()).isEqualTo("KALU000000001");
 
-    searchHits = advancedSearchService.searchAll("n1", Pageable.unpaged()).getSearchHits();
+    searchHits =
+        advancedSearchService
+            .searchAll("\"eli/bund/bgbl-1/1000/test/2000-10-06/2/deu\"", Pageable.unpaged())
+            .getSearchHits();
     assertThat(searchHits).hasSize(1);
     Norm norm = (Norm) searchHits.getSearchHit(0).getContent();
-    assertThat(norm.getId()).isEqualTo("n1");
+    assertThat(norm.getId()).isEqualTo("eli/bund/bgbl-1/1000/test/2000-10-06/2/deu");
 
     searchHits = advancedSearchService.searchAll("KSNR0000", Pageable.unpaged()).getSearchHits();
     assertThat(searchHits).hasSize(1);
@@ -94,9 +97,12 @@ class AdvancedSearchServiceTest extends ContainersIntegrationBase {
   @DisplayName("Advanced search for norm works")
   void advancedSearchForNormWorks() {
 
-    var searchHits = advancedSearchService.searchNorm("n1", Pageable.unpaged()).getSearchHits();
+    var searchHits =
+        advancedSearchService
+            .searchNorm("\"eli/bund/bgbl-1/1000/test/2000-10-06/2/deu\"", Pageable.unpaged())
+            .getSearchHits();
     assertThat(searchHits).hasSize(1);
     Norm caseLaw = searchHits.getSearchHit(0).getContent();
-    assertThat(caseLaw.getId()).isEqualTo("n1");
+    assertThat(caseLaw.getId()).isEqualTo("eli/bund/bgbl-1/1000/test/2000-10-06/2/deu");
   }
 }

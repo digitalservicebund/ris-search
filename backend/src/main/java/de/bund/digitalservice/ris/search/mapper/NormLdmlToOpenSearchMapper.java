@@ -156,7 +156,7 @@ public class NormLdmlToOpenSearchMapper {
 
       List<Article> articles =
           getArticlesByXmlDocument(
-              xmlDocument, attachments, officialAbbreviation, expressionEli, indexedAt);
+              xmlDocument, attachments, officialAbbreviation, workEli, expressionEli, indexedAt);
       List<String> articleNames = articles.stream().map(Article::getName).toList();
       List<String> articleTexts = articles.stream().map(Article::getText).toList();
       String fullCitation = xmlDocument.getElementByXpath(X_PATH_FULL_CITATION);
@@ -392,6 +392,7 @@ public class NormLdmlToOpenSearchMapper {
       XmlDocument xmlDocument,
       List<Attachment> attachments,
       String officialAbbreviation,
+      String workEli,
       String expressionEli,
       String indexedAt)
       throws ValidationException {
@@ -415,14 +416,15 @@ public class NormLdmlToOpenSearchMapper {
         xmlDocument.getFirstMatchedNodeByXpath(X_PATH_PREAMBLE_FORMULA);
     if (preambleFormulaNode.isPresent()) {
       articles.add(
-          getNodeAsArticle(preambleFormulaNode.get(), EINGANGSFORMEL, indexedAt, expressionEli));
+          getNodeAsArticle(
+              preambleFormulaNode.get(), EINGANGSFORMEL, indexedAt, workEli, expressionEli));
     }
     for (int i = 0; i < nodes.getLength(); i++) {
       getArticleNodeAsArticle(
               nodes.item(i),
               temporalGroupsWithDates,
               officialAbbreviation,
-              null,
+              workEli,
               expressionEli,
               indexedAt)
           .ifPresent(articles::add);
@@ -432,7 +434,8 @@ public class NormLdmlToOpenSearchMapper {
         xmlDocument.getFirstMatchedNodeByXpath(X_PATH_CONCLUSIONS_FORMULA);
     if (conclusionsFormulaNode.isPresent()) {
       articles.add(
-          getNodeAsArticle(conclusionsFormulaNode.get(), SCHLUSSFORMEL, indexedAt, expressionEli));
+          getNodeAsArticle(
+              conclusionsFormulaNode.get(), SCHLUSSFORMEL, indexedAt, workEli, expressionEli));
     }
 
     var attachmentsAsArticles =
@@ -444,10 +447,13 @@ public class NormLdmlToOpenSearchMapper {
                           .filter(StringUtils::isNotBlank)
                           .collect(Collectors.joining(" "));
                   return Article.builder()
-                      .name(name)
+                      .id(expressionEli + "/" + a.eId())
                       .eId(a.eId())
-                      .indexedAt(indexedAt)
+                      .expressionEli(expressionEli)
+                      .workEli(workEli)
                       .text(a.textContent())
+                      .name(name)
+                      .indexedAt(indexedAt)
                       .manifestationEli(a.manifestationEli())
                       .build();
                 })
@@ -477,7 +483,7 @@ public class NormLdmlToOpenSearchMapper {
       Node articleNode,
       Map<String, TimeInterval> temporalGroupsWithDates,
       String officialAbbreviation,
-      String optionalName,
+      String workEli,
       String expressionEli,
       String indexedAt) {
     try {
@@ -507,18 +513,16 @@ public class NormLdmlToOpenSearchMapper {
         expiryDate = toLocalDate(timeInterval.end());
       }
 
-      final String articleHeader =
-          optionalName != null ? optionalName : buildArticleHeader(marker, heading);
-
       final @Nullable String searchKeyword = getSearchKeyword(marker, officialAbbreviation);
 
       return Optional.of(
           Article.builder()
               .id(id)
               .eId(eId)
+              .workEli(workEli)
               .expressionEli(expressionEli)
               .guid(guid)
-              .name(articleHeader)
+              .name(buildArticleHeader(marker, heading))
               .text(cleanText(text))
               .entryIntoForceDate(entryIntoForceDate)
               .expiryDate(expiryDate)
@@ -532,7 +536,8 @@ public class NormLdmlToOpenSearchMapper {
   }
 
   private static Article getNodeAsArticle(
-      Node node, String name, String indexedAt, String expressionEli) throws ValidationException {
+      Node node, String name, String indexedAt, String workEli, String expressionEli)
+      throws ValidationException {
     Node eIdAttribute = node.getAttributes().getNamedItem("eId");
     if (Objects.isNull(eIdAttribute)) {
       throw new ValidationException(
@@ -546,6 +551,8 @@ public class NormLdmlToOpenSearchMapper {
             Optional.ofNullable(node.getAttributes().getNamedItem("eId"))
                 .map(Node::getTextContent)
                 .orElse(null))
+        .workEli(workEli)
+        .expressionEli(expressionEli)
         .text(cleanText(node.getTextContent()))
         .name(cleanText(name))
         .indexedAt(indexedAt)
