@@ -43,7 +43,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
             </div>
           </div>
 
-          <div>
+          <nav aria-label="Weitere Informationen">
             <ul
               class="grid gap-8 wrap-break-word sm:grid-flow-col sm:grid-cols-2 sm:grid-rows-5"
             >
@@ -111,7 +111,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
                 >
               </li>
             </ul>
-          </div>
+          </nav>
         </div>
       </div>
     </div>

@@ -17,6 +17,14 @@ describe("AppFooter", () => {
     },
   };
 
+  it("renders the footer navigation", () => {
+    mockedPrivateFeaturesEnabled.mockReturnValue(false);
+    render(AppFooter, { global: { stubs: globalStubs } });
+    expect(
+      screen.getByRole("navigation", { name: "Weitere Informationen" }),
+    ).toBeVisible();
+  });
+
   it("does not render 'English translations' when privateFeatureEnabled is false", () => {
     mockedPrivateFeaturesEnabled.mockReturnValue(false);
     render(AppFooter, { global: { stubs: globalStubs } });
