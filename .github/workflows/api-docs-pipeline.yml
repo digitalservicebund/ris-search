@@ -20,6 +20,9 @@ on:
 env:
   API_DOCS_ROOT: ./api-docs
 
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
