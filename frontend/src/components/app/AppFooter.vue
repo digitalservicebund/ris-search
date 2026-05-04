@@ -9,13 +9,17 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
 </script>
 
 <template>
-  <footer class="relative print:hidden">
-    <div v-if="!hideFeedbackForm" class="border-t border-t-gray-400 py-64">
-      <div class="container">
-        <AnalyticsFeedbackForm />
-      </div>
+  <section
+    v-if="!hideFeedbackForm"
+    class="border-t border-t-gray-400 py-64"
+    aria-label="Geben Sie uns Feedback"
+  >
+    <div class="container">
+      <AnalyticsFeedbackForm />
     </div>
+  </section>
 
+  <footer class="relative print:hidden">
     <div class="border-t border-t-gray-400 py-64">
       <div class="container">
         <div class="grid grid-cols-1 gap-48 md:grid-cols-2">
