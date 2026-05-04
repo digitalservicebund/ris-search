@@ -4,7 +4,7 @@ RUN apk update && apk upgrade
 RUN apk add git
 RUN corepack enable
 WORKDIR /app
-COPY package.json pnpm-lock.yaml env.d.ts tailwind.config.js ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml env.d.ts tailwind.config.js ./
 RUN pnpm ci
 COPY .vitepress ./.vitepress
 COPY docs ./docs
