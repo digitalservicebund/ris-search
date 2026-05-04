@@ -152,7 +152,7 @@ public class ArticleService {
     for (SearchHit<Article> articleSearchHit : articles.getSearchHits()) {
       String expressionEli = articleSearchHit.getContent().getExpressionEli();
 
-      normInnerHitsMap.put(expressionEli, articleSearchHit.getInnerHits());
+      normInnerHitsMap.get(expressionEli).putAll(articleSearchHit.getInnerHits());
     }
   }
 

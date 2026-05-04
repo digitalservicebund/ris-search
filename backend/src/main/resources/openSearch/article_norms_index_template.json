@@ -12,6 +12,22 @@
         "expression_eli": {
           "type": "keyword"
         },
+        "TE": {
+          "type": "alias",
+          "path": "text"
+        },
+        "TP": {
+          "type": "alias",
+          "path": "text"
+        },
+        "UP": {
+          "type": "alias",
+          "path": "name"
+        },
+        "UEE": {
+          "type": "alias",
+          "path": "name"
+        },
         "eid": {
           "type": "text"
         },
