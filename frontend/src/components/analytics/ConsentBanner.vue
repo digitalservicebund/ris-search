@@ -21,7 +21,6 @@ const headingId = useId();
     v-if="isBannerVisible"
     class="ris-body2-regular lg:ris-body1-regular flex flex-col gap-24 bg-blue-200 px-8 py-16 lg:p-24"
     :aria-labelledby="headingId"
-    data-testid="cookie-banner"
   >
     <div class="container">
       <h2 :id="headingId" class="ris-heading3-bold text-xl lg:text-2xl">
@@ -46,11 +45,7 @@ const headingId = useId();
           @submit.prevent="handleSetTracking(true)"
         >
           <input type="hidden" name="consent" value="true" />
-          <Button
-            label="Akzeptieren"
-            data-testid="accept-cookie"
-            type="submit"
-          />
+          <Button label="Akzeptieren" type="submit" />
         </form>
         <form
           action="/api/cookie-consent"
@@ -59,7 +54,7 @@ const headingId = useId();
           @submit.prevent="handleSetTracking(false)"
         >
           <input type="hidden" name="consent" value="false" />
-          <Button label="Ablehnen" data-testid="decline-cookie" type="submit" />
+          <Button label="Ablehnen" type="submit" />
         </form>
         <NuxtLink :to="{ name: 'data-protection' }" class="ris-link1-regular">
           Datenschutzerklärung

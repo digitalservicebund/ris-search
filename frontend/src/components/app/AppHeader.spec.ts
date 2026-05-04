@@ -5,6 +5,13 @@ import { describe, it, expect } from "vitest";
 import AppHeader from "./AppHeader.vue";
 
 describe("AppHeader", () => {
+  it("renders correctly", async () => {
+    await renderSuspended(AppHeader);
+    expect(
+      screen.getByRole("navigation", { name: "Hauptmenü" }),
+    ).toBeInTheDocument();
+  });
+
   it("toggles the mobile menu", async () => {
     const user = userEvent.setup();
     await renderSuspended(AppHeader);
