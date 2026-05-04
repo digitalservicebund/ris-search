@@ -1,0 +1,17 @@
+packages: []
+
+allowBuilds:
+  esbuild: true
+  vue-demi: false
+
+minimumReleaseAge: 4320
+
+overrides:
+  "brace-expansion": "2.0.3"
+  "esbuild": "0.25.0"
+
+publicHoistPattern:
+  - "vue"
+  - "vite"
+
+savePrefix: ""
