@@ -34,7 +34,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import javax.xml.transform.stream.StreamSource;
 import org.eclipse.persistence.exceptions.DescriptorException;
 import org.springframework.stereotype.Service;
@@ -202,7 +201,7 @@ public class CaseLawLdmlToOpenSearchMapper {
         .flatMap(Collection::stream)
         .filter(Objects::nonNull)
         .map(LinkedJudgement::asString)
-        .collect(Collectors.toList());
+        .toList();
   }
 
   private List<String> extractKeywords(Meta meta) {
