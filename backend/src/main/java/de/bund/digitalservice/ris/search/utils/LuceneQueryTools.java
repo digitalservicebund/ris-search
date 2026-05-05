@@ -2,14 +2,24 @@ package de.bund.digitalservice.ris.search.utils;
 
 import de.bund.digitalservice.ris.search.exception.CustomValidationException;
 import de.bund.digitalservice.ris.search.models.errors.CustomError;
+import java.util.Arrays;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.lucene.analysis.core.KeywordAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.index.Term;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
+import org.apache.lucene.search.BooleanClause;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.search.QueryVisitor;
+import org.jspecify.annotations.NonNull;
 import org.springframework.data.elasticsearch.UncategorizedElasticsearchException;
 
 /** Class to store the Lucene query tools */
@@ -46,6 +56,65 @@ public class LuceneQueryTools {
       logger.error("Validation error(s): {}", invalidQueryException.getErrors());
       throw invalidQueryException;
     }
+  }
+
+  /**
+   * Transforms a query string by extracting all terms and combining them with OR. Special
+   * characters are escaped.
+   *
+   * @param queryString to be transformed
+   * @return A new query string with all terms OR-combined
+   * @throws CustomValidationException in case a queryString is invalid
+   */
+  public static String joinAllTermsWithOr(@NonNull String queryString)
+      throws CustomValidationException {
+    if (queryString.isBlank()) {
+      return "";
+    }
+
+    // using a KeywordAnalyzer to avoid dates being split up into separate terms
+    QueryParser queryParser = new QueryParser("", new KeywordAnalyzer());
+    Query query = null;
+    try {
+      query = queryParser.parse(queryString);
+    } catch (ParseException e) {
+      throw invalidQueryException;
+    }
+
+    var terms = collectTerms(query);
+
+    return terms.stream()
+        .map(t -> t.field().isBlank() ? t.text() : t.field() + ":" + t.text())
+        .collect(Collectors.joining(" OR "));
+  }
+
+  /**
+   * Collects all terms of a given Query. Escapes all terms during collection.
+   *
+   * @param query to collect all terms from
+   * @return Set of terms with escaped text fields
+   */
+  private static Set<Term> collectTerms(Query query) {
+    Set<Term> terms = new LinkedHashSet<>();
+
+    query.visit(
+        new QueryVisitor() {
+
+          @Override
+          public void consumeTerms(Query query, Term... visitedTerms) {
+            terms.addAll(
+                Arrays.stream(visitedTerms)
+                    .map(t -> new Term(t.field(), QueryParser.escape(t.text())))
+                    .toList());
+          }
+
+          @Override
+          public QueryVisitor getSubVisitor(BooleanClause.Occur occur, Query parent) {
+            return this;
+          }
+        });
+
+    return terms;
   }
 
   static final Pattern NO_MAPPING_FOUND_PATTERN =
