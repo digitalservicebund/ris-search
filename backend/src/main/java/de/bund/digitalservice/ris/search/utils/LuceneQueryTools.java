@@ -2,14 +2,23 @@ package de.bund.digitalservice.ris.search.utils;
 
 import de.bund.digitalservice.ris.search.exception.CustomValidationException;
 import de.bund.digitalservice.ris.search.models.errors.CustomError;
+import java.util.Arrays;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.lucene.analysis.core.KeywordAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.index.Term;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
+import org.apache.lucene.search.BooleanClause;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.search.QueryVisitor;
 import org.springframework.data.elasticsearch.UncategorizedElasticsearchException;
 
 /** Class to store the Lucene query tools */
@@ -46,6 +55,43 @@ public class LuceneQueryTools {
       logger.error("Validation error(s): {}", invalidQueryException.getErrors());
       throw invalidQueryException;
     }
+  }
+
+  public static String joinAllTermsWithOr(String queryString) throws CustomValidationException {
+
+    QueryParser queryParser = new QueryParser("", new KeywordAnalyzer());
+    Query query = null;
+    try {
+      query = queryParser.parse(queryString);
+    } catch (ParseException e) {
+      throw invalidQueryException;
+    }
+
+    var terms = collectTerms(query);
+
+    return terms.stream()
+        .map(t -> t.field().isBlank() ? t.text() : t.field() + ":" + t.text())
+        .collect(Collectors.joining(" OR "));
+  }
+
+  public static Set<Term> collectTerms(Query query) {
+    Set<Term> terms = new LinkedHashSet<>();
+
+    query.visit(
+        new QueryVisitor() {
+
+          @Override
+          public void consumeTerms(Query query, Term... visitedTerms) {
+            terms.addAll(Arrays.asList(visitedTerms));
+          }
+
+          @Override
+          public QueryVisitor getSubVisitor(BooleanClause.Occur occur, Query parent) {
+            return this;
+          }
+        });
+
+    return terms;
   }
 
   static final Pattern NO_MAPPING_FOUND_PATTERN =

@@ -4,11 +4,13 @@ import static org.opensearch.index.query.QueryBuilders.matchAllQuery;
 import static org.opensearch.index.query.QueryBuilders.queryStringQuery;
 
 import de.bund.digitalservice.ris.search.config.opensearch.Configurations;
+import de.bund.digitalservice.ris.search.exception.CustomValidationException;
 import de.bund.digitalservice.ris.search.models.opensearch.AbstractSearchEntity;
 import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
+import de.bund.digitalservice.ris.search.utils.LuceneQueryTools;
 import de.bund.digitalservice.ris.search.utils.PageUtils;
 import de.bund.digitalservice.ris.search.utils.RisHighlightBuilder;
 import java.util.Collection;
@@ -165,7 +167,8 @@ public class AdvancedSearchService {
    * @param pageable the pagination information defining the page size and index.
    * @return a paginated list of search results containing Norm objects.
    */
-  public SearchPage<Norm> searchNorm(String search, Pageable pageable) {
+  public SearchPage<Norm> searchNorm(String search, Pageable pageable)
+      throws CustomValidationException {
 
     HighlightBuilder highlightBuilder = RisHighlightBuilder.baseHighlighter();
     NormSimpleSearchType.getHighlightedFieldsStatic().forEach(highlightBuilder::field);
@@ -181,7 +184,9 @@ public class AdvancedSearchService {
 
     List<String> expressionElis =
         searchpage.getSearchHits().stream().map(SearchHit::getId).toList();
-    var articleHits = articleService.searchArticlesWithQueryString(expressionElis, search);
+    var articleHits =
+        articleService.searchArticlesWithQueryString(
+            expressionElis, LuceneQueryTools.joinAllTermsWithOr(search));
 
     articleService.populateArticleTextMatches(searchpage, articleHits);
 
