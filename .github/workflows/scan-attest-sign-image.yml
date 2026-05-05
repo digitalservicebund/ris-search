@@ -26,6 +26,12 @@ on:
         required: false
         type: boolean
 
+permissions:
+  contents: read
+  packages: write
+  id-token: write
+  security-events: write
+
 jobs:
   scan-attest-sign-image:
     runs-on: ubuntu-latest

@@ -15,6 +15,13 @@ on:
   # Allow to run this workflow manually
   workflow_dispatch:
 
+permissions:
+  contents: read
+  pull-requests: read # SonarQube PR decoration
+  packages: write # Push images in build-and-push-image and scan-attest-sign-image
+  id-token: write # Sigstore/Fulcio identity challenge in build-and-push-image and scan-attest-sign-image
+  security-events: write # Upload Trivy SARIF results in scan-attest-sign-image
+
 env:
   RUN_ID: ${{ github.run_id }}
 
