@@ -22,10 +22,15 @@ env:
 
 permissions:
   contents: read
+  packages: write # Required by build-and-push-image job and scan-attest-sign-image
+  id-token: write # Required by scan-attest-sign-image (cosign attest/sign)
+  security-events: write # Required by scan-attest-sign-image (upload Trivy SARIF to Security tab)
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
 

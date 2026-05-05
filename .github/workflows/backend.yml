@@ -24,10 +24,16 @@ env:
 
 permissions:
   contents: read
+  pull-requests: read # Required by backend-tests-and-code-quality job (SonarQube PR decoration)
+  packages: write # Required by build-and-push-image job and scan-attest-sign-image
+  id-token: write # Required by build-and-push-image job and scan-attest-sign-image
+  security-events: write # Required by scan-attest-sign-image
 
 jobs:
   validate-gradle-wrapper:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
       - name: Validate gradle wrapper
@@ -35,6 +41,8 @@ jobs:
 
   check-source-code-formatting:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     needs: validate-gradle-wrapper
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
@@ -53,6 +61,8 @@ jobs:
 
   audit-licenses:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     needs: validate-gradle-wrapper
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
@@ -192,6 +202,8 @@ jobs:
 
   generate-backend-code-documentation:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
       - name: Set up JDK
@@ -215,6 +227,8 @@ jobs:
 
   push-reports:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     needs:
       - generate-backend-code-documentation
     if: ${{ github.ref == 'refs/heads/main' }}

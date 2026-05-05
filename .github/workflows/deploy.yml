@@ -20,6 +20,10 @@ on:
         default: ris-search,ris-search/frontend
         required: false
         type: string
+
+permissions:
+  contents: read
+
 jobs:
   deploy:
     runs-on: ubuntu-latest

@@ -5,6 +5,11 @@ on:
   # Allow manual workflow trigger
   workflow_dispatch:
 
+permissions:
+  contents: write
+  pull-requests: write
+  id-token: write
+
 jobs:
   update-chainguard-image-version:
     runs-on: ubuntu-latest

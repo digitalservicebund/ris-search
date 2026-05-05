@@ -3,6 +3,9 @@ name: Clean up old images
 on:
   workflow_dispatch:
 
+permissions:
+  packages: write
+
 jobs:
   clean:
     runs-on: ubuntu-latest
