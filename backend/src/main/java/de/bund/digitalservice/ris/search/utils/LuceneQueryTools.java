@@ -19,6 +19,7 @@ import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.QueryVisitor;
+import org.jspecify.annotations.NonNull;
 import org.springframework.data.elasticsearch.UncategorizedElasticsearchException;
 
 /** Class to store the Lucene query tools */
@@ -57,8 +58,21 @@ public class LuceneQueryTools {
     }
   }
 
-  public static String joinAllTermsWithOr(String queryString) throws CustomValidationException {
+  /**
+   * Transforms a query string by extracting all terms and combining them with OR. Special
+   * characters are escaped.
+   *
+   * @param queryString to be transformed
+   * @return A new query string with all terms OR-combined
+   * @throws CustomValidationException in case a queryString is invalid
+   */
+  public static String joinAllTermsWithOr(@NonNull String queryString)
+      throws CustomValidationException {
+    if (queryString.isBlank()) {
+      return "";
+    }
 
+    // using a KeywordAnalyzer to avoid dates being split up into separate terms
     QueryParser queryParser = new QueryParser("", new KeywordAnalyzer());
     Query query = null;
     try {
@@ -74,7 +88,13 @@ public class LuceneQueryTools {
         .collect(Collectors.joining(" OR "));
   }
 
-  public static Set<Term> collectTerms(Query query) {
+  /**
+   * Collects all terms of a given Query. Escapes all terms during collection.
+   *
+   * @param query to collect all terms from
+   * @return Set of terms with escaped text fields
+   */
+  private static Set<Term> collectTerms(Query query) {
     Set<Term> terms = new LinkedHashSet<>();
 
     query.visit(
@@ -82,7 +102,10 @@ public class LuceneQueryTools {
 
           @Override
           public void consumeTerms(Query query, Term... visitedTerms) {
-            terms.addAll(Arrays.asList(visitedTerms));
+            terms.addAll(
+                Arrays.stream(visitedTerms)
+                    .map(t -> new Term(t.field(), QueryParser.escape(t.text())))
+                    .toList());
           }
 
           @Override
