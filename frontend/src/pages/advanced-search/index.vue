@@ -6,8 +6,6 @@ import { DocumentKind } from "~/types/api";
 import { queryableDataFields } from "~/utils/search/dataFields";
 import { isStrictDateFilterValue } from "~/utils/search/dateFilterType";
 
-useHead({ title: "Erweiterte Suche" });
-
 definePageMeta({
   alias: "/erweiterte-suche",
   middleware: () => {
@@ -27,6 +25,14 @@ const {
   saveFilterStateToRoute,
   sort,
 } = useAdvancedSearchRouteParams();
+
+const title = computed(() => {
+  const pageSuffix =
+    pageIndex.value > 0 ? `, Seite ${pageIndex.value + 1}` : "";
+  return `Erweiterte Suche${pageSuffix}`;
+});
+
+useHead({ title });
 
 const searchFormId = useId();
 
