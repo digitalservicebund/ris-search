@@ -1,5 +1,12 @@
 packages: []
 
+allowBuilds:
+  "@parcel/watcher": true
+  "@sentry/cli": false
+  core-js: false
+  esbuild: true
+  protobufjs: false
+
 minimumReleaseAge: 4320
 minimumReleaseAgeExclude:
   - vite
@@ -8,7 +15,5 @@ minimumReleaseAgeExclude:
 publicHoistPattern:
   - "vue"
   - "vite"
-
-overrides:
 
 savePrefix: ""

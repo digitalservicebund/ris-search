@@ -1,0 +1,9 @@
+packages: []
+
+allowBuilds:
+  esbuild: true
+  vue-demi: false
+
+minimumReleaseAge: 4320
+
+savePrefix: ""

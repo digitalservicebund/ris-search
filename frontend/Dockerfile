@@ -2,10 +2,10 @@ FROM node:24.14.1-alpine3.22@sha256:4f33c7804fa7775b87875f512e25e515692210bfdeaf
 ARG NUXT_PUBLIC_SENTRY_DSN
 ARG SENTRY_RELEASE
 RUN apk update && apk upgrade
-RUN npm install -g pnpm@10.28.2
+RUN corepack enable
 WORKDIR /app
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-RUN pnpm install --frozen-lockfile
+RUN pnpm ci
 COPY playwright.config.ts nuxt.config.ts nuxt.config.d.ts tsconfig.json \
   .oxlintrc.json sentry.server.config.ts sentry.client.config.ts ./
 COPY config ./config
