@@ -2,6 +2,7 @@ package de.bund.digitalservice.ris.search.integration.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import de.bund.digitalservice.ris.search.exception.CustomValidationException;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.models.opensearch.AbstractSearchEntity;
 import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
@@ -95,7 +96,7 @@ class AdvancedSearchServiceTest extends ContainersIntegrationBase {
 
   @Test
   @DisplayName("Advanced search for norm works")
-  void advancedSearchForNormWorks() {
+  void advancedSearchForNormWorks() throws CustomValidationException {
 
     var searchHits =
         advancedSearchService

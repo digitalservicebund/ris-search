@@ -75,7 +75,7 @@ public class ArticleService {
 
     boolQuery.filter(QueryBuilders.termsQuery("expression_eli", expressionElis));
 
-    boolQuery.should(QueryBuilders.queryStringQuery(queryString.replace("AND", "OR")));
+    boolQuery.should(QueryBuilders.queryStringQuery(queryString));
 
     HighlightBuilder highlightBuilder =
         RisHighlightBuilder.baseHighlighter().field("name").field("text");
