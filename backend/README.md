@@ -43,6 +43,12 @@ Denoting an integration test is accomplished by using a JUnit 5 tag annotation: 
 
 Furthermore, there is another type of test worth mentioning. We're using [ArchUnit](https://www.archunit.org/getting-started) for ensuring certain architectural characteristics, for instance making sure that there are no cyclic dependencies.
 
+## Dependencies
+Make sure to regenerate the `gradle.lockfile` file when changing dependencies with:
+```bash
+./gradlew dependencies --write-locks
+```
+
 ## Code Quality
 
 Check formatting:

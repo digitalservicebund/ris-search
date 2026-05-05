@@ -101,6 +101,10 @@ dependencies {
     testImplementation(libs.restassured)
 }
 
+dependencyLocking {
+    lockAllConfigurations()
+}
+
 val generatedPath = "build/generated/**"
 spotless {
     java {
