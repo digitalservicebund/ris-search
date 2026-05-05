@@ -11,7 +11,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
 <template>
   <section
     v-if="!hideFeedbackForm"
-    class="border-t border-t-gray-400 py-64"
+    class="border-t border-t-gray-400 py-64 print:hidden"
     aria-label="Geben Sie uns Feedback"
   >
     <div class="container">
