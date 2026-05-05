@@ -4,7 +4,7 @@
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                 xsi:schemaLocation="http://docs.oasis-open.org/legaldocml/ns/akn/3.0 https://docs.oasis-open.org/legaldocml/akn-core/v1.0/os/part2-specs/schemas/akomantoso30.xsd">
 
-    <akn:judgment name="Urteil">
+    <akn:judgment name="/akn/ontology/de/concept/documenttype/bund/rechtsprechung/entscheidung">
         <akn:meta>
             <akn:identification source="#ris">
                 <akn:FRBRWork>
@@ -13,14 +13,14 @@
                     <akn:FRBRalias name="Übergreifende ID" value="fake-uuid-0007"/>
                     <akn:FRBRalias name="Dokumentnummer" value="JURE200030030" />
                     <akn:FRBRdate eId="Entscheidungsdatum" date="2025-04-09" name="Entscheidungsdatum"/>
-                    <akn:FRBRauthor href="#gericht"/>
+                    <akn:FRBRauthor href="#organisation-gericht-courttype-courtlocation"/>
                     <akn:FRBRcountry value="de"/>
                 </akn:FRBRWork>
                 <akn:FRBRExpression>
                     <akn:FRBRthis value="JURE200030030/dokument"/>
                     <akn:FRBRuri value="JURE200030030/dokument"/>
                     <akn:FRBRdate date="2025-04-09" name="Entscheidungsdatum"/>
-                    <akn:FRBRauthor href="#gericht"/>
+                    <akn:FRBRauthor href="#organisation-gericht-courttype-courtlocation"/>
                     <akn:FRBRlanguage language="deu"/>
                 </akn:FRBRExpression>
                 <akn:FRBRManifestation>
@@ -53,7 +53,7 @@
             <akn:references source="#ris">
                 <akn:TLCOrganization eId="ris" href="" showAs="Rechtsinformationssystem des Bundes"/>
                 <akn:TLCOrganization eId="bag-dokumentationsstelle" href="" showAs="BAG"/>
-                <akn:TLCOrganization eId="gericht" href="" showAs="ArbG"/>
+                <akn:TLCOrganization eId="organisation-gericht-courttype-courtlocation" href="" showAs="ArbG"/>
                 <akn:TLCOrganization eId="spruchkoerper" href="" showAs="5. Kammer"/>
                 <akn:TLCPerson eId="dr-phil-max-mustermann"
                                href=""
@@ -68,7 +68,7 @@
                         <ris:aktenzeichen domainTerm="Aktenzeichen" akn:refersTo="#aktenzeichen">AB 5678/90</ris:aktenzeichen>
                     </ris:aktenzeichenListe>
                     <ris:dokumenttyp domainTerm="Dokumenttyp">Urteil</ris:dokumenttyp>
-                    <ris:gericht domainTerm="Gericht" refersTo="#gericht">
+                    <ris:gericht domainTerm="Gericht" refersTo="#organisation-gericht-courttype-courtlocation">
                         <ris:gerichtstyp domainTerm="Gerichtstyp">ArbG</ris:gerichtstyp>
                         <ris:gerichtsort domainTerm="Gerichtsort">Köln</ris:gerichtsort>
                         <ris:spruchkoerper domainTerm="Spruchkörper" refersTo="#spruchkoerper">5. Kammer</ris:spruchkoerper>
@@ -94,7 +94,7 @@
             <akn:p>Testheader für Urteil 7.</akn:p>
             <akn:p>Aktenzeichen: <akn:docNumber refersTo="#aktenzeichen">AB 5678/90</akn:docNumber></akn:p>
             <akn:p>Entscheidungsdatum: <akn:docDate date="2025-04-09" refersTo="#entscheidungsdatum">09.04.2025</akn:docDate></akn:p>
-            <akn:p>Gericht: <akn:courtType refersTo="#gericht">ArbG</akn:courtType></akn:p>
+            <akn:p>Gericht: <akn:courtType refersTo="#organisation-gericht-courttype-courtlocation">ArbG</akn:courtType></akn:p>
             <akn:p>Dokumenttyp: <akn:docType>Urteil</akn:docType></akn:p>
             <akn:p>Kurztitel: <akn:shortTitle>
                 <akn:embeddedStructure>

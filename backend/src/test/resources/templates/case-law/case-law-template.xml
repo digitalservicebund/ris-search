@@ -3,7 +3,7 @@
                 xmlns:ris="http://rechtsinformationen.bund.de/schema/ris/0.1/"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                 xsi:schemaLocation="http://docs.oasis-open.org/legaldocml/ns/akn/3.0 https://docs.oasis-open.org/legaldocml/akn-core/v1.0/os/part2-specs/schemas/akomantoso30.xsd">
-    <akn:judgment name="Urteil">
+    <akn:judgment name="/akn/ontology/de/concept/documenttype/bund/rechtsprechung/entscheidung">
 
         {% if not hideMeta %}
         <akn:meta>
@@ -16,7 +16,7 @@
             </akn:p>
             <akn:p>Entscheidungsdatum: <akn:docDate date="2023-07-18" refersTo="#entscheidungsdatum">01.01.2020</akn:docDate>
             </akn:p>
-            <akn:p>Gericht: <akn:courtType refersTo="#gericht">courtLabel test</akn:courtType>
+            <akn:p>Gericht: <akn:courtType refersTo="#organisation-gericht-courttype-courtlocation">courtLabel test</akn:courtType>
             </akn:p>
             <akn:p>Dokumenttyp: <akn:docType>documentType test</akn:docType>
             </akn:p>

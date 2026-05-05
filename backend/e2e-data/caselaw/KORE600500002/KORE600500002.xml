@@ -4,7 +4,7 @@
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                 xsi:schemaLocation="http://docs.oasis-open.org/legaldocml/ns/akn/3.0 https://docs.oasis-open.org/legaldocml/akn-core/v1.0/os/part2-specs/schemas/akomantoso30.xsd">
 
-    <akn:judgment name="Urteil">
+    <akn:judgment name="/akn/ontology/de/concept/documenttype/bund/rechtsprechung/entscheidung">
         <akn:meta>
             <akn:identification source="#ris">
                 <akn:FRBRWork>
@@ -13,14 +13,14 @@
                     <akn:FRBRalias name="Übergreifende ID" value="fake-uuid-00012"/>
                     <akn:FRBRalias name="Dokumentnummer" value="KORE600500002" />
                     <akn:FRBRdate eId="Entscheidungsdatum" date="2023-11-22" name="Entscheidungsdatum"/>
-                    <akn:FRBRauthor href="#gericht"/>
+                    <akn:FRBRauthor href="#organisation-gericht-courttype-courtlocation"/>
                     <akn:FRBRcountry value="de"/>
                 </akn:FRBRWork>
                 <akn:FRBRExpression>
                     <akn:FRBRthis value="KORE600500002/dokument"/>
                     <akn:FRBRuri value="KORE600500002/dokument"/>
                     <akn:FRBRdate date="2023-11-22" name="Entscheidungsdatum"/>
-                    <akn:FRBRauthor href="#gericht"/>
+                    <akn:FRBRauthor href="#organisation-gericht-courttype-courtlocation"/>
                     <akn:FRBRlanguage language="deu"/>
                 </akn:FRBRExpression>
                 <akn:FRBRManifestation>
@@ -52,7 +52,7 @@
             <akn:references source="#ris">
                 <akn:TLCOrganization eId="ris" href="" showAs="Rechtsinformationssystem des Bundes"/>
                 <akn:TLCOrganization eId="lg-test12-dokumentationsstelle" href="" showAs="LG Test12"/>
-                <akn:TLCOrganization eId="gericht" href="" showAs="LG"/>
+                <akn:TLCOrganization eId="organisation-gericht-courttype-courtlocation" href="" showAs="LG"/>
                 <akn:TLCOrganization eId="spruchkoerper" href="" showAs="3. Kammer"/>
             </akn:references>
             <akn:proprietary source="ris">
@@ -61,7 +61,7 @@
                         <ris:aktenzeichen domainTerm="Aktenzeichen" akn:refersTo="#aktenzeichen">TS 345678</ris:aktenzeichen>
                     </ris:aktenzeichenListe>
                     <ris:dokumenttyp domainTerm="Dokumenttyp">Urteil</ris:dokumenttyp>
-                    <ris:gericht domainTerm="Gericht" refersTo="#gericht">
+                    <ris:gericht domainTerm="Gericht" refersTo="#organisation-gericht-courttype-courtlocation">
                         <ris:gerichtstyp domainTerm="Gerichtstyp">LG</ris:gerichtstyp>
                         <ris:gerichtsort domainTerm="Gerichtsort">Testort12</ris:gerichtsort>
                         <ris:spruchkoerper domainTerm="Spruchkörper" refersTo="#spruchkoerper">3. Kammer</ris:spruchkoerper>
@@ -81,7 +81,7 @@
             <akn:p>Testheader für Urteil 12.</akn:p>
             <akn:p>Aktenzeichen: <akn:docNumber refersTo="#aktenzeichen">TS 345678</akn:docNumber></akn:p>
             <akn:p>Entscheidungsdatum: <akn:docDate date="2023-11-22" refersTo="#entscheidungsdatum">22.11.2023</akn:docDate></akn:p>
-            <akn:p>Gericht: <akn:courtType refersTo="#gericht">LG</akn:courtType></akn:p>
+            <akn:p>Gericht: <akn:courtType refersTo="#organisation-gericht-courttype-courtlocation">LG</akn:courtType></akn:p>
             <akn:p>Dokumenttyp: <akn:docType>Urteil</akn:docType></akn:p>
             <akn:p>Kurztitel: <akn:shortTitle>
                 <akn:embeddedStructure>
