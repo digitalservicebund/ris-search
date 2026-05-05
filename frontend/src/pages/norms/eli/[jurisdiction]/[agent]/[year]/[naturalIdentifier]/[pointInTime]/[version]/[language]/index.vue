@@ -318,16 +318,16 @@ const fassungenTabPanelTitleId = useId();
       <section
         v-else-if="currentView === 'versions'"
         role="tabpanel"
-        :aria-labelledby="
-          privateFeaturesEnabled ? fassungenTabPanelTitleId : undefined
-        "
+        :aria-labelledby="fassungenTabPanelTitleId"
       >
         <div class="container pt-32 pb-32 lg:pb-56">
           <template v-if="privateFeaturesEnabled">
             <h2 :id="fassungenTabPanelTitleId" class="ris-heading3-bold">
               Fassungen
             </h2>
+
             <DocumentsIncompleteDataMessage class="my-24" />
+
             <DocumentsNormsNormVersionList
               :status="normVersionsStatus"
               :current-legislation-identifier="
@@ -337,7 +337,30 @@ const fassungenTabPanelTitleId = useId();
             />
           </template>
 
-          <DocumentsNormsVersionsTeaser v-else />
+          <div class="max-w-prose" v-else>
+            <h2 :id="fassungenTabPanelTitleId" class="ris-heading3-bold mb-24">
+              Fassungen sind noch nicht verfügbar
+            </h2>
+            <p>
+              Mit dem Livegang des neuen Rechtsinformationsportals werden auch
+              außer Kraft getretene und zukünftig in Kraft tretende Fassungen
+              der Gesetze und Verordnungen zur Verfügung gestellt.
+            </p>
+
+            <h3 class="ris-heading3-bold mt-48 mb-24">
+              Unterstützen Sie uns bei der Entwicklung dieser Funktion
+            </h3>
+
+            <p>
+              Unser Ziel ist es, Rechtsinformationen für Bürgerinnen und Bürger
+              leichter zugänglich zu machen. Deshalb suchen wir Menschen, die
+              ihre Erfahrungen mit uns teilen und unseren Service testen.
+            </p>
+
+            <Button :as="NuxtLink" class="mt-16" :to="{ name: 'usage-tests' }">
+              Mehr über Nutzungstest erfahren
+            </Button>
+          </div>
         </div>
       </section>
     </div>
