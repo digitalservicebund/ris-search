@@ -25,6 +25,7 @@ import org.opensearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
+import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHitSupport;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.SearchPage;
@@ -48,6 +49,7 @@ public class AdvancedSearchService {
   private final ElasticsearchOperations operations;
   private final PageUtils pageUtils;
   private final IndexCoordinates allDocumentsIndex;
+  private final ArticleService articleService;
 
   /**
    * Constructs an instance of AdvancedSearchService which provides search capabilities for multiple
@@ -61,10 +63,14 @@ public class AdvancedSearchService {
    */
   @Autowired
   public AdvancedSearchService(
-      ElasticsearchOperations operations, PageUtils pageUtils, Configurations configurations) {
+      ElasticsearchOperations operations,
+      PageUtils pageUtils,
+      Configurations configurations,
+      ArticleService articleService) {
     this.operations = operations;
     this.pageUtils = pageUtils;
     this.allDocumentsIndex = IndexCoordinates.of(configurations.getDocumentsAliasName());
+    this.articleService = articleService;
   }
 
   /**
@@ -163,14 +169,23 @@ public class AdvancedSearchService {
 
     HighlightBuilder highlightBuilder = RisHighlightBuilder.baseHighlighter();
     NormSimpleSearchType.getHighlightedFieldsStatic().forEach(highlightBuilder::field);
-    return SearchHitSupport.searchPageFor(
-        callOpenSearch(
-            search,
-            highlightBuilder,
-            NormSimpleSearchType.NORMS_FETCH_EXCLUDED_FIELDS,
-            pageable,
-            Norm.class),
-        pageable);
+    var searchpage =
+        SearchHitSupport.searchPageFor(
+            callOpenSearch(
+                search,
+                highlightBuilder,
+                NormSimpleSearchType.NORMS_FETCH_EXCLUDED_FIELDS,
+                pageable,
+                Norm.class),
+            pageable);
+
+    List<String> expressionElis =
+        searchpage.getSearchHits().stream().map(SearchHit::getId).toList();
+    var articleHits = articleService.searchArticlesWithQueryString(expressionElis, search);
+
+    articleService.populateArticleTextMatches(searchpage, articleHits);
+
+    return searchpage;
   }
 
   private <T> SearchHits<T> callOpenSearch(

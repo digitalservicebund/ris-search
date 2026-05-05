@@ -69,6 +69,36 @@ public class ArticleService {
     return operations.search(articleQuery, Article.class);
   }
 
+  public SearchHits<Article> searchArticlesWithQueryString(
+      List<String> expressionElis, String queryString) {
+    BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
+
+    boolQuery.filter(QueryBuilders.termsQuery("expression_eli", expressionElis));
+
+    boolQuery.should(QueryBuilders.queryStringQuery(queryString.replace("AND", "OR")));
+
+    HighlightBuilder highlightBuilder =
+        RisHighlightBuilder.baseHighlighter().field("name").field("text");
+
+    InnerHitBuilder innerHitBuilder =
+        new InnerHitBuilder()
+            .setName("top_three_articles")
+            .setSize(3)
+            .setHighlightBuilder(highlightBuilder);
+
+    CollapseBuilder collapseBuilder =
+        new CollapseBuilder("expression_eli").setInnerHits(innerHitBuilder);
+
+    NativeSearchQuery articleQuery =
+        new NativeSearchQueryBuilder()
+            .withSearchType(SearchType.DFS_QUERY_THEN_FETCH)
+            .withQuery(boolQuery)
+            .withCollapseBuilder(collapseBuilder)
+            .build();
+
+    return operations.search(articleQuery, Article.class);
+  }
+
   public void populateArticleTextMatches(SearchHits<Norm> normSearchHits, String searchTerm) {
     if (StringUtils.isEmpty(searchTerm)) {
       return;
@@ -107,6 +137,21 @@ public class ArticleService {
 
     for (SearchHit<Article> articleSearchHit : articles.getSearchHits()) {
       String expressionEli = articleSearchHit.getContent().getExpressionEli();
+      normInnerHitsMap.get(expressionEli).putAll(articleSearchHit.getInnerHits());
+    }
+  }
+
+  public void populateArticleTextMatches(
+      SearchPage<Norm> searchHits, SearchHits<Article> articles) {
+
+    var normSearchHits = searchHits.getSearchHits().stream();
+
+    Map<String, Map<String, SearchHits<?>>> normInnerHitsMap =
+        normSearchHits.collect(Collectors.toMap(SearchHit::getId, SearchHit::getInnerHits));
+
+    for (SearchHit<Article> articleSearchHit : articles.getSearchHits()) {
+      String expressionEli = articleSearchHit.getContent().getExpressionEli();
+
       normInnerHitsMap.get(expressionEli).putAll(articleSearchHit.getInnerHits());
     }
   }
