@@ -218,7 +218,7 @@ jobs:
         with:
           name: backend-code-documentation
           path: tmp/backend-code-documentation/
-      - name: Java - git add report
+      - name: Upload code documentation to ris-reports
         uses: digitalservicebund/add-ris-report@3fafb0fb08714549c748eb44ac69d2099c7cbb47
         with:
           filePath: tmp/backend-code-documentation

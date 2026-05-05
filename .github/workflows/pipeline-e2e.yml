@@ -189,7 +189,7 @@ jobs:
         with:
           path: tmp/playwright-report/
           pattern: playwright-e2e-tests-report-*
-      - name: E2E test reports - git add report
+      - name: Upload test reports to ris-reports
         uses: digitalservicebund/add-ris-report@3fafb0fb08714549c748eb44ac69d2099c7cbb47
         with:
           filePath: tmp/playwright-report/
