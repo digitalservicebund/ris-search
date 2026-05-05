@@ -7,7 +7,7 @@ describe("SimpleSearchInput", () => {
   it("renders correctly", () => {
     const { container } = render(SimpleSearchInput);
 
-    // Testing via conainer as an unlabelled search is not recognized in JSDOM
+    // Testing via container as an unlabelled search is not recognized in JSDOM
     expect(container.querySelector("search")).toBeInTheDocument();
 
     expect(
