@@ -6,8 +6,4 @@ allowBuilds:
 
 minimumReleaseAge: 4320
 
-publicHoistPattern:
-  - "vue"
-  - "vite"
-
 savePrefix: ""
