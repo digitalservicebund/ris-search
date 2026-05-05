@@ -72,6 +72,9 @@ pebble = { module = "io.pebbletemplates:pebble-spring-boot-starter", version.ref
 streamex = { module = 'one.util:streamex', version.ref = "streamex" }
 restassured = { module = 'io.rest-assured:rest-assured', version.ref = "rest-assured" }
 
+# Override sub-dependency 1.8 with 1.84 to avoid CVE-2026-5588 CVE-2026-0636
+bouncycastle = { module = "org.bouncycastle:bcpkix-jdk18on", version = "1.84" }
+
 [plugins]
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
 spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "spring-dependency-management" }
