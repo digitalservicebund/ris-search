@@ -23,8 +23,8 @@ export type DataField = {
 export const queryableDataFields: Record<DocumentKind, DataField[]> = {
   [DocumentKind.All]: [],
   [DocumentKind.Norm]: [
-    { label: "Überschriften der Paragraphen", pattern: "UP:" },
-    { label: "Text der Paragraphen", pattern: "TP:" },
+    { label: "Überschriften der Paragrafen", pattern: "UP:" },
+    { label: "Text der Paragrafen", pattern: "TP:" },
     { label: "Kurzüberschrift ", pattern: "KU:" },
     { label: "Langüberschrift", pattern: "LU:" },
     { label: "Buchstabenabkürzung", pattern: "AB:" },
