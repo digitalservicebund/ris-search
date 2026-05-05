@@ -173,7 +173,7 @@ watch(searchStatus, async (newStatus, oldStatus) => {
   if (loadingSuccess && scrollToResultsOnLoad.value) {
     scrollToResultsOnLoad.value = false;
     await nextTick();
-    resultsContainerRef.value?.scrollIntoView({ behavior: "smooth" });
+    resultsContainerRef.value?.querySelector<HTMLAnchorElement>("a")?.focus();
   }
 });
 </script>
