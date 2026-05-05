@@ -59,7 +59,7 @@ const currentView = computed(
       <div v-else>
         <!-- Tabs -->
         <div class="border-b border-gray-400">
-          <nav class="container -mb-1">
+          <nav class="container -mb-1" aria-label="Tab-Liste">
             <Tabs :value="currentView" :show-navigators="false">
               <TabList>
                 <!-- Note that we need to override aria-controls manually,

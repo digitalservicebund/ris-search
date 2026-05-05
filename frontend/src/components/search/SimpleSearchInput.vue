@@ -38,27 +38,24 @@ const searchInputId = useId();
 </script>
 
 <template>
-  <form
-    role="search"
-    :class="{ 'max-w-md': !fullWidth }"
-    action="/search"
-    @submit.prevent="performSearch"
-  >
-    <InputGroup>
-      <label class="sr-only" :for="searchInputId">{{ inputLabel }}</label>
-      <InputText
-        :id="searchInputId"
-        v-model="currentText"
-        :placeholder="inputPlaceholder"
-        fluid
-        name="query"
-        type="search"
-      />
-      <InputGroupAddon>
-        <Button :aria-label="submitLabel" type="submit">
-          <template #icon><IconSearch /></template>
-        </Button>
-      </InputGroupAddon>
-    </InputGroup>
-  </form>
+  <search :class="{ 'max-w-md': !fullWidth }">
+    <form action="/search" @submit.prevent="performSearch">
+      <InputGroup>
+        <label class="sr-only" :for="searchInputId">{{ inputLabel }}</label>
+        <InputText
+          :id="searchInputId"
+          v-model="currentText"
+          :placeholder="inputPlaceholder"
+          fluid
+          name="query"
+          type="search"
+        />
+        <InputGroupAddon>
+          <Button :aria-label="submitLabel" type="submit">
+            <template #icon><IconSearch /></template>
+          </Button>
+        </InputGroupAddon>
+      </InputGroup>
+    </form>
+  </search>
 </template>

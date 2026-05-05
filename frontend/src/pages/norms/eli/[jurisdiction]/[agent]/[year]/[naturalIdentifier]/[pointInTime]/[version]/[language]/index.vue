@@ -183,6 +183,7 @@ const currentView = computed(
 
 useDynamicSeo({ title, description });
 
+const textTabPanelTitleId = useId();
 const detailsTabPanelTitleId = useId();
 const fassungenTabPanelTitleId = useId();
 </script>
@@ -213,7 +214,7 @@ const fassungenTabPanelTitleId = useId();
     </div>
 
     <div class="border-b border-gray-400">
-      <nav class="container -mb-1 overflow-x-auto pt-1">
+      <nav class="container -mb-1 overflow-x-auto pt-1" aria-label="Tab-Liste">
         <Tabs :value="currentView" :show-navigators="false">
           <TabList>
             <Tab
@@ -235,10 +236,14 @@ const fassungenTabPanelTitleId = useId();
     </div>
 
     <div class="min-h-96 bg-white print:py-0">
-      <section v-if="currentView === 'text'">
+      <section
+        v-if="currentView === 'text'"
+        role="tabpanel"
+        :aria-labelledby="textTabPanelTitleId"
+      >
         <SidebarLayout class="container">
           <template #content>
-            <h2 class="sr-only">Text</h2>
+            <h2 :id="textTabPanelTitleId" class="sr-only">Text</h2>
             <DocumentsIncompleteDataMessage />
             <DocumentsNormsLegislationContent
               :official-toc="htmlParts.officialToc"
@@ -260,6 +265,7 @@ const fassungenTabPanelTitleId = useId();
 
       <section
         v-else-if="currentView === 'details'"
+        role="tabpanel"
         :aria-labelledby="detailsTabPanelTitleId"
       >
         <div class="container pt-32 pb-32 lg:pb-56">
@@ -311,16 +317,17 @@ const fassungenTabPanelTitleId = useId();
 
       <section
         v-else-if="currentView === 'versions'"
-        :aria-labelledby="
-          privateFeaturesEnabled ? fassungenTabPanelTitleId : undefined
-        "
+        role="tabpanel"
+        :aria-labelledby="fassungenTabPanelTitleId"
       >
         <div class="container pt-32 pb-32 lg:pb-56">
           <template v-if="privateFeaturesEnabled">
             <h2 :id="fassungenTabPanelTitleId" class="ris-heading3-bold">
               Fassungen
             </h2>
+
             <DocumentsIncompleteDataMessage class="my-24" />
+
             <DocumentsNormsNormVersionList
               :status="normVersionsStatus"
               :current-legislation-identifier="
@@ -330,7 +337,30 @@ const fassungenTabPanelTitleId = useId();
             />
           </template>
 
-          <DocumentsNormsVersionsTeaser v-else />
+          <div class="max-w-prose" v-else>
+            <h2 :id="fassungenTabPanelTitleId" class="ris-heading3-bold mb-24">
+              Fassungen sind noch nicht verfügbar
+            </h2>
+            <p>
+              Mit dem Livegang des neuen Rechtsinformationsportals werden auch
+              außer Kraft getretene und zukünftig in Kraft tretende Fassungen
+              der Gesetze und Verordnungen zur Verfügung gestellt.
+            </p>
+
+            <h3 class="ris-heading3-bold mt-48 mb-24">
+              Unterstützen Sie uns bei der Entwicklung dieser Funktion
+            </h3>
+
+            <p>
+              Unser Ziel ist es, Rechtsinformationen für Bürgerinnen und Bürger
+              leichter zugänglich zu machen. Deshalb suchen wir Menschen, die
+              ihre Erfahrungen mit uns teilen und unseren Service testen.
+            </p>
+
+            <Button :as="NuxtLink" class="mt-16" :to="{ name: 'usage-tests' }">
+              Mehr über Nutzungstest erfahren
+            </Button>
+          </div>
         </div>
       </section>
     </div>

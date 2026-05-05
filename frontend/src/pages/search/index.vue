@@ -5,6 +5,8 @@ import { isStrictDateFilterValue } from "~/utils/search/dateFilterType";
 
 useStaticPageSeo("suche");
 
+const filterHeadingId = useId();
+
 const {
   court,
   dateFilter,
@@ -203,29 +205,36 @@ useHead({ title });
   </p>
 
   <div class="mt-24 flex flex-col gap-48 lg:flex-row">
-    <fieldset class="top-8 flex w-full flex-col gap-24 pb-10 lg:w-3/12">
-      <legend class="ris-label1-regular flex h-48 items-center">Filter</legend>
+    <aside class="pb-10 lg:w-3/12" :aria-labelledby="filterHeadingId">
+      <h2
+        :id="filterHeadingId"
+        class="ris-label1-regular flex h-48 items-center"
+      >
+        Filter
+      </h2>
 
-      <SearchCategoryFilter v-model="categoryFilterValue" />
+      <div class="flex flex-col gap-24">
+        <SearchCategoryFilter v-model="categoryFilterValue" />
 
-      <SearchCourtFilter
-        v-if="documentKind === DocumentKind.CaseLaw"
-        v-model="court"
-      />
+        <SearchCourtFilter
+          v-if="documentKind === DocumentKind.CaseLaw"
+          v-model="court"
+        />
 
-      <SearchDateRangeFilter
-        v-if="
-          documentKind === DocumentKind.CaseLaw ||
-          documentKind === DocumentKind.AdministrativeDirective
-        "
-        v-model="dateFilter"
-      />
+        <SearchDateRangeFilter
+          v-if="
+            documentKind === DocumentKind.CaseLaw ||
+            documentKind === DocumentKind.AdministrativeDirective
+          "
+          v-model="dateFilter"
+        />
 
-      <SearchYearRangeFilter
-        v-else-if="documentKind === DocumentKind.Literature"
-        v-model="dateFilter"
-      />
-    </fieldset>
+        <SearchYearRangeFilter
+          v-else-if="documentKind === DocumentKind.Literature"
+          v-model="dateFilter"
+        />
+      </div>
+    </aside>
 
     <div
       :id="mainSectionId"

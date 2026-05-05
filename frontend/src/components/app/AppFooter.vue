@@ -9,13 +9,17 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
 </script>
 
 <template>
-  <footer class="relative print:hidden">
-    <div v-if="!hideFeedbackForm" class="border-t border-t-gray-400 py-64">
-      <div class="container">
-        <AnalyticsFeedbackForm />
-      </div>
+  <section
+    v-if="!hideFeedbackForm"
+    class="border-t border-t-gray-400 py-64 print:hidden"
+    aria-label="Geben Sie uns Feedback"
+  >
+    <div class="container">
+      <AnalyticsFeedbackForm />
     </div>
+  </section>
 
+  <footer class="relative print:hidden">
     <div class="border-t border-t-gray-400 py-64">
       <div class="container">
         <div class="grid grid-cols-1 gap-48 md:grid-cols-2">
@@ -43,7 +47,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
             </div>
           </div>
 
-          <div>
+          <nav aria-label="Weitere Informationen">
             <ul
               class="grid gap-8 wrap-break-word sm:grid-flow-col sm:grid-cols-2 sm:grid-rows-5"
             >
@@ -111,7 +115,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
                 >
               </li>
             </ul>
-          </div>
+          </nav>
         </div>
       </div>
     </div>

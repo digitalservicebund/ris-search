@@ -28,9 +28,6 @@ const factory = async (userConsent: boolean | undefined) => {
 };
 
 describe("ConsentBanner", () => {
-  const cookieBannerTestId = "cookie-banner";
-  const declineButtonTestId = "decline-cookie";
-
   beforeEach(() => {
     mockUserConsent.value = undefined;
     vi.clearAllMocks();
@@ -38,17 +35,25 @@ describe("ConsentBanner", () => {
 
   it("shows the banner when user has not given consent yet", async () => {
     await factory(undefined);
-    expect(screen.queryByTestId(cookieBannerTestId)).toBeInTheDocument();
+    expect(
+      screen.queryByRole("region", {
+        name: "Cookie-Einstellungen akzeptieren oder ablehnen",
+      }),
+    ).toBeInTheDocument();
   });
 
   it("hides the banner when user has already given consent", async () => {
     await factory(true);
-    expect(screen.queryByTestId(cookieBannerTestId)).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("region", {
+        name: "Cookie-Einstellungen akzeptieren oder ablehnen",
+      }),
+    ).not.toBeInTheDocument();
   });
 
   it("sets tracking when clicking the Decline button", async () => {
     await factory(undefined);
-    const declineButton = screen.getByTestId(declineButtonTestId);
+    const declineButton = screen.getByRole("button", { name: "Ablehnen" });
     await fireEvent.submit(declineButton.closest("form")!);
     expect(mockSetTracking).toHaveBeenCalledWith(false);
   });

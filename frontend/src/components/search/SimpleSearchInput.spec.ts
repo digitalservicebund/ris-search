@@ -5,7 +5,10 @@ import SimpleSearchInput from "./SimpleSearchInput.vue";
 
 describe("SimpleSearchInput", () => {
   it("renders correctly", () => {
-    render(SimpleSearchInput);
+    const { container } = render(SimpleSearchInput);
+
+    // Testing via container as an unlabelled search is not recognized in JSDOM
+    expect(container.querySelector("search")).toBeInTheDocument();
 
     expect(
       screen.getByRole("searchbox", { name: "Suchfeld" }),

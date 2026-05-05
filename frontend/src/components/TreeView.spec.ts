@@ -135,6 +135,18 @@ describe("TreeView", () => {
         screen.getByRole("navigation", { name: "Table of contents" }),
       ).toBeInTheDocument();
     });
+
+    it("heading takes precedence over label", async () => {
+      await renderSuspended(TreeView, {
+        props: { items: flatItems, heading: "My Heading", label: "Fallback" },
+      });
+      expect(
+        screen.getByRole("navigation", { name: "My Heading" }),
+      ).toBeInTheDocument();
+      expect(
+        screen.queryByRole("navigation", { name: "Fallback" }),
+      ).not.toBeInTheDocument();
+    });
   });
 
   describe("expandToKey", () => {

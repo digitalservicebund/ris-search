@@ -137,7 +137,7 @@ describe("document", () => {
       },
     });
 
-    expect(screen.getByRole("tablist")).toBeVisible();
+    expect(screen.getByRole("navigation", { name: "Tab-Liste" })).toBeVisible();
     expect(screen.getByRole("tab", { name: /Text/ })).toBeVisible();
     expect(screen.getByRole("tab", { name: /Details/ })).toBeVisible();
   });

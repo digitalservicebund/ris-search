@@ -53,6 +53,9 @@ export default defineNuxtConfig({
         customCollections: {
           custom: FileSystemIconLoader("./src/assets/icons"),
         },
+        iconCustomizer(collection, icon, props) {
+          props.role = "presentation";
+        },
       }),
     ],
     optimizeDeps: {
