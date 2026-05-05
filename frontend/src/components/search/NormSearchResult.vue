@@ -113,15 +113,13 @@ const getArticleUrl = (highlight: TextMatch) =>
         :key="highlight.name + index"
         class="flex flex-col"
       >
-        <div class="ris-label1-bold">
-          <NuxtLink
-            class="link-hover text-blue-800"
-            :to="getArticleUrl(highlight)"
-            @click="openResult(getArticleUrl(highlight))"
-          >
-            <h3 v-html="sanitizeSearchResult(highlight.name)" />
-          </NuxtLink>
-        </div>
+        <NuxtLink
+          class="ris-link1-bold link-hover"
+          :to="getArticleUrl(highlight)"
+          @click="openResult(getArticleUrl(highlight))"
+        >
+          <h3 v-html="sanitizeSearchResult(highlight.name)" />
+        </NuxtLink>
         <div
           v-html="highlight.text ? sanitizeSearchResult(highlight.text) : ''"
         />

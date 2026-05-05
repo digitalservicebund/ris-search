@@ -89,20 +89,12 @@ describe("Pagination", () => {
   });
 
   it("renders navigation buttons when there are multiple pages", async () => {
-    const page = createMockPage();
-    await renderSuspended(Pagination, {
-      props: { page },
-    });
-
-    expect(screen.getByLabelText("vorherige Ergebnisse")).toBeInTheDocument();
-    expect(screen.getByLabelText("nächste Ergebnisse")).toBeInTheDocument();
-  });
-
-  it("disables previous button on first page", async () => {
     const page = createMockPage({
+      "@id": "/api/search?pageIndex=1&size=10",
       view: {
         first: "/api/search?pageIndex=0&size=10",
-        next: "/api/search?pageIndex=1&size=10",
+        previous: "/api/search?pageIndex=0&size=10",
+        next: "/api/search?pageIndex=2&size=10",
         last: "/api/search?pageIndex=9&size=10",
       },
     });
@@ -110,15 +102,28 @@ describe("Pagination", () => {
       props: { page },
     });
 
-    expect(
-      screen.getByRole("button", { name: "vorherige Ergebnisse" }),
-    ).toBeDisabled();
-    expect(
-      screen.getByRole("link", { name: "nächste Ergebnisse" }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Zurück" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Weiter" })).toBeInTheDocument();
   });
 
-  it("disables next button on last page", async () => {
+  it("hides previous button from accessibility tree on first page", async () => {
+    const page = createMockPage({
+      view: {
+        first: "/api/search?pageIndex=0&size=10",
+        next: "/api/search?pageIndex=1&size=10",
+        last: "/api/search?pageIndex=9&size=10",
+      },
+    });
+    await renderSuspended(Pagination, { props: { page } });
+
+    expect(
+      screen.queryByRole("button", { name: "Zurück" }),
+    ).not.toBeInTheDocument();
+
+    expect(screen.getByRole("link", { name: "Weiter" })).toBeInTheDocument();
+  });
+
+  it("hides next button from accessibility tree on last page", async () => {
     const page = createMockPage({
       "@id": "/api/search?pageIndex=9&size=10",
       view: {
@@ -127,16 +132,13 @@ describe("Pagination", () => {
         last: "/api/search?pageIndex=9&size=10",
       },
     });
-    await renderSuspended(Pagination, {
-      props: { page },
-    });
+    await renderSuspended(Pagination, { props: { page } });
+
+    expect(screen.getByRole("link", { name: "Zurück" })).toBeInTheDocument();
 
     expect(
-      screen.getByRole("link", { name: "vorherige Ergebnisse" }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole("button", { name: "nächste Ergebnisse" }),
-    ).toBeDisabled();
+      screen.queryByRole("button", { name: "Weiter" }),
+    ).not.toBeInTheDocument();
   });
 
   it("next button links to correct page", async () => {
@@ -145,7 +147,7 @@ describe("Pagination", () => {
       props: { page },
     });
 
-    const nextLink = screen.getByRole("link", { name: "nächste Ergebnisse" });
+    const nextLink = screen.getByRole("link", { name: "Weiter" });
     expect(nextLink).toHaveAttribute("href", "/?pageIndex=1");
   });
 
@@ -163,9 +165,7 @@ describe("Pagination", () => {
       props: { page },
     });
 
-    const previousLink = screen.getByRole("link", {
-      name: "vorherige Ergebnisse",
-    });
+    const previousLink = screen.getByRole("link", { name: "Zurück" });
     expect(previousLink).toHaveAttribute("href", "/?pageIndex=1");
   });
 
@@ -183,9 +183,7 @@ describe("Pagination", () => {
       props: { page },
     });
 
-    const previousLink = screen.getByRole("link", {
-      name: "vorherige Ergebnisse",
-    });
+    const previousLink = screen.getByRole("link", { name: "Zurück" });
     expect(previousLink).toHaveAttribute("href", "/");
   });
 

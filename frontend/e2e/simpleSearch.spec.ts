@@ -143,7 +143,7 @@ test.describe("general search page features", () => {
     const pagination = page.getByRole("navigation", { name: "Paginierung" });
     await expect(pagination).toHaveText(/Seite 1: Treffer 1–10 von \d+/);
 
-    await page.getByLabel("nächste Ergebnisse").click();
+    await pagination.getByRole("link", { name: "Weiter" }).click();
     await page.waitForURL(/pageIndex=1/);
 
     await expect(resultCounter).toHaveText(nonZeroResultCount);
@@ -154,9 +154,49 @@ test.describe("general search page features", () => {
     expect(await searchResults.count()).toBeGreaterThan(1);
     await expect(pagination).toHaveText(/Seite 2: Treffer 11–\d+ von \d+/);
 
-    await page.getByLabel("vorherige Ergebnisse").click();
+    await pagination.getByRole("link", { name: "Zurück" }).click();
     await page.waitForURL(/pageIndex=0/);
     await expect(searchResults).toHaveCount(10);
+  });
+
+  test("page title updates with page number on pagination", async ({
+    page,
+  }) => {
+    await navigate(page, "/search?query=und");
+
+    await expect(page).toHaveTitle(/und — Suche \|/);
+
+    await page
+      .getByRole("navigation", { name: "Paginierung" })
+      .getByRole("link", { name: "Weiter" })
+      .click();
+    await page.waitForURL(/pageIndex=1/);
+
+    await expect(page).toHaveTitle(/und — Suche, Seite 2/);
+
+    await page
+      .getByRole("navigation", { name: "Paginierung" })
+      .getByRole("link", { name: "Zurück" })
+      .click();
+    await page.waitForURL(/pageIndex=0/);
+
+    await expect(page).toHaveTitle(/und — Suche \|/);
+  });
+
+  test("focuses first search result after pagination", async ({ page }) => {
+    await navigate(page, "/search?query=und");
+
+    await page
+      .getByRole("navigation", { name: "Paginierung" })
+      .getByRole("link", { name: "Weiter" })
+      .click();
+    await page.waitForURL(/pageIndex=1/);
+
+    const firstResultLink = page
+      .getByRole("list", { name: "Suchergebnisse" })
+      .getByRole("link")
+      .first();
+    await expect(firstResultLink).toBeFocused();
   });
 
   test("sort by date in ascending order", async ({ page }) => {
@@ -1106,7 +1146,10 @@ noJsTest("pagination works without JavaScript", async ({ page }) => {
   await expect(getResultCounter(page)).toHaveText(nonZeroResultCount);
   await expect(getSearchResults(page)).toHaveCount(10);
 
-  await page.getByLabel("nächste Ergebnisse").click();
+  await page
+    .getByRole("navigation", { name: "Paginierung" })
+    .getByRole("link", { name: "Weiter" })
+    .click();
   await page.waitForURL(/pageIndex=1/);
 
   await expect(getResultCounter(page)).toHaveText(nonZeroResultCount);
@@ -1116,7 +1159,10 @@ noJsTest("pagination works without JavaScript", async ({ page }) => {
   // exact.
   expect(await getSearchResults(page).count()).toBeGreaterThan(1);
 
-  await page.getByLabel("vorherige Ergebnisse").click();
+  await page
+    .getByRole("navigation", { name: "Paginierung" })
+    .getByRole("link", { name: "Zurück" })
+    .click();
   expect(page).not.toHaveURL(/pageIndex=\d+/);
 
   await expect(getResultCounter(page)).toHaveText(nonZeroResultCount);

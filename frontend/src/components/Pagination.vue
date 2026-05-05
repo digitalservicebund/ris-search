@@ -116,10 +116,10 @@ const itemsOnPage = computed(() => buildItemsOnPageString(props.page));
           v-if="!isOnlyPage"
           :to="previousPageRoute"
           :as="previousPageRoute ? NuxtLink : undefined"
-          aria-label="vorherige Ergebnisse"
           severity="secondary"
           label="Zurück"
           :disabled="!previousPageRoute"
+          :aria-hidden="!previousPageRoute ? 'true' : undefined"
           @click.prevent="previousPage()"
         >
           <template #icon><IconArrowBack /></template>
@@ -139,11 +139,11 @@ const itemsOnPage = computed(() => buildItemsOnPageString(props.page));
           v-if="!isOnlyPage"
           :to="nextPageRoute"
           :as="nextPageRoute ? NuxtLink : undefined"
-          aria-label="nächste Ergebnisse"
           severity="secondary"
           icon-pos="right"
           label="Weiter"
           :disabled="!nextPageRoute"
+          :aria-hidden="!nextPageRoute ? 'true' : undefined"
           @click.prevent="nextPage()"
         >
           <template #icon="slot">

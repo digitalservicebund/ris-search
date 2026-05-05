@@ -155,26 +155,29 @@ watch(searchStatus, async (newStatus, oldStatus) => {
   if (loadingSuccess && scrollToResultsOnLoad.value) {
     scrollToResultsOnLoad.value = false;
     await nextTick();
-    resultsContainerRef.value?.scrollIntoView({ behavior: "smooth" });
+    resultsContainerRef.value?.querySelector<HTMLAnchorElement>("a")?.focus();
   }
 });
 
 // Page title ---------------------------------------------
 
 const title = computed(() => {
-  if (query.value) return `${query.value} — Suche`;
+  const pageSuffix =
+    pageIndex.value > 0 ? `, Seite ${pageIndex.value + 1}` : "";
+
+  if (query.value) return `${query.value} — Suche${pageSuffix}`;
 
   switch (documentKind.value) {
     case DocumentKind.Norm:
-      return "Gesetze & Verordnungen — Suche";
+      return `Gesetze & Verordnungen — Suche${pageSuffix}`;
     case DocumentKind.CaseLaw:
-      return "Rechtsprechung — Suche";
+      return `Rechtsprechung — Suche${pageSuffix}`;
     case DocumentKind.Literature:
-      return "Literaturnachweise — Suche";
+      return `Literaturnachweise — Suche${pageSuffix}`;
     case DocumentKind.AdministrativeDirective:
-      return "Verwaltungsvorschriften — Suche";
+      return `Verwaltungsvorschriften — Suche${pageSuffix}`;
     default:
-      return "Suche";
+      return `Suche${pageSuffix}`;
   }
 });
 
