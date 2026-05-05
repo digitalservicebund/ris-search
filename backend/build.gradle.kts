@@ -83,7 +83,7 @@ dependencies {
     implementation(libs.streamex)
 
     // Override sub-dependency 1.8 with 1.84 to avoid CVE-2026-5588 CVE-2026-0636
-    implementation("org.bouncycastle:bcpkix-jdk18on:1.84")
+    implementation(libs.bouncycastle)
 
     compileOnly(libs.lombok)
     annotationProcessor(libs.lombok)
