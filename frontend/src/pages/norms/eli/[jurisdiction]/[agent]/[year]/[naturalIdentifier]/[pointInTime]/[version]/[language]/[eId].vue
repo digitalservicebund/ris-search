@@ -265,7 +265,8 @@ useDynamicSeo({ title, description });
           <DocumentsNormsLegislationContent single-article>
             <article class="akn-act" v-html="articleHtml" />
           </DocumentsNormsLegislationContent>
-          <div class="flex flex-row justify-between">
+
+          <nav class="flex flex-row justify-between" aria-label="Paragrafen">
             <div class="flex flex-col">
               <NuxtLink
                 v-if="previousArticleUrl"
@@ -278,6 +279,7 @@ useDynamicSeo({ title, description });
                 </div>
               </NuxtLink>
             </div>
+
             <div class="flex flex-col">
               <NuxtLink
                 v-if="nextArticleUrl"
@@ -290,8 +292,9 @@ useDynamicSeo({ title, description });
                 </div>
               </NuxtLink>
             </div>
-          </div>
+          </nav>
         </template>
+
         <template #sidebar>
           <DocumentsTableOfContents
             v-if="tableOfContents.length"
