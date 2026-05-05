@@ -104,7 +104,7 @@ test.describe("general advanced search page features", () => {
     const pagination = page.getByRole("navigation", { name: "Paginierung" });
     await expect(pagination).toHaveText(/Seite 1: Treffer 1–10 von \d+/);
 
-    await page.getByLabel("nächste Ergebnisse").click();
+    await pagination.getByRole("link", { name: "Weiter" }).click();
     await page.waitForURL(/pageIndex=1/);
 
     expect(resultCounter).toHaveText(nonZeroResultCount);
@@ -115,9 +115,55 @@ test.describe("general advanced search page features", () => {
     expect(await searchResults.count()).toBeGreaterThan(1);
     await expect(pagination).toHaveText(/Seite 2: Treffer 11–\d+ von \d+/);
 
-    await page.getByLabel("vorherige Ergebnisse").click();
+    await pagination.getByRole("link", { name: "Zurück" }).click();
     await page.waitForURL(/pageIndex=0/);
     await expect(searchResults).toHaveCount(10);
+  });
+
+  test("page title updates with page number on pagination", async ({
+    page,
+  }) => {
+    await navigate(
+      page,
+      "/advanced-search?documentKind=R&dateFilterType=period&dateFilterFrom=2023-01-01&dateFilterTo=2025-12-31&itemsPerPage=10",
+    );
+
+    await expect(page).toHaveTitle(/^Erweiterte Suche \|/);
+
+    await page
+      .getByRole("navigation", { name: "Paginierung" })
+      .getByRole("link", { name: "Weiter" })
+      .click();
+    await page.waitForURL(/pageIndex=1/);
+
+    await expect(page).toHaveTitle(/Erweiterte Suche, Seite 2/);
+
+    await page
+      .getByRole("navigation", { name: "Paginierung" })
+      .getByRole("link", { name: "Zurück" })
+      .click();
+    await page.waitForURL(/pageIndex=0/);
+
+    await expect(page).toHaveTitle(/^Erweiterte Suche \|/);
+  });
+
+  test("focuses first search result after pagination", async ({ page }) => {
+    await navigate(
+      page,
+      "/advanced-search?documentKind=R&dateFilterType=period&dateFilterFrom=2023-01-01&dateFilterTo=2025-12-31&itemsPerPage=10",
+    );
+
+    await page
+      .getByRole("navigation", { name: "Paginierung" })
+      .getByRole("link", { name: "Weiter" })
+      .click();
+    await page.waitForURL(/pageIndex=1/);
+
+    const firstResultLink = page
+      .getByRole("list", { name: "Suchergebnisse" })
+      .getByRole("link")
+      .first();
+    await expect(firstResultLink).toBeFocused();
   });
 
   test("sort by date in ascending order", async ({ page }) => {
