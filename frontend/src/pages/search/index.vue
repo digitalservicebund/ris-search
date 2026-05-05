@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Message, Select } from "primevue";
 import { DocumentKind } from "~/types/api";
+import { formatDocumentKind } from "~/utils/displayValues";
 import { isStrictDateFilterValue } from "~/utils/search/dateFilterType";
 
 useStaticPageSeo("suche");
@@ -167,18 +168,11 @@ const title = computed(() => {
 
   if (query.value) return `${query.value} — Suche${pageSuffix}`;
 
-  switch (documentKind.value) {
-    case DocumentKind.Norm:
-      return `Gesetze & Verordnungen — Suche${pageSuffix}`;
-    case DocumentKind.CaseLaw:
-      return `Rechtsprechung — Suche${pageSuffix}`;
-    case DocumentKind.Literature:
-      return `Literaturnachweise — Suche${pageSuffix}`;
-    case DocumentKind.AdministrativeDirective:
-      return `Verwaltungsvorschriften — Suche${pageSuffix}`;
-    default:
-      return `Suche${pageSuffix}`;
+  if (documentKind.value !== DocumentKind.All) {
+    return `${formatDocumentKind(documentKind.value)} — Suche${pageSuffix}`;
   }
+
+  return `Suche${pageSuffix}`;
 });
 
 useHead({ title });

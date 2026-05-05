@@ -86,7 +86,7 @@ test.describe("general search page features", () => {
       .getByRole("button", { name: "Gerichtsentscheidungen" })
       .click();
     await expect(page).toHaveTitle(
-      "Rechtsprechung — Suche | Rechtsinformationen des Bundes",
+      "Gerichtsentscheidungen — Suche | Rechtsinformationen des Bundes",
     );
 
     await page
