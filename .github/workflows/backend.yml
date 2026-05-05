@@ -209,37 +209,20 @@ jobs:
 
   push-reports:
     runs-on: ubuntu-latest
-    env:
-      reports-repo: digitalservicebund/ris-reports
     needs:
       - generate-backend-code-documentation
     if: ${{ github.ref == 'refs/heads/main' }}
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
-        with:
-          repository: ${{ env.reports-repo }}
-          ssh-key: ${{ secrets.REPORTS_DEPLOY_KEY }}
-      - name: Setup git config
-        run: |
-          git config user.name "${{ github.repository }}"
-          # This email identifies the commit as GitHub Actions - see https://github.com/orgs/community/discussions/26560
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
       - name: Backend Code Documentation - Download
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
         with:
           name: backend-code-documentation
           path: tmp/backend-code-documentation/
-      - name: Java - git add report
-        uses: digitalservicebund/add-ris-report@c6c8735d23295c36a271c75e7dedc9b6b9a9ef5e
+      - name: Upload code documentation to ris-reports
+        uses: digitalservicebund/add-ris-report@3fafb0fb08714549c748eb44ac69d2099c7cbb47
         with:
           filePath: tmp/backend-code-documentation
           destinationDir: search-code-documentation/java
           reportIsDirectory: true
-      - name: Push reports
-        run: |
-          git diff-index --cached --quiet HEAD ||
-            git commit \
-              -m "Update from ${{ github.repository }}" \
-              -m "From commit: ${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}" &&
-            git push origin main &&
-            echo "Pushed reports to ${{ github.server_url }}/${{ env.reports-repo }}" >> $GITHUB_STEP_SUMMARY
+          BUCKET_ACCESS_KEY_ID: ${{ secrets.REPORTS_BUCKET_ACCESS_KEY_ID }}
+          BUCKET_SECRET_ACCESS_KEY: ${{ secrets.REPORTS_BUCKET_SECRET_ACCESS_KEY }}
