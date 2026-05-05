@@ -26,7 +26,10 @@ test.describe("view norm article page", () => {
     });
 
     await test.step("navigate between single articles", async () => {
-      await page.getByRole("link", { name: "Nächster Paragraf" }).click();
+      await page
+        .getByRole("navigation", { name: "Paragrafen" })
+        .getByRole("link", { name: "Nächster Paragraf" })
+        .click();
       await page.waitForURL(new RegExp("/art-z2$"), { waitUntil: "commit" });
       const h2Art2 = page
         .getByRole("main")
@@ -40,7 +43,10 @@ test.describe("view norm article page", () => {
         }),
       ).toBeVisible();
 
-      await page.getByRole("link", { name: "Nächster Paragraf" }).click();
+      await page
+        .getByRole("navigation", { name: "Paragrafen" })
+        .getByRole("link", { name: "Nächster Paragraf" })
+        .click();
       await page.waitForURL(new RegExp("/art-z3$"), { waitUntil: "commit" });
       const h2Art3 = page
         .getByRole("main")
@@ -78,7 +84,10 @@ test.describe("view norm article page", () => {
         }),
       ).toBeVisible();
 
-      await page.getByRole("link", { name: "Vorheriger Paragraf" }).click();
+      await page
+        .getByRole("navigation", { name: "Paragrafen" })
+        .getByRole("link", { name: "Vorheriger Paragraf" })
+        .click();
       await page.waitForURL(new RegExp("/art-z2$"), { waitUntil: "commit" });
       const h2Art2Back = page
         .getByRole("main")
@@ -198,7 +207,10 @@ test.describe("view norm article page", () => {
       "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/pr%C3%A4ambel-n1_formel-n1",
     );
 
-    await page.getByRole("link", { name: "Nächster Paragraf" }).click();
+    await page
+      .getByRole("navigation", { name: "Paragrafen" })
+      .getByRole("link", { name: "Nächster Paragraf" })
+      .click();
 
     await expect(
       page.getByRole("heading", {
@@ -269,7 +281,10 @@ test.describe("view norm article page", () => {
       "/norms/eli/bund/bgbl-1/1964/s902/2009-02-05/19/deu/art-z3",
     );
 
-    await page.getByRole("link", { name: "Nächster Paragraf" }).click();
+    await page
+      .getByRole("navigation", { name: "Paragrafen" })
+      .getByRole("link", { name: "Nächster Paragraf" })
+      .click();
 
     await expect(
       page.getByRole("heading", {
@@ -294,7 +309,10 @@ test.describe("view norm article page", () => {
       }),
     ).toBeVisible();
 
-    await page.getByRole("link", { name: "Vorheriger Paragraf" }).click();
+    await page
+      .getByRole("navigation", { name: "Paragrafen" })
+      .getByRole("link", { name: "Vorheriger Paragraf" })
+      .click();
 
     await expect(
       page.getByRole("heading", {
