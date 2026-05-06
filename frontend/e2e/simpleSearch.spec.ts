@@ -31,7 +31,9 @@ test.describe("reach search from start page", () => {
 
   test("navigates back to the start page", async ({ page }) => {
     await navigate(page, "/search?query=Fiktiv");
-    await page.getByRole("link", { name: "Zur Startseite" }).click();
+    await page
+      .getByRole("link", { name: "Rechtsinformationen des Bundes" })
+      .click();
 
     await expect(
       page.getByRole("searchbox", { name: "Suchfeld" }),
@@ -202,7 +204,7 @@ test.describe("general search page features", () => {
   test("sort by date in ascending order", async ({ page }) => {
     await navigate(page, "/search?query=fiktiv");
 
-    await page.getByRole("combobox", { name: "Relevanz" }).click();
+    await page.getByRole("combobox", { name: "Sortieren nach" }).click();
     await page.getByRole("option", { name: "Datum: Älteste zuerst" }).click();
 
     await expect(page).toHaveURL(/sort=date/);
@@ -211,7 +213,7 @@ test.describe("general search page features", () => {
   test("sort by date in descending order", async ({ page }) => {
     await navigate(page, "/search?query=fiktiv");
 
-    await page.getByRole("combobox", { name: "Relevanz" }).click();
+    await page.getByRole("combobox", { name: "Sortieren nach" }).click();
     await page.getByRole("option", { name: "Datum: Neueste zuerst" }).click();
 
     await expect(page).toHaveURL(/sort=-date/);
@@ -220,7 +222,7 @@ test.describe("general search page features", () => {
   test("sort by relevance (default)", async ({ page }) => {
     await navigate(page, "/search?query=fiktiv&sort=date");
 
-    await page.getByRole("combobox", { name: "Datum: Älteste zuerst" }).click();
+    await page.getByRole("combobox", { name: "Sortieren nach" }).click();
     await page.getByRole("option", { name: "Relevanz" }).click();
 
     await expect(page).toHaveURL(/sort=default/);
@@ -233,7 +235,7 @@ test.describe("general search page features", () => {
 
     await expect(searchResults).toHaveCount(10);
 
-    await page.getByRole("combobox", { name: "10" }).click();
+    await page.getByRole("combobox", { name: "Einträge pro Seite" }).click();
     await page.getByRole("option", { name: "50" }).click();
 
     await expect(searchResults).toHaveCount(18);
@@ -256,7 +258,7 @@ test.describe("searching all documents", () => {
   test("shows search results for all document kinds", async ({ page }) => {
     await navigate(page, "/search");
 
-    await page.getByRole("combobox", { name: "10" }).click();
+    await page.getByRole("combobox", { name: "Einträge pro Seite" }).click();
     await page.getByRole("option", { name: "50" }).click();
 
     // Norm
@@ -1091,7 +1093,7 @@ test.describe("searching administrative directives", () => {
   test("sort by date", async ({ page }) => {
     await navigate(page, "/search?documentKind=V");
 
-    await page.getByRole("combobox", { name: "Relevanz" }).click();
+    await page.getByRole("combobox", { name: "Sortieren nach" }).click();
     await page.getByRole("option", { name: "Datum: Älteste zuerst" }).click();
 
     await expect(page).toHaveURL(/sort=date/);
@@ -1101,7 +1103,7 @@ test.describe("searching administrative directives", () => {
 
     await expect(searchResults.nth(0)).toHaveText(/01.11.2004/);
 
-    await page.getByRole("combobox", { name: "Datum: Älteste zuerst" }).click();
+    await page.getByRole("combobox", { name: "Sortieren nach" }).click();
     await page.getByRole("option", { name: "Datum: Neueste zuerst" }).click();
 
     await expect(page).toHaveURL(/sort=-date/);

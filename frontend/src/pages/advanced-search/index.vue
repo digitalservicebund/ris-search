@@ -98,7 +98,7 @@ const documentKindMenuItems: MenuItem[] = [
 
 // Search results ------------------------------------------
 
-const itemsPerPageDropdownId = useId();
+const itemsPerPageLabelId = useId();
 const resultsContainerRef = ref<HTMLElement | null>(null);
 const scrollToResultsOnLoad = ref(false);
 
@@ -235,17 +235,16 @@ watch(searchStatus, async (newStatus, oldStatus) => {
           </span>
           <SearchSortSelect v-model="sort" :document-kind />
 
-          <label
-            :for="itemsPerPageDropdownId"
-            class="ris-label2-regular flex items-center gap-8"
-          >
-            Einträge pro Seite
+          <div class="flex items-center gap-8">
+            <label :id="itemsPerPageLabelId" class="ris-label2-regular">
+              Einträge pro Seite
+            </label>
             <Select
-              :id="itemsPerPageDropdownId"
               v-model="itemsPerPage"
+              :aria-labelledby="itemsPerPageLabelId"
               :options="itemsPerPageOptions"
             />
-          </label>
+          </div>
         </div>
 
         <div class="max-w-prose">

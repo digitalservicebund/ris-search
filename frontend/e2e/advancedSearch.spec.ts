@@ -73,9 +73,9 @@ async function searchFor(
   await results;
 }
 
-async function sortBy(page: Page, prop: string, current = "Relevanz") {
+async function sortBy(page: Page, prop: string) {
   const load = page.waitForResponse(/v1\/document\/lucene-search/);
-  await page.getByRole("combobox", { name: current }).click();
+  await page.getByRole("combobox", { name: "Sortieren nach" }).click();
   await page.getByRole("option", { name: prop }).click();
   await load;
 }
@@ -205,7 +205,7 @@ test.describe("general advanced search page features", () => {
   test("sort by relevance (default)", async ({ page }) => {
     await navigate(page, "/advanced-search?q=und&documentKind=N&sort=date");
 
-    await sortBy(page, "Relevanz", "Datum: Älteste zuerst");
+    await sortBy(page, "Relevanz");
 
     // Don't have a great way of asserting relevance, so just making sure the
     // parameter is handled correctly
@@ -225,7 +225,7 @@ test.describe("general advanced search page features", () => {
 
     await expect(searchResults).toHaveCount(10);
 
-    await page.getByRole("combobox", { name: "10" }).click();
+    await page.getByRole("combobox", { name: "Einträge pro Seite" }).click();
     await page.getByRole("option", { name: "50" }).click();
 
     await expect(searchResults).toHaveCount(13);
