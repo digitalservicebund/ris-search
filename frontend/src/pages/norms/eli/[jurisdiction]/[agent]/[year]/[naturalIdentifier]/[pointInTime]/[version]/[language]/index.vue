@@ -214,7 +214,7 @@ const fassungenTabPanelTitleId = useId();
     </div>
 
     <div class="border-b border-gray-400">
-      <nav class="container -mb-1 overflow-x-auto pt-1" aria-label="Tab-Liste">
+      <nav class="container -mb-1 overflow-x-auto pt-1" aria-label="Tab">
         <Tabs :value="currentView" :show-navigators="false">
           <TabList>
             <Tab
