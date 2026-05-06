@@ -187,7 +187,7 @@ Attributes from the Juris CALS format without a corresponding HTML attribute mig
 
 /* Einzelvorschrift :: Überschrift  */
 :deep(h2.einzelvorschrift) {
-  @apply ris-heading3-bold my-24 inline-block break-after-avoid;
+  @apply ris-heading3-bold my-24 inline-block break-after-avoid not-print:wrap-break-word not-print:hyphens-auto;
 }
 
 :deep(.akn-heading a) {
