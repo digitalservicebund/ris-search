@@ -9,7 +9,7 @@ const nuxtLinkStub = {
 };
 
 describe("Breadcrumbs", () => {
-  it("renders Startseite and all items except the last as links", async () => {
+  it("renders Start and all items except the last as links", async () => {
     await renderSuspended(RisBreadcrumb, {
       props: {
         items: [
@@ -20,7 +20,7 @@ describe("Breadcrumbs", () => {
       global: { stubs: { NuxtLink: nuxtLinkStub } },
     });
 
-    expect(screen.getByRole("link", { name: "Startseite" })).toBeVisible();
+    expect(screen.getByRole("link", { name: "Start" })).toBeVisible();
 
     const fooLink = screen.getByRole("link", { name: "Foo" });
     expect(fooLink).toBeVisible();
@@ -103,7 +103,7 @@ describe("Breadcrumbs", () => {
       expect(
         screen.getByRole("button", { name: "Navigiere zu" }),
       ).toBeVisible();
-      expect(screen.getByRole("link", { name: "Startseite" })).toBeVisible();
+      expect(screen.getByRole("link", { name: "Start" })).toBeVisible();
       expect(screen.getByText("Last")).toBeVisible();
       expect(screen.queryByRole("link", { name: "A" })).not.toBeInTheDocument();
       expect(screen.queryByRole("link", { name: "B" })).not.toBeInTheDocument();
@@ -127,9 +127,7 @@ describe("Breadcrumbs", () => {
 
       const dialog = screen.getByRole("dialog");
       expect(dialog).toBeVisible();
-      expect(
-        within(dialog).getByRole("link", { name: "Startseite" }),
-      ).toBeVisible();
+      expect(within(dialog).getByRole("link", { name: "Start" })).toBeVisible();
       expect(within(dialog).getByRole("link", { name: "A" })).toHaveAttribute(
         "href",
         "/a",

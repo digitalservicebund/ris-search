@@ -34,7 +34,7 @@ const {
 }>();
 
 const itemsWithHome = computed(() => [
-  { label: "Startseite", route: { name: "index" } },
+  { label: "Start", route: { name: "index" } },
   ...items,
 ]);
 

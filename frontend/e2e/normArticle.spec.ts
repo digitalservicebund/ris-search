@@ -412,9 +412,7 @@ test("shows correct breadcrumbs for a nested article", async ({
 
   const breadcrumb = page.getByRole("navigation", { name: "Pfadnavigation" });
 
-  await expect(
-    breadcrumb.getByRole("link", { name: "Startseite" }),
-  ).toBeVisible();
+  await expect(breadcrumb.getByRole("link", { name: "Start" })).toBeVisible();
   await expect(breadcrumb.getByRole("link", { name: "Suche" })).toBeVisible();
   await expect(breadcrumb.getByRole("link", { name: "BWahlGV" })).toBeVisible();
   await expect(
@@ -440,9 +438,7 @@ test("shows correct breadcrumbs for an Eingangsformel", async ({
 
   const breadcrumb = page.getByRole("navigation", { name: "Pfadnavigation" });
 
-  await expect(
-    breadcrumb.getByRole("link", { name: "Startseite" }),
-  ).toBeVisible();
+  await expect(breadcrumb.getByRole("link", { name: "Start" })).toBeVisible();
   await expect(breadcrumb.getByRole("link", { name: "Suche" })).toBeVisible();
   await expect(breadcrumb.getByRole("link", { name: "MFG" })).toBeVisible();
   await expect(breadcrumb.getByText("Eingangsformel")).toBeVisible();
@@ -626,9 +622,7 @@ test.describe("mobile breadcrumbs", () => {
 
     const breadcrumb = page.getByRole("navigation", { name: "Pfadnavigation" });
 
-    await expect(
-      breadcrumb.getByRole("link", { name: "Startseite" }),
-    ).toBeVisible();
+    await expect(breadcrumb.getByRole("link", { name: "Start" })).toBeVisible();
     await expect(breadcrumb.getByText("§ 9")).toBeVisible();
 
     await page.getByRole("button", { name: "Navigiere zu" }).click();
@@ -637,9 +631,7 @@ test.describe("mobile breadcrumbs", () => {
 
     await expect(dialog).toBeVisible();
 
-    await expect(
-      dialog.getByRole("link", { name: "Startseite" }),
-    ).toBeVisible();
+    await expect(dialog.getByRole("link", { name: "Start" })).toBeVisible();
     await expect(dialog.getByRole("link", { name: "Suche" })).toBeVisible();
     await expect(dialog.getByRole("link", { name: "BWahlGV" })).toBeVisible();
     await expect(

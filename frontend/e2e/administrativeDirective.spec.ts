@@ -22,10 +22,7 @@ test("displays administrative directive page with metadata and text tab by defau
   const breadcrumb = page.getByRole("navigation", { name: "Pfadnavigation" });
 
   await expect(breadcrumb).toBeVisible();
-  await expect(breadcrumb.getByRole("link")).toContainText([
-    "Startseite",
-    "Suche",
-  ]);
+  await expect(breadcrumb.getByRole("link")).toContainText(["Start", "Suche"]);
   const expectedTitle =
     "Verwaltungsvorschrift für das Testen des Portals zur Darstellung von Verwaltungsvorschriften";
   await expect(breadcrumb.getByText(expectedTitle)).toBeVisible();
