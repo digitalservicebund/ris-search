@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { NuxtLink } from "#components";
 import type { Dayjs } from "dayjs";
-import { Tab, TabList, Tabs } from "primevue";
+import { Button, Tab, TabList, Tabs } from "primevue";
 import type { ComputedRef } from "vue";
 import type { BreadcrumbItem } from "~/components/Breadcrumbs.vue";
 import { DocumentKind, type LegislationExpression } from "~/types/api";
