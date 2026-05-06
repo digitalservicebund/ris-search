@@ -4,13 +4,11 @@ import static org.opensearch.index.query.QueryBuilders.matchAllQuery;
 import static org.opensearch.index.query.QueryBuilders.queryStringQuery;
 
 import de.bund.digitalservice.ris.search.config.opensearch.Configurations;
-import de.bund.digitalservice.ris.search.exception.CustomValidationException;
 import de.bund.digitalservice.ris.search.models.opensearch.AbstractSearchEntity;
 import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
-import de.bund.digitalservice.ris.search.utils.LuceneQueryTools;
 import de.bund.digitalservice.ris.search.utils.PageUtils;
 import de.bund.digitalservice.ris.search.utils.RisHighlightBuilder;
 import java.util.Collection;
@@ -27,7 +25,6 @@ import org.opensearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
-import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHitSupport;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.SearchPage;
@@ -159,42 +156,33 @@ public class AdvancedSearchService {
   }
 
   /**
-   * Executes a search query for Norm objects in an OpenSearch index. The search results are
-   * paginated based on the provided Pageable object, and fields in the results may be highlighted
-   * based on the configuration.
+   * Executes a lucene query for Norm objects in an OpenSearch index. The results are paginated
+   * based on the provided Pageable object, and fields in the results may be highlighted based on
+   * the configuration.
    *
-   * @param search the search query string. If null or empty, a match-all query is executed.
+   * @param searchString the lucene query string. If null or empty, a match-all query is executed.
    * @param pageable the pagination information defining the page size and index.
-   * @return a paginated list of search results containing Norm objects.
+   * @return a paginated list of results containing Norm objects.
    */
-  public SearchPage<Norm> searchNorm(String search, Pageable pageable)
-      throws CustomValidationException {
+  public SearchPage<Norm> searchNorm(String searchString, Pageable pageable) {
 
     HighlightBuilder highlightBuilder = RisHighlightBuilder.baseHighlighter();
     NormSimpleSearchType.getHighlightedFieldsStatic().forEach(highlightBuilder::field);
-    var searchpage =
-        SearchHitSupport.searchPageFor(
-            callOpenSearch(
-                search,
-                highlightBuilder,
-                NormSimpleSearchType.NORMS_FETCH_EXCLUDED_FIELDS,
-                pageable,
-                Norm.class),
-            pageable);
+    SearchHits<Norm> searchHits =
+        callOpenSearch(
+            searchString,
+            highlightBuilder,
+            NormSimpleSearchType.NORMS_FETCH_EXCLUDED_FIELDS,
+            pageable,
+            Norm.class);
 
-    List<String> expressionElis =
-        searchpage.getSearchHits().stream().map(SearchHit::getId).toList();
-    var articleHits =
-        articleService.searchArticlesWithQueryString(
-            expressionElis, LuceneQueryTools.joinAllTermsWithOr(search));
+    articleService.populateArticleTextMatches(searchHits.getSearchHits(), searchString, true);
 
-    articleService.populateArticleTextMatches(searchpage, articleHits);
-
-    return searchpage;
+    return SearchHitSupport.searchPageFor(searchHits, pageable);
   }
 
   private <T> SearchHits<T> callOpenSearch(
-      @Nullable String search,
+      @Nullable String searchString,
       @Nullable HighlightBuilder highlightBuilder,
       @Nullable List<String> excludedFields,
       @NotNull Pageable pageable,
@@ -211,8 +199,8 @@ public class AdvancedSearchService {
           new FetchSourceFilter(false, null, excludedFields.toArray(String[]::new)));
     }
 
-    if (StringUtils.isNotBlank(search)) {
-      searchQuery.withQuery(queryStringQuery(search));
+    if (StringUtils.isNotBlank(searchString)) {
+      searchQuery.withQuery(queryStringQuery(searchString));
     } else {
       searchQuery.withQuery(matchAllQuery());
     }
