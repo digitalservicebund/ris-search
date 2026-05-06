@@ -4,11 +4,13 @@ import static org.opensearch.index.query.QueryBuilders.matchAllQuery;
 import static org.opensearch.index.query.QueryBuilders.queryStringQuery;
 
 import de.bund.digitalservice.ris.search.config.opensearch.Configurations;
+import de.bund.digitalservice.ris.search.exception.CustomValidationException;
 import de.bund.digitalservice.ris.search.models.opensearch.AbstractSearchEntity;
 import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
+import de.bund.digitalservice.ris.search.utils.LuceneQueryTools;
 import de.bund.digitalservice.ris.search.utils.PageUtils;
 import de.bund.digitalservice.ris.search.utils.RisHighlightBuilder;
 import java.util.Collection;
@@ -160,29 +162,36 @@ public class AdvancedSearchService {
    * based on the provided Pageable object, and fields in the results may be highlighted based on
    * the configuration.
    *
-   * @param searchString the lucene query string. If null or empty, a match-all query is executed.
+   * @param search the lucene query string. If null or empty, a match-all query is executed.
    * @param pageable the pagination information defining the page size and index.
-   * @return a paginated list of results containing Norm objects.
+   * @return a paginated list of search results containing Norm objects.
    */
-  public SearchPage<Norm> searchNorm(String searchString, Pageable pageable) {
+  public SearchPage<Norm> searchNorm(String search, Pageable pageable)
+      throws CustomValidationException {
 
     HighlightBuilder highlightBuilder = RisHighlightBuilder.baseHighlighter();
     NormSimpleSearchType.getHighlightedFieldsStatic().forEach(highlightBuilder::field);
-    SearchHits<Norm> searchHits =
-        callOpenSearch(
-            searchString,
-            highlightBuilder,
-            NormSimpleSearchType.NORMS_FETCH_EXCLUDED_FIELDS,
-            pageable,
-            Norm.class);
+    var searchpage =
+        SearchHitSupport.searchPageFor(
+            callOpenSearch(
+                search,
+                highlightBuilder,
+                NormSimpleSearchType.NORMS_FETCH_EXCLUDED_FIELDS,
+                pageable,
+                Norm.class),
+            pageable);
 
-    articleService.populateArticleTextMatches(searchHits.getSearchHits(), searchString, true);
+    var articleHits =
+        articleService.searchArticles(
+            searchpage, LuceneQueryTools.joinAllTermsWithOr(search), true);
 
-    return SearchHitSupport.searchPageFor(searchHits, pageable);
+    articleService.populateArticleTextMatches(searchpage, articleHits);
+
+    return searchpage;
   }
 
   private <T> SearchHits<T> callOpenSearch(
-      @Nullable String searchString,
+      @Nullable String search,
       @Nullable HighlightBuilder highlightBuilder,
       @Nullable List<String> excludedFields,
       @NotNull Pageable pageable,
@@ -199,8 +208,8 @@ public class AdvancedSearchService {
           new FetchSourceFilter(false, null, excludedFields.toArray(String[]::new)));
     }
 
-    if (StringUtils.isNotBlank(searchString)) {
-      searchQuery.withQuery(queryStringQuery(searchString));
+    if (StringUtils.isNotBlank(search)) {
+      searchQuery.withQuery(queryStringQuery(search));
     } else {
       searchQuery.withQuery(matchAllQuery());
     }

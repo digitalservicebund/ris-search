@@ -180,7 +180,7 @@ public class NormSearchResponseMapper {
    *     total number of items, and the corresponding view metadata.
    */
   public static CollectionSchema<SearchMemberSchema<LegislationExpressionSearchSchema>> fromDomain(
-      final SearchPage<Norm> page, String path) {
+      final SearchPage<?> page, String path) {
     String id = String.format("%s?pageIndex=%d&size=%d", path, page.getNumber(), page.getSize());
     PartialCollectionViewSchema view = PartialCollectionViewMapper.fromPage(path, page);
 

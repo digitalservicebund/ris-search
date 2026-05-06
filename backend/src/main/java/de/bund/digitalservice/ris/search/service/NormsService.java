@@ -103,10 +103,14 @@ public class NormsService {
         simpleSearchQueryBuilder.buildQuery(
             List.of(new NormSimpleSearchType(normsSearchParams)), params, pageable);
     SearchHits<Norm> searchHits = operations.search(query, Norm.class);
-    articleService.populateArticleTextMatches(
-        searchHits.getSearchHits(), params.getSearchTerm(), false);
 
-    return PageUtils.unwrapSearchHits(searchHits, pageable);
+    var searchPage = PageUtils.unwrapSearchHits(searchHits, pageable);
+
+    var articles = articleService.searchArticles(searchPage, params.getSearchTerm(), false);
+
+    articleService.populateArticleTextMatches(searchPage, articles);
+
+    return searchPage;
   }
 
   /**

@@ -13,7 +13,6 @@ import de.bund.digitalservice.ris.search.schema.AbstractDocumentSchema;
 import de.bund.digitalservice.ris.search.schema.CollectionSchema;
 import de.bund.digitalservice.ris.search.schema.SearchMemberSchema;
 import de.bund.digitalservice.ris.search.service.AllDocumentsService;
-import de.bund.digitalservice.ris.search.service.ArticleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -44,12 +43,9 @@ public class AllDocumentsSearchController {
   protected static final Logger logger = LogManager.getLogger(AllDocumentsSearchController.class);
 
   private final AllDocumentsService allDocumentsService;
-  private final ArticleService articleService;
 
-  public AllDocumentsSearchController(
-      AllDocumentsService allDocumentsService, ArticleService articleService) {
+  public AllDocumentsSearchController(AllDocumentsService allDocumentsService) {
     this.allDocumentsService = allDocumentsService;
-    this.articleService = articleService;
   }
 
   /**
@@ -100,8 +96,6 @@ public class AllDocumentsSearchController {
     try {
       SearchPage<AbstractSearchEntity> searchResult =
           allDocumentsService.simpleSearchAllDocuments(request, sortedPageRequest, mostRelevantOn);
-      articleService.populateArticleTextMatches(
-          searchResult.getSearchHits().getSearchHits(), request.getSearchTerm(), false);
 
       return ResponseEntity.ok()
           .contentType(MediaType.APPLICATION_JSON)

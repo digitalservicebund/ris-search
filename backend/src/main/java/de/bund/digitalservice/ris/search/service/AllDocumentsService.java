@@ -26,17 +26,20 @@ public class AllDocumentsService {
   private final SimpleSearchQueryBuilder simpleSearchQueryBuilder;
   private final IndexCoordinates allDocumentsIndex;
   private final PageUtils pageUtils;
+  private final ArticleService articleService;
 
   /** Constructor for AllDocumentsService. */
   public AllDocumentsService(
       ElasticsearchOperations operations,
       Configurations configurations,
       PageUtils pageUtils,
-      SimpleSearchQueryBuilder simpleSearchQueryBuilder) {
+      SimpleSearchQueryBuilder simpleSearchQueryBuilder,
+      ArticleService articleService) {
     this.operations = operations;
     allDocumentsIndex = IndexCoordinates.of(configurations.getDocumentsAliasName());
     this.pageUtils = pageUtils;
     this.simpleSearchQueryBuilder = simpleSearchQueryBuilder;
+    this.articleService = articleService;
   }
 
   /**
@@ -68,6 +71,11 @@ public class AllDocumentsService {
     NativeSearchQuery query = simpleSearchQueryBuilder.buildQuery(searchTypes, params, pageable);
 
     SearchHits<Document> search = operations.search(query, Document.class, allDocumentsIndex);
-    return pageUtils.unwrapMixedSearchHits(search, pageable);
+    SearchPage<AbstractSearchEntity> searchPage = pageUtils.unwrapMixedSearchHits(search, pageable);
+
+    var articles = articleService.searchArticles(searchPage, params.getSearchTerm(), false);
+    articleService.populateArticleTextMatches(searchPage, articles);
+
+    return searchPage;
   }
 }

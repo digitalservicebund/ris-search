@@ -1,18 +1,15 @@
 package de.bund.digitalservice.ris.search.service;
 
-import de.bund.digitalservice.ris.search.exception.CustomValidationException;
+import de.bund.digitalservice.ris.search.models.opensearch.AbstractSearchEntity;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.repository.opensearch.ArticlesRepository;
-import de.bund.digitalservice.ris.search.utils.LuceneQueryTools;
 import de.bund.digitalservice.ris.search.utils.RisHighlightBuilder;
+import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.opensearch.action.search.SearchType;
 import org.opensearch.data.client.orhlc.NativeSearchQuery;
 import org.opensearch.data.client.orhlc.NativeSearchQueryBuilder;
@@ -21,17 +18,18 @@ import org.opensearch.index.query.InnerHitBuilder;
 import org.opensearch.index.query.MultiMatchQueryBuilder;
 import org.opensearch.index.query.Operator;
 import org.opensearch.index.query.QueryBuilders;
-import org.opensearch.index.search.MatchQuery;
 import org.opensearch.search.collapse.CollapseBuilder;
 import org.opensearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
+import org.springframework.data.elasticsearch.core.SearchHitsImpl;
+import org.springframework.data.elasticsearch.core.SearchPage;
+import org.springframework.data.elasticsearch.core.TotalHitsRelation;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ArticleService {
-  protected static final Logger logger = LogManager.getLogger(ArticleService.class);
 
   private final ElasticsearchOperations operations;
   private final ArticlesRepository articlesRepository;
@@ -41,17 +39,20 @@ public class ArticleService {
     this.articlesRepository = articlesRepository;
   }
 
-  private SearchHits<Article> searchArticles(
-      Set<String> expressionElis, String searchString, boolean isAdvancedSearch) {
-    BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
-    boolQuery.filter(QueryBuilders.termsQuery("expression_eli", expressionElis));
+  public <T extends AbstractSearchEntity> SearchHits<Article> searchArticles(
+      SearchPage<T> searchPage, String searchTerm, boolean isLuceneQuery) {
+    if (searchPage.isEmpty() || searchTerm == null || searchTerm.isBlank()) {
+      return getEmptySearchHitsImpl();
+    }
 
-    if (isAdvancedSearch) {
-      boolQuery.should(QueryBuilders.queryStringQuery(searchString));
+    BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
+    boolQuery.filter(QueryBuilders.termsQuery("expression_eli", getExpressionElis(searchPage)));
+
+    if (isLuceneQuery) {
+      boolQuery.should(QueryBuilders.queryStringQuery(searchTerm));
     } else {
       boolQuery.should(
-          new MultiMatchQueryBuilder(searchString)
-              .zeroTermsQuery(MatchQuery.ZeroTermsQuery.ALL)
+          new MultiMatchQueryBuilder(searchTerm)
               .type(MultiMatchQueryBuilder.Type.CROSS_FIELDS)
               .operator(Operator.OR));
     }
@@ -78,29 +79,37 @@ public class ArticleService {
     return operations.search(articleQuery, Article.class);
   }
 
-  public <T> void populateArticleTextMatches(
-      List<SearchHit<T>> normSearchHits, String searchString, boolean isAdvancedSearch) {
-    if (StringUtils.isEmpty(searchString)) {
-      return;
-    }
+  private SearchHits<Article> getEmptySearchHitsImpl() {
+    return new SearchHitsImpl<>(
+        0, TotalHitsRelation.EQUAL_TO, 0, Duration.ZERO, null, null, List.of(), null, null, null);
+  }
+
+  private <T extends AbstractSearchEntity> List<String> getExpressionElis(
+      SearchPage<T> searchPage) {
+    List<String> expressionElis = new ArrayList<>();
+    searchPage
+        .getSearchHits()
+        .getSearchHits()
+        .forEach(
+            hit -> {
+              if (hit.getContent() instanceof Norm) {
+                expressionElis.add(((Norm) hit.getContent()).getExpressionEli());
+              }
+            });
+    return expressionElis;
+  }
+
+  public <T extends AbstractSearchEntity> void populateArticleTextMatches(
+      SearchPage<T> searchHits, SearchHits<Article> articles) {
+
+    List<SearchHit<T>> normSearchHits =
+        searchHits.getSearchHits().stream()
+            .filter(e -> e.getContent().getClass().equals(Norm.class))
+            .toList();
+
     Map<String, Map<String, SearchHits<?>>> normInnerHitsMap =
         normSearchHits.stream()
             .collect(Collectors.toMap(SearchHit::getId, SearchHit::getInnerHits));
-    Set<String> expressionElis = normInnerHitsMap.keySet();
-    if (isAdvancedSearch) {
-      try {
-        searchString = LuceneQueryTools.joinAllTermsWithOr(searchString);
-      } catch (CustomValidationException e) {
-        // This should never happen, but if it does happen we will get an error in the logs. It
-        // could only happen if the lucene query was valid, but our transformation turned it
-        // invalid.
-        logger.error(
-            "Error transforming lucene query for articles. Trying to fail gracefully by returning no articles.",
-            e);
-        return;
-      }
-    }
-    SearchHits<Article> articles = searchArticles(expressionElis, searchString, isAdvancedSearch);
 
     for (SearchHit<Article> articleSearchHit : articles.getSearchHits()) {
       String expressionEli = articleSearchHit.getContent().getExpressionEli();
