@@ -22,10 +22,7 @@ test("displays literature page with metadata and text tab by default", async ({
   const breadcrumb = page.getByRole("navigation", { name: "Pfadnavigation" });
 
   await expect(breadcrumb).toBeVisible();
-  await expect(breadcrumb.getByRole("link")).toContainText([
-    "Startseite",
-    "Suche",
-  ]);
+  await expect(breadcrumb.getByRole("link")).toContainText(["Start", "Suche"]);
 
   // Main title
   await expect(breadcrumb.getByText("Erstes Test-Dokument ULI")).toBeVisible();

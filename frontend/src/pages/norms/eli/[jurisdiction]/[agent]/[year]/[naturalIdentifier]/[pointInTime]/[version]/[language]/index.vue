@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { NuxtLink } from "#components";
 import type { Dayjs } from "dayjs";
-import { Tab, TabList, Tabs } from "primevue";
+import { Button, Tab, TabList, Tabs } from "primevue";
 import type { ComputedRef } from "vue";
 import type { BreadcrumbItem } from "~/components/Breadcrumbs.vue";
 import { DocumentKind, type LegislationExpression } from "~/types/api";
@@ -81,9 +81,6 @@ const { status: normVersionsStatus, sortedVersions: normVersions } =
   useNormVersions(metadata.value?.exampleOfWork?.legislationIdentifier ?? "");
 
 const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
-  const validFrom = dateFormattedDDMMYYYY(validityInterval.value?.from);
-  const validFromDisplay = validFrom ? ` vom ${validFrom}` : "";
-
   return [
     {
       label: "Suche",
@@ -91,7 +88,7 @@ const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
     },
     {
       route: `/norms/${metadata.value?.legislationIdentifier}`,
-      label: normBreadcrumbTitle.value + validFromDisplay,
+      label: normBreadcrumbTitle.value,
     },
   ];
 });

@@ -194,7 +194,7 @@ test("displays validity in breadcrumb navigation", async ({
 
   const breadcrumbLinks = breadcrumb.getByRole("listitem");
   await expect(breadcrumbLinks).toContainText([
-    "Startseite",
+    "Start",
     "", // Empty items are separators
     "Suche",
     "",

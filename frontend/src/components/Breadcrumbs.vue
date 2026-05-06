@@ -22,6 +22,7 @@ const {
   collapse = false,
   items = [],
   label = "Pfadnavigation",
+  forceOneLine = true,
 } = defineProps<{
   /**
    * When set, the breadcrumbs will show a maximum of 3 items, after which
@@ -31,10 +32,12 @@ const {
   collapse?: boolean;
   items?: BreadcrumbItem[];
   label?: string;
+  /** When set, forces the breadcrumbs to always be limited to one line. */
+  forceOneLine?: boolean;
 }>();
 
 const itemsWithHome = computed(() => [
-  { label: "Startseite", route: { name: "index" } },
+  { label: "Start", route: { name: "index" } },
   ...items,
 ]);
 
@@ -66,7 +69,12 @@ const drawerId = useId();
 </script>
 
 <template>
-  <Breadcrumb :model="effectiveItems" :aria-label="label" v-bind="$attrs">
+  <Breadcrumb
+    :model="effectiveItems"
+    :aria-label="label"
+    :class="{ 'overflow-hidden [&_ol]:flex-nowrap!': forceOneLine }"
+    v-bind="$attrs"
+  >
     <template #item="slot">
       <span v-if="slot.item.command">
         <button

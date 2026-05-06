@@ -317,6 +317,21 @@ test.describe("can view metadata of norms", () => {
   });
 });
 
+test("shows correct breadcrumbs for a norm", async ({
+  page,
+  privateFeaturesEnabled,
+}) => {
+  test.skip(!privateFeaturesEnabled);
+
+  await navigate(page, "/norms/eli/bund/bgbl-1/1972/s2459/1999-04-20/4/deu");
+
+  const breadcrumb = page.getByRole("navigation", { name: "Pfadnavigation" });
+
+  await expect(breadcrumb.getByRole("link", { name: "Start" })).toBeVisible();
+  await expect(breadcrumb.getByRole("link", { name: "Suche" })).toBeVisible();
+  await expect(breadcrumb.getByText("BWahlGV")).toBeVisible();
+});
+
 test("sets up meta tags for norm page when private features are enabled", async ({
   page,
   privateFeaturesEnabled,
