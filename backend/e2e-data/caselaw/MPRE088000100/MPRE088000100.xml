@@ -4,7 +4,7 @@
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                 xsi:schemaLocation="http://docs.oasis-open.org/legaldocml/ns/akn/3.0 https://docs.oasis-open.org/legaldocml/akn-core/v1.0/os/part2-specs/schemas/akomantoso30.xsd">
 
-    <akn:judgment name="Beschluss">
+    <akn:judgment name="/akn/ontology/de/concept/documenttype/bund/rechtsprechung/entscheidung">
         <akn:meta>
             <akn:identification source="#ris">
                 <akn:FRBRWork>
@@ -13,14 +13,14 @@
                     <akn:FRBRalias name="Übergreifende ID" value="fake-uuid-0003"/>
                     <akn:FRBRalias name="Dokumentnummer" value="MPRE088000100" />
                     <akn:FRBRdate eId="Entscheidungsdatum" date="2025-04-09" name="Entscheidungsdatum"/>
-                    <akn:FRBRauthor href="#gericht"/>
+                    <akn:FRBRauthor href="#organisation-gericht-courttype-courtlocation"/>
                     <akn:FRBRcountry value="de"/>
                 </akn:FRBRWork>
                 <akn:FRBRExpression>
                     <akn:FRBRthis value="MPRE088000100/dokument"/>
                     <akn:FRBRuri value="MPRE088000100/dokument"/>
                     <akn:FRBRdate date="2025-04-09" name="Entscheidungsdatum"/>
-                    <akn:FRBRauthor href="#gericht"/>
+                    <akn:FRBRauthor href="#organisation-gericht-courttype-courtlocation"/>
                     <akn:FRBRlanguage language="deu"/>
                 </akn:FRBRExpression>
                 <akn:FRBRManifestation>
@@ -52,7 +52,7 @@
             <akn:references source="#ris">
                 <akn:TLCOrganization eId="ris" href="" showAs="Rechtsinformationssystem des Bundes"/>
                 <akn:TLCOrganization eId="bpatg-dokumentationsstelle" href="" showAs="BPatG"/>
-                <akn:TLCOrganization eId="gericht" href="" showAs="BPatG"/>
+                <akn:TLCOrganization eId="organisation-gericht-courttype-courtlocation" href="" showAs="BPatG"/>
                 <akn:TLCOrganization eId="spruchkoerper" href="" showAs="15. Senat"/>
             </akn:references>
             <akn:proprietary source="ris">
@@ -64,7 +64,7 @@
                         <ris:aktenzeichen domainTerm="Aktenzeichen" akn:refersTo="#aktenzeichen">AB C 78/90</ris:aktenzeichen>
                     </ris:aktenzeichenListe>
                     <ris:dokumenttyp domainTerm="Dokumenttyp">Beschluss</ris:dokumenttyp>
-                    <ris:gericht domainTerm="Gericht" refersTo="#gericht">
+                    <ris:gericht domainTerm="Gericht" refersTo="#organisation-gericht-courttype-courtlocation">
                         <ris:gerichtstyp domainTerm="Gerichtstyp">BPatG</ris:gerichtstyp>
                         <ris:gerichtsort domainTerm="Gerichtsort">Beispielstadt</ris:gerichtsort>
                         <ris:spruchkoerper domainTerm="Spruchkörper" refersTo="#spruchkoerper">15. Senat</ris:spruchkoerper>
@@ -84,7 +84,7 @@
             <akn:p>Beispielheader für den Beschluss 2.</akn:p>
             <akn:p>Aktenzeichen: <akn:docNumber refersTo="#aktenzeichen">AB C 78/90</akn:docNumber></akn:p>
             <akn:p>Entscheidungsdatum: <akn:docDate date="2025-04-09" refersTo="#entscheidungsdatum">09.04.2025</akn:docDate></akn:p>
-            <akn:p>Gericht: <akn:courtType refersTo="#gericht">BPatG</akn:courtType></akn:p>
+            <akn:p>Gericht: <akn:courtType refersTo="#organisation-gericht-courttype-courtlocation">BPatG</akn:courtType></akn:p>
             <akn:p>Dokumenttyp: <akn:docType>Beschluss</akn:docType></akn:p>
             <akn:p>Kurztitel: <akn:shortTitle>
                 <akn:embeddedStructure>

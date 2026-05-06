@@ -4,7 +4,7 @@
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                 xsi:schemaLocation="http://docs.oasis-open.org/legaldocml/ns/akn/3.0 https://docs.oasis-open.org/legaldocml/akn-core/v1.0/os/part2-specs/schemas/akomantoso30.xsd">
 
-    <akn:judgment name="Urteil">
+    <akn:judgment name="/akn/ontology/de/concept/documenttype/bund/rechtsprechung/entscheidung">
         <akn:meta>
             <akn:identification source="#ris">
                 <akn:FRBRWork>
@@ -13,14 +13,14 @@
                     <akn:FRBRalias name="Übergreifende ID" value="fake-uuid-0001"/>
                     <akn:FRBRalias name="Dokumentnummer" value="STRE300770800" />
                     <akn:FRBRdate eId="Entscheidungsdatum" date="2025-04-09" name="Entscheidungsdatum"/>
-                    <akn:FRBRauthor href="#gericht"/>
+                    <akn:FRBRauthor href="#organisation-gericht-courttype-courtlocation"/>
                     <akn:FRBRcountry value="de"/>
                 </akn:FRBRWork>
                 <akn:FRBRExpression>
                     <akn:FRBRthis value="STRE300770800/dokument"/>
                     <akn:FRBRuri value="STRE300770800/dokument"/>
                     <akn:FRBRdate date="2025-04-09" name="Entscheidungsdatum"/>
-                    <akn:FRBRauthor href="#gericht"/>
+                    <akn:FRBRauthor href="#organisation-gericht-courttype-courtlocation"/>
                     <akn:FRBRlanguage language="deu"/>
                 </akn:FRBRExpression>
                 <akn:FRBRManifestation>
@@ -53,7 +53,7 @@
             <akn:references source="#ris">
                 <akn:TLCOrganization eId="ris" href="" showAs="Rechtsinformationssystem des Bundes"/>
                 <akn:TLCOrganization eId="bfh-dokumentationsstelle" href="" showAs="BFH"/>
-                <akn:TLCOrganization eId="gericht" href="" showAs="FG"/>
+                <akn:TLCOrganization eId="organisation-gericht-courttype-courtlocation" href="" showAs="FG"/>
                 <akn:TLCOrganization eId="spruchkoerper" href="" showAs="10. Senat"/>
             </akn:references>
             <akn:proprietary source="ris">
@@ -62,7 +62,7 @@
                         <ris:aktenzeichen domainTerm="Aktenzeichen" akn:refersTo="#aktenzeichen">22 L 5678/90</ris:aktenzeichen>
                     </ris:aktenzeichenListe>
                     <ris:dokumenttyp domainTerm="Dokumenttyp">Urteil</ris:dokumenttyp>
-                    <ris:gericht domainTerm="Gericht" refersTo="#gericht">
+                    <ris:gericht domainTerm="Gericht" refersTo="#organisation-gericht-courttype-courtlocation">
                         <ris:gerichtstyp domainTerm="Gerichtstyp">FG</ris:gerichtstyp>
                         <ris:gerichtsort domainTerm="Gerichtsort">Berlin</ris:gerichtsort>
                         <ris:spruchkoerper domainTerm="Spruchkörper" refersTo="#spruchkoerper">10. Senat</ris:spruchkoerper>
@@ -90,7 +90,7 @@
             <akn:p>Dies ist ein Beispieltext für die Darstellung des Urteilskopfs.</akn:p>
             <akn:p>Aktenzeichen: <akn:docNumber refersTo="#aktenzeichen">22 L 5678/90</akn:docNumber></akn:p>
             <akn:p>Entscheidungsdatum: <akn:docDate date="2025-04-09" refersTo="#entscheidungsdatum">09.04.2025</akn:docDate></akn:p>
-            <akn:p>Gericht: <akn:courtType refersTo="#gericht">FG</akn:courtType></akn:p>
+            <akn:p>Gericht: <akn:courtType refersTo="#organisation-gericht-courttype-courtlocation">FG</akn:courtType></akn:p>
             <akn:p>Dokumenttyp: <akn:docType>Urteil</akn:docType></akn:p>
             <akn:p>Kurztitel: <akn:shortTitle>
                 <akn:embeddedStructure>

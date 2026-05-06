@@ -7,14 +7,14 @@
             <akn:FRBRalias name="ECLI" value="{% if ecli %}{{ ecli }}{% else %}testEcli{% endif %}"/>
             <akn:FRBRalias eId="aktenzeichen" name="Aktenzeichen" value="fileNumber test"/>
             <akn:FRBRdate eId="entscheidungsdatum" date="{% if decisionDate %}{{ decisionDate }}{% else %}2020-01-01{% endif %}" name="Entscheidungsdatum"/>
-            <akn:FRBRauthor href="#gericht"/>
+            <akn:FRBRauthor href="#organisation-gericht-courttype-courtlocation"/>
             <akn:FRBRcountry value="de"/>
         </akn:FRBRWork>
         <akn:FRBRExpression>
             <akn:FRBRthis value="{% if documentNumber %}{{documentNumber}}{% else %}testDocNumber{% endif %}"/>
             <akn:FRBRuri value="{% if documentNumber %}{{documentNumber}}{% else %}testDocNumber{% endif %}"/>
             <akn:FRBRdate date="2020-01-01" name="Entscheidungsdatum"/>
-            <akn:FRBRauthor href="#gericht"/>
+            <akn:FRBRauthor href="#organisation-gericht-courttype-courtlocation"/>
             <akn:FRBRlanguage language="deu"/>
         </akn:FRBRExpression>
         <akn:FRBRManifestation>
@@ -27,7 +27,7 @@
 <akn:analysis source="#ris">
     <akn:otherReferences source="#ris">
         <akn:implicitReference ris:domainTerm="Norm">
-            <ris:norm domainTerm="Norm">
+            <ris:referenzNormen domainTerm="Norm">
                 <ris:abkuerzung domainTerm="Abkürzung">normReference test</ris:abkuerzung>
                 <ris:einzelnorm domainTerm="Einzelnorm">
                     <ris:bezeichnung domainTerm="Bezeichnung">singleNorm test</ris:bezeichnung>
@@ -39,13 +39,13 @@
                     <ris:fassungsdatum domainTerm="Fassungsdatum">2022-03-06</ris:fassungsdatum>
                     <ris:jahr domainTerm="Jahr">2022</ris:jahr>
                 </ris:einzelnorm>
-            </ris:norm>
+            </ris:referenzNormen>
         </akn:implicitReference>
         <akn:implicitReference ris:domainTerm="Norm">
-            <ris:norm domainTerm="Norm">
+            <ris:referenzNormen domainTerm="Norm">
                 <ris:abkuerzung domainTerm="Abkürzung">normReference without SingleNorms</ris:abkuerzung>
                 <ris:titel domainTerm="Amtliche Langüberschrift">officialLongTitle</ris:titel>
-            </ris:norm>
+            </ris:referenzNormen>
         </akn:implicitReference>
         <akn:implicitReference ris:domainTerm="Rechtszug">
             <ris:vorgehend domainTerm="Vorgehende Entscheidung">
@@ -133,7 +133,7 @@
 <akn:references source="#ris">
 <akn:TLCOrganization eId="ris" href="" showAs="Rechtsinformationssystem des Bundes"/>
 <akn:TLCOrganization eId="bag-dokumentationsstelle" href="" showAs="BAG"/>
-<akn:TLCOrganization eId="gericht" href="" showAs="ArbG"/>
+<akn:TLCOrganization eId="organisation-gericht-courttype-courtlocation" href="" showAs="ArbG"/>
 <akn:TLCOrganization eId="spruchkoerper" href="" showAs="5. Kammer"/>
 <akn:TLCPerson eId="dr-phil-max-mustermann"
                href=""
@@ -151,8 +151,8 @@
             <ris:aktenzeichen domainTerm="Aktenzeichen" refersTo="#aktenzeichen">Test file number 1</ris:aktenzeichen>
             <ris:aktenzeichen domainTerm="Aktenzeichen" refersTo="#aktenzeichen">Test file number 2</ris:aktenzeichen>
         </ris:aktenzeichenListe>
-        <ris:dokumenttyp domainTerm="Dokumenttyp">{% if documentType %}{{ documentType }}{% else %}Test document type{% endif %}</ris:dokumenttyp>
-        <ris:gericht domainTerm="Gericht" refersTo="#gericht">
+        <ris:dokumenttyp domainTerm="Dokumenttyp">{% if documentType %}{{ documentType }}{% else %}Urteil{% endif %}</ris:dokumenttyp>
+        <ris:gericht domainTerm="Gericht" refersTo="#organisation-gericht-courttype-courtlocation">
             <ris:gerichtstyp domainTerm="Gerichtstyp">{% if courtType %}{{ courtType }}{% else %}Test court type{% endif %}</ris:gerichtstyp>
             <ris:gerichtsort domainTerm="Gerichtsort">{% if location %}{{ location }}{% else %}Test court location{% endif%}</ris:gerichtsort>
             <ris:spruchkoerper domainTerm="Spruchkörper" refersTo="#spruchkoerper">Test judicial body</ris:spruchkoerper>
