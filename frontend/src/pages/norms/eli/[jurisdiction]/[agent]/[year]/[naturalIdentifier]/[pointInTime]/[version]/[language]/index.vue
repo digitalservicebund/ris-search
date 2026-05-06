@@ -81,9 +81,6 @@ const { status: normVersionsStatus, sortedVersions: normVersions } =
   useNormVersions(metadata.value?.exampleOfWork?.legislationIdentifier ?? "");
 
 const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
-  const validFrom = dateFormattedDDMMYYYY(validityInterval.value?.from);
-  const validFromDisplay = validFrom ? ` vom ${validFrom}` : "";
-
   return [
     {
       label: "Suche",
@@ -91,7 +88,7 @@ const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
     },
     {
       route: `/norms/${metadata.value?.legislationIdentifier}`,
-      label: normBreadcrumbTitle.value + validFromDisplay,
+      label: normBreadcrumbTitle.value,
     },
   ];
 });
