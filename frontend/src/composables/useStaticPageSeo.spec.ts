@@ -1,9 +1,10 @@
 import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { useStaticPageSeo } from "./useStaticPageSeo";
-import { TEST_URL, createExpectedHeadCall } from "~/tests/seoTestHelpers";
 import { staticPageSeo } from "~/utils/i18n/staticPageSeo";
 import type { StaticPage } from "~/utils/i18n/staticPageSeo";
+
+const TEST_URL = "https://testphase.rechtsinformationen.bund.de/example";
 
 const { useHead, useRequestURL } = vi.hoisted(() => ({
   useHead: vi.fn(),
@@ -23,11 +24,24 @@ describe("useStaticPageSeo composable", () => {
     "sets correct meta tags",
     (key) => {
       const entry = staticPageSeo[key];
+      const ogTitle = entry.ogTitle ?? entry.title;
 
       useStaticPageSeo(key);
 
       expect(useHead).toHaveBeenCalledWith(
-        createExpectedHeadCall(entry.title, entry.description, TEST_URL),
+        expect.objectContaining({
+          title: entry.title,
+          link: [{ rel: "canonical", href: TEST_URL }],
+          meta: [
+            { name: "description", content: entry.description },
+            { property: "og:type", content: "article" },
+            { property: "og:title", content: ogTitle },
+            { property: "og:description", content: entry.description },
+            { property: "og:url", content: TEST_URL },
+            { name: "twitter:title", content: ogTitle },
+            { name: "twitter:description", content: entry.description },
+          ],
+        }),
       );
     },
   );
@@ -41,13 +55,24 @@ describe("useStaticPageSeo composable", () => {
 
       useStaticPageSeo("startseite");
 
+      const entry = staticPageSeo.startseite;
+      const ogTitle = entry.ogTitle ?? entry.title;
+
       expect(useRequestURL).toHaveBeenCalled();
       expect(useHead).toHaveBeenCalledWith(
-        createExpectedHeadCall(
-          staticPageSeo.startseite.title,
-          staticPageSeo.startseite.description,
-          href,
-        ),
+        expect.objectContaining({
+          title: entry.title,
+          link: [{ rel: "canonical", href }],
+          meta: [
+            { name: "description", content: entry.description },
+            { property: "og:type", content: "article" },
+            { property: "og:title", content: ogTitle },
+            { property: "og:description", content: entry.description },
+            { property: "og:url", content: href },
+            { name: "twitter:title", content: ogTitle },
+            { name: "twitter:description", content: entry.description },
+          ],
+        }),
       );
     });
   });

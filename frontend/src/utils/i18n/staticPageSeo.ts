@@ -15,6 +15,7 @@ export type StaticPage =
 
 export type StaticPageSeo = {
   title: string;
+  ogTitle?: string;
   description: string;
 };
 

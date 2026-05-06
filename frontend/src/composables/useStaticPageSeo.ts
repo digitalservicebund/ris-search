@@ -5,6 +5,7 @@ export function useStaticPageSeo(page: StaticPage) {
   const entry = staticPageSeo[page];
 
   const title = entry.title;
+  const ogTitle = entry.ogTitle ?? entry.title;
   const description = entry.description;
   const url = useRequestURL();
 
@@ -14,10 +15,10 @@ export function useStaticPageSeo(page: StaticPage) {
     meta: [
       { name: "description", content: description },
       { property: "og:type", content: "article" },
-      { property: "og:title", content: title },
+      { property: "og:title", content: ogTitle },
       { property: "og:description", content: description },
       { property: "og:url", content: url.href },
-      { name: "twitter:title", content: title },
+      { name: "twitter:title", content: ogTitle },
       { name: "twitter:description", content: description },
     ],
   });
