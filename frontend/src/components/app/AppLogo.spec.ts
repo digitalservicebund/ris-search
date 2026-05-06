@@ -7,11 +7,10 @@ describe("AppLogo", () => {
   it("links to home and shows brand text", async () => {
     await renderSuspended(Logo);
 
-    const link = screen.getByRole("link", { name: "Zur Startseite" });
+    const link = screen.getByRole("link", {
+      name: /Zur Startseite —\s*Rechtsinformationen\s*des Bundes/,
+    });
     expect(link).toBeInTheDocument();
     expect(link).toHaveAttribute("href", expect.stringContaining("/"));
-
-    expect(screen.getByText("Rechtsinformationen")).toBeInTheDocument();
-    expect(screen.getByText("des Bundes")).toBeInTheDocument();
   });
 });
