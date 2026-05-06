@@ -22,7 +22,11 @@ async function handleSetTracking(value: boolean) {
 
 <template>
   <div class="w-fit" data-testid="consent-status-wrapper">
-    <Message severity="info" class="ris-body2-regular mb-24 bg-white">
+    <Message
+      role="status"
+      severity="info"
+      class="ris-body2-regular mb-24 bg-white"
+    >
       <template #icon>
         <IconCheck v-if="userConsent" class="text-blue-800" />
         <IconClose v-else class="text-blue-800" />

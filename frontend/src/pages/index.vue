@@ -134,10 +134,10 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
         alt="Bundesministerium der Justiz und für Verbraucherschutz"
       />
       <div class="space-y-8">
-        <p class="ris-body2-bold wrap-break-word hyphens-auto">
+        <h3 class="ris-body2-bold wrap-break-word hyphens-auto">
           Ein Service im Auftrag des Bundesministeriums der Justiz und für
           Verbraucherschutz
-        </p>
+        </h3>
         <p class="ris-body2-regular">
           Dieser Service befindet sich in der Testphase. Sie haben die
           Möglichkeit, erste Funktionen frühzeitig zu testen und Feedback zu
