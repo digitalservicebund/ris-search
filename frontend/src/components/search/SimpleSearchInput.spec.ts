@@ -11,7 +11,7 @@ describe("SimpleSearchInput", () => {
     expect(container.querySelector("search")).toBeInTheDocument();
 
     expect(
-      screen.getByRole("searchbox", { name: "Suchfeld" }),
+      screen.getByRole("searchbox", { name: "Suchbegriff eingeben" }),
     ).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Suchen" })).toBeInTheDocument();
   });
@@ -19,9 +19,7 @@ describe("SimpleSearchInput", () => {
   it("enables input after Nuxt is ready", async () => {
     render(SimpleSearchInput);
 
-    expect(
-      screen.getByRole("searchbox", { name: "Suchfeld" }),
-    ).not.toBeDisabled();
+    expect(screen.getByRole("searchbox")).not.toBeDisabled();
   });
 
   it("updates currentText, but not model on input change", async () => {
@@ -29,14 +27,9 @@ describe("SimpleSearchInput", () => {
 
     const { emitted } = render(SimpleSearchInput);
 
-    await user.type(
-      screen.getByRole("searchbox", { name: "Suchfeld" }),
-      "test query",
-    );
+    await user.type(screen.getByRole("searchbox"), "test query");
 
-    expect(screen.getByRole("searchbox", { name: "Suchfeld" })).toHaveValue(
-      "test query",
-    );
+    expect(screen.getByRole("searchbox")).toHaveValue("test query");
     expect(emitted("update:modelValue")).toBeFalsy();
   });
 
@@ -45,9 +38,7 @@ describe("SimpleSearchInput", () => {
       props: { modelValue: "updated model" },
     });
 
-    expect(screen.getByRole("searchbox", { name: "Suchfeld" })).toHaveValue(
-      "updated model",
-    );
+    expect(screen.getByRole("searchbox")).toHaveValue("updated model");
   });
 
   it("submits search on Enter key press", async () => {
@@ -55,7 +46,7 @@ describe("SimpleSearchInput", () => {
 
     const { emitted } = render(SimpleSearchInput);
 
-    const input = screen.getByRole("searchbox", { name: "Suchfeld" });
+    const input = screen.getByRole("searchbox");
     await user.type(input, "test query");
     await user.type(input, "{enter}");
 
@@ -67,10 +58,7 @@ describe("SimpleSearchInput", () => {
 
     const { emitted } = render(SimpleSearchInput);
 
-    await user.type(
-      screen.getByRole("searchbox", { name: "Suchfeld" }),
-      "test query",
-    );
+    await user.type(screen.getByRole("searchbox"), "test query");
     await user.click(screen.getByRole("button", { name: "Suchen" }));
 
     expect(emitted("update:modelValue")).toEqual([["test query"]]);

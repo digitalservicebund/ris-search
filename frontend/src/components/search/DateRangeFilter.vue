@@ -9,7 +9,7 @@ import type {
 /** Active date filter value */
 const filter = defineModel<DateFilterValue>({ required: true });
 
-const dateModeSelectId = useId();
+const dateModeLabelId = useId();
 const fromDateId = useId();
 const toDateId = useId();
 
@@ -77,10 +77,10 @@ const toDate = computed({
 <template>
   <div class="flex flex-col gap-16">
     <span class="flex flex-col gap-8">
-      <label :for="dateModeSelectId" class="ris-label2-regular">Zeitraum</label>
+      <label :id="dateModeLabelId" class="ris-label2-regular">Zeitraum</label>
       <Select
-        :id="dateModeSelectId"
         v-model="selectedType"
+        :aria-labelledby="dateModeLabelId"
         :options="items"
         :placeholder="items[0]?.label"
         :pt="{ overlay: { class: 'bg-white w-full' } }"

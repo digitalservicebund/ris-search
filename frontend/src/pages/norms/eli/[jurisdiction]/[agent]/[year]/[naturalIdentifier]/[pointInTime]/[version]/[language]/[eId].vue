@@ -263,7 +263,7 @@ useDynamicSeo({ title, description });
         <template v-if="!!articleHtml" #content>
           <DocumentsIncompleteDataMessage />
           <DocumentsNormsLegislationContent single-article>
-            <article class="akn-act" v-html="articleHtml" />
+            <div class="akn-act" v-html="articleHtml" />
           </DocumentsNormsLegislationContent>
 
           <nav class="flex flex-row justify-between" aria-label="Paragrafen">

@@ -18,7 +18,7 @@ const nonZeroResultCount = /[1-9][\d.]* Suchergebnis(se)?/;
 test.describe("reach search from start page", () => {
   test("searches for a query from the start page", async ({ page }) => {
     await navigate(page, "/");
-    const searchInput = page.getByRole("searchbox", { name: "Suchfeld" });
+    const searchInput = page.getByRole("searchbox");
     await searchInput.fill("Fiktiv");
 
     const searchButton = page.getByRole("button", { name: "Suchen" });
@@ -35,10 +35,7 @@ test.describe("reach search from start page", () => {
       .getByRole("link", { name: "Rechtsinformationen des Bundes" })
       .click();
 
-    await expect(
-      page.getByRole("searchbox", { name: "Suchfeld" }),
-      "should be reset",
-    ).toBeEmpty();
+    await expect(page.getByRole("searchbox"), "should be reset").toBeEmpty();
   });
 });
 
@@ -114,9 +111,7 @@ test.describe("general search page features", () => {
 
     await expect(page).toHaveTitle("Suche — Rechtsinformationen des Bundes");
 
-    await page
-      .getByRole("searchbox", { name: "Suchfeld" })
-      .fill("frühstück brötchen");
+    await page.getByRole("searchbox").fill("frühstück brötchen");
 
     await page.getByRole("button", { name: "Suchen" }).click();
 
@@ -129,7 +124,7 @@ test.describe("general search page features", () => {
     await navigate(page, "/search?documentKind=N");
 
     await expect(
-      page.getByRole("combobox", { name: "Keine zeitliche Begrenzung" }),
+      page.getByRole("combobox", { name: "Zeitraum" }),
     ).not.toBeVisible();
   });
 
@@ -459,7 +454,7 @@ test.describe("searching legislation", () => {
     await navigate(page, "/search?documentKind=N");
 
     await expect(
-      page.getByRole("combobox", { name: "Keine zeitliche Begrenzung" }),
+      page.getByRole("combobox", { name: "Zeitraum" }),
     ).not.toBeVisible();
   });
 
@@ -618,7 +613,7 @@ test.describe("searching caselaw", () => {
   test("searches by custom court", async ({ page }) => {
     await navigate(page, "/search?documentKind=R");
 
-    await page.getByRole("combobox", { name: "Gericht" }).fill("LG");
+    await page.getByRole("combobox", { name: "Bundesgericht" }).fill("LG");
     await page.getByRole("option", { name: "LG Hamburg" }).click();
 
     await expect(page).toHaveURL(/court=LG\+Hamburg/);
@@ -631,9 +626,7 @@ test.describe("searching caselaw", () => {
   test("searches decision date before a date", async ({ page }) => {
     await navigate(page, "/search?documentKind=R");
 
-    await page
-      .getByRole("combobox", { name: "Keine zeitliche Begrenzung" })
-      .click();
+    await page.getByRole("combobox", { name: "Zeitraum" }).click();
     await page.getByRole("option", { name: "Bis zu einem Datum" }).click();
 
     await page.getByRole("textbox", { name: "Datum" }).fill("31.12.2024");
@@ -648,9 +641,7 @@ test.describe("searching caselaw", () => {
   test("searches decision date after a date", async ({ page }) => {
     await navigate(page, "/search?documentKind=R");
 
-    await page
-      .getByRole("combobox", { name: "Keine zeitliche Begrenzung" })
-      .click();
+    await page.getByRole("combobox", { name: "Zeitraum" }).click();
     await page.getByRole("option", { name: "Ab einem Datum" }).click();
 
     await page.getByRole("textbox", { name: "Datum" }).fill("10.04.2025");
@@ -667,9 +658,7 @@ test.describe("searching caselaw", () => {
   test("searches decision date on a specific date", async ({ page }) => {
     await navigate(page, "/search?documentKind=R");
 
-    await page
-      .getByRole("combobox", { name: "Keine zeitliche Begrenzung" })
-      .click();
+    await page.getByRole("combobox", { name: "Zeitraum" }).click();
     await page.getByRole("option", { name: "An einem Datum" }).click();
 
     await page.getByRole("textbox", { name: "Datum" }).fill("15.06.2024");
@@ -684,9 +673,7 @@ test.describe("searching caselaw", () => {
   test("searches decision date in a range", async ({ page }) => {
     await navigate(page, "/search?documentKind=R");
 
-    await page
-      .getByRole("combobox", { name: "Keine zeitliche Begrenzung" })
-      .click();
+    await page.getByRole("combobox", { name: "Zeitraum" }).click();
     await page.getByRole("option", { name: "In einem Zeitraum" }).click();
 
     await page
@@ -713,7 +700,7 @@ test.describe("searching caselaw", () => {
     const dateInput = page.getByRole("textbox", { name: "Datum" });
     await expect(dateInput).toHaveValue("01.01.2020");
 
-    await page.getByRole("combobox", { name: "An einem Datum" }).click();
+    await page.getByRole("combobox", { name: "Zeitraum" }).click();
     await page.getByRole("option", { name: "Ab einem Datum" }).click();
 
     // Type a partial date - if the input wasn't properly reset, this would
@@ -836,9 +823,7 @@ test.describe("searching literature", () => {
   test("searches until publication year", async ({ page }) => {
     await navigate(page, "/search?documentKind=L");
 
-    await page
-      .getByRole("combobox", { name: "Keine zeitliche Begrenzung" })
-      .click();
+    await page.getByRole("combobox", { name: "Zeitraum" }).click();
     await page.getByRole("option", { name: "Bis zu einem Jahr" }).click();
 
     await page.getByRole("textbox", { name: "Jahr" }).fill("2013");
@@ -851,9 +836,7 @@ test.describe("searching literature", () => {
   test("searches from publication year", async ({ page }) => {
     await navigate(page, "/search?documentKind=L");
 
-    await page
-      .getByRole("combobox", { name: "Keine zeitliche Begrenzung" })
-      .click();
+    await page.getByRole("combobox", { name: "Zeitraum" }).click();
     await page.getByRole("option", { name: "Ab einem Jahr" }).click();
 
     await page.getByRole("textbox", { name: "Jahr" }).fill("2024");
@@ -868,9 +851,7 @@ test.describe("searching literature", () => {
   test("searches for specific publication year", async ({ page }) => {
     await navigate(page, "/search?documentKind=L");
 
-    await page
-      .getByRole("combobox", { name: "Keine zeitliche Begrenzung" })
-      .click();
+    await page.getByRole("combobox", { name: "Zeitraum" }).click();
     await page.getByRole("option", { name: "In einem Jahr" }).click();
 
     await page.getByRole("textbox", { name: "Jahr" }).fill("2015");
@@ -885,9 +866,7 @@ test.describe("searching literature", () => {
   test("searches by publication year with range", async ({ page }) => {
     await navigate(page, "/search?documentKind=L");
 
-    await page
-      .getByRole("combobox", { name: "Keine zeitliche Begrenzung" })
-      .click();
+    await page.getByRole("combobox", { name: "Zeitraum" }).click();
     await page.getByRole("option", { name: "In einem Zeitraum" }).click();
 
     await page.getByRole("textbox", { name: "Ab dem Jahr" }).fill("2015");
@@ -909,7 +888,7 @@ test.describe("searching literature", () => {
     const yearInput = page.getByRole("textbox", { name: "Jahr" });
     await expect(yearInput).toHaveValue("2020");
 
-    await page.getByRole("combobox", { name: "In einem Jahr" }).click();
+    await page.getByRole("combobox", { name: "Zeitraum" }).click();
     await page.getByRole("option", { name: "Ab einem Jahr" }).click();
 
     // Type a partial year - if the input wasn't properly reset, this would
@@ -1013,9 +992,7 @@ test.describe("searching administrative directives", () => {
   test("searches entry into force before a date", async ({ page }) => {
     await navigate(page, "/search?documentKind=V");
 
-    await page
-      .getByRole("combobox", { name: "Keine zeitliche Begrenzung" })
-      .click();
+    await page.getByRole("combobox", { name: "Zeitraum" }).click();
     await page.getByRole("option", { name: "Bis zu einem Datum" }).click();
 
     await page.getByRole("textbox", { name: "Datum" }).fill("15.03.2019");
@@ -1030,9 +1007,7 @@ test.describe("searching administrative directives", () => {
   test("searches entry into force after a date", async ({ page }) => {
     await navigate(page, "/search?documentKind=V");
 
-    await page
-      .getByRole("combobox", { name: "Keine zeitliche Begrenzung" })
-      .click();
+    await page.getByRole("combobox", { name: "Zeitraum" }).click();
     await page.getByRole("option", { name: "Ab einem Datum" }).click();
 
     await page.getByRole("textbox", { name: "Datum" }).fill("01.07.2025");
@@ -1049,9 +1024,7 @@ test.describe("searching administrative directives", () => {
   test("searches entry into force on a specific date", async ({ page }) => {
     await navigate(page, "/search?documentKind=V");
 
-    await page
-      .getByRole("combobox", { name: "Keine zeitliche Begrenzung" })
-      .click();
+    await page.getByRole("combobox", { name: "Zeitraum" }).click();
     await page.getByRole("option", { name: "An einem Datum" }).click();
 
     await page.getByRole("textbox", { name: "Datum" }).fill("23.12.2022");
@@ -1071,9 +1044,7 @@ test.describe("searching administrative directives", () => {
   test("searches entry into force in a range", async ({ page }) => {
     await navigate(page, "/search?documentKind=V");
 
-    await page
-      .getByRole("combobox", { name: "Keine zeitliche Begrenzung" })
-      .click();
+    await page.getByRole("combobox", { name: "Zeitraum" }).click();
     await page.getByRole("option", { name: "In einem Zeitraum" }).click();
 
     await page

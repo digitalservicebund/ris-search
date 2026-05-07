@@ -10,7 +10,7 @@ test("search from homepage", async ({ page }) => {
     }),
   ).toBeVisible();
 
-  const searchInput = page.getByRole("searchbox", { name: "Suchfeld" });
+  const searchInput = page.getByRole("searchbox");
   await searchInput.fill("apfel");
 
   const searchButton = page.getByRole("button", { name: "Suchen" });
@@ -33,7 +33,7 @@ test.describe("find and display norms", () => {
   }) => {
     await page.goto("/");
 
-    const searchInput = page.getByRole("searchbox", { name: "Suchfeld" });
+    const searchInput = page.getByRole("searchbox");
     await searchInput.fill("Brennereiordnung");
 
     const searchButton = page.getByRole("button", { name: "Suchen" });
@@ -70,7 +70,7 @@ test.describe("find and display caselaws", () => {
   }) => {
     await page.goto("/");
 
-    const searchInput = page.getByRole("searchbox", { name: "Suchfeld" });
+    const searchInput = page.getByRole("searchbox");
     await searchInput.fill("Rechtmäßigkeit einer Sperrerklärung");
 
     const searchButton = page.getByRole("button", { name: "Suchen" });
@@ -110,7 +110,7 @@ test.describe("find and display literature", () => {
   }) => {
     await page.goto("/");
 
-    const searchInput = page.getByRole("searchbox", { name: "Suchfeld" });
+    const searchInput = page.getByRole("searchbox");
     await searchInput.fill("Die Arbeitergilden der Gegenwart");
 
     const searchButton = page.getByRole("button", { name: "Suchen" });
@@ -150,7 +150,7 @@ test.describe("find and display administrative directives", () => {
   }) => {
     await page.goto("/");
 
-    const searchInput = page.getByRole("searchbox", { name: "Suchfeld" });
+    const searchInput = page.getByRole("searchbox");
     await searchInput.fill("Leistungsanspruch in der Dreiwochenfrist");
 
     const searchButton = page.getByRole("button", { name: "Suchen" });

@@ -35,7 +35,6 @@ import java.util.stream.Stream;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -247,11 +246,8 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
     var content = response.getResponse().getContentAsString();
     Document parsed = Jsoup.parse(content);
 
-    final Elements articles = parsed.body().selectXpath("//article");
-    assertThat(articles).hasSize(1);
-
-    final String articleId = Objects.requireNonNull(articles.getFirst().attribute("id")).getValue();
-    assertThat(articleId).isEqualTo("art-z1");
+    final var article = parsed.body().getElementById("art-z1");
+    assertThat(article).isNotNull();
   }
 
   @Test
@@ -642,10 +638,8 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
             .andReturn();
 
     Document parsed = Jsoup.parse(response.getResponse().getContentAsString());
-    Elements articles = parsed.body().selectXpath("//article");
-
-    assertThat(articles).hasSize(1);
-    assertThat(articles.getFirst().attr("id")).isEqualTo("art-z%c2%a7%c2%a7%204%20bis%2014");
+    var article = parsed.body().getElementById("art-z%c2%a7%c2%a7%204%20bis%2014");
+    assertThat(article).isNotNull();
   }
 
   static Stream<Arguments> articleEidProvider() {

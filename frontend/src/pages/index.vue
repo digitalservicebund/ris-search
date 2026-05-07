@@ -56,7 +56,12 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
         @update:model-value="(query) => redirectToSearch(query)"
         @empty-search="() => redirectToSearch()"
       />
-      <Message severity="warn" class="ris-body2-regular">
+      <Message
+        severity="warn"
+        class="ris-body2-regular"
+        role="status"
+        aria-live="off"
+      >
         <p class="ris-body2-bold mt-2">
           Dieser Service befindet sich in der Testphase.
         </p>

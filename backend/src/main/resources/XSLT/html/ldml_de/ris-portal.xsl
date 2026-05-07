@@ -117,7 +117,7 @@
     </xsl:template>
 
     <xsl:template match="akn:article" name="article-with-link-heading">
-        <article>
+        <div>
             <xsl:apply-templates select="@*" />
             <!-- wrap h2 in link that points to $dokumentpfad/@eId -->
             <a href="{concat($dokumentpfad, '/', @eId)}">
@@ -130,11 +130,11 @@
             <xsl:call-template name="notes-collection" >
                 <xsl:with-param name="thisId" select="@eId"/>
             </xsl:call-template>
-        </article>
+        </div>
     </xsl:template>
 
     <xsl:template name="article-with-basic-heading">
-        <article>
+        <div>
             <!-- Start processing from the specified article -->
             <xsl:apply-templates select="@*" />
             <xsl:call-template name="num-and-heading-h2"/>
@@ -146,7 +146,7 @@
             <xsl:call-template name="notes-collection" >
                 <xsl:with-param name="thisId" select="@eId"/>
             </xsl:call-template>
-        </article>
+        </div>
     </xsl:template>
 
     <xsl:template name="num-and-heading-h2">

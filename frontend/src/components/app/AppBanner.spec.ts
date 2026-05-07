@@ -6,7 +6,7 @@ import AppBanner from "./AppBanner.vue";
 describe("AppBanner", () => {
   it("shows the trial banner", async () => {
     await renderSuspended(AppBanner);
-    expect(screen.getByRole("alert")).toBeInTheDocument();
+    expect(screen.getByRole("status")).toBeInTheDocument();
     expect(
       screen.getByRole("link", {
         name: /Erfahren Sie mehr über die Testphase/,
