@@ -1,25 +1,22 @@
-import { staticPageSeo } from "~/utils/i18n/staticPageSeo";
-import type { StaticPage } from "~/utils/i18n/staticPageSeo";
-
-export function useStaticPageSeo(page: StaticPage) {
-  const entry = staticPageSeo[page];
-
-  const title = entry.title;
-  const ogTitle = entry.ogTitle ?? entry.title;
-  const description = entry.description;
+export function useStaticPageSeo(
+  title: string,
+  description: string,
+  ogTitle?: string,
+) {
   const url = useRequestURL();
 
+  useSeoMeta({
+    title: title,
+    description: description,
+    ogType: "article",
+    ogTitle: ogTitle ?? title,
+    ogDescription: description,
+    ogUrl: url.href,
+    twitterTitle: ogTitle ?? title,
+    twitterDescription: description,
+  });
+
   useHead({
-    title,
     link: [{ rel: "canonical", href: url.href }],
-    meta: [
-      { name: "description", content: description },
-      { property: "og:type", content: "article" },
-      { property: "og:title", content: ogTitle },
-      { property: "og:description", content: description },
-      { property: "og:url", content: url.href },
-      { name: "twitter:title", content: ogTitle },
-      { name: "twitter:description", content: description },
-    ],
   });
 }

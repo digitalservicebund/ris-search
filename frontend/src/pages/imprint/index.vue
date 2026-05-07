@@ -3,7 +3,11 @@ import text from "./content.md?raw";
 
 definePageMeta({ alias: ["/impressum"], layout: false });
 
-useStaticPageSeo("impressum");
+useStaticPageSeo(
+  "Impressum",
+  "Angaben gemäß § 5 TMG – Herausgeber, Verantwortliche und rechtliche Hinweise zum Portal.",
+  "Impressum des Rechtsinformationsportals des Bundes",
+);
 </script>
 
 <template>

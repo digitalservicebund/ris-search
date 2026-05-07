@@ -3,7 +3,11 @@ import text from "./content.md?raw";
 
 definePageMeta({ alias: ["/ueber"], layout: false });
 
-useStaticPageSeo("ueber");
+useStaticPageSeo(
+  "Über den Service",
+  "Erfahren Sie, wie das Portal Gesetze und Urteile für alle frei zugänglich macht.",
+  "Über das neue Rechtsinformationsportal des Bundes",
+);
 </script>
 
 <template>

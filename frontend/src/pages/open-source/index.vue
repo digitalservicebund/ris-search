@@ -3,7 +3,11 @@ import text from "./content.md?raw";
 
 definePageMeta({ layout: false });
 
-useStaticPageSeo("open-source");
+useStaticPageSeo(
+  "Open Source",
+  "Informationen zur verwendeten Open-Source-Software, zu Lizenzen und Beteiligungsmöglichkeiten.",
+  "Open Source im Rechtsinformationsportal des Bundes",
+);
 </script>
 
 <template>

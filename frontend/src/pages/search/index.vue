@@ -3,7 +3,13 @@ import { Message, Select } from "primevue";
 import { DocumentKind } from "~/types/api";
 import { isStrictDateFilterValue } from "~/utils/search/dateFilterType";
 
-useStaticPageSeo("suche");
+// Note: the title is overridden further down. This should probably
+// use the useDyncamiSeo composbale, but that isn't refactored yet.
+// Will clean this up in a followup PR.
+useStaticPageSeo(
+  "Suche im Rechtsinformationsportal des Bundes",
+  "Finden Sie gezielt Gesetze, Verordnungen und Entscheidungen – schnell, präzise und übersichtlich.",
+);
 
 const filterHeadingId = useId();
 

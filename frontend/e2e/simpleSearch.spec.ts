@@ -71,14 +71,14 @@ test.describe("general search page features", () => {
   test("sets the pages title", async ({ page }) => {
     await navigate(page, "/search");
 
-    await expect(page).toHaveTitle("Suche | Rechtsinformationen des Bundes");
+    await expect(page).toHaveTitle("Suche — Rechtsinformationen des Bundes");
 
     await page
       .getByRole("complementary", { name: "Filter" })
       .getByRole("button", { name: "Gesetze & Verordnungen" })
       .click();
     await expect(page).toHaveTitle(
-      "Gesetze & Verordnungen — Suche | Rechtsinformationen des Bundes",
+      "Gesetze & Verordnungen — Suche — Rechtsinformationen des Bundes",
     );
 
     await page
@@ -86,7 +86,7 @@ test.describe("general search page features", () => {
       .getByRole("button", { name: "Gerichtsentscheidungen" })
       .click();
     await expect(page).toHaveTitle(
-      "Gerichtsentscheidungen — Suche | Rechtsinformationen des Bundes",
+      "Gerichtsentscheidungen — Suche — Rechtsinformationen des Bundes",
     );
 
     await page
@@ -94,7 +94,7 @@ test.describe("general search page features", () => {
       .getByRole("button", { name: "Verwaltungsvorschriften" })
       .click();
     await expect(page).toHaveTitle(
-      "Verwaltungsvorschriften — Suche | Rechtsinformationen des Bundes",
+      "Verwaltungsvorschriften — Suche — Rechtsinformationen des Bundes",
     );
 
     await page
@@ -102,7 +102,7 @@ test.describe("general search page features", () => {
       .getByRole("button", { name: "Literaturnachweise" })
       .click();
     await expect(page).toHaveTitle(
-      "Literaturnachweise — Suche | Rechtsinformationen des Bundes",
+      "Literaturnachweise — Suche — Rechtsinformationen des Bundes",
     );
 
     await page
@@ -110,7 +110,7 @@ test.describe("general search page features", () => {
       .getByRole("button", { name: "Alle Dokumentarten" })
       .click();
 
-    await expect(page).toHaveTitle("Suche | Rechtsinformationen des Bundes");
+    await expect(page).toHaveTitle("Suche — Rechtsinformationen des Bundes");
 
     await page
       .getByRole("searchbox", { name: "Suchfeld" })
@@ -119,7 +119,7 @@ test.describe("general search page features", () => {
     await page.getByRole("button", { name: "Suchen" }).click();
 
     await expect(page).toHaveTitle(
-      "frühstück brötchen — Suche | Rechtsinformationen des Bundes",
+      "frühstück brötchen — Suche — Rechtsinformationen des Bundes",
     );
   });
 
@@ -164,7 +164,7 @@ test.describe("general search page features", () => {
   }) => {
     await navigate(page, "/search?query=und");
 
-    await expect(page).toHaveTitle(/und — Suche \|/);
+    await expect(page).toHaveTitle(/und — Suche —/);
 
     await page
       .getByRole("navigation", { name: "Paginierung" })
@@ -180,7 +180,7 @@ test.describe("general search page features", () => {
       .click();
     await page.waitForURL(/pageIndex=0/);
 
-    await expect(page).toHaveTitle(/und — Suche \|/);
+    await expect(page).toHaveTitle(/und — Suche —/);
   });
 
   test("focuses first search result after pagination", async ({ page }) => {

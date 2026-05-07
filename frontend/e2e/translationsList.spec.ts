@@ -8,7 +8,7 @@ test("opens the page via URL", { tag: ["@RISDEV-8949"] }, async ({ page }) => {
     }),
   ).toBeVisible();
   await expect(page).toHaveTitle(
-    "English Translations of German Federal Laws and Regulations | Rechtsinformationen des Bundes",
+    "English Translations of German Federal Laws and Regulations — Rechtsinformationen des Bundes",
   );
 });
 
@@ -24,7 +24,7 @@ test(
     await expect(translationsLink).toBeVisible();
     await translationsLink.click();
     await expect(page).toHaveTitle(
-      "English Translations of German Federal Laws and Regulations | Rechtsinformationen des Bundes",
+      "English Translations of German Federal Laws and Regulations — Rechtsinformationen des Bundes",
     );
   },
 );
@@ -44,7 +44,7 @@ test(
     await expect(translationsLink).toBeVisible();
     await translationsLink.click();
     await expect(page).toHaveTitle(
-      "English Translations of German Federal Laws and Regulations | Rechtsinformationen des Bundes",
+      "English Translations of German Federal Laws and Regulations — Rechtsinformationen des Bundes",
     );
   },
 );

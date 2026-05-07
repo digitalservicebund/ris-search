@@ -1,17 +1,17 @@
 import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { useStaticPageSeo } from "./useStaticPageSeo";
-import { staticPageSeo } from "~/utils/i18n/staticPageSeo";
-import type { StaticPage } from "~/utils/i18n/staticPageSeo";
 
 const TEST_URL = "https://testphase.rechtsinformationen.bund.de/example";
 
-const { useHead, useRequestURL } = vi.hoisted(() => ({
+const { useHead, useSeoMeta, useRequestURL } = vi.hoisted(() => ({
   useHead: vi.fn(),
+  useSeoMeta: vi.fn(),
   useRequestURL: vi.fn(() => new URL(TEST_URL)),
 }));
 
 mockNuxtImport("useHead", () => useHead);
+mockNuxtImport("useSeoMeta", () => useSeoMeta);
 mockNuxtImport("useRequestURL", () => useRequestURL);
 
 describe("useStaticPageSeo composable", () => {
@@ -20,60 +20,35 @@ describe("useStaticPageSeo composable", () => {
     useRequestURL.mockReturnValue(new URL(TEST_URL));
   });
 
-  it.each(Object.keys(staticPageSeo) as StaticPage[])(
-    "sets correct meta tags",
-    (key) => {
-      const entry = staticPageSeo[key];
-      const ogTitle = entry.ogTitle ?? entry.title;
+  it("sets meta tags and canonical link", () => {
+    useStaticPageSeo("Test Title", "Test Description");
 
-      useStaticPageSeo(key);
+    expect(useSeoMeta).toHaveBeenCalledWith(
+      expect.objectContaining({
+        title: "Test Title",
+        description: "Test Description",
+        ogType: "article",
+        ogTitle: "Test Title",
+        ogDescription: "Test Description",
+        ogUrl: TEST_URL,
+        twitterTitle: "Test Title",
+        twitterDescription: "Test Description",
+      }),
+    );
 
-      expect(useHead).toHaveBeenCalledWith(
-        expect.objectContaining({
-          title: entry.title,
-          link: [{ rel: "canonical", href: TEST_URL }],
-          meta: [
-            { name: "description", content: entry.description },
-            { property: "og:type", content: "article" },
-            { property: "og:title", content: ogTitle },
-            { property: "og:description", content: entry.description },
-            { property: "og:url", content: TEST_URL },
-            { name: "twitter:title", content: ogTitle },
-            { name: "twitter:description", content: entry.description },
-          ],
-        }),
-      );
-    },
-  );
-
-  describe("URL handling", () => {
-    it.each([
-      "https://testphase.rechtsinformationen.bund.de/custom-path",
-      "https://testphase.rechtsinformationen.bund.de/page?param=value&other=test",
-    ])("uses exact url for canonical and og:url", (href) => {
-      useRequestURL.mockReturnValueOnce(new URL(href));
-
-      useStaticPageSeo("startseite");
-
-      const entry = staticPageSeo.startseite;
-      const ogTitle = entry.ogTitle ?? entry.title;
-
-      expect(useRequestURL).toHaveBeenCalled();
-      expect(useHead).toHaveBeenCalledWith(
-        expect.objectContaining({
-          title: entry.title,
-          link: [{ rel: "canonical", href }],
-          meta: [
-            { name: "description", content: entry.description },
-            { property: "og:type", content: "article" },
-            { property: "og:title", content: ogTitle },
-            { property: "og:description", content: entry.description },
-            { property: "og:url", content: href },
-            { name: "twitter:title", content: ogTitle },
-            { name: "twitter:description", content: entry.description },
-          ],
-        }),
-      );
+    expect(useHead).toHaveBeenCalledWith({
+      link: [{ rel: "canonical", href: TEST_URL }],
     });
+  });
+
+  it("uses ogTitle when provided instead of falling back to title", () => {
+    useStaticPageSeo("Test Title", "Test Description", "Custom OG Title");
+
+    expect(useSeoMeta).toHaveBeenCalledWith(
+      expect.objectContaining({
+        ogTitle: "Custom OG Title",
+        twitterTitle: "Custom OG Title",
+      }),
+    );
   });
 });

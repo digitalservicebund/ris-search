@@ -38,7 +38,7 @@ test("opens the page via URL", { tag: ["@RISDEV-8950"] }, async ({ page }) => {
     }),
   ).toBeVisible();
   await expect(page).toHaveTitle(
-    "Test Regulation for the Model Framework of the Public | Rechtsinformationen des Bundes",
+    "Test Regulation for the Model Framework of the Public — Rechtsinformationen des Bundes",
   );
 });
 
