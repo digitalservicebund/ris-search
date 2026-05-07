@@ -85,6 +85,11 @@ dependencies {
     // Override sub-dependency 1.8 with 1.84 to avoid CVE-2026-5588 CVE-2026-0636
     implementation(libs.bouncycastle)
 
+    // CVE-2026-42583, CVE-2026-42584, CVE-2026-42587
+    implementation(libs.netty.http)
+    implementation(libs.netty.http2)
+    implementation(libs.netty.compression)
+
     compileOnly(libs.lombok)
     annotationProcessor(libs.lombok)
 
