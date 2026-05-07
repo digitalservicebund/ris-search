@@ -117,7 +117,7 @@ public class NormsService {
   public Optional<Norm> getByExpressionEli(final ExpressionEli expressionEli) {
     Norm result = normsRepository.getByExpressionEli(expressionEli.toString());
     if (result != null) {
-      articleService.populateArticles(result, result.getExpressionEli());
+      result.setArticles(articleService.findAllByExpressionEli(result.getExpressionEli()));
     }
     return Optional.ofNullable(result);
   }

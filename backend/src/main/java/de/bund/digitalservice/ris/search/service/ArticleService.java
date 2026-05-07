@@ -7,6 +7,7 @@ import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.repository.opensearch.ArticlesRepository;
 import de.bund.digitalservice.ris.search.utils.LuceneQueryTools;
 import de.bund.digitalservice.ris.search.utils.RisHighlightBuilder;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -90,6 +91,10 @@ public class ArticleService {
             .collect(Collectors.toMap(SearchHit::getId, SearchHit::getInnerHits));
     Set<String> expressionElis = normInnerHitsMap.keySet();
 
+    if (expressionElis.isEmpty()) {
+      return;
+    }
+
     if (isLuceneQuery) {
       try {
         searchString = LuceneQueryTools.joinAllTermsWithOr(searchString);
@@ -112,7 +117,7 @@ public class ArticleService {
     }
   }
 
-  public void populateArticles(Norm norm, String expressionEli) {
-    norm.setArticles(articlesRepository.findAllByExpressionEli(expressionEli));
+  public List<Article> findAllByExpressionEli(String expressionEli) {
+    return articlesRepository.findAllByExpressionEli(expressionEli);
   }
 }
