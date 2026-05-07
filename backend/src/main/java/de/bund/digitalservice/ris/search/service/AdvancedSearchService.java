@@ -28,7 +28,6 @@ import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHitSupport;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.SearchPage;
-import org.springframework.data.elasticsearch.core.document.Document;
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
 import org.springframework.data.elasticsearch.core.query.FetchSourceFilter;
 import org.springframework.stereotype.Service;
@@ -46,7 +45,6 @@ import org.springframework.stereotype.Service;
 public class AdvancedSearchService {
 
   private final ElasticsearchOperations operations;
-  private final PageUtils pageUtils;
   private final IndexCoordinates allDocumentsIndex;
   private final ArticleService articleService;
 
@@ -56,18 +54,15 @@ public class AdvancedSearchService {
    * utilizes configurations for determining index settings.
    *
    * @param operations the ElasticsearchOperations instance used for search operations.
-   * @param pageUtils utility class for handling pagination and search result mapping.
    * @param configurations configuration provider for OpenSearch settings, including indices and
    *     alias names.
    */
   @Autowired
   public AdvancedSearchService(
       ElasticsearchOperations operations,
-      PageUtils pageUtils,
       Configurations configurations,
       ArticleService articleService) {
     this.operations = operations;
-    this.pageUtils = pageUtils;
     this.allDocumentsIndex = IndexCoordinates.of(configurations.getDocumentsAliasName());
     this.articleService = articleService;
   }
@@ -95,9 +90,11 @@ public class AdvancedSearchService {
             .collect(Collectors.toSet());
 
     highlightfields.forEach(highlightBuilder::field);
-    var searchResults = callOpenSearch(search, highlightBuilder, null, pageable, Document.class);
-    articleService.populateArticleTextMatches(searchResults.getSearchHits(), search, true);
-    return pageUtils.unwrapMixedSearchHits(searchResults, pageable);
+    SearchHits<AbstractSearchEntity> documentHits =
+        callOpenSearch(search, highlightBuilder, null, pageable, AbstractSearchEntity.class);
+
+    articleService.populateArticleTextMatches(documentHits, search, true);
+    return PageUtils.unwrapSearchHits(documentHits, pageable);
   }
 
   /**
@@ -177,7 +174,7 @@ public class AdvancedSearchService {
             pageable,
             Norm.class);
 
-    articleService.populateArticleTextMatches(searchHits.getSearchHits(), searchString, true);
+    articleService.populateArticleTextMatches(searchHits, searchString, true);
 
     return SearchHitSupport.searchPageFor(searchHits, pageable);
   }
@@ -206,7 +203,7 @@ public class AdvancedSearchService {
       searchQuery.withQuery(matchAllQuery());
     }
 
-    if (type == Document.class) {
+    if (type == AbstractSearchEntity.class) {
       return operations.search(searchQuery.build(), type, allDocumentsIndex);
     } else {
       return operations.search(searchQuery.build(), type);

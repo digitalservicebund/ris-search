@@ -1,12 +1,12 @@
 package de.bund.digitalservice.ris.search.service;
 
 import de.bund.digitalservice.ris.search.exception.CustomValidationException;
+import de.bund.digitalservice.ris.search.models.opensearch.AbstractSearchEntity;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.repository.opensearch.ArticlesRepository;
 import de.bund.digitalservice.ris.search.utils.LuceneQueryTools;
 import de.bund.digitalservice.ris.search.utils.RisHighlightBuilder;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -78,13 +78,15 @@ public class ArticleService {
     return operations.search(articleQuery, Article.class);
   }
 
-  public <T> void populateArticleTextMatches(
-      List<SearchHit<T>> normSearchHits, String searchString, boolean isLuceneQuery) {
+  public <T extends AbstractSearchEntity> void populateArticleTextMatches(
+      SearchHits<T> searchHits, String searchString, boolean isLuceneQuery) {
     if (StringUtils.isEmpty(searchString)) {
       return;
     }
+
     Map<String, Map<String, SearchHits<?>>> normInnerHitsMap =
-        normSearchHits.stream()
+        searchHits.stream()
+            .filter(hit -> hit.getContent() instanceof Norm)
             .collect(Collectors.toMap(SearchHit::getId, SearchHit::getInnerHits));
     Set<String> expressionElis = normInnerHitsMap.keySet();
 
