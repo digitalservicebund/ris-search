@@ -197,24 +197,20 @@ describe("NormSearchResult", () => {
     expect(screen.getByText("highlighted Text")).toBeInTheDocument();
   });
 
-  it("filters HTML tags except mark, i, b", () => {
-    const text =
-      '<mark>mark</mark> <i>i</i> <b>b</b> <img src="" alt="do not show"> <div>div</div> plain_text.';
-    const expectedSanitized =
-      "<mark>mark</mark> <i>i</i> <b>b</b>  div plain_text.";
+  it("filters HTML tags except mark, i, b in norm heading and highlights", () => {
     const modifiedSearchResult: SearchResult<LegislationExpression> = {
       ...mockSearchResult,
       textMatches: [
         {
           "@type": "SearchResultMatch",
           name: "name",
-          text,
+          text: '<mark>mark</mark> <i>i</i> <b>b</b> <img src="" alt="do not show"> <div>div</div> Norm Title',
           location: undefined,
         },
         {
           "@type": "SearchResultMatch",
-          name: text,
-          text,
+          name: '<mark>mark</mark> <i>i</i> <b>b</b> <img src="" alt="do not show"> <div>div</div> Article 1',
+          text: '<mark>mark</mark> <i>i</i> <b>b</b> <img src="" alt="do not show"> <div>div</div> Text preview',
           location: "hauptteil_1",
         },
       ],
@@ -222,11 +218,31 @@ describe("NormSearchResult", () => {
 
     renderComponent(modifiedSearchResult);
 
-    const titleHeading = screen.getAllByRole("heading")[0];
-    expect(titleHeading?.innerHTML).toBe(expectedSanitized);
+    const heading = screen.getByRole("heading", {
+      name: /mark i b div Norm Title/i,
+    });
+    expect(heading.querySelector("mark")).toHaveTextContent("mark");
+    expect(heading.querySelector("i")).toHaveTextContent("i");
+    expect(heading.querySelector("b")).toHaveTextContent("b");
+    expect(heading.querySelector("img")).not.toBeInTheDocument();
+    expect(heading.querySelector("div")).not.toBeInTheDocument();
 
-    const contentHeading = screen.getAllByRole("heading")[1];
-    expect(contentHeading?.innerHTML).toBe(expectedSanitized);
+    const articleLink = screen.getByRole("link", {
+      name: /mark i b div Article 1/i,
+    });
+    expect(articleLink.querySelector("mark")).toHaveTextContent("mark");
+    expect(articleLink.querySelector("i")).toHaveTextContent("i");
+    expect(articleLink.querySelector("b")).toHaveTextContent("b");
+    expect(articleLink.querySelector("img")).not.toBeInTheDocument();
+    expect(heading.querySelector("div")).not.toBeInTheDocument();
+
+    const textPreview = articleLink.nextElementSibling;
+    expect(textPreview).toHaveTextContent(/mark i b div Text preview/i);
+    expect(textPreview?.querySelector("mark")).toHaveTextContent("mark");
+    expect(textPreview?.querySelector("i")).toHaveTextContent("i");
+    expect(textPreview?.querySelector("b")).toHaveTextContent("b");
+    expect(textPreview?.querySelector("img")).not.toBeInTheDocument();
+    expect(textPreview?.querySelector("div")).not.toBeInTheDocument();
   });
 
   it("includes the location in the generated highlight URL for Article 1 properly encoded", () => {
