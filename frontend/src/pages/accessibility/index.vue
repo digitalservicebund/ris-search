@@ -3,7 +3,11 @@ import text from "./content.md?raw";
 
 definePageMeta({ alias: ["/barrierefreiheit"], layout: false });
 
-useStaticPageSeo("barrierefreiheit");
+useStaticPageSeo(
+  "Barrierefreiheit",
+  "Informationen zur digitalen Zugänglichkeit, zum technischen Standard und zur Feedback-Möglichkeit.",
+  "Barrierefreiheit im Rechtsinformationsportal des Bundes",
+);
 </script>
 
 <template>

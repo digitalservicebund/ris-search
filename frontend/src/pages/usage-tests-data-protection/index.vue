@@ -6,7 +6,11 @@ definePageMeta({
   layout: false,
 });
 
-useStaticPageSeo("nutzungstests-datenschutz");
+useStaticPageSeo(
+  "Datenschutzerklärung zu den Nutzungstests",
+  "Erfahren Sie, wie wir Ihre Daten bei Teilnahme an unseren Nutzungstests erfassen, verwenden und schützen",
+  "Datenschutzerklärung zu den Nutzungstests des Rechtsinformationsportals des Bundes",
+);
 </script>
 
 <template>

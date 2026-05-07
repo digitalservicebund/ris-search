@@ -68,7 +68,10 @@ const minisearch = computed(() => {
   return miniSearch;
 });
 
-useStaticPageSeo("translations-list");
+useStaticPageSeo(
+  "English Translations of German Federal Laws and Regulations",
+  "Access official English translations of selected German laws and regulations. These translations are for informational purposes only and are not legally binding.",
+);
 
 const translationsListId = useId();
 </script>

@@ -3,7 +3,8 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { computed } from "vue";
 import { useDynamicSeo } from "./useDynamicSeo";
 import type { SeoMetaTag as MetaTag, CanonicalLink } from "./useDynamicSeo";
-import { TEST_URL } from "~/tests/seoTestHelpers";
+
+const TEST_URL = "https://testphase.rechtsinformationen.bund.de/example";
 
 const { useHead, useRequestURL } = vi.hoisted(() => ({
   useHead: vi.fn(),
