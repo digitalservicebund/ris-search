@@ -207,7 +207,7 @@ const detailsSectionId = useId();
               :to="detailsMetadata.zipUrl"
             >
               <IcOutlineFileDownload class="mr-2 inline" />
-              {{ detailsMetadata.documentNumber }} als ZIP herunterladen
+              Diese Gerichtsentscheidung als ZIP herunterladen
             </NuxtLink>
           </DetailsListEntry>
         </DetailsList>

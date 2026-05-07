@@ -15,7 +15,7 @@ describe("SortSelect", () => {
       },
     });
 
-    await user.click(screen.getByRole("combobox"));
+    await user.click(screen.getByRole("combobox", { name: "Sortieren nach" }));
 
     const options = screen.getAllByRole("option");
     expect(options).toHaveLength(3);
@@ -33,7 +33,7 @@ describe("SortSelect", () => {
       },
     });
 
-    await user.click(screen.getByRole("combobox"));
+    await user.click(screen.getByRole("combobox", { name: "Sortieren nach" }));
 
     const options = screen.getAllByRole("option");
     expect(options).toHaveLength(3);
@@ -51,7 +51,7 @@ describe("SortSelect", () => {
       },
     });
 
-    await user.click(screen.getByRole("combobox"));
+    await user.click(screen.getByRole("combobox", { name: "Sortieren nach" }));
 
     const options = screen.getAllByRole("option");
     expect(options).toHaveLength(5);
@@ -73,7 +73,7 @@ describe("SortSelect", () => {
 
     await rerender({ documentKind: DocumentKind.CaseLaw });
 
-    await user.click(screen.getByRole("combobox"));
+    await user.click(screen.getByRole("combobox", { name: "Sortieren nach" }));
 
     const options = screen.getAllByRole("option");
     expect(options).toHaveLength(5);
@@ -93,7 +93,7 @@ describe("SortSelect", () => {
       },
     });
 
-    await user.click(screen.getByRole("combobox"));
+    await user.click(screen.getByRole("combobox", { name: "Sortieren nach" }));
     await user.click(
       screen.getByRole("option", { name: "Datum: Älteste zuerst" }),
     );

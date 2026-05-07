@@ -181,7 +181,7 @@ test("can view details", async ({ page }) => {
     "Vorinstanz:",
     "nicht vorhanden",
     "Download:",
-    "KORE600500000 als ZIP herunterladen",
+    "Diese Gerichtsentscheidung als ZIP herunterladen",
   ]);
 });
 
@@ -190,7 +190,7 @@ test("renders the download link", async ({ page }) => {
   await page.getByRole("tab", { name: "Details" }).click();
 
   const zipLink = page.getByRole("link", {
-    name: "KORE600500000 als ZIP herunterladen",
+    name: "Diese Gerichtsentscheidung als ZIP herunterladen",
   });
   await expect(zipLink).toBeVisible();
   await expect(zipLink).toHaveAttribute(

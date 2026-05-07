@@ -61,14 +61,14 @@ watch(validSortOptions, (newVal) => {
   }
 });
 
-const sortSelectId = useId();
+const sortLabelId = useId();
 </script>
 
 <template>
   <span class="flex w-auto items-center gap-8">
-    <label :for="sortSelectId" class="ris-label2-regular">Sortieren nach</label>
+    <label :id="sortLabelId" class="ris-label2-regular">Sortieren nach</label>
     <Select
-      :id="sortSelectId"
+      :aria-labelledby="sortLabelId"
       v-model="model"
       scroll-height="20rem"
       option-label="label"
