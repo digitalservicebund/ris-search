@@ -15,7 +15,7 @@ const filter = defineModel<DateFilterValue>({ required: true });
  */
 type YearMode = "allTime" | "before" | "equal" | "after" | "range";
 
-const yearModeSelectId = useId();
+const yearModeLabelId = useId();
 const yearEqualId = useId();
 const yearAfterId = useId();
 const yearBeforeId = useId();
@@ -167,10 +167,10 @@ const hasMultipleInputs = computed(() => show.value.after && show.value.before);
 <template>
   <div class="flex flex-col gap-16">
     <span class="flex flex-col gap-8">
-      <label :for="yearModeSelectId" class="ris-label2-regular">Zeitraum</label>
+      <label :id="yearModeLabelId" class="ris-label2-regular">Zeitraum</label>
       <Select
-        :id="yearModeSelectId"
         :model-value="mode"
+        :aria-labelledby="yearModeLabelId"
         :options="items"
         :placeholder="items[0]?.label"
         :pt="{ overlay: { class: 'bg-white w-full' } }"
