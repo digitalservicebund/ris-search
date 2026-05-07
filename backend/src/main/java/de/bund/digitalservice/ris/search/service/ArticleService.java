@@ -42,11 +42,11 @@ public class ArticleService {
   }
 
   private SearchHits<Article> searchArticles(
-      Set<String> expressionElis, String searchString, boolean isAdvancedSearch) {
+      Set<String> expressionElis, String searchString, boolean isLuceneQuery) {
     BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
     boolQuery.filter(QueryBuilders.termsQuery("expression_eli", expressionElis));
 
-    if (isAdvancedSearch) {
+    if (isLuceneQuery) {
       boolQuery.should(QueryBuilders.queryStringQuery(searchString));
     } else {
       boolQuery.should(
@@ -79,7 +79,7 @@ public class ArticleService {
   }
 
   public <T> void populateArticleTextMatches(
-      List<SearchHit<T>> normSearchHits, String searchString, boolean isAdvancedSearch) {
+      List<SearchHit<T>> normSearchHits, String searchString, boolean isLuceneQuery) {
     if (StringUtils.isEmpty(searchString)) {
       return;
     }
@@ -87,7 +87,8 @@ public class ArticleService {
         normSearchHits.stream()
             .collect(Collectors.toMap(SearchHit::getId, SearchHit::getInnerHits));
     Set<String> expressionElis = normInnerHitsMap.keySet();
-    if (isAdvancedSearch) {
+
+    if (isLuceneQuery) {
       try {
         searchString = LuceneQueryTools.joinAllTermsWithOr(searchString);
       } catch (CustomValidationException e) {
@@ -100,7 +101,8 @@ public class ArticleService {
         return;
       }
     }
-    SearchHits<Article> articles = searchArticles(expressionElis, searchString, isAdvancedSearch);
+
+    SearchHits<Article> articles = searchArticles(expressionElis, searchString, isLuceneQuery);
 
     for (SearchHit<Article> articleSearchHit : articles.getSearchHits()) {
       String expressionEli = articleSearchHit.getContent().getExpressionEli();
