@@ -3,7 +3,7 @@ import { Button, InputGroup, InputGroupAddon, InputText } from "primevue";
 import IconSearch from "~icons/ic/search";
 
 const {
-  inputLabel = "Suchfeld",
+  inputLabel = "Suchbegriff eingeben",
   inputPlaceholder = "Suchbegriff eingeben",
   submitLabel = "Suchen",
 } = defineProps<{
@@ -41,10 +41,10 @@ const searchInputId = useId();
   <search :class="{ 'max-w-md': !fullWidth }">
     <form action="/search" @submit.prevent="performSearch">
       <InputGroup>
-        <label class="sr-only" :for="searchInputId">{{ inputLabel }}</label>
         <InputText
           :id="searchInputId"
           v-model="currentText"
+          :aria-label="inputLabel"
           :placeholder="inputPlaceholder"
           fluid
           name="query"

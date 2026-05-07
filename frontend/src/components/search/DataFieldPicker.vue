@@ -98,11 +98,11 @@ function submitUnlessLoading() {
       @submit.prevent="submitUnlessLoading()"
     >
       <InputGroup>
-        <label class="sr-only" :for="queryInputId">Suchfeld</label>
         <InputText
           :id="queryInputId"
           ref="queryInputEl"
           v-model="query"
+          aria-label="Suchbegriff eingeben"
           size="large"
           class="grow"
           placeholder="Suchbegriff eingeben"

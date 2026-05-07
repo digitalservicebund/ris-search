@@ -44,7 +44,7 @@ async function searchFor(
   },
 ) {
   await page.getByRole("button", { name: search.documentKind }).click();
-  await page.getByRole("searchbox", { name: "Suchfeld" }).fill(search.q);
+  await page.getByRole("searchbox").fill(search.q);
 
   if (search.dateFilter) {
     await page.getByRole("radio", { name: search.dateFilter }).click();
@@ -251,7 +251,7 @@ test.describe("general advanced search page features", () => {
       documentKind: "Gesetze & Verordnungen",
     });
 
-    const queryInput = page.getByRole("searchbox", { name: "Suchfeld" });
+    const queryInput = page.getByRole("searchbox");
     await expect(queryInput).toHaveValue("AB:FrSaftErfrischV");
 
     await page.getByRole("button", { name: "Gerichtsentscheidungen" }).click();
@@ -280,9 +280,7 @@ test.describe("general advanced search page features", () => {
 
     await page.goBack();
 
-    await expect(page.getByRole("searchbox", { name: "Suchfeld" })).toHaveValue(
-      "AB:FrSaftErfrischV",
-    );
+    await expect(page.getByRole("searchbox")).toHaveValue("AB:FrSaftErfrischV");
 
     await expect(searchResults).toHaveText([/FrSaftErfrischV/]);
   });
@@ -312,9 +310,7 @@ test.describe("general advanced search page features", () => {
 
     await page.goBack();
 
-    await expect(page.getByRole("searchbox", { name: "Suchfeld" })).toHaveValue(
-      'AZ:"KL 1234/56"',
-    );
+    await expect(page.getByRole("searchbox")).toHaveValue('AZ:"KL 1234/56"');
 
     await expect(searchResults).toHaveText(/KL 1234\/56/);
   });
