@@ -100,8 +100,6 @@ public class AllDocumentsSearchController {
     try {
       SearchPage<AbstractSearchEntity> searchResult =
           allDocumentsService.simpleSearchAllDocuments(request, sortedPageRequest, mostRelevantOn);
-      articleService.populateArticleTextMatches(
-          searchResult.getSearchHits().getSearchHits(), request.getSearchTerm(), false);
 
       return ResponseEntity.ok()
           .contentType(MediaType.APPLICATION_JSON)
