@@ -23,9 +23,9 @@ const headingId = useId();
     :aria-labelledby="headingId"
   >
     <div class="container">
-      <h2 :id="headingId" class="ris-heading3-bold text-xl lg:text-2xl">
+      <p :id="headingId" class="ris-heading3-bold text-xl lg:text-2xl">
         Cookie-Einstellungen akzeptieren oder ablehnen
-      </h2>
+      </p>
 
       <div class="pt-8">
         <p>

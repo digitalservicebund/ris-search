@@ -118,7 +118,7 @@ const getArticleUrl = (highlight: TextMatch) =>
           :to="getArticleUrl(highlight)"
           @click="openResult(getArticleUrl(highlight))"
         >
-          <h3 v-html="sanitizeSearchResult(highlight.name)" />
+          <span v-html="sanitizeSearchResult(highlight.name)" />
         </NuxtLink>
         <div
           v-html="highlight.text ? sanitizeSearchResult(highlight.text) : ''"
