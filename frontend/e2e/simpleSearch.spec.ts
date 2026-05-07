@@ -611,7 +611,7 @@ test.describe("searching caselaw", () => {
   test("searches by custom court", async ({ page }) => {
     await navigate(page, "/search?documentKind=R");
 
-    await page.getByRole("combobox", { name: "Gericht" }).fill("LG");
+    await page.getByRole("combobox", { name: "Bundesgericht" }).fill("LG");
     await page.getByRole("option", { name: "LG Hamburg" }).click();
 
     await expect(page).toHaveURL(/court=LG\+Hamburg/);
@@ -698,7 +698,7 @@ test.describe("searching caselaw", () => {
     const dateInput = page.getByRole("textbox", { name: "Datum" });
     await expect(dateInput).toHaveValue("01.01.2020");
 
-    await page.getByRole("combobox", { name: "An einem Datum" }).click();
+    await page.getByRole("combobox", { name: "Zeitraum" }).click();
     await page.getByRole("option", { name: "Ab einem Datum" }).click();
 
     // Type a partial date - if the input wasn't properly reset, this would
@@ -886,7 +886,7 @@ test.describe("searching literature", () => {
     const yearInput = page.getByRole("textbox", { name: "Jahr" });
     await expect(yearInput).toHaveValue("2020");
 
-    await page.getByRole("combobox", { name: "In einem Jahr" }).click();
+    await page.getByRole("combobox", { name: "Zeitraum" }).click();
     await page.getByRole("option", { name: "Ab einem Jahr" }).click();
 
     // Type a partial year - if the input wasn't properly reset, this would

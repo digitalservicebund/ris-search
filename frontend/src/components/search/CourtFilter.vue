@@ -88,10 +88,10 @@ const id = useId();
 
 <template>
   <div class="flex flex-col gap-8">
-    <label :for="id" class="ris-label2-regular">Bundesgericht</label>
+    <label :id="id" class="ris-label2-regular">Bundesgericht</label>
     <AutoComplete
       v-model="model"
-      :input-id="id"
+      :aria-labelledby="id"
       :suggestions
       append-to="self"
       dropdown
