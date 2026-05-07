@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import IconWarningAmber from "~icons/ic/outline-warning-amber";
 </script>
+
 <template>
   <div
-    role="alert"
+    role="status"
     class="ris-body2-regular flex bg-yellow-200 px-8 py-16 text-pretty sm:px-16 print:hidden"
   >
     <div class="container flex gap-8">

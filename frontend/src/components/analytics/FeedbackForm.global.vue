@@ -61,7 +61,7 @@ watch(
         <div class="ris-heading3-bold">
           Möchten Sie an Nutzungsstudien teilnehmen?
         </div>
-        <p class="">
+        <p>
           Nutzungsstudien helfen uns zu verstehen, wie Sie diesen Service nutzen
           und wie wir sie verbessern können. Wir suchen Menschen, die sich
           unentgeltlich an der Nutzungsstudien beteiligen möchten. Dafür ist nur

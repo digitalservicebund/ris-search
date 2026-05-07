@@ -276,7 +276,12 @@ useHead({ title });
             {{ searchError.message }}
           </Message>
 
-          <Message severity="warn" class="ris-body2-regular mt-16 max-w-prose">
+          <Message
+            severity="warn"
+            class="ris-body2-regular mt-16 max-w-prose"
+            role="status"
+            aria-live="off"
+          >
             <p class="ris-body2-bold mt-2">
               Dieser Service befindet sich in der Testphase.
             </p>

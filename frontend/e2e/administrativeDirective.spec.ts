@@ -51,7 +51,7 @@ test("displays administrative directive page with metadata and text tab by defau
 
   // Text section
   const textSection = page.getByRole("tabpanel", { name: "Text" });
-  await expect(textSection.getByRole("alert")).toContainText(
+  await expect(textSection.getByRole("status")).toContainText(
     "Dieser Service befindet sich in der Testphase",
   );
 
@@ -228,7 +228,7 @@ test("shows detailed information in the 'Details' tab", async ({ page }) => {
   await detailsLink.click();
 
   await expect(page.getByRole("heading", { name: "Details" })).toBeVisible();
-  await expect(page.getByRole("main").getByRole("alert")).toContainText(
+  await expect(page.getByRole("main").getByRole("status")).toContainText(
     "Dieser Service befindet sich in der Testphase",
   );
 
@@ -262,7 +262,7 @@ test("hides tabs and shows details if document is empty", async ({ page }) => {
     page.getByRole("heading", { level: 2, name: "Details" }),
   ).toBeVisible();
 
-  await expect(page.getByRole("main").getByRole("alert")).toContainText(
+  await expect(page.getByRole("main").getByRole("status")).toContainText(
     "Dieser Service befindet sich in der Testphase",
   );
 
