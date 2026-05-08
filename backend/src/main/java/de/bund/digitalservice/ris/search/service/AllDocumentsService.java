@@ -24,18 +24,18 @@ public class AllDocumentsService {
   private final ElasticsearchOperations operations;
   private final SimpleSearchQueryBuilder simpleSearchQueryBuilder;
   private final IndexCoordinates allDocumentsIndex;
-  private final ArticleService articleService;
+  private final NormsService normsService;
 
   /** Constructor for AllDocumentsService. */
   public AllDocumentsService(
       ElasticsearchOperations operations,
       Configurations configurations,
       SimpleSearchQueryBuilder simpleSearchQueryBuilder,
-      ArticleService articleService) {
+      NormsService normsService) {
     this.operations = operations;
     allDocumentsIndex = IndexCoordinates.of(configurations.getDocumentsAliasName());
     this.simpleSearchQueryBuilder = simpleSearchQueryBuilder;
-    this.articleService = articleService;
+    this.normsService = normsService;
   }
 
   /**
@@ -68,7 +68,8 @@ public class AllDocumentsService {
 
     SearchHits<AbstractSearchEntity> documentHits =
         operations.search(query, AbstractSearchEntity.class, allDocumentsIndex);
-    articleService.populateArticleTextMatches(documentHits, params.getSearchTerm(), false);
+    normsService.populateNormSearchHitsWithArticleTextMatches(
+        documentHits, params.getSearchTerm(), false);
 
     return PageUtils.unwrapSearchHits(documentHits, pageable);
   }
