@@ -4,11 +4,13 @@ import static org.opensearch.index.query.QueryBuilders.matchAllQuery;
 import static org.opensearch.index.query.QueryBuilders.queryStringQuery;
 
 import de.bund.digitalservice.ris.search.config.opensearch.Configurations;
+import de.bund.digitalservice.ris.search.exception.CustomValidationException;
 import de.bund.digitalservice.ris.search.models.opensearch.AbstractSearchEntity;
 import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
+import de.bund.digitalservice.ris.search.utils.LuceneQueryTools;
 import de.bund.digitalservice.ris.search.utils.PageUtils;
 import de.bund.digitalservice.ris.search.utils.RisHighlightBuilder;
 import java.util.Collection;
@@ -17,6 +19,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.Nullable;
 import org.opensearch.action.search.SearchType;
@@ -46,7 +50,8 @@ public class AdvancedSearchService {
 
   private final ElasticsearchOperations operations;
   private final IndexCoordinates allDocumentsIndex;
-  private final ArticleService articleService;
+  private final NormsService normsService;
+  protected static final Logger logger = LogManager.getLogger(AdvancedSearchService.class);
 
   /**
    * Constructs an instance of AdvancedSearchService which provides search capabilities for multiple
@@ -61,10 +66,10 @@ public class AdvancedSearchService {
   public AdvancedSearchService(
       ElasticsearchOperations operations,
       Configurations configurations,
-      ArticleService articleService) {
+      NormsService normsService) {
     this.operations = operations;
     this.allDocumentsIndex = IndexCoordinates.of(configurations.getDocumentsAliasName());
-    this.articleService = articleService;
+    this.normsService = normsService;
   }
 
   /**
@@ -93,7 +98,7 @@ public class AdvancedSearchService {
     SearchHits<AbstractSearchEntity> documentHits =
         callOpenSearch(search, highlightBuilder, null, pageable, AbstractSearchEntity.class);
 
-    articleService.populateArticleTextMatches(documentHits, search, true);
+    addArticleHighlightsToNormSearchHits(documentHits, search);
     return PageUtils.unwrapSearchHits(documentHits, pageable);
   }
 
@@ -174,9 +179,18 @@ public class AdvancedSearchService {
             pageable,
             Norm.class);
 
-    articleService.populateArticleTextMatches(searchHits, searchString, true);
-
+    addArticleHighlightsToNormSearchHits(searchHits, searchString);
     return SearchHitSupport.searchPageFor(searchHits, pageable);
+  }
+
+  private <T extends AbstractSearchEntity> void addArticleHighlightsToNormSearchHits(
+      SearchHits<T> normHits, String queryString) {
+    try {
+      normsService.populateNormSearchHitsWithArticleTextMatches(
+          normHits, LuceneQueryTools.joinAllTermsWithOr(queryString), true);
+    } catch (CustomValidationException e) {
+      logger.error("Error transforming lucene query for article highlights.", e);
+    }
   }
 
   private <T> SearchHits<T> callOpenSearch(
