@@ -72,7 +72,10 @@ const drawerId = useId();
   <Breadcrumb
     :model="effectiveItems"
     :aria-label="label"
-    :class="{ 'overflow-hidden [&_ol]:flex-nowrap!': forceOneLine }"
+    :class="[
+      '-ml-8 py-8 pl-8', // Offset to ensure focus outline is visible
+      { 'overflow-hidden [&_ol]:flex-nowrap!': forceOneLine },
+    ]"
     v-bind="$attrs"
   >
     <template #item="slot">
