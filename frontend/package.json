@@ -23,19 +23,19 @@
   "dependencies": {
     "@digitalservicebund/ris-ui": "4.3.0",
     "@nuxtjs/mdc": "0.21.1",
-    "@nuxtjs/sitemap": "8.0.14",
+    "@nuxtjs/sitemap": "8.0.15",
     "@sentry/nuxt": "10.51.0",
     "dayjs": "1.11.20",
     "lodash-es": "4.18.1",
     "minisearch": "7.2.0",
     "nuxt": "4.4.4",
     "nuxt-security": "2.5.1",
-    "posthog-js": "1.372.5",
+    "posthog-js": "1.372.9",
     "primevue": "4.5.5",
     "sanitize-html": "2.17.3"
   },
   "devDependencies": {
-    "@axe-core/playwright": "4.11.2",
+    "@axe-core/playwright": "4.11.3",
     "@iconify-json/ic": "1.2.4",
     "@nuxt/test-utils": "4.0.3",
     "@playwright/test": "1.59.1",
@@ -49,13 +49,13 @@
     "@types/node": "25.6.0",
     "@types/sanitize-html": "2.16.1",
     "@vitest/coverage-v8": "4.1.5",
-    "@vue/test-utils": "2.4.9",
+    "@vue/test-utils": "2.4.10",
     "axe-html-reporter": "2.2.11",
-    "jsdom": "29.1.0",
+    "jsdom": "29.1.1",
     "license-checker-rseidelsohn": "4.4.2",
-    "lighthouse": "13.1.0",
+    "lighthouse": "13.2.0",
     "openapi-typescript": "7.13.0",
-    "oxlint": "1.62.0",
+    "oxlint": "1.63.0",
     "playwright-lighthouse": "4.0.0",
     "prettier": "3.8.3",
     "prettier-plugin-tailwindcss": "0.8.0",
@@ -63,7 +63,7 @@
     "typescript": "5.9.3",
     "unplugin-icons": "23.0.1",
     "vitest": "4.1.5",
-    "vue-tsc": "3.2.7"
+    "vue-tsc": "3.2.8"
   },
   "engines": {
     "node": ">=24"
