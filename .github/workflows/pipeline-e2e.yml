@@ -82,11 +82,6 @@ jobs:
         run: pnpm ci
         working-directory: ./frontend
 
-      - name: Install Playwright browsers
-        # --with-deps is not needed; OS dependencies are pre-installed in the container image
-        run: pnpm exec playwright install chromium firefox webkit
-        working-directory: ./frontend
-
       - name: Start frontend locally (background)
         working-directory: ./frontend
         env:
