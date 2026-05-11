@@ -13,7 +13,7 @@ type SkipLinksRegistry = {
   clear: () => void;
 };
 
-const injectSkipLinksRegistry = Symbol() as InjectionKey<SkipLinksRegistry>;
+export const injectSkipLinksRegistry = Symbol() as InjectionKey<SkipLinksRegistry>;
 
 /**
  * When used in a component, the component will provide a registry of skip links
@@ -44,8 +44,7 @@ export function provideSkipLinks() {
  * Assumes that skip links are only registered once per page. Any registration
  * of skip links will replace the list of existing skip links.
  *
- * @throws When used outside of a component tree that provides a skip link
- *  registry.
+ * @throws When used outside of a component tree that provides a skip link registry.
  */
 export function useSkipLinks(links: MaybeRefOrGetter<SkipLink[]>) {
   const registry = inject(injectSkipLinksRegistry, null);
