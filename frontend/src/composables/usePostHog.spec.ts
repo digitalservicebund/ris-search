@@ -1,5 +1,4 @@
 import { mockNuxtImport } from "@nuxt/test-utils/runtime";
-import type { PostHog } from "posthog-js";
 import { posthog } from "posthog-js";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
@@ -233,7 +232,7 @@ describe("usePostHog", () => {
     const router = useRouter();
     router.currentRoute.value.query = { query: "test query" };
     await setTracking(true);
-    const captureSpy = vi.spyOn(postHog.value as PostHog, "capture");
+    const captureSpy = vi.spyOn(postHog.value!, "capture");
     searchResultClicked("testUrl", 1);
     expect(captureSpy).toHaveBeenCalledWith("search_result_clicked", {
       url: "testUrl",
@@ -254,7 +253,7 @@ describe("usePostHog", () => {
       documentKind: DocumentKind.CaseLaw,
     };
 
-    const captureSpy = vi.spyOn(postHog.value as PostHog, "capture");
+    const captureSpy = vi.spyOn(postHog.value!, "capture");
     noSearchResults(params);
     expect(captureSpy).toHaveBeenCalledWith("no_search_results", {
       searchParams: {
