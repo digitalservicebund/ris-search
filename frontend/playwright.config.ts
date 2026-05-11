@@ -5,6 +5,8 @@ export const environment = {
   remoteDebuggingPort: 9222,
 };
 
+const ISOLATED_SPECS = ["seo.spec.ts", "accessibility.spec.ts"];
+
 const projects: Project[] = [
   {
     name: "chromium",
@@ -12,7 +14,30 @@ const projects: Project[] = [
       ...devices["Desktop Chrome"],
       permissions: ["clipboard-read", "clipboard-write"],
     },
-    testIgnore: "seo.spec.ts",
+    testIgnore: ISOLATED_SPECS,
+  },
+  {
+    name: "firefox",
+    use: {
+      ...devices["Desktop Firefox"],
+    },
+    testIgnore: ISOLATED_SPECS,
+  },
+  {
+    name: "webkit",
+    use: {
+      ...devices["Desktop Safari"],
+    },
+    testIgnore: ISOLATED_SPECS,
+  },
+  {
+    name: "mobile",
+    use: {
+      ...devices["Desktop Firefox"],
+      viewport: { width: 320, height: 600 },
+      touch: true,
+    },
+    testIgnore: ISOLATED_SPECS,
   },
   {
     name: "seo",
@@ -22,27 +47,27 @@ const projects: Project[] = [
     testMatch: "seo.spec.ts",
   },
   {
-    name: "firefox",
+    name: "accessibility-chromium",
+    use: {
+      ...devices["Desktop Chrome"],
+    },
+    testMatch: "accessibility.spec.ts",
+  },
+  {
+    name: "accessibility-firefox",
     use: {
       ...devices["Desktop Firefox"],
     },
-    testIgnore: "seo.spec.ts",
+    testMatch: "accessibility.spec.ts",
   },
   {
-    name: "webkit",
-    use: {
-      ...devices["Desktop Safari"],
-    },
-    testIgnore: "seo.spec.ts",
-  },
-  {
-    name: "mobile",
+    name: "accessibility-mobile",
     use: {
       ...devices["Desktop Firefox"],
       viewport: { width: 320, height: 600 },
       touch: true,
     },
-    testIgnore: "seo.spec.ts",
+    testMatch: "accessibility.spec.ts",
   },
   {
     name: "smoke-tests",
