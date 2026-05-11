@@ -73,10 +73,6 @@ export const testPages = [
   },
 ];
 
-test.beforeAll(async ({ privateFeaturesEnabled, browserName }) => {
-  test.skip(!privateFeaturesEnabled || browserName !== "chromium");
-});
-
 test.setTimeout(120000);
 
 for (const testPage of testPages) {

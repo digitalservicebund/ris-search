@@ -12,6 +12,14 @@ const projects: Project[] = [
       ...devices["Desktop Chrome"],
       permissions: ["clipboard-read", "clipboard-write"],
     },
+    testIgnore: "seo.spec.ts",
+  },
+  {
+    name: "seo",
+    use: {
+      ...devices["Desktop Chrome"],
+    },
+    testMatch: "seo.spec.ts",
   },
   {
     name: "firefox",
