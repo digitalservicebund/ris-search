@@ -42,6 +42,13 @@ public class WebMvcConfig implements WebMvcConfigurer {
     registry.addInterceptor(defaultRateLimitInterceptor);
   }
 
+  /**
+   * Configures a {@link UrlHandlerFilter} to globally manage trailing slashes in URLs. This filter
+   * intercepts requests and performs a client-side redirect to the same path without a trailing
+   * slash.
+   *
+   * @return a configured {@link UrlHandlerFilter}
+   */
   @Bean
   public UrlHandlerFilter urlHandlerFilter() {
     return UrlHandlerFilter.trailingSlashHandler("/**")
