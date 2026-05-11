@@ -51,7 +51,13 @@ jobs:
         with:
           java-version: "21.0"
           distribution: "temurin"
-          cache: gradle
+
+      - name: Cache Gradle packages
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
+        with:
+          path: .gradle-cache
+          key: gradle-${{ runner.os }}-${{ hashFiles('backend/**/*.gradle*', 'backend/gradle/wrapper/gradle-wrapper.properties') }}
+          restore-keys: gradle-${{ runner.os }}-
 
       - name: Grant execute permission for gradlew
         working-directory: ./backend
@@ -62,6 +68,7 @@ jobs:
         env:
           SPRING_PROFILES_ACTIVE: e2e,default
           OPENSEARCH_HOST: opensearch # use service name because it's inside the docker network
+          GRADLE_USER_HOME: ${{ github.workspace }}/.gradle-cache
           THC_PORT: 8090
           NODE_OPTIONS: "--max_old_space_size=4096"
         run: |
@@ -194,7 +201,13 @@ jobs:
         with:
           java-version: "21.0"
           distribution: "temurin"
-          cache: gradle
+
+      - name: Cache Gradle packages
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
+        with:
+          path: .gradle-cache
+          key: gradle-${{ runner.os }}-${{ hashFiles('backend/**/*.gradle*', 'backend/gradle/wrapper/gradle-wrapper.properties') }}
+          restore-keys: gradle-${{ runner.os }}-
 
       - name: Grant execute permission for gradlew
         working-directory: ./backend
@@ -205,6 +218,7 @@ jobs:
         env:
           SPRING_PROFILES_ACTIVE: e2e,default
           OPENSEARCH_HOST: opensearch
+          GRADLE_USER_HOME: ${{ github.workspace }}/.gradle-cache
           THC_PORT: 8090
           NODE_OPTIONS: "--max_old_space_size=4096"
         run: |
@@ -327,7 +341,13 @@ jobs:
         with:
           java-version: "21.0"
           distribution: "temurin"
-          cache: gradle
+
+      - name: Cache Gradle packages
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
+        with:
+          path: .gradle-cache
+          key: gradle-${{ runner.os }}-${{ hashFiles('backend/**/*.gradle*', 'backend/gradle/wrapper/gradle-wrapper.properties') }}
+          restore-keys: gradle-${{ runner.os }}-
 
       - name: Grant execute permission for gradlew
         working-directory: ./backend
@@ -338,6 +358,7 @@ jobs:
         env:
           SPRING_PROFILES_ACTIVE: e2e,default
           OPENSEARCH_HOST: opensearch
+          GRADLE_USER_HOME: ${{ github.workspace }}/.gradle-cache
           THC_PORT: 8090
           NODE_OPTIONS: "--max_old_space_size=4096"
         run: |
