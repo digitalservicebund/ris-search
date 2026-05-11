@@ -1,6 +1,5 @@
 # Maps common abbreviations for court names to their expanded version
-# data enriched with mappings from https://openjur.de/s/abkuerzungen.html
-# see https://www.elastic.co/guide/en/elasticsearch/reference/7.10/analysis-synonym-tokenfilter.html for reference
+# This is only used by the backend to build the responses for the /courts endpoint
 
 AG, Amtsgericht
 AnwG, Anwaltsgericht
