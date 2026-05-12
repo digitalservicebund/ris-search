@@ -68,7 +68,6 @@ const documentKindAndGroup = computed(() => ({
 
 // Search results ------------------------------------------
 
-const mainSectionId = useId();
 const itemsPerPageLabelId = useId();
 const resultsContainerRef = ref<HTMLElement | null>(null);
 const scrollToResultsOnLoad = ref(false);
