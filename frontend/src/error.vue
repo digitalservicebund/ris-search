@@ -2,10 +2,21 @@
 import type { NuxtError } from "#app";
 import SimpleSearchInput from "~/components/search/SimpleSearchInput.vue";
 
-useSkipLinks([
+// Error page is rendered independently from app.vue and therefore needs its
+// own skip links setup
+const { register } = provideSkipLinks();
+const cleanup = register([
   { label: "Zum Inhalt", to: "#main" },
   { label: "Zum Fußbereich", to: "#footer" },
 ]);
+onUnmounted(() => cleanup());
+
+useHead({
+  titleTemplate: (pageTitle) =>
+    pageTitle
+      ? `${pageTitle} — Rechtsinformationen des Bundes`
+      : "Rechtsinformationen des Bundes",
+});
 
 function redirectToSearch(searchStr?: string) {
   navigateTo({ name: "search", query: searchStr ? { query: searchStr } : {} });
@@ -29,12 +40,17 @@ const isInternalServerError = computed(
 const locationClientOnly = computed(() => location.href);
 
 const pageTitle = computed(() => {
-  return `${isNotFoundError.value ? "Diese Seite existiert nicht" : "Es gab leider einen Fehler"}`;
+  return isNotFoundError.value
+    ? "Diese Seite existiert nicht"
+    : "Es gab leider einen Fehler";
 });
-useHead({ title: pageTitle.value });
+
+useHead({ title: pageTitle });
 </script>
 
 <template>
+  <AppSkipLinks />
+
   <NuxtLayout name="default">
     <div class="container pt-48 pb-24">
       <template v-if="isNotFoundError">

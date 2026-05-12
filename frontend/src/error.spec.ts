@@ -1,10 +1,12 @@
 import { renderSuspended } from "@nuxt/test-utils/runtime";
 import { describe, vi } from "vitest";
+import type * as SkipLinks from "~/composables/useSkipLinks";
 import ErrorPage from "./error.vue";
 
-vi.mock("~/composables/useSkipLinks", () => ({
-  useSkipLinks: vi.fn(),
-}));
+vi.mock("~/composables/useSkipLinks", async (importOriginal) => {
+  const actual = await importOriginal<typeof SkipLinks>();
+  return { ...actual, useSkipLinks: vi.fn() };
+});
 
 const NuxtLayoutStub = {
   name: "NuxtLayout",
