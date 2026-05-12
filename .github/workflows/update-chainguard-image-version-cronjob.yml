@@ -19,6 +19,7 @@ jobs:
       id-token: write
     steps:
         - uses: chainguard-dev/actions/setup-gitsign@c69a264ec2a5934c3186c618f368fc1c86f16cff #v1.6.19
+
         - name: Bump chainguard/jre image
           uses: digitalservicebund/bump-chainguard-digest@937cc7a12750bfd06419f32cabcaa79a37f32705 # v1.1.3
           with:
@@ -26,3 +27,10 @@ jobs:
             file_path: backend/Dockerfile.prod
             github_token: ${{ github.token }}
             branch: bump-chaingurad-jre-image-version
+
+        - name: Send status to Slack
+          uses: digitalservicebund/notify-on-failure-gha@671832f192aee0a068fd92b2f6deb975df794a84 # v1.6.1
+          if: ${{ failure() && github.ref == 'refs/heads/main' }}
+          with:
+            SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+            SLACK_CHANNEL_ID: ${{ vars.NEURIS_PORTAL_ALERTS_SLACK_CHANNEL_ID }}

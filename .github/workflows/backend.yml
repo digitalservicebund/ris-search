@@ -36,8 +36,16 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+
       - name: Validate gradle wrapper
         uses: gradle/actions/wrapper-validation@50e97c2cd7a37755bbfafc9c5b7cafaece252f6e #v6.1.0
+
+      - name: Send status to Slack
+        uses: digitalservicebund/notify-on-failure-gha@671832f192aee0a068fd92b2f6deb975df794a84 # v1.6.1
+        if: ${{ failure() && github.ref == 'refs/heads/main' }}
+        with:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          SLACK_CHANNEL_ID: ${{ vars.NEURIS_PORTAL_ALERTS_SLACK_CHANNEL_ID }}
 
   check-source-code-formatting:
     runs-on: ubuntu-latest
@@ -46,18 +54,28 @@ jobs:
     needs: validate-gradle-wrapper
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+
       - name: Set up JDK
         uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5
         with:
           java-version: "21.0"
           distribution: "temurin"
           cache: gradle
+
       - name: Grant execute permission for gradlew
         working-directory: ./backend
         run: chmod +x gradlew
+
       - name: Build with Gradle
         working-directory: ./backend
         run: ./gradlew spotlessCheck
+
+      - name: Send status to Slack
+        uses: digitalservicebund/notify-on-failure-gha@671832f192aee0a068fd92b2f6deb975df794a84 # v1.6.1
+        if: ${{ failure() && github.ref == 'refs/heads/main' }}
+        with:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          SLACK_CHANNEL_ID: ${{ vars.NEURIS_PORTAL_ALERTS_SLACK_CHANNEL_ID }}
 
   audit-licenses:
     runs-on: ubuntu-latest
@@ -66,18 +84,28 @@ jobs:
     needs: validate-gradle-wrapper
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+
       - name: Set up JDK
         uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5
         with:
           java-version: "21.0"
           distribution: "temurin"
           cache: gradle
+
       - name: Grant execute permission for gradlew
         working-directory: ./backend
         run: chmod +x gradlew
+
       - name: Run license scanner
         working-directory: ./backend
         run: ./gradlew checkLicense
+
+      - name: Send status to Slack
+        uses: digitalservicebund/notify-on-failure-gha@671832f192aee0a068fd92b2f6deb975df794a84 # v1.6.1
+        if: ${{ failure() && github.ref == 'refs/heads/main' }}
+        with:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          SLACK_CHANNEL_ID: ${{ vars.NEURIS_PORTAL_ALERTS_SLACK_CHANNEL_ID }}
 
   backend-tests-and-code-quality:
     name: Backend tests and code quality checks
@@ -155,15 +183,18 @@ jobs:
       image-digest: ${{ steps.build-push-image.outputs.digest }}
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+
       - name: Set up JDK
         uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5
         with:
           java-version: "21.0"
           distribution: "temurin"
           cache: gradle
+
       - name: Grant execute permission for gradlew
         working-directory: ./backend
         run: chmod +x gradlew
+
       - name: Log into container registry
         # Third-party action, pin to commit SHA!
         uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121 # v4
@@ -171,8 +202,10 @@ jobs:
           registry: ${{ inputs.container-registry }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@4d04d5d9486b7bd6fa91e7baf45bbb4f8b9deedd # v4
+
       - name: Build backend image
         id: build-push-image
         uses: docker/build-push-action@bcafcacb16a39f128d818304e6c9c0c18556b85f # v7.1.0
@@ -187,6 +220,13 @@ jobs:
           push: true
           build-args: |
             SENTRY_RELEASE=${{ github.sha }}
+            
+      - name: Send status to Slack
+        uses: digitalservicebund/notify-on-failure-gha@671832f192aee0a068fd92b2f6deb975df794a84 # v1.6.1
+        if: ${{ failure() && github.ref == 'refs/heads/main' }}
+        with:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          SLACK_CHANNEL_ID: ${{ vars.NEURIS_PORTAL_ALERTS_SLACK_CHANNEL_ID }}
 
   scan-attest-and-sign-image:
     needs: build-and-push-image
@@ -206,24 +246,35 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+
       - name: Set up JDK
         uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5
         with:
           java-version: "21.0"
           distribution: "temurin"
           cache: gradle
+
       - name: Grant execute permission for gradlew
         working-directory: ./backend
         run: chmod +x gradlew
+
       - name: Run Javadoc
         working-directory: ./backend
         run: ./gradlew javadoc
+
       - name: Upload documentation
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: backend-code-documentation
           retention-days: 3
           path: backend/build/docs/javadoc/
+
+      - name: Send status to Slack
+        uses: digitalservicebund/notify-on-failure-gha@671832f192aee0a068fd92b2f6deb975df794a84 # v1.6.1
+        if: ${{ failure() && github.ref == 'refs/heads/main' }}
+        with:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          SLACK_CHANNEL_ID: ${{ vars.NEURIS_PORTAL_ALERTS_SLACK_CHANNEL_ID }}
 
   push-reports:
     runs-on: ubuntu-latest
@@ -238,6 +289,7 @@ jobs:
         with:
           name: backend-code-documentation
           path: tmp/backend-code-documentation/
+
       - name: Upload code documentation to ris-reports
         uses: digitalservicebund/add-ris-report@5980f8dc97ec0aea58656e79e391eea59a9dfea8
         with:
@@ -246,3 +298,10 @@ jobs:
           reportIsDirectory: true
           BUCKET_ACCESS_KEY_ID: ${{ secrets.REPORTS_BUCKET_ACCESS_KEY_ID }}
           BUCKET_SECRET_ACCESS_KEY: ${{ secrets.REPORTS_BUCKET_SECRET_ACCESS_KEY }}
+
+      - name: Send status to Slack
+        uses: digitalservicebund/notify-on-failure-gha@671832f192aee0a068fd92b2f6deb975df794a84 # v1.6.1
+        if: ${{ failure() && github.ref == 'refs/heads/main' }}
+        with:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          SLACK_CHANNEL_ID: ${{ vars.NEURIS_PORTAL_ALERTS_SLACK_CHANNEL_ID }}

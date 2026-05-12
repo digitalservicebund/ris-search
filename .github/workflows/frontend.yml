@@ -27,28 +27,35 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+
       - name: Setup pnpm
         uses: pnpm/action-setup@739bfe42ca9233c5e6aca07c1a25a9d34aca49b0 # v6.0.7
         with:
           package_json_file: ./frontend/package.json
+
       - name: Setup Node
         uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
         with:
           node-version: 24
           cache: "pnpm"
           cache-dependency-path: ./frontend/pnpm-lock.yaml
+
       - name: Install Node modules
         run: pnpm ci
         working-directory: ./frontend
+
       - name: Prepare Nuxt
         run: pnpm run prepare
         working-directory: ./frontend
+
       - name: Check style
         run: pnpm run style:check
         working-directory: ./frontend
+
       - name: Run tests with coverage
         run: pnpm run coverage
         working-directory: ./frontend
+
       - name: Set up SonarCloud
         if: ${{  github.actor != 'dependabot[bot]' }}
         # Third-party action, pin to commit SHA!
@@ -63,6 +70,7 @@ jobs:
             -Dsonar.projectBaseDir=frontend
             -Dsonar.sources=src
             -Dsonar.javascript.lcov.reportPaths=src/coverage/lcov.info
+
       - name: Check SonarCloud Quality Gate
         if: ${{ github.actor != 'dependabot[bot]' }}
         uses: sonarsource/sonarqube-quality-gate-action@cf038b0e0cdecfa9e56c198bbb7d21d751d62c3b # v1.2.0
@@ -71,6 +79,7 @@ jobs:
         timeout-minutes: 3
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
       - name: Send status to Slack
         uses: digitalservicebund/notify-on-failure-gha@671832f192aee0a068fd92b2f6deb975df794a84 # v1.6.1
         if: ${{ failure() && github.ref == 'refs/heads/main' }}
@@ -84,28 +93,34 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+
       - name: Setup pnpm
         uses: pnpm/action-setup@739bfe42ca9233c5e6aca07c1a25a9d34aca49b0 # v6.0.7
         with:
           package_json_file: ./frontend/package.json
+
       - name: Setup Node
         uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
         with:
           node-version: 24
           cache: "pnpm"
           cache-dependency-path: ./frontend/pnpm-lock.yaml
+
       - name: Install Node modules
         run: pnpm ci
         working-directory: ./frontend
+
       - name: Run licence scanner
         run: pnpm audit:licences
         working-directory: ./frontend
+
       - name: Upload licence report
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: licence-reports-frontend
           retention-days: 3
           path: frontend/frontend-licence-report.csv
+
       - name: Send status to Slack
         uses: digitalservicebund/notify-on-failure-gha@671832f192aee0a068fd92b2f6deb975df794a84 # v1.6.1
         if: ${{ failure() && github.ref == 'refs/heads/main' }}
@@ -119,6 +134,7 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+
       - name: Run Trivy vulnerability file scanner
         # Third-party action, pin to commit SHA!
         # See https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions
@@ -130,6 +146,7 @@ jobs:
           format: "sarif"
           output: "trivy-results.sarif"
           trivyignores: frontend/.trivyignore
+
       - name: Check Trivy results
         run: |
           if grep -qE 'HIGH|CRITICAL' trivy-results.sarif; then
@@ -144,6 +161,7 @@ jobs:
             echo "No significant vulnerabilities found"
             exit 0
           fi
+
       - name: Upload Trivy vulnerability file scanner results
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         if: ${{ failure() }}
@@ -151,6 +169,13 @@ jobs:
           name: "trivy-frontend-file-results.sarif"
           path: "trivy-results.sarif"
           if-no-files-found: error
+
+      - name: Send status to Slack
+        uses: digitalservicebund/notify-on-failure-gha@671832f192aee0a068fd92b2f6deb975df794a84 # v1.6.1
+        if: ${{ failure() && github.ref == 'refs/heads/main' }}
+        with:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          SLACK_CHANNEL_ID: ${{ vars.NEURIS_PORTAL_ALERTS_SLACK_CHANNEL_ID }}
 
   build-and-push-image:
     runs-on: ubuntu-latest
