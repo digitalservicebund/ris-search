@@ -53,13 +53,14 @@ export function useSkipLinks(links?: MaybeRefOrGetter<SkipLink[]>) {
   const registry = inject(injectSkipLinksRegistry, null);
   if (!registry) throw new Error("skip links registry has not been provided");
 
-  let cleanup: ReturnType<SkipLinksRegistry["register"]>;
+  let cleanup: ReturnType<SkipLinksRegistry["register"]> | undefined;
 
   watchEffect(() => {
     const linksVal = toValue(links);
+    cleanup?.();
+    cleanup = undefined;
     if (!linksVal) return;
 
-    cleanup?.();
     cleanup = registry.register(linksVal);
   });
 
