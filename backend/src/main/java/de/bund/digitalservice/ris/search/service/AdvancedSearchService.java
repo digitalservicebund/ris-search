@@ -85,7 +85,7 @@ public class AdvancedSearchService {
 
     HighlightBuilder highlightBuilder = RisHighlightBuilder.baseHighlighter();
 
-    Set<HighlightBuilder.Field> highlightfields =
+    Set<HighlightBuilder.Field> highlightFields =
         Stream.of(
                 CaseLawSimpleSearchType.getHighlightedFieldsStatic(),
                 LiteratureSimpleSearchType.getHighlightedFieldsStatic(),
@@ -94,9 +94,14 @@ public class AdvancedSearchService {
             .flatMap(Collection::stream)
             .collect(Collectors.toSet());
 
-    highlightfields.forEach(highlightBuilder::field);
+    highlightFields.forEach(highlightBuilder::field);
     SearchHits<AbstractSearchEntity> documentHits =
-        callOpenSearch(search, highlightBuilder, null, pageable, AbstractSearchEntity.class);
+        callOpenSearch(
+            search,
+            highlightBuilder,
+            NormSimpleSearchType.NORMS_FETCH_EXCLUDED_FIELDS,
+            pageable,
+            AbstractSearchEntity.class);
 
     addArticleHighlightsToNormSearchHits(documentHits, search);
     return PageUtils.unwrapSearchHits(documentHits, pageable);

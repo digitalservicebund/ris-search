@@ -27,6 +27,7 @@ public class LiteratureSimpleSearchType implements SimpleSearchType {
     return List.of(
         new HighlightBuilder.Field(Literature.Fields.MAIN_TITLE).numOfFragments(0),
         new HighlightBuilder.Field(Literature.Fields.DOCUMENTARY_TITLE).numOfFragments(0),
+        new HighlightBuilder.Field(Literature.Fields.OUTLINE),
         new HighlightBuilder.Field(Literature.Fields.SHORT_REPORT));
   }
 
