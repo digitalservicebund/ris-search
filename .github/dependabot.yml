@@ -23,7 +23,6 @@ updates:
   - package-ecosystem: "npm"
     directories:
       - "/frontend"
-      - "/api-docs"
     schedule:
       interval: "weekly"
       day: "sunday"
@@ -31,6 +30,21 @@ updates:
       default-days: 3
     groups:
       all-frontend-non-major-dependencies:
+        update-types:
+          - minor
+          - patch
+  - package-ecosystem: "npm"
+    directories:
+      - "/api-docs"
+    schedule:
+      interval: "weekly"
+      day: "sunday"
+    cooldown:
+      default-days: 3
+    labels:
+      - "api-docs"
+    groups:
+      all-api-docs-non-major-dependencies:
         update-types:
           - minor
           - patch
