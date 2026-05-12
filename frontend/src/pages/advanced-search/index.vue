@@ -5,6 +5,7 @@ import type { Statistics } from "~/types/api";
 import { DocumentKind } from "~/types/api";
 import { queryableDataFields } from "~/utils/search/dataFields";
 import { isStrictDateFilterValue } from "~/utils/search/dateFilterType";
+import { useAdvancedSearchTitle } from "~/composables/useAdvancedSearchSeo";
 
 definePageMeta({
   alias: "/erweiterte-suche",
@@ -32,13 +33,10 @@ const {
   sort,
 } = useAdvancedSearchRouteParams();
 
-const title = computed(() => {
-  const pageSuffix =
-    pageIndex.value > 0 ? `, Seite ${pageIndex.value + 1}` : "";
-  return `Erweiterte Suche${pageSuffix}`;
+useAdvancedSearchTitle({
+  documentKind,
+  pageIndex,
 });
-
-useHead({ title });
 
 const searchFormId = useId();
 
