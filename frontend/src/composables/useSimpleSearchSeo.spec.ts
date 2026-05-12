@@ -4,11 +4,11 @@ import { buildSearchTitle } from "./useSimpleSearchSeo";
 
 describe("buildSearchTitle", () => {
   describe("no query, no pagination", () => {
-    it("returns 'Suche' for DocumentKind.All", () => {
+    it("uses 'Suche' for an all document kind search", () => {
       expect(buildSearchTitle(undefined, DocumentKind.All, 0)).toBe("Suche");
     });
 
-    it("uses the document kind label when not All", () => {
+    it("uses the document kind label on document specific searches", () => {
       expect(buildSearchTitle(undefined, DocumentKind.CaseLaw, 0)).toBe(
         "Gerichtsentscheidungen, Suche",
       );
@@ -18,6 +18,9 @@ describe("buildSearchTitle", () => {
       expect(buildSearchTitle(undefined, DocumentKind.Literature, 0)).toBe(
         "Literaturnachweise, Suche",
       );
+      expect(
+        buildSearchTitle(undefined, DocumentKind.AdministrativeDirective, 0),
+      ).toBe("Verwaltungsvorschriften, Suche");
     });
   });
 
@@ -34,7 +37,7 @@ describe("buildSearchTitle", () => {
   });
 
   describe("pagination", () => {
-    it("appends page suffix starting from page 1", () => {
+    it("appends page suffix starting from page 2", () => {
       expect(buildSearchTitle(undefined, DocumentKind.All, 1)).toBe(
         "Suche, Seite 2",
       );
@@ -43,7 +46,7 @@ describe("buildSearchTitle", () => {
       );
     });
 
-    it("combines query and page suffix", () => {
+    it("combines query and page suffix for all document kind searches", () => {
       expect(buildSearchTitle("BGB", DocumentKind.All, 1)).toBe(
         "Suche, BGB, Seite 2",
       );
