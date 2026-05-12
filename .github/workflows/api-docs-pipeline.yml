@@ -20,6 +20,15 @@ on:
 env:
   API_DOCS_ROOT: ./api-docs
 
+# On non-main branches, runs for the same workflow+ref share a concurrency group,
+# so a newer run cancels any still-running older one (cancel-in-progress: true).
+# On main, each run gets a unique group (run_id) so runs never cancel each other.
+# github.workflow is included in the group key so two different workflows triggered
+# by the same ref (e.g. this pipeline and the main pipeline) don't cancel each other.
+concurrency:
+  group: ${{ github.ref == 'refs/heads/main' && github.run_id || format('{0}-{1}', github.workflow, github.ref) }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
 permissions:
   contents: read
   packages: write # Required by build-and-push-image job and scan-attest-sign-image
