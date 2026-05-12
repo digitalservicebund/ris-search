@@ -2,15 +2,7 @@
 import { Message, Select } from "primevue";
 import { DocumentKind } from "~/types/api";
 import { isStrictDateFilterValue } from "~/utils/search/dateFilterType";
-
-// Note: the title is overridden further down. This should probably
-// use the useDyncamiSeo composbale, but that isn't refactored yet.
-// Will clean this up in a followup PR.
-useStaticPageSeo({
-  title: "Suche im Rechtsinformationsportal des Bundes",
-  description:
-    "Finden Sie gezielt Gesetze, Verordnungen und Entscheidungen – schnell, präzise und übersichtlich.",
-});
+import { useSimpleSearchSeo } from "~/composables/useSimpleSearchSeo";
 
 const filterHeadingId = useId();
 
@@ -25,6 +17,12 @@ const {
   sort,
   typeGroup,
 } = useSimpleSearchRouteParams();
+
+useSimpleSearchSeo({
+  query,
+  documentKind,
+  pageIndex,
+});
 
 const privateFeaturesEnabled = usePrivateFeaturesFlag();
 
@@ -165,23 +163,6 @@ watch(searchStatus, async (newStatus, oldStatus) => {
     resultsContainerRef.value?.querySelector<HTMLAnchorElement>("a")?.focus();
   }
 });
-
-// Page title ---------------------------------------------
-
-const title = computed(() => {
-  const pageSuffix =
-    pageIndex.value > 0 ? `, Seite ${pageIndex.value + 1}` : "";
-
-  if (query.value) return `Suche, ${query.value}${pageSuffix}`;
-
-  if (documentKind.value !== DocumentKind.All) {
-    return `${formatDocumentKind(documentKind.value)}, Suche${pageSuffix}`;
-  }
-
-  return `Suche${pageSuffix}`;
-});
-
-useHead({ title });
 </script>
 
 <template>

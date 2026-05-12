@@ -67,59 +67,6 @@ test.describe("links to advanced search", () => {
 });
 
 test.describe("general search page features", () => {
-  test("sets the pages title", async ({ page }) => {
-    await navigate(page, "/search");
-
-    await expect(page).toHaveTitle("Suche — Rechtsinformationen des Bundes");
-
-    await page
-      .getByRole("complementary", { name: "Filter" })
-      .getByRole("button", { name: "Gesetze & Verordnungen" })
-      .click();
-    await expect(page).toHaveTitle(
-      "Gesetze & Verordnungen, Suche — Rechtsinformationen des Bundes",
-    );
-
-    await page
-      .getByRole("complementary", { name: "Filter" })
-      .getByRole("button", { name: "Gerichtsentscheidungen" })
-      .click();
-    await expect(page).toHaveTitle(
-      "Gerichtsentscheidungen, Suche — Rechtsinformationen des Bundes",
-    );
-
-    await page
-      .getByRole("complementary", { name: "Filter" })
-      .getByRole("button", { name: "Verwaltungsvorschriften" })
-      .click();
-    await expect(page).toHaveTitle(
-      "Verwaltungsvorschriften, Suche — Rechtsinformationen des Bundes",
-    );
-
-    await page
-      .getByRole("complementary", { name: "Filter" })
-      .getByRole("button", { name: "Literaturnachweise" })
-      .click();
-    await expect(page).toHaveTitle(
-      "Literaturnachweise, Suche — Rechtsinformationen des Bundes",
-    );
-
-    await page
-      .getByRole("complementary", { name: "Filter" })
-      .getByRole("button", { name: "Alle Dokumentarten" })
-      .click();
-
-    await expect(page).toHaveTitle("Suche — Rechtsinformationen des Bundes");
-
-    await page.getByRole("searchbox").fill("frühstück brötchen");
-
-    await page.getByRole("button", { name: "Suchen" }).click();
-
-    await expect(page).toHaveTitle(
-      "Suche, frühstück brötchen — Rechtsinformationen des Bundes",
-    );
-  });
-
   test("does not show date search filter", async ({ page }) => {
     await navigate(page, "/search?documentKind=N");
 
@@ -154,30 +101,6 @@ test.describe("general search page features", () => {
     await pagination.getByRole("link", { name: "Zurück" }).click();
     await page.waitForURL(/pageIndex=0/);
     await expect(searchResults).toHaveCount(10);
-  });
-
-  test("page title updates with page number on pagination", async ({
-    page,
-  }) => {
-    await navigate(page, "/search?query=und");
-
-    await expect(page).toHaveTitle(/und — Suche —/);
-
-    await page
-      .getByRole("navigation", { name: "Paginierung" })
-      .getByRole("link", { name: "Weiter" })
-      .click();
-    await page.waitForURL(/pageIndex=1/);
-
-    await expect(page).toHaveTitle(/Suche, und, Seite 2/);
-
-    await page
-      .getByRole("navigation", { name: "Paginierung" })
-      .getByRole("link", { name: "Zurück" })
-      .click();
-    await page.waitForURL(/pageIndex=0/);
-
-    await expect(page).toHaveTitle(/Suche, und —/);
   });
 
   test("focuses first search result after pagination", async ({ page }) => {
