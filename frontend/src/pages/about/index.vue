@@ -5,7 +5,8 @@ definePageMeta({ alias: ["/ueber"], layout: false });
 
 useSeo({
   title: "Über den Service",
-  description: "Erfahren Sie, wie das Portal Gesetze und Urteile für alle frei zugänglich macht.",
+  description:
+    "Erfahren Sie, wie das Portal Gesetze und Urteile für alle frei zugänglich macht.",
   ogTitle: "Über das neue Rechtsinformationsportal des Bundes",
 });
 </script>

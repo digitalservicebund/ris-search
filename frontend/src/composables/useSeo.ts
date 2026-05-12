@@ -1,18 +1,18 @@
-import { computed, toValue, type MaybeRefOrGetter } from "vue"
+import { computed, toValue, type MaybeRefOrGetter } from "vue";
 
 export type SeoInput = {
-  title: MaybeRefOrGetter<string>
-  description: MaybeRefOrGetter<string>
+  title: MaybeRefOrGetter<string>;
+  description: MaybeRefOrGetter<string>;
   /** Falls back to title if omitted */
-  ogTitle?: MaybeRefOrGetter<string>
-}
+  ogTitle?: MaybeRefOrGetter<string>;
+};
 
 export function useSeo({ title, description, ogTitle }: SeoInput) {
-  const url = useRequestURL()
+  const url = useRequestURL();
 
-  const resolvedTitle = computed(() => toValue(title))
-  const resolvedDescription = computed(() => toValue(description))
-  const resolvedOgTitle = computed(() => toValue(ogTitle ?? title))
+  const resolvedTitle = computed(() => toValue(title));
+  const resolvedDescription = computed(() => toValue(description));
+  const resolvedOgTitle = computed(() => toValue(ogTitle ?? title));
 
   useSeoMeta({
     title: resolvedTitle,
@@ -23,9 +23,9 @@ export function useSeo({ title, description, ogTitle }: SeoInput) {
     ogUrl: url.href,
     twitterTitle: resolvedOgTitle,
     twitterDescription: resolvedDescription,
-  })
+  });
 
   useHead({
     link: [{ rel: "canonical", href: url.href }],
-  })
+  });
 }

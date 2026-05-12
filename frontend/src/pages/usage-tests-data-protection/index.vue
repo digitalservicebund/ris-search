@@ -10,7 +10,8 @@ useSeo({
   title: "Datenschutzerklärung zu den Nutzungstests",
   description:
     "Erfahren Sie, wie wir Ihre Daten bei Teilnahme an unseren Nutzungstests erfassen, verwenden und schützen",
-  ogTitle: "Datenschutzerklärung zu den Nutzungstests des Rechtsinformationsportals des Bundes",
+  ogTitle:
+    "Datenschutzerklärung zu den Nutzungstests des Rechtsinformationsportals des Bundes",
 });
 </script>
 
