@@ -13,6 +13,7 @@ const {
   count,
   documentKind,
   loading = false,
+  skipLinkTarget = "#search-results",
 } = defineProps<{
   /** All data fields for all supported document kinds. */
   dataFields?: Record<DocumentKind, DataField[]>;
@@ -24,6 +25,8 @@ const {
   loading?: boolean;
   /** ID of the underlying form element to connect it with other items on the screen */
   formId?: string;
+  /** Element to scroll to when the skip link is used */
+  skipLinkTarget?: SkipLink["to"];
 }>();
 
 /** The current search query. */
@@ -116,6 +119,8 @@ function submitUnlessLoading() {
           </Button>
         </InputGroupAddon>
       </InputGroup>
+
+      <SkipLink class="mt-8" :to="skipLinkTarget">Zu den Ergebnissen</SkipLink>
     </form>
 
     <div class="hidden lg:block">

@@ -1,11 +1,12 @@
+import { renderSuspended } from "@nuxt/test-utils/runtime";
 import { userEvent } from "@testing-library/user-event";
-import { render, screen } from "@testing-library/vue";
+import { screen } from "@testing-library/vue";
 import DataFieldPicker from "./DataFieldPicker.vue";
 import { DocumentKind } from "~/types/api";
 
 describe("DataFieldPicker", () => {
-  it("displays the document kind name without count", () => {
-    render(DataFieldPicker, {
+  it("displays the document kind name without count", async () => {
+    await renderSuspended(DataFieldPicker, {
       props: {
         dataFields: undefined,
         documentKind: DocumentKind.CaseLaw,
@@ -20,7 +21,7 @@ describe("DataFieldPicker", () => {
   it.each([DocumentKind.Norm, DocumentKind.Literature, DocumentKind.CaseLaw])(
     'displays the document kind name and count for "%s"',
     async (documentKind) => {
-      render(DataFieldPicker, {
+      await renderSuspended(DataFieldPicker, {
         props: {
           dataFields: undefined,
           count: { [documentKind]: 1000 },
@@ -35,7 +36,7 @@ describe("DataFieldPicker", () => {
   );
 
   it("displays the data fields for the document kind", async () => {
-    const { rerender } = render(DataFieldPicker, {
+    const { rerender } = await renderSuspended(DataFieldPicker, {
       props: {
         dataFields: {
           [DocumentKind.All]: [],
@@ -110,8 +111,8 @@ describe("DataFieldPicker", () => {
     ).not.toBeInTheDocument();
   });
 
-  it("displays the search query", () => {
-    render(DataFieldPicker, {
+  it("displays the search query", async () => {
+    await renderSuspended(DataFieldPicker, {
       props: {
         dataFields: undefined,
         documentKind: DocumentKind.CaseLaw,
@@ -125,7 +126,7 @@ describe("DataFieldPicker", () => {
   it("updates the search query on typing", async () => {
     const user = userEvent.setup();
 
-    const { emitted } = render(DataFieldPicker, {
+    const { emitted } = await renderSuspended(DataFieldPicker, {
       props: {
         dataFields: undefined,
         documentKind: DocumentKind.CaseLaw,
@@ -141,7 +142,7 @@ describe("DataFieldPicker", () => {
   it("inserts a data field", async () => {
     const user = userEvent.setup();
 
-    const { emitted } = render(DataFieldPicker, {
+    const { emitted } = await renderSuspended(DataFieldPicker, {
       props: {
         dataFields: {
           [DocumentKind.All]: [],
@@ -165,7 +166,7 @@ describe("DataFieldPicker", () => {
   it("removes the cursor marker from the data field", async () => {
     const user = userEvent.setup();
 
-    const { emitted } = render(DataFieldPicker, {
+    const { emitted } = await renderSuspended(DataFieldPicker, {
       props: {
         dataFields: {
           [DocumentKind.All]: [],
@@ -198,7 +199,7 @@ describe("DataFieldPicker", () => {
 
     let modelValue = "test query";
 
-    const { rerender } = render(DataFieldPicker, {
+    const { rerender } = await renderSuspended(DataFieldPicker, {
       props: {
         dataFields: {
           [DocumentKind.All]: [],
@@ -239,7 +240,7 @@ describe("DataFieldPicker", () => {
 
     let modelValue = "test query";
 
-    const { rerender } = render(DataFieldPicker, {
+    const { rerender } = await renderSuspended(DataFieldPicker, {
       props: {
         dataFields: {
           [DocumentKind.All]: [],
@@ -271,7 +272,7 @@ describe("DataFieldPicker", () => {
   it("does not add leading whitespace", async () => {
     const user = userEvent.setup();
 
-    const { emitted } = render(DataFieldPicker, {
+    const { emitted } = await renderSuspended(DataFieldPicker, {
       props: {
         dataFields: {
           [DocumentKind.All]: [],
@@ -295,7 +296,7 @@ describe("DataFieldPicker", () => {
   it("does not add double whitespace", async () => {
     const user = userEvent.setup();
 
-    const { emitted } = render(DataFieldPicker, {
+    const { emitted } = await renderSuspended(DataFieldPicker, {
       props: {
         dataFields: {
           [DocumentKind.All]: [],
@@ -319,7 +320,7 @@ describe("DataFieldPicker", () => {
   it("emits the submit event on button click", async () => {
     const user = userEvent.setup();
 
-    const { emitted } = render(DataFieldPicker, {
+    const { emitted } = await renderSuspended(DataFieldPicker, {
       props: {
         dataFields: undefined,
         documentKind: DocumentKind.CaseLaw,
@@ -335,7 +336,7 @@ describe("DataFieldPicker", () => {
   it("emits the submit event on enter press", async () => {
     const user = userEvent.setup();
 
-    const { emitted } = render(DataFieldPicker, {
+    const { emitted } = await renderSuspended(DataFieldPicker, {
       props: {
         dataFields: undefined,
         documentKind: DocumentKind.CaseLaw,
@@ -351,7 +352,7 @@ describe("DataFieldPicker", () => {
   it("does not emit submit events when the component is loading", async () => {
     const user = userEvent.setup();
 
-    const { emitted } = render(DataFieldPicker, {
+    const { emitted } = await renderSuspended(DataFieldPicker, {
       props: {
         dataFields: undefined,
         documentKind: DocumentKind.CaseLaw,
@@ -366,8 +367,8 @@ describe("DataFieldPicker", () => {
     expect(emitted("submit")).toBeFalsy();
   });
 
-  it("associates the ID with the underlying form element", () => {
-    render(DataFieldPicker, {
+  it("associates the ID with the underlying form element", async () => {
+    await renderSuspended(DataFieldPicker, {
       props: {
         documentKind: DocumentKind.CaseLaw,
         formId: "example",
@@ -379,13 +380,20 @@ describe("DataFieldPicker", () => {
     expect(screen.getByTestId("form")).toHaveAttribute("id", "example");
   });
 
-  it("shows the operators help", () => {
-    render(DataFieldPicker, {
+  it("renders a focusable skip link to the search results", async () => {
+    await renderSuspended(DataFieldPicker, {
       props: {
         documentKind: DocumentKind.CaseLaw,
+        skipLinkTarget: "#example",
       },
     });
 
-    expect(screen.getAllByText("Hilfestellung zu Suchoperatoren")).toBeTruthy();
+    const link = screen.getByRole("link", {
+      name: "Zu den Ergebnissen",
+      hidden: true,
+    });
+
+    expect(link).toBeInTheDocument();
+    expect(link).toHaveAttribute("href", expect.stringContaining("#example"));
   });
 });

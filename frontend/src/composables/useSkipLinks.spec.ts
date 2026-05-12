@@ -1,4 +1,4 @@
-import { mountSuspended } from "@nuxt/test-utils/runtime";
+import { renderSuspended } from "@nuxt/test-utils/runtime";
 import { describe, expect, it } from "vitest";
 import { nextTick } from "vue";
 import {
@@ -11,7 +11,7 @@ import {
 describe("provideSkipLinks", () => {
   async function mountProvider() {
     let registry: SkipLinksRegistry | undefined;
-    await mountSuspended(
+    await renderSuspended(
       defineComponent({
         setup() {
           registry = provideSkipLinks();
@@ -65,7 +65,7 @@ describe("useSkipLinks", () => {
       },
     });
 
-    const wrapper = await mountSuspended(
+    const wrapper = await renderSuspended(
       defineComponent({
         setup() {
           registry = provideSkipLinks();
@@ -79,12 +79,12 @@ describe("useSkipLinks", () => {
 
   it("throws when no registry is provided", async () => {
     await expect(
-      mountSuspended(
+      renderSuspended(
         defineComponent({
           setup() {
             useSkipLinks([]);
-            return () => h("div");
           },
+          template: "<div></div>",
         }),
       ),
     ).rejects.toThrow("skip links registry has not been provided");
