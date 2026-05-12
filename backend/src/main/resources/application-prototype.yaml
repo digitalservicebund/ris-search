@@ -23,7 +23,7 @@ swagger:
 
 springdoc:
   swagger-ui:
-    supportedSubmitMethods: []
+    supportedSubmitMethods: ["get"]
     defaultModelsExpandDepth: -1
 
 management:
