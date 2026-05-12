@@ -9,6 +9,12 @@ import IcOutlineInfo from "~icons/ic/outline-info";
 
 definePageMeta({ layout: false });
 
+useSkipLinks([
+  { label: "Zum Inhalt", to: "#main" },
+  { label: "Zum Entscheidungstext", to: "#content" },
+  { label: "Zum Fußbereich", to: "#footer" },
+]);
+
 const route = useRoute();
 
 const documentNumber = route.params.documentNumber?.toString();

@@ -18,6 +18,12 @@ definePageMeta({
   layout: "norm",
 });
 
+useSkipLinks([
+  { label: "Zum Inhalt", to: "#main" },
+  { label: "Zum Gesetzestext", to: "#content" },
+  { label: "Zum Fußbereich", to: "#footer" },
+]);
+
 const route = useRoute();
 const expressionEli = Object.values(route.params).join("/");
 const privateFeaturesEnabled = usePrivateFeaturesFlag();
@@ -232,7 +238,7 @@ const fassungenTabPanelTitleId = useId();
       </nav>
     </div>
 
-    <div class="min-h-96 bg-white print:py-0">
+    <div id="content" class="min-h-96 bg-white print:py-0">
       <section
         v-if="currentView === 'text'"
         role="tabpanel"

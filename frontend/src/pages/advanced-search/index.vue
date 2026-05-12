@@ -16,6 +16,12 @@ definePageMeta({
   },
 });
 
+useSkipLinks([
+  { label: "Zur Suche", to: "#search" },
+  { label: "Zum Inhalt", to: "#main" },
+  { label: "Zum Fußbereich", to: "#footer" },
+]);
+
 const {
   dateFilter,
   documentKind,
@@ -207,7 +213,7 @@ watch(searchStatus, async (newStatus, oldStatus) => {
       <SearchDateFilter v-model="dateFilter" :document-kind />
     </aside>
 
-    <div class="row-start-2 lg:row-start-auto">
+    <div id="search" class="row-start-2 lg:row-start-auto">
       <SearchDataFieldPicker
         v-model="query"
         :data-fields="queryableDataFields"
@@ -219,7 +225,7 @@ watch(searchStatus, async (newStatus, oldStatus) => {
       />
     </div>
 
-    <div ref="resultsContainerRef" class="scroll-mt-16">
+    <div ref="resultsContainerRef" id="search-results" class="scroll-mt-16">
       <Pagination
         v-if="searchStatus !== 'idle'"
         :is-loading="searchStatus === 'pending'"

@@ -383,6 +383,66 @@ describe("useSimpleSearchRouteParams", () => {
   });
 
   describe("saveFilterStateToRoute", () => {
+    it("retains the hash when the query did not change", async () => {
+      const navigateToMock = vi.fn();
+
+      const query = {
+        query: "test%20search",
+        documentKind: "R",
+        court: "BGH",
+        typeGroup: "",
+        dateFilterType: "allTime",
+        dateFilterFrom: "",
+        dateFilterTo: "",
+        pageIndex: "0",
+        sort: "default",
+        itemsPerPage: "10",
+      };
+
+      vi.doMock("#app", () => ({
+        useRoute: vi.fn().mockReturnValue({
+          query: query,
+          hash: "#some-anchor",
+        }),
+        navigateTo: navigateToMock,
+      }));
+
+      const { useSimpleSearchRouteParams } =
+        await import("./useSimpleSearchRouteParams");
+
+      const { saveFilterStateToRoute } = useSimpleSearchRouteParams();
+
+      await saveFilterStateToRoute();
+
+      expect(navigateToMock).toHaveBeenCalledWith(
+        expect.objectContaining({ hash: "#some-anchor" }),
+      );
+    });
+
+    it("resets the hash when the query changes", async () => {
+      const navigateToMock = vi.fn();
+
+      vi.doMock("#app", () => ({
+        useRoute: vi.fn().mockReturnValue({
+          query: { query: "old%20search" },
+          hash: "#some-anchor",
+        }),
+        navigateTo: navigateToMock,
+      }));
+
+      const { useSimpleSearchRouteParams } =
+        await import("./useSimpleSearchRouteParams");
+
+      const { query, saveFilterStateToRoute } = useSimpleSearchRouteParams();
+
+      query.value = "new search";
+      await saveFilterStateToRoute();
+
+      expect(navigateToMock).toHaveBeenCalledWith(
+        expect.objectContaining({ hash: undefined }),
+      );
+    });
+
     it("calls navigateTo with all filter parameters", async () => {
       const navigateToMock = vi.fn();
       const existingQuery = { existingParam: "value" };
@@ -390,6 +450,7 @@ describe("useSimpleSearchRouteParams", () => {
       vi.doMock("#app", () => ({
         useRoute: vi.fn().mockReturnValue({
           query: existingQuery,
+          hash: "",
         }),
         navigateTo: navigateToMock,
       }));
@@ -425,6 +486,7 @@ describe("useSimpleSearchRouteParams", () => {
       await saveFilterStateToRoute();
 
       expect(navigateToMock).toHaveBeenCalledWith({
+        hash: undefined,
         query: {
           existingParam: "value",
           query: "test%20search",
@@ -434,7 +496,7 @@ describe("useSimpleSearchRouteParams", () => {
           dateFilterType: "allTime",
           dateFilterFrom: "2023-01-01",
           dateFilterTo: "2023-12-31",
-          pageIndex: 2,
+          pageIndex: "2",
           sort: "relevance",
           itemsPerPage: "100",
         },

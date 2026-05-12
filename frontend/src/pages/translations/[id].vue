@@ -18,6 +18,11 @@ import IcOutlineWarning from "~icons/ic/outline-warning-amber";
 
 definePageMeta({ layout: "norm" });
 
+useSkipLinks([
+  { label: "Skip to main", to: "#main" },
+  { label: "Skip to footer", to: "#footer" },
+]);
+
 useHead({
   htmlAttrs: { lang: "en" },
 });

@@ -16,6 +16,11 @@ definePageMeta({
   layout: "norm",
 });
 
+useSkipLinks([
+  { label: "Zum Gesetzestext", to: "#content" },
+  { label: "Zum Fußbereich", to: "#footer" },
+]);
+
 const route = useRoute();
 
 const privateFeaturesEnabled = usePrivateFeaturesFlag();
@@ -258,7 +263,7 @@ useDynamicSeo({ title, description });
       <Metadata :items="metadataItems" />
     </div>
 
-    <div class="border-t border-t-gray-400 bg-white">
+    <div id="content" class="border-t border-t-gray-400 bg-white">
       <SidebarLayout class="container">
         <template v-if="!!articleHtml" #content>
           <DocumentsIncompleteDataMessage />

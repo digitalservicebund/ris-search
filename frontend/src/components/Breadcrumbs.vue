@@ -61,6 +61,7 @@ const effectiveItems = computed(() => {
 
 const {
   visible: drawerVisible,
+  // @ts-expect-error -- usage in template not detected
   triggerRef: drawerTriggerRef,
   closeButtonProps,
 } = useDrawer();

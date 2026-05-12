@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { Toast } from "primevue";
 
+provideSkipLinks();
+
 useHead({
   titleTemplate: (pageTitle) =>
     pageTitle
@@ -10,6 +12,7 @@ useHead({
 </script>
 
 <template>
+  <AppSkipLinks />
   <NuxtLayout>
     <NuxtPage />
   </NuxtLayout>

@@ -12,7 +12,7 @@ import AppHeader from "~/components/app/AppHeader.vue";
 
   <div class="min-h-[50vh] bg-gray-100">
     <AppHeader />
-    <main>
+    <main id="main">
       <slot />
     </main>
   </div>

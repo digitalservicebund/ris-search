@@ -5,7 +5,10 @@ defineProps<{
   staticContent: string;
 }>();
 
-const breadcrumbHeadingId = useId();
+useSkipLinks([
+  { label: "Zum Inhalt", to: "#main" },
+  { label: "Zum Fußbereich", to: "#footer" },
+]);
 </script>
 
 <template>

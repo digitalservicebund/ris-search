@@ -334,6 +334,63 @@ describe("useAdvancedSearchRouteParams", () => {
   });
 
   describe("saveFilterStateToRoute", () => {
+    it("retains the hash when the query did not change", async () => {
+      const navigateToMock = vi.fn();
+
+      const query = {
+        q: "test%20search",
+        documentKind: "N",
+        dateFilterType: "currentlyInForce",
+        dateFilterFrom: "",
+        dateFilterTo: "",
+        pageIndex: "0",
+        sort: "default",
+        itemsPerPage: "50",
+      };
+
+      vi.doMock("#app", () => ({
+        useRoute: vi
+          .fn()
+          .mockReturnValue({ query: query, hash: "#some-anchor" }),
+        navigateTo: navigateToMock,
+      }));
+
+      const { useAdvancedSearchRouteParams } =
+        await import("./useAdvancedSearchRouteParams");
+
+      const { saveFilterStateToRoute } = useAdvancedSearchRouteParams();
+
+      await saveFilterStateToRoute();
+
+      expect(navigateToMock).toHaveBeenCalledWith(
+        expect.objectContaining({ hash: "#some-anchor" }),
+      );
+    });
+
+    it("resets the hash when the query changes", async () => {
+      const navigateToMock = vi.fn();
+
+      vi.doMock("#app", () => ({
+        useRoute: vi.fn().mockReturnValue({
+          query: { q: "old%20search" },
+          hash: "#some-anchor",
+        }),
+        navigateTo: navigateToMock,
+      }));
+
+      const { useAdvancedSearchRouteParams } =
+        await import("./useAdvancedSearchRouteParams");
+
+      const { query, saveFilterStateToRoute } = useAdvancedSearchRouteParams();
+
+      query.value = "new search";
+      await saveFilterStateToRoute();
+
+      expect(navigateToMock).toHaveBeenCalledWith(
+        expect.objectContaining({ hash: undefined }),
+      );
+    });
+
     it("calls navigateTo with all filter parameters", async () => {
       const navigateToMock = vi.fn();
       const existingQuery = { existingParam: "value" };
@@ -341,6 +398,7 @@ describe("useAdvancedSearchRouteParams", () => {
       vi.doMock("#app", () => ({
         useRoute: vi.fn().mockReturnValue({
           query: existingQuery,
+          hash: "",
         }),
         navigateTo: navigateToMock,
       }));
@@ -372,6 +430,7 @@ describe("useAdvancedSearchRouteParams", () => {
       await saveFilterStateToRoute();
 
       expect(navigateToMock).toHaveBeenCalledWith({
+        hash: undefined,
         query: {
           existingParam: "value",
           q: "test%20search",
@@ -379,7 +438,7 @@ describe("useAdvancedSearchRouteParams", () => {
           dateFilterType: "allTime",
           dateFilterFrom: "2023-01-01",
           dateFilterTo: "2023-12-31",
-          pageIndex: 2,
+          pageIndex: "2",
           sort: "relevance",
           itemsPerPage: "100",
         },
