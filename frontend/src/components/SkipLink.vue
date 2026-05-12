@@ -8,6 +8,8 @@ const props = defineProps<{
 
 const { skipLinkTarget } = useCssModule();
 
+const route = useRoute();
+
 async function focusTarget() {
   await nextTick();
 
@@ -26,12 +28,15 @@ async function focusTarget() {
   target.classList.add(skipLinkTarget);
   target.focus({ preventScroll: true });
 }
+
+// Clone the route so search params are retained while navigating
+const linkTarget = computed(() => ({ ...route, hash: props.to }));
 </script>
 
 <template>
   <Button
     :as="NuxtLink"
-    :to="{ hash: to }"
+    :to="linkTarget"
     class="not-focus:sr-only focus-visible:outline-none!"
     severity="warn"
     @click="focusTarget"

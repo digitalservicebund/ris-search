@@ -1,5 +1,6 @@
 import { navigateTo, useRoute } from "#app";
-import type { LocationQueryValue } from "#vue-router";
+import type { LocationQueryValue, LocationQueryRaw } from "#vue-router";
+import { isEqual } from "lodash-es";
 import { DocumentKind } from "~/types/api";
 import { isDocumentKind } from "~/utils/documentKind";
 import {
@@ -96,20 +97,35 @@ export function useSimpleSearchRouteParams() {
   }
 
   function saveFilterStateToRoute() {
+    const from = { ...route.query };
+
+    let to: LocationQueryRaw = {
+      ...from,
+      query: encodeURIComponent(query.value),
+      court: court.value,
+      documentKind: documentKind.value,
+      typeGroup: typeGroup.value ?? "",
+      dateFilterType: dateFilter.value.type,
+      dateFilterFrom: dateFilter.value.from ?? "",
+      dateFilterTo: dateFilter.value.to ?? "",
+      pageIndex: pageIndex.value.toString(),
+      sort: sort.value,
+      itemsPerPage: itemsPerPage.value,
+    };
+
+    // Undefined values in the "to" query will be removed by the router
+    // automatically. Filtering them out here because we don't care about them
+    // but they might still cause comparison mismatches.
+    to = Object.fromEntries(
+      Object.entries(to).filter(([, val]) => {
+        return val !== undefined && val !== null;
+      }),
+    );
+
     return navigateTo({
-      query: {
-        ...route.query,
-        query: encodeURIComponent(query.value),
-        court: court.value,
-        documentKind: documentKind.value,
-        typeGroup: typeGroup.value ?? "",
-        dateFilterType: dateFilter.value.type,
-        dateFilterFrom: dateFilter.value.from ?? "",
-        dateFilterTo: dateFilter.value.to ?? "",
-        pageIndex: pageIndex.value,
-        sort: sort.value,
-        itemsPerPage: itemsPerPage.value,
-      },
+      // Reset hash when the query changes to prevent unintended scrolling
+      hash: isEqual(from, to) ? route.hash : undefined,
+      query: to,
     });
   }
 

@@ -1,5 +1,6 @@
 import { navigateTo, useRoute } from "#app";
-import type { LocationQueryValue } from "#vue-router";
+import type { LocationQueryRaw, LocationQueryValue } from "#vue-router";
+import { isEqual } from "lodash-es";
 import { DocumentKind } from "~/types/api";
 import {
   type DateFilterValue,
@@ -74,18 +75,24 @@ export function useAdvancedSearchRouteParams() {
   }
 
   function saveFilterStateToRoute() {
+    const from = { ...route.query };
+
+    const to: LocationQueryRaw = {
+      ...from,
+      q: encodeURIComponent(query.value),
+      documentKind: documentKind.value,
+      dateFilterType: dateFilter.value.type,
+      dateFilterFrom: dateFilter.value.from ?? "",
+      dateFilterTo: dateFilter.value.to ?? "",
+      pageIndex: pageIndex.value.toString(),
+      sort: sort.value,
+      itemsPerPage: itemsPerPage.value,
+    };
+
     return navigateTo({
-      query: {
-        ...route.query,
-        q: encodeURIComponent(query.value),
-        documentKind: documentKind.value,
-        dateFilterType: dateFilter.value.type,
-        dateFilterFrom: dateFilter.value.from ?? "",
-        dateFilterTo: dateFilter.value.to ?? "",
-        pageIndex: pageIndex.value,
-        sort: sort.value,
-        itemsPerPage: itemsPerPage.value,
-      },
+      // Reset hash when the query changes to prevent unintended scrolling
+      hash: isEqual(from, to) ? route.hash : undefined,
+      query: to,
     });
   }
 
