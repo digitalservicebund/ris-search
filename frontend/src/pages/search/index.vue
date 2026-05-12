@@ -171,10 +171,10 @@ const title = computed(() => {
   const pageSuffix =
     pageIndex.value > 0 ? `, Seite ${pageIndex.value + 1}` : "";
 
-  if (query.value) return `${query.value} — Suche${pageSuffix}`;
+  if (query.value) return `Suche, ${query.value}${pageSuffix}`;
 
   if (documentKind.value !== DocumentKind.All) {
-    return `${formatDocumentKind(documentKind.value)} — Suche${pageSuffix}`;
+    return `${formatDocumentKind(documentKind.value)}, Suche${pageSuffix}`;
   }
 
   return `Suche${pageSuffix}`;

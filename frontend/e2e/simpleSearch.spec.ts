@@ -77,7 +77,7 @@ test.describe("general search page features", () => {
       .getByRole("button", { name: "Gesetze & Verordnungen" })
       .click();
     await expect(page).toHaveTitle(
-      "Gesetze & Verordnungen — Suche — Rechtsinformationen des Bundes",
+      "Gesetze & Verordnungen, Suche — Rechtsinformationen des Bundes",
     );
 
     await page
@@ -85,7 +85,7 @@ test.describe("general search page features", () => {
       .getByRole("button", { name: "Gerichtsentscheidungen" })
       .click();
     await expect(page).toHaveTitle(
-      "Gerichtsentscheidungen — Suche — Rechtsinformationen des Bundes",
+      "Gerichtsentscheidungen, Suche — Rechtsinformationen des Bundes",
     );
 
     await page
@@ -93,7 +93,7 @@ test.describe("general search page features", () => {
       .getByRole("button", { name: "Verwaltungsvorschriften" })
       .click();
     await expect(page).toHaveTitle(
-      "Verwaltungsvorschriften — Suche — Rechtsinformationen des Bundes",
+      "Verwaltungsvorschriften, Suche — Rechtsinformationen des Bundes",
     );
 
     await page
@@ -101,7 +101,7 @@ test.describe("general search page features", () => {
       .getByRole("button", { name: "Literaturnachweise" })
       .click();
     await expect(page).toHaveTitle(
-      "Literaturnachweise — Suche — Rechtsinformationen des Bundes",
+      "Literaturnachweise, Suche — Rechtsinformationen des Bundes",
     );
 
     await page
@@ -116,7 +116,7 @@ test.describe("general search page features", () => {
     await page.getByRole("button", { name: "Suchen" }).click();
 
     await expect(page).toHaveTitle(
-      "frühstück brötchen — Suche — Rechtsinformationen des Bundes",
+      "Suche, frühstück brötchen — Rechtsinformationen des Bundes",
     );
   });
 
@@ -169,7 +169,7 @@ test.describe("general search page features", () => {
       .click();
     await page.waitForURL(/pageIndex=1/);
 
-    await expect(page).toHaveTitle(/und — Suche, Seite 2/);
+    await expect(page).toHaveTitle(/Suche, und, Seite 2/);
 
     await page
       .getByRole("navigation", { name: "Paginierung" })
@@ -177,7 +177,7 @@ test.describe("general search page features", () => {
       .click();
     await page.waitForURL(/pageIndex=0/);
 
-    await expect(page).toHaveTitle(/und — Suche —/);
+    await expect(page).toHaveTitle(/Suche, und —/);
   });
 
   test("focuses first search result after pagination", async ({ page }) => {
@@ -783,7 +783,7 @@ test.describe("searching literature", () => {
     ).toBeVisible();
   });
 
-  test("shows placeholder title for search result items without title", async ({
+  test("shows placeholder headline for search result items without headline", async ({
     page,
   }) => {
     await navigate(
@@ -947,7 +947,7 @@ test.describe("searching administrative directives", () => {
     ).toBeVisible();
   });
 
-  test("shows placeholder title for search result items without title", async ({
+  test("shows placeholder headline for search result items without headline", async ({
     page,
   }) => {
     await navigate(page, "/search?query=keinen+Titel&documentKind=V");
