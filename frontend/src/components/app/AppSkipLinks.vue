@@ -4,8 +4,9 @@ const links = computed(() => registry?.links.value);
 </script>
 
 <template>
-  <div
+  <nav
     v-if="links?.length"
+    aria-label="Sprunglinks"
     class="pointer-events-none fixed inset-x-0 top-8 z-10 flex justify-center gap-8 px-8"
   >
     <SkipLink
@@ -16,5 +17,5 @@ const links = computed(() => registry?.links.value);
     >
       {{ link.label }}
     </SkipLink>
-  </div>
+  </nav>
 </template>
