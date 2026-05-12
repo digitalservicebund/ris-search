@@ -66,6 +66,7 @@ export default defineNuxtConfig({
     typeCheck: process.env.CI !== "true",
     tsConfig: {
       compilerOptions: {
+        noUnusedLocals: true,
         types: ["node", "vitest", "vitest/globals", "unplugin-icons/types/vue"],
       },
     },

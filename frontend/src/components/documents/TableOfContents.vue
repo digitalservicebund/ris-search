@@ -15,6 +15,7 @@ const props = defineProps<Props>();
 
 const {
   visible: mobileTocVisible,
+  // @ts-expect-error -- usage in template not detected
   triggerRef: openButtonRef,
   closeButtonProps,
 } = useDrawer();
