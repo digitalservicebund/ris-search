@@ -19,7 +19,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
     </div>
   </section>
 
-  <footer class="relative print:hidden">
+  <footer id="footer" class="relative print:hidden">
     <div class="border-t border-t-gray-400 py-64">
       <div class="container">
         <div class="grid grid-cols-1 gap-48 md:grid-cols-2">
