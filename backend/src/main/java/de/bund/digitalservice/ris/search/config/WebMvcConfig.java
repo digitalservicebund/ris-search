@@ -2,7 +2,10 @@ package de.bund.digitalservice.ris.search.config;
 
 import de.bund.digitalservice.ris.search.config.ratelimiting.DefaultRateLimitInterceptor;
 import de.bund.digitalservice.ris.search.config.ratelimiting.FeedbackRateLimitInterceptor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.filter.UrlHandlerFilter;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -37,5 +40,19 @@ public class WebMvcConfig implements WebMvcConfigurer {
   public void addInterceptors(InterceptorRegistry registry) {
     registry.addInterceptor(feedbackInterceptor).addPathPatterns(ApiConfig.Paths.FEEDBACK);
     registry.addInterceptor(defaultRateLimitInterceptor);
+  }
+
+  /**
+   * Configures a {@link UrlHandlerFilter} to globally manage trailing slashes in URLs. This filter
+   * intercepts requests and performs a client-side redirect to the same path without a trailing
+   * slash.
+   *
+   * @return a configured {@link UrlHandlerFilter}
+   */
+  @Bean
+  public UrlHandlerFilter urlHandlerFilter() {
+    return UrlHandlerFilter.trailingSlashHandler("/**")
+        .redirect(HttpStatus.PERMANENT_REDIRECT)
+        .build();
   }
 }
