@@ -3,7 +3,7 @@ import text from "./content.md?raw";
 
 definePageMeta({ layout: false });
 
-useStaticPageSeo({
+useSeo({
   title: "Feedback",
   description:
     "Teilen Sie Ihre Rückmeldungen und Anregungen zur Testphase – Ihr Input hilft bei der Weiterentwicklung.",

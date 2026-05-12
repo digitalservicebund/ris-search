@@ -3,7 +3,7 @@ import text from "./content.md?raw";
 
 definePageMeta({ alias: ["/datenschutz"], layout: false });
 
-useStaticPageSeo({
+useSeo({
   title: "Datenschutzerklärung",
   description:
     "Wie wir Ihre Daten schützen, welche Rechte Sie haben und welche Verfahren wir anwenden.",

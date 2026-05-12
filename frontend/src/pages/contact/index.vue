@@ -3,7 +3,7 @@ import text from "./content.md?raw";
 
 definePageMeta({ alias: ["/kontakt"], layout: false });
 
-useStaticPageSeo({
+useSeo({
   title: "Kontakt",
   description:
     "Hier erreichen Sie uns bei Fragen, Hinweisen oder technischen Problemen rund um das Portal.",

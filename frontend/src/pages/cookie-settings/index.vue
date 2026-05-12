@@ -3,7 +3,7 @@ import text from "./content.md?raw";
 
 definePageMeta({ alias: ["/cookie-einstellungen"], layout: false });
 
-useStaticPageSeo({
+useSeo({
   title: "Cookie-Einstellungen",
   description:
     "Wählen Sie, welche Cookies Sie zulassen – für eine bessere, datenschutzgerechte Nutzung.",

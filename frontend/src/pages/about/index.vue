@@ -3,7 +3,7 @@ import text from "./content.md?raw";
 
 definePageMeta({ alias: ["/ueber"], layout: false });
 
-useStaticPageSeo({
+useSeo({
   title: "Über den Service",
   description: "Erfahren Sie, wie das Portal Gesetze und Urteile für alle frei zugänglich macht.",
   ogTitle: "Über das neue Rechtsinformationsportal des Bundes",

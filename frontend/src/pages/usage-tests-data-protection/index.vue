@@ -6,7 +6,7 @@ definePageMeta({
   layout: false,
 });
 
-useStaticPageSeo({
+useSeo({
   title: "Datenschutzerklärung zu den Nutzungstests",
   description:
     "Erfahren Sie, wie wir Ihre Daten bei Teilnahme an unseren Nutzungstests erfassen, verwenden und schützen",

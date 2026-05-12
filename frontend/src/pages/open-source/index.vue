@@ -3,7 +3,7 @@ import text from "./content.md?raw";
 
 definePageMeta({ layout: false });
 
-useStaticPageSeo({
+useSeo({
   title: "Open Source",
   description:
     "Informationen zur verwendeten Open-Source-Software, zu Lizenzen und Beteiligungsmöglichkeiten.",

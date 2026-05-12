@@ -11,7 +11,7 @@ function redirectToSearch(searchStr?: string) {
 
 definePageMeta({ layout: "base" });
 
-useStaticPageSeo({
+useSeo({
   title: "Schneller und direkter Zugang zu Rechtsinformationen",
   description:
     "Nutzen Sie das neue Rechtsinformationsportal des Bundes – Gesetze, Verordnungen und Urteile auf einen Blick.",

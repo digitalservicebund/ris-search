@@ -3,7 +3,7 @@ import text from "./content.md?raw";
 
 definePageMeta({ alias: ["/barrierefreiheit"], layout: false });
 
-useStaticPageSeo({
+useSeo({
   title: "Barrierefreiheit",
   description:
     "Informationen zur digitalen Zugänglichkeit, zum technischen Standard und zur Feedback-Möglichkeit.",

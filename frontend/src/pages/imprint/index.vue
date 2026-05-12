@@ -3,7 +3,7 @@ import text from "./content.md?raw";
 
 definePageMeta({ alias: ["/impressum"], layout: false });
 
-useStaticPageSeo({
+useSeo({
   title: "Impressum",
   description:
     "Angaben gemäß § 5 TMG – Herausgeber, Verantwortliche und rechtliche Hinweise zum Portal.",

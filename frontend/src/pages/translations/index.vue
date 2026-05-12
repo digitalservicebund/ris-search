@@ -68,7 +68,7 @@ const minisearch = computed(() => {
   return miniSearch;
 });
 
-useStaticPageSeo({
+useSeo({
   title: "English Translations of German Federal Laws and Regulations",
   description:
     "Access official English translations of selected German laws and regulations. These translations are for informational purposes only and are not legally binding.",
