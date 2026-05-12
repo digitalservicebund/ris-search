@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { Toast } from "primevue";
 
-const route = useRoute();
-const skipLinks = provideSkipLinks();
+provideSkipLinks();
 
 useHead({
   titleTemplate: (pageTitle) =>
@@ -10,14 +9,6 @@ useHead({
       ? `${pageTitle} — Rechtsinformationen des Bundes`
       : "Rechtsinformationen des Bundes",
 });
-
-watch(
-  () => route.path,
-  () => {
-    skipLinks.clear();
-  },
-  { immediate: true },
-);
 </script>
 
 <template>

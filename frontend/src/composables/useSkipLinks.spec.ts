@@ -1,53 +1,138 @@
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import { describe, expect, it } from "vitest";
-import { createApp, defineComponent, h, nextTick, ref } from "vue";
-import { provideSkipLinks, useSkipLinks, type SkipLink } from "./useSkipLinks";
+import { nextTick } from "vue";
+import {
+  provideSkipLinks,
+  useSkipLinks,
+  type SkipLink,
+  type SkipLinksRegistry,
+} from "./useSkipLinks";
+
+describe("provideSkipLinks", () => {
+  async function mountProvider() {
+    let registry: SkipLinksRegistry | undefined;
+    await mountSuspended(
+      defineComponent({
+        setup() {
+          registry = provideSkipLinks();
+          return () => h("div");
+        },
+      }),
+    );
+    return registry!;
+  }
+
+  it("registers links", async () => {
+    const { links, register } = await mountProvider();
+    register([{ label: "Main content", to: "#main" }]);
+    expect(links.value).toEqual([{ label: "Main content", to: "#main" }]);
+  });
+
+  it("accumulates links from multiple registrations", async () => {
+    const { links, register } = await mountProvider();
+    register([{ label: "Main content", to: "#main" }]);
+    register([{ label: "Navigation", to: "#nav" }]);
+    expect(links.value).toHaveLength(2);
+    expect(links.value).toContainEqual({ label: "Main content", to: "#main" });
+    expect(links.value).toContainEqual({ label: "Navigation", to: "#nav" });
+  });
+
+  it("removes links when the cleanup function is called", async () => {
+    const { links, register } = await mountProvider();
+    const cleanup = register([{ label: "Main content", to: "#main" }]);
+    cleanup();
+    expect(links.value).toEqual([]);
+  });
+
+  it("cleanup only removes links registered with the original call", async () => {
+    const { links, register } = await mountProvider();
+    const cleanup = register([{ label: "Main content", to: "#main" }]);
+    register([{ label: "Navigation", to: "#nav" }]);
+    cleanup();
+    expect(links.value).toEqual([{ label: "Navigation", to: "#nav" }]);
+  });
+});
 
 describe("useSkipLinks", () => {
-  it("syncs provided skip links into the registry", async () => {
-    const links = ref<SkipLink[]>([]);
-    const skipLinks = ref<SkipLink[]>([
-      { label: "Zum Inhalt", to: "#main" },
-      { label: "Zum Fußbereich", to: "#footer" },
-    ]);
+  async function mountProvider(links?: MaybeRefOrGetter<SkipLink[]>) {
+    let registry: SkipLinksRegistry | undefined;
+    let result: Ref<SkipLink[]> | undefined;
 
-    const RegisterSkipLinks = defineComponent({
+    const child = defineComponent({
       setup() {
-        const registeredLinks = useSkipLinks(skipLinks);
-        links.value = registeredLinks.value;
-
-        watchEffect(() => {
-          links.value = registeredLinks.value;
-        });
-
+        result = useSkipLinks(links);
         return () => h("div");
       },
     });
 
-    await mountSuspended(
+    const wrapper = await mountSuspended(
       defineComponent({
         setup() {
-          provideSkipLinks();
-          return () => h(RegisterSkipLinks);
+          registry = provideSkipLinks();
+          return () => h(child);
         },
       }),
     );
 
-    expect(links.value).toEqual(skipLinks.value);
-
-    skipLinks.value = [{ label: "Zu den Filtern", to: "#filters" }];
-    await nextTick();
-
-    expect(links.value).toEqual(skipLinks.value);
-  });
+    return { wrapper, registry: registry!, result: result! };
+  }
 
   it("throws when no registry is provided", async () => {
-    const app = createApp({ render: () => null });
+    await expect(
+      mountSuspended(
+        defineComponent({
+          setup() {
+            useSkipLinks([]);
+            return () => h("div");
+          },
+        }),
+      ),
+    ).rejects.toThrow("skip links registry has not been provided");
+  });
 
-    expect(() =>
-      app.runWithContext(() => {
-        useSkipLinks([]);
-      }),
-    ).toThrow("Skip links registry is not available");
+  it("returns the registry links ref", async () => {
+    const { registry, result } = await mountProvider([]);
+    expect(result).toBe(registry.links);
+  });
+
+  it("registers provided links immediately", async () => {
+    const { registry } = await mountProvider([{ label: "Main", to: "#main" }]);
+    expect(registry.links.value).toEqual([{ label: "Main", to: "#main" }]);
+  });
+
+  it("re-registers when reactive links change", async () => {
+    const links = ref<SkipLink[]>([{ label: "Main", to: "#main" }]);
+    const { registry } = await mountProvider(links);
+
+    links.value = [{ label: "Nav", to: "#nav" }];
+    await nextTick();
+
+    expect(registry.links.value).toEqual([{ label: "Nav", to: "#nav" }]);
+  });
+
+  it("removes old links before registering new ones on update", async () => {
+    const links = ref<SkipLink[]>([{ label: "Main", to: "#main" }]);
+    const { registry } = await mountProvider(links);
+
+    links.value = [{ label: "Nav", to: "#nav" }];
+    await nextTick();
+
+    expect(registry.links.value).not.toContainEqual({
+      label: "Main",
+      to: "#main",
+    });
+  });
+
+  it("cleans up links on unmount", async () => {
+    const { wrapper, registry } = await mountProvider([
+      { label: "Main", to: "#main" },
+    ]);
+    wrapper.unmount();
+    expect(registry.links.value).toEqual([]);
+  });
+
+  it("does not register links when called without arguments", async () => {
+    const { registry } = await mountProvider();
+    expect(registry.links.value).toEqual([]);
   });
 });
