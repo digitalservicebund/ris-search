@@ -11,11 +11,12 @@ function redirectToSearch(searchStr?: string) {
 
 definePageMeta({ layout: "base" });
 
-useStaticPageSeo(
-  "Schneller und direkter Zugang zu Rechtsinformationen",
-  "Nutzen Sie das neue Rechtsinformationsportal des Bundes – Gesetze, Verordnungen und Urteile auf einen Blick.",
-  "Rechtsinformationen des Bundes",
-);
+useSeo({
+  title: "Schneller und direkter Zugang zu Rechtsinformationen",
+  description:
+    "Nutzen Sie das neue Rechtsinformationsportal des Bundes – Gesetze, Verordnungen und Urteile auf einen Blick.",
+  ogTitle: "Rechtsinformationen des Bundes",
+});
 
 const privateFeaturesEnabled = usePrivateFeaturesFlag();
 </script>
