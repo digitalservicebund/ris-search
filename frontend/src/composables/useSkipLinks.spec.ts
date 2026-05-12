@@ -8,20 +8,43 @@ import {
   type SkipLinksRegistry,
 } from "./useSkipLinks";
 
-describe("provideSkipLinks", () => {
-  async function mountProvider() {
-    let registry: SkipLinksRegistry | undefined;
-    await renderSuspended(
-      defineComponent({
-        setup() {
-          registry = provideSkipLinks();
-          return () => h("div");
-        },
-      }),
-    );
-    return registry!;
-  }
+async function mountProvider() {
+  let registry: SkipLinksRegistry | undefined;
+  await renderSuspended(
+    defineComponent({
+      setup() {
+        registry = provideSkipLinks();
+        return () => h("div");
+      },
+    }),
+  );
+  return registry!;
+}
 
+async function mountProviderAndConsumer(links?: MaybeRefOrGetter<SkipLink[]>) {
+  let registry: SkipLinksRegistry | undefined;
+  let result: Ref<SkipLink[]> | undefined;
+
+  const child = defineComponent({
+    setup() {
+      result = useSkipLinks(links);
+      return () => h("div");
+    },
+  });
+
+  const wrapper = await renderSuspended(
+    defineComponent({
+      setup() {
+        registry = provideSkipLinks();
+        return () => h(child);
+      },
+    }),
+  );
+
+  return { wrapper, registry: registry!, result: result! };
+}
+
+describe("provideSkipLinks", () => {
   it("registers links", async () => {
     const { links, register } = await mountProvider();
     register([{ label: "Main content", to: "#main" }]);
@@ -54,29 +77,6 @@ describe("provideSkipLinks", () => {
 });
 
 describe("useSkipLinks", () => {
-  async function mountProvider(links?: MaybeRefOrGetter<SkipLink[]>) {
-    let registry: SkipLinksRegistry | undefined;
-    let result: Ref<SkipLink[]> | undefined;
-
-    const child = defineComponent({
-      setup() {
-        result = useSkipLinks(links);
-        return () => h("div");
-      },
-    });
-
-    const wrapper = await renderSuspended(
-      defineComponent({
-        setup() {
-          registry = provideSkipLinks();
-          return () => h(child);
-        },
-      }),
-    );
-
-    return { wrapper, registry: registry!, result: result! };
-  }
-
   it("throws when no registry is provided", async () => {
     await expect(
       renderSuspended(
@@ -91,18 +91,20 @@ describe("useSkipLinks", () => {
   });
 
   it("returns the registry links ref", async () => {
-    const { registry, result } = await mountProvider([]);
+    const { registry, result } = await mountProviderAndConsumer([]);
     expect(result).toBe(registry.links);
   });
 
   it("registers provided links immediately", async () => {
-    const { registry } = await mountProvider([{ label: "Main", to: "#main" }]);
+    const { registry } = await mountProviderAndConsumer([
+      { label: "Main", to: "#main" },
+    ]);
     expect(registry.links.value).toEqual([{ label: "Main", to: "#main" }]);
   });
 
   it("re-registers when reactive links change", async () => {
     const links = ref<SkipLink[]>([{ label: "Main", to: "#main" }]);
-    const { registry } = await mountProvider(links);
+    const { registry } = await mountProviderAndConsumer(links);
 
     links.value = [{ label: "Nav", to: "#nav" }];
     await nextTick();
@@ -112,7 +114,7 @@ describe("useSkipLinks", () => {
 
   it("removes old links before registering new ones on update", async () => {
     const links = ref<SkipLink[]>([{ label: "Main", to: "#main" }]);
-    const { registry } = await mountProvider(links);
+    const { registry } = await mountProviderAndConsumer(links);
 
     links.value = [{ label: "Nav", to: "#nav" }];
     await nextTick();
@@ -124,7 +126,7 @@ describe("useSkipLinks", () => {
   });
 
   it("cleans up links on unmount", async () => {
-    const { wrapper, registry } = await mountProvider([
+    const { wrapper, registry } = await mountProviderAndConsumer([
       { label: "Main", to: "#main" },
     ]);
     wrapper.unmount();
@@ -132,7 +134,7 @@ describe("useSkipLinks", () => {
   });
 
   it("does not register links when called without arguments", async () => {
-    const { registry } = await mountProvider();
+    const { registry } = await mountProviderAndConsumer();
     expect(registry.links.value).toEqual([]);
   });
 });
