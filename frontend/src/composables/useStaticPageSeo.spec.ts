@@ -21,7 +21,7 @@ describe("useStaticPageSeo composable", () => {
   });
 
   it("sets meta tags and canonical link", () => {
-    useStaticPageSeo("Test Title", "Test Description");
+    useStaticPageSeo({ title: "Test Title", description: "Test Description" });
 
     expect(useSeoMeta).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -42,7 +42,7 @@ describe("useStaticPageSeo composable", () => {
   });
 
   it("uses ogTitle when provided instead of falling back to title", () => {
-    useStaticPageSeo("Test Title", "Test Description", "Custom OG Title");
+    useStaticPageSeo({ title: "Test Title", description: "Test Description", ogTitle: "Custom OG Title" });
 
     expect(useSeoMeta).toHaveBeenCalledWith(
       expect.objectContaining({

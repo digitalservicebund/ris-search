@@ -6,10 +6,11 @@ import { isStrictDateFilterValue } from "~/utils/search/dateFilterType";
 // Note: the title is overridden further down. This should probably
 // use the useDyncamiSeo composbale, but that isn't refactored yet.
 // Will clean this up in a followup PR.
-useStaticPageSeo(
-  "Suche im Rechtsinformationsportal des Bundes",
-  "Finden Sie gezielt Gesetze, Verordnungen und Entscheidungen – schnell, präzise und übersichtlich.",
-);
+useStaticPageSeo({
+  title: "Suche im Rechtsinformationsportal des Bundes",
+  description:
+    "Finden Sie gezielt Gesetze, Verordnungen und Entscheidungen – schnell, präzise und übersichtlich.",
+});
 
 const filterHeadingId = useId();
 

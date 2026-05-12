@@ -3,11 +3,12 @@ import text from "./content.md?raw";
 
 definePageMeta({ alias: ["/kontakt"], layout: false });
 
-useStaticPageSeo(
-  "Kontakt",
-  "Hier erreichen Sie uns bei Fragen, Hinweisen oder technischen Problemen rund um das Portal.",
-  "Kontakt zum Rechtsinformationsportal des Bundes",
-);
+useStaticPageSeo({
+  title: "Kontakt",
+  description:
+    "Hier erreichen Sie uns bei Fragen, Hinweisen oder technischen Problemen rund um das Portal.",
+  ogTitle: "Kontakt zum Rechtsinformationsportal des Bundes",
+});
 </script>
 
 <template>

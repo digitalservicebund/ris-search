@@ -3,11 +3,12 @@ import text from "./content.md?raw";
 
 definePageMeta({ alias: ["/cookie-einstellungen"], layout: false });
 
-useStaticPageSeo(
-  "Cookie-Einstellungen",
-  "Wählen Sie, welche Cookies Sie zulassen – für eine bessere, datenschutzgerechte Nutzung.",
-  "Cookie-Einstellungen für das Rechtsinformationsportal des Bundes",
-);
+useStaticPageSeo({
+  title: "Cookie-Einstellungen",
+  description:
+    "Wählen Sie, welche Cookies Sie zulassen – für eine bessere, datenschutzgerechte Nutzung.",
+  ogTitle: "Cookie-Einstellungen für das Rechtsinformationsportal des Bundes",
+});
 </script>
 
 <template>

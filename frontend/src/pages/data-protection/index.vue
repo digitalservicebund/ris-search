@@ -3,11 +3,12 @@ import text from "./content.md?raw";
 
 definePageMeta({ alias: ["/datenschutz"], layout: false });
 
-useStaticPageSeo(
-  "Datenschutzerklärung",
-  "Wie wir Ihre Daten schützen, welche Rechte Sie haben und welche Verfahren wir anwenden.",
-  "Datenschutzrichtlinie des Rechtsinformationsportals des Bundes",
-);
+useStaticPageSeo({
+  title: "Datenschutzerklärung",
+  description:
+    "Wie wir Ihre Daten schützen, welche Rechte Sie haben und welche Verfahren wir anwenden.",
+  ogTitle: "Datenschutzrichtlinie des Rechtsinformationsportals des Bundes",
+});
 </script>
 
 <template>

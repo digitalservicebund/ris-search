@@ -3,11 +3,12 @@ import text from "./content.md?raw";
 
 definePageMeta({ layout: false });
 
-useStaticPageSeo(
-  "Feedback",
-  "Teilen Sie Ihre Rückmeldungen und Anregungen zur Testphase – Ihr Input hilft bei der Weiterentwicklung.",
-  "Feedback zum Rechtsinformationsportal des Bundes",
-);
+useStaticPageSeo({
+  title: "Feedback",
+  description:
+    "Teilen Sie Ihre Rückmeldungen und Anregungen zur Testphase – Ihr Input hilft bei der Weiterentwicklung.",
+  ogTitle: "Feedback zum Rechtsinformationsportal des Bundes",
+});
 </script>
 
 <template>

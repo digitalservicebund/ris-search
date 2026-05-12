@@ -1,8 +1,12 @@
-export function useStaticPageSeo(
-  title: string,
-  description: string,
-  ogTitle?: string,
-) {
+export function useStaticPageSeo({
+  title,
+  description,
+  ogTitle,
+}: {
+  title: string
+  description: string
+  ogTitle?: string
+}) {
   const url = useRequestURL();
 
   useSeoMeta({
