@@ -22,8 +22,6 @@ services:
       - "OPENSEARCH_JAVA_OPTS=-Xms1024m -Xmx1024m"
     networks:
       - ris-portal
-    volumes:
-      - ./backend/src/main/resources/openSearch/mounted/:/usr/share/opensearch/config/mounted/
 
   opensearch-dashboards:
     image: opensearchproject/opensearch-dashboards:2.11.0

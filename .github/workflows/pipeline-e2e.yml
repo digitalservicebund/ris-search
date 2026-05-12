@@ -13,6 +13,10 @@ env:
 jobs:
   e2e-tests:
     runs-on: ubuntu-latest
+    container:
+      # Image version must match @playwright/test in frontend/package.json
+      image: mcr.microsoft.com/playwright@sha256:b0ab6f3cb99aa7803adbc14d9027ec1785fc6e433b97e134e0f8fe61683b6b53 # v1.59.1-noble
+      options: --user 1001
     permissions:
       contents: read
     strategy:
@@ -25,69 +29,66 @@ jobs:
             private_features_enabled: false
           - configuration_label: private
             private_features_enabled: true
+    services:
+      opensearch:
+        image: opensearchproject/opensearch@sha256:2f49c399988df5c9a3b25a05ec78ea75ac4b39ae76e1d2609f94a653224bb24b # v2.11.0
+        env:
+          node.name: opensearch-node1
+          discovery.type: single-node
+          DISABLE_SECURITY_PLUGIN: "true"
+          OPENSEARCH_JAVA_OPTS: "-Xms1024m -Xmx1024m"
+        options: >-
+          --health-cmd "curl --silent --fail http://localhost:9200/_cluster/health || exit 1"
+          --health-interval 5s
+          --health-retries 20
+          --health-timeout 3s
+          --health-start-period 10s
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
-        with:
-          fetch-depth: 40
-      - name: Adjust permissions to Docker
-        run: sudo chmod 666 /var/run/docker.sock
-      - name: Cache OpenSearch image
-        id: opensearch-cache
-        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
-        with:
-          path: /home/runner/.docker-image-cache/opensearch.tar
-          key: opensearch-image-cache-2.11.0
-      - name: Load cached OpenSearch image if exists
-        if: steps.opensearch-cache.outputs.cache-hit == 'true'
-        run: |
-          docker load -i /home/runner/.docker-image-cache/opensearch.tar
-      - name: Pull and cache OpenSearch image
-        if: steps.opensearch-cache.outputs.cache-hit != 'true'
-        run: |
-          mkdir -p /home/runner/.docker-image-cache
-          docker pull opensearchproject/opensearch:2.11.0
-          docker save opensearchproject/opensearch:2.11.0 -o /home/runner/.docker-image-cache/opensearch.tar
-      - name: Start opensearch container
-        run: docker compose -f docker-compose.yml up -d opensearch
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+
       - name: Set up JDK
         uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5
         with:
           java-version: "21.0"
           distribution: "temurin"
-          cache: gradle
+
+      - name: Cache Gradle packages
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
+        with:
+          path: .gradle-cache
+          key: gradle-${{ runner.os }}-${{ hashFiles('backend/**/*.gradle*', 'backend/gradle/wrapper/gradle-wrapper.properties') }}
+          restore-keys: gradle-${{ runner.os }}-
+
       - name: Grant execute permission for gradlew
         working-directory: ./backend
         run: chmod +x gradlew
-      - name: Wait for OpenSearch health
-        run: |
-          echo "Waiting for OpenSearch on http://localhost:9200 ..."
-          until curl --silent --fail http://localhost:9200/_cluster/health; do
-            echo "Still waiting for OpenSearch..."
-            sleep 5
-          done
+
       - name: Start backend locally (background)
         working-directory: ./backend
         env:
           SPRING_PROFILES_ACTIVE: e2e,default
-          OPENSEARCH_HOST: localhost
+          OPENSEARCH_HOST: opensearch # use service name because it's inside the docker network
+          GRADLE_USER_HOME: ${{ github.workspace }}/.gradle-cache
           THC_PORT: 8090
           NODE_OPTIONS: "--max_old_space_size=4096"
         run: |
           nohup ./gradlew bootRun --no-daemon > backend.log 2>&1 &
-          sleep 8
+
       - name: Setup pnpm
         uses: pnpm/action-setup@739bfe42ca9233c5e6aca07c1a25a9d34aca49b0 #v6.0.7
         with:
           package_json_file: ./frontend/package.json
+
       - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
         with:
           node-version: 24
           cache: "pnpm"
           cache-dependency-path: ./frontend/pnpm-lock.yaml
+
       - name: Install Node modules
         run: pnpm ci
         working-directory: ./frontend
+
       - name: Start frontend locally (background)
         working-directory: ./frontend
         env:
@@ -97,18 +98,7 @@ jobs:
           CI: true
         run: |
           nohup pnpm dev --no-devtools --port 3000 > frontend.log 2>&1 &
-      - name: Get Playwright version
-        run: echo "PLAYWRIGHT_VERSION=$(pnpm list @playwright/test --depth=0 | grep @playwright/test | awk '{print $2}')" >> $GITHUB_ENV
-        working-directory: ./frontend
-      - name: Cache browser binaries
-        id: playwright-cache
-        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
-        with:
-          path: /home/runner/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}
-      - name: Install Playwright browsers
-        run: pnpm exec playwright install --with-deps chromium firefox webkit
-        working-directory: ./frontend
+
       - name: Wait for backend to respond
         run: |
           echo "Waiting for backend on http://localhost:8090/actuator/health ..."
@@ -116,6 +106,7 @@ jobs:
             echo "Still waiting..."
             sleep 5
           done
+
       - name: Wait for frontend to fully render
         timeout-minutes: 5
         run: |
@@ -125,12 +116,14 @@ jobs:
             sleep 5
           done
           echo "Nuxt is ready!"
+
       - name: Run Playwright tests
         run: pnpm exec playwright test --project ${{ matrix.browser }}
         working-directory: ./frontend
         env:
           NUXT_PUBLIC_PRIVATE_FEATURES_ENABLED: ${{ matrix.private_features_enabled }}
           TZ: Europe/Berlin
+
       - name: Upload test reports
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         if: ${{ !failure() }}
@@ -138,6 +131,7 @@ jobs:
           name: playwright-e2e-tests-report-${{ matrix.configuration_label }}-${{ matrix.browser }}
           path: frontend/playwright-report/**
           retention-days: 5
+
       - name: Upload traces of failed tests
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         if: ${{ failure() }}
@@ -145,37 +139,21 @@ jobs:
           name: failed-e2e-tests-${{ matrix.configuration_label }}-${{ matrix.browser }}
           path: frontend/playwright-report/**/*.zip
           retention-days: 5
-      - name: Output logs on failure
-        if: ${{ failure() }}
-        run: docker compose -f docker-compose.yml logs > docker-compose-logs-${{ matrix.configuration_label }}-${{ matrix.browser }}.log
+
       - name: Upload backend log
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         if: ${{ failure() }}
         with:
           name: backend-log-${{ matrix.configuration_label }}-${{ matrix.browser }}
           path: backend/backend.log
+
       - name: Upload frontend log
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         if: ${{ failure() }}
         with:
           name: frontend-log-${{ matrix.configuration_label }}-${{ matrix.browser }}
           path: frontend/frontend.log
-      - name: Upload Docker logs
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
-        if: ${{ failure() }}
-        with:
-          name: docker-compose-logs-${{ matrix.configuration_label }}-${{ matrix.browser }}
-          path: docker-compose-logs-${{ matrix.configuration_label }}-${{ matrix.browser }}.log
-          retention-days: 5
-      - name: Tear down services
-        if: ${{ always() }}
-        run: docker compose -f docker-compose.yml down -v
-      - name: Kill frontend dev process
-        if: ${{ always() }}
-        run: pkill -f "pnpm dev" || true
-      - name: Kill backend process
-        if: ${{ always() }}
-        run: pkill -f "bootRun" || true
+
       - name: Send status to Slack
         uses: digitalservicebund/notify-on-failure-gha@671832f192aee0a068fd92b2f6deb975df794a84 # v1.6.1
         if: ${{ failure() && github.ref == 'refs/heads/main' }}
@@ -196,6 +174,7 @@ jobs:
         with:
           path: tmp/playwright-report/
           pattern: playwright-e2e-tests-report-*
+
       - name: Upload test reports to ris-reports
         uses: digitalservicebund/add-ris-report@3fafb0fb08714549c748eb44ac69d2099c7cbb47
         with:
@@ -204,6 +183,7 @@ jobs:
           reportIsDirectory: true
           BUCKET_ACCESS_KEY_ID: ${{ secrets.REPORTS_BUCKET_ACCESS_KEY_ID }}
           BUCKET_SECRET_ACCESS_KEY: ${{ secrets.REPORTS_BUCKET_SECRET_ACCESS_KEY }}
+
       - name: Send status to Slack
         uses: digitalservicebund/notify-on-failure-gha@671832f192aee0a068fd92b2f6deb975df794a84 # v1.6.1
         if: ${{ failure() && github.ref == 'refs/heads/main' }}
