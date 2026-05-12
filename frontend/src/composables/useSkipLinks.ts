@@ -47,9 +47,6 @@ export function provideSkipLinks(): SkipLinksRegistry {
 /**
  * Allows a component to register skip links.
  *
- * Assumes that skip links are only registered once per page. Any registration
- * of skip links will replace the list of existing skip links.
- *
  * @throws when used outside of a component tree that provides a skip link registry.
  */
 export function useSkipLinks(links?: MaybeRefOrGetter<SkipLink[]>) {
