@@ -2,6 +2,11 @@
 import type { NuxtError } from "#app";
 import SimpleSearchInput from "~/components/search/SimpleSearchInput.vue";
 
+useSkipLinks([
+  { label: "Zum Inhalt", to: "#main" },
+  { label: "Zum Fußbereich", to: "#footer" },
+]);
+
 function redirectToSearch(searchStr?: string) {
   navigateTo({ name: "search", query: searchStr ? { query: searchStr } : {} });
 }

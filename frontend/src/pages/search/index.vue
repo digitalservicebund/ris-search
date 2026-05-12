@@ -4,6 +4,12 @@ import { DocumentKind } from "~/types/api";
 import { isStrictDateFilterValue } from "~/utils/search/dateFilterType";
 import { useSimpleSearchSeo } from "~/composables/useSimpleSearchSeo";
 
+useSkipLinks([
+  { label: "Zur Suche", to: "#search" },
+  { label: "Zum Inhalt", to: "#main" },
+  { label: "Zum Fußbereich", to: "#footer" },
+]);
+
 const filterHeadingId = useId();
 
 const {
@@ -172,14 +178,11 @@ watch(searchStatus, async (newStatus, oldStatus) => {
     <h1 class="ris-heading2-bold inline-block">Suche</h1>
   </div>
 
-  <SearchSimpleSearchInput v-model="query" />
+  <div id="search">
+    <SearchSimpleSearchInput v-model="query" />
+  </div>
 
-  <NuxtLink
-    :to="{ hash: `#${mainSectionId}` }"
-    class="ris-link2-bold not-focus:sr-only"
-  >
-    Zu den Hauptinhalten springen
-  </NuxtLink>
+  <SkipLink to="#search-results" class="mt-8">Zu den Ergebnissen</SkipLink>
 
   <p v-if="privateFeaturesEnabled" class="ris-label2-regular mt-8">
     Mehr Suchoptionen finden Sie unter
@@ -221,7 +224,7 @@ watch(searchStatus, async (newStatus, oldStatus) => {
     </aside>
 
     <div
-      :id="mainSectionId"
+      id="search-results"
       ref="resultsContainerRef"
       class="w-full scroll-mt-16 flex-col justify-end gap-8 lg:w-9/12"
     >
