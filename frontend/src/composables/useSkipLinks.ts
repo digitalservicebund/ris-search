@@ -17,7 +17,7 @@ export type SkipLinksRegistry = {
   register: (links: SkipLink[]) => () => void;
 };
 
-export const injectSkipLinksRegistry =
+const skipLinksRegistryInjectionKey =
   Symbol() as InjectionKey<SkipLinksRegistry>;
 
 /**
@@ -40,7 +40,7 @@ export function provideSkipLinks(): SkipLinksRegistry {
     register,
     links: computed(() => Array.from(registry.values())),
   };
-  provide(injectSkipLinksRegistry, instance);
+  provide(skipLinksRegistryInjectionKey, instance);
   return instance;
 }
 
@@ -50,7 +50,7 @@ export function provideSkipLinks(): SkipLinksRegistry {
  * @throws when used outside of a component tree that provides a skip link registry.
  */
 export function useSkipLinks(links?: MaybeRefOrGetter<SkipLink[]>) {
-  const registry = inject(injectSkipLinksRegistry, null);
+  const registry = inject(skipLinksRegistryInjectionKey, null);
   if (!registry) throw new Error("skip links registry has not been provided");
 
   let cleanup: ReturnType<SkipLinksRegistry["register"]> | undefined;
