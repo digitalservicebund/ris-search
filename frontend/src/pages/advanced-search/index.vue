@@ -5,7 +5,6 @@ import type { Statistics } from "~/types/api";
 import { DocumentKind } from "~/types/api";
 import { queryableDataFields } from "~/utils/search/dataFields";
 import { isStrictDateFilterValue } from "~/utils/search/dateFilterType";
-import { useAdvancedSearchTitle } from "~/composables/useAdvancedSearchSeo";
 
 definePageMeta({
   alias: "/erweiterte-suche",
@@ -33,9 +32,14 @@ const {
   sort,
 } = useAdvancedSearchRouteParams();
 
-useAdvancedSearchTitle({
+useSearchSeo({
+  query,
   documentKind,
   pageIndex,
+  searchType: "Erweiterte Suche",
+  description:
+    "Finden Sie gezielt Rechtsinformationen – schnell, präzise und übersichtlich.",
+  ogTitle: "Erweiterte Suche im Rechtsinformationsportal des Bundes",
 });
 
 const searchFormId = useId();
