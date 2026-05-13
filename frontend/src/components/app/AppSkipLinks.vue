@@ -1,6 +1,5 @@
 <script setup lang="ts">
-const registry = inject(injectSkipLinksRegistry, null);
-const links = computed(() => registry?.links.value);
+const links = useSkipLinks();
 </script>
 
 <template>
