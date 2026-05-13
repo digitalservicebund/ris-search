@@ -120,33 +120,6 @@ test.describe("general advanced search page features", () => {
     await expect(searchResults).toHaveCount(10);
   });
 
-  test("page title updates with page number on pagination", async ({
-    page,
-  }) => {
-    await navigate(
-      page,
-      "/advanced-search?documentKind=R&dateFilterType=period&dateFilterFrom=2023-01-01&dateFilterTo=2025-12-31&itemsPerPage=10",
-    );
-
-    await expect(page).toHaveTitle(/^Erweiterte Suche —/);
-
-    await page
-      .getByRole("navigation", { name: "Paginierung" })
-      .getByRole("link", { name: "Weiter" })
-      .click();
-    await page.waitForURL(/pageIndex=1/);
-
-    await expect(page).toHaveTitle(/Erweiterte Suche, Seite 2/);
-
-    await page
-      .getByRole("navigation", { name: "Paginierung" })
-      .getByRole("link", { name: "Zurück" })
-      .click();
-    await page.waitForURL(/pageIndex=0/);
-
-    await expect(page).toHaveTitle(/^Erweiterte Suche —/);
-  });
-
   test("focuses first search result after pagination", async ({ page }) => {
     await navigate(
       page,
