@@ -1,9 +1,9 @@
 import { renderSuspended } from "@nuxt/test-utils/runtime";
 import { screen } from "@testing-library/vue";
 import { describe, it, expect } from "vitest";
-import Logo from "./AppLogo.vue";
+import Logo from "./Logo.vue";
 
-describe("AppLogo", () => {
+describe("Logo", () => {
   it("links to home and shows brand text", async () => {
     await renderSuspended(Logo);
 

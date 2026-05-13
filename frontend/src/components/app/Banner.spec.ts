@@ -1,9 +1,9 @@
 import { renderSuspended } from "@nuxt/test-utils/runtime";
 import { screen } from "@testing-library/vue";
 import { describe, it, expect } from "vitest";
-import AppBanner from "./AppBanner.vue";
+import AppBanner from "./Banner.vue";
 
-describe("AppBanner", () => {
+describe("Banner", () => {
   it("shows the trial banner", async () => {
     await renderSuspended(AppBanner);
     expect(screen.getByRole("status")).toBeInTheDocument();

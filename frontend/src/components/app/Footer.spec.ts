@@ -1,7 +1,7 @@
 import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import { render, screen } from "@testing-library/vue";
 import { describe, it, expect, vi } from "vitest";
-import AppFooter from "~/components/app/AppFooter.vue";
+import AppFooter from "~/components/app/Footer.vue";
 import { usePrivateFeaturesFlag } from "~/composables/usePrivateFeaturesFlag";
 
 vi.mock("~/composables/usePrivateFeaturesFlag", () => ({
@@ -16,7 +16,7 @@ const { useRouteMock } = vi.hoisted(() => ({
 
 mockNuxtImport("useRoute", () => useRouteMock);
 
-describe("AppFooter", () => {
+describe("Footer", () => {
   const globalStubs = {
     NuxtLink: {
       props: ["to"],

@@ -2,7 +2,7 @@ import { renderSuspended } from "@nuxt/test-utils/runtime";
 import { screen } from "@testing-library/vue";
 import { defineComponent, h } from "vue";
 import { describe, expect, it } from "vitest";
-import AppSkipLinks from "./AppSkipLinks.vue";
+import AppSkipLinks from "./SkipLinks.vue";
 
 const RegisterSkipLinks = defineComponent({
   setup() {
@@ -22,7 +22,7 @@ const SkipLinksDummy = defineComponent({
   },
 });
 
-describe("AppSkipLinks", () => {
+describe("SkipLinks", () => {
   it("renders registered skip links", async () => {
     await renderSuspended(SkipLinksDummy);
 

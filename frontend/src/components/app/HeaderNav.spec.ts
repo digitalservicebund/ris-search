@@ -2,7 +2,7 @@ import { renderSuspended } from "@nuxt/test-utils/runtime";
 import { userEvent } from "@testing-library/user-event";
 import { screen } from "@testing-library/vue";
 import { describe, it, expect } from "vitest";
-import AppHeaderNav from "./AppHeaderNav.vue";
+import AppHeaderNav from "./HeaderNav.vue";
 
 const NuxtLinkStub = {
   name: "NuxtLink",
@@ -10,7 +10,7 @@ const NuxtLinkStub = {
   template: `<a :href="typeof to === 'string' ? to : '/'" v-bind="$attrs"><slot /></a>`,
 };
 
-describe("AppHeaderNav", () => {
+describe("HeaderNav", () => {
   it('emits "selectItem" for each NuxtLink that has been clicked', async () => {
     const user = userEvent.setup();
     const { emitted } = await renderSuspended(AppHeaderNav, {
