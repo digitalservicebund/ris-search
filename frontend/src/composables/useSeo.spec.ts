@@ -27,16 +27,14 @@ describe("useSeo composable", () => {
 
       expect(useSeoMeta).toHaveBeenCalledWith(
         expect.objectContaining({
-          title: expect.objectContaining({ value: "Test Title" }),
-          description: expect.objectContaining({ value: "Test Description" }),
+          title: "Test Title",
+          description: "Test Description",
           ogType: "article",
-          ogTitle: expect.objectContaining({ value: "Test Title" }),
-          ogDescription: expect.objectContaining({ value: "Test Description" }),
+          ogTitle: "Test Title",
+          ogDescription: "Test Description",
           ogUrl: TEST_URL,
-          twitterTitle: expect.objectContaining({ value: "Test Title" }),
-          twitterDescription: expect.objectContaining({
-            value: "Test Description",
-          }),
+          twitterTitle: "Test Title",
+          twitterDescription: "Test Description",
         }),
       );
 
@@ -54,8 +52,8 @@ describe("useSeo composable", () => {
 
       expect(useSeoMeta).toHaveBeenCalledWith(
         expect.objectContaining({
-          ogTitle: expect.objectContaining({ value: "Custom OG Title" }),
-          twitterTitle: expect.objectContaining({ value: "Custom OG Title" }),
+          ogTitle: "Custom OG Title",
+          twitterTitle: "Custom OG Title",
         }),
       );
     });

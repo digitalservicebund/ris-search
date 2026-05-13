@@ -2,7 +2,7 @@
 import { Message, Select } from "primevue";
 import { DocumentKind } from "~/types/api";
 import { isStrictDateFilterValue } from "~/utils/search/dateFilterType";
-import { useSimpleSearchSeo } from "~/composables/useSimpleSearchSeo";
+import { useSearchSeo } from "~/composables/useSearchSeo";
 
 useSkipLinks([
   { label: "Zur Suche", to: "#search" },
@@ -24,10 +24,14 @@ const {
   typeGroup,
 } = useSimpleSearchRouteParams();
 
-useSimpleSearchSeo({
+useSearchSeo({
   query,
   documentKind,
   pageIndex,
+  searchType: "Suche",
+  description:
+    "Finden Sie gezielt Gesetze, Verordnungen und Entscheidungen – schnell, präzise und übersichtlich.",
+  ogTitle: "Suche im Rechtsinformationsportal des Bundes",
 });
 
 const privateFeaturesEnabled = usePrivateFeaturesFlag();

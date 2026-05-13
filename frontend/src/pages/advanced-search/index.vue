@@ -32,13 +32,15 @@ const {
   sort,
 } = useAdvancedSearchRouteParams();
 
-const title = computed(() => {
-  const pageSuffix =
-    pageIndex.value > 0 ? `, Seite ${pageIndex.value + 1}` : "";
-  return `Erweiterte Suche${pageSuffix}`;
+useSearchSeo({
+  query,
+  documentKind,
+  pageIndex,
+  searchType: "Erweiterte Suche",
+  description:
+    "Finden Sie gezielt Rechtsinformationen – schnell, präzise und übersichtlich.",
+  ogTitle: "Erweiterte Suche im Rechtsinformationsportal des Bundes",
 });
-
-useHead({ title });
 
 const searchFormId = useId();
 

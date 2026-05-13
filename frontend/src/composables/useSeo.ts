@@ -1,4 +1,4 @@
-import { computed, toValue, type MaybeRefOrGetter } from "vue";
+import { type MaybeRefOrGetter } from "vue";
 
 export type SeoInput = {
   title: MaybeRefOrGetter<string>;
@@ -10,19 +10,15 @@ export type SeoInput = {
 export function useSeo({ title, description, ogTitle }: SeoInput) {
   const url = useRequestURL();
 
-  const resolvedTitle = computed(() => toValue(title));
-  const resolvedDescription = computed(() => toValue(description));
-  const resolvedOgTitle = computed(() => toValue(ogTitle ?? title));
-
   useSeoMeta({
-    title: resolvedTitle,
-    description: resolvedDescription,
+    title: title,
+    description: description,
     ogType: "article",
-    ogTitle: resolvedOgTitle,
-    ogDescription: resolvedDescription,
+    ogTitle: ogTitle ?? title,
+    ogDescription: description,
     ogUrl: url.href,
-    twitterTitle: resolvedOgTitle,
-    twitterDescription: resolvedDescription,
+    twitterTitle: ogTitle ?? title,
+    twitterDescription: description,
   });
 
   useHead({
