@@ -2,9 +2,9 @@ import { renderSuspended } from "@nuxt/test-utils/runtime";
 import { userEvent } from "@testing-library/user-event";
 import { screen } from "@testing-library/vue";
 import { describe, it, expect } from "vitest";
-import AppHeader from "./AppHeader.vue";
+import AppHeader from "./Header.vue";
 
-describe("AppHeader", () => {
+describe("Header", () => {
   it("renders correctly", async () => {
     await renderSuspended(AppHeader);
     expect(
