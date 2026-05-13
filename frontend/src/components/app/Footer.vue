@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import bmjvLogo from "~/assets/img/BMJV_de_v1__Web_farbig.svg";
-import BackToTopLink from "~/components/app/BackToTopLink.vue";
 import { usePrivateFeaturesFlag } from "~/composables/usePrivateFeaturesFlag";
 
 const route = useRoute();
@@ -120,6 +119,6 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
       </div>
     </div>
 
-    <BackToTopLink class="absolute right-16 bottom-32" />
+    <AppBackToTopLink />
   </footer>
 </template>

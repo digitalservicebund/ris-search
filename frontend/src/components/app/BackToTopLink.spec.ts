@@ -9,7 +9,7 @@ describe("BackToTopLink", () => {
     await renderSuspended(BackToTopLink);
 
     expect(
-      screen.getByRole("link", { name: "zum Seitenanfang" }),
+      screen.getByRole("link", { name: "Zum Seitenanfang" }),
     ).toHaveAttribute("href", expect.stringContaining("#top"));
   });
 
@@ -26,7 +26,7 @@ describe("BackToTopLink", () => {
 
     await renderSuspended(BackToTopLink);
 
-    await user.click(screen.getByRole("link", { name: "zum Seitenanfang" }));
+    await user.click(screen.getByRole("link", { name: "Zum Seitenanfang" }));
 
     expect(document.getElementById).toHaveBeenCalledWith("top");
     expect(mockScrollIntoView).toHaveBeenCalledWith({ behavior: "smooth" });
@@ -50,7 +50,7 @@ describe("BackToTopLink", () => {
       }),
     );
 
-    await user.click(screen.getByRole("link", { name: "zum Seitenanfang" }));
+    await user.click(screen.getByRole("link", { name: "Zum Seitenanfang" }));
 
     expect(hasError).toBe(false);
   });
