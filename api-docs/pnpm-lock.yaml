@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@digitalservicebund/ris-ui':
-        specifier: ^2.0.0
-        version: 2.0.0(primevue@4.5.5(vue@3.5.34(typescript@6.0.3)))(tailwindcss@3.4.19)(vue@3.5.34(typescript@6.0.3))
+        specifier: ^4.4.0
+        version: 4.4.0(primevue@4.5.5(vue@3.5.34(typescript@6.0.3)))(tailwindcss@3.4.19)(vue@3.5.34(typescript@6.0.3))
       '@headlessui/vue':
         specifier: 1.7.23
         version: 1.7.23(vue@3.5.34(typescript@6.0.3))
@@ -214,11 +214,11 @@ packages:
     resolution: {integrity: sha512-P4qRe2OyIZsxtOsX4GY0JP5k0YyDimoeY/eQP5S2Ibr0T1uFoH3/7yOsXeNeAS15H1A4h81apfNakK019F835Q==}
     deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
 
-  '@digitalservicebund/ris-ui@2.0.0':
-    resolution: {integrity: sha512-kFLRwAOmsNgFj41CUEOWTfWNKubOawEM1jOv3mpmZcvh46THbYP7GrPVdmcJ5onLLub8pcjyijQhXkCHYaxOEA==}
+  '@digitalservicebund/ris-ui@4.4.0':
+    resolution: {integrity: sha512-LJT0An7mql34gUbnrno302UsOUPOiXgGdY35uN4jU3FaN0IeKzfiWJ9xT7VANAZl0pwkgL7dQCmV8RCoh1dDTw==}
     peerDependencies:
       primevue: ^4.0.0
-      tailwindcss: ^3.0.0
+      tailwindcss: ^4.0.0
       vue: ^3.0.0
 
   '@docsearch/css@3.8.2':
@@ -1412,6 +1412,7 @@ packages:
 
   lucide-vue-next@0.577.0:
     resolution: {integrity: sha512-py05bAfv9SHVJqscbiOnjcnLlEmOffA58a+7XhZuFxrs6txe1E8VoR1ngWGTYO+9aVKABAz8l3ee3PqiQN9QPA==}
+    deprecated: Package deprecated. Please use @lucide/vue instead.
     peerDependencies:
       vue: '>=3.0.1'
 
@@ -2207,7 +2208,7 @@ snapshots:
 
   '@digitalservice4germany/style-dictionary@2.0.0': {}
 
-  '@digitalservicebund/ris-ui@2.0.0(primevue@4.5.5(vue@3.5.34(typescript@6.0.3)))(tailwindcss@3.4.19)(vue@3.5.34(typescript@6.0.3))':
+  '@digitalservicebund/ris-ui@4.4.0(primevue@4.5.5(vue@3.5.34(typescript@6.0.3)))(tailwindcss@3.4.19)(vue@3.5.34(typescript@6.0.3))':
     dependencies:
       primevue: 4.5.5(vue@3.5.34(typescript@6.0.3))
       tailwindcss: 3.4.19

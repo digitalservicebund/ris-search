@@ -30,7 +30,7 @@
     "vitepress": "1.6.4"
   },
   "dependencies": {
-    "@digitalservicebund/ris-ui": "^2.0.0",
+    "@digitalservicebund/ris-ui": "^4.4.0",
     "@headlessui/vue": "1.7.23",
     "primeicons": "^7.0.0",
     "primevue": "^4.5.5",
