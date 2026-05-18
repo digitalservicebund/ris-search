@@ -1,7 +1,7 @@
 import { renderSuspended } from "@nuxt/test-utils/runtime";
 import { screen } from "@testing-library/vue";
 import { defineComponent, h } from "vue";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import AppSkipLinks from "./SkipLinks.vue";
 
 const RegisterSkipLinks = defineComponent({
@@ -28,5 +28,29 @@ describe("SkipLinks", () => {
 
     expect(screen.getByRole("link", { name: "Zum Inhalt" })).toBeVisible();
     expect(screen.getByRole("link", { name: "Zum Fußbereich" })).toBeVisible();
+  });
+
+  it("focuses nav when navigating to a different path", async () => {
+    await renderSuspended(SkipLinksDummy, { route: "/search" });
+    const nav = screen.getByRole("navigation", { name: "Sprunglinks" });
+    const focusSpy = vi.spyOn(nav, "focus");
+
+    const router = useRouter();
+    await router.push("/about");
+
+    expect(focusSpy).toHaveBeenCalled();
+    focusSpy.mockRestore();
+  });
+
+  it("does not focus nav when navigating to the same path with different query params", async () => {
+    await renderSuspended(SkipLinksDummy, { route: "/search?q=foo" });
+    const nav = screen.getByRole("navigation", { name: "Sprunglinks" });
+    const focusSpy = vi.spyOn(nav, "focus");
+
+    const router = useRouter();
+    await router.push("/search?q=bar");
+
+    expect(focusSpy).not.toHaveBeenCalled();
+    focusSpy.mockRestore();
   });
 });

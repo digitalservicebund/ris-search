@@ -1,4 +1,4 @@
-import { navigate, test } from "./utils/fixtures";
+import { expect, navigate, test } from "./utils/fixtures";
 import {
   expectPageSkipLinks,
   type SkipLinkExpectation,
@@ -109,6 +109,77 @@ const scenarios: Scenario[] = [
     ],
   },
 ];
+
+test("skip links are focused after client-side navigation", async ({
+  page,
+  isMobileTest,
+}) => {
+  test.skip(isMobileTest);
+
+  await navigate(page, "/");
+
+  await page.keyboard.press("Tab");
+  await expect(
+    page.getByRole("navigation", { name: "Sprunglinks" }).getByRole("link", {
+      name: "Zum Inhalt",
+    }),
+  ).toBeFocused();
+
+  await page
+    .getByRole("navigation")
+    .getByRole("link", { name: "Suche" })
+    .click();
+
+  await expect(
+    page.getByRole("heading", { name: "Suche", level: 1, exact: true }),
+  ).toBeVisible();
+
+  const skipLinks = page.getByRole("navigation", { name: "Sprunglinks" });
+  skipLinks.waitFor({ state: "attached" });
+
+  await page.keyboard.press("Tab");
+  await expect(
+    skipLinks.getByRole("link", { name: "Zur Suche" }),
+  ).toBeFocused();
+});
+
+test.describe("mobile", () => {
+  test.beforeEach(({ isMobileTest }) => {
+    test.skip(!isMobileTest);
+  });
+
+  test("skip links are focused after client-side navigation", async ({
+    page,
+  }) => {
+    await navigate(page, "/");
+
+    await page.keyboard.press("Tab");
+    await expect(
+      page.getByRole("navigation", { name: "Sprunglinks" }).getByRole("link", {
+        name: "Zum Inhalt",
+      }),
+    ).toBeFocused();
+
+    await page.getByRole("button", { name: "Menü" }).click();
+
+    await page
+      .getByRole("navigation")
+      .getByRole("link", { name: "Suche" })
+      .click();
+
+    await expect(
+      page.getByRole("heading", { name: "Suche", level: 1, exact: true }),
+    ).toBeVisible();
+
+    const skipLinks = page.getByRole("navigation", { name: "Sprunglinks" });
+    skipLinks.waitFor({ state: "attached" });
+
+    await page.keyboard.press("Tab");
+    await expect(
+      skipLinks.getByRole("link", { name: "Zur Suche" }),
+    ).toBeFocused();
+  });
+});
 
 for (const { name, url, skipLinks, requiresPrivateFeatures } of scenarios) {
   test(`skip links work on the ${name}`, async ({
