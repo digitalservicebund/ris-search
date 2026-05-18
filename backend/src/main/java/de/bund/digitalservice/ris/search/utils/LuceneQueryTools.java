@@ -5,8 +5,6 @@ import de.bund.digitalservice.ris.search.models.errors.CustomError;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
@@ -15,19 +13,9 @@ import org.springframework.data.elasticsearch.UncategorizedElasticsearchExceptio
 /** Class to store the Lucene query tools */
 public class LuceneQueryTools {
 
-  private static final Logger logger = LogManager.getLogger(LuceneQueryTools.class);
-
   private static final StandardAnalyzer analyzer = new StandardAnalyzer();
 
   private LuceneQueryTools() {}
-
-  private static final CustomValidationException invalidQueryException =
-      new CustomValidationException(
-          CustomError.builder()
-              .code("invalid_lucene_query")
-              .parameter("query")
-              .message("Invalid lucene query")
-              .build());
 
   /**
    * Method to validate the parameters of a Lucene query
@@ -43,8 +31,12 @@ public class LuceneQueryTools {
       QueryParser queryParser = new QueryParser("", analyzer);
       queryParser.parse(query);
     } catch (ParseException e) {
-      logger.error("Validation error(s): {}", invalidQueryException.getErrors());
-      throw invalidQueryException;
+      throw new CustomValidationException(
+          CustomError.builder()
+              .code("invalid_lucene_query")
+              .parameter("query")
+              .message(e.getMessage())
+              .build());
     }
   }
 
