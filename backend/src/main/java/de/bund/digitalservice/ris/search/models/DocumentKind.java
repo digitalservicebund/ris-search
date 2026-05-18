@@ -1,68 +1,23 @@
 package de.bund.digitalservice.ris.search.models;
 
-import com.fasterxml.jackson.annotation.JsonValue;
 import de.bund.digitalservice.ris.search.utils.eli.EliFile;
 import de.bund.digitalservice.ris.search.utils.eli.ExpressionEli;
 import java.util.Optional;
 import lombok.Getter;
-import org.jetbrains.annotations.NotNull;
-import org.springframework.core.convert.converter.Converter;
-import org.springframework.stereotype.Component;
 
 /** Enum for the different kinds of documents that can be searched for. */
 @Getter
 public enum DocumentKind {
-  CASE_LAW("R", "case-law"),
-  LEGISLATION("N", "norms"),
-  LITERATURE("L", "literature"),
-  ADMINISTRATIVE_DIRECTIVE("V", "administrative-directives"),
+  CASE_LAW("case-law"),
+  LEGISLATION("norms"),
+  LITERATURE("literature"),
+  ADMINISTRATIVE_DIRECTIVE("administrative-directives"),
   ;
 
-  private final String singleLetterAlias;
   private final String siteMapPath;
 
-  DocumentKind(String singleLetterAlias, String siteMapPath) {
-    this.singleLetterAlias = singleLetterAlias;
+  DocumentKind(String siteMapPath) {
     this.siteMapPath = siteMapPath;
-  }
-
-  @JsonValue
-  public String getSingleLetterAlias() {
-    return singleLetterAlias;
-  }
-
-  /**
-   * Resolves a string documentKindString to the corresponding {@code DocumentKind} enum constant.
-   * This method extends the default {@code valueOf} behavior by first checking for a match on the
-   * single letter alias and then the standard enum lookup for other valid names.
-   *
-   * @param documentKindString the string to find the value for.
-   * @return the {@code DocumentKind} corresponding to documentKindString.
-   * @throws IllegalArgumentException if the input documentKindString does not correspond to any
-   *     defined {@code DocumentKind} constant.
-   * @throws NullPointerException if the input documentKindString is null.
-   */
-  public static DocumentKind valueFromString(String documentKindString) {
-    return switch (documentKindString.toUpperCase()) {
-      case "R" -> DocumentKind.CASE_LAW;
-      case "N" -> DocumentKind.LEGISLATION;
-      case "L" -> DocumentKind.LITERATURE;
-      case "V" -> DocumentKind.ADMINISTRATIVE_DIRECTIVE;
-      default -> DocumentKind.valueOf(documentKindString.toUpperCase());
-    };
-  }
-
-  /**
-   * Using the {@link Component} annotation, this converter class is registered to handle extended
-   * value conversion when this enum is used as a request parameter.
-   */
-  @Component
-  public static class FromStringConverter implements Converter<String, DocumentKind> {
-
-    @Override
-    public DocumentKind convert(@NotNull String source) {
-      return DocumentKind.valueFromString(source);
-    }
   }
 
   /**
