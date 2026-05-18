@@ -15,7 +15,7 @@
     "@iconify-json/mdi": "^1.2.3",
     "@tailwindcss/typography": "0.5.19",
     "@types/markdown-it": "^14.1.2",
-    "@types/node": "25.7.0",
+    "@types/node": "25.8.0",
     "@vue/tsconfig": "0.9.1",
     "autoprefixer": "^10.5.0",
     "deepmerge": "^4.3.1",
