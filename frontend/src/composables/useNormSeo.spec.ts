@@ -10,6 +10,24 @@ const { useSeo } = vi.hoisted(() => ({
 
 mockNuxtImport("useSeo", () => useSeo);
 
+function expectPageTitle(expectedTitle: string) {
+  expect(useSeo).toHaveBeenCalledWith(
+    expect.objectContaining({ title: expectedTitle }),
+  );
+}
+
+function expectDescription(expected: string) {
+  expect(useSeo).toHaveBeenCalledWith(
+    expect.objectContaining({ description: expected }),
+  );
+}
+
+function expectOgTitle(expectedOgTitle?: string) {
+  expect(useSeo).toHaveBeenCalledWith(
+    expect.objectContaining({ ogTitle: expectedOgTitle }),
+  );
+}
+
 describe("useNormSeo", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -33,12 +51,6 @@ describe("useNormSeo", () => {
   });
 
   describe("norm page title", () => {
-    function expectPageTitle(expectedTitle: string) {
-      expect(useSeo).toHaveBeenCalledWith(
-        expect.objectContaining({ title: expectedTitle }),
-      );
-    }
-
     it("uses only abbreviation if validity data is undefined", () => {
       useNormSeo({
         norm: { abbreviation: "FooBar" } as LegislationExpression,
@@ -85,12 +97,6 @@ describe("useNormSeo", () => {
   });
 
   describe("norm description", () => {
-    function expectDescription(expected: string) {
-      expect(useSeo).toHaveBeenCalledWith(
-        expect.objectContaining({ description: expected }),
-      );
-    }
-
     it("returns empty string if norm has no alternateName or name", () => {
       useNormSeo({ norm: {} as LegislationExpression });
       expectDescription("");
@@ -126,18 +132,12 @@ describe("useNormSeo", () => {
   });
 
   describe("norm og:title", () => {
-    function expectOgTitle(expectedOgTitle?: string) {
-      expect(useSeo).toHaveBeenCalledWith(
-        expect.objectContaining({ ogTitle: expectedOgTitle }),
-      );
-    }
-
     it("empty if norm has no abbreviation or alternateName", () => {
       useNormSeo({
         norm: {} as LegislationExpression,
       });
 
-      expectOgTitle(undefined);
+      expectOgTitle();
     });
 
     it("uses abbreviation as base title", () => {
