@@ -110,6 +110,7 @@ public class ControllerExceptionHandler {
   @ExceptionHandler(CustomValidationException.class)
   public ResponseEntity<CustomErrorResponse> handleCustomValidationException(
       CustomValidationException exception) {
+    logger.warn(exception.getMessage());
     var errorResponse = CustomErrorResponse.builder().errors(exception.getErrors()).build();
     return ResponseEntity.status(HttpStatus.UNPROCESSABLE_CONTENT).body(errorResponse);
   }

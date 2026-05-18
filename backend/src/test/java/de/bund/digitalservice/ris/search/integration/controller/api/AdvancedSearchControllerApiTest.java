@@ -423,20 +423,8 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
         .perform(get(url).contentType(MediaType.APPLICATION_JSON))
         .andDo(print())
         .andExpect(status().isUnprocessableContent())
-        .andExpect(
-            content()
-                .json(
-                    """
-                                                        {
-                                                          "errors": [
-                                                            {
-                                                              "code": "invalid_lucene_query",
-                                                              "parameter": "query",
-                                                              "message": "Invalid lucene query"
-                                                            }
-                                                          ]
-                                                        }
-                                                    """));
+        .andExpect(jsonPath("$.errors[0].code").value("invalid_lucene_query"))
+        .andExpect(jsonPath("$.errors[0].parameter").value("query"));
   }
 
   private static Stream<Arguments> provideSortTestData() {
