@@ -43,6 +43,7 @@ updates:
       default-days: 3
     labels:
       - "api-docs"
+      - "dependencies"
     groups:
       all-api-docs-non-major-dependencies:
         update-types:
