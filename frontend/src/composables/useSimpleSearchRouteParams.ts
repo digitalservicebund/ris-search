@@ -1,6 +1,6 @@
 import { navigateTo, useRoute } from "#app";
-import type { LocationQueryValue, LocationQueryRaw } from "#vue-router";
-import { isEqual } from "lodash-es";
+import type { LocationQueryRaw, LocationQueryValue } from "#vue-router";
+import { isEmpty, isEqual } from "lodash-es";
 import { DocumentKind } from "~/types/api";
 import { isDocumentKind } from "~/utils/documentKind";
 import {
@@ -122,9 +122,17 @@ export function useSimpleSearchRouteParams() {
       }),
     );
 
+    // Hash is used for skip links on the page:
+    //
+    // - We'll keep it if the search params haven't change or if no search has
+    //   been performed yet (-> route change is due to hash change, so any
+    //   change to the hash would break navigation)
+    // - Remove it if the search params have changed (-> route change is due to
+    //   search, so keeping the hash would cause unintended scrolling)
+    const shouldKeepHash = isEmpty(from) || isEqual(from, to);
+
     return navigateTo({
-      // Reset hash when the query changes to prevent unintended scrolling
-      hash: isEqual(from, to) ? route.hash : undefined,
+      hash: shouldKeepHash ? route.hash : undefined,
       query: to,
     });
   }

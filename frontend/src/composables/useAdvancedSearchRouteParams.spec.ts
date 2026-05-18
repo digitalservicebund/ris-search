@@ -349,9 +349,29 @@ describe("useAdvancedSearchRouteParams", () => {
       };
 
       vi.doMock("#app", () => ({
-        useRoute: vi
-          .fn()
-          .mockReturnValue({ query: query, hash: "#some-anchor" }),
+        useRoute: vi.fn().mockReturnValue({ query, hash: "#some-anchor" }),
+        navigateTo: navigateToMock,
+      }));
+
+      const { useAdvancedSearchRouteParams } =
+        await import("./useAdvancedSearchRouteParams");
+
+      const { saveFilterStateToRoute } = useAdvancedSearchRouteParams();
+
+      await saveFilterStateToRoute();
+
+      expect(navigateToMock).toHaveBeenCalledWith(
+        expect.objectContaining({ hash: "#some-anchor" }),
+      );
+    });
+
+    it("retains the hash when the query was empty", async () => {
+      const navigateToMock = vi.fn();
+
+      const query = {};
+
+      vi.doMock("#app", () => ({
+        useRoute: vi.fn().mockReturnValue({ query, hash: "#some-anchor" }),
         navigateTo: navigateToMock,
       }));
 

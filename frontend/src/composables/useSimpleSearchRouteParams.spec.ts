@@ -400,10 +400,29 @@ describe("useSimpleSearchRouteParams", () => {
       };
 
       vi.doMock("#app", () => ({
-        useRoute: vi.fn().mockReturnValue({
-          query: query,
-          hash: "#some-anchor",
-        }),
+        useRoute: vi.fn().mockReturnValue({ query, hash: "#some-anchor" }),
+        navigateTo: navigateToMock,
+      }));
+
+      const { useSimpleSearchRouteParams } =
+        await import("./useSimpleSearchRouteParams");
+
+      const { saveFilterStateToRoute } = useSimpleSearchRouteParams();
+
+      await saveFilterStateToRoute();
+
+      expect(navigateToMock).toHaveBeenCalledWith(
+        expect.objectContaining({ hash: "#some-anchor" }),
+      );
+    });
+
+    it("retains the hash when the query was empty", async () => {
+      const navigateToMock = vi.fn();
+
+      const query = {};
+
+      vi.doMock("#app", () => ({
+        useRoute: vi.fn().mockReturnValue({ query, hash: "#some-anchor" }),
         navigateTo: navigateToMock,
       }));
 
