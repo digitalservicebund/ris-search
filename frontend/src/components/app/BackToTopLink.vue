@@ -1,33 +1,57 @@
 <script setup lang="ts">
-const handleClick = () => {
-  const header = document.getElementById("top");
-  if (header) {
-    header.scrollIntoView({ behavior: "smooth" });
-  }
-};
+import { Button } from "primevue";
+import IcBaselineKeyboardArrowUp from "~icons/ic/baseline-keyboard-arrow-up";
+
+const scrollTarget = "top";
+
+function scrollToTop() {
+  document.getElementById(scrollTarget)?.scrollIntoView({ behavior: "smooth" });
+}
 </script>
 
 <template>
-  <NuxtLink
-    :to="{ hash: '#top' }"
-    aria-label="zum Seitenanfang"
-    class="outline-offset-4 outline-blue-800 focus-visible:outline-4"
-    @click.prevent="handleClick"
-  >
-    <svg
-      viewBox="0 0 42 42"
-      width="2.5rem"
-      height="2.5rem"
-      version="1.1"
-      focusable="false"
-      aria-hidden="true"
+  <div class="back-to-top-link">
+    <Button
+      :href="`#${scrollTarget}`"
+      aria-label="Zum Seitenanfang"
+      as="a"
+      rounded
+      severity="secondary"
+      @click.prevent="scrollToTop"
     >
-      <path
-        d="M21 1a20 20 0 1 0 20 20A20 20 0 0 0 21 1Zm0 38a18 18 0 1 1 18-18 18 18 0 0 1-18 18Z"
-      />
-      <path
-        d="M21.2 16.5a.3.3 0 0 0-.4 0l-6.6 6.6a.2.2 0 0 0 0 .3l1 1.1a.2.2 0 0 0 .4 0l5.4-5.4 5.4 5.4a.2.2 0 0 0 .3 0l1-1a.2.2 0 0 0 0-.4Z"
-      />
-    </svg>
-  </NuxtLink>
+      <template #icon>
+        <IcBaselineKeyboardArrowUp />
+      </template>
+    </Button>
+  </div>
 </template>
+
+<style scoped>
+@reference "~/assets/main.css";
+
+.back-to-top-link {
+  @apply fixed right-16 bottom-(--offset-bottom) [--offset-bottom:1rem];
+}
+
+:root:has([data-back-to-top-adjust="drawer"]) {
+  .back-to-top-link {
+    /* drawer height + 1rem on mobile */
+    @apply [--offset-bottom:4.875rem] md:[--offset-bottom:1rem];
+  }
+}
+
+@supports (animation-range: normal) {
+  .back-to-top-link {
+    @apply animate-[slide-in_linear_both] [animation-range:normal_8rem] [animation-timeline:scroll(root)];
+  }
+
+  @keyframes slide-in {
+    from {
+      translate: 0 calc(100% + var(--offset-bottom));
+    }
+    to {
+      translate: 0 0;
+    }
+  }
+}
+</style>
