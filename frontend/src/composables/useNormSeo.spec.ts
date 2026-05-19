@@ -10,24 +10,6 @@ const { useSeo } = vi.hoisted(() => ({
 
 mockNuxtImport("useSeo", () => useSeo);
 
-function expectPageTitle(expectedTitle: string) {
-  expect(useSeo).toHaveBeenCalledWith(
-    expect.objectContaining({ title: expectedTitle }),
-  );
-}
-
-function expectDescription(expected: string) {
-  expect(useSeo).toHaveBeenCalledWith(
-    expect.objectContaining({ description: expected }),
-  );
-}
-
-function expectOgTitle(expectedOgTitle?: string) {
-  expect(useSeo).toHaveBeenCalledWith(
-    expect.objectContaining({ ogTitle: expectedOgTitle }),
-  );
-}
-
 describe("useNormSeo", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -56,7 +38,9 @@ describe("useNormSeo", () => {
         norm: { abbreviation: "FooBar" } as LegislationExpression,
       });
 
-      expectPageTitle("FooBar");
+      expect(useSeo).toHaveBeenCalledWith(
+        expect.objectContaining({ title: "FooBar" }),
+      );
     });
 
     it.each([
@@ -70,7 +54,9 @@ describe("useNormSeo", () => {
         validityInterval: { from, to },
       });
 
-      expectPageTitle(`FooBar${expected}`);
+      expect(useSeo).toHaveBeenCalledWith(
+        expect.objectContaining({ title: `FooBar${expected}` }),
+      );
     });
 
     it("appends validity status", () => {
@@ -79,7 +65,9 @@ describe("useNormSeo", () => {
         validityStatus: "InForce",
       });
 
-      expectPageTitle("FooBar, Aktuell gültig");
+      expect(useSeo).toHaveBeenCalledWith(
+        expect.objectContaining({ title: "FooBar, Aktuell gültig" }),
+      );
     });
 
     it("validity status succeeds validity period", () => {
@@ -92,14 +80,21 @@ describe("useNormSeo", () => {
         validityStatus: "InForce",
       });
 
-      expectPageTitle("FooBar, 01.01.2025-01.01.2026, Aktuell gültig");
+      expect(useSeo).toHaveBeenCalledWith(
+        expect.objectContaining({
+          title: "FooBar, 01.01.2025-01.01.2026, Aktuell gültig",
+        }),
+      );
     });
   });
 
   describe("norm description", () => {
     it("returns empty string if norm has no alternateName or name", () => {
       useNormSeo({ norm: {} as LegislationExpression });
-      expectDescription("");
+
+      expect(useSeo).toHaveBeenCalledWith(
+        expect.objectContaining({ description: "" }),
+      );
     });
 
     it("uses alternateName as description", () => {
@@ -109,14 +104,20 @@ describe("useNormSeo", () => {
           alternateName: "Foo Bar Gesetz",
         } as LegislationExpression,
       });
-      expectDescription("Foo Bar Gesetz");
+
+      expect(useSeo).toHaveBeenCalledWith(
+        expect.objectContaining({ description: "Foo Bar Gesetz" }),
+      );
     });
 
     it("falls back to name if alternateName is absent", () => {
       useNormSeo({
         norm: { name: "Gesetz über Foo und Bar" } as LegislationExpression,
       });
-      expectDescription("Gesetz über Foo und Bar");
+
+      expect(useSeo).toHaveBeenCalledWith(
+        expect.objectContaining({ description: "Gesetz über Foo und Bar" }),
+      );
     });
 
     it("truncates description at 150 characters", () => {
@@ -125,8 +126,11 @@ describe("useNormSeo", () => {
         norm: { alternateName: longTitle } as LegislationExpression,
       });
 
-      expectDescription(
-        "Ein sehr langes Gesetz Ein sehr langes Gesetz Ein sehr langes Gesetz Ein sehr langes Gesetz Ein sehr langes Gesetz Ein sehr langes Gesetz Ein sehr",
+      expect(useSeo).toHaveBeenCalledWith(
+        expect.objectContaining({
+          description:
+            "Ein sehr langes Gesetz Ein sehr langes Gesetz Ein sehr langes Gesetz Ein sehr langes Gesetz Ein sehr langes Gesetz Ein sehr langes Gesetz Ein sehr",
+        }),
       );
     });
   });
@@ -137,7 +141,9 @@ describe("useNormSeo", () => {
         norm: {} as LegislationExpression,
       });
 
-      expectOgTitle();
+      expect(useSeo).toHaveBeenCalledWith(
+        expect.objectContaining({ ogTitle: undefined }),
+      );
     });
 
     it("uses abbreviation as base title", () => {
@@ -148,7 +154,9 @@ describe("useNormSeo", () => {
         } as LegislationExpression,
       });
 
-      expectOgTitle("FooBar");
+      expect(useSeo).toHaveBeenCalledWith(
+        expect.objectContaining({ ogTitle: "FooBar" }),
+      );
     });
 
     it("falls back to alternateName if abbreviation is absent", () => {
@@ -156,7 +164,9 @@ describe("useNormSeo", () => {
         norm: { alternateName: "Foo Bar Gesetz" } as LegislationExpression,
       });
 
-      expectOgTitle("Foo Bar Gesetz");
+      expect(useSeo).toHaveBeenCalledWith(
+        expect.objectContaining({ ogTitle: "Foo Bar Gesetz" }),
+      );
     });
 
     it("appends validFrom date", () => {
@@ -165,7 +175,9 @@ describe("useNormSeo", () => {
         validityInterval: { from: dayjs("01-01-2025"), to: undefined },
       });
 
-      expectOgTitle("FooBar: Fassung vom 01.01.2025");
+      expect(useSeo).toHaveBeenCalledWith(
+        expect.objectContaining({ ogTitle: "FooBar: Fassung vom 01.01.2025" }),
+      );
     });
 
     it("does not append validTo date", () => {
@@ -174,7 +186,9 @@ describe("useNormSeo", () => {
         validityInterval: { from: undefined, to: dayjs("01-01-2026") },
       });
 
-      expectOgTitle("FooBar");
+      expect(useSeo).toHaveBeenCalledWith(
+        expect.objectContaining({ ogTitle: "FooBar" }),
+      );
     });
 
     it("appends validity status label", () => {
@@ -183,7 +197,9 @@ describe("useNormSeo", () => {
         validityStatus: "InForce",
       });
 
-      expectOgTitle("FooBar: Aktuell gültig");
+      expect(useSeo).toHaveBeenCalledWith(
+        expect.objectContaining({ ogTitle: "FooBar: Aktuell gültig" }),
+      );
     });
 
     it("appends both validFrom date and validity status", () => {
@@ -196,7 +212,11 @@ describe("useNormSeo", () => {
         validityStatus: "InForce",
       });
 
-      expectOgTitle("FooBar: Fassung vom 01.01.2025, Aktuell gültig");
+      expect(useSeo).toHaveBeenCalledWith(
+        expect.objectContaining({
+          ogTitle: "FooBar: Fassung vom 01.01.2025, Aktuell gültig",
+        }),
+      );
     });
 
     it("truncates title", () => {
@@ -210,7 +230,11 @@ describe("useNormSeo", () => {
 
       // "Sehr Langes Gesetz: Fassung vom 01.01.2025, Aktuell gültig" is 58 chars
       // expect truncation at last word boundary within 55 chars
-      expectOgTitle("Sehr Langes Gesetz: Fassung vom 01.01.2025, Aktuell");
+      expect(useSeo).toHaveBeenCalledWith(
+        expect.objectContaining({
+          ogTitle: "Sehr Langes Gesetz: Fassung vom 01.01.2025, Aktuell",
+        }),
+      );
     });
   });
 });
