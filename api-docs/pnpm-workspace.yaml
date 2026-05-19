@@ -1,5 +1,8 @@
 packages: []
 
+overrides:
+  esbuild: ">=0.25.0" # GHSA-67mh-4wv8-2f99
+
 allowBuilds:
   esbuild: true
   vue-demi: false

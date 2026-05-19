@@ -1,0 +1,6 @@
+# CVEs ignored here are usually fixed by pinning them in pnpm-workspace.yaml.
+# Ignoring them here is to solve trivy complaints from vulnerable dependencies
+# in the Node Docker image that are not actually used in the production
+# application.
+
+CVE-2026-39365
