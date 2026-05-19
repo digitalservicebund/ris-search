@@ -58,7 +58,7 @@ describe("useSeo composable", () => {
       );
     });
 
-    it("dose not set descriptions if undefined", () => {
+    it("dose not set descriptions if description is undefined", () => {
       useSeo({ title: "Test Title" });
 
       expect(useSeoMeta).toHaveBeenCalledWith(
