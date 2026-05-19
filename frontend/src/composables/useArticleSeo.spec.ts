@@ -46,16 +46,19 @@ describe("useArticleSeo", () => {
       ["2025-01-01/..", "BGB, vom 01.01.2025"],
       ["../2026-01-01", "BGB, bis 01.01.2026"],
       ["2025-01-01/2026-01-01", "BGB, 01.01.2025-01.01.2026"],
-    ])("appends formatted validity interval", (temporalCoverage, expected) => {
-      useArticleSeo({
-        abbreviation: "BGB",
-        article: { temporalCoverage } as Article,
-      });
+    ])(
+      "appends formatted validity interval for temporalCoverage '%s'",
+      (temporalCoverage, expected) => {
+        useArticleSeo({
+          abbreviation: "BGB",
+          article: { temporalCoverage } as Article,
+        });
 
-      expect(useSeo).toHaveBeenCalledWith(
-        expect.objectContaining({ title: expected }),
-      );
-    });
+        expect(useSeo).toHaveBeenCalledWith(
+          expect.objectContaining({ title: expected }),
+        );
+      },
+    );
 
     it("combines abbreviation, article name and validity interval", () => {
       useArticleSeo({

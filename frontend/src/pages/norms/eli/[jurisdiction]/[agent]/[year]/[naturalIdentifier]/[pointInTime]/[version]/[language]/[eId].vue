@@ -77,10 +77,10 @@ const article: Ref<Article | undefined> = computed(() =>
 );
 
 useArticleSeo({
-  abbreviation: norm.value.abbreviation,
+  abbreviation: norm.value?.abbreviation,
   article: article.value,
-  articleHeadlineHtml: data.value.articleHeading,
-  articleHtml: data.value.htmlBody,
+  articleHeadlineHtml: data.value?.articleHeading,
+  articleHtml: data.value?.htmlBody,
 });
 
 const previousArticleUrl: Ref<RouteLocationRaw | undefined> = computed(() =>
