@@ -6,6 +6,7 @@ import { type CaseLaw, DocumentKind } from "~/types/api";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineFileDownload from "~icons/ic/outline-file-download";
 import IcOutlineInfo from "~icons/ic/outline-info";
+import { useCaselawSeo } from "~/composables/useCaselawSeo";
 
 definePageMeta({ layout: false });
 
@@ -36,71 +37,7 @@ const document = computed(() => {
   }
 });
 
-// Page head ----------------------------------------------
-
-function buildOgTitle(caselawData: CaseLaw) {
-  const court = caselawData.courtName?.trim() || "";
-  const dtype = caselawData.documentType || "Gerichtsentscheidung";
-  const date = caselawData.decisionDate
-    ? dateFormattedDDMMYYYY(caselawData.decisionDate)
-    : "";
-  const file = caselawData.fileNumbers?.[0] || "";
-
-  const parts = [
-    court && `${court}:`,
-    dtype,
-    date && `vom ${date}`,
-    file && `– ${file}`,
-  ]
-    .filter(Boolean)
-    .join(" ");
-
-  return truncateAtWord(parts, 55) || undefined;
-}
-
-const ogTitle = computed(() => {
-  return caseLaw.value ? buildOgTitle(caseLaw.value) : undefined;
-});
-
-const description = computed<string>(() => {
-  if (caseLaw.value?.guidingPrinciple) {
-    const sentences = caseLaw.value.guidingPrinciple
-      .split(/(?<=[.!?])\s+/)
-      .filter(Boolean);
-
-    return truncateAtWord(sentences.slice(0, 2).join(" "), 150);
-  }
-
-  if (document.value) {
-    const firstParagraph = document.value.querySelector("section p");
-    const firstParagraphText = firstParagraph?.textContent?.trim();
-    if (firstParagraphText) {
-      return truncateAtWord(firstParagraphText, 150);
-    }
-  }
-
-  return "Gerichtsentscheidung";
-});
-
-const url = useRequestURL();
-
-const link = computed(() => [{ rel: "canonical", href: url.href }]);
-
-const meta = computed(() =>
-  [
-    { name: "description", content: description.value },
-    { property: "og:type", content: "article" },
-    { property: "og:title", content: ogTitle.value },
-    { property: "og:description", content: description.value },
-    { property: "og:url", content: url.href },
-    { name: "twitter:title", content: ogTitle.value },
-    { name: "twitter:description", content: description.value },
-  ].filter(
-    (tag) => typeof tag.content === "string" && tag.content.trim() !== "",
-  ),
-);
-
-useHead({ title: ogTitle, link, meta });
+useCaselawSeo({ caseLaw: caseLaw.value, document: document.value });
 
 // Page contents ------------------------------------------
 
