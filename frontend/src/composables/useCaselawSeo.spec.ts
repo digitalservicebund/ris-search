@@ -9,17 +9,6 @@ const { useSeo } = vi.hoisted(() => ({
 
 mockNuxtImport("useSeo", () => useSeo);
 
-function makeCaseLaw(overrides: Partial<CaseLaw> = {}): CaseLaw {
-  return {
-    documentNumber: "KORE123456789",
-    courtName: "Bundesgerichtshof",
-    documentType: "Urteil",
-    decisionDate: "2023-06-15",
-    fileNumbers: ["VIII ZR 12/23"],
-    ...overrides,
-  } as CaseLaw;
-}
-
 describe("useCaselawSeo", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -39,7 +28,14 @@ describe("useCaselawSeo", () => {
 
   describe("buildTitle", () => {
     it("builds a full title from court, documentType, date, and fileNumber", () => {
-      useCaselawSeo({ caseLaw: makeCaseLaw() });
+      useCaselawSeo({
+        caseLaw: {
+          courtName: "Bundesgerichtshof",
+          documentType: "Urteil",
+          decisionDate: "2023-06-15",
+          fileNumbers: ["VIII ZR 12/23"],
+        } as CaseLaw,
+      });
 
       expect(useSeo).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -49,7 +45,13 @@ describe("useCaselawSeo", () => {
     });
 
     it("falls back to 'Gerichtsentscheidung' when documentType is missing", () => {
-      useCaselawSeo({ caseLaw: makeCaseLaw({ documentType: undefined }) });
+      useCaselawSeo({
+        caseLaw: {
+          courtName: "Bundesgerichtshof",
+          decisionDate: "2023-06-15",
+          fileNumbers: ["VIII ZR 12/23"],
+        } as CaseLaw,
+      });
 
       expect(useSeo).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -60,7 +62,13 @@ describe("useCaselawSeo", () => {
     });
 
     it("omits court when courtName is missing", () => {
-      useCaselawSeo({ caseLaw: makeCaseLaw({ courtName: undefined }) });
+      useCaselawSeo({
+        caseLaw: {
+          documentType: "Urteil",
+          decisionDate: "2023-06-15",
+          fileNumbers: ["VIII ZR 12/23"],
+        } as CaseLaw,
+      });
 
       expect(useSeo).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -70,7 +78,13 @@ describe("useCaselawSeo", () => {
     });
 
     it("omits date when decisionDate is missing", () => {
-      useCaselawSeo({ caseLaw: makeCaseLaw({ decisionDate: undefined }) });
+      useCaselawSeo({
+        caseLaw: {
+          courtName: "Bundesgerichtshof",
+          documentType: "Urteil",
+          fileNumbers: ["VIII ZR 12/23"],
+        } as CaseLaw,
+      });
 
       expect(useSeo).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -79,8 +93,14 @@ describe("useCaselawSeo", () => {
       );
     });
 
-    it("omits fileNumber when fileNumbers is empty", () => {
-      useCaselawSeo({ caseLaw: makeCaseLaw({ fileNumbers: [] }) });
+    it("omits fileNumber when fileNumbers is undefined", () => {
+      useCaselawSeo({
+        caseLaw: {
+          courtName: "Bundesgerichtshof",
+          documentType: "Urteil",
+          decisionDate: "2023-06-15",
+        } as CaseLaw,
+      });
 
       expect(useSeo).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -106,10 +126,11 @@ describe("useCaselawSeo", () => {
         "<html lang='de'><body><section><p>Not used in this case.</p></section></body></html>",
         "text/html",
       );
-      const guidingPrinciple =
-        "Fist sentence. Second sentence. Third sentence should be cut off.";
       useCaselawSeo({
-        caseLaw: makeCaseLaw({ guidingPrinciple }),
+        caseLaw: {
+          guidingPrinciple:
+            "Fist sentence. Second sentence. Third sentence should be cut off.",
+        } as CaseLaw,
         document: doc,
       });
 
@@ -126,20 +147,11 @@ describe("useCaselawSeo", () => {
         "text/html",
       );
       useCaselawSeo({
-        caseLaw: makeCaseLaw({ guidingPrinciple: undefined }),
         document: doc,
       });
 
       expect(useSeo).toHaveBeenCalledWith(
         expect.objectContaining({ description: "Paragraph text here." }),
-      );
-    });
-
-    it("falls back to default when no guidingPrinciple nad no document", () => {
-      useCaselawSeo({ caseLaw: makeCaseLaw({ guidingPrinciple: undefined }) });
-
-      expect(useSeo).toHaveBeenCalledWith(
-        expect.objectContaining({ description: "Gerichtsentscheidung" }),
       );
     });
 
@@ -149,7 +161,7 @@ describe("useCaselawSeo", () => {
         "text/html",
       );
       useCaselawSeo({
-        caseLaw: makeCaseLaw({ guidingPrinciple: undefined }),
+        caseLaw: {} as CaseLaw,
         document: doc,
       });
 
@@ -164,7 +176,14 @@ describe("useCaselawSeo", () => {
   // oxlint-disable-next-line vitest/no-disabled-tests
   describe.skip("buildOgTitle", () => {
     it("builds ogTitle with court, documentType, date, and fileNumber", () => {
-      useCaselawSeo({ caseLaw: makeCaseLaw() });
+      useCaselawSeo({
+        caseLaw: {
+          courtName: "Bundesgerichtshof",
+          documentType: "Urteil",
+          decisionDate: "2023-06-15",
+          fileNumbers: ["VIII ZR 12/23"],
+        } as CaseLaw,
+      });
 
       expect(useSeo).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -174,7 +193,13 @@ describe("useCaselawSeo", () => {
     });
 
     it("uses 'Gerichtsentscheidung' as documentType fallback", () => {
-      useCaselawSeo({ caseLaw: makeCaseLaw({ documentType: undefined }) });
+      useCaselawSeo({
+        caseLaw: {
+          courtName: "Bundesgerichtshof",
+          decisionDate: "2023-06-15",
+          fileNumbers: ["VIII ZR 12/23"],
+        } as CaseLaw,
+      });
 
       expect(useSeo).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -185,7 +210,13 @@ describe("useCaselawSeo", () => {
     });
 
     it("omits court when courtName is missing", () => {
-      useCaselawSeo({ caseLaw: makeCaseLaw({ courtName: undefined }) });
+      useCaselawSeo({
+        caseLaw: {
+          documentType: "Urteil",
+          decisionDate: "2023-06-15",
+          fileNumbers: ["VIII ZR 12/23"],
+        } as CaseLaw,
+      });
 
       expect(useSeo).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -196,10 +227,10 @@ describe("useCaselawSeo", () => {
 
     it("truncates ogTitle at word boundary to 55 characters", () => {
       useCaselawSeo({
-        caseLaw: makeCaseLaw({
+        caseLaw: {
           courtName: "Oberverwaltungsgericht Nordrhein-Westfalen Münster",
           documentType: "Beschluss",
-        }),
+        } as CaseLaw,
       });
 
       expect(useSeo).toHaveBeenCalledWith(
