@@ -8,6 +8,7 @@ import {
 } from "~/types/api";
 import IcBaselineArrowBack from "~icons/ic/baseline-arrow-back";
 import IcBaselineArrowForward from "~icons/ic/baseline-arrow-Forward";
+import { useArticleSeo } from "~/composables/useArticleSeo";
 
 definePageMeta({
   // expression ELI + article eId
@@ -60,6 +61,10 @@ const tableOfContents = computed(() => {
   );
 });
 
+const singleViewParts = computed(() =>
+  getPartsLeafNodes(norm.value?.hasPart ?? []),
+);
+
 const article: Ref<Article | undefined> = computed(() =>
   // The eId is taken from the router, which always automatically decodes URIs.
   // However some eIds are pre-encoded in the XML data (e.g. "art-z§§ 1 bis 3"
@@ -71,16 +76,19 @@ const article: Ref<Article | undefined> = computed(() =>
   ),
 );
 
+useArticleSeo({
+  abbreviation: norm.value.abbreviation,
+  article: article.value,
+  articleHeadlineHtml: data.value.articleHeading,
+  articleHtml: data.value.htmlBody,
+});
+
 const previousArticleUrl: Ref<RouteLocationRaw | undefined> = computed(() =>
   getRouteForSiblingArticle(article.value, -1),
 );
 
 const nextArticleUrl: Ref<RouteLocationRaw | undefined> = computed(() =>
   getRouteForSiblingArticle(article.value, 1),
-);
-
-const singleViewParts = computed(() =>
-  getPartsLeafNodes(norm.value?.hasPart ?? []),
 );
 
 // Get all leaf nodes from the hasPart Tree.
@@ -171,34 +179,6 @@ const inForceNormLink = computed(() => {
   return `/norms/${validVersion?.item.legislationIdentifier}`;
 });
 
-const buildOgTitleForArticle = (
-  normAbbreviation?: string,
-  articleHeadlineHtml?: string,
-): string | undefined => {
-  const headlineText = (() => {
-    if (!articleHeadlineHtml) return "";
-    const doc = parseDocument(articleHeadlineHtml);
-    const text = doc.body?.textContent ?? "";
-    return text.replaceAll(/\s+/g, " ").trim();
-  })();
-
-  const base = normAbbreviation || headlineText;
-  if (!base) return undefined;
-
-  const full =
-    normAbbreviation && headlineText
-      ? `${normAbbreviation}: ${headlineText}`
-      : base;
-
-  return truncateAtWord(full, 55) || undefined;
-};
-
-const title = computed(() =>
-  norm.value
-    ? buildOgTitleForArticle(norm.value.abbreviation?.trim(), htmlTitle.value)
-    : "",
-);
-
 const metadataItems = computed(() => {
   const interval = temporalCoverageToValidityInterval(
     article.value?.temporalCoverage,
@@ -214,16 +194,6 @@ const metadataItems = computed(() => {
     },
   ];
 });
-
-const description = computed<string | undefined>(() => {
-  if (!articleHtml.value) return undefined;
-  const doc = parseDocument(articleHtml.value);
-  const firstParagraph = doc.querySelector("p");
-  const text = firstParagraph?.textContent?.trim();
-  return text ? truncateAtWord(text, 150) : undefined;
-});
-
-useDynamicSeo({ title, description });
 </script>
 
 <template>

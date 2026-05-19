@@ -57,6 +57,24 @@ describe("useSeo composable", () => {
         }),
       );
     });
+
+    it("dose not set descriptions if undefined", () => {
+      useSeo({ title: "Test Title" });
+
+      expect(useSeoMeta).toHaveBeenCalledWith(
+        expect.objectContaining({
+          title: "Test Title",
+          ogType: "article",
+          ogTitle: "Test Title",
+          ogUrl: TEST_URL,
+          twitterTitle: "Test Title",
+        }),
+      );
+
+      expect(useHead).toHaveBeenCalledWith({
+        link: [{ rel: "canonical", href: TEST_URL }],
+      });
+    });
   });
 
   describe("dynamic (computed/ref) usage", () => {
