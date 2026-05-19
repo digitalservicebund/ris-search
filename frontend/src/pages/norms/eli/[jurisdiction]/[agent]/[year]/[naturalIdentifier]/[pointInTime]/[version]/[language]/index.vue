@@ -1,15 +1,14 @@
 <script setup lang="ts">
 import { NuxtLink } from "#components";
-import type { Dayjs } from "dayjs";
 import { Button, Tab, TabList, Tabs } from "primevue";
 import type { ComputedRef } from "vue";
 import type { BreadcrumbItem } from "~/components/Breadcrumbs.vue";
 import { DocumentKind, type LegislationExpression } from "~/types/api";
-import type { ValidityStatus } from "~/utils/norm";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IconFileDownload from "~icons/ic/outline-file-download";
 import IcOutlineInfo from "~icons/ic/outline-info";
 import IcOutlineRestore from "~icons/ic/outline-settings-backup-restore";
+import { useNormSeo } from "~/composables/useNormSeo";
 
 definePageMeta({
   // note: this is an expression ELI
@@ -79,6 +78,12 @@ const validityStatus = computed(() => {
   return undefined;
 });
 
+useNormSeo({
+  norm: data.value.legislation,
+  validityInterval: validityInterval.value,
+  validityStatus: validityStatus.value,
+});
+
 const normBreadcrumbTitle = computed(() =>
   metadata.value ? getNormBreadcrumbTitle(metadata.value) : "",
 );
@@ -99,44 +104,6 @@ const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
   ];
 });
 
-const buildOgTitle = (
-  norm: LegislationExpression,
-  validFrom?: Dayjs,
-  normValidityStatus?: ValidityStatus,
-) => {
-  const shortTitle = norm.alternateName?.trim();
-  const baseTitle = norm.abbreviation?.trim() || shortTitle || "";
-
-  if (!baseTitle) return undefined;
-  const parts: string[] = [];
-
-  if (privateFeaturesEnabled) {
-    const formattedValidFrom = dateFormattedDDMMYYYY(validFrom);
-    if (formattedValidFrom) parts.push(`Fassung vom ${formattedValidFrom}`);
-
-    const statusLabel = getValidityStatusLabel(normValidityStatus);
-    if (statusLabel) parts.push(statusLabel);
-
-    return truncateAtWord(`${baseTitle}: ${parts.join(", ")}`, 55) || undefined;
-  } else {
-    if (validFrom) parts.push(`Fassung vom [Inkrafttreten]`);
-    if (normValidityStatus) parts.push("[Status]");
-  }
-
-  let result = baseTitle;
-  if (parts.length) result += `: ${parts.join(", ")}`;
-  return truncateAtWord(result, 55) || undefined;
-};
-
-const title = computed<string | undefined>(() =>
-  metadata.value
-    ? buildOgTitle(
-        metadata.value,
-        validityInterval.value?.from,
-        validityStatus.value,
-      )
-    : undefined,
-);
 const metadataItems = computed(() => {
   if (privateFeaturesEnabled) {
     return getNormMetadataItems(metadata.value);
@@ -150,13 +117,6 @@ const metadataItems = computed(() => {
       label: "Status",
     },
   ];
-});
-
-const description = computed<string | undefined>(() => {
-  const shortTitle = metadata.value?.alternateName?.trim();
-  const longTitle = metadata.value?.name?.trim();
-  const chosen = shortTitle || longTitle || "";
-  return chosen ? truncateAtWord(chosen, 150) : undefined;
 });
 
 const views = [
@@ -183,8 +143,6 @@ const views = [
 const currentView = computed(
   () => route.query.view?.toString() ?? views[0].path,
 );
-
-useDynamicSeo({ title, description });
 
 const textTabPanelTitleId = useId();
 const detailsTabPanelTitleId = useId();
