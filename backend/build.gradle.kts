@@ -90,6 +90,9 @@ dependencies {
     implementation(libs.netty.http2)
     implementation(libs.netty.compression)
 
+    // CVE-2026-41293, CVE-2026-43512, CVE-2026-41284, CVE-2026-42498, CVE-2026-43513
+    implementation(libs.tomcat.embed)
+
     compileOnly(libs.lombok)
     annotationProcessor(libs.lombok)
 
