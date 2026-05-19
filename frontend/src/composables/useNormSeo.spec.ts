@@ -252,10 +252,7 @@ describe("buildValidityTitleLabel", () => {
     [dayjs("2025-01-01"), undefined, ", vom 01.01.2025"],
     [undefined, dayjs("2026-01-01"), ", bis 01.01.2026"],
     [dayjs("2025-01-01"), dayjs("2026-01-01"), ", 01.01.2025-01.01.2026"],
-  ])(
-    "formats the validity interval correctly",
-    (from, to, expected) => {
-      expect(buildValidityTitleLabel({ from, to })).toBe(expected);
-    },
-  );
+  ])("formats the validity interval correctly", (from, to, expected) => {
+    expect(buildValidityTitleLabel({ from, to })).toBe(expected);
+  });
 });
