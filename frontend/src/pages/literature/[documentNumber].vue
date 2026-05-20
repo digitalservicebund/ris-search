@@ -4,6 +4,7 @@ import type { DocumentView } from "~/layouts/document.vue";
 import { DocumentKind, type Literature } from "~/types/api";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineInfo from "~icons/ic/outline-info";
+import { useLiteratureSeo } from "~/composables/useLiteratureSeo";
 
 definePageMeta({ layout: false });
 
@@ -23,6 +24,8 @@ const documentMetadataUrl = `/v1/literature/${documentNumber}`;
 const { data: literature, error: metadataError } =
   await useRisBackend<Literature>(documentMetadataUrl);
 if (metadataError?.value) showError(metadataError.value);
+
+useLiteratureSeo({ literature: literature.value });
 
 const { data: html, error: contentError } = await useRisBackend<string>(
   `${documentMetadataUrl}.html`,
