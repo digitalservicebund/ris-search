@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { mockNuxtImport } from "@nuxt/test-utils/runtime";
-import { useNormSeo } from "./useNormSeo";
+import { buildValidityTitleLabel, useNormSeo } from "./useNormSeo";
 import { type LegislationExpression } from "~/types/api";
 import dayjs from "dayjs";
 
@@ -236,5 +236,23 @@ describe("useNormSeo", () => {
         }),
       );
     });
+  });
+});
+
+describe("buildValidityTitleLabel", () => {
+  it("returns empty string when no interval is provided", () => {
+    expect(buildValidityTitleLabel()).toBe("");
+  });
+
+  it("returns empty string when interval has no dates", () => {
+    expect(buildValidityTitleLabel({})).toBe("");
+  });
+
+  it.each([
+    [dayjs("2025-01-01"), undefined, ", vom 01.01.2025"],
+    [undefined, dayjs("2026-01-01"), ", bis 01.01.2026"],
+    [dayjs("2025-01-01"), dayjs("2026-01-01"), ", 01.01.2025-01.01.2026"],
+  ])("formats the validity interval correctly", (from, to, expected) => {
+    expect(buildValidityTitleLabel({ from, to })).toBe(expected);
   });
 });

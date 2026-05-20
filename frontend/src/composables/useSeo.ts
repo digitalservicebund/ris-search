@@ -2,7 +2,7 @@ import { type MaybeRefOrGetter } from "vue";
 
 export type SeoInput = {
   title: MaybeRefOrGetter<string>;
-  description: MaybeRefOrGetter<string>;
+  description?: MaybeRefOrGetter<string>;
   /** Falls back to title if omitted */
   ogTitle?: MaybeRefOrGetter<string>;
 };

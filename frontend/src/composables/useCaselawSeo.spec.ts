@@ -169,6 +169,19 @@ describe("useCaselawSeo", () => {
         expect.objectContaining({ description: "Gerichtsentscheidung" }),
       );
     });
+
+    it("truncates description at 150 characters word boundary", () => {
+      const guidingPrinciple =
+        "This is a long text " +
+        "LongWordWithoutWhiteSpacesShouldGetTruncated".repeat(3).trim();
+      useCaselawSeo({ caseLaw: { guidingPrinciple } as CaseLaw });
+
+      expect(useSeo).toHaveBeenCalledWith(
+        expect.objectContaining({
+          description: "This is a long text",
+        }),
+      );
+    });
   });
 
   // TODO: Make sure the tests reflect the expected behavoir afer

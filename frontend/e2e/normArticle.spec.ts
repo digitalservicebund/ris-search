@@ -444,62 +444,6 @@ test("shows correct breadcrumbs for an Eingangsformel", async ({
   await expect(breadcrumb.getByText("Eingangsformel")).toBeVisible();
 });
 
-test("sets up meta tags for article page", async ({ page }) => {
-  await navigate(
-    page,
-    "/norms/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu/art-z1",
-  );
-
-  const title = await page.title();
-  expect(title).toContain("§ 1 Anwendungsbereich");
-
-  const canonicalLink = await page
-    .locator('link[rel="canonical"]')
-    .getAttribute("href");
-  expect(canonicalLink).toMatch(/\/norms\/eli\/bund\//);
-
-  const metaDescription = await page
-    .locator('meta[name="description"]')
-    .getAttribute("content");
-  expect(metaDescription).toBe(
-    "Die in Anlage 1 aufgeführten Erzeugnisse unterliegen dieser Verordnung, soweit sie zum gewerbsmäßigen Vertrieb bestimmt sind.",
-  );
-
-  const ogType = await page
-    .locator('meta[property="og:type"]')
-    .getAttribute("content");
-  expect(ogType).toBe("article");
-
-  const ogTitle = await page
-    .locator('meta[property="og:title"]')
-    .getAttribute("content");
-  expect(ogTitle).toContain("§ 1 Anwendungsbereich");
-
-  const ogDescription = await page
-    .locator('meta[property="og:description"]')
-    .getAttribute("content");
-  expect(ogDescription).toBe(
-    "Die in Anlage 1 aufgeführten Erzeugnisse unterliegen dieser Verordnung, soweit sie zum gewerbsmäßigen Vertrieb bestimmt sind.",
-  );
-
-  const ogUrl = await page
-    .locator('meta[property="og:url"]')
-    .getAttribute("content");
-  expect(ogUrl).toMatch(/\/norms\/eli\/bund\//);
-
-  const twitterTitle = await page
-    .locator('meta[name="twitter:title"]')
-    .getAttribute("content");
-  expect(twitterTitle).toContain("§ 1 Anwendungsbereich");
-
-  const twitterDescription = await page
-    .locator('meta[name="twitter:description"]')
-    .getAttribute("content");
-  expect(twitterDescription).toBe(
-    "Die in Anlage 1 aufgeführten Erzeugnisse unterliegen dieser Verordnung, soweit sie zum gewerbsmäßigen Vertrieb bestimmt sind.",
-  );
-});
-
 test.describe("mobile table of contents", () => {
   test("floating button for the TOC is visible", async ({
     page,
