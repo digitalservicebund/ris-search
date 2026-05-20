@@ -4,6 +4,7 @@ import type { DocumentView } from "~/layouts/document.vue";
 import { type AdministrativeDirective, DocumentKind } from "~/types/api";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineInfo from "~icons/ic/outline-info";
+import { useAdministrativeDirectiveSeo } from "~/composables/useAdministrativeDirectiveSeo";
 
 definePageMeta({ layout: false });
 
@@ -23,6 +24,12 @@ const documentMetadataUrl = `/v1/administrative-directive/${documentNumber}`;
 const { data, error: metadataError } =
   await useRisBackend<AdministrativeDirective>(documentMetadataUrl);
 if (metadataError?.value) showError(metadataError.value);
+
+useAdministrativeDirectiveSeo({
+  documentType: data.value?.documentType,
+  entryIntoForceDate: data.value?.entryIntoForceDate,
+  headline: data.value?.headline,
+});
 
 const { data: html, error: contentError } = await useRisBackend<string>(
   `${documentMetadataUrl}.html`,
