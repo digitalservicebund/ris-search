@@ -14,7 +14,7 @@ describe("useLiteratureSeo", () => {
   });
 
   describe("buildTitle", () => {
-    it("builds a full title from documentType, year, and headline", () => {
+    it("builds title from documentType, year, and headline", () => {
       useLiteratureSeo({
         documentTypes: ["Aufsatz"],
         yearsOfPublication: ["2023"],
@@ -43,7 +43,7 @@ describe("useLiteratureSeo", () => {
       );
     });
 
-    it("omits documentType when documentTypes is empty", () => {
+    it("uses fallback when documentTypes is empty", () => {
       useLiteratureSeo({
         documentTypes: [],
         yearsOfPublication: ["2023"],
@@ -52,7 +52,7 @@ describe("useLiteratureSeo", () => {
 
       expect(useSeo).toHaveBeenCalledWith(
         expect.objectContaining({
-          title: "2023, Grundrechte im digitalen Raum",
+          title: "Literaturnachweis, 2023, Grundrechte im digitalen Raum",
         }),
       );
     });
@@ -98,7 +98,7 @@ describe("useLiteratureSeo", () => {
       );
     });
 
-    it("returns empty string when all fields are missing", () => {
+    it("uses fallback when all fields are missing", () => {
       useLiteratureSeo({
         documentTypes: [],
         yearsOfPublication: [],
@@ -106,7 +106,7 @@ describe("useLiteratureSeo", () => {
 
       expect(useSeo).toHaveBeenCalledWith(
         expect.objectContaining({
-          title: "",
+          title: "Literaturnachweis",
         }),
       );
     });

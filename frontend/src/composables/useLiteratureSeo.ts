@@ -33,7 +33,7 @@ function buildTitle({
   alternativeHeadline?: string;
 }) {
   const parts = [
-    documentTypes[0] ?? "",
+    documentTypes[0] ?? "Literaturnachweis",
     yearsOfPublication[0] ?? "",
     (headline || alternativeHeadline) ?? "",
   ].filter((it) => !isStringEmpty(it));
