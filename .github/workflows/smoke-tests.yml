@@ -13,36 +13,30 @@ env:
 jobs:
   smoke-tests:
     runs-on: ubuntu-latest
+    container:
+      # Image version must match @playwright/test in frontend/package.json
+      image: mcr.microsoft.com/playwright@sha256:9bd26ad900bb5e0f4dee75839e957a89ae89c2b7ab1e76050e559790e946b948 # v1.60.0-noble
+      options: --user 1001
     permissions:
       contents: read
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
-        with:
-          fetch-depth: 40
+
       - name: Setup pnpm
         uses: pnpm/action-setup@0e279bb959325dab635dd2c09392533439d90093 # v6.0.8
         with:
           package_json_file: ./frontend/package.json
+
       - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
         with:
           node-version: 24
           cache: "pnpm"
           cache-dependency-path: ./frontend/pnpm-lock.yaml
+
       - name: Install Node modules
         run: pnpm ci
         working-directory: ./frontend
-      - name: Get Playwright version
-        run: echo "PLAYWRIGHT_VERSION=$(pnpm list @playwright/test --depth=0 | grep @playwright/test | awk '{print $2}')" >> $GITHUB_ENV
-        working-directory: ./frontend
-      - name: Cache browser binaries
-        id: playwright-cache
-        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
-        with:
-          path: /home/runner/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}
-      - name: Install Playwright browsers
-        run: pnpm exec playwright install --with-deps chromium
-        working-directory: ./frontend
+
       - name: Run Playwright tests
         run: pnpm exec playwright test --project=smoke-tests
         working-directory: ./frontend
@@ -50,6 +44,7 @@ jobs:
           STAGING_BASIC_AUTH_USERNAME: ${{ secrets.STAGING_BASIC_AUTH_USERNAME }}
           STAGING_BASIC_AUTH_PASSWORD: ${{ secrets.STAGING_BASIC_AUTH_PASSWORD }}
           TZ: Europe/Berlin
+
       - name: Upload traces of failed smoke tests
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         if: ${{ failure() }}
@@ -57,6 +52,7 @@ jobs:
           name: failed-smoke-tests
           path: frontend/playwright-report/**/*.zip
           retention-days: 5
+
       - name: Send status to Slack
         uses: digitalservicebund/notify-on-failure-gha@671832f192aee0a068fd92b2f6deb975df794a84 # v1.6.1
         if: ${{ failure() && github.ref == 'refs/heads/main' }}
