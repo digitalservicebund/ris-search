@@ -6,15 +6,15 @@ import type { BreadcrumbItem } from "~/components/Breadcrumbs.vue";
 import DetailsList from "~/components/DetailsList.vue";
 import DetailsListEntry from "~/components/DetailsListEntry.vue";
 import NormTranslationActionMenu from "~/components/documents/actionMenu/NormTranslationActionMenu.vue";
-import { useDynamicSeo } from "~/composables/useDynamicSeo";
 import {
   fetchTranslationAndHTML,
   getGermanOriginal,
 } from "~/composables/useTranslationData";
-import { removePrefix, truncateAtWord } from "~/utils/textFormatting";
+import { removePrefix } from "~/utils/textFormatting";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineInfo from "~icons/ic/outline-info";
 import IcOutlineWarning from "~icons/ic/outline-warning-amber";
+import { useTranslationSeo } from "~/composables/useTranslationSeo";
 
 definePageMeta({ layout: "norm" });
 
@@ -37,6 +37,11 @@ const { legislation } = await getGermanOriginal(id);
 
 const currentTranslation = data.value?.content;
 const html = data.value?.htmlBody;
+
+useTranslationSeo({
+  name: currentTranslation?.name,
+  translationOfWork: currentTranslation?.translationOfWork,
+});
 
 const versionInformation = computed(() => {
   return removePrefix(currentTranslation?.about, "Version information:");
@@ -68,37 +73,6 @@ const breadcrumbItems = computed(() => {
   }
   return items;
 });
-
-const buildOgForTranslation = (
-  name: string,
-  translationOfWork: string,
-): { title: string; description: string } => {
-  const base = name.trim() || translationOfWork.trim();
-
-  const title = truncateAtWord(`${base} – English Translation`, 55);
-
-  const description = truncateAtWord(
-    `This is the English translation of the ${base}, provided by the German Federal Legal Information Portal. This translation is for informational purposes only. The German version is the only legally binding text.`,
-    150,
-  );
-
-  return { title, description };
-};
-
-const translationSeo = computed(() => {
-  if (!currentTranslation?.name && !currentTranslation?.translationOfWork) {
-    return { title: "", description: "" };
-  }
-
-  return buildOgForTranslation(
-    currentTranslation.name || "",
-    currentTranslation.translationOfWork || "",
-  );
-});
-
-const title = computed(() => translationSeo.value.title);
-const description = computed(() => translationSeo.value.description);
-useDynamicSeo({ title, description });
 
 const views = [
   {
