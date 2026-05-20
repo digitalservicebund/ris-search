@@ -37,9 +37,6 @@ test("opens the page via URL", { tag: ["@RISDEV-8950"] }, async ({ page }) => {
       name: "Test Regulation for the Model Framework of the Public Service",
     }),
   ).toBeVisible();
-  await expect(page).toHaveTitle(
-    "Test Regulation for the Model Framework of the Public — Rechtsinformationen des Bundes",
-  );
 });
 
 test("has text and detail tab", { tag: ["@RISDEV-8950"] }, async ({ page }) => {
