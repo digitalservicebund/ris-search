@@ -1,22 +1,41 @@
-import { type Literature } from "~/types/api";
-
 export type UseLiteratureSeoInput = {
-  literature?: Literature;
+  documentTypes: string[];
+  yearsOfPublication: string[];
+  headline?: string;
+  alternativeHeadline?: string;
 };
 
-export function useLiteratureSeo({ literature }: UseLiteratureSeoInput) {
+export function useLiteratureSeo({
+  documentTypes,
+  yearsOfPublication,
+  headline,
+  alternativeHeadline,
+}: UseLiteratureSeoInput) {
   useSeo({
-    title: buildTitle(literature),
-    description: "", // todo after main is merged an description is optional
+    title: buildTitle({
+      documentTypes,
+      yearsOfPublication,
+      headline,
+      alternativeHeadline,
+    }),
   });
 }
 
-function buildTitle(literature?: Literature) {
-  if (!literature) return "";
+function buildTitle({
+  documentTypes,
+  yearsOfPublication,
+  headline,
+  alternativeHeadline,
+}: {
+  documentTypes: string[];
+  yearsOfPublication: string[];
+  headline?: string;
+  alternativeHeadline?: string;
+}) {
   const parts = [
-    literature.documentTypes[0] ?? "",
-    literature.yearsOfPublication[0] ?? "",
-    (literature.headline || literature.alternativeHeadline) ?? "",
+    documentTypes[0] ?? "",
+    yearsOfPublication[0] ?? "",
+    (headline || alternativeHeadline) ?? "",
   ].filter((it) => !isStringEmpty(it));
 
   return parts.join(", ");

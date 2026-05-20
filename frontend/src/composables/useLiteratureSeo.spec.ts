@@ -1,6 +1,5 @@
 import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { Literature } from "~/types/api";
 import { useLiteratureSeo } from "./useLiteratureSeo";
 
 const { useSeo } = vi.hoisted(() => ({
@@ -17,12 +16,10 @@ describe("useLiteratureSeo", () => {
   describe("buildTitle", () => {
     it("builds a full title from documentType, year, and headline", () => {
       useLiteratureSeo({
-        literature: {
-          documentTypes: ["Aufsatz"],
-          yearsOfPublication: ["2023"],
-          headline: "Grundrechte im digitalen Raum",
-          alternativeHeadline: "Alternative Überschrift",
-        } as Literature,
+        documentTypes: ["Aufsatz"],
+        yearsOfPublication: ["2023"],
+        headline: "Grundrechte im digitalen Raum",
+        alternativeHeadline: "Alternative Überschrift",
       });
 
       expect(useSeo).toHaveBeenCalledWith(
@@ -34,11 +31,9 @@ describe("useLiteratureSeo", () => {
 
     it("falls back to alternativeHeadline when headline is missing", () => {
       useLiteratureSeo({
-        literature: {
-          documentTypes: ["Aufsatz"],
-          yearsOfPublication: ["2023"],
-          alternativeHeadline: "Alternative Überschrift",
-        } as Literature,
+        documentTypes: ["Aufsatz"],
+        yearsOfPublication: ["2023"],
+        alternativeHeadline: "Alternative Überschrift",
       });
 
       expect(useSeo).toHaveBeenCalledWith(
@@ -50,11 +45,9 @@ describe("useLiteratureSeo", () => {
 
     it("omits documentType when documentTypes is empty", () => {
       useLiteratureSeo({
-        literature: {
-          documentTypes: [] as string[],
-          yearsOfPublication: ["2023"],
-          headline: "Grundrechte im digitalen Raum",
-        } as Literature,
+        documentTypes: [],
+        yearsOfPublication: ["2023"],
+        headline: "Grundrechte im digitalen Raum",
       });
 
       expect(useSeo).toHaveBeenCalledWith(
@@ -66,11 +59,9 @@ describe("useLiteratureSeo", () => {
 
     it("omits year when yearsOfPublication is empty", () => {
       useLiteratureSeo({
-        literature: {
-          documentTypes: ["Aufsatz"],
-          yearsOfPublication: [] as string[],
-          headline: "Grundrechte im digitalen Raum",
-        } as Literature,
+        documentTypes: ["Aufsatz"],
+        yearsOfPublication: [],
+        headline: "Grundrechte im digitalen Raum",
       });
 
       expect(useSeo).toHaveBeenCalledWith(
@@ -82,10 +73,8 @@ describe("useLiteratureSeo", () => {
 
     it("omits headline when both headline and alternativeHeadline are missing", () => {
       useLiteratureSeo({
-        literature: {
-          documentTypes: ["Aufsatz"],
-          yearsOfPublication: ["2023"],
-        } as Literature,
+        documentTypes: ["Aufsatz"],
+        yearsOfPublication: ["2023"],
       });
 
       expect(useSeo).toHaveBeenCalledWith(
@@ -97,11 +86,9 @@ describe("useLiteratureSeo", () => {
 
     it("uses only first documentType and first year when multiple are present", () => {
       useLiteratureSeo({
-        literature: {
-          documentTypes: ["Aufsatz", "Monografie"],
-          yearsOfPublication: ["2023", "2024"],
-          headline: "Ein Titel",
-        } as Literature,
+        documentTypes: ["Aufsatz", "Monografie"],
+        yearsOfPublication: ["2023", "2024"],
+        headline: "Ein Titel",
       });
 
       expect(useSeo).toHaveBeenCalledWith(
@@ -113,10 +100,8 @@ describe("useLiteratureSeo", () => {
 
     it("returns empty string when all fields are missing", () => {
       useLiteratureSeo({
-        literature: {
-          documentTypes: [] as string[],
-          yearsOfPublication: [] as string[],
-        } as Literature,
+        documentTypes: [],
+        yearsOfPublication: [],
       });
 
       expect(useSeo).toHaveBeenCalledWith(

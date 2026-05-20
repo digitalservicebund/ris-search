@@ -2,6 +2,7 @@
 import type { TreeItem } from "~/components/TreeView.vue";
 import type { DocumentView } from "~/layouts/document.vue";
 import { DocumentKind, type Literature } from "~/types/api";
+
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineInfo from "~icons/ic/outline-info";
 import { useLiteratureSeo } from "~/composables/useLiteratureSeo";
@@ -25,7 +26,12 @@ const { data: literature, error: metadataError } =
   await useRisBackend<Literature>(documentMetadataUrl);
 if (metadataError?.value) showError(metadataError.value);
 
-useLiteratureSeo({ literature: literature.value });
+useLiteratureSeo({
+  documentTypes: literature.value?.documentTypes ?? [],
+  yearsOfPublication: literature.value?.yearsOfPublication ?? [],
+  headline: literature.value?.headline,
+  alternativeHeadline: literature.value?.alternativeHeadline,
+});
 
 const { data: html, error: contentError } = await useRisBackend<string>(
   `${documentMetadataUrl}.html`,
