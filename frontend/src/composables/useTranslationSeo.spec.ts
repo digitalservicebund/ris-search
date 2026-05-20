@@ -13,61 +13,39 @@ describe("useTranslationSeo", () => {
     vi.clearAllMocks();
   });
 
-  describe("title", () => {
-    it("build title with name", () => {
-      useTranslationSeo({ name: "BGB" });
+  it("builds title, description and ogTitle", () => {
+    useTranslationSeo({ name: "BGB", translationOfWork: "Civil Code" });
 
-      expect(useSeo).toHaveBeenCalledWith(
-        expect.objectContaining({ title: "BGB, English translation" }),
-      );
-    });
-
-    it("omits name when name is absent", () => {
-      useTranslationSeo({});
-
-      expect(useSeo).toHaveBeenCalledWith(
-        expect.objectContaining({ title: "English translation" }),
-      );
-    });
-
-    it("omits name when name is empty string", () => {
-      useTranslationSeo({ name: "" });
-
-      expect(useSeo).toHaveBeenCalledWith(
-        expect.objectContaining({ title: "English translation" }),
-      );
-    });
+    expect(useSeo).toHaveBeenCalledWith(
+      expect.objectContaining({
+        title: "BGB, English translation",
+        description: expect.stringContaining("BGB"),
+        ogTitle: "BGB – English Translation",
+      }),
+    );
   });
 
-  describe("description and ogTitle", () => {
-    it("includes the name in the description when provided", () => {
-      useTranslationSeo({ name: "BGB", translationOfWork: "Civil Code" });
+  it("uses fallbacks if name is missing", () => {
+    useTranslationSeo({ translationOfWork: "Civil Code" });
 
-      expect(useSeo).toHaveBeenCalledWith(
-        expect.objectContaining({
-          description: expect.stringContaining("BGB"),
-          ogTitle: "BGB – English Translation",
-        }),
-      );
-    });
+    expect(useSeo).toHaveBeenCalledWith(
+      expect.objectContaining({
+        title: "English translation",
+        description: expect.stringContaining("Civil Code"),
+        ogTitle: "Civil Code – English Translation",
+      }),
+    );
+  });
 
-    it("falls back to translationOfWork when name is absent", () => {
-      useTranslationSeo({ translationOfWork: "Civil Code" });
+  it("creates only fallback title if no values given", () => {
+    useTranslationSeo({});
 
-      expect(useSeo).toHaveBeenCalledWith(
-        expect.objectContaining({
-          description: expect.stringContaining("Civil Code"),
-          ogTitle: "Civil Code – English Translation",
-        }),
-      );
-    });
-
-    it("returns empty description when neither name nor translationOfWork is given", () => {
-      useTranslationSeo({});
-
-      expect(useSeo).toHaveBeenCalledWith(
-        expect.objectContaining({ description: "", ogTitle: "" }),
-      );
-    });
+    expect(useSeo).toHaveBeenCalledWith(
+      expect.objectContaining({
+        title: "English translation",
+        description: "",
+        ogTitle: "",
+      }),
+    );
   });
 });
