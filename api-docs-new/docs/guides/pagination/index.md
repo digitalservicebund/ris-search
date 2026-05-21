@@ -15,7 +15,7 @@ The schema for paginated responses is based on the [`Collection`](https://www.hy
 All paginated endpoints share the following parameters:
 
 | Query parameter | Type  | Description                       | Default |
-|-----------------|-------|-----------------------------------|---------|
+| --------------- | ----- | --------------------------------- | ------- |
 | `size`          | `int` | The number of entities per page   | 100     |
 | `pageIndex`     | `int` | The number of the page to request | 0       |
 
@@ -48,7 +48,7 @@ curl -G https://testphase.rechtsinformationen.bund.de/v1/case-law
 The response does include the following fields:
 
 | Field           | Description                                    |
-|-----------------|------------------------------------------------|
+| --------------- | ---------------------------------------------- |
 | `totalItems`    | The total number of entities available         |
 | `member`        | The list of the entities returned in this page |
 | `view.first`    | The URL of the first page                      |

@@ -6,7 +6,7 @@ hero:
   actions:
     - theme: brand
       text: API Reference (Swagger)
-      link: https://testphase.rechtsinformationen.bund.de/swagger-ui/index.html
+      link: https://docs.rechtsinformationen.bund.de/swagger-ui/index.html
 ---
 
 Our API offers you simple and efficient access to an extensive collection of legal data.
@@ -28,6 +28,7 @@ Learn how to integrate our API → [API Reference](/guides/)
 ### Bulk download of multiple XML documents
 
 We plan to make the bulk downloads available as XML soon. You can then:
+
 - identify frequently used terms and formulations in norms and case law
 - recognize correlations between different areas of norms and case law
 

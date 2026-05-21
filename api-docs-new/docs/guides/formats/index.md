@@ -13,6 +13,7 @@ Our API supports retrieving entities in **JSON, XML, or HTML**. By default, all 
 By default, entities are returned in JSON format when making a request to the base URL. The response will include the `Content-Type: application/json` header.
 
 **Example Request:**
+
 ```http
 GET /entity/123
 ```
@@ -22,6 +23,7 @@ GET /entity/123
 To retrieve an entity in XML format, append `.xml` to the URL. The response will include the `Content-Type: application/xml` header.
 
 **Example Request:**
+
 ```http
 GET /entity/123.xml
 ```
@@ -31,6 +33,7 @@ GET /entity/123.xml
 For an HTML-rendered version of the entity, append `.html` to the URL. The response will have the `Content-Type: text/html` header, making it suitable for rendering in a browser.
 
 **Example Request:**
+
 ```http
 GET /entity/123.html
 ```
