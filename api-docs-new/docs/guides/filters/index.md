@@ -59,7 +59,7 @@ All date fields implement similar query parameters for filtering.
 - Ranges are always inclusive — dates that match the start or end are included in the result.
 
 | Query Parameter   | Type   | Description                                                                                                                |
-|-------------------|--------|----------------------------------------------------------------------------------------------------------------------------|
+| ----------------- | ------ | -------------------------------------------------------------------------------------------------------------------------- |
 | `<dateField>From` | `date` | The from (greater than or equal) operator returns all entities where `dateField` is later than, or equal to, a given date. |
 | `<dateField>To`   | `date` | The to (less than or equal) operator returns all entities where `dateField` is earlier than, or equal to, a given date.    |
 

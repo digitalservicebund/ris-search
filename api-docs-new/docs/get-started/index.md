@@ -33,24 +33,24 @@ The following example shows how to retrieve a single case law document from our 
 curl -G https://testphase.rechtsinformationen.bund.de/v1/case-law/KVRE461542501
 ```
 
-You can discover more endpoints with examples in [Swagger](https://testphase.rechtsinformationen.bund.de/swagger-ui/index.html).
+You can discover more endpoints with examples in [Swagger](https://docs.rechtsinformationen.bund.de/swagger-ui/index.html).
 
 ## Exploring the API
 
 After your first request, check out the following sections for more detailed information:
 
-* **API Overview:** Learn about the API operations and data formats from the [Home page](/).
-* **Guides:** Get detailed instructions on topics such as [Formats](/guides/formats/), [Pagination](/guides/pagination/), [Filters](/guides/filters/), [Rate Limiting](/guides/rate-limiting/), and [Error Codes](/guides/error-codes/).
-* **Standards:** Read more about the data formats and standards like LegalDocML in [Standards](/standards/).
-* **Feedback:** Share your thoughts via our [Feedback](/feedback/) page.
-* **Changelog:** Stay updated with changes in our [Changelog](/changelog/).
-* **Contact:** For further questions or personalized help, visit our [Contact](/contact/) page.
+- **API Overview:** Learn about the API operations and data formats from the [Home page](/).
+- **Guides:** Get detailed instructions on topics such as [Formats](/guides/formats/), [Pagination](/guides/pagination/), [Filters](/guides/filters/), [Rate Limiting](/guides/rate-limiting/), and [Error Codes](/guides/error-codes/).
+- **Standards:** Read more about the data formats and standards like LegalDocML in [Standards](/standards/).
+- **Feedback:** Share your thoughts via our [Feedback](/feedback/) page.
+- **Changelog:** Stay updated with changes in our [Changelog](/changelog/).
+- **Contact:** For further questions or personalized help, visit our [Contact](/contact/) page.
 
 ## Next Steps
 
-* Experiment with different requests and explore the API features.
-* Use the guides to integrate our API into your applications.
-* Provide feedback to help improve our service.
+- Experiment with different requests and explore the API features.
+- Use the guides to integrate our API into your applications.
+- Provide feedback to help improve our service.
 
 Enjoy building with our API!
 We would be happy to see what you built: [rechtsinformationen@digitalservice.bund.de](mailto:rechtsinformationen@digitalservice.bund.de)
