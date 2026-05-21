@@ -30,7 +30,7 @@ function buildTitle(
     ? `, ${getValidityStatusLabel(validityStatus)}`
     : "";
 
-  return `${norm.abbreviation ?? "Gesetz"}${validityIntervalPart}${validityStatusPart}`;
+  return `${norm.abbreviation || "Gesetz"}${validityIntervalPart}${validityStatusPart}`;
 }
 
 /**
