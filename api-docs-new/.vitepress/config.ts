@@ -1,10 +1,8 @@
 import { defineConfig } from "vitepress";
 
 export default defineConfig({
-  srcDir: "./docs",
   outDir: "./dist",
   cleanUrls: true,
-  ignoreDeadLinks: false,
   lastUpdated: true,
   title: "API-Dokumentation des Rechtsinformationsportals des Bundes",
   description:
@@ -37,6 +35,7 @@ export default defineConfig({
     ],
   ],
   themeConfig: {
+    siteTitle: "RIS API Docs",
     nav: [
       { text: "Get Started", link: "/get-started/" },
       { text: "Standards", link: "/standards/" },

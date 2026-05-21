@@ -4,6 +4,7 @@
   "scripts": {
     "dev": "vitepress dev",
     "build": "vitepress build",
+    "preview": "vitepress preview",
     "style:check": "prettier --check . && oxlint --max-warnings=0",
     "style:fix": "prettier . --write --ignore-unknown && oxlint --fix"
   },
