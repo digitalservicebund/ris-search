@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { getEncodingURL } from "./caseLaw";
 import type { CaseLaw } from "~/types/api";
+import { getEncodingURL } from "./caseLaw";
 
 describe("caseLaw", () => {
   describe("getEncodingURL", () => {

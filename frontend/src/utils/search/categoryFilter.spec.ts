@@ -1,5 +1,5 @@
-import { computeExpandedKeys } from "./categoryFilter";
 import { DocumentKind } from "~/types/api";
+import { computeExpandedKeys } from "./categoryFilter";
 
 describe("computeExpandedKeys", () => {
   it("returns only DocumentKind.All when category is empty", () => {

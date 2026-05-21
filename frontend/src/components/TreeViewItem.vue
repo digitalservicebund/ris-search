@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { NuxtLink } from "#components";
 import IcBaselineExpandLess from "~icons/ic/baseline-expand-less";
 import IcBaselineExpandMore from "~icons/ic/baseline-expand-more";
 import IcBaselineUnfoldLess from "~icons/ic/baseline-unfold-less";
 import IcBaselineUnfoldMore from "~icons/ic/baseline-unfold-more";
+import { NuxtLink } from "#components";
 import type { TreeItem } from "./TreeView.vue";
 
 const {

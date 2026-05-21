@@ -1,6 +1,6 @@
 import { mountSuspended } from "@nuxt/test-utils/runtime";
-import { type ComponentPublicInstance, nextTick } from "vue";
 import { describe, expect, it } from "vitest";
+import { type ComponentPublicInstance, nextTick } from "vue";
 import { useDrawer } from "./useDrawer";
 
 describe("useDrawer", () => {

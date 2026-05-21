@@ -28,8 +28,8 @@ const {
   /** When set, the subheading becomes a link to this route */
   subheadingTo?: RouteLocationRaw;
   /**
-   * Accessible label of the tree. Used as a fallback if the tree doesn't have
-   * a visible heading. Make sure that either heading or label is set.
+   * Accessible label of the tree. Used as a fallback if the tree doesn't have a
+   * visible heading. Make sure that either heading or label is set.
    */
   label?: string;
   /**

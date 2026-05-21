@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
-import { useCommandActionItem } from "~/composables/useActionMenuItem/useCommandActionItem";
 import PdfIcon from "~icons/custom/pdf";
+import { useCommandActionItem } from "~/composables/useActionMenuItem/useCommandActionItem";
 
 describe("useCommandActionItem", () => {
   it("creates an ActionMenuItem with the given values", async () => {

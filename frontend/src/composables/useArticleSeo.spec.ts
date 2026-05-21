@@ -1,7 +1,7 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
 import { mockNuxtImport } from "@nuxt/test-utils/runtime";
-import { useArticleSeo } from "./useArticleSeo";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { Article } from "~/types/api";
+import { useArticleSeo } from "./useArticleSeo";
 
 const { useSeo } = vi.hoisted(() => ({
   useSeo: vi.fn(),

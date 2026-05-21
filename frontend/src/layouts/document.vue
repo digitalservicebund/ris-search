@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { Tab, TabList, Tabs } from "primevue";
-import BaseLayout from "./base.vue";
 import { NuxtLink } from "#components";
 import type { BreadcrumbItem } from "~/components/Breadcrumbs.vue";
 import type { MetadataItem } from "~/components/Metadata.vue";
+import BaseLayout from "./base.vue";
 
 export type DocumentView = {
   label: string;

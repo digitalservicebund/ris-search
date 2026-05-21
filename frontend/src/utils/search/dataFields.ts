@@ -1,8 +1,6 @@
 import { DocumentKind } from "~/types/api";
 
-/**
- * Queryable fields that can be added to the search query for advanced searches.
- */
+/** Queryable fields that can be added to the search query for advanced searches. */
 export type DataField = {
   /** Human-readable label for the user */
   label: string;
@@ -17,9 +15,7 @@ export type DataField = {
   pattern: string;
 };
 
-/**
- * Query fields that should be displayed for each document kind.
- */
+/** Query fields that should be displayed for each document kind. */
 export const queryableDataFields: Record<DocumentKind, DataField[]> = {
   [DocumentKind.All]: [],
   [DocumentKind.Norm]: [

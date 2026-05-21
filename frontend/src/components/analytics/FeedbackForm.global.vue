@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { NuxtLink } from "#components";
 import { Button, Textarea } from "primevue";
+import ErrorOutline from "~icons/ic/outline-error-outline";
+import { NuxtLink } from "#components";
 import { usePostHog } from "~/composables/usePostHog";
 import { isStringEmpty } from "~/utils/textFormatting";
-import ErrorOutline from "~icons/ic/outline-error-outline";
 
 const { sendFeedbackToPostHog } = usePostHog();
 const honeypotId = useId();

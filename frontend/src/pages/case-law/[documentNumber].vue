@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import type { MetadataItem } from "~/components/Metadata.vue";
-import type { TreeItem } from "~/components/TreeView.vue";
-import type { DocumentView } from "~/layouts/document.vue";
-import { type CaseLaw, DocumentKind } from "~/types/api";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineFileDownload from "~icons/ic/outline-file-download";
 import IcOutlineInfo from "~icons/ic/outline-info";
+import type { MetadataItem } from "~/components/Metadata.vue";
+import type { TreeItem } from "~/components/TreeView.vue";
 import { useCaselawSeo } from "~/composables/useCaselawSeo";
+import type { DocumentView } from "~/layouts/document.vue";
+import { type CaseLaw, DocumentKind } from "~/types/api";
 
 definePageMeta({ layout: false });
 

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Button } from "primevue";
-import type { DataField } from "~/utils/search/dataFields";
 import IcBaselinePlus from "~icons/ic/baseline-plus";
+import type { DataField } from "~/utils/search/dataFields";
 
 const { dataFields = [] } = defineProps<{
   /** Data fields that should be displayed. */

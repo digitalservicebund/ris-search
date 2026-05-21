@@ -1,10 +1,10 @@
+import type { FetchHook } from "ofetch";
 import { describe, expect, it, vi } from "vitest";
-import { useFetchNormArticleContent, useFetchNormContent } from "./useNormData";
 import type {
   LegislationExpression,
   LegislationManifestation,
 } from "~/types/api";
-import type { FetchHook } from "ofetch";
+import { useFetchNormArticleContent, useFetchNormContent } from "./useNormData";
 
 const { mockFetch } = vi.hoisted(() => {
   return {

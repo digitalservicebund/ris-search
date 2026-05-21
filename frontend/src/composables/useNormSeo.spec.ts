@@ -1,8 +1,8 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
 import { mockNuxtImport } from "@nuxt/test-utils/runtime";
-import { buildValidityTitleLabel, useNormSeo } from "./useNormSeo";
-import { type LegislationExpression } from "~/types/api";
 import dayjs from "dayjs";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { type LegislationExpression } from "~/types/api";
+import { buildValidityTitleLabel, useNormSeo } from "./useNormSeo";
 
 const { useSeo } = vi.hoisted(() => ({
   useSeo: vi.fn(),

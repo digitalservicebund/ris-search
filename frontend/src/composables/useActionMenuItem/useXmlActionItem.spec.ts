@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { useXmlActionItem } from "~/composables/useActionMenuItem/useXmlActionItem";
 import XmlIcon from "~icons/custom/xml";
+import { useXmlActionItem } from "~/composables/useActionMenuItem/useXmlActionItem";
 
 describe("useXmlActionItem", () => {
   it("creates an ActionMenuItem with with xml url", async () => {

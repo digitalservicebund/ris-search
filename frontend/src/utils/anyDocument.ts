@@ -10,7 +10,7 @@ import type {
  * Type guard asserting that the candidate is a caselaw document.
  *
  * @param candidate Document to check
- * @returns true if the document is a caselaw document.
+ * @returns True if the document is a caselaw document.
  */
 export function isCaselaw(candidate: AnyDocument): candidate is CaseLaw {
   return candidate["@type"] === "Decision";
@@ -20,7 +20,7 @@ export function isCaselaw(candidate: AnyDocument): candidate is CaseLaw {
  * Type guard asserting that the candidate is a legislation work document.
  *
  * @param candidate Document to check
- * @returns true if the document is a legislation work document.
+ * @returns True if the document is a legislation work document.
  */
 export function isLegislation(
   candidate: AnyDocument,
@@ -32,17 +32,18 @@ export function isLegislation(
  * Type guard asserting that the candidate is a literature document.
  *
  * @param candidate Document to check
- * @returns true if the document is a literature document.
+ * @returns True if the document is a literature document.
  */
 export function isLiterature(candidate: AnyDocument): candidate is Literature {
   return candidate["@type"] === "Literature";
 }
 
 /**
- * Type guard asserting that the candidate is an administrative directive document.
+ * Type guard asserting that the candidate is an administrative directive
+ * document.
  *
  * @param candidate Document to check
- * @returns true if the document is an administrative directive document.
+ * @returns True if the document is an administrative directive document.
  */
 export function isAdministrativeDirective(
   candidate: AnyDocument,

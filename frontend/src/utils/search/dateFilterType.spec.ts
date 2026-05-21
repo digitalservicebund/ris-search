@@ -1,10 +1,10 @@
+import { DocumentKind } from "~/types/api";
 import {
   dateFilterToQuery,
   dateFilterToSimpleSearchParams,
   isFilterType,
   isStrictDateFilterValue,
 } from "./dateFilterType";
-import { DocumentKind } from "~/types/api";
 
 describe("filterType", () => {
   describe("isFilterType", () => {

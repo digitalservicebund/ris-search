@@ -5,16 +5,19 @@ type AccessibilityRelatedMetrics = {
 };
 
 /**
- * Retrieves default information about the user browsing preferences,
- * which helps with measuring the accessibility of the portal.
- * This function creates a temporary DOM element to measure the default text size,
- * checks the current zoom level, and determines the user's theme preference (light or dark mode).
- * The collected information is used by PostHog to send along the $pageview event.
+ * Retrieves default information about the user browsing preferences, which
+ * helps with measuring the accessibility of the portal. This function creates a
+ * temporary DOM element to measure the default text size, checks the current
+ * zoom level, and determines the user's theme preference (light or dark mode).
+ * The collected information is used by PostHog to send along the $pageview
+ * event.
  *
  * @returns {Object} An object containing the following properties:
- * - `zoomLevel` {number}: The current zoom level of the browser window.
- * - `defaultTextSize` {string}: The default text size of the webpage in px.
- * - `themePreference` {string}: The user's theme preference, either "dark" or "light".
+ *
+ *   - `zoomLevel` {number}: The current zoom level of the browser window.
+ *   - `defaultTextSize` {string}: The default text size of the webpage in px.
+ *   - `themePreference` {string}: The user's theme preference, either "dark" or
+ *     "light".
  */
 export function getAccessibilityRelatedMetrics(): AccessibilityRelatedMetrics {
   const tempElement = document.createElement("div");

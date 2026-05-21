@@ -6,8 +6,8 @@ import type { ComponentPublicInstance } from "vue";
  * behaviors:
  *
  * - Returns `visible` ref to bind to the drawer's open state
- * - Place focus on an element when the drawer is closed. This should be set
- *   to the element that originally opened the drawer (accessibility requirement)
+ * - Place focus on an element when the drawer is closed. This should be set to
+ *   the element that originally opened the drawer (accessibility requirement)
  * - Returns reusable default props for the close button
  */
 export function useDrawer() {

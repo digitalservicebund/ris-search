@@ -25,13 +25,13 @@ export function formatDocumentKind(documentKind: DocumentKind): string {
 }
 
 /**
- * Returns a human readable label and status color for the validity status of
- * a norm.
+ * Returns a human readable label and status color for the validity status of a
+ * norm.
  *
  * @param temporalCoverage Temporal coverage, must conform to the format of
- *  LegislationExpression.temporalCoverage
+ *   LegislationExpression.temporalCoverage
  * @returns Formatted status or undefined if no status can be determined based
- *  on the temporal coverage
+ *   on the temporal coverage
  */
 export function formatNormValidity(
   temporalCoverage: string | undefined,

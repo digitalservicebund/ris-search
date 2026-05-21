@@ -1,14 +1,14 @@
 <script setup lang="ts">
+import IcBaselineArrowBack from "~icons/ic/baseline-arrow-back";
+import IcBaselineArrowForward from "~icons/ic/baseline-arrow-Forward";
 import type { RouteLocationRaw } from "#vue-router";
 import type { BreadcrumbItem } from "~/components/Breadcrumbs.vue";
+import { useArticleSeo } from "~/composables/useArticleSeo";
 import {
   type Article,
   DocumentKind,
   type LegislationExpressionPartSchema,
 } from "~/types/api";
-import IcBaselineArrowBack from "~icons/ic/baseline-arrow-back";
-import IcBaselineArrowForward from "~icons/ic/baseline-arrow-Forward";
-import { useArticleSeo } from "~/composables/useArticleSeo";
 
 definePageMeta({
   // expression ELI + article eId

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { NuxtLink } from "#components";
 import { Button, Drawer } from "primevue";
 import type { MenuItem } from "primevue/menuitem";
 import IcBaselineMoreVert from "~icons/ic/baseline-more-vert";
+import { NuxtLink } from "#components";
 
 export type ActionMenuItem = Omit<MenuItem, "icon"> & {
   iconComponent: Component;

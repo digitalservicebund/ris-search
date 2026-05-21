@@ -1,8 +1,8 @@
 import { render, screen } from "@testing-library/vue";
-import ArticleVersionWarning from "./ArticleVersionWarning.vue";
 import type { Article } from "~/types/api";
 import { parseDateGermanLocalTime } from "~/utils/dateFormatting";
 import type { ValidityInterval } from "~/utils/norm";
+import ArticleVersionWarning from "./ArticleVersionWarning.vue";
 
 vi.mock("~/utils/norm", async (importOriginal) => {
   const mod = await importOriginal<Record<string, unknown>>();

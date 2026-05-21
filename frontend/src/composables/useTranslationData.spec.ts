@@ -1,4 +1,5 @@
 import { mockNuxtImport } from "@nuxt/test-utils/runtime";
+import type { FetchHook } from "ofetch";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { TranslationContent } from "~/composables/useTranslationData";
 import {
@@ -7,7 +8,6 @@ import {
   fetchTranslationListWithIdFilter,
   getGermanOriginal,
 } from "~/composables/useTranslationData";
-import type { FetchHook } from "ofetch";
 
 const { mockFetch } = vi.hoisted(() => {
   return {

@@ -1,8 +1,8 @@
 // oxlint-disable-next-line no-restricted-imports
 import { useToast } from "primevue/usetoast";
-import type { ActionMenuItem } from "~/components/documents/actionMenu/ActionMenu.vue";
 import IcBaselineCheck from "~icons/ic/baseline-check";
 import IconLink from "~icons/ic/outline-link";
+import type { ActionMenuItem } from "~/components/documents/actionMenu/ActionMenu.vue";
 
 const COPY_MESSAGE_TIMEOUT = 3000;
 

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { RouteLocationRaw } from "#vue-router";
 import { Drawer } from "primevue";
-import type { TreeItem } from "~/components/TreeView.vue";
 import IcBaselineList from "~icons/ic/baseline-list";
+import type { RouteLocationRaw } from "#vue-router";
+import type { TreeItem } from "~/components/TreeView.vue";
 
 interface Props {
   tableOfContents: TreeItem[];

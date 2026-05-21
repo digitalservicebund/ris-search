@@ -1,8 +1,8 @@
 import type { TreeItem } from "~/components/TreeView.vue";
 
 /**
- * Collects the item's own key and all descendant keys that are parents
- * (i.e. nodes that can be expanded). Leaf nodes are excluded.
+ * Collects the item's own key and all descendant keys that are parents (i.e.
+ * nodes that can be expanded). Leaf nodes are excluded.
  */
 export function getExpandableKeys(item: TreeItem): string[] {
   if (!item.children?.length) return [];
@@ -19,9 +19,8 @@ export function isDeepExpanded(
 }
 
 /**
- * Toggles the deep expanded state of the item and all its descendants:
- * - if all are expanded, collapses all
- * - otherwise (none or mixed), expands all
+ * Toggles the deep expanded state of the item and all its descendants: - if all
+ * are expanded, collapses all - otherwise (none or mixed), expands all
  *
  * Returns the new expandedKeys array.
  */

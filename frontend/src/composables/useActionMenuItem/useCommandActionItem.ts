@@ -3,6 +3,7 @@ import type { ActionMenuItem } from "~/components/documents/actionMenu/ActionMen
 /**
  * Use this function to construct a action menu item where the action is a
  * simple command (e.g. print, ...).
+ *
  * @param label
  * @param icon
  * @param command

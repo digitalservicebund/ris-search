@@ -93,9 +93,10 @@ export function removePrefix(str: string | undefined, prefix: string) {
 }
 
 /**
- * Returns a string constructed by joining the array elements with ', '.
- * If the array only contains one element, the element is returned.
- * Returns undefined if the array is empty
+ * Returns a string constructed by joining the array elements with ', '. If the
+ * array only contains one element, the element is returned. Returns undefined
+ * if the array is empty
+ *
  * @param array
  */
 export function formatArray(array: string[]): string | undefined {
@@ -108,8 +109,9 @@ export function formatArray(array: string[]): string | undefined {
 
 /**
  * Expects an array of strings where each element is a name in the format
- * "Lastname, Firstname". The names are converted to "Firstname Lastname".
- * If an element contains no or more than one comma, it is kept unchanged.
+ * "Lastname, Firstname". The names are converted to "Firstname Lastname". If an
+ * element contains no or more than one comma, it is kept unchanged.
+ *
  * @param names
  */
 export function formatNames(names: string[]): string[] {
@@ -126,7 +128,9 @@ export function formatNames(names: string[]): string[] {
 }
 
 /**
- * Given a noun in singular and plural form, choses the correct one based on the provided count.
+ * Given a noun in singular and plural form, choses the correct one based on the
+ * provided count.
+ *
  * @param singular
  * @param plural
  * @param count

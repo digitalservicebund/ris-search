@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { AutoCompleteSuggestion } from "~/components/AutoComplete.vue";
 import { debounce } from "lodash-es";
 import type {
   AutoCompleteCompleteEvent,
   AutoCompleteDropdownClickEvent,
 } from "primevue/autocomplete";
+import type { AutoCompleteSuggestion } from "~/components/AutoComplete.vue";
 import useBackendUrl from "~/composables/useBackendUrl";
 import type { CourtSearchResult, CourtsSearchParams } from "~/types/api";
 import { courtFilterDefaultSuggestions } from "~/utils/search/courtFilter";

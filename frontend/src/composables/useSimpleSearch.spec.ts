@@ -1,11 +1,11 @@
 import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ref, type ComputedRef, type Ref } from "vue";
+import { DocumentKind } from "~/types/api";
 import {
   useSimpleSearch,
   type SimpleSearchEndpointParams,
 } from "./useSimpleSearch";
-import { DocumentKind } from "~/types/api";
 
 type OnRequestHook = (ctx: { options: { query: unknown } }) => void;
 

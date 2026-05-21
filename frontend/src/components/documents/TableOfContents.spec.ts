@@ -1,10 +1,10 @@
 import { renderSuspended } from "@nuxt/test-utils/runtime";
-import { screen, within } from "@testing-library/vue";
 import { userEvent } from "@testing-library/user-event";
+import { screen, within } from "@testing-library/vue";
 import { beforeEach, describe, expect, it } from "vitest";
-import TableOfContents from "./TableOfContents.vue";
 import type { LegislationExpressionPartSchema } from "~/types/api";
 import { tocItemsToTreeViewItems } from "~/utils/tableOfContents";
+import TableOfContents from "./TableOfContents.vue";
 
 describe("TableOfContents", () => {
   const mockTocItems: LegislationExpressionPartSchema[] = [

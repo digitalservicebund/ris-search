@@ -1,6 +1,6 @@
 import { renderSuspended } from "@nuxt/test-utils/runtime";
-import { screen } from "@testing-library/vue";
 import { userEvent } from "@testing-library/user-event";
+import { screen } from "@testing-library/vue";
 import { describe, expect, it } from "vitest";
 import SingleAccordion from "./SingleAccordion.vue";
 

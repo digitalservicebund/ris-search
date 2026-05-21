@@ -1,7 +1,7 @@
 <script setup lang="ts">
 /**
- * Wrapper component for legislation content that provides scoped styling
- * for server-rendered AKN (Akoma Ntoso) HTML content.
+ * Wrapper component for legislation content that provides scoped styling for
+ * server-rendered AKN (Akoma Ntoso) HTML content.
  */
 defineProps<{
   /** When true, applies single-article view styling (hides section headings) */

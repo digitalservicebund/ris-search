@@ -49,10 +49,10 @@ export type StrictDateFilterValue =
  * Takes a date filter from the UI and makes sure that its internal state is
  * consistent based on the type:
  *
- * - if the filter contains properties that aren't needed for the type,
- *   removes them
- * - if the filter is missing required information based on the type,
- *   throws an error
+ * - If the filter contains properties that aren't needed for the type, removes
+ *   them
+ * - If the filter is missing required information based on the type, throws an
+ *   error
  *
  * @param filter Filter value to check
  * @returns Strict date filter
@@ -93,8 +93,8 @@ function validateDateFilterValue(
 }
 
 /**
- * Validates that the date filter value is internally consistent based on the type
- * without returning the result or throwing errors.
+ * Validates that the date filter value is internally consistent based on the
+ * type without returning the result or throwing errors.
  *
  * @param candidate Date filter to check
  * @returns True if the date filter is internally consistent
@@ -122,8 +122,9 @@ function validAtPointInTime(pointInTime: string): string {
  *
  * @param filter Date filter to convert
  * @returns Lucene query string or undefined if the filter is "allTime"
- * @throws if the provided filter is in an inconsistent state (e.g. required
- *  parameters for the current type are missing) or unsupported in Lucene queries
+ * @throws If the provided filter is in an inconsistent state (e.g. required
+ *   parameters for the current type are missing) or unsupported in Lucene
+ *   queries
  */
 export function dateFilterToQuery(
   filter: DateFilterValue,
@@ -180,14 +181,14 @@ export function dateFilterToQuery(
  * Converts a date filter to a query that can be submitted to the simple search
  * endpoint.
  *
- * The "currentlyInForce" filter type is not currently supported. Attempting
- * to use it will throw an error.
+ * The "currentlyInForce" filter type is not currently supported. Attempting to
+ * use it will throw an error.
  *
  * @param filter Date filter to convert
  * @returns Filter object or undefined if the filter is "allTime"
- * @throws if the provided filter is in an inconsistent state (e.g. required
- *  parameters for the current type are missing) or unsupported in the simple
- *  search
+ * @throws If the provided filter is in an inconsistent state (e.g. required
+ *   parameters for the current type are missing) or unsupported in the simple
+ *   search
  */
 export function dateFilterToSimpleSearchParams(
   filter: DateFilterValue,

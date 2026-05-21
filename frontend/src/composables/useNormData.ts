@@ -19,15 +19,15 @@ export interface NormContent {
 }
 
 /**
- * Fetches the metadata of a norm exluding its articles content as an async operation.
- * This has the advantage of only needing to be processed once, either during
- * client-side or server-side rendering.
- * It will also extract the title and table of contents HTML parts, to be
- * displayed in separately from the main content.
+ * Fetches the metadata of a norm exluding its articles content as an async
+ * operation. This has the advantage of only needing to be processed once,
+ * either during client-side or server-side rendering. It will also extract the
+ * title and table of contents HTML parts, to be displayed in separately from
+ * the main content.
  *
  * @param expressionEli The ELI for the expression to display. The concrete
- * manifestation ELI of the HTML version will be derived from metadata (from
- * first API call).
+ *   manifestation ELI of the HTML version will be derived from metadata (from
+ *   first API call).
  */
 export function useFetchNormContent(
   expressionEli: string,
@@ -135,18 +135,16 @@ export interface NormArticleContent {
 
 /**
  * Fetches the metadata and actual content for a single norm article as an async
- * operation.
- * This has the advantage of only needing to be processed once, either during
- * client-side or server-side rendering.
- * It will also extract the article title, to be displayed separately from
- * the main content.
+ * operation. This has the advantage of only needing to be processed once,
+ * either during client-side or server-side rendering. It will also extract the
+ * article title, to be displayed separately from the main content.
  *
  * @param expressionEli The ELI for the expression to display. The concrete
- * manifestation ELI of the HTML version will be derived from metadata (from
- * first API call).
+ *   manifestation ELI of the HTML version will be derived from metadata (from
+ *   first API call).
  * @param articleEId The eId of the single article belonging to the norm
- * indicated by the expressionEli.
- * It will be appended to the manifestation ELI URL when requesting HTML.
+ *   indicated by the expressionEli. It will be appended to the manifestation
+ *   ELI URL when requesting HTML.
  */
 export function useFetchNormArticleContent(
   expressionEli: string,
@@ -191,6 +189,7 @@ export function useFetchNormArticleContent(
 
 /**
  * Extracts the HTML URL from a Legislation metadata structure.
+ *
  * @throws Error If the metadata doesn't include an HTML version.
  */
 function getContentUrl(metadata: LegislationExpression) {

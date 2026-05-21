@@ -1,6 +1,6 @@
+import { isEmpty, isEqual } from "lodash-es";
 import { navigateTo, useRoute } from "#app";
 import type { LocationQueryRaw, LocationQueryValue } from "#vue-router";
-import { isEmpty, isEqual } from "lodash-es";
 import { DocumentKind } from "~/types/api";
 import {
   type DateFilterValue,

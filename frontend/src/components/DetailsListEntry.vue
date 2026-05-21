@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { isEmpty } from "lodash-es";
-import { isStringEmpty } from "~/utils/textFormatting";
 import type { HTMLAttributes } from "vue";
+import { isStringEmpty } from "~/utils/textFormatting";
 
 const props = defineProps<{
   label: string;

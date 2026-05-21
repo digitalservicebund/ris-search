@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ExternalLink, NuxtLink } from "#components";
 import { Button, Message } from "primevue";
+import { ExternalLink, NuxtLink } from "#components";
 import bmjvLogo from "~/assets/img/BMJV_de_v1__Web_farbig.svg";
 import SimpleSearchInput from "~/components/search/SimpleSearchInput.vue";
 import { usePrivateFeaturesFlag } from "~/composables/usePrivateFeaturesFlag";

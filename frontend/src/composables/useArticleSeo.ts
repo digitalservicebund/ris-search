@@ -1,7 +1,7 @@
-import { normalizeSpaces } from "~/utils/textFormatting";
-import type { Article } from "~/types/api";
 import { buildValidityTitleLabel } from "~/composables/useNormSeo";
+import type { Article } from "~/types/api";
 import { temporalCoverageToValidityInterval } from "~/utils/norm";
+import { normalizeSpaces } from "~/utils/textFormatting";
 
 export type UseArticleSeoInput = {
   abbreviation?: string;

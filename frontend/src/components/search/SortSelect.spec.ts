@@ -1,9 +1,9 @@
 import { userEvent } from "@testing-library/user-event";
 import { render, screen } from "@testing-library/vue";
 import { describe, it, expect } from "vitest";
-import SortOptionsComponent from "./SortSelect.vue";
 import { DocumentKind } from "~/types/api";
 import { sortMode } from "~/utils/search/sortMode";
+import SortOptionsComponent from "./SortSelect.vue";
 
 describe("SortSelect", () => {
   it("computes correct sort options for 'all' document kind", async () => {

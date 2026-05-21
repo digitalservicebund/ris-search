@@ -1,6 +1,5 @@
 import { render } from "@testing-library/vue";
 import { describe, it, expect } from "vitest";
-import SearchResultComponent from "./SearchResult.vue";
 import type {
   AdministrativeDirective,
   AnyDocument,
@@ -9,6 +8,7 @@ import type {
   Literature,
   SearchResult,
 } from "~/types/api";
+import SearchResultComponent from "./SearchResult.vue";
 
 describe("SearchResult", () => {
   it("shows the correct result for caselaw", () => {

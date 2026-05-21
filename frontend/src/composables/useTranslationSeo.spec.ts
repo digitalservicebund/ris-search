@@ -1,5 +1,5 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
 import { mockNuxtImport } from "@nuxt/test-utils/runtime";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { useTranslationSeo } from "./useTranslationSeo";
 
 const { useSeo } = vi.hoisted(() => ({
