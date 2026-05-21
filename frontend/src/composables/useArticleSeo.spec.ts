@@ -15,19 +15,19 @@ describe("useArticleSeo", () => {
   });
 
   describe("buildTitle", () => {
-    it("returns empty string when nothing is provided", () => {
-      useArticleSeo({});
-
-      expect(useSeo).toHaveBeenCalledWith(
-        expect.objectContaining({ title: "" }),
-      );
-    });
-
     it("uses abbreviation as base", () => {
       useArticleSeo({ abbreviation: "BGB" });
 
       expect(useSeo).toHaveBeenCalledWith(
         expect.objectContaining({ title: "BGB" }),
+      );
+    });
+
+    it("uses 'Gesetz' as fallback if abbreviation is missing", () => {
+      useArticleSeo({});
+
+      expect(useSeo).toHaveBeenCalledWith(
+        expect.objectContaining({ title: "Gesetz" }),
       );
     });
 
