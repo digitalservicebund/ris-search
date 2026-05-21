@@ -43,6 +43,14 @@ describe("useNormSeo", () => {
       );
     });
 
+    it("uses 'Gesetz' as fallback if abbreviation is missing", () => {
+      useNormSeo({ norm: {} as LegislationExpression });
+
+      expect(useSeo).toHaveBeenCalledWith(
+        expect.objectContaining({ title: "Gesetz" }),
+      );
+    });
+
     it.each([
       [undefined, undefined, ""],
       [dayjs("01-01-2025"), undefined, ", vom 01.01.2025"],

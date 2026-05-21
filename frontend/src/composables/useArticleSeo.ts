@@ -28,7 +28,7 @@ function buildTitle(abbreviation?: string, article?: Article) {
   const validityIntervalLabel = buildValidityTitleLabel(
     temporalCoverageToValidityInterval(article?.temporalCoverage),
   );
-  return `${abbreviation ?? ""}${paragraphNumber}${validityIntervalLabel}`;
+  return `${abbreviation || "Gesetz"}${paragraphNumber}${validityIntervalLabel}`;
 }
 
 function buildDescription(articleHtml?: string) {
