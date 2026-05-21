@@ -110,7 +110,7 @@ pnpm generate-api-types
 
 ## Code Quality
 
-We use TypeScript, Oxlint, and Prettier to support code quality and consistent formatting. To run Oxlint and Prettier:
+We use TypeScript, Oxlint, and Oxfmt to support code quality and consistent formatting. To run Oxlint and Oxfmt:
 
 ```sh
 pnpm style:check  # Check if code follows conventions and is formatted
