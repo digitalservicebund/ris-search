@@ -1,5 +1,4 @@
 FROM node:24.16.0-alpine3.22@sha256:191c9f0080fcbbc6547a85dc0ff7988072214a355aabdc1d2ec55a7dae5eea8a AS build
-ARG NUXT_PUBLIC_SENTRY_DSN
 ARG SENTRY_RELEASE
 RUN apk update && apk upgrade
 RUN corepack enable
@@ -17,7 +16,6 @@ RUN --mount=type=secret,id=SENTRY_AUTH_TOKEN,required=false \
   pnpm run prepare && NODE_OPTIONS="--max-old-space-size=4096" pnpm build
 
 FROM node:24.16.0-alpine3.22@sha256:191c9f0080fcbbc6547a85dc0ff7988072214a355aabdc1d2ec55a7dae5eea8a
-ARG NUXT_PUBLIC_SENTRY_DSN
 ARG SENTRY_RELEASE
 RUN apk update && apk upgrade && apk add dumb-init && apk cache clean
 USER node
@@ -29,7 +27,6 @@ COPY start.sh ./
 EXPOSE 3000
 ENV HOST=0.0.0.0 \
   PORT=3000 \
-  NUXT_PUBLIC_SENTRY_DSN=${NUXT_PUBLIC_SENTRY_DSN} \
   SENTRY_RELEASE=${SENTRY_RELEASE}
 ENTRYPOINT ["/usr/bin/dumb-init", "--"]
 CMD ["sh", "./start.sh"]
