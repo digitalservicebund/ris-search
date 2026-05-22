@@ -252,9 +252,15 @@
         "operationId": "getChangelogs",
         "parameters": [
           {
-            "name": "since",
+            "name": "from",
             "in": "query",
-            "required": true,
+            "required": false,
+            "schema": { "type": "string", "format": "date-time" }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": false,
             "schema": { "type": "string", "format": "date-time" }
           }
         ],
@@ -953,9 +959,15 @@
         "operationId": "getChangelogs_1",
         "parameters": [
           {
-            "name": "since",
+            "name": "from",
             "in": "query",
-            "required": true,
+            "required": false,
+            "schema": { "type": "string", "format": "date-time" }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": false,
             "schema": { "type": "string", "format": "date-time" }
           }
         ],
@@ -1718,9 +1730,15 @@
         "operationId": "getChangelogs_2",
         "parameters": [
           {
-            "name": "since",
+            "name": "from",
             "in": "query",
-            "required": true,
+            "required": false,
+            "schema": { "type": "string", "format": "date-time" }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": false,
             "schema": { "type": "string", "format": "date-time" }
           }
         ],
@@ -1917,9 +1935,15 @@
         "operationId": "getChangelogs_3",
         "parameters": [
           {
-            "name": "since",
+            "name": "from",
             "in": "query",
-            "required": true,
+            "required": false,
+            "schema": { "type": "string", "format": "date-time" }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": false,
             "schema": { "type": "string", "format": "date-time" }
           }
         ],
@@ -2283,9 +2307,13 @@
       "ChangelogDocument": {
         "type": "object",
         "properties": {
-          "@id": { "type": "string" },
-          "@type": { "type": "string" }
-        }
+          "@id": {
+            "type": "string",
+            "description": "unique identifier of the document"
+          },
+          "@type": { "type": "string", "description": "type of the document" }
+        },
+        "required": ["@id", "@type"]
       },
       "ChangelogResponse": {
         "type": "object",
@@ -2293,16 +2321,22 @@
           "@context": { "type": "object", "additionalProperties": {} },
           "changed": {
             "type": "array",
+            "description": "Set of changed documents",
             "items": { "$ref": "#/components/schemas/ChangelogDocument" },
             "uniqueItems": true
           },
           "deleted": {
             "type": "array",
+            "description": "Set of deleted documents",
             "items": { "$ref": "#/components/schemas/ChangelogDocument" },
             "uniqueItems": true
           },
-          "allChanged": { "type": "boolean" }
-        }
+          "allChanged": {
+            "type": "boolean",
+            "description": "flag to communicate that the whole storage got rebuilt"
+          }
+        },
+        "required": ["allChanged", "changed", "deleted"]
       },
       "CollectionSchemaSearchMemberSchemaLegislationExpressionSearchSchema": {
         "type": "object",
