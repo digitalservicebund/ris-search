@@ -8,6 +8,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
+import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.repository.objectstorage.AdministrativeDirectiveBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.LiteratureBucket;
@@ -30,7 +31,7 @@ import org.springframework.util.MultiValueMap;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @Tag("integration")
-class ChangelogEndpointsTest {
+class ChangelogEndpointsTest extends ContainersIntegrationBase {
 
   @Autowired private MockMvc mockMvc;
 
