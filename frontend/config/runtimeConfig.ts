@@ -31,6 +31,7 @@ export const runtimeConfig: NuxtConfig["runtimeConfig"] = {
     risBackendUrl: "",
     privateFeaturesEnabled: false,
     sentryDSN: "",
+    sentryEnvironment: "",
     analytics: {
       posthogKey: "",
       posthogHost: "",
