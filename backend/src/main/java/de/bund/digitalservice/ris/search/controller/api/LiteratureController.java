@@ -217,6 +217,10 @@ public class LiteratureController {
   }
 
   @GetMapping(path = ApiConfig.Paths.LITERATURE_CHANGELOGS)
+  @Operation(
+      summary = "Literature changelog",
+      description =
+          "Returns references of document changes that occurred in between two points in time.")
   public ResponseEntity<ChangelogResponse> getChangelogs(
       @ParameterObject @Valid ChangelogParams params) {
 

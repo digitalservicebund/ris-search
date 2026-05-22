@@ -265,6 +265,11 @@ public class CaseLawController {
   }
 
   @GetMapping(path = ApiConfig.Paths.CASELAW_CHANGELOGS)
+  @Operation(
+      summary = "Caselaw changelog",
+      description =
+          "Returns references of document changes that occurred in between two points in time.")
+  @ApiResponse(responseCode = "200")
   public ResponseEntity<ChangelogResponse> getChangelogs(
       @ParameterObject @Valid ChangelogParams params) {
 

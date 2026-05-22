@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
@@ -134,5 +136,17 @@ class ChangelogEndpointsTest {
             jsonPath("$.deleted[0].['@id']")
                 .value("/v1/legislation/eli/bund/bgbl-1/2000/identifier/2026-01-01/1/deu"))
         .andExpect(jsonPath("$.deleted[0].['@type']").value("Legislation"));
+  }
+
+  @ParameterizedTest
+  @ValueSource(
+      strings = {
+        ApiConfig.Paths.ADMINISTRATIVE_DIRECTIVE_CHANGELOGS,
+        ApiConfig.Paths.LEGISLATION_CHANGELOGS,
+        ApiConfig.Paths.CASELAW_CHANGELOGS,
+        ApiConfig.Paths.LITERATURE_CHANGELOGS
+      })
+  void queryParamtersAreMandatory(String route) throws Exception {
+    mockMvc.perform(get(route)).andExpect(status().is4xxClientError());
   }
 }

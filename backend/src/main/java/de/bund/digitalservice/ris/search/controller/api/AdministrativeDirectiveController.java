@@ -203,6 +203,10 @@ public class AdministrativeDirectiveController {
   }
 
   @GetMapping(path = ApiConfig.Paths.ADMINISTRATIVE_DIRECTIVE_CHANGELOGS)
+  @Operation(
+      summary = "Administrative Directive changelog",
+      description =
+          "Returns references of document changes that occurred in between two points in time.")
   public ResponseEntity<ChangelogResponse> getChangelogs(
       @ParameterObject @Valid ChangelogParams params) {
 

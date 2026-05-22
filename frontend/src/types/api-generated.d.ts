@@ -114,6 +114,12 @@ export interface paths {
       path?: never;
       cookie?: never;
     };
+    /**
+     * Literature changelog
+     *
+     * Returns references of document changes that occurred in between two
+     * points in time.
+     */
     get: operations["getChangelogs"];
     put?: never;
     post?: never;
@@ -330,6 +336,12 @@ export interface paths {
       path?: never;
       cookie?: never;
     };
+    /**
+     * Legislation changelog
+     *
+     * Returns references of document changes that occurred in between two
+     * points in time.
+     */
     get: operations["getChangelogs_1"];
     put?: never;
     post?: never;
@@ -614,6 +626,12 @@ export interface paths {
       path?: never;
       cookie?: never;
     };
+    /**
+     * Caselaw changelog
+     *
+     * Returns references of document changes that occurred in between two
+     * points in time.
+     */
     get: operations["getChangelogs_2"];
     put?: never;
     post?: never;
@@ -717,6 +735,12 @@ export interface paths {
       path?: never;
       cookie?: never;
     };
+    /**
+     * Administrative Directive changelog
+     *
+     * Returns references of document changes that occurred in between two
+     * points in time.
+     */
     get: operations["getChangelogs_3"];
     put?: never;
     post?: never;
@@ -2019,9 +2043,9 @@ export interface operations {
   };
   getChangelogs: {
     parameters: {
-      query?: {
-        from?: string;
-        to?: string;
+      query: {
+        from: string;
+        to: string;
       };
       header?: never;
       path?: never;
@@ -2643,9 +2667,9 @@ export interface operations {
   };
   getChangelogs_1: {
     parameters: {
-      query?: {
-        from?: string;
-        to?: string;
+      query: {
+        from: string;
+        to: string;
       };
       header?: never;
       path?: never;
@@ -3304,9 +3328,9 @@ export interface operations {
   };
   getChangelogs_2: {
     parameters: {
-      query?: {
-        from?: string;
-        to?: string;
+      query: {
+        from: string;
+        to: string;
       };
       header?: never;
       path?: never;
@@ -3495,9 +3519,9 @@ export interface operations {
   };
   getChangelogs_3: {
     parameters: {
-      query?: {
-        from?: string;
-        to?: string;
+      query: {
+        from: string;
+        to: string;
       };
       header?: never;
       path?: never;

@@ -249,18 +249,20 @@
     "/v1/literature/changelogs": {
       "get": {
         "tags": ["Literature"],
+        "summary": "Literature changelog",
+        "description": "Returns references of document changes that occurred in between two points in time.",
         "operationId": "getChangelogs",
         "parameters": [
           {
             "name": "from",
             "in": "query",
-            "required": false,
+            "required": true,
             "schema": { "type": "string", "format": "date-time" }
           },
           {
             "name": "to",
             "in": "query",
-            "required": false,
+            "required": true,
             "schema": { "type": "string", "format": "date-time" }
           }
         ],
@@ -956,18 +958,20 @@
     "/v1/legislation/changelogs": {
       "get": {
         "tags": ["Legislation"],
+        "summary": "Legislation changelog",
+        "description": "Returns references of document changes that occurred in between two points in time.",
         "operationId": "getChangelogs_1",
         "parameters": [
           {
             "name": "from",
             "in": "query",
-            "required": false,
+            "required": true,
             "schema": { "type": "string", "format": "date-time" }
           },
           {
             "name": "to",
             "in": "query",
-            "required": false,
+            "required": true,
             "schema": { "type": "string", "format": "date-time" }
           }
         ],
@@ -1727,18 +1731,20 @@
     "/v1/case-law/changelogs": {
       "get": {
         "tags": ["Case Law"],
+        "summary": "Caselaw changelog",
+        "description": "Returns references of document changes that occurred in between two points in time.",
         "operationId": "getChangelogs_2",
         "parameters": [
           {
             "name": "from",
             "in": "query",
-            "required": false,
+            "required": true,
             "schema": { "type": "string", "format": "date-time" }
           },
           {
             "name": "to",
             "in": "query",
-            "required": false,
+            "required": true,
             "schema": { "type": "string", "format": "date-time" }
           }
         ],
@@ -1932,18 +1938,20 @@
     "/v1/administrative-directive/changelogs": {
       "get": {
         "tags": ["AdministrativeDirective"],
+        "summary": "Administrative Directive changelog",
+        "description": "Returns references of document changes that occurred in between two points in time.",
         "operationId": "getChangelogs_3",
         "parameters": [
           {
             "name": "from",
             "in": "query",
-            "required": false,
+            "required": true,
             "schema": { "type": "string", "format": "date-time" }
           },
           {
             "name": "to",
             "in": "query",
-            "required": false,
+            "required": true,
             "schema": { "type": "string", "format": "date-time" }
           }
         ],

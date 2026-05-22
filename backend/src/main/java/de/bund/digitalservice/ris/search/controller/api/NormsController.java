@@ -659,6 +659,10 @@ public class NormsController {
   }
 
   @GetMapping(path = ApiConfig.Paths.LEGISLATION_CHANGELOGS)
+  @Operation(
+      summary = "Legislation changelog",
+      description =
+          "Returns references of document changes that occurred in between two points in time.")
   public ResponseEntity<ChangelogResponse> getChangelogs(
       @ParameterObject @Valid ChangelogParams params) {
 
