@@ -20,24 +20,26 @@ public class ApiConfig {
 
     public static final String BASE = "/v1";
 
+    public static final String CHANGELOGS = "/changelogs";
+
     public static final String DOCUMENT = BASE + "/document";
 
     public static final String CASELAW = BASE + "/case-law";
-    public static final String CASELAW_CHANGELOGS = CASELAW + "/changelogs";
+    public static final String CASELAW_CHANGELOGS = CASELAW + CHANGELOGS;
 
     public static final String LITERATURE = BASE + "/literature";
-    public static final String LITERATURE_CHANGELOGS = LITERATURE + "/changelogs";
+    public static final String LITERATURE_CHANGELOGS = LITERATURE + CHANGELOGS;
 
     public static final String ADMINISTRATIVE_DIRECTIVE = BASE + "/administrative-directive";
     public static final String ADMINISTRATIVE_DIRECTIVE_CHANGELOGS =
-        ADMINISTRATIVE_DIRECTIVE + "/changelogs";
+        ADMINISTRATIVE_DIRECTIVE + CHANGELOGS;
 
     public static final String FEEDBACK = BASE + "/feedback";
 
     public static final String LEGISLATION = BASE + "/legislation";
     public static final String LEGISLATION_WORK_EXAMPLE = LEGISLATION + "/work-example/eli";
     public static final String LEGISLATION_SINGLE = LEGISLATION + "/eli";
-    public static final String LEGISLATION_CHANGELOGS = LEGISLATION + "/changelogs";
+    public static final String LEGISLATION_CHANGELOGS = LEGISLATION + CHANGELOGS;
     public static final String LEGISLATION_TRANSLATION = BASE + "/translatedLegislation";
 
     public static final String DOCUMENT_ADVANCED_SEARCH = DOCUMENT + "/lucene-search";

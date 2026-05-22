@@ -13,6 +13,8 @@ import java.util.stream.Collectors;
 /** Mapper class to map Changelog objects to api representations of a changelog. */
 public class ChangelogResponseMapper {
 
+  private ChangelogResponseMapper() {}
+
   /**
    * Maps A changelog to a ChangelogResponse based on the documentKind.
    *
