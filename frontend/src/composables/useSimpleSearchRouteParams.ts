@@ -9,6 +9,16 @@ import {
 } from "~/utils/search/dateFilterType";
 import { searchParamToNumber, searchParamToString } from "~/utils/searchParams";
 
+function getInitialFilterTypeFromQuery(
+  init: LocationQueryValue | LocationQueryValue[] | undefined,
+): DateFilterValue["type"] {
+  if (typeof init !== "string" || !isFilterType(init)) {
+    return "allTime";
+  }
+
+  return init;
+}
+
 export function useSimpleSearchRouteParams() {
   const route = useRoute();
 
@@ -41,16 +51,6 @@ export function useSimpleSearchRouteParams() {
   const query = ref<string>("");
 
   // Date filter --------------------------------------------
-
-  function getInitialFilterTypeFromQuery(
-    init: LocationQueryValue | LocationQueryValue[] | undefined,
-  ): DateFilterValue["type"] {
-    if (typeof init !== "string" || !isFilterType(init)) {
-      return "allTime";
-    }
-
-    return init;
-  }
 
   const dateFilter = ref<DateFilterValue>({ type: "allTime" });
 

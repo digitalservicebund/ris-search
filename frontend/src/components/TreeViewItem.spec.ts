@@ -5,40 +5,42 @@ import { describe, expect, it } from "vitest";
 import type { TreeItem } from "./TreeView.vue";
 import TreeViewItem from "./TreeViewItem.vue";
 
+const leaf: TreeItem = { key: "a", title: "Item A" };
+
+const parent: TreeItem = {
+  key: "p",
+  title: "Parent",
+  children: [
+    { key: "c1", title: "Child 1" },
+    { key: "c2", title: "Child 2" },
+  ],
+};
+
+const deepParent: TreeItem = {
+  key: "p",
+  title: "Parent",
+  children: [
+    {
+      key: "c",
+      title: "Child",
+      children: [{ key: "g", title: "Grandchild" }],
+    },
+  ],
+};
+
+function render(
+  item: TreeItem,
+  expandedKeys: string[] = [],
+  selected?: string,
+  focusedKey?: string,
+  level?: number,
+) {
+  return renderSuspended(TreeViewItem, {
+    props: { item, expandedKeys, selected, focusedKey, level },
+  });
+}
+
 describe("TreeViewItem", () => {
-  const leaf: TreeItem = { key: "a", title: "Item A" };
-  const parent: TreeItem = {
-    key: "p",
-    title: "Parent",
-    children: [
-      { key: "c1", title: "Child 1" },
-      { key: "c2", title: "Child 2" },
-    ],
-  };
-  const deepParent: TreeItem = {
-    key: "p",
-    title: "Parent",
-    children: [
-      {
-        key: "c",
-        title: "Child",
-        children: [{ key: "g", title: "Grandchild" }],
-      },
-    ],
-  };
-
-  function render(
-    item: TreeItem,
-    expandedKeys: string[] = [],
-    selected?: string,
-    focusedKey?: string,
-    level?: number,
-  ) {
-    return renderSuspended(TreeViewItem, {
-      props: { item, expandedKeys, selected, focusedKey, level },
-    });
-  }
-
   it("renders the item", async () => {
     await render(leaf);
     expect(

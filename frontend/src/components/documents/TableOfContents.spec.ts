@@ -6,92 +6,92 @@ import type { LegislationExpressionPartSchema } from "~/types/api";
 import { tocItemsToTreeViewItems } from "~/utils/tableOfContents";
 import TableOfContents from "./TableOfContents.vue";
 
+const mockTocItems: LegislationExpressionPartSchema[] = [
+  {
+    "@id": "chapter1",
+    eId: "chapter1",
+    name: "1",
+    headline: "Chapter 1",
+    encoding: [],
+    temporalCoverage: "../..",
+    hasPart: [
+      {
+        "@id": "section1-1",
+        eId: "section1-1",
+        name: "1.1",
+        headline: "Section 1.1",
+        encoding: [],
+        temporalCoverage: "../..",
+        hasPart: [],
+      },
+      {
+        "@id": "section1-2",
+        eId: "section1-2",
+        name: "1.2",
+        headline: "Section 1.2",
+        encoding: [],
+        temporalCoverage: "../..",
+        hasPart: [
+          {
+            "@id": "subsection1-2-1",
+            eId: "subsection1-2-1",
+            name: "1.2.1",
+            headline: "Subsection 1.2.1",
+            encoding: [],
+            temporalCoverage: "../..",
+            hasPart: [],
+          },
+        ],
+      },
+    ],
+  },
+  {
+    "@id": "chapter2",
+    eId: "chapter2",
+    name: "2",
+    headline: "Chapter 2",
+    encoding: [],
+    temporalCoverage: "../..",
+    hasPart: [
+      {
+        "@id": "section2-1",
+        eId: "section2-1",
+        name: "2.1",
+        headline: "Section 2.1",
+        encoding: [],
+        temporalCoverage: "../..",
+        hasPart: [],
+      },
+    ],
+  },
+];
+
+const createItems = (items = mockTocItems) =>
+  tocItemsToTreeViewItems(
+    items,
+    (id) => ({ path: "/", hash: `#${id}` }),
+    (id) => ({ path: "/about", hash: `#${id}` }),
+  );
+
+async function renderComponent(props?: {
+  selectedKey?: string;
+  items?: ReturnType<typeof createItems>;
+  selectionEnabled?: boolean;
+  subheading?: string;
+}) {
+  return renderSuspended(TableOfContents, {
+    props: {
+      tableOfContents: props?.items ?? createItems(),
+      selectedKey: props?.selectedKey,
+      subheading: props?.subheading,
+    },
+  });
+}
+
 describe("TableOfContents", () => {
-  const mockTocItems: LegislationExpressionPartSchema[] = [
-    {
-      "@id": "chapter1",
-      eId: "chapter1",
-      name: "1",
-      headline: "Chapter 1",
-      encoding: [],
-      temporalCoverage: "../..",
-      hasPart: [
-        {
-          "@id": "section1-1",
-          eId: "section1-1",
-          name: "1.1",
-          headline: "Section 1.1",
-          encoding: [],
-          temporalCoverage: "../..",
-          hasPart: [],
-        },
-        {
-          "@id": "section1-2",
-          eId: "section1-2",
-          name: "1.2",
-          headline: "Section 1.2",
-          encoding: [],
-          temporalCoverage: "../..",
-          hasPart: [
-            {
-              "@id": "subsection1-2-1",
-              eId: "subsection1-2-1",
-              name: "1.2.1",
-              headline: "Subsection 1.2.1",
-              encoding: [],
-              temporalCoverage: "../..",
-              hasPart: [],
-            },
-          ],
-        },
-      ],
-    },
-    {
-      "@id": "chapter2",
-      eId: "chapter2",
-      name: "2",
-      headline: "Chapter 2",
-      encoding: [],
-      temporalCoverage: "../..",
-      hasPart: [
-        {
-          "@id": "section2-1",
-          eId: "section2-1",
-          name: "2.1",
-          headline: "Section 2.1",
-          encoding: [],
-          temporalCoverage: "../..",
-          hasPart: [],
-        },
-      ],
-    },
-  ];
-
-  const createItems = (items = mockTocItems) =>
-    tocItemsToTreeViewItems(
-      items,
-      (id) => ({ path: "/", hash: `#${id}` }),
-      (id) => ({ path: "/about", hash: `#${id}` }),
-    );
-
   beforeEach(() => {
     vi.clearAllMocks();
   });
-
-  async function renderComponent(props?: {
-    selectedKey?: string;
-    items?: ReturnType<typeof createItems>;
-    selectionEnabled?: boolean;
-    subheading?: string;
-  }) {
-    return renderSuspended(TableOfContents, {
-      props: {
-        tableOfContents: props?.items ?? createItems(),
-        selectedKey: props?.selectedKey,
-        subheading: props?.subheading,
-      },
-    });
-  }
 
   it("renders the root entries and aria label", async () => {
     await renderComponent();
