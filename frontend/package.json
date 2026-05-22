@@ -28,9 +28,9 @@
     "dayjs": "1.11.20",
     "lodash-es": "4.18.1",
     "minisearch": "7.2.0",
-    "nuxt": "4.4.5",
+    "nuxt": "4.4.6",
     "nuxt-security": "2.6.0",
-    "posthog-js": "1.373.4",
+    "posthog-js": "1.374.2",
     "primevue": "4.5.5",
     "sanitize-html": "2.17.4"
   },
@@ -46,7 +46,7 @@
     "@testing-library/vue": "8.1.0",
     "@types/jsdom": "28.0.3",
     "@types/lodash-es": "4.17.12",
-    "@types/node": "25.8.0",
+    "@types/node": "25.9.0",
     "@types/sanitize-html": "2.16.1",
     "@vitest/coverage-v8": "4.1.6",
     "@vue/test-utils": "2.4.10",
@@ -56,13 +56,13 @@
     "lighthouse": "13.3.0",
     "openapi-typescript": "7.13.0",
     "oxfmt": "0.50.0",
-    "oxlint": "1.64.0",
+    "oxlint": "1.65.0",
     "playwright-lighthouse": "4.0.0",
     "tailwindcss": "4.3.0",
     "typescript": "6.0.3",
     "unplugin-icons": "23.0.1",
     "vitest": "4.1.6",
-    "vue-tsc": "3.2.9"
+    "vue-tsc": "3.3.0"
   },
   "engines": {
     "node": ">=24"
