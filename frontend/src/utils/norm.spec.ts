@@ -105,6 +105,49 @@ describe("getValidityStatus", () => {
   });
 });
 
+type PartialExpression = Pick<
+  LegislationExpression,
+  "legislationLegalForce" | "temporalCoverage" | "legislationIdentifier"
+>;
+
+const currentExpression: PartialExpression = {
+  legislationLegalForce: "InForce",
+  temporalCoverage: "1999-01-01/..",
+  legislationIdentifier: "currentExpression",
+};
+
+const veryOldExpression: PartialExpression = {
+  legislationLegalForce: "NotInForce",
+  temporalCoverage: "1871-05-15/1871-05-17",
+  legislationIdentifier: "veryOldExpression",
+};
+
+const oldExpression: PartialExpression = {
+  legislationLegalForce: "NotInForce",
+  temporalCoverage: "1900-01-01/1980-01-01",
+  legislationIdentifier: "oldExpression",
+};
+
+const upcomingExpression: PartialExpression = {
+  legislationLegalForce: "NotInForce",
+  temporalCoverage: "2001-01-01/..",
+  legislationIdentifier: "upcomingExpression",
+};
+
+const farFutureExpression: PartialExpression = {
+  legislationLegalForce: "NotInForce",
+  temporalCoverage: "3000-01-01/..",
+  legislationIdentifier: "farFutureExpression",
+};
+
+function transform(
+  partialExpressions: PartialExpression[],
+): LegislationExpression[] {
+  return partialExpressions.map(
+    (partialExpression) => partialExpression as LegislationExpression,
+  );
+}
+
 describe("getMostRelevantExpression", () => {
   beforeAll(() => {
     vi.useFakeTimers();
@@ -112,45 +155,6 @@ describe("getMostRelevantExpression", () => {
   });
 
   afterAll(() => vi.useRealTimers());
-
-  type PartialExpression = Pick<
-    LegislationExpression,
-    "legislationLegalForce" | "temporalCoverage" | "legislationIdentifier"
-  >;
-
-  const currentExpression: PartialExpression = {
-    legislationLegalForce: "InForce",
-    temporalCoverage: "1999-01-01/..",
-    legislationIdentifier: "currentExpression",
-  };
-  const veryOldExpression: PartialExpression = {
-    legislationLegalForce: "NotInForce",
-    temporalCoverage: "1871-05-15/1871-05-17",
-    legislationIdentifier: "veryOldExpression",
-  };
-  const oldExpression: PartialExpression = {
-    legislationLegalForce: "NotInForce",
-    temporalCoverage: "1900-01-01/1980-01-01",
-    legislationIdentifier: "oldExpression",
-  };
-  const upcomingExpression: PartialExpression = {
-    legislationLegalForce: "NotInForce",
-    temporalCoverage: "2001-01-01/..",
-    legislationIdentifier: "upcomingExpression",
-  };
-  const farFutureExpression: PartialExpression = {
-    legislationLegalForce: "NotInForce",
-    temporalCoverage: "3000-01-01/..",
-    legislationIdentifier: "farFutureExpression",
-  };
-
-  function transform(
-    partialExpressions: PartialExpression[],
-  ): LegislationExpression[] {
-    return partialExpressions.map(
-      (partialExpression) => partialExpression as LegislationExpression,
-    );
-  }
 
   const allExpressions = [
     veryOldExpression,
