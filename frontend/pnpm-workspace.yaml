@@ -1,7 +1,6 @@
 packages: []
 
 overrides:
-  devalue: "5.8.1" # CVE-2026-42570
 
 allowBuilds:
   "@parcel/watcher": true
