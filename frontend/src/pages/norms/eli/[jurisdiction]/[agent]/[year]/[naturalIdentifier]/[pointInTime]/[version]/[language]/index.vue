@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { NuxtLink } from "#components";
 import { Button, Tab, TabList, Tabs } from "primevue";
 import type { ComputedRef } from "vue";
-import type { BreadcrumbItem } from "~/components/Breadcrumbs.vue";
-import { DocumentKind, type LegislationExpression } from "~/types/api";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IconFileDownload from "~icons/ic/outline-file-download";
 import IcOutlineInfo from "~icons/ic/outline-info";
 import IcOutlineRestore from "~icons/ic/outline-settings-backup-restore";
+import { NuxtLink } from "#components";
+import type { BreadcrumbItem } from "~/components/Breadcrumbs.vue";
 import { useNormSeo } from "~/composables/useNormSeo";
+import { DocumentKind, type LegislationExpression } from "~/types/api";
 
 definePageMeta({
   // note: this is an expression ELI

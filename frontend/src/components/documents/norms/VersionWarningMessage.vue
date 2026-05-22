@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import type { RouteLocationRaw } from "#vue-router";
 import { Message } from "primevue";
+import IcBaselineHistory from "~icons/ic/baseline-history";
+import IcBaselineUpdate from "~icons/ic/baseline-update";
+import type { RouteLocationRaw } from "#vue-router";
 import type { LegislationExpression } from "~/types/api";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
 import type { ValidityStatus } from "~/utils/norm";
 import { temporalCoverageToValidityInterval } from "~/utils/norm";
-import IcBaselineHistory from "~icons/ic/baseline-history";
-import IcBaselineUpdate from "~icons/ic/baseline-update";
 
 const {
   currentVersionValidityStatus,

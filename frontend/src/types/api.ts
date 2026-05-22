@@ -75,21 +75,13 @@ export type AnyDocument =
   | AdministrativeDirective;
 
 export enum DocumentKind {
-  /**
-   * Rechtsprechung
-   */
+  /** Rechtsprechung */
   CaseLaw = "R",
-  /**
-   * Rechtsnorm: Gesetze, Satzungen und Rechtsverordnungen
-   */
+  /** Rechtsnorm: Gesetze, Satzungen und Rechtsverordnungen */
   Norm = "N",
-  /**
-   * Literatur
-   */
+  /** Literatur */
   Literature = "L",
-  /**
-   * Verwaltungsvorschriften
-   */
+  /** Verwaltungsvorschriften */
   AdministrativeDirective = "V",
 
   All = "A",

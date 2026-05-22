@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { MenuItem, MenuItemCommandEvent } from "primevue/menuitem";
 import { PanelMenu } from "primevue";
+import type { MenuItem, MenuItemCommandEvent } from "primevue/menuitem";
 import {
   computeExpandedKeys,
   categoryFilterItems,

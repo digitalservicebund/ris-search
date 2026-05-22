@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import IcBaselineBalance from "~icons/ic/baseline-balance";
 import Badge from "~/components/Badge.vue";
 import type { SearchResultHeaderItem } from "~/components/search/SearchResultHeader.vue";
 import { usePostHog } from "~/composables/usePostHog";
@@ -13,7 +14,6 @@ import { formatNormValidity } from "~/utils/displayValues";
 import { temporalCoverageToValidityInterval } from "~/utils/norm";
 import { sanitizeSearchResult } from "~/utils/sanitize";
 import { addEllipsis } from "~/utils/textFormatting";
-import IcBaselineBalance from "~icons/ic/baseline-balance";
 
 const props = defineProps<{
   searchResult: SearchResult<LegislationExpression>;

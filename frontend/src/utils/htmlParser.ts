@@ -60,8 +60,10 @@ export function getTextFromElements(elements?: NodeListOf<Element>): string[] {
 }
 
 /**
- * Determines if the given html document is empty. A document is considered empty
- * if the html `<body>` is empty or contains only a single headline (`<h1>`).
+ * Determines if the given html document is empty. A document is considered
+ * empty if the html `<body>` is empty or contains only a single headline
+ * (`<h1>`).
+ *
  * @param htmlDocument
  */
 export function isDocumentEmpty(document?: Document): boolean {

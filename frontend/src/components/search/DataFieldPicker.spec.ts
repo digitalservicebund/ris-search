@@ -1,8 +1,8 @@
 import { renderSuspended } from "@nuxt/test-utils/runtime";
 import { userEvent } from "@testing-library/user-event";
 import { screen } from "@testing-library/vue";
-import DataFieldPicker from "./DataFieldPicker.vue";
 import { DocumentKind } from "~/types/api";
+import DataFieldPicker from "./DataFieldPicker.vue";
 
 describe("DataFieldPicker", () => {
   it("displays the document kind name without count", async () => {

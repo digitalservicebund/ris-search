@@ -3,7 +3,6 @@ import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc";
 import { without } from "lodash-es";
 import { describe, expect, vi } from "vitest";
-import { parseDateGermanLocalTime } from "./dateFormatting";
 import type { LegislationExpression } from "~/types/api";
 import {
   getMostRelevantExpression,
@@ -11,6 +10,7 @@ import {
   temporalCoverageToValidityInterval,
   type ValidityInterval,
 } from "~/utils/norm";
+import { parseDateGermanLocalTime } from "./dateFormatting";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);

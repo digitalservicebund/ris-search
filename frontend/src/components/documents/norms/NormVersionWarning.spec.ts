@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/vue";
-import NormVersionWarning from "./NormVersionWarning.vue";
 import type { LegislationExpression } from "~/types/api";
+import NormVersionWarning from "./NormVersionWarning.vue";
 
 describe("NormVersionWarning", () => {
   const testVersions = [

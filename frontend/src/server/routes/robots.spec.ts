@@ -1,8 +1,8 @@
 import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import type { EventHandlerRequest, H3Event } from "h3";
 import { afterEach, describe, expect, it, test, vi } from "vitest";
-import middleware from "./robots.txt.get";
 import useBackendUrl from "~/composables/useBackendUrl";
+import middleware from "./robots.txt.get";
 
 vi.mock("~/plugins/risBackend", () => ({
   default: vi.fn(),

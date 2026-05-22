@@ -1,11 +1,11 @@
 import { render, screen } from "@testing-library/vue";
 import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
-import NormSearchResult from "./NormSearchResult.vue";
 import type {
   LegislationExpression,
   SearchResult,
   TextMatch,
 } from "~/types/api";
+import NormSearchResult from "./NormSearchResult.vue";
 
 const mockSearchResult: SearchResult<LegislationExpression> = {
   item: {

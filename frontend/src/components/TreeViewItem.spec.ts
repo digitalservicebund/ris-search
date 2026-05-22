@@ -2,8 +2,8 @@ import { renderSuspended } from "@nuxt/test-utils/runtime";
 import { userEvent } from "@testing-library/user-event";
 import { screen } from "@testing-library/vue";
 import { describe, expect, it } from "vitest";
-import TreeViewItem from "./TreeViewItem.vue";
 import type { TreeItem } from "./TreeView.vue";
+import TreeViewItem from "./TreeViewItem.vue";
 
 describe("TreeViewItem", () => {
   const leaf: TreeItem = { key: "a", title: "Item A" };

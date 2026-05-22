@@ -1,8 +1,8 @@
 import { render, screen } from "@testing-library/vue";
 import { describe, it, expect, vi } from "vitest";
 import { nextTick } from "vue";
-import NormHeadingGroup from "./NormHeadingGroup.vue";
 import type { LegislationExpression } from "~/types/api";
+import NormHeadingGroup from "./NormHeadingGroup.vue";
 
 const createDefaultProps = () => ({
   htmlParts: {

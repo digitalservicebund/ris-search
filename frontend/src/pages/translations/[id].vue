@@ -1,7 +1,10 @@
 <script setup lang="ts">
-import { NuxtLink } from "#components";
 import { Message, Tab, TabList, Tabs } from "primevue";
 import { computed } from "vue";
+import IcBaselineSubject from "~icons/ic/baseline-subject";
+import IcOutlineInfo from "~icons/ic/outline-info";
+import IcOutlineWarning from "~icons/ic/outline-warning-amber";
+import { NuxtLink } from "#components";
 import type { BreadcrumbItem } from "~/components/Breadcrumbs.vue";
 import DetailsList from "~/components/DetailsList.vue";
 import DetailsListEntry from "~/components/DetailsListEntry.vue";
@@ -10,11 +13,8 @@ import {
   fetchTranslationAndHTML,
   getGermanOriginal,
 } from "~/composables/useTranslationData";
-import { removePrefix } from "~/utils/textFormatting";
-import IcBaselineSubject from "~icons/ic/baseline-subject";
-import IcOutlineInfo from "~icons/ic/outline-info";
-import IcOutlineWarning from "~icons/ic/outline-warning-amber";
 import { useTranslationSeo } from "~/composables/useTranslationSeo";
+import { removePrefix } from "~/utils/textFormatting";
 
 definePageMeta({ layout: "norm" });
 

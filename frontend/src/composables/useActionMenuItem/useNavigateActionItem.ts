@@ -2,6 +2,7 @@ import type { ActionMenuItem } from "~/components/documents/actionMenu/ActionMen
 
 /**
  * Use this function to create an action item which navigates to the given url.
+ *
  * @param label
  * @param icon
  * @param url

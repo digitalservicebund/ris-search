@@ -4,8 +4,8 @@ import {
   mockNuxtImport,
 } from "@nuxt/test-utils/runtime";
 import { vi } from "vitest";
-import NormVersionList from "./NormVersionList.vue";
 import { data } from "~/components/documents/norms/NormVersions.spec.data";
+import NormVersionList from "./NormVersionList.vue";
 
 registerEndpoint(`/v1/legislation`, () => {
   return data;

@@ -74,8 +74,8 @@ export function usePostHog() {
   const host = getStringOrUndefined(config.public.analytics.posthogHost);
 
   /**
-   * Whether the consent banner should be shown to the user. True once PostHog is
-   * enabled, and no consent decision has been made yet.
+   * Whether the consent banner should be shown to the user. True once PostHog
+   * is enabled, and no consent decision has been made yet.
    */
   const isBannerVisible = computed(() => {
     const isPostHogEnabled = !isStringEmpty(key) && !isStringEmpty(host);

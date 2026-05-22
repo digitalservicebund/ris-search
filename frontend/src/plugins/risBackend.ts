@@ -19,7 +19,7 @@ function addServerAuthentication(basicAuth: string): FetchHook {
  * useRisBackend<Example>(baseUrl, {
  *   onRequest: extendOnRequest(() => {
  *     // Custom handler implementation
- *   })
+ *   }),
  * });
  * ```
  *

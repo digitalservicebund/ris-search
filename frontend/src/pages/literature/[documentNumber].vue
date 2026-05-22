@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import type { TreeItem } from "~/components/TreeView.vue";
-import type { DocumentView } from "~/layouts/document.vue";
-import { DocumentKind, type Literature } from "~/types/api";
-
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineInfo from "~icons/ic/outline-info";
+import type { TreeItem } from "~/components/TreeView.vue";
 import { useLiteratureSeo } from "~/composables/useLiteratureSeo";
+import type { DocumentView } from "~/layouts/document.vue";
+import { DocumentKind, type Literature } from "~/types/api";
 
 definePageMeta({ layout: false });
 

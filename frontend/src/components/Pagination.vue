@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { Button } from "primevue";
+import IconArrowBack from "~icons/ic/baseline-arrow-back";
+import IconArrowForward from "~icons/ic/baseline-arrow-forward";
 import { NuxtLink } from "#components";
 import type { RouteLocationRaw } from "#vue-router";
 import type { AnyDocument, SearchResult } from "~/types/api";
 import { buildItemsOnPageString, parsePageNumber } from "~/utils/pagination";
-import IconArrowBack from "~icons/ic/baseline-arrow-back";
-import IconArrowForward from "~icons/ic/baseline-arrow-forward";
 
 export interface PartialCollectionView {
   first?: string;

@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { TreeItem } from "~/components/TreeView.vue";
-import type { DocumentView } from "~/layouts/document.vue";
-import { type AdministrativeDirective, DocumentKind } from "~/types/api";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineInfo from "~icons/ic/outline-info";
+import type { TreeItem } from "~/components/TreeView.vue";
 import { useAdministrativeDirectiveSeo } from "~/composables/useAdministrativeDirectiveSeo";
+import type { DocumentView } from "~/layouts/document.vue";
+import { type AdministrativeDirective, DocumentKind } from "~/types/api";
 
 definePageMeta({ layout: false });
 

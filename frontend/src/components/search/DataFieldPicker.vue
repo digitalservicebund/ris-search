@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { Button, InputGroup, InputGroupAddon, InputText } from "primevue";
-import OperatorsHelp from "./OperatorsHelp.vue";
+import IcBaselineSearch from "~icons/ic/baseline-search";
 import DataFieldList from "~/components/search/DataFieldList.vue";
 import type { DocumentKind } from "~/types/api";
 import { formatDocumentKind } from "~/utils/displayValues";
 import { formatNumberWithSeparators } from "~/utils/numberFormatting";
 import type { DataField } from "~/utils/search/dataFields";
-import IcBaselineSearch from "~icons/ic/baseline-search";
+import OperatorsHelp from "./OperatorsHelp.vue";
 
 const {
   dataFields = {},
@@ -23,7 +23,10 @@ const {
   documentKind: DocumentKind;
   /** True if the component should be displayed in a loading state */
   loading?: boolean;
-  /** ID of the underlying form element to connect it with other items on the screen */
+  /**
+   * ID of the underlying form element to connect it with other items on the
+   * screen
+   */
   formId?: string;
   /** Element to scroll to when the skip link is used */
   skipLinkTarget?: SkipLink["to"];
@@ -34,8 +37,8 @@ const query = defineModel<string>({ default: "" });
 
 const emit = defineEmits<{
   /**
-   * Emitted when the search button is clicked or the query is submitted
-   * by pressing Enter
+   * Emitted when the search button is clicked or the query is submitted by
+   * pressing Enter
    */
   submit: [];
 }>();

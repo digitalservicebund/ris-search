@@ -3,11 +3,11 @@ import { userEvent } from "@testing-library/user-event";
 import { screen, waitFor } from "@testing-library/vue";
 import { InputText } from "primevue";
 import { describe, expect, it } from "vitest";
-import DateRangeFilter from "./DateRangeFilter.vue";
 import type {
   DateFilterValue,
   FilterType,
 } from "~/utils/search/dateFilterType";
+import DateRangeFilter from "./DateRangeFilter.vue";
 
 describe("DateRangeFilter", () => {
   const renderModes: [FilterType, number][] = [

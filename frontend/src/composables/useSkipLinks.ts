@@ -47,7 +47,8 @@ export function provideSkipLinks(): SkipLinksRegistry {
 /**
  * Allows a component to register skip links.
  *
- * @throws when used outside of a component tree that provides a skip link registry.
+ * @throws When used outside of a component tree that provides a skip link
+ *   registry.
  */
 export function useSkipLinks(links?: MaybeRefOrGetter<SkipLink[]>) {
   const registry = inject(skipLinksRegistryInjectionKey, null);

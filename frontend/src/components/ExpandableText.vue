@@ -4,12 +4,14 @@ import { ref, useId, useTemplateRef, watchEffect } from "vue";
 const { length = 3, tolerance = 3 } = defineProps<{
   /**
    * Specifies the maximum number of visible lines.
+   *
    * @default 3
    */
   length?: number;
   /**
    * Specifies a pixels threshold under which overflowing content would be
    * ignored.
+   *
    * @default 3
    */
   tolerance?: number;

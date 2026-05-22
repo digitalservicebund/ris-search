@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import NormHeadingFootnotes from "./NormHeadingFootnotes.vue";
 import type { NormContent } from "~/composables/useNormData";
 import type { LegislationExpression } from "~/types/api";
 import { getNormTitle } from "~/utils/norm";
+import NormHeadingFootnotes from "./NormHeadingFootnotes.vue";
 const props = defineProps<{
   htmlParts?: NormContent["htmlParts"];
   metadata: LegislationExpression;

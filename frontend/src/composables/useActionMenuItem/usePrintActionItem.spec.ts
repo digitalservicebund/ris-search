@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
-import { usePrintActionItem } from "~/composables/useActionMenuItem/usePrintActionItem";
 import IconPrint from "~icons/ic/baseline-print";
+import { usePrintActionItem } from "~/composables/useActionMenuItem/usePrintActionItem";
 
 describe("usePrintActionItem", () => {
   it("creates an ActionMenuItem with print label, icon and action", async () => {

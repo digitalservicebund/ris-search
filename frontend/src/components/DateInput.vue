@@ -55,8 +55,8 @@ const emit = defineEmits<{
   "update:modelValue": [value?: string];
 
   /**
-   * Emitted when the form field enters an invalid state based on user
-   * inputs (e.g. the date is invalid).
+   * Emitted when the form field enters an invalid state based on user inputs
+   * (e.g. the date is invalid).
    */
   "update:validationError": [value?: ValidationError];
 }>();

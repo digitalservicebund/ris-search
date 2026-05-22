@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { NuxtLink } from "#components";
-import type { RouteLocationRaw } from "#vue-router";
 import { Breadcrumb, Drawer } from "primevue";
 import type { MenuItem } from "primevue/menuitem";
 import IcBaselineMoreHoriz from "~icons/ic/baseline-more-horiz";
 import ChevronRightIcon from "~icons/ic/outline-chevron-right";
+import { NuxtLink } from "#components";
+import type { RouteLocationRaw } from "#vue-router";
 
 export type BreadcrumbItem = {
   /** Default label of the item */
@@ -25,9 +25,9 @@ const {
   forceOneLine = true,
 } = defineProps<{
   /**
-   * When set, the breadcrumbs will show a maximum of 3 items, after which
-   * all items between the first and the last item will be tucked away in a
-   * drawer that can be opened with a button.
+   * When set, the breadcrumbs will show a maximum of 3 items, after which all
+   * items between the first and the last item will be tucked away in a drawer
+   * that can be opened with a button.
    */
   collapse?: boolean;
   items?: BreadcrumbItem[];

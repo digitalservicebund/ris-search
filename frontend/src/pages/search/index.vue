@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { Message, Select } from "primevue";
+import { useSearchSeo } from "~/composables/useSearchSeo";
 import { DocumentKind } from "~/types/api";
 import { isStrictDateFilterValue } from "~/utils/search/dateFilterType";
-import { useSearchSeo } from "~/composables/useSearchSeo";
 
 useSkipLinks([
   { label: "Zur Suche", to: "#search" },

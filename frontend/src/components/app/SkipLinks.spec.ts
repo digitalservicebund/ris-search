@@ -1,7 +1,7 @@
 import { renderSuspended } from "@nuxt/test-utils/runtime";
 import { screen } from "@testing-library/vue";
-import { defineComponent, h } from "vue";
 import { describe, expect, it, vi } from "vitest";
+import { defineComponent, h } from "vue";
 import AppSkipLinks from "./SkipLinks.vue";
 
 const RegisterSkipLinks = defineComponent({

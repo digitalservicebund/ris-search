@@ -1,11 +1,4 @@
 import { describe } from "vitest";
-import {
-  getIdentifier,
-  isAdministrativeDirective,
-  isCaselaw,
-  isLegislation,
-  isLiterature,
-} from "./anyDocument";
 import type {
   AdministrativeDirective,
   AnyDocument,
@@ -13,6 +6,13 @@ import type {
   LegislationExpression,
   Literature,
 } from "~/types/api";
+import {
+  getIdentifier,
+  isAdministrativeDirective,
+  isCaselaw,
+  isLegislation,
+  isLiterature,
+} from "./anyDocument";
 
 describe("anyDocument", () => {
   describe("isCaselaw", () => {

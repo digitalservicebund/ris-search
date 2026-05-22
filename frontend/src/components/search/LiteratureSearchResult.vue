@@ -1,11 +1,11 @@
 <script setup lang="ts">
+import OutlineBookIcon from "~icons/ic/outline-book";
 import type { SearchResultHeaderItem } from "~/components/search/SearchResultHeader.vue";
 import { usePostHog } from "~/composables/usePostHog";
 import type { Literature, SearchResult, TextMatch } from "~/types/api";
 import { LITERATURE_TITLE_PLACEHOLDER } from "~/utils/literature";
 import { sanitizeSearchResult } from "~/utils/sanitize";
 import { addEllipsis } from "~/utils/textFormatting";
-import OutlineBookIcon from "~icons/ic/outline-book";
 
 const { searchResultClicked } = usePostHog();
 const router = useRouter();

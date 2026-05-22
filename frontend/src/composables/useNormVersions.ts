@@ -1,5 +1,5 @@
-import type { AsyncDataRequestStatus } from "#app";
 import { computed, type ComputedRef } from "vue";
+import type { AsyncDataRequestStatus } from "#app";
 import type {
   JSONLDList,
   LegislationExpression,

@@ -1,5 +1,5 @@
-import type { LegislationExpression } from "~/types/api";
 import type { Dayjs } from "dayjs";
+import type { LegislationExpression } from "~/types/api";
 import { getValidityStatusLabel, type ValidityStatus } from "~/utils/norm";
 
 export type UseNormSeoInput = {
@@ -35,9 +35,10 @@ function buildTitle(
 
 /**
  * Build a label to be used as part of a page title. If both dates are available
- * it returns a range e.g. `, 01.01.2025-01.01.2026`. If only one of the dates exists,
- * the date prefixed with a `vom` or `bis` is returned.
- * NOTE: the string is prefixed with a `, ` so it can directly be inserted in to a title string.
+ * it returns a range e.g. `, 01.01.2025-01.01.2026`. If only one of the dates
+ * exists, the date prefixed with a `vom` or `bis` is returned. NOTE: the string
+ * is prefixed with a `, ` so it can directly be inserted in to a title string.
+ *
  * @param validityInterval
  */
 export function buildValidityTitleLabel(validityInterval?: ValidityInterval) {

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { findNodePath, tocItemsToTreeViewItems } from "./tableOfContents";
 import type { LegislationExpressionPartSchema } from "~/types/api";
+import { findNodePath, tocItemsToTreeViewItems } from "./tableOfContents";
 
 const getHeadingTarget = (id: string, headingPath = "/heading") => ({
   path: headingPath,
