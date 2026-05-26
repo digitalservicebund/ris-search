@@ -1,6 +1,7 @@
 server:
   port: 8080
   front-end-url: https://ris-portal.dev.ds4g.net/
+  cms-url: https://ris-cm.staging.tech.digitalservice.dev/
   technical-users: []
 
 spring:
