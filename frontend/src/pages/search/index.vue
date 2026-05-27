@@ -11,15 +11,16 @@ useSkipLinks([
 ]);
 
 const filterHeadingId = useId();
+const route = useRoute();
 
 const {
   court,
   dateFilter,
   documentKind,
   itemsPerPage,
+  navigateToSearch,
   pageIndex,
   query,
-  saveFilterStateToRoute,
   sort,
   typeGroup,
 } = useSimpleSearchRouteParams();
@@ -38,32 +39,34 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
 
 // Date filter ---------------------------------------------
 
-const strictDateFilter = ref(
-  isStrictDateFilterValue(dateFilter.value) ? dateFilter.value : undefined,
-);
+const localDateFilter = ref(dateFilter.value);
 
-watch(dateFilter, (newVal) => {
-  if (isStrictDateFilterValue(newVal)) strictDateFilter.value = newVal;
+watch(dateFilter, (val) => {
+  localDateFilter.value = val;
 });
+
+const strictDateFilter = computed(() =>
+  isStrictDateFilterValue(localDateFilter.value)
+    ? localDateFilter.value
+    : undefined,
+);
 
 // Document kind -------------------------------------------
 
-const categoryFilterValue = computed({
-  get() {
-    let val = documentKind.value.toString();
-    if (typeGroup.value) val += `.${typeGroup.value}`;
-    return val;
-  },
-  set(value) {
-    const [maybeKind, group] = value.split(".");
-
-    let kind = DocumentKind.All;
-    if (maybeKind && isDocumentKind(maybeKind)) kind = maybeKind;
-    documentKind.value = kind;
-
-    typeGroup.value = group;
-  },
+const categoryFilterValue = computed(() => {
+  let val = documentKind.value.toString();
+  if (typeGroup.value) val += `.${typeGroup.value}`;
+  return val;
 });
+
+function updateCategoryFilter(value: string) {
+  const [maybeKind, group] = value.split(".");
+
+  let kind = DocumentKind.All;
+  if (maybeKind && isDocumentKind(maybeKind)) kind = maybeKind;
+
+  navigateToSearch({ documentKind: kind, typeGroup: group, pageIndex: 0 });
+}
 
 const documentKindAndGroup = computed(() => ({
   documentKind: documentKind.value,
@@ -107,6 +110,14 @@ watch(
   { immediate: true },
 );
 
+// Re-run search when URL changes
+watch(
+  () => route.query,
+  async () => {
+    await submitSearch();
+  },
+);
+
 // Watch for changes in page size, so that the page number is adjusted accordingly
 watch(
   () => searchResults.value,
@@ -121,9 +132,7 @@ watch(
       const lastPage = Math.floor((totalItems - 1) / perPage);
 
       if (requestedPage !== lastPage) {
-        pageIndex.value = lastPage;
-        await saveFilterStateToRoute();
-        await submitSearch();
+        await navigateToSearch({ pageIndex: lastPage }, { replace: true });
       }
     }
   },
@@ -137,31 +146,43 @@ const formattedResultCount = computed(() => {
 
 const isLoading = computed(() => searchStatus.value === "pending");
 
-// Auto reload for "discrete" actions
-watch(
-  () => [
-    court.value,
-    documentKind.value,
-    itemsPerPage.value,
-    pageIndex.value,
-    sort.value,
-    strictDateFilter.value,
-    typeGroup.value,
-    query.value,
-  ],
-  async () => {
-    await submit();
-  },
-);
+// User action handlers ------------------------------------
 
-async function submit() {
-  await saveFilterStateToRoute();
-  await submitSearch();
+function updateQuery(value: string | undefined) {
+  navigateToSearch({ query: value ?? "", pageIndex: 0 });
+}
+
+function handleEmptySearch() {
+  navigateToSearch({ query: "", pageIndex: 0 });
 }
 
 async function updatePage(page: number) {
   scrollToResultsOnLoad.value = true;
-  pageIndex.value = page;
+  navigateToSearch({ pageIndex: page });
+}
+
+function updateSort(value: string | undefined) {
+  navigateToSearch({
+    sort: value ?? SIMPLE_SEARCH_DEFAULTS.sort,
+    pageIndex: 0,
+  });
+}
+
+function updateItemsPerPage(value: string | undefined) {
+  navigateToSearch({
+    itemsPerPage: value ?? SIMPLE_SEARCH_DEFAULTS.itemsPerPage,
+    pageIndex: 0,
+  });
+}
+
+function updateCourt(value: string | undefined) {
+  navigateToSearch({ court: value, pageIndex: 0 });
+}
+
+function updateDateFilter(value: typeof dateFilter.value) {
+  localDateFilter.value = value;
+  if (!isStrictDateFilterValue(value)) return;
+  navigateToSearch({ dateFilter: value, pageIndex: 0 });
 }
 
 watch(searchStatus, async (newStatus, oldStatus) => {
@@ -182,7 +203,11 @@ watch(searchStatus, async (newStatus, oldStatus) => {
   </div>
 
   <div id="search">
-    <SearchSimpleSearchInput v-model="query" />
+    <SearchSimpleSearchInput
+      :model-value="query"
+      @update:model-value="updateQuery"
+      @empty-search="handleEmptySearch"
+    />
   </div>
 
   <SkipLink to="#search-results" class="mt-8">Zu den Ergebnissen</SkipLink>
@@ -204,11 +229,15 @@ watch(searchStatus, async (newStatus, oldStatus) => {
       </h2>
 
       <div class="flex flex-col gap-24">
-        <SearchCategoryFilter v-model="categoryFilterValue" />
+        <SearchCategoryFilter
+          :model-value="categoryFilterValue"
+          @update:model-value="updateCategoryFilter"
+        />
 
         <SearchCourtFilter
           v-if="documentKind === DocumentKind.CaseLaw"
-          v-model="court"
+          :model-value="court"
+          @update:model-value="updateCourt"
         />
 
         <SearchDateRangeFilter
@@ -216,12 +245,14 @@ watch(searchStatus, async (newStatus, oldStatus) => {
             documentKind === DocumentKind.CaseLaw ||
             documentKind === DocumentKind.AdministrativeDirective
           "
-          v-model="dateFilter"
+          v-model="localDateFilter"
+          @update:model-value="updateDateFilter"
         />
 
         <SearchYearRangeFilter
           v-else-if="documentKind === DocumentKind.Literature"
-          v-model="dateFilter"
+          v-model="localDateFilter"
+          @update:model-value="updateDateFilter"
         />
       </div>
     </aside>
@@ -254,13 +285,18 @@ watch(searchStatus, async (newStatus, oldStatus) => {
                 Einträge pro Seite
               </label>
               <Select
-                v-model="itemsPerPage"
+                :model-value="itemsPerPage"
                 :aria-labelledby="itemsPerPageLabelId"
                 :options="itemsPerPageOptions"
+                @update:model-value="updateItemsPerPage"
               />
             </div>
 
-            <SearchSortSelect v-model="sort" :document-kind />
+            <SearchSortSelect
+              :model-value="sort"
+              :document-kind
+              @update:model-value="updateSort"
+            />
           </div>
         </div>
 

@@ -22,13 +22,15 @@ useSkipLinks([
   { label: "Zum Fußbereich", to: "#footer" },
 ]);
 
+const route = useRoute();
+
 const {
   dateFilter,
   documentKind,
   itemsPerPage,
+  navigateToSearch,
   pageIndex,
   query,
-  saveFilterStateToRoute,
   sort,
 } = useAdvancedSearchRouteParams();
 
@@ -43,10 +45,6 @@ useSearchSeo({
 });
 
 const searchFormId = useId();
-
-watch(documentKind, () => {
-  query.value = "";
-});
 
 // Stats ---------------------------------------------------
 
@@ -66,19 +64,34 @@ const count = computed(() =>
 
 // Date filter ---------------------------------------------
 
-const strictDateFilter = ref(
-  isStrictDateFilterValue(dateFilter.value) ? dateFilter.value : undefined,
+const localDateFilter = ref(dateFilter.value);
+
+watch(dateFilter, (val) => {
+  localDateFilter.value = val;
+});
+
+const strictDateFilter = computed(() =>
+  isStrictDateFilterValue(localDateFilter.value)
+    ? localDateFilter.value
+    : undefined,
 );
 
-watch(dateFilter, (newVal) => {
-  if (isStrictDateFilterValue(newVal)) strictDateFilter.value = newVal;
+// Query input ---------------------------------------------
+
+const localQuery = ref(query.value);
+
+watch(query, (val) => {
+  localQuery.value = val;
 });
 
 // Document kind -------------------------------------------
 
 const setDocumentKind: MenuItem["command"] = (e) => {
   if (!e.item.key) return;
-  documentKind.value = e.item.key as DocumentKind;
+  navigateToSearch({
+    documentKind: e.item.key as DocumentKind,
+    pageIndex: 0,
+  });
 };
 
 const documentKindMenuItems: MenuItem[] = [
@@ -127,6 +140,14 @@ const {
 // Perform initial search with any existing filter + query params
 await submitSearch();
 
+// Re-run search when URL changes
+watch(
+  () => route.query,
+  async () => {
+    await submitSearch();
+  },
+);
+
 // Watch for changes in page size, so that the page number is adjusted accordingly
 watch(
   () => searchResults.value,
@@ -141,9 +162,7 @@ watch(
       const lastPage = Math.floor((totalItems - 1) / perPage);
 
       if (requestedPage !== lastPage) {
-        pageIndex.value = lastPage;
-        await saveFilterStateToRoute();
-        await submitSearch();
+        await navigateToSearch({ pageIndex: lastPage }, { replace: true });
       }
     }
   },
@@ -154,26 +173,35 @@ const formattedResultCount = computed(() =>
   formatResultCount(totalItemCount.value),
 );
 
-// Auto reload for "discrete" actions
-watch(
-  () => [
-    documentKind.value,
-    sort.value,
-    itemsPerPage.value,
-    pageIndex.value,
-    strictDateFilter.value,
-  ],
-  () => submit(),
-);
+// User action handlers ------------------------------------
 
-async function submit() {
-  await saveFilterStateToRoute();
-  submitSearch();
+function submit() {
+  navigateToSearch({ query: localQuery.value, pageIndex: 0 });
 }
 
 function handlePageUpdate(page: number) {
   scrollToResultsOnLoad.value = true;
-  pageIndex.value = page;
+  navigateToSearch({ pageIndex: page });
+}
+
+function updateSort(value: string | undefined) {
+  navigateToSearch({
+    sort: value ?? ADVANCED_SEARCH_DEFAULTS.sort,
+    pageIndex: 0,
+  });
+}
+
+function updateItemsPerPage(value: string | undefined) {
+  navigateToSearch({
+    itemsPerPage: value ?? ADVANCED_SEARCH_DEFAULTS.itemsPerPage,
+    pageIndex: 0,
+  });
+}
+
+function updateDateFilter(value: typeof dateFilter.value) {
+  localDateFilter.value = value;
+  if (!isStrictDateFilterValue(value)) return;
+  navigateToSearch({ dateFilter: value, pageIndex: 0 });
 }
 
 watch(searchStatus, async (newStatus, oldStatus) => {
@@ -212,12 +240,16 @@ watch(searchStatus, async (newStatus, oldStatus) => {
         />
       </fieldset>
 
-      <SearchDateFilter v-model="dateFilter" :document-kind />
+      <SearchDateFilter
+        v-model="localDateFilter"
+        :document-kind
+        @update:model-value="updateDateFilter"
+      />
     </aside>
 
     <div id="search" class="row-start-2 lg:row-start-auto">
       <SearchDataFieldPicker
-        v-model="query"
+        v-model="localQuery"
         :data-fields="queryableDataFields"
         :document-kind
         :loading="searchStatus === 'pending'"
@@ -241,16 +273,21 @@ watch(searchStatus, async (newStatus, oldStatus) => {
           <span class="ris-subhead-regular mr-auto text-nowrap">
             {{ formattedResultCount }}
           </span>
-          <SearchSortSelect v-model="sort" :document-kind />
+          <SearchSortSelect
+            :model-value="sort"
+            :document-kind
+            @update:model-value="updateSort"
+          />
 
           <div class="flex items-center gap-8">
             <label :id="itemsPerPageLabelId" class="ris-label2-regular">
               Einträge pro Seite
             </label>
             <Select
-              v-model="itemsPerPage"
+              :model-value="itemsPerPage"
               :aria-labelledby="itemsPerPageLabelId"
               :options="itemsPerPageOptions"
+              @update:model-value="updateItemsPerPage"
             />
           </div>
         </div>

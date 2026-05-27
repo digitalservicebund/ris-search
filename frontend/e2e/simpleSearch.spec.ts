@@ -37,6 +37,26 @@ test.describe("reach search from start page", () => {
 
     await expect(page.getByRole("searchbox"), "should be reset").toBeEmpty();
   });
+
+  test("browser back restores previous state", async ({ page }) => {
+    await navigate(page, "/");
+
+    await page.getByRole("button", { name: "Suchen" }).click();
+    await expect(
+      page.getByRole("heading", { name: "Suche", level: 1 }),
+    ).toBeVisible();
+
+    const searchInput = page.getByRole("searchbox");
+    await searchInput.fill("Fiktiv");
+    await page.getByRole("button", { name: "Suchen" }).click();
+    await expect(searchInput).toHaveValue("Fiktiv");
+
+    await page.goBack();
+    await expect(searchInput).toBeEmpty();
+
+    await page.goBack();
+    await expect(page).toHaveURL("/");
+  });
 });
 
 test.describe("links to advanced search", () => {
@@ -544,6 +564,23 @@ test.describe("searching caselaw", () => {
     await expect(getSearchResults(page)).toHaveText(
       Array(2).fill(/LG Hamburg/),
     );
+  });
+
+  test("does not trigger a search when selecting a date filter type without entering a date", async ({
+    page,
+  }) => {
+    await navigate(page, "/search?documentKind=R");
+    const initialUrl = page.url();
+
+    const resultCounter = getResultCounter(page);
+    await expect(resultCounter).toHaveText(nonZeroResultCount);
+
+    await page.getByRole("combobox", { name: "Zeitraum" }).click();
+    await page.getByRole("option", { name: "Ab einem Datum" }).click();
+    expect(page.url()).toBe(initialUrl);
+
+    await page.getByRole("textbox", { name: "Datum" }).fill("10.04.2025");
+    await expect(page).toHaveURL(/dateFilterFrom=2025-04-10/);
   });
 
   test("searches decision date before a date", async ({ page }) => {

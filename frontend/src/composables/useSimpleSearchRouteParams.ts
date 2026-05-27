@@ -1,6 +1,6 @@
 import { isEmpty, isEqual } from "lodash-es";
 import { navigateTo, useRoute } from "#app";
-import type { LocationQueryRaw, LocationQueryValue } from "#vue-router";
+import type { LocationQueryRaw } from "#vue-router";
 import { DocumentKind } from "~/types/api";
 import { isDocumentKind } from "~/utils/documentKind";
 import {
@@ -9,113 +9,132 @@ import {
 } from "~/utils/search/dateFilterType";
 import { searchParamToNumber, searchParamToString } from "~/utils/searchParams";
 
-function getInitialFilterTypeFromQuery(
-  init: LocationQueryValue | LocationQueryValue[] | undefined,
-): DateFilterValue["type"] {
-  if (typeof init !== "string" || !isFilterType(init)) {
-    return "allTime";
-  }
-
-  return init;
+export interface SearchRouteParams {
+  query?: string;
+  documentKind?: DocumentKind;
+  typeGroup?: string;
+  court?: string;
+  dateFilter?: DateFilterValue;
+  sort?: string;
+  itemsPerPage?: string;
+  pageIndex?: number;
 }
+
+export const SIMPLE_SEARCH_DEFAULTS = {
+  documentKind: DocumentKind.All,
+  sort: "default",
+  itemsPerPage: "10",
+  pageIndex: 0,
+  dateFilterType: "allTime" as const,
+} as const;
 
 export function useSimpleSearchRouteParams() {
   const route = useRoute();
 
   // General parameters -------------------------------------
 
-  const documentKind = ref<DocumentKind>(DocumentKind.All);
+  const query = computed(() => {
+    const raw = searchParamToString(route.query.query) ?? "";
+    try {
+      return decodeURIComponent(raw);
+    } catch {
+      return raw;
+    }
+  });
 
-  watch(
-    documentKind,
-    (val, oldVal) => {
-      if (val !== oldVal) {
-        dateFilter.value = { type: "allTime" };
-      }
+  const documentKind = computed(() => {
+    const param = searchParamToString(route.query.documentKind);
+    return param && isDocumentKind(param)
+      ? param
+      : SIMPLE_SEARCH_DEFAULTS.documentKind;
+  });
 
-      if (val !== DocumentKind.CaseLaw) {
-        typeGroup.value = undefined;
-        court.value = undefined;
-      }
-    },
-    {
-      // Run this watcher immediately when the documentKind changes, rather than
-      // scheduling it with the other watchers, since it has side effects on
-      // other watched properties that can cause race conditions.
-      flush: "sync",
-    },
+  const typeGroup = computed(
+    () => searchParamToString(route.query.typeGroup) || undefined,
   );
 
-  const typeGroup = ref<string>();
+  const court = computed(
+    () => searchParamToString(route.query.court) || undefined,
+  );
 
-  const query = ref<string>("");
+  const dateFilter = computed<DateFilterValue>(() => {
+    const typeParam = searchParamToString(route.query.dateFilterType);
+    const type =
+      typeof typeParam === "string" && isFilterType(typeParam)
+        ? typeParam
+        : SIMPLE_SEARCH_DEFAULTS.dateFilterType;
+    return {
+      type,
+      from: searchParamToString(route.query.dateFilterFrom) || undefined,
+      to: searchParamToString(route.query.dateFilterTo) || undefined,
+    };
+  });
 
-  // Date filter --------------------------------------------
+  const sort = computed(
+    () => searchParamToString(route.query.sort) ?? SIMPLE_SEARCH_DEFAULTS.sort,
+  );
 
-  const dateFilter = ref<DateFilterValue>({ type: "allTime" });
+  const itemsPerPage = computed(
+    () =>
+      searchParamToString(route.query.itemsPerPage) ??
+      SIMPLE_SEARCH_DEFAULTS.itemsPerPage,
+  );
 
-  // Court filter -------------------------------------------
+  const pageIndex = computed(() =>
+    searchParamToNumber(
+      route.query.pageIndex,
+      SIMPLE_SEARCH_DEFAULTS.pageIndex,
+    ),
+  );
 
-  const court = ref<string>();
+  // Navigation helper --------------------------------------
 
-  // Sort & pagination --------------------------------------
-
-  const sort = ref<string>("default");
-
-  const itemsPerPage = ref<string>("10");
-
-  const pageIndex = ref<number>(0);
-
-  // Saving and restoring -----------------------------------
-
-  function loadFilterStateFromRoute(routeQuery = route.query) {
-    const documentKindParam = searchParamToString(routeQuery.documentKind);
-    documentKind.value =
-      documentKindParam && isDocumentKind(documentKindParam)
-        ? documentKindParam
-        : DocumentKind.All;
-
-    query.value = decodeURIComponent(
-      searchParamToString(routeQuery.query) ?? "",
-    );
-
-    court.value = searchParamToString(routeQuery.court);
-
-    typeGroup.value = searchParamToString(routeQuery.typeGroup);
-
-    dateFilter.value = {
-      type: getInitialFilterTypeFromQuery(routeQuery.dateFilterType),
-      from: searchParamToString(routeQuery.dateFilterFrom),
-      to: searchParamToString(routeQuery.dateFilterTo),
+  function navigateToSearch(
+    params: SearchRouteParams,
+    options?: { replace?: boolean },
+  ) {
+    const merged: SearchRouteParams = {
+      query: query.value,
+      documentKind: documentKind.value,
+      typeGroup: typeGroup.value,
+      court: court.value,
+      dateFilter: dateFilter.value,
+      sort: sort.value,
+      itemsPerPage: itemsPerPage.value,
+      pageIndex: pageIndex.value,
+      ...params,
     };
 
-    sort.value = searchParamToString(routeQuery.sort) ?? "default";
+    // When documentKind changes, reset dependent filters
+    if (
+      params.documentKind !== undefined &&
+      params.documentKind !== documentKind.value
+    ) {
+      if (!params.dateFilter)
+        merged.dateFilter = { type: SIMPLE_SEARCH_DEFAULTS.dateFilterType };
+      if (params.documentKind !== DocumentKind.CaseLaw) {
+        if (!params.typeGroup) merged.typeGroup = undefined;
+        if (!params.court) merged.court = undefined;
+      }
+    }
 
-    itemsPerPage.value = searchParamToString(routeQuery.itemsPerPage) ?? "10";
-
-    pageIndex.value = searchParamToNumber(routeQuery.pageIndex, 0);
-  }
-
-  function saveFilterStateToRoute() {
     const from = { ...route.query };
 
     let to: LocationQueryRaw = {
-      ...from,
-      query: encodeURIComponent(query.value),
-      court: court.value,
-      documentKind: documentKind.value,
-      typeGroup: typeGroup.value ?? "",
-      dateFilterType: dateFilter.value.type,
-      dateFilterFrom: dateFilter.value.from ?? "",
-      dateFilterTo: dateFilter.value.to ?? "",
-      pageIndex: pageIndex.value.toString(),
-      sort: sort.value,
-      itemsPerPage: itemsPerPage.value,
+      query: encodeURIComponent(merged.query ?? ""),
+      court: merged.court ?? "",
+      documentKind: merged.documentKind,
+      typeGroup: merged.typeGroup ?? "",
+      dateFilterType: merged.dateFilter?.type,
+      dateFilterFrom: merged.dateFilter?.from ?? "",
+      dateFilterTo: merged.dateFilter?.to ?? "",
+      pageIndex: (
+        merged.pageIndex ?? SIMPLE_SEARCH_DEFAULTS.pageIndex
+      ).toString(),
+      sort: merged.sort,
+      itemsPerPage: merged.itemsPerPage,
     };
 
-    // Undefined values in the "to" query will be removed by the router
-    // automatically. Filtering them out here because we don't care about them
-    // but they might still cause comparison mismatches.
     to = Object.fromEntries(
       Object.entries(to).filter(([, val]) => {
         return val !== undefined && val !== null;
@@ -124,33 +143,30 @@ export function useSimpleSearchRouteParams() {
 
     // Hash is used for skip links on the page:
     //
-    // - We'll keep it if the search params haven't change or if no search has
+    // - We'll keep it if the search params haven't changed or if no search has
     //   been performed yet (-> route change is due to hash change, so any
     //   change to the hash would break navigation)
     // - Remove it if the search params have changed (-> route change is due to
     //   search, so keeping the hash would cause unintended scrolling)
     const shouldKeepHash = isEmpty(from) || isEqual(from, to);
 
-    return navigateTo({
-      hash: shouldKeepHash ? route.hash : undefined,
-      query: to,
-    });
+    return navigateTo(
+      {
+        hash: shouldKeepHash ? route.hash : undefined,
+        query: to,
+      },
+      { replace: options?.replace },
+    );
   }
-
-  watch(
-    () => route.query,
-    (val) => loadFilterStateFromRoute(val),
-    { immediate: true },
-  );
 
   return {
     court,
     dateFilter,
     documentKind,
     itemsPerPage,
+    navigateToSearch,
     pageIndex,
     query,
-    saveFilterStateToRoute,
     sort,
     typeGroup,
   };

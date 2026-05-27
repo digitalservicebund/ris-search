@@ -382,7 +382,7 @@ describe("useSimpleSearchRouteParams", () => {
     });
   });
 
-  describe("saveFilterStateToRoute", () => {
+  describe("navigateToSearch", () => {
     it("retains the hash when the query did not change", async () => {
       const navigateToMock = vi.fn();
 
@@ -407,34 +407,34 @@ describe("useSimpleSearchRouteParams", () => {
       const { useSimpleSearchRouteParams } =
         await import("./useSimpleSearchRouteParams");
 
-      const { saveFilterStateToRoute } = useSimpleSearchRouteParams();
+      const { navigateToSearch } = useSimpleSearchRouteParams();
 
-      await saveFilterStateToRoute();
+      await navigateToSearch({});
 
       expect(navigateToMock).toHaveBeenCalledWith(
         expect.objectContaining({ hash: "#some-anchor" }),
+        expect.anything(),
       );
     });
 
     it("retains the hash when the query was empty", async () => {
       const navigateToMock = vi.fn();
 
-      const query = {};
-
       vi.doMock("#app", () => ({
-        useRoute: vi.fn().mockReturnValue({ query, hash: "#some-anchor" }),
+        useRoute: vi.fn().mockReturnValue({ query: {}, hash: "#some-anchor" }),
         navigateTo: navigateToMock,
       }));
 
       const { useSimpleSearchRouteParams } =
         await import("./useSimpleSearchRouteParams");
 
-      const { saveFilterStateToRoute } = useSimpleSearchRouteParams();
+      const { navigateToSearch } = useSimpleSearchRouteParams();
 
-      await saveFilterStateToRoute();
+      await navigateToSearch({});
 
       expect(navigateToMock).toHaveBeenCalledWith(
         expect.objectContaining({ hash: "#some-anchor" }),
+        expect.anything(),
       );
     });
 
@@ -452,23 +452,22 @@ describe("useSimpleSearchRouteParams", () => {
       const { useSimpleSearchRouteParams } =
         await import("./useSimpleSearchRouteParams");
 
-      const { query, saveFilterStateToRoute } = useSimpleSearchRouteParams();
+      const { navigateToSearch } = useSimpleSearchRouteParams();
 
-      query.value = "new search";
-      await saveFilterStateToRoute();
+      await navigateToSearch({ query: "new search" });
 
       expect(navigateToMock).toHaveBeenCalledWith(
         expect.objectContaining({ hash: undefined }),
+        expect.anything(),
       );
     });
 
-    it("calls navigateTo with all filter parameters", async () => {
+    it("calls navigation with all filter parameters", async () => {
       const navigateToMock = vi.fn();
-      const existingQuery = { existingParam: "value" };
 
       vi.doMock("#app", () => ({
         useRoute: vi.fn().mockReturnValue({
-          query: existingQuery,
+          query: {},
           hash: "",
         }),
         navigateTo: navigateToMock,
@@ -477,49 +476,41 @@ describe("useSimpleSearchRouteParams", () => {
       const { useSimpleSearchRouteParams } =
         await import("./useSimpleSearchRouteParams");
 
-      const {
-        query,
-        documentKind,
-        court,
-        typeGroup,
-        dateFilter,
-        pageIndex,
-        sort,
-        itemsPerPage,
-        saveFilterStateToRoute,
-      } = useSimpleSearchRouteParams();
+      const { navigateToSearch } = useSimpleSearchRouteParams();
 
-      query.value = "test search";
-      documentKind.value = DocumentKind.CaseLaw;
-      court.value = "BGH";
-      typeGroup.value = "example-type-group";
-      dateFilter.value = {
-        type: "allTime",
-        from: "2023-01-01",
-        to: "2023-12-31",
-      };
-      pageIndex.value = 2;
-      sort.value = "relevance";
-      itemsPerPage.value = "100";
-
-      await saveFilterStateToRoute();
-
-      expect(navigateToMock).toHaveBeenCalledWith({
-        hash: undefined,
-        query: {
-          existingParam: "value",
-          query: "test%20search",
-          court: "BGH",
-          documentKind: "R",
-          typeGroup: "example-type-group",
-          dateFilterType: "allTime",
-          dateFilterFrom: "2023-01-01",
-          dateFilterTo: "2023-12-31",
-          pageIndex: "2",
-          sort: "relevance",
-          itemsPerPage: "100",
+      await navigateToSearch({
+        query: "test search",
+        documentKind: DocumentKind.CaseLaw,
+        court: "BGH",
+        typeGroup: "example-type-group",
+        dateFilter: {
+          type: "allTime",
+          from: "2023-01-01",
+          to: "2023-12-31",
         },
+        pageIndex: 2,
+        sort: "relevance",
+        itemsPerPage: "100",
       });
+
+      expect(navigateToMock).toHaveBeenCalledWith(
+        {
+          hash: "",
+          query: {
+            query: "test%20search",
+            court: "BGH",
+            documentKind: "R",
+            typeGroup: "example-type-group",
+            dateFilterType: "allTime",
+            dateFilterFrom: "2023-01-01",
+            dateFilterTo: "2023-12-31",
+            pageIndex: "2",
+            sort: "relevance",
+            itemsPerPage: "100",
+          },
+        },
+        { replace: undefined },
+      );
     });
 
     it("encodes the query string", async () => {
@@ -535,16 +526,18 @@ describe("useSimpleSearchRouteParams", () => {
       const { useSimpleSearchRouteParams } =
         await import("./useSimpleSearchRouteParams");
 
-      const { query, saveFilterStateToRoute } = useSimpleSearchRouteParams();
+      const { navigateToSearch } = useSimpleSearchRouteParams();
 
-      query.value = "DATUM:>2021-01-01";
-      await saveFilterStateToRoute();
+      await navigateToSearch({ query: "DATUM:>2021-01-01" });
 
-      expect(navigateToMock).toHaveBeenCalledWith({
-        query: expect.objectContaining({
-          query: encodeURIComponent("DATUM:>2021-01-01"),
+      expect(navigateToMock).toHaveBeenCalledWith(
+        expect.objectContaining({
+          query: expect.objectContaining({
+            query: encodeURIComponent("DATUM:>2021-01-01"),
+          }),
         }),
-      });
+        expect.anything(),
+      );
     });
 
     it("handles undefined date filter values by setting empty strings", async () => {
@@ -560,23 +553,141 @@ describe("useSimpleSearchRouteParams", () => {
       const { useSimpleSearchRouteParams } =
         await import("./useSimpleSearchRouteParams");
 
-      const { dateFilter, saveFilterStateToRoute } =
-        useSimpleSearchRouteParams();
+      const { navigateToSearch } = useSimpleSearchRouteParams();
 
-      dateFilter.value = {
-        type: "allTime",
-        from: undefined,
-        to: undefined,
-      };
-
-      await saveFilterStateToRoute();
-
-      expect(navigateToMock).toHaveBeenCalledWith({
-        query: expect.objectContaining({
-          dateFilterFrom: "",
-          dateFilterTo: "",
-        }),
+      await navigateToSearch({
+        dateFilter: { type: "allTime", from: undefined, to: undefined },
       });
+
+      expect(navigateToMock).toHaveBeenCalledWith(
+        expect.objectContaining({
+          query: expect.objectContaining({
+            dateFilterFrom: "",
+            dateFilterTo: "",
+          }),
+        }),
+        expect.anything(),
+      );
+    });
+
+    it("passes replace option to navigation", async () => {
+      const navigateToMock = vi.fn();
+
+      vi.doMock("#app", () => ({
+        useRoute: vi.fn().mockReturnValue({
+          query: {},
+        }),
+        navigateTo: navigateToMock,
+      }));
+
+      const { useSimpleSearchRouteParams } =
+        await import("./useSimpleSearchRouteParams");
+
+      const { navigateToSearch } = useSimpleSearchRouteParams();
+
+      await navigateToSearch({ pageIndex: 3 }, { replace: true });
+
+      expect(navigateToMock).toHaveBeenCalledWith(expect.anything(), {
+        replace: true,
+      });
+    });
+
+    it("resets date filter when document kind changes", async () => {
+      const navigateToMock = vi.fn();
+
+      vi.doMock("#app", () => ({
+        useRoute: vi.fn().mockReturnValue({
+          query: {
+            documentKind: "R",
+            dateFilterType: "period",
+            dateFilterFrom: "2024-01-01",
+            dateFilterTo: "2024-12-31",
+          },
+        }),
+        navigateTo: navigateToMock,
+      }));
+
+      const { useSimpleSearchRouteParams } =
+        await import("./useSimpleSearchRouteParams");
+
+      const { navigateToSearch } = useSimpleSearchRouteParams();
+
+      await navigateToSearch({ documentKind: DocumentKind.Norm });
+
+      expect(navigateToMock).toHaveBeenCalledWith(
+        expect.objectContaining({
+          query: expect.objectContaining({
+            dateFilterType: "allTime",
+            dateFilterFrom: "",
+            dateFilterTo: "",
+          }),
+        }),
+        expect.anything(),
+      );
+    });
+
+    it("resets type group and court when changing from Case Law", async () => {
+      const navigateToMock = vi.fn();
+
+      vi.doMock("#app", () => ({
+        useRoute: vi.fn().mockReturnValue({
+          query: {
+            documentKind: "R",
+            typeGroup: "urteil",
+            court: "BGH",
+          },
+        }),
+        navigateTo: navigateToMock,
+      }));
+
+      const { useSimpleSearchRouteParams } =
+        await import("./useSimpleSearchRouteParams");
+
+      const { navigateToSearch } = useSimpleSearchRouteParams();
+
+      await navigateToSearch({ documentKind: DocumentKind.All });
+
+      expect(navigateToMock).toHaveBeenCalledWith(
+        expect.objectContaining({
+          query: expect.objectContaining({
+            typeGroup: "",
+            court: "",
+          }),
+        }),
+        expect.anything(),
+      );
+    });
+
+    it("does not reset type group and court when staying on Case Law", async () => {
+      const navigateToMock = vi.fn();
+
+      vi.doMock("#app", () => ({
+        useRoute: vi.fn().mockReturnValue({
+          query: {
+            documentKind: "R",
+            typeGroup: "urteil",
+            court: "BGH",
+          },
+        }),
+        navigateTo: navigateToMock,
+      }));
+
+      const { useSimpleSearchRouteParams } =
+        await import("./useSimpleSearchRouteParams");
+
+      const { navigateToSearch } = useSimpleSearchRouteParams();
+
+      await navigateToSearch({ query: "test" });
+
+      expect(navigateToMock).toHaveBeenCalledWith(
+        expect.objectContaining({
+          query: expect.objectContaining({
+            typeGroup: "urteil",
+            court: "BGH",
+          }),
+        }),
+        expect.anything(),
+      );
     });
   });
 
@@ -598,96 +709,5 @@ describe("useSimpleSearchRouteParams", () => {
     await nextTick();
 
     expect(query.value).toEqual("test after");
-  });
-
-  describe("document kind change side effects", () => {
-    it("resets dateFilter when changing document kind", async () => {
-      const routeQuery = reactive({
-        query: {
-          documentKind: DocumentKind.CaseLaw,
-          dateFilterType: "period",
-          dateFilterFrom: "2024-01-01",
-          dateFilterTo: "2024-12-31",
-        },
-      });
-
-      vi.doMock("#app", () => ({
-        useRoute: vi.fn().mockReturnValue(routeQuery),
-      }));
-
-      const { useSimpleSearchRouteParams } =
-        await import("./useSimpleSearchRouteParams");
-
-      const { documentKind, dateFilter } = useSimpleSearchRouteParams();
-
-      expect(documentKind.value).toEqual(DocumentKind.CaseLaw);
-      expect(dateFilter.value.type).toBe("period");
-
-      documentKind.value = DocumentKind.Norm;
-
-      expect(dateFilter.value.type).toBe("allTime");
-    });
-
-    it("resets typeGroup and court when changing from CaseLaw", async () => {
-      const routeQuery = reactive({
-        query: {
-          documentKind: DocumentKind.CaseLaw,
-          typeGroup: "urteil",
-          court: "BGH",
-        },
-      });
-
-      vi.doMock("#app", () => ({
-        useRoute: vi.fn().mockReturnValue(routeQuery),
-      }));
-
-      const { useSimpleSearchRouteParams } =
-        await import("./useSimpleSearchRouteParams");
-
-      const { documentKind, typeGroup, court } = useSimpleSearchRouteParams();
-
-      expect(documentKind.value).toEqual(DocumentKind.CaseLaw);
-      expect(typeGroup.value).toBe("urteil");
-      expect(court.value).toBe("BGH");
-
-      documentKind.value = DocumentKind.All;
-
-      expect(typeGroup.value).toBeUndefined();
-      expect(court.value).toBeUndefined();
-    });
-
-    it("resets all CaseLaw-specific filters when changing from CaseLaw to All", async () => {
-      const routeQuery = reactive({
-        query: {
-          documentKind: DocumentKind.CaseLaw,
-          typeGroup: "urteil",
-          court: "BGH",
-          dateFilterType: "period",
-          dateFilterFrom: "2024-01-01",
-          dateFilterTo: "2024-12-31",
-        },
-      });
-
-      vi.doMock("#app", () => ({
-        useRoute: vi.fn().mockReturnValue(routeQuery),
-      }));
-
-      const { useSimpleSearchRouteParams } =
-        await import("./useSimpleSearchRouteParams");
-
-      const { documentKind, typeGroup, court, dateFilter } =
-        useSimpleSearchRouteParams();
-
-      expect(documentKind.value).toEqual(DocumentKind.CaseLaw);
-      expect(typeGroup.value).toBe("urteil");
-      expect(court.value).toBe("BGH");
-      expect(dateFilter.value.type).toBe("period");
-
-      documentKind.value = DocumentKind.All;
-
-      expect(typeGroup.value).toBeUndefined();
-      expect(court.value).toBeUndefined();
-      expect(dateFilter.value.type).toBe("allTime");
-    });
   });
 });

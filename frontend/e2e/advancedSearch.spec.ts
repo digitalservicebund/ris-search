@@ -89,6 +89,29 @@ test.describe("general advanced search page features", () => {
     ).toBeVisible();
   });
 
+  test("browser back restores previous state", async ({ page }) => {
+    await navigate(page, "/search");
+
+    await page.getByRole("link", { name: "Erweiterte Suche" }).click();
+    const advancedSearchHeading = page.getByRole("heading", {
+      level: 1,
+      name: "Erweiterte Suche",
+    });
+    await expect(advancedSearchHeading).toBeVisible();
+
+    const searchInput = page.getByRole("searchbox");
+    await searchInput.fill("Fiktiv");
+    await page.getByRole("button", { name: "Suchen" }).click();
+    await expect(searchInput).toHaveValue("Fiktiv");
+
+    await page.goBack();
+    await expect(advancedSearchHeading).toBeVisible();
+    await expect(searchInput).toBeEmpty();
+
+    await page.goBack();
+    await expect(page).toHaveURL("/search");
+  });
+
   test("pagination switches pages", async ({ page }) => {
     await navigate(
       page,
@@ -357,6 +380,20 @@ test.describe("searching legislation", () => {
         name: "Fiktive Fruchtsaft- und Erfrischungsgetränkeverordnung zu Testzwecken",
       }),
     ).toBeVisible();
+  });
+
+  test("does not trigger a search when selecting a date filter type without entering a date", async ({
+    page,
+  }) => {
+    await navigate(page, "/advanced-search");
+    const initialUrl = page.url();
+
+    await page.getByRole("radio", { name: "Bestimmtes Datum" }).click();
+    expect(page.url()).toBe(initialUrl);
+
+    await page.getByRole("textbox", { name: "Datum" }).fill("01.01.2001");
+    await expect(page).toHaveURL(/dateFilterType=specificDate/);
+    await expect(page).toHaveURL(/dateFilterFrom=2001-01-01/);
   });
 
   test("searches without date restrictions, shows validity badge", async ({
