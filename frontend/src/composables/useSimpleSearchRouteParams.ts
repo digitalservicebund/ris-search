@@ -71,8 +71,7 @@ export function useSimpleSearchRouteParams() {
   });
 
   const sort = computed(
-    () =>
-      searchParamToString(route.query.sort) ?? SIMPLE_SEARCH_DEFAULTS.sort,
+    () => searchParamToString(route.query.sort) ?? SIMPLE_SEARCH_DEFAULTS.sort,
   );
 
   const itemsPerPage = computed(
@@ -82,7 +81,10 @@ export function useSimpleSearchRouteParams() {
   );
 
   const pageIndex = computed(() =>
-    searchParamToNumber(route.query.pageIndex, SIMPLE_SEARCH_DEFAULTS.pageIndex),
+    searchParamToNumber(
+      route.query.pageIndex,
+      SIMPLE_SEARCH_DEFAULTS.pageIndex,
+    ),
   );
 
   // Navigation helper --------------------------------------
@@ -126,7 +128,9 @@ export function useSimpleSearchRouteParams() {
       dateFilterType: merged.dateFilter?.type,
       dateFilterFrom: merged.dateFilter?.from ?? "",
       dateFilterTo: merged.dateFilter?.to ?? "",
-      pageIndex: (merged.pageIndex ?? SIMPLE_SEARCH_DEFAULTS.pageIndex).toString(),
+      pageIndex: (
+        merged.pageIndex ?? SIMPLE_SEARCH_DEFAULTS.pageIndex
+      ).toString(),
       sort: merged.sort,
       itemsPerPage: merged.itemsPerPage,
     };
