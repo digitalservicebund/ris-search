@@ -1,7 +1,6 @@
 package de.bund.digitalservice.ris.search.unit.service;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -192,7 +191,7 @@ class ChangelogServiceTest {
 
     Changelog result = changelogService.getIndexedChangesBetween(from, to);
 
-    verify(bucket, never()).getFileAsString(eq("changelogs/2026-07-08T12:00:00.933434Z-norm.json"));
+    verify(bucket, never()).getFileAsString("changelogs/2026-07-08T12:00:00.933434Z-norm.json");
 
     Assertions.assertTrue(result.getChanged().contains("file1"));
     Assertions.assertFalse(result.getChanged().contains("file2"));

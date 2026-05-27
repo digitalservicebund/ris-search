@@ -4,6 +4,7 @@ import static de.bund.digitalservice.ris.search.service.CaseLawIndexSyncJob.CASE
 import static de.bund.digitalservice.ris.search.service.LiteratureIndexSyncJob.LITERATURE_STATUS_FILENAME;
 import static de.bund.digitalservice.ris.search.service.NormIndexSyncJob.NORM_STATUS_FILENAME;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import de.bund.digitalservice.ris.search.repository.objectstorage.AdministrativeDirectiveBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.LiteratureBucket;
@@ -25,8 +26,8 @@ public class ChangelogConfig {
    */
   @Bean
   public ChangelogService caseLawChangelogService(
-      CaseLawBucket bucket, IndexStatusService indexStatusService) {
-    return new ChangelogService(bucket, indexStatusService, CASELAW_STATUS_FILENAME);
+      CaseLawBucket bucket, IndexStatusService indexStatusService, ObjectMapper om) {
+    return new ChangelogService(bucket, indexStatusService, CASELAW_STATUS_FILENAME, om);
   }
 
   /**
@@ -36,8 +37,8 @@ public class ChangelogConfig {
    */
   @Bean
   public ChangelogService normsChangelogService(
-      NormsBucket bucket, IndexStatusService indexStatusService) {
-    return new ChangelogService(bucket, indexStatusService, NORM_STATUS_FILENAME);
+      NormsBucket bucket, IndexStatusService indexStatusService, ObjectMapper om) {
+    return new ChangelogService(bucket, indexStatusService, NORM_STATUS_FILENAME, om);
   }
 
   /**
@@ -47,8 +48,8 @@ public class ChangelogConfig {
    */
   @Bean
   public ChangelogService literatureChangelogService(
-      LiteratureBucket bucket, IndexStatusService indexStatusService) {
-    return new ChangelogService(bucket, indexStatusService, LITERATURE_STATUS_FILENAME);
+      LiteratureBucket bucket, IndexStatusService indexStatusService, ObjectMapper om) {
+    return new ChangelogService(bucket, indexStatusService, LITERATURE_STATUS_FILENAME, om);
   }
 
   /**
@@ -58,8 +59,10 @@ public class ChangelogConfig {
    */
   @Bean
   public ChangelogService administrativeDirectiveChangelogService(
-      AdministrativeDirectiveBucket bucket, IndexStatusService indexStatusService) {
+      AdministrativeDirectiveBucket bucket,
+      IndexStatusService indexStatusService,
+      ObjectMapper om) {
     return new ChangelogService(
-        bucket, indexStatusService, AdministrativeDirectiveIndexSyncJob.STATUS_FILENAME);
+        bucket, indexStatusService, AdministrativeDirectiveIndexSyncJob.STATUS_FILENAME, om);
   }
 }

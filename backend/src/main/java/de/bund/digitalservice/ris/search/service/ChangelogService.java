@@ -28,11 +28,17 @@ public class ChangelogService {
 
   private final IndexStatusService indexStatusService;
 
+  private final ObjectMapper objectMapper;
+
   public ChangelogService(
-      ObjectStorage bucket, IndexStatusService indexStatusService, String indexStatusFile) {
+      ObjectStorage bucket,
+      IndexStatusService indexStatusService,
+      String indexStatusFile,
+      ObjectMapper objectMapper) {
     this.bucket = bucket;
     this.indexStatusService = indexStatusService;
     this.indexStatusFile = indexStatusFile;
+    this.objectMapper = objectMapper;
   }
 
   /**
@@ -79,7 +85,7 @@ public class ChangelogService {
       return Optional.empty();
     } else {
       try {
-        return Optional.of(new ObjectMapper().readValue(changelogContent.get(), Changelog.class));
+        return Optional.of(objectMapper.readValue(changelogContent.get(), Changelog.class));
       } catch (JsonProcessingException e) {
         logger.error("Error while parsing changelog file {} in bucket {}", filename, bucket, e);
         return Optional.empty();
