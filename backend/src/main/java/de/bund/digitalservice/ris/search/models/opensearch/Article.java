@@ -12,6 +12,10 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
+/**
+ * Model class representing an article in the opensearch index. This class is annotated with Lombok
+ * annotations for generating getters, setters, constructors, and builder methods.
+ */
 @Data
 @Builder // need only for unit tests
 @NoArgsConstructor // need only for unit tests

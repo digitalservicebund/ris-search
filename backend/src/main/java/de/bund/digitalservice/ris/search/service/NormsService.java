@@ -246,8 +246,8 @@ public class NormsService {
   }
 
   /**
-   * @param prefix
-   * @return
+   * @param prefix the prefix for a given norm
+   * @return a list of the filenames that match the provided prefix
    */
   public List<String> getAllFilenamesByPath(String prefix) {
     return normsBucket.getAllKeysByPrefix(prefix);

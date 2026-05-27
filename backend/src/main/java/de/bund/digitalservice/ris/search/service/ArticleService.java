@@ -25,6 +25,10 @@ import org.springframework.data.elasticsearch.core.SearchHitsImpl;
 import org.springframework.data.elasticsearch.core.TotalHitsRelation;
 import org.springframework.stereotype.Service;
 
+/**
+ * Service class for interacting with the database and return the search results. This class is
+ * annotated with {@link Service} to indicate that it's a service component in the Spring context.
+ */
 @Service
 public class ArticleService {
   protected static final Logger logger = LogManager.getLogger(ArticleService.class);
@@ -32,6 +36,12 @@ public class ArticleService {
   private final ElasticsearchOperations operations;
   private final ArticlesRepository articlesRepository;
 
+  /**
+   * Constructs a new instance of {@code ArticleService}.
+   *
+   * @param operations the ElasticsearchOperations instance to interact with Elasticsearch.
+   * @param articlesRepository The repository for interacting with the OpenSearch articles.
+   */
   public ArticleService(ElasticsearchOperations operations, ArticlesRepository articlesRepository) {
     this.operations = operations;
     this.articlesRepository = articlesRepository;
