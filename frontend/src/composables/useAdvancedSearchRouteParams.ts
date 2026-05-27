@@ -18,6 +18,19 @@ export interface AdvancedSearchRouteParams {
   pageIndex?: number;
 }
 
+export const ADVANCED_SEARCH_DEFAULTS = {
+  documentKind: DocumentKind.Norm,
+  sort: "default",
+  itemsPerPage: "50",
+  pageIndex: 0,
+} as const;
+
+export function getDefaultDateFilterType(
+  documentKind: DocumentKind,
+): DateFilterValue["type"] {
+  return documentKind === DocumentKind.Norm ? "currentlyInForce" : "allTime";
+}
+
 export function useAdvancedSearchRouteParams() {
   const route = useRoute();
 
@@ -25,7 +38,9 @@ export function useAdvancedSearchRouteParams() {
 
   const documentKind = computed(() => {
     const param = searchParamToString(route.query.documentKind);
-    return param && isDocumentKind(param) ? param : DocumentKind.Norm;
+    return param && isDocumentKind(param)
+      ? param
+      : ADVANCED_SEARCH_DEFAULTS.documentKind;
   });
 
   const query = computed(() =>
@@ -47,11 +62,7 @@ export function useAdvancedSearchRouteParams() {
         type = typeParam;
       }
     } else {
-      // Default depends on document kind
-      type =
-        documentKind.value === DocumentKind.Norm
-          ? "currentlyInForce"
-          : "allTime";
+      type = getDefaultDateFilterType(documentKind.value);
     }
 
     return {
@@ -62,15 +73,21 @@ export function useAdvancedSearchRouteParams() {
   });
 
   const sort = computed(
-    () => searchParamToString(route.query.sort) ?? "default",
+    () =>
+      searchParamToString(route.query.sort) ?? ADVANCED_SEARCH_DEFAULTS.sort,
   );
 
   const itemsPerPage = computed(
-    () => searchParamToString(route.query.itemsPerPage) ?? "50",
+    () =>
+      searchParamToString(route.query.itemsPerPage) ??
+      ADVANCED_SEARCH_DEFAULTS.itemsPerPage,
   );
 
   const pageIndex = computed(() =>
-    searchParamToNumber(route.query.pageIndex, 0),
+    searchParamToNumber(
+      route.query.pageIndex,
+      ADVANCED_SEARCH_DEFAULTS.pageIndex,
+    ),
   );
 
   // Navigation helper --------------------------------------
@@ -89,7 +106,7 @@ export function useAdvancedSearchRouteParams() {
       ...params,
     };
 
-    // When documentKind changes, reset query
+    // When documentKind changes, reset query and date filter
     if (
       params.documentKind !== undefined &&
       params.documentKind !== documentKind.value
@@ -97,10 +114,7 @@ export function useAdvancedSearchRouteParams() {
       if (params.query === undefined) merged.query = "";
       if (!params.dateFilter) {
         merged.dateFilter = {
-          type:
-            params.documentKind === DocumentKind.Norm
-              ? "currentlyInForce"
-              : "allTime",
+          type: getDefaultDateFilterType(params.documentKind),
         };
       }
     }
@@ -109,13 +123,15 @@ export function useAdvancedSearchRouteParams() {
 
     const to: LocationQueryRaw = {
       q: encodeURIComponent(merged.query ?? ""),
-      documentKind: merged.documentKind ?? DocumentKind.Norm,
-      dateFilterType: merged.dateFilter?.type ?? "allTime",
+      documentKind: merged.documentKind,
+      dateFilterType: merged.dateFilter?.type,
       dateFilterFrom: merged.dateFilter?.from ?? "",
       dateFilterTo: merged.dateFilter?.to ?? "",
-      pageIndex: (merged.pageIndex ?? 0).toString(),
-      sort: merged.sort ?? "default",
-      itemsPerPage: merged.itemsPerPage ?? "50",
+      pageIndex: (
+        merged.pageIndex ?? ADVANCED_SEARCH_DEFAULTS.pageIndex
+      ).toString(),
+      sort: merged.sort,
+      itemsPerPage: merged.itemsPerPage,
     };
 
     // Hash is used for skip links on the page:

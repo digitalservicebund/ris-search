@@ -185,11 +185,17 @@ function handlePageUpdate(page: number) {
 }
 
 function updateSort(value: string | undefined) {
-  navigateToSearch({ sort: value ?? "default", pageIndex: 0 });
+  navigateToSearch({
+    sort: value ?? ADVANCED_SEARCH_DEFAULTS.sort,
+    pageIndex: 0,
+  });
 }
 
 function updateItemsPerPage(value: string | undefined) {
-  navigateToSearch({ itemsPerPage: value ?? "50", pageIndex: 0 });
+  navigateToSearch({
+    itemsPerPage: value ?? ADVANCED_SEARCH_DEFAULTS.itemsPerPage,
+    pageIndex: 0,
+  });
 }
 
 function updateDateFilter(value: typeof dateFilter.value) {

@@ -162,11 +162,17 @@ async function updatePage(page: number) {
 }
 
 function updateSort(value: string | undefined) {
-  navigateToSearch({ sort: value ?? "default", pageIndex: 0 });
+  navigateToSearch({
+    sort: value ?? SIMPLE_SEARCH_DEFAULTS.sort,
+    pageIndex: 0,
+  });
 }
 
 function updateItemsPerPage(value: string | undefined) {
-  navigateToSearch({ itemsPerPage: value ?? "10", pageIndex: 0 });
+  navigateToSearch({
+    itemsPerPage: value ?? SIMPLE_SEARCH_DEFAULTS.itemsPerPage,
+    pageIndex: 0,
+  });
 }
 
 function updateCourt(value: string | undefined) {

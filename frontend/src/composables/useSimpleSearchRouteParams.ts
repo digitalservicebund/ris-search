@@ -20,6 +20,14 @@ export interface SearchRouteParams {
   pageIndex?: number;
 }
 
+export const SIMPLE_SEARCH_DEFAULTS = {
+  documentKind: DocumentKind.All,
+  sort: "default",
+  itemsPerPage: "10",
+  pageIndex: 0,
+  dateFilterType: "allTime" as const,
+} as const;
+
 export function useSimpleSearchRouteParams() {
   const route = useRoute();
 
@@ -31,7 +39,9 @@ export function useSimpleSearchRouteParams() {
 
   const documentKind = computed(() => {
     const param = searchParamToString(route.query.documentKind);
-    return param && isDocumentKind(param) ? param : DocumentKind.All;
+    return param && isDocumentKind(param)
+      ? param
+      : SIMPLE_SEARCH_DEFAULTS.documentKind;
   });
 
   const typeGroup = computed(
@@ -47,7 +57,7 @@ export function useSimpleSearchRouteParams() {
     const type =
       typeof typeParam === "string" && isFilterType(typeParam)
         ? typeParam
-        : "allTime";
+        : SIMPLE_SEARCH_DEFAULTS.dateFilterType;
     return {
       type,
       from: searchParamToString(route.query.dateFilterFrom) || undefined,
@@ -56,15 +66,18 @@ export function useSimpleSearchRouteParams() {
   });
 
   const sort = computed(
-    () => searchParamToString(route.query.sort) ?? "default",
+    () =>
+      searchParamToString(route.query.sort) ?? SIMPLE_SEARCH_DEFAULTS.sort,
   );
 
   const itemsPerPage = computed(
-    () => searchParamToString(route.query.itemsPerPage) ?? "10",
+    () =>
+      searchParamToString(route.query.itemsPerPage) ??
+      SIMPLE_SEARCH_DEFAULTS.itemsPerPage,
   );
 
   const pageIndex = computed(() =>
-    searchParamToNumber(route.query.pageIndex, 0),
+    searchParamToNumber(route.query.pageIndex, SIMPLE_SEARCH_DEFAULTS.pageIndex),
   );
 
   // Navigation helper --------------------------------------
@@ -90,7 +103,8 @@ export function useSimpleSearchRouteParams() {
       params.documentKind !== undefined &&
       params.documentKind !== documentKind.value
     ) {
-      if (!params.dateFilter) merged.dateFilter = { type: "allTime" };
+      if (!params.dateFilter)
+        merged.dateFilter = { type: SIMPLE_SEARCH_DEFAULTS.dateFilterType };
       if (params.documentKind !== DocumentKind.CaseLaw) {
         if (!params.typeGroup) merged.typeGroup = undefined;
         if (!params.court) merged.court = undefined;
@@ -102,14 +116,14 @@ export function useSimpleSearchRouteParams() {
     let to: LocationQueryRaw = {
       query: encodeURIComponent(merged.query ?? ""),
       court: merged.court ?? "",
-      documentKind: merged.documentKind ?? DocumentKind.All,
+      documentKind: merged.documentKind,
       typeGroup: merged.typeGroup ?? "",
-      dateFilterType: merged.dateFilter?.type ?? "allTime",
+      dateFilterType: merged.dateFilter?.type,
       dateFilterFrom: merged.dateFilter?.from ?? "",
       dateFilterTo: merged.dateFilter?.to ?? "",
-      pageIndex: (merged.pageIndex ?? 0).toString(),
-      sort: merged.sort ?? "default",
-      itemsPerPage: merged.itemsPerPage ?? "10",
+      pageIndex: (merged.pageIndex ?? SIMPLE_SEARCH_DEFAULTS.pageIndex).toString(),
+      sort: merged.sort,
+      itemsPerPage: merged.itemsPerPage,
     };
 
     to = Object.fromEntries(
