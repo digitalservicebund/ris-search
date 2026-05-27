@@ -86,6 +86,7 @@ const submitFeedback = async () => {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  margin-top: 1rem;
   margin-bottom: 1rem;
 }
 

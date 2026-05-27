@@ -17,4 +17,3 @@ We are particularly interested in your feedback on the following points:
 - Where do you see potential for improvement?
 - What additional information or examples would be helpful for you?
 
-<FeedbackForm />

@@ -38,6 +38,10 @@ export default defineConfig({
     siteTitle: "RIS API Docs",
     nav: [
       { text: "Get Started", link: "/get-started/" },
+      {
+        text: "Swagger",
+        link: " https://docs.rechtsinformationen.bund.de/swagger-ui/index.html",
+      },
       { text: "Standards", link: "/standards/" },
       {
         text: "Guides",
@@ -74,7 +78,6 @@ export default defineConfig({
       },
       { text: "Changelog", link: "/changelog/" },
       { text: "Feedback", link: "/feedback/" },
-      { text: "Contact", link: "/contact/" },
     ],
     socialLinks: [
       {
@@ -82,10 +85,6 @@ export default defineConfig({
         link: "https://github.com/digitalservicebund/ris-search",
       },
     ],
-    footer: {
-      message:
-        '<a href="https://digitalservice.bund.de/en/legal-notice">Legal Notice</a> · <a href="/contact/">Contact</a> · <a href="https://digitalservice.bund.de/en/data-privacy">Data Privacy</a>',
-    },
   },
   markdown: {
     theme: {
