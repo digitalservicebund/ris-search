@@ -26,6 +26,7 @@ public class CorsConfig {
 
   private final String frontEndUrl;
   private final String docsUrl;
+  private final String cmsUrl;
 
   /**
    * Constructor for the CorsConfig class, which initializes the configuration for Cross-Origin
@@ -36,10 +37,12 @@ public class CorsConfig {
    */
   public CorsConfig(
       @Value("${server.front-end-url}") String frontEndUrl,
-      @Value("${server.docs-url}") String docsUrl) {
+      @Value("${server.docs-url}") String docsUrl,
+      @Value("${server.cms-url}") String cmsUrl) {
 
     this.frontEndUrl = frontEndUrl;
     this.docsUrl = docsUrl;
+    this.cmsUrl = cmsUrl;
   }
 
   /**
@@ -58,7 +61,7 @@ public class CorsConfig {
             .addMapping("/v1/**")
             .allowedMethods("GET", "HEAD", "OPTIONS")
             .allowedHeaders(CorsConfiguration.ALL)
-            .allowedOrigins(frontEndUrl, docsUrl);
+            .allowedOrigins(frontEndUrl, docsUrl, cmsUrl);
       }
     };
   }
