@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import DefaultTheme from "vitepress/theme";
-import Banner from "./components/Banner.vue";
 
 const { Layout } = DefaultTheme;
 </script>
