@@ -78,7 +78,7 @@ class EcliSitemapJobTest {
     when(portalBucket.getFileAsString(LAST_PROCESSED_CHANGELOG))
         .thenReturn(Optional.of("changelog/date"));
     when(changelogService.getNewChangelogsPaths("changelog/date")).thenReturn(changelogPaths);
-    when(changelogService.parseAndMergeChangelogs(changelogPaths)).thenReturn(log1);
+    when(changelogService.getChangesFromFiles(changelogPaths)).thenReturn(log1);
 
     Job.ReturnCode code = sitemapJob.runJob();
 

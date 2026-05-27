@@ -1,12 +1,17 @@
 package de.bund.digitalservice.ris.search.unit.service;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
 import de.bund.digitalservice.ris.search.service.ChangelogService;
+import de.bund.digitalservice.ris.search.service.IndexStatusService;
+import de.bund.digitalservice.ris.search.service.IndexingState;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
@@ -26,13 +31,15 @@ class ChangelogServiceTest {
 
   @Mock ObjectStorage bucket;
 
+  @Mock IndexStatusService statusService;
+
   ChangelogService changelogService;
 
   ObjectMapper objectMapper = new ObjectMapper();
 
   @BeforeEach
   void setup() {
-    changelogService = new ChangelogService(bucket) {};
+    changelogService = new ChangelogService(bucket, statusService, "status_file") {};
   }
 
   @Test
@@ -90,7 +97,7 @@ class ChangelogServiceTest {
     when(bucket.getFileAsString("log3"))
         .thenReturn(Optional.of(objectMapper.writeValueAsString(log3)));
 
-    Changelog result = changelogService.parseAndMergeChangelogs(List.of("log1", "log2", "log3"));
+    Changelog result = changelogService.getChangesFromFiles(List.of("log1", "log2", "log3"));
     Assertions.assertTrue(result.isChangeAll());
   }
 
@@ -113,7 +120,7 @@ class ChangelogServiceTest {
     when(bucket.getFileAsString("log3"))
         .thenReturn(Optional.of(objectMapper.writeValueAsString(log3)));
 
-    var result = changelogService.parseAndMergeChangelogs(List.of("log1", "log2", "log3"));
+    var result = changelogService.getChangesFromFiles(List.of("log1", "log2", "log3"));
 
     Assertions.assertEquals(3, result.getChanged().size());
     Assertions.assertTrue(result.getChanged().contains("changed"));
@@ -128,7 +135,7 @@ class ChangelogServiceTest {
   }
 
   @Test
-  void itMergesAListOfChangelogsBetweenTimestamps()
+  void itCollectsChangesBetweenTimestamps()
       throws JsonProcessingException, ObjectStoreServiceException {
     Instant from = Instant.parse("2026-07-03T12:00:00Z");
     Instant to = Instant.parse("2027-01-01T12:00:00Z");
@@ -150,9 +157,44 @@ class ChangelogServiceTest {
     when(bucket.getFileAsString("changelogs/2026-07-08T12:00:00.933434Z-norm.json"))
         .thenReturn(Optional.of(objectMapper.writeValueAsString(expectedSecond)));
 
-    Changelog result = changelogService.parseAndMergeChangelogsBetween(from, to);
+    IndexingState state = new IndexingState().withLastProcessedChangelogFile(null);
+    when(statusService.loadStatus("status_file")).thenReturn(state);
+
+    Changelog result = changelogService.getIndexedChangesBetween(from, to);
 
     Assertions.assertTrue(result.getChanged().contains("file1"));
     Assertions.assertTrue(result.getChanged().contains("file2"));
+  }
+
+  @Test
+  void itLimitsChangesToIndexedChangelogs()
+      throws JsonProcessingException, ObjectStoreServiceException {
+    Instant from = Instant.parse("2026-07-03T12:00:00Z");
+    Instant to = Instant.parse("2027-01-01T12:00:00Z");
+
+    Changelog expectedFirst =
+        new Changelog(new HashSet<>(List.of("file1")), new HashSet<>(), false);
+
+    when(bucket.getAllKeysByPrefix(any()))
+        .thenReturn(
+            List.of(
+                "changelogs/2026-07-03T11:00:00.000000Z-norm.json",
+                "changelogs/2026-07-03T12:00:00.933434Z-norm.json",
+                "changelogs/2026-07-08T12:00:00.933434Z-norm.json"));
+
+    when(bucket.getFileAsString("changelogs/2026-07-03T12:00:00.933434Z-norm.json"))
+        .thenReturn(Optional.of(objectMapper.writeValueAsString(expectedFirst)));
+
+    IndexingState state =
+        new IndexingState()
+            .withLastProcessedChangelogFile("changelogs/2026-07-03T12:00:00.933434Z-norm.json");
+    when(statusService.loadStatus("status_file")).thenReturn(state);
+
+    Changelog result = changelogService.getIndexedChangesBetween(from, to);
+
+    verify(bucket, never()).getFileAsString(eq("changelogs/2026-07-08T12:00:00.933434Z-norm.json"));
+
+    Assertions.assertTrue(result.getChanged().contains("file1"));
+    Assertions.assertFalse(result.getChanged().contains("file2"));
   }
 }

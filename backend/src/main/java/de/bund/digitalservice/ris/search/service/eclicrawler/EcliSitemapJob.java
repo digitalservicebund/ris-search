@@ -108,7 +108,7 @@ public class EcliSitemapJob implements Job {
 
   private Changelog getMergedChanges(List<String> changelogPaths) {
     try {
-      return changelogService.parseAndMergeChangelogs(changelogPaths);
+      return changelogService.getChangesFromFiles(changelogPaths);
     } catch (ObjectStoreServiceException e) {
       throw new FatalEcliSitemapJobException(e.getMessage());
     }

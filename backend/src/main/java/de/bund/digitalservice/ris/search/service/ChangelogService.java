@@ -24,8 +24,15 @@ public class ChangelogService {
 
   public static final String CHANGELOGS_PREFIX = "changelogs/";
 
-  public ChangelogService(ObjectStorage bucket) {
+  private final String indexStatusFile;
+
+  private final IndexStatusService indexStatusService;
+
+  public ChangelogService(
+      ObjectStorage bucket, IndexStatusService indexStatusService, String indexStatusFile) {
     this.bucket = bucket;
+    this.indexStatusService = indexStatusService;
+    this.indexStatusFile = indexStatusFile;
   }
 
   /**
@@ -48,32 +55,6 @@ public class ChangelogService {
         .filter(e -> e.compareTo(lastProcessedChangelog) > 0)
         .sorted()
         .toList();
-  }
-
-  /**
-   * Returns a list of Changelogs that appeared between from and to Instants
-   *
-   * @param from Instant object to determine from timestamp
-   * @param to Instant object to determine to timestamp
-   * @return List of Changelogs
-   */
-  public Changelog parseAndMergeChangelogsBetween(Instant from, Instant to) {
-
-    List<Changelog> changelogs =
-        bucket.getAllKeysByPrefix(CHANGELOGS_PREFIX).stream()
-            .filter(e -> !CHANGELOGS_PREFIX.equals(e))
-            .filter(
-                e -> {
-                  Instant changelogTime =
-                      Instant.parse(e.substring(CHANGELOGS_PREFIX.length(), e.indexOf("Z") + 1));
-                  return changelogTime.isAfter(from) && changelogTime.isBefore(to);
-                })
-            .sorted()
-            .map(this::parseOneChangelog)
-            .flatMap(Optional::stream)
-            .toList();
-
-    return foldChangelogs(changelogs);
   }
 
   /**
@@ -106,6 +87,48 @@ public class ChangelogService {
     }
   }
 
+  private List<String> getNewChangelogsBetween(Instant from, Instant to) {
+
+    return bucket.getAllKeysByPrefix(CHANGELOGS_PREFIX).stream()
+        .filter(e -> !CHANGELOGS_PREFIX.equals(e))
+        .filter(
+            e -> {
+              Instant changelogTime =
+                  Instant.parse(e.substring(CHANGELOGS_PREFIX.length(), e.indexOf("Z") + 1));
+              // get all changelogs between timestamps inclusive
+              return !changelogTime.isBefore(from) && !changelogTime.isAfter(to);
+            })
+        .sorted()
+        .toList();
+  }
+
+  /**
+   * Retrieves an aggregated Changelog containing all document changes indexed between two
+   * timestamps (inclusive).
+   *
+   * @param from the starting timestamp boundary (inclusive)
+   * @param to the ending timestamp boundary (inclusive)
+   * @return Changelog object including all changes that were indexed
+   */
+  public Changelog getIndexedChangesBetween(Instant from, Instant to) {
+    IndexingState state = indexStatusService.loadStatus(indexStatusFile);
+
+    Optional<Instant> newestIndexedTimestamp =
+        Optional.ofNullable(state.lastProcessedChangelogFile())
+            .map(lp -> lp.substring(CHANGELOGS_PREFIX.length(), lp.indexOf("Z") + 1))
+            .map(Instant::parse);
+
+    Instant limit = newestIndexedTimestamp.filter(ts -> ts.isBefore(to)).orElse(to);
+
+    List<Changelog> changelogs =
+        getNewChangelogsBetween(from, limit).stream()
+            .map(this::parseOneChangelog)
+            .flatMap(Optional::stream)
+            .toList();
+
+    return foldChangelogs(changelogs);
+  }
+
   /**
    * Parses multiple changelog files from the given object storage and converts its content to a
    * List of {@link de.bund.digitalservice.ris.search.importer.changelog.Changelog} objects.
@@ -120,21 +143,10 @@ public class ChangelogService {
    * @throws de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException If an error
    *     occurs while accessing the object storage.
    */
-  public Changelog parseAndMergeChangelogs(List<String> filenames)
-      throws ObjectStoreServiceException {
+  public Changelog getChangesFromFiles(List<String> filenames) throws ObjectStoreServiceException {
 
     List<Changelog> changelogs =
-        filenames.stream()
-            .map(
-                path -> {
-                  try {
-                    return parseOneChangelog(path);
-                  } catch (ObjectStoreServiceException e) {
-                    return Optional.<Changelog>empty();
-                  }
-                })
-            .flatMap(Optional::stream)
-            .toList();
+        filenames.stream().map(this::parseOneChangelog).flatMap(Optional::stream).toList();
     return foldChangelogs(changelogs);
   }
 

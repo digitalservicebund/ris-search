@@ -274,7 +274,7 @@ public class CaseLawController {
       @ParameterObject @Valid ChangelogParams params) {
 
     var changelog =
-        changelogService.parseAndMergeChangelogsBetween(
+        changelogService.getIndexedChangesBetween(
             params.getFrom().toInstant(), params.getTo().toInstant());
     var baseUrl = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
     return ResponseEntity.ok(
