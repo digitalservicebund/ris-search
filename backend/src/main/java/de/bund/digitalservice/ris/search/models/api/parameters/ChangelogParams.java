@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
+/** This class represents the parameters for changelog queries. */
 @Getter
 @Setter
 public class ChangelogParams {

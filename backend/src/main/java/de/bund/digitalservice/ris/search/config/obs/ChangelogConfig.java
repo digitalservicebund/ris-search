@@ -22,6 +22,7 @@ public class ChangelogConfig {
   /**
    * @param bucket root bucket of case law files
    * @param indexStatusService IndexStatusService to manage status file handling
+   * @param om global ObjectMapper to parse the changelog files
    * @return ChangelogService configured to manage case law files
    */
   @Bean
@@ -33,6 +34,7 @@ public class ChangelogConfig {
   /**
    * @param bucket root bucket of case law files
    * @param indexStatusService IndexStatusService to manage status file handling
+   * @param om global ObjectMapper to parse the changelog files
    * @return IndexedChangelogService configured to manage legislation files
    */
   @Bean
@@ -44,6 +46,7 @@ public class ChangelogConfig {
   /**
    * @param bucket root bucket of case law files
    * @param indexStatusService IndexStatusService to manage status file handling
+   * @param om global ObjectMapper to parse the changelog files
    * @return IndexedChangelogService configured to manage literature files
    */
   @Bean
@@ -55,6 +58,7 @@ public class ChangelogConfig {
   /**
    * @param bucket root bucket of case law files
    * @param indexStatusService IndexStatusService to manage status file handling
+   * @param om global ObjectMapper to parse the changelog files
    * @return IndexedChangelogService configured to manage literature files
    */
   @Bean

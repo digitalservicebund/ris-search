@@ -202,6 +202,15 @@ public class AdministrativeDirectiveController {
         .orElseGet(() -> ResponseEntity.notFound().build());
   }
 
+  /**
+   * Retrieves an aggregated changelog, listing all indexed fileChanges between the given timestamps
+   * (inclusive). If a full reindex occurred inside the given bounds, the allChanged flag is set to
+   * true, otherwise changes are given based on the document root in the changed/deleted
+   * collections.
+   *
+   * @param params {@link ChangelogParams} to determine upper and lower boundary to retrieve changes
+   * @return Changelog response with aggregated changes across the given time range
+   */
   @GetMapping(path = ApiConfig.Paths.ADMINISTRATIVE_DIRECTIVE_CHANGELOGS)
   @Operation(
       summary = "Administrative Directive changelog",

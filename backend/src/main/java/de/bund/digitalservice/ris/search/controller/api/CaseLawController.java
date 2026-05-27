@@ -264,6 +264,15 @@ public class CaseLawController {
     return ApiConfig.Paths.CASELAW + "/" + documentNumber + "/";
   }
 
+  /**
+   * Retrieves an aggregated changelog, listing all indexed fileChanges between the given timestamps
+   * (inclusive). If a full reindex occurred inside the given bounds, the allChanged flag is set to
+   * true, otherwise changes are given based on the document root in the changed/deleted
+   * collections.
+   *
+   * @param params {@link ChangelogParams} to determine upper and lower boundary to retrieve changes
+   * @return Changelog response with aggregated changes across the given time range
+   */
   @GetMapping(path = ApiConfig.Paths.CASELAW_CHANGELOGS)
   @Operation(
       summary = "Caselaw changelog",

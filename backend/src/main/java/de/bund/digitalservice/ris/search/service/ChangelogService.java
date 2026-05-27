@@ -31,6 +31,14 @@ public class ChangelogService {
 
   private final ObjectReader changelogReader;
 
+  /**
+   * Changelog service to manage changelogs of documents
+   *
+   * @param bucket bucket containing the changelogs
+   * @param indexStatusService indexStatusService to manage indexing state
+   * @param indexStatusFile indexStatusFile belonging to the respective document kind
+   * @param objectMapper global ObjectMapper to create a Changelog Reader
+   */
   public ChangelogService(
       ObjectStorage bucket,
       IndexStatusService indexStatusService,
