@@ -37,6 +37,26 @@ test.describe("reach search from start page", () => {
 
     await expect(page.getByRole("searchbox"), "should be reset").toBeEmpty();
   });
+
+  test("browser back restores previous state", async ({ page }) => {
+    await navigate(page, "/");
+
+    await page.getByRole("button", { name: "Suchen" }).click();
+    await expect(
+      page.getByRole("heading", { name: "Suche", level: 1 }),
+    ).toBeVisible();
+
+    const searchInput = page.getByRole("searchbox");
+    await searchInput.fill("Fiktiv");
+    await page.getByRole("button", { name: "Suchen" }).click();
+    await expect(searchInput).toHaveValue("Fiktiv");
+
+    await page.goBack();
+    await expect(searchInput).toBeEmpty();
+
+    await page.goBack();
+    await expect(page).toHaveURL("/");
+  });
 });
 
 test.describe("links to advanced search", () => {

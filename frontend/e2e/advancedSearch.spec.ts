@@ -89,6 +89,29 @@ test.describe("general advanced search page features", () => {
     ).toBeVisible();
   });
 
+  test("browser back restores previous state", async ({ page }) => {
+    await navigate(page, "/search");
+
+    await page.getByRole("link", { name: "Erweiterte Suche" }).click();
+    const advancedSearchHeading = page.getByRole("heading", {
+      level: 1,
+      name: "Erweiterte Suche",
+    });
+    await expect(advancedSearchHeading).toBeVisible();
+
+    const searchInput = page.getByRole("searchbox");
+    await searchInput.fill("Fiktiv");
+    await page.getByRole("button", { name: "Suchen" }).click();
+    await expect(searchInput).toHaveValue("Fiktiv");
+
+    await page.goBack();
+    await expect(advancedSearchHeading).toBeVisible();
+    await expect(searchInput).toBeEmpty();
+
+    await page.goBack();
+    await expect(page).toHaveURL("/search");
+  });
+
   test("pagination switches pages", async ({ page }) => {
     await navigate(
       page,
