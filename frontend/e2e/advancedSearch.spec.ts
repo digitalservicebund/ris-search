@@ -382,6 +382,20 @@ test.describe("searching legislation", () => {
     ).toBeVisible();
   });
 
+  test("does not trigger a search when selecting a date filter type without entering a date", async ({
+    page,
+  }) => {
+    await navigate(page, "/advanced-search");
+    const initialUrl = page.url();
+
+    await page.getByRole("radio", { name: "Bestimmtes Datum" }).click();
+    expect(page.url()).toBe(initialUrl);
+
+    await page.getByRole("textbox", { name: "Datum" }).fill("01.01.2001");
+    await expect(page).toHaveURL(/dateFilterType=specificDate/);
+    await expect(page).toHaveURL(/dateFilterFrom=2001-01-01/);
+  });
+
   test("searches without date restrictions, shows validity badge", async ({
     page,
   }) => {

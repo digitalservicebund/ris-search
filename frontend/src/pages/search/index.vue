@@ -180,6 +180,8 @@ function updateCourt(value: string | undefined) {
 }
 
 function updateDateFilter(value: typeof dateFilter.value) {
+  localDateFilter.value = value;
+  if (!isStrictDateFilterValue(value)) return;
   navigateToSearch({ dateFilter: value, pageIndex: 0 });
 }
 

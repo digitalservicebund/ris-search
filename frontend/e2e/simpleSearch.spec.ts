@@ -566,6 +566,23 @@ test.describe("searching caselaw", () => {
     );
   });
 
+  test("does not trigger a search when selecting a date filter type without entering a date", async ({
+    page,
+  }) => {
+    await navigate(page, "/search?documentKind=R");
+    const initialUrl = page.url();
+
+    const resultCounter = getResultCounter(page);
+    await expect(resultCounter).toHaveText(nonZeroResultCount);
+
+    await page.getByRole("combobox", { name: "Zeitraum" }).click();
+    await page.getByRole("option", { name: "Ab einem Datum" }).click();
+    expect(page.url()).toBe(initialUrl);
+
+    await page.getByRole("textbox", { name: "Datum" }).fill("10.04.2025");
+    await expect(page).toHaveURL(/dateFilterFrom=2025-04-10/);
+  });
+
   test("searches decision date before a date", async ({ page }) => {
     await navigate(page, "/search?documentKind=R");
 
