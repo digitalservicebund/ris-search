@@ -155,6 +155,6 @@ class NormsImporterTest extends ContainersIntegrationBase {
 
   private IndexingState getMockState() {
     Instant time = Instant.now();
-    return new IndexingState(time.toString(), time.toString(), time.toString());
+    return new IndexingState(time.toString(), time.toString());
   }
 }

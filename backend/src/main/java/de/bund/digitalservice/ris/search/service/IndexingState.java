@@ -10,11 +10,10 @@ import org.jetbrains.annotations.Nullable;
  * the indexing was locked.
  */
 @With
-public record IndexingState(
-    @Nullable String lastProcessedChangelogFile, String startTime, String lockTime) {
+public record IndexingState(@Nullable String lastProcessedChangelogFile, String startTime) {
 
   public IndexingState() {
-    this(null, null, null);
+    this(null, null);
   }
 
   public Instant startTimeInstant() {

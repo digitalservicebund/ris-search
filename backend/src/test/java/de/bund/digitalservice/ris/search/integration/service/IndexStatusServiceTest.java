@@ -5,7 +5,6 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
-import de.bund.digitalservice.ris.search.service.CaseLawIndexSyncJob;
 import de.bund.digitalservice.ris.search.service.IndexStatusService;
 import de.bund.digitalservice.ris.search.service.IndexingState;
 import java.time.Instant;
@@ -25,8 +24,7 @@ class IndexStatusServiceTest extends ContainersIntegrationBase {
   @Test
   void saveAndloadStatusTest1() throws ObjectStoreServiceException {
     Instant time = Instant.now();
-    IndexingState testData =
-        new IndexingState("lastProcessedChangelogFile", time.toString(), "lockTime");
+    IndexingState testData = new IndexingState("lastProcessedChangelogFile", time.toString());
     indexStatusService.saveStatus("testFile.json", testData);
     IndexingState result = indexStatusService.loadStatus("testFile.json");
     assertThat(result).isEqualTo(testData);
@@ -54,33 +52,5 @@ class IndexStatusServiceTest extends ContainersIntegrationBase {
     IndexingState expected =
         new IndexingState().withLastProcessedChangelogFile("lastProcessedChangelogFile");
     assertThat(result).isEqualTo(expected);
-  }
-
-  @Test
-  void normalLockingWorks() throws ObjectStoreServiceException {
-    Instant startTime = Instant.now();
-    IndexingState state = new IndexingState().withStartTime(startTime.toString());
-    indexStatusService.lockIndex(CaseLawIndexSyncJob.CASELAW_STATUS_FILENAME, state);
-    IndexingState result =
-        indexStatusService.loadStatus(CaseLawIndexSyncJob.CASELAW_STATUS_FILENAME);
-    String lockTime = result.lockTime();
-    assertThat(lockTime).isEqualTo(startTime.toString());
-    portalBucket.delete(CaseLawIndexSyncJob.CASELAW_STATUS_FILENAME);
-  }
-
-  @Test
-  void alreadyLockedWorksAsExpected() throws ObjectStoreServiceException {
-    Instant startTime = Instant.now();
-    IndexingState state = new IndexingState().withStartTime(startTime.toString());
-    boolean locked =
-        indexStatusService.lockIndex(CaseLawIndexSyncJob.CASELAW_STATUS_FILENAME, state);
-    assertThat(locked).isTrue();
-
-    IndexingState newState =
-        indexStatusService.loadStatus(CaseLawIndexSyncJob.CASELAW_STATUS_FILENAME);
-
-    locked = indexStatusService.lockIndex(CaseLawIndexSyncJob.CASELAW_STATUS_FILENAME, newState);
-    assertThat(locked).isFalse();
-    portalBucket.delete(CaseLawIndexSyncJob.CASELAW_STATUS_FILENAME);
   }
 }

@@ -76,17 +76,11 @@ public class IndexSyncJob implements Job {
    */
   public Job.ReturnCode runJob() {
     logger.info("Starting index sync job for {}", statusFileName);
-    // load current state and lock if possible
     try {
       IndexingState state =
           indexStatusService.loadStatus(statusFileName).withStartTime(Instant.now().toString());
-      boolean locked = indexStatusService.lockIndex(statusFileName, state);
-      if (!locked) {
-        return ReturnCode.SUCCESS;
-      }
 
       fetchAndProcessChanges(state);
-      indexStatusService.unlockIndex(statusFileName);
     } catch (ObjectStoreServiceException ex) {
       logger.error(ex);
       return ReturnCode.ERROR;

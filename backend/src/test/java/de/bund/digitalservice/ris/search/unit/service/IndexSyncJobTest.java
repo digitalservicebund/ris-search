@@ -3,7 +3,6 @@ package de.bund.digitalservice.ris.search.unit.service;
 import static de.bund.digitalservice.ris.search.service.NormIndexSyncJob.NORM_STATUS_FILENAME;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -52,32 +51,6 @@ class IndexSyncJobTest {
   }
 
   @Test
-  void lockIsAcquiredAndReleasedOnSuccessfulProcess() throws ObjectStoreServiceException {
-
-    Instant time = Instant.now();
-    String changelogFileName = ChangelogService.CHANGELOGS_PREFIX + time + "-changelog.json";
-    List<String> changelogs = List.of(changelogFileName);
-
-    when(indexStatusService.lockIndex(any(), any())).thenReturn(true);
-    when(indexStatusService.loadStatus(any()))
-        .thenReturn(
-            new IndexingState(time.minusSeconds(10).toString(), time.toString(), time.toString()));
-
-    when(changelogService.getNewChangelogsPaths(eq(normsBucket), any())).thenReturn(changelogs);
-    Changelog changelog = new Changelog();
-    changelog.setChangeAll(true);
-    when(changelogService.parseOneChangelog(normsBucket, changelogs.getFirst()))
-        .thenReturn(changelog);
-
-    normIndexSyncJob.runJob();
-
-    verify(indexStatusService, times(1)).lockIndex(any(), any());
-    verify(indexStatusService, times(1)).unlockIndex(any());
-    verify(indexStatusService, times(1))
-        .updateLastProcessedChangelog(NORM_STATUS_FILENAME, changelogFileName);
-  }
-
-  @Test
   void itTriggersReindexAll() throws ObjectStoreServiceException {
     Changelog changelog = new Changelog();
     changelog.setChangeAll(true);
@@ -106,22 +79,11 @@ class IndexSyncJobTest {
     when(indexNormsService.getNumberOfIndexableDocumentsInBucket()).thenReturn(99);
 
     Instant time = Instant.now();
-    normIndexSyncJob.alertOnNumberMismatch(
-        new IndexingState(time.toString(), time.toString(), time.toString()));
+    normIndexSyncJob.alertOnNumberMismatch(new IndexingState(time.toString(), time.toString()));
 
     String expectedOutput = "IndexNormsService has 99 files in bucket but 100 indexed documents";
 
     assertThat(output).contains(expectedOutput);
-  }
-
-  @Test
-  void itReturnsSuccessOnLockedStatus() throws ObjectStoreServiceException {
-
-    when(indexStatusService.loadStatus(any()))
-        .thenReturn(new IndexingState().withStartTime("mocktime"));
-    when(indexStatusService.lockIndex(any(), any())).thenReturn(false);
-
-    Assertions.assertEquals(Job.ReturnCode.SUCCESS, normIndexSyncJob.runJob());
   }
 
   @Test
