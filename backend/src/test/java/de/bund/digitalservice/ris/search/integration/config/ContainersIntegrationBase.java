@@ -43,7 +43,7 @@ public class ContainersIntegrationBase {
   @Autowired protected CaseLawRepository caseLawRepository;
   @Autowired protected LiteratureRepository literatureRepository;
   @Autowired protected NormsRepository normsRepository;
-  @Autowired ArticlesRepository articlesRepository;
+  @Autowired protected ArticlesRepository articlesRepository;
   @Autowired protected CaseLawBucket caseLawBucket;
   @Autowired protected NormsBucket normsBucket;
   @Autowired protected AdministrativeDirectiveRepository administrativeDirectiveRepository;
@@ -84,6 +84,10 @@ public class ContainersIntegrationBase {
   }
 
   @BeforeAll
+  void beforeAllWrapper() {
+    reset();
+  }
+
   protected void reset() {
     resetBuckets();
     resetRepositories();
