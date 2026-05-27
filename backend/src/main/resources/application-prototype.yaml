@@ -33,7 +33,6 @@ management:
         include: health,info,prometheus
 
 sentry:
-  environment: prototype
   traces-sample-rate: 0.01
 
 logging:

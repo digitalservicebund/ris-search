@@ -21,7 +21,6 @@ swagger:
     description: Public uat server
 
 sentry:
-  environment: uat-backend
   traces-sample-rate: 0.01
   logging:
     minimum-event-level: error

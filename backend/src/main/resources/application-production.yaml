@@ -30,7 +30,6 @@ management:
         include: health,info,prometheus
 
 sentry:
-  environment: production
   traces-sample-rate: 0.01
   logging:
     minimum-event-level: error

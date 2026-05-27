@@ -22,7 +22,6 @@ swagger:
     description: Public staging server
 
 sentry:
-  environment: staging-backend
   traces-sample-rate: 0.01
   logging:
     minimum-event-level: error

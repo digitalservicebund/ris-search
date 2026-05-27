@@ -233,7 +233,6 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: |
-            NUXT_PUBLIC_SENTRY_DSN=${{ secrets.SENTRY_DSN }}
             SENTRY_RELEASE=${{ env.SENTRY_RELEASE }}
           secrets: |
             SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}

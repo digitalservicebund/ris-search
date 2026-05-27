@@ -91,6 +91,7 @@ local:
 
 sentry:
   release: "${SENTRY_RELEASE:default_release}"
+  environment: "${SENTRY_ENVIRONMENT:}"
 
 app:
   security:
