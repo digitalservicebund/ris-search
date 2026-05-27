@@ -5,6 +5,8 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
@@ -22,8 +24,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
-import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 @ExtendWith(MockitoExtension.class)
 class ChangelogServiceTest {
@@ -38,7 +38,7 @@ class ChangelogServiceTest {
 
   @BeforeEach
   void setup() {
-    changelogService = new ChangelogService(bucket, statusService, "status_file") {};
+    changelogService = new ChangelogService(bucket, statusService, "status_file", objectMapper) {};
   }
 
   @Test
@@ -193,7 +193,7 @@ class ChangelogServiceTest {
 
     verify(bucket, never()).getFileAsString("changelogs/2026-07-08T12:00:00.933434Z-norm.json");
 
+    Assertions.assertEquals(1, result.getChanged().size());
     Assertions.assertTrue(result.getChanged().contains("file1"));
-    Assertions.assertFalse(result.getChanged().contains("file2"));
   }
 }

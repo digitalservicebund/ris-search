@@ -2,6 +2,7 @@ package de.bund.digitalservice.ris.search.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectReader;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
@@ -28,7 +29,7 @@ public class ChangelogService {
 
   private final IndexStatusService indexStatusService;
 
-  private final ObjectMapper objectMapper;
+  private final ObjectReader changelogReader;
 
   public ChangelogService(
       ObjectStorage bucket,
@@ -38,7 +39,7 @@ public class ChangelogService {
     this.bucket = bucket;
     this.indexStatusService = indexStatusService;
     this.indexStatusFile = indexStatusFile;
-    this.objectMapper = objectMapper;
+    this.changelogReader = objectMapper.readerFor(Changelog.class);
   }
 
   /**
@@ -85,7 +86,7 @@ public class ChangelogService {
       return Optional.empty();
     } else {
       try {
-        return Optional.of(objectMapper.readValue(changelogContent.get(), Changelog.class));
+        return Optional.of(changelogReader.readValue(changelogContent.get()));
       } catch (JsonProcessingException e) {
         logger.error("Error while parsing changelog file {} in bucket {}", filename, bucket, e);
         return Optional.empty();
