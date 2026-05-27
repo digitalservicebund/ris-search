@@ -33,9 +33,14 @@ export function useSimpleSearchRouteParams() {
 
   // General parameters -------------------------------------
 
-  const query = computed(() =>
-    decodeURIComponent(searchParamToString(route.query.query) ?? ""),
-  );
+  const query = computed(() => {
+    const raw = searchParamToString(route.query.query) ?? "";
+    try {
+      return decodeURIComponent(raw);
+    } catch {
+      return raw;
+    }
+  });
 
   const documentKind = computed(() => {
     const param = searchParamToString(route.query.documentKind);

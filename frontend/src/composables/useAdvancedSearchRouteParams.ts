@@ -43,9 +43,14 @@ export function useAdvancedSearchRouteParams() {
       : ADVANCED_SEARCH_DEFAULTS.documentKind;
   });
 
-  const query = computed(() =>
-    decodeURIComponent(searchParamToString(route.query.q) ?? ""),
-  );
+  const query = computed(() => {
+    const raw = searchParamToString(route.query.q) ?? "";
+    try {
+      return decodeURIComponent(raw);
+    } catch {
+      return raw;
+    }
+  });
 
   const dateFilter = computed<DateFilterValue>(() => {
     const typeParam = searchParamToString(route.query.dateFilterType);
