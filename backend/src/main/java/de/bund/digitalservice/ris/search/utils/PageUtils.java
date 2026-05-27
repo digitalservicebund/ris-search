@@ -1,8 +1,6 @@
 package de.bund.digitalservice.ris.search.utils;
 
 import java.util.regex.Pattern;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.SearchHitSupport;
 import org.springframework.data.elasticsearch.core.SearchHits;
@@ -18,7 +16,7 @@ import org.springframework.data.elasticsearch.core.SearchPage;
  */
 public class PageUtils {
 
-  private static final Logger logger = LogManager.getLogger(PageUtils.class);
+  private PageUtils() {}
 
   public static <T> SearchPage<T> unwrapSearchHits(SearchHits<T> searchResult, Pageable pageable) {
     return SearchHitSupport.searchPageFor(searchResult, pageable);

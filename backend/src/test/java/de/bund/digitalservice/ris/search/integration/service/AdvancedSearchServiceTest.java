@@ -191,7 +191,7 @@ class AdvancedSearchServiceTest extends ContainersIntegrationBase {
     Map<String, List<String>> textMatches = searchHit.getHighlightFields();
     for (List<String> textMatch : textMatches.values()) {
       // we set numOfFragments = 1 so we expect exactly one match per field
-      assertThat(textMatch.size() == 1);
+      assertThat(textMatch.size()).isEqualTo(1);
     }
     return textMatches.entrySet().stream()
         .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().getFirst()));

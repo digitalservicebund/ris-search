@@ -1,7 +1,6 @@
 package de.bund.digitalservice.ris.search.controller.api;
 
 import de.bund.digitalservice.ris.search.config.ApiConfig;
-import de.bund.digitalservice.ris.search.exception.CustomValidationException;
 import de.bund.digitalservice.ris.search.mapper.DocumentResponseMapper;
 import de.bund.digitalservice.ris.search.mapper.SortParamsConverter;
 import de.bund.digitalservice.ris.search.models.api.parameters.NormsSearchParams;
@@ -13,7 +12,6 @@ import de.bund.digitalservice.ris.search.schema.AbstractDocumentSchema;
 import de.bund.digitalservice.ris.search.schema.CollectionSchema;
 import de.bund.digitalservice.ris.search.schema.SearchMemberSchema;
 import de.bund.digitalservice.ris.search.service.AllDocumentsService;
-import de.bund.digitalservice.ris.search.service.ArticleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -44,12 +42,9 @@ public class AllDocumentsSearchController {
   protected static final Logger logger = LogManager.getLogger(AllDocumentsSearchController.class);
 
   private final AllDocumentsService allDocumentsService;
-  private final ArticleService articleService;
 
-  public AllDocumentsSearchController(
-      AllDocumentsService allDocumentsService, ArticleService articleService) {
+  public AllDocumentsSearchController(AllDocumentsService allDocumentsService) {
     this.allDocumentsService = allDocumentsService;
-    this.articleService = articleService;
   }
 
   /**
@@ -65,8 +60,6 @@ public class AllDocumentsSearchController {
    * @param mostRelevantOn Specifies for what date the norms most relevant expression should be
    *     returned.
    * @return A ResponseEntity containing a paginated collection of search results.
-   * @throws CustomValidationException if there are validation errors with the provided input
-   *     parameters.
    */
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   @Operation(
