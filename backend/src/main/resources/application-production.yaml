@@ -1,5 +1,6 @@
 server:
   port: 8080
+  cms-url: https://content-management.ris.bund.de/
 
 spring:
   config:
