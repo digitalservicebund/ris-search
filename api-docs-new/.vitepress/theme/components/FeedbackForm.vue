@@ -5,38 +5,42 @@ const feedback = ref("");
 const errorMessage = ref<string | undefined>();
 const isSent = ref(false);
 
-const emptyMessageError = "Please enter your feedback in the box provided";
-const sendingError =
+const SENDING_ERROR_MESSAGE =
   "There has been an error submitting your feedback. Please try again later.";
 
 const submitFeedback = async () => {
   errorMessage.value = undefined;
   if (!feedback.value.trim()) {
-    errorMessage.value = emptyMessageError;
+    errorMessage.value = "Please enter your feedback in the box provided";
     return;
   }
   try {
     const params = new URLSearchParams({
       text: feedback.value,
-      url: window.location.href,
+      url: globalThis.location.href,
       user_id: "anonymous_api_documentation_user",
     });
     const result = await fetch(
       `https://testphase.rechtsinformationen.bund.de/v1/feedback?${params.toString()}`,
       { method: "GET" },
     );
-    if (!result.ok) throw new Error("Error sending feedback");
+
+    if (!result.ok) {
+      errorMessage.value = SENDING_ERROR_MESSAGE;
+      return;
+    }
+
     isSent.value = true;
   } catch (error) {
     console.error("Error sending survey response:", error);
-    errorMessage.value = sendingError;
+    errorMessage.value = SENDING_ERROR_MESSAGE;
   }
 };
 </script>
 
 <template>
   <div class="feedback-form">
-    <div v-if="isSent" data-test-id="feedback-sent-confirmation">
+    <div v-if="isSent">
       <p><strong>Thank you for your Feedback!</strong></p>
     </div>
     <div v-else>
@@ -47,28 +51,17 @@ const submitFeedback = async () => {
       </p>
       <div class="feedback-form__field">
         <textarea
-          id="feedback-message"
           v-model="feedback"
           placeholder="Enter feedback"
           rows="6"
           :class="{ 'feedback-form__textarea--invalid': errorMessage }"
           @input="errorMessage = undefined"
         />
-        <small
-          v-if="errorMessage"
-          data-test-id="feedback-error-message"
-          class="feedback-form__error"
-        >
+        <small v-if="errorMessage" class="feedback-form__error">
           {{ errorMessage }}
         </small>
       </div>
-      <button
-        data-test-id="submit-feedback-button"
-        class="feedback-form__submit"
-        @click="submitFeedback"
-      >
-        Send Feedback
-      </button>
+      <button class="RisButton" @click="submitFeedback">Send Feedback</button>
     </div>
   </div>
 </template>
@@ -93,7 +86,7 @@ const submitFeedback = async () => {
 .feedback-form__field textarea {
   width: 100%;
   padding: 0.5rem;
-  border: 2px solid var(--vp-c-brand-1, #3451b2);
+  border: 2px solid var(--vp-c-brand-1);
   border-radius: 4px;
   font-family: inherit;
   font-size: 1rem;
@@ -108,24 +101,10 @@ const submitFeedback = async () => {
 }
 
 .feedback-form__textarea--invalid {
-  border-color: var(--vp-c-danger-1, #c00) !important;
+  border-color: var(--vp-c-danger-1) !important;
 }
 
 .feedback-form__error {
-  color: var(--vp-c-danger-1, #c00);
-}
-
-.feedback-form__submit {
-  padding: 0.5rem 1.25rem;
-  background: var(--vp-c-brand-1, #3451b2);
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  font-size: 1rem;
-  cursor: pointer;
-}
-
-.feedback-form__submit:hover {
-  background: var(--vp-c-brand-2, #3a5ccc);
+  color: var(--vp-c-danger-1);
 }
 </style>
