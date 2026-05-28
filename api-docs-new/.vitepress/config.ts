@@ -35,22 +35,11 @@ export default defineConfig({
     ],
   ],
   themeConfig: {
-    siteTitle: "RIS API Docs",
+    siteTitle: "German Legal Data Docs",
     nav: [
-      { text: "Get Started", link: "/get-started/" },
-      { text: "Standards", link: "/standards/" },
       {
-        text: "Guides",
-        items: [
-          { text: "Formats", link: "/guides/formats/" },
-          { text: "Pagination", link: "/guides/pagination/" },
-          { text: "Filters", link: "/guides/filters/" },
-          { text: "Rate Limiting", link: "/guides/rate-limiting/" },
-          { text: "Error Codes", link: "/guides/error-codes/" },
-        ],
+        component: "SwaggerButton",
       },
-      { text: "Changelog", link: "/changelog/" },
-      { text: "Feedback", link: "/feedback/" },
     ],
     sidebar: [
       {
