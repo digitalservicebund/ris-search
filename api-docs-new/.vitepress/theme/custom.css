@@ -14,16 +14,6 @@
   --vp-button-brand-hover-bg: #336f91;
 }
 
-/*--color-blue-100: #f2f6f8;*/
-/*--color-blue-200: #ecf1f4;*/
-/*--color-blue-300: #dce8ef;*/
-/*--color-blue-400: #ccdbe4;*/
-/*--color-blue-500: #b3c9d6;*/
-/*--color-blue-600: #6693ad;*/
-/*--color-blue-700: #336f91;*/
-/*--color-blue-800: #004b76;*/
-/*--color-blue-900: #003350;*/
-
 :is(a, button).RisButton {
   display: inline-block;
   text-align: center;
