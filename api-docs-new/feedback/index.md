@@ -16,4 +16,3 @@ We are particularly interested in your feedback on the following points:
 - What do you find particularly helpful about the current documentation?
 - Where do you see potential for improvement?
 - What additional information or examples would be helpful for you?
-
