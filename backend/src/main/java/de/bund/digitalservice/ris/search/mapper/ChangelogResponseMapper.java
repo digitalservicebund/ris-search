@@ -19,22 +19,17 @@ public class ChangelogResponseMapper {
    * Maps A changelog to a ChangelogResponse based on the documentKind.
    *
    * @param changelog Changelog to me mapped
-   * @param baseUrl baseUrl of the ris namespace
    * @param documentKind documentKind to apply document specific mapping logic
    * @return ChangelogResponse
    */
-  public static ChangelogResponse mapChangelog(
-      Changelog changelog, String baseUrl, DocumentKind documentKind) {
+  public static ChangelogResponse mapChangelog(Changelog changelog, DocumentKind documentKind) {
     return switch (documentKind) {
-      case LEGISLATION -> mapNorms(changelog, baseUrl);
-      case CASE_LAW ->
-          mapDocument(changelog, baseUrl, ApiConfig.Paths.CASELAW, JsonldTypes.DECISION);
-      case LITERATURE ->
-          mapDocument(changelog, baseUrl, ApiConfig.Paths.LITERATURE, JsonldTypes.LITERATURE);
+      case LEGISLATION -> mapNorms(changelog);
+      case CASE_LAW -> mapDocument(changelog, ApiConfig.Paths.CASELAW, JsonldTypes.DECISION);
+      case LITERATURE -> mapDocument(changelog, ApiConfig.Paths.LITERATURE, JsonldTypes.LITERATURE);
       case ADMINISTRATIVE_DIRECTIVE ->
           mapDocument(
               changelog,
-              baseUrl,
               ApiConfig.Paths.ADMINISTRATIVE_DIRECTIVE,
               JsonldTypes.ADMINISTRATIVE_DIRECTIVE);
     };
@@ -45,10 +40,9 @@ public class ChangelogResponseMapper {
    * expressions.
    *
    * @param changelog Changelog to me mapped
-   * @param baseUrl baseUrl of the ris namespace
    * @return ChangelogResponse with all changes by expression
    */
-  private static ChangelogResponse mapNorms(Changelog changelog, String baseUrl) {
+  private static ChangelogResponse mapNorms(Changelog changelog) {
     String apiUrl = ApiConfig.Paths.LEGISLATION + "/";
     Set<ChangelogDocument> changed =
         changelog.getChanged().stream()
@@ -74,7 +68,7 @@ public class ChangelogResponseMapper {
                         .stream())
             .collect(Collectors.toSet());
 
-    return new ChangelogResponse(changed, deleted, changelog.isChangeAll(), baseUrl);
+    return new ChangelogResponse(changed, deleted, changelog.isChangeAll());
   }
 
   /**
@@ -82,12 +76,10 @@ public class ChangelogResponseMapper {
    * to a set of affected expressions.
    *
    * @param changelog Changelog to me mapped
-   * @param baseUrl baseUrl of the ris namespace
    * @param type String representation of the @type of a document
    * @return ChangelogResponse with all changes by expression
    */
-  private static ChangelogResponse mapDocument(
-      Changelog changelog, String baseUrl, String apiPath, String type) {
+  private static ChangelogResponse mapDocument(Changelog changelog, String apiPath, String type) {
     var changed =
         changelog.getChanged().stream()
             .map(
@@ -103,6 +95,6 @@ public class ChangelogResponseMapper {
                         apiPath + "/" + (path.substring(0, path.indexOf("/"))), type))
             .collect(Collectors.toSet());
 
-    return new ChangelogResponse(changed, deleted, changelog.isChangeAll(), baseUrl);
+    return new ChangelogResponse(changed, deleted, changelog.isChangeAll());
   }
 }

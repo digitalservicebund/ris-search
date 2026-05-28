@@ -43,7 +43,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 /**
  * Controller for managing administrative directives. It provides endpoints to retrieve, search,
@@ -222,10 +221,8 @@ public class AdministrativeDirectiveController {
     var changelog =
         changelogService.getIndexedChangesBetween(
             params.getFrom().toInstant(), params.getTo().toInstant());
-    var baseUrl = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
 
     return ResponseEntity.ok(
-        ChangelogResponseMapper.mapChangelog(
-            changelog, baseUrl, DocumentKind.ADMINISTRATIVE_DIRECTIVE));
+        ChangelogResponseMapper.mapChangelog(changelog, DocumentKind.ADMINISTRATIVE_DIRECTIVE));
   }
 }

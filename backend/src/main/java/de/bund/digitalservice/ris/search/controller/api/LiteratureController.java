@@ -46,7 +46,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 /** Controller responsible for handling literature-related endpoints. */
 @Tag(name = "Literature")
@@ -237,8 +236,7 @@ public class LiteratureController {
         changelogService.getIndexedChangesBetween(
             params.getFrom().toInstant(), params.getTo().toInstant());
 
-    var baseUrl = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
     return ResponseEntity.ok(
-        ChangelogResponseMapper.mapChangelog(changelog, baseUrl, DocumentKind.LITERATURE));
+        ChangelogResponseMapper.mapChangelog(changelog, DocumentKind.LITERATURE));
   }
 }

@@ -38,7 +38,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 /**
  * CaseLawController provides endpoints for managing and retrieving case law documentation in
@@ -285,8 +284,7 @@ public class CaseLawController {
     var changelog =
         changelogService.getIndexedChangesBetween(
             params.getFrom().toInstant(), params.getTo().toInstant());
-    var baseUrl = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
     return ResponseEntity.ok(
-        ChangelogResponseMapper.mapChangelog(changelog, baseUrl, DocumentKind.CASE_LAW));
+        ChangelogResponseMapper.mapChangelog(changelog, DocumentKind.CASE_LAW));
   }
 }

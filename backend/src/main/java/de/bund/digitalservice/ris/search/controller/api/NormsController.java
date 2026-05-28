@@ -54,7 +54,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 /** Controller class for handling REST API requests for legislation. */
 @RestController
@@ -678,9 +677,8 @@ public class NormsController {
     var changelog =
         changelogService.getIndexedChangesBetween(
             params.getFrom().toInstant(), params.getTo().toInstant());
-    var baseUrl = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
     return ResponseEntity.ok(
-        ChangelogResponseMapper.mapChangelog(changelog, baseUrl, DocumentKind.LEGISLATION));
+        ChangelogResponseMapper.mapChangelog(changelog, DocumentKind.LEGISLATION));
   }
 
   /**
