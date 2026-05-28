@@ -5,12 +5,14 @@
     "dev": "vitepress dev",
     "build": "vitepress build",
     "preview": "vitepress preview",
-    "style:check": "prettier --check . && oxlint --max-warnings=0",
-    "style:fix": "prettier . --write --ignore-unknown && oxlint --fix"
+    "fmt": "oxfmt",
+    "lint": "oxlint --fix",
+    "style:check": "oxfmt --check && oxlint --max-warnings=0",
+    "style:fix": "pnpm fmt && pnpm lint"
   },
   "devDependencies": {
+    "oxfmt": "0.50.0",
     "oxlint": "1.64.0",
-    "prettier": "3.8.3",
     "vitepress": "1.6.4",
     "vue": "^3.5.34"
   },
