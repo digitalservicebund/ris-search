@@ -70,7 +70,7 @@ class AdministrativeDirectiveIndexSyncJobTest extends ContainersIntegrationBase 
     bucket.save("changelogs/2025-07-12T13:34:34.392285Z.json", mapper.writeValueAsString(log));
 
     // previous statefile
-    IndexingState state = new IndexingState("2025-07-12T13:34:34.392285Z.json", null, null);
+    IndexingState state = new IndexingState("2025-07-12T13:34:34.392285Z.json", null);
     portalBucket.save(
         AdministrativeDirectiveIndexSyncJob.STATUS_FILENAME, mapper.writeValueAsString(state));
 

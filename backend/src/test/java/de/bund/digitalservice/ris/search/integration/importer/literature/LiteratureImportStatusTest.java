@@ -9,7 +9,6 @@ import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
 import de.bund.digitalservice.ris.search.service.IndexStatusService;
 import de.bund.digitalservice.ris.search.service.IndexingState;
 import de.bund.digitalservice.ris.search.service.LiteratureIndexSyncJob;
-import java.time.Instant;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -35,8 +34,7 @@ class LiteratureImportStatusTest extends ContainersIntegrationBase {
 
   @BeforeEach
   void setUp() {
-    String oldTimestamp = "2000-01-01T00:00:00Z";
-    IndexingState indexingState = new IndexingState(null, null, oldTimestamp);
+    IndexingState indexingState = new IndexingState(null, null);
     indexStatusService.saveStatus(LiteratureIndexSyncJob.LITERATURE_STATUS_FILENAME, indexingState);
   }
 
@@ -48,19 +46,5 @@ class LiteratureImportStatusTest extends ContainersIntegrationBase {
     IndexingState result =
         indexStatusService.loadStatus(LiteratureIndexSyncJob.LITERATURE_STATUS_FILENAME);
     assertThat(result.lastProcessedChangelogFile()).isNotNull();
-  }
-
-  @Test
-  void testLocking() throws ObjectStoreServiceException {
-    IndexingState state =
-        indexStatusService
-            .loadStatus(LiteratureIndexSyncJob.LITERATURE_STATUS_FILENAME)
-            .withStartTime(Instant.now().toString());
-    boolean locked =
-        indexStatusService.lockIndex(LiteratureIndexSyncJob.LITERATURE_STATUS_FILENAME, state);
-    assertThat(locked).isTrue();
-    IndexingState result =
-        indexStatusService.loadStatus(LiteratureIndexSyncJob.LITERATURE_STATUS_FILENAME);
-    assertThat(state.startTime()).isEqualTo(result.lockTime());
   }
 }

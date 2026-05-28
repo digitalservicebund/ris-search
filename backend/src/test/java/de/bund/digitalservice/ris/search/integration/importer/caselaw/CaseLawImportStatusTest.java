@@ -9,7 +9,6 @@ import de.bund.digitalservice.ris.search.service.IndexStatusService;
 import de.bund.digitalservice.ris.search.service.IndexingState;
 import de.bund.digitalservice.ris.search.utils.CaseLawLdmlTemplateUtils;
 import java.io.IOException;
-import java.time.Instant;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,8 +43,7 @@ class CaseLawImportStatusTest extends ContainersIntegrationBase {
         throw new RuntimeException(e);
       }
     }
-    String oldTimestamp = "2000-01-01T00:00:00Z";
-    IndexingState indexingState = new IndexingState(null, null, oldTimestamp);
+    IndexingState indexingState = new IndexingState(null, null);
     indexStatusService.saveStatus(CaseLawIndexSyncJob.CASELAW_STATUS_FILENAME, indexingState);
   }
 
@@ -57,19 +55,5 @@ class CaseLawImportStatusTest extends ContainersIntegrationBase {
     IndexingState result =
         indexStatusService.loadStatus(CaseLawIndexSyncJob.CASELAW_STATUS_FILENAME);
     Assertions.assertNotNull(result.lastProcessedChangelogFile());
-  }
-
-  @Test
-  void testLocking() throws ObjectStoreServiceException {
-    IndexingState state =
-        indexStatusService
-            .loadStatus(CaseLawIndexSyncJob.CASELAW_STATUS_FILENAME)
-            .withStartTime(Instant.now().toString());
-    boolean locked =
-        indexStatusService.lockIndex(CaseLawIndexSyncJob.CASELAW_STATUS_FILENAME, state);
-    Assertions.assertTrue(locked);
-    IndexingState result =
-        indexStatusService.loadStatus(CaseLawIndexSyncJob.CASELAW_STATUS_FILENAME);
-    Assertions.assertEquals(state.startTime(), result.lockTime());
   }
 }
