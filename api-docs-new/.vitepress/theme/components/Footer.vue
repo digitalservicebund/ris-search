@@ -53,6 +53,7 @@ import bmjvLogo from "../assets/images/bmjv_logo.svg";
 .container {
   display: flex;
   flex-direction: column;
+  font-size: small;
 }
 
 .branding {

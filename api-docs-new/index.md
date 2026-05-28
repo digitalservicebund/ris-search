@@ -5,10 +5,9 @@ hero:
   tagline: The application programming interface (API) provides free access to comprehensive federal legal information provided by the Federal Ministry of Justice and the Federal Office of Justice.
   actions:
     - theme: brand
-      text: API Reference (Swagger)
+      text: Test the API in Swagger
       link: https://docs.rechtsinformationen.bund.de/swagger-ui/index.html
 ---
-
 Our API offers you simple and efficient access to an extensive collection of legal data.
 Analyze trends or integrate legal texts into your applications.
 
@@ -35,3 +34,7 @@ We plan to make the bulk downloads available as XML soon. You can then:
 ### Planned feature: Versions of norms
 
 We are continuously working on expanding the features of our API to provide you with even more comprehensive access to legal information. An important part of our future development is the versioning of norms.
+
+---
+
+<Footer/>
