@@ -1,14 +1,14 @@
 import DefaultTheme from "vitepress/theme";
 import type { Theme } from "vitepress";
 import Layout from "./Layout.vue";
-import ActionButton from "./components/ActionButton.vue";
+import SwaggerButton from "./components/SwaggerButton.vue";
 import Footer from "./components/Footer.vue";
-import './custom.css'
+import "./custom.css";
 
 export default {
   extends: DefaultTheme,
   enhanceApp({ app }) {
-    app.component("ActionButton", ActionButton);
+    app.component("SwaggerButton", SwaggerButton);
     app.component("Footer", Footer);
   },
   Layout,

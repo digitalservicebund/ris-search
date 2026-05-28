@@ -2,7 +2,7 @@
 import DefaultTheme from "vitepress/theme";
 import FeedbackForm from "./components/FeedbackForm.vue";
 import Footer from "./components/Footer.vue";
-import ActionButton from "./components/ActionButton.vue";
+import SwaggerButton from "./components/SwaggerButton.vue";
 
 const { Layout } = DefaultTheme;
 </script>
@@ -10,7 +10,7 @@ const { Layout } = DefaultTheme;
 <template>
   <Layout>
     <template #sidebar-nav-after>
-      <ActionButton text="Test the API in Swagger" href="https://docs.rechtsinformationen.bund.de/swagger-ui/index.html" />
+      <SwaggerButton />
     </template>
     <template #doc-before>
       <div class="vp-doc">
@@ -38,13 +38,11 @@ const { Layout } = DefaultTheme;
         </div>
       </div>
     </template>
-    <template #doc-footer-before>
+    <template #doc-footer-before> </template>
+    <template #doc-after>
       <div class="vp-doc feedback">
-        <hr />
         <FeedbackForm />
       </div>
-    </template>
-    <template #doc-after>
       <div class="vp-doc footer">
         <Footer />
       </div>
@@ -54,7 +52,7 @@ const { Layout } = DefaultTheme;
 
 <style scoped>
 .feedback {
-  margin-top: 2rem;
+  margin-top: 6rem;
   margin-bottom: 2rem;
 }
 
