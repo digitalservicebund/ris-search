@@ -2,12 +2,16 @@
 import DefaultTheme from "vitepress/theme";
 import FeedbackForm from "./components/FeedbackForm.vue";
 import Footer from "./components/Footer.vue";
+import ActionButton from "./components/ActionButton.vue";
 
 const { Layout } = DefaultTheme;
 </script>
 
 <template>
   <Layout>
+    <template #sidebar-nav-after>
+      <ActionButton text="Test the API in Swagger" href="https://docs.rechtsinformationen.bund.de/swagger-ui/index.html" />
+    </template>
     <template #doc-before>
       <div class="vp-doc">
         <div class="warning custom-block">
@@ -21,7 +25,7 @@ const { Layout } = DefaultTheme;
         </div>
       </div>
     </template>
-    <template #home-hero-before>
+    <template #home-hero-info-before>
       <div class="vp-doc">
         <div class="warning custom-block">
           <p class="custom-block-title">This is a trial service.</p>
