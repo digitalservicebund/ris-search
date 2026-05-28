@@ -1,13 +1,10 @@
 FROM node:24.14.1-alpine3.22@sha256:4f33c7804fa7775b87875f512e25e515692210bfdeafd715eb8bc441c364e2f6 AS builder
-RUN apk update && apk upgrade
 # Needed for vitepress to calulcate the last updated date for files
 RUN apk add git
 RUN corepack enable
 WORKDIR /app
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml env.d.ts tailwind.config.js ./
+COPY . ./
 RUN pnpm ci
-COPY .vitepress ./.vitepress
-COPY docs ./docs
 RUN pnpm build
 
 FROM nginxinc/nginx-unprivileged:1.31.1-alpine3.23@sha256:8122337ed6c475bb486bc9340da453d4599f225e6b920ff0d92ca2267486b9b5
