@@ -1,6 +1,60 @@
 :root {
-    --vp-c-brand-1: #004b76;
-    --vp-c-brand-2: #336f91;
-    --vp-c-brand-3: #004b76;
-    --vp-c-brand-soft: #004b76;
+  --vp-c-brand-1: #004b76;
+  --vp-c-brand-2: #336f91;
+  --vp-c-brand-3: #004b76;
+  --vp-c-brand-soft: #ccdbe4;
+}
+
+.dark {
+  --vp-c-brand-1: #ccdbe4;
+  --vp-c-brand-2: #ecf1f4;
+  --vp-c-brand-3: #004b76;
+  --vp-c-brand-soft: #336f91;
+
+  --vp-button-brand-hover-bg: #336f91;
+}
+
+/*--color-blue-100: #f2f6f8;*/
+/*--color-blue-200: #ecf1f4;*/
+/*--color-blue-300: #dce8ef;*/
+/*--color-blue-400: #ccdbe4;*/
+/*--color-blue-500: #b3c9d6;*/
+/*--color-blue-600: #6693ad;*/
+/*--color-blue-700: #336f91;*/
+/*--color-blue-800: #004b76;*/
+/*--color-blue-900: #003350;*/
+
+:is(a, button).RisButton {
+  display: inline-block;
+  text-align: center;
+  font-weight: 600;
+  white-space: nowrap;
+  text-decoration: none;
+  transition:
+    color 0.25s,
+    border-color 0.25s,
+    background-color 0.25s;
+  border-radius: 4px;
+  padding: 0 20px;
+  line-height: 38px;
+  font-size: 14px;
+  border-color: var(--vp-button-brand-border);
+  color: var(--vp-button-brand-text);
+  background-color: var(--vp-button-brand-bg);
+}
+
+:is(a, button).RisButton:active {
+  transition:
+    color 0.1s,
+    border-color 0.1s,
+    background-color 0.1s;
+  border-color: var(--vp-button-brand-active-border);
+  color: var(--vp-button-brand-active-text);
+  background-color: var(--vp-button-brand-active-bg);
+}
+
+:is(a, button).RisButton:hover {
+  border-color: var(--vp-button-brand-hover-border);
+  color: var(--vp-button-brand-hover-text);
+  background-color: var(--vp-button-brand-hover-bg);
 }
