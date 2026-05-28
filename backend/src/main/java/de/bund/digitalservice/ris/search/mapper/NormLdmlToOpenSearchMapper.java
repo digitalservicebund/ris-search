@@ -547,10 +547,7 @@ public class NormLdmlToOpenSearchMapper {
 
     return Article.builder()
         .id(expressionEli + "/" + eIdAttribute.getTextContent())
-        .eId(
-            Optional.ofNullable(node.getAttributes().getNamedItem("eId"))
-                .map(Node::getTextContent)
-                .orElse(null))
+        .eId(eIdAttribute.getTextContent())
         .workEli(workEli)
         .expressionEli(expressionEli)
         .text(cleanText(node.getTextContent()))
