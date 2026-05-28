@@ -33,9 +33,8 @@ class NormsServiceTest extends ContainersIntegrationBase {
   @Autowired private NormsRepository repository;
 
   @BeforeEach
-  void reset() {
-    clearRepositoryData();
-    resetRepositories();
+  void setup() {
+    reset();
   }
 
   @Test
@@ -127,18 +126,19 @@ class NormsServiceTest extends ContainersIntegrationBase {
     SearchPage<Norm> result =
         normsService.simpleSearchNorms(universalSearchParams, normsSearchParams, pageable);
     assertThat(result.getContent()).hasSize(1);
-    var searchHits = result.getContent().getFirst().getInnerHits().get("articles").getSearchHits();
+    var searchHits =
+        result.getContent().getFirst().getInnerHits().get("top_three_articles").getSearchHits();
     assertThat(searchHits).hasSize(2);
 
-    var textHighlight = searchHits.getFirst().getHighlightField("articles.text");
+    var textHighlight = searchHits.getFirst().getHighlightField("text");
     assertThat(textHighlight).hasSize(1);
     assertThat(textHighlight.getFirst()).isEqualTo("example <mark>text</mark> 1");
 
-    var textHighlight2 = searchHits.get(1).getHighlightField("articles.text");
+    var textHighlight2 = searchHits.get(1).getHighlightField("text");
     assertThat(textHighlight).hasSize(1);
     assertThat(textHighlight2.getFirst()).isEqualTo("example <mark>text</mark> 2");
 
     Article firstArticle = (Article) searchHits.getFirst().getContent();
-    assertThat(firstArticle.name()).contains(articleName);
+    assertThat(firstArticle.getName()).contains(articleName);
   }
 }

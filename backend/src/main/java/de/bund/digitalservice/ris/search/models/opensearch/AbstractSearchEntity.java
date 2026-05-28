@@ -6,4 +6,4 @@ package de.bund.digitalservice.ris.search.models.opensearch;
  */
 @SuppressWarnings("javaarchitecture:S7027")
 public sealed interface AbstractSearchEntity
-    permits AdministrativeDirective, CaseLawDocumentationUnit, Literature, Norm {}
+    permits AdministrativeDirective, CaseLawDocumentationUnit, Literature, Norm, Article {}

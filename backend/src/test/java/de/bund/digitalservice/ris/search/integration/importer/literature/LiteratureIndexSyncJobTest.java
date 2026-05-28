@@ -28,7 +28,7 @@ class LiteratureIndexSyncJobTest extends ContainersIntegrationBase {
   @Autowired LiteratureRepository repository;
 
   @BeforeEach
-  void reset() {
+  void setup() {
     bucket.getAllKeys().forEach(bucket::delete);
     portalBucket.getAllKeys().forEach(portalBucket::delete);
     literatureRepository.deleteAll();

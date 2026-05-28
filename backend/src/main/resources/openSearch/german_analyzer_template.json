@@ -9,10 +9,10 @@
             "tokenizer": "standard",
             "filter": [
               "lowercase",
+              "german_normalization",
               "german_stemmer",
               "court_type_synonyms",
-              "golem_thesaurus_synonyms",
-              "german_normalization"
+              "golem_thesaurus_synonyms"
             ],
             "char_filter": [
               "replace_article_character",
@@ -24,11 +24,11 @@
             "tokenizer": "standard",
             "filter": [
               "lowercase",
+              "german_normalization",
               "german_stemmer",
               "court_type_synonyms",
               "golem_thesaurus_synonyms",
-              "german_decompounder",
-              "german_normalization"
+              "german_decompounder"
             ],
             "char_filter": [
               "replace_article_character",

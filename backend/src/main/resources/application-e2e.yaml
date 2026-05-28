@@ -6,3 +6,4 @@ opensearch:
   caselaws-index-name: caselaws_e2e
   literature-index-name: literature_e2e
   documents-alias-name: documents_e2e
+  articles-index-name: articles_e2e

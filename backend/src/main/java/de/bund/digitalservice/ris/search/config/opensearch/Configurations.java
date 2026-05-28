@@ -18,6 +18,8 @@ public class Configurations {
 
   private String password;
 
+  private String articlesIndexName;
+
   private String normsIndexName;
 
   private String caseLawsIndexName;

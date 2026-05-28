@@ -35,7 +35,7 @@ public class SortingTestArguments {
 
     int caseLawSize = CaseLawTestData.allDocuments.size();
     int literatureSize = LiteratureTestData.allDocuments.size();
-    int normsSize = NormsTestData.allDocuments.size();
+    int normsSize = NormsTestData.allNorms.size();
     int administrativeDirectiveSize = AdministrativeDirectiveTestData.allDocuments.size();
     int combinedSize = caseLawSize + literatureSize + normsSize + administrativeDirectiveSize;
 
@@ -87,7 +87,7 @@ public class SortingTestArguments {
                 .toList());
     List<String> normsDates =
         new ArrayList<>(
-            NormsTestData.allDocuments.stream()
+            NormsTestData.allNorms.stream()
                 .map(d -> d.getNormsDate().toString())
                 .sorted()
                 .toList());

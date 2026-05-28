@@ -14,7 +14,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.SearchPage;
-import org.springframework.data.elasticsearch.core.document.Document;
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
 import org.springframework.stereotype.Service;
 
@@ -25,18 +24,18 @@ public class AllDocumentsService {
   private final ElasticsearchOperations operations;
   private final SimpleSearchQueryBuilder simpleSearchQueryBuilder;
   private final IndexCoordinates allDocumentsIndex;
-  private final PageUtils pageUtils;
+  private final NormsService normsService;
 
   /** Constructor for AllDocumentsService. */
   public AllDocumentsService(
       ElasticsearchOperations operations,
       Configurations configurations,
-      PageUtils pageUtils,
-      SimpleSearchQueryBuilder simpleSearchQueryBuilder) {
+      SimpleSearchQueryBuilder simpleSearchQueryBuilder,
+      NormsService normsService) {
     this.operations = operations;
     allDocumentsIndex = IndexCoordinates.of(configurations.getDocumentsAliasName());
-    this.pageUtils = pageUtils;
     this.simpleSearchQueryBuilder = simpleSearchQueryBuilder;
+    this.normsService = normsService;
   }
 
   /**
@@ -67,7 +66,11 @@ public class AllDocumentsService {
 
     NativeSearchQuery query = simpleSearchQueryBuilder.buildQuery(searchTypes, params, pageable);
 
-    SearchHits<Document> search = operations.search(query, Document.class, allDocumentsIndex);
-    return pageUtils.unwrapMixedSearchHits(search, pageable);
+    SearchHits<AbstractSearchEntity> documentHits =
+        operations.search(query, AbstractSearchEntity.class, allDocumentsIndex);
+    normsService.populateNormSearchHitsWithArticleTextMatches(
+        documentHits, params.getSearchTerm(), false);
+
+    return PageUtils.unwrapSearchHits(documentHits, pageable);
   }
 }

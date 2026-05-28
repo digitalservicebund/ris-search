@@ -9,6 +9,7 @@ import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.models.opensearch.TableOfContentsItem;
 import de.bund.digitalservice.ris.search.utils.LdmlTemporalData;
 import de.bund.digitalservice.ris.search.utils.XmlDocument;
+import jakarta.xml.bind.ValidationException;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -20,6 +21,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 import one.util.streamex.StreamEx;
 import org.apache.commons.lang3.StringUtils;
@@ -150,10 +152,13 @@ public class NormLdmlToOpenSearchMapper {
 
       final String officialAbbreviation = getOfficialAbbreviationByXmlDocument(xmlDocument);
 
+      String indexedAt = Instant.now().toString();
+
       List<Article> articles =
-          getArticlesByXmlDocument(xmlDocument, attachments, officialAbbreviation);
-      List<String> articleNames = articles.stream().map(Article::name).toList();
-      List<String> articleTexts = articles.stream().map(Article::text).toList();
+          getArticlesByXmlDocument(
+              xmlDocument, attachments, officialAbbreviation, workEli, expressionEli, indexedAt);
+      List<String> articleNames = articles.stream().map(Article::getName).toList();
+      List<String> articleTexts = articles.stream().map(Article::getText).toList();
       String fullCitation = xmlDocument.getElementByXpath(X_PATH_FULL_CITATION);
       String officialToc =
           Optional.ofNullable(xmlDocument.getElementByXpath(X_PATH_OFFICIAL_TOC))
@@ -193,7 +198,7 @@ public class NormLdmlToOpenSearchMapper {
               .articleNames(articleNames)
               .articleTexts(articleTexts)
               .officialFootNotes(getOfficialFootNotes(xmlDocument, attachments))
-              .indexedAt(Instant.now().toString())
+              .indexedAt(indexedAt)
               .build());
     } catch (Exception e) {
       logger.warn("Error to create Norms from XML content.", e);
@@ -384,7 +389,13 @@ public class NormLdmlToOpenSearchMapper {
   }
 
   private static List<Article> getArticlesByXmlDocument(
-      XmlDocument xmlDocument, List<Attachment> attachments, String officialAbbreviation) {
+      XmlDocument xmlDocument,
+      List<Attachment> attachments,
+      String officialAbbreviation,
+      String workEli,
+      String expressionEli,
+      String indexedAt)
+      throws ValidationException {
 
     NodeList nodes = null;
     try {
@@ -401,56 +412,31 @@ public class NormLdmlToOpenSearchMapper {
     Map<String, TimeInterval> temporalGroupsWithDates =
         LdmlTemporalData.getTemporalDataWithDatesMapping(xmlDocument);
 
-    getNodeAsArticle(xmlDocument, X_PATH_PREAMBLE_FORMULA, EINGANGSFORMEL).ifPresent(articles::add);
+    Optional<Node> preambleFormulaNode =
+        xmlDocument.getFirstMatchedNodeByXpath(X_PATH_PREAMBLE_FORMULA);
+    if (preambleFormulaNode.isPresent()) {
+      articles.add(
+          getNodeAsArticle(
+              preambleFormulaNode.get(), EINGANGSFORMEL, indexedAt, workEli, expressionEli));
+    }
     for (int i = 0; i < nodes.getLength(); i++) {
-      Node articleNode = nodes.item(i);
-      try {
-        var articleXml = new XmlDocument(articleNode);
-        String marker = cleanText(articleXml.getSimpleElementByXpath(X_PATH_ARTICLE_NUM));
-        final var headingNode = articleXml.getFirstMatchedNodeByXpath(X_PATH_ARTICLE_HEADING);
-        String heading =
-            headingNode.map(node -> cleanText(XmlDocument.extractDirectChildText(node))).orElse("");
-        String period = articleNode.getAttributes().getNamedItem("period").getTextContent();
-        String eId = articleNode.getAttributes().getNamedItem("eId").getTextContent();
-        String guid = articleNode.getAttributes().getNamedItem("GUID").getTextContent();
-        NodeList paragraphNodes = articleXml.getNodesByXpath(X_PATH_ARTICLE_PARAGRAPHS);
-        String text = "";
-        for (int j = 0; j < paragraphNodes.getLength(); j++) {
-          Node paragraphNode = paragraphNodes.item(j);
-          String paragraphText = NormParagraphToTextMapper.extractTextFromParagraph(paragraphNode);
-          text = text.concat(paragraphText).concat(" ");
-        }
-
-        LocalDate entryIntoForceDate = null;
-        LocalDate expiryDate = null;
-
-        TimeInterval timeInterval = temporalGroupsWithDates.get(period);
-        if (timeInterval != null) {
-          entryIntoForceDate = toLocalDate(timeInterval.start());
-          expiryDate = toLocalDate(timeInterval.end());
-        }
-
-        final String articleHeader = buildArticleHeader(marker, heading);
-
-        final @Nullable String searchKeyword = getSearchKeyword(marker, officialAbbreviation);
-
-        articles.add(
-            Article.builder()
-                .guid(guid)
-                .eId(eId)
-                .name(articleHeader)
-                .text(cleanText(text))
-                .entryIntoForceDate(entryIntoForceDate)
-                .expiryDate(expiryDate)
-                .searchKeyword(searchKeyword)
-                .build());
-      } catch (Exception e) {
-        logger.warn("Error parsing xml", e);
-      }
+      getArticleNodeAsArticle(
+              nodes.item(i),
+              temporalGroupsWithDates,
+              officialAbbreviation,
+              workEli,
+              expressionEli,
+              indexedAt)
+          .ifPresent(articles::add);
     }
 
-    getNodeAsArticle(xmlDocument, X_PATH_CONCLUSIONS_FORMULA, SCHLUSSFORMEL)
-        .ifPresent(articles::add);
+    Optional<Node> conclusionsFormulaNode =
+        xmlDocument.getFirstMatchedNodeByXpath(X_PATH_CONCLUSIONS_FORMULA);
+    if (conclusionsFormulaNode.isPresent()) {
+      articles.add(
+          getNodeAsArticle(
+              conclusionsFormulaNode.get(), SCHLUSSFORMEL, indexedAt, workEli, expressionEli));
+    }
 
     var attachmentsAsArticles =
         attachments.stream()
@@ -461,9 +447,13 @@ public class NormLdmlToOpenSearchMapper {
                           .filter(StringUtils::isNotBlank)
                           .collect(Collectors.joining(" "));
                   return Article.builder()
-                      .name(name)
+                      .id(expressionEli + "/" + a.eId())
                       .eId(a.eId())
+                      .expressionEli(expressionEli)
+                      .workEli(workEli)
                       .text(a.textContent())
+                      .name(name)
+                      .indexedAt(indexedAt)
                       .manifestationEli(a.manifestationEli())
                       .build();
                 })
@@ -489,20 +479,81 @@ public class NormLdmlToOpenSearchMapper {
     return "%s %s".formatted(marker, officialAbbreviation);
   }
 
-  private static Optional<Article> getNodeAsArticle(
-      XmlDocument xmlDocument, String path, String name) {
-    return xmlDocument
-        .getFirstMatchedNodeByXpath(path)
-        .map(
-            node ->
-                Article.builder()
-                    .eId(
-                        Optional.ofNullable(node.getAttributes().getNamedItem("eId"))
-                            .map(Node::getTextContent)
-                            .orElse(null))
-                    .text(cleanText(node.getTextContent()))
-                    .name(cleanText(name))
-                    .build());
+  private static Optional<Article> getArticleNodeAsArticle(
+      Node articleNode,
+      Map<String, TimeInterval> temporalGroupsWithDates,
+      String officialAbbreviation,
+      String workEli,
+      String expressionEli,
+      String indexedAt) {
+    try {
+      var articleXml = new XmlDocument(articleNode);
+      String marker = cleanText(articleXml.getSimpleElementByXpath(X_PATH_ARTICLE_NUM));
+      final var headingNode = articleXml.getFirstMatchedNodeByXpath(X_PATH_ARTICLE_HEADING);
+      String heading =
+          headingNode.map(node -> cleanText(XmlDocument.extractDirectChildText(node))).orElse("");
+      String period = articleNode.getAttributes().getNamedItem("period").getTextContent();
+      String eId = articleNode.getAttributes().getNamedItem("eId").getTextContent();
+      String id = expressionEli + "/" + eId;
+      String guid = articleNode.getAttributes().getNamedItem("GUID").getTextContent();
+      NodeList paragraphNodes = articleXml.getNodesByXpath(X_PATH_ARTICLE_PARAGRAPHS);
+      String text = "";
+      for (int j = 0; j < paragraphNodes.getLength(); j++) {
+        Node paragraphNode = paragraphNodes.item(j);
+        String paragraphText = NormParagraphToTextMapper.extractTextFromParagraph(paragraphNode);
+        text = text.concat(paragraphText).concat(" ");
+      }
+
+      LocalDate entryIntoForceDate = null;
+      LocalDate expiryDate = null;
+
+      TimeInterval timeInterval = temporalGroupsWithDates.get(period);
+      if (timeInterval != null) {
+        entryIntoForceDate = toLocalDate(timeInterval.start());
+        expiryDate = toLocalDate(timeInterval.end());
+      }
+
+      final @Nullable String searchKeyword = getSearchKeyword(marker, officialAbbreviation);
+
+      return Optional.of(
+          Article.builder()
+              .id(id)
+              .eId(eId)
+              .workEli(workEli)
+              .expressionEli(expressionEli)
+              .guid(guid)
+              .name(buildArticleHeader(marker, heading))
+              .text(cleanText(text))
+              .entryIntoForceDate(entryIntoForceDate)
+              .expiryDate(expiryDate)
+              .searchKeyword(searchKeyword)
+              .indexedAt(indexedAt)
+              .build());
+    } catch (XPathExpressionException | ParserConfigurationException e) {
+      logger.warn("Error parsing xml", e);
+      return Optional.empty();
+    }
+  }
+
+  private static Article getNodeAsArticle(
+      Node node, String name, String indexedAt, String workEli, String expressionEli)
+      throws ValidationException {
+    Node eIdAttribute = node.getAttributes().getNamedItem("eId");
+    if (Objects.isNull(eIdAttribute)) {
+      throw new ValidationException(
+          String.format(
+              "missing eId in node with name %s and expressionEli %s", name, expressionEli));
+    }
+
+    return Article.builder()
+        .id(expressionEli + "/" + eIdAttribute.getTextContent())
+        .eId(eIdAttribute.getTextContent())
+        .workEli(workEli)
+        .expressionEli(expressionEli)
+        .text(cleanText(node.getTextContent()))
+        .name(cleanText(name))
+        .indexedAt(indexedAt)
+        .build();
   }
 
   private static String buildArticleHeader(String articleMarker, String articleHeading) {

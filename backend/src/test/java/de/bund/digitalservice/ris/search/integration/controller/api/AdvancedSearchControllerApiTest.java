@@ -272,7 +272,7 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
 
     int caseLawSize = CaseLawTestData.allDocuments.size();
     int literatureSize = LiteratureTestData.allDocuments.size();
-    int normsSize = NormsTestData.allDocuments.size();
+    int normsSize = NormsTestData.allNorms.size();
     int administrativeDirectiveSize = AdministrativeDirectiveTestData.allDocuments.size();
     int combinedSize = caseLawSize + literatureSize + normsSize + administrativeDirectiveSize;
     stream.add(Arguments.of("", combinedSize, null, null));

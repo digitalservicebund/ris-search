@@ -180,32 +180,39 @@ class NormLdmlToOpenSearchMapperTest {
     Article secondArticle = norm.getArticles().get(2);
     Article thirdArticle = norm.getArticles().get(3);
     Article attachment = norm.getArticles().get(4);
-    assertEquals("Eingangsformel", preamble.name());
-    assertEquals("Preamble", preamble.text());
-    assertEquals("§ 1 Heading", norm.getArticles().get(1).name());
-    assertEquals("Das ist ein Satz. Das ist noch ein Satz.", firstArticle.text());
-    assertEquals("§ 2 Heading 2", secondArticle.name());
+    assertEquals("Eingangsformel", preamble.getName());
+    assertEquals("Preamble", preamble.getText());
+    assertEquals("§ 1 Heading", norm.getArticles().get(1).getName());
+    assertEquals("Das ist ein Satz. Das ist noch ein Satz.", firstArticle.getText());
+    assertEquals("§ 2 Heading 2", secondArticle.getName());
     assertEquals(
         "(1) Ein weiterer Satz mit einem Punkt in einer Aufzählung und noch einem Punkt. (2) Noch ein wichtiger Satz. Das ist der letzte Satz.",
-        secondArticle.text());
-    assertEquals(LocalDate.of(2003, 11, 3), firstArticle.entryIntoForceDate());
-    assertNull(firstArticle.expiryDate());
-    assertEquals(LocalDate.of(2003, 11, 3), secondArticle.entryIntoForceDate());
-    assertEquals(LocalDate.of(2003, 11, 6), secondArticle.expiryDate());
-    assertNull(thirdArticle.entryIntoForceDate());
-    assertEquals(LocalDate.of(2003, 11, 1), thirdArticle.expiryDate());
-
+        secondArticle.getText());
+    assertEquals(LocalDate.of(2003, 11, 3), firstArticle.getEntryIntoForceDate());
+    assertNull(firstArticle.getExpiryDate());
+    assertEquals(LocalDate.of(2003, 11, 3), secondArticle.getEntryIntoForceDate());
+    assertEquals(LocalDate.of(2003, 11, 6), secondArticle.getExpiryDate());
+    assertNull(thirdArticle.getEntryIntoForceDate());
+    assertEquals(LocalDate.of(2003, 11, 1), thirdArticle.getExpiryDate());
+    String workEli = "eli/bund/bgbl-1/1962/s514";
+    String expressionEli = workEli + "/2010-04-27/1/deu";
+    String manifestationEli = expressionEli + "/2010-04-27/offenestruktur-1.xml";
+    String eid = "anlagen-1_anlage-1";
     assertThat(attachment)
         .isEqualTo(
             new Article(
+                expressionEli + "/" + eid,
+                eid,
+                expressionEli,
+                workEli,
                 "Anlage T1 (zu § 1)",
                 "This text appears in the attachment. This text also appears, inside a paragraph.",
                 null,
                 null,
-                "anlagen-1_anlage-1",
                 null,
-                "eli/bund/bgbl-1/1962/s514/2010-04-27/1/deu/2010-04-27/offenestruktur-1.xml",
-                null));
+                manifestationEli,
+                null,
+                attachment.getIndexedAt()));
   }
 
   @Test
@@ -296,11 +303,11 @@ class NormLdmlToOpenSearchMapperTest {
             "art-z5",
             "art-z%c2%a7%c2%a7%204%20bis%2014",
             "schluss-n1_formel-n1");
-    assertThat(norm.getArticles().stream().map(Article::eId).toList()).isEqualTo(eIds);
+    assertThat(norm.getArticles().stream().map(Article::getEId).toList()).isEqualTo(eIds);
     Article firstArticle = norm.getArticles().stream().findFirst().orElseThrow();
-    assertThat(firstArticle.entryIntoForceDate()).isEqualTo(LocalDate.of(1991, 1, 1));
-    assertThat(firstArticle.guid()).isEqualTo("87cd6b3a-d198-49c3-a02f-6adfd12940cb");
-    assertThat(firstArticle.expiryDate()).isNull();
+    assertThat(firstArticle.getEntryIntoForceDate()).isEqualTo(LocalDate.of(1991, 1, 1));
+    assertThat(firstArticle.getGuid()).isEqualTo("87cd6b3a-d198-49c3-a02f-6adfd12940cb");
+    assertThat(firstArticle.getExpiryDate()).isNull();
   }
 
   private static Stream<Arguments> provideShortTitlePermutations() {

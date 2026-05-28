@@ -4,11 +4,13 @@ import static org.opensearch.index.query.QueryBuilders.matchAllQuery;
 import static org.opensearch.index.query.QueryBuilders.queryStringQuery;
 
 import de.bund.digitalservice.ris.search.config.opensearch.Configurations;
+import de.bund.digitalservice.ris.search.exception.CustomValidationException;
 import de.bund.digitalservice.ris.search.models.opensearch.AbstractSearchEntity;
 import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
+import de.bund.digitalservice.ris.search.utils.LuceneQueryTools;
 import de.bund.digitalservice.ris.search.utils.PageUtils;
 import de.bund.digitalservice.ris.search.utils.RisHighlightBuilder;
 import java.util.Collection;
@@ -17,6 +19,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.Nullable;
 import org.opensearch.action.search.SearchType;
@@ -28,7 +32,6 @@ import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHitSupport;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.SearchPage;
-import org.springframework.data.elasticsearch.core.document.Document;
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
 import org.springframework.data.elasticsearch.core.query.FetchSourceFilter;
 import org.springframework.stereotype.Service;
@@ -46,8 +49,9 @@ import org.springframework.stereotype.Service;
 public class AdvancedSearchService {
 
   private final ElasticsearchOperations operations;
-  private final PageUtils pageUtils;
   private final IndexCoordinates allDocumentsIndex;
+  private final NormsService normsService;
+  protected static final Logger logger = LogManager.getLogger(AdvancedSearchService.class);
 
   /**
    * Constructs an instance of AdvancedSearchService which provides search capabilities for multiple
@@ -55,16 +59,17 @@ public class AdvancedSearchService {
    * utilizes configurations for determining index settings.
    *
    * @param operations the ElasticsearchOperations instance used for search operations.
-   * @param pageUtils utility class for handling pagination and search result mapping.
    * @param configurations configuration provider for OpenSearch settings, including indices and
    *     alias names.
    */
   @Autowired
   public AdvancedSearchService(
-      ElasticsearchOperations operations, PageUtils pageUtils, Configurations configurations) {
+      ElasticsearchOperations operations,
+      Configurations configurations,
+      NormsService normsService) {
     this.operations = operations;
-    this.pageUtils = pageUtils;
     this.allDocumentsIndex = IndexCoordinates.of(configurations.getDocumentsAliasName());
+    this.normsService = normsService;
   }
 
   /**
@@ -80,7 +85,7 @@ public class AdvancedSearchService {
 
     HighlightBuilder highlightBuilder = RisHighlightBuilder.baseHighlighter();
 
-    Set<HighlightBuilder.Field> highlightfields =
+    Set<HighlightBuilder.Field> highlightFields =
         Stream.of(
                 CaseLawSimpleSearchType.getHighlightedFieldsStatic(),
                 LiteratureSimpleSearchType.getHighlightedFieldsStatic(),
@@ -89,9 +94,17 @@ public class AdvancedSearchService {
             .flatMap(Collection::stream)
             .collect(Collectors.toSet());
 
-    highlightfields.forEach(highlightBuilder::field);
-    var searchResults = callOpenSearch(search, highlightBuilder, null, pageable, Document.class);
-    return pageUtils.unwrapMixedSearchHits(searchResults, pageable);
+    highlightFields.forEach(highlightBuilder::field);
+    SearchHits<AbstractSearchEntity> documentHits =
+        callOpenSearch(
+            search,
+            highlightBuilder,
+            NormSimpleSearchType.NORMS_FETCH_EXCLUDED_FIELDS,
+            pageable,
+            AbstractSearchEntity.class);
+
+    addArticleHighlightsToNormSearchHits(documentHits, search);
+    return PageUtils.unwrapSearchHits(documentHits, pageable);
   }
 
   /**
@@ -151,30 +164,42 @@ public class AdvancedSearchService {
   }
 
   /**
-   * Executes a search query for Norm objects in an OpenSearch index. The search results are
-   * paginated based on the provided Pageable object, and fields in the results may be highlighted
-   * based on the configuration.
+   * Executes a lucene query for Norm objects in an OpenSearch index. The results are paginated
+   * based on the provided Pageable object, and fields in the results may be highlighted based on
+   * the configuration.
    *
-   * @param search the search query string. If null or empty, a match-all query is executed.
+   * @param searchString the lucene query string. If null or empty, a match-all query is executed.
    * @param pageable the pagination information defining the page size and index.
-   * @return a paginated list of search results containing Norm objects.
+   * @return a paginated list of results containing Norm objects.
    */
-  public SearchPage<Norm> searchNorm(String search, Pageable pageable) {
+  public SearchPage<Norm> searchNorm(String searchString, Pageable pageable) {
 
     HighlightBuilder highlightBuilder = RisHighlightBuilder.baseHighlighter();
     NormSimpleSearchType.getHighlightedFieldsStatic().forEach(highlightBuilder::field);
-    return SearchHitSupport.searchPageFor(
+    SearchHits<Norm> searchHits =
         callOpenSearch(
-            search,
+            searchString,
             highlightBuilder,
             NormSimpleSearchType.NORMS_FETCH_EXCLUDED_FIELDS,
             pageable,
-            Norm.class),
-        pageable);
+            Norm.class);
+
+    addArticleHighlightsToNormSearchHits(searchHits, searchString);
+    return SearchHitSupport.searchPageFor(searchHits, pageable);
+  }
+
+  private <T extends AbstractSearchEntity> void addArticleHighlightsToNormSearchHits(
+      SearchHits<T> normHits, String queryString) {
+    try {
+      normsService.populateNormSearchHitsWithArticleTextMatches(
+          normHits, LuceneQueryTools.joinAllTermsWithOr(queryString), true);
+    } catch (CustomValidationException e) {
+      logger.error("Error transforming lucene query for article highlights.", e);
+    }
   }
 
   private <T> SearchHits<T> callOpenSearch(
-      @Nullable String search,
+      @Nullable String searchString,
       @Nullable HighlightBuilder highlightBuilder,
       @Nullable List<String> excludedFields,
       @NotNull Pageable pageable,
@@ -191,13 +216,13 @@ public class AdvancedSearchService {
           new FetchSourceFilter(false, null, excludedFields.toArray(String[]::new)));
     }
 
-    if (StringUtils.isNotBlank(search)) {
-      searchQuery.withQuery(queryStringQuery(search));
+    if (StringUtils.isNotBlank(searchString)) {
+      searchQuery.withQuery(queryStringQuery(searchString));
     } else {
       searchQuery.withQuery(matchAllQuery());
     }
 
-    if (type == Document.class) {
+    if (type == AbstractSearchEntity.class) {
       return operations.search(searchQuery.build(), type, allDocumentsIndex);
     } else {
       return operations.search(searchQuery.build(), type);

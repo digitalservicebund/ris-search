@@ -62,6 +62,8 @@ public class OpensearchSchemaSetup {
       upsertOneIndexAndItsAliases(
           restHighLevelClient, indexResponse, configurations.getNormsIndexName(), true);
       upsertOneIndexAndItsAliases(
+          restHighLevelClient, indexResponse, configurations.getArticlesIndexName(), false);
+      upsertOneIndexAndItsAliases(
           restHighLevelClient,
           indexResponse,
           configurations.getAdministrativeDirectiveIndexName(),
@@ -90,6 +92,10 @@ public class OpensearchSchemaSetup {
         restHighLevelClient,
         "/_index_template/norms_index_template",
         "/openSearch/norms_index_template.json");
+    putJsonToOpenSearch(
+        restHighLevelClient,
+        "/_index_template/article_index_template",
+        "/openSearch/article_norms_index_template.json");
     putJsonToOpenSearch(
         restHighLevelClient,
         "/_index_template/administrative_directive_index_template",

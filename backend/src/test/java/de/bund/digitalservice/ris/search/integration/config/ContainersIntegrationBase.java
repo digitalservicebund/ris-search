@@ -6,14 +6,15 @@ import de.bund.digitalservice.ris.search.integration.controller.api.testData.Cas
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.LiteratureTestData;
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.NormsTestData;
 import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
+import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
-import de.bund.digitalservice.ris.search.repository.objectstorage.LiteratureBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.S3ObjectStorageClient;
 import de.bund.digitalservice.ris.search.repository.opensearch.AdministrativeDirectiveRepository;
+import de.bund.digitalservice.ris.search.repository.opensearch.ArticlesRepository;
 import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository;
 import de.bund.digitalservice.ris.search.repository.opensearch.LiteratureRepository;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
@@ -42,8 +43,8 @@ public class ContainersIntegrationBase {
   @Autowired protected CaseLawRepository caseLawRepository;
   @Autowired protected LiteratureRepository literatureRepository;
   @Autowired protected NormsRepository normsRepository;
+  @Autowired protected ArticlesRepository articlesRepository;
   @Autowired protected CaseLawBucket caseLawBucket;
-  @Autowired protected LiteratureBucket literatureBucket;
   @Autowired protected NormsBucket normsBucket;
   @Autowired protected AdministrativeDirectiveRepository administrativeDirectiveRepository;
 
@@ -83,7 +84,11 @@ public class ContainersIntegrationBase {
   }
 
   @BeforeAll
-  void reset() {
+  void beforeAllWrapper() {
+    reset();
+  }
+
+  protected void reset() {
     resetBuckets();
     resetRepositories();
   }
@@ -110,7 +115,8 @@ public class ContainersIntegrationBase {
     clearRepositoryData();
     caseLawRepository.saveAll(CaseLawTestData.allDocuments);
     literatureRepository.saveAll(LiteratureTestData.allDocuments);
-    normsRepository.saveAll(NormsTestData.allDocuments);
+    normsRepository.saveAll(NormsTestData.allNorms);
+    articlesRepository.saveAll(NormsTestData.allArticles);
     administrativeDirectiveRepository.saveAll(AdministrativeDirectiveTestData.allDocuments);
   }
 
@@ -155,5 +161,27 @@ public class ContainersIntegrationBase {
                 })
             .toList());
     return result;
+  }
+
+  protected void saveSimpleNorm(String id, String content) {
+    String expressionEli = "ExpressionPrefix" + id;
+    String workEli = "WorkPrefix" + expressionEli;
+    String articleName = "Article 1";
+    normsRepository.save(
+        Norm.builder()
+            .id(expressionEli)
+            .workEli(workEli)
+            .expressionEli(expressionEli)
+            .articleTexts(List.of(content))
+            .articles(List.of(Article.builder().name(articleName).text(content).build()))
+            .build());
+    articlesRepository.save(
+        Article.builder()
+            .id(expressionEli + "/" + "eid1")
+            .workEli(workEli)
+            .expressionEli(expressionEli)
+            .name(articleName)
+            .text(content)
+            .build());
   }
 }

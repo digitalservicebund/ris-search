@@ -1,7 +1,6 @@
 package de.bund.digitalservice.ris.search.controller.api;
 
 import de.bund.digitalservice.ris.search.config.ApiConfig;
-import de.bund.digitalservice.ris.search.exception.CustomValidationException;
 import de.bund.digitalservice.ris.search.mapper.DocumentResponseMapper;
 import de.bund.digitalservice.ris.search.mapper.SortParamsConverter;
 import de.bund.digitalservice.ris.search.models.api.parameters.NormsSearchParams;
@@ -13,7 +12,6 @@ import de.bund.digitalservice.ris.search.schema.AbstractDocumentSchema;
 import de.bund.digitalservice.ris.search.schema.CollectionSchema;
 import de.bund.digitalservice.ris.search.schema.SearchMemberSchema;
 import de.bund.digitalservice.ris.search.service.AllDocumentsService;
-import de.bund.digitalservice.ris.search.utils.LuceneQueryTools;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -21,6 +19,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.time.LocalDate;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.UncategorizedElasticsearchException;
@@ -39,6 +39,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(ApiConfig.Paths.DOCUMENT)
 public class AllDocumentsSearchController {
+  protected static final Logger logger = LogManager.getLogger(AllDocumentsSearchController.class);
 
   private final AllDocumentsService allDocumentsService;
 
@@ -59,8 +60,6 @@ public class AllDocumentsSearchController {
    * @param mostRelevantOn Specifies for what date the norms most relevant expression should be
    *     returned.
    * @return A ResponseEntity containing a paginated collection of search results.
-   * @throws CustomValidationException if there are validation errors with the provided input
-   *     parameters.
    */
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   @Operation(
@@ -84,8 +83,7 @@ public class AllDocumentsSearchController {
                   description = NormsSearchParams.MOST_RELEVANT_ON_DESCRIPTION,
                   example = "2026-03-11")
               @RequestParam(name = "mostRelevantOn", required = false)
-              LocalDate mostRelevantOn)
-          throws CustomValidationException {
+              LocalDate mostRelevantOn) {
 
     var pageRequest = PageRequest.of(paginationParams.getPageIndex(), paginationParams.getSize());
 
@@ -100,7 +98,7 @@ public class AllDocumentsSearchController {
           .contentType(MediaType.APPLICATION_JSON)
           .body((DocumentResponseMapper.fromDomain(searchResult, ApiConfig.Paths.DOCUMENT)));
     } catch (UncategorizedElasticsearchException e) {
-      LuceneQueryTools.checkForInvalidQuery(e);
+      logger.error("Unexpected Opensearch error during simple search.", e);
       throw e;
     }
   }

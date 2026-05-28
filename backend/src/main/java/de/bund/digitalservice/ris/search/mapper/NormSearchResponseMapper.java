@@ -58,18 +58,18 @@ public class NormSearchResponseMapper {
   private static TextMatchSchema convertArticleHitToTextMatchSchema(SearchHit<?> articleHit) {
     var articleHitContent = articleHit.getContent();
     String articleMatchingName =
-        articleHit.getHighlightFields().getOrDefault("articles.name", List.of()).stream()
+        articleHit.getHighlightFields().getOrDefault("name", List.of()).stream()
             .findFirst()
             .orElse("");
     String articleMatchingText =
-        articleHit.getHighlightFields().getOrDefault("articles.text", List.of()).stream()
+        articleHit.getHighlightFields().getOrDefault("text", List.of()).stream()
             .findFirst()
             .orElse("");
     if (articleHitContent instanceof Article article) {
       return toTextMatchSchema(
-          articleMatchingName.isEmpty() ? article.name() : articleMatchingName,
-          articleMatchingText.isEmpty() ? article.text() : articleMatchingText,
-          article.eId());
+          articleMatchingName.isEmpty() ? article.getName() : articleMatchingName,
+          articleMatchingText.isEmpty() ? article.getText() : articleMatchingText,
+          article.getEId());
     }
     if (articleHitContent instanceof Map<?, ?> hit
         && hit.containsKey("name")
@@ -93,7 +93,7 @@ public class NormSearchResponseMapper {
    */
   public static <T> List<TextMatchSchema> getTextMatches(SearchHit<T> searchHit) {
     Optional<SearchHits<?>> matchingArticles =
-        Optional.ofNullable(searchHit.getInnerHits().getOrDefault("articles", null));
+        Optional.ofNullable(searchHit.getInnerHits().getOrDefault("top_three_articles", null));
 
     List<TextMatchSchema> articleHits =
         matchingArticles
