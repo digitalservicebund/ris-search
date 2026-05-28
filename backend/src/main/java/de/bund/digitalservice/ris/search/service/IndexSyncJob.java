@@ -12,15 +12,14 @@ import org.springframework.scheduling.annotation.Async;
 
 /**
  * Executes a job to synchronize the indexing by processing changelogs and updating the index state
- * accordingly. The job ensures that no concurrent indexing operations happen on the same index by
- * acquiring locks and applying relevant updates.
+ * accordingly.
  *
  * <p>Implements the `Job` interface, and the primary operation is invoked via the `runJob` method.
  * The `runJobAsync` method provides asynchronous support for executing the job.
  *
- * <p>This class interacts with: - `IndexStatusService` to manage the lock status and update last
- * processed changelog information. - `ObjectStorage` to fetch changelog file information. -
- * `IndexService` to perform indexing operations based on the changelog or complete reindexes.
+ * <p>This class interacts with: - `IndexStatusService` to update last processed changelog
+ * information. - `ObjectStorage` to fetch changelog file information. - `IndexService` to perform
+ * indexing operations based on the changelog or complete reindexes.
  */
 public class IndexSyncJob implements Job {
 
@@ -60,13 +59,8 @@ public class IndexSyncJob implements Job {
   }
 
   /**
-   * Executes the index synchronization job, which involves loading the indexing state, acquiring a
-   * lock, fetching and processing changes, and releasing the lock.
-   *
-   * <p>The method starts by fetching the current indexing status and attempts to acquire a lock for
-   * the specified status file. If the lock cannot be acquired, the job ends successfully without
-   * further action. If the lock is obtained, it proceeds to fetch and process changes (e.g., new or
-   * updated changelog files). Once the processing is complete, the lock is released.
+   * Executes the index synchronization job, which involves loading the indexing state, fetching and
+   * processing changes.
    *
    * <p>If an exception occurs during the operation, it is logged, and the method returns an error
    * code.
