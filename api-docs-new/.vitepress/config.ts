@@ -38,10 +38,6 @@ export default defineConfig({
     siteTitle: "RIS API Docs",
     nav: [
       { text: "Get Started", link: "/get-started/" },
-      {
-        text: "Swagger",
-        link: " https://docs.rechtsinformationen.bund.de/swagger-ui/index.html",
-      },
       { text: "Standards", link: "/standards/" },
       {
         text: "Guides",
