@@ -18,7 +18,7 @@ By default, entities are returned in JSON format when making a request to the ba
 GET /entity/123
 ```
 
-### Retrieving an Entity in XML
+### Retrieving an Entity in XML:
 
 To retrieve an entity in XML format, append `.xml` to the URL. The response will include the `Content-Type: application/xml` header.
 
@@ -28,7 +28,7 @@ To retrieve an entity in XML format, append `.xml` to the URL. The response will
 GET /entity/123.xml
 ```
 
-### Retrieving an Entity in HTML
+### Retrieving an Entity in HTML:
 
 For an HTML-rendered version of the entity, append `.html` to the URL. The response will have the `Content-Type: text/html` header, making it suitable for rendering in a browser.
 

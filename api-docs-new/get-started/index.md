@@ -53,4 +53,4 @@ After your first request, check out the following sections for more detailed inf
 - Provide feedback to help improve our service.
 
 Enjoy building with our API!
-We would be happy to see what you built: [rechtsinformationen@digitalservice.bund.de](mailto:rechtsinformationen@digitalservice.bund.de)
+We would be happy to see what you built with our API: [rechtsinformationen@digitalservice.bund.de](mailto:rechtsinformationen@digitalservice.bund.de)

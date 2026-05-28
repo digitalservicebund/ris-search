@@ -14,15 +14,19 @@ List endpoints support filtering results using the `searchTerm` query parameter.
 
 - **All-Term Matching (Default Behavior):**
   When you enter multiple words without quotation marks, the search will return documents containing all the search terms, though not necessarily in the specified order.
+
   **Example:** `searchTerm=trademarks protection Hannover`
   This will match documents containing any variation of "trademarks," "protection," and "Hannover."
 
 - **Exact Phrase Matching:**
   To search for an exact phrase, enclose it in double quotes (`"`). This ensures that only documents containing the exact phrase, in the specified order, are matched.
+
   **Example:** `searchTerm="trademarks protection"`
   This will match documents containing the exact phrase "trademarks protection".
 
-  > **Note:** Using quotation marks tells the search engine to look for the exact words in the exact order without any variations. This is particularly useful when searching for specific names, titles, or phrases.
+  ::: info Note
+  Using quotation marks tells the search engine to look for the exact words in the exact order without any variations. This is particularly useful when searching for specific names, titles, or phrases.
+  :::
 
 ### Usage
 
@@ -31,25 +35,25 @@ List endpoints support filtering results using the `searchTerm` query parameter.
 
 ### Examples
 
-`searchTerm=urlaub arbeitnehmer` — Matches documents containing any variation of "urlaub" and "arbeitnehmer":
+- `searchTerm=urlaub arbeitnehmer` — Matches documents containing any variation of "urlaub" and "arbeitnehmer":
 
-::: code-group
+  ::: code-group
 
-```bash [cURL]
-curl -G https://testphase.rechtsinformationen.bund.de/v1/case-law?searchTerm=urlaub+arbeitnehmer
-```
+  ```bash [cURL]
+  curl -G https://testphase.rechtsinformationen.bund.de/v1/case-law?searchTerm=urlaub+arbeitnehmer
+  ```
 
-:::
+  :::
 
-`searchTerm="urlaub arbeitnehmer"` — Matches documents containing the exact phrase, enforcing word order:
+- `searchTerm="urlaub arbeitnehmer"` — Matches documents containing the exact phrase, enforcing word order:
 
-::: code-group
+  ::: code-group
 
-```bash [cURL]
-curl -G 'https://testphase.rechtsinformationen.bund.de/v1/case-law?searchTerm="urlaub arbeitnehmer"'
-```
+  ```bash [cURL]
+  curl -G 'https://testphase.rechtsinformationen.bund.de/v1/case-law?searchTerm="urlaub arbeitnehmer"'
+  ```
 
-:::
+  :::
 
 ## Date Filters
 
