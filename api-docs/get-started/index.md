@@ -43,7 +43,6 @@ After your first request, check out the following sections for more detailed inf
 - **Guides:** Get detailed instructions on topics such as [Formats](/guides/formats/), [Pagination](/guides/pagination/), [Filters](/guides/filters/), [Rate Limiting](/guides/rate-limiting/), and [Error Codes](/guides/error-codes/).
 - **Standards:** Read more about the data formats and standards like LegalDocML in [Standards](/standards/).
 - **Feedback:** Share your thoughts via our [Feedback](/feedback/) page.
-- **Changelog:** Stay updated with changes in our [Changelog](/changelog/).
 
 ## Next Steps
 
