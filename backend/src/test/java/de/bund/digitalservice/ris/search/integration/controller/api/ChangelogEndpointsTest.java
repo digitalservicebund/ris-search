@@ -131,7 +131,8 @@ class ChangelogEndpointsTest extends ContainersIntegrationBase {
         .andExpect(status().isOk())
         .andExpect(
             jsonPath("$.changed[0].['@id']")
-                .value("/v1/legislation/eli/bund/bgbl-1/1999/identifier/2026-01-01/1/deu/zip"))
+                .value(
+                    "/v1/legislation/eli/bund/bgbl-1/1999/identifier/2026-01-01/1/deu/2026-01-01/zip"))
         .andExpect(jsonPath("$.changed[0].['@type']").value("LegislationObject"))
         .andExpect(
             jsonPath("$.deleted[0].['@id']")

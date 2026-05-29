@@ -17,11 +17,12 @@ public class ChangelogResponseMapper {
   private ChangelogResponseMapper() {}
 
   /**
-   * Maps A changelog to a ChangelogResponse based on the documentKind.
+   * Takes a Changelog representation at maps it to an api representation of its specific
+   * documentKind
    *
-   * @param changelog Changelog to me mapped
-   * @param documentKind documentKind to apply document specific mapping logic
-   * @return ChangelogResponse
+   * @param changelog Changelog object to be mapped
+   * @param documentKind documentKind of the response
+   * @return api response of a specific Changelog
    */
   public static ChangelogResponse mapChangelog(Changelog changelog, DocumentKind documentKind) {
     return switch (documentKind) {
@@ -36,83 +37,72 @@ public class ChangelogResponseMapper {
     };
   }
 
-  /**
-   * Maps a changelog to a ChangelogResponse. It groups all changed files to a set of affected
-   * expressions.
-   *
-   * @param changelog Changelog to me mapped
-   * @return ChangelogResponse with all changes by expression
-   */
-  private static ChangelogResponse mapNorms(Changelog changelog) {
-    String apiUrl = ApiConfig.Paths.LEGISLATION + "/";
+  /** Maps a changelog to a ChangelogResponse for non-legislation documents. */
+  private static ChangelogResponse mapDocument(
+      Changelog changelog, String apiPath, String deletedType) {
     Set<ChangelogChangedDocument> changed =
         changelog.getChanged().stream()
-            .flatMap(
-                id ->
-                    EliFile.fromString(id)
-                        .map(
-                            eli ->
-                                new ChangelogChangedDocument(
-                                    EncodingSchemaFactory.id(
-                                        EncodingSchemaFactory.SchemaType.ZIP, getNormBaseUrl(eli)),
-                                    JsonldTypes.LEGISLATION_OBJECT,
-                                    EncodingSchemaFactory.contentUrl(
-                                        EncodingSchemaFactory.SchemaType.ZIP, getNormBaseUrl(eli))))
-                        .stream())
+            .map(path -> toChangedDocument(apiPath, path))
             .collect(Collectors.toSet());
 
     Set<ChangelogDeletedDocument> deleted =
         changelog.getDeleted().stream()
-            .flatMap(
-                id ->
-                    EliFile.fromString(id)
-                        .map(
-                            eli ->
-                                new ChangelogDeletedDocument(
-                                    getNormBaseUrl(eli), JsonldTypes.LEGISLATION))
-                        .stream())
+            .map(path -> toDeletedDocument(apiPath, path, deletedType))
             .collect(Collectors.toSet());
 
     return new ChangelogResponse(changed, deleted, changelog.isChangeAll());
   }
 
-  /**
-   * Maps a changelog to a ChangelogResponse of any other DocumentType. It groups all changed files
-   * to a set of affected expressions.
-   *
-   * @param changelog Changelog to me mapped
-   * @param deletedType String representation of the @type of a deleted document
-   * @return ChangelogResponse with all changes by expression
-   */
-  private static ChangelogResponse mapDocument(
-      Changelog changelog, String apiPath, String deletedType) {
-    var changed =
+  private static ChangelogChangedDocument toChangedDocument(String apiPath, String filePath) {
+    String baseUrl = getDocumentPath(apiPath, filePath);
+
+    String id = EncodingSchemaFactory.id(EncodingSchemaFactory.SchemaType.ZIP, baseUrl);
+    String contentUrl =
+        EncodingSchemaFactory.contentUrl(EncodingSchemaFactory.SchemaType.ZIP, baseUrl);
+
+    return new ChangelogChangedDocument(id, JsonldTypes.MEDIA_OBJECT, contentUrl);
+  }
+
+  private static ChangelogDeletedDocument toDeletedDocument(
+      String apiPath, String filePath, String type) {
+    String baseUrl = getDocumentPath(apiPath, filePath);
+    return new ChangelogDeletedDocument(baseUrl, type);
+  }
+
+  /** Maps a legislation changelog. */
+  private static ChangelogResponse mapNorms(Changelog changelog) {
+    Set<ChangelogChangedDocument> changed =
         changelog.getChanged().stream()
-            .map(
-                path -> {
-                  var baseUrl = getDocumentPath(apiPath, path);
-                  return new ChangelogChangedDocument(
-                      EncodingSchemaFactory.id(EncodingSchemaFactory.SchemaType.ZIP, baseUrl),
-                      JsonldTypes.MEDIA_OBJECT,
-                      EncodingSchemaFactory.contentUrl(
-                          EncodingSchemaFactory.SchemaType.ZIP, baseUrl));
-                })
+            .flatMap(id -> EliFile.fromString(id).stream())
+            .map(ChangelogResponseMapper::toLegislationChangedDocument)
             .collect(Collectors.toSet());
 
-    var deleted =
+    Set<ChangelogDeletedDocument> deleted =
         changelog.getDeleted().stream()
-            .map(
-                path -> {
-                  var baseUrl = getDocumentPath(apiPath, path);
-                  return new ChangelogDeletedDocument(baseUrl, deletedType);
-                })
+            .flatMap(id -> EliFile.fromString(id).stream())
+            .map(ChangelogResponseMapper::toLegislationDeletedDocument)
             .collect(Collectors.toSet());
 
     return new ChangelogResponse(changed, deleted, changelog.isChangeAll());
   }
 
-  private static String getNormBaseUrl(EliFile eliFile) {
-    return ApiConfig.Paths.LEGISLATION + "/" + eliFile.getManifestationEli().getManifestationRoot();
+  private static ChangelogChangedDocument toLegislationChangedDocument(EliFile eli) {
+    String rootUrl = prefixApiUrl(eli.getManifestationEli().getManifestationRoot());
+
+    String id = EncodingSchemaFactory.id(EncodingSchemaFactory.SchemaType.ZIP, rootUrl);
+    String contentUrl =
+        EncodingSchemaFactory.contentUrl(EncodingSchemaFactory.SchemaType.ZIP, rootUrl);
+
+    return new ChangelogChangedDocument(id, JsonldTypes.LEGISLATION_OBJECT, contentUrl);
+  }
+
+  private static ChangelogDeletedDocument toLegislationDeletedDocument(EliFile eli) {
+    String baseUrl = prefixApiUrl(eli.getExpressionEli().toString());
+    return new ChangelogDeletedDocument(baseUrl, JsonldTypes.LEGISLATION);
+  }
+
+  private static String prefixApiUrl(String path) {
+    return ApiConfig.Paths.LEGISLATION + "/" + path;
   }
 
   private static String getDocumentPath(String apiPath, String filePath) {
