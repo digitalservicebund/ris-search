@@ -1,7 +1,0 @@
-/dist
-/node_modules
-/.vitepress/cache
-/.cache
-/.idea
-/.env
-.DS_Store
