@@ -44,7 +44,6 @@ After your first request, check out the following sections for more detailed inf
 - **Standards:** Read more about the data formats and standards like LegalDocML in [Standards](/standards/).
 - **Feedback:** Share your thoughts via our [Feedback](/feedback/) page.
 - **Changelog:** Stay updated with changes in our [Changelog](/changelog/).
-- **Contact:** For further questions or personalized help, visit our [Contact](/contact/) page.
 
 ## Next Steps
 
