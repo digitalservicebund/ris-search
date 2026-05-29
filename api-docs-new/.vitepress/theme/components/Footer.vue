@@ -31,7 +31,7 @@ import bmjvLogo from "../assets/images/bmjv_logo.svg";
           </ul>
         </div>
       </div>
-      <div class="container-2">
+      <div>
         <p>
           Ein Service im Auftrag des
           <a href="https://www.bmj.de" target="_blank"
@@ -54,36 +54,27 @@ import bmjvLogo from "../assets/images/bmjv_logo.svg";
   display: flex;
   flex-direction: column;
   font-size: small;
+
+  & p {
+    margin: 0;
+  }
 }
 
 .branding {
   display: flex;
-  flex-direction: row;
   justify-content: space-between;
-  align-items: start;
+  align-items: flex-start;
   flex-wrap: wrap;
-}
 
-.branding img {
-  padding-bottom: 16px;
-}
+  & img {
+    padding-block-end: 1rem;
+  }
 
-.vp-doc ul {
-  margin: 0;
-  padding: 0;
-}
-
-.branding ul {
-  list-style: none;
-  padding-bottom: 16px;
-}
-
-.container-2 {
-  display: flex;
-  flex-direction: column;
-}
-
-.container-2 p {
-  margin: 0;
+  & ul {
+    list-style: none;
+    padding-block-end: 1rem;
+    padding-inline-start: 0;
+    margin-block: 0;
+  }
 }
 </style>

@@ -69,39 +69,38 @@ const submitFeedback = async () => {
 <style scoped>
 .feedback-form {
   max-width: 65ch;
-}
 
-.feedback-form h3 {
-  margin-top: 0;
+  & h3 {
+    margin-top: 0;
+  }
 }
 
 .feedback-form__field {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-}
+  margin-block: 1rem;
 
-.feedback-form__field textarea {
-  width: 100%;
-  padding: 0.5rem;
-  border: 2px solid var(--vp-c-brand-1);
-  border-radius: 4px;
-  font-family: inherit;
-  font-size: 1rem;
-  resize: vertical;
-  background: var(--vp-c-bg);
-  color: var(--vp-c-text-1);
-}
+  & textarea {
+    width: 100%;
+    padding: 0.5rem;
+    border: 2px solid var(--vp-c-brand-1);
+    border-radius: 4px;
+    font: inherit;
+    font-size: 1rem;
+    resize: vertical;
+    background: var(--vp-c-bg);
+    color: var(--vp-c-text-1);
 
-.feedback-form__field textarea:focus {
-  outline: none;
-  border-width: 3px;
-}
+    &:focus {
+      outline: none;
+      border-width: 3px;
+    }
 
-.feedback-form__textarea--invalid {
-  border-color: var(--vp-c-danger-1) !important;
+    &.feedback-form__textarea--invalid {
+      border-color: var(--vp-c-danger-1);
+    }
+  }
 }
 
 .feedback-form__error {
