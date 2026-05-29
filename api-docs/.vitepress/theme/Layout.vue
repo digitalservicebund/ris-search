@@ -9,9 +9,6 @@ const { Layout } = DefaultTheme;
 
 <template>
   <Layout>
-    <template #sidebar-nav-after>
-      <SwaggerButton />
-    </template>
     <template #doc-before>
       <div class="vp-doc">
         <div class="warning custom-block">
