@@ -19,9 +19,9 @@ Content-Type: application/json
 }
 ```
 
-### Examples
+## Examples
 
-#### 403 error - Response
+### 403 error - Response
 
 ```
 curl -X POST "https://testphase.rechtsinformationen.bund.de/v1/case-law"
@@ -42,7 +42,7 @@ Content-Type: application/json
 }
 ```
 
-#### 404 error - Response
+### 404 error - Response
 
 ```
 curl "https://testphase.rechtsinformationen.bund.de/v1/DOES_NOT_EXIST"
@@ -63,7 +63,7 @@ Content-Type: application/json
 }
 ```
 
-#### 422 Unprocessable Content
+### 422 Unprocessable Content
 
 ```
 curl "https://testphase.rechtsinformationen.bund.de/v1/case-law?dateFrom=a&dateTo=a"
@@ -89,7 +89,7 @@ Content-Type: application/json
 }
 ```
 
-#### 500 Internal server error
+### 500 Internal server error
 
 ```http
 HTTP/2 500
@@ -106,7 +106,7 @@ Content-Type: application/json
 }
 ```
 
-#### 503 Service Unavailable
+### 503 Service Unavailable
 
 ```http
 HTTP/2 503
