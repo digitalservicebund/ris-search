@@ -1,8 +1,0 @@
-{
-  "compilerOptions": {
-    "skipLibCheck": true,
-    "types": ["vitepress/client"]
-  },
-  "include": [".vitepress/**/*.ts", ".vitepress/**/*.vue"],
-  "exclude": ["node_modules/", ".vitepress/cache/"]
-}

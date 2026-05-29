@@ -1,15 +1,10 @@
-<script setup lang="ts">
-import { useData } from "vitepress";
-import ButtonLink from "./ButtonLink.vue";
-const { theme } = useData();
-</script>
-
 <template>
-  <ButtonLink
-    :href="theme.swaggerUiUrl"
+  <a
+    class="RisButton"
+    href="https://docs.rechtsinformationen.bund.de/swagger-ui/index.html"
     target="_blank"
-    class="not-prose mt-16 bg-blue-800 hover:bg-blue-600 hover:text-white p-16 ris-label2-bold text-white no-underline focus:text-white focus-visible:text-white"
+    rel="noreferrer"
   >
     Test the API in Swagger
-  </ButtonLink>
+  </a>
 </template>
