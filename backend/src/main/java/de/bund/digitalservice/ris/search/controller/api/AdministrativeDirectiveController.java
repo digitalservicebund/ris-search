@@ -219,7 +219,7 @@ public class AdministrativeDirectiveController {
       @ParameterObject @Valid ChangelogParams params) {
 
     var changelog =
-        changelogService.getIndexedChangesBetween(
+        changelogService.getChangesBetween(
             params.getFrom().toInstant(), params.getTo().toInstant());
 
     return ResponseEntity.ok(

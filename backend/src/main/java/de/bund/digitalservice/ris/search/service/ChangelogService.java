@@ -25,28 +25,16 @@ public class ChangelogService {
 
   public static final String CHANGELOGS_PREFIX = "changelogs/";
 
-  private final String indexStatusFile;
-
-  private final IndexStatusService indexStatusService;
-
   private final ObjectReader changelogReader;
 
   /**
    * Changelog service to manage changelogs of documents
    *
    * @param bucket bucket containing the changelogs
-   * @param indexStatusService indexStatusService to manage indexing state
-   * @param indexStatusFile indexStatusFile belonging to the respective document kind
    * @param objectMapper global ObjectMapper to create a Changelog Reader
    */
-  public ChangelogService(
-      ObjectStorage bucket,
-      IndexStatusService indexStatusService,
-      String indexStatusFile,
-      ObjectMapper objectMapper) {
+  public ChangelogService(ObjectStorage bucket, ObjectMapper objectMapper) {
     this.bucket = bucket;
-    this.indexStatusService = indexStatusService;
-    this.indexStatusFile = indexStatusFile;
     this.changelogReader = objectMapper.readerFor(Changelog.class);
   }
 
@@ -102,41 +90,27 @@ public class ChangelogService {
     }
   }
 
-  private List<String> getNewChangelogsBetween(Instant from, Instant to) {
-
-    return bucket.getAllKeysByPrefix(CHANGELOGS_PREFIX).stream()
-        .filter(e -> !CHANGELOGS_PREFIX.equals(e))
-        .filter(
-            e -> {
-              Instant changelogTime =
-                  Instant.parse(e.substring(CHANGELOGS_PREFIX.length(), e.indexOf("Z") + 1));
-              // get all changelogs between timestamps inclusive
-              return !changelogTime.isBefore(from) && !changelogTime.isAfter(to);
-            })
-        .sorted()
-        .toList();
-  }
-
   /**
-   * Retrieves an aggregated Changelog containing all document changes indexed between two
-   * timestamps (inclusive).
+   * Retrieves an aggregated Changelog containing all document changes between two timestamps
+   * (inclusive).
    *
    * @param from the starting timestamp boundary (inclusive)
    * @param to the ending timestamp boundary (inclusive)
    * @return Changelog object including all changes that were indexed
    */
-  public Changelog getIndexedChangesBetween(Instant from, Instant to) {
-    IndexingState state = indexStatusService.loadStatus(indexStatusFile);
+  public Changelog getChangesBetween(Instant from, Instant to) {
 
-    Optional<Instant> newestIndexedTimestamp =
-        Optional.ofNullable(state.lastProcessedChangelogFile())
-            .map(lp -> lp.substring(CHANGELOGS_PREFIX.length(), lp.indexOf("Z") + 1))
-            .map(Instant::parse);
-
-    Instant limit = newestIndexedTimestamp.filter(ts -> ts.isBefore(to)).orElse(to);
-
-    List<Changelog> changelogs =
-        getNewChangelogsBetween(from, limit).stream()
+    var changelogs =
+        bucket.getAllKeysByPrefix(CHANGELOGS_PREFIX).stream()
+            .filter(e -> !CHANGELOGS_PREFIX.equals(e))
+            .filter(
+                e -> {
+                  Instant changelogTime =
+                      Instant.parse(e.substring(CHANGELOGS_PREFIX.length(), e.indexOf("Z") + 1));
+                  // get all changelogs between timestamps inclusive
+                  return !changelogTime.isBefore(from) && !changelogTime.isAfter(to);
+                })
+            .sorted()
             .map(this::parseOneChangelog)
             .flatMap(Optional::stream)
             .toList();

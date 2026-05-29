@@ -1,17 +1,11 @@
 package de.bund.digitalservice.ris.search.config.obs;
 
-import static de.bund.digitalservice.ris.search.service.CaseLawIndexSyncJob.CASELAW_STATUS_FILENAME;
-import static de.bund.digitalservice.ris.search.service.LiteratureIndexSyncJob.LITERATURE_STATUS_FILENAME;
-import static de.bund.digitalservice.ris.search.service.NormIndexSyncJob.NORM_STATUS_FILENAME;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.bund.digitalservice.ris.search.repository.objectstorage.AdministrativeDirectiveBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.LiteratureBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
-import de.bund.digitalservice.ris.search.service.AdministrativeDirectiveIndexSyncJob;
 import de.bund.digitalservice.ris.search.service.ChangelogService;
-import de.bund.digitalservice.ris.search.service.IndexStatusService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -21,52 +15,42 @@ public class ChangelogConfig {
 
   /**
    * @param bucket root bucket of case law files
-   * @param indexStatusService IndexStatusService to manage status file handling
    * @param om global ObjectMapper to parse the changelog files
    * @return ChangelogService configured to manage case law files
    */
   @Bean
-  public ChangelogService caseLawChangelogService(
-      CaseLawBucket bucket, IndexStatusService indexStatusService, ObjectMapper om) {
-    return new ChangelogService(bucket, indexStatusService, CASELAW_STATUS_FILENAME, om);
+  public ChangelogService caseLawChangelogService(CaseLawBucket bucket, ObjectMapper om) {
+    return new ChangelogService(bucket, om);
   }
 
   /**
    * @param bucket root bucket of case law files
-   * @param indexStatusService IndexStatusService to manage status file handling
    * @param om global ObjectMapper to parse the changelog files
    * @return IndexedChangelogService configured to manage legislation files
    */
   @Bean
-  public ChangelogService normsChangelogService(
-      NormsBucket bucket, IndexStatusService indexStatusService, ObjectMapper om) {
-    return new ChangelogService(bucket, indexStatusService, NORM_STATUS_FILENAME, om);
+  public ChangelogService normsChangelogService(NormsBucket bucket, ObjectMapper om) {
+    return new ChangelogService(bucket, om);
   }
 
   /**
    * @param bucket root bucket of case law files
-   * @param indexStatusService IndexStatusService to manage status file handling
    * @param om global ObjectMapper to parse the changelog files
    * @return IndexedChangelogService configured to manage literature files
    */
   @Bean
-  public ChangelogService literatureChangelogService(
-      LiteratureBucket bucket, IndexStatusService indexStatusService, ObjectMapper om) {
-    return new ChangelogService(bucket, indexStatusService, LITERATURE_STATUS_FILENAME, om);
+  public ChangelogService literatureChangelogService(LiteratureBucket bucket, ObjectMapper om) {
+    return new ChangelogService(bucket, om);
   }
 
   /**
    * @param bucket root bucket of case law files
-   * @param indexStatusService IndexStatusService to manage status file handling
    * @param om global ObjectMapper to parse the changelog files
    * @return IndexedChangelogService configured to manage literature files
    */
   @Bean
   public ChangelogService administrativeDirectiveChangelogService(
-      AdministrativeDirectiveBucket bucket,
-      IndexStatusService indexStatusService,
-      ObjectMapper om) {
-    return new ChangelogService(
-        bucket, indexStatusService, AdministrativeDirectiveIndexSyncJob.STATUS_FILENAME, om);
+      AdministrativeDirectiveBucket bucket, ObjectMapper om) {
+    return new ChangelogService(bucket, om);
   }
 }
