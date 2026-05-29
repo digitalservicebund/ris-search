@@ -1,12 +1,12 @@
 import type { PostHog } from "posthog-js";
 import { posthog } from "posthog-js";
 import type { DocumentKind } from "~/types/api";
+import { itemsPerPageDefault } from "~/utils/search/itemsPerPageOptions";
 import {
   getStringOrUndefined,
   isStringEmpty,
   stringToBoolean,
 } from "~/utils/textFormatting";
-import { itemsPerPageDefault } from "~/utils/search/itemsPerPageOptions";
 
 export const CONSENT_COOKIE_NAME = "consent_given";
 

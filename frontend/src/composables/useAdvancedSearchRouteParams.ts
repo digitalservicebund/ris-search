@@ -7,8 +7,8 @@ import {
   type DateFilterValue,
   isFilterType,
 } from "~/utils/search/dateFilterType";
-import { searchParamToNumber, searchParamToString } from "~/utils/searchParams";
 import { itemsPerPageDefault } from "~/utils/search/itemsPerPageOptions";
+import { searchParamToNumber, searchParamToString } from "~/utils/searchParams";
 
 export interface AdvancedSearchRouteParams {
   query?: string;
