@@ -21,6 +21,7 @@ import org.opensearch.index.query.QueryBuilders;
 import org.opensearch.index.search.MatchQuery;
 import org.opensearch.search.collapse.CollapseBuilder;
 import org.opensearch.search.fetch.subphase.highlight.HighlightBuilder;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.SearchHitsImpl;
@@ -102,6 +103,7 @@ public class ArticleService {
     NativeSearchQuery articleQuery =
         new NativeSearchQueryBuilder()
             .withSearchType(SearchType.DFS_QUERY_THEN_FETCH)
+            .withPageable(Pageable.ofSize(expressionElis.size()))
             .withQuery(boolQuery)
             .withCollapseBuilder(collapseBuilder)
             .build();
