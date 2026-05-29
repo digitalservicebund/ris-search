@@ -70,30 +70,30 @@ jobs:
     uses: ./.github/workflows/smoke-tests.yml
     secrets: inherit
 
-#  deploy-uat:
-#    needs:
-#      - smoke-tests
-#    uses: ./.github/workflows/deploy.yml
-#    secrets: inherit
-#    with:
-#      image-tag: ${{ github.sha }}
-#      deployment-environment: uat
-#
-#  deploy-prototype:
-#    needs:
-#      - deploy-uat
-#    uses: ./.github/workflows/deploy.yml
-#    secrets: inherit
-#    with:
-#      image-tag: ${{ github.sha }}
-#      deployment-environment: prototype
-#
-#  deploy-production:
-#    needs:
-#      - deploy-prototype
-#    uses: ./.github/workflows/deploy.yml
-#    secrets: inherit
-#    with:
-#      image-tag: ${{ github.sha }}
-#      deployment-environment: prod
-#      argocd-app-name: ris-search-production
+  deploy-uat:
+    needs:
+      - smoke-tests
+    uses: ./.github/workflows/deploy.yml
+    secrets: inherit
+    with:
+      image-tag: ${{ github.sha }}
+      deployment-environment: uat
+
+  deploy-prototype:
+    needs:
+      - deploy-uat
+    uses: ./.github/workflows/deploy.yml
+    secrets: inherit
+    with:
+      image-tag: ${{ github.sha }}
+      deployment-environment: prototype
+
+  deploy-production:
+    needs:
+      - deploy-prototype
+    uses: ./.github/workflows/deploy.yml
+    secrets: inherit
+    with:
+      image-tag: ${{ github.sha }}
+      deployment-environment: prod
+      argocd-app-name: ris-search-production
