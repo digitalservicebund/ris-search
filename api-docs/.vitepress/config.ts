@@ -4,9 +4,8 @@ export default defineConfig({
   outDir: "./dist",
   cleanUrls: true,
   lastUpdated: true,
-  title: "API-Dokumentation des Rechtsinformationsportals des Bundes",
-  description:
-    "Technische Dokumentation und API-Referenz für den Zugriff auf Rechtsinformationen des Bundes.",
+  title: "API Documentation of the Federal Legal Data Portal",
+  description: "Technical documentation and API reference for accessing federal legal data.",
   head: [
     ["link", { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" }],
     ["link", { rel: "icon", href: "/favicon.png", type: "image/png" }],
@@ -15,7 +14,7 @@ export default defineConfig({
       "meta",
       {
         property: "og:title",
-        content: "API-Dokumentation des Rechtsinformationsportals des Bundes",
+        content: "API Documentation of the Federal Legal Data Portal",
       },
     ],
     [
@@ -27,7 +26,7 @@ export default defineConfig({
     ],
   ],
   themeConfig: {
-    siteTitle: "German Legal Data Docs",
+    siteTitle: "German Legal Data API Docs",
     nav: [
       {
         component: "SwaggerButton",
@@ -53,7 +52,6 @@ export default defineConfig({
           { text: "Error Codes", link: "/guides/error-codes/" },
         ],
       },
-      { text: "Changelog", link: "/changelog/" },
       { text: "Feedback", link: "/feedback/" },
     ],
     socialLinks: [
