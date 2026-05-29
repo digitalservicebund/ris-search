@@ -13,6 +13,7 @@ import org.opensearch.data.client.orhlc.NativeSearchQuery;
 import org.opensearch.data.client.orhlc.NativeSearchQueryBuilder;
 import org.opensearch.index.query.BoolQueryBuilder;
 import org.opensearch.index.query.InnerHitBuilder;
+import org.opensearch.index.query.MatchPhraseQueryBuilder;
 import org.opensearch.index.query.MultiMatchQueryBuilder;
 import org.opensearch.index.query.Operator;
 import org.opensearch.index.query.QueryBuilders;
@@ -73,6 +74,11 @@ public class ArticleService {
               .zeroTermsQuery(MatchQuery.ZeroTermsQuery.ALL)
               .type(MultiMatchQueryBuilder.Type.CROSS_FIELDS)
               .operator(Operator.OR));
+
+      // Allow searching articles by a combined "search keyword" (e.g., article number and norm
+      // abbreviation).
+      // Slop is added to account for re-ordering of the components.
+      boolQuery.should(new MatchPhraseQueryBuilder("search_keyword", searchString).slop(3));
     }
 
     HighlightBuilder highlightBuilder =
