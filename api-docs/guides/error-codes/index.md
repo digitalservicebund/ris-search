@@ -4,8 +4,6 @@ title: Error Codes
 
 # Error Codes
 
-Learn how to diagnose and resolve common problems.
-
 In the event of an unsuccessful API request, standard [HTTP response codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status) are returned to indicate the error in the response header.
 
 For most resources, additional error information is returned in the response body. In those cases, the error response body has the following structure:

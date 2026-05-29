@@ -4,7 +4,7 @@ The application programming interface (API) provides free access to comprehensiv
 
 Our API offers you simple and efficient access to an extensive collection of legal data. Analyze trends or integrate legal texts into your applications.
 
-::: tip **This is a trial service.**
+::: tip **Incomplete dataset**
 The dataset is not yet complete. We will also provide more functions in the future.
 :::
 <SwaggerButton />

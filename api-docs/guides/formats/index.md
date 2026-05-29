@@ -4,8 +4,6 @@ title: Formats
 
 # Resource Endpoints & Formats
 
-Understand the formats we support.
-
 Our API supports retrieving entities in **JSON, XML, or HTML**. By default, all responses are returned in JSON format unless a specific format is requested. The format can be chosen by appending an extension to the URL.
 
 ### Retrieving an Entity in JSON (Default)

@@ -5,7 +5,8 @@ export default defineConfig({
   cleanUrls: true,
   lastUpdated: true,
   title: "API Documentation of the Federal Legal Data Portal",
-  description: "Technical documentation and API reference for accessing federal legal data.",
+  description:
+    "Technical documentation and API reference for accessing federal legal data.",
   head: [
     ["link", { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" }],
     ["link", { rel: "icon", href: "/favicon.png", type: "image/png" }],

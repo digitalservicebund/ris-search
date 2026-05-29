@@ -4,8 +4,6 @@ title: Standards
 
 # Standards
 
-To ensure high data quality and interoperability, we follow established standards. We provide an overview on this page.
-
 To ensure efficient access to legal information, we use various data formats in our portal: JSON, LegalDocML and
 LegalDocML.de. These formats are used to provide data in a structured way, enable the exchange between systems and
 promote the standardization of legal documents. Below we explain the individual formats and their areas of application.

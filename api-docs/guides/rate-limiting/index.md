@@ -4,8 +4,6 @@ title: Rate Limiting
 
 # Rate Limiting
 
-Learn about rate limits, how to avoid exceeding them, and what to do if you do exceed them.
-
 To ensure fair usage and protect our infrastructure from abuse, we enforce rate limits on incoming requests.
 
 ## Rate Limit Policy
