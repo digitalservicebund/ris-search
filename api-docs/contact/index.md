@@ -1,6 +1,7 @@
 ---
 title: Contact
 ---
+
 # Contact
 
 Our mission is to develop a user-centered legal information system.

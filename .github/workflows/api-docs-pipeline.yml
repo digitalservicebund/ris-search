@@ -63,6 +63,10 @@ jobs:
         run: pnpm run style:check
         working-directory: ${{ env.API_DOCS_ROOT }}
 
+      - name: Check types
+        run: pnpm run typecheck
+        working-directory: ${{ env.API_DOCS_ROOT }}
+
   build:
     runs-on: ubuntu-latest
     permissions:
