@@ -25,20 +25,6 @@ const { Layout } = DefaultTheme;
         </div>
       </div>
     </template>
-    <template #home-hero-info-before>
-      <div class="vp-doc">
-        <div class="warning custom-block">
-          <p class="custom-block-title">This is a trial service.</p>
-          <p>
-            This API may be subject to changes and improvements as we learn from
-            usage. This means that you may use this software and build
-            applications that utilise it. However as we learn from feedback we
-            may make changes to the software.
-          </p>
-        </div>
-      </div>
-    </template>
-    <template #doc-footer-before> </template>
     <template #doc-after>
       <div class="vp-doc feedback">
         <FeedbackForm />

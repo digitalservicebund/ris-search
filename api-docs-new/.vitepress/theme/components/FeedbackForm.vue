@@ -31,8 +31,7 @@ const submitFeedback = async () => {
     }
 
     isSent.value = true;
-  } catch (error) {
-    console.error("Error sending survey response:", error);
+  } catch {
     errorMessage.value = SENDING_ERROR_MESSAGE;
   }
 };
