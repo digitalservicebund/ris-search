@@ -3,6 +3,7 @@ import { Message, Select } from "primevue";
 import { useSearchSeo } from "~/composables/useSearchSeo";
 import { DocumentKind } from "~/types/api";
 import { isStrictDateFilterValue } from "~/utils/search/dateFilterType";
+import { itemsPerPageOptions } from "~/utils/search/itemsPerPageOptions";
 
 useSkipLinks([
   { label: "Zur Suche", to: "#search" },
@@ -78,8 +79,6 @@ const documentKindAndGroup = computed(() => ({
 const itemsPerPageLabelId = useId();
 const resultsContainerRef = ref<HTMLElement | null>(null);
 const scrollToResultsOnLoad = ref(false);
-
-const itemsPerPageOptions = ["10", "50", "100"];
 
 const {
   searchError,

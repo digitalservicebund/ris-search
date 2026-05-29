@@ -223,7 +223,7 @@ describe("useSimpleSearch", () => {
 
       expect(useRisBackendMock).toHaveBeenCalled();
       expect(getQueryValue()).toMatchObject({
-        size: "10",
+        size: "25",
         pageIndex: 0,
         sort: "default",
       });

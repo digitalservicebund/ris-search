@@ -282,7 +282,7 @@ describe("useAdvancedSearchRouteParams", () => {
 
       const { itemsPerPage } = useAdvancedSearchRouteParams();
 
-      expect(itemsPerPage.value).toBe("50");
+      expect(itemsPerPage.value).toBe("25");
     });
   });
 

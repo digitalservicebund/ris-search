@@ -168,7 +168,7 @@ describe("usePostHog", () => {
 
     const params: PostHogSearchParams = {
       searchTerm: "test query",
-      size: "10",
+      size: "25",
       pageIndex: 0,
       sort: "default",
       documentKind: DocumentKind.CaseLaw,
@@ -176,7 +176,7 @@ describe("usePostHog", () => {
 
     const previousParams: PostHogSearchParams = {
       searchTerm: "old query",
-      size: "10",
+      size: "25",
       pageIndex: 0,
       sort: "default",
       documentKind: DocumentKind.CaseLaw,
@@ -193,7 +193,7 @@ describe("usePostHog", () => {
         dateAfter: undefined,
         dateBefore: undefined,
         dateSearchMode: "",
-        itemsPerPage: 10,
+        itemsPerPage: 25,
         pageNumber: 0,
         query: "test query",
         sort: "default",
@@ -205,7 +205,7 @@ describe("usePostHog", () => {
         dateAfter: undefined,
         dateBefore: undefined,
         dateSearchMode: "",
-        itemsPerPage: 10,
+        itemsPerPage: 25,
         pageNumber: 0,
         query: "old query",
         sort: "default",
@@ -219,7 +219,7 @@ describe("usePostHog", () => {
     userConsent.value = false;
     searchPerformed("simple", {
       searchTerm: "test query",
-      size: "10",
+      size: "25",
       pageIndex: 0,
       sort: "default",
       documentKind: DocumentKind.CaseLaw,
@@ -247,7 +247,7 @@ describe("usePostHog", () => {
 
     const params: PostHogSearchParams = {
       searchTerm: "test query",
-      size: "10",
+      size: "25",
       pageIndex: 0,
       sort: "default",
       documentKind: DocumentKind.CaseLaw,
@@ -263,7 +263,7 @@ describe("usePostHog", () => {
         dateAfter: undefined,
         dateBefore: undefined,
         dateSearchMode: "",
-        itemsPerPage: 10,
+        itemsPerPage: 25,
         pageNumber: 0,
         query: "test query",
         sort: "default",

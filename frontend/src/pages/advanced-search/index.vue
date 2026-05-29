@@ -5,6 +5,7 @@ import type { Statistics } from "~/types/api";
 import { DocumentKind } from "~/types/api";
 import { queryableDataFields } from "~/utils/search/dataFields";
 import { isStrictDateFilterValue } from "~/utils/search/dateFilterType";
+import { itemsPerPageOptions } from "~/utils/search/itemsPerPageOptions";
 
 definePageMeta({
   alias: "/erweiterte-suche",
@@ -122,8 +123,6 @@ const documentKindMenuItems: MenuItem[] = [
 const itemsPerPageLabelId = useId();
 const resultsContainerRef = ref<HTMLElement | null>(null);
 const scrollToResultsOnLoad = ref(false);
-
-const itemsPerPageOptions = ["10", "50", "100"];
 
 const {
   searchError,

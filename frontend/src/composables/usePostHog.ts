@@ -1,6 +1,7 @@
 import type { PostHog } from "posthog-js";
 import { posthog } from "posthog-js";
 import type { DocumentKind } from "~/types/api";
+import { itemsPerPageDefault } from "~/utils/search/itemsPerPageOptions";
 import {
   getStringOrUndefined,
   isStringEmpty,
@@ -47,7 +48,7 @@ function mapTrackingParamsToLegacyFormat(
     dateAfter: q.dateFrom,
     dateBefore: q.dateTo,
     dateSearchMode: "", // This has never been tracked properly and only exist for compatibility
-    itemsPerPage: searchParamToNumber(q.size, 10),
+    itemsPerPage: searchParamToNumber(q.size, Number(itemsPerPageDefault)),
     pageNumber: q.pageIndex,
     query: q.searchTerm,
     sort: q.sort,

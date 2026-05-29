@@ -6,6 +6,7 @@ import {
   dateFilterToSimpleSearchParams,
   type StrictDateFilterValue,
 } from "~/utils/search/dateFilterType";
+import { itemsPerPageDefault } from "~/utils/search/itemsPerPageOptions";
 
 /** Additional configuration for search API calls */
 type SimpleSearchOptions = {
@@ -49,7 +50,7 @@ export async function useSimpleSearch(
   dateFilter: MaybeRefOrGetter<StrictDateFilterValue | undefined>,
   court: MaybeRefOrGetter<string | undefined>,
   {
-    itemsPerPage = "10",
+    itemsPerPage = itemsPerPageDefault,
     pageIndex = 0,
     sort = "default",
   }: Partial<SimpleSearchOptions>,

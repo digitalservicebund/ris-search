@@ -112,6 +112,18 @@ describe("useAdvancedSearch", () => {
     expect(urlQuery?.value).toMatchObject({ query: "(test query)" });
   });
 
+  it("uses default values for pagination and sort", async () => {
+    await useAdvancedSearch("example", DocumentKind.CaseLaw, undefined, {});
+
+    expect(useRisBackendMock).toHaveBeenCalled();
+    const urlQuery = useRisBackendMock.mock.calls[0]![1].query;
+    expect(urlQuery?.value).toMatchObject({
+      size: "25",
+      pageIndex: 0,
+      sort: "default",
+    });
+  });
+
   it("submits pagination parameters correctly", async () => {
     await useAdvancedSearch(
       "example",

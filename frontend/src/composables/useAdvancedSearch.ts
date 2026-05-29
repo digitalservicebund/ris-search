@@ -5,6 +5,7 @@ import {
   dateFilterToQuery,
   type StrictDateFilterValue,
 } from "~/utils/search/dateFilterType";
+import { itemsPerPageDefault } from "~/utils/search/itemsPerPageOptions";
 
 /** Additional configuration for search API calls */
 type AdvancedSearchOptions = {
@@ -35,7 +36,7 @@ export async function useAdvancedSearch(
   documentKind: MaybeRefOrGetter<DocumentKind>,
   dateFilter: MaybeRefOrGetter<StrictDateFilterValue | undefined>,
   {
-    itemsPerPage = "50",
+    itemsPerPage = itemsPerPageDefault,
     pageIndex = 0,
     sort = "default",
   }: Partial<AdvancedSearchOptions>,

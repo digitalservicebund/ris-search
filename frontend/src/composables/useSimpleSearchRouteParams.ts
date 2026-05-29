@@ -7,6 +7,7 @@ import {
   isFilterType,
   type DateFilterValue,
 } from "~/utils/search/dateFilterType";
+import { itemsPerPageDefault } from "~/utils/search/itemsPerPageOptions";
 import { searchParamToNumber, searchParamToString } from "~/utils/searchParams";
 
 export interface SearchRouteParams {
@@ -23,7 +24,7 @@ export interface SearchRouteParams {
 export const SIMPLE_SEARCH_DEFAULTS = {
   documentKind: DocumentKind.All,
   sort: "default",
-  itemsPerPage: "10",
+  itemsPerPage: itemsPerPageDefault,
   pageIndex: 0,
   dateFilterType: "allTime" as const,
 } as const;
