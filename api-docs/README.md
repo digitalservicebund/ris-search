@@ -1,8 +1,17 @@
-# RIS Portal Api-Docs Documentation
+# RIS Portal API-Docs
 
-## Installation
+Static documentation site for the RIS portal public API, built with [VitePress](https://vitepress.dev/).
+
+Covers basics about the API and links to the swagger documentation.
+
+## Setup
 
 ```sh
 pnpm install
-pnpm run dev
+```
+
+## Run locally
+
+```sh
+pnpm dev
 ```
