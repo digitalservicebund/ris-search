@@ -8,6 +8,7 @@ import {
   isFilterType,
 } from "~/utils/search/dateFilterType";
 import { searchParamToNumber, searchParamToString } from "~/utils/searchParams";
+import { itemsPerPageDefault } from "~/utils/search/itemsPerPageOptions";
 
 export interface AdvancedSearchRouteParams {
   query?: string;
@@ -21,7 +22,7 @@ export interface AdvancedSearchRouteParams {
 export const ADVANCED_SEARCH_DEFAULTS = {
   documentKind: DocumentKind.Norm,
   sort: "default",
-  itemsPerPage: "50",
+  itemsPerPage: itemsPerPageDefault,
   pageIndex: 0,
 } as const;
 

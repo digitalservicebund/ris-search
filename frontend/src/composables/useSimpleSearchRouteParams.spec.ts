@@ -331,7 +331,7 @@ describe("useSimpleSearchRouteParams", () => {
 
       const { itemsPerPage } = useSimpleSearchRouteParams();
 
-      expect(itemsPerPage.value).toBe("10");
+      expect(itemsPerPage.value).toBe("25");
     });
   });
 

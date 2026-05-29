@@ -96,7 +96,7 @@ test.describe("general search page features", () => {
   });
 
   test("pagination switches pages", async ({ page }) => {
-    await navigate(page, "/search?query=und");
+    await navigate(page, "/search?query=und&itemsPerPage=10");
 
     const resultCounter = getResultCounter(page);
     await expect(resultCounter).toHaveText(nonZeroResultCount);
@@ -124,7 +124,7 @@ test.describe("general search page features", () => {
   });
 
   test("focuses first search result after pagination", async ({ page }) => {
-    await navigate(page, "/search?query=und");
+    await navigate(page, "/search?query=und&itemsPerPage=10");
 
     await page
       .getByRole("navigation", { name: "Paginierung" })
@@ -167,7 +167,7 @@ test.describe("general search page features", () => {
   });
 
   test("change number of results per page", async ({ page }) => {
-    await navigate(page, "/search?query=fiktiv");
+    await navigate(page, "/search?query=fiktiv&itemsPerPage=10");
 
     const searchResults = getSearchResults(page);
 
@@ -433,7 +433,7 @@ test.describe("searching caselaw", () => {
 
     // Ensure all visible entries are of type caselaw
     await expect(searchResults).toHaveText(
-      Array(10).fill(/^(Beschluss|Urteil)/),
+      Array(13).fill(/^(Beschluss|Urteil)/),
     );
   });
 
@@ -495,7 +495,7 @@ test.describe("searching caselaw", () => {
       await expect(page).toHaveURL(/typeGroup=urteil/);
 
       await expect(getSearchResults(page)).toHaveText(
-        Array.from<RegExp>({ length: 10 }).fill(/^Urteil/),
+        Array.from<RegExp>({ length: 11 }).fill(/^Urteil/),
       );
     });
 
@@ -535,7 +535,7 @@ test.describe("searching caselaw", () => {
       await expect(page).toHaveURL(/typeGroup=($|&)/);
 
       await expect(getSearchResults(page)).toHaveText(
-        Array(10).fill(/^(Beschluss|Urteil)/),
+        Array(13).fill(/^(Beschluss|Urteil)/),
       );
     });
   });
@@ -1074,7 +1074,7 @@ noJsTest("search works without JavaScript", async ({ page }) => {
 });
 
 noJsTest("pagination works without JavaScript", async ({ page }) => {
-  await navigate(page, "/search?query=und");
+  await navigate(page, "/search?query=und&itemsPerPage=10");
 
   await expect(getResultCounter(page)).toHaveText(nonZeroResultCount);
   await expect(getSearchResults(page)).toHaveCount(10);
