@@ -8,9 +8,9 @@ import java.util.Set;
 /** A DTO for ChangelogResponses. */
 public record ChangelogResponse(
     @Schema(description = "Set of changed documents", requiredMode = Schema.RequiredMode.REQUIRED)
-        Set<ChangelogDocument> changed,
+        Set<ChangelogChangedDocument> changed,
     @Schema(description = "Set of deleted documents", requiredMode = Schema.RequiredMode.REQUIRED)
-        Set<ChangelogDocument> deleted,
+        Set<ChangelogDeletedDocument> deleted,
     @Schema(
             description = "flag to communicate that the whole storage got rebuilt",
             requiredMode = Schema.RequiredMode.REQUIRED)

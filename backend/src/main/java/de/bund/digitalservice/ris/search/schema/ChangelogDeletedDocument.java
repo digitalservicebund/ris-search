@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 /** A DTO for a single document in a ChangelogResponse. */
-public record ChangelogDocument(
+public record ChangelogDeletedDocument(
     @JsonProperty("@id")
         @Schema(
             description = "unique identifier of the document",

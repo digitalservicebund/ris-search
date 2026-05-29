@@ -66,8 +66,8 @@ class ChangelogEndpointsTest extends ContainersIntegrationBase {
             get(ApiConfig.Paths.CASELAW_CHANGELOGS)
                 .params(MultiValueMap.fromSingleValue(Map.of("from", from, "to", to))))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.changed[0].['@id']").value("/v1/case-law/file1"))
-        .andExpect(jsonPath("$.changed[0].['@type']").value("Decision"))
+        .andExpect(jsonPath("$.changed[0].['@id']").value("/v1/case-law/file1/zip"))
+        .andExpect(jsonPath("$.changed[0].['@type']").value("MediaObject"))
         .andExpect(jsonPath("$.deleted[0].['@id']").value("/v1/case-law/file2"))
         .andExpect(jsonPath("$.deleted[0].['@type']").value("Decision"));
   }
@@ -83,8 +83,8 @@ class ChangelogEndpointsTest extends ContainersIntegrationBase {
             get(ApiConfig.Paths.LITERATURE_CHANGELOGS)
                 .params(MultiValueMap.fromSingleValue(Map.of("from", from, "to", to))))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.changed[0].['@id']").value("/v1/literature/file1"))
-        .andExpect(jsonPath("$.changed[0].['@type']").value("Literature"))
+        .andExpect(jsonPath("$.changed[0].['@id']").value("/v1/literature/file1/zip"))
+        .andExpect(jsonPath("$.changed[0].['@type']").value("MediaObject"))
         .andExpect(jsonPath("$.deleted[0].['@id']").value("/v1/literature/file2"))
         .andExpect(jsonPath("$.deleted[0].['@type']").value("Literature"));
   }
@@ -100,8 +100,8 @@ class ChangelogEndpointsTest extends ContainersIntegrationBase {
             get(ApiConfig.Paths.ADMINISTRATIVE_DIRECTIVE_CHANGELOGS)
                 .params(MultiValueMap.fromSingleValue(Map.of("from", from, "to", to))))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.changed[0].['@id']").value("/v1/administrative-directive/file1"))
-        .andExpect(jsonPath("$.changed[0].['@type']").value("AdministrativeDirective"))
+        .andExpect(jsonPath("$.changed[0].['@id']").value("/v1/administrative-directive/file1/zip"))
+        .andExpect(jsonPath("$.changed[0].['@type']").value("MediaObject"))
         .andExpect(jsonPath("$.deleted[0].['@id']").value("/v1/administrative-directive/file2"))
         .andExpect(jsonPath("$.deleted[0].['@type']").value("AdministrativeDirective"));
   }
@@ -131,8 +131,8 @@ class ChangelogEndpointsTest extends ContainersIntegrationBase {
         .andExpect(status().isOk())
         .andExpect(
             jsonPath("$.changed[0].['@id']")
-                .value("/v1/legislation/eli/bund/bgbl-1/1999/identifier/2026-01-01/1/deu"))
-        .andExpect(jsonPath("$.changed[0].['@type']").value("Legislation"))
+                .value("/v1/legislation/eli/bund/bgbl-1/1999/identifier/2026-01-01/1/deu/zip"))
+        .andExpect(jsonPath("$.changed[0].['@type']").value("LegislationObject"))
         .andExpect(
             jsonPath("$.deleted[0].['@id']")
                 .value("/v1/legislation/eli/bund/bgbl-1/2000/identifier/2026-01-01/1/deu"))

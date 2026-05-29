@@ -2312,7 +2312,19 @@
           "yearsOfPublication"
         ]
       },
-      "ChangelogDocument": {
+      "ChangelogChangedDocument": {
+        "type": "object",
+        "properties": {
+          "@id": {
+            "type": "string",
+            "description": "unique identifier of the document"
+          },
+          "@type": { "type": "string", "description": "type of the document" },
+          "contentUrl": { "type": "string" }
+        },
+        "required": ["@id", "@type", "contentUrl"]
+      },
+      "ChangelogDeletedDocument": {
         "type": "object",
         "properties": {
           "@id": {
@@ -2330,13 +2342,17 @@
           "changed": {
             "type": "array",
             "description": "Set of changed documents",
-            "items": { "$ref": "#/components/schemas/ChangelogDocument" },
+            "items": {
+              "$ref": "#/components/schemas/ChangelogChangedDocument"
+            },
             "uniqueItems": true
           },
           "deleted": {
             "type": "array",
             "description": "Set of deleted documents",
-            "items": { "$ref": "#/components/schemas/ChangelogDocument" },
+            "items": {
+              "$ref": "#/components/schemas/ChangelogDeletedDocument"
+            },
             "uniqueItems": true
           },
           "allChanged": {
@@ -2687,7 +2703,7 @@
       "CaseLawEncodingSchema": {
         "type": "object",
         "properties": {
-          "@type": { "type": "string", "example": "DecisionObject" },
+          "@type": { "type": "string", "example": "MediaObject" },
           "@id": { "type": "string" },
           "contentUrl": { "type": "string" },
           "encodingFormat": { "type": "string", "example": "text/html" },

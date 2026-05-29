@@ -3,7 +3,8 @@ package de.bund.digitalservice.ris.search.mapper;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.models.DocumentKind;
-import de.bund.digitalservice.ris.search.schema.ChangelogDocument;
+import de.bund.digitalservice.ris.search.schema.ChangelogChangedDocument;
+import de.bund.digitalservice.ris.search.schema.ChangelogDeletedDocument;
 import de.bund.digitalservice.ris.search.schema.ChangelogResponse;
 import de.bund.digitalservice.ris.search.schema.JsonldTypes;
 import de.bund.digitalservice.ris.search.utils.eli.EliFile;
@@ -44,27 +45,31 @@ public class ChangelogResponseMapper {
    */
   private static ChangelogResponse mapNorms(Changelog changelog) {
     String apiUrl = ApiConfig.Paths.LEGISLATION + "/";
-    Set<ChangelogDocument> changed =
+    Set<ChangelogChangedDocument> changed =
         changelog.getChanged().stream()
             .flatMap(
                 id ->
                     EliFile.fromString(id)
                         .map(
                             eli ->
-                                new ChangelogDocument(
-                                    apiUrl + eli.getExpressionEli(), JsonldTypes.LEGISLATION))
+                                new ChangelogChangedDocument(
+                                    EncodingSchemaFactory.id(
+                                        EncodingSchemaFactory.SchemaType.ZIP, getNormBaseUrl(eli)),
+                                    JsonldTypes.LEGISLATION_OBJECT,
+                                    EncodingSchemaFactory.contentUrl(
+                                        EncodingSchemaFactory.SchemaType.ZIP, getNormBaseUrl(eli))))
                         .stream())
             .collect(Collectors.toSet());
 
-    Set<ChangelogDocument> deleted =
+    Set<ChangelogDeletedDocument> deleted =
         changelog.getDeleted().stream()
             .flatMap(
                 id ->
                     EliFile.fromString(id)
                         .map(
                             eli ->
-                                new ChangelogDocument(
-                                    apiUrl + eli.getExpressionEli(), JsonldTypes.LEGISLATION))
+                                new ChangelogDeletedDocument(
+                                    getNormBaseUrl(eli), JsonldTypes.LEGISLATION))
                         .stream())
             .collect(Collectors.toSet());
 
@@ -76,25 +81,41 @@ public class ChangelogResponseMapper {
    * to a set of affected expressions.
    *
    * @param changelog Changelog to me mapped
-   * @param type String representation of the @type of a document
+   * @param deletedType String representation of the @type of a deleted document
    * @return ChangelogResponse with all changes by expression
    */
-  private static ChangelogResponse mapDocument(Changelog changelog, String apiPath, String type) {
+  private static ChangelogResponse mapDocument(
+      Changelog changelog, String apiPath, String deletedType) {
     var changed =
         changelog.getChanged().stream()
             .map(
-                path ->
-                    new ChangelogDocument(
-                        apiPath + "/" + (path.substring(0, path.indexOf("/"))), type))
+                path -> {
+                  var baseUrl = getDocumentPath(apiPath, path);
+                  return new ChangelogChangedDocument(
+                      EncodingSchemaFactory.id(EncodingSchemaFactory.SchemaType.ZIP, baseUrl),
+                      JsonldTypes.MEDIA_OBJECT,
+                      EncodingSchemaFactory.contentUrl(
+                          EncodingSchemaFactory.SchemaType.ZIP, baseUrl));
+                })
             .collect(Collectors.toSet());
+
     var deleted =
         changelog.getDeleted().stream()
             .map(
-                path ->
-                    new ChangelogDocument(
-                        apiPath + "/" + (path.substring(0, path.indexOf("/"))), type))
+                path -> {
+                  var baseUrl = getDocumentPath(apiPath, path);
+                  return new ChangelogDeletedDocument(baseUrl, deletedType);
+                })
             .collect(Collectors.toSet());
 
     return new ChangelogResponse(changed, deleted, changelog.isChangeAll());
+  }
+
+  private static String getNormBaseUrl(EliFile eliFile) {
+    return ApiConfig.Paths.LEGISLATION + "/" + eliFile.getManifestationEli().getManifestationRoot();
+  }
+
+  private static String getDocumentPath(String apiPath, String filePath) {
+    return apiPath + "/" + (filePath.substring(0, filePath.indexOf("/")));
   }
 }

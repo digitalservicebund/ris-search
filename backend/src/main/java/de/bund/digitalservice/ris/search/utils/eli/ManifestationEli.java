@@ -26,6 +26,19 @@ public record ManifestationEli(
     String subtype,
     String format) {
 
+  public String getManifestationRoot() {
+    return "eli/%s/%s/%s/%s/%s/%d/%s/%s"
+        .formatted(
+            jurisdiction(),
+            agent(),
+            year(),
+            naturalIdentifier(),
+            pointInTime().format(DateTimeFormatter.ISO_LOCAL_DATE),
+            version(),
+            language(),
+            pointInTimeManifestation().format(DateTimeFormatter.ISO_LOCAL_DATE));
+  }
+
   @Override
   public String toString() {
     return "eli/%s/%s/%s/%s/%s/%d/%s/%s/%s.%s"
