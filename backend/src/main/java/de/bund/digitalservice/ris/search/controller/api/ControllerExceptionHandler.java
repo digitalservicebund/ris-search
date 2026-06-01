@@ -21,6 +21,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 /**
@@ -32,6 +33,7 @@ public class ControllerExceptionHandler {
 
   private static final Logger logger = LoggerFactory.getLogger(ControllerExceptionHandler.class);
 
+  public static final String CODE_FOR_400 = "bad_request";
   public static final String CODE_FOR_403 = "forbidden";
   public static final String CODE_FOR_404 = "not_found";
 
@@ -136,6 +138,26 @@ public class ControllerExceptionHandler {
     CustomErrorResponse errorResponse =
         CustomErrorResponse.builder().errors(List.of(errorDetail)).build();
     return ResponseEntity.status(HttpStatus.UNPROCESSABLE_CONTENT).body(errorResponse);
+  }
+
+  /**
+   * This ExceptionHandler maps MethodArgumentTypeMismatchExceptions that occur during type
+   * conversion of Controller arguments
+   *
+   * @param ex the {@link
+   *     org.springframework.web.method.annotation.MethodArgumentTypeMismatchException} that is
+   *     thrown during the type conversion of controller arguments
+   * @return @{@link org.springframework.http.ResponseEntity} with httpStatus 400
+   */
+  @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+  public ResponseEntity<CustomErrorResponse> handleControllerParameterTypeMismatchErrors(
+      MethodArgumentTypeMismatchException ex) {
+
+    CustomError error = new CustomError(CODE_FOR_400, "The request could not be parsed", "");
+    CustomErrorResponse errorResponse =
+        CustomErrorResponse.builder().errors(List.of(error)).build();
+    logger.warn(ex.getMessage(), ex);
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
   }
 
   /**
