@@ -4,7 +4,7 @@ jacoco = "0.8.11"
 spring-boot = "4.0.6"
 spring-boot-starter = "4.0.6"
 spring-dependency-management = "1.1.7"
-spotless = "8.4.0"
+spotless = "8.6.0"
 sonarqube = "7.3.0.8198"
 license-report = "3.1.2"
 test-logger = "4.0.0"
@@ -15,7 +15,7 @@ test-containers = "1.21.4"
 spring-cloud-k8s = "5.0.1"
 springdoc-openapi = "3.0.3"
 prometheus = "1.16.5"
-sentry = "8.41.0"
+sentry = "8.43.0"
 commons-text = "1.15.0"
 junit5 = "1.4.2"
 mockito = "5.23.0"
@@ -75,9 +75,9 @@ restassured = { module = 'io.rest-assured:rest-assured', version.ref = "rest-ass
 # Override sub-dependency 1.8 with 1.84 to avoid CVE-2026-5588 CVE-2026-0636
 bouncycastle = { module = "org.bouncycastle:bcpkix-jdk18on", version = "1.84" }
 # CVE-2026-42583, CVE-2026-42584, CVE-2026-42587
-netty-http = { module = "io.netty:netty-codec-http", version = "4.2.13.Final" }
-netty-http2 = { module = "io.netty:netty-codec-http2", version = "4.2.13.Final" }
-netty-compression = { module = "io.netty:netty-codec-compression", version = "4.2.13.Final" }
+netty-http = { module = "io.netty:netty-codec-http", version = "4.2.14.Final" }
+netty-http2 = { module = "io.netty:netty-codec-http2", version = "4.2.14.Final" }
+netty-compression = { module = "io.netty:netty-codec-compression", version = "4.2.14.Final" }
 # CVE-2026-41293, CVE-2026-43512, CVE-2026-41284, CVE-2026-42498, CVE-2026-43513
 tomcat-embed = { module = "org.apache.tomcat.embed:tomcat-embed-core", version = "11.0.22" }
 
