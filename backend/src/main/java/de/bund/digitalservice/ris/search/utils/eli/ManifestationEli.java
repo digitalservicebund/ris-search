@@ -26,6 +26,11 @@ public record ManifestationEli(
     String subtype,
     String format) {
 
+  /**
+   * Represents the root of a Manifestation without a specific subtype and format
+   *
+   * @return the String representation of the root the manifestation
+   */
   public String getManifestationRoot() {
     return "eli/%s/%s/%s/%s/%s/%d/%s/%s"
         .formatted(
