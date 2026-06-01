@@ -66,4 +66,17 @@ class ErrorResponseTest extends ContainersIntegrationBase {
                 Matchers.is("An unexpected error occurred. Please try again later.")))
         .andExpect(jsonPath("$.errors[0].parameter", Matchers.is("")));
   }
+
+  @Test
+  @DisplayName("Should return 400 on argument type mismatch")
+  void shouldReturn400MethodArgumentTypeMismatchException() throws Exception {
+    mockMvc
+        .perform(
+            get("/v1/legislation/eli/bund/bgbl-1/2002/s42/regelungstext-1/abschnitt/§-1629")
+                .contentType(MediaType.TEXT_HTML))
+        .andExpect(status().is(400))
+        .andExpect(jsonPath("$.errors[0].code", Matchers.is("bad_request")))
+        .andExpect(jsonPath("$.errors[0].message", Matchers.is("The request could not be parsed")))
+        .andExpect(jsonPath("$.errors[0].parameter", Matchers.is("")));
+  }
 }
