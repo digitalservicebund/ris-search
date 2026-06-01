@@ -208,7 +208,7 @@ jobs:
 
       - name: Build backend image
         id: build-push-image
-        uses: docker/build-push-action@bcafcacb16a39f128d818304e6c9c0c18556b85f # v7.1.0
+        uses: docker/build-push-action@f9f3042f7e2789586610d6e8b85c8f03e5195baf # v7.2.0
         # Note: We set the sentry release to the current commit sha so it is baked into the docker image
         # and supplied to the backend application at runtime so it can associate errors with the correct sentry release.
         # There is no need to create a sentry release in the backend pipeline as we already create one in the frontend pipeline
