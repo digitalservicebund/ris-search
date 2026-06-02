@@ -35,8 +35,7 @@ public class ZipManager {
 
   private static void appendZipEntryFromS3(
       ObjectStorage s3Bucket, String key, ZipOutputStream zipOut) throws IOException {
-    String suffix = key.substring(key.lastIndexOf('/') + 1);
-    ZipEntry zipEntry = new ZipEntry(suffix);
+    ZipEntry zipEntry = new ZipEntry(key);
     zipOut.putNextEntry(zipEntry);
 
     try (InputStream objectInputStream = s3Bucket.getStream(key)) {

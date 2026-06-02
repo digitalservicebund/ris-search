@@ -1,6 +1,5 @@
 package de.bund.digitalservice.ris.search.service;
 
-import de.bund.digitalservice.ris.search.exception.NoSuchKeyException;
 import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
 import de.bund.digitalservice.ris.search.service.helper.ZipManager;
 import java.io.BufferedOutputStream;
@@ -14,61 +13,54 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.stereotype.Service;
 
 /** Service for creating and managing bulk exports of objects from ObjectStorage. */
-@Service
-public class BulkExportService {
+public class BulkExportService implements Job {
 
   private final Logger logger = LogManager.getLogger(BulkExportService.class);
 
-  /**
-   * Asynchronously creates a ZIP archive of all objects in the sourceBucket with the given prefix,
-   * uploads it to the destinationBucket, and deletes obsolete archives.
-   *
-   * @param sourceBucket the ObjectStorage bucket to read files from
-   * @param destinationBucket the ObjectStorage bucket to upload the ZIP archive to
-   * @param outputName the base name for the output ZIP file
-   * @param prefix the prefix to filter objects in the sourceBucket
-   */
-  public void updateExportAsync(
+  private final ObjectStorage sourceBucket;
+  private final ObjectStorage destinationBucket;
+  private final String outputName;
+  private final String prefix;
+  private final Predicate<String> keyFilter;
+
+  public BulkExportService(
       ObjectStorage sourceBucket,
       ObjectStorage destinationBucket,
       String outputName,
-      String prefix) {
-    try {
-      this.updateExport(sourceBucket, destinationBucket, outputName, prefix);
-    } catch (IOException | ExecutionException | NoSuchKeyException e) {
-      logger.error("in async operation", e);
-    } catch (InterruptedException e) {
-      logger.error("in async operation", e);
-      Thread.currentThread().interrupt();
-    }
+      String prefix,
+      Predicate<String> keyFilter) {
+    this.sourceBucket = sourceBucket;
+    this.destinationBucket = destinationBucket;
+    this.outputName = outputName;
+    this.prefix = prefix;
+    this.keyFilter = keyFilter;
   }
 
   /**
    * Creates a ZIP archive of all objects in the sourceBucket with the given prefix, uploads it to
    * the destinationBucket, and deletes obsolete archives.
    *
-   * @param sourceBucket the ObjectStorage bucket to read files from
-   * @param destinationBucket the ObjectStorage bucket to upload the ZIP archive to
-   * @param outputName the base name for the output ZIP file
-   * @param prefix the prefix to filter objects in the sourceBucket
-   * @throws IOException if an I/O error occurs during processing
-   * @throws ExecutionException if an error occurs during the upload process
-   * @throws InterruptedException if the thread is interrupted while waiting for upload completion
-   * @throws NoSuchKeyException if a specified key does not exist in the sourceBucket
+   * @return ReturnCode
    */
-  public void updateExport(
-      ObjectStorage sourceBucket, ObjectStorage destinationBucket, String outputName, String prefix)
-      throws IOException, ExecutionException, InterruptedException, NoSuchKeyException {
+  public ReturnCode runJob() {
 
     String timestamp = Instant.now().toString();
-    List<String> keysToZip = sourceBucket.getAllKeysByPrefix(prefix);
+    List<String> keysToZip =
+        sourceBucket.getAllKeysByPrefix(prefix).stream()
+            .filter(keyFilter)
+            .collect(Collectors.toList());
+
+    if (keysToZip.isEmpty()) {
+      return null;
+    }
 
     String affectedPrefix = "archive/" + outputName;
     String resultObjectKey = affectedPrefix + "_" + timestamp + ".zip";
@@ -113,9 +105,9 @@ public class BulkExportService {
                       resultObjectKey,
                       FileUtils.byteCountToDisplaySize(byteCount)));
 
-    } catch (InterruptedException | ExecutionException e) {
+    } catch (InterruptedException | ExecutionException | IOException e) {
       logger.error("Error processing key '{}'", keysToZip, e);
-      throw e;
+      return ReturnCode.ERROR;
     }
 
     // Clean up old backups now that the new one is safely uploaded
@@ -123,5 +115,7 @@ public class BulkExportService {
     for (String obsoleteObjectKey : obsoleteObjectKeys) {
       destinationBucket.delete(obsoleteObjectKey);
     }
+
+    return ReturnCode.SUCCESS;
   }
 }

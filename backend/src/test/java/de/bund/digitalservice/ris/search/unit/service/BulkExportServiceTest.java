@@ -31,8 +31,6 @@ import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 
 class BulkExportServiceTest {
 
-  private final BulkExportService bulkExportService = new BulkExportService();
-
   final Function<byte[], ResponseInputStream<GetObjectResponse>> makeInputStream =
       bytes -> {
         final var stream = new ByteArrayInputStream(bytes);
@@ -40,7 +38,7 @@ class BulkExportServiceTest {
       };
 
   @Test
-  void updateExport_successfulZipAndUpload() throws IOException, NoSuchKeyException {
+  void runJob_successfulZipAndUpload() throws IOException, NoSuchKeyException {
     ObjectStorage sourceBucket = mock(ObjectStorage.class);
     ObjectStorage destinationBucket = mock(ObjectStorage.class);
     String outputName = "test-export";
@@ -64,8 +62,10 @@ class BulkExportServiceTest {
               return -1L;
             });
 
-    assertDoesNotThrow(
-        () -> bulkExportService.updateExport(sourceBucket, destinationBucket, outputName, prefix));
+    BulkExportService bulkExportService =
+        new BulkExportService(sourceBucket, destinationBucket, outputName, prefix, (key) -> true);
+
+    assertDoesNotThrow(bulkExportService::runJob);
 
     verify(sourceBucket, times(1)).getAllKeysByPrefix(prefix);
     verify(sourceBucket, times(1)).getStream("file1.txt");
@@ -82,7 +82,7 @@ class BulkExportServiceTest {
   }
 
   @Test
-  void updateExport_withObsoleteFiles_shouldDeleteThem() throws IOException, NoSuchKeyException {
+  void runJob_withObsoleteFiles_shouldDeleteThem() throws IOException, NoSuchKeyException {
     ObjectStorage sourceBucket = mock(ObjectStorage.class);
     ObjectStorage destinationBucket = mock(ObjectStorage.class);
     String outputName = "test-export";
@@ -101,8 +101,10 @@ class BulkExportServiceTest {
     when(destinationBucket.putStream(anyString(), any(InputStream.class))).thenReturn(0L);
     doNothing().when(destinationBucket).delete(anyString());
 
-    assertDoesNotThrow(
-        () -> bulkExportService.updateExport(sourceBucket, destinationBucket, outputName, prefix));
+    BulkExportService bulkExportService =
+        new BulkExportService(sourceBucket, destinationBucket, outputName, prefix, (key) -> true);
+
+    assertDoesNotThrow(bulkExportService::runJob);
 
     verify(sourceBucket, times(1)).getAllKeysByPrefix(prefix);
     verify(sourceBucket, times(1)).getStream("file1.txt");
@@ -113,7 +115,7 @@ class BulkExportServiceTest {
   }
 
   @Test
-  void updateExport_sourceBucketThrowsIOException_shouldPropagateException()
+  void runJob_sourceBucketThrowsIOException_shouldPropagateException()
       throws IOException, NoSuchKeyException {
     ObjectStorage sourceBucket = mock(ObjectStorage.class);
     ObjectStorage destinationBucket = mock(ObjectStorage.class);
@@ -123,9 +125,10 @@ class BulkExportServiceTest {
     when(sourceBucket.getAllKeysByPrefix(prefix))
         .thenThrow(new RuntimeException("The mock source bucket does not want to list files"));
 
-    assertThrows(
-        RuntimeException.class,
-        () -> bulkExportService.updateExport(sourceBucket, destinationBucket, outputName, prefix));
+    BulkExportService bulkExportService =
+        new BulkExportService(sourceBucket, destinationBucket, outputName, prefix, (key) -> true);
+
+    assertThrows(RuntimeException.class, bulkExportService::runJob);
 
     verify(sourceBucket, times(0)).getStream(anyString());
     verify(destinationBucket, times(0)).putStream(anyString(), any(InputStream.class));
@@ -133,7 +136,7 @@ class BulkExportServiceTest {
   }
 
   @Test
-  void updateExport_destinationBucketPutStreamThrowsIOException_shouldPropagateException()
+  void runJob_destinationBucketPutStreamThrowsIOException_shouldPropagateException()
       throws IOException, NoSuchKeyException {
     ObjectStorage sourceBucket = mock(ObjectStorage.class);
     ObjectStorage destinationBucket = mock(ObjectStorage.class);
@@ -145,11 +148,11 @@ class BulkExportServiceTest {
     when(destinationBucket.putStream(anyString(), any(InputStream.class)))
         .thenThrow(new IOException("The mock source bucket threw an exception"));
 
-    assertThrows(
-        Exception.class,
-        () ->
-            bulkExportService.updateExport(
-                sourceBucket, destinationBucket, "test-export", "some/prefix/"));
+    BulkExportService bulkExportService =
+        new BulkExportService(
+            sourceBucket, destinationBucket, "test-export", "some/prefix/", (key) -> true);
+
+    assertThrows(Exception.class, bulkExportService::runJob);
 
     verify(sourceBucket, times(1)).getAllKeysByPrefix("some/prefix/");
     verify(sourceBucket, times(1)).getStream("file.txt");
