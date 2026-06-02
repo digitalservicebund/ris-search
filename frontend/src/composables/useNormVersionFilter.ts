@@ -1,6 +1,6 @@
+import dayjs from "dayjs";
 import { computed, ref } from "vue";
 import type { LegislationExpression } from "~/types/api";
-import { parseDateGermanLocalTime } from "~/utils/dateFormatting";
 import { temporalCoverageToValidityInterval } from "~/utils/norm";
 
 export function useNormVersionFilter(
@@ -9,7 +9,9 @@ export function useNormVersionFilter(
   const dateFilterValue = ref<string>();
 
   const filteredNormVersions = computed<LegislationExpression[]>(() => {
-    const filterDate = parseDateGermanLocalTime(dateFilterValue.value);
+    const filterDate = dateFilterValue.value
+      ? dayjs(dateFilterValue.value, "YYYY-MM-DD").tz("Europe/Berlin")
+      : undefined;
 
     if (!filterDate) return normVersions.value;
 
