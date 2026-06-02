@@ -2,8 +2,10 @@ package de.bund.digitalservice.ris.search.service;
 
 import de.bund.digitalservice.ris.search.exception.NoSuchKeyException;
 import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
+import de.bund.digitalservice.ris.search.service.helper.ZipManager;
+import java.io.BufferedOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.time.Instant;
@@ -12,13 +14,10 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 /** Service for creating and managing bulk exports of objects from ObjectStorage. */
@@ -36,7 +35,6 @@ public class BulkExportService {
    * @param outputName the base name for the output ZIP file
    * @param prefix the prefix to filter objects in the sourceBucket
    */
-  @Async
   public void updateExportAsync(
       ObjectStorage sourceBucket,
       ObjectStorage destinationBucket,
@@ -68,6 +66,7 @@ public class BulkExportService {
   public void updateExport(
       ObjectStorage sourceBucket, ObjectStorage destinationBucket, String outputName, String prefix)
       throws IOException, ExecutionException, InterruptedException, NoSuchKeyException {
+
     String timestamp = Instant.now().toString();
     List<String> keysToZip = sourceBucket.getAllKeysByPrefix(prefix);
 
@@ -75,48 +74,36 @@ public class BulkExportService {
     String resultObjectKey = affectedPrefix + "_" + timestamp + ".zip";
     List<String> obsoleteObjectKeys = destinationBucket.getAllKeysByPrefix(affectedPrefix);
 
-    // Create a PipedInputStream and PipedOutputStream for streaming data, and an ExecutorService
-    // for parallel execution
-    try (PipedInputStream pipedInputStream = new PipedInputStream();
+    // Setup the pipe with a larger buffer (5MB) to reduce thread context-switching
+    try (PipedInputStream pipedInputStream = new PipedInputStream(1024 * 1024 * 5);
         PipedOutputStream pipedOutputStream = new PipedOutputStream(pipedInputStream);
         ExecutorService executorService = Executors.newFixedThreadPool(1)) {
-      // Start the multipart upload in a separate thread
-      Future<?> uploadFuture =
+
+      // Background Task: Run the ZIP engine on the thread pool
+      Future<?> zipFuture =
           executorService.submit(
               () -> {
-                try {
-                  return destinationBucket.putStream(resultObjectKey, pipedInputStream);
-                } catch (RuntimeException | IOException e) {
-                  logger.error("error in putStream, closing pipe", e);
-                  pipedOutputStream
-                      .close(); // prevent the writing thread from waiting to write more data
-                  throw e;
+                // Wrap in BufferedOutputStream to prevent tiny, slow writes to the pipe
+                try (OutputStream bufferedOut = new BufferedOutputStream(pipedOutputStream)) {
+                  ZipManager.writeZipArchive(sourceBucket, keysToZip, bufferedOut);
+                } catch (IOException e) {
+                  logger.error(
+                      "Error inside ZIP background thread, closing pipe to unblock reader", e);
+                  try {
+                    pipedOutputStream.close(); // Safeguard: don't let the reader hang
+                  } catch (IOException ignored) {
+                  }
+                  throw new RuntimeException(e);
                 }
               });
 
-      // Create the zip archive in the main thread, writing to the PipedOutputStream
-      try (ZipOutputStream zos = new ZipOutputStream(pipedOutputStream)) {
-        logger.info("adding {} files to ZIP", keysToZip.size());
-        for (String key : keysToZip) {
-          logger.debug("adding {}", key);
+      // Stream the data directly into the destination bucket
+      // putStream blocks here and pulls data out of the pipe as the background thread pushes it in
+      long byteCount = destinationBucket.putStream(resultObjectKey, pipedInputStream);
 
-          try (InputStream inputStream = sourceBucket.getStream(key)) {
-            ZipEntry zipEntry = new ZipEntry(key);
-            zos.putNextEntry(zipEntry);
+      // Ensure the background thread finished completely and check for errors
+      zipFuture.get();
 
-            byte[] buffer = new byte[1024];
-            int bytesRead;
-            while ((bytesRead = inputStream.read(buffer)) != -1) {
-              zos.write(buffer, 0, bytesRead);
-            }
-            zos.closeEntry();
-          }
-        }
-        zos.finish();
-        zos.flush();
-      }
-
-      long byteCount = (long) uploadFuture.get(); // blocking call, waits for the upload
       logger.log(
           Level.INFO,
           () ->
@@ -126,11 +113,12 @@ public class BulkExportService {
                       resultObjectKey,
                       FileUtils.byteCountToDisplaySize(byteCount)));
 
-    } catch (InterruptedException | ExecutionException | RuntimeException | NoSuchKeyException e) {
+    } catch (InterruptedException | ExecutionException e) {
       logger.error("Error processing key '{}'", keysToZip, e);
       throw e;
     }
 
+    // Clean up old backups now that the new one is safely uploaded
     logger.info("deleting obsolete archive objects {}", obsoleteObjectKeys);
     for (String obsoleteObjectKey : obsoleteObjectKeys) {
       destinationBucket.delete(obsoleteObjectKey);
