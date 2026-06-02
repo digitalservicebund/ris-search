@@ -90,7 +90,13 @@ async function handleSelectionUpdate(newSelection: TableRowData) {
     :row-class="rowClass"
     @row-select="onRowSelect"
     @update:selection="handleSelectionUpdate"
+    :pt="{
+      emptyMessageCell: {
+        class: 'ps-16 py-12 text-left text-gray-900',
+      },
+    }"
   >
+    <template #empty>Keine Ergebnisse gefunden</template>
     <Column
       field="fromDate"
       header="Gültig ab"
