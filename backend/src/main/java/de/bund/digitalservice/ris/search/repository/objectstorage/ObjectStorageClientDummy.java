@@ -20,6 +20,11 @@ public class ObjectStorageClientDummy implements ObjectStorageClient {
   }
 
   @Override
+  public List<String> listKeysExcludingPrefix(String path) {
+    return List.of();
+  }
+
+  @Override
   public List<ObjectKeyInfo> listByPrefixWithLastModified(String prefix) {
     return List.of();
   }

@@ -74,6 +74,22 @@ public class LocalFilesystemObjectStorageClient implements ObjectStorageClient {
   }
 
   @Override
+  public List<String> listKeysExcludingPrefix(String prefix) {
+    Path basePath = localStorageDirectory.resolve(bucket);
+
+    try (Stream<Path> stream = Files.walk(basePath)) {
+      return stream
+          .filter(Files::isRegularFile)
+          .filter(f -> !f.toString().startsWith(basePath + "/" + prefix))
+          .map(path -> path.toString().substring(basePath.toString().length() + 1))
+          .toList();
+    } catch (IOException e) {
+      LOGGER.error("Could not list files in {} exluding prefix {}", basePath, prefix);
+      return List.of();
+    }
+  }
+
+  @Override
   public List<ObjectKeyInfo> listByPrefixWithLastModified(String prefix) {
     Path bucketPath = localStorageDirectory.resolve(bucket);
     return listKeysByPrefix(
@@ -161,7 +177,7 @@ public class LocalFilesystemObjectStorageClient implements ObjectStorageClient {
           .map(mappingFunction)
           .toList();
     } catch (IOException e) {
-      LOGGER.info("Could not list files in {}", basePath);
+      LOGGER.error("Could not list files in {}", basePath);
       return List.of();
     }
   }

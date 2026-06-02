@@ -2,6 +2,7 @@ package de.bund.digitalservice.ris.search.importer;
 
 import de.bund.digitalservice.ris.search.service.AdministrativeDirectiveIndexSyncJob;
 import de.bund.digitalservice.ris.search.service.CaseLawIndexSyncJob;
+import de.bund.digitalservice.ris.search.service.DailySnapshotJob;
 import de.bund.digitalservice.ris.search.service.Job;
 import de.bund.digitalservice.ris.search.service.LiteratureIndexSyncJob;
 import de.bund.digitalservice.ris.search.service.NormIndexSyncJob;
@@ -33,6 +34,7 @@ public class ImportTaskProcessor {
   private final SitemapsUpdateJob sitemapsUpdateJob;
   private final EcliSitemapJob ecliSitemapJob;
   private final AdministrativeDirectiveIndexSyncJob administrativeDirectiveUpdateJob;
+  private final DailySnapshotJob snapshotJob;
 
   private static final Logger logger = LogManager.getLogger(ImportTaskProcessor.class);
 
@@ -55,13 +57,15 @@ public class ImportTaskProcessor {
       SitemapsUpdateJob sitemapsUpdateJob,
       LiteratureIndexSyncJob literatureIndexSyncJob,
       EcliSitemapJob ecliSitemapJob,
-      AdministrativeDirectiveIndexSyncJob administrativeDirectiveUpdateJob) {
+      AdministrativeDirectiveIndexSyncJob administrativeDirectiveUpdateJob,
+      DailySnapshotJob snapshotJob) {
     this.normIndexSyncJob = normIndexSyncJob;
     this.caseLawIndexSyncJob = caseLawIndexSyncJob;
     this.literatureIndexSyncJob = literatureIndexSyncJob;
     this.sitemapsUpdateJob = sitemapsUpdateJob;
     this.ecliSitemapJob = ecliSitemapJob;
     this.administrativeDirectiveUpdateJob = administrativeDirectiveUpdateJob;
+    this.snapshotJob = snapshotJob;
   }
 
   public boolean shouldRun(String[] args) {
@@ -144,6 +148,7 @@ public class ImportTaskProcessor {
       case "import_administrative_directive" -> runTask(administrativeDirectiveUpdateJob);
       case "update_sitemaps" -> runTask(sitemapsUpdateJob);
       case "generate_ecli_sitemaps" -> runTask(ecliSitemapJob);
+      case "generate_snapshot" -> runTask(snapshotJob);
       default -> throw new IllegalArgumentException("Unexpected target '%s'".formatted(target));
     };
   }
