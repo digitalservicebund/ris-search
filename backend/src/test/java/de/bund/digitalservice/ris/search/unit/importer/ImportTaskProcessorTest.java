@@ -33,7 +33,8 @@ class ImportTaskProcessorTest {
   @Mock private SitemapsUpdateJob sitemapsUpdateJob;
   @Mock private EcliSitemapJob ecliSitemapJob;
   @Mock private AdministrativeDirectiveIndexSyncJob administrativeDirectiveUpdateJob;
-  @Mock private BulkExportService snapshotJob;
+  @Mock private BulkExportService normsBulkExport;
+  @Mock private BulkExportService caseLawBulkExport;
 
   private ImportTaskProcessor processor;
 
@@ -47,7 +48,8 @@ class ImportTaskProcessorTest {
             literatureIndexSyncJob,
             ecliSitemapJob,
             administrativeDirectiveUpdateJob,
-            snapshotJob);
+            normsBulkExport,
+            caseLawBulkExport);
   }
 
   @Test

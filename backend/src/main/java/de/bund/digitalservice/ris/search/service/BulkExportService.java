@@ -59,7 +59,8 @@ public class BulkExportService implements Job {
             .collect(Collectors.toList());
 
     if (keysToZip.isEmpty()) {
-      return null;
+      logger.error("No files found for bucket {}", sourceBucket.getClass());
+      return ReturnCode.ERROR;
     }
 
     String affectedPrefix = "archive/" + outputName;
