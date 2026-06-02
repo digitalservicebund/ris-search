@@ -24,7 +24,7 @@ public class ChangelogConfig {
   }
 
   /**
-   * @param bucket root bucket of case law files
+   * @param bucket root bucket of norms files
    * @param om global ObjectMapper to parse the changelog files
    * @return IndexedChangelogService configured to manage legislation files
    */
@@ -34,7 +34,7 @@ public class ChangelogConfig {
   }
 
   /**
-   * @param bucket root bucket of case law files
+   * @param bucket root bucket of literature files
    * @param om global ObjectMapper to parse the changelog files
    * @return IndexedChangelogService configured to manage literature files
    */
@@ -44,9 +44,9 @@ public class ChangelogConfig {
   }
 
   /**
-   * @param bucket root bucket of case law files
+   * @param bucket root bucket of administrative directive files
    * @param om global ObjectMapper to parse the changelog files
-   * @return IndexedChangelogService configured to manage literature files
+   * @return IndexedChangelogService configured to manage administrative directive files
    */
   @Bean
   public ChangelogService administrativeDirectiveChangelogService(

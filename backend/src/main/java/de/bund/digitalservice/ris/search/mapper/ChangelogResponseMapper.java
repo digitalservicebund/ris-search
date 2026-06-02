@@ -19,7 +19,7 @@ public class ChangelogResponseMapper {
   private ChangelogResponseMapper() {}
 
   /**
-   * Takes a Changelog representation at maps it to an api representation of its specific
+   * Takes a Changelog representation and maps it to an api representation of its specific
    * documentKind
    *
    * @param changelog Changelog object to be mapped

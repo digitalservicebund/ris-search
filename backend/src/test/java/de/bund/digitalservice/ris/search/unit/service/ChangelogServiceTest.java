@@ -9,7 +9,6 @@ import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
 import de.bund.digitalservice.ris.search.service.ChangelogService;
-import de.bund.digitalservice.ris.search.service.IndexStatusService;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
@@ -26,8 +25,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class ChangelogServiceTest {
 
   @Mock ObjectStorage bucket;
-
-  @Mock IndexStatusService statusService;
 
   ChangelogService changelogService;
 
@@ -157,5 +154,31 @@ class ChangelogServiceTest {
 
     Assertions.assertTrue(result.getChanged().contains("file1"));
     Assertions.assertTrue(result.getChanged().contains("file2"));
+  }
+
+  @Test
+  void itDetectsChangeAllBetweenTimestamps()
+      throws JsonProcessingException, ObjectStoreServiceException {
+    Instant from = Instant.parse("2026-07-03T12:00:00Z");
+    Instant to = Instant.parse("2027-01-01T12:00:00Z");
+
+    Changelog expectedFirst = new Changelog(new HashSet<>(), new HashSet<>(), true);
+    Changelog expectedSecond =
+        new Changelog(new HashSet<>(List.of("file2")), new HashSet<>(), false);
+
+    when(bucket.getAllKeysByPrefix(any()))
+        .thenReturn(
+            List.of(
+                "changelogs/2026-07-03T12:00:00.000000Z-norm.json",
+                "changelogs/2027-01-01T12:00:00.000000Z-norm.json"));
+
+    when(bucket.getFileAsString("changelogs/2026-07-03T12:00:00.000000Z-norm.json"))
+        .thenReturn(Optional.of(objectMapper.writeValueAsString(expectedFirst)));
+    when(bucket.getFileAsString("changelogs/2027-01-01T12:00:00.000000Z-norm.json"))
+        .thenReturn(Optional.of(objectMapper.writeValueAsString(expectedSecond)));
+
+    Changelog result = changelogService.getChangesBetween(from, to);
+
+    Assertions.assertTrue(result.isChangeAll());
   }
 }
