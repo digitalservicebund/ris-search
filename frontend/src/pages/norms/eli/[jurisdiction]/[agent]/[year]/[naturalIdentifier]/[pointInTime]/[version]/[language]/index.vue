@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { Button, Tab, TabList, Tabs } from "primevue";
-import type { ComputedRef } from "vue";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IconFileDownload from "~icons/ic/outline-file-download";
 import IcOutlineInfo from "~icons/ic/outline-info";
 import IcOutlineRestore from "~icons/ic/outline-settings-backup-restore";
 import { NuxtLink } from "#components";
 import type { BreadcrumbItem } from "~/components/Breadcrumbs.vue";
+import DateInput from "~/components/DateInput.vue";
 import { useNormSeo } from "~/composables/useNormSeo";
 import { DocumentKind, type LegislationExpression } from "~/types/api";
 
@@ -144,9 +144,13 @@ const currentView = computed(
   () => route.query.view?.toString() ?? views[0].path,
 );
 
+const { dateFilterValue: fassungenDateFilterValue, filteredNormVersions } =
+  useNormVersionFilter(normVersions);
+
 const textTabPanelTitleId = useId();
 const detailsTabPanelTitleId = useId();
 const fassungenTabPanelTitleId = useId();
+const fassungenDateFilterInputId = useId();
 </script>
 
 <template>
@@ -288,13 +292,24 @@ const fassungenTabPanelTitleId = useId();
             </h2>
 
             <DocumentsIncompleteDataMessage class="my-24" />
-
+            <div class="my-16 md:my-24">
+              <label
+                :for="fassungenDateFilterInputId"
+                class="ris-label2-regular"
+                >Gültig am</label
+              >
+              <DateInput
+                v-model="fassungenDateFilterValue"
+                class="mb-16 max-w-240 md:mb-24"
+                :id="fassungenDateFilterInputId"
+              />
+            </div>
             <DocumentsNormsNormVersionList
               :status="normVersionsStatus"
               :current-legislation-identifier="
                 metadata.legislationIdentifier ?? ''
               "
-              :versions="normVersions"
+              :versions="filteredNormVersions"
             />
           </template>
 
