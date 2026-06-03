@@ -2,6 +2,7 @@ package de.bund.digitalservice.ris.search.service;
 
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
+import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
 import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
@@ -26,7 +27,7 @@ public class IndexSyncJob implements Job {
   private static final Logger logger = LogManager.getLogger(IndexSyncJob.class);
 
   private final IndexStatusService indexStatusService;
-  private final ChangelogService changelogService;
+  private final ChangelogService<? extends ObjectStorage> changelogService;
   private final IndexService indexService;
   private final String statusFileName;
 
@@ -40,7 +41,7 @@ public class IndexSyncJob implements Job {
    */
   public IndexSyncJob(
       IndexStatusService indexStatusService,
-      ChangelogService changelogService,
+      ChangelogService<? extends ObjectStorage> changelogService,
       IndexService indexService,
       String statusFileName) {
     this.indexStatusService = indexStatusService;
