@@ -13,7 +13,6 @@ import de.bund.digitalservice.ris.search.models.api.parameters.ChangelogParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.PaginationParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
-import de.bund.digitalservice.ris.search.repository.objectstorage.AdministrativeDirectiveBucket;
 import de.bund.digitalservice.ris.search.schema.AdministrativeDirectiveSchema;
 import de.bund.digitalservice.ris.search.schema.AdministrativeDirectiveSearchSchema;
 import de.bund.digitalservice.ris.search.schema.ChangelogResponse;
@@ -34,6 +33,7 @@ import java.util.List;
 import java.util.Optional;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.UncategorizedElasticsearchException;
@@ -55,7 +55,7 @@ public class AdministrativeDirectiveController {
 
   private final AdministrativeDirectiveService service;
   private final AdministrativeDirectiveXsltTransformerService transformerService;
-  private final ChangelogService<AdministrativeDirectiveBucket> changelogService;
+  private final ChangelogService changelogService;
 
   /**
    * Constructor for the AdministrativeDirectiveController, used to initialize the controller with
@@ -69,7 +69,7 @@ public class AdministrativeDirectiveController {
   public AdministrativeDirectiveController(
       AdministrativeDirectiveService service,
       AdministrativeDirectiveXsltTransformerService transformerService,
-      ChangelogService<AdministrativeDirectiveBucket> changelogService) {
+      @Qualifier("administrativeDirectiveChangelogService") ChangelogService changelogService) {
     this.service = service;
     this.transformerService = transformerService;
     this.changelogService = changelogService;

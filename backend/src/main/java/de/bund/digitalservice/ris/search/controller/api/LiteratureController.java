@@ -15,7 +15,6 @@ import de.bund.digitalservice.ris.search.models.api.parameters.PaginationParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.models.ldml.literature.LiteratureType;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
-import de.bund.digitalservice.ris.search.repository.objectstorage.LiteratureBucket;
 import de.bund.digitalservice.ris.search.schema.ChangelogResponse;
 import de.bund.digitalservice.ris.search.schema.CollectionSchema;
 import de.bund.digitalservice.ris.search.schema.LiteratureSchema;
@@ -37,6 +36,7 @@ import java.util.List;
 import java.util.Optional;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.UncategorizedElasticsearchException;
@@ -56,7 +56,7 @@ public class LiteratureController {
   private final LiteratureService literatureService;
   private final LiteratureXsltTransformerService xsltTransformerService;
   private final SliLiteratureXsltTransformerService sliXsltTransformerService;
-  private final ChangelogService<LiteratureBucket> changelogService;
+  private final ChangelogService changelogService;
 
   /**
    * Constructor for LiteratureController.
@@ -70,7 +70,7 @@ public class LiteratureController {
       LiteratureService literatureService,
       LiteratureXsltTransformerService literatureXsltTransformerService,
       SliLiteratureXsltTransformerService sliLiteratureXsltTransformerService,
-      ChangelogService<LiteratureBucket> changelogService) {
+      @Qualifier("literatureChangelogService") ChangelogService changelogService) {
     this.literatureService = literatureService;
     this.xsltTransformerService = literatureXsltTransformerService;
     this.sliXsltTransformerService = sliLiteratureXsltTransformerService;

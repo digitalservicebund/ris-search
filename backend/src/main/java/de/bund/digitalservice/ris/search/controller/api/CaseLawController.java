@@ -10,7 +10,6 @@ import de.bund.digitalservice.ris.search.mapper.ChangelogResponseMapper;
 import de.bund.digitalservice.ris.search.models.DocumentKind;
 import de.bund.digitalservice.ris.search.models.api.parameters.ChangelogParams;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
-import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.schema.CaseLawSchema;
 import de.bund.digitalservice.ris.search.schema.ChangelogResponse;
 import de.bund.digitalservice.ris.search.service.CaseLawService;
@@ -29,6 +28,7 @@ import java.util.List;
 import java.util.Optional;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
@@ -61,7 +61,7 @@ public class CaseLawController {
 
   private final CaseLawService caseLawService;
   private final CaselawXsltTransformerService xsltTransformerService;
-  private final ChangelogService<CaseLawBucket> changelogService;
+  private final ChangelogService changelogService;
 
   /**
    * Constructor for the CaseLawController class.
@@ -73,7 +73,7 @@ public class CaseLawController {
   public CaseLawController(
       CaseLawService caseLawService,
       CaselawXsltTransformerService xsltTransformerService,
-      ChangelogService<CaseLawBucket> changelogService) {
+      @Qualifier("caseLawChangelogService") ChangelogService changelogService) {
     this.caseLawService = caseLawService;
     this.xsltTransformerService = xsltTransformerService;
     this.changelogService = changelogService;

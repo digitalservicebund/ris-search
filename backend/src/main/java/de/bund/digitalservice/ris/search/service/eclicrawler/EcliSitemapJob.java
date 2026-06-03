@@ -3,7 +3,6 @@ package de.bund.digitalservice.ris.search.service.eclicrawler;
 import de.bund.digitalservice.ris.search.exception.FatalEcliSitemapJobException;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
-import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
 import de.bund.digitalservice.ris.search.service.ChangelogService;
 import de.bund.digitalservice.ris.search.service.Job;
@@ -11,6 +10,7 @@ import java.time.LocalDate;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +22,7 @@ public class EcliSitemapJob implements Job {
 
   PortalBucket portalBucket;
 
-  ChangelogService<CaseLawBucket> changelogService;
+  ChangelogService changelogService;
 
   EcliCrawlerDocumentService ecliCrawlerDocumentService;
   private final LocalDate today = LocalDate.now();
@@ -44,7 +44,7 @@ public class EcliSitemapJob implements Job {
   public EcliSitemapJob(
       EcliSitemapWriter service,
       PortalBucket portalBucket,
-      ChangelogService<CaseLawBucket> changelogService,
+      @Qualifier("caseLawChangelogService") ChangelogService changelogService,
       EcliCrawlerDocumentService ecliCrawlerDocumentService,
       @Value("${server.front-end-url}") String frontEndUrl) {
     this.sitemapWriter = service;
