@@ -1,5 +1,8 @@
 package de.bund.digitalservice.ris.search.unit.service;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.InstanceOfAssertFactories.LIST;
+import static org.assertj.core.api.InstanceOfAssertFactories.SET;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -14,7 +17,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -40,7 +42,7 @@ class ChangelogServiceTest {
 
     when(bucket.getFileAsString(any())).thenReturn(Optional.of("you shall not parse"));
     Optional<Changelog> changelog = changelogService.parseOneChangelog("mockFileName");
-    Assertions.assertTrue(changelog.isEmpty());
+    assertThat(changelog).isNotPresent();
   }
 
   @Test
@@ -49,7 +51,7 @@ class ChangelogServiceTest {
     when(bucket.getFileAsString(any())).thenReturn(Optional.empty());
 
     Optional<Changelog> changelog = changelogService.parseOneChangelog("mockFileName");
-    Assertions.assertTrue(changelog.isEmpty());
+    assertThat(changelog).isNotPresent();
   }
 
   @Test
@@ -70,8 +72,9 @@ class ChangelogServiceTest {
         .thenReturn(List.of(olderChangelogFile, changelogFile2, changelogFile1));
 
     List<String> changelogs = changelogService.getNewChangelogsPaths(lastSuccess);
-    Assertions.assertEquals(changelogs.toArray()[0], changelogFile1);
-    Assertions.assertEquals(changelogs.toArray()[1], changelogFile2);
+    assertThat(changelogs)
+        .asInstanceOf(LIST)
+        .containsExactlyInAnyOrderElementsOf(List.of(changelogFile1, changelogFile2));
   }
 
   @Test
@@ -91,7 +94,7 @@ class ChangelogServiceTest {
         .thenReturn(Optional.of(objectMapper.writeValueAsString(log3)));
 
     Changelog result = changelogService.getChangesFromFiles(List.of("log1", "log2", "log3"));
-    Assertions.assertTrue(result.isChangeAll());
+    assertThat(result.isChangeAll()).isTrue();
   }
 
   @Test
@@ -115,16 +118,13 @@ class ChangelogServiceTest {
 
     var result = changelogService.getChangesFromFiles(List.of("log1", "log2", "log3"));
 
-    Assertions.assertEquals(3, result.getChanged().size());
-    Assertions.assertTrue(result.getChanged().contains("changed"));
-    Assertions.assertTrue(result.getChanged().contains("changed2"));
-    Assertions.assertTrue(result.getChanged().contains("changed3"));
+    assertThat(result.getChanged())
+        .asInstanceOf(SET)
+        .containsExactlyInAnyOrder("changed", "changed2", "changed3");
 
-    Assertions.assertEquals(4, result.getDeleted().size());
-    Assertions.assertTrue(result.getDeleted().contains("deleted"));
-    Assertions.assertTrue(result.getDeleted().contains("deleted2"));
-    Assertions.assertTrue(result.getDeleted().contains("obsolete"));
-    Assertions.assertTrue(result.getDeleted().contains("obsolete2"));
+    assertThat(result.getDeleted())
+        .asInstanceOf(SET)
+        .containsExactlyInAnyOrder("deleted", "deleted2", "obsolete", "obsolete2");
   }
 
   @Test
@@ -152,8 +152,7 @@ class ChangelogServiceTest {
 
     Changelog result = changelogService.getChangesBetween(from, to);
 
-    Assertions.assertTrue(result.getChanged().contains("file1"));
-    Assertions.assertTrue(result.getChanged().contains("file2"));
+    assertThat(result.getChanged()).asInstanceOf(SET).containsExactlyInAnyOrder("file1", "file2");
   }
 
   @Test
@@ -179,6 +178,6 @@ class ChangelogServiceTest {
 
     Changelog result = changelogService.getChangesBetween(from, to);
 
-    Assertions.assertTrue(result.isChangeAll());
+    assertThat(result.isChangeAll()).isTrue();
   }
 }
