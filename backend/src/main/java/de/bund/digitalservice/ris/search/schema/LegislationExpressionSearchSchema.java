@@ -55,8 +55,8 @@ public record LegislationExpressionSearchSchema(
     implements AbstractDocumentSchema, JsonldResource {
 
   @Override
-  @Schema(example = "Legislation")
+  @Schema(example = JsonldTypes.LEGISLATION)
   public String getType() {
-    return "Legislation";
+    return JsonldTypes.LEGISLATION;
   }
 }

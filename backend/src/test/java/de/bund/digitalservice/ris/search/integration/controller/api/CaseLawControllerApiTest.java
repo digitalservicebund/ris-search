@@ -12,9 +12,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
+import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.models.PublicationStatus;
+import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
+import de.bund.digitalservice.ris.search.service.ChangelogService;
 import de.bund.digitalservice.ris.search.service.IndexCaselawService;
 import de.bund.digitalservice.ris.search.utils.CaseLawLdmlTemplateUtils;
 import java.io.ByteArrayInputStream;
@@ -22,6 +26,8 @@ import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import org.assertj.core.api.Assertions;
@@ -45,6 +51,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.util.MultiValueMap;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
@@ -52,6 +59,7 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 class CaseLawControllerApiTest extends ContainersIntegrationBase {
   @Autowired private IndexCaselawService indexCaselawService;
   @Autowired private MockMvc mockMvc;
+  @Autowired private CaseLawBucket bucket;
   private final CaseLawLdmlTemplateUtils caseLawLdmlTemplateUtils = new CaseLawLdmlTemplateUtils();
   private final String documentNumber = "BFRE000107055";
 
@@ -280,5 +288,31 @@ class CaseLawControllerApiTest extends ContainersIntegrationBase {
           .perform(get(getResourcePath(this.documentNumber + "/NonExistent", "png")))
           .andExpect(status().isInternalServerError());
     }
+  }
+
+  @Test
+  void itReturnsFileChangesBetweenTimestamps() throws Exception {
+    Changelog changelog =
+        new Changelog(
+            new HashSet<>(List.of("file1/file1.xml")),
+            new HashSet<>(List.of("file2/file2.xml")),
+            false);
+    String changelogContent = new ObjectMapper().writeValueAsString(changelog);
+
+    bucket.save(
+        ChangelogService.CHANGELOGS_PREFIX + "2026-07-03T12:00:00.276525407Z", changelogContent);
+
+    String from = "2026-07-03T12:00:00Z";
+    String to = "2026-07-04T12:00:00Z";
+
+    mockMvc
+        .perform(
+            get(ApiConfig.Paths.CASELAW_CHANGELOGS)
+                .params(MultiValueMap.fromSingleValue(Map.of("from", from, "to", to))))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.changed[0].['@id']").value("/v1/case-law/file1/zip"))
+        .andExpect(jsonPath("$.changed[0].['@type']").value("MediaObject"))
+        .andExpect(jsonPath("$.deleted[0].['@id']").value("/v1/case-law/file2"))
+        .andExpect(jsonPath("$.deleted[0].['@type']").value("Decision"));
   }
 }

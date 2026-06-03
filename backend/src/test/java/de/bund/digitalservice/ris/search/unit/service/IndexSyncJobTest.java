@@ -43,11 +43,7 @@ class IndexSyncJobTest {
   void setup() {
     normIndexSyncJob =
         new IndexSyncJob(
-            indexStatusService,
-            changelogService,
-            normsBucket,
-            indexNormsService,
-            NORM_STATUS_FILENAME);
+            indexStatusService, changelogService, indexNormsService, NORM_STATUS_FILENAME);
   }
 
   @Test

@@ -15,8 +15,8 @@ public record CaseLawEncodingSchema(
     implements JsonldResource {
 
   @Override
-  @Schema(example = "DecisionObject")
+  @Schema(example = JsonldTypes.MEDIA_OBJECT)
   public String getType() {
-    return "DecisionObject";
+    return JsonldTypes.MEDIA_OBJECT;
   }
 }

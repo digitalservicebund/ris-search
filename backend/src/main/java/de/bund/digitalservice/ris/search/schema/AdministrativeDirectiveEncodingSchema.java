@@ -18,8 +18,8 @@ public record AdministrativeDirectiveEncodingSchema(
     implements JsonldResource {
 
   @Override
-  @Schema(example = "MediaObject")
+  @Schema(example = JsonldTypes.MEDIA_OBJECT)
   public String getType() {
-    return "MediaObject";
+    return JsonldTypes.MEDIA_OBJECT;
   }
 }

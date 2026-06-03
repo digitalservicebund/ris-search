@@ -246,6 +246,38 @@
         }
       }
     },
+    "/v1/literature/changelog": {
+      "get": {
+        "tags": ["Literature"],
+        "summary": "Literature changelog",
+        "description": "Returns references of document changes that occurred in between two points in time.",
+        "operationId": "getChangelogs",
+        "parameters": [
+          {
+            "name": "from",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string", "format": "date-time" }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string", "format": "date-time" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ChangelogResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/legislation": {
       "get": {
         "tags": ["Legislation"],
@@ -920,6 +952,38 @@
             }
           },
           "404": { "description": "Not Found" }
+        }
+      }
+    },
+    "/v1/legislation/changelog": {
+      "get": {
+        "tags": ["Legislation"],
+        "summary": "Legislation changelog",
+        "description": "Returns references of document changes that occurred in between two points in time.",
+        "operationId": "getChangelogs_1",
+        "parameters": [
+          {
+            "name": "from",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string", "format": "date-time" }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string", "format": "date-time" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ChangelogResponse" }
+              }
+            }
+          }
         }
       }
     },
@@ -1664,6 +1728,38 @@
         }
       }
     },
+    "/v1/case-law/changelog": {
+      "get": {
+        "tags": ["Case Law"],
+        "summary": "Caselaw changelog",
+        "description": "Returns references of document changes that occurred in between two points in time.",
+        "operationId": "getChangelogs_2",
+        "parameters": [
+          {
+            "name": "from",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string", "format": "date-time" }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string", "format": "date-time" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ChangelogResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/administrative-directive": {
       "get": {
         "tags": ["AdministrativeDirective"],
@@ -1836,6 +1932,38 @@
             "content": { "text/html": { "schema": { "type": "string" } } }
           },
           "404": { "description": "Not Found" }
+        }
+      }
+    },
+    "/v1/administrative-directive/changelog": {
+      "get": {
+        "tags": ["AdministrativeDirective"],
+        "summary": "Administrative Directive changelog",
+        "description": "Returns references of document changes that occurred in between two points in time.",
+        "operationId": "getChangelogs_3",
+        "parameters": [
+          {
+            "name": "from",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string", "format": "date-time" }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string", "format": "date-time" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ChangelogResponse" }
+              }
+            }
+          }
         }
       }
     }
@@ -2184,6 +2312,56 @@
           "yearsOfPublication"
         ]
       },
+      "ChangelogChangedDocument": {
+        "type": "object",
+        "properties": {
+          "@id": {
+            "type": "string",
+            "description": "unique identifier of the document"
+          },
+          "@type": { "type": "string", "description": "type of the document" },
+          "contentUrl": { "type": "string" }
+        },
+        "required": ["@id", "@type", "contentUrl"]
+      },
+      "ChangelogDeletedDocument": {
+        "type": "object",
+        "properties": {
+          "@id": {
+            "type": "string",
+            "description": "unique identifier of the document"
+          },
+          "@type": { "type": "string", "description": "type of the document" }
+        },
+        "required": ["@id", "@type"]
+      },
+      "ChangelogResponse": {
+        "type": "object",
+        "properties": {
+          "@context": { "type": "object", "additionalProperties": {} },
+          "changed": {
+            "type": "array",
+            "description": "Set of changed documents",
+            "items": {
+              "$ref": "#/components/schemas/ChangelogChangedDocument"
+            },
+            "uniqueItems": true
+          },
+          "deleted": {
+            "type": "array",
+            "description": "Set of deleted documents",
+            "items": {
+              "$ref": "#/components/schemas/ChangelogDeletedDocument"
+            },
+            "uniqueItems": true
+          },
+          "allChanged": {
+            "type": "boolean",
+            "description": "flag to communicate that the whole storage got rebuilt"
+          }
+        },
+        "required": ["allChanged", "changed", "deleted"]
+      },
       "CollectionSchemaSearchMemberSchemaLegislationExpressionSearchSchema": {
         "type": "object",
         "properties": {
@@ -2525,7 +2703,7 @@
       "CaseLawEncodingSchema": {
         "type": "object",
         "properties": {
-          "@type": { "type": "string", "example": "DecisionObject" },
+          "@type": { "type": "string", "example": "MediaObject" },
           "@id": { "type": "string" },
           "contentUrl": { "type": "string" },
           "encodingFormat": { "type": "string", "example": "text/html" },

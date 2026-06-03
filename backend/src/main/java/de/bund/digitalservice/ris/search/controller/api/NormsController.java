@@ -5,18 +5,23 @@ import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.exception.CustomValidationException;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
+import de.bund.digitalservice.ris.search.mapper.ChangelogResponseMapper;
 import de.bund.digitalservice.ris.search.mapper.NormSchemaMapper;
 import de.bund.digitalservice.ris.search.mapper.NormSearchResponseMapper;
 import de.bund.digitalservice.ris.search.mapper.SortParamsConverter;
+import de.bund.digitalservice.ris.search.models.DocumentKind;
+import de.bund.digitalservice.ris.search.models.api.parameters.ChangelogParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.NormsSearchParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.NormsSortParam;
 import de.bund.digitalservice.ris.search.models.api.parameters.PaginationParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
+import de.bund.digitalservice.ris.search.schema.ChangelogResponse;
 import de.bund.digitalservice.ris.search.schema.CollectionSchema;
 import de.bund.digitalservice.ris.search.schema.LegislationExpressionSchema;
 import de.bund.digitalservice.ris.search.schema.LegislationExpressionSearchSchema;
 import de.bund.digitalservice.ris.search.schema.SearchMemberSchema;
+import de.bund.digitalservice.ris.search.service.ChangelogService;
 import de.bund.digitalservice.ris.search.service.NormsService;
 import de.bund.digitalservice.ris.search.service.xslt.NormXsltTransformerService;
 import de.bund.digitalservice.ris.search.utils.LuceneQueryTools;
@@ -37,6 +42,7 @@ import java.util.List;
 import java.util.Optional;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.UncategorizedElasticsearchException;
@@ -76,6 +82,7 @@ public class NormsController {
 
   private final NormsService normsService;
   private final NormXsltTransformerService xsltTransformerService;
+  private final ChangelogService changelogService;
 
   /**
    * Constructor for the NormsController class.
@@ -85,9 +92,12 @@ public class NormsController {
    */
   @Autowired
   public NormsController(
-      NormsService normsService, NormXsltTransformerService xsltTransformerService) {
+      NormsService normsService,
+      NormXsltTransformerService xsltTransformerService,
+      @Qualifier(value = "normsChangelogService") ChangelogService changelogService) {
     this.normsService = normsService;
     this.xsltTransformerService = xsltTransformerService;
+    this.changelogService = changelogService;
   }
 
   /**
@@ -645,6 +655,30 @@ public class NormsController {
             body ->
                 ResponseEntity.status(HttpStatus.OK).header("Content-Type", mimeType).body(body))
         .orElseGet(() -> ResponseEntity.notFound().build());
+  }
+
+  /**
+   * Retrieves an aggregated changelog, listing all indexed fileChanges between the given timestamps
+   * (inclusive). If a full reindex occurred inside the given bounds, the allChanged flag is set to
+   * true, otherwise changes are given based on the document root in the changed/deleted
+   * collections.
+   *
+   * @param params {@link ChangelogParams} to determine upper and lower boundary to retrieve changes
+   * @return Changelog response with aggregated changes across the given time range
+   */
+  @GetMapping(path = ApiConfig.Paths.LEGISLATION_CHANGELOGS)
+  @Operation(
+      summary = "Legislation changelog",
+      description =
+          "Returns references of document changes that occurred in between two points in time.")
+  public ResponseEntity<ChangelogResponse> getChangelogs(
+      @ParameterObject @Valid ChangelogParams params) {
+
+    var changelog =
+        changelogService.getChangesBetween(
+            params.getFrom().toInstant(), params.getTo().toInstant());
+    return ResponseEntity.ok(
+        ChangelogResponseMapper.mapChangelog(changelog, DocumentKind.LEGISLATION));
   }
 
   /**

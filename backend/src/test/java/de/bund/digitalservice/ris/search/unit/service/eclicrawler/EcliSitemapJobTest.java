@@ -9,7 +9,6 @@ import static org.mockito.Mockito.when;
 
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
-import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
 import de.bund.digitalservice.ris.search.service.ChangelogService;
 import de.bund.digitalservice.ris.search.service.Job;
@@ -33,7 +32,6 @@ class EcliSitemapJobTest {
   EcliSitemapJob sitemapJob;
   @Mock EcliSitemapWriter sitemapWriter;
   @Mock PortalBucket portalBucket;
-  @Mock CaseLawBucket caseLawBucket;
   @Mock EcliCrawlerDocumentService documentService;
   @Mock ChangelogService changelogService;
   String apiUrl = "frontend/url/";
@@ -42,8 +40,7 @@ class EcliSitemapJobTest {
   void setup() {
 
     sitemapJob =
-        new EcliSitemapJob(
-            sitemapWriter, portalBucket, caseLawBucket, changelogService, documentService, apiUrl);
+        new EcliSitemapJob(sitemapWriter, portalBucket, changelogService, documentService, apiUrl);
   }
 
   @Test
@@ -60,7 +57,7 @@ class EcliSitemapJobTest {
     List<String> changelogPaths = List.of("changelog0.xml", "changelog1.xml");
     LocalDate day = LocalDate.now();
     when(sitemapWriter.getSitemapFilesPathsForDay(day)).thenReturn(List.of());
-    when(changelogService.getNewChangelogsPaths(caseLawBucket, "0")).thenReturn(changelogPaths);
+    when(changelogService.getNewChangelogsPaths("0")).thenReturn(changelogPaths);
 
     Job.ReturnCode code = sitemapJob.runJob();
 
@@ -80,9 +77,8 @@ class EcliSitemapJobTest {
     when(portalBucket.getAllKeysByPrefix(LAST_PROCESSED_CHANGELOG)).thenReturn(List.of("file"));
     when(portalBucket.getFileAsString(LAST_PROCESSED_CHANGELOG))
         .thenReturn(Optional.of("changelog/date"));
-    when(changelogService.getNewChangelogsPaths(caseLawBucket, "changelog/date"))
-        .thenReturn(changelogPaths);
-    when(changelogService.parseChangelogs(caseLawBucket, changelogPaths)).thenReturn(List.of(log1));
+    when(changelogService.getNewChangelogsPaths("changelog/date")).thenReturn(changelogPaths);
+    when(changelogService.getChangesFromFiles(changelogPaths)).thenReturn(log1);
 
     Job.ReturnCode code = sitemapJob.runJob();
 
