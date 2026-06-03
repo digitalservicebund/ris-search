@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
+import java.io.UncheckedIOException;
 import java.time.Instant;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -14,7 +15,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -54,9 +54,7 @@ public class BulkExportService implements Job {
 
     String timestamp = Instant.now().toString();
     List<String> keysToZip =
-        sourceBucket.getAllKeysByPrefix(prefix).stream()
-            .filter(keyFilter)
-            .collect(Collectors.toList());
+        sourceBucket.getAllKeysByPrefix(prefix).stream().filter(keyFilter).toList();
 
     if (keysToZip.isEmpty()) {
       logger.error("No files found for bucket {}", sourceBucket.getClass());
@@ -80,13 +78,9 @@ public class BulkExportService implements Job {
                 try (OutputStream bufferedOut = new BufferedOutputStream(pipedOutputStream)) {
                   ZipManager.writeZipArchive(sourceBucket, keysToZip, bufferedOut);
                 } catch (IOException e) {
-                  logger.error(
-                      "Error inside ZIP background thread, closing pipe to unblock reader", e);
-                  try {
-                    pipedOutputStream.close(); // Safeguard: don't let the reader hang
-                  } catch (IOException ignored) {
-                  }
-                  throw new RuntimeException(e);
+                  logger.error("Error inside ZIP background thread.", e);
+                  // trigger ExecutionException when retrieving result of zip thread
+                  throw new UncheckedIOException(e);
                 }
               });
 

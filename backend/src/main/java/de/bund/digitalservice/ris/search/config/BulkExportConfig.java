@@ -14,7 +14,7 @@ public class BulkExportConfig {
 
   @Bean
   public BulkExportService normsBulkExport(NormsBucket source, PortalBucket target) {
-    return new BulkExportService(source, target, "output", "eli", (key) -> true);
+    return new BulkExportService(source, target, "output", "eli", key -> true);
   }
 
   @Bean
@@ -23,6 +23,6 @@ public class BulkExportConfig {
   }
 
   private Predicate<String> filterChangelogFiles() {
-    return (key) -> !key.startsWith(ChangelogService.CHANGELOGS_PREFIX);
+    return key -> !key.startsWith(ChangelogService.CHANGELOGS_PREFIX);
   }
 }

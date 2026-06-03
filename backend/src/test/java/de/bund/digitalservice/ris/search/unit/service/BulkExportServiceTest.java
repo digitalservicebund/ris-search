@@ -65,7 +65,7 @@ class BulkExportServiceTest {
             });
 
     BulkExportService bulkExportService =
-        new BulkExportService(sourceBucket, destinationBucket, outputName, prefix, (key) -> true);
+        new BulkExportService(sourceBucket, destinationBucket, outputName, prefix, key -> true);
 
     assertDoesNotThrow(bulkExportService::runJob);
 
@@ -104,7 +104,7 @@ class BulkExportServiceTest {
     doNothing().when(destinationBucket).delete(anyString());
 
     BulkExportService bulkExportService =
-        new BulkExportService(sourceBucket, destinationBucket, outputName, prefix, (key) -> true);
+        new BulkExportService(sourceBucket, destinationBucket, outputName, prefix, key -> true);
 
     assertDoesNotThrow(bulkExportService::runJob);
 
@@ -128,7 +128,7 @@ class BulkExportServiceTest {
         .thenThrow(new RuntimeException("The mock source bucket does not want to list files"));
 
     BulkExportService bulkExportService =
-        new BulkExportService(sourceBucket, destinationBucket, outputName, prefix, (key) -> true);
+        new BulkExportService(sourceBucket, destinationBucket, outputName, prefix, key -> true);
 
     assertThrows(RuntimeException.class, bulkExportService::runJob);
 
@@ -152,7 +152,7 @@ class BulkExportServiceTest {
 
     BulkExportService bulkExportService =
         new BulkExportService(
-            sourceBucket, destinationBucket, "test-export", "some/prefix/", (key) -> true);
+            sourceBucket, destinationBucket, "test-export", "some/prefix/", key -> true);
 
     assertEquals(Job.ReturnCode.ERROR, bulkExportService.runJob());
 
@@ -163,7 +163,7 @@ class BulkExportServiceTest {
   }
 
   @Test
-  void runJob_onEmptyFiles_shouldReturnEarlyWithErrorCode() throws IOException, NoSuchKeyException {
+  void runJob_onEmptyFiles_shouldReturnEarlyWithErrorCode() {
     ObjectStorage sourceBucket = mock(ObjectStorage.class);
     ObjectStorage destinationBucket = mock(ObjectStorage.class);
 
@@ -171,7 +171,7 @@ class BulkExportServiceTest {
 
     BulkExportService bulkExportService =
         new BulkExportService(
-            sourceBucket, destinationBucket, "test-export", "some/prefix/", (key) -> false);
+            sourceBucket, destinationBucket, "test-export", "some/prefix/", key -> false);
 
     assertEquals(Job.ReturnCode.ERROR, bulkExportService.runJob());
   }
