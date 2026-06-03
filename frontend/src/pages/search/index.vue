@@ -5,11 +5,13 @@ import { DocumentKind } from "~/types/api";
 import { isStrictDateFilterValue } from "~/utils/search/dateFilterType";
 import { itemsPerPageOptions } from "~/utils/search/itemsPerPageOptions";
 
-useSkipLinks([
-  { label: "Zur Suche", to: "#search" },
-  { label: "Zum Inhalt", to: "#main" },
-  { label: "Zum Fußbereich", to: "#footer" },
-]);
+definePageMeta({
+  skipLinks: [
+    { label: "Zur Suche", to: "#search" },
+    { label: "Zum Inhalt", to: "#main" },
+    { label: "Zum Fußbereich", to: "#footer" },
+  ],
+});
 
 const filterHeadingId = useId();
 const route = useRoute();

@@ -15,13 +15,12 @@ definePageMeta({
     const config = useRuntimeConfig();
     if (!config.public.privateFeaturesEnabled) return abortNavigation();
   },
+  skipLinks: [
+    { label: "Zur Suche", to: "#search" },
+    { label: "Zum Inhalt", to: "#main" },
+    { label: "Zum Fußbereich", to: "#footer" },
+  ],
 });
-
-useSkipLinks([
-  { label: "Zur Suche", to: "#search" },
-  { label: "Zum Inhalt", to: "#main" },
-  { label: "Zum Fußbereich", to: "#footer" },
-]);
 
 const route = useRoute();
 
