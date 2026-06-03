@@ -100,6 +100,14 @@ const scenarios: Scenario[] = [
     ],
   },
   {
+    name: "error page",
+    url: "/404",
+    skipLinks: [
+      { label: "Zum Inhalt", target: "#main" },
+      { label: "Zum Fußbereich", target: "#footer" },
+    ],
+  },
+  {
     // representative all static content pages
     name: "about page",
     url: "/about",
