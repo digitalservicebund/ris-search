@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { SkipLink } from "~/types/router";
+import type { SkipLink } from "~";
 
 const props = defineProps<{
   /**

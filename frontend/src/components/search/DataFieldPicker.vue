@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { Button, InputGroup, InputGroupAddon, InputText } from "primevue";
+import type { SkipLink } from "~";
 import IcBaselineSearch from "~icons/ic/baseline-search";
 import DataFieldList from "~/components/search/DataFieldList.vue";
 import type { DocumentKind } from "~/types/api";
-import type { SkipLink } from "~/types/router";
 import { formatDocumentKind } from "~/utils/displayValues";
 import { formatNumberWithSeparators } from "~/utils/numberFormatting";
 import type { DataField } from "~/utils/search/dataFields";

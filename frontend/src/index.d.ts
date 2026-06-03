@@ -1,5 +1,5 @@
-declare module "vue-router" {
-  interface RouteMeta {
+declare module "#app" {
+  interface PageMeta {
     skipLinks?: SkipLink[];
   }
 }

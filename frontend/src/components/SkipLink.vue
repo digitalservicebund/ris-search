@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Button } from "primevue";
+import type { SkipLink } from "~";
 import { NuxtLink } from "#components";
-import type { SkipLink } from "~/types/router";
 
 const props = defineProps<{
   to: SkipLink["to"];
