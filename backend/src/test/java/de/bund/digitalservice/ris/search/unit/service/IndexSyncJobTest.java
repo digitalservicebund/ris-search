@@ -10,6 +10,7 @@ import static org.mockito.Mockito.when;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
+import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
 import de.bund.digitalservice.ris.search.service.ChangelogService;
 import de.bund.digitalservice.ris.search.service.IndexNormsService;
 import de.bund.digitalservice.ris.search.service.IndexStatusService;
@@ -35,7 +36,7 @@ class IndexSyncJobTest {
   @Mock IndexStatusService indexStatusService;
   @Mock NormsBucket normsBucket;
   @Mock IndexNormsService indexNormsService;
-  @Mock ChangelogService changelogService;
+  @Mock ChangelogService<? extends ObjectStorage> changelogService;
 
   IndexSyncJob normIndexSyncJob;
 
