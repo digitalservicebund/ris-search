@@ -14,7 +14,6 @@ import software.amazon.awssdk.core.exception.SdkException;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.AbortMultipartUploadRequest;
-import software.amazon.awssdk.services.s3.model.CommonPrefix;
 import software.amazon.awssdk.services.s3.model.CompleteMultipartUploadRequest;
 import software.amazon.awssdk.services.s3.model.CompletedPart;
 import software.amazon.awssdk.services.s3.model.CreateMultipartUploadRequest;
@@ -202,53 +201,5 @@ public class S3ObjectStorageClient implements ObjectStorageClient {
     }
     assert offset <= buffer.length;
     return offset;
-  }
-
-  public List<String> listKeysExcludingPrefix(String prefix) {
-    List<String> collectedKeys = new ArrayList<>();
-    collectKeysExcludingPrefix(prefix, collectedKeys);
-    return collectedKeys;
-  }
-
-  public void collectKeysExcludingPrefix(String prefix, List<String> results) {
-    String continuationToken = null;
-
-    do {
-      // Use a delimiter to ensure we get 'CommonPrefixes' (folders)
-      // instead of blindly listing every nested file at once
-      ListObjectsV2Request request =
-          ListObjectsV2Request.builder()
-              .bucket(bucketName)
-              .prefix(prefix)
-              .delimiter("/")
-              .continuationToken(continuationToken)
-              .build();
-
-      ListObjectsV2Response response = s3Client.listObjectsV2(request);
-
-      // Process files in the current directory. response.contents() only returns actual objects
-      for (S3Object s3Object : response.contents()) {
-
-        // skip empty objects
-        if (s3Object.key().endsWith("/")) {
-          continue;
-        }
-        results.add(s3Object.key());
-      }
-
-      // Process sub-folders, skipping "changelogs/"
-      for (CommonPrefix commonPrefix : response.commonPrefixes()) {
-        String subFolder = commonPrefix.prefix();
-
-        if (prefix.equals(subFolder)) {
-          logger.debug("skipping folder: {}", subFolder);
-          continue;
-        }
-
-        // Recursively list the allowed sub-folders
-        collectKeysExcludingPrefix(subFolder, results);
-      }
-      continuationToken = response.nextContinuationToken();
-    } while (continuationToken != null);
   }
 }

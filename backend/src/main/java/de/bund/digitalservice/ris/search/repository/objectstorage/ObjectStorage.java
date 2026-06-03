@@ -135,8 +135,4 @@ public class ObjectStorage {
   public long putStream(String objectKey, InputStream inputStream) throws IOException {
     return client.putStream(objectKey, inputStream);
   }
-
-  public List<String> getAllKeysExcludingPrefix(String prefix) {
-    return client.listKeysExcludingPrefix(prefix);
-  }
 }

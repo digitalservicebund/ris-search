@@ -15,8 +15,6 @@ import java.util.List;
 public interface ObjectStorageClient {
   public List<String> listKeysByPrefix(String path);
 
-  public List<String> listKeysExcludingPrefix(String path);
-
   List<ObjectKeyInfo> listByPrefixWithLastModified(String prefix);
 
   public FilterInputStream getStream(String objectKey) throws NoSuchKeyException;
