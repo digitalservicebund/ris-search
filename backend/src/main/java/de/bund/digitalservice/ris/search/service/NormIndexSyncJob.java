@@ -1,6 +1,6 @@
 package de.bund.digitalservice.ris.search.service;
 
-import org.springframework.beans.factory.annotation.Qualifier;
+import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import org.springframework.stereotype.Component;
 
 /** Job for synchronizing the index of legal norms. */
@@ -18,7 +18,7 @@ public class NormIndexSyncJob extends IndexSyncJob {
    */
   public NormIndexSyncJob(
       IndexStatusService indexStatusService,
-      @Qualifier("normsChangelogService") ChangelogService changelogService,
+      ChangelogService<NormsBucket> changelogService,
       IndexNormsService indexNormsService) {
     super(indexStatusService, changelogService, indexNormsService, NORM_STATUS_FILENAME);
   }

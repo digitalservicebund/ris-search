@@ -1,6 +1,6 @@
 package de.bund.digitalservice.ris.search.service;
 
-import org.springframework.beans.factory.annotation.Qualifier;
+import de.bund.digitalservice.ris.search.repository.objectstorage.LiteratureBucket;
 import org.springframework.stereotype.Component;
 
 /** Job for synchronizing the index of literature. */
@@ -18,7 +18,7 @@ public class LiteratureIndexSyncJob extends IndexSyncJob {
    */
   public LiteratureIndexSyncJob(
       IndexStatusService indexStatusService,
-      @Qualifier("literatureChangelogService") ChangelogService changelogService,
+      ChangelogService<LiteratureBucket> changelogService,
       IndexLiteratureService indexLiteratureService) {
     super(indexStatusService, changelogService, indexLiteratureService, LITERATURE_STATUS_FILENAME);
   }

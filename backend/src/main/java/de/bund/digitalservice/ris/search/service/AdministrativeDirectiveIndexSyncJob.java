@@ -1,6 +1,6 @@
 package de.bund.digitalservice.ris.search.service;
 
-import org.springframework.beans.factory.annotation.Qualifier;
+import de.bund.digitalservice.ris.search.repository.objectstorage.AdministrativeDirectiveBucket;
 import org.springframework.stereotype.Component;
 
 /** Job for synchronizing the index of administrative directives. */
@@ -18,7 +18,7 @@ public class AdministrativeDirectiveIndexSyncJob extends IndexSyncJob {
    */
   public AdministrativeDirectiveIndexSyncJob(
       IndexStatusService indexStatusService,
-      @Qualifier("administrativeDirectiveChangelogService") ChangelogService changelogService,
+      ChangelogService<AdministrativeDirectiveBucket> changelogService,
       IndexAdministrativeDirectiveService service) {
 
     super(indexStatusService, changelogService, service, STATUS_FILENAME);

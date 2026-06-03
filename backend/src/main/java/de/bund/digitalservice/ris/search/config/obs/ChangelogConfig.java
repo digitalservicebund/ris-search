@@ -19,8 +19,9 @@ public class ChangelogConfig {
    * @return ChangelogService configured to manage case law files
    */
   @Bean
-  public ChangelogService caseLawChangelogService(CaseLawBucket bucket, ObjectMapper om) {
-    return new ChangelogService(bucket, om);
+  public ChangelogService<CaseLawBucket> caseLawChangelogService(
+      CaseLawBucket bucket, ObjectMapper om) {
+    return new ChangelogService<>(bucket, om);
   }
 
   /**
@@ -29,8 +30,8 @@ public class ChangelogConfig {
    * @return IndexedChangelogService configured to manage legislation files
    */
   @Bean
-  public ChangelogService normsChangelogService(NormsBucket bucket, ObjectMapper om) {
-    return new ChangelogService(bucket, om);
+  public ChangelogService<NormsBucket> normsChangelogService(NormsBucket bucket, ObjectMapper om) {
+    return new ChangelogService<>(bucket, om);
   }
 
   /**
@@ -39,8 +40,9 @@ public class ChangelogConfig {
    * @return IndexedChangelogService configured to manage literature files
    */
   @Bean
-  public ChangelogService literatureChangelogService(LiteratureBucket bucket, ObjectMapper om) {
-    return new ChangelogService(bucket, om);
+  public ChangelogService<LiteratureBucket> literatureChangelogService(
+      LiteratureBucket bucket, ObjectMapper om) {
+    return new ChangelogService<>(bucket, om);
   }
 
   /**
@@ -49,8 +51,8 @@ public class ChangelogConfig {
    * @return IndexedChangelogService configured to manage administrative directive files
    */
   @Bean
-  public ChangelogService administrativeDirectiveChangelogService(
+  public ChangelogService<AdministrativeDirectiveBucket> administrativeDirectiveChangelogService(
       AdministrativeDirectiveBucket bucket, ObjectMapper om) {
-    return new ChangelogService(bucket, om);
+    return new ChangelogService<>(bucket, om);
   }
 }

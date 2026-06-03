@@ -1,6 +1,6 @@
 package de.bund.digitalservice.ris.search.service;
 
-import org.springframework.beans.factory.annotation.Qualifier;
+import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import org.springframework.stereotype.Component;
 
 /** Job for synchronizing the index of case law. */
@@ -18,7 +18,7 @@ public class CaseLawIndexSyncJob extends IndexSyncJob {
    */
   public CaseLawIndexSyncJob(
       IndexStatusService indexStatusService,
-      @Qualifier("caseLawChangelogService") ChangelogService changelogService,
+      ChangelogService<CaseLawBucket> changelogService,
       IndexCaselawService indexCaselawService) {
     super(indexStatusService, changelogService, indexCaselawService, CASELAW_STATUS_FILENAME);
   }
