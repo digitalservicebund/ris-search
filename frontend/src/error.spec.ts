@@ -1,12 +1,7 @@
 import { renderSuspended } from "@nuxt/test-utils/runtime";
-import { describe, vi } from "vitest";
-import type * as SkipLinks from "~/composables/useSkipLinks";
+import { screen } from "@testing-library/vue";
+import { describe } from "vitest";
 import ErrorPage from "./error.vue";
-
-vi.mock("~/composables/useSkipLinks", async (importOriginal) => {
-  const actual = await importOriginal<typeof SkipLinks>();
-  return { ...actual, useSkipLinks: vi.fn() };
-});
 
 const NuxtLayoutStub = {
   name: "NuxtLayout",
@@ -43,17 +38,17 @@ const mountComponent = async (statusCode: number) =>
 
 describe("Error", () => {
   it("shows a specific message for Not Found errors (404)", async () => {
-    const { container } = await mountComponent(404);
-    expect(container.textContent).toMatchSnapshot();
+    await mountComponent(404);
+    expect(screen.getByTestId("error-message").textContent).toMatchSnapshot();
   });
 
   it("shows a generic message for internal server errors (500)", async () => {
-    const { container } = await mountComponent(500);
-    expect(container.textContent).toMatchSnapshot();
+    await mountComponent(500);
+    expect(screen.getByTestId("error-message").textContent).toMatchSnapshot();
   });
 
   it("shows a more generic message for other errors", async () => {
-    const { container } = await mountComponent(418);
-    expect(container.textContent).toMatchSnapshot();
+    await mountComponent(418);
+    expect(screen.getByTestId("error-message").textContent).toMatchSnapshot();
   });
 });
