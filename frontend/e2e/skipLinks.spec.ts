@@ -1,4 +1,4 @@
-import { expect, navigate, test } from "./utils/fixtures";
+import { expect, navigate, noJsTest, test } from "./utils/fixtures";
 import {
   expectPageSkipLinks,
   type SkipLinkExpectation,
@@ -191,3 +191,10 @@ for (const { name, url, skipLinks, requiresPrivateFeatures } of scenarios) {
     await expectPageSkipLinks(page, skipLinks);
   });
 }
+
+noJsTest("skip links exist without JavaScript", async ({ page }) => {
+  await page.goto("/");
+  await expect(
+    page.getByRole("navigation", { name: "Sprunglinks" }),
+  ).toBeAttached();
+});
