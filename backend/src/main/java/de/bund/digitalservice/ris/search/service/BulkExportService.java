@@ -100,7 +100,12 @@ public class BulkExportService implements Job {
                       resultObjectKey,
                       FileUtils.byteCountToDisplaySize(byteCount)));
 
-    } catch (InterruptedException | ExecutionException | IOException e) {
+    } catch (InterruptedException e) {
+      logger.error("Job execution was interrupted", e);
+      Thread.currentThread().interrupt();
+      return ReturnCode.ERROR;
+
+    } catch (ExecutionException | IOException e) {
       logger.error("Error processing key '{}'", keysToZip, e);
       return ReturnCode.ERROR;
     }
