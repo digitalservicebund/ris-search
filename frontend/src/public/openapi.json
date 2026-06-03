@@ -246,7 +246,7 @@
         }
       }
     },
-    "/v1/literature/changelogs": {
+    "/v1/literature/changelog": {
       "get": {
         "tags": ["Literature"],
         "summary": "Literature changelog",
@@ -955,7 +955,7 @@
         }
       }
     },
-    "/v1/legislation/changelogs": {
+    "/v1/legislation/changelog": {
       "get": {
         "tags": ["Legislation"],
         "summary": "Legislation changelog",
@@ -1728,7 +1728,7 @@
         }
       }
     },
-    "/v1/case-law/changelogs": {
+    "/v1/case-law/changelog": {
       "get": {
         "tags": ["Case Law"],
         "summary": "Caselaw changelog",
@@ -1935,7 +1935,7 @@
         }
       }
     },
-    "/v1/administrative-directive/changelogs": {
+    "/v1/administrative-directive/changelog": {
       "get": {
         "tags": ["AdministrativeDirective"],
         "summary": "Administrative Directive changelog",

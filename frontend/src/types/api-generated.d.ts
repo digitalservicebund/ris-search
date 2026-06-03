@@ -107,7 +107,7 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  "/v1/literature/changelogs": {
+  "/v1/literature/changelog": {
     parameters: {
       query?: never;
       header?: never;
@@ -329,7 +329,7 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  "/v1/legislation/changelogs": {
+  "/v1/legislation/changelog": {
     parameters: {
       query?: never;
       header?: never;
@@ -617,7 +617,7 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  "/v1/case-law/changelogs": {
+  "/v1/case-law/changelog": {
     parameters: {
       query?: never;
       header?: never;
@@ -726,7 +726,7 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  "/v1/administrative-directive/changelogs": {
+  "/v1/administrative-directive/changelog": {
     parameters: {
       query?: never;
       header?: never;

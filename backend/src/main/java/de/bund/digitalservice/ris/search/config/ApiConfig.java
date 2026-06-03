@@ -20,7 +20,7 @@ public class ApiConfig {
 
     public static final String BASE = "/v1";
 
-    public static final String CHANGELOGS = "/changelogs";
+    public static final String CHANGELOGS = "/changelog";
 
     public static final String DOCUMENT = BASE + "/document";
 
