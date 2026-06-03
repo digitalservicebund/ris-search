@@ -124,12 +124,18 @@ class ImportTaskProcessorTest {
       "--task",
       "import_literature",
       "--task",
-      "update_sitemaps"
+      "update_sitemaps",
+      "--task",
+      "generate_norms_snapshot",
+      "--task",
+      "generate_caselaw_snapshot"
     };
     when(normIndexSyncJob.runJob()).thenReturn(Job.ReturnCode.SUCCESS);
     when(caseLawIndexSyncJob.runJob()).thenReturn(Job.ReturnCode.SUCCESS);
     when(literatureIndexSyncJob.runJob()).thenReturn(Job.ReturnCode.SUCCESS);
     when(sitemapsUpdateJob.runJob()).thenReturn(Job.ReturnCode.SUCCESS);
+    when(normsBulkExport.runJob()).thenReturn(Job.ReturnCode.SUCCESS);
+    when(caseLawBulkExport.runJob()).thenReturn(Job.ReturnCode.SUCCESS);
 
     // When
     int exitCode = processor.run(args);
@@ -140,6 +146,8 @@ class ImportTaskProcessorTest {
     verify(caseLawIndexSyncJob).runJob();
     verify(literatureIndexSyncJob).runJob();
     verify(sitemapsUpdateJob).runJob();
+    verify(normsBulkExport).runJob();
+    verify(caseLawBulkExport).runJob();
   }
 
   @Test

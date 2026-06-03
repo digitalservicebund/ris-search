@@ -31,6 +31,16 @@ public class BulkExportService implements Job {
   private final String prefix;
   private final Predicate<String> keyFilter;
 
+  /**
+   * Job to include potentially all files from a source bucket in a zip file and store it in a
+   * destination bucket.
+   *
+   * @param sourceBucket the ObjectStorage bucket to read files from
+   * @param destinationBucket the ObjectStorage bucket to upload the ZIP archive to
+   * @param outputName the base name for the output ZIP file
+   * @param prefix the prefix to filter objects in the sourceBucket
+   * @param keyFilter filter to exclude files based on their keys
+   */
   public BulkExportService(
       ObjectStorage sourceBucket,
       ObjectStorage destinationBucket,
