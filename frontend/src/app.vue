@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { Toast } from "primevue";
 
-provideSkipLinks();
-
 useHead({
   titleTemplate: (pageTitle) =>
     pageTitle

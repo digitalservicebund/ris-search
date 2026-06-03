@@ -15,13 +15,12 @@ definePageMeta({
   alias:
     "/eli/:jurisdiction/:agent/:year/:naturalIdentifier/:pointInTime/:version/:language",
   layout: "norm",
+  skipLinks: [
+    { label: "Zum Inhalt", to: "#main" },
+    { label: "Zum Gesetzestext", to: "#content" },
+    { label: "Zum Fußbereich", to: "#footer" },
+  ],
 });
-
-useSkipLinks([
-  { label: "Zum Inhalt", to: "#main" },
-  { label: "Zum Gesetzestext", to: "#content" },
-  { label: "Zum Fußbereich", to: "#footer" },
-]);
 
 const route = useRoute();
 const expressionEli = Object.values(route.params).join("/");

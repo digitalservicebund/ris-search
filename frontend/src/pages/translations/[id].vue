@@ -16,12 +16,13 @@ import {
 import { useTranslationSeo } from "~/composables/useTranslationSeo";
 import { removePrefix } from "~/utils/textFormatting";
 
-definePageMeta({ layout: "norm" });
-
-useSkipLinks([
-  { label: "Skip to main", to: "#main" },
-  { label: "Skip to footer", to: "#footer" },
-]);
+definePageMeta({
+  layout: "norm",
+  skipLinks: [
+    { label: "Skip to main", to: "#main" },
+    { label: "Skip to footer", to: "#footer" },
+  ],
+});
 
 useHead({
   htmlAttrs: { lang: "en" },

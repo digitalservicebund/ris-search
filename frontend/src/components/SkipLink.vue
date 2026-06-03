@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Button } from "primevue";
+import type { SkipLink } from "~";
 import { NuxtLink } from "#components";
 
 const props = defineProps<{

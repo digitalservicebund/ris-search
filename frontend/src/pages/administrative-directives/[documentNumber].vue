@@ -6,13 +6,14 @@ import { useAdministrativeDirectiveSeo } from "~/composables/useAdministrativeDi
 import type { DocumentView } from "~/layouts/document.vue";
 import { type AdministrativeDirective, DocumentKind } from "~/types/api";
 
-definePageMeta({ layout: false });
-
-useSkipLinks([
-  { label: "Zum Inhalt", to: "#main" },
-  { label: "Zum Text", to: "#content" },
-  { label: "Zum Fußbereich", to: "#footer" },
-]);
+definePageMeta({
+  layout: false,
+  skipLinks: [
+    { label: "Zum Inhalt", to: "#main" },
+    { label: "Zum Text", to: "#content" },
+    { label: "Zum Fußbereich", to: "#footer" },
+  ],
+});
 
 const route = useRoute();
 

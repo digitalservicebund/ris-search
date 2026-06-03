@@ -6,13 +6,14 @@ import { useLiteratureSeo } from "~/composables/useLiteratureSeo";
 import type { DocumentView } from "~/layouts/document.vue";
 import { DocumentKind, type Literature } from "~/types/api";
 
-definePageMeta({ layout: false });
-
-useSkipLinks([
-  { label: "Zum Inhalt", to: "#main" },
-  { label: "Zum Text", to: "#content" },
-  { label: "Zum Fußbereich", to: "#footer" },
-]);
+definePageMeta({
+  layout: false,
+  skipLinks: [
+    { label: "Zum Inhalt", to: "#main" },
+    { label: "Zum Text", to: "#content" },
+    { label: "Zum Fußbereich", to: "#footer" },
+  ],
+});
 
 const route = useRoute();
 

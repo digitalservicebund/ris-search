@@ -1,7 +1,14 @@
 <script setup lang="ts">
 import text from "./content.md?raw";
 
-definePageMeta({ alias: ["/einfuehrung"], layout: false });
+definePageMeta({
+  alias: ["/einfuehrung"],
+  layout: false,
+  skipLinks: [
+    { label: "Zum Inhalt", to: "#main" },
+    { label: "Zum Fußbereich", to: "#footer" },
+  ],
+});
 </script>
 
 <template>

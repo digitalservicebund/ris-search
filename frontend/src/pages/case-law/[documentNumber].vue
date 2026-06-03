@@ -8,13 +8,14 @@ import { useCaselawSeo } from "~/composables/useCaselawSeo";
 import type { DocumentView } from "~/layouts/document.vue";
 import { type CaseLaw, DocumentKind } from "~/types/api";
 
-definePageMeta({ layout: false });
-
-useSkipLinks([
-  { label: "Zum Inhalt", to: "#main" },
-  { label: "Zum Entscheidungstext", to: "#content" },
-  { label: "Zum Fußbereich", to: "#footer" },
-]);
+definePageMeta({
+  layout: false,
+  skipLinks: [
+    { label: "Zum Inhalt", to: "#main" },
+    { label: "Zum Entscheidungstext", to: "#content" },
+    { label: "Zum Fußbereich", to: "#footer" },
+  ],
+});
 
 const route = useRoute();
 

@@ -1,4 +1,4 @@
-import { expect, navigate, test } from "./utils/fixtures";
+import { expect, navigate, noJsTest, test } from "./utils/fixtures";
 import {
   expectPageSkipLinks,
   type SkipLinkExpectation,
@@ -100,6 +100,14 @@ const scenarios: Scenario[] = [
     ],
   },
   {
+    name: "error page",
+    url: "/404",
+    skipLinks: [
+      { label: "Zum Inhalt", target: "#main" },
+      { label: "Zum Fußbereich", target: "#footer" },
+    ],
+  },
+  {
     // representative all static content pages
     name: "about page",
     url: "/about",
@@ -191,3 +199,10 @@ for (const { name, url, skipLinks, requiresPrivateFeatures } of scenarios) {
     await expectPageSkipLinks(page, skipLinks);
   });
 }
+
+noJsTest("skip links exist without JavaScript", async ({ page }) => {
+  await page.goto("/");
+  await expect(
+    page.getByRole("navigation", { name: "Sprunglinks" }),
+  ).toBeAttached();
+});
