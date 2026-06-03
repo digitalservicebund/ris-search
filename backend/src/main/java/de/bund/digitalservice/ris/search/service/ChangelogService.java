@@ -17,7 +17,7 @@ import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
 /** Service to retrieve and parse changelog files */
-public class ChangelogService {
+public class ChangelogService<T extends ObjectStorage> {
 
   private static final Logger logger = LogManager.getLogger(ChangelogService.class);
 
@@ -33,7 +33,7 @@ public class ChangelogService {
    * @param bucket bucket containing the changelogs
    * @param objectMapper global ObjectMapper to create a Changelog Reader
    */
-  public ChangelogService(ObjectStorage bucket, ObjectMapper objectMapper) {
+  public ChangelogService(T bucket, ObjectMapper objectMapper) {
     this.bucket = bucket;
     this.changelogReader = objectMapper.readerFor(Changelog.class);
   }

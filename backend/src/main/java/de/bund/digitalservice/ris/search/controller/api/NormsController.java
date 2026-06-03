@@ -16,6 +16,7 @@ import de.bund.digitalservice.ris.search.models.api.parameters.NormsSortParam;
 import de.bund.digitalservice.ris.search.models.api.parameters.PaginationParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
+import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import de.bund.digitalservice.ris.search.schema.ChangelogResponse;
 import de.bund.digitalservice.ris.search.schema.CollectionSchema;
 import de.bund.digitalservice.ris.search.schema.LegislationExpressionSchema;
@@ -42,7 +43,6 @@ import java.util.List;
 import java.util.Optional;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.UncategorizedElasticsearchException;
@@ -82,7 +82,7 @@ public class NormsController {
 
   private final NormsService normsService;
   private final NormXsltTransformerService xsltTransformerService;
-  private final ChangelogService changelogService;
+  private final ChangelogService<NormsBucket> changelogService;
 
   /**
    * Constructor for the NormsController class.
@@ -94,7 +94,7 @@ public class NormsController {
   public NormsController(
       NormsService normsService,
       NormXsltTransformerService xsltTransformerService,
-      @Qualifier(value = "normsChangelogService") ChangelogService changelogService) {
+      ChangelogService<NormsBucket> changelogService) {
     this.normsService = normsService;
     this.xsltTransformerService = xsltTransformerService;
     this.changelogService = changelogService;
