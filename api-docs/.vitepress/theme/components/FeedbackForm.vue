@@ -11,7 +11,7 @@ const SENDING_ERROR_MESSAGE =
 const submitFeedback = async () => {
   errorMessage.value = undefined;
   if (!feedback.value.trim()) {
-    errorMessage.value = "Please enter your feedback in the box provided";
+    errorMessage.value = "Please enter your feedback";
     return;
   }
   try {
@@ -48,19 +48,22 @@ const submitFeedback = async () => {
         Your feedback will help us to improve the documentation. Describe your
         request in as much detail as possible. Do not enter any personal data.
       </p>
-      <div :class="$style.field">
-        <textarea
-          v-model="feedback"
-          placeholder="Enter feedback"
-          rows="6"
-          :class="[$style.textarea, { [$style.textareaInvalid]: errorMessage }]"
-          @input="errorMessage = undefined"
-        />
-        <small v-if="errorMessage" :class="$style.error">
-          {{ errorMessage }}
-        </small>
-      </div>
-      <button class="ris-button" @click="submitFeedback">Send Feedback</button>
+      <form novalidate @submit.prevent="submitFeedback">
+        <div :class="$style.field">
+          <textarea
+            v-model="feedback"
+            placeholder="Enter feedback"
+            rows="6"
+            :class="[$style.textarea]"
+            @input="errorMessage = undefined"
+            required
+          />
+          <small v-if="errorMessage" :class="$style.error">
+            {{ errorMessage }}
+          </small>
+        </div>
+        <button type="submit" class="ris-button">Send Feedback</button>
+      </form>
     </div>
   </div>
 </template>
@@ -96,10 +99,10 @@ const submitFeedback = async () => {
     outline: none;
     border-width: 3px;
   }
-}
 
-.textareaInvalid {
-  border-color: var(--vp-c-danger-1);
+  &:user-invalid {
+    border-color: var(--vp-c-danger-1);
+  }
 }
 
 .error {
