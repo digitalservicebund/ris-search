@@ -1,5 +1,6 @@
 package de.bund.digitalservice.ris.search.unit.mapper;
 
+import static de.bund.digitalservice.ris.search.integration.controller.api.testData.SharedTestConstants.FIXED_INSTANT;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -18,7 +19,6 @@ import de.bund.digitalservice.ris.search.models.ldml.directive.Normgeber;
 import de.bund.digitalservice.ris.search.models.ldml.directive.Proprietary;
 import de.bund.digitalservice.ris.search.models.ldml.directive.RisMeta;
 import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
-import java.time.Instant;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
@@ -62,7 +62,7 @@ class AdministrativeDirectiveToOpenSearchMapperUnitTest {
 
     ldml.getDoc().getMeta().getProprietary().getMeta().setNormgeber(normgeber);
     AdministrativeDirective entity =
-        AdministrativeDirectiveLdmlToOpenSearchMapper.map(ldml, Instant.now());
+        AdministrativeDirectiveLdmlToOpenSearchMapper.map(ldml, FIXED_INSTANT);
     assertThat(entity.legislationAuthority()).isEqualTo("BB Ministerium");
   }
 
@@ -74,7 +74,7 @@ class AdministrativeDirectiveToOpenSearchMapperUnitTest {
 
     ldml.getDoc().getMeta().getProprietary().getMeta().setNormgeber(normgeber);
     AdministrativeDirective entity =
-        AdministrativeDirectiveLdmlToOpenSearchMapper.map(ldml, Instant.now());
+        AdministrativeDirectiveLdmlToOpenSearchMapper.map(ldml, FIXED_INSTANT);
     assertThat(entity.legislationAuthority()).isEqualTo("BB");
   }
 
@@ -87,7 +87,7 @@ class AdministrativeDirectiveToOpenSearchMapperUnitTest {
 
     ldml.getDoc().getMeta().getProprietary().getMeta().setActiveReferences(List.of(ref));
     AdministrativeDirective entity =
-        AdministrativeDirectiveLdmlToOpenSearchMapper.map(ldml, Instant.now());
+        AdministrativeDirectiveLdmlToOpenSearchMapper.map(ldml, FIXED_INSTANT);
     assertThat(entity.activeAdministrativeReferences().getFirst()).isEqualTo("Ref");
   }
 
@@ -102,7 +102,7 @@ class AdministrativeDirectiveToOpenSearchMapperUnitTest {
 
     ldml.getDoc().getMeta().getProprietary().getMeta().setActiveReferences(List.of(ref));
     AdministrativeDirective entity =
-        AdministrativeDirectiveLdmlToOpenSearchMapper.map(ldml, Instant.now());
+        AdministrativeDirectiveLdmlToOpenSearchMapper.map(ldml, FIXED_INSTANT);
     assertThat(entity.activeNormReferences().getFirst()).isEqualTo("Ref Par Pos");
   }
 
@@ -111,12 +111,11 @@ class AdministrativeDirectiveToOpenSearchMapperUnitTest {
     AdministrativeDirectiveLdml ldml = new AdministrativeDirectiveLdml();
     ldml.setDoc(new Doc());
 
-    var now = Instant.now();
     OpenSearchMapperException e =
         assertThrows(
             OpenSearchMapperException.class,
             () -> {
-              AdministrativeDirectiveLdmlToOpenSearchMapper.map(ldml, now);
+              AdministrativeDirectiveLdmlToOpenSearchMapper.map(ldml, FIXED_INSTANT);
             });
 
     assertThat(e.getMessage()).isEqualTo("ldml has no documentNumber");
@@ -128,12 +127,11 @@ class AdministrativeDirectiveToOpenSearchMapperUnitTest {
 
     ldml.getDoc().getMeta().getProprietary().getMeta().setFieldsOfLaw(List.of(new FieldOfLaw()));
 
-    var now = Instant.now();
     OpenSearchMapperException e =
         assertThrows(
             OpenSearchMapperException.class,
             () -> {
-              AdministrativeDirectiveLdmlToOpenSearchMapper.map(ldml, now);
+              AdministrativeDirectiveLdmlToOpenSearchMapper.map(ldml, FIXED_INSTANT);
             });
 
     assertThat(e.getMessage()).isEqualTo("field of law value is null");

@@ -8,11 +8,11 @@ import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.CaseLawTestData;
+import de.bund.digitalservice.ris.search.integration.controller.api.testData.SharedTestConstants;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository;
 import de.bund.digitalservice.ris.search.service.IndexCaselawService;
 import java.io.IOException;
-import java.time.Instant;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -45,7 +45,7 @@ class IndexCaseLawServiceTest extends ContainersIntegrationBase {
         "file1.xml", CaseLawTestData.simpleCaseLawXml(Map.of("documentNumber", "TEST080020093")));
     caseLawBucket.save("file2.xml", "this will not parse");
 
-    String startingTimestamp = Instant.now().toString();
+    String startingTimestamp = SharedTestConstants.INDEXED_AT_TIMESTAMP;
     this.service.reindexAll(startingTimestamp);
 
     assertThat(repo.count()).isEqualTo(1);

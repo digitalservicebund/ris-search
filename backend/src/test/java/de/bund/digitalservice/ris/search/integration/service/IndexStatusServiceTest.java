@@ -4,10 +4,10 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
+import de.bund.digitalservice.ris.search.integration.controller.api.testData.SharedTestConstants;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
 import de.bund.digitalservice.ris.search.service.IndexStatusService;
 import de.bund.digitalservice.ris.search.service.IndexingState;
-import java.time.Instant;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +23,8 @@ class IndexStatusServiceTest extends ContainersIntegrationBase {
 
   @Test
   void saveAndloadStatusTest1() throws ObjectStoreServiceException {
-    Instant time = Instant.now();
-    IndexingState testData = new IndexingState("lastProcessedChangelogFile", time.toString());
+    IndexingState testData =
+        new IndexingState("lastProcessedChangelogFile", SharedTestConstants.INDEXED_AT_TIMESTAMP);
     indexStatusService.saveStatus("testFile.json", testData);
     IndexingState result = indexStatusService.loadStatus("testFile.json");
     assertThat(result).isEqualTo(testData);

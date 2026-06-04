@@ -5,6 +5,7 @@ import io.pebbletemplates.pebble.template.PebbleTemplate;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.HashMap;
@@ -16,6 +17,8 @@ public class SharedTestConstants {
   public static final LocalDate DATE_2_1 = LocalDate.of(2024, Month.JANUARY, 1);
   public static final LocalDate DATE_2_2 = LocalDate.of(2024, Month.JANUARY, 2);
   public static final LocalDate DATE_2_3 = LocalDate.of(2024, Month.JANUARY, 3);
+  public static final String INDEXED_AT_TIMESTAMP = "2024-01-01T00:00:00Z";
+  public static final Instant FIXED_INSTANT = Instant.parse("2024-01-01T00:00:00Z");
 
   /**
    * Generates XML from a Pebble template with the given context.
