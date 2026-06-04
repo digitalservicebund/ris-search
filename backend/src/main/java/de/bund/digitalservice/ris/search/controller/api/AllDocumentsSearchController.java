@@ -96,7 +96,7 @@ public class AllDocumentsSearchController {
 
       return ResponseEntity.ok()
           .contentType(MediaType.APPLICATION_JSON)
-          .body((DocumentResponseMapper.fromDomain(searchResult, ApiConfig.Paths.DOCUMENT)));
+          .body(DocumentResponseMapper.fromDomain(searchResult, ApiConfig.Paths.DOCUMENT));
     } catch (UncategorizedElasticsearchException e) {
       logger.error("Unexpected Opensearch error during simple search.", e);
       throw e;
