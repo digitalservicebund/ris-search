@@ -1,5 +1,8 @@
 {
-  "extends": "@vue/tsconfig/tsconfig.json",
-  "include": ["env.d.ts", ".vitepress/**/*", "docs/**/*", "docs/**/*.md"],
-  "exclude": ["node_modules/"]
+  "compilerOptions": {
+    "skipLibCheck": true,
+    "types": ["vitepress/client"]
+  },
+  "include": [".vitepress/**/*.ts", ".vitepress/**/*.vue"],
+  "exclude": ["node_modules/", ".vitepress/cache/"]
 }
