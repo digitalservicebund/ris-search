@@ -31,7 +31,7 @@ jobs:
         - name: Bump chainguard/nginx image
           uses: digitalservicebund/bump-chainguard-digest@937cc7a12750bfd06419f32cabcaa79a37f32705 # v1.1.3
           with:
-            image_name: jre
+            image_name: nginx
             file_path: api-docs/Dockerfile
             github_token: ${{ github.token }}
             branch: bump-chaingurad-nginx-image-version
