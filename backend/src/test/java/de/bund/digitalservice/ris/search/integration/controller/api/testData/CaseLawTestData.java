@@ -3,6 +3,7 @@ package de.bund.digitalservice.ris.search.integration.controller.api.testData;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -97,7 +98,7 @@ public class CaseLawTestData {
             .location("Gotha")
             .courtKeyword("FG Gotha")
             .documentType("Kammerbeschluss")
-            .decisionDate(LocalDate.of(2025, 1, 1))
+            .decisionDate(LocalDate.of(2025, Month.JANUARY, 1))
             .grounds("Beschlussgründe")
             .guidingPrinciple("Leitsatz")
             .otherLongText(matchAllTerm)
@@ -114,7 +115,7 @@ public class CaseLawTestData {
             .location("Hannover")
             .courtKeyword("FG Hannover")
             .documentType("Entscheidung")
-            .decisionDate(LocalDate.of(2026, 1, 1))
+            .decisionDate(LocalDate.of(2026, Month.JANUARY, 1))
             .grounds("Beschlussgründe")
             .guidingPrinciple("Leitsatz")
             .otherLongText(matchAllTerm)
@@ -131,7 +132,7 @@ public class CaseLawTestData {
             .location("Saarbrücken")
             .courtKeyword("LG Saarbrücken")
             .documentType("EuGH-Vorlage")
-            .decisionDate(LocalDate.of(2025, 2, 2))
+            .decisionDate(LocalDate.of(2025, Month.FEBRUARY, 2))
             .grounds("Beschlussgründe")
             .guidingPrinciple("Leitsatz")
             .otherLongText(matchAllTerm)

@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -188,12 +189,12 @@ class NormLdmlToOpenSearchMapperTest {
     assertEquals(
         "(1) Ein weiterer Satz mit einem Punkt in einer Aufzählung und noch einem Punkt. (2) Noch ein wichtiger Satz. Das ist der letzte Satz.",
         secondArticle.getText());
-    assertEquals(LocalDate.of(2003, 11, 3), firstArticle.getEntryIntoForceDate());
+    assertEquals(LocalDate.of(2003, Month.NOVEMBER, 3), firstArticle.getEntryIntoForceDate());
     assertNull(firstArticle.getExpiryDate());
-    assertEquals(LocalDate.of(2003, 11, 3), secondArticle.getEntryIntoForceDate());
-    assertEquals(LocalDate.of(2003, 11, 6), secondArticle.getExpiryDate());
+    assertEquals(LocalDate.of(2003, Month.NOVEMBER, 3), secondArticle.getEntryIntoForceDate());
+    assertEquals(LocalDate.of(2003, Month.NOVEMBER, 6), secondArticle.getExpiryDate());
     assertNull(thirdArticle.getEntryIntoForceDate());
-    assertEquals(LocalDate.of(2003, 11, 1), thirdArticle.getExpiryDate());
+    assertEquals(LocalDate.of(2003, Month.NOVEMBER, 1), thirdArticle.getExpiryDate());
     String workEli = "eli/bund/bgbl-1/1962/s514";
     String expressionEli = workEli + "/2010-04-27/1/deu";
     String manifestationEli = expressionEli + "/2010-04-27/offenestruktur-1.xml";
@@ -305,7 +306,8 @@ class NormLdmlToOpenSearchMapperTest {
             "schluss-n1_formel-n1");
     assertThat(norm.getArticles().stream().map(Article::getEId).toList()).isEqualTo(eIds);
     Article firstArticle = norm.getArticles().stream().findFirst().orElseThrow();
-    assertThat(firstArticle.getEntryIntoForceDate()).isEqualTo(LocalDate.of(1991, 1, 1));
+    assertThat(firstArticle.getEntryIntoForceDate())
+        .isEqualTo(LocalDate.of(1991, Month.JANUARY, 1));
     assertThat(firstArticle.getGuid()).isEqualTo("87cd6b3a-d198-49c3-a02f-6adfd12940cb");
     assertThat(firstArticle.getExpiryDate()).isNull();
   }

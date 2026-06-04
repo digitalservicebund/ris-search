@@ -9,6 +9,7 @@ import de.bund.digitalservice.ris.search.service.IndexNormsService;
 import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.Comparator;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -58,11 +59,13 @@ class IndexNormsServiceTest extends ContainersIntegrationBase {
     assertThat(expressions.getFirst().getTimeRelevanceStartDate())
         .isEqualTo(IndexNormsService.TIME_RELEVANCE_MIN);
     assertThat(expressions.getFirst().getTimeRelevanceEndDate())
-        .isEqualTo(LocalDate.of(1995, 1, 1));
-    assertThat(expressions.get(1).getTimeRelevanceStartDate()).isEqualTo(LocalDate.of(1995, 1, 2));
-    assertThat(expressions.get(1).getTimeRelevanceEndDate()).isEqualTo(LocalDate.of(2049, 12, 31));
+        .isEqualTo(LocalDate.of(1995, Month.JANUARY, 1));
+    assertThat(expressions.get(1).getTimeRelevanceStartDate())
+        .isEqualTo(LocalDate.of(1995, Month.JANUARY, 2));
+    assertThat(expressions.get(1).getTimeRelevanceEndDate())
+        .isEqualTo(LocalDate.of(2049, Month.DECEMBER, 31));
     assertThat(expressions.getLast().getTimeRelevanceStartDate())
-        .isEqualTo(LocalDate.of(2050, 1, 1));
+        .isEqualTo(LocalDate.of(2050, Month.JANUARY, 1));
     assertThat(expressions.getLast().getTimeRelevanceEndDate())
         .isEqualTo(IndexNormsService.TIME_RELEVANCE_MAX);
   }

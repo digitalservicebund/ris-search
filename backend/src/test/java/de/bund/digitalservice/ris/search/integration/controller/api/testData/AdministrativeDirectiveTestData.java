@@ -5,6 +5,7 @@ import static de.bund.digitalservice.ris.search.integration.controller.api.testD
 import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,8 +24,8 @@ public class AdministrativeDirectiveTestData {
             .documentTypeDetail("Rundschreiben")
             .shortReport("text content")
             .legislationAuthority("NG Ministerium")
-            .entryIntoEffectDate(LocalDate.of(1978, 1, 17))
-            .expiryDate(LocalDate.of(2026, 1, 1))
+            .entryIntoEffectDate(LocalDate.of(1978, Month.JANUARY, 17))
+            .expiryDate(LocalDate.of(2026, Month.JANUARY, 1))
             .normReferences(List.of("PhanGB"))
             .caselawReferences(List.of("Aktivzitierung I"))
             .references(List.of("Lorem Ipsum 19XX, 11"))

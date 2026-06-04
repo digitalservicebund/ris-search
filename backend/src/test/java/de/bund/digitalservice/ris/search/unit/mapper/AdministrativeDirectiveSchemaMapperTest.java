@@ -7,6 +7,7 @@ import de.bund.digitalservice.ris.search.mapper.EncodingSchemaFactory;
 import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
 import de.bund.digitalservice.ris.search.schema.AdministrativeDirectiveSchema;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
@@ -23,13 +24,13 @@ class AdministrativeDirectiveSchemaMapperTest {
             .documentTypeDetail("Rundschreiben")
             .shortReport("Kurzreferat")
             .referenceNumbers(List.of("RNR"))
-            .entryIntoEffectDate(LocalDate.of(2024, 1, 1))
-            .expiryDate(LocalDate.of(2026, 1, 1))
+            .entryIntoEffectDate(LocalDate.of(2024, Month.JANUARY, 1))
+            .expiryDate(LocalDate.of(2026, Month.JANUARY, 1))
             .legislationAuthority("authority")
             .references(List.of("Fundstelle"))
             .normReferences(List.of("norm"))
             .tableOfContentsEntries(List.of("item 1", "item 2"))
-            .citationDates(List.of(LocalDate.of(2024, 1, 2)))
+            .citationDates(List.of(LocalDate.of(2024, Month.JANUARY, 2)))
             .build();
 
     AdministrativeDirectiveSchema expected =
@@ -40,11 +41,11 @@ class AdministrativeDirectiveSchemaMapperTest {
             .documentTypeDetail("Rundschreiben")
             .shortReport("Kurzreferat")
             .referenceNumbers(List.of("RNR"))
-            .entryIntoForceDate(LocalDate.of(2024, 1, 1))
-            .expiryDate(LocalDate.of(2026, 1, 1))
+            .entryIntoForceDate(LocalDate.of(2024, Month.JANUARY, 1))
+            .expiryDate(LocalDate.of(2026, Month.JANUARY, 1))
             .legislationAuthority("authority")
             .references(List.of("Fundstelle"))
-            .citationDates(List.of(LocalDate.of(2024, 1, 2)))
+            .citationDates(List.of(LocalDate.of(2024, Month.JANUARY, 2)))
             .normReferences(List.of("norm"))
             .outline(List.of("item 1", "item 2"))
             .encoding(

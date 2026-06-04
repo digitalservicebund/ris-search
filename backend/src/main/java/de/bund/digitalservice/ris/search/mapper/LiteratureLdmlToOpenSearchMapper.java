@@ -27,6 +27,7 @@ import jakarta.xml.bind.ValidationException;
 import java.io.StringReader;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.Month;
 import java.time.YearMonth;
 import java.time.format.DateTimeParseException;
 import java.util.Collections;
@@ -111,7 +112,7 @@ public class LiteratureLdmlToOpenSearchMapper {
     try {
       if (firstValue.matches("\\d{4}")) {
         // Format: YYYY → YYYY-01-01
-        return LocalDate.of(Integer.parseInt(firstValue), 1, 1);
+        return LocalDate.of(Integer.parseInt(firstValue), Month.JANUARY, 1);
       } else if (firstValue.matches("\\d{4}-\\d{2}")) {
         // Format: YYYY-MM → YYYY-MM-01
         YearMonth yearMonth = YearMonth.parse(firstValue);

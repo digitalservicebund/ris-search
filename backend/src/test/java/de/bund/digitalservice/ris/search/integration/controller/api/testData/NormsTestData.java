@@ -10,6 +10,7 @@ import de.bund.digitalservice.ris.search.models.opensearch.TableOfContentsItem;
 import de.bund.digitalservice.ris.search.utils.eli.EliFile;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -183,8 +184,8 @@ public class NormsTestData {
             .datePublished(DATE_2_2.plusDays(1))
             .articleTexts(List.of("example text 1", "example text 2"))
             .articleNames(List.of("§ 1 Example article", "§ 2 Example article"))
-            .entryIntoForceDate(LocalDate.of(2025, 11, 1))
-            .normsSortDate(LocalDate.of(2025, 11, 1))
+            .entryIntoForceDate(LocalDate.of(2025, Month.NOVEMBER, 1))
+            .normsSortDate(LocalDate.of(2025, Month.NOVEMBER, 1))
             .articles(
                 List.of(
                     new Article(
@@ -194,8 +195,8 @@ public class NormsTestData {
                         workEli,
                         "§ 1 Example article",
                         "example text 1",
-                        LocalDate.of(2023, 12, 31),
-                        LocalDate.of(3000, 1, 2),
+                        LocalDate.of(2023, Month.DECEMBER, 31),
+                        LocalDate.of(3000, Month.JANUARY, 2),
                         "guid1",
                         manifestationEli,
                         "§ 1 TeG",
@@ -208,7 +209,7 @@ public class NormsTestData {
                         "§ 2 Example article",
                         "example text 2",
                         null,
-                        LocalDate.of(2024, 1, 2),
+                        LocalDate.of(2024, Month.JANUARY, 2),
                         "guid2",
                         manifestationEli,
                         "§ 2 TeG",
@@ -228,9 +229,9 @@ public class NormsTestData {
             .expressionEli("eli/2024/teg/2/exp")
             .normsDate(DATE_1_1)
             .datePublished(DATE_1_1)
-            .entryIntoForceDate(LocalDate.of(2025, 11, 2))
-            .normsSortDate(LocalDate.of(2025, 11, 2))
-            .expiryDate(LocalDate.of(2025, 11, 3))
+            .entryIntoForceDate(LocalDate.of(2025, Month.NOVEMBER, 2))
+            .normsSortDate(LocalDate.of(2025, Month.NOVEMBER, 2))
+            .expiryDate(LocalDate.of(2025, Month.NOVEMBER, 3))
             .build();
 
     var normTestThree =
@@ -244,9 +245,9 @@ public class NormsTestData {
             .expressionEli("eli/2024/teg/3/exp")
             .normsDate(DATE_2_1)
             .datePublished(DATE_2_1)
-            .entryIntoForceDate(LocalDate.of(2025, 11, 3))
-            .normsSortDate(LocalDate.of(2025, 11, 3))
-            .expiryDate(LocalDate.of(2025, 11, 3))
+            .entryIntoForceDate(LocalDate.of(2025, Month.NOVEMBER, 3))
+            .normsSortDate(LocalDate.of(2025, Month.NOVEMBER, 3))
+            .expiryDate(LocalDate.of(2025, Month.NOVEMBER, 3))
             .build();
 
     return new ArrayList<>(List.of(normTestOne, normTestTwo, normTestThree));

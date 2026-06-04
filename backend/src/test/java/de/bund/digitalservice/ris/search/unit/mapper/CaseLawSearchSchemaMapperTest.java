@@ -14,6 +14,7 @@ import de.bund.digitalservice.ris.search.schema.CollectionSchema;
 import de.bund.digitalservice.ris.search.schema.SearchMemberSchema;
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.Month;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Map;
@@ -142,7 +143,7 @@ class CaseLawSearchSchemaMapperTest {
             .ecli("ecli")
             .headline("headline")
             .otherLongText("other longtext")
-            .decisionDate(LocalDate.of(2026, 1, 1))
+            .decisionDate(LocalDate.of(2026, Month.JANUARY, 1))
             .fileNumbers(List.of("n1", "n2"))
             .courtType("courtType")
             .location("location")
@@ -163,7 +164,7 @@ class CaseLawSearchSchemaMapperTest {
             .ecli("ecli")
             .headline("headline")
             .otherLongText("other longtext")
-            .decisionDate(LocalDate.of(2026, 1, 1))
+            .decisionDate(LocalDate.of(2026, Month.JANUARY, 1))
             .fileNumbers(List.of("n1", "n2"))
             .courtType("courtType")
             .location("location")

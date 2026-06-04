@@ -26,6 +26,7 @@ import de.bund.digitalservice.ris.search.service.eclicrawler.EcliCrawlerDocument
 import de.bund.digitalservice.ris.search.service.eclicrawler.EcliSitemapWriter;
 import jakarta.xml.bind.JAXBException;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -63,7 +64,7 @@ class EcliCrawlerDocumentServiceTest {
         .documentNumber(docNumber)
         .ecli("ECLI:DE:XX:2025:1111111")
         .courtType("BGH")
-        .decisionDate(LocalDate.of(2025, 1, 1))
+        .decisionDate(LocalDate.of(2025, Month.JANUARY, 1))
         .build();
   }
 
@@ -80,7 +81,7 @@ class EcliCrawlerDocumentServiceTest {
 
   @Test
   void itSplitsSitemapsByMaxNumberOfUrls() throws ObjectStoreServiceException, JAXBException {
-    LocalDate day = LocalDate.of(2025, 1, 1);
+    LocalDate day = LocalDate.of(2025, Month.JANUARY, 1);
     var filenames = IntStream.range(0, 11000).boxed().map(i -> "file_" + i + ".xml").toList();
 
     when(caseLawBucket.getAllKeys()).thenReturn(filenames);
@@ -117,7 +118,7 @@ class EcliCrawlerDocumentServiceTest {
 
   @Test
   void itWritesFilesFromAChangelog() throws ObjectStoreServiceException, JAXBException {
-    LocalDate day = LocalDate.of(2025, 1, 1);
+    LocalDate day = LocalDate.of(2025, Month.JANUARY, 1);
     String createdFilename = "createdDoc.xml";
     String deletedFilename = "deletedDoc.xml";
     Changelog changelog = new Changelog();

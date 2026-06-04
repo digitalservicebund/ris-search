@@ -31,6 +31,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -526,14 +527,14 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
         Norm.builder()
             .id("n1")
             .officialTitle("title1")
-            .entryIntoForceDate(LocalDate.of(2026, 1, 1))
+            .entryIntoForceDate(LocalDate.of(2026, Month.JANUARY, 1))
             .build();
 
     var normTestTwo =
         Norm.builder()
             .id("id2")
             .officialTitle("title2")
-            .entryIntoForceDate(LocalDate.of(2025, 1, 1))
+            .entryIntoForceDate(LocalDate.of(2025, Month.JANUARY, 1))
             .build();
 
     normsRepository.saveAll(List.of(normTestOne, normTestTwo));

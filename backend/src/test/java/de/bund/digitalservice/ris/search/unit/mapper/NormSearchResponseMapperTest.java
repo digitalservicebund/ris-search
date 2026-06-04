@@ -14,6 +14,7 @@ import de.bund.digitalservice.ris.search.schema.LegislationWorkSchema;
 import de.bund.digitalservice.ris.search.schema.TextMatchSchema;
 import java.lang.reflect.Method;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -127,8 +128,8 @@ class NormSearchResponseMapperTest {
         Norm.builder()
             .id("id")
             .expressionEli("expressionEli")
-            .datePublished(LocalDate.of(2026, 1, 1))
-            .normsDate(LocalDate.of(2025, 1, 1))
+            .datePublished(LocalDate.of(2026, Month.JANUARY, 1))
+            .normsDate(LocalDate.of(2025, Month.JANUARY, 1))
             .articles(
                 List.of(
                     Article.builder()
@@ -148,8 +149,8 @@ class NormSearchResponseMapperTest {
                 new LegislationWorkSchema(
                     "/v1/legislation/workEli",
                     "workEli",
-                    LocalDate.of(2025, 1, 1),
-                    LocalDate.of(2026, 1, 1),
+                    LocalDate.of(2025, Month.JANUARY, 1),
+                    LocalDate.of(2026, Month.JANUARY, 1),
                     null))
             .legislationLegalForce(LegalForceStatus.IN_FORCE)
             .encoding(
