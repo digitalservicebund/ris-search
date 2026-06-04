@@ -12,7 +12,7 @@ describe("SkipLinks", () => {
           { label: "Zum Fußbereich", to: "#footer" },
         ],
       },
-      route: "/no-links-here",
+      route: "/example",
     });
 
     expect(screen.getByRole("link", { name: "Zum Inhalt" })).toBeVisible();
@@ -22,17 +22,25 @@ describe("SkipLinks", () => {
   it("merges links from props with links from route meta", async () => {
     await renderSuspended(AppSkipLinks, {
       props: {
-        links: [{ label: "Extra", to: "#extra" }],
+        links: [{ label: "Target 1", to: "#target1" }],
       },
-      route: "/no-links-here",
+      route: "/example",
     });
 
-    // Only prop links visible (no route meta on this route)
-    expect(screen.getByRole("link", { name: "Extra" })).toBeVisible();
+    const router = useRouter();
+    router.addRoute({
+      path: "/with-meta",
+      meta: { skipLinks: [{ label: "Target 2", to: "#target2" }] },
+      component: {},
+    });
+    await router.push("/with-meta");
+
+    expect(screen.getByRole("link", { name: "Target 1" })).toBeVisible();
+    expect(screen.getByRole("link", { name: "Target 2" })).toBeVisible();
   });
 
   it("renders nothing when no links are provided and no route meta is set", async () => {
-    await renderSuspended(AppSkipLinks, { route: "/no-links-here" });
+    await renderSuspended(AppSkipLinks, { route: "/example" });
 
     expect(
       screen.queryByRole("navigation", { name: "Sprunglinks" }),
