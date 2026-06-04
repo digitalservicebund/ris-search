@@ -6,6 +6,10 @@
 @import "./print.css";
 
 @theme {
+  --font-mono:
+    ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, Consolas,
+    "DejaVu Sans Mono", monospace;
+
   --max-width-prose: 45rem;
 }
 
@@ -40,6 +44,10 @@ typography. Should be moved to RIS UI when implementing all of responsive
 typography (RISDEV-10826). */
 @utility body-font-link {
   @apply ris-link2-regular sm:ris-link1-regular;
+}
+
+@utility mono-font {
+  @apply font-mono text-base leading-20;
 }
 
 mark {

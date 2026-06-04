@@ -366,6 +366,14 @@ const fassungenDateFilterInputId = useId();
 }
 
 .footnotes :deep(.nichtamtliche-fussnoten .fussnote) {
-  @apply mt-16 first:mt-0;
+  @apply mt-8 first:mt-0;
+}
+
+.footnotes :deep(.nichtamtliche-fussnoten .fussnote pre) {
+  @apply mono-font overflow-auto border border-gray-400 p-8;
+}
+
+.footnotes :deep(.nichtamtliche-fussnoten .fussnote:first-child pre) {
+  @apply -mt-8;
 }
 </style>
