@@ -4,8 +4,8 @@ import bmjvLogo from "../assets/images/bmjv_logo.svg";
 
 <template>
   <footer>
-    <div class="container">
-      <div class="branding">
+    <div :class="$style.container">
+      <div :class="$style.branding">
         <img
           :src="bmjvLogo"
           alt="Bundesministerium der Justiz und für Verbraucherschutz"
@@ -49,7 +49,7 @@ import bmjvLogo from "../assets/images/bmjv_logo.svg";
   </footer>
 </template>
 
-<style scoped>
+<style module>
 .container {
   display: flex;
   flex-direction: column;

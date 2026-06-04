@@ -38,7 +38,7 @@ const submitFeedback = async () => {
 </script>
 
 <template>
-  <div class="feedback-form">
+  <div :class="$style.form">
     <div v-if="isSent">
       <p><strong>Thank you for your Feedback!</strong></p>
     </div>
@@ -48,25 +48,25 @@ const submitFeedback = async () => {
         Your feedback will help us to improve the documentation. Describe your
         request in as much detail as possible. Do not enter any personal data.
       </p>
-      <div class="feedback-form__field">
+      <div :class="$style.field">
         <textarea
           v-model="feedback"
           placeholder="Enter feedback"
           rows="6"
-          :class="{ 'feedback-form__textarea--invalid': errorMessage }"
+          :class="[$style.textarea, { [$style.textareaInvalid]: errorMessage }]"
           @input="errorMessage = undefined"
         />
-        <small v-if="errorMessage" class="feedback-form__error">
+        <small v-if="errorMessage" :class="$style.error">
           {{ errorMessage }}
         </small>
       </div>
-      <button class="RisButton" @click="submitFeedback">Send Feedback</button>
+      <button class="ris-button" @click="submitFeedback">Send Feedback</button>
     </div>
   </div>
 </template>
 
-<style scoped>
-.feedback-form {
+<style module>
+.form {
   max-width: 65ch;
 
   & h3 {
@@ -74,35 +74,35 @@ const submitFeedback = async () => {
   }
 }
 
-.feedback-form__field {
+.field {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
   margin-block: 1rem;
+}
 
-  & textarea {
-    width: 100%;
-    padding: 0.5rem;
-    border: 2px solid var(--vp-c-brand-1);
-    border-radius: 4px;
-    font: inherit;
-    font-size: 1rem;
-    resize: vertical;
-    background: var(--vp-c-bg);
-    color: var(--vp-c-text-1);
+.textarea {
+  width: 100%;
+  padding: 0.5rem;
+  border: 2px solid var(--vp-c-brand-1);
+  border-radius: 4px;
+  font: inherit;
+  font-size: 1rem;
+  resize: vertical;
+  background: var(--vp-c-bg);
+  color: var(--vp-c-text-1);
 
-    &:focus {
-      outline: none;
-      border-width: 3px;
-    }
-
-    &.feedback-form__textarea--invalid {
-      border-color: var(--vp-c-danger-1);
-    }
+  &:focus {
+    outline: none;
+    border-width: 3px;
   }
 }
 
-.feedback-form__error {
+.textareaInvalid {
+  border-color: var(--vp-c-danger-1);
+}
+
+.error {
   color: var(--vp-c-danger-1);
 }
 </style>

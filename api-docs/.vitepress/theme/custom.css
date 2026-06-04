@@ -14,7 +14,7 @@
   --vp-button-brand-hover-bg: #336f91;
 }
 
-:is(a, button).RisButton {
+:is(a, button).ris-button {
   display: inline-block;
   text-align: center;
   font-weight: 600;
@@ -24,15 +24,15 @@
     color 0.25s,
     border-color 0.25s,
     background-color 0.25s;
-  padding: 0 20px;
-  line-height: 38px;
-  font-size: 14px;
+  padding: 0 1.25rem;
+  line-height: 2.375rem;
+  font-size: 0.875rem;
   border-color: var(--vp-button-brand-border);
   color: var(--vp-button-brand-text);
   background-color: var(--vp-button-brand-bg);
 }
 
-:is(a, button).RisButton:active {
+:is(a, button).ris-button:active {
   transition:
     color 0.1s,
     border-color 0.1s,
@@ -42,7 +42,7 @@
   background-color: var(--vp-button-brand-active-bg);
 }
 
-:is(a, button).RisButton:hover {
+:is(a, button).ris-button:hover {
   border-color: var(--vp-button-brand-hover-border);
   color: var(--vp-button-brand-hover-text);
   background-color: var(--vp-button-brand-hover-bg);

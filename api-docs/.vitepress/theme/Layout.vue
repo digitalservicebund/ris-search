@@ -23,17 +23,17 @@ const { Layout } = DefaultTheme;
       </div>
     </template>
     <template #doc-after>
-      <div class="vp-doc feedback">
+      <div :class="['vp-doc', $style.feedback]">
         <FeedbackForm />
       </div>
-      <div class="vp-doc footer">
+      <div :class="['vp-doc', $style.footer]">
         <Footer />
       </div>
     </template>
   </Layout>
 </template>
 
-<style scoped>
+<style module>
 .feedback {
   margin-top: 6rem;
   margin-bottom: 2rem;
