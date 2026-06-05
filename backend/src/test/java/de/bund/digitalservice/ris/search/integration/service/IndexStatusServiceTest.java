@@ -24,7 +24,8 @@ class IndexStatusServiceTest extends ContainersIntegrationBase {
   @Test
   void saveAndloadStatusTest1() throws ObjectStoreServiceException {
     IndexingState testData =
-        new IndexingState("lastProcessedChangelogFile", SharedTestConstants.INDEXED_AT_TIMESTAMP);
+        new IndexingState(
+            "lastProcessedChangelogFile", SharedTestConstants.TIMESTAMP_2024_01_01_AS_STRING);
     indexStatusService.saveStatus("testFile.json", testData);
     IndexingState result = indexStatusService.loadStatus("testFile.json");
     assertThat(result).isEqualTo(testData);

@@ -45,7 +45,7 @@ class IndexCaseLawServiceTest extends ContainersIntegrationBase {
         "file1.xml", CaseLawTestData.simpleCaseLawXml(Map.of("documentNumber", "TEST080020093")));
     caseLawBucket.save("file2.xml", "this will not parse");
 
-    String startingTimestamp = SharedTestConstants.INDEXED_AT_TIMESTAMP;
+    String startingTimestamp = SharedTestConstants.TIMESTAMP_2024_01_01_AS_STRING;
     this.service.reindexAll(startingTimestamp);
 
     assertThat(repo.count()).isEqualTo(1);

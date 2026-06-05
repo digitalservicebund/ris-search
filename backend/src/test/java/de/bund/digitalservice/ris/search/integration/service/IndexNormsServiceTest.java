@@ -38,7 +38,7 @@ class IndexNormsServiceTest extends ContainersIntegrationBase {
     String workEli = "eli/bund/bgbl-1/1991/s101";
     String normFile1 = workEli + "/1991-01-01/1/deu/1991-01-01/regelungstext-1.xml";
     normsBucket.save(normFile1, NormsTestData.simpleNormXml(normFile1, null));
-    indexNormsService.reindexAll(SharedTestConstants.INDEXED_AT_TIMESTAMP);
+    indexNormsService.reindexAll(SharedTestConstants.TIMESTAMP_2024_01_01_AS_STRING);
     List<Norm> expressions = normsRepository.getByWorkEli(workEli);
     assertThat(expressions).hasSize(1);
     assertThat(expressions.getFirst().getTimeRelevanceStartDate())
@@ -50,7 +50,7 @@ class IndexNormsServiceTest extends ContainersIntegrationBase {
   @Test
   @DisplayName("Three expressions cover full time relevance window")
   void threeExpressionsCoverFullTimeRelevanceWindow() {
-    indexNormsService.reindexAll(SharedTestConstants.INDEXED_AT_TIMESTAMP);
+    indexNormsService.reindexAll(SharedTestConstants.TIMESTAMP_2024_01_01_AS_STRING);
     List<Norm> expressions = normsRepository.getByWorkEli("eli/bund/bgbl-1/1991/s102");
     assertThat(expressions).hasSize(3);
 
@@ -73,7 +73,7 @@ class IndexNormsServiceTest extends ContainersIntegrationBase {
   @Test
   @DisplayName("Full citation indexes properly")
   void fullCitationIndexesProperly() {
-    indexNormsService.reindexAll(SharedTestConstants.INDEXED_AT_TIMESTAMP);
+    indexNormsService.reindexAll(SharedTestConstants.TIMESTAMP_2024_01_01_AS_STRING);
     Norm expression =
         normsRepository.getByExpressionEli("eli/bund/bgbl-1/1991/s102/1991-01-01/1/deu");
     assertThat(expression.getFullCitation()).startsWith("Verordnung");
@@ -82,7 +82,7 @@ class IndexNormsServiceTest extends ContainersIntegrationBase {
   @Test
   @DisplayName("Official Toc indexes properly")
   void officialTocIndexesProperly() {
-    indexNormsService.reindexAll(SharedTestConstants.INDEXED_AT_TIMESTAMP);
+    indexNormsService.reindexAll(SharedTestConstants.TIMESTAMP_2024_01_01_AS_STRING);
     Norm expression =
         normsRepository.getByExpressionEli("eli/bund/bgbl-1/1991/s102/1991-01-01/1/deu");
     assertThat(expression.getOfficialToc()).startsWith("Abschnitt 1");
@@ -91,7 +91,7 @@ class IndexNormsServiceTest extends ContainersIntegrationBase {
   @Test
   @DisplayName("Official foot notes index properly")
   void officialFootNotesIndexProperly() {
-    indexNormsService.reindexAll(SharedTestConstants.INDEXED_AT_TIMESTAMP);
+    indexNormsService.reindexAll(SharedTestConstants.TIMESTAMP_2024_01_01_AS_STRING);
     Norm expression =
         normsRepository.getByExpressionEli("eli/bund/bgbl-1/1991/s102/1991-01-01/1/deu");
     assertThat(expression.getOfficialFootNotes())

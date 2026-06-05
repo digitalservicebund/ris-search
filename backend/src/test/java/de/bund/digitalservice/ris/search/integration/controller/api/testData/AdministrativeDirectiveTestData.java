@@ -1,7 +1,7 @@
 package de.bund.digitalservice.ris.search.integration.controller.api.testData;
 
 import static de.bund.digitalservice.ris.search.integration.controller.api.testData.SharedTestConstants.DATE_2_1;
-import static de.bund.digitalservice.ris.search.integration.controller.api.testData.SharedTestConstants.INDEXED_AT_TIMESTAMP;
+import static de.bund.digitalservice.ris.search.integration.controller.api.testData.SharedTestConstants.TIMESTAMP_2024_01_01_AS_STRING;
 
 import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
 import java.time.LocalDate;
@@ -35,7 +35,7 @@ public class AdministrativeDirectiveTestData {
             .activeNormReferences(List.of("ArbGG § 1 Abs 1"))
             .keywords(List.of("Schlagwort1", "Schlagwort2"))
             .fieldsOfLaw(List.of("01-01-01-01"))
-            .indexedAt(INDEXED_AT_TIMESTAMP)
+            .indexedAt(TIMESTAMP_2024_01_01_AS_STRING)
             .build());
   }
 }
