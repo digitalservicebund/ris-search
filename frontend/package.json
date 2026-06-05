@@ -12,7 +12,7 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "prepare": "nuxt prepare",
-    "fmt": "oxfmt",
+    "fmt": "oxfmt --no-error-on-unmatched-pattern",
     "lint": "oxlint --fix --no-error-on-unmatched-pattern",
     "style:check": "oxfmt --check && oxlint --max-warnings=0",
     "style:fix": "pnpm fmt && pnpm lint",
