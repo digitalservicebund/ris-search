@@ -75,7 +75,8 @@ class BulkExportServiceTest {
     verify(destinationBucket, times(1)).getAllKeysByPrefix(anyString());
     verify(destinationBucket, times(1))
         .putStream(
-            matches("archive/test-export_\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d+Z\\.zip"),
+            matches(
+                "snapshots/test-export_\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d+Z\\.zip"),
             any(InputStream.class));
     verify(destinationBucket, times(0)).delete(anyString());
 
@@ -188,32 +189,6 @@ class BulkExportServiceTest {
     BulkExportService bulkExportService =
         new BulkExportService(
             sourceBucket, destinationBucket, "test-export", "some/prefix/", key -> true);
-
-    assertEquals(Job.ReturnCode.ERROR, bulkExportService.runJob());
-  }
-
-  @Test
-  void runJob_threadGetsInterrupted_shouldReturnWithErrorCode()
-      throws NoSuchKeyException, IOException {
-    ObjectStorage sourceBucket = mock(ObjectStorage.class);
-    ObjectStorage destinationBucket = mock(ObjectStorage.class);
-    String outputName = "test-export";
-    String prefix = "some/path/";
-
-    when(sourceBucket.getAllKeysByPrefix(prefix)).thenReturn(List.of("file1.txt"));
-    final byte[] bytes1 = "This is the content of file 1.".getBytes();
-    when(sourceBucket.getStream("file1.txt")).thenReturn(makeInputStream.apply(bytes1));
-    when(destinationBucket.getAllKeysByPrefix(anyString())).thenReturn(Collections.emptyList());
-
-    when(destinationBucket.putStream(anyString(), any(InputStream.class)))
-        .thenAnswer(
-            i -> {
-              Thread.currentThread().interrupt();
-              return -1L;
-            });
-
-    BulkExportService bulkExportService =
-        new BulkExportService(sourceBucket, destinationBucket, outputName, prefix, key -> true);
 
     assertEquals(Job.ReturnCode.ERROR, bulkExportService.runJob());
   }

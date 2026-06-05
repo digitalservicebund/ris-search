@@ -82,4 +82,18 @@ public class ObsConfig {
     return new S3ObjectStorageClient(
         new TestMockS3Client("portal", relativeLocalStorageDirectory), "portal");
   }
+
+  /**
+   * Mock S3 client for public documents
+   *
+   * @param relativeLocalStorageDirectory
+   * @return ObjectStorageClient
+   */
+  @Bean(name = "publicFilesS3Client")
+  @Profile({"test"})
+  public ObjectStorageClient mockPublicFilesTestS3Client(
+      @Value("${local.file-storage}") String relativeLocalStorageDirectory) {
+    return new S3ObjectStorageClient(
+        new TestMockS3Client("public", relativeLocalStorageDirectory), "public");
+  }
 }

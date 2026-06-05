@@ -71,7 +71,7 @@ public class BulkExportService implements Job {
       return ReturnCode.ERROR;
     }
 
-    String affectedPrefix = "archive/" + outputName;
+    String affectedPrefix = "snapshots/" + outputName;
     String resultObjectKey = affectedPrefix + "_" + timestamp + ".zip";
     List<String> obsoleteObjectKeys = destinationBucket.getAllKeysByPrefix(affectedPrefix);
 
