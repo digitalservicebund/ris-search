@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 import de.bund.digitalservice.ris.search.controller.api.LiteratureController;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.repository.objectstorage.LiteratureBucket;
+import de.bund.digitalservice.ris.search.service.ChangelogService;
 import de.bund.digitalservice.ris.search.service.LiteratureService;
 import de.bund.digitalservice.ris.search.service.xslt.LiteratureXsltTransformerService;
 import de.bund.digitalservice.ris.search.service.xslt.SliLiteratureXsltTransformerService;
@@ -32,9 +33,13 @@ class LiteratureControllerTest {
 
   @Mock LiteratureBucket bucket;
 
+  @Mock ChangelogService changelogService;
+
   @BeforeEach
   void setup() {
-    controller = new LiteratureController(literatureService, uliTransformer, sliTransformer);
+    controller =
+        new LiteratureController(
+            literatureService, uliTransformer, sliTransformer, changelogService);
   }
 
   @Test

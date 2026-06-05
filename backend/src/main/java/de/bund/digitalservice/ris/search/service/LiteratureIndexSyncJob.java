@@ -14,19 +14,12 @@ public class LiteratureIndexSyncJob extends IndexSyncJob {
    *
    * @param indexStatusService service to manage the status of an index job
    * @param changelogService service to manage changelogs
-   * @param bucket root bucket for literature files
    * @param indexLiteratureService service to index literature files
    */
   public LiteratureIndexSyncJob(
       IndexStatusService indexStatusService,
-      ChangelogService changelogService,
-      LiteratureBucket bucket,
+      ChangelogService<LiteratureBucket> changelogService,
       IndexLiteratureService indexLiteratureService) {
-    super(
-        indexStatusService,
-        changelogService,
-        bucket,
-        indexLiteratureService,
-        LITERATURE_STATUS_FILENAME);
+    super(indexStatusService, changelogService, indexLiteratureService, LITERATURE_STATUS_FILENAME);
   }
 }

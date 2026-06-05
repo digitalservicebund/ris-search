@@ -1,7 +1,21 @@
 <script setup lang="ts">
-const links = useSkipLinks();
+import type { SkipLink } from "~";
 
+const props = defineProps<{
+  /**
+   * Use this to manually provide skip links to the component when
+   * definePageMeta is not available (prefer definePageMeta if possible).
+   */
+  links?: SkipLink[];
+}>();
+
+const route = useRoute();
 const router = useRouter();
+
+const links = computed(() => [
+  ...(route.meta.skipLinks ?? []),
+  ...(props.links ?? []),
+]);
 
 const wrapper = useTemplateRef("wrapper");
 
@@ -14,7 +28,7 @@ onUnmounted(unregister);
 
 <template>
   <nav
-    v-if="links?.length"
+    v-if="links.length"
     ref="wrapper"
     aria-label="Sprunglinks"
     tabindex="-1"

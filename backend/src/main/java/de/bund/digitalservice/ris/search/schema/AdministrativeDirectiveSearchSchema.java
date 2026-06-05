@@ -56,8 +56,8 @@ public record AdministrativeDirectiveSearchSchema(
     implements AbstractDocumentSchema, JsonldResource {
 
   @Override
-  @Schema(example = "AdministrativeDirective")
+  @Schema(example = JsonldTypes.ADMINISTRATIVE_DIRECTIVE)
   public String getType() {
-    return "AdministrativeDirective";
+    return JsonldTypes.ADMINISTRATIVE_DIRECTIVE;
   }
 }

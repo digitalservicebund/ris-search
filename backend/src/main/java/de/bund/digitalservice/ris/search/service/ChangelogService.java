@@ -2,28 +2,41 @@ package de.bund.digitalservice.ris.search.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectReader;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
-import java.util.ArrayList;
+import java.time.Instant;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.springframework.stereotype.Service;
 
 /** Service to retrieve and parse changelog files */
-@Service
-public class ChangelogService {
+public class ChangelogService<T extends ObjectStorage> {
 
   private static final Logger logger = LogManager.getLogger(ChangelogService.class);
 
+  private final ObjectStorage bucket;
+
   public static final String CHANGELOGS_PREFIX = "changelogs/";
+
+  private final ObjectReader changelogReader;
+
+  /**
+   * Changelog service to manage changelogs of documents
+   *
+   * @param bucket bucket containing the changelogs
+   * @param objectMapper global ObjectMapper to create a Changelog Reader
+   */
+  public ChangelogService(T bucket, ObjectMapper objectMapper) {
+    this.bucket = bucket;
+    this.changelogReader = objectMapper.readerFor(Changelog.class);
+  }
 
   /**
    * Retrieves a list of new changelog file names from the specified object storage, filtered by
@@ -34,13 +47,11 @@ public class ChangelogService {
    * that are lexicographically older or equal to the `lastProcessedChangelog` and sorts the
    * remaining file names in ascending order.
    *
-   * @param bucket bucket containing chainlogs
    * @param lastProcessedChangelog the filename of the last processed changelog; files with
    *     lexicographically greater names will be included
    * @return a sorted list of file names representing unprocessed changelog files
    */
-  public List<String> getNewChangelogsPaths(
-      ObjectStorage bucket, @NotNull String lastProcessedChangelog) {
+  public List<String> getNewChangelogsPaths(@NotNull String lastProcessedChangelog) {
 
     return bucket.getAllKeysByPrefix(CHANGELOGS_PREFIX).stream()
         .filter(e -> !CHANGELOGS_PREFIX.equals(e))
@@ -57,27 +68,54 @@ public class ChangelogService {
    * no content is found, or if there is an error during parsing, the method logs an error and
    * returns null.
    *
-   * @param bucket The bucket where the changelog files are stored
    * @param filename The name of the file to be fetched and parsed as a changelog.
    * @return A {@link de.bund.digitalservice.ris.search.importer.changelog.Changelog} object if
    *     parsing is successful, or null if the file could not be retrieved or parsed.
    * @throws de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException If an error
    *     occurs while accessing the object storage.
    */
-  public @Nullable Changelog parseOneChangelog(ObjectStorage bucket, String filename)
-      throws ObjectStoreServiceException {
+  public Optional<Changelog> parseOneChangelog(String filename) throws ObjectStoreServiceException {
     Optional<String> changelogContent = bucket.getFileAsString(filename);
     if (changelogContent.isEmpty()) {
-      logger.error("Changelog file {} could not be fetched during import.", filename);
-      return null;
+      logger.error(
+          "Changelog file {} in bucket {} could not be fetched during import.", filename, bucket);
+      return Optional.empty();
     } else {
       try {
-        return new ObjectMapper().readValue(changelogContent.get(), Changelog.class);
+        return Optional.of(changelogReader.readValue(changelogContent.get()));
       } catch (JsonProcessingException e) {
-        logger.error("Error while parsing changelog file {}", filename, e);
-        return null;
+        logger.error("Error while parsing changelog file {} in bucket {}", filename, bucket, e);
+        return Optional.empty();
       }
     }
+  }
+
+  /**
+   * Retrieves an aggregated Changelog containing all document changes between two timestamps
+   * (inclusive).
+   *
+   * @param from the starting timestamp boundary (inclusive)
+   * @param to the ending timestamp boundary (inclusive)
+   * @return Changelog object including all changes that were indexed
+   */
+  public Changelog getChangesBetween(Instant from, Instant to) {
+
+    var changelogs =
+        bucket.getAllKeysByPrefix(CHANGELOGS_PREFIX).stream()
+            .filter(e -> !CHANGELOGS_PREFIX.equals(e))
+            .filter(
+                e -> {
+                  Instant changelogTime =
+                      Instant.parse(e.substring(CHANGELOGS_PREFIX.length(), e.indexOf("Z") + 1));
+                  // get all changelogs between timestamps inclusive
+                  return !changelogTime.isBefore(from) && !changelogTime.isAfter(to);
+                })
+            .sorted()
+            .map(this::parseOneChangelog)
+            .flatMap(Optional::stream)
+            .toList();
+
+    return foldChangelogs(changelogs);
   }
 
   /**
@@ -88,23 +126,17 @@ public class ChangelogService {
    * no content is found, or if there is an error during parsing, the method logs an error and
    * continues with the following files.
    *
-   * @param bucket the bucket where the changelog files are stored
    * @param filenames the list of changelogfiles to be parsed.
    * @return A {@link de.bund.digitalservice.ris.search.importer.changelog.Changelog} object if
    *     parsing is successful, or null if the file could not be retrieved or parsed.
    * @throws de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException If an error
    *     occurs while accessing the object storage.
    */
-  public List<Changelog> parseChangelogs(ObjectStorage bucket, List<String> filenames)
-      throws ObjectStoreServiceException {
-    List<Changelog> changelogs = new ArrayList<>();
-    for (String filename : filenames) {
-      Changelog changelog = parseOneChangelog(bucket, filename);
-      if (Objects.nonNull(changelog)) {
-        changelogs.add(changelog);
-      }
-    }
-    return changelogs;
+  public Changelog getChangesFromFiles(List<String> filenames) throws ObjectStoreServiceException {
+
+    List<Changelog> changelogs =
+        filenames.stream().map(this::parseOneChangelog).flatMap(Optional::stream).toList();
+    return foldChangelogs(changelogs);
   }
 
   /**
@@ -113,18 +145,23 @@ public class ChangelogService {
    * @param logs changelogs to be checked for a changeAll flag
    * @return true if any changelog contains a changeAll flag
    */
-  public static boolean containsChangeAll(List<Changelog> logs) {
-    return !logs.stream().filter(Changelog::isChangeAll).toList().isEmpty();
+  private boolean containsChangeAll(List<Changelog> logs) {
+    return logs.stream().anyMatch(Changelog::isChangeAll);
   }
 
   /**
-   * Merges multiple changelogs into a single changelog. If a file is marked as changed and deleted
-   * in the same changelog, it will be marked as deleted. ChangeAll flags are ignored.
+   * Folds multiple changelogs into a single changelog. If a file is marked as changed and deleted
+   * in the same changelog, it will be marked as deleted. When a changelog with changeAll is
+   * encountered the method short circuits and returns a changeAll=true changelog.
    *
    * @param changelogs the list of changelogs to merge
    * @return the merged changelog
    */
-  public static Changelog mergeChangelogs(List<Changelog> changelogs) {
+  private Changelog foldChangelogs(List<Changelog> changelogs) {
+    if (containsChangeAll(changelogs)) {
+      return new Changelog(new HashSet<>(), new HashSet<>(), true);
+    }
+
     enum Action {
       CHANGED,
       DELETED

@@ -6,6 +6,7 @@ import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
 import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.scheduling.annotation.Async;
@@ -26,8 +27,7 @@ public class IndexSyncJob implements Job {
   private static final Logger logger = LogManager.getLogger(IndexSyncJob.class);
 
   private final IndexStatusService indexStatusService;
-  private final ChangelogService changelogService;
-  private final ObjectStorage changelogBucket;
+  private final ChangelogService<? extends ObjectStorage> changelogService;
   private final IndexService indexService;
   private final String statusFileName;
 
@@ -36,21 +36,18 @@ public class IndexSyncJob implements Job {
    *
    * @param indexStatusService the service to manage index status
    * @param changelogService the object storage for changelog files
-   * @param changelogBucket the object storage for changelog files
    * @param indexService the service to perform indexing operations
    * @param statusFileName the name of the status
    */
   public IndexSyncJob(
       IndexStatusService indexStatusService,
-      ChangelogService changelogService,
-      ObjectStorage changelogBucket,
+      ChangelogService<? extends ObjectStorage> changelogService,
       IndexService indexService,
       String statusFileName) {
     this.indexStatusService = indexStatusService;
     this.changelogService = changelogService;
     this.indexService = indexService;
     this.statusFileName = statusFileName;
-    this.changelogBucket = changelogBucket;
   }
 
   @Async
@@ -111,9 +108,7 @@ public class IndexSyncJob implements Job {
       alertOnNumberMismatch(state);
     } else {
       List<String> unprocessedChangelogs =
-          changelogService
-              .getNewChangelogsPaths(changelogBucket, state.lastProcessedChangelogFile())
-              .stream()
+          changelogService.getNewChangelogsPaths(state.lastProcessedChangelogFile()).stream()
               .sorted()
               .toList();
       processChangelogs(state, unprocessedChangelogs);
@@ -128,10 +123,10 @@ public class IndexSyncJob implements Job {
   private void processChangelogs(IndexingState state, List<String> unprocessedChangelogs)
       throws ObjectStoreServiceException {
     for (String fileName : unprocessedChangelogs) {
-      Changelog changelogContent = changelogService.parseOneChangelog(changelogBucket, fileName);
-      if (changelogContent != null) {
+      Optional<Changelog> changelogOptional = changelogService.parseOneChangelog(fileName);
+      if (changelogOptional.isPresent()) {
         logger.info("Processing changelog {}", fileName);
-        importChangelogContent(changelogContent, state.startTime());
+        importChangelogContent(changelogOptional.get(), state.startTime());
         indexStatusService.updateLastProcessedChangelog(statusFileName, fileName);
         logger.info("Processed changelog {}", fileName);
       }
@@ -182,7 +177,7 @@ public class IndexSyncJob implements Job {
       return;
     }
     List<String> unprocessedChangelogs =
-        changelogService.getNewChangelogsPaths(changelogBucket, state.lastProcessedChangelogFile());
+        changelogService.getNewChangelogsPaths(state.lastProcessedChangelogFile());
     if (unprocessedChangelogs.isEmpty()) {
       int numberOfFilesInBucket = indexService.getNumberOfIndexableDocumentsInBucket();
       int numberOfIndexedDocuments = indexService.getNumberOfIndexedEntities();

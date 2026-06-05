@@ -15,12 +15,11 @@ definePageMeta({
   alias:
     "/eli/:jurisdiction/:agent/:year/:naturalIdentifier/:pointInTime/:version/:language/:eId",
   layout: "norm",
+  skipLinks: [
+    { label: "Zum Gesetzestext", to: "#content" },
+    { label: "Zum Fußbereich", to: "#footer" },
+  ],
 });
-
-useSkipLinks([
-  { label: "Zum Gesetzestext", to: "#content" },
-  { label: "Zum Fußbereich", to: "#footer" },
-]);
 
 const route = useRoute();
 

@@ -14,15 +14,13 @@ public class AdministrativeDirectiveIndexSyncJob extends IndexSyncJob {
    *
    * @param indexStatusService service to manage the status of an index job
    * @param changelogService service to manage changelogs
-   * @param bucket root bucket for administrative directive files
    * @param service service to index administrative directive files
    */
   public AdministrativeDirectiveIndexSyncJob(
       IndexStatusService indexStatusService,
-      ChangelogService changelogService,
-      AdministrativeDirectiveBucket bucket,
+      ChangelogService<AdministrativeDirectiveBucket> changelogService,
       IndexAdministrativeDirectiveService service) {
 
-    super(indexStatusService, changelogService, bucket, service, STATUS_FILENAME);
+    super(indexStatusService, changelogService, service, STATUS_FILENAME);
   }
 }

@@ -24,8 +24,8 @@ public record TextMatchSchema(
     implements JsonldResource {
 
   @Override
-  @Schema(example = "SearchResultMatch")
+  @Schema(example = JsonldTypes.SEARCH_RESULT_MATCH)
   public String getType() {
-    return "SearchResultMatch";
+    return JsonldTypes.SEARCH_RESULT_MATCH;
   }
 }

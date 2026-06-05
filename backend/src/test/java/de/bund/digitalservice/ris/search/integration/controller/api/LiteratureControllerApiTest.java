@@ -9,8 +9,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
+import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
+import de.bund.digitalservice.ris.search.repository.objectstorage.LiteratureBucket;
+import de.bund.digitalservice.ris.search.service.ChangelogService;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -20,6 +27,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.util.MultiValueMap;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
@@ -27,6 +35,8 @@ import org.springframework.test.web.servlet.MockMvc;
 class LiteratureControllerApiTest extends ContainersIntegrationBase {
 
   @Autowired private MockMvc mockMvc;
+
+  @Autowired private LiteratureBucket bucket;
 
   private final String documentNumberPresentInBucket = "XXLU000000001";
 
@@ -380,5 +390,31 @@ class LiteratureControllerApiTest extends ContainersIntegrationBase {
         .andExpect(jsonPath("$.member[0]['item'].documentNumber", Matchers.is("KALU000000003")))
         .andExpect(jsonPath("$.member[1]['item'].documentNumber", Matchers.is("KALU000000001")))
         .andExpect(jsonPath("$.member[2]['item'].documentNumber", Matchers.is("KALU000000002")));
+  }
+
+  @Test
+  void itReturnsFileChangesBetweenTimestamps() throws Exception {
+    Changelog changelog =
+        new Changelog(
+            new HashSet<>(List.of("file1/file1.xml")),
+            new HashSet<>(List.of("file2/file2.xml")),
+            false);
+    String changelogContent = new ObjectMapper().writeValueAsString(changelog);
+
+    bucket.save(
+        ChangelogService.CHANGELOGS_PREFIX + "2026-07-03T12:00:00.276525407Z", changelogContent);
+
+    String from = "2026-07-03T12:00:00Z";
+    String to = "2026-07-04T12:00:00Z";
+
+    mockMvc
+        .perform(
+            get(ApiConfig.Paths.LITERATURE_CHANGELOGS)
+                .params(MultiValueMap.fromSingleValue(Map.of("from", from, "to", to))))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.changed[0].['@id']").value("/v1/literature/file1/zip"))
+        .andExpect(jsonPath("$.changed[0].['@type']").value("MediaObject"))
+        .andExpect(jsonPath("$.deleted[0].['@id']").value("/v1/literature/file2"))
+        .andExpect(jsonPath("$.deleted[0].['@type']").value("Literature"));
   }
 }

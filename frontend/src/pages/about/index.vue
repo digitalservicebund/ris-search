@@ -1,7 +1,14 @@
 <script setup lang="ts">
 import text from "./content.md?raw";
 
-definePageMeta({ alias: ["/ueber"], layout: false });
+definePageMeta({
+  alias: ["/ueber"],
+  layout: false,
+  skipLinks: [
+    { label: "Zum Inhalt", to: "#main" },
+    { label: "Zum Fußbereich", to: "#footer" },
+  ],
+});
 
 useSeo({
   title: "Über den Service",

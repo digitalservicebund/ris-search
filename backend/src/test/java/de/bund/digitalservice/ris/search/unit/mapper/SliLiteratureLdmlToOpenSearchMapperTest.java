@@ -7,6 +7,7 @@ import de.bund.digitalservice.ris.search.mapper.SliLiteratureLdmlToOpenSearchMap
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,7 +28,7 @@ class SliLiteratureLdmlToOpenSearchMapperTest {
             .id("XXLS000000001")
             .documentNumber("XXLS000000001")
             .yearsOfPublication(List.of("2025"))
-            .firstPublicationDate(LocalDate.of(2025, 1, 1))
+            .firstPublicationDate(LocalDate.of(2025, Month.JANUARY, 1))
             .documentTypes(List.of("Auf", "Foo"))
             .mainTitle("Literatur Test Dokument")
             .mainTitleAdditions("Titelzusatz")

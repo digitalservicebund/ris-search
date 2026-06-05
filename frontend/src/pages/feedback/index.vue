@@ -1,7 +1,13 @@
 <script setup lang="ts">
 import text from "./content.md?raw";
 
-definePageMeta({ layout: false });
+definePageMeta({
+  layout: false,
+  skipLinks: [
+    { label: "Zum Inhalt", to: "#main" },
+    { label: "Zum Fußbereich", to: "#footer" },
+  ],
+});
 
 useSeo({
   title: "Feedback",

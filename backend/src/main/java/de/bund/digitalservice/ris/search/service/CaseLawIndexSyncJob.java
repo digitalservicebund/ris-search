@@ -14,15 +14,12 @@ public class CaseLawIndexSyncJob extends IndexSyncJob {
    *
    * @param indexStatusService service to manage the status of an index job
    * @param changelogService service to manage changelogs
-   * @param bucket root bucket for caselaw files
    * @param indexCaselawService service to index caselawfiles
    */
   public CaseLawIndexSyncJob(
       IndexStatusService indexStatusService,
-      ChangelogService changelogService,
-      CaseLawBucket bucket,
+      ChangelogService<CaseLawBucket> changelogService,
       IndexCaselawService indexCaselawService) {
-    super(
-        indexStatusService, changelogService, bucket, indexCaselawService, CASELAW_STATUS_FILENAME);
+    super(indexStatusService, changelogService, indexCaselawService, CASELAW_STATUS_FILENAME);
   }
 }

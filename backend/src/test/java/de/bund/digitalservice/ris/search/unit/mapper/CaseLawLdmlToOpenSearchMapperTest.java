@@ -7,6 +7,7 @@ import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationU
 import de.bund.digitalservice.ris.search.utils.CaseLawLdmlTemplateUtils;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.Month;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -33,7 +34,7 @@ class CaseLawLdmlToOpenSearchMapperTest {
     assertThat(caseLaw.ecli()).isEqualTo("testEcli");
     assertThat(caseLaw.guidingPrinciple()).isEqualTo("Example Leitsatz/GuidingPrinciple");
     assertThat(caseLaw.headline()).isEqualTo("the title");
-    assertThat(caseLaw.decisionDate()).isEqualTo(LocalDate.of(2020, 1, 1));
+    assertThat(caseLaw.decisionDate()).isEqualTo(LocalDate.of(2020, Month.JANUARY, 1));
     assertThat(caseLaw.tenor()).isEqualTo("Example Tenor/Tenor");
     assertThat(caseLaw.fileNumbers()).hasToString("[Test file number 1, Test file number 2]");
     assertThat(caseLaw.courtType()).isEqualTo("Test court type");

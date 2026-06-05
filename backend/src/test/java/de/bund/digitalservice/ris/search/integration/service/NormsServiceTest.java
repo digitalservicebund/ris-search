@@ -12,6 +12,7 @@ import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
 import de.bund.digitalservice.ris.search.service.NormsService;
 import de.bund.digitalservice.ris.search.utils.eli.WorkEli;
 import java.time.LocalDate;
+import java.time.Month;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -42,15 +43,15 @@ class NormsServiceTest extends ContainersIntegrationBase {
     var latestExpression =
         Norm.builder()
             .id("eli/bund/bgbl-1/2020/s1126/2025-05-05/deu")
-            .entryIntoForceDate(LocalDate.of(2025, 5, 5))
+            .entryIntoForceDate(LocalDate.of(2025, Month.MAY, 5))
             .expiryDate(null)
             .expressionEli("eli/bund/bgbl-1/2020/s1126/2025-05-05/deu")
             .manifestationEliExample(
                 "eli/bund/bgbl-1/2020/s1126/2025-05-05/deu/2920-08-04/regelungstext-1.xml")
             .officialTitle("latest title")
-            .datePublished(LocalDate.of(2022, 1, 1))
+            .datePublished(LocalDate.of(2022, Month.JANUARY, 1))
             .officialShortTitle("latest short title")
-            .normsDate(LocalDate.of(2022, 1, 1))
+            .normsDate(LocalDate.of(2022, Month.JANUARY, 1))
             .officialAbbreviation("latest abbr")
             .workEli("eli/bund/bgbl-1/2020/s1126")
             .build();
@@ -58,15 +59,15 @@ class NormsServiceTest extends ContainersIntegrationBase {
     var olderExpression =
         Norm.builder()
             .id("eli/bund/bgbl-1/2022/s1126/2022-05-05/deu")
-            .entryIntoForceDate(LocalDate.of(2022, 5, 5))
-            .expiryDate(LocalDate.of(2025, 5, 5))
+            .entryIntoForceDate(LocalDate.of(2022, Month.MAY, 5))
+            .expiryDate(LocalDate.of(2025, Month.MAY, 5))
             .expressionEli("eli/bund/bgbl-1/2022/s1126/2022-05-05/deu")
             .manifestationEliExample(
                 "eli/bund/bgbl-1/2022/s1126/2025-05-05/deu/2920-08-04/regelungstext-1.xml")
             .officialTitle("oldest title")
-            .datePublished(LocalDate.of(2020, 1, 1))
+            .datePublished(LocalDate.of(2020, Month.JANUARY, 1))
             .officialShortTitle("oldest short title")
-            .normsDate(LocalDate.of(2020, 1, 1))
+            .normsDate(LocalDate.of(2020, Month.JANUARY, 1))
             .officialAbbreviation("oldest abbr")
             .workEli("eli/bund/bgbl-1/2020/s1126")
             .build();
@@ -89,7 +90,7 @@ class NormsServiceTest extends ContainersIntegrationBase {
     var latestExpression =
         Norm.builder()
             .id("eli/bund/bgbl-1/2020/s1126/2025-05-05/deu")
-            .entryIntoForceDate(LocalDate.of(2025, 5, 5))
+            .entryIntoForceDate(LocalDate.of(2025, Month.MAY, 5))
             .expiryDate(null)
             .expressionEli("eli/bund/bgbl-1/2020/s1126/2025-05-05/deu")
             .workEli("eli/bund/bgbl-1/2020/s1126")
@@ -97,8 +98,8 @@ class NormsServiceTest extends ContainersIntegrationBase {
     repository.save(latestExpression);
     repository.save(
         Norm.builder()
-            .entryIntoForceDate(LocalDate.of(2020, 5, 5))
-            .expiryDate(LocalDate.of(2025, 5, 5))
+            .entryIntoForceDate(LocalDate.of(2020, Month.MAY, 5))
+            .expiryDate(LocalDate.of(2025, Month.MAY, 5))
             .expressionEli("eli/bund/bgbl-1/2020/s1126/2020-05-05/deu")
             .workEli("eli/bund/bgbl-1/2020/s1126")
             .build());

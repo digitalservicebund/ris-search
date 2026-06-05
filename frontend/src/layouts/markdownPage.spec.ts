@@ -1,11 +1,7 @@
 import { renderSuspended } from "@nuxt/test-utils/runtime";
 import { screen } from "@testing-library/vue";
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect } from "vitest";
 import MarkdownPage from "./markdownPage.vue";
-
-vi.mock("~/composables/useSkipLinks", () => ({
-  useSkipLinks: vi.fn(),
-}));
 
 describe("markdownPage", () => {
   it("renders breadcrumb slot", async () => {

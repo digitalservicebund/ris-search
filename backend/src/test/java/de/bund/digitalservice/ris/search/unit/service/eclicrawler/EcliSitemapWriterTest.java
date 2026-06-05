@@ -19,6 +19,7 @@ import de.bund.digitalservice.ris.search.service.eclicrawler.EcliSitemapWriter;
 import jakarta.xml.bind.JAXBException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -50,7 +51,7 @@ class EcliSitemapWriterTest {
     urls.add(new Url().setLoc("loc1"));
     urls.add(new Url().setLoc("loc2"));
 
-    LocalDate day = LocalDate.of(2025, 1, 1);
+    LocalDate day = LocalDate.of(2025, Month.JANUARY, 1);
     Sitemap sitemap = new Sitemap().setUrl(urls).setName("2025/01/01/sitemap_1.xml");
     when(marshaller.marshallSitemap(sitemap)).thenReturn("xmlContent");
 
@@ -68,7 +69,7 @@ class EcliSitemapWriterTest {
 
   @Test
   void itReturnsSitemapFilesForAGivenDay() {
-    LocalDate date = LocalDate.of(2025, 1, 1);
+    LocalDate date = LocalDate.of(2025, Month.JANUARY, 1);
     when(bucket.getAllKeysByPrefix("eclicrawler/2025/01/01"))
         .thenReturn(List.of("eclicrawler/2025/01/01/sitemap_1.xml"));
 
@@ -155,7 +156,7 @@ class EcliSitemapWriterTest {
   @Test
   void itWritesSitemapIndices() throws JAXBException {
     String baseUrl = "http://base/";
-    LocalDate date = LocalDate.of(2025, 1, 1);
+    LocalDate date = LocalDate.of(2025, Month.JANUARY, 1);
     Sitemap sitemap = new Sitemap().setName("2025/01/01/sitemap_1.xml");
     Sitemapindex index = new Sitemapindex().setName("2025/01/01/sitemap_index_1.xml");
     SitemapIndexEntry indexEntry =
@@ -175,7 +176,7 @@ class EcliSitemapWriterTest {
     for (int i = 0; i <= MAX_SITEMAP_URLS + 1; i++) {
       sitemaps.add(new Sitemap().setName(String.valueOf(i)));
     }
-    LocalDate day = LocalDate.of(2025, 1, 1);
+    LocalDate day = LocalDate.of(2025, Month.JANUARY, 1);
 
     ArgumentCaptor<String> argument = ArgumentCaptor.forClass(String.class);
     Mockito.doNothing().when(bucket).save(argument.capture(), any());

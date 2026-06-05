@@ -4,17 +4,23 @@ import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.exception.CustomValidationException;
 import de.bund.digitalservice.ris.search.mapper.AdministrativeDirectiveSchemaMapper;
 import de.bund.digitalservice.ris.search.mapper.AdministrativeDirectiveSearchSchemaMapper;
+import de.bund.digitalservice.ris.search.mapper.ChangelogResponseMapper;
 import de.bund.digitalservice.ris.search.mapper.SortParamsConverter;
+import de.bund.digitalservice.ris.search.models.DocumentKind;
 import de.bund.digitalservice.ris.search.models.api.parameters.AdministrativeDirectiveSearchParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.AdministrativeDirectiveSortParam;
+import de.bund.digitalservice.ris.search.models.api.parameters.ChangelogParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.PaginationParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
+import de.bund.digitalservice.ris.search.repository.objectstorage.AdministrativeDirectiveBucket;
 import de.bund.digitalservice.ris.search.schema.AdministrativeDirectiveSchema;
 import de.bund.digitalservice.ris.search.schema.AdministrativeDirectiveSearchSchema;
+import de.bund.digitalservice.ris.search.schema.ChangelogResponse;
 import de.bund.digitalservice.ris.search.schema.CollectionSchema;
 import de.bund.digitalservice.ris.search.schema.SearchMemberSchema;
 import de.bund.digitalservice.ris.search.service.AdministrativeDirectiveService;
+import de.bund.digitalservice.ris.search.service.ChangelogService;
 import de.bund.digitalservice.ris.search.service.xslt.AdministrativeDirectiveXsltTransformerService;
 import de.bund.digitalservice.ris.search.utils.LuceneQueryTools;
 import io.swagger.v3.oas.annotations.Operation;
@@ -49,6 +55,7 @@ public class AdministrativeDirectiveController {
 
   private final AdministrativeDirectiveService service;
   private final AdministrativeDirectiveXsltTransformerService transformerService;
+  private final ChangelogService<AdministrativeDirectiveBucket> changelogService;
 
   /**
    * Constructor for the AdministrativeDirectiveController, used to initialize the controller with
@@ -61,9 +68,11 @@ public class AdministrativeDirectiveController {
   @Autowired
   public AdministrativeDirectiveController(
       AdministrativeDirectiveService service,
-      AdministrativeDirectiveXsltTransformerService transformerService) {
+      AdministrativeDirectiveXsltTransformerService transformerService,
+      ChangelogService<AdministrativeDirectiveBucket> changelogService) {
     this.service = service;
     this.transformerService = transformerService;
+    this.changelogService = changelogService;
   }
 
   /**
@@ -190,5 +199,30 @@ public class AdministrativeDirectiveController {
         .map(transformerService::transform)
         .map(ResponseEntity::ok)
         .orElseGet(() -> ResponseEntity.notFound().build());
+  }
+
+  /**
+   * Retrieves an aggregated changelog, listing all indexed fileChanges between the given timestamps
+   * (inclusive). If a full reindex occurred inside the given bounds, the allChanged flag is set to
+   * true, otherwise changes are given based on the document root in the changed/deleted
+   * collections.
+   *
+   * @param params {@link ChangelogParams} to determine upper and lower boundary to retrieve changes
+   * @return Changelog response with aggregated changes across the given time range
+   */
+  @GetMapping(path = ApiConfig.Paths.ADMINISTRATIVE_DIRECTIVE_CHANGELOGS)
+  @Operation(
+      summary = "Administrative Directive changelog",
+      description =
+          "Returns references of document changes that occurred in between two points in time.")
+  public ResponseEntity<ChangelogResponse> getChangelogs(
+      @ParameterObject @Valid ChangelogParams params) {
+
+    var changelog =
+        changelogService.getChangesBetween(
+            params.getFrom().toInstant(), params.getTo().toInstant());
+
+    return ResponseEntity.ok(
+        ChangelogResponseMapper.mapChangelog(changelog, DocumentKind.ADMINISTRATIVE_DIRECTIVE));
   }
 }

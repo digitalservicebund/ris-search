@@ -2,6 +2,7 @@ package de.bund.digitalservice.ris.search.integration.controller.api.testData;
 
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +19,7 @@ public class LiteratureTestData {
             .id("lit-1")
             .documentNumber("KALU000000001")
             .yearsOfPublication(List.of("2014", "2024"))
-            .firstPublicationDate(LocalDate.of(2014, 1, 1))
+            .firstPublicationDate(LocalDate.of(2014, Month.JANUARY, 1))
             .documentTypes(List.of("Auf"))
             .dependentReferences(List.of("BUV, 1982, 123-123"))
             .independentReferences(List.of("50 Jahre Betriebs-Berater, 1987, 123-456"))
@@ -35,7 +36,7 @@ public class LiteratureTestData {
             .id("lit-2")
             .documentNumber("KALU000000002")
             .yearsOfPublication(List.of("1999", "2000", "2001"))
-            .firstPublicationDate(LocalDate.of(1999, 1, 1))
+            .firstPublicationDate(LocalDate.of(1999, Month.JANUARY, 1))
             .documentTypes(List.of("Kommentar", "Aufsatz"))
             .dependentReferences(List.of("NJW, 2000, 456-789"))
             .independentReferences(List.of("Festschrift für Müller, 2001, 12-34"))
@@ -57,7 +58,7 @@ public class LiteratureTestData {
             .id("lit-3")
             .documentNumber("KALU000000003")
             .yearsOfPublication(List.of("2020"))
-            .firstPublicationDate(LocalDate.of(2020, 1, 1))
+            .firstPublicationDate(LocalDate.of(2020, Month.JANUARY, 1))
             .documentTypes(List.of("Buch"))
             .dependentReferences(List.of())
             .independentReferences(List.of("Juristische Ausbildung, 2020, 567-890"))

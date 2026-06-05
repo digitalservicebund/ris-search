@@ -2,15 +2,6 @@
 import type { NuxtError } from "#app";
 import SimpleSearchInput from "~/components/search/SimpleSearchInput.vue";
 
-// Error page is rendered independently from app.vue and therefore needs its
-// own skip links setup
-const { register } = provideSkipLinks();
-const cleanup = register([
-  { label: "Zum Inhalt", to: "#main" },
-  { label: "Zum Fußbereich", to: "#footer" },
-]);
-onUnmounted(() => cleanup());
-
 useHead({
   titleTemplate: (pageTitle) =>
     pageTitle
@@ -49,10 +40,15 @@ useHead({ title: pageTitle });
 </script>
 
 <template>
-  <AppSkipLinks />
+  <AppSkipLinks
+    :links="[
+      { label: 'Zum Inhalt', to: '#main' },
+      { label: 'Zum Fußbereich', to: '#footer' },
+    ]"
+  />
 
   <NuxtLayout name="default">
-    <div class="container pt-48 pb-24">
+    <div class="container pt-48 pb-24" data-testid="error-message">
       <template v-if="isNotFoundError">
         <h1 class="ris-heading2-bold inline-block">
           Diese Seite existiert nicht

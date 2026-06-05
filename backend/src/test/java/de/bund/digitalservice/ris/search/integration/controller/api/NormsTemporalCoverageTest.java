@@ -10,6 +10,7 @@ import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -129,7 +130,7 @@ class NormsTemporalCoverageTest extends ContainersIntegrationBase {
   }
 
   private LocalDate day(int d) {
-    return LocalDate.of(2000, 1, d);
+    return LocalDate.of(2000, Month.JANUARY, d);
   }
 
   private static @NotNull ResultMatcher resultHasItemCount(int size) {

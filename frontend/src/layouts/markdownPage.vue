@@ -4,11 +4,6 @@ import DefaultLayout from "./default.vue";
 defineProps<{
   staticContent: string;
 }>();
-
-useSkipLinks([
-  { label: "Zum Inhalt", to: "#main" },
-  { label: "Zum Fußbereich", to: "#footer" },
-]);
 </script>
 
 <template>

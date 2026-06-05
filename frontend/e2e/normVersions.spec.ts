@@ -1,23 +1,5 @@
 import { expect, navigate, test } from "./utils/fixtures";
 
-const expectedVersionData = [
-  {
-    dateFrom: "04.08.2919",
-    dateTo: "-",
-    status: "Zukünftig in Kraft",
-  },
-  {
-    dateFrom: "04.08.2022",
-    dateTo: "01.01.2030",
-    status: "Aktuell gültig",
-  },
-  {
-    dateFrom: "04.08.2020",
-    dateTo: "03.08.2022",
-    status: "Außer Kraft",
-  },
-];
-
 test.beforeAll(async ({ privateFeaturesEnabled }) => {
   test.skip(
     !privateFeaturesEnabled,
@@ -25,49 +7,85 @@ test.beforeAll(async ({ privateFeaturesEnabled }) => {
   );
 });
 
-test("can browse different Fassungen of a norm", async ({ page }) => {
-  await navigate(page, "/norms/eli/bund/bgbl-1/2020/s1126/2020-08-04/1/deu");
+test.describe("fassungen tab", async () => {
+  test("displays Fassungen table in the Fassungen tab", async ({ page }) => {
+    await navigate(page, "/norms/eli/bund/bgbl-1/2020/s1126/2020-08-04/1/deu");
 
-  await page.getByRole("tab", { name: "Fassungen" }).click();
+    await page.getByRole("tab", { name: "Fassungen" }).click();
 
-  const tableBodyLocator = page.getByRole("table").getByRole("rowgroup").nth(1);
+    await expect(page.getByRole("table").getByRole("row")).toHaveText(
+      [
+        "Gültig ab Gültig bis Status",
+        "04.08.2919 - Zukünftig in Kraft",
+        "04.08.2022 01.01.2030 Aktuell gültig",
+        "04.08.2020 03.08.2022 Außer Kraft",
+      ],
+      { useInnerText: true },
+    );
+  });
 
-  for (const [index, expectedRowData] of expectedVersionData.entries()) {
-    const cellLocator = tableBodyLocator
-      .getByRole("row")
-      .nth(index)
-      .getByRole("cell");
-    await expect(cellLocator.nth(0)).toContainText(expectedRowData.dateFrom);
-    await expect(cellLocator.nth(1)).toContainText(expectedRowData.dateTo);
-    await expect(cellLocator.nth(2)).toContainText(expectedRowData.status);
-  }
-});
+  test("can navigate to a Fassung by clicking the table row", async ({
+    page,
+  }) => {
+    await navigate(
+      page,
+      "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu?view=versions",
+    );
 
-test("can navigate to a Fassung by clicking the table row", async ({
-  page,
-}) => {
-  await navigate(page, "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu");
+    await expect(
+      page.getByRole("heading", {
+        name: "Zum Testen von Fassungen - Aktuelle Fassung",
+      }),
+    ).toBeVisible();
 
-  await expect(
-    page.getByRole("heading", {
-      name: "Zum Testen von Fassungen - Aktuelle Fassung",
-    }),
-  ).toBeVisible();
-
-  await page.getByRole("tab", { name: "Fassungen" }).click();
-
-  await test.step("Navigate to future fassung", async () => {
-    const tableBodyLocator = page
-      .getByRole("table")
-      .getByRole("rowgroup")
-      .nth(1);
-    await tableBodyLocator.getByRole("row").nth(0).click();
+    await page
+      .getByRole("row", { name: "04.08.2919 - Zukünftig in Kraft" })
+      .click();
 
     await expect(
       page.getByRole("heading", {
         name: "Zum Testen von Fassungen - Zukünftige Fassung",
       }),
     ).toBeVisible();
+  });
+
+  test("can filter Fassungen by date", async ({ page }) => {
+    await navigate(
+      page,
+      "/norms/eli/bund/bgbl-1/2020/s1126/2020-08-04/1/deu?view=versions",
+    );
+
+    const tableBody = page.getByRole("table").getByRole("rowgroup").nth(1);
+
+    await expect(tableBody.getByRole("row")).toHaveCount(3);
+
+    await page.getByRole("textbox", { name: "Gültig am" }).fill("04.08.2020");
+
+    await expect(tableBody.getByRole("row")).toHaveCount(1);
+    await expect(tableBody.getByRole("row")).toHaveText(
+      "04.08.2020 03.08.2022 Außer Kraft",
+      { useInnerText: true },
+    );
+  });
+
+  test("shows no results placeholder when no Fassung found", async ({
+    page,
+  }) => {
+    await navigate(
+      page,
+      "/norms/eli/bund/bgbl-1/2020/s1126/2020-08-04/1/deu?view=versions",
+    );
+
+    const tableBody = page.getByRole("table").getByRole("rowgroup").nth(1);
+
+    await expect(tableBody.getByRole("row")).toHaveCount(3);
+
+    await page.getByRole("textbox", { name: "Gültig am" }).fill("04.08.1536");
+
+    await expect(tableBody.getByRole("row")).toHaveCount(1);
+    await expect(tableBody.getByRole("row")).toHaveText(
+      "Keine Ergebnisse gefunden",
+    );
   });
 });
 
@@ -130,56 +148,58 @@ test.describe("displays metadata correctly", async () => {
   });
 });
 
-test("shows an info about future versions on a historic norm article", async ({
-  page,
-  privateFeaturesEnabled,
-}) => {
-  test.skip(!privateFeaturesEnabled);
-
-  await navigate(
+test.describe("future or historic version info", () => {
+  test("shows an info about future versions on a historic norm article", async ({
     page,
-    "/norms/eli/bund/bgbl-1/2020/s1126/2020-08-04/1/deu/art-z1",
-  );
+    privateFeaturesEnabled,
+  }) => {
+    test.skip(!privateFeaturesEnabled);
 
-  await expect(
-    page.getByText("Sie lesen einen Paragrafen einer historischen Fassung."),
-  ).toBeVisible();
+    await navigate(
+      page,
+      "/norms/eli/bund/bgbl-1/2020/s1126/2020-08-04/1/deu/art-z1",
+    );
 
-  await page
-    .getByRole("link", { name: "Zur aktuell gültigen Fassung" })
-    .click();
+    await expect(
+      page.getByText("Sie lesen einen Paragrafen einer historischen Fassung."),
+    ).toBeVisible();
 
-  await expect(
-    page.getByRole("heading", {
-      name: "Zum Testen von Fassungen - Aktuelle Fassung",
-    }),
-  ).toBeVisible();
-});
+    await page
+      .getByRole("link", { name: "Zur aktuell gültigen Fassung" })
+      .click();
 
-test("shows an info about previous versions on a future norm article", async ({
-  page,
-  privateFeaturesEnabled,
-}) => {
-  test.skip(!privateFeaturesEnabled);
+    await expect(
+      page.getByRole("heading", {
+        name: "Zum Testen von Fassungen - Aktuelle Fassung",
+      }),
+    ).toBeVisible();
+  });
 
-  await navigate(
+  test("shows an info about previous versions on a future norm article", async ({
     page,
-    "/norms/eli/bund/bgbl-1/2020/s1126/2920-08-04/1/deu/art-z1",
-  );
+    privateFeaturesEnabled,
+  }) => {
+    test.skip(!privateFeaturesEnabled);
 
-  await expect(
-    page.getByText("Sie lesen einen Paragrafen einer zukünftigen Fassung."),
-  ).toBeVisible();
+    await navigate(
+      page,
+      "/norms/eli/bund/bgbl-1/2020/s1126/2920-08-04/1/deu/art-z1",
+    );
 
-  await page
-    .getByRole("link", { name: "Zur aktuell gültigen Fassung" })
-    .click();
+    await expect(
+      page.getByText("Sie lesen einen Paragrafen einer zukünftigen Fassung."),
+    ).toBeVisible();
 
-  await expect(
-    page.getByRole("heading", {
-      name: "Zum Testen von Fassungen - Aktuelle Fassung",
-    }),
-  ).toBeVisible();
+    await page
+      .getByRole("link", { name: "Zur aktuell gültigen Fassung" })
+      .click();
+
+    await expect(
+      page.getByRole("heading", {
+        name: "Zum Testen von Fassungen - Aktuelle Fassung",
+      }),
+    ).toBeVisible();
+  });
 });
 
 test("displays validity in breadcrumb navigation", async ({

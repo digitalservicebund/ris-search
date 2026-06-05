@@ -87,6 +87,11 @@ s3:
       bucket-name: portal
       access-key-id:
       secret-access-key:
+    public-files:
+      endpoint:
+      bucket-name: public
+      access-key-id:
+      secret-access-key:
 
 local:
   file-storage: backend/.local-storage

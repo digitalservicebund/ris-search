@@ -11,6 +11,7 @@ import de.bund.digitalservice.ris.search.schema.LegislationExpressionSchema;
 import de.bund.digitalservice.ris.search.schema.LegislationObjectSchema;
 import de.bund.digitalservice.ris.search.schema.LegislationWorkSchema;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -23,8 +24,8 @@ class NormSchemaMapperTest {
         Norm.builder()
             .id("id")
             .expressionEli("expressionEli")
-            .normsDate(LocalDate.of(2025, 1, 1))
-            .datePublished(LocalDate.of(2026, 1, 1))
+            .normsDate(LocalDate.of(2025, Month.JANUARY, 1))
+            .datePublished(LocalDate.of(2026, Month.JANUARY, 1))
             .tableOfContents(
                 List.of(
                     TableOfContentsItem.builder()
@@ -39,8 +40,8 @@ class NormSchemaMapperTest {
                         .name("name")
                         .text("attachmentText")
                         .manifestationEli("eli")
-                        .entryIntoForceDate(LocalDate.of(2024, 1, 1))
-                        .expiryDate(LocalDate.of(2025, 1, 1))
+                        .entryIntoForceDate(LocalDate.of(2024, Month.JANUARY, 1))
+                        .expiryDate(LocalDate.of(2025, Month.JANUARY, 1))
                         .build()))
             .manifestationEliExample("manifestationEli/regelungstext-1.xml")
             .workEli("workEli")
@@ -55,8 +56,8 @@ class NormSchemaMapperTest {
                 new LegislationWorkSchema(
                     "/v1/legislation/workEli",
                     "workEli",
-                    LocalDate.of(2025, 1, 1),
-                    LocalDate.of(2026, 1, 1),
+                    LocalDate.of(2025, Month.JANUARY, 1),
+                    LocalDate.of(2026, Month.JANUARY, 1),
                     null))
             .encoding(
                 List.of(
@@ -107,8 +108,8 @@ class NormSchemaMapperTest {
         Norm.builder()
             .id("id")
             .expressionEli("expressionEli")
-            .normsDate(LocalDate.of(2025, 1, 1))
-            .datePublished(LocalDate.of(2026, 1, 1))
+            .normsDate(LocalDate.of(2025, Month.JANUARY, 1))
+            .datePublished(LocalDate.of(2026, Month.JANUARY, 1))
             .tableOfContents(
                 List.of(
                     TableOfContentsItem.builder()
@@ -152,20 +153,20 @@ class NormSchemaMapperTest {
                     Article.builder()
                         .eId("articleEid1")
                         .name("articleName1")
-                        .entryIntoForceDate(LocalDate.of(2024, 1, 1))
-                        .expiryDate(LocalDate.of(2025, 1, 1))
+                        .entryIntoForceDate(LocalDate.of(2024, Month.JANUARY, 1))
+                        .expiryDate(LocalDate.of(2025, Month.JANUARY, 1))
                         .build(),
                     Article.builder()
                         .eId("articleEid2")
                         .name("articleName2")
-                        .entryIntoForceDate(LocalDate.of(2024, 1, 1))
-                        .expiryDate(LocalDate.of(2025, 1, 1))
+                        .entryIntoForceDate(LocalDate.of(2024, Month.JANUARY, 1))
+                        .expiryDate(LocalDate.of(2025, Month.JANUARY, 1))
                         .build(),
                     Article.builder()
                         .eId("attachmentEid")
                         .name("attachmentName")
-                        .entryIntoForceDate(LocalDate.of(2024, 1, 1))
-                        .expiryDate(LocalDate.of(2025, 1, 1))
+                        .entryIntoForceDate(LocalDate.of(2024, Month.JANUARY, 1))
+                        .expiryDate(LocalDate.of(2025, Month.JANUARY, 1))
                         .manifestationEli("attachment/eli")
                         .build()))
             .manifestationEliExample("manifestationEli/regelungstext-1.xml")

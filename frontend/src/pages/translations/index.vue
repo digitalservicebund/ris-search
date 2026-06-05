@@ -5,10 +5,12 @@ import SimpleSearchInput from "~/components/search/SimpleSearchInput.vue";
 import type { TranslationContent } from "~/composables/useTranslationData";
 import { fetchTranslationList } from "~/composables/useTranslationData";
 
-useSkipLinks([
-  { label: "Skip to main", to: "#main" },
-  { label: "Skip to footer", to: "#footer" },
-]);
+definePageMeta({
+  skipLinks: [
+    { label: "Skip to main", to: "#main" },
+    { label: "Skip to footer", to: "#footer" },
+  ],
+});
 
 useHead({
   htmlAttrs: { lang: "en" },

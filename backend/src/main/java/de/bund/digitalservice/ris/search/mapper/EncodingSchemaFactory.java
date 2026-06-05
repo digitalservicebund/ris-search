@@ -34,11 +34,11 @@ public class EncodingSchemaFactory {
     }
   }
 
-  private static String id(SchemaType type, String baseUrl) {
+  public static String id(SchemaType type, String baseUrl) {
     return baseUrl + "/" + type.value;
   }
 
-  private static String contentUrl(SchemaType type, String baseUrl) {
+  public static String contentUrl(SchemaType type, String baseUrl) {
     return baseUrl + "." + type.value;
   }
 

@@ -7,6 +7,7 @@ import de.bund.digitalservice.ris.search.mapper.EncodingSchemaFactory;
 import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
 import de.bund.digitalservice.ris.search.schema.AdministrativeDirectiveSearchSchema;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
@@ -26,7 +27,7 @@ class AdministrativeDirectiveSearchSchemaMapperTest {
             .shortReport("shortReport")
             .referenceNumbers(List.of("RNR"))
             .legislationAuthority("legislationAuthority")
-            .entryIntoEffectDate(LocalDate.of(2024, 1, 1))
+            .entryIntoEffectDate(LocalDate.of(2024, Month.JANUARY, 1))
             .build();
 
     AdministrativeDirectiveSearchSchema expected =
@@ -38,7 +39,7 @@ class AdministrativeDirectiveSearchSchemaMapperTest {
             .documentType("VV")
             .referenceNumbers(List.of("RNR"))
             .legislationAuthority("legislationAuthority")
-            .entryIntoForceDate(LocalDate.of(2024, 1, 1))
+            .entryIntoForceDate(LocalDate.of(2024, Month.JANUARY, 1))
             .encoding(
                 EncodingSchemaFactory.administrativeDirectiveEncodingSchemas(
                     "/v1/administrative-directive/KN0000"))
