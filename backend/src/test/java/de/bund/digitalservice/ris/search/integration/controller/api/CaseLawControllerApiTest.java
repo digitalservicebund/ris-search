@@ -13,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.bund.digitalservice.ris.SharedTestConstants;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
@@ -23,7 +24,6 @@ import de.bund.digitalservice.ris.search.service.IndexCaselawService;
 import de.bund.digitalservice.ris.search.utils.CaseLawLdmlTemplateUtils;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.HashMap;
@@ -113,7 +113,7 @@ class CaseLawControllerApiTest extends ContainersIntegrationBase {
   @Test
   @DisplayName("Should return case law when using api endpoint with document number")
   void shouldReturnSingleCaselawJson() throws Exception {
-    indexCaselawService.reindexAll(Instant.now().toString());
+    indexCaselawService.reindexAll(SharedTestConstants.TIMESTAMP_2024_01_01_AS_STRING);
 
     mockMvc
         .perform(

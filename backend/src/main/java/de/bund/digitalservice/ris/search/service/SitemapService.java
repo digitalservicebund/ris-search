@@ -11,6 +11,7 @@ import jakarta.xml.bind.Marshaller;
 import java.io.StringWriter;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.stream.IntStream;
 import lombok.RequiredArgsConstructor;
@@ -113,7 +114,7 @@ public class SitemapService {
                 e ->
                     new Url(
                         String.format("%sv1/%s", baseUrl, getBatchSitemapPath(e, type)),
-                        LocalDate.now()))
+                        LocalDate.now(ZoneOffset.UTC)))
             .toList();
     return marshal(new SitemapIndex(urls));
   }

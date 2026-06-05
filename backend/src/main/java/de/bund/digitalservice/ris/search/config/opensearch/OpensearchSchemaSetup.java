@@ -3,6 +3,7 @@ package de.bund.digitalservice.ris.search.config.opensearch;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.time.ZoneOffset;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -129,7 +130,7 @@ public class OpensearchSchemaSetup {
             .max(Comparator.naturalOrder())
             .orElse(null);
     if (latestIndex == null) {
-      latestIndex = aliasName + "_" + LocalDate.now();
+      latestIndex = aliasName + "_" + LocalDate.now(ZoneOffset.UTC);
       logger.info("Creating index {}", latestIndex);
 
       boolean acknowledged =

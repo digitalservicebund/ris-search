@@ -1,7 +1,7 @@
 package de.bund.digitalservice.ris.search.models.ldml.literature;
 
 import jakarta.xml.bind.annotation.XmlAttribute;
-import java.util.Date;
+import java.time.LocalDate;
 import lombok.Getter;
 
 /**
@@ -23,7 +23,7 @@ public class NormReference {
   private String abbreviation;
 
   @XmlAttribute(name = "dateOfVersion")
-  private Date dateOfVersion;
+  private LocalDate dateOfVersion;
 
   @XmlAttribute(name = "singleNorm")
   private String singleNorm;

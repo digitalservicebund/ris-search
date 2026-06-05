@@ -157,9 +157,12 @@ public class DateUtils {
    *     inclusive of the current date. Otherwise, false.
    */
   public static boolean isActive(LocalDate start, LocalDate end) {
-
     Clock berlinClock = Clock.system(TimeZone.getTimeZone("Europe/Berlin").toZoneId());
-    LocalDate currentDateInGermany = LocalDate.now(berlinClock);
+    return isActive(start, end, berlinClock);
+  }
+
+  public static boolean isActive(LocalDate start, LocalDate end, Clock clock) {
+    LocalDate currentDateInGermany = LocalDate.now(clock);
 
     // Nulls are considered as open intervals
     boolean hasStarted = start == null || !start.isAfter(currentDateInGermany);
