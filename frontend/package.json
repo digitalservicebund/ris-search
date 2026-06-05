@@ -13,7 +13,7 @@
     "preview": "nuxt preview",
     "prepare": "nuxt prepare",
     "fmt": "oxfmt",
-    "lint": "oxlint --fix",
+    "lint": "oxlint --fix --no-error-on-unmatched-pattern",
     "style:check": "oxfmt --check && oxlint --max-warnings=0",
     "style:fix": "pnpm fmt && pnpm lint",
     "generate-api-types": "openapi-typescript src/public/openapi.json -o src/types/api-generated.d.ts",
