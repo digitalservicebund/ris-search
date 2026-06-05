@@ -1,8 +1,5 @@
-import os from "node:os";
-import path from "node:path";
 import type { BrowserContext, Locator, Page } from "@playwright/test";
-import { chromium, expect as baseExpect, test as base } from "@playwright/test";
-import { environment } from "../../playwright.config";
+import { expect as baseExpect, test as base } from "@playwright/test";
 
 type WorkerFixtures = {
   isMobileTest: boolean;
@@ -27,48 +24,6 @@ export const test = base.extend<{}, WorkerFixtures>({
     },
     { scope: "worker" },
   ],
-});
-
-type SeoWorkerFixtures = {
-  persistentContext: BrowserContext;
-  privateFeaturesEnabled: boolean;
-};
-
-export const seoTest = base.extend<{}, SeoWorkerFixtures>({
-  persistentContext: [
-    // oxlint-disable-next-line no-empty-pattern -- Playwright fixture syntax requires this
-    async ({}, use) => {
-      const port = environment.remoteDebuggingPort;
-      const userDataDir = path.join(os.tmpdir(), `playwright-seo-${port}`);
-
-      const context = await chromium.launchPersistentContext(userDataDir, {
-        headless: true,
-        args: [
-          `--remote-debugging-port=${port}`,
-          "--no-sandbox",
-          "--disable-setuid-sandbox",
-        ],
-      });
-
-      await use(context);
-      await context.close().catch(() => {});
-    },
-    { scope: "worker" },
-  ],
-  privateFeaturesEnabled: [
-    // oxlint-disable-next-line no-empty-pattern -- Playwright fixture syntax requires this
-    async ({}, use) => {
-      const privateFeaturesEnabled =
-        process.env.NUXT_PUBLIC_PRIVATE_FEATURES_ENABLED === "true";
-      await use(privateFeaturesEnabled);
-    },
-    { scope: "worker" },
-  ],
-  page: async ({ persistentContext }, use) => {
-    const page = await persistentContext.newPage();
-    await use(page);
-    await page.close();
-  },
 });
 
 export const expect = baseExpect.extend({
