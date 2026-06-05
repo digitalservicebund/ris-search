@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 /** This controller provides an endpoint to get the name of the bulk zip for each document kind */
 @Tag(
     name = "Document bulk download links",
-    description = "Returns a link to download of a bulk zip for each document kind.")
+    description = "Returns a link that can be used to download a bulk zip for each document kind.")
 @RestController
 @RequestMapping(ApiConfig.Paths.BULK_ZIP_LINKS)
 public class BulkZipLinksController {
