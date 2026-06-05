@@ -73,10 +73,10 @@ class ZipManagerTest {
         ZipInputStream zipInputStream = new ZipInputStream(inputStream)) {
 
       ZipEntry xmlEntry = zipInputStream.getNextEntry();
-      assertZipEntry(xmlEntry, zipInputStream, xmlFilename, xmlContentExpected);
+      assertZipEntry(xmlEntry, zipInputStream, keyPrefix + xmlFilename, xmlContentExpected);
 
       ZipEntry pngEntry = zipInputStream.getNextEntry();
-      assertZipEntry(pngEntry, zipInputStream, pngFilename, pngContentExpected);
+      assertZipEntry(pngEntry, zipInputStream, keyPrefix + pngFilename, pngContentExpected);
 
       Assertions.assertNull(
           zipInputStream.getNextEntry(), "Zip file should not contain additional entries.");

@@ -202,8 +202,10 @@ class CaseLawControllerApiTest extends ContainersIntegrationBase {
 
     Assertions.assertThat(files)
         .containsOnly(
-            Map.entry(this.documentNumber + ".xml", createTestCaseLawLdml().getBytes()),
-            Map.entry("Attachment.png", "picture".getBytes()));
+            Map.entry(
+                this.documentNumber + "/" + this.documentNumber + ".xml",
+                createTestCaseLawLdml().getBytes()),
+            Map.entry(this.documentNumber + "/Attachment.png", "picture".getBytes()));
   }
 
   @Test

@@ -214,17 +214,19 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
     assertThat(files)
         .containsOnly(
             Map.entry(
-                "regelungstext-1.xml",
+                "eli/bund/bgbl-1/1991/s101/1991-01-01/1/deu/1991-01-01/regelungstext-1.xml",
                 Files.readAllBytes(Path.of(resourceDirectoryPath, "regelungstext-1.xml"))),
             Map.entry(
-                "anlage-regelungstext-1.xml",
+                "eli/bund/bgbl-1/1991/s101/1991-01-01/1/deu/1991-01-01/anlage-regelungstext-1.xml",
                 Files.readAllBytes(Path.of(resourceDirectoryPath, "anlage-regelungstext-1.xml"))),
             Map.entry(
-                "bild_1.jpg", Files.readAllBytes(Path.of(resourceDirectoryPath, "bild_1.jpg"))),
+                "eli/bund/bgbl-1/1991/s101/1991-01-01/1/deu/1991-01-01/bild_1.jpg",
+                Files.readAllBytes(Path.of(resourceDirectoryPath, "bild_1.jpg"))),
             Map.entry(
-                "bild_1.png", Files.readAllBytes(Path.of(resourceDirectoryPath, "bild_1.png"))),
+                "eli/bund/bgbl-1/1991/s101/1991-01-01/1/deu/1991-01-01/bild_1.png",
+                Files.readAllBytes(Path.of(resourceDirectoryPath, "bild_1.png"))),
             Map.entry(
-                "dokument.pdf",
+                "eli/bund/bgbl-1/1991/s101/1991-01-01/1/deu/1991-01-01/dokument.pdf",
                 Files.readAllBytes(Path.of(resourceDirectoryPath, "dokument.pdf"))));
   }
 

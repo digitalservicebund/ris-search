@@ -46,6 +46,9 @@ public class ObsConfig {
   @Value("${s3.file-storage.administrative-directive.endpoint}")
   private String administrativeDirectiveEndpoint;
 
+  @Value("${s3.file-storage.public-files.endpoint}")
+  private String publicFilesEndpoint;
+
   @Value("${s3.file-storage.administrative-directive.access-key-id}")
   private String administrativeDirectiveAccessKeyId;
 
@@ -69,6 +72,12 @@ public class ObsConfig {
 
   @Value("${s3.file-storage.portal.secret-access-key}")
   private String portalSecretAccessKey;
+
+  @Value("${s3.file-storage.public-files.access-key-id}")
+  private String publicFilesAccessKeyId;
+
+  @Value("${s3.file-storage.public-files.secret-access-key}")
+  private String publicFilesSecretAccessKey;
 
   /**
    * Creates an {@code ObjectStorageClient} for the "norm" context, which interacts with an
@@ -211,6 +220,41 @@ public class ObsConfig {
         bucket);
   }
 
+  /**
+   * Creates an {@code ObjectStorageClient} to connect to the public files bucket.
+   *
+   * @param bucket the name of the S3 bucket to be used by this client
+   * @return an {@code ObjectStorageClient} configured for the "public" context
+   * @throws URISyntaxException if the endpoint URI is invalid
+   */
+  @Bean(name = "publicFilesS3Client")
+  @Profile({"staging"})
+  public ObjectStorageClient publicFilesS3Client(
+      @Value("${s3.file-storage.public-files.bucket-name}") String bucket)
+      throws URISyntaxException {
+    return new S3ObjectStorageClient(
+        S3Client.builder()
+            .credentialsProvider(
+                StaticCredentialsProvider.create(
+                    AwsBasicCredentials.create(publicFilesAccessKeyId, publicFilesSecretAccessKey)))
+            .endpointOverride(new URI(publicFilesEndpoint))
+            .region(Region.of(REGION))
+            .build(),
+        bucket);
+  }
+
+  /**
+   * Creates an dummy s3 client for environments where the bucket doesn't exist
+   *
+   * @return an {@code ObjectStorageClient} configured for the "portal" context
+   * @throws URISyntaxException if the endpoint URI is invalid
+   */
+  @Bean(name = "publicFilesS3Client")
+  @Profile({"production", "uat", "prototype"})
+  public ObjectStorageClient publicFilesS3DummyClient() {
+    return new ObjectStorageClientDummy();
+  }
+
   @Bean(name = "normS3Client")
   @Profile({"default"})
   public ObjectStorageClient mockNormS3Client(
@@ -254,5 +298,13 @@ public class ObsConfig {
   public ObjectStorageClient mockPortalS3Client(
       @Value("${local.file-storage}") String relativeLocalStorageDirectory) {
     return new LocalFilesystemObjectStorageClient("portal", relativeLocalStorageDirectory);
+  }
+
+  @Bean(name = "publicFilesS3Client")
+  @Profile({"default"})
+  public ObjectStorageClient mockPublicFilesS3Client(
+      @Value("${s3.file-storage.public-files.bucket-name}") String bucketName,
+      @Value("${local.file-storage}") String relativeLocalStorageDirectory) {
+    return new LocalFilesystemObjectStorageClient(bucketName, relativeLocalStorageDirectory);
   }
 }
