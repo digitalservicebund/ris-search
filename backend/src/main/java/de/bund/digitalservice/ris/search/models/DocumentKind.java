@@ -8,16 +8,18 @@ import lombok.Getter;
 /** Enum for the different kinds of documents that can be searched for. */
 @Getter
 public enum DocumentKind {
-  CASE_LAW("case-law"),
-  LEGISLATION("norms"),
-  LITERATURE("literature"),
-  ADMINISTRATIVE_DIRECTIVE("administrative-directives"),
+  CASE_LAW("case-law", "case-law"),
+  LEGISLATION("norms", "legislation"),
+  LITERATURE("literature", "literature"),
+  ADMINISTRATIVE_DIRECTIVE("administrative-directives", "administrative-directives"),
   ;
 
   private final String siteMapPath;
+  private final String bulkZipPath;
 
-  DocumentKind(String siteMapPath) {
+  DocumentKind(String siteMapPath, String bulkZipPath) {
     this.siteMapPath = siteMapPath;
+    this.bulkZipPath = bulkZipPath;
   }
 
   /**

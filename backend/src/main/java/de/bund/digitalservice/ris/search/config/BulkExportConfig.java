@@ -1,5 +1,6 @@
 package de.bund.digitalservice.ris.search.config;
 
+import de.bund.digitalservice.ris.search.models.DocumentKind;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PublicFilesBucket;
@@ -15,12 +16,14 @@ public class BulkExportConfig {
 
   @Bean
   public BulkExportService normsBulkExport(NormsBucket source, PublicFilesBucket target) {
-    return new BulkExportService(source, target, "legislation", "eli", key -> true);
+    return new BulkExportService(
+        source, target, DocumentKind.LEGISLATION.getBulkZipPath(), "eli", key -> true);
   }
 
   @Bean
   public BulkExportService caseLawBulkExport(CaseLawBucket source, PublicFilesBucket target) {
-    return new BulkExportService(source, target, "case-law", "", filterChangelogFiles());
+    return new BulkExportService(
+        source, target, DocumentKind.CASE_LAW.getBulkZipPath(), "", filterChangelogFiles());
   }
 
   private Predicate<String> filterChangelogFiles() {
