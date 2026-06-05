@@ -161,6 +161,17 @@ public class DateUtils {
     return isActive(start, end, berlinClock);
   }
 
+  /**
+   * Determines whether the provided date range is active according to the current date from the
+   * supplied clock.
+   *
+   * @param start The start date of the interval, inclusive. A null value represents an open start
+   *     interval.
+   * @param end The end date of the interval, inclusive. A null value represents an open end
+   *     interval.
+   * @param clock Clock used to resolve the current date.
+   * @return true if the current date from the given clock is within the interval; otherwise false.
+   */
   public static boolean isActive(LocalDate start, LocalDate end, Clock clock) {
     LocalDate currentDateInGermany = LocalDate.now(clock);
 

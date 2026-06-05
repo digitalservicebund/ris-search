@@ -59,6 +59,17 @@ public class EcliSitemapJob implements Job {
         Clock.systemUTC());
   }
 
+  /**
+   * Constructor variant that allows providing a custom clock, primarily for deterministic tests.
+   *
+   * @param service EcliSitemapWriter service for writing sitemaps.
+   * @param portalBucket PortalBucket for storing portal-related files.
+   * @param changelogService CaseLawChangelogService to manage caselaw changelogs.
+   * @param ecliCrawlerDocumentService EcliCrawlerDocumentService for handling ECLI crawler
+   *     documents.
+   * @param frontEndUrl Front-end URL.
+   * @param clock Clock used to resolve the current date.
+   */
   public EcliSitemapJob(
       EcliSitemapWriter service,
       PortalBucket portalBucket,
