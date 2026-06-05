@@ -67,5 +67,6 @@
         ]
       }
     ]
-  }
+  },
+  "ignorePatterns": ["src/public/openapi.json"]
 }

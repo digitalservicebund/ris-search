@@ -9,7 +9,6 @@ pre-commit:
     check-format-frontend:
       root: frontend
       stage_fixed: true
-      exclude: "src/public/openapi.json"
       run: >-
         pnpm fmt {staged_files} &&
         pnpm lint {staged_files}
