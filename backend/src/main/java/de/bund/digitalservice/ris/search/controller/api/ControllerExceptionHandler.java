@@ -11,10 +11,13 @@ import jakarta.validation.Path;
 import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.Objects;
+import org.apache.catalina.connector.ClientAbortException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.NestedExceptionUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -306,5 +309,38 @@ public class ControllerExceptionHandler {
     CustomErrorResponse errorResponse =
         CustomErrorResponse.builder().errors(List.of(error)).build();
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+  }
+
+  /**
+   * Checks if a HttpMessageNotWritableException is wrapping a ClientAbortException and delegates to
+   * that handler. This might happen if a client aborts a request during json serialization.
+   *
+   * @param exception HttpMessageNotWritableException
+   */
+  @ExceptionHandler({HttpMessageNotWritableException.class})
+  public void handleHttpMessageNotWritableException(HttpMessageNotWritableException exception)
+      throws HttpMessageNotWritableException {
+    Throwable rootCause = NestedExceptionUtils.getMostSpecificCause(exception);
+
+    if (rootCause instanceof ClientAbortException clientabortexception) {
+      handleClientAbortException(clientabortexception);
+    }
+    throw exception;
+  }
+
+  /**
+   * Logs ClientAbortExceptions with log level warn. Does not return a ResponseEntity since the
+   * connection is lost already.
+   *
+   * @param exception ClientAbortException
+   */
+  @ExceptionHandler({ClientAbortException.class})
+  public void handleClientAbortException(ClientAbortException exception) {
+    // Get the absolute root cause of the exception chain
+    Throwable rootCause = NestedExceptionUtils.getMostSpecificCause(exception);
+
+    if (rootCause instanceof ClientAbortException) {
+      logger.warn("connection closed by client", rootCause);
+    }
   }
 }
