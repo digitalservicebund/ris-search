@@ -25,6 +25,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -64,7 +65,7 @@ class CaseLawControllerApiTest extends ContainersIntegrationBase {
   private final String documentNumber = "BFRE000107055";
 
   private String createTestCaseLawLdml() throws IOException {
-    LocalDate decisionDate = LocalDate.of(2023, 1, 2);
+    LocalDate decisionDate = LocalDate.of(2023, Month.JANUARY, 2);
 
     Map<String, Object> context = new HashMap<>();
     context.put("documentNumber", this.documentNumber);

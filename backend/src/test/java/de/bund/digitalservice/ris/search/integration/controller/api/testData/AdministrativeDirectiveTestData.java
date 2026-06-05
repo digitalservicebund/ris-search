@@ -1,10 +1,11 @@
 package de.bund.digitalservice.ris.search.integration.controller.api.testData;
 
 import static de.bund.digitalservice.ris.search.integration.controller.api.testData.SharedTestConstants.DATE_2_1;
+import static de.bund.digitalservice.ris.search.integration.controller.api.testData.SharedTestConstants.TIMESTAMP_2024_01_01_AS_STRING;
 
 import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
-import java.time.Instant;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,8 +24,8 @@ public class AdministrativeDirectiveTestData {
             .documentTypeDetail("Rundschreiben")
             .shortReport("text content")
             .legislationAuthority("NG Ministerium")
-            .entryIntoEffectDate(LocalDate.of(1978, 1, 17))
-            .expiryDate(LocalDate.of(2026, 1, 1))
+            .entryIntoEffectDate(LocalDate.of(1978, Month.JANUARY, 17))
+            .expiryDate(LocalDate.of(2026, Month.JANUARY, 1))
             .normReferences(List.of("PhanGB"))
             .caselawReferences(List.of("Aktivzitierung I"))
             .references(List.of("Lorem Ipsum 19XX, 11"))
@@ -34,7 +35,7 @@ public class AdministrativeDirectiveTestData {
             .activeNormReferences(List.of("ArbGG § 1 Abs 1"))
             .keywords(List.of("Schlagwort1", "Schlagwort2"))
             .fieldsOfLaw(List.of("01-01-01-01"))
-            .indexedAt(Instant.now().toString())
+            .indexedAt(TIMESTAMP_2024_01_01_AS_STRING)
             .build());
   }
 }

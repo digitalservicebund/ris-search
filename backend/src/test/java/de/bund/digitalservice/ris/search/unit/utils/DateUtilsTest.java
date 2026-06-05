@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import de.bund.digitalservice.ris.search.utils.DateUtils;
 import java.time.Clock;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.List;
 import java.util.TimeZone;
 import org.junit.jupiter.api.Test;
@@ -22,7 +23,7 @@ class DateUtilsTest {
   }
 
   private static List<Arguments> getTestDates() {
-    LocalDate pastDate = LocalDate.of(2023, 1, 1);
+    LocalDate pastDate = LocalDate.of(2023, Month.JANUARY, 1);
     Clock berlinClock = Clock.system(TimeZone.getTimeZone("Europe/Berlin").toZoneId());
     LocalDate currentDateInGermany = LocalDate.now(berlinClock);
     return List.of(
@@ -45,8 +46,8 @@ class DateUtilsTest {
 
   @Test
   void testToDateIntervalString() {
-    LocalDate start = LocalDate.of(2021, 1, 1);
-    LocalDate end = LocalDate.of(2021, 12, 31);
+    LocalDate start = LocalDate.of(2021, Month.JANUARY, 1);
+    LocalDate end = LocalDate.of(2021, Month.DECEMBER, 31);
 
     // Case: Start Date, End Date
     assertEquals("2021-01-01/2021-12-31", toDateIntervalString(start, end));

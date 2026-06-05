@@ -14,6 +14,7 @@ import de.bund.digitalservice.ris.search.utils.eli.ManifestationEli;
 import de.bund.digitalservice.ris.search.utils.eli.WorkEli;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.Month;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -46,8 +47,8 @@ public class IndexNormsService implements IndexService {
   private final NormsBucket normsBucket;
 
   // We can't use LocalDate.MIN or LocalDate.MAX because opensearch min and max differ from java
-  public static final LocalDate TIME_RELEVANCE_MIN = LocalDate.of(1, 1, 1);
-  public static final LocalDate TIME_RELEVANCE_MAX = LocalDate.of(9999, 1, 1);
+  public static final LocalDate TIME_RELEVANCE_MIN = LocalDate.of(1, Month.JANUARY, 1);
+  public static final LocalDate TIME_RELEVANCE_MAX = LocalDate.of(9999, Month.JANUARY, 1);
 
   /**
    * Constructor for IndexNormsService.

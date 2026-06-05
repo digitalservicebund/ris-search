@@ -9,6 +9,7 @@ import de.bund.digitalservice.ris.search.mapper.LiteratureLdmlToOpenSearchMapper
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -34,7 +35,7 @@ class LiteratureLdmlToOpenSearchMapperTest {
 
     // Publication info
     assertThat(literature.yearsOfPublication()).containsExactly("2025");
-    assertThat(literature.firstPublicationDate()).isEqualTo(LocalDate.of(2025, 1, 1));
+    assertThat(literature.firstPublicationDate()).isEqualTo(LocalDate.of(2025, Month.JANUARY, 1));
 
     // Metadata
     assertThat(literature.documentTypes()).containsExactly("Auf", "Foo");
@@ -173,12 +174,12 @@ class LiteratureLdmlToOpenSearchMapperTest {
 
   private static Stream<Arguments> provideYearsOfPublication() {
     return Stream.of(
-        Arguments.of(" 2020 ", LocalDate.of(2020, 1, 1)),
-        Arguments.of("2020", LocalDate.of(2020, 1, 1)),
-        Arguments.of(" 2020-05 ", LocalDate.of(2020, 5, 1)),
-        Arguments.of("2020-05", LocalDate.of(2020, 5, 1)),
-        Arguments.of(" 2020-05-23 ", LocalDate.of(2020, 5, 23)),
-        Arguments.of("2020-05-23", LocalDate.of(2020, 5, 23)),
+        Arguments.of(" 2020 ", LocalDate.of(2020, Month.JANUARY, 1)),
+        Arguments.of("2020", LocalDate.of(2020, Month.JANUARY, 1)),
+        Arguments.of(" 2020-05 ", LocalDate.of(2020, Month.MAY, 1)),
+        Arguments.of("2020-05", LocalDate.of(2020, Month.MAY, 1)),
+        Arguments.of(" 2020-05-23 ", LocalDate.of(2020, Month.MAY, 23)),
+        Arguments.of("2020-05-23", LocalDate.of(2020, Month.MAY, 23)),
         Arguments.of("XX", null),
         Arguments.of("1986 - 1987", null),
         Arguments.of("2001 (vermutlich)", null),

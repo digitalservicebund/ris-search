@@ -6,6 +6,7 @@ import de.bund.digitalservice.ris.LoadXmlUtils;
 import de.bund.digitalservice.ris.search.mapper.LiteratureLdmlToOpenSearchMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import java.time.LocalDate;
+import java.time.Month;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
@@ -22,7 +23,7 @@ class LiteratureLdmlToOpensearchMapperIntergrationTest {
     assertThat(literature.id()).isEqualTo("XXLU000000001");
     assertThat(literature.documentNumber()).isEqualTo("XXLU000000001");
     assertThat(literature.yearsOfPublication()).containsExactly("2025");
-    assertThat(literature.firstPublicationDate()).isEqualTo(LocalDate.of(2025, 1, 1));
+    assertThat(literature.firstPublicationDate()).isEqualTo(LocalDate.of(2025, Month.JANUARY, 1));
     assertThat(literature.documentTypes()).containsExactly("Auf", "Foo");
     assertThat(literature.dependentReferences()).containsExactly("BB, 1979, 1298-1300");
     assertThat(literature.independentReferences())
