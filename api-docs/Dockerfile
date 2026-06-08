@@ -1,9 +1,10 @@
 FROM node:26.3.0-alpine3.22@sha256:c7932b9e5e337b0e733d6e16abc1b0e104759e8b05e59ed56586cce967d26dfe AS builder
 # Needed for vitepress to calulcate the last updated date for files
 RUN apk add git
-RUN corepack enable
+RUN npm install -g corepack
 WORKDIR /app
 COPY . ./
+RUN corepack enable
 RUN pnpm ci
 RUN pnpm build
 
