@@ -50,8 +50,13 @@ public class ChangelogResponseMapper {
         path ->
             Stream.of(
                 toChangedDocument(getDocumentBaseUrl(apiPath, path), JsonldTypes.MEDIA_OBJECT)),
-        path ->
-            Stream.of(new ChangelogDeletedDocument(getDocumentBaseUrl(apiPath, path), jsonldType)));
+        path -> {
+          if (!isRootDocument(path)) {
+            return Stream.empty();
+          }
+          return Stream.of(
+              new ChangelogDeletedDocument(getDocumentBaseUrl(apiPath, path), jsonldType));
+        });
   }
 
   private static ChangelogResponse mapLegislation(Changelog changelog) {
@@ -83,10 +88,7 @@ public class ChangelogResponseMapper {
         changelog.getChanged().stream().flatMap(changeMapper).collect(Collectors.toSet());
 
     Set<ChangelogDeletedDocument> deleted =
-        changelog.getDeleted().stream()
-            .filter(ChangelogResponseMapper::isRootDocument)
-            .flatMap(deleteMapper)
-            .collect(Collectors.toSet());
+        changelog.getDeleted().stream().flatMap(deleteMapper).collect(Collectors.toSet());
 
     return new ChangelogResponse(changed, deleted, changelog.isChangeAll());
   }
