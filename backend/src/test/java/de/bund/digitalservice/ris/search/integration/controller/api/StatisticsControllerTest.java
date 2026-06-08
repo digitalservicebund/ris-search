@@ -6,10 +6,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
-import de.bund.digitalservice.ris.search.repository.opensearch.AdministrativeDirectiveRepository;
-import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository;
-import de.bund.digitalservice.ris.search.repository.opensearch.LiteratureRepository;
-import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -26,10 +22,6 @@ import org.springframework.test.web.servlet.MockMvc;
 class StatisticsControllerTest extends ContainersIntegrationBase {
 
   @Autowired private MockMvc mockMvc;
-  @Autowired private CaseLawRepository caseLawRepository;
-  @Autowired private LiteratureRepository literatureRepository;
-  @Autowired private NormsRepository normsRepository;
-  @Autowired private AdministrativeDirectiveRepository administrativeDirectiveRepository;
 
   @BeforeEach
   void setUpSearchControllerApiTest() {

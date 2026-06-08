@@ -12,6 +12,7 @@ import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
+import de.bund.digitalservice.ris.search.repository.objectstorage.PublicFilesBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.S3ObjectStorageClient;
 import de.bund.digitalservice.ris.search.repository.opensearch.AdministrativeDirectiveRepository;
 import de.bund.digitalservice.ris.search.repository.opensearch.ArticlesRepository;
@@ -46,6 +47,7 @@ public class ContainersIntegrationBase {
   @Autowired protected ArticlesRepository articlesRepository;
   @Autowired protected CaseLawBucket caseLawBucket;
   @Autowired protected NormsBucket normsBucket;
+  @Autowired protected PublicFilesBucket publicFilesBucket;
   @Autowired protected AdministrativeDirectiveRepository administrativeDirectiveRepository;
 
   @Autowired

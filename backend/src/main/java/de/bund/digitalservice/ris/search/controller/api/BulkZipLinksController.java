@@ -24,8 +24,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class BulkZipLinksController {
 
   private final PublicFilesBucket publicFilesBucket;
-  private final String ZIP_PREFIX;
-  private final String BUCKET_URL;
+  private final String zipPrefix;
+  private final String bucketUrl;
 
   /** Constructs a new instance of {@code BulkZipLinksController} */
   public BulkZipLinksController(
@@ -33,8 +33,8 @@ public class BulkZipLinksController {
       @Value("${s3.file-storage.public-files.bucket-name}") String publicFilesBucketName,
       @Value("${s3.file-storage.public-files.endpoint}") String publicFilesBucketEndpoint) {
     this.publicFilesBucket = publicFilesBucket;
-    this.ZIP_PREFIX = BulkExportService.BULK_ZIP_PREFIX;
-    this.BUCKET_URL = publicFilesBucketEndpoint + "/" + publicFilesBucketName + "/";
+    this.zipPrefix = BulkExportService.BULK_ZIP_PREFIX;
+    this.bucketUrl = publicFilesBucketEndpoint + "/" + publicFilesBucketName + "/";
   }
 
   /**
@@ -44,8 +44,8 @@ public class BulkZipLinksController {
   public BulkZipLinksSchema getBulkZipLinks() {
 
     List<String> files =
-        publicFilesBucket.getAllKeysByPrefix(ZIP_PREFIX).stream()
-            .map(e -> e.substring(ZIP_PREFIX.length()))
+        publicFilesBucket.getAllKeysByPrefix(zipPrefix).stream()
+            .map(e -> e.substring(zipPrefix.length()))
             .toList();
 
     return new BulkZipLinksSchema(
@@ -61,7 +61,7 @@ public class BulkZipLinksController {
     return toFilter.stream()
         .filter(e -> e.startsWith(prefix))
         .max(Comparator.naturalOrder())
-        .map(e -> BUCKET_URL + ZIP_PREFIX + e)
+        .map(e -> bucketUrl + zipPrefix + e)
         .orElse("");
   }
 }

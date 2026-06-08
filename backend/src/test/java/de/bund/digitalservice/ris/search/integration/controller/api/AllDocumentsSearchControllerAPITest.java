@@ -24,9 +24,6 @@ import de.bund.digitalservice.ris.search.integration.controller.api.testData.Nor
 import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
-import de.bund.digitalservice.ris.search.repository.opensearch.AdministrativeDirectiveRepository;
-import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository;
-import de.bund.digitalservice.ris.search.repository.opensearch.LiteratureRepository;
 import de.bund.digitalservice.ris.search.service.IndexNormsService;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -55,9 +52,6 @@ import org.springframework.test.web.servlet.MockMvc;
 class AllDocumentsSearchControllerAPITest extends ContainersIntegrationBase {
 
   @Autowired private MockMvc mockMvc;
-  @Autowired private CaseLawRepository caseLawRepository;
-  @Autowired private LiteratureRepository literatureRepository;
-  @Autowired private AdministrativeDirectiveRepository administrativeDirectiveRepository;
   @Autowired private IndexNormsService indexNormsService;
 
   @BeforeEach
