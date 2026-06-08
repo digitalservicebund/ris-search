@@ -1,7 +1,7 @@
 package de.bund.digitalservice.ris.search.integration.controller.api.testData;
 
-import static de.bund.digitalservice.ris.search.integration.controller.api.testData.SharedTestConstants.DATE_2_1;
-import static de.bund.digitalservice.ris.search.integration.controller.api.testData.SharedTestConstants.TIMESTAMP_2024_01_01_AS_STRING;
+import static de.bund.digitalservice.ris.SharedTestConstants.DATE_2024_01_01;
+import static de.bund.digitalservice.ris.SharedTestConstants.TIMESTAMP_2024_01_01_AS_STRING;
 
 import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
 import java.time.LocalDate;
@@ -30,7 +30,7 @@ public class AdministrativeDirectiveTestData {
             .caselawReferences(List.of("Aktivzitierung I"))
             .references(List.of("Lorem Ipsum 19XX, 11"))
             .referenceNumbers(List.of("RFR I"))
-            .citationDates(List.of(DATE_2_1))
+            .citationDates(List.of(DATE_2024_01_01))
             .activeAdministrativeReferences(List.of("VR Full Reference 2024-01-01 00001"))
             .activeNormReferences(List.of("ArbGG § 1 Abs 1"))
             .keywords(List.of("Schlagwort1", "Schlagwort2"))

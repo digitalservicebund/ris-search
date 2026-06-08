@@ -18,14 +18,12 @@ const projects: Project[] = [
     use: {
       ...devices["Desktop Firefox"],
     },
-    testIgnore: "seo.spec.ts",
   },
   {
     name: "webkit",
     use: {
       ...devices["Desktop Safari"],
     },
-    testIgnore: "seo.spec.ts",
   },
   {
     name: "mobile",
@@ -34,7 +32,6 @@ const projects: Project[] = [
       viewport: { width: 320, height: 600 },
       touch: true,
     },
-    testIgnore: "seo.spec.ts",
   },
   {
     name: "smoke-tests",

@@ -16,6 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
+import de.bund.digitalservice.ris.SharedTestConstants;
 import de.bund.digitalservice.ris.TestJsonUtils;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
@@ -25,7 +26,6 @@ import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirecti
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.service.IndexNormsService;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -285,7 +285,7 @@ class AllDocumentsSearchControllerAPITest extends ContainersIntegrationBase {
   @DisplayName("Should return most relevant expression for a mostRelevantOn date")
   void shouldReturnMostRelevantExpressionForADay() throws Exception {
     addNormXmlFiles(NormsTestData.s102WorkExpressions);
-    indexNormsService.reindexAll(Instant.now().toString());
+    indexNormsService.reindexAll(SharedTestConstants.TIMESTAMP_2024_01_01_AS_STRING);
 
     // A date where 1 expression was in force returns that expression
     JsonPath.parse(
@@ -307,7 +307,7 @@ class AllDocumentsSearchControllerAPITest extends ContainersIntegrationBase {
   @DisplayName("Should return all expressions if mostRelevantOn is null")
   void shouldReturnAllExpressions() throws Exception {
     addNormXmlFiles(NormsTestData.s102WorkExpressions);
-    indexNormsService.reindexAll(Instant.now().toString());
+    indexNormsService.reindexAll(SharedTestConstants.TIMESTAMP_2024_01_01_AS_STRING);
 
     // A date where 1 expression was in force returns that expression
     JsonPath.parse(

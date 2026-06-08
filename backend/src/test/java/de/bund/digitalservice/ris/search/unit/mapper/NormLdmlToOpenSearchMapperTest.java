@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import de.bund.digitalservice.ris.SharedTestConstants;
 import de.bund.digitalservice.ris.search.mapper.NormLdmlToOpenSearchMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
@@ -129,10 +130,13 @@ class NormLdmlToOpenSearchMapperTest {
   private static Stream<Arguments> getTestDates() {
     return Stream.of(
         Arguments.of("1962-07-20", null, true),
-        Arguments.of("1962-07-20", LocalDate.now().plusDays(1).toString(), true),
-        Arguments.of(LocalDate.now().plusDays(1).toString(), null, false),
         Arguments.of(
-            LocalDate.now().plusDays(1).toString(), LocalDate.now().plusDays(2).toString(), false),
+            "1962-07-20", SharedTestConstants.DATE_2024_01_01.plusDays(1).toString(), true),
+        Arguments.of(SharedTestConstants.DATE_2024_01_01.plusDays(1).toString(), null, false),
+        Arguments.of(
+            SharedTestConstants.DATE_2024_01_01.plusDays(1).toString(),
+            SharedTestConstants.DATE_2024_01_01.plusDays(2).toString(),
+            false),
         Arguments.of(null, null, false),
         Arguments.of("1962-07-20", "1962-07-21", false));
   }

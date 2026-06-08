@@ -1,6 +1,6 @@
 package de.bund.digitalservice.ris.search.unit.mapper;
 
-import static de.bund.digitalservice.ris.search.integration.controller.api.testData.SharedTestConstants.TIMESTAMP_2024_01_01_AS_INSTANT;
+import static de.bund.digitalservice.ris.SharedTestConstants.TIMESTAMP_2024_01_01_AS_INSTANT;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 

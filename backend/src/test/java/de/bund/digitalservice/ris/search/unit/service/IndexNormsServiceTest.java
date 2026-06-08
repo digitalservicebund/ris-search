@@ -12,9 +12,6 @@ import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.ArticlesRepository;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
 import de.bund.digitalservice.ris.search.service.IndexNormsService;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -147,8 +144,7 @@ class IndexNormsServiceTest {
             "eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu/1992-01-02/regelungstext-1.xml"))
         .thenReturn(Optional.of(testContent));
 
-    String startingTimestamp =
-        ZonedDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT);
+    String startingTimestamp = "2024-01-01T12:00:00Z";
     this.service.reindexAll(startingTimestamp);
 
     verify(repo, times(1)).save(any());

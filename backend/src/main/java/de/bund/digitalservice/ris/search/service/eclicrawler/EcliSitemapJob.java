@@ -7,10 +7,12 @@ import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
 import de.bund.digitalservice.ris.search.service.ChangelogService;
 import de.bund.digitalservice.ris.search.service.Job;
+import java.time.Clock;
 import java.time.LocalDate;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +27,7 @@ public class EcliSitemapJob implements Job {
   ChangelogService<CaseLawBucket> changelogService;
 
   EcliCrawlerDocumentService ecliCrawlerDocumentService;
-  private final LocalDate today = LocalDate.now();
+  private final LocalDate today;
 
   private static final Logger logger = LogManager.getLogger(EcliSitemapJob.class);
   public static final String LAST_PROCESSED_CHANGELOG = "eclicrawler/last_processed_changelog";
@@ -41,17 +43,46 @@ public class EcliSitemapJob implements Job {
    *     documents.
    * @param frontEndUrl Front-end URL from application properties.
    */
+  @Autowired
   public EcliSitemapJob(
       EcliSitemapWriter service,
       PortalBucket portalBucket,
       ChangelogService<CaseLawBucket> changelogService,
       EcliCrawlerDocumentService ecliCrawlerDocumentService,
       @Value("${server.front-end-url}") String frontEndUrl) {
+    this(
+        service,
+        portalBucket,
+        changelogService,
+        ecliCrawlerDocumentService,
+        frontEndUrl,
+        Clock.systemUTC());
+  }
+
+  /**
+   * Constructor variant that allows providing a custom clock, primarily for deterministic tests.
+   *
+   * @param service EcliSitemapWriter service for writing sitemaps.
+   * @param portalBucket PortalBucket for storing portal-related files.
+   * @param changelogService CaseLawChangelogService to manage caselaw changelogs.
+   * @param ecliCrawlerDocumentService EcliCrawlerDocumentService for handling ECLI crawler
+   *     documents.
+   * @param frontEndUrl Front-end URL.
+   * @param clock Clock used to resolve the current date.
+   */
+  public EcliSitemapJob(
+      EcliSitemapWriter service,
+      PortalBucket portalBucket,
+      ChangelogService<CaseLawBucket> changelogService,
+      EcliCrawlerDocumentService ecliCrawlerDocumentService,
+      String frontEndUrl,
+      Clock clock) {
     this.sitemapWriter = service;
     this.portalBucket = portalBucket;
     this.changelogService = changelogService;
     this.ecliCrawlerDocumentService = ecliCrawlerDocumentService;
     this.apiUrl = frontEndUrl + "v1/eclicrawler/";
+    this.today = LocalDate.now(clock);
   }
 
   /**

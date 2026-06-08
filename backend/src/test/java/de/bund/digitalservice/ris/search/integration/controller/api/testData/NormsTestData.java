@@ -1,9 +1,10 @@
 package de.bund.digitalservice.ris.search.integration.controller.api.testData;
 
-import static de.bund.digitalservice.ris.search.integration.controller.api.testData.SharedTestConstants.DATE_1_1;
-import static de.bund.digitalservice.ris.search.integration.controller.api.testData.SharedTestConstants.DATE_2_1;
-import static de.bund.digitalservice.ris.search.integration.controller.api.testData.SharedTestConstants.DATE_2_2;
+import static de.bund.digitalservice.ris.SharedTestConstants.DATE_2023_01_02;
+import static de.bund.digitalservice.ris.SharedTestConstants.DATE_2024_01_01;
+import static de.bund.digitalservice.ris.SharedTestConstants.DATE_2024_01_02;
 
+import de.bund.digitalservice.ris.PebbleTemplateTestUtils;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.models.opensearch.TableOfContentsItem;
@@ -95,7 +96,7 @@ public class NormsTestData {
     context.put("work_eli", eliFile.getWorkEli().toString());
     context.put("expression_eli", eliFile.getExpressionEli().toString());
     context.put("manifestation_eli", eliFile.getManifestationEli().toString());
-    return SharedTestConstants.getXmlFromTemplate(context, NORM_LDML_TEMPLATE);
+    return PebbleTemplateTestUtils.getXmlFromTemplate(context, NORM_LDML_TEMPLATE);
   }
 
   /**
@@ -118,7 +119,7 @@ public class NormsTestData {
     context.put("work_eli", eliFile.getWorkEli().toString());
     context.put("expression_eli", eliFile.getExpressionEli().toString());
     context.put("attachment_name", eliFile.fileName());
-    return SharedTestConstants.getXmlFromTemplate(context, NORM_ATTACHMENT_LDML_TEMPLATE);
+    return PebbleTemplateTestUtils.getXmlFromTemplate(context, NORM_ATTACHMENT_LDML_TEMPLATE);
   }
 
   private static TableOfContentsItem simpleToc(String number) {
@@ -180,8 +181,8 @@ public class NormsTestData {
             .officialShortTitle("TestG1")
             .workEli(workEli)
             .expressionEli(expressionEli)
-            .normsDate(DATE_2_2)
-            .datePublished(DATE_2_2.plusDays(1))
+            .normsDate(DATE_2024_01_02)
+            .datePublished(DATE_2024_01_02.plusDays(1))
             .articleTexts(List.of("example text 1", "example text 2"))
             .articleNames(List.of("§ 1 Example article", "§ 2 Example article"))
             .entryIntoForceDate(LocalDate.of(2025, Month.NOVEMBER, 1))
@@ -227,8 +228,8 @@ public class NormsTestData {
             .officialShortTitle("TestG2")
             .workEli("eli/2024/teg/2")
             .expressionEli("eli/2024/teg/2/exp")
-            .normsDate(DATE_1_1)
-            .datePublished(DATE_1_1)
+            .normsDate(DATE_2023_01_02)
+            .datePublished(DATE_2023_01_02)
             .entryIntoForceDate(LocalDate.of(2025, Month.NOVEMBER, 2))
             .normsSortDate(LocalDate.of(2025, Month.NOVEMBER, 2))
             .expiryDate(LocalDate.of(2025, Month.NOVEMBER, 3))
@@ -243,8 +244,8 @@ public class NormsTestData {
             .officialShortTitle("TestG3")
             .workEli("eli/2024/teg/3")
             .expressionEli("eli/2024/teg/3/exp")
-            .normsDate(DATE_2_1)
-            .datePublished(DATE_2_1)
+            .normsDate(DATE_2024_01_01)
+            .datePublished(DATE_2024_01_01)
             .entryIntoForceDate(LocalDate.of(2025, Month.NOVEMBER, 3))
             .normsSortDate(LocalDate.of(2025, Month.NOVEMBER, 3))
             .expiryDate(LocalDate.of(2025, Month.NOVEMBER, 3))

@@ -1,5 +1,7 @@
 package de.bund.digitalservice.ris.search.integration.controller.api.testData;
 
+import de.bund.digitalservice.ris.PebbleTemplateTestUtils;
+import de.bund.digitalservice.ris.SharedTestConstants;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -35,7 +37,7 @@ public class CaseLawTestData {
             .courtType("KG")
             .location("Berlin")
             .documentType("Urteil")
-            .decisionDate(SharedTestConstants.DATE_2_2)
+            .decisionDate(SharedTestConstants.DATE_2024_01_02)
             .fileNumbers(List.of("IX ZR 100/10"))
             .dissentingOpinion("eine abweichende Meinung")
             .decisionGrounds("diese Entscheidungsgründe")
@@ -62,7 +64,7 @@ public class CaseLawTestData {
             .location("Berlin")
             .courtKeyword("FG Berlin")
             .documentType("Versäumnisurteil")
-            .decisionDate(SharedTestConstants.DATE_2_3)
+            .decisionDate(SharedTestConstants.DATE_2024_01_03)
             .guidingPrinciple("Leitsatz mit ein paar Wörtern und Ergänzungen")
             .fileNumbers(List.of("IX ZR 100/20"))
             .otherLongText("Sonstiger Langtext " + matchAllTerm)
@@ -81,7 +83,7 @@ public class CaseLawTestData {
             .courtKeyword("FG Hamburg")
             .documentType("Zweites Versäumnisurteil")
             .fileNumbers(List.of("IX ZR 100/30"))
-            .decisionDate(SharedTestConstants.DATE_2_1)
+            .decisionDate(SharedTestConstants.DATE_2024_01_01)
             .grounds("Folgende Gründe gibt es.")
             .guidingPrinciple("Leitsatz")
             .otherLongText(matchAllTerm)
@@ -175,6 +177,6 @@ public class CaseLawTestData {
     if (context == null) {
       context = new HashMap<>();
     }
-    return SharedTestConstants.getXmlFromTemplate(context, CASE_LAW_LDML_TEMPLATE);
+    return PebbleTemplateTestUtils.getXmlFromTemplate(context, CASE_LAW_LDML_TEMPLATE);
   }
 }

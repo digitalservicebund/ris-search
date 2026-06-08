@@ -3,6 +3,7 @@ package de.bund.digitalservice.ris.search.integration.mapper;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import de.bund.digitalservice.ris.LoadXmlUtils;
+import de.bund.digitalservice.ris.SharedTestConstants;
 import de.bund.digitalservice.ris.search.mapper.AdministrativeDirectiveLdmlToOpenSearchMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
 import java.time.Instant;
@@ -19,7 +20,7 @@ class AdministrativeDirectiveToOpenSearchMapperTest {
     String ldmlString =
         LoadXmlUtils.loadXmlAsString(AdministrativeDirective.class, "KSNR0000.akn.xml");
 
-    Instant now = Instant.now();
+    Instant now = SharedTestConstants.TIMESTAMP_2024_01_01_AS_INSTANT;
     AdministrativeDirective entity =
         AdministrativeDirectiveLdmlToOpenSearchMapper.map(ldmlString, now);
 

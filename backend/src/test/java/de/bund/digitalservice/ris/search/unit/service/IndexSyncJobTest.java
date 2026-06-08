@@ -7,6 +7,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import de.bund.digitalservice.ris.SharedTestConstants;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
@@ -17,7 +18,6 @@ import de.bund.digitalservice.ris.search.service.IndexStatusService;
 import de.bund.digitalservice.ris.search.service.IndexSyncJob;
 import de.bund.digitalservice.ris.search.service.IndexingState;
 import de.bund.digitalservice.ris.search.service.Job;
-import java.time.Instant;
 import java.util.List;
 import org.assertj.core.util.Sets;
 import org.junit.jupiter.api.Assertions;
@@ -52,7 +52,8 @@ class IndexSyncJobTest {
     Changelog changelog = new Changelog();
     changelog.setChangeAll(true);
 
-    normIndexSyncJob.importChangelogContent(changelog, Instant.now().toString());
+    normIndexSyncJob.importChangelogContent(
+        changelog, SharedTestConstants.TIMESTAMP_2024_01_01_AS_STRING);
 
     verify(indexNormsService, times(1)).reindexAll(any());
   }
@@ -63,7 +64,7 @@ class IndexSyncJobTest {
     changelog.setChanged(Sets.newHashSet(List.of("identifier1")));
     changelog.setDeleted(Sets.newHashSet(List.of("identifier1")));
 
-    String now = Instant.now().toString();
+    String now = SharedTestConstants.TIMESTAMP_2024_01_01_AS_STRING;
 
     Assertions.assertThrows(
         IllegalArgumentException.class,
@@ -75,7 +76,7 @@ class IndexSyncJobTest {
     when(indexNormsService.getNumberOfIndexedEntities()).thenReturn(100);
     when(indexNormsService.getNumberOfIndexableDocumentsInBucket()).thenReturn(99);
 
-    Instant time = Instant.now();
+    var time = SharedTestConstants.TIMESTAMP_2024_01_01_AS_INSTANT;
     normIndexSyncJob.alertOnNumberMismatch(new IndexingState(time.toString(), time.toString()));
 
     String expectedOutput = "IndexNormsService has 99 files in bucket but 100 indexed documents";

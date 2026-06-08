@@ -8,6 +8,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import de.bund.digitalservice.ris.SharedTestConstants;
 import de.bund.digitalservice.ris.search.models.DocumentKind;
 import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectKeyInfo;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
@@ -119,7 +120,7 @@ class SitemapServiceTest {
 
   @Test
   void testDeleteOldSitemapFiles() {
-    Instant now = Instant.now();
+    Instant now = SharedTestConstants.TIMESTAMP_2024_01_01_AS_INSTANT;
     ObjectKeyInfo oldFile = new ObjectKeyInfo("sitemaps/norms/1.xml", now.minusSeconds(86400));
     ObjectKeyInfo nowFile = new ObjectKeyInfo("sitemaps/caselaw/2.xml", now);
     ObjectKeyInfo newFile = new ObjectKeyInfo("sitemaps/norms/3.xml", now.plusSeconds(60));

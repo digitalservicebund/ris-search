@@ -6,26 +6,29 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import de.bund.digitalservice.ris.search.utils.DateUtils;
 import java.time.Clock;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.Month;
+import java.time.ZoneId;
 import java.util.List;
-import java.util.TimeZone;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 class DateUtilsTest {
+  private static final Clock FIXED_BERLIN_CLOCK =
+      Clock.fixed(Instant.parse("2024-01-01T12:00:00Z"), ZoneId.of("Europe/Berlin"));
+
   @ParameterizedTest(name = "Test valid date from {0} to {1} is {2}")
   @MethodSource("getTestDates")
   void testIsValidDate(LocalDate from, LocalDate to, boolean expected) {
-    assertEquals(expected, DateUtils.isActive(from, to));
+    assertEquals(expected, DateUtils.isActive(from, to, FIXED_BERLIN_CLOCK));
   }
 
   private static List<Arguments> getTestDates() {
     LocalDate pastDate = LocalDate.of(2023, Month.JANUARY, 1);
-    Clock berlinClock = Clock.system(TimeZone.getTimeZone("Europe/Berlin").toZoneId());
-    LocalDate currentDateInGermany = LocalDate.now(berlinClock);
+    LocalDate currentDateInGermany = LocalDate.now(FIXED_BERLIN_CLOCK);
     return List.of(
         Arguments.of(null, null, true),
         Arguments.of(pastDate, null, true),
