@@ -20,7 +20,9 @@ public class ChangelogResponseMapper {
 
   /**
    * Takes a Changelog representation and maps it to an api representation of its specific
-   * documentKind
+   * documentKind. It only considers a change as deleted when the root document is being deleted.
+   * For legislation the regelungstext is considered the root. For other documentTypes the the xml
+   * filename that matches the parent directory is considered the root.
    *
    * @param changelog Changelog object to be mapped
    * @param documentKind documentKind of the response
@@ -64,6 +66,7 @@ public class ChangelogResponseMapper {
                             JsonldTypes.LEGISLATION_OBJECT)),
         id ->
             EliFile.fromString(id).stream()
+                .filter(eliFile -> eliFile.fileName().startsWith("regelungstext-"))
                 .map(
                     eli ->
                         new ChangelogDeletedDocument(
@@ -80,9 +83,33 @@ public class ChangelogResponseMapper {
         changelog.getChanged().stream().flatMap(changeMapper).collect(Collectors.toSet());
 
     Set<ChangelogDeletedDocument> deleted =
-        changelog.getDeleted().stream().flatMap(deleteMapper).collect(Collectors.toSet());
+        changelog.getDeleted().stream()
+            .filter(ChangelogResponseMapper::isRootDocument)
+            .flatMap(deleteMapper)
+            .collect(Collectors.toSet());
 
     return new ChangelogResponse(changed, deleted, changelog.isChangeAll());
+  }
+
+  private static boolean isRootDocument(String path) {
+    String[] parts = path.split("/");
+
+    if (parts.length != 2) {
+      return false;
+    }
+
+    String firstId = parts[0];
+    String secondPart = parts[1];
+
+    if (!secondPart.endsWith(".xml")) {
+      return false;
+    }
+
+    // Strip the ".xml" off the second part to isolate the second ID
+    String secondId = secondPart.substring(0, secondPart.length() - 4);
+
+    // Check if the two IDs are an exact match
+    return firstId.equals(secondId);
   }
 
   private static ChangelogChangedDocument toChangedDocument(String baseUrl, String mediaType) {
