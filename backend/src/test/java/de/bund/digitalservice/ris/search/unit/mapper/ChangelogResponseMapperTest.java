@@ -36,6 +36,25 @@ class ChangelogResponseMapperTest {
         .anySatisfy(id -> assertThat(id.toString()).contains("ABCD00001"));
   }
 
+  @ParameterizedTest
+  @EnumSource(
+      value = DocumentKind.class,
+      names = {"CASE_LAW", "LITERATURE", "ADMINISTRATIVE_DIRECTIVE"})
+  void itmarksRootDocumentsAsDeleted(DocumentKind documentKind) {
+    Changelog changelog =
+        new Changelog(
+            new HashSet<>(List.of()), new HashSet<>(List.of("ABCD00002/ABCD00002.xml")), false);
+
+    ChangelogResponse actual = ChangelogResponseMapper.mapChangelog(changelog, documentKind);
+
+    assertThat(actual.changed().isEmpty());
+    assertThat(actual.deleted())
+        .asInstanceOf(SET)
+        .hasSize(1)
+        .extracting("id") // Or use the method reference: ChangelogChangedDocument::id
+        .anySatisfy(id -> assertThat(id.toString()).contains("ABCD00002"));
+  }
+
   @Test
   void itIgnoresNonRootDocumentsInDeletedListForLegislation() {
     Changelog changelog =
@@ -54,6 +73,31 @@ class ChangelogResponseMapperTest {
     // Should ignore the anlage and non-root files, leaving deleted empty
     assertThat(actual.deleted()).asInstanceOf(SET).isEmpty();
     assertThat(actual.changed())
+        .asInstanceOf(SET)
+        .hasSize(1)
+        .extracting("id")
+        .anySatisfy(
+            id ->
+                assertThat(id.toString())
+                    .contains("eli/bund/bgbl-1/1999/identifier/2026-01-01/1/deu"));
+  }
+
+  @Test
+  void itmarksRegelungstextDocumentsAsDeleted() {
+    Changelog changelog =
+        new Changelog(
+            new HashSet<>(List.of()),
+            new HashSet<>(
+                List.of(
+                    "eli/bund/bgbl-1/1999/identifier/2026-01-01/1/deu/2026-01-01/regelungstext-verkuendung-1.xml")),
+            false);
+
+    ChangelogResponse actual =
+        ChangelogResponseMapper.mapChangelog(changelog, DocumentKind.LEGISLATION);
+
+    // Should ignore the anlage and non-root files, leaving deleted empty
+    assertThat(actual.changed()).asInstanceOf(SET).isEmpty();
+    assertThat(actual.deleted())
         .asInstanceOf(SET)
         .hasSize(1)
         .extracting("id")
