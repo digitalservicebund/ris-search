@@ -2,9 +2,9 @@ package de.bund.digitalservice.ris.search.integration.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import de.bund.digitalservice.ris.SharedTestConstants;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.NormsTestData;
-import de.bund.digitalservice.ris.search.integration.controller.api.testData.SharedTestConstants;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.service.IndexNormsService;
 import java.io.IOException;

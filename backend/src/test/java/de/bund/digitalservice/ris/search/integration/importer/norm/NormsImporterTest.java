@@ -2,6 +2,7 @@ package de.bund.digitalservice.ris.search.integration.importer.norm;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import de.bund.digitalservice.ris.SharedTestConstants;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
@@ -47,7 +48,7 @@ class NormsImporterTest extends ContainersIntegrationBase {
     final String relatedByWorkEliFile =
         "eli/bund/bgbl-1/1992/s101/1992-02-01/2/deu/1992-02-02/regelungstext-1.xml";
 
-    Instant now = Instant.now();
+    Instant now = SharedTestConstants.TIMESTAMP_2024_01_01_AS_INSTANT;
     String firstChangelogFileName =
         "changelogs/%s-changelog.json".formatted(now.minus(2, ChronoUnit.HOURS).toString());
     String secondChangelogFileName =
@@ -78,7 +79,7 @@ class NormsImporterTest extends ContainersIntegrationBase {
     final String oldManifestationEli = expressionEli + "/1992-01-01/regelungstext-1.xml";
     final String newManifestationEli = expressionEli + "/1992-01-02/regelungstext-1.xml";
 
-    Instant now = Instant.now();
+    Instant now = SharedTestConstants.TIMESTAMP_2024_01_01_AS_INSTANT;
     Instant lastSuccess = now.minus(1, ChronoUnit.HOURS);
 
     normsRepository.save(
@@ -109,7 +110,7 @@ class NormsImporterTest extends ContainersIntegrationBase {
   @DisplayName("Delete removes the norm")
   void testDelete() throws ObjectStoreServiceException {
 
-    Instant now = Instant.now();
+    Instant now = SharedTestConstants.TIMESTAMP_2024_01_01_AS_INSTANT;
     Instant lastSuccess = now.minus(1, ChronoUnit.HOURS);
 
     final EliFile toKeep =
@@ -154,7 +155,7 @@ class NormsImporterTest extends ContainersIntegrationBase {
   }
 
   private IndexingState getMockState() {
-    Instant time = Instant.now();
+    Instant time = SharedTestConstants.TIMESTAMP_2024_01_01_AS_INSTANT;
     return new IndexingState(time.toString(), time.toString());
   }
 }

@@ -18,6 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
+import de.bund.digitalservice.ris.SharedTestConstants;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
@@ -29,7 +30,6 @@ import java.io.ByteArrayInputStream;
 import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.HashSet;
@@ -558,7 +558,7 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
   @DisplayName("Should return most relevant expression for a day")
   void shouldReturnMostRelevantExpressionForADay() throws Exception {
     addNormXmlFiles(NormsTestData.s102WorkExpressions);
-    indexNormsService.reindexAll(Instant.now().toString());
+    indexNormsService.reindexAll(SharedTestConstants.TIMESTAMP_2024_01_01_AS_STRING);
 
     // A very old date should return the oldest expression
     DocumentContext json =

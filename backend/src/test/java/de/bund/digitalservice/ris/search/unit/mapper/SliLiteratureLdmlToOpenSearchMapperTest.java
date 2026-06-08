@@ -3,9 +3,9 @@ package de.bund.digitalservice.ris.search.unit.mapper;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import de.bund.digitalservice.ris.LoadXmlUtils;
+import de.bund.digitalservice.ris.SharedTestConstants;
 import de.bund.digitalservice.ris.search.mapper.SliLiteratureLdmlToOpenSearchMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;
@@ -20,7 +20,7 @@ class SliLiteratureLdmlToOpenSearchMapperTest {
   @Test
   @DisplayName("Correctly maps all available fields from valid literature LDML XML")
   void correctlyMapsAllAvailableFields() {
-    var now = Instant.now();
+    var now = SharedTestConstants.TIMESTAMP_2024_01_01_AS_INSTANT;
     Literature literature = SliLiteratureLdmlToOpenSearchMapper.mapLdml(VALID_XML, now);
 
     var expected =

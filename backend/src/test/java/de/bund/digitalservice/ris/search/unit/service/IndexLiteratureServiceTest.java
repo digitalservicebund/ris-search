@@ -7,15 +7,13 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import de.bund.digitalservice.ris.LoadXmlUtils;
+import de.bund.digitalservice.ris.SharedTestConstants;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.repository.objectstorage.LiteratureBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.LiteratureRepository;
 import de.bund.digitalservice.ris.search.service.IndexLiteratureService;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -49,8 +47,7 @@ class IndexLiteratureServiceTest {
     when(this.bucket.getFileAsString(filenameA)).thenReturn(Optional.of(xml));
     when(this.bucket.getFileAsString(filenameB)).thenReturn(Optional.of("this will not parse"));
 
-    String startingTimestamp =
-        ZonedDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT);
+    String startingTimestamp = SharedTestConstants.TIMESTAMP_2024_01_01_AS_STRING;
     this.service.reindexAll(startingTimestamp);
 
     verify(repo, times(1))
@@ -78,8 +75,7 @@ class IndexLiteratureServiceTest {
     when(this.bucket.getFileAsString(filenameC)).thenReturn(Optional.of(xml));
     when(this.bucket.getFileAsString(filenameD)).thenReturn(Optional.of(xml));
 
-    String startingTimestamp =
-        ZonedDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT);
+    String startingTimestamp = SharedTestConstants.TIMESTAMP_2024_01_01_AS_STRING;
     this.service.reindexAll(startingTimestamp);
 
     verify(repo, times(1))

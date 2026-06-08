@@ -2,7 +2,7 @@ package de.bund.digitalservice.ris.search.unit.mapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import de.bund.digitalservice.ris.search.integration.controller.api.testData.SharedTestConstants;
+import de.bund.digitalservice.ris.SharedTestConstants;
 import de.bund.digitalservice.ris.search.mapper.CaseLawSchemaMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.schema.CaseLawEncodingSchema;
@@ -24,7 +24,7 @@ class CaseLawSchemaMapperTest {
             .courtType("KG")
             .location("Berlin")
             .documentType("Urteil")
-            .decisionDate(SharedTestConstants.DATE_2_2)
+            .decisionDate(SharedTestConstants.DATE_2024_01_02)
             .fileNumbers(List.of("FileNumberTest"))
             .dissentingOpinion("eine abweichende Meinung")
             .decisionGrounds("diese Entscheidungsgründe")
@@ -52,7 +52,7 @@ class CaseLawSchemaMapperTest {
     assertThat(caseLawSchema.courtType()).isEqualTo("KG");
     assertThat(caseLawSchema.location()).isEqualTo("Berlin");
     assertThat(caseLawSchema.documentType()).isEqualTo("Urteil");
-    assertThat(caseLawSchema.decisionDate()).isEqualTo(SharedTestConstants.DATE_2_2);
+    assertThat(caseLawSchema.decisionDate()).isEqualTo(SharedTestConstants.DATE_2024_01_02);
     assertThat(caseLawSchema.fileNumbers()).containsExactly("FileNumberTest");
     assertThat(caseLawSchema.dissentingOpinion()).isEqualTo("eine abweichende Meinung");
     assertThat(caseLawSchema.decisionGrounds()).isEqualTo("diese Entscheidungsgründe");

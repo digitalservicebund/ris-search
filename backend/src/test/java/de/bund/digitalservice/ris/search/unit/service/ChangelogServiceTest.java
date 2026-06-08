@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.bund.digitalservice.ris.SharedTestConstants;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
@@ -56,7 +57,7 @@ class ChangelogServiceTest {
 
   @Test
   void itReturnsChangelogsSortedByTimestamp() {
-    Instant now = Instant.now();
+    Instant now = SharedTestConstants.TIMESTAMP_2024_01_01_AS_INSTANT;
     String lastSuccess =
         ChangelogService.CHANGELOGS_PREFIX
             + now.minus(2, ChronoUnit.HOURS).toString()
