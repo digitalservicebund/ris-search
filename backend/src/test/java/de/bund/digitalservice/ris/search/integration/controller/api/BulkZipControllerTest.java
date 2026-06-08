@@ -10,7 +10,6 @@ import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.models.DocumentKind;
 import de.bund.digitalservice.ris.search.service.BulkExportService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -27,13 +26,10 @@ class BulkZipControllerTest extends ContainersIntegrationBase {
 
   @Autowired private MockMvc mockMvc;
 
-  private static final String caseLaw = DocumentKind.CASE_LAW.getBulkZipPath();
-  private static final String legislation = DocumentKind.LEGISLATION.getBulkZipPath();
-  private static final String literature = DocumentKind.LITERATURE.getBulkZipPath();
-  private static final String admin = DocumentKind.ADMINISTRATIVE_DIRECTIVE.getBulkZipPath();
-
-  @BeforeEach
-  void setUpSearchControllerApiTest() {}
+  private static final String CASE_LAW = DocumentKind.CASE_LAW.getBulkZipPath();
+  private static final String LEGISLATION = DocumentKind.LEGISLATION.getBulkZipPath();
+  private static final String LITERATURE = DocumentKind.LITERATURE.getBulkZipPath();
+  private static final String ADMIN = DocumentKind.ADMINISTRATIVE_DIRECTIVE.getBulkZipPath();
 
   @Test
   @DisplayName("Should return latest snapshot when 2 exist")
@@ -44,11 +40,11 @@ class BulkZipControllerTest extends ContainersIntegrationBase {
       publicFilesBucket.delete(key);
     }
     String bulkZipPattern = BulkExportService.BULK_ZIP_PREFIX + "%s_2026-01-%sT00:00:00.zip";
-    publicFilesBucket.save(String.format(bulkZipPattern, caseLaw, "01"), "");
-    publicFilesBucket.save(String.format(bulkZipPattern, caseLaw, "02"), "");
-    publicFilesBucket.save(String.format(bulkZipPattern, legislation, "02"), "");
-    publicFilesBucket.save(String.format(bulkZipPattern, literature, "02"), "");
-    publicFilesBucket.save(String.format(bulkZipPattern, admin, "02"), "");
+    publicFilesBucket.save(String.format(bulkZipPattern, CASE_LAW, "01"), "");
+    publicFilesBucket.save(String.format(bulkZipPattern, CASE_LAW, "02"), "");
+    publicFilesBucket.save(String.format(bulkZipPattern, LEGISLATION, "02"), "");
+    publicFilesBucket.save(String.format(bulkZipPattern, LITERATURE, "02"), "");
+    publicFilesBucket.save(String.format(bulkZipPattern, ADMIN, "02"), "");
 
     String expectedPrefix = "https://object.storage.eu01.onstackit.cloud/public/snapshots/";
 
