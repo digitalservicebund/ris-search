@@ -1,6 +1,7 @@
-FROM node:24.14.1-alpine3.22@sha256:4f33c7804fa7775b87875f512e25e515692210bfdeafd715eb8bc441c364e2f6 AS builder
+FROM node:26.3.0-alpine3.22@sha256:c7932b9e5e337b0e733d6e16abc1b0e104759e8b05e59ed56586cce967d26dfe AS builder
 # Needed for vitepress to calulcate the last updated date for files
 RUN apk add git
+RUN npm install -g corepack
 RUN corepack enable
 WORKDIR /app
 COPY . ./

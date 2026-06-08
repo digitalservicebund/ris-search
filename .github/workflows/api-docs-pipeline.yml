@@ -51,9 +51,9 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
         with:
-          node-version: 24
+          node-version-file: '${{ env.API_DOCS_ROOT }}/package.json'
           cache: "pnpm"
-          cache-dependency-path: ${{ env.API_DOCS_ROOT }}/package.json
+          cache-dependency-path: ${{ env.API_DOCS_ROOT }}/pnpm-lock.yaml
 
       - name: Install Node modules
         run: pnpm ci
@@ -84,7 +84,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
         with:
-          node-version: 24
+          node-version-file: '${{ env.API_DOCS_ROOT }}/package.json'
           cache: "pnpm"
           cache-dependency-path: ${{ env.API_DOCS_ROOT }}/pnpm-lock.yaml
 
