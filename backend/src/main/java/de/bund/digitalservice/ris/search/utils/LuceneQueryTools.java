@@ -62,8 +62,7 @@ public class LuceneQueryTools {
    * @return A new query string with all terms OR-combined
    * @throws CustomValidationException in case a queryString is invalid
    */
-  public static String joinAllTermsWithOr(String queryString)
-      throws CustomValidationException {
+  public static String joinAllTermsWithOr(String queryString) throws CustomValidationException {
     if (queryString == null || queryString.isBlank()) {
       return "";
     }
