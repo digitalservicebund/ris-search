@@ -18,7 +18,6 @@ import org.apache.lucene.queryparser.classic.QueryParserBase;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.QueryVisitor;
-import org.jspecify.annotations.NonNull;
 import org.springframework.data.elasticsearch.UncategorizedElasticsearchException;
 
 /** Class to store the Lucene query tools */
