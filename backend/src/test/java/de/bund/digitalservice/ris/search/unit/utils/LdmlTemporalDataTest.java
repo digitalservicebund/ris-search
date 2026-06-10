@@ -1,12 +1,8 @@
 package de.bund.digitalservice.ris.search.unit.utils;
 
+import static org.assertj.core.api.Assertions.catchThrowableOfType;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.InstanceOfAssertFactories.MAP;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.spy;
@@ -60,13 +56,13 @@ class LdmlTemporalDataTest {
     XmlDocument xmlDocument = new XmlDocument(testContent.getBytes());
     Map<String, TimeInterval> result =
         LdmlTemporalData.getTemporalDataWithDatesMapping(xmlDocument);
-    assertThat(result.size() == 3);
-    assertThat(result.get("#meta-1_geltzeiten-1_geltungszeitgr-1").start().equals("2003-11-03"));
-    assertNull(result.get("#meta-1_geltzeiten-1_geltungszeitgr-1").end());
-    assertThat(result.get("#meta-1_geltzeiten-1_geltungszeitgr-2").start().equals("2003-11-03"));
-    assertThat(result.get("#meta-1_geltzeiten-1_geltungszeitgr-2").end().equals("2003-11-06"));
-    assertNull(result.get("#meta-1_geltzeiten-1_geltungszeitgr-3").start());
-    assertThat(result.get("#meta-1_geltzeiten-1_geltungszeitgr-3").end().equals("2003-11-01"));
+    assertThat(result).asInstanceOf(MAP).hasSize(3);
+    assertThat(result.get("#meta-1_geltzeiten-1_geltungszeitgr-1").start()).isEqualTo("2003-11-03");
+    assertThat(result.get("#meta-1_geltzeiten-1_geltungszeitgr-1").end()).isNull();
+    assertThat(result.get("#meta-1_geltzeiten-1_geltungszeitgr-2").start()).isEqualTo("2003-11-03");
+    assertThat(result.get("#meta-1_geltzeiten-1_geltungszeitgr-2").end()).isEqualTo("2003-11-06");
+    assertThat(result.get("#meta-1_geltzeiten-1_geltungszeitgr-3").start()).isNull();
+    assertThat(result.get("#meta-1_geltzeiten-1_geltungszeitgr-3").end()).isEqualTo("2003-11-01");
   }
 
   @Test
@@ -75,10 +71,10 @@ class LdmlTemporalDataTest {
     constructor.setAccessible(true);
 
     InvocationTargetException thrown =
-        assertThrows(InvocationTargetException.class, constructor::newInstance);
+        catchThrowableOfType(constructor::newInstance, InvocationTargetException.class);
 
-    assertInstanceOf(IllegalStateException.class, thrown.getCause());
-    assertEquals("Utility class", thrown.getCause().getMessage());
+    assertThat(thrown.getCause()).isInstanceOf(IllegalStateException.class);
+    assertThat(thrown.getCause().getMessage()).isEqualTo("Utility class");
   }
 
   @Test
@@ -92,7 +88,7 @@ class LdmlTemporalDataTest {
 
     Map<String, TimeInterval> result = LdmlTemporalData.getTemporalDataWithDatesMapping(spyXml);
 
-    assertNotNull(result);
-    assertTrue(result.isEmpty());
+    assertThat(result).isNotNull();
+    assertThat(result).asInstanceOf(MAP).isEmpty();
   }
 }
