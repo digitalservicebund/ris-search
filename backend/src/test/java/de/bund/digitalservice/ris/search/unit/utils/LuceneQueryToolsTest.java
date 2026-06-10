@@ -1,6 +1,9 @@
 package de.bund.digitalservice.ris.search.unit.utils;
 
 import static de.bund.digitalservice.ris.search.utils.LuceneQueryTools.checkForInvalidQuery;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -10,7 +13,6 @@ import java.io.IOException;
 import org.apache.hc.core5.http.ProtocolVersion;
 import org.apache.hc.core5.http.message.RequestLine;
 import org.apache.hc.core5.http.message.StatusLine;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.opensearch.client.Response;
 import org.opensearch.client.ResponseException;
@@ -20,11 +22,11 @@ class LuceneQueryToolsTest {
 
   @Test
   void testIsValidLuceneQuery() {
-    Assertions.assertDoesNotThrow(() -> LuceneQueryTools.validateLuceneQuery("test"));
-    Assertions.assertDoesNotThrow(
-        () -> LuceneQueryTools.validateLuceneQuery("decision_date:2024-02-01"));
-    Assertions.assertThrows(
-        CustomValidationException.class, () -> LuceneQueryTools.validateLuceneQuery("(test"));
+    assertThatCode(() -> LuceneQueryTools.validateLuceneQuery("test")).doesNotThrowAnyException();
+    assertThatCode(() -> LuceneQueryTools.validateLuceneQuery("decision_date:2024-02-01"))
+        .doesNotThrowAnyException();
+    assertThatExceptionOfType(CustomValidationException.class)
+        .isThrownBy(() -> LuceneQueryTools.validateLuceneQuery("(test"));
   }
 
   @Test
@@ -45,12 +47,52 @@ class LuceneQueryToolsTest {
     innerException.addSuppressed(new ResponseException(mockResponse));
     when(outerException.getCause()).thenReturn(innerException);
 
-    CustomValidationException thrownException =
-        Assertions.assertThrowsExactly(
-            CustomValidationException.class, () -> checkForInvalidQuery(outerException));
-    Assertions.assertEquals("sort", thrownException.getErrors().getFirst().parameter());
-    Assertions.assertEquals(
-        "Sorting is not supported for param_field",
-        thrownException.getErrors().getFirst().message());
+    assertThatExceptionOfType(CustomValidationException.class)
+        .isThrownBy(() -> checkForInvalidQuery(outerException))
+        .satisfies(
+            e -> {
+              assertThat(e.getErrors().getFirst().parameter()).isEqualTo("sort");
+              assertThat(e.getErrors().getFirst().message())
+                  .isEqualTo("Sorting is not supported for param_field");
+            });
+  }
+
+  @Test
+  void returnsEmptyStringForNull() throws CustomValidationException {
+    assertThat(LuceneQueryTools.joinAllTermsWithOr(null)).isEmpty();
+  }
+
+  @Test
+  void returnsEmptyStringForBlankInput() throws CustomValidationException {
+    assertThat(LuceneQueryTools.joinAllTermsWithOr("   ")).isEmpty();
+  }
+
+  @Test
+  void returnsSingleTerm() throws CustomValidationException {
+    assertThat(LuceneQueryTools.joinAllTermsWithOr("test")).isEqualTo("test");
+  }
+
+  @Test
+  void joinsMultipleTermsWithOr() throws CustomValidationException {
+    var result = LuceneQueryTools.joinAllTermsWithOr("a:foo b:bar");
+    assertThat(result.split(" OR ")).containsExactlyInAnyOrder("a:foo", "b:bar");
+  }
+
+  @Test
+  void extractsTermsFromAndQuery() throws CustomValidationException {
+    var result = LuceneQueryTools.joinAllTermsWithOr("foo AND bar");
+    assertThat(result.split(" OR ")).containsExactlyInAnyOrder("foo", "bar");
+  }
+
+  @Test
+  void preservesFieldPrefixAndEscapesSpecialCharacters() throws CustomValidationException {
+    assertThat(LuceneQueryTools.joinAllTermsWithOr("decision_date:2024-02-01"))
+        .isEqualTo("decision_date:2024\\-02\\-01");
+  }
+
+  @Test
+  void throwsForInvalidLuceneSyntax() {
+    assertThatExceptionOfType(CustomValidationException.class)
+        .isThrownBy(() -> LuceneQueryTools.joinAllTermsWithOr("(test"));
   }
 }
