@@ -28,7 +28,7 @@ class ChangelogResponseMapperTest {
 
     ChangelogResponse actual = ChangelogResponseMapper.mapChangelog(changelog, documentKind);
 
-    assertThat(actual.deleted().isEmpty());
+    assertThat(actual.deleted()).asInstanceOf(SET).isEmpty();
     assertThat(actual.changed())
         .asInstanceOf(SET)
         .hasSize(1)
@@ -47,7 +47,7 @@ class ChangelogResponseMapperTest {
 
     ChangelogResponse actual = ChangelogResponseMapper.mapChangelog(changelog, documentKind);
 
-    assertThat(actual.changed().isEmpty());
+    assertThat(actual.changed()).asInstanceOf(SET).isEmpty();
     assertThat(actual.deleted())
         .asInstanceOf(SET)
         .hasSize(1)
