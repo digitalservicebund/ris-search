@@ -13,7 +13,6 @@ import java.io.IOException;
 import org.apache.hc.core5.http.ProtocolVersion;
 import org.apache.hc.core5.http.message.RequestLine;
 import org.apache.hc.core5.http.message.StatusLine;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.opensearch.client.Response;
 import org.opensearch.client.ResponseException;
@@ -58,46 +57,42 @@ class LuceneQueryToolsTest {
             });
   }
 
-  @Nested
-  class JoinAllTermsWithOr {
+  @Test
+  void returnsEmptyStringForNull() throws CustomValidationException {
+    assertThat(LuceneQueryTools.joinAllTermsWithOr(null)).isEmpty();
+  }
 
-    @Test
-    void returnsEmptyStringForNull() throws CustomValidationException {
-      assertThat(LuceneQueryTools.joinAllTermsWithOr(null)).isEmpty();
-    }
+  @Test
+  void returnsEmptyStringForBlankInput() throws CustomValidationException {
+    assertThat(LuceneQueryTools.joinAllTermsWithOr("   ")).isEmpty();
+  }
 
-    @Test
-    void returnsEmptyStringForBlankInput() throws CustomValidationException {
-      assertThat(LuceneQueryTools.joinAllTermsWithOr("   ")).isEmpty();
-    }
+  @Test
+  void returnsSingleTerm() throws CustomValidationException {
+    assertThat(LuceneQueryTools.joinAllTermsWithOr("test")).isEqualTo("test");
+  }
 
-    @Test
-    void returnsSingleTerm() throws CustomValidationException {
-      assertThat(LuceneQueryTools.joinAllTermsWithOr("test")).isEqualTo("test");
-    }
+  @Test
+  void joinsMultipleTermsWithOr() throws CustomValidationException {
+    var result = LuceneQueryTools.joinAllTermsWithOr("a:foo b:bar");
+    assertThat(result.split(" OR ")).containsExactlyInAnyOrder("a:foo", "b:bar");
+  }
 
-    @Test
-    void joinsMultipleTermsWithOr() throws CustomValidationException {
-      var result = LuceneQueryTools.joinAllTermsWithOr("a:foo b:bar");
-      assertThat(result.split(" OR ")).containsExactlyInAnyOrder("a:foo", "b:bar");
-    }
+  @Test
+  void extractsTermsFromAndQuery() throws CustomValidationException {
+    var result = LuceneQueryTools.joinAllTermsWithOr("foo AND bar");
+    assertThat(result.split(" OR ")).containsExactlyInAnyOrder("foo", "bar");
+  }
 
-    @Test
-    void extractsTermsFromAndQuery() throws CustomValidationException {
-      var result = LuceneQueryTools.joinAllTermsWithOr("foo AND bar");
-      assertThat(result.split(" OR ")).containsExactlyInAnyOrder("foo", "bar");
-    }
+  @Test
+  void preservesFieldPrefixAndEscapesSpecialCharacters() throws CustomValidationException {
+    assertThat(LuceneQueryTools.joinAllTermsWithOr("decision_date:2024-02-01"))
+        .isEqualTo("decision_date:2024\\-02\\-01");
+  }
 
-    @Test
-    void preservesFieldPrefixAndEscapesSpecialCharacters() throws CustomValidationException {
-      assertThat(LuceneQueryTools.joinAllTermsWithOr("decision_date:2024-02-01"))
-          .isEqualTo("decision_date:2024\\-02\\-01");
-    }
-
-    @Test
-    void throwsForInvalidLuceneSyntax() {
-      assertThatExceptionOfType(CustomValidationException.class)
-          .isThrownBy(() -> LuceneQueryTools.joinAllTermsWithOr("(test"));
-    }
+  @Test
+  void throwsForInvalidLuceneSyntax() {
+    assertThatExceptionOfType(CustomValidationException.class)
+        .isThrownBy(() -> LuceneQueryTools.joinAllTermsWithOr("(test"));
   }
 }
