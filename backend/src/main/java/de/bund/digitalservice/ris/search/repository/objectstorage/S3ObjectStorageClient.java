@@ -36,6 +36,7 @@ public class S3ObjectStorageClient implements ObjectStorageClient {
 
   @Getter private final S3Client s3Client;
   private final String bucketName;
+  private String prefix;
   private final Logger logger = LogManager.getLogger(S3ObjectStorageClient.class);
 
   /**
@@ -43,27 +44,39 @@ public class S3ObjectStorageClient implements ObjectStorageClient {
    *
    * @param s3Client the AWS S3 client to use for requests
    * @param bucketName the S3 bucket name this client operates on
+   * @param prefix the prefix to prepend to all object keys (can be null or empty)
    */
-  public S3ObjectStorageClient(S3Client s3Client, String bucketName) {
+  public S3ObjectStorageClient(S3Client s3Client, String bucketName, String prefix) {
     this.s3Client = s3Client;
     this.bucketName = bucketName;
+    this.prefix = prefix != null ? prefix : "";
+  }
+
+  /**
+   * Constructs the full S3 object key by prepending the configured prefix.
+   *
+   * @param path the relative path
+   * @return the full S3 object key with prefix
+   */
+  private String buildObjectKey(String path) {
+    return prefix + (path != null ? path : "");
   }
 
   @Override
   public List<String> listKeysByPrefix(String path) {
-    return listKeysByPrefix(path, S3Object::key);
+    return listKeysByPrefix(buildObjectKey(path), S3Object::key);
   }
 
   @Override
   public List<ObjectKeyInfo> listByPrefixWithLastModified(String path) {
-    return listKeysByPrefix(path, ObjectKeyInfo::fromS3Object);
+    return listKeysByPrefix(buildObjectKey(path), ObjectKeyInfo::fromS3Object);
   }
 
   private <T> List<T> listKeysByPrefix(String path, Function<S3Object, T> mappingFunction) {
     List<T> keys = new ArrayList<>();
     ListObjectsV2Response response;
     ListObjectsV2Request request =
-        ListObjectsV2Request.builder().bucket(bucketName).prefix(path).build();
+        ListObjectsV2Request.builder().bucket(bucketName).prefix(buildObjectKey(path)).build();
     do {
       response = s3Client.listObjectsV2(request);
       keys.addAll(response.contents().stream().map(mappingFunction).toList());
@@ -71,7 +84,7 @@ public class S3ObjectStorageClient implements ObjectStorageClient {
       request =
           ListObjectsV2Request.builder()
               .bucket(bucketName)
-              .prefix(path)
+              .prefix(buildObjectKey(path))
               .continuationToken(token)
               .build();
     } while (Boolean.TRUE.equals(response.isTruncated()));
@@ -82,7 +95,8 @@ public class S3ObjectStorageClient implements ObjectStorageClient {
   @Override
   public ResponseInputStream<GetObjectResponse> getStream(String objectKey)
       throws NoSuchKeyException {
-    GetObjectRequest request = GetObjectRequest.builder().bucket(bucketName).key(objectKey).build();
+    GetObjectRequest request =
+        GetObjectRequest.builder().bucket(bucketName).key(buildObjectKey(objectKey)).build();
     try {
       return s3Client.getObject(request);
     } catch (software.amazon.awssdk.services.s3.model.NoSuchKeyException e) {
@@ -93,7 +107,7 @@ public class S3ObjectStorageClient implements ObjectStorageClient {
   @Override
   public void save(String fileName, String fileContent) {
     PutObjectRequest putObjectRequest =
-        PutObjectRequest.builder().bucket(bucketName).key(fileName).build();
+        PutObjectRequest.builder().bucket(bucketName).key(buildObjectKey(fileName)).build();
     s3Client.putObject(putObjectRequest, RequestBody.fromString(fileContent));
   }
 
@@ -104,7 +118,7 @@ public class S3ObjectStorageClient implements ObjectStorageClient {
 
   @Override
   public void delete(String fileName) {
-    s3Client.deleteObject(builder -> builder.bucket(bucketName).key(fileName));
+    s3Client.deleteObject(builder -> builder.bucket(bucketName).key(buildObjectKey(fileName)));
   }
 
   /**
@@ -117,7 +131,10 @@ public class S3ObjectStorageClient implements ObjectStorageClient {
   @Override
   public long putStream(String objectKey, InputStream inputStream) throws IOException {
     CreateMultipartUploadRequest createRequest =
-        CreateMultipartUploadRequest.builder().bucket(bucketName).key(objectKey).build();
+        CreateMultipartUploadRequest.builder()
+            .bucket(bucketName)
+            .key(buildObjectKey(objectKey))
+            .build();
 
     String uploadId = s3Client.createMultipartUpload(createRequest).uploadId();
     logger.info("Started multipart upload with ID: {}", uploadId);
@@ -137,7 +154,7 @@ public class S3ObjectStorageClient implements ObjectStorageClient {
         UploadPartRequest uploadRequest =
             UploadPartRequest.builder()
                 .bucket(bucketName)
-                .key(objectKey)
+                .key(buildObjectKey(objectKey))
                 .uploadId(uploadId)
                 .partNumber(partNumber)
                 .build();
@@ -159,7 +176,7 @@ public class S3ObjectStorageClient implements ObjectStorageClient {
       CompleteMultipartUploadRequest completeRequest =
           CompleteMultipartUploadRequest.builder()
               .bucket(bucketName)
-              .key(objectKey)
+              .key(buildObjectKey(objectKey))
               .uploadId(uploadId)
               .multipartUpload(upload -> upload.parts(completedParts))
               .build();
@@ -173,7 +190,7 @@ public class S3ObjectStorageClient implements ObjectStorageClient {
       s3Client.abortMultipartUpload(
           AbortMultipartUploadRequest.builder()
               .bucket(bucketName)
-              .key(objectKey)
+              .key(buildObjectKey(objectKey))
               .uploadId(uploadId)
               .build());
       throw e;

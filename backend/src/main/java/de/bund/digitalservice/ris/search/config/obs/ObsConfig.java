@@ -34,6 +34,9 @@ public class ObsConfig {
   @Value("${s3.file-storage.case-law.secret-access-key}")
   private String caseLawSecretAccessKey;
 
+  @Value("${s3.file-storage.case-law.prefix}")
+  private String caseLawPrefx;
+
   @Value("${s3.file-storage.literature.endpoint}")
   private String literatureEndpoint;
 
@@ -42,6 +45,9 @@ public class ObsConfig {
 
   @Value("${s3.file-storage.literature.secret-access-key}")
   private String literatureSecretAccessKey;
+
+  @Value("${s3.file-storage.literature.prefix}")
+  private String literaturePrefx;
 
   @Value("${s3.file-storage.administrative-directive.endpoint}")
   private String administrativeDirectiveEndpoint;
@@ -55,6 +61,9 @@ public class ObsConfig {
   @Value("${s3.file-storage.administrative-directive.secret-access-key}")
   private String administrativeDirectiveSecretAccessKey;
 
+  @Value("${s3.file-storage.administrative-directive.prefix}")
+  private String administrativeDirectivePrefx;
+
   @Value("${s3.file-storage.norm.endpoint}")
   private String normEndpoint;
 
@@ -63,6 +72,9 @@ public class ObsConfig {
 
   @Value("${s3.file-storage.norm.secret-access-key}")
   private String normSecretAccessKey;
+
+  @Value("${s3.file-storage.norm.prefix}")
+  private String normPrefx;
 
   @Value("${s3.file-storage.portal.endpoint}")
   private String portalEndpoint;
@@ -100,7 +112,8 @@ public class ObsConfig {
             .endpointOverride(new URI(normEndpoint))
             .region(Region.of(REGION))
             .build(),
-        bucket);
+        bucket,
+        normPrefx);
   }
 
   /**
@@ -124,7 +137,8 @@ public class ObsConfig {
             .endpointOverride(new URI(caseLawEndpoint))
             .region(Region.of(REGION))
             .build(),
-        bucket);
+        bucket,
+        caseLawPrefx);
   }
 
   @Bean(name = "caseLawS3Client")
@@ -154,7 +168,8 @@ public class ObsConfig {
             .endpointOverride(new URI(literatureEndpoint))
             .region(Region.of(REGION))
             .build(),
-        bucket);
+        bucket,
+        literaturePrefx);
   }
 
   @Bean(name = "literatureS3Client")
@@ -187,7 +202,8 @@ public class ObsConfig {
             .endpointOverride(new URI(administrativeDirectiveEndpoint))
             .region(Region.of(REGION))
             .build(),
-        bucket);
+        bucket,
+        administrativeDirectivePrefx);
   }
 
   @Bean(name = "administrativeDirectiveS3Client")
@@ -217,7 +233,8 @@ public class ObsConfig {
             .endpointOverride(new URI(portalEndpoint))
             .region(Region.of(REGION))
             .build(),
-        bucket);
+        bucket,
+        null);
   }
 
   /**
@@ -240,7 +257,8 @@ public class ObsConfig {
             .endpointOverride(new URI(publicFilesEndpoint))
             .region(Region.of(REGION))
             .build(),
-        bucket);
+        bucket,
+        null);
   }
 
   /**

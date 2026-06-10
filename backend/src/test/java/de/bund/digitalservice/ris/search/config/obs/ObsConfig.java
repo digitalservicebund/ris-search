@@ -22,7 +22,7 @@ public class ObsConfig {
   public ObjectStorageClient mockCaseLawTestS3Client(
       @Value("${local.file-storage}") String relativeLocalStorageDirectory) {
     return new S3ObjectStorageClient(
-        new TestMockS3Client("caselaw", relativeLocalStorageDirectory), "caselaw");
+        new TestMockS3Client("caselaw", relativeLocalStorageDirectory), "caselaw", null);
   }
 
   /**
@@ -37,7 +37,7 @@ public class ObsConfig {
       @Value("${local.file-storage}") String relativeLocalStorageDirectory) {
     var bucketName = "literature";
     return new S3ObjectStorageClient(
-        new TestMockS3Client(bucketName, relativeLocalStorageDirectory), bucketName);
+        new TestMockS3Client(bucketName, relativeLocalStorageDirectory), bucketName, null);
   }
 
   /**
@@ -52,7 +52,7 @@ public class ObsConfig {
       @Value("${local.file-storage}") String relativeLocalStorageDirectory) {
     var bucketName = "administrative-directive";
     return new S3ObjectStorageClient(
-        new TestMockS3Client(bucketName, relativeLocalStorageDirectory), bucketName);
+        new TestMockS3Client(bucketName, relativeLocalStorageDirectory), bucketName, null);
   }
 
   /**
@@ -66,7 +66,7 @@ public class ObsConfig {
   public ObjectStorageClient mockNormTestS3Client(
       @Value("${local.file-storage}") String relativeLocalStorageDirectory) {
     return new S3ObjectStorageClient(
-        new TestMockS3Client("norm", relativeLocalStorageDirectory), "norm");
+        new TestMockS3Client("norm", relativeLocalStorageDirectory), "norm", null);
   }
 
   /**
@@ -80,7 +80,7 @@ public class ObsConfig {
   public ObjectStorageClient mockPortalTestS3Client(
       @Value("${local.file-storage}") String relativeLocalStorageDirectory) {
     return new S3ObjectStorageClient(
-        new TestMockS3Client("portal", relativeLocalStorageDirectory), "portal");
+        new TestMockS3Client("portal", relativeLocalStorageDirectory), "portal", null);
   }
 
   /**
@@ -94,6 +94,6 @@ public class ObsConfig {
   public ObjectStorageClient mockPublicFilesTestS3Client(
       @Value("${local.file-storage}") String relativeLocalStorageDirectory) {
     return new S3ObjectStorageClient(
-        new TestMockS3Client("public", relativeLocalStorageDirectory), "public");
+        new TestMockS3Client("public", relativeLocalStorageDirectory), "public", null);
   }
 }

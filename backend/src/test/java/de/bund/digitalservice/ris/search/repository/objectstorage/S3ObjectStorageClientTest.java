@@ -70,7 +70,7 @@ class S3ObjectStorageClientTest {
   @BeforeEach
   void setUp() {
     MockitoAnnotations.openMocks(this);
-    s3Service = new S3ObjectStorageClient(s3Client, BUCKET_NAME);
+    s3Service = new S3ObjectStorageClient(s3Client, BUCKET_NAME, null);
   }
 
   @Test
