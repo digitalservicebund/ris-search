@@ -143,7 +143,7 @@ public class ObsConfig {
    * @throws URISyntaxException if the endpoint URI is invalid
    */
   @Bean(name = "literatureS3Client")
-  @Profile({"staging"})
+  @Profile({"staging", "uat"})
   public ObjectStorageClient literatureS3Client(
       @Value("${s3.file-storage.literature.bucket-name}") String bucket) throws URISyntaxException {
     return new S3ObjectStorageClient(
@@ -158,7 +158,7 @@ public class ObsConfig {
   }
 
   @Bean(name = "literatureS3Client")
-  @Profile({"uat", "production", "prototype"})
+  @Profile({"production", "prototype"})
   public ObjectStorageClient literatureS3DummyClient() {
     return new ObjectStorageClientDummy();
   }
@@ -173,7 +173,7 @@ public class ObsConfig {
    * @throws URISyntaxException if the endpoint URI is invalid
    */
   @Bean(name = "administrativeDirectiveS3Client")
-  @Profile({"staging"})
+  @Profile({"staging", "uat"})
   public ObjectStorageClient administrativeDirectiveS3Client(
       @Value("${s3.file-storage.administrative-directive.bucket-name}") String bucket)
       throws URISyntaxException {
@@ -191,7 +191,7 @@ public class ObsConfig {
   }
 
   @Bean(name = "administrativeDirectiveS3Client")
-  @Profile({"uat", "production", "prototype"})
+  @Profile({"production", "prototype"})
   public ObjectStorageClient administrativeDirectiveS3DummyClient() {
     return new ObjectStorageClientDummy();
   }
