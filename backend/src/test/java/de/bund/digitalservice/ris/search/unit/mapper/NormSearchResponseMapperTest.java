@@ -71,14 +71,19 @@ class NormSearchResponseMapperTest {
   static Stream<Arguments> provideConvertArticleHitToTextMatchSchemaTestCases() {
     return Stream.of(
         // Test Case 1: Article content with empty highlights
-        Arguments.of(createArticle("Article Name", "Article Text"), Map.of(), null, null, true),
+        Arguments.of(
+            createArticle("Article Name", "Article Text"),
+            Map.of(),
+            "Article Name",
+            "Article Text",
+            false),
         // Test Case 2: Article content with name highlight only
         Arguments.of(
             createArticle("Original Article Name", "Article Text"),
             Map.of("name", List.of("Highlighted Article Name")),
-            null,
-            null,
-            true),
+            "Highlighted Article Name",
+            "Article Text",
+            false),
         // Test Case 3: Article content with text highlight
         Arguments.of(
             createArticle("Article Name", "Original Article Text"),
@@ -94,26 +99,7 @@ class NormSearchResponseMapperTest {
                 "text", List.of("Highlighted Article Text")),
             "Highlighted Article Name",
             "Highlighted Article Text",
-            false),
-        // Test Case 5: Map content with "name" key and no text highlight
-        Arguments.of(Map.of("name", "Article Name", "eid", "eid1"), Map.of(), null, null, true),
-        // Test Case 6: Map content with "name" and "eid" keys and text highlight
-        Arguments.of(
-            Map.of("name", "Article Name", "eid", "eid1"),
-            Map.of("text", List.of("Highlighted Map Article Text")),
-            "Article Name",
-            "Highlighted Map Article Text",
-            false),
-        // Test Case 7: Map content without "name" key
-        Arguments.of(
-            Map.of("otherKey", "Some Value"),
-            Map.of("text", List.of("Highlighted Map Article Text")),
-            null,
-            null,
-            true),
-        // Test Case 8: Content that is neither Article nor Map with "name" key
-        Arguments.of(
-            "Some Content", Map.of("text", List.of("Highlighted Text")), null, null, true));
+            false));
   }
 
   @Test

@@ -14,7 +14,6 @@ import de.bund.digitalservice.ris.search.schema.TextMatchSchema;
 import de.bund.digitalservice.ris.search.utils.DateUtils;
 import de.bund.digitalservice.ris.search.utils.PageUtils;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import org.apache.commons.collections4.ListUtils;
@@ -57,6 +56,11 @@ public class NormSearchResponseMapper {
 
   private static TextMatchSchema convertArticleHitToTextMatchSchema(SearchHit<?> articleHit) {
     var articleHitContent = articleHit.getContent();
+
+    if (!(articleHitContent instanceof Article article)) {
+      throw new RuntimeException("not an instance");
+    }
+
     String articleMatchingName =
         articleHit.getHighlightFields().getOrDefault("name", List.of()).stream()
             .findFirst()
@@ -65,20 +69,10 @@ public class NormSearchResponseMapper {
         articleHit.getHighlightFields().getOrDefault("text", List.of()).stream()
             .findFirst()
             .orElse("");
-    if (articleMatchingText.isEmpty()) return null;
-    if (articleHitContent instanceof Article article) {
-      return toTextMatchSchema(
-          articleMatchingName.isEmpty() ? article.getName() : articleMatchingName,
-          articleMatchingText,
-          article.getEId());
-    }
-    if (articleHitContent instanceof Map<?, ?> hit
-        && hit.containsKey("name")
-        && hit.containsKey("eid")) {
-      return toTextMatchSchema(
-          hit.get("name").toString(), articleMatchingText, hit.get("eid").toString());
-    }
-    return null;
+    return toTextMatchSchema(
+        articleMatchingName.isEmpty() ? article.getName() : articleMatchingName,
+        articleMatchingText.isEmpty() ? article.getText() : articleMatchingText,
+        article.getEId());
   }
 
   /**
