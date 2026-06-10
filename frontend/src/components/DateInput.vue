@@ -176,9 +176,9 @@ function focus() {
 
 async function clear() {
   inputValue.value = "";
-  // Setting v-model to "" alone is not enough to reset InputMask's internal
-  // character buffer when :auto-clear is false. Changing :key forces Vue to
-  // fully unmount and remount the component, giving us a guaranteed clean slate.
+  // Setting v-model to "" alone is apparently not enough to reset InputMask's internal
+  // buffer. Changing :key forces Vue to fully unmount and remount the component,
+  // which makes sure the input is actually cleared when the user starts typing again.
   key.value = crypto.randomUUID();
   await nextTick();
   focus();
