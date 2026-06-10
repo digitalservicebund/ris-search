@@ -11,8 +11,13 @@ allowBuilds:
 
 minimumReleaseAge: 4320
 minimumReleaseAgeExclude:
-  - vite
-  - "@digitalservicebund/ris-ui"
+  - playwright
+  - playwright-core
+  - "@playwright/test"
+  - "@tailwindcss/oxide"
+  - tailwindcss
+  - "@tailwindcss/node"
+  - "@tailwindcss/vite"
 
 publicHoistPattern:
   - "vue"
