@@ -71,19 +71,14 @@ class NormSearchResponseMapperTest {
   static Stream<Arguments> provideConvertArticleHitToTextMatchSchemaTestCases() {
     return Stream.of(
         // Test Case 1: Article content with empty highlights
-        Arguments.of(
-            createArticle("Article Name", "Article Text"),
-            Map.of(),
-            "Article Name",
-            "Article Text",
-            false),
-        // Test Case 2: Article content with name highlight
+        Arguments.of(createArticle("Article Name", "Article Text"), Map.of(), null, null, true),
+        // Test Case 2: Article content with name highlight only
         Arguments.of(
             createArticle("Original Article Name", "Article Text"),
             Map.of("name", List.of("Highlighted Article Name")),
-            "Highlighted Article Name",
-            "Article Text",
-            false),
+            null,
+            null,
+            true),
         // Test Case 3: Article content with text highlight
         Arguments.of(
             createArticle("Article Name", "Original Article Text"),
@@ -101,8 +96,7 @@ class NormSearchResponseMapperTest {
             "Highlighted Article Text",
             false),
         // Test Case 5: Map content with "name" key and no text highlight
-        Arguments.of(
-            Map.of("name", "Article Name", "eid", "eid1"), Map.of(), "Article Name", "", false),
+        Arguments.of(Map.of("name", "Article Name", "eid", "eid1"), Map.of(), null, null, true),
         // Test Case 6: Map content with "name" and "eid" keys and text highlight
         Arguments.of(
             Map.of("name", "Article Name", "eid", "eid1"),

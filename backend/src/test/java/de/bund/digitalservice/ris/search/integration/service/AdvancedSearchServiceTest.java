@@ -161,22 +161,14 @@ class AdvancedSearchServiceTest extends ContainersIntegrationBase {
             .getSearchHits()
             .getSearchHit(0);
 
-    // Check that the title was highlighted
+    // The ELI query does not match any content fields, so no highlights are returned
     Map<String, String> nonArticleHighlights = getFieldMatches(searchHit);
-    assertThat(nonArticleHighlights).containsOnly(Map.entry("officialTitle", "Test Gesetz"));
+    assertThat(nonArticleHighlights).isEmpty();
 
-    // check the article highlights work
-    List<Pair<String, String>> articleHighlights =
-        searchHit
-            .getInnerHits()
-            .get("top_three_articles")
-            .get()
-            .map(this::getArticleTextMatch)
-            .toList();
-    assertThat(articleHighlights)
-        .containsExactly(
-            Pair.of("§ 1 Example article", "example text 1"),
-            Pair.of("§ 2 Example article", "example text 2"));
+    // Articles are still returned (the expression_eli filter matches), but without highlight text
+    var articleInnerHits = searchHit.getInnerHits().get("top_three_articles");
+    assertThat(articleInnerHits).hasSize(2);
+    articleInnerHits.forEach(hit -> assertThat(getFieldMatches(hit)).isEmpty());
   }
 
   private Pair<String, String> getArticleTextMatch(SearchHit<?> searchHit) {
