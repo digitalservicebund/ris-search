@@ -1,6 +1,6 @@
 package de.bund.digitalservice.ris.search.unit.utils;
 
-import static org.assertj.core.api.Assertions.catchThrowableOfType;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.InstanceOfAssertFactories.MAP;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -70,11 +70,11 @@ class LdmlTemporalDataTest {
     Constructor<LdmlTemporalData> constructor = LdmlTemporalData.class.getDeclaredConstructor();
     constructor.setAccessible(true);
 
-    InvocationTargetException thrown =
-        catchThrowableOfType(constructor::newInstance, InvocationTargetException.class);
-
-    assertThat(thrown.getCause()).isInstanceOf(IllegalStateException.class);
-    assertThat(thrown.getCause().getMessage()).isEqualTo("Utility class");
+    assertThatThrownBy(constructor::newInstance)
+        .isInstanceOf(InvocationTargetException.class)
+        .cause()
+        .isInstanceOf(IllegalStateException.class)
+        .hasMessage("Utility class");
   }
 
   @Test
