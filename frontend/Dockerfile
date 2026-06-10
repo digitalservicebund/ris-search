@@ -22,10 +22,11 @@ WORKDIR /app
 COPY --chown=node:node --from=build /app/.output/server ./server
 COPY --chown=node:node --from=build /app/.output/public ./public
 COPY --chown=node:node --from=build /app/.output/nitro.json ./nitro.json
+COPY --chown=node:node start.sh ./start.sh
 
 EXPOSE 3000
 ENV HOST=0.0.0.0 \
   PORT=3000 \
   SENTRY_RELEASE=${SENTRY_RELEASE}
 ENTRYPOINT ["/usr/bin/dumb-init", "--"]
-CMD ["node", "--import", "/app/server/sentry.server.config.mjs", "/app/server/index.mjs"]
+CMD ["sh", "start.sh"]
