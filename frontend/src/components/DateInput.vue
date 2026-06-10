@@ -2,8 +2,9 @@
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import { InputMask } from "primevue";
-import { computed, ref, useTemplateRef, watch } from "vue";
+import { computed, nextTick, ref, useTemplateRef, watch } from "vue";
 import IconErrorOutline from "~icons/ic/baseline-error-outline";
+import ClearButtonWrapper from "~/components/ClearButtonWrapper.vue";
 
 /** Form field validation error. */
 export type ValidationError = {
@@ -36,6 +37,9 @@ const props = withDefaults(
 
     /** Validation error and message to display. */
     validationError?: ValidationError;
+
+    /** Whether to show a clear button. */
+    withClearButton?: boolean;
   }>(),
   {
     modelValue: "",
@@ -43,6 +47,7 @@ const props = withDefaults(
     isReadOnly: false,
     label: undefined,
     validationError: undefined,
+    withClearButton: false,
   },
 );
 
@@ -126,6 +131,8 @@ const isValidDate = computed(() => {
   return dayjs(inputValue.value, HUMAN_READABLE_FORMAT, true).isValid();
 });
 
+const key = ref<string>();
+
 function validateInput() {
   if (inputCompleted.value) {
     if (isValidDate.value) {
@@ -167,13 +174,27 @@ function focus() {
   inputMaskEl.value?.$el.focus();
 }
 
+async function clear() {
+  inputValue.value = "";
+  // Setting v-model to "" alone is not enough to reset InputMask's internal
+  // character buffer when :auto-clear is false. Changing :key forces Vue to
+  // fully unmount and remount the component, giving us a guaranteed clean slate.
+  key.value = crypto.randomUUID();
+  await nextTick();
+  focus();
+}
+
 defineExpose({ focus });
 </script>
 
 <template>
-  <div class="flex w-full flex-col gap-2">
+  <ClearButtonWrapper
+    :clearButtonVisible="!!inputValue && props.withClearButton"
+    @clear="clear"
+  >
     <InputMask
       :id="id"
+      :key
       ref="inputMaskEl"
       v-model="inputValue"
       :auto-clear="false"
@@ -191,5 +212,5 @@ defineExpose({ focus });
       <IconErrorOutline />
       {{ errorMessage }}
     </small>
-  </div>
+  </ClearButtonWrapper>
 </template>
