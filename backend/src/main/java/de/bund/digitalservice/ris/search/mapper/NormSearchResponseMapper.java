@@ -65,10 +65,11 @@ public class NormSearchResponseMapper {
         articleHit.getHighlightFields().getOrDefault("text", List.of()).stream()
             .findFirst()
             .orElse("");
+    if (articleMatchingText.isEmpty()) return null;
     if (articleHitContent instanceof Article article) {
       return toTextMatchSchema(
           articleMatchingName.isEmpty() ? article.getName() : articleMatchingName,
-          articleMatchingText.isEmpty() ? article.getText() : articleMatchingText,
+          articleMatchingText,
           article.getEId());
     }
     if (articleHitContent instanceof Map<?, ?> hit

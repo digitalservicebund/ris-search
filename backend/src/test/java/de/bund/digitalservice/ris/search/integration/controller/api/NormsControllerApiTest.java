@@ -2,6 +2,7 @@ package de.bund.digitalservice.ris.search.integration.controller.api;
 
 import static de.bund.digitalservice.ris.ZipTestUtils.readZipStream;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
@@ -422,15 +423,9 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
         .andExpect(jsonPath("$.member[*].articles", hasSize(0)))
         .andExpect(jsonPath("$.member[*].textMatches").value(hasSize(3)))
         .andExpect(jsonPath("$.member[0].textMatches[0].@type").value(equalTo("SearchResultMatch")))
-        .andExpect(
-            jsonPath("$.member[0].textMatches[*].name")
-                .value(containsInAnyOrder("name", "§ 1 Example article", "§ 2 Example article")))
-        .andExpect(
-            jsonPath("$.member[0].textMatches[*].location")
-                .value(containsInAnyOrder(null, "art-z1", "art-z2")))
-        .andExpect(
-            jsonPath("$.member[0].textMatches[*].text")
-                .value(containsInAnyOrder(highlightedMatch, "example text 1", "example text 2")));
+        .andExpect(jsonPath("$.member[0].textMatches[*].name").value(contains("name")))
+        .andExpect(jsonPath("$.member[0].textMatches[*].location").value(contains((Object) null)))
+        .andExpect(jsonPath("$.member[0].textMatches[*].text").value(contains(highlightedMatch)));
   }
 
   @Test

@@ -67,10 +67,7 @@ class NlexServiceTest extends ContainersIntegrationBase {
 
     assertThat(firstDocument.getContent().getParaList())
         .extracting(Para::getRoles, Para::getValue)
-        .containsExactlyInAnyOrder(
-            tuple("zoom", "example text 1"),
-            tuple("zoom", "example text 2"),
-            tuple("zoom", "<mark>Test</mark> Gesetz"));
+        .containsExactlyInAnyOrder(tuple("zoom", "<mark>Test</mark> Gesetz"));
   }
 
   @Test
