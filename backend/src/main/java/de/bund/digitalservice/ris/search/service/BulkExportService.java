@@ -19,6 +19,7 @@ import java.util.concurrent.Semaphore;
 import java.util.function.Predicate;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
+import lombok.Value;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -35,6 +36,16 @@ public class BulkExportService implements Job {
   private final String prefix;
   private final Predicate<String> keyFilter;
 
+  /**
+   * Job to include potentially all files from a source bucket in a zip file and store it in a
+   * destination bucket.
+   *
+   * @param sourceBucket the ObjectStorage bucket to read files from
+   * @param destinationBucket the ObjectStorage bucket to upload the ZIP archive to
+   * @param outputName the base name for the output ZIP file
+   * @param prefix the prefix to filter objects in the sourceBucket
+   * @param keyFilter filter to exclude files based on their keys
+   */
   public BulkExportService(
       ObjectStorage sourceBucket,
       ObjectStorage destinationBucket,
@@ -91,6 +102,10 @@ public class BulkExportService implements Job {
                       resultObjectKey,
                       FileUtils.byteCountToDisplaySize(byteCount)));
 
+    } catch (InterruptedException e) {
+      logger.error("Bulk export execution was interrupted.", e);
+      Thread.currentThread().interrupt();
+      return ReturnCode.ERROR;
     } catch (Exception e) {
       logger.error("Bulk export execution failed or was aborted due to structural error.", e);
       return ReturnCode.ERROR;
@@ -105,9 +120,13 @@ public class BulkExportService implements Job {
     return ReturnCode.SUCCESS;
   }
 
-  private record FileData(String key, byte[] bytes) {
-    private static final FileData END_OF_STREAM = new FileData("SIGNAL_SUCCESS", null);
-    private static final FileData STREAM_ERROR = new FileData("SIGNAL_FAILURE", null);
+  @Value
+  static class FileData {
+    String key;
+    byte[] bytes;
+
+    public static final FileData END_OF_STREAM = new FileData("SIGNAL_SUCCESS", null);
+    public static final FileData STREAM_ERROR = new FileData("SIGNAL_FAILURE", null);
   }
 
   private static final class S3BatchDownloader implements Runnable {
@@ -188,11 +207,13 @@ public class BulkExportService implements Job {
                 "Aborting archive compilation due to an upstream download failure.");
           }
 
-          ZipEntry entry = new ZipEntry(fileData.key());
+          ZipEntry entry = new ZipEntry(fileData.getKey());
           zos.putNextEntry(entry);
-          zos.write(fileData.bytes());
+          zos.write(fileData.getBytes());
           zos.closeEntry();
         }
+      } catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
       } catch (Exception e) {
         throw new UncheckedIOException(
             new IOException("ZIP production engine encountered a failure status", e));

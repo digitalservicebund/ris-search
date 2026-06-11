@@ -18,7 +18,6 @@ import de.bund.digitalservice.ris.search.exception.NoSuchKeyException;
 import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
 import de.bund.digitalservice.ris.search.service.BulkExportService;
 import de.bund.digitalservice.ris.search.service.Job;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
@@ -26,22 +25,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.Function;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import software.amazon.awssdk.core.ResponseInputStream;
-import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 
 class BulkExportServiceTest {
 
-  final Function<byte[], ResponseInputStream<GetObjectResponse>> makeInputStream =
-      bytes -> {
-        final var stream = new ByteArrayInputStream(bytes);
-        return new ResponseInputStream<>(Mockito.mock(GetObjectResponse.class), stream);
-      };
-
   @Test
-  void runJob_successfulZipAndUpload() throws IOException, NoSuchKeyException {
+  void runJob_successfulZipAndUpload() throws IOException {
     ObjectStorage sourceBucket = mock(ObjectStorage.class);
     ObjectStorage destinationBucket = mock(ObjectStorage.class);
     String outputName = "test-export";
@@ -86,7 +75,7 @@ class BulkExportServiceTest {
   }
 
   @Test
-  void runJob_withObsoleteFiles_shouldDeleteThem() throws IOException, NoSuchKeyException {
+  void runJob_withObsoleteFiles_shouldDeleteThem() throws IOException {
     ObjectStorage sourceBucket = mock(ObjectStorage.class);
     ObjectStorage destinationBucket = mock(ObjectStorage.class);
     String outputName = "test-export";
@@ -140,7 +129,7 @@ class BulkExportServiceTest {
 
   @Test
   void runJob_destinationBucketPutStreamThrowsIOException_shouldReturnWithErrorCode()
-      throws IOException, NoSuchKeyException {
+      throws IOException {
     ObjectStorage sourceBucket = mock(ObjectStorage.class);
     ObjectStorage destinationBucket = mock(ObjectStorage.class);
 
@@ -172,7 +161,7 @@ class BulkExportServiceTest {
   }
 
   @Test
-  void runJob_whenContentOfKeyIsNotFound_shouldReturnWithErrorCode() throws NoSuchKeyException {
+  void runJob_whenContentOfKeyIsNotFound_shouldReturnWithErrorCode() {
     ObjectStorage sourceBucket = mock(ObjectStorage.class);
     ObjectStorage destinationBucket = mock(ObjectStorage.class);
 
