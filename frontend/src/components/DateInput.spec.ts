@@ -22,6 +22,7 @@ function renderComponent(options?: {
   modelValue?: string;
   validationError?: ValidationError;
   isReadOnly?: boolean;
+  withClearButton?: boolean;
   stubs?: Record<string, object>;
 }) {
   const user = userEvent.setup();
@@ -30,6 +31,7 @@ function renderComponent(options?: {
     modelValue: options?.modelValue,
     validationError: options?.validationError,
     isReadOnly: options?.isReadOnly,
+    withClearButton: options?.withClearButton,
   };
   const utils = render(DateInput, {
     props,
@@ -212,5 +214,42 @@ describe("DateInput", () => {
     expect(input).toHaveValue("29.02.2001");
 
     expect(screen.getByText("Ungültige Eingabe")).toBeInTheDocument();
+  });
+
+  describe("clear button", () => {
+    it("is not shown when withClearButton prop is not set", () => {
+      renderComponent({ modelValue: "2024-04-22" });
+      expect(
+        screen.queryByRole("button", { name: "Entfernen" }),
+      ).not.toBeInTheDocument();
+    });
+
+    it("is not shown when the input is empty", () => {
+      renderComponent({ withClearButton: true });
+      expect(
+        screen.queryByRole("button", { name: "Entfernen" }),
+      ).not.toBeInTheDocument();
+    });
+
+    it("is shown when the input has a value", () => {
+      renderComponent({ modelValue: "2024-04-22", withClearButton: true });
+      expect(
+        screen.getByRole("button", { name: "Entfernen" }),
+      ).toBeInTheDocument();
+    });
+
+    it("clears the input when clicked", async () => {
+      const { emitted } = renderComponent({
+        modelValue: "2024-04-22",
+        withClearButton: true,
+        stubs: { InputMask: InputText },
+      });
+
+      await userEvent.click(screen.getByRole("button", { name: "Entfernen" }));
+      await nextTick();
+
+      expect(screen.getByRole("textbox")).toHaveValue("");
+      expect(emitted("update:modelValue")).toContainEqual([undefined]);
+    });
   });
 });
