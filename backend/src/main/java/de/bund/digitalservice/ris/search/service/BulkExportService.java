@@ -74,7 +74,7 @@ public class BulkExportService implements Job {
     String resultObjectKey = affectedPrefix + "_" + timestamp + ".zip";
     List<String> obsoleteObjectKeys = destinationBucket.getAllKeysByPrefix(affectedPrefix);
 
-    BlockingQueue<FileData> downloadQueue = new ArrayBlockingQueue<>(1000);
+    BlockingQueue<FileData> downloadQueue = new ArrayBlockingQueue<>(20);
 
     try (PipedInputStream pipedInputStream = new PipedInputStream(1024 * 1024 * 5);
         PipedOutputStream pipedOutputStream = new PipedOutputStream(pipedInputStream);
@@ -136,7 +136,7 @@ public class BulkExportService implements Job {
     private final ObjectStorage sourceBucket;
     private final List<String> keysToDownload;
     private final BlockingQueue<FileData> outputQueue;
-    private final Semaphore throttle = new Semaphore(250);
+    private final Semaphore throttle = new Semaphore(20);
 
     public S3BatchDownloader(
         ObjectStorage sourceBucket,
@@ -149,37 +149,44 @@ public class BulkExportService implements Job {
 
     @Override
     public void run() {
-      try (ExecutorService pool = Executors.newVirtualThreadPerTaskExecutor()) {
-        for (String key : keysToDownload) {
-          pool.submit(
-              () -> {
-                try {
-                  throttle.acquire();
-                  Optional<byte[]> fileBytes = sourceBucket.get(key);
-
-                  if (fileBytes.isEmpty()) {
-                    log.error("Fail-Fast triggered: Object key '{}' not found in storage.", key);
-                    outputQueue.put(FileData.STREAM_ERROR);
-                    return;
-                  }
-
-                  outputQueue.put(new FileData(key, fileBytes.get()));
-
-                } catch (InterruptedException e) {
-                  Thread.currentThread().interrupt();
-                } catch (Exception e) {
-                  log.error("Unexpected download failure for key '{}'", key, e);
-                  outputQueue.add(FileData.STREAM_ERROR);
-                } finally {
-                  throttle.release();
-                }
-              });
-        }
-      }
-
       try {
+        try (ExecutorService pool = Executors.newVirtualThreadPerTaskExecutor()) {
+          for (String key : keysToDownload) {
+            throttle.acquire();
+            pool.submit(
+                () -> {
+                  try {
+                    Optional<byte[]> fileBytes = sourceBucket.get(key);
+
+                    if (fileBytes.isEmpty()) {
+                      log.error("Fail-Fast triggered: Object key '{}' not found in storage.", key);
+                      outputQueue.put(FileData.STREAM_ERROR);
+                      return;
+                    }
+
+                    outputQueue.put(new FileData(key, fileBytes.get()));
+
+                  } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                  } catch (Exception e) {
+                    log.error("Unexpected download failure for key '{}'", key, e);
+
+                    try {
+                      outputQueue.put(FileData.STREAM_ERROR);
+                    } catch (InterruptedException ex) {
+                      Thread.currentThread().interrupt();
+                    }
+                  } finally {
+                    throttle.release();
+                  }
+                });
+          }
+        }
+
         outputQueue.put(FileData.END_OF_STREAM);
+
       } catch (InterruptedException e) {
+        log.warn("Downloader orchestrator execution was interrupted.");
         Thread.currentThread().interrupt();
       }
     }
