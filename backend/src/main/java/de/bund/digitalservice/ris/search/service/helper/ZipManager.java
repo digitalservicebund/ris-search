@@ -8,10 +8,14 @@ import java.io.OutputStream;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /** Utility class for creating zip archives from S3 objects. */
 public class ZipManager {
   private ZipManager() {}
+
+  private static final Logger logger = LogManager.getLogger(ZipManager.class);
 
   /**
    * Writes a zip archive containing the objects from the given S3 keys to the provided output
@@ -24,9 +28,15 @@ public class ZipManager {
    */
   public static void writeZipArchive(
       ObjectStorage s3Bucket, List<String> keys, OutputStream outputStream) throws IOException {
+
+    int numKeys = keys.size();
+    logger.info("writing zip archive");
     try (ZipOutputStream zipOut = new ZipOutputStream(outputStream)) {
+      int i = 1;
       for (String key : keys) {
         appendZipEntryFromS3(s3Bucket, key, zipOut);
+        logger.info("written file {} of {}", i, numKeys);
+        i++;
       }
     } catch (IOException e) {
       throw new IOException("error building ZipOutputStream with keys %s".formatted(keys), e);
