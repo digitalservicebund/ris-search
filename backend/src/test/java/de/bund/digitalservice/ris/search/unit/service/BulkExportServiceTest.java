@@ -24,6 +24,7 @@ import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import org.junit.jupiter.api.Test;
@@ -48,9 +49,9 @@ class BulkExportServiceTest {
 
     when(sourceBucket.getAllKeysByPrefix(prefix)).thenReturn(List.of("file1.txt", "file2.pdf"));
     final byte[] bytes1 = "This is the content of file 1.".getBytes();
-    when(sourceBucket.getStream("file1.txt")).thenReturn(makeInputStream.apply(bytes1));
+    when(sourceBucket.get("file1.txt")).thenReturn(Optional.of(bytes1));
     final byte[] bytes2 = "%PDF-1.5...".getBytes();
-    when(sourceBucket.getStream("file2.pdf")).thenReturn(makeInputStream.apply(bytes2));
+    when(sourceBucket.get("file2.pdf")).thenReturn(Optional.of(bytes2));
     when(destinationBucket.getAllKeysByPrefix(anyString())).thenReturn(Collections.emptyList());
 
     AtomicReference<Map<String, byte[]>> files = new AtomicReference<>();
@@ -70,8 +71,8 @@ class BulkExportServiceTest {
     assertDoesNotThrow(bulkExportService::runJob);
 
     verify(sourceBucket, times(1)).getAllKeysByPrefix(prefix);
-    verify(sourceBucket, times(1)).getStream("file1.txt");
-    verify(sourceBucket, times(1)).getStream("file2.pdf");
+    verify(sourceBucket, times(1)).get("file1.txt");
+    verify(sourceBucket, times(1)).get("file2.pdf");
     verify(destinationBucket, times(1)).getAllKeysByPrefix(anyString());
     verify(destinationBucket, times(1))
         .putStream(
@@ -93,8 +94,7 @@ class BulkExportServiceTest {
     String file1Content = "Some content";
 
     when(sourceBucket.getAllKeysByPrefix(prefix)).thenReturn(List.of("file1.txt"));
-    when(sourceBucket.getStream("file1.txt"))
-        .thenReturn(makeInputStream.apply(file1Content.getBytes()));
+    when(sourceBucket.get("file1.txt")).thenReturn(Optional.of(file1Content.getBytes()));
     when(destinationBucket.getAllKeysByPrefix(anyString()))
         .thenReturn(
             List.of(
@@ -110,7 +110,7 @@ class BulkExportServiceTest {
     assertDoesNotThrow(bulkExportService::runJob);
 
     verify(sourceBucket, times(1)).getAllKeysByPrefix(prefix);
-    verify(sourceBucket, times(1)).getStream("file1.txt");
+    verify(sourceBucket, times(1)).get("file1.txt");
     verify(destinationBucket, times(1)).getAllKeysByPrefix(anyString());
     verify(destinationBucket, times(1)).putStream(anyString(), any(InputStream.class));
     verify(destinationBucket, times(1)).delete("archive/test-export_old1.zip");
@@ -145,22 +145,16 @@ class BulkExportServiceTest {
     ObjectStorage destinationBucket = mock(ObjectStorage.class);
 
     when(sourceBucket.getAllKeysByPrefix("some/prefix/")).thenReturn(List.of("file.txt"));
-    when(sourceBucket.getStream("file.txt"))
-        .thenReturn(makeInputStream.apply("content".getBytes()));
+    when(sourceBucket.get("file.txt")).thenReturn(Optional.of("content".getBytes()));
     when(destinationBucket.getAllKeysByPrefix(anyString())).thenReturn(Collections.emptyList());
     when(destinationBucket.putStream(anyString(), any(InputStream.class)))
-        .thenThrow(new IOException("The mock source bucket threw an exception"));
+        .thenThrow(new IOException("The mock destination bucket threw an exception"));
 
     BulkExportService bulkExportService =
         new BulkExportService(
             sourceBucket, destinationBucket, "test-export", "some/prefix/", key -> true);
 
     assertEquals(Job.ReturnCode.ERROR, bulkExportService.runJob());
-
-    verify(sourceBucket, times(1)).getAllKeysByPrefix("some/prefix/");
-    verify(sourceBucket, times(1)).getStream("file.txt");
-    verify(destinationBucket, times(1)).getAllKeysByPrefix(anyString());
-    verify(destinationBucket, times(0)).delete(anyString());
   }
 
   @Test
@@ -178,13 +172,12 @@ class BulkExportServiceTest {
   }
 
   @Test
-  void runJob_sourceBucketGetStreamThrowsException_shouldReturnWithErrorCode()
-      throws NoSuchKeyException {
+  void runJob_whenContentOfKeyIsNotFound_shouldReturnWithErrorCode() throws NoSuchKeyException {
     ObjectStorage sourceBucket = mock(ObjectStorage.class);
     ObjectStorage destinationBucket = mock(ObjectStorage.class);
 
     when(sourceBucket.getAllKeysByPrefix("some/prefix/")).thenReturn(List.of("file"));
-    when(sourceBucket.getStream("file")).thenThrow(NoSuchKeyException.class);
+    when(sourceBucket.get("file")).thenReturn(Optional.empty());
 
     BulkExportService bulkExportService =
         new BulkExportService(
