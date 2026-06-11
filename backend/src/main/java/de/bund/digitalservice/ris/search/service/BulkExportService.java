@@ -81,7 +81,8 @@ public class BulkExportService implements Job {
         ExecutorService orchestrator = Executors.newFixedThreadPool(2)) {
 
       Runnable downloaderTask = new S3BatchDownloader(sourceBucket, keysToZip, downloadQueue);
-      Runnable zipperTask = new ZipStreamConsumer(downloadQueue, pipedOutputStream);
+      Runnable zipperTask =
+          new ZipStreamConsumer(downloadQueue, pipedOutputStream, keysToZip.size());
 
       Future<?> downloadWorker = orchestrator.submit(downloaderTask);
       Future<?> zipWorker = orchestrator.submit(zipperTask);
@@ -187,14 +188,21 @@ public class BulkExportService implements Job {
   private static final class ZipStreamConsumer implements Runnable {
     private final BlockingQueue<FileData> inputQueue;
     private final OutputStream outputPipe;
+    private final int totalFileCount;
 
-    public ZipStreamConsumer(BlockingQueue<FileData> inputQueue, OutputStream outputPipe) {
+    private final Logger logger = LogManager.getLogger(ZipStreamConsumer.class);
+
+    public ZipStreamConsumer(
+        BlockingQueue<FileData> inputQueue, OutputStream outputPipe, int totalFileCount) {
       this.inputQueue = inputQueue;
       this.outputPipe = outputPipe;
+      this.totalFileCount = totalFileCount;
     }
 
     @Override
     public void run() {
+      int processedCount = 0;
+
       try (ZipOutputStream zos = new ZipOutputStream(new BufferedOutputStream(outputPipe))) {
         while (true) {
           FileData fileData = inputQueue.take();
@@ -211,6 +219,14 @@ public class BulkExportService implements Job {
           zos.putNextEntry(entry);
           zos.write(fileData.getBytes());
           zos.closeEntry();
+
+          processedCount++;
+          if (processedCount % 10000 == 0 || processedCount == totalFileCount) {
+            logger.info(
+                "Bulk export progress: {}/{} files packaged for upload",
+                processedCount,
+                totalFileCount);
+          }
         }
       } catch (InterruptedException e) {
         Thread.currentThread().interrupt();

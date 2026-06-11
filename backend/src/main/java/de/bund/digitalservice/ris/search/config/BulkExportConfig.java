@@ -30,7 +30,7 @@ public class BulkExportConfig {
    */
   @Bean
   public BulkExportService caseLawBulkExport(CaseLawBucket source, PublicFilesBucket target) {
-    return new BulkExportService(source, target, "case-law", "KARE", filterChangelogFiles());
+    return new BulkExportService(source, target, "case-law", "", filterChangelogFiles());
   }
 
   private Predicate<String> filterChangelogFiles() {
