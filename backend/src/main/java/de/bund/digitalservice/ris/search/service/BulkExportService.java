@@ -1,7 +1,6 @@
 package de.bund.digitalservice.ris.search.service;
 
 import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
-import de.bund.digitalservice.ris.search.service.helper.ZipManager;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -10,11 +9,17 @@ import java.io.PipedOutputStream;
 import java.io.UncheckedIOException;
 import java.time.Instant;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
+import java.util.Optional;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.Semaphore;
 import java.util.function.Predicate;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
+import lombok.Value;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -54,14 +59,8 @@ public class BulkExportService implements Job {
     this.keyFilter = keyFilter;
   }
 
-  /**
-   * Creates a ZIP archive of all objects in the sourceBucket with the given prefix, uploads it to
-   * the destinationBucket, and deletes obsolete archives.
-   *
-   * @return ReturnCode
-   */
+  @Override
   public ReturnCode runJob() {
-
     String timestamp = Instant.now().toString();
     List<String> keysToZip =
         sourceBucket.getAllKeysByPrefix(prefix).stream().filter(keyFilter).toList();
@@ -75,31 +74,24 @@ public class BulkExportService implements Job {
     String resultObjectKey = affectedPrefix + "_" + timestamp + ".zip";
     List<String> obsoleteObjectKeys = destinationBucket.getAllKeysByPrefix(affectedPrefix);
 
-    // Setup the pipe with a larger buffer (5MB) to reduce thread context-switching
+    BlockingQueue<FileData> downloadQueue = new ArrayBlockingQueue<>(1000);
+
     try (PipedInputStream pipedInputStream = new PipedInputStream(1024 * 1024 * 5);
         PipedOutputStream pipedOutputStream = new PipedOutputStream(pipedInputStream);
-        ExecutorService executorService = Executors.newFixedThreadPool(1)) {
+        ExecutorService orchestrator = Executors.newFixedThreadPool(2)) {
 
-      // Background Task: Run the ZIP engine on the thread pool
-      Future<?> zipFuture =
-          executorService.submit(
-              () -> {
-                // Wrap in BufferedOutputStream to prevent tiny, slow writes to the pipe
-                try (OutputStream bufferedOut = new BufferedOutputStream(pipedOutputStream)) {
-                  ZipManager.writeZipArchive(sourceBucket, keysToZip, bufferedOut);
-                } catch (IOException e) {
-                  logger.error("Error inside ZIP background thread.", e);
-                  // trigger ExecutionException when retrieving result of zip thread
-                  throw new UncheckedIOException(e);
-                }
-              });
+      Runnable downloaderTask = new S3BatchDownloader(sourceBucket, keysToZip, downloadQueue);
+      Runnable zipperTask = new ZipStreamConsumer(downloadQueue, pipedOutputStream);
 
-      // Stream the data directly into the destination bucket
-      // putStream blocks here and pulls data out of the pipe as the background thread pushes it in
+      Future<?> downloadWorker = orchestrator.submit(downloaderTask);
+      Future<?> zipWorker = orchestrator.submit(zipperTask);
+
+      // Main thread blocks here, piping input data directly to S3
       long byteCount = destinationBucket.putStream(resultObjectKey, pipedInputStream);
 
-      // Ensure the background thread finished completely and check for errors
-      zipFuture.get();
+      // Check background worker health
+      downloadWorker.get();
+      zipWorker.get();
 
       logger.log(
           Level.INFO,
@@ -111,21 +103,121 @@ public class BulkExportService implements Job {
                       FileUtils.byteCountToDisplaySize(byteCount)));
 
     } catch (InterruptedException e) {
-      logger.error("Job execution was interrupted", e);
+      logger.error("Bulk export execution was interrupted.", e);
       Thread.currentThread().interrupt();
       return ReturnCode.ERROR;
-
-    } catch (ExecutionException | IOException e) {
-      logger.error("Error processing key '{}'", keysToZip, e);
+    } catch (Exception e) {
+      logger.error("Bulk export execution failed or was aborted due to structural error.", e);
       return ReturnCode.ERROR;
     }
 
-    // Clean up old backups now that the new one is safely uploaded
-    logger.info("deleting obsolete archive objects {}", obsoleteObjectKeys);
+    // Clean up old backups exclusively on success
+    logger.info("Deleting obsolete archive objects {}", obsoleteObjectKeys);
     for (String obsoleteObjectKey : obsoleteObjectKeys) {
       destinationBucket.delete(obsoleteObjectKey);
     }
 
     return ReturnCode.SUCCESS;
+  }
+
+  @Value
+  static class FileData {
+    String key;
+    byte[] bytes;
+
+    public static final FileData END_OF_STREAM = new FileData("SIGNAL_SUCCESS", null);
+    public static final FileData STREAM_ERROR = new FileData("SIGNAL_FAILURE", null);
+  }
+
+  private static final class S3BatchDownloader implements Runnable {
+    private final Logger log = LogManager.getLogger(S3BatchDownloader.class);
+
+    private final ObjectStorage sourceBucket;
+    private final List<String> keysToDownload;
+    private final BlockingQueue<FileData> outputQueue;
+    private final Semaphore throttle = new Semaphore(250);
+
+    public S3BatchDownloader(
+        ObjectStorage sourceBucket,
+        List<String> keysToDownload,
+        BlockingQueue<FileData> outputQueue) {
+      this.sourceBucket = sourceBucket;
+      this.keysToDownload = keysToDownload;
+      this.outputQueue = outputQueue;
+    }
+
+    @Override
+    public void run() {
+      try (ExecutorService pool = Executors.newVirtualThreadPerTaskExecutor()) {
+        for (String key : keysToDownload) {
+          pool.submit(
+              () -> {
+                try {
+                  throttle.acquire();
+                  Optional<byte[]> fileBytes = sourceBucket.get(key);
+
+                  if (fileBytes.isEmpty()) {
+                    log.error("Fail-Fast triggered: Object key '{}' not found in storage.", key);
+                    outputQueue.put(FileData.STREAM_ERROR);
+                    return;
+                  }
+
+                  outputQueue.put(new FileData(key, fileBytes.get()));
+
+                } catch (InterruptedException e) {
+                  Thread.currentThread().interrupt();
+                } catch (Exception e) {
+                  log.error("Unexpected download failure for key '{}'", key, e);
+                  outputQueue.add(FileData.STREAM_ERROR);
+                } finally {
+                  throttle.release();
+                }
+              });
+        }
+      }
+
+      try {
+        outputQueue.put(FileData.END_OF_STREAM);
+      } catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
+      }
+    }
+  }
+
+  private static final class ZipStreamConsumer implements Runnable {
+    private final BlockingQueue<FileData> inputQueue;
+    private final OutputStream outputPipe;
+
+    public ZipStreamConsumer(BlockingQueue<FileData> inputQueue, OutputStream outputPipe) {
+      this.inputQueue = inputQueue;
+      this.outputPipe = outputPipe;
+    }
+
+    @Override
+    public void run() {
+      try (ZipOutputStream zos = new ZipOutputStream(new BufferedOutputStream(outputPipe))) {
+        while (true) {
+          FileData fileData = inputQueue.take();
+
+          if (fileData == FileData.END_OF_STREAM) {
+            break;
+          }
+          if (fileData == FileData.STREAM_ERROR) {
+            throw new IOException(
+                "Aborting archive compilation due to an upstream download failure.");
+          }
+
+          ZipEntry entry = new ZipEntry(fileData.getKey());
+          zos.putNextEntry(entry);
+          zos.write(fileData.getBytes());
+          zos.closeEntry();
+        }
+      } catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
+      } catch (Exception e) {
+        throw new UncheckedIOException(
+            new IOException("ZIP production engine encountered a failure status", e));
+      }
+    }
   }
 }
