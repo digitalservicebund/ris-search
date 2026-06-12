@@ -59,7 +59,7 @@ class BulkZipControllerTest extends ContainersIntegrationBase {
 
     // Check that all document kinds have the correct link and case law picked the latest
     assertThat(
-            objectMapper.readValue(responseJson, ZipDataCatalogSchema.class).dataSets().stream()
+            objectMapper.readValue(responseJson, ZipDataCatalogSchema.class).dataSet().stream()
                 .map(e -> e.distribution().contentUrl())
                 .toList())
         .containsExactly(

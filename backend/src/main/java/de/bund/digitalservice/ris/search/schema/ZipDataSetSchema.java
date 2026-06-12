@@ -26,12 +26,14 @@ public record ZipDataSetSchema(
         @JsonInclude(JsonInclude.Include.ALWAYS)
         ZipDataDownloadSchema distribution)
     implements JsonldResource {
+
   @Override
   @Schema(example = JsonldTypes.DATASET)
   public String getType() {
     return JsonldTypes.DATASET;
   }
 
+  /** Constructor for admin */
   public static ZipDataSetSchema admin(String url) {
     return new ZipDataSetSchema(
         DocumentKind.ADMINISTRATIVE_DIRECTIVE.getBulkZipPath(),
@@ -39,6 +41,7 @@ public record ZipDataSetSchema(
         new ZipDataDownloadSchema(url));
   }
 
+  /** Constructor for caseLaw */
   public static ZipDataSetSchema caseLaw(String url) {
     return new ZipDataSetSchema(
         DocumentKind.CASE_LAW.getBulkZipPath(),
@@ -46,6 +49,7 @@ public record ZipDataSetSchema(
         new ZipDataDownloadSchema(url));
   }
 
+  /** Constructor for legislation */
   public static ZipDataSetSchema legislation(String url) {
     return new ZipDataSetSchema(
         DocumentKind.LEGISLATION.getBulkZipPath(),
@@ -53,6 +57,7 @@ public record ZipDataSetSchema(
         new ZipDataDownloadSchema(url));
   }
 
+  /** Constructor for literature */
   public static ZipDataSetSchema literature(String url) {
     return new ZipDataSetSchema(
         DocumentKind.LITERATURE.getBulkZipPath(),
