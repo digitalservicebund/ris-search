@@ -316,16 +316,19 @@ public class ControllerExceptionHandler {
    * that handler. This might happen if a client aborts a request during json serialization.
    *
    * @param exception HttpMessageNotWritableException
+   * @return standard 500 ResponseEntity or null in case of a clientAbortException
    */
   @ExceptionHandler({HttpMessageNotWritableException.class})
-  public void handleHttpMessageNotWritableException(HttpMessageNotWritableException exception)
-      throws HttpMessageNotWritableException {
+  public ResponseEntity<CustomErrorResponse> handleHttpMessageNotWritableException(
+      HttpMessageNotWritableException exception) {
     Throwable rootCause = NestedExceptionUtils.getMostSpecificCause(exception);
 
     if (rootCause instanceof ClientAbortException clientabortexception) {
       handleClientAbortException(clientabortexception);
+      // return null since the connection is already lost
+      return null;
     }
-    throw exception;
+    return return500();
   }
 
   /**
@@ -336,11 +339,6 @@ public class ControllerExceptionHandler {
    */
   @ExceptionHandler({ClientAbortException.class})
   public void handleClientAbortException(ClientAbortException exception) {
-    // Get the absolute root cause of the exception chain
-    Throwable rootCause = NestedExceptionUtils.getMostSpecificCause(exception);
-
-    if (rootCause instanceof ClientAbortException) {
-      logger.warn("connection closed by client", rootCause);
-    }
+    logger.warn("connection closed by client: {}", exception.getMessage());
   }
 }
