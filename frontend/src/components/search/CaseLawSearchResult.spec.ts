@@ -148,6 +148,14 @@ describe("CaselawSearchResult", () => {
     expect(contentItems[0]?.innerHTML).toBe(expectedSanitized);
   });
 
+  it("uses item headline as fallback when no text match is present", () => {
+    renderComponent({ textMatches: [] });
+
+    expect(
+      screen.getByRole("link", { name: "Decision Name —Test Headline" }),
+    ).toBeInTheDocument();
+  });
+
   it("displays static text when title is not present", () => {
     const searchResultWithoutTitle = {
       item: { ...searchResult.item, headline: "" },
@@ -280,7 +288,7 @@ describe("CaselawSearchResult", () => {
     expect(contentItems).toHaveLength(0);
   });
 
-  it("shows only the first textMatch if none contain marks", () => {
+  it("shows only the first text match if none contain marks", () => {
     const searchResultWithoutHighlights = {
       item: searchResult.item,
       textMatches: [
