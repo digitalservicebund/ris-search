@@ -2,7 +2,6 @@ package de.bund.digitalservice.ris.search.unit.mapper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
 import de.bund.digitalservice.ris.search.mapper.NormSearchResponseMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
@@ -30,7 +29,7 @@ class NormSearchResponseMapperTest {
     return Article.builder().eId("eid1").name(name).text(text).build();
   }
 
-  private TextMatchSchema invokeConvertArticleHitToTextMatchSchema(SearchHit<?> articleHit)
+  private TextMatchSchema invokeConvertArticleHitToTextMatchSchema(SearchHit<Article> articleHit)
       throws Exception {
     Method method =
         NormSearchResponseMapper.class.getDeclaredMethod(
@@ -47,24 +46,19 @@ class NormSearchResponseMapperTest {
   @ParameterizedTest
   @MethodSource("provideConvertArticleHitToTextMatchSchemaTestCases")
   void testConvertArticleHitToTextMatchSchema(
-      Object content,
+      Article content,
       Map<String, List<String>> highlightFields,
       String expectedName,
-      String expectedText,
-      boolean expectNull)
+      String expectedText)
       throws Exception {
 
     TextMatchSchema result =
         invokeConvertArticleHitToTextMatchSchema(createSearchHit(content, highlightFields));
 
-    if (expectNull) {
-      assertNull(result);
-    } else {
-      assertNotNull(result);
-      assertEquals("eid1", result.location());
-      assertEquals(expectedName, result.name());
-      assertEquals(expectedText, result.text());
-    }
+    assertNotNull(result);
+    assertEquals("eid1", result.location());
+    assertEquals(expectedName, result.name());
+    assertEquals(expectedText, result.text());
   }
 
   /** Provides test cases for the parameterized test method. */
@@ -75,22 +69,19 @@ class NormSearchResponseMapperTest {
             createArticle("Article Name", "Article Text"),
             Map.of(),
             "Article Name",
-            "Article Text",
-            false),
+            "Article Text"),
         // Test Case 2: Article content with name highlight only
         Arguments.of(
             createArticle("Original Article Name", "Article Text"),
             Map.of("name", List.of("Highlighted Article Name")),
             "Highlighted Article Name",
-            "Article Text",
-            false),
+            "Article Text"),
         // Test Case 3: Article content with text highlight
         Arguments.of(
             createArticle("Article Name", "Original Article Text"),
             Map.of("text", List.of("Highlighted Article Text")),
             "Article Name",
-            "Highlighted Article Text",
-            false),
+            "Highlighted Article Text"),
         // Test Case 4: Article content with both name and text highlights
         Arguments.of(
             createArticle("Original Article Name", "Original Article Text"),
@@ -98,8 +89,7 @@ class NormSearchResponseMapperTest {
                 "name", List.of("Highlighted Article Name"),
                 "text", List.of("Highlighted Article Text")),
             "Highlighted Article Name",
-            "Highlighted Article Text",
-            false));
+            "Highlighted Article Text"));
   }
 
   @Test

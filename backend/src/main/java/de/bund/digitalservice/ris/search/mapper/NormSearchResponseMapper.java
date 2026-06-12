@@ -54,12 +54,8 @@ public class NormSearchResponseMapper {
         .build();
   }
 
-  private static TextMatchSchema convertArticleHitToTextMatchSchema(SearchHit<?> articleHit) {
-    var articleHitContent = articleHit.getContent();
-
-    if (!(articleHitContent instanceof Article article)) {
-      throw new RuntimeException("not an instance");
-    }
+  private static TextMatchSchema convertArticleHitToTextMatchSchema(SearchHit<Article> articleHit) {
+    Article article = articleHit.getContent();
 
     String articleMatchingName =
         articleHit.getHighlightFields().getOrDefault("name", List.of()).stream()
@@ -95,6 +91,7 @@ public class NormSearchResponseMapper {
             .map(
                 hits ->
                     hits.stream()
+                        .map(hit -> (SearchHit<Article>) hit)
                         .map(NormSearchResponseMapper::convertArticleHitToTextMatchSchema)
                         .filter(Objects::nonNull)
                         .toList())
