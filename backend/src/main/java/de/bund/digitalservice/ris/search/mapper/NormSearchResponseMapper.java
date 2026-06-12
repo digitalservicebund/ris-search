@@ -14,7 +14,6 @@ import de.bund.digitalservice.ris.search.schema.TextMatchSchema;
 import de.bund.digitalservice.ris.search.utils.DateUtils;
 import de.bund.digitalservice.ris.search.utils.PageUtils;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import org.apache.commons.collections4.ListUtils;
@@ -55,8 +54,9 @@ public class NormSearchResponseMapper {
         .build();
   }
 
-  private static TextMatchSchema convertArticleHitToTextMatchSchema(SearchHit<?> articleHit) {
-    var articleHitContent = articleHit.getContent();
+  private static TextMatchSchema convertArticleHitToTextMatchSchema(SearchHit<Article> articleHit) {
+    Article article = articleHit.getContent();
+
     String articleMatchingName =
         articleHit.getHighlightFields().getOrDefault("name", List.of()).stream()
             .findFirst()
@@ -65,19 +65,10 @@ public class NormSearchResponseMapper {
         articleHit.getHighlightFields().getOrDefault("text", List.of()).stream()
             .findFirst()
             .orElse("");
-    if (articleHitContent instanceof Article article) {
-      return toTextMatchSchema(
-          articleMatchingName.isEmpty() ? article.getName() : articleMatchingName,
-          articleMatchingText.isEmpty() ? article.getText() : articleMatchingText,
-          article.getEId());
-    }
-    if (articleHitContent instanceof Map<?, ?> hit
-        && hit.containsKey("name")
-        && hit.containsKey("eid")) {
-      return toTextMatchSchema(
-          hit.get("name").toString(), articleMatchingText, hit.get("eid").toString());
-    }
-    return null;
+    return toTextMatchSchema(
+        articleMatchingName.isEmpty() ? article.getName() : articleMatchingName,
+        articleMatchingText.isEmpty() ? article.getText() : articleMatchingText,
+        article.getEId());
   }
 
   /**
@@ -100,6 +91,7 @@ public class NormSearchResponseMapper {
             .map(
                 hits ->
                     hits.stream()
+                        .map(hit -> (SearchHit<Article>) hit)
                         .map(NormSearchResponseMapper::convertArticleHitToTextMatchSchema)
                         .filter(Objects::nonNull)
                         .toList())

@@ -112,8 +112,21 @@ describe("AdministrativeDirectiveSearchResult", () => {
       expect(mark.tagName).toBe("MARK");
     });
 
-    it("renders placeholder title with correct link", async () => {
+    it("uses item headline as fallback when no text match is present", async () => {
       await renderComponent({
+        textMatches: [],
+      });
+
+      expect(
+        screen.getByRole("link", {
+          name: "Verwaltungsvorschrift Überschrift",
+        }),
+      ).toBeVisible();
+    });
+
+    it("renders placeholder title when neither text match nor item headline is present", async () => {
+      await renderComponent({
+        item: { ...searchResult.item, headline: undefined },
         textMatches: [],
       });
 
