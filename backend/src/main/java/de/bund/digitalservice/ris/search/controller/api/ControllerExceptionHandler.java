@@ -328,6 +328,7 @@ public class ControllerExceptionHandler {
       // return null since the connection is already lost
       return null;
     }
+    logger.error(exception.getMessage(), exception);
     return return500();
   }
 
