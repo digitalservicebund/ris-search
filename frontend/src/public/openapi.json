@@ -1939,7 +1939,7 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/BulkZipLinksSchema"
+                  "$ref" : "#/components/schemas/ZipDataCatalogSchema"
                 }
               }
             }
@@ -3483,32 +3483,69 @@
           }
         }
       },
-      "BulkZipLinkSchema" : {
+      "ZipDataCatalogSchema" : {
         "type" : "object",
+        "description" : "Represents a <a href=\"https://schema.org/DataCatalog\">schema.org/DataCatalog</a>.",
         "properties" : {
-          "link" : {
-            "type" : "string"
+          "@type" : {
+            "type" : "string",
+            "example" : "DataCatalog"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "The name of this data catalog."
+          },
+          "dataSets" : {
+            "type" : "array",
+            "description" : "The list of zip datasets contained in this catalog.",
+            "items" : {
+              "$ref" : "#/components/schemas/ZipDataSetSchema"
+            }
           }
         },
-        "required" : [ "link" ]
+        "required" : [ "dataSets", "name" ]
       },
-      "BulkZipLinksSchema" : {
+      "ZipDataDownloadSchema" : {
         "type" : "object",
+        "description" : "Represents <a href=\"https://schema.org/DataDownload\">schema.org/DataDownload</a>.",
         "properties" : {
-          "legislation" : {
-            "$ref" : "#/components/schemas/BulkZipLinkSchema"
+          "@type" : {
+            "type" : "string",
+            "example" : "DataDownload"
           },
-          "case-law" : {
-            "$ref" : "#/components/schemas/BulkZipLinkSchema"
+          "encodingFormat" : {
+            "type" : "string",
+            "description" : "Will always be application/zip."
           },
-          "literature" : {
-            "$ref" : "#/components/schemas/BulkZipLinkSchema"
-          },
-          "administrative-directive" : {
-            "$ref" : "#/components/schemas/BulkZipLinkSchema"
+          "contentUrl" : {
+            "type" : "string",
+            "description" : "The url to download the zip file."
           }
         },
-        "required" : [ "administrative-directive", "case-law", "legislation", "literature" ]
+        "required" : [ "contentUrl", "encodingFormat" ]
+      },
+      "ZipDataSetSchema" : {
+        "type" : "object",
+        "description" : "Represents <a href=\"https://schema.org/Dataset\">schema.org/Dataset</a>.",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "example" : "Dataset"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "The name of the dataset."
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "A short summary describing the contents of the dataset."
+          },
+          "distribution" : {
+            "$ref" : "#/components/schemas/ZipDataDownloadSchema",
+            "description" : "The downloadable form of this dataset."
+          }
+        },
+        "required" : [ "description", "name" ]
       },
       "AdministrativeDirectiveSchema" : {
         "type" : "object",

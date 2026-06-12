@@ -3,8 +3,7 @@ package de.bund.digitalservice.ris.search.controller.api;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.models.DocumentKind;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PublicFilesBucket;
-import de.bund.digitalservice.ris.search.schema.BulkZipLinkSchema;
-import de.bund.digitalservice.ris.search.schema.BulkZipLinksSchema;
+import de.bund.digitalservice.ris.search.schema.ZipDataCatalogSchema;
 import de.bund.digitalservice.ris.search.service.BulkExportService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.Comparator;
@@ -38,23 +37,21 @@ public class BulkZipLinksController {
   }
 
   /**
-   * @return an instance of {@link BulkZipLinksSchema} containing the bulk zip links.
+   * @return an instance of {@link ZipDataCatalogSchema} containing the bulk zip links.
    */
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-  public BulkZipLinksSchema getBulkZipLinks() {
+  public ZipDataCatalogSchema getBulkZipLinks() {
 
     List<String> files =
         publicFilesBucket.getAllKeysByPrefix(zipPrefix).stream()
             .map(e -> e.substring(zipPrefix.length()))
             .toList();
 
-    return new BulkZipLinksSchema(
-        new BulkZipLinkSchema(
-            getLatestWithPrefix(files, DocumentKind.LEGISLATION.getBulkZipPath())),
-        new BulkZipLinkSchema(getLatestWithPrefix(files, DocumentKind.CASE_LAW.getBulkZipPath())),
-        new BulkZipLinkSchema(getLatestWithPrefix(files, DocumentKind.LITERATURE.getBulkZipPath())),
-        new BulkZipLinkSchema(
-            getLatestWithPrefix(files, DocumentKind.ADMINISTRATIVE_DIRECTIVE.getBulkZipPath())));
+    return new ZipDataCatalogSchema(
+        getLatestWithPrefix(files, DocumentKind.ADMINISTRATIVE_DIRECTIVE.getBulkZipPath()),
+        getLatestWithPrefix(files, DocumentKind.CASE_LAW.getBulkZipPath()),
+        getLatestWithPrefix(files, DocumentKind.LEGISLATION.getBulkZipPath()),
+        getLatestWithPrefix(files, DocumentKind.LITERATURE.getBulkZipPath()));
   }
 
   private String getLatestWithPrefix(List<String> toFilter, String prefix) {
@@ -62,6 +59,6 @@ public class BulkZipLinksController {
         .filter(e -> e.startsWith(prefix))
         .max(Comparator.naturalOrder())
         .map(e -> bucketUrl + zipPrefix + e)
-        .orElse("");
+        .orElse(null);
   }
 }

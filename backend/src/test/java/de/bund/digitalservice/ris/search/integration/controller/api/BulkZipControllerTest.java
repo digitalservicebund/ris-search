@@ -4,11 +4,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.jayway.jsonpath.DocumentContext;
-import com.jayway.jsonpath.JsonPath;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.models.DocumentKind;
+import de.bund.digitalservice.ris.search.schema.ZipDataCatalogSchema;
 import de.bund.digitalservice.ris.search.service.BulkExportService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -25,6 +25,7 @@ import org.springframework.test.web.servlet.MockMvc;
 class BulkZipControllerTest extends ContainersIntegrationBase {
 
   @Autowired private MockMvc mockMvc;
+  @Autowired private ObjectMapper objectMapper;
 
   private static final String CASE_LAW = DocumentKind.CASE_LAW.getBulkZipPath();
   private static final String LEGISLATION = DocumentKind.LEGISLATION.getBulkZipPath();
@@ -48,24 +49,23 @@ class BulkZipControllerTest extends ContainersIntegrationBase {
 
     String expectedPrefix = "https://object.storage.eu01.onstackit.cloud/public/snapshots/";
 
-    DocumentContext json =
-        JsonPath.parse(
-            mockMvc
-                .perform(
-                    get(ApiConfig.Paths.BULK_ZIP_LINKS).contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andReturn()
-                .getResponse()
-                .getContentAsString());
+    String responseJson =
+        mockMvc
+            .perform(get(ApiConfig.Paths.BULK_ZIP_LINKS).contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andReturn()
+            .getResponse()
+            .getContentAsString();
 
-    // Check that all document kinds have the correct link and caselaw picked the latest
-    assertThat(json.read("$.case-law.link", String.class))
-        .isEqualTo(expectedPrefix + "case-law_2026-01-02T00:00:00.zip");
-    assertThat(json.read("$.legislation.link", String.class))
-        .isEqualTo(expectedPrefix + "legislation_2026-01-02T00:00:00.zip");
-    assertThat(json.read("$.literature.link", String.class))
-        .isEqualTo(expectedPrefix + "literature_2026-01-02T00:00:00.zip");
-    assertThat(json.read("$.administrative-directive.link", String.class))
-        .isEqualTo(expectedPrefix + "administrative-directives_2026-01-02T00:00:00.zip");
+    // Check that all document kinds have the correct link and case law picked the latest
+    assertThat(
+            objectMapper.readValue(responseJson, ZipDataCatalogSchema.class).dataSets().stream()
+                .map(e -> e.distribution().contentUrl())
+                .toList())
+        .containsExactly(
+            expectedPrefix + "administrative-directives_2026-01-02T00:00:00.zip",
+            expectedPrefix + "case-law_2026-01-02T00:00:00.zip",
+            expectedPrefix + "legislation_2026-01-02T00:00:00.zip",
+            expectedPrefix + "literature_2026-01-02T00:00:00.zip");
   }
 }
