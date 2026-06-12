@@ -84,7 +84,7 @@ export default defineNuxtConfig({
       // i.e. not try to resolve it as a component. Workaround to be able to
       // use this element while waiting for https://github.com/vuejs/core/pull/9249
       // to be released.
-      isCustomElement: (tag) => ["search"].includes(tag),
+      isCustomElement: (tag: string) => ["search"].includes(tag),
     },
   },
 
