@@ -68,9 +68,9 @@ public class ArticleService {
     boolQuery.filter(QueryBuilders.termsQuery("expression_eli", expressionElis));
 
     if (isLuceneQuery) {
-      boolQuery.must(QueryBuilders.queryStringQuery(searchString));
+      boolQuery.should(QueryBuilders.queryStringQuery(searchString));
     } else {
-      boolQuery.must(
+      boolQuery.should(
           new MultiMatchQueryBuilder(searchString)
               .zeroTermsQuery(MatchQuery.ZeroTermsQuery.ALL)
               .type(MultiMatchQueryBuilder.Type.CROSS_FIELDS)
