@@ -27,7 +27,7 @@ opensearch-test-containers = "4.1.0"
 jsoup = "1.22.2"
 commons-csv = "1.14.1"
 amazon-aws-sdk-s3 = "2.29.45"
-saxon-he = "12.9"
+saxon-he = "13.0"
 streamex = "0.8.4"
 tools-jackson-core = "3.1.4"
 jaxb-moxy = "5.0.0"
@@ -78,6 +78,10 @@ bouncycastle = { module = "org.bouncycastle:bcpkix-jdk18on", version = "1.84" }
 netty-http = { module = "io.netty:netty-codec-http", version = "4.2.15.Final" }
 netty-http2 = { module = "io.netty:netty-codec-http2", version = "4.2.15.Final" }
 netty-compression = { module = "io.netty:netty-codec-compression", version = "4.2.15.Final" }
+
+# CVE-2026-44249 CVE-2026-45416
+netty-handler = { module = "io.netty:netty-handler", version = "4.2.15.Final"}
+
 # CVE-2026-41293, CVE-2026-43512, CVE-2026-41284, CVE-2026-42498, CVE-2026-43513
 tomcat-embed = { module = "org.apache.tomcat.embed:tomcat-embed-core", version = "11.0.22" }
 

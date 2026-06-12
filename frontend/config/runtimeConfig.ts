@@ -1,16 +1,7 @@
-import fs from "node:fs";
 import type { NuxtConfig } from "nuxt/schema";
 import { isDevelopment } from "./shared";
 
 const secureCookie = !isDevelopment;
-
-const getBasicAuth = () => {
-  const path = "/etc/secrets/basic-auth/secret";
-  if (fs.existsSync(path)) {
-    return fs.readFileSync(path, "utf-8").trim();
-  }
-  return process.env.NUXT_BASIC_AUTH || "";
-};
 
 /**
  * Configuration for the runtimeConfig section of Nuxt config. These should be
@@ -18,7 +9,7 @@ const getBasicAuth = () => {
  * information on configuration.
  */
 export const runtimeConfig: NuxtConfig["runtimeConfig"] = {
-  basicAuth: getBasicAuth(),
+  basicAuth: "",
   auth: {
     webAuth: false,
   },

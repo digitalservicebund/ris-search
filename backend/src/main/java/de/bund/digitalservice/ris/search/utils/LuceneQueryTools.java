@@ -18,7 +18,6 @@ import org.apache.lucene.queryparser.classic.QueryParserBase;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.QueryVisitor;
-import org.jspecify.annotations.NonNull;
 import org.springframework.data.elasticsearch.UncategorizedElasticsearchException;
 
 /** Class to store the Lucene query tools */
@@ -63,9 +62,8 @@ public class LuceneQueryTools {
    * @return A new query string with all terms OR-combined
    * @throws CustomValidationException in case a queryString is invalid
    */
-  public static String joinAllTermsWithOr(@NonNull String queryString)
-      throws CustomValidationException {
-    if (queryString.isBlank()) {
+  public static String joinAllTermsWithOr(String queryString) throws CustomValidationException {
+    if (queryString == null || queryString.isBlank()) {
       return "";
     }
 

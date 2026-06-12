@@ -1,6 +1,6 @@
-FROM node:24.16.0-alpine3.22@sha256:191c9f0080fcbbc6547a85dc0ff7988072214a355aabdc1d2ec55a7dae5eea8a AS build
+FROM node:26.3.0-alpine3.22@sha256:c7932b9e5e337b0e733d6e16abc1b0e104759e8b05e59ed56586cce967d26dfe AS build
 ARG SENTRY_RELEASE
-RUN apk update && apk upgrade
+RUN npm install -g corepack
 RUN corepack enable
 WORKDIR /app
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
@@ -15,18 +15,18 @@ RUN --mount=type=secret,id=SENTRY_AUTH_TOKEN,required=false \
   fi && \
   pnpm run prepare && NODE_OPTIONS="--max-old-space-size=4096" pnpm build
 
-FROM node:24.16.0-alpine3.22@sha256:191c9f0080fcbbc6547a85dc0ff7988072214a355aabdc1d2ec55a7dae5eea8a
+FROM cgr.dev/chainguard/node@sha256:857cb86c746a3d202fdc0cbebb67fb22b3bf51890c0f3ee6af6b40be2059c725
 ARG SENTRY_RELEASE
-RUN apk update && apk upgrade && apk add dumb-init && apk cache clean
 USER node
 WORKDIR /app
 COPY --chown=node:node --from=build /app/.output/server ./server
 COPY --chown=node:node --from=build /app/.output/public ./public
 COPY --chown=node:node --from=build /app/.output/nitro.json ./nitro.json
-COPY start.sh ./
+COPY --chown=node:node start.sh ./start.sh
+
 EXPOSE 3000
 ENV HOST=0.0.0.0 \
   PORT=3000 \
   SENTRY_RELEASE=${SENTRY_RELEASE}
 ENTRYPOINT ["/usr/bin/dumb-init", "--"]
-CMD ["sh", "./start.sh"]
+CMD ["sh", "start.sh"]

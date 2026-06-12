@@ -14,12 +14,22 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class BulkExportConfig {
 
+  /**
+   * @param source the source bucket
+   * @param target the target bucket
+   * @return the normsBulkExport bean
+   */
   @Bean
   public BulkExportService normsBulkExport(NormsBucket source, PublicFilesBucket target) {
     return new BulkExportService(
         source, target, DocumentKind.LEGISLATION.getBulkZipPath(), "eli", key -> true);
   }
 
+  /**
+   * @param source the source bucket
+   * @param target the target bucket
+   * @return the caseLawBulkExport bean
+   */
   @Bean
   public BulkExportService caseLawBulkExport(CaseLawBucket source, PublicFilesBucket target) {
     return new BulkExportService(
