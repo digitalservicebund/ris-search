@@ -507,7 +507,7 @@ test.describe("searching caselaw", () => {
     await navigate(page, "/advanced-search");
 
     await searchFor(page, {
-      q: 'AZ:"34 X (xyz) 456/78"',
+      q: 'AZ:"34 X (xyz) 456/78" Verfahrensbeschreibung',
       documentKind: "Gerichtsentscheidungen",
     });
 
@@ -531,7 +531,9 @@ test.describe("searching caselaw", () => {
       searchResult.getByRole("link", { name: "Orientierungssatz:" }),
     ).toBeVisible();
     await expect(
-      searchResult.getByText(/1. Fiktiver Satz für Testzwecke im Beschluss/),
+      searchResult.getByText(
+        /Weitere fiktive Informationen zur Verfahrensbeschreibung./,
+      ),
     ).toBeVisible();
   });
 
