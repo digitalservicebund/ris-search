@@ -79,4 +79,18 @@ class ErrorResponseTest extends ContainersIntegrationBase {
         .andExpect(jsonPath("$.errors[0].message", Matchers.is("The request could not be parsed")))
         .andExpect(jsonPath("$.errors[0].parameter", Matchers.is("")));
   }
+
+  @Test
+  void shouldGracefullyHandleClientAbortExceptions() throws Exception {
+    mockMvc
+        .perform(get("/clientAbort").contentType(MediaType.TEXT_HTML))
+        .andExpect(status().isOk());
+  }
+
+  @Test
+  void shouldRethrowHttpMessageNotWritableExceptionThatAreNotFromClientAbort() throws Exception {
+    mockMvc
+        .perform(get("/throwHttpMessageNotWritableException").contentType(MediaType.TEXT_HTML))
+        .andExpect(status().is5xxServerError());
+  }
 }
