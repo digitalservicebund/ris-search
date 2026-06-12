@@ -4,9 +4,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -48,9 +48,10 @@ class SwaggerIntegrationTest extends ContainersIntegrationBase {
               try {
                 Files.createDirectories(outDir);
                 File outputFile = new File(outDir.toFile(), "openapi.json");
-                try (FileOutputStream outputStream = new FileOutputStream(outputFile)) {
-                  outputStream.write(content);
-                }
+                // format the file before writing
+                ObjectMapper mapper = new ObjectMapper();
+                Object jsonObject = mapper.readValue(content, Object.class);
+                mapper.writerWithDefaultPrettyPrinter().writeValue(outputFile, jsonObject);
               } catch (IOException exception) {
                 throw new RuntimeException(exception);
               }
@@ -63,6 +64,10 @@ class SwaggerIntegrationTest extends ContainersIntegrationBase {
             jsonPath(
                 "$.tags[*].name",
                 Matchers.containsInAnyOrder(
-                    "All documents", "Legislation", "Case Law", "Statistics")));
+                    "All documents",
+                    "Legislation",
+                    "Case Law",
+                    "Statistics",
+                    "Document bulk download links")));
   }
 }

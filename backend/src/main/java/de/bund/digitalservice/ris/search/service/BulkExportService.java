@@ -35,6 +35,7 @@ public class BulkExportService implements Job {
   private final String outputName;
   private final String prefix;
   private final Predicate<String> keyFilter;
+  public static final String BULK_ZIP_PREFIX = "snapshots/";
 
   /**
    * Job to include potentially all files from a source bucket in a zip file and store it in a
@@ -70,7 +71,7 @@ public class BulkExportService implements Job {
       return ReturnCode.ERROR;
     }
 
-    String affectedPrefix = "snapshots/" + outputName;
+    String affectedPrefix = BULK_ZIP_PREFIX + outputName;
     String resultObjectKey = affectedPrefix + "_" + timestamp + ".zip";
     List<String> obsoleteObjectKeys = destinationBucket.getAllKeysByPrefix(affectedPrefix);
 

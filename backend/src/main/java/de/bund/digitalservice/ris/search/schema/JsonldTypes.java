@@ -15,4 +15,7 @@ public class JsonldTypes {
   public static final String SEARCH_RESULT_MATCH = "SearchResultMatch";
   public static final String LITERATURE = "Literature";
   public static final String HYDRA_PARTIAL_COLLECTION_VIEW = "hydra:PartialCollectionView";
+  public static final String DATA_CATALOG = "DataCatalog";
+  public static final String DATASET = "Dataset";
+  public static final String DATA_DOWNLOAD = "DataDownload";
 }

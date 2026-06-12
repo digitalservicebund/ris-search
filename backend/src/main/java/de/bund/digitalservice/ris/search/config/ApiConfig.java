@@ -53,6 +53,7 @@ public class ApiConfig {
     public static final String SITEMAP = BASE + "/sitemaps";
     public static final String ECLICRAWLER = BASE + "/eclicrawler";
     public static final String STATISTICS = BASE + "/statistics";
+    public static final String BULK_ZIP_LINKS = BASE + "/bulk-zip-links";
   }
 
   public static final String VERSION = "1";
