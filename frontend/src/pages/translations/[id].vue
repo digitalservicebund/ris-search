@@ -88,6 +88,10 @@ const views: OneOrMore<TabView> = [
 
 const textSectionId = useId();
 const detailsTabPanelTitleId = useId();
+
+const textContentRef = ref<HTMLElement | null>(null);
+const { query: searchQuery, matchCount: searchMatchCount } =
+  useNormTextSearch(textContentRef);
 </script>
 
 <template>
@@ -145,7 +149,12 @@ const detailsTabPanelTitleId = useId();
             :aria-labelledby="textSectionId"
           >
             <h2 :id="textSectionId" class="sr-only">Text</h2>
-            <section class="max-w-prose" v-html="html" />
+            <DocumentsNormsNormTextSearchBar
+              v-model="searchQuery"
+              :match-count="searchMatchCount"
+              class="mb-16 print:hidden"
+            />
+            <section class="max-w-prose" ref="textContentRef" v-html="html" />
           </section>
         </template>
 

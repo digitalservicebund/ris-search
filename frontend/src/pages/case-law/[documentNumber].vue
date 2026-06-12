@@ -104,6 +104,10 @@ const detailsMetadata = computed(() => {
 
 const textSectionId = useId();
 const detailsSectionId = useId();
+
+const textContentRef = ref<HTMLElement | null>(null);
+const { query: searchQuery, matchCount: searchMatchCount } =
+  useNormTextSearch(textContentRef);
 </script>
 
 <template>
@@ -164,8 +168,14 @@ const detailsSectionId = useId();
           <section role="tabpanel" :aria-labelledby="textSectionId">
             <h2 :id="textSectionId" class="sr-only">Text</h2>
             <DocumentsIncompleteDataMessage />
+            <DocumentsNormsNormTextSearchBar
+              v-model="searchQuery"
+              :match-count="searchMatchCount"
+              class="mb-16 print:hidden"
+            />
             <div
               v-if="document"
+              ref="textContentRef"
               class="case-law"
               v-html="document.body.innerHTML"
             ></div>
