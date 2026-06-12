@@ -54,6 +54,11 @@ mark {
   @apply bg-yellow-200;
 }
 
+::highlight(norm-search) {
+  background-color: #fde047; /* yellow-300 */
+  color: inherit;
+}
+
 input[type="search"] {
   &[data-size="large"] {
     &::-webkit-search-cancel-button {

@@ -95,6 +95,10 @@ const currentView = computed(
 );
 
 const detailsTabPanelTitleId = useId();
+
+const textContentRef = ref<HTMLElement | null>(null);
+const { query: searchQuery, matchCount: searchMatchCount } =
+  useNormTextSearch(textContentRef);
 </script>
 
 <template>
@@ -167,7 +171,12 @@ const detailsTabPanelTitleId = useId();
     <div class="container">
       <section v-if="currentView === 'text'">
         <h2 class="sr-only">Text</h2>
-        <section class="max-w-prose" v-html="html" />
+        <DocumentsNormsNormTextSearchBar
+          v-model="searchQuery"
+          :match-count="searchMatchCount"
+          class="mb-16 print:hidden"
+        />
+        <section ref="textContentRef" class="max-w-prose" v-html="html" />
       </section>
 
       <section
