@@ -13,8 +13,9 @@ import de.bund.digitalservice.ris.search.schema.SearchMemberSchema;
 import de.bund.digitalservice.ris.search.schema.TextMatchSchema;
 import de.bund.digitalservice.ris.search.utils.DateUtils;
 import de.bund.digitalservice.ris.search.utils.PageUtils;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+import java.util.Map;
 import java.util.Optional;
 import org.apache.commons.collections4.ListUtils;
 import org.springframework.data.domain.Page;
@@ -54,17 +55,13 @@ public class NormSearchResponseMapper {
         .build();
   }
 
-  private static TextMatchSchema convertArticleHitToTextMatchSchema(SearchHit<Article> articleHit) {
-    Article article = articleHit.getContent();
+  private static TextMatchSchema convertArticleHitToTextMatchSchema(
+      Article article, Map<String, List<String>> highlightFields) {
 
     String articleMatchingName =
-        articleHit.getHighlightFields().getOrDefault("name", List.of()).stream()
-            .findFirst()
-            .orElse("");
+        highlightFields.getOrDefault("name", List.of()).stream().findFirst().orElse("");
     String articleMatchingText =
-        articleHit.getHighlightFields().getOrDefault("text", List.of()).stream()
-            .findFirst()
-            .orElse("");
+        highlightFields.getOrDefault("text", List.of()).stream().findFirst().orElse("");
     return toTextMatchSchema(
         articleMatchingName.isEmpty() ? article.getName() : articleMatchingName,
         articleMatchingText.isEmpty() ? article.getText() : articleMatchingText,
@@ -86,16 +83,14 @@ public class NormSearchResponseMapper {
     Optional<SearchHits<?>> matchingArticles =
         Optional.ofNullable(searchHit.getInnerHits().getOrDefault("top_three_articles", null));
 
-    List<TextMatchSchema> articleHits =
-        matchingArticles
-            .map(
-                hits ->
-                    hits.stream()
-                        .map(hit -> (SearchHit<Article>) hit)
-                        .map(NormSearchResponseMapper::convertArticleHitToTextMatchSchema)
-                        .filter(Objects::nonNull)
-                        .toList())
-            .orElse(List.of());
+    List<TextMatchSchema> articleHits = new ArrayList<>();
+    for (var articleHit : matchingArticles.get()) {
+      var content = articleHit.getContent();
+      if (content instanceof Article) {
+        articleHits.add(
+            convertArticleHitToTextMatchSchema((Article) content, articleHit.getHighlightFields()));
+      }
+    }
 
     List<TextMatchSchema> normHits =
         searchHit.getHighlightFields().entrySet().stream()
