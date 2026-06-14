@@ -4,7 +4,7 @@ COPY . /app
 RUN ./gradlew build -x integrationTest -x test -x spotlessCheck
 
 
-FROM cgr.dev/chainguard/jre@sha256:21e9aea108246b9c19724e4f6b64d8f8ad73da7219dbfdd88de0be7ae811ac3f
+FROM cgr.dev/chainguard/jre@sha256:aec912a20efff9133df2abd4c29f7ad57644db8c1a07a2fccc967967a0926784
 ARG SENTRY_RELEASE
 COPY --from=backend-builder /app/build/libs/ris-search-*.jar /app/app.jar
 EXPOSE 8090
