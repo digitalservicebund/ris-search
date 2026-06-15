@@ -22,16 +22,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.springframework.data.elasticsearch.core.SearchHit;
 
 class NormSearchResponseMapperTest {
   private static Article createArticle(String name, String text) {
     return Article.builder().eId("eid1").name(name).text(text).build();
-  }
-
-  private <T> SearchHit<T> createSearchHit(T content, Map<String, List<String>> highlightFields) {
-    return new SearchHit<>(
-        "1", "1", "routing", 1, null, highlightFields, null, null, null, null, content);
   }
 
   @ParameterizedTest
@@ -40,8 +34,7 @@ class NormSearchResponseMapperTest {
       Article content,
       Map<String, List<String>> highlightFields,
       String expectedName,
-      String expectedText)
-      throws Exception {
+      String expectedText) {
 
     TextMatchSchema result = convertArticleHitToTextMatchSchema(content, highlightFields);
 
