@@ -31,6 +31,13 @@ configurations {
 
 repositories {
     mavenCentral()
+    maven {
+        url = uri("https://maven.pkg.github.com/digitalservicebund/ris-html-transformation")
+        credentials {
+            username = System.getenv("GH_PACKAGES_REPOSITORY_USER")
+            password = System.getenv("GH_PACKAGES_REPOSITORY_TOKEN")
+        }
+    }
 }
 
 jacoco { toolVersion = libs.versions.jacoco.get() }
@@ -95,6 +102,10 @@ dependencies {
 
     // CVE-2026-41293, CVE-2026-43512, CVE-2026-41284, CVE-2026-42498, CVE-2026-43513
     implementation(libs.tomcat.embed)
+
+    implementation(libs.ris.html.transformation)
+    // Local development:
+    // implementation(files("../../ris-html-transformation/build/libs/ris-html-transformation-0.0.1-SNAPSHOT.jar"))
 
     compileOnly(libs.lombok)
     annotationProcessor(libs.lombok)
