@@ -60,7 +60,7 @@
                 <ris:legalDocML.de_metadaten xmlns:ris="http://MetadatenRIS.LegalDocML.de/1.8.2/"
                          xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.8.2/
                          ../../Grammatiken/Norms/legalDocML.de-metadaten-ris.xsd">
-                    {% if abkuerzung %}<ris:abkuerzung>{{abkuerzung}}</ris:abkuerzung>{% else %}<ris:abkuerzung refersTo="interne-abkuerzung">TEST_MOCK_NOT_IMPORTANT</ris:abkuerzung>{% endif %}
+                    {% if abkuerzung %}<ris:abkuerzung>{{abkuerzung}}</ris:abkuerzung>{% else %}<ris:abkuerzung refersTo="interne-abkuerzung">RisAbk</ris:abkuerzung>{% endif %}
                     <ris:inkraft date="{% if inkraft %}{{inkraft}}{% else %}2020-01-01{% endif %}"/>
                     {% if ausserkraft %}<ris:ausserkraft date="{{ausserkraft}}"/>{% endif %}
                     <ris:vollzitat>Verordnung zu der Vereinbarung zwischen der Regierung der Bundesrepublik Deutschland und dem Freiwilligenprogramm der Vereinten Nationen über die Errichtung eines durch das Umweltprogramm der Vereinten Nationen gestellten Sekretariats für die Zwischenstaatliche Plattform Wissenschaft-Politik für Biodiversität und Ökosystemdienstleistungen (IPBES) in Bonn (IPBES-Sekretariat) vom 8. Juli 2024 (BGBl. 2024 II Nr. 266)</ris:vollzitat>
