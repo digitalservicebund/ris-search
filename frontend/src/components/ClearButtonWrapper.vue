@@ -26,7 +26,7 @@ const emit = defineEmits<{
     <button
       v-if="clearButtonVisible"
       type="button"
-      class="absolute top-6 right-6 flex h-[2em] w-[2em] cursor-pointer items-center justify-center text-blue-800 hover:bg-blue-100 hover:text-blue-800 focus-visible:bg-blue-800 focus-visible:text-white focus-visible:outline-none"
+      class="absolute inset-y-6 right-6 flex aspect-square cursor-pointer items-center justify-center text-blue-800 hover:bg-blue-100 hover:text-blue-800 focus-visible:bg-blue-800 focus-visible:text-white focus-visible:outline-none"
       aria-label="Entfernen"
       @click="emit('clear')"
     >

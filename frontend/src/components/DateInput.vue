@@ -188,29 +188,35 @@ defineExpose({ focus });
 </script>
 
 <template>
-  <ClearButtonWrapper
-    :clearButtonVisible="!!inputValue && props.showClear"
-    @clear="clear"
-  >
-    <InputMask
-      :id="id"
-      :key
-      ref="inputMaskEl"
-      v-model="inputValue"
-      :auto-clear="false"
-      :invalid="effectiveHasError"
-      :readonly="isReadOnly"
-      :disabled="isReadOnly"
-      class="w-full"
-      mask="99.99.9999"
-      placeholder="TT.MM.JJJJ"
-      @blur="onBlur"
-      @keydown="backspaceDelete"
-    />
+  <div>
+    <ClearButtonWrapper
+      :clearButtonVisible="!!inputValue && props.showClear"
+      @clear="clear"
+    >
+      <InputMask
+        :id="id"
+        :key
+        ref="inputMaskEl"
+        v-model="inputValue"
+        :auto-clear="false"
+        :invalid="effectiveHasError"
+        :readonly="isReadOnly"
+        :disabled="isReadOnly"
+        class="w-full"
+        mask="99.99.9999"
+        placeholder="TT.MM.JJJJ"
+        @blur="onBlur"
+        @keydown="backspaceDelete"
+      />
+    </ClearButtonWrapper>
 
-    <small v-if="errorMessage" :id="`${id}-hint`">
+    <small
+      v-if="errorMessage"
+      class="mt-4 flex items-center gap-4 text-red-900"
+      :id="`${id}-hint`"
+    >
       <IconErrorOutline />
       {{ errorMessage }}
     </small>
-  </ClearButtonWrapper>
+  </div>
 </template>
