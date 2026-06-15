@@ -1,13 +1,13 @@
 import { userEvent } from "@testing-library/user-event";
 import { render, screen } from "@testing-library/vue";
-import ClearButtonWrapper from "./ClearButtonWrapper.vue";
+import WithClearButton from "./WithClearButton.vue";
 
 function renderComponent(options?: {
   clearable?: boolean;
   slotContent?: string;
 }) {
   const user = userEvent.setup();
-  const utils = render(ClearButtonWrapper, {
+  const utils = render(WithClearButton, {
     props: {
       clearButtonVisible: options?.clearable,
     },

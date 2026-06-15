@@ -4,7 +4,7 @@ import customParseFormat from "dayjs/plugin/customParseFormat";
 import { InputMask } from "primevue";
 import { computed, nextTick, ref, useTemplateRef, watch } from "vue";
 import IconErrorOutline from "~icons/ic/baseline-error-outline";
-import ClearButtonWrapper from "~/components/ClearButtonWrapper.vue";
+import WithClearButton from "./WithClearButton.vue";
 
 /** Form field validation error. */
 export type ValidationError = {
@@ -189,7 +189,7 @@ defineExpose({ focus });
 
 <template>
   <div>
-    <ClearButtonWrapper
+    <WithClearButton
       :clearButtonVisible="!!inputValue && props.showClear"
       @clear="clear"
     >
@@ -208,7 +208,7 @@ defineExpose({ focus });
         @blur="onBlur"
         @keydown="backspaceDelete"
       />
-    </ClearButtonWrapper>
+    </WithClearButton>
 
     <small
       v-if="errorMessage"
