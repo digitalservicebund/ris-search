@@ -1,81 +1,70 @@
 <script setup lang="ts">
+import type { Dayjs } from "dayjs";
 import IcBaselineBalance from "~icons/ic/baseline-balance";
 import type { SearchResultHeaderItem } from "~/components/search/SearchResultHeader.vue";
-import type {
-  LegislationExpression,
-  SearchResult,
-  TextMatch,
-} from "~/types/api";
+import type { LegislationExpression, SearchResult } from "~/types/api";
+import { getMatch, getTitleWithFallback } from "~/utils/search/searchResults";
 
-const props = defineProps<{
+const { searchResult, order } = defineProps<{
   searchResult: SearchResult<LegislationExpression>;
   order: number;
 }>();
 
 const { searchResultClicked } = usePostHog();
 
-const item = computed(() => props.searchResult.item);
-
-const textMatches: ComputedRef<TextMatch[]> = computed(
-  () => props.searchResult.textMatches,
-);
-
-const headline = computed(() => {
-  const match =
-    getMatch("name", textMatches.value) ||
-    item.value.name ||
-    "Titelzeile nicht vorhanden";
-
-  return sanitizeSearchResult(match);
-});
-
-function getMatch(match: string, highlights: TextMatch[]) {
-  return highlights.find((highlight) => highlight.name === match)?.text;
-}
-
-const link = computed(() => {
-  const prefix = "/norms/";
-  const expressionEli = item.value.legislationIdentifier;
-  if (!expressionEli) return null;
-  return prefix + expressionEli;
-});
-
 const privateFeaturesEnabled = usePrivateFeaturesFlag();
 
-const formattedDate = computed(() => {
-  const date = privateFeaturesEnabled
-    ? temporalCoverageToValidityInterval(item.value?.temporalCoverage)?.from
-    : item.value?.exampleOfWork.legislationDate;
-
-  return dateFormattedDDMMYYYY(date);
-});
-
-const relevantHighlights = computed(() => {
-  return textMatches.value
-    .filter((highlight) => highlight.name != "name")
-    .map((hl) => ({ ...hl, text: addEllipsis(hl.text) }) as TextMatch);
-});
-
-function openResult(url: string) {
-  searchResultClicked(url, props.order);
-}
-
-const validityStatus = computed(() => {
-  return formatNormValidity(item.value.temporalCoverage);
-});
+const headline = computed(() =>
+  getTitleWithFallback(
+    getMatch("name", searchResult.textMatches),
+    searchResult.item.name,
+  ),
+);
 
 const resultTypeId = useId();
 
 const headerItems = computed<SearchResultHeaderItem[]>(() => {
+  let date: string | Dayjs | undefined =
+    searchResult.item?.exampleOfWork.legislationDate;
+
+  if (privateFeaturesEnabled) {
+    const coverage = temporalCoverageToValidityInterval(
+      searchResult.item?.temporalCoverage,
+    );
+    date = coverage?.from;
+  }
+
   return [
     { value: "Norm", id: resultTypeId },
-    { value: item.value.abbreviation },
-    { value: formattedDate.value },
+    { value: searchResult.item.abbreviation },
+    { value: dateFormattedDDMMYYYY(date) },
   ].filter((i): i is SearchResultHeaderItem => i.value !== undefined);
 });
 
-const getArticleUrl = (highlight: TextMatch) =>
-  `${link.value}/${highlight.location ?? ""}`;
+const validityStatus = computed(() =>
+  formatNormValidity(searchResult.item.temporalCoverage),
+);
+
+const detailPageUrl = computed(() => {
+  const prefix = "/norms/";
+  const expressionEli = searchResult.item.legislationIdentifier;
+  if (!expressionEli) return null;
+  return prefix + expressionEli;
+});
+
+const relevantHighlights = computed(() =>
+  searchResult.textMatches
+    .filter((highlight) => highlight.name != "name")
+    .map((hl) => ({
+      name: sanitizeSearchResult(hl.name),
+      text: sanitizeSearchResult(addEllipsis(hl.text) ?? ""),
+      location: hl.location,
+    })),
+);
+
+function getArticleLink(highlight: { location?: string | null }) {
+  return `${detailPageUrl.value}/${highlight.location ?? ""}`;
+}
 </script>
 
 <template>
@@ -90,11 +79,11 @@ const getArticleUrl = (highlight: TextMatch) =>
       </template>
     </SearchResultHeader>
     <NuxtLink
-      v-if="!!link"
-      :to="link"
+      v-if="!!detailPageUrl"
+      :to="detailPageUrl"
       :aria-describedby="resultTypeId"
       class="ris-heading3-bold! ris-link1-regular link-hover block"
-      @click="openResult(link)"
+      @click="searchResultClicked(detailPageUrl, order)"
     >
       <h2 v-html="headline" />
     </NuxtLink>
@@ -107,14 +96,12 @@ const getArticleUrl = (highlight: TextMatch) =>
       >
         <NuxtLink
           class="ris-link1-bold link-hover"
-          :to="getArticleUrl(highlight)"
-          @click="openResult(getArticleUrl(highlight))"
+          :to="getArticleLink(highlight)"
+          @click="searchResultClicked(getArticleLink(highlight), order)"
         >
-          <span v-html="sanitizeSearchResult(highlight.name)" />
+          <span v-html="highlight.name" />
         </NuxtLink>
-        <div
-          v-html="highlight.text ? sanitizeSearchResult(highlight.text) : ''"
-        />
+        <div v-html="highlight.text" />
       </div>
     </div>
   </div>

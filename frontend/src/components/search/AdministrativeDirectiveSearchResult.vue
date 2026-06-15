@@ -3,21 +3,23 @@ import RuleIcon from "~icons/ic/outline-rule";
 import type { SearchResultHeaderItem } from "~/components/search/SearchResultHeader.vue";
 import { usePostHog } from "~/composables/usePostHog";
 import type { AdministrativeDirective, SearchResult } from "~/types/api";
-
-const { searchResultClicked } = usePostHog();
-const router = useRouter();
+import { getMatch, getTitleWithFallback } from "~/utils/search/searchResults";
 
 const { searchResult, order } = defineProps<{
   searchResult: SearchResult<AdministrativeDirective>;
   order: number;
 }>();
 
-const detailPageRoute = computed(() => ({
-  name: "administrative-directives-documentNumber",
-  params: {
-    documentNumber: searchResult.item.documentNumber,
-  },
-}));
+const { searchResultClicked } = usePostHog();
+
+const router = useRouter();
+
+const headline = computed(() =>
+  getTitleWithFallback(
+    getMatch("headline", searchResult.textMatches),
+    searchResult.item.headline,
+  ),
+);
 
 const resultTypeId = useId();
 
@@ -31,19 +33,18 @@ const headerItems = computed<SearchResultHeaderItem[]>(() => {
   ].filter((i): i is SearchResultHeaderItem => i.value !== undefined);
 });
 
-const headline = computed(() =>
-  sanitizeSearchResult(
-    getMatch("headline") ||
-      searchResult.item.headline ||
-      "Titelzeile nicht vorhanden",
-  ),
-);
+const detailPageRoute = computed(() => ({
+  name: "administrative-directives-documentNumber",
+  params: {
+    documentNumber: searchResult.item.documentNumber,
+  },
+}));
 
 const text = computed(() => {
-  const shortReportMatch = getMatch("shortReport");
+  const shortReportMatch = getMatch("shortReport", searchResult.textMatches);
   if (!shortReportMatch) return undefined;
 
-  const plainShortReportMatch = sanitizeSearchResult(shortReportMatch, []);
+  const plainShortReportMatch = stripAllHtml(shortReportMatch);
   const fullShortReport = searchResult.item.shortReport;
   const sanitizedShortReport = sanitizeSearchResult(shortReportMatch);
 
@@ -54,10 +55,6 @@ const text = computed(() => {
 
   return `${prefix}${sanitizedShortReport}${postfix}`;
 });
-
-function getMatch(name: string) {
-  return searchResult.textMatches.find((match) => match.name === name)?.text;
-}
 
 function trackResultClick() {
   const url = router.resolve(detailPageRoute.value).href;

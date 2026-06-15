@@ -1,33 +1,22 @@
 <script setup lang="ts">
 import { partition } from "lodash-es";
 import GavelIcon from "~icons/ic/outline-gavel";
-import type { RouteLocationRaw } from "#vue-router";
 import type { SearchResultHeaderItem } from "~/components/search/SearchResultHeader.vue";
 import type { CaseLaw, SearchResult, TextMatch } from "~/types/api";
+import {
+  getMatch,
+  getMatches,
+  getTitleWithFallback,
+} from "~/utils/search/searchResults";
 
-const { searchResultClicked } = usePostHog();
-
-const props = defineProps<{
+const { searchResult, order } = defineProps<{
   searchResult: SearchResult<CaseLaw>;
   order: number;
 }>();
 
-type CaseLawMetadata = {
-  headline: string;
-  route: RouteLocationRaw;
-  url: string;
-  decisionName: string;
-};
+const { searchResultClicked } = usePostHog();
 
-function getMatch(match: string, matches: TextMatch[]) {
-  return matches.find((highlight) => highlight.name === match)?.text;
-}
-
-function getMatches(match: string, matches: TextMatch[]) {
-  return matches
-    .filter((highlight) => highlight.name === match)
-    .map((highlight) => highlight.text);
-}
+const router = useRouter();
 
 type Key =
   | "guidingPrinciple"
@@ -45,7 +34,6 @@ interface FieldDisplayProperties {
 
 type ExtendedTextMatch = TextMatch & FieldDisplayProperties;
 
-// field definitions. A Map is used to preserve order, with the first present item
 const fields: Map<Key, FieldDisplayProperties> = new Map([
   ["guidingPrinciple", { id: "leitsatz", title: "Leitsatz" }],
   ["headnote", { id: "orientierungssatz", title: "Orientierungssatz" }],
@@ -65,81 +53,19 @@ const fields: Map<Key, FieldDisplayProperties> = new Map([
   ],
 ]);
 
-function getFileNumbers(item: CaseLaw) {
-  const matches = getMatches("fileNumbers", props.searchResult.textMatches);
-  if (matches.length) {
-    const replaced = [...item.fileNumbers];
-    for (const match of matches) {
-      const stripped = sanitizeSearchResult(match, []);
-      const index = item.fileNumbers.indexOf(stripped);
-      if (index !== -1) {
-        replaced[index] = match;
-      }
-    }
-    return replaced.join(", ");
-  }
-  return item.fileNumbers?.join(", ");
-}
+const headline = computed(() =>
+  getTitleWithFallback(
+    removeOuterParentheses(getMatch("headline", searchResult.textMatches)),
+    removeOuterParentheses(searchResult.item.headline),
+  ),
+);
 
-const metadata = computed(() => {
-  const item = props.searchResult.item;
-  return {
-    headline:
-      getMatch("headline", props.searchResult.textMatches) ||
-      item.headline ||
-      "Titelzeile nicht vorhanden",
-    route: {
-      name: "case-law-documentNumber",
-      params: { documentNumber: props.searchResult.item.documentNumber },
-    },
-    // The URL is currently needed for PostHog tracking but should not be used
-    // for navigation. Use `route` for navigation instead.
-    url: `/case-law/${props.searchResult.item.documentNumber}`,
-    decisionName: item.decisionName?.at(0),
-  } as CaseLawMetadata;
-});
-
-const previewSections = computed<ExtendedTextMatch[]>(() => {
-  const textMatches = props.searchResult.textMatches;
-  const foundFields = new Set<Key>();
-  const relevantMatches = textMatches
-    .filter((match) => fields.has(match.name as Key))
-    .map((match) => {
-      foundFields.add(match.name as Key);
-      return {
-        ...match,
-        text: addEllipsis(match.text),
-        ...fields.get(match.name as Key),
-      } as ExtendedTextMatch;
-    });
-
-  // always show the most relevant field, regardless of highlight status
-  const firstFieldName = [...fields.keys()].find((key) => foundFields.has(key));
-  const [firstFields, otherFields] = partition(
-    relevantMatches,
-    (match) => match.name === firstFieldName,
-  );
-
-  // show up to 4 fields
-  const slice: ExtendedTextMatch[] = [...firstFields, ...otherFields]
-    .slice(0, 4)
-    .filter((i) => !!i);
-
-  if (slice.length === 0) return [];
-
-  const haveHighlight = slice.some((field) => field.text.includes("<mark>"));
-
-  // if no fields have a highlight, show only the first one
-  // casting because TypeScript doesn't realize we already ensured it's not undefined
-  if (!haveHighlight) return [slice[0] as ExtendedTextMatch];
-
-  return slice;
-});
+const decisionName = computed(() => searchResult.item.decisionName?.at(0));
 
 const resultTypeId = useId();
 
 const headerItems = computed(() => {
-  const item = props.searchResult.item;
+  const item = searchResult.item;
 
   const items: SearchResultHeaderItem[] = [
     { value: item.documentType || "Entscheidung", id: resultTypeId },
@@ -156,12 +82,71 @@ const headerItems = computed(() => {
   return items;
 });
 
-const headline = computed(() =>
-  sanitizeSearchResult(removeOuterParentheses(metadata.value.headline)),
-);
+function getFileNumbers(item: CaseLaw) {
+  const matches = getMatches("fileNumbers", searchResult.textMatches);
 
-function trackResultClick(url: string) {
-  searchResultClicked(url, props.order);
+  if (matches.length) {
+    const replaced = [...item.fileNumbers];
+    for (const match of matches) {
+      const stripped = stripAllHtml(match);
+      const index = item.fileNumbers.indexOf(stripped);
+      if (index !== -1) {
+        replaced[index] = match;
+      }
+    }
+
+    return replaced.join(", ");
+  }
+
+  return item.fileNumbers?.join(", ");
+}
+
+const detailPageRoute = computed(() => ({
+  name: "case-law-documentNumber",
+  params: { documentNumber: searchResult.item.documentNumber },
+}));
+
+const previewSections = computed<ExtendedTextMatch[]>(() => {
+  const textMatches = searchResult.textMatches;
+  const foundFields = new Set<Key>();
+
+  const relevantMatches = textMatches
+    .filter((match) => fields.has(match.name as Key))
+    .map<ExtendedTextMatch>((match) => {
+      foundFields.add(match.name as Key);
+      return {
+        ...match,
+        text: sanitizeSearchResult(addEllipsis(match.text) ?? ""),
+        ...fields.get(match.name as Key)!, // always defined since we filtered above
+      };
+    });
+
+  // always show the most relevant field, regardless of highlight status
+  const firstFieldName = [...fields.keys()].find((key) => foundFields.has(key));
+  const [firstFields, otherFields] = partition(
+    relevantMatches,
+    (match) => match.name === firstFieldName,
+  );
+
+  // show up to 4 fields
+  const slice: ExtendedTextMatch[] = [...firstFields, ...otherFields]
+    .slice(0, 4)
+    .filter((i) => !!i);
+
+  if (slice.length === 0) return [];
+
+  const highlighted = slice.some((field) => field.text.includes("<mark>"));
+
+  // if no fields have a highlight, show only the first one casting because
+  // TypeScript doesn't realize we already ensured it's not undefined
+  if (!highlighted) return [slice[0] as ExtendedTextMatch];
+
+  return slice;
+});
+
+function trackResultClick() {
+  const url = router.resolve(detailPageRoute.value).href;
+  searchResultClicked(url, order);
 }
 </script>
 
@@ -169,15 +154,13 @@ function trackResultClick(url: string) {
   <div class="my-36 flex flex-col gap-8 hyphens-auto">
     <SearchResultHeader :icon="GavelIcon" :items="headerItems" />
     <NuxtLink
-      :to="metadata.route"
+      :to="detailPageRoute"
       :aria-describedby="resultTypeId"
       class="ris-heading3-bold! ris-link1-regular link-hover block"
-      @click="trackResultClick(metadata.url)"
+      @click="trackResultClick()"
     >
       <h2>
-        <span v-if="!!metadata.decisionName">
-          {{ metadata.decisionName }} —
-        </span>
+        <span v-if="!!decisionName"> {{ decisionName }} — </span>
         <span v-html="headline" />
       </h2>
     </NuxtLink>
@@ -185,17 +168,17 @@ function trackResultClick(url: string) {
     <div class="flex w-full flex-col gap-6">
       <div v-for="section in previewSections" :key="section?.id">
         <NuxtLink
-          :to="{ path: `${metadata.url}`, hash: `#${section?.id}` }"
+          :to="{ ...detailPageRoute, hash: `#${section?.id}` }"
           class="ris-link1-bold link-hover"
           external
-          @click="trackResultClick(`${metadata.url}#${section?.id}`)"
+          @click="trackResultClick()"
           >{{ section?.title }}:</NuxtLink
         >{{ " " }}
         <span
           v-if="section.text"
           data-testid="highlighted-field"
           class="ris-label1-regular"
-          v-html="sanitizeSearchResult(section.text)"
+          v-html="section.text"
         />
       </div>
     </div>
