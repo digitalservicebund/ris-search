@@ -1,5 +1,6 @@
 package de.bund.digitalservice.ris.search.unit.mapper;
 
+import static de.bund.digitalservice.ris.search.mapper.NormSearchResponseMapper.convertArticleHitToTextMatchSchema;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -11,7 +12,6 @@ import de.bund.digitalservice.ris.search.schema.LegislationExpressionSearchSchem
 import de.bund.digitalservice.ris.search.schema.LegislationObjectSchema;
 import de.bund.digitalservice.ris.search.schema.LegislationWorkSchema;
 import de.bund.digitalservice.ris.search.schema.TextMatchSchema;
-import java.lang.reflect.Method;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;
@@ -29,15 +29,6 @@ class NormSearchResponseMapperTest {
     return Article.builder().eId("eid1").name(name).text(text).build();
   }
 
-  private TextMatchSchema invokeConvertArticleHitToTextMatchSchema(SearchHit<Article> articleHit)
-      throws Exception {
-    Method method =
-        NormSearchResponseMapper.class.getDeclaredMethod(
-            "convertArticleHitToTextMatchSchema", SearchHit.class);
-    method.setAccessible(true);
-    return (TextMatchSchema) method.invoke(null, articleHit);
-  }
-
   private <T> SearchHit<T> createSearchHit(T content, Map<String, List<String>> highlightFields) {
     return new SearchHit<>(
         "1", "1", "routing", 1, null, highlightFields, null, null, null, null, content);
@@ -52,8 +43,7 @@ class NormSearchResponseMapperTest {
       String expectedText)
       throws Exception {
 
-    TextMatchSchema result =
-        invokeConvertArticleHitToTextMatchSchema(createSearchHit(content, highlightFields));
+    TextMatchSchema result = convertArticleHitToTextMatchSchema(content, highlightFields);
 
     assertNotNull(result);
     assertEquals("eid1", result.location());
