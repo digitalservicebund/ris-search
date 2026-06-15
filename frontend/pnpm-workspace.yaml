@@ -1,6 +1,7 @@
 packages: []
 
 overrides:
+  "esbuild": "0.28.1"
 
 allowBuilds:
   "@parcel/watcher": true
@@ -11,13 +12,6 @@ allowBuilds:
 
 minimumReleaseAge: 4320
 minimumReleaseAgeExclude:
-  - playwright
-  - playwright-core
-  - "@playwright/test"
-  - "@tailwindcss/oxide"
-  - tailwindcss
-  - "@tailwindcss/node"
-  - "@tailwindcss/vite"
 
 publicHoistPattern:
   - "vue"
