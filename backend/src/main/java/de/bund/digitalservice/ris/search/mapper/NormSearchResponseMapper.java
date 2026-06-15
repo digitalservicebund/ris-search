@@ -53,6 +53,13 @@ public class NormSearchResponseMapper {
         .build();
   }
 
+  /**
+   * Converts search hits in articles to a {@link TextMatchSchema}.
+   *
+   * @param article Article to convert
+   * @param highlightFields Text matches
+   * @return A {@link TextMatchSchema} representing the text matches found in the article.
+   */
   public static TextMatchSchema convertArticleHitToTextMatchSchema(
       Article article, Map<String, List<String>> highlightFields) {
 
