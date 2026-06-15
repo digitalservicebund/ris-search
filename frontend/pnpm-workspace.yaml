@@ -9,9 +9,9 @@ allowBuilds:
   core-js: false
   esbuild: true
   protobufjs: false
+  vue-demi: false
 
 minimumReleaseAge: 4320
-minimumReleaseAgeExclude:
 
 publicHoistPattern:
   - "vue"
