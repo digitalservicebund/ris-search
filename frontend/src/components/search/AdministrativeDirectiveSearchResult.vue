@@ -33,7 +33,11 @@ const headerItems = computed<SearchResultHeaderItem[]>(() => {
 });
 
 const headline = computed(() =>
-  sanitizeSearchResult(getMatch("headline") || "Titelzeile nicht vorhanden"),
+  sanitizeSearchResult(
+    getMatch("headline") ||
+      searchResult.item.headline ||
+      "Titelzeile nicht vorhanden",
+  ),
 );
 
 const text = computed(() => {

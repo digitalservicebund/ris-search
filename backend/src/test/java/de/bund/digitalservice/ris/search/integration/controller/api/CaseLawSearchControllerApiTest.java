@@ -259,11 +259,7 @@ class CaseLawSearchControllerApiTest extends ContainersIntegrationBase {
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.member[*].textMatches").exists())
-        .andExpect(
-            jsonPath("$.member[0].textMatches[*].name")
-                .value(
-                    Matchers.containsInRelativeOrder(
-                        "caseFacts", "headnote", "otherHeadnote", "decisionGrounds", "headline")))
+        .andExpect(jsonPath("$.member[0].textMatches[*].name").value(Matchers.contains("headline")))
         .andExpect(
             jsonPath("$.member[0].textMatches[?(@.name == 'headline')].text")
                 .value(

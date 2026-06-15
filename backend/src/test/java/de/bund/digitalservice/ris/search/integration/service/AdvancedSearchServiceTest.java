@@ -152,8 +152,8 @@ class AdvancedSearchServiceTest extends ContainersIntegrationBase {
   }
 
   @Test
-  @DisplayName("norm advanced search without highlights works")
-  void normAdvancedSearchWithoutHighlightsWorks() {
+  @DisplayName("norm advanced search without highlights returns no articles")
+  void normAdvancedSearchWithoutHighlightsReturnsNoArticles() {
 
     var searchHit =
         advancedSearchService
@@ -161,22 +161,11 @@ class AdvancedSearchServiceTest extends ContainersIntegrationBase {
             .getSearchHits()
             .getSearchHit(0);
 
-    // Check that the title was highlighted
     Map<String, String> nonArticleHighlights = getFieldMatches(searchHit);
-    assertThat(nonArticleHighlights).containsOnly(Map.entry("officialTitle", "Test Gesetz"));
+    assertThat(nonArticleHighlights).isEmpty();
 
-    // check the article highlights work
-    List<Pair<String, String>> articleHighlights =
-        searchHit
-            .getInnerHits()
-            .get("top_three_articles")
-            .get()
-            .map(this::getArticleTextMatch)
-            .toList();
-    assertThat(articleHighlights)
-        .containsExactly(
-            Pair.of("§ 1 Example article", "example text 1"),
-            Pair.of("§ 2 Example article", "example text 2"));
+    var articleInnerHits = searchHit.getInnerHits().get("top_three_articles");
+    assertThat(articleInnerHits).isNull();
   }
 
   private Pair<String, String> getArticleTextMatch(SearchHit<?> searchHit) {

@@ -13,7 +13,6 @@ import org.opensearch.data.client.orhlc.NativeSearchQuery;
 import org.opensearch.data.client.orhlc.NativeSearchQueryBuilder;
 import org.opensearch.index.query.BoolQueryBuilder;
 import org.opensearch.index.query.InnerHitBuilder;
-import org.opensearch.index.query.MatchAllQueryBuilder;
 import org.opensearch.index.query.MatchPhraseQueryBuilder;
 import org.opensearch.index.query.MultiMatchQueryBuilder;
 import org.opensearch.index.query.Operator;
@@ -69,9 +68,9 @@ public class ArticleService {
     boolQuery.filter(QueryBuilders.termsQuery("expression_eli", expressionElis));
 
     if (isLuceneQuery) {
-      boolQuery.should(QueryBuilders.queryStringQuery(searchString));
+      boolQuery.must(QueryBuilders.queryStringQuery(searchString));
     } else {
-      boolQuery.should(
+      boolQuery.must(
           new MultiMatchQueryBuilder(searchString)
               .zeroTermsQuery(MatchQuery.ZeroTermsQuery.ALL)
               .type(MultiMatchQueryBuilder.Type.CROSS_FIELDS)
@@ -81,11 +80,6 @@ public class ArticleService {
       // abbreviation).
       // Slop is added to account for re-ordering of the components.
       boolQuery.should(new MatchPhraseQueryBuilder("search_keyword", searchString).slop(3));
-
-      // Include a MatchAllQuery with boost 0 to ensure all articles are considered for display,
-      // even if they don't explicitly match the query, but without influencing their ranking.
-      // This is useful for filling in results if few highly relevant articles are found.
-      boolQuery.should(new MatchAllQueryBuilder().boost(0));
     }
 
     HighlightBuilder highlightBuilder =

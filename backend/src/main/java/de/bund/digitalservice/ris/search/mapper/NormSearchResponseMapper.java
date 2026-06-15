@@ -13,14 +13,12 @@ import de.bund.digitalservice.ris.search.schema.SearchMemberSchema;
 import de.bund.digitalservice.ris.search.schema.TextMatchSchema;
 import de.bund.digitalservice.ris.search.utils.DateUtils;
 import de.bund.digitalservice.ris.search.utils.PageUtils;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
 import org.apache.commons.collections4.ListUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.elasticsearch.core.SearchHit;
-import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.SearchPage;
 
 /**
@@ -55,29 +53,24 @@ public class NormSearchResponseMapper {
         .build();
   }
 
-  private static TextMatchSchema convertArticleHitToTextMatchSchema(SearchHit<?> articleHit) {
-    var articleHitContent = articleHit.getContent();
+  /**
+   * Converts search hits in articles to a {@link TextMatchSchema}.
+   *
+   * @param article Article to convert
+   * @param highlightFields Text matches
+   * @return A {@link TextMatchSchema} representing the text matches found in the article.
+   */
+  public static TextMatchSchema convertArticleHitToTextMatchSchema(
+      Article article, Map<String, List<String>> highlightFields) {
+
     String articleMatchingName =
-        articleHit.getHighlightFields().getOrDefault("name", List.of()).stream()
-            .findFirst()
-            .orElse("");
+        highlightFields.getOrDefault("name", List.of()).stream().findFirst().orElse("");
     String articleMatchingText =
-        articleHit.getHighlightFields().getOrDefault("text", List.of()).stream()
-            .findFirst()
-            .orElse("");
-    if (articleHitContent instanceof Article article) {
-      return toTextMatchSchema(
-          articleMatchingName.isEmpty() ? article.getName() : articleMatchingName,
-          articleMatchingText.isEmpty() ? article.getText() : articleMatchingText,
-          article.getEId());
-    }
-    if (articleHitContent instanceof Map<?, ?> hit
-        && hit.containsKey("name")
-        && hit.containsKey("eid")) {
-      return toTextMatchSchema(
-          hit.get("name").toString(), articleMatchingText, hit.get("eid").toString());
-    }
-    return null;
+        highlightFields.getOrDefault("text", List.of()).stream().findFirst().orElse("");
+    return toTextMatchSchema(
+        articleMatchingName.isEmpty() ? article.getName() : articleMatchingName,
+        articleMatchingText.isEmpty() ? article.getText() : articleMatchingText,
+        article.getEId());
   }
 
   /**
@@ -92,18 +85,18 @@ public class NormSearchResponseMapper {
    *     {@link SearchHit}, including matches from inner hits and highlighted fields.
    */
   public static <T> List<TextMatchSchema> getTextMatches(SearchHit<T> searchHit) {
-    Optional<SearchHits<?>> matchingArticles =
-        Optional.ofNullable(searchHit.getInnerHits().getOrDefault("top_three_articles", null));
+    List<TextMatchSchema> articleHits = new ArrayList<>();
 
-    List<TextMatchSchema> articleHits =
-        matchingArticles
-            .map(
-                hits ->
-                    hits.stream()
-                        .map(NormSearchResponseMapper::convertArticleHitToTextMatchSchema)
-                        .filter(Objects::nonNull)
-                        .toList())
-            .orElse(List.of());
+    var matchingArticles = searchHit.getInnerHits().get("top_three_articles");
+    if (matchingArticles != null) {
+      for (var articleHit : matchingArticles) {
+        var content = articleHit.getContent();
+        if (content instanceof Article article) {
+          articleHits.add(
+              convertArticleHitToTextMatchSchema(article, articleHit.getHighlightFields()));
+        }
+      }
+    }
 
     List<TextMatchSchema> normHits =
         searchHit.getHighlightFields().entrySet().stream()
