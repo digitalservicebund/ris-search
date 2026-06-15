@@ -152,8 +152,8 @@ class AdvancedSearchServiceTest extends ContainersIntegrationBase {
   }
 
   @Test
-  @DisplayName("norm advanced search without highlights works")
-  void normAdvancedSearchWithoutHighlightsWorks() {
+  @DisplayName("norm advanced search without highlights returns no articles")
+  void normAdvancedSearchWithoutHighlightsReturnsNoArticles() {
 
     var searchHit =
         advancedSearchService
@@ -161,14 +161,11 @@ class AdvancedSearchServiceTest extends ContainersIntegrationBase {
             .getSearchHits()
             .getSearchHit(0);
 
-    // The ELI query does not match any content fields, so no highlights are returned
     Map<String, String> nonArticleHighlights = getFieldMatches(searchHit);
     assertThat(nonArticleHighlights).isEmpty();
 
-    // Articles are still returned (the expression_eli filter matches), but without highlight text
     var articleInnerHits = searchHit.getInnerHits().get("top_three_articles");
-    assertThat(articleInnerHits).hasSize(2);
-    articleInnerHits.forEach(hit -> assertThat(getFieldMatches(hit)).isEmpty());
+    assertThat(articleInnerHits).isNull();
   }
 
   private Pair<String, String> getArticleTextMatch(SearchHit<?> searchHit) {
