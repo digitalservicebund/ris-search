@@ -60,7 +60,7 @@
                 <ris:legalDocML.de_metadaten xmlns:ris="http://MetadatenRIS.LegalDocML.de/1.8.2/"
                          xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.8.2/
                          ../../Grammatiken/Norms/legalDocML.de-metadaten-ris.xsd">
-                    <ris:abkuerzung refersTo="interne-abkuerzung">TEST_MOCK_NOT_IMPORTANT</ris:abkuerzung>
+                    {% if abkuerzung %}<ris:abkuerzung>{{abkuerzung}}</ris:abkuerzung>{% else %}<ris:abkuerzung refersTo="interne-abkuerzung">TEST_MOCK_NOT_IMPORTANT</ris:abkuerzung>{% endif %}
                     <ris:inkraft date="{% if inkraft %}{{inkraft}}{% else %}2020-01-01{% endif %}"/>
                     {% if ausserkraft %}<ris:ausserkraft date="{{ausserkraft}}"/>{% endif %}
                     <ris:vollzitat>Verordnung zu der Vereinbarung zwischen der Regierung der Bundesrepublik Deutschland und dem Freiwilligenprogramm der Vereinten Nationen über die Errichtung eines durch das Umweltprogramm der Vereinten Nationen gestellten Sekretariats für die Zwischenstaatliche Plattform Wissenschaft-Politik für Biodiversität und Ökosystemdienstleistungen (IPBES) in Bonn (IPBES-Sekretariat) vom 8. Juli 2024 (BGBl. 2024 II Nr. 266)</ris:vollzitat>
@@ -80,7 +80,7 @@
                             </akn:p>
                         </akn:authorialNote>
                     </akn:docTitle>
-                    <akn:shortTitle GUID="f312be90-0938-4ab8-a18d-e5b97e9be345" eId="einleitung-n1_doktitel-n1_text-n1_kurztitel-n1">(Formatting Test - <akn:inline GUID="f312be90-0938-4ab8-a18d-e5b97e9be456" refersTo="amtliche-abkuerzung" name="attributsemantik-noch-undefiniert" eId="einleitung-n1_doktitel-n1_text-n1_kurztitel-n1_inline-n1">MFT</akn:inline>)</akn:shortTitle>
+                    {% if not omitShortTitleAbbreviation %}<akn:shortTitle GUID="f312be90-0938-4ab8-a18d-e5b97e9be345" eId="einleitung-n1_doktitel-n1_text-n1_kurztitel-n1">(Formatting Test - <akn:inline GUID="f312be90-0938-4ab8-a18d-e5b97e9be456" refersTo="amtliche-abkuerzung" name="attributsemantik-noch-undefiniert" eId="einleitung-n1_doktitel-n1_text-n1_kurztitel-n1_inline-n1">MFT</akn:inline>)</akn:shortTitle>{% endif %}
                 </akn:p>
             </akn:longTitle>
             <akn:block eId="einleitung-n1_block-n1" GUID="50b373c9-d7a9-4ea1-a6c9-bee1fa5617c6" name="attributsemantik-noch-undefiniert">

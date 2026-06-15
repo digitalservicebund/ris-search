@@ -87,6 +87,7 @@ public class NormLdmlToOpenSearchMapper {
   private static final String AKN_ACT = "/akn:akomaNtoso/akn:act/";
   private static final String AKN_RIS_METADATA =
       AKN_ACT + "akn:meta/akn:proprietary/ris:legalDocML.de_metadaten/";
+  private static final String X_PATH_RIS_ABKUERZUNG = AKN_RIS_METADATA + "ris:abkuerzung";
   private static final String X_PATH_ENTRY_INTO_FORCE_DATE = AKN_RIS_METADATA + "ris:inkraft/@date";
   private static final String X_PATH_EXPIRY_DATE = AKN_RIS_METADATA + "ris:ausserkraft/@date";
   private static final String X_PATH_GEGENSTANDSLOS = AKN_RIS_METADATA + "ris:gegenstandlos";
@@ -291,6 +292,12 @@ public class NormLdmlToOpenSearchMapper {
 
     if (StringUtils.isNotEmpty(xmlDocumentDocTitleAbbreviation)) {
       return xmlDocumentDocTitleAbbreviation;
+    }
+
+    String risAbkuerzung = xmlDocument.getElementByXpath(X_PATH_RIS_ABKUERZUNG);
+
+    if (StringUtils.isNotEmpty(risAbkuerzung)) {
+      return risAbkuerzung;
     }
 
     return StringUtils.EMPTY;

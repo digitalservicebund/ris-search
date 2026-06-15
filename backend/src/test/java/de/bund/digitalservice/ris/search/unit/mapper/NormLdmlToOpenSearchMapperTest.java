@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import de.bund.digitalservice.ris.SharedTestConstants;
+import de.bund.digitalservice.ris.search.integration.controller.api.testData.NormsTestData;
 import de.bund.digitalservice.ris.search.mapper.NormLdmlToOpenSearchMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
@@ -74,6 +75,17 @@ class NormLdmlToOpenSearchMapperTest {
         NormLdmlToOpenSearchMapper.parseNorm(readXmlTestFile(normFile), Map.of(), true).get();
     assertEquals("AdWirkG", norm.getOfficialAbbreviation());
     assertNull(norm.getNormsDate());
+  }
+
+  @Test
+  @DisplayName("Should use ris:abkuerzung as fallback when no amtliche abbreviation is present")
+  void shouldUseRisAbkuerzungAsFallback() throws IOException {
+    String xml =
+        NormsTestData.simpleNormXml(
+            "eli/bund/bgbl-1/1962/s514/2010-04-27/1/deu/2010-04-27/regelungstext-1.xml",
+            Map.of("abkuerzung", "RisAbkG", "omitShortTitleAbbreviation", true));
+    Norm norm = NormLdmlToOpenSearchMapper.parseNorm(xml, Map.of(), true).get();
+    assertThat(norm.getOfficialAbbreviation()).isEqualTo("RisAbkG");
   }
 
   @Test
