@@ -3,11 +3,7 @@ import { partition } from "lodash-es";
 import GavelIcon from "~icons/ic/outline-gavel";
 import type { RouteLocationRaw } from "#vue-router";
 import type { SearchResultHeaderItem } from "~/components/search/SearchResultHeader.vue";
-import { usePostHog } from "~/composables/usePostHog";
 import type { CaseLaw, SearchResult, TextMatch } from "~/types/api";
-import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
-import { sanitizeSearchResult } from "~/utils/sanitize";
-import { addEllipsis, removeOuterParentheses } from "~/utils/textFormatting";
 
 const { searchResultClicked } = usePostHog();
 

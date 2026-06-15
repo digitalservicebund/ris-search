@@ -1,19 +1,11 @@
 <script setup lang="ts">
 import IcBaselineBalance from "~icons/ic/baseline-balance";
-import Badge from "~/components/Badge.vue";
 import type { SearchResultHeaderItem } from "~/components/search/SearchResultHeader.vue";
-import { usePostHog } from "~/composables/usePostHog";
-import { usePrivateFeaturesFlag } from "~/composables/usePrivateFeaturesFlag";
 import type {
   LegislationExpression,
   SearchResult,
   TextMatch,
 } from "~/types/api";
-import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
-import { formatNormValidity } from "~/utils/displayValues";
-import { temporalCoverageToValidityInterval } from "~/utils/norm";
-import { sanitizeSearchResult } from "~/utils/sanitize";
-import { addEllipsis } from "~/utils/textFormatting";
 
 const props = defineProps<{
   searchResult: SearchResult<LegislationExpression>;

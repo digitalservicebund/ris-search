@@ -3,7 +3,6 @@ import RuleIcon from "~icons/ic/outline-rule";
 import type { SearchResultHeaderItem } from "~/components/search/SearchResultHeader.vue";
 import { usePostHog } from "~/composables/usePostHog";
 import type { AdministrativeDirective, SearchResult } from "~/types/api";
-import { sanitizeSearchResult } from "~/utils/sanitize";
 
 const { searchResultClicked } = usePostHog();
 const router = useRouter();
