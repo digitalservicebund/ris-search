@@ -2,8 +2,9 @@
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import { InputMask } from "primevue";
-import { computed, ref, useTemplateRef, watch } from "vue";
+import { computed, nextTick, ref, useTemplateRef, watch } from "vue";
 import IconErrorOutline from "~icons/ic/baseline-error-outline";
+import WithClearButton from "./WithClearButton.vue";
 
 /** Form field validation error. */
 export type ValidationError = {
@@ -36,6 +37,9 @@ const props = withDefaults(
 
     /** Validation error and message to display. */
     validationError?: ValidationError;
+
+    /** Whether to show a clear button. */
+    showClear?: boolean;
   }>(),
   {
     modelValue: "",
@@ -43,6 +47,7 @@ const props = withDefaults(
     isReadOnly: false,
     label: undefined,
     validationError: undefined,
+    showClear: false,
   },
 );
 
@@ -126,6 +131,8 @@ const isValidDate = computed(() => {
   return dayjs(inputValue.value, HUMAN_READABLE_FORMAT, true).isValid();
 });
 
+const key = ref<string>();
+
 function validateInput() {
   if (inputCompleted.value) {
     if (isValidDate.value) {
@@ -167,27 +174,48 @@ function focus() {
   inputMaskEl.value?.$el.focus();
 }
 
+async function clear() {
+  inputValue.value = "";
+  // Setting v-model to "" alone is apparently not enough to reset InputMask's internal
+  // buffer. Changing :key forces Vue to fully unmount and remount the component,
+  // which makes sure the input is actually cleared when the user starts typing again.
+  key.value = crypto.randomUUID();
+  await nextTick();
+  focus();
+}
+
 defineExpose({ focus });
 </script>
 
 <template>
-  <div class="flex w-full flex-col gap-2">
-    <InputMask
-      :id="id"
-      ref="inputMaskEl"
-      v-model="inputValue"
-      :auto-clear="false"
-      :invalid="effectiveHasError"
-      :readonly="isReadOnly"
-      :disabled="isReadOnly"
-      class="w-full"
-      mask="99.99.9999"
-      placeholder="TT.MM.JJJJ"
-      @blur="onBlur"
-      @keydown="backspaceDelete"
-    />
+  <div>
+    <WithClearButton
+      :clearButtonVisible="!!inputValue && props.showClear"
+      @clear="clear"
+    >
+      <InputMask
+        :id="id"
+        :key
+        ref="inputMaskEl"
+        v-model="inputValue"
+        :auto-clear="false"
+        :invalid="effectiveHasError"
+        :readonly="isReadOnly"
+        :disabled="isReadOnly"
+        class="w-full"
+        :class="{ 'pr-[2.5em]': props.showClear }"
+        mask="99.99.9999"
+        placeholder="TT.MM.JJJJ"
+        @blur="onBlur"
+        @keydown="backspaceDelete"
+      />
+    </WithClearButton>
 
-    <small v-if="errorMessage" :id="`${id}-hint`">
+    <small
+      v-if="errorMessage"
+      class="mt-4 flex items-center gap-4 text-red-900"
+      :id="`${id}-hint`"
+    >
       <IconErrorOutline />
       {{ errorMessage }}
     </small>
