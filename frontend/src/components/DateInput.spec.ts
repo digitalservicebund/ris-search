@@ -22,7 +22,7 @@ function renderComponent(options?: {
   modelValue?: string;
   validationError?: ValidationError;
   isReadOnly?: boolean;
-  withClearButton?: boolean;
+  showClear?: boolean;
   stubs?: Record<string, object>;
 }) {
   const user = userEvent.setup();
@@ -31,7 +31,7 @@ function renderComponent(options?: {
     modelValue: options?.modelValue,
     validationError: options?.validationError,
     isReadOnly: options?.isReadOnly,
-    withClearButton: options?.withClearButton,
+    showClear: options?.showClear,
   };
   const utils = render(DateInput, {
     props,
@@ -225,14 +225,14 @@ describe("DateInput", () => {
     });
 
     it("is not shown when the input is empty", () => {
-      renderComponent({ withClearButton: true });
+      renderComponent({ showClear: true });
       expect(
         screen.queryByRole("button", { name: "Entfernen" }),
       ).not.toBeInTheDocument();
     });
 
     it("is shown when the input has a value", () => {
-      renderComponent({ modelValue: "2024-04-22", withClearButton: true });
+      renderComponent({ modelValue: "2024-04-22", showClear: true });
       expect(
         screen.getByRole("button", { name: "Entfernen" }),
       ).toBeInTheDocument();
@@ -241,7 +241,7 @@ describe("DateInput", () => {
     it("clears the input when clicked", async () => {
       const { emitted } = renderComponent({
         modelValue: "2024-04-22",
-        withClearButton: true,
+        showClear: true,
         stubs: { InputMask: InputText },
       });
 

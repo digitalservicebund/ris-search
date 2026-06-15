@@ -301,7 +301,7 @@ const fassungenDateFilterInputId = useId();
                 v-model="fassungenDateFilterValue"
                 class="mb-16 max-w-240 md:mb-24"
                 :id="fassungenDateFilterInputId"
-                :withClearButton="true"
+                :showClear="true"
               />
             </div>
             <DocumentsNormsNormVersionList

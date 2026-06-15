@@ -39,7 +39,7 @@ const props = withDefaults(
     validationError?: ValidationError;
 
     /** Whether to show a clear button. */
-    withClearButton?: boolean;
+    showClear?: boolean;
   }>(),
   {
     modelValue: "",
@@ -47,7 +47,7 @@ const props = withDefaults(
     isReadOnly: false,
     label: undefined,
     validationError: undefined,
-    withClearButton: false,
+    showClear: false,
   },
 );
 
@@ -189,7 +189,7 @@ defineExpose({ focus });
 
 <template>
   <ClearButtonWrapper
-    :clearButtonVisible="!!inputValue && props.withClearButton"
+    :clearButtonVisible="!!inputValue && props.showClear"
     @clear="clear"
   >
     <InputMask
