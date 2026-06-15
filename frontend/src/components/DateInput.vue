@@ -203,6 +203,7 @@ defineExpose({ focus });
         :readonly="isReadOnly"
         :disabled="isReadOnly"
         class="w-full"
+        :class="{ 'pr-[2.5em]': props.showClear }"
         mask="99.99.9999"
         placeholder="TT.MM.JJJJ"
         @blur="onBlur"
