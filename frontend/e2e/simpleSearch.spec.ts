@@ -438,7 +438,10 @@ test.describe("searching caselaw", () => {
   });
 
   test("shows the search result contents", async ({ page }) => {
-    await navigate(page, "/search?query=34+X+(xyz)+456/78&documentKind=R");
+    await navigate(
+      page,
+      "/search?query=34+X+(xyz)+456/78+Verfahrensbeschreibung&documentKind=R",
+    );
 
     const searchResult = getSearchResults(page).first();
 
@@ -460,7 +463,9 @@ test.describe("searching caselaw", () => {
       searchResult.getByRole("link", { name: "Orientierungssatz:" }),
     ).toBeVisible();
     await expect(
-      searchResult.getByText(/1. Fiktiver Satz für Testzwecke im Beschluss/),
+      searchResult.getByText(
+        /Weitere fiktive Informationen zur Verfahrensbeschreibung./,
+      ),
     ).toBeVisible();
   });
 

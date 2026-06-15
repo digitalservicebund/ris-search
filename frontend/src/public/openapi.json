@@ -3487,6 +3487,10 @@
         "type" : "object",
         "description" : "Represents a <a href=\"https://schema.org/DataCatalog\">schema.org/DataCatalog</a>.",
         "properties" : {
+          "@context" : {
+            "type" : "string",
+            "example" : "https://schema.org/"
+          },
           "@type" : {
             "type" : "string",
             "example" : "DataCatalog"
@@ -3495,7 +3499,7 @@
             "type" : "string",
             "description" : "The name of this data catalog."
           },
-          "dataSets" : {
+          "dataSet" : {
             "type" : "array",
             "description" : "The list of zip datasets contained in this catalog.",
             "items" : {
@@ -3503,7 +3507,7 @@
             }
           }
         },
-        "required" : [ "dataSets", "name" ]
+        "required" : [ "dataSet", "name" ]
       },
       "ZipDataDownloadSchema" : {
         "type" : "object",
