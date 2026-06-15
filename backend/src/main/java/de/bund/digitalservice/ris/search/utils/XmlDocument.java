@@ -13,6 +13,7 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Document;
@@ -178,6 +179,18 @@ public class XmlDocument {
       logger.warn(String.format("Error finding element by xpath: %s", xpath), exception);
       return null;
     }
+  }
+
+  /**
+   * Retrieves the text content of the first XML element that matches the given XPath expression,
+   * returning a non-empty {@code Optional} only when the value is present and non-blank.
+   *
+   * @param xpath the XPath expression to evaluate against the XML document
+   * @return an {@code Optional} containing the trimmed text content, or empty if the node is
+   *     missing, blank, or an error occurs
+   */
+  public Optional<String> getNonEmptyElementByXpath(String xpath) {
+    return Optional.ofNullable(getElementByXpath(xpath)).filter(StringUtils::isNotBlank);
   }
 
   /**
