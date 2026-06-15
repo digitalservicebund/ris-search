@@ -60,6 +60,3 @@ updates:
       day: "sunday"
     cooldown:
       default-days: 3
-    ignore:
-      # The chainguard images is updated separately, see: update-chainguard-image-version-cronjob.yml
-      - dependency-name: "chainguard/jre"
