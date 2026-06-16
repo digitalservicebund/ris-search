@@ -48,6 +48,10 @@ const views: DocumentView[] = [
 const textSectionId = useId();
 const detailsSectionId = useId();
 
+const textContentRef = ref<HTMLElement | null>(null);
+const { query: searchQuery, matchCount: searchMatchCount } =
+  useNormTextSearch(textContentRef);
+
 const title = computed(() => data.value?.headline);
 
 const document = html.value ? parseDocument(html.value) : undefined;
@@ -121,8 +125,14 @@ const detailItems = computed(() =>
           <section role="tabpanel" :aria-labelledby="textSectionId">
             <h2 :id="textSectionId" class="sr-only">Text</h2>
             <DocumentsIncompleteDataMessage />
+            <DocumentsNormsNormTextSearchBar
+              v-model="searchQuery"
+              :match-count="searchMatchCount"
+              class="mb-16 print:hidden"
+            />
             <div
               v-if="document"
+              ref="textContentRef"
               class="administrative-directive"
               v-html="document.body.innerHTML"
             ></div>

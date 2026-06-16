@@ -150,6 +150,10 @@ const textTabPanelTitleId = useId();
 const detailsTabPanelTitleId = useId();
 const fassungenTabPanelTitleId = useId();
 const fassungenDateFilterInputId = useId();
+
+const normTextContentRef = ref<HTMLElement | null>(null);
+const { query: searchQuery, matchCount: searchMatchCount } =
+  useNormTextSearch(normTextContentRef);
 </script>
 
 <template>
@@ -205,6 +209,12 @@ const fassungenDateFilterInputId = useId();
         role="tabpanel"
         :aria-labelledby="textTabPanelTitleId"
       >
+        <div class="container pt-16 pb-4 print:hidden">
+          <DocumentsNormsNormTextSearchBar
+            v-model="searchQuery"
+            :match-count="searchMatchCount"
+          />
+        </div>
         <SidebarLayout class="container">
           <template #content>
             <h2 :id="textTabPanelTitleId" class="sr-only">Text</h2>
@@ -212,7 +222,7 @@ const fassungenDateFilterInputId = useId();
             <DocumentsNormsLegislationContent
               :official-toc="htmlParts.officialToc"
             >
-              <div v-html="htmlParts.body" />
+              <div ref="normTextContentRef" v-html="htmlParts.body" />
             </DocumentsNormsLegislationContent>
           </template>
 

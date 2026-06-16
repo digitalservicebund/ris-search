@@ -54,6 +54,10 @@ const views: DocumentView[] = [
 const textSectionId = useId();
 const detailsSectionId = useId();
 
+const textContentRef = ref<HTMLElement | null>(null);
+const { query: searchQuery, matchCount: searchMatchCount } =
+  useNormTextSearch(textContentRef);
+
 const title = computed(() => getTitle(literature.value));
 const document = html.value ? parseDocument(html.value) : undefined;
 const isEmptyDocument = computed(() => isDocumentEmpty(document));
@@ -123,8 +127,14 @@ const detailItems = computed(() => getLiteratureDetailItems(literature.value));
           <section role="tabpanel" :aria-labelledby="textSectionId">
             <h2 :id="textSectionId" class="sr-only">Text</h2>
             <DocumentsIncompleteDataMessage />
+            <DocumentsNormsNormTextSearchBar
+              v-model="searchQuery"
+              :match-count="searchMatchCount"
+              class="mb-16 print:hidden"
+            />
             <div
               v-if="document"
+              ref="textContentRef"
               class="literature"
               v-html="document.body.innerHTML"
             ></div>
