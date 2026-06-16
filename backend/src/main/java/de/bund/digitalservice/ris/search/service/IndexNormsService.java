@@ -17,7 +17,6 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.time.Period;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -27,7 +26,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.apache.commons.collections4.ListUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,7 +73,8 @@ public class IndexNormsService implements IndexService {
    */
   public void reindexAll(String startingTimestamp) {
     DateUtils.avoidOpenSearchSubMillisecondDateBug();
-    Set<WorkEli> workElis = getWorks(normsBucket.getAllKeysByPrefix("eli/").stream());
+    List<String> allFiles = normsBucket.getAllKeysByPrefix("eli/");
+    Map<WorkEli, List<String>> workElis = getWorks(allFiles.stream());
     processWorkEliUpdates(workElis, startingTimestamp);
     clearOldNorms(startingTimestamp);
   }
@@ -83,7 +82,7 @@ public class IndexNormsService implements IndexService {
   @Override
   public void indexChangelog(Changelog changelog) {
     try {
-      Set<WorkEli> workElis =
+      Map<WorkEli, List<String>> workElis =
           getWorks(Stream.concat(changelog.getChanged().stream(), changelog.getDeleted().stream()));
       processWorkEliUpdates(workElis, Instant.now().toString());
     } catch (IllegalArgumentException e) {
@@ -91,31 +90,29 @@ public class IndexNormsService implements IndexService {
     }
   }
 
-  private Set<WorkEli> getWorks(Stream<String> files) {
+  private Map<WorkEli, List<String>> getWorks(Stream<String> files) {
     return files
         .map(EliFile::fromString)
-        // this filters out the files that are not an EliFile
-        .flatMap(Optional::stream)
-        .map(EliFile::getWorkEli)
-        // collecting to a set makes sure each work eli occurs at most once
-        .collect(Collectors.toSet());
+        .flatMap(Optional::stream) // Filters out empty optionals, leaving Stream<EliFile>
+        .collect(
+            Collectors.groupingBy(
+                EliFile::getWorkEli, // Key: Group by the WorkEli
+                Collectors.mapping( // Value: Extract the filename and collect to a list
+                    EliFile::toString, Collectors.toList())));
   }
 
-  private void processWorkEliUpdates(Collection<WorkEli> workElis, String startingTimestamp) {
-    List<List<WorkEli>> batches = ListUtils.partition(workElis.stream().toList(), 100);
-    for (int i = 0; i < batches.size(); i++) {
-      List<WorkEli> oneBatch = batches.get(i);
-      logger.info("Indexing batch {} of {}", i + 1, batches.size());
-      for (WorkEli eli : oneBatch) {
-        processOneNormWork(eli, startingTimestamp);
-      }
+  private void processWorkEliUpdates(
+      Map<WorkEli, List<String>> workElis, String startingTimestamp) {
+    for (WorkEli eli : workElis.keySet()) {
+      processOneNormWork(eli, workElis.get(eli), startingTimestamp);
     }
   }
 
-  private void processOneNormWork(WorkEli workEli, String startingTimestamp) {
-    // Get all expressions for the current work from the bucket
+  private void processOneNormWork(
+      WorkEli workEli, List<String> filenames, String startingTimestamp) {
+
     Set<ExpressionEli> expressionElis =
-        normsBucket.getAllKeysByPrefix(workEli.toString() + "/").stream()
+        filenames.stream()
             .map(EliFile::fromString)
             .flatMap(Optional::stream)
             .map(EliFile::getExpressionEli)
@@ -125,7 +122,7 @@ public class IndexNormsService implements IndexService {
     List<Norm> normExpressions = new ArrayList<>();
     for (ExpressionEli expressionEli : expressionElis) {
       try {
-        getNormFromS3(expressionEli).ifPresent(normExpressions::add);
+        getNormFromS3(expressionEli, filenames).ifPresent(normExpressions::add);
       } catch (ObjectStoreServiceException e) {
         // If we can't get the content of an expression we log an error and move on
         // That means on failure of a work "changed" it will end up deleted
@@ -135,10 +132,8 @@ public class IndexNormsService implements IndexService {
 
     addTimeRelevanceWindows(workEli.toString(), normExpressions);
 
+    normsRepository.saveAll(normExpressions);
     for (Norm norm : normExpressions) {
-      // saving norms in a batch caused an error due to opensearch request being too large
-      //noinspection UseBulkOperation
-      normsRepository.save(norm);
       articlesRepository.saveAll(norm.getArticles());
     }
 
@@ -212,12 +207,12 @@ public class IndexNormsService implements IndexService {
     return !norm2.getEntryIntoForceDate().isAfter(norm1.getExpiryDate());
   }
 
-  private Optional<Norm> getNormFromS3(ExpressionEli expressionEli)
+  private Optional<Norm> getNormFromS3(ExpressionEli expressionEli, List<String> filenames)
       throws ObjectStoreServiceException {
 
     // Get all files for the current expression.
     final List<String> keysMatchingExpressionEli =
-        normsBucket.getAllKeysByPrefix(expressionEli.toString());
+        filenames.stream().filter(n -> n.startsWith(expressionEli.toString())).toList();
 
     Optional<String> newestFileName =
         keysMatchingExpressionEli.stream()
