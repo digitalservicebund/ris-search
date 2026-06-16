@@ -3029,6 +3029,13 @@
               "type" : "string",
               "description" : "Kurzreferat"
             },
+            "outline" : {
+              "type" : "array",
+              "description" : "Gliederung",
+              "items" : {
+                "type" : "string"
+              }
+            },
             "documentType" : {
               "type" : "string",
               "description" : "Dokumenttyp",

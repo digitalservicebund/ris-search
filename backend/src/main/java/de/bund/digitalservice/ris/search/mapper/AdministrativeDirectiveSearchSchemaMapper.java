@@ -100,6 +100,7 @@ public class AdministrativeDirectiveSearchSchemaMapper {
         .documentNumber(doc.documentNumber())
         .headline(doc.headline())
         .shortReport(doc.shortReport())
+        .outline(doc.tableOfContentsEntries())
         .entryIntoForceDate(doc.entryIntoEffectDate())
         .referenceNumbers(doc.referenceNumbers())
         .legislationAuthority(doc.legislationAuthority())
