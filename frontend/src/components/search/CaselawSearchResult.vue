@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { partition } from "lodash-es";
 import GavelIcon from "~icons/ic/outline-gavel";
 import type { SearchResultHeaderItem } from "~/components/search/SearchResultHeader.vue";
 import type { CaseLaw, SearchResult, TextMatch } from "~/types/api";
@@ -107,41 +106,18 @@ const detailPageRoute = computed(() => ({
 }));
 
 const previewSections = computed<ExtendedTextMatch[]>(() => {
-  const textMatches = searchResult.textMatches;
-  const foundFields = new Set<Key>();
-
-  const relevantMatches = textMatches
+  const keys = [...fields.keys()];
+  return searchResult.textMatches
     .filter((match) => fields.has(match.name as Key))
-    .map<ExtendedTextMatch>((match) => {
-      foundFields.add(match.name as Key);
-      return {
-        ...match,
-        text: sanitizeSearchResult(addEllipsis(match.text) ?? ""),
-        ...fields.get(match.name as Key)!, // always defined since we filtered above
-      };
-    });
-
-  // always show the most relevant field, regardless of highlight status
-  const firstFieldName = [...fields.keys()].find((key) => foundFields.has(key));
-  const [firstFields, otherFields] = partition(
-    relevantMatches,
-    (match) => match.name === firstFieldName,
-  );
-
-  // show up to 4 fields
-  const slice: ExtendedTextMatch[] = [...firstFields, ...otherFields]
-    .slice(0, 4)
-    .filter((i) => !!i);
-
-  if (slice.length === 0) return [];
-
-  const highlighted = slice.some((field) => field.text.includes("<mark>"));
-
-  // if no fields have a highlight, show only the first one casting because
-  // TypeScript doesn't realize we already ensured it's not undefined
-  if (!highlighted) return [slice[0] as ExtendedTextMatch];
-
-  return slice;
+    .toSorted(
+      (a, b) => keys.indexOf(a.name as Key) - keys.indexOf(b.name as Key),
+    )
+    .map<ExtendedTextMatch>((match) => ({
+      ...match,
+      text: sanitizeSearchResult(addEllipsis(match.text) ?? ""),
+      ...fields.get(match.name as Key)!, // always defined since we filtered above
+    }))
+    .slice(0, 4);
 });
 
 function trackResultClick() {
