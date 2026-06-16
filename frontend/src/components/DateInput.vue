@@ -126,7 +126,7 @@ defineExpose({ focus });
         ref="inputMaskEl"
         v-model="inputValue"
         :auto-clear="false"
-        :invalid="errorMessage != undefined"
+        :invalid="errorMessage !== undefined"
         :readonly="isReadOnly"
         :disabled="isReadOnly"
         class="w-full"
