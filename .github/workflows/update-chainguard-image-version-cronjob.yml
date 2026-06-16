@@ -1,7 +1,5 @@
 name: Update-Chainguard-Image-Version-Cronjob
 on:
-  schedule:
-    - cron: '0 18 * * 0' # Runs at 6:00pm UTC (7 winter time/8 summer time in Germany) on Sundays
   # Allow manual workflow trigger
   workflow_dispatch:
 
