@@ -1,8 +1,6 @@
 import type { MetadataItem } from "~/components/Metadata.vue";
 import type { Literature } from "~/types/api";
 
-export const LITERATURE_TITLE_PLACEHOLDER = "Titelzeile nicht vorhanden";
-
 export function getTitle(literature?: Partial<Literature>) {
   return [
     literature?.headline,

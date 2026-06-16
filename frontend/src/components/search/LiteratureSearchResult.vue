@@ -1,74 +1,31 @@
 <script setup lang="ts">
 import OutlineBookIcon from "~icons/ic/outline-book";
 import type { SearchResultHeaderItem } from "~/components/search/SearchResultHeader.vue";
-import { usePostHog } from "~/composables/usePostHog";
-import type { Literature, SearchResult, TextMatch } from "~/types/api";
-import { LITERATURE_TITLE_PLACEHOLDER } from "~/utils/literature";
-import { sanitizeSearchResult } from "~/utils/sanitize";
-import { addEllipsis } from "~/utils/textFormatting";
+import type { Literature, SearchResult } from "~/types/api";
+import { getMatch, getTitleWithFallback } from "~/utils/search/searchResults";
 
-const { searchResultClicked } = usePostHog();
-const router = useRouter();
-
-const props = defineProps<{
+const { searchResult, order } = defineProps<{
   searchResult: SearchResult<Literature>;
   order: number;
 }>();
 
-type LiteratureMetadata = {
-  headline: string;
-  alternativeHeadline: string;
-  shortReport: string;
-};
+const { searchResultClicked } = usePostHog();
 
-function getMatch(match: string, highlights: TextMatch[]) {
-  return highlights.find((highlight) => highlight.name === match)?.text;
-}
+const router = useRouter();
 
-function getShortReportSnippet(
-  shortReport: string | undefined,
-  textMatches: TextMatch[],
-): string | undefined {
-  if (!shortReport) return undefined;
-
-  // Find the relevant highlight for "shortReport"
-  const match = textMatches.find(
-    (hl) => hl.name === "shortReport" && hl.text?.includes("<mark>"),
-  );
-
-  if (!match) {
-    // No highlight — just return the whole text, will be truncated with line-clamp because of 3 lines wanted and not only 2
-    return shortReport;
-  }
-
-  // Return the highlighted text (with ellipsis if needed)
-  return addEllipsis(match.text);
-}
-
-const detailPageRoute = computed(() => ({
-  name: "literature-documentNumber",
-  params: { documentNumber: props.searchResult.item.documentNumber },
-}));
-
-const metadata = computed(() => {
-  const item = props.searchResult.item;
-  return {
-    headline:
-      getMatch("mainTitle", props.searchResult.textMatches) || item.headline,
-    alternativeHeadline:
-      getMatch("documentaryTitle", props.searchResult.textMatches) ||
-      item.alternativeHeadline,
-    shortReport: getShortReportSnippet(
-      item.shortReport,
-      props.searchResult.textMatches,
-    ),
-  } as LiteratureMetadata;
-});
+const headline = computed(() =>
+  getTitleWithFallback(
+    getMatch("mainTitle", searchResult.textMatches),
+    searchResult.item.headline,
+    getMatch("documentaryTitle", searchResult.textMatches),
+    searchResult.item.alternativeHeadline,
+  ),
+);
 
 const resultTypeId = useId();
 
 const headerItems = computed<SearchResultHeaderItem[]>(() => {
-  const item = props.searchResult.item;
+  const item = searchResult.item;
   const reference =
     item.dependentReferences?.[0] ?? item.independentReferences?.[0];
   return [
@@ -78,25 +35,39 @@ const headerItems = computed<SearchResultHeaderItem[]>(() => {
   ].filter((i): i is SearchResultHeaderItem => i.value !== undefined);
 });
 
-const sanitizedHeadline = computed(() =>
-  sanitizeSearchResult(
-    metadata.value.headline ||
-      metadata.value.alternativeHeadline ||
-      LITERATURE_TITLE_PLACEHOLDER,
-  ),
-);
+const detailPageRoute = computed(() => ({
+  name: "literature-documentNumber",
+  params: { documentNumber: searchResult.item.documentNumber },
+}));
+
+const shortReport = computed(() => {
+  const fullText = searchResult.item.shortReport;
+  if (!fullText) return undefined;
+
+  // Find the relevant highlight for "shortReport"
+  const match = searchResult.textMatches.find(
+    (hl) => hl.name === "shortReport" && hl.text?.includes("<mark>"),
+  );
+
+  // No highlight — just return the whole text, will be truncated with
+  // line-clamp because of 3 lines wanted and not only 2
+  if (!match) return fullText;
+
+  // Return the highlighted text (with ellipsis if needed)
+  return addEllipsis(match.text);
+});
 
 const shortReportIncludesHighlight = computed(
-  () => metadata.value.shortReport?.includes("<mark>") ?? false,
+  () => shortReport.value?.includes("<mark>") ?? false,
 );
 
 const sanitizedShortReport = computed(() =>
-  sanitizeSearchResult(metadata.value.shortReport),
+  sanitizeSearchResult(shortReport.value ?? ""),
 );
 
 function trackResultClick() {
   const url = router.resolve(detailPageRoute.value).href;
-  searchResultClicked(url, props.order);
+  searchResultClicked(url, order);
 }
 </script>
 
@@ -110,7 +81,7 @@ function trackResultClick() {
       @click="trackResultClick()"
     >
       <h2>
-        <span v-html="sanitizedHeadline" />
+        <span v-html="headline" />
       </h2>
     </NuxtLink>
 

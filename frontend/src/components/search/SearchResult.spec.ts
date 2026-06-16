@@ -21,13 +21,13 @@ describe("SearchResult", () => {
       },
       global: {
         stubs: {
-          CaselawSearchResult: true,
+          SearchCaselawSearchResult: true,
         },
       },
     });
 
     expect(
-      container.querySelector("caselaw-search-result-stub"),
+      container.querySelector("search-caselaw-search-result-stub"),
     ).toBeInTheDocument();
   });
 
@@ -41,13 +41,13 @@ describe("SearchResult", () => {
       },
       global: {
         stubs: {
-          NormSearchResult: true,
+          SearchNormSearchResult: true,
         },
       },
     });
 
     expect(
-      container.querySelector("norm-search-result-stub"),
+      container.querySelector("search-norm-search-result-stub"),
     ).toBeInTheDocument();
   });
 
@@ -61,13 +61,13 @@ describe("SearchResult", () => {
       },
       global: {
         stubs: {
-          LiteratureSearchResult: true,
+          SearchLiteratureSearchResult: true,
         },
       },
     });
 
     expect(
-      container.querySelector("literature-search-result-stub"),
+      container.querySelector("search-literature-search-result-stub"),
     ).toBeInTheDocument();
   });
 
@@ -81,13 +81,15 @@ describe("SearchResult", () => {
       },
       global: {
         stubs: {
-          AdministrativeDirectiveSearchResult: true,
+          SearchAdministrativeDirectiveSearchResult: true,
         },
       },
     });
 
     expect(
-      container.querySelector("administrative-directive-search-result-stub"),
+      container.querySelector(
+        "search-administrative-directive-search-result-stub",
+      ),
     ).toBeInTheDocument();
   });
 

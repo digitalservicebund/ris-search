@@ -1,8 +1,4 @@
 <script setup lang="ts">
-import AdministrativeDirectiveSearchResult from "~/components/search/AdministrativeDirectiveSearchResult.vue";
-import CaselawSearchResult from "~/components/search/CaselawSearchResult.vue";
-import LiteratureSearchResult from "~/components/search/LiteratureSearchResult.vue";
-import NormSearchResult from "~/components/search/NormSearchResult.vue";
 import type {
   AdministrativeDirective,
   AnyDocument,
@@ -11,41 +7,35 @@ import type {
   Literature,
   SearchResult,
 } from "~/types/api";
-import {
-  isCaselaw,
-  isLegislation,
-  isLiterature,
-  isAdministrativeDirective,
-} from "~/utils/anyDocument";
 
-const props = defineProps<{
+defineProps<{
   searchResult: SearchResult<AnyDocument>;
   order: number;
 }>();
 </script>
 
 <template>
-  <CaselawSearchResult
-    v-if="isCaselaw(props.searchResult.item)"
-    :search-result="props.searchResult as SearchResult<CaseLaw>"
-    :order="props.order"
+  <SearchCaselawSearchResult
+    v-if="isCaselaw(searchResult.item)"
+    :search-result="searchResult as SearchResult<CaseLaw>"
+    :order="order"
   />
 
-  <NormSearchResult
-    v-else-if="isLegislation(props.searchResult.item)"
-    :search-result="props.searchResult as SearchResult<LegislationExpression>"
-    :order="props.order"
+  <SearchNormSearchResult
+    v-else-if="isLegislation(searchResult.item)"
+    :search-result="searchResult as SearchResult<LegislationExpression>"
+    :order="order"
   />
 
-  <LiteratureSearchResult
-    v-else-if="isLiterature(props.searchResult.item)"
-    :search-result="props.searchResult as SearchResult<Literature>"
-    :order="props.order"
+  <SearchLiteratureSearchResult
+    v-else-if="isLiterature(searchResult.item)"
+    :search-result="searchResult as SearchResult<Literature>"
+    :order="order"
   />
 
-  <AdministrativeDirectiveSearchResult
-    v-else-if="isAdministrativeDirective(props.searchResult.item)"
-    :search-result="props.searchResult as SearchResult<AdministrativeDirective>"
-    :order="props.order"
+  <SearchAdministrativeDirectiveSearchResult
+    v-else-if="isAdministrativeDirective(searchResult.item)"
+    :search-result="searchResult as SearchResult<AdministrativeDirective>"
+    :order="order"
   />
 </template>

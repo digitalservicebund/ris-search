@@ -6,3 +6,8 @@ export function sanitizeSearchResult(
 ) {
   return sanitizeHtml(html, { allowedTags: allowedTags });
 }
+
+/** Strips all HTML tags from the given string, returning plain text. */
+export function stripAllHtml(html: string): string {
+  return sanitizeHtml(html, { allowedTags: [] });
+}
