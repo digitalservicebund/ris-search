@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { Select } from "primevue";
-import type { ValidationError } from "~/components/DateInput.vue";
 import type {
   DateFilterValue,
   FilterType,
@@ -12,9 +11,6 @@ const filter = defineModel<DateFilterValue>({ required: true });
 const dateModeLabelId = useId();
 const fromDateId = useId();
 const toDateId = useId();
-
-const fromValidationError = ref<ValidationError | undefined>();
-const toValidationError = ref<ValidationError | undefined>();
 
 const items: { label: string; value: FilterType }[] = [
   { label: "Keine zeitliche Begrenzung", value: "allTime" },
@@ -96,12 +92,7 @@ const toDate = computed({
         <template v-if="hasMultipleInputs">Ab dem Datum</template>
         <template v-else>Datum</template>
       </label>
-      <DateInput
-        :id="fromDateId"
-        :key
-        v-model="fromDate"
-        v-model:validation-error="fromValidationError"
-      />
+      <DateInput :id="fromDateId" :key v-model="fromDate" />
     </div>
 
     <div v-if="showToField" class="flex flex-col gap-8">
@@ -109,12 +100,7 @@ const toDate = computed({
         <template v-if="hasMultipleInputs">Bis zum Datum</template>
         <template v-else>Datum</template>
       </label>
-      <DateInput
-        :id="toDateId"
-        :key
-        v-model="toDate"
-        v-model:validation-error="toValidationError"
-      />
+      <DateInput :id="toDateId" :key v-model="toDate" />
     </div>
   </div>
 </template>

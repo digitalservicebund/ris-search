@@ -6,18 +6,6 @@ import { computed, nextTick, ref, useTemplateRef, watch } from "vue";
 import IconErrorOutline from "~icons/ic/baseline-error-outline";
 import WithClearButton from "./WithClearButton.vue";
 
-/** Form field validation error. */
-export type ValidationError = {
-  /** Error code (intended for differentiating types in code). */
-  code?: string;
-
-  /** Error message (intended for displaying to the user). */
-  message: string;
-
-  /** Identifier that can be used for connecting the error with a UI control. */
-  instance: string;
-};
-
 const props = withDefaults(
   defineProps<{
     /** HTML element ID of the form field. */
@@ -35,9 +23,6 @@ const props = withDefaults(
     /** Label of the form field. */
     label?: string;
 
-    /** Validation error and message to display. */
-    validationError?: ValidationError;
-
     /** Whether to show a clear button. */
     showClear?: boolean;
   }>(),
@@ -46,7 +31,6 @@ const props = withDefaults(
     size: "small",
     isReadOnly: false,
     label: undefined,
-    validationError: undefined,
     showClear: false,
   },
 );
@@ -58,12 +42,6 @@ const emit = defineEmits<{
    * (e.g. partial dates while typing) are handled internally and not emitted.
    */
   "update:modelValue": [value?: string];
-
-  /**
-   * Emitted when the form field enters an invalid state based on user inputs
-   * (e.g. the date is invalid).
-   */
-  "update:validationError": [value?: ValidationError];
 }>();
 
 const HUMAN_READABLE_FORMAT = "DD.MM.YYYY";
@@ -87,12 +65,17 @@ watch(
 );
 
 watch(inputValue, (is) => {
-  if (is === "") emit("update:modelValue", undefined);
-  else if (isValidDate.value) {
+  errorMessage.value = undefined;
+
+  if (is === "") {
+    emit("update:modelValue", undefined);
+  } else if (dayjs(is, HUMAN_READABLE_FORMAT, true).isValid()) {
     emit(
       "update:modelValue",
       dayjs(is, HUMAN_READABLE_FORMAT, true).format(MACHINE_FORMAT),
     );
+  } else if (inputCompleted.value) {
+    errorMessage.value = "Kein valides Datum";
   }
 });
 
@@ -101,71 +84,14 @@ const inputCompleted = computed(() => {
   return datePattern.test(inputValue.value || "");
 });
 
-const localValidationError = ref<ValidationError | undefined>(undefined);
-
-const internalHasError = computed(() => {
-  return inputCompleted.value && !isValidDate.value;
-});
-
-const effectiveHasError = computed(() => {
-  return internalHasError.value || !!localValidationError.value;
-});
-
-watch(
-  () => props.validationError,
-  (newVal) => {
-    localValidationError.value = newVal;
-  },
-  { immediate: true },
-);
-
-const errorMessage = computed(() => {
-  if (internalHasError.value && !localValidationError.value) {
-    return "Ungültige Eingabe";
-  } else if (localValidationError.value) {
-    return localValidationError.value.message ?? "Ungültige Eingabe";
-  } else return undefined;
-});
-
-const isValidDate = computed(() => {
-  return dayjs(inputValue.value, HUMAN_READABLE_FORMAT, true).isValid();
-});
-
+const errorMessage = ref<string | undefined>(undefined);
 const key = ref<string>();
 
-function validateInput() {
-  if (inputCompleted.value) {
-    if (isValidDate.value) {
-      emit("update:validationError", undefined);
-    } else {
-      const validationError = {
-        message: "Kein valides Datum",
-        instance: props.id,
-      };
-      emit("update:validationError", validationError);
-    }
-  } else if (inputValue.value) {
-    const validationError = {
-      message: "Unvollständiges Datum",
-      instance: props.id,
-    };
-    emit("update:validationError", validationError);
-  } else {
-    emit("update:validationError", undefined);
+function onBlur() {
+  if (!inputCompleted.value && inputValue.value) {
+    errorMessage.value = "Unvollständiges Datum";
   }
 }
-
-function backspaceDelete() {
-  emit("update:validationError", undefined);
-}
-
-function onBlur() {
-  validateInput();
-}
-
-watch(inputCompleted, (is) => {
-  if (is) validateInput();
-});
 
 const inputMaskEl = useTemplateRef("inputMaskEl");
 
@@ -176,6 +102,7 @@ function focus() {
 
 async function clear() {
   inputValue.value = "";
+  errorMessage.value = undefined;
   // Setting v-model to "" alone is apparently not enough to reset InputMask's internal
   // buffer. Changing :key forces Vue to fully unmount and remount the component,
   // which makes sure the input is actually cleared when the user starts typing again.
@@ -199,7 +126,7 @@ defineExpose({ focus });
         ref="inputMaskEl"
         v-model="inputValue"
         :auto-clear="false"
-        :invalid="effectiveHasError"
+        :invalid="errorMessage !== undefined"
         :readonly="isReadOnly"
         :disabled="isReadOnly"
         class="w-full"
@@ -207,7 +134,6 @@ defineExpose({ focus });
         mask="99.99.9999"
         placeholder="TT.MM.JJJJ"
         @blur="onBlur"
-        @keydown="backspaceDelete"
       />
     </WithClearButton>
 
