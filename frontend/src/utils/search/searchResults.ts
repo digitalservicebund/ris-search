@@ -12,7 +12,7 @@ export function getMatch(
   textMatches: TextMatch[],
 ): string | undefined {
   const text = textMatches.find((m) => m.name === name)?.text;
-  return text !== undefined ? sanitizeSearchResult(text) : undefined;
+  return typeof text === "string" ? sanitizeSearchResult(text) : undefined;
 }
 
 /** Returns the sanitized texts of all TextMatches with the given name. */
