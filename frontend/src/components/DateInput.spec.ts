@@ -3,7 +3,6 @@ import { render, screen } from "@testing-library/vue";
 import { InputText } from "primevue";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { nextTick } from "vue";
-import type { ValidationError } from "./DateInput.vue";
 import DateInput from "./DateInput.vue";
 
 beforeEach(() => {
@@ -20,7 +19,6 @@ afterEach(() => {
 
 function renderComponent(options?: {
   modelValue?: string;
-  validationError?: ValidationError;
   isReadOnly?: boolean;
   showClear?: boolean;
   stubs?: Record<string, object>;
@@ -29,7 +27,6 @@ function renderComponent(options?: {
   const props = {
     id: "identifier",
     modelValue: options?.modelValue,
-    validationError: options?.validationError,
     isReadOnly: options?.isReadOnly,
     showClear: options?.showClear,
   };
@@ -110,7 +107,7 @@ describe("DateInput", () => {
   });
 
   it("removes validation errors on backspace delete", async () => {
-    const { emitted } = renderComponent({
+    renderComponent({
       modelValue: "2022-05-13",
       stubs: {
         InputMask: InputText,
@@ -121,9 +118,11 @@ describe("DateInput", () => {
     await userEvent.clear(input);
     await userEvent.type(input, "40.05.2022");
     expect(input).toHaveValue("40.05.2022");
+    const errorLabel = screen.getByText("Kein valides Datum");
+    expect(errorLabel).toBeVisible();
     await userEvent.type(input, "{backspace}");
 
-    expect(emitted("update:validationError")).toBeTruthy();
+    expect(errorLabel).not.toBeInTheDocument();
   });
 
   it("does not allow invalid dates", async () => {
@@ -137,16 +136,8 @@ describe("DateInput", () => {
     await nextTick();
 
     expect(input).toHaveValue("29.02.2001");
-
     expect(emitted("update:modelValue")).not.toBeTruthy();
-
-    expect(emitted("update:validationError")).toBeTruthy();
-
-    const array: ValidationError[][] = emitted("update:validationError");
-
-    expect(
-      array.find((element) => element[0] !== undefined)?.[0]?.message,
-    ).toBe("Kein valides Datum");
+    expect(screen.getByText("Kein valides Datum")).toBeVisible();
   });
 
   it("does not allow letters", async () => {
@@ -168,15 +159,7 @@ describe("DateInput", () => {
     await nextTick();
 
     expect(emitted("update:modelValue")).not.toBeTruthy();
-    const validationErrors = emitted()[
-      "update:validationError"
-    ] as ValidationError[][];
-
-    expect(
-      validationErrors
-        .filter((element) => element[0] !== undefined)
-        .some((element) => element[0]?.message === "Unvollständiges Datum"),
-    ).toBe(true);
+    expect(screen.getByText("Unvollständiges Datum")).toBeVisible();
   });
 
   it("sets the input to readonly", () => {
@@ -187,33 +170,6 @@ describe("DateInput", () => {
   it("sets the input to editable", () => {
     renderComponent({ isReadOnly: false });
     expect(screen.getByRole("textbox")).not.toHaveAttribute("readonly");
-  });
-
-  it("shows error message block for external validation errors", async () => {
-    const validationError = {
-      message: "Externer Fehler",
-      instance: "identifier",
-    };
-    renderComponent({ validationError });
-
-    const errorBlock = screen.getByText("Externer Fehler");
-    expect(errorBlock).toBeInTheDocument();
-  });
-
-  it("shows error message block for internal validation errors", async () => {
-    renderComponent({
-      stubs: {
-        InputMask: InputText,
-      },
-    });
-
-    const input = screen.getByRole("textbox");
-    await userEvent.type(input, "29.02.2001");
-    await nextTick();
-
-    expect(input).toHaveValue("29.02.2001");
-
-    expect(screen.getByText("Ungültige Eingabe")).toBeInTheDocument();
   });
 
   describe("clear button", () => {
@@ -250,6 +206,24 @@ describe("DateInput", () => {
 
       expect(screen.getByRole("textbox")).toHaveValue("");
       expect(emitted("update:modelValue")).toContainEqual([undefined]);
+    });
+
+    it("resets the error message when clicked", async () => {
+      renderComponent({
+        showClear: true,
+        stubs: { InputMask: InputText },
+      });
+
+      const input = screen.getByRole("textbox");
+      await userEvent.type(input, "29.02.2025");
+
+      const errorLabel = screen.getByText("Kein valides Datum");
+      expect(errorLabel).toBeVisible();
+
+      await userEvent.click(screen.getByRole("button", { name: "Entfernen" }));
+      await nextTick();
+
+      expect(errorLabel).not.toBeVisible();
     });
   });
 });
