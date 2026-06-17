@@ -28,7 +28,7 @@
     "dayjs": "1.11.21",
     "lodash-es": "4.18.1",
     "minisearch": "7.2.0",
-    "nuxt": "4.4.8",
+    "nuxt": "4.4.6",
     "nuxt-security": "2.6.0",
     "posthog-js": "1.386.6",
     "primevue": "4.5.5",
