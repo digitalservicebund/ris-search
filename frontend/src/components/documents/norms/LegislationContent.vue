@@ -123,7 +123,7 @@ defineProps<{
 }
 
 :deep(.akn-act pre) {
-  @apply ris-body3-regular overflow-x-auto font-[monospace];
+  @apply typo-mono overflow-x-auto;
 }
 
 :deep(.akn-act .akn-paragraph),
@@ -187,7 +187,7 @@ Attributes from the Juris CALS format without a corresponding HTML attribute mig
 
 /* Einzelvorschrift :: Überschrift  */
 :deep(h2.einzelvorschrift) {
-  @apply ris-heading3-bold my-24 inline-block break-after-avoid not-print:wrap-break-word not-print:hyphens-auto;
+  @apply typo-headline3-bold my-24 inline-block break-after-avoid not-print:wrap-break-word not-print:hyphens-auto;
 }
 
 :deep(.akn-heading a) {
@@ -260,7 +260,7 @@ Attributes from the Juris CALS format without a corresponding HTML attribute mig
 :deep(.akn-subsection > .akn-num),
 :deep(.akn-title > .akn-num),
 :deep(.akn-subtitle > .akn-num) {
-  @apply ris-heading3-bold float-none mb-4 block text-center;
+  @apply typo-headline3-bold float-none mb-4 block text-center;
 }
 
 :deep(.akn-book > .akn-heading),
@@ -271,7 +271,7 @@ Attributes from the Juris CALS format without a corresponding HTML attribute mig
 :deep(.akn-subsection > .akn-heading),
 :deep(.akn-title > .akn-heading),
 :deep(.akn-subtitle > .akn-heading) {
-  @apply ris-heading3-regular float-none mb-24 block border-b border-gray-400 pb-16 text-center text-gray-900;
+  @apply typo-headline3-regular float-none mb-24 block border-b border-gray-400 pb-16 text-center text-gray-900;
 }
 
 :deep(.akn-book + .akn-book),
@@ -290,7 +290,7 @@ Attributes from the Juris CALS format without a corresponding HTML attribute mig
 
 :deep(.fussnoten),
 :deep(.nichtamtliche-fussnoten) {
-  @apply ris-body2-regular my-16 list-none pl-0 text-gray-900;
+  @apply typo-body-regular my-16 list-none pl-0 text-gray-900;
 }
 
 /* Show a 10 character wide separator above the collected notes  */

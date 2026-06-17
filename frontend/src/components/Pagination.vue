@@ -125,10 +125,10 @@ const itemsOnPage = computed(() => buildItemsOnPageString(props.page));
           <template #icon><IconArrowBack /></template>
         </Button>
 
-        <span class="ris-label1-regular only:m-auto">
+        <span class="typo-label-regular only:m-auto">
           <span
             v-if="!isOnlyPage && currentPageIndex !== undefined"
-            class="ris-label1-bold"
+            class="typo-label-bold"
           >
             Seite {{ currentPageIndex + 1 }}:
           </span>

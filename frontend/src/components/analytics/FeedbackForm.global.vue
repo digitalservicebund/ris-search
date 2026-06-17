@@ -55,10 +55,10 @@ watch(
       class="space-y-24"
       data-test-id="feedback-sent-confirmation"
     >
-      <div class="ris-heading3-bold">Vielen Dank für Ihr Feedback!</div>
+      <div class="typo-headline3-bold">Vielen Dank für Ihr Feedback!</div>
       <!-- Temporarily disabled due to data issue with Form bricks -->
       <div v-if="false" class="flex flex-col space-y-8">
-        <div class="ris-heading3-bold">
+        <div class="typo-headline3-bold">
           Möchten Sie an Nutzungsstudien teilnehmen?
         </div>
         <p>
@@ -95,7 +95,7 @@ watch(
       @submit.prevent="submitFeedback"
     >
       <div v-if="!hideIntro" class="flex flex-col space-y-8">
-        <h2 class="ris-heading3-bold">Geben Sie uns Feedback</h2>
+        <h2 class="typo-headline3-bold">Geben Sie uns Feedback</h2>
         <p class="">
           Ihr Feedback hilft uns, den Service an den Bedürfnissen der
           Nutzerinnen und Nutzer auszurichten. Beschreiben Sie Ihr Anliegen so
@@ -116,7 +116,7 @@ watch(
         </div>
 
         <div class="text-field">
-          <label :for="feedbackMessageId" class="ris-label2-regular">
+          <label :for="feedbackMessageId" class="typo-label-regular">
             Feedback
           </label>
           <Textarea

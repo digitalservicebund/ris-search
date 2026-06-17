@@ -14,7 +14,7 @@ const ecli = computed(() => {
 
 <template>
   <h1
-    class="ris-heading1-regular mb-16 inline-block hyphens-auto max-sm:leading-48"
+    class="typo-headline1-regular mb-16 inline-block hyphens-auto max-sm:leading-48"
   >
     Platzhalter
   </h1>

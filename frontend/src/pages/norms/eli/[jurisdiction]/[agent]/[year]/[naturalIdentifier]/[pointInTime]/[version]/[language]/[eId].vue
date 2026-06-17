@@ -208,11 +208,11 @@ const metadataItems = computed(() => {
       </div>
 
       <div class="my-24 mb-24">
-        <p class="ris-label1-regular md:ris-subhead-regular mb-8">
+        <p class="typo-label-regular mb-8">
           {{ normTitle }}
         </p>
         <h1
-          class="ris-heading2-bold wrap-break-word hyphens-auto max-md:text-2xl"
+          class="typo-headline2-bold wrap-break-word hyphens-auto max-md:text-2xl"
           v-html="htmlTitle"
         />
       </div>
@@ -245,7 +245,7 @@ const metadataItems = computed(() => {
               <NuxtLink
                 v-if="previousArticleUrl"
                 :to="previousArticleUrl"
-                class="ris-link1-regular link-hover"
+                class="typo-link-regular link-hover"
               >
                 <div class="flex items-center space-x-8">
                   <IcBaselineArrowBack class="mt-1 shrink-0" />
@@ -258,7 +258,7 @@ const metadataItems = computed(() => {
               <NuxtLink
                 v-if="nextArticleUrl"
                 :to="nextArticleUrl"
-                class="ris-link1-regular link-hover"
+                class="typo-link-regular link-hover"
               >
                 <div class="flex items-center space-x-8">
                   <span>Nächster Paragraf</span>

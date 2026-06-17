@@ -40,11 +40,11 @@ const drawerId = useId();
       @click="mobileTocVisible = true"
     >
       <div class="line-clamp-1">
-        <span class="ris-subhead-bold">Inhalte</span>{{ " " }}
-        <span class="ris-subhead-regular">{{ subheading }}</span>
+        <span class="typo-headline3-bold">Inhalte</span>{{ " " }}
+        <span class="typo-headline3-regular">{{ subheading }}</span>
       </div>
 
-      <IcBaselineList class="ris-body2-regular flex-none text-blue-800" />
+      <IcBaselineList class="typo-body-regular flex-none text-blue-800" />
     </button>
   </Transition>
 
@@ -58,8 +58,8 @@ const drawerId = useId();
   >
     <template #header>
       <div class="line-clamp-1">
-        <span class="ris-subhead-bold">Inhalte</span>{{ " " }}
-        <span class="ris-subhead-regular">{{ subheading }}</span>
+        <span class="typo-headline3-bold">Inhalte</span>{{ " " }}
+        <span class="typo-headline3-regular">{{ subheading }}</span>
       </div>
     </template>
 

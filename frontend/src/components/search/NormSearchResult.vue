@@ -82,7 +82,7 @@ function getArticleLink(highlight: { location?: string | null }) {
       v-if="!!detailPageUrl"
       :to="detailPageUrl"
       :aria-describedby="resultTypeId"
-      class="ris-heading3-bold! ris-link1-regular link-hover block"
+      class="typo-headline3-bold! typo-link-regular link-hover block"
       @click="searchResultClicked(detailPageUrl, order)"
     >
       <h2 v-html="headline" />
@@ -95,7 +95,7 @@ function getArticleLink(highlight: { location?: string | null }) {
         class="flex flex-col"
       >
         <NuxtLink
-          class="ris-link1-bold link-hover"
+          class="typo-link-bold link-hover"
           :to="getArticleLink(highlight)"
           @click="searchResultClicked(getArticleLink(highlight), order)"
         >

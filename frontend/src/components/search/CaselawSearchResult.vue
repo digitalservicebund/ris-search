@@ -156,7 +156,7 @@ function trackResultClick() {
     <NuxtLink
       :to="detailPageRoute"
       :aria-describedby="resultTypeId"
-      class="ris-heading3-bold! ris-link1-regular link-hover block"
+      class="typo-headline3-bold! typo-link-regular link-hover block"
       @click="trackResultClick()"
     >
       <h2>
@@ -169,7 +169,7 @@ function trackResultClick() {
       <div v-for="section in previewSections" :key="section?.id">
         <NuxtLink
           :to="{ ...detailPageRoute, hash: `#${section?.id}` }"
-          class="ris-link1-bold link-hover"
+          class="typo-link-bold link-hover"
           external
           @click="trackResultClick()"
           >{{ section?.title }}:</NuxtLink
@@ -177,7 +177,7 @@ function trackResultClick() {
         <span
           v-if="section.text"
           data-testid="highlighted-field"
-          class="ris-label1-regular"
+          class="typo-label-regular"
           v-html="section.text"
         />
       </div>

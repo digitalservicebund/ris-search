@@ -105,7 +105,7 @@ const detailItems = computed(() =>
         :aria-labelledby="detailsSectionId"
         class="pt-32 pb-32 lg:pb-56"
       >
-        <h2 :id="detailsSectionId" class="ris-heading3-bold">Details</h2>
+        <h2 :id="detailsSectionId" class="typo-headline3-bold">Details</h2>
         <DocumentsIncompleteDataMessage class="my-24" />
         <DetailsList>
           <template v-for="item in detailItems" :key="item.label">
@@ -154,11 +154,11 @@ const detailItems = computed(() =>
 }
 
 :deep(.administrative-directive h2) {
-  @apply ris-heading3-bold my-24 inline-block;
+  @apply typo-headline3-bold my-24 inline-block;
 }
 
 :deep(.administrative-directive h3) {
-  @apply ris-body1-bold my-8;
+  @apply typo-body-bold my-8;
 }
 
 :deep(.administrative-directive p) {

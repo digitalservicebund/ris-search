@@ -40,7 +40,7 @@ describe("HeadingGroup", () => {
       "Test Heading",
     );
     expect(document.querySelector(".dokumentenkopf")).toBeInTheDocument();
-    expect(document.querySelector(".ris-heading3-regular")).toHaveTextContent(
+    expect(document.querySelector(".typo-headline3-regular")).toHaveTextContent(
       "Test Alternate Name",
     );
 

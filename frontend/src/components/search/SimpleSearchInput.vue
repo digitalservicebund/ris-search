@@ -49,9 +49,10 @@ const searchInputId = useId();
           fluid
           name="query"
           type="search"
+          size="large"
         />
         <InputGroupAddon>
-          <Button :aria-label="submitLabel" type="submit">
+          <Button :aria-label="submitLabel" type="submit" size="large">
             <template #icon><IconSearch /></template>
           </Button>
         </InputGroupAddon>

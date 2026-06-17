@@ -31,14 +31,14 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
   <div class="flex gap-16 bg-blue-800 pt-64 pb-96 text-white">
     <div class="container max-w-prose">
       <div
-        class="ris-label3-bold mb-8 inline-block rounded-sm border border-white/10 bg-blue-700 px-8 py-4 uppercase"
+        class="typo-label-bold mb-8 inline-block rounded-sm border border-white/10 bg-blue-700 px-8 py-4 uppercase"
       >
         Testphase
       </div>
-      <h1 class="ris-heading1-regular wrap-break-word hyphens-auto">
+      <h1 class="typo-headline1-regular wrap-break-word hyphens-auto">
         Rechtsinformationen des Bundes
       </h1>
-      <p class="ris-subhead-regular mt-24">
+      <p class="typo-body-regular 2xl:ris-subhead-regular mt-24">
         Schneller und direkter Zugang zu Gesetzen, Verordnungen,
         Gerichtsentscheidungen und künftig auch Verwaltungsvorschriften des
         Bundes – an einem zentralen Ort.
@@ -49,7 +49,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
   <div class="container flex max-w-prose flex-col gap-24 py-56">
     <FeatureCard>
       <div>
-        <h2 class="ris-heading3-bold wrap-break-word hyphens-auto">
+        <h2 class="typo-headline3-bold wrap-break-word hyphens-auto">
           Testen Sie die Suche
         </h2>
         <p class="mt-8">
@@ -65,11 +65,11 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
       />
       <Message
         severity="warn"
-        class="ris-body2-regular"
+        class="typo-body-regular"
         role="status"
         aria-live="off"
       >
-        <p class="ris-body2-bold mt-2">
+        <p class="typo-body-bold mt-2">
           Dieser Service befindet sich in der Testphase.
         </p>
         <p>
@@ -83,7 +83,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
 
     <FeatureCard>
       <div>
-        <h2 class="ris-heading3-bold wrap-break-word hyphens-auto">
+        <h2 class="typo-headline3-bold wrap-break-word hyphens-auto">
           Testen Sie die Darstellung aktueller Gesetze, Verordnungen und
           Gerichtsentscheidungen
         </h2>
@@ -104,7 +104,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
 
     <FeatureCard v-if="privateFeaturesEnabled">
       <div>
-        <h2 class="ris-heading3-bold wrap-break-word hyphens-auto">
+        <h2 class="typo-headline3-bold wrap-break-word hyphens-auto">
           English translation of German laws and regulations
         </h2>
         <p class="mt-8">
@@ -122,7 +122,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
 
     <FeatureCard>
       <div>
-        <h2 class="ris-heading3-bold wrap-break-word hyphens-auto">
+        <h2 class="typo-headline3-bold wrap-break-word hyphens-auto">
           Testen Sie die Programmierschnittstelle
         </h2>
         <p class="mt-8">
@@ -150,17 +150,17 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
         alt="Bundesministerium der Justiz und für Verbraucherschutz"
       />
       <div class="space-y-8">
-        <h3 class="ris-body2-bold wrap-break-word hyphens-auto">
+        <h3 class="typo-body-bold wrap-break-word hyphens-auto">
           Ein Service im Auftrag des Bundesministeriums der Justiz und für
           Verbraucherschutz
         </h3>
-        <p class="ris-body2-regular">
+        <p class="typo-body-regular">
           Dieser Service befindet sich in der Testphase. Sie haben die
           Möglichkeit, erste Funktionen frühzeitig zu testen und Feedback zu
           geben. Die Funktionen und der Umfang der Daten werden schrittweise
           erweitert.
         </p>
-        <NuxtLink class="ris-link2-regular" :to="{ name: 'about' }"
+        <NuxtLink class="typo-link-regular" :to="{ name: 'about' }"
           >Weitere Informationen zur Testphase</NuxtLink
         >
       </div>

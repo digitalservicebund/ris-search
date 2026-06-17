@@ -44,7 +44,7 @@ describe("DetailsListEntry", () => {
     expect(screen.getByRole("term")).toHaveTextContent("Test Label");
     const definition = screen.getByRole("definition");
     expect(definition).toHaveTextContent("Default Slot");
-    expect(definition).toHaveClass("ris-label1-regular");
+    expect(definition).toHaveClass("typo-label-regular");
   });
 
   it("prefers valueList over value if no slot given", () => {
@@ -59,10 +59,10 @@ describe("DetailsListEntry", () => {
     expect(screen.getByRole("term")).toHaveTextContent("Test Label");
     const definitions = screen.getAllByRole("definition");
     expect(definitions[0]).toHaveTextContent("value 1");
-    expect(definitions[0]).toHaveClass("ris-label1-regular");
+    expect(definitions[0]).toHaveClass("typo-label-regular");
 
     expect(definitions[1]).toHaveTextContent("value 2");
-    expect(definitions[1]).toHaveClass("ris-label1-regular");
+    expect(definitions[1]).toHaveClass("typo-label-regular");
   });
 
   it("renders provided value if no slot and valueList given", () => {
@@ -76,6 +76,6 @@ describe("DetailsListEntry", () => {
     expect(screen.getByRole("term")).toHaveTextContent("Test Label");
     const definition = screen.getByRole("definition");
     expect(definition).toHaveTextContent("Some value");
-    expect(definition).toHaveClass("ris-label1-regular");
+    expect(definition).toHaveClass("typo-label-regular");
   });
 });

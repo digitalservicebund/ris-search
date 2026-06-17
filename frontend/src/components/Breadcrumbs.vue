@@ -83,7 +83,7 @@ const drawerId = useId();
       <span v-if="slot.item.command">
         <button
           ref="drawerTriggerRef"
-          class="ris-body2-regular flex h-32 w-32 items-center justify-center rounded-xs border border-blue-500 bg-blue-200 text-blue-800 outline-offset-4 outline-blue-800 focus-visible:outline-4 active:bg-blue-400"
+          class="typo-body-regular flex h-32 w-32 items-center justify-center rounded-xs border border-blue-500 bg-blue-200 text-blue-800 outline-offset-4 outline-blue-800 focus-visible:outline-4 active:bg-blue-400"
           :aria-label="
             typeof slot.item.label === 'string' ? slot.item.label : undefined
           "

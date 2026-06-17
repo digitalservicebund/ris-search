@@ -28,17 +28,17 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
               alt="Bundesministerium der Justiz und für Verbraucherschutz"
             />
             <div>
-              <p class="ris-body2-regular">
+              <p class="typo-body-regular">
                 Ein Service im Auftrag des
-                <ExternalLink class="ris-link2-regular" url="https://www.bmj.de"
+                <ExternalLink class="typo-link-regular" url="https://www.bmj.de"
                   >Bundesministeriums der Justiz und für
                   Verbraucherschutz</ExternalLink
                 >
               </p>
-              <p class="ris-body2-regular">
+              <p class="typo-body-regular">
                 Umsetzung und Betrieb durch
                 <ExternalLink
-                  class="ris-link2-regular"
+                  class="typo-link-regular"
                   url="https://digitalservice.bund.de"
                   >DigitalService GmbH des Bundes</ExternalLink
                 >
@@ -52,63 +52,63 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
             >
               <li>
                 <NuxtLink
-                  class="ris-link2-regular link-hover"
+                  class="typo-link-regular link-hover"
                   :to="{ name: 'contact' }"
                   >Kontakt</NuxtLink
                 >
               </li>
               <li>
                 <NuxtLink
-                  class="ris-link2-regular link-hover"
+                  class="typo-link-regular link-hover"
                   :to="{ name: 'imprint' }"
                   >Impressum</NuxtLink
                 >
               </li>
               <li>
                 <NuxtLink
-                  class="ris-link2-regular link-hover"
+                  class="typo-link-regular link-hover"
                   :to="{ name: 'data-protection' }"
                   >Datenschutzerklärung</NuxtLink
                 >
               </li>
               <li>
                 <NuxtLink
-                  class="ris-link2-regular link-hover"
+                  class="typo-link-regular link-hover"
                   :to="{ name: 'accessibility' }"
                   >Barrierefreiheit</NuxtLink
                 >
               </li>
               <li>
                 <NuxtLink
-                  class="ris-link2-regular link-hover"
+                  class="typo-link-regular link-hover"
                   :to="{ name: 'cookie-settings' }"
                   >Cookie-Einstellungen</NuxtLink
                 >
               </li>
               <li v-if="privateFeaturesEnabled">
                 <NuxtLink
-                  class="ris-link2-regular link-hover"
+                  class="typo-link-regular link-hover"
                   :to="{ name: 'translations' }"
                   >English translations</NuxtLink
                 >
               </li>
               <li>
                 <NuxtLink
-                  class="ris-link2-regular link-hover"
+                  class="typo-link-regular link-hover"
                   :to="{ name: 'open-source' }"
                   >Open Source</NuxtLink
                 >
               </li>
               <li>
                 <ExternalLink
-                  class="ris-link2-regular link-hover"
+                  class="typo-link-regular link-hover"
                   url="https://docs.rechtsinformationen.bund.de"
                   >API-Dokumentation</ExternalLink
                 >
               </li>
               <li>
                 <NuxtLink
-                  class="ris-link2-regular link-hover"
+                  class="typo-link-regular link-hover"
                   :to="{ name: 'usage-tests' }"
                   >Nutzungstests</NuxtLink
                 >
