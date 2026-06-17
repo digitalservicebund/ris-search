@@ -86,13 +86,10 @@ public class IndexNormsService implements IndexService {
           getWorks(Stream.concat(changelog.getChanged().stream(), changelog.getDeleted().stream()));
 
       // retrieve all file paths for the given workElis
-      Map<WorkEli, List<String>> allFilesByWorkEli =
-          workElis.stream()
-              .collect(
-                  Collectors.toMap(
-                      workEli -> workEli,
-                      workEli -> normsBucket.getAllKeysByPrefix(workEli.toString() + "/")));
-
+      Map<WorkEli, List<String>> allFilesByWorkEli = new HashMap<>();
+      for (WorkEli workEli : workElis) {
+        allFilesByWorkEli.put(workEli, normsBucket.getAllKeysByPrefix(workEli.toString() + "/"));
+      }
       processWorkEliUpdates(allFilesByWorkEli, Instant.now().toString());
     } catch (IllegalArgumentException e) {
       logger.error("Error while reading changelog file: {}", e.getMessage());
@@ -132,8 +129,16 @@ public class IndexNormsService implements IndexService {
 
   private void processWorkEliUpdates(
       Map<WorkEli, List<String>> workElis, String startingTimestamp) {
+    int processedWorkEli = 0;
+    int totalWorkElis = workElis.size();
+
     for (Map.Entry<WorkEli, List<String>> entry : workElis.entrySet()) {
       processOneNormWork(entry.getKey(), entry.getValue(), startingTimestamp);
+
+      processedWorkEli++;
+      if (processedWorkEli % 100 == 0 || processedWorkEli == totalWorkElis) {
+        logger.info("index progress: {}/{} works processed", processedWorkEli, totalWorkElis);
+      }
     }
   }
 

@@ -1,6 +1,7 @@
 package de.bund.digitalservice.ris.search.unit.service;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -139,6 +140,7 @@ class IndexNormsServiceTest {
     String startingTimestamp = "2024-01-01T12:00:00Z";
     this.service.reindexAll(startingTimestamp);
 
+    verify(repo, times(1)).saveAll(any());
     verify(repo, times(1))
         .saveAll(
             argThat(
