@@ -2,6 +2,7 @@ packages: []
 
 overrides:
   "esbuild": "0.28.1"
+  "vite-plugin-checker": "0.13.0"
 
 allowBuilds:
   "@parcel/watcher": true
