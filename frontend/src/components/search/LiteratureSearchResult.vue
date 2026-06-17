@@ -13,6 +13,11 @@ const { searchResultClicked } = usePostHog();
 
 const router = useRouter();
 
+const fields = new Map([
+  ["outline", { id: "gliederung", title: "Gliederung" }],
+  ["shortReport", { id: "kurzreferat", title: "Kurzreferat" }],
+]);
+
 const headline = computed(() =>
   getTitleWithFallback(
     getMatch("mainTitle", searchResult.textMatches),
@@ -40,29 +45,9 @@ const detailPageRoute = computed(() => ({
   params: { documentNumber: searchResult.item.documentNumber },
 }));
 
-const shortReport = computed(() => {
-  const fullText = searchResult.item.shortReport;
-  if (!fullText) return undefined;
-
-  // Find the relevant highlight for "shortReport"
-  const match = searchResult.textMatches.find(
-    (hl) => hl.name === "shortReport" && hl.text?.includes("<mark>"),
-  );
-
-  // No highlight — just return the whole text, will be truncated with
-  // line-clamp because of 3 lines wanted and not only 2
-  if (!match) return fullText;
-
-  // Return the highlighted text (with ellipsis if needed)
-  return addEllipsis(match.text);
-});
-
-const shortReportIncludesHighlight = computed(
-  () => shortReport.value?.includes("<mark>") ?? false,
-);
-
-const sanitizedShortReport = computed(() =>
-  sanitizeSearchResult(shortReport.value ?? ""),
+const previewSections = useSearchResultSections(
+  () => searchResult.textMatches,
+  fields,
 );
 
 function trackResultClick() {
@@ -86,11 +71,21 @@ function trackResultClick() {
     </NuxtLink>
 
     <div class="flex w-full flex-col gap-6">
-      <span
-        data-testid="highlighted-field"
-        :class="{ 'line-clamp-3': !shortReportIncludesHighlight }"
-        v-html="sanitizedShortReport"
-      />
+      <div v-for="section in previewSections" :key="section.id">
+        <NuxtLink
+          :to="{ ...detailPageRoute, hash: `#${section.id}` }"
+          class="ris-link1-bold link-hover"
+          external
+          @click="trackResultClick()"
+          >{{ section.title }}:</NuxtLink
+        >{{ " " }}
+        <span
+          v-if="section.text"
+          data-testid="highlighted-field"
+          class="ris-label1-regular"
+          v-html="section.text"
+        />
+      </div>
     </div>
   </div>
 </template>

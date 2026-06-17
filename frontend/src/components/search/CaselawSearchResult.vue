@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import GavelIcon from "~icons/ic/outline-gavel";
 import type { SearchResultHeaderItem } from "~/components/search/SearchResultHeader.vue";
-import type { CaseLaw, SearchResult, TextMatch } from "~/types/api";
+import type { CaseLaw, SearchResult } from "~/types/api";
 import {
   getMatch,
   getMatches,
@@ -17,23 +17,7 @@ const { searchResultClicked } = usePostHog();
 
 const router = useRouter();
 
-type Key =
-  | "guidingPrinciple"
-  | "headnote"
-  | "otherHeadnote"
-  | "tenor"
-  | "grounds"
-  | "caseFacts"
-  | "decisionGrounds";
-
-interface FieldDisplayProperties {
-  id: string;
-  title: string;
-}
-
-type ExtendedTextMatch = TextMatch & FieldDisplayProperties;
-
-const fields: Map<Key, FieldDisplayProperties> = new Map([
+const fields = new Map([
   ["guidingPrinciple", { id: "leitsatz", title: "Leitsatz" }],
   ["headnote", { id: "orientierungssatz", title: "Orientierungssatz" }],
   [
@@ -105,20 +89,11 @@ const detailPageRoute = computed(() => ({
   params: { documentNumber: searchResult.item.documentNumber },
 }));
 
-const previewSections = computed<ExtendedTextMatch[]>(() => {
-  const keys = [...fields.keys()];
-  return searchResult.textMatches
-    .filter((match) => fields.has(match.name as Key))
-    .toSorted(
-      (a, b) => keys.indexOf(a.name as Key) - keys.indexOf(b.name as Key),
-    )
-    .map<ExtendedTextMatch>((match) => ({
-      ...match,
-      text: sanitizeSearchResult(addEllipsis(match.text) ?? ""),
-      ...fields.get(match.name as Key)!, // always defined since we filtered above
-    }))
-    .slice(0, 4);
-});
+const previewSections = useSearchResultSections(
+  () => searchResult.textMatches,
+  fields,
+  4,
+);
 
 function trackResultClick() {
   const url = router.resolve(detailPageRoute.value).href;

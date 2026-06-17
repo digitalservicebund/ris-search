@@ -67,184 +67,6 @@ function renderComponent({
 }
 
 describe("LiteratureSearchResult", () => {
-  it("renders the expected title", async () => {
-    renderComponent({});
-    expect(
-      screen.getByText(
-        "Eine Untersuchung der juristischen Methoden im 21. Jahrhundert",
-      ),
-    ).toBeInTheDocument();
-  });
-
-  it("has accessible description linking to result type", async () => {
-    renderComponent({});
-    expect(
-      screen.getByRole("link", {
-        name: "Eine Untersuchung der juristischen Methoden im 21. Jahrhundert",
-        description: "Book",
-      }),
-    ).toBeInTheDocument();
-  });
-
-  it("renders placeholder title if title is missing", async () => {
-    const searchResultWithoutTitle = {
-      item: {
-        ...searchResult.item,
-        headline: undefined,
-        alternativeHeadline: undefined,
-      },
-      textMatches: [],
-    };
-    renderComponent(searchResultWithoutTitle);
-    expect(screen.getByText("Titelzeile nicht vorhanden")).toBeInTheDocument();
-  });
-
-  it("displays highlighted headline when mainTitle", async () => {
-    const textMatch: TextMatch = {
-      "@type": "SearchResultMatch",
-      name: "mainTitle",
-      text: `testing <mark>highlighted main title</mark> is here`,
-      location: undefined,
-    };
-
-    renderComponent({ textMatches: [textMatch] });
-
-    const mark = screen.getByText("highlighted main title");
-    expect(mark.tagName).toBe("MARK");
-  });
-
-  it("displays highlighted headline when documentary title has markup", async () => {
-    const textMatch: TextMatch = {
-      "@type": "SearchResultMatch",
-      name: "documentaryTitle",
-      text: `testing <mark>highlighted documentary title</mark> is here`,
-      location: undefined,
-    };
-
-    // Clone the item but set headline to undefined
-    const itemWithoutHeadline = { ...searchResult.item, headline: undefined };
-
-    renderComponent({ item: itemWithoutHeadline, textMatches: [textMatch] });
-
-    const mark = screen.getByText("highlighted documentary title");
-    expect(mark.tagName).toBe("MARK");
-  });
-
-  it("displays alternative title when headline is not present", async () => {
-    const itemWithoutHeadline = { ...searchResult.item, headline: "" };
-    renderComponent({ item: itemWithoutHeadline });
-    expect(
-      screen.getByText("Study of Legal Methodologies in the 21st Century"),
-    ).toBeInTheDocument();
-  });
-
-  it("displays highlighted text with correct class", async () => {
-    const textMatch: TextMatch = {
-      "@type": "SearchResultMatch",
-      name: "shortReport",
-      text: "testing <mark>highlighted Text</mark> is here",
-      location: undefined,
-    };
-
-    renderComponent({ textMatches: [textMatch] });
-
-    const mark = screen.getByText("highlighted Text");
-    expect(mark.tagName).toBe("MARK");
-  });
-
-  it("renders full shortReport when no match is present", async () => {
-    renderComponent({});
-    expect(
-      screen.getByText(/Dieses Werk analysiert die Entwicklung/),
-    ).toBeInTheDocument();
-  });
-
-  it("applies line-clamp-3 class only when no highlight exists", async () => {
-    // No highlight
-    const { rerender } = renderComponent({});
-    const span = screen.getByTestId("highlighted-field");
-    expect(span).toHaveClass("line-clamp-3");
-
-    // With highlight
-    const match: TextMatch = {
-      "@type": "SearchResultMatch",
-      name: "shortReport",
-      text: `<mark>Dieses</mark> Werk analysiert`,
-      location: undefined,
-    };
-    await rerender({
-      searchResult: { item: searchResult.item, textMatches: [match] },
-    });
-    expect(screen.getByTestId("highlighted-field")).not.toHaveClass(
-      "line-clamp-3",
-    );
-  });
-
-  it("highlights a word in the middle of shortReport", async () => {
-    const match: TextMatch = {
-      "@type": "SearchResultMatch",
-      name: "shortReport",
-      text: `… Rolle von <mark>Präzedenzfällen</mark> in modernen Gerichtsbarkeiten …`,
-      location: undefined,
-    };
-
-    renderComponent({ textMatches: [match] });
-
-    const mark = screen.getByText("Präzedenzfällen");
-    expect(mark).toBeInTheDocument();
-    expect(mark.tagName).toBe("MARK");
-  });
-
-  it("highlights a word at the end of shortReport", async () => {
-    const match: TextMatch = {
-      "@type": "SearchResultMatch",
-      name: "shortReport",
-      text: `… automatisierter <mark>Entscheidungsfindung</mark>`,
-      location: undefined,
-    };
-
-    renderComponent({ textMatches: [match] });
-
-    const mark = screen.getByText("Entscheidungsfindung");
-    expect(mark).toBeInTheDocument();
-    expect(mark.tagName).toBe("MARK");
-  });
-
-  it("limits shortReport snippet length and preserves highlight", async () => {
-    const match: TextMatch = {
-      "@type": "SearchResultMatch",
-      name: "shortReport",
-      text: `… Rolle von <mark>Präzedenzfällen</mark> in modernen Gerichtsbarkeiten …`,
-      location: undefined,
-    };
-
-    renderComponent({ textMatches: [match] });
-
-    const snippet = screen.getByTestId("highlighted-field");
-    expect(snippet).toHaveTextContent("Präzedenzfällen");
-    expect(snippet.textContent?.length ?? 0).toBeLessThanOrEqual(280);
-  });
-
-  it("applies line-clamp-3 class only when no highlight exists", async () => {
-    // No match
-    const { rerender } = renderComponent({});
-    let span = screen.getByTestId("highlighted-field");
-    expect(span).toHaveClass("line-clamp-3");
-
-    // With match
-    const match: TextMatch = {
-      "@type": "SearchResultMatch",
-      name: "shortReport",
-      text: `<mark>Dieses</mark> Werk analysiert`,
-      location: undefined,
-    };
-    await rerender({
-      searchResult: { item: searchResult.item, textMatches: [match] },
-    });
-    span = screen.getByTestId("highlighted-field");
-    expect(span).not.toHaveClass("line-clamp-3");
-  });
-
   describe("metadata", () => {
     it("renders first documentType", async () => {
       renderComponent();
@@ -269,6 +91,140 @@ describe("LiteratureSearchResult", () => {
     it("renders first year of publication", async () => {
       renderComponent();
       expect(screen.getByText("2021")).toBeVisible();
+    });
+  });
+
+  describe("headline", () => {
+    it("renders the expected title", async () => {
+      renderComponent({});
+      expect(
+        screen.getByText(
+          "Eine Untersuchung der juristischen Methoden im 21. Jahrhundert",
+        ),
+      ).toBeInTheDocument();
+    });
+
+    it("has accessible description linking to result type", async () => {
+      renderComponent({});
+      expect(
+        screen.getByRole("link", {
+          name: "Eine Untersuchung der juristischen Methoden im 21. Jahrhundert",
+          description: "Book",
+        }),
+      ).toBeInTheDocument();
+    });
+
+    it("renders placeholder title if title is missing", async () => {
+      const searchResultWithoutTitle = {
+        item: {
+          ...searchResult.item,
+          headline: undefined,
+          alternativeHeadline: undefined,
+        },
+        textMatches: [],
+      };
+      renderComponent(searchResultWithoutTitle);
+      expect(
+        screen.getByText("Titelzeile nicht vorhanden"),
+      ).toBeInTheDocument();
+    });
+
+    it("displays highlighted headline when main title has highlights", async () => {
+      const textMatch: TextMatch = {
+        "@type": "SearchResultMatch",
+        name: "mainTitle",
+        text: `testing <mark>highlighted main title</mark> is here`,
+        location: undefined,
+      };
+
+      renderComponent({ textMatches: [textMatch] });
+
+      const mark = screen.getByText("highlighted main title");
+      expect(mark.tagName).toBe("MARK");
+    });
+
+    it("displays highlighted headline when documentary title has markup", async () => {
+      const textMatch: TextMatch = {
+        "@type": "SearchResultMatch",
+        name: "documentaryTitle",
+        text: `testing <mark>highlighted documentary title</mark> is here`,
+        location: undefined,
+      };
+
+      const itemWithoutHeadline = { ...searchResult.item, headline: undefined };
+
+      renderComponent({ item: itemWithoutHeadline, textMatches: [textMatch] });
+
+      const mark = screen.getByText("highlighted documentary title");
+      expect(mark.tagName).toBe("MARK");
+    });
+
+    it("displays alternative title when headline is not present", async () => {
+      const itemWithoutHeadline = { ...searchResult.item, headline: "" };
+      renderComponent({ item: itemWithoutHeadline });
+      expect(
+        screen.getByText("Study of Legal Methodologies in the 21st Century"),
+      ).toBeInTheDocument();
+    });
+  });
+
+  describe("preview sections", () => {
+    it("renders no highlights when text matches is empty", () => {
+      renderComponent({});
+      expect(screen.queryAllByTestId("highlighted-field")).toHaveLength(0);
+    });
+
+    it("renders matches", () => {
+      const textMatches: TextMatch[] = [
+        {
+          "@type": "SearchResultMatch",
+          name: "outline",
+          text: "<mark>I. Einführung</mark>",
+          location: undefined,
+        },
+        {
+          "@type": "SearchResultMatch",
+          name: "shortReport",
+          text: "testing <mark>highlighted Text</mark> is here",
+          location: undefined,
+        },
+      ];
+
+      renderComponent({ textMatches });
+
+      expect(
+        screen.getByRole("link", { name: "Gliederung:" }),
+      ).toBeInTheDocument();
+      const outlineMark = screen.getByText("I. Einführung");
+      expect(outlineMark.tagName).toBe("MARK");
+
+      expect(
+        screen.getByRole("link", { name: "Kurzreferat:" }),
+      ).toBeInTheDocument();
+      const shortReportMark = screen.getByText("highlighted Text");
+      expect(shortReportMark.tagName).toBe("MARK");
+    });
+
+    it("filters HTML tags except mark, i, b", () => {
+      const text =
+        '<mark>mark</mark> <i>i</i> <b>b</b> <img src="" alt="do not show"> <div>div</div> plain_text.';
+      const expectedSanitized =
+        "<mark>mark</mark> <i>i</i> <b>b</b>  div plain_text.";
+
+      const textMatches: TextMatch[] = [
+        {
+          "@type": "SearchResultMatch",
+          name: "shortReport",
+          text,
+          location: undefined,
+        },
+      ];
+
+      renderComponent({ textMatches });
+
+      const contentItems = screen.getAllByTestId("highlighted-field");
+      expect(contentItems).toHaveLength(1);
+      expect(contentItems[0]?.innerHTML).toBe(expectedSanitized);
     });
   });
 });

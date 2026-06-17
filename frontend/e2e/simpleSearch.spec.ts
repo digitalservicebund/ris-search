@@ -761,8 +761,20 @@ test.describe("searching literature", () => {
         name: "Erstes Test-Dokument ULI",
       }),
     ).toBeVisible();
+  });
+
+  test("shows highlighted short report in search results", async ({ page }) => {
+    await navigate(
+      page,
+      "/search?query=einfaches+Test-Dokument&documentKind=L",
+    );
+
+    const searchResult = getSearchResults(page).first();
 
     // Highlights
+    await expect(
+      searchResult.getByRole("link", { name: "Kurzreferat:" }),
+    ).toBeVisible();
     await expect(
       searchResult.getByText(/Dies ist ein einfaches Test-Dokument./),
     ).toBeVisible();
@@ -926,10 +938,9 @@ test.describe("searching administrative directives", () => {
 
     // Highlights
     await expect(
-      searchResult.getByText(
-        /… Beschlossen wurde, das Beschlüsse beschlossen werden müssen./,
-      ),
+      searchResult.getByRole("link", { name: "Kurzreferat:" }),
     ).toBeVisible();
+    await expect(searchResult.getByText(/Beschlossen wurde/)).toBeVisible();
   });
 
   test("shows placeholder headline for search result items without headline", async ({

@@ -16,20 +16,7 @@ const searchResult: SearchResult<AdministrativeDirective> = {
     referenceNumbers: ["Foo - 123", "Bar - 123"],
     entryIntoForceDate: "2025-07-01",
   } as AdministrativeDirective,
-  textMatches: [
-    {
-      "@type": "SearchResultMatch",
-      name: "shortReport",
-      text: "Inhalt eines Kurzreferats.",
-      location: undefined,
-    },
-    {
-      "@type": "SearchResultMatch",
-      name: "headline",
-      text: "Verwaltungsvorschrift Überschrift",
-      location: undefined,
-    },
-  ],
+  textMatches: [],
 };
 
 async function renderComponent({
@@ -138,82 +125,56 @@ describe("AdministrativeDirectiveSearchResult", () => {
     });
   });
 
-  describe("shortReport", () => {
-    it("renders shortReport match without ellipses", async () => {
-      await renderComponent();
-      expect(screen.getByText("Inhalt eines Kurzreferats.")).toBeVisible();
-    });
-
-    it("renders shortReport match with ellipses at start", async () => {
+  describe("preview sections", () => {
+    it("renders matches", async () => {
       await renderComponent({
-        item: {
-          ...searchResult.item,
-          shortReport: "Dies ist der lange Inhalt eines Kurzreferats.",
-        },
-      });
-      expect(screen.getByText("… Inhalt eines Kurzreferats.")).toBeVisible();
-    });
-
-    it("renders shortReport match with ellipses at end", async () => {
-      await renderComponent({
-        item: {
-          ...searchResult.item,
-          shortReport: "Inhalt eines Kurzreferats. Weitere Inhalt.",
-        },
-      });
-      expect(screen.getByText("Inhalt eines Kurzreferats. …")).toBeVisible();
-    });
-
-    it("renders shortReport match with ellipses at start and end", async () => {
-      await renderComponent({
-        item: {
-          ...searchResult.item,
-          shortReport:
-            "Dies ist der lange Inhalt eines Kurzreferats. Weitere Inhalt.",
-        },
-      });
-      expect(screen.getByText("… Inhalt eines Kurzreferats. …")).toBeVisible();
-    });
-
-    it("renders shortReport match with markup", async () => {
-      await renderComponent({
-        item: {
-          ...searchResult.item,
-          shortReport: "Inhalt eines Kurzreferats. Weiterer Inhalt.",
-        },
         textMatches: [
           {
             "@type": "SearchResultMatch",
             name: "shortReport",
-            text: "<b>Inhalt</b> <i>eines</i> <mark>Kurzreferats.</mark> <a>Weiterer Inhalt.</a>",
+            text: "testing <mark>highlighted Text</mark> is here",
+            location: undefined,
+          },
+          {
+            "@type": "SearchResultMatch",
+            name: "tableOfContentsEntries",
+            text: "<mark>I. Einführung</mark>",
             location: undefined,
           },
         ],
       });
-      expect(screen.getByText("Inhalt").tagName).toBe("B");
-      expect(screen.getByText("eines").tagName).toBe("I");
-      expect(screen.getByText("Kurzreferats.").tagName).toBe("MARK");
-      // Does not render other tags
-      expect(screen.getByText("Weiterer Inhalt.").tagName).not.toBe("A");
+
+      expect(
+        screen.getByRole("link", { name: "Kurzreferat:" }),
+      ).toBeInTheDocument();
+      const linkMark = screen.getByText("highlighted Text");
+      expect(linkMark.tagName).toBe("MARK");
+
+      expect(screen.getByRole("link", { name: "Inhalt:" })).toBeInTheDocument();
+      const shortReportMark = screen.getByText("I. Einführung");
+      expect(shortReportMark.tagName).toBe("MARK");
     });
 
-    it("renders shortReport match with markup and ellipses", async () => {
+    it("filters HTML tags except mark, i, b", async () => {
+      const text =
+        '<mark>mark</mark> <i>i</i> <b>b</b> <img src="" alt="do not show"> <div>div</div> plain_text.';
+      const expectedSanitized =
+        "<mark>mark</mark> <i>i</i> <b>b</b>  div plain_text.";
+
       await renderComponent({
-        item: {
-          ...searchResult.item,
-          shortReport: "Inhalt eines Kurzreferats. Weiterer Inhalt.",
-        },
         textMatches: [
           {
             "@type": "SearchResultMatch",
             name: "shortReport",
-            text: "<mark>Inhalt</mark> eines Kurzreferats.",
+            text,
             location: undefined,
           },
         ],
       });
-      expect(screen.getByText("Inhalt").tagName).toBe("MARK");
-      expect(screen.getByText("eines Kurzreferats. …")).toBeVisible();
+
+      const items = screen.getAllByTestId("highlighted-field");
+      expect(items).toHaveLength(1);
+      expect(items[0]?.innerHTML).toBe(expectedSanitized);
     });
   });
 });
