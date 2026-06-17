@@ -371,7 +371,7 @@ const fassungenDateFilterInputId = useId();
 }
 
 .footnotes :deep(.nichtamtliche-fussnoten .fussnote pre) {
-  @apply mono-font overflow-auto border border-gray-400 p-8;
+  @apply typo-mono overflow-auto border border-gray-400 p-8;
 }
 
 .footnotes :deep(.nichtamtliche-fussnoten .fussnote:first-child pre) {

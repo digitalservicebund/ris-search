@@ -1,0 +1,15 @@
+@utility typo-body {
+  @apply ris-body2-regular sm:ris-body1-regular;
+}
+
+@utility typo-body-link {
+  @apply ris-link2-regular sm:ris-link1-regular;
+}
+
+@utility typo-mono {
+  @apply font-mono text-base leading-20;
+}
+
+@utility link-hover {
+  @apply no-underline hover:underline;
+}

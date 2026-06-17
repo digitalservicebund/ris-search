@@ -3,6 +3,7 @@
 
 @source "../../node_modules/@digitalservicebund/ris-ui/dist/**/*.{js,vue,ts}";
 
+@import "./typography.css";
 @import "./print.css";
 
 @theme {
@@ -26,28 +27,6 @@
 
 @utility container {
   @apply mx-auto px-16;
-}
-
-@utility link-hover {
-  @apply no-underline hover:underline;
-}
-
-/* Added as part of RISDEV-11283 (mobile action menu) for initial responsive
-typography. Should be moved to RIS UI when implementing all of responsive
-typography (RISDEV-10826). */
-@utility body-font {
-  @apply ris-body2-regular sm:ris-body1-regular;
-}
-
-/* Added as part of RISDEV-11282 (mobile breadcrumbs) for initial responsive
-typography. Should be moved to RIS UI when implementing all of responsive
-typography (RISDEV-10826). */
-@utility body-font-link {
-  @apply ris-link2-regular sm:ris-link1-regular;
-}
-
-@utility mono-font {
-  @apply font-mono text-base leading-20;
 }
 
 mark {
