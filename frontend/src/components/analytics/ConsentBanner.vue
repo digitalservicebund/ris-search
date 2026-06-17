@@ -22,7 +22,7 @@ const headingId = useId();
     class="typo-body-regular flex flex-col gap-24 bg-blue-200 px-8 py-16 lg:p-24"
     :aria-labelledby="headingId"
   >
-    <div class="container">
+    <div class="wrapper">
       <p :id="headingId" class="typo-headline2-bold">
         Cookie-Einstellungen akzeptieren oder ablehnen
       </p>

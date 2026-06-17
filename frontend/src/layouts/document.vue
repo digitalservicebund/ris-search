@@ -32,7 +32,7 @@ const currentView = computed(
   <BaseLayout>
     <div class="pt-32 lg:pt-64">
       <!-- Header -->
-      <div class="container text-left">
+      <div class="wrapper text-left">
         <div class="flex items-center gap-4 md:gap-16 print:hidden">
           <Breadcrumbs :items="breadcrumbs" class="grow" />
           <slot name="actionMenu" />
@@ -51,7 +51,7 @@ const currentView = computed(
         v-if="isEmptyDocument"
         class="min-h-96 border-t border-t-gray-400 bg-white print:py-0"
       >
-        <div class="container">
+        <div class="wrapper">
           <slot name="details" />
         </div>
       </div>
@@ -59,7 +59,7 @@ const currentView = computed(
       <div v-else>
         <!-- Tabs -->
         <div class="border-b border-gray-400">
-          <nav class="container -mb-1" aria-label="Tab">
+          <nav class="wrapper -mb-1" aria-label="Tab">
             <Tabs :value="currentView" :show-navigators="false">
               <TabList>
                 <!-- Note that we need to override aria-controls manually,
@@ -84,7 +84,7 @@ const currentView = computed(
         </div>
 
         <div id="content" class="min-h-96 bg-white">
-          <div class="container">
+          <div class="wrapper">
             <slot :name="currentView" />
           </div>
         </div>
