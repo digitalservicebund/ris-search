@@ -85,12 +85,13 @@ public class IndexNormsService implements IndexService {
       Set<WorkEli> workElis =
           getWorks(Stream.concat(changelog.getChanged().stream(), changelog.getDeleted().stream()));
 
-      Map<WorkEli, List<String>> allFilesByWorkEli = new HashMap<>();
-      workElis.forEach(
-          (workEli -> {
-            List<String> filesOfWork = normsBucket.getAllKeysByPrefix(workEli.toString() + "/");
-            allFilesByWorkEli.put(workEli, filesOfWork);
-          }));
+      // retrieve all file paths for the given workElis
+      Map<WorkEli, List<String>> allFilesByWorkEli =
+          workElis.stream()
+              .collect(
+                  Collectors.toMap(
+                      workEli -> workEli,
+                      workEli -> normsBucket.getAllKeysByPrefix(workEli.toString() + "/")));
 
       processWorkEliUpdates(allFilesByWorkEli, Instant.now().toString());
     } catch (IllegalArgumentException e) {
@@ -98,6 +99,12 @@ public class IndexNormsService implements IndexService {
     }
   }
 
+  /**
+   * retrieves a Set of workElis from a stream of files
+   *
+   * @param files list of file paths
+   * @return Set of WorkElis
+   */
   private Set<WorkEli> getWorks(Stream<String> files) {
     return files
         .map(EliFile::fromString)
@@ -108,21 +115,25 @@ public class IndexNormsService implements IndexService {
         .collect(Collectors.toSet());
   }
 
+  /**
+   * takes a list of File paths and groups them by workEli
+   *
+   * @param files list of file paths
+   * @return Map of the paths grouped by workEli
+   */
   private Map<WorkEli, List<String>> groupFilesByWorkEli(Stream<String> files) {
     return files
         .map(EliFile::fromString)
-        .flatMap(Optional::stream) // Filters out empty optionals, leaving Stream<EliFile>
+        .flatMap(Optional::stream)
         .collect(
             Collectors.groupingBy(
-                EliFile::getWorkEli, // Key: Group by the WorkEli
-                Collectors.mapping( // Value: Extract the filename and collect to a list
-                    EliFile::toString, Collectors.toList())));
+                EliFile::getWorkEli, Collectors.mapping(EliFile::toString, Collectors.toList())));
   }
 
   private void processWorkEliUpdates(
       Map<WorkEli, List<String>> workElis, String startingTimestamp) {
-    for (WorkEli eli : workElis.keySet()) {
-      processOneNormWork(eli, workElis.get(eli), startingTimestamp);
+    for (Map.Entry<WorkEli, List<String>> entry : workElis.entrySet()) {
+      processOneNormWork(entry.getKey(), entry.getValue(), startingTimestamp);
     }
   }
 
