@@ -143,9 +143,9 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
       </div>
     </FeatureCard>
 
-    <FeatureCard inner-class="gap-x-64 gap-y-32 sm:flex-row">
+    <FeatureCard inner-class="gap-x-64 gap-y-32 md:flex-row">
       <img
-        class="mt-20 ml-20 self-start sm:mt-4 md:ml-0"
+        class="mt-20 ml-20 self-start md:mt-4 md:ml-0"
         :src="bmjvLogo"
         alt="Bundesministerium der Justiz und für Verbraucherschutz"
       />
