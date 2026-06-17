@@ -74,7 +74,7 @@ public class IndexNormsService implements IndexService {
   public void reindexAll(String startingTimestamp) {
     DateUtils.avoidOpenSearchSubMillisecondDateBug();
     List<String> allFiles = normsBucket.getAllKeysByPrefix("eli/");
-    Map<WorkEli, List<String>> workElis = getWorks(allFiles.stream());
+    Map<WorkEli, List<String>> workElis = groupFilesByWorkEli(allFiles.stream());
     processWorkEliUpdates(workElis, startingTimestamp);
     clearOldNorms(startingTimestamp);
   }
@@ -82,15 +82,33 @@ public class IndexNormsService implements IndexService {
   @Override
   public void indexChangelog(Changelog changelog) {
     try {
-      Map<WorkEli, List<String>> workElis =
+      Set<WorkEli> workElis =
           getWorks(Stream.concat(changelog.getChanged().stream(), changelog.getDeleted().stream()));
-      processWorkEliUpdates(workElis, Instant.now().toString());
+
+      Map<WorkEli, List<String>> allFilesByWorkEli = new HashMap<>();
+      workElis.forEach(
+          (workEli -> {
+            List<String> filesOfWork = normsBucket.getAllKeysByPrefix(workEli.toString() + "/");
+            allFilesByWorkEli.put(workEli, filesOfWork);
+          }));
+
+      processWorkEliUpdates(allFilesByWorkEli, Instant.now().toString());
     } catch (IllegalArgumentException e) {
       logger.error("Error while reading changelog file: {}", e.getMessage());
     }
   }
 
-  private Map<WorkEli, List<String>> getWorks(Stream<String> files) {
+  private Set<WorkEli> getWorks(Stream<String> files) {
+    return files
+        .map(EliFile::fromString)
+        // this filters out the files that are not an EliFile
+        .flatMap(Optional::stream)
+        .map(EliFile::getWorkEli)
+        // collecting to a set makes sure each work eli occurs at most once
+        .collect(Collectors.toSet());
+  }
+
+  private Map<WorkEli, List<String>> groupFilesByWorkEli(Stream<String> files) {
     return files
         .map(EliFile::fromString)
         .flatMap(Optional::stream) // Filters out empty optionals, leaving Stream<EliFile>
