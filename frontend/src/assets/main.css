@@ -21,7 +21,7 @@
   }
 
   body {
-    @apply ris-body1-regular antialiased;
+    @apply typo-body-regular antialiased;
   }
 }
 

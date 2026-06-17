@@ -1,9 +1,49 @@
-@utility typo-body {
-  @apply ris-body2-regular sm:ris-body1-regular;
+@utility typo-body-regular {
+  @apply ris-body2-regular sm:ris-body1-regular 2xl:text-[1.25rem];
 }
 
-@utility typo-body-link {
-  @apply ris-link2-regular sm:ris-link1-regular;
+@utility typo-body-bold {
+  @apply ris-body2-bold sm:ris-body1-bold 2xl:text-[1.25rem];
+}
+
+@utility typo-link-regular {
+  @apply ris-link2-regular sm:ris-link1-regular 2xl:text-[1.25rem];
+}
+
+@utility typo-link-bold {
+  @apply ris-link2-bold sm:ris-link1-bold 2xl:text-[1.25rem];
+}
+
+@utility typo-headline1-regular {
+  @apply ris-heading3-regular md:ris-heading2-regular 2xl:text-[2.5rem];
+}
+
+@utility typo-headline1-bold {
+  @apply ris-heading3-bold md:ris-heading2-bold 2xl:text-[2.5rem];
+}
+
+@utility typo-headline2-regular {
+  @apply ris-heading3-regular 2xl:ris-heading2-regular;
+}
+
+@utility typo-headline2-bold {
+  @apply ris-heading3-bold 2xl:ris-heading2-bold;
+}
+
+@utility typo-headline3-regular {
+  @apply ris-subhead-regular 2xl:ris-heading3-regular;
+}
+
+@utility typo-headline3-bold {
+  @apply ris-subhead-bold 2xl:ris-heading3-bold;
+}
+
+@utility typo-label-regular {
+  @apply ris-label2-regular sm:ris-label1-regular 2xl:text-[1.25rem];
+}
+
+@utility typo-label-bold {
+  @apply ris-label2-bold sm:ris-label1-bold 2xl:text-[1.25rem];
 }
 
 @utility typo-mono {
