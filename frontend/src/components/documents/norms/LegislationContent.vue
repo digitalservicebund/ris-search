@@ -290,7 +290,7 @@ Attributes from the Juris CALS format without a corresponding HTML attribute mig
 
 :deep(.fussnoten),
 :deep(.nichtamtliche-fussnoten) {
-  @apply typo-body-regular my-16 list-none pl-0 text-gray-900;
+  @apply ris-label3-regular md:ris-label2-regular 2xl:ris-label1-regular my-16 list-none pl-0 text-gray-900;
 }
 
 /* Show a 10 character wide separator above the collected notes  */
