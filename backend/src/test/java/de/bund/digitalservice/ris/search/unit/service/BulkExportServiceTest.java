@@ -16,7 +16,9 @@ import static org.mockito.Mockito.when;
 import de.bund.digitalservice.ris.ZipTestUtils;
 import de.bund.digitalservice.ris.search.exception.NoSuchKeyException;
 import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
+import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
 import de.bund.digitalservice.ris.search.service.BulkExportService;
+import de.bund.digitalservice.ris.search.service.ChangelogService;
 import de.bund.digitalservice.ris.search.service.Job;
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,8 +28,15 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+@ExtendWith(MockitoExtension.class)
 class BulkExportServiceTest {
+
+  @Mock ChangelogService<?> changelogMock;
+  @Mock PortalBucket portalBucketMock;
 
   @Test
   void runJob_successfulZipAndUpload() throws IOException {
@@ -55,7 +64,14 @@ class BulkExportServiceTest {
             });
 
     BulkExportService bulkExportService =
-        new BulkExportService(sourceBucket, destinationBucket, outputName, prefix, key -> true);
+        new BulkExportService(
+            sourceBucket,
+            destinationBucket,
+            outputName,
+            prefix,
+            key -> true,
+            changelogMock,
+            portalBucketMock);
 
     assertDoesNotThrow(bulkExportService::runJob);
 
@@ -94,7 +110,14 @@ class BulkExportServiceTest {
     doNothing().when(destinationBucket).delete(anyString());
 
     BulkExportService bulkExportService =
-        new BulkExportService(sourceBucket, destinationBucket, outputName, prefix, key -> true);
+        new BulkExportService(
+            sourceBucket,
+            destinationBucket,
+            outputName,
+            prefix,
+            key -> true,
+            changelogMock,
+            portalBucketMock);
 
     assertDoesNotThrow(bulkExportService::runJob);
 
@@ -118,7 +141,14 @@ class BulkExportServiceTest {
         .thenThrow(new RuntimeException("The mock source bucket does not want to list files"));
 
     BulkExportService bulkExportService =
-        new BulkExportService(sourceBucket, destinationBucket, outputName, prefix, key -> true);
+        new BulkExportService(
+            sourceBucket,
+            destinationBucket,
+            outputName,
+            prefix,
+            key -> true,
+            changelogMock,
+            portalBucketMock);
 
     assertThrows(RuntimeException.class, bulkExportService::runJob);
 
@@ -141,7 +171,13 @@ class BulkExportServiceTest {
 
     BulkExportService bulkExportService =
         new BulkExportService(
-            sourceBucket, destinationBucket, "test-export", "some/prefix/", key -> true);
+            sourceBucket,
+            destinationBucket,
+            "test-export",
+            "some/prefix/",
+            key -> true,
+            changelogMock,
+            portalBucketMock);
 
     assertEquals(Job.ReturnCode.ERROR, bulkExportService.runJob());
   }
@@ -155,7 +191,13 @@ class BulkExportServiceTest {
 
     BulkExportService bulkExportService =
         new BulkExportService(
-            sourceBucket, destinationBucket, "test-export", "some/prefix/", key -> false);
+            sourceBucket,
+            destinationBucket,
+            "test-export",
+            "some/prefix/",
+            key -> false,
+            changelogMock,
+            portalBucketMock);
 
     assertEquals(Job.ReturnCode.ERROR, bulkExportService.runJob());
   }
@@ -170,7 +212,13 @@ class BulkExportServiceTest {
 
     BulkExportService bulkExportService =
         new BulkExportService(
-            sourceBucket, destinationBucket, "test-export", "some/prefix/", key -> true);
+            sourceBucket,
+            destinationBucket,
+            "test-export",
+            "some/prefix/",
+            key -> true,
+            changelogMock,
+            portalBucketMock);
 
     assertEquals(Job.ReturnCode.ERROR, bulkExportService.runJob());
   }

@@ -1,6 +1,7 @@
 package de.bund.digitalservice.ris.search.service;
 
 import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
+import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -21,6 +22,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import lombok.Value;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -35,6 +37,8 @@ public class BulkExportService implements Job {
   private final String outputName;
   private final String prefix;
   private final Predicate<String> keyFilter;
+  private final ChangelogService<?> changelogService;
+  private final PortalBucket portalBucket;
   public static final String BULK_ZIP_PREFIX = "snapshots/";
 
   /**
@@ -52,17 +56,28 @@ public class BulkExportService implements Job {
       ObjectStorage destinationBucket,
       String outputName,
       String prefix,
-      Predicate<String> keyFilter) {
+      Predicate<String> keyFilter,
+      ChangelogService<?> changelogService,
+      PortalBucket portalBucket) {
     this.sourceBucket = sourceBucket;
     this.destinationBucket = destinationBucket;
     this.outputName = outputName;
     this.prefix = prefix;
     this.keyFilter = keyFilter;
+    this.changelogService = changelogService;
+    this.portalBucket = portalBucket;
   }
 
   @Override
   public ReturnCode runJob() {
     String timestamp = Instant.now().toString();
+
+    var lastSuccess =
+        portalBucket.getAllKeysByPrefix("last-succesfull-snapshot/" + outputName + "/");
+    if (!lastSuccess.isEmpty()) {
+      FilenameUtils.getName(lastSuccess.getLast());
+    }
+
     List<String> keysToZip =
         sourceBucket.getAllKeysByPrefix(prefix).stream().filter(keyFilter).toList();
 
@@ -119,6 +134,7 @@ public class BulkExportService implements Job {
       destinationBucket.delete(obsoleteObjectKey);
     }
 
+    portalBucket.save("last-succesfull-snapshot/" + outputName + "/" + timestamp, "");
     return ReturnCode.SUCCESS;
   }
 
