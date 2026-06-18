@@ -34,7 +34,7 @@
 
 @layer utilities {
   .wrapper {
-    @apply mx-auto px-16 lg:px-24 2xl:max-w-[96rem];
+    @apply mx-auto px-16 lg:px-24 2xl:max-w-(--breakpoint-2xl);
   }
 }
 
