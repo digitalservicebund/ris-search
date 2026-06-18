@@ -221,10 +221,11 @@ jobs:
           context: backend
           tags: ${{ inputs.image-reference }}
           push: true
+          secrets: |
+            GH_PACKAGES_REPOSITORY_USER=${{ github.actor }}
+            GH_PACKAGES_REPOSITORY_TOKEN=${{ secrets.GITHUB_TOKEN }}
           build-args: |
             SENTRY_RELEASE=${{ github.sha }}
-            GH_PACKAGES_REPOSITORY_USER=${{ github.actor }}
-            GH_PACKAGES_REPOSITORY_TOKEN=${{ github.token }}
       - name: Send status to Slack
         uses: digitalservicebund/notify-on-failure-gha@671832f192aee0a068fd92b2f6deb975df794a84 # v1.6.1
         if: ${{ failure() && github.ref == 'refs/heads/main' }}

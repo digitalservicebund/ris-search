@@ -104,8 +104,6 @@ dependencies {
     implementation(libs.tomcat.embed)
 
     implementation(libs.ris.html.transformation)
-    // Local development:
-    // implementation(files("../../ris-html-transformation/build/libs/ris-html-transformation-0.0.1-SNAPSHOT.jar"))
 
     compileOnly(libs.lombok)
     annotationProcessor(libs.lombok)

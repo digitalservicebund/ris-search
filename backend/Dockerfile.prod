@@ -2,20 +2,15 @@ FROM gradle:9.5.1-jdk21@sha256:4a011ed0edfe2feb7dace27d1fedf22caf217918b59932a95
 WORKDIR /app
 COPY . /app
 
-ARG GH_PACKAGES_REPOSITORY_USER
-ARG GH_PACKAGES_REPOSITORY_TOKEN
-
-ENV GH_PACKAGES_REPOSITORY_USER=${GH_PACKAGES_REPOSITORY_USER}
-ENV GH_PACKAGES_REPOSITORY_TOKEN=${GH_PACKAGES_REPOSITORY_TOKEN}
-
-RUN ./gradlew build -x integrationTest -x test -x spotlessCheck
-
+RUN --mount=type=secret,id=GH_PACKAGES_REPOSITORY_USER \
+    --mount=type=secret,id=GH_PACKAGES_REPOSITORY_TOKEN \
+    export GH_PACKAGES_REPOSITORY_USER=$(cat /run/secrets/GH_PACKAGES_REPOSITORY_USER) && \
+    export GH_PACKAGES_REPOSITORY_TOKEN=$(cat /run/secrets/GH_PACKAGES_REPOSITORY_TOKEN) && \
+    ./gradlew build -x integrationTest -x test -x spotlessCheck
 
 FROM cgr.dev/chainguard/jre@sha256:1d340a4433ee14b6950311cc17ae37e455bedac67d2fd1a589a299efbb2837d4
 ARG SENTRY_RELEASE
 COPY --from=backend-builder /app/build/libs/ris-search-*.jar /app/app.jar
 EXPOSE 8090
 ENV SENTRY_RELEASE=${SENTRY_RELEASE}
-ENV GH_PACKAGES_REPOSITORY_USER=${GH_PACKAGES_REPOSITORY_USER}
-ENV GH_PACKAGES_REPOSITORY_TOKEN=${GH_PACKAGES_REPOSITORY_TOKEN}
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]
