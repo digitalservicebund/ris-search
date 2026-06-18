@@ -7,7 +7,7 @@ import IconWarningAmber from "~icons/ic/outline-warning-amber";
     role="status"
     class="typo-body-regular flex bg-yellow-200 px-8 py-16 text-pretty sm:px-16 print:hidden"
   >
-    <div class="container flex gap-8">
+    <div class="wrapper flex gap-8">
       <IconWarningAmber class="shrink-0" />
       <div>
         <p>

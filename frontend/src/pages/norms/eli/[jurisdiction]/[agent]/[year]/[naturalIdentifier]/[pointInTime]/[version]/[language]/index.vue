@@ -156,7 +156,7 @@ const fassungenDateFilterInputId = useId();
   <div v-if="status == 'pending'">Lade ...</div>
 
   <div v-if="!!metadata">
-    <div class="container">
+    <div class="wrapper">
       <div class="flex items-center gap-4 md:gap-16 print:hidden">
         <Breadcrumbs :items="breadcrumbItems" class="grow" />
         <DocumentsActionMenuNormActionMenu
@@ -178,7 +178,7 @@ const fassungenDateFilterInputId = useId();
     </div>
 
     <div class="border-b border-gray-400">
-      <nav class="container -mb-1 overflow-x-auto pt-1" aria-label="Tab">
+      <nav class="wrapper -mb-1 overflow-x-auto pt-1" aria-label="Tab">
         <Tabs :value="currentView" :show-navigators="false">
           <TabList>
             <Tab
@@ -205,7 +205,7 @@ const fassungenDateFilterInputId = useId();
         role="tabpanel"
         :aria-labelledby="textTabPanelTitleId"
       >
-        <SidebarLayout class="container">
+        <SidebarLayout class="wrapper">
           <template #content>
             <h2 :id="textTabPanelTitleId" class="sr-only">Text</h2>
             <DocumentsIncompleteDataMessage />
@@ -232,7 +232,7 @@ const fassungenDateFilterInputId = useId();
         role="tabpanel"
         :aria-labelledby="detailsTabPanelTitleId"
       >
-        <div class="container pt-32 pb-32 lg:pb-56">
+        <div class="wrapper pt-32 pb-32 lg:pb-56">
           <h2 :id="detailsTabPanelTitleId" class="typo-headline3-bold">
             Details
           </h2>
@@ -284,7 +284,7 @@ const fassungenDateFilterInputId = useId();
         role="tabpanel"
         :aria-labelledby="fassungenTabPanelTitleId"
       >
-        <div class="container pt-32 pb-32 lg:pb-56">
+        <div class="wrapper pt-32 pb-32 lg:pb-56">
           <template v-if="privateFeaturesEnabled">
             <h2 :id="fassungenTabPanelTitleId" class="typo-headline3-bold">
               Fassungen

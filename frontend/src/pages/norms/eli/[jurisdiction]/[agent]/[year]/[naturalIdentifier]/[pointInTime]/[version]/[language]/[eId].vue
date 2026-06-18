@@ -196,10 +196,10 @@ const metadataItems = computed(() => {
 </script>
 
 <template>
-  <div v-if="status == 'pending'" class="container">Lade ...</div>
+  <div v-if="status == 'pending'" class="wrapper">Lade ...</div>
 
   <template v-if="!!norm">
-    <div class="container">
+    <div class="wrapper">
       <div class="md:hidden">
         <Breadcrumbs :items="breadcrumbItems" collapse />
       </div>
@@ -226,14 +226,14 @@ const metadataItems = computed(() => {
 
     <div
       v-if="privateFeaturesEnabled"
-      class="container mb-24 flex flex-col space-y-16 space-x-0 md:space-y-0 lg:flex-row lg:space-x-24"
+      class="wrapper mb-24 flex flex-col space-y-16 space-x-0 md:space-y-0 lg:flex-row lg:space-x-24"
       data-testid="metadata"
     >
       <Metadata :items="metadataItems" />
     </div>
 
     <div id="content" class="border-t border-t-gray-400 bg-white">
-      <SidebarLayout class="container">
+      <SidebarLayout class="wrapper">
         <template v-if="!!articleHtml" #content>
           <DocumentsIncompleteDataMessage />
           <DocumentsNormsLegislationContent single-article>

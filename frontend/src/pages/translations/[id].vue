@@ -98,7 +98,7 @@ const detailsTabPanelTitleId = useId();
 </script>
 
 <template>
-  <div v-if="currentTranslation" class="container">
+  <div v-if="currentTranslation" class="wrapper">
     <div class="flex items-center gap-8 print:hidden">
       <Breadcrumbs :items="breadcrumbItems" class="grow" />
       <NormTranslationActionMenu class="mb-auto" />
@@ -142,7 +142,7 @@ const detailsTabPanelTitleId = useId();
   </div>
 
   <div class="border-b border-gray-400">
-    <nav class="container -mb-1">
+    <nav class="wrapper -mb-1">
       <Tabs :value="currentView" :show-navigators="false">
         <TabList>
           <Tab
@@ -164,7 +164,7 @@ const detailsTabPanelTitleId = useId();
   </div>
 
   <div class="min-h-96 bg-white py-24 print:py-0">
-    <div class="container">
+    <div class="wrapper">
       <section v-if="currentView === 'text'">
         <h2 class="sr-only">Text</h2>
         <section class="max-w-prose" v-html="html" />
