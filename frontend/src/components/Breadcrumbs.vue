@@ -83,7 +83,7 @@ const drawerId = useId();
       <span v-if="slot.item.command">
         <button
           ref="drawerTriggerRef"
-          class="ris-body2-regular flex h-32 w-32 items-center justify-center rounded-xs border border-blue-500 bg-blue-200 text-blue-800 outline-offset-4 outline-blue-800 focus-visible:outline-4 active:bg-blue-400"
+          class="typo-body-regular flex h-32 w-32 items-center justify-center rounded-xs border border-blue-500 bg-blue-200 text-blue-800 outline-offset-4 outline-blue-800 focus-visible:outline-4 active:bg-blue-400"
           :aria-label="
             typeof slot.item.label === 'string' ? slot.item.label : undefined
           "
@@ -129,14 +129,14 @@ const drawerId = useId();
           v-if="i.route && i !== itemsWithHome.at(-1)"
           :to="i.route"
           @click="drawerVisible = false"
-          class="body-font-link link-hover flex py-12"
+          class="typo-link-regular link-hover flex py-12"
         >
           {{ i.extendedLabel ?? i.label }}
         </NuxtLink>
 
         <span
           v-else
-          class="body-font flex cursor-not-allowed py-12 text-gray-900"
+          class="typo-body-regular flex cursor-not-allowed py-12 text-gray-900"
         >
           {{ i.extendedLabel ?? i.label }}
         </span>

@@ -23,7 +23,7 @@ const normTitle = computed(() => getNormTitle(props.metadata));
     <hgroup>
       <p
         v-if="hasHeading"
-        class="word-wrap ris-heading3-regular mb-12 wrap-break-word hyphens-auto max-md:text-xl"
+        class="word-wrap typo-headline3-regular mb-12 wrap-break-word hyphens-auto max-md:text-xl"
       >
         {{ metadata.alternateName }}
       </p>
@@ -69,11 +69,11 @@ const normTitle = computed(() => getNormTitle(props.metadata));
 
 .dokumentenkopf {
   :deep(.titel) {
-    @apply ris-heading2-bold hyphens-auto max-md:text-2xl;
+    @apply typo-headline1-bold hyphens-auto max-md:text-2xl;
   }
 
   :deep(*[data-longTitle] .titel) {
-    @apply ris-heading3-bold;
+    @apply typo-headline3-bold;
   }
 }
 </style>

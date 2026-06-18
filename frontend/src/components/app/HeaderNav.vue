@@ -47,6 +47,6 @@ defineEmits<{ selectItem: [] }>();
 @reference "~/assets/main.css";
 
 .nav-link {
-  @apply ris-link1-regular link-hover flex items-center gap-4 aria-[current=page]:underline aria-[current=page]:decoration-[0.1875rem];
+  @apply typo-link-regular link-hover flex items-center gap-4 aria-[current=page]:underline aria-[current=page]:decoration-[0.1875rem];
 }
 </style>

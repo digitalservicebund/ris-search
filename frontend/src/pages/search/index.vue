@@ -200,7 +200,7 @@ watch(searchStatus, async (newStatus, oldStatus) => {
   <Breadcrumbs :items="[{ label: 'Suche' }]" />
 
   <div class="py-24">
-    <h1 class="ris-heading2-bold inline-block">Suche</h1>
+    <h1 class="typo-headline1-bold inline-block">Suche</h1>
   </div>
 
   <div id="search">
@@ -213,9 +213,9 @@ watch(searchStatus, async (newStatus, oldStatus) => {
 
   <SkipLink to="#search-results" class="mt-8">Zu den Ergebnissen</SkipLink>
 
-  <p v-if="privateFeaturesEnabled" class="ris-label2-regular mt-8">
+  <p v-if="privateFeaturesEnabled" class="typo-label-regular mt-8">
     Mehr Suchoptionen finden Sie unter
-    <NuxtLink :to="{ name: 'advanced-search' }" class="ris-link2-bold">
+    <NuxtLink :to="{ name: 'advanced-search' }" class="typo-link-bold">
       Erweiterte Suche
     </NuxtLink>
   </p>
@@ -224,7 +224,7 @@ watch(searchStatus, async (newStatus, oldStatus) => {
     <aside class="pb-10 lg:w-3/12" :aria-labelledby="filterHeadingId">
       <h2
         :id="filterHeadingId"
-        class="ris-label1-regular flex h-48 items-center"
+        class="typo-label-regular flex h-48 items-center"
       >
         Filter
       </h2>
@@ -275,14 +275,14 @@ watch(searchStatus, async (newStatus, oldStatus) => {
           <output
             aria-atomic="true"
             aria-live="polite"
-            class="ris-label2-regular"
+            class="typo-label-regular"
           >
             {{ isLoading ? "Lade ..." : formattedResultCount }}
           </output>
 
           <div class="flex flex-wrap gap-x-32 gap-y-16">
             <div class="flex items-center gap-8">
-              <label :id="itemsPerPageLabelId" class="ris-label2-regular">
+              <label :id="itemsPerPageLabelId" class="typo-label-regular">
                 Einträge pro Seite
               </label>
               <Select
@@ -308,11 +308,11 @@ watch(searchStatus, async (newStatus, oldStatus) => {
 
           <Message
             severity="warn"
-            class="ris-body2-regular mt-16 max-w-prose"
+            class="typo-body-regular mt-16 max-w-prose"
             role="status"
             aria-live="off"
           >
-            <p class="ris-body2-bold mt-2">
+            <p class="typo-body-bold mt-2">
               Dieser Service befindet sich in der Testphase.
             </p>
             <p>

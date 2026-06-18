@@ -217,7 +217,7 @@ watch(searchStatus, async (newStatus, oldStatus) => {
 
   <div class="mt-24 grid grid-cols-1 gap-40 lg:grid-cols-[20rem_1fr] lg:gap-64">
     <div class="lg:col-span-2">
-      <h1 class="ris-heading2-bold mb-16">Erweiterte Suche</h1>
+      <h1 class="typo-headline2-bold mb-16">Erweiterte Suche</h1>
       <p class="text-balance">
         Nutzen Sie die erweiterte Suche, um genau das zu finden, was Sie
         brauchen – ob im Leitsatz, Titel oder direkt im Volltext. Mit
@@ -231,7 +231,7 @@ watch(searchStatus, async (newStatus, oldStatus) => {
       aria-label="Filter"
     >
       <fieldset class="mb-40">
-        <legend class="ris-label1-regular mb-8">Dokumentart</legend>
+        <legend class="typo-label-regular mb-8">Dokumentart</legend>
         <PanelMenu
           :model="documentKindMenuItems"
           :expanded-keys="{ [documentKind]: true }"
@@ -268,7 +268,7 @@ watch(searchStatus, async (newStatus, oldStatus) => {
         <div
           class="mb-32 flex flex-col gap-16 md:flex-row md:items-center md:gap-48"
         >
-          <span class="ris-subhead-regular mr-auto text-nowrap">
+          <span class="typo-headline3-regular mr-auto text-nowrap">
             {{ formattedResultCount }}
           </span>
           <SearchSortSelect
@@ -278,7 +278,7 @@ watch(searchStatus, async (newStatus, oldStatus) => {
           />
 
           <div class="flex items-center gap-8">
-            <label :id="itemsPerPageLabelId" class="ris-label2-regular">
+            <label :id="itemsPerPageLabelId" class="typo-label-regular">
               Einträge pro Seite
             </label>
             <Select

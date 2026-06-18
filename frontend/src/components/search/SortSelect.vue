@@ -66,7 +66,7 @@ const sortLabelId = useId();
 
 <template>
   <span class="flex w-auto items-center gap-8">
-    <label :id="sortLabelId" class="ris-label2-regular">Sortieren nach</label>
+    <label :id="sortLabelId" class="typo-label-regular">Sortieren nach</label>
     <Select
       :aria-labelledby="sortLabelId"
       v-model="model"

@@ -34,10 +34,10 @@ const badge = computed(() => {
 
 <template>
   <div class="flex h-full flex-col bg-white p-16">
-    <div class="ris-body2-bold">
+    <div class="typo-body-bold">
       <MDCSlot unwrap="p" name="header" />
     </div>
-    <div class="ris-body2-regular pt-8 pb-16">
+    <div class="typo-body-regular pt-8 pb-16">
       <MDCSlot unwrap="p" />
     </div>
     <div v-if="badge" class="mt-auto self-start">

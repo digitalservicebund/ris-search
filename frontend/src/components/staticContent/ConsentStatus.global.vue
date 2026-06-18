@@ -25,7 +25,7 @@ async function handleSetTracking(value: boolean) {
     <Message
       role="status"
       severity="info"
-      class="ris-body2-regular mb-24 bg-white"
+      class="typo-body-regular mb-24 bg-white"
     >
       <template #icon>
         <IconCheck v-if="userConsent" class="text-blue-800" />
@@ -33,20 +33,20 @@ async function handleSetTracking(value: boolean) {
       </template>
       <client-only>
         <div v-if="userConsent">
-          <p class="ris-body2-bold">
+          <p class="typo-body-bold">
             Ich bin mit der Nutzung von Analyse-Cookies einverstanden.
           </p>
           <p>Damit helfen Sie uns, das Portal weiter zu verbessern.</p>
         </div>
         <div v-else>
-          <p class="ris-body2-bold">
+          <p class="typo-body-bold">
             Ich bin mit der Nutzung von Analyse-Cookies nicht einverstanden.
           </p>
           <p>Ihre Nutzung des Portals wird nicht zu Analysezwecken erfasst.</p>
         </div>
         <template #fallback>
           <div v-if="userConsent">
-            <p class="ris-body2-bold">
+            <p class="typo-body-bold">
               Ich bin mit der Nutzung von System-Cookies einverstanden.
             </p>
             <p>
@@ -55,7 +55,7 @@ async function handleSetTracking(value: boolean) {
             </p>
           </div>
           <div v-else>
-            <p class="ris-body2-bold">
+            <p class="typo-body-bold">
               Ich bin mit der Nutzung von Analyse-Cookies nicht einverstanden.
             </p>
             <p>

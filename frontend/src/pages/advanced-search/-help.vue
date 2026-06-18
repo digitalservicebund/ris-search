@@ -44,7 +44,7 @@ const availableFeatures: Feature[] = privateFeaturesEnabled
   <div v-if="privateFeaturesEnabled" class="container py-16">
     <div class="flex flex-col gap-48">
       <div>
-        <h1 class="ris-heading2-regular mt-24 mb-8">Hilfe zur Suche</h1>
+        <h1 class="typo-headline2-regular mt-24 mb-8">Hilfe zur Suche</h1>
         <p>
           Hier finden Sie eine Übersicht über die aktuell verfügbaren Funktionen
           und Rubriken der Suche. Wir arbeiten daran weitere Daten hinzuzufügen
@@ -53,7 +53,7 @@ const availableFeatures: Feature[] = privateFeaturesEnabled
       </div>
 
       <div>
-        <h2 class="ris-heading3-regular mb-20">Verfügbare Funktionen</h2>
+        <h2 class="typo-headline3-regular mb-20">Verfügbare Funktionen</h2>
         <dl class="flex flex-col gap-16 divide-y divide-gray-200">
           <div
             v-for="feature in availableFeatures"
@@ -70,7 +70,7 @@ const availableFeatures: Feature[] = privateFeaturesEnabled
               <p class="whitespace-pre-wrap">{{ feature.description }}</p>
               <div
                 v-if="feature.examples.length > 0"
-                class="ris-body2-regular mt-4"
+                class="typo-body-regular mt-4"
               >
                 <template v-for="example in feature.examples" :key="example">
                   <pre
@@ -86,7 +86,7 @@ const availableFeatures: Feature[] = privateFeaturesEnabled
 
       <div>
         <div class="flex flex-row justify-between">
-          <h2 class="ris-heading3-regular mb-20">Verfügbare Rubriken</h2>
+          <h2 class="typo-headline3-regular mb-20">Verfügbare Rubriken</h2>
           <Select
             v-model="filter"
             class="ds-select-small w-auto"
@@ -131,7 +131,7 @@ const availableFeatures: Feature[] = privateFeaturesEnabled
                 {{ field.label }}
               </td>
               <td
-                class="ris-body2-regular border-b border-blue-300 px-16 py-12 align-middle"
+                class="typo-body-regular border-b border-blue-300 px-16 py-12 align-middle"
               >
                 <template v-for="alias in field.aliases" :key="alias">
                   <code>{{ alias }}</code>
@@ -139,7 +139,7 @@ const availableFeatures: Feature[] = privateFeaturesEnabled
                 </template>
               </td>
               <td
-                class="ris-body2-regular border-b border-blue-300 px-16 py-12 align-middle"
+                class="typo-body-regular border-b border-blue-300 px-16 py-12 align-middle"
               >
                 <template v-for="example in field.examples" :key="example">
                   <pre
@@ -162,13 +162,13 @@ const availableFeatures: Feature[] = privateFeaturesEnabled
   </div>
   <div v-if="!privateFeaturesEnabled">
     <h1
-      class="ris-heading1-regular inline-block hyphens-auto max-sm:leading-48"
+      class="typo-headline1-regular inline-block hyphens-auto max-sm:leading-48"
     >
       Hilfe zur Suche
     </h1>
     <div class="flex flex-col gap-48">
       <div>
-        <h2 class="ris-heading3-regular mb-20">Verfügbare Funktionen</h2>
+        <h2 class="typo-headline3-regular mb-20">Verfügbare Funktionen</h2>
         <dl class="flex flex-col gap-16 divide-y divide-gray-200">
           <div
             v-for="feature in availableFeatures"
@@ -185,7 +185,7 @@ const availableFeatures: Feature[] = privateFeaturesEnabled
               <p class="whitespace-pre-wrap">{{ feature.description }}</p>
               <div
                 v-if="feature.examples.length > 0"
-                class="ris-body2-regular mt-4"
+                class="typo-body-regular mt-4"
               >
                 <template v-for="example in feature.examples" :key="example">
                   <pre
@@ -201,7 +201,7 @@ const availableFeatures: Feature[] = privateFeaturesEnabled
 
       <div>
         <div class="flex flex-row justify-between">
-          <h2 class="ris-heading3-regular mb-20">Verfügbare Rubriken</h2>
+          <h2 class="typo-headline3-regular mb-20">Verfügbare Rubriken</h2>
           <Select
             v-model="filter"
             class="ds-select-small w-auto"
@@ -246,7 +246,7 @@ const availableFeatures: Feature[] = privateFeaturesEnabled
                 {{ field.label }}
               </td>
               <td
-                class="ris-body2-regular border-b border-blue-300 px-16 py-12 align-middle"
+                class="typo-body-regular border-b border-blue-300 px-16 py-12 align-middle"
               >
                 <template v-for="alias in field.aliases" :key="alias">
                   <code>{{ alias }}</code>
@@ -254,7 +254,7 @@ const availableFeatures: Feature[] = privateFeaturesEnabled
                 </template>
               </td>
               <td
-                class="ris-body2-regular border-b border-blue-300 px-16 py-12 align-middle"
+                class="typo-body-regular border-b border-blue-300 px-16 py-12 align-middle"
               >
                 <template v-for="example in field.examples" :key="example">
                   <pre
