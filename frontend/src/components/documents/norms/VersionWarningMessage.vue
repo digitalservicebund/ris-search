@@ -66,7 +66,7 @@ const versionLink = computed<
 
 <template>
   <div v-if="showWarningMessage" class="mb-40 w-fit">
-    <Message :severity="warningMessageType" class="ris-body2-regular">
+    <Message :severity="warningMessageType" class="typo-body-regular">
       <template #icon>
         <IcBaselineUpdate
           v-if="currentVersionValidityStatus === 'InForce'"
@@ -79,7 +79,7 @@ const versionLink = computed<
       </template>
 
       <p>
-        <span :id="versionTextId" class="ris-label2-bold">{{
+        <span :id="versionTextId" class="typo-label-bold">{{
           versionText
         }}</span
         >{{ " " }}
@@ -87,7 +87,7 @@ const versionLink = computed<
         <NuxtLink
           v-if="versionLink"
           :to="versionLink.to"
-          class="ris-link2-regular"
+          class="typo-link-regular"
           :aria-describedby="versionTextId"
         >
           {{ versionLink.label }}

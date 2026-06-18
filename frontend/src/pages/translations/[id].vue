@@ -107,14 +107,14 @@ const detailsTabPanelTitleId = useId();
     <hgroup class="dokumentenkopf mt-24 mb-48">
       <p
         v-if="currentTranslation?.translationOfWork"
-        class="word-wrap ris-heading3-regular mb-12 hyphens-auto"
+        class="word-wrap typo-headline3-regular mb-12 hyphens-auto"
       >
         {{ currentTranslation.translationOfWork }}
       </p>
 
       <h1
         v-if="currentTranslation?.name"
-        class="ris-heading2-bold mb-48 wrap-break-word hyphens-auto"
+        class="typo-headline2-bold mb-48 wrap-break-word hyphens-auto"
       >
         {{ currentTranslation.name }}
       </h1>
@@ -128,12 +128,12 @@ const detailsTabPanelTitleId = useId();
       <template #icon>
         <IcOutlineWarning />
       </template>
-      <p class="ris-body2-bold mt-2">Version Information</p>
+      <p class="typo-body-bold mt-2">Version Information</p>
       <p class="mt-2">
         Translations may not be updated at the same time as the German legal
         provision.
         <NuxtLink
-          class="ris-link1-regular"
+          class="typo-link-regular"
           :to="`/norms/${germanOriginalWorkEli}`"
           >Go to the German version</NuxtLink
         >.
@@ -174,7 +174,7 @@ const detailsTabPanelTitleId = useId();
         v-else-if="currentView === 'details'"
         :aria-labelledby="detailsTabPanelTitleId"
       >
-        <h2 :id="detailsTabPanelTitleId" class="ris-heading3-bold my-24">
+        <h2 :id="detailsTabPanelTitleId" class="typo-headline3-bold my-24">
           Details
         </h2>
         <DetailsList>

@@ -124,7 +124,7 @@ const detailsSectionId = useId();
         :aria-labelledby="detailsSectionId"
         class="pt-32 pb-32 lg:pb-56"
       >
-        <h2 :id="detailsSectionId" class="ris-heading3-bold">Details</h2>
+        <h2 :id="detailsSectionId" class="typo-headline3-bold">Details</h2>
         <DocumentsIncompleteDataMessage class="my-24" />
         <DetailsList>
           <DetailsListEntry
@@ -146,7 +146,7 @@ const detailsSectionId = useId();
           <DetailsListEntry v-if="detailsMetadata.zipUrl" label="Download:">
             <NuxtLink
               data-attr="xml-zip-view"
-              class="ris-link1-regular"
+              class="typo-link-regular"
               external
               :to="detailsMetadata.zipUrl"
             >
@@ -204,7 +204,7 @@ const detailsSectionId = useId();
 }
 
 :deep(.case-law h2) {
-  @apply ris-heading3-bold my-24 inline-block;
+  @apply typo-headline3-bold my-24 inline-block;
 }
 
 :deep(.case-law .border-number) {
@@ -221,7 +221,7 @@ const detailsSectionId = useId();
 }
 
 :deep(.case-law .border-number-link) {
-  @apply ris-link1-regular pl-[0.25ch];
+  @apply typo-link-regular pl-[0.25ch];
 }
 
 :deep(.case-law section > p) {

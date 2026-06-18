@@ -19,11 +19,11 @@ const headingId = useId();
 <template>
   <section
     v-if="isBannerVisible"
-    class="ris-body2-regular lg:ris-body1-regular flex flex-col gap-24 bg-blue-200 px-8 py-16 lg:p-24"
+    class="typo-body-regular flex flex-col gap-24 bg-blue-200 px-8 py-16 lg:p-24"
     :aria-labelledby="headingId"
   >
     <div class="container">
-      <p :id="headingId" class="ris-heading3-bold text-xl lg:text-2xl">
+      <p :id="headingId" class="typo-headline2-bold">
         Cookie-Einstellungen akzeptieren oder ablehnen
       </p>
 
@@ -56,10 +56,10 @@ const headingId = useId();
           <input type="hidden" name="consent" value="false" />
           <Button label="Ablehnen" type="submit" />
         </form>
-        <NuxtLink :to="{ name: 'data-protection' }" class="ris-link1-regular">
+        <NuxtLink :to="{ name: 'data-protection' }" class="typo-link-regular">
           Datenschutzerklärung
         </NuxtLink>
-        <NuxtLink :to="{ name: 'cookie-settings' }" class="ris-link1-regular">
+        <NuxtLink :to="{ name: 'cookie-settings' }" class="typo-link-regular">
           Cookie-Einstellungen
         </NuxtLink>
       </div>

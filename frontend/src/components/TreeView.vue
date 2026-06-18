@@ -280,15 +280,15 @@ function onKeydown(event: KeyboardEvent) {
       v-if="heading"
       class="flex-none space-y-4 border-b border-b-gray-400 px-[1.375rem] py-16"
     >
-      <h2 :id="headingId" class="ris-heading3-bold">{{ heading }}</h2>
+      <h2 :id="headingId" class="typo-headline3-bold">{{ heading }}</h2>
       <NuxtLink
         v-if="subheading && subheadingTo"
         :to="subheadingTo"
-        class="ris-link1-regular link-hover line-clamp-1"
+        class="typo-link-regular link-hover line-clamp-1"
       >
         {{ subheading }}
       </NuxtLink>
-      <p v-else-if="subheading" class="ris-label1-regular line-clamp-1">
+      <p v-else-if="subheading" class="typo-label-regular line-clamp-1">
         {{ subheading }}
       </p>
     </div>

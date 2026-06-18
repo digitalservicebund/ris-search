@@ -46,7 +46,7 @@ watchEffect(() => {
 
     <button
       v-if="canExpand"
-      class="ris-link1-regular cursor-pointer focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-blue-800 active:outline-hidden"
+      class="typo-link-regular cursor-pointer focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-blue-800 active:outline-hidden"
       :aria-controls="textId"
       :aria-expanded="expanded"
       @click="expanded = !expanded"

@@ -35,27 +35,27 @@ see: https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@scope 
   }
 
   h1 {
-    @apply ris-heading1-regular pt-32 pb-24 hyphens-auto max-sm:leading-48 md:hyphens-none;
+    @apply typo-headline1-regular pt-32 pb-24 hyphens-auto max-sm:leading-48 md:hyphens-none;
   }
 
   h2 {
-    @apply ris-heading2-regular py-24;
+    @apply typo-headline2-regular py-24;
   }
 
   h3 {
-    @apply ris-heading3-regular py-16;
+    @apply typo-headline3-regular py-16;
   }
 
   h4 {
-    @apply ris-subhead-bold py-8;
+    @apply typo-headline3-bold py-8;
   }
 
   h5 {
-    @apply ris-body1-bold pb-8;
+    @apply typo-body-bold pb-8;
   }
 
   a {
-    @apply ris-link1-regular;
+    @apply typo-link-regular;
   }
 
   :is(p, ul, ol, li) {

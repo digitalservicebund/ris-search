@@ -32,7 +32,7 @@ const wrapFootnote = computed(
 
 .dokumentenkopf-fussnoten {
   :deep(.fussnoten) {
-    @apply ris-body2-regular my-0 list-none space-y-12 pl-0 text-gray-900;
+    @apply ris-label3-regular md:ris-label2-regular my-0 list-none space-y-12 pl-0 text-gray-900;
   }
 
   :deep(.fussnoten:before) {

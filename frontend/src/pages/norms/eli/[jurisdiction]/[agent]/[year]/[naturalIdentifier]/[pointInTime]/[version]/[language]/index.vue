@@ -233,7 +233,7 @@ const fassungenDateFilterInputId = useId();
         :aria-labelledby="detailsTabPanelTitleId"
       >
         <div class="container pt-32 pb-32 lg:pb-56">
-          <h2 :id="detailsTabPanelTitleId" class="ris-heading3-bold">
+          <h2 :id="detailsTabPanelTitleId" class="typo-headline3-bold">
             Details
           </h2>
           <DocumentsIncompleteDataMessage class="my-24" />
@@ -267,7 +267,7 @@ const fassungenDateFilterInputId = useId();
             <DetailsListEntry label="Download:">
               <NuxtLink
                 data-attr="xml-zip-view"
-                class="ris-link1-regular"
+                class="typo-link-regular"
                 external
                 :to="zipUrl"
               >
@@ -286,7 +286,7 @@ const fassungenDateFilterInputId = useId();
       >
         <div class="container pt-32 pb-32 lg:pb-56">
           <template v-if="privateFeaturesEnabled">
-            <h2 :id="fassungenTabPanelTitleId" class="ris-heading3-bold">
+            <h2 :id="fassungenTabPanelTitleId" class="typo-headline3-bold">
               Fassungen
             </h2>
 
@@ -294,7 +294,7 @@ const fassungenDateFilterInputId = useId();
             <div class="my-16 md:my-24">
               <label
                 :for="fassungenDateFilterInputId"
-                class="ris-label2-regular"
+                class="typo-label-regular"
                 >Gültig am</label
               >
               <DateInput
@@ -314,7 +314,10 @@ const fassungenDateFilterInputId = useId();
           </template>
 
           <div class="max-w-prose" v-else>
-            <h2 :id="fassungenTabPanelTitleId" class="ris-heading3-bold mb-24">
+            <h2
+              :id="fassungenTabPanelTitleId"
+              class="typo-headline3-bold mb-24"
+            >
               Fassungen sind noch nicht verfügbar
             </h2>
             <p>
@@ -323,7 +326,7 @@ const fassungenDateFilterInputId = useId();
               der Gesetze und Verordnungen zur Verfügung gestellt.
             </p>
 
-            <h3 class="ris-heading3-bold mt-48 mb-24">
+            <h3 class="typo-headline3-bold mt-48 mb-24">
               Unterstützen Sie uns bei der Entwicklung dieser Funktion
             </h3>
 
@@ -350,7 +353,7 @@ const fassungenDateFilterInputId = useId();
   @apply mb-16 ml-16 lg:pl-32;
 
   &.level-1 {
-    @apply ris-label1-bold ml-0;
+    @apply typo-label-bold ml-0;
   }
 
   &.level-5 {
@@ -371,7 +374,7 @@ const fassungenDateFilterInputId = useId();
 }
 
 .footnotes :deep(.nichtamtliche-fussnoten .fussnote pre) {
-  @apply mono-font overflow-auto border border-gray-400 p-8;
+  @apply typo-mono overflow-auto border border-gray-400 p-8;
 }
 
 .footnotes :deep(.nichtamtliche-fussnoten .fussnote:first-child pre) {
