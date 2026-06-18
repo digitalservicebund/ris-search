@@ -68,7 +68,7 @@ function trackResultClick() {
     <NuxtLink
       :to="detailPageRoute"
       :aria-describedby="resultTypeId"
-      class="typo-headline3-bold! typo-link-regular link-hover block"
+      class="typo-headline-searchresult"
       @click="trackResultClick()"
     >
       <h2>

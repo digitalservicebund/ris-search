@@ -82,7 +82,7 @@ function getArticleLink(highlight: { location?: string | null }) {
       v-if="!!detailPageUrl"
       :to="detailPageUrl"
       :aria-describedby="resultTypeId"
-      class="typo-headline3-bold! typo-link-regular link-hover block"
+      class="typo-headline-searchresult"
       @click="searchResultClicked(detailPageUrl, order)"
     >
       <h2 v-html="headline" />

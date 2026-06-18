@@ -53,3 +53,11 @@
 @utility link-hover {
   @apply no-underline hover:underline sm:no-underline sm:hover:underline;
 }
+
+@utility typo-headline-searchresult {
+  @apply ris-subhead-bold md:ris-heading3-bold 2xl:ris-heading2-bold block;
+
+  &:is(a) {
+    @apply link-hover text-blue-800 underline-offset-2;
+  }
+}
