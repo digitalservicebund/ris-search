@@ -91,7 +91,7 @@ public class NormSearchResponseMapper {
     if (matchingArticles != null) {
       for (var articleHit : matchingArticles) {
         var content = articleHit.getContent();
-        if (content instanceof Article article) {
+        if (content instanceof Article article && !articleHit.getHighlightFields().isEmpty()) {
           articleHits.add(
               convertArticleHitToTextMatchSchema(article, articleHit.getHighlightFields()));
         }
