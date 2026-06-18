@@ -17,7 +17,6 @@ import org.opensearch.index.query.MatchPhraseQueryBuilder;
 import org.opensearch.index.query.MultiMatchQueryBuilder;
 import org.opensearch.index.query.Operator;
 import org.opensearch.index.query.QueryBuilders;
-import org.opensearch.index.search.MatchQuery;
 import org.opensearch.search.collapse.CollapseBuilder;
 import org.opensearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.springframework.data.domain.Pageable;
@@ -72,7 +71,6 @@ public class ArticleService {
     } else {
       boolQuery.must(
           new MultiMatchQueryBuilder(searchString)
-              .zeroTermsQuery(MatchQuery.ZeroTermsQuery.ALL)
               .type(MultiMatchQueryBuilder.Type.CROSS_FIELDS)
               .operator(Operator.OR));
 
