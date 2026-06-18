@@ -273,35 +273,9 @@ test.describe("searching legislation", () => {
       }),
     ).toBeVisible();
 
-    // Highlights
     await expect(
       searchResult.getByRole("link", { name: "§ 1 Anwendungsbereich" }),
-    ).toBeVisible();
-    await expect(
-      searchResult.getByText(
-        /\(1\) Die in Anlage 1 aufgeführten Erzeugnisse unterliegen/,
-      ),
-    ).toBeVisible();
-
-    await expect(
-      searchResult.getByRole("link", {
-        name: "§ 2 Zutaten, Herstellungsanforderungen",
-      }),
-    ).toBeVisible();
-    await expect(
-      searchResult.getByText(
-        /\(1\) Die Ausgangserzeugnisse für Erzeugnisse gemäß/,
-      ),
-    ).toBeVisible();
-
-    await expect(
-      searchResult.getByRole("link", { name: "§ 3 Kennzeichnung" }),
-    ).toBeVisible();
-    await expect(
-      searchResult.getByText(
-        /\(1\) Die Kennzeichnung der Erzeugnisse erfolgt nach/,
-      ),
-    ).toBeVisible();
+    ).not.toBeAttached();
   });
 
   test("shows the search result contents when private features are disabled", async ({
