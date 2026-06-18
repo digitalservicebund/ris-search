@@ -255,6 +255,52 @@ test.describe("searching legislation", () => {
     privateFeaturesEnabled,
   }) => {
     test.skip(!privateFeaturesEnabled);
+    await navigate(page, "/search?query=Fruchtverarbeitung&documentKind=N");
+
+    const searchResult = getSearchResults(page).first();
+
+    // Header
+    await expect(searchResult).toHaveText(/Norm/);
+    await expect(searchResult).toHaveText(/03.10.1990/);
+
+    await expect(searchResult).toHaveText(/Aktuell gültig/);
+
+    // Result detail link
+    await expect(
+      searchResult.getByRole("link", {
+        name: "Fiktive Verordnung zur Ausbildung in der Fruchtverarbeitung",
+      }),
+    ).toBeVisible();
+
+    // Highlights
+    await expect(
+      searchResult.getByRole("link", {
+        name: "§ 1 Anerkennung des fiktiven Ausbildungsberufs",
+      }),
+    ).toBeVisible();
+    await expect(
+      searchResult.getByText(
+        /Der Ausbildungsberuf in der Fruchtverarbeitung wird auf fiktiver Basis anerkannt und soll innovative Ansätze fördern./,
+      ),
+    ).toBeVisible();
+
+    await expect(
+      searchResult.getByRole("link", {
+        name: "§ 3 Fiktives Ausbildungsberufsbild",
+      }),
+    ).toBeVisible();
+    await expect(
+      searchResult.getByText(
+        /Der Ausbildungsberuf in der Fruchtverarbeitung wird auf fiktiver Basis anerkannt und soll innovative Ansätze fördern./,
+      ),
+    ).toBeVisible();
+  });
+
+  test("doesn't show article highlights without a direct text match when private features are enabled", async ({
+    page,
+    privateFeaturesEnabled,
+  }) => {
+    test.skip(!privateFeaturesEnabled);
     await navigate(page, "/search?query=FrSaftErfrischV&documentKind=N");
 
     const searchResult = getSearchResults(page).first();
