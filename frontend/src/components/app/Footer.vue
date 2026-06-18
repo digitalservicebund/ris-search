@@ -10,7 +10,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
 <template>
   <section
     v-if="!hideFeedbackForm"
-    class="border-t border-t-gray-400 py-64 print:hidden"
+    class="border-t border-t-gray-400 py-32 md:py-56 print:hidden"
     aria-label="Geben Sie uns Feedback"
   >
     <div class="wrapper">
@@ -19,7 +19,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
   </section>
 
   <footer id="footer" class="relative print:hidden">
-    <div class="border-t border-t-gray-400 py-64">
+    <div class="border-t border-t-gray-400 py-40 md:py-64">
       <div class="wrapper">
         <div class="grid grid-cols-1 gap-48 md:grid-cols-2">
           <div class="space-y-16">
