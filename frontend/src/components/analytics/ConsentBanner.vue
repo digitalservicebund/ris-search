@@ -23,7 +23,7 @@ const headingId = useId();
     :aria-labelledby="headingId"
   >
     <div class="container">
-      <p :id="headingId" class="typo-headline3-bold text-xl lg:text-2xl">
+      <p :id="headingId" class="typo-headline2-bold">
         Cookie-Einstellungen akzeptieren oder ablehnen
       </p>
 

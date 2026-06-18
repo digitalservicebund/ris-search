@@ -212,7 +212,7 @@ const metadataItems = computed(() => {
           {{ normTitle }}
         </p>
         <h1
-          class="typo-headline2-bold wrap-break-word hyphens-auto max-md:text-2xl"
+          class="typo-headline1-bold wrap-break-word hyphens-auto max-md:text-2xl"
           v-html="htmlTitle"
         />
       </div>

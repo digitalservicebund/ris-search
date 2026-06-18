@@ -90,7 +90,7 @@ const translationsListId = useId();
   </div>
 
   <section class="mt-24 max-w-prose space-y-24">
-    <h1 class="typo-headline2-bold overflow-x-auto">
+    <h1 class="typo-headline1-bold overflow-x-auto">
       English Translations of German Federal Laws and Regulations
     </h1>
     <p>
@@ -135,12 +135,12 @@ const translationsListId = useId();
 
           <NuxtLink
             :to="{ name: 'translations-id', params: { id: t['@id'] } }"
-            class="typo-headline3-bold! typo-link-regular link-hover block"
+            class="typo-headline-searchresult"
           >
             <h2>{{ t.name }}</h2>
           </NuxtLink>
 
-          <p class="typo-label-regular text-gray-900">{{ t.translator }}</p>
+          <p class="typo-body-regular text-gray-900">{{ t.translator }}</p>
         </div>
       </li>
     </ul>

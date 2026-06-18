@@ -31,7 +31,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
   <div class="flex gap-16 bg-blue-800 pt-64 pb-96 text-white">
     <div class="container max-w-prose">
       <div
-        class="typo-label-bold mb-8 inline-block rounded-sm border border-white/10 bg-blue-700 px-8 py-4 uppercase"
+        class="typo-label-bold mb-8 inline-block rounded-sm border border-white/10 bg-blue-700 px-8 py-4"
       >
         Testphase
       </div>
@@ -49,7 +49,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
   <div class="container flex max-w-prose flex-col gap-24 py-56">
     <FeatureCard>
       <div>
-        <h2 class="typo-headline3-bold wrap-break-word hyphens-auto">
+        <h2 class="typo-headline2-bold wrap-break-word hyphens-auto">
           Testen Sie die Suche
         </h2>
         <p class="mt-8">
@@ -83,7 +83,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
 
     <FeatureCard>
       <div>
-        <h2 class="typo-headline3-bold wrap-break-word hyphens-auto">
+        <h2 class="typo-headline2-bold wrap-break-word hyphens-auto">
           Testen Sie die Darstellung aktueller Gesetze, Verordnungen und
           Gerichtsentscheidungen
         </h2>
@@ -104,7 +104,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
 
     <FeatureCard v-if="privateFeaturesEnabled">
       <div>
-        <h2 class="typo-headline3-bold wrap-break-word hyphens-auto">
+        <h2 class="typo-headline2-bold wrap-break-word hyphens-auto">
           English translation of German laws and regulations
         </h2>
         <p class="mt-8">
@@ -122,7 +122,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
 
     <FeatureCard>
       <div>
-        <h2 class="typo-headline3-bold wrap-break-word hyphens-auto">
+        <h2 class="typo-headline2-bold wrap-break-word hyphens-auto">
           Testen Sie die Programmierschnittstelle
         </h2>
         <p class="mt-8">

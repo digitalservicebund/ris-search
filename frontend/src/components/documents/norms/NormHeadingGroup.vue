@@ -69,7 +69,7 @@ const normTitle = computed(() => getNormTitle(props.metadata));
 
 .dokumentenkopf {
   :deep(.titel) {
-    @apply typo-headline2-bold hyphens-auto max-md:text-2xl;
+    @apply typo-headline1-bold hyphens-auto max-md:text-2xl;
   }
 
   :deep(*[data-longTitle] .titel) {

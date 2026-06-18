@@ -200,7 +200,7 @@ watch(searchStatus, async (newStatus, oldStatus) => {
   <Breadcrumbs :items="[{ label: 'Suche' }]" />
 
   <div class="py-24">
-    <h1 class="typo-headline2-bold inline-block">Suche</h1>
+    <h1 class="typo-headline1-bold inline-block">Suche</h1>
   </div>
 
   <div id="search">
