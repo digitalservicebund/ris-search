@@ -133,13 +133,6 @@ class IndexNormsServiceTest {
             List.of(
                 "eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu/1992-01-02/regelungstext-1.xml",
                 "eli/not_an_eli"));
-    when(this.bucket.getAllKeysByPrefix("eli/bund/bgbl-1/1992/s101/"))
-        .thenReturn(
-            List.of("eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu/1992-01-02/regelungstext-1.xml"));
-
-    when(this.bucket.getAllKeysByPrefix("eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu"))
-        .thenReturn(
-            List.of("eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu/1992-01-02/regelungstext-1.xml"));
     when(this.bucket.getFileAsString(
             "eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu/1992-01-02/regelungstext-1.xml"))
         .thenReturn(Optional.of(testContent));
@@ -147,9 +140,15 @@ class IndexNormsServiceTest {
     String startingTimestamp = "2024-01-01T12:00:00Z";
     this.service.reindexAll(startingTimestamp);
 
-    verify(repo, times(1)).save(any());
+    verify(repo, times(1)).saveAll(any());
     verify(repo, times(1))
-        .save(argThat(arg -> "eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu".equals(arg.getId())));
+        .saveAll(
+            argThat(
+                arg ->
+                    arg.iterator()
+                        .next()
+                        .getId()
+                        .equals("eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu")));
     verify(repo, times(1)).deleteByIndexedAtBefore(startingTimestamp);
   }
 
