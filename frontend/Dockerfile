@@ -15,7 +15,7 @@ RUN --mount=type=secret,id=SENTRY_AUTH_TOKEN,required=false \
   fi && \
   pnpm run prepare && NODE_OPTIONS="--max-old-space-size=4096" pnpm build
 
-FROM cgr.dev/chainguard/node@sha256:f6bc4835864c3f7a65b05ab696202153bb80d810873028a52a27eeba13051912
+FROM cgr.dev/chainguard/node@sha256:27bf957bdf6d189108c8908c958fd966d9814f78e7172c2d791940f4e208a334
 ARG SENTRY_RELEASE
 USER node
 WORKDIR /app
