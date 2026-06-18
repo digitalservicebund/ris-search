@@ -13,14 +13,14 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
     class="border-t border-t-gray-400 py-64 print:hidden"
     aria-label="Geben Sie uns Feedback"
   >
-    <div class="container">
+    <div class="wrapper">
       <AnalyticsFeedbackForm />
     </div>
   </section>
 
   <footer id="footer" class="relative print:hidden">
     <div class="border-t border-t-gray-400 py-64">
-      <div class="container">
+      <div class="wrapper">
         <div class="grid grid-cols-1 gap-48 md:grid-cols-2">
           <div class="space-y-16">
             <img

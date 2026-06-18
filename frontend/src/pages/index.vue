@@ -29,7 +29,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
 
 <template>
   <div class="flex gap-16 bg-blue-800 pt-64 pb-96 text-white">
-    <div class="container max-w-prose">
+    <div class="wrapper">
       <div
         class="typo-label-bold mb-8 inline-block rounded-sm border border-white/10 bg-blue-700 px-8 py-4"
       >
@@ -46,7 +46,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
     </div>
   </div>
 
-  <div class="container flex max-w-prose flex-col gap-24 py-56">
+  <div class="wrapper flex flex-col gap-24 py-56">
     <FeatureCard>
       <div>
         <h2 class="typo-headline2-bold wrap-break-word hyphens-auto">
@@ -143,9 +143,9 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
       </div>
     </FeatureCard>
 
-    <FeatureCard inner-class="gap-x-64 gap-y-32 sm:flex-row">
+    <FeatureCard inner-class="gap-x-64 gap-y-32 md:flex-row">
       <img
-        class="mt-20 ml-20 self-start sm:mt-4 md:ml-0"
+        class="mt-20 ml-20 self-start md:mt-4 md:ml-0"
         :src="bmjvLogo"
         alt="Bundesministerium der Justiz und für Verbraucherschutz"
       />
