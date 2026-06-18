@@ -9,7 +9,7 @@ import ConsentBanner from "~/components/analytics/ConsentBanner.vue";
   <ConsentBanner />
 
   <div class="min-h-[50vh] bg-gray-100">
-    <AppHeader />
+    <AppHeader class="mb-16 md:mb-24" />
     <main id="main">
       <slot />
     </main>
