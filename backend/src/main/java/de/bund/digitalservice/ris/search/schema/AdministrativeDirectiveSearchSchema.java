@@ -38,6 +38,7 @@ public record AdministrativeDirectiveSearchSchema(
         String documentNumber,
     @Nullable @Schema(description = "Haupttitel") String headline,
     @Nullable @Schema(description = "Kurzreferat") String shortReport,
+    @Nullable @Schema(description = "Gliederung") List<String> outline,
     @Schema(
             description = "Dokumenttyp",
             example = "VV",

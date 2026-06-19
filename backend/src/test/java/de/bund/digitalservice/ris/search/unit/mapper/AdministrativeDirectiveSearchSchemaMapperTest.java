@@ -28,6 +28,7 @@ class AdministrativeDirectiveSearchSchemaMapperTest {
             .referenceNumbers(List.of("RNR"))
             .legislationAuthority("legislationAuthority")
             .entryIntoEffectDate(LocalDate.of(2024, Month.JANUARY, 1))
+            .tableOfContentsEntries(List.of("outline entry"))
             .build();
 
     AdministrativeDirectiveSearchSchema expected =
@@ -36,6 +37,7 @@ class AdministrativeDirectiveSearchSchemaMapperTest {
             .documentNumber("KN0000")
             .headline("headline")
             .shortReport("shortReport")
+            .outline(List.of("outline entry"))
             .documentType("VV")
             .referenceNumbers(List.of("RNR"))
             .legislationAuthority("legislationAuthority")

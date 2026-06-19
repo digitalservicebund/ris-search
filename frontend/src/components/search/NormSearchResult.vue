@@ -25,11 +25,11 @@ const resultTypeId = useId();
 
 const headerItems = computed<SearchResultHeaderItem[]>(() => {
   let date: string | Dayjs | undefined =
-    searchResult.item?.exampleOfWork.legislationDate;
+    searchResult.item.exampleOfWork.legislationDate;
 
   if (privateFeaturesEnabled) {
     const coverage = temporalCoverageToValidityInterval(
-      searchResult.item?.temporalCoverage,
+      searchResult.item.temporalCoverage,
     );
     date = coverage?.from;
   }

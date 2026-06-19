@@ -20,7 +20,7 @@ public class AdministrativeDirectiveSimpleSearchType implements SimpleSearchType
 
   @Override
   public List<String> getExcludedFields() {
-    return List.of();
+    return List.of(AdministrativeDirective.Fields.OUTLINE);
   }
 
   @Override
@@ -31,7 +31,8 @@ public class AdministrativeDirectiveSimpleSearchType implements SimpleSearchType
   public static List<HighlightBuilder.Field> getHighlightedFieldsStatic() {
     return List.of(
         new HighlightBuilder.Field(AdministrativeDirective.Fields.HEADLINE).numOfFragments(0),
-        new HighlightBuilder.Field(AdministrativeDirective.Fields.SHORT_REPORT));
+        new HighlightBuilder.Field(AdministrativeDirective.Fields.SHORT_REPORT),
+        new HighlightBuilder.Field(AdministrativeDirective.Fields.OUTLINE));
   }
 
   /**

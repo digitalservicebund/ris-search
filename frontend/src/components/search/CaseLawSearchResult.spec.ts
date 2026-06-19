@@ -198,18 +198,18 @@ describe("CaselawSearchResult", () => {
     });
   });
 
-  it("displays the first field in order only when there are no highlights if there are multiple fields", () => {
+  it("sorts fields by field map order", () => {
     const textMatches: TextMatch[] = [
       {
         "@type": "SearchResultMatch",
-        name: "guidingPrinciple",
-        text: "Leitsatz.",
+        name: "caseFacts",
+        text: "<mark>Tatbestand</mark>.",
         location: undefined,
       },
       {
         "@type": "SearchResultMatch",
-        name: "caseFacts",
-        text: "Tatbestand.",
+        name: "guidingPrinciple",
+        text: "<mark>Leitsatz</mark>.",
         location: undefined,
       },
     ];
@@ -217,8 +217,9 @@ describe("CaselawSearchResult", () => {
     renderComponent({ textMatches });
 
     const contentItems = screen.getAllByTestId("highlighted-field");
-    expect(contentItems).toHaveLength(1);
+    expect(contentItems).toHaveLength(2);
     expect(contentItems[0]).toHaveTextContent("Leitsatz.");
+    expect(contentItems[1]).toHaveTextContent("Tatbestand.");
   });
 
   it("displays guiding principle first, if available, then up to 3 other matching items", () => {
@@ -288,38 +289,48 @@ describe("CaselawSearchResult", () => {
     expect(contentItems).toHaveLength(0);
   });
 
-  it("shows only the first text match if none contain marks", () => {
-    const searchResultWithoutHighlights = {
-      item: searchResult.item,
-      textMatches: [
-        {
-          "@type": "SearchResultMatch",
-          name: "guidingPrinciple",
-          text: "Guiding Principle.",
-          location: undefined,
-        },
-        {
-          "@type": "SearchResultMatch",
-          name: "headnote",
-          text: "This should not even be shown.",
-          location: undefined,
-        },
-      ] as TextMatch[],
-    };
-
-    renderComponent(searchResultWithoutHighlights);
-
-    const contentItems = screen.getAllByTestId("highlighted-field");
-    expect(contentItems).toHaveLength(1);
-    expect(contentItems[0]).toHaveTextContent("Guiding Principle.");
-  });
-
-  it("returns the first field from caselaw fields and up to three highlighted fields if highlights are present", () => {
+  it("shows all returned text matches", () => {
     const textMatches: TextMatch[] = [
       {
         "@type": "SearchResultMatch",
         name: "guidingPrinciple",
-        text: "Guiding Principle.",
+        text: "<mark>Guiding Principle</mark>.",
+        location: undefined,
+      },
+      {
+        "@type": "SearchResultMatch",
+        name: "headnote",
+        text: "<mark>Headnote</mark>.",
+        location: undefined,
+      },
+    ] as TextMatch[];
+
+    renderComponent({ textMatches });
+
+    const contentItems = screen.getAllByTestId("highlighted-field");
+    expect(contentItems).toHaveLength(2);
+    expect(contentItems[0]).toHaveTextContent("Guiding Principle.");
+    expect(contentItems[1]).toHaveTextContent("Headnote.");
+  });
+
+  it("shows up to 4 fields sorted by field map order", () => {
+    const textMatches: TextMatch[] = [
+      {
+        "@type": "SearchResultMatch",
+        name: "grounds",
+        text: "<mark>Grounds</mark>.",
+        location: undefined,
+      },
+      {
+        "@type": "SearchResultMatch",
+        name: "headnote",
+        text: "<mark>Headnote</mark>.",
+        location: undefined,
+      },
+      {
+        "@type": "SearchResultMatch",
+        name: "guidingPrinciple",
+        text: "<mark>Guiding Principle</mark>.",
         location: undefined,
       },
       {
@@ -334,12 +345,6 @@ describe("CaselawSearchResult", () => {
         text: "<mark>Tenor</mark>.",
         location: undefined,
       },
-      {
-        "@type": "SearchResultMatch",
-        name: "grounds",
-        text: "<mark>Grounds</mark>.",
-        location: undefined,
-      },
     ];
 
     renderComponent({ textMatches });
@@ -347,9 +352,9 @@ describe("CaselawSearchResult", () => {
     const contentItems = screen.getAllByTestId("highlighted-field");
 
     expect(contentItems).toHaveLength(4);
-    expect(contentItems[0]?.innerHTML).toBe("Guiding Principle.");
-    expect(contentItems[1]?.innerHTML).toBe(textMatches[1]?.text);
-    expect(contentItems[2]?.innerHTML).toBe(textMatches[2]?.text);
-    expect(contentItems[3]?.innerHTML).toBe(textMatches[3]?.text);
+    expect(contentItems[0]).toHaveTextContent("Guiding Principle.");
+    expect(contentItems[1]).toHaveTextContent("Headnote.");
+    expect(contentItems[2]).toHaveTextContent("Other Headnote.");
+    expect(contentItems[3]).toHaveTextContent("Tenor.");
   });
 });

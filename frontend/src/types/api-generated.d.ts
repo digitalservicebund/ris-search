@@ -639,6 +639,22 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/v1/bulk-zip-links": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations["getBulkZipLinks"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/v1/administrative-directive": {
     parameters: {
       query?: never;
@@ -1401,6 +1417,8 @@ export interface components {
       headline?: string;
       /** Kurzreferat */
       shortReport?: string;
+      /** Gliederung */
+      outline?: string[];
       /**
        * Dokumenttyp
        *
@@ -1763,6 +1781,55 @@ export interface components {
        *   Bundesgerichtshof Karlsruhe
        */
       label?: string;
+    };
+    /**
+     * Represents a <a
+     * href="https://schema.org/DataCatalog">schema.org/DataCatalog</a>.
+     */
+    ZipDataCatalogSchema: {
+      /**
+       * @example
+       *   https://schema.org/
+       */
+      "@context"?: string;
+      /**
+       * @example
+       *   DataCatalog;
+       */
+      "@type"?: string;
+      /** The name of this data catalog. */
+      name: string;
+      /** The list of zip datasets contained in this catalog. */
+      dataSet: components["schemas"]["ZipDataSetSchema"][];
+    };
+    /**
+     * Represents <a
+     * href="https://schema.org/DataDownload">schema.org/DataDownload</a>.
+     */
+    ZipDataDownloadSchema: {
+      /**
+       * @example
+       *   DataDownload;
+       */
+      "@type"?: string;
+      /** Will always be application/zip. */
+      encodingFormat: string;
+      /** The url to download the zip file. */
+      contentUrl: string;
+    };
+    /** Represents <a href="https://schema.org/Dataset">schema.org/Dataset</a>. */
+    ZipDataSetSchema: {
+      /**
+       * @example
+       *   Dataset;
+       */
+      "@type"?: string;
+      /** The name of the dataset. */
+      name: string;
+      /** A short summary describing the contents of the dataset. */
+      description: string;
+      /** The downloadable form of this dataset. */
+      distribution?: components["schemas"]["ZipDataDownloadSchema"];
     };
     AdministrativeDirectiveSchema: {
       /**
@@ -3323,6 +3390,26 @@ export interface operations {
         };
         content: {
           "*/*": components["schemas"]["ChangelogResponse"];
+        };
+      };
+    };
+  };
+  getBulkZipLinks: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ZipDataCatalogSchema"];
         };
       };
     };

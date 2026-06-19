@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import RuleIcon from "~icons/ic/outline-rule";
 import type { SearchResultHeaderItem } from "~/components/search/SearchResultHeader.vue";
-import { usePostHog } from "~/composables/usePostHog";
 import type { AdministrativeDirective, SearchResult } from "~/types/api";
 import { getMatch, getTitleWithFallback } from "~/utils/search/searchResults";
 
@@ -13,6 +12,11 @@ const { searchResult, order } = defineProps<{
 const { searchResultClicked } = usePostHog();
 
 const router = useRouter();
+
+const fields = new Map([
+  ["tableOfContentsEntries", { id: "inhalt", title: "Inhalt" }],
+  ["shortReport", { id: "kurzreferat", title: "Kurzreferat" }],
+]);
 
 const headline = computed(() =>
   getTitleWithFallback(
@@ -40,21 +44,10 @@ const detailPageRoute = computed(() => ({
   },
 }));
 
-const text = computed(() => {
-  const shortReportMatch = getMatch("shortReport", searchResult.textMatches);
-  if (!shortReportMatch) return undefined;
-
-  const plainShortReportMatch = stripAllHtml(shortReportMatch);
-  const fullShortReport = searchResult.item.shortReport;
-  const sanitizedShortReport = sanitizeSearchResult(shortReportMatch);
-
-  if (plainShortReportMatch === fullShortReport) return sanitizedShortReport;
-
-  const prefix = fullShortReport?.startsWith(plainShortReportMatch) ? "" : "… ";
-  const postfix = fullShortReport?.endsWith(plainShortReportMatch) ? "" : " …";
-
-  return `${prefix}${sanitizedShortReport}${postfix}`;
-});
+const previewSections = useSearchResultSections(
+  () => searchResult.textMatches,
+  fields,
+);
 
 function trackResultClick() {
   const url = router.resolve(detailPageRoute.value).href;
@@ -76,8 +69,22 @@ function trackResultClick() {
       </h2>
     </NuxtLink>
 
-    <div v-if="text" class="flex w-full flex-col gap-6">
-      <span data-testid="highlighted-field" v-html="text"> </span>
+    <div class="flex w-full flex-col gap-6">
+      <div v-for="section in previewSections" :key="section.id">
+        <NuxtLink
+          :to="{ ...detailPageRoute, hash: `#${section.id}` }"
+          class="ris-link1-bold link-hover"
+          external
+          @click="trackResultClick()"
+          >{{ section.title }}:</NuxtLink
+        >{{ " " }}
+        <span
+          v-if="section.text"
+          data-testid="highlighted-field"
+          class="ris-label1-regular"
+          v-html="section.text"
+        />
+      </div>
     </div>
   </div>
 </template>
