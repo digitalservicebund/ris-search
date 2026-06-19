@@ -14,7 +14,7 @@ definePageMeta({
   // expression ELI + article eId
   alias:
     "/eli/:jurisdiction/:agent/:year/:naturalIdentifier/:pointInTime/:version/:language/:eId",
-  layout: "norm",
+  layout: false,
   skipLinks: [
     { label: "Zum Gesetzestext", to: "#content" },
     { label: "Zum Fußbereich", to: "#footer" },
@@ -34,20 +34,20 @@ const eId = computed(() => {
   return eIdParam.endsWith(".html") ? eIdParam.slice(0, -5) : eIdParam;
 });
 
-const { data, error, status } = await useFetchNormArticleContent(
+const { data, error } = await useFetchNormArticleContent(
   expressionEli,
   eId.value,
 );
 
-const norm = computed(() => data.value?.legislation);
+if (error.value || !data.value) {
+  throw createError({ status: error.value?.status ?? 500 });
+}
+
+const norm = computed(() => data.value.legislation);
 
 const normTitle = computed(() => getNormBreadcrumbTitle(norm.value));
 
-const articleHtml = computed(() => data.value?.htmlBody);
-
-if (error.value) {
-  showError(error.value);
-}
+const articleHtml = computed(() => data.value.htmlBody);
 
 const normPath: string = route.fullPath.replace(/\/[^/]*$/, "");
 
@@ -78,8 +78,8 @@ const article: Ref<Article | undefined> = computed(() =>
 useArticleSeo({
   abbreviation: norm.value?.abbreviation,
   article: article.value,
-  articleHeadlineHtml: data.value?.articleHeading,
-  articleHtml: data.value?.htmlBody,
+  articleHeadlineHtml: data.value.articleHeading,
+  articleHtml: data.value.htmlBody,
 });
 
 const previousArticleUrl: Ref<RouteLocationRaw | undefined> = computed(() =>
@@ -157,7 +157,7 @@ const breadcrumbItems: Ref<BreadcrumbItem[]> = computed(() => {
   return list;
 });
 
-const htmlTitle = computed(() => data.value?.articleHeading);
+const htmlTitle = computed(() => data.value.articleHeading);
 
 const validVersions =
   norm.value?.legislationLegalForce === "InForce"
@@ -196,89 +196,92 @@ const metadataItems = computed(() => {
 </script>
 
 <template>
-  <div v-if="status == 'pending'" class="wrapper">Lade ...</div>
-
-  <template v-if="!!norm">
-    <div class="wrapper">
-      <div class="md:hidden">
-        <Breadcrumbs :items="breadcrumbItems" collapse />
+  <NuxtLayout name="content">
+    <template #breadcrumb>
+      <div>
+        <div class="md:hidden">
+          <Breadcrumbs :items="breadcrumbItems" collapse />
+        </div>
+        <div class="hidden md:block">
+          <Breadcrumbs :items="breadcrumbItems" />
+        </div>
       </div>
-      <div class="hidden md:block">
-        <Breadcrumbs :items="breadcrumbItems" />
-      </div>
+    </template>
+    <template #default>
+      <div class="wrapper">
+        <div class="my-24 mb-24">
+          <p class="typo-label-regular mb-8">
+            {{ normTitle }}
+          </p>
+          <h1
+            class="typo-headline1-bold wrap-break-word hyphens-auto max-md:text-2xl"
+            v-html="htmlTitle"
+          />
+        </div>
 
-      <div class="my-24 mb-24">
-        <p class="typo-label-regular mb-8">
-          {{ normTitle }}
-        </p>
-        <h1
-          class="typo-headline1-bold wrap-break-word hyphens-auto max-md:text-2xl"
-          v-html="htmlTitle"
+        <DocumentsNormsArticleVersionWarning
+          v-if="inForceNormLink && article"
+          :in-force-version-link="inForceNormLink"
+          :current-article="article"
         />
       </div>
 
-      <DocumentsNormsArticleVersionWarning
-        v-if="inForceNormLink && article"
-        :in-force-version-link="inForceNormLink"
-        :current-article="article"
-      />
-    </div>
+      <div
+        v-if="privateFeaturesEnabled"
+        class="wrapper mb-24 flex flex-col space-y-16 space-x-0 md:space-y-0 lg:flex-row lg:space-x-24"
+        data-testid="metadata"
+      >
+        <Metadata :items="metadataItems" />
+      </div>
 
-    <div
-      v-if="privateFeaturesEnabled"
-      class="wrapper mb-24 flex flex-col space-y-16 space-x-0 md:space-y-0 lg:flex-row lg:space-x-24"
-      data-testid="metadata"
-    >
-      <Metadata :items="metadataItems" />
-    </div>
+      <div id="content" class="border-t border-t-gray-400 bg-white">
+        <SidebarLayout class="wrapper">
+          <template v-if="!!articleHtml" #content>
+            <DocumentsIncompleteDataMessage />
+            <DocumentsNormsLegislationContent single-article>
+              <div class="akn-act" v-html="articleHtml" />
+            </DocumentsNormsLegislationContent>
 
-    <div id="content" class="border-t border-t-gray-400 bg-white">
-      <SidebarLayout class="wrapper">
-        <template v-if="!!articleHtml" #content>
-          <DocumentsIncompleteDataMessage />
-          <DocumentsNormsLegislationContent single-article>
-            <div class="akn-act" v-html="articleHtml" />
-          </DocumentsNormsLegislationContent>
+            <nav class="flex flex-row justify-between" aria-label="Paragrafen">
+              <div class="flex flex-col">
+                <NuxtLink
+                  v-if="previousArticleUrl"
+                  :to="previousArticleUrl"
+                  class="typo-link-regular link-hover"
+                >
+                  <div class="flex items-center space-x-8">
+                    <IcBaselineArrowBack class="mt-1 shrink-0" />
+                    <span>Vorheriger Paragraf</span>
+                  </div>
+                </NuxtLink>
+              </div>
 
-          <nav class="flex flex-row justify-between" aria-label="Paragrafen">
-            <div class="flex flex-col">
-              <NuxtLink
-                v-if="previousArticleUrl"
-                :to="previousArticleUrl"
-                class="typo-link-regular link-hover"
-              >
-                <div class="flex items-center space-x-8">
-                  <IcBaselineArrowBack class="mt-1 shrink-0" />
-                  <span>Vorheriger Paragraf</span>
-                </div>
-              </NuxtLink>
-            </div>
+              <div class="flex flex-col">
+                <NuxtLink
+                  v-if="nextArticleUrl"
+                  :to="nextArticleUrl"
+                  class="typo-link-regular link-hover"
+                >
+                  <div class="flex items-center space-x-8">
+                    <span>Nächster Paragraf</span>
+                    <IcBaselineArrowForward class="mt-1 shrink-0" />
+                  </div>
+                </NuxtLink>
+              </div>
+            </nav>
+          </template>
 
-            <div class="flex flex-col">
-              <NuxtLink
-                v-if="nextArticleUrl"
-                :to="nextArticleUrl"
-                class="typo-link-regular link-hover"
-              >
-                <div class="flex items-center space-x-8">
-                  <span>Nächster Paragraf</span>
-                  <IcBaselineArrowForward class="mt-1 shrink-0" />
-                </div>
-              </NuxtLink>
-            </div>
-          </nav>
-        </template>
-
-        <template #sidebar>
-          <DocumentsTableOfContents
-            v-if="tableOfContents.length"
-            :subheading="normTitle"
-            :subheading-to="normPath"
-            :table-of-contents="tableOfContents"
-            :selected-key="eId"
-          />
-        </template>
-      </SidebarLayout>
-    </div>
-  </template>
+          <template #sidebar>
+            <DocumentsTableOfContents
+              v-if="tableOfContents.length"
+              :subheading="normTitle"
+              :subheading-to="normPath"
+              :table-of-contents="tableOfContents"
+              :selected-key="eId"
+            />
+          </template>
+        </SidebarLayout>
+      </div>
+    </template>
+  </NuxtLayout>
 </template>

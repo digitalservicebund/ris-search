@@ -5,7 +5,6 @@ import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineInfo from "~icons/ic/outline-info";
 import IcOutlineWarning from "~icons/ic/outline-warning-amber";
 import { NuxtLink } from "#components";
-import type { BreadcrumbItem } from "~/components/Breadcrumbs.vue";
 import DetailsList from "~/components/DetailsList.vue";
 import DetailsListEntry from "~/components/DetailsListEntry.vue";
 import NormTranslationActionMenu from "~/components/documents/actionMenu/NormTranslationActionMenu.vue";
@@ -17,7 +16,7 @@ import { useTranslationSeo } from "~/composables/useTranslationSeo";
 import { removePrefix } from "~/utils/textFormatting";
 
 definePageMeta({
-  layout: "norm",
+  layout: false,
   skipLinks: [
     { label: "Skip to main", to: "#main" },
     { label: "Skip to footer", to: "#footer" },
@@ -32,27 +31,26 @@ const route = useRoute();
 const id = route.params.id as string;
 
 const { data, error } = await fetchTranslationAndHTML(id);
-if (error.value) showError(error.value);
+if (error.value || !data.value) {
+  showError({ status: error.value?.status ?? 500 });
+}
 
 const { legislation } = await getGermanOriginal(id);
 
-const currentTranslation = data.value?.content;
-const html = data.value?.htmlBody;
+const currentTranslation = data.value.content;
+const html = data.value.htmlBody;
 
 useTranslationSeo({
-  name: currentTranslation?.name,
-  translationOfWork: currentTranslation?.translationOfWork,
+  name: currentTranslation.name,
+  translationOfWork: currentTranslation.translationOfWork,
 });
 
 const versionInformation = computed(() => {
-  return removePrefix(currentTranslation?.about, "Version information:");
+  return removePrefix(currentTranslation.about, "Version information:");
 });
 
 const translatedBy = computed(() => {
-  return removePrefix(
-    currentTranslation?.translator,
-    "Translation provided by",
-  );
+  return removePrefix(currentTranslation.translator, "Translation provided by");
 });
 
 const germanOriginalWorkEli = computed(() => {
@@ -60,19 +58,16 @@ const germanOriginalWorkEli = computed(() => {
 });
 
 const breadcrumbItems = computed(() => {
-  const items: BreadcrumbItem[] = [
+  return [
     {
       label: "English translations",
       route: "/translations",
     },
-  ];
-  if (currentTranslation) {
-    items.push({
+    {
       label: currentTranslation["@id"],
       route: "/translations",
-    });
-  }
-  return items;
+    },
+  ];
 });
 
 const views = [
@@ -98,96 +93,101 @@ const detailsTabPanelTitleId = useId();
 </script>
 
 <template>
-  <div v-if="currentTranslation" class="wrapper">
-    <div class="flex items-center gap-8 print:hidden">
-      <Breadcrumbs :items="breadcrumbItems" class="grow" />
-      <NormTranslationActionMenu class="mb-auto" />
-    </div>
-
-    <hgroup class="dokumentenkopf mt-24 mb-48">
-      <p
-        v-if="currentTranslation?.translationOfWork"
-        class="word-wrap typo-headline3-regular mb-12 hyphens-auto"
-      >
-        {{ currentTranslation.translationOfWork }}
-      </p>
-
-      <h1
-        v-if="currentTranslation?.name"
-        class="typo-headline2-bold mb-48 wrap-break-word hyphens-auto"
-      >
-        {{ currentTranslation.name }}
-      </h1>
-    </hgroup>
-
-    <Message
-      v-if="legislation"
-      :closable="false"
-      class="mb-48 max-w-prose space-y-24"
-    >
-      <template #icon>
-        <IcOutlineWarning />
-      </template>
-      <p class="typo-body-bold mt-2">Version Information</p>
-      <p class="mt-2">
-        Translations may not be updated at the same time as the German legal
-        provision.
-        <NuxtLink
-          class="typo-link-regular"
-          :to="`/norms/${germanOriginalWorkEli}`"
-          >Go to the German version</NuxtLink
-        >.
-      </p>
-    </Message>
-  </div>
-
-  <div class="border-b border-gray-400">
-    <nav class="wrapper -mb-1">
-      <Tabs :value="currentView" :show-navigators="false">
-        <TabList>
-          <Tab
-            v-for="view in views"
-            :key="view.path"
-            :value="view.path"
-            :as="NuxtLink"
-            :to="{ query: { view: view.path } }"
-            :aria-controls="undefined"
-            :data-attr="view.analyticsId"
-            class="flex items-center gap-8"
+  <NuxtLayout name="content">
+    <template #breadcrumb>
+      <div class="flex items-center gap-8 print:hidden">
+        <Breadcrumbs :items="breadcrumbItems" class="grow" />
+        <NormTranslationActionMenu class="mb-auto" />
+      </div>
+    </template>
+    <template #default>
+      <div class="wrapper">
+        <hgroup class="dokumentenkopf mt-24 mb-48">
+          <p
+            v-if="currentTranslation?.translationOfWork"
+            class="word-wrap typo-headline3-regular mb-12 hyphens-auto"
           >
-            <component :is="view.icon" />
-            {{ view.label }}
-          </Tab>
-        </TabList>
-      </Tabs>
-    </nav>
-  </div>
+            {{ currentTranslation.translationOfWork }}
+          </p>
 
-  <div class="min-h-96 bg-white py-24 print:py-0">
-    <div class="wrapper">
-      <section v-if="currentView === 'text'">
-        <h2 class="sr-only">Text</h2>
-        <section class="max-w-prose" v-html="html" />
-      </section>
+          <h1
+            v-if="currentTranslation?.name"
+            class="typo-headline2-bold mb-48 wrap-break-word hyphens-auto"
+          >
+            {{ currentTranslation.name }}
+          </h1>
+        </hgroup>
 
-      <section
-        v-else-if="currentView === 'details'"
-        :aria-labelledby="detailsTabPanelTitleId"
-      >
-        <h2 :id="detailsTabPanelTitleId" class="typo-headline3-bold my-24">
-          Details
-        </h2>
-        <DetailsList>
-          <DetailsListEntry
-            label="Translation provided by:"
-            :value="translatedBy"
-          />
-          <DetailsListEntry
-            label="Version information:"
-            :value="versionInformation"
-          />
-        </DetailsList>
-      </section>
-    </div>
-  </div>
+        <Message
+          v-if="legislation"
+          :closable="false"
+          class="mb-48 max-w-prose space-y-24"
+        >
+          <template #icon>
+            <IcOutlineWarning />
+          </template>
+          <p class="typo-body-bold mt-2">Version Information</p>
+          <p class="mt-2">
+            Translations may not be updated at the same time as the German legal
+            provision.
+            <NuxtLink
+              class="typo-link-regular"
+              :to="`/norms/${germanOriginalWorkEli}`"
+              >Go to the German version</NuxtLink
+            >.
+          </p>
+        </Message>
+      </div>
+
+      <div class="border-b border-gray-400">
+        <nav class="wrapper -mb-1">
+          <Tabs :value="currentView" :show-navigators="false">
+            <TabList>
+              <Tab
+                v-for="view in views"
+                :key="view.path"
+                :value="view.path"
+                :as="NuxtLink"
+                :to="{ query: { view: view.path } }"
+                :aria-controls="undefined"
+                :data-attr="view.analyticsId"
+                class="flex items-center gap-8"
+              >
+                <component :is="view.icon" />
+                {{ view.label }}
+              </Tab>
+            </TabList>
+          </Tabs>
+        </nav>
+      </div>
+
+      <div class="min-h-96 bg-white py-24 print:py-0">
+        <div class="wrapper">
+          <section v-if="currentView === 'text'">
+            <h2 class="sr-only">Text</h2>
+            <section class="max-w-prose" v-html="html" />
+          </section>
+
+          <section
+            v-else-if="currentView === 'details'"
+            :aria-labelledby="detailsTabPanelTitleId"
+          >
+            <h2 :id="detailsTabPanelTitleId" class="typo-headline3-bold my-24">
+              Details
+            </h2>
+            <DetailsList>
+              <DetailsListEntry
+                label="Translation provided by:"
+                :value="translatedBy"
+              />
+              <DetailsListEntry
+                label="Version information:"
+                :value="versionInformation"
+              />
+            </DetailsList>
+          </section>
+        </div>
+      </div>
+    </template>
+  </NuxtLayout>
 </template>
