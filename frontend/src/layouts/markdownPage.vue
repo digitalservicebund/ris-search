@@ -31,31 +31,31 @@ defineProps<{
 see: https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@scope */
 @scope (.prose) to (.no-prose) {
   :scope {
-    @apply max-w-prose;
+    @apply ris-body2-regular sm:ris-body1-regular max-w-prose 2xl:text-[1.25rem];
   }
 
   h1 {
-    @apply typo-headline1-regular pt-32 pb-24 hyphens-auto max-sm:leading-48 md:hyphens-none;
+    @apply ris-heading3-bold md:ris-heading2-bold pt-24 pb-8 hyphens-auto max-sm:leading-48 md:hyphens-none 2xl:text-[2.5rem];
   }
 
   h2 {
-    @apply typo-headline2-regular py-24;
+    @apply ris-heading3-regular pt-24 pb-8;
   }
 
   h3 {
-    @apply typo-headline3-regular py-16;
+    @apply ris-subhead-regular 2xl:ris-heading3-regular pt-16 pb-8;
   }
 
   h4 {
-    @apply typo-headline3-bold py-8;
+    @apply ris-subhead-regular sm:ris-body1-bold 2xl:ris-subhead-bold py-8;
   }
 
   h5 {
-    @apply typo-body-bold pb-8;
+    @apply ris-body2-bold sm:ris-body1-bold py-8 2xl:text-[1.25rem];
   }
 
   a {
-    @apply typo-link-regular;
+    @apply ris-link2-regular sm:ris-link1-regular 2xl:text-[1.25rem];
   }
 
   :is(p, ul, ol, li) {
