@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { partition } from "lodash-es";
 import GavelIcon from "~icons/ic/outline-gavel";
 import type { SearchResultHeaderItem } from "~/components/search/SearchResultHeader.vue";
-import type { CaseLaw, SearchResult, TextMatch } from "~/types/api";
+import type { CaseLaw, SearchResult } from "~/types/api";
 import {
   getMatch,
   getMatches,
@@ -18,23 +17,7 @@ const { searchResultClicked } = usePostHog();
 
 const router = useRouter();
 
-type Key =
-  | "guidingPrinciple"
-  | "headnote"
-  | "otherHeadnote"
-  | "tenor"
-  | "grounds"
-  | "caseFacts"
-  | "decisionGrounds";
-
-interface FieldDisplayProperties {
-  id: string;
-  title: string;
-}
-
-type ExtendedTextMatch = TextMatch & FieldDisplayProperties;
-
-const fields: Map<Key, FieldDisplayProperties> = new Map([
+const fields = new Map([
   ["guidingPrinciple", { id: "leitsatz", title: "Leitsatz" }],
   ["headnote", { id: "orientierungssatz", title: "Orientierungssatz" }],
   [
@@ -106,43 +89,11 @@ const detailPageRoute = computed(() => ({
   params: { documentNumber: searchResult.item.documentNumber },
 }));
 
-const previewSections = computed<ExtendedTextMatch[]>(() => {
-  const textMatches = searchResult.textMatches;
-  const foundFields = new Set<Key>();
-
-  const relevantMatches = textMatches
-    .filter((match) => fields.has(match.name as Key))
-    .map<ExtendedTextMatch>((match) => {
-      foundFields.add(match.name as Key);
-      return {
-        ...match,
-        text: sanitizeSearchResult(addEllipsis(match.text) ?? ""),
-        ...fields.get(match.name as Key)!, // always defined since we filtered above
-      };
-    });
-
-  // always show the most relevant field, regardless of highlight status
-  const firstFieldName = [...fields.keys()].find((key) => foundFields.has(key));
-  const [firstFields, otherFields] = partition(
-    relevantMatches,
-    (match) => match.name === firstFieldName,
-  );
-
-  // show up to 4 fields
-  const slice: ExtendedTextMatch[] = [...firstFields, ...otherFields]
-    .slice(0, 4)
-    .filter((i) => !!i);
-
-  if (slice.length === 0) return [];
-
-  const highlighted = slice.some((field) => field.text.includes("<mark>"));
-
-  // if no fields have a highlight, show only the first one casting because
-  // TypeScript doesn't realize we already ensured it's not undefined
-  if (!highlighted) return [slice[0] as ExtendedTextMatch];
-
-  return slice;
-});
+const previewSections = useSearchResultSections(
+  () => searchResult.textMatches,
+  fields,
+  4,
+);
 
 function trackResultClick() {
   const url = router.resolve(detailPageRoute.value).href;

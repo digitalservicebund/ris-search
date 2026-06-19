@@ -673,7 +673,7 @@ test.describe("searching literature", () => {
     await navigate(page, "/advanced-search");
 
     await searchFor(page, {
-      q: 'main_title:"Erstes Test-Dokument ULI"',
+      q: 'main_title:"Erstes Test-Dokument ULI" "einfaches Test-Dokument"',
       documentKind: "Literaturnachweise",
     });
 
@@ -683,9 +683,6 @@ test.describe("searching literature", () => {
     await expect(searchResult).toHaveText(/FooBar, 1982, 123-123/);
     await expect(searchResult).toHaveText(/2024/);
     await expect(searchResult).toHaveText(/Erstes Test-Dokument ULI/);
-    await expect(searchResult).toHaveText(
-      /Dies ist ein einfaches Test-Dokument./,
-    );
 
     // Result detail link
     await expect(
@@ -693,7 +690,12 @@ test.describe("searching literature", () => {
     ).toBeVisible();
 
     // Highlights
-    // TODO: Highlights?
+    await expect(
+      searchResult.getByRole("link", { name: "Kurzreferat:" }),
+    ).toBeVisible();
+    await expect(
+      searchResult.getByText(/einfaches Test-Dokument/),
+    ).toBeVisible();
   });
 
   test("navigates to the document detail page", async ({ page }) => {
@@ -801,6 +803,9 @@ test.describe("searching administrative directive", () => {
     ).toHaveText(/Beschluss über den Beschluss/);
 
     // Text preview (only checking the first two sentences)
+    await expect(
+      searchResult.getByRole("link", { name: "Kurzreferat:" }),
+    ).toBeVisible();
     await expect(searchResult).toHaveText(
       /Beschlossen wurde, das Beschlüsse beschlossen werden müssen. /,
     );

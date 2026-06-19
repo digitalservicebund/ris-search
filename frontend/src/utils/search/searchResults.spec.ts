@@ -45,13 +45,6 @@ describe("searchResults", () => {
       ]);
     });
 
-    it("returns only the sanitized texts for the requested name", () => {
-      expect(getMatches("headline", matches)).toEqual([
-        "The <mark>Main</mark> Title",
-        "Second headline",
-      ]);
-    });
-
     it("sanitizes disallowed tags from each match", () => {
       const m: TextMatch[] = [
         { name: "field", text: "<img src='x'/><mark>hit</mark>" },

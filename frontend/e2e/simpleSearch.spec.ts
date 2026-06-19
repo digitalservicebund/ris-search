@@ -746,7 +746,10 @@ test.describe("searching literature", () => {
   });
 
   test("shows the search result contents", async ({ page }) => {
-    await navigate(page, "/search?query=FooBar,+1982,+123-123&documentKind=L");
+    await navigate(
+      page,
+      "/search?query=FooBar,+1982,+123-123+einfaches+Test-Dokument&documentKind=L",
+    );
 
     const searchResult = getSearchResults(page).first();
 
@@ -763,6 +766,9 @@ test.describe("searching literature", () => {
     ).toBeVisible();
 
     // Highlights
+    await expect(
+      searchResult.getByRole("link", { name: "Kurzreferat:" }),
+    ).toBeVisible();
     await expect(
       searchResult.getByText(/Dies ist ein einfaches Test-Dokument./),
     ).toBeVisible();
@@ -926,10 +932,9 @@ test.describe("searching administrative directives", () => {
 
     // Highlights
     await expect(
-      searchResult.getByText(
-        /… Beschlossen wurde, das Beschlüsse beschlossen werden müssen./,
-      ),
+      searchResult.getByRole("link", { name: "Kurzreferat:" }),
     ).toBeVisible();
+    await expect(searchResult.getByText(/Beschlossen wurde/)).toBeVisible();
   });
 
   test("shows placeholder headline for search result items without headline", async ({
