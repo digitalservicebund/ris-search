@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import DefaultLayout from "./default.vue";
+import ContentLayout from "./content.vue";
 
 defineProps<{
   staticContent: string;
@@ -7,15 +7,19 @@ defineProps<{
 </script>
 
 <template>
-  <DefaultLayout>
-    <div>
+  <ContentLayout>
+    <template #breadcrumb>
       <slot name="breadcrumb" />
-    </div>
+    </template>
 
-    <div class="prose">
-      <MDC :value="staticContent"></MDC>
-    </div>
-  </DefaultLayout>
+    <template #default>
+      <div class="wrapper pb-32 md:pb-56">
+        <div class="prose">
+          <MDC :value="staticContent"></MDC>
+        </div>
+      </div>
+    </template>
+  </ContentLayout>
 </template>
 
 <style>
@@ -35,7 +39,7 @@ see: https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@scope 
   }
 
   h1 {
-    @apply ris-heading3-bold md:ris-heading2-bold pt-24 pb-8 hyphens-auto max-sm:leading-48 md:hyphens-none 2xl:text-[2.5rem];
+    @apply typo-headline1-regular pb-24 hyphens-auto max-sm:leading-48 md:hyphens-none;
   }
 
   h2 {

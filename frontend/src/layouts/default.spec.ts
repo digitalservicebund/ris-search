@@ -3,7 +3,7 @@ import { screen } from "@testing-library/vue";
 import { describe, it, expect } from "vitest";
 import DefaultLayout from "./default.vue";
 
-describe("default", () => {
+describe("base", () => {
   it("renders slot content", async () => {
     await renderSuspended(DefaultLayout, {
       slots: { default: "<p>Page content</p>" },

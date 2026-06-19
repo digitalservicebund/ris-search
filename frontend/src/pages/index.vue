@@ -10,7 +10,6 @@ function redirectToSearch(searchStr?: string) {
 }
 
 definePageMeta({
-  layout: "base",
   skipLinks: [
     { label: "Zum Inhalt", to: "#main" },
     { label: "Zum Fußbereich", to: "#footer" },
