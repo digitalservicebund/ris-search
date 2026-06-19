@@ -8,7 +8,9 @@ import java.io.OutputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.io.UncheckedIOException;
+import java.time.Clock;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -22,7 +24,6 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import lombok.Value;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -39,7 +40,9 @@ public class BulkExportService implements Job {
   private final Predicate<String> keyFilter;
   private final ChangelogService<?> changelogService;
   private final PortalBucket portalBucket;
+  private final Clock clock;
   public static final String BULK_ZIP_PREFIX = "snapshots/";
+  public static final String JOB_STATE_STORAGE_PREFIX = "last-snapshot-runs/";
 
   /**
    * Job to include potentially all files from a source bucket in a zip file and store it in a
@@ -50,6 +53,9 @@ public class BulkExportService implements Job {
    * @param outputName the base name for the output ZIP file
    * @param prefix the prefix to filter objects in the sourceBucket
    * @param keyFilter filter to exclude files based on their keys
+   * @param changelogService changelogService to check for document changes
+   * @param portalBucket to store state of the job
+   * @param clock system clock for time based operations
    */
   public BulkExportService(
       ObjectStorage sourceBucket,
@@ -58,7 +64,8 @@ public class BulkExportService implements Job {
       String prefix,
       Predicate<String> keyFilter,
       ChangelogService<?> changelogService,
-      PortalBucket portalBucket) {
+      PortalBucket portalBucket,
+      Clock clock) {
     this.sourceBucket = sourceBucket;
     this.destinationBucket = destinationBucket;
     this.outputName = outputName;
@@ -66,18 +73,50 @@ public class BulkExportService implements Job {
     this.keyFilter = keyFilter;
     this.changelogService = changelogService;
     this.portalBucket = portalBucket;
+    this.clock = clock;
   }
 
   @Override
   public ReturnCode runJob() {
-    String timestamp = Instant.now().toString();
+    Instant timestamp = clock.instant();
+    String archivePrefix = BULK_ZIP_PREFIX + outputName;
+    String resultObjectKey = archivePrefix + "_" + timestamp + ".zip";
+    // collect already existing archive to be deleted after a successful snapshot or a detected file
+    // deletion
+    List<String> obsoleteObjectKeys = destinationBucket.getAllKeysByPrefix(archivePrefix);
 
-    var lastSuccess =
-        portalBucket.getAllKeysByPrefix("last-succesfull-snapshot/" + outputName + "/");
-    if (!lastSuccess.isEmpty()) {
-      FilenameUtils.getName(lastSuccess.getLast());
+    var lastSuccess = portalBucket.getFileAsString(JOB_STATE_STORAGE_PREFIX + outputName);
+    if (lastSuccess.isPresent()) {
+      var lastSuccessInstant = Instant.parse(lastSuccess.get().trim());
+      var changes = changelogService.getChangesBetween(lastSuccessInstant, timestamp);
+
+      boolean noChanges =
+          changes.getChanged().isEmpty()
+              && changes.getDeleted().isEmpty()
+              && !changes.isChangeAll();
+
+      if (noChanges) {
+        logger.info("No new changes detected. Keeping the snapshot");
+        return ReturnCode.SUCCESS;
+      }
+
+      boolean deletionDetected = changes.getDeleted().stream().anyMatch(d -> d.endsWith(".xml"));
+
+      if (deletionDetected) {
+        logger.info("Document deletion detected. Recreating snapshot");
+        deleteArchives(obsoleteObjectKeys);
+      } else {
+        // If no deletions occurred, check if the last run was within the 24-hour cooldown period
+        boolean runWasLessThanADayAgo =
+            timestamp.isBefore(lastSuccessInstant.plus(1, ChronoUnit.DAYS));
+        if (runWasLessThanADayAgo) {
+          logger.info("Last snapshot is too recent");
+          return ReturnCode.SUCCESS;
+        }
+      }
     }
 
+    logger.info("Creating snapshot");
     List<String> keysToZip =
         sourceBucket.getAllKeysByPrefix(prefix).stream().filter(keyFilter).toList();
 
@@ -85,10 +124,6 @@ public class BulkExportService implements Job {
       logger.error("No files found for bucket {}", sourceBucket.getClass());
       return ReturnCode.ERROR;
     }
-
-    String affectedPrefix = BULK_ZIP_PREFIX + outputName;
-    String resultObjectKey = affectedPrefix + "_" + timestamp + ".zip";
-    List<String> obsoleteObjectKeys = destinationBucket.getAllKeysByPrefix(affectedPrefix);
 
     BlockingQueue<FileData> downloadQueue = new ArrayBlockingQueue<>(20);
 
@@ -129,12 +164,9 @@ public class BulkExportService implements Job {
     }
 
     // Clean up old backups exclusively on success
-    logger.info("Deleting obsolete archive objects {}", obsoleteObjectKeys);
-    for (String obsoleteObjectKey : obsoleteObjectKeys) {
-      destinationBucket.delete(obsoleteObjectKey);
-    }
+    deleteArchives(obsoleteObjectKeys);
 
-    portalBucket.save("last-succesfull-snapshot/" + outputName + "/" + timestamp, "");
+    portalBucket.save(JOB_STATE_STORAGE_PREFIX + outputName, timestamp.toString());
     return ReturnCode.SUCCESS;
   }
 
@@ -258,6 +290,13 @@ public class BulkExportService implements Job {
         throw new UncheckedIOException(
             new IOException("ZIP production engine encountered a failure status", e));
       }
+    }
+  }
+
+  private void deleteArchives(List<String> obsoleteObjectKeys) {
+    logger.info("Deleting archive objects {}", obsoleteObjectKeys);
+    for (String obsoleteObjectKey : obsoleteObjectKeys) {
+      destinationBucket.delete(obsoleteObjectKey);
     }
   }
 }

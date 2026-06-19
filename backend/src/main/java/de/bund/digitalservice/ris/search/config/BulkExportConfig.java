@@ -7,6 +7,7 @@ import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PublicFilesBucket;
 import de.bund.digitalservice.ris.search.service.BulkExportService;
 import de.bund.digitalservice.ris.search.service.ChangelogService;
+import java.time.Clock;
 import java.util.function.Predicate;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,7 +34,8 @@ public class BulkExportConfig {
         "eli",
         key -> true,
         changelogService,
-        portalBucket);
+        portalBucket,
+        Clock.systemDefaultZone());
   }
 
   /**
@@ -54,7 +56,8 @@ public class BulkExportConfig {
         "",
         filterChangelogFiles(),
         changelogService,
-        portalBucket);
+        portalBucket,
+        Clock.systemDefaultZone());
   }
 
   private Predicate<String> filterChangelogFiles() {

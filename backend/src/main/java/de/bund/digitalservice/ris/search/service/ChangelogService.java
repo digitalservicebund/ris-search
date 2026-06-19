@@ -132,11 +132,12 @@ public class ChangelogService<T extends ObjectStorage> {
    * @throws de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException If an error
    *     occurs while accessing the object storage.
    */
-  public Changelog getChangesFromFiles(List<String> filenames) throws ObjectStoreServiceException {
+  public Changelog getChangesFromFiles(List<String> filenames) {
+    return foldChangelogs(getChangelogsFromFiles(filenames));
+  }
 
-    List<Changelog> changelogs =
-        filenames.stream().map(this::parseOneChangelog).flatMap(Optional::stream).toList();
-    return foldChangelogs(changelogs);
+  public List<Changelog> getChangelogsFromFiles(List<String> filenames) {
+    return filenames.stream().map(this::parseOneChangelog).flatMap(Optional::stream).toList();
   }
 
   /**
