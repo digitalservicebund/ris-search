@@ -34,7 +34,7 @@ export function useSearchResultSections(
         ...fields.get(match.name)!, // always defined since we filtered above
       }));
 
-    return maxSections !== undefined
+    return Number.isInteger(maxSections)
       ? sections.slice(0, maxSections)
       : sections;
   });
