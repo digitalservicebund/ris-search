@@ -746,7 +746,10 @@ test.describe("searching literature", () => {
   });
 
   test("shows the search result contents", async ({ page }) => {
-    await navigate(page, "/search?query=FooBar,+1982,+123-123&documentKind=L");
+    await navigate(
+      page,
+      "/search?query=FooBar,+1982,+123-123+einfaches+Test-Dokument&documentKind=L",
+    );
 
     const searchResult = getSearchResults(page).first();
 
@@ -761,15 +764,6 @@ test.describe("searching literature", () => {
         name: "Erstes Test-Dokument ULI",
       }),
     ).toBeVisible();
-  });
-
-  test("shows highlighted short report in search results", async ({ page }) => {
-    await navigate(
-      page,
-      "/search?query=einfaches+Test-Dokument&documentKind=L",
-    );
-
-    const searchResult = getSearchResults(page).first();
 
     // Highlights
     await expect(
