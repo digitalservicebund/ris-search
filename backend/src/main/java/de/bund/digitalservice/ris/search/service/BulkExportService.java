@@ -1,16 +1,13 @@
 package de.bund.digitalservice.ris.search.service;
 
 import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
-import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.io.UncheckedIOException;
-import java.time.Clock;
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -29,23 +26,21 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /** Service for creating and managing bulk exports of objects from ObjectStorage. */
-public class BulkExportService implements Job {
+public class BulkExportService {
 
   private final Logger logger = LogManager.getLogger(BulkExportService.class);
 
   private final ObjectStorage sourceBucket;
   private final ObjectStorage destinationBucket;
-  private final String outputName;
   private final String prefix;
   private final Predicate<String> keyFilter;
-  private final ChangelogService<?> changelogService;
-  private final PortalBucket portalBucket;
-  private final Clock clock;
   public static final String BULK_ZIP_PREFIX = "snapshots/";
   public static final String JOB_STATE_STORAGE_PREFIX = "last-snapshot-runs/";
 
+  private final String archivePrefix;
+
   /**
-   * Job to include potentially all files from a source bucket in a zip file and store it in a
+   * Service to include potentially all files from a source bucket in a zip file and store it in a
    * destination bucket.
    *
    * @param sourceBucket the ObjectStorage bucket to read files from
@@ -53,68 +48,31 @@ public class BulkExportService implements Job {
    * @param outputName the base name for the output ZIP file
    * @param prefix the prefix to filter objects in the sourceBucket
    * @param keyFilter filter to exclude files based on their keys
-   * @param changelogService changelogService to check for document changes
-   * @param portalBucket to store state of the job
-   * @param clock system clock for time based operations
    */
   public BulkExportService(
       ObjectStorage sourceBucket,
       ObjectStorage destinationBucket,
       String outputName,
       String prefix,
-      Predicate<String> keyFilter,
-      ChangelogService<?> changelogService,
-      PortalBucket portalBucket,
-      Clock clock) {
+      Predicate<String> keyFilter) {
     this.sourceBucket = sourceBucket;
     this.destinationBucket = destinationBucket;
-    this.outputName = outputName;
     this.prefix = prefix;
     this.keyFilter = keyFilter;
-    this.changelogService = changelogService;
-    this.portalBucket = portalBucket;
-    this.clock = clock;
+    this.archivePrefix = BULK_ZIP_PREFIX + outputName;
   }
 
-  @Override
-  public ReturnCode runJob() {
-    Instant timestamp = clock.instant();
-    String archivePrefix = BULK_ZIP_PREFIX + outputName;
+  /**
+   * starts the archiving process
+   *
+   * @param timestamp start of the snapshot creation
+   * @return true if successful, false on error
+   */
+  public boolean runJob(Instant timestamp) {
     String resultObjectKey = archivePrefix + "_" + timestamp + ".zip";
     // collect already existing archive to be deleted after a successful snapshot or a detected file
     // deletion
     List<String> obsoleteObjectKeys = destinationBucket.getAllKeysByPrefix(archivePrefix);
-
-    var lastSuccess = portalBucket.getFileAsString(JOB_STATE_STORAGE_PREFIX + outputName);
-    if (lastSuccess.isPresent()) {
-      var lastSuccessInstant = Instant.parse(lastSuccess.get().trim());
-      var changes = changelogService.getChangesBetween(lastSuccessInstant, timestamp);
-
-      boolean noChanges =
-          changes.getChanged().isEmpty()
-              && changes.getDeleted().isEmpty()
-              && !changes.isChangeAll();
-
-      if (noChanges) {
-        logger.info("No new changes detected. Keeping the snapshot");
-        return ReturnCode.SUCCESS;
-      }
-
-      boolean deletionDetected = changes.getDeleted().stream().anyMatch(d -> d.endsWith(".xml"));
-
-      if (deletionDetected) {
-        logger.info("Document deletion detected. Recreating snapshot");
-        deleteArchives(obsoleteObjectKeys);
-      } else {
-        // If no deletions occurred, check if the last run was within the 24-hour cooldown period
-        boolean runWasLessThanADayAgo =
-            timestamp.isBefore(lastSuccessInstant.plus(1, ChronoUnit.DAYS));
-        if (runWasLessThanADayAgo) {
-          logger.info("Last snapshot is too recent");
-          return ReturnCode.SUCCESS;
-        }
-      }
-    }
 
     logger.info("Creating snapshot");
     List<String> keysToZip =
@@ -122,7 +80,7 @@ public class BulkExportService implements Job {
 
     if (keysToZip.isEmpty()) {
       logger.error("No files found for bucket {}", sourceBucket.getClass());
-      return ReturnCode.ERROR;
+      return false;
     }
 
     BlockingQueue<FileData> downloadQueue = new ArrayBlockingQueue<>(20);
@@ -157,17 +115,15 @@ public class BulkExportService implements Job {
     } catch (InterruptedException e) {
       logger.error("Bulk export execution was interrupted.", e);
       Thread.currentThread().interrupt();
-      return ReturnCode.ERROR;
+      return false;
     } catch (Exception e) {
       logger.error("Bulk export execution failed or was aborted due to structural error.", e);
-      return ReturnCode.ERROR;
+      return false;
     }
 
     // Clean up old backups exclusively on success
     deleteArchives(obsoleteObjectKeys);
-
-    portalBucket.save(JOB_STATE_STORAGE_PREFIX + outputName, timestamp.toString());
-    return ReturnCode.SUCCESS;
+    return true;
   }
 
   @Value
@@ -291,6 +247,13 @@ public class BulkExportService implements Job {
             new IOException("ZIP production engine encountered a failure status", e));
       }
     }
+  }
+
+  /** Delete every archive of the given prefix */
+  public void deleteArchives() {
+    logger.info("delete all archives for document Type");
+    List<String> files = destinationBucket.getAllKeysByPrefix(archivePrefix);
+    deleteArchives(files);
   }
 
   private void deleteArchives(List<String> obsoleteObjectKeys) {

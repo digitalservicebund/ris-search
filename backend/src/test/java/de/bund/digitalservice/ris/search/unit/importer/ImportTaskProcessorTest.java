@@ -10,7 +10,7 @@ import static org.mockito.Mockito.when;
 
 import de.bund.digitalservice.ris.search.importer.ImportTaskProcessor;
 import de.bund.digitalservice.ris.search.service.AdministrativeDirectiveIndexSyncJob;
-import de.bund.digitalservice.ris.search.service.BulkExportService;
+import de.bund.digitalservice.ris.search.service.BulkExportJob;
 import de.bund.digitalservice.ris.search.service.CaseLawIndexSyncJob;
 import de.bund.digitalservice.ris.search.service.Job;
 import de.bund.digitalservice.ris.search.service.LiteratureIndexSyncJob;
@@ -33,8 +33,8 @@ class ImportTaskProcessorTest {
   @Mock private SitemapsUpdateJob sitemapsUpdateJob;
   @Mock private EcliSitemapJob ecliSitemapJob;
   @Mock private AdministrativeDirectiveIndexSyncJob administrativeDirectiveUpdateJob;
-  @Mock private BulkExportService normsBulkExport;
-  @Mock private BulkExportService caseLawBulkExport;
+  @Mock private BulkExportJob normsBulkExport;
+  @Mock private BulkExportJob caseLawBulkExport;
 
   private ImportTaskProcessor processor;
 

@@ -5,6 +5,7 @@ import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PublicFilesBucket;
+import de.bund.digitalservice.ris.search.service.BulkExportJob;
 import de.bund.digitalservice.ris.search.service.BulkExportService;
 import de.bund.digitalservice.ris.search.service.ChangelogService;
 import java.time.Clock;
@@ -17,47 +18,47 @@ import org.springframework.context.annotation.Configuration;
 public class BulkExportConfig {
 
   /**
-   * @param source the source bucket
-   * @param target the target bucket
-   * @return the normsBulkExport bean
+   * @param source sourceBucket to create the document snapshot from
+   * @param target targetBucket to create the archive in
+   * @param changelogService the changelogService used to observe file changes
+   * @param portalBucket portalBucket to store the job state
+   * @return BulkExportJob
    */
   @Bean
-  public BulkExportService normsBulkExport(
+  public BulkExportJob normsBulkExport(
       NormsBucket source,
       PublicFilesBucket target,
       ChangelogService<NormsBucket> changelogService,
       PortalBucket portalBucket) {
-    return new BulkExportService(
-        source,
-        target,
-        DocumentKind.LEGISLATION.getBulkZipPath(),
-        "eli",
-        key -> true,
-        changelogService,
+    return new BulkExportJob(
+        new BulkExportService(
+            source, target, DocumentKind.LEGISLATION.getBulkZipPath(), "eli", key -> true),
         portalBucket,
-        Clock.systemDefaultZone());
+        Clock.systemDefaultZone(),
+        "legislation",
+        changelogService);
   }
 
   /**
-   * @param source the source bucket
-   * @param target the target bucket
-   * @return the caseLawBulkExport bean
+   * @param source sourceBucket to create the document snapshot from
+   * @param target targetBucket to create the archive in
+   * @param changelogService the changelogService used to observe file changes
+   * @param portalBucket portalBucket to store the job state
+   * @return BulkExportJob
    */
   @Bean
-  public BulkExportService caseLawBulkExport(
+  public BulkExportJob caseLawBulkExport(
       CaseLawBucket source,
       PublicFilesBucket target,
       ChangelogService<CaseLawBucket> changelogService,
       PortalBucket portalBucket) {
-    return new BulkExportService(
-        source,
-        target,
-        DocumentKind.CASE_LAW.getBulkZipPath(),
-        "",
-        filterChangelogFiles(),
-        changelogService,
+    return new BulkExportJob(
+        new BulkExportService(
+            source, target, DocumentKind.CASE_LAW.getBulkZipPath(), "", filterChangelogFiles()),
         portalBucket,
-        Clock.systemDefaultZone());
+        Clock.systemDefaultZone(),
+        "legislation",
+        changelogService);
   }
 
   private Predicate<String> filterChangelogFiles() {

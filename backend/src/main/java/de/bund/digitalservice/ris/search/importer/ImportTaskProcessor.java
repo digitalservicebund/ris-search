@@ -1,7 +1,7 @@
 package de.bund.digitalservice.ris.search.importer;
 
 import de.bund.digitalservice.ris.search.service.AdministrativeDirectiveIndexSyncJob;
-import de.bund.digitalservice.ris.search.service.BulkExportService;
+import de.bund.digitalservice.ris.search.service.BulkExportJob;
 import de.bund.digitalservice.ris.search.service.CaseLawIndexSyncJob;
 import de.bund.digitalservice.ris.search.service.Job;
 import de.bund.digitalservice.ris.search.service.LiteratureIndexSyncJob;
@@ -35,8 +35,8 @@ public class ImportTaskProcessor {
   private final SitemapsUpdateJob sitemapsUpdateJob;
   private final EcliSitemapJob ecliSitemapJob;
   private final AdministrativeDirectiveIndexSyncJob administrativeDirectiveUpdateJob;
-  private final BulkExportService normsBulkExport;
-  private final BulkExportService caseLawBulkExport;
+  private final BulkExportJob normsBulkExport;
+  private final BulkExportJob caseLawBulkExport;
 
   private static final Logger logger = LogManager.getLogger(ImportTaskProcessor.class);
 
@@ -60,8 +60,8 @@ public class ImportTaskProcessor {
       LiteratureIndexSyncJob literatureIndexSyncJob,
       EcliSitemapJob ecliSitemapJob,
       AdministrativeDirectiveIndexSyncJob administrativeDirectiveUpdateJob,
-      @Qualifier("normsBulkExport") BulkExportService normsBulkExport,
-      @Qualifier("caseLawBulkExport") BulkExportService caseLawBulkExport) {
+      @Qualifier("normsBulkExport") BulkExportJob normsBulkExport,
+      @Qualifier("caseLawBulkExport") BulkExportJob caseLawBulkExport) {
     this.normIndexSyncJob = normIndexSyncJob;
     this.caseLawIndexSyncJob = caseLawIndexSyncJob;
     this.literatureIndexSyncJob = literatureIndexSyncJob;

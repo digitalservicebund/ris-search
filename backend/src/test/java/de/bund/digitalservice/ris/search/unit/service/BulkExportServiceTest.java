@@ -1,144 +1,41 @@
 package de.bund.digitalservice.ris.search.unit.service;
 
-import static de.bund.digitalservice.ris.search.service.BulkExportService.BULK_ZIP_PREFIX;
-import static de.bund.digitalservice.ris.search.service.BulkExportService.JOB_STATE_STORAGE_PREFIX;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.matches;
 import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import de.bund.digitalservice.ris.ZipTestUtils;
 import de.bund.digitalservice.ris.search.exception.NoSuchKeyException;
-import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
-import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
 import de.bund.digitalservice.ris.search.service.BulkExportService;
-import de.bund.digitalservice.ris.search.service.ChangelogService;
-import de.bund.digitalservice.ris.search.service.Job;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
-@ExtendWith(MockitoExtension.class)
 class BulkExportServiceTest {
 
-  @Mock ChangelogService<?> changelogMock;
-  @Mock PortalBucket portalBucketMock;
-  @Mock ObjectStorage sourceBucket;
-  @Mock ObjectStorage destinationBucket;
   private static final Clock clock =
       Clock.fixed(Instant.parse("2024-01-01T12:00:00.123Z"), ZoneId.of("UTC"));
 
   @Test
-  void runJob_returnsEarlyWhenNoChangesAreDetected() {
-    String outputName = "test-export";
-    String prefix = "some/path/";
-
-    when(portalBucketMock.getFileAsString(JOB_STATE_STORAGE_PREFIX + outputName))
-        .thenReturn(Optional.of("2024-01-01T12:00:00Z"));
-
-    Changelog noChangeChangelog =
-        new Changelog(new HashSet<>(List.of()), new HashSet<>(List.of()), false);
-    when(changelogMock.getChangesBetween(any(), any())).thenReturn(noChangeChangelog);
-
-    BulkExportService bulkExportService =
-        new BulkExportService(
-            sourceBucket,
-            destinationBucket,
-            outputName,
-            prefix,
-            key -> true,
-            changelogMock,
-            portalBucketMock,
-            clock);
-
-    var actual = bulkExportService.runJob();
-    assertThat(actual).isEqualTo(Job.ReturnCode.SUCCESS);
-    verify(sourceBucket, never()).getAllKeysByPrefix(prefix);
-  }
-
-  @Test
-  void runJob_returnsEarlyWhenOutsideRerunWindow() {
-    String outputName = "test-export";
-    String prefix = "some/path/";
-
-    when(portalBucketMock.getFileAsString(JOB_STATE_STORAGE_PREFIX + outputName))
-        .thenReturn(Optional.of("2024-01-01T12:00:00Z"));
-    when(destinationBucket.getAllKeysByPrefix(BULK_ZIP_PREFIX + outputName))
-        .thenReturn(List.of("obsolete"));
-
-    Changelog changelog =
-        new Changelog(new HashSet<>(List.of("something.xml")), new HashSet<>(List.of()), false);
-    when(changelogMock.getChangesBetween(any(), any())).thenReturn(changelog);
-
-    BulkExportService bulkExportService =
-        new BulkExportService(
-            sourceBucket,
-            destinationBucket,
-            outputName,
-            prefix,
-            key -> true,
-            changelogMock,
-            portalBucketMock,
-            clock);
-
-    var actual = bulkExportService.runJob();
-    assertThat(actual).isEqualTo(Job.ReturnCode.SUCCESS);
-    verify(sourceBucket, never()).getAllKeysByPrefix(prefix);
-  }
-
-  @Test
-  void runJob_triesToRecreateOnDetectedDeletion() {
-    String outputName = "test-export";
-    String prefix = "some/path/";
-
-    when(portalBucketMock.getFileAsString(JOB_STATE_STORAGE_PREFIX + outputName))
-        .thenReturn(Optional.of("2024-01-01T13:00:00Z"));
-    when(destinationBucket.getAllKeysByPrefix(BULK_ZIP_PREFIX + outputName))
-        .thenReturn(List.of("obsolete"));
-
-    Changelog changelog =
-        new Changelog(new HashSet<>(List.of()), new HashSet<>(List.of("something.xml")), false);
-    when(changelogMock.getChangesBetween(any(), any())).thenReturn(changelog);
-
-    BulkExportService bulkExportService =
-        new BulkExportService(
-            sourceBucket,
-            destinationBucket,
-            outputName,
-            prefix,
-            key -> true,
-            changelogMock,
-            portalBucketMock,
-            clock);
-
-    bulkExportService.runJob();
-    verify(destinationBucket, times(1)).delete("obsolete");
-    verify(sourceBucket, times(1)).getAllKeysByPrefix(prefix);
-  }
-
-  @Test
   void runJob_successfulZipAndUpload() throws IOException {
+    ObjectStorage sourceBucket = mock(ObjectStorage.class);
+    ObjectStorage destinationBucket = mock(ObjectStorage.class);
     String outputName = "test-export";
     String prefix = "some/path/";
 
@@ -161,17 +58,10 @@ class BulkExportServiceTest {
             });
 
     BulkExportService bulkExportService =
-        new BulkExportService(
-            sourceBucket,
-            destinationBucket,
-            outputName,
-            prefix,
-            key -> true,
-            changelogMock,
-            portalBucketMock,
-            clock);
+        new BulkExportService(sourceBucket, destinationBucket, outputName, prefix, key -> true);
 
-    assertDoesNotThrow(bulkExportService::runJob);
+    boolean actual = bulkExportService.runJob(clock.instant());
+    assertThat(actual).isTrue();
 
     verify(sourceBucket, times(1)).getAllKeysByPrefix(prefix);
     verify(sourceBucket, times(1)).get("file1.txt");
@@ -190,6 +80,8 @@ class BulkExportServiceTest {
 
   @Test
   void runJob_withObsoleteFiles_shouldDeleteThem() throws IOException {
+    ObjectStorage sourceBucket = mock(ObjectStorage.class);
+    ObjectStorage destinationBucket = mock(ObjectStorage.class);
     String outputName = "test-export";
     String prefix = "some/path/";
     String file1Content = "Some content";
@@ -206,17 +98,10 @@ class BulkExportServiceTest {
     doNothing().when(destinationBucket).delete(anyString());
 
     BulkExportService bulkExportService =
-        new BulkExportService(
-            sourceBucket,
-            destinationBucket,
-            outputName,
-            prefix,
-            key -> true,
-            changelogMock,
-            portalBucketMock,
-            clock);
+        new BulkExportService(sourceBucket, destinationBucket, outputName, prefix, key -> true);
 
-    assertDoesNotThrow(bulkExportService::runJob);
+    boolean actual = bulkExportService.runJob(clock.instant());
+    assertThat(actual).isTrue();
 
     verify(sourceBucket, times(1)).getAllKeysByPrefix(prefix);
     verify(sourceBucket, times(1)).get("file1.txt");
@@ -229,6 +114,8 @@ class BulkExportServiceTest {
   @Test
   void runJob_sourceBucketThrowsIOException_shouldPropagateException()
       throws IOException, NoSuchKeyException {
+    ObjectStorage sourceBucket = mock(ObjectStorage.class);
+    ObjectStorage destinationBucket = mock(ObjectStorage.class);
     String outputName = "test-export";
     String prefix = "some/path/";
 
@@ -236,17 +123,10 @@ class BulkExportServiceTest {
         .thenThrow(new RuntimeException("The mock source bucket does not want to list files"));
 
     BulkExportService bulkExportService =
-        new BulkExportService(
-            sourceBucket,
-            destinationBucket,
-            outputName,
-            prefix,
-            key -> true,
-            changelogMock,
-            portalBucketMock,
-            clock);
+        new BulkExportService(sourceBucket, destinationBucket, outputName, prefix, key -> true);
 
-    assertThrows(RuntimeException.class, bulkExportService::runJob);
+    Instant timestamp = clock.instant();
+    assertThrows(RuntimeException.class, () -> bulkExportService.runJob(timestamp));
 
     verify(sourceBucket, times(0)).getStream(anyString());
     verify(destinationBucket, times(0)).putStream(anyString(), any(InputStream.class));
@@ -254,8 +134,11 @@ class BulkExportServiceTest {
   }
 
   @Test
-  void runJob_destinationBucketPutStreamThrowsIOException_shouldReturnWithErrorCode()
+  void runJob_destinationBucketPutStreamThrowsIOException_shouldReturnWithFalse()
       throws IOException {
+    ObjectStorage sourceBucket = mock(ObjectStorage.class);
+    ObjectStorage destinationBucket = mock(ObjectStorage.class);
+
     when(sourceBucket.getAllKeysByPrefix("some/prefix/")).thenReturn(List.of("file.txt"));
     when(sourceBucket.get("file.txt")).thenReturn(Optional.of("content".getBytes()));
     when(destinationBucket.getAllKeysByPrefix(anyString())).thenReturn(Collections.emptyList());
@@ -264,52 +147,40 @@ class BulkExportServiceTest {
 
     BulkExportService bulkExportService =
         new BulkExportService(
-            sourceBucket,
-            destinationBucket,
-            "test-export",
-            "some/prefix/",
-            key -> true,
-            changelogMock,
-            portalBucketMock,
-            clock);
+            sourceBucket, destinationBucket, "test-export", "some/prefix/", key -> true);
 
-    assertEquals(Job.ReturnCode.ERROR, bulkExportService.runJob());
+    boolean actual = bulkExportService.runJob(clock.instant());
+    assertThat(actual).isFalse();
   }
 
   @Test
-  void runJob_onEmptyFiles_shouldReturnEarlyWithErrorCode() {
+  void runJob_onEmptyFiles_shouldReturnEarlyWithFalse() {
+    ObjectStorage sourceBucket = mock(ObjectStorage.class);
+    ObjectStorage destinationBucket = mock(ObjectStorage.class);
+
     when(sourceBucket.getAllKeysByPrefix("some/prefix/")).thenReturn(List.of("file.txt"));
 
     BulkExportService bulkExportService =
         new BulkExportService(
-            sourceBucket,
-            destinationBucket,
-            "test-export",
-            "some/prefix/",
-            key -> false,
-            changelogMock,
-            portalBucketMock,
-            clock);
+            sourceBucket, destinationBucket, "test-export", "some/prefix/", key -> false);
 
-    assertEquals(Job.ReturnCode.ERROR, bulkExportService.runJob());
+    boolean actual = bulkExportService.runJob(clock.instant());
+    assertThat(actual).isFalse();
   }
 
   @Test
   void runJob_whenContentOfKeyIsNotFound_shouldReturnWithErrorCode() {
+    ObjectStorage sourceBucket = mock(ObjectStorage.class);
+    ObjectStorage destinationBucket = mock(ObjectStorage.class);
+
     when(sourceBucket.getAllKeysByPrefix("some/prefix/")).thenReturn(List.of("file"));
     when(sourceBucket.get("file")).thenReturn(Optional.empty());
 
     BulkExportService bulkExportService =
         new BulkExportService(
-            sourceBucket,
-            destinationBucket,
-            "test-export",
-            "some/prefix/",
-            key -> true,
-            changelogMock,
-            portalBucketMock,
-            clock);
+            sourceBucket, destinationBucket, "test-export", "some/prefix/", key -> true);
 
-    assertEquals(Job.ReturnCode.ERROR, bulkExportService.runJob());
+    boolean actual = bulkExportService.runJob(clock.instant());
+    assertThat(actual).isFalse();
   }
 }
