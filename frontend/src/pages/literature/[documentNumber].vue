@@ -156,7 +156,7 @@ const detailItems = computed(() => getLiteratureDetailItems(literature.value));
 }
 
 :deep(.literature h2) {
-  @apply typo-headline3-bold my-24 inline-block;
+  @apply typo-headline2-bold my-24 inline-block;
 }
 
 :deep(.literature h3) {

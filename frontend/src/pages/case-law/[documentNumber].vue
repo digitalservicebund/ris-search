@@ -204,7 +204,7 @@ const detailsSectionId = useId();
 }
 
 :deep(.case-law h2) {
-  @apply typo-headline3-bold my-24 inline-block;
+  @apply typo-headline2-bold my-24 inline-block;
 }
 
 :deep(.case-law .border-number) {

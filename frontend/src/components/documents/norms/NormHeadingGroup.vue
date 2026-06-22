@@ -23,7 +23,7 @@ const normTitle = computed(() => getNormTitle(props.metadata));
     <hgroup>
       <p
         v-if="hasHeading"
-        class="word-wrap typo-headline3-regular mb-12 wrap-break-word hyphens-auto max-md:text-xl"
+        class="word-wrap typo-headline3-regular mb-8 wrap-break-word hyphens-auto max-md:text-xl"
       >
         {{ metadata.alternateName }}
       </p>
@@ -33,7 +33,7 @@ const normTitle = computed(() => getNormTitle(props.metadata));
           <div
             v-if="hasHeading"
             :data-longTitle="isLongTitle || null"
-            class="wrap-break-word hyphens-auto max-sm:text-2xl"
+            class="wrap-break-word hyphens-auto"
             v-html="props.htmlParts?.heading"
           />
           <div v-else class="titel wrap-break-word">
@@ -45,7 +45,7 @@ const normTitle = computed(() => getNormTitle(props.metadata));
           <div
             v-if="props.htmlParts?.heading"
             :data-longTitle="isLongTitle || null"
-            class="wrap-break-word hyphens-auto max-sm:text-2xl"
+            class="wrap-break-word hyphens-auto"
             v-html="props.htmlParts.heading"
           ></div>
           <div v-else class="titel wrap-break-word">

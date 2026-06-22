@@ -210,7 +210,7 @@ const metadataItems = computed(() => {
     <template #default>
       <div class="wrapper">
         <div class="my-24 mb-24">
-          <p class="typo-label1-regular mb-8">
+          <p class="typo-headline3-regular mb-8">
             {{ normTitle }}
           </p>
           <h1
