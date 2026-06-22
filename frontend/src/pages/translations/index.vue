@@ -10,6 +10,7 @@ definePageMeta({
     { label: "Skip to main", to: "#main" },
     { label: "Skip to footer", to: "#footer" },
   ],
+  layout: false,
 });
 
 useHead({
@@ -85,69 +86,84 @@ const translationsListId = useId();
 </script>
 
 <template>
-  <div class="print:hidden">
-    <Breadcrumbs :items="breadcrumbItems" />
-  </div>
-
-  <section class="mt-24 max-w-prose space-y-24">
-    <h1 class="typo-headline1-bold overflow-x-auto">
-      English Translations of German Federal Laws and Regulations
-    </h1>
-    <p>
-      We provide translations of our German content to help you. Please note
-      that the original German versions are the only authoritative source.
-    </p>
-    <p>
-      The translations published on this website may be used in accordance with
-      the applicable copyright exceptions. In particular, single copies may be
-      made including in the form of downloads or printouts for private,
-      non-commercial use. Any reproduction, processing, distribution or other
-      type of use of these translations that does not fall within the relevant
-      copyright exceptions requires the prior consent of the author or other
-      rights holder.
-    </p>
-    <SimpleSearchInput
-      v-model="activeSearchTerm"
-      class="my-48"
-      input-label="Search term"
-      input-placeholder="Search by title or abbreviation"
-      submit-label="Search"
-    />
-  </section>
-
-  <section :aria-labelledby="translationsListId" class="mt-48">
-    <h2 :id="translationsListId" class="sr-only">Translations List</h2>
-
-    <ul
-      v-if="sortedTranslations !== null && sortedTranslations.length > 0"
-      class="mt-48 flex flex-col gap-16"
-    >
-      <li
-        v-for="t in sortedTranslations"
-        :key="t['@id']"
-        class="bg-white px-32 py-24"
-      >
-        <div class="flex max-w-prose flex-col gap-8">
-          <SearchResultHeader
-            lang="de"
-            :items="[{ value: t['@id'] }, { value: t.translationOfWork ?? '' }]"
+  <NuxtLayout name="breadcrumb-page">
+    <template #breadcrumb>
+      <div class="print:hidden">
+        <Breadcrumbs :items="breadcrumbItems" />
+      </div>
+    </template>
+    <template #default>
+      <div class="wrapper pb-32 lg:pb-64">
+        <section class="mt-24 max-w-prose space-y-24">
+          <h1 class="typo-headline1-bold overflow-x-auto">
+            English Translations of German Federal Laws and Regulations
+          </h1>
+          <p>
+            We provide translations of our German content to help you. Please
+            note that the original German versions are the only authoritative
+            source.
+          </p>
+          <p>
+            The translations published on this website may be used in accordance
+            with the applicable copyright exceptions. In particular, single
+            copies may be made including in the form of downloads or printouts
+            for private, non-commercial use. Any reproduction, processing,
+            distribution or other type of use of these translations that does
+            not fall within the relevant copyright exceptions requires the prior
+            consent of the author or other rights holder.
+          </p>
+          <SimpleSearchInput
+            v-model="activeSearchTerm"
+            class="my-48"
+            input-label="Search term"
+            input-placeholder="Search by title or abbreviation"
+            submit-label="Search"
           />
+        </section>
 
-          <NuxtLink
-            :to="{ name: 'translations-id', params: { id: t['@id'] } }"
-            class="typo-headline-searchresult"
+        <section :aria-labelledby="translationsListId" class="mt-48">
+          <h2 :id="translationsListId" class="sr-only">Translations List</h2>
+
+          <ul
+            v-if="sortedTranslations !== null && sortedTranslations.length > 0"
+            class="mt-48 flex flex-col gap-16"
           >
-            <h2>{{ t.name }}</h2>
-          </NuxtLink>
+            <li
+              v-for="t in sortedTranslations"
+              :key="t['@id']"
+              class="bg-white px-32 py-24"
+            >
+              <div class="flex max-w-prose flex-col gap-8">
+                <SearchResultHeader
+                  lang="de"
+                  :items="[
+                    { value: t['@id'] },
+                    { value: t.translationOfWork ?? '' },
+                  ]"
+                />
 
-          <p class="typo-body-regular text-gray-900">{{ t.translator }}</p>
-        </div>
-      </li>
-    </ul>
+                <NuxtLink
+                  :to="{ name: 'translations-id', params: { id: t['@id'] } }"
+                  class="typo-headline-searchresult"
+                >
+                  <h2>{{ t.name }}</h2>
+                </NuxtLink>
 
-    <div v-else class="mt-8">
-      <p class="typo-body-bold">We didn’t find anything.</p>
-      <p class="mb-16">Try checking the spelling or using a different title.</p>
-    </div>
-  </section>
+                <p class="typo-body-regular text-gray-900">
+                  {{ t.translator }}
+                </p>
+              </div>
+            </li>
+          </ul>
+
+          <div v-else class="mt-8">
+            <p class="typo-body-bold">We didn’t find anything.</p>
+            <p class="mb-16">
+              Try checking the spelling or using a different title.
+            </p>
+          </div>
+        </section>
+      </div>
+    </template>
+  </NuxtLayout>
 </template>
