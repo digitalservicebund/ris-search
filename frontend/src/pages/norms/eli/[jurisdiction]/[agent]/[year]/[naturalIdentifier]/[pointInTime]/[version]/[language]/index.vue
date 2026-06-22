@@ -298,7 +298,7 @@ const fassungenDateFilterInputId = useId();
               <div class="my-16 md:my-24">
                 <label
                   :for="fassungenDateFilterInputId"
-                  class="typo-label-regular"
+                  class="typo-label2-regular"
                   >Gültig am</label
                 >
                 <DateInput
@@ -363,7 +363,7 @@ const fassungenDateFilterInputId = useId();
   @apply mb-16 ml-16 lg:pl-32;
 
   &.level-1 {
-    @apply typo-label-bold ml-0;
+    @apply typo-label1-bold ml-0;
   }
 
   &.level-5 {

@@ -95,7 +95,7 @@ function submitUnlessLoading() {
 
 <template>
   <search class="flex flex-col gap-8">
-    <p class="typo-label-bold" aria-hidden="true">
+    <p class="typo-label1-bold" aria-hidden="true">
       In {{ formattedCount }} {{ formattedDocumentKind }} suchen
     </p>
 
@@ -128,7 +128,7 @@ function submitUnlessLoading() {
     </form>
 
     <div class="hidden lg:block">
-      <p class="typo-label-bold mb-8">
+      <p class="typo-label1-bold mb-8">
         Diese Datenfelder können gezielt durchsucht werden:
       </p>
 

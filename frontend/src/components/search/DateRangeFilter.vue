@@ -73,7 +73,7 @@ const toDate = computed({
 <template>
   <div class="flex flex-col gap-16">
     <span class="flex flex-col gap-8">
-      <label :id="dateModeLabelId" class="typo-label-regular">Zeitraum</label>
+      <label :id="dateModeLabelId" class="typo-label2-regular">Zeitraum</label>
       <Select
         v-model="selectedType"
         :aria-labelledby="dateModeLabelId"
@@ -88,7 +88,7 @@ const toDate = computed({
     </span>
 
     <div v-if="showFromField" class="flex flex-col gap-8">
-      <label :for="fromDateId" class="typo-label-regular">
+      <label :for="fromDateId" class="typo-label2-regular">
         <template v-if="hasMultipleInputs">Ab dem Datum</template>
         <template v-else>Datum</template>
       </label>
@@ -96,7 +96,7 @@ const toDate = computed({
     </div>
 
     <div v-if="showToField" class="flex flex-col gap-8">
-      <label :for="toDateId" class="typo-label-regular">
+      <label :for="toDateId" class="typo-label2-regular">
         <template v-if="hasMultipleInputs">Bis zum Datum</template>
         <template v-else>Datum</template>
       </label>

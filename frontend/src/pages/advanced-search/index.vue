@@ -237,7 +237,7 @@ watch(searchStatus, async (newStatus, oldStatus) => {
           aria-label="Filter"
         >
           <fieldset class="mb-40">
-            <legend class="typo-label-regular mb-8">Dokumentart</legend>
+            <legend class="typo-label1-regular mb-8">Dokumentart</legend>
             <PanelMenu
               :model="documentKindMenuItems"
               :expanded-keys="{ [documentKind]: true }"
@@ -284,7 +284,7 @@ watch(searchStatus, async (newStatus, oldStatus) => {
               />
 
               <div class="flex items-center gap-8">
-                <label :id="itemsPerPageLabelId" class="typo-label-regular">
+                <label :id="itemsPerPageLabelId" class="typo-label2-regular">
                   Einträge pro Seite
                 </label>
                 <Select
@@ -305,6 +305,7 @@ watch(searchStatus, async (newStatus, oldStatus) => {
                 <li
                   v-for="(searchResult, order) in searchResults.member"
                   :key="getIdentifier(searchResult.item)"
+                  class="my-32"
                 >
                   <SearchResult :search-result :order />
                 </li>

@@ -167,7 +167,7 @@ const hasMultipleInputs = computed(() => show.value.after && show.value.before);
 <template>
   <div class="flex flex-col gap-16">
     <span class="flex flex-col gap-8">
-      <label :id="yearModeLabelId" class="typo-label-regular">Zeitraum</label>
+      <label :id="yearModeLabelId" class="typo-label2-regular">Zeitraum</label>
       <Select
         :model-value="mode"
         :aria-labelledby="yearModeLabelId"
@@ -183,12 +183,12 @@ const hasMultipleInputs = computed(() => show.value.after && show.value.before);
     </span>
 
     <div v-if="show.equal" class="flex flex-col gap-8">
-      <label class="typo-label-regular" :for="yearEqualId">Jahr</label>
+      <label class="typo-label2-regular" :for="yearEqualId">Jahr</label>
       <YearInput :id="yearEqualId" :key v-model="yearEqual" />
     </div>
 
     <div v-if="show.after" class="flex flex-col gap-8">
-      <label class="typo-label-regular" :for="yearAfterId">
+      <label class="typo-label2-regular" :for="yearAfterId">
         <template v-if="hasMultipleInputs">Ab dem Jahr</template>
         <template v-else>Jahr</template>
       </label>
@@ -196,7 +196,7 @@ const hasMultipleInputs = computed(() => show.value.after && show.value.before);
     </div>
 
     <div v-if="show.before" class="flex flex-col gap-8">
-      <label class="typo-label-regular" :for="yearBeforeId">
+      <label class="typo-label2-regular" :for="yearBeforeId">
         <template v-if="hasMultipleInputs">Bis zum Jahr</template>
         <template v-else>Jahr</template>
       </label>

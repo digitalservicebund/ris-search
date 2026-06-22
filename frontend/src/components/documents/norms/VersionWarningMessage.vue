@@ -79,7 +79,7 @@ const versionLink = computed<
       </template>
 
       <p>
-        <span :id="versionTextId" class="typo-label-bold">{{
+        <span :id="versionTextId" class="typo-label1-bold">{{
           versionText
         }}</span
         >{{ " " }}

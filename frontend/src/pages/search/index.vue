@@ -218,7 +218,7 @@ watch(searchStatus, async (newStatus, oldStatus) => {
           Zu den Ergebnissen
         </SkipLink>
 
-        <p v-if="privateFeaturesEnabled" class="typo-label-regular mt-8">
+        <p v-if="privateFeaturesEnabled" class="typo-label1-regular mt-8">
           Mehr Suchoptionen finden Sie unter
           <NuxtLink :to="{ name: 'advanced-search' }" class="typo-link-bold">
             Erweiterte Suche
@@ -229,7 +229,7 @@ watch(searchStatus, async (newStatus, oldStatus) => {
           <aside class="pb-10 lg:w-3/12" :aria-labelledby="filterHeadingId">
             <h2
               :id="filterHeadingId"
-              class="typo-label-regular flex h-48 items-center"
+              class="typo-label1-regular flex h-48 items-center"
             >
               Filter
             </h2>
@@ -280,14 +280,17 @@ watch(searchStatus, async (newStatus, oldStatus) => {
                 <output
                   aria-atomic="true"
                   aria-live="polite"
-                  class="typo-label-regular"
+                  class="typo-label1-regular"
                 >
                   {{ isLoading ? "Lade ..." : formattedResultCount }}
                 </output>
 
                 <div class="flex flex-wrap gap-x-32 gap-y-16">
                   <div class="flex items-center gap-8">
-                    <label :id="itemsPerPageLabelId" class="typo-label-regular">
+                    <label
+                      :id="itemsPerPageLabelId"
+                      class="typo-label2-regular"
+                    >
                       Einträge pro Seite
                     </label>
                     <Select

@@ -128,7 +128,7 @@ function trackResultClick() {
         <span
           v-if="section.text"
           data-testid="highlighted-field"
-          class="typo-label-regular"
+          class="typo-label1-regular"
           v-html="section.text"
         />
       </div>

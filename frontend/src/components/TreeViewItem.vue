@@ -195,7 +195,7 @@ function onToggleDeep() {
   }
 
   .header {
-    @apply text-gray-1000 typo-label-regular mb-2 flex gap-8 border-l-4 border-l-transparent py-8 pr-8 pl-12 hover:border-blue-500 hover:bg-blue-200 active:border-blue-800 active:bg-blue-300;
+    @apply text-gray-1000 typo-label1-regular mb-2 flex gap-8 border-l-4 border-l-transparent py-8 pr-8 pl-12 hover:border-blue-500 hover:bg-blue-200 active:border-blue-800 active:bg-blue-300;
   }
 
   .content {
@@ -206,7 +206,7 @@ function onToggleDeep() {
     }
 
     .subtitle {
-      @apply typo-label-regular text-gray-900;
+      @apply typo-label1-regular text-gray-900;
     }
 
     .title:hover,
@@ -242,7 +242,7 @@ function onToggleDeep() {
     }
 
     .content .title {
-      @apply typo-label-bold;
+      @apply typo-label1-bold;
     }
   }
 
@@ -264,11 +264,11 @@ function onToggleDeep() {
       }
 
       .title {
-        @apply typo-label-bold flex-none;
+        @apply typo-label1-bold flex-none;
       }
 
       .subtitle {
-        @apply typo-label-regular text-gray-1000;
+        @apply typo-label1-regular text-gray-1000;
       }
 
       &:hover {
@@ -286,7 +286,7 @@ function onToggleDeep() {
 
     .content {
       .title {
-        @apply typo-label-bold flex-none;
+        @apply typo-label1-bold flex-none;
       }
 
       .subtitle {
@@ -295,7 +295,7 @@ function onToggleDeep() {
     }
 
     &:not([aria-expanded]) .title {
-      @apply typo-label-bold;
+      @apply typo-label1-bold;
     }
   }
 

@@ -116,7 +116,7 @@ watch(
         </div>
 
         <div class="text-field">
-          <label :for="feedbackMessageId" class="typo-label-regular">
+          <label :for="feedbackMessageId" class="typo-label2-regular">
             Feedback
           </label>
           <Textarea
