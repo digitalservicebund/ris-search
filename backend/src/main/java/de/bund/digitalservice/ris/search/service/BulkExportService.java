@@ -35,7 +35,7 @@ public class BulkExportService {
   private final String prefix;
   private final Predicate<String> keyFilter;
   public static final String BULK_ZIP_PREFIX = "snapshots/";
-  public static final String JOB_STATE_STORAGE_PREFIX = "last-snapshot-runs/";
+  public static final String JOB_STATE_STORAGE_PREFIX = "snapshot-job-state/";
 
   private final String archivePrefix;
 

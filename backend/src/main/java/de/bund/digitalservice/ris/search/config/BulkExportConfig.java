@@ -8,7 +8,6 @@ import de.bund.digitalservice.ris.search.repository.objectstorage.PublicFilesBuc
 import de.bund.digitalservice.ris.search.service.BulkExportJob;
 import de.bund.digitalservice.ris.search.service.BulkExportService;
 import de.bund.digitalservice.ris.search.service.ChangelogService;
-import java.time.Clock;
 import java.util.function.Predicate;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,7 +33,6 @@ public class BulkExportConfig {
         new BulkExportService(
             source, target, DocumentKind.LEGISLATION.getBulkZipPath(), "eli", key -> true),
         portalBucket,
-        Clock.systemDefaultZone(),
         "legislation",
         changelogService);
   }
@@ -56,7 +54,6 @@ public class BulkExportConfig {
         new BulkExportService(
             source, target, DocumentKind.CASE_LAW.getBulkZipPath(), "", filterChangelogFiles()),
         portalBucket,
-        Clock.systemDefaultZone(),
         "legislation",
         changelogService);
   }

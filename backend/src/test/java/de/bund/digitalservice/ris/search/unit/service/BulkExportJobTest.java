@@ -50,7 +50,7 @@ class BulkExportJobTest {
     when(changelogMock.getChangesBetween(any(), any())).thenReturn(noChangeChangelog);
 
     BulkExportJob job =
-        new BulkExportJob(exportService, portalBucketMock, clock, outputName, changelogMock);
+        new BulkExportJob(exportService, portalBucketMock, outputName, changelogMock);
 
     var actual = job.runJob();
     assertThat(actual).isEqualTo(Job.ReturnCode.SUCCESS);
@@ -69,7 +69,7 @@ class BulkExportJobTest {
     when(changelogMock.getChangesBetween(any(), any())).thenReturn(changelog);
 
     BulkExportJob job =
-        new BulkExportJob(exportService, portalBucketMock, clock, outputName, changelogMock);
+        new BulkExportJob(exportService, portalBucketMock, outputName, changelogMock);
 
     var actual = job.runJob();
     assertThat(actual).isEqualTo(Job.ReturnCode.SUCCESS);
@@ -88,10 +88,10 @@ class BulkExportJobTest {
     when(changelogMock.getChangesBetween(any(), any())).thenReturn(changelog);
 
     BulkExportJob job =
-        new BulkExportJob(exportService, portalBucketMock, clock, outputName, changelogMock);
+        new BulkExportJob(exportService, portalBucketMock, outputName, changelogMock);
 
     job.runJob();
     verify(exportService, times(1)).deleteArchives();
-    verify(exportService, times(1)).runJob(clock.instant());
+    verify(exportService, times(1)).runJob(any());
   }
 }
