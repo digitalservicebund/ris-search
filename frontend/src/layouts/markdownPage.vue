@@ -39,7 +39,7 @@ see: https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@scope 
   }
 
   h1 {
-    @apply typo-headline1-regular pb-24 hyphens-auto max-sm:leading-48 md:hyphens-none;
+    @apply ris-heading3-bold md:ris-heading2-bold pb-8 hyphens-auto max-sm:leading-48 md:hyphens-none 2xl:text-[2.5rem];
   }
 
   h2 {
