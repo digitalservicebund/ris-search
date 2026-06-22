@@ -19,7 +19,7 @@ const hasHeading = computed(() => !!props.htmlParts?.heading);
 const normTitle = computed(() => getNormTitle(props.metadata));
 </script>
 <template>
-  <div class="dokumentenkopf mt-24 mb-48">
+  <div class="dokumentenkopf mb-48">
     <hgroup>
       <p
         v-if="hasHeading"
