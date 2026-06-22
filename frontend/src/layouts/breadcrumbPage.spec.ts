@@ -3,7 +3,7 @@ import { screen } from "@testing-library/vue";
 import { describe, it, expect } from "vitest";
 import BreadcrumbPageLayout from "./breadcrumbPage.vue";
 
-describe("content", () => {
+describe("breadcrumbPage", () => {
   it("renders default slot content", async () => {
     await renderSuspended(BreadcrumbPageLayout, {
       slots: { default: "<p>Page content</p>" },
