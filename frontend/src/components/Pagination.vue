@@ -104,8 +104,8 @@ const itemsOnPage = computed(() => buildItemsOnPageString(props.page));
     aria-label="Paginierung"
     class="flex flex-col items-center"
     :class="{
-      'mt-20': props.navigationPosition === 'bottom',
-      'mb-20': props.navigationPosition === 'top',
+      'mt-48': props.navigationPosition === 'bottom',
+      'mb-48': props.navigationPosition === 'top',
     }"
   >
     <div class="flex w-full items-center">

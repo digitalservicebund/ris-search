@@ -204,9 +204,7 @@ watch(searchStatus, async (newStatus, oldStatus) => {
     </template>
     <template #default>
       <div class="wrapper pb-32 md:pb-56">
-        <div class="pb-24">
-          <h1 class="typo-headline1-bold inline-block">Suche</h1>
-        </div>
+        <h1 class="typo-headline1-bold inline-block pb-8">Suche</h1>
 
         <div id="search">
           <SearchSimpleSearchInput
@@ -216,9 +214,9 @@ watch(searchStatus, async (newStatus, oldStatus) => {
           />
         </div>
 
-        <SkipLink to="#search-results" class="mt-8"
-          >Zu den Ergebnissen</SkipLink
-        >
+        <SkipLink to="#search-results" class="mt-8">
+          Zu den Ergebnissen
+        </SkipLink>
 
         <p v-if="privateFeaturesEnabled" class="typo-label-regular mt-8">
           Mehr Suchoptionen finden Sie unter
@@ -227,7 +225,7 @@ watch(searchStatus, async (newStatus, oldStatus) => {
           </NuxtLink>
         </p>
 
-        <div class="mt-24 flex flex-col gap-48 lg:flex-row">
+        <div class="mt-32 flex flex-col gap-48 md:mt-48 lg:flex-row">
           <aside class="pb-10 lg:w-3/12" :aria-labelledby="filterHeadingId">
             <h2
               :id="filterHeadingId"
@@ -334,6 +332,7 @@ watch(searchStatus, async (newStatus, oldStatus) => {
                   <li
                     v-for="(searchResult, index) in searchResults.member"
                     :key="getIdentifier(searchResult.item)"
+                    class="my-32"
                   >
                     <SearchResult :search-result :order="index" />
                   </li>
