@@ -233,7 +233,7 @@ const fassungenDateFilterInputId = useId();
           role="tabpanel"
           :aria-labelledby="detailsTabPanelTitleId"
         >
-          <div class="wrapper pt-32 pb-32 lg:pb-56">
+          <div class="wrapper pt-32 pb-32 md:pb-56">
             <h2 :id="detailsTabPanelTitleId" class="typo-headline3-bold">
               Details
             </h2>
@@ -288,7 +288,7 @@ const fassungenDateFilterInputId = useId();
           role="tabpanel"
           :aria-labelledby="fassungenTabPanelTitleId"
         >
-          <div class="wrapper pt-32 pb-32 lg:pb-56">
+          <div class="wrapper pt-32 pb-32 md:pb-56">
             <template v-if="privateFeaturesEnabled">
               <h2 :id="fassungenTabPanelTitleId" class="typo-headline3-bold">
                 Fassungen
