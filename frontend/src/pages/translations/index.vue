@@ -93,12 +93,14 @@ const translationsListId = useId();
       </div>
     </template>
     <template #default>
-      <div class="wrapper pb-32 lg:pb-64">
-        <section class="mt-24 max-w-prose space-y-24">
+      <div class="wrapper pb-32 md:pb-56">
+        <section
+          class="mt-24 max-w-prose space-y-24 md:space-y-32 2xl:space-y-48"
+        >
           <h1 class="typo-headline1-bold overflow-x-auto">
             English Translations of German Federal Laws and Regulations
           </h1>
-          <p>
+          <p class="mb-8">
             We provide translations of our German content to help you. Please
             note that the original German versions are the only authoritative
             source.
@@ -131,7 +133,7 @@ const translationsListId = useId();
             <li
               v-for="t in sortedTranslations"
               :key="t['@id']"
-              class="bg-white px-32 py-24"
+              class="bg-white p-16 sm:py-24 md:px-24 lg:px-32"
             >
               <div class="flex max-w-prose flex-col gap-8">
                 <SearchResultHeader
