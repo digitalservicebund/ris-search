@@ -66,11 +66,11 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
       />
       <Message
         severity="warn"
-        class="typo-body-regular"
+        class="ris-body2-regular"
         role="status"
         aria-live="off"
       >
-        <p class="typo-body-bold mt-2">
+        <p class="ris-body2-bold mt-2">
           Dieser Service befindet sich in der Testphase.
         </p>
         <p>

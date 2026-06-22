@@ -316,11 +316,11 @@ watch(searchStatus, async (newStatus, oldStatus) => {
 
                 <Message
                   severity="warn"
-                  class="typo-body-regular mt-16 max-w-prose"
+                  class="ris-body2-regular mt-16 max-w-prose"
                   role="status"
                   aria-live="off"
                 >
-                  <p class="typo-body-bold mt-2">
+                  <p class="ris-body2-bold mt-2">
                     Dieser Service befindet sich in der Testphase.
                   </p>
                   <p>

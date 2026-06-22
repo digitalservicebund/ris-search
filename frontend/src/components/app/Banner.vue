@@ -5,18 +5,18 @@ import IconWarningAmber from "~icons/ic/outline-warning-amber";
 <template>
   <div
     role="status"
-    class="typo-body-regular bg-yellow-200 py-16 text-pretty print:hidden"
+    class="ris-body2-regular bg-yellow-200 py-16 text-pretty print:hidden"
   >
     <div class="wrapper flex gap-8">
       <IconWarningAmber class="shrink-0" />
       <div>
         <p>
-          <span class="typo-body-bold">
+          <span class="ris-body2-bold">
             Dieser Service befindet sich in der Testphase.
           </span>
           Testen Sie erste Funktionen und geben Sie Feedback für die
           Weiterentwicklung.
-          <NuxtLink class="typo-link-regular" :to="{ name: 'about' }">
+          <NuxtLink class="ris-link2-regular" :to="{ name: 'about' }">
             Erfahren Sie mehr über die Testphase
           </NuxtLink>
         </p>
