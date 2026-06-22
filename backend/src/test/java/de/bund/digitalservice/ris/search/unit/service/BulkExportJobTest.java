@@ -15,9 +15,7 @@ import de.bund.digitalservice.ris.search.service.BulkExportJob;
 import de.bund.digitalservice.ris.search.service.BulkExportService;
 import de.bund.digitalservice.ris.search.service.ChangelogService;
 import de.bund.digitalservice.ris.search.service.Job;
-import java.time.Clock;
 import java.time.Instant;
-import java.time.ZoneId;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -34,13 +32,9 @@ class BulkExportJobTest {
   @Mock ObjectStorage sourceBucket;
   @Mock BulkExportService exportService;
 
-  private static final Clock clock =
-      Clock.fixed(Instant.parse("2024-01-01T12:00:00.123Z"), ZoneId.of("UTC"));
-
   @Test
   void runJob_returnsEarlyWhenNoChangesAreDetected() {
     String outputName = "test-export";
-    String prefix = "some/path/";
 
     when(portalBucketMock.getFileAsString(JOB_STATE_STORAGE_PREFIX + outputName))
         .thenReturn(Optional.of("2024-01-01T12:00:00Z"));
@@ -54,15 +48,15 @@ class BulkExportJobTest {
 
     var actual = job.runJob();
     assertThat(actual).isEqualTo(Job.ReturnCode.SUCCESS);
-    verify(sourceBucket, never()).getAllKeysByPrefix(prefix);
+    verify(sourceBucket, never()).getAllKeysByPrefix(any());
   }
 
   @Test
-  void runJob_returnsEarlyWhenOutsideRerunWindow() {
+  void runJob_returnsEarlyWhenBeforeRegenerationTime() {
     String outputName = "test-export";
 
     when(portalBucketMock.getFileAsString(JOB_STATE_STORAGE_PREFIX + outputName))
-        .thenReturn(Optional.of("2024-01-01T12:00:00Z"));
+        .thenReturn(Optional.of(Instant.now().minusSeconds(3600).toString()));
 
     Changelog changelog =
         new Changelog(new HashSet<>(List.of("something.xml")), new HashSet<>(List.of()), false);
@@ -73,7 +67,7 @@ class BulkExportJobTest {
 
     var actual = job.runJob();
     assertThat(actual).isEqualTo(Job.ReturnCode.SUCCESS);
-    verify(exportService, never()).runJob(clock.instant());
+    verify(exportService, never()).runJob(any());
   }
 
   @Test

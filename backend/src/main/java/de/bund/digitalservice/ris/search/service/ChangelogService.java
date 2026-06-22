@@ -96,9 +96,11 @@ public class ChangelogService<T extends ObjectStorage> {
    *
    * @param from the starting timestamp boundary (inclusive)
    * @param to the ending timestamp boundary (inclusive)
+   * @throws de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException If an error
+   *     occurs while accessing the object storage.
    * @return Changelog object including all changes that were indexed
    */
-  public Changelog getChangesBetween(Instant from, Instant to) {
+  public Changelog getChangesBetween(Instant from, Instant to) throws ObjectStoreServiceException {
 
     var changelogs =
         bucket.getAllKeysByPrefix(CHANGELOGS_PREFIX).stream()
@@ -119,25 +121,22 @@ public class ChangelogService<T extends ObjectStorage> {
   }
 
   /**
-   * Parses multiple changelog files from the given object storage and converts its content to a
-   * List of {@link de.bund.digitalservice.ris.search.importer.changelog.Changelog} objects.
+   * Parses multiple changelog files from the given object storage and collapses them into a single
+   * changelog
    *
-   * <p>The method fetches the file content from the object storage using the provided filename. If
-   * no content is found, or if there is an error during parsing, the method logs an error and
-   * continues with the following files.
-   *
-   * @param filenames the list of changelogfiles to be parsed.
+   * @param filenames the list of changelog files to be collapsed.
    * @return A {@link de.bund.digitalservice.ris.search.importer.changelog.Changelog} object if
    *     parsing is successful, or null if the file could not be retrieved or parsed.
    * @throws de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException If an error
    *     occurs while accessing the object storage.
    */
-  public Changelog getChangesFromFiles(List<String> filenames) {
-    return foldChangelogs(getChangelogsFromFiles(filenames));
-  }
-
-  public List<Changelog> getChangelogsFromFiles(List<String> filenames) {
-    return filenames.stream().map(this::parseOneChangelog).flatMap(Optional::stream).toList();
+  public Changelog getChangesFromFiles(List<String> filenames) throws ObjectStoreServiceException {
+    return foldChangelogs(
+        filenames.stream()
+            .map(this::parseOneChangelog)
+            .flatMap(Optional::stream)
+            .sorted()
+            .toList());
   }
 
   /**
@@ -156,9 +155,12 @@ public class ChangelogService<T extends ObjectStorage> {
    * encountered the method short circuits and returns a changeAll=true changelog.
    *
    * @param changelogs the list of changelogs to merge
-   * @return the merged changelog
+   * @return the merged changelog or null if there are no changelogs
    */
   private Changelog foldChangelogs(List<Changelog> changelogs) {
+    if (changelogs.isEmpty()) {
+      return null;
+    }
     if (containsChangeAll(changelogs)) {
       return new Changelog(new HashSet<>(), new HashSet<>(), true);
     }

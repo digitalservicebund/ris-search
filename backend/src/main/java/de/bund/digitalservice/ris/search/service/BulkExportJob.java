@@ -10,7 +10,7 @@ import org.apache.logging.log4j.Logger;
 
 /**
  * Job to manage the lifecycle of zip snapshots. It creates snapshots a maximum of every 24 hours.
- * In case a document gets marked es deleted in its corresponding changelog service, the current
+ * In case a document gets marked as deleted in its corresponding changelog service, the current
  * snapshot gets deleted and recreated, even outside of the 24 hour window.
  */
 public class BulkExportJob implements Job {
@@ -74,7 +74,10 @@ public class BulkExportJob implements Job {
         }
       }
     }
-    exportService.runJob(jobStartTime);
+    boolean success = exportService.runJob(jobStartTime);
+    if (!success) {
+      return ReturnCode.ERROR;
+    }
     portalBucket.save(JOB_STATE_STORAGE_PREFIX + documentType, jobStartTime.toString());
     return ReturnCode.SUCCESS;
   }

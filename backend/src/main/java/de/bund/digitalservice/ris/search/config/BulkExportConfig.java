@@ -33,7 +33,7 @@ public class BulkExportConfig {
         new BulkExportService(
             source, target, DocumentKind.LEGISLATION.getBulkZipPath(), "eli", key -> true),
         portalBucket,
-        "legislation",
+        DocumentKind.LEGISLATION.getBulkZipPath(),
         changelogService);
   }
 
@@ -54,7 +54,7 @@ public class BulkExportConfig {
         new BulkExportService(
             source, target, DocumentKind.CASE_LAW.getBulkZipPath(), "", filterChangelogFiles()),
         portalBucket,
-        "legislation",
+        DocumentKind.CASE_LAW.getBulkZipPath(),
         changelogService);
   }
 
