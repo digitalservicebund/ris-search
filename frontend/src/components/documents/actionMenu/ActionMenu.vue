@@ -29,7 +29,7 @@ const handleDrawerItemClick = async (item: ActionMenuItem) => {
 </script>
 
 <template>
-  <div class="md:hidden" v-bind="$attrs">
+  <div class="md:hidden" v-bind="$attrs" data-breadcrumbs-adjust="actionmenu">
     <Button
       ref="drawerTriggerRef"
       aria-label="Aktionen anzeigen"
