@@ -34,7 +34,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
       >
         Testphase
       </div>
-      <h1 class="typo-headline1-regular wrap-break-word hyphens-auto">
+      <h1 class="typo-headline1-bold wrap-break-word hyphens-auto">
         Rechtsinformationen des Bundes
       </h1>
       <p class="typo-body-regular 2xl:ris-subhead-regular">
