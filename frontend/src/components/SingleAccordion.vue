@@ -34,7 +34,7 @@ const activePanel = computed({
     <AccordionPanel value="0">
       <AccordionHeader
         :pt="{
-          root: 'typo-label1-bold flex cursor-pointer flex-row items-center gap-8 text-blue-800 outline-blue-800 focus-visible:outline-4 mb-6 outline-offset-4',
+          root: 'typo-label2-bold flex cursor-pointer flex-row items-center gap-8 text-blue-800 outline-blue-800 focus-visible:outline-4 mb-6 outline-offset-4',
         }"
       >
         <template v-if="activePanel === '0'">

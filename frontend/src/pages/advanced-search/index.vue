@@ -223,7 +223,7 @@ watch(searchStatus, async (newStatus, oldStatus) => {
         class="wrapper grid grid-cols-1 gap-40 pb-32 md:pb-56 lg:grid-cols-[20rem_1fr] lg:gap-64"
       >
         <div class="lg:col-span-2">
-          <h1 class="typo-headline2-bold mb-16">Erweiterte Suche</h1>
+          <h1 class="typo-headline1-bold mb-16">Erweiterte Suche</h1>
           <p class="text-balance">
             Nutzen Sie die erweiterte Suche, um genau das zu finden, was Sie
             brauchen – ob im Leitsatz, Titel oder direkt im Volltext. Mit
