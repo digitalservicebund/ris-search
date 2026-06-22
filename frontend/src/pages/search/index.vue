@@ -198,7 +198,7 @@ watch(searchStatus, async (newStatus, oldStatus) => {
 </script>
 
 <template>
-  <NuxtLayout name="content">
+  <NuxtLayout name="breadcrumb-page">
     <template #breadcrumb>
       <Breadcrumbs :items="[{ label: 'Suche' }]" />
     </template>

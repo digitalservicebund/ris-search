@@ -153,7 +153,7 @@ const fassungenDateFilterInputId = useId();
 </script>
 
 <template>
-  <NuxtLayout name="content">
+  <NuxtLayout name="breadcrumb-page">
     <template #breadcrumb>
       <div class="flex items-center gap-4 md:gap-16 print:hidden">
         <Breadcrumbs :items="breadcrumbItems" class="grow" />

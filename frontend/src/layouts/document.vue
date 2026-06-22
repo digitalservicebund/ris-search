@@ -3,7 +3,7 @@ import { Tab, TabList, Tabs } from "primevue";
 import { NuxtLink } from "#components";
 import type { BreadcrumbItem } from "~/components/Breadcrumbs.vue";
 import type { MetadataItem } from "~/components/Metadata.vue";
-import ContentLayout from "./content.vue";
+import BreadcrumbPageLayout from "./breadcrumbPage.vue";
 
 export type DocumentView = {
   label: string;
@@ -29,7 +29,7 @@ const currentView = computed(
 </script>
 
 <template>
-  <ContentLayout>
+  <BreadcrumbPageLayout>
     <template #breadcrumb>
       <div class="flex items-center gap-4 md:gap-16 print:hidden">
         <Breadcrumbs :items="breadcrumbs" class="grow" />
@@ -93,5 +93,5 @@ const currentView = computed(
         </div>
       </div>
     </template>
-  </ContentLayout>
+  </BreadcrumbPageLayout>
 </template>

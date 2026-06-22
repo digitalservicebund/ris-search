@@ -86,7 +86,7 @@ const translationsListId = useId();
 </script>
 
 <template>
-  <NuxtLayout name="content">
+  <NuxtLayout name="breadcrumb-page">
     <template #breadcrumb>
       <div class="print:hidden">
         <Breadcrumbs :items="breadcrumbItems" />

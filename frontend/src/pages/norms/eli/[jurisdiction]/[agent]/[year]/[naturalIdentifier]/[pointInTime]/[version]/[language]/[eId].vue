@@ -196,7 +196,7 @@ const metadataItems = computed(() => {
 </script>
 
 <template>
-  <NuxtLayout name="content">
+  <NuxtLayout name="breadcrumb-page">
     <template #breadcrumb>
       <div>
         <div class="md:hidden">

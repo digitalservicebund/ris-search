@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ContentLayout from "./content.vue";
+import BreadcrumbPageLayout from "./breadcrumbPage.vue";
 
 defineProps<{
   staticContent: string;
@@ -7,7 +7,7 @@ defineProps<{
 </script>
 
 <template>
-  <ContentLayout>
+  <BreadcrumbPageLayout>
     <template #breadcrumb>
       <slot name="breadcrumb" />
     </template>
@@ -19,7 +19,7 @@ defineProps<{
         </div>
       </div>
     </template>
-  </ContentLayout>
+  </BreadcrumbPageLayout>
 </template>
 
 <style>
