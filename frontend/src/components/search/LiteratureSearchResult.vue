@@ -57,7 +57,7 @@ function trackResultClick() {
 </script>
 
 <template>
-  <div class="my-36 flex flex-col gap-8 hyphens-auto">
+  <div class="flex flex-col gap-8 hyphens-auto">
     <SearchResultHeader :icon="OutlineBookIcon" :items="headerItems" />
     <NuxtLink
       :to="detailPageRoute"
@@ -70,7 +70,7 @@ function trackResultClick() {
       </h2>
     </NuxtLink>
 
-    <div class="flex w-full flex-col gap-6">
+    <div v-if="previewSections.length" class="flex w-full flex-col gap-6">
       <div v-for="section in previewSections" :key="section.id">
         <NuxtLink
           :to="{ ...detailPageRoute, hash: `#${section.id}` }"
