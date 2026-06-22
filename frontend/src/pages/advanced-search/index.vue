@@ -274,14 +274,13 @@ watch(searchStatus, async (newStatus, oldStatus) => {
             <div
               class="mb-32 flex flex-col gap-16 md:flex-row md:items-center md:gap-48"
             >
-              <span class="typo-headline3-regular mr-auto text-nowrap">
+              <output
+                aria-atomic="true"
+                aria-live="polite"
+                class="typo-label2-regular mr-auto text-nowrap"
+              >
                 {{ formattedResultCount }}
-              </span>
-              <SearchSortSelect
-                :model-value="sort"
-                :document-kind
-                @update:model-value="updateSort"
-              />
+              </output>
 
               <div class="flex items-center gap-8">
                 <label :id="itemsPerPageLabelId" class="typo-label2-regular">
@@ -294,6 +293,12 @@ watch(searchStatus, async (newStatus, oldStatus) => {
                   @update:model-value="updateItemsPerPage"
                 />
               </div>
+
+              <SearchSortSelect
+                :model-value="sort"
+                :document-kind
+                @update:model-value="updateSort"
+              />
             </div>
 
             <div class="max-w-prose">
