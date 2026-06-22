@@ -52,7 +52,7 @@
     "@vue/test-utils": "2.4.11",
     "axe-html-reporter": "2.2.11",
     "jsdom": "29.1.1",
-    "license-checker-rseidelsohn": "4.4.2",
+    "license-checker-rseidelsohn": "5.0.1",
     "openapi-typescript": "7.13.0",
     "oxfmt": "0.55.0",
     "oxlint": "1.70.0",
