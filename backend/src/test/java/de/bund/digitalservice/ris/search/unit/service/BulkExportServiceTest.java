@@ -33,7 +33,7 @@ class BulkExportServiceTest {
       Clock.fixed(Instant.parse("2024-01-01T12:00:00.123Z"), ZoneId.of("UTC"));
 
   @Test
-  void runJob_successfulZipAndUpload() throws IOException {
+  void updateLatestZip_successfulZipAndUpload() throws IOException {
     ObjectStorage sourceBucket = mock(ObjectStorage.class);
     ObjectStorage destinationBucket = mock(ObjectStorage.class);
     String outputName = "test-export";
@@ -60,7 +60,7 @@ class BulkExportServiceTest {
     BulkExportService bulkExportService =
         new BulkExportService(sourceBucket, destinationBucket, outputName, prefix, key -> true);
 
-    boolean actual = bulkExportService.runJob(clock.instant());
+    boolean actual = bulkExportService.updateLatestZip(clock.instant());
     assertThat(actual).isTrue();
 
     verify(sourceBucket, times(1)).getAllKeysByPrefix(prefix);
@@ -79,7 +79,7 @@ class BulkExportServiceTest {
   }
 
   @Test
-  void runJob_withObsoleteFiles_shouldDeleteThem() throws IOException {
+  void updateLatestZip_withObsoleteFiles_shouldDeleteThem() throws IOException {
     ObjectStorage sourceBucket = mock(ObjectStorage.class);
     ObjectStorage destinationBucket = mock(ObjectStorage.class);
     String outputName = "test-export";
@@ -100,7 +100,7 @@ class BulkExportServiceTest {
     BulkExportService bulkExportService =
         new BulkExportService(sourceBucket, destinationBucket, outputName, prefix, key -> true);
 
-    boolean actual = bulkExportService.runJob(clock.instant());
+    boolean actual = bulkExportService.updateLatestZip(clock.instant());
     assertThat(actual).isTrue();
 
     verify(sourceBucket, times(1)).getAllKeysByPrefix(prefix);
@@ -112,7 +112,7 @@ class BulkExportServiceTest {
   }
 
   @Test
-  void runJob_sourceBucketThrowsIOException_shouldPropagateException()
+  void updateLatestZip_sourceBucketThrowsIOException_shouldPropagateException()
       throws IOException, NoSuchKeyException {
     ObjectStorage sourceBucket = mock(ObjectStorage.class);
     ObjectStorage destinationBucket = mock(ObjectStorage.class);
@@ -126,7 +126,7 @@ class BulkExportServiceTest {
         new BulkExportService(sourceBucket, destinationBucket, outputName, prefix, key -> true);
 
     Instant timestamp = clock.instant();
-    assertThrows(RuntimeException.class, () -> bulkExportService.runJob(timestamp));
+    assertThrows(RuntimeException.class, () -> bulkExportService.updateLatestZip(timestamp));
 
     verify(sourceBucket, times(0)).getStream(anyString());
     verify(destinationBucket, times(0)).putStream(anyString(), any(InputStream.class));
@@ -134,7 +134,7 @@ class BulkExportServiceTest {
   }
 
   @Test
-  void runJob_destinationBucketPutStreamThrowsIOException_shouldReturnWithFalse()
+  void updateLatestZip_destinationBucketPutStreamThrowsIOException_shouldReturnWithFalse()
       throws IOException {
     ObjectStorage sourceBucket = mock(ObjectStorage.class);
     ObjectStorage destinationBucket = mock(ObjectStorage.class);
@@ -149,12 +149,12 @@ class BulkExportServiceTest {
         new BulkExportService(
             sourceBucket, destinationBucket, "test-export", "some/prefix/", key -> true);
 
-    boolean actual = bulkExportService.runJob(clock.instant());
+    boolean actual = bulkExportService.updateLatestZip(clock.instant());
     assertThat(actual).isFalse();
   }
 
   @Test
-  void runJob_onEmptyFiles_shouldReturnEarlyWithFalse() {
+  void updateLatestZip_onEmptyFiles_shouldReturnEarlyWithFalse() {
     ObjectStorage sourceBucket = mock(ObjectStorage.class);
     ObjectStorage destinationBucket = mock(ObjectStorage.class);
 
@@ -164,12 +164,12 @@ class BulkExportServiceTest {
         new BulkExportService(
             sourceBucket, destinationBucket, "test-export", "some/prefix/", key -> false);
 
-    boolean actual = bulkExportService.runJob(clock.instant());
+    boolean actual = bulkExportService.updateLatestZip(clock.instant());
     assertThat(actual).isFalse();
   }
 
   @Test
-  void runJob_whenContentOfKeyIsNotFound_shouldReturnWithErrorCode() {
+  void updateLatestZip_whenContentOfKeyIsNotFound_shouldReturnWithErrorCode() {
     ObjectStorage sourceBucket = mock(ObjectStorage.class);
     ObjectStorage destinationBucket = mock(ObjectStorage.class);
 
@@ -180,7 +180,7 @@ class BulkExportServiceTest {
         new BulkExportService(
             sourceBucket, destinationBucket, "test-export", "some/prefix/", key -> true);
 
-    boolean actual = bulkExportService.runJob(clock.instant());
+    boolean actual = bulkExportService.updateLatestZip(clock.instant());
     assertThat(actual).isFalse();
   }
 }

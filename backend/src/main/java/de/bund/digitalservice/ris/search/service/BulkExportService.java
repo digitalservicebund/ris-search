@@ -68,7 +68,7 @@ public class BulkExportService {
    * @param timestamp start of the snapshot creation
    * @return true if successful, false on error
    */
-  public boolean runJob(Instant timestamp) {
+  public boolean updateLatestZip(Instant timestamp) {
     String resultObjectKey = archivePrefix + "_" + timestamp + ".zip";
     // collect already existing archive to be deleted after a successful snapshot or a detected file
     // deletion

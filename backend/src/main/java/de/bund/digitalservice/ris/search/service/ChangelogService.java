@@ -8,7 +8,6 @@ import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
 import java.time.Instant;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -122,7 +121,7 @@ public class ChangelogService<T extends ObjectStorage> {
 
   /**
    * Parses multiple changelog files from the given object storage and collapses them into a single
-   * changelog
+   * changelog. If no changes occurred the changed and deleted lists will be empty.
    *
    * @param filenames the list of changelog files to be collapsed.
    * @return A {@link de.bund.digitalservice.ris.search.importer.changelog.Changelog} object if
@@ -133,9 +132,9 @@ public class ChangelogService<T extends ObjectStorage> {
   public Changelog getChangesFromFiles(List<String> filenames) throws ObjectStoreServiceException {
     return foldChangelogs(
         filenames.stream()
+            .sorted()
             .map(this::parseOneChangelog)
             .flatMap(Optional::stream)
-            .sorted()
             .toList());
   }
 
@@ -152,17 +151,17 @@ public class ChangelogService<T extends ObjectStorage> {
   /**
    * Folds multiple changelogs into a single changelog. If a file is marked as changed and deleted
    * in the same changelog, it will be marked as deleted. When a changelog with changeAll is
-   * encountered the method short circuits and returns a changeAll=true changelog.
+   * encountered the method short circuits and returns a changeAll=true changelog. When no changes
+   * are present the changed and deleted lists are empty.
    *
    * @param changelogs the list of changelogs to merge
-   * @return the merged changelog or null if there are no changelogs
+   * @return the merged changelog
    */
   private Changelog foldChangelogs(List<Changelog> changelogs) {
-    if (changelogs.isEmpty()) {
-      return null;
-    }
+    Changelog result = new Changelog();
     if (containsChangeAll(changelogs)) {
-      return new Changelog(new HashSet<>(), new HashSet<>(), true);
+      result.setChangeAll(true);
+      return result;
     }
 
     enum Action {
@@ -174,16 +173,15 @@ public class ChangelogService<T extends ObjectStorage> {
       log.getChanged().forEach(filename -> mergedChanges.put(filename, Action.CHANGED));
       log.getDeleted().forEach(filename -> mergedChanges.put(filename, Action.DELETED));
     }
-    Changelog mergedChangelog = new Changelog();
     mergedChanges.forEach(
         (id, type) -> {
           if (Action.CHANGED.equals(type)) {
-            mergedChangelog.getChanged().add(id);
+            result.getChanged().add(id);
           } else {
-            mergedChangelog.getDeleted().add(id);
+            result.getDeleted().add(id);
           }
         });
 
-    return mergedChangelog;
+    return result;
   }
 }

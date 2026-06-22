@@ -9,7 +9,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
-import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
 import de.bund.digitalservice.ris.search.service.BulkExportJob;
 import de.bund.digitalservice.ris.search.service.BulkExportService;
@@ -29,7 +28,6 @@ class BulkExportJobTest {
 
   @Mock ChangelogService<?> changelogMock;
   @Mock PortalBucket portalBucketMock;
-  @Mock ObjectStorage sourceBucket;
   @Mock BulkExportService exportService;
 
   @Test
@@ -48,7 +46,7 @@ class BulkExportJobTest {
 
     var actual = job.runJob();
     assertThat(actual).isEqualTo(Job.ReturnCode.SUCCESS);
-    verify(sourceBucket, never()).getAllKeysByPrefix(any());
+    verify(exportService, never()).updateLatestZip(any());
   }
 
   @Test
@@ -67,7 +65,7 @@ class BulkExportJobTest {
 
     var actual = job.runJob();
     assertThat(actual).isEqualTo(Job.ReturnCode.SUCCESS);
-    verify(exportService, never()).runJob(any());
+    verify(exportService, never()).updateLatestZip(any());
   }
 
   @Test
@@ -86,6 +84,6 @@ class BulkExportJobTest {
 
     job.runJob();
     verify(exportService, times(1)).deleteArchives();
-    verify(exportService, times(1)).runJob(any());
+    verify(exportService, times(1)).updateLatestZip(any());
   }
 }
