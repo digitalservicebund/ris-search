@@ -218,9 +218,12 @@ watch(searchStatus, async (newStatus, oldStatus) => {
           Zu den Ergebnissen
         </SkipLink>
 
-        <p v-if="privateFeaturesEnabled" class="typo-label1-regular mt-8">
+        <p v-if="privateFeaturesEnabled" class="typo-label2-regular mt-8">
           Mehr Suchoptionen finden Sie unter
-          <NuxtLink :to="{ name: 'advanced-search' }" class="typo-link-bold">
+          <NuxtLink
+            :to="{ name: 'advanced-search' }"
+            class="ris-link2-bold 2xl:ris-link1-bold"
+          >
             Erweiterte Suche
           </NuxtLink>
         </p>
