@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Message, Tab, TabList, Tabs } from "primevue";
+import { Message } from "primevue";
 import { computed } from "vue";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineInfo from "~icons/ic/outline-info";
@@ -8,6 +8,7 @@ import { NuxtLink } from "#components";
 import DetailsList from "~/components/DetailsList.vue";
 import DetailsListEntry from "~/components/DetailsListEntry.vue";
 import NormTranslationActionMenu from "~/components/documents/actionMenu/NormTranslationActionMenu.vue";
+import type { TabView } from "~/components/TabsLayout.vue";
 import {
   fetchTranslationAndHTML,
   getGermanOriginal,
@@ -70,7 +71,7 @@ const breadcrumbItems = computed(() => {
   ];
 });
 
-const views = [
+const views: OneOrMore<TabView> = [
   {
     path: "text",
     label: "Text",
@@ -85,10 +86,7 @@ const views = [
   },
 ] as const;
 
-const currentView = computed(
-  () => route.query.view?.toString() ?? views[0].path,
-);
-
+const textSectionId = useId();
 const detailsTabPanelTitleId = useId();
 </script>
 
@@ -139,37 +137,20 @@ const detailsTabPanelTitleId = useId();
         </Message>
       </div>
 
-      <div class="border-b border-gray-400">
-        <nav class="wrapper -mb-1">
-          <Tabs :value="currentView" :show-navigators="false">
-            <TabList>
-              <Tab
-                v-for="view in views"
-                :key="view.path"
-                :value="view.path"
-                :as="NuxtLink"
-                :to="{ query: { view: view.path } }"
-                :aria-controls="undefined"
-                :data-attr="view.analyticsId"
-                class="flex items-center gap-8"
-              >
-                <component :is="view.icon" />
-                {{ view.label }}
-              </Tab>
-            </TabList>
-          </Tabs>
-        </nav>
-      </div>
-
-      <div class="min-h-96 bg-white">
-        <div class="wrapper">
-          <section v-if="currentView === 'text'" class="pt-32 pb-32 md:pb-56">
-            <h2 class="sr-only">Text</h2>
+      <TabsLayout :views>
+        <template #text>
+          <section
+            class="pt-32 pb-32 md:pb-56"
+            role="tabpanel"
+            :aria-labelledby="textSectionId"
+          >
+            <h2 :id="textSectionId" class="sr-only">Text</h2>
             <section class="max-w-prose" v-html="html" />
           </section>
+        </template>
 
+        <template #details>
           <section
-            v-else-if="currentView === 'details'"
             class="pt-32 pb-32 md:pb-56"
             :aria-labelledby="detailsTabPanelTitleId"
           >
@@ -187,8 +168,8 @@ const detailsTabPanelTitleId = useId();
               />
             </DetailsList>
           </section>
-        </div>
-      </div>
+        </template>
+      </TabsLayout>
     </template>
   </NuxtLayout>
 </template>

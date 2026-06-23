@@ -3,7 +3,8 @@ import { screen } from "@testing-library/vue";
 import { describe, expect, it, vi } from "vitest";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineInfo from "~icons/ic/outline-info";
-import DocumentLayout, { type DocumentView } from "./document.vue";
+import type { TabView } from "~/components/TabsLayout.vue";
+import DocumentLayout from "./document.vue";
 
 const { useRouteMock } = vi.hoisted(() => ({
   useRouteMock: vi.fn(() => ({ query: {} })),
@@ -11,7 +12,7 @@ const { useRouteMock } = vi.hoisted(() => ({
 
 mockNuxtImport("useRoute", () => useRouteMock);
 
-const defaultViews: OneOrMore<DocumentView> = [
+const defaultViews: OneOrMore<TabView> = [
   { label: "Text", path: "text", icon: IcBaselineSubject },
   { label: "Details", path: "details", icon: IcOutlineInfo },
 ];
