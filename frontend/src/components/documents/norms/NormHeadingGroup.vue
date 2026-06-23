@@ -18,12 +18,13 @@ const isLongTitle = computed(
 const hasHeading = computed(() => !!props.htmlParts?.heading);
 const normTitle = computed(() => getNormTitle(props.metadata));
 </script>
+
 <template>
-  <div class="dokumentenkopf mb-48">
+  <div class="dokumentenkopf">
     <hgroup>
       <p
         v-if="hasHeading"
-        class="word-wrap typo-headline3-regular mb-8 wrap-break-word hyphens-auto max-md:text-xl"
+        class="word-wrap typo-headline3-regular mb-8 wrap-break-word hyphens-auto"
       >
         {{ metadata.alternateName }}
       </p>
@@ -57,7 +58,7 @@ const normTitle = computed(() => getNormTitle(props.metadata));
 
     <NormHeadingFootnotes
       v-if="props.htmlParts?.headingAuthorialNotes"
-      class="my-48 max-w-prose"
+      class="max-w-prose"
       :html="props.htmlParts.headingAuthorialNotes"
       :text-length="props.htmlParts?.headingAuthorialNotesLength"
     />
@@ -69,7 +70,7 @@ const normTitle = computed(() => getNormTitle(props.metadata));
 
 .dokumentenkopf {
   :deep(.titel) {
-    @apply typo-headline1-bold hyphens-auto max-md:text-2xl;
+    @apply typo-headline1-bold mb-8 hyphens-auto sm:mb-16 md:mb-24;
   }
 
   :deep(*[data-longTitle] .titel) {

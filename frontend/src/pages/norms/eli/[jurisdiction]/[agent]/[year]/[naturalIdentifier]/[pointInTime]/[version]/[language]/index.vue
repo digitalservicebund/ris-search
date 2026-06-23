@@ -165,17 +165,21 @@ const fassungenDateFilterInputId = useId();
       </div>
     </template>
     <template #default>
-      <div class="wrapper">
+      <div
+        class="wrapper mb-24 space-y-24 sm:mb-32 sm:space-y-32 md:mb-40 md:space-y-40 2xl:mb-48 2xl:space-y-48"
+      >
         <DocumentsNormsNormHeadingGroup
           :metadata="metadata"
           :html-parts="htmlParts"
         />
+
         <DocumentsNormsNormVersionWarning
           v-if="normVersionsStatus === 'success'"
           :versions="normVersions"
           :current-version="metadata"
         />
-        <Metadata :items="metadataItems" class="mb-48" />
+
+        <Metadata :items="metadataItems" />
       </div>
 
       <div class="border-b border-gray-400">

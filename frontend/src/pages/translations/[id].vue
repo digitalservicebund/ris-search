@@ -127,7 +127,7 @@ const detailsTabPanelTitleId = useId();
             <IcOutlineWarning />
           </template>
           <p class="typo-body-bold mt-2">Version Information</p>
-          <p class="mt-2 typo-body-regular">
+          <p class="typo-body-regular mt-2">
             Translations may not be updated at the same time as the German legal
             provision.
             <NuxtLink

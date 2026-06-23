@@ -8,7 +8,7 @@ import DefaultLayout from "./default.vue";
    8px extra padding to ensure the outline is visible. -->
     <div class="mt-8 md:mt-16">
       <div
-        class="wrapper mb-8 has-data-[breadcrumbs-adjust=actionmenu]:-mt-4 md:mb-16"
+        class="wrapper mb-8 has-data-[breadcrumbs-adjust=actionmenu]:-mt-4 has-data-[breadcrumbs-adjust=actionmenu]:mb-4 md:mb-16 md:has-data-[breadcrumbs-adjust=actionmenu]:mb-12"
       >
         <slot name="breadcrumb" />
       </div>
