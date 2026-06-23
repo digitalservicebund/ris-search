@@ -1,16 +1,8 @@
 <script setup lang="ts">
-import { Tab, TabList, Tabs } from "primevue";
-import { NuxtLink } from "#components";
 import type { BreadcrumbItem } from "~/components/Breadcrumbs.vue";
 import type { MetadataItem } from "~/components/Metadata.vue";
+import type { TabView } from "~/components/TabsLayout.vue";
 import BreadcrumbPageLayout from "./breadcrumbPage.vue";
-
-export type DocumentView = {
-  label: string;
-  path: string;
-  icon: Component;
-  analyticsId?: string;
-};
 
 const { titlePlaceholder = "Titelzeile nicht vorhanden", views } = defineProps<{
   title?: string;
@@ -18,14 +10,8 @@ const { titlePlaceholder = "Titelzeile nicht vorhanden", views } = defineProps<{
   isEmptyDocument?: boolean;
   breadcrumbs?: BreadcrumbItem[];
   metadata?: MetadataItem[];
-  views: OneOrMore<DocumentView>;
+  views: OneOrMore<TabView>;
 }>();
-
-const route = useRoute();
-
-const currentView = computed(
-  () => route.query.view?.toString() ?? views[0].path,
-);
 </script>
 
 <template>
@@ -64,36 +50,11 @@ const currentView = computed(
 
         <div v-else>
           <!-- Tabs -->
-          <div class="border-b border-gray-400">
-            <nav class="wrapper -mb-1" aria-label="Tab">
-              <Tabs :value="currentView" :show-navigators="false">
-                <TabList>
-                  <!-- Note that we need to override aria-controls manually,
-                otherwise PrimeVue will insert the ID of a tab panel that
-                doesn't exist -->
-                  <Tab
-                    v-for="view in views"
-                    :key="view.path"
-                    :value="view.path"
-                    :as="NuxtLink"
-                    :to="{ query: { view: view.path } }"
-                    :aria-controls="undefined"
-                    :data-attr="view.analyticsId"
-                    class="flex items-center gap-8"
-                  >
-                    <component :is="view.icon" />
-                    {{ view.label }}
-                  </Tab>
-                </TabList>
-              </Tabs>
-            </nav>
-          </div>
-
-          <div id="content" class="min-h-96 bg-white">
-            <div class="wrapper">
-              <slot :name="currentView" />
-            </div>
-          </div>
+          <TabsLayout :views>
+            <template v-for="(_, name) in $slots" #[name]>
+              <slot :name="name" />
+            </template>
+          </TabsLayout>
         </div>
       </div>
     </template>

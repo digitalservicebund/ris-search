@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineInfo from "~icons/ic/outline-info";
+import type { TabView } from "~/components/TabsLayout.vue";
 import type { TreeItem } from "~/components/TreeView.vue";
 import { useAdministrativeDirectiveSeo } from "~/composables/useAdministrativeDirectiveSeo";
-import type { DocumentView } from "~/layouts/document.vue";
 import { type AdministrativeDirective, DocumentKind } from "~/types/api";
 
 definePageMeta({
@@ -40,7 +40,7 @@ if (contentError?.value) showError(contentError.value);
 
 // Page contents ------------------------------------------
 
-const views: DocumentView[] = [
+const views: TabView[] = [
   { path: "text", label: "Text", icon: IcBaselineSubject },
   { path: "details", label: "Details", icon: IcOutlineInfo },
 ];
