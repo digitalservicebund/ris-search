@@ -82,7 +82,7 @@ class BulkExportJobTest {
     BulkExportJob job =
         new BulkExportJob(exportService, portalBucketMock, outputName, changelogMock);
 
-    job.runJob();
+    assertThat(job.runJob()).isEqualTo(Job.ReturnCode.SUCCESS);
     verify(exportService, times(1)).deleteArchives();
     verify(exportService, times(1)).updateLatestZip(any());
   }

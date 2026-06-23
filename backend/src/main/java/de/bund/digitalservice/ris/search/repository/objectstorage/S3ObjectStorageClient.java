@@ -3,6 +3,9 @@ package de.bund.digitalservice.ris.search.repository.objectstorage;
 import de.bund.digitalservice.ris.search.exception.NoSuchKeyException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.ByteBuffer;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -10,7 +13,6 @@ import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import software.amazon.awssdk.core.ResponseInputStream;
-import software.amazon.awssdk.core.exception.SdkException;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.AbortMultipartUploadRequest;
@@ -120,6 +122,7 @@ public class S3ObjectStorageClient implements ObjectStorageClient {
         CreateMultipartUploadRequest.builder().bucket(bucketName).key(objectKey).build();
 
     String uploadId = s3Client.createMultipartUpload(createRequest).uploadId();
+    boolean success = false;
     logger.info("Started multipart upload with ID: {}", uploadId);
 
     List<String> partETags = new java.util.ArrayList<>();
@@ -129,11 +132,13 @@ public class S3ObjectStorageClient implements ObjectStorageClient {
     int partNumber = 1;
     long totalBytesRead = 0;
 
-    try (inputStream) { // try-with-resources closes the input stream when exiting the block
-      // Read the input stream in chunks and upload each part
+    try (inputStream;
+        ReadableByteChannel channel = Channels.newChannel(inputStream)) {
+      // try-with-resources closes the inputStream and channel
+      // Read the inputStream stream in chunks and upload each part
       byte[] buffer = new byte[partSize];
       int bytesRead;
-      while ((bytesRead = readChunk(inputStream, buffer)) > 0) {
+      while ((bytesRead = readChunk(channel, buffer)) > 0) {
         UploadPartRequest uploadRequest =
             UploadPartRequest.builder()
                 .bucket(bucketName)
@@ -166,33 +171,37 @@ public class S3ObjectStorageClient implements ObjectStorageClient {
       s3Client.completeMultipartUpload(completeRequest);
       logger.info("Completed multipart upload ({} parts) with ID: {}", partETags.size(), uploadId);
 
+      success = true;
       return totalBytesRead;
 
-    } catch (IOException | SdkException e) {
-      logger.warn("Error uploading to S3, aborting multipart upload");
-      s3Client.abortMultipartUpload(
-          AbortMultipartUploadRequest.builder()
-              .bucket(bucketName)
-              .key(objectKey)
-              .uploadId(uploadId)
-              .build());
-      throw e;
+    } finally {
+      if (!success && uploadId != null) {
+        logger.warn("Error uploading to S3, aborting multipart upload");
+        s3Client.abortMultipartUpload(
+            AbortMultipartUploadRequest.builder()
+                .bucket(bucketName)
+                .key(objectKey)
+                .uploadId(uploadId)
+                .build());
+      }
     }
   }
 
   /**
-   * Keeps reading from a stream until a number of bytes has been read, or the stream is closed.
+   * Keeps reading from an input channel until a number of bytes has been read, or the stream is
+   * closed.
    *
-   * @param inputStream The stream to read from.
+   * @param inputChannel The channel to read from.
    * @param buffer The buffer to read into.
    * @return The number of bytes read.
    */
-  int readChunk(InputStream inputStream, byte[] buffer) throws IOException {
+  int readChunk(ReadableByteChannel inputChannel, byte[] buffer) throws IOException {
     int offset = 0;
     int bytesRead;
     while (offset < buffer.length) {
       final int byteCountRemaining = buffer.length - offset;
-      bytesRead = inputStream.read(buffer, offset, byteCountRemaining);
+      ByteBuffer byteBuffer = ByteBuffer.wrap(buffer, offset, byteCountRemaining);
+      bytesRead = inputChannel.read(byteBuffer);
       if (bytesRead != -1) {
         offset += bytesRead;
       } else {

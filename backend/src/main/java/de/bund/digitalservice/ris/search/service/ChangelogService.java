@@ -124,8 +124,8 @@ public class ChangelogService<T extends ObjectStorage> {
    * changelog. If no changes occurred the changed and deleted lists will be empty.
    *
    * @param filenames the list of changelog files to be collapsed.
-   * @return A {@link de.bund.digitalservice.ris.search.importer.changelog.Changelog} object if
-   *     parsing is successful, or null if the file could not be retrieved or parsed.
+   * @return A {@link de.bund.digitalservice.ris.search.importer.changelog.Changelog} object. If
+   *     there were no changes, the lists in the object are empty.
    * @throws de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException If an error
    *     occurs while accessing the object storage.
    */

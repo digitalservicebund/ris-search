@@ -96,7 +96,9 @@ public class BulkExportService {
       Future<?> downloadWorker = orchestrator.submit(downloaderTask);
       Future<?> zipWorker = orchestrator.submit(zipperTask);
 
-      // Main thread blocks here, piping input data directly to S3
+      // Main thread blocks here, piping input data directly to S3. S3ObjectStorageClient::putStream
+      // uses a ReadableByteChannel which, unlike InputStream, listens for interruptions and
+      // gracefully cancels the multipart upload.
       long byteCount = destinationBucket.putStream(resultObjectKey, pipedInputStream);
 
       // Check background worker health
@@ -121,7 +123,9 @@ public class BulkExportService {
       return false;
     }
 
-    // Clean up old backups exclusively on success
+    // Clean up old backups exclusively on success. If deletion fails (and throws an exception) the
+    // job will fail. This is wanted. We will successfully have a zip, but will get an error to
+    // investigate.
     deleteArchives(obsoleteObjectKeys);
     return true;
   }
@@ -249,9 +253,9 @@ public class BulkExportService {
     }
   }
 
-  /** Delete every archive of the given prefix */
+  /** Delete all archives for the document kind this service manages */
   public void deleteArchives() {
-    logger.info("delete all archives for document Type");
+    logger.info("deleting all archives for prefix: {}", archivePrefix);
     List<String> files = destinationBucket.getAllKeysByPrefix(archivePrefix);
     deleteArchives(files);
   }

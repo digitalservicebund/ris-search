@@ -169,7 +169,7 @@ class BulkExportServiceTest {
   }
 
   @Test
-  void updateLatestZip_whenContentOfKeyIsNotFound_shouldReturnWithErrorCode() {
+  void updateLatestZip_whenContentOfKeyIsNotFound_shouldReturnFalse() {
     ObjectStorage sourceBucket = mock(ObjectStorage.class);
     ObjectStorage destinationBucket = mock(ObjectStorage.class);
 
