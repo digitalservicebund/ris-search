@@ -112,7 +112,7 @@ const detailsTabPanelTitleId = useId();
 
           <h1
             v-if="currentTranslation?.name"
-            class="typo-headline1-bold my-8 wrap-break-word hyphens-auto sm:mb-16 md:mb-24"
+            class="typo-headline1-bold my-8 wrap-break-word hyphens-auto sm:mb-16 md:mb-40"
           >
             {{ currentTranslation.name }}
           </h1>
@@ -121,7 +121,7 @@ const detailsTabPanelTitleId = useId();
         <Message
           v-if="legislation"
           :closable="false"
-          class="my-24 max-w-prose space-y-24 sm:my-32 md:my-40 2xl:my-48"
+          class="my-24 max-w-prose space-y-24 sm:my-32 md:my-40"
         >
           <template #icon>
             <IcOutlineWarning />

@@ -4,11 +4,11 @@ import DefaultLayout from "./default.vue";
 
 <template>
   <DefaultLayout>
-    <!-- Target spacing for breadcrumbs is 16/24px, but the breadcrumbs define
-   8px extra padding to ensure the outline is visible. -->
+    <!-- Breadcrumbs add an extra 8px because they have padding (needed to
+    ensure the outline isn't cropped) -->
     <div class="mt-8 md:mt-16">
       <div
-        class="wrapper mb-8 has-data-[breadcrumbs-adjust=actionmenu]:-mt-4 has-data-[breadcrumbs-adjust=actionmenu]:mb-4 md:mb-16 md:has-data-[breadcrumbs-adjust=actionmenu]:mb-12"
+        class="wrapper mb-16 has-data-[breadcrumbs-adjust=actionmenu]:-mt-4 has-data-[breadcrumbs-adjust=actionmenu]:mb-12 md:mb-24 md:has-data-[breadcrumbs-adjust=actionmenu]:mb-20"
       >
         <slot name="breadcrumb" />
       </div>
