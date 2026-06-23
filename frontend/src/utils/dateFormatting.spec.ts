@@ -23,11 +23,11 @@ describe("getCurrentDateInGermany", () => {
 
 describe("dateFormattedDDMMYYYY", () => {
   it("returns undefined if input is undefined", () => {
-    expect(dateFormattedDDMMYYYY()).toBe(undefined);
+    expect(dateFormattedDDMMYYYY()).toBeUndefined();
   });
 
   it("returns undefined if input not a valid date", () => {
-    expect(dateFormattedDDMMYYYY("foo")).toBe(undefined);
+    expect(dateFormattedDDMMYYYY("foo")).toBeUndefined();
   });
 
   it("returns formatted date if input is valid date string", () => {
