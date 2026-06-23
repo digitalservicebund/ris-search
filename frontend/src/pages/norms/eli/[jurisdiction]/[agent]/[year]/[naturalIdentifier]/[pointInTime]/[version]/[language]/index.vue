@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Button, Tab, TabList, Tabs } from "primevue";
+import { Button } from "primevue";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IconFileDownload from "~icons/ic/outline-file-download";
 import IcOutlineInfo from "~icons/ic/outline-info";
@@ -7,6 +7,7 @@ import IcOutlineRestore from "~icons/ic/outline-settings-backup-restore";
 import { NuxtLink } from "#components";
 import type { BreadcrumbItem } from "~/components/Breadcrumbs.vue";
 import DateInput from "~/components/DateInput.vue";
+import type { TabView } from "~/components/TabsLayout.vue";
 import { useNormSeo } from "~/composables/useNormSeo";
 import { DocumentKind, type LegislationExpression } from "~/types/api";
 
@@ -118,7 +119,7 @@ const metadataItems = computed(() => {
   ];
 });
 
-const views = [
+const views: OneOrMore<TabView> = [
   {
     path: "text",
     label: "Text",
@@ -138,10 +139,6 @@ const views = [
     analyticsId: "norm-versions-tab",
   },
 ] as const;
-
-const currentView = computed(
-  () => route.query.view?.toString() ?? views[0].path,
-);
 
 const { dateFilterValue: fassungenDateFilterValue, filteredNormVersions } =
   useNormVersionFilter(normVersions);
@@ -182,180 +179,155 @@ const fassungenDateFilterInputId = useId();
         <Metadata :items="metadataItems" />
       </div>
 
-      <div class="border-b border-gray-400">
-        <nav class="wrapper -mb-1 overflow-x-auto pt-1" aria-label="Tab">
-          <Tabs :value="currentView" :show-navigators="false">
-            <TabList>
-              <Tab
-                v-for="view in views"
-                :key="view.path"
-                :value="view.path"
-                :as="NuxtLink"
-                :to="{ query: { view: view.path } }"
-                :aria-controls="undefined"
-                :data-attr="view.analyticsId"
-                class="flex items-center gap-8"
-              >
-                <component :is="view.icon" />
-                {{ view.label }}
-              </Tab>
-            </TabList>
-          </Tabs>
-        </nav>
-      </div>
-
-      <div id="content" class="min-h-96 bg-white print:py-0">
-        <section
-          v-if="currentView === 'text'"
-          role="tabpanel"
-          :aria-labelledby="textTabPanelTitleId"
-        >
-          <SidebarLayout class="wrapper">
-            <template #content>
-              <h2 :id="textTabPanelTitleId" class="sr-only">Text</h2>
-              <DocumentsIncompleteDataMessage />
-              <DocumentsNormsLegislationContent
-                :official-toc="htmlParts.officialToc"
-              >
-                <div v-html="htmlParts.body" />
-              </DocumentsNormsLegislationContent>
-            </template>
-
-            <template #sidebar v-if="tableOfContents?.length">
-              <client-only>
-                <DocumentsTableOfContents
-                  :subheading="normBreadcrumbTitle"
-                  :table-of-contents="tableOfContents"
-                />
-              </client-only>
-            </template>
-          </SidebarLayout>
-        </section>
-
-        <section
-          v-else-if="currentView === 'details'"
-          role="tabpanel"
-          :aria-labelledby="detailsTabPanelTitleId"
-        >
-          <div class="wrapper pt-32 pb-32 md:pb-56">
-            <h2 :id="detailsTabPanelTitleId" class="typo-headline3-bold">
-              Details
-            </h2>
-            <DocumentsIncompleteDataMessage class="my-24" />
-            <DetailsList>
-              <DetailsListEntry
-                label="Ausfertigungsdatum:"
-                :value="
-                  dateFormattedDDMMYYYY(metadata.exampleOfWork.legislationDate)
-                "
-              />
-              <DetailsListEntry
-                label="Vollzitat:"
-                :value="htmlParts.vollzitat"
-              />
-              <DetailsListEntry
-                label="Stand:"
-                :value-list="htmlParts.standangaben"
-              />
-              <DetailsListEntry
-                label="Hinweis zum Stand:"
-                :value-list="htmlParts.standangabenHinweis"
-              />
-              <DetailsListEntry
-                v-if="htmlParts.prefaceContainer"
-                label="Besonderer Hinweis:"
-              >
-                <div v-html="htmlParts.prefaceContainer" />
-              </DetailsListEntry>
-              <DetailsListEntry label="Fußnoten:">
-                <template v-if="htmlParts.headingNotes">
-                  <div class="footnotes" v-html="htmlParts.headingNotes" />
-                </template>
-              </DetailsListEntry>
-              <DetailsListEntry label="Download:">
-                <NuxtLink
-                  data-attr="xml-zip-view"
-                  class="typo-link-regular"
-                  external
-                  :to="zipUrl"
+      <TabsLayout :views>
+        <template #text>
+          <section role="tabpanel" :aria-labelledby="textTabPanelTitleId">
+            <SidebarLayout class="wrapper">
+              <template #content>
+                <h2 :id="textTabPanelTitleId" class="sr-only">Text</h2>
+                <DocumentsIncompleteDataMessage />
+                <DocumentsNormsLegislationContent
+                  :official-toc="htmlParts.officialToc"
                 >
-                  <IconFileDownload class="mr-2 inline" />
-                  {{ metadata.abbreviation ?? "Inhalte" }} als ZIP herunterladen
-                </NuxtLink>
-              </DetailsListEntry>
-            </DetailsList>
-          </div>
-        </section>
+                  <div v-html="htmlParts.body" />
+                </DocumentsNormsLegislationContent>
+              </template>
 
-        <section
-          v-else-if="currentView === 'versions'"
-          role="tabpanel"
-          :aria-labelledby="fassungenTabPanelTitleId"
-        >
-          <div class="wrapper pt-32 pb-32 md:pb-56">
-            <template v-if="privateFeaturesEnabled">
-              <h2 :id="fassungenTabPanelTitleId" class="typo-headline3-bold">
-                Fassungen
+              <template #sidebar v-if="tableOfContents?.length">
+                <client-only>
+                  <DocumentsTableOfContents
+                    :subheading="normBreadcrumbTitle"
+                    :table-of-contents="tableOfContents"
+                  />
+                </client-only>
+              </template>
+            </SidebarLayout>
+          </section>
+        </template>
+
+        <template #details>
+          <section role="tabpanel" :aria-labelledby="detailsTabPanelTitleId">
+            <div class="wrapper pt-32 pb-32 md:pb-56">
+              <h2 :id="detailsTabPanelTitleId" class="typo-headline3-bold">
+                Details
               </h2>
-
               <DocumentsIncompleteDataMessage class="my-24" />
-              <div class="my-16 md:my-24">
-                <label
-                  :for="fassungenDateFilterInputId"
-                  class="typo-label2-regular"
-                  >Gültig am</label
-                >
-                <DateInput
-                  v-model="fassungenDateFilterValue"
-                  class="mb-16 max-w-240 md:mb-24"
-                  :id="fassungenDateFilterInputId"
-                  :showClear="true"
+              <DetailsList>
+                <DetailsListEntry
+                  label="Ausfertigungsdatum:"
+                  :value="
+                    dateFormattedDDMMYYYY(
+                      metadata.exampleOfWork.legislationDate,
+                    )
+                  "
                 />
-              </div>
-              <DocumentsNormsNormVersionList
-                :status="normVersionsStatus"
-                :current-legislation-identifier="
-                  metadata.legislationIdentifier ?? ''
-                "
-                :versions="filteredNormVersions"
-              />
-            </template>
-
-            <div class="max-w-prose" v-else>
-              <h2
-                :id="fassungenTabPanelTitleId"
-                class="typo-headline3-bold mb-24"
-              >
-                Fassungen sind noch nicht verfügbar
-              </h2>
-              <p>
-                Mit dem Livegang des neuen Rechtsinformationsportals werden auch
-                außer Kraft getretene und zukünftig in Kraft tretende Fassungen
-                der Gesetze und Verordnungen zur Verfügung gestellt.
-              </p>
-
-              <h3 class="typo-headline3-bold mt-48 mb-24">
-                Unterstützen Sie uns bei der Entwicklung dieser Funktion
-              </h3>
-
-              <p>
-                Unser Ziel ist es, Rechtsinformationen für Bürgerinnen und
-                Bürger leichter zugänglich zu machen. Deshalb suchen wir
-                Menschen, die ihre Erfahrungen mit uns teilen und unseren
-                Service testen.
-              </p>
-
-              <Button
-                :as="NuxtLink"
-                class="mt-16"
-                :to="{ name: 'usage-tests' }"
-              >
-                Mehr über Nutzungstest erfahren
-              </Button>
+                <DetailsListEntry
+                  label="Vollzitat:"
+                  :value="htmlParts.vollzitat"
+                />
+                <DetailsListEntry
+                  label="Stand:"
+                  :value-list="htmlParts.standangaben"
+                />
+                <DetailsListEntry
+                  label="Hinweis zum Stand:"
+                  :value-list="htmlParts.standangabenHinweis"
+                />
+                <DetailsListEntry
+                  v-if="htmlParts.prefaceContainer"
+                  label="Besonderer Hinweis:"
+                >
+                  <div v-html="htmlParts.prefaceContainer" />
+                </DetailsListEntry>
+                <DetailsListEntry label="Fußnoten:">
+                  <template v-if="htmlParts.headingNotes">
+                    <div class="footnotes" v-html="htmlParts.headingNotes" />
+                  </template>
+                </DetailsListEntry>
+                <DetailsListEntry label="Download:">
+                  <NuxtLink
+                    data-attr="xml-zip-view"
+                    class="typo-link-regular"
+                    external
+                    :to="zipUrl"
+                  >
+                    <IconFileDownload class="mr-2 inline" />
+                    {{ metadata.abbreviation ?? "Inhalte" }} als ZIP
+                    herunterladen
+                  </NuxtLink>
+                </DetailsListEntry>
+              </DetailsList>
             </div>
-          </div>
-        </section>
-      </div>
+          </section>
+        </template>
+
+        <template #versions>
+          <section role="tabpanel" :aria-labelledby="fassungenTabPanelTitleId">
+            <div class="wrapper pt-32 pb-32 md:pb-56">
+              <template v-if="privateFeaturesEnabled">
+                <h2 :id="fassungenTabPanelTitleId" class="typo-headline3-bold">
+                  Fassungen
+                </h2>
+
+                <DocumentsIncompleteDataMessage class="my-24" />
+                <div class="my-16 md:my-24">
+                  <label
+                    :for="fassungenDateFilterInputId"
+                    class="typo-label2-regular"
+                    >Gültig am</label
+                  >
+                  <DateInput
+                    v-model="fassungenDateFilterValue"
+                    class="mb-16 max-w-240 md:mb-24"
+                    :id="fassungenDateFilterInputId"
+                    :showClear="true"
+                  />
+                </div>
+                <DocumentsNormsNormVersionList
+                  :status="normVersionsStatus"
+                  :current-legislation-identifier="
+                    metadata.legislationIdentifier ?? ''
+                  "
+                  :versions="filteredNormVersions"
+                />
+              </template>
+
+              <div class="max-w-prose" v-else>
+                <h2
+                  :id="fassungenTabPanelTitleId"
+                  class="typo-headline3-bold mb-24"
+                >
+                  Fassungen sind noch nicht verfügbar
+                </h2>
+                <p>
+                  Mit dem Livegang des neuen Rechtsinformationsportals werden
+                  auch außer Kraft getretene und zukünftig in Kraft tretende
+                  Fassungen der Gesetze und Verordnungen zur Verfügung gestellt.
+                </p>
+
+                <h3 class="typo-headline3-bold mt-48 mb-24">
+                  Unterstützen Sie uns bei der Entwicklung dieser Funktion
+                </h3>
+
+                <p>
+                  Unser Ziel ist es, Rechtsinformationen für Bürgerinnen und
+                  Bürger leichter zugänglich zu machen. Deshalb suchen wir
+                  Menschen, die ihre Erfahrungen mit uns teilen und unseren
+                  Service testen.
+                </p>
+
+                <Button
+                  :as="NuxtLink"
+                  class="mt-16"
+                  :to="{ name: 'usage-tests' }"
+                >
+                  Mehr über Nutzungstest erfahren
+                </Button>
+              </div>
+            </div>
+          </section>
+        </template>
+      </TabsLayout>
     </template>
   </NuxtLayout>
 </template>

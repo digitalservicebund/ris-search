@@ -3,9 +3,9 @@ import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineFileDownload from "~icons/ic/outline-file-download";
 import IcOutlineInfo from "~icons/ic/outline-info";
 import type { MetadataItem } from "~/components/Metadata.vue";
+import type { TabView } from "~/components/TabsLayout.vue";
 import type { TreeItem } from "~/components/TreeView.vue";
 import { useCaselawSeo } from "~/composables/useCaselawSeo";
-import type { DocumentView } from "~/layouts/document.vue";
 import { type CaseLaw, DocumentKind } from "~/types/api";
 
 definePageMeta({
@@ -42,7 +42,7 @@ useCaselawSeo({ caseLaw: caseLaw.value, document: document.value });
 
 // Page contents ------------------------------------------
 
-const views: DocumentView[] = [
+const views: TabView[] = [
   { path: "text", label: "Text", icon: IcBaselineSubject },
   {
     path: "details",
