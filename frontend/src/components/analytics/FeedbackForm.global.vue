@@ -95,7 +95,7 @@ watch(
       @submit.prevent="submitFeedback"
     >
       <div v-if="!hideIntro" class="flex flex-col space-y-8">
-        <h2 class="typo-headline3-bold">Geben Sie uns Feedback</h2>
+        <h2 class="typo-headline2-bold">Geben Sie uns Feedback</h2>
         <p class="">
           Ihr Feedback hilft uns, den Service an den Bedürfnissen der
           Nutzerinnen und Nutzer auszurichten. Beschreiben Sie Ihr Anliegen so
@@ -116,7 +116,7 @@ watch(
         </div>
 
         <div class="text-field">
-          <label :for="feedbackMessageId" class="typo-label-regular">
+          <label :for="feedbackMessageId" class="typo-label2-regular">
             Feedback
           </label>
           <Textarea

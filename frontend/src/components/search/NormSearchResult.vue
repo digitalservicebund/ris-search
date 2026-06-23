@@ -68,7 +68,7 @@ function getArticleLink(highlight: { location?: string | null }) {
 </script>
 
 <template>
-  <div class="my-36 flex flex-col gap-8 hyphens-auto">
+  <div class="flex flex-col gap-8 hyphens-auto">
     <SearchResultHeader :icon="IcBaselineBalance" :items="headerItems">
       <template #trailing>
         <Badge
@@ -88,7 +88,11 @@ function getArticleLink(highlight: { location?: string | null }) {
       <h2 v-html="headline" />
     </NuxtLink>
 
-    <div class="flex w-full flex-col gap-6" data-testid="highlights">
+    <div
+      v-if="relevantHighlights.length"
+      class="flex w-full flex-col gap-6"
+      data-testid="highlights"
+    >
       <div
         v-for="(highlight, index) in relevantHighlights"
         :key="highlight.name + index"

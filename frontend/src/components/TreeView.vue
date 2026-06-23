@@ -288,7 +288,7 @@ function onKeydown(event: KeyboardEvent) {
       >
         {{ subheading }}
       </NuxtLink>
-      <p v-else-if="subheading" class="typo-label-regular line-clamp-1">
+      <p v-else-if="subheading" class="typo-label1-regular line-clamp-1">
         {{ subheading }}
       </p>
     </div>

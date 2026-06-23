@@ -38,12 +38,20 @@
   @apply ris-subhead-bold 2xl:ris-heading3-bold;
 }
 
-@utility typo-label-regular {
+@utility typo-label1-regular {
   @apply ris-label2-regular sm:ris-label1-regular 2xl:text-[1.25rem];
 }
 
-@utility typo-label-bold {
+@utility typo-label1-bold {
   @apply ris-label2-bold sm:ris-label1-bold 2xl:text-[1.25rem];
+}
+
+@utility typo-label2-regular {
+  @apply ris-label2-regular 2xl:text-[1.125rem];
+}
+
+@utility typo-label2-bold {
+  @apply ris-label2-bold 2xl:text-[1.125rem];
 }
 
 @utility typo-mono {

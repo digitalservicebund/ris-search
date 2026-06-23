@@ -65,7 +65,7 @@ const versionLink = computed<
 </script>
 
 <template>
-  <div v-if="showWarningMessage" class="mb-40 w-fit">
+  <div v-if="showWarningMessage" class="w-fit">
     <Message :severity="warningMessageType" class="typo-body-regular">
       <template #icon>
         <IcBaselineUpdate
@@ -79,7 +79,7 @@ const versionLink = computed<
       </template>
 
       <p>
-        <span :id="versionTextId" class="typo-label-bold">{{
+        <span :id="versionTextId" class="typo-label1-bold">{{
           versionText
         }}</span
         >{{ " " }}

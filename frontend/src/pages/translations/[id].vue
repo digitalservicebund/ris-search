@@ -102,17 +102,17 @@ const detailsTabPanelTitleId = useId();
     </template>
     <template #default>
       <div class="wrapper">
-        <hgroup class="dokumentenkopf mt-24 mb-48">
+        <hgroup class="dokumentenkopf">
           <p
             v-if="currentTranslation?.translationOfWork"
-            class="word-wrap typo-headline3-regular mb-12 hyphens-auto"
+            class="word-wrap typo-headline3-regular mb-8 hyphens-auto"
           >
             {{ currentTranslation.translationOfWork }}
           </p>
 
           <h1
             v-if="currentTranslation?.name"
-            class="typo-headline2-bold mb-48 wrap-break-word hyphens-auto"
+            class="typo-headline2-bold my-8 wrap-break-word hyphens-auto sm:mb-16 md:mb-24"
           >
             {{ currentTranslation.name }}
           </h1>
@@ -121,13 +121,13 @@ const detailsTabPanelTitleId = useId();
         <Message
           v-if="legislation"
           :closable="false"
-          class="mb-48 max-w-prose space-y-24"
+          class="my-24 max-w-prose space-y-24 sm:my-32 md:my-40 2xl:my-48"
         >
           <template #icon>
             <IcOutlineWarning />
           </template>
           <p class="typo-body-bold mt-2">Version Information</p>
-          <p class="mt-2">
+          <p class="typo-body-regular mt-2">
             Translations may not be updated at the same time as the German legal
             provision.
             <NuxtLink
@@ -161,21 +161,22 @@ const detailsTabPanelTitleId = useId();
         </nav>
       </div>
 
-      <div class="min-h-96 bg-white py-24 print:py-0">
+      <div class="min-h-96 bg-white">
         <div class="wrapper">
-          <section v-if="currentView === 'text'">
+          <section v-if="currentView === 'text'" class="pt-32 pb-32 md:pb-56">
             <h2 class="sr-only">Text</h2>
             <section class="max-w-prose" v-html="html" />
           </section>
 
           <section
             v-else-if="currentView === 'details'"
+            class="pt-32 pb-32 md:pb-56"
             :aria-labelledby="detailsTabPanelTitleId"
           >
-            <h2 :id="detailsTabPanelTitleId" class="typo-headline3-bold my-24">
+            <h2 :id="detailsTabPanelTitleId" class="typo-headline3-bold">
               Details
             </h2>
-            <DetailsList>
+            <DetailsList class="mt-24">
               <DetailsListEntry
                 label="Translation provided by:"
                 :value="translatedBy"

@@ -45,7 +45,11 @@ const currentView = computed(
             :placeholder="titlePlaceholder"
           />
 
-          <Metadata v-if="metadata?.length" :items="metadata" class="mb-48" />
+          <Metadata
+            v-if="metadata?.length"
+            :items="metadata"
+            class="my-24 sm:my-32 md:my-40 2xl:my-48"
+          />
         </div>
 
         <!-- Empty documents -->

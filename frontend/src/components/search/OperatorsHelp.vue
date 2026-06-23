@@ -37,7 +37,7 @@ const isExpanded = ref(true);
         <caption class="sr-only">
           Hilfestellung zu Suchoperatoren
         </caption>
-        <thead class="typo-label-bold contents text-gray-900">
+        <thead class="ris-label2-bold contents text-gray-900">
           <tr class="contents">
             <th scope="col">Operator</th>
             <th scope="col">Bedeutung</th>
@@ -47,13 +47,13 @@ const isExpanded = ref(true);
           <tr v-for="(row, i) in data" :key="i" class="contents">
             <td class="border-b border-b-gray-200 py-6 pr-24">
               <span
-                class="typo-label-bold content-center rounded-lg border border-blue-300 bg-blue-200 px-8 py-4 text-nowrap text-blue-900"
+                class="ris-label2-bold content-center rounded-lg border border-blue-300 bg-blue-200 px-8 py-4 text-nowrap text-blue-900"
               >
                 {{ row.operator }}
               </span>
             </td>
             <td class="border-b border-b-gray-200 py-6">
-              <span class="typo-label-regular content-center text-gray-900">
+              <span class="ris-label2-regular content-center text-gray-900">
                 {{ row.description }}
               </span>
             </td>

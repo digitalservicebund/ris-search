@@ -27,17 +27,17 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
 </script>
 
 <template>
-  <div class="flex gap-16 bg-blue-800 pt-64 pb-96 text-white">
-    <div class="wrapper">
+  <div class="flex gap-16 bg-blue-800 py-40 text-white md:py-64 2xl:py-80">
+    <div class="wrapper flex flex-col items-start gap-16 2xl:gap-24">
       <div
-        class="typo-label-bold mb-8 inline-block rounded-sm border border-white/10 bg-blue-700 px-8 py-4"
+        class="typo-label2-bold inline-block rounded-sm border border-white/10 bg-blue-700 px-8 py-4"
       >
         Testphase
       </div>
-      <h1 class="typo-headline1-regular wrap-break-word hyphens-auto">
+      <h1 class="typo-headline1-bold wrap-break-word hyphens-auto">
         Rechtsinformationen des Bundes
       </h1>
-      <p class="typo-body-regular 2xl:ris-subhead-regular mt-24">
+      <p class="typo-body-regular 2xl:ris-subhead-regular">
         Schneller und direkter Zugang zu Gesetzen, Verordnungen,
         Gerichtsentscheidungen und künftig auch Verwaltungsvorschriften des
         Bundes – an einem zentralen Ort.
@@ -45,7 +45,9 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
     </div>
   </div>
 
-  <div class="wrapper flex flex-col gap-24 py-56">
+  <div
+    class="wrapper flex flex-col gap-16 pt-16 pb-32 sm:gap-24 sm:pt-24 md:pb-56"
+  >
     <FeatureCard>
       <div>
         <h2 class="typo-headline2-bold wrap-break-word hyphens-auto">
@@ -64,11 +66,11 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
       />
       <Message
         severity="warn"
-        class="typo-body-regular"
+        class="ris-body2-regular"
         role="status"
         aria-live="off"
       >
-        <p class="typo-body-bold mt-2">
+        <p class="ris-body2-bold mt-2">
           Dieser Service befindet sich in der Testphase.
         </p>
         <p>
