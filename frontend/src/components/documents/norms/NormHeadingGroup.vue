@@ -58,7 +58,7 @@ const normTitle = computed(() => getNormTitle(props.metadata));
 
     <NormHeadingFootnotes
       v-if="props.htmlParts?.headingAuthorialNotes"
-      class="max-w-prose"
+      class="mt-8 max-w-prose sm:mt-16 md:mt-24"
       :html="props.htmlParts.headingAuthorialNotes"
       :text-length="props.htmlParts?.headingAuthorialNotesLength"
     />
@@ -70,7 +70,7 @@ const normTitle = computed(() => getNormTitle(props.metadata));
 
 .dokumentenkopf {
   :deep(.titel) {
-    @apply typo-headline1-bold mb-8 hyphens-auto sm:mb-16 md:mb-24;
+    @apply typo-headline1-bold hyphens-auto;
   }
 
   :deep(*[data-longTitle] .titel) {
