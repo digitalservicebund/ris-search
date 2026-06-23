@@ -43,15 +43,15 @@ see: https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@scope 
   }
 
   h2 {
-    @apply ris-heading3-regular pt-24 pb-8;
+    @apply ris-heading3-regular md:ris-heading2-regular pt-24 pb-8;
   }
 
   h3 {
-    @apply ris-subhead-regular 2xl:ris-heading3-regular pt-16 pb-8;
+    @apply ris-subhead-regular md:ris-heading3-regular pt-16 pb-8;
   }
 
   h4 {
-    @apply ris-subhead-regular sm:ris-body1-bold 2xl:ris-subhead-bold py-8;
+    @apply ris-body1-bold sm:ris-subhead-bold py-8;
   }
 
   h5 {
