@@ -14,7 +14,7 @@ const itemsWithContent = computed(() => items.filter((i) => !!i.value));
 </script>
 
 <template>
-  <div class="flex gap-8">
+  <div class="flex items-center gap-8">
     <p
       class="typo-label2-regular content-center space-x-8 wrap-anywhere hyphens-auto"
     >
