@@ -338,7 +338,7 @@ watch(searchStatus, async (newStatus, oldStatus) => {
                   <li
                     v-for="(searchResult, index) in searchResults.member"
                     :key="getIdentifier(searchResult.item)"
-                    class="my-32"
+                    class="my-40"
                   >
                     <SearchResult :search-result :order="index" />
                   </li>
