@@ -112,7 +112,7 @@ const detailsTabPanelTitleId = useId();
 
           <h1
             v-if="currentTranslation?.name"
-            class="typo-headline2-bold my-8 wrap-break-word hyphens-auto sm:mb-16 md:mb-24"
+            class="typo-headline1-bold my-8 wrap-break-word hyphens-auto sm:mb-16 md:mb-24"
           >
             {{ currentTranslation.name }}
           </h1>
@@ -126,12 +126,12 @@ const detailsTabPanelTitleId = useId();
           <template #icon>
             <IcOutlineWarning />
           </template>
-          <p class="typo-body-bold mt-2">Version Information</p>
-          <p class="typo-body-regular mt-2">
+          <p class="typo-label2-bold mt-2">Version Information</p>
+          <p class="typo-label2-regular mt-2">
             Translations may not be updated at the same time as the German legal
             provision.
             <NuxtLink
-              class="typo-link-regular"
+              class="ris-link2-regular 2xl:ris-link1-regular"
               :to="`/norms/${germanOriginalWorkEli}`"
               >Go to the German version</NuxtLink
             >.
