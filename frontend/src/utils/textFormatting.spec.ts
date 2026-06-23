@@ -2,6 +2,7 @@ import { describe, expect } from "vitest";
 import {
   addEllipsis,
   getStringOrDefault,
+  normalizeSpaces,
   removeOuterParentheses,
   truncateAtWord,
   removePrefix,
@@ -86,6 +87,33 @@ describe("addEllipsis heuristics", () => {
   it("adds ellipses to strings that end with counts", () => {
     expect(addEllipsis("1. first. 2.")).toBe("1. first. 2. …");
     expect(addEllipsis("I. first. II.")).toBe("I. first. II. …");
+  });
+});
+
+describe("normalizeSpaces", () => {
+  it("returns the string unchanged when there is nothing to normalize", () => {
+    expect(normalizeSpaces("Hello world")).toBe("Hello world");
+  });
+
+  it("trims leading and trailing whitespace", () => {
+    expect(normalizeSpaces("  hello  ")).toBe("hello");
+    expect(normalizeSpaces("\t hello \n")).toBe("hello");
+  });
+
+  it("collapses multiple spaces into one", () => {
+    expect(normalizeSpaces("a  b  c")).toBe("a b c");
+  });
+
+  it("collapses mixed whitespace characters into a single space", () => {
+    expect(normalizeSpaces("a\t b\n c")).toBe("a b c");
+  });
+
+  it("returns an empty string for a string of only whitespace", () => {
+    expect(normalizeSpaces("   ")).toBe("");
+  });
+
+  it("returns an empty string for an already-empty string", () => {
+    expect(normalizeSpaces("")).toBe("");
   });
 });
 

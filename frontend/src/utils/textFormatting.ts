@@ -59,7 +59,7 @@ export function stringToBoolean(
 }
 
 export function normalizeSpaces(text: string): string {
-  return text.trim().split(/\s+/).join(" ");
+  return text.trim().replaceAll(/\s+/g, " ");
 }
 
 export function truncateAtWord(
