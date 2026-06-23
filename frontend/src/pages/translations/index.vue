@@ -97,7 +97,7 @@ const translationsListId = useId();
         <section
           class="mt-24 max-w-prose space-y-24 md:space-y-32 2xl:space-y-48"
         >
-          <h1 class="typo-headline1-bold overflow-x-auto">
+          <h1 class="typo-headline1-bold">
             English Translations of German Federal Laws and Regulations
           </h1>
           <p class="mb-8">
