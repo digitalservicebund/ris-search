@@ -40,7 +40,7 @@ describe("useNormVersions", () => {
         immediate: true,
       },
     );
-    expect(sortedVersions.value.length).toBe(2);
+    expect(sortedVersions.value).toHaveLength(2);
     expect(sortedVersions.value[0]?.temporalCoverage).toBe(
       "2023-12-01/2300-10-01",
     );
