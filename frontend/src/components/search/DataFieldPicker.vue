@@ -94,8 +94,8 @@ function submitUnlessLoading() {
 </script>
 
 <template>
-  <search class="flex flex-col gap-8">
-    <p class="typo-label-bold" aria-hidden="true">
+  <search class="flex flex-col">
+    <p class="typo-label1-bold mb-8" aria-hidden="true">
       In {{ formattedCount }} {{ formattedDocumentKind }} suchen
     </p>
 
@@ -103,6 +103,7 @@ function submitUnlessLoading() {
       :id="formId"
       data-testid="form"
       @submit.prevent="submitUnlessLoading()"
+      class="mb-16"
     >
       <InputGroup>
         <InputText
@@ -128,7 +129,7 @@ function submitUnlessLoading() {
     </form>
 
     <div class="hidden lg:block">
-      <p class="typo-label-bold mb-8">
+      <p class="typo-label2-regular mb-8">
         Diese Datenfelder können gezielt durchsucht werden:
       </p>
 

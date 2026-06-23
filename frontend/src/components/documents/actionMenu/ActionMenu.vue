@@ -29,7 +29,9 @@ const handleDrawerItemClick = async (item: ActionMenuItem) => {
 </script>
 
 <template>
-  <div class="md:hidden" v-bind="$attrs">
+  <!-- data attribute can be used by the layout to adjust spacings when an action
+  menu exists -->
+  <div class="md:hidden" v-bind="$attrs" data-breadcrumbs-adjust="actionmenu">
     <Button
       ref="drawerTriggerRef"
       aria-label="Aktionen anzeigen"

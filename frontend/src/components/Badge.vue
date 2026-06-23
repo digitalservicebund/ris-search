@@ -16,7 +16,7 @@ export enum BadgeColor {
 
 <template>
   <span
-    class="typo-label-bold inline-block flex-none px-8 py-4"
+    class="typo-label2-bold inline-block flex-none px-8 py-4"
     :class="{
       'border border-green-400 bg-green-100 text-green-800':
         color === BadgeColor.GREEN,

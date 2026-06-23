@@ -204,9 +204,7 @@ watch(searchStatus, async (newStatus, oldStatus) => {
     </template>
     <template #default>
       <div class="wrapper pb-32 md:pb-56">
-        <div class="pb-24">
-          <h1 class="typo-headline1-bold inline-block">Suche</h1>
-        </div>
+        <h1 class="typo-headline1-bold inline-block pb-8">Suche</h1>
 
         <div id="search">
           <SearchSimpleSearchInput
@@ -216,22 +214,25 @@ watch(searchStatus, async (newStatus, oldStatus) => {
           />
         </div>
 
-        <SkipLink to="#search-results" class="mt-8"
-          >Zu den Ergebnissen</SkipLink
-        >
+        <SkipLink to="#search-results" class="mt-8">
+          Zu den Ergebnissen
+        </SkipLink>
 
-        <p v-if="privateFeaturesEnabled" class="typo-label-regular mt-8">
+        <p v-if="privateFeaturesEnabled" class="typo-label2-regular mt-8">
           Mehr Suchoptionen finden Sie unter
-          <NuxtLink :to="{ name: 'advanced-search' }" class="typo-link-bold">
+          <NuxtLink
+            :to="{ name: 'advanced-search' }"
+            class="ris-link2-bold 2xl:ris-link1-bold"
+          >
             Erweiterte Suche
           </NuxtLink>
         </p>
 
-        <div class="mt-24 flex flex-col gap-48 lg:flex-row">
+        <div class="mt-32 flex flex-col gap-48 md:mt-48 lg:flex-row">
           <aside class="pb-10 lg:w-3/12" :aria-labelledby="filterHeadingId">
             <h2
               :id="filterHeadingId"
-              class="typo-label-regular flex h-48 items-center"
+              class="typo-label1-regular flex h-48 items-center"
             >
               Filter
             </h2>
@@ -282,14 +283,17 @@ watch(searchStatus, async (newStatus, oldStatus) => {
                 <output
                   aria-atomic="true"
                   aria-live="polite"
-                  class="typo-label-regular"
+                  class="typo-label1-regular"
                 >
                   {{ isLoading ? "Lade ..." : formattedResultCount }}
                 </output>
 
                 <div class="flex flex-wrap gap-x-32 gap-y-16">
                   <div class="flex items-center gap-8">
-                    <label :id="itemsPerPageLabelId" class="typo-label-regular">
+                    <label
+                      :id="itemsPerPageLabelId"
+                      class="typo-label2-regular"
+                    >
                       Einträge pro Seite
                     </label>
                     <Select
@@ -315,11 +319,11 @@ watch(searchStatus, async (newStatus, oldStatus) => {
 
                 <Message
                   severity="warn"
-                  class="typo-body-regular mt-16 max-w-prose"
+                  class="ris-body2-regular mt-16 max-w-prose"
                   role="status"
                   aria-live="off"
                 >
-                  <p class="typo-body-bold mt-2">
+                  <p class="ris-body2-bold mt-2">
                     Dieser Service befindet sich in der Testphase.
                   </p>
                   <p>
@@ -334,6 +338,7 @@ watch(searchStatus, async (newStatus, oldStatus) => {
                   <li
                     v-for="(searchResult, index) in searchResults.member"
                     :key="getIdentifier(searchResult.item)"
+                    class="my-32"
                   >
                     <SearchResult :search-result :order="index" />
                   </li>

@@ -260,7 +260,7 @@ Attributes from the Juris CALS format without a corresponding HTML attribute mig
 :deep(.akn-subsection > .akn-num),
 :deep(.akn-title > .akn-num),
 :deep(.akn-subtitle > .akn-num) {
-  @apply typo-headline3-bold float-none mb-4 block text-center;
+  @apply typo-headline2-bold float-none mb-4 block text-center;
 }
 
 :deep(.akn-book > .akn-heading),
@@ -271,7 +271,7 @@ Attributes from the Juris CALS format without a corresponding HTML attribute mig
 :deep(.akn-subsection > .akn-heading),
 :deep(.akn-title > .akn-heading),
 :deep(.akn-subtitle > .akn-heading) {
-  @apply typo-headline3-regular float-none mb-24 block border-b border-gray-400 pb-16 text-center text-gray-900;
+  @apply typo-headline2-regular float-none mb-24 block border-b border-gray-400 pb-16 text-center text-gray-900;
 }
 
 :deep(.akn-book + .akn-book),

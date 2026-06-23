@@ -18,12 +18,13 @@ const isLongTitle = computed(
 const hasHeading = computed(() => !!props.htmlParts?.heading);
 const normTitle = computed(() => getNormTitle(props.metadata));
 </script>
+
 <template>
-  <div class="dokumentenkopf mb-48">
+  <div class="dokumentenkopf">
     <hgroup>
       <p
         v-if="hasHeading"
-        class="word-wrap typo-headline3-regular mb-12 wrap-break-word hyphens-auto max-md:text-xl"
+        class="word-wrap typo-headline3-regular mb-8 wrap-break-word hyphens-auto"
       >
         {{ metadata.alternateName }}
       </p>
@@ -33,7 +34,7 @@ const normTitle = computed(() => getNormTitle(props.metadata));
           <div
             v-if="hasHeading"
             :data-longTitle="isLongTitle || null"
-            class="wrap-break-word hyphens-auto max-sm:text-2xl"
+            class="wrap-break-word hyphens-auto"
             v-html="props.htmlParts?.heading"
           />
           <div v-else class="titel wrap-break-word">
@@ -45,7 +46,7 @@ const normTitle = computed(() => getNormTitle(props.metadata));
           <div
             v-if="props.htmlParts?.heading"
             :data-longTitle="isLongTitle || null"
-            class="wrap-break-word hyphens-auto max-sm:text-2xl"
+            class="wrap-break-word hyphens-auto"
             v-html="props.htmlParts.heading"
           ></div>
           <div v-else class="titel wrap-break-word">
@@ -57,7 +58,7 @@ const normTitle = computed(() => getNormTitle(props.metadata));
 
     <NormHeadingFootnotes
       v-if="props.htmlParts?.headingAuthorialNotes"
-      class="my-48 max-w-prose"
+      class="mt-8 max-w-prose sm:mt-16 md:mt-24"
       :html="props.htmlParts.headingAuthorialNotes"
       :text-length="props.htmlParts?.headingAuthorialNotesLength"
     />
@@ -69,7 +70,7 @@ const normTitle = computed(() => getNormTitle(props.metadata));
 
 .dokumentenkopf {
   :deep(.titel) {
-    @apply typo-headline1-bold hyphens-auto max-md:text-2xl;
+    @apply typo-headline1-bold hyphens-auto;
   }
 
   :deep(*[data-longTitle] .titel) {

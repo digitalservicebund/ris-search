@@ -145,12 +145,12 @@ const dropdownButtonFocus = ref(false);
         :data-variant="isActiveOption(slotProps.option) && 'active'"
         class="flex min-h-48 flex-col justify-center gap-2 border-l-4 border-transparent px-12 py-10 data-[variant=active]:-ml-4 data-[variant=active]:border-blue-800 data-[variant=active]:bg-blue-200"
       >
-        <div class="typo-label-regular">
+        <div class="typo-label1-regular">
           {{ slotProps.option.label }}
         </div>
         <div
           v-if="slotProps.option.secondaryLabel"
-          class="typo-label-regular text-gray-900"
+          class="typo-label1-regular text-gray-900"
         >
           {{ slotProps.option.secondaryLabel }}
         </div>

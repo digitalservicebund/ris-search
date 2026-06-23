@@ -19,7 +19,7 @@ const headingId = useId();
 <template>
   <section
     v-if="isBannerVisible"
-    class="typo-body-regular flex flex-col gap-24 bg-blue-200 px-8 py-16 lg:p-24"
+    class="typo-body-regular flex flex-col gap-24 bg-blue-200 px-16 py-24"
     :aria-labelledby="headingId"
   >
     <div class="wrapper">
@@ -37,7 +37,7 @@ const headingId = useId();
         </p>
       </div>
 
-      <div class="flex flex-wrap items-center gap-x-24 gap-y-12 pt-16 lg:pt-24">
+      <div class="flex flex-wrap items-center gap-x-24 gap-y-8 pt-16 lg:pt-24">
         <form
           action="/api/cookie-consent"
           method="POST"

@@ -84,7 +84,7 @@ function setPeriodTo(value: string | undefined) {
 
 <template>
   <form :aria-labelledby="formId" class="flex flex-col gap-24">
-    <p :id="formId" class="typo-label-bold">Filter nach {{ filterLabel }}</p>
+    <p :id="formId" class="typo-label2-bold">Filter nach {{ filterLabel }}</p>
 
     <div v-if="visibleFilters.currentlyInForce" class="flex items-center">
       <RadioButton
@@ -94,7 +94,7 @@ function setPeriodTo(value: string | undefined) {
         value="currentlyInForce"
         @update:model-value="setFilterType"
       />
-      <label :for="currentlyInForceId" class="typo-label-regular">
+      <label :for="currentlyInForceId" class="typo-label2-regular">
         Aktuell gültig
       </label>
     </div>
@@ -107,7 +107,7 @@ function setPeriodTo(value: string | undefined) {
         value="allTime"
         @update:model-value="setFilterType"
       />
-      <label :for="allTimeId" class="typo-label-regular">
+      <label :for="allTimeId" class="typo-label2-regular">
         Keine zeitliche Begrenzung
       </label>
     </div>
@@ -122,7 +122,7 @@ function setPeriodTo(value: string | undefined) {
             value="specificDate"
             @update:model-value="setFilterType"
           />
-          <label :for="specificDateId" class="typo-label-regular">
+          <label :for="specificDateId" class="typo-label2-regular">
             Bestimmtes Datum
           </label>
         </div>
@@ -151,7 +151,7 @@ function setPeriodTo(value: string | undefined) {
             value="period"
             @update:model-value="setFilterType"
           />
-          <label :for="periodId" class="typo-label-regular">
+          <label :for="periodId" class="typo-label2-regular">
             Innerhalb einer Zeitspanne
           </label>
         </div>
@@ -161,7 +161,7 @@ function setPeriodTo(value: string | undefined) {
             v-if="documentKind === DocumentKind.Literature"
             class="flex flex-col gap-8 pt-8 pl-40"
           >
-            <label :for="periodFromYearInputId" class="typo-label-regular">
+            <label :for="periodFromYearInputId" class="typo-label2-regular">
               von
             </label>
             <YearInput
@@ -170,7 +170,7 @@ function setPeriodTo(value: string | undefined) {
               @update:model-value="setPeriodFrom($event)"
             />
 
-            <label :for="periodToYearInputId" class="typo-label-regular mt-8">
+            <label :for="periodToYearInputId" class="typo-label2-regular mt-8">
               bis
             </label>
             <YearInput
@@ -181,7 +181,7 @@ function setPeriodTo(value: string | undefined) {
           </div>
 
           <div v-else class="flex flex-col gap-8 pt-8 pl-40">
-            <label :for="periodFromDateInputId" class="typo-label-regular">
+            <label :for="periodFromDateInputId" class="typo-label2-regular">
               von
             </label>
             <DateInput
@@ -190,7 +190,7 @@ function setPeriodTo(value: string | undefined) {
               @update:model-value="setPeriodFrom($event)"
             />
 
-            <label :for="periodToDateInputId" class="typo-label-regular mt-8">
+            <label :for="periodToDateInputId" class="typo-label2-regular mt-8">
               bis
             </label>
             <DateInput

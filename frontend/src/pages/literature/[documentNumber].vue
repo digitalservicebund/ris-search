@@ -101,7 +101,7 @@ const detailItems = computed(() => getLiteratureDetailItems(literature.value));
       <section
         :role="isEmptyDocument ? undefined : 'tabpanel'"
         :aria-labelledby="detailsSectionId"
-        class="pt-32 pb-32 lg:pb-56"
+        class="pt-32 pb-32 md:pb-56"
       >
         <h2 :id="detailsSectionId" class="typo-headline3-bold">Details</h2>
         <DocumentsIncompleteDataMessage class="my-24" />
@@ -156,7 +156,7 @@ const detailItems = computed(() => getLiteratureDetailItems(literature.value));
 }
 
 :deep(.literature h2) {
-  @apply typo-headline3-bold my-24 inline-block;
+  @apply typo-headline2-bold my-24 inline-block;
 }
 
 :deep(.literature h3) {

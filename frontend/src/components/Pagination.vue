@@ -104,8 +104,8 @@ const itemsOnPage = computed(() => buildItemsOnPageString(props.page));
     aria-label="Paginierung"
     class="flex flex-col items-center"
     :class="{
-      'mt-20': props.navigationPosition === 'bottom',
-      'mb-20': props.navigationPosition === 'top',
+      'mt-48': props.navigationPosition === 'bottom',
+      'mb-48': props.navigationPosition === 'top',
     }"
   >
     <div class="flex w-full items-center">
@@ -125,10 +125,10 @@ const itemsOnPage = computed(() => buildItemsOnPageString(props.page));
           <template #icon><IconArrowBack /></template>
         </Button>
 
-        <span class="typo-label-regular only:m-auto">
+        <span class="typo-label1-regular only:m-auto">
           <span
             v-if="!isOnlyPage && currentPageIndex !== undefined"
-            class="typo-label-bold"
+            class="typo-label1-bold"
           >
             Seite {{ currentPageIndex + 1 }}:
           </span>

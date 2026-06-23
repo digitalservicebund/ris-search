@@ -208,30 +208,24 @@ const metadataItems = computed(() => {
       </div>
     </template>
     <template #default>
-      <div class="wrapper">
-        <div class="my-24 mb-24">
-          <p class="typo-label-regular mb-8">
-            {{ normTitle }}
-          </p>
-          <h1
-            class="typo-headline1-bold wrap-break-word hyphens-auto max-md:text-2xl"
-            v-html="htmlTitle"
-          />
-        </div>
+      <div
+        class="wrapper mb-24 space-y-24 sm:mb-32 sm:space-y-32 md:mb-40 md:space-y-40 2xl:mb-48 2xl:space-y-48"
+      >
+        <p class="typo-headline3-regular mb-8">
+          {{ normTitle }}
+        </p>
+        <h1
+          class="typo-headline1-bold wrap-break-word hyphens-auto"
+          v-html="htmlTitle"
+        />
 
         <DocumentsNormsArticleVersionWarning
           v-if="inForceNormLink && article"
           :in-force-version-link="inForceNormLink"
           :current-article="article"
         />
-      </div>
 
-      <div
-        v-if="privateFeaturesEnabled"
-        class="wrapper mb-24 flex flex-col space-y-16 space-x-0 md:space-y-0 lg:flex-row lg:space-x-24"
-        data-testid="metadata"
-      >
-        <Metadata :items="metadataItems" />
+        <Metadata v-if="privateFeaturesEnabled" :items="metadataItems" />
       </div>
 
       <div id="content" class="border-t border-t-gray-400 bg-white">
