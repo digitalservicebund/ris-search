@@ -3,16 +3,11 @@ import type { NormContent } from "~/composables/useNormData";
 import type { LegislationExpression } from "~/types/api";
 import { getNormTitle } from "~/utils/norm";
 import NormHeadingFootnotes from "./NormHeadingFootnotes.vue";
+
 const props = defineProps<{
   htmlParts?: NormContent["htmlParts"];
   metadata: LegislationExpression;
 }>();
-
-// show very long titles in smaller font
-const heading1MaxLength = 180;
-const isLongTitle = computed(
-  () => props.metadata.name.length > heading1MaxLength,
-);
 
 // only show the alternate name as secondary if it isn't already being used as the main title
 const hasHeading = computed(() => !!props.htmlParts?.heading);
@@ -33,7 +28,6 @@ const normTitle = computed(() => getNormTitle(props.metadata));
         <ExpandableText :length="6">
           <div
             v-if="hasHeading"
-            :data-longTitle="isLongTitle || null"
             class="wrap-break-word hyphens-auto"
             v-html="props.htmlParts?.heading"
           />
@@ -45,7 +39,6 @@ const normTitle = computed(() => getNormTitle(props.metadata));
         <template #fallback>
           <div
             v-if="props.htmlParts?.heading"
-            :data-longTitle="isLongTitle || null"
             class="wrap-break-word hyphens-auto"
             v-html="props.htmlParts.heading"
           ></div>
@@ -71,10 +64,6 @@ const normTitle = computed(() => getNormTitle(props.metadata));
 .dokumentenkopf {
   :deep(.titel) {
     @apply typo-headline1-bold hyphens-auto;
-  }
-
-  :deep(*[data-longTitle] .titel) {
-    @apply typo-headline3-bold;
   }
 }
 </style>
