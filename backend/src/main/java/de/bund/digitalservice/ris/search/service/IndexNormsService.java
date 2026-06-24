@@ -7,6 +7,7 @@ import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.ArticlesRepository;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
+import de.bund.digitalservice.ris.search.utils.BatchUtils;
 import de.bund.digitalservice.ris.search.utils.DateUtils;
 import de.bund.digitalservice.ris.search.utils.eli.EliFile;
 import de.bund.digitalservice.ris.search.utils.eli.ExpressionEli;
@@ -166,9 +167,9 @@ public class IndexNormsService implements IndexService {
 
     addTimeRelevanceWindows(workEli.toString(), normExpressions);
 
-    normsRepository.saveAll(normExpressions);
+    BatchUtils.processInBatches(normExpressions, 100, normsRepository::saveAll);
     for (Norm norm : normExpressions) {
-      articlesRepository.saveAll(norm.getArticles());
+      BatchUtils.processInBatches(norm.getArticles(), 100, articlesRepository::saveAll);
     }
 
     // delete the expressions from this work that were indexed before the start time
