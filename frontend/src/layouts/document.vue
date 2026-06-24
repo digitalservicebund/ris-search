@@ -34,7 +34,7 @@ const { titlePlaceholder = "Titelzeile nicht vorhanden", views } = defineProps<{
           <Metadata
             v-if="metadata?.length"
             :items="metadata"
-            class="my-24 sm:my-32 md:my-40 2xl:my-48"
+            class="my-24 sm:my-32 md:my-40"
           />
         </div>
 

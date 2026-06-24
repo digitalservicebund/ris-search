@@ -9,7 +9,7 @@ const { title, placeholder } = defineProps<Props>();
 
 <template>
   <h1
-    class="typo-headline2-bold mb-8 wrap-break-word hyphens-auto sm:mb-16 md:mb-24"
+    class="typo-headline1-bold mb-8 wrap-break-word hyphens-auto sm:mb-16 md:mb-24"
     :class="{ 'text-gray-900': !title }"
   >
     {{ title ?? placeholder }}
