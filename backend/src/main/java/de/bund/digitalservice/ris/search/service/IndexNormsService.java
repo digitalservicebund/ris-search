@@ -49,6 +49,8 @@ public class IndexNormsService implements IndexService {
   public static final LocalDate TIME_RELEVANCE_MIN = LocalDate.of(1, Month.JANUARY, 1);
   public static final LocalDate TIME_RELEVANCE_MAX = LocalDate.of(9999, Month.JANUARY, 1);
 
+  private static final int BATCH_SIZE = 100;
+
   /**
    * Constructor for IndexNormsService.
    *
@@ -137,7 +139,7 @@ public class IndexNormsService implements IndexService {
       processOneNormWork(entry.getKey(), entry.getValue(), startingTimestamp);
 
       processedWorkEli++;
-      if (processedWorkEli % 100 == 0 || processedWorkEli == totalWorkElis) {
+      if (processedWorkEli % BATCH_SIZE == 0 || processedWorkEli == totalWorkElis) {
         logger.info("index progress: {}/{} works processed", processedWorkEli, totalWorkElis);
       }
     }
@@ -167,9 +169,9 @@ public class IndexNormsService implements IndexService {
 
     addTimeRelevanceWindows(workEli.toString(), normExpressions);
 
-    BatchUtils.processInBatches(normExpressions, 100, normsRepository::saveAll);
+    BatchUtils.processInBatches(normExpressions, BATCH_SIZE, normsRepository::saveAll);
     for (Norm norm : normExpressions) {
-      BatchUtils.processInBatches(norm.getArticles(), 100, articlesRepository::saveAll);
+      BatchUtils.processInBatches(norm.getArticles(), BATCH_SIZE, articlesRepository::saveAll);
     }
 
     // delete the expressions from this work that were indexed before the start time
