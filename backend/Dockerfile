@@ -1,4 +1,4 @@
-FROM gradle:9.5.1-jdk21@sha256:4a011ed0edfe2feb7dace27d1fedf22caf217918b59932a95605cb7beec142c4
+FROM gradle:9.6.0-jdk21@sha256:6b71d4d40e45200709c178ca0ab10125e1d99e6e44dec6bcbabd0a3371f8e650
 WORKDIR /backend
 COPY --chown=gradle:gradle . /app/backend
 WORKDIR /app/backend
