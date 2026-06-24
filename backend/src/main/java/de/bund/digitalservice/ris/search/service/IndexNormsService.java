@@ -7,6 +7,7 @@ import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.ArticlesRepository;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
+import de.bund.digitalservice.ris.search.utils.BatchUtils;
 import de.bund.digitalservice.ris.search.utils.DateUtils;
 import de.bund.digitalservice.ris.search.utils.eli.EliFile;
 import de.bund.digitalservice.ris.search.utils.eli.ExpressionEli;
@@ -47,6 +48,8 @@ public class IndexNormsService implements IndexService {
   // We can't use LocalDate.MIN or LocalDate.MAX because opensearch min and max differ from java
   public static final LocalDate TIME_RELEVANCE_MIN = LocalDate.of(1, Month.JANUARY, 1);
   public static final LocalDate TIME_RELEVANCE_MAX = LocalDate.of(9999, Month.JANUARY, 1);
+
+  private static final int BATCH_SIZE = 100;
 
   /**
    * Constructor for IndexNormsService.
@@ -136,7 +139,7 @@ public class IndexNormsService implements IndexService {
       processOneNormWork(entry.getKey(), entry.getValue(), startingTimestamp);
 
       processedWorkEli++;
-      if (processedWorkEli % 100 == 0 || processedWorkEli == totalWorkElis) {
+      if (processedWorkEli % BATCH_SIZE == 0 || processedWorkEli == totalWorkElis) {
         logger.info("index progress: {}/{} works processed", processedWorkEli, totalWorkElis);
       }
     }
@@ -166,9 +169,9 @@ public class IndexNormsService implements IndexService {
 
     addTimeRelevanceWindows(workEli.toString(), normExpressions);
 
-    normsRepository.saveAll(normExpressions);
+    BatchUtils.processInBatches(normExpressions, BATCH_SIZE, normsRepository::saveAll);
     for (Norm norm : normExpressions) {
-      articlesRepository.saveAll(norm.getArticles());
+      BatchUtils.processInBatches(norm.getArticles(), BATCH_SIZE, articlesRepository::saveAll);
     }
 
     // delete the expressions from this work that were indexed before the start time
