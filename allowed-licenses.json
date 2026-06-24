@@ -93,6 +93,10 @@
     {
       "moduleLicense": "Custom: LICENSE",
       "moduleName": "posthog-js"
+    },
+    {
+      "moduleLicense": "UNKNOWN",
+      "moduleName": "vaul-vue"
     }
   ]
 }
