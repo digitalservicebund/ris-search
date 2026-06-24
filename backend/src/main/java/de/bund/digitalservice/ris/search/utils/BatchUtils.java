@@ -6,6 +6,8 @@ import org.apache.commons.collections4.ListUtils;
 
 public class BatchUtils {
 
+  private BatchUtils() {}
+
   public static <T> void processInBatches(
       List<T> list, int batchSize, Consumer<List<T>> batchProcessor) {
     if (list == null || list.isEmpty() || batchSize <= 0) {
