@@ -19,40 +19,57 @@ public class BulkExportConfig {
   /**
    * @param source sourceBucket to create the document snapshot from
    * @param target targetBucket to create the archive in
+   * @return BulkExportService
+   */
+  @Bean
+  public BulkExportService normsBulkExportService(NormsBucket source, PublicFilesBucket target) {
+    return new BulkExportService(
+        source, target, DocumentKind.LEGISLATION.getBulkZipPath(), "eli", key -> true);
+  }
+
+  /**
+   * @param source sourceBucket to create the document snapshot from
+   * @param target targetBucket to create the archive in
+   * @return BulkExportService
+   */
+  @Bean
+  public BulkExportService caseLawBulkExportService(
+      CaseLawBucket source, PublicFilesBucket target) {
+    return new BulkExportService(
+        source, target, DocumentKind.CASE_LAW.getBulkZipPath(), "", filterChangelogFiles());
+  }
+
+  /**
+   * @param normsBulkExportService the export service for norms
    * @param changelogService the changelogService used to observe file changes
    * @param portalBucket portalBucket to store the job state
    * @return BulkExportJob
    */
   @Bean
   public BulkExportJob normsBulkExport(
-      NormsBucket source,
-      PublicFilesBucket target,
+      BulkExportService normsBulkExportService,
       ChangelogService<NormsBucket> changelogService,
       PortalBucket portalBucket) {
     return new BulkExportJob(
-        new BulkExportService(
-            source, target, DocumentKind.LEGISLATION.getBulkZipPath(), "eli", key -> true),
+        normsBulkExportService,
         portalBucket,
         DocumentKind.LEGISLATION.getBulkZipPath(),
         changelogService);
   }
 
   /**
-   * @param source sourceBucket to create the document snapshot from
-   * @param target targetBucket to create the archive in
+   * @param caseLawBulkExportService the export service for norms
    * @param changelogService the changelogService used to observe file changes
    * @param portalBucket portalBucket to store the job state
    * @return BulkExportJob
    */
   @Bean
   public BulkExportJob caseLawBulkExport(
-      CaseLawBucket source,
-      PublicFilesBucket target,
+      BulkExportService caseLawBulkExportService,
       ChangelogService<CaseLawBucket> changelogService,
       PortalBucket portalBucket) {
     return new BulkExportJob(
-        new BulkExportService(
-            source, target, DocumentKind.CASE_LAW.getBulkZipPath(), "", filterChangelogFiles()),
+        caseLawBulkExportService,
         portalBucket,
         DocumentKind.CASE_LAW.getBulkZipPath(),
         changelogService);
