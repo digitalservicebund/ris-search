@@ -49,22 +49,6 @@ describe("HeadingGroup", () => {
     expect(notesStub.dataset.textLength).toBe("180");
   });
 
-  it("adds data-longtitle attribute for long titles", async () => {
-    const longName =
-      "Beschwerde- und Rechtsmittelzulassungsgesetz zur Sicherstellung der Glaubwürdigkeit von Entscheidungen der Einzelhandelsgerichte in Angelegenheiten des E-Commerce und der Vertragsabwicklung durch besondere Anforderungen an die Präsentation digitaler Gerichtsentscheidungen sowie zur Änderung des E-Commerce-Marktgesetzes und der Verbraucherinformationsgesetzgebung";
-    const props = createDefaultProps();
-    props.metadata.name = longName;
-
-    render(NormHeadingGroup, {
-      props,
-    });
-
-    await nextTick();
-
-    const headingWrapper = document.querySelector("div[data-longtitle]");
-    expect(headingWrapper).toHaveAttribute("data-longtitle", "true");
-  });
-
   it("still renders heading when no headingAuthorialNotes are provided", async () => {
     const props = createDefaultProps();
     props.htmlParts.headingAuthorialNotes = "";

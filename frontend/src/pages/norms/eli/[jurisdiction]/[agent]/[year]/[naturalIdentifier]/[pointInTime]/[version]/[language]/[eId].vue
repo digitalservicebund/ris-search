@@ -209,7 +209,7 @@ const metadataItems = computed(() => {
     </template>
     <template #default>
       <div
-        class="wrapper mb-24 space-y-24 sm:mb-32 sm:space-y-32 md:mb-40 md:space-y-40 2xl:mb-48 2xl:space-y-48"
+        class="wrapper mb-24 space-y-24 sm:mb-32 sm:space-y-32 md:mb-40 md:space-y-40"
       >
         <p class="typo-headline3-regular mb-8">
           {{ normTitle }}
