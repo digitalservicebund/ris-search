@@ -29,8 +29,8 @@ export function getStringOrUndefined(
   return isStringEmpty(string) ? undefined : (string as string);
 }
 
-export function addEllipsis(text?: string) {
-  if (!text?.length) return text;
+export function addEllipsis(text: string) {
+  if (!text.length) return text;
 
   const startsWithLowercase = text[0]?.toUpperCase() !== text[0];
   if (startsWithLowercase) {
