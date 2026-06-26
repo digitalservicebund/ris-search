@@ -84,7 +84,7 @@ function setPeriodTo(value: string | undefined) {
 
 <template>
   <form :aria-labelledby="formId" class="flex flex-col gap-24">
-    <p :id="formId" class="typo-label2-bold">Filter nach {{ filterLabel }}</p>
+    <p :id="formId" class="typo-label1-bold">Filter nach {{ filterLabel }}</p>
 
     <div v-if="visibleFilters.currentlyInForce" class="flex items-center">
       <RadioButton
@@ -94,9 +94,7 @@ function setPeriodTo(value: string | undefined) {
         value="currentlyInForce"
         @update:model-value="setFilterType"
       />
-      <label :for="currentlyInForceId" class="typo-label2-regular">
-        Aktuell gültig
-      </label>
+      <label :for="currentlyInForceId"> Aktuell gültig </label>
     </div>
 
     <div v-if="visibleFilters.allTime" class="flex items-center">
@@ -107,9 +105,7 @@ function setPeriodTo(value: string | undefined) {
         value="allTime"
         @update:model-value="setFilterType"
       />
-      <label :for="allTimeId" class="typo-label2-regular">
-        Keine zeitliche Begrenzung
-      </label>
+      <label :for="allTimeId"> Keine zeitliche Begrenzung </label>
     </div>
 
     <template v-if="visibleFilters.specificDate">
@@ -122,9 +118,7 @@ function setPeriodTo(value: string | undefined) {
             value="specificDate"
             @update:model-value="setFilterType"
           />
-          <label :for="specificDateId" class="typo-label2-regular">
-            Bestimmtes Datum
-          </label>
+          <label :for="specificDateId"> Bestimmtes Datum </label>
         </div>
 
         <div
@@ -151,9 +145,7 @@ function setPeriodTo(value: string | undefined) {
             value="period"
             @update:model-value="setFilterType"
           />
-          <label :for="periodId" class="typo-label2-regular">
-            Innerhalb einer Zeitspanne
-          </label>
+          <label :for="periodId"> Innerhalb einer Zeitspanne </label>
         </div>
 
         <template v-if="filter.type === 'period'">
@@ -161,9 +153,7 @@ function setPeriodTo(value: string | undefined) {
             v-if="documentKind === DocumentKind.Literature"
             class="flex flex-col gap-8 pt-8 pl-40"
           >
-            <label :for="periodFromYearInputId" class="typo-label2-regular">
-              von
-            </label>
+            <label :for="periodFromYearInputId"> von </label>
             <YearInput
               :id="periodFromYearInputId"
               :model-value="filter.from"
@@ -181,9 +171,7 @@ function setPeriodTo(value: string | undefined) {
           </div>
 
           <div v-else class="flex flex-col gap-8 pt-8 pl-40">
-            <label :for="periodFromDateInputId" class="typo-label2-regular">
-              von
-            </label>
+            <label :for="periodFromDateInputId"> von </label>
             <DateInput
               :id="periodFromDateInputId"
               :model-value="filter.from"
