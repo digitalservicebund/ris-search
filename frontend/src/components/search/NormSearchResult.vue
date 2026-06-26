@@ -55,11 +55,18 @@ const detailPageUrl = computed(() => {
 const relevantHighlights = computed(() =>
   searchResult.textMatches
     .filter((highlight) => highlight.name != "name")
-    .map((hl) => ({
-      name: sanitizeSearchResult(hl.name),
-      text: sanitizeSearchResult(addEllipsis(hl.text) ?? ""),
-      location: hl.location,
-    })),
+    .map((hl) => {
+      const textHasHighlight = hl.text.includes("<mark>");
+      const text = textHasHighlight
+        ? sanitizeSearchResult(addEllipsis(hl.text))
+        : "";
+
+      return {
+        name: sanitizeSearchResult(hl.name),
+        text,
+        location: hl.location,
+      };
+    }),
 );
 
 function getArticleLink(highlight: { location?: string | null }) {
@@ -105,7 +112,11 @@ function getArticleLink(highlight: { location?: string | null }) {
         >
           <span v-html="highlight.name" />
         </NuxtLink>
-        <div v-html="highlight.text" />
+        <div
+          v-if="highlight.text"
+          data-testid="highlighted-field"
+          v-html="highlight.text"
+        />
       </div>
     </div>
   </div>
