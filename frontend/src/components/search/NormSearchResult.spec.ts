@@ -40,25 +40,25 @@ const mockSearchResult: SearchResult<LegislationExpression> = {
     },
     {
       name: "Article 1",
-      text: "Example Text 1",
+      text: "<mark>Example</mark> Text 1",
       "@type": "SearchResultMatch",
       location: "PräöüÄÖÜambel",
     },
     {
       name: "Article 2",
-      text: "Example Text 2",
+      text: "<mark>Example</mark> Text 2",
       "@type": "SearchResultMatch",
       location: undefined,
     },
     {
       name: "Article 3",
-      text: "Example Text 3",
+      text: "<mark>Example</mark> Text 3",
       "@type": "SearchResultMatch",
       location: undefined,
     },
     {
       name: "Article 4",
-      text: "Example Text 4",
+      text: "<mark>Example</mark> Text 4",
       "@type": "SearchResultMatch",
       location: undefined,
     },
@@ -119,10 +119,12 @@ describe("NormSearchResult", () => {
     expect(heading.innerHTML).toBe("Highlighted <mark>Test Title</mark>");
 
     expect(screen.getByText("Article 1")).toBeInTheDocument();
-    expect(screen.getByText(/Example Text 1/)).toBeInTheDocument();
+    expect(
+      screen.getByText((_, el) => el?.textContent === "Example Text 1 …"),
+    ).toBeInTheDocument();
 
-    const highlightSection = screen.getByTestId("highlights");
-    expect(highlightSection.children).toHaveLength(4);
+    const highlightSection = screen.getAllByTestId("highlighted-field");
+    expect(highlightSection).toHaveLength(4);
   });
 
   it("renders ausfertigungs datum when in prototype environment", () => {
@@ -251,6 +253,24 @@ describe("NormSearchResult", () => {
     expect(articleHeading).toBeInTheDocument();
     const link = articleHeading.closest("a");
     expect(link?.getAttribute("href")).contains("/PräöüÄÖÜambel");
+  });
+
+  it("does not display a highlight when the text match has no mark", () => {
+    const modifiedSearchResult: SearchResult<LegislationExpression> = {
+      ...mockSearchResult,
+      textMatches: [
+        {
+          "@type": "SearchResultMatch",
+          name: "<mark>articles.text</mark>",
+          text: "plain text without any highlight",
+          location: undefined,
+        },
+      ],
+    };
+
+    renderComponent(modifiedSearchResult);
+
+    expect(screen.queryByTestId("highlighted-field")).not.toBeInTheDocument();
   });
 
   describe("validity status badge", () => {

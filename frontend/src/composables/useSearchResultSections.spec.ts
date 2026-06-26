@@ -101,4 +101,13 @@ describe("useSearchResultSections", () => {
 
     expect(previewSections.value).toHaveLength(2);
   });
+
+  it("sets text to empty string when the match has no highlight", () => {
+    const textMatches: TextMatch[] = [
+      { name: "first", text: "plain text without any marks" },
+    ];
+    const previewSections = useSearchResultSections(textMatches, fields);
+
+    expect(previewSections.value[0]?.text).toBe("");
+  });
 });

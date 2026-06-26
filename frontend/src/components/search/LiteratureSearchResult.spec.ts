@@ -226,5 +226,20 @@ describe("LiteratureSearchResult", () => {
       expect(contentItems).toHaveLength(1);
       expect(contentItems[0]?.innerHTML).toBe(expectedSanitized);
     });
+
+    it("does not render a section when the text match has no highlight", () => {
+      renderComponent({
+        textMatches: [
+          {
+            "@type": "SearchResultMatch",
+            name: "shortReport",
+            text: "plain text without any highlight",
+            location: undefined,
+          },
+        ],
+      });
+
+      expect(screen.queryAllByTestId("highlighted-field")).toHaveLength(0);
+    });
   });
 });

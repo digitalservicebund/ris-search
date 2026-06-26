@@ -176,5 +176,20 @@ describe("AdministrativeDirectiveSearchResult", () => {
       expect(items).toHaveLength(1);
       expect(items[0]?.innerHTML).toBe(expectedSanitized);
     });
+
+    it("does not render a section when the text match has no highlight", async () => {
+      await renderComponent({
+        textMatches: [
+          {
+            "@type": "SearchResultMatch",
+            name: "shortReport",
+            text: "plain text without any highlight",
+            location: undefined,
+          },
+        ],
+      });
+
+      expect(screen.queryAllByTestId("highlighted-field")).toHaveLength(0);
+    });
   });
 });
