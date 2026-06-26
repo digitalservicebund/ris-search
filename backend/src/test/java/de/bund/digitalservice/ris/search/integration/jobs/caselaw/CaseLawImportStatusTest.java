@@ -1,4 +1,4 @@
-package de.bund.digitalservice.ris.search.integration.importer.caselaw;
+package de.bund.digitalservice.ris.search.integration.jobs.caselaw;
 
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;

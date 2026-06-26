@@ -1,8 +1,6 @@
 package de.bund.digitalservice.ris.search.unit.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -17,9 +15,11 @@ import de.bund.digitalservice.ris.ZipTestUtils;
 import de.bund.digitalservice.ris.search.exception.NoSuchKeyException;
 import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
 import de.bund.digitalservice.ris.search.service.BulkExportService;
-import de.bund.digitalservice.ris.search.service.Job;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.Clock;
+import java.time.Instant;
+import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -29,8 +29,11 @@ import org.junit.jupiter.api.Test;
 
 class BulkExportServiceTest {
 
+  private static final Clock clock =
+      Clock.fixed(Instant.parse("2024-01-01T12:00:00.123Z"), ZoneId.of("UTC"));
+
   @Test
-  void runJob_successfulZipAndUpload() throws IOException {
+  void updateLatestZip_successfulZipAndUpload() throws IOException {
     ObjectStorage sourceBucket = mock(ObjectStorage.class);
     ObjectStorage destinationBucket = mock(ObjectStorage.class);
     String outputName = "test-export";
@@ -57,7 +60,8 @@ class BulkExportServiceTest {
     BulkExportService bulkExportService =
         new BulkExportService(sourceBucket, destinationBucket, outputName, prefix, key -> true);
 
-    assertDoesNotThrow(bulkExportService::runJob);
+    boolean actual = bulkExportService.updateLatestZip(clock.instant());
+    assertThat(actual).isTrue();
 
     verify(sourceBucket, times(1)).getAllKeysByPrefix(prefix);
     verify(sourceBucket, times(1)).get("file1.txt");
@@ -75,7 +79,7 @@ class BulkExportServiceTest {
   }
 
   @Test
-  void runJob_withObsoleteFiles_shouldDeleteThem() throws IOException {
+  void updateLatestZip_withObsoleteFiles_shouldDeleteThem() throws IOException {
     ObjectStorage sourceBucket = mock(ObjectStorage.class);
     ObjectStorage destinationBucket = mock(ObjectStorage.class);
     String outputName = "test-export";
@@ -96,7 +100,8 @@ class BulkExportServiceTest {
     BulkExportService bulkExportService =
         new BulkExportService(sourceBucket, destinationBucket, outputName, prefix, key -> true);
 
-    assertDoesNotThrow(bulkExportService::runJob);
+    boolean actual = bulkExportService.updateLatestZip(clock.instant());
+    assertThat(actual).isTrue();
 
     verify(sourceBucket, times(1)).getAllKeysByPrefix(prefix);
     verify(sourceBucket, times(1)).get("file1.txt");
@@ -107,7 +112,7 @@ class BulkExportServiceTest {
   }
 
   @Test
-  void runJob_sourceBucketThrowsIOException_shouldPropagateException()
+  void updateLatestZip_sourceBucketThrowsIOException_shouldPropagateException()
       throws IOException, NoSuchKeyException {
     ObjectStorage sourceBucket = mock(ObjectStorage.class);
     ObjectStorage destinationBucket = mock(ObjectStorage.class);
@@ -120,7 +125,8 @@ class BulkExportServiceTest {
     BulkExportService bulkExportService =
         new BulkExportService(sourceBucket, destinationBucket, outputName, prefix, key -> true);
 
-    assertThrows(RuntimeException.class, bulkExportService::runJob);
+    Instant timestamp = clock.instant();
+    assertThrows(RuntimeException.class, () -> bulkExportService.updateLatestZip(timestamp));
 
     verify(sourceBucket, times(0)).getStream(anyString());
     verify(destinationBucket, times(0)).putStream(anyString(), any(InputStream.class));
@@ -128,7 +134,7 @@ class BulkExportServiceTest {
   }
 
   @Test
-  void runJob_destinationBucketPutStreamThrowsIOException_shouldReturnWithErrorCode()
+  void updateLatestZip_destinationBucketPutStreamThrowsIOException_shouldReturnWithFalse()
       throws IOException {
     ObjectStorage sourceBucket = mock(ObjectStorage.class);
     ObjectStorage destinationBucket = mock(ObjectStorage.class);
@@ -143,11 +149,12 @@ class BulkExportServiceTest {
         new BulkExportService(
             sourceBucket, destinationBucket, "test-export", "some/prefix/", key -> true);
 
-    assertEquals(Job.ReturnCode.ERROR, bulkExportService.runJob());
+    boolean actual = bulkExportService.updateLatestZip(clock.instant());
+    assertThat(actual).isFalse();
   }
 
   @Test
-  void runJob_onEmptyFiles_shouldReturnEarlyWithErrorCode() {
+  void updateLatestZip_onEmptyFiles_shouldReturnEarlyWithFalse() {
     ObjectStorage sourceBucket = mock(ObjectStorage.class);
     ObjectStorage destinationBucket = mock(ObjectStorage.class);
 
@@ -157,11 +164,12 @@ class BulkExportServiceTest {
         new BulkExportService(
             sourceBucket, destinationBucket, "test-export", "some/prefix/", key -> false);
 
-    assertEquals(Job.ReturnCode.ERROR, bulkExportService.runJob());
+    boolean actual = bulkExportService.updateLatestZip(clock.instant());
+    assertThat(actual).isFalse();
   }
 
   @Test
-  void runJob_whenContentOfKeyIsNotFound_shouldReturnWithErrorCode() {
+  void updateLatestZip_whenContentOfKeyIsNotFound_shouldReturnFalse() {
     ObjectStorage sourceBucket = mock(ObjectStorage.class);
     ObjectStorage destinationBucket = mock(ObjectStorage.class);
 
@@ -172,6 +180,7 @@ class BulkExportServiceTest {
         new BulkExportService(
             sourceBucket, destinationBucket, "test-export", "some/prefix/", key -> true);
 
-    assertEquals(Job.ReturnCode.ERROR, bulkExportService.runJob());
+    boolean actual = bulkExportService.updateLatestZip(clock.instant());
+    assertThat(actual).isFalse();
   }
 }
