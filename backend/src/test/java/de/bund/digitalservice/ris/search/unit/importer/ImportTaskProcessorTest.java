@@ -35,6 +35,8 @@ class ImportTaskProcessorTest {
   @Mock private AdministrativeDirectiveIndexSyncJob administrativeDirectiveUpdateJob;
   @Mock private BulkExportJob normsBulkExport;
   @Mock private BulkExportJob caseLawBulkExport;
+  @Mock private BulkExportJob adminBulkExport;
+  @Mock private BulkExportJob literatureBulkExport;
 
   private ImportTaskProcessor processor;
 
@@ -49,7 +51,9 @@ class ImportTaskProcessorTest {
             ecliSitemapJob,
             administrativeDirectiveUpdateJob,
             normsBulkExport,
-            caseLawBulkExport);
+            caseLawBulkExport,
+            adminBulkExport,
+            literatureBulkExport);
   }
 
   @Test
@@ -128,7 +132,11 @@ class ImportTaskProcessorTest {
       "--task",
       "generate_norms_snapshot",
       "--task",
-      "generate_caselaw_snapshot"
+      "generate_caselaw_snapshot",
+      "--task",
+      "generate_admin_snapshot",
+      "--task",
+      "generate_literature_snapshot"
     };
     when(normIndexSyncJob.runJob()).thenReturn(Job.ReturnCode.SUCCESS);
     when(caseLawIndexSyncJob.runJob()).thenReturn(Job.ReturnCode.SUCCESS);
@@ -136,6 +144,8 @@ class ImportTaskProcessorTest {
     when(sitemapsUpdateJob.runJob()).thenReturn(Job.ReturnCode.SUCCESS);
     when(normsBulkExport.runJob()).thenReturn(Job.ReturnCode.SUCCESS);
     when(caseLawBulkExport.runJob()).thenReturn(Job.ReturnCode.SUCCESS);
+    when(adminBulkExport.runJob()).thenReturn(Job.ReturnCode.SUCCESS);
+    when(literatureBulkExport.runJob()).thenReturn(Job.ReturnCode.SUCCESS);
 
     // When
     int exitCode = processor.run(args);
@@ -148,6 +158,8 @@ class ImportTaskProcessorTest {
     verify(sitemapsUpdateJob).runJob();
     verify(normsBulkExport).runJob();
     verify(caseLawBulkExport).runJob();
+    verify(adminBulkExport).runJob();
+    verify(literatureBulkExport).runJob();
   }
 
   @Test
