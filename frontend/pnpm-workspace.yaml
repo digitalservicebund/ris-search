@@ -13,6 +13,8 @@ allowBuilds:
   vue-demi: false
 
 minimumReleaseAge: 4320
+minimumReleaseAgeExclude:
+  - "@digitalservicebund/ris-ui"
 
 publicHoistPattern:
   - "vue"
