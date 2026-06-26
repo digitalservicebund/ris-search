@@ -237,7 +237,7 @@ watch(searchStatus, async (newStatus, oldStatus) => {
           aria-label="Filter"
         >
           <fieldset class="mb-40">
-            <legend class="typo-label1-regular mb-8">Dokumentart</legend>
+            <legend class="typo-label1-bold mb-8">Dokumentart</legend>
             <PanelMenu
               :model="documentKindMenuItems"
               :expanded-keys="{ [documentKind]: true }"
