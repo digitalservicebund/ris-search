@@ -1,4 +1,4 @@
-package de.bund.digitalservice.ris.search.integration.importer.norm;
+package de.bund.digitalservice.ris.search.integration.jobs.norm;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

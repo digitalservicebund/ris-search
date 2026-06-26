@@ -1,4 +1,4 @@
-package de.bund.digitalservice.ris.search.integration.importer.literature;
+package de.bund.digitalservice.ris.search.integration.jobs.literature;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

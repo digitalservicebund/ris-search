@@ -22,6 +22,10 @@ import software.amazon.awssdk.core.ResponseInputStream;
 import software.amazon.awssdk.core.exception.SdkClientException;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.CompleteMultipartUploadRequest;
+import software.amazon.awssdk.services.s3.model.CompleteMultipartUploadResponse;
+import software.amazon.awssdk.services.s3.model.CreateMultipartUploadRequest;
+import software.amazon.awssdk.services.s3.model.CreateMultipartUploadResponse;
 import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.DeleteObjectResponse;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
@@ -31,6 +35,8 @@ import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
 import software.amazon.awssdk.services.s3.model.NoSuchKeyException;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectResponse;
+import software.amazon.awssdk.services.s3.model.UploadPartRequest;
+import software.amazon.awssdk.services.s3.model.UploadPartResponse;
 
 /**
  * TestMockS3Client is a mock implementation of the S3Client interface for testing purposes. It
@@ -144,6 +150,25 @@ public class TestMockS3Client extends MockS3Client implements S3Client {
       LOGGER.error("Couldn't put object to local storage: {}", key);
       return null;
     }
+  }
+
+  @Override
+  public CreateMultipartUploadResponse createMultipartUpload(CreateMultipartUploadRequest request) {
+    String uploadId = java.util.UUID.randomUUID().toString();
+    return CreateMultipartUploadResponse.builder().uploadId(uploadId).build();
+  }
+
+  @Override
+  public UploadPartResponse uploadPart(
+      UploadPartRequest uploadPartRequest, RequestBody requestBody) {
+    return UploadPartResponse.builder().eTag("mockEtag").build();
+  }
+
+  @Override
+  public CompleteMultipartUploadResponse completeMultipartUpload(
+      CompleteMultipartUploadRequest completeMultipartUploadRequest) {
+    putFile(completeMultipartUploadRequest.key(), "mock file content");
+    return CompleteMultipartUploadResponse.builder().build();
   }
 
   protected void logObjectRetrievalError(String message) {

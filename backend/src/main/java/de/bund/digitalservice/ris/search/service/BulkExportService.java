@@ -26,19 +26,21 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /** Service for creating and managing bulk exports of objects from ObjectStorage. */
-public class BulkExportService implements Job {
+public class BulkExportService {
 
   private final Logger logger = LogManager.getLogger(BulkExportService.class);
 
   private final ObjectStorage sourceBucket;
   private final ObjectStorage destinationBucket;
-  private final String outputName;
   private final String prefix;
   private final Predicate<String> keyFilter;
   public static final String BULK_ZIP_PREFIX = "snapshots/";
+  public static final String JOB_STATE_STORAGE_PREFIX = "snapshot-job-state/";
+
+  private final String archivePrefix;
 
   /**
-   * Job to include potentially all files from a source bucket in a zip file and store it in a
+   * Service to include potentially all files from a source bucket in a zip file and store it in a
    * destination bucket.
    *
    * @param sourceBucket the ObjectStorage bucket to read files from
@@ -55,25 +57,31 @@ public class BulkExportService implements Job {
       Predicate<String> keyFilter) {
     this.sourceBucket = sourceBucket;
     this.destinationBucket = destinationBucket;
-    this.outputName = outputName;
     this.prefix = prefix;
     this.keyFilter = keyFilter;
+    this.archivePrefix = BULK_ZIP_PREFIX + outputName;
   }
 
-  @Override
-  public ReturnCode runJob() {
-    String timestamp = Instant.now().toString();
+  /**
+   * starts the archiving process
+   *
+   * @param timestamp start of the snapshot creation
+   * @return true if successful, false on error
+   */
+  public boolean updateLatestZip(Instant timestamp) {
+    String resultObjectKey = archivePrefix + "_" + timestamp + ".zip";
+    // collect already existing archive to be deleted after a successful snapshot or a detected file
+    // deletion
+    List<String> obsoleteObjectKeys = destinationBucket.getAllKeysByPrefix(archivePrefix);
+
+    logger.info("Creating snapshot");
     List<String> keysToZip =
         sourceBucket.getAllKeysByPrefix(prefix).stream().filter(keyFilter).toList();
 
     if (keysToZip.isEmpty()) {
       logger.error("No files found for bucket {}", sourceBucket.getClass());
-      return ReturnCode.ERROR;
+      return false;
     }
-
-    String affectedPrefix = BULK_ZIP_PREFIX + outputName;
-    String resultObjectKey = affectedPrefix + "_" + timestamp + ".zip";
-    List<String> obsoleteObjectKeys = destinationBucket.getAllKeysByPrefix(affectedPrefix);
 
     BlockingQueue<FileData> downloadQueue = new ArrayBlockingQueue<>(20);
 
@@ -88,7 +96,9 @@ public class BulkExportService implements Job {
       Future<?> downloadWorker = orchestrator.submit(downloaderTask);
       Future<?> zipWorker = orchestrator.submit(zipperTask);
 
-      // Main thread blocks here, piping input data directly to S3
+      // Main thread blocks here, piping input data directly to S3. S3ObjectStorageClient::putStream
+      // uses a ReadableByteChannel which, unlike InputStream, listens for interruptions and
+      // gracefully cancels the multipart upload.
       long byteCount = destinationBucket.putStream(resultObjectKey, pipedInputStream);
 
       // Check background worker health
@@ -107,19 +117,17 @@ public class BulkExportService implements Job {
     } catch (InterruptedException e) {
       logger.error("Bulk export execution was interrupted.", e);
       Thread.currentThread().interrupt();
-      return ReturnCode.ERROR;
+      return false;
     } catch (Exception e) {
       logger.error("Bulk export execution failed or was aborted due to structural error.", e);
-      return ReturnCode.ERROR;
+      return false;
     }
 
-    // Clean up old backups exclusively on success
-    logger.info("Deleting obsolete archive objects {}", obsoleteObjectKeys);
-    for (String obsoleteObjectKey : obsoleteObjectKeys) {
-      destinationBucket.delete(obsoleteObjectKey);
-    }
-
-    return ReturnCode.SUCCESS;
+    // Clean up old backups exclusively on success. If deletion fails (and throws an exception) the
+    // job will fail. This is wanted. We will successfully have a zip, but will get an error to
+    // investigate.
+    deleteArchives(obsoleteObjectKeys);
+    return true;
   }
 
   @Value
@@ -242,6 +250,20 @@ public class BulkExportService implements Job {
         throw new UncheckedIOException(
             new IOException("ZIP production engine encountered a failure status", e));
       }
+    }
+  }
+
+  /** Delete all archives for the document kind this service manages */
+  public void deleteArchives() {
+    logger.info("deleting all archives for prefix: {}", archivePrefix);
+    List<String> files = destinationBucket.getAllKeysByPrefix(archivePrefix);
+    deleteArchives(files);
+  }
+
+  private void deleteArchives(List<String> obsoleteObjectKeys) {
+    logger.info("Deleting archive objects {}", obsoleteObjectKeys);
+    for (String obsoleteObjectKey : obsoleteObjectKeys) {
+      destinationBucket.delete(obsoleteObjectKey);
     }
   }
 }

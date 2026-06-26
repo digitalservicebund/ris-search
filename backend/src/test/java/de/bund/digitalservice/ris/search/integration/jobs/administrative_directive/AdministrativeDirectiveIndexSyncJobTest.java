@@ -1,4 +1,4 @@
-package de.bund.digitalservice.ris.search.integration.importer.administrative_directive;
+package de.bund.digitalservice.ris.search.integration.jobs.administrative_directive;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.testcontainers.shaded.org.awaitility.Awaitility.await;
