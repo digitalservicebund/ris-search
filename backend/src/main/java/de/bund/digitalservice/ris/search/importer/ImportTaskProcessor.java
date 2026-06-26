@@ -143,9 +143,7 @@ public class ImportTaskProcessor {
    * predefined job types such as importing norms, case law, literature, administrative directives,
    * or updating sitemaps.
    *
-   * @param target the identifier of the task to execute. Expected values include: "import_norms",
-   *     "import_caselaw", "import_literature", "import_administrative_directive",
-   *     "update_sitemaps", and "generate_ecli_sitemaps".
+   * @param target the identifier of the task to execute.
    * @return the return code of the executed job. Typically, indicates the success or failure of a
    *     task, with success represented by a specific constant.
    * @throws IllegalArgumentException if the provided target is not recognized.
