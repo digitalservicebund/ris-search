@@ -169,21 +169,41 @@ describe("CaselawSearchResult", () => {
 
   describe("fields when only one text match is returned", () => {
     const fields = [
-      { field: "guidingPrinciple", value: "Leitsatz." },
-      { field: "headnote", value: "Orientierungssatz." },
-      { field: "otherHeadnote", value: "Sonstiger Orientierungssätze." },
-      { field: "tenor", value: "Tenor." },
-      { field: "grounds", value: "Gründe." },
-      { field: "caseFacts", value: "Tatbestand." },
-      { field: "decisionGrounds", value: "Entscheidungsgründe." },
+      {
+        field: "guidingPrinciple",
+        value: "Leitsatz.",
+        text: "<mark>Leitsatz</mark>.",
+      },
+      {
+        field: "headnote",
+        value: "Orientierungssatz.",
+        text: "<mark>Orientierungssatz</mark>.",
+      },
+      {
+        field: "otherHeadnote",
+        value: "Sonstiger Orientierungssätze.",
+        text: "<mark>Sonstiger Orientierungssätze</mark>.",
+      },
+      { field: "tenor", value: "Tenor.", text: "<mark>Tenor</mark>." },
+      { field: "grounds", value: "Gründe.", text: "<mark>Gründe</mark>." },
+      {
+        field: "caseFacts",
+        value: "Tatbestand.",
+        text: "<mark>Tatbestand</mark>.",
+      },
+      {
+        field: "decisionGrounds",
+        value: "Entscheidungsgründe.",
+        text: "<mark>Entscheidungsgründe</mark>.",
+      },
     ];
 
-    fields.forEach(({ field, value }) => {
+    fields.forEach(({ field, value, text }) => {
       it(`displays '${value}'`, () => {
         const textMatches: TextMatch[] = [
           {
             name: field,
-            text: value,
+            text,
             "@type": "SearchResultMatch",
             location: undefined,
           },
@@ -356,5 +376,20 @@ describe("CaselawSearchResult", () => {
     expect(contentItems[1]).toHaveTextContent("Headnote.");
     expect(contentItems[2]).toHaveTextContent("Other Headnote.");
     expect(contentItems[3]).toHaveTextContent("Tenor.");
+  });
+
+  it("does not display a field when the text match has no highlight", () => {
+    renderComponent({
+      textMatches: [
+        {
+          "@type": "SearchResultMatch",
+          name: "guidingPrinciple",
+          text: "plain text without any highlight",
+          location: undefined,
+        },
+      ],
+    });
+
+    expect(screen.queryAllByTestId("highlighted-field")).toHaveLength(0);
   });
 });
