@@ -47,7 +47,7 @@ const currentView = computed(
       </nav>
     </div>
 
-    <div class="min-h-96 bg-white print:py-0">
+    <div id="content" class="min-h-96 bg-white print:py-0">
       <div class="wrapper">
         <slot :name="currentView" />
       </div>

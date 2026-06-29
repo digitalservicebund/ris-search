@@ -228,7 +228,7 @@ const metadataItems = computed(() => {
       <Metadata v-if="privateFeaturesEnabled" :items="metadataItems" />
     </div>
 
-    <div class="border-t border-t-gray-400 bg-white">
+    <div id="content" class="border-t border-t-gray-400 bg-white">
       <SidebarLayout class="wrapper">
         <template v-if="!!articleHtml">
           <DocumentsIncompleteDataMessage />
