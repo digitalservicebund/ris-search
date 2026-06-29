@@ -132,9 +132,8 @@ public class S3ObjectStorageClient implements ObjectStorageClient {
     int partNumber = 1;
     long totalBytesRead = 0;
 
-    try (inputStream;
-        ReadableByteChannel channel = Channels.newChannel(inputStream)) {
-      // try-with-resources closes the inputStream and channel
+    try (ReadableByteChannel channel = Channels.newChannel(inputStream)) {
+      // try-with-resources manages the channel
       // Read the inputStream stream in chunks and upload each part
       byte[] buffer = new byte[partSize];
       int bytesRead;
@@ -176,7 +175,7 @@ public class S3ObjectStorageClient implements ObjectStorageClient {
 
     } finally {
       if (!success && uploadId != null) {
-        logger.warn("Error uploading to S3, aborting multipart upload");
+        logger.error("Error uploading to S3, aborting multipart upload");
         s3Client.abortMultipartUpload(
             AbortMultipartUploadRequest.builder()
                 .bucket(bucketName)
