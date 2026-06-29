@@ -182,7 +182,7 @@ const fassungenDateFilterInputId = useId();
       <TabsLayout :views>
         <template #text>
           <section role="tabpanel" :aria-labelledby="textTabPanelTitleId">
-            <SidebarLayout class="wrapper">
+            <SidebarLayout>
               <template #content>
                 <h2 :id="textTabPanelTitleId" class="sr-only">Text</h2>
                 <DocumentsIncompleteDataMessage />
@@ -207,7 +207,7 @@ const fassungenDateFilterInputId = useId();
 
         <template #details>
           <section role="tabpanel" :aria-labelledby="detailsTabPanelTitleId">
-            <div class="wrapper pt-32 pb-32 md:pb-56">
+            <div class="pt-32 pb-32 md:pb-56">
               <h2 :id="detailsTabPanelTitleId" class="typo-headline3-bold">
                 Details
               </h2>
@@ -263,7 +263,7 @@ const fassungenDateFilterInputId = useId();
 
         <template #versions>
           <section role="tabpanel" :aria-labelledby="fassungenTabPanelTitleId">
-            <div class="wrapper pt-32 pb-32 md:pb-56">
+            <div class="pt-32 pb-32 md:pb-56">
               <template v-if="privateFeaturesEnabled">
                 <h2 :id="fassungenTabPanelTitleId" class="typo-headline3-bold">
                   Fassungen
