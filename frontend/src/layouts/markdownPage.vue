@@ -12,13 +12,11 @@ defineProps<{
       <slot name="breadcrumb" />
     </template>
 
-    <template #default>
-      <div class="wrapper pb-32 md:pb-56">
-        <div class="prose">
-          <MDC :value="staticContent"></MDC>
-        </div>
+    <div class="wrapper pb-32 md:pb-56">
+      <div class="prose">
+        <MDC :value="staticContent"></MDC>
       </div>
-    </template>
+    </div>
   </BreadcrumbPageLayout>
 </template>
 

@@ -202,159 +202,155 @@ watch(searchStatus, async (newStatus, oldStatus) => {
     <template #breadcrumb>
       <Breadcrumbs :items="[{ label: 'Suche' }]" />
     </template>
-    <template #default>
-      <div class="wrapper pb-32 md:pb-56">
-        <h1 class="typo-headline1-bold inline-block pb-8">Suche</h1>
 
-        <div id="search">
-          <SearchSimpleSearchInput
-            :model-value="query"
-            @update:model-value="updateQuery"
-            @empty-search="handleEmptySearch"
-          />
-        </div>
+    <div class="wrapper pb-32 md:pb-56">
+      <h1 class="typo-headline1-bold inline-block pb-8">Suche</h1>
 
-        <SkipLink to="#search-results" class="mt-8">
-          Zu den Ergebnissen
-        </SkipLink>
+      <div id="search">
+        <SearchSimpleSearchInput
+          :model-value="query"
+          @update:model-value="updateQuery"
+          @empty-search="handleEmptySearch"
+        />
+      </div>
 
-        <p v-if="privateFeaturesEnabled" class="typo-label2-regular mt-8">
-          Mehr Suchoptionen finden Sie unter
-          <NuxtLink
-            :to="{ name: 'advanced-search' }"
-            class="ris-link2-bold 2xl:ris-link1-bold"
+      <SkipLink to="#search-results" class="mt-8">
+        Zu den Ergebnissen
+      </SkipLink>
+
+      <p v-if="privateFeaturesEnabled" class="typo-label2-regular mt-8">
+        Mehr Suchoptionen finden Sie unter
+        <NuxtLink
+          :to="{ name: 'advanced-search' }"
+          class="ris-link2-bold 2xl:ris-link1-bold"
+        >
+          Erweiterte Suche
+        </NuxtLink>
+      </p>
+
+      <div class="mt-32 flex flex-col gap-48 md:mt-48 lg:flex-row">
+        <aside class="pb-10 lg:w-3/12" :aria-labelledby="filterHeadingId">
+          <h2
+            :id="filterHeadingId"
+            class="typo-label1-regular flex h-48 items-center"
           >
-            Erweiterte Suche
-          </NuxtLink>
-        </p>
+            Filter
+          </h2>
 
-        <div class="mt-32 flex flex-col gap-48 md:mt-48 lg:flex-row">
-          <aside class="pb-10 lg:w-3/12" :aria-labelledby="filterHeadingId">
-            <h2
-              :id="filterHeadingId"
-              class="typo-label1-regular flex h-48 items-center"
-            >
-              Filter
-            </h2>
+          <div class="flex flex-col gap-24">
+            <SearchCategoryFilter
+              :model-value="categoryFilterValue"
+              @update:model-value="updateCategoryFilter"
+            />
 
-            <div class="flex flex-col gap-24">
-              <SearchCategoryFilter
-                :model-value="categoryFilterValue"
-                @update:model-value="updateCategoryFilter"
-              />
+            <SearchCourtFilter
+              v-if="documentKind === DocumentKind.CaseLaw"
+              :model-value="court"
+              @update:model-value="updateCourt"
+            />
 
-              <SearchCourtFilter
-                v-if="documentKind === DocumentKind.CaseLaw"
-                :model-value="court"
-                @update:model-value="updateCourt"
-              />
+            <SearchDateRangeFilter
+              v-if="
+                documentKind === DocumentKind.CaseLaw ||
+                documentKind === DocumentKind.AdministrativeDirective
+              "
+              v-model="localDateFilter"
+              @update:model-value="updateDateFilter"
+            />
 
-              <SearchDateRangeFilter
-                v-if="
-                  documentKind === DocumentKind.CaseLaw ||
-                  documentKind === DocumentKind.AdministrativeDirective
-                "
-                v-model="localDateFilter"
-                @update:model-value="updateDateFilter"
-              />
+            <SearchYearRangeFilter
+              v-else-if="documentKind === DocumentKind.Literature"
+              v-model="localDateFilter"
+              @update:model-value="updateDateFilter"
+            />
+          </div>
+        </aside>
 
-              <SearchYearRangeFilter
-                v-else-if="documentKind === DocumentKind.Literature"
-                v-model="localDateFilter"
-                @update:model-value="updateDateFilter"
-              />
-            </div>
-          </aside>
-
-          <div
-            id="search-results"
-            ref="resultsContainerRef"
-            class="w-full scroll-mt-16 flex-col justify-end gap-8 lg:w-9/12"
+        <div
+          id="search-results"
+          ref="resultsContainerRef"
+          class="w-full scroll-mt-16 flex-col justify-end gap-8 lg:w-9/12"
+        >
+          <Pagination
+            :is-loading="isLoading"
+            :page="searchResults"
+            navigation-position="bottom"
+            @update-page="updatePage"
           >
-            <Pagination
-              :is-loading="isLoading"
-              :page="searchResults"
-              navigation-position="bottom"
-              @update-page="updatePage"
+            <div
+              class="mb-12 flex w-full flex-wrap items-center justify-between gap-x-32 gap-y-16"
             >
-              <div
-                class="mb-12 flex w-full flex-wrap items-center justify-between gap-x-32 gap-y-16"
+              <output
+                aria-atomic="true"
+                aria-live="polite"
+                class="typo-label1-regular"
               >
-                <output
-                  aria-atomic="true"
-                  aria-live="polite"
-                  class="typo-label1-regular"
-                >
-                  {{ isLoading ? "Lade ..." : formattedResultCount }}
-                </output>
+                {{ isLoading ? "Lade ..." : formattedResultCount }}
+              </output>
 
-                <div class="flex flex-wrap gap-x-32 gap-y-16">
-                  <div class="flex items-center gap-8">
-                    <label
-                      :id="itemsPerPageLabelId"
-                      class="typo-label2-regular"
-                    >
-                      Einträge pro Seite
-                    </label>
-                    <Select
-                      :model-value="itemsPerPage"
-                      :aria-labelledby="itemsPerPageLabelId"
-                      :options="itemsPerPageOptions"
-                      @update:model-value="updateItemsPerPage"
-                    />
-                  </div>
-
-                  <SearchSortSelect
-                    :model-value="sort"
-                    :document-kind
-                    @update:model-value="updateSort"
+              <div class="flex flex-wrap gap-x-32 gap-y-16">
+                <div class="flex items-center gap-8">
+                  <label :id="itemsPerPageLabelId" class="typo-label2-regular">
+                    Einträge pro Seite
+                  </label>
+                  <Select
+                    :model-value="itemsPerPage"
+                    :aria-labelledby="itemsPerPageLabelId"
+                    :options="itemsPerPageOptions"
+                    @update:model-value="updateItemsPerPage"
                   />
                 </div>
+
+                <SearchSortSelect
+                  :model-value="sort"
+                  :document-kind
+                  @update:model-value="updateSort"
+                />
               </div>
+            </div>
 
-              <div class="max-w-prose">
-                <Message v-if="!!searchError" severity="error">
-                  {{ searchError.message }}
-                </Message>
+            <div class="max-w-prose">
+              <Message v-if="!!searchError" severity="error">
+                {{ searchError.message }}
+              </Message>
 
-                <Message
-                  severity="warn"
-                  class="ris-body2-regular mt-16 max-w-prose"
-                  role="status"
-                  aria-live="off"
+              <Message
+                severity="warn"
+                class="ris-body2-regular mt-16 max-w-prose"
+                role="status"
+                aria-live="off"
+              >
+                <p class="ris-body2-bold mt-2">
+                  Dieser Service befindet sich in der Testphase.
+                </p>
+                <p>
+                  Der Datenbestand ist noch nicht vollständig und die
+                  Suchpriorisierung noch nicht final. Der Service ist in
+                  Entwicklung. Wir arbeiten an der Ergänzung und Darstellung
+                  aller Inhalte.
+                </p>
+              </Message>
+
+              <ul v-if="searchResults" aria-label="Suchergebnisse">
+                <li
+                  v-for="(searchResult, index) in searchResults.member"
+                  :key="getIdentifier(searchResult.item)"
+                  class="my-40"
                 >
-                  <p class="ris-body2-bold mt-2">
-                    Dieser Service befindet sich in der Testphase.
-                  </p>
-                  <p>
-                    Der Datenbestand ist noch nicht vollständig und die
-                    Suchpriorisierung noch nicht final. Der Service ist in
-                    Entwicklung. Wir arbeiten an der Ergänzung und Darstellung
-                    aller Inhalte.
-                  </p>
-                </Message>
+                  <SearchResult :search-result :order="index" />
+                </li>
+              </ul>
 
-                <ul v-if="searchResults" aria-label="Suchergebnisse">
-                  <li
-                    v-for="(searchResult, index) in searchResults.member"
-                    :key="getIdentifier(searchResult.item)"
-                    class="my-40"
-                  >
-                    <SearchResult :search-result :order="index" />
-                  </li>
-                </ul>
-
-                <div
-                  v-if="isLoading"
-                  class="flex h-full min-h-48 w-full items-center justify-center"
-                >
-                  <DelayedLoadingMessage />
-                </div>
+              <div
+                v-if="isLoading"
+                class="flex h-full min-h-48 w-full items-center justify-center"
+              >
+                <DelayedLoadingMessage />
               </div>
-            </Pagination>
-          </div>
+            </div>
+          </Pagination>
         </div>
       </div>
-    </template>
+    </div>
   </NuxtLayout>
 </template>
