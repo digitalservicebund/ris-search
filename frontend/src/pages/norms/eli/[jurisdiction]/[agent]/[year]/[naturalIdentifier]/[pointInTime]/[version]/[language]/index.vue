@@ -209,7 +209,13 @@ const fassungenDateFilterInputId = useId();
               <h2 :id="detailsTabPanelTitleId" class="typo-headline3-bold">
                 Details
               </h2>
-              <DocumentsIncompleteDataMessage class="my-24" />
+
+              <div class="base-grid my-24">
+                <DocumentsIncompleteDataMessage
+                  class="col-span-12 lg:col-span-7"
+                />
+              </div>
+
               <DetailsList>
                 <DetailsListEntry
                   label="Ausfertigungsdatum:"
@@ -267,7 +273,12 @@ const fassungenDateFilterInputId = useId();
                   Fassungen
                 </h2>
 
-                <DocumentsIncompleteDataMessage class="my-24" />
+                <div class="base-grid my-24">
+                  <DocumentsIncompleteDataMessage
+                    class="col-span-12 lg:col-span-7"
+                  />
+                </div>
+
                 <div class="my-16 md:my-24">
                   <label
                     :for="fassungenDateFilterInputId"
@@ -362,6 +373,6 @@ const fassungenDateFilterInputId = useId();
 }
 
 .footnotes :deep(.nichtamtliche-fussnoten .fussnote:first-child pre) {
-  @apply -mt-8;
+  @apply md:-mt-8;
 }
 </style>
