@@ -119,17 +119,15 @@ const detailItems = computed(() => getLiteratureDetailItems(literature.value));
 
     <template #text>
       <SidebarLayout>
-        <template #content>
-          <section role="tabpanel" :aria-labelledby="textSectionId">
-            <h2 :id="textSectionId" class="sr-only">Text</h2>
-            <DocumentsIncompleteDataMessage />
-            <div
-              v-if="document"
-              class="literature"
-              v-html="document.body.innerHTML"
-            ></div>
-          </section>
-        </template>
+        <section role="tabpanel" :aria-labelledby="textSectionId">
+          <h2 :id="textSectionId" class="sr-only">Text</h2>
+          <DocumentsIncompleteDataMessage />
+          <div
+            v-if="document"
+            class="literature"
+            v-html="document.body.innerHTML"
+          ></div>
+        </section>
 
         <template #sidebar>
           <client-only>

@@ -230,7 +230,7 @@ const metadataItems = computed(() => {
 
       <div class="border-t border-t-gray-400 bg-white">
         <SidebarLayout class="wrapper">
-          <template v-if="!!articleHtml" #content>
+          <template v-if="!!articleHtml">
             <DocumentsIncompleteDataMessage />
             <DocumentsNormsLegislationContent single-article>
               <div class="akn-act" v-html="articleHtml" />

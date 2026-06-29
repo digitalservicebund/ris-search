@@ -183,15 +183,13 @@ const fassungenDateFilterInputId = useId();
         <template #text>
           <section role="tabpanel" :aria-labelledby="textTabPanelTitleId">
             <SidebarLayout>
-              <template #content>
-                <h2 :id="textTabPanelTitleId" class="sr-only">Text</h2>
-                <DocumentsIncompleteDataMessage />
-                <DocumentsNormsLegislationContent
-                  :official-toc="htmlParts.officialToc"
-                >
-                  <div v-html="htmlParts.body" />
-                </DocumentsNormsLegislationContent>
-              </template>
+              <h2 :id="textTabPanelTitleId" class="sr-only">Text</h2>
+              <DocumentsIncompleteDataMessage />
+              <DocumentsNormsLegislationContent
+                :official-toc="htmlParts.officialToc"
+              >
+                <div v-html="htmlParts.body" />
+              </DocumentsNormsLegislationContent>
 
               <template #sidebar v-if="tableOfContents?.length">
                 <client-only>
