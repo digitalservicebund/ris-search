@@ -8,6 +8,7 @@ import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationU
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.service.AdvancedSearchService;
+import de.bund.digitalservice.ris.search.utils.RisHighlightBuilder;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -166,6 +167,112 @@ class AdvancedSearchServiceTest extends ContainersIntegrationBase {
 
     var articleInnerHits = searchHit.getInnerHits().get("top_three_articles");
     assertThat(articleInnerHits).isNull();
+  }
+
+  @Test
+  @DisplayName(
+      "norm advanced search returns the full official title when the match is in a title longer than fragment size")
+  void normAdvancedSearchReturnsFullOfficialTitleLongerThan320Characters() {
+    String token = "__token__";
+    String title = longTitleContaining(token);
+    normsRepository.save(
+        Norm.builder()
+            .id("long-title-norm")
+            .workEli("eli/long-title-norm/work")
+            .expressionEli("eli/long-title-norm/expression")
+            .officialTitle(title)
+            .build());
+
+    var searchHit =
+        advancedSearchService.searchNorm(token, Pageable.unpaged()).getSearchHits().getSearchHit(0);
+
+    assertThat(getFieldMatches(searchHit)).containsEntry("officialTitle", highlight(title, token));
+  }
+
+  @Test
+  @DisplayName(
+      "case law advanced search returns the full headline when the match is in a title longer than fragment size")
+  void caseLawAdvancedSearchReturnsFullHeadlineLongerThan320Characters() {
+    String token = "__token__";
+    String title = longTitleContaining(token);
+    caseLawRepository.save(
+        CaseLawDocumentationUnit.builder()
+            .id("long-title-caselaw")
+            .documentNumber("LONGCASELAW01")
+            .headline(title)
+            .build());
+
+    var searchHit =
+        advancedSearchService
+            .searchCaseLaw(token, Pageable.unpaged())
+            .getSearchHits()
+            .getSearchHit(0);
+
+    assertThat(getFieldMatches(searchHit)).containsEntry("headline", highlight(title, token));
+  }
+
+  @Test
+  @DisplayName(
+      "literature advanced search returns the full main title when the match is in a title longer than fragment size")
+  void literatureAdvancedSearchReturnsFullMainTitleLongerThan320Characters() {
+    String token = "__token__";
+    String title = longTitleContaining(token);
+    literatureRepository.save(
+        Literature.builder()
+            .id("long-title-literature")
+            .documentNumber("LONGLIT0000001")
+            .mainTitle(title)
+            .build());
+
+    var searchHit =
+        advancedSearchService
+            .searchLiterature(token, Pageable.unpaged())
+            .getSearchHits()
+            .getSearchHit(0);
+
+    assertThat(getFieldMatches(searchHit)).containsEntry("mainTitle", highlight(title, token));
+  }
+
+  @Test
+  @DisplayName(
+      "administrative directive advanced search returns the full headline when the match is in a title longer than fragment size")
+  void administrativeDirectiveAdvancedSearchReturnsFullHeadlineLongerThan320Characters() {
+    String token = "__token__";
+    String title = longTitleContaining(token);
+    administrativeDirectiveRepository.save(
+        AdministrativeDirective.builder()
+            .id("long-title-administrative-directive")
+            .documentNumber("LONGADMIN00001")
+            .headline(title)
+            .build());
+
+    var searchHit =
+        advancedSearchService
+            .searchAdministrativeDirective(token, Pageable.unpaged())
+            .getSearchHits()
+            .getSearchHit(0);
+
+    assertThat(getFieldMatches(searchHit)).containsEntry("headline", highlight(title, token));
+  }
+
+  /**
+   * Builds a title that is longer than the highlight fragment size ({@link
+   * RisHighlightBuilder#HIGHLIGHT_FRAGMENT_SIZE}) and embeds the given (unique) token so it can be
+   * matched on. The token is placed in the middle so that a truncated fragment would not contain
+   * the whole title.
+   */
+  private String longTitleContaining(String token) {
+    String filler = "Lorem ipsum dolor sit amet ".repeat(15); // 405 characters
+    String title = (filler + token + " " + filler).strip();
+    assertThat(title.length()).isGreaterThan(RisHighlightBuilder.HIGHLIGHT_FRAGMENT_SIZE);
+    return title;
+  }
+
+  /** Returns the title with the (single, whole-word) token wrapped in highlight tags. */
+  private String highlight(String title, String token) {
+    return title.replace(
+        token,
+        RisHighlightBuilder.HIGHLIGHT_PRE_TAG + token + RisHighlightBuilder.HIGHLIGHT_POST_TAG);
   }
 
   private Pair<String, String> getArticleTextMatch(SearchHit<?> searchHit) {
