@@ -145,8 +145,10 @@ const detailsTabPanelTitleId = useId();
           role="tabpanel"
           :aria-labelledby="textSectionId"
         >
-          <h2 :id="textSectionId" class="sr-only">Text</h2>
-          <section class="max-w-prose" v-html="html" />
+          <SidebarLayout>
+            <h2 :id="textSectionId" class="sr-only">Text</h2>
+            <div v-html="html" />
+          </SidebarLayout>
         </section>
       </template>
 
