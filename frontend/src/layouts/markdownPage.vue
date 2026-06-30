@@ -12,8 +12,10 @@ defineProps<{
       <slot name="breadcrumb" />
     </template>
 
-    <div class="wrapper pb-32 md:pb-56">
-      <div class="prose">
+    <div class="wrapper base-grid pb-32 md:pb-56">
+      <div
+        class="markdown-content col-span-12 md:col-span-9 lg:col-span-8 xl:col-span-7 2xl:col-span-6"
+      >
         <MDC :value="staticContent"></MDC>
       </div>
     </div>
@@ -31,9 +33,9 @@ defineProps<{
   styles defined here.
 
 see: https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@scope */
-@scope (.prose) to (.no-prose) {
+@scope (.markdown-content) to (.no-markdown-content) {
   :scope {
-    @apply ris-body2-regular sm:ris-body1-regular max-w-prose 2xl:text-[1.25rem];
+    @apply ris-body2-regular sm:ris-body1-regular 2xl:text-[1.25rem];
   }
 
   h1 {
