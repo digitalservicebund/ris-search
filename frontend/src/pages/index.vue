@@ -46,9 +46,11 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
   </div>
 
   <div
-    class="wrapper flex flex-col gap-16 pt-16 pb-32 sm:gap-24 sm:pt-24 md:pb-56"
+    class="wrapper base-grid gap-y-16 pt-16 pb-32 sm:gap-y-24 sm:pt-24 md:pb-56"
   >
-    <FeatureCard>
+    <FeatureCard
+      class="col-span-12 lg:col-span-10 lg:col-start-2 xl:col-span-8 xl:col-start-3"
+    >
       <div>
         <h2 class="typo-headline2-bold wrap-break-word hyphens-auto">
           Testen Sie die Suche
@@ -82,7 +84,9 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
       </Message>
     </FeatureCard>
 
-    <FeatureCard>
+    <FeatureCard
+      class="col-span-12 lg:col-span-10 lg:col-start-2 xl:col-span-8 xl:col-start-3"
+    >
       <div>
         <h2 class="typo-headline2-bold wrap-break-word hyphens-auto">
           Testen Sie die Darstellung aktueller Gesetze, Verordnungen und
@@ -103,7 +107,10 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
       </div>
     </FeatureCard>
 
-    <FeatureCard v-if="privateFeaturesEnabled">
+    <FeatureCard
+      class="col-span-12 lg:col-span-10 lg:col-start-2 xl:col-span-8 xl:col-start-3"
+      v-if="privateFeaturesEnabled"
+    >
       <div>
         <h2 class="typo-headline2-bold wrap-break-word hyphens-auto">
           English translation of German laws and regulations
@@ -121,7 +128,9 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
       </div>
     </FeatureCard>
 
-    <FeatureCard>
+    <FeatureCard
+      class="col-span-12 lg:col-span-10 lg:col-start-2 xl:col-span-8 xl:col-start-3"
+    >
       <div>
         <h2 class="typo-headline2-bold wrap-break-word hyphens-auto">
           Testen Sie die Programmierschnittstelle
@@ -144,7 +153,10 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
       </div>
     </FeatureCard>
 
-    <FeatureCard inner-class="gap-x-64 gap-y-32 md:flex-row">
+    <FeatureCard
+      class="col-span-12 lg:col-span-10 lg:col-start-2 xl:col-span-8 xl:col-start-3"
+      inner-class="gap-x-64 gap-y-32 md:flex-row"
+    >
       <img
         class="mt-20 ml-20 self-start md:mt-4 md:ml-0"
         :src="bmjvLogo"
