@@ -219,10 +219,8 @@ watch(searchStatus, async (newStatus, oldStatus) => {
       <Breadcrumbs :items="[{ label: 'Erweiterte Suche' }]" />
     </template>
 
-    <div
-      class="wrapper grid grid-cols-1 gap-40 pb-32 md:pb-56 lg:grid-cols-[20rem_1fr] lg:gap-64"
-    >
-      <div class="lg:col-span-2">
+    <div class="wrapper base-grid gap-y-40 pb-32 md:pb-56 lg:gap-y-64">
+      <div class="col-span-12">
         <h1 class="typo-headline1-bold mb-16">Erweiterte Suche</h1>
         <p class="text-balance">
           Nutzen Sie die erweiterte Suche, um genau das zu finden, was Sie
@@ -233,7 +231,7 @@ watch(searchStatus, async (newStatus, oldStatus) => {
       </div>
 
       <aside
-        class="row-start-3 lg:row-span-2 lg:row-start-auto"
+        class="col-span-12 lg:col-span-4 lg:row-span-2 xl:col-span-3"
         aria-label="Filter"
       >
         <fieldset class="mb-40">
@@ -251,7 +249,7 @@ watch(searchStatus, async (newStatus, oldStatus) => {
         />
       </aside>
 
-      <div id="search" class="row-start-2 lg:row-start-auto">
+      <div id="search" class="col-span-12 lg:col-span-8 lg:col-start-5">
         <SearchDataFieldPicker
           v-model="localQuery"
           :data-fields="queryableDataFields"
@@ -263,60 +261,67 @@ watch(searchStatus, async (newStatus, oldStatus) => {
         />
       </div>
 
-      <div ref="resultsContainerRef" id="search-results" class="scroll-mt-16">
-        <Pagination
-          v-if="searchStatus !== 'idle'"
-          :is-loading="searchStatus === 'pending'"
-          :page="searchResults"
-          navigation-position="bottom"
-          @update-page="handlePageUpdate"
+      <div
+        ref="resultsContainerRef"
+        id="search-results"
+        class="col-span-12 grid scroll-mt-16 grid-cols-subgrid gap-y-32 lg:col-span-8 lg:col-start-5"
+      >
+        <div
+          class="col-span-12 flex flex-col gap-16 md:flex-row md:items-center md:gap-48 lg:col-span-8"
         >
-          <div
-            class="mb-32 flex flex-col gap-16 md:flex-row md:items-center md:gap-48"
+          <output
+            aria-atomic="true"
+            aria-live="polite"
+            class="typo-label2-regular mr-auto text-nowrap"
           >
-            <output
-              aria-atomic="true"
-              aria-live="polite"
-              class="typo-label2-regular mr-auto text-nowrap"
-            >
-              {{ formattedResultCount }}
-            </output>
+            {{ formattedResultCount }}
+          </output>
 
-            <div class="flex items-center gap-8">
-              <label :id="itemsPerPageLabelId" class="typo-label2-regular">
-                Einträge pro Seite
-              </label>
-              <Select
-                :model-value="itemsPerPage"
-                :aria-labelledby="itemsPerPageLabelId"
-                :options="itemsPerPageOptions"
-                @update:model-value="updateItemsPerPage"
-              />
-            </div>
-
-            <SearchSortSelect
-              :model-value="sort"
-              :document-kind
-              @update:model-value="updateSort"
+          <div class="flex items-center gap-8">
+            <label :id="itemsPerPageLabelId" class="typo-label2-regular">
+              Einträge pro Seite
+            </label>
+            <Select
+              :model-value="itemsPerPage"
+              :aria-labelledby="itemsPerPageLabelId"
+              :options="itemsPerPageOptions"
+              @update:model-value="updateItemsPerPage"
             />
           </div>
 
-          <div class="max-w-prose">
+          <SearchSortSelect
+            :model-value="sort"
+            :document-kind
+            @update:model-value="updateSort"
+          />
+        </div>
+
+        <div id="search" class="col-span-12 lg:col-span-7">
+          <Pagination
+            v-if="searchStatus !== 'idle'"
+            :is-loading="searchStatus === 'pending'"
+            :page="searchResults"
+            navigation-position="bottom"
+            @update-page="handlePageUpdate"
+          >
             <Message v-if="!!searchError" severity="error">
               {{ searchError.message }}
             </Message>
 
-            <ul v-if="searchResults" aria-label="Suchergebnisse">
+            <ul
+              v-if="searchResults"
+              aria-label="Suchergebnisse"
+              class="space-y-40"
+            >
               <li
                 v-for="(searchResult, order) in searchResults.member"
                 :key="getIdentifier(searchResult.item)"
-                class="my-40"
               >
                 <SearchResult :search-result :order />
               </li>
             </ul>
-          </div>
-        </Pagination>
+          </Pagination>
+        </div>
       </div>
     </div>
   </NuxtLayout>
