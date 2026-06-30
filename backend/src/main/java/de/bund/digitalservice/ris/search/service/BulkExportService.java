@@ -17,6 +17,7 @@ import java.util.concurrent.Future;
 import java.util.function.Predicate;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
+import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -122,13 +123,13 @@ public class BulkExportService {
     return true;
   }
 
+  private record FetchResult(String key, Optional<byte[]> bytes) {}
+
   private static final class ZipStreamProducer implements Runnable {
     private final List<String> keysToDownload;
     private final OutputStream outputPipe;
     private final int totalFileCount;
     private final ObjectStorage sourceBucket;
-
-    private final Logger logger = LogManager.getLogger(ZipStreamProducer.class);
 
     private final Logger log = LogManager.getLogger(ZipStreamProducer.class);
 
@@ -143,31 +144,51 @@ public class BulkExportService {
       this.totalFileCount = totalFileCount;
     }
 
-    @Override
     public void run() {
       int processedCount = 0;
 
-      try (ZipOutputStream zos = new ZipOutputStream(new BufferedOutputStream(outputPipe))) {
-        for (String key : keysToDownload) {
-          Optional<byte[]> fileBytes = sourceBucket.get(key);
+      try (ExecutorService downloadExecutor = Executors.newVirtualThreadPerTaskExecutor();
+          ZipOutputStream zos = new ZipOutputStream(new BufferedOutputStream(outputPipe))) {
 
-          if (fileBytes.isEmpty()) {
-            log.error("Object key '{}' not found in storage.", key);
-            throw new IOException("Object key not found");
+        List<List<String>> batches = ListUtils.partition(keysToDownload, 100);
+
+        // download the batches asynchronously to minimize io latency
+        for (List<String> keyBatch : batches) {
+          List<CompletableFuture<FetchResult>> futures =
+              keyBatch.stream()
+                  .map(
+                      key ->
+                          CompletableFuture.supplyAsync(
+                              () -> {
+                                Optional<byte[]> bytes = sourceBucket.get(key);
+                                return new FetchResult(key, bytes);
+                              },
+                              downloadExecutor))
+                  .toList();
+
+          // write batch to the ZIP in a blocking call
+          for (CompletableFuture<FetchResult> future : futures) {
+
+            // If any background download task threw an exception this will throw a
+            // CompletionException and abort
+            FetchResult result = future.join();
+
+            Optional<byte[]> bytesOption = result.bytes;
+
+            if (bytesOption.isEmpty()) {
+              log.error("Object key '{}' not found in storage.", result.key());
+              throw new IOException("Object key not found: " + result.key());
+            }
+
+            ZipEntry entry = new ZipEntry(result.key());
+            zos.putNextEntry(entry);
+            zos.write(bytesOption.get());
+            zos.closeEntry();
+
+            processedCount++;
           }
 
-          ZipEntry entry = new ZipEntry(key);
-          zos.putNextEntry(entry);
-          zos.write(fileBytes.get());
-          zos.closeEntry();
-
-          processedCount++;
-          if (processedCount % 10000 == 0 || processedCount == totalFileCount) {
-            logger.info(
-                "Bulk export progress: {}/{} files packaged for upload",
-                processedCount,
-                totalFileCount);
-          }
+          log.info("Bulk export progress: {}/{} files packaged", processedCount, totalFileCount);
         }
       } catch (Exception e) {
         throw new UncheckedIOException(
