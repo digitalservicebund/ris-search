@@ -12,6 +12,7 @@ import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.Objects;
 import org.apache.catalina.connector.ClientAbortException;
+import org.apache.tomcat.util.http.InvalidParameterException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.NestedExceptionUtils;
@@ -341,5 +342,24 @@ public class ControllerExceptionHandler {
   @ExceptionHandler({ClientAbortException.class})
   public void handleClientAbortException(ClientAbortException exception) {
     logger.warn("connection closed by client: {}", exception.getMessage());
+  }
+
+  /**
+   * Handles exceptions of type {@link InvalidParameterException} and returns a standardized error
+   * response with HTTP status 400 (Bad Request).
+   *
+   * @param ex the {@link InvalidParameterException} containing the error
+   * @return a {@link ResponseEntity} containing a {@link CustomError} object with the error message
+   */
+  @ExceptionHandler(InvalidParameterException.class)
+  public ResponseEntity<CustomError> handleInvalidTomcatParameter(InvalidParameterException ex) {
+    // NOTE : This is org.apache.tomcat.util.http.InvalidParameterException and not
+    // java.security.InvalidParameterException therefore represents a client error
+
+    logger.warn("Invalid parameter provided by api user : {}", ex.getMessage());
+
+    CustomError error =
+        CustomError.builder().code("invalid_parameter").message("Invalid parameter").build();
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
   }
 }

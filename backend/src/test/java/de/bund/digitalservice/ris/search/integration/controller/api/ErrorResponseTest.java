@@ -1,17 +1,23 @@
 package de.bund.digitalservice.ris.search.integration.controller.api;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.integration.config.TestMockEndpointsController;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
@@ -24,6 +30,8 @@ import org.springframework.test.web.servlet.MockMvc;
 class ErrorResponseTest extends ContainersIntegrationBase {
 
   @Autowired private MockMvc mockMvc;
+
+  @LocalServerPort private int port;
 
   @Test
   @DisplayName("Should return 403 when using wrong http method")
@@ -92,5 +100,23 @@ class ErrorResponseTest extends ContainersIntegrationBase {
     mockMvc
         .perform(get("/throwHttpMessageNotWritableException").contentType(MediaType.TEXT_HTML))
         .andExpect(status().is5xxServerError());
+  }
+
+  @Test
+  @DisplayName("Should return 400 on invalid parameter")
+  void shouldReturn400OnInvalidParameterException() throws Exception {
+    // An actual HttpClient is needed instead of mockMvc to get the tomcat level error
+    try (HttpClient client = HttpClient.newHttpClient()) {
+
+      HttpRequest request =
+          HttpRequest.newBuilder()
+              .uri(URI.create("http://localhost:" + port + "/v1/legislation?searchTerm=f%FCr"))
+              .header("Content-Type", "text/html")
+              .GET()
+              .build();
+
+      HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+      assertThat(response.statusCode()).isEqualTo(400);
+    }
   }
 }
