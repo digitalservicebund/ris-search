@@ -17,7 +17,6 @@ import java.util.concurrent.Future;
 import java.util.function.Predicate;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-import lombok.Value;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -90,13 +89,13 @@ public class BulkExportService {
               new ZipStreamProducer(keysToZip, sourceBucket, pipedOutputStream, keysToZip.size()),
               executor);
 
-      // Check background worker health
-      zipWorker.get();
-
       // Main thread blocks here, piping input data directly to S3. S3ObjectStorageClient::putStream
       // uses a ReadableByteChannel which, unlike InputStream, listens for interruptions and
       // gracefully cancels the multipart upload.
       long byteCount = destinationBucket.putStream(resultObjectKey, pipedInputStream);
+
+      // Check background worker health
+      zipWorker.get();
 
       logger.log(
           Level.INFO,
@@ -121,15 +120,6 @@ public class BulkExportService {
     // investigate.
     deleteArchives(obsoleteObjectKeys);
     return true;
-  }
-
-  @Value
-  static class FileData {
-    String key;
-    byte[] bytes;
-
-    public static final FileData END_OF_STREAM = new FileData("SIGNAL_SUCCESS", null);
-    public static final FileData STREAM_ERROR = new FileData("SIGNAL_FAILURE", null);
   }
 
   private static final class ZipStreamProducer implements Runnable {
