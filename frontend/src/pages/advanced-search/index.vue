@@ -296,7 +296,7 @@ watch(searchStatus, async (newStatus, oldStatus) => {
           />
         </div>
 
-        <div id="search" class="col-span-12 lg:col-span-7">
+        <div class="col-span-12 lg:col-span-7">
           <Pagination
             v-if="searchStatus !== 'idle'"
             :is-loading="searchStatus === 'pending'"
