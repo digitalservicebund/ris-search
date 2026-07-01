@@ -25,7 +25,7 @@
         },
         "AB": {
           "type": "alias",
-          "path": "official_abbreviation"
+          "path": "abbreviation"
         },
         "DATUM": {
           "type": "alias",
@@ -87,7 +87,7 @@
             }
           }
         },
-        "official_abbreviation": {
+        "abbreviation": {
           "type": "text",
           "analyzer": "custom_german_analyzer",
           "fields": {

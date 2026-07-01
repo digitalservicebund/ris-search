@@ -1,6 +1,6 @@
 <?xml-model href="../../../Grammatiken/Norms/legalDocML.de.sch" schematypens="http://purl.oclc.org/dsdl/schematron"?>
 <?xml-model href="../../../Grammatiken/Norms/legalDocML.de.sch" schematypens="http://purl.oclc.org/dsdl/schematron"?>
-<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.6/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://Metadaten.LegalDocML.de/1.6/ ../schema/legalDocML.de-metadaten.xsd http://Inhaltsdaten.LegalDocML.de/1.6/ ../schema/legalDocML.de-regelungstextverkuendungsfassung.xsd">
+<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.8.2/" xmlns:ris="http://MetadatenRIS.LegalDocML.de/1.8.2/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://Metadaten.LegalDocML.de/1.6/ ../schema/legalDocML.de-metadaten.xsd http://Inhaltsdaten.LegalDocML.de/1.6/ ../schema/legalDocML.de-regelungstextverkuendungsfassung.xsd">
     <akn:act name="regelungstext">
         <akn:meta GUID="87b3446a-faa1-4d81-bb34-48ce7929de86" eId="meta-1">
             <akn:identification GUID="d0fadae0-fffa-45b9-957a-dcac17793605" eId="meta-1_ident-1" source="attributsemantik-noch-undefiniert">
@@ -24,7 +24,11 @@
                     <akn:FRBRuri value="eli/bund/bgbl-1/1962/s514//2010-04-27/1/deu/2010-04-27/regelungstext-1.xml"/>
                 </akn:FRBRManifestation>
             </akn:identification>
-            <akn:proprietary GUID="8108f3bf-efa8-47fa-94b9-e645ad8e3cb6" eId="meta-1_proprietary-1" source="attributsemantik-noch-undefiniert"/>
+            <akn:proprietary eId="meta-1_proprietary-1" GUID="cc6ed2b0-745d-4b44-83e2-9e6f7e500c28" source="attributsemantik-noch-undefiniert">
+                <ris:legalDocML.de_metadaten xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.8.2/ ../../Grammatiken/Norms/legalDocML.de-metadaten-ris.xsd">
+                    <ris:abkuerzung refersTo="interne-abkuerzung">RisAbbrev</ris:abkuerzung>
+                </ris:legalDocML.de_metadaten>
+            </akn:proprietary>
         </akn:meta>
     </akn:act>
 </akn:akomaNtoso>

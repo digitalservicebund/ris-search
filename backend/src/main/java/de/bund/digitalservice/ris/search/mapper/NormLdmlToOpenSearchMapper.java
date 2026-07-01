@@ -69,9 +69,7 @@ public class NormLdmlToOpenSearchMapper {
   private static final String X_PATH_MANIFESTATION_THIS =
       "//*[local-name()='FRBRManifestation']/*[local-name()='FRBRthis']/@value";
   private static final String X_PATH_SHORT_TITLE_ABBREVIATION =
-      "//*[local-name()='shortTitle']/*[local-name()='inline']/text()";
-  private static final String X_PATH_DOC_TITLE_ABBREVIATION =
-      "//*[local-name()='docTitle']/*[local-name()='inline']/text()";
+      "//*[local-name()='shortTitle']/*[local-name()='inline' and @refersTo='amtliche-abkuerzung']/text()";
   private static final String X_PATH_WORK_DATE =
       "//*[local-name()='FRBRWork']/*[local-name()='FRBRdate']/@date";
   private static final String X_PATH_DATE_AUSFERTIGUNG =
@@ -150,13 +148,19 @@ public class NormLdmlToOpenSearchMapper {
       List<Attachment> attachments =
           NormAttachmentMapper.parseAttachments(xmlDocument, attachmentFileContents);
 
-      final String officialAbbreviation = getOfficialAbbreviationByXmlDocument(xmlDocument);
+      final Optional<String> maybeAbbreviation = getAbbreviation(xmlDocument);
+      if (maybeAbbreviation.isEmpty()) {
+        logger.error("Norm '{}' does not have ris:abkuerzung", manifestationEli);
+        return Optional.empty();
+      }
+
+      final String abbreviation = maybeAbbreviation.get();
 
       String indexedAt = Instant.now().toString();
 
       List<Article> articles =
           getArticlesByXmlDocument(
-              xmlDocument, attachments, officialAbbreviation, workEli, expressionEli, indexedAt);
+              xmlDocument, attachments, abbreviation, workEli, expressionEli, indexedAt);
       List<String> articleNames = articles.stream().map(Article::getName).toList();
       List<String> articleTexts = articles.stream().map(Article::getText).toList();
       String fullCitation = xmlDocument.getElementByXpath(X_PATH_FULL_CITATION);
@@ -185,7 +189,7 @@ public class NormLdmlToOpenSearchMapper {
               .manifestationEliExample(manifestationEli)
               .officialTitle(getOfficialTitleByXmlDocument(xmlDocument))
               .officialShortTitle(getOfficialShortTitleByXmlDocument(xmlDocument))
-              .officialAbbreviation(officialAbbreviation)
+              .abbreviation(abbreviation)
               .normsDate(legislationDate)
               .normsSortDate(normsSortDate)
               .datePublished(datePublished)
@@ -278,22 +282,21 @@ public class NormLdmlToOpenSearchMapper {
         .trim();
   }
 
-  private static String getOfficialAbbreviationByXmlDocument(XmlDocument xmlDocument) {
-    String xmlDocumentShortTitleAbbreviation =
-        xmlDocument.getElementByXpath(X_PATH_SHORT_TITLE_ABBREVIATION);
+  /**
+   * Tries to extract the official abbreviation (amtliche Abkürzung) from the document. If that
+   * doesn't exist uses the ris:abkuerzung as fallback.
+   *
+   * @param xmlDocument
+   * @return official abbreviation or ris:abkuerzung (fallback)
+   */
+  private static Optional<String> getAbbreviation(XmlDocument xmlDocument) {
+    Optional<String> officialAbbreviation =
+        xmlDocument.getNonEmptyElementByXpath(X_PATH_SHORT_TITLE_ABBREVIATION);
+    Optional<String> risAbbreviation = xmlDocument.getNonEmptyElementByXpath(X_PATH_RIS_ABKUERZUNG);
 
-    if (StringUtils.isNotEmpty(xmlDocumentShortTitleAbbreviation)) {
-      return xmlDocumentShortTitleAbbreviation;
-    }
-
-    String xmlDocumentDocTitleAbbreviation =
-        xmlDocument.getElementByXpath(X_PATH_DOC_TITLE_ABBREVIATION);
-
-    if (StringUtils.isNotEmpty(xmlDocumentDocTitleAbbreviation)) {
-      return xmlDocumentDocTitleAbbreviation;
-    }
-
-    return StringUtils.EMPTY;
+    if (officialAbbreviation.isPresent()) {
+      return officialAbbreviation;
+    } else return risAbbreviation;
   }
 
   private static LocalDate getDateByXpath(XmlDocument xmlDocument, String xpath) {
@@ -391,7 +394,7 @@ public class NormLdmlToOpenSearchMapper {
   private static List<Article> getArticlesByXmlDocument(
       XmlDocument xmlDocument,
       List<Attachment> attachments,
-      String officialAbbreviation,
+      String abbreviation,
       String workEli,
       String expressionEli,
       String indexedAt)
@@ -423,7 +426,7 @@ public class NormLdmlToOpenSearchMapper {
       getArticleNodeAsArticle(
               nodes.item(i),
               temporalGroupsWithDates,
-              officialAbbreviation,
+              abbreviation,
               workEli,
               expressionEli,
               indexedAt)
@@ -468,21 +471,21 @@ public class NormLdmlToOpenSearchMapper {
    * instance, users might type "97 BGB", which should reveal that article first.
    *
    * @param marker The first part, e.g. "§ 97".
-   * @param officialAbbreviation E.g. "BGB".
+   * @param abbreviation E.g. "BGB".
    * @return null if either part is missing, or the concatenation of both.
    */
   @Nullable
-  private static String getSearchKeyword(String marker, String officialAbbreviation) {
-    if (StringUtils.isBlank(officialAbbreviation) || StringUtils.isBlank(marker)) {
+  private static String getSearchKeyword(String marker, String abbreviation) {
+    if (StringUtils.isBlank(abbreviation) || StringUtils.isBlank(marker)) {
       return null;
     }
-    return "%s %s".formatted(marker, officialAbbreviation);
+    return "%s %s".formatted(marker, abbreviation);
   }
 
   private static Optional<Article> getArticleNodeAsArticle(
       Node articleNode,
       Map<String, TimeInterval> temporalGroupsWithDates,
-      String officialAbbreviation,
+      String abbreviation,
       String workEli,
       String expressionEli,
       String indexedAt) {
@@ -513,7 +516,7 @@ public class NormLdmlToOpenSearchMapper {
         expiryDate = toLocalDate(timeInterval.end());
       }
 
-      final @Nullable String searchKeyword = getSearchKeyword(marker, officialAbbreviation);
+      final @Nullable String searchKeyword = getSearchKeyword(marker, abbreviation);
 
       return Optional.of(
           Article.builder()

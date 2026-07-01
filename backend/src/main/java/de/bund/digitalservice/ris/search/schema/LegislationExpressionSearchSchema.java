@@ -5,7 +5,6 @@ import de.bund.digitalservice.ris.search.config.ApiConfig;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
 import lombok.Builder;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents the schema for a legislation expression search result, providing details about a
@@ -40,7 +39,10 @@ public record LegislationExpressionSearchSchema(
             example = "1998-02-06/..",
             requiredMode = Schema.RequiredMode.REQUIRED)
         String temporalCoverage,
-    @Nullable @Schema(example = "KakaoV 2003", description = "Amtliche Buchstabenabkürzung")
+    @Schema(
+            example = "KakaoV 2003",
+            description = "Amtliche Buchstabenabkürzung, if it exists. Otherwise ris-abkuerzung.",
+            requiredMode = Schema.RequiredMode.REQUIRED)
         String abbreviation,
     @Schema(
             example = "Kakaoverordnung",
