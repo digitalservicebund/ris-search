@@ -5,44 +5,43 @@ import { NuxtLink } from "#components";
 import { usePostHog } from "~/composables/usePostHog";
 import { isStringEmpty } from "~/utils/textFormatting";
 
+defineProps<{ hideIntro?: boolean }>();
+
+const route = useRoute();
+
 const { sendFeedbackToPostHog } = usePostHog();
-const honeypotId = useId();
-const feedbackMessageId = useId();
-const feedback = ref("");
-const honeypot = ref("");
 const errorMessage: Ref<string | undefined> = ref();
 const isSent = ref(false);
-const emptyMessageError = "Geben Sie Ihr Feedback in das obere Textfeld ein.";
 const sendingError =
   "Es gab leider einen Fehler. Probieren Sie es zu einem späteren Moment noch einmal.";
 
-const submitFeedback = async () => {
+const feedback = ref("");
+const feedbackMessageId = useId();
+
+const honeypot = ref("");
+const honeypotId = useId();
+
+async function submitFeedback() {
   errorMessage.value = undefined;
+
   if (isStringEmpty(feedback.value)) {
-    errorMessage.value = emptyMessageError;
+    errorMessage.value = "Geben Sie Ihr Feedback in das obere Textfeld ein.";
     return;
   }
+
   try {
     await sendFeedbackToPostHog(feedback.value, honeypot.value);
     isSent.value = true;
   } catch {
     errorMessage.value = sendingError;
   }
-};
-defineProps<{ hideIntro?: boolean }>();
-
-const feedbackAction = "/api/feedback";
-
-const route = useRoute();
+}
 
 watch(
   () => route.query.feedback,
-  (feedbackParam) => {
-    if (feedbackParam === "sent") {
-      isSent.value = true;
-    } else if (feedbackParam === "error") {
-      errorMessage.value = sendingError;
-    }
+  (value) => {
+    if (value === "sent") isSent.value = true;
+    else if (value === "error") errorMessage.value = sendingError;
   },
   { immediate: true },
 );
@@ -56,41 +55,35 @@ watch(
       data-test-id="feedback-sent-confirmation"
     >
       <div class="typo-headline3-bold">Vielen Dank für Ihr Feedback!</div>
-      <!-- Temporarily disabled due to data issue with Form bricks -->
-      <div v-if="false" class="flex flex-col space-y-8">
+
+      <div class="flex flex-col space-y-8">
         <div class="typo-headline3-bold">
           Möchten Sie an Nutzungsstudien teilnehmen?
         </div>
         <p>
           Nutzungsstudien helfen uns zu verstehen, wie Sie diesen Service nutzen
-          und wie wir sie verbessern können. Wir suchen Menschen, die sich
-          unentgeltlich an der Nutzungsstudien beteiligen möchten. Dafür ist nur
+          und wie wir ihn verbessern können. Wir suchen Menschen, die sich
+          unentgeltlich an Nutzungsstudien beteiligen möchten. Dafür ist nur
           etwas Zeit und kein Vorwissen notwendig. Sobald wir eine passende
           Nutzungsstudie planen, erhalten Sie eine Einladung per E‑Mail mit
           allen Details. Die meisten Studien führen wir online durch. Sie
           brauchen für die Teilnahme:
         </p>
       </div>
-      <!-- Temporarily disabled due to data issue with Form bricks -->
-      <ul v-if="false" class="list-inside list-disc">
+      <ul class="list-inside list-disc">
         <li>einen Computer oder ein Smartphone,</li>
         <li>eine stabile Internetverbindung</li>
         <li>und eine ruhige Umgebung</li>
       </ul>
-      <!-- Temporarily disabled due to data issue with Form bricks -->
-      <Button
-        v-if="false"
-        :as="NuxtLink"
-        :to="{ name: 'usage-tests' }"
-        class="flex flex-row"
-      >
+      <Button :as="NuxtLink" :to="{ name: 'usage-tests' }">
         Für Nutzungsstudien registrieren
       </Button>
     </div>
+
     <form
       v-else
+      action="/api/feedback"
       class="space-y-16"
-      :action="feedbackAction"
       method="POST"
       @submit.prevent="submitFeedback"
     >
