@@ -1,0 +1,24 @@
+package de.bund.digitalservice.ris.builder.models.attachment;
+
+import de.bund.digitalservice.ris.builder.models.common.BaseElement;
+import jakarta.xml.bind.annotation.XmlAttribute;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class DocumentRef extends BaseElement {
+
+  @Builder.Default
+  @XmlAttribute(name = "eId")
+  private String eId = "verweis-n1";
+
+  @XmlAttribute(name = "href")
+  private String href;
+
+  @Builder.Default
+  @XmlAttribute(name = "showAs")
+  private String showAs = "/akn/ontology/de/concept/documenttype/bund/anlage-regelungstext";
+}

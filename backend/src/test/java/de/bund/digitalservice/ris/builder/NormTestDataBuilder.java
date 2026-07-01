@@ -2,31 +2,65 @@ package de.bund.digitalservice.ris.builder;
 
 import de.bund.digitalservice.ris.builder.models.Act;
 import de.bund.digitalservice.ris.builder.models.AkomaNtoso;
+import de.bund.digitalservice.ris.builder.models.Doc;
+import de.bund.digitalservice.ris.builder.models.attachment.Attachments;
 import de.bund.digitalservice.ris.builder.models.body.Article;
+import de.bund.digitalservice.ris.builder.models.body.Body;
 import de.bund.digitalservice.ris.builder.models.body.Chapter;
 import de.bund.digitalservice.ris.builder.models.body.Section;
+import de.bund.digitalservice.ris.builder.models.common.AknP;
+import de.bund.digitalservice.ris.builder.models.common.Block;
+import de.bund.digitalservice.ris.builder.models.common.Inline;
 import de.bund.digitalservice.ris.builder.models.meta.Meta;
 import de.bund.digitalservice.ris.builder.models.meta.identification.Identification;
 import de.bund.digitalservice.ris.builder.models.meta.lifecycle.Lifecycle;
+import de.bund.digitalservice.ris.builder.models.preamble.Preamble;
+import de.bund.digitalservice.ris.builder.models.preface.DocTitle;
 import de.bund.digitalservice.ris.builder.models.preface.LongTitle;
+import de.bund.digitalservice.ris.builder.models.preface.Preface;
 import de.bund.digitalservice.ris.builder.models.preface.ShortTitle;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.Marshaller;
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Consumer;
 import org.eclipse.persistence.oxm.NamespacePrefixMapper;
 
+/**
+ * This class allows to construct norms for testing purposes using the builder pattern.
+ *
+ * <p><b>Important notes:</b>
+ *
+ * <ul>
+ *   <li>it does not 100% implement the eId logic correctly. E.g. when adding chapter, sections etc.
+ *       the eId is not calculated but set to a fixed value (which still fulfills the xsd
+ *       validation). This does not cause issues as long as the production logic does not rely on
+ *       the eIds. In cases where the eId is important it needs to be set manually when creating the
+ *       chapter, section etc.
+ * </ul>
+ */
 public class NormTestDataBuilder {
 
   public static final String AKN_NS = "http://Inhaltsdaten.LegalDocML.de/1.8.2/";
   public static final String RIS_NS = "http://MetadatenRIS.LegalDocML.de/1.8.2/";
 
-  private static final String SCHEMA_LOCATION =
-      "http://MetadatenRIS.LegalDocML.de/1.8.2/ Grammatiken/Norms/legalDocML.de-metadaten-ris.xsd"
-          + " http://MetadatenRegelungstext.LegalDocML.de/1.8.2/ Grammatiken/Norms/legalDocML.de-metadaten-regelungstext.xsd"
-          + " http://MetadatenRechtsetzungsdokument.LegalDocML.de/1.8.2/ Grammatiken/Norms/legalDocML.de-metadaten-rechtsetzungsdokument.xsd"
-          + " http://Inhaltsdaten.LegalDocML.de/1.8.2/ Grammatiken/Norms/legalDocML.de-regelungstextverkuendungsfassung.xsd";
+  private static final String COMMON_SCHEMA_LOCATIONS =
+      "http://MetadatenRIS.LegalDocML.de/1.8.2/ ../ris-norms-ldml-schema-extensions/1.8.2/legalDocML.de-metadaten-ris.xsd"
+          + "http://MetadatenRegelungstext.LegalDocML.de/1.8.2/ Grammatiken/Norms/legalDocML.de-metadaten-regelungstext.xsd"
+          + "http://MetadatenRechtsetzungsdokument.LegalDocML.de/1.8.2/ Grammatiken/legalDocML.de-metadaten-rechtsetzungsdokument.xsd";
+
+  private static final String OFFENE_STRUKTUR_SCHEMA_LOCATIONS =
+      COMMON_SCHEMA_LOCATIONS
+          + "http://Inhaltsdaten.LegalDocML.de/1.8.2/ Grammatiken/legalDocML.de-offenestruktur.xsd";
+
+  private static final String REGELUNGSTEXT_SCHEMA_LOCATION =
+      COMMON_SCHEMA_LOCATIONS
+          + "http://Inhaltsdaten.LegalDocML.de/1.8.2/ Grammatiken/legalDocML.de-regelungstextverkuendungsfassung.xsd";
 
   private final AkomaNtoso document = new AkomaNtoso();
+  private final List<AkomaNtoso> attachmentsDocs = new ArrayList<>();
 
   public NormTestDataBuilder() {
     this.document.setAct(Act.builder().meta(Meta.builder().build()).build());
@@ -109,16 +143,30 @@ public class NormTestDataBuilder {
     return this;
   }
 
-  public Chapter chapter(String heading, String num) {
-    Chapter chapter = new Chapter().addHeading(heading).addNum(num);
-    this.document.getAct().getBody().addChild(chapter);
-    return chapter;
+  public NormTestDataBuilder formula(String text) {
+    Preamble preamble =
+        Optional.ofNullable(this.document.getAct().getPreamble())
+            .orElse(Preamble.builder().build());
+    preamble.addFormula(text);
+    this.document.getAct().setPreamble(preamble);
+
+    return this;
   }
 
-  public Section section(String heading, String num) {
+  public NormTestDataBuilder chapter(
+      String heading, String num, Consumer<Chapter> chapterConsumer) {
+    Chapter chapter = new Chapter().addHeading(heading).addNum(num);
+    chapterConsumer.accept(chapter);
+    this.document.getAct().getBody().addChild(chapter);
+    return this;
+  }
+
+  public NormTestDataBuilder section(
+      String heading, String num, Consumer<Section> sectionConsumer) {
     Section section = new Section().addHeading(heading).addNum(num);
+    sectionConsumer.accept(section);
     this.document.getAct().getBody().addChild(section);
-    return section;
+    return this;
   }
 
   public NormTestDataBuilder article(Article article) {
@@ -156,16 +204,92 @@ public class NormTestDataBuilder {
     return this;
   }
 
+  public NormTestDataBuilder attachment(
+      String manifestationEli, String num, String bezug, String heading, String text) {
+    DocTitle attachmentTitle =
+        DocTitle.builder()
+            .eId("einleitung-n1_block-n1_doctitel-n1")
+            .children(
+                List.of(
+                    Inline.builder()
+                        .eId("einleitung-n1_block-n1_doctitel-n1_inline-n1")
+                        .refersTo("anlageregelungstext-num")
+                        .content(num)
+                        .build(),
+                    Inline.builder()
+                        .eId("einleitung-n1_block-n1_doctitel-n1_inline-n2")
+                        .refersTo("anlageregelungstext-bezug")
+                        .content(bezug)
+                        .build(),
+                    Inline.builder()
+                        .eId("einleitung-n1_block-n1_doctitel-n1_inline-n3")
+                        .refersTo("anlageregelungstext-heading")
+                        .content(heading)
+                        .build()))
+            .build();
+
+    AkomaNtoso attachment = new AkomaNtoso();
+    attachment.setDoc(
+        Doc.builder()
+            .meta(
+                Meta.builder()
+                    .lifecycle(null)
+                    .temporalData(null)
+                    .proprietary(null)
+                    .identification(Identification.fromEli(manifestationEli))
+                    .build())
+            .preface(
+                Preface.builder()
+                    .longTitle(null)
+                    .block(
+                        Block.builder()
+                            .eId("einleitung-n1_block-n1")
+                            .children(List.of(attachmentTitle))
+                            .build())
+                    .build())
+            .body(
+                Body.builder()
+                    .children(
+                        List.of(
+                            AknP.builder()
+                                .eId("hauptteil-n1_text-n1")
+                                .children(List.of(text))
+                                .build()))
+                    .build())
+            .build());
+
+    Attachments attachments =
+        Optional.ofNullable(this.document.getAct().getAttachments())
+            .orElse(Attachments.builder().build());
+
+    attachments.addAttachment(manifestationEli);
+    this.document.getAct().setAttachments(attachments);
+    attachmentsDocs.add(attachment);
+
+    return this;
+  }
+
+  public String buildNormXml() {
+    return this.marshallDocument(this.document, REGELUNGSTEXT_SCHEMA_LOCATION, "regelungstext");
+  }
+
+  public List<String> buildAttachmentXmls() {
+
+    return this.attachmentsDocs.stream()
+        .map(doc -> marshallDocument(doc, OFFENE_STRUKTUR_SCHEMA_LOCATIONS, "anlage-regelungstext"))
+        .toList();
+  }
+
   /**
    * Converts the internal JAXB object into the final XML String, validates it against the .xsd
    * files and returns the xml string if valid. Otherwise, throws an Exception.
    */
-  public String build() {
+  private String marshallDocument(AkomaNtoso document, String schemaLocations, String docType) {
     try {
       JAXBContext context = JAXBContext.newInstance(AkomaNtoso.class);
       Marshaller marshaller = context.createMarshaller();
       marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-      marshaller.setProperty(Marshaller.JAXB_SCHEMA_LOCATION, SCHEMA_LOCATION);
+      marshaller.setProperty(Marshaller.JAXB_SCHEMA_LOCATION, schemaLocations);
       marshaller.setProperty(
           "org.glassfish.jaxb.namespacePrefixMapper",
           new NamespacePrefixMapper() {
@@ -179,9 +303,9 @@ public class NormTestDataBuilder {
           });
 
       StringWriter writer = new StringWriter();
-      marshaller.marshal(this.document, writer);
+      marshaller.marshal(document, writer);
       String xml = writer.toString();
-      //      XmlValidator.validateNormXml(xml, "regelungstext");
+      XmlValidator.validateNormXml(xml, docType);
 
       return xml;
     } catch (Exception e) {

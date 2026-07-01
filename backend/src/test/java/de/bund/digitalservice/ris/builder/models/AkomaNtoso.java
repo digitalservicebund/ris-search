@@ -16,4 +16,7 @@ public class AkomaNtoso {
 
   @XmlElement(name = "act", namespace = NormTestDataBuilder.AKN_NS)
   private Act act;
+
+  @XmlElement(name = "doc", namespace = NormTestDataBuilder.AKN_NS)
+  private Doc doc;
 }
