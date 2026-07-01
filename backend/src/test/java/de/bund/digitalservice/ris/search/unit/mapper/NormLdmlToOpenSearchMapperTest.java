@@ -19,6 +19,7 @@ import java.time.Month;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -51,29 +52,51 @@ class NormLdmlToOpenSearchMapperTest {
         "Verordnung zur Durchführung des § 88 Abs. 2 Nr. 8 des Bundessozialhilfegesetzes",
         norm.getOfficialTitle());
     assertEquals("Kurztitel", norm.getOfficialShortTitle());
-    assertEquals("ABK", norm.getOfficialAbbreviation());
+    assertEquals("ABK", norm.getAbbreviation());
     assertEquals(LocalDate.parse("1962-07-15"), norm.getNormsDate());
     assertEquals(LocalDate.parse("1962-07-15"), norm.getNormsSortDate());
     assertEquals(LocalDate.parse("1962-07-20"), norm.getDatePublished());
   }
 
   @Test
-  @DisplayName("Should create the official abbreviation title correct from the doctitle")
-  void shouldOfficialAbbreviationTitleFromDocTitleCorrect() throws IOException {
-    String normFile = "xmlDocumentTestAbbreviationWithDocTitle.xml";
-    Norm norm =
-        NormLdmlToOpenSearchMapper.parseNorm(readXmlTestFile(normFile), Map.of(), true).get();
-    assertEquals("AdKG", norm.getOfficialAbbreviation());
+  @DisplayName("Returns empty optional when official- and ris-abbreviation are missing")
+  void returnsEmptyOptionalWhenAbbreviationsAreMissing() throws IOException {
+    // test1 -> no abbreviations -> error
+    // test2 -> both -> uses amtliche abkuerzung
+    // test3 -> only ris -> uses ris-abkuerzung
+    Optional<Norm> norm =
+        NormLdmlToOpenSearchMapper.parseNorm(
+            readXmlTestFile("abbreviationTest1.xml"), Map.of(), true);
+
+    assertThat(norm).isEmpty();
   }
 
   @Test
-  @DisplayName("Should create the official abbreviation title correct from the short title")
-  void shouldOfficialAbbreviationTitleFromShortTitleCorrect() throws IOException {
-    String normFile = "xmlDocumentTestAbbreviationWithShortTitle.xml";
-    Norm norm =
-        NormLdmlToOpenSearchMapper.parseNorm(readXmlTestFile(normFile), Map.of(), true).get();
-    assertEquals("AdWirkG", norm.getOfficialAbbreviation());
-    assertNull(norm.getNormsDate());
+  @DisplayName("Extracts amtliche Abkuerzung as abbreviation")
+  void extractsAmtlicheAbkuerzungAsAbbreviation() throws IOException {
+    // test1 -> no abbreviations -> error
+    // test2 -> both -> uses amtliche abkuerzung
+    // test3 -> only ris -> uses ris-abkuerzung
+    Optional<Norm> norm =
+        NormLdmlToOpenSearchMapper.parseNorm(
+            readXmlTestFile("abbreviationTest2.xml"), Map.of(), true);
+
+    assertThat(norm).isNotEmpty();
+    assertThat(norm.get().getAbbreviation()).isEqualTo("OffAbb");
+  }
+
+  @Test
+  @DisplayName("Uses ris-abbreviation as fallback")
+  void usesRisAbbreviationAsFallback() throws IOException {
+    // test1 -> no abbreviations -> error
+    // test2 -> both -> uses amtliche abkuerzung
+    // test3 -> only ris -> uses ris-abkuerzung
+    Optional<Norm> norm =
+        NormLdmlToOpenSearchMapper.parseNorm(
+            readXmlTestFile("abbreviationTest3.xml"), Map.of(), true);
+
+    assertThat(norm).isNotEmpty();
+    assertThat(norm.get().getAbbreviation()).isEqualTo("RisAbbrev");
   }
 
   @Test
@@ -268,10 +291,10 @@ class NormLdmlToOpenSearchMapperTest {
   @Test
   @DisplayName("Correctly maps a nested table of content to a nested list with TableOfContentsItem")
   void nestedTableOfContentExtractionTest() throws IOException {
-    var sourceFile =
-        Files.readString(
-            Path.of("src/test/resources/data/xmlTests/xmlDocumentTestTableOfContent.xml"));
-    var norm = NormLdmlToOpenSearchMapper.parseNorm(sourceFile, Map.of(), true).orElseThrow();
+    var norm =
+        NormLdmlToOpenSearchMapper.parseNorm(
+                readXmlTestFile("xmlDocumentTestTableOfContent.xml"), Map.of(), true)
+            .orElseThrow();
     var tableOfContents = norm.getTableOfContents();
     assertEquals(tableOfContents, expectedToC);
   }
