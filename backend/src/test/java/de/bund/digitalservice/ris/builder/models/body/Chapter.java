@@ -7,6 +7,7 @@ import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -17,6 +18,7 @@ import lombok.NoArgsConstructor;
 @XmlRootElement(name = "chapter", namespace = NormTestDataBuilder.AKN_NS)
 public class Chapter extends BaseElement implements BodyElement {
 
+  @Builder.Default
   @XmlAttribute(name = "eId")
   private String eId = "kapitel-n1";
 
@@ -42,8 +44,9 @@ public class Chapter extends BaseElement implements BodyElement {
     return this;
   }
 
-  public Section addSection(String heading, String num) {
+  public Section addSection(String heading, String num, Consumer<Section> sectionConsumer) {
     Section section = new Section().addHeading(heading).addNum(num);
+    sectionConsumer.accept(section);
     this.sections.add(section);
     return section;
   }

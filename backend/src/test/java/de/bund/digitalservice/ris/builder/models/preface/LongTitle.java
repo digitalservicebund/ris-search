@@ -43,7 +43,7 @@ public class LongTitle extends BaseElement {
           .build();
 
   public LongTitle withOfficialTitle(String officialTitle) {
-    this.officialTitle = DocTitle.builder().text(officialTitle).build();
+    this.officialTitle = DocTitle.builder().children(List.of(officialTitle)).build();
     setTitlesAndAbbreviation();
     return this;
   }
