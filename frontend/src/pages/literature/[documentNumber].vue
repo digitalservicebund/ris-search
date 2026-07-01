@@ -145,10 +145,6 @@ const detailItems = computed(() => getLiteratureDetailItems(literature.value));
 <style scoped>
 @reference "~/assets/main.css";
 
-.literature {
-  @apply max-w-prose print:max-w-none;
-}
-
 :deep(.literature h1) {
   @apply hidden;
 }

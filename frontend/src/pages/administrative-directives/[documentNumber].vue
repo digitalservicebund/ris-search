@@ -143,10 +143,6 @@ const detailItems = computed(() =>
 <style scoped>
 @reference "~/assets/main.css";
 
-.administrative-directive {
-  @apply max-w-prose print:max-w-none;
-}
-
 :deep(.administrative-directive h1) {
   @apply hidden;
 }

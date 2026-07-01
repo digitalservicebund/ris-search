@@ -185,7 +185,6 @@ const detailsSectionId = useId();
 
 .case-law {
   --border-number-min-width: 3rem;
-  @apply max-w-prose print:max-w-none;
 }
 
 :deep(.case-law table[border="1"] :is(th, td)) {
