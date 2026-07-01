@@ -138,6 +138,7 @@
                     <ris:vollzitat>Fiktive Fruchtsaft- und Erfrischungsgetränkeverordnung vom 27. Mai 2000 (BGBl. I S. 1016), zuletzt modifiziert im Testverfahren</ris:vollzitat>
                     <ris:standangabe type="stand">Zuletzt geändert durch Testanpassungen</ris:standangabe>
                     <ris:standangabe type="neuf">Neugefasst durch Testdaten</ris:standangabe>
+                    <ris:abkuerzung refersTo="interne-abkuerzung">RisFrSaftErfrischV</ris:abkuerzung>
                 </ris:legalDocML.de_metadaten>
             </akn:proprietary>
         </akn:meta>
