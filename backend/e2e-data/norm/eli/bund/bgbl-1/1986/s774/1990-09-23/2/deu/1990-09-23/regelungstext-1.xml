@@ -52,6 +52,7 @@
             <akn:proprietary GUID="c1b2c3d4-9999-4111-8111-333333333333" eId="meta-n1_proprietary-n1" source="attributsemantik-noch-undefiniert">
                 <ris:legalDocML.de_metadaten xmlns:ris="http://MetadatenRIS.LegalDocML.de/1.8.2/" xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.8.2/ ../schema/legalDocML.de-metadaten-ris.xsd">
                     <ris:inkraft date="1990-10-03"/>
+                    <ris:abkuerzung refersTo="interne-abkuerzung">RisFruchtAF</ris:abkuerzung>
                 </ris:legalDocML.de_metadaten>
             </akn:proprietary>
         </akn:meta>
