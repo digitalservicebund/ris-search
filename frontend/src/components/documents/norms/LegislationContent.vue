@@ -27,10 +27,6 @@ defineProps<{
 <style scoped>
 @reference "~/assets/main.css";
 
-.legislation {
-  @apply max-w-prose print:max-w-none;
-}
-
 /* AKN */
 :deep(.akn-act) {
   @apply flex flex-col gap-32 pt-24;
@@ -215,7 +211,7 @@ Attributes from the Juris CALS format without a corresponding HTML attribute mig
   h2,
   p,
   table {
-    @apply max-w-prose;
+    @apply max-w-full;
   }
 
   table.pgwide {

@@ -161,174 +161,179 @@ const fassungenDateFilterInputId = useId();
         />
       </div>
     </template>
-    <template #default>
-      <div
-        class="wrapper mb-24 space-y-24 sm:mb-32 sm:space-y-32 md:mb-40 md:space-y-40"
-      >
-        <DocumentsNormsNormHeadingGroup
-          :metadata="metadata"
-          :html-parts="htmlParts"
-        />
 
-        <DocumentsNormsNormVersionWarning
-          v-if="normVersionsStatus === 'success'"
-          :versions="normVersions"
-          :current-version="metadata"
-        />
+    <div
+      class="wrapper mb-24 space-y-24 sm:mb-32 sm:space-y-32 md:mb-40 md:space-y-40"
+    >
+      <DocumentsNormsNormHeadingGroup
+        :metadata="metadata"
+        :html-parts="htmlParts"
+      />
 
-        <Metadata :items="metadataItems" />
-      </div>
+      <DocumentsNormsNormVersionWarning
+        v-if="normVersionsStatus === 'success'"
+        :versions="normVersions"
+        :current-version="metadata"
+      />
 
-      <TabsLayout :views>
-        <template #text>
-          <section role="tabpanel" :aria-labelledby="textTabPanelTitleId">
-            <SidebarLayout class="wrapper">
-              <template #content>
-                <h2 :id="textTabPanelTitleId" class="sr-only">Text</h2>
-                <DocumentsIncompleteDataMessage />
-                <DocumentsNormsLegislationContent
-                  :official-toc="htmlParts.officialToc"
+      <Metadata :items="metadataItems" />
+    </div>
+
+    <TabsLayout :views>
+      <template #text>
+        <section role="tabpanel" :aria-labelledby="textTabPanelTitleId">
+          <SidebarLayout>
+            <h2 :id="textTabPanelTitleId" class="sr-only">Text</h2>
+            <DocumentsIncompleteDataMessage />
+            <DocumentsNormsLegislationContent
+              :official-toc="htmlParts.officialToc"
+            >
+              <div v-html="htmlParts.body" />
+            </DocumentsNormsLegislationContent>
+
+            <template #sidebar v-if="tableOfContents?.length">
+              <client-only>
+                <DocumentsTableOfContents
+                  :subheading="normBreadcrumbTitle"
+                  :table-of-contents="tableOfContents"
+                />
+              </client-only>
+            </template>
+          </SidebarLayout>
+        </section>
+      </template>
+
+      <template #details>
+        <section role="tabpanel" :aria-labelledby="detailsTabPanelTitleId">
+          <div class="pt-32 pb-32 md:pb-56">
+            <h2 :id="detailsTabPanelTitleId" class="typo-headline3-bold">
+              Details
+            </h2>
+
+            <div class="base-grid my-24">
+              <DocumentsIncompleteDataMessage
+                class="col-span-12 lg:col-span-7"
+              />
+            </div>
+
+            <DetailsList>
+              <DetailsListEntry
+                label="Ausfertigungsdatum:"
+                :value="
+                  dateFormattedDDMMYYYY(metadata.exampleOfWork.legislationDate)
+                "
+              />
+              <DetailsListEntry
+                label="Vollzitat:"
+                :value="htmlParts.vollzitat"
+              />
+              <DetailsListEntry
+                label="Stand:"
+                :value-list="htmlParts.standangaben"
+              />
+              <DetailsListEntry
+                label="Hinweis zum Stand:"
+                :value-list="htmlParts.standangabenHinweis"
+              />
+              <DetailsListEntry
+                v-if="htmlParts.prefaceContainer"
+                label="Besonderer Hinweis:"
+              >
+                <div v-html="htmlParts.prefaceContainer" />
+              </DetailsListEntry>
+              <DetailsListEntry label="Fußnoten:">
+                <template v-if="htmlParts.headingNotes">
+                  <div class="footnotes" v-html="htmlParts.headingNotes" />
+                </template>
+              </DetailsListEntry>
+              <DetailsListEntry label="Download:">
+                <NuxtLink
+                  data-attr="xml-zip-view"
+                  class="typo-link-regular"
+                  external
+                  :to="zipUrl"
                 >
-                  <div v-html="htmlParts.body" />
-                </DocumentsNormsLegislationContent>
-              </template>
+                  <IconFileDownload class="mr-2 inline" />
+                  {{ metadata.abbreviation ?? "Inhalte" }} als ZIP herunterladen
+                </NuxtLink>
+              </DetailsListEntry>
+            </DetailsList>
+          </div>
+        </section>
+      </template>
 
-              <template #sidebar v-if="tableOfContents?.length">
-                <client-only>
-                  <DocumentsTableOfContents
-                    :subheading="normBreadcrumbTitle"
-                    :table-of-contents="tableOfContents"
-                  />
-                </client-only>
-              </template>
-            </SidebarLayout>
-          </section>
-        </template>
-
-        <template #details>
-          <section role="tabpanel" :aria-labelledby="detailsTabPanelTitleId">
-            <div class="wrapper pt-32 pb-32 md:pb-56">
-              <h2 :id="detailsTabPanelTitleId" class="typo-headline3-bold">
-                Details
+      <template #versions>
+        <section role="tabpanel" :aria-labelledby="fassungenTabPanelTitleId">
+          <div class="pt-32 pb-32 md:pb-56">
+            <template v-if="privateFeaturesEnabled">
+              <h2 :id="fassungenTabPanelTitleId" class="typo-headline3-bold">
+                Fassungen
               </h2>
-              <DocumentsIncompleteDataMessage class="my-24" />
-              <DetailsList>
-                <DetailsListEntry
-                  label="Ausfertigungsdatum:"
-                  :value="
-                    dateFormattedDDMMYYYY(
-                      metadata.exampleOfWork.legislationDate,
-                    )
-                  "
+
+              <div class="base-grid my-24">
+                <DocumentsIncompleteDataMessage
+                  class="col-span-12 lg:col-span-7"
                 />
-                <DetailsListEntry
-                  label="Vollzitat:"
-                  :value="htmlParts.vollzitat"
-                />
-                <DetailsListEntry
-                  label="Stand:"
-                  :value-list="htmlParts.standangaben"
-                />
-                <DetailsListEntry
-                  label="Hinweis zum Stand:"
-                  :value-list="htmlParts.standangabenHinweis"
-                />
-                <DetailsListEntry
-                  v-if="htmlParts.prefaceContainer"
-                  label="Besonderer Hinweis:"
-                >
-                  <div v-html="htmlParts.prefaceContainer" />
-                </DetailsListEntry>
-                <DetailsListEntry label="Fußnoten:">
-                  <template v-if="htmlParts.headingNotes">
-                    <div class="footnotes" v-html="htmlParts.headingNotes" />
-                  </template>
-                </DetailsListEntry>
-                <DetailsListEntry label="Download:">
-                  <NuxtLink
-                    data-attr="xml-zip-view"
-                    class="typo-link-regular"
-                    external
-                    :to="zipUrl"
-                  >
-                    <IconFileDownload class="mr-2 inline" />
-                    {{ metadata.abbreviation ?? "Inhalte" }} als ZIP
-                    herunterladen
-                  </NuxtLink>
-                </DetailsListEntry>
-              </DetailsList>
-            </div>
-          </section>
-        </template>
-
-        <template #versions>
-          <section role="tabpanel" :aria-labelledby="fassungenTabPanelTitleId">
-            <div class="wrapper pt-32 pb-32 md:pb-56">
-              <template v-if="privateFeaturesEnabled">
-                <h2 :id="fassungenTabPanelTitleId" class="typo-headline3-bold">
-                  Fassungen
-                </h2>
-
-                <DocumentsIncompleteDataMessage class="my-24" />
-                <div class="my-16 md:my-24">
-                  <label
-                    :for="fassungenDateFilterInputId"
-                    class="typo-label2-regular"
-                    >Gültig am</label
-                  >
-                  <DateInput
-                    v-model="fassungenDateFilterValue"
-                    class="mb-16 max-w-240 md:mb-24"
-                    :id="fassungenDateFilterInputId"
-                    :showClear="true"
-                  />
-                </div>
-                <DocumentsNormsNormVersionList
-                  :status="normVersionsStatus"
-                  :current-legislation-identifier="
-                    metadata.legislationIdentifier ?? ''
-                  "
-                  :versions="filteredNormVersions"
-                />
-              </template>
-
-              <div class="max-w-prose" v-else>
-                <h2
-                  :id="fassungenTabPanelTitleId"
-                  class="typo-headline3-bold mb-24"
-                >
-                  Fassungen sind noch nicht verfügbar
-                </h2>
-                <p>
-                  Mit dem Livegang des neuen Rechtsinformationsportals werden
-                  auch außer Kraft getretene und zukünftig in Kraft tretende
-                  Fassungen der Gesetze und Verordnungen zur Verfügung gestellt.
-                </p>
-
-                <h3 class="typo-headline3-bold mt-48 mb-24">
-                  Unterstützen Sie uns bei der Entwicklung dieser Funktion
-                </h3>
-
-                <p>
-                  Unser Ziel ist es, Rechtsinformationen für Bürgerinnen und
-                  Bürger leichter zugänglich zu machen. Deshalb suchen wir
-                  Menschen, die ihre Erfahrungen mit uns teilen und unseren
-                  Service testen.
-                </p>
-
-                <Button
-                  :as="NuxtLink"
-                  class="mt-16"
-                  :to="{ name: 'usage-tests' }"
-                >
-                  Mehr über Nutzungstest erfahren
-                </Button>
               </div>
+
+              <div class="my-16 md:my-24">
+                <label
+                  :for="fassungenDateFilterInputId"
+                  class="typo-label2-regular"
+                  >Gültig am</label
+                >
+                <DateInput
+                  v-model="fassungenDateFilterValue"
+                  class="mb-16 max-w-240 md:mb-24"
+                  :id="fassungenDateFilterInputId"
+                  :showClear="true"
+                />
+              </div>
+              <DocumentsNormsNormVersionList
+                :status="normVersionsStatus"
+                :current-legislation-identifier="
+                  metadata.legislationIdentifier ?? ''
+                "
+                :versions="filteredNormVersions"
+              />
+            </template>
+
+            <div class="max-w-prose" v-else>
+              <h2
+                :id="fassungenTabPanelTitleId"
+                class="typo-headline3-bold mb-24"
+              >
+                Fassungen sind noch nicht verfügbar
+              </h2>
+              <p>
+                Mit dem Livegang des neuen Rechtsinformationsportals werden auch
+                außer Kraft getretene und zukünftig in Kraft tretende Fassungen
+                der Gesetze und Verordnungen zur Verfügung gestellt.
+              </p>
+
+              <h3 class="typo-headline3-bold mt-48 mb-24">
+                Unterstützen Sie uns bei der Entwicklung dieser Funktion
+              </h3>
+
+              <p>
+                Unser Ziel ist es, Rechtsinformationen für Bürgerinnen und
+                Bürger leichter zugänglich zu machen. Deshalb suchen wir
+                Menschen, die ihre Erfahrungen mit uns teilen und unseren
+                Service testen.
+              </p>
+
+              <Button
+                :as="NuxtLink"
+                class="mt-16"
+                :to="{ name: 'usage-tests' }"
+              >
+                Mehr über Nutzungstest erfahren
+              </Button>
             </div>
-          </section>
-        </template>
-      </TabsLayout>
-    </template>
+          </div>
+        </section>
+      </template>
+    </TabsLayout>
   </NuxtLayout>
 </template>
 
@@ -364,6 +369,6 @@ const fassungenDateFilterInputId = useId();
 }
 
 .footnotes :deep(.nichtamtliche-fussnoten .fussnote:first-child pre) {
-  @apply -mt-8;
+  @apply md:-mt-8;
 }
 </style>

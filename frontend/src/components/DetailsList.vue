@@ -1,5 +1,5 @@
 <template>
-  <dl data-testid="details-list" class="space-y-24">
+  <dl data-testid="details-list" class="base-grid gap-y-24">
     <slot />
   </dl>
 </template>

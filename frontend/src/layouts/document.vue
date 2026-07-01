@@ -22,41 +22,40 @@ const { titlePlaceholder = "Titelzeile nicht vorhanden", views } = defineProps<{
         <slot name="actionMenu" />
       </div>
     </template>
-    <template #default>
-      <div>
-        <!-- Header -->
-        <div class="wrapper text-left">
-          <DocumentsDocumentTitle
-            :title="title"
-            :placeholder="titlePlaceholder"
-          />
 
-          <Metadata
-            v-if="metadata?.length"
-            :items="metadata"
-            class="my-24 sm:my-32 md:my-40"
-          />
-        </div>
+    <div>
+      <!-- Header -->
+      <div class="wrapper text-left">
+        <DocumentsDocumentTitle
+          :title="title"
+          :placeholder="titlePlaceholder"
+        />
 
-        <!-- Empty documents -->
-        <div
-          v-if="isEmptyDocument"
-          class="min-h-96 border-t border-t-gray-400 bg-white print:py-0"
-        >
-          <div class="wrapper">
-            <slot name="details" />
-          </div>
-        </div>
+        <Metadata
+          v-if="metadata?.length"
+          :items="metadata"
+          class="my-24 sm:my-32 md:my-40"
+        />
+      </div>
 
-        <div v-else>
-          <!-- Tabs -->
-          <TabsLayout :views>
-            <template v-for="(_, name) in $slots" #[name]>
-              <slot :name="name" />
-            </template>
-          </TabsLayout>
+      <!-- Empty documents -->
+      <div
+        v-if="isEmptyDocument"
+        class="min-h-96 border-t border-t-gray-400 bg-white print:py-0"
+      >
+        <div class="wrapper">
+          <slot name="details" />
         </div>
       </div>
-    </template>
+
+      <div v-else>
+        <!-- Tabs -->
+        <TabsLayout :views>
+          <template v-for="(_, name) in $slots" #[name]>
+            <slot :name="name" />
+          </template>
+        </TabsLayout>
+      </div>
+    </div>
   </BreadcrumbPageLayout>
 </template>
