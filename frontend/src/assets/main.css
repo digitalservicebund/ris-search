@@ -1,10 +1,11 @@
 @import "tailwindcss";
 @import "../../node_modules/@digitalservicebund/ris-ui/dist/style.css";
-
 @source "../../node_modules/@digitalservicebund/ris-ui/dist/**/*.{js,vue,ts}";
 
+@import "./global.css" layer(base);
+@import "./print.css" layer(base);
 @import "./typography.css";
-@import "./print.css";
+@import "./layout.css";
 
 @theme {
   --font-mono:
@@ -24,41 +25,4 @@
     --p-tabs-tab-border-color: var(--color-gray-400);
     --p-tabs-tablist-border-color: var(--color-gray-400);
   }
-
-  body {
-    @apply typo-body-regular antialiased;
-  }
-}
-
-@utility content-wrapper {
-  @apply mx-auto max-w-(--breakpoint-2xl) px-16 lg:px-24;
-}
-
-@utility content-grid {
-  @apply grid auto-rows-auto grid-cols-12 gap-x-8 md:gap-x-16 lg:gap-x-24;
-}
-
-@utility content-grid-textblock {
-  @apply col-span-12 lg:col-span-8 2xl:col-span-6;
-}
-
-mark {
-  @apply bg-yellow-200;
-}
-
-input[type="search"] {
-  &[data-size="large"] {
-    &::-webkit-search-cancel-button {
-      @apply mr-[-1.125rem] h-48 w-48;
-    }
-  }
-
-  &::-webkit-search-cancel-button {
-    @apply -mr-12 h-36 w-36 cursor-pointer appearance-none;
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-16 -16 52 52'><path fill='currentColor' d='M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12z'></path></svg>");
-  }
-}
-
-input[type="search"]::-webkit-search-cancel-button:hover {
-  @apply bg-blue-100;
 }

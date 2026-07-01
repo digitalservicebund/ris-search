@@ -1,0 +1,11 @@
+@utility content-wrapper {
+  @apply mx-auto max-w-(--breakpoint-2xl) px-16 lg:px-24;
+}
+
+@utility content-grid {
+  @apply grid auto-rows-auto grid-cols-12 gap-x-8 md:gap-x-16 lg:gap-x-24;
+}
+
+@utility content-grid-textblock {
+  @apply col-span-12 lg:col-span-8 2xl:col-span-6;
+}
