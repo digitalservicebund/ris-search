@@ -12,10 +12,8 @@ defineProps<{
       <slot name="breadcrumb" />
     </template>
 
-    <div class="content-wrapper content-grid pb-32 md:pb-56">
-      <div class="markdown-content content-grid-textblock">
-        <MDC :value="staticContent"></MDC>
-      </div>
+    <div class="content-wrapper pb-32 md:pb-56">
+      <MDC :value="staticContent" class="markdown-content content-grid"></MDC>
     </div>
   </BreadcrumbPageLayout>
 </template>
@@ -36,8 +34,12 @@ see: https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@scope 
     @apply ris-body2-regular sm:ris-body1-regular 2xl:text-[1.25rem];
   }
 
+  :is(h2, h3, h4, h5, h6, p, ol, ul) {
+    @apply content-grid-textblock col-start-1;
+  }
+
   h1 {
-    @apply ris-heading3-bold md:ris-heading2-bold pb-8 hyphens-auto max-sm:leading-48 md:hyphens-none 2xl:text-[2.5rem];
+    @apply ris-heading3-bold md:ris-heading2-bold col-span-12 pb-8 hyphens-auto max-sm:leading-48 md:hyphens-none 2xl:text-[2.5rem];
   }
 
   h2 {
@@ -67,5 +69,9 @@ see: https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@scope 
   :is(ul, ol) {
     @apply list-outside list-disc pl-24;
   }
+}
+
+.no-markdown-content {
+  @apply content-grid-textblock col-start-1;
 }
 </style>
