@@ -61,9 +61,6 @@ class NormLdmlToOpenSearchMapperTest {
   @Test
   @DisplayName("Returns empty optional when official- and ris-abbreviation are missing")
   void returnsEmptyOptionalWhenAbbreviationsAreMissing() throws IOException {
-    // test1 -> no abbreviations -> error
-    // test2 -> both -> uses amtliche abkuerzung
-    // test3 -> only ris -> uses ris-abkuerzung
     Optional<Norm> norm =
         NormLdmlToOpenSearchMapper.parseNorm(
             readXmlTestFile("abbreviationTest1.xml"), Map.of(), true);
@@ -74,9 +71,6 @@ class NormLdmlToOpenSearchMapperTest {
   @Test
   @DisplayName("Extracts amtliche Abkuerzung as abbreviation")
   void extractsAmtlicheAbkuerzungAsAbbreviation() throws IOException {
-    // test1 -> no abbreviations -> error
-    // test2 -> both -> uses amtliche abkuerzung
-    // test3 -> only ris -> uses ris-abkuerzung
     Optional<Norm> norm =
         NormLdmlToOpenSearchMapper.parseNorm(
             readXmlTestFile("abbreviationTest2.xml"), Map.of(), true);
@@ -88,9 +82,6 @@ class NormLdmlToOpenSearchMapperTest {
   @Test
   @DisplayName("Uses ris-abbreviation as fallback")
   void usesRisAbbreviationAsFallback() throws IOException {
-    // test1 -> no abbreviations -> error
-    // test2 -> both -> uses amtliche abkuerzung
-    // test3 -> only ris -> uses ris-abkuerzung
     Optional<Norm> norm =
         NormLdmlToOpenSearchMapper.parseNorm(
             readXmlTestFile("abbreviationTest3.xml"), Map.of(), true);
