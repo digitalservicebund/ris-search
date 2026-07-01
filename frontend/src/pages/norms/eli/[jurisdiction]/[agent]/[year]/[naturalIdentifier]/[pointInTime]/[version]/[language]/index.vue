@@ -6,9 +6,7 @@ import IcOutlineInfo from "~icons/ic/outline-info";
 import IcOutlineRestore from "~icons/ic/outline-settings-backup-restore";
 import { NuxtLink } from "#components";
 import type { BreadcrumbItem } from "~/components/Breadcrumbs.vue";
-import DateInput from "~/components/DateInput.vue";
 import type { TabView } from "~/components/TabsLayout.vue";
-import { useNormSeo } from "~/composables/useNormSeo";
 import { DocumentKind, type LegislationExpression } from "~/types/api";
 
 definePageMeta({
@@ -290,37 +288,39 @@ const fassungenDateFilterInputId = useId();
               />
             </template>
 
-            <div class="max-w-text-content" v-else>
-              <h2
-                :id="fassungenTabPanelTitleId"
-                class="typo-headline3-bold mb-24"
-              >
-                Fassungen sind noch nicht verfügbar
-              </h2>
-              <p>
-                Mit dem Livegang des neuen Rechtsinformationsportals werden auch
-                außer Kraft getretene und zukünftig in Kraft tretende Fassungen
-                der Gesetze und Verordnungen zur Verfügung gestellt.
-              </p>
+            <div class="content-grid" v-else>
+              <div class="content-grid-textblock">
+                <h2
+                  :id="fassungenTabPanelTitleId"
+                  class="typo-headline3-bold mb-24"
+                >
+                  Fassungen sind noch nicht verfügbar
+                </h2>
+                <p>
+                  Mit dem Livegang des neuen Rechtsinformationsportals werden
+                  auch außer Kraft getretene und zukünftig in Kraft tretende
+                  Fassungen der Gesetze und Verordnungen zur Verfügung gestellt.
+                </p>
 
-              <h3 class="typo-headline3-bold mt-48 mb-24">
-                Unterstützen Sie uns bei der Entwicklung dieser Funktion
-              </h3>
+                <h3 class="typo-headline3-bold mt-48 mb-24">
+                  Unterstützen Sie uns bei der Entwicklung dieser Funktion
+                </h3>
 
-              <p>
-                Unser Ziel ist es, Rechtsinformationen für Bürgerinnen und
-                Bürger leichter zugänglich zu machen. Deshalb suchen wir
-                Menschen, die ihre Erfahrungen mit uns teilen und unseren
-                Service testen.
-              </p>
+                <p>
+                  Unser Ziel ist es, Rechtsinformationen für Bürgerinnen und
+                  Bürger leichter zugänglich zu machen. Deshalb suchen wir
+                  Menschen, die ihre Erfahrungen mit uns teilen und unseren
+                  Service testen.
+                </p>
 
-              <Button
-                :as="NuxtLink"
-                class="mt-16"
-                :to="{ name: 'usage-tests' }"
-              >
-                Mehr über Nutzungstest erfahren
-              </Button>
+                <Button
+                  :as="NuxtLink"
+                  class="mt-16"
+                  :to="{ name: 'usage-tests' }"
+                >
+                  Mehr über Nutzungstest erfahren
+                </Button>
+              </div>
             </div>
           </div>
         </section>

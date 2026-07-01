@@ -13,7 +13,7 @@ defineProps<{
     </template>
 
     <div class="content-wrapper content-grid pb-32 md:pb-56">
-      <div class="markdown-content col-span-12 lg:col-span-8 2xl:col-span-6">
+      <div class="markdown-content content-grid-textblock">
         <MDC :value="staticContent"></MDC>
       </div>
     </div>

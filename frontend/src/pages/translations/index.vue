@@ -91,7 +91,7 @@ const translationsListId = useId();
     </template>
 
     <div class="content-wrapper content-grid pb-32 md:pb-56">
-      <section class="col-span-12 space-y-16 lg:col-span-8 2xl:col-span-6">
+      <section class="content-grid-textblock space-y-16">
         <h1 class="typo-headline1-bold mb-8">
           English Translations of German Federal Laws and Regulations
         </h1>

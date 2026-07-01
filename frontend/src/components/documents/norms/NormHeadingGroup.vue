@@ -49,12 +49,14 @@ const normTitle = computed(() => getNormTitle(props.metadata));
       </client-only>
     </hgroup>
 
-    <NormHeadingFootnotes
-      v-if="props.htmlParts?.headingAuthorialNotes"
-      class="max-w-text-content mt-8"
-      :html="props.htmlParts.headingAuthorialNotes"
-      :text-length="props.htmlParts?.headingAuthorialNotesLength"
-    />
+    <div class="content-grid">
+      <NormHeadingFootnotes
+        v-if="props.htmlParts?.headingAuthorialNotes"
+        class="content-grid-textblock mt-8"
+        :html="props.htmlParts.headingAuthorialNotes"
+        :text-length="props.htmlParts?.headingAuthorialNotesLength"
+      />
+    </div>
   </div>
 </template>
 
