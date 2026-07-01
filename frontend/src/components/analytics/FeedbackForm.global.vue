@@ -55,28 +55,13 @@ watch(
       data-test-id="feedback-sent-confirmation"
     >
       <div class="typo-headline3-bold">Vielen Dank für Ihr Feedback!</div>
-
-      <div class="flex flex-col space-y-8">
-        <div class="typo-headline3-bold">
-          Möchten Sie an Nutzungsstudien teilnehmen?
-        </div>
-        <p>
-          Nutzungsstudien helfen uns zu verstehen, wie Sie diesen Service nutzen
-          und wie wir ihn verbessern können. Wir suchen Menschen, die sich
-          unentgeltlich an Nutzungsstudien beteiligen möchten. Dafür ist nur
-          etwas Zeit und kein Vorwissen notwendig. Sobald wir eine passende
-          Nutzungsstudie planen, erhalten Sie eine Einladung per E‑Mail mit
-          allen Details. Die meisten Studien führen wir online durch. Sie
-          brauchen für die Teilnahme:
-        </p>
-      </div>
-      <ul class="list-inside list-disc">
-        <li>einen Computer oder ein Smartphone,</li>
-        <li>eine stabile Internetverbindung</li>
-        <li>und eine ruhige Umgebung</li>
-      </ul>
+      <p>
+        Möchten Sie unseren Service auch darüber hinaus mitgestalten? Nehmen Sie
+        an einer Nutzungsstudie teil und helfen Sie uns, Rechtsinformationen
+        leichter zugänglich zu machen.
+      </p>
       <Button :as="NuxtLink" :to="{ name: 'usage-tests' }">
-        Für Nutzungsstudien registrieren
+        Zur Registrierungsseite
       </Button>
     </div>
 
