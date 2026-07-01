@@ -27,21 +27,26 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
 </script>
 
 <template>
-  <div class="flex gap-16 bg-blue-800 py-40 text-white md:py-64 2xl:py-80">
-    <div class="content-wrapper flex flex-col items-start gap-16 2xl:gap-24">
+  <div class="bg-blue-800 text-white">
+    <div class="content-wrapper content-grid">
       <div
-        class="typo-label2-bold inline-block rounded-sm border border-white/10 bg-blue-700 px-8 py-4"
+        class="col-span-12 flex flex-col items-start gap-16 px-16 py-40 sm:px-24 md:px-48 md:py-64 lg:col-span-10 lg:col-start-2 lg:px-80 xl:col-span-8 xl:col-start-3 2xl:gap-24 2xl:px-96 2xl:py-80"
       >
-        Testphase
+        <div
+          class="typo-label2-bold inline-block rounded-sm border border-white/10 bg-blue-700 px-8 py-4"
+        >
+          Testphase
+        </div>
+
+        <h1 class="typo-headline1-bold wrap-break-word hyphens-auto">
+          Rechtsinformationen des Bundes
+        </h1>
+        <p class="typo-body-regular 2xl:ris-subhead-regular">
+          Schneller und direkter Zugang zu Gesetzen, Verordnungen,
+          Gerichtsentscheidungen und künftig auch Verwaltungsvorschriften des
+          Bundes – an einem zentralen Ort.
+        </p>
       </div>
-      <h1 class="typo-headline1-bold wrap-break-word hyphens-auto">
-        Rechtsinformationen des Bundes
-      </h1>
-      <p class="typo-body-regular 2xl:ris-subhead-regular">
-        Schneller und direkter Zugang zu Gesetzen, Verordnungen,
-        Gerichtsentscheidungen und künftig auch Verwaltungsvorschriften des
-        Bundes – an einem zentralen Ort.
-      </p>
     </div>
   </div>
 
