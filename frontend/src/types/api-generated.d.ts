@@ -1417,6 +1417,8 @@ export interface components {
       headline?: string;
       /** Kurzreferat */
       shortReport?: string;
+      /** Gliederung */
+      outline?: string[];
       /**
        * Dokumenttyp
        *
