@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import de.bund.digitalservice.ris.SharedTestConstants;
+import de.bund.digitalservice.ris.builder.NormTestDataBuilder;
 import de.bund.digitalservice.ris.search.mapper.NormLdmlToOpenSearchMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
@@ -36,11 +37,56 @@ class NormLdmlToOpenSearchMapperTest {
   }
 
   @Test
+  void testNormTestDataBuidler() {
+    String xmlTestData = new NormTestDataBuilder().build();
+    assertThat(xmlTestData).isNotBlank();
+  }
+
+  @Test
+  void testNormTestDataBuidler1() {
+    NormTestDataBuilder builder =
+        new NormTestDataBuilder()
+            .eli("eli/bund/bgbl-1/1962/s514/2010-04-27/1/deu/2010-04-27/regelungstext-1.xml")
+            .defaultArticle()
+            .officialTitle("Official Title")
+            .shortTitle("Short Title")
+            .inForceDate("2000-01-01")
+            .outOfForceDate("2000-01-07")
+            .risAbbreviation("FooBar")
+            .officialAbbreviation("OffFooBar");
+
+    builder
+        .chapter("Chapter One", "1")
+        .addSection("Section One", "1")
+        .addArticle(
+            builder
+                .buildArticle("Article number two", "§ 2", "2025-01-01", "2025-07-01", "art-z2")
+                .addParagraph("Paragraph 1 test", "(1)")
+                .addParagraph("Paragraph 2 test", "(2)"));
+
+    String xmlTestData = builder.build();
+    assertThat(xmlTestData).isNotBlank();
+  }
+
+  @Test
   @DisplayName("Should create the ELI, ID, title, abbreviation, and dates correctly")
   void shouldCreateAttributesCorrect() throws IOException {
-    String normFile = "xmlContent.xml";
-    Norm norm =
-        NormLdmlToOpenSearchMapper.parseNorm(readXmlTestFile(normFile), Map.of(), true).get();
+    //    String xmlContent = readXmlTestFile("xmlContent.xml");
+
+    NormTestDataBuilder builder =
+        new NormTestDataBuilder()
+            .eli("eli/bund/bgbl-1/1962/s514/2010-04-27/1/deu/2010-04-27/regelungstext-1.xml")
+            .officialTitle(
+                "Verordnung zur Durchführung des § 88 Abs. 2 Nr. 8 des Bundessozialhilfegesetzes")
+            .shortTitle("Kurztitel")
+            .officialAbbreviation("ABK")
+            .inForceDate("2000-01-01")
+            .outOfForceDate("2000-01-07")
+            .legislationDate("1962-07-15")
+            .datePublished("1962-07-20");
+
+    String xmlContent = builder.build();
+    Norm norm = NormLdmlToOpenSearchMapper.parseNorm(xmlContent, Map.of(), true).get();
 
     assertEquals("eli/bund/bgbl-1/1962/s514", norm.getWorkEli());
     assertEquals("eli/bund/bgbl-1/1962/s514/2010-04-27/1/deu", norm.getExpressionEli());
