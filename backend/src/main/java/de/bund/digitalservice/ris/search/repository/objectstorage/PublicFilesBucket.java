@@ -14,6 +14,6 @@ import org.springframework.stereotype.Component;
 public class PublicFilesBucket extends ObjectStorage {
 
   public PublicFilesBucket(@Qualifier("publicFilesS3Client") ObjectStorageClient s3Client) {
-    super(s3Client, LogManager.getLogger(PublicFilesBucket.class));
+    super(s3Client, LogManager.getLogger(PublicFilesBucket.class), "");
   }
 }

@@ -67,21 +67,25 @@ s3:
       bucket-name: norm
       access-key-id:
       secret-access-key:
+      versionPrefix:
     case-law:
       endpoint: "https://object.storage.eu01.onstackit.cloud"
       bucket-name: caselaw
       access-key-id:
       secret-access-key:
+      versionPrefix:
     literature:
       endpoint: "https://object.storage.eu01.onstackit.cloud"
       bucket-name: literature
       access-key-id:
       secret-access-key:
+      versionPrefix:
     administrative-directive:
       endpoint: "https://object.storage.eu01.onstackit.cloud"
       bucket-name: administrative-directive
       access-key-id:
       secret-access-key:
+      versionPrefix:
     portal:
       endpoint: "https://object.storage.eu01.onstackit.cloud"
       bucket-name: portal

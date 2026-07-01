@@ -34,8 +34,8 @@ repositories {
     maven {
         url = uri("https://maven.pkg.github.com/digitalservicebund/ris-html-transformation")
         credentials {
-            username = System.getenv("GH_PACKAGES_REPOSITORY_USER")
-            password = System.getenv("GH_PACKAGES_REPOSITORY_TOKEN")
+            username = System.getenv("GH_PACKAGES_REPOSITORY_USER") ?: project.findProperty("global_gh_packages_user") as String?
+            password = System.getenv("GH_PACKAGES_REPOSITORY_TOKEN") ?: project.findProperty("global_gh_packages_token") as String?
         }
     }
 }

@@ -14,6 +14,6 @@ import org.springframework.stereotype.Component;
 public class PortalBucket extends ObjectStorage {
 
   public PortalBucket(@Qualifier("portalS3Client") ObjectStorageClient s3Client) {
-    super(s3Client, LogManager.getLogger(PortalBucket.class));
+    super(s3Client, LogManager.getLogger(PortalBucket.class), "");
   }
 }
