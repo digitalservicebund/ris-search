@@ -209,7 +209,7 @@ const metadataItems = computed(() => {
     </template>
 
     <div
-      class="wrapper mb-24 space-y-24 sm:mb-32 sm:space-y-32 md:mb-40 md:space-y-40"
+      class="content-wrapper mb-24 space-y-24 sm:mb-32 sm:space-y-32 md:mb-40 md:space-y-40"
     >
       <p class="typo-headline3-regular mb-8">
         {{ normTitle }}
@@ -229,7 +229,7 @@ const metadataItems = computed(() => {
     </div>
 
     <div id="content" class="border-t border-t-gray-400 bg-white">
-      <SidebarLayout class="wrapper">
+      <SidebarLayout class="content-wrapper">
         <template v-if="!!articleHtml">
           <DocumentsIncompleteDataMessage />
           <DocumentsNormsLegislationContent single-article>

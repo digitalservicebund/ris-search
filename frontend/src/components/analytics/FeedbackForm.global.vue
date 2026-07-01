@@ -48,7 +48,7 @@ watch(
 </script>
 
 <template>
-  <div class="flex max-w-prose flex-col">
+  <div class="max-w-text-content flex flex-col">
     <div
       v-if="isSent"
       class="space-y-24"

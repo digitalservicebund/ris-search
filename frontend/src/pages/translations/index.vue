@@ -93,9 +93,9 @@ const translationsListId = useId();
       </div>
     </template>
 
-    <div class="wrapper pb-32 md:pb-56">
+    <div class="content-wrapper pb-32 md:pb-56">
       <section
-        class="mt-24 max-w-prose space-y-24 md:space-y-32 2xl:space-y-48"
+        class="max-w-text-content mt-24 space-y-24 md:space-y-32 2xl:space-y-48"
       >
         <h1 class="typo-headline1-bold">
           English Translations of German Federal Laws and Regulations
@@ -134,7 +134,7 @@ const translationsListId = useId();
             :key="t['@id']"
             class="bg-white p-16 sm:py-24 md:px-24 lg:px-32"
           >
-            <div class="flex max-w-prose flex-col gap-8">
+            <div class="max-w-text-content flex flex-col gap-8">
               <SearchResultHeader
                 lang="de"
                 :items="[

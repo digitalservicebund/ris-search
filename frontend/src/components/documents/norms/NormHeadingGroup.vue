@@ -51,7 +51,7 @@ const normTitle = computed(() => getNormTitle(props.metadata));
 
     <NormHeadingFootnotes
       v-if="props.htmlParts?.headingAuthorialNotes"
-      class="mt-8 max-w-prose"
+      class="max-w-text-content mt-8"
       :html="props.htmlParts.headingAuthorialNotes"
       :text-length="props.htmlParts?.headingAuthorialNotesLength"
     />

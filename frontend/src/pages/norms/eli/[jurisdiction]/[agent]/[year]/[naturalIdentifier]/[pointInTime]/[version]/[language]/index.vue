@@ -163,7 +163,7 @@ const fassungenDateFilterInputId = useId();
     </template>
 
     <div
-      class="wrapper mb-24 space-y-24 sm:mb-32 sm:space-y-32 md:mb-40 md:space-y-40"
+      class="content-wrapper mb-24 space-y-24 sm:mb-32 sm:space-y-32 md:mb-40 md:space-y-40"
     >
       <DocumentsNormsNormHeadingGroup
         :metadata="metadata"
@@ -211,7 +211,7 @@ const fassungenDateFilterInputId = useId();
             </h2>
 
             <DocumentsIncompleteDataMessage
-              class="col-span-12 max-w-prose lg:col-span-7"
+              class="max-w-text-content col-span-12 lg:col-span-7"
             />
 
             <DetailsList>
@@ -269,7 +269,7 @@ const fassungenDateFilterInputId = useId();
               </h2>
 
               <DocumentsIncompleteDataMessage
-                class="col-span-12 max-w-prose lg:col-span-7"
+                class="max-w-text-content col-span-12 lg:col-span-7"
               />
 
               <div class="my-16 md:my-24">
@@ -294,7 +294,7 @@ const fassungenDateFilterInputId = useId();
               />
             </template>
 
-            <div class="max-w-prose" v-else>
+            <div class="max-w-text-content" v-else>
               <h2
                 :id="fassungenTabPanelTitleId"
                 class="typo-headline3-bold mb-24"

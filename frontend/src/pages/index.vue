@@ -28,7 +28,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
 
 <template>
   <div class="flex gap-16 bg-blue-800 py-40 text-white md:py-64 2xl:py-80">
-    <div class="wrapper flex flex-col items-start gap-16 2xl:gap-24">
+    <div class="content-wrapper flex flex-col items-start gap-16 2xl:gap-24">
       <div
         class="typo-label2-bold inline-block rounded-sm border border-white/10 bg-blue-700 px-8 py-4"
       >
@@ -46,7 +46,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
   </div>
 
   <div
-    class="wrapper base-grid gap-y-16 pt-16 pb-32 sm:gap-y-24 sm:pt-24 md:pb-56"
+    class="content-wrapper content-grid gap-y-16 pt-16 pb-32 sm:gap-y-24 sm:pt-24 md:pb-56"
   >
     <FeatureCard
       class="col-span-12 lg:col-span-10 lg:col-start-2 xl:col-span-8 xl:col-start-3"

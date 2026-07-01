@@ -203,7 +203,7 @@ watch(searchStatus, async (newStatus, oldStatus) => {
       <Breadcrumbs :items="[{ label: 'Suche' }]" />
     </template>
 
-    <div class="wrapper pb-32 md:pb-56">
+    <div class="content-wrapper pb-32 md:pb-56">
       <h1 class="typo-headline1-bold inline-block pb-8">Suche</h1>
 
       <div id="search">
@@ -228,7 +228,7 @@ watch(searchStatus, async (newStatus, oldStatus) => {
         </NuxtLink>
       </p>
 
-      <div class="base-grid mt-32 gap-y-32">
+      <div class="content-grid mt-32 gap-y-32">
         <div
           class="col-span-12 row-start-2 flex flex-wrap items-center justify-between gap-x-32 gap-y-16 md:row-auto"
         >
@@ -318,7 +318,7 @@ watch(searchStatus, async (newStatus, oldStatus) => {
 
             <Message
               severity="warn"
-              class="ris-body2-regular max-w-prose"
+              class="ris-body2-regular max-w-text-content"
               role="status"
               aria-live="off"
             >

@@ -99,7 +99,7 @@ const detailsTabPanelTitleId = useId();
       </div>
     </template>
 
-    <div class="wrapper">
+    <div class="content-wrapper">
       <hgroup class="dokumentenkopf">
         <p
           v-if="currentTranslation?.translationOfWork"
@@ -119,7 +119,7 @@ const detailsTabPanelTitleId = useId();
       <Message
         v-if="legislation"
         :closable="false"
-        class="my-24 max-w-prose space-y-24 sm:my-32 md:my-40"
+        class="max-w-text-content my-24 space-y-24 sm:my-32 md:my-40"
       >
         <template #icon>
           <IcOutlineWarning />

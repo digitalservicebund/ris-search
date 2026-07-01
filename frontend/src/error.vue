@@ -48,7 +48,7 @@ useHead({ title: pageTitle });
   />
 
   <NuxtLayout name="default">
-    <div class="wrapper pt-48 pb-24" data-testid="error-message">
+    <div class="content-wrapper pt-48 pb-24" data-testid="error-message">
       <template v-if="isNotFoundError">
         <h1 class="typo-headline2-bold inline-block">
           Diese Seite existiert nicht

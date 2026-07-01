@@ -11,7 +11,7 @@
     ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, Consolas,
     "DejaVu Sans Mono", monospace;
 
-  --max-width-prose: 45rem;
+  --max-width-text-content: 45rem;
 
   /* explicitly define breakpoints to align with the design */
   --breakpoint-sm: 24rem; /* 384 */
@@ -32,11 +32,11 @@
   }
 }
 
-@utility wrapper {
+@utility content-wrapper {
   @apply mx-auto max-w-(--breakpoint-2xl) px-16 lg:px-24;
 }
 
-@utility base-grid {
+@utility content-grid {
   @apply grid auto-rows-auto grid-cols-12 gap-x-8 md:gap-x-16 lg:gap-x-24;
 }
 
