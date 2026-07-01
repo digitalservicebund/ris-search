@@ -91,6 +91,7 @@ public class NormLdmlToOpenSearchMapper {
   private static final String X_PATH_BEDINGTES_INKRAFTTRETEN =
       AKN_RIS_METADATA + "ris:bedingtesInkrafttreten";
   private static final String X_PATH_FULL_CITATION = AKN_RIS_METADATA + "ris:vollzitat";
+  private static final String X_PATH_RIS_ABKUERZUNG = AKN_RIS_METADATA + "ris:abkuerzung";
   private static final String X_PATH_OFFICIAL_TOC =
       AKN_ACT + "akn:preamble/akn:blockContainer[@refersTo='inhaltsuebersicht']/akn:toc";
   private static final String X_PATH_BODY = "//*[local-name()='body']";
