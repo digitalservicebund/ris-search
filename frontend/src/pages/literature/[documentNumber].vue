@@ -121,7 +121,7 @@ const detailItems = computed(() => getLiteratureDetailItems(literature.value));
       <SidebarLayout>
         <section role="tabpanel" :aria-labelledby="textSectionId">
           <h2 :id="textSectionId" class="sr-only">Text</h2>
-          <DocumentsIncompleteDataMessage />
+          <DocumentsIncompleteDataMessage class="my-24" />
           <div
             v-if="document"
             class="literature"

@@ -318,7 +318,7 @@ watch(searchStatus, async (newStatus, oldStatus) => {
 
             <Message
               severity="warn"
-              class="ris-body2-regular max-w-text-content"
+              class="ris-body2-regular"
               role="status"
               aria-live="off"
             >

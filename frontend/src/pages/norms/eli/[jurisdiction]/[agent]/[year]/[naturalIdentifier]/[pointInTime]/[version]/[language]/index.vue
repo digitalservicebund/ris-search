@@ -210,9 +210,7 @@ const fassungenDateFilterInputId = useId();
               Details
             </h2>
 
-            <DocumentsIncompleteDataMessage
-              class="max-w-text-content col-span-12 lg:col-span-7"
-            />
+            <DocumentsIncompleteDataMessage class="my-24" />
 
             <DetailsList>
               <DetailsListEntry
@@ -268,9 +266,7 @@ const fassungenDateFilterInputId = useId();
                 Fassungen
               </h2>
 
-              <DocumentsIncompleteDataMessage
-                class="max-w-text-content col-span-12 lg:col-span-7"
-              />
+              <DocumentsIncompleteDataMessage class="my-24" />
 
               <div class="my-16 md:my-24">
                 <label
