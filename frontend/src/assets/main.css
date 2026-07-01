@@ -32,10 +32,12 @@
   }
 }
 
-@layer utilities {
-  .wrapper {
-    @apply mx-auto px-16 lg:px-24 2xl:max-w-(--breakpoint-2xl);
-  }
+@utility wrapper {
+  @apply mx-auto max-w-(--breakpoint-2xl) px-16 lg:px-24;
+}
+
+@utility base-grid {
+  @apply grid auto-rows-auto grid-cols-12 gap-x-8 md:gap-x-16 lg:gap-x-24;
 }
 
 mark {

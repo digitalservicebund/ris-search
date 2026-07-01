@@ -5,7 +5,7 @@ import { Message } from "primevue";
 <template>
   <Message
     severity="warn"
-    class="ris-body2-regular max-w-prose"
+    class="ris-body2-regular"
     role="status"
     aria-live="off"
   >

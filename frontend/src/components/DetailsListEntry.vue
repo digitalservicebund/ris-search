@@ -19,33 +19,36 @@ const emptyValuePlaceholder = "nicht vorhanden";
 </script>
 
 <template>
-  <div
-    class="flex flex-col gap-8 md:grid md:grid-cols-4 md:gap-8 md:px-0 lg:grid-cols-5 xl:grid-cols-6"
-  >
-    <dt class="typo-label1-bold hyphens-auto">
+  <div class="col-span-12 grid grid-cols-subgrid">
+    <dt
+      class="typo-label1-bold col-span-12 hyphens-auto md:col-span-3 xl:col-span-2"
+    >
       {{ label }}
     </dt>
+
     <dd
       v-if="$slots.default"
-      class="typo-label1-regular max-w-prose md:col-span-3"
+      class="typo-label1-regular col-span-12 md:col-span-9 lg:col-span-6"
       :class="valueClass"
     >
       <div>
         <slot />
       </div>
     </dd>
+
     <dd
       v-for="listItem in valueList"
       v-else-if="valueList?.length"
       :key="listItem"
-      class="typo-label1-regular max-w-prose md:col-span-3 md:col-start-2"
+      class="typo-label1-regular col-span-12 md:col-span-9 md:col-start-4 lg:col-span-6 xl:col-start-3"
       :class="valueClass"
     >
       {{ listItem }}
     </dd>
+
     <dd
       v-else
-      class="typo-label1-regular max-w-prose data-empty:text-gray-900 md:col-span-3"
+      class="typo-label1-regular col-span-12 data-empty:text-gray-900 md:col-span-9 lg:col-span-6"
       :data-empty="emptyProp"
       :class="valueClass"
     >

@@ -218,52 +218,85 @@ watch(searchStatus, async (newStatus, oldStatus) => {
     <template #breadcrumb>
       <Breadcrumbs :items="[{ label: 'Erweiterte Suche' }]" />
     </template>
-    <template #default>
-      <div
-        class="wrapper grid grid-cols-1 gap-40 pb-32 md:pb-56 lg:grid-cols-[20rem_1fr] lg:gap-64"
+
+    <div class="wrapper base-grid gap-y-40 pb-32 md:pb-56 lg:gap-y-64">
+      <div class="col-span-12">
+        <h1 class="typo-headline1-bold mb-16">Erweiterte Suche</h1>
+        <p class="text-balance">
+          Nutzen Sie die erweiterte Suche, um genau das zu finden, was Sie
+          brauchen – ob im Leitsatz, Titel oder direkt im Volltext. Mit
+          Suchoperatoren wie AND, OR und NOT bekommen Sie noch präzisere
+          Ergebnisse.
+        </p>
+      </div>
+
+      <aside
+        class="col-span-12 lg:col-span-4 lg:row-span-2 xl:col-span-3"
+        aria-label="Filter"
       >
-        <div class="lg:col-span-2">
-          <h1 class="typo-headline1-bold mb-16">Erweiterte Suche</h1>
-          <p class="text-balance">
-            Nutzen Sie die erweiterte Suche, um genau das zu finden, was Sie
-            brauchen – ob im Leitsatz, Titel oder direkt im Volltext. Mit
-            Suchoperatoren wie AND, OR und NOT bekommen Sie noch präzisere
-            Ergebnisse.
-          </p>
-        </div>
+        <fieldset class="mb-40">
+          <legend class="typo-label1-bold mb-8">Dokumentart</legend>
+          <PanelMenu
+            :model="documentKindMenuItems"
+            :expanded-keys="{ [documentKind]: true }"
+          />
+        </fieldset>
 
-        <aside
-          class="row-start-3 lg:row-span-2 lg:row-start-auto"
-          aria-label="Filter"
+        <SearchDateFilter
+          v-model="localDateFilter"
+          :document-kind
+          @update:model-value="updateDateFilter"
+        />
+      </aside>
+
+      <div id="search" class="col-span-12 lg:col-span-8 lg:col-start-5">
+        <SearchDataFieldPicker
+          v-model="localQuery"
+          :data-fields="queryableDataFields"
+          :document-kind
+          :loading="searchStatus === 'pending'"
+          :form-id="searchFormId"
+          :count
+          @submit="submit"
+        />
+      </div>
+
+      <div
+        ref="resultsContainerRef"
+        id="search-results"
+        class="col-span-12 grid scroll-mt-16 grid-cols-subgrid gap-y-32 lg:col-span-8 lg:col-start-5"
+      >
+        <div
+          class="col-span-12 flex flex-col gap-16 md:flex-row md:items-center md:gap-48 lg:col-span-8"
         >
-          <fieldset class="mb-40">
-            <legend class="typo-label1-bold mb-8">Dokumentart</legend>
-            <PanelMenu
-              :model="documentKindMenuItems"
-              :expanded-keys="{ [documentKind]: true }"
+          <output
+            aria-atomic="true"
+            aria-live="polite"
+            class="typo-label2-regular mr-auto text-nowrap"
+          >
+            {{ formattedResultCount }}
+          </output>
+
+          <div class="flex items-center gap-8">
+            <label :id="itemsPerPageLabelId" class="typo-label2-regular">
+              Einträge pro Seite
+            </label>
+            <Select
+              :model-value="itemsPerPage"
+              :aria-labelledby="itemsPerPageLabelId"
+              :options="itemsPerPageOptions"
+              @update:model-value="updateItemsPerPage"
             />
-          </fieldset>
+          </div>
 
-          <SearchDateFilter
-            v-model="localDateFilter"
+          <SearchSortSelect
+            :model-value="sort"
             :document-kind
-            @update:model-value="updateDateFilter"
-          />
-        </aside>
-
-        <div id="search" class="row-start-2 lg:row-start-auto">
-          <SearchDataFieldPicker
-            v-model="localQuery"
-            :data-fields="queryableDataFields"
-            :document-kind
-            :loading="searchStatus === 'pending'"
-            :form-id="searchFormId"
-            :count
-            @submit="submit"
+            @update:model-value="updateSort"
           />
         </div>
 
-        <div ref="resultsContainerRef" id="search-results" class="scroll-mt-16">
+        <div class="col-span-12 lg:col-span-7">
           <Pagination
             v-if="searchStatus !== 'idle'"
             :is-loading="searchStatus === 'pending'"
@@ -271,54 +304,25 @@ watch(searchStatus, async (newStatus, oldStatus) => {
             navigation-position="bottom"
             @update-page="handlePageUpdate"
           >
-            <div
-              class="mb-32 flex flex-col gap-16 md:flex-row md:items-center md:gap-48"
+            <Message v-if="!!searchError" severity="error">
+              {{ searchError.message }}
+            </Message>
+
+            <ul
+              v-if="searchResults"
+              aria-label="Suchergebnisse"
+              class="space-y-40"
             >
-              <output
-                aria-atomic="true"
-                aria-live="polite"
-                class="typo-label2-regular mr-auto text-nowrap"
+              <li
+                v-for="(searchResult, order) in searchResults.member"
+                :key="getIdentifier(searchResult.item)"
               >
-                {{ formattedResultCount }}
-              </output>
-
-              <div class="flex items-center gap-8">
-                <label :id="itemsPerPageLabelId" class="typo-label2-regular">
-                  Einträge pro Seite
-                </label>
-                <Select
-                  :model-value="itemsPerPage"
-                  :aria-labelledby="itemsPerPageLabelId"
-                  :options="itemsPerPageOptions"
-                  @update:model-value="updateItemsPerPage"
-                />
-              </div>
-
-              <SearchSortSelect
-                :model-value="sort"
-                :document-kind
-                @update:model-value="updateSort"
-              />
-            </div>
-
-            <div class="max-w-prose">
-              <Message v-if="!!searchError" severity="error">
-                {{ searchError.message }}
-              </Message>
-
-              <ul v-if="searchResults" aria-label="Suchergebnisse">
-                <li
-                  v-for="(searchResult, order) in searchResults.member"
-                  :key="getIdentifier(searchResult.item)"
-                  class="my-40"
-                >
-                  <SearchResult :search-result :order />
-                </li>
-              </ul>
-            </div>
+                <SearchResult :search-result :order />
+              </li>
+            </ul>
           </Pagination>
         </div>
       </div>
-    </template>
+    </div>
   </NuxtLayout>
 </template>
