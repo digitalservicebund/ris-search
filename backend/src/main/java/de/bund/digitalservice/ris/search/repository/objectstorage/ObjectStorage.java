@@ -104,7 +104,7 @@ public class ObjectStorage {
         final var response = getStream(objectKey);
         return Optional.of(response.readAllBytes());
       } catch (NoSuchKeyException e) {
-        logger.warn(String.format("Object key %s does not exist", objectKey));
+        logger.warn(String.format("Object key %s does not exist", versionPrefix + objectKey));
         return Optional.empty();
       } catch (IOException | AwsServiceException | SdkClientException e) {
         logger.warn(
