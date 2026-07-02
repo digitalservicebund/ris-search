@@ -92,7 +92,7 @@ class NormLdmlToOpenSearchMapperTest {
 
   @Test
   @DisplayName("Should create the ELI, ID, title, abbreviation, and dates correctly")
-  void shouldCreateAttributesCorrect() throws IOException {
+  void shouldCreateAttributesCorrect() {
     //    String xmlContent = readXmlTestFile("xmlContent.xml");
 
     NormTestDataBuilder builder =
