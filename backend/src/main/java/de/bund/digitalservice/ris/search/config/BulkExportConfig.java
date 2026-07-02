@@ -21,6 +21,7 @@ public class BulkExportConfig {
 
   /**
    * @param source sourceBucket to create the document snapshot from
+   * @param versionPrefix the version prefix for the bucket
    * @param target targetBucket to create the archive in
    * @return BulkExportService
    */
@@ -39,6 +40,7 @@ public class BulkExportConfig {
 
   /**
    * @param source sourceBucket to create the document snapshot from
+   * @param versionPrefix the version prefix for the bucket
    * @param target targetBucket to create the archive in
    * @return BulkExportService
    */
@@ -57,6 +59,7 @@ public class BulkExportConfig {
 
   /**
    * @param source sourceBucket to create the document snapshot from
+   * @param versionPrefix the version prefix for the bucket
    * @param target targetBucket to create the archive in
    * @return BulkExportService
    */
@@ -75,6 +78,7 @@ public class BulkExportConfig {
 
   /**
    * @param source sourceBucket to create the document snapshot from
+   * @param versionPrefix the version prefix for the bucket
    * @param target targetBucket to create the archive in
    * @return BulkExportService
    */

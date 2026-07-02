@@ -16,6 +16,7 @@ public class ChangelogConfig {
 
   /**
    * @param bucket root bucket of case law files
+   * @param versionPrefix the version prefix for the bucket
    * @param om global ObjectMapper to parse the changelog files
    * @return ChangelogService configured to manage case law files
    */
@@ -29,6 +30,7 @@ public class ChangelogConfig {
 
   /**
    * @param bucket root bucket of norms files
+   * @param versionPrefix the version prefix for the bucket
    * @param om global ObjectMapper to parse the changelog files
    * @return IndexedChangelogService configured to manage legislation files
    */
@@ -42,6 +44,7 @@ public class ChangelogConfig {
 
   /**
    * @param bucket root bucket of literature files
+   * @param versionPrefix the version prefix for the bucket
    * @param om global ObjectMapper to parse the changelog files
    * @return IndexedChangelogService configured to manage literature files
    */
@@ -55,6 +58,7 @@ public class ChangelogConfig {
 
   /**
    * @param bucket root bucket of administrative directive files
+   * @param versionPrefix the version prefix for the bucket
    * @param om global ObjectMapper to parse the changelog files
    * @return IndexedChangelogService configured to manage administrative directive files
    */

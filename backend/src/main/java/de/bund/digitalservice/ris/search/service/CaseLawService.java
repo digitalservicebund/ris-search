@@ -167,6 +167,12 @@ public class CaseLawService {
     return caseLawRepository.findByDocumentNumber(documentNumber);
   }
 
+  /**
+   * Get a file by its document number.
+   *
+   * @param documentNumber the document number of the file to get
+   * @return the file
+   */
   public Optional<byte[]> getFileByDocumentNumber(String documentNumber)
       throws ObjectStoreServiceException {
     return caseLawBucket.get(
