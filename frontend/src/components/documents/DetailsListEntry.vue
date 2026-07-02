@@ -27,7 +27,7 @@ const emptyValuePlaceholder = "nicht vorhanden";
 
     <dd
       v-if="$slots.default"
-      class="typo-label1-regular col-span-12 md:col-span-9 lg:col-span-6"
+      class="typo-label1-regular col-span-12 md:col-span-9 md:col-start-4 lg:col-span-6 lg:col-start-4"
       :class="valueClass"
     >
       <div>
@@ -39,7 +39,7 @@ const emptyValuePlaceholder = "nicht vorhanden";
       v-for="listItem in valueList"
       v-else-if="valueList?.length"
       :key="listItem"
-      class="typo-label1-regular col-span-12 md:col-span-9 md:col-start-4 lg:col-span-6 xl:col-start-3"
+      class="typo-label1-regular col-span-12 md:col-span-9 md:col-start-4 lg:col-span-6 lg:col-start-4"
       :class="valueClass"
     >
       {{ listItem }}
@@ -47,7 +47,7 @@ const emptyValuePlaceholder = "nicht vorhanden";
 
     <dd
       v-else
-      class="typo-label1-regular col-span-12 data-empty:text-gray-900 md:col-span-9 lg:col-span-6"
+      class="typo-label1-regular col-span-12 data-empty:text-gray-900 md:col-span-9 md:col-start-4 lg:col-span-6 lg:col-start-4"
       :data-empty="emptyProp"
       :class="valueClass"
     >
