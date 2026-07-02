@@ -46,4 +46,4 @@ management:
 s3:
   file-storage:
     case-law:
-      versionPrefix: "V1"
+      versionPrefix: "V1/"
