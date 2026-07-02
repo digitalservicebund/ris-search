@@ -18,8 +18,7 @@ import lombok.NoArgsConstructor;
 @XmlRootElement(namespace = NormTestDataBuilder.AKN_NS)
 public class Article extends BaseElement implements BodyElement {
 
-  // Starting with 2 to account for the default paragraph
-  @Builder.Default @XmlTransient private int paragraphCounter = 1;
+  @Builder.Default @XmlTransient private int paragraphCounter = 0;
 
   @XmlAttribute private String eId;
 
@@ -48,8 +47,8 @@ public class Article extends BaseElement implements BodyElement {
   }
 
   public Article addParagraph(String text, String num) {
-    paragraphs.add(AknParagraph.withText(text, num, eId, String.valueOf(paragraphCounter)));
     paragraphCounter++;
+    paragraphs.add(AknParagraph.withText(text, num, eId, String.valueOf(paragraphCounter)));
 
     return this;
   }
