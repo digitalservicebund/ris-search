@@ -14,6 +14,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -87,8 +88,7 @@ public class BulkExportService {
 
       Future<Void> zipWorker =
           CompletableFuture.runAsync(
-              new ZipStreamProducer(keysToZip, sourceBucket, pipedOutputStream, keysToZip.size()),
-              executor);
+              new ZipStreamProducer(keysToZip, sourceBucket, pipedOutputStream), executor);
 
       // Main thread blocks here, piping input data directly to S3. S3ObjectStorageClient::putStream
       // uses a ReadableByteChannel which, unlike InputStream, listens for interruptions and
@@ -134,26 +134,23 @@ public class BulkExportService {
     private final Logger log = LogManager.getLogger(ZipStreamProducer.class);
 
     public ZipStreamProducer(
-        List<String> keysToDownload,
-        ObjectStorage sourceBucket,
-        OutputStream outputPipe,
-        int totalFileCount) {
+        List<String> keysToDownload, ObjectStorage sourceBucket, OutputStream outputPipe) {
       this.keysToDownload = keysToDownload;
       this.sourceBucket = sourceBucket;
       this.outputPipe = outputPipe;
-      this.totalFileCount = totalFileCount;
+      this.totalFileCount = keysToDownload.size();
     }
 
     public void run() {
       int processedCount = 0;
 
-      try (ExecutorService downloadExecutor = Executors.newVirtualThreadPerTaskExecutor();
-          ZipOutputStream zos = new ZipOutputStream(new BufferedOutputStream(outputPipe))) {
-
+      ExecutorService downloadExecutor = Executors.newVirtualThreadPerTaskExecutor();
+      try (ZipOutputStream zos = new ZipOutputStream(new BufferedOutputStream(outputPipe))) {
         List<List<String>> batches = ListUtils.partition(keysToDownload, 100);
 
         // download the batches asynchronously to minimize io latency
         for (List<String> keyBatch : batches) {
+          log.info("download next batch");
           List<CompletableFuture<FetchResult>> futures =
               keyBatch.stream()
                   .map(
@@ -166,12 +163,12 @@ public class BulkExportService {
                               downloadExecutor))
                   .toList();
 
+          log.info("write next batch");
           // write batch to the ZIP in a blocking call
           for (CompletableFuture<FetchResult> future : futures) {
 
-            // If any background download task threw an exception this will throw a
-            // CompletionException and abort
-            FetchResult result = future.join();
+            // abort the process if download throws an exception or times out
+            FetchResult result = future.get(1, TimeUnit.MINUTES);
 
             Optional<byte[]> bytesOption = result.bytes;
 
@@ -186,13 +183,27 @@ public class BulkExportService {
             zos.closeEntry();
 
             processedCount++;
+            if (processedCount % 1000 == 0 || processedCount == totalFileCount) {
+              log.info(
+                  "Bulk export progress: {}/{} files packaged for upload",
+                  processedCount,
+                  totalFileCount);
+            }
           }
-
-          log.info("Bulk export progress: {}/{} files packaged", processedCount, totalFileCount);
         }
       } catch (Exception e) {
+        // force close the executor in case of an error
+        downloadExecutor.shutdownNow();
+
+        if (e instanceof InterruptedException) {
+          log.error("Download thread was interrupted.", e);
+          Thread.currentThread().interrupt();
+        }
+
         throw new UncheckedIOException(
             new IOException("ZIP production engine encountered a failure status", e));
+      } finally {
+        downloadExecutor.close();
       }
     }
   }
