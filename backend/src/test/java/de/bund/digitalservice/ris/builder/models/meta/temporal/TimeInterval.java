@@ -26,7 +26,8 @@ public class TimeInterval extends BaseElement {
   @XmlAttribute(name = "end")
   private String end;
 
-  public static TimeInterval withDates(String startEventEId, String endEventEId, String parentEId) {
+  public static TimeInterval withEventRefs(
+      String startEventEId, String endEventEId, String parentEId) {
     return TimeInterval.builder()
         .eId(parentEId + "_gelzeitintervall-n1")
         .start(startEventEId)

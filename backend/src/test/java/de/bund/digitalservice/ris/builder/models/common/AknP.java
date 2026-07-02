@@ -27,8 +27,13 @@ public class AknP implements BodyElement {
   @XmlAttribute(name = "GUID")
   private String guid = UUID.randomUUID().toString();
 
+  @Builder.Default
   @XmlAttribute(name = "eId")
-  private String eId;
+  private String eId = "text-n1";
 
   @Builder.Default @XmlAnyElement private List<Object> children = new ArrayList<>();
+
+  public static AknP withText(String text) {
+    return AknP.builder().children(List.of(text)).build();
+  }
 }

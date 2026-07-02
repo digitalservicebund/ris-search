@@ -17,7 +17,7 @@ public class Formula extends BaseElement {
 
   @Builder.Default
   @XmlAttribute(name = "eId")
-  private String eId = " präambel-n1_formel-n1";
+  private String eId = "präambel-n1_formel-n1";
 
   @Builder.Default
   @XmlAttribute(name = "refersTo")

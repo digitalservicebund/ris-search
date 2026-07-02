@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import de.bund.digitalservice.ris.SharedTestConstants;
 import de.bund.digitalservice.ris.builder.NormTestDataBuilder;
+import de.bund.digitalservice.ris.builder.models.common.AknP;
 import de.bund.digitalservice.ris.search.mapper.NormLdmlToOpenSearchMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
@@ -41,7 +42,7 @@ class NormLdmlToOpenSearchMapperTest {
         new NormTestDataBuilder()
             .eli("eli/bund/bgbl-1/1962/s514/2010-04-27/1/deu/2010-04-27/regelungstext-1.xml")
             .officialTitle("Official Title")
-            .shortTitle("Short Title")
+            .shortTitle("Short Title (", ")")
             .inForceDate("2000-01-01")
             .outOfForceDate("2000-01-07")
             .risAbbreviation("FooBar")
@@ -51,7 +52,7 @@ class NormLdmlToOpenSearchMapperTest {
                 "Anlage 1",
                 "(zu § 1)",
                 "Headline der Anlage",
-                "Content of the Anlage");
+                List.of(AknP.withText("Content of the Anlage")));
 
     builder.chapter(
         "Chapter One",
@@ -98,7 +99,7 @@ class NormLdmlToOpenSearchMapperTest {
             .eli("eli/bund/bgbl-1/1962/s514/2010-04-27/1/deu/2010-04-27/regelungstext-1.xml")
             .officialTitle(
                 "Verordnung zur Durchführung des § 88 Abs. 2 Nr. 8 des Bundessozialhilfegesetzes")
-            .shortTitle("Kurztitel")
+            .shortTitle("Kurztitel (", ")")
             .officialAbbreviation("ABK")
             .inForceDate("2000-01-01")
             .outOfForceDate("2000-01-07")
@@ -246,37 +247,45 @@ class NormLdmlToOpenSearchMapperTest {
     builder
         .article(
             builder
-                .buildArticle("Heading", "§ 1", "2003-11-03", null, "art-1")
+                .buildArticle("Heading", "§ 1", "2003-11-03", null, "art-z1")
                 .addParagraph("Das ist ein Satz. Das ist noch ein Satz.", ""))
         .article(
             builder
-                .buildArticle("Heading 2", "§ 2", "2003-11-03", "2003-11-06", "art-2")
+                .buildArticle("Heading 2", "§ 2", "2003-11-03", "2003-11-06", "art-z2")
                 .addParagraph(
                     "Ein weiterer Satz mit einem Punkt in einer Aufzählung und noch einem Punkt.",
                     "(1)")
                 .addParagraph("Noch ein wichtiger Satz. Das ist der letzte Satz.", "(2)"))
         .article(
             builder
-                .buildArticle("", "", null, "2003-11-01", "art-3")
+                .buildArticle("", "", "2003-11-01", null, "art-z3")
                 .addParagraph("Mit Text.", ""));
 
-    // NormTestDataBuilder does not support akn:attachments yet, so the attachment/offenestruktur
-    // parts of the original test data cannot be reproduced yet.
-    // var attachments =
-    //     Map.of(
-    //         "eli/bund/bgbl-1/1962/s514/2010-04-27/1/deu/2010-04-27/offenestruktur-1.xml",
-    //         readXmlTestFile("offenestruktur-1.xml"));
-    Norm norm = NormLdmlToOpenSearchMapper.parseNorm(builder.buildNormXml(), Map.of(), true).get();
+    String attachmentEli =
+        "eli/bund/bgbl-1/1962/s514/2010-04-27/1/deu/2010-04-27/offenestruktur-1.xml";
+    builder.attachment(
+        attachmentEli,
+        "Anlage T1",
+        "(zu § 1)",
+        "",
+        List.of(
+            AknP.withText(
+                "This text appears in the attachment. This text also appears, inside a paragraph.")));
 
-    // 5 when the attachment article is included, see comment above.
-    // assertEquals(5, norm.getArticles().size());
-    assertEquals(4, norm.getArticles().size());
+    Norm norm =
+        NormLdmlToOpenSearchMapper.parseNorm(
+                builder.buildNormXml(),
+                Map.of(attachmentEli, builder.buildAttachmentXmls().getFirst()),
+                true)
+            .get();
+
+    assertEquals(5, norm.getArticles().size());
 
     Article preamble = norm.getArticles().get(0);
     Article firstArticle = norm.getArticles().get(1);
     Article secondArticle = norm.getArticles().get(2);
     Article thirdArticle = norm.getArticles().get(3);
-    // Article attachment = norm.getArticles().get(4);
+    Article attachment = norm.getArticles().get(4);
     assertEquals("Eingangsformel", preamble.getName());
     assertEquals("Preamble", preamble.getText());
     assertEquals("§ 1 Heading", norm.getArticles().get(1).getName());
@@ -289,28 +298,27 @@ class NormLdmlToOpenSearchMapperTest {
     assertNull(firstArticle.getExpiryDate());
     assertEquals(LocalDate.of(2003, Month.NOVEMBER, 3), secondArticle.getEntryIntoForceDate());
     assertEquals(LocalDate.of(2003, Month.NOVEMBER, 6), secondArticle.getExpiryDate());
-    assertNull(thirdArticle.getEntryIntoForceDate());
-    assertEquals(LocalDate.of(2003, Month.NOVEMBER, 1), thirdArticle.getExpiryDate());
-    // String workEli = "eli/bund/bgbl-1/1962/s514";
-    // String expressionEli = workEli + "/2010-04-27/1/deu";
-    // String manifestationEli = expressionEli + "/2010-04-27/offenestruktur-1.xml";
-    // String eid = "anlagen-1_anlage-1";
-    // assertThat(attachment)
-    //     .isEqualTo(
-    //         new Article(
-    //             expressionEli + "/" + eid,
-    //             eid,
-    //             expressionEli,
-    //             workEli,
-    //             "Anlage T1 (zu § 1)",
-    //             "This text appears in the attachment. This text also appears, inside a
-    // paragraph.",
-    //             null,
-    //             null,
-    //             null,
-    //             manifestationEli,
-    //             null,
-    //             attachment.getIndexedAt()));
+    assertEquals(LocalDate.of(2003, Month.NOVEMBER, 1), thirdArticle.getEntryIntoForceDate());
+    assertNull(thirdArticle.getExpiryDate());
+    String workEli = "eli/bund/bgbl-1/1962/s514";
+    String expressionEli = workEli + "/2010-04-27/1/deu";
+    String manifestationEli = expressionEli + "/2010-04-27/offenestruktur-1.xml";
+    String eid = "anlagen-n1_anlage-n1";
+    assertThat(attachment)
+        .isEqualTo(
+            new Article(
+                expressionEli + "/" + eid,
+                eid,
+                expressionEli,
+                workEli,
+                "Anlage T1 (zu § 1)",
+                "This text appears in the attachment. This text also appears, inside a paragraph.",
+                null,
+                null,
+                null,
+                manifestationEli,
+                null,
+                attachment.getIndexedAt()));
   }
 
   @Test

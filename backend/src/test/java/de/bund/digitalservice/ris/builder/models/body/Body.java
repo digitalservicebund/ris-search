@@ -1,5 +1,6 @@
 package de.bund.digitalservice.ris.builder.models.body;
 
+import de.bund.digitalservice.ris.builder.models.common.AknP;
 import de.bund.digitalservice.ris.builder.models.common.BaseElement;
 import jakarta.xml.bind.annotation.XmlAnyElement;
 import jakarta.xml.bind.annotation.XmlAttribute;
@@ -13,7 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@XmlSeeAlso({Article.class, Chapter.class, Section.class})
+@XmlSeeAlso({Article.class, Chapter.class, Section.class, AknP.class})
 public class Body extends BaseElement {
 
   @Builder.Default

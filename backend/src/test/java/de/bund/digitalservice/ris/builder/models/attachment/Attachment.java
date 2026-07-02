@@ -15,7 +15,7 @@ public class Attachment extends BaseElement {
 
   @Builder.Default
   @XmlAttribute(name = "eId")
-  private String eId = "anlage-n1";
+  private String eId = "anlagen-n1_anlage-n1";
 
   @XmlElement(name = "documentRef", namespace = NormTestDataBuilder.AKN_NS)
   private DocumentRef documentRef;

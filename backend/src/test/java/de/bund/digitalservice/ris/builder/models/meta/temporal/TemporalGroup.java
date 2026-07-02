@@ -24,7 +24,7 @@ public class TemporalGroup extends BaseElement {
   static TemporalGroup withEventRefs(String startEventEId, String endEventEId, String groupEId) {
     return TemporalGroup.builder()
         .eId(groupEId)
-        .timeInterval(TimeInterval.withDates(startEventEId, endEventEId, groupEId))
+        .timeInterval(TimeInterval.withEventRefs(startEventEId, endEventEId, groupEId))
         .build();
   }
 }
