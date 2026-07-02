@@ -34,7 +34,7 @@ jaxb-moxy = "5.0.0"
 posthog = "1.2.0"
 pebble = "4.1.2"
 rest-assured = "6.0.0"
-ris-html-transformation="0.0.2"
+ris-html-transformation="0.0.3"
 
 [libraries]
 spring-actuator = { module="org.springframework.boot:spring-boot-starter-actuator", version.ref="spring-boot-starter" }
