@@ -20,6 +20,7 @@ import de.bund.digitalservice.ris.builder.models.preface.DocTitle;
 import de.bund.digitalservice.ris.builder.models.preface.LongTitle;
 import de.bund.digitalservice.ris.builder.models.preface.Preface;
 import de.bund.digitalservice.ris.builder.models.preface.ShortTitle;
+import de.bund.digitalservice.ris.utils.NormXmlValidator;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.Marshaller;
 import java.io.StringWriter;
@@ -49,7 +50,7 @@ public class NormTestDataBuilder {
 
   private static final String COMMON_SCHEMA_LOCATIONS =
       "http://MetadatenRIS.LegalDocML.de/1.8.2/ ../ris-norms-ldml-schema-extensions/1.8.2/legalDocML.de-metadaten-ris.xsd"
-          + "http://MetadatenRegelungstext.LegalDocML.de/1.8.2/ Grammatiken/Norms/legalDocML.de-metadaten-regelungstext.xsd"
+          + "http://MetadatenRegelungstext.LegalDocML.de/1.8.2/ Grammatiken/legalDocML.de-metadaten-regelungstext.xsd"
           + "http://MetadatenRechtsetzungsdokument.LegalDocML.de/1.8.2/ Grammatiken/legalDocML.de-metadaten-rechtsetzungsdokument.xsd";
 
   private static final String OFFENE_STRUKTUR_SCHEMA_LOCATIONS =
@@ -273,13 +274,17 @@ public class NormTestDataBuilder {
   }
 
   public String buildNormXml() {
-    return this.marshallDocument(this.document, REGELUNGSTEXT_SCHEMA_LOCATION, "regelungstext");
+    return this.marshallDocument(
+        this.document, REGELUNGSTEXT_SCHEMA_LOCATION, NormXmlValidator.Type.REGELUNGSTEXT);
   }
 
   public List<String> buildAttachmentXmls() {
 
     return this.attachmentsDocs.stream()
-        .map(doc -> marshallDocument(doc, OFFENE_STRUKTUR_SCHEMA_LOCATIONS, "anlage-regelungstext"))
+        .map(
+            doc ->
+                marshallDocument(
+                    doc, OFFENE_STRUKTUR_SCHEMA_LOCATIONS, NormXmlValidator.Type.ANLAGE))
         .toList();
   }
 
@@ -287,7 +292,8 @@ public class NormTestDataBuilder {
    * Converts the internal JAXB object into the final XML String, validates it against the .xsd
    * files and returns the xml string if valid. Otherwise, throws an Exception.
    */
-  private String marshallDocument(AkomaNtoso document, String schemaLocations, String docType) {
+  private String marshallDocument(
+      AkomaNtoso document, String schemaLocations, NormXmlValidator.Type docType) {
     try {
       JAXBContext context = JAXBContext.newInstance(AkomaNtoso.class);
       Marshaller marshaller = context.createMarshaller();
@@ -308,11 +314,11 @@ public class NormTestDataBuilder {
       StringWriter writer = new StringWriter();
       marshaller.marshal(document, writer);
       String xml = writer.toString();
-      XmlValidator.validateNormXml(xml, docType);
+      NormXmlValidator.validateContent(xml, docType);
 
       return xml;
     } catch (Exception e) {
-      throw new RuntimeException("Failed to generate XML from XSD classes in Test Builder", e);
+      throw new RuntimeException("Failed to generate XML", e);
     }
   }
 }
