@@ -44,3 +44,8 @@ logging:
             search:
               config:
                 httplogs: TRACE
+
+s3:
+  file-storage:
+    case-law:
+      versionPrefix: "V1/"

@@ -62,3 +62,8 @@ app:
     # Since the api also hosts the swagger files, this header is used for both the api AND some of the docs pages
     # https://testphase.rechtsinformationen.bund.de is in connect-src so the docs "try it out" can call the api
     csp-header: "default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src data: 'self'; connect-src 'self' https://testphase.rechtsinformationen.bund.de; font-src 'self'; frame-src 'none'; object-src 'none'; media-src 'none';"
+
+s3:
+  file-storage:
+    case-law:
+      versionPrefix: "V1/"
