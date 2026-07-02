@@ -11,6 +11,8 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionService;
+import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -18,7 +20,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -144,51 +145,47 @@ public class BulkExportService {
     public void run() {
       int processedCount = 0;
 
+      // do not rely on the autoClosable of the ExecutorService to be able to force close on Error
       ExecutorService downloadExecutor = Executors.newVirtualThreadPerTaskExecutor();
       try (ZipOutputStream zos = new ZipOutputStream(new BufferedOutputStream(outputPipe))) {
-        List<List<String>> batches = ListUtils.partition(keysToDownload, 100);
+        int maxConcurrentDownloads = 30;
+        int submittedCount = 0;
 
-        // download the batches asynchronously to minimize io latency
-        for (List<String> keyBatch : batches) {
-          log.info("download next batch");
-          List<CompletableFuture<FetchResult>> futures =
-              keyBatch.stream()
-                  .map(
-                      key ->
-                          CompletableFuture.supplyAsync(
-                              () -> {
-                                Optional<byte[]> bytes = sourceBucket.get(key);
-                                return new FetchResult(key, bytes);
-                              },
-                              downloadExecutor))
-                  .toList();
+        CompletionService<FetchResult> completionService =
+            new ExecutorCompletionService<>(downloadExecutor);
 
-          log.info("write next batch");
-          // write batch to the ZIP in a blocking call
-          for (CompletableFuture<FetchResult> future : futures) {
+        // preload the queue of concurrent file downloads
+        int itemsToPreload = Math.min(maxConcurrentDownloads, totalFileCount);
+        for (int i = 0; i < itemsToPreload; i++) {
+          String key = keysToDownload.get(i);
+          completionService.submit(() -> new FetchResult(key, sourceBucket.get(key)));
+          submittedCount++;
+        }
 
-            // abort the process if download throws an exception or times out
-            FetchResult result = future.get(1, TimeUnit.MINUTES);
+        for (int i = 0; i < totalFileCount; i++) {
+          // Pull the next available completed file
+          FetchResult result = completionService.take().get(5, TimeUnit.MINUTES);
 
-            Optional<byte[]> bytesOption = result.bytes;
+          Optional<byte[]> bytesOption = result.bytes;
+          if (bytesOption.isEmpty()) {
+            throw new IOException("Object key not found: " + result.key());
+          }
 
-            if (bytesOption.isEmpty()) {
-              log.error("Object key '{}' not found in storage.", result.key());
-              throw new IOException("Object key not found: " + result.key());
-            }
+          // Write to ZIP
+          ZipEntry entry = new ZipEntry(result.key());
+          zos.putNextEntry(entry);
+          zos.write(bytesOption.get());
+          zos.closeEntry();
+          processedCount++;
 
-            ZipEntry entry = new ZipEntry(result.key());
-            zos.putNextEntry(entry);
-            zos.write(bytesOption.get());
-            zos.closeEntry();
+          // Immediately feed a new file into the pipeline to maintain maximum active downloads
+          if (submittedCount < totalFileCount) {
+            String nextKey = keysToDownload.get(submittedCount++);
+            completionService.submit(() -> new FetchResult(nextKey, sourceBucket.get(nextKey)));
+          }
 
-            processedCount++;
-            if (processedCount % 1000 == 0 || processedCount == totalFileCount) {
-              log.info(
-                  "Bulk export progress: {}/{} files packaged for upload",
-                  processedCount,
-                  totalFileCount);
-            }
+          if (processedCount % 10000 == 0 || processedCount == totalFileCount) {
+            log.info("Bulk export progress: {}/{} files packaged", processedCount, totalFileCount);
           }
         }
       } catch (Exception e) {
