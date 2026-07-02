@@ -91,31 +91,34 @@ const translationsListId = useId();
     </template>
 
     <div class="content-wrapper content-grid pb-32 md:pb-56">
-      <section class="col-span-12 grid grid-cols-subgrid space-y-16">
+      <section class="col-span-12 grid grid-cols-subgrid">
         <h1 class="typo-headline1-bold col-span-12 mb-8">
           English Translations of German Federal Laws and Regulations
         </h1>
-        <p class="content-grid-textblock">
-          We provide translations of our German content to help you. Please note
-          that the original German versions are the only authoritative source.
-        </p>
-        <p class="content-grid-textblock">
-          The translations published on this website may be used in accordance
-          with the applicable copyright exceptions. In particular, single copies
-          may be made including in the form of downloads or printouts for
-          private, non-commercial use. Any reproduction, processing,
-          distribution or other type of use of these translations that does not
-          fall within the relevant copyright exceptions requires the prior
-          consent of the author or other rights holder.
-        </p>
-        <SearchSimpleSearchInput
-          v-model="activeSearchTerm"
-          class="content-grid-textblock my-48"
-          input-label="Search term"
-          input-placeholder="Search by title or abbreviation"
-          submit-label="Search"
-          full-width
-        />
+        <div class="content-grid-textblock">
+          <p class="mb-16">
+            We provide translations of our German content to help you. Please
+            note that the original German versions are the only authoritative
+            source.
+          </p>
+          <p class="mb-16">
+            The translations published on this website may be used in accordance
+            with the applicable copyright exceptions. In particular, single
+            copies may be made including in the form of downloads or printouts
+            for private, non-commercial use. Any reproduction, processing,
+            distribution or other type of use of these translations that does
+            not fall within the relevant copyright exceptions requires the prior
+            consent of the author or other rights holder.
+          </p>
+          <SearchSimpleSearchInput
+            v-model="activeSearchTerm"
+            class="my-48"
+            input-label="Search term"
+            input-placeholder="Search by title or abbreviation"
+            submit-label="Search"
+            full-width
+          />
+        </div>
       </section>
 
       <section
