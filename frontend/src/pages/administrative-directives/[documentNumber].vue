@@ -3,7 +3,6 @@ import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineInfo from "~icons/ic/outline-info";
 import type { TabView } from "~/components/documents/TabsLayout.vue";
 import type { TreeItem } from "~/components/TreeView.vue";
-import { useAdministrativeDirectiveSeo } from "~/composables/useAdministrativeDirectiveSeo";
 import { type AdministrativeDirective, DocumentKind } from "~/types/api";
 
 definePageMeta({

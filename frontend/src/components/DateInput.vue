@@ -2,9 +2,7 @@
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import { InputMask } from "primevue";
-import { computed, nextTick, ref, useTemplateRef, watch } from "vue";
 import IconErrorOutline from "~icons/ic/baseline-error-outline";
-import WithClearButton from "./WithClearButton.vue";
 
 const props = withDefaults(
   defineProps<{

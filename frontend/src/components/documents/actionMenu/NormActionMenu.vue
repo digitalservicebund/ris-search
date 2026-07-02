@@ -1,14 +1,12 @@
 <script setup lang="ts">
 import EngIcon from "~icons/custom/eng";
 import UpdatingLinkIcon from "~icons/custom/updatingLink";
-import ActionMenu from "~/components/documents/actionMenu/ActionMenu.vue";
 import { useCopyUrlActionItem } from "~/composables/useActionMenuItem/useCopyUrlActionItem";
 import { useNavigateActionItem } from "~/composables/useActionMenuItem/useNavigateActionItem";
 import { usePdfActionItem } from "~/composables/useActionMenuItem/usePdfActionItem";
 import { usePrintActionItem } from "~/composables/useActionMenuItem/usePrintActionItem";
 import { useXmlActionItem } from "~/composables/useActionMenuItem/useXmlActionItem";
 import type { LegislationExpression } from "~/types/api";
-import { getManifestationUrl } from "~/utils/norm";
 
 const { metadata, translationUrl } = defineProps<{
   metadata: LegislationExpression | undefined;
@@ -50,5 +48,5 @@ const actions = computed(() => {
 </script>
 
 <template>
-  <ActionMenu :actions />
+  <DocumentsActionMenu :actions />
 </template>

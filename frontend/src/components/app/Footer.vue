@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import bmjvLogo from "~/assets/img/BMJV_de_v1__Web_farbig.svg";
-import { usePrivateFeaturesFlag } from "~/composables/usePrivateFeaturesFlag";
 
 const route = useRoute();
 const hideFeedbackForm = computed(() => route.path === "/feedback");

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { Button } from "primevue";
-import { usePostHog } from "~/composables/usePostHog";
 
 const { userConsent, isBannerVisible, setTracking } = usePostHog();
 

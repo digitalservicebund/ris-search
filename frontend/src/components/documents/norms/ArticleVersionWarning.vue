@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import VersionWarningMessage from "~/components/documents/norms/VersionWarningMessage.vue";
 import type { Article } from "~/types/api";
-import { getValidityStatus } from "~/utils/norm";
 
 const props = defineProps<{
   inForceVersionLink: string;
@@ -20,7 +18,7 @@ const currentArticleStatus = computed(() => {
 </script>
 
 <template>
-  <VersionWarningMessage
+  <DocumentsNormsVersionWarningMessage
     :current-version-validity-status="currentArticleStatus"
     :in-force-version-link="inForceVersionLink"
     historical-warning-message="Sie lesen einen Paragrafen einer historischen Fassung."

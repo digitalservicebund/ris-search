@@ -4,10 +4,7 @@ import type { SkipLink } from "~";
 import IcBaselineSearch from "~icons/ic/baseline-search";
 import DataFieldList from "~/components/search/DataFieldList.vue";
 import type { DocumentKind } from "~/types/api";
-import { formatDocumentKind } from "~/utils/displayValues";
-import { formatNumberWithSeparators } from "~/utils/numberFormatting";
 import type { DataField } from "~/utils/search/dataFields";
-import OperatorsHelp from "./OperatorsHelp.vue";
 
 const {
   dataFields = {},
@@ -154,5 +151,5 @@ function submitUnlessLoading() {
     </div>
   </search>
 
-  <OperatorsHelp class="lg:mt-32" />
+  <SearchOperatorsHelp class="lg:mt-32" />
 </template>

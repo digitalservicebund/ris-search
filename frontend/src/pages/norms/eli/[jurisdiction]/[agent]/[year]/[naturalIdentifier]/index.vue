@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { JSONLDList, LegislationExpression } from "~/types/api";
-import { getMostRelevantExpression } from "~/utils/norm";
 
 const route = useRoute();
 

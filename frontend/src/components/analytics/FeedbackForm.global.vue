@@ -2,8 +2,6 @@
 import { Button, Textarea } from "primevue";
 import ErrorOutline from "~icons/ic/outline-error-outline";
 import { NuxtLink } from "#components";
-import { usePostHog } from "~/composables/usePostHog";
-import { isStringEmpty } from "~/utils/textFormatting";
 
 defineProps<{ hideIntro?: boolean }>();
 

@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { ref, useId, useTemplateRef, watchEffect } from "vue";
-
 const { length = 3, tolerance = 3 } = defineProps<{
   /**
    * Specifies the maximum number of visible lines.

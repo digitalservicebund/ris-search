@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Badge, { BadgeColor } from "~/components/Badge.vue";
+import { BadgeColor } from "~/components/Badge.vue";
 
 export type StatusCardType = "implemented" | "in_progress" | "planned";
 
