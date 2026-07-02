@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-model href="../../../Grammatiken/Norms/legalDocML.de.sch" schematypens="http://purl.oclc.org/dsdl/schematron"?>
-<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.8.2/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.8.2/" xmlns:ris="http://MetadatenRIS.LegalDocML.de/1.8.2/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                 xsi:schemaLocation="">
     <akn:act name="regelungstext">
         <akn:meta eId="meta-1" GUID="9fac524a-aced-4b13-a792-4f824daf1d01">
@@ -18,6 +18,11 @@
                     <akn:FRBRuri value="eli/bund/bgbl-1/1962/s514/2010-04-27/1/deu/2010-04-27/regelungstext-1.xml"/>
                 </akn:FRBRManifestation>
             </akn:identification>
+            <akn:proprietary eId="meta-1_proprietary-1" GUID="cc6ed2b0-745d-4b44-83e2-9e6f7e500c28" source="attributsemantik-noch-undefiniert">
+                <ris:legalDocML.de_metadaten xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.8.2/ ../../Grammatiken/Norms/legalDocML.de-metadaten-ris.xsd">
+                    <ris:abkuerzung refersTo="interne-abkuerzung">RisAbbrev</ris:abkuerzung>
+                </ris:legalDocML.de_metadaten>
+            </akn:proprietary>
         </akn:meta>
         <akn:body GUID="03e30ba0-fd7b-4884-991c-3df76c61166c" eId="hauptteil-1">
             <akn:part GUID="6a7f5d82-4ca6-41e5-b7ab-07256d100f15" eId="hauptteil-1_teil-1">

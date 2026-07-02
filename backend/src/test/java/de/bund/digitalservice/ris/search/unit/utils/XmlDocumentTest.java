@@ -1,5 +1,7 @@
 package de.bund.digitalservice.ris.search.unit.utils;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import de.bund.digitalservice.ris.search.utils.XmlDocument;
 import java.io.IOException;
 import java.util.Optional;
@@ -85,5 +87,29 @@ class XmlDocumentTest {
         xmlDocument.getFirstMatchedNodeByXpath("/xml/test").orElseThrow().getTextContent();
 
     Assertions.assertEquals("New Text", text2);
+  }
+
+  @Test
+  void getNonEmptyElementByXpath_returnsValueWhenPresent()
+      throws ParserConfigurationException, IOException, SAXException {
+    String xml = "<xml><value>Hello</value></xml>";
+    XmlDocument xmlDocument = new XmlDocument(xml.getBytes());
+    assertThat(xmlDocument.getNonEmptyElementByXpath("/xml/value")).contains("Hello");
+  }
+
+  @Test
+  void getNonEmptyElementByXpath_returnsEmptyWhenNodeMissing()
+      throws ParserConfigurationException, IOException, SAXException {
+    String xml = "<xml></xml>";
+    XmlDocument xmlDocument = new XmlDocument(xml.getBytes());
+    assertThat(xmlDocument.getNonEmptyElementByXpath("/xml/value")).isEmpty();
+  }
+
+  @Test
+  void getNonEmptyElementByXpath_returnsEmptyWhenNodeIsBlank()
+      throws ParserConfigurationException, IOException, SAXException {
+    String xml = "<xml><value>   </value></xml>";
+    XmlDocument xmlDocument = new XmlDocument(xml.getBytes());
+    assertThat(xmlDocument.getNonEmptyElementByXpath("/xml/value")).isEmpty();
   }
 }

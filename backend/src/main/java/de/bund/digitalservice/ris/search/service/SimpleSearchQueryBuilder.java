@@ -115,7 +115,7 @@ public class SimpleSearchQueryBuilder {
 
   public static final Map<String, Float> normFieldBoosts =
       Map.of(
-          Norm.Fields.OFFICIAL_ABBREVIATION, convertOrderingToBoost(1),
+          Norm.Fields.ABBREVIATION, convertOrderingToBoost(1),
           Norm.Fields.OFFICIAL_SHORT_TITLE, convertOrderingToBoost(1),
           Norm.Fields.OFFICIAL_TITLE, convertOrderingToBoost(1),
           Norm.Fields.PREAMBLE_FORMULA, convertOrderingToBoost(2),
@@ -156,7 +156,7 @@ public class SimpleSearchQueryBuilder {
             .field(Norm.Fields.EXPRESSION_ELI_KEYWORD)
             .field(Norm.Fields.OFFICIAL_TITLE_KEYWORD)
             .field(Norm.Fields.OFFICIAL_SHORT_TITLE_KEYWORD)
-            .field(Norm.Fields.OFFICIAL_ABBREVIATION_KEYWORD)
+            .field(Norm.Fields.ABBREVIATION_KEYWORD)
             .boost(10.0f));
   }
 
