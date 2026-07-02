@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ProgressSpinner } from "primevue";
 import type { JSONLDList, LegislationExpression } from "~/types/api";
 
 const route = useRoute();
@@ -31,8 +32,7 @@ if (data.value?.member?.length === 0) {
   });
 }
 </script>
+
 <template>
-  <DelayedLoadingMessage
-    >Suche aktuelle, zukünftige oder historische Fassung…</DelayedLoadingMessage
-  >
+  <ProgressSpinner />
 </template>

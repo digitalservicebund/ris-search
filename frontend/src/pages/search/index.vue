@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Message, Select } from "primevue";
+import { Message, ProgressSpinner, Select } from "primevue";
 import { DocumentKind } from "~/types/api";
 import { isStrictDateFilterValue } from "~/utils/search/dateFilterType";
 import { itemsPerPageOptions } from "~/utils/search/itemsPerPageOptions";
@@ -346,7 +346,7 @@ watch(searchStatus, async (newStatus, oldStatus) => {
               v-if="isLoading"
               class="flex h-full min-h-48 w-full items-center justify-center"
             >
-              <DelayedLoadingMessage />
+              <ProgressSpinner />
             </div>
           </Pagination>
         </div>
