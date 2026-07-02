@@ -46,6 +46,10 @@ public class Lifecycle extends BaseElement {
                   .build()));
 
   public String addInForceEvent(String date) {
+    if (date == null) {
+      return null;
+    }
+
     String eventEId = updateAndGetNextEventEId();
     eventRefs.add(EventRef.inForce(date, eventEId));
 
@@ -53,6 +57,10 @@ public class Lifecycle extends BaseElement {
   }
 
   public String addOutOfForce(String date) {
+    if (date == null) {
+      return null;
+    }
+
     String eventEId = updateAndGetNextEventEId();
     eventRefs.add(EventRef.outOfForce(date, eventEId));
 

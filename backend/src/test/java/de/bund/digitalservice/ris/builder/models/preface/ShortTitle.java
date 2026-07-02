@@ -26,6 +26,8 @@ public class ShortTitle {
 
   @XmlTransient private String shortTitle;
 
+  @XmlTransient private String shortTitleSuffix;
+
   @XmlTransient private Inline abbreviation;
 
   @Builder.Default
@@ -39,8 +41,9 @@ public class ShortTitle {
   @Builder.Default @XmlAnyElement
   private List<Object> children = List.of("Short Title of the Legislation");
 
-  public ShortTitle withTitle(String title) {
+  public ShortTitle withTitle(String title, String suffix) {
     this.shortTitle = title;
+    this.shortTitleSuffix = suffix;
     setTitleAndAbbreviation();
 
     return this;
@@ -67,6 +70,10 @@ public class ShortTitle {
 
     if (this.abbreviation != null) {
       childElements.add(this.abbreviation);
+    }
+
+    if (this.shortTitleSuffix != null) {
+      childElements.add(this.shortTitleSuffix);
     }
 
     this.children = childElements;

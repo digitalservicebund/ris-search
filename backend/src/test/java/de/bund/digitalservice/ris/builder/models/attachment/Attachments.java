@@ -23,10 +23,15 @@ public class Attachments extends BaseElement {
   @XmlElement(name = "attachment", namespace = NormTestDataBuilder.AKN_NS)
   private List<Attachment> attachments = new ArrayList<>();
 
-  public void addAttachment(String manifestationEli) {
+  public void addAttachment(String manifestationEli, String eIdNumber) {
     attachments.add(
         Attachment.builder()
+            .eId("anlagen-n1_anlage-n" + eIdNumber)
             .documentRef(DocumentRef.builder().href(manifestationEli).build())
             .build());
+  }
+
+  public int getAttachmentCount() {
+    return this.attachments.size();
   }
 }

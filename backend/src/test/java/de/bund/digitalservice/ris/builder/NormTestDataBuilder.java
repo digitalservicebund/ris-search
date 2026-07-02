@@ -6,9 +6,9 @@ import de.bund.digitalservice.ris.builder.models.Doc;
 import de.bund.digitalservice.ris.builder.models.attachment.Attachments;
 import de.bund.digitalservice.ris.builder.models.body.Article;
 import de.bund.digitalservice.ris.builder.models.body.Body;
+import de.bund.digitalservice.ris.builder.models.body.BodyElement;
 import de.bund.digitalservice.ris.builder.models.body.Chapter;
 import de.bund.digitalservice.ris.builder.models.body.Section;
-import de.bund.digitalservice.ris.builder.models.common.AknP;
 import de.bund.digitalservice.ris.builder.models.common.Block;
 import de.bund.digitalservice.ris.builder.models.common.Inline;
 import de.bund.digitalservice.ris.builder.models.meta.Meta;
@@ -78,7 +78,7 @@ public class NormTestDataBuilder {
     return this;
   }
 
-  public NormTestDataBuilder shortTitle(String title) {
+  public NormTestDataBuilder shortTitle(String title, String suffix) {
     ShortTitle shortTitle = this.document.getAct().getPreface().getLongTitle().getShortTitle();
     this.document
         .getAct()
@@ -88,7 +88,7 @@ public class NormTestDataBuilder {
                 .getAct()
                 .getPreface()
                 .getLongTitle()
-                .withShortTitle(shortTitle.withTitle(title)));
+                .withShortTitle(shortTitle.withTitle(title, suffix)));
 
     return this;
   }
@@ -205,7 +205,11 @@ public class NormTestDataBuilder {
   }
 
   public NormTestDataBuilder attachment(
-      String manifestationEli, String num, String bezug, String heading, String text) {
+      String manifestationEli,
+      String num,
+      String bezug,
+      String heading,
+      List<BodyElement> mainBodyChildren) {
     DocTitle attachmentTitle =
         DocTitle.builder()
             .eId("einleitung-n1_block-n1_doctitel-n1")
@@ -247,22 +251,15 @@ public class NormTestDataBuilder {
                             .children(List.of(attachmentTitle))
                             .build())
                     .build())
-            .body(
-                Body.builder()
-                    .children(
-                        List.of(
-                            AknP.builder()
-                                .eId("hauptteil-n1_text-n1")
-                                .children(List.of(text))
-                                .build()))
-                    .build())
+            .body(Body.builder().children(mainBodyChildren).build())
             .build());
 
     Attachments attachments =
         Optional.ofNullable(this.document.getAct().getAttachments())
             .orElse(Attachments.builder().build());
 
-    attachments.addAttachment(manifestationEli);
+    attachments.addAttachment(
+        manifestationEli, String.valueOf(attachments.getAttachmentCount() + 1));
     this.document.getAct().setAttachments(attachments);
     attachmentsDocs.add(attachment);
 
