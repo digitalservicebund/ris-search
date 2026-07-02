@@ -91,11 +91,6 @@ describe("NormVersionList", () => {
           data.member![1]?.legislationIdentifier ?? "",
         versions: data.member!,
       },
-      global: {
-        stubs: {
-          IncompleteDataMessage: true,
-        },
-      },
     });
 
     const headerRowCells = wrapper.find("thead").findAll("th");
@@ -138,11 +133,6 @@ describe("NormVersionList", () => {
           data.member![1]?.legislationIdentifier ?? "",
         versions: data.member!,
       },
-      global: {
-        stubs: {
-          IncompleteDataMessage: true,
-        },
-      },
     });
 
     const futureVersionRow = wrapper.find("tbody").findAll("tr")[0];
@@ -161,11 +151,6 @@ describe("NormVersionList", () => {
         currentLegislationIdentifier:
           data.member![1]?.legislationIdentifier ?? "",
         versions: data.member!,
-      },
-      global: {
-        stubs: {
-          IncompleteDataMessage: true,
-        },
       },
     });
 
