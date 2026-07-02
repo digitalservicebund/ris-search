@@ -228,7 +228,7 @@ public class ObsConfig {
    * @throws URISyntaxException if the endpoint URI is invalid
    */
   @Bean(name = "publicFilesS3Client")
-  @Profile({"staging"})
+  @Profile({"staging", "production", "uat", "prototype"})
   public ObjectStorageClient publicFilesS3Client(
       @Value("${s3.file-storage.public-files.bucket-name}") String bucket)
       throws URISyntaxException {
@@ -241,18 +241,6 @@ public class ObsConfig {
             .region(Region.of(REGION))
             .build(),
         bucket);
-  }
-
-  /**
-   * Creates an dummy s3 client for environments where the bucket doesn't exist
-   *
-   * @return an {@code ObjectStorageClient} configured for the "portal" context
-   * @throws URISyntaxException if the endpoint URI is invalid
-   */
-  @Bean(name = "publicFilesS3Client")
-  @Profile({"production", "uat", "prototype"})
-  public ObjectStorageClient publicFilesS3DummyClient() {
-    return new ObjectStorageClientDummy();
   }
 
   @Bean(name = "normS3Client")
