@@ -3,7 +3,7 @@ import { screen } from "@testing-library/vue";
 import { describe, expect, it, vi } from "vitest";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineInfo from "~icons/ic/outline-info";
-import type { TabView } from "~/components/TabsLayout.vue";
+import type { TabView } from "~/components/documents/TabsLayout.vue";
 import DocumentLayout from "./document.vue";
 
 const { useRouteMock } = vi.hoisted(() => ({

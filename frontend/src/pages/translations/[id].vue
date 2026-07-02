@@ -6,7 +6,7 @@ import IcOutlineInfo from "~icons/ic/outline-info";
 import IcOutlineWarning from "~icons/ic/outline-warning-amber";
 import { NuxtLink } from "#components";
 import NormTranslationActionMenu from "~/components/documents/actionMenu/NormTranslationActionMenu.vue";
-import type { TabView } from "~/components/TabsLayout.vue";
+import type { TabView } from "~/components/documents/TabsLayout.vue";
 import {
   fetchTranslationAndHTML,
   getGermanOriginal,
@@ -136,7 +136,7 @@ const detailsTabPanelTitleId = useId();
       </Message>
     </div>
 
-    <TabsLayout :views>
+    <DocumentsTabsLayout :views>
       <template #text>
         <section
           class="pt-32 pb-32 md:pb-56"
@@ -170,6 +170,6 @@ const detailsTabPanelTitleId = useId();
           </DocumentsDetailsList>
         </section>
       </template>
-    </TabsLayout>
+    </DocumentsTabsLayout>
   </NuxtLayout>
 </template>

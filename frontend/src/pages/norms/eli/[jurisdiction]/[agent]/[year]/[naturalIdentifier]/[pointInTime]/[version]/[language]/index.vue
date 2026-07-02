@@ -6,7 +6,7 @@ import IcOutlineInfo from "~icons/ic/outline-info";
 import IcOutlineRestore from "~icons/ic/outline-settings-backup-restore";
 import { NuxtLink } from "#components";
 import type { BreadcrumbItem } from "~/components/Breadcrumbs.vue";
-import type { TabView } from "~/components/TabsLayout.vue";
+import type { TabView } from "~/components/documents/TabsLayout.vue";
 import { DocumentKind, type LegislationExpression } from "~/types/api";
 
 definePageMeta({
@@ -177,7 +177,7 @@ const fassungenDateFilterInputId = useId();
       <Metadata :items="metadataItems" />
     </div>
 
-    <TabsLayout :views>
+    <DocumentsTabsLayout :views>
       <template #text>
         <section role="tabpanel" :aria-labelledby="textTabPanelTitleId">
           <SidebarLayout>
@@ -325,7 +325,7 @@ const fassungenDateFilterInputId = useId();
           </div>
         </section>
       </template>
-    </TabsLayout>
+    </DocumentsTabsLayout>
   </NuxtLayout>
 </template>
 
