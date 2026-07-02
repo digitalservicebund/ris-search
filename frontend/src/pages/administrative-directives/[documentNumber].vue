@@ -107,11 +107,14 @@ const detailItems = computed(() =>
       >
         <h2 :id="detailsSectionId" class="typo-headline3-bold">Details</h2>
         <DocumentsIncompleteDataMessage class="my-24" />
-        <DetailsList>
+        <DocumentsDetailsList>
           <template v-for="item in detailItems" :key="item.label">
-            <DetailsListEntry :label="item.label" :value="item.value" />
+            <DocumentsDetailsListEntry
+              :label="item.label"
+              :value="item.value"
+            />
           </template>
-        </DetailsList>
+        </DocumentsDetailsList>
       </section>
     </template>
 

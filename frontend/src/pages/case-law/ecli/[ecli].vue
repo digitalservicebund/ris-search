@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import DetailsList from "~/components/DetailsList.vue";
-import DetailsListEntry from "~/components/DetailsListEntry.vue";
-
 definePageMeta({ alias: "/ecli/:ecli" });
 
 const route = useRoute();
@@ -19,9 +16,9 @@ const ecli = computed(() => {
     Platzhalter
   </h1>
 
-  <DetailsList>
-    <DetailsListEntry label="ECLI" :value="ecli" />
-  </DetailsList>
+  <DocumentsDetailsList>
+    <DocumentsDetailsListEntry label="ECLI" :value="ecli" />
+  </DocumentsDetailsList>
 
   <div>
     <div class="border border-yellow-300 bg-yellow-100 px-16 py-12">

@@ -210,37 +210,37 @@ const fassungenDateFilterInputId = useId();
 
             <DocumentsIncompleteDataMessage class="my-24" />
 
-            <DetailsList>
-              <DetailsListEntry
+            <DocumentsDetailsList>
+              <DocumentsDetailsListEntry
                 label="Ausfertigungsdatum:"
                 :value="
                   dateFormattedDDMMYYYY(metadata.exampleOfWork.legislationDate)
                 "
               />
-              <DetailsListEntry
+              <DocumentsDetailsListEntry
                 label="Vollzitat:"
                 :value="htmlParts.vollzitat"
               />
-              <DetailsListEntry
+              <DocumentsDetailsListEntry
                 label="Stand:"
                 :value-list="htmlParts.standangaben"
               />
-              <DetailsListEntry
+              <DocumentsDetailsListEntry
                 label="Hinweis zum Stand:"
                 :value-list="htmlParts.standangabenHinweis"
               />
-              <DetailsListEntry
+              <DocumentsDetailsListEntry
                 v-if="htmlParts.prefaceContainer"
                 label="Besonderer Hinweis:"
               >
                 <div v-html="htmlParts.prefaceContainer" />
-              </DetailsListEntry>
-              <DetailsListEntry label="Fußnoten:">
+              </DocumentsDetailsListEntry>
+              <DocumentsDetailsListEntry label="Fußnoten:">
                 <template v-if="htmlParts.headingNotes">
                   <div class="footnotes" v-html="htmlParts.headingNotes" />
                 </template>
-              </DetailsListEntry>
-              <DetailsListEntry label="Download:">
+              </DocumentsDetailsListEntry>
+              <DocumentsDetailsListEntry label="Download:">
                 <NuxtLink
                   data-attr="xml-zip-view"
                   class="typo-link-regular"
@@ -250,8 +250,8 @@ const fassungenDateFilterInputId = useId();
                   <IconFileDownload class="mr-2 inline" />
                   {{ metadata.abbreviation ?? "Inhalte" }} als ZIP herunterladen
                 </NuxtLink>
-              </DetailsListEntry>
-            </DetailsList>
+              </DocumentsDetailsListEntry>
+            </DocumentsDetailsList>
           </div>
         </section>
       </template>

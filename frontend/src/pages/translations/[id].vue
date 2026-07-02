@@ -5,8 +5,6 @@ import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineInfo from "~icons/ic/outline-info";
 import IcOutlineWarning from "~icons/ic/outline-warning-amber";
 import { NuxtLink } from "#components";
-import DetailsList from "~/components/DetailsList.vue";
-import DetailsListEntry from "~/components/DetailsListEntry.vue";
 import NormTranslationActionMenu from "~/components/documents/actionMenu/NormTranslationActionMenu.vue";
 import type { TabView } from "~/components/TabsLayout.vue";
 import {
@@ -160,16 +158,16 @@ const detailsTabPanelTitleId = useId();
           <h2 :id="detailsTabPanelTitleId" class="typo-headline3-bold">
             Details
           </h2>
-          <DetailsList class="mt-24">
-            <DetailsListEntry
+          <DocumentsDetailsList class="mt-24">
+            <DocumentsDetailsListEntry
               label="Translation provided by:"
               :value="translatedBy"
             />
-            <DetailsListEntry
+            <DocumentsDetailsListEntry
               label="Version information:"
               :value="versionInformation"
             />
-          </DetailsList>
+          </DocumentsDetailsList>
         </section>
       </template>
     </TabsLayout>

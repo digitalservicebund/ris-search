@@ -126,24 +126,27 @@ const detailsSectionId = useId();
       >
         <h2 :id="detailsSectionId" class="typo-headline3-bold">Details</h2>
         <DocumentsIncompleteDataMessage class="my-24" />
-        <DetailsList>
-          <DetailsListEntry
+        <DocumentsDetailsList>
+          <DocumentsDetailsListEntry
             label="Spruchkörper:"
             :value="detailsMetadata.judicialBody"
           />
-          <DetailsListEntry
+          <DocumentsDetailsListEntry
             label="ECLI:"
             :value="detailsMetadata.ecli"
             valueClass="break-all"
           />
-          <DetailsListEntry label="Normen:" value="" />
-          <DetailsListEntry
+          <DocumentsDetailsListEntry label="Normen:" value="" />
+          <DocumentsDetailsListEntry
             label="Entscheidungsname:"
             :value="detailsMetadata.decisionNames"
           />
-          <DetailsListEntry label="Vorinstanz:" value="" />
+          <DocumentsDetailsListEntry label="Vorinstanz:" value="" />
 
-          <DetailsListEntry v-if="detailsMetadata.zipUrl" label="Download:">
+          <DocumentsDetailsListEntry
+            v-if="detailsMetadata.zipUrl"
+            label="Download:"
+          >
             <NuxtLink
               data-attr="xml-zip-view"
               class="typo-link-regular"
@@ -153,8 +156,8 @@ const detailsSectionId = useId();
               <IcOutlineFileDownload class="mr-2 inline" />
               Diese Gerichtsentscheidung als ZIP herunterladen
             </NuxtLink>
-          </DetailsListEntry>
-        </DetailsList>
+          </DocumentsDetailsListEntry>
+        </DocumentsDetailsList>
       </section>
     </template>
 
