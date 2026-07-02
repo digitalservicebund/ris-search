@@ -163,12 +163,12 @@ const fassungenDateFilterInputId = useId();
     <div
       class="content-wrapper mb-24 space-y-24 sm:mb-32 sm:space-y-32 md:mb-40 md:space-y-40"
     >
-      <DocumentsNormsNormHeadingGroup
+      <DocumentsNormsHeadingGroup
         :metadata="metadata"
         :html-parts="htmlParts"
       />
 
-      <DocumentsNormsNormVersionWarning
+      <DocumentsNormsVersionWarning
         v-if="normVersionsStatus === 'success'"
         :versions="normVersions"
         :current-version="metadata"
@@ -279,7 +279,7 @@ const fassungenDateFilterInputId = useId();
                   :showClear="true"
                 />
               </div>
-              <DocumentsNormsNormVersionList
+              <DocumentsNormsVersionList
                 :status="normVersionsStatus"
                 :current-legislation-identifier="
                   metadata.legislationIdentifier ?? ''

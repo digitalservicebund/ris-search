@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/vue";
 import { describe, expect, it, vi } from "vitest";
 import { nextTick } from "vue";
 import type { LegislationExpression } from "~/types/api";
-import NormHeadingGroup from "./NormHeadingGroup.vue";
+import HeadingGroup from "./HeadingGroup.vue";
 
 const createDefaultProps = () => ({
   htmlParts: {
@@ -23,7 +23,7 @@ vi.mock("./titles", () => ({
 
 describe("HeadingGroup", () => {
   it("renders correctly with all props provided", async () => {
-    render(NormHeadingGroup, {
+    render(HeadingGroup, {
       props: createDefaultProps(),
     });
     await nextTick();
@@ -43,7 +43,7 @@ describe("HeadingGroup", () => {
     const props = createDefaultProps();
     props.htmlParts.headingAuthorialNotes = "";
 
-    render(NormHeadingGroup, {
+    render(HeadingGroup, {
       props,
     });
 
@@ -63,7 +63,7 @@ describe("HeadingGroup", () => {
       template: '<div class="fallback"><slot name="fallback" /></div>',
     };
 
-    render(NormHeadingGroup, {
+    render(HeadingGroup, {
       props: createDefaultProps(),
       global: {
         stubs: {
@@ -88,7 +88,7 @@ describe("HeadingGroup", () => {
       template: '<div><slot name="fallback" /></div>',
     };
 
-    render(NormHeadingGroup, {
+    render(HeadingGroup, {
       props,
       global: {
         stubs: {

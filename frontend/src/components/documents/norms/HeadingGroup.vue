@@ -47,7 +47,7 @@ const normTitle = computed(() => getNormTitle(props.metadata));
     </hgroup>
 
     <div class="content-grid">
-      <DocumentsNormsNormHeadingFootnotes
+      <DocumentsNormsHeadingFootnotes
         v-if="props.htmlParts?.headingAuthorialNotes"
         class="content-grid-textblock mt-8"
         :html="props.htmlParts.headingAuthorialNotes"

@@ -5,7 +5,7 @@ import {
 } from "@nuxt/test-utils/runtime";
 import { vi } from "vitest";
 import type { JSONLDList, LegislationExpression } from "~/types/api";
-import NormVersionList from "./NormVersionList.vue";
+import VersionList from "./VersionList.vue";
 
 function createLegislationExpression(
   expressionEli: string,
@@ -71,7 +71,7 @@ registerEndpoint(`/v1/legislation`, () => {
 const { mockNavigateTo } = vi.hoisted(() => ({ mockNavigateTo: vi.fn() }));
 mockNuxtImport("navigateTo", () => mockNavigateTo);
 
-describe("NormVersionList", () => {
+describe("VersionList", () => {
   beforeEach(() => {
     vi.useFakeTimers();
     vi.setSystemTime(new Date("2025-01-01T12:00:00"));
@@ -84,7 +84,7 @@ describe("NormVersionList", () => {
   });
 
   it("lists versions, sorted by date", async () => {
-    const wrapper = await mountSuspended(NormVersionList, {
+    const wrapper = await mountSuspended(VersionList, {
       props: {
         status: "success",
         currentLegislationIdentifier:
@@ -126,7 +126,7 @@ describe("NormVersionList", () => {
   });
 
   it("navigates on row click if fassung is not currently displayed", async () => {
-    const wrapper = await mountSuspended(NormVersionList, {
+    const wrapper = await mountSuspended(VersionList, {
       props: {
         status: "success",
         currentLegislationIdentifier:
@@ -145,7 +145,7 @@ describe("NormVersionList", () => {
   });
 
   it("does not nvigate to fassung currently displayed", async () => {
-    const wrapper = await mountSuspended(NormVersionList, {
+    const wrapper = await mountSuspended(VersionList, {
       props: {
         status: "success",
         currentLegislationIdentifier:
