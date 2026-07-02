@@ -174,7 +174,7 @@ const fassungenDateFilterInputId = useId();
         :current-version="metadata"
       />
 
-      <Metadata :items="metadataItems" />
+      <DocumentsMetadata :items="metadataItems" />
     </div>
 
     <DocumentsTabsLayout :views>

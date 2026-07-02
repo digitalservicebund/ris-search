@@ -225,7 +225,7 @@ const metadataItems = computed(() => {
         :current-article="article"
       />
 
-      <Metadata v-if="privateFeaturesEnabled" :items="metadataItems" />
+      <DocumentsMetadata v-if="privateFeaturesEnabled" :items="metadataItems" />
     </div>
 
     <div id="content" class="border-t border-t-gray-400 bg-white">

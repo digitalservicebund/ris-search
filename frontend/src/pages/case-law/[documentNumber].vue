@@ -2,8 +2,8 @@
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineFileDownload from "~icons/ic/outline-file-download";
 import IcOutlineInfo from "~icons/ic/outline-info";
+import type { MetadataItem } from "~/components/documents/Metadata.vue";
 import type { TabView } from "~/components/documents/TabsLayout.vue";
-import type { MetadataItem } from "~/components/Metadata.vue";
 import type { TreeItem } from "~/components/TreeView.vue";
 import { type CaseLaw, DocumentKind } from "~/types/api";
 
