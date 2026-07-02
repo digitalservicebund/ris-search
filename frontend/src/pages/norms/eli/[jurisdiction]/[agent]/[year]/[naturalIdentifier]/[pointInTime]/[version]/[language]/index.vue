@@ -6,7 +6,7 @@ import IcOutlineInfo from "~icons/ic/outline-info";
 import IcOutlineRestore from "~icons/ic/outline-settings-backup-restore";
 import { NuxtLink } from "#components";
 import type { BreadcrumbItem } from "~/components/Breadcrumbs.vue";
-import type { TabView } from "~/components/TabsLayout.vue";
+import type { TabView } from "~/components/documents/TabsLayout.vue";
 import { DocumentKind, type LegislationExpression } from "~/types/api";
 
 definePageMeta({
@@ -163,21 +163,21 @@ const fassungenDateFilterInputId = useId();
     <div
       class="content-wrapper mb-24 space-y-24 sm:mb-32 sm:space-y-32 md:mb-40 md:space-y-40"
     >
-      <DocumentsNormsNormHeadingGroup
+      <DocumentsNormsHeadingGroup
         :metadata="metadata"
         :html-parts="htmlParts"
       />
 
-      <DocumentsNormsNormVersionWarning
+      <DocumentsNormsVersionWarning
         v-if="normVersionsStatus === 'success'"
         :versions="normVersions"
         :current-version="metadata"
       />
 
-      <Metadata :items="metadataItems" />
+      <DocumentsMetadata :items="metadataItems" />
     </div>
 
-    <TabsLayout :views>
+    <DocumentsTabsLayout :views>
       <template #text>
         <section role="tabpanel" :aria-labelledby="textTabPanelTitleId">
           <SidebarLayout>
@@ -210,37 +210,37 @@ const fassungenDateFilterInputId = useId();
 
             <DocumentsIncompleteDataMessage class="my-24" />
 
-            <DetailsList>
-              <DetailsListEntry
+            <DocumentsDetailsList>
+              <DocumentsDetailsListEntry
                 label="Ausfertigungsdatum:"
                 :value="
                   dateFormattedDDMMYYYY(metadata.exampleOfWork.legislationDate)
                 "
               />
-              <DetailsListEntry
+              <DocumentsDetailsListEntry
                 label="Vollzitat:"
                 :value="htmlParts.vollzitat"
               />
-              <DetailsListEntry
+              <DocumentsDetailsListEntry
                 label="Stand:"
                 :value-list="htmlParts.standangaben"
               />
-              <DetailsListEntry
+              <DocumentsDetailsListEntry
                 label="Hinweis zum Stand:"
                 :value-list="htmlParts.standangabenHinweis"
               />
-              <DetailsListEntry
+              <DocumentsDetailsListEntry
                 v-if="htmlParts.prefaceContainer"
                 label="Besonderer Hinweis:"
               >
                 <div v-html="htmlParts.prefaceContainer" />
-              </DetailsListEntry>
-              <DetailsListEntry label="Fußnoten:">
+              </DocumentsDetailsListEntry>
+              <DocumentsDetailsListEntry label="Fußnoten:">
                 <template v-if="htmlParts.headingNotes">
                   <div class="footnotes" v-html="htmlParts.headingNotes" />
                 </template>
-              </DetailsListEntry>
-              <DetailsListEntry label="Download:">
+              </DocumentsDetailsListEntry>
+              <DocumentsDetailsListEntry label="Download:">
                 <NuxtLink
                   data-attr="xml-zip-view"
                   class="typo-link-regular"
@@ -250,8 +250,8 @@ const fassungenDateFilterInputId = useId();
                   <IconFileDownload class="mr-2 inline" />
                   {{ metadata.abbreviation ?? "Inhalte" }} als ZIP herunterladen
                 </NuxtLink>
-              </DetailsListEntry>
-            </DetailsList>
+              </DocumentsDetailsListEntry>
+            </DocumentsDetailsList>
           </div>
         </section>
       </template>
@@ -279,7 +279,7 @@ const fassungenDateFilterInputId = useId();
                   :showClear="true"
                 />
               </div>
-              <DocumentsNormsNormVersionList
+              <DocumentsNormsVersionList
                 :status="normVersionsStatus"
                 :current-legislation-identifier="
                   metadata.legislationIdentifier ?? ''
@@ -325,11 +325,11 @@ const fassungenDateFilterInputId = useId();
           </div>
         </section>
       </template>
-    </TabsLayout>
+    </DocumentsTabsLayout>
   </NuxtLayout>
 </template>
 
-<style lang="css" scoped>
+<style scoped>
 @reference "~/assets/main.css";
 
 :deep(.official-toc div) {

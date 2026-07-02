@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { BreadcrumbItem } from "~/components/Breadcrumbs.vue";
-import type { MetadataItem } from "~/components/Metadata.vue";
-import type { TabView } from "~/components/TabsLayout.vue";
+import type { MetadataItem } from "~/components/documents/Metadata.vue";
+import type { TabView } from "~/components/documents/TabsLayout.vue";
 import BreadcrumbPageLayout from "./breadcrumbPage.vue";
 
 const { titlePlaceholder = "Titelzeile nicht vorhanden", views } = defineProps<{
@@ -31,7 +31,7 @@ const { titlePlaceholder = "Titelzeile nicht vorhanden", views } = defineProps<{
           :placeholder="titlePlaceholder"
         />
 
-        <Metadata
+        <DocumentsMetadata
           v-if="metadata?.length"
           :items="metadata"
           class="my-24 sm:my-32 md:my-40"
@@ -50,11 +50,11 @@ const { titlePlaceholder = "Titelzeile nicht vorhanden", views } = defineProps<{
 
       <div v-else>
         <!-- Tabs -->
-        <TabsLayout :views>
+        <DocumentsTabsLayout :views>
           <template v-for="(_, name) in $slots" #[name]>
             <slot :name="name" />
           </template>
-        </TabsLayout>
+        </DocumentsTabsLayout>
       </div>
     </div>
   </BreadcrumbPageLayout>

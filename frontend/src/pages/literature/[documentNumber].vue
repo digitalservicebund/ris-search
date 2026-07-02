@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineInfo from "~icons/ic/outline-info";
-import type { TabView } from "~/components/TabsLayout.vue";
+import type { TabView } from "~/components/documents/TabsLayout.vue";
 import type { TreeItem } from "~/components/TreeView.vue";
-import { useLiteratureSeo } from "~/composables/useLiteratureSeo";
 import { DocumentKind, type Literature } from "~/types/api";
 
 definePageMeta({
@@ -105,15 +104,15 @@ const detailItems = computed(() => getLiteratureDetailItems(literature.value));
       >
         <h2 :id="detailsSectionId" class="typo-headline3-bold">Details</h2>
         <DocumentsIncompleteDataMessage class="my-24" />
-        <DetailsList>
+        <DocumentsDetailsList>
           <template v-for="item in detailItems" :key="item.label">
-            <DetailsListEntry
+            <DocumentsDetailsListEntry
               :label="item.label"
               :value="item.value"
               :value-list="item.valueList"
             />
           </template>
-        </DetailsList>
+        </DocumentsDetailsList>
       </section>
     </template>
 

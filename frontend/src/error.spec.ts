@@ -3,16 +3,6 @@ import { screen } from "@testing-library/vue";
 import { describe } from "vitest";
 import ErrorPage from "./error.vue";
 
-const NuxtLayoutStub = {
-  name: "NuxtLayout",
-  template: "<div><slot /></div>",
-};
-
-const SimpleSearchInputStub = {
-  name: "SimpleSearchInput",
-  template: "<div></div>",
-};
-
 const mountComponent = async (statusCode: number) =>
   await renderSuspended(ErrorPage, {
     props: {
@@ -26,12 +16,6 @@ const mountComponent = async (statusCode: number) =>
           message: "",
           statusCode,
         }),
-      },
-    },
-    global: {
-      stubs: {
-        NuxtLayout: NuxtLayoutStub,
-        SimpleSearchInput: SimpleSearchInputStub,
       },
     },
   });

@@ -1,8 +1,8 @@
 import { render, screen } from "@testing-library/vue";
 import type { LegislationExpression } from "~/types/api";
-import NormVersionWarning from "./NormVersionWarning.vue";
+import VersionWarning from "./VersionWarning.vue";
 
-describe("NormVersionWarning", () => {
+describe("VersionWarning", () => {
   const testVersions = [
     {
       temporalCoverage: "2020-01-01/2022-12-31",
@@ -63,7 +63,7 @@ describe("NormVersionWarning", () => {
   ];
 
   it.each(testCases)("$label", async (testData) => {
-    render(NormVersionWarning, {
+    render(VersionWarning, {
       props: {
         versions: testVersions,
         currentVersion: testData.currentlyRendered as LegislationExpression,
@@ -94,7 +94,7 @@ describe("NormVersionWarning", () => {
   });
 
   it("does not render a message if there are no future versions existing for the current in force version", () => {
-    const { container } = render(NormVersionWarning, {
+    const { container } = render(VersionWarning, {
       props: {
         versions: [testVersions[0]!, testVersions[1]!],
         currentVersion: {
@@ -118,7 +118,7 @@ describe("NormVersionWarning", () => {
       testVersions[3]!,
     ];
 
-    const { container } = render(NormVersionWarning, {
+    const { container } = render(VersionWarning, {
       props: {
         versions: versionsWithoutInForce,
         currentVersion: {

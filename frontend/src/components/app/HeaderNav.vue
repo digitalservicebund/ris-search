@@ -43,7 +43,7 @@ defineEmits<{ selectItem: [] }>();
   </div>
 </template>
 
-<style lang="css" scoped>
+<style scoped>
 @reference "~/assets/main.css";
 
 .nav-link {

@@ -2,11 +2,11 @@ import { renderSuspended } from "@nuxt/test-utils/runtime";
 import { userEvent } from "@testing-library/user-event";
 import { screen } from "@testing-library/vue";
 import { describe, expect, it } from "vitest";
-import NormHeadingFootnotes from "./NormHeadingFootnotes.vue";
+import HeadingFootnotes from "./HeadingFootnotes.vue";
 
-describe("NormHeadingFootnotes", () => {
+describe("HeadingFootnotes", () => {
   it("shows short footnotes in full", async () => {
-    await renderSuspended(NormHeadingFootnotes, {
+    await renderSuspended(HeadingFootnotes, {
       props: {
         html: "content",
         textLength: 100,
@@ -20,7 +20,7 @@ describe("NormHeadingFootnotes", () => {
   it("shows a button to display longer footnotes", async () => {
     const user = userEvent.setup();
 
-    await renderSuspended(NormHeadingFootnotes, {
+    await renderSuspended(HeadingFootnotes, {
       props: {
         html: "longer content",
         textLength: 500,

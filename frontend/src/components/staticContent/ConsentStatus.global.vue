@@ -2,7 +2,6 @@
 import { Button, Message } from "primevue";
 import IconCheck from "~icons/ic/check";
 import IconClose from "~icons/ic/close";
-import { CONSENT_COOKIE_NAME, usePostHog } from "~/composables/usePostHog";
 
 const { userConsent, initialize, setTracking } = usePostHog();
 

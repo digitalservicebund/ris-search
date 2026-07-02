@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import ActionMenu from "~/components/documents/actionMenu/ActionMenu.vue";
 import { useCopyUrlActionItem } from "~/composables/useActionMenuItem/useCopyUrlActionItem";
 import { usePdfActionItem } from "~/composables/useActionMenuItem/usePdfActionItem";
 import { usePrintActionItem } from "~/composables/useActionMenuItem/usePrintActionItem";
@@ -16,5 +15,5 @@ const actions = computed(() => {
 </script>
 
 <template>
-  <ActionMenu :actions />
+  <DocumentsActionMenu :actions />
 </template>

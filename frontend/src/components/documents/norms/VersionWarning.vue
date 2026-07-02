@@ -1,11 +1,6 @@
 <script setup lang="ts">
 import dayjs from "dayjs";
-import VersionWarningMessage from "~/components/documents/norms/VersionWarningMessage.vue";
 import type { LegislationExpression } from "~/types/api";
-import {
-  getValidityStatus,
-  temporalCoverageToValidityInterval,
-} from "~/utils/norm";
 
 const props = defineProps<{
   versions: LegislationExpression[];
@@ -51,7 +46,7 @@ const firstFutureVersion = computed(() => {
 </script>
 
 <template>
-  <VersionWarningMessage
+  <DocumentsNormsVersionWarningMessage
     :current-version-validity-status="currentVersionValidityStatus"
     :in-force-version-link="inForceVersionLink"
     :future-version="firstFutureVersion"

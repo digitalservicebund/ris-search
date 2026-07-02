@@ -1,11 +1,7 @@
 <script setup lang="ts">
 import { orderBy } from "lodash-es";
 import { Column, DataTable } from "primevue";
-import Badge from "~/components/Badge.vue";
 import type { LegislationExpression } from "~/types/api";
-import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
-import { formatNormValidity } from "~/utils/displayValues";
-import { temporalCoverageToValidityInterval } from "~/utils/norm";
 
 const props = defineProps<{
   status: string;

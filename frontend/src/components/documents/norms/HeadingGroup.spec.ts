@@ -1,8 +1,8 @@
 import { render, screen } from "@testing-library/vue";
-import { describe, it, expect, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { nextTick } from "vue";
 import type { LegislationExpression } from "~/types/api";
-import NormHeadingGroup from "./NormHeadingGroup.vue";
+import HeadingGroup from "./HeadingGroup.vue";
 
 const createDefaultProps = () => ({
   htmlParts: {
@@ -21,18 +21,10 @@ vi.mock("./titles", () => ({
   getNormTitle: vi.fn(() => `getNormTitle title`),
 }));
 
-const NormHeadingFootnotesStub = {
-  name: "NormHeadingFootnotes",
-  props: ["html", "textLength"],
-  template:
-    '<div data-testid="norm-heading-footnotes" :data-html="html" :data-text-length="textLength"></div>',
-};
-
 describe("HeadingGroup", () => {
   it("renders correctly with all props provided", async () => {
-    render(NormHeadingGroup, {
+    render(HeadingGroup, {
       props: createDefaultProps(),
-      global: { stubs: { NormHeadingFootnotes: NormHeadingFootnotesStub } },
     });
     await nextTick();
 
@@ -44,16 +36,14 @@ describe("HeadingGroup", () => {
       "Test Alternate Name",
     );
 
-    const notesStub = screen.getByTestId("norm-heading-footnotes");
-    expect(notesStub.dataset.html).toBe("<p>Test Notes</p>");
-    expect(notesStub.dataset.textLength).toBe("180");
+    expect(screen.getByText("Test Notes")).toBeInTheDocument();
   });
 
   it("still renders heading when no headingAuthorialNotes are provided", async () => {
     const props = createDefaultProps();
     props.htmlParts.headingAuthorialNotes = "";
 
-    render(NormHeadingGroup, {
+    render(HeadingGroup, {
       props,
     });
 
@@ -73,13 +63,12 @@ describe("HeadingGroup", () => {
       template: '<div class="fallback"><slot name="fallback" /></div>',
     };
 
-    render(NormHeadingGroup, {
+    render(HeadingGroup, {
       props: createDefaultProps(),
       global: {
         stubs: {
           "client-only": ClientOnlyStub,
           ClientOnly: ClientOnlyStub,
-          NormHeadingFootnotes: NormHeadingFootnotesStub,
         },
       },
     });
@@ -99,7 +88,7 @@ describe("HeadingGroup", () => {
       template: '<div><slot name="fallback" /></div>',
     };
 
-    render(NormHeadingGroup, {
+    render(HeadingGroup, {
       props,
       global: {
         stubs: {

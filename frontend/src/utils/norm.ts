@@ -1,6 +1,6 @@
 import dayjs, { type Dayjs } from "dayjs";
 import { partition, sortBy } from "lodash-es";
-import type { MetadataItem } from "~/components/Metadata.vue";
+import type { MetadataItem } from "~/components/documents/Metadata.vue";
 import type { LegislationExpression } from "~/types/api";
 import {
   dateFormattedDDMMYYYY,

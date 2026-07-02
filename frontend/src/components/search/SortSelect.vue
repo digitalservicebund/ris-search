@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { Select } from "primevue";
-import { computed } from "vue";
 import { DocumentKind } from "~/types/api";
 import { sortMode } from "~/utils/search/sortMode";
 

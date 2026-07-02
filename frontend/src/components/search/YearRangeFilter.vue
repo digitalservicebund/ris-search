@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { Select } from "primevue";
-import YearInput from "~/components/YearInput.vue";
 import type {
   DateFilterValue,
   FilterType,

@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import { Button, Message } from "primevue";
 import { ExternalLink, NuxtLink } from "#components";
-import bmjvLogo from "~/assets/img/BMJV_de_v1__Web_farbig.svg";
-import SimpleSearchInput from "~/components/search/SimpleSearchInput.vue";
-import { usePrivateFeaturesFlag } from "~/composables/usePrivateFeaturesFlag";
+import bmjvLogo from "~/assets/img/bmjv-de-v1-web-farbig.svg";
 
 function redirectToSearch(searchStr?: string) {
   navigateTo({ name: "search", query: searchStr ? { query: searchStr } : {} });
@@ -53,9 +51,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
   <div
     class="content-wrapper content-grid gap-y-16 pt-16 pb-32 sm:gap-y-24 sm:pt-24 md:pb-56"
   >
-    <FeatureCard
-      class="col-span-12 lg:col-span-10 lg:col-start-2 xl:col-span-8 xl:col-start-3"
-    >
+    <div class="feature-card">
       <div>
         <h2 class="typo-headline2-bold wrap-break-word hyphens-auto">
           Testen Sie die Suche
@@ -65,12 +61,14 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
           Bundesgerichte.
         </p>
       </div>
-      <SimpleSearchInput
+
+      <SearchSimpleSearchInput
         full-width
         model-value=""
         @update:model-value="(query) => redirectToSearch(query)"
         @empty-search="() => redirectToSearch()"
       />
+
       <Message
         severity="warn"
         class="ris-body2-regular"
@@ -87,11 +85,9 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
           Webseiten Gesetze-im-Internet und Rechtsprechung-im-Internet.
         </p>
       </Message>
-    </FeatureCard>
+    </div>
 
-    <FeatureCard
-      class="col-span-12 lg:col-span-10 lg:col-start-2 xl:col-span-8 xl:col-start-3"
-    >
+    <div class="feature-card">
       <div>
         <h2 class="typo-headline2-bold wrap-break-word hyphens-auto">
           Testen Sie die Darstellung aktueller Gesetze, Verordnungen und
@@ -102,6 +98,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
           uns, die Inhalte klarer und zugänglicher zu machen.
         </p>
       </div>
+
       <div class="flex flex-wrap gap-16">
         <Button :as="NuxtLink" to="/search?documentKind=N">
           Zu den Gesetzen und Verordnungen
@@ -110,12 +107,9 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
           Zu den Gerichtsentscheidungen
         </Button>
       </div>
-    </FeatureCard>
+    </div>
 
-    <FeatureCard
-      class="col-span-12 lg:col-span-10 lg:col-start-2 xl:col-span-8 xl:col-start-3"
-      v-if="privateFeaturesEnabled"
-    >
+    <div class="feature-card" v-if="privateFeaturesEnabled">
       <div>
         <h2 class="typo-headline2-bold wrap-break-word hyphens-auto">
           English translation of German laws and regulations
@@ -131,11 +125,9 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
           Go to translations
         </Button>
       </div>
-    </FeatureCard>
+    </div>
 
-    <FeatureCard
-      class="col-span-12 lg:col-span-10 lg:col-start-2 xl:col-span-8 xl:col-start-3"
-    >
+    <div class="feature-card">
       <div>
         <h2 class="typo-headline2-bold wrap-break-word hyphens-auto">
           Testen Sie die Programmierschnittstelle
@@ -156,12 +148,9 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
           Zur API-Dokumentation
         </Button>
       </div>
-    </FeatureCard>
+    </div>
 
-    <FeatureCard
-      class="col-span-12 lg:col-span-10 lg:col-start-2 xl:col-span-8 xl:col-start-3"
-      inner-class="gap-x-64 gap-y-32 md:flex-row"
-    >
+    <div class="feature-card gap-x-64 gap-y-32 md:flex-row">
       <img
         class="mt-20 ml-20 self-start md:mt-4 md:ml-0"
         :src="bmjvLogo"
@@ -182,6 +171,16 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
           >Weitere Informationen zur Testphase</NuxtLink
         >
       </div>
-    </FeatureCard>
+    </div>
   </div>
 </template>
+
+<style scoped>
+@reference "~/assets/main.css";
+
+@layer components {
+  .feature-card {
+    @apply col-span-12 flex flex-col gap-16 bg-white p-16 sm:p-24 md:gap-24 md:p-48 lg:col-span-10 lg:col-start-2 lg:px-80 xl:col-span-8 xl:col-start-3 2xl:px-96 2xl:py-56;
+  }
+}
+</style>

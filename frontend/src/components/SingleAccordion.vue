@@ -5,7 +5,6 @@ import {
   AccordionHeader,
   AccordionPanel,
 } from "primevue";
-import { computed } from "vue";
 import IcOutlineExpandCircleDown from "~icons/ic/outline-expand-circle-down";
 
 const props = defineProps<{

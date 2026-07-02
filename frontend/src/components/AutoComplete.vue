@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { AutoComplete as BaseAutoComplete, ProgressSpinner } from "primevue";
 import { type AutoCompleteProps as BaseAutoCompleteProps } from "primevue/autocomplete";
-import { ref } from "vue";
 import IcBaselineClose from "~icons/ic/baseline-close";
 import IcBaselineKeyboardArrowDown from "~icons/ic/baseline-keyboard-arrow-down";
 

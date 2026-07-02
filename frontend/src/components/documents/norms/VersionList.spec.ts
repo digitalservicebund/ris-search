@@ -4,8 +4,65 @@ import {
   mockNuxtImport,
 } from "@nuxt/test-utils/runtime";
 import { vi } from "vitest";
-import { data } from "~/components/documents/norms/NormVersions.spec.data";
-import NormVersionList from "./NormVersionList.vue";
+import type { JSONLDList, LegislationExpression } from "~/types/api";
+import VersionList from "./VersionList.vue";
+
+function createLegislationExpression(
+  expressionEli: string,
+  temporalCoverage: string,
+  legalForce: "InForce" | "NotInForce",
+): LegislationExpression {
+  const workIdentifier = expressionEli.split("/").slice(0, 5).join("/");
+  return {
+    "@type": "Legislation",
+    "@id": `/v1/legislation/${expressionEli}`,
+    legislationIdentifier: expressionEli,
+    temporalCoverage: temporalCoverage,
+    legislationLegalForce: legalForce,
+    exampleOfWork: {
+      "@id": `/v1/legislation/${workIdentifier}`,
+      "@type": "Legislation",
+      legislationIdentifier: workIdentifier,
+      legislationDate: "2025-01-01",
+      datePublished: "2025-01-01",
+      isPartOf: {
+        name: "",
+      },
+    },
+    name: "",
+    alternateName: "",
+    encoding: [],
+    hasPart: [],
+  };
+}
+
+export const data: JSONLDList<LegislationExpression> = {
+  "@type": "hydra:Collection",
+  totalItems: 3,
+  member: [
+    createLegislationExpression(
+      "eli/bund/bgbl-1/2000/s001/2000-01-01/1/deu/regelungstext-1",
+      "2000-01-05/2019-12-31",
+      "NotInForce",
+    ),
+    createLegislationExpression(
+      "eli/bund/bgbl-1/2000/s001/2020-01-01/1/deu/regelungstext-1",
+      "2020-01-01/..",
+      "InForce",
+    ),
+    createLegislationExpression(
+      "eli/bund/bgbl-1/2000/s001/2030-01-01/1/deu/regelungstext-1",
+      "2031-01-01/..",
+      "NotInForce",
+    ),
+  ],
+  view: {
+    first: "",
+    previous: undefined,
+    next: undefined,
+    last: "",
+  },
+};
 
 registerEndpoint(`/v1/legislation`, () => {
   return data;
@@ -14,7 +71,7 @@ registerEndpoint(`/v1/legislation`, () => {
 const { mockNavigateTo } = vi.hoisted(() => ({ mockNavigateTo: vi.fn() }));
 mockNuxtImport("navigateTo", () => mockNavigateTo);
 
-describe("NormVersionList", () => {
+describe("VersionList", () => {
   beforeEach(() => {
     vi.useFakeTimers();
     vi.setSystemTime(new Date("2025-01-01T12:00:00"));
@@ -27,17 +84,12 @@ describe("NormVersionList", () => {
   });
 
   it("lists versions, sorted by date", async () => {
-    const wrapper = await mountSuspended(NormVersionList, {
+    const wrapper = await mountSuspended(VersionList, {
       props: {
         status: "success",
         currentLegislationIdentifier:
           data.member![1]?.legislationIdentifier ?? "",
         versions: data.member!,
-      },
-      global: {
-        stubs: {
-          IncompleteDataMessage: true,
-        },
       },
     });
 
@@ -74,17 +126,12 @@ describe("NormVersionList", () => {
   });
 
   it("navigates on row click if fassung is not currently displayed", async () => {
-    const wrapper = await mountSuspended(NormVersionList, {
+    const wrapper = await mountSuspended(VersionList, {
       props: {
         status: "success",
         currentLegislationIdentifier:
           data.member![1]?.legislationIdentifier ?? "",
         versions: data.member!,
-      },
-      global: {
-        stubs: {
-          IncompleteDataMessage: true,
-        },
       },
     });
 
@@ -98,17 +145,12 @@ describe("NormVersionList", () => {
   });
 
   it("does not nvigate to fassung currently displayed", async () => {
-    const wrapper = await mountSuspended(NormVersionList, {
+    const wrapper = await mountSuspended(VersionList, {
       props: {
         status: "success",
         currentLegislationIdentifier:
           data.member![1]?.legislationIdentifier ?? "",
         versions: data.member!,
-      },
-      global: {
-        stubs: {
-          IncompleteDataMessage: true,
-        },
       },
     });
 

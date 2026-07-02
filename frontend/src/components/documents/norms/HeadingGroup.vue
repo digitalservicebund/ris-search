@@ -1,8 +1,5 @@
 <script setup lang="ts">
-import type { NormContent } from "~/composables/useNormData";
 import type { LegislationExpression } from "~/types/api";
-import { getNormTitle } from "~/utils/norm";
-import NormHeadingFootnotes from "./NormHeadingFootnotes.vue";
 
 const props = defineProps<{
   htmlParts?: NormContent["htmlParts"];
@@ -50,7 +47,7 @@ const normTitle = computed(() => getNormTitle(props.metadata));
     </hgroup>
 
     <div class="content-grid">
-      <NormHeadingFootnotes
+      <DocumentsNormsHeadingFootnotes
         v-if="props.htmlParts?.headingAuthorialNotes"
         class="content-grid-textblock mt-8"
         :html="props.htmlParts.headingAuthorialNotes"
