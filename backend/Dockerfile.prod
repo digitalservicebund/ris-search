@@ -8,7 +8,7 @@ RUN --mount=type=secret,id=GH_PACKAGES_REPOSITORY_USER \
     export GH_PACKAGES_REPOSITORY_TOKEN=$(cat /run/secrets/GH_PACKAGES_REPOSITORY_TOKEN) && \
     ./gradlew build -x integrationTest -x test -x spotlessCheck
 
-FROM cgr.dev/chainguard/jre@sha256:10c35d59e42f4c945ec76eceff29ca55d74b2d0959fa59030ef17709d3b8a062
+FROM cgr.dev/chainguard/jre@sha256:6dea879333f679e7865ebfc49760a85ccc12f6625da87fd591f04a35bba11117
 ARG SENTRY_RELEASE
 COPY --from=backend-builder /app/build/libs/ris-search-*.jar /app/app.jar
 EXPOSE 8090
