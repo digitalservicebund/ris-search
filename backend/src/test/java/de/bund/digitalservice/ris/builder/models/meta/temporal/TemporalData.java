@@ -19,13 +19,9 @@ public class TemporalData extends BaseElement {
   // Starting with 2 to account for the default group
   @Builder.Default @XmlTransient private int temporalGroupsCounter = 2;
 
-  @Builder.Default
-  @XmlAttribute(name = "eId")
-  private String eId = "meta-n1_geltzeiten-n1";
+  @Builder.Default @XmlAttribute private String eId = "meta-n1_geltzeiten-n1";
 
-  @Builder.Default
-  @XmlAttribute(name = "source")
-  private String source = "attributsemantik-noch-undefiniert";
+  @Builder.Default @XmlAttribute private String source = "attributsemantik-noch-undefiniert";
 
   @Builder.Default
   @XmlElement(name = "temporalGroup", namespace = NormTestDataBuilder.AKN_NS)

@@ -24,23 +24,21 @@ import lombok.Setter;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Meta extends BaseElement {
 
-  @Builder.Default
-  @XmlAttribute(name = "eId")
-  private String eId = "meta-n1";
+  @Builder.Default @XmlAttribute private String eId = "meta-n1";
 
   @Builder.Default
-  @XmlElement(name = "identification", namespace = NormTestDataBuilder.AKN_NS)
+  @XmlElement(namespace = NormTestDataBuilder.AKN_NS)
   private Identification identification = Identification.builder().build();
 
   @Builder.Default
-  @XmlElement(name = "lifecycle", namespace = NormTestDataBuilder.AKN_NS)
+  @XmlElement(namespace = NormTestDataBuilder.AKN_NS)
   private Lifecycle lifecycle = Lifecycle.builder().build();
 
   @Builder.Default
-  @XmlElement(name = "temporalData", namespace = NormTestDataBuilder.AKN_NS)
+  @XmlElement(namespace = NormTestDataBuilder.AKN_NS)
   private TemporalData temporalData = TemporalData.builder().build();
 
   @Builder.Default
-  @XmlElement(name = "proprietary", namespace = NormTestDataBuilder.AKN_NS)
+  @XmlElement(namespace = NormTestDataBuilder.AKN_NS)
   private Proprietary proprietary = Proprietary.builder().build();
 }

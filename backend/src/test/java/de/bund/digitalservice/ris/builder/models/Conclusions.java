@@ -15,11 +15,9 @@ import lombok.NoArgsConstructor;
 @Builder
 public class Conclusions extends BaseElement {
 
-  @Builder.Default
-  @XmlAttribute(name = "eId")
-  private String eId = "schluss-n1";
+  @Builder.Default @XmlAttribute private String eId = "schluss-n1";
 
-  @XmlElement(name = "formula", namespace = NormTestDataBuilder.AKN_NS)
+  @XmlElement(namespace = NormTestDataBuilder.AKN_NS)
   private Formula formula;
 
   public static Conclusions withText(String text) {

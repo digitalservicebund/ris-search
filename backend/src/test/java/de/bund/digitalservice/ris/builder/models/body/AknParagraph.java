@@ -13,13 +13,12 @@ import lombok.NoArgsConstructor;
 @Builder
 public class AknParagraph extends BaseElement {
 
-  @XmlAttribute(name = "eId")
-  private String eId;
+  @XmlAttribute private String eId;
 
-  @XmlElement(name = "num", namespace = NormTestDataBuilder.AKN_NS)
+  @XmlElement(namespace = NormTestDataBuilder.AKN_NS)
   private AknNum num;
 
-  @XmlElement(name = "content", namespace = NormTestDataBuilder.AKN_NS)
+  @XmlElement(namespace = NormTestDataBuilder.AKN_NS)
   private Content content;
 
   static AknParagraph withText(

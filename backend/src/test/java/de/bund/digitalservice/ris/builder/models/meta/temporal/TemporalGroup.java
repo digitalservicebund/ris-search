@@ -13,12 +13,10 @@ import lombok.NoArgsConstructor;
 @Builder
 public class TemporalGroup extends BaseElement {
 
-  @Builder.Default
-  @XmlAttribute(name = "eId")
-  private String eId = "meta-n1_geltzeiten-n1_geltungszeitgr-n1";
+  @Builder.Default @XmlAttribute private String eId = "meta-n1_geltzeiten-n1_geltungszeitgr-n1";
 
   @Builder.Default
-  @XmlElement(name = "timeInterval", namespace = NormTestDataBuilder.AKN_NS)
+  @XmlElement(namespace = NormTestDataBuilder.AKN_NS)
   private TimeInterval timeInterval = TimeInterval.builder().build();
 
   static TemporalGroup withEventRefs(String startEventEId, String endEventEId, String groupEId) {

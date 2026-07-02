@@ -16,11 +16,9 @@ final class FRBRLeafs {
   @Builder
   static class ValueLeaf extends BaseElement {
 
-    @XmlAttribute(name = "eId")
-    String eId;
+    @XmlAttribute String eId;
 
-    @XmlAttribute(name = "value")
-    String value;
+    @XmlAttribute String value;
   }
 
   @AllArgsConstructor
@@ -28,14 +26,11 @@ final class FRBRLeafs {
   @Builder
   static class NamedLeaf extends BaseElement {
 
-    @XmlAttribute(name = "eId")
-    String eId;
+    @XmlAttribute String eId;
 
-    @XmlAttribute(name = "name")
-    String name;
+    @XmlAttribute String name;
 
-    @XmlAttribute(name = "value")
-    String value;
+    @XmlAttribute String value;
   }
 
   @AllArgsConstructor
@@ -43,14 +38,11 @@ final class FRBRLeafs {
   @Builder
   static class DateLeaf extends BaseElement {
 
-    @XmlAttribute(name = "eId")
-    String eId;
+    @XmlAttribute String eId;
 
-    @XmlAttribute(name = "date")
-    String date;
+    @XmlAttribute String date;
 
-    @XmlAttribute(name = "name")
-    String name;
+    @XmlAttribute String name;
   }
 
   @AllArgsConstructor
@@ -58,11 +50,9 @@ final class FRBRLeafs {
   @Builder
   static class HrefLeaf extends BaseElement {
 
-    @XmlAttribute(name = "eId")
-    String eId;
+    @XmlAttribute String eId;
 
-    @XmlAttribute(name = "href")
-    String href;
+    @XmlAttribute String href;
   }
 
   @AllArgsConstructor
@@ -70,11 +60,9 @@ final class FRBRLeafs {
   @Builder
   static class LanguageLeaf extends BaseElement {
 
-    @XmlAttribute(name = "eId")
-    String eId;
+    @XmlAttribute String eId;
 
-    @XmlAttribute(name = "language")
-    String language;
+    @XmlAttribute String language;
   }
 
   @AllArgsConstructor
@@ -82,10 +70,8 @@ final class FRBRLeafs {
   @Builder
   static class FormatLeaf extends BaseElement {
 
-    @XmlAttribute(name = "eId")
-    String eId;
+    @XmlAttribute String eId;
 
-    @XmlAttribute(name = "value")
-    String value;
+    @XmlAttribute String value;
   }
 }

@@ -15,17 +15,11 @@ import lombok.NoArgsConstructor;
 @Builder
 public class Formula extends BaseElement {
 
-  @Builder.Default
-  @XmlAttribute(name = "eId")
-  private String eId = "präambel-n1_formel-n1";
+  @Builder.Default @XmlAttribute private String eId = "präambel-n1_formel-n1";
 
-  @Builder.Default
-  @XmlAttribute(name = "refersTo")
-  private String refersTo = "eingangsformel";
+  @Builder.Default @XmlAttribute private String refersTo = "eingangsformel";
 
-  @Builder.Default
-  @XmlAttribute(name = "name")
-  private String name = "attributsemantik-noch-undefiniert";
+  @Builder.Default @XmlAttribute private String name = "attributsemantik-noch-undefiniert";
 
   @XmlElement(name = "p", namespace = NormTestDataBuilder.AKN_NS)
   private AknP paragraph;

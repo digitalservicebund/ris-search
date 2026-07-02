@@ -2,8 +2,6 @@ package de.bund.digitalservice.ris.builder.models.preface;
 
 import de.bund.digitalservice.ris.builder.NormTestDataBuilder;
 import de.bund.digitalservice.ris.builder.models.common.Inline;
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAnyElement;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlRootElement;
@@ -20,8 +18,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @XmlSeeAlso({Inline.class})
-@XmlRootElement(name = "shortTitle", namespace = NormTestDataBuilder.AKN_NS)
-@XmlAccessorType(XmlAccessType.FIELD)
+@XmlRootElement(namespace = NormTestDataBuilder.AKN_NS)
 public class ShortTitle {
 
   @XmlTransient private String shortTitle;
@@ -30,8 +27,7 @@ public class ShortTitle {
 
   @XmlTransient private Inline abbreviation;
 
-  @Builder.Default
-  @XmlAttribute(name = "eId")
+  @Builder.Default @XmlAttribute
   private String eId = "einleitung-n1_doktitel-n1_text-n1_kurztitel-n1";
 
   @Builder.Default

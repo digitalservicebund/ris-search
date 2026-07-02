@@ -13,11 +13,9 @@ import lombok.NoArgsConstructor;
 @Builder
 public class Preamble extends BaseElement {
 
-  @Builder.Default
-  @XmlAttribute(name = "eId")
-  private String eId = "präambel-n1";
+  @Builder.Default @XmlAttribute private String eId = "präambel-n1";
 
-  @XmlElement(name = "formula", namespace = NormTestDataBuilder.AKN_NS)
+  @XmlElement(namespace = NormTestDataBuilder.AKN_NS)
   private Formula formula;
 
   public void addFormula(String text) {

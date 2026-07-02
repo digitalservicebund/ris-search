@@ -70,9 +70,7 @@ public class FRBRWork extends BaseElement {
             .build();
   }
 
-  @Builder.Default
-  @XmlAttribute(name = "eId")
-  private String eId = "meta-n1_ident-n1_frbrwork-n1";
+  @Builder.Default @XmlAttribute private String eId = "meta-n1_ident-n1_frbrwork-n1";
 
   @Builder.Default
   @XmlElement(name = "FRBRthis", namespace = NormTestDataBuilder.AKN_NS)

@@ -11,14 +11,10 @@ import lombok.NoArgsConstructor;
 @Builder
 public class DocumentRef extends BaseElement {
 
-  @Builder.Default
-  @XmlAttribute(name = "eId")
-  private String eId = "verweis-n1";
+  @Builder.Default @XmlAttribute private String eId = "verweis-n1";
 
-  @XmlAttribute(name = "href")
-  private String href;
+  @XmlAttribute private String href;
 
-  @Builder.Default
-  @XmlAttribute(name = "showAs")
+  @Builder.Default @XmlAttribute
   private String showAs = "/akn/ontology/de/concept/documenttype/bund/anlage-regelungstext";
 }

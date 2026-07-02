@@ -15,9 +15,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class Content extends BaseElement {
 
-  @Builder.Default
-  @XmlAttribute(name = "eId")
-  private String eId = "art-z1_abs-z1_inhalt-n1";
+  @Builder.Default @XmlAttribute private String eId = "art-z1_abs-z1_inhalt-n1";
 
   @Builder.Default
   @XmlElement(name = "p", namespace = NormTestDataBuilder.AKN_NS)

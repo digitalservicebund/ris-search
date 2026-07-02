@@ -17,9 +17,7 @@ import lombok.NoArgsConstructor;
 @XmlSeeAlso({Article.class, Chapter.class, Section.class, AknP.class})
 public class Body extends BaseElement {
 
-  @Builder.Default
-  @XmlAttribute(name = "eId")
-  private String eId = "hauptteil-n1";
+  @Builder.Default @XmlAttribute private String eId = "hauptteil-n1";
 
   @Builder.Default @XmlAnyElement private List<BodyElement> children = new ArrayList<>();
 

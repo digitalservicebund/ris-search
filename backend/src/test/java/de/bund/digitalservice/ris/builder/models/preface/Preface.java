@@ -23,16 +23,14 @@ import lombok.Setter;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Preface extends BaseElement {
 
-  @Builder.Default
-  @XmlAttribute(name = "eId")
-  private String eId = "einleitung-n1";
+  @Builder.Default @XmlAttribute private String eId = "einleitung-n1";
 
   @Builder.Default
-  @XmlElement(name = "longTitle", namespace = NormTestDataBuilder.AKN_NS)
+  @XmlElement(namespace = NormTestDataBuilder.AKN_NS)
   private LongTitle longTitle = LongTitle.builder().build();
 
   @Builder.Default
-  @XmlElement(name = "block", namespace = NormTestDataBuilder.AKN_NS)
+  @XmlElement(namespace = NormTestDataBuilder.AKN_NS)
   private Block block = buildLegislationDateBlock("2002-01-01");
 
   public void setLegislationDate(String date) {

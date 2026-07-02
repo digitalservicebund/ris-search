@@ -11,20 +11,14 @@ import lombok.NoArgsConstructor;
 @Builder
 public class TimeInterval extends BaseElement {
 
-  @Builder.Default
-  @XmlAttribute(name = "eId")
+  @Builder.Default @XmlAttribute
   private String eId = "meta-n1_geltzeiten-n1_geltungszeitgr-n1_gelzeitintervall-n1";
 
-  @Builder.Default
-  @XmlAttribute(name = "refersTo")
-  private String refersTo = "geltungszeit";
+  @Builder.Default @XmlAttribute private String refersTo = "geltungszeit";
 
-  @Builder.Default
-  @XmlAttribute(name = "start")
-  private String start = "#meta-n1_lebzykl-n1_ereignis-n2";
+  @Builder.Default @XmlAttribute private String start = "#meta-n1_lebzykl-n1_ereignis-n2";
 
-  @XmlAttribute(name = "end")
-  private String end;
+  @XmlAttribute private String end;
 
   public static TimeInterval withEventRefs(
       String startEventEId, String endEventEId, String parentEId) {

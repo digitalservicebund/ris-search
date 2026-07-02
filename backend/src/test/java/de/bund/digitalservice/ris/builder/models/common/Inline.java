@@ -12,22 +12,18 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@XmlRootElement(name = "inline", namespace = NormTestDataBuilder.AKN_NS)
+@XmlRootElement(namespace = NormTestDataBuilder.AKN_NS)
 public class Inline {
 
   @Builder.Default
   @XmlAttribute(name = "GUID")
   private String guid = UUID.randomUUID().toString();
 
-  @XmlAttribute(name = "eId")
-  private String eId;
+  @XmlAttribute private String eId;
 
-  @Builder.Default
-  @XmlAttribute(name = "name")
-  private String name = "attributsemantik-noch-undefiniert";
+  @Builder.Default @XmlAttribute private String name = "attributsemantik-noch-undefiniert";
 
-  @XmlAttribute(name = "refersTo")
-  private String refersTo;
+  @XmlAttribute private String refersTo;
 
   @XmlValue private String content;
 }
