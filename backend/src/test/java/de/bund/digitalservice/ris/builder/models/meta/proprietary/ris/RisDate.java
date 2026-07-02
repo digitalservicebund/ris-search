@@ -10,7 +10,5 @@ import lombok.NoArgsConstructor;
 @Builder
 public class RisDate {
 
-  @Builder.Default
-  @XmlAttribute(name = "date")
-  private String date = "2024-01-06";
+  @Builder.Default @XmlAttribute private String date = "2024-01-06";
 }

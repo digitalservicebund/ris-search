@@ -16,9 +16,7 @@ public class Heading {
   @XmlAttribute(name = "GUID")
   protected String guid = UUID.randomUUID().toString();
 
-  @Builder.Default
-  @XmlAttribute(name = "eId")
-  private String eId = "art-z1_überschrift-n1";
+  @Builder.Default @XmlAttribute private String eId = "art-z1_überschrift-n1";
 
   @Builder.Default @XmlValue private String headline = "Headline of Article";
 }

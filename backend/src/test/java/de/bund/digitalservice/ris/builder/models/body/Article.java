@@ -15,23 +15,20 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@XmlRootElement(name = "article", namespace = NormTestDataBuilder.AKN_NS)
+@XmlRootElement(namespace = NormTestDataBuilder.AKN_NS)
 public class Article extends BaseElement implements BodyElement {
 
   // Starting with 2 to account for the default paragraph
   @Builder.Default @XmlTransient private int paragraphCounter = 1;
 
-  @XmlAttribute(name = "eId")
-  private String eId;
+  @XmlAttribute private String eId;
 
-  @Builder.Default
-  @XmlAttribute(name = "period")
-  private String period = "#meta-n1_geltzeiten-n1_geltungszeitgr-n1";
+  @Builder.Default @XmlAttribute private String period = "#meta-n1_geltzeiten-n1_geltungszeitgr-n1";
 
-  @XmlElement(name = "num", namespace = NormTestDataBuilder.AKN_NS)
+  @XmlElement(namespace = NormTestDataBuilder.AKN_NS)
   private AknNum num;
 
-  @XmlElement(name = "heading", namespace = NormTestDataBuilder.AKN_NS)
+  @XmlElement(namespace = NormTestDataBuilder.AKN_NS)
   private Heading heading;
 
   @Builder.Default

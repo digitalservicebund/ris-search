@@ -3,8 +3,6 @@ package de.bund.digitalservice.ris.builder.models.meta.proprietary;
 import de.bund.digitalservice.ris.builder.NormTestDataBuilder;
 import de.bund.digitalservice.ris.builder.models.common.BaseElement;
 import de.bund.digitalservice.ris.builder.models.meta.proprietary.ris.RisMetadata;
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import lombok.AllArgsConstructor;
@@ -16,16 +14,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Getter
-@XmlAccessorType(XmlAccessType.FIELD)
 public class Proprietary extends BaseElement {
 
-  @Builder.Default
-  @XmlAttribute(name = "eId")
-  private String eId = "meta-n1_proprietary-n1";
+  @Builder.Default @XmlAttribute private String eId = "meta-n1_proprietary-n1";
 
-  @Builder.Default
-  @XmlAttribute(name = "source")
-  private String source = "attributsemantik-noch-undefiniert";
+  @Builder.Default @XmlAttribute private String source = "attributsemantik-noch-undefiniert";
 
   @Builder.Default
   @XmlElement(name = "legalDocML.de_metadaten", namespace = NormTestDataBuilder.RIS_NS)

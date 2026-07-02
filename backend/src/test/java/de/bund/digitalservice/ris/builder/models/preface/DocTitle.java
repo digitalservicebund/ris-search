@@ -14,15 +14,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@XmlRootElement(name = "docTitle", namespace = NormTestDataBuilder.AKN_NS)
+@XmlRootElement(namespace = NormTestDataBuilder.AKN_NS)
 public class DocTitle {
 
   @Builder.Default
   @XmlAttribute(name = "GUID")
   private String guid = UUID.randomUUID().toString();
 
-  @Builder.Default
-  @XmlAttribute(name = "eId")
+  @Builder.Default @XmlAttribute
   private String eId = "einleitung-n1_doktitel-n1_text-n1_doctitel-n1";
 
   @Builder.Default @XmlAnyElement

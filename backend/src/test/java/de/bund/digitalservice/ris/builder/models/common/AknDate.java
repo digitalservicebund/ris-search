@@ -18,12 +18,9 @@ public class AknDate {
   @XmlAttribute(name = "GUID")
   private String guid = UUID.randomUUID().toString();
 
-  @XmlAttribute(name = "eId")
-  private String eId;
+  @XmlAttribute private String eId;
 
-  @XmlAttribute(name = "refersTo")
-  private String refersTo;
+  @XmlAttribute private String refersTo;
 
-  @XmlAttribute(name = "date")
-  private String date;
+  @XmlAttribute private String date;
 }

@@ -15,17 +15,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@XmlRootElement(name = "chapter", namespace = NormTestDataBuilder.AKN_NS)
+@XmlRootElement(namespace = NormTestDataBuilder.AKN_NS)
 public class Chapter extends BaseElement implements BodyElement {
 
-  @Builder.Default
-  @XmlAttribute(name = "eId")
-  private String eId = "kapitel-n1";
+  @Builder.Default @XmlAttribute private String eId = "kapitel-n1";
 
-  @XmlElement(name = "num", namespace = NormTestDataBuilder.AKN_NS)
+  @XmlElement(namespace = NormTestDataBuilder.AKN_NS)
   private AknNum num;
 
-  @XmlElement(name = "heading", namespace = NormTestDataBuilder.AKN_NS)
+  @XmlElement(namespace = NormTestDataBuilder.AKN_NS)
   private Heading heading;
 
   @Builder.Default

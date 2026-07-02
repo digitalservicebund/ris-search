@@ -11,9 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class RisAbkuerzung {
 
-  @Builder.Default
-  @XmlAttribute(name = "refersTo")
-  private String refersTo = "interne-abkuerzung";
+  @Builder.Default @XmlAttribute private String refersTo = "interne-abkuerzung";
 
   @Builder.Default @XmlValue private String abbreviation = "RisAbk";
 }

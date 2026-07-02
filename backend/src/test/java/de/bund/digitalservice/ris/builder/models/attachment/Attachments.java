@@ -15,9 +15,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class Attachments extends BaseElement {
 
-  @Builder.Default
-  @XmlAttribute(name = "eId")
-  private String eId = "anlagen-n1";
+  @Builder.Default @XmlAttribute private String eId = "anlagen-n1";
 
   @Builder.Default
   @XmlElement(name = "attachment", namespace = NormTestDataBuilder.AKN_NS)

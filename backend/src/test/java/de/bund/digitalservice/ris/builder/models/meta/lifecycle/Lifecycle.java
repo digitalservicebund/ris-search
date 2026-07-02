@@ -19,13 +19,9 @@ public class Lifecycle extends BaseElement {
   // Starting with 3 to account for the 2 default events
   @Builder.Default @XmlTransient private int eventEIdCounter = 3;
 
-  @Builder.Default
-  @XmlAttribute(name = "eId")
-  private String eId = "meta-n1_lebzykl-n1";
+  @Builder.Default @XmlAttribute private String eId = "meta-n1_lebzykl-n1";
 
-  @Builder.Default
-  @XmlAttribute(name = "source")
-  private String source = "attributsemantik-noch-undefiniert";
+  @Builder.Default @XmlAttribute private String source = "attributsemantik-noch-undefiniert";
 
   @Builder.Default
   @XmlElement(name = "eventRef", namespace = NormTestDataBuilder.AKN_NS)

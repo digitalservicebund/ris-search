@@ -11,21 +11,15 @@ import lombok.NoArgsConstructor;
 @Builder
 public class EventRef extends BaseElement {
 
-  @XmlAttribute(name = "eId")
-  private String eId;
+  @XmlAttribute private String eId;
 
-  @XmlAttribute(name = "date")
-  private String date;
+  @XmlAttribute private String date;
 
-  @XmlAttribute(name = "refersTo")
-  private String refersTo;
+  @XmlAttribute private String refersTo;
 
-  @Builder.Default
-  @XmlAttribute(name = "source")
-  private String source = "attributsemantik-noch-undefiniert";
+  @Builder.Default @XmlAttribute private String source = "attributsemantik-noch-undefiniert";
 
-  @XmlAttribute(name = "type")
-  private String type;
+  @XmlAttribute private String type;
 
   public static EventRef inForce(String date, String eId) {
     return EventRef.builder()

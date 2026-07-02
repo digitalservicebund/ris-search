@@ -16,12 +16,9 @@ public class AknNum {
   @XmlAttribute(name = "GUID")
   protected String guid = UUID.randomUUID().toString();
 
-  @Builder.Default
-  @XmlAttribute(name = "eId")
-  private String eId = "art-z1_bezeichnung-n1";
+  @Builder.Default @XmlAttribute private String eId = "art-z1_bezeichnung-n1";
 
-  @XmlAttribute(name = "refersTo")
-  private String refersTo;
+  @XmlAttribute private String refersTo;
 
   @Builder.Default @XmlValue private String value = "§ 1";
 }

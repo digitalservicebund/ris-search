@@ -33,13 +33,9 @@ public class Identification extends BaseElement {
     return builder.build();
   }
 
-  @Builder.Default
-  @XmlAttribute(name = "eId")
-  private String eId = "meta-n1_ident-n1";
+  @Builder.Default @XmlAttribute private String eId = "meta-n1_ident-n1";
 
-  @Builder.Default
-  @XmlAttribute(name = "source")
-  private String source = "attributsemantik-noch-undefiniert";
+  @Builder.Default @XmlAttribute private String source = "attributsemantik-noch-undefiniert";
 
   @Builder.Default
   @XmlElement(name = "FRBRWork", namespace = NormTestDataBuilder.AKN_NS)

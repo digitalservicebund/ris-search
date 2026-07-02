@@ -13,10 +13,8 @@ import lombok.NoArgsConstructor;
 @Builder
 public class Attachment extends BaseElement {
 
-  @Builder.Default
-  @XmlAttribute(name = "eId")
-  private String eId = "anlagen-n1_anlage-n1";
+  @Builder.Default @XmlAttribute private String eId = "anlagen-n1_anlage-n1";
 
-  @XmlElement(name = "documentRef", namespace = NormTestDataBuilder.AKN_NS)
+  @XmlElement(namespace = NormTestDataBuilder.AKN_NS)
   private DocumentRef documentRef;
 }
