@@ -150,7 +150,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
       </div>
     </div>
 
-    <div class="feature-card gap-x-64 gap-y-32 md:flex-row">
+    <div class="feature-card bmjv-card">
       <img
         class="mt-20 ml-20 self-start md:mt-4 md:ml-0"
         :src="bmjvLogo"
@@ -178,9 +178,11 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
 <style scoped>
 @reference "~/assets/main.css";
 
-@layer components {
-  .feature-card {
-    @apply col-span-12 flex flex-col gap-16 bg-white p-16 sm:p-24 md:gap-24 md:p-48 lg:col-span-10 lg:col-start-2 lg:px-80 xl:col-span-8 xl:col-start-3 2xl:px-96 2xl:py-56;
-  }
+.feature-card {
+  @apply col-span-12 flex flex-col gap-16 bg-white p-16 sm:p-24 md:gap-24 md:p-48 lg:col-span-10 lg:col-start-2 lg:px-80 xl:col-span-8 xl:col-start-3 2xl:px-96 2xl:py-56;
+}
+
+.bmjv-card {
+  @apply gap-x-64 gap-y-32 md:flex-row;
 }
 </style>
