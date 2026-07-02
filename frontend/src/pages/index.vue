@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Button, Message } from "primevue";
 import { ExternalLink, NuxtLink } from "#components";
-import bmjvLogo from "~/assets/img/BMJV_de_v1__Web_farbig.svg";
+import bmjvLogo from "~/assets/img/bmjv-de-v1-web-farbig.svg";
 
 function redirectToSearch(searchStr?: string) {
   navigateTo({ name: "search", query: searchStr ? { query: searchStr } : {} });
