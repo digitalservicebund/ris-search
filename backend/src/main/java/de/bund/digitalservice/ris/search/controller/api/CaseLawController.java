@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Optional;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
@@ -60,6 +61,7 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
 public class CaseLawController {
 
   private final CaseLawService caseLawService;
+  private final String versionPrefix;
   private final CaselawXsltTransformerService xsltTransformerService;
   private final ChangelogService<CaseLawBucket> changelogService;
 
@@ -67,14 +69,17 @@ public class CaseLawController {
    * Constructor for the CaseLawController class.
    *
    * @param caseLawService the service layer responsible for case law operations
+   * @param versionPrefix the version prefix for the bucket
    * @param xsltTransformerService the service used for XSLT transformations related to case law
    */
   @Autowired
   public CaseLawController(
       CaseLawService caseLawService,
+      @Value("${s3.file-storage.case-law.versionPrefix}") String versionPrefix,
       CaselawXsltTransformerService xsltTransformerService,
       ChangelogService<CaseLawBucket> changelogService) {
     this.caseLawService = caseLawService;
+    this.versionPrefix = versionPrefix;
     this.xsltTransformerService = xsltTransformerService;
     this.changelogService = changelogService;
   }
@@ -238,7 +243,7 @@ public class CaseLawController {
 
     byte[] resource =
         caseLawService
-            .getFileByPath(documentNumber + "/" + name + "." + extension)
+            .getFileByPath(versionPrefix + documentNumber + "/" + name + "." + extension)
             .orElseGet(
                 () -> {
                   try {

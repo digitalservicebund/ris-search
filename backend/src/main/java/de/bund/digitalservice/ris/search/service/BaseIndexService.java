@@ -111,7 +111,7 @@ public abstract class BaseIndexService<T> implements IndexService {
   protected abstract Optional<T> mapFileToEntity(String filename, String fileContent);
 
   protected List<String> getAllIndexableFilenames() {
-    return objectStorage.getAllKeys().stream()
+    return objectStorage.getAllKeysOnCurrentVersion().stream()
         .filter(s -> s.endsWith(".xml") && !s.contains(ChangelogService.CHANGELOGS_PREFIX))
         .toList();
   }

@@ -29,6 +29,7 @@ import org.opensearch.search.aggregations.bucket.terms.ParsedStringTerms;
 import org.opensearch.search.aggregations.bucket.terms.Terms;
 import org.opensearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHits;
@@ -44,6 +45,7 @@ import org.springframework.stereotype.Service;
 public class CaseLawService {
   private final CaseLawRepository caseLawRepository;
   private final CaseLawBucket caseLawBucket;
+  private final String versionPrefix;
   private final ElasticsearchOperations operations;
   private final CourtNameAbbreviationExpander courtNameAbbreviationExpander;
   private final Configurations configurations;
@@ -55,6 +57,7 @@ public class CaseLawService {
    *
    * @param caseLawRepository the repository responsible for managing CaseLaw entities
    * @param caseLawBucket the bucket for storing and managing case law data in bulk operations
+   * @param versionPrefix the version prefix for the bucket
    * @param operations the ElasticsearchOperations instance to interact with Elasticsearch
    * @param configurations the configurations required for the service
    * @param marshaller the mapper for converting CaseLaw entities to OpenSearch format
@@ -65,12 +68,14 @@ public class CaseLawService {
   public CaseLawService(
       CaseLawRepository caseLawRepository,
       CaseLawBucket caseLawBucket,
+      @Value("${s3.file-storage.case-law.versionPrefix}") String versionPrefix,
       ElasticsearchOperations operations,
       Configurations configurations,
       CaseLawLdmlToOpenSearchMapper marshaller,
       SimpleSearchQueryBuilder simpleSearchQueryBuilder) {
     this.caseLawRepository = caseLawRepository;
     this.caseLawBucket = caseLawBucket;
+    this.versionPrefix = versionPrefix;
     this.operations = operations;
     this.configurations = configurations;
     this.courtNameAbbreviationExpander = new CourtNameAbbreviationExpander();
@@ -162,9 +167,16 @@ public class CaseLawService {
     return caseLawRepository.findByDocumentNumber(documentNumber);
   }
 
+  /**
+   * Get a file by its document number.
+   *
+   * @param documentNumber the document number of the file to get
+   * @return the file
+   */
   public Optional<byte[]> getFileByDocumentNumber(String documentNumber)
       throws ObjectStoreServiceException {
-    return caseLawBucket.get(String.format("%s/%s.xml", documentNumber, documentNumber));
+    return caseLawBucket.get(
+        String.format("%s%s/%s.xml", versionPrefix, documentNumber, documentNumber));
   }
 
   public Optional<byte[]> getFileByPath(String path) throws ObjectStoreServiceException {
@@ -176,7 +188,7 @@ public class CaseLawService {
   }
 
   public List<String> getAllFilenamesByDocumentNumber(String documentNumber) {
-    return caseLawBucket.getAllKeysByPrefix(documentNumber);
+    return caseLawBucket.getAllKeysByPrefix(versionPrefix + documentNumber);
   }
 
   /**

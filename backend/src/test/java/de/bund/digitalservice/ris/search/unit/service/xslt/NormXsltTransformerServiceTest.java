@@ -29,7 +29,7 @@ class NormXsltTransformerServiceTest {
 
   private final NormsBucket normsBucketMock = Mockito.mock(NormsBucket.class);
   private final NormXsltTransformerService service =
-      new NormXsltTransformerService(normsBucketMock);
+      new NormXsltTransformerService(normsBucketMock, "");
 
   String resourcesPath = getClass().getResource("/data/XsltTransformerServiceTest/").getPath();
 

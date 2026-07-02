@@ -84,7 +84,7 @@ class EcliCrawlerDocumentServiceTest {
     LocalDate day = LocalDate.of(2025, Month.JANUARY, 1);
     var filenames = IntStream.range(0, 11000).boxed().map(i -> "file_" + i + ".xml").toList();
 
-    when(caseLawBucket.getAllKeys()).thenReturn(filenames);
+    when(caseLawBucket.getAllKeysOnCurrentVersion()).thenReturn(filenames);
     when(caselawService.getFromBucket(any())).thenReturn(Optional.of(getTestDocUnit("docNumber")));
 
     when(sitemapWriter.writeUrlsToSitemap(eq(day), any(), eq(1)))

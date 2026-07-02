@@ -33,7 +33,7 @@ class IndexNormsServiceTest {
 
   @BeforeEach()
   void setup() {
-    this.service = new IndexNormsService(environment, bucket, repo, articlesRepository);
+    this.service = new IndexNormsService(environment, bucket, "", repo, articlesRepository);
   }
 
   private final String testContent =

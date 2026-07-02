@@ -13,6 +13,7 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.URIResolver;
 import javax.xml.transform.stream.StreamSource;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriUtils;
 
@@ -24,6 +25,7 @@ public class NormXsltTransformerService extends XsltTransformer {
   static final String DEBUGGING_VALUE = "false";
 
   private final NormsBucket normsBucket;
+  private final String versionPrefix;
 
   @Override
   String getXsltBasePath() {
@@ -35,9 +37,17 @@ public class NormXsltTransformerService extends XsltTransformer {
     return "ris-portal.xsl";
   }
 
-  /** Key for the resource path parameter passed to the XSLT transformer. */
-  public NormXsltTransformerService(NormsBucket normsBucket) {
+  /**
+   * Constructs a new instance of {@code NormXsltTransformerService}.
+   *
+   * @param normsBucket The object storage bucket for norms files.
+   * @param versionPrefix the version prefix for the bucket
+   */
+  public NormXsltTransformerService(
+      NormsBucket normsBucket,
+      @Value("${s3.file-storage.norm.versionPrefix}") String versionPrefix) {
     this.normsBucket = normsBucket;
+    this.versionPrefix = versionPrefix;
     setCustomUriResolver();
   }
 
@@ -76,7 +86,7 @@ public class NormXsltTransformerService extends XsltTransformer {
   @NotNull
   private StreamSource resolveEliResource(EliFile eliFile) throws TransformerException {
     try {
-      var response = this.normsBucket.getStream(eliFile.toString());
+      var response = this.normsBucket.getStream(versionPrefix + eliFile.toString());
       return new StreamSource(response);
     } catch (NoSuchKeyException | NullPointerException e) {
       throw new TransformerException("Failed to resolve: " + eliFile, e);

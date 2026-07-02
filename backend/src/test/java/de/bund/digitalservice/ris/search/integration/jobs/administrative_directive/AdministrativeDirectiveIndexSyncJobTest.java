@@ -34,8 +34,8 @@ class AdministrativeDirectiveIndexSyncJobTest extends ContainersIntegrationBase 
 
   @BeforeEach
   void setup() {
-    bucket.getAllKeys().forEach(bucket::delete);
-    portalBucket.getAllKeys().forEach(portalBucket::delete);
+    bucket.getAllKeysOnCurrentVersion().forEach(bucket::delete);
+    portalBucket.getAllKeysOnCurrentVersion().forEach(portalBucket::delete);
     administrativeDirectiveRepository.deleteAll();
   }
 
