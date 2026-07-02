@@ -45,7 +45,8 @@ class LiteratureServiceTest {
     literatureBucketMock = Mockito.mock(LiteratureBucket.class);
     operationsMock = Mockito.mock(ElasticsearchOperations.class);
     this.literatureService =
-        new LiteratureService(literatureRepositoryMock, literatureBucketMock, operationsMock, null);
+        new LiteratureService(
+            literatureRepositoryMock, literatureBucketMock, "", operationsMock, null);
   }
 
   @Test

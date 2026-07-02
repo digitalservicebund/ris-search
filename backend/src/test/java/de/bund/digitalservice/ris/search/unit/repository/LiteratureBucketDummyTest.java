@@ -16,7 +16,7 @@ class LiteratureBucketDummyTest {
   @Test
   void getAllKeysAlwaysReturnsEmptyList() {
     bucket.save("foo.xml", "");
-    assertThat(bucket.getAllKeys()).isEmpty();
+    assertThat(bucket.getAllKeysOnCurrentVersion()).isEmpty();
   }
 
   @Test

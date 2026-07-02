@@ -14,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.opensearch.data.client.orhlc.NativeSearchQuery;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHits;
@@ -29,6 +30,7 @@ import org.springframework.stereotype.Service;
 public class AdministrativeDirectiveService {
   private final AdministrativeDirectiveRepository repository;
   private final AdministrativeDirectiveBucket bucket;
+  private final String versionPrefix;
   private final ElasticsearchOperations operations;
   private final SimpleSearchQueryBuilder simpleSearchQueryBuilder;
 
@@ -37,6 +39,7 @@ public class AdministrativeDirectiveService {
    *
    * @param repository Repository for AdministrativeDirective entities.
    * @param bucket Object storage bucket for AdministrativeDirective files.
+   * @param versionPrefix the version prefix for the bucket
    * @param operations Elasticsearch operations for querying the database.
    * @param simpleSearchQueryBuilder Builder for constructing simple search queries.
    */
@@ -45,10 +48,12 @@ public class AdministrativeDirectiveService {
   public AdministrativeDirectiveService(
       AdministrativeDirectiveRepository repository,
       AdministrativeDirectiveBucket bucket,
+      @Value("${s3.file-storage.administrative-directive.versionPrefix}") String versionPrefix,
       ElasticsearchOperations operations,
       SimpleSearchQueryBuilder simpleSearchQueryBuilder) {
     this.repository = repository;
     this.bucket = bucket;
+    this.versionPrefix = versionPrefix;
     this.operations = operations;
     this.simpleSearchQueryBuilder = simpleSearchQueryBuilder;
   }
@@ -84,7 +89,7 @@ public class AdministrativeDirectiveService {
    */
   public Optional<byte[]> getFileByDocumentNumber(String documentNumber) {
     try {
-      return bucket.get(String.format("%s.akn.xml", documentNumber));
+      return bucket.get(String.format("%s%s.akn.xml", versionPrefix, documentNumber));
     } catch (ObjectStoreServiceException e) {
       return Optional.empty();
     }

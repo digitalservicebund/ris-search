@@ -43,6 +43,7 @@ import java.util.List;
 import java.util.Optional;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.UncategorizedElasticsearchException;
@@ -81,6 +82,7 @@ public class NormsController {
   public static final String NATURAL_IDENTIFIER_EXAMPLE = "s1325";
 
   private final NormsService normsService;
+  private final String versionPrefix;
   private final NormXsltTransformerService xsltTransformerService;
   private final ChangelogService<NormsBucket> changelogService;
 
@@ -88,14 +90,17 @@ public class NormsController {
    * Constructor for the NormsController class.
    *
    * @param normsService the service responsible for handling norms-related operations
+   * @param versionPrefix the version prefix for the bucket
    * @param xsltTransformerService the service responsible for transforming norms using XSLT
    */
   @Autowired
   public NormsController(
       NormsService normsService,
+      @Value("${s3.file-storage.norm.versionPrefix}") String versionPrefix,
       NormXsltTransformerService xsltTransformerService,
       ChangelogService<NormsBucket> changelogService) {
     this.normsService = normsService;
+    this.versionPrefix = versionPrefix;
     this.xsltTransformerService = xsltTransformerService;
     this.changelogService = changelogService;
   }
@@ -478,7 +483,7 @@ public class NormsController {
 
     String fileName = prefix + ".zip";
 
-    List<String> keys = normsService.getAllFilenamesByPath(prefix);
+    List<String> keys = normsService.getAllFilenamesByPath(versionPrefix + prefix);
 
     if (keys.isEmpty()) {
       return ResponseEntity.notFound().build();

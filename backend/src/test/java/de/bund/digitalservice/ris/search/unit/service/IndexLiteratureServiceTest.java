@@ -43,7 +43,7 @@ class IndexLiteratureServiceTest {
     var filenameB = "XXLU000000002.akn.xml";
     final String xml = LoadXmlUtils.loadXmlAsString(Literature.class, filenameA);
 
-    when(this.bucket.getAllKeys()).thenReturn(List.of(filenameA, filenameB));
+    when(this.bucket.getAllKeysOnCurrentVersion()).thenReturn(List.of(filenameA, filenameB));
     when(this.bucket.getFileAsString(filenameA)).thenReturn(Optional.of(xml));
     when(this.bucket.getFileAsString(filenameB)).thenReturn(Optional.of("this will not parse"));
 
@@ -69,7 +69,8 @@ class IndexLiteratureServiceTest {
     var filenameD = "XXXLU000000002.akn.xml";
     final String xml = LoadXmlUtils.loadXmlAsString(Literature.class, filenameA);
 
-    when(this.bucket.getAllKeys()).thenReturn(List.of(filenameA, filenameB, filenameC, filenameD));
+    when(this.bucket.getAllKeysOnCurrentVersion())
+        .thenReturn(List.of(filenameA, filenameB, filenameC, filenameD));
     when(this.bucket.getFileAsString(filenameA)).thenReturn(Optional.of(xml));
     when(this.bucket.getFileAsString(filenameB)).thenReturn(Optional.of(xml));
     when(this.bucket.getFileAsString(filenameC)).thenReturn(Optional.of(xml));
@@ -137,7 +138,7 @@ class IndexLiteratureServiceTest {
 
   @Test
   void itReturnsRightNumberOfFiles() {
-    when(this.bucket.getAllKeys())
+    when(this.bucket.getAllKeysOnCurrentVersion())
         .thenReturn(
             List.of(
                 "XXLU000000001.akn.xml",

@@ -47,8 +47,8 @@ public class ObjectStorage {
    * @return a list of keys as strings, where each key represents an object stored in the object
    *     storage
    */
-  public List<String> getAllKeys() {
-    return getAllKeysByPrefix("");
+  public List<String> getAllKeysOnCurrentVersion() {
+    return getAllKeysByPrefix(versionPrefix);
   }
 
   /**
@@ -58,7 +58,7 @@ public class ObjectStorage {
    * @return a list of matched object keys as strings
    */
   public List<String> getAllKeysByPrefix(String path) {
-    return client.listKeysByPrefix(versionPrefix + path);
+    return client.listKeysByPrefix(path);
   }
 
   /**
@@ -70,7 +70,7 @@ public class ObjectStorage {
    *     their last modified timestamps
    */
   public List<ObjectKeyInfo> getAllKeyInfosByPrefix(String path) {
-    return client.listByPrefixWithLastModified(versionPrefix + path);
+    return client.listByPrefixWithLastModified(path);
   }
 
   /**
@@ -104,7 +104,7 @@ public class ObjectStorage {
         final var response = getStream(objectKey);
         return Optional.of(response.readAllBytes());
       } catch (NoSuchKeyException e) {
-        logger.warn(String.format("Object key %s does not exist", versionPrefix + objectKey));
+        logger.warn(String.format("Object key %s does not exist", objectKey));
         return Optional.empty();
       } catch (IOException | AwsServiceException | SdkClientException e) {
         logger.warn(
@@ -120,15 +120,15 @@ public class ObjectStorage {
   }
 
   public FilterInputStream getStream(String objectKey) throws NoSuchKeyException {
-    return client.getStream(versionPrefix + objectKey);
+    return client.getStream(objectKey);
   }
 
   public void delete(String fileName) {
-    client.delete(versionPrefix + fileName);
+    client.delete(fileName);
   }
 
   public void save(String fileName, String fileContent) {
-    client.save(versionPrefix + fileName, fileContent);
+    client.save(fileName, fileContent);
   }
 
   public void close() {
@@ -136,6 +136,6 @@ public class ObjectStorage {
   }
 
   public long putStream(String objectKey, InputStream inputStream) throws IOException {
-    return client.putStream(versionPrefix + objectKey, inputStream);
+    return client.putStream(objectKey, inputStream);
   }
 }

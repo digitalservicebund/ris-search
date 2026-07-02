@@ -11,7 +11,6 @@ import de.bund.digitalservice.ris.search.utils.BatchUtils;
 import de.bund.digitalservice.ris.search.utils.DateUtils;
 import de.bund.digitalservice.ris.search.utils.eli.EliFile;
 import de.bund.digitalservice.ris.search.utils.eli.ExpressionEli;
-import de.bund.digitalservice.ris.search.utils.eli.ManifestationEli;
 import de.bund.digitalservice.ris.search.utils.eli.WorkEli;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -30,6 +29,7 @@ import java.util.stream.Stream;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.Profiles;
 import org.springframework.stereotype.Service;
@@ -44,6 +44,7 @@ public class IndexNormsService implements IndexService {
   private final NormsRepository normsRepository;
   private final ArticlesRepository articlesRepository;
   private final NormsBucket normsBucket;
+  private final String versionPrefix;
 
   // We can't use LocalDate.MIN or LocalDate.MAX because opensearch min and max differ from java
   public static final LocalDate TIME_RELEVANCE_MIN = LocalDate.of(1, Month.JANUARY, 1);
@@ -61,10 +62,12 @@ public class IndexNormsService implements IndexService {
   public IndexNormsService(
       Environment environment,
       NormsBucket normsBucket,
+      @Value("${s3.file-storage.norm.versionPrefix}") String versionPrefix,
       NormsRepository normsRepository,
       ArticlesRepository articlesRepository) {
     this.environment = environment;
     this.normsBucket = normsBucket;
+    this.versionPrefix = versionPrefix;
     this.normsRepository = normsRepository;
     this.articlesRepository = articlesRepository;
   }
@@ -76,7 +79,7 @@ public class IndexNormsService implements IndexService {
    */
   public void reindexAll(String startingTimestamp) {
     DateUtils.avoidOpenSearchSubMillisecondDateBug();
-    List<String> allFiles = normsBucket.getAllKeysByPrefix("eli/");
+    List<String> allFiles = normsBucket.getAllKeysByPrefix(versionPrefix + "eli/");
     Map<WorkEli, List<String>> workElis = groupFilesByWorkEli(allFiles.stream());
     processWorkEliUpdates(workElis, startingTimestamp);
     clearOldNorms(startingTimestamp);
@@ -91,7 +94,8 @@ public class IndexNormsService implements IndexService {
       // retrieve all file paths for the given workElis
       Map<WorkEli, List<String>> allFilesByWorkEli = new HashMap<>();
       for (WorkEli workEli : workElis) {
-        allFilesByWorkEli.put(workEli, normsBucket.getAllKeysByPrefix(workEli.toString() + "/"));
+        allFilesByWorkEli.put(
+            workEli, normsBucket.getAllKeysByPrefix(versionPrefix + workEli.toString() + "/"));
       }
       processWorkEliUpdates(allFilesByWorkEli, Instant.now().toString());
     } catch (IllegalArgumentException e) {
@@ -249,7 +253,10 @@ public class IndexNormsService implements IndexService {
 
     // Get all files for the current expression.
     final List<String> keysMatchingExpressionEli =
-        filenames.stream().filter(n -> n.startsWith(expressionEli.toString())).toList();
+        filenames.stream()
+            .filter(n -> n.startsWith(versionPrefix + expressionEli.toString()))
+            .map(e -> e.substring(versionPrefix.length()))
+            .toList();
 
     Optional<String> newestFileName =
         keysMatchingExpressionEli.stream()
@@ -261,7 +268,7 @@ public class IndexNormsService implements IndexService {
             // only get the manifestation files that represent expression xml files
             .filter(e -> e.subtype().startsWith("regelungstext-"))
             // take the manifestation with the latest pointInTimeManifestation
-            .map(ManifestationEli::toString)
+            .map(e -> versionPrefix + e)
             .max(java.util.Comparator.naturalOrder());
 
     if (newestFileName.isEmpty()) {
@@ -318,7 +325,7 @@ public class IndexNormsService implements IndexService {
    */
   public int getNumberOfIndexableDocumentsInBucket() {
     Set<ExpressionEli> norms =
-        normsBucket.getAllKeysByPrefix("eli/").stream()
+        normsBucket.getAllKeysByPrefix(versionPrefix + "eli/").stream()
             .map(EliFile::fromString)
             .flatMap(Optional::stream)
             .filter(e -> e.fileName().startsWith("regelungstext-"))

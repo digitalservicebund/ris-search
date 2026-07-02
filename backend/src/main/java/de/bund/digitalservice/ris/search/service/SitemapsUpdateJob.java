@@ -69,7 +69,7 @@ public class SitemapsUpdateJob implements Job {
   public void createSitemaps(ObjectStorage currentBucket, DocumentKind docKind) {
     String prefix = docKind.getSiteMapPath();
     List<String> ids =
-        currentBucket.getAllKeys().stream()
+        currentBucket.getAllKeysOnCurrentVersion().stream()
             .map(e -> DocumentKind.extractIdFromFileName(e, docKind))
             .flatMap(Optional::stream)
             .distinct()

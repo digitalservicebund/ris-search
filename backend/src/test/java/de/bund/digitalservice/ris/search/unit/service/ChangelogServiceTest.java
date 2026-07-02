@@ -35,7 +35,7 @@ class ChangelogServiceTest {
 
   @BeforeEach
   void setup() {
-    changelogService = new ChangelogService(bucket, objectMapper) {};
+    changelogService = new ChangelogService(bucket, "", objectMapper) {};
   }
 
   @Test

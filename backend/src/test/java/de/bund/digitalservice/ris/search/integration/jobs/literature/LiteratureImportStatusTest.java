@@ -40,9 +40,9 @@ class LiteratureImportStatusTest extends ContainersIntegrationBase {
 
   @Test
   void createsLastSuccessFileProperly() throws ObjectStoreServiceException {
-    assertThat(literatureBucket.getAllKeys()).hasSize(2);
+    assertThat(literatureBucket.getAllKeysOnCurrentVersion()).hasSize(2);
     literatureIndexSyncJob.runJob();
-    assertThat(literatureBucket.getAllKeys()).hasSize(2);
+    assertThat(literatureBucket.getAllKeysOnCurrentVersion()).hasSize(2);
     IndexingState result =
         indexStatusService.loadStatus(LiteratureIndexSyncJob.LITERATURE_STATUS_FILENAME);
     assertThat(result.lastProcessedChangelogFile()).isNotNull();

@@ -20,10 +20,10 @@ public class ChangelogService<T extends ObjectStorage> {
 
   private static final Logger logger = LogManager.getLogger(ChangelogService.class);
 
-  private final ObjectStorage bucket;
-
   public static final String CHANGELOGS_PREFIX = "changelogs/";
 
+  private final ObjectStorage bucket;
+  private final String versionPrefix;
   private final ObjectReader changelogReader;
 
   /**
@@ -32,8 +32,9 @@ public class ChangelogService<T extends ObjectStorage> {
    * @param bucket bucket containing the changelogs
    * @param objectMapper global ObjectMapper to create a Changelog Reader
    */
-  public ChangelogService(T bucket, ObjectMapper objectMapper) {
+  public ChangelogService(T bucket, String versionPrefix, ObjectMapper objectMapper) {
     this.bucket = bucket;
+    this.versionPrefix = versionPrefix;
     this.changelogReader = objectMapper.readerFor(Changelog.class);
   }
 
@@ -52,7 +53,7 @@ public class ChangelogService<T extends ObjectStorage> {
    */
   public List<String> getNewChangelogsPaths(@NotNull String lastProcessedChangelog) {
 
-    return bucket.getAllKeysByPrefix(CHANGELOGS_PREFIX).stream()
+    return bucket.getAllKeysByPrefix(versionPrefix + CHANGELOGS_PREFIX).stream()
         .filter(e -> !CHANGELOGS_PREFIX.equals(e))
         .filter(e -> e.compareTo(lastProcessedChangelog) > 0)
         .sorted()
@@ -102,7 +103,7 @@ public class ChangelogService<T extends ObjectStorage> {
   public Changelog getChangesBetween(Instant from, Instant to) throws ObjectStoreServiceException {
 
     var changelogs =
-        bucket.getAllKeysByPrefix(CHANGELOGS_PREFIX).stream()
+        bucket.getAllKeysByPrefix(versionPrefix + CHANGELOGS_PREFIX).stream()
             .filter(e -> !CHANGELOGS_PREFIX.equals(e))
             .filter(
                 e -> {
