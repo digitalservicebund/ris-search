@@ -107,6 +107,8 @@ dependencies {
 
     compileOnly(libs.lombok)
     annotationProcessor(libs.lombok)
+    testCompileOnly(libs.lombok)
+    testAnnotationProcessor(libs.lombok)
 
     developmentOnly(libs.spring.boot.devtools)
     testImplementation(libs.spring.boot.starter.test)

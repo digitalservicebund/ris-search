@@ -1,6 +1,7 @@
 # This is a Gradle generated file for dependency locking.
 # Manual edits can break the build and are not advised.
 # This file is expected to be part of source control.
+# To regenerate this file, run: ./gradlew :dependencies --write-locks
 biz.aQute.bnd:biz.aQute.bnd.annotation:7.1.0=compileClasspath,testCompileClasspath
 ch.qos.logback:logback-classic:1.5.34=compileClasspath,productionRuntimeClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
 ch.qos.logback:logback-core:1.5.34=compileClasspath,productionRuntimeClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
@@ -282,7 +283,7 @@ org.ow2.asm:asm-tree:9.6=jacocoAnt
 org.ow2.asm:asm-tree:9.9.1=compileClasspath,productionRuntimeClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath,xjc
 org.ow2.asm:asm:9.6=jacocoAnt
 org.ow2.asm:asm:9.9.1=compileClasspath,productionRuntimeClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath,xjc
-org.projectlombok:lombok:1.18.46=annotationProcessor,compileClasspath
+org.projectlombok:lombok:1.18.46=annotationProcessor,compileClasspath,testAnnotationProcessor,testCompileClasspath
 org.reactivestreams:reactive-streams:1.0.4=compileClasspath,productionRuntimeClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
 org.reflections:reflections:0.10.2=checkstyle
 org.rnorth.duct-tape:duct-tape:1.0.8=testCompileClasspath,testRuntimeClasspath
@@ -419,4 +420,4 @@ tools.jackson.dataformat:jackson-dataformat-cbor:3.1.4=compileClasspath,producti
 tools.jackson.dataformat:jackson-dataformat-smile:3.1.4=compileClasspath,productionRuntimeClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
 tools.jackson.dataformat:jackson-dataformat-yaml:3.1.4=compileClasspath,productionRuntimeClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
 tools.jackson:jackson-bom:3.1.4=compileClasspath,productionRuntimeClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
-empty=testAndDevelopmentOnly,testAnnotationProcessor
+empty=testAndDevelopmentOnly
