@@ -194,10 +194,16 @@ public class BulkExportService {
       } catch (Exception e) {
         // force close the executor in case of an error
         downloadExecutor.shutdownNow();
+
+        if (e instanceof InterruptedException) {
+          log.error("Download thread was interrupted.", e);
+          Thread.currentThread().interrupt();
+        }
+
         throw new UncheckedIOException(
             new IOException("ZIP production engine encountered a failure status", e));
       } finally {
-        downloadExecutor.shutdown();
+        downloadExecutor.close();
       }
     }
   }
