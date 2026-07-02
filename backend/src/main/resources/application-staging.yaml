@@ -42,3 +42,8 @@ management:
     web:
       exposure:
         include: health,info,prometheus
+
+s3:
+  file-storage:
+    case-law:
+      versionPrefix: "V1"

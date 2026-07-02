@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"
-                xmlns:ris="http://rechtsinformationen.bund.de/schema/ris/0.1/"
+                xmlns:ris="http://rechtsinformationen.bund.de/schema/ris/0.1"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xsi:schemaLocation="http://docs.oasis-open.org/legaldocml/ns/akn/3.0 https://docs.oasis-open.org/legaldocml/akn-core/v1.0/os/part2-specs/schemas/akomantoso30.xsd">
+                xsi:schemaLocation="http://docs.oasis-open.org/legaldocml/ns/akn/3.0 https://docs.oasis-open.org/legaldocml/akn-core/v2.0/cs01/part2-specs/schemas/akomantoso30.xsd">
     <akn:judgment name="/akn/ontology/de/concept/documenttype/bund/rechtsprechung/entscheidung">
 
         {% if not hideMeta %}
@@ -126,15 +126,20 @@
             {% endif %}
 
             {% if not hideOpinions %}
-            <akn:motivation ris:domainTerm="Abweichende Meinung">
+            <akn:motivation
+                    ris:domainTerm="Abweichende Meinung"
+                    xsi:type="ris:abweichendeMeinung"
+            >
                 <akn:p>dissenting test</akn:p>
                 <akn:block name="Mitwirkende Richter">
-                    <akn:opinion ris:domainTerm="Art der Mitwirkung"
-                                 type="dissenting"
-                                 by="#dr-phil-max-mustermann">referenced opinions test 1</akn:opinion>
-                    <akn:opinion ris:domainTerm="Art der Mitwirkung"
-                                 type="dissenting"
-                                 by="#richterin-maxima-mustermann">referenced opinions test 2</akn:opinion>
+                    <akn:opinion
+                            by="#person-dr-phil-max-mustermann"
+                            ris:domainTerm="Art der Mitwirkung"
+                    >referenced opinions test 1</akn:opinion>
+                    <akn:opinion
+                            by="#person-maxima-mustermann"
+                            ris:domainTerm="Art der Mitwirkung"
+                    >referenced opinions test 2</akn:opinion>
                 </akn:block>
             </akn:motivation>
             {% endif %}

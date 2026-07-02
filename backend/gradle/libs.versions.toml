@@ -34,6 +34,7 @@ jaxb-moxy = "5.0.0"
 posthog = "1.2.0"
 pebble = "4.1.2"
 rest-assured = "6.0.0"
+ris-html-transformation="0.0.4"
 
 [libraries]
 spring-actuator = { module="org.springframework.boot:spring-boot-starter-actuator", version.ref="spring-boot-starter" }
@@ -69,6 +70,7 @@ tools-jackson-core = { module = "tools.jackson.core:jackson-core", version.ref =
 jaxb-moxy = { module = "org.eclipse.persistence:org.eclipse.persistence.moxy", version.ref = "jaxb-moxy" }
 jaxb-moxy-xjc = {module = "org.eclipse.persistence:org.eclipse.persistence.moxy.utils.xjc", version.ref = "jaxb-moxy"}
 pebble = { module = "io.pebbletemplates:pebble-spring-boot-starter", version.ref = "pebble" }
+ris-html-transformation = { module = "de.bund.digitalservice:ris-html-transformation", version.ref = "ris-html-transformation"}
 streamex = { module = 'one.util:streamex', version.ref = "streamex" }
 restassured = { module = 'io.rest-assured:rest-assured', version.ref = "rest-assured" }
 

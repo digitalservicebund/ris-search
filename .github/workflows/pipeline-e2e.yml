@@ -6,6 +6,7 @@ on:
 
 permissions:
   contents: read
+  packages: read
 
 env:
   RUN_ID: ${{ github.run_id }}
@@ -71,6 +72,8 @@ jobs:
           GRADLE_USER_HOME: ${{ github.workspace }}/.gradle-cache
           THC_PORT: 8090
           NODE_OPTIONS: "--max_old_space_size=4096"
+          GH_PACKAGES_REPOSITORY_USER: ${{ github.actor }}
+          GH_PACKAGES_REPOSITORY_TOKEN: ${{ github.token }}
         run: |
           nohup ./gradlew bootRun --no-daemon > backend.log 2>&1 &
 

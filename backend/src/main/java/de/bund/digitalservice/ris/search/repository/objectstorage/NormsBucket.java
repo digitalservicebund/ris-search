@@ -2,6 +2,7 @@ package de.bund.digitalservice.ris.search.repository.objectstorage;
 
 import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 /**
@@ -13,7 +14,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class NormsBucket extends ObjectStorage {
 
-  public NormsBucket(@Qualifier("normS3Client") ObjectStorageClient normS3Client) {
-    super(normS3Client, LogManager.getLogger(NormsBucket.class));
+  public NormsBucket(
+      @Qualifier("normS3Client") ObjectStorageClient normS3Client,
+      @Value("${s3.file-storage.norm.versionPrefix}") String versionPrefix) {
+    super(normS3Client, LogManager.getLogger(NormsBucket.class), versionPrefix);
   }
 }

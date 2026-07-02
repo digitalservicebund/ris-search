@@ -151,7 +151,7 @@ class CaselawXsltTransformerServiceTest {
 
                                   <p class="opinion-entry"><strong>Dr. Phil. Max Mustermann</strong>: referenced opinions test 1</p>
 
-                                  <p class="opinion-entry"><strong>Richterin Maxima Mustermann</strong>: referenced opinions test 2</p>
+                                  <p class="opinion-entry"><strong>Maxima Mustermann</strong>: referenced opinions test 2</p>
 
                                   </section>
             """;

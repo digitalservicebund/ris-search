@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 class LiteratureBucketDummyTest {
 
-  LiteratureBucket bucket = new LiteratureBucket(new ObjectStorageClientDummy());
+  LiteratureBucket bucket = new LiteratureBucket(new ObjectStorageClientDummy(), "");
 
   @Test
   void getAllKeysAlwaysReturnsEmptyList() {

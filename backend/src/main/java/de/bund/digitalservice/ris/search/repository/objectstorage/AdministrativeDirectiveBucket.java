@@ -2,6 +2,7 @@ package de.bund.digitalservice.ris.search.repository.objectstorage;
 
 import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 /**
@@ -14,7 +15,8 @@ import org.springframework.stereotype.Component;
 public class AdministrativeDirectiveBucket extends ObjectStorage {
 
   public AdministrativeDirectiveBucket(
-      @Qualifier("administrativeDirectiveS3Client") ObjectStorageClient s3Client) {
-    super(s3Client, LogManager.getLogger(AdministrativeDirectiveBucket.class));
+      @Qualifier("administrativeDirectiveS3Client") ObjectStorageClient s3Client,
+      @Value("${s3.file-storage.administrative-directive.versionPrefix}") String versionPrefix) {
+    super(s3Client, LogManager.getLogger(AdministrativeDirectiveBucket.class), versionPrefix);
   }
 }

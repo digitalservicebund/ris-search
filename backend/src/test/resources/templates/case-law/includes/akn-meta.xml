@@ -135,12 +135,6 @@
 <akn:TLCOrganization eId="bag-dokumentationsstelle" href="" showAs="BAG"/>
 <akn:TLCOrganization eId="organisation-gericht-courttype-courtlocation" href="" showAs="ArbG"/>
 <akn:TLCOrganization eId="spruchkoerper" href="" showAs="5. Kammer"/>
-<akn:TLCPerson eId="dr-phil-max-mustermann"
-               href=""
-               showAs="Dr. Phil. Max Mustermann"/>
-<akn:TLCPerson eId="richterin-maxima-mustermann"
-               href=""
-               showAs="Richterin Maxima Mustermann"/>
 </akn:references>
 <akn:proprietary source="#ris">
     <ris:meta>
@@ -184,6 +178,22 @@
             <ris:region domainTerm="Region">NW</ris:region>
         </ris:regionen>
         <ris:dokumentationsstelle domainTerm="Dokumentationsstelle" refersTo="#documentationoffice-dokumentationsstelle">documentationOffice</ris:dokumentationsstelle>
+        <ris:personen domainTerm="Personen">
+            <ris:person
+                    domainTerm="Person"
+                    eId="person-dr-phil-max-mustermann"
+                    showAs="Dr. Phil. Max Mustermann"
+            >
+                <ris:name domainTerm="Name">Dr. Phil. Max Mustermann</ris:name>
+            </ris:person>
+            <ris:person
+                    domainTerm="Person"
+                    eId="person-maxima-mustermann"
+                    showAs="Maxima Mustermann"
+            >
+                <ris:name domainTerm="Name">Maxima Mustermann</ris:name>
+            </ris:person>
+        </ris:personen>
     </ris:meta>
 </akn:proprietary>
 <akn:classification source="#ris">

@@ -25,6 +25,7 @@ public class ObjectStorage {
   public static final int MAXIMUM_CALL_ATTEMPTS = 3;
   private final Logger logger;
   private final ObjectStorageClient client;
+  private final String versionPrefix;
 
   /**
    * Constructs an ObjectStorage instance.
@@ -32,10 +33,12 @@ public class ObjectStorage {
    * @param client the object storage client used for operations such as saving, retrieving, and
    *     deleting objects
    * @param logger the logger used for logging activities and errors within the object storage
+   * @param versionPrefix the prefix for the currently active version of the data in the bucket
    */
-  public ObjectStorage(ObjectStorageClient client, Logger logger) {
+  public ObjectStorage(ObjectStorageClient client, Logger logger, String versionPrefix) {
     this.client = client;
     this.logger = logger;
+    this.versionPrefix = versionPrefix;
   }
 
   /**
@@ -55,7 +58,7 @@ public class ObjectStorage {
    * @return a list of matched object keys as strings
    */
   public List<String> getAllKeysByPrefix(String path) {
-    return client.listKeysByPrefix(path);
+    return client.listKeysByPrefix(versionPrefix + path);
   }
 
   /**
@@ -67,7 +70,7 @@ public class ObjectStorage {
    *     their last modified timestamps
    */
   public List<ObjectKeyInfo> getAllKeyInfosByPrefix(String path) {
-    return client.listByPrefixWithLastModified(path);
+    return client.listByPrefixWithLastModified(versionPrefix + path);
   }
 
   /**
@@ -117,15 +120,15 @@ public class ObjectStorage {
   }
 
   public FilterInputStream getStream(String objectKey) throws NoSuchKeyException {
-    return client.getStream(objectKey);
+    return client.getStream(versionPrefix + objectKey);
   }
 
   public void delete(String fileName) {
-    client.delete(fileName);
+    client.delete(versionPrefix + fileName);
   }
 
   public void save(String fileName, String fileContent) {
-    client.save(fileName, fileContent);
+    client.save(versionPrefix + fileName, fileContent);
   }
 
   public void close() {
@@ -133,6 +136,6 @@ public class ObjectStorage {
   }
 
   public long putStream(String objectKey, InputStream inputStream) throws IOException {
-    return client.putStream(objectKey, inputStream);
+    return client.putStream(versionPrefix + objectKey, inputStream);
   }
 }

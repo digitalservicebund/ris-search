@@ -2,6 +2,7 @@ package de.bund.digitalservice.ris.search.repository.objectstorage;
 
 import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 /**
@@ -13,7 +14,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class LiteratureBucket extends ObjectStorage {
 
-  public LiteratureBucket(@Qualifier("literatureS3Client") ObjectStorageClient s3Client) {
-    super(s3Client, LogManager.getLogger(LiteratureBucket.class));
+  public LiteratureBucket(
+      @Qualifier("literatureS3Client") ObjectStorageClient s3Client,
+      @Value("${s3.file-storage.literature.versionPrefix}") String versionPrefix) {
+    super(s3Client, LogManager.getLogger(LiteratureBucket.class), versionPrefix);
   }
 }
