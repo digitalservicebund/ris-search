@@ -329,7 +329,7 @@ const fassungenDateFilterInputId = useId();
   </NuxtLayout>
 </template>
 
-<style lang="css" scoped>
+<style scoped>
 @reference "~/assets/main.css";
 
 :deep(.official-toc div) {
