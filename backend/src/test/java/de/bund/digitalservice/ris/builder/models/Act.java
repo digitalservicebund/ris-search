@@ -43,6 +43,9 @@ public class Act {
   @XmlElement(name = "body", namespace = NormTestDataBuilder.AKN_NS)
   private Body body = Body.builder().build();
 
+  @XmlElement(name = "conclusions", namespace = NormTestDataBuilder.AKN_NS)
+  private Conclusions conclusions;
+
   @XmlElement(name = "attachments", namespace = NormTestDataBuilder.AKN_NS)
   private Attachments attachments;
 }

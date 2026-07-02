@@ -52,7 +52,8 @@ class NormLdmlToOpenSearchMapperTest {
                 "Anlage 1",
                 "(zu § 1)",
                 "Headline der Anlage",
-                List.of(AknP.withText("Content of the Anlage")));
+                List.of(AknP.withText("Content of the Anlage")))
+            .conclusion("This is the documents final conclusion.");
 
     builder.chapter(
         "Chapter One",

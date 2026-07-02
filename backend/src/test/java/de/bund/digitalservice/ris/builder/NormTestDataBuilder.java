@@ -2,6 +2,7 @@ package de.bund.digitalservice.ris.builder;
 
 import de.bund.digitalservice.ris.builder.models.Act;
 import de.bund.digitalservice.ris.builder.models.AkomaNtoso;
+import de.bund.digitalservice.ris.builder.models.Conclusions;
 import de.bund.digitalservice.ris.builder.models.Doc;
 import de.bund.digitalservice.ris.builder.models.attachment.Attachments;
 import de.bund.digitalservice.ris.builder.models.body.Article;
@@ -263,6 +264,11 @@ public class NormTestDataBuilder {
     this.document.getAct().setAttachments(attachments);
     attachmentsDocs.add(attachment);
 
+    return this;
+  }
+
+  public NormTestDataBuilder conclusion(String text) {
+    this.document.getAct().setConclusions(Conclusions.withText(text));
     return this;
   }
 
