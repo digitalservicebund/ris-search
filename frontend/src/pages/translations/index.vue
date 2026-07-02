@@ -1,9 +1,6 @@
 <script setup lang="ts">
 import MiniSearch from "minisearch";
 import type { BreadcrumbItem } from "~/components/Breadcrumbs.vue";
-import SimpleSearchInput from "~/components/search/SimpleSearchInput.vue";
-import type { TranslationContent } from "~/composables/useTranslationData";
-import { fetchTranslationList } from "~/composables/useTranslationData";
 
 definePageMeta({
   skipLinks: [
@@ -93,18 +90,16 @@ const translationsListId = useId();
       </div>
     </template>
 
-    <div class="wrapper pb-32 md:pb-56">
-      <section
-        class="mt-24 max-w-prose space-y-24 md:space-y-32 2xl:space-y-48"
-      >
-        <h1 class="typo-headline1-bold">
+    <div class="content-wrapper content-grid pb-32 md:pb-56">
+      <section class="col-span-12 grid grid-cols-subgrid space-y-16">
+        <h1 class="typo-headline1-bold col-span-12 mb-8">
           English Translations of German Federal Laws and Regulations
         </h1>
-        <p class="mb-8">
+        <p class="content-grid-textblock">
           We provide translations of our German content to help you. Please note
           that the original German versions are the only authoritative source.
         </p>
-        <p>
+        <p class="content-grid-textblock">
           The translations published on this website may be used in accordance
           with the applicable copyright exceptions. In particular, single copies
           may be made including in the form of downloads or printouts for
@@ -113,28 +108,32 @@ const translationsListId = useId();
           fall within the relevant copyright exceptions requires the prior
           consent of the author or other rights holder.
         </p>
-        <SimpleSearchInput
+        <SearchSimpleSearchInput
           v-model="activeSearchTerm"
-          class="my-48"
+          class="content-grid-textblock my-48"
           input-label="Search term"
           input-placeholder="Search by title or abbreviation"
           submit-label="Search"
+          full-width
         />
       </section>
 
-      <section :aria-labelledby="translationsListId" class="mt-48">
+      <section
+        :aria-labelledby="translationsListId"
+        class="col-span-12 xl:col-span-8"
+      >
         <h2 :id="translationsListId" class="sr-only">Translations List</h2>
 
         <ul
           v-if="sortedTranslations !== null && sortedTranslations.length > 0"
-          class="mt-48 flex flex-col gap-16"
+          class="flex flex-col gap-16"
         >
           <li
             v-for="t in sortedTranslations"
             :key="t['@id']"
             class="bg-white p-16 sm:py-24 md:px-24 lg:px-32"
           >
-            <div class="flex max-w-prose flex-col gap-8">
+            <div class="flex flex-col gap-8">
               <SearchResultHeader
                 lang="de"
                 :items="[

@@ -219,7 +219,9 @@ watch(searchStatus, async (newStatus, oldStatus) => {
       <Breadcrumbs :items="[{ label: 'Erweiterte Suche' }]" />
     </template>
 
-    <div class="wrapper base-grid gap-y-40 pb-32 md:pb-56 lg:gap-y-64">
+    <div
+      class="content-wrapper content-grid gap-y-40 pb-32 md:pb-56 lg:gap-y-64"
+    >
       <div class="col-span-12">
         <h1 class="typo-headline1-bold mb-16">Erweiterte Suche</h1>
         <p class="text-balance">

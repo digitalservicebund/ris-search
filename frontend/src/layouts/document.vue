@@ -25,7 +25,7 @@ const { titlePlaceholder = "Titelzeile nicht vorhanden", views } = defineProps<{
 
     <div>
       <!-- Header -->
-      <div class="wrapper text-left">
+      <div class="content-wrapper text-left">
         <DocumentsDocumentTitle
           :title="title"
           :placeholder="titlePlaceholder"
@@ -43,7 +43,7 @@ const { titlePlaceholder = "Titelzeile nicht vorhanden", views } = defineProps<{
         v-if="isEmptyDocument"
         class="min-h-96 border-t border-t-gray-400 bg-white print:py-0"
       >
-        <div class="wrapper">
+        <div class="content-wrapper">
           <slot name="details" />
         </div>
       </div>

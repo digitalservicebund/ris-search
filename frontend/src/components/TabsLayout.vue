@@ -23,7 +23,7 @@ const currentView = computed(
 <template>
   <div>
     <div class="border-b border-gray-400">
-      <nav class="wrapper -mb-1 overflow-x-auto pt-1" aria-label="Tab">
+      <nav class="content-wrapper -mb-1 overflow-x-auto pt-1" aria-label="Tab">
         <Tabs :value="currentView" :show-navigators="false">
           <TabList>
             <!-- Note that we need to override aria-controls manually,
@@ -48,7 +48,7 @@ const currentView = computed(
     </div>
 
     <div id="content" class="min-h-96 bg-white print:py-0">
-      <div class="wrapper">
+      <div class="content-wrapper">
         <slot :name="currentView" />
       </div>
     </div>

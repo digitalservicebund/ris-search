@@ -162,7 +162,7 @@ const detailsSectionId = useId();
       <SidebarLayout>
         <section role="tabpanel" :aria-labelledby="textSectionId">
           <h2 :id="textSectionId" class="sr-only">Text</h2>
-          <DocumentsIncompleteDataMessage />
+          <DocumentsIncompleteDataMessage class="my-24" />
           <div
             v-if="document"
             class="case-law"
@@ -185,7 +185,6 @@ const detailsSectionId = useId();
 
 .case-law {
   --border-number-min-width: 3rem;
-  @apply max-w-prose print:max-w-none;
 }
 
 :deep(.case-law table[border="1"] :is(th, td)) {

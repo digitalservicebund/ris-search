@@ -119,7 +119,7 @@ const detailItems = computed(() =>
       <SidebarLayout>
         <section role="tabpanel" :aria-labelledby="textSectionId">
           <h2 :id="textSectionId" class="sr-only">Text</h2>
-          <DocumentsIncompleteDataMessage />
+          <DocumentsIncompleteDataMessage class="my-24" />
           <div
             v-if="document"
             class="administrative-directive"
@@ -142,10 +142,6 @@ const detailItems = computed(() =>
 
 <style scoped>
 @reference "~/assets/main.css";
-
-.administrative-directive {
-  @apply max-w-prose print:max-w-none;
-}
 
 :deep(.administrative-directive h1) {
   @apply hidden;

@@ -99,7 +99,7 @@ const detailsTabPanelTitleId = useId();
       </div>
     </template>
 
-    <div class="wrapper">
+    <div class="content-wrapper">
       <hgroup class="dokumentenkopf">
         <p
           v-if="currentTranslation?.translationOfWork"
@@ -119,7 +119,7 @@ const detailsTabPanelTitleId = useId();
       <Message
         v-if="legislation"
         :closable="false"
-        class="my-24 max-w-prose space-y-24 sm:my-32 md:my-40"
+        class="my-24 space-y-24 sm:my-32 md:my-40"
       >
         <template #icon>
           <IcOutlineWarning />
@@ -132,7 +132,7 @@ const detailsTabPanelTitleId = useId();
             class="ris-link2-regular 2xl:ris-link1-regular"
             :to="`/norms/${germanOriginalWorkEli}`"
           >
-            Go to the German version </NuxtLink
+            Go to the German version</NuxtLink
           >.
         </p>
       </Message>
