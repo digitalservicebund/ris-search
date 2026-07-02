@@ -6,8 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import de.bund.digitalservice.ris.SharedTestConstants;
-import de.bund.digitalservice.ris.builder.NormTestDataBuilder;
-import de.bund.digitalservice.ris.builder.models.common.AknP;
 import de.bund.digitalservice.ris.search.mapper.NormLdmlToOpenSearchMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
@@ -38,78 +36,11 @@ class NormLdmlToOpenSearchMapperTest {
   }
 
   @Test
-  void testNormTestDataBuidler1() {
-    NormTestDataBuilder builder =
-        new NormTestDataBuilder()
-            .eli("eli/bund/bgbl-1/1962/s514/2010-04-27/1/deu/2010-04-27/regelungstext-1.xml")
-            .officialTitle("Official Title")
-            .shortTitle("Short Title (", ")")
-            .inForceDate("2000-01-01")
-            .outOfForceDate("2000-01-07")
-            .risAbbreviation("FooBar")
-            .officialAbbreviation("OffFooBar")
-            .attachment(
-                "eli/bund/bgbl-1/1962/s514/2010-04-27/1/deu/2010-04-27/anlage-regelungstext-1.xml",
-                "Anlage 1",
-                "(zu § 1)",
-                "Headline der Anlage",
-                List.of(AknP.withText("Content of the Anlage")))
-            .conclusion("This is the documents final conclusion.");
-
-    builder.chapter(
-        "Chapter One",
-        "1",
-        chapter1 -> {
-          chapter1.addSection(
-              "Section One",
-              "1",
-              section1 -> {
-                section1.addArticle(
-                    builder
-                        .buildArticle(
-                            "Article number one", "§ 1", "2025-01-01", "2025-07-01", "art-z1")
-                        .addParagraph("Paragraph 1 test", "(1)")
-                        .addParagraph("Paragraph 2 test", "(2)"));
-              });
-
-          chapter1.addSection(
-              "Section Two",
-              "2",
-              section1 -> {
-                section1.addArticle(
-                    builder
-                        .buildArticle(
-                            "Article number two", "§ 2", "2026-01-01", "2026-07-01", "art-z2")
-                        .addParagraph("Paragraph 1 test", "(1)")
-                        .addParagraph("Paragraph 2 test", "(2)"));
-              });
-        });
-
-    String normXml = builder.buildNormXml();
-    String attachmentXml = builder.buildAttachmentXmls().getFirst();
-    assertThat(normXml).isNotBlank();
-    assertThat(attachmentXml).isNotBlank();
-  }
-
-  @Test
   @DisplayName("Should create the ELI, ID, title, abbreviation, and dates correctly")
-  void shouldCreateAttributesCorrect() {
-    //    String xmlContent = readXmlTestFile("xmlContent.xml");
-
-    NormTestDataBuilder builder =
-        new NormTestDataBuilder()
-            .eli("eli/bund/bgbl-1/1962/s514/2010-04-27/1/deu/2010-04-27/regelungstext-1.xml")
-            .officialTitle(
-                "Verordnung zur Durchführung des § 88 Abs. 2 Nr. 8 des Bundessozialhilfegesetzes")
-            .shortTitle("Kurztitel (", ")")
-            .officialAbbreviation("ABK")
-            .inForceDate("2000-01-01")
-            .outOfForceDate("2000-01-07")
-            .legislationDate("1962-07-15")
-            .datePublished("1962-07-20");
-
-    String xmlContent = builder.buildNormXml();
-    Norm norm = NormLdmlToOpenSearchMapper.parseNorm(xmlContent, Map.of(), true).get();
+  void shouldCreateAttributesCorrect() throws IOException {
+    String normFile = "xmlContent.xml";
+    Norm norm =
+        NormLdmlToOpenSearchMapper.parseNorm(readXmlTestFile(normFile), Map.of(), true).get();
 
     assertEquals("eli/bund/bgbl-1/1962/s514", norm.getWorkEli());
     assertEquals("eli/bund/bgbl-1/1962/s514/2010-04-27/1/deu", norm.getExpressionEli());
@@ -254,47 +185,14 @@ class NormLdmlToOpenSearchMapperTest {
 
   @Test
   @DisplayName("Should extract the articles correctly")
-  void shouldExtractArticlesCorrectly() {
-    NormTestDataBuilder builder =
-        new NormTestDataBuilder()
-            .eli("eli/bund/bgbl-1/1962/s514/2010-04-27/1/deu/2010-04-27/regelungstext-1.xml")
-            .formula("Preamble");
-
-    builder
-        .article(
-            builder
-                .buildArticle("Heading", "§ 1", "2003-11-03", null, "art-z1")
-                .addParagraph("Das ist ein Satz. Das ist noch ein Satz.", ""))
-        .article(
-            builder
-                .buildArticle("Heading 2", "§ 2", "2003-11-03", "2003-11-06", "art-z2")
-                .addParagraph(
-                    "Ein weiterer Satz mit einem Punkt in einer Aufzählung und noch einem Punkt.",
-                    "(1)")
-                .addParagraph("Noch ein wichtiger Satz. Das ist der letzte Satz.", "(2)"))
-        .article(
-            builder
-                .buildArticle("", "", "2003-11-01", null, "art-z3")
-                .addParagraph("Mit Text.", ""));
-
-    String attachmentEli =
-        "eli/bund/bgbl-1/1962/s514/2010-04-27/1/deu/2010-04-27/offenestruktur-1.xml";
-    builder.attachment(
-        attachmentEli,
-        "Anlage T1",
-        "(zu § 1)",
-        "",
-        List.of(
-            AknP.withText(
-                "This text appears in the attachment. This text also appears, inside a paragraph.")));
-
+  void shouldExtractArticlesCorrectly() throws IOException {
+    String normFile = "xmlDocumentTestArticleExtraction.xml";
+    var attachments =
+        Map.of(
+            "eli/bund/bgbl-1/1962/s514/2010-04-27/1/deu/2010-04-27/offenestruktur-1.xml",
+            readXmlTestFile("offenestruktur-1.xml"));
     Norm norm =
-        NormLdmlToOpenSearchMapper.parseNorm(
-                builder.buildNormXml(),
-                Map.of(attachmentEli, builder.buildAttachmentXmls().getFirst()),
-                true)
-            .get();
-
+        NormLdmlToOpenSearchMapper.parseNorm(readXmlTestFile(normFile), attachments, true).get();
     assertEquals(5, norm.getArticles().size());
 
     Article preamble = norm.getArticles().get(0);
@@ -314,12 +212,12 @@ class NormLdmlToOpenSearchMapperTest {
     assertNull(firstArticle.getExpiryDate());
     assertEquals(LocalDate.of(2003, Month.NOVEMBER, 3), secondArticle.getEntryIntoForceDate());
     assertEquals(LocalDate.of(2003, Month.NOVEMBER, 6), secondArticle.getExpiryDate());
-    assertEquals(LocalDate.of(2003, Month.NOVEMBER, 1), thirdArticle.getEntryIntoForceDate());
-    assertNull(thirdArticle.getExpiryDate());
+    assertNull(thirdArticle.getEntryIntoForceDate());
+    assertEquals(LocalDate.of(2003, Month.NOVEMBER, 1), thirdArticle.getExpiryDate());
     String workEli = "eli/bund/bgbl-1/1962/s514";
     String expressionEli = workEli + "/2010-04-27/1/deu";
     String manifestationEli = expressionEli + "/2010-04-27/offenestruktur-1.xml";
-    String eid = "anlagen-n1_anlage-n1";
+    String eid = "anlagen-1_anlage-1";
     assertThat(attachment)
         .isEqualTo(
             new Article(
