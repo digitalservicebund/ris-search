@@ -6,8 +6,14 @@ import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletionService;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorCompletionService;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import org.apache.logging.log4j.Logger;
 import software.amazon.awssdk.awscore.exception.AwsServiceException;
 import software.amazon.awssdk.core.exception.SdkClientException;
@@ -85,6 +91,33 @@ public class ObjectStorage {
   public Optional<String> getFileAsString(String filename) throws ObjectStoreServiceException {
     Optional<byte[]> s3Response = get(filename);
     return s3Response.map(bytes -> new String(bytes, StandardCharsets.UTF_8));
+  }
+
+  public List<FetchResult> getObjects(List<String> keys) {
+    ExecutorService downloadExecutor = Executors.newVirtualThreadPerTaskExecutor();
+
+    CompletionService<FetchResult> completionService =
+        new ExecutorCompletionService<>(downloadExecutor);
+    List<FetchResult> content = new ArrayList<>(keys.size());
+
+    try {
+      for (String key : keys) {
+        completionService.submit(() -> new FetchResult(key, this.get(key)));
+      }
+
+      for (int i = 0; i < keys.size(); i++) {
+        content.add(completionService.take().get());
+      }
+    } catch (InterruptedException interruptedException) {
+      downloadExecutor.shutdownNow();
+      Thread.currentThread().interrupt();
+    } catch (ExecutionException e) {
+      downloadExecutor.shutdownNow();
+      logger.error("couldnt fetch");
+    } finally {
+      downloadExecutor.close();
+    }
+    return content;
   }
 
   /**
