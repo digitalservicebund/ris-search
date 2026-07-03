@@ -1,8 +1,16 @@
-import { renderSuspended } from "@nuxt/test-utils/runtime";
+import { mockNuxtImport, renderSuspended } from "@nuxt/test-utils/runtime";
 import { screen } from "@testing-library/vue";
 import { describe } from "vitest";
 import AdministrativeDirectiveSearchResult from "~/components/search/AdministrativeDirectiveSearchResult.vue";
 import type { AdministrativeDirective, SearchResult } from "~/types/api";
+
+const { useRouteMock } = vi.hoisted(() => ({
+  useRouteMock: vi.fn(() => ({
+    fullPath: "/search?query=test&documentKind=VS",
+  })),
+}));
+
+mockNuxtImport("useRoute", () => useRouteMock);
 
 const searchResult: SearchResult<AdministrativeDirective> = {
   item: {
@@ -191,5 +199,20 @@ describe("AdministrativeDirectiveSearchResult", () => {
 
       expect(screen.queryAllByTestId("highlighted-field")).toHaveLength(0);
     });
+  });
+
+  it("includes the current search URL as query param in the detail page link", async () => {
+    useRouteMock.mockReturnValue({
+      fullPath: "/search?query=Vorschrift&documentKind=VS&pageIndex=0",
+    });
+
+    await renderComponent();
+
+    const link = screen.getByRole("link", {
+      name: "Verwaltungsvorschrift Überschrift",
+    });
+    const href = link.getAttribute("href") ?? "";
+    expect(href).toContain("from=");
+    expect(href).toContain("Vorschrift");
   });
 });

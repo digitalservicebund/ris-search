@@ -1,7 +1,16 @@
+import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import { render, screen } from "@testing-library/vue";
 import { describe, expect, it } from "vitest";
 import CaselawRecord from "~/components/search/CaselawSearchResult.vue";
 import type { CaseLaw, SearchResult, TextMatch } from "~/types/api";
+
+const { useRouteMock } = vi.hoisted(() => ({
+  useRouteMock: vi.fn(() => ({
+    fullPath: "/search?query=test&documentKind=R",
+  })),
+}));
+
+mockNuxtImport("useRoute", () => useRouteMock);
 
 const searchResult: SearchResult<CaseLaw> = {
   item: {
@@ -40,7 +49,10 @@ function renderComponent({
     props: { searchResult: result, order: 0 },
     global: {
       stubs: {
-        NuxtLink: { template: '<a :href="to"><slot /></a>', props: ["to"] },
+        NuxtLink: {
+          template: '<a :href="JSON.stringify(to)"><slot /></a>',
+          props: ["to"],
+        },
       },
     },
   });
@@ -391,5 +403,19 @@ describe("CaselawSearchResult", () => {
     });
 
     expect(screen.queryAllByTestId("highlighted-field")).toHaveLength(0);
+  });
+
+  it("includes the current search URL as query param in the detail page link", () => {
+    useRouteMock.mockReturnValue({
+      fullPath: "/search?query=BGB&documentKind=R&pageIndex=2",
+    });
+
+    renderComponent({});
+
+    const link = screen.getByRole("link", { name: /Decision Name/ });
+    const href = JSON.parse(link.getAttribute("href") ?? "{}");
+    expect(href.query?.from).toBe(
+      "/search?query=BGB&documentKind=R&pageIndex=2",
+    );
   });
 });
