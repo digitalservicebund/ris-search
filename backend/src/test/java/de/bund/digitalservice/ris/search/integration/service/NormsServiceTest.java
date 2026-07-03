@@ -52,7 +52,7 @@ class NormsServiceTest extends ContainersIntegrationBase {
             .datePublished(LocalDate.of(2022, Month.JANUARY, 1))
             .officialShortTitle("latest short title")
             .normsDate(LocalDate.of(2022, Month.JANUARY, 1))
-            .abbreviation("latest abbr")
+            .official_abbreviation("latest abbr")
             .workEli("eli/bund/bgbl-1/2020/s1126")
             .build();
 
@@ -68,7 +68,7 @@ class NormsServiceTest extends ContainersIntegrationBase {
             .datePublished(LocalDate.of(2020, Month.JANUARY, 1))
             .officialShortTitle("oldest short title")
             .normsDate(LocalDate.of(2020, Month.JANUARY, 1))
-            .abbreviation("oldest abbr")
+            .official_abbreviation("oldest abbr")
             .workEli("eli/bund/bgbl-1/2020/s1126")
             .build();
     repository.save(olderExpression);

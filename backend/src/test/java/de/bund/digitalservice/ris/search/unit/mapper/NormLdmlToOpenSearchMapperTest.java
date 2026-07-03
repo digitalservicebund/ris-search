@@ -52,7 +52,7 @@ class NormLdmlToOpenSearchMapperTest {
         "Verordnung zur Durchführung des § 88 Abs. 2 Nr. 8 des Bundessozialhilfegesetzes",
         norm.getOfficialTitle());
     assertEquals("Kurztitel", norm.getOfficialShortTitle());
-    assertEquals("ABK", norm.getAbbreviation());
+    assertEquals("ABK", norm.getOfficial_abbreviation());
     assertEquals(LocalDate.parse("1962-07-15"), norm.getNormsDate());
     assertEquals(LocalDate.parse("1962-07-15"), norm.getNormsSortDate());
     assertEquals(LocalDate.parse("1962-07-20"), norm.getDatePublished());
@@ -66,7 +66,7 @@ class NormLdmlToOpenSearchMapperTest {
             readXmlTestFile("abbreviationTest1.xml"), Map.of(), true);
 
     assertThat(norm).isNotEmpty();
-    assertThat(norm.get().getAbbreviation()).isNull();
+    assertThat(norm.get().getOfficial_abbreviation()).isNull();
   }
 
   @Test
@@ -77,7 +77,7 @@ class NormLdmlToOpenSearchMapperTest {
             readXmlTestFile("abbreviationTest2.xml"), Map.of(), true);
 
     assertThat(norm).isNotEmpty();
-    assertThat(norm.get().getAbbreviation()).isEqualTo("OffAbb");
+    assertThat(norm.get().getOfficial_abbreviation()).isEqualTo("OffAbb");
   }
 
   @Test
@@ -88,7 +88,7 @@ class NormLdmlToOpenSearchMapperTest {
             readXmlTestFile("abbreviationTest3.xml"), Map.of(), true);
 
     assertThat(norm).isNotEmpty();
-    assertThat(norm.get().getAbbreviation()).isEqualTo("RisAbbrev");
+    assertThat(norm.get().getOfficial_abbreviation()).isEqualTo("RisAbbrev");
   }
 
   @Test

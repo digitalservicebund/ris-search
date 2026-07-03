@@ -145,7 +145,7 @@ public class NormSearchResponseMapper {
 
     return LegislationExpressionSearchSchema.builder()
         .id(expressionId)
-        .abbreviation(norm.getAbbreviation())
+        .abbreviation(norm.getOfficial_abbreviation())
         .alternateName(norm.getOfficialShortTitle())
         .legislationIdentifier(expressionEli)
         .exampleOfWork(
