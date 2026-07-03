@@ -29,13 +29,13 @@ class ChangelogServiceTest {
 
   @Mock ObjectStorage bucket;
 
-  ChangelogService changelogService;
+  ChangelogService<?> changelogService;
 
   ObjectMapper objectMapper = new ObjectMapper();
 
   @BeforeEach
   void setup() {
-    changelogService = new ChangelogService(bucket, "", objectMapper) {};
+    changelogService = new ChangelogService<>(bucket, "", objectMapper) {};
   }
 
   @Test
@@ -152,6 +152,34 @@ class ChangelogServiceTest {
         .thenReturn(Optional.of(objectMapper.writeValueAsString(expectedSecond)));
 
     Changelog result = changelogService.getChangesBetween(from, to);
+
+    assertThat(result.getChanged()).asInstanceOf(SET).containsExactlyInAnyOrder("file1", "file2");
+  }
+
+  @Test
+  void itConsidersVersionPrefixes() throws JsonProcessingException, ObjectStoreServiceException {
+    Instant from = Instant.parse("2026-07-03T12:00:00Z");
+    Instant to = Instant.parse("2027-01-01T12:00:00Z");
+
+    Changelog expectedFirst =
+        new Changelog(new HashSet<>(List.of("file1")), new HashSet<>(), false);
+    Changelog expectedSecond =
+        new Changelog(new HashSet<>(List.of("file2")), new HashSet<>(), false);
+
+    when(bucket.getAllKeysByPrefix(any()))
+        .thenReturn(
+            List.of(
+                "V1/changelogs/2026-07-03T11:00:00.000000Z-norm.json",
+                "V1/changelogs/2026-07-03T12:00:00.933434Z-norm.json",
+                "V1/changelogs/2026-07-08T12:00:00.933434Z-norm.json"));
+
+    when(bucket.getFileAsString("V1/changelogs/2026-07-03T12:00:00.933434Z-norm.json"))
+        .thenReturn(Optional.of(objectMapper.writeValueAsString(expectedFirst)));
+    when(bucket.getFileAsString("V1/changelogs/2026-07-08T12:00:00.933434Z-norm.json"))
+        .thenReturn(Optional.of(objectMapper.writeValueAsString(expectedSecond)));
+
+    ChangelogService<?> service = new ChangelogService<>(bucket, "V1/", objectMapper);
+    Changelog result = service.getChangesBetween(from, to);
 
     assertThat(result.getChanged()).asInstanceOf(SET).containsExactlyInAnyOrder("file1", "file2");
   }
