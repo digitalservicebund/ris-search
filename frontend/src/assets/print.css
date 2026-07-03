@@ -3,10 +3,6 @@
     --max-width-prose: 100%;
   }
 
-  body {
-    @apply text-sm;
-  }
-
   article {
     @apply break-inside-avoid-page;
 
