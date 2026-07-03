@@ -207,7 +207,7 @@ public class NormsService {
                     return Norm.builder()
                         .id(hit.getId())
                         .workEli(returnedWorkEli)
-                        .official_abbreviation(abbreviation)
+                        .officialAbbreviation(abbreviation)
                         .officialShortTitle(shortTitle)
                         .officialTitle(officialTitle)
                         .datePublished(datePublished)

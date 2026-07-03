@@ -56,7 +56,7 @@ public class NormSchemaMapper {
 
     return LegislationExpressionSchema.builder()
         .id(CONTENT_BASE_URL + norm.getExpressionEli())
-        .abbreviation(norm.getOfficial_abbreviation())
+        .abbreviation(norm.getOfficialAbbreviation())
         .alternateName(norm.getOfficialShortTitle())
         .exampleOfWork(
             new LegislationWorkSchema(

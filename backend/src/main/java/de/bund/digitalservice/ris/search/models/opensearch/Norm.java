@@ -54,7 +54,7 @@ public final class Norm implements AbstractSearchEntity {
   private String officialShortTitle;
 
   @Field(name = Fields.OFFICIAL_ABBREVIATION)
-  private String official_abbreviation;
+  private String officialAbbreviation;
 
   /**
    * The date of adoption or signature of the legislation. This is the date at which the text is
