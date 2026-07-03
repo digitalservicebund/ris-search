@@ -121,10 +121,7 @@ const translationsListId = useId();
         </div>
       </section>
 
-      <section
-        :aria-labelledby="translationsListId"
-        class="col-span-12 xl:col-span-8"
-      >
+      <section :aria-labelledby="translationsListId" class="col-span-12">
         <h2 :id="translationsListId" class="sr-only">Translations List</h2>
 
         <ul
