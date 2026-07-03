@@ -385,7 +385,7 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
   @ParameterizedTest
   @ValueSource(strings = {"official_abbreviation", "AB"})
   @DisplayName("Should return 200 when looking for official abbreviation and aliases")
-  void shouldReturnOkAbbreviation(String queryParam) throws Exception {
+  void shouldReturnOkOfficialAbbreviation(String queryParam) throws Exception {
 
     mockMvc
         .perform(
@@ -453,16 +453,16 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
             content()
                 .json(
                     """
-                                            {
-                                              "errors": [
-                                                {
-                                                  "code": "invalid_parameter_value",
-                                                  "message": "%s",
-                                                  "parameter": "sort"
-                                                }
-                                              ]
-                                            }
-                                            """
+                                                    {
+                                                      "errors": [
+                                                        {
+                                                          "code": "invalid_parameter_value",
+                                                          "message": "%s",
+                                                          "parameter": "sort"
+                                                        }
+                                                      ]
+                                                    }
+                                                    """
                         .formatted(expectedError)));
   }
 
