@@ -30,8 +30,8 @@ export interface paths {
     /**
      * List and search literature
      *
-     * The endpoint returns a list of literature from our database. The list
-     * is paginated and can be filtered and sorted.
+     * The endpoint returns a list of literature from our database. The list is
+     * paginated and can be filtered and sorted.
      */
     get: operations["searchAndFilter"];
     put?: never;
@@ -74,8 +74,8 @@ export interface paths {
     /**
      * Literature XML
      *
-     * Returns a literature item as XML. This content is used as a source
-     * for the HTML endpoint.
+     * Returns a literature item as XML. This content is used as a source for
+     * the HTML endpoint.
      */
     get: operations["getLiteratureAsXml"];
     put?: never;
@@ -151,23 +151,23 @@ export interface paths {
      * GET /v1/legislation?searchTerm=Gesetz%20über%20das%20Verfahren%20bei%20sonstigen%20Änderungen
      * ```
      *
-     * The API will return only the legislation that contains all these
-     * terms. Please note that in practice very common tokens such as `das`
-     * are ignored (please see <a
+     * The API will return only the legislation that contains all these terms.
+     * Please note that in practice very common tokens such as `das` are ignored
+     * (please see <a
      * href="https://en.wikipedia.org/wiki/Stop_word">https://en.wikipedia.org/wiki/Stop_word</a>
      * for more details).
      *
      * ## Example 2
      *
-     * Get all legislation containing the tokens :` Gesetz` and `über` and
-     * were valid on 2020-01-01
+     * Get all legislation containing the tokens :` Gesetz` and `über` and were
+     * valid on 2020-01-01
      *
      * ```http
      * GET /v1/legislation?temporalCoverageFrom=2020-01-01&temporalCoverageTo=2020-01-01&searchTerm=Gesetz%20über
      * ```
      *
-     * This example can be used to only return currently valid legislation
-     * by replacing 2020-01-01 with today's date.
+     * This example can be used to only return currently valid legislation by
+     * replacing 2020-01-01 with today's date.
      *
      * ## Example 3
      *
@@ -218,8 +218,8 @@ export interface paths {
     /**
      * Manifestation article (§) HTML
      *
-     * Returns a specific article (§) of particular manifestation of a piece
-     * of legislation, converted to HTML.
+     * Returns a specific article (§) of particular manifestation of a piece of
+     * legislation, converted to HTML.
      */
     get: operations["getLegislationArticleAsHtml"];
     put?: never;
@@ -272,8 +272,8 @@ export interface paths {
     /**
      * Manifestation HTML
      *
-     * Returns a particular manifestation of a piece of legislation,
-     * converted to HTML.
+     * Returns a particular manifestation of a piece of legislation, converted
+     * to HTML.
      */
     get: operations["getLegislationSubtypeAsHtml"];
     put?: never;
@@ -294,8 +294,8 @@ export interface paths {
     /**
      * Manifestation resource
      *
-     * Returns a specific resource of a particular manifestation of a piece
-     * of legislation.
+     * Returns a specific resource of a particular manifestation of a piece of
+     * legislation.
      */
     get: operations["getFile"];
     put?: never;
@@ -316,9 +316,9 @@ export interface paths {
     /**
      * Manifestation ZIP (XML and attachments)
      *
-     * Returns a particular manifestation of a piece of legislation,
-     * including attachments, as a ZIP archive. Note the omission of the
-     * subtype path parameter.
+     * Returns a particular manifestation of a piece of legislation, including
+     * attachments, as a ZIP archive. Note the omission of the subtype path
+     * parameter.
      */
     get: operations["getLegislationSubtypeAsZip"];
     put?: never;
@@ -362,16 +362,15 @@ export interface paths {
      * Global search / list
      *
      * This endpoint can be used to search for documents across different
-     * document kinds. Currently we support case law, legislation and
-     * literature document kinds. The endpoint provides a paginated response
-     * with up to 10,000 results with at most 100 results per page. The
-     * searchTerm parameter searches across multiple fields of a document at
-     * the same time. The fields searched depend on the document kind. See
-     * the filters guide for more information. Default sorting is by
-     * relevance from most relevant to least relevant. Multiple factors are
-     * combined to boost the most relevant documents to the top of the
-     * result list. Additionally, sorting by date is possible by setting the
-     * sort query parameter to date.
+     * document kinds. Currently we support case law, legislation and literature
+     * document kinds. The endpoint provides a paginated response with up to
+     * 10,000 results with at most 100 results per page. The searchTerm
+     * parameter searches across multiple fields of a document at the same time.
+     * The fields searched depend on the document kind. See the filters guide
+     * for more information. Default sorting is by relevance from most relevant
+     * to least relevant. Multiple factors are combined to boost the most
+     * relevant documents to the top of the result list. Additionally, sorting
+     * by date is possible by setting the sort query parameter to date.
      */
     get: operations["searchAndFilter_2"];
     put?: never;
@@ -477,8 +476,8 @@ export interface paths {
     /**
      * List and search decisions
      *
-     * The endpoint returns a list of decisions from our database. The list
-     * is paginated and can be filtered and sorted.
+     * The endpoint returns a list of decisions from our database. The list is
+     * paginated and can be filtered and sorted.
      */
     get: operations["searchAndFilter_3"];
     put?: never;
@@ -562,8 +561,8 @@ export interface paths {
     /**
      * Decision XML
      *
-     * Returns a case law decision as XML. This content is used as a source
-     * for the HTML endpoint.
+     * Returns a case law decision as XML. This content is used as a source for
+     * the HTML endpoint.
      */
     get: operations["getCaseLawDocumentationUnitAsXml"];
     put?: never;
@@ -605,10 +604,9 @@ export interface paths {
     /**
      * List courts
      *
-     * Lists courts with long and short name and number of associated
-     * decisions. The prefix parameter may be used to filter this list. Only
-     * includes courts whose decisions have been published in this
-     * database.
+     * Lists courts with long and short name and number of associated decisions.
+     * The prefix parameter may be used to filter this list. Only includes
+     * courts whose decisions have been published in this database.
      */
     get: operations["getCourts"];
     put?: never;
@@ -689,8 +687,8 @@ export interface paths {
     /**
      * Administrative directive metadata
      *
-     * The endpoint returns the metadata of a single administrative
-     * directive from our database.
+     * The endpoint returns the metadata of a single administrative directive
+     * from our database.
      */
     get: operations["getAdministrativeDirectiveMetadata"];
     put?: never;
@@ -711,8 +709,8 @@ export interface paths {
     /**
      * Administrative directive XML
      *
-     * Returns an administrative directive item as XML. This content is used
-     * as a source for the HTML endpoint.
+     * Returns an administrative directive item as XML. This content is used as
+     * a source for the HTML endpoint.
      */
     get: operations["getAdministrativeDirectiveAsXml"];
     put?: never;
@@ -1141,14 +1139,13 @@ export interface components {
       name: string;
       /**
        * @example
-       *   eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu
+       *   eli / bund / bgbl - 1 / 1975 / s1760 / 1998 - 01 - 29 / 10 / deu;
        */
       legislationIdentifier: string;
       /** The work the expression is based on */
       exampleOfWork: components["schemas"]["LegislationWorkSchema"];
       /**
-       * Textual string indicating a time period in [ISO 8601 time
-       * interval
+       * Textual string indicating a time period in [ISO 8601 time interval
        * format](https://en.wikipedia.org/wiki/ISO_8601#Time_intervals)
        *
        * @example
@@ -1156,8 +1153,7 @@ export interface components {
        */
       temporalCoverage: string;
       /**
-       * Amtliche Buchstabenabkürzung, if it exists. Otherwise
-       * ris-abkuerzung.
+       * Amtliche Buchstabenabkürzung, if it exists. Otherwise ris-abkuerzung.
        *
        * @example
        *   KakaoV 2003
@@ -1226,8 +1222,8 @@ export interface components {
        *
        * Ausfertigungsdatum (The date of adoption or signature of the
        * legislation. This is the date at which the text is officially
-       * acknowledged to be a legislation, even though it might not even
-       * be published or in force.)
+       * acknowledged to be a legislation, even though it might not even be
+       * published or in force.)
        *
        * @example
        *   2003 - 12 - 15;
@@ -1236,9 +1232,9 @@ export interface components {
       /**
        * Format: date
        *
-       * Verkündungsdatum (The date of first publication of the
-       * legislation, when it was published in the official gazette. This
-       * may be later than the `legislationDate`.)
+       * Verkündungsdatum (The date of first publication of the legislation,
+       * when it was published in the official gazette. This may be later than
+       * the `legislationDate`.)
        *
        * @example
        *   2003 - 12 - 16;
@@ -1280,8 +1276,8 @@ export interface components {
        */
       "@id": string;
       /**
-       * Expression-level identifier, uniquely identifying this element in
-       * an FRBR expression
+       * Expression-level identifier, uniquely identifying this element in an
+       * FRBR expression
        *
        * @example
        *   hauptteitel - para - 1;
@@ -1302,8 +1298,7 @@ export interface components {
        */
       headline: string;
       /**
-       * Textual string indicating a time period in [ISO 8601 time
-       * interval
+       * Textual string indicating a time period in [ISO 8601 time interval
        * format](https://en.wikipedia.org/wiki/ISO_8601#Time_intervals)
        *
        * @example
@@ -1334,8 +1329,7 @@ export interface components {
        */
       name: string;
       /**
-       * Amtliche Buchstabenabkürzung, if it exists. Otherwise
-       * ris-abkuerzung.
+       * Amtliche Buchstabenabkürzung, if it exists. Otherwise ris-abkuerzung.
        *
        * @example
        *   KakaoV 2003
@@ -1352,12 +1346,11 @@ export interface components {
       exampleOfWork: components["schemas"]["LegislationWorkSchema"];
       /**
        * @example
-       *   eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu
+       *   eli / bund / bgbl - 1 / 1975 / s1760 / 1998 - 01 - 29 / 10 / deu;
        */
       legislationIdentifier: string;
       /**
-       * Textual string indicating a time period in [ISO 8601 time
-       * interval
+       * Textual string indicating a time period in [ISO 8601 time interval
        * format](https://en.wikipedia.org/wiki/ISO_8601#Time_intervals)
        *
        * @example
@@ -1371,8 +1364,8 @@ export interface components {
        */
       legislationLegalForce: "InForce" | "NotInForce" | "PartiallyInForce";
       /**
-       * List of components (articles, preambles, conclusions,
-       * attachments, …) that form this legislation item.
+       * List of components (articles, preambles, conclusions, attachments, …)
+       * that form this legislation item.
        */
       hasPart: components["schemas"]["LegislationExpressionPartSchema"][];
       encoding: components["schemas"]["LegislationObjectSchema"][];
@@ -1824,10 +1817,7 @@ export interface components {
       /** The url to download the zip file. */
       contentUrl: string;
     };
-    /**
-     * Represents <a
-     * href="https://schema.org/Dataset">schema.org/Dataset</a>.
-     */
+    /** Represents <a href="https://schema.org/Dataset">schema.org/Dataset</a>. */
     ZipDataSetSchema: {
       /**
        * @example
@@ -1957,20 +1947,19 @@ export interface operations {
         author?: string[];
         collaborator?: string[];
         /**
-         * Searches for the given tokens in searchTerm. If searchTerm
-         * contains more than one token, all tokens must be in the
-         * document for the document to match.
+         * Searches for the given tokens in searchTerm. If searchTerm contains
+         * more than one token, all tokens must be in the document for the
+         * document to match.
          */
         searchTerm?: string;
         /**
-         * The from (greater than or equal) parameter returns all
-         * entities where date is later than, or equal to, the given
-         * date.
+         * The from (greater than or equal) parameter returns all entities where
+         * date is later than, or equal to, the given date.
          */
         dateFrom?: string;
         /**
-         * The to (less than or equal) parameter returns all entities
-         * where date is earlier than, or equal to, the given date.
+         * The to (less than or equal) parameter returns all entities where date
+         * is earlier than, or equal to, the given date.
          */
         dateTo?: string;
         /**
@@ -1981,19 +1970,17 @@ export interface operations {
          */
         size?: number;
         /**
-         * The number of the page to request. The page starts with the
-         * value 0
+         * The number of the page to request. The page starts with the value 0
          *
          * @example
          *   0;
          */
         pageIndex?: number;
         /**
-         * The field to sort the results by. Default is the relevance
-         * score calculated by OpenSearch. Valid usage of the sort field
-         * are : date and documentNumber and not setting the sort field
-         * (sort by relevance descending).Add a leading - to set the
-         * order to descending (-date)
+         * The field to sort the results by. Default is the relevance score
+         * calculated by OpenSearch. Valid usage of the sort field are : date
+         * and documentNumber and not setting the sort field (sort by relevance
+         * descending).Add a leading - to set the order to descending (-date)
          */
         sort?: string;
       };
@@ -2147,56 +2134,52 @@ export interface operations {
     parameters: {
       query?: {
         /**
-         * Search by European Legislation Identifier (ELI). Right now
-         * only searching by work ELI is supported, but a general eli
-         * prefix match might be supported in the future.
+         * Search by European Legislation Identifier (ELI). Right now only
+         * searching by work ELI is supported, but a general eli prefix match
+         * might be supported in the future.
          */
         eli?: string;
         /**
-         * Filters the result set to only return expressions that are in
-         * force _on or after_ the provided date. The parameter should
-         * be provided in `YYYY-MM-DD` format. Differs from `dateFrom`,
-         * which refers to the date of adoption or signature of the
-         * legislation. If both `temporalCoverageFrom` and
-         * `temporalCoverageTo` are given, this will output all
-         * expressions that were in force during at least one day
-         * between the two dates. To get all expressions for one
-         * specific day, set both parameters to the same day.
+         * Filters the result set to only return expressions that are in force
+         * _on or after_ the provided date. The parameter should be provided in
+         * `YYYY-MM-DD` format. Differs from `dateFrom`, which refers to the
+         * date of adoption or signature of the legislation. If both
+         * `temporalCoverageFrom` and `temporalCoverageTo` are given, this will
+         * output all expressions that were in force during at least one day
+         * between the two dates. To get all expressions for one specific day,
+         * set both parameters to the same day.
          */
         temporalCoverageFrom?: string;
         /**
-         * Filters the result set to only return expressions that are in
-         * force _on or before_ the provided date. The parameter should
-         * be provided in `YYYY-MM-DD` format. Differs from `dateTo`,
-         * which refers to the date of adoption or signature of the
-         * legislation.
+         * Filters the result set to only return expressions that are in force
+         * _on or before_ the provided date. The parameter should be provided in
+         * `YYYY-MM-DD` format. Differs from `dateTo`, which refers to the date
+         * of adoption or signature of the legislation.
          */
         temporalCoverageTo?: string;
         /**
-         * Filters the result set so every work returns exactly one
-         * expression. Most relevant is defined as : The expression in
-         * force on that date if it exists, then the expression that
-         * would next be in force if that exists, then the most recent
-         * expression that was in force. If other filters are used the
-         * work may return 0 expressions due to the most relevant
-         * expression being filtered out.
+         * Filters the result set so every work returns exactly one expression.
+         * Most relevant is defined as : The expression in force on that date if
+         * it exists, then the expression that would next be in force if that
+         * exists, then the most recent expression that was in force. If other
+         * filters are used the work may return 0 expressions due to the most
+         * relevant expression being filtered out.
          */
         mostRelevantOn?: string;
         /**
-         * Searches for the given tokens in searchTerm. If searchTerm
-         * contains more than one token, all tokens must be in the
-         * document for the document to match.
+         * Searches for the given tokens in searchTerm. If searchTerm contains
+         * more than one token, all tokens must be in the document for the
+         * document to match.
          */
         searchTerm?: string;
         /**
-         * The from (greater than or equal) parameter returns all
-         * entities where date is later than, or equal to, the given
-         * date.
+         * The from (greater than or equal) parameter returns all entities where
+         * date is later than, or equal to, the given date.
          */
         dateFrom?: string;
         /**
-         * The to (less than or equal) parameter returns all entities
-         * where date is earlier than, or equal to, the given date.
+         * The to (less than or equal) parameter returns all entities where date
+         * is earlier than, or equal to, the given date.
          */
         dateTo?: string;
         /**
@@ -2207,19 +2190,18 @@ export interface operations {
          */
         size?: number;
         /**
-         * The number of the page to request. The page starts with the
-         * value 0
+         * The number of the page to request. The page starts with the value 0
          *
          * @example
          *   0;
          */
         pageIndex?: number;
         /**
-         * The field to sort the results by. Default is the relevance
-         * score calculated by OpenSearch. Valid usage of the sort field
-         * are : date, temporalCoverageFrom, legislationIdentifier and
-         * not setting the sort field (sort by relevance descending).Add
-         * a leading - to set the order to descending (-date)
+         * The field to sort the results by. Default is the relevance score
+         * calculated by OpenSearch. Valid usage of the sort field are : date,
+         * temporalCoverageFrom, legislationIdentifier and not setting the sort
+         * field (sort by relevance descending).Add a leading - to set the order
+         * to descending (-date)
          */
         sort?: string;
       };
@@ -2257,8 +2239,8 @@ export interface operations {
         /** Country or regional code for the jurisdiction */
         jurisdiction: "bund";
         /**
-         * Agent or authority issuing the legislation, e.g., 'bgbl-1'
-         * for Bundesgesetzblatt Teil I (Federal Law Gazette part I)
+         * Agent or authority issuing the legislation, e.g., 'bgbl-1' for
+         * Bundesgesetzblatt Teil I (Federal Law Gazette part I)
          *
          * @example
          *   bgbl - 1;
@@ -2272,8 +2254,8 @@ export interface operations {
          */
         year: string;
         /**
-         * Unique natural identifier for the legislation, specific to
-         * the jurisdiction and agent
+         * Unique natural identifier for the legislation, specific to the
+         * jurisdiction and agent
          *
          * @example
          *   s1325;
@@ -2330,8 +2312,8 @@ export interface operations {
          */
         jurisdiction: "bund";
         /**
-         * Agent or authority issuing the legislation, e.g., 'bgbl-1'
-         * for Bundesgesetzblatt Teil I (Federal Law Gazette part I)
+         * Agent or authority issuing the legislation, e.g., 'bgbl-1' for
+         * Bundesgesetzblatt Teil I (Federal Law Gazette part I)
          *
          * @example
          *   bgbl - 1;
@@ -2345,8 +2327,8 @@ export interface operations {
          */
         year: string;
         /**
-         * Unique natural identifier for the legislation, specific to
-         * the jurisdiction and agent
+         * Unique natural identifier for the legislation, specific to the
+         * jurisdiction and agent
          *
          * @example
          *   s1325;
@@ -2378,8 +2360,7 @@ export interface operations {
          */
         subtype: string;
         /**
-         * The expression identifier, denoting elements inside an
-         * expression
+         * The expression identifier, denoting elements inside an expression
          *
          * @example
          *   art - z1;
@@ -2423,8 +2404,8 @@ export interface operations {
          */
         jurisdiction: "bund";
         /**
-         * Agent or authority issuing the legislation, e.g., 'bgbl-1'
-         * for Bundesgesetzblatt Teil I (Federal Law Gazette part I)
+         * Agent or authority issuing the legislation, e.g., 'bgbl-1' for
+         * Bundesgesetzblatt Teil I (Federal Law Gazette part I)
          *
          * @example
          *   bgbl - 1;
@@ -2438,8 +2419,8 @@ export interface operations {
          */
         year: string;
         /**
-         * Unique natural identifier for the legislation, specific to
-         * the jurisdiction and agent
+         * Unique natural identifier for the legislation, specific to the
+         * jurisdiction and agent
          *
          * @example
          *   s1325;
@@ -2506,8 +2487,8 @@ export interface operations {
          */
         jurisdiction: "bund";
         /**
-         * Agent or authority issuing the legislation, e.g., 'bgbl-1'
-         * for Bundesgesetzblatt Teil I (Federal Law Gazette part I)
+         * Agent or authority issuing the legislation, e.g., 'bgbl-1' for
+         * Bundesgesetzblatt Teil I (Federal Law Gazette part I)
          *
          * @example
          *   bgbl - 1;
@@ -2521,8 +2502,8 @@ export interface operations {
          */
         year: string;
         /**
-         * Unique natural identifier for the legislation, specific to
-         * the jurisdiction and agent
+         * Unique natural identifier for the legislation, specific to the
+         * jurisdiction and agent
          *
          * @example
          *   s1325;
@@ -2591,8 +2572,8 @@ export interface operations {
          */
         jurisdiction: "bund";
         /**
-         * Agent or authority issuing the legislation, e.g., 'bgbl-1'
-         * for Bundesgesetzblatt Teil I (Federal Law Gazette part I)
+         * Agent or authority issuing the legislation, e.g., 'bgbl-1' for
+         * Bundesgesetzblatt Teil I (Federal Law Gazette part I)
          *
          * @example
          *   bgbl - 1;
@@ -2606,8 +2587,8 @@ export interface operations {
          */
         year: string;
         /**
-         * Unique natural identifier for the legislation, specific to
-         * the jurisdiction and agent
+         * Unique natural identifier for the legislation, specific to the
+         * jurisdiction and agent
          *
          * @example
          *   s1325;
@@ -2679,8 +2660,8 @@ export interface operations {
          */
         jurisdiction: "bund";
         /**
-         * Agent or authority issuing the legislation, e.g., 'bgbl-1'
-         * for Bundesgesetzblatt Teil I (Federal Law Gazette part I)
+         * Agent or authority issuing the legislation, e.g., 'bgbl-1' for
+         * Bundesgesetzblatt Teil I (Federal Law Gazette part I)
          *
          * @example
          *   bgbl - 1;
@@ -2694,8 +2675,8 @@ export interface operations {
          */
         year: string;
         /**
-         * Unique natural identifier for the legislation, specific to
-         * the jurisdiction and agent
+         * Unique natural identifier for the legislation, specific to the
+         * jurisdiction and agent
          *
          * @example
          *   s1325;
@@ -2771,29 +2752,27 @@ export interface operations {
     parameters: {
       query?: {
         /**
-         * Searches for the given tokens in searchTerm. If searchTerm
-         * contains more than one token, all tokens must be in the
-         * document for the document to match.
+         * Searches for the given tokens in searchTerm. If searchTerm contains
+         * more than one token, all tokens must be in the document for the
+         * document to match.
          */
         searchTerm?: string;
         /**
-         * The from (greater than or equal) parameter returns all
-         * entities where date is later than, or equal to, the given
-         * date.
+         * The from (greater than or equal) parameter returns all entities where
+         * date is later than, or equal to, the given date.
          */
         dateFrom?: string;
         /**
-         * The to (less than or equal) parameter returns all entities
-         * where date is earlier than, or equal to, the given date.
+         * The to (less than or equal) parameter returns all entities where date
+         * is earlier than, or equal to, the given date.
          */
         dateTo?: string;
         /**
-         * The field to sort the results by. Default is the relevance
-         * score calculated by OpenSearch. Valid usage of the sort field
-         * are : date, temporalCoverageFrom, legislationIdentifier,
-         * courtName, documentNumber and not setting the sort field
-         * (sort by relevance descending).Add a leading - to set the
-         * order to descending (-date)
+         * The field to sort the results by. Default is the relevance score
+         * calculated by OpenSearch. Valid usage of the sort field are : date,
+         * temporalCoverageFrom, legislationIdentifier, courtName,
+         * documentNumber and not setting the sort field (sort by relevance
+         * descending).Add a leading - to set the order to descending (-date)
          */
         sort?: string;
         /**
@@ -2804,21 +2783,19 @@ export interface operations {
          */
         size?: number;
         /**
-         * The number of the page to request. The page starts with the
-         * value 0
+         * The number of the page to request. The page starts with the value 0
          *
          * @example
          *   0;
          */
         pageIndex?: number;
         /**
-         * Filters the result set so every work returns exactly one
-         * expression. Most relevant is defined as : The expression in
-         * force on that date if it exists, then the expression that
-         * would next be in force if that exists, then the most recent
-         * expression that was in force. If other filters are used the
-         * work may return 0 expressions due to the most relevant
-         * expression being filtered out.
+         * Filters the result set so every work returns exactly one expression.
+         * Most relevant is defined as : The expression in force on that date if
+         * it exists, then the expression that would next be in force if that
+         * exists, then the most recent expression that was in force. If other
+         * filters are used the work may return 0 expressions due to the most
+         * relevant expression being filtered out.
          *
          * @example
          *   2026 - 03 - 11;
@@ -2862,20 +2839,18 @@ export interface operations {
          */
         size?: number;
         /**
-         * The number of the page to request. The page starts with the
-         * value 0
+         * The number of the page to request. The page starts with the value 0
          *
          * @example
          *   0;
          */
         pageIndex?: number;
         /**
-         * The field to sort the results by. Default is the relevance
-         * score calculated by OpenSearch. Valid usage of the sort field
-         * are : date, temporalCoverageFrom, legislationIdentifier,
-         * courtName, documentNumber and not setting the sort field
-         * (sort by relevance descending).Add a leading - to set the
-         * order to descending (-date)
+         * The field to sort the results by. Default is the relevance score
+         * calculated by OpenSearch. Valid usage of the sort field are : date,
+         * temporalCoverageFrom, legislationIdentifier, courtName,
+         * documentNumber and not setting the sort field (sort by relevance
+         * descending).Add a leading - to set the order to descending (-date)
          */
         sort?: string;
       };
@@ -2916,19 +2891,17 @@ export interface operations {
          */
         size?: number;
         /**
-         * The number of the page to request. The page starts with the
-         * value 0
+         * The number of the page to request. The page starts with the value 0
          *
          * @example
          *   0;
          */
         pageIndex?: number;
         /**
-         * The field to sort the results by. Default is the relevance
-         * score calculated by OpenSearch. Valid usage of the sort field
-         * are : date and documentNumber and not setting the sort field
-         * (sort by relevance descending).Add a leading - to set the
-         * order to descending (-date)
+         * The field to sort the results by. Default is the relevance score
+         * calculated by OpenSearch. Valid usage of the sort field are : date
+         * and documentNumber and not setting the sort field (sort by relevance
+         * descending).Add a leading - to set the order to descending (-date)
          */
         sort?: string;
       };
@@ -2969,19 +2942,18 @@ export interface operations {
          */
         size?: number;
         /**
-         * The number of the page to request. The page starts with the
-         * value 0
+         * The number of the page to request. The page starts with the value 0
          *
          * @example
          *   0;
          */
         pageIndex?: number;
         /**
-         * The field to sort the results by. Default is the relevance
-         * score calculated by OpenSearch. Valid usage of the sort field
-         * are : date, temporalCoverageFrom, legislationIdentifier and
-         * not setting the sort field (sort by relevance descending).Add
-         * a leading - to set the order to descending (-date)
+         * The field to sort the results by. Default is the relevance score
+         * calculated by OpenSearch. Valid usage of the sort field are : date,
+         * temporalCoverageFrom, legislationIdentifier and not setting the sort
+         * field (sort by relevance descending).Add a leading - to set the order
+         * to descending (-date)
          */
         sort?: string;
       };
@@ -3022,19 +2994,18 @@ export interface operations {
          */
         size?: number;
         /**
-         * The number of the page to request. The page starts with the
-         * value 0
+         * The number of the page to request. The page starts with the value 0
          *
          * @example
          *   0;
          */
         pageIndex?: number;
         /**
-         * The field to sort the results by. Default is the relevance
-         * score calculated by OpenSearch. Valid usage of the sort field
-         * are : date, courtName, documentNumber and not setting the
-         * sort field (sort by relevance descending).Add a leading - to
-         * set the order to descending (-date)
+         * The field to sort the results by. Default is the relevance score
+         * calculated by OpenSearch. Valid usage of the sort field are : date,
+         * courtName, documentNumber and not setting the sort field (sort by
+         * relevance descending).Add a leading - to set the order to descending
+         * (-date)
          */
         sort?: string;
       };
@@ -3075,19 +3046,17 @@ export interface operations {
          */
         size?: number;
         /**
-         * The number of the page to request. The page starts with the
-         * value 0
+         * The number of the page to request. The page starts with the value 0
          *
          * @example
          *   0;
          */
         pageIndex?: number;
         /**
-         * The field to sort the results by. Default is the relevance
-         * score calculated by OpenSearch. Valid usage of the sort field
-         * are : date and documentNumber and not setting the sort field
-         * (sort by relevance descending).Add a leading - to set the
-         * order to descending (-date)
+         * The field to sort the results by. Default is the relevance score
+         * calculated by OpenSearch. Valid usage of the sort field are : date
+         * and documentNumber and not setting the sort field (sort by relevance
+         * descending).Add a leading - to set the order to descending (-date)
          */
         sort?: string;
       };
@@ -3121,43 +3090,41 @@ export interface operations {
         fileNumber?: string;
         ecli?: string;
         /**
-         * Filter by court name (Finanzgericht Münster, FG Münster, ArbG
-         * Köln) or court type (Finanzgericht, FG, ArbG). Supports both
-         * long and short names.
+         * Filter by court name (Finanzgericht Münster, FG Münster, ArbG Köln)
+         * or court type (Finanzgericht, FG, ArbG). Supports both long and short
+         * names.
          */
         court?: string;
         /**
-         * Corresponds to “Rechtskraft”, meaning that the decision
-         * referred to is legally binding.
+         * Corresponds to “Rechtskraft”, meaning that the decision referred to
+         * is legally binding.
          */
         legalEffect?: "JA" | "NEIN" | "KEINE_ANGABE" | "FALSCHE_ANGABE";
         /**
-         * Filter by document type (Urteil, Versäumnisurteil,
-         * Entscheidung etc.). Multiple values may be specified as a
-         * comma-separated list or by repeating the parameter.
+         * Filter by document type (Urteil, Versäumnisurteil, Entscheidung
+         * etc.). Multiple values may be specified as a comma-separated list or
+         * by repeating the parameter.
          */
         type?: string[];
         /**
-         * Extended filter by type group. Multiple values may be
-         * specified as a comma-separated list or by repeating the
-         * parameter.
+         * Extended filter by type group. Multiple values may be specified as a
+         * comma-separated list or by repeating the parameter.
          */
         typeGroup?: "Urteil" | "Beschluss" | "other";
         /**
-         * Searches for the given tokens in searchTerm. If searchTerm
-         * contains more than one token, all tokens must be in the
-         * document for the document to match.
+         * Searches for the given tokens in searchTerm. If searchTerm contains
+         * more than one token, all tokens must be in the document for the
+         * document to match.
          */
         searchTerm?: string;
         /**
-         * The from (greater than or equal) parameter returns all
-         * entities where date is later than, or equal to, the given
-         * date.
+         * The from (greater than or equal) parameter returns all entities where
+         * date is later than, or equal to, the given date.
          */
         dateFrom?: string;
         /**
-         * The to (less than or equal) parameter returns all entities
-         * where date is earlier than, or equal to, the given date.
+         * The to (less than or equal) parameter returns all entities where date
+         * is earlier than, or equal to, the given date.
          */
         dateTo?: string;
         /**
@@ -3168,19 +3135,18 @@ export interface operations {
          */
         size?: number;
         /**
-         * The number of the page to request. The page starts with the
-         * value 0
+         * The number of the page to request. The page starts with the value 0
          *
          * @example
          *   0;
          */
         pageIndex?: number;
         /**
-         * The field to sort the results by. Default is the relevance
-         * score calculated by OpenSearch. Valid usage of the sort field
-         * are : date, courtName, documentNumber and not setting the
-         * sort field (sort by relevance descending).Add a leading - to
-         * set the order to descending (-date)
+         * The field to sort the results by. Default is the relevance score
+         * calculated by OpenSearch. Valid usage of the sort field are : date,
+         * courtName, documentNumber and not setting the sort field (sort by
+         * relevance descending).Add a leading - to set the order to descending
+         * (-date)
          */
         sort?: string;
       };
@@ -3453,20 +3419,19 @@ export interface operations {
       query?: {
         documentNumber?: string;
         /**
-         * Searches for the given tokens in searchTerm. If searchTerm
-         * contains more than one token, all tokens must be in the
-         * document for the document to match.
+         * Searches for the given tokens in searchTerm. If searchTerm contains
+         * more than one token, all tokens must be in the document for the
+         * document to match.
          */
         searchTerm?: string;
         /**
-         * The from (greater than or equal) parameter returns all
-         * entities where date is later than, or equal to, the given
-         * date.
+         * The from (greater than or equal) parameter returns all entities where
+         * date is later than, or equal to, the given date.
          */
         dateFrom?: string;
         /**
-         * The to (less than or equal) parameter returns all entities
-         * where date is earlier than, or equal to, the given date.
+         * The to (less than or equal) parameter returns all entities where date
+         * is earlier than, or equal to, the given date.
          */
         dateTo?: string;
         /**
@@ -3477,19 +3442,17 @@ export interface operations {
          */
         size?: number;
         /**
-         * The number of the page to request. The page starts with the
-         * value 0
+         * The number of the page to request. The page starts with the value 0
          *
          * @example
          *   0;
          */
         pageIndex?: number;
         /**
-         * The field to sort the results by. Default is the relevance
-         * score calculated by OpenSearch. Valid usage of the sort field
-         * are : date and documentNumber and not setting the sort field
-         * (sort by relevance descending).Add a leading - to set the
-         * order to descending (-date)
+         * The field to sort the results by. Default is the relevance score
+         * calculated by OpenSearch. Valid usage of the sort field are : date
+         * and documentNumber and not setting the sort field (sort by relevance
+         * descending).Add a leading - to set the order to descending (-date)
          */
         sort?: string;
       };
