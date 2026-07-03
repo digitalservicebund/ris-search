@@ -246,7 +246,7 @@ public class NormsService {
    * @throws IOException when a given File was not able to be archived
    */
   public void writeZipArchive(List<String> keys, OutputStream outputStream) throws IOException {
-    ZipManager.writeZipArchive(normsBucket, keys, outputStream);
+    ZipManager.writeZipArchive(normsBucket, versionPrefix, keys, outputStream);
   }
 
   /**

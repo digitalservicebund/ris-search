@@ -184,7 +184,7 @@ public class CaseLawService {
   }
 
   public void writeZipArchive(List<String> keys, OutputStream outputStream) throws IOException {
-    ZipManager.writeZipArchive(caseLawBucket, keys, outputStream);
+    ZipManager.writeZipArchive(caseLawBucket, versionPrefix, keys, outputStream);
   }
 
   public List<String> getAllFilenamesByDocumentNumber(String documentNumber) {

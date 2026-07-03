@@ -10,7 +10,6 @@ import de.bund.digitalservice.ris.search.repository.objectstorage.PublicFilesBuc
 import de.bund.digitalservice.ris.search.service.BulkExportJob;
 import de.bund.digitalservice.ris.search.service.BulkExportService;
 import de.bund.digitalservice.ris.search.service.ChangelogService;
-import java.util.function.Predicate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,11 +30,7 @@ public class BulkExportConfig {
       @Value("${s3.file-storage.norm.versionPrefix}") String versionPrefix,
       PublicFilesBucket target) {
     return new BulkExportService(
-        source,
-        target,
-        DocumentKind.LEGISLATION.getBulkZipPath(),
-        versionPrefix + "eli",
-        key -> true);
+        source, target, DocumentKind.LEGISLATION.getBulkZipPath(), versionPrefix);
   }
 
   /**
@@ -50,11 +45,7 @@ public class BulkExportConfig {
       @Value("${s3.file-storage.case-law.versionPrefix}") String versionPrefix,
       PublicFilesBucket target) {
     return new BulkExportService(
-        source,
-        target,
-        DocumentKind.CASE_LAW.getBulkZipPath(),
-        versionPrefix,
-        filterChangelogFiles());
+        source, target, DocumentKind.CASE_LAW.getBulkZipPath(), versionPrefix);
   }
 
   /**
@@ -69,11 +60,7 @@ public class BulkExportConfig {
       @Value("${s3.file-storage.administrative-directive.versionPrefix}") String versionPrefix,
       PublicFilesBucket target) {
     return new BulkExportService(
-        source,
-        target,
-        DocumentKind.ADMINISTRATIVE_DIRECTIVE.getBulkZipPath(),
-        versionPrefix,
-        filterChangelogFiles());
+        source, target, DocumentKind.ADMINISTRATIVE_DIRECTIVE.getBulkZipPath(), versionPrefix);
   }
 
   /**
@@ -88,11 +75,7 @@ public class BulkExportConfig {
       @Value("${s3.file-storage.literature.versionPrefix}") String versionPrefix,
       PublicFilesBucket target) {
     return new BulkExportService(
-        source,
-        target,
-        DocumentKind.LITERATURE.getBulkZipPath(),
-        versionPrefix,
-        filterChangelogFiles());
+        source, target, DocumentKind.LITERATURE.getBulkZipPath(), versionPrefix);
   }
 
   /**
@@ -165,9 +148,5 @@ public class BulkExportConfig {
         portalBucket,
         DocumentKind.LITERATURE.getBulkZipPath(),
         changelogService);
-  }
-
-  private Predicate<String> filterChangelogFiles() {
-    return key -> !key.startsWith(ChangelogService.CHANGELOGS_PREFIX);
   }
 }
