@@ -1,6 +1,13 @@
+import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import { render, screen } from "@testing-library/vue";
 import type { LegislationExpression } from "~/types/api";
 import VersionWarning from "./VersionWarning.vue";
+
+const { useRouteMock } = vi.hoisted(() => ({
+  useRouteMock: vi.fn(() => ({ query: {} })),
+}));
+
+mockNuxtImport("useRoute", () => useRouteMock);
 
 describe("VersionWarning", () => {
   const testVersions = [
@@ -72,7 +79,7 @@ describe("VersionWarning", () => {
         stubs: {
           RouterLink: {
             props: ["to"],
-            template: '<a :href="to"><slot/></a>',
+            template: '<a :href="to.path"><slot/></a>',
           },
         },
       },
@@ -142,5 +149,30 @@ describe("VersionWarning", () => {
     ).toBeInTheDocument();
     expect(screen.queryByRole("link")).toBeNull();
     expect(container).not.toBeEmptyDOMElement();
+  });
+
+  it("keeps the from query parameter in version links", async () => {
+    useRouteMock.mockReturnValue({ query: { from: "/search?q=test" } });
+
+    render(VersionWarning, {
+      props: {
+        versions: testVersions,
+        currentVersion: testVersions[0] as LegislationExpression,
+      },
+      global: {
+        stubs: {
+          RouterLink: {
+            props: ["to"],
+            template:
+              '<a :href="to.path" :data-from="to.query?.from"><slot/></a>',
+          },
+        },
+      },
+    });
+
+    const link = await screen.findByRole("link", {
+      name: "Zur aktuell gültigen Fassung",
+    });
+    expect(link).toHaveAttribute("data-from", "/search?q=test");
   });
 });

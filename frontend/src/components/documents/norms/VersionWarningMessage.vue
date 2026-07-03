@@ -16,8 +16,10 @@ const {
   futureVersion?: LegislationExpression;
   futureWarningMessage: string;
   historicalWarningMessage: string;
-  inForceVersionLink?: string;
+  inForceVersionLink?: RouteLocationRaw;
 }>();
+
+const route = useRoute();
 
 const warningMessageType = computed(() =>
   currentVersionValidityStatus === "InForce" ? "info" : "warn",
@@ -50,14 +52,15 @@ const versionLink = computed<
 >(() => {
   if (currentVersionValidityStatus === "InForce" && futureVersion) {
     return {
-      to: `/norms/${futureVersion.legislationIdentifier}`,
+      to: {
+        path: `/norms/${futureVersion.legislationIdentifier}`,
+        query: { from: route.query.from },
+      },
       label: "Zur zukünftigen Fassung",
     };
   } else if (inForceVersionLink) {
     return { to: inForceVersionLink, label: "Zur aktuell gültigen Fassung" };
-  } else {
-    return undefined;
-  }
+  } else return undefined;
 });
 </script>
 

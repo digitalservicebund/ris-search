@@ -68,8 +68,12 @@ registerEndpoint(`/v1/legislation`, () => {
   return data;
 });
 
-const { mockNavigateTo } = vi.hoisted(() => ({ mockNavigateTo: vi.fn() }));
+const { mockNavigateTo, useRouteMock } = vi.hoisted(() => ({
+  mockNavigateTo: vi.fn(),
+  useRouteMock: vi.fn(() => ({ query: {} })),
+}));
 mockNuxtImport("navigateTo", () => mockNavigateTo);
+mockNuxtImport("useRoute", () => useRouteMock);
 
 describe("VersionList", () => {
   beforeEach(() => {
@@ -77,6 +81,7 @@ describe("VersionList", () => {
     vi.setSystemTime(new Date("2025-01-01T12:00:00"));
 
     mockNavigateTo.mockClear();
+    useRouteMock.mockReturnValue({ query: {} });
   });
 
   afterEach(() => {
@@ -139,9 +144,10 @@ describe("VersionList", () => {
     await futureVersionRow?.trigger("click");
 
     expect(mockNavigateTo).toHaveBeenCalledTimes(1);
-    expect(mockNavigateTo).toHaveBeenCalledWith(
-      "/norms/eli/bund/bgbl-1/2000/s001/2030-01-01/1/deu/regelungstext-1",
-    );
+    expect(mockNavigateTo).toHaveBeenCalledWith({
+      path: "/norms/eli/bund/bgbl-1/2000/s001/2030-01-01/1/deu/regelungstext-1",
+      query: { from: undefined },
+    });
   });
 
   it("does not nvigate to fassung currently displayed", async () => {
@@ -158,5 +164,26 @@ describe("VersionList", () => {
     await futureVersionRow?.trigger("click");
 
     expect(mockNavigateTo).toHaveBeenCalledTimes(0);
+  });
+
+  it("keeps the from query parameter when navigating to a version", async () => {
+    useRouteMock.mockReturnValue({ query: { from: "/search?q=test" } });
+
+    const wrapper = await mountSuspended(VersionList, {
+      props: {
+        status: "success",
+        currentLegislationIdentifier:
+          data.member![1]?.legislationIdentifier ?? "",
+        versions: data.member!,
+      },
+    });
+
+    const futureVersionRow = wrapper.find("tbody").findAll("tr")[0];
+    await futureVersionRow?.trigger("click");
+
+    expect(mockNavigateTo).toHaveBeenCalledWith({
+      path: "/norms/eli/bund/bgbl-1/2000/s001/2030-01-01/1/deu/regelungstext-1",
+      query: { from: "/search?q=test" },
+    });
   });
 });

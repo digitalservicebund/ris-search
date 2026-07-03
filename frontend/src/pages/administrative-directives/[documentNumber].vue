@@ -3,6 +3,7 @@ import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineInfo from "~icons/ic/outline-info";
 import type { TabView } from "~/components/documents/TabsLayout.vue";
 import type { TreeItem } from "~/components/TreeView.vue";
+import { useSearchBackLink } from "~/composables/useSearchBackLink";
 import { type AdministrativeDirective, DocumentKind } from "~/types/api";
 
 definePageMeta({
@@ -57,18 +58,17 @@ const tocEntries = computed<TreeItem[] | null>(() => {
     ? getAllSectionsFromDocument(document, "section").map((entry) => ({
         key: entry.id,
         subtitle: entry.title, // Subtitle for more subtle appearance
-        to: { hash: `#${entry.id}` },
+        to: { hash: `#${entry.id}`, query: { from: route.query.from } },
       }))
     : null;
 });
 
+const searchBackLink = useSearchBackLink(DocumentKind.AdministrativeDirective);
+
 const breadcrumbs = computed(() => [
   {
-    label: "Suche",
-    route: {
-      name: "search",
-      query: { documentKind: DocumentKind.AdministrativeDirective },
-    },
+    label: searchBackLink.value.label,
+    route: searchBackLink.value.route,
   },
   { label: title.value ?? "Titelzeile nicht vorhanden" },
 ]);
