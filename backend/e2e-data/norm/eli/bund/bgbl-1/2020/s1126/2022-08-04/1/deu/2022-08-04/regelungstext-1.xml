@@ -74,6 +74,38 @@
             </akn:formula>
         </akn:preamble>
         <akn:body GUID="c7d8e9f0-a1b2-4890-abcd-6789abcde123" eId="hauptteil-n1">
+            <akn:section GUID="11111111-aaaa-bbbb-cccc-111111111111" eId="hauptteil-n1_abschnitt-n1">
+                <akn:num GUID="22222222-aaaa-bbbb-cccc-222222222222" eId="hauptteil-n1_abschnitt-n1_bezeichnung-n1">
+                    Abschnitt 1
+                </akn:num>
+                <akn:heading GUID="33333333-aaaa-bbbb-cccc-333333333333" eId="hauptteil-n1_abschnitt-n1_überschrift-n1">
+                    Anwendungsbereich
+                </akn:heading>
+                <akn:article GUID="44444444-aaaa-bbbb-cccc-444444444444" eId="hauptteil-n1_abschnitt-n1_art-z1" period="#meta-n1_geltzeiten-n1_geltungszeitgr-n1" refersTo="stammform">
+                    <akn:num GUID="55555555-aaaa-bbbb-cccc-555555555555" eId="hauptteil-n1_abschnitt-n1_art-z1_bezeichnung-n1">
+                        § 1
+                    </akn:num>
+                    <akn:heading GUID="66666666-aaaa-bbbb-cccc-666666666666" eId="hauptteil-n1_abschnitt-n1_art-z1_überschrift-n1">
+                        Anwendungsbereich
+                    </akn:heading>
+                    <akn:paragraph GUID="77777777-aaaa-bbbb-cccc-777777777777" eId="hauptteil-n1_abschnitt-n1_art-z1_abs-z1">
+                        <akn:num GUID="88888888-aaaa-bbbb-cccc-888888888888" eId="hauptteil-n1_abschnitt-n1_art-z1_abs-z1_bezeichnung-n1">(1)</akn:num>
+                        <akn:content GUID="99999999-aaaa-bbbb-cccc-999999999999" eId="hauptteil-n1_abschnitt-n1_art-z1_abs-z1_inhalt-n1">
+                            <akn:p GUID="aaaaaaaa-aaaa-bbbb-cccc-aaaaaaaaaaaa" eId="hauptteil-n1_abschnitt-n1_art-z1_abs-z1_inhalt-n1_text-n1">
+                                Die in Anlage 1 aufgeführten Erzeugnisse unterliegen dieser Verordnung, soweit sie zum gewerbsmäßigen Vertrieb bestimmt sind.
+                            </akn:p>
+                        </akn:content>
+                    </akn:paragraph>
+                    <akn:paragraph GUID="bbbbbbbb-aaaa-bbbb-cccc-bbbbbbbbbbbb" eId="hauptteil-n1_abschnitt-n1_art-z1_abs-z2">
+                        <akn:num GUID="cccccccc-aaaa-bbbb-cccc-cccccccccccc" eId="hauptteil-n1_abschnitt-n1_art-z1_abs-z2_bezeichnung-n1">(2)</akn:num>
+                        <akn:content GUID="dddddddd-aaaa-bbbb-cccc-dddddddddddd" eId="hauptteil-n1_abschnitt-n1_art-z1_abs-z2_inhalt-n1">
+                            <akn:p GUID="eeeeeeee-aaaa-bbbb-cccc-eeeeeeeeeeee" eId="hauptteil-n1_abschnitt-n1_art-z1_abs-z2_inhalt-n1_text-n1">
+                                Diese Verordnung gilt ergänzend auch für Produkte, die in den Anwendungsbereich des Abschnitts 3 fallen.
+                            </akn:p>
+                        </akn:content>
+                    </akn:paragraph>
+                </akn:article>
+            </akn:section>
             <akn:article GUID="d8e9f0a1-b2c3-4890-abcd-7890abcde123" eId="art-z1" period="#meta-n1_geltzeiten-n1_geltungszeitgr-n2" refersTo="stammform">
                 <akn:num GUID="e9f0a1b2-c3d4-4890-abcd-890abcdef123" eId="art-z1_bezeichnung-n1">Art 1</akn:num>
                 <akn:heading GUID="f0a1b2c3-d4e5-4890-abcd-901abcdef123" eId="art-z1_überschrift-n1">Fiktive Bestimmungen zur Einführung</akn:heading>

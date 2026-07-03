@@ -215,7 +215,7 @@ test.describe("view norm article page", () => {
     await expect(
       page.getByRole("heading", {
         level: 1,
-        name: "Art 1 Fiktive Bestimmungen zur Einführung",
+        name: "§ 1 Anwendungsbereich",
       }),
     ).toBeVisible();
   });
