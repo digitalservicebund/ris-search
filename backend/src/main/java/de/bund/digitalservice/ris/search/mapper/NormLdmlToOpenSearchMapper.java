@@ -149,13 +149,9 @@ public class NormLdmlToOpenSearchMapper {
       List<Attachment> attachments =
           NormAttachmentMapper.parseAttachments(xmlDocument, attachmentFileContents);
 
-      final Optional<String> maybeAbbreviation = getAbbreviation(xmlDocument);
-      if (maybeAbbreviation.isEmpty()) {
-        logger.error("Norm '{}' does not have ris:abkuerzung", manifestationEli);
-        return Optional.empty();
-      }
-
-      final String abbreviation = maybeAbbreviation.get();
+      // Technically a ris-abbreviation exists for every norm. It's not enforce to exist here
+      // because for testphase-documents the value is not yet present.
+      final String abbreviation = getAbbreviation(xmlDocument).orElse(null);
 
       String indexedAt = Instant.now().toString();
 

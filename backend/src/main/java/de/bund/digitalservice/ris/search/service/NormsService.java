@@ -168,7 +168,7 @@ public class NormsService {
             .docValueField(Norm.Fields.DATE_PUBLISHED, DATE_FORMAT)
             .docValueField(Norm.Fields.OFFICIAL_SHORT_TITLE_KEYWORD)
             .docValueField(Norm.Fields.NORMS_DATE, DATE_FORMAT)
-            .docValueField(Norm.Fields.ABBREVIATION_KEYWORD)
+            .docValueField(Norm.Fields.OFFICIAL_ABBREVIATION_KEYWORD)
             .docValueField(Norm.Fields.LATEST_MANIFESTATION_ELI_KEYWORD)
             .fetchSource(false)
             .from(pageable.getPageNumber() * pageable.getPageSize())
@@ -202,7 +202,8 @@ public class NormsService {
                     String shortTitle = getField(fields, Norm.Fields.OFFICIAL_SHORT_TITLE_KEYWORD);
                     String manifestationEli =
                         getField(fields, Norm.Fields.LATEST_MANIFESTATION_ELI_KEYWORD);
-                    String abbreviation = getField(fields, Norm.Fields.ABBREVIATION_KEYWORD);
+                    String abbreviation =
+                        getField(fields, Norm.Fields.OFFICIAL_ABBREVIATION_KEYWORD);
                     return Norm.builder()
                         .id(hit.getId())
                         .workEli(returnedWorkEli)

@@ -59,13 +59,14 @@ class NormLdmlToOpenSearchMapperTest {
   }
 
   @Test
-  @DisplayName("Returns empty optional when official- and ris-abbreviation are missing")
-  void returnsEmptyOptionalWhenAbbreviationsAreMissing() throws IOException {
+  @DisplayName("Sets abbreviation to null when official- and ris-abbreviation are missing")
+  void returnsNullWhenAbbreviationsAreMissing() throws IOException {
     Optional<Norm> norm =
         NormLdmlToOpenSearchMapper.parseNorm(
             readXmlTestFile("abbreviationTest1.xml"), Map.of(), true);
 
-    assertThat(norm).isEmpty();
+    assertThat(norm).isNotEmpty();
+    assertThat(norm.get().getAbbreviation()).isNull();
   }
 
   @Test

@@ -383,7 +383,7 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {"abbreviation", "AB"})
+  @ValueSource(strings = {"official_abbreviation", "AB"})
   @DisplayName("Should return 200 when looking for official abbreviation and aliases")
   void shouldReturnOkAbbreviation(String queryParam) throws Exception {
 
@@ -403,7 +403,7 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
     mockMvc
         .perform(
             get(ApiConfig.Paths.LEGISLATION_ADVANCED_SEARCH
-                    + String.format("?query=%s:TeG2 AND %s:TeG2", "abbreviation", "AB"))
+                    + String.format("?query=%s:TeG2 AND %s:TeG2", "official_abbreviation", "AB"))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$.member", hasSize(1)))
         .andExpect(status().isOk());
@@ -453,16 +453,16 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
             content()
                 .json(
                     """
+                                            {
+                                              "errors": [
                                                 {
-                                                  "errors": [
-                                                    {
-                                                      "code": "invalid_parameter_value",
-                                                      "message": "%s",
-                                                      "parameter": "sort"
-                                                    }
-                                                  ]
+                                                  "code": "invalid_parameter_value",
+                                                  "message": "%s",
+                                                  "parameter": "sort"
                                                 }
-                                                """
+                                              ]
+                                            }
+                                            """
                         .formatted(expectedError)));
   }
 

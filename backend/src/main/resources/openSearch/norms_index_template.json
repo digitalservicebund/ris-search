@@ -1,5 +1,7 @@
 {
-  "index_patterns": ["norms_*"],
+  "index_patterns": [
+    "norms_*"
+  ],
   "composed_of": [
     "german_analyzer_template"
   ],
@@ -25,7 +27,7 @@
         },
         "AB": {
           "type": "alias",
-          "path": "abbreviation"
+          "path": "official_abbreviation"
         },
         "DATUM": {
           "type": "alias",
@@ -87,7 +89,7 @@
             }
           }
         },
-        "abbreviation": {
+        "official_abbreviation": {
           "type": "text",
           "analyzer": "custom_german_analyzer",
           "fields": {
@@ -172,6 +174,5 @@
         }
       }
     }
-
   }
 }

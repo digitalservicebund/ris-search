@@ -45,7 +45,10 @@ public record LegislationExpressionSchema(
             description = "Amtliche Langüberschrift",
             requiredMode = Schema.RequiredMode.REQUIRED)
         String name,
-    @Nullable @Schema(example = "KakaoV 2003", description = "Amtliche Buchstabenabkürzung")
+    @Nullable
+        @Schema(
+            example = "KakaoV 2003",
+            description = "Amtliche Buchstabenabkürzung, if it exists. Otherwise ris-abkuerzung.")
         String abbreviation,
     @Schema(
             example = "Kakaoverordnung",
@@ -63,8 +66,8 @@ public record LegislationExpressionSchema(
     @Schema(
             description =
                 """
-                         Textual string indicating a time period in [ISO 8601 time interval format](https://en.wikipedia.org/wiki/ISO_8601#Time_intervals)
-                         """,
+                                Textual string indicating a time period in [ISO 8601 time interval format](https://en.wikipedia.org/wiki/ISO_8601#Time_intervals)
+                                """,
             example = "1998-02-06/..",
             requiredMode = Schema.RequiredMode.REQUIRED)
         String temporalCoverage,

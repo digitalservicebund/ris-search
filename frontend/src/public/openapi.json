@@ -2763,7 +2763,7 @@
           }
         } ],
         "description" : "A legislation expression and references to its manifestations.",
-        "required" : [ "@id", "abbreviation", "alternateName", "encoding", "exampleOfWork", "legislationIdentifier", "legislationLegalForce", "name", "temporalCoverage" ]
+        "required" : [ "@id", "alternateName", "encoding", "exampleOfWork", "legislationIdentifier", "legislationLegalForce", "name", "temporalCoverage" ]
       },
       "LegislationObjectSchema" : {
         "type" : "object",
@@ -2924,7 +2924,7 @@
           },
           "abbreviation" : {
             "type" : "string",
-            "description" : "Amtliche Buchstabenabkürzung",
+            "description" : "Amtliche Buchstabenabkürzung, if it exists. Otherwise ris-abkuerzung.",
             "example" : "KakaoV 2003"
           },
           "alternateName" : {
