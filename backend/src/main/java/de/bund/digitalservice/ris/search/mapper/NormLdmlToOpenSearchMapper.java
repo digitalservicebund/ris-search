@@ -289,11 +289,10 @@ public class NormLdmlToOpenSearchMapper {
   private static Optional<String> getAbbreviation(XmlDocument xmlDocument) {
     Optional<String> officialAbbreviation =
         xmlDocument.getNonEmptyElementByXpath(X_PATH_SHORT_TITLE_ABBREVIATION);
-    Optional<String> risAbbreviation = xmlDocument.getNonEmptyElementByXpath(X_PATH_RIS_ABKUERZUNG);
 
     if (officialAbbreviation.isPresent()) {
       return officialAbbreviation;
-    } else return risAbbreviation;
+    } else return xmlDocument.getNonEmptyElementByXpath(X_PATH_RIS_ABKUERZUNG);
   }
 
   private static LocalDate getDateByXpath(XmlDocument xmlDocument, String xpath) {
