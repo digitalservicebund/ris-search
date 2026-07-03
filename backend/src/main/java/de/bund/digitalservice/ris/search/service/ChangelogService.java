@@ -101,14 +101,14 @@ public class ChangelogService<T extends ObjectStorage> {
    * @return Changelog object including all changes that were indexed
    */
   public Changelog getChangesBetween(Instant from, Instant to) throws ObjectStoreServiceException {
+    String prefix = versionPrefix + CHANGELOGS_PREFIX;
 
     var changelogs =
-        bucket.getAllKeysByPrefix(versionPrefix + CHANGELOGS_PREFIX).stream()
-            .filter(e -> !CHANGELOGS_PREFIX.equals(e))
+        bucket.getAllKeysByPrefix(prefix).stream()
+            .filter(key -> !prefix.equals(key))
             .filter(
-                e -> {
-                  Instant changelogTime =
-                      Instant.parse(e.substring(CHANGELOGS_PREFIX.length(), e.indexOf("Z") + 1));
+                key -> {
+                  Instant changelogTime = parseInstantFromKey(key);
                   // get all changelogs between timestamps inclusive
                   return !changelogTime.isBefore(from) && !changelogTime.isAfter(to);
                 })
@@ -118,6 +118,12 @@ public class ChangelogService<T extends ObjectStorage> {
             .toList();
 
     return foldChangelogs(changelogs);
+  }
+
+  private Instant parseInstantFromKey(String key) {
+    String fileName = key.substring(key.lastIndexOf('/') + 1);
+    String timestampStr = fileName.substring(0, fileName.indexOf('Z') + 1);
+    return Instant.parse(timestampStr);
   }
 
   /**
