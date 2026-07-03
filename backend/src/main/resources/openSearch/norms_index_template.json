@@ -1,7 +1,5 @@
 {
-  "index_patterns": [
-    "norms_*"
-  ],
+  "index_patterns": ["norms_*"],
   "composed_of": [
     "german_analyzer_template"
   ],
@@ -174,5 +172,6 @@
         }
       }
     }
+
   }
 }
