@@ -1,7 +1,9 @@
 package de.bund.digitalservice.ris.builder.models.body;
 
 import de.bund.digitalservice.ris.builder.NormTestDataBuilder;
+import de.bund.digitalservice.ris.builder.models.common.AuthorialNote;
 import de.bund.digitalservice.ris.builder.models.common.BaseElement;
+import de.bund.digitalservice.ris.builder.models.common.Heading;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
@@ -40,9 +42,13 @@ public class Article extends BaseElement implements BodyElement {
     return this;
   }
 
-  public Article addHeading(String text) {
-    this.heading = Heading.builder().eId(eId + "_überschrift-n1").headline(text).build();
+  public Article addHeading(String text, String authorialNote) {
+    List<Object> headingElements = new ArrayList<>(List.of(text));
+    if (authorialNote != null) {
+      headingElements.add(AuthorialNote.withText(authorialNote));
+    }
 
+    this.heading = Heading.builder().eId(eId + "_überschrift-n1").headline(headingElements).build();
     return this;
   }
 

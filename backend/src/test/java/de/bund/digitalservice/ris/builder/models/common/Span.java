@@ -1,4 +1,4 @@
-package de.bund.digitalservice.ris.builder.models.body;
+package de.bund.digitalservice.ris.builder.models.common;
 
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlValue;
@@ -10,13 +10,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Heading {
+public class Span {
 
   @Builder.Default
   @XmlAttribute(name = "GUID")
-  protected String guid = UUID.randomUUID().toString();
+  private String guid = UUID.randomUUID().toString();
 
-  @Builder.Default @XmlAttribute private String eId = "art-z1_überschrift-n1";
+  @Builder.Default @XmlAttribute private String eId = "span-n1";
 
-  @Builder.Default @XmlValue private String headline = "Headline of Article";
+  @XmlValue private String content;
 }

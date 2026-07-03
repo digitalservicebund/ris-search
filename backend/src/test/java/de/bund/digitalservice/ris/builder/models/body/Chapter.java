@@ -2,6 +2,7 @@ package de.bund.digitalservice.ris.builder.models.body;
 
 import de.bund.digitalservice.ris.builder.NormTestDataBuilder;
 import de.bund.digitalservice.ris.builder.models.common.BaseElement;
+import de.bund.digitalservice.ris.builder.models.common.Heading;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
@@ -37,7 +38,7 @@ public class Chapter extends BaseElement implements BodyElement {
   }
 
   public Chapter addHeading(String text) {
-    this.heading = Heading.builder().eId(eId + "_überschrift-n1").headline(text).build();
+    this.heading = Heading.builder().eId(eId + "_überschrift-n1").headline(List.of(text)).build();
 
     return this;
   }

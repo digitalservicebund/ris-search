@@ -16,6 +16,7 @@ import de.bund.digitalservice.ris.builder.models.meta.Meta;
 import de.bund.digitalservice.ris.builder.models.meta.identification.Identification;
 import de.bund.digitalservice.ris.builder.models.meta.lifecycle.Lifecycle;
 import de.bund.digitalservice.ris.builder.models.preamble.Preamble;
+import de.bund.digitalservice.ris.builder.models.preamble.Toc;
 import de.bund.digitalservice.ris.builder.models.preface.DocTitle;
 import de.bund.digitalservice.ris.builder.models.preface.LongTitle;
 import de.bund.digitalservice.ris.builder.models.preface.Preface;
@@ -64,8 +65,12 @@ public class NormTestDataBuilder {
   private final AkomaNtoso document = new AkomaNtoso();
   private final List<AkomaNtoso> attachmentsDocs = new ArrayList<>();
 
-  public NormTestDataBuilder() {
+  private NormTestDataBuilder() {
     this.document.setAct(Act.builder().meta(Meta.builder().build()).build());
+  }
+
+  public static NormTestDataBuilder builder() {
+    return new NormTestDataBuilder();
   }
 
   public NormTestDataBuilder eli(String manifestationEli) {
@@ -73,9 +78,12 @@ public class NormTestDataBuilder {
     return this;
   }
 
-  public NormTestDataBuilder officialTitle(String officalTitle) {
+  public NormTestDataBuilder officialTitle(String officalTitle, String authorialNote) {
     LongTitle longTitle = this.document.getAct().getPreface().getLongTitle();
-    this.document.getAct().getPreface().setLongTitle(longTitle.withOfficialTitle(officalTitle));
+    this.document
+        .getAct()
+        .getPreface()
+        .setLongTitle(longTitle.withOfficialTitle(officalTitle, authorialNote));
 
     return this;
   }
@@ -125,11 +133,21 @@ public class NormTestDataBuilder {
     return this;
   }
 
+  /**
+   * Sets the norms Ausfertigungsdatum
+   *
+   * @param date
+   */
   public NormTestDataBuilder legislationDate(String date) {
     this.document.getAct().getPreface().setLegislationDate(date);
     return this;
   }
 
+  /**
+   * Sets the norms Verkuendungsdatum
+   *
+   * @param date
+   */
   public NormTestDataBuilder datePublished(String date) {
     this.document.getAct().getMeta().getIdentification().getFrbrWork().setDatePublished(date);
     return this;
@@ -145,11 +163,28 @@ public class NormTestDataBuilder {
     return this;
   }
 
+  public NormTestDataBuilder fullCitation(String citation) {
+    this.document.getAct().getMeta().getProprietary().getRisMetadata().setFullCitation(citation);
+    return this;
+  }
+
   public NormTestDataBuilder formula(String text) {
     Preamble preamble =
         Optional.ofNullable(this.document.getAct().getPreamble())
             .orElse(Preamble.builder().build());
     preamble.addFormula(text);
+    this.document.getAct().setPreamble(preamble);
+
+    return this;
+  }
+
+  public NormTestDataBuilder toc(Consumer<Toc> tocConsumer) {
+    Preamble preamble =
+        Optional.ofNullable(this.document.getAct().getPreamble())
+            .orElse(Preamble.builder().build());
+    Toc toc = preamble.addToc();
+    tocConsumer.accept(toc);
+
     this.document.getAct().setPreamble(preamble);
 
     return this;
@@ -171,13 +206,15 @@ public class NormTestDataBuilder {
     return this;
   }
 
-  public NormTestDataBuilder article(Article article) {
+  public NormTestDataBuilder article(
+      String num, String startDate, String endDate, String eId, Consumer<Article> articleConsumer) {
+    Article article = buildArticle(num, startDate, endDate, eId);
+    articleConsumer.accept(article);
     this.document.getAct().getBody().addChild(article);
     return this;
   }
 
-  public Article buildArticle(
-      String heading, String num, String startDate, String endDate, String eId) {
+  public Article buildArticle(String num, String startDate, String endDate, String eId) {
     Lifecycle lifecycle = this.document.getAct().getMeta().getLifecycle();
     String inForceEventEId = lifecycle.addInForceEvent(startDate);
     String outOfForceEventEId = lifecycle.addOutOfForce(endDate);
@@ -189,17 +226,13 @@ public class NormTestDataBuilder {
             .getTemporalData()
             .addTemporalGroup(inForceEventEId, outOfForceEventEId);
 
-    return Article.builder()
-        .eId(eId)
-        .period("#" + temporalGroupEId)
-        .build()
-        .addNum(num)
-        .addHeading(heading);
+    return Article.builder().eId(eId).period("#" + temporalGroupEId).build().addNum(num);
   }
 
   public NormTestDataBuilder defaultArticle() {
     Article article =
-        this.buildArticle("Article number one", "§ 1", "2025-01-01", "2025-07-01", "art-z1")
+        this.buildArticle("§ 1", "2025-01-01", "2025-07-01", "art-z1")
+            .addHeading("Article number one", null)
             .addParagraph("Paragraph one", "(1)");
 
     this.document.getAct().getBody().addChild(article);
@@ -318,7 +351,7 @@ public class NormTestDataBuilder {
 
       return xml;
     } catch (Exception e) {
-      throw new RuntimeException("Failed to generate XML", e);
+      throw new IllegalArgumentException("Failed to generate XML", e);
     }
   }
 }

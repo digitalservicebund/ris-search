@@ -26,6 +26,7 @@ public class FRBRWork extends BaseElement {
             .eId("meta-n1_ident-n1_frbrwork-n1_frbrthis-n1")
             .value(eli.getWorkEli().toString())
             .build());
+
     builder.frbrUri(
         ValueLeaf.builder()
             .eId("meta-n1_ident-n1_frbrwork-n1_frbruri-n1")

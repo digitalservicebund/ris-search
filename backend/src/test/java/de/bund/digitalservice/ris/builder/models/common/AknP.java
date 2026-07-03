@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@XmlSeeAlso({DocStage.class, DocTitle.class, ShortTitle.class})
+@XmlSeeAlso({DocStage.class, DocTitle.class, ShortTitle.class, AuthorialNote.class})
 @XmlRootElement(name = "p", namespace = NormTestDataBuilder.AKN_NS)
 public class AknP implements BodyElement {
 
@@ -32,6 +32,11 @@ public class AknP implements BodyElement {
   @Builder.Default @XmlAnyElement private List<Object> children = new ArrayList<>();
 
   public static AknP withText(String text) {
-    return AknP.builder().children(List.of(text)).build();
+    return AknP.builder().children(new ArrayList<>(List.of(text))).build();
+  }
+
+  public AknP addChild(Object child) {
+    this.children.add(child);
+    return this;
   }
 }

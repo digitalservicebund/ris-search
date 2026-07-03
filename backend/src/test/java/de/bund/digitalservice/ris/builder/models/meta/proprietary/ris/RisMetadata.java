@@ -6,11 +6,20 @@ import jakarta.xml.bind.annotation.XmlElement;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class RisMetadata {
+
+  @Builder.Default
+  @XmlElement(name = "abkuerzung", namespace = RIS_NS)
+  private RisAbkuerzung internalAbbreviation = RisAbkuerzung.builder().build();
+
+  public void setAbbreviation(String abbreviation) {
+    this.internalAbbreviation = RisAbkuerzung.builder().abbreviation(abbreviation).build();
+  }
 
   @XmlElement(name = "inkraft", namespace = RIS_NS)
   private RisDate inForceDate;
@@ -26,11 +35,7 @@ public class RisMetadata {
     this.outOfForceDate = RisDate.builder().date(date).build();
   }
 
-  @Builder.Default
-  @XmlElement(name = "abkuerzung", namespace = RIS_NS)
-  private RisAbkuerzung internalAbbreviation = RisAbkuerzung.builder().build();
-
-  public void setAbbreviation(String abbreviation) {
-    this.internalAbbreviation = RisAbkuerzung.builder().abbreviation(abbreviation).build();
-  }
+  @Setter
+  @XmlElement(name = "vollzitat", namespace = RIS_NS)
+  private String fullCitation;
 }

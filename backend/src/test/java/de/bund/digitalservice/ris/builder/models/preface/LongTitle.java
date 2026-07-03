@@ -2,6 +2,7 @@ package de.bund.digitalservice.ris.builder.models.preface;
 
 import de.bund.digitalservice.ris.builder.NormTestDataBuilder;
 import de.bund.digitalservice.ris.builder.models.common.AknP;
+import de.bund.digitalservice.ris.builder.models.common.AuthorialNote;
 import de.bund.digitalservice.ris.builder.models.common.BaseElement;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
@@ -37,8 +38,13 @@ public class LongTitle extends BaseElement {
                   ShortTitle.builder().build()))
           .build();
 
-  public LongTitle withOfficialTitle(String officialTitle) {
-    this.officialTitle = DocTitle.builder().children(List.of(officialTitle)).build();
+  public LongTitle withOfficialTitle(String officialTitle, String authorialNote) {
+    List<Object> titleElements = new ArrayList<>(List.of(officialTitle));
+    if (authorialNote != null) {
+      titleElements.add(AuthorialNote.withText(authorialNote));
+    }
+
+    this.officialTitle = DocTitle.builder().children(titleElements).build();
     setTitlesAndAbbreviation();
     return this;
   }
