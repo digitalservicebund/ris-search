@@ -4,7 +4,7 @@ jacoco = "0.8.11"
 spring-boot = "4.1.0"
 spring-boot-starter = "4.1.0"
 spring-dependency-management = "1.1.7"
-spotless = "8.7.0"
+spotless = "8.8.0"
 sonarqube = "7.3.1.8318"
 license-report = "3.1.4"
 test-logger = "4.0.0"
@@ -15,7 +15,7 @@ test-containers = "1.21.4"
 spring-cloud-k8s = "5.0.2"
 springdoc-openapi = "3.0.3"
 prometheus = "1.17.0"
-sentry = "8.44.1"
+sentry = "8.46.0"
 commons-text = "1.15.0"
 junit5 = "1.4.2"
 mockito = "5.23.0"
@@ -30,7 +30,7 @@ amazon-aws-sdk-s3 = "2.29.45"
 saxon-he = "13.0"
 streamex = "0.8.4"
 tools-jackson-core = "3.2.0"
-jaxb-moxy = "5.0.0"
+jaxb-moxy = "5.0.1"
 posthog = "1.2.0"
 pebble = "4.1.2"
 rest-assured = "6.0.0"
@@ -85,7 +85,7 @@ netty-compression = { module = "io.netty:netty-codec-compression", version = "4.
 netty-handler = { module = "io.netty:netty-handler", version = "4.2.15.Final"}
 
 # CVE-2026-41293, CVE-2026-43512, CVE-2026-41284, CVE-2026-42498, CVE-2026-43513
-tomcat-embed = { module = "org.apache.tomcat.embed:tomcat-embed-core", version = "11.0.22" }
+tomcat-embed = { module = "org.apache.tomcat.embed:tomcat-embed-core", version = "11.0.23" }
 
 
 [plugins]
