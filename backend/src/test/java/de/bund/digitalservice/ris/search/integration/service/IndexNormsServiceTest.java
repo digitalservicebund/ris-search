@@ -3,11 +3,10 @@ package de.bund.digitalservice.ris.search.integration.service;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import de.bund.digitalservice.ris.SharedTestConstants;
+import de.bund.digitalservice.ris.builder.NormTestDataBuilder;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
-import de.bund.digitalservice.ris.search.integration.controller.api.testData.NormsTestData;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.service.IndexNormsService;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.Comparator;
@@ -33,11 +32,13 @@ class IndexNormsServiceTest extends ContainersIntegrationBase {
 
   @Test
   @DisplayName("One expression has full time relevance window")
-  void oneExpressionHasFullTimeRelevanceWindow() throws IOException {
+  void oneExpressionHasFullTimeRelevanceWindow() {
     // This test is for the prototype which won't have inkraft properly defined until 2028
     String workEli = "eli/bund/bgbl-1/1991/s101";
-    String normFile1 = workEli + "/1991-01-01/1/deu/1991-01-01/regelungstext-1.xml";
-    normsBucket.save(normFile1, NormsTestData.simpleNormXml(normFile1, null));
+    String manifestationEli = workEli + "/1991-01-01/1/deu/1991-01-01/regelungstext-1.xml";
+    String normXml = NormTestDataBuilder.builder().eli(manifestationEli).buildNormXml();
+
+    normsBucket.save(manifestationEli, normXml);
     indexNormsService.reindexAll(SharedTestConstants.TIMESTAMP_2024_01_01_AS_STRING);
     List<Norm> expressions = normsRepository.getByWorkEli(workEli);
     assertThat(expressions).hasSize(1);

@@ -4,15 +4,12 @@ import static de.bund.digitalservice.ris.SharedTestConstants.DATE_2023_01_02;
 import static de.bund.digitalservice.ris.SharedTestConstants.DATE_2024_01_01;
 import static de.bund.digitalservice.ris.SharedTestConstants.DATE_2024_01_02;
 
-import de.bund.digitalservice.ris.PebbleTemplateTestUtils;
 import de.bund.digitalservice.ris.builder.NormTestDataBuilder;
 import de.bund.digitalservice.ris.builder.models.common.AknP;
 import de.bund.digitalservice.ris.builder.models.common.AuthorialNote;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.models.opensearch.TableOfContentsItem;
-import de.bund.digitalservice.ris.search.utils.eli.EliFile;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
@@ -25,9 +22,6 @@ import java.util.Objects;
 /** Test data for norms used in integration tests. */
 public class NormsTestData {
 
-  public static final String NORM_LDML_TEMPLATE = "templates/norm/norm-template.xml";
-  public static final String NORM_ATTACHMENT_LDML_TEMPLATE =
-      "templates/norm/norm-attachment-template.xml";
   public static final String S_102_WORK_ELI = "eli/bund/bgbl-1/1991/s102";
 
   public static Map<String, String> s102WorkExpressions = createS102Work();
@@ -41,7 +35,7 @@ public class NormsTestData {
    *
    * @return map of eli file names to their XML content
    */
-  public static Map<String, String> createS102Work() {
+  private static Map<String, String> createS102Work() {
     Map<String, String> result = new HashMap<>();
 
     // ------------- build first expression with attachment -------------------
@@ -106,52 +100,6 @@ public class NormsTestData {
     result.put(version3ManifestationEli, version3Builder.buildNormXml());
 
     return result;
-  }
-
-  /**
-   * Creates a simple Norm XML from a template for testing purposes.
-   *
-   * @param fileName the eli file name
-   * @param context additional context variables for the template
-   * @return the generated XML as string
-   * @throws IOException if template reading fails
-   */
-  public static String simpleNormXml(String fileName, Map<String, Object> context)
-      throws IOException {
-    if (context == null) {
-      context = new HashMap<>();
-    }
-    context = new HashMap<>(context);
-    EliFile eliFile =
-        EliFile.fromString(fileName)
-            .orElseThrow(() -> new IllegalArgumentException("Invalid eli file"));
-    context.put("work_eli", eliFile.getWorkEli().toString());
-    context.put("expression_eli", eliFile.getExpressionEli().toString());
-    context.put("manifestation_eli", eliFile.getManifestationEli().toString());
-    return PebbleTemplateTestUtils.getXmlFromTemplate(context, NORM_LDML_TEMPLATE);
-  }
-
-  /**
-   * Creates a simple Norm XML attachment from a template for testing purposes.
-   *
-   * @param fileName the eli file name
-   * @param context additional context variables for the template
-   * @return the generated XML as string
-   * @throws IOException if template reading fails
-   */
-  public static String simpleNormXmlAttachment(String fileName, Map<String, Object> context)
-      throws IOException {
-    if (context == null) {
-      context = new HashMap<>();
-    }
-    context = new HashMap<>(context);
-    EliFile eliFile =
-        EliFile.fromString(fileName)
-            .orElseThrow(() -> new IllegalArgumentException("Invalid eli file"));
-    context.put("work_eli", eliFile.getWorkEli().toString());
-    context.put("expression_eli", eliFile.getExpressionEli().toString());
-    context.put("attachment_name", eliFile.fileName());
-    return PebbleTemplateTestUtils.getXmlFromTemplate(context, NORM_ATTACHMENT_LDML_TEMPLATE);
   }
 
   private static TableOfContentsItem simpleToc(String number) {
