@@ -1,7 +1,7 @@
 import type { Page } from "@playwright/test";
 import { expect, navigate, test } from "./utils/fixtures";
 
-const testCases = [
+const legislationTestCases = [
   {
     name: "simple search",
     route: "/search?query=aktuelle%2520fassung&documentKind=N",
@@ -14,7 +14,7 @@ const testCases = [
     returnTo: "/advanced-search?q=aktuelle%252520fassung%26documentKind=N",
     label: "Erweiterte Suche",
   },
-];
+] as const;
 
 const caseLawTestCases = [
   {
@@ -35,7 +35,7 @@ const caseLawTestCases = [
     label: "Erweiterte Suche",
     searchValue: "Testangaben zur Dokumentennavigation",
   },
-];
+] as const;
 
 const adminDirectiveTestCases = [
   {
@@ -52,7 +52,7 @@ const adminDirectiveTestCases = [
     label: "Erweiterte Suche",
     searchValue: "Genaues",
   },
-];
+] as const;
 
 const literatureTestCases = [
   {
@@ -69,205 +69,220 @@ const literatureTestCases = [
     label: "Erweiterte Suche",
     searchValue: "Problemstellung",
   },
-];
+] as const;
 
-testCases.forEach((t) => {
-  test.describe(`retains search state for "${t.name}"`, () => {
+legislationTestCases.forEach((t) => {
+  test.describe(`retains search state for ${t.name} of legislation`, () => {
     const fromParam = new RegExp(RegExp.escape(`from=${t.returnTo}`));
 
-    test.describe("legislation", () => {
-      // keep in local scope for readability
-      // oxlint-disable-next-line unicorn/consistent-function-scoping
-      async function goToDetail(page: Page) {
-        await page
-          .getByRole("link", {
-            name: "Zum Testen von Fassungen - Aktuelle Fassung",
-          })
-          .click();
-      }
-
-      test("open detail page via result title", async ({ page }) => {
-        await navigate(page, t.route);
-        await goToDetail(page);
-
-        await expect(page).toHaveURL(fromParam);
-      });
-
-      test("restores search state via breadcrumb", async ({ page }) => {
-        await navigate(page, t.route);
-        await goToDetail(page);
-
-        await page
-          .getByRole("navigation", { name: "Pfadnavigation" })
-          .getByRole("link", { name: t.label })
-          .click();
-
-        await expect(page.getByRole("searchbox")).toHaveValue(
-          "aktuelle fassung",
-        );
-      });
-
-      test("keep search state on tabs", async ({ page }) => {
-        await navigate(page, t.route);
-        await goToDetail(page);
-
-        await expect(page.getByRole("tab", { name: "Text" })).toHaveAttribute(
-          "href",
-          fromParam,
-        );
-        await expect(
-          page.getByRole("tab", { name: "Details" }),
-        ).toHaveAttribute("href", fromParam);
-        await expect(
-          page.getByRole("tab", { name: "Fassungen" }),
-        ).toHaveAttribute("href", fromParam);
-      });
-
-      test("keep search state in versions list", async ({ page }) => {
-        await navigate(page, t.route);
-        await goToDetail(page);
-
-        // Zukünftige Fassung
-        await page.getByRole("tab", { name: "Fassungen" }).click();
-        await page.getByRole("cell", { name: "Zukünftig in Kraft" }).click();
-        await expect(
-          page.getByRole("heading", {
-            level: 1,
-            name: "Zum Testen von Fassungen - Zukünftige Fassung",
-          }),
-        ).toBeVisible();
-        await expect(page).toHaveURL(fromParam);
-
-        // Aktuelle Fassung
-        await page.getByRole("tab", { name: "Fassungen" }).click();
-        await page.getByRole("cell", { name: "Aktuell gültig" }).click();
-        await expect(
-          page.getByRole("heading", {
-            level: 1,
-            name: "Zum Testen von Fassungen - Aktuelle Fassung",
-          }),
-        ).toBeVisible();
-        await expect(page).toHaveURL(fromParam);
-
-        // Außer Kraft
-        await page.getByRole("tab", { name: "Fassungen" }).click();
-        await page.getByRole("cell", { name: "Außer Kraft" }).click();
-        await expect(
-          page.getByRole("heading", {
-            level: 1,
-            name: "Zum Testen von Fassungen - Alte Fassung",
-          }),
-        ).toBeVisible();
-        await expect(page).toHaveURL(fromParam);
-      });
-
-      test("keep search state in versions messages", async ({ page }) => {
-        await navigate(page, t.route);
-        await goToDetail(page);
-
-        // Zukünftige Fassung
-        await page
-          .getByRole("link", { name: "Zur zukünftigen Fassung" })
-          .click();
-        await expect(
-          page.getByRole("heading", {
-            level: 1,
-            name: "Zum Testen von Fassungen - Zukünftige Fassung",
-          }),
-        ).toBeVisible();
-        await expect(page).toHaveURL(fromParam);
-
-        // Aktuelle Fassung
-        await page
-          .getByRole("link", { name: "Zur aktuell gültigen Fassung" })
-          .click();
-        await expect(
-          page.getByRole("heading", {
-            level: 1,
-            name: "Zum Testen von Fassungen - Aktuelle Fassung",
-          }),
-        ).toBeVisible();
-        await expect(page).toHaveURL(fromParam);
-
-        // Außer Kraft
-        await page.getByRole("tab", { name: "Fassungen" }).click();
-        await page.getByRole("cell", { name: "Außer Kraft" }).click();
-        await page
-          .getByRole("link", { name: "Zur aktuell gültigen Fassung" })
-          .click();
-        await expect(
-          page.getByRole("heading", {
-            level: 1,
-            name: "Zum Testen von Fassungen - Aktuelle Fassung",
-          }),
-        ).toBeVisible();
-        await expect(page).toHaveURL(fromParam);
-      });
-
-      test("keep search state in table of contents section items", async ({
-        page,
-      }) => {
-        await navigate(page, t.route);
-        await goToDetail(page);
-
-        await page
-          .getByRole("navigation", { name: "Inhalte" })
-          .getByRole("link", { name: "Abschnitt 1" })
-          .click();
-
-        await expect(page).toHaveURL(/#hauptteil-n1_abschnitt-n1/);
-        await expect(page).toHaveURL(fromParam);
-      });
-
-      test("keep search state in table of contents article items", async ({
-        page,
-      }) => {
-        await navigate(page, t.route);
-        await goToDetail(page);
-
-        await page
-          .getByRole("navigation", { name: "Inhalte" })
-          .getByRole("treeitem", { name: "Abschnitt 1" })
-          .getByRole("button", { name: "Ebene öffnen" })
-          .click();
-
-        await page
-          .getByRole("navigation", { name: "Inhalte" })
-          .getByRole("link", { name: "§ 1", exact: true })
-          .click();
-
-        await expect(page).toHaveURL(/#hauptteil-n1_abschnitt-n1_art-z1/);
-        await expect(page).toHaveURL(fromParam);
-      });
-
-      // Not yet implemented
-      test.skip("keep search state when navigating to article in norm", async ({
-        page,
-      }) => {
-        await navigate(page, t.route);
-        await goToDetail(page);
-
-        await expect(
-          page.getByRole("heading", {
-            level: 1,
-            name: "Zum Testen von Fassungen - Aktuelle Fassung",
-          }),
-        ).toBeVisible();
-
-        await page
-          .getByRole("heading", { level: 2, name: "Eingangsformel" })
-          .click();
-        await expect(
-          page.getByRole("heading", { level: 1, name: "Eingangsformel" }),
-        ).toBeVisible();
-        await expect(page).toHaveURL(fromParam);
-      });
+    test.beforeAll(({ privateFeaturesEnabled }) => {
+      test.skip(t.name === "advanced search" && !privateFeaturesEnabled);
     });
 
-    test.describe("legislation article", () => {
+    // keep in local scope for readability
+    // oxlint-disable-next-line unicorn/consistent-function-scoping
+    async function goToDetailViaTitle(page: Page) {
+      await page
+        .getByRole("link", {
+          name: "Zum Testen von Fassungen - Aktuelle Fassung",
+        })
+        .click();
+    }
+
+    test("open detail page via result title", async ({ page }) => {
+      await navigate(page, t.route);
+      await goToDetailViaTitle(page);
+
+      await expect(page).toHaveURL(fromParam);
+    });
+
+    test("restores search state via breadcrumb", async ({ page }) => {
+      await navigate(page, t.route);
+      await goToDetailViaTitle(page);
+
+      await page
+        .getByRole("navigation", { name: "Pfadnavigation" })
+        .getByRole("link", { name: t.label })
+        .click();
+
+      await expect(page.getByRole("searchbox")).toHaveValue("aktuelle fassung");
+    });
+
+    test("keep search state on tabs", async ({ page }) => {
+      await navigate(page, t.route);
+      await goToDetailViaTitle(page);
+
+      await expect(page.getByRole("tab", { name: "Text" })).toHaveAttribute(
+        "href",
+        fromParam,
+      );
+      await expect(page.getByRole("tab", { name: "Details" })).toHaveAttribute(
+        "href",
+        fromParam,
+      );
+      await expect(
+        page.getByRole("tab", { name: "Fassungen" }),
+      ).toHaveAttribute("href", fromParam);
+    });
+
+    test("keep search state in versions list", async ({
+      page,
+      privateFeaturesEnabled,
+    }) => {
+      test.skip(!privateFeaturesEnabled);
+
+      await navigate(page, t.route);
+      await goToDetailViaTitle(page);
+
+      // Zukünftige Fassung
+      await page.getByRole("tab", { name: "Fassungen" }).click();
+      await page.getByRole("cell", { name: "Zukünftig in Kraft" }).click();
+      await expect(
+        page.getByRole("heading", {
+          level: 1,
+          name: "Zum Testen von Fassungen - Zukünftige Fassung",
+        }),
+      ).toBeVisible();
+      await expect(page).toHaveURL(fromParam);
+
+      // Aktuelle Fassung
+      await page.getByRole("tab", { name: "Fassungen" }).click();
+      await page.getByRole("cell", { name: "Aktuell gültig" }).click();
+      await expect(
+        page.getByRole("heading", {
+          level: 1,
+          name: "Zum Testen von Fassungen - Aktuelle Fassung",
+        }),
+      ).toBeVisible();
+      await expect(page).toHaveURL(fromParam);
+
+      // Außer Kraft
+      await page.getByRole("tab", { name: "Fassungen" }).click();
+      await page.getByRole("cell", { name: "Außer Kraft" }).click();
+      await expect(
+        page.getByRole("heading", {
+          level: 1,
+          name: "Zum Testen von Fassungen - Alte Fassung",
+        }),
+      ).toBeVisible();
+      await expect(page).toHaveURL(fromParam);
+    });
+
+    test("keep search state in versions messages", async ({
+      page,
+      privateFeaturesEnabled,
+    }) => {
+      test.skip(!privateFeaturesEnabled);
+
+      await navigate(page, t.route);
+      await goToDetailViaTitle(page);
+
+      // Zukünftige Fassung
+      await page.getByRole("link", { name: "Zur zukünftigen Fassung" }).click();
+      await expect(
+        page.getByRole("heading", {
+          level: 1,
+          name: "Zum Testen von Fassungen - Zukünftige Fassung",
+        }),
+      ).toBeVisible();
+      await expect(page).toHaveURL(fromParam);
+
+      // Aktuelle Fassung
+      await page
+        .getByRole("link", { name: "Zur aktuell gültigen Fassung" })
+        .click();
+      await expect(
+        page.getByRole("heading", {
+          level: 1,
+          name: "Zum Testen von Fassungen - Aktuelle Fassung",
+        }),
+      ).toBeVisible();
+      await expect(page).toHaveURL(fromParam);
+
+      // Außer Kraft
+      await page.getByRole("tab", { name: "Fassungen" }).click();
+      await page.getByRole("cell", { name: "Außer Kraft" }).click();
+      await page
+        .getByRole("link", { name: "Zur aktuell gültigen Fassung" })
+        .click();
+      await expect(
+        page.getByRole("heading", {
+          level: 1,
+          name: "Zum Testen von Fassungen - Aktuelle Fassung",
+        }),
+      ).toBeVisible();
+      await expect(page).toHaveURL(fromParam);
+    });
+
+    test("keep search state in table of contents section items", async ({
+      page,
+      isMobileTest,
+    }) => {
+      test.skip(isMobileTest);
+
+      await navigate(page, t.route);
+      await goToDetailViaTitle(page);
+
+      await page
+        .getByRole("navigation", { name: "Inhalte" })
+        .getByRole("link", { name: "Abschnitt 1" })
+        .click();
+
+      await expect(page).toHaveURL(/#hauptteil-n1_abschnitt-n1/);
+      await expect(page).toHaveURL(fromParam);
+    });
+
+    test("keep search state in table of contents article items", async ({
+      page,
+      isMobileTest,
+    }) => {
+      test.skip(isMobileTest);
+
+      await navigate(page, t.route);
+      await goToDetailViaTitle(page);
+
+      await page
+        .getByRole("navigation", { name: "Inhalte" })
+        .getByRole("treeitem", { name: "Abschnitt 1" })
+        .getByRole("button", { name: "Ebene öffnen" })
+        .click();
+
+      await page
+        .getByRole("navigation", { name: "Inhalte" })
+        .getByRole("link", { name: "§ 1", exact: true })
+        .click();
+
+      await expect(page).toHaveURL(/#hauptteil-n1_abschnitt-n1_art-z1/);
+      await expect(page).toHaveURL(fromParam);
+    });
+
+    // Not yet implemented
+    test.skip("keep search state when navigating to article in norm", async ({
+      page,
+    }) => {
+      await navigate(page, t.route);
+      await goToDetailViaTitle(page);
+
+      await expect(
+        page.getByRole("heading", {
+          level: 1,
+          name: "Zum Testen von Fassungen - Aktuelle Fassung",
+        }),
+      ).toBeVisible();
+
+      await page
+        .getByRole("heading", { level: 2, name: "Eingangsformel" })
+        .click();
+      await expect(
+        page.getByRole("heading", { level: 1, name: "Eingangsformel" }),
+      ).toBeVisible();
+      await expect(page).toHaveURL(fromParam);
+    });
+
+    test.describe("article", () => {
       // keep in local scope for readability
       // oxlint-disable-next-line unicorn/consistent-function-scoping
-      async function goToDetail(page: Page) {
+      async function goToDetailViaSection(page: Page) {
         await page
           .getByRole("link", { name: "Eingangsformel" })
           .first()
@@ -276,14 +291,19 @@ testCases.forEach((t) => {
 
       test("open detail page via article match title", async ({ page }) => {
         await navigate(page, t.route);
-        await goToDetail(page);
+        await goToDetailViaSection(page);
 
         await expect(page).toHaveURL(fromParam);
       });
 
-      test("restores search state via breadcrumb", async ({ page }) => {
+      test("restores search state via breadcrumb", async ({
+        page,
+        isMobileTest,
+      }) => {
+        test.skip(isMobileTest);
+
         await navigate(page, t.route);
-        await goToDetail(page);
+        await goToDetailViaSection(page);
 
         await page
           .getByRole("navigation", { name: "Pfadnavigation" })
@@ -297,9 +317,12 @@ testCases.forEach((t) => {
 
       test("keep search state when navigating to the parent norm", async ({
         page,
+        isMobileTest,
       }) => {
+        test.skip(isMobileTest);
+
         await navigate(page, t.route);
-        await goToDetail(page);
+        await goToDetailViaSection(page);
 
         await page.getByRole("link", { name: "Nächster Paragraf" }).click();
 
@@ -319,9 +342,12 @@ testCases.forEach((t) => {
 
       test("keep search state when navigating to the parent section", async ({
         page,
+        isMobileTest,
       }) => {
+        test.skip(isMobileTest);
+
         await navigate(page, t.route);
-        await goToDetail(page);
+        await goToDetailViaSection(page);
 
         await page.getByRole("link", { name: "Nächster Paragraf" }).click();
 
@@ -343,7 +369,7 @@ testCases.forEach((t) => {
         page,
       }) => {
         await navigate(page, t.route);
-        await goToDetail(page);
+        await goToDetailViaSection(page);
 
         await page.getByRole("link", { name: "Nächster Paragraf" }).click();
         await expect(
@@ -366,9 +392,12 @@ testCases.forEach((t) => {
 
       test("keep search state in table of contents section items", async ({
         page,
+        isMobileTest,
       }) => {
+        test.skip(isMobileTest);
+
         await navigate(page, t.route);
-        await goToDetail(page);
+        await goToDetailViaSection(page);
 
         await expect(
           page
@@ -379,9 +408,12 @@ testCases.forEach((t) => {
 
       test("keep search state in table of contents article items", async ({
         page,
+        isMobileTest,
       }) => {
+        test.skip(isMobileTest);
+
         await navigate(page, t.route);
-        await goToDetail(page);
+        await goToDetailViaSection(page);
 
         await page
           .getByRole("navigation", { name: "Inhalte" })
@@ -398,9 +430,12 @@ testCases.forEach((t) => {
 
       test("keep search state in table of contents parent link", async ({
         page,
+        isMobileTest,
       }) => {
+        test.skip(isMobileTest);
+
         await navigate(page, t.route);
-        await goToDetail(page);
+        await goToDetailViaSection(page);
 
         await expect(
           page.getByRole("navigation", { name: "Inhalte" }).getByRole("link", {
@@ -413,8 +448,12 @@ testCases.forEach((t) => {
 });
 
 caseLawTestCases.forEach((t) => {
-  test.describe(`retains search state for caselaw "${t.name}"`, () => {
+  test.describe(`retains search state for ${t.name} of caselaw`, () => {
     const fromParam = new RegExp(RegExp.escape(`from=${t.returnTo}`));
+
+    test.beforeAll(({ privateFeaturesEnabled }) => {
+      test.skip(t.name === "advanced search" && !privateFeaturesEnabled);
+    });
 
     // oxlint-disable-next-line unicorn/consistent-function-scoping
     async function goToDetailViaTitle(page: Page) {
@@ -481,7 +520,12 @@ caseLawTestCases.forEach((t) => {
       );
     });
 
-    test("keep search state in table of contents", async ({ page }) => {
+    test("keep search state in table of contents", async ({
+      page,
+      isMobileTest,
+    }) => {
+      test.skip(isMobileTest);
+
       await navigate(page, t.route);
       await goToDetailViaTitle(page);
 
@@ -511,8 +555,12 @@ caseLawTestCases.forEach((t) => {
 });
 
 adminDirectiveTestCases.forEach((t) => {
-  test.describe(`retains search state for administrative directives "${t.name}"`, () => {
+  test.describe(`retains search state for ${t.name} of administrative directives`, () => {
     const fromParam = new RegExp(RegExp.escape(`from=${t.returnTo}`));
+
+    test.beforeAll(({ privateFeaturesEnabled }) => {
+      test.skip(t.name === "advanced search" && !privateFeaturesEnabled);
+    });
 
     // oxlint-disable-next-line unicorn/consistent-function-scoping
     async function goToDetailViaTitle(page: Page) {
@@ -571,7 +619,12 @@ adminDirectiveTestCases.forEach((t) => {
       );
     });
 
-    test("keep search state in table of contents", async ({ page }) => {
+    test("keep search state in table of contents", async ({
+      page,
+      isMobileTest,
+    }) => {
+      test.skip(isMobileTest);
+
       await navigate(page, t.route);
       await goToDetailViaTitle(page);
 
@@ -587,8 +640,12 @@ adminDirectiveTestCases.forEach((t) => {
 });
 
 literatureTestCases.forEach((t) => {
-  test.describe(`retains search state for literature "${t.name}"`, () => {
+  test.describe(`retains search state for ${t.name} of literature`, () => {
     const fromParam = new RegExp(RegExp.escape(`from=${t.returnTo}`));
+
+    test.beforeAll(({ privateFeaturesEnabled }) => {
+      test.skip(t.name === "advanced search" && !privateFeaturesEnabled);
+    });
 
     // oxlint-disable-next-line unicorn/consistent-function-scoping
     async function goToDetailViaTitle(page: Page) {
@@ -646,7 +703,12 @@ literatureTestCases.forEach((t) => {
       );
     });
 
-    test("keep search state in table of contents", async ({ page }) => {
+    test("keep search state in table of contents", async ({
+      page,
+      isMobileTest,
+    }) => {
+      test.skip(isMobileTest);
+
       await navigate(page, t.route);
       await goToDetailViaTitle(page);
 
