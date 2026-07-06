@@ -2,7 +2,6 @@ packages: []
 
 overrides:
   "esbuild": "0.28.1"
-  "vite-plugin-checker": "0.13.0"
 
 allowBuilds:
   "@parcel/watcher": true
@@ -13,11 +12,6 @@ allowBuilds:
   vue-demi: false
 
 minimumReleaseAge: 4320
-minimumReleaseAgeExclude:
-  - "@digitalservicebund/ris-ui"
-  - "@playwright/test@1.61.1"
-  - playwright-core@1.61.1
-  - playwright@1.61.1
 
 publicHoistPattern:
   - "vue"

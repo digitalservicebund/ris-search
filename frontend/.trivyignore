@@ -2,7 +2,3 @@
 # Ignoring them here is to solve trivy complaints from vulnerable dependencies
 # in the Node Docker image that are not actually used in the production
 # application.
-
-CVE-2026-42338
-CVE-2026-45149
-CVE-2026-12151

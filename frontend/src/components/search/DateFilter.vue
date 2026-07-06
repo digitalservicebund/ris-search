@@ -12,7 +12,9 @@ const { documentKind } = defineProps<{
 }>();
 
 /** The currently active filter */
-const filter = defineModel<DateFilterValue>({ default: { type: "allTime" } });
+const filter = defineModel<DateFilterValue>({
+  default: () => ({ type: "allTime" }),
+});
 
 const formId = useId();
 const currentlyInForceId = useId();
