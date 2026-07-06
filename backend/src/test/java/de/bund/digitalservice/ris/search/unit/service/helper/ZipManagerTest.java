@@ -1,5 +1,6 @@
 package de.bund.digitalservice.ris.search.unit.service.helper;
 
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import de.bund.digitalservice.ris.search.exception.NoSuchKeyException;
@@ -19,7 +20,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
@@ -29,7 +29,7 @@ class ZipManagerTest {
 
   @BeforeEach
   void setUp() {
-    bucketMock = Mockito.mock(ObjectStorage.class);
+    bucketMock = mock(ObjectStorage.class);
   }
 
   private FilterInputStream createFilterInputStream(String dataString) {

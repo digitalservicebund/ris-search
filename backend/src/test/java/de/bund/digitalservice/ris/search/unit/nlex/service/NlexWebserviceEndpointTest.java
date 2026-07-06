@@ -1,6 +1,8 @@
 package de.bund.digitalservice.ris.search.unit.nlex.service;
 
 import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import de.bund.digitalservice.ris.TestXmlUtils;
 import de.bund.digitalservice.ris.search.nlex.schema.query.Query;
@@ -27,7 +29,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatcher;
-import org.mockito.Mockito;
 
 class NlexWebserviceEndpointTest {
   private NlexWebServiceEndpoint nlexServiceEndpoint;
@@ -35,7 +36,7 @@ class NlexWebserviceEndpointTest {
 
   @BeforeEach
   void setup() throws JAXBException {
-    this.service = Mockito.mock(NlexService.class);
+    this.service = mock(NlexService.class);
     this.nlexServiceEndpoint = new NlexWebServiceEndpoint(service);
   }
 
@@ -110,21 +111,20 @@ class NlexWebserviceEndpointTest {
     RequestResponse expectedResponse = new RequestResponse();
     expectedResponse.setRequestResult(exampleResultString);
 
-    Mockito.when(
-            this.service.runRequestQuery(
-                argThat(
-                    new ArgumentMatcher<Query>() {
-                      @Override
-                      public boolean matches(Query query) {
-                        return query.getNavigation().getPage().getNumber() == 1
-                            && query
-                                .getCriteria()
-                                .getAnd()
-                                .getWords()
-                                .getContains()
-                                .equals("Sample expression");
-                      }
-                    })))
+    when(this.service.runRequestQuery(
+            argThat(
+                new ArgumentMatcher<Query>() {
+                  @Override
+                  public boolean matches(Query query) {
+                    return query.getNavigation().getPage().getNumber() == 1
+                        && query
+                            .getCriteria()
+                            .getAnd()
+                            .getWords()
+                            .getContains()
+                            .equals("Sample expression");
+                  }
+                })))
         .thenReturn(exampleResult);
 
     RequestResponse response = this.nlexServiceEndpoint.request(request);

@@ -3,6 +3,7 @@ package de.bund.digitalservice.ris.search.unit.controller.api;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import de.bund.digitalservice.ris.search.controller.api.LiteratureController;
@@ -17,7 +18,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
@@ -54,7 +54,7 @@ class LiteratureControllerTest {
 
     var actual = controller.getLiteratureAsHtml(documentNumber);
 
-    Mockito.verify(sliTransformer, never()).transformLiterature(any());
+    verify(sliTransformer, never()).transformLiterature(any());
     assertThat(actual.getBody()).isEqualTo("uliHtml");
   }
 
@@ -70,7 +70,7 @@ class LiteratureControllerTest {
 
     var actual = controller.getLiteratureAsHtml(documentNumber);
 
-    Mockito.verify(uliTransformer, never()).transformLiterature(any());
+    verify(uliTransformer, never()).transformLiterature(any());
     assertThat(actual.getBody()).isEqualTo("sliHtml");
   }
 
