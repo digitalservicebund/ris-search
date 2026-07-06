@@ -38,6 +38,15 @@ async function renderComponent({
 
   return await renderSuspended(AdministrativeDirectiveSearchResult, {
     props: { searchResult: result, order: 0 },
+    global: {
+      stubs: {
+        NuxtLink: {
+          template:
+            '<a :href="to.path ?? to" :data-from="to.query?.from"><slot /></a>',
+          props: ["to"],
+        },
+      },
+    },
   });
 }
 
@@ -211,8 +220,32 @@ describe("AdministrativeDirectiveSearchResult", () => {
     const link = screen.getByRole("link", {
       name: "Verwaltungsvorschrift Überschrift",
     });
-    const href = link.getAttribute("href") ?? "";
-    expect(href).toContain("from=");
-    expect(href).toContain("Vorschrift");
+    expect(link).toHaveAttribute(
+      "data-from",
+      "/search?query=Vorschrift&documentKind=VS&pageIndex=0",
+    );
+  });
+
+  it("includes the current search URL as query param in preview section links", async () => {
+    useRouteMock.mockReturnValue({
+      fullPath: "/search?query=Vorschrift&documentKind=VS&pageIndex=0",
+    });
+
+    await renderComponent({
+      textMatches: [
+        {
+          "@type": "SearchResultMatch",
+          name: "shortReport",
+          text: "testing <mark>highlighted</mark> text",
+          location: undefined,
+        },
+      ],
+    });
+
+    const sectionLink = screen.getByRole("link", { name: "Kurzreferat:" });
+    expect(sectionLink).toHaveAttribute(
+      "data-from",
+      "/search?query=Vorschrift&documentKind=VS&pageIndex=0",
+    );
   });
 });

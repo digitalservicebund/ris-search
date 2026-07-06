@@ -83,7 +83,8 @@ function renderComponent(
     global: {
       stubs: {
         NuxtLink: {
-          template: '<a :href="JSON.stringify(to)"><slot /></a>',
+          template:
+            '<a :href="to.path ?? to" :data-from="to.query?.from"><slot /></a>',
           props: ["to"],
         },
       },
@@ -170,8 +171,8 @@ describe("NormSearchResult", () => {
     renderComponent();
 
     const link = screen.getByRole("link", { name: /Test Title/i });
-    const href = JSON.parse(link.getAttribute("href") ?? "{}");
-    expect(href.path).toBe(
+    expect(link).toHaveAttribute(
+      "href",
       `/norms/${mockSearchResult.item.legislationIdentifier}`,
     );
   });
@@ -256,8 +257,7 @@ describe("NormSearchResult", () => {
     const articleHeading = screen.getByText("Article 1");
     expect(articleHeading).toBeInTheDocument();
     const link = articleHeading.closest("a");
-    const href = JSON.parse(link?.getAttribute("href") ?? "{}");
-    expect(href.path).toContain("/PräöüÄÖÜambel");
+    expect(link?.getAttribute("href")).toContain("/PräöüÄÖÜambel");
   });
 
   it("does not display a highlight when the text match has no mark", () => {
@@ -343,10 +343,7 @@ describe("NormSearchResult", () => {
     renderComponent();
 
     const link = screen.getByRole("link", { name: /Test Title/i });
-    const href = JSON.parse(link.getAttribute("href") ?? "{}");
-    expect(href.query?.from).toBe(
-      "/search?query=BGB&documentKind=N&pageIndex=1",
-    );
+    expect(link).toHaveAttribute("data-from", "/search?query=BGB&documentKind=N&pageIndex=1");
   });
 
   it("includes the current search URL as query param in the article detail page link", () => {
@@ -357,9 +354,6 @@ describe("NormSearchResult", () => {
     renderComponent();
 
     const link = screen.getByRole("link", { name: /Article 2/i });
-    const href = JSON.parse(link.getAttribute("href") ?? "{}");
-    expect(href.query?.from).toBe(
-      "/search?query=BGB&documentKind=N&pageIndex=1",
-    );
+    expect(link).toHaveAttribute("data-from", "/search?query=BGB&documentKind=N&pageIndex=1");
   });
 });

@@ -50,7 +50,8 @@ function renderComponent({
     global: {
       stubs: {
         NuxtLink: {
-          template: '<a :href="JSON.stringify(to)"><slot /></a>',
+          template:
+            '<a :href="to.path ?? to" :data-from="to.query?.from"><slot /></a>',
           props: ["to"],
         },
       },
@@ -413,8 +414,31 @@ describe("CaselawSearchResult", () => {
     renderComponent({});
 
     const link = screen.getByRole("link", { name: /Decision Name/ });
-    const href = JSON.parse(link.getAttribute("href") ?? "{}");
-    expect(href.query?.from).toBe(
+    expect(link).toHaveAttribute(
+      "data-from",
+      "/search?query=BGB&documentKind=R&pageIndex=2",
+    );
+  });
+
+  it("includes the current search URL as query param in preview section links", () => {
+    useRouteMock.mockReturnValue({
+      fullPath: "/search?query=BGB&documentKind=R&pageIndex=2",
+    });
+
+    renderComponent({
+      textMatches: [
+        {
+          "@type": "SearchResultMatch",
+          name: "guidingPrinciple",
+          text: "testing <mark>highlighted</mark> text",
+          location: undefined,
+        },
+      ],
+    });
+
+    const sectionLink = screen.getByRole("link", { name: "Leitsatz:" });
+    expect(sectionLink).toHaveAttribute(
+      "data-from",
       "/search?query=BGB&documentKind=R&pageIndex=2",
     );
   });

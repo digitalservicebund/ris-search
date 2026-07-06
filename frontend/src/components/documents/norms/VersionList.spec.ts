@@ -186,4 +186,25 @@ describe("VersionList", () => {
       query: { from: "/search?q=test" },
     });
   });
+
+  it("keeps the from query parameter when navigating to a past version", async () => {
+    useRouteMock.mockReturnValue({ query: { from: "/search?q=test" } });
+
+    const wrapper = await mountSuspended(VersionList, {
+      props: {
+        status: "success",
+        currentLegislationIdentifier:
+          data.member![1]?.legislationIdentifier ?? "",
+        versions: data.member!,
+      },
+    });
+
+    const pastVersionRow = wrapper.find("tbody").findAll("tr")[2];
+    await pastVersionRow?.trigger("click");
+
+    expect(mockNavigateTo).toHaveBeenCalledWith({
+      path: "/norms/eli/bund/bgbl-1/2000/s001/2000-01-01/1/deu/regelungstext-1",
+      query: { from: "/search?q=test" },
+    });
+  });
 });
