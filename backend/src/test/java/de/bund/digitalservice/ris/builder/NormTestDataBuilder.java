@@ -85,42 +85,34 @@ public class NormTestDataBuilder {
     return this;
   }
 
-  public NormTestDataBuilder officialTitle(String officalTitle, String authorialNote) {
+  public NormTestDataBuilder officialTitle(String officialTitle, String authorialNote) {
     LongTitle longTitle = this.document.getAct().getPreface().getLongTitle();
     this.document
         .getAct()
         .getPreface()
-        .setLongTitle(longTitle.withOfficialTitle(officalTitle, authorialNote));
+        .setLongTitle(longTitle.withOfficialTitle(officialTitle, authorialNote));
 
     return this;
   }
 
   public NormTestDataBuilder shortTitle(String title, String suffix) {
+    LongTitle longTitle = this.document.getAct().getPreface().getLongTitle();
     ShortTitle shortTitle = this.document.getAct().getPreface().getLongTitle().getShortTitle();
     this.document
         .getAct()
         .getPreface()
-        .setLongTitle(
-            this.document
-                .getAct()
-                .getPreface()
-                .getLongTitle()
-                .withShortTitle(shortTitle.withTitle(title, suffix)));
+        .setLongTitle(longTitle.withShortTitle(shortTitle.withTitle(title, suffix)));
 
     return this;
   }
 
   public NormTestDataBuilder officialAbbreviation(String abbreviation) {
+    LongTitle longTitle = this.document.getAct().getPreface().getLongTitle();
     ShortTitle shortTitle = this.document.getAct().getPreface().getLongTitle().getShortTitle();
     this.document
         .getAct()
         .getPreface()
-        .setLongTitle(
-            this.document
-                .getAct()
-                .getPreface()
-                .getLongTitle()
-                .withShortTitle(shortTitle.withOfficialAbbreviation(abbreviation)));
+        .setLongTitle(longTitle.withShortTitle(shortTitle.withOfficialAbbreviation(abbreviation)));
 
     return this;
   }
@@ -329,7 +321,7 @@ public class NormTestDataBuilder {
   }
 
   /**
-   * Retunrs a map with the attachment xmls where the keys are the manifestationElis and the values
+   * Returns a map with the attachment XMLs where the keys are the manifestationElis and the values
    * are the xml strings.
    *
    * @return map of manifestationElis to attachments
