@@ -46,8 +46,9 @@ import org.eclipse.persistence.oxm.NamespacePrefixMapper;
  *   <li>It does not 100% implement the eId logic correctly. E.g. in many places the eId is not
  *       constructed based in the parent eId but simply set to the minimum required string to
  *       fulfill the schema validation. The application does not rely on the eId for almost all the
- *       filed extractions, so this is fine. In places where the eId is important (e.g. Articles and
- *       Temporal Data) it is set correctly or the builder gives the option to manually set the eId.
+ *       field extractions, so this is fine. In places where the eId is important (e.g. Articles and
+ *       Temporal Data) it is automatically constructed or the builder gives the option to manually
+ *       set the eId.
  * </ul>
  */
 public class NormTestDataBuilder {
@@ -142,7 +143,7 @@ public class NormTestDataBuilder {
   /**
    * Sets the norms Ausfertigungsdatum
    *
-   * @param date
+   * @param date date in the format YYYY-MM-DD
    */
   public NormTestDataBuilder legislationDate(String date) {
     this.document.getAct().getPreface().setLegislationDate(date);
@@ -152,7 +153,7 @@ public class NormTestDataBuilder {
   /**
    * Sets the norms Verkuendungsdatum
    *
-   * @param date
+   * @param date date in the format YYYY-MM-DD
    */
   public NormTestDataBuilder datePublished(String date) {
     this.document.getAct().getMeta().getIdentification().getFrbrWork().setDatePublished(date);
@@ -224,10 +225,10 @@ public class NormTestDataBuilder {
    * Creates the article element and the separate temporal group and lifecycle events and links them
    * together.
    *
-   * @param num
-   * @param startDate
-   * @param endDate
-   * @param eId
+   * @param num e.g. "§ 1"
+   * @param startDate date the Article starts being valid
+   * @param endDate date the Article stops being valid
+   * @param eId eId of the article e.g. "art-z1"
    * @return Article
    */
   public Article buildArticle(String num, String startDate, String endDate, String eId) {
