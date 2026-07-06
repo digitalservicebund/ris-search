@@ -10,7 +10,9 @@ const { administrativeDirective } = defineProps<{
 }>();
 
 const actions = computed(() => {
-  const permalink = useRequestURL().href;
+  const requestUrl = useRequestURL();
+  requestUrl.search = "";
+  const permalink = requestUrl.href;
 
   const xmlUrl = useBackendUrl(
     administrativeDirective?.encoding?.find(

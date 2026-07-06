@@ -22,9 +22,7 @@ vi.mock("primevue/usetoast", () => ({
 }));
 
 mockNuxtImport("useRequestURL", () => {
-  return () => ({
-    href: "https://example.com/literature",
-  });
+  return () => new URL("https://example.com/literature?foo=bar");
 });
 
 const mockedLiterature = {

@@ -14,7 +14,10 @@ const { metadata, translationUrl } = defineProps<{
 }>();
 
 const actions = computed(() => {
-  const href = useRequestURL().href;
+  const requestUrl = useRequestURL();
+  requestUrl.search = "";
+  const href = requestUrl.href;
+
   const workEli = metadata?.exampleOfWork.legislationIdentifier;
   const workEliLink = workEli ? href.replace(/eli.+$/, workEli) : undefined;
   const xmlUrl = useBackendUrl(

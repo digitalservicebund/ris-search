@@ -4,7 +4,9 @@ import { usePdfActionItem } from "~/composables/useActionMenuItem/usePdfActionIt
 import { usePrintActionItem } from "~/composables/useActionMenuItem/usePrintActionItem";
 
 const actions = computed(() => {
-  const permalink = useRequestURL().href;
+  const requestUrl = useRequestURL();
+  requestUrl.search = "";
+  const permalink = requestUrl.href;
 
   return [
     useCopyUrlActionItem(permalink, "Link to translation"),

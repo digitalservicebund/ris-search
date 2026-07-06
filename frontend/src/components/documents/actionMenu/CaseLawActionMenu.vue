@@ -8,7 +8,9 @@ import type { CaseLaw } from "~/types/api";
 const { caseLaw } = defineProps<{ caseLaw: CaseLaw | undefined }>();
 
 const actions = computed(() => {
-  const permalink = useRequestURL().href;
+  const requestUrl = useRequestURL();
+  requestUrl.search = "";
+  const permalink = requestUrl.href;
 
   const xmlUrl = useBackendUrl(getEncodingURL(caseLaw, "application/xml"));
 

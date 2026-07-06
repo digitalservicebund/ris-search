@@ -17,9 +17,7 @@ vi.mock("primevue/usetoast", () => ({
 }));
 
 mockNuxtImport("useRequestURL", () => {
-  return () => ({
-    href: "https://example.com/translations",
-  });
+  return () => new URL("https://example.com/translations?foo=bar");
 });
 
 function renderLiteratureActionMenu() {

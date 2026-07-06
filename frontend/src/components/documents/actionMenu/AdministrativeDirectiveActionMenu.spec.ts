@@ -22,9 +22,7 @@ vi.mock("primevue/usetoast", () => ({
 }));
 
 mockNuxtImport("useRequestURL", () => {
-  return () => ({
-    href: "https://example.com/administrative-directive",
-  });
+  return () => new URL("https://example.com/administrative-directive?foo=bar");
 });
 
 const mockedAdministrativeDirective = {
