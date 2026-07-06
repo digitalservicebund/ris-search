@@ -2,6 +2,7 @@ package de.bund.digitalservice.ris.search.unit.service;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
@@ -18,7 +19,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -41,9 +41,9 @@ class LiteratureServiceTest {
 
   @BeforeEach
   void setUp() {
-    literatureRepositoryMock = Mockito.mock(LiteratureRepository.class);
-    literatureBucketMock = Mockito.mock(LiteratureBucket.class);
-    operationsMock = Mockito.mock(ElasticsearchOperations.class);
+    literatureRepositoryMock = mock(LiteratureRepository.class);
+    literatureBucketMock = mock(LiteratureBucket.class);
+    operationsMock = mock(ElasticsearchOperations.class);
     this.literatureService =
         new LiteratureService(
             literatureRepositoryMock, literatureBucketMock, "", operationsMock, null);

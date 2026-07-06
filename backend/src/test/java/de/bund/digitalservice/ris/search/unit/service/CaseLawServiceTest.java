@@ -1,6 +1,7 @@
 package de.bund.digitalservice.ris.search.unit.service;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import de.bund.digitalservice.ris.search.config.opensearch.Configurations;
@@ -20,7 +21,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 
@@ -35,7 +35,7 @@ class CaseLawServiceTest {
 
   @BeforeEach
   void setUp() {
-    Configurations configurations = Mockito.mock(Configurations.class);
+    Configurations configurations = mock(Configurations.class);
     this.caseLawService =
         new CaseLawService(
             caseLawRepositoryMock,

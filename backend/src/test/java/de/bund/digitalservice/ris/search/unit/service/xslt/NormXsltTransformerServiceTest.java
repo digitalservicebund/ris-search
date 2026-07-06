@@ -1,6 +1,8 @@
 package de.bund.digitalservice.ris.search.unit.service.xslt;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import de.bund.digitalservice.ris.search.exception.FileTransformationException;
 import de.bund.digitalservice.ris.search.exception.NoSuchKeyException;
@@ -27,7 +29,7 @@ import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 class NormXsltTransformerServiceTest {
   public static final String RESOURCES_BASE_PATH = "res://";
 
-  private final NormsBucket normsBucketMock = Mockito.mock(NormsBucket.class);
+  private final NormsBucket normsBucketMock = mock(NormsBucket.class);
   private final NormXsltTransformerService service =
       new NormXsltTransformerService(normsBucketMock, "");
 
@@ -97,19 +99,17 @@ class NormXsltTransformerServiceTest {
           try {
             final var allBytes = Files.readAllBytes(Path.of(resourcesPath, filename));
             final var stream = new ByteArrayInputStream(allBytes);
-            return new ResponseInputStream<>(Mockito.mock(GetObjectResponse.class), stream);
+            return new ResponseInputStream<>(mock(GetObjectResponse.class), stream);
           } catch (IOException e) {
             throw new RuntimeException(e);
           }
         };
 
-    Mockito.when(
-            normsBucketMock.getStream(
-                "eli/bund/bgbl-1/0000/s1000/2000-01-01/1/deu/2000-01-01/anlage-regelungstext-1.xml"))
+    when(normsBucketMock.getStream(
+            "eli/bund/bgbl-1/0000/s1000/2000-01-01/1/deu/2000-01-01/anlage-regelungstext-1.xml"))
         .thenReturn(makeInputStream.apply("anlage-regelungstext-1.xml"));
-    Mockito.when(
-            normsBucketMock.getStream(
-                "eli/bund/bgbl-1/0000/s1000/2000-01-01/1/deu/2000-01-01/anlage-regelungstext-2.xml"))
+    when(normsBucketMock.getStream(
+            "eli/bund/bgbl-1/0000/s1000/2000-01-01/1/deu/2000-01-01/anlage-regelungstext-2.xml"))
         .thenReturn(makeInputStream.apply("anlage-regelungstext-2.xml"));
 
     var actualHtml = service.transformNorm(bytes, "subtype", RESOURCES_BASE_PATH);
