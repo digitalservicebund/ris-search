@@ -77,7 +77,7 @@ public class NormsTestData {
                             AuthorialNote.withText("Authorial note in attachment contents"))));
 
     result.put(version1ManifestationEli, version1Builder.buildNormXml());
-    result.put(version1AttachmentEli, version1Builder.buildAttachmentXmls().getFirst());
+    result.putAll(version1Builder.buildAttachmentXmls());
 
     // ------------- build second expression -------------------
     String version2ManifestationEli =

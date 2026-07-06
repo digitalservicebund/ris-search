@@ -25,23 +25,29 @@ import de.bund.digitalservice.ris.utils.NormXmlValidator;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.Marshaller;
 import java.io.StringWriter;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 import org.eclipse.persistence.oxm.NamespacePrefixMapper;
 
 /**
  * This class allows to construct norms for testing purposes using the builder pattern.
  *
- * <p><b>Important notes:</b>
+ * <p><b>Usage notes:</b>
  *
  * <ul>
- *   <li>it does not 100% implement the eId logic correctly. E.g. when adding chapter, sections etc.
- *       the eId is not calculated but set to a fixed value (which still fulfills the xsd
- *       validation). This does not cause issues as long as the production logic does not rely on
- *       the eIds. In cases where the eId is important it needs to be set manually when creating the
- *       chapter, section etc.
+ *   <li>The builder validates the created xml string using the norm xsd files. If the validation
+ *       fails the error message says what element/attribtue is causing the issue. For debugging, it
+ *       helps to comment out the line where the validation is done and then look at the generated
+ *       xml to see what is wrong.
+ *   <li>It does not 100% implement the eId logic correctly. E.g. in many places the eId is not
+ *       constructed based in the parent eId but simply set to the minimum required string to
+ *       fulfill the schema validation. The application does not rely on the eId for almost all the
+ *       filed extractions, so this is fine. In places where the eId is important (e.g. Articles and
+ *       Temporal Data) it is set correctly or the builder gives the option to manually set the eId.
  * </ul>
  */
 public class NormTestDataBuilder {
@@ -63,7 +69,7 @@ public class NormTestDataBuilder {
           + "http://Inhaltsdaten.LegalDocML.de/1.8.2/ Grammatiken/legalDocML.de-regelungstextverkuendungsfassung.xsd";
 
   private final AkomaNtoso document = new AkomaNtoso();
-  private final List<AkomaNtoso> attachmentsDocs = new ArrayList<>();
+  private final Map<String, AkomaNtoso> attachmentsDocs = new HashMap<>();
 
   private NormTestDataBuilder() {
     this.document.setAct(Act.builder().meta(Meta.builder().build()).build());
@@ -214,6 +220,16 @@ public class NormTestDataBuilder {
     return this;
   }
 
+  /**
+   * Creates the article element and the separate temporal group and lifecycle events and links them
+   * together.
+   *
+   * @param num
+   * @param startDate
+   * @param endDate
+   * @param eId
+   * @return Article
+   */
   public Article buildArticle(String num, String startDate, String endDate, String eId) {
     Lifecycle lifecycle = this.document.getAct().getMeta().getLifecycle();
     String inForceEventEId = lifecycle.addInForceEvent(startDate);
@@ -296,7 +312,7 @@ public class NormTestDataBuilder {
     attachments.addAttachment(
         manifestationEli, String.valueOf(attachments.getAttachmentCount() + 1));
     this.document.getAct().setAttachments(attachments);
-    attachmentsDocs.add(attachment);
+    attachmentsDocs.put(manifestationEli, attachment);
 
     return this;
   }
@@ -311,14 +327,23 @@ public class NormTestDataBuilder {
         this.document, REGELUNGSTEXT_SCHEMA_LOCATION, NormXmlValidator.Type.REGELUNGSTEXT);
   }
 
-  public List<String> buildAttachmentXmls() {
+  /**
+   * Retunrs a map with the attachment xmls where the keys are the manifestationElis and the values
+   * are the xml strings.
+   *
+   * @return map of manifestationElis to attachments
+   */
+  public Map<String, String> buildAttachmentXmls() {
 
-    return this.attachmentsDocs.stream()
-        .map(
-            doc ->
-                marshallDocument(
-                    doc, OFFENE_STRUKTUR_SCHEMA_LOCATIONS, NormXmlValidator.Type.ANLAGE))
-        .toList();
+    return this.attachmentsDocs.entrySet().stream()
+        .collect(
+            Collectors.toMap(
+                Map.Entry::getKey,
+                entry ->
+                    marshallDocument(
+                        entry.getValue(),
+                        OFFENE_STRUKTUR_SCHEMA_LOCATIONS,
+                        NormXmlValidator.Type.ANLAGE)));
   }
 
   /**
