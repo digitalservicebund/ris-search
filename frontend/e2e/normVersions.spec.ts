@@ -157,7 +157,7 @@ test.describe("future or historic version info", () => {
 
     await navigate(
       page,
-      "/norms/eli/bund/bgbl-1/2020/s1126/2020-08-04/1/deu/art-z1",
+      "/norms/eli/bund/bgbl-1/2020/s1126/2020-08-04/1/deu/hauptteil-n1_abschnitt-n2_art-z1",
     );
 
     await expect(
@@ -183,7 +183,7 @@ test.describe("future or historic version info", () => {
 
     await navigate(
       page,
-      "/norms/eli/bund/bgbl-1/2020/s1126/2920-08-04/1/deu/art-z1",
+      "/norms/eli/bund/bgbl-1/2020/s1126/2920-08-04/1/deu/hauptteil-n1_abschnitt-n2_art-z1",
     );
 
     await expect(

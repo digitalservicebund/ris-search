@@ -227,7 +227,7 @@ test.describe("view norm article page", () => {
     test.skip(isMobileTest);
     await navigate(
       page,
-      "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/art-z1",
+      "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/hauptteil-n1_abschnitt-n2_art-z1",
     );
 
     const tocNav = page.getByRole("navigation", { name: "Inhalte" });
