@@ -453,16 +453,16 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
             content()
                 .json(
                     """
-                                                {
-                                                  "errors": [
                                                     {
-                                                      "code": "invalid_parameter_value",
-                                                      "message": "%s",
-                                                      "parameter": "sort"
+                                                      "errors": [
+                                                        {
+                                                          "code": "invalid_parameter_value",
+                                                          "message": "%s",
+                                                          "parameter": "sort"
+                                                        }
+                                                      ]
                                                     }
-                                                  ]
-                                                }
-                                                """
+                                                    """
                         .formatted(expectedError)));
   }
 

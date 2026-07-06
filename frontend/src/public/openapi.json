@@ -2741,7 +2741,7 @@
             },
             "abbreviation" : {
               "type" : "string",
-              "description" : "Amtliche Buchstabenabkürzung",
+              "description" : "Amtliche Buchstabenabkürzung, if it exists. Otherwise ris-abkuerzung.",
               "example" : "KakaoV 2003"
             },
             "alternateName" : {
@@ -2924,7 +2924,7 @@
           },
           "abbreviation" : {
             "type" : "string",
-            "description" : "Amtliche Buchstabenabkürzung",
+            "description" : "Amtliche Buchstabenabkürzung, if it exists. Otherwise ris-abkuerzung.",
             "example" : "KakaoV 2003"
           },
           "alternateName" : {

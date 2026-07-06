@@ -99,7 +99,7 @@ test.describe("displays metadata correctly", async () => {
       metadataList.getByRole("term").or(metadataList.getByRole("definition")),
     ).toHaveText([
       "Abkürzung",
-      "—",
+      "RisFassTestAkt",
       "Status",
       "Aktuell gültig",
       "Gültig ab",
@@ -118,7 +118,7 @@ test.describe("displays metadata correctly", async () => {
       metadataList.getByRole("term").or(metadataList.getByRole("definition")),
     ).toHaveText([
       "Abkürzung",
-      "—",
+      "RisFassTestAlt",
       "Status",
       "Außer Kraft",
       "Gültig ab",
@@ -137,7 +137,7 @@ test.describe("displays metadata correctly", async () => {
       metadataList.getByRole("term").or(metadataList.getByRole("definition")),
     ).toHaveText([
       "Abkürzung",
-      "—",
+      "RisFassTestZuk",
       "Status",
       "Zukünftig in Kraft",
       "Gültig ab",

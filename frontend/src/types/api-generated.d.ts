@@ -1153,7 +1153,7 @@ export interface components {
        */
       temporalCoverage: string;
       /**
-       * Amtliche Buchstabenabkürzung
+       * Amtliche Buchstabenabkürzung, if it exists. Otherwise ris-abkuerzung.
        *
        * @example
        *   KakaoV 2003
@@ -1329,7 +1329,7 @@ export interface components {
        */
       name: string;
       /**
-       * Amtliche Buchstabenabkürzung
+       * Amtliche Buchstabenabkürzung, if it exists. Otherwise ris-abkuerzung.
        *
        * @example
        *   KakaoV 2003
