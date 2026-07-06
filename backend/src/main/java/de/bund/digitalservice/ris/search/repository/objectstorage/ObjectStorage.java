@@ -9,11 +9,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.CompletionService;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import org.apache.logging.log4j.Logger;
 import software.amazon.awssdk.awscore.exception.AwsServiceException;
 import software.amazon.awssdk.core.exception.SdkClientException;
@@ -93,29 +92,25 @@ public class ObjectStorage {
     return s3Response.map(bytes -> new String(bytes, StandardCharsets.UTF_8));
   }
 
-  public List<FetchResult> getObjects(List<String> keys) {
-    ExecutorService downloadExecutor = Executors.newVirtualThreadPerTaskExecutor();
+  public List<DocumentObject> getObjects(List<String> keys) {
 
-    CompletionService<FetchResult> completionService =
-        new ExecutorCompletionService<>(downloadExecutor);
-    List<FetchResult> content = new ArrayList<>(keys.size());
+    List<Future<DocumentObject>> tasks = new ArrayList<>(keys.size());
+    List<DocumentObject> content = new ArrayList<>(keys.size());
 
-    try {
+    try (ExecutorService downloadExecutor = Executors.newVirtualThreadPerTaskExecutor()) {
       for (String key : keys) {
-        completionService.submit(() -> new FetchResult(key, this.get(key)));
+        tasks.add(downloadExecutor.submit(() -> new DocumentObject(key, this.get(key))));
       }
-
-      for (int i = 0; i < keys.size(); i++) {
-        content.add(completionService.take().get());
+      for (Future<DocumentObject> task : tasks) {
+        try {
+          content.add(task.get());
+        } catch (ExecutionException e) {
+          logger.error(e.getCause());
+        } catch (InterruptedException interruptedException) {
+          downloadExecutor.shutdownNow();
+          Thread.currentThread().interrupt();
+        }
       }
-    } catch (InterruptedException interruptedException) {
-      downloadExecutor.shutdownNow();
-      Thread.currentThread().interrupt();
-    } catch (ExecutionException e) {
-      downloadExecutor.shutdownNow();
-      logger.error("couldnt fetch");
-    } finally {
-      downloadExecutor.close();
     }
     return content;
   }
