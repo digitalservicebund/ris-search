@@ -67,7 +67,7 @@ class ZipManagerTest {
 
     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
     ZipManager.writeZipArchive(
-        bucketMock, List.of(keyPrefix + xmlFilename, keyPrefix + pngFilename), outputStream);
+        bucketMock, "", List.of(keyPrefix + xmlFilename, keyPrefix + pngFilename), outputStream);
 
     try (ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
         ZipInputStream zipInputStream = new ZipInputStream(inputStream)) {

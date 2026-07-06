@@ -17,7 +17,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Predicate;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import org.apache.commons.io.FileUtils;
@@ -32,8 +31,7 @@ public class BulkExportService {
 
   private final ObjectStorage sourceBucket;
   private final ObjectStorage destinationBucket;
-  private final String prefix;
-  private final Predicate<String> keyFilter;
+  private final String versionPrefix;
   public static final String BULK_ZIP_PREFIX = "snapshots/";
   public static final String JOB_STATE_STORAGE_PREFIX = "snapshot-job-state/";
 
@@ -46,19 +44,16 @@ public class BulkExportService {
    * @param sourceBucket the ObjectStorage bucket to read files from
    * @param destinationBucket the ObjectStorage bucket to upload the ZIP archive to
    * @param outputName the base name for the output ZIP file
-   * @param prefix the prefix to filter objects in the sourceBucket
-   * @param keyFilter filter to exclude files based on their keys
+   * @param versionPrefix the prefix to filter objects in the sourceBucket
    */
   public BulkExportService(
       ObjectStorage sourceBucket,
       ObjectStorage destinationBucket,
       String outputName,
-      String prefix,
-      Predicate<String> keyFilter) {
+      String versionPrefix) {
     this.sourceBucket = sourceBucket;
     this.destinationBucket = destinationBucket;
-    this.prefix = prefix;
-    this.keyFilter = keyFilter;
+    this.versionPrefix = versionPrefix;
     this.archivePrefix = BULK_ZIP_PREFIX + outputName;
   }
 
@@ -76,7 +71,9 @@ public class BulkExportService {
 
     logger.info("Creating snapshot");
     List<String> keysToZip =
-        sourceBucket.getAllKeysByPrefix(prefix).stream().filter(keyFilter).toList();
+        sourceBucket.getAllKeysByPrefix(versionPrefix).stream()
+            .filter(key -> !key.startsWith(versionPrefix + ChangelogService.CHANGELOGS_PREFIX))
+            .toList();
 
     if (keysToZip.isEmpty()) {
       logger.error("No files found for bucket {}", sourceBucket.getClass());
