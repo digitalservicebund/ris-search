@@ -119,8 +119,8 @@
             <akn:proprietary GUID="11111111-2222-3333-4444-666666666666" eId="meta-n1_proprietary-n1"
                              source="attributsemantik-noch-undefiniert">
                 <ris:legalDocML.de_metadaten xmlns:ris="http://MetadatenRIS.LegalDocML.de/1.8.2/" xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.8.2/ ../schema/legalDocML.de-metadaten-ris.xsd">
-                    <ris:inkraft date="1999-04-24"/>
                     <ris:abkuerzung refersTo="interne-abkuerzung">RisBWahlGV</ris:abkuerzung>
+                    <ris:inkraft date="1999-04-24"/>
                 </ris:legalDocML.de_metadaten>
             </akn:proprietary>
         </akn:meta>
