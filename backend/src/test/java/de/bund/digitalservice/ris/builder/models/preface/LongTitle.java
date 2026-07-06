@@ -4,6 +4,8 @@ import de.bund.digitalservice.ris.builder.NormTestDataBuilder;
 import de.bund.digitalservice.ris.builder.models.common.AknP;
 import de.bund.digitalservice.ris.builder.models.common.AuthorialNote;
 import de.bund.digitalservice.ris.builder.models.common.BaseElement;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlTransient;
@@ -18,6 +20,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Getter
+@XmlAccessorType(XmlAccessType.FIELD)
 public class LongTitle extends BaseElement {
 
   @XmlTransient private DocTitle officialTitle;
@@ -38,7 +41,7 @@ public class LongTitle extends BaseElement {
                   ShortTitle.builder().build()))
           .build();
 
-  public LongTitle withOfficialTitle(String officialTitle, String authorialNote) {
+  public void setOfficialTitle(String officialTitle, String authorialNote) {
     List<Object> titleElements = new ArrayList<>(List.of(officialTitle));
     if (authorialNote != null) {
       titleElements.add(AuthorialNote.withText(authorialNote));
@@ -46,13 +49,11 @@ public class LongTitle extends BaseElement {
 
     this.officialTitle = DocTitle.builder().children(titleElements).build();
     setTitlesAndAbbreviation();
-    return this;
   }
 
-  public LongTitle withShortTitle(ShortTitle shortTitle) {
+  public void setShortTitle(ShortTitle shortTitle) {
     this.shortTitle = shortTitle;
     setTitlesAndAbbreviation();
-    return this;
   }
 
   private void setTitlesAndAbbreviation() {

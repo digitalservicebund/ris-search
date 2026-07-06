@@ -18,7 +18,6 @@ import de.bund.digitalservice.ris.builder.models.meta.lifecycle.Lifecycle;
 import de.bund.digitalservice.ris.builder.models.preamble.Preamble;
 import de.bund.digitalservice.ris.builder.models.preamble.Toc;
 import de.bund.digitalservice.ris.builder.models.preface.DocTitle;
-import de.bund.digitalservice.ris.builder.models.preface.LongTitle;
 import de.bund.digitalservice.ris.builder.models.preface.Preface;
 import de.bund.digitalservice.ris.builder.models.preface.ShortTitle;
 import de.bund.digitalservice.ris.utils.NormXmlValidator;
@@ -86,33 +85,33 @@ public class NormTestDataBuilder {
   }
 
   public NormTestDataBuilder officialTitle(String officialTitle, String authorialNote) {
-    LongTitle longTitle = this.document.getAct().getPreface().getLongTitle();
     this.document
         .getAct()
         .getPreface()
-        .setLongTitle(longTitle.withOfficialTitle(officialTitle, authorialNote));
+        .getLongTitle()
+        .setOfficialTitle(officialTitle, authorialNote);
 
     return this;
   }
 
   public NormTestDataBuilder shortTitle(String title, String suffix) {
-    LongTitle longTitle = this.document.getAct().getPreface().getLongTitle();
     ShortTitle shortTitle = this.document.getAct().getPreface().getLongTitle().getShortTitle();
     this.document
         .getAct()
         .getPreface()
-        .setLongTitle(longTitle.withShortTitle(shortTitle.withTitle(title, suffix)));
+        .getLongTitle()
+        .setShortTitle(shortTitle.withTitle(title, suffix));
 
     return this;
   }
 
   public NormTestDataBuilder officialAbbreviation(String abbreviation) {
-    LongTitle longTitle = this.document.getAct().getPreface().getLongTitle();
     ShortTitle shortTitle = this.document.getAct().getPreface().getLongTitle().getShortTitle();
     this.document
         .getAct()
         .getPreface()
-        .setLongTitle(longTitle.withShortTitle(shortTitle.withOfficialAbbreviation(abbreviation)));
+        .getLongTitle()
+        .setShortTitle(shortTitle.withOfficialAbbreviation(abbreviation));
 
     return this;
   }
