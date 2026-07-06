@@ -54,7 +54,7 @@ jobs:
           distribution: "temurin"
 
       - name: Cache Gradle packages
-        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v5
         with:
           path: .gradle-cache
           key: gradle-${{ runner.os }}-${{ hashFiles('backend/**/*.gradle*', 'backend/gradle/wrapper/gradle-wrapper.properties') }}
