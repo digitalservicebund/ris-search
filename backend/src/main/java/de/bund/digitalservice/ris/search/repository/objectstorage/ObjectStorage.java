@@ -92,22 +92,33 @@ public class ObjectStorage {
     return s3Response.map(bytes -> new String(bytes, StandardCharsets.UTF_8));
   }
 
-  public List<DocumentObject> getObjects(List<String> keys) {
+  /**
+   * Retrieves a list of objects from the object storage based on the given object keys. Not found
+   * keys will be ignored in the result list without an exception thrown.
+   *
+   * @param keys list of keys identifying the objects in the storage
+   * @return a List of StoreObjects
+   * @throws ObjectStoreServiceException if all retries fail or an unexpected error occurs during
+   *     the operation
+   */
+  public List<StorageObject> getObjects(List<String> keys) {
 
-    List<Future<DocumentObject>> tasks = new ArrayList<>(keys.size());
-    List<DocumentObject> content = new ArrayList<>(keys.size());
+    List<Future<StorageObject>> tasks = new ArrayList<>(keys.size());
+    List<StorageObject> content = new ArrayList<>(keys.size());
 
     try (ExecutorService downloadExecutor = Executors.newVirtualThreadPerTaskExecutor()) {
       for (String key : keys) {
-        tasks.add(downloadExecutor.submit(() -> new DocumentObject(key, this.get(key))));
+        tasks.add(downloadExecutor.submit(() -> new StorageObject(key, this.get(key))));
       }
-      for (Future<DocumentObject> task : tasks) {
+      for (Future<StorageObject> task : tasks) {
         try {
           content.add(task.get());
         } catch (ExecutionException e) {
-          logger.error(e.getCause());
+          downloadExecutor.shutdownNow();
+          logger.error("an exception occured furing object retrieval", e.getCause());
         } catch (InterruptedException interruptedException) {
           downloadExecutor.shutdownNow();
+          logger.error("object retrieval thread was interrupted");
           Thread.currentThread().interrupt();
         }
       }

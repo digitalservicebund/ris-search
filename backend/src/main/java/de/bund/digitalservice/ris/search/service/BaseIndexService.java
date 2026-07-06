@@ -2,8 +2,8 @@ package de.bund.digitalservice.ris.search.service;
 
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
-import de.bund.digitalservice.ris.search.repository.objectstorage.DocumentObject;
 import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
+import de.bund.digitalservice.ris.search.repository.objectstorage.StorageObject;
 import de.bund.digitalservice.ris.search.repository.opensearch.DocumentRepository;
 import de.bund.digitalservice.ris.search.utils.DateUtils;
 import java.time.Instant;
@@ -90,7 +90,7 @@ public abstract class BaseIndexService<T> implements IndexService {
   }
 
   private void indexOneBatch(List<String> filenames) throws ObjectStoreServiceException {
-    List<DocumentObject> results = objectStorage.getObjects(filenames);
+    List<StorageObject> results = objectStorage.getObjects(filenames);
 
     List<T> allParsedEntities =
         results.stream().map(this::fetchAndMapEntity).flatMap(Optional::stream).toList();
@@ -100,7 +100,7 @@ public abstract class BaseIndexService<T> implements IndexService {
     documentRepository.saveAll(allParsedEntities);
   }
 
-  private Optional<T> fetchAndMapEntity(DocumentObject result) {
+  private Optional<T> fetchAndMapEntity(StorageObject result) {
 
     Optional<byte[]> content = result.bytes();
 
