@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
+/** Represents a single {@code akn:attachment} element referencing an attachment document. */
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
+/** Represents an {@code akn:date} element, e.g. a legislation date reference. */
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

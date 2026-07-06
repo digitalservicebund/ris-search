@@ -10,6 +10,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/** Represents the {@code akn:proprietary} element, holding RIS-specific metadata. */
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

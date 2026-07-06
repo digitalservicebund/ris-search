@@ -8,6 +8,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
+/**
+ * Represents an {@code akn:authorialNote} element, e.g. a footnote attached to a title or heading.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

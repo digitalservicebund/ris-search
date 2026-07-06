@@ -14,11 +14,20 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
+/**
+ * Represents the {@code akn:FRBRManifestation} element identifying the norm's manifestation level.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class FRBRManifestation extends BaseElement {
 
+  /**
+   * Builds an FRBRManifestation from the manifestation-level parts of the given ELI.
+   *
+   * @param eli the parsed ELI to derive the manifestation identification from
+   * @return the built {@link FRBRManifestation}
+   */
   public static FRBRManifestation fromEli(EliFile eli) {
     return FRBRManifestation.builder()
         .frbrThis(

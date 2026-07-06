@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
+/** Represents an {@code akn:inline} element, e.g. an official abbreviation marker. */
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

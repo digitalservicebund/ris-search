@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
+/** Represents an {@code akn:content} element wrapping a paragraph's text. */
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

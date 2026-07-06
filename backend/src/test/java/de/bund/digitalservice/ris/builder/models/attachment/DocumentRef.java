@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
+/** Represents the {@code akn:documentRef} element linking an attachment to its document. */
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

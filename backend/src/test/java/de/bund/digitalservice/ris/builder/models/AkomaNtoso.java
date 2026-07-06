@@ -6,6 +6,10 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Represents the {@code akn:akomaNtoso} document root, wrapping either an {@link Act} or a {@link
+ * Doc}.
+ */
 @Getter
 @Setter
 @XmlRootElement(namespace = NormTestDataBuilder.AKN_NS)

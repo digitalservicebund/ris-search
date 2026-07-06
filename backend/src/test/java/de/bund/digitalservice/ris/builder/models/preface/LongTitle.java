@@ -16,6 +16,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/** Represents the {@code akn:longTitle} element, wrapping the norm's official and short titles. */
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -41,6 +42,12 @@ public class LongTitle extends BaseElement {
                   ShortTitle.builder().build()))
           .build();
 
+  /**
+   * Sets the official title, optionally with an authorial note, and rebuilds the paragraph.
+   *
+   * @param officialTitle the official title text
+   * @param authorialNote optional authorial note text, or {@code null} for none
+   */
   public void setOfficialTitle(String officialTitle, String authorialNote) {
     List<Object> titleElements = new ArrayList<>(List.of(officialTitle));
     if (authorialNote != null) {
@@ -51,6 +58,11 @@ public class LongTitle extends BaseElement {
     setTitlesAndAbbreviation();
   }
 
+  /**
+   * Sets the short title and rebuilds the paragraph.
+   *
+   * @param shortTitle the short title to set
+   */
   public void setShortTitle(ShortTitle shortTitle) {
     this.shortTitle = shortTitle;
     setTitlesAndAbbreviation();

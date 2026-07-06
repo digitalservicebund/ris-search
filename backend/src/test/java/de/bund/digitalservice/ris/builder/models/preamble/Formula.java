@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
+/** Represents an {@code akn:formula} element, e.g. the norm's enacting formula (Eingangsformel). */
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -24,6 +25,12 @@ public class Formula extends BaseElement {
   @XmlElement(name = "p", namespace = NormTestDataBuilder.AKN_NS)
   private AknP paragraph;
 
+  /**
+   * Creates a formula containing a single paragraph with the given text.
+   *
+   * @param text the formula text
+   * @return the built {@link Formula}
+   */
   public static Formula withText(String text) {
     return Formula.builder()
         .paragraph(

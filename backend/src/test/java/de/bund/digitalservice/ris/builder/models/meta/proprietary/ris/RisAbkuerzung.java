@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
+/** Represents the {@code ris:abkuerzung} element, the norm's internal RIS abbreviation. */
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

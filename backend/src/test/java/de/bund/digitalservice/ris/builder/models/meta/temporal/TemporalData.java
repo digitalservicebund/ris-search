@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
+/** Represents the {@code akn:temporalData} element, a container of {@link TemporalGroup}s. */
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -28,6 +29,15 @@ public class TemporalData extends BaseElement {
   private List<TemporalGroup> temporalGroups =
       new ArrayList<>(List.of(TemporalGroup.builder().build()));
 
+  /**
+   * Adds a temporal group linking the given lifecycle events and returns its eId.
+   *
+   * @param startEventEId reference to the event the interval starts at, e.g.
+   *     "#meta-n1_lebzykl-n1_ereignis-n3"
+   * @param endEventEId reference to the event the interval ends at, e.g.
+   *     "#meta-n1_lebzykl-n1_ereignis-n4"
+   * @return the eId of the created temporal group
+   */
   public String addTemporalGroup(String startEventEId, String endEventEId) {
     String temporalGroupEId = "meta-n1_geltzeiten-n1_geltungszeitgr-n" + temporalGroupsCounter;
     temporalGroups.add(TemporalGroup.withEventRefs(startEventEId, endEventEId, temporalGroupEId));

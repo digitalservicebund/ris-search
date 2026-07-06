@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
+/** Represents the {@code akn:lifecycle} element, a container of {@link EventRef}s. */
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -41,6 +42,13 @@ public class Lifecycle extends BaseElement {
                   .type("generation")
                   .build()));
 
+  /**
+   * Adds an in-force event at the given date and returns its reference.
+   *
+   * @param date the date the event occurs, in the format YYYY-MM-DD, or {@code null} for none
+   * @return the event's eId as a reference (e.g. "#meta-n1_lebzykl-n1_ereignis-n3"), or {@code
+   *     null} if no date was given
+   */
   public String addInForceEvent(String date) {
     if (date == null) {
       return null;
@@ -52,6 +60,13 @@ public class Lifecycle extends BaseElement {
     return "#" + eventEId;
   }
 
+  /**
+   * Adds an out-of-force event at the given date and returns its reference.
+   *
+   * @param date the date the event occurs, in the format YYYY-MM-DD, or {@code null} for none
+   * @return the event's eId as a reference (e.g. "#meta-n1_lebzykl-n1_ereignis-n4"), or {@code
+   *     null} if no date was given
+   */
   public String addOutOfForce(String date) {
     if (date == null) {
       return null;

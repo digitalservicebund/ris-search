@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
+/** Represents an {@code akn:section} element, grouping articles within the norm's body. */
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -30,18 +31,36 @@ public class Section extends BaseElement implements BodyElement {
   @XmlElement(name = "article", namespace = NormTestDataBuilder.AKN_NS)
   private List<Article> articles = new ArrayList<>();
 
+  /**
+   * Sets the section's number.
+   *
+   * @param num the section number, e.g. "Abschnitt 1"
+   * @return this section for chaining
+   */
   public Section addNum(String num) {
     this.num = AknNum.builder().eId(eId + "_bezeichnung-n1").value(num).build();
 
     return this;
   }
 
+  /**
+   * Sets the section's heading.
+   *
+   * @param text the heading text
+   * @return this section for chaining
+   */
   public Section addHeading(String text) {
     this.heading = Heading.builder().eId(eId + "_überschrift-n1").headline(List.of(text)).build();
 
     return this;
   }
 
+  /**
+   * Adds an article to this section.
+   *
+   * @param article the article to add
+   * @return this section for chaining
+   */
   public Section addArticle(Article article) {
     this.articles.add(article);
     return this;

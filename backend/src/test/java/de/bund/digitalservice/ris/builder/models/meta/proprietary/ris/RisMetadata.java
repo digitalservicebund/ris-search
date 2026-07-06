@@ -8,6 +8,9 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Represents the {@code ris:legalDocML.de_metadaten} element, holding RIS-specific norm metadata.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

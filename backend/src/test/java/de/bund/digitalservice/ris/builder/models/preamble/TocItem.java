@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
+/** Represents an {@code akn:tocItem} element, a single entry in the table of contents. */
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -24,6 +25,14 @@ public class TocItem extends BaseElement {
   @XmlElement(namespace = NormTestDataBuilder.AKN_NS)
   private Span span = Span.builder().content("Eintrag 1").build();
 
+  /**
+   * Creates a table of contents entry with the given text, nesting level and eId.
+   *
+   * @param text the entry text
+   * @param level the nesting level, e.g. "1"
+   * @param eId the eId of the entry
+   * @return the built {@link TocItem}
+   */
   public static TocItem withTextAndLevel(String text, String level, String eId) {
     return TocItem.builder()
         .level(level)

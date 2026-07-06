@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
+/** Represents the {@code akn:docTitle} element, the norm's official title (Langtitel). */
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

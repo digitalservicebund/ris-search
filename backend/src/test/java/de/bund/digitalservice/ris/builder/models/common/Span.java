@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
+/** Represents an {@code akn:span} element, e.g. a table of contents entry's text. */
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

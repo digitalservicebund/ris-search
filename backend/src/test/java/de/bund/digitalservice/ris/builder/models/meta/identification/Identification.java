@@ -11,12 +11,24 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * Represents the {@code akn:identification} element, grouping the FRBR
+ * work/expression/manifestation.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Getter
 public class Identification extends BaseElement {
 
+  /**
+   * Builds an Identification from the given manifestation ELI string.
+   *
+   * @param eliString the manifestation ELI, e.g.
+   *     "eli/bund/bgbl-1/1991/s102/1991-01-01/1/deu/1991-01-01/regelungstext-1.xml"
+   * @return the built {@link Identification}
+   * @throws IllegalArgumentException if the ELI string cannot be parsed
+   */
   public static Identification fromEli(String eliString) {
     Optional<EliFile> parsedEli = EliFile.fromString(eliString);
     if (parsedEli.isEmpty()) {

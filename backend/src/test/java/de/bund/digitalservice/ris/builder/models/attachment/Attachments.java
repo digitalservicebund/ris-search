@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
+/** Represents the {@code akn:attachments} element, a container of {@link Attachment}s. */
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -21,6 +22,12 @@ public class Attachments extends BaseElement {
   @XmlElement(name = "attachment", namespace = NormTestDataBuilder.AKN_NS)
   private List<Attachment> attachments = new ArrayList<>();
 
+  /**
+   * Adds an attachment referencing the given manifestation ELI.
+   *
+   * @param manifestationEli the manifestation ELI of the referenced attachment document
+   * @param eIdNumber the number used to build the attachment's eId, e.g. "1"
+   */
   public void addAttachment(String manifestationEli, String eIdNumber) {
     attachments.add(
         Attachment.builder()

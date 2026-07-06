@@ -14,6 +14,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/** Represents the {@code akn:act} root element of a Regelungstext norm document. */
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

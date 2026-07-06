@@ -5,6 +5,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
+/** Validates Literature LegalDocML XML content/files against the relevant XSD schemas. */
 public class LiteratureXmlValidator {
 
   private static final List<String> LITERATURE_SCHEMA_METADATA_FILES =

@@ -15,6 +15,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/** Represents the {@code akn:preface} element, holding the norm's title and legislation date. */
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

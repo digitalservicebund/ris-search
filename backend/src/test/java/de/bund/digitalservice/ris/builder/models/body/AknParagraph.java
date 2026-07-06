@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
+/** Represents an {@code akn:paragraph} element within an article. */
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
+/** Represents the {@code akn:conclusions} element holding the norm's closing formula. */
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -20,6 +21,12 @@ public class Conclusions extends BaseElement {
   @XmlElement(namespace = NormTestDataBuilder.AKN_NS)
   private Formula formula;
 
+  /**
+   * Creates conclusions containing a single closing formula with the given text.
+   *
+   * @param text the closing formula text
+   * @return the built {@link Conclusions}
+   */
   public static Conclusions withText(String text) {
     return Conclusions.builder()
         .formula(

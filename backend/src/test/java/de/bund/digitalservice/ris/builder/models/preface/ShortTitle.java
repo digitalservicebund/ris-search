@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
+/** Represents the {@code akn:shortTitle} element, the norm's short title (Kurztitel). */
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -37,6 +38,13 @@ public class ShortTitle {
   @Builder.Default @XmlAnyElement
   private List<Object> children = List.of("Short Title of the Legislation");
 
+  /**
+   * Sets the short title text and suffix, and rebuilds the element's children.
+   *
+   * @param title the short title text
+   * @param suffix optional suffix appended after the title, or {@code null} for none
+   * @return this short title for chaining
+   */
   public ShortTitle withTitle(String title, String suffix) {
     this.shortTitle = title;
     this.shortTitleSuffix = suffix;
@@ -45,6 +53,12 @@ public class ShortTitle {
     return this;
   }
 
+  /**
+   * Sets the official abbreviation, and rebuilds the element's children.
+   *
+   * @param abbreviation the official abbreviation text
+   * @return this short title for chaining
+   */
   public ShortTitle withOfficialAbbreviation(String abbreviation) {
     this.abbreviation =
         Inline.builder()

@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
+/** Represents an {@code akn:temporalGroup} element, wrapping a {@link TimeInterval}. */
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

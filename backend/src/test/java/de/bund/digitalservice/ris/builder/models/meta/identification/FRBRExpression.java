@@ -15,11 +15,18 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
+/** Represents the {@code akn:FRBRExpression} element identifying the norm's expression level. */
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class FRBRExpression extends BaseElement {
 
+  /**
+   * Builds an FRBRExpression from the expression-level parts of the given ELI.
+   *
+   * @param eli the parsed ELI to derive the expression identification from
+   * @return the built {@link FRBRExpression}
+   */
   public static FRBRExpression fromEli(EliFile eli) {
     return FRBRExpression.builder()
         .frbrThis(

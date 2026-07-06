@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
+/** Represents an {@code akn:blockContainer} element holding the table of contents. */
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

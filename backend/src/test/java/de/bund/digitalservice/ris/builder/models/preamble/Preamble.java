@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
+/** Represents the {@code akn:preamble} element, holding the table of contents and formula. */
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -26,6 +27,11 @@ public class Preamble extends BaseElement {
     this.formula = Formula.withText(text);
   }
 
+  /**
+   * Creates a table of contents, attaches it to this preamble's block container and returns it.
+   *
+   * @return the created {@link Toc}
+   */
   public Toc addToc() {
     Toc toc = Toc.builder().build();
     this.blockContainer = BlockContainer.builder().toc(toc).build();

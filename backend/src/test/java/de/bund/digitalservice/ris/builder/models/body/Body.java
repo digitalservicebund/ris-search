@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
+/** Represents the {@code akn:body} element, containing the norm's structural content. */
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

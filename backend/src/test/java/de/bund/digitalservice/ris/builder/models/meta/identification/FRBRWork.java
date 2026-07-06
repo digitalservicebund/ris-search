@@ -13,11 +13,18 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
+/** Represents the {@code akn:FRBRWork} element identifying the norm's work level. */
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class FRBRWork extends BaseElement {
 
+  /**
+   * Builds an FRBRWork from the work-level parts of the given ELI.
+   *
+   * @param eli the parsed ELI to derive the work identification from
+   * @return the built {@link FRBRWork}
+   */
   public static FRBRWork fromEli(EliFile eli) {
 
     FRBRWork.FRBRWorkBuilder builder = FRBRWork.builder();

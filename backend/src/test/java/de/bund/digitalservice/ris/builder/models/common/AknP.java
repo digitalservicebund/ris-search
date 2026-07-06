@@ -16,6 +16,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
+/**
+ * Represents an {@code akn:p} paragraph element, a generic text container used throughout the norm.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -35,6 +38,12 @@ public class AknP implements BodyElement {
     return AknP.builder().children(new ArrayList<>(List.of(text))).build();
   }
 
+  /**
+   * Adds a child element or text node to this paragraph.
+   *
+   * @param child the child to add, e.g. a {@link String} or another AKN element
+   * @return this paragraph for chaining
+   */
   public AknP addChild(Object child) {
     this.children.add(child);
     return this;

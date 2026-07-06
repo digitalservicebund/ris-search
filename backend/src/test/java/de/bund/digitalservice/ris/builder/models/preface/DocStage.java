@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
+/** Represents the {@code akn:docStage} element, e.g. the norm's promulgation stage marker. */
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

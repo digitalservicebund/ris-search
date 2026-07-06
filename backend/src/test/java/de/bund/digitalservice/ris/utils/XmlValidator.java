@@ -12,6 +12,7 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 
+/** Validates XML content or files against a given set of XSD schema files. */
 public class XmlValidator {
 
   private static List<StreamSource> loadSchemaFiles(List<String> schemaFilePaths) {
@@ -31,11 +32,24 @@ public class XmlValidator {
         .toList();
   }
 
+  /**
+   * Validates the given XML string against the given schema files.
+   *
+   * @param xmlContent the XML content to validate
+   * @param schemaFilePaths classpath locations of the XSD schema files to validate against
+   */
   public static void validateXmlContent(String xmlContent, List<String> schemaFilePaths) {
     Source ldmlFileStream = new StreamSource(new StringReader(xmlContent));
     validate(ldmlFileStream, schemaFilePaths);
   }
 
+  /**
+   * Validates the XML file at the given path against the given schema files.
+   *
+   * @param filePath path of the XML file to validate
+   * @param schemaFilePaths classpath locations of the XSD schema files to validate against
+   * @throws MalformedURLException if the file path cannot be converted to a URL
+   */
   public static void validateXmlFile(Path filePath, List<String> schemaFilePaths)
       throws MalformedURLException {
     String ldmlFileURL = filePath.toUri().toURL().toExternalForm();

@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
+/** Represents an {@code akn:num} element, e.g. the number of an article or paragraph. */
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

@@ -79,11 +79,25 @@ public class NormTestDataBuilder {
     return new NormTestDataBuilder();
   }
 
+  /**
+   * Sets the norm's ELI-based identification (FRBRWork, FRBRExpression and FRBRManifestation).
+   *
+   * @param manifestationEli the manifestation ELI, e.g.
+   *     "eli/bund/bgbl-1/1991/s102/1991-01-01/1/deu/1991-01-01/regelungstext-1.xml"
+   * @return this builder for chaining
+   */
   public NormTestDataBuilder eli(String manifestationEli) {
     this.document.getAct().getMeta().setIdentification(Identification.fromEli(manifestationEli));
     return this;
   }
 
+  /**
+   * Sets the norm's official title (Langtitel) shown in the preface.
+   *
+   * @param officialTitle the official title text
+   * @param authorialNote optional authorial note attached to the title, or {@code null} for none
+   * @return this builder for chaining
+   */
   public NormTestDataBuilder officialTitle(String officialTitle, String authorialNote) {
     this.document
         .getAct()
@@ -94,6 +108,13 @@ public class NormTestDataBuilder {
     return this;
   }
 
+  /**
+   * Sets the norm's short title (Kurztitel) in the preface.
+   *
+   * @param title the short title text
+   * @param suffix optional suffix appended after the title, or {@code null} for none
+   * @return this builder for chaining
+   */
   public NormTestDataBuilder shortTitle(String title, String suffix) {
     ShortTitle shortTitle = this.document.getAct().getPreface().getLongTitle().getShortTitle();
     this.document
@@ -105,6 +126,12 @@ public class NormTestDataBuilder {
     return this;
   }
 
+  /**
+   * Sets the norm's official abbreviation (amtliche Abkürzung) in the preface.
+   *
+   * @param abbreviation the official abbreviation text
+   * @return this builder for chaining
+   */
   public NormTestDataBuilder officialAbbreviation(String abbreviation) {
     ShortTitle shortTitle = this.document.getAct().getPreface().getLongTitle().getShortTitle();
     this.document
@@ -116,11 +143,23 @@ public class NormTestDataBuilder {
     return this;
   }
 
+  /**
+   * Sets the norm's RIS in-force date ({@code ris:inkraft}).
+   *
+   * @param inForceDate date in the format YYYY-MM-DD
+   * @return this builder for chaining
+   */
   public NormTestDataBuilder inForceDate(String inForceDate) {
     this.document.getAct().getMeta().getProprietary().getRisMetadata().setInForce(inForceDate);
     return this;
   }
 
+  /**
+   * Sets the norm's RIS out-of-force date ({@code ris:ausserkraft}).
+   *
+   * @param outOfForceDate date in the format YYYY-MM-DD
+   * @return this builder for chaining
+   */
   public NormTestDataBuilder outOfForceDate(String outOfForceDate) {
     this.document
         .getAct()
@@ -135,6 +174,7 @@ public class NormTestDataBuilder {
    * Sets the norms Ausfertigungsdatum
    *
    * @param date date in the format YYYY-MM-DD
+   * @return this builder for chaining
    */
   public NormTestDataBuilder legislationDate(String date) {
     this.document.getAct().getPreface().setLegislationDate(date);
@@ -145,12 +185,19 @@ public class NormTestDataBuilder {
    * Sets the norms Verkuendungsdatum
    *
    * @param date date in the format YYYY-MM-DD
+   * @return this builder for chaining
    */
   public NormTestDataBuilder datePublished(String date) {
     this.document.getAct().getMeta().getIdentification().getFrbrWork().setDatePublished(date);
     return this;
   }
 
+  /**
+   * Sets the norm's internal RIS abbreviation ({@code ris:abkuerzung}).
+   *
+   * @param internalAbbreviation the internal abbreviation text
+   * @return this builder for chaining
+   */
   public NormTestDataBuilder risAbbreviation(String internalAbbreviation) {
     this.document
         .getAct()
@@ -161,11 +208,23 @@ public class NormTestDataBuilder {
     return this;
   }
 
+  /**
+   * Sets the norm's full citation ({@code ris:vollzitat}).
+   *
+   * @param citation the full citation text
+   * @return this builder for chaining
+   */
   public NormTestDataBuilder fullCitation(String citation) {
     this.document.getAct().getMeta().getProprietary().getRisMetadata().setFullCitation(citation);
     return this;
   }
 
+  /**
+   * Adds an enacting formula (Eingangsformel) to the norm's preamble.
+   *
+   * @param text the formula text
+   * @return this builder for chaining
+   */
   public NormTestDataBuilder formula(String text) {
     Preamble preamble =
         Optional.ofNullable(this.document.getAct().getPreamble())
@@ -176,6 +235,12 @@ public class NormTestDataBuilder {
     return this;
   }
 
+  /**
+   * Adds a table of contents to the norm's preamble and lets the caller populate it.
+   *
+   * @param tocConsumer callback used to add entries to the created {@link Toc}
+   * @return this builder for chaining
+   */
   public NormTestDataBuilder toc(Consumer<Toc> tocConsumer) {
     Preamble preamble =
         Optional.ofNullable(this.document.getAct().getPreamble())
@@ -188,6 +253,14 @@ public class NormTestDataBuilder {
     return this;
   }
 
+  /**
+   * Adds a chapter to the norm's body and lets the caller populate it.
+   *
+   * @param heading the chapter heading text
+   * @param num the chapter number, e.g. "Kapitel 1"
+   * @param chapterConsumer callback used to populate the created {@link Chapter}
+   * @return this builder for chaining
+   */
   public NormTestDataBuilder chapter(
       String heading, String num, Consumer<Chapter> chapterConsumer) {
     Chapter chapter = new Chapter().addHeading(heading).addNum(num);
@@ -196,6 +269,14 @@ public class NormTestDataBuilder {
     return this;
   }
 
+  /**
+   * Adds a section to the norm's body and lets the caller populate it.
+   *
+   * @param heading the section heading text
+   * @param num the section number, e.g. "Abschnitt 1"
+   * @param sectionConsumer callback used to populate the created {@link Section}
+   * @return this builder for chaining
+   */
   public NormTestDataBuilder section(
       String heading, String num, Consumer<Section> sectionConsumer) {
     Section section = new Section().addHeading(heading).addNum(num);
@@ -204,6 +285,16 @@ public class NormTestDataBuilder {
     return this;
   }
 
+  /**
+   * Adds an article to the norm's body and lets the caller populate it.
+   *
+   * @param num the article number, e.g. "§ 1"
+   * @param startDate date the article starts being valid
+   * @param endDate date the article stops being valid
+   * @param eId eId of the article, e.g. "art-z1"
+   * @param articleConsumer callback used to populate the created {@link Article}
+   * @return this builder for chaining
+   */
   public NormTestDataBuilder article(
       String num, String startDate, String endDate, String eId, Consumer<Article> articleConsumer) {
     Article article = buildArticle(num, startDate, endDate, eId);
@@ -237,6 +328,11 @@ public class NormTestDataBuilder {
     return Article.builder().eId(eId).period("#" + temporalGroupEId).build().addNum(num);
   }
 
+  /**
+   * Adds a single default article with one heading and one paragraph to the norm's body.
+   *
+   * @return this builder for chaining
+   */
   public NormTestDataBuilder defaultArticle() {
     Article article =
         this.buildArticle("§ 1", "2025-01-01", "2025-07-01", "art-z1")
@@ -247,6 +343,16 @@ public class NormTestDataBuilder {
     return this;
   }
 
+  /**
+   * Adds an attachment (Anlage) to the norm, together with its own AkomaNtoso document.
+   *
+   * @param manifestationEli the manifestation ELI of the attachment
+   * @param num the attachment number shown in its title
+   * @param bezug the reference text shown in its title
+   * @param heading the heading text shown in its title
+   * @param mainBodyChildren the body content of the attachment document
+   * @return this builder for chaining
+   */
   public NormTestDataBuilder attachment(
       String manifestationEli,
       String num,
@@ -309,11 +415,22 @@ public class NormTestDataBuilder {
     return this;
   }
 
+  /**
+   * Sets the norm's closing formula (Schlussformel).
+   *
+   * @param text the conclusion text
+   * @return this builder for chaining
+   */
   public NormTestDataBuilder conclusion(String text) {
     this.document.getAct().setConclusions(Conclusions.withText(text));
     return this;
   }
 
+  /**
+   * Marshals the norm into its validated Regelungstext XML representation.
+   *
+   * @return the norm as an XML string
+   */
   public String buildNormXml() {
     return this.marshallDocument(
         this.document, REGELUNGSTEXT_SCHEMA_LOCATION, NormXmlValidator.Type.REGELUNGSTEXT);

@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
+/** Represents an {@code akn:block} element, a generic grouping container. */
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

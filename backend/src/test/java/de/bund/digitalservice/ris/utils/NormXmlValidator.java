@@ -5,8 +5,10 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
+/** Validates Norm LegalDocML XML content/files against the relevant XSD schemas. */
 public class NormXmlValidator {
 
+  /** The kind of norm document being validated, determining which schema to apply. */
   public enum Type {
     REGELUNGSTEXT,
     ANLAGE,

@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
+/** Represents the {@code akn:toc} element, the norm's table of contents. */
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -24,6 +25,13 @@ public class Toc extends BaseElement {
   @XmlElement(name = "tocItem", namespace = NormTestDataBuilder.AKN_NS)
   private List<TocItem> tocItems = new ArrayList<>();
 
+  /**
+   * Adds a table of contents entry with the given text and nesting level.
+   *
+   * @param text the entry text
+   * @param level the nesting level, e.g. "1"
+   * @return this table of contents for chaining
+   */
   public Toc addEntry(String text, String level) {
     this.tocEntriesCounter++;
     tocItems.add(

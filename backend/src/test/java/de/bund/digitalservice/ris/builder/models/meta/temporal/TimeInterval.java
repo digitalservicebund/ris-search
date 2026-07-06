@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
+/** Represents an {@code akn:timeInterval} element, defining a period of validity. */
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -20,6 +21,14 @@ public class TimeInterval extends BaseElement {
 
   @XmlAttribute private String end;
 
+  /**
+   * Creates a time interval starting and ending at the given lifecycle events.
+   *
+   * @param startEventEId reference to the event the interval starts at
+   * @param endEventEId reference to the event the interval ends at
+   * @param parentEId eId of the enclosing {@link TemporalGroup}, used to derive this element's eId
+   * @return the built {@link TimeInterval}
+   */
   public static TimeInterval withEventRefs(
       String startEventEId, String endEventEId, String parentEId) {
     return TimeInterval.builder()

@@ -16,6 +16,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/** Represents the {@code akn:meta} element, holding identification, lifecycle and RIS metadata. */
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

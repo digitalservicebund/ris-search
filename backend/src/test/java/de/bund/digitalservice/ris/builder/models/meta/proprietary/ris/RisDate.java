@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
+/** Represents a RIS date element, e.g. {@code ris:inkraft} or {@code ris:ausserkraft}. */
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

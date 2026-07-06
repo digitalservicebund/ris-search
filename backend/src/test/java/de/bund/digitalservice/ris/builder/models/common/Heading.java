@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
+/** Represents an {@code akn:heading} element, e.g. the heading of an article or chapter. */
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

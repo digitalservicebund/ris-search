@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
+/** Represents the {@code akn:doc} root element used for attachment (Anlage) documents. */
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
