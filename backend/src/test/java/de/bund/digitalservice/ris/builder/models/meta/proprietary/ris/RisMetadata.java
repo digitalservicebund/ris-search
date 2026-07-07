@@ -21,7 +21,11 @@ public class RisMetadata {
   private RisAbkuerzung internalAbbreviation = RisAbkuerzung.builder().build();
 
   public void setAbbreviation(String abbreviation) {
-    this.internalAbbreviation = RisAbkuerzung.builder().abbreviation(abbreviation).build();
+    if (abbreviation == null) {
+      this.internalAbbreviation = null;
+    } else {
+      this.internalAbbreviation = RisAbkuerzung.builder().abbreviation(abbreviation).build();
+    }
   }
 
   @XmlElement(name = "inkraft", namespace = RIS_NS)

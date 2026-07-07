@@ -60,12 +60,16 @@ public class ShortTitle {
    * @return this short title for chaining
    */
   public ShortTitle withOfficialAbbreviation(String abbreviation) {
-    this.abbreviation =
-        Inline.builder()
-            .eId("einleitung-n1_doktitel-n1_text-n1_kurztitel-n1_inline-n1")
-            .refersTo("amtliche-abkuerzung")
-            .content(abbreviation)
-            .build();
+    if (abbreviation == null) {
+      this.abbreviation = null;
+    } else {
+      this.abbreviation =
+          Inline.builder()
+              .eId("einleitung-n1_doktitel-n1_text-n1_kurztitel-n1_inline-n1")
+              .refersTo("amtliche-abkuerzung")
+              .content(abbreviation)
+              .build();
+    }
 
     setTitleAndAbbreviation();
 
