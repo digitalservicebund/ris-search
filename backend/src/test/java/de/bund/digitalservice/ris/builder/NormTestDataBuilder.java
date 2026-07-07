@@ -18,6 +18,7 @@ import de.bund.digitalservice.ris.builder.models.meta.lifecycle.Lifecycle;
 import de.bund.digitalservice.ris.builder.models.preamble.Preamble;
 import de.bund.digitalservice.ris.builder.models.preamble.Toc;
 import de.bund.digitalservice.ris.builder.models.preface.DocTitle;
+import de.bund.digitalservice.ris.builder.models.preface.LongTitle;
 import de.bund.digitalservice.ris.builder.models.preface.Preface;
 import de.bund.digitalservice.ris.builder.models.preface.ShortTitle;
 import de.bund.digitalservice.ris.utils.NormXmlValidator;
@@ -95,15 +96,28 @@ public class NormTestDataBuilder {
    * Sets the norm's official title (Langtitel) shown in the preface.
    *
    * @param officialTitle the official title text
-   * @param authorialNote optional authorial note attached to the title, or {@code null} for none
    * @return this builder for chaining
    */
-  public NormTestDataBuilder officialTitle(String officialTitle, String authorialNote) {
-    this.document
-        .getAct()
-        .getPreface()
-        .getLongTitle()
-        .setOfficialTitle(officialTitle, authorialNote);
+  public NormTestDataBuilder officialTitle(String officialTitle) {
+    this.officialTitle(officialTitle, null);
+
+    return this;
+  }
+
+  /**
+   * Sets the norm's official title (Langtitel) shown in the preface and provides the title for
+   * further actions.
+   *
+   * @param officialTitle the official title text
+   * @param longTitleConsumer callback which provided the LongTitle object for fruther actions
+   * @return this builder for chaining
+   */
+  public NormTestDataBuilder officialTitle(
+      String officialTitle, Consumer<LongTitle> longTitleConsumer) {
+    LongTitle longTitle = this.document.getAct().getPreface().getLongTitle();
+
+    longTitle.setOfficialTitle(officialTitle);
+    if (longTitleConsumer != null) longTitleConsumer.accept(longTitle);
 
     return this;
   }
