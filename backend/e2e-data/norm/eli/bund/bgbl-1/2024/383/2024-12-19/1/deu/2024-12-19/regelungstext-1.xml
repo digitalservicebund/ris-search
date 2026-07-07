@@ -45,8 +45,8 @@
             </akn:temporalData>
             <akn:proprietary GUID="66778899-aabb-ccdd-eeff-001122334455" eId="meta-n1_proprietary-n1" source="attributsemantik-noch-undefiniert">
                 <ris:legalDocML.de_metadaten xmlns:ris="http://MetadatenRIS.LegalDocML.de/1.8.2/" xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.8.2/ ../schema/legalDocML.de-metadaten-ris.xsd">
-                    <ris:inkraft date="2024-12-23"/>
                     <ris:abkuerzung refersTo="interne-abkuerzung">RisMFG</ris:abkuerzung>
+                    <ris:inkraft date="2024-12-23"/>
                 </ris:legalDocML.de_metadaten>
             </akn:proprietary>
         </akn:meta>

@@ -50,8 +50,8 @@
             </akn:temporalData>
             <akn:proprietary GUID="aaaaaaaa-bbbb-4ccc-dddd-eeeeeeeeeeee" eId="meta-n1_proprietary-n1" source="attributsemantik-noch-undefiniert">
                 <ris:legalDocML.de_metadaten xmlns:ris="http://MetadatenRIS.LegalDocML.de/1.8.2/" xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.8.2/ ../schema/legalDocML.de-metadaten-ris.xsd">
-                    <ris:inkraft date="2009-02-12"/>
                     <ris:abkuerzung refersTo="interne-abkuerzung">RisTMD</ris:abkuerzung>
+                    <ris:inkraft date="2009-02-12"/>
                 </ris:legalDocML.de_metadaten>
             </akn:proprietary>
         </akn:meta>

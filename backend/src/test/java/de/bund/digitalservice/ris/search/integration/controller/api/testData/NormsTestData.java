@@ -4,12 +4,12 @@ import static de.bund.digitalservice.ris.SharedTestConstants.DATE_2023_01_02;
 import static de.bund.digitalservice.ris.SharedTestConstants.DATE_2024_01_01;
 import static de.bund.digitalservice.ris.SharedTestConstants.DATE_2024_01_02;
 
-import de.bund.digitalservice.ris.PebbleTemplateTestUtils;
+import de.bund.digitalservice.ris.builder.NormTestDataBuilder;
+import de.bund.digitalservice.ris.builder.models.common.AknP;
+import de.bund.digitalservice.ris.builder.models.common.AuthorialNote;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.models.opensearch.TableOfContentsItem;
-import de.bund.digitalservice.ris.search.utils.eli.EliFile;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
@@ -22,9 +22,6 @@ import java.util.Objects;
 /** Test data for norms used in integration tests. */
 public class NormsTestData {
 
-  public static final String NORM_LDML_TEMPLATE = "templates/norm/norm-template.xml";
-  public static final String NORM_ATTACHMENT_LDML_TEMPLATE =
-      "templates/norm/norm-attachment-template.xml";
   public static final String S_102_WORK_ELI = "eli/bund/bgbl-1/1991/s102";
 
   public static Map<String, String> s102WorkExpressions = createS102Work();
@@ -38,88 +35,71 @@ public class NormsTestData {
    *
    * @return map of eli file names to their XML content
    */
-  public static Map<String, String> createS102Work() {
-    try {
-      Map<String, String> result = new HashMap<>();
+  private static Map<String, String> createS102Work() {
+    Map<String, String> result = new HashMap<>();
 
-      String work1expression1attachment1 =
-          S_102_WORK_ELI + "/1991-01-01/1/deu/1991-01-01/anlage-regelungstext-1.xml";
-      result.put(
-          work1expression1attachment1, simpleNormXmlAttachment(work1expression1attachment1, null));
+    // ------------- build first expression with attachment -------------------
+    String version1ExpressionEli = S_102_WORK_ELI + "/1991-01-01/1/deu";
+    String version1ManifestationEli = version1ExpressionEli + "/1991-01-01/regelungstext-1.xml";
+    String version1AttachmentEli = version1ExpressionEli + "/1991-01-01/anlage-regelungstext-1.xml";
+    NormTestDataBuilder version1Builder =
+        NormTestDataBuilder.builder()
+            .eli(version1ManifestationEli)
+            .inForceDate("1991-01-01")
+            .outOfForceDate("1995-01-01")
+            .officialTitle("Formatting Test Document", "Authorial note in the norm title.")
+            .fullCitation("Verordnung zu der Vereinbarung")
+            .toc(
+                toc -> {
+                  toc.addEntry("Abschnitt 1", "1")
+                      .addEntry("Allgemeine Bestimmungen ", "2")
+                      .addEntry("Eintrag 2", "1")
+                      .addEntry("Art 1", "5");
+                })
+            .article(
+                "§ 1",
+                "1991-01-01",
+                "1991-01-01",
+                "art-z1",
+                article -> {
+                  article
+                      .addHeading("Erster Artikel", "Authorial note in an article title.")
+                      .addParagraph("Paragraph one", "(1)");
+                })
+            .attachment(
+                version1AttachmentEli,
+                "Anlage 1",
+                "",
+                "Anlage zum Hauptdokument",
+                List.of(
+                    AknP.withText("Attachment content")
+                        .addChild(
+                            AuthorialNote.withText("Authorial note in attachment contents"))));
 
-      String work1expression1 = S_102_WORK_ELI + "/1991-01-01/1/deu/1991-01-01/regelungstext-1.xml";
-      result.put(
-          work1expression1,
-          simpleNormXml(
-              work1expression1,
-              Map.of(
-                  "inkraft",
-                  "1991-01-01",
-                  "ausserkraft",
-                  "1995-01-01",
-                  "attachment",
-                  work1expression1attachment1)));
+    result.put(version1ManifestationEli, version1Builder.buildNormXml());
+    result.putAll(version1Builder.buildAttachmentXmls());
 
-      String work1expression2 = S_102_WORK_ELI + "/2020-01-01/1/deu/2020-01-01/regelungstext-1.xml";
-      result.put(
-          work1expression2,
-          simpleNormXml(
-              work1expression2, Map.of("inkraft", "2020-01-01", "ausserkraft", "2049-12-31")));
+    // ------------- build second expression -------------------
+    String version2ManifestationEli =
+        S_102_WORK_ELI + "/2020-01-01/1/deu/2020-01-01/regelungstext-1.xml";
+    NormTestDataBuilder version2Builder =
+        NormTestDataBuilder.builder()
+            .eli(version2ManifestationEli)
+            .inForceDate("2020-01-01")
+            .outOfForceDate("2049-12-31");
 
-      String work1expression3 = S_102_WORK_ELI + "/2050-01-01/1/deu/2050-01-01/regelungstext-1.xml";
-      result.put(
-          work1expression3, simpleNormXml(work1expression3, Map.of("inkraft", "2050-01-01")));
+    result.put(version2ManifestationEli, version2Builder.buildNormXml());
 
-      return result;
-    } catch (IOException e) {
-      throw new IllegalArgumentException("Invalid norms being created at test startup.");
-    }
-  }
+    // ------------- build third expression -------------------
+    String version3ManifestationEli =
+        S_102_WORK_ELI + "/2050-01-01/1/deu/2050-01-01/regelungstext-1.xml";
 
-  /**
-   * Creates a simple Norm XML from a template for testing purposes.
-   *
-   * @param fileName the eli file name
-   * @param context additional context variables for the template
-   * @return the generated XML as string
-   * @throws IOException if template reading fails
-   */
-  public static String simpleNormXml(String fileName, Map<String, Object> context)
-      throws IOException {
-    if (context == null) {
-      context = new HashMap<>();
-    }
-    context = new HashMap<>(context);
-    EliFile eliFile =
-        EliFile.fromString(fileName)
-            .orElseThrow(() -> new IllegalArgumentException("Invalid eli file"));
-    context.put("work_eli", eliFile.getWorkEli().toString());
-    context.put("expression_eli", eliFile.getExpressionEli().toString());
-    context.put("manifestation_eli", eliFile.getManifestationEli().toString());
-    return PebbleTemplateTestUtils.getXmlFromTemplate(context, NORM_LDML_TEMPLATE);
-  }
+    NormTestDataBuilder version3Builder =
+        NormTestDataBuilder.builder().eli(version3ManifestationEli).inForceDate("2050-01-01");
 
-  /**
-   * Creates a simple Norm XML attachment from a template for testing purposes.
-   *
-   * @param fileName the eli file name
-   * @param context additional context variables for the template
-   * @return the generated XML as string
-   * @throws IOException if template reading fails
-   */
-  public static String simpleNormXmlAttachment(String fileName, Map<String, Object> context)
-      throws IOException {
-    if (context == null) {
-      context = new HashMap<>();
-    }
-    context = new HashMap<>(context);
-    EliFile eliFile =
-        EliFile.fromString(fileName)
-            .orElseThrow(() -> new IllegalArgumentException("Invalid eli file"));
-    context.put("work_eli", eliFile.getWorkEli().toString());
-    context.put("expression_eli", eliFile.getExpressionEli().toString());
-    context.put("attachment_name", eliFile.fileName());
-    return PebbleTemplateTestUtils.getXmlFromTemplate(context, NORM_ATTACHMENT_LDML_TEMPLATE);
+    result.put(version3ManifestationEli, version3Builder.buildNormXml());
+
+    return result;
   }
 
   private static TableOfContentsItem simpleToc(String number) {
