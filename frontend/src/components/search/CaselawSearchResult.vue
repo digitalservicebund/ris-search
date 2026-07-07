@@ -16,6 +16,7 @@ const { searchResult, order } = defineProps<{
 const { searchResultClicked } = usePostHog();
 
 const router = useRouter();
+const route = useRoute();
 
 const fields = new Map([
   ["guidingPrinciple", { id: "leitsatz", title: "Leitsatz" }],
@@ -87,6 +88,7 @@ function getFileNumbers(item: CaseLaw) {
 const detailPageRoute = computed(() => ({
   name: "case-law-documentNumber",
   params: { documentNumber: searchResult.item.documentNumber },
+  query: { from: route.fullPath },
 }));
 
 const previewSections = useSearchResultSections(

@@ -78,7 +78,7 @@ const testPages = [
   },
   {
     name: "norm view - single article",
-    url: "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/art-z1",
+    url: "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/hauptteil-n1_abschnitt-n2_art-z1",
   },
   {
     name: "caselaw view",

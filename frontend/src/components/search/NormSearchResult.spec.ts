@@ -1,3 +1,4 @@
+import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import { render, screen } from "@testing-library/vue";
 import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
 import type {
@@ -6,6 +7,14 @@ import type {
   TextMatch,
 } from "~/types/api";
 import NormSearchResult from "./NormSearchResult.vue";
+
+const { useRouteMock } = vi.hoisted(() => ({
+  useRouteMock: vi.fn(() => ({
+    fullPath: "/search?query=test&documentKind=N",
+  })),
+}));
+
+mockNuxtImport("useRoute", () => useRouteMock);
 
 const mockSearchResult: SearchResult<LegislationExpression> = {
   item: {
@@ -48,7 +57,7 @@ const mockSearchResult: SearchResult<LegislationExpression> = {
       name: "Article 2",
       text: "<mark>Example</mark> Text 2",
       "@type": "SearchResultMatch",
-      location: undefined,
+      location: "art-2",
     },
     {
       name: "Article 3",
@@ -74,7 +83,8 @@ function renderComponent(
     global: {
       stubs: {
         NuxtLink: {
-          template: '<a :href="to"><slot /></a>',
+          template:
+            '<a :href="to.path ?? to" :data-from="to.query?.from"><slot /></a>',
           props: ["to"],
         },
       },
@@ -85,18 +95,13 @@ function renderComponent(
 function withTemporalCoverage(temporalCoverage: string | undefined) {
   return {
     ...mockSearchResult,
-    item: {
-      ...mockSearchResult.item,
-      temporalCoverage,
-    },
+    item: { ...mockSearchResult.item, temporalCoverage },
   } as SearchResult<LegislationExpression>;
 }
 
-const mocks = vi.hoisted(() => {
-  return {
-    usePrivateFeaturesFlag: vi.fn().mockReturnValue(false),
-  };
-});
+const mocks = vi.hoisted(() => ({
+  usePrivateFeaturesFlag: vi.fn().mockReturnValue(false),
+}));
 
 vi.mock("~/composables/usePrivateFeaturesFlag", () => {
   return { usePrivateFeaturesFlag: mocks.usePrivateFeaturesFlag };
@@ -252,7 +257,7 @@ describe("NormSearchResult", () => {
     const articleHeading = screen.getByText("Article 1");
     expect(articleHeading).toBeInTheDocument();
     const link = articleHeading.closest("a");
-    expect(link?.getAttribute("href")).contains("/PräöüÄÖÜambel");
+    expect(link?.getAttribute("href")).toContain("/PräöüÄÖÜambel");
   });
 
   it("does not display a highlight when the text match has no mark", () => {
@@ -328,5 +333,33 @@ describe("NormSearchResult", () => {
       expect(screen.queryByText("Zukünftig in Kraft")).not.toBeInTheDocument();
       expect(screen.queryByText("Außer Kraft")).not.toBeInTheDocument();
     });
+  });
+
+  it("includes the current search URL as query param in the detail page link", () => {
+    useRouteMock.mockReturnValue({
+      fullPath: "/search?query=BGB&documentKind=N&pageIndex=1",
+    });
+
+    renderComponent();
+
+    const link = screen.getByRole("link", { name: /Test Title/i });
+    expect(link).toHaveAttribute(
+      "data-from",
+      "/search?query=BGB&documentKind=N&pageIndex=1",
+    );
+  });
+
+  it("includes the current search URL as query param in the article detail page link", () => {
+    useRouteMock.mockReturnValue({
+      fullPath: "/search?query=BGB&documentKind=N&pageIndex=1",
+    });
+
+    renderComponent();
+
+    const link = screen.getByRole("link", { name: /Article 2/i });
+    expect(link).toHaveAttribute(
+      "data-from",
+      "/search?query=BGB&documentKind=N&pageIndex=1",
+    );
   });
 });

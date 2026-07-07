@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { orderBy } from "lodash-es";
 import { Column, DataTable } from "primevue";
+import type { RouteLocationRaw } from "#vue-router";
 import type { LegislationExpression } from "~/types/api";
 
 const props = defineProps<{
@@ -9,14 +10,16 @@ const props = defineProps<{
   versions: LegislationExpression[];
 }>();
 
-interface TableRowData {
+type TableRowData = {
   id: number;
   fromDate: string;
   toDate: string;
   status?: ReturnType<typeof formatNormValidity>;
-  link: string;
+  link: RouteLocationRaw;
   selectable: boolean;
-}
+};
+
+const route = useRoute();
 
 const selectedVersion = ref<TableRowData>();
 
@@ -36,7 +39,10 @@ const tableRowData = computed<TableRowData[]>(() => {
 
     const id = index;
 
-    const link = `/norms/${version.legislationIdentifier}`;
+    const link: RouteLocationRaw = {
+      path: `/norms/${version.legislationIdentifier}`,
+      query: { from: route.query.from },
+    };
 
     const selectable =
       version.legislationIdentifier !== props.currentLegislationIdentifier;
@@ -61,18 +67,13 @@ const rowClass = (row: TableRowData) => {
 };
 
 async function onRowSelect() {
-  if (selectedVersion.value) {
-    await navigateTo(selectedVersion.value.link);
-  }
+  if (selectedVersion.value) await navigateTo(selectedVersion.value.link);
 }
 
 async function handleSelectionUpdate(newSelection: TableRowData) {
   // Necessary so the unselectable row is never highlighted as selected
-  if (newSelection.selectable) {
-    selectedVersion.value = newSelection;
-  } else {
-    selectedVersion.value = undefined;
-  }
+  if (newSelection.selectable) selectedVersion.value = newSelection;
+  else selectedVersion.value = undefined;
 }
 </script>
 
@@ -86,31 +87,23 @@ async function handleSelectionUpdate(newSelection: TableRowData) {
     :row-class="rowClass"
     @row-select="onRowSelect"
     @update:selection="handleSelectionUpdate"
-    :pt="{
-      emptyMessageCell: {
-        class: 'ps-16 py-12 text-left text-gray-900',
-      },
-    }"
+    :pt="{ emptyMessageCell: { class: 'ps-16 py-12 text-left text-gray-900' } }"
   >
     <template #empty>Keine Ergebnisse gefunden</template>
     <Column
       field="fromDate"
       header="Gültig ab"
       header-class="whitespace-nowrap w-1"
-    ></Column>
+    />
     <Column
       field="toDate"
       header="Gültig bis"
       header-class="whitespace-nowrap w-1"
-    ></Column>
+    />
     <Column header="Status">
-      <template #body="slotProps">
+      <template #body="{ data: { status } }">
         <div class="flex justify-between">
-          <Badge
-            v-if="slotProps.data.status"
-            :label="slotProps.data.status.label"
-            :color="slotProps.data.status.color"
-          ></Badge>
+          <Badge v-if="status" :label="status.label" :color="status.color" />
         </div>
       </template>
     </Column>

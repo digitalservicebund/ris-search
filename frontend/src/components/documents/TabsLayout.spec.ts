@@ -108,6 +108,22 @@ describe("TabsLayout", () => {
     );
   });
 
+  it("preserves existing query params in tab links", async () => {
+    useRouteMock.mockReturnValue({
+      query: { from: "/search?query=test&documentKind=R", view: "view-a" },
+    });
+
+    await renderSuspended(TabsLayout, { props: { views } });
+
+    const tabB = screen.getByRole("tab", { name: /Tab B/i });
+
+    expect(tabB).toHaveAttribute(
+      "href",
+      expect.stringContaining("view=view-b"),
+    );
+    expect(tabB).toHaveAttribute("href", expect.stringContaining("from="));
+  });
+
   it("forwards analyticsId as data-attr on the tab", async () => {
     useRouteMock.mockReturnValue({ query: {} });
 

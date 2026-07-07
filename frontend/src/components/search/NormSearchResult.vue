@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Dayjs } from "dayjs";
 import IcBaselineBalance from "~icons/ic/baseline-balance";
+import type { RouteLocationRaw, RouteLocationAsPath } from "#vue-router";
 import type { SearchResultHeaderItem } from "~/components/search/SearchResultHeader.vue";
 import type { LegislationExpression, SearchResult } from "~/types/api";
 import { getMatch, getTitleWithFallback } from "~/utils/search/searchResults";
@@ -11,8 +12,8 @@ const { searchResult, order } = defineProps<{
 }>();
 
 const { searchResultClicked } = usePostHog();
-
 const privateFeaturesEnabled = usePrivateFeaturesFlag();
+const route = useRoute();
 
 const headline = computed(() =>
   getTitleWithFallback(
@@ -45,12 +46,10 @@ const validityStatus = computed(() =>
   formatNormValidity(searchResult.item.temporalCoverage),
 );
 
-const detailPageUrl = computed(() => {
-  const prefix = "/norms/";
-  const expressionEli = searchResult.item.legislationIdentifier;
-  if (!expressionEli) return null;
-  return prefix + expressionEli;
-});
+const detailPageRoute = computed<RouteLocationAsPath>(() => ({
+  path: `/norms/${searchResult.item.legislationIdentifier}`,
+  query: { from: route.fullPath },
+}));
 
 const relevantHighlights = computed(() =>
   searchResult.textMatches
@@ -61,17 +60,19 @@ const relevantHighlights = computed(() =>
         ? sanitizeSearchResult(addEllipsis(hl.text))
         : "";
 
+      const highlightRoute: RouteLocationRaw = {
+        ...detailPageRoute.value,
+        path: `${detailPageRoute.value.path}/${hl.location}`,
+      };
+
       return {
-        name: sanitizeSearchResult(hl.name),
-        text,
         location: hl.location,
+        name: sanitizeSearchResult(hl.name),
+        route: highlightRoute,
+        text,
       };
     }),
 );
-
-function getArticleLink(highlight: { location?: string | null }) {
-  return `${detailPageUrl.value}/${highlight.location ?? ""}`;
-}
 </script>
 
 <template>
@@ -85,12 +86,13 @@ function getArticleLink(highlight: { location?: string | null }) {
         />
       </template>
     </SearchResultHeader>
+
     <NuxtLink
-      v-if="!!detailPageUrl"
-      :to="detailPageUrl"
+      v-if="detailPageRoute"
+      :to="detailPageRoute"
       :aria-describedby="resultTypeId"
       class="typo-headline-searchresult"
-      @click="searchResultClicked(detailPageUrl, order)"
+      @click="searchResultClicked(detailPageRoute.path, order)"
     >
       <h2 v-html="headline" />
     </NuxtLink>
@@ -107,8 +109,8 @@ function getArticleLink(highlight: { location?: string | null }) {
       >
         <NuxtLink
           class="typo-link-bold link-hover"
-          :to="getArticleLink(highlight)"
-          @click="searchResultClicked(getArticleLink(highlight), order)"
+          :to="highlight.route"
+          @click="searchResultClicked(highlight.route.path, order)"
         >
           <span v-html="highlight.name" />
         </NuxtLink>

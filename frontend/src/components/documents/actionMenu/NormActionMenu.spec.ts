@@ -25,9 +25,7 @@ vi.mock("primevue/usetoast", () => ({
 }));
 
 mockNuxtImport("useRequestURL", () => {
-  return () => ({
-    href: "https://example.com/eli/foo",
-  });
+  return () => new URL("https://example.com/eli/foo?foo=bar");
 });
 
 const mockLegislation = {

@@ -18,20 +18,14 @@ test("displays administrative directive page with metadata and text tab by defau
 }) => {
   await navigate(page, "/administrative-directives/KSNR000000001");
 
-  // Breadcrumb navigation
-  const breadcrumb = page.getByRole("navigation", { name: "Pfadnavigation" });
-
-  await expect(breadcrumb).toBeVisible();
-  await expect(breadcrumb.getByRole("link")).toContainText(["Start", "Suche"]);
-  const expectedTitle =
-    "Verwaltungsvorschrift für das Testen des Portals zur Darstellung von Verwaltungsvorschriften";
-  await expect(breadcrumb.getByText(expectedTitle)).toBeVisible();
-
   // Main title
   await expect(
     page
       .getByRole("main")
-      .getByRole("heading", { level: 1, name: expectedTitle })
+      .getByRole("heading", {
+        level: 1,
+        name: "Verwaltungsvorschrift für das Testen des Portals zur Darstellung von Verwaltungsvorschriften",
+      })
       .first(),
   ).toBeVisible();
 
@@ -182,16 +176,29 @@ test.describe("mobile table of contents", () => {
   });
 });
 
-test("can navigate to search via breadcrumb", async ({ page }) => {
-  await navigate(page, "/administrative-directives/KSNR000000001");
+test("shows correct breadcrumbs for administrative diectives", async ({
+  page,
+}) => {
+  await navigate(
+    page,
+    "/administrative-directives/KSNR000000001?from=/search?query=example",
+  );
 
-  await page
-    .getByLabel("Pfadnavigation")
-    .getByRole("link", { name: "Suche" })
-    .click();
+  const breadcrumb = page.getByRole("navigation", { name: "Pfadnavigation" });
+
+  await expect(breadcrumb.getByRole("link", { name: "Start" })).toBeVisible();
+
+  const searchBreadcrumb = breadcrumb.getByRole("link", { name: "Suche" });
+  await expect(searchBreadcrumb).toBeVisible();
+  await expect(searchBreadcrumb).toHaveAttribute(
+    "href",
+    "/search?query=example",
+  );
 
   await expect(
-    page.getByRole("heading", { level: 1, name: "Suche" }),
+    breadcrumb.getByText(
+      "Verwaltungsvorschrift für das Testen des Portals zur Darstellung von Verwaltungsvorschriften",
+    ),
   ).toBeVisible();
 });
 
@@ -231,7 +238,6 @@ test("shows detailed information in the 'Details' tab", async ({ page }) => {
   await expect(page.getByRole("main").getByRole("status")).toContainText(
     "Dieser Service befindet sich in der Testphase",
   );
-
   const detailsList = page.getByTestId("details-list");
   await expect(
     detailsList.getByRole("term").or(detailsList.getByRole("definition")),

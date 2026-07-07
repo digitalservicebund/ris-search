@@ -1075,6 +1075,34 @@ test.describe("searching administrative directives", () => {
   });
 });
 
+test("restores search state from document breadcrumbs", async ({ page }) => {
+  await navigate(page, "/search");
+
+  const searchInput = page.getByRole("searchbox");
+  await searchInput.fill("FrSaftErfrischV");
+  await page.getByRole("button", { name: "Suchen" }).click();
+
+  await page
+    .getByRole("link", {
+      name: "Fiktive Fruchtsaft- und Erfrischungsgetränkeverordnung zu Testzwecken",
+    })
+    .click();
+
+  await expect(
+    page.getByRole("heading", {
+      level: 1,
+      name: "Fiktive Fruchtsaft- und Erfrischungsgetränkeverordnung zu Testzwecken",
+    }),
+  ).toBeVisible();
+
+  await page
+    .getByRole("navigation", { name: "Pfadnavigation" })
+    .getByRole("link", { name: "Suche" })
+    .click();
+
+  await expect(page.getByRole("searchbox")).toHaveValue("FrSaftErfrischV");
+});
+
 noJsTest("search works without JavaScript", async ({ page }) => {
   const searchTerm = "Fiktiv";
 

@@ -1,7 +1,16 @@
+import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import { render, screen } from "@testing-library/vue";
 import { describe, expect, it } from "vitest";
 import CaselawRecord from "~/components/search/CaselawSearchResult.vue";
 import type { CaseLaw, SearchResult, TextMatch } from "~/types/api";
+
+const { useRouteMock } = vi.hoisted(() => ({
+  useRouteMock: vi.fn(() => ({
+    fullPath: "/search?query=test&documentKind=R",
+  })),
+}));
+
+mockNuxtImport("useRoute", () => useRouteMock);
 
 const searchResult: SearchResult<CaseLaw> = {
   item: {
@@ -40,7 +49,11 @@ function renderComponent({
     props: { searchResult: result, order: 0 },
     global: {
       stubs: {
-        NuxtLink: { template: '<a :href="to"><slot /></a>', props: ["to"] },
+        NuxtLink: {
+          template:
+            '<a :href="to.path ?? to" :data-from="to.query?.from"><slot /></a>',
+          props: ["to"],
+        },
       },
     },
   });
@@ -391,5 +404,42 @@ describe("CaselawSearchResult", () => {
     });
 
     expect(screen.queryAllByTestId("highlighted-field")).toHaveLength(0);
+  });
+
+  it("includes the current search URL as query param in the detail page link", () => {
+    useRouteMock.mockReturnValue({
+      fullPath: "/search?query=BGB&documentKind=R&pageIndex=2",
+    });
+
+    renderComponent({});
+
+    const link = screen.getByRole("link", { name: /Decision Name/ });
+    expect(link).toHaveAttribute(
+      "data-from",
+      "/search?query=BGB&documentKind=R&pageIndex=2",
+    );
+  });
+
+  it("includes the current search URL as query param in preview section links", () => {
+    useRouteMock.mockReturnValue({
+      fullPath: "/search?query=BGB&documentKind=R&pageIndex=2",
+    });
+
+    renderComponent({
+      textMatches: [
+        {
+          "@type": "SearchResultMatch",
+          name: "guidingPrinciple",
+          text: "testing <mark>highlighted</mark> text",
+          location: undefined,
+        },
+      ],
+    });
+
+    const sectionLink = screen.getByRole("link", { name: "Leitsatz:" });
+    expect(sectionLink).toHaveAttribute(
+      "data-from",
+      "/search?query=BGB&documentKind=R&pageIndex=2",
+    );
   });
 });

@@ -1,7 +1,16 @@
+import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import { render, screen } from "@testing-library/vue";
 import { describe } from "vitest";
 import LiteratureSearchResult from "~/components/search/LiteratureSearchResult.vue";
 import type { Literature, SearchResult, TextMatch } from "~/types/api";
+
+const { useRouteMock } = vi.hoisted(() => ({
+  useRouteMock: vi.fn(() => ({
+    fullPath: "/search?query=test&documentKind=L",
+  })),
+}));
+
+mockNuxtImport("useRoute", () => useRouteMock);
 
 const searchResult: SearchResult<Literature> = {
   item: {
@@ -58,7 +67,7 @@ function renderComponent({
       stubs: {
         NuxtLink: {
           template:
-            '<a :href="to" :aria-describedby="ariaDescribedby"><slot /></a>',
+            '<a :href="to.path ?? to" :data-from="to.query?.from" :aria-describedby="ariaDescribedby"><slot /></a>',
           props: ["to", "ariaDescribedby"],
         },
       },
@@ -241,5 +250,44 @@ describe("LiteratureSearchResult", () => {
 
       expect(screen.queryAllByTestId("highlighted-field")).toHaveLength(0);
     });
+  });
+
+  it("includes the current search URL as query param in the detail page link", () => {
+    useRouteMock.mockReturnValue({
+      fullPath: "/search?query=Recht&documentKind=L&pageIndex=3",
+    });
+
+    renderComponent({});
+
+    const link = screen.getByRole("link", {
+      name: "Eine Untersuchung der juristischen Methoden im 21. Jahrhundert",
+    });
+    expect(link).toHaveAttribute(
+      "data-from",
+      "/search?query=Recht&documentKind=L&pageIndex=3",
+    );
+  });
+
+  it("includes the current search URL as query param in preview section links", () => {
+    useRouteMock.mockReturnValue({
+      fullPath: "/search?query=Recht&documentKind=L&pageIndex=3",
+    });
+
+    renderComponent({
+      textMatches: [
+        {
+          "@type": "SearchResultMatch",
+          name: "shortReport",
+          text: "testing <mark>highlighted</mark> text",
+          location: undefined,
+        },
+      ],
+    });
+
+    const sectionLink = screen.getByRole("link", { name: "Kurzreferat:" });
+    expect(sectionLink).toHaveAttribute(
+      "data-from",
+      "/search?query=Recht&documentKind=L&pageIndex=3",
+    );
   });
 });

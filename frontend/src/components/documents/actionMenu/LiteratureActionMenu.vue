@@ -8,7 +8,9 @@ import type { Literature } from "~/types/api";
 const { literature } = defineProps<{ literature: Literature | undefined }>();
 
 const actions = computed(() => {
-  const permalink = useRequestURL().href;
+  const requestUrl = useRequestURL();
+  requestUrl.search = "";
+  const permalink = requestUrl.href;
 
   const xmlUrl = useBackendUrl(
     literature?.encoding?.find((e) => e.encodingFormat === "application/xml")

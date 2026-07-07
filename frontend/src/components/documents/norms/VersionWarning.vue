@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import dayjs from "dayjs";
+import type { RouteLocationRaw } from "#vue-router";
 import type { LegislationExpression } from "~/types/api";
 
 const props = defineProps<{
@@ -7,13 +8,18 @@ const props = defineProps<{
   currentVersion: LegislationExpression;
 }>();
 
+const route = useRoute();
+
 const inForceVersion = computed(() =>
   props.versions.find((version) => version.legislationLegalForce === "InForce"),
 );
 
-const inForceVersionLink = computed(() =>
+const inForceVersionLink = computed<RouteLocationRaw | undefined>(() =>
   inForceVersion.value
-    ? `/norms/${inForceVersion.value?.legislationIdentifier}`
+    ? {
+        path: `/norms/${inForceVersion.value?.legislationIdentifier}`,
+        query: { from: route.query.from },
+      }
     : undefined,
 );
 

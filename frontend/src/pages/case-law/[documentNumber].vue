@@ -5,6 +5,7 @@ import IcOutlineInfo from "~icons/ic/outline-info";
 import type { MetadataItem } from "~/components/documents/Metadata.vue";
 import type { TabView } from "~/components/documents/TabsLayout.vue";
 import type { TreeItem } from "~/components/TreeView.vue";
+import { useSearchBackLink } from "~/composables/useSearchBackLink";
 import { type CaseLaw, DocumentKind } from "~/types/api";
 
 definePageMeta({
@@ -57,10 +58,12 @@ const title = computed(() => {
     : undefined;
 });
 
+const searchBackLink = useSearchBackLink(DocumentKind.CaseLaw);
+
 const breadcrumbs = computed(() => [
   {
-    label: "Suche",
-    route: `/search?documentKind=${DocumentKind.CaseLaw}`,
+    label: searchBackLink.value.label,
+    route: searchBackLink.value.route,
   },
   { label: title.value ?? "Titelzeile nicht vorhanden" },
 ]);
@@ -70,7 +73,7 @@ const tocEntries = computed<TreeItem[] | null>(() => {
     ? getAllSectionsFromDocument(document.value, "section").map((entry) => ({
         key: entry.id,
         subtitle: entry.title, // Subtitle for more subtle appearance
-        to: { hash: `#${entry.id}` },
+        to: { hash: `#${entry.id}`, query: { from: route.query.from } },
       }))
     : null;
 });

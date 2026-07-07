@@ -1,9 +1,14 @@
 <script setup lang="ts">
 import IcBaselineArrowBack from "~icons/ic/baseline-arrow-back";
 import IcBaselineArrowForward from "~icons/ic/baseline-arrow-Forward";
-import type { RouteLocationRaw } from "#vue-router";
+import type {
+  RouteLocationRaw,
+  RouteLocationAsPath,
+  RouteLocationAsRelativeGeneric,
+} from "#vue-router";
 import type { BreadcrumbItem } from "~/components/Breadcrumbs.vue";
 import { useArticleSeo } from "~/composables/useArticleSeo";
+import { useSearchBackLink } from "~/composables/useSearchBackLink";
 import {
   type Article,
   DocumentKind,
@@ -11,7 +16,6 @@ import {
 } from "~/types/api";
 
 definePageMeta({
-  // expression ELI + article eId
   alias:
     "/eli/:jurisdiction/:agent/:year/:naturalIdentifier/:pointInTime/:version/:language/:eId",
   layout: false,
@@ -49,14 +53,26 @@ const normTitle = computed(() => getNormBreadcrumbTitle(norm.value));
 
 const articleHtml = computed(() => data.value.htmlBody);
 
-const normPath: string = route.fullPath.replace(/\/[^/]*$/, "");
+const normExpressionPath = `/norms/eli/${expressionEli}`;
+
+const normExpressionRoute = computed<RouteLocationRaw>(() => ({
+  path: normExpressionPath,
+  query: { from: route.query.from },
+}));
 
 const tableOfContents = computed(() => {
   if (!norm.value?.hasPart) return [];
   return tocItemsToTreeViewItems(
     norm.value.hasPart,
-    (id) => ({ path: normPath, hash: `#${id}` }),
-    (id) => ({ path: `${normPath}/${id}` }),
+    (id) => ({
+      path: normExpressionPath,
+      hash: `#${id}`,
+      query: { from: route.query.from },
+    }),
+    (id) => ({
+      path: `${normExpressionPath}/${id}`,
+      query: { from: route.query.from },
+    }),
   );
 });
 
@@ -131,6 +147,8 @@ function getRouteForSiblingArticle(
 
 const NORM_INFO_MAX_LENGTH = 23;
 
+const searchBackLink = useSearchBackLink(DocumentKind.Norm);
+
 const breadcrumbItems: Ref<BreadcrumbItem[]> = computed(() => {
   const currentNodePath = eId.value
     ? (findNodePath(tableOfContents.value, eId.value) ?? [])
@@ -138,20 +156,34 @@ const breadcrumbItems: Ref<BreadcrumbItem[]> = computed(() => {
 
   const title = truncateAtWord(normTitle.value, NORM_INFO_MAX_LENGTH, true);
 
+  const fromQuery = route.query.from
+    ? { from: route.query.from as string }
+    : {};
+
   const list: BreadcrumbItem[] = [
     {
-      label: "Suche",
-      route: `/search?documentKind=${DocumentKind.Norm}`,
+      label: searchBackLink.value.label,
+      route: searchBackLink.value.route,
     },
     {
       label: title,
-      route: normPath,
+      route: { path: normExpressionPath, query: fromQuery },
       extendedLabel: normTitle.value,
     },
   ];
 
   currentNodePath.forEach((node) => {
-    list.push({ label: node.title || node.subtitle || "", route: node.to });
+    // Normalize a route location (which can be a string or undefined into a
+    // object describing a path so we can append the query later
+    const base:
+      | RouteLocationAsPath
+      | RouteLocationAsRelativeGeneric
+      | undefined = typeof node.to === "string" ? { path: node.to } : node.to;
+
+    list.push({
+      label: node.title || node.subtitle || "",
+      route: { ...base, query: fromQuery },
+    });
   });
 
   return list;
@@ -269,7 +301,7 @@ const metadataItems = computed(() => {
           <DocumentsTableOfContents
             v-if="tableOfContents.length"
             :subheading="normTitle"
-            :subheading-to="normPath"
+            :subheading-to="normExpressionRoute"
             :table-of-contents="tableOfContents"
             :selected-key="eId"
           />

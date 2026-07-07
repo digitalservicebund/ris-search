@@ -18,15 +18,7 @@ test("displays literature page with metadata and text tab by default", async ({
 }) => {
   await navigate(page, "/literature/XXLU000000001");
 
-  // Breadcrumb navigation
-  const breadcrumb = page.getByRole("navigation", { name: "Pfadnavigation" });
-
-  await expect(breadcrumb).toBeVisible();
-  await expect(breadcrumb.getByRole("link")).toContainText(["Start", "Suche"]);
-
   // Main title
-  await expect(breadcrumb.getByText("Erstes Test-Dokument ULI")).toBeVisible();
-
   await expect(
     page
       .getByRole("main")
@@ -283,17 +275,21 @@ test.describe("mobile table of contents", () => {
   });
 });
 
-test("can navigate to search via breadcrumb", async ({ page }) => {
-  await navigate(page, "/literature/XXLU000000001");
+test("shows correct breadcrumbs for literature", async ({ page }) => {
+  await navigate(page, "/literature/XXLU000000001?from=/search?query=example");
 
-  await page
-    .getByLabel("Pfadnavigation")
-    .getByRole("link", { name: "Suche" })
-    .click();
+  const breadcrumb = page.getByRole("navigation", { name: "Pfadnavigation" });
 
-  await expect(
-    page.getByRole("heading", { level: 1, name: "Suche" }),
-  ).toBeVisible();
+  await expect(breadcrumb.getByRole("link", { name: "Start" })).toBeVisible();
+
+  const searchBreadcrumb = breadcrumb.getByRole("link", { name: "Suche" });
+  await expect(searchBreadcrumb).toBeVisible();
+  await expect(searchBreadcrumb).toHaveAttribute(
+    "href",
+    "/search?query=example",
+  );
+
+  await expect(breadcrumb.getByText("Erstes Test-Dokument ULI")).toBeVisible();
 });
 
 noJsTest("tabs work without JavaScript", async ({ page }) => {

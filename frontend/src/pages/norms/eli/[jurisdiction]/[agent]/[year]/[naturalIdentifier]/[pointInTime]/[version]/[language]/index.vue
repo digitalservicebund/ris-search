@@ -7,10 +7,10 @@ import IcOutlineRestore from "~icons/ic/outline-settings-backup-restore";
 import { NuxtLink } from "#components";
 import type { BreadcrumbItem } from "~/components/Breadcrumbs.vue";
 import type { TabView } from "~/components/documents/TabsLayout.vue";
+import { useSearchBackLink } from "~/composables/useSearchBackLink";
 import { DocumentKind, type LegislationExpression } from "~/types/api";
 
 definePageMeta({
-  // note: this is an expression ELI
   alias:
     "/eli/:jurisdiction/:agent/:year/:naturalIdentifier/:pointInTime/:version/:language",
   layout: false,
@@ -57,10 +57,19 @@ const zipUrl = computed(() =>
 const tableOfContents = computed(() => {
   if (!metadata.value.hasPart) return [];
   const normPath = route.path;
+
   return tocItemsToTreeViewItems(
     metadata.value.hasPart,
-    (id) => ({ path: normPath, hash: `#${id}` }),
-    (id) => ({ path: normPath, hash: `#${id}` }),
+    (id) => ({
+      path: normPath,
+      hash: `#${id}`,
+      query: { from: route.query.from },
+    }),
+    (id) => ({
+      path: normPath,
+      hash: `#${id}`,
+      query: { from: route.query.from },
+    }),
   );
 });
 
@@ -70,11 +79,11 @@ const validityInterval = computed(() =>
     : undefined,
 );
 
-const validityStatus = computed(() => {
-  if (metadata.value && validityInterval)
-    return getValidityStatus(validityInterval.value);
-  return undefined;
-});
+const validityStatus = computed(() =>
+  metadata.value && validityInterval
+    ? getValidityStatus(validityInterval.value)
+    : undefined,
+);
 
 useNormSeo({
   norm: data.value.legislation,
@@ -89,11 +98,13 @@ const normBreadcrumbTitle = computed(() =>
 const { status: normVersionsStatus, sortedVersions: normVersions } =
   useNormVersions(metadata.value.exampleOfWork?.legislationIdentifier ?? "");
 
+const searchBackLink = useSearchBackLink(DocumentKind.Norm);
+
 const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
   return [
     {
-      label: "Suche",
-      route: `/search?documentKind=${DocumentKind.Norm}`,
+      label: searchBackLink.value.label,
+      route: searchBackLink.value.route,
     },
     {
       route: `/norms/${metadata.value.legislationIdentifier}`,
