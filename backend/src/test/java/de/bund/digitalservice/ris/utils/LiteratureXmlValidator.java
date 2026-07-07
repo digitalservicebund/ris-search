@@ -13,7 +13,7 @@ public class LiteratureXmlValidator {
 
   private static List<String> schemaFilesForLiterature(String ldmlFilePath) {
     List<String> schemaFiles = new ArrayList<>(LITERATURE_SCHEMA_METADATA_FILES);
-    if (ldmlFilePath.substring(2, 4).equals("LU")) {
+    if (ldmlFilePath.startsWith("LU", 2)) {
       schemaFiles.add("Grammatiken/Literature/ldml-ris-literature-unselbstaendig-meta.xsd");
     } else {
       schemaFiles.add("Grammatiken/Literature/ldml-ris-literature-selbstaendig-meta.xsd");
