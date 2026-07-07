@@ -12,8 +12,10 @@ import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.repository.objectstorage.LiteratureBucket;
+import de.bund.digitalservice.ris.search.repository.objectstorage.StorageObject;
 import de.bund.digitalservice.ris.search.repository.opensearch.LiteratureRepository;
 import de.bund.digitalservice.ris.search.service.IndexLiteratureService;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -41,11 +43,18 @@ class IndexLiteratureServiceTest {
   void reindexAllIgnoresInvalidFiles() throws ObjectStoreServiceException {
     var filenameA = "XXLU000000001.akn.xml";
     var filenameB = "XXLU000000002.akn.xml";
-    final String xml = LoadXmlUtils.loadXmlAsString(Literature.class, filenameA);
+    final byte[] xml =
+        LoadXmlUtils.loadXmlAsString(Literature.class, filenameA).getBytes(StandardCharsets.UTF_8);
 
-    when(this.bucket.getAllKeysOnCurrentVersion()).thenReturn(List.of(filenameA, filenameB));
-    when(this.bucket.getFileAsString(filenameA)).thenReturn(Optional.of(xml));
-    when(this.bucket.getFileAsString(filenameB)).thenReturn(Optional.of("this will not parse"));
+    var keys = List.of(filenameA, filenameB);
+    when(this.bucket.getAllKeysOnCurrentVersion()).thenReturn(keys);
+    when(this.bucket.getObjects(keys))
+        .thenReturn(
+            List.of(
+                new StorageObject(filenameA, Optional.of(xml)),
+                new StorageObject(
+                    filenameB,
+                    Optional.of("this will not parse".getBytes(StandardCharsets.UTF_8)))));
 
     String startingTimestamp = SharedTestConstants.TIMESTAMP_2024_01_01_AS_STRING;
     this.service.reindexAll(startingTimestamp);
@@ -67,14 +76,18 @@ class IndexLiteratureServiceTest {
     var filenameB = "XXLS000000002.akn.xml";
     var filenameC = "XLU0000000002.akn.xml";
     var filenameD = "XXXLU000000002.akn.xml";
-    final String xml = LoadXmlUtils.loadXmlAsString(Literature.class, filenameA);
+    final byte[] xml =
+        LoadXmlUtils.loadXmlAsString(Literature.class, filenameA).getBytes(StandardCharsets.UTF_8);
 
     when(this.bucket.getAllKeysOnCurrentVersion())
         .thenReturn(List.of(filenameA, filenameB, filenameC, filenameD));
-    when(this.bucket.getFileAsString(filenameA)).thenReturn(Optional.of(xml));
-    when(this.bucket.getFileAsString(filenameB)).thenReturn(Optional.of(xml));
-    when(this.bucket.getFileAsString(filenameC)).thenReturn(Optional.of(xml));
-    when(this.bucket.getFileAsString(filenameD)).thenReturn(Optional.of(xml));
+    when(this.bucket.getObjects(List.of(filenameA, filenameB, filenameC, filenameD)))
+        .thenReturn(
+            List.of(
+                new StorageObject(filenameA, Optional.of(xml)),
+                new StorageObject(filenameB, Optional.of(xml)),
+                new StorageObject(filenameC, Optional.of(xml)),
+                new StorageObject(filenameD, Optional.of(xml))));
 
     String startingTimestamp = SharedTestConstants.TIMESTAMP_2024_01_01_AS_STRING;
     this.service.reindexAll(startingTimestamp);
@@ -92,8 +105,12 @@ class IndexLiteratureServiceTest {
   @Test
   void itCanReindexFromOneSpecificChangelog() throws ObjectStoreServiceException {
     final String xmlFileName = "XXLU000000001.akn.xml";
-    final String xml = LoadXmlUtils.loadXmlAsString(Literature.class, xmlFileName);
-    when(this.bucket.getFileAsString(xmlFileName)).thenReturn(Optional.of(xml));
+    final byte[] xml =
+        LoadXmlUtils.loadXmlAsString(Literature.class, xmlFileName)
+            .getBytes(StandardCharsets.UTF_8);
+
+    when(this.bucket.getObjects(List.of(xmlFileName)))
+        .thenReturn(List.of(new StorageObject(xmlFileName, Optional.of(xml))));
 
     Changelog changelog = new Changelog();
     changelog.setChanged(Sets.newHashSet(List.of(xmlFileName)));
@@ -111,8 +128,12 @@ class IndexLiteratureServiceTest {
   @Test
   void ignoresReferencesThatAreNotInBucketFilesInChangelog() throws ObjectStoreServiceException {
     final String xmlFileName = "XXLU000000001.akn.xml";
-    final String xml = LoadXmlUtils.loadXmlAsString(Literature.class, xmlFileName);
-    when(this.bucket.getFileAsString(xmlFileName)).thenReturn(Optional.of(xml));
+    final byte[] xml =
+        LoadXmlUtils.loadXmlAsString(Literature.class, xmlFileName)
+            .getBytes(StandardCharsets.UTF_8);
+
+    when(this.bucket.getObjects(List.of(xmlFileName, "XXLU000000002.akn.xml")))
+        .thenReturn(List.of(new StorageObject(xmlFileName, Optional.of(xml))));
 
     Changelog changelog = new Changelog();
     changelog.setChanged(Sets.newHashSet(List.of(xmlFileName, "XXLU000000002.akn.xml")));

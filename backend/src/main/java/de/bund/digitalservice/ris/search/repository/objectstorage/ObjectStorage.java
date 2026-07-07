@@ -114,7 +114,10 @@ public class ObjectStorage {
         try {
           content.add(task.get());
         } catch (ExecutionException e) {
-          downloadExecutor.shutdownNow();
+          if (e.getCause() instanceof ObjectStoreServiceException) {
+            downloadExecutor.shutdownNow();
+            throw new ObjectStoreServiceException(e.getCause().getMessage());
+          }
           logger.error("an exception occured furing object retrieval", e.getCause());
         } catch (InterruptedException interruptedException) {
           downloadExecutor.shutdownNow();
