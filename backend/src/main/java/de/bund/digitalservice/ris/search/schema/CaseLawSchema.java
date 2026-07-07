@@ -1,6 +1,7 @@
 package de.bund.digitalservice.ris.search.schema;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import de.bund.digitalservice.ris.search.xsd.RISSchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
 import java.util.List;
@@ -9,7 +10,7 @@ import lombok.Builder;
 /** A DTO for court decisions in a specific encoding, following schema.org naming guidelines. */
 @Builder
 public record CaseLawSchema(
-    @Schema(example = "KARE000000000", requiredMode = Schema.RequiredMode.REQUIRED)
+    @RISSchema(name = "ris:dokumentnummer", example = "KARE000000000", requiredMode = Schema.RequiredMode.REQUIRED)
         String documentNumber,
     @Schema(
             example = "ECLI:DE:FGRLP:1969:0905.IV85.68.0A",
@@ -26,30 +27,33 @@ public record CaseLawSchema(
     @Schema(description = "Sonstiger Orientierungssatz") String otherHeadnote,
     @Schema(description = "Sonstiger Langtext") String otherLongText,
     @Schema(description = "Tenor") String tenor,
-    @Schema(description = "Entscheidungsdatum", requiredMode = Schema.RequiredMode.REQUIRED)
+    @RISSchema(name = "ris:entscheidungsdatum", description = "Entscheidungsdatum", requiredMode = Schema.RequiredMode.REQUIRED)
         LocalDate decisionDate,
-    @Schema(
+    @RISSchema(
+            name = "ris:aktenzeichenListe",
             example = "BGH 123/23",
             description = "Aktenzeichen",
             requiredMode = Schema.RequiredMode.REQUIRED)
         List<String> fileNumbers,
-    @Schema(example = "FG", description = "Gerichtstyp") String courtType,
-    @Schema(example = "Berlin", description = "Gerichtssitz") String location,
-    @Schema(example = "Urteil") String documentType,
+    @RISSchema(name = "ris:gerichtstyp", example = "FG", description = "Gerichtstyp") String courtType,
+    @RISSchema(name = "ris:gerichtsort", example = "Berlin", description = "Gerichtssitz") String location,
+    @RISSchema(example = "Urteil", name = "ris:dokumenttyp") String documentType,
     @Schema(description = "Leitsatz") String outline,
-    @Schema(example = "Gericht", description = "Spruchkörper") String judicialBody,
-    @Schema(
-            example = "3. Kammer",
+    @RISSchema(name = "ris:spruchkoerper", example = "1. Senat", description = "Spruchkörper") String judicialBody,
+    @RISSchema(
+            name = "",
+            example = "Kündigung",
             description = "Schlagworte",
             requiredMode = Schema.RequiredMode.REQUIRED)
         List<String> keywords,
-    @Schema(example = "LArbG Hamm") String courtName, // corresponds to courtKeyword
+    @RISSchema(name = "ris:gericht", example = "LArbG Hamm") String courtName, // corresponds to courtKeyword
     @Schema(
             examples = {"Beispielentscheidung"},
             description = "Entscheidungsname",
             requiredMode = Schema.RequiredMode.REQUIRED)
         List<String> decisionName,
-    @Schema(
+    @RISSchema(
+            name = "ris:abweichendeDokumentnummer",
             example = "DEV-123",
             description = "Abweichende Dokumentnummer",
             requiredMode = Schema.RequiredMode.REQUIRED)

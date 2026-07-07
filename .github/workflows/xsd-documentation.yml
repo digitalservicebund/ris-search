@@ -1,0 +1,51 @@
+name: "Generate documentation for XSD Schema documentation keys"
+
+on:
+#  push:
+#    branches: [main]
+#    paths:
+#      - "backend/build.gradle.kts"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  xsd-documentation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+
+      - name: Set up JDK
+        uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5
+        with:
+          java-version: "21.0"
+          distribution: "temurin"
+          cache: gradle
+
+      - name: Grant execute permission for gradlew
+        working-directory: ./backend
+        run: chmod +x gradlew
+
+      - name: Build with Gradle
+        working-directory: ./backend
+        run: ./gradlew xsdDocumentation
+
+      - uses: chainguard-dev/actions/setup-gitsign@e1c4977ad9cb32b12c5b222ec0134a22bec60bd5
+
+      - name: Commit and push changes
+        if: ${{ github.ref == 'refs/heads/main' }}
+        run: |
+          git pull origin main
+          npx --yes prettier --write doc/readme
+          git add doc/readme/adm.md doc/readme/caselaw.md doc/readme/literature.md
+          git diff-index --cached --quiet HEAD ||
+            git commit -m "Update documentation for xsd schema" -m "[skip ci]" &&
+            git push origin main
+
+      - name: Send status to Slack
+        uses: digitalservicebund/notify-on-failure-gha@671832f192aee0a068fd92b2f6deb975df794a84 # v1.6.1
+        if: ${{ failure() && github.ref == 'refs/heads/main' }}
+        with:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          SLACK_CHANNEL_ID: ${{ vars.NEURIS_PORTAL_ALERTS_SLACK_CHANNEL_ID }}

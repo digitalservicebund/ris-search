@@ -104,3 +104,9 @@ app:
   security:
     csp-header: "default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src data: 'self'; connect-src 'self'; font-src 'self'; frame-src 'none'; object-src 'none'; media-src 'none';"
 
+xsd:
+  schema-prefix: "classpath:schema/"
+  xsd-locations:
+    caselaw: [ "classpath:schema/caselaw-decision.xsd", "classpath:schema/caselaw-pending-proceeding.xsd" ]
+    adm: [ "classpath:schema/adm.xsd" ]
+    literature: [ "classpath:schema/literature-sli.xsd", "classpath:schema/literature-uli.xsd" ]

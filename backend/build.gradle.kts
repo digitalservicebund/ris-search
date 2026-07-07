@@ -31,6 +31,17 @@ configurations {
 
 repositories {
     mavenCentral()
+    maven {
+        url = uri("https://maven.pkg.github.com/digitalservicebund/ris-xml-schema")
+        credentials {
+            username = System.getenv("GH_PACKAGES_REPOSITORY_USER")
+            password = System.getenv("GH_PACKAGES_REPOSITORY_TOKEN")
+        }
+    }
+}
+
+springBoot {
+    mainClass = "de.bund.digitalservice.ris.search.Application"
 }
 
 jacoco { toolVersion = libs.versions.jacoco.get() }
@@ -96,6 +107,8 @@ dependencies {
     // CVE-2026-41293, CVE-2026-43512, CVE-2026-41284, CVE-2026-42498, CVE-2026-43513
     implementation(libs.tomcat.embed)
 
+    implementation(libs.ris.xml.schema)
+
     compileOnly(libs.lombok)
     annotationProcessor(libs.lombok)
 
@@ -110,6 +123,8 @@ dependencies {
     testImplementation(libs.opensearch.testcontainers)
     testImplementation(libs.testcontainers.postgresql)
     testImplementation(libs.restassured)
+
+    testImplementation(libs.reflections)
 }
 
 dependencyLocking {
@@ -169,6 +184,13 @@ tasks {
         classpath(configurations["xjc"])
         mainClass = "org.eclipse.persistence.jaxb.xjc.MOXyXJC"
         args = listOf("src/main/resources/WEB_INF/nlex/simple_template.wsdl", "-wsdl", "-d", outputDir.get().asFile.path, "-p", "nlex")
+    }
+
+    register<JavaExec>("xsdDocumentation") {
+        group = "documentation"
+        description = "Generiert Markdown für XSD Dokumentationselemente"
+        mainClass.set("de.bund.digitalservice.ris.markdown.MarkdownGenerator")
+        classpath = sourceSets["main"].runtimeClasspath
     }
 
     compileJava {

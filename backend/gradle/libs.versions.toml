@@ -34,6 +34,8 @@ jaxb-moxy = "5.0.0"
 posthog = "1.2.0"
 pebble = "4.1.2"
 rest-assured = "6.0.0"
+ris-xml-schema = "0.1.6"
+reflections = "0.10.2"
 
 [libraries]
 spring-actuator = { module="org.springframework.boot:spring-boot-starter-actuator", version.ref="spring-boot-starter" }
@@ -85,6 +87,8 @@ netty-handler = { module = "io.netty:netty-handler", version = "4.2.15.Final"}
 # CVE-2026-41293, CVE-2026-43512, CVE-2026-41284, CVE-2026-42498, CVE-2026-43513
 tomcat-embed = { module = "org.apache.tomcat.embed:tomcat-embed-core", version = "11.0.22" }
 
+ris-xml-schema = { module = "de.bund.digitalservice:ris-xml-schema", version.ref = "ris-xml-schema" }
+reflections = { module = "org.reflections:reflections", version.ref = "reflections" }
 
 [plugins]
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
