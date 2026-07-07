@@ -21,29 +21,14 @@ const normTitle = computed(() => getNormTitle(props.metadata));
         {{ metadata.alternateName }}
       </p>
 
-      <client-only>
-        <ExpandableText :length="6">
-          <div
-            v-if="hasHeading"
-            class="wrap-break-word hyphens-auto"
-            v-html="props.htmlParts?.heading"
-          />
-          <div v-else class="titel wrap-break-word">
-            {{ normTitle }}
-          </div>
-        </ExpandableText>
-
-        <template #fallback>
-          <div
-            v-if="props.htmlParts?.heading"
-            class="wrap-break-word hyphens-auto"
-            v-html="props.htmlParts.heading"
-          ></div>
-          <div v-else class="titel wrap-break-word">
-            {{ normTitle }}
-          </div>
-        </template>
-      </client-only>
+      <div
+        v-if="props.htmlParts?.heading"
+        class="wrap-break-word hyphens-auto"
+        v-html="props.htmlParts.heading"
+      ></div>
+      <div v-else class="titel wrap-break-word">
+        {{ normTitle }}
+      </div>
     </hgroup>
 
     <div class="content-grid">
