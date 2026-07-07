@@ -89,19 +89,14 @@ dependencies {
     implementation(libs.pebble)
     implementation(libs.streamex)
 
-    // Override sub-dependency 1.8 with 1.84 to avoid CVE-2026-5588 CVE-2026-0636
-    implementation(libs.bouncycastle)
+    // CVE-2026-54515
+    implementation(libs.jackson.databind)
 
-    // CVE-2026-42583, CVE-2026-42584, CVE-2026-42587
-    implementation(libs.netty.http)
-    implementation(libs.netty.http2)
-    implementation(libs.netty.compression)
+    // CVE-2026-5588
+    implementation(libs.bouncycastle.bcpkix)
 
-    // CVE-2026-44249 CVE-2026-45416
-    implementation(libs.netty.handler)
-
-    // CVE-2026-41293, CVE-2026-43512, CVE-2026-41284, CVE-2026-42498, CVE-2026-43513
-    implementation(libs.tomcat.embed)
+    // CVE-2026-0636
+    implementation(libs.bouncycastle.bcprov)
 
     implementation(libs.ris.html.transformation)
 
