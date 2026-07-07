@@ -2,48 +2,35 @@ package de.bund.digitalservice.ris.utils;
 
 import java.net.MalformedURLException;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
+import lombok.Getter;
 
 /** Validates Norm LegalDocML XML content/files against the relevant XSD schemas. */
 public class NormXmlValidator {
 
   /** The kind of norm document being validated, determining which schema to apply. */
   public enum Type {
-    REGELUNGSTEXT,
-    ANLAGE,
-    RECHTSETZUNGSDOKUMENT,
-  }
+    REGELUNGSTEXT("Grammatiken/Norms/legalDocML.de-regelungstextverkuendungsfassung.xsd"),
+    ANLAGE("Grammatiken/Norms/legalDocML.de-offenestruktur.xsd"),
+    RECHTSETZUNGSDOKUMENT("Grammatiken/Norms/legalDocML.de-rechtsetzungsdokument.xsd");
 
-  private static final List<String> NORM_SCHEMA_METADATA_FILES =
-      List.of(
-          "Grammatiken/Norms/legalDocML.de-metadaten-ris.xsd",
-          "Grammatiken/Norms/legalDocML.de-metadaten-regelungstext.xsd",
-          "Grammatiken/Norms/legalDocML.de-metadaten-rechtsetzungsdokument.xsd");
+    @Getter private final List<String> schemaFiles;
 
-  private static List<String> schemaFilesForType(Type type) {
-    List<String> schemaFiles = new ArrayList<>(NORM_SCHEMA_METADATA_FILES);
-
-    switch (type) {
-      case REGELUNGSTEXT:
-        schemaFiles.add("Grammatiken/Norms/legalDocML.de-regelungstextverkuendungsfassung.xsd");
-        break;
-      case ANLAGE:
-        schemaFiles.add("Grammatiken/Norms/legalDocML.de-offenestruktur.xsd");
-        break;
-      case RECHTSETZUNGSDOKUMENT:
-        schemaFiles.add("Grammatiken/Norms/legalDocML.de-rechtsetzungsdokument.xsd");
-        break;
+    Type(String path) {
+      schemaFiles =
+          List.of(
+              "Grammatiken/Norms/legalDocML.de-metadaten-ris.xsd",
+              "Grammatiken/Norms/legalDocML.de-metadaten-regelungstext.xsd",
+              "Grammatiken/Norms/legalDocML.de-metadaten-rechtsetzungsdokument.xsd",
+              path);
     }
-
-    return schemaFiles;
   }
 
   public static void validateContent(String xmlContent, Type type) {
-    XmlValidator.validateXmlContent(xmlContent, schemaFilesForType(type));
+    XmlValidator.validateXmlContent(xmlContent, type.getSchemaFiles());
   }
 
   public static void validateFile(Path xmlFilePath, Type type) throws MalformedURLException {
-    XmlValidator.validateXmlFile(xmlFilePath, schemaFilesForType(type));
+    XmlValidator.validateXmlFile(xmlFilePath, type.getSchemaFiles());
   }
 }
