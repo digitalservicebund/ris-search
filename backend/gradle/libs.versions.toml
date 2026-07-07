@@ -74,19 +74,14 @@ ris-html-transformation = { module = "de.bund.digitalservice:ris-html-transforma
 streamex = { module = 'one.util:streamex', version.ref = "streamex" }
 restassured = { module = 'io.rest-assured:rest-assured', version.ref = "rest-assured" }
 
-# Override sub-dependency 1.8 with 1.84 to avoid CVE-2026-5588 CVE-2026-0636
-bouncycastle = { module = "org.bouncycastle:bcpkix-jdk18on", version = "1.84" }
-# CVE-2026-42583, CVE-2026-42584, CVE-2026-42587
-netty-http = { module = "io.netty:netty-codec-http", version = "4.2.15.Final" }
-netty-http2 = { module = "io.netty:netty-codec-http2", version = "4.2.15.Final" }
-netty-compression = { module = "io.netty:netty-codec-compression", version = "4.2.15.Final" }
+# CVE-2026-54515
+jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version = "2.21.5" }
 
-# CVE-2026-44249 CVE-2026-45416
-netty-handler = { module = "io.netty:netty-handler", version = "4.2.15.Final"}
+# CVE-2026-5588
+bouncycastle-bcpkix = { module = "org.bouncycastle:bcpkix-jdk18on", version = "1.84" }
 
-# CVE-2026-41293, CVE-2026-43512, CVE-2026-41284, CVE-2026-42498, CVE-2026-43513
-tomcat-embed = { module = "org.apache.tomcat.embed:tomcat-embed-core", version = "11.0.23" }
-
+# CVE-2026-0636
+bouncycastle-bcprov = { module = "org.bouncycastle:bcprov-jdk18on", version = "1.84" }
 
 [plugins]
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
