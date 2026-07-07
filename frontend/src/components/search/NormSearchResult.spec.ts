@@ -343,7 +343,10 @@ describe("NormSearchResult", () => {
     renderComponent();
 
     const link = screen.getByRole("link", { name: /Test Title/i });
-    expect(link).toHaveAttribute("data-from", "/search?query=BGB&documentKind=N&pageIndex=1");
+    expect(link).toHaveAttribute(
+      "data-from",
+      "/search?query=BGB&documentKind=N&pageIndex=1",
+    );
   });
 
   it("includes the current search URL as query param in the article detail page link", () => {
@@ -354,6 +357,9 @@ describe("NormSearchResult", () => {
     renderComponent();
 
     const link = screen.getByRole("link", { name: /Article 2/i });
-    expect(link).toHaveAttribute("data-from", "/search?query=BGB&documentKind=N&pageIndex=1");
+    expect(link).toHaveAttribute(
+      "data-from",
+      "/search?query=BGB&documentKind=N&pageIndex=1",
+    );
   });
 });

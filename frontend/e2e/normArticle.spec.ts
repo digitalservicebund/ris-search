@@ -400,48 +400,100 @@ test.describe("can view metadata of norm articles", () => {
 
 test("shows correct breadcrumbs for a nested article", async ({
   page,
-  privateFeaturesEnabled,
   isMobileTest,
 }) => {
-  test.skip(!privateFeaturesEnabled || isMobileTest);
+  test.skip(isMobileTest);
 
   await navigate(
     page,
-    "/norms/eli/bund/bgbl-1/1972/s2459/1999-04-20/4/deu/art-z3",
+    "/norms/eli/bund/bgbl-1/1972/s2459/1999-04-20/4/deu/art-z3?from=/search?query=example",
   );
 
   const breadcrumb = page.getByRole("navigation", { name: "Pfadnavigation" });
 
   await expect(breadcrumb.getByRole("link", { name: "Start" })).toBeVisible();
-  await expect(breadcrumb.getByRole("link", { name: "Suche" })).toBeVisible();
+
+  const searchBreadcrumb = breadcrumb.getByRole("link", { name: "Suche" });
+  await expect(searchBreadcrumb).toBeVisible();
+  await expect(searchBreadcrumb).toHaveAttribute(
+    "href",
+    "/search?query=example",
+  );
+
   await expect(breadcrumb.getByRole("link", { name: "BWahlGV" })).toBeVisible();
-  await expect(
-    breadcrumb.getByRole("link", { name: "Dritter Abschnitt" }),
-  ).toBeVisible();
-  await expect(
-    breadcrumb.getByRole("link", { name: "Erster Unterabschnitt" }),
-  ).toBeVisible();
+
+  const sectionBreadcrumb = breadcrumb.getByRole("link", {
+    name: "Dritter Abschnitt",
+  });
+  await expect(sectionBreadcrumb).toBeVisible();
+  await expect(sectionBreadcrumb).toHaveAttribute(
+    "href",
+    /from=\/search\?query=example/,
+  );
+
+  const subsectionBreadcrumb = breadcrumb.getByRole("link", {
+    name: "Erster Unterabschnitt",
+  });
+  await expect(subsectionBreadcrumb).toBeVisible();
+  await expect(subsectionBreadcrumb).toHaveAttribute(
+    "href",
+    /from=\/search\?query=example/,
+  );
+
   await expect(breadcrumb.getByText("§ 9")).toBeVisible();
 });
 
 test("shows correct breadcrumbs for an Eingangsformel", async ({
   page,
-  privateFeaturesEnabled,
   isMobileTest,
 }) => {
-  test.skip(!privateFeaturesEnabled || isMobileTest);
+  test.skip(isMobileTest);
 
   await navigate(
     page,
-    "norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu/präambel-n1_formel-n1",
+    "norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu/präambel-n1_formel-n1?from=/search?query=example",
   );
 
   const breadcrumb = page.getByRole("navigation", { name: "Pfadnavigation" });
 
   await expect(breadcrumb.getByRole("link", { name: "Start" })).toBeVisible();
-  await expect(breadcrumb.getByRole("link", { name: "Suche" })).toBeVisible();
-  await expect(breadcrumb.getByRole("link", { name: "MFG" })).toBeVisible();
+
+  const searchBreadcrumb = breadcrumb.getByRole("link", { name: "Suche" });
+  await expect(searchBreadcrumb).toBeVisible();
+  await expect(searchBreadcrumb).toHaveAttribute(
+    "href",
+    "/search?query=example",
+  );
+
+  const normBreadcrumb = breadcrumb.getByRole("link", { name: "MFG" });
+  await expect(normBreadcrumb).toBeVisible();
+  await expect(normBreadcrumb).toHaveAttribute(
+    "href",
+    /from=\/search\?query=example/,
+  );
+
   await expect(breadcrumb.getByText("Eingangsformel")).toBeVisible();
+});
+
+test("keeps search state when navigating to other paragraphs", async ({
+  page,
+}) => {
+  await navigate(page, "/search?query=aktuelle%2520fassung&documentKind=N");
+
+  await page.getByRole("link", { name: "Eingangsformel" }).first().click();
+  await expect(
+    page.getByRole("heading", { level: 1, name: "Eingangsformel" }),
+  ).toBeVisible();
+
+  await page.getByRole("link", { name: "Nächster Paragraf" }).click();
+  await expect(
+    page.getByRole("heading", { level: 1, name: "§ 1 Anwendungsbereich" }),
+  ).toBeVisible();
+
+  await page.getByRole("link", { name: "Vorheriger Paragraf" }).click();
+  await expect(
+    page.getByRole("heading", { level: 1, name: "Eingangsformel" }),
+  ).toBeVisible();
 });
 
 test.describe("mobile table of contents", () => {

@@ -943,6 +943,35 @@ test.describe("searching administrative directive", () => {
   });
 });
 
+test("restores search state from document breadcrumbs", async ({ page }) => {
+  await navigate(page, "/advanced-search");
+
+  await searchFor(page, {
+    q: "FrSaftErfrischV",
+    documentKind: "Gesetze & Verordnungen",
+  });
+
+  await page
+    .getByRole("link", {
+      name: "Fiktive Fruchtsaft- und Erfrischungsgetränkeverordnung zu Testzwecken",
+    })
+    .click();
+
+  await expect(
+    page.getByRole("heading", {
+      level: 1,
+      name: "Fiktive Fruchtsaft- und Erfrischungsgetränkeverordnung zu Testzwecken",
+    }),
+  ).toBeVisible();
+
+  await page
+    .getByRole("navigation", { name: "Pfadnavigation" })
+    .getByRole("link", { name: "Erweiterte Suche" })
+    .click();
+
+  await expect(page.getByRole("searchbox")).toHaveValue("FrSaftErfrischV");
+});
+
 test.describe("responsive", () => {
   test.beforeEach(({ isMobileTest }) => {
     test.skip(!isMobileTest);
