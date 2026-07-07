@@ -71,7 +71,9 @@ test.describe("find and display caselaws", () => {
     await page.goto("/");
 
     const searchInput = page.getByRole("searchbox");
-    await searchInput.fill("Rechtmäßigkeit einer Sperrerklärung");
+    await searchInput.fill(
+      '"BVerwG, Beschluss vom 7. Januar 2010 - 20 F 5/09"',
+    );
 
     const searchButton = page.getByRole("button", { name: "Suchen" });
     await searchButton.click();
@@ -79,7 +81,7 @@ test.describe("find and display caselaws", () => {
     await page.getByRole("button", { name: "Gerichtsentscheidungen" }).click();
     await page
       .getByRole("link", {
-        name: "Rechtmäßigkeit einer Sperrerklärung",
+        name: "BVerwG, Beschluss vom 7. Januar 2010 - 20 F 5/09",
         exact: true,
       })
       .click();
@@ -87,7 +89,7 @@ test.describe("find and display caselaws", () => {
     await expect(
       page.getByRole("heading", {
         level: 1,
-        name: "Rechtmäßigkeit einer Sperrerklärung",
+        name: "BVerwG, Beschluss vom 7. Januar 2010 - 20 F 5/09",
       }),
     ).toBeVisible();
   });
@@ -98,7 +100,7 @@ test.describe("find and display caselaws", () => {
     await expect(
       page.getByRole("heading", {
         level: 1,
-        name: "Rechtmäßigkeit einer Sperrerklärung",
+        name: "BVerwG, Beschluss vom 7. Januar 2010 - 20 F 5/09",
       }),
     ).toBeVisible();
   });
