@@ -16,6 +16,8 @@ import lombok.Setter;
 @Builder
 public class RisMetadata {
 
+  private static class EmptyElement {}
+
   @Builder.Default
   @XmlElement(name = "abkuerzung", namespace = RIS_NS)
   private RisAbkuerzung internalAbbreviation = RisAbkuerzung.builder().build();
@@ -45,4 +47,18 @@ public class RisMetadata {
   @Setter
   @XmlElement(name = "vollzitat", namespace = RIS_NS)
   private String fullCitation;
+
+  @XmlElement(namespace = RIS_NS)
+  private EmptyElement bedingtesInkrafttreten;
+
+  public void setBedingtesInkrafttreten() {
+    this.bedingtesInkrafttreten = new EmptyElement();
+  }
+
+  @XmlElement(namespace = RIS_NS)
+  private EmptyElement gegenstandslos;
+
+  public void setGegenstandslos() {
+    this.gegenstandslos = new EmptyElement();
+  }
 }

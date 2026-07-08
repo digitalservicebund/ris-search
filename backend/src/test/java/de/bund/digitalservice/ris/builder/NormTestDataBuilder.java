@@ -13,6 +13,7 @@ import de.bund.digitalservice.ris.builder.models.body.Section;
 import de.bund.digitalservice.ris.builder.models.common.Block;
 import de.bund.digitalservice.ris.builder.models.common.Inline;
 import de.bund.digitalservice.ris.builder.models.meta.Meta;
+import de.bund.digitalservice.ris.builder.models.meta.identification.FRBRWork;
 import de.bund.digitalservice.ris.builder.models.meta.identification.Identification;
 import de.bund.digitalservice.ris.builder.models.meta.lifecycle.Lifecycle;
 import de.bund.digitalservice.ris.builder.models.preamble.Preamble;
@@ -71,13 +72,25 @@ public class NormTestDataBuilder {
 
   private final AkomaNtoso document = new AkomaNtoso();
   private final Map<String, AkomaNtoso> attachmentsDocs = new HashMap<>();
+  private final boolean enforceValidation;
 
-  private NormTestDataBuilder() {
+  private NormTestDataBuilder(boolean enforceValidation) {
+    this.enforceValidation = enforceValidation;
     this.document.setAct(Act.builder().meta(Meta.builder().build()).build());
   }
 
   public static NormTestDataBuilder builder() {
-    return new NormTestDataBuilder();
+    return new NormTestDataBuilder(true);
+  }
+
+  /**
+   * Creates a builder that does not schema validate the xmls. ONLY use this for test cases that
+   * require invalid xml. E.g. to test that extraction fails on certain elements missing.
+   *
+   * @return builder
+   */
+  public static NormTestDataBuilder invalidBuilder() {
+    return new NormTestDataBuilder(false);
   }
 
   /**
@@ -89,6 +102,57 @@ public class NormTestDataBuilder {
    */
   public NormTestDataBuilder eli(String manifestationEli) {
     this.document.getAct().getMeta().setIdentification(Identification.fromEli(manifestationEli));
+    return this;
+  }
+
+  /**
+   * Sets the FRBRWork's FRBRUri field
+   *
+   * @param workEli the work ELI, e.g. "eli/bund/bgbl-1/1991/s102/"
+   * @return this builder for chaining
+   */
+  public NormTestDataBuilder workEli(String workEli) {
+    this.document.getAct().getMeta().getIdentification().getFrbrWork().setUri(workEli);
+    return this;
+  }
+
+  /**
+   * Sets the FRBRExpression's FRBRUri field
+   *
+   * @param expressionEli the expression ELI, e.g. "eli/bund/bgbl-1/1991/s102/2025-11-18/1/deu"
+   * @return this builder for chaining
+   */
+  public NormTestDataBuilder expressionEli(String expressionEli) {
+    this.document.getAct().getMeta().getIdentification().getFrbrExpression().setUri(expressionEli);
+    return this;
+  }
+
+  /**
+   * Sets the FRBRManifestation's FRBRUri field
+   *
+   * @param manifestationEli the manifestation ELI, e.g.
+   *     "eli/bund/bgbl-1/1991/s102/2025-11-18/1/deu/2025-11-26/regelungstext-verkuendung-1.xml"
+   * @return this builder for chaining
+   */
+  public NormTestDataBuilder manifestationEli(String manifestationEli) {
+    this.document
+        .getAct()
+        .getMeta()
+        .getIdentification()
+        .getFrbrManifestation()
+        .setThis(manifestationEli);
+    return this;
+  }
+
+  /**
+   * Can be used to make individual settings on the @FRBRWork
+   *
+   * @param workConsumer that provides the document FRBRWork object
+   * @return this builder for chaining
+   */
+  public NormTestDataBuilder frbrWork(Consumer<FRBRWork> workConsumer) {
+    FRBRWork work = this.document.getAct().getMeta().getIdentification().getFrbrWork();
+    workConsumer.accept(work);
     return this;
   }
 
@@ -230,6 +294,26 @@ public class NormTestDataBuilder {
    */
   public NormTestDataBuilder fullCitation(String citation) {
     this.document.getAct().getMeta().getProprietary().getRisMetadata().setFullCitation(citation);
+    return this;
+  }
+
+  /**
+   * Adds a ris metadata ({@code ris:bedingtesInkrafttreten}) element.
+   *
+   * @return this builder for chaining
+   */
+  public NormTestDataBuilder bedingtesInkrafttreten() {
+    this.document.getAct().getMeta().getProprietary().getRisMetadata().setBedingtesInkrafttreten();
+    return this;
+  }
+
+  /**
+   * Adds a ris metadata ({@code ris:gegenstandslos}) element.
+   *
+   * @return this builder for chaining
+   */
+  public NormTestDataBuilder gegenstandslos() {
+    this.document.getAct().getMeta().getProprietary().getRisMetadata().setGegenstandslos();
     return this;
   }
 
@@ -495,7 +579,9 @@ public class NormTestDataBuilder {
       StringWriter writer = new StringWriter();
       marshaller.marshal(document, writer);
       String xml = writer.toString();
-      NormXmlValidator.validateContent(xml, docType);
+      if (enforceValidation) {
+        NormXmlValidator.validateContent(xml, docType);
+      }
 
       return xml;
     } catch (Exception e) {

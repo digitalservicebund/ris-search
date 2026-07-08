@@ -69,13 +69,36 @@ public class FRBRWork extends BaseElement {
     return builder.build();
   }
 
-  public void setDatePublished(String date) {
+  public FRBRWork setUri(String workEli) {
+    this.frbrUri =
+        ValueLeaf.builder().eId("meta-n1_ident-n1_frbrwork-n1_frbruri-n1").value(workEli).build();
+
+    return this;
+  }
+
+  public FRBRWork setName(String name) {
+    this.frbrName =
+        ValueLeaf.builder().eId("meta-n1_ident-n1_frbrwork-n1_frbrname-n1").value(name).build();
+
+    return this;
+  }
+
+  public FRBRWork setNumber(String number) {
+    this.frbrNumber =
+        ValueLeaf.builder().eId("meta-n1_ident-n1_frbrwork-n1_frbrnumber-n1").value(number).build();
+
+    return this;
+  }
+
+  public FRBRWork setDatePublished(String date) {
     this.frbrDate =
         DateLeaf.builder()
             .eId("meta-n1_ident-n1_frbrwork-n1_frbrdate-n1")
             .date(date)
             .name("verkuendungsfassung-verkuendungsdatum")
             .build();
+
+    return this;
   }
 
   @Builder.Default @XmlAttribute private String eId = "meta-n1_ident-n1_frbrwork-n1";

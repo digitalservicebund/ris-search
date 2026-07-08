@@ -5,7 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import de.bund.digitalservice.ris.SharedTestConstants;
+import de.bund.digitalservice.ris.builder.NormTestDataBuilder;
+import de.bund.digitalservice.ris.builder.models.common.AknP;
 import de.bund.digitalservice.ris.search.mapper.NormLdmlToOpenSearchMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
@@ -18,7 +19,6 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
@@ -35,12 +35,28 @@ class NormLdmlToOpenSearchMapperTest {
     return new String(Files.readAllBytes(file.toPath()));
   }
 
+  // --------- Elis, Titles and Dates -------
   @Test
-  @DisplayName("Should create the ELI, ID, title, abbreviation, and dates correctly")
-  void shouldCreateAttributesCorrect() throws IOException {
-    String normFile = "xmlContent.xml";
-    Norm norm =
-        NormLdmlToOpenSearchMapper.parseNorm(readXmlTestFile(normFile), Map.of(), true).get();
+  void extractsElisTitlesAndDates() {
+
+    NormTestDataBuilder builder =
+        NormTestDataBuilder.builder()
+            .eli("eli/bund/bgbl-1/1962/s514/2010-04-27/1/deu/2010-04-27/regelungstext-1.xml")
+            .officialTitle(
+                "Verordnung zur Durchführung des § 88 Abs. 2 Nr. 8 des Bundessozialhilfegesetzes")
+            .shortTitle("Kurztitel (", ")")
+            .officialAbbreviation("ABK")
+            .inForceDate("2000-01-01")
+            .outOfForceDate("2000-01-07")
+            .legislationDate("1962-07-15")
+            .datePublished("1962-07-20");
+
+    String xmlContent = builder.buildNormXml();
+    Optional<Norm> maybeNorm = NormLdmlToOpenSearchMapper.parseNorm(xmlContent, Map.of(), false);
+
+    assertThat(maybeNorm).isNotEmpty();
+
+    Norm norm = maybeNorm.get();
 
     assertEquals("eli/bund/bgbl-1/1962/s514", norm.getWorkEli());
     assertEquals("eli/bund/bgbl-1/1962/s514/2010-04-27/1/deu", norm.getExpressionEli());
@@ -53,125 +69,147 @@ class NormLdmlToOpenSearchMapperTest {
         norm.getOfficialTitle());
     assertEquals("Kurztitel", norm.getOfficialShortTitle());
     assertEquals("ABK", norm.getOfficialAbbreviation());
+    assertEquals(LocalDate.parse("2000-01-01"), norm.getEntryIntoForceDate());
+    assertEquals(LocalDate.parse("2000-01-07"), norm.getExpiryDate());
     assertEquals(LocalDate.parse("1962-07-15"), norm.getNormsDate());
-    assertEquals(LocalDate.parse("1962-07-15"), norm.getNormsSortDate());
+    // Should be same as in force in none-prototype env
+    assertEquals(LocalDate.parse("2000-01-01"), norm.getNormsSortDate());
     assertEquals(LocalDate.parse("1962-07-20"), norm.getDatePublished());
   }
 
   @Test
-  @DisplayName("Sets abbreviation to null when official- and ris-abbreviation are missing")
-  void returnsNullWhenAbbreviationsAreMissing() throws IOException {
-    Optional<Norm> norm =
-        NormLdmlToOpenSearchMapper.parseNorm(
-            readXmlTestFile("abbreviationTest1.xml"), Map.of(), true);
+  void ignoresWhiteSpaceAroundDates() {
+    NormTestDataBuilder builder =
+        NormTestDataBuilder.builder()
+            .inForceDate(" 2000-01-01 ")
+            .outOfForceDate(" 2000-01-07 ")
+            .legislationDate("    1962-07-15   ")
+            .datePublished("  1962-07-20   ");
 
-    assertThat(norm).isNotEmpty();
-    assertThat(norm.get().getOfficialAbbreviation()).isNull();
-  }
+    String xmlContent = builder.buildNormXml();
+    Optional<Norm> maybeNorm = NormLdmlToOpenSearchMapper.parseNorm(xmlContent, Map.of(), true);
 
-  @Test
-  @DisplayName("Extracts amtliche Abkuerzung as abbreviation")
-  void extractsAmtlicheAbkuerzungAsAbbreviation() throws IOException {
-    Optional<Norm> norm =
-        NormLdmlToOpenSearchMapper.parseNorm(
-            readXmlTestFile("abbreviationTest2.xml"), Map.of(), true);
+    assertThat(maybeNorm).isNotEmpty();
 
-    assertThat(norm).isNotEmpty();
-    assertThat(norm.get().getOfficialAbbreviation()).isEqualTo("OffAbb");
-  }
-
-  @Test
-  @DisplayName("Uses ris-abbreviation as fallback")
-  void usesRisAbbreviationAsFallback() throws IOException {
-    Optional<Norm> norm =
-        NormLdmlToOpenSearchMapper.parseNorm(
-            readXmlTestFile("abbreviationTest3.xml"), Map.of(), true);
-
-    assertThat(norm).isNotEmpty();
-    assertThat(norm.get().getOfficialAbbreviation()).isEqualTo("RisAbbrev");
-  }
-
-  @Test
-  @DisplayName("Should not create norms when it does not exist the eli")
-  void shouldNotCreateNormsWithoutEli() throws IOException {
-    String normFile = "xmlDocumentTestWithoutEli.xml";
-    assertTrue(
-        NormLdmlToOpenSearchMapper.parseNorm(readXmlTestFile(normFile), Map.of(), true).isEmpty());
-  }
-
-  @Test
-  @DisplayName("Should not create norms when the xml has a wrong format")
-  void shouldNotCreateNormsWithWrongXmlDocument() throws IOException {
-    String normFile = "xmlDocumentWrongFormat.xml";
-    assertTrue(
-        NormLdmlToOpenSearchMapper.parseNorm(readXmlTestFile(normFile), Map.of(), true).isEmpty());
-  }
-
-  @Test
-  @DisplayName("Should create norms date even when has an empty space in the xml file")
-  void shouldCreateNormsDateEmptySpace() throws IOException {
-    String normFile = "xmlDocumentTestDateWithEmptySpace.xml";
-    Norm norm =
-        NormLdmlToOpenSearchMapper.parseNorm(readXmlTestFile(normFile), Map.of(), true).get();
+    Norm norm = maybeNorm.get();
+    assertEquals(LocalDate.parse("2000-01-07"), norm.getExpiryDate());
+    assertEquals(LocalDate.parse("1962-07-15"), norm.getNormsDate());
     assertEquals(LocalDate.parse("1962-07-15"), norm.getNormsDate());
     assertEquals(LocalDate.parse("1962-07-20"), norm.getDatePublished());
   }
 
-  @ParameterizedTest
-  @MethodSource("getTestDates")
-  void shouldCreateExpiryAndEntryIntoForceDatesCorrectly(
-      String entryIntoForceDate, String expiryDate, boolean isActive) throws IOException {
-    String normFile = "xmlDocumentTestEntryIntoForceAndExpiryDates.xml";
-    String fileContent = String.format(readXmlTestFile(normFile), entryIntoForceDate, expiryDate);
-    Norm norm = NormLdmlToOpenSearchMapper.parseNorm(fileContent, Map.of(), false).get();
+  // --------- Tests for amtliche- and ris-abkuerzung -------
+  @Test
+  void setsAbbreviationToNullWhenAbbreviationsAreMissing() {
+    NormTestDataBuilder builder =
+        NormTestDataBuilder.builder().officialAbbreviation(null).risAbbreviation(null);
 
-    LocalDate expectedEntryIntoForceDate = null;
-    if (entryIntoForceDate != null) {
-      expectedEntryIntoForceDate = LocalDate.parse(entryIntoForceDate);
-    }
-    LocalDate expectedExpiryDate = null;
-    if (expiryDate != null) {
-      expectedExpiryDate = LocalDate.parse(expiryDate);
-    }
-    assertEquals(expectedEntryIntoForceDate, norm.getEntryIntoForceDate());
-    assertEquals(expectedEntryIntoForceDate, norm.getNormsSortDate());
-    assertEquals(expectedExpiryDate, norm.getExpiryDate());
+    String xmlContent = builder.buildNormXml();
+    Optional<Norm> maybeNorm = NormLdmlToOpenSearchMapper.parseNorm(xmlContent, Map.of(), false);
 
-    norm = NormLdmlToOpenSearchMapper.parseNorm(fileContent, Map.of(), true).get();
-    assertEquals(LocalDate.parse("1964-08-01"), norm.getNormsDate());
-    assertEquals(LocalDate.parse("1964-08-01"), norm.getNormsSortDate());
+    assertThat(maybeNorm).isNotEmpty();
+    assertThat(maybeNorm.get().getOfficialAbbreviation()).isNull();
   }
 
-  private static Stream<Arguments> getTestDates() {
-    return Stream.of(
-        Arguments.of("1962-07-20", null, true),
-        Arguments.of(
-            "1962-07-20", SharedTestConstants.DATE_2024_01_01.plusDays(1).toString(), true),
-        Arguments.of(SharedTestConstants.DATE_2024_01_01.plusDays(1).toString(), null, false),
-        Arguments.of(
-            SharedTestConstants.DATE_2024_01_01.plusDays(1).toString(),
-            SharedTestConstants.DATE_2024_01_01.plusDays(2).toString(),
-            false),
-        Arguments.of(null, null, false),
-        Arguments.of("1962-07-20", "1962-07-21", false));
+  @Test
+  void prefersOfficialAbbreviationOverRisAbbreviation() {
+    NormTestDataBuilder builder =
+        NormTestDataBuilder.builder().officialAbbreviation("OffAbb").risAbbreviation("RisAbb");
+
+    String xmlContent = builder.buildNormXml();
+    Optional<Norm> maybeNorm = NormLdmlToOpenSearchMapper.parseNorm(xmlContent, Map.of(), false);
+
+    assertThat(maybeNorm).isNotEmpty();
+    assertThat(maybeNorm.get().getOfficialAbbreviation()).isEqualTo("OffAbb");
   }
 
-  @ParameterizedTest
-  @MethodSource("getTestPublishedIn")
-  void shouldCreatePublishedInFieldCorrectly(
-      String normsDate, String name, String number, String expectedResult) throws IOException {
-    String normFile = "xmlDocumentTestPublishedInExtraction.xml";
-    String fileContent =
-        String.format(
-            readXmlTestFile(normFile),
-            Objects.requireNonNullElse(normsDate, ""),
-            Objects.requireNonNullElse(number, ""),
-            Objects.requireNonNullElse(name, ""));
-    Norm norm = NormLdmlToOpenSearchMapper.parseNorm(fileContent, Map.of(), true).get();
+  @Test
+  void usesRisAbbreviationAsFallback() {
+    NormTestDataBuilder builder =
+        NormTestDataBuilder.builder().officialAbbreviation(null).risAbbreviation("RisAbb");
 
-    assertEquals(expectedResult, norm.getPublishedIn());
+    String xmlContent = builder.buildNormXml();
+    Optional<Norm> maybeNorm = NormLdmlToOpenSearchMapper.parseNorm(xmlContent, Map.of(), false);
+
+    assertThat(maybeNorm).isNotEmpty();
+    assertThat(maybeNorm.get().getOfficialAbbreviation()).isEqualTo("RisAbb");
   }
 
+  // --------- Tests empty mappings ------------
+  @Test
+  void doesNotMapNormIfWorkEliIsMissing() {
+    String xmlContent = NormTestDataBuilder.invalidBuilder().workEli(null).buildNormXml();
+
+    assertThat(NormLdmlToOpenSearchMapper.parseNorm(xmlContent, Map.of(), false)).isEmpty();
+  }
+
+  @Test
+  void doesNotMapNormIfExpressionEliIsMissing() {
+    String xmlContent = NormTestDataBuilder.invalidBuilder().expressionEli(null).buildNormXml();
+
+    assertThat(NormLdmlToOpenSearchMapper.parseNorm(xmlContent, Map.of(), false)).isEmpty();
+  }
+
+  @Test
+  void doesNotMapNormIfManifestationEliIsMissing() {
+    String xmlContent = NormTestDataBuilder.invalidBuilder().manifestationEli(null).buildNormXml();
+
+    assertThat(NormLdmlToOpenSearchMapper.parseNorm(xmlContent, Map.of(), false)).isEmpty();
+  }
+
+  @Test
+  void doesNotCreateNormForInvalidXmlDocument() {
+    String xml = "<akn:akomaNtoso xmlns:akn=\"http://Inhaltsdaten.LegalDocML.de\"/>";
+    assertTrue(NormLdmlToOpenSearchMapper.parseNorm(xml, Map.of(), true).isEmpty());
+  }
+
+  @Test
+  void doesNotMapNormIfBedingtesInkrafttreten() {
+    String xmlContent = NormTestDataBuilder.builder().bedingtesInkrafttreten().buildNormXml();
+
+    assertThat(NormLdmlToOpenSearchMapper.parseNorm(xmlContent, Map.of(), false)).isEmpty();
+  }
+
+  @Test
+  void doesNotMapNormIfGegenstandlos() {
+    String xmlContent = NormTestDataBuilder.invalidBuilder().gegenstandslos().buildNormXml();
+
+    assertThat(NormLdmlToOpenSearchMapper.parseNorm(xmlContent, Map.of(), false)).isEmpty();
+  }
+
+  // -------------- Norm sort date
+  @Test
+  void usesInForceDateAsSortDateInNonePrototypeEnvironment() {
+
+    NormTestDataBuilder builder =
+        NormTestDataBuilder.builder().inForceDate("2020-01-01").legislationDate("2050-07-31");
+
+    String xmlContent = builder.buildNormXml();
+    Optional<Norm> maybeNorm = NormLdmlToOpenSearchMapper.parseNorm(xmlContent, Map.of(), false);
+
+    assertThat(maybeNorm).isNotEmpty();
+
+    Norm norm = maybeNorm.get();
+
+    assertThat(norm.getNormsSortDate()).isEqualTo(LocalDate.parse("2020-01-01"));
+  }
+
+  @Test
+  void usesLegislationDateAsSortDateInPrototypeEnvironment() {
+    NormTestDataBuilder builder =
+        NormTestDataBuilder.builder().inForceDate("2020-01-01").legislationDate("2050-07-31");
+
+    String xmlContent = builder.buildNormXml();
+    Optional<Norm> maybeNorm = NormLdmlToOpenSearchMapper.parseNorm(xmlContent, Map.of(), true);
+
+    assertThat(maybeNorm).isNotEmpty();
+
+    Norm norm = maybeNorm.get();
+
+    assertThat(norm.getNormsSortDate()).isEqualTo(LocalDate.parse("2050-07-31"));
+  }
+
+  // ------------- PublishedIn tests
   private static Stream<Arguments> getTestPublishedIn() {
     return Stream.of(
         Arguments.of("1962-07-20", "bgbl-1", "s120", "BGBl I, 1962 120"),
@@ -183,16 +221,81 @@ class NormLdmlToOpenSearchMapperTest {
         Arguments.of(null, "bgbl-1", "120", "BGBl I 120"));
   }
 
+  @ParameterizedTest
+  @MethodSource("getTestPublishedIn")
+  void shouldCreatePublishedInFieldCorrectly(
+      String datePublished, String name, String number, String expectedResult) {
+
+    NormTestDataBuilder builder =
+        NormTestDataBuilder.invalidBuilder()
+            .frbrWork(
+                frbrWork -> {
+                  frbrWork.setDatePublished(datePublished).setName(name).setNumber(number);
+                });
+
+    String xmlContent = builder.buildNormXml();
+    Optional<Norm> maybeNorm = NormLdmlToOpenSearchMapper.parseNorm(xmlContent, Map.of(), false);
+
+    assertThat(maybeNorm).isNotEmpty();
+
+    Norm norm = maybeNorm.get();
+    assertEquals(expectedResult, norm.getPublishedIn());
+  }
+
   @Test
-  @DisplayName("Should extract the articles correctly")
-  void shouldExtractArticlesCorrectly() throws IOException {
-    String normFile = "xmlDocumentTestArticleExtraction.xml";
-    var attachments =
-        Map.of(
-            "eli/bund/bgbl-1/1962/s514/2010-04-27/1/deu/2010-04-27/offenestruktur-1.xml",
-            readXmlTestFile("offenestruktur-1.xml"));
-    Norm norm =
-        NormLdmlToOpenSearchMapper.parseNorm(readXmlTestFile(normFile), attachments, true).get();
+  void extractsArticles() {
+    NormTestDataBuilder builder =
+        NormTestDataBuilder.builder()
+            .eli("eli/bund/bgbl-1/1962/s514/2010-04-27/1/deu/2010-04-27/regelungstext-1.xml")
+            .formula("Preamble")
+            .article(
+                "§ 1",
+                "2003-11-03",
+                null,
+                "art-z1",
+                article -> {
+                  article
+                      .addHeading("Heading 1", null)
+                      .addParagraph("Das ist ein Satz. Das ist noch ein Satz.", "(1)");
+                })
+            .article(
+                "§ 2",
+                "2003-11-03",
+                "2003-11-06",
+                "art-z2",
+                article -> {
+                  article
+                      .addHeading("Heading 2", null)
+                      .addParagraph(
+                          "Ein weiterer Satz mit einem Punkt in einer Aufzählung und noch einem Punkt.",
+                          "(1)")
+                      .addParagraph("Noch ein wichtiger Satz. Das ist der letzte Satz.", "(2)");
+                })
+            .article(
+                "§ 3",
+                "2003-11-01",
+                null,
+                "art-z3",
+                article -> {
+                  article.addHeading("Heading 3", null).addParagraph("Mit Text.", "");
+                })
+            .attachment(
+                "eli/bund/bgbl-1/1962/s514/2010-04-27/1/deu/2010-04-27/offenestruktur-1.xml",
+                "Anlage T1",
+                "(zu § 1)",
+                "",
+                List.of(
+                    AknP.withText(
+                        "This text appears in the attachment. This text also appears, inside a paragraph.")));
+
+    Optional<Norm> maybeNorm =
+        NormLdmlToOpenSearchMapper.parseNorm(
+            builder.buildNormXml(), builder.buildAttachmentXmls(), true);
+
+    assertThat(maybeNorm).isNotEmpty();
+
+    Norm norm = maybeNorm.get();
+
     assertEquals(5, norm.getArticles().size());
 
     Article preamble = norm.getArticles().get(0);
@@ -202,8 +305,8 @@ class NormLdmlToOpenSearchMapperTest {
     Article attachment = norm.getArticles().get(4);
     assertEquals("Eingangsformel", preamble.getName());
     assertEquals("Preamble", preamble.getText());
-    assertEquals("§ 1 Heading", norm.getArticles().get(1).getName());
-    assertEquals("Das ist ein Satz. Das ist noch ein Satz.", firstArticle.getText());
+    assertEquals("§ 1 Heading 1", norm.getArticles().get(1).getName());
+    assertEquals("(1) Das ist ein Satz. Das ist noch ein Satz.", firstArticle.getText());
     assertEquals("§ 2 Heading 2", secondArticle.getName());
     assertEquals(
         "(1) Ein weiterer Satz mit einem Punkt in einer Aufzählung und noch einem Punkt. (2) Noch ein wichtiger Satz. Das ist der letzte Satz.",
@@ -212,12 +315,12 @@ class NormLdmlToOpenSearchMapperTest {
     assertNull(firstArticle.getExpiryDate());
     assertEquals(LocalDate.of(2003, Month.NOVEMBER, 3), secondArticle.getEntryIntoForceDate());
     assertEquals(LocalDate.of(2003, Month.NOVEMBER, 6), secondArticle.getExpiryDate());
-    assertNull(thirdArticle.getEntryIntoForceDate());
-    assertEquals(LocalDate.of(2003, Month.NOVEMBER, 1), thirdArticle.getExpiryDate());
+    assertEquals(LocalDate.of(2003, Month.NOVEMBER, 1), thirdArticle.getEntryIntoForceDate());
+    assertNull(thirdArticle.getExpiryDate());
     String workEli = "eli/bund/bgbl-1/1962/s514";
     String expressionEli = workEli + "/2010-04-27/1/deu";
     String manifestationEli = expressionEli + "/2010-04-27/offenestruktur-1.xml";
-    String eid = "anlagen-1_anlage-1";
+    String eid = "anlagen-n1_anlage-n1";
     assertThat(attachment)
         .isEqualTo(
             new Article(
@@ -236,8 +339,7 @@ class NormLdmlToOpenSearchMapperTest {
   }
 
   @Test
-  @DisplayName("Should create the table of contents")
-  void shouldCreateTheTableOfContents() throws IOException {
+  void createsTableOfContents() throws IOException {
     String normFile = "xmlContentTestWithPreambleAndConclusionsFormula.xml";
     var attachments =
         Map.of(
@@ -283,10 +385,10 @@ class NormLdmlToOpenSearchMapperTest {
   @Test
   @DisplayName("Correctly maps a nested table of content to a nested list with TableOfContentsItem")
   void nestedTableOfContentExtractionTest() throws IOException {
-    var norm =
-        NormLdmlToOpenSearchMapper.parseNorm(
-                readXmlTestFile("xmlDocumentTestTableOfContent.xml"), Map.of(), true)
-            .orElseThrow();
+    var sourceFile =
+        Files.readString(
+            Path.of("src/test/resources/data/xmlTests/xmlDocumentTestTableOfContent.xml"));
+    var norm = NormLdmlToOpenSearchMapper.parseNorm(sourceFile, Map.of(), true).orElseThrow();
     var tableOfContents = norm.getTableOfContents();
     assertEquals(tableOfContents, expectedToC);
   }

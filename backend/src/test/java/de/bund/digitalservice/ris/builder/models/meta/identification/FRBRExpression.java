@@ -58,6 +58,14 @@ public class FRBRExpression extends BaseElement {
         .build();
   }
 
+  public void setUri(String expressionEli) {
+    this.frbrUri =
+        ValueLeaf.builder()
+            .eId("meta-n1_ident-n1_frbrexpression-n1_frbruri-n1")
+            .value(expressionEli)
+            .build();
+  }
+
   @Builder.Default @XmlAttribute private String eId = "meta-n1_ident-n1_frbrexpression-n1";
 
   @Builder.Default
