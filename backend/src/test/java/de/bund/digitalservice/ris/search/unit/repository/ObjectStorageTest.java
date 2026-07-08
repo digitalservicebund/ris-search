@@ -12,7 +12,6 @@ import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -51,9 +50,24 @@ class ObjectStorageTest {
     var result = storage.getObjects(List.of("key1", "key2"));
 
     assertThat(result.getFirst().key()).isEqualTo("key1");
-    assertThat(result.getFirst().bytes()).isEqualTo(Optional.empty());
+    assertThat(result.getFirst().bytes()).isNotPresent();
     assertThat(result.getLast().key()).isEqualTo("key2");
     assertThat(result.getLast().bytes())
         .hasValueSatisfying(bytes -> assertThat(bytes).containsExactly(testdata));
+  }
+
+  @Test
+  void getObjectsResetsInterruptedFlag() throws Exception {
+    Thread mainThread = Thread.currentThread();
+
+    when(client.getStream("key1"))
+        .thenAnswer(
+            invocation -> {
+              mainThread.interrupt();
+              return new DataInputStream(new ByteArrayInputStream(new byte[0]));
+            });
+
+    storage.getObjects(List.of("key1"));
+    assertThat(Thread.currentThread().isInterrupted()).isTrue();
   }
 }
