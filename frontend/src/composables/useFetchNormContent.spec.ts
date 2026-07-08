@@ -4,7 +4,10 @@ import type {
   LegislationExpression,
   LegislationManifestation,
 } from "~/types/api";
-import { useFetchNormArticleContent, useFetchNormContent } from "./useNormData";
+import {
+  useFetchNormArticleContent,
+  useFetchNormContent,
+} from "./useFetchNormContent";
 
 const { mockFetch } = vi.hoisted(() => {
   return {
@@ -17,7 +20,7 @@ vi.mock("~/plugins/risBackend", () => ({
   extendOnRequest: (...cbs: FetchHook[]) => cbs,
 }));
 
-describe("useNormData", () => {
+describe("useFetchNormContent", () => {
   const consoleInfoMock = vi
     .spyOn(console, "info")
     .mockImplementation(() => undefined);
