@@ -3,6 +3,7 @@ package de.bund.digitalservice.ris.search.service;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
+import de.bund.digitalservice.ris.search.repository.objectstorage.StorageObject;
 import de.bund.digitalservice.ris.search.repository.opensearch.DocumentRepository;
 import de.bund.digitalservice.ris.search.utils.DateUtils;
 import java.time.Instant;
@@ -89,23 +90,26 @@ public abstract class BaseIndexService<T> implements IndexService {
   }
 
   private void indexOneBatch(List<String> filenames) throws ObjectStoreServiceException {
+    List<StorageObject> results = objectStorage.getObjects(filenames);
+
     List<T> allParsedEntities =
-        filenames.stream().map(this::fetchAndMapEntity).flatMap(Optional::stream).toList();
+        results.stream().map(this::fetchAndMapEntity).flatMap(Optional::stream).toList();
 
     logger.info("Sending {} entities to OpenSearch", allParsedEntities.size());
 
     documentRepository.saveAll(allParsedEntities);
   }
 
-  private Optional<T> fetchAndMapEntity(String filename) {
-    Optional<String> content = objectStorage.getFileAsString(filename);
+  private Optional<T> fetchAndMapEntity(StorageObject result) {
+
+    Optional<byte[]> content = result.bytes();
 
     if (content.isEmpty()) {
-      logger.warn("Tried to index file {}, but it doesn't exist.", filename);
+      logger.warn("Tried to index file {}, but it doesn't exist.", result.key());
       return Optional.empty();
     }
 
-    return mapFileToEntity(filename, content.get());
+    return mapFileToEntity(result.key(), new String(content.get()));
   }
 
   protected abstract Optional<T> mapFileToEntity(String filename, String fileContent);

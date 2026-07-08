@@ -6,8 +6,13 @@ import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import org.apache.logging.log4j.Logger;
 import software.amazon.awssdk.awscore.exception.AwsServiceException;
 import software.amazon.awssdk.core.exception.SdkClientException;
@@ -85,6 +90,43 @@ public class ObjectStorage {
   public Optional<String> getFileAsString(String filename) throws ObjectStoreServiceException {
     Optional<byte[]> s3Response = get(filename);
     return s3Response.map(bytes -> new String(bytes, StandardCharsets.UTF_8));
+  }
+
+  /**
+   * Retrieves a list of objects from the object storage based on the given object keys. Not found
+   * keys will be ignored in the result list without an exception thrown.
+   *
+   * @param keys list of keys identifying the objects in the storage
+   * @return a List of StoreObjects
+   * @throws ObjectStoreServiceException if all retries fail or an unexpected error occurs during
+   *     the operation
+   */
+  public List<StorageObject> getObjects(List<String> keys) {
+
+    List<Future<StorageObject>> tasks = new ArrayList<>(keys.size());
+    List<StorageObject> content = new ArrayList<>(keys.size());
+
+    try (ExecutorService downloadExecutor = Executors.newVirtualThreadPerTaskExecutor()) {
+      for (String key : keys) {
+        tasks.add(downloadExecutor.submit(() -> new StorageObject(key, this.get(key))));
+      }
+      for (Future<StorageObject> task : tasks) {
+        try {
+          content.add(task.get());
+        } catch (ExecutionException e) {
+          if (e.getCause() instanceof ObjectStoreServiceException) {
+            downloadExecutor.shutdownNow();
+            throw new ObjectStoreServiceException(e.getCause().getMessage());
+          }
+          logger.error("an exception occured furing object retrieval", e.getCause());
+        } catch (InterruptedException interruptedException) {
+          downloadExecutor.shutdownNow();
+          logger.error("object retrieval thread was interrupted");
+          Thread.currentThread().interrupt();
+        }
+      }
+    }
+    return content;
   }
 
   /**

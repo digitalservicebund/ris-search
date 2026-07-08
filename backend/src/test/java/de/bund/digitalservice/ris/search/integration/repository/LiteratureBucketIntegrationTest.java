@@ -7,6 +7,8 @@ import de.bund.digitalservice.ris.search.config.obs.ObsConfig;
 import de.bund.digitalservice.ris.search.exception.NoSuchKeyException;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.repository.objectstorage.LiteratureBucket;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -58,6 +60,24 @@ class LiteratureBucketIntegrationTest {
     bucket.save("XXLU020000001.akn.xml", "");
     bucket.save("changelog.json", "");
     assertThat(bucket.getAllKeyInfosByPrefix("XXLU01")).hasSize(1);
+  }
+
+  @Test
+  void getObjectsReturnsAllObjects() {
+    bucket.save("file0.xml", "0");
+    bucket.save("file1.xml", "1");
+    bucket.save("file2.xml", "2");
+    var objects = bucket.getObjects(List.of("file0.xml", "file1.xml", "file2.xml"));
+
+    for (int i = 0; i < objects.size(); i++) {
+      var currentObj = objects.get(i);
+
+      assertThat(currentObj.key()).isEqualTo("file" + i + ".xml");
+      assertThat(currentObj.bytes())
+          .isPresent()
+          .get()
+          .isEqualTo(String.valueOf(i).getBytes(StandardCharsets.UTF_8));
+    }
   }
 
   @Test
