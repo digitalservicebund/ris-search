@@ -47,7 +47,6 @@ public class CaseLawService {
   private final CaseLawBucket caseLawBucket;
   private final String versionPrefix;
   private final ElasticsearchOperations operations;
-  private final CourtNameAbbreviationExpander courtNameAbbreviationExpander;
   private final Configurations configurations;
   private final CaseLawLdmlToOpenSearchMapper marshaller;
   private final SimpleSearchQueryBuilder simpleSearchQueryBuilder;
@@ -72,14 +71,12 @@ public class CaseLawService {
       ElasticsearchOperations operations,
       Configurations configurations,
       CaseLawLdmlToOpenSearchMapper marshaller,
-      SimpleSearchQueryBuilder simpleSearchQueryBuilder,
-      CourtNameAbbreviationExpander courtNameService) {
+      SimpleSearchQueryBuilder simpleSearchQueryBuilder) {
     this.caseLawRepository = caseLawRepository;
     this.caseLawBucket = caseLawBucket;
     this.versionPrefix = versionPrefix;
     this.operations = operations;
     this.configurations = configurations;
-    this.courtNameAbbreviationExpander = courtNameService;
     this.marshaller = marshaller;
     this.simpleSearchQueryBuilder = simpleSearchQueryBuilder;
   }
@@ -145,7 +142,9 @@ public class CaseLawService {
             item -> {
               String key = item.getKeyAsString();
               long count = item.getDocCount();
-              String label = courtNameAbbreviationExpander.getLabelExpandingSynonyms(key);
+              String label =
+                  CourtNameAbbreviationExpander.getLabelExpandingSynonyms(
+                      key, CourtNameAbbreviationExpander.extractFirstToken(searchPrefix));
               return new CourtSearchResult(key, count, label);
             })
         .toList();

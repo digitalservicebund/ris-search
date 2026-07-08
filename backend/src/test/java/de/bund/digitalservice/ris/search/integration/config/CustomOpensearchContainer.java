@@ -1,8 +1,6 @@
 package de.bund.digitalservice.ris.search.integration.config;
 
 import org.opensearch.testcontainers.OpenSearchContainer;
-import org.testcontainers.containers.BindMode;
-import org.testcontainers.containers.SelinuxContext;
 
 /** Custom OpenSearch container for integration testing. */
 @SuppressWarnings("rawtypes")
@@ -27,12 +25,5 @@ public class CustomOpensearchContainer extends OpenSearchContainer {
     addEnv(DISCOVERY_TYPE, DISCOVERY_TYPE_SINGLE_NODE);
     addEnv(DISABLE_SECURITY_PLUGIN, Boolean.TRUE.toString());
     addEnv(CLUSTER_NAME, OPEN_SEARCH);
-
-    withClasspathResourceMapping(
-            "openSearch/mounted/",
-            "/usr/share/opensearch/config/mounted/",
-            BindMode.READ_ONLY,
-            SelinuxContext.NONE)
-        .close();
   }
 }
