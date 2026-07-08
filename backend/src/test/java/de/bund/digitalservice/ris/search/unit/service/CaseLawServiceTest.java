@@ -13,6 +13,7 @@ import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository;
 import de.bund.digitalservice.ris.search.service.CaseLawService;
 import de.bund.digitalservice.ris.search.service.SimpleSearchQueryBuilder;
+import de.bund.digitalservice.ris.search.service.helper.CourtNameAbbreviationExpander;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
@@ -32,6 +33,7 @@ class CaseLawServiceTest {
   @Mock private CaseLawBucket caseLawBucketMock;
   @Mock private CaseLawLdmlToOpenSearchMapper marshaller;
   @Mock private CaseLawRepository caseLawRepositoryMock;
+  @Mock private CourtNameAbbreviationExpander synonyms;
 
   @BeforeEach
   void setUp() {
@@ -44,7 +46,8 @@ class CaseLawServiceTest {
             operationsMock,
             configurations,
             marshaller,
-            new SimpleSearchQueryBuilder(null));
+            new SimpleSearchQueryBuilder(null),
+            synonyms);
   }
 
   @Test
