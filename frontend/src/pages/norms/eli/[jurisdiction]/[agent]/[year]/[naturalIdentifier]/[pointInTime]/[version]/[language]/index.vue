@@ -22,10 +22,25 @@ definePageMeta({
 });
 
 const route = useRoute();
+const url = useRequestURL();
 const expressionEli = Object.values(route.params).join("/");
 const privateFeaturesEnabled = usePrivateFeaturesFlag();
 
-const { data, error } = await useFetchNormContent(expressionEli);
+const { data, error } = await useFetchNormContent(expressionEli, {
+  rewriteLink: (link) => {
+    if (!link) return null;
+
+    const newLink = new URL(link, url);
+    const isSameOrigin = newLink.origin === url.origin;
+    const isHashOnly = link.startsWith("#");
+    if (!isSameOrigin || isHashOnly) return link;
+
+    const from = searchParamToString(route.query.from);
+    if (from) newLink.searchParams.set("from", from);
+
+    return newLink.pathname + newLink.search + newLink.hash;
+  },
+});
 
 if (error.value || !data.value) {
   showError({ status: error.value?.status ?? 500 });

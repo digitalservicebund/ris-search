@@ -178,6 +178,21 @@ describe("useFetchNormContent", () => {
     );
   });
 
+  it("rewrites links", async () => {
+    mockFetch.mockReturnValueOnce(mockMetadata);
+    mockFetch.mockReturnValueOnce(
+      `<html><body><a href="/original/path">link</a></body></html>`,
+    );
+
+    const { data } = await useFetchNormContent("rewrite-test-eli", {
+      rewriteLink: (href) => (href ? `/rewritten${href}` : null),
+    });
+
+    expect(data.value.htmlParts.body).toContain(
+      `href="/rewritten/original/path"`,
+    );
+  });
+
   it("adds preamble footnotes to the official toc", async () => {
     mockFetch.mockReturnValueOnce(mockMetadata);
     mockFetch.mockReturnValueOnce(
