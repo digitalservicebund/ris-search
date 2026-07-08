@@ -2,7 +2,7 @@ import type { AsyncData, NuxtError } from "#app";
 import type { LegislationExpression } from "~/types/api";
 import { getTextFromElements, parseDocument } from "~/utils/htmlParser";
 
-export interface NormContent {
+export type NormContent = {
   legislation: LegislationExpression;
   htmlParts: {
     heading?: string;
@@ -16,7 +16,13 @@ export interface NormContent {
     standangabenHinweis?: string[];
     body: string;
   };
-}
+};
+
+export type UseFetchNormContentOptions = {
+  rewriteLink: (link: string | null) => string | null;
+};
+
+type ExtractHtmlPartsOptions = UseFetchNormContentOptions;
 
 /**
  * Fetches the metadata of a norm exluding its articles content as an async
@@ -31,6 +37,7 @@ export interface NormContent {
  */
 export function useFetchNormContent(
   expressionEli: string,
+  options?: UseFetchNormContentOptions,
 ): AsyncData<
   NormContent,
   NuxtError<NormContent> | NuxtError<null> | undefined
@@ -51,7 +58,7 @@ export function useFetchNormContent(
         },
       });
       const document = parseDocument(html);
-      const htmlParts = extractHtmlParts(document);
+      const htmlParts = extractHtmlParts(document, options);
       return {
         legislation: metadata,
         htmlParts,
@@ -61,7 +68,20 @@ export function useFetchNormContent(
   );
 }
 
-function extractHtmlParts(document: Document): NormContent["htmlParts"] {
+function extractHtmlParts(
+  document: Document,
+  options?: ExtractHtmlPartsOptions,
+): NormContent["htmlParts"] {
+  const { body } = document;
+  if (options?.rewriteLink) {
+    const links = body.querySelectorAll("a");
+    links.forEach((link) => {
+      const newHref = options.rewriteLink(link.getAttribute("href"));
+      if (newHref !== null) link.setAttribute("href", newHref);
+      else link.removeAttribute("href");
+    });
+  }
+
   const heading = document.querySelector(".dokumentenkopf .titel");
   const headingAuthorialNotes = document.querySelector(
     ".dokumentenkopf .fussnoten",
@@ -74,6 +94,7 @@ function extractHtmlParts(document: Document): NormContent["htmlParts"] {
   const headingNotes = document.querySelector(
     ".dokumentenkopf .nichtamtliche-fussnoten",
   );
+
   const prefaceContainer = document.querySelector(
     ".dokumentenkopf .akn-container",
   );
@@ -89,14 +110,17 @@ function extractHtmlParts(document: Document): NormContent["htmlParts"] {
     : undefined;
 
   const proprietary = document.querySelector(".akn-proprietary");
+
   const standangaben = getTextFromElements(
     proprietary?.querySelectorAll(
       ".ris-standangabe:not([data-type='hinweis'])",
     ),
   );
+
   const standangabenHinweis = getTextFromElements(
     proprietary?.querySelectorAll(".ris-standangabe[data-type='hinweis']"),
   );
+
   const vollzitat =
     proprietary?.querySelector(".ris-vollzitat")?.textContent ?? undefined;
 
@@ -112,7 +136,7 @@ function extractHtmlParts(document: Document): NormContent["htmlParts"] {
     standangaben,
     standangabenHinweis,
     vollzitat,
-    body: document.body.innerHTML,
+    body: body.innerHTML,
   };
 }
 

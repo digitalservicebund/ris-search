@@ -103,6 +103,37 @@ test.describe("view norm article page", () => {
     });
   });
 
+  test("keeps search state when navigating to a single norm", async ({
+    page,
+    isMobileTest,
+  }) => {
+    test.skip(isMobileTest);
+
+    await navigate(page, "/search?query=FrSaftErfrischV&documentKind=N");
+
+    await page
+      .getByRole("link", {
+        name: "Fiktive Fruchtsaft- und Erfrischungsgetränkeverordnung zu Testzwecken",
+      })
+      .click();
+
+    await page
+      .getByRole("main")
+      .getByRole("link", { name: "§ 1 Anwendungsbereich" })
+      .click();
+
+    await expect(
+      page.getByRole("heading", { level: 1, name: "§ 1 Anwendungsbereich" }),
+    ).toBeVisible();
+
+    await page
+      .getByRole("navigation", { name: "Pfadnavigation" })
+      .getByRole("link", { name: "Suche" })
+      .click();
+
+    await expect(page.getByRole("searchbox")).toHaveValue("FrSaftErfrischV");
+  });
+
   test("can navigate to and view an attachment", async ({ page }) => {
     const mainExpressionEliUrl =
       "/norms/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu";

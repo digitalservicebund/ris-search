@@ -4,7 +4,10 @@ import type {
   LegislationExpression,
   LegislationManifestation,
 } from "~/types/api";
-import { useFetchNormArticleContent, useFetchNormContent } from "./useNormData";
+import {
+  useFetchNormArticleContent,
+  useFetchNormContent,
+} from "./useFetchNormContent";
 
 const { mockFetch } = vi.hoisted(() => {
   return {
@@ -17,7 +20,7 @@ vi.mock("~/plugins/risBackend", () => ({
   extendOnRequest: (...cbs: FetchHook[]) => cbs,
 }));
 
-describe("useNormData", () => {
+describe("useFetchNormContent", () => {
   const consoleInfoMock = vi
     .spyOn(console, "info")
     .mockImplementation(() => undefined);
@@ -172,6 +175,21 @@ describe("useNormData", () => {
     const { data } = await useFetchNormContent(expressionEli);
     expect(data.value.htmlParts.headingNotes).toContain(
       "(+++ Textnachweis ab: 1.1.2000 +++)<br />(+++ Zur Anwendung vgl. § 5 +++)",
+    );
+  });
+
+  it("rewrites links", async () => {
+    mockFetch.mockReturnValueOnce(mockMetadata);
+    mockFetch.mockReturnValueOnce(
+      `<html><body><a href="/original/path">link</a></body></html>`,
+    );
+
+    const { data } = await useFetchNormContent("rewrite-test-eli", {
+      rewriteLink: (href) => (href ? `/rewritten${href}` : null),
+    });
+
+    expect(data.value.htmlParts.body).toContain(
+      `href="/rewritten/original/path"`,
     );
   });
 
