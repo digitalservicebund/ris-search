@@ -127,11 +127,13 @@ public class IndexNormsService implements IndexService {
    */
   private Map<WorkEli, List<String>> groupFilesByWorkEli(Stream<String> files) {
     return files
+        .map(e -> e.substring(versionPrefix.length()))
         .map(EliFile::fromString)
         .flatMap(Optional::stream)
         .collect(
             Collectors.groupingBy(
-                EliFile::getWorkEli, Collectors.mapping(EliFile::toString, Collectors.toList())));
+                EliFile::getWorkEli,
+                Collectors.mapping(e -> versionPrefix + e.toString(), Collectors.toList())));
   }
 
   private void processWorkEliUpdates(
@@ -154,6 +156,7 @@ public class IndexNormsService implements IndexService {
 
     Set<ExpressionEli> expressionElis =
         filenames.stream()
+            .map(e -> e.substring(versionPrefix.length()))
             .map(EliFile::fromString)
             .flatMap(Optional::stream)
             .map(EliFile::getExpressionEli)
@@ -291,7 +294,9 @@ public class IndexNormsService implements IndexService {
     String prefix = fileName.substring(0, fileName.lastIndexOf("/"));
     Map<String, String> attachments = new HashMap<>();
     for (String key : keysMatchingExpressionEli) {
-      if (key.startsWith(prefix) && !Objects.equals(key, fileName)) {
+      var keyWithVersionPrefix = versionPrefix + key;
+      if (keyWithVersionPrefix.startsWith(prefix)
+          && !Objects.equals(keyWithVersionPrefix, fileName)) {
         Optional<String> attachment = normsBucket.getFileAsString(key);
         attachment.ifPresent(a -> attachments.put(key, a));
       }
