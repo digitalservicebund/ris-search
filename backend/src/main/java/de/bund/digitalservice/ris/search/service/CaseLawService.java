@@ -50,6 +50,7 @@ public class CaseLawService {
   private final Configurations configurations;
   private final CaseLawLdmlToOpenSearchMapper marshaller;
   private final SimpleSearchQueryBuilder simpleSearchQueryBuilder;
+  private final CourtNameAbbreviationExpander courtNameExpander;
 
   /**
    * Constructs a new instance of the CaseLawService class, initializing its dependencies.
@@ -71,7 +72,8 @@ public class CaseLawService {
       ElasticsearchOperations operations,
       Configurations configurations,
       CaseLawLdmlToOpenSearchMapper marshaller,
-      SimpleSearchQueryBuilder simpleSearchQueryBuilder) {
+      SimpleSearchQueryBuilder simpleSearchQueryBuilder,
+      CourtNameAbbreviationExpander courtNameExpander) {
     this.caseLawRepository = caseLawRepository;
     this.caseLawBucket = caseLawBucket;
     this.versionPrefix = versionPrefix;
@@ -79,6 +81,7 @@ public class CaseLawService {
     this.configurations = configurations;
     this.marshaller = marshaller;
     this.simpleSearchQueryBuilder = simpleSearchQueryBuilder;
+    this.courtNameExpander = courtNameExpander;
   }
 
   /**
@@ -143,8 +146,8 @@ public class CaseLawService {
               String key = item.getKeyAsString();
               long count = item.getDocCount();
               String label =
-                  CourtNameAbbreviationExpander.getLabelExpandingSynonyms(
-                      key, CourtNameAbbreviationExpander.extractFirstToken(searchPrefix));
+                  courtNameExpander.getLabelExpandingSynonyms(
+                      key, courtNameExpander.extractFirstToken(searchPrefix));
               return new CourtSearchResult(key, count, label);
             })
         .toList();

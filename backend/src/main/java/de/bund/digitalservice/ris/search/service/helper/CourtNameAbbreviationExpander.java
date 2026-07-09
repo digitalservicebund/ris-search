@@ -2,7 +2,6 @@ package de.bund.digitalservice.ris.search.service.helper;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.annotation.PostConstruct;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -20,19 +19,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class CourtNameAbbreviationExpander {
 
-  private static Map<String, String> synonyms;
-  private final ObjectMapper objectMapper;
-  private final Resource jsonResource;
+  public final Map<String, String> synonyms;
 
   public CourtNameAbbreviationExpander(
       ObjectMapper objectMapper,
       @Value("classpath:openSearch/german_analyzer_template.json") Resource jsonResource) {
-    this.objectMapper = objectMapper;
-    this.jsonResource = jsonResource;
-  }
 
-  @PostConstruct
-  public void initializeSynonyms() {
     Map<String, String> synonymMap = new HashMap<>();
 
     try (InputStream inputStream = jsonResource.getInputStream()) {
@@ -73,7 +65,7 @@ public class CourtNameAbbreviationExpander {
    * @param prefix The input string from which to extract the first token.
    * @return The first token in uppercase, or null if the input is null or empty.
    */
-  public static String extractFirstToken(String prefix) {
+  public String extractFirstToken(String prefix) {
     if (prefix == null) {
       return null;
     }
@@ -92,7 +84,7 @@ public class CourtNameAbbreviationExpander {
    * @param keepToken A token prefix to keep unchanged (can be null).
    * @return The input string with court name abbreviations expanded.
    */
-  public static @NotNull String getLabelExpandingSynonyms(String key, String keepToken) {
+  public @NotNull String getLabelExpandingSynonyms(String key, String keepToken) {
     return Arrays.stream(key.split(" "))
         .map(
             part -> {
