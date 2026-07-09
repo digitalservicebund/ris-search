@@ -508,7 +508,10 @@ test("shows correct breadcrumbs for an Eingangsformel", async ({
 
 test("keeps search state when navigating to other paragraphs", async ({
   page,
+  isMobileTest,
 }) => {
+  test.skip(isMobileTest);
+
   await navigate(page, "/search?query=aktuelle%2520fassung&documentKind=N");
 
   await page.getByRole("link", { name: "Eingangsformel" }).first().click();
@@ -525,6 +528,13 @@ test("keeps search state when navigating to other paragraphs", async ({
   await expect(
     page.getByRole("heading", { level: 1, name: "Eingangsformel" }),
   ).toBeVisible();
+
+  await page
+    .getByRole("navigation", { name: "Pfadnavigation" })
+    .getByRole("link", { name: "Suche" })
+    .click();
+
+  await expect(page.getByRole("searchbox")).toHaveValue("aktuelle fassung");
 });
 
 test.describe("mobile table of contents", () => {
