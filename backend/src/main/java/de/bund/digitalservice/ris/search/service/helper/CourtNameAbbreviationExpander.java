@@ -21,6 +21,7 @@ public class CourtNameAbbreviationExpander {
 
   public final Map<String, String> synonyms;
 
+  /** used to replace court synonyms set up in the german analyzer template in raw Strings */
   public CourtNameAbbreviationExpander(
       ObjectMapper objectMapper,
       @Value("classpath:openSearch/german_analyzer_template.json") Resource jsonResource) {
