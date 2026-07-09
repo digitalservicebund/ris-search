@@ -2,7 +2,6 @@ package de.bund.digitalservice.ris.search.service.helper;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.annotation.PostConstruct;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -12,30 +11,29 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
 /** Utility class for expanding court name abbreviations using a predefined set of synonyms. */
 @Component
 public class CourtNameAbbreviationExpander {
 
-  private static Map<String, String> synonyms;
-  private final ObjectMapper objectMapper;
-  private final Resource jsonResource;
+  private static final Map<String, String> synonyms;
 
-  public CourtNameAbbreviationExpander(
-      ObjectMapper objectMapper,
-      @Value("classpath:openSearch/german_analyzer_template.json") Resource jsonResource) {
-    this.objectMapper = objectMapper;
-    this.jsonResource = jsonResource;
-  }
+  private CourtNameAbbreviationExpander() {}
 
-  @PostConstruct
-  public void initializeSynonyms() {
+  static {
     Map<String, String> synonymMap = new HashMap<>();
+    ObjectMapper objectMapper = new ObjectMapper();
 
-    try (InputStream inputStream = jsonResource.getInputStream()) {
+    try (InputStream inputStream =
+        CourtNameAbbreviationExpander.class
+            .getClassLoader()
+            .getResourceAsStream("openSearch/german_analyzer_template.json")) {
+
+      if (inputStream == null) {
+        throw new IllegalStateException("JSON template file not found on classpath");
+      }
+
       JsonNode rootNode = objectMapper.readTree(inputStream);
       JsonNode synonymsArray =
           rootNode
