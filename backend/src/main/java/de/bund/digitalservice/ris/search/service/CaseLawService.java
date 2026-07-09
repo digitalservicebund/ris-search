@@ -47,7 +47,6 @@ public class CaseLawService {
   private final CaseLawBucket caseLawBucket;
   private final String versionPrefix;
   private final ElasticsearchOperations operations;
-  private final CourtNameAbbreviationExpander courtNameAbbreviationExpander;
   private final Configurations configurations;
   private final CaseLawLdmlToOpenSearchMapper marshaller;
   private final SimpleSearchQueryBuilder simpleSearchQueryBuilder;
@@ -78,7 +77,6 @@ public class CaseLawService {
     this.versionPrefix = versionPrefix;
     this.operations = operations;
     this.configurations = configurations;
-    this.courtNameAbbreviationExpander = new CourtNameAbbreviationExpander();
     this.marshaller = marshaller;
     this.simpleSearchQueryBuilder = simpleSearchQueryBuilder;
   }
@@ -139,20 +137,20 @@ public class CaseLawService {
             IndexCoordinates.of(configurations.getCaseLawsIndexName()));
 
     var buckets = getBuckets(searchHits, aggregationName);
-    var firstToken = CourtNameAbbreviationExpander.extractFirstToken(searchPrefix);
     return buckets.stream()
         .map(
             item -> {
               String key = item.getKeyAsString();
               long count = item.getDocCount();
               String label =
-                  courtNameAbbreviationExpander.getLabelExpandingSynonyms(key, firstToken);
+                  CourtNameAbbreviationExpander.getLabelExpandingSynonyms(
+                      key, CourtNameAbbreviationExpander.extractFirstToken(searchPrefix));
               return new CourtSearchResult(key, count, label);
             })
         .toList();
   }
 
-  private static List<? extends Terms.Bucket> getBuckets(
+  private List<? extends Terms.Bucket> getBuckets(
       SearchHits<Void> searchHits, String aggregationName) {
     OpenSearchAggregations aggregationsWrapper =
         (OpenSearchAggregations) searchHits.getAggregations();
