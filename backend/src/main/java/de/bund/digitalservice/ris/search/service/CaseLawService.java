@@ -142,9 +142,7 @@ public class CaseLawService {
             item -> {
               String key = item.getKeyAsString();
               long count = item.getDocCount();
-              String label =
-                  CourtNameAbbreviationExpander.getLabelExpandingSynonyms(
-                      key, CourtNameAbbreviationExpander.extractFirstToken(searchPrefix));
+              String label = CourtNameAbbreviationExpander.getLabelExpandingSynonyms(key);
               return new CourtSearchResult(key, count, label);
             })
         .toList();

@@ -582,7 +582,7 @@ test.describe("searching caselaw", () => {
     await navigate(page, "/search?documentKind=R");
 
     await page.getByRole("combobox", { name: "Bundesgericht" }).fill("LG");
-    await page.getByRole("option", { name: "LG Hamburg" }).click();
+    await page.getByRole("option", { name: "Landgericht Hamburg" }).click();
 
     await expect(page).toHaveURL(/court=LG\+Hamburg/);
 

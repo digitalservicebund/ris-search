@@ -9,7 +9,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
-import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 
@@ -66,40 +65,14 @@ public class CourtNameAbbreviationExpander {
   }
 
   /**
-   * Extracts the first token from the given prefix string and converts it to uppercase.
-   *
-   * @param prefix The input string from which to extract the first token.
-   * @return The first token in uppercase, or null if the input is null or empty.
-   */
-  public static String extractFirstToken(String prefix) {
-    if (prefix == null) {
-      return null;
-    }
-    var parts = StringUtils.split(prefix, " ");
-    if (parts.length > 0) {
-      return parts[0].toUpperCase();
-    } else {
-      return null;
-    }
-  }
-
-  /**
    * Expands court name abbreviations in the given key using the loaded synonyms.
    *
    * @param key The input string containing court name abbreviations.
-   * @param keepToken A token prefix to keep unchanged (can be null).
    * @return The input string with court name abbreviations expanded.
    */
-  public static @NotNull String getLabelExpandingSynonyms(String key, String keepToken) {
+  public static @NotNull String getLabelExpandingSynonyms(String key) {
     return Arrays.stream(key.split(" "))
-        .map(
-            part -> {
-              if (keepToken != null && part.startsWith(keepToken)) {
-                return part;
-              }
-              String synonym = synonyms.get(part);
-              return synonym != null ? synonym : part;
-            })
+        .map(part -> synonyms.getOrDefault(part.toUpperCase(), part))
         .collect(Collectors.joining(" "));
   }
 }
