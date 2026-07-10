@@ -209,8 +209,8 @@ class CaseLawSearchControllerApiTest extends ContainersIntegrationBase {
         Arguments.of(null, allIds, allLabels),
         Arguments.of("Finanzgericht", fgIds, fgLabels),
         Arguments.of("Fin", fgIds, fgLabels),
-        Arguments.of("FG", fgIds, fgIds), // should return the raw IDs as labels
-        Arguments.of("kg b", new String[] {"KG Berlin"}, new String[] {"KG Berlin"}),
+        Arguments.of("FG", fgIds, fgLabels),
+        Arguments.of("kg b", new String[] {"KG Berlin"}, new String[] {"Kammergericht Berlin"}),
         Arguments.of(
             "Finanzgericht Ha",
             new String[] {"FG Hamburg", "FG Hannover"},
@@ -218,7 +218,7 @@ class CaseLawSearchControllerApiTest extends ContainersIntegrationBase {
         Arguments.of(
             "FG Ha",
             new String[] {"FG Hamburg", "FG Hannover"},
-            new String[] {"FG Hamburg", "FG Hannover"}), // should return the raw IDs as labels
+            new String[] {"Finanzgericht Hamburg", "Finanzgericht Hannover"}),
         Arguments.of("bi", empty, empty));
   }
 
