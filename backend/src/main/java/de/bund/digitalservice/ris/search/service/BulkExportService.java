@@ -31,7 +31,6 @@ public class BulkExportService {
 
   private final ObjectStorage sourceBucket;
   private final ObjectStorage destinationBucket;
-  private final String versionPrefix;
   public static final String BULK_ZIP_PREFIX = "snapshots/";
   public static final String JOB_STATE_STORAGE_PREFIX = "snapshot-job-state/";
 
@@ -44,16 +43,11 @@ public class BulkExportService {
    * @param sourceBucket the ObjectStorage bucket to read files from
    * @param destinationBucket the ObjectStorage bucket to upload the ZIP archive to
    * @param outputName the base name for the output ZIP file
-   * @param versionPrefix the prefix to filter objects in the sourceBucket
    */
   public BulkExportService(
-      ObjectStorage sourceBucket,
-      ObjectStorage destinationBucket,
-      String outputName,
-      String versionPrefix) {
+      ObjectStorage sourceBucket, ObjectStorage destinationBucket, String outputName) {
     this.sourceBucket = sourceBucket;
     this.destinationBucket = destinationBucket;
-    this.versionPrefix = versionPrefix;
     this.archivePrefix = BULK_ZIP_PREFIX + outputName;
   }
 
@@ -71,8 +65,8 @@ public class BulkExportService {
 
     logger.info("Creating snapshot");
     List<String> keysToZip =
-        sourceBucket.getAllKeysByPrefix(versionPrefix).stream()
-            .filter(key -> !key.startsWith(versionPrefix + ChangelogService.CHANGELOGS_PREFIX))
+        sourceBucket.getAllKeys().stream()
+            .filter(key -> !key.startsWith(ChangelogService.CHANGELOGS_PREFIX))
             .toList();
 
     if (keysToZip.isEmpty()) {

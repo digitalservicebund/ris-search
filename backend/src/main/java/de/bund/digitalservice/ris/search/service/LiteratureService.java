@@ -20,7 +20,6 @@ import org.opensearch.data.client.orhlc.NativeSearchQuery;
 import org.opensearch.data.client.orhlc.NativeSearchQueryBuilder;
 import org.opensearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHits;
@@ -35,7 +34,6 @@ import org.springframework.stereotype.Service;
 public class LiteratureService {
   private final LiteratureRepository literatureRepository;
   private final LiteratureBucket literatureBucket;
-  private final String versionPrefix;
   private final ElasticsearchOperations operations;
   private final SimpleSearchQueryBuilder simpleSearchQueryBuilder;
 
@@ -44,7 +42,6 @@ public class LiteratureService {
    *
    * @param literatureRepository Repository for literature data
    * @param literatureBucket Bucket for literature files
-   * @param versionPrefix the version prefix for the bucket
    * @param operations Elasticsearch operations for querying
    * @param simpleSearchQueryBuilder Builder for simple search queries
    */
@@ -53,12 +50,10 @@ public class LiteratureService {
   public LiteratureService(
       LiteratureRepository literatureRepository,
       LiteratureBucket literatureBucket,
-      @Value("${s3.file-storage.literature.versionPrefix}") String versionPrefix,
       ElasticsearchOperations operations,
       SimpleSearchQueryBuilder simpleSearchQueryBuilder) {
     this.literatureRepository = literatureRepository;
     this.literatureBucket = literatureBucket;
-    this.versionPrefix = versionPrefix;
     this.operations = operations;
     this.simpleSearchQueryBuilder = simpleSearchQueryBuilder;
   }
@@ -127,6 +122,6 @@ public class LiteratureService {
    */
   public Optional<byte[]> getFileByDocumentNumber(String documentNumber)
       throws ObjectStoreServiceException {
-    return literatureBucket.get(String.format("%s%s.akn.xml", versionPrefix, documentNumber));
+    return literatureBucket.get(String.format("%s.akn.xml", documentNumber));
   }
 }

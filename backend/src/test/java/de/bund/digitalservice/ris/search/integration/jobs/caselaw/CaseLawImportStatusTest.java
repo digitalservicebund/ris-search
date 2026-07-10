@@ -49,9 +49,9 @@ class CaseLawImportStatusTest extends ContainersIntegrationBase {
 
   @Test
   void createsLastSuccessFileProperly() throws ObjectStoreServiceException {
-    Assertions.assertEquals(5, caseLawBucket.getAllKeysOnCurrentVersion().size());
+    Assertions.assertEquals(5, caseLawBucket.getAllKeys().size());
     caseLawIndexSyncJob.runJob();
-    Assertions.assertEquals(5, caseLawBucket.getAllKeysOnCurrentVersion().size());
+    Assertions.assertEquals(5, caseLawBucket.getAllKeys().size());
     IndexingState result =
         indexStatusService.loadStatus(CaseLawIndexSyncJob.CASELAW_STATUS_FILENAME);
     Assertions.assertNotNull(result.lastProcessedChangelogFile());

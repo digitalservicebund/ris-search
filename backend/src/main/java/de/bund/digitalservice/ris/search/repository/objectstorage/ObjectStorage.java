@@ -13,6 +13,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import lombok.Getter;
 import org.apache.logging.log4j.Logger;
 import software.amazon.awssdk.awscore.exception.AwsServiceException;
 import software.amazon.awssdk.core.exception.SdkClientException;
@@ -30,6 +31,7 @@ public class ObjectStorage {
   public static final int MAXIMUM_CALL_ATTEMPTS = 3;
   private final Logger logger;
   private final ObjectStorageClient client;
+  @Getter // This getter is so that the ChangelogService knows how to strip off the prefix
   private final String versionPrefix;
 
   /**
@@ -47,13 +49,13 @@ public class ObjectStorage {
   }
 
   /**
-   * Retrieves a list of all keys stored in the object storage.
+   * Retrieves a list of all keys stored in the object storage under the current versionPrefix.
    *
    * @return a list of keys as strings, where each key represents an object stored in the object
    *     storage
    */
-  public List<String> getAllKeysOnCurrentVersion() {
-    return getAllKeysByPrefix(versionPrefix);
+  public List<String> getAllKeys() {
+    return getAllKeysByPrefix("");
   }
 
   /**
@@ -63,7 +65,9 @@ public class ObjectStorage {
    * @return a list of matched object keys as strings
    */
   public List<String> getAllKeysByPrefix(String path) {
-    return client.listKeysByPrefix(path);
+    return client.listKeysByPrefix(versionPrefix + path).stream()
+        .map(e -> e.substring(versionPrefix.length()))
+        .toList();
   }
 
   /**
@@ -75,7 +79,7 @@ public class ObjectStorage {
    *     their last modified timestamps
    */
   public List<ObjectKeyInfo> getAllKeyInfosByPrefix(String path) {
-    return client.listByPrefixWithLastModified(path);
+    return client.listByPrefixWithLastModified(versionPrefix + path);
   }
 
   /**
@@ -162,15 +166,15 @@ public class ObjectStorage {
   }
 
   public FilterInputStream getStream(String objectKey) throws NoSuchKeyException {
-    return client.getStream(objectKey);
+    return client.getStream(versionPrefix + objectKey);
   }
 
   public void delete(String fileName) {
-    client.delete(fileName);
+    client.delete(versionPrefix + fileName);
   }
 
   public void save(String fileName, String fileContent) {
-    client.save(fileName, fileContent);
+    client.save(versionPrefix + fileName, fileContent);
   }
 
   public void close() {
@@ -178,6 +182,6 @@ public class ObjectStorage {
   }
 
   public long putStream(String objectKey, InputStream inputStream) throws IOException {
-    return client.putStream(objectKey, inputStream);
+    return client.putStream(versionPrefix + objectKey, inputStream);
   }
 }

@@ -126,7 +126,7 @@ public class EcliCrawlerDocumentService {
    */
   public void writeFullDiff(String apiUrl, LocalDate day) {
     List<String> allFiles =
-        caselawBucket.getAllKeysOnCurrentVersion().stream()
+        caselawBucket.getAllKeys().stream()
             .filter(s -> s.endsWith(".xml") && !s.contains(ChangelogService.CHANGELOGS_PREFIX))
             .toList();
 

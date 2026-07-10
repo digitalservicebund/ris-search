@@ -18,17 +18,15 @@ public class ZipManager {
    * stream.
    *
    * @param s3Bucket The S3 bucket from which to retrieve the objects.
-   * @param versionPrefix the version prefix for the bucket
    * @param keys A list of S3 keys representing the objects to be included in the zip archive.
    * @param outputStream The output stream where the zip archive will be written.
    * @throws IOException If an I/O error occurs during the process.
    */
   public static void writeZipArchive(
-      ObjectStorage s3Bucket, String versionPrefix, List<String> keys, OutputStream outputStream)
-      throws IOException {
+      ObjectStorage s3Bucket, List<String> keys, OutputStream outputStream) throws IOException {
     try (ZipOutputStream zipOut = new ZipOutputStream(outputStream)) {
       for (String key : keys) {
-        appendZipEntryFromS3(s3Bucket, versionPrefix, key, zipOut);
+        appendZipEntryFromS3(s3Bucket, key, zipOut);
       }
     } catch (IOException e) {
       throw new IOException("error building ZipOutputStream with keys %s".formatted(keys), e);
@@ -36,9 +34,8 @@ public class ZipManager {
   }
 
   private static void appendZipEntryFromS3(
-      ObjectStorage s3Bucket, String versionPrefix, String key, ZipOutputStream zipOut)
-      throws IOException {
-    ZipEntry zipEntry = new ZipEntry(key.substring(versionPrefix.length()));
+      ObjectStorage s3Bucket, String key, ZipOutputStream zipOut) throws IOException {
+    ZipEntry zipEntry = new ZipEntry(key);
     zipOut.putNextEntry(zipEntry);
 
     try (InputStream objectInputStream = s3Bucket.getStream(key)) {

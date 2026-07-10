@@ -8,9 +8,11 @@ import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
 import java.time.Instant;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -23,7 +25,6 @@ public class ChangelogService<T extends ObjectStorage> {
   public static final String CHANGELOGS_PREFIX = "changelogs/";
 
   private final ObjectStorage bucket;
-  private final String versionPrefix;
   private final ObjectReader changelogReader;
 
   /**
@@ -32,9 +33,8 @@ public class ChangelogService<T extends ObjectStorage> {
    * @param bucket bucket containing the changelogs
    * @param objectMapper global ObjectMapper to create a Changelog Reader
    */
-  public ChangelogService(T bucket, String versionPrefix, ObjectMapper objectMapper) {
+  public ChangelogService(T bucket, ObjectMapper objectMapper) {
     this.bucket = bucket;
-    this.versionPrefix = versionPrefix;
     this.changelogReader = objectMapper.readerFor(Changelog.class);
   }
 
@@ -53,7 +53,7 @@ public class ChangelogService<T extends ObjectStorage> {
    */
   public List<String> getNewChangelogsPaths(@NotNull String lastProcessedChangelog) {
 
-    return bucket.getAllKeysByPrefix(versionPrefix + CHANGELOGS_PREFIX).stream()
+    return bucket.getAllKeysByPrefix(CHANGELOGS_PREFIX).stream()
         .filter(e -> !CHANGELOGS_PREFIX.equals(e))
         .filter(e -> e.compareTo(lastProcessedChangelog) > 0)
         .sorted()
@@ -82,12 +82,26 @@ public class ChangelogService<T extends ObjectStorage> {
       return Optional.empty();
     } else {
       try {
-        return Optional.of(changelogReader.readValue(changelogContent.get()));
+        return Optional.of(
+            stripVersionPrefix(
+                bucket.getVersionPrefix(), changelogReader.readValue(changelogContent.get())));
       } catch (JsonProcessingException e) {
         logger.error("Error while parsing changelog file {} in bucket {}", filename, bucket, e);
         return Optional.empty();
       }
     }
+  }
+
+  private Changelog stripVersionPrefix(String versionPrefix, Changelog input) {
+    input.setChanged(
+        input.getChanged().stream()
+            .map(e -> e.substring(versionPrefix.length()))
+            .collect(Collectors.toCollection(HashSet::new)));
+    input.setDeleted(
+        input.getDeleted().stream()
+            .map(e -> e.substring(versionPrefix.length()))
+            .collect(Collectors.toCollection(HashSet::new)));
+    return input;
   }
 
   /**
@@ -101,11 +115,9 @@ public class ChangelogService<T extends ObjectStorage> {
    * @return Changelog object including all changes that were indexed
    */
   public Changelog getChangesBetween(Instant from, Instant to) throws ObjectStoreServiceException {
-    String prefix = versionPrefix + CHANGELOGS_PREFIX;
-
     var changelogs =
-        bucket.getAllKeysByPrefix(prefix).stream()
-            .filter(key -> !prefix.equals(key))
+        bucket.getAllKeysByPrefix(CHANGELOGS_PREFIX).stream()
+            .filter(key -> !CHANGELOGS_PREFIX.equals(key))
             .filter(
                 key -> {
                   Instant changelogTime = parseInstantFromKey(key);

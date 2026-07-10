@@ -10,7 +10,6 @@ import de.bund.digitalservice.ris.search.repository.objectstorage.PublicFilesBuc
 import de.bund.digitalservice.ris.search.service.BulkExportJob;
 import de.bund.digitalservice.ris.search.service.BulkExportService;
 import de.bund.digitalservice.ris.search.service.ChangelogService;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -20,62 +19,46 @@ public class BulkExportConfig {
 
   /**
    * @param source sourceBucket to create the document snapshot from
-   * @param versionPrefix the version prefix for the bucket
    * @param target targetBucket to create the archive in
    * @return BulkExportService
    */
   @Bean
-  public BulkExportService normsBulkExportService(
-      NormsBucket source,
-      @Value("${s3.file-storage.norm.versionPrefix}") String versionPrefix,
-      PublicFilesBucket target) {
-    return new BulkExportService(
-        source, target, DocumentKind.LEGISLATION.getBulkZipPath(), versionPrefix);
+  public BulkExportService normsBulkExportService(NormsBucket source, PublicFilesBucket target) {
+    return new BulkExportService(source, target, DocumentKind.LEGISLATION.getBulkZipPath());
   }
 
   /**
    * @param source sourceBucket to create the document snapshot from
-   * @param versionPrefix the version prefix for the bucket
    * @param target targetBucket to create the archive in
    * @return BulkExportService
    */
   @Bean
   public BulkExportService caseLawBulkExportService(
-      CaseLawBucket source,
-      @Value("${s3.file-storage.case-law.versionPrefix}") String versionPrefix,
-      PublicFilesBucket target) {
-    return new BulkExportService(
-        source, target, DocumentKind.CASE_LAW.getBulkZipPath(), versionPrefix);
+      CaseLawBucket source, PublicFilesBucket target) {
+    return new BulkExportService(source, target, DocumentKind.CASE_LAW.getBulkZipPath());
   }
 
   /**
    * @param source sourceBucket to create the document snapshot from
-   * @param versionPrefix the version prefix for the bucket
    * @param target targetBucket to create the archive in
    * @return BulkExportService
    */
   @Bean
   public BulkExportService adminBulkExportService(
-      AdministrativeDirectiveBucket source,
-      @Value("${s3.file-storage.administrative-directive.versionPrefix}") String versionPrefix,
-      PublicFilesBucket target) {
+      AdministrativeDirectiveBucket source, PublicFilesBucket target) {
     return new BulkExportService(
-        source, target, DocumentKind.ADMINISTRATIVE_DIRECTIVE.getBulkZipPath(), versionPrefix);
+        source, target, DocumentKind.ADMINISTRATIVE_DIRECTIVE.getBulkZipPath());
   }
 
   /**
    * @param source sourceBucket to create the document snapshot from
-   * @param versionPrefix the version prefix for the bucket
    * @param target targetBucket to create the archive in
    * @return BulkExportService
    */
   @Bean
   public BulkExportService literatureBulkExportService(
-      LiteratureBucket source,
-      @Value("${s3.file-storage.literature.versionPrefix}") String versionPrefix,
-      PublicFilesBucket target) {
-    return new BulkExportService(
-        source, target, DocumentKind.LITERATURE.getBulkZipPath(), versionPrefix);
+      LiteratureBucket source, PublicFilesBucket target) {
+    return new BulkExportService(source, target, DocumentKind.LITERATURE.getBulkZipPath());
   }
 
   /**

@@ -61,7 +61,6 @@ public class NormsService {
   private final ArticleService articleService;
   private final RestHighLevelClient openSearchRestClient;
   private final NormsBucket normsBucket;
-  private final String versionPrefix;
   private final String normsIndexName;
   private static final String DATE_FORMAT = "yyyy-MM-dd";
 
@@ -70,7 +69,6 @@ public class NormsService {
    *
    * @param normsRepository The repository for interacting with the OpenSearch norms.
    * @param normsBucket The object storage bucket for norms files.
-   * @param versionPrefix the version prefix for the bucket
    * @param operations The Elasticsearch operations for executing queries.
    * @param simpleSearchQueryBuilder The query builder for constructing search queries.
    */
@@ -78,7 +76,6 @@ public class NormsService {
   public NormsService(
       NormsRepository normsRepository,
       NormsBucket normsBucket,
-      @Value("${s3.file-storage.norm.versionPrefix}") String versionPrefix,
       ElasticsearchOperations operations,
       RestHighLevelClient openSearchRestClient,
       SimpleSearchQueryBuilder simpleSearchQueryBuilder,
@@ -86,7 +83,6 @@ public class NormsService {
       @Value("${opensearch.norms-index-name}") String normsIndexName) {
     this.normsRepository = normsRepository;
     this.normsBucket = normsBucket;
-    this.versionPrefix = versionPrefix;
     this.operations = operations;
     this.openSearchRestClient = openSearchRestClient;
     this.simpleSearchQueryBuilder = simpleSearchQueryBuilder;
@@ -142,7 +138,7 @@ public class NormsService {
    */
   public Optional<byte[]> getNormFileByEli(ManifestationEli eli)
       throws ObjectStoreServiceException {
-    return normsBucket.get(versionPrefix + eli.toString());
+    return normsBucket.get(eli.toString());
   }
 
   /**
@@ -246,7 +242,7 @@ public class NormsService {
    * @throws IOException when a given File was not able to be archived
    */
   public void writeZipArchive(List<String> keys, OutputStream outputStream) throws IOException {
-    ZipManager.writeZipArchive(normsBucket, versionPrefix, keys, outputStream);
+    ZipManager.writeZipArchive(normsBucket, keys, outputStream);
   }
 
   /**

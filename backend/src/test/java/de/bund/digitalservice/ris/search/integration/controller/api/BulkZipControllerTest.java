@@ -37,7 +37,7 @@ class BulkZipControllerTest extends ContainersIntegrationBase {
   void endpointShouldReturnCorrectCount() throws Exception {
     // Empty the bucket and add mock files. 2 for case law and 1 for the others. The content is not
     // relevant to test the links
-    for (String key : publicFilesBucket.getAllKeysOnCurrentVersion()) {
+    for (String key : publicFilesBucket.getAllKeys()) {
       publicFilesBucket.delete(key);
     }
     String bulkZipPattern = BulkExportService.BULK_ZIP_PREFIX + "%s_2026-01-%sT00:00:00.zip";
