@@ -6,6 +6,9 @@ import de.bund.digitalservice.ris.SharedTestConstants;
 import de.bund.digitalservice.ris.builder.NormTestDataBuilder;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
+import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
+import de.bund.digitalservice.ris.search.repository.opensearch.ArticlesRepository;
+import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
 import de.bund.digitalservice.ris.search.service.IndexNormsService;
 import java.time.LocalDate;
 import java.time.Month;
@@ -17,12 +20,21 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.env.Environment;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Tag("integration")
 class IndexNormsServiceTest extends ContainersIntegrationBase {
 
   @Autowired private IndexNormsService indexNormsService;
+
+  @Autowired private Environment env;
+
+  @Autowired private NormsBucket normsBucket;
+
+  @Autowired private NormsRepository normsRepository;
+
+  @Autowired private ArticlesRepository articlesRepository;
 
   @BeforeEach
   void setUpSearchControllerApiTest() {
@@ -98,5 +110,30 @@ class IndexNormsServiceTest extends ContainersIntegrationBase {
     assertThat(expression.getOfficialFootNotes())
         .isEqualTo(
             "Authorial note in the norm title. Authorial note in an article title. Authorial note in attachment contents");
+  }
+
+  @Test
+  @DisplayName("a version gets prefixed")
+  void itIndexesTheCorrectVersionOfFiles() {
+    String versionPrefix = "v1/";
+    String workEli = "eli/bund/bgbl-1/1991/s101";
+    String manifestationEli = workEli + "/1991-01-01/1/deu/1991-01-01/regelungstext-1.xml";
+    String normXml = NormTestDataBuilder.builder().eli(manifestationEli).buildNormXml();
+
+    normsBucket.save(versionPrefix + manifestationEli, normXml);
+
+    // these should not get indexed
+    normsBucket.save(manifestationEli, normXml);
+    normsBucket.save("v2/" + manifestationEli, normXml);
+
+    IndexNormsService versionedIndexNormService =
+        new IndexNormsService(env, normsBucket, versionPrefix, normsRepository, articlesRepository);
+
+    versionedIndexNormService.reindexAll(SharedTestConstants.TIMESTAMP_2024_01_01_AS_STRING);
+
+    List<Norm> expressions = normsRepository.getByWorkEli(workEli);
+
+    assertThat(expressions).hasSize(1);
+    assertThat(expressions.getFirst().getWorkEli()).isEqualTo(workEli);
   }
 }
