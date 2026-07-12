@@ -15,7 +15,7 @@ test-containers = "1.21.4"
 spring-cloud-k8s = "5.0.2"
 springdoc-openapi = "3.0.3"
 prometheus = "1.17.0"
-sentry = "8.46.0"
+sentry = "8.48.0"
 commons-text = "1.15.0"
 junit5 = "1.4.2"
 mockito = "5.23.0"
@@ -75,7 +75,7 @@ streamex = { module = 'one.util:streamex', version.ref = "streamex" }
 restassured = { module = 'io.rest-assured:rest-assured', version.ref = "rest-assured" }
 
 # CVE-2026-54515
-jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version = "2.21.5" }
+jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version = "2.22.1" }
 
 # CVE-2026-5588
 bouncycastle-bcpkix = { module = "org.bouncycastle:bcpkix-jdk18on", version = "1.84" }
