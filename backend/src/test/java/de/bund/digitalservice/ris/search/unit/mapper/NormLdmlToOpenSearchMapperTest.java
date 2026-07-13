@@ -346,14 +346,25 @@ class NormLdmlToOpenSearchMapperTest {
   }
 
   @Test
-  void createsTableOfContents() throws IOException {
-    String normFile = "xmlContentTestWithPreambleAndConclusionsFormula.xml";
-    var attachments =
-        Map.of(
-            "eli/bund/bgbl-1/1962/s514/2010-04-27/1/deu/2010-04-27/offenestruktur-1.xml",
-            readXmlTestFile("offenestruktur-1.xml"));
-    Norm norm =
-        NormLdmlToOpenSearchMapper.parseNorm(readXmlTestFile(normFile), attachments, true).get();
+  void createsTableOfContents() {
+    NormTestDataBuilder builder =
+        NormTestDataBuilder.builder()
+            .formula("")
+            .defaultArticle()
+            .conclusion("")
+            .attachment(
+                "eli/bund/bgbl-1/1962/s514/2010-04-27/1/deu/2010-04-27/offenestruktur-1.xml",
+                "Anlage T1",
+                "(zu § 1)",
+                "",
+                List.of(AknP.withText("Attachemtn Content")));
+    String xmlContent = builder.buildNormXml();
+    Optional<Norm> maybeNorm =
+        NormLdmlToOpenSearchMapper.parseNorm(xmlContent, builder.buildAttachmentXmls(), false);
+
+    assertThat(maybeNorm).isNotEmpty();
+
+    Norm norm = maybeNorm.get();
 
     List<TableOfContentsItem> toc = norm.getTableOfContents();
 
@@ -361,10 +372,11 @@ class NormLdmlToOpenSearchMapperTest {
         .hasSize(4)
         .isEqualTo(
             List.of(
-                new TableOfContentsItem("preambel-1_formel-1", "", "Eingangsformel", List.of()),
-                new TableOfContentsItem("hauptteil-1_art-1", "§ 1", "", List.of()),
-                new TableOfContentsItem("schluss-1_formel-1", "", "Schlussformel", List.of()),
-                new TableOfContentsItem("anlagen-1_anlage-1", "Anlage T1", "(zu § 1)", List.of())));
+                new TableOfContentsItem("präambel-n1_formel-n1", "", "Eingangsformel", List.of()),
+                new TableOfContentsItem("art-z1", "§ 1", "Article number one", List.of()),
+                new TableOfContentsItem("schluss-n1_formel-n1", "", "Schlussformel", List.of()),
+                new TableOfContentsItem(
+                    "anlagen-n1_anlage-n1", "Anlage T1", "(zu § 1)", List.of())));
   }
 
   List<TableOfContentsItem> expectedToC =
