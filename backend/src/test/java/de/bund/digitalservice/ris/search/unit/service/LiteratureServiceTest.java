@@ -45,8 +45,7 @@ class LiteratureServiceTest {
     literatureBucketMock = mock(LiteratureBucket.class);
     operationsMock = mock(ElasticsearchOperations.class);
     this.literatureService =
-        new LiteratureService(
-            literatureRepositoryMock, literatureBucketMock, "", operationsMock, null);
+        new LiteratureService(literatureRepositoryMock, literatureBucketMock, operationsMock, null);
   }
 
   @Test

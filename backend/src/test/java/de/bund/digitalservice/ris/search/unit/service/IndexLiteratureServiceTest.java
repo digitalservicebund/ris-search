@@ -47,7 +47,7 @@ class IndexLiteratureServiceTest {
         LoadXmlUtils.loadXmlAsString(Literature.class, filenameA).getBytes(StandardCharsets.UTF_8);
 
     var keys = List.of(filenameA, filenameB);
-    when(this.bucket.getAllKeysOnCurrentVersion()).thenReturn(keys);
+    when(this.bucket.getAllKeys()).thenReturn(keys);
     when(this.bucket.getObjects(keys))
         .thenReturn(
             List.of(
@@ -79,8 +79,7 @@ class IndexLiteratureServiceTest {
     final byte[] xml =
         LoadXmlUtils.loadXmlAsString(Literature.class, filenameA).getBytes(StandardCharsets.UTF_8);
 
-    when(this.bucket.getAllKeysOnCurrentVersion())
-        .thenReturn(List.of(filenameA, filenameB, filenameC, filenameD));
+    when(this.bucket.getAllKeys()).thenReturn(List.of(filenameA, filenameB, filenameC, filenameD));
     when(this.bucket.getObjects(List.of(filenameA, filenameB, filenameC, filenameD)))
         .thenReturn(
             List.of(
@@ -159,7 +158,7 @@ class IndexLiteratureServiceTest {
 
   @Test
   void itReturnsRightNumberOfFiles() {
-    when(this.bucket.getAllKeysOnCurrentVersion())
+    when(this.bucket.getAllKeys())
         .thenReturn(
             List.of(
                 "XXLU000000001.akn.xml",

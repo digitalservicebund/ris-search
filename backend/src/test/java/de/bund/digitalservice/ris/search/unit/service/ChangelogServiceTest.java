@@ -35,7 +35,7 @@ class ChangelogServiceTest {
 
   @BeforeEach
   void setup() {
-    changelogService = new ChangelogService<>(bucket, "", objectMapper) {};
+    changelogService = new ChangelogService<>(bucket, objectMapper) {};
   }
 
   @Test
@@ -87,6 +87,7 @@ class ChangelogServiceTest {
     Changelog log3 = new Changelog();
     log3.setDeleted(new HashSet<>(List.of("deleted")));
 
+    when(bucket.getVersionPrefix()).thenReturn("");
     when(bucket.getFileAsString("log1"))
         .thenReturn(Optional.of(objectMapper.writeValueAsString(log1)));
     when(bucket.getFileAsString("log2"))
@@ -110,6 +111,7 @@ class ChangelogServiceTest {
     log3.setChanged(new HashSet<>(List.of("changed3")));
     log3.setDeleted(new HashSet<>(List.of("obsolete2", "deleted2")));
 
+    when(bucket.getVersionPrefix()).thenReturn("");
     when(bucket.getFileAsString("log1"))
         .thenReturn(Optional.of(objectMapper.writeValueAsString(log1)));
     when(bucket.getFileAsString("log2"))
@@ -139,6 +141,7 @@ class ChangelogServiceTest {
     Changelog expectedSecond =
         new Changelog(new HashSet<>(List.of("file2")), new HashSet<>(), false);
 
+    when(bucket.getVersionPrefix()).thenReturn("");
     when(bucket.getAllKeysByPrefix(any()))
         .thenReturn(
             List.of(
@@ -162,23 +165,24 @@ class ChangelogServiceTest {
     Instant to = Instant.parse("2027-01-01T12:00:00Z");
 
     Changelog expectedFirst =
-        new Changelog(new HashSet<>(List.of("file1")), new HashSet<>(), false);
+        new Changelog(new HashSet<>(List.of("V1/file1")), new HashSet<>(), false);
     Changelog expectedSecond =
-        new Changelog(new HashSet<>(List.of("file2")), new HashSet<>(), false);
+        new Changelog(new HashSet<>(List.of("V1/file2")), new HashSet<>(), false);
 
+    when(bucket.getVersionPrefix()).thenReturn("V1/");
     when(bucket.getAllKeysByPrefix(any()))
         .thenReturn(
             List.of(
-                "V1/changelogs/2026-07-03T11:00:00.000000Z-norm.json",
-                "V1/changelogs/2026-07-03T12:00:00.933434Z-norm.json",
-                "V1/changelogs/2026-07-08T12:00:00.933434Z-norm.json"));
+                "changelogs/2026-07-03T11:00:00.000000Z-norm.json",
+                "changelogs/2026-07-03T12:00:00.933434Z-norm.json",
+                "changelogs/2026-07-08T12:00:00.933434Z-norm.json"));
 
-    when(bucket.getFileAsString("V1/changelogs/2026-07-03T12:00:00.933434Z-norm.json"))
+    when(bucket.getFileAsString("changelogs/2026-07-03T12:00:00.933434Z-norm.json"))
         .thenReturn(Optional.of(objectMapper.writeValueAsString(expectedFirst)));
-    when(bucket.getFileAsString("V1/changelogs/2026-07-08T12:00:00.933434Z-norm.json"))
+    when(bucket.getFileAsString("changelogs/2026-07-08T12:00:00.933434Z-norm.json"))
         .thenReturn(Optional.of(objectMapper.writeValueAsString(expectedSecond)));
 
-    ChangelogService<?> service = new ChangelogService<>(bucket, "V1/", objectMapper);
+    ChangelogService<?> service = new ChangelogService<>(bucket, objectMapper);
     Changelog result = service.getChangesBetween(from, to);
 
     assertThat(result.getChanged()).asInstanceOf(SET).containsExactlyInAnyOrder("file1", "file2");
@@ -194,6 +198,7 @@ class ChangelogServiceTest {
     Changelog expectedSecond =
         new Changelog(new HashSet<>(List.of("file2")), new HashSet<>(), false);
 
+    when(bucket.getVersionPrefix()).thenReturn("");
     when(bucket.getAllKeysByPrefix(any()))
         .thenReturn(
             List.of(

@@ -40,7 +40,6 @@ class CaseLawServiceTest {
         new CaseLawService(
             caseLawRepositoryMock,
             caseLawBucketMock,
-            "",
             operationsMock,
             configurations,
             marshaller,

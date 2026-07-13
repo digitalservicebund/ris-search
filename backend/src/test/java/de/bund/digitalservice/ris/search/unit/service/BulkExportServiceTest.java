@@ -38,7 +38,7 @@ class BulkExportServiceTest {
     ObjectStorage destinationBucket = mock(ObjectStorage.class);
     String outputName = "test-export";
 
-    when(sourceBucket.getAllKeysByPrefix("")).thenReturn(List.of("file1.txt", "file2.pdf"));
+    when(sourceBucket.getAllKeys()).thenReturn(List.of("file1.txt", "file2.pdf"));
     final byte[] bytes1 = "This is the content of file 1.".getBytes();
     when(sourceBucket.get("file1.txt")).thenReturn(Optional.of(bytes1));
     final byte[] bytes2 = "%PDF-1.5...".getBytes();
@@ -57,12 +57,12 @@ class BulkExportServiceTest {
             });
 
     BulkExportService bulkExportService =
-        new BulkExportService(sourceBucket, destinationBucket, outputName, "");
+        new BulkExportService(sourceBucket, destinationBucket, outputName);
 
     boolean actual = bulkExportService.updateLatestZip(clock.instant());
     assertThat(actual).isTrue();
 
-    verify(sourceBucket, times(1)).getAllKeysByPrefix("");
+    verify(sourceBucket, times(1)).getAllKeys();
     verify(sourceBucket, times(1)).get("file1.txt");
     verify(sourceBucket, times(1)).get("file2.pdf");
     verify(destinationBucket, times(1)).getAllKeysByPrefix(anyString());
@@ -84,7 +84,7 @@ class BulkExportServiceTest {
     String outputName = "test-export";
     String file1Content = "Some content";
 
-    when(sourceBucket.getAllKeysByPrefix("")).thenReturn(List.of("file1.txt"));
+    when(sourceBucket.getAllKeys()).thenReturn(List.of("file1.txt"));
     when(sourceBucket.get("file1.txt")).thenReturn(Optional.of(file1Content.getBytes()));
     when(destinationBucket.getAllKeysByPrefix(anyString()))
         .thenReturn(
@@ -96,12 +96,12 @@ class BulkExportServiceTest {
     doNothing().when(destinationBucket).delete(anyString());
 
     BulkExportService bulkExportService =
-        new BulkExportService(sourceBucket, destinationBucket, outputName, "");
+        new BulkExportService(sourceBucket, destinationBucket, outputName);
 
     boolean actual = bulkExportService.updateLatestZip(clock.instant());
     assertThat(actual).isTrue();
 
-    verify(sourceBucket, times(1)).getAllKeysByPrefix("");
+    verify(sourceBucket, times(1)).getAllKeys();
     verify(sourceBucket, times(1)).get("file1.txt");
     verify(destinationBucket, times(1)).getAllKeysByPrefix(anyString());
     verify(destinationBucket, times(1)).putStream(anyString(), any(InputStream.class));
@@ -116,11 +116,11 @@ class BulkExportServiceTest {
     ObjectStorage destinationBucket = mock(ObjectStorage.class);
     String outputName = "test-export";
 
-    when(sourceBucket.getAllKeysByPrefix(""))
+    when(sourceBucket.getAllKeys())
         .thenThrow(new RuntimeException("The mock source bucket does not want to list files"));
 
     BulkExportService bulkExportService =
-        new BulkExportService(sourceBucket, destinationBucket, outputName, "");
+        new BulkExportService(sourceBucket, destinationBucket, outputName);
 
     Instant timestamp = clock.instant();
     assertThrows(RuntimeException.class, () -> bulkExportService.updateLatestZip(timestamp));
@@ -143,7 +143,7 @@ class BulkExportServiceTest {
         .thenThrow(new IOException("The mock destination bucket threw an exception"));
 
     BulkExportService bulkExportService =
-        new BulkExportService(sourceBucket, destinationBucket, "test-export", "");
+        new BulkExportService(sourceBucket, destinationBucket, "test-export");
 
     boolean actual = bulkExportService.updateLatestZip(clock.instant());
     assertThat(actual).isFalse();
@@ -157,7 +157,7 @@ class BulkExportServiceTest {
     when(sourceBucket.getAllKeysByPrefix("")).thenReturn(List.of("file.txt"));
 
     BulkExportService bulkExportService =
-        new BulkExportService(sourceBucket, destinationBucket, "test-export", "");
+        new BulkExportService(sourceBucket, destinationBucket, "test-export");
 
     boolean actual = bulkExportService.updateLatestZip(clock.instant());
     assertThat(actual).isFalse();
@@ -172,7 +172,7 @@ class BulkExportServiceTest {
     when(sourceBucket.get("file")).thenReturn(Optional.empty());
 
     BulkExportService bulkExportService =
-        new BulkExportService(sourceBucket, destinationBucket, "test-export", "");
+        new BulkExportService(sourceBucket, destinationBucket, "test-export");
 
     boolean actual = bulkExportService.updateLatestZip(clock.instant());
     assertThat(actual).isFalse();

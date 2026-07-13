@@ -23,20 +23,20 @@ class LiteratureBucketIntegrationTest {
 
   @BeforeEach
   void setUp() {
-    bucket.getAllKeysOnCurrentVersion().forEach(key -> bucket.delete(key));
+    bucket.getAllKeys().forEach(key -> bucket.delete(key));
   }
 
   @Test
   void getAllKeysReturnsAllKeys() {
     bucket.save("XXLU000000001.akn.xml", "");
     bucket.save("changelog.json", "");
-    assertThat(bucket.getAllKeysOnCurrentVersion())
+    assertThat(bucket.getAllKeys())
         .containsExactlyInAnyOrder("changelog.json", "XXLU000000001.akn.xml");
   }
 
   @Test
   void getAllKeysReturnsEmptyListIfBucketIsEmpty() {
-    assertThat(bucket.getAllKeysOnCurrentVersion()).isEmpty();
+    assertThat(bucket.getAllKeys()).isEmpty();
   }
 
   @Test

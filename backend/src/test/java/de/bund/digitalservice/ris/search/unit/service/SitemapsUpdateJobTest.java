@@ -68,11 +68,10 @@ class SitemapsUpdateJobTest {
               + "/1992-01-01/1/deu/1992-01-02/regelungstext-verkuendung-1.xml");
     }
 
-    when(administrativeDirectiveBucket.getAllKeysOnCurrentVersion())
-        .thenReturn(administrativeDirective);
-    when(caseLawBucket.getAllKeysOnCurrentVersion()).thenReturn(caseLawKeys);
-    when(literatureBucket.getAllKeysOnCurrentVersion()).thenReturn(literatureKeys);
-    when(normsBucket.getAllKeysOnCurrentVersion()).thenReturn(normsKeys);
+    when(administrativeDirectiveBucket.getAllKeys()).thenReturn(administrativeDirective);
+    when(caseLawBucket.getAllKeys()).thenReturn(caseLawKeys);
+    when(literatureBucket.getAllKeys()).thenReturn(literatureKeys);
+    when(normsBucket.getAllKeys()).thenReturn(normsKeys);
 
     sitemapsUpdateJob.runJob();
 
@@ -116,10 +115,10 @@ class SitemapsUpdateJobTest {
             "eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu/1992-01-02/NOT_VALID/regelungstext-1.xml",
             "eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu/1992-01-02/NOT_VALID/something-else.xml");
 
-    when(administrativeDirectiveBucket.getAllKeysOnCurrentVersion()).thenReturn(vvKeys);
-    when(caseLawBucket.getAllKeysOnCurrentVersion()).thenReturn(caselawKeys);
-    when(literatureBucket.getAllKeysOnCurrentVersion()).thenReturn(literatureKeys);
-    when(normsBucket.getAllKeysOnCurrentVersion()).thenReturn(normsKeys);
+    when(administrativeDirectiveBucket.getAllKeys()).thenReturn(vvKeys);
+    when(caseLawBucket.getAllKeys()).thenReturn(caselawKeys);
+    when(literatureBucket.getAllKeys()).thenReturn(literatureKeys);
+    when(normsBucket.getAllKeys()).thenReturn(normsKeys);
 
     sitemapsUpdateJob.runJob();
 
@@ -135,7 +134,7 @@ class SitemapsUpdateJobTest {
             "eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu/1992-01-02/regelungstext-2.xml",
             "eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu/1992-01-02/anlage-regelungstext-1.xml");
 
-    when(normsBucket.getAllKeysOnCurrentVersion()).thenReturn(normsKeys);
+    when(normsBucket.getAllKeys()).thenReturn(normsKeys);
 
     sitemapsUpdateJob.createSitemaps(normsBucket, DocumentKind.LEGISLATION);
 
@@ -152,7 +151,7 @@ class SitemapsUpdateJobTest {
             "eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu/1992-01-02/regelungstext-verkuendung-1.xml",
             "eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu/1992-03-10/regelungstext-verkuendung-1.xml");
 
-    when(normsBucket.getAllKeysOnCurrentVersion()).thenReturn(normsKeys);
+    when(normsBucket.getAllKeys()).thenReturn(normsKeys);
 
     sitemapsUpdateJob.createSitemaps(normsBucket, DocumentKind.LEGISLATION);
 
