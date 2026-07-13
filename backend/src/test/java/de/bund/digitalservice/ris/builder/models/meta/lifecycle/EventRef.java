@@ -4,14 +4,12 @@ import de.bund.digitalservice.ris.builder.models.common.BaseElement;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /** Represents an {@code akn:eventRef} element, a single entry in the norm's lifecycle. */
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Getter
 public class EventRef extends BaseElement {
 
   @XmlAttribute private String eId;
