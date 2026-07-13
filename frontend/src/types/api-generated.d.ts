@@ -1490,6 +1490,11 @@ export interface components {
       headline?: string;
       /**
        * @example
+       *   Titelzeile;
+       */
+      titleLine?: string;
+      /**
+       * @example
        *   Sonstiger Langtext
        */
       otherLongText?: string;
@@ -1676,6 +1681,8 @@ export interface components {
       guidingPrinciple?: string;
       /** Überschrift */
       headline?: string;
+      /** Titelzeile */
+      titleLine?: string;
       /** Orientierungssatz */
       headnote?: string;
       /** Sonstiger Orientierungssatz */
