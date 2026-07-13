@@ -75,8 +75,7 @@ const availableFeatures: Feature[] = privateFeaturesEnabled
                 <template v-for="example in feature.examples" :key="example">
                   <pre
                     class="inline-block w-auto border border-gray-200 px-4"
-                    >{{ example }}</pre
-                  >
+                    >{{ example }}</pre>
                 </template>
               </div>
             </dd>
@@ -144,8 +143,7 @@ const availableFeatures: Feature[] = privateFeaturesEnabled
                 <template v-for="example in field.examples" :key="example">
                   <pre
                     class="inline-block w-auto border border-gray-200 px-4"
-                    >{{ example }}</pre
-                  >
+                    >{{ example }}</pre>
                   <br />
                 </template>
               </td>
@@ -190,8 +188,7 @@ const availableFeatures: Feature[] = privateFeaturesEnabled
                 <template v-for="example in feature.examples" :key="example">
                   <pre
                     class="inline-block w-auto border border-gray-200 px-4"
-                    >{{ example }}</pre
-                  >
+                    >{{ example }}</pre>
                 </template>
               </div>
             </dd>
@@ -259,8 +256,7 @@ const availableFeatures: Feature[] = privateFeaturesEnabled
                 <template v-for="example in field.examples" :key="example">
                   <pre
                     class="inline-block w-auto border border-gray-200 px-4"
-                    >{{ example }}</pre
-                  >
+                    >{{ example }}</pre>
                   <br />
                 </template>
               </td>
