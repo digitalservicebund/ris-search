@@ -11,9 +11,6 @@ import de.bund.digitalservice.ris.search.mapper.NormLdmlToOpenSearchMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.models.opensearch.TableOfContentsItem;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;
@@ -444,27 +441,50 @@ class NormLdmlToOpenSearchMapperTest {
 
   @Test
   @DisplayName("Extract articles metadata correctly")
-  void extractArticlesMetadataTest() throws IOException {
-    var sourceFile =
-        Files.readString(
-            Path.of(
-                "src/test/resources/data/LDML/norm/eli/bund/bgbl-1/1991/s101/1991-01-01/1/deu/1991-01-01/regelungstext-1.xml"));
-    var norm = NormLdmlToOpenSearchMapper.parseNorm(sourceFile, Map.of(), true).orElseThrow();
+  void extractArticlesMetadataTest() {
+    NormTestDataBuilder builder =
+        NormTestDataBuilder.builder()
+            .formula("Preamble")
+            .article(
+                "§ 1",
+                "2003-11-03",
+                "2004-05-12",
+                "art-z1",
+                article -> {
+                  article.addHeading("Heading 1", null).addParagraph("Article content 1", "(1)");
+                })
+            .article(
+                "Article with weird name",
+                "2003-11-03",
+                null,
+                "art-z%c2%a7%c2%a7%204%20bis%2014",
+                article -> {
+                  article.addHeading("Heading 2", null).addParagraph("Article content 2", "(1)");
+                })
+            .conclusion("Conclusion");
+
+    Optional<Norm> maybeNorm =
+        NormLdmlToOpenSearchMapper.parseNorm(
+            builder.buildNormXml(), builder.buildAttachmentXmls(), true);
+
+    assertThat(maybeNorm).isNotEmpty();
+
+    Norm norm = maybeNorm.get();
     var eIds =
         List.of(
+            "präambel-n1_formel-n1",
             "art-z1",
-            "art-z2",
-            "art-z3",
-            "art-z4",
-            "art-z5",
             "art-z%c2%a7%c2%a7%204%20bis%2014",
             "schluss-n1_formel-n1");
     assertThat(norm.getArticles().stream().map(Article::getEId).toList()).isEqualTo(eIds);
-    Article firstArticle = norm.getArticles().stream().findFirst().orElseThrow();
+
+    Article firstArticle = norm.getArticles().get(1);
     assertThat(firstArticle.getEntryIntoForceDate())
-        .isEqualTo(LocalDate.of(1991, Month.JANUARY, 1));
-    assertThat(firstArticle.getGuid()).isEqualTo("87cd6b3a-d198-49c3-a02f-6adfd12940cb");
-    assertThat(firstArticle.getExpiryDate()).isNull();
+        .isEqualTo(LocalDate.of(2003, Month.NOVEMBER, 3));
+    assertThat(firstArticle.getExpiryDate()).isEqualTo(LocalDate.of(2004, Month.MAY, 12));
+
+    Article secondArticle = norm.getArticles().get(2);
+    assertThat(secondArticle.getExpiryDate()).isNull();
   }
 
   private static Stream<Arguments> provideShortTitlePermutations() {
