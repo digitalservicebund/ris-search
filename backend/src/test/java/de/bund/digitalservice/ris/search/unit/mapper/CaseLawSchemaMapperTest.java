@@ -30,6 +30,7 @@ class CaseLawSchemaMapperTest {
             .decisionGrounds("diese Entscheidungsgründe")
             .headnote("Orientierungssatz")
             .headline("Test")
+            .titleLine("Title line")
             .otherHeadnote("Sonstiger Orientierungssatz")
             .otherLongText("Long text")
             .caseFacts("Tatbestand")
@@ -58,6 +59,7 @@ class CaseLawSchemaMapperTest {
     assertThat(caseLawSchema.decisionGrounds()).isEqualTo("diese Entscheidungsgründe");
     assertThat(caseLawSchema.headnote()).isEqualTo("Orientierungssatz");
     assertThat(caseLawSchema.headline()).isEqualTo("Test");
+    assertThat(caseLawSchema.titleLine()).isEqualTo("Title line");
     assertThat(caseLawSchema.otherHeadnote()).isEqualTo("Sonstiger Orientierungssatz");
     assertThat(caseLawSchema.otherLongText()).isEqualTo("Long text");
     assertThat(caseLawSchema.caseFacts()).isEqualTo("Tatbestand");

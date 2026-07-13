@@ -22,6 +22,7 @@ public record CaseLawSchema(
     @Schema(description = "Gründe") String grounds,
     @Schema(description = "Leitsatz") String guidingPrinciple,
     @Schema(description = "Überschrift") String headline,
+    @Schema(description = "Titelzeile") String titleLine,
     @Schema(description = "Orientierungssatz") String headnote,
     @Schema(description = "Sonstiger Orientierungssatz") String otherHeadnote,
     @Schema(description = "Sonstiger Langtext") String otherLongText,

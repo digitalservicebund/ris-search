@@ -86,6 +86,7 @@ public class CaseLawLdmlToOpenSearchMapper {
         .documentationOffice(risMeta.getRisDokumentationsstelle())
         .legalEffect(risMeta.getRisRechtskraft())
         .headline(sanitize(judgment.getHeader().findShortTitle()))
+        .titleLine(extractTitleLine(meta))
         .guidingPrinciple(extractContent(judgmentBody, DomainTerm.GUIDING_PRINCIPLE))
         .headnote(sanitize(extractHeadnote(meta).orElse(null)))
         .otherHeadnote(sanitize(extractOtherHeadnote(meta).orElse(null)))
@@ -128,7 +129,7 @@ public class CaseLawLdmlToOpenSearchMapper {
     }
   }
 
-  private static void validateCaseLawLdml(CaseLawLdml ldml) throws ValidationException {
+  private void validateCaseLawLdml(CaseLawLdml ldml) throws ValidationException {
     if (ldml == null) throw new ValidationException("LDML root is null");
     validateNotNull(ldml.getJudgment(), "Judgment missing");
     Judgment judgment = ldml.getJudgment();
@@ -153,8 +154,11 @@ public class CaseLawLdmlToOpenSearchMapper {
     validateNotNull(
         meta.getProprietary().getRisMeta().getRisGericht().getGerichtstyp(), "CourtType missing");
 
-    if (judgment.getHeader() == null || judgment.getHeader().findShortTitle() == null) {
-      throw new ValidationException("Header or Short Title is missing");
+    boolean hasShortTitle =
+        judgment.getHeader() != null && judgment.getHeader().findShortTitle() != null;
+    boolean hasTitleLine = extractTitleLine(meta) != null;
+    if (!hasShortTitle && !hasTitleLine) {
+      throw new ValidationException("Short Title or Title Line is missing");
     }
   }
 
@@ -190,6 +194,14 @@ public class CaseLawLdmlToOpenSearchMapper {
         .stream()
         .map(DocumentaryShortTexts.RisEntscheidungsName::getName)
         .toList();
+  }
+
+  private String extractTitleLine(Meta meta) {
+    return extractDocumentaryShortTexts(meta)
+        .map(DocumentaryShortTexts::getRisTitelzeile)
+        .map(DocumentaryShortTexts.RisTitelzeile::getContent)
+        .map(this::sanitize)
+        .orElse(null);
   }
 
   private static List<String> getLinkedJudgements(

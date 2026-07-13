@@ -16,6 +16,7 @@ public record CaseLawSearchSchema(
             requiredMode = Schema.RequiredMode.REQUIRED)
         String ecli,
     @Schema(example = "Überschrift") String headline,
+    @Schema(example = "Titelzeile") String titleLine,
     @Schema(example = "Sonstiger Langtext") String otherLongText,
     @Schema(requiredMode = Schema.RequiredMode.REQUIRED) LocalDate decisionDate,
     @Schema(example = "BGH 123/23", requiredMode = Schema.RequiredMode.REQUIRED)

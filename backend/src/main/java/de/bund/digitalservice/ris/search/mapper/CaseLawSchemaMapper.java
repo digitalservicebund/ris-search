@@ -44,6 +44,7 @@ public class CaseLawSchemaMapper {
         .grounds(doc.grounds())
         .guidingPrinciple(doc.guidingPrinciple())
         .headline(doc.headline())
+        .titleLine(doc.titleLine())
         .headnote(doc.headnote())
         .otherHeadnote(doc.otherHeadnote())
         .otherLongText(doc.otherLongText())

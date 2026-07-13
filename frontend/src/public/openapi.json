@@ -3115,6 +3115,10 @@
               "type" : "string",
               "example" : "Überschrift"
             },
+            "titleLine" : {
+              "type" : "string",
+              "example" : "Titelzeile"
+            },
             "otherLongText" : {
               "type" : "string",
               "example" : "Sonstiger Langtext"
@@ -3374,6 +3378,10 @@
           "headline" : {
             "type" : "string",
             "description" : "Überschrift"
+          },
+          "titleLine" : {
+            "type" : "string",
+            "description" : "Titelzeile"
           },
           "headnote" : {
             "type" : "string",
