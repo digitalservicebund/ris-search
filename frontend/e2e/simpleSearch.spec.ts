@@ -295,7 +295,7 @@ test.describe("searching legislation", () => {
     ).toBeVisible();
     await expect(
       searchResult.getByText(
-        /Alle wesentlichen Informationen wie Inhaltsstoffe, Mindesthaltbarkeitsdatum und Herkunft sind/
+        /Alle wesentlichen Informationen wie Inhaltsstoffe, Mindesthaltbarkeitsdatum und Herkunft sind/,
       ),
     ).toBeVisible();
 
@@ -306,7 +306,7 @@ test.describe("searching legislation", () => {
     ).toBeVisible();
     await expect(
       searchResult.getByText(
-        /Werden Säfte aus Früchten mit Kernen, Samenkörnern und Schale hergestellt/
+        /Werden Säfte aus Früchten mit Kernen, Samenkörnern und Schale hergestellt/,
       ),
     ).toBeVisible();
   });
