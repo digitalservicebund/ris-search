@@ -24,6 +24,8 @@ test("shows 404 page when case law is not found", async ({ page }) => {
 test("can view a single case law documentation unit", async ({ page }) => {
   await navigate(page, "/case-law/KORE600500000");
 
+  await expect(page.getByText("Urteil 6.", { exact: true })).toBeVisible();
+
   await expect(
     page.getByRole("heading", { name: "Testheader für Urteil 6." }).first(),
   ).toBeVisible();
