@@ -84,7 +84,7 @@ public class NormTestDataBuilder {
   }
 
   /**
-   * Disables schema validate on the final generated xml. ONLY use this for test cases that require
+   * Disables schema validation on the generated xml. ONLY use this for test cases that require
    * invalid xml. E.g. to test that extraction fails on certain elements missing.
    *
    * @return builder
