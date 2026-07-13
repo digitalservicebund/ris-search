@@ -5,6 +5,7 @@ import de.bund.digitalservice.ris.search.config.ApiConfig;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
 import lombok.Builder;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents the schema for a legislation expression search result, providing details about a
@@ -43,10 +44,11 @@ public record LegislationExpressionSearchSchema(
             example = "KakaoV 2003",
             description = "Amtliche Buchstabenabkürzung, if it exists. Otherwise ris-abkuerzung.")
         String abbreviation,
-    @Schema(
+    @Nullable
+        @Schema(
             example = "Kakaoverordnung",
             description = "Amtliche Kurzüberschrift",
-            requiredMode = Schema.RequiredMode.REQUIRED)
+            nullable = true)
         String alternateName,
     @Schema(
             description = "Whether the legislation expression is currently in force.",
