@@ -3,6 +3,7 @@ package de.bund.digitalservice.ris.builder.models.body;
 import de.bund.digitalservice.ris.builder.NormTestDataBuilder;
 import de.bund.digitalservice.ris.builder.models.common.BaseElement;
 import de.bund.digitalservice.ris.builder.models.common.Heading;
+import jakarta.xml.bind.annotation.XmlAnyElement;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
@@ -22,15 +23,17 @@ public class Chapter extends BaseElement implements BodyElement {
 
   @Builder.Default @XmlAttribute private String eId = "kapitel-n1";
 
+  public void setEId(String eId) {
+    this.eId = eId;
+  }
+
   @XmlElement(namespace = NormTestDataBuilder.AKN_NS)
   private AknNum num;
 
   @XmlElement(namespace = NormTestDataBuilder.AKN_NS)
   private Heading heading;
 
-  @Builder.Default
-  @XmlElement(name = "section", namespace = NormTestDataBuilder.AKN_NS)
-  private List<Section> sections = new ArrayList<>();
+  @Builder.Default @XmlAnyElement private List<BodyElement> children = new ArrayList<>();
 
   /**
    * Sets the chapter's number.
@@ -67,7 +70,18 @@ public class Chapter extends BaseElement implements BodyElement {
   public Section addSection(String heading, String num, Consumer<Section> sectionConsumer) {
     Section section = new Section().addHeading(heading).addNum(num);
     sectionConsumer.accept(section);
-    this.sections.add(section);
+    this.children.add(section);
     return section;
+  }
+
+  /**
+   * Creates a article, lets the caller populate it, and adds it to this chapter.
+   *
+   * @param article to add as child
+   * @return the Chapter
+   */
+  public Chapter addArticle(Article article) {
+    this.children.add(article);
+    return this;
   }
 }

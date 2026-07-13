@@ -11,7 +11,6 @@ import de.bund.digitalservice.ris.search.mapper.NormLdmlToOpenSearchMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.models.opensearch.TableOfContentsItem;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -26,14 +25,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.springframework.util.ResourceUtils;
 
 class NormLdmlToOpenSearchMapperTest {
-
-  String readXmlTestFile(String fileName) throws IOException {
-    File file = ResourceUtils.getFile(String.format("classpath:data/xmlTests/%s", fileName));
-    return new String(Files.readAllBytes(file.toPath()));
-  }
 
   // --------- Elis, Titles and Dates -------
   @Test
@@ -249,6 +242,7 @@ class NormLdmlToOpenSearchMapperTest {
     assertEquals(expectedResult, norm.getPublishedIn());
   }
 
+  // ---------------- Article tests ---------------
   @Test
   void extractsArticles() {
     NormTestDataBuilder builder =
@@ -345,6 +339,7 @@ class NormLdmlToOpenSearchMapperTest {
                 attachment.getIndexedAt()));
   }
 
+  // ---------------- Table of Contents tests ---------------
   @Test
   void createsTableOfContents() {
     NormTestDataBuilder builder =
@@ -379,52 +374,72 @@ class NormLdmlToOpenSearchMapperTest {
                     "anlagen-n1_anlage-n1", "Anlage T1", "(zu § 1)", List.of())));
   }
 
-  List<TableOfContentsItem> expectedToC =
-      List.of(
-          new TableOfContentsItem(
-              "hauptteil-1_teil-1",
-              "Teil 1",
-              "Heading 1",
-              List.of(
-                  new TableOfContentsItem("hauptteil-1_teil-1_para-1", "§ 1", "", List.of()),
-                  new TableOfContentsItem("hauptteil-1_teil-1_para-2", "§ 2", "", List.of()))),
-          new TableOfContentsItem(
-              "hauptteil-1_teil-2",
-              "Teil 2",
-              "Heading 2",
-              List.of(
-                  new TableOfContentsItem(
-                      "hauptteil-1_teil-2_titel-1",
-                      "Titel 1",
-                      "Heading 2.2",
-                      List.of(
-                          new TableOfContentsItem(
-                              "hauptteil-1_teil-2_titel-1_para-1", "§ 3", "", List.of()))))));
-
   @Test
-  @DisplayName("Correctly maps a nested table of content to a nested list with TableOfContentsItem")
-  void nestedTableOfContentExtractionTest() throws IOException {
-    var sourceFile =
-        Files.readString(
-            Path.of("src/test/resources/data/xmlTests/xmlDocumentTestTableOfContent.xml"));
-    var norm = NormLdmlToOpenSearchMapper.parseNorm(sourceFile, Map.of(), true).orElseThrow();
-    var tableOfContents = norm.getTableOfContents();
-    assertEquals(tableOfContents, expectedToC);
-  }
+  void createsNestedTableOfContents() {
+    NormTestDataBuilder builder = NormTestDataBuilder.builder();
 
-  @Test
-  @DisplayName("Correctly maps a nested table of content even when article has no heading")
-  void nestedTableOfContentWithoutArticleHeadingTest() throws IOException {
-    var sourceFile =
-        Files.readString(
-            Path.of("src/test/resources/data/xmlTests/xmlDocumentTestTableOfContent.xml"));
-    // Removes one empty heading node from the last article
-    sourceFile =
-        sourceFile.replaceAll("<[^<]*hauptteil-1_teil-2_titel-1_art-1_überschrift-1[^>]*>", "");
-    var norm = NormLdmlToOpenSearchMapper.parseNorm(sourceFile, Map.of(), true).orElseThrow();
-    // Table of content should be rendered the same
+    builder
+        .chapter(
+            "Heading 1",
+            "Kapitel 1",
+            chapter -> {
+              chapter
+                  .addArticle(
+                      builder
+                          .buildArticle("§ 1", "2020-01-01", null, "art-z1")
+                          .addHeading("Artikel 1", null)
+                          .addParagraph("Paragraf 1", "(1)"))
+                  .addArticle(
+                      builder
+                          .buildArticle("§ 2", "2020-01-01", null, "art-z2")
+                          .addHeading("", null)
+                          .addParagraph("Paragraf 1", "(1)"));
+            })
+        .chapter(
+            "Heading 2",
+            "Kapitel 2",
+            chapter -> {
+              chapter.setEId("kapitel-n2");
+              chapter.addSection(
+                  "Heading 2.1",
+                  "Abschnitt 2.1",
+                  section -> {
+                    section.addArticle(
+                        builder
+                            .buildArticle("§ 3", "2020-01-01", null, "art-z3")
+                            .addHeading("Artikel 3", null)
+                            .addParagraph("Paragraf 1", "(1)"));
+                  });
+            });
+
+    String xmlContent = builder.buildNormXml();
+    Optional<Norm> maybeNorm = NormLdmlToOpenSearchMapper.parseNorm(xmlContent, Map.of(), false);
+
+    assertThat(maybeNorm).isNotEmpty();
+
+    Norm norm = maybeNorm.get();
     var tableOfContents = norm.getTableOfContents();
-    assertEquals(expectedToC, tableOfContents);
+    assertEquals(
+        tableOfContents,
+        List.of(
+            new TableOfContentsItem(
+                "kapitel-n1",
+                "Kapitel 1",
+                "Heading 1",
+                List.of(
+                    new TableOfContentsItem("art-z1", "§ 1", "Artikel 1", List.of()),
+                    new TableOfContentsItem("art-z2", "§ 2", "", List.of()))),
+            new TableOfContentsItem(
+                "kapitel-n2",
+                "Kapitel 2",
+                "Heading 2",
+                List.of(
+                    new TableOfContentsItem(
+                        "abschnitt-n1",
+                        "Abschnitt 2.1",
+                        "Heading 2.1",
+                        List.of(
+                            new TableOfContentsItem("art-z3", "§ 3", "Artikel 3", List.of())))))));
   }
 
   @Test
