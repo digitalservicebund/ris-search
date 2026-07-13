@@ -4,13 +4,17 @@ import SearchResultHeader, {
   type SearchResultHeaderItem,
 } from "~/components/search/SearchResultHeader.vue";
 
-function renderComponent(items: SearchResultHeaderItem[] = []) {
+function renderComponent(
+  items: SearchResultHeaderItem[] = [],
+  secondaryItem?: string,
+) {
   return render(SearchResultHeader, {
     props: {
       icon: markRaw({
         template: "<span>icon-stub</span>",
       }),
       items: items,
+      secondaryItem,
     },
   });
 }
@@ -84,5 +88,11 @@ describe("SearchResultHeader", () => {
 
     const itemSpans = container.querySelectorAll("p > span");
     expect(itemSpans).toHaveLength(3); // Icon + 2 text elements
+  });
+
+  it("renders an optional secondary row", async () => {
+    renderComponent([], "Secondary item");
+
+    expect(screen.getByText("Secondary item")).toBeVisible();
   });
 });
