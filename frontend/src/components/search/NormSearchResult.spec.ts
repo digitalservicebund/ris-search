@@ -22,7 +22,7 @@ const mockSearchResult: SearchResult<LegislationExpression> = {
     abbreviation: "TN",
     "@type": "Legislation",
     "@id": "eli/bund/bgbl-0/1999/ab/regelungstext-1",
-    alternateName: "NoRM",
+    alternateName: "Alternate",
     hasPart: [],
     legislationIdentifier:
       "eli/bund/bgbl-0/1999/abc/1999-12-31/1/deu/regelungstext-1",
@@ -117,6 +117,7 @@ describe("NormSearchResult", () => {
     renderComponent();
     expect(screen.getByText("TN")).toBeInTheDocument();
     expect(screen.getByText(/Norm/)).toBeInTheDocument();
+    expect(screen.getByText("Alternate")).toBeInTheDocument();
     expect(screen.getByText("01.01.2000")).toBeInTheDocument();
     expect(screen.queryByText("14.12.1999")).not.toBeInTheDocument();
 
@@ -165,6 +166,33 @@ describe("NormSearchResult", () => {
     expect(
       screen.getByRole("link", { name: "Titelzeile nicht vorhanden" }),
     ).toBeInTheDocument();
+  });
+
+  it("does not display the secondary header row without an official short title", () => {
+    renderComponent({
+      ...mockSearchResult,
+      item: { ...mockSearchResult.item, alternateName: "" },
+    });
+
+    expect(screen.queryByText("Alternate")).not.toBeInTheDocument();
+  });
+
+  it("does not display the secondary header row when the official short title is null", () => {
+    renderComponent({
+      ...mockSearchResult,
+      item: { ...mockSearchResult.item, alternateName: null },
+    });
+
+    expect(screen.queryByText("Alternate")).not.toBeInTheDocument();
+  });
+
+  it("truncates the secondary header row to 90 characters", () => {
+    renderComponent({
+      ...mockSearchResult,
+      item: { ...mockSearchResult.item, alternateName: "a".repeat(100) },
+    });
+
+    expect(screen.getByText("a".repeat(90))).toBeInTheDocument();
   });
 
   it("correctly links to the norm page", () => {

@@ -22,6 +22,12 @@ const headline = computed(() =>
   ),
 );
 
+const secondaryTitle = computed(() =>
+  searchResult.item.alternateName
+    ? truncateAtWord(searchResult.item.alternateName, 90)
+    : undefined,
+);
+
 const resultTypeId = useId();
 
 const headerItems = computed<SearchResultHeaderItem[]>(() => {
@@ -77,7 +83,11 @@ const relevantHighlights = computed(() =>
 
 <template>
   <div class="flex flex-col gap-8 hyphens-auto">
-    <SearchResultHeader :icon="IcBaselineBalance" :items="headerItems">
+    <SearchResultHeader
+      :icon="IcBaselineBalance"
+      :items="headerItems"
+      :secondary-item="secondaryTitle"
+    >
       <template #trailing>
         <Badge
           v-if="validityStatus"
