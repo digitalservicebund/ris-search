@@ -25,8 +25,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 class NormLdmlToOpenSearchMapperTest {
 
-  // --------- Elis, Titles and Dates -------
   @Test
+  @DisplayName("Extracts ELIs, titles and dates")
   void extractsElisTitlesAndDates() {
 
     NormTestDataBuilder builder =
@@ -68,6 +68,7 @@ class NormLdmlToOpenSearchMapperTest {
   }
 
   @Test
+  @DisplayName("Ignores whitespace around dates")
   void ignoresWhiteSpaceAroundDates() {
     NormTestDataBuilder builder =
         NormTestDataBuilder.builder()
@@ -88,8 +89,8 @@ class NormLdmlToOpenSearchMapperTest {
     assertEquals(LocalDate.parse("1962-07-20"), norm.getDatePublished());
   }
 
-  // --------- Tests for amtliche- and ris-abkuerzung -------
   @Test
+  @DisplayName("Sets abbreviation to null when both abbreviations are missing")
   void setsAbbreviationToNullWhenAbbreviationsAreMissing() {
     NormTestDataBuilder builder =
         NormTestDataBuilder.builder().officialAbbreviation(null).risAbbreviation(null);
@@ -102,6 +103,7 @@ class NormLdmlToOpenSearchMapperTest {
   }
 
   @Test
+  @DisplayName("Prefers official abbreviation over RIS abbreviation")
   void prefersOfficialAbbreviationOverRisAbbreviation() {
     NormTestDataBuilder builder =
         NormTestDataBuilder.builder().officialAbbreviation("OffAbb").risAbbreviation("RisAbb");
@@ -114,6 +116,7 @@ class NormLdmlToOpenSearchMapperTest {
   }
 
   @Test
+  @DisplayName("Uses RIS abbreviation as fallback")
   void usesRisAbbreviationAsFallback() {
     NormTestDataBuilder builder =
         NormTestDataBuilder.builder().officialAbbreviation(null).risAbbreviation("RisAbb");
@@ -125,8 +128,8 @@ class NormLdmlToOpenSearchMapperTest {
     assertThat(maybeNorm.get().getOfficialAbbreviation()).isEqualTo("RisAbb");
   }
 
-  // --------- Tests empty mappings ------------
   @Test
+  @DisplayName("Does not map norm if work ELI is missing")
   void doesNotMapNormIfWorkEliIsMissing() {
     String xmlContent =
         NormTestDataBuilder.builder().disableValidation().workEli(null).buildNormXml();
@@ -135,6 +138,7 @@ class NormLdmlToOpenSearchMapperTest {
   }
 
   @Test
+  @DisplayName("Does not map norm if expression ELI is missing")
   void doesNotMapNormIfExpressionEliIsMissing() {
     String xmlContent =
         NormTestDataBuilder.builder().disableValidation().expressionEli(null).buildNormXml();
@@ -143,6 +147,7 @@ class NormLdmlToOpenSearchMapperTest {
   }
 
   @Test
+  @DisplayName("Does not map norm if manifestation ELI is missing")
   void doesNotMapNormIfManifestationEliIsMissing() {
     String xmlContent =
         NormTestDataBuilder.builder().disableValidation().manifestationEli(null).buildNormXml();
@@ -151,12 +156,14 @@ class NormLdmlToOpenSearchMapperTest {
   }
 
   @Test
+  @DisplayName("Does not create norm for invalid XML document")
   void doesNotCreateNormForInvalidXmlDocument() {
     String xml = "<akn:akomaNtoso xmlns:akn=\"http://Inhaltsdaten.LegalDocML.de\"/>";
     assertTrue(NormLdmlToOpenSearchMapper.parseNorm(xml, Map.of(), true).isEmpty());
   }
 
   @Test
+  @DisplayName("Does not map norm if it has a bedingtes Inkrafttreten")
   void doesNotMapNormIfBedingtesInkrafttreten() {
     String xmlContent = NormTestDataBuilder.builder().bedingtesInkrafttreten().buildNormXml();
 
@@ -164,6 +171,7 @@ class NormLdmlToOpenSearchMapperTest {
   }
 
   @Test
+  @DisplayName("Does not map norm if marked as gegenstandslos")
   void doesNotMapNormIfGegenstandlos() {
     String xmlContent =
         NormTestDataBuilder.builder().disableValidation().gegenstandslos().buildNormXml();
@@ -171,8 +179,8 @@ class NormLdmlToOpenSearchMapperTest {
     assertThat(NormLdmlToOpenSearchMapper.parseNorm(xmlContent, Map.of(), false)).isEmpty();
   }
 
-  // -------------- Norm sort date
   @Test
+  @DisplayName("Uses in-force date as sort date outside prototype env")
   void usesInForceDateAsSortDateInNonePrototypeEnvironment() {
 
     NormTestDataBuilder builder =
@@ -189,6 +197,7 @@ class NormLdmlToOpenSearchMapperTest {
   }
 
   @Test
+  @DisplayName("Uses legislation date as sort date in prototype env")
   void usesLegislationDateAsSortDateInPrototypeEnvironment() {
     NormTestDataBuilder builder =
         NormTestDataBuilder.builder().inForceDate("2020-01-01").legislationDate("2050-07-31");
@@ -203,7 +212,6 @@ class NormLdmlToOpenSearchMapperTest {
     assertThat(norm.getNormsSortDate()).isEqualTo(LocalDate.parse("2050-07-31"));
   }
 
-  // ------------- PublishedIn tests ----------------
   private static Stream<Arguments> getTestPublishedIn() {
     return Stream.of(
         Arguments.of("1962-07-20", "bgbl-1", "s120", "BGBl I, 1962 120"),
@@ -217,6 +225,7 @@ class NormLdmlToOpenSearchMapperTest {
 
   @ParameterizedTest
   @MethodSource("getTestPublishedIn")
+  @DisplayName("Builds the published-in field correctly")
   void shouldCreatePublishedInFieldCorrectly(
       String datePublished, String name, String number, String expectedResult) {
 
@@ -239,8 +248,8 @@ class NormLdmlToOpenSearchMapperTest {
     assertEquals(expectedResult, norm.getPublishedIn());
   }
 
-  // ---------------- Article tests ---------------
   @Test
+  @DisplayName("Extracts articles, preamble and attachments")
   void extractsArticles() {
     NormTestDataBuilder builder =
         NormTestDataBuilder.builder()
@@ -336,8 +345,8 @@ class NormLdmlToOpenSearchMapperTest {
                 attachment.getIndexedAt()));
   }
 
-  // ---------------- Table of Contents tests ---------------
   @Test
+  @DisplayName("Creates table of contents with attachment")
   void createsTableOfContents() {
     NormTestDataBuilder builder =
         NormTestDataBuilder.builder()
@@ -372,6 +381,7 @@ class NormLdmlToOpenSearchMapperTest {
   }
 
   @Test
+  @DisplayName("Creates nested table of contents with chapters and sections")
   void createsNestedTableOfContents() {
     NormTestDataBuilder builder = NormTestDataBuilder.builder();
 
