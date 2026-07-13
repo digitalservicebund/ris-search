@@ -1,9 +1,6 @@
 package de.bund.digitalservice.ris.search.unit.mapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import de.bund.digitalservice.ris.builder.NormTestDataBuilder;
 import de.bund.digitalservice.ris.builder.models.common.AknP;
@@ -48,23 +45,22 @@ class NormLdmlToOpenSearchMapperTest {
 
     Norm norm = maybeNorm.get();
 
-    assertEquals("eli/bund/bgbl-1/1962/s514", norm.getWorkEli());
-    assertEquals("eli/bund/bgbl-1/1962/s514/2010-04-27/1/deu", norm.getExpressionEli());
-    assertEquals("eli/bund/bgbl-1/1962/s514/2010-04-27/1/deu", norm.getId());
-    assertEquals(
-        "eli/bund/bgbl-1/1962/s514/2010-04-27/1/deu/2010-04-27/regelungstext-1.xml",
-        norm.getManifestationEliExample());
-    assertEquals(
-        "Verordnung zur Durchführung des § 88 Abs. 2 Nr. 8 des Bundessozialhilfegesetzes",
-        norm.getOfficialTitle());
-    assertEquals("Kurztitel", norm.getOfficialShortTitle());
-    assertEquals("ABK", norm.getOfficialAbbreviation());
-    assertEquals(LocalDate.parse("2000-01-01"), norm.getEntryIntoForceDate());
-    assertEquals(LocalDate.parse("2000-01-07"), norm.getExpiryDate());
-    assertEquals(LocalDate.parse("1962-07-15"), norm.getNormsDate());
+    assertThat(norm.getWorkEli()).isEqualTo("eli/bund/bgbl-1/1962/s514");
+    assertThat(norm.getExpressionEli()).isEqualTo("eli/bund/bgbl-1/1962/s514/2010-04-27/1/deu");
+    assertThat(norm.getId()).isEqualTo("eli/bund/bgbl-1/1962/s514/2010-04-27/1/deu");
+    assertThat(norm.getManifestationEliExample())
+        .isEqualTo("eli/bund/bgbl-1/1962/s514/2010-04-27/1/deu/2010-04-27/regelungstext-1.xml");
+    assertThat(norm.getOfficialTitle())
+        .isEqualTo(
+            "Verordnung zur Durchführung des § 88 Abs. 2 Nr. 8 des Bundessozialhilfegesetzes");
+    assertThat(norm.getOfficialShortTitle()).isEqualTo("Kurztitel");
+    assertThat(norm.getOfficialAbbreviation()).isEqualTo("ABK");
+    assertThat(norm.getEntryIntoForceDate()).isEqualTo(LocalDate.parse("2000-01-01"));
+    assertThat(norm.getExpiryDate()).isEqualTo(LocalDate.parse("2000-01-07"));
+    assertThat(norm.getNormsDate()).isEqualTo(LocalDate.parse("1962-07-15"));
     // Should be same as in force in none-prototype env
-    assertEquals(LocalDate.parse("2000-01-01"), norm.getNormsSortDate());
-    assertEquals(LocalDate.parse("1962-07-20"), norm.getDatePublished());
+    assertThat(norm.getNormsSortDate()).isEqualTo(LocalDate.parse("2000-01-01"));
+    assertThat(norm.getDatePublished()).isEqualTo(LocalDate.parse("1962-07-20"));
   }
 
   @Test
@@ -83,10 +79,9 @@ class NormLdmlToOpenSearchMapperTest {
     assertThat(maybeNorm).isNotEmpty();
 
     Norm norm = maybeNorm.get();
-    assertEquals(LocalDate.parse("2000-01-07"), norm.getExpiryDate());
-    assertEquals(LocalDate.parse("1962-07-15"), norm.getNormsDate());
-    assertEquals(LocalDate.parse("1962-07-15"), norm.getNormsDate());
-    assertEquals(LocalDate.parse("1962-07-20"), norm.getDatePublished());
+    assertThat(norm.getExpiryDate()).isEqualTo(LocalDate.parse("2000-01-07"));
+    assertThat(norm.getNormsDate()).isEqualTo(LocalDate.parse("1962-07-15"));
+    assertThat(norm.getDatePublished()).isEqualTo(LocalDate.parse("1962-07-20"));
   }
 
   @Test
@@ -159,7 +154,7 @@ class NormLdmlToOpenSearchMapperTest {
   @DisplayName("Does not create norm for invalid XML document")
   void doesNotCreateNormForInvalidXmlDocument() {
     String xml = "<akn:akomaNtoso xmlns:akn=\"http://Inhaltsdaten.LegalDocML.de\"/>";
-    assertTrue(NormLdmlToOpenSearchMapper.parseNorm(xml, Map.of(), true).isEmpty());
+    assertThat(NormLdmlToOpenSearchMapper.parseNorm(xml, Map.of(), true)).isEmpty();
   }
 
   @Test
@@ -245,7 +240,7 @@ class NormLdmlToOpenSearchMapperTest {
     assertThat(maybeNorm).isNotEmpty();
 
     Norm norm = maybeNorm.get();
-    assertEquals(expectedResult, norm.getPublishedIn());
+    assertThat(norm.getPublishedIn()).isEqualTo(expectedResult);
   }
 
   @Test
@@ -303,27 +298,35 @@ class NormLdmlToOpenSearchMapperTest {
 
     Norm norm = maybeNorm.get();
 
-    assertEquals(5, norm.getArticles().size());
+    assertThat(norm.getArticles()).hasSize(5);
 
     Article preamble = norm.getArticles().get(0);
     Article firstArticle = norm.getArticles().get(1);
     Article secondArticle = norm.getArticles().get(2);
     Article thirdArticle = norm.getArticles().get(3);
     Article attachment = norm.getArticles().get(4);
-    assertEquals("Eingangsformel", preamble.getName());
-    assertEquals("Preamble", preamble.getText());
-    assertEquals("§ 1 Heading 1", norm.getArticles().get(1).getName());
-    assertEquals("(1) Das ist ein Satz. Das ist noch ein Satz.", firstArticle.getText());
-    assertEquals("§ 2 Heading 2", secondArticle.getName());
-    assertEquals(
-        "(1) Ein weiterer Satz mit einem Punkt in einer Aufzählung und noch einem Punkt. (2) Noch ein wichtiger Satz. Das ist der letzte Satz.",
-        secondArticle.getText());
-    assertEquals(LocalDate.of(2003, Month.NOVEMBER, 3), firstArticle.getEntryIntoForceDate());
-    assertNull(firstArticle.getExpiryDate());
-    assertEquals(LocalDate.of(2003, Month.NOVEMBER, 3), secondArticle.getEntryIntoForceDate());
-    assertEquals(LocalDate.of(2003, Month.NOVEMBER, 6), secondArticle.getExpiryDate());
-    assertEquals(LocalDate.of(2003, Month.NOVEMBER, 1), thirdArticle.getEntryIntoForceDate());
-    assertNull(thirdArticle.getExpiryDate());
+
+    assertThat(preamble.getName()).isEqualTo("Eingangsformel");
+    assertThat(preamble.getText()).isEqualTo("Preamble");
+    assertThat(firstArticle.getEntryIntoForceDate())
+        .isEqualTo(LocalDate.of(2003, Month.NOVEMBER, 3));
+    assertThat(firstArticle.getExpiryDate()).isNull();
+
+    assertThat(firstArticle.getName()).isEqualTo("§ 1 Heading 1");
+    assertThat(firstArticle.getText()).isEqualTo("(1) Das ist ein Satz. Das ist noch ein Satz.");
+
+    assertThat(secondArticle.getName()).isEqualTo("§ 2 Heading 2");
+    assertThat(secondArticle.getText())
+        .isEqualTo(
+            "(1) Ein weiterer Satz mit einem Punkt in einer Aufzählung und noch einem Punkt. (2) Noch ein wichtiger Satz. Das ist der letzte Satz.");
+    assertThat(secondArticle.getEntryIntoForceDate())
+        .isEqualTo(LocalDate.of(2003, Month.NOVEMBER, 3));
+    assertThat(secondArticle.getExpiryDate()).isEqualTo(LocalDate.of(2003, Month.NOVEMBER, 6));
+
+    assertThat(thirdArticle.getEntryIntoForceDate())
+        .isEqualTo(LocalDate.of(2003, Month.NOVEMBER, 1));
+    assertThat(thirdArticle.getExpiryDate()).isNull();
+
     String workEli = "eli/bund/bgbl-1/1962/s514";
     String expressionEli = workEli + "/2010-04-27/1/deu";
     String manifestationEli = expressionEli + "/2010-04-27/offenestruktur-1.xml";
@@ -426,27 +429,28 @@ class NormLdmlToOpenSearchMapperTest {
 
     Norm norm = maybeNorm.get();
     var tableOfContents = norm.getTableOfContents();
-    assertEquals(
-        tableOfContents,
-        List.of(
-            new TableOfContentsItem(
-                "kapitel-n1",
-                "Kapitel 1",
-                "Heading 1",
-                List.of(
-                    new TableOfContentsItem("art-z1", "§ 1", "Artikel 1", List.of()),
-                    new TableOfContentsItem("art-z2", "§ 2", "", List.of()))),
-            new TableOfContentsItem(
-                "kapitel-n2",
-                "Kapitel 2",
-                "Heading 2",
-                List.of(
-                    new TableOfContentsItem(
-                        "abschnitt-n1",
-                        "Abschnitt 2.1",
-                        "Heading 2.1",
-                        List.of(
-                            new TableOfContentsItem("art-z3", "§ 3", "Artikel 3", List.of())))))));
+    assertThat(tableOfContents)
+        .isEqualTo(
+            List.of(
+                new TableOfContentsItem(
+                    "kapitel-n1",
+                    "Kapitel 1",
+                    "Heading 1",
+                    List.of(
+                        new TableOfContentsItem("art-z1", "§ 1", "Artikel 1", List.of()),
+                        new TableOfContentsItem("art-z2", "§ 2", "", List.of()))),
+                new TableOfContentsItem(
+                    "kapitel-n2",
+                    "Kapitel 2",
+                    "Heading 2",
+                    List.of(
+                        new TableOfContentsItem(
+                            "abschnitt-n1",
+                            "Abschnitt 2.1",
+                            "Heading 2.1",
+                            List.of(
+                                new TableOfContentsItem(
+                                    "art-z3", "§ 3", "Artikel 3", List.of())))))));
   }
 
   @Test
