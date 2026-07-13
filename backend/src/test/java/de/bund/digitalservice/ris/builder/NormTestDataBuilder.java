@@ -72,7 +72,7 @@ public class NormTestDataBuilder {
 
   private final AkomaNtoso document = new AkomaNtoso();
   private final Map<String, AkomaNtoso> attachmentsDocs = new HashMap<>();
-  private final boolean enforceValidation;
+  private boolean enforceValidation;
 
   private NormTestDataBuilder(boolean enforceValidation) {
     this.enforceValidation = enforceValidation;
@@ -84,13 +84,14 @@ public class NormTestDataBuilder {
   }
 
   /**
-   * Creates a builder that does not schema validate the xmls. ONLY use this for test cases that
-   * require invalid xml. E.g. to test that extraction fails on certain elements missing.
+   * Disables schema validate on the final generated xml. ONLY use this for test cases that require
+   * invalid xml. E.g. to test that extraction fails on certain elements missing.
    *
    * @return builder
    */
-  public static NormTestDataBuilder invalidBuilder() {
-    return new NormTestDataBuilder(false);
+  public NormTestDataBuilder disableValidation() {
+    enforceValidation = false;
+    return this;
   }
 
   /**

@@ -138,21 +138,24 @@ class NormLdmlToOpenSearchMapperTest {
   // --------- Tests empty mappings ------------
   @Test
   void doesNotMapNormIfWorkEliIsMissing() {
-    String xmlContent = NormTestDataBuilder.invalidBuilder().workEli(null).buildNormXml();
+    String xmlContent =
+        NormTestDataBuilder.builder().disableValidation().workEli(null).buildNormXml();
 
     assertThat(NormLdmlToOpenSearchMapper.parseNorm(xmlContent, Map.of(), false)).isEmpty();
   }
 
   @Test
   void doesNotMapNormIfExpressionEliIsMissing() {
-    String xmlContent = NormTestDataBuilder.invalidBuilder().expressionEli(null).buildNormXml();
+    String xmlContent =
+        NormTestDataBuilder.builder().disableValidation().expressionEli(null).buildNormXml();
 
     assertThat(NormLdmlToOpenSearchMapper.parseNorm(xmlContent, Map.of(), false)).isEmpty();
   }
 
   @Test
   void doesNotMapNormIfManifestationEliIsMissing() {
-    String xmlContent = NormTestDataBuilder.invalidBuilder().manifestationEli(null).buildNormXml();
+    String xmlContent =
+        NormTestDataBuilder.builder().disableValidation().manifestationEli(null).buildNormXml();
 
     assertThat(NormLdmlToOpenSearchMapper.parseNorm(xmlContent, Map.of(), false)).isEmpty();
   }
@@ -172,7 +175,8 @@ class NormLdmlToOpenSearchMapperTest {
 
   @Test
   void doesNotMapNormIfGegenstandlos() {
-    String xmlContent = NormTestDataBuilder.invalidBuilder().gegenstandslos().buildNormXml();
+    String xmlContent =
+        NormTestDataBuilder.builder().disableValidation().gegenstandslos().buildNormXml();
 
     assertThat(NormLdmlToOpenSearchMapper.parseNorm(xmlContent, Map.of(), false)).isEmpty();
   }
@@ -209,7 +213,7 @@ class NormLdmlToOpenSearchMapperTest {
     assertThat(norm.getNormsSortDate()).isEqualTo(LocalDate.parse("2050-07-31"));
   }
 
-  // ------------- PublishedIn tests
+  // ------------- PublishedIn tests ----------------
   private static Stream<Arguments> getTestPublishedIn() {
     return Stream.of(
         Arguments.of("1962-07-20", "bgbl-1", "s120", "BGBl I, 1962 120"),
@@ -226,8 +230,11 @@ class NormLdmlToOpenSearchMapperTest {
   void shouldCreatePublishedInFieldCorrectly(
       String datePublished, String name, String number, String expectedResult) {
 
+    // Note: The validation is disabled because null values
+    // are not xsd conform for these fields
     NormTestDataBuilder builder =
-        NormTestDataBuilder.invalidBuilder()
+        NormTestDataBuilder.builder()
+            .disableValidation()
             .frbrWork(
                 frbrWork -> {
                   frbrWork.setDatePublished(datePublished).setName(name).setNumber(number);
