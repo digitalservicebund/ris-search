@@ -58,6 +58,8 @@ const title = computed(() => {
     : undefined;
 });
 
+const secondaryTitle = computed(() => getCaselawSecondaryTitle(caseLaw.value));
+
 const searchBackLink = useSearchBackLink(DocumentKind.CaseLaw);
 
 const breadcrumbs = computed(() => [
@@ -113,6 +115,7 @@ const detailsSectionId = useId();
     name="document"
     :breadcrumbs
     :metadata="headerMetadata"
+    :secondary-title
     :title
     :views
   >

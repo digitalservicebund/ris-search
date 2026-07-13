@@ -6,6 +6,7 @@ import BreadcrumbPageLayout from "./breadcrumbPage.vue";
 
 const { titlePlaceholder = "Titelzeile nicht vorhanden", views } = defineProps<{
   title?: string;
+  secondaryTitle?: string;
   titlePlaceholder?: string;
   isEmptyDocument?: boolean;
   breadcrumbs?: BreadcrumbItem[];
@@ -26,6 +27,12 @@ const { titlePlaceholder = "Titelzeile nicht vorhanden", views } = defineProps<{
     <div>
       <!-- Header -->
       <div class="content-wrapper text-left">
+        <p
+          v-if="secondaryTitle"
+          class="typo-headline3-regular mb-8 wrap-break-word hyphens-auto"
+        >
+          {{ secondaryTitle }}
+        </p>
         <DocumentsDocumentTitle
           :title="title"
           :placeholder="titlePlaceholder"
