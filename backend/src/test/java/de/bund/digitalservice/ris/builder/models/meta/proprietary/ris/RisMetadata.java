@@ -22,6 +22,11 @@ public class RisMetadata {
   @XmlElement(name = "abkuerzung", namespace = RIS_NS)
   private RisAbkuerzung internalAbbreviation = RisAbkuerzung.builder().build();
 
+  /**
+   * Sets the RIS-internal abbreviation, or removes it if {@code null}.
+   *
+   * @param abbreviation the abbreviation value, or {@code null} to remove it
+   */
   public void setAbbreviation(String abbreviation) {
     if (abbreviation == null) {
       this.internalAbbreviation = null;
@@ -33,6 +38,11 @@ public class RisMetadata {
   @XmlElement(name = "inkraft", namespace = RIS_NS)
   private RisDate inForceDate;
 
+  /**
+   * Sets the in-force date element.
+   *
+   * @param date the in-force date value
+   */
   public void setInForce(String date) {
     this.inForceDate = RisDate.builder().date(date).build();
   }
@@ -40,6 +50,11 @@ public class RisMetadata {
   @XmlElement(name = "ausserkraft", namespace = RIS_NS)
   private RisDate outOfForceDate;
 
+  /**
+   * Sets the out-of-force date element.
+   *
+   * @param date the out-of-force date value
+   */
   public void setOutOfForce(String date) {
     this.outOfForceDate = RisDate.builder().date(date).build();
   }
@@ -51,6 +66,7 @@ public class RisMetadata {
   @XmlElement(namespace = RIS_NS)
   private EmptyElement bedingtesInkrafttreten;
 
+  /** Marks the norm as {@code bedingtesInkrafttreten}. */
   public void setBedingtesInkrafttreten() {
     this.bedingtesInkrafttreten = new EmptyElement();
   }
@@ -58,6 +74,7 @@ public class RisMetadata {
   @XmlElement(namespace = RIS_NS)
   private EmptyElement gegenstandslos;
 
+  /** Marks the norm as {@code gegenstandslos}. */
   public void setGegenstandslos() {
     this.gegenstandslos = new EmptyElement();
   }

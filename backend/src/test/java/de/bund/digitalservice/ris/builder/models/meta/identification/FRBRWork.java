@@ -69,6 +69,12 @@ public class FRBRWork extends BaseElement {
     return builder.build();
   }
 
+  /**
+   * Sets the {@code FRBRuri} element.
+   *
+   * @param workEli the work-level ELI value
+   * @return this {@link FRBRWork} for chaining
+   */
   public FRBRWork setUri(String workEli) {
     this.frbrUri =
         ValueLeaf.builder().eId("meta-n1_ident-n1_frbrwork-n1_frbruri-n1").value(workEli).build();
@@ -76,6 +82,12 @@ public class FRBRWork extends BaseElement {
     return this;
   }
 
+  /**
+   * Sets the {@code FRBRname} element.
+   *
+   * @param name the authority/name value
+   * @return this {@link FRBRWork} for chaining
+   */
   public FRBRWork setName(String name) {
     this.frbrName =
         ValueLeaf.builder().eId("meta-n1_ident-n1_frbrwork-n1_frbrname-n1").value(name).build();
@@ -83,6 +95,12 @@ public class FRBRWork extends BaseElement {
     return this;
   }
 
+  /**
+   * Sets the {@code FRBRnumber} element.
+   *
+   * @param number the document number value
+   * @return this {@link FRBRWork} for chaining
+   */
   public FRBRWork setNumber(String number) {
     this.frbrNumber =
         ValueLeaf.builder().eId("meta-n1_ident-n1_frbrwork-n1_frbrnumber-n1").value(number).build();
@@ -90,6 +108,12 @@ public class FRBRWork extends BaseElement {
     return this;
   }
 
+  /**
+   * Sets the {@code FRBRdate} element for the publication date.
+   *
+   * @param date the publication date value
+   * @return this {@link FRBRWork} for chaining
+   */
   public FRBRWork setDatePublished(String date) {
     this.frbrDate =
         DateLeaf.builder()
