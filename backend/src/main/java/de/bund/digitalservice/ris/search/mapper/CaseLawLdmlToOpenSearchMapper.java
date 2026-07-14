@@ -129,7 +129,7 @@ public class CaseLawLdmlToOpenSearchMapper {
     }
   }
 
-  private void validateCaseLawLdml(CaseLawLdml ldml) throws ValidationException {
+  private static void validateCaseLawLdml(CaseLawLdml ldml) throws ValidationException {
     if (ldml == null) throw new ValidationException("LDML root is null");
     validateNotNull(ldml.getJudgment(), "Judgment missing");
     Judgment judgment = ldml.getJudgment();
@@ -196,11 +196,11 @@ public class CaseLawLdmlToOpenSearchMapper {
         .toList();
   }
 
-  private String extractTitleLine(Meta meta) {
+  private static String extractTitleLine(Meta meta) {
     return extractDocumentaryShortTexts(meta)
         .map(DocumentaryShortTexts::getRisTitelzeile)
         .map(DocumentaryShortTexts.RisTitelzeile::getContent)
-        .map(this::sanitize)
+        .map(CaseLawLdmlToOpenSearchMapper::sanitize)
         .orElse(null);
   }
 
@@ -223,10 +223,10 @@ public class CaseLawLdmlToOpenSearchMapper {
   }
 
   private String extractContent(JudgmentBody judgmentBody, DomainTerm term) {
-    return judgmentBody.getContentByDomainTerm(term).map(this::sanitize).orElse(null);
+    return judgmentBody.getContentByDomainTerm(term).map(CaseLawLdmlToOpenSearchMapper::sanitize).orElse(null);
   }
 
-  private String sanitize(JaxbHtml html) {
+  private static String sanitize(JaxbHtml html) {
     if (html == null) {
       return null;
     }
