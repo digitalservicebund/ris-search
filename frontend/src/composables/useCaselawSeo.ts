@@ -14,18 +14,7 @@ export function useCaselawSeo({ caseLaw, document }: UseCaselawSeoInput) {
 }
 
 function buildTitle(caseLaw?: CaseLaw) {
-  const court = caseLaw?.courtName ?? "";
-  const documentType = caseLaw?.documentType ?? "Gerichtsentscheidung";
-  const formattedDate = dateFormattedDDMMYYYY(caseLaw?.decisionDate) ?? "";
-  const fileNumber = caseLaw?.fileNumbers?.[0] || "";
-
-  let title = court;
-
-  if (documentType) title += `${court ? ", " : ""}${documentType}`;
-  if (formattedDate) title += ` vom ${formattedDate}`;
-  if (fileNumber) title += ` - ${fileNumber}`;
-
-  return title;
+  return caseLaw?.headline || "Gerichtsentscheidung";
 }
 
 function buildDescription(

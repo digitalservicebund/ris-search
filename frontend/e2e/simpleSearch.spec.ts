@@ -211,9 +211,7 @@ test.describe("searching all documents", () => {
 
     // Caselaw Beschluss
     await expect(
-      page.getByText(
-        "Beispielentscheid — Beispielheader für den Beschlusstext.",
-      ),
+      page.getByText("Beispielheader für den Beschlusstext."),
     ).toBeVisible();
 
     // Literature
@@ -255,43 +253,60 @@ test.describe("searching legislation", () => {
     privateFeaturesEnabled,
   }) => {
     test.skip(!privateFeaturesEnabled);
-    await navigate(page, "/search?query=Fruchtverarbeitung&documentKind=N");
+    await navigate(
+      page,
+      "/search?query=Lebensmittel-+und+Bedarfsgegenständegesetzes&documentKind=N",
+    );
 
     const searchResult = getSearchResults(page).first();
 
     // Header
     await expect(searchResult).toHaveText(/Norm/);
-    await expect(searchResult).toHaveText(/03.10.1990/);
-
+    await expect(searchResult).toHaveText(/NormFrSaftErfrischV/);
+    await expect(searchResult).toHaveText(/29\.04\.2023/);
     await expect(searchResult).toHaveText(/Aktuell gültig/);
+    await expect(searchResult).toHaveText(
+      /Fruchtsaft- und Erfrischungsgetränkeverordnung/,
+    );
 
     // Result detail link
     await expect(
       searchResult.getByRole("link", {
-        name: "Fiktive Verordnung zur Ausbildung in der Fruchtverarbeitung",
+        name: "Fiktive Fruchtsaft- und Erfrischungsgetränkeverordnung zu Testzwecken",
       }),
     ).toBeVisible();
 
     // Highlights
     await expect(
       searchResult.getByRole("link", {
-        name: "§ 1 Anerkennung des fiktiven Ausbildungsberufs",
+        name: "Eingangsformel",
       }),
     ).toBeVisible();
     await expect(
       searchResult.getByText(
-        /Der Ausbildungsberuf in der Fruchtverarbeitung wird auf fiktiver Basis anerkannt und soll innovative Ansätze fördern./,
+        /Auf Grundlage des fiktiven Lebensmittel- und Bedarfsgegenständegesetzes in der Fassung vom 27\./,
       ),
     ).toBeVisible();
 
     await expect(
       searchResult.getByRole("link", {
-        name: "§ 3 Fiktives Ausbildungsberufsbild",
+        name: "§ 3 Kennzeichnung",
       }),
     ).toBeVisible();
     await expect(
       searchResult.getByText(
-        /Der Ausbildungsberuf in der Fruchtverarbeitung wird auf fiktiver Basis anerkannt und soll innovative Ansätze fördern./,
+        /Alle wesentlichen Informationen wie Inhaltsstoffe, Mindesthaltbarkeitsdatum und Herkunft sind/,
+      ),
+    ).toBeVisible();
+
+    await expect(
+      searchResult.getByRole("link", {
+        name: "Anlage T1 (zu § 4 Absatz 2, § 5 Absatz 1 bis 3, § 6 Absatz 2 bis 4 und § 8)",
+      }),
+    ).toBeVisible();
+    await expect(
+      searchResult.getByText(
+        /Werden Säfte aus Früchten mit Kernen, Samenkörnern und Schale hergestellt/,
       ),
     ).toBeVisible();
   });
@@ -470,11 +485,12 @@ test.describe("searching caselaw", () => {
     await expect(searchResult).toHaveText(/BPatG Teststadt/);
     await expect(searchResult).toHaveText(/09.04.2025/);
     await expect(searchResult).toHaveText(/34 X \(xyz\) 456\/78/);
+    await expect(searchResult).toHaveText(/Beispielentscheid/);
 
     // Result detail link
     await expect(
       searchResult.getByRole("link", {
-        name: "Beispielentscheid — Beispielheader für den Beschlusstext.",
+        name: "Beispielheader für den Beschlusstext.",
       }),
     ).toBeVisible();
 
@@ -495,7 +511,7 @@ test.describe("searching caselaw", () => {
     // Result detail link
     await page
       .getByRole("link", {
-        name: "Beispielentscheid — Beispielheader für den Beschlusstext.",
+        name: "Beispielheader für den Beschlusstext.",
       })
       .click();
 

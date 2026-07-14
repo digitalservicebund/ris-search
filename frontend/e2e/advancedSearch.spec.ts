@@ -353,6 +353,10 @@ test.describe("searching legislation", () => {
     // Header
     await expect(searchResult).toHaveText(/Norm/);
     await expect(searchResult).toHaveText(/FrSaftErfrischV/);
+    await expect(searchResult).toHaveText(/Aktuell gültig/);
+    await expect(searchResult).toHaveText(
+      /Fruchtsaft- und Erfrischungsgetränkeverordnung/,
+    );
 
     // Result detail link
     await expect(
@@ -518,11 +522,12 @@ test.describe("searching caselaw", () => {
     await expect(searchResult).toHaveText(/BPatG Teststadt/);
     await expect(searchResult).toHaveText(/09.04.2025/);
     await expect(searchResult).toHaveText(/34 X \(xyz\) 456\/78/);
+    await expect(searchResult).toHaveText(/Beispielentscheid/);
 
     // Result detail link
     await expect(
       searchResult.getByRole("link", {
-        name: "Beispielentscheid — Beispielheader für den Beschlusstext.",
+        name: "Beispielheader für den Beschlusstext.",
       }),
     ).toBeVisible();
 
@@ -548,7 +553,7 @@ test.describe("searching caselaw", () => {
     // Result detail link
     await page
       .getByRole("link", {
-        name: "Beispielentscheid — Beispielheader für den Beschlusstext.",
+        name: "Beispielheader für den Beschlusstext.",
       })
       .click();
 

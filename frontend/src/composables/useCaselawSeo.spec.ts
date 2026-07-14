@@ -27,94 +27,26 @@ describe("useCaselawSeo", () => {
   });
 
   describe("buildTitle", () => {
-    it("builds a full title from court, documentType, date, and fileNumber", () => {
+    it("uses the headline", () => {
       useCaselawSeo({
         caseLaw: {
-          courtName: "Bundesgerichtshof",
-          documentType: "Urteil",
-          decisionDate: "2023-06-15",
-          fileNumbers: ["VIII ZR 12/23"],
+          headline: "Caselaw short title",
         } as CaseLaw,
       });
 
       expect(useSeo).toHaveBeenCalledWith(
         expect.objectContaining({
-          title: "Bundesgerichtshof, Urteil vom 15.06.2023 - VIII ZR 12/23",
+          title: "Caselaw short title",
         }),
       );
     });
 
-    it("falls back to 'Gerichtsentscheidung' when documentType is missing", () => {
-      useCaselawSeo({
-        caseLaw: {
-          courtName: "Bundesgerichtshof",
-          decisionDate: "2023-06-15",
-          fileNumbers: ["VIII ZR 12/23"],
-        } as CaseLaw,
-      });
+    it("falls back to 'Gerichtsentscheidung' without a headline", () => {
+      useCaselawSeo({ caseLaw: {} as CaseLaw });
 
       expect(useSeo).toHaveBeenCalledWith(
         expect.objectContaining({
-          title:
-            "Bundesgerichtshof, Gerichtsentscheidung vom 15.06.2023 - VIII ZR 12/23",
-        }),
-      );
-    });
-
-    it("omits court when courtName is missing", () => {
-      useCaselawSeo({
-        caseLaw: {
-          documentType: "Urteil",
-          decisionDate: "2023-06-15",
-          fileNumbers: ["VIII ZR 12/23"],
-        } as CaseLaw,
-      });
-
-      expect(useSeo).toHaveBeenCalledWith(
-        expect.objectContaining({
-          title: "Urteil vom 15.06.2023 - VIII ZR 12/23",
-        }),
-      );
-    });
-
-    it("omits date when decisionDate is missing", () => {
-      useCaselawSeo({
-        caseLaw: {
-          courtName: "Bundesgerichtshof",
-          documentType: "Urteil",
-          fileNumbers: ["VIII ZR 12/23"],
-        } as CaseLaw,
-      });
-
-      expect(useSeo).toHaveBeenCalledWith(
-        expect.objectContaining({
-          title: "Bundesgerichtshof, Urteil - VIII ZR 12/23",
-        }),
-      );
-    });
-
-    it("omits fileNumber when fileNumbers is undefined", () => {
-      useCaselawSeo({
-        caseLaw: {
-          courtName: "Bundesgerichtshof",
-          documentType: "Urteil",
-          decisionDate: "2023-06-15",
-        } as CaseLaw,
-      });
-
-      expect(useSeo).toHaveBeenCalledWith(
-        expect.objectContaining({
-          title: "Bundesgerichtshof, Urteil vom 15.06.2023",
-        }),
-      );
-    });
-
-    it("uses first of multiple fileNumbers", () => {
-      useCaselawSeo({ caseLaw: { fileNumbers: ["X1", "X2"] } as CaseLaw });
-
-      expect(useSeo).toHaveBeenCalledWith(
-        expect.objectContaining({
-          title: "Gerichtsentscheidung - X1",
+          title: "Gerichtsentscheidung",
         }),
       );
     });

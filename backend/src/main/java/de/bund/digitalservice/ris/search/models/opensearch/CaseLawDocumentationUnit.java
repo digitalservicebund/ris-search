@@ -28,6 +28,7 @@ public record CaseLawDocumentationUnit(
     @Field(name = Fields.GROUNDS) String grounds,
     @Field(name = Fields.GUIDING_PRINCIPLE) String guidingPrinciple,
     @Field(name = Fields.HEADLINE) String headline,
+    @Field(name = Fields.TITLE_LINE) String titleLine,
     @Field(name = Fields.HEADNOTE) String headnote,
     @Field(name = Fields.OTHER_HEADNOTE) String otherHeadnote,
     @Field(name = Fields.OTHER_LONG_TEXT) String otherLongText,
@@ -84,6 +85,7 @@ public record CaseLawDocumentationUnit(
     public static final String GROUNDS = "grounds";
     public static final String GUIDING_PRINCIPLE = "guiding_principle";
     public static final String HEADLINE = "headline";
+    public static final String TITLE_LINE = "title_line";
     public static final String HEADNOTE = "headnote";
     public static final String OTHER_HEADNOTE = "other_headnote";
     public static final String OTHER_LONG_TEXT = "other_long_text";

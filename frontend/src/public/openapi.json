@@ -2745,7 +2745,7 @@
               "example" : "KakaoV 2003"
             },
             "alternateName" : {
-              "type" : "string",
+              "type" : [ "string", "null" ],
               "description" : "Amtliche Kurzüberschrift",
               "example" : "Kakaoverordnung"
             },
@@ -2763,7 +2763,7 @@
           }
         } ],
         "description" : "A legislation expression and references to its manifestations.",
-        "required" : [ "@id", "alternateName", "encoding", "exampleOfWork", "legislationIdentifier", "legislationLegalForce", "name", "temporalCoverage" ]
+        "required" : [ "@id", "encoding", "exampleOfWork", "legislationIdentifier", "legislationLegalForce", "name", "temporalCoverage" ]
       },
       "LegislationObjectSchema" : {
         "type" : "object",
@@ -2928,7 +2928,7 @@
             "example" : "KakaoV 2003"
           },
           "alternateName" : {
-            "type" : "string",
+            "type" : [ "string", "null" ],
             "description" : "Amtliche Kurzüberschrift",
             "example" : "Kakaoverordnung"
           },
@@ -2964,7 +2964,7 @@
             }
           }
         },
-        "required" : [ "@id", "alternateName", "encoding", "exampleOfWork", "hasPart", "legislationIdentifier", "legislationLegalForce", "name", "temporalCoverage" ]
+        "required" : [ "@id", "encoding", "exampleOfWork", "hasPart", "legislationIdentifier", "legislationLegalForce", "name", "temporalCoverage" ]
       },
       "StreamingResponseBody" : { },
       "AbstractDocumentSchema" : {
@@ -3114,6 +3114,10 @@
             "headline" : {
               "type" : "string",
               "example" : "Überschrift"
+            },
+            "titleLine" : {
+              "type" : "string",
+              "example" : "Titelzeile"
             },
             "otherLongText" : {
               "type" : "string",
@@ -3374,6 +3378,10 @@
           "headline" : {
             "type" : "string",
             "description" : "Überschrift"
+          },
+          "titleLine" : {
+            "type" : "string",
+            "description" : "Titelzeile"
           },
           "headnote" : {
             "type" : "string",

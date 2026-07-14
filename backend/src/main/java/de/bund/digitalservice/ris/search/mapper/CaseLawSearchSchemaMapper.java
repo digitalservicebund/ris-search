@@ -109,6 +109,7 @@ public class CaseLawSearchSchemaMapper {
         .documentNumber(doc.documentNumber())
         .ecli(doc.ecli())
         .headline(doc.headline())
+        .titleLine(doc.titleLine())
         .otherLongText(doc.otherLongText())
         .decisionDate(doc.decisionDate())
         .fileNumbers(doc.fileNumbers())

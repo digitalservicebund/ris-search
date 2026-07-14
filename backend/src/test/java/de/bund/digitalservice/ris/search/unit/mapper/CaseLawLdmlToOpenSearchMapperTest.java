@@ -34,6 +34,7 @@ class CaseLawLdmlToOpenSearchMapperTest {
     assertThat(caseLaw.ecli()).isEqualTo("testEcli");
     assertThat(caseLaw.guidingPrinciple()).isEqualTo("Example Leitsatz/GuidingPrinciple");
     assertThat(caseLaw.headline()).isEqualTo("the title");
+    assertThat(caseLaw.titleLine()).isEqualTo("Title");
     assertThat(caseLaw.decisionDate()).isEqualTo(LocalDate.of(2020, Month.JANUARY, 1));
     assertThat(caseLaw.tenor()).isEqualTo("Example Tenor/Tenor");
     assertThat(caseLaw.fileNumbers()).hasToString("[Test file number 1, Test file number 2]");
@@ -56,5 +57,16 @@ class CaseLawLdmlToOpenSearchMapperTest {
         .containsExactlyInAnyOrder(
             "ensuing decision file number, ensuing decision court type",
             "ensuing decision file number, ensuing decision court type");
+  }
+
+  @Test
+  void shouldMapTitleLineWithoutShortTitle() {
+    String titleLineOnlyLdml =
+        testCaseLawLdml.replaceAll("(?s)\\s*<akn:p>Kurztitel:.*?</akn:shortTitle>\\s*</akn:p>", "");
+
+    CaseLawDocumentationUnit caseLaw = mapper.fromString(titleLineOnlyLdml);
+
+    assertThat(caseLaw.headline()).isNull();
+    assertThat(caseLaw.titleLine()).isEqualTo("Title");
   }
 }

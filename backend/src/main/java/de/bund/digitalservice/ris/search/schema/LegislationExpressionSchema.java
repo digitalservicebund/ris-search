@@ -50,10 +50,11 @@ public record LegislationExpressionSchema(
             example = "KakaoV 2003",
             description = "Amtliche Buchstabenabkürzung, if it exists. Otherwise ris-abkuerzung.")
         String abbreviation,
-    @Schema(
+    @Nullable
+        @Schema(
             example = "Kakaoverordnung",
             description = "Amtliche Kurzüberschrift",
-            requiredMode = Schema.RequiredMode.REQUIRED)
+            nullable = true)
         String alternateName,
     @Schema(
             description = "The work the expression is based on",

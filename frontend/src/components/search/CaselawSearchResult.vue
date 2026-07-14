@@ -44,7 +44,9 @@ const headline = computed(() =>
   ),
 );
 
-const decisionName = computed(() => searchResult.item.decisionName?.at(0));
+const secondaryTitle = computed(() =>
+  getCaselawSecondaryTitle(searchResult.item),
+);
 
 const resultTypeId = useId();
 
@@ -105,17 +107,18 @@ function trackResultClick() {
 
 <template>
   <div class="flex flex-col gap-8 hyphens-auto">
-    <SearchResultHeader :icon="GavelIcon" :items="headerItems" />
+    <SearchResultHeader
+      :icon="GavelIcon"
+      :items="headerItems"
+      :secondary-item="secondaryTitle"
+    />
     <NuxtLink
       :to="detailPageRoute"
       :aria-describedby="resultTypeId"
       class="typo-headline-searchresult"
       @click="trackResultClick()"
     >
-      <h2>
-        <span v-if="!!decisionName"> {{ decisionName }} — </span>
-        <span v-html="headline" />
-      </h2>
+      <h2><span v-html="headline" /></h2>
     </NuxtLink>
 
     <div v-if="previewSections.length" class="flex w-full flex-col gap-6">

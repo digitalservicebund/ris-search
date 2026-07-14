@@ -32,6 +32,21 @@ describe("document", () => {
     );
   });
 
+  it("renders an optional secondary title above the main title", async () => {
+    await renderSuspended(DocumentLayout, {
+      props: {
+        secondaryTitle: "Secondary title",
+        title: "Title",
+        views: defaultViews,
+      },
+    });
+
+    expect(screen.getByText("Secondary title")).toBeVisible();
+    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
+      "Title",
+    );
+  });
+
   it("renders title placeholder if no title provided", async () => {
     await renderSuspended(DocumentLayout, {
       props: {

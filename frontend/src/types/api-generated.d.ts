@@ -1165,7 +1165,7 @@ export interface components {
        * @example
        *   Kakaoverordnung;
        */
-      alternateName: string;
+      alternateName?: string | null;
       /**
        * Whether the legislation expression is currently in force.
        *
@@ -1341,7 +1341,7 @@ export interface components {
        * @example
        *   Kakaoverordnung;
        */
-      alternateName: string;
+      alternateName?: string | null;
       /** The work the expression is based on */
       exampleOfWork: components["schemas"]["LegislationWorkSchema"];
       /**
@@ -1488,6 +1488,11 @@ export interface components {
        *   Überschrift;
        */
       headline?: string;
+      /**
+       * @example
+       *   Titelzeile;
+       */
+      titleLine?: string;
       /**
        * @example
        *   Sonstiger Langtext
@@ -1676,6 +1681,8 @@ export interface components {
       guidingPrinciple?: string;
       /** Überschrift */
       headline?: string;
+      /** Titelzeile */
+      titleLine?: string;
       /** Orientierungssatz */
       headnote?: string;
       /** Sonstiger Orientierungssatz */

@@ -86,6 +86,7 @@ public class CaseLawLdmlToOpenSearchMapper {
         .documentationOffice(risMeta.getRisDokumentationsstelle())
         .legalEffect(risMeta.getRisRechtskraft())
         .headline(sanitize(judgment.getHeader().findShortTitle()))
+        .titleLine(extractTitleLine(meta))
         .guidingPrinciple(extractContent(judgmentBody, DomainTerm.GUIDING_PRINCIPLE))
         .headnote(sanitize(extractHeadnote(meta).orElse(null)))
         .otherHeadnote(sanitize(extractOtherHeadnote(meta).orElse(null)))
@@ -153,8 +154,11 @@ public class CaseLawLdmlToOpenSearchMapper {
     validateNotNull(
         meta.getProprietary().getRisMeta().getRisGericht().getGerichtstyp(), "CourtType missing");
 
-    if (judgment.getHeader() == null || judgment.getHeader().findShortTitle() == null) {
-      throw new ValidationException("Header or Short Title is missing");
+    boolean hasShortTitle =
+        judgment.getHeader() != null && judgment.getHeader().findShortTitle() != null;
+    boolean hasTitleLine = extractTitleLine(meta) != null;
+    if (!hasShortTitle && !hasTitleLine) {
+      throw new ValidationException("Short Title or Title Line is missing");
     }
   }
 
@@ -192,6 +196,14 @@ public class CaseLawLdmlToOpenSearchMapper {
         .toList();
   }
 
+  private static String extractTitleLine(Meta meta) {
+    return extractDocumentaryShortTexts(meta)
+        .map(DocumentaryShortTexts::getRisTitelzeile)
+        .map(DocumentaryShortTexts.RisTitelzeile::getContent)
+        .map(CaseLawLdmlToOpenSearchMapper::sanitize)
+        .orElse(null);
+  }
+
   private static List<String> getLinkedJudgements(
       Meta meta, Function<OtherReferences, List<LinkedJudgement>> extractor) {
     return Optional.ofNullable(meta.getAnalysis())
@@ -211,10 +223,13 @@ public class CaseLawLdmlToOpenSearchMapper {
   }
 
   private String extractContent(JudgmentBody judgmentBody, DomainTerm term) {
-    return judgmentBody.getContentByDomainTerm(term).map(this::sanitize).orElse(null);
+    return judgmentBody
+        .getContentByDomainTerm(term)
+        .map(CaseLawLdmlToOpenSearchMapper::sanitize)
+        .orElse(null);
   }
 
-  private String sanitize(JaxbHtml html) {
+  private static String sanitize(JaxbHtml html) {
     if (html == null) {
       return null;
     }

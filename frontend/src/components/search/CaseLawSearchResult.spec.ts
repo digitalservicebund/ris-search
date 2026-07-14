@@ -34,6 +34,7 @@ const searchResult: SearchResult<CaseLaw> = {
     decisionDate: "2023-01-01",
     fileNumbers: ["123", "testing highlighted file number is here"],
     decisionName: ["Decision Name"],
+    titleLine: "Title line",
     documentType: "Document Type",
   },
   textMatches: [],
@@ -60,11 +61,10 @@ function renderComponent({
 }
 
 describe("CaselawSearchResult", () => {
-  it("renders the expected title", () => {
+  it("renders the expected title and secondary header row", () => {
     renderComponent({});
-    expect(screen.getByRole("link")).toHaveTextContent(
-      "Decision Name — Test Headline",
-    );
+    expect(screen.getByRole("link")).toHaveTextContent("Test Headline");
+    expect(screen.getByText("Decision Name")).toBeVisible();
   });
 
   it("has accessible description linking to result type", () => {
@@ -73,7 +73,7 @@ describe("CaselawSearchResult", () => {
       screen.getByRole("link", {
         description: "Document Type",
       }),
-    ).toHaveTextContent("Decision Name — Test Headline");
+    ).toHaveTextContent("Test Headline");
   });
 
   it("displays highlighted headline", () => {
@@ -165,7 +165,7 @@ describe("CaselawSearchResult", () => {
     renderComponent({ textMatches: [] });
 
     expect(
-      screen.getByRole("link", { name: "Decision Name —Test Headline" }),
+      screen.getByRole("link", { name: "Test Headline" }),
     ).toBeInTheDocument();
   });
 
@@ -178,6 +178,32 @@ describe("CaselawSearchResult", () => {
     renderComponent(searchResultWithoutTitle);
 
     expect(screen.getByText("Titelzeile nicht vorhanden")).toBeInTheDocument();
+  });
+
+  it("uses Titlezeile when no decision name exists", () => {
+    renderComponent({
+      item: { ...searchResult.item, decisionName: [] },
+    });
+
+    expect(screen.getByText("Title line")).toBeVisible();
+  });
+
+  it("does not display a secondary header row without decision name or Titlezeile", () => {
+    renderComponent({
+      item: { ...searchResult.item, decisionName: [], titleLine: undefined },
+    });
+
+    expect(screen.queryByText("Decision Name")).not.toBeInTheDocument();
+    expect(screen.queryByText("Title line")).not.toBeInTheDocument();
+  });
+
+  it("truncates the secondary header row to 90 characters", () => {
+    const longDecisionName = "a".repeat(100);
+    renderComponent({
+      item: { ...searchResult.item, decisionName: [longDecisionName] },
+    });
+
+    expect(screen.getByText("a".repeat(90))).toBeVisible();
   });
 
   describe("fields when only one text match is returned", () => {
@@ -413,7 +439,7 @@ describe("CaselawSearchResult", () => {
 
     renderComponent({});
 
-    const link = screen.getByRole("link", { name: /Decision Name/ });
+    const link = screen.getByRole("link", { name: "Test Headline" });
     expect(link).toHaveAttribute(
       "data-from",
       "/search?query=BGB&documentKind=R&pageIndex=2",
