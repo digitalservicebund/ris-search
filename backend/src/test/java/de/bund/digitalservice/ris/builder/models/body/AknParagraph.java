@@ -27,7 +27,7 @@ public class AknParagraph extends BaseElement {
     String newEId = parentEId + "_abs-z" + eIdNumber;
     return AknParagraph.builder()
         .eId(newEId)
-        .num(AknNum.builder().eId(newEId + "_bezeichnung-n1").value(num).build())
+        .num(new AknNum(newEId, num))
         .content(Content.withText(paragraphText, newEId))
         .build();
   }

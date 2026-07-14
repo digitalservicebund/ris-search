@@ -42,7 +42,7 @@ public class Chapter extends BaseElement implements BodyElement {
    * @return this chapter for chaining
    */
   public Chapter addNum(String num) {
-    this.num = AknNum.builder().eId(eId + "_bezeichnung-n1").value(num).build();
+    this.num = new AknNum(eId, num);
 
     return this;
   }

@@ -5,6 +5,7 @@ import de.bund.digitalservice.ris.builder.models.AkomaNtoso;
 import de.bund.digitalservice.ris.builder.models.Conclusions;
 import de.bund.digitalservice.ris.builder.models.Doc;
 import de.bund.digitalservice.ris.builder.models.attachment.Attachments;
+import de.bund.digitalservice.ris.builder.models.body.AknNum;
 import de.bund.digitalservice.ris.builder.models.body.Article;
 import de.bund.digitalservice.ris.builder.models.body.Body;
 import de.bund.digitalservice.ris.builder.models.body.BodyElement;
@@ -424,7 +425,11 @@ public class NormTestDataBuilder {
             .getTemporalData()
             .addTemporalGroup(inForceEventEId, outOfForceEventEId);
 
-    return Article.builder().eId(eId).period("#" + temporalGroupEId).build().addNum(num);
+    return Article.builder()
+        .eId(eId)
+        .period("#" + temporalGroupEId)
+        .num(new AknNum(eId, num))
+        .build();
   }
 
   /**

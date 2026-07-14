@@ -38,18 +38,6 @@ public class Article extends BaseElement implements BodyElement {
   private List<AknParagraph> paragraphs = new ArrayList<>();
 
   /**
-   * Sets the article's number.
-   *
-   * @param num the article number, e.g. "§ 1"
-   * @return this article for chaining
-   */
-  public Article addNum(String num) {
-    this.num = AknNum.builder().eId(eId + "_bezeichnung-n1").value(num).build();
-
-    return this;
-  }
-
-  /**
    * Sets the article's heading, optionally with an authorial note.
    *
    * @param text the heading text
