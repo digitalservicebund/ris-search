@@ -54,6 +54,14 @@ public class FRBRManifestation extends BaseElement {
         .build();
   }
 
+  public void setThis(String manifestationEli) {
+    this.frbrThis =
+        ValueLeaf.builder()
+            .eId("meta-n1_ident-n1_frbrmanifestation-n1_frbrthis-n1")
+            .value(manifestationEli)
+            .build();
+  }
+
   @Builder.Default @XmlAttribute private String eId = "meta-n1_ident-n1_frbrmanifestation-n1";
 
   @Builder.Default

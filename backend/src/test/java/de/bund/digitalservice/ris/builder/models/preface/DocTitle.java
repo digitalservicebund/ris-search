@@ -9,12 +9,14 @@ import java.util.List;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /** Represents the {@code akn:docTitle} element, the norm's official title (Langtitel). */
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Getter
 @XmlRootElement(namespace = NormTestDataBuilder.AKN_NS)
 public class DocTitle {
 

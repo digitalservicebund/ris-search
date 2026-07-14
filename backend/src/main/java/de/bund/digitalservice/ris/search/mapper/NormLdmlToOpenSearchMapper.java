@@ -87,7 +87,7 @@ public class NormLdmlToOpenSearchMapper {
       AKN_ACT + "akn:meta/akn:proprietary/ris:legalDocML.de_metadaten/";
   private static final String X_PATH_ENTRY_INTO_FORCE_DATE = AKN_RIS_METADATA + "ris:inkraft/@date";
   private static final String X_PATH_EXPIRY_DATE = AKN_RIS_METADATA + "ris:ausserkraft/@date";
-  private static final String X_PATH_GEGENSTANDSLOS = AKN_RIS_METADATA + "ris:gegenstandlos";
+  private static final String X_PATH_GEGENSTANDSLOS = AKN_RIS_METADATA + "ris:gegenstandslos";
   private static final String X_PATH_BEDINGTES_INKRAFTTRETEN =
       AKN_RIS_METADATA + "ris:bedingtesInkrafttreten";
   private static final String X_PATH_FULL_CITATION = AKN_RIS_METADATA + "ris:vollzitat";

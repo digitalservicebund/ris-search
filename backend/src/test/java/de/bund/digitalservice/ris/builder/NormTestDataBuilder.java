@@ -13,11 +13,13 @@ import de.bund.digitalservice.ris.builder.models.body.Section;
 import de.bund.digitalservice.ris.builder.models.common.Block;
 import de.bund.digitalservice.ris.builder.models.common.Inline;
 import de.bund.digitalservice.ris.builder.models.meta.Meta;
+import de.bund.digitalservice.ris.builder.models.meta.identification.FRBRWork;
 import de.bund.digitalservice.ris.builder.models.meta.identification.Identification;
 import de.bund.digitalservice.ris.builder.models.meta.lifecycle.Lifecycle;
 import de.bund.digitalservice.ris.builder.models.preamble.Preamble;
 import de.bund.digitalservice.ris.builder.models.preamble.Toc;
 import de.bund.digitalservice.ris.builder.models.preface.DocTitle;
+import de.bund.digitalservice.ris.builder.models.preface.LongTitle;
 import de.bund.digitalservice.ris.builder.models.preface.Preface;
 import de.bund.digitalservice.ris.builder.models.preface.ShortTitle;
 import de.bund.digitalservice.ris.utils.NormXmlValidator;
@@ -70,13 +72,26 @@ public class NormTestDataBuilder {
 
   private final AkomaNtoso document = new AkomaNtoso();
   private final Map<String, AkomaNtoso> attachmentsDocs = new HashMap<>();
+  private boolean enforceValidation;
 
-  private NormTestDataBuilder() {
+  private NormTestDataBuilder(boolean enforceValidation) {
+    this.enforceValidation = enforceValidation;
     this.document.setAct(Act.builder().meta(Meta.builder().build()).build());
   }
 
   public static NormTestDataBuilder builder() {
-    return new NormTestDataBuilder();
+    return new NormTestDataBuilder(true);
+  }
+
+  /**
+   * Disables schema validation on the generated xml. ONLY use this for test cases that require
+   * invalid xml. E.g. to test that extraction fails on certain elements missing.
+   *
+   * @return builder
+   */
+  public NormTestDataBuilder disableValidation() {
+    enforceValidation = false;
+    return this;
   }
 
   /**
@@ -92,18 +107,82 @@ public class NormTestDataBuilder {
   }
 
   /**
+   * Sets the FRBRWork's FRBRUri field
+   *
+   * @param workEli the work ELI, e.g. "eli/bund/bgbl-1/1991/s102/"
+   * @return this builder for chaining
+   */
+  public NormTestDataBuilder workEli(String workEli) {
+    this.document.getAct().getMeta().getIdentification().getFrbrWork().setUri(workEli);
+    return this;
+  }
+
+  /**
+   * Sets the FRBRExpression's FRBRUri field
+   *
+   * @param expressionEli the expression ELI, e.g. "eli/bund/bgbl-1/1991/s102/2025-11-18/1/deu"
+   * @return this builder for chaining
+   */
+  public NormTestDataBuilder expressionEli(String expressionEli) {
+    this.document.getAct().getMeta().getIdentification().getFrbrExpression().setUri(expressionEli);
+    return this;
+  }
+
+  /**
+   * Sets the FRBRManifestation's FRBRUri field
+   *
+   * @param manifestationEli the manifestation ELI, e.g.
+   *     "eli/bund/bgbl-1/1991/s102/2025-11-18/1/deu/2025-11-26/regelungstext-verkuendung-1.xml"
+   * @return this builder for chaining
+   */
+  public NormTestDataBuilder manifestationEli(String manifestationEli) {
+    this.document
+        .getAct()
+        .getMeta()
+        .getIdentification()
+        .getFrbrManifestation()
+        .setThis(manifestationEli);
+    return this;
+  }
+
+  /**
+   * Can be used to make individual settings on the @FRBRWork
+   *
+   * @param workConsumer that provides the document FRBRWork object
+   * @return this builder for chaining
+   */
+  public NormTestDataBuilder frbrWork(Consumer<FRBRWork> workConsumer) {
+    FRBRWork work = this.document.getAct().getMeta().getIdentification().getFrbrWork();
+    workConsumer.accept(work);
+    return this;
+  }
+
+  /**
    * Sets the norm's official title (Langtitel) shown in the preface.
    *
    * @param officialTitle the official title text
-   * @param authorialNote optional authorial note attached to the title, or {@code null} for none
    * @return this builder for chaining
    */
-  public NormTestDataBuilder officialTitle(String officialTitle, String authorialNote) {
-    this.document
-        .getAct()
-        .getPreface()
-        .getLongTitle()
-        .setOfficialTitle(officialTitle, authorialNote);
+  public NormTestDataBuilder officialTitle(String officialTitle) {
+    this.officialTitle(officialTitle, null);
+
+    return this;
+  }
+
+  /**
+   * Sets the norm's official title (Langtitel) shown in the preface and provides the title for
+   * further actions.
+   *
+   * @param officialTitle the official title text
+   * @param longTitleConsumer callback which provided the LongTitle object for fruther actions
+   * @return this builder for chaining
+   */
+  public NormTestDataBuilder officialTitle(
+      String officialTitle, Consumer<LongTitle> longTitleConsumer) {
+    LongTitle longTitle = this.document.getAct().getPreface().getLongTitle();
+
+    longTitle.setOfficialTitle(officialTitle);
+    if (longTitleConsumer != null) longTitleConsumer.accept(longTitle);
 
     return this;
   }
@@ -216,6 +295,26 @@ public class NormTestDataBuilder {
    */
   public NormTestDataBuilder fullCitation(String citation) {
     this.document.getAct().getMeta().getProprietary().getRisMetadata().setFullCitation(citation);
+    return this;
+  }
+
+  /**
+   * Adds a ris metadata ({@code ris:bedingtesInkrafttreten}) element.
+   *
+   * @return this builder for chaining
+   */
+  public NormTestDataBuilder bedingtesInkrafttreten() {
+    this.document.getAct().getMeta().getProprietary().getRisMetadata().setBedingtesInkrafttreten();
+    return this;
+  }
+
+  /**
+   * Adds a ris metadata ({@code ris:gegenstandslos}) element.
+   *
+   * @return this builder for chaining
+   */
+  public NormTestDataBuilder gegenstandslos() {
+    this.document.getAct().getMeta().getProprietary().getRisMetadata().setGegenstandslos();
     return this;
   }
 
@@ -481,7 +580,9 @@ public class NormTestDataBuilder {
       StringWriter writer = new StringWriter();
       marshaller.marshal(document, writer);
       String xml = writer.toString();
-      NormXmlValidator.validateContent(xml, docType);
+      if (enforceValidation) {
+        NormXmlValidator.validateContent(xml, docType);
+      }
 
       return xml;
     } catch (Exception e) {

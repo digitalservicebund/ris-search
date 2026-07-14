@@ -43,18 +43,23 @@ public class LongTitle extends BaseElement {
           .build();
 
   /**
-   * Sets the official title, optionally with an authorial note, and rebuilds the paragraph.
+   * Sets the official title and rebuilds the paragraph.
    *
    * @param officialTitle the official title text
+   */
+  public void setOfficialTitle(String officialTitle) {
+    this.officialTitle =
+        DocTitle.builder().children(new ArrayList<>(List.of(officialTitle))).build();
+    setTitlesAndAbbreviation();
+  }
+
+  /**
+   * Adds an authorial note to the official title
+   *
    * @param authorialNote optional authorial note text, or {@code null} for none
    */
-  public void setOfficialTitle(String officialTitle, String authorialNote) {
-    List<Object> titleElements = new ArrayList<>(List.of(officialTitle));
-    if (authorialNote != null) {
-      titleElements.add(AuthorialNote.withText(authorialNote));
-    }
-
-    this.officialTitle = DocTitle.builder().children(titleElements).build();
+  public void addAuthorialNote(String authorialNote) {
+    this.officialTitle.getChildren().add(AuthorialNote.withText(authorialNote));
     setTitlesAndAbbreviation();
   }
 
