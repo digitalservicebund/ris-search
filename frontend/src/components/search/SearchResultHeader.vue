@@ -30,7 +30,7 @@ const itemsWithContent = computed(() => items.filter((i) => !!i.value));
           <span v-else :id="item.id">{{ item.value }}</span>
         </template>
       </p>
-      <p v-if="secondaryItem" class="typo-label2-regular mt-4 hyphens-auto">
+      <p v-if="secondaryItem" class="typo-label1-regular mt-8 hyphens-auto">
         {{ secondaryItem }}
       </p>
     </div>
