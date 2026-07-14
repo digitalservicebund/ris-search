@@ -223,7 +223,10 @@ public class CaseLawLdmlToOpenSearchMapper {
   }
 
   private String extractContent(JudgmentBody judgmentBody, DomainTerm term) {
-    return judgmentBody.getContentByDomainTerm(term).map(CaseLawLdmlToOpenSearchMapper::sanitize).orElse(null);
+    return judgmentBody
+        .getContentByDomainTerm(term)
+        .map(CaseLawLdmlToOpenSearchMapper::sanitize)
+        .orElse(null);
   }
 
   private static String sanitize(JaxbHtml html) {
