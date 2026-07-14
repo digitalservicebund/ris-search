@@ -15,11 +15,9 @@ const itemsWithContent = computed(() => items.filter((i) => !!i.value));
 </script>
 
 <template>
-  <div class="flex items-start gap-8">
+  <div class="flex items-center gap-8">
     <div>
-      <p
-        class="typo-label2-regular content-center space-x-8 wrap-anywhere hyphens-auto"
-      >
+      <p class="typo-label2-regular content-center space-x-8 hyphens-auto">
         <span
           v-if="icon"
           class="inline-flex h-lh items-center align-text-bottom"
@@ -32,10 +30,7 @@ const itemsWithContent = computed(() => items.filter((i) => !!i.value));
           <span v-else :id="item.id">{{ item.value }}</span>
         </template>
       </p>
-      <p
-        v-if="secondaryItem"
-        class="typo-label2-regular mt-4 wrap-anywhere hyphens-auto"
-      >
+      <p v-if="secondaryItem" class="typo-label2-regular mt-4 hyphens-auto">
         {{ secondaryItem }}
       </p>
     </div>
