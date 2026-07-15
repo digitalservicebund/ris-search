@@ -17,6 +17,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
@@ -52,7 +54,7 @@ class NormsServiceTest extends ContainersIntegrationBase {
             .datePublished(LocalDate.of(2022, Month.JANUARY, 1))
             .officialShortTitle("latest short title")
             .normsDate(LocalDate.of(2022, Month.JANUARY, 1))
-            .officialAbbreviation("latest abbr")
+            .officialAbbreviation("latest_abbr")
             .workEli("eli/bund/bgbl-1/2020/s1126")
             .build();
 
@@ -68,7 +70,7 @@ class NormsServiceTest extends ContainersIntegrationBase {
             .datePublished(LocalDate.of(2020, Month.JANUARY, 1))
             .officialShortTitle("oldest short title")
             .normsDate(LocalDate.of(2020, Month.JANUARY, 1))
-            .officialAbbreviation("oldest abbr")
+            .officialAbbreviation("oldest_abbr")
             .workEli("eli/bund/bgbl-1/2020/s1126")
             .build();
     repository.save(olderExpression);
@@ -141,5 +143,42 @@ class NormsServiceTest extends ContainersIntegrationBase {
 
     Article firstArticle = (Article) searchHits.getFirst().getContent();
     assertThat(firstArticle.getName()).contains(articleName);
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {"FooBar 2009", "foobar 2009", "foobar_2009"})
+  void shouldFilterNormByAbbreviation(String abbreviationParam) {
+    repository.save(Norm.builder().officialAbbreviation("FooBar 2009").build());
+
+    repository.save(Norm.builder().officialAbbreviation("FooBar").build());
+
+    repository.save(Norm.builder().officialAbbreviation("BarBaz 2009").build());
+
+    NormsSearchParams params = new NormsSearchParams();
+    params.setAbbreviation(abbreviationParam);
+    var result =
+        normsService.simpleSearchNorms(new UniversalSearchParams(), params, Pageable.unpaged());
+
+    assertThat(result).hasSize(1);
+    assertThat(
+            result
+                .getSearchHits()
+                .getSearchHits()
+                .getFirst()
+                .getContent()
+                .getOfficialAbbreviation())
+        .isEqualTo("FooBar 2009");
+  }
+
+  @Test
+  void shouldFilterOnlyOnFullKeywordMatchesByAbbreviation() {
+    repository.save(Norm.builder().officialAbbreviation("FooBar Baz 2009").build());
+
+    NormsSearchParams params = new NormsSearchParams();
+    params.setAbbreviation("Baz");
+    var result =
+        normsService.simpleSearchNorms(new UniversalSearchParams(), params, Pageable.unpaged());
+
+    assertThat(result).isEmpty();
   }
 }
