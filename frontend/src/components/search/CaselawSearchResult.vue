@@ -44,9 +44,10 @@ const headline = computed(() =>
   ),
 );
 
-const secondaryTitle = computed(() =>
-  getCaselawSecondaryTitle(searchResult.item),
-);
+const secondaryTitle = computed<SearchResultHeaderItem | undefined>(() => {
+  const title = getCaselawSecondaryTitle(searchResult.item);
+  return title ? { value: title } : undefined;
+});
 
 const resultTypeId = useId();
 
