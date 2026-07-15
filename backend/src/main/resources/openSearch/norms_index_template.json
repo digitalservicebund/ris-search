@@ -93,7 +93,7 @@
           "fields": {
             "keyword": {
               "type": "keyword",
-              "normalizer": "normalized_keyword"
+              "normalizer": "norm_abbreviation_normalized_keyword"
             }
           }
         },

@@ -366,6 +366,43 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
   }
 
   @Test
+  @DisplayName("Should allow filtering norms by abbreviation")
+  void shouldReturnNormsFilteringByAbbreviation() throws Exception {
+    final String uri = ApiConfig.Paths.LEGISLATION + "?abbreviation=Teg";
+    mockMvc
+        .perform(get(uri).contentType(MediaType.APPLICATION_JSON))
+        .andExpectAll(
+            status().isOk(),
+            jsonPath("$.member", hasSize(1)),
+            jsonPath("$.member[0]['item'].abbreviation", is("TeG")));
+  }
+
+  @Test
+  @DisplayName("Should allow filtering norms by abbreviation and most relevantOn date")
+  void shouldReturnNormsFilteringByAbbreviationAndMostRelevantOn() throws Exception {
+    // Note a Norm with the same abbreviation but different date is
+    // already added via the ContainerIntegrationBase class
+    LocalDate date = LocalDate.of(2025, Month.NOVEMBER, 3);
+    normsRepository.save(
+        Norm.builder()
+            .id("eli/2024/teg/4/exp")
+            .officialAbbreviation("TeG")
+            .officialTitle("This is it")
+            .entryIntoForceDate(date)
+            .expiryDate(date)
+            .build());
+
+    final String uri = ApiConfig.Paths.LEGISLATION + "?abbreviation=Teg&mostRelevantOn=2025-11-03";
+    mockMvc
+        .perform(get(uri).contentType(MediaType.APPLICATION_JSON))
+        .andExpectAll(
+            status().isOk(),
+            jsonPath("$.member", hasSize(1)),
+            jsonPath("$.member[0]['item'].abbreviation", is("TeG")),
+            jsonPath("$.member[0]['item'].name", is("This is it")));
+  }
+
+  @Test
   @DisplayName("Should find a norm when searching for its expression ELI explicitly")
   void shouldFindNormByExpressionEli() throws Exception {
     final String eli = NormsTestData.allNorms.getFirst().getExpressionEli();

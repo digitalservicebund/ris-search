@@ -1,6 +1,7 @@
 package de.bund.digitalservice.ris.search.service;
 
 import static org.opensearch.index.query.QueryBuilders.matchQuery;
+import static org.opensearch.index.query.QueryBuilders.termQuery;
 
 import de.bund.digitalservice.ris.search.models.api.parameters.NormsSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
@@ -47,10 +48,18 @@ public class NormSimpleSearchType implements SimpleSearchType {
     if (normsSearchParams == null) {
       return;
     }
+
     if (normsSearchParams.getEli() != null) {
       query.must(
           matchQuery(Norm.Fields.WORK_ELI, normsSearchParams.getEli()).operator(Operator.AND));
     }
+
+    if (normsSearchParams.getAbbreviation() != null) {
+      query.must(
+          termQuery(
+              Norm.Fields.OFFICIAL_ABBREVIATION_KEYWORD, normsSearchParams.getAbbreviation()));
+    }
+
     if (normsSearchParams.getMostRelevantOn() != null) {
       BoolQueryBuilder isNotNorm =
           QueryBuilders.boolQuery().mustNot(QueryBuilders.existsQuery(Norm.Fields.EXPRESSION_ELI));

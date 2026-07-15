@@ -113,12 +113,22 @@
             "type": "pattern_replace",
             "pattern": "\\u20AC",
             "replacement": "eur"
+          },
+          "whitespace_to_underscore": {
+            "type": "pattern_replace",
+            "pattern": "\\s+",
+            "replacement": "_"
           }
         },
         "normalizer": {
           "normalized_keyword": {
             "type": "custom",
             "char_filter": [],
+            "filter": ["asciifolding", "lowercase"]
+          },
+          "norm_abbreviation_normalized_keyword": {
+            "type": "custom",
+            "char_filter": ["whitespace_to_underscore"],
             "filter": ["asciifolding", "lowercase"]
           }
         }
