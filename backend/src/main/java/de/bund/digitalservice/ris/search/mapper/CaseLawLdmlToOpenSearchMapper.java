@@ -154,11 +154,8 @@ public class CaseLawLdmlToOpenSearchMapper {
     validateNotNull(
         meta.getProprietary().getRisMeta().getRisGericht().getGerichtstyp(), "CourtType missing");
 
-    boolean hasShortTitle =
-        judgment.getHeader() != null && judgment.getHeader().findShortTitle() != null;
-    boolean hasTitleLine = extractTitleLine(meta) != null;
-    if (!hasShortTitle && !hasTitleLine) {
-      throw new ValidationException("Short Title or Title Line is missing");
+    if (judgment.getHeader() == null || judgment.getHeader().findShortTitle() == null) {
+      throw new ValidationException("Header or Short Title is missing");
     }
   }
 

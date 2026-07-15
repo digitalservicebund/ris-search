@@ -58,15 +58,4 @@ class CaseLawLdmlToOpenSearchMapperTest {
             "ensuing decision file number, ensuing decision court type",
             "ensuing decision file number, ensuing decision court type");
   }
-
-  @Test
-  void shouldMapTitleLineWithoutShortTitle() {
-    String titleLineOnlyLdml =
-        testCaseLawLdml.replaceAll("(?s)\\s*<akn:p>Kurztitel:.*?</akn:shortTitle>\\s*</akn:p>", "");
-
-    CaseLawDocumentationUnit caseLaw = mapper.fromString(titleLineOnlyLdml);
-
-    assertThat(caseLaw.headline()).isNull();
-    assertThat(caseLaw.titleLine()).isEqualTo("Title");
-  }
 }
