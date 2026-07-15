@@ -144,7 +144,7 @@ public class CaseLawLdmlToOpenSearchMapper {
     validateNotNull(work.getFrbrThis(), "FrbrThis missing");
 
     if (work.getFrbrDate() == null || work.getFrbrDate().getDate().isBlank()) {
-      throw new ValidationException("Decision date is missing");
+      throw new ValidationException("Decision date missing");
     }
     validateNotNull(meta.getProprietary(), "Proprietary missing");
     validateNotNull(meta.getProprietary().getRisMeta(), "RisMeta missing");
@@ -155,7 +155,7 @@ public class CaseLawLdmlToOpenSearchMapper {
         meta.getProprietary().getRisMeta().getRisGericht().getGerichtstyp(), "CourtType missing");
 
     if (judgment.getHeader() == null || judgment.getHeader().findShortTitle() == null) {
-      throw new ValidationException("Header or Short Title is missing");
+      throw new ValidationException("Short Title missing");
     }
   }
 
