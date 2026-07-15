@@ -21,6 +21,8 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -159,15 +161,17 @@ class ChangelogServiceTest {
     assertThat(result.getChanged()).asInstanceOf(SET).containsExactlyInAnyOrder("file1", "file2");
   }
 
-  @Test
-  void itConsidersVersionPrefixes() throws JsonProcessingException, ObjectStoreServiceException {
+  @ParameterizedTest
+  @ValueSource(strings = {"V1/file", "file"})
+  void itConsidersVersionPrefixes(String baseFilename)
+      throws JsonProcessingException, ObjectStoreServiceException {
     Instant from = Instant.parse("2026-07-03T12:00:00Z");
     Instant to = Instant.parse("2027-01-01T12:00:00Z");
 
-    Changelog expectedFirst =
-        new Changelog(new HashSet<>(List.of("V1/file1")), new HashSet<>(), false);
-    Changelog expectedSecond =
-        new Changelog(new HashSet<>(List.of("V1/file2")), new HashSet<>(), false);
+    Changelog firstChangelog =
+        new Changelog(new HashSet<>(List.of(baseFilename + "1")), new HashSet<>(), false);
+    Changelog secondChangelog =
+        new Changelog(new HashSet<>(List.of(baseFilename + "2")), new HashSet<>(), false);
 
     when(bucket.getVersionPrefix()).thenReturn("V1/");
     when(bucket.getAllKeysByPrefix(any()))
@@ -178,13 +182,14 @@ class ChangelogServiceTest {
                 "changelogs/2026-07-08T12:00:00.933434Z-norm.json"));
 
     when(bucket.getFileAsString("changelogs/2026-07-03T12:00:00.933434Z-norm.json"))
-        .thenReturn(Optional.of(objectMapper.writeValueAsString(expectedFirst)));
+        .thenReturn(Optional.of(objectMapper.writeValueAsString(firstChangelog)));
     when(bucket.getFileAsString("changelogs/2026-07-08T12:00:00.933434Z-norm.json"))
-        .thenReturn(Optional.of(objectMapper.writeValueAsString(expectedSecond)));
+        .thenReturn(Optional.of(objectMapper.writeValueAsString(secondChangelog)));
 
     ChangelogService<?> service = new ChangelogService<>(bucket, objectMapper);
     Changelog result = service.getChangesBetween(from, to);
 
+    // Should strip the version prefix only if it exists, otherwise leave the filename unchanged
     assertThat(result.getChanged()).asInstanceOf(SET).containsExactlyInAnyOrder("file1", "file2");
   }
 
