@@ -118,11 +118,16 @@ jobs:
 
       - name: Attest vulnerability scan
         if: ${{ github.actor != 'dependabot[bot]' }}
-        run: cosign attest --yes --replace --predicate "vuln-${{ inputs.app }}.json" --type vuln ${{ inputs.image-reference }}
+        run: cosign attest --yes --replace --predicate "vuln-${INPUTS_APP}.json" --type vuln ${INPUTS_IMAGE_REFERENCE}
+        env:
+          INPUTS_APP: ${{ inputs.app }}
+          INPUTS_IMAGE_REFERENCE: ${{ inputs.image-reference }}
 
       - name: Sign the published image
         if: ${{ github.actor != 'dependabot[bot]' }}
-        run: cosign sign --yes ${{ inputs.image-reference }}
+        run: cosign sign --yes ${INPUTS_IMAGE_REFERENCE}
+        env:
+          INPUTS_IMAGE_REFERENCE: ${{ inputs.image-reference }}
 
       - name: Send status to Slack
         if: ${{ failure() && github.ref == 'refs/heads/main' }}
