@@ -6,7 +6,7 @@ import SearchResultHeader, {
 
 function renderComponent(
   items: SearchResultHeaderItem[] = [],
-  secondaryItem?: string,
+  secondaryItem?: SearchResultHeaderItem,
 ) {
   return render(SearchResultHeader, {
     props: {
@@ -91,8 +91,27 @@ describe("SearchResultHeader", () => {
   });
 
   it("renders an optional secondary row", async () => {
-    renderComponent([], "Secondary item");
+    renderComponent([], { value: "Secondary item" });
 
     expect(screen.getByText("Secondary item")).toBeVisible();
+  });
+
+  it("renders secondary row as markup", async () => {
+    const { container } = renderComponent([], {
+      value: "<mark>Secondary item</mark>",
+      isMarkup: true,
+    });
+
+    expect(screen.getByText("Secondary item")).toBeVisible();
+
+    const markupSpan = container.querySelector("p:has(mark)");
+    expect(markupSpan?.innerHTML).toContain("<mark>Secondary item</mark>");
+  });
+
+  it("does not render secondary row when value is empty", async () => {
+    const { container } = renderComponent([], { value: "" });
+
+    const secondaryRows = container.querySelectorAll(".typo-label1-regular");
+    expect(secondaryRows).toHaveLength(0);
   });
 });

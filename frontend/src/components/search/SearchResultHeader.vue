@@ -8,7 +8,7 @@ export interface SearchResultHeaderItem {
 const { icon, items, secondaryItem } = defineProps<{
   icon?: Component;
   items: SearchResultHeaderItem[];
-  secondaryItem?: string;
+  secondaryItem?: SearchResultHeaderItem;
 }>();
 
 const itemsWithContent = computed(() => items.filter((i) => !!i.value));
@@ -30,8 +30,12 @@ const itemsWithContent = computed(() => items.filter((i) => !!i.value));
           <span v-else :id="item.id">{{ item.value }}</span>
         </template>
       </p>
-      <p v-if="secondaryItem" class="typo-label1-regular mt-8 hyphens-auto">
-        {{ secondaryItem }}
+      <p
+        v-if="secondaryItem?.value"
+        class="typo-label1-regular mt-8 hyphens-auto"
+      >
+        <span v-if="secondaryItem.isMarkup" v-html="secondaryItem.value" />
+        <span v-else>{{ secondaryItem.value }}</span>
       </p>
     </div>
 
