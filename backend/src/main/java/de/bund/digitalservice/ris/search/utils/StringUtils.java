@@ -1,5 +1,6 @@
 package de.bund.digitalservice.ris.search.utils;
 
+/** Class for string utility functions. */
 public class StringUtils {
 
   private StringUtils() {}
