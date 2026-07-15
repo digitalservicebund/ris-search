@@ -155,7 +155,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Run Tests and Scan with SonarQube
-        if: ${{ github.actor != 'dependabot[bot]' }}
+        if: ${{ github.event.pull_request.user.login != 'dependabot[bot]' }}
         id: sonarqube-tests
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
@@ -166,7 +166,7 @@ jobs:
 
       - name: Check SonarQube Quality Gate
         uses: sonarsource/sonarqube-quality-gate-action@cf038b0e0cdecfa9e56c198bbb7d21d751d62c3b # v1.2.0
-        if: ${{ github.actor != 'dependabot[bot]' }}
+        if: ${{ github.event.pull_request.user.login != 'dependabot[bot]' }}
         with:
           scanMetadataReportFile: backend/build/sonar/report-task.txt
         timeout-minutes: 3 # Force to fail step after specific time
@@ -176,7 +176,7 @@ jobs:
         # Dependabot does not have access to org tokens like SONAR_TOKEN
         # thus run the tests without sonar in dependabot PRs
       - name: Run unit and integration tests
-        if: ${{ github.actor == 'dependabot[bot]' }}
+        if: ${{ github.event.pull_request.user.login == 'dependabot[bot]' }}
         working-directory: ./backend
         run: ./gradlew integrationTest
 

@@ -96,7 +96,7 @@ jobs:
       - name: Generate Cosign vulnerability scan record
         # Third-party action, pin to commit SHA!
         uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
-        if: ${{ github.actor != 'dependabot[bot]' }}
+        if: ${{ github.event.pull_request.user.login != 'dependabot[bot]' }}
         with:
          image-ref: ${{ inputs.image-reference }}
          format: "cosign-vuln"
@@ -104,27 +104,27 @@ jobs:
 
       - name: Upload Cosign vulnerability scan record as artifact
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
-        if: ${{ github.actor != 'dependabot[bot]' }}
+        if: ${{ github.event.pull_request.user.login != 'dependabot[bot]' }}
         with:
          name: "vuln-${{ inputs.app }}.json"
          path: "vuln-${{ inputs.app }}.json"
          if-no-files-found: error
 
       - name: Install Cosign
-        if: ${{ github.actor != 'dependabot[bot]' }}
+        if: ${{ github.event.pull_request.user.login != 'dependabot[bot]' }}
         uses: sigstore/cosign-installer@6f9f17788090df1f26f669e9d70d6ae9567deba6  # v4.1.2
         with:
          cosign-release: "v2.6.0" # We need to use v2.X.X because of major version GHA v4.X.X and broken image verification of Kyverno
 
       - name: Attest vulnerability scan
-        if: ${{ github.actor != 'dependabot[bot]' }}
+        if: ${{ github.event.pull_request.user.login != 'dependabot[bot]' }}
         run: cosign attest --yes --replace --predicate "vuln-${INPUTS_APP}.json" --type vuln ${INPUTS_IMAGE_REFERENCE}
         env:
           INPUTS_APP: ${{ inputs.app }}
           INPUTS_IMAGE_REFERENCE: ${{ inputs.image-reference }}
 
       - name: Sign the published image
-        if: ${{ github.actor != 'dependabot[bot]' }}
+        if: ${{ github.event.pull_request.user.login != 'dependabot[bot]' }}
         run: cosign sign --yes ${INPUTS_IMAGE_REFERENCE}
         env:
           INPUTS_IMAGE_REFERENCE: ${{ inputs.image-reference }}

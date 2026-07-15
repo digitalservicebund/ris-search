@@ -66,7 +66,7 @@ jobs:
         working-directory: ./frontend
 
       - name: Set up SonarCloud
-        if: ${{  github.actor != 'dependabot[bot]' }}
+        if: ${{ github.event.pull_request.user.login != 'dependabot[bot]' }}
         # Third-party action, pin to commit SHA!
         # See https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions
         uses: sonarsource/sonarqube-scan-action@713881670b6b3676cda39549040e2d88c70d582e # v7
@@ -81,7 +81,7 @@ jobs:
             -Dsonar.javascript.lcov.reportPaths=src/coverage/lcov.info
 
       - name: Check SonarCloud Quality Gate
-        if: ${{ github.actor != 'dependabot[bot]' }}
+        if: ${{ github.event.pull_request.user.login != 'dependabot[bot]' }}
         uses: sonarsource/sonarqube-quality-gate-action@cf038b0e0cdecfa9e56c198bbb7d21d751d62c3b # v1.2.0
         with:
           scanMetadataReportFile: frontend/.scannerwork/report-task.txt
