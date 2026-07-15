@@ -154,7 +154,8 @@ jobs:
       packages: write
       id-token: write
       security-events: write
-    secrets: inherit
+    secrets:
+      SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
     with:
       # Use image digest instead of tag to uniquely identify the image
       image-reference: ghcr.io/${{ github.repository }}/api-docs@${{ needs.build-and-push-image.outputs.image-digest }}
@@ -164,7 +165,12 @@ jobs:
     needs:
       - scan-attest-and-sign-image
     uses: ./.github/workflows/deploy.yml
-    secrets: inherit
+    secrets:
+      ARGOCD_AUTH_TOKEN: ${{ secrets.ARGOCD_AUTH_TOKEN }}
+      ARGOCD_SERVER_STACKIT: ${{ secrets.ARGOCD_SERVER_STACKIT }}
+      GITOPS_NEURIS_APP_ID: ${{ secrets.GITOPS_NEURIS_APP_ID }}
+      GITOPS_NEURIS_APP_PRIVATE_KEY: ${{ secrets.GITOPS_NEURIS_APP_PRIVATE_KEY }}
+      SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
     with:
       image-tag: ${{ github.sha }}
       deployment-environment: prototype

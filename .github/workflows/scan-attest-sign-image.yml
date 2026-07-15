@@ -2,6 +2,9 @@ name: Scan-Attest-and-Sign-Image
 
 on:
   workflow_call:
+    secrets:
+      SLACK_BOT_TOKEN:
+        required: true
     inputs:
       image-reference:
         description: 'The full image reference (registry/repo:tag) of the image to scan and attest'

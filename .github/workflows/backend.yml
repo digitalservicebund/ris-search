@@ -15,6 +15,15 @@ on:
         required: false
         type: string
         default: ghcr.io
+    secrets:
+      REPORTS_BUCKET_ACCESS_KEY_ID:
+        required: true
+      REPORTS_BUCKET_SECRET_ACCESS_KEY:
+        required: true
+      SLACK_BOT_TOKEN:
+        required: true
+      SONAR_TOKEN:
+        required: true
 
 env:
   RUN_ID: ${{ github.run_id }}
@@ -245,7 +254,8 @@ jobs:
   scan-attest-and-sign-image:
     needs: build-and-push-image
     uses: ./.github/workflows/scan-attest-sign-image.yml
-    secrets: inherit
+    secrets:
+      SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
     with:
       # Use image digest instead of tag to uniquely identify the image
       image-reference: ${{ inputs.container-registry}}/${{ github.repository }}@${{ needs.build-and-push-image.outputs.image-digest }}

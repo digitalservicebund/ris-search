@@ -2,6 +2,13 @@ name: Smoke tests
 
 on:
   workflow_call:
+    secrets:
+      SLACK_BOT_TOKEN:
+        required: true
+      STAGING_BASIC_AUTH_PASSWORD:
+        required: true
+      STAGING_BASIC_AUTH_USERNAME:
+        required: true
   workflow_dispatch:
 
 permissions:

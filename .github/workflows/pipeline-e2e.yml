@@ -2,6 +2,13 @@ name: End-to-end tests
 
 on:
   workflow_call:
+    secrets:
+      REPORTS_BUCKET_ACCESS_KEY_ID:
+        required: true
+      REPORTS_BUCKET_SECRET_ACCESS_KEY:
+        required: true
+      SLACK_BOT_TOKEN:
+        required: true
   workflow_dispatch:
 
 permissions:
