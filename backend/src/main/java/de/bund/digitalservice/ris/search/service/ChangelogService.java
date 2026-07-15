@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectReader;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
+import de.bund.digitalservice.ris.search.utils.StringUtils;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -95,11 +96,11 @@ public class ChangelogService<T extends ObjectStorage> {
   private Changelog stripVersionPrefix(String versionPrefix, Changelog input) {
     input.setChanged(
         input.getChanged().stream()
-            .map(e -> e.substring(versionPrefix.length()))
+            .map(e -> StringUtils.stripPrefix(e, versionPrefix))
             .collect(Collectors.toCollection(HashSet::new)));
     input.setDeleted(
         input.getDeleted().stream()
-            .map(e -> e.substring(versionPrefix.length()))
+            .map(e -> StringUtils.stripPrefix(e, versionPrefix))
             .collect(Collectors.toCollection(HashSet::new)));
     return input;
   }
