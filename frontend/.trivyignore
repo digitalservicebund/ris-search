@@ -2,3 +2,10 @@
 # Ignoring them here is to solve trivy complaints from vulnerable dependencies
 # in the Node Docker image that are not actually used in the production
 # application.
+
+# These are all vulnerabilities in node-tar, used by npm in the production
+# image. Ignoring since we don't use npm.
+CVE-2026-59871
+CVE-2026-59873
+CVE-2026-59874
+CVE-2026-59875
