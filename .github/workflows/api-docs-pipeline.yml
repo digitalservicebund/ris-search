@@ -31,9 +31,6 @@ concurrency:
 
 permissions:
   contents: read
-  packages: write # Required by build-and-push-image job and scan-attest-sign-image
-  id-token: write # Required by scan-attest-sign-image (cosign attest/sign)
-  security-events: write # Required by scan-attest-sign-image (upload Trivy SARIF to Security tab)
 
 jobs:
   check-style:
@@ -152,6 +149,11 @@ jobs:
   scan-attest-and-sign-image:
     needs: build-and-push-image
     uses: ./.github/workflows/scan-attest-sign-image.yml
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+      security-events: write
     secrets: inherit
     with:
       # Use image digest instead of tag to uniquely identify the image

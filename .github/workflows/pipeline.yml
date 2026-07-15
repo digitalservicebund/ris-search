@@ -26,10 +26,6 @@ concurrency:
 
 permissions:
   contents: read
-  pull-requests: read # SonarQube PR decoration
-  packages: write # Push images in build-and-push-image and scan-attest-sign-image
-  id-token: write # Sigstore/Fulcio identity challenge in build-and-push-image and scan-attest-sign-image
-  security-events: write # Upload Trivy SARIF results in scan-attest-sign-image
 
 env:
   RUN_ID: ${{ github.run_id }}
@@ -42,12 +38,23 @@ jobs:
   backend-jobs:
     uses: ./.github/workflows/backend.yml
     secrets: inherit
+    permissions:
+      contents: read
+      pull-requests: read
+      packages: write
+      id-token: write
+      security-events: write
     with:
       container-registry: ghcr.io
       image-reference: ghcr.io/${{ github.repository }}:${{ github.sha }}
 
   frontend-jobs:
     uses: ./.github/workflows/frontend.yml
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+      security-events: write
     secrets: inherit
     with:
       container-registry: ghcr.io
