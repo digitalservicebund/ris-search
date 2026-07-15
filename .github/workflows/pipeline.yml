@@ -33,6 +33,9 @@ env:
 jobs:
   e2e-tests:
     uses: ./.github/workflows/pipeline-e2e.yml
+    permissions:
+      packages: read
+      contents: read
     secrets:
       SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
       REPORTS_BUCKET_ACCESS_KEY_ID: ${{ secrets.REPORTS_BUCKET_ACCESS_KEY_ID }}
