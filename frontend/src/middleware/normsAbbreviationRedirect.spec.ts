@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from "vitest";
 import { ref } from "vue";
 import type { RouteLocationNormalizedGeneric } from "vue-router";
 import type { LegislationExpression, SearchResult } from "~/types/api";
-import normAbbreviationRedirect from "./norms-abbreviation-redirect";
+import normAbbreviationRedirect from "./normsAbbreviationRedirect";
 
 const { useRisBackendMock } = vi.hoisted(() => ({
   useRisBackendMock: vi.fn(),
