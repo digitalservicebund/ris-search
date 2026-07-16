@@ -203,7 +203,7 @@ describe("CaselawSearchResult", () => {
       item: { ...searchResult.item, decisionName: [longDecisionName] },
     });
 
-    expect(screen.getByText("a".repeat(90))).toBeVisible();
+    expect(screen.getByText("a".repeat(90) + "…")).toBeVisible();
   });
 
   describe("fields when only one text match is returned", () => {

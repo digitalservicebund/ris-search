@@ -58,7 +58,9 @@ const title = computed(() => {
     : undefined;
 });
 
-const secondaryTitle = computed(() => getCaselawSecondaryTitle(caseLaw.value));
+const secondaryTitle = computed(() =>
+  getCaselawSecondaryTitle(caseLaw.value, false),
+);
 
 const searchBackLink = useSearchBackLink(DocumentKind.CaseLaw);
 

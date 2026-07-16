@@ -192,7 +192,7 @@ describe("NormSearchResult", () => {
       item: { ...mockSearchResult.item, alternateName: "a".repeat(100) },
     });
 
-    expect(screen.getByText("a".repeat(90))).toBeInTheDocument();
+    expect(screen.getByText("a".repeat(90) + "…")).toBeInTheDocument();
   });
 
   it("correctly links to the norm page", () => {

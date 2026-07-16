@@ -79,7 +79,7 @@ describe("caselaw", () => {
     it("truncates the secondary title to 90 characters", () => {
       expect(
         getCaselawSecondaryTitle({ decisionName: ["a".repeat(100)] }),
-      ).toBe("a".repeat(90));
+      ).toBe("a".repeat(90) + "…");
     });
 
     it("truncates the secondary title after formatting decision names", () => {
@@ -89,7 +89,14 @@ describe("caselaw", () => {
         getCaselawSecondaryTitle({
           decisionName: [decisionName1, decisionName2],
         }),
-      ).toBe(truncateAtWord(`${decisionName1}, ${decisionName2}`, 90));
+      ).toBe(truncateAtWord(`${decisionName1}, ${decisionName2}`, 90, true));
+    });
+
+    it("does not truncate the title when disabled", () => {
+      const fullTItle = "a".repeat(100);
+      expect(
+        getCaselawSecondaryTitle({ decisionName: [fullTItle] }, false),
+      ).toBe(fullTItle);
     });
   });
 });
