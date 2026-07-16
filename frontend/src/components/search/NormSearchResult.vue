@@ -24,7 +24,7 @@ const headline = computed(() =>
 
 const secondaryTitle = computed<SearchResultHeaderItem | undefined>(() =>
   searchResult.item.alternateName
-    ? { value: truncateAtWord(searchResult.item.alternateName, 90) }
+    ? { value: truncateAtWord(searchResult.item.alternateName, 90, true) }
     : undefined,
 );
 
