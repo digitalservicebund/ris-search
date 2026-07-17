@@ -2,7 +2,6 @@
 import text from "./content.md?raw";
 
 definePageMeta({
-  alias: ["/barrierefreiheit"],
   layout: false,
   skipLinks: [
     { label: "Zum Inhalt", to: "#main" },
@@ -11,17 +10,17 @@ definePageMeta({
 });
 
 useSeo({
-  title: "Barrierefreiheit",
+  title: "Kontakt",
   description:
-    "Informationen zur digitalen Zugänglichkeit, zum technischen Standard und zur Feedback-Möglichkeit.",
-  ogTitle: "Barrierefreiheit im Rechtsinformationsportal des Bundes",
+    "Hier erreichen Sie uns bei Fragen, Hinweisen oder technischen Problemen rund um das Portal.",
+  ogTitle: "Kontakt zum Rechtsinformationsportal des Bundes",
 });
 </script>
 
 <template>
   <NuxtLayout name="markdown-page" :static-content="text">
     <template #breadcrumb>
-      <Breadcrumbs :items="[{ label: 'Barrierefreiheit' }]" />
+      <Breadcrumbs :items="[{ label: 'Kontakt' }]" />
     </template>
   </NuxtLayout>
 </template>

@@ -57,7 +57,7 @@ describe("SkipLinks", () => {
     const focusSpy = vi.spyOn(nav, "focus");
 
     const router = useRouter();
-    await router.push("/about");
+    await router.push("/ueber");
 
     expect(focusSpy).toHaveBeenCalled();
     focusSpy.mockRestore();

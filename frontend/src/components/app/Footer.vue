@@ -54,35 +54,35 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
             <li>
               <NuxtLink
                 class="typo-link-regular link-hover"
-                :to="{ name: 'contact' }"
+                :to="{ name: 'kontakt' }"
                 >Kontakt</NuxtLink
               >
             </li>
             <li>
               <NuxtLink
                 class="typo-link-regular link-hover"
-                :to="{ name: 'imprint' }"
+                :to="{ name: 'impressum' }"
                 >Impressum</NuxtLink
               >
             </li>
             <li>
               <NuxtLink
                 class="typo-link-regular link-hover"
-                :to="{ name: 'data-protection' }"
+                :to="{ name: 'datenschutzerklaerung' }"
                 >Datenschutzerklärung</NuxtLink
               >
             </li>
             <li>
               <NuxtLink
                 class="typo-link-regular link-hover"
-                :to="{ name: 'accessibility' }"
+                :to="{ name: 'barrierefreiheit' }"
                 >Barrierefreiheit</NuxtLink
               >
             </li>
             <li>
               <NuxtLink
                 class="typo-link-regular link-hover"
-                :to="{ name: 'cookie-settings' }"
+                :to="{ name: 'cookie-einstellungen' }"
                 >Cookie-Einstellungen</NuxtLink
               >
             </li>
@@ -110,7 +110,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
             <li>
               <NuxtLink
                 class="typo-link-regular link-hover"
-                :to="{ name: 'usage-tests' }"
+                :to="{ name: 'nutzungstests' }"
                 >Nutzungstests</NuxtLink
               >
             </li>

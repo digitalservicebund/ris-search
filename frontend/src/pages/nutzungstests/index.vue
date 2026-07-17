@@ -2,7 +2,6 @@
 import text from "./content.md?raw";
 
 definePageMeta({
-  alias: ["/cookie-einstellungen"],
   layout: false,
   skipLinks: [
     { label: "Zum Inhalt", to: "#main" },
@@ -11,17 +10,17 @@ definePageMeta({
 });
 
 useSeo({
-  title: "Cookie-Einstellungen",
+  title: "Nutzungstests",
   description:
-    "Wählen Sie, welche Cookies Sie zulassen – für eine bessere, datenschutzgerechte Nutzung.",
-  ogTitle: "Cookie-Einstellungen für das Rechtsinformationsportal des Bundes",
+    "Erfahren Sie, wie das Portal getestet wird, welche Ergebnisse vorliegen und wie Sie teilnehmen können.",
+  ogTitle: "Nutzungstests zum Rechtsinformationsportal des Bundes",
 });
 </script>
 
 <template>
   <NuxtLayout name="markdown-page" :static-content="text">
     <template #breadcrumb>
-      <Breadcrumbs :items="[{ label: 'Cookie-Einstellungen' }]" />
+      <Breadcrumbs :items="[{ label: 'Nutzungstests' }]" />
     </template>
   </NuxtLayout>
 </template>

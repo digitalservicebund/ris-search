@@ -4,7 +4,7 @@ Zuletzt aktualisiert: 23. April 2025
 
 Für das Bundesministerium der Justiz und für Verbraucherschutz (BMJV) hat der Schutz personenbezogener Daten einen hohen Stellenwert. Auf dieser Seite informieren wir Sie über die Verarbeitung Ihrer personenbezogenen Daten, wenn Sie
 
-- unsere Webseiten testphase.rechtsinformationen.bund.de (Informationen zum Einsatz von Cookies finden Sie in den [Cookie-Einstellungen](/cookie-settings)) bzw. docs.rechtsinformationen.bund.de besuchen (siehe Abschnitt A);
+- unsere Webseiten testphase.rechtsinformationen.bund.de (Informationen zum Einsatz von Cookies finden Sie in den [Cookie-Einstellungen](/cookie-einstellungen)) bzw. docs.rechtsinformationen.bund.de besuchen (siehe Abschnitt A);
 - die Kontakt-E-Mail-Adresse unserer Auftragsverarbeiterin [rechtsinformationen@digitalservice.bund.de](mailto:rechtsinformationen@digitalservice.bund.de) benutzen (siehe Abschnitt B);
 - unsere Feedback-Box benutzen (siehe Abschnitt C).
 

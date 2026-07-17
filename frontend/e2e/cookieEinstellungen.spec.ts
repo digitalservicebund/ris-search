@@ -5,7 +5,7 @@ test("shows declined state by default and can accept cookies", async ({
   context,
 }) => {
   await context.clearCookies();
-  await navigate(page, "/cookie-settings");
+  await navigate(page, "/cookie-einstellungen");
 
   const acceptButton = page.getByRole("button", {
     name: "Cookies akzeptieren",
@@ -35,7 +35,7 @@ test("can change cookie consent from accepted to declined", async ({
   page,
   context,
 }) => {
-  await navigate(page, "/cookie-settings");
+  await navigate(page, "/cookie-einstellungen");
 
   // Set consent to true via cookie
   const url = new URL(page.url());

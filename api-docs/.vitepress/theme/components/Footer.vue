@@ -24,7 +24,7 @@ import bmjvLogo from "../assets/images/bmjv_logo.svg";
             </li>
             <li>
               <a
-                href="https://testphase.rechtsinformationen.bund.de/datenschutz"
+                href="https://testphase.rechtsinformationen.bund.de/datenschutzerklaerung"
                 >Datenschutzerklärung</a
               >
             </li>

@@ -70,7 +70,7 @@ const createItems = (items = mockTocItems) =>
   tocItemsToTreeViewItems(
     items,
     (id) => ({ path: "/", hash: `#${id}` }),
-    (id) => ({ path: "/about", hash: `#${id}` }),
+    (id) => ({ path: "/ueber", hash: `#${id}` }),
   );
 
 async function renderComponent(props?: {

@@ -16,7 +16,7 @@ import IconWarningAmber from "~icons/ic/outline-warning-amber";
           </span>
           Testen Sie erste Funktionen und geben Sie Feedback für die
           Weiterentwicklung.
-          <NuxtLink class="ris-link2-regular" :to="{ name: 'about' }">
+          <NuxtLink class="ris-link2-regular" :to="{ name: 'ueber' }">
             Erfahren Sie mehr über die Testphase
           </NuxtLink>
         </p>

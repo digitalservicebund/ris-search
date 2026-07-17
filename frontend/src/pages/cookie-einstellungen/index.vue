@@ -2,7 +2,6 @@
 import text from "./content.md?raw";
 
 definePageMeta({
-  alias: ["/kontakt"],
   layout: false,
   skipLinks: [
     { label: "Zum Inhalt", to: "#main" },
@@ -11,17 +10,17 @@ definePageMeta({
 });
 
 useSeo({
-  title: "Kontakt",
+  title: "Cookie-Einstellungen",
   description:
-    "Hier erreichen Sie uns bei Fragen, Hinweisen oder technischen Problemen rund um das Portal.",
-  ogTitle: "Kontakt zum Rechtsinformationsportal des Bundes",
+    "Wählen Sie, welche Cookies Sie zulassen – für eine bessere, datenschutzgerechte Nutzung.",
+  ogTitle: "Cookie-Einstellungen für das Rechtsinformationsportal des Bundes",
 });
 </script>
 
 <template>
   <NuxtLayout name="markdown-page" :static-content="text">
     <template #breadcrumb>
-      <Breadcrumbs :items="[{ label: 'Kontakt' }]" />
+      <Breadcrumbs :items="[{ label: 'Cookie-Einstellungen' }]" />
     </template>
   </NuxtLayout>
 </template>

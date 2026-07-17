@@ -2,7 +2,6 @@
 import text from "./content.md?raw";
 
 definePageMeta({
-  alias: ["/impressum"],
   layout: false,
   skipLinks: [
     { label: "Zum Inhalt", to: "#main" },
@@ -11,17 +10,17 @@ definePageMeta({
 });
 
 useSeo({
-  title: "Impressum",
+  title: "Über den Service",
   description:
-    "Angaben gemäß § 5 TMG – Herausgeber, Verantwortliche und rechtliche Hinweise zum Portal.",
-  ogTitle: "Impressum des Rechtsinformationsportals des Bundes",
+    "Erfahren Sie, wie das Portal Gesetze und Urteile für alle frei zugänglich macht.",
+  ogTitle: "Über das neue Rechtsinformationsportal des Bundes",
 });
 </script>
 
 <template>
   <NuxtLayout name="markdown-page" :static-content="text">
     <template #breadcrumb>
-      <Breadcrumbs :items="[{ label: 'Impressum' }]" />
+      <Breadcrumbs :items="[{ label: 'Über den Service' }]" />
     </template>
   </NuxtLayout>
 </template>
