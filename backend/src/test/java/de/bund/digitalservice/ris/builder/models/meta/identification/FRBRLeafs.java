@@ -5,19 +5,20 @@ import jakarta.xml.bind.annotation.XmlAttribute;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /** Reusable FRBR leaf-element types shared by FRBRWork, FRBRExpression, and FRBRManifestation. */
-final class FRBRLeafs {
+public final class FRBRLeafs {
 
   private FRBRLeafs() {}
 
   @AllArgsConstructor
   @NoArgsConstructor
   @Builder
-  static class ValueLeaf extends BaseElement {
+  @Setter
+  public static class ValueLeaf extends BaseElement {
 
     @XmlAttribute String eId;
-
     @XmlAttribute String value;
   }
 

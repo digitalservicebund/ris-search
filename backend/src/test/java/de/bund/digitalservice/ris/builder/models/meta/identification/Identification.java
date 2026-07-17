@@ -38,7 +38,7 @@ public class Identification extends BaseElement {
     EliFile eli = parsedEli.get();
 
     Identification.IdentificationBuilder builder = Identification.builder();
-    builder.frbrWork(FRBRWork.fromEli(eli));
+    builder.frbrWork(new FRBRWork(eli.getWorkEli()));
     builder.frbrExpression(FRBRExpression.fromEli(eli));
     builder.frbrManifestation(FRBRManifestation.fromEli(eli));
 
@@ -51,7 +51,7 @@ public class Identification extends BaseElement {
 
   @Builder.Default
   @XmlElement(name = "FRBRWork", namespace = NormTestDataBuilder.AKN_NS)
-  private FRBRWork frbrWork = FRBRWork.builder().build();
+  private FRBRWork frbrWork = new FRBRWork();
 
   @Builder.Default
   @XmlElement(name = "FRBRExpression", namespace = NormTestDataBuilder.AKN_NS)
