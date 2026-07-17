@@ -90,7 +90,7 @@ test.describe("general advanced search page features", () => {
   });
 
   test("browser back restores previous state", async ({ page }) => {
-    await navigate(page, "/search");
+    await navigate(page, "/suche");
 
     await page.getByRole("link", { name: "Erweiterte Suche" }).click();
     const advancedSearchHeading = page.getByRole("heading", {
@@ -109,7 +109,7 @@ test.describe("general advanced search page features", () => {
     await expect(searchInput).toBeEmpty();
 
     await page.goBack();
-    await expect(page).toHaveURL("/search");
+    await expect(page).toHaveURL("/suche");
   });
 
   test("pagination switches pages", async ({ page }) => {

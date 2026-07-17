@@ -110,7 +110,7 @@ describe("TabsLayout", () => {
 
   it("preserves existing query params in tab links", async () => {
     useRouteMock.mockReturnValue({
-      query: { from: "/search?query=test&documentKind=R", view: "view-a" },
+      query: { from: "/suche?query=test&documentKind=R", view: "view-a" },
     });
 
     await renderSuspended(TabsLayout, { props: { views } });

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import IconSearch from "~icons/ic/search";
+import IconSearch from "~icons/ic/suche";
 
 defineProps<{ listClass: string }>();
 
@@ -15,7 +15,7 @@ defineEmits<{ selectItem: [] }>();
       <li>
         <NuxtLink
           class="nav-link"
-          :to="{ name: 'search' }"
+          :to="{ name: 'suche' }"
           @click="$emit('selectItem')"
         >
           <IconSearch />Suche

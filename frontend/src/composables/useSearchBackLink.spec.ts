@@ -19,15 +19,15 @@ describe("useSearchBackLink", () => {
   describe("when 'from' is a valid simple search URL", () => {
     it("returns route pointing to the 'from' URL", async () => {
       const backLink = await setup(
-        "/search?query=test&documentKind=R&pageIndex=2",
+        "/suche?query=test&documentKind=R&pageIndex=2",
       );
       expect(backLink.value.route).toBe(
-        "/search?query=test&documentKind=R&pageIndex=2",
+        "/suche?query=test&documentKind=R&pageIndex=2",
       );
     });
 
     it("returns label 'Suche'", async () => {
-      const backLink = await setup("/search?query=test&documentKind=R");
+      const backLink = await setup("/suche?query=test&documentKind=R");
       expect(backLink.value.label).toBe("Suche");
     });
   });
@@ -52,7 +52,7 @@ describe("useSearchBackLink", () => {
     it("uses the fallback route when 'from' is absent", async () => {
       const backLink = await setup(undefined);
       expect(backLink.value.route).toBe(
-        `/search?documentKind=${DocumentKind.CaseLaw}`,
+        `/suche?documentKind=${DocumentKind.CaseLaw}`,
       );
     });
 
@@ -64,14 +64,14 @@ describe("useSearchBackLink", () => {
     it("uses the fallback route when 'from' is not a search path", async () => {
       const backLink = await setup("/search-other?query=test");
       expect(backLink.value.route).toBe(
-        `/search?documentKind=${DocumentKind.CaseLaw}`,
+        `/suche?documentKind=${DocumentKind.CaseLaw}`,
       );
     });
 
     it("uses the fallback when 'from' is an empty string", async () => {
       const backLink = await setup("");
       expect(backLink.value.route).toBe(
-        `/search?documentKind=${DocumentKind.CaseLaw}`,
+        `/suche?documentKind=${DocumentKind.CaseLaw}`,
       );
     });
   });

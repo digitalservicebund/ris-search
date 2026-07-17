@@ -45,7 +45,7 @@ describe("feedback.post", () => {
 
   it("forwards feedback and empty honeypot to the backend by default", async () => {
     mockReadBody.mockResolvedValue({ text: "Great app!" });
-    mockGetHeader.mockReturnValue("https://example.com/search?query=test");
+    mockGetHeader.mockReturnValue("https://example.com/suche?query=test");
     mockGetRequestURL.mockReturnValue(
       new URL("https://example.com/api/feedback"),
     );

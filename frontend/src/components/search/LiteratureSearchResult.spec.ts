@@ -6,7 +6,7 @@ import type { Literature, SearchResult, TextMatch } from "~/types/api";
 
 const { useRouteMock } = vi.hoisted(() => ({
   useRouteMock: vi.fn(() => ({
-    fullPath: "/search?query=test&documentKind=L",
+    fullPath: "/suche?query=test&documentKind=L",
   })),
 }));
 
@@ -254,7 +254,7 @@ describe("LiteratureSearchResult", () => {
 
   it("includes the current search URL as query param in the detail page link", () => {
     useRouteMock.mockReturnValue({
-      fullPath: "/search?query=Recht&documentKind=L&pageIndex=3",
+      fullPath: "/suche?query=Recht&documentKind=L&pageIndex=3",
     });
 
     renderComponent({});
@@ -264,13 +264,13 @@ describe("LiteratureSearchResult", () => {
     });
     expect(link).toHaveAttribute(
       "data-from",
-      "/search?query=Recht&documentKind=L&pageIndex=3",
+      "/suche?query=Recht&documentKind=L&pageIndex=3",
     );
   });
 
   it("includes the current search URL as query param in preview section links", () => {
     useRouteMock.mockReturnValue({
-      fullPath: "/search?query=Recht&documentKind=L&pageIndex=3",
+      fullPath: "/suche?query=Recht&documentKind=L&pageIndex=3",
     });
 
     renderComponent({
@@ -287,7 +287,7 @@ describe("LiteratureSearchResult", () => {
     const sectionLink = screen.getByRole("link", { name: "Kurzreferat:" });
     expect(sectionLink).toHaveAttribute(
       "data-from",
-      "/search?query=Recht&documentKind=L&pageIndex=3",
+      "/suche?query=Recht&documentKind=L&pageIndex=3",
     );
   });
 });

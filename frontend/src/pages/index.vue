@@ -4,7 +4,7 @@ import { ExternalLink, NuxtLink } from "#components";
 import bmjvLogo from "~/assets/img/bmjv-de-v1-web-farbig.svg";
 
 function redirectToSearch(searchStr?: string) {
-  navigateTo({ name: "search", query: searchStr ? { query: searchStr } : {} });
+  navigateTo({ name: "suche", query: searchStr ? { query: searchStr } : {} });
 }
 
 definePageMeta({
@@ -100,10 +100,10 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
       </div>
 
       <div class="flex flex-wrap gap-16">
-        <Button :as="NuxtLink" to="/search?documentKind=N">
+        <Button :as="NuxtLink" to="/suche?documentKind=N">
           Zu den Gesetzen und Verordnungen
         </Button>
-        <Button :as="NuxtLink" to="/search?documentKind=R">
+        <Button :as="NuxtLink" to="/suche?documentKind=R">
           Zu den Gerichtsentscheidungen
         </Button>
       </div>
