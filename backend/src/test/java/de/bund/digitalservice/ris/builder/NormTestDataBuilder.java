@@ -113,7 +113,13 @@ public class NormTestDataBuilder {
    * @return this builder for chaining
    */
   public NormTestDataBuilder workEli(String workEli) {
-    this.document.getAct().getMeta().getIdentification().getFrbrWork().setUri(workEli);
+    this.document
+        .getAct()
+        .getMeta()
+        .getIdentification()
+        .getFrbrWork()
+        .getFrbrUri()
+        .setValue(workEli);
     return this;
   }
 
