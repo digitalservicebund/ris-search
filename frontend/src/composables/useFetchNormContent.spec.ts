@@ -147,6 +147,17 @@ describe("useFetchNormContent", () => {
     expect(mockFetch).toHaveBeenCalledWith("/v1/legislation/eli/test-eli");
   });
 
+  it("does not return partial data when the HTML request fails", async () => {
+    mockFetch.mockReturnValueOnce(mockMetadata);
+    mockFetch.mockRejectedValueOnce(new Error("HTML request failed"));
+
+    const { data, error } = await useFetchNormContent(expressionEli);
+
+    expect(data.value).toBeUndefined();
+    expect(error.value?.message).toBe("HTML request failed");
+    expect(mockFetch).toHaveBeenCalledTimes(2);
+  });
+
   it.each([
     ["simple footnote", 15],
     ["<span>with html</span>", 9],

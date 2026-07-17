@@ -20,17 +20,17 @@ definePageMeta({
 const route = useRoute();
 
 const documentNumber = route.params.documentNumber?.toString();
-if (!documentNumber) showError({ status: 404 });
+if (!documentNumber) throw createError({ status: 404 });
 
 const { data: caseLaw, error: metadataError } = await useRisBackend<CaseLaw>(
   `/v1/case-law/${documentNumber}`,
 );
-if (metadataError?.value) showError(metadataError.value);
+if (metadataError?.value) throw createError(metadataError.value);
 
 const { data: html, error: contentError } = await useRisBackend<string>(
   `/v1/case-law/${documentNumber}.html`,
 );
-if (contentError?.value) showError(contentError.value);
+if (contentError?.value) throw createError(contentError.value);
 
 const document = computed(() => {
   if (html.value) {

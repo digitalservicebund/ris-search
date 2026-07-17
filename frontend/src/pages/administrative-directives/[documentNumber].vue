@@ -18,13 +18,13 @@ definePageMeta({
 const route = useRoute();
 
 const documentNumber = route.params.documentNumber as string;
-if (!documentNumber) showError({ status: 404 });
+if (!documentNumber) throw createError({ status: 404 });
 
 const documentMetadataUrl = `/v1/administrative-directive/${documentNumber}`;
 
 const { data, error: metadataError } =
   await useRisBackend<AdministrativeDirective>(documentMetadataUrl);
-if (metadataError?.value) showError(metadataError.value);
+if (metadataError?.value) throw createError(metadataError.value);
 
 useAdministrativeDirectiveSeo({
   documentType: data.value?.documentType,
@@ -36,7 +36,7 @@ const { data: html, error: contentError } = await useRisBackend<string>(
   `${documentMetadataUrl}.html`,
   { headers: { Accept: "text/html" } },
 );
-if (contentError?.value) showError(contentError.value);
+if (contentError?.value) throw createError(contentError.value);
 
 // Page contents ------------------------------------------
 

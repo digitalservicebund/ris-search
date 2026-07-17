@@ -43,7 +43,7 @@ const { data, error } = await useFetchNormContent(expressionEli, {
 });
 
 if (error.value || !data.value) {
-  showError({ status: error.value?.status ?? 500 });
+  throw createError({ status: error.value?.status ?? 500 });
 }
 
 const metadata: Ref<LegislationExpression> = computed(() => {
