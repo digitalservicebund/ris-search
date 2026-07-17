@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Button, InputGroup, InputGroupAddon, InputText } from "primevue";
-import IconSearch from "~icons/ic/suche";
+import IconSearch from "~icons/ic/search";
 
 const {
   inputLabel = "Suchbegriff eingeben",

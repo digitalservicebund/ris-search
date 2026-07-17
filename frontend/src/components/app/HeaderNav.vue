@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import IconSearch from "~icons/ic/suche";
+import IconSearch from "~icons/ic/search";
 
 defineProps<{ listClass: string }>();
 
