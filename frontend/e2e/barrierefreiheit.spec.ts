@@ -63,7 +63,7 @@ const testPages = [
   },
   {
     name: "advanced search",
-    url: "/advanced-search",
+    url: "/erweiterte-suche",
   },
   {
     name: "norm view",

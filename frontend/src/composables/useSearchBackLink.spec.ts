@@ -35,15 +35,15 @@ describe("useSearchBackLink", () => {
   describe("when 'from' is a valid advanced search URL", () => {
     it("returns route pointing to the 'from' URL", async () => {
       const backLink = await setup(
-        "/advanced-search?q=BGB&documentKind=N&pageIndex=1",
+        "/erweiterte-suche?q=BGB&documentKind=N&pageIndex=1",
       );
       expect(backLink.value.route).toBe(
-        "/advanced-search?q=BGB&documentKind=N&pageIndex=1",
+        "/erweiterte-suche?q=BGB&documentKind=N&pageIndex=1",
       );
     });
 
     it("returns label 'Erweiterte Suche'", async () => {
-      const backLink = await setup("/advanced-search?q=BGB");
+      const backLink = await setup("/erweiterte-suche?q=BGB");
       expect(backLink.value.label).toBe("Erweiterte Suche");
     });
   });

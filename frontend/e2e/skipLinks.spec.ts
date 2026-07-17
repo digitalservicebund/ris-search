@@ -31,7 +31,7 @@ const scenarios: Scenario[] = [
   },
   {
     name: "advanced search page",
-    url: "/advanced-search",
+    url: "/erweiterte-suche",
     requiresPrivateFeatures: true,
     skipLinks: [
       { label: "Zur Suche", target: "#search" },

@@ -115,7 +115,7 @@ test.describe("general advanced search page features", () => {
   test("pagination switches pages", async ({ page }) => {
     await navigate(
       page,
-      "/advanced-search?documentKind=R&dateFilterType=period&dateFilterFrom=2023-01-01&dateFilterTo=2025-12-31&itemsPerPage=10",
+      "/erweiterte-suche?documentKind=R&dateFilterType=period&dateFilterFrom=2023-01-01&dateFilterTo=2025-12-31&itemsPerPage=10",
     );
 
     const resultCounter = getResultCounter(page);
@@ -146,7 +146,7 @@ test.describe("general advanced search page features", () => {
   test("focuses first search result after pagination", async ({ page }) => {
     await navigate(
       page,
-      "/advanced-search?documentKind=R&dateFilterType=period&dateFilterFrom=2023-01-01&dateFilterTo=2025-12-31&itemsPerPage=10",
+      "/erweiterte-suche?documentKind=R&dateFilterType=period&dateFilterFrom=2023-01-01&dateFilterTo=2025-12-31&itemsPerPage=10",
     );
 
     await page
@@ -163,7 +163,7 @@ test.describe("general advanced search page features", () => {
   });
 
   test("sort by date in ascending order", async ({ page }) => {
-    await navigate(page, "/advanced-search");
+    await navigate(page, "/erweiterte-suche");
 
     await searchFor(page, {
       q: "FrSaftErfrischV OR BWahlGV",
@@ -181,7 +181,7 @@ test.describe("general advanced search page features", () => {
   });
 
   test("sort by date in descending order", async ({ page }) => {
-    await navigate(page, "/advanced-search");
+    await navigate(page, "/erweiterte-suche");
 
     await searchFor(page, {
       q: "FrSaftErfrischV OR BWahlGV",
@@ -199,7 +199,7 @@ test.describe("general advanced search page features", () => {
   });
 
   test("sort by relevance (default)", async ({ page }) => {
-    await navigate(page, "/advanced-search?q=und&documentKind=N&sort=date");
+    await navigate(page, "/erweiterte-suche?q=und&documentKind=N&sort=date");
 
     await sortBy(page, "Relevanz");
 
@@ -214,7 +214,7 @@ test.describe("general advanced search page features", () => {
   test("change number of results per page", async ({ page }) => {
     await navigate(
       page,
-      "/advanced-search?documentKind=R&dateFilterType=period&dateFilterFrom=2023-01-01&dateFilterTo=2025-12-31&itemsPerPage=10",
+      "/erweiterte-suche?documentKind=R&dateFilterType=period&dateFilterFrom=2023-01-01&dateFilterTo=2025-12-31&itemsPerPage=10",
     );
 
     const searchResults = getSearchResults(page);
@@ -231,7 +231,7 @@ test.describe("general advanced search page features", () => {
     page,
   }) => {
     const nonExistingUrl =
-      "/advanced-search?documentKind=R&dateFilterType=period&dateFilterFrom=2023-01-01&dateFilterTo=2025-12-31&itemsPerPage=100&pageIndex=10";
+      "/erweiterte-suche?documentKind=R&dateFilterType=period&dateFilterFrom=2023-01-01&dateFilterTo=2025-12-31&itemsPerPage=100&pageIndex=10";
     await navigate(page, nonExistingUrl);
     await expect(page).not.toHaveURL(/pageIndex=10/);
     const searchResults = await getSearchResults(page).all();
@@ -240,7 +240,7 @@ test.describe("general advanced search page features", () => {
   });
 
   test("clears query when switching document kind", async ({ page }) => {
-    await navigate(page, "/advanced-search");
+    await navigate(page, "/erweiterte-suche");
 
     await searchFor(page, {
       q: "AB:FrSaftErfrischV",
@@ -256,7 +256,7 @@ test.describe("general advanced search page features", () => {
   });
 
   test("reacts to browser back/forward navigation", async ({ page }) => {
-    await navigate(page, "/advanced-search");
+    await navigate(page, "/erweiterte-suche");
 
     await searchFor(page, {
       q: "AB:FrSaftErfrischV",
@@ -284,7 +284,7 @@ test.describe("general advanced search page features", () => {
   test("restores search state when navigating back from a different route", async ({
     page,
   }) => {
-    await navigate(page, "/advanced-search");
+    await navigate(page, "/erweiterte-suche");
 
     await searchFor(page, {
       q: 'AZ:"KL 1234/56"',
@@ -314,7 +314,7 @@ test.describe("general advanced search page features", () => {
 
 test.describe("searching legislation", () => {
   test("only shows legislation results", async ({ page }) => {
-    await navigate(page, "/advanced-search");
+    await navigate(page, "/erweiterte-suche");
 
     await searchFor(page, {
       q: "fiktiv",
@@ -331,7 +331,7 @@ test.describe("searching legislation", () => {
   });
 
   test("shows total document count", async ({ page }) => {
-    await navigate(page, "/advanced-search?documentKind=N");
+    await navigate(page, "/erweiterte-suche?documentKind=N");
 
     const count = getTotalDocumentCounter(page);
 
@@ -341,7 +341,7 @@ test.describe("searching legislation", () => {
   });
 
   test("shows the search result contents", async ({ page }) => {
-    await navigate(page, "/advanced-search");
+    await navigate(page, "/erweiterte-suche");
 
     await searchFor(page, {
       q: "FrSaftErfrischV",
@@ -369,7 +369,7 @@ test.describe("searching legislation", () => {
   });
 
   test("navigates to the document detail page", async ({ page }) => {
-    await navigate(page, "/advanced-search?q=FrSaftErfrischV&documentKind=N");
+    await navigate(page, "/erweiterte-suche?q=FrSaftErfrischV&documentKind=N");
 
     // Result detail link
     await page
@@ -389,7 +389,7 @@ test.describe("searching legislation", () => {
   test("does not trigger a search when selecting a date filter type without entering a date", async ({
     page,
   }) => {
-    await navigate(page, "/advanced-search");
+    await navigate(page, "/erweiterte-suche");
     const initialUrl = page.url();
 
     await page.getByRole("radio", { name: "Bestimmtes Datum" }).click();
@@ -403,7 +403,7 @@ test.describe("searching legislation", () => {
   test("searches without date restrictions, shows validity badge", async ({
     page,
   }) => {
-    await navigate(page, "/advanced-search");
+    await navigate(page, "/erweiterte-suche");
 
     await searchFor(page, {
       q: 'LU:"Zum Testen von Fassungen"',
@@ -423,7 +423,7 @@ test.describe("searching legislation", () => {
   test("filters to show only currently valid, shows validity badge", async ({
     page,
   }) => {
-    await navigate(page, "/advanced-search");
+    await navigate(page, "/erweiterte-suche");
 
     await searchFor(page, {
       q: 'LU:"Zum Testen von Fassungen"',
@@ -437,7 +437,7 @@ test.describe("searching legislation", () => {
   });
 
   test("filters to show specific date", async ({ page }) => {
-    await navigate(page, "/advanced-search");
+    await navigate(page, "/erweiterte-suche");
 
     await searchFor(page, {
       documentKind: "Gesetze & Verordnungen",
@@ -456,7 +456,7 @@ test.describe("searching legislation", () => {
   });
 
   test("filters to show date range", async ({ page }) => {
-    await navigate(page, "/advanced-search");
+    await navigate(page, "/erweiterte-suche");
 
     await searchFor(page, {
       documentKind: "Gesetze & Verordnungen",
@@ -479,7 +479,7 @@ test.describe("searching legislation", () => {
 
 test.describe("searching caselaw", () => {
   test("only shows caselaw results", async ({ page }) => {
-    await navigate(page, "/advanced-search");
+    await navigate(page, "/erweiterte-suche");
 
     await searchFor(page, {
       q: "urteil",
@@ -498,7 +498,7 @@ test.describe("searching caselaw", () => {
   });
 
   test("shows total document count", async ({ page }) => {
-    await navigate(page, "/advanced-search?documentKind=R");
+    await navigate(page, "/erweiterte-suche?documentKind=R");
 
     const count = getTotalDocumentCounter(page);
 
@@ -508,7 +508,7 @@ test.describe("searching caselaw", () => {
   });
 
   test("shows the search result contents", async ({ page }) => {
-    await navigate(page, "/advanced-search");
+    await navigate(page, "/erweiterte-suche");
 
     await searchFor(page, {
       q: 'AZ:"34 X (xyz) 456/78" Verfahrensbeschreibung',
@@ -543,7 +543,7 @@ test.describe("searching caselaw", () => {
   });
 
   test("navigates to the document detail page", async ({ page }) => {
-    await navigate(page, "/advanced-search");
+    await navigate(page, "/erweiterte-suche");
 
     await searchFor(page, {
       q: 'AZ:"34 X (xyz) 456/78"',
@@ -566,7 +566,7 @@ test.describe("searching caselaw", () => {
   });
 
   test("searches without date restrictions", async ({ page }) => {
-    await navigate(page, "/advanced-search");
+    await navigate(page, "/erweiterte-suche");
 
     await searchFor(page, {
       documentKind: "Gerichtsentscheidungen",
@@ -583,7 +583,7 @@ test.describe("searching caselaw", () => {
   });
 
   test("filter to show specific date", async ({ page }) => {
-    await navigate(page, "/advanced-search");
+    await navigate(page, "/erweiterte-suche");
 
     await searchFor(page, {
       documentKind: "Gerichtsentscheidungen",
@@ -598,7 +598,7 @@ test.describe("searching caselaw", () => {
   });
 
   test("filters to show date range", async ({ page }) => {
-    await navigate(page, "/advanced-search");
+    await navigate(page, "/erweiterte-suche");
 
     await searchFor(page, {
       documentKind: "Gerichtsentscheidungen",
@@ -616,7 +616,7 @@ test.describe("searching caselaw", () => {
   });
 
   test("sorts by court in ascending order", async ({ page }) => {
-    await navigate(page, "/advanced-search");
+    await navigate(page, "/erweiterte-suche");
 
     await searchFor(page, {
       documentKind: "Gerichtsentscheidungen",
@@ -631,7 +631,7 @@ test.describe("searching caselaw", () => {
   });
 
   test("sorts by court in descending order", async ({ page }) => {
-    await navigate(page, "/advanced-search");
+    await navigate(page, "/erweiterte-suche");
 
     await searchFor(page, {
       documentKind: "Gerichtsentscheidungen",
@@ -648,7 +648,7 @@ test.describe("searching caselaw", () => {
 
 test.describe("searching literature", () => {
   test("only shows literature results", async ({ page }) => {
-    await navigate(page, "/advanced-search");
+    await navigate(page, "/erweiterte-suche");
 
     await searchFor(page, {
       q: "und",
@@ -665,7 +665,7 @@ test.describe("searching literature", () => {
   });
 
   test("shows total document count", async ({ page }) => {
-    await navigate(page, "/advanced-search?documentKind=L");
+    await navigate(page, "/erweiterte-suche?documentKind=L");
 
     const count = getTotalDocumentCounter(page);
 
@@ -675,7 +675,7 @@ test.describe("searching literature", () => {
   });
 
   test("shows the search result contents", async ({ page }) => {
-    await navigate(page, "/advanced-search");
+    await navigate(page, "/erweiterte-suche");
 
     await searchFor(page, {
       q: 'main_title:"Erstes Test-Dokument ULI" "einfaches Test-Dokument"',
@@ -704,7 +704,7 @@ test.describe("searching literature", () => {
   });
 
   test("navigates to the document detail page", async ({ page }) => {
-    await navigate(page, "/advanced-search");
+    await navigate(page, "/erweiterte-suche");
 
     await searchFor(page, {
       q: 'main_title:"Erstes Test-Dokument ULI"',
@@ -723,7 +723,7 @@ test.describe("searching literature", () => {
   });
 
   test("searches without date restrictions", async ({ page }) => {
-    await navigate(page, "/advanced-search");
+    await navigate(page, "/erweiterte-suche");
 
     await searchFor(page, {
       documentKind: "Literaturnachweise",
@@ -740,7 +740,7 @@ test.describe("searching literature", () => {
   });
 
   test("filter to show date range", async ({ page }) => {
-    await navigate(page, "/advanced-search");
+    await navigate(page, "/erweiterte-suche");
 
     await searchFor(page, {
       documentKind: "Literaturnachweise",
@@ -760,7 +760,7 @@ test.describe("searching literature", () => {
 
 test.describe("searching administrative directive", () => {
   test("only shows administrative directive results", async ({ page }) => {
-    await navigate(page, "/advanced-search");
+    await navigate(page, "/erweiterte-suche");
 
     await searchFor(page, {
       q: "und",
@@ -777,7 +777,7 @@ test.describe("searching administrative directive", () => {
   });
 
   test("shows total document count", async ({ page }) => {
-    await navigate(page, "/advanced-search?documentKind=V");
+    await navigate(page, "/erweiterte-suche?documentKind=V");
 
     const count = getTotalDocumentCounter(page);
 
@@ -787,7 +787,7 @@ test.describe("searching administrative directive", () => {
   });
 
   test("shows the search result contents", async ({ page }) => {
-    await navigate(page, "/advanced-search");
+    await navigate(page, "/erweiterte-suche");
 
     await searchFor(page, {
       q: 'VT:"Beschlüsse beschlossen werden"',
@@ -817,7 +817,7 @@ test.describe("searching administrative directive", () => {
   });
 
   test("navigates to the document detail page", async ({ page }) => {
-    await navigate(page, "/advanced-search");
+    await navigate(page, "/erweiterte-suche");
 
     await searchFor(page, {
       q: "'Beschlüsse beschlossen werden'",
@@ -838,7 +838,7 @@ test.describe("searching administrative directive", () => {
   });
 
   test("can search in field 'Normgeber'", async ({ page }) => {
-    await navigate(page, "/advanced-search");
+    await navigate(page, "/erweiterte-suche");
 
     await searchFor(page, {
       documentKind: "Verwaltungsvorschriften",
@@ -852,7 +852,7 @@ test.describe("searching administrative directive", () => {
   });
 
   test("can search in field 'Fundstelle'", async ({ page }) => {
-    await navigate(page, "/advanced-search");
+    await navigate(page, "/erweiterte-suche");
 
     await searchFor(page, {
       documentKind: "Verwaltungsvorschriften",
@@ -866,7 +866,7 @@ test.describe("searching administrative directive", () => {
   });
 
   test("can search in field 'Überschrift'", async ({ page }) => {
-    await navigate(page, "/advanced-search");
+    await navigate(page, "/erweiterte-suche");
 
     await searchFor(page, {
       documentKind: "Verwaltungsvorschriften",
@@ -882,7 +882,7 @@ test.describe("searching administrative directive", () => {
   });
 
   test("can search in field 'Volltext'", async ({ page }) => {
-    await navigate(page, "/advanced-search");
+    await navigate(page, "/erweiterte-suche");
 
     await searchFor(page, {
       documentKind: "Verwaltungsvorschriften",
@@ -896,7 +896,7 @@ test.describe("searching administrative directive", () => {
   });
 
   test("searches without date restrictions", async ({ page }) => {
-    await navigate(page, "/advanced-search");
+    await navigate(page, "/erweiterte-suche");
 
     await searchFor(page, {
       documentKind: "Verwaltungsvorschriften",
@@ -913,7 +913,7 @@ test.describe("searching administrative directive", () => {
   });
 
   test("filter to show specific date", async ({ page }) => {
-    await navigate(page, "/advanced-search");
+    await navigate(page, "/erweiterte-suche");
 
     await searchFor(page, {
       documentKind: "Verwaltungsvorschriften",
@@ -929,7 +929,7 @@ test.describe("searching administrative directive", () => {
   });
 
   test("filter to show date range", async ({ page }) => {
-    await navigate(page, "/advanced-search");
+    await navigate(page, "/erweiterte-suche");
 
     await searchFor(page, {
       documentKind: "Verwaltungsvorschriften",
@@ -949,7 +949,7 @@ test.describe("searching administrative directive", () => {
 });
 
 test("restores search state from document breadcrumbs", async ({ page }) => {
-  await navigate(page, "/advanced-search");
+  await navigate(page, "/erweiterte-suche");
 
   await searchFor(page, {
     q: "FrSaftErfrischV",
@@ -985,7 +985,7 @@ test.describe("responsive", () => {
   test("displays the available data fields in an accordion", async ({
     page,
   }) => {
-    await navigate(page, "/advanced-search");
+    await navigate(page, "/erweiterte-suche");
 
     const dataFieldsToggle = page.getByRole("button", {
       name: "Auswahl für gezielte Suche",
@@ -1006,7 +1006,7 @@ test.describe("responsive", () => {
 test.describe("search by AND + OR operators", { tag: ["@RISDEV-8385"] }, () => {
   test.describe("legislation", () => {
     test("searches with AND operator", async ({ page }) => {
-      await navigate(page, "/advanced-search");
+      await navigate(page, "/erweiterte-suche");
 
       await searchFor(page, {
         q: 'LU:"Verordnung" AND LU:"Kontrolle"',
@@ -1021,7 +1021,7 @@ test.describe("search by AND + OR operators", { tag: ["@RISDEV-8385"] }, () => {
     });
 
     test("searches with OR operator", async ({ page }) => {
-      await navigate(page, "/advanced-search");
+      await navigate(page, "/erweiterte-suche");
 
       await searchFor(page, {
         q: "LU:Fruchtsaft OR LU:Fruchtsirup",
@@ -1040,7 +1040,7 @@ test.describe("search by AND + OR operators", { tag: ["@RISDEV-8385"] }, () => {
 
   test.describe("caselaw", () => {
     test("searches with AND operator", async ({ page }) => {
-      await navigate(page, "/advanced-search");
+      await navigate(page, "/erweiterte-suche");
 
       await searchFor(page, {
         q: 'GERICHT:"LG Hamburg" AND "Urteil 4"',
@@ -1055,7 +1055,7 @@ test.describe("search by AND + OR operators", { tag: ["@RISDEV-8385"] }, () => {
     });
 
     test("searches with OR operator", async ({ page }) => {
-      await navigate(page, "/advanced-search");
+      await navigate(page, "/erweiterte-suche");
 
       await searchFor(page, {
         q: 'GERICHT:"ArbG Köln" OR GERICHT:"BDiG Frankfurt"',
@@ -1073,7 +1073,7 @@ test.describe("search by AND + OR operators", { tag: ["@RISDEV-8385"] }, () => {
 
   test.describe("literature", () => {
     test("searches with AND operator", async ({ page }) => {
-      await navigate(page, "/advanced-search");
+      await navigate(page, "/erweiterte-suche");
 
       await searchFor(page, {
         q: "Erstes AND Dokument",
@@ -1088,7 +1088,7 @@ test.describe("search by AND + OR operators", { tag: ["@RISDEV-8385"] }, () => {
     });
 
     test("searches with OR operator", async ({ page }) => {
-      await navigate(page, "/advanced-search");
+      await navigate(page, "/erweiterte-suche");
 
       await searchFor(page, {
         q: "Erstes OR Zweites",
@@ -1106,7 +1106,7 @@ test.describe("search by AND + OR operators", { tag: ["@RISDEV-8385"] }, () => {
 
   test.describe("administrative directive", () => {
     test("searches with AND operator", async ({ page }) => {
-      await navigate(page, "/advanced-search");
+      await navigate(page, "/erweiterte-suche");
 
       await searchFor(page, {
         q: "Beschlüsse AND Beschluss",
@@ -1129,7 +1129,7 @@ test.describe("search by AND + OR operators", { tag: ["@RISDEV-8385"] }, () => {
     });
 
     test("searches with OR operator", async ({ page }) => {
-      await navigate(page, "/advanced-search");
+      await navigate(page, "/erweiterte-suche");
       await searchFor(page, {
         q: "Katze OR Beschluss",
         documentKind: "Verwaltungsvorschriften",

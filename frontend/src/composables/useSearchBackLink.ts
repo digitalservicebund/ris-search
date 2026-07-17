@@ -7,7 +7,7 @@ export type SearchBackLink = {
   route: RouteLocationRaw;
 };
 
-const ALLOWED_PREFIXES = ["/suche", "/advanced-search"] as const;
+const ALLOWED_PREFIXES = ["/suche", "/erweiterte-suche"] as const;
 
 /**
  * Returns the label and route for the "back to search" breadcrumb on document
