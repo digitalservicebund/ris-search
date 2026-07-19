@@ -29,11 +29,11 @@ commons-csv = "1.14.1"
 amazon-aws-sdk-s3 = "2.29.45"
 saxon-he = "13.0"
 streamex = "0.8.4"
-tools-jackson-core = "3.2.0"
+tools-jackson-core = "3.2.1"
 jaxb-moxy = "5.0.1"
 posthog = "1.2.0"
 pebble = "4.1.2"
-rest-assured = "6.0.0"
+rest-assured = "6.0.1"
 ris-html-transformation="0.0.4"
 
 [libraries]
@@ -78,10 +78,10 @@ restassured = { module = 'io.rest-assured:rest-assured', version.ref = "rest-ass
 jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version = "2.22.1" }
 
 # CVE-2026-5588
-bouncycastle-bcpkix = { module = "org.bouncycastle:bcpkix-jdk18on", version = "1.84" }
+bouncycastle-bcpkix = { module = "org.bouncycastle:bcpkix-jdk18on", version = "1.85" }
 
 # CVE-2026-0636
-bouncycastle-bcprov = { module = "org.bouncycastle:bcprov-jdk18on", version = "1.84" }
+bouncycastle-bcprov = { module = "org.bouncycastle:bcprov-jdk18on", version = "1.85" }
 
 [plugins]
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
