@@ -69,11 +69,7 @@ public class RisMeta {
    * @return the combined court keyword
    */
   public String getCourtKeyword() {
-    if (risGericht == null) return null;
-    if (risGericht.getGerichtsort() == null) {
-      return risGericht.getGerichtstyp();
-    }
-    return String.format("%s %s", risGericht.getGerichtstyp(), risGericht.getGerichtsort());
+    return risGericht.getShowAs();
   }
 
   public List<String> getAktenzeichen() {
