@@ -61,7 +61,7 @@
                         <ris:aktenzeichen domainTerm="Aktenzeichen" akn:refersTo="#aktenzeichen">KL 1234/56</ris:aktenzeichen>
                     </ris:aktenzeichenListe>
                     <ris:dokumenttyp domainTerm="Dokumenttyp">Urteil</ris:dokumenttyp>
-                    <ris:gericht domainTerm="Gericht" refersTo="#organisation-gericht-courttype-courtlocation">
+                    <ris:gericht domainTerm="Gericht" refersTo="#organisation-gericht-courttype-courtlocation" showAs="LG Hamburg Label">
                         <ris:gerichtstyp domainTerm="Gerichtstyp">LG</ris:gerichtstyp>
                         <ris:gerichtsort domainTerm="Gerichtsort">Hamburg</ris:gerichtsort>
                         <ris:spruchkoerper domainTerm="Spruchkörper" refersTo="#spruchkoerper">10. Senat</ris:spruchkoerper>
