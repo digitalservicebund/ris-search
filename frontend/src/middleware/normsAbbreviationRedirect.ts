@@ -16,7 +16,7 @@ export default defineNuxtRouteMiddleware(async (from) => {
 
   const expressionEli = data.value?.member?.[0]?.item?.legislationIdentifier;
   if (expressionEli && data.value?.member?.length === 1) {
-    return `/norms/${expressionEli}`;
+    return `/gesetze/${expressionEli}`;
   }
 
   throw createError(error.value ?? { status: 404 });

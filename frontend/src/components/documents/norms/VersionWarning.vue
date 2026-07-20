@@ -17,7 +17,7 @@ const inForceVersion = computed(() =>
 const inForceVersionLink = computed<RouteLocationRaw | undefined>(() =>
   inForceVersion.value
     ? {
-        path: `/norms/${inForceVersion.value?.legislationIdentifier}`,
+        path: `/gesetze/${inForceVersion.value?.legislationIdentifier}`,
         query: { from: route.query.from },
       }
     : undefined,

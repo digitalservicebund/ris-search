@@ -9,7 +9,10 @@ test.beforeAll(async ({ privateFeaturesEnabled }) => {
 
 test.describe("fassungen tab", async () => {
   test("displays Fassungen table in the Fassungen tab", async ({ page }) => {
-    await navigate(page, "/norms/eli/bund/bgbl-1/2020/s1126/2020-08-04/1/deu");
+    await navigate(
+      page,
+      "/gesetze/eli/bund/bgbl-1/2020/s1126/2020-08-04/1/deu",
+    );
 
     await page.getByRole("tab", { name: "Fassungen" }).click();
 
@@ -29,7 +32,7 @@ test.describe("fassungen tab", async () => {
   }) => {
     await navigate(
       page,
-      "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu?view=versions",
+      "/gesetze/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu?view=versions",
     );
 
     await expect(
@@ -52,7 +55,7 @@ test.describe("fassungen tab", async () => {
   test("can filter Fassungen by date", async ({ page }) => {
     await navigate(
       page,
-      "/norms/eli/bund/bgbl-1/2020/s1126/2020-08-04/1/deu?view=versions",
+      "/gesetze/eli/bund/bgbl-1/2020/s1126/2020-08-04/1/deu?view=versions",
     );
 
     const tableBody = page.getByRole("table").getByRole("rowgroup").nth(1);
@@ -73,7 +76,7 @@ test.describe("fassungen tab", async () => {
   }) => {
     await navigate(
       page,
-      "/norms/eli/bund/bgbl-1/2020/s1126/2020-08-04/1/deu?view=versions",
+      "/gesetze/eli/bund/bgbl-1/2020/s1126/2020-08-04/1/deu?view=versions",
     );
 
     const tableBody = page.getByRole("table").getByRole("rowgroup").nth(1);
@@ -91,7 +94,10 @@ test.describe("fassungen tab", async () => {
 
 test.describe("displays metadata correctly", async () => {
   test("currently valid norm", async ({ page }) => {
-    await navigate(page, "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu");
+    await navigate(
+      page,
+      "/gesetze/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu",
+    );
 
     const metadataList = page.getByTestId("metadata-list");
 
@@ -110,7 +116,10 @@ test.describe("displays metadata correctly", async () => {
   });
 
   test("on historic norm", async ({ page }) => {
-    await navigate(page, "/norms/eli/bund/bgbl-1/2020/s1126/2020-08-04/1/deu");
+    await navigate(
+      page,
+      "/gesetze/eli/bund/bgbl-1/2020/s1126/2020-08-04/1/deu",
+    );
 
     const metadataList = page.getByTestId("metadata-list");
 
@@ -129,7 +138,10 @@ test.describe("displays metadata correctly", async () => {
   });
 
   test("on future norm", async ({ page }) => {
-    await navigate(page, "/norms/eli/bund/bgbl-1/2020/s1126/2920-08-04/1/deu");
+    await navigate(
+      page,
+      "/gesetze/eli/bund/bgbl-1/2020/s1126/2920-08-04/1/deu",
+    );
 
     const metadataList = page.getByTestId("metadata-list");
 
@@ -157,7 +169,7 @@ test.describe("future or historic version info", () => {
 
     await navigate(
       page,
-      "/norms/eli/bund/bgbl-1/2020/s1126/2020-08-04/1/deu/hauptteil-n1_abschnitt-n2_art-z1",
+      "/gesetze/eli/bund/bgbl-1/2020/s1126/2020-08-04/1/deu/hauptteil-n1_abschnitt-n2_art-z1",
     );
 
     await expect(
@@ -183,7 +195,7 @@ test.describe("future or historic version info", () => {
 
     await navigate(
       page,
-      "/norms/eli/bund/bgbl-1/2020/s1126/2920-08-04/1/deu/hauptteil-n1_abschnitt-n2_art-z1",
+      "/gesetze/eli/bund/bgbl-1/2020/s1126/2920-08-04/1/deu/hauptteil-n1_abschnitt-n2_art-z1",
     );
 
     await expect(
@@ -207,7 +219,7 @@ test("displays validity in breadcrumb navigation", async ({
   privateFeaturesEnabled,
 }) => {
   test.skip(!privateFeaturesEnabled);
-  await navigate(page, "/norms/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu");
+  await navigate(page, "/gesetze/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu");
 
   const breadcrumb = page.getByRole("navigation", { name: "Pfadnavigation" });
   await expect(breadcrumb).toBeVisible();

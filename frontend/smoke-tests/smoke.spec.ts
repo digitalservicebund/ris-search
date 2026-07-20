@@ -53,7 +53,7 @@ test.describe("find and display norms", () => {
   });
 
   test("open norm directly (server side rendered)", async ({ page }) => {
-    await page.goto("/norms/eli/bund/banz-at/1922/s717/1922-09-12/1/deu");
+    await page.goto("/gesetze/eli/bund/banz-at/1922/s717/1922-09-12/1/deu");
 
     await expect(
       page.getByRole("heading", {

@@ -122,7 +122,7 @@ const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
       route: searchBackLink.value.route,
     },
     {
-      route: `/norms/${metadata.value.legislationIdentifier}`,
+      route: `/gesetze/${metadata.value.legislationIdentifier}`,
       label: normBreadcrumbTitle.value,
     },
   ];

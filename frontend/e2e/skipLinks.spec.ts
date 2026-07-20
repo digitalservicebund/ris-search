@@ -41,7 +41,7 @@ const scenarios: Scenario[] = [
   },
   {
     name: "norm page",
-    url: "/norms/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu",
+    url: "/gesetze/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu",
     skipLinks: [
       { label: "Zum Inhalt", target: "#main" },
       { label: "Zum Gesetzestext", target: "#content" },
@@ -50,7 +50,7 @@ const scenarios: Scenario[] = [
   },
   {
     name: "norm article page",
-    url: "/norms/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu/art-z1",
+    url: "/gesetze/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu/art-z1",
     skipLinks: [
       { label: "Zum Gesetzestext", target: "#content" },
       { label: "Zum Fußbereich", target: "#footer" },

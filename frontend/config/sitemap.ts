@@ -10,7 +10,7 @@ export const sitemap: Partial<ModuleOptions> = {
         "/administrative-directives/**",
         "/case‑law/**",
         "/literature/**",
-        "/norms/eli/**",
+        "/gesetze/eli/**",
       ],
       defaults: { priority: 0.7 },
     },

@@ -53,7 +53,7 @@ const validityStatus = computed(() =>
 );
 
 const detailPageRoute = computed<RouteLocationAsPath>(() => ({
-  path: `/norms/${searchResult.item.legislationIdentifier}`,
+  path: `/gesetze/${searchResult.item.legislationIdentifier}`,
   query: { from: route.fullPath },
 }));
 

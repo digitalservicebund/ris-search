@@ -40,7 +40,7 @@ const tableRowData = computed<TableRowData[]>(() => {
     const id = index;
 
     const link: RouteLocationRaw = {
-      path: `/norms/${version.legislationIdentifier}`,
+      path: `/gesetze/${version.legislationIdentifier}`,
       query: { from: route.query.from },
     };
 

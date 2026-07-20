@@ -10,7 +10,7 @@ test.describe("view norm page", async () => {
   test.setTimeout(60000);
 
   noJsTest("tabs work without JavaScript", async ({ page }) => {
-    await navigate(page, "/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu");
+    await navigate(page, "/gesetze/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu");
 
     await test.step("text", async () => {
       await expect(
@@ -44,7 +44,10 @@ test.describe("view norm page", async () => {
   });
 
   test("shows detailed information in the Details tab", async ({ page }) => {
-    await navigate(page, "/norms/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu");
+    await navigate(
+      page,
+      "/gesetze/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu",
+    );
 
     await page.getByRole("tab", { name: "Details" }).click();
 
@@ -75,7 +78,10 @@ test.describe("view norm page", async () => {
   test("official table of contents is visible and expandable", async ({
     page,
   }) => {
-    await navigate(page, "/norms/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu");
+    await navigate(
+      page,
+      "/gesetze/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu",
+    );
 
     const button = page.getByRole("button", {
       name: "Amtliches Inhaltsverzeichnis einblenden",
@@ -90,7 +96,10 @@ test.describe("view norm page", async () => {
   });
 
   test("view footnotes in title", async ({ page }) => {
-    await navigate(page, "/norms/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu");
+    await navigate(
+      page,
+      "/gesetze/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu",
+    );
 
     const marker = await page.getByRole("superscript").innerText();
     expect(marker).toBe("❃");
@@ -107,7 +116,7 @@ test.describe("view norm page", async () => {
     isMobileTest,
   }) => {
     test.skip(isMobileTest);
-    const normUrl = "/norms/eli/bund/bgbl-1/1964/s902/2009-02-05/19/deu";
+    const normUrl = "/gesetze/eli/bund/bgbl-1/1964/s902/2009-02-05/19/deu";
 
     await navigate(page, normUrl);
 
@@ -131,7 +140,7 @@ test.describe("view norm page", async () => {
     isMobileTest,
   }) => {
     test.skip(isMobileTest);
-    const normUrl = "/norms/eli/bund/bgbl-1/1964/s902/2009-02-05/19/deu";
+    const normUrl = "/gesetze/eli/bund/bgbl-1/1964/s902/2009-02-05/19/deu";
 
     await navigate(page, normUrl);
 
@@ -158,13 +167,16 @@ test.describe("view norm page", async () => {
     isMobileTest,
   }) => {
     test.skip(isMobileTest);
-    await navigate(page, "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu");
+    await navigate(
+      page,
+      "/gesetze/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu",
+    );
 
     const sidebar = page.getByRole("navigation", { name: "Inhalte" });
     await sidebar.getByRole("link", { name: "Eingangsformel" }).click();
 
     await expect(page).toHaveURL(
-      "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu#präambel-n1_formel-n1",
+      "/gesetze/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu#präambel-n1_formel-n1",
     );
 
     const heading = page.getByRole("heading", { name: "Eingangsformel" });
@@ -177,31 +189,31 @@ test.describe("view norm page", async () => {
 test.describe("actions menu", () => {
   test.describe("can copy currently valid expression link", () => {
     testCopyLinkButton(
-      "/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu",
+      "/gesetze/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu",
       "Link zur jeweils gültigen Fassung",
-      RegExp(".*/norms/eli/bund/bgbl-1/2024/383"),
+      RegExp(".*/gesetze/eli/bund/bgbl-1/2024/383"),
     );
   });
 
   test.describe("can copy permalink to currently viewed expression", () => {
     testCopyLinkButton(
-      "/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu",
+      "/gesetze/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu",
       "Permalink zu dieser Fassung kopieren",
-      RegExp(".*/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu"),
+      RegExp(".*/gesetze/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu"),
     );
   });
 
   test.describe("can use print action button to open print menu", () => {
-    testPrintButton("/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu");
+    testPrintButton("/gesetze/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu");
   });
 
   test.describe("can't use PDF action as it is disabled", () => {
-    testPdfButton("/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu");
+    testPdfButton("/gesetze/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu");
   });
 
   test.describe("can use XML action to view norms xml file", () => {
     testXmlButton(
-      "/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu",
+      "/gesetze/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu",
       "http://localhost:8090/v1/legislation/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu/2024-12-19/regelungstext-1.xml",
     );
   });
@@ -211,7 +223,7 @@ test.describe("actions menu", () => {
       test.skip(isMobileTest);
       await navigate(
         page,
-        "/norms/eli/bund/bgbl-1/1964/s902/2009-02-05/19/deu",
+        "/gesetze/eli/bund/bgbl-1/1964/s902/2009-02-05/19/deu",
       );
 
       const button = page.getByRole("menuitem", {
@@ -235,7 +247,7 @@ test.describe("actions menu", () => {
       test.skip(!isMobileTest);
       await navigate(
         page,
-        "/norms/eli/bund/bgbl-1/1964/s902/2009-02-05/19/deu",
+        "/gesetze/eli/bund/bgbl-1/1964/s902/2009-02-05/19/deu",
       );
 
       await page.getByLabel("Aktionen anzeigen").click();
@@ -254,7 +266,10 @@ test.describe("actions menu", () => {
   test.describe("does not show english translation link if no translation exists", () => {
     test("desktop", async ({ page, isMobileTest }) => {
       test.skip(isMobileTest);
-      await navigate(page, "/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu");
+      await navigate(
+        page,
+        "/gesetze/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu",
+      );
 
       await expect(
         page.getByRole("menuitem", {
@@ -265,7 +280,10 @@ test.describe("actions menu", () => {
 
     test("mobile", async ({ page, isMobileTest }) => {
       test.skip(!isMobileTest);
-      await navigate(page, "/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu");
+      await navigate(
+        page,
+        "/gesetze/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu",
+      );
 
       await page.getByLabel("Aktionen anzeigen").click();
 
@@ -284,7 +302,7 @@ test.describe("can view metadata of norms", () => {
     privateFeaturesEnabled,
   }) => {
     test.skip(!privateFeaturesEnabled);
-    await navigate(page, "/norms/eli/bund/bgbl-1/2025/130/2025-05-05/1/deu");
+    await navigate(page, "/gesetze/eli/bund/bgbl-1/2025/130/2025-05-05/1/deu");
 
     const metadataList = page.getByTestId("metadata-list");
 
@@ -307,7 +325,7 @@ test.describe("can view metadata of norms", () => {
     privateFeaturesEnabled,
   }) => {
     test.skip(privateFeaturesEnabled);
-    await navigate(page, "/norms/eli/bund/bgbl-1/2025/130/2025-05-05/1/deu");
+    await navigate(page, "/gesetze/eli/bund/bgbl-1/2025/130/2025-05-05/1/deu");
 
     const metadataList = page.getByTestId("metadata-list");
 
@@ -320,7 +338,7 @@ test.describe("can view metadata of norms", () => {
 test("shows correct breadcrumbs for a norm", async ({ page }) => {
   await navigate(
     page,
-    "/norms/eli/bund/bgbl-1/1972/s2459/1999-04-20/4/deu?from=/suche?query=example",
+    "/gesetze/eli/bund/bgbl-1/1972/s2459/1999-04-20/4/deu?from=/search?query=example",
   );
 
   const breadcrumb = page.getByRole("navigation", { name: "Pfadnavigation" });
@@ -331,7 +349,7 @@ test("shows correct breadcrumbs for a norm", async ({ page }) => {
   await expect(searchBreadcrumb).toBeVisible();
   await expect(searchBreadcrumb).toHaveAttribute(
     "href",
-    "/suche?query=example",
+    "/search?query=example",
   );
 
   await expect(breadcrumb.getByText("BWahlGV")).toBeVisible();
@@ -343,7 +361,10 @@ test.describe("mobile table of contents", () => {
     isMobileTest,
   }) => {
     test.skip(!isMobileTest);
-    await navigate(page, "/norms/eli/bund/bgbl-1/1972/s2459/1999-04-20/4/deu");
+    await navigate(
+      page,
+      "/gesetze/eli/bund/bgbl-1/1972/s2459/1999-04-20/4/deu",
+    );
 
     await expect(
       page.getByRole("button", { name: "Inhalte BWahlGV" }),
@@ -355,7 +376,10 @@ test.describe("mobile table of contents", () => {
     isMobileTest,
   }) => {
     test.skip(!isMobileTest);
-    await navigate(page, "/norms/eli/bund/bgbl-1/1972/s2459/1999-04-20/4/deu");
+    await navigate(
+      page,
+      "/gesetze/eli/bund/bgbl-1/1972/s2459/1999-04-20/4/deu",
+    );
 
     await page.getByRole("button", { name: "Inhalte BWahlGV" }).click();
 
@@ -367,7 +391,10 @@ test.describe("mobile table of contents", () => {
     isMobileTest,
   }) => {
     test.skip(!isMobileTest);
-    await navigate(page, "/norms/eli/bund/bgbl-1/1972/s2459/1999-04-20/4/deu");
+    await navigate(
+      page,
+      "/gesetze/eli/bund/bgbl-1/1972/s2459/1999-04-20/4/deu",
+    );
 
     await page.getByRole("button", { name: "Inhalte BWahlGV" }).click();
 
@@ -385,7 +412,10 @@ test.describe("mobile table of contents", () => {
     isMobileTest,
   }) => {
     test.skip(!isMobileTest);
-    await navigate(page, "/norms/eli/bund/bgbl-1/1972/s2459/1999-04-20/4/deu");
+    await navigate(
+      page,
+      "/gesetze/eli/bund/bgbl-1/1972/s2459/1999-04-20/4/deu",
+    );
 
     await page.getByRole("button", { name: "Inhalte BWahlGV" }).click();
 

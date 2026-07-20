@@ -16,7 +16,7 @@ const matchedExpressionEli = computed(() => {
 });
 
 if (matchedExpressionEli.value) {
-  await navigateTo(`/norms/${matchedExpressionEli.value}`, {
+  await navigateTo(`/gesetze/${matchedExpressionEli.value}`, {
     replace: true,
   });
 }

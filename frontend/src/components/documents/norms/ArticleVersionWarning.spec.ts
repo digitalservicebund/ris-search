@@ -19,7 +19,7 @@ const articles = [
 
 describe("ArticleVersionWarning", () => {
   const inForceVersionLink =
-    "/norms/eli/bund/bgbl-1/2000/s100/2000-01-01/1/deu";
+    "/gesetze/eli/bund/bgbl-1/2000/s100/2000-01-01/1/deu";
 
   it.each(articles)("shows warning for article %s", async (currentArticle) => {
     await renderSuspended(ArticleVersionWarning, {
