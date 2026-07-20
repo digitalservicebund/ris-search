@@ -20,24 +20,19 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import org.assertj.core.util.Sets;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 class IndexLiteratureServiceTest {
 
-  IndexLiteratureService service;
+  @InjectMocks IndexLiteratureService service;
 
   @Mock LiteratureBucket bucket;
   @Mock LiteratureRepository repo;
-
-  @BeforeEach()
-  void setup() {
-    this.service = new IndexLiteratureService(bucket, repo);
-  }
 
   @Test
   void reindexAllIgnoresInvalidFiles() throws ObjectStoreServiceException {

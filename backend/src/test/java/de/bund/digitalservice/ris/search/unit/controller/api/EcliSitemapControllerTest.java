@@ -7,9 +7,9 @@ import de.bund.digitalservice.ris.search.controller.api.EcliSitemapController;
 import de.bund.digitalservice.ris.search.service.eclicrawler.EcliSitemapWriter;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatusCode;
@@ -18,14 +18,9 @@ import org.springframework.http.MediaType;
 @ExtendWith(MockitoExtension.class)
 class EcliSitemapControllerTest {
 
-  EcliSitemapController controller;
+  @InjectMocks EcliSitemapController controller;
 
   @Mock EcliSitemapWriter service;
-
-  @BeforeEach()
-  void setup() {
-    controller = new EcliSitemapController(service);
-  }
 
   @Test
   void itRetrievesTheCorrectFile() {

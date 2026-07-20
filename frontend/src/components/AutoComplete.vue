@@ -123,6 +123,7 @@ const dropdownButtonFocus = ref(false);
     <template #dropdown="slotProps">
       <button
         v-if="innerValue"
+        type="button"
         class="cursor-pointer p-8 text-blue-800 hover:bg-blue-100 hover:text-blue-800 focus-visible:bg-blue-800 focus-visible:text-white focus-visible:outline-none"
         aria-label="Entfernen"
         @click="onClear"
@@ -136,6 +137,7 @@ const dropdownButtonFocus = ref(false);
           'bg-blue-800 text-white': dropdownButtonFocus,
           'hover:bg-blue-100 hover:text-blue-800': !dropdownButtonFocus,
         }"
+        type="button"
         aria-label="Vorschläge anzeigen"
         aria-haspopup="listbox"
         @click="slotProps.toggleCallback"

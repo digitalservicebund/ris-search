@@ -32,6 +32,7 @@ const drawerId = useId();
   >
     <button
       v-if="!mobileTocVisible"
+      type="button"
       ref="openButtonRef"
       class="shadow-gray-1000/15 fixed inset-x-0 bottom-0 z-10 flex cursor-pointer items-center justify-between gap-8 bg-white p-16 text-left shadow-[0_0_0.5rem] -outline-offset-4 outline-blue-800 focus-visible:outline-4 md:hidden"
       data-back-to-top-adjust="drawer"

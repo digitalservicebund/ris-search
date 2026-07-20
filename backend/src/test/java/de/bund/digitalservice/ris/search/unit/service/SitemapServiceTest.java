@@ -20,6 +20,7 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -28,12 +29,11 @@ import org.springframework.test.util.ReflectionTestUtils;
 class SitemapServiceTest {
   private static final String TEST_ELI_FILE =
       "eli/bund/bgbl-1/1991/s101/1991-01-01/1/deu/1991-01-20/regelungstext-1.xml";
-  private SitemapService sitemapService;
+  @InjectMocks private SitemapService sitemapService;
   @Mock private PortalBucket portalBucket;
 
   @BeforeEach
   void setUp() {
-    sitemapService = new SitemapService(portalBucket);
     ReflectionTestUtils.setField(sitemapService, "baseUrl", "https://test.local/");
   }
 
