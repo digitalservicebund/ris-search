@@ -10,7 +10,7 @@ import NormSearchResult from "./NormSearchResult.vue";
 
 const { useRouteMock } = vi.hoisted(() => ({
   useRouteMock: vi.fn(() => ({
-    fullPath: "/search?query=test&documentKind=N",
+    fullPath: "/suche?query=test&documentKind=N",
   })),
 }));
 
@@ -365,7 +365,7 @@ describe("NormSearchResult", () => {
 
   it("includes the current search URL as query param in the detail page link", () => {
     useRouteMock.mockReturnValue({
-      fullPath: "/search?query=BGB&documentKind=N&pageIndex=1",
+      fullPath: "/suche?query=BGB&documentKind=N&pageIndex=1",
     });
 
     renderComponent();
@@ -373,13 +373,13 @@ describe("NormSearchResult", () => {
     const link = screen.getByRole("link", { name: /Test Title/i });
     expect(link).toHaveAttribute(
       "data-from",
-      "/search?query=BGB&documentKind=N&pageIndex=1",
+      "/suche?query=BGB&documentKind=N&pageIndex=1",
     );
   });
 
   it("includes the current search URL as query param in the article detail page link", () => {
     useRouteMock.mockReturnValue({
-      fullPath: "/search?query=BGB&documentKind=N&pageIndex=1",
+      fullPath: "/suche?query=BGB&documentKind=N&pageIndex=1",
     });
 
     renderComponent();
@@ -387,7 +387,7 @@ describe("NormSearchResult", () => {
     const link = screen.getByRole("link", { name: /Article 2/i });
     expect(link).toHaveAttribute(
       "data-from",
-      "/search?query=BGB&documentKind=N&pageIndex=1",
+      "/suche?query=BGB&documentKind=N&pageIndex=1",
     );
   });
 });

@@ -45,7 +45,7 @@ describe("feedback.post", () => {
 
   it("forwards feedback and empty honeypot to the backend by default", async () => {
     mockReadBody.mockResolvedValue({ text: "Great app!" });
-    mockGetHeader.mockReturnValue("https://example.com/search?query=test");
+    mockGetHeader.mockReturnValue("https://example.com/suche?query=test");
     mockGetRequestURL.mockReturnValue(
       new URL("https://example.com/api/feedback"),
     );
@@ -55,7 +55,7 @@ describe("feedback.post", () => {
 
     expect(mockFetch).toHaveBeenCalledWith(
       expect.stringContaining(
-        "/v1/feedback?text=Great+app%21&url=%2Fsearch%3Fquery%3Dtest&user_id=anonymous_feedback_user&name=",
+        "/v1/feedback?text=Great+app%21&url=%2Fsuche%3Fquery%3Dtest&user_id=anonymous_feedback_user&name=",
       ),
     );
   });

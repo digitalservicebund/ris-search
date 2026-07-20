@@ -152,7 +152,7 @@ describe("VersionWarning", () => {
   });
 
   it("keeps the from query parameter in version links", async () => {
-    useRouteMock.mockReturnValue({ query: { from: "/search?q=test" } });
+    useRouteMock.mockReturnValue({ query: { from: "/suche?q=test" } });
 
     render(VersionWarning, {
       props: {
@@ -173,6 +173,6 @@ describe("VersionWarning", () => {
     const link = await screen.findByRole("link", {
       name: "Zur aktuell gültigen Fassung",
     });
-    expect(link).toHaveAttribute("data-from", "/search?q=test");
+    expect(link).toHaveAttribute("data-from", "/suche?q=test");
   });
 });

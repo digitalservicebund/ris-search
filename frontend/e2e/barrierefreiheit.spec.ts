@@ -51,19 +51,19 @@ const testPages = [
   },
   {
     name: "simple search - all documents",
-    url: "/search",
+    url: "/suche",
   },
   {
     name: "simple search - legislation",
-    url: "/search?documentKind=N",
+    url: "/suche?documentKind=N",
   },
   {
     name: "simple search - caselaw",
-    url: "/search?documentKind=R",
+    url: "/suche?documentKind=R",
   },
   {
     name: "advanced search",
-    url: "/advanced-search",
+    url: "/erweiterte-suche",
   },
   {
     name: "norm view",

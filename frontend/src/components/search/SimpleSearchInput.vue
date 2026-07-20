@@ -39,7 +39,7 @@ const searchInputId = useId();
 
 <template>
   <search :class="{ 'max-w-md': !fullWidth }">
-    <form action="/search" @submit.prevent="performSearch">
+    <form action="/suche" @submit.prevent="performSearch">
       <InputGroup>
         <InputText
           :id="searchInputId"

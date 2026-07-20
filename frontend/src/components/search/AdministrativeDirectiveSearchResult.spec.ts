@@ -6,7 +6,7 @@ import type { AdministrativeDirective, SearchResult } from "~/types/api";
 
 const { useRouteMock } = vi.hoisted(() => ({
   useRouteMock: vi.fn(() => ({
-    fullPath: "/search?query=test&documentKind=VS",
+    fullPath: "/suche?query=test&documentKind=VS",
   })),
 }));
 
@@ -212,7 +212,7 @@ describe("AdministrativeDirectiveSearchResult", () => {
 
   it("includes the current search URL as query param in the detail page link", async () => {
     useRouteMock.mockReturnValue({
-      fullPath: "/search?query=Vorschrift&documentKind=VS&pageIndex=0",
+      fullPath: "/suche?query=Vorschrift&documentKind=VS&pageIndex=0",
     });
 
     await renderComponent();
@@ -222,13 +222,13 @@ describe("AdministrativeDirectiveSearchResult", () => {
     });
     expect(link).toHaveAttribute(
       "data-from",
-      "/search?query=Vorschrift&documentKind=VS&pageIndex=0",
+      "/suche?query=Vorschrift&documentKind=VS&pageIndex=0",
     );
   });
 
   it("includes the current search URL as query param in preview section links", async () => {
     useRouteMock.mockReturnValue({
-      fullPath: "/search?query=Vorschrift&documentKind=VS&pageIndex=0",
+      fullPath: "/suche?query=Vorschrift&documentKind=VS&pageIndex=0",
     });
 
     await renderComponent({
@@ -245,7 +245,7 @@ describe("AdministrativeDirectiveSearchResult", () => {
     const sectionLink = screen.getByRole("link", { name: "Kurzreferat:" });
     expect(sectionLink).toHaveAttribute(
       "data-from",
-      "/search?query=Vorschrift&documentKind=VS&pageIndex=0",
+      "/suche?query=Vorschrift&documentKind=VS&pageIndex=0",
     );
   });
 });

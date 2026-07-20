@@ -7,7 +7,7 @@ export type SearchBackLink = {
   route: RouteLocationRaw;
 };
 
-const ALLOWED_PREFIXES = ["/search", "/advanced-search"] as const;
+const ALLOWED_PREFIXES = ["/suche", "/erweiterte-suche"] as const;
 
 /**
  * Returns the label and route for the "back to search" breadcrumb on document
@@ -29,7 +29,7 @@ export function useSearchBackLink(
     if (from) {
       for (const prefix of ALLOWED_PREFIXES) {
         if (from === prefix || from.startsWith(`${prefix}?`)) {
-          const label = prefix === "/search" ? "Suche" : "Erweiterte Suche";
+          const label = prefix === "/suche" ? "Suche" : "Erweiterte Suche";
           return { label, route: from };
         }
       }
@@ -37,7 +37,7 @@ export function useSearchBackLink(
 
     return {
       label: "Suche",
-      route: `/search?documentKind=${fallbackDocumentKind}`,
+      route: `/suche?documentKind=${fallbackDocumentKind}`,
     };
   });
 }

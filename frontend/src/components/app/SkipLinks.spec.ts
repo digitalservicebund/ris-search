@@ -50,7 +50,7 @@ describe("SkipLinks", () => {
   it("focuses nav when navigating to a different path", async () => {
     await renderSuspended(AppSkipLinks, {
       props: { links: [{ label: "Zur Suche", to: "#search" }] },
-      route: "/search",
+      route: "/suche",
     });
 
     const nav = screen.getByRole("navigation", { name: "Sprunglinks" });
@@ -66,14 +66,14 @@ describe("SkipLinks", () => {
   it("does not focus nav when navigating to the same path with different query params", async () => {
     await renderSuspended(AppSkipLinks, {
       props: { links: [{ label: "Zur Suche", to: "#search" }] },
-      route: "/search?q=foo",
+      route: "/suche?q=foo",
     });
 
     const nav = screen.getByRole("navigation", { name: "Sprunglinks" });
     const focusSpy = vi.spyOn(nav, "focus");
 
     const router = useRouter();
-    await router.push("/search?q=bar");
+    await router.push("/suche?q=bar");
 
     expect(focusSpy).not.toHaveBeenCalled();
     focusSpy.mockRestore();

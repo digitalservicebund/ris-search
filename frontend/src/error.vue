@@ -10,7 +10,7 @@ useHead({
 });
 
 function redirectToSearch(searchStr?: string) {
-  navigateTo({ name: "search", query: searchStr ? { query: searchStr } : {} });
+  navigateTo({ name: "suche", query: searchStr ? { query: searchStr } : {} });
 }
 
 const props = defineProps({

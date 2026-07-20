@@ -15,7 +15,7 @@ defineEmits<{ selectItem: [] }>();
       <li>
         <NuxtLink
           class="nav-link"
-          :to="{ name: 'search' }"
+          :to="{ name: 'suche' }"
           @click="$emit('selectItem')"
         >
           <IconSearch />Suche

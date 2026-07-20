@@ -220,7 +220,7 @@ watch(searchStatus, async (newStatus, oldStatus) => {
       <p v-if="privateFeaturesEnabled" class="typo-label2-regular mt-8">
         Mehr Suchoptionen finden Sie unter
         <NuxtLink
-          :to="{ name: 'advanced-search' }"
+          :to="{ name: 'erweiterte-suche' }"
           class="ris-link2-bold 2xl:ris-link1-bold"
         >
           Erweiterte Suche

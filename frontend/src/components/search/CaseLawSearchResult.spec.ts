@@ -6,7 +6,7 @@ import type { CaseLaw, SearchResult, TextMatch } from "~/types/api";
 
 const { useRouteMock } = vi.hoisted(() => ({
   useRouteMock: vi.fn(() => ({
-    fullPath: "/search?query=test&documentKind=R",
+    fullPath: "/suche?query=test&documentKind=R",
   })),
 }));
 
@@ -434,7 +434,7 @@ describe("CaselawSearchResult", () => {
 
   it("includes the current search URL as query param in the detail page link", () => {
     useRouteMock.mockReturnValue({
-      fullPath: "/search?query=BGB&documentKind=R&pageIndex=2",
+      fullPath: "/suche?query=BGB&documentKind=R&pageIndex=2",
     });
 
     renderComponent({});
@@ -442,13 +442,13 @@ describe("CaselawSearchResult", () => {
     const link = screen.getByRole("link", { name: "Test Headline" });
     expect(link).toHaveAttribute(
       "data-from",
-      "/search?query=BGB&documentKind=R&pageIndex=2",
+      "/suche?query=BGB&documentKind=R&pageIndex=2",
     );
   });
 
   it("includes the current search URL as query param in preview section links", () => {
     useRouteMock.mockReturnValue({
-      fullPath: "/search?query=BGB&documentKind=R&pageIndex=2",
+      fullPath: "/suche?query=BGB&documentKind=R&pageIndex=2",
     });
 
     renderComponent({
@@ -465,7 +465,7 @@ describe("CaselawSearchResult", () => {
     const sectionLink = screen.getByRole("link", { name: "Leitsatz:" });
     expect(sectionLink).toHaveAttribute(
       "data-from",
-      "/search?query=BGB&documentKind=R&pageIndex=2",
+      "/suche?query=BGB&documentKind=R&pageIndex=2",
     );
   });
 });
