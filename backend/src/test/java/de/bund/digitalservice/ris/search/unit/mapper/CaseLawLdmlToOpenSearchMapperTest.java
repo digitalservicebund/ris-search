@@ -40,7 +40,7 @@ class CaseLawLdmlToOpenSearchMapperTest {
     assertThat(caseLaw.fileNumbers()).hasToString("[Test file number 1, Test file number 2]");
     assertThat(caseLaw.courtType()).isEqualTo("Test court type");
     assertThat(caseLaw.location()).isEqualTo("Test court location");
-    assertThat(caseLaw.courtKeyword()).isEqualTo("Test court type Test court location");
+    assertThat(caseLaw.courtKeyword()).isEqualTo("Test court label");
     assertThat(caseLaw.documentType()).isEqualTo("Urteil");
     assertThat(caseLaw.outline()).isEqualTo("Example Gliederung/Outline");
     assertThat(caseLaw.judicialBody()).isEqualTo("Test judicial body");
