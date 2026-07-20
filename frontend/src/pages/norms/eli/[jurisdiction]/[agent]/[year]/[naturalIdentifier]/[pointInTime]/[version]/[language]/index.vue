@@ -342,7 +342,7 @@ const fassungenDateFilterInputId = useId();
                 <Button
                   :as="NuxtLink"
                   class="mt-16"
-                  :to="{ name: 'usage-tests' }"
+                  :to="{ name: 'nutzungstests' }"
                 >
                   Mehr über Nutzungstest erfahren
                 </Button>

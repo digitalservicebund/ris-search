@@ -2,7 +2,6 @@
 import text from "./content.md?raw";
 
 definePageMeta({
-  alias: ["/nutzungstests-datenschutz"],
   layout: false,
   skipLinks: [
     { label: "Zum Inhalt", to: "#main" },

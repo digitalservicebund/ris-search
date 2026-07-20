@@ -33,7 +33,7 @@ defineEmits<{ selectItem: [] }>();
       <li>
         <NuxtLink
           class="nav-link"
-          :to="{ name: 'about' }"
+          :to="{ name: 'ueber' }"
           @click="$emit('selectItem')"
         >
           Über den Service

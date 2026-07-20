@@ -58,7 +58,7 @@ watch(
         an einer Nutzungsstudie teil und helfen Sie uns, Rechtsinformationen
         leichter zugänglich zu machen.
       </p>
-      <Button :as="NuxtLink" :to="{ name: 'usage-tests' }">
+      <Button :as="NuxtLink" :to="{ name: 'nutzungstests' }">
         Zur Registrierungsseite
       </Button>
     </div>

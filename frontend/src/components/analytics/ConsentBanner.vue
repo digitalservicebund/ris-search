@@ -55,10 +55,16 @@ const headingId = useId();
           <input type="hidden" name="consent" value="false" />
           <Button label="Ablehnen" type="submit" />
         </form>
-        <NuxtLink :to="{ name: 'data-protection' }" class="typo-link-regular">
+        <NuxtLink
+          :to="{ name: 'datenschutzerklaerung' }"
+          class="typo-link-regular"
+        >
           Datenschutzerklärung
         </NuxtLink>
-        <NuxtLink :to="{ name: 'cookie-settings' }" class="typo-link-regular">
+        <NuxtLink
+          :to="{ name: 'cookie-einstellungen' }"
+          class="typo-link-regular"
+        >
           Cookie-Einstellungen
         </NuxtLink>
       </div>

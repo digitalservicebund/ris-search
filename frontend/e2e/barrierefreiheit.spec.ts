@@ -23,7 +23,7 @@ const testPages = [
   },
   {
     name: "data protection",
-    url: "/datenschutz",
+    url: "/datenschutzerklaerung",
   },
   {
     name: "accessibility",
@@ -47,7 +47,7 @@ const testPages = [
   },
   {
     name: "user tests data protection",
-    url: "/nutzungstests-datenschutz",
+    url: "/nutzungstests-datenschutzerklaerung",
   },
   {
     name: "simple search - all documents",

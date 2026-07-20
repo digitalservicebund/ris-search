@@ -167,7 +167,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
           geben. Die Funktionen und der Umfang der Daten werden schrittweise
           erweitert.
         </p>
-        <NuxtLink class="typo-link-regular" :to="{ name: 'about' }"
+        <NuxtLink class="typo-link-regular" :to="{ name: 'ueber' }"
           >Weitere Informationen zur Testphase</NuxtLink
         >
       </div>

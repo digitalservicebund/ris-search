@@ -2,7 +2,6 @@
 import text from "./content.md?raw";
 
 definePageMeta({
-  alias: ["/datenschutz"],
   layout: false,
   skipLinks: [
     { label: "Zum Inhalt", to: "#main" },
@@ -11,17 +10,17 @@ definePageMeta({
 });
 
 useSeo({
-  title: "Datenschutzerklärung",
+  title: "Barrierefreiheit",
   description:
-    "Wie wir Ihre Daten schützen, welche Rechte Sie haben und welche Verfahren wir anwenden.",
-  ogTitle: "Datenschutzrichtlinie des Rechtsinformationsportals des Bundes",
+    "Informationen zur digitalen Zugänglichkeit, zum technischen Standard und zur Feedback-Möglichkeit.",
+  ogTitle: "Barrierefreiheit im Rechtsinformationsportal des Bundes",
 });
 </script>
 
 <template>
   <NuxtLayout name="markdown-page" :static-content="text">
     <template #breadcrumb>
-      <Breadcrumbs :items="[{ label: 'Datenschutzerklärung' }]" />
+      <Breadcrumbs :items="[{ label: 'Barrierefreiheit' }]" />
     </template>
   </NuxtLayout>
 </template>

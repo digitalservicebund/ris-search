@@ -6,7 +6,7 @@ import ProseA from "./ProseA.global.vue";
 describe("ProseA", () => {
   it("renders without error with default props", async () => {
     await renderSuspended(ProseA, {
-      props: { href: "/about" },
+      props: { href: "/ueber" },
       slots: { default: () => "Test Link" },
     });
 
@@ -15,13 +15,13 @@ describe("ProseA", () => {
 
   it("renders as NuxtLink for relative paths", async () => {
     await renderSuspended(ProseA, {
-      props: { href: "/contact" },
+      props: { href: "/kontakt" },
       slots: { default: () => "Relative Link" },
     });
 
     const link = screen.getByRole("link", { name: "Relative Link" });
 
-    expect(link).toHaveAttribute("href", "/contact");
+    expect(link).toHaveAttribute("href", "/kontakt");
   });
 
   it("renders as NuxtLink for hash links", async () => {
@@ -65,7 +65,7 @@ describe("ProseA", () => {
 
   it("passes target attribute to NuxtLink for internal links", async () => {
     await renderSuspended(ProseA, {
-      props: { href: "/imprint", target: "_blank" },
+      props: { href: "/impressum", target: "_blank" },
       slots: { default: () => "Internal with target" },
     });
 
@@ -76,7 +76,7 @@ describe("ProseA", () => {
 
   it("renders slot content correctly", async () => {
     await renderSuspended(ProseA, {
-      props: { href: "/about" },
+      props: { href: "/ueber" },
       slots: { default: () => "Custom slot content" },
     });
 

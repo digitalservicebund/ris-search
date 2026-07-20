@@ -2,7 +2,6 @@
 import text from "./content.md?raw";
 
 definePageMeta({
-  alias: ["/ueber"],
   layout: false,
   skipLinks: [
     { label: "Zum Inhalt", to: "#main" },
@@ -11,17 +10,17 @@ definePageMeta({
 });
 
 useSeo({
-  title: "Über den Service",
+  title: "Datenschutzerklärung",
   description:
-    "Erfahren Sie, wie das Portal Gesetze und Urteile für alle frei zugänglich macht.",
-  ogTitle: "Über das neue Rechtsinformationsportal des Bundes",
+    "Wie wir Ihre Daten schützen, welche Rechte Sie haben und welche Verfahren wir anwenden.",
+  ogTitle: "Datenschutzrichtlinie des Rechtsinformationsportals des Bundes",
 });
 </script>
 
 <template>
   <NuxtLayout name="markdown-page" :static-content="text">
     <template #breadcrumb>
-      <Breadcrumbs :items="[{ label: 'Über den Service' }]" />
+      <Breadcrumbs :items="[{ label: 'Datenschutzerklärung' }]" />
     </template>
   </NuxtLayout>
 </template>
