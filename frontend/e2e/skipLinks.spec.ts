@@ -58,7 +58,7 @@ const scenarios: Scenario[] = [
   },
   {
     name: "case-law page",
-    url: "/case-law/KORE600500000",
+    url: "/gerichtsentscheidungen/KORE600500000",
     skipLinks: [
       { label: "Zum Inhalt", target: "#main" },
       { label: "Zum Entscheidungstext", target: "#content" },

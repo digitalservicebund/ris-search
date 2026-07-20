@@ -82,7 +82,7 @@ const testPages = [
   },
   {
     name: "caselaw view",
-    url: "/case-law/STRE300770800",
+    url: "/gerichtsentscheidungen/STRE300770800",
     tabs: [{ name: "Details" }],
   },
   {

@@ -95,7 +95,7 @@ test.describe("find and display caselaws", () => {
   });
 
   test("open caselaw directly (server side rendered)", async ({ page }) => {
-    await page.goto("/case-law/JURE100055708");
+    await page.goto("/gerichtsentscheidungen/JURE100055708");
 
     await expect(
       page.getByRole("heading", {

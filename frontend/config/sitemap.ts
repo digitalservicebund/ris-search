@@ -8,7 +8,7 @@ export const sitemap: Partial<ModuleOptions> = {
       includeAppSources: true,
       exclude: [
         "/administrative-directives/**",
-        "/case‑law/**",
+        "/gerichtsentscheidungen/**",
         "/literature/**",
         "/gesetze/eli/**",
       ],
