@@ -519,7 +519,7 @@ test.describe("searching caselaw", () => {
 
     // Header
     await expect(searchResult).toHaveText(/Beschluss/);
-    await expect(searchResult).toHaveText(/BPatG Teststadt/);
+    await expect(searchResult).toHaveText(/BPatG Label/);
     await expect(searchResult).toHaveText(/09.04.2025/);
     await expect(searchResult).toHaveText(/34 X \(xyz\) 456\/78/);
     await expect(searchResult).toHaveText(/Beispielentscheid/);
