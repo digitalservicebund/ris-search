@@ -14,16 +14,16 @@ import de.bund.digitalservice.ris.search.service.LiteratureService;
 import de.bund.digitalservice.ris.search.service.xslt.LiteratureXsltTransformerService;
 import de.bund.digitalservice.ris.search.service.xslt.SliLiteratureXsltTransformerService;
 import java.util.Optional;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 class LiteratureControllerTest {
 
-  LiteratureController controller;
+  @InjectMocks LiteratureController controller;
 
   @Mock LiteratureService literatureService;
 
@@ -34,13 +34,6 @@ class LiteratureControllerTest {
   @Mock LiteratureBucket bucket;
 
   @Mock ChangelogService changelogService;
-
-  @BeforeEach
-  void setup() {
-    controller =
-        new LiteratureController(
-            literatureService, uliTransformer, sliTransformer, changelogService);
-  }
 
   @Test
   void itCallsTheUliTransformer() throws ObjectStoreServiceException {

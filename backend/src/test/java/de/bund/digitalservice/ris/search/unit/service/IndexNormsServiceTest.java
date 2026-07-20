@@ -14,9 +14,9 @@ import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
 import de.bund.digitalservice.ris.search.service.IndexNormsService;
 import java.util.List;
 import java.util.Optional;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.core.env.Environment;
@@ -24,17 +24,12 @@ import org.springframework.core.env.Environment;
 @ExtendWith(MockitoExtension.class)
 class IndexNormsServiceTest {
 
-  IndexNormsService service;
+  @InjectMocks IndexNormsService service;
 
   @Mock NormsBucket bucket;
   @Mock Environment environment;
   @Mock NormsRepository repo;
   @Mock ArticlesRepository articlesRepository;
-
-  @BeforeEach()
-  void setup() {
-    this.service = new IndexNormsService(environment, bucket, repo, articlesRepository);
-  }
 
   private final String testContent =
       """

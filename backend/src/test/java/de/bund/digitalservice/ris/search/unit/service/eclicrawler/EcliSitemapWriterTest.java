@@ -24,10 +24,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -35,14 +35,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class EcliSitemapWriterTest {
 
-  EcliSitemapWriter service;
+  @InjectMocks EcliSitemapWriter service;
   @Mock PortalBucket bucket;
   @Mock EcliMarshaller marshaller;
-
-  @BeforeEach
-  void setup() {
-    service = new EcliSitemapWriter(bucket, marshaller);
-  }
 
   @Test
   void itWritesDocumentsToSitemaps() throws JAXBException {
