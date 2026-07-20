@@ -36,7 +36,7 @@ describe("ConsentBanner", () => {
   it("shows the banner when user has not given consent yet", async () => {
     await factory(undefined);
     expect(
-      screen.queryByRole("region", {
+      screen.getByRole("region", {
         name: "Cookie-Einstellungen akzeptieren oder ablehnen",
       }),
     ).toBeInTheDocument();

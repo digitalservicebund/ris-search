@@ -40,18 +40,18 @@ describe("ConsentStatus", () => {
 
   it("renders without error", async () => {
     await factory(undefined);
-    expect(screen.queryByTestId("consent-status-wrapper")).toBeInTheDocument();
+    expect(screen.getByTestId("consent-status-wrapper")).toBeInTheDocument();
   });
 
   it("shows accept button when consent is not given", async () => {
     await factory(false);
-    expect(screen.queryByTestId(acceptButtonTestId)).toBeInTheDocument();
+    expect(screen.getByTestId(acceptButtonTestId)).toBeInTheDocument();
     expect(screen.queryByTestId(declineButtonTestId)).not.toBeInTheDocument();
   });
 
   it("shows decline button when consent is given", async () => {
     await factory(true);
-    expect(screen.queryByTestId(declineButtonTestId)).toBeInTheDocument();
+    expect(screen.getByTestId(declineButtonTestId)).toBeInTheDocument();
     expect(screen.queryByTestId(acceptButtonTestId)).not.toBeInTheDocument();
   });
 
