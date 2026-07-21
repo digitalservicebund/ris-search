@@ -276,28 +276,30 @@ public class IndexNormsService implements IndexService {
       return Optional.empty();
     }
 
-    Map<String, String> attachments = getAttachments(keysMatchingExpressionEli);
+    Map<String, String> attachments = getXmlAttachments(fileName, keysMatchingExpressionEli);
     Optional<Norm> norm =
         NormLdmlToOpenSearchMapper.parseNorm(
             fileContent.get(), attachments, environment.acceptsProfiles(Profiles.of("prototype")));
     if (norm.isEmpty()) {
       logger.error("Unknown error while processing file {} during Norm import.", fileName);
-      return Optional.empty();
-    } else {
-      return norm;
     }
+
+    return norm;
   }
 
   /**
-   * retrieves all contents of found attachments in a list of object keys
+   * retrieves all contents of attachments belonging to a specific parent file from a list of object
+   * keys
    *
+   * @param parentFile parent manifestation file the attachments belong to
    * @param keys list of object keys
    * @return Hashmap of key and content of all found attachments
    */
-  private Map<String, String> getAttachments(List<String> keys) {
+  private Map<String, String> getXmlAttachments(String parentFile, List<String> keys) {
     Map<String, String> attachments = new HashMap<>();
+    String mainFilePath = parentFile.substring(0, parentFile.lastIndexOf("/"));
     for (String key : keys) {
-      if (key.contains("anlage-") && key.endsWith(".xml")) {
+      if (key.startsWith(mainFilePath + "/anlage-") && key.endsWith(".xml")) {
         Optional<String> attachment = normsBucket.getFileAsString(key);
         attachment.ifPresent(content -> attachments.put(key, content));
       }
