@@ -135,7 +135,7 @@ test.describe("find and display literature", () => {
   });
 
   test("open literature directly (server side rendered)", async ({ page }) => {
-    await page.goto("/literature/KSLS051342704");
+    await page.goto("/literaturnachweise/KSLS051342704");
 
     await expect(
       page.getByRole("heading", {

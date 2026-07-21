@@ -9,7 +9,7 @@ export const sitemap: Partial<ModuleOptions> = {
       exclude: [
         "/verwaltungsregelungen/**",
         "/gerichtsentscheidungen/**",
-        "/literature/**",
+        "/literaturnachweise/**",
         "/gesetze/eli/**",
       ],
       defaults: { priority: 0.7 },

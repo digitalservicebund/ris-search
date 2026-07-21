@@ -67,7 +67,7 @@ const scenarios: Scenario[] = [
   },
   {
     name: "literature page",
-    url: "/literature/XXLU000000001",
+    url: "/literaturnachweise/XXLU000000001",
     skipLinks: [
       { label: "Zum Inhalt", target: "#main" },
       { label: "Zum Text", target: "#content" },

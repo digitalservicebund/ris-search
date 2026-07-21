@@ -87,7 +87,7 @@ const testPages = [
   },
   {
     name: "literature view",
-    url: "/literature/XXLU000000001",
+    url: "/literaturnachweise/XXLU000000001",
     tabs: [{ name: "Details" }],
   },
   {

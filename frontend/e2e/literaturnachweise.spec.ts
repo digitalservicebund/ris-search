@@ -16,7 +16,7 @@ async function getSidebar(page: Page) {
 test("displays literature page with metadata and text tab by default", async ({
   page,
 }) => {
-  await navigate(page, "/literature/XXLU000000001");
+  await navigate(page, "/literaturnachweise/XXLU000000001");
 
   // Main title
   await expect(
@@ -127,7 +127,7 @@ test("displays literature page with metadata and text tab by default", async ({
 });
 
 test("displays sli footnotes in text section", async ({ page }) => {
-  await navigate(page, "/literature/XXLS000000001");
+  await navigate(page, "/literaturnachweise/XXLS000000001");
 
   await expect(
     page
@@ -150,7 +150,7 @@ test("displays sli footnotes in text section", async ({ page }) => {
 });
 
 test("displays all titles", async ({ page }) => {
-  await navigate(page, "/literature/XXLU000000002");
+  await navigate(page, "/literaturnachweise/XXLU000000002");
 
   await expect(
     page
@@ -172,7 +172,7 @@ test("displays all titles", async ({ page }) => {
 });
 
 test("displays all sli titles", async ({ page }) => {
-  await navigate(page, "/literature/XXLS000000001");
+  await navigate(page, "/literaturnachweise/XXLS000000001");
 
   await expect(
     page
@@ -203,12 +203,12 @@ test("sidebar TOC renders on desktop and clicking a link scrolls to the section"
 }) => {
   test.skip(isMobileTest);
 
-  await navigate(page, "/literature/XXLU000000001");
+  await navigate(page, "/literaturnachweise/XXLU000000001");
 
   const sidebar = await getSidebar(page);
   await sidebar.getByRole("link", { name: "Kurzreferat" }).click();
 
-  await expect(page).toHaveURL("/literature/XXLU000000001#kurzreferat");
+  await expect(page).toHaveURL("/literaturnachweise/XXLU000000001#kurzreferat");
 
   const heading = page.getByRole("heading", { name: "Kurzreferat" });
   await expect(heading).toBeInViewport();
@@ -222,7 +222,7 @@ test("sidebar TOC is not shown when document has no text sections", async ({
 }) => {
   test.skip(isMobileTest);
 
-  await navigate(page, "/literature/XXLU000000005");
+  await navigate(page, "/literaturnachweise/XXLU000000005");
 
   await expect(
     page.getByRole("navigation", { name: "Inhalte" }),
@@ -235,7 +235,7 @@ test.describe("mobile table of contents", () => {
     isMobileTest,
   }) => {
     test.skip(!isMobileTest);
-    await navigate(page, "/literature/XXLU000000001");
+    await navigate(page, "/literaturnachweise/XXLU000000001");
 
     await expect(page.getByRole("button", { name: "Inhalte" })).toBeVisible();
   });
@@ -245,7 +245,7 @@ test.describe("mobile table of contents", () => {
     isMobileTest,
   }) => {
     test.skip(!isMobileTest);
-    await navigate(page, "/literature/XXLU000000001");
+    await navigate(page, "/literaturnachweise/XXLU000000001");
 
     await page.getByRole("button", { name: "Inhalte" }).click();
 
@@ -257,7 +257,7 @@ test.describe("mobile table of contents", () => {
     isMobileTest,
   }) => {
     test.skip(!isMobileTest);
-    await navigate(page, "/literature/XXLU000000001");
+    await navigate(page, "/literaturnachweise/XXLU000000001");
 
     await page.getByRole("button", { name: "Inhalte" }).click();
 
@@ -276,7 +276,10 @@ test.describe("mobile table of contents", () => {
 });
 
 test("shows correct breadcrumbs for literature", async ({ page }) => {
-  await navigate(page, "/literature/XXLU000000001?from=/suche?query=example");
+  await navigate(
+    page,
+    "/literaturnachweise/XXLU000000001?from=/search?query=example",
+  );
 
   const breadcrumb = page.getByRole("navigation", { name: "Pfadnavigation" });
 
@@ -286,14 +289,14 @@ test("shows correct breadcrumbs for literature", async ({ page }) => {
   await expect(searchBreadcrumb).toBeVisible();
   await expect(searchBreadcrumb).toHaveAttribute(
     "href",
-    "/suche?query=example",
+    "/search?query=example",
   );
 
   await expect(breadcrumb.getByText("Erstes Test-Dokument ULI")).toBeVisible();
 });
 
 noJsTest("tabs work without JavaScript", async ({ page }) => {
-  await navigate(page, "/literature/XXLU000000001");
+  await navigate(page, "/literaturnachweise/XXLU000000001");
 
   await test.step("text", async () => {
     await expect(
@@ -317,7 +320,7 @@ noJsTest("tabs work without JavaScript", async ({ page }) => {
 });
 
 test("shows detailed information in the 'Details' tab", async ({ page }) => {
-  await navigate(page, "/literature/XXLU000000001");
+  await navigate(page, "/literaturnachweise/XXLU000000001");
 
   const detailsLink = page.getByRole("tab", {
     name: "Details",
@@ -349,7 +352,7 @@ test("shows detailed information in the 'Details' tab", async ({ page }) => {
 test("shows detailed information in the 'Details' tab of sli documents", async ({
   page,
 }) => {
-  await navigate(page, "/literature/XXLS000000001");
+  await navigate(page, "/literaturnachweise/XXLS000000001");
 
   const detailsLink = page.getByRole("tab", {
     name: "Details",
@@ -398,30 +401,30 @@ test("shows detailed information in the 'Details' tab of sli documents", async (
 test.describe("actions menu", () => {
   test.describe("can copy link to currently viewed page", () => {
     testCopyLinkButton(
-      "/literature/XXLU000000001",
+      "/literaturnachweise/XXLU000000001",
       "Link kopieren",
-      RegExp(".*/literature/XXLU000000001"),
+      RegExp(".*/literaturnachweise/XXLU000000001"),
     );
   });
 
   test.describe("can use print action button to open print menu", () => {
-    testPrintButton("/literature/XXLU000000001");
+    testPrintButton("/literaturnachweise/XXLU000000001");
   });
 
   test.describe("can't use PDF action as it is disabled", () => {
-    testPdfButton("/literature/XXLU000000001");
+    testPdfButton("/literaturnachweise/XXLU000000001");
   });
 
   test.describe("can use XML action to view literature xml file", () => {
     testXmlButton(
-      "/literature/XXLU000000001",
+      "/literaturnachweise/XXLU000000001",
       "http://localhost:8090/v1/literature/XXLU000000001.xml",
     );
   });
 });
 
 test("hides tabs and shows details if document is empty", async ({ page }) => {
-  await navigate(page, "/literature/XXLU000000005");
+  await navigate(page, "/literaturnachweise/XXLU000000005");
 
   await expect(
     page.getByRole("navigation", {
@@ -455,7 +458,7 @@ test("hides tabs and shows details if document is empty", async ({ page }) => {
 });
 
 test("displays references", async ({ page }) => {
-  await navigate(page, "/literature/XXLU000000009");
+  await navigate(page, "/literaturnachweise/XXLU000000009");
 
   await expect(
     page
