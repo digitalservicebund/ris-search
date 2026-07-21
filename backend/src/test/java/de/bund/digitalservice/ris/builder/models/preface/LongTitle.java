@@ -48,8 +48,13 @@ public class LongTitle extends BaseElement {
    * @param officialTitle the official title text
    */
   public void setOfficialTitle(String officialTitle) {
-    this.officialTitle =
-        DocTitle.builder().children(new ArrayList<>(List.of(officialTitle))).build();
+    if (officialTitle == null) {
+      this.officialTitle = null;
+    } else {
+      this.officialTitle =
+          DocTitle.builder().children(new ArrayList<>(List.of(officialTitle))).build();
+    }
+
     setTitlesAndAbbreviation();
   }
 
