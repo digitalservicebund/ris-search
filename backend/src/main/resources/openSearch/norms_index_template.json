@@ -6,6 +6,12 @@
   "priority": 500,
   "template": {
     "mappings": {
+      "_source": {
+        "excludes": [
+          "article_texts",
+          "article_names"
+        ]
+      },
       "properties": {
         "AL": {
           "type": "alias",

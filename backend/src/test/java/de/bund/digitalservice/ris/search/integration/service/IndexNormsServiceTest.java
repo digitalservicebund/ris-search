@@ -9,7 +9,6 @@ import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.service.IndexNormsService;
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.Comparator;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -17,6 +16,8 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Tag("integration")
@@ -40,7 +41,8 @@ class IndexNormsServiceTest extends ContainersIntegrationBase {
 
     normsBucket.save(manifestationEli, normXml);
     indexNormsService.reindexAll(SharedTestConstants.TIMESTAMP_2024_01_01_AS_STRING);
-    List<Norm> expressions = normsRepository.getByWorkEliKeyword(workEli);
+    List<Norm> expressions =
+        normsRepository.getByWorkEliKeyword(workEli, Pageable.unpaged()).toList();
     assertThat(expressions).hasSize(1);
     assertThat(expressions.getFirst().getTimeRelevanceStartDate())
         .isEqualTo(IndexNormsService.TIME_RELEVANCE_MIN);
@@ -52,10 +54,11 @@ class IndexNormsServiceTest extends ContainersIntegrationBase {
   @DisplayName("Three expressions cover full time relevance window")
   void threeExpressionsCoverFullTimeRelevanceWindow() {
     indexNormsService.reindexAll(SharedTestConstants.TIMESTAMP_2024_01_01_AS_STRING);
-    List<Norm> expressions = normsRepository.getByWorkEliKeyword("eli/bund/bgbl-1/1991/s102");
+    List<Norm> expressions =
+        normsRepository
+            .getByWorkEliKeyword("eli/bund/bgbl-1/1991/s102", Pageable.unpaged(Sort.by("id")))
+            .getContent();
     assertThat(expressions).hasSize(3);
-
-    expressions.sort(Comparator.comparing(Norm::getId));
 
     assertThat(expressions.getFirst().getTimeRelevanceStartDate())
         .isEqualTo(IndexNormsService.TIME_RELEVANCE_MIN);

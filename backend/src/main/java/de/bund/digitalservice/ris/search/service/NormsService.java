@@ -9,39 +9,28 @@ import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
 import de.bund.digitalservice.ris.search.service.helper.ZipManager;
-import de.bund.digitalservice.ris.search.utils.DateUtils;
 import de.bund.digitalservice.ris.search.utils.PageUtils;
 import de.bund.digitalservice.ris.search.utils.eli.ExpressionEli;
 import de.bund.digitalservice.ris.search.utils.eli.ManifestationEli;
 import de.bund.digitalservice.ris.search.utils.eli.WorkEli;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-import org.opensearch.OpenSearchException;
-import org.opensearch.action.search.SearchRequest;
-import org.opensearch.action.search.SearchResponse;
-import org.opensearch.client.RequestOptions;
 import org.opensearch.client.RestHighLevelClient;
-import org.opensearch.common.document.DocumentField;
 import org.opensearch.data.client.orhlc.NativeSearchQuery;
-import org.opensearch.index.query.QueryBuilders;
-import org.opensearch.search.builder.SearchSourceBuilder;
-import org.opensearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
@@ -59,10 +48,7 @@ public class NormsService {
   private final ElasticsearchOperations operations;
   private final SimpleSearchQueryBuilder simpleSearchQueryBuilder;
   private final ArticleService articleService;
-  private final RestHighLevelClient openSearchRestClient;
   private final NormsBucket normsBucket;
-  private final String normsIndexName;
-  private static final String DATE_FORMAT = "yyyy-MM-dd";
 
   /**
    * Constructs a new instance of {@code NormsService}.
@@ -84,9 +70,7 @@ public class NormsService {
     this.normsRepository = normsRepository;
     this.normsBucket = normsBucket;
     this.operations = operations;
-    this.openSearchRestClient = openSearchRestClient;
     this.simpleSearchQueryBuilder = simpleSearchQueryBuilder;
-    this.normsIndexName = normsIndexName;
     this.articleService = articleService;
   }
 
@@ -152,86 +136,13 @@ public class NormsService {
    * @return Paginated Norms containing work_example metadata
    */
   public Page<Norm> getWorkExpressions(WorkEli workEli, Pageable pageable) {
-    SearchSourceBuilder sourceBuilder =
-        new SearchSourceBuilder()
-            .query(QueryBuilders.termQuery(Norm.Fields.WORK_ELI_KEYWORD, workEli.toString()))
-            .sort(Norm.Fields.ENTRY_INTO_FORCE_DATE, SortOrder.DESC)
-            .docValueField(Norm.Fields.EXPRESSION_ELI_KEYWORD)
-            .docValueField(Norm.Fields.WORK_ELI_KEYWORD)
-            .docValueField(Norm.Fields.ENTRY_INTO_FORCE_DATE, DATE_FORMAT)
-            .docValueField(Norm.Fields.EXPIRY_DATE, DATE_FORMAT)
-            .docValueField(Norm.Fields.OFFICIAL_TITLE_KEYWORD)
-            .docValueField(Norm.Fields.DATE_PUBLISHED, DATE_FORMAT)
-            .docValueField(Norm.Fields.OFFICIAL_SHORT_TITLE_KEYWORD)
-            .docValueField(Norm.Fields.NORMS_DATE, DATE_FORMAT)
-            .docValueField(Norm.Fields.OFFICIAL_ABBREVIATION_KEYWORD)
-            .docValueField(Norm.Fields.LATEST_MANIFESTATION_ELI_KEYWORD)
-            .fetchSource(false)
-            .from(pageable.getPageNumber() * pageable.getPageSize())
-            .size(pageable.getPageSize());
+    Pageable sortedPageable =
+        PageRequest.of(
+            pageable.getPageNumber(),
+            pageable.getPageSize(),
+            Sort.by(Sort.Direction.DESC, "entryIntoForceDate"));
 
-    SearchRequest searchRequest = new SearchRequest(normsIndexName).source(sourceBuilder);
-
-    try {
-      SearchResponse response = openSearchRestClient.search(searchRequest, RequestOptions.DEFAULT);
-      var hits = response.getHits();
-      var norms =
-          Arrays.stream(hits.getHits())
-              .map(
-                  hit -> {
-                    var fields = hit.getFields();
-
-                    String returnedWorkEli = getField(fields, Norm.Fields.WORK_ELI_KEYWORD);
-                    String expressionEli = getField(fields, Norm.Fields.EXPRESSION_ELI_KEYWORD);
-                    LocalDate entryIntoForceDate =
-                        DateUtils.nullSafeParseyyyyMMdd(
-                            getField(fields, Norm.Fields.ENTRY_INTO_FORCE_DATE));
-                    LocalDate expiryDate =
-                        DateUtils.nullSafeParseyyyyMMdd(getField(fields, Norm.Fields.EXPIRY_DATE));
-                    LocalDate datePublished =
-                        DateUtils.nullSafeParseyyyyMMdd(
-                            getField(fields, Norm.Fields.DATE_PUBLISHED));
-                    LocalDate normsDate =
-                        DateUtils.nullSafeParseyyyyMMdd(getField(fields, Norm.Fields.NORMS_DATE));
-
-                    String officialTitle = getField(fields, Norm.Fields.OFFICIAL_TITLE_KEYWORD);
-                    String shortTitle = getField(fields, Norm.Fields.OFFICIAL_SHORT_TITLE_KEYWORD);
-                    String manifestationEli =
-                        getField(fields, Norm.Fields.LATEST_MANIFESTATION_ELI_KEYWORD);
-                    String abbreviation =
-                        getField(fields, Norm.Fields.OFFICIAL_ABBREVIATION_KEYWORD);
-                    return Norm.builder()
-                        .id(hit.getId())
-                        .workEli(returnedWorkEli)
-                        .officialAbbreviation(abbreviation)
-                        .officialShortTitle(shortTitle)
-                        .officialTitle(officialTitle)
-                        .datePublished(datePublished)
-                        .expressionEli(expressionEli)
-                        .normsDate(normsDate)
-                        .entryIntoForceDate(entryIntoForceDate)
-                        .expiryDate(expiryDate)
-                        .manifestationEliExample(manifestationEli)
-                        .build();
-                  })
-              .toList();
-
-      long totalHits = Objects.isNull(hits.getTotalHits()) ? 0 : hits.getTotalHits().value();
-      return new PageImpl<>(norms, pageable, totalHits);
-    } catch (IOException e) {
-      throw new OpenSearchException(e);
-    }
-  }
-
-  /**
-   * Returns the Optional of the string value of a DocumentField if it is part of the fields Map
-   *
-   * @param fields Map of Fieldname and DocumentField of a Searchhit
-   * @param field the field to retrieve from the Map
-   * @return Optional of a the string value of DocumentField
-   */
-  private @Nullable String getField(Map<String, DocumentField> fields, String field) {
-    return fields.get(field) != null ? fields.get(field).getValue() : null;
+    return normsRepository.getByWorkEliKeyword(workEli.toString(), sortedPageable);
   }
 
   /**
