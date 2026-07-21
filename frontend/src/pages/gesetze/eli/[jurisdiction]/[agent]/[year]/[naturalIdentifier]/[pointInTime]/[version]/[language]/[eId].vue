@@ -196,6 +196,10 @@ const validVersions =
     ? undefined
     : useValidNormVersions(norm.value?.exampleOfWork.legislationIdentifier);
 
+const articleVersions = privateFeaturesEnabled
+  ? useNormVersions(norm.value?.exampleOfWork.legislationIdentifier ?? "")
+  : undefined;
+
 const inForceNormLink = computed(() => {
   if (
     !validVersions ||
@@ -295,6 +299,14 @@ const metadataItems = computed(() => {
               </NuxtLink>
             </div>
           </nav>
+
+          <DocumentsNormsArticleVersionList
+            v-if="privateFeaturesEnabled && articleVersions && norm && eId"
+            :status="articleVersions.status.value"
+            :versions="articleVersions.sortedVersions.value"
+            :current-legislation-identifier="norm.legislationIdentifier"
+            :e-id="eId"
+          />
         </template>
 
         <template #sidebar>
