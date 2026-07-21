@@ -14,7 +14,7 @@ async function getSidebar(page: Page) {
 }
 
 test("shows 404 page when case law is not found", async ({ page }) => {
-  await page.goto("/case-law/NONEXISTENT123");
+  await page.goto("/gerichtsentscheidungen/NONEXISTENT123");
 
   await expect(
     page.getByRole("heading", { name: "Diese Seite existiert nicht" }),
@@ -22,7 +22,7 @@ test("shows 404 page when case law is not found", async ({ page }) => {
 });
 
 test("can view a single case law documentation unit", async ({ page }) => {
-  await navigate(page, "/case-law/KORE600500000");
+  await navigate(page, "/gerichtsentscheidungen/KORE600500000");
 
   await expect(page.getByText("Urteil 6.", { exact: true })).toBeVisible();
 
@@ -44,12 +44,14 @@ test("sidebar TOC renders on desktop and clicking a link scrolls to the section"
   isMobileTest,
 }) => {
   test.skip(isMobileTest);
-  await navigate(page, "/case-law/JURE200030030");
+  await navigate(page, "/gerichtsentscheidungen/JURE200030030");
 
   const sidebar = await getSidebar(page);
   await sidebar.getByRole("link", { name: "Tatbestand" }).click();
 
-  await expect(page).toHaveURL("/case-law/JURE200030030#tatbestand");
+  await expect(page).toHaveURL(
+    "/gerichtsentscheidungen/JURE200030030#tatbestand",
+  );
 
   const heading = page.getByRole("heading", { name: "Tatbestand" });
   await expect(heading).toBeInViewport();
@@ -63,7 +65,7 @@ test.describe("mobile table of contents", () => {
     isMobileTest,
   }) => {
     test.skip(!isMobileTest);
-    await navigate(page, "/case-law/JURE200030030");
+    await navigate(page, "/gerichtsentscheidungen/JURE200030030");
 
     await expect(page.getByRole("button", { name: "Inhalte" })).toBeVisible();
   });
@@ -73,7 +75,7 @@ test.describe("mobile table of contents", () => {
     isMobileTest,
   }) => {
     test.skip(!isMobileTest);
-    await navigate(page, "/case-law/JURE200030030");
+    await navigate(page, "/gerichtsentscheidungen/JURE200030030");
 
     await page.getByRole("button", { name: "Inhalte" }).click();
 
@@ -85,7 +87,7 @@ test.describe("mobile table of contents", () => {
     isMobileTest,
   }) => {
     test.skip(!isMobileTest);
-    await navigate(page, "/case-law/JURE200030030");
+    await navigate(page, "/gerichtsentscheidungen/JURE200030030");
 
     await page.getByRole("button", { name: "Inhalte" }).click();
 
@@ -104,7 +106,7 @@ test.describe("mobile table of contents", () => {
 });
 
 test("jumps to Randnummern", async ({ page }) => {
-  await navigate(page, "/case-law/BORE040077911?from=/suche");
+  await navigate(page, "/gerichtsentscheidungen/BORE040077911?from=/suche");
 
   const link = page.getByRole("link", { name: "Springe zu Randnummer: 1" });
 
@@ -125,30 +127,30 @@ test("jumps to Randnummern", async ({ page }) => {
 test.describe("actions menu", () => {
   test.describe("can copy link to currently viewed page", () => {
     testCopyLinkButton(
-      "/case-law/JURE200030030",
+      "/gerichtsentscheidungen/JURE200030030",
       "Link kopieren",
-      RegExp(".*/case-law/JURE200030030"),
+      RegExp(".*/gerichtsentscheidungen/JURE200030030"),
     );
   });
 
   test.describe("can use print action button to open print menu", () => {
-    testPrintButton("/case-law/JURE200030030");
+    testPrintButton("/gerichtsentscheidungen/JURE200030030");
   });
 
   test.describe("can't use PDF action as it is disabled", () => {
-    testPdfButton("/case-law/JURE200030030");
+    testPdfButton("/gerichtsentscheidungen/JURE200030030");
   });
 
   test.describe("can use XML action to view caselaw xml file", () => {
     testXmlButton(
-      "/case-law/JURE200030030",
+      "/gerichtsentscheidungen/JURE200030030",
       "http://localhost:8090/v1/case-law/JURE200030030.xml",
     );
   });
 });
 
 test("can view metadata", async ({ page }) => {
-  await navigate(page, "/case-law/KORE600500000");
+  await navigate(page, "/gerichtsentscheidungen/KORE600500000");
   const metadataList = page.getByTestId("metadata-list");
 
   await expect(
@@ -166,7 +168,7 @@ test("can view metadata", async ({ page }) => {
 });
 
 test("can view details", async ({ page }) => {
-  await navigate(page, "/case-law/KORE600500000");
+  await navigate(page, "/gerichtsentscheidungen/KORE600500000");
   await page.getByRole("tab", { name: "Details" }).click();
   const detailsList = page.getByTestId("details-list");
 
@@ -189,7 +191,7 @@ test("can view details", async ({ page }) => {
 });
 
 test("renders the download link", async ({ page }) => {
-  await navigate(page, "/case-law/KORE600500000");
+  await navigate(page, "/gerichtsentscheidungen/KORE600500000");
   await page.getByRole("tab", { name: "Details" }).click();
 
   const zipLink = page.getByRole("link", {
@@ -203,7 +205,7 @@ test("renders the download link", async ({ page }) => {
 });
 
 noJsTest("tabs work without JavaScript", async ({ page }) => {
-  await navigate(page, "/case-law/JURE200030030");
+  await navigate(page, "/gerichtsentscheidungen/JURE200030030");
 
   await test.step("text", async () => {
     await expect(
@@ -227,7 +229,10 @@ noJsTest("tabs work without JavaScript", async ({ page }) => {
 });
 
 test("shows correct breadcrumbs for case law", async ({ page }) => {
-  await navigate(page, "/case-law/KORE600500000?from=/suche?query=example");
+  await navigate(
+    page,
+    "/gerichtsentscheidungen/KORE600500000?from=/suche?query=example",
+  );
 
   const breadcrumb = page.getByRole("navigation", { name: "Pfadnavigation" });
 

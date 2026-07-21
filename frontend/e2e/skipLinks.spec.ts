@@ -41,7 +41,7 @@ const scenarios: Scenario[] = [
   },
   {
     name: "norm page",
-    url: "/norms/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu",
+    url: "/gesetze/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu",
     skipLinks: [
       { label: "Zum Inhalt", target: "#main" },
       { label: "Zum Gesetzestext", target: "#content" },
@@ -50,7 +50,7 @@ const scenarios: Scenario[] = [
   },
   {
     name: "norm article page",
-    url: "/norms/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu/art-z1",
+    url: "/gesetze/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu/art-z1",
     skipLinks: [
       { label: "Zum Gesetzestext", target: "#content" },
       { label: "Zum Fußbereich", target: "#footer" },
@@ -58,7 +58,7 @@ const scenarios: Scenario[] = [
   },
   {
     name: "case-law page",
-    url: "/case-law/KORE600500000",
+    url: "/gerichtsentscheidungen/KORE600500000",
     skipLinks: [
       { label: "Zum Inhalt", target: "#main" },
       { label: "Zum Entscheidungstext", target: "#content" },
@@ -67,7 +67,7 @@ const scenarios: Scenario[] = [
   },
   {
     name: "literature page",
-    url: "/literature/XXLU000000001",
+    url: "/literaturnachweise/XXLU000000001",
     skipLinks: [
       { label: "Zum Inhalt", target: "#main" },
       { label: "Zum Text", target: "#content" },
@@ -76,7 +76,7 @@ const scenarios: Scenario[] = [
   },
   {
     name: "administrative directive page",
-    url: "/administrative-directives/KSNR000000001",
+    url: "/verwaltungsregelungen/KSNR000000001",
     skipLinks: [
       { label: "Zum Inhalt", target: "#main" },
       { label: "Zum Text", target: "#content" },

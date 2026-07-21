@@ -42,7 +42,7 @@ const headerItems = computed<SearchResultHeaderItem[]>(() => {
 });
 
 const detailPageRoute = computed(() => ({
-  name: "literature-documentNumber",
+  name: "literaturnachweise-documentNumber",
   params: { documentNumber: searchResult.item.documentNumber },
   query: { from: route.fullPath },
 }));

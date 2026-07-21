@@ -10,7 +10,7 @@ const { useRouteMock } = vi.hoisted(() => ({
 mockNuxtImport("useRoute", () => useRouteMock);
 
 const baseProps = {
-  inForceVersionLink: "/norms/eli/bund/bgbl-1/2000/s100/2000-01-01/1/deu",
+  inForceVersionLink: "/gesetze/eli/bund/bgbl-1/2000/s100/2000-01-01/1/deu",
   historicalWarningMessage: "Paragraf einer historischen Fassung.",
   futureWarningMessage: "Paragraf einer zukünftigen Fassung.",
 };
@@ -137,7 +137,7 @@ describe("VersionWarningMessage", () => {
 
   it("keeps the from query parameter in the in-force version link for expired versions", async () => {
     const inForceLink = {
-      path: "/norms/eli/bund/bgbl-1/2000/s100/2020-01-01/1/deu",
+      path: "/gesetze/eli/bund/bgbl-1/2000/s100/2020-01-01/1/deu",
       query: { from: "/suche?q=test" },
     };
 

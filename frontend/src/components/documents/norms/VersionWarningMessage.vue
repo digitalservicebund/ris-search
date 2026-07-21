@@ -53,7 +53,7 @@ const versionLink = computed<
   if (currentVersionValidityStatus === "InForce" && futureVersion) {
     return {
       to: {
-        path: `/norms/${futureVersion.legislationIdentifier}`,
+        path: `/gesetze/${futureVersion.legislationIdentifier}`,
         query: { from: route.query.from },
       },
       label: "Zur zukünftigen Fassung",

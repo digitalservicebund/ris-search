@@ -53,7 +53,7 @@ test.describe("find and display norms", () => {
   });
 
   test("open norm directly (server side rendered)", async ({ page }) => {
-    await page.goto("/norms/eli/bund/banz-at/1922/s717/1922-09-12/1/deu");
+    await page.goto("/gesetze/eli/bund/banz-at/1922/s717/1922-09-12/1/deu");
 
     await expect(
       page.getByRole("heading", {
@@ -95,7 +95,7 @@ test.describe("find and display caselaws", () => {
   });
 
   test("open caselaw directly (server side rendered)", async ({ page }) => {
-    await page.goto("/case-law/JURE100055708");
+    await page.goto("/gerichtsentscheidungen/JURE100055708");
 
     await expect(
       page.getByRole("heading", {
@@ -135,7 +135,7 @@ test.describe("find and display literature", () => {
   });
 
   test("open literature directly (server side rendered)", async ({ page }) => {
-    await page.goto("/literature/KSLS051342704");
+    await page.goto("/literaturnachweise/KSLS051342704");
 
     await expect(
       page.getByRole("heading", {
@@ -177,7 +177,7 @@ test.describe("find and display administrative directives", () => {
   test("open administrative directives directly (server side rendered)", async ({
     page,
   }) => {
-    await page.goto("/administrative-directives/KSNR132460020");
+    await page.goto("/verwaltungsregelungen/KSNR132460020");
 
     await expect(
       page.getByRole("heading", {

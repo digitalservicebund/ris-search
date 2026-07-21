@@ -16,7 +16,7 @@ async function getSidebar(page: Page) {
 test("displays administrative directive page with metadata and text tab by default", async ({
   page,
 }) => {
-  await navigate(page, "/administrative-directives/KSNR000000001");
+  await navigate(page, "/verwaltungsregelungen/KSNR000000001");
 
   // Main title
   await expect(
@@ -102,14 +102,12 @@ test("sidebar TOC renders on desktop and clicking a link scrolls to the section"
 }) => {
   test.skip(isMobileTest);
 
-  await navigate(page, "/administrative-directives/KSNR000000001");
+  await navigate(page, "/verwaltungsregelungen/KSNR000000001");
 
   const sidebar = await getSidebar(page);
   await sidebar.getByRole("link", { name: "Verweise" }).click();
 
-  await expect(page).toHaveURL(
-    "/administrative-directives/KSNR000000001#verweise",
-  );
+  await expect(page).toHaveURL("/verwaltungsregelungen/KSNR000000001#verweise");
 
   const heading = page.getByRole("heading", { name: "Verweise" });
   await expect(heading).toBeInViewport();
@@ -123,7 +121,7 @@ test("sidebar TOC is not shown when document has no text sections", async ({
 }) => {
   test.skip(isMobileTest);
 
-  await navigate(page, "/administrative-directives/KSNR000000004");
+  await navigate(page, "/verwaltungsregelungen/KSNR000000004");
 
   await expect(
     page.getByRole("navigation", { name: "Inhalte" }),
@@ -136,7 +134,7 @@ test.describe("mobile table of contents", () => {
     isMobileTest,
   }) => {
     test.skip(!isMobileTest);
-    await navigate(page, "/administrative-directives/KSNR000000001");
+    await navigate(page, "/verwaltungsregelungen/KSNR000000001");
 
     await expect(page.getByRole("button", { name: "Inhalte" })).toBeVisible();
   });
@@ -146,7 +144,7 @@ test.describe("mobile table of contents", () => {
     isMobileTest,
   }) => {
     test.skip(!isMobileTest);
-    await navigate(page, "/administrative-directives/KSNR000000001");
+    await navigate(page, "/verwaltungsregelungen/KSNR000000001");
 
     await page.getByRole("button", { name: "Inhalte" }).click();
 
@@ -158,7 +156,7 @@ test.describe("mobile table of contents", () => {
     isMobileTest,
   }) => {
     test.skip(!isMobileTest);
-    await navigate(page, "/administrative-directives/KSNR000000001");
+    await navigate(page, "/verwaltungsregelungen/KSNR000000001");
 
     await page.getByRole("button", { name: "Inhalte" }).click();
 
@@ -181,7 +179,7 @@ test("shows correct breadcrumbs for administrative diectives", async ({
 }) => {
   await navigate(
     page,
-    "/administrative-directives/KSNR000000001?from=/suche?query=example",
+    "/verwaltungsregelungen/KSNR000000001?from=/suche?query=example",
   );
 
   const breadcrumb = page.getByRole("navigation", { name: "Pfadnavigation" });
@@ -203,7 +201,7 @@ test("shows correct breadcrumbs for administrative diectives", async ({
 });
 
 noJsTest("tabs work without JavaScript", async ({ page }) => {
-  await navigate(page, "/administrative-directives/KSNR000000001");
+  await navigate(page, "/verwaltungsregelungen/KSNR000000001");
 
   await test.step("text", async () => {
     await expect(
@@ -227,7 +225,7 @@ noJsTest("tabs work without JavaScript", async ({ page }) => {
 });
 
 test("shows detailed information in the 'Details' tab", async ({ page }) => {
-  await navigate(page, "/administrative-directives/KSNR000000001");
+  await navigate(page, "/verwaltungsregelungen/KSNR000000001");
 
   const detailsLink = page.getByRole("tab", {
     name: "Details",
@@ -256,7 +254,7 @@ test("shows detailed information in the 'Details' tab", async ({ page }) => {
 });
 
 test("hides tabs and shows details if document is empty", async ({ page }) => {
-  await navigate(page, "/administrative-directives/KSNR000000004");
+  await navigate(page, "/verwaltungsregelungen/KSNR000000004");
 
   await expect(
     page.getByRole("navigation", {
@@ -292,30 +290,30 @@ test("hides tabs and shows details if document is empty", async ({ page }) => {
 test.describe("actions menu", () => {
   test.describe("can copy link to currently viewed page", () => {
     testCopyLinkButton(
-      "/administrative-directives/KSNR000000001",
+      "/verwaltungsregelungen/KSNR000000001",
       "Link kopieren",
-      RegExp(".*/administrative-directives/KSNR000000001"),
+      RegExp(".*/verwaltungsregelungen/KSNR000000001"),
     );
   });
 
   test.describe("can use print action button to open print menu", () => {
-    testPrintButton("/administrative-directives/KSNR000000001");
+    testPrintButton("/verwaltungsregelungen/KSNR000000001");
   });
 
   test.describe("can't use PDF action as it is disabled", () => {
-    testPdfButton("/administrative-directives/KSNR000000001");
+    testPdfButton("/verwaltungsregelungen/KSNR000000001");
   });
 
   test.describe("can use XML action to view administrative directive xml file", () => {
     testXmlButton(
-      "/administrative-directives/KSNR000000001",
+      "/verwaltungsregelungen/KSNR000000001",
       "http://localhost:8090/v1/administrative-directive/KSNR000000001.xml",
     );
   });
 });
 
 test("displays references", async ({ page }) => {
-  await navigate(page, "/administrative-directives/KSNR000000005");
+  await navigate(page, "/verwaltungsregelungen/KSNR000000005");
 
   await expect(
     page

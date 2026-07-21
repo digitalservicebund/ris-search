@@ -128,7 +128,7 @@ const detailsTabPanelTitleId = useId();
           provision.
           <NuxtLink
             class="ris-link2-regular 2xl:ris-link1-regular"
-            :to="`/norms/${germanOriginalWorkEli}`"
+            :to="`/gesetze/${germanOriginalWorkEli}`"
           >
             Go to the German version</NuxtLink
           >.

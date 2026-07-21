@@ -42,7 +42,7 @@ describe("VersionWarning", () => {
         legislationLegalForce: testVersions[1]!.legislationLegalForce,
       },
       messageText: "Ab 01.01.2824 gilt eine neue Fassung.",
-      link: `/norms/${testVersions[2]!.legislationIdentifier}`,
+      link: `/gesetze/${testVersions[2]!.legislationIdentifier}`,
       linkText: "Zur zukünftigen Fassung",
     },
     {
@@ -53,7 +53,7 @@ describe("VersionWarning", () => {
         legislationLegalForce: testVersions[0]!.legislationLegalForce,
       },
       messageText: "Sie lesen eine historische Fassung.",
-      link: `/norms/${testVersions[1]!.legislationIdentifier}`,
+      link: `/gesetze/${testVersions[1]!.legislationIdentifier}`,
       linkText: "Zur aktuell gültigen Fassung",
     },
     {
@@ -64,7 +64,7 @@ describe("VersionWarning", () => {
         legislationLegalForce: testVersions[2]!.legislationLegalForce,
       },
       messageText: "Sie lesen eine zukünftige Fassung.",
-      link: `/norms/${testVersions[1]!.legislationIdentifier}`,
+      link: `/gesetze/${testVersions[1]!.legislationIdentifier}`,
       linkText: "Zur aktuell gültigen Fassung",
     },
   ];

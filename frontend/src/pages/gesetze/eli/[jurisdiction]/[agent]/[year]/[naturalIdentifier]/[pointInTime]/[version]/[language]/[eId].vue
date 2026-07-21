@@ -53,7 +53,7 @@ const normTitle = computed(() => getNormBreadcrumbTitle(norm.value));
 
 const articleHtml = computed(() => data.value.htmlBody);
 
-const normExpressionPath = `/norms/eli/${expressionEli}`;
+const normExpressionPath = `/gesetze/eli/${expressionEli}`;
 
 const normExpressionRoute = computed<RouteLocationRaw>(() => ({
   path: normExpressionPath,
@@ -207,7 +207,7 @@ const inForceNormLink = computed(() => {
   }
 
   const validVersion = validVersions.data.value.member[0];
-  return `/norms/${validVersion?.item.legislationIdentifier}`;
+  return `/gesetze/${validVersion?.item.legislationIdentifier}`;
 });
 
 const metadataItems = computed(() => {

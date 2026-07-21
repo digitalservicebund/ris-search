@@ -55,7 +55,7 @@ describe("normsAbbreviationRedirect middleware", () => {
 
     const result = await normAbbreviationRedirect(makeRoute("BGB"), emptyRoute);
 
-    expect(result).toBe("/norms/eliIdentifier");
+    expect(result).toBe("/gesetze/eliIdentifier");
   });
 
   it("throws 404 when no expression is found for the abbreviation", async () => {

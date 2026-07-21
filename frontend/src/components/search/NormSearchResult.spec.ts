@@ -201,7 +201,7 @@ describe("NormSearchResult", () => {
     const link = screen.getByRole("link", { name: /Test Title/i });
     expect(link).toHaveAttribute(
       "href",
-      `/norms/${mockSearchResult.item.legislationIdentifier}`,
+      `/gesetze/${mockSearchResult.item.legislationIdentifier}`,
     );
   });
 
