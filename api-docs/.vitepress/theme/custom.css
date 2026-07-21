@@ -1,4 +1,8 @@
 :root {
+  --vp-font-family-base: BundesSansWeb, Calibri, Verdana, Arial, Helvetica, sans-serif;
+}
+
+:root {
   --vp-c-brand-1: #004b76;
   --vp-c-brand-2: #336f91;
   --vp-c-brand-3: #004b76;
