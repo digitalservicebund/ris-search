@@ -39,7 +39,7 @@ const headerItems = computed<SearchResultHeaderItem[]>(() => {
 });
 
 const detailPageRoute = computed(() => ({
-  name: "administrative-directives-documentNumber",
+  name: "verwaltungsregelungen-documentNumber",
   params: {
     documentNumber: searchResult.item.documentNumber,
   },

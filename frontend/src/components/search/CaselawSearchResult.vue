@@ -89,7 +89,7 @@ function getFileNumbers(item: CaseLaw) {
 }
 
 const detailPageRoute = computed(() => ({
-  name: "case-law-documentNumber",
+  name: "gerichtsentscheidungen-documentNumber",
   params: { documentNumber: searchResult.item.documentNumber },
   query: { from: route.fullPath },
 }));

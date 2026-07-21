@@ -60,7 +60,7 @@ export async function useSimpleSearch(
     const baseUrl = `/v1`;
 
     if (documentKind === DocumentKind.CaseLaw) {
-      return baseUrl + "/case-law/";
+      return baseUrl + "/case-law";
     } else if (documentKind === DocumentKind.Norm) {
       return baseUrl + "/legislation";
     } else if (documentKind === DocumentKind.Literature) {
