@@ -177,7 +177,7 @@ test.describe("find and display administrative directives", () => {
   test("open administrative directives directly (server side rendered)", async ({
     page,
   }) => {
-    await page.goto("/administrative-directives/KSNR132460020");
+    await page.goto("/verwaltungsregelungen/KSNR132460020");
 
     await expect(
       page.getByRole("heading", {

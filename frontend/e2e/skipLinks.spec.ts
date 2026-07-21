@@ -76,7 +76,7 @@ const scenarios: Scenario[] = [
   },
   {
     name: "administrative directive page",
-    url: "/administrative-directives/KSNR000000001",
+    url: "/verwaltungsregelungen/KSNR000000001",
     skipLinks: [
       { label: "Zum Inhalt", target: "#main" },
       { label: "Zum Text", target: "#content" },

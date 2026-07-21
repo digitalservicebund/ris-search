@@ -92,7 +92,7 @@ const testPages = [
   },
   {
     name: "administrative directive view",
-    url: "/administrative-directives/KSNR000000001",
+    url: "/verwaltungsregelungen/KSNR000000001",
   },
   {
     name: "translations",
