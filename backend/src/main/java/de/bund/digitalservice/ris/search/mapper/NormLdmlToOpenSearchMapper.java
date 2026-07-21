@@ -247,7 +247,7 @@ public class NormLdmlToOpenSearchMapper {
     String xmlDocumentOfficialTitle = xmlDocument.getElementByXpath(X_PATH_DOC_TITLE_NAME);
 
     return StringUtils.isNotEmpty(xmlDocumentOfficialTitle)
-        ? StringUtils.trimToNull(
+        ? StringUtils.trimToEmpty(
                 xmlDocumentOfficialTitle.replace(")", "").replace("(", "").replace("\n", " "))
             .replaceAll("\\s{2,}", " ")
         : StringUtils.EMPTY;

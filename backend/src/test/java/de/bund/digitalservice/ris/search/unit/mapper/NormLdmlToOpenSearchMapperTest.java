@@ -63,6 +63,33 @@ class NormLdmlToOpenSearchMapperTest {
     assertThat(norm.getDatePublished()).isEqualTo(LocalDate.parse("1962-07-20"));
   }
 
+  private static Stream<Arguments> officialTitleTestData() {
+    return Stream.of(
+        Arguments.of("(Title)", "Title"),
+        Arguments.of(" Title Title", "Title Title"),
+        Arguments.of("\nTitle\n", "Title"),
+        Arguments.of("        Title     ", "Title"),
+        Arguments.of(" \n ( Title  \n   ) ()", "Title"),
+        Arguments.of("", ""),
+        Arguments.of(null, ""),
+        Arguments.of("   () \n", ""));
+  }
+
+  @ParameterizedTest
+  @MethodSource("officialTitleTestData")
+  @DisplayName("Extracts and cleans official title")
+  void extractsAndCleansOfficialTitle(String title, String expected) {
+
+    NormTestDataBuilder builder = NormTestDataBuilder.builder().officialTitle(title);
+
+    String xmlContent = builder.buildNormXml();
+    Optional<Norm> maybeNorm = NormLdmlToOpenSearchMapper.parseNorm(xmlContent, Map.of(), false);
+
+    assertThat(maybeNorm).isNotEmpty();
+
+    assertThat(maybeNorm.get().getOfficialTitle()).isEqualTo(expected);
+  }
+
   @Test
   @DisplayName("Ignores whitespace around dates")
   void ignoresWhiteSpaceAroundDates() {
