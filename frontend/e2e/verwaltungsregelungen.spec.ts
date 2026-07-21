@@ -179,7 +179,7 @@ test("shows correct breadcrumbs for administrative diectives", async ({
 }) => {
   await navigate(
     page,
-    "/verwaltungsregelungen/KSNR000000001?from=/search?query=example",
+    "/verwaltungsregelungen/KSNR000000001?from=/suche?query=example",
   );
 
   const breadcrumb = page.getByRole("navigation", { name: "Pfadnavigation" });
@@ -190,7 +190,7 @@ test("shows correct breadcrumbs for administrative diectives", async ({
   await expect(searchBreadcrumb).toBeVisible();
   await expect(searchBreadcrumb).toHaveAttribute(
     "href",
-    "/search?query=example",
+    "/suche?query=example",
   );
 
   await expect(

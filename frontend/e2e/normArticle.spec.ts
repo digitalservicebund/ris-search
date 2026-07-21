@@ -109,7 +109,7 @@ test.describe("view norm article page", () => {
   }) => {
     test.skip(isMobileTest);
 
-    await navigate(page, "/search?query=FrSaftErfrischV&documentKind=N");
+    await navigate(page, "/suche?query=FrSaftErfrischV&documentKind=N");
 
     await page
       .getByRole("link", {
@@ -443,7 +443,7 @@ test("shows correct breadcrumbs for a nested article", async ({
 
   await navigate(
     page,
-    "/gesetze/eli/bund/bgbl-1/1972/s2459/1999-04-20/4/deu/art-z3?from=/search?query=example",
+    "/gesetze/eli/bund/bgbl-1/1972/s2459/1999-04-20/4/deu/art-z3?from=/suche?query=example",
   );
 
   const breadcrumb = page.getByRole("navigation", { name: "Pfadnavigation" });
@@ -454,7 +454,7 @@ test("shows correct breadcrumbs for a nested article", async ({
   await expect(searchBreadcrumb).toBeVisible();
   await expect(searchBreadcrumb).toHaveAttribute(
     "href",
-    "/search?query=example",
+    "/suche?query=example",
   );
 
   await expect(breadcrumb.getByRole("link", { name: "BWahlGV" })).toBeVisible();
@@ -465,7 +465,7 @@ test("shows correct breadcrumbs for a nested article", async ({
   await expect(sectionBreadcrumb).toBeVisible();
   await expect(sectionBreadcrumb).toHaveAttribute(
     "href",
-    /from=\/search\?query=example/,
+    /from=\/suche\?query=example/,
   );
 
   const subsectionBreadcrumb = breadcrumb.getByRole("link", {
@@ -474,7 +474,7 @@ test("shows correct breadcrumbs for a nested article", async ({
   await expect(subsectionBreadcrumb).toBeVisible();
   await expect(subsectionBreadcrumb).toHaveAttribute(
     "href",
-    /from=\/search\?query=example/,
+    /from=\/suche\?query=example/,
   );
 
   await expect(breadcrumb.getByText("§ 9")).toBeVisible();
@@ -488,7 +488,7 @@ test("shows correct breadcrumbs for an Eingangsformel", async ({
 
   await navigate(
     page,
-    "/gesetze/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu/präambel-n1_formel-n1?from=/search?query=example",
+    "/gesetze/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu/präambel-n1_formel-n1?from=/suche?query=example",
   );
 
   const breadcrumb = page.getByRole("navigation", { name: "Pfadnavigation" });
@@ -499,14 +499,14 @@ test("shows correct breadcrumbs for an Eingangsformel", async ({
   await expect(searchBreadcrumb).toBeVisible();
   await expect(searchBreadcrumb).toHaveAttribute(
     "href",
-    "/search?query=example",
+    "/suche?query=example",
   );
 
   const normBreadcrumb = breadcrumb.getByRole("link", { name: "MFG" });
   await expect(normBreadcrumb).toBeVisible();
   await expect(normBreadcrumb).toHaveAttribute(
     "href",
-    /from=\/search\?query=example/,
+    /from=\/suche\?query=example/,
   );
 
   await expect(breadcrumb.getByText("Eingangsformel")).toBeVisible();
@@ -518,7 +518,7 @@ test("keeps search state when navigating to other paragraphs", async ({
 }) => {
   test.skip(isMobileTest);
 
-  await navigate(page, "/search?query=aktuelle%2520fassung&documentKind=N");
+  await navigate(page, "/suche?query=aktuelle%2520fassung&documentKind=N");
 
   await page.getByRole("link", { name: "Eingangsformel" }).first().click();
   await expect(

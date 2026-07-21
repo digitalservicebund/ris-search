@@ -106,7 +106,7 @@ test.describe("mobile table of contents", () => {
 });
 
 test("jumps to Randnummern", async ({ page }) => {
-  await navigate(page, "/gerichtsentscheidungen/BORE040077911?from=/search");
+  await navigate(page, "/gerichtsentscheidungen/BORE040077911?from=/suche");
 
   const link = page.getByRole("link", { name: "Springe zu Randnummer: 1" });
 
@@ -115,7 +115,7 @@ test("jumps to Randnummern", async ({ page }) => {
   await link.click();
 
   await expect(page).toHaveURL(/#randnummer-1$/);
-  await expect(page).toHaveURL(/\?from=\/search/);
+  await expect(page).toHaveURL(/\?from=\/suche/);
 
   await expect(
     page.getByText(
@@ -231,7 +231,7 @@ noJsTest("tabs work without JavaScript", async ({ page }) => {
 test("shows correct breadcrumbs for case law", async ({ page }) => {
   await navigate(
     page,
-    "/gerichtsentscheidungen/KORE600500000?from=/search?query=example",
+    "/gerichtsentscheidungen/KORE600500000?from=/suche?query=example",
   );
 
   const breadcrumb = page.getByRole("navigation", { name: "Pfadnavigation" });
@@ -242,7 +242,7 @@ test("shows correct breadcrumbs for case law", async ({ page }) => {
   await expect(searchBreadcrumb).toBeVisible();
   await expect(searchBreadcrumb).toHaveAttribute(
     "href",
-    "/search?query=example",
+    "/suche?query=example",
   );
 
   await expect(breadcrumb.getByText("Testheader für Urteil 6.")).toBeVisible();

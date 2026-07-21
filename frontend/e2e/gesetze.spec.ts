@@ -338,7 +338,7 @@ test.describe("can view metadata of norms", () => {
 test("shows correct breadcrumbs for a norm", async ({ page }) => {
   await navigate(
     page,
-    "/gesetze/eli/bund/bgbl-1/1972/s2459/1999-04-20/4/deu?from=/search?query=example",
+    "/gesetze/eli/bund/bgbl-1/1972/s2459/1999-04-20/4/deu?from=/suche?query=example",
   );
 
   const breadcrumb = page.getByRole("navigation", { name: "Pfadnavigation" });
@@ -349,7 +349,7 @@ test("shows correct breadcrumbs for a norm", async ({ page }) => {
   await expect(searchBreadcrumb).toBeVisible();
   await expect(searchBreadcrumb).toHaveAttribute(
     "href",
-    "/search?query=example",
+    "/suche?query=example",
   );
 
   await expect(breadcrumb.getByText("BWahlGV")).toBeVisible();

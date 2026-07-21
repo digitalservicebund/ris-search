@@ -278,7 +278,7 @@ test.describe("mobile table of contents", () => {
 test("shows correct breadcrumbs for literature", async ({ page }) => {
   await navigate(
     page,
-    "/literaturnachweise/XXLU000000001?from=/search?query=example",
+    "/literaturnachweise/XXLU000000001?from=/suche?query=example",
   );
 
   const breadcrumb = page.getByRole("navigation", { name: "Pfadnavigation" });
@@ -289,7 +289,7 @@ test("shows correct breadcrumbs for literature", async ({ page }) => {
   await expect(searchBreadcrumb).toBeVisible();
   await expect(searchBreadcrumb).toHaveAttribute(
     "href",
-    "/search?query=example",
+    "/suche?query=example",
   );
 
   await expect(breadcrumb.getByText("Erstes Test-Dokument ULI")).toBeVisible();

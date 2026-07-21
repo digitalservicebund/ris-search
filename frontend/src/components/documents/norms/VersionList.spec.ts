@@ -167,7 +167,7 @@ describe("VersionList", () => {
   });
 
   it("keeps the from query parameter when navigating to a version", async () => {
-    useRouteMock.mockReturnValue({ query: { from: "/search?q=test" } });
+    useRouteMock.mockReturnValue({ query: { from: "/suche?q=test" } });
 
     const wrapper = await mountSuspended(VersionList, {
       props: {
@@ -183,12 +183,12 @@ describe("VersionList", () => {
 
     expect(mockNavigateTo).toHaveBeenCalledWith({
       path: "/gesetze/eli/bund/bgbl-1/2000/s001/2030-01-01/1/deu/regelungstext-1",
-      query: { from: "/search?q=test" },
+      query: { from: "/suche?q=test" },
     });
   });
 
   it("keeps the from query parameter when navigating to a past version", async () => {
-    useRouteMock.mockReturnValue({ query: { from: "/search?q=test" } });
+    useRouteMock.mockReturnValue({ query: { from: "/suche?q=test" } });
 
     const wrapper = await mountSuspended(VersionList, {
       props: {
@@ -204,7 +204,7 @@ describe("VersionList", () => {
 
     expect(mockNavigateTo).toHaveBeenCalledWith({
       path: "/gesetze/eli/bund/bgbl-1/2000/s001/2000-01-01/1/deu/regelungstext-1",
-      query: { from: "/search?q=test" },
+      query: { from: "/suche?q=test" },
     });
   });
 });

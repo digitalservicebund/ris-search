@@ -112,7 +112,7 @@ describe("VersionWarningMessage", () => {
   });
 
   it("keeps the from query parameter in the future version link", async () => {
-    useRouteMock.mockReturnValue({ query: { from: "/search?q=test" } });
+    useRouteMock.mockReturnValue({ query: { from: "/suche?q=test" } });
 
     await renderSuspended(VersionWarningMessage, {
       props: {
@@ -132,13 +132,13 @@ describe("VersionWarningMessage", () => {
     });
 
     const link = screen.getByRole("link", { name: "Zur zukünftigen Fassung" });
-    expect(link).toHaveAttribute("data-from", "/search?q=test");
+    expect(link).toHaveAttribute("data-from", "/suche?q=test");
   });
 
   it("keeps the from query parameter in the in-force version link for expired versions", async () => {
     const inForceLink = {
       path: "/gesetze/eli/bund/bgbl-1/2000/s100/2020-01-01/1/deu",
-      query: { from: "/search?q=test" },
+      query: { from: "/suche?q=test" },
     };
 
     await renderSuspended(VersionWarningMessage, {
@@ -161,6 +161,6 @@ describe("VersionWarningMessage", () => {
     const link = screen.getByRole("link", {
       name: "Zur aktuell gültigen Fassung",
     });
-    expect(link).toHaveAttribute("data-from", "/search?q=test");
+    expect(link).toHaveAttribute("data-from", "/suche?q=test");
   });
 });
