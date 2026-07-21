@@ -1,7 +1,10 @@
 import dayjs, { type Dayjs } from "dayjs";
 import { partition, sortBy } from "lodash-es";
 import type { MetadataItem } from "~/components/documents/Metadata.vue";
-import type { LegislationExpression } from "~/types/api";
+import type {
+  LegislationExpression,
+  LegislationExpressionPartSchema,
+} from "~/types/api";
 import {
   dateFormattedDDMMYYYY,
   getCurrentDateInGermany,
@@ -66,6 +69,24 @@ export function getValidityStatus(
     return "FutureInForce";
   }
 
+  return undefined;
+}
+
+/**
+ * Recursively searches a `hasPart` tree for the part matching `eId`, at any
+ * depth (not just leaf articles) since the tree shape can differ between
+ * expressions of the same work.
+ */
+export function findPartByEId(
+  parts: LegislationExpressionPartSchema[] | undefined,
+  eId: string,
+): LegislationExpressionPartSchema | undefined {
+  if (!parts) return undefined;
+  for (const part of parts) {
+    if (decodeURIComponent(part.eId) === eId) return part;
+    const found = findPartByEId(part.hasPart, eId);
+    if (found) return found;
+  }
   return undefined;
 }
 
