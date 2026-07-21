@@ -2,6 +2,8 @@
   "template": {
     "settings":
     {
+      "number_of_shards": 3,
+      "number_of_replicas": 1,
       "analysis": {
         "analyzer": {
           "custom_german_analyzer": {
