@@ -22,7 +22,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -277,27 +276,35 @@ public class IndexNormsService implements IndexService {
       return Optional.empty();
     }
 
-    /*
-    Find offenestruktur-*.xml (attachment) files that share the same manifestation ELI prefix and download their
-    contents for processing.
-     */
-    String prefix = fileName.substring(0, fileName.lastIndexOf("/"));
-    Map<String, String> attachments = new HashMap<>();
-    for (String key : keysMatchingExpressionEli) {
-      if (key.startsWith(prefix) && !Objects.equals(key, fileName)) {
-        Optional<String> attachment = normsBucket.getFileAsString(key);
-        attachment.ifPresent(a -> attachments.put(key, a));
-      }
-    }
+    Map<String, String> attachments = getXmlAttachments(fileName, keysMatchingExpressionEli);
     Optional<Norm> norm =
         NormLdmlToOpenSearchMapper.parseNorm(
             fileContent.get(), attachments, environment.acceptsProfiles(Profiles.of("prototype")));
     if (norm.isEmpty()) {
       logger.error("Unknown error while processing file {} during Norm import.", fileName);
-      return Optional.empty();
-    } else {
-      return norm;
     }
+
+    return norm;
+  }
+
+  /**
+   * retrieves all contents of attachments belonging to a specific parent file from a list of object
+   * keys
+   *
+   * @param parentFile parent manifestation file the attachments belong to
+   * @param keys list of object keys
+   * @return Hashmap of key and content of all found attachments
+   */
+  private Map<String, String> getXmlAttachments(String parentFile, List<String> keys) {
+    Map<String, String> attachments = new HashMap<>();
+    String mainFilePath = parentFile.substring(0, parentFile.lastIndexOf("/"));
+    for (String key : keys) {
+      if (key.startsWith(mainFilePath + "/anlage-") && key.endsWith(".xml")) {
+        Optional<String> attachment = normsBucket.getFileAsString(key);
+        attachment.ifPresent(content -> attachments.put(key, content));
+      }
+    }
+    return attachments;
   }
 
   private void clearOldNorms(String timestamp) {
