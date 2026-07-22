@@ -56,6 +56,9 @@ public final class Norm implements AbstractSearchEntity {
   @Field(name = Fields.OFFICIAL_ABBREVIATION)
   private String officialAbbreviation;
 
+  @Field(name = Fields.RIS_ABBREVIATION)
+  private String risAbbreviation;
+
   /**
    * The date of adoption or signature of the legislation. This is the date at which the text is
    * officially acknowledged to be a legislation, even though it might not even be published or in
@@ -140,6 +143,8 @@ public final class Norm implements AbstractSearchEntity {
     public static final String DATE_PUBLISHED = "date_published";
     public static final String OFFICIAL_ABBREVIATION = "official_abbreviation";
     public static final String OFFICIAL_ABBREVIATION_KEYWORD = "official_abbreviation.keyword";
+    public static final String RIS_ABBREVIATION = "ris_abbreviation";
+    public static final String RIS_ABBREVIATION_KEYWORD = "ris_abbreviation.keyword";
     public static final String OFFICIAL_SHORT_TITLE = "official_short_title";
     public static final String OFFICIAL_SHORT_TITLE_KEYWORD = "official_short_title.keyword";
     public static final String OFFICIAL_TITLE = "official_title";
