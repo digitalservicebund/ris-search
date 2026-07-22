@@ -29,7 +29,7 @@
           "path": "name"
         },
         "eid": {
-          "type": "text"
+          "type": "keyword"
         },
         "guid": {
           "type": "text"

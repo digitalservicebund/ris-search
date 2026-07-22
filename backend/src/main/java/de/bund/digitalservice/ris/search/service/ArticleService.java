@@ -19,6 +19,8 @@ import org.opensearch.index.query.Operator;
 import org.opensearch.index.query.QueryBuilders;
 import org.opensearch.search.collapse.CollapseBuilder;
 import org.opensearch.search.fetch.subphase.highlight.HighlightBuilder;
+import org.opensearch.search.sort.SortBuilders;
+import org.opensearch.search.sort.SortOrder;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHits;
@@ -87,6 +89,9 @@ public class ArticleService {
         new InnerHitBuilder()
             .setName("top_three_articles")
             .setSize(3)
+            .addSort(SortBuilders.scoreSort().order(SortOrder.DESC))
+            // Secondary tie-breaker sort (e.g., by eid)
+            .addSort(SortBuilders.fieldSort("eid").order(SortOrder.ASC))
             .setHighlightBuilder(highlightBuilder);
 
     CollapseBuilder collapseBuilder =
