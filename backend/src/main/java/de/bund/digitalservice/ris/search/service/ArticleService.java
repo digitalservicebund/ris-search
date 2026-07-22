@@ -90,8 +90,8 @@ public class ArticleService {
             .setName("top_three_articles")
             .setSize(3)
             .addSort(SortBuilders.scoreSort().order(SortOrder.DESC))
-            // Secondary tie-breaker sort (e.g., by eid)
-            .addSort(SortBuilders.fieldSort("eid").order(SortOrder.ASC))
+            // Secondary tie-breaker sort
+            .addSort(SortBuilders.fieldSort("_id").order(SortOrder.ASC))
             .setHighlightBuilder(highlightBuilder);
 
     CollapseBuilder collapseBuilder =
