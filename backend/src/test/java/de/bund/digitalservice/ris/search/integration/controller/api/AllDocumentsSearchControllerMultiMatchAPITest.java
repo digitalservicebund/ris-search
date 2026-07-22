@@ -7,6 +7,7 @@ import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -49,14 +50,17 @@ class AllDocumentsSearchControllerMultiMatchAPITest extends ContainersIntegratio
                 .tenor("Mord")
                 .headline("Totschlag")
                 .guidingPrinciple("Raub")
+                .decisionDate(LocalDate.of(2025, 1, 3))
                 .build(),
             CaseLawDocumentationUnit.builder()
                 .documentNumber("case_sameField {m,t,r} in one field")
                 .tenor("Mord, Totschlag, Raub")
+                .decisionDate(LocalDate.of(2025, 1, 2))
                 .build(),
             CaseLawDocumentationUnit.builder()
                 .documentNumber("case_sameFieldReordered {m,t,r} in one field but different order")
                 .tenor("Raub, Mord, Totschlag")
+                .decisionDate(LocalDate.of(2025, 1, 1))
                 .build());
     var normsData =
         List.of(
@@ -65,18 +69,21 @@ class AllDocumentsSearchControllerMultiMatchAPITest extends ContainersIntegratio
                 .expressionEli("N1 {m,t} in one field")
                 .officialTitle("Mord Totschlag")
                 .tableOfContents(Collections.emptyList())
+                .normsSortDate(LocalDate.of(2025, 1, 1))
                 .build(),
             Norm.builder()
                 .workEli("N2 {r} in one field")
                 .expressionEli("N2 {r} in one field")
                 .officialTitle("Raub")
                 .tableOfContents(Collections.emptyList())
+                .normsSortDate(LocalDate.of(2025, 1, 2))
                 .build(),
             Norm.builder()
                 .workEli("N3 {r} in one field")
                 .expressionEli("N3 {r} in one field")
                 .officialTitle("Raub")
                 .tableOfContents(Collections.emptyList())
+                .normsSortDate(LocalDate.of(2025, 1, 3))
                 .build());
 
     caseLawRepository.saveAll(caseLawData);
