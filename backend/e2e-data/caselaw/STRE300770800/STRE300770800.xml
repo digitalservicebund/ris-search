@@ -62,7 +62,7 @@
                         <ris:aktenzeichen domainTerm="Aktenzeichen" akn:refersTo="#aktenzeichen">22 L 5678/90</ris:aktenzeichen>
                     </ris:aktenzeichenListe>
                     <ris:dokumenttyp domainTerm="Dokumenttyp">Urteil</ris:dokumenttyp>
-                    <ris:gericht domainTerm="Gericht" refersTo="#organisation-gericht-courttype-courtlocation">
+                    <ris:gericht domainTerm="Gericht" refersTo="#organisation-gericht-courttype-courtlocation" showAs="FG Berlin Label">
                         <ris:gerichtstyp domainTerm="Gerichtstyp">FG</ris:gerichtstyp>
                         <ris:gerichtsort domainTerm="Gerichtsort">Berlin</ris:gerichtsort>
                         <ris:spruchkoerper domainTerm="Spruchkörper" refersTo="#spruchkoerper">10. Senat</ris:spruchkoerper>

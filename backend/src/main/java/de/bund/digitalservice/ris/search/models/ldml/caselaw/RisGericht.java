@@ -26,8 +26,12 @@ public class RisGericht {
   @XmlAttribute private String domainTerm;
 
   /** Reference to a formal definition or IRI within the Akoma Ntoso namespace. */
-  @XmlAttribute(name = "refersTo", namespace = CaseLawLdmlNamespaces.AKN_NS)
+  @XmlAttribute(name = "refersTo")
   private String refersTo;
+
+  /** Reference to a formal definition or IRI within the Akoma Ntoso namespace. */
+  @XmlAttribute(name = "showAs")
+  private String showAs;
 
   /** The type of court (e.g., Amtsgericht, Landgericht). */
   @XmlElement(name = "gerichtstyp", namespace = CaseLawLdmlNamespaces.RIS_NS)

@@ -157,7 +157,7 @@ test("can view metadata", async ({ page }) => {
     metadataList.getByRole("term").or(metadataList.getByRole("definition")),
   ).toHaveText([
     "Gericht",
-    "LG Testort6",
+    "LG Test6 Label",
     "Dokumenttyp",
     "Urteil",
     "Entscheidungsdatum",

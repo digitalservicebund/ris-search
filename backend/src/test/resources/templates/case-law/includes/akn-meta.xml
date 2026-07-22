@@ -146,7 +146,7 @@
             <ris:aktenzeichen domainTerm="Aktenzeichen" refersTo="#aktenzeichen">Test file number 2</ris:aktenzeichen>
         </ris:aktenzeichenListe>
         <ris:dokumenttyp domainTerm="Dokumenttyp">{% if documentType %}{{ documentType }}{% else %}Urteil{% endif %}</ris:dokumenttyp>
-        <ris:gericht domainTerm="Gericht" refersTo="#organisation-gericht-courttype-courtlocation">
+        <ris:gericht domainTerm="Gericht" refersTo="#organisation-gericht-courttype-courtlocation" showAs="{% if courtLabel %}{{ courtLabel }}{% else %}Test court label{% endif %}">
             <ris:gerichtstyp domainTerm="Gerichtstyp">{% if courtType %}{{ courtType }}{% else %}Test court type{% endif %}</ris:gerichtstyp>
             <ris:gerichtsort domainTerm="Gerichtsort">{% if location %}{{ location }}{% else %}Test court location{% endif%}</ris:gerichtsort>
             <ris:spruchkoerper domainTerm="Spruchkörper" refersTo="#spruchkoerper">Test judicial body</ris:spruchkoerper>

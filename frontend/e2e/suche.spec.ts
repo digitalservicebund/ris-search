@@ -482,7 +482,7 @@ test.describe("searching caselaw", () => {
 
     // Header
     await expect(searchResult).toHaveText(/Beschluss/);
-    await expect(searchResult).toHaveText(/BPatG Teststadt/);
+    await expect(searchResult).toHaveText(/BPatG Label/);
     await expect(searchResult).toHaveText(/09.04.2025/);
     await expect(searchResult).toHaveText(/34 X \(xyz\) 456\/78/);
     await expect(searchResult).toHaveText(/Beispielentscheid/);
@@ -598,12 +598,14 @@ test.describe("searching caselaw", () => {
     await navigate(page, "/suche?documentKind=R");
 
     await page.getByRole("combobox", { name: "Bundesgericht" }).fill("LG");
-    await page.getByRole("option", { name: "Landgericht Hamburg" }).click();
+    await page
+      .getByRole("option", { name: "Landgericht Hamburg Label" })
+      .click();
 
     await expect(page).toHaveURL(/court=LG\+Hamburg/);
 
     await expect(getSearchResults(page)).toHaveText(
-      Array(2).fill(/LG Hamburg/),
+      Array(3).fill(/LG Hamburg Label/),
     );
   });
 
@@ -717,10 +719,10 @@ test.describe("searching caselaw", () => {
     // Start with caselaw search with typeGroup, date filter, and court
     await navigate(
       page,
-      "/suche?documentKind=R&typeGroup=urteil&court=LG+Hamburg&dateFilterType=period&dateFilterFrom=2025-01-01&dateFilterTo=2025-12-31",
+      "/suche?documentKind=R&typeGroup=urteil&court=LG+Hamburg+Label&dateFilterType=period&dateFilterFrom=2025-01-01&dateFilterTo=2025-12-31",
     );
 
-    await expect(getResultCounter(page)).toHaveText("2 Suchergebnisse");
+    await expect(getResultCounter(page)).toHaveText("3 Suchergebnisse");
 
     // Switch to All Documents
     await page

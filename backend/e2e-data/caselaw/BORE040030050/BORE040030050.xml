@@ -61,7 +61,7 @@
                         <ris:aktenzeichen domainTerm="Aktenzeichen" akn:refersTo="#aktenzeichen">TT 98765</ris:aktenzeichen>
                     </ris:aktenzeichenListe>
                     <ris:dokumenttyp domainTerm="Dokumenttyp">Urteil</ris:dokumenttyp>
-                    <ris:gericht domainTerm="Gericht" refersTo="#organisation-gericht-courttype-courtlocation">
+                    <ris:gericht domainTerm="Gericht" refersTo="#organisation-gericht-courttype-courtlocation" showAs="LG Test8 Label">
                         <ris:gerichtstyp domainTerm="Gerichtstyp">LG</ris:gerichtstyp>
                         <ris:gerichtsort domainTerm="Gerichtsort">Testort8</ris:gerichtsort>
                         <ris:spruchkoerper domainTerm="Spruchkörper" refersTo="#spruchkoerper">11. Senat</ris:spruchkoerper>

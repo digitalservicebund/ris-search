@@ -67,7 +67,7 @@
                         <ris:aktenzeichen domainTerm="Aktenzeichen" akn:refersTo="#aktenzeichen">34 X (xyz) 456/78</ris:aktenzeichen>
                     </ris:aktenzeichenListe>
                     <ris:dokumenttyp domainTerm="Dokumenttyp">Beschluss</ris:dokumenttyp>
-                    <ris:gericht domainTerm="Gericht" refersTo="#organisation-gericht-courttype-courtlocation">
+                    <ris:gericht domainTerm="Gericht" refersTo="#organisation-gericht-courttype-courtlocation" showAs="BPatG Label">
                         <ris:gerichtstyp domainTerm="Gerichtstyp">BPatG</ris:gerichtstyp>
                         <ris:gerichtsort domainTerm="Gerichtsort">Teststadt</ris:gerichtsort>
                         <ris:spruchkoerper domainTerm="Spruchkörper" refersTo="#spruchkoerper">27. Senat</ris:spruchkoerper>

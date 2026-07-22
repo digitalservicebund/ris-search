@@ -68,7 +68,7 @@
                         <ris:aktenzeichen domainTerm="Aktenzeichen" akn:refersTo="#aktenzeichen">AB 5678/90</ris:aktenzeichen>
                     </ris:aktenzeichenListe>
                     <ris:dokumenttyp domainTerm="Dokumenttyp">Urteil</ris:dokumenttyp>
-                    <ris:gericht domainTerm="Gericht" refersTo="#organisation-gericht-courttype-courtlocation">
+                    <ris:gericht domainTerm="Gericht" refersTo="#organisation-gericht-courttype-courtlocation" showAs="ArbG Köln Label">
                         <ris:gerichtstyp domainTerm="Gerichtstyp">ArbG</ris:gerichtstyp>
                         <ris:gerichtsort domainTerm="Gerichtsort">Köln</ris:gerichtsort>
                         <ris:spruchkoerper domainTerm="Spruchkörper" refersTo="#spruchkoerper">5. Kammer</ris:spruchkoerper>

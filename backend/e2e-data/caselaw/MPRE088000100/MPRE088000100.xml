@@ -64,7 +64,7 @@
                         <ris:aktenzeichen domainTerm="Aktenzeichen" akn:refersTo="#aktenzeichen">AB C 78/90</ris:aktenzeichen>
                     </ris:aktenzeichenListe>
                     <ris:dokumenttyp domainTerm="Dokumenttyp">Beschluss</ris:dokumenttyp>
-                    <ris:gericht domainTerm="Gericht" refersTo="#organisation-gericht-courttype-courtlocation">
+                    <ris:gericht domainTerm="Gericht" refersTo="#organisation-gericht-courttype-courtlocation" showAs="BPatG Label">
                         <ris:gerichtstyp domainTerm="Gerichtstyp">BPatG</ris:gerichtstyp>
                         <ris:gerichtsort domainTerm="Gerichtsort">Beispielstadt</ris:gerichtsort>
                         <ris:spruchkoerper domainTerm="Spruchkörper" refersTo="#spruchkoerper">15. Senat</ris:spruchkoerper>

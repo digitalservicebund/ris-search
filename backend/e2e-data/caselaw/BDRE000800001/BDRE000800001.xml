@@ -61,7 +61,7 @@
                     <ris:aktenzeichen domainTerm="Aktenzeichen" akn:refersTo="#aktenzeichen">XVI VL 34/99</ris:aktenzeichen>
                 </ris:aktenzeichenListe>
                 <ris:dokumenttyp domainTerm="Dokumenttyp">Urteil</ris:dokumenttyp>
-                <ris:gericht domainTerm="Gericht" refersTo="#organisation-gericht-courttype-courtlocation">
+                <ris:gericht domainTerm="Gericht" refersTo="#organisation-gericht-courttype-courtlocation" showAs="BDiG Frankfurt Label">
                     <ris:gerichtstyp domainTerm="Gerichtstyp">BDiG</ris:gerichtstyp>
                     <ris:gerichtsort domainTerm="Gerichtsort">Frankfurt</ris:gerichtsort>
                     <ris:spruchkoerper domainTerm="Spruchkörper" refersTo="#spruchkoerper">16. Kammer</ris:spruchkoerper>
