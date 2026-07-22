@@ -91,6 +91,6 @@ public class AdministrativeDirectiveService {
   }
 
   public List<AdministrativeDirective> getByDocumentNumber(String documentNumber) {
-    return repository.findByDocumentNumber(documentNumber);
+    return repository.findByDocumentNumberKeyword(documentNumber);
   }
 }

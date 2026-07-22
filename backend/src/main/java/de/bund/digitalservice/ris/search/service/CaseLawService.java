@@ -155,7 +155,7 @@ public class CaseLawService {
   }
 
   public List<CaseLawDocumentationUnit> getByDocumentNumber(String documentNumber) {
-    return caseLawRepository.findByDocumentNumber(documentNumber);
+    return caseLawRepository.findByDocumentNumberKeyword(documentNumber);
   }
 
   /**

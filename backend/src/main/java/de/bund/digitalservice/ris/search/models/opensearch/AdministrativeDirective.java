@@ -34,6 +34,7 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 public record AdministrativeDirective(
     @Id @Field(name = Fields.ID) String id,
     @Field(name = Fields.DOCUMENT_NUMBER) String documentNumber,
+    @Field(name = Literature.Fields.DOCUMENT_NUMBER_KEYWORD) String documentNumberKeyword,
     @Nullable @Field(name = Fields.HEADLINE) String headline,
     @Field(name = Fields.DOCUMENT_TYPE) String documentType,
     @Nullable @Field(name = Fields.DOCUMENT_TYPE_DETAIL) String documentTypeDetail,
