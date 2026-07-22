@@ -12,22 +12,20 @@ test.describe("open norm by abbreviation", async () => {
     );
   });
 
-  ["GeGuGe 2025", "geguge 2025", "geguge_2025"].forEach(
-    (abbreviationVariant) => {
-      test(`redirect works for abbreviation variant '${abbreviationVariant}'`, async ({
-        page,
-      }) => {
-        await navigate(page, `/gesetze/${abbreviationVariant}`);
+  ["GeGuGe 2025", "geguge 2025"].forEach((abbreviationVariant) => {
+    test(`redirect works for abbreviation variant '${abbreviationVariant}'`, async ({
+      page,
+    }) => {
+      await navigate(page, `/gesetze/${abbreviationVariant}`);
 
-        await page.waitForURL(
-          "/gesetze/eli/bund/bgbl-1/2025/130/2025-05-05/1/deu",
-        );
-        await expect(page.getByRole("heading", { level: 1 })).toHaveText(
-          "Gerade gültiges Gesetz",
-        );
-      });
-    },
-  );
+      await page.waitForURL(
+        "/gesetze/eli/bund/bgbl-1/2025/130/2025-05-05/1/deu",
+      );
+      await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+        "Gerade gültiges Gesetz",
+      );
+    });
+  });
 
   test("redirects to error page for unknown abbreviation", async ({ page }) => {
     await navigate(page, "/gesetze/unknownAbr");

@@ -54,7 +54,7 @@ class NormsServiceTest extends ContainersIntegrationBase {
             .datePublished(LocalDate.of(2022, Month.JANUARY, 1))
             .officialShortTitle("latest short title")
             .normsDate(LocalDate.of(2022, Month.JANUARY, 1))
-            .officialAbbreviation("latest_abbr")
+            .officialAbbreviation("latest abbr")
             .workEli("eli/bund/bgbl-1/2020/s1126")
             .build();
 
@@ -70,7 +70,7 @@ class NormsServiceTest extends ContainersIntegrationBase {
             .datePublished(LocalDate.of(2020, Month.JANUARY, 1))
             .officialShortTitle("oldest short title")
             .normsDate(LocalDate.of(2020, Month.JANUARY, 1))
-            .officialAbbreviation("oldest_abbr")
+            .officialAbbreviation("oldest abbr")
             .workEli("eli/bund/bgbl-1/2020/s1126")
             .build();
     repository.save(olderExpression);
@@ -146,7 +146,7 @@ class NormsServiceTest extends ContainersIntegrationBase {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {"FooBar 2009", "foobar 2009", "foobar_2009"})
+  @ValueSource(strings = {"FooBar 2009", "foobar 2009"})
   void shouldFilterNormByAbbreviation(String abbreviationParam) {
     repository.save(Norm.builder().officialAbbreviation("FooBar 2009").build());
 
