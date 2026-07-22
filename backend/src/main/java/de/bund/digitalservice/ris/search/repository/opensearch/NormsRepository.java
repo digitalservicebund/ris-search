@@ -19,15 +19,15 @@ public interface NormsRepository extends ElasticsearchRepository<Norm, String> {
    * @param workEli The work-level ELI identifier.
    * @return A {@link Norm}
    */
-  List<Norm> getByWorkEli(String workEli);
+  List<Norm> getByWorkEliKeyword(String workEli);
 
   /**
-   * Returns a {@link Norm} by its expression-level ELI.
+   * Returns a {@link Norm} by its expression-level ELI keyword.
    *
    * @param expressionEli The expression-level ELI identifier.
    * @return A {@link Norm}
    */
-  Norm getByExpressionEli(String expressionEli);
+  Norm getByExpressionEliKeyword(String expressionEli);
 
   /**
    * Returns all legislation in a {@link Page}.

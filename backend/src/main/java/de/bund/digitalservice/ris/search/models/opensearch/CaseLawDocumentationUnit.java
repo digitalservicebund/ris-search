@@ -21,6 +21,7 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 public record CaseLawDocumentationUnit(
     @JsonIgnore @Id @Field(name = Fields.ID) String id,
     @Field(name = Fields.DOCUMENT_NUMBER) String documentNumber,
+    @Field(name = Literature.Fields.DOCUMENT_NUMBER_KEYWORD) String documentNumberKeyword,
     @Field(name = Fields.ECLI) String ecli,
     @Field(name = Fields.CASE_FACTS) String caseFacts,
     @Field(name = Fields.DECISION_GROUNDS) String decisionGrounds,

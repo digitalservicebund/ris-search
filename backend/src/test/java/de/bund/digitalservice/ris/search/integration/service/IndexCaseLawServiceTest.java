@@ -49,7 +49,7 @@ class IndexCaseLawServiceTest extends ContainersIntegrationBase {
     this.service.reindexAll(startingTimestamp);
 
     assertThat(repo.count()).isEqualTo(1);
-    assertThat(repo.findByDocumentNumber("TEST080020093")).hasSize(1);
+    assertThat(repo.findByDocumentNumberKeyword("TEST080020093")).hasSize(1);
     verify(repo, times(1)).deleteByIndexedAtBefore(startingTimestamp);
   }
 
@@ -63,7 +63,7 @@ class IndexCaseLawServiceTest extends ContainersIntegrationBase {
     changelog.setChanged(Sets.newHashSet(List.of("TEST080020093.xml")));
     service.indexChangelog(changelog);
     assertThat(repo.count()).isEqualTo(1);
-    assertThat(repo.findByDocumentNumber("TEST080020093")).hasSize(1);
+    assertThat(repo.findByDocumentNumberKeyword("TEST080020093")).hasSize(1);
   }
 
   @Test
@@ -76,7 +76,7 @@ class IndexCaseLawServiceTest extends ContainersIntegrationBase {
     changelog.setChangeAll(true);
     service.indexChangelog(changelog);
     assertThat(repo.count()).isEqualTo(1);
-    assertThat(repo.findByDocumentNumber("TEST080020093")).hasSize(1);
+    assertThat(repo.findByDocumentNumberKeyword("TEST080020093")).hasSize(1);
   }
 
   @Test
@@ -92,7 +92,7 @@ class IndexCaseLawServiceTest extends ContainersIntegrationBase {
     service.indexChangelog(changelog);
 
     assertThat(repo.count()).isEqualTo(1);
-    assertThat(repo.findByDocumentNumber("TEST080020093")).hasSize(1);
+    assertThat(repo.findByDocumentNumberKeyword("TEST080020093")).hasSize(1);
   }
 
   @Test

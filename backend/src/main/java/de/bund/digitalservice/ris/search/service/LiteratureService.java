@@ -110,7 +110,7 @@ public class LiteratureService {
    * @return the list of items
    */
   public List<Literature> getByDocumentNumber(String documentNumber) {
-    return literatureRepository.findByDocumentNumber(documentNumber);
+    return literatureRepository.findByDocumentNumberKeyword(documentNumber);
   }
 
   /**

@@ -79,7 +79,8 @@ class LiteratureServiceTest {
   @DisplayName("Should return an existing literature item by its document number")
   void shouldReturnLiteratureByDocumentNumber() {
     var expectedResult = List.of(Literature.builder().build());
-    when(literatureRepositoryMock.findByDocumentNumber("XXLU000000001")).thenReturn(expectedResult);
+    when(literatureRepositoryMock.findByDocumentNumberKeyword("XXLU000000001"))
+        .thenReturn(expectedResult);
 
     var actual = literatureService.getByDocumentNumber("XXLU000000001");
     Assertions.assertEquals(expectedResult, actual);

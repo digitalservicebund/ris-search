@@ -18,6 +18,7 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 public record Literature(
     @Id @Field(name = Fields.ID) String id,
     @Field(name = Fields.DOCUMENT_NUMBER) String documentNumber,
+    @Field(name = Fields.DOCUMENT_NUMBER_KEYWORD) String documentNumberKeyword,
     @ElementCollection @Field(name = Fields.YEARS_OF_PUBLICATION) List<String> yearsOfPublication,
     @Field(name = Fields.FIRST_PUBLICATION_DATE, type = FieldType.Date, format = DateFormat.date)
         LocalDate firstPublicationDate,

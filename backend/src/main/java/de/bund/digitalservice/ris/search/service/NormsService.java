@@ -121,7 +121,7 @@ public class NormsService {
    * @return an {@link Optional} containing the Norm if found, or empty if not found
    */
   public Optional<Norm> getByExpressionEli(final ExpressionEli expressionEli) {
-    Norm result = normsRepository.getByExpressionEli(expressionEli.toString());
+    Norm result = normsRepository.getByExpressionEliKeyword(expressionEli.toString());
     if (result != null) {
       result.setArticles(articleService.findAllByExpressionEli(result.getExpressionEli()));
     }
