@@ -86,6 +86,9 @@ bouncycastle-bcprov = { module = "org.bouncycastle:bcprov-jdk18on", version = "1
 # CVE-2026-55831
 netty-codec-http = { module = "io.netty:netty-codec-http", version = "4.2.16.Final" }
 
+# CVE-2026-59901
+netty-codec-compression = { module = "io.netty:netty-codec-compression", version = "4.2.16.Final" }
+
 [plugins]
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
 spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "spring-dependency-management" }

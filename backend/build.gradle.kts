@@ -101,6 +101,9 @@ dependencies {
     // CVE-2026-55831
     implementation(libs.netty.codec.http)
 
+    // CVE-2026-59901
+    implementation(libs.netty.codec.compression)
+
     implementation(libs.ris.html.transformation)
 
     compileOnly(libs.lombok)
