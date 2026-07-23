@@ -77,6 +77,7 @@ public class BulkExportJob implements Job {
           }
         }
       }
+
       boolean success = exportService.updateLatestZip(jobStartTime);
       if (!success) {
         return ReturnCode.ERROR;

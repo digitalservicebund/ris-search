@@ -71,7 +71,7 @@ public class BulkExportService {
 
     if (keysToZip.isEmpty()) {
       logger.info("No files found for bucket {}", sourceBucket.getClass());
-      return false;
+      return true;
     }
 
     try (ExecutorService executor = Executors.newSingleThreadExecutor();
