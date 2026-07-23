@@ -70,7 +70,7 @@ public class BulkExportService {
             .toList();
 
     if (keysToZip.isEmpty()) {
-      logger.error("No files found for bucket {}", sourceBucket.getClass());
+      logger.info("No files found for bucket {}", sourceBucket.getClass());
       return false;
     }
 
