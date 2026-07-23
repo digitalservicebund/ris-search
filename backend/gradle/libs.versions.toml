@@ -26,7 +26,7 @@ opensearch-test-autoconfigure = "2.0.3"
 opensearch-test-containers = "4.1.0"
 jsoup = "1.22.2"
 commons-csv = "1.14.1"
-amazon-aws-sdk-s3 = "2.29.45"
+amazon-aws-sdk-s3 = "2.47.5"
 saxon-he = "13.0"
 streamex = "0.8.4"
 tools-jackson-core = "3.2.0"
@@ -82,6 +82,9 @@ bouncycastle-bcpkix = { module = "org.bouncycastle:bcpkix-jdk18on", version = "1
 
 # CVE-2026-0636
 bouncycastle-bcprov = { module = "org.bouncycastle:bcprov-jdk18on", version = "1.84" }
+
+# CVE-2026-55831
+netty-codec-http = { module = "io.netty:netty-codec-http", version = "4.2.16.Final" }
 
 [plugins]
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }

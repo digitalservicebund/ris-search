@@ -98,6 +98,9 @@ dependencies {
     // CVE-2026-0636
     implementation(libs.bouncycastle.bcprov)
 
+    // CVE-2026-55831
+    implementation(libs.netty.codec.http)
+
     implementation(libs.ris.html.transformation)
 
     compileOnly(libs.lombok)
