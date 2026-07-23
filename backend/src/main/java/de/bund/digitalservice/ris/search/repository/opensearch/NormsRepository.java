@@ -4,6 +4,7 @@ import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.elasticsearch.annotations.SourceFilters;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 
 /**
@@ -19,6 +20,7 @@ public interface NormsRepository extends ElasticsearchRepository<Norm, String> {
    * @param pageable pageable to manage page size and sorting
    * @return A {@link Norm}
    */
+  @SourceFilters(excludes = {"articleTexts", "articleNames"})
   Page<Norm> getByWorkEliKeyword(String workEli, Pageable pageable);
 
   /**
