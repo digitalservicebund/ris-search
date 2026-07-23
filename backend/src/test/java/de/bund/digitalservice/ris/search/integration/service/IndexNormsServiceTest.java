@@ -40,7 +40,7 @@ class IndexNormsServiceTest extends ContainersIntegrationBase {
 
     normsBucket.save(manifestationEli, normXml);
     indexNormsService.reindexAll(SharedTestConstants.TIMESTAMP_2024_01_01_AS_STRING);
-    List<Norm> expressions = normsRepository.getByWorkEli(workEli);
+    List<Norm> expressions = normsRepository.getByWorkEliKeyword(workEli);
     assertThat(expressions).hasSize(1);
     assertThat(expressions.getFirst().getTimeRelevanceStartDate())
         .isEqualTo(IndexNormsService.TIME_RELEVANCE_MIN);
@@ -52,7 +52,7 @@ class IndexNormsServiceTest extends ContainersIntegrationBase {
   @DisplayName("Three expressions cover full time relevance window")
   void threeExpressionsCoverFullTimeRelevanceWindow() {
     indexNormsService.reindexAll(SharedTestConstants.TIMESTAMP_2024_01_01_AS_STRING);
-    List<Norm> expressions = normsRepository.getByWorkEli("eli/bund/bgbl-1/1991/s102");
+    List<Norm> expressions = normsRepository.getByWorkEliKeyword("eli/bund/bgbl-1/1991/s102");
     assertThat(expressions).hasSize(3);
 
     expressions.sort(Comparator.comparing(Norm::getId));
@@ -76,7 +76,7 @@ class IndexNormsServiceTest extends ContainersIntegrationBase {
   void fullCitationIndexesProperly() {
     indexNormsService.reindexAll(SharedTestConstants.TIMESTAMP_2024_01_01_AS_STRING);
     Norm expression =
-        normsRepository.getByExpressionEli("eli/bund/bgbl-1/1991/s102/1991-01-01/1/deu");
+        normsRepository.getByExpressionEliKeyword("eli/bund/bgbl-1/1991/s102/1991-01-01/1/deu");
     assertThat(expression.getFullCitation()).startsWith("Verordnung");
   }
 
@@ -85,7 +85,7 @@ class IndexNormsServiceTest extends ContainersIntegrationBase {
   void officialTocIndexesProperly() {
     indexNormsService.reindexAll(SharedTestConstants.TIMESTAMP_2024_01_01_AS_STRING);
     Norm expression =
-        normsRepository.getByExpressionEli("eli/bund/bgbl-1/1991/s102/1991-01-01/1/deu");
+        normsRepository.getByExpressionEliKeyword("eli/bund/bgbl-1/1991/s102/1991-01-01/1/deu");
     assertThat(expression.getOfficialToc()).startsWith("Abschnitt 1");
   }
 
@@ -94,7 +94,7 @@ class IndexNormsServiceTest extends ContainersIntegrationBase {
   void officialFootNotesIndexProperly() {
     indexNormsService.reindexAll(SharedTestConstants.TIMESTAMP_2024_01_01_AS_STRING);
     Norm expression =
-        normsRepository.getByExpressionEli("eli/bund/bgbl-1/1991/s102/1991-01-01/1/deu");
+        normsRepository.getByExpressionEliKeyword("eli/bund/bgbl-1/1991/s102/1991-01-01/1/deu");
     assertThat(expression.getOfficialFootNotes())
         .isEqualTo(
             "Authorial note in the norm title. Authorial note in an article title. Authorial note in attachment contents");

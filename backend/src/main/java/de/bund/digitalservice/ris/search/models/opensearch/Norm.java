@@ -32,8 +32,14 @@ public final class Norm implements AbstractSearchEntity {
   @Field(name = Fields.WORK_ELI)
   private String workEli;
 
+  @Field(name = Fields.WORK_ELI_KEYWORD, type = FieldType.Keyword)
+  private String workEliKeyword;
+
   @Field(name = Fields.EXPRESSION_ELI)
   private String expressionEli;
+
+  @Field(name = Fields.EXPRESSION_ELI_KEYWORD, type = FieldType.Keyword)
+  private String expressionEliKeyword;
 
   /**
    * The documents represented by this class represent legislation expressions, meaning concrete
