@@ -114,6 +114,7 @@ public class NormLdmlToOpenSearchMapper {
    * The method extracts and maps metadata, content, and attachments from the XML to populate the
    * properties of the {@link Norm}.
    *
+   * @param fileName filename of the xmlFile, used for logging
    * @param xmlFile A string representation of the XML file content.
    * @param attachmentFileContents A map where the keys represent the attachment names and the
    *     values contain their respective content.
