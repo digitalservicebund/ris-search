@@ -70,10 +70,9 @@ const submitFeedback = async () => {
 
 <style module>
 .form {
-  max-width: 65ch;
-
   & h3 {
     margin-top: 0;
+    font-size: 1.25rem;
   }
 }
 
