@@ -1,10 +1,10 @@
 package de.bund.digitalservice.ris.search.repository.opensearch;
 
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
-import java.util.List;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.elasticsearch.annotations.SourceFilters;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 
 /**
@@ -17,9 +17,11 @@ public interface NormsRepository extends ElasticsearchRepository<Norm, String> {
    * Returns all {@link Norm} matching the given work ELI.
    *
    * @param workEli The work-level ELI identifier.
+   * @param pageable pageable to manage page size and sorting
    * @return A {@link Norm}
    */
-  List<Norm> getByWorkEliKeyword(String workEli);
+  @SourceFilters(excludes = {"articleTexts", "articleNames"})
+  Page<Norm> getByWorkEliKeyword(String workEli, Pageable pageable);
 
   /**
    * Returns a {@link Norm} by its expression-level ELI keyword.
