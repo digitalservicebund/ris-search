@@ -1153,6 +1153,148 @@ test.describe("searching administrative directives", () => {
   });
 });
 
+test.describe("mobile filter and sort drawers", () => {
+  test.beforeEach(({ isMobileTest }) => {
+    test.skip(!isMobileTest);
+  });
+
+  test("shows the 'Filtern' button only for document kinds with sub-filters", async ({
+    page,
+  }) => {
+    await navigate(page, "/suche");
+    await expect(
+      page.getByRole("button", { name: "Filtern" }),
+    ).not.toBeVisible();
+
+    await page
+      .getByRole("complementary", { name: "Ergebnisse anzeigen für:" })
+      .getByRole("button", { name: "Gerichtsentscheidungen" })
+      .click();
+
+    await expect(page.getByRole("button", { name: "Filtern" })).toBeVisible();
+  });
+
+  test("applies a court filter from the filter drawer", async ({ page }) => {
+    await navigate(page, "/suche?documentKind=R");
+
+    await page.getByRole("button", { name: "Filtern" }).click();
+    const dialog = page.getByRole("dialog", { name: "Filtern" });
+    await expect(dialog).toBeVisible();
+
+    await dialog.getByRole("combobox", { name: "Bundesgericht" }).fill("LG");
+    await page
+      .getByRole("option", { name: "Landgericht Hamburg Label" })
+      .click();
+
+    await dialog.getByRole("button", { name: "Anwenden" }).click();
+
+    await expect(dialog).not.toBeVisible();
+    await expect(page).toHaveURL(/court=LG\+Hamburg/);
+    await expect(getSearchResults(page)).toHaveText(
+      Array(3).fill(/LG Hamburg Label/),
+    );
+  });
+
+  test("applies a date filter from the filter drawer", async ({ page }) => {
+    await navigate(page, "/suche?documentKind=R");
+
+    await page.getByRole("button", { name: "Filtern" }).click();
+    const dialog = page.getByRole("dialog", { name: "Filtern" });
+    await expect(dialog).toBeVisible();
+
+    await dialog.getByRole("combobox", { name: "Zeitraum" }).click();
+    await page.getByRole("option", { name: "Bis zu einem Datum" }).click();
+    await dialog.getByRole("textbox", { name: "Datum" }).fill("31.12.2024");
+
+    await dialog.getByRole("button", { name: "Anwenden" }).click();
+
+    await expect(dialog).not.toBeVisible();
+    await expect(page).toHaveURL(/dateFilterFrom=&dateFilterTo=2024-12-31/);
+
+    const searchResults = getSearchResults(page);
+    await expect(searchResults).toHaveCount(2);
+    await expect(searchResults.nth(0)).toHaveText(/15.06.2024|22.11.2023/);
+  });
+
+  test("discards filter drawer changes when closed without applying", async ({
+    page,
+  }) => {
+    await navigate(page, "/suche?documentKind=R");
+
+    await page.getByRole("button", { name: "Filtern" }).click();
+    const dialog = page.getByRole("dialog", { name: "Filtern" });
+
+    await dialog.getByRole("combobox", { name: "Bundesgericht" }).fill("LG");
+    await page
+      .getByRole("option", { name: "Landgericht Hamburg Label" })
+      .click();
+
+    await dialog.getByRole("button", { name: "Schließen" }).click();
+    await expect(dialog).not.toBeVisible();
+
+    await expect(page).not.toHaveURL(/court=/);
+
+    // Reopening the drawer shows the field reset to the last committed value
+    await page.getByRole("button", { name: "Filtern" }).click();
+    await expect(
+      dialog.getByRole("combobox", { name: "Bundesgericht" }),
+    ).toHaveValue("");
+  });
+
+  test("'Zurücksetzen' resets and immediately commits the filters", async ({
+    page,
+  }) => {
+    await navigate(
+      page,
+      "/suche?documentKind=R&court=LG+Hamburg+Label&dateFilterType=period&dateFilterFrom=2025-01-01&dateFilterTo=2025-12-31",
+    );
+
+    await page.getByRole("button", { name: "Filtern" }).click();
+    const dialog = page.getByRole("dialog", { name: "Filtern" });
+
+    await dialog.getByRole("button", { name: "Zurücksetzen" }).click();
+
+    await expect(dialog).not.toBeVisible();
+    await expect(page).not.toHaveURL(/court=LG\+Hamburg/);
+    await expect(page).not.toHaveURL(/dateFilterFrom=2025-01-01/);
+  });
+
+  test("applies sorting from the sort drawer", async ({ page }) => {
+    await navigate(page, "/suche?documentKind=V");
+
+    await page.getByRole("button", { name: "Sortieren" }).click();
+    const dialog = page.getByRole("dialog", { name: "Sortieren" });
+    await expect(dialog).toBeVisible();
+
+    await dialog.getByRole("radio", { name: "Datum: Älteste zuerst" }).click();
+    await dialog.getByRole("button", { name: "Anwenden" }).click();
+
+    await expect(dialog).not.toBeVisible();
+    await expect(page).toHaveURL(/sort=date/);
+
+    const searchResults = getSearchResults(page);
+    await expect(searchResults).toHaveCount(5);
+    await expect(searchResults.nth(0)).toHaveText(/01.11.2004/);
+  });
+
+  test("applies page size from the sort drawer", async ({ page }) => {
+    await navigate(page, "/suche?query=fiktiv&itemsPerPage=10");
+
+    const searchResults = getSearchResults(page);
+    await expect(searchResults).toHaveCount(10);
+
+    await page.getByRole("button", { name: "Sortieren" }).click();
+    const dialog = page.getByRole("dialog", { name: "Sortieren" });
+
+    await dialog.getByRole("radio", { name: "50" }).click();
+    await dialog.getByRole("button", { name: "Anwenden" }).click();
+
+    await expect(dialog).not.toBeVisible();
+    await expect(page).toHaveURL(/itemsPerPage=50/);
+    await expect(searchResults).toHaveCount(18);
+  });
+});
+
 test("restores search state from document breadcrumbs", async ({ page }) => {
   await navigate(page, "/suche");
 
