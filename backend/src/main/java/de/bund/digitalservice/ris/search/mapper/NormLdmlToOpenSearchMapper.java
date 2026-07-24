@@ -10,6 +10,7 @@ import de.bund.digitalservice.ris.search.models.opensearch.TableOfContentsItem;
 import de.bund.digitalservice.ris.search.utils.LdmlTemporalData;
 import de.bund.digitalservice.ris.search.utils.XmlDocument;
 import jakarta.xml.bind.ValidationException;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -31,6 +32,7 @@ import org.jetbrains.annotations.Nullable;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 /**
  * The `NormLdmlToOpenSearchMapper` class is responsible for mapping and extracting data from a
@@ -57,6 +59,7 @@ import org.w3c.dom.NodeList;
  * extraction and mapping while adhering to the structure and metadata provided within XML files.
  */
 public class NormLdmlToOpenSearchMapper {
+
   private static final Logger logger = LogManager.getLogger(NormLdmlToOpenSearchMapper.class);
 
   private static final String X_PATH_SHORT_TITLE_ALTERNATE_NAME =
@@ -111,6 +114,7 @@ public class NormLdmlToOpenSearchMapper {
    * The method extracts and maps metadata, content, and attachments from the XML to populate the
    * properties of the {@link Norm}.
    *
+   * @param fileName filename of the xmlFile, used for logging
    * @param xmlFile A string representation of the XML file content.
    * @param attachmentFileContents A map where the keys represent the attachment names and the
    *     values contain their respective content.
@@ -120,90 +124,116 @@ public class NormLdmlToOpenSearchMapper {
    *     conditions.
    */
   public static Optional<Norm> parseNorm(
-      String xmlFile, Map<String, String> attachmentFileContents, boolean isPrototype) {
+      String fileName,
+      String xmlFile,
+      Map<String, String> attachmentFileContents,
+      boolean isPrototype) {
     try {
-      var xmlDocument = new XmlDocument(xmlFile.getBytes(StandardCharsets.UTF_8));
-      @Nullable String workEli = xmlDocument.getElementByXpath(X_PATH_WORK_URI);
-      @Nullable String expressionEli = xmlDocument.getElementByXpath(X_PATH_EXPRESSION_URI);
-      @Nullable String manifestationEli = xmlDocument.getElementByXpath(X_PATH_MANIFESTATION_THIS);
+      return Optional.of(doParse(xmlFile, attachmentFileContents, isPrototype));
+    } catch (IllegalStateException e) {
+      logger.warn("Skipping parsing of '{}'", fileName, e);
+    } catch (ParserConfigurationException
+        | XPathExpressionException
+        | ValidationException
+        | IllegalArgumentException
+        | IOException
+        | SAXException e) {
+      logger.error("Error parsing norm '{}'", fileName, e);
+    }
 
-      if (workEli == null || expressionEli == null || manifestationEli == null) {
-        logger.warn("Could not parse ELI");
-        return Optional.empty();
-      }
+    return Optional.empty();
+  }
 
-      boolean isGegenstandslos = xmlDocument.getElementExistByXpath(X_PATH_GEGENSTANDSLOS);
-      boolean isBedingtesInkrafttreten =
-          xmlDocument.getElementExistByXpath(X_PATH_BEDINGTES_INKRAFTTRETEN);
+  private static Norm doParse(
+      String xmlFile, Map<String, String> attachmentFileContents, boolean isPrototype)
+      throws XPathExpressionException,
+          ParserConfigurationException,
+          IOException,
+          SAXException,
+          ValidationException {
+    var xmlDocument = new XmlDocument(xmlFile.getBytes(StandardCharsets.UTF_8));
 
-      if (isGegenstandslos) {
-        logger.warn("Ignoring Gegenstandslos until logic is defined");
-        return Optional.empty();
-      }
+    requireNotBedingtInkraftOrGegenstandslos(xmlDocument);
 
-      if (isBedingtesInkrafttreten) {
-        logger.warn("Ignoring BedingtesInkrafttreten until logic is defined");
-        return Optional.empty();
-      }
+    String workEli = xmlDocument.getNonEmptyElementOrThrow(X_PATH_WORK_URI, "Work-Eli must exist");
 
-      List<Attachment> attachments =
-          NormAttachmentMapper.parseAttachments(xmlDocument, attachmentFileContents);
+    String expressionEli =
+        xmlDocument.getNonEmptyElementOrThrow(X_PATH_EXPRESSION_URI, "Expression-Eli must exist");
 
-      // Technically a ris-abbreviation exists for every norm. It's not enforce to exist here
-      // because for testphase-documents the value is not yet present.
-      final String abbreviation = getAbbreviation(xmlDocument).orElse(null);
+    String manifestationEli =
+        xmlDocument.getNonEmptyElementOrThrow(
+            X_PATH_MANIFESTATION_THIS, "Manifestation-Eli must exist");
 
-      String indexedAt = Instant.now().toString();
+    String risAbbreviation =
+        xmlDocument.getNonEmptyElementOrThrow(
+            X_PATH_RIS_ABKUERZUNG, "Norm must have ris-abbreviation");
 
-      List<Article> articles =
-          getArticlesByXmlDocument(
-              xmlDocument, attachments, abbreviation, workEli, expressionEli, indexedAt);
-      List<String> articleNames = articles.stream().map(Article::getName).toList();
-      List<String> articleTexts = articles.stream().map(Article::getText).toList();
-      String fullCitation = xmlDocument.getElementByXpath(X_PATH_FULL_CITATION);
-      String officialToc =
-          Optional.ofNullable(xmlDocument.getElementByXpath(X_PATH_OFFICIAL_TOC))
-              .map(String::strip)
-              .map(e -> e.replaceAll("\\s+", " "))
-              .orElse(null);
-      final List<TableOfContentsItem> tableOfContents =
-          getTableOfContents(expressionEli, xmlDocument, attachments);
+    String abbreviation =
+        xmlDocument
+            .getNonEmptyElementByXpath(X_PATH_SHORT_TITLE_ABBREVIATION)
+            .orElse(risAbbreviation);
 
-      // For differentiation of legislationDate and datePublished, see comments on Norm::normsDate
-      // and Norm::datePublished
-      LocalDate entryIntoForceDate = getDateByXpath(xmlDocument, X_PATH_ENTRY_INTO_FORCE_DATE);
-      LocalDate expiryDate = getDateByXpath(xmlDocument, X_PATH_EXPIRY_DATE);
-      LocalDate legislationDate = getDateByXpath(xmlDocument, X_PATH_DATE_AUSFERTIGUNG);
-      LocalDate datePublished = getDateByXpath(xmlDocument, X_PATH_WORK_DATE);
-      LocalDate normsSortDate = isPrototype ? legislationDate : entryIntoForceDate;
+    List<Attachment> attachments =
+        NormAttachmentMapper.parseAttachments(xmlDocument, attachmentFileContents);
 
-      return Optional.of(
-          Norm.builder()
-              .id(expressionEli)
-              .tableOfContents(tableOfContents)
-              .workEli(workEli)
-              .expressionEli(expressionEli)
-              .manifestationEliExample(manifestationEli)
-              .officialTitle(getOfficialTitleByXmlDocument(xmlDocument))
-              .officialShortTitle(getOfficialShortTitleByXmlDocument(xmlDocument))
-              .officialAbbreviation(abbreviation)
-              .normsDate(legislationDate)
-              .normsSortDate(normsSortDate)
-              .datePublished(datePublished)
-              .publishedIn(getPublishedInByXmlDocument(xmlDocument, datePublished))
-              .entryIntoForceDate(entryIntoForceDate)
-              .expiryDate(expiryDate)
-              .fullCitation(fullCitation)
-              .officialToc(officialToc)
-              .articles(articles)
-              .articleNames(articleNames)
-              .articleTexts(articleTexts)
-              .officialFootNotes(getOfficialFootNotes(xmlDocument, attachments))
-              .indexedAt(indexedAt)
-              .build());
-    } catch (Exception e) {
-      logger.warn("Error to create Norms from XML content.", e);
-      return Optional.empty();
+    String indexedAt = Instant.now().toString();
+
+    List<Article> articles =
+        getArticlesByXmlDocument(
+            xmlDocument, attachments, abbreviation, workEli, expressionEli, indexedAt);
+    List<String> articleNames = articles.stream().map(Article::getName).toList();
+    List<String> articleTexts = articles.stream().map(Article::getText).toList();
+    String fullCitation = xmlDocument.getElementByXpath(X_PATH_FULL_CITATION);
+    String officialToc =
+        Optional.ofNullable(xmlDocument.getElementByXpath(X_PATH_OFFICIAL_TOC))
+            .map(String::strip)
+            .map(e -> e.replaceAll("\\s+", " "))
+            .orElse(null);
+    final List<TableOfContentsItem> tableOfContents =
+        getTableOfContents(expressionEli, xmlDocument, attachments);
+
+    // For differentiation of legislationDate and datePublished, see comments on Norm::normsDate
+    // and Norm::datePublished
+    LocalDate entryIntoForceDate = getDateByXpath(xmlDocument, X_PATH_ENTRY_INTO_FORCE_DATE);
+    LocalDate expiryDate = getDateByXpath(xmlDocument, X_PATH_EXPIRY_DATE);
+    LocalDate legislationDate = getDateByXpath(xmlDocument, X_PATH_DATE_AUSFERTIGUNG);
+    LocalDate datePublished = getDateByXpath(xmlDocument, X_PATH_WORK_DATE);
+    LocalDate normsSortDate = isPrototype ? legislationDate : entryIntoForceDate;
+
+    return Norm.builder()
+        .id(expressionEli)
+        .tableOfContents(tableOfContents)
+        .workEli(workEli)
+        .expressionEli(expressionEli)
+        .manifestationEliExample(manifestationEli)
+        .officialTitle(getOfficialTitleByXmlDocument(xmlDocument))
+        .officialShortTitle(getOfficialShortTitleByXmlDocument(xmlDocument))
+        .officialAbbreviation(abbreviation)
+        .risAbbreviation(risAbbreviation)
+        .normsDate(legislationDate)
+        .normsSortDate(normsSortDate)
+        .datePublished(datePublished)
+        .publishedIn(getPublishedInByXmlDocument(xmlDocument, datePublished))
+        .entryIntoForceDate(entryIntoForceDate)
+        .expiryDate(expiryDate)
+        .fullCitation(fullCitation)
+        .officialToc(officialToc)
+        .articles(articles)
+        .articleNames(articleNames)
+        .articleTexts(articleTexts)
+        .officialFootNotes(getOfficialFootNotes(xmlDocument, attachments))
+        .indexedAt(indexedAt)
+        .build();
+  }
+
+  private static void requireNotBedingtInkraftOrGegenstandslos(XmlDocument xmlDocument)
+      throws XPathExpressionException {
+    if (xmlDocument.getElementExistByXpath(X_PATH_GEGENSTANDSLOS)) {
+      throw new IllegalStateException("Ignoring Gegenstandslos until logic is defined");
+    }
+
+    if (xmlDocument.getElementExistByXpath(X_PATH_BEDINGTES_INKRAFTTRETEN)) {
+      throw new IllegalStateException("Ignoring BedingtesInkrafttreten until logic is defined");
     }
   }
 
@@ -277,22 +307,6 @@ public class NormLdmlToOpenSearchMapper {
         .replaceAll("[()]", " ")
         .replaceAll("\\s{2,}", " ") // collapse multiple whitespaces
         .trim();
-  }
-
-  /**
-   * Tries to extract the official abbreviation (amtliche Abkürzung) from the document. If that
-   * doesn't exist uses the ris:abkuerzung as fallback.
-   *
-   * @param xmlDocument
-   * @return official abbreviation or ris:abkuerzung (fallback)
-   */
-  private static Optional<String> getAbbreviation(XmlDocument xmlDocument) {
-    Optional<String> officialAbbreviation =
-        xmlDocument.getNonEmptyElementByXpath(X_PATH_SHORT_TITLE_ABBREVIATION);
-
-    if (officialAbbreviation.isPresent()) {
-      return officialAbbreviation;
-    } else return xmlDocument.getNonEmptyElementByXpath(X_PATH_RIS_ABKUERZUNG);
   }
 
   private static LocalDate getDateByXpath(XmlDocument xmlDocument, String xpath) {
