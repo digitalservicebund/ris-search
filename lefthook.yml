@@ -12,6 +12,12 @@ pre-commit:
       run: >-
         pnpm fmt {staged_files} &&
         pnpm lint {staged_files}
+    check-format-api-docs:
+      root: api-docs
+      stage_fixed: true
+      run: >-
+        pnpm fmt {staged_files} &&
+        pnpm lint {staged_files}
     check-javadocs:
       skip: true
       tags: check javadocs
