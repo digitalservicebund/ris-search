@@ -1023,6 +1023,118 @@ test.describe("responsive", () => {
     await dataFieldsToggle.click();
     await expect(dataFieldsList).toBeVisible();
   });
+
+  test("applies a date filter from the filter drawer", async ({ page }) => {
+    await navigate(page, "/erweiterte-suche");
+
+    await page.getByRole("button", { name: "Gerichtsentscheidungen" }).click();
+    await page.getByRole("searchbox").fill("urteil");
+    const initialSearch = page.waitForResponse(/v1\/document\/lucene-search/);
+    await page.getByRole("button", { name: "Suchen" }).click();
+    await initialSearch;
+
+    await page.getByRole("button", { name: "Filtern" }).click();
+    const dialog = page.getByRole("dialog", { name: "Filtern" });
+    await expect(dialog).toBeVisible();
+
+    await dialog.getByRole("radio", { name: "Bestimmtes Datum" }).click();
+    await dialog.getByRole("textbox", { name: "Datum" }).fill("15.06.2024");
+
+    await dialog.getByRole("button", { name: "Anwenden" }).click();
+
+    await expect(dialog).not.toBeVisible();
+    await expect(page).toHaveURL(/dateFilterType=specificDate/);
+    await expect(page).toHaveURL(/dateFilterFrom=2024-06-15/);
+
+    await expect(getSearchResults(page)).toHaveText(/15.06.2024/);
+  });
+
+  test("discards filter drawer changes when closed without applying", async ({
+    page,
+  }) => {
+    await navigate(page, "/erweiterte-suche?documentKind=R");
+
+    await page.getByRole("button", { name: "Filtern" }).click();
+    const dialog = page.getByRole("dialog", { name: "Filtern" });
+
+    await dialog.getByRole("radio", { name: "Bestimmtes Datum" }).click();
+    await dialog.getByRole("textbox", { name: "Datum" }).fill("15.06.2024");
+
+    await dialog.getByRole("button", { name: "Schließen" }).click();
+    await expect(dialog).not.toBeVisible();
+
+    await expect(page).not.toHaveURL(/dateFilterType=specificDate/);
+
+    // Reopening the drawer shows the field reset to the last committed value
+    await page.getByRole("button", { name: "Filtern" }).click();
+    await expect(
+      dialog.getByRole("radio", { name: "Keine zeitliche Begrenzung" }),
+    ).toBeChecked();
+  });
+
+  test("'Zurücksetzen' resets and immediately commits the filters", async ({
+    page,
+  }) => {
+    await navigate(
+      page,
+      "/erweiterte-suche?documentKind=R&dateFilterType=specificDate&dateFilterFrom=2024-06-15",
+    );
+
+    await page.getByRole("button", { name: "Filtern" }).click();
+    const dialog = page.getByRole("dialog", { name: "Filtern" });
+
+    await dialog.getByRole("button", { name: "Zurücksetzen" }).click();
+
+    await expect(dialog).not.toBeVisible();
+    await expect(page).not.toHaveURL(/dateFilterType=specificDate/);
+  });
+
+  test("applies sorting from the sort drawer", async ({ page }) => {
+    await navigate(page, "/erweiterte-suche");
+
+    await page.getByRole("button", { name: "Gerichtsentscheidungen" }).click();
+    await page
+      .getByRole("searchbox")
+      .fill('GERICHT:"ArbG Köln" OR GERICHT:"BDiG Frankfurt"');
+    const initialSearch = page.waitForResponse(/v1\/document\/lucene-search/);
+    await page.getByRole("button", { name: "Suchen" }).click();
+    await initialSearch;
+
+    await page.getByRole("button", { name: "Sortieren" }).click();
+    const dialog = page.getByRole("dialog", { name: "Sortieren" });
+    await expect(dialog).toBeVisible();
+
+    await dialog.getByRole("radio", { name: "Gericht: Von A nach Z" }).click();
+    await dialog.getByRole("button", { name: "Anwenden" }).click();
+
+    await expect(dialog).not.toBeVisible();
+    await expect(page).toHaveURL(/sort=courtName/);
+
+    await expect(getSearchResults(page)).toHaveText([
+      /ArbG Köln/,
+      /BDiG Frankfurt/,
+    ]);
+  });
+
+  test("applies page size from the sort drawer", async ({ page }) => {
+    await navigate(
+      page,
+      "/erweiterte-suche?documentKind=R&dateFilterType=period&dateFilterFrom=2023-01-01&dateFilterTo=2025-12-31&itemsPerPage=10",
+    );
+
+    const searchResults = getSearchResults(page);
+    await expect(searchResults).toHaveCount(10);
+
+    await page.getByRole("button", { name: "Sortieren" }).click();
+    const dialog = page.getByRole("dialog", { name: "Sortieren" });
+
+    await dialog.getByRole("radio", { name: "50" }).click();
+    await dialog.getByRole("button", { name: "Anwenden" }).click();
+
+    await expect(dialog).not.toBeVisible();
+    await expect(page).toHaveURL(/itemsPerPage=50/);
+    await expect(searchResults).toHaveCount(13);
+  });
 });
 
 test.describe("search by AND + OR operators", { tag: ["@RISDEV-8385"] }, () => {
