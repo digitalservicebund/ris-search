@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Select } from "primevue";
+import { RadioButton } from "primevue";
 import { DocumentKind } from "~/types/api";
 import { validSortOptions } from "~/utils/search/sortOptions";
 
@@ -18,19 +18,25 @@ watch(options, (newVal) => {
   }
 });
 
-const sortLabelId = useId();
+const name = useId();
+const legendId = useId();
 </script>
 
 <template>
-  <span class="flex w-auto items-center gap-8">
-    <label :id="sortLabelId" class="typo-label2-regular">Sortieren nach</label>
-    <Select
-      :aria-labelledby="sortLabelId"
-      v-model="model"
-      scroll-height="20rem"
-      option-label="label"
-      option-value="value"
-      :options="options"
-    />
-  </span>
+  <fieldset :aria-labelledby="legendId" class="flex flex-col gap-16">
+    <legend :id="legendId" class="typo-label1-bold mb-8">Sortieren nach</legend>
+    <div
+      v-for="option in options"
+      :key="option.value"
+      class="flex items-center gap-8"
+    >
+      <RadioButton
+        v-model="model"
+        :input-id="`${name}-${option.value}`"
+        :name="name"
+        :value="option.value"
+      />
+      <label :for="`${name}-${option.value}`">{{ option.label }}</label>
+    </div>
+  </fieldset>
 </template>
