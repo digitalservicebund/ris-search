@@ -136,8 +136,8 @@ class BulkExportServiceTest {
     ObjectStorage sourceBucket = mock(ObjectStorage.class);
     ObjectStorage destinationBucket = mock(ObjectStorage.class);
 
-    when(sourceBucket.getAllKeysByPrefix("")).thenReturn(List.of("file.txt"));
-    when(sourceBucket.get("file.txt")).thenReturn(Optional.of("content".getBytes()));
+    when(sourceBucket.getAllKeys()).thenReturn(List.of("file.xml"));
+    when(sourceBucket.get("file.xml")).thenReturn(Optional.of("content".getBytes()));
     when(destinationBucket.getAllKeysByPrefix(anyString())).thenReturn(Collections.emptyList());
     when(destinationBucket.putStream(anyString(), any(InputStream.class)))
         .thenThrow(new IOException("The mock destination bucket threw an exception"));
@@ -154,7 +154,7 @@ class BulkExportServiceTest {
     ObjectStorage sourceBucket = mock(ObjectStorage.class);
     ObjectStorage destinationBucket = mock(ObjectStorage.class);
 
-    when(sourceBucket.getAllKeysByPrefix("")).thenReturn(List.of("file.txt"));
+    when(sourceBucket.getAllKeys()).thenReturn(List.of("file.txt"));
 
     BulkExportService bulkExportService =
         new BulkExportService(sourceBucket, destinationBucket, "test-export");
@@ -164,11 +164,25 @@ class BulkExportServiceTest {
   }
 
   @Test
+  void updateLatestZip_emptySourceBucket_shouldReturnEarlyWithTrue() {
+    ObjectStorage sourceBucket = mock(ObjectStorage.class);
+    ObjectStorage destinationBucket = mock(ObjectStorage.class);
+
+    when(sourceBucket.getAllKeys()).thenReturn(List.of());
+
+    BulkExportService bulkExportService =
+        new BulkExportService(sourceBucket, destinationBucket, "test-export");
+
+    boolean actual = bulkExportService.updateLatestZip(clock.instant());
+    assertThat(actual).isTrue();
+  }
+
+  @Test
   void updateLatestZip_whenContentOfKeyIsNotFound_shouldReturnFalse() {
     ObjectStorage sourceBucket = mock(ObjectStorage.class);
     ObjectStorage destinationBucket = mock(ObjectStorage.class);
 
-    when(sourceBucket.getAllKeysByPrefix("")).thenReturn(List.of("file"));
+    when(sourceBucket.getAllKeys()).thenReturn(List.of("file"));
     when(sourceBucket.get("file")).thenReturn(Optional.empty());
 
     BulkExportService bulkExportService =

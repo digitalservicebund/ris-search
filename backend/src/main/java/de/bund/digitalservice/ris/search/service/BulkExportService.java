@@ -70,8 +70,8 @@ public class BulkExportService {
             .toList();
 
     if (keysToZip.isEmpty()) {
-      logger.error("No files found for bucket {}", sourceBucket.getClass());
-      return false;
+      logger.info("No files found for bucket {}", sourceBucket.getClass());
+      return true;
     }
 
     try (ExecutorService executor = Executors.newSingleThreadExecutor();
