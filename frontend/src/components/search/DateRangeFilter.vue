@@ -5,6 +5,15 @@ import type {
   FilterType,
 } from "~/utils/search/dateFilterType";
 
+const { appendTo = "self" } = defineProps<{
+  /**
+   * Where to render the dropdown overlay. "self" (the default) keeps it
+   * width-matched to the field, but gets clipped by any scrollable ancestor
+   * (e.g. a Drawer). Use "body" in such contexts instead.
+   */
+  appendTo?: "self" | "body";
+}>();
+
 /** Active date filter value */
 const filter = defineModel<DateFilterValue>({ required: true });
 
@@ -77,10 +86,14 @@ const toDate = computed({
       <Select
         v-model="selectedType"
         :aria-labelledby="dateModeLabelId"
+        :append-to="appendTo"
         :options="items"
         :placeholder="items[0]?.label"
-        :pt="{ overlay: { class: 'bg-white w-full' } }"
-        append-to="self"
+        :pt="{
+          overlay: {
+            class: appendTo === 'self' ? 'bg-white w-full' : 'bg-white',
+          },
+        }"
         option-label="label"
         option-value="value"
         scroll-height="20rem"
