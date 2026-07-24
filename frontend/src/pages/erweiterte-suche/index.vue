@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { Message, PanelMenu, Select } from "primevue";
 import type { MenuItem } from "primevue/menuitem";
+import IconFilterAlt from "~icons/ic/baseline-filter-alt";
+import IconSwapVert from "~icons/ic/baseline-swap-vert";
 import type { Statistics } from "~/types/api";
 import { DocumentKind } from "~/types/api";
 import { queryableDataFields } from "~/utils/search/dataFields";
@@ -117,6 +119,62 @@ const documentKindMenuItems: MenuItem[] = [
     command: setDocumentKind,
   },
 ];
+
+// Mobile filter/sort drawers -------------------------------
+
+const filterDrawerVisible = ref(false);
+const sortDrawerVisible = ref(false);
+
+const dateFilterDraft = useDraftValue(dateFilter, filterDrawerVisible, {
+  type: getDefaultDateFilterType(documentKind.value),
+});
+
+const sortDraft = useDraftValue(
+  sort,
+  sortDrawerVisible,
+  ADVANCED_SEARCH_DEFAULTS.sort,
+);
+
+const itemsPerPageDraft = useDraftValue(
+  itemsPerPage,
+  sortDrawerVisible,
+  ADVANCED_SEARCH_DEFAULTS.itemsPerPage,
+);
+
+function applyFilterDrawer() {
+  const strictDraftDateFilter = isStrictDateFilterValue(
+    dateFilterDraft.draft.value,
+  )
+    ? dateFilterDraft.draft.value
+    : undefined;
+
+  navigateToSearch({
+    ...(strictDraftDateFilter ? { dateFilter: strictDraftDateFilter } : {}),
+    pageIndex: 0,
+  });
+}
+
+function resetFilterDrawer() {
+  dateFilterDraft.draft.value = {
+    type: getDefaultDateFilterType(documentKind.value),
+  };
+  applyFilterDrawer();
+}
+
+function applySortDrawer() {
+  navigateToSearch({
+    sort: sortDraft.draft.value ?? ADVANCED_SEARCH_DEFAULTS.sort,
+    itemsPerPage:
+      itemsPerPageDraft.draft.value ?? ADVANCED_SEARCH_DEFAULTS.itemsPerPage,
+    pageIndex: 0,
+  });
+}
+
+function resetSortDrawer() {
+  sortDraft.reset();
+  itemsPerPageDraft.reset();
+  applySortDrawer();
+}
 
 // Search results ------------------------------------------
 
@@ -244,11 +302,13 @@ watch(searchStatus, async (newStatus, oldStatus) => {
           />
         </fieldset>
 
-        <SearchDateFilter
-          v-model="localDateFilter"
-          :document-kind
-          @update:model-value="updateDateFilter"
-        />
+        <div class="hidden md:block">
+          <SearchDateFilter
+            v-model="localDateFilter"
+            :document-kind
+            @update:model-value="updateDateFilter"
+          />
+        </div>
       </aside>
 
       <div id="search" class="col-span-12 lg:col-span-8 lg:col-start-5">
@@ -271,6 +331,40 @@ watch(searchStatus, async (newStatus, oldStatus) => {
         <div
           class="col-span-12 flex flex-col gap-16 md:flex-row md:items-center md:gap-48 lg:col-span-8"
         >
+          <div class="flex gap-8 md:hidden">
+            <SearchMobileActionDrawer
+              v-model:visible="filterDrawerVisible"
+              class="flex-1"
+              label="Filtern"
+              :icon="IconFilterAlt"
+              @reset="resetFilterDrawer"
+              @apply="applyFilterDrawer"
+            >
+              <SearchDateFilter
+                v-model="dateFilterDraft.draft.value"
+                :document-kind
+              />
+            </SearchMobileActionDrawer>
+
+            <SearchMobileActionDrawer
+              v-model:visible="sortDrawerVisible"
+              class="flex-1"
+              label="Sortieren"
+              :icon="IconSwapVert"
+              @reset="resetSortDrawer"
+              @apply="applySortDrawer"
+            >
+              <SearchSortOptionsRadioGroup
+                v-model="sortDraft.draft.value"
+                :document-kind
+              />
+
+              <SearchItemsPerPageRadioGroup
+                v-model="itemsPerPageDraft.draft.value"
+              />
+            </SearchMobileActionDrawer>
+          </div>
+
           <output
             aria-atomic="true"
             aria-live="polite"
@@ -279,7 +373,7 @@ watch(searchStatus, async (newStatus, oldStatus) => {
             {{ formattedResultCount }}
           </output>
 
-          <div class="flex items-center gap-8">
+          <div class="hidden items-center gap-8 md:flex">
             <label :id="itemsPerPageLabelId" class="typo-label2-regular">
               Einträge pro Seite
             </label>
@@ -292,6 +386,7 @@ watch(searchStatus, async (newStatus, oldStatus) => {
           </div>
 
           <SearchSortSelect
+            class="hidden md:flex"
             :model-value="sort"
             :document-kind
             @update:model-value="updateSort"
