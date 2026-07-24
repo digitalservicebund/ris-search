@@ -40,7 +40,7 @@ describe("MobileActionDrawer", () => {
     expect(screen.getByText("Custom body")).toBeVisible();
   });
 
-  it("emits reset and keeps the drawer open when 'Zurücksetzen' is clicked", async () => {
+  it("emits reset and closes the drawer when 'Zurücksetzen' is clicked", async () => {
     const user = userEvent.setup();
     const { emitted } = await renderDrawer();
 
@@ -48,7 +48,11 @@ describe("MobileActionDrawer", () => {
     await user.click(screen.getByRole("button", { name: "Zurücksetzen" }));
 
     expect(emitted("reset")).toHaveLength(1);
-    expect(screen.getByRole("dialog", { name: "Filtern" })).toBeVisible();
+    await waitFor(() =>
+      expect(
+        screen.queryByRole("dialog", { name: "Filtern" }),
+      ).not.toBeInTheDocument(),
+    );
   });
 
   it("emits apply and closes the drawer when 'Anwenden' is clicked", async () => {
@@ -71,10 +75,12 @@ describe("MobileActionDrawer", () => {
     const { emitted } = await renderDrawer();
 
     await user.click(screen.getByRole("button", { name: "Filtern" }));
-    // The close button's visible label is "Schließen" (set via
-    // useDrawer()'s closeButtonProps), but PrimeVue's Drawer always sets an
-    // explicit aria-label of "Close" on it, which takes precedence over the
-    // visible text for the accessible name.
+    // The close button's visible label is "Schließen" (set via useDrawer()'s
+    // closeButtonProps), but PrimeVue's Drawer also sets an explicit
+    // aria-label, which takes precedence over the visible text for the
+    // accessible name. It defaults to English ("Close") here because this
+    // isolated component test doesn't load the app's German PrimeVue locale
+    // plugin (src/plugins/risUi.ts) - the real app renders "Schließen".
     await user.click(screen.getByRole("button", { name: "Close" }));
 
     expect(emitted("apply")).toBeFalsy();

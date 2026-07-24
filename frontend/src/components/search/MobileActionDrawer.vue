@@ -10,18 +10,25 @@ const { label, icon } = defineProps<{
 const emit = defineEmits<{
   /** "Anwenden" was clicked - the drawer closes right after */
   apply: [];
-  /** "Zurücksetzen" was clicked - the drawer stays open */
+  /** "Zurücksetzen" was clicked - the drawer closes right after */
   reset: [];
 }>();
 
+/** The drawer's open state, exposed so callers can react to it opening/closing */
+const visible = defineModel<boolean>("visible", { default: false });
+
 const {
-  visible,
   // @ts-expect-error -- usage in template not detected
   triggerRef,
   closeButtonProps,
-} = useDrawer();
+} = useDrawer(visible);
 
 const drawerId = useId();
+
+function handleReset() {
+  emit("reset");
+  visible.value = false;
+}
 
 function handleApply() {
   emit("apply");
@@ -63,7 +70,7 @@ function handleApply() {
           severity="secondary"
           label="Zurücksetzen"
           class="flex-1"
-          @click="emit('reset')"
+          @click="handleReset"
         />
         <Button
           severity="primary"
