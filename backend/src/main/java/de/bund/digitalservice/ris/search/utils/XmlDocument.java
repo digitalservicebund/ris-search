@@ -194,6 +194,25 @@ public class XmlDocument {
   }
 
   /**
+   * Tries to extract the value at the given xpath returns it if it's not blank. Otherwise, throws
+   * an {@code IllegalArgumentException} with the provided errorMessage.
+   *
+   * @param xpath of the element to extract
+   * @param errorMessage added to the exception in case the element couldn't be extracted
+   * @return the element if found
+   * @throws IllegalArgumentException if the element was not found
+   */
+  public String getNonEmptyElementOrThrow(String xpath, String errorMessage) {
+    Optional<String> value = getNonEmptyElementByXpath(xpath);
+
+    if (value.isPresent()) {
+      return value.get();
+    }
+
+    throw new IllegalArgumentException(errorMessage);
+  }
+
+  /**
    * Returns the text value of a node, excluding text in any child nodes.
    *
    * @param node the node to extract text from

@@ -277,14 +277,12 @@ public class IndexNormsService implements IndexService {
     }
 
     Map<String, String> attachments = getXmlAttachments(fileName, keysMatchingExpressionEli);
-    Optional<Norm> norm =
-        NormLdmlToOpenSearchMapper.parseNorm(
-            fileContent.get(), attachments, environment.acceptsProfiles(Profiles.of("prototype")));
-    if (norm.isEmpty()) {
-      logger.error("Unknown error while processing file {} during Norm import.", fileName);
-    }
 
-    return norm;
+    return NormLdmlToOpenSearchMapper.parseNorm(
+        fileName,
+        fileContent.get(),
+        attachments,
+        environment.acceptsProfiles(Profiles.of("prototype")));
   }
 
   /**

@@ -39,7 +39,8 @@ class NormLdmlToOpenSearchMapperTest {
             .datePublished("1962-07-20");
 
     String xmlContent = builder.buildNormXml();
-    Optional<Norm> maybeNorm = NormLdmlToOpenSearchMapper.parseNorm(xmlContent, Map.of(), false);
+    Optional<Norm> maybeNorm =
+        NormLdmlToOpenSearchMapper.parseNorm("", xmlContent, Map.of(), false);
 
     assertThat(maybeNorm).isNotEmpty();
 
@@ -83,7 +84,8 @@ class NormLdmlToOpenSearchMapperTest {
     NormTestDataBuilder builder = NormTestDataBuilder.builder().officialTitle(title);
 
     String xmlContent = builder.buildNormXml();
-    Optional<Norm> maybeNorm = NormLdmlToOpenSearchMapper.parseNorm(xmlContent, Map.of(), false);
+    Optional<Norm> maybeNorm =
+        NormLdmlToOpenSearchMapper.parseNorm("", xmlContent, Map.of(), false);
 
     assertThat(maybeNorm).isNotEmpty();
 
@@ -101,7 +103,7 @@ class NormLdmlToOpenSearchMapperTest {
             .datePublished("  1962-07-20   ");
 
     String xmlContent = builder.buildNormXml();
-    Optional<Norm> maybeNorm = NormLdmlToOpenSearchMapper.parseNorm(xmlContent, Map.of(), true);
+    Optional<Norm> maybeNorm = NormLdmlToOpenSearchMapper.parseNorm("", xmlContent, Map.of(), true);
 
     assertThat(maybeNorm).isNotEmpty();
 
@@ -112,42 +114,69 @@ class NormLdmlToOpenSearchMapperTest {
   }
 
   @Test
-  @DisplayName("Sets abbreviation to null when both abbreviations are missing")
-  void setsAbbreviationToNullWhenAbbreviationsAreMissing() {
-    NormTestDataBuilder builder =
-        NormTestDataBuilder.builder().officialAbbreviation(null).risAbbreviation(null);
+  @DisplayName("Sets ris-abbreviation")
+  void extractsRisAbbreviation() {
+    NormTestDataBuilder builder = NormTestDataBuilder.builder().risAbbreviation("RisAbbrev");
 
     String xmlContent = builder.buildNormXml();
-    Optional<Norm> maybeNorm = NormLdmlToOpenSearchMapper.parseNorm(xmlContent, Map.of(), false);
+    Optional<Norm> maybeNorm =
+        NormLdmlToOpenSearchMapper.parseNorm("", xmlContent, Map.of(), false);
 
     assertThat(maybeNorm).isNotEmpty();
-    assertThat(maybeNorm.get().getOfficialAbbreviation()).isNull();
+    assertThat(maybeNorm.get().getRisAbbreviation()).isEqualTo("RisAbbrev");
   }
 
   @Test
-  @DisplayName("Prefers official abbreviation over RIS abbreviation")
+  @DisplayName("Does not map norm if ris-abbreviation is missing")
+  void returnsEmptyOptionalIfRisAbbreviationIsMissing() {
+    NormTestDataBuilder builder = NormTestDataBuilder.builder().risAbbreviation(null);
+
+    String xmlContent = builder.buildNormXml();
+    Optional<Norm> maybeNorm =
+        NormLdmlToOpenSearchMapper.parseNorm("", xmlContent, Map.of(), false);
+
+    assertThat(maybeNorm).isEmpty();
+  }
+
+  @Test
+  @DisplayName("Sets abbreviation to official abbreviation if both abbreviations exist")
   void prefersOfficialAbbreviationOverRisAbbreviation() {
     NormTestDataBuilder builder =
         NormTestDataBuilder.builder().officialAbbreviation("OffAbb").risAbbreviation("RisAbb");
 
     String xmlContent = builder.buildNormXml();
-    Optional<Norm> maybeNorm = NormLdmlToOpenSearchMapper.parseNorm(xmlContent, Map.of(), false);
+    Optional<Norm> maybeNorm =
+        NormLdmlToOpenSearchMapper.parseNorm("", xmlContent, Map.of(), false);
 
     assertThat(maybeNorm).isNotEmpty();
     assertThat(maybeNorm.get().getOfficialAbbreviation()).isEqualTo("OffAbb");
   }
 
   @Test
-  @DisplayName("Uses RIS abbreviation as fallback")
+  @DisplayName("Sets abbreviation to ris-abbreviation as fallback")
   void usesRisAbbreviationAsFallback() {
     NormTestDataBuilder builder =
         NormTestDataBuilder.builder().officialAbbreviation(null).risAbbreviation("RisAbb");
 
     String xmlContent = builder.buildNormXml();
-    Optional<Norm> maybeNorm = NormLdmlToOpenSearchMapper.parseNorm(xmlContent, Map.of(), false);
+    Optional<Norm> maybeNorm =
+        NormLdmlToOpenSearchMapper.parseNorm("", xmlContent, Map.of(), false);
 
     assertThat(maybeNorm).isNotEmpty();
     assertThat(maybeNorm.get().getOfficialAbbreviation()).isEqualTo("RisAbb");
+  }
+
+  @Test
+  @DisplayName("Does not map norm if no abbreviation exists")
+  void returnsEmptyOptionalWhenAbbreviationsAreMissing() {
+    NormTestDataBuilder builder =
+        NormTestDataBuilder.builder().officialAbbreviation(null).risAbbreviation(null);
+
+    String xmlContent = builder.buildNormXml();
+    Optional<Norm> maybeNorm =
+        NormLdmlToOpenSearchMapper.parseNorm("", xmlContent, Map.of(), false);
+
+    assertThat(maybeNorm).isEmpty();
   }
 
   @Test
@@ -156,7 +185,7 @@ class NormLdmlToOpenSearchMapperTest {
     String xmlContent =
         NormTestDataBuilder.builder().disableValidation().workEli(null).buildNormXml();
 
-    assertThat(NormLdmlToOpenSearchMapper.parseNorm(xmlContent, Map.of(), false)).isEmpty();
+    assertThat(NormLdmlToOpenSearchMapper.parseNorm("", xmlContent, Map.of(), false)).isEmpty();
   }
 
   @Test
@@ -165,7 +194,7 @@ class NormLdmlToOpenSearchMapperTest {
     String xmlContent =
         NormTestDataBuilder.builder().disableValidation().expressionEli(null).buildNormXml();
 
-    assertThat(NormLdmlToOpenSearchMapper.parseNorm(xmlContent, Map.of(), false)).isEmpty();
+    assertThat(NormLdmlToOpenSearchMapper.parseNorm("", xmlContent, Map.of(), false)).isEmpty();
   }
 
   @Test
@@ -174,14 +203,14 @@ class NormLdmlToOpenSearchMapperTest {
     String xmlContent =
         NormTestDataBuilder.builder().disableValidation().manifestationEli(null).buildNormXml();
 
-    assertThat(NormLdmlToOpenSearchMapper.parseNorm(xmlContent, Map.of(), false)).isEmpty();
+    assertThat(NormLdmlToOpenSearchMapper.parseNorm("", xmlContent, Map.of(), false)).isEmpty();
   }
 
   @Test
   @DisplayName("Does not create norm for invalid XML document")
   void doesNotCreateNormForInvalidXmlDocument() {
     String xml = "<akn:akomaNtoso xmlns:akn=\"http://Inhaltsdaten.LegalDocML.de\"/>";
-    assertThat(NormLdmlToOpenSearchMapper.parseNorm(xml, Map.of(), true)).isEmpty();
+    assertThat(NormLdmlToOpenSearchMapper.parseNorm("", xml, Map.of(), true)).isEmpty();
   }
 
   @Test
@@ -189,7 +218,7 @@ class NormLdmlToOpenSearchMapperTest {
   void doesNotMapNormIfBedingtesInkrafttreten() {
     String xmlContent = NormTestDataBuilder.builder().bedingtesInkrafttreten().buildNormXml();
 
-    assertThat(NormLdmlToOpenSearchMapper.parseNorm(xmlContent, Map.of(), false)).isEmpty();
+    assertThat(NormLdmlToOpenSearchMapper.parseNorm("", xmlContent, Map.of(), false)).isEmpty();
   }
 
   @Test
@@ -198,7 +227,7 @@ class NormLdmlToOpenSearchMapperTest {
     String xmlContent =
         NormTestDataBuilder.builder().disableValidation().gegenstandslos().buildNormXml();
 
-    assertThat(NormLdmlToOpenSearchMapper.parseNorm(xmlContent, Map.of(), false)).isEmpty();
+    assertThat(NormLdmlToOpenSearchMapper.parseNorm("", xmlContent, Map.of(), false)).isEmpty();
   }
 
   @Test
@@ -209,7 +238,8 @@ class NormLdmlToOpenSearchMapperTest {
         NormTestDataBuilder.builder().inForceDate("2020-01-01").legislationDate("2050-07-31");
 
     String xmlContent = builder.buildNormXml();
-    Optional<Norm> maybeNorm = NormLdmlToOpenSearchMapper.parseNorm(xmlContent, Map.of(), false);
+    Optional<Norm> maybeNorm =
+        NormLdmlToOpenSearchMapper.parseNorm("", xmlContent, Map.of(), false);
 
     assertThat(maybeNorm).isNotEmpty();
 
@@ -225,7 +255,7 @@ class NormLdmlToOpenSearchMapperTest {
         NormTestDataBuilder.builder().inForceDate("2020-01-01").legislationDate("2050-07-31");
 
     String xmlContent = builder.buildNormXml();
-    Optional<Norm> maybeNorm = NormLdmlToOpenSearchMapper.parseNorm(xmlContent, Map.of(), true);
+    Optional<Norm> maybeNorm = NormLdmlToOpenSearchMapper.parseNorm("", xmlContent, Map.of(), true);
 
     assertThat(maybeNorm).isNotEmpty();
 
@@ -262,7 +292,8 @@ class NormLdmlToOpenSearchMapperTest {
                 });
 
     String xmlContent = builder.buildNormXml();
-    Optional<Norm> maybeNorm = NormLdmlToOpenSearchMapper.parseNorm(xmlContent, Map.of(), false);
+    Optional<Norm> maybeNorm =
+        NormLdmlToOpenSearchMapper.parseNorm("", xmlContent, Map.of(), false);
 
     assertThat(maybeNorm).isNotEmpty();
 
@@ -319,7 +350,7 @@ class NormLdmlToOpenSearchMapperTest {
 
     Optional<Norm> maybeNorm =
         NormLdmlToOpenSearchMapper.parseNorm(
-            builder.buildNormXml(), builder.buildAttachmentXmls(), true);
+            "", builder.buildNormXml(), builder.buildAttachmentXmls(), true);
 
     assertThat(maybeNorm).isNotEmpty();
 
@@ -391,7 +422,7 @@ class NormLdmlToOpenSearchMapperTest {
                 List.of(AknP.withText("Attachemtn Content")));
     String xmlContent = builder.buildNormXml();
     Optional<Norm> maybeNorm =
-        NormLdmlToOpenSearchMapper.parseNorm(xmlContent, builder.buildAttachmentXmls(), false);
+        NormLdmlToOpenSearchMapper.parseNorm("", xmlContent, builder.buildAttachmentXmls(), false);
 
     assertThat(maybeNorm).isNotEmpty();
 
@@ -450,7 +481,8 @@ class NormLdmlToOpenSearchMapperTest {
             });
 
     String xmlContent = builder.buildNormXml();
-    Optional<Norm> maybeNorm = NormLdmlToOpenSearchMapper.parseNorm(xmlContent, Map.of(), false);
+    Optional<Norm> maybeNorm =
+        NormLdmlToOpenSearchMapper.parseNorm("", xmlContent, Map.of(), false);
 
     assertThat(maybeNorm).isNotEmpty();
 
@@ -506,7 +538,7 @@ class NormLdmlToOpenSearchMapperTest {
 
     Optional<Norm> maybeNorm =
         NormLdmlToOpenSearchMapper.parseNorm(
-            builder.buildNormXml(), builder.buildAttachmentXmls(), true);
+            "", builder.buildNormXml(), builder.buildAttachmentXmls(), true);
 
     assertThat(maybeNorm).isNotEmpty();
 
