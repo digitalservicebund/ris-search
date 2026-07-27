@@ -175,7 +175,7 @@ const hasMultipleInputs = computed(() => show.value.after && show.value.before);
 <template>
   <div class="flex flex-col gap-16">
     <span class="flex flex-col gap-8">
-      <label :id="yearModeLabelId" class="typo-label2-regular">Zeitraum</label>
+      <label :id="yearModeLabelId" class="typo-label2-bold">Zeitraum</label>
       <Select
         :model-value="mode"
         :aria-labelledby="yearModeLabelId"

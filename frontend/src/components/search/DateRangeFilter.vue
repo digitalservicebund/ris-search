@@ -82,7 +82,7 @@ const toDate = computed({
 <template>
   <div class="flex flex-col gap-16">
     <span class="flex flex-col gap-8">
-      <label :id="dateModeLabelId" class="typo-label2-regular">Zeitraum</label>
+      <label :id="dateModeLabelId" class="typo-label2-bold">Zeitraum</label>
       <Select
         v-model="selectedType"
         :aria-labelledby="dateModeLabelId"

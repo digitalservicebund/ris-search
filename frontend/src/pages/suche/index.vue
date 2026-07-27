@@ -294,9 +294,9 @@ watch(searchStatus, async (newStatus, oldStatus) => {
         </NuxtLink>
       </p>
 
-      <div class="content-grid mt-32 gap-y-32">
+      <div class="content-grid mt-32 gap-y-24 md:gap-y-32">
         <div
-          class="col-span-12 row-start-2 flex flex-col gap-16 md:row-auto md:flex-row md:flex-wrap md:items-center md:justify-between md:gap-x-32"
+          class="col-span-12 row-start-2 flex flex-col gap-24 md:row-auto md:flex-row md:flex-wrap md:items-center md:justify-between md:gap-x-32"
         >
           <div class="flex gap-8 md:hidden">
             <SearchMobileActionDrawer
@@ -352,7 +352,7 @@ watch(searchStatus, async (newStatus, oldStatus) => {
           <output
             aria-atomic="true"
             aria-live="polite"
-            class="typo-label1-bold"
+            class="typo-label1-regular border-b border-b-gray-400 pb-16 md:border-none md:pb-0"
           >
             {{ isLoading ? "Lade ..." : formattedResultCount }}
           </output>
@@ -379,12 +379,12 @@ watch(searchStatus, async (newStatus, oldStatus) => {
         </div>
 
         <aside
-          class="col-span-12 pb-10 md:col-span-4 lg:col-span-3"
+          class="col-span-12 md:pb-10 md:col-span-4 lg:col-span-3"
           :aria-labelledby="filterHeadingId"
         >
           <h2
             :id="filterHeadingId"
-            class="typo-label1-regular mb-16 flex items-center"
+            class="typo-label1-bold mb-16 flex items-center"
           >
             Ergebnisse anzeigen für:
           </h2>

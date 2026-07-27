@@ -10,7 +10,7 @@ const legendId = useId();
 
 <template>
   <fieldset :aria-labelledby="legendId" class="flex flex-col gap-16">
-    <legend :id="legendId" class="typo-label1-bold mb-8">
+    <legend :id="legendId" class="typo-label1-bold mb-16">
       Einträge pro Seite
     </legend>
     <div

@@ -96,7 +96,7 @@ const id = useId();
 
 <template>
   <div class="flex flex-col gap-8">
-    <label :id="id" class="typo-label2-regular">Bundesgericht</label>
+    <label :id="id" class="typo-label2-bold">Bundesgericht</label>
     <AutoComplete
       v-model="model"
       :aria-labelledby="id"

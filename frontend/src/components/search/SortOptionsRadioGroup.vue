@@ -24,7 +24,7 @@ const legendId = useId();
 
 <template>
   <fieldset :aria-labelledby="legendId" class="flex flex-col gap-16">
-    <legend :id="legendId" class="typo-label1-bold mb-8">Sortieren nach</legend>
+    <legend :id="legendId" class="typo-label1-bold mb-16">Sortieren nach</legend>
     <div
       v-for="option in options"
       :key="option.value"
