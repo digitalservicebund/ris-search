@@ -29,7 +29,7 @@
     "nuxt": "4.4.8",
     "nuxt-security": "2.6.0",
     "posthog-js": "1.399.0",
-    "primevue": "4.5.5",
+    "primevue": "5.0.0",
     "sanitize-html": "2.17.5"
   },
   "devDependencies": {
