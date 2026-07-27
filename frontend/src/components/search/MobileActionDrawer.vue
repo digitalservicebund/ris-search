@@ -40,11 +40,11 @@ function handleApply() {
   <div class="md:hidden" v-bind="$attrs">
     <Button
       ref="triggerRef"
-      severity="info"
-      :label="label"
-      class="w-full"
       :aria-controls="drawerId"
       :aria-expanded="visible"
+      :label="label"
+      class="w-full"
+      severity="info"
       @click="visible = true"
     >
       <template #icon>
@@ -54,31 +54,33 @@ function handleApply() {
 
     <Drawer
       :id="drawerId"
-      v-model:visible="visible"
       :aria-label="label"
-      block-scroll
-      :header="label"
-      position="bottom"
       :close-button-props="closeButtonProps"
+      :header="label"
+      block-scroll
+      position="bottom"
+      v-model:visible="visible"
     >
       <div class="flex flex-col gap-24">
         <slot />
       </div>
 
-      <div class="mt-24 flex gap-8">
-        <Button
-          severity="secondary"
-          label="Zurücksetzen"
-          class="flex-1"
-          @click="handleReset"
-        />
-        <Button
-          severity="primary"
-          label="Anwenden"
-          class="flex-1"
-          @click="handleApply"
-        />
-      </div>
+      <template #footer>
+        <div class="flex gap-8">
+          <Button
+            class="flex-1"
+            label="Zurücksetzen"
+            severity="secondary"
+            @click="handleReset"
+          />
+          <Button
+            class="flex-1"
+            label="Anwenden"
+            severity="primary"
+            @click="handleApply"
+          />
+        </div>
+      </template>
     </Drawer>
   </div>
 </template>
