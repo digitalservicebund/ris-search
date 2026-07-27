@@ -153,7 +153,7 @@ public class NormLdmlToOpenSearchMapper {
           ValidationException {
     var xmlDocument = new XmlDocument(xmlFile.getBytes(StandardCharsets.UTF_8));
 
-    requireNotBedingtInkraftOrGegenstandslos(xmlDocument);
+    requireNotBedingtInkraftAndNotGegenstandslos(xmlDocument);
 
     String workEli = xmlDocument.getNonEmptyElementOrThrow(X_PATH_WORK_URI, "Work-Eli must exist");
 
@@ -226,7 +226,7 @@ public class NormLdmlToOpenSearchMapper {
         .build();
   }
 
-  private static void requireNotBedingtInkraftOrGegenstandslos(XmlDocument xmlDocument)
+  private static void requireNotBedingtInkraftAndNotGegenstandslos(XmlDocument xmlDocument)
       throws XPathExpressionException {
     if (xmlDocument.getElementExistByXpath(X_PATH_GEGENSTANDSLOS)) {
       throw new IllegalStateException("Ignoring Gegenstandslos until logic is defined");
