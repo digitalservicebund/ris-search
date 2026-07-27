@@ -181,4 +181,38 @@ class NormsServiceTest extends ContainersIntegrationBase {
 
     assertThat(result).isEmpty();
   }
+
+  @ParameterizedTest
+  @ValueSource(strings = {"FooBar 2009", "foobar 2009", "foobar_2009"})
+  void shouldFilterNormByRisAbbreviation(String risAbbreviation) {
+    repository.save(
+        Norm.builder().officialAbbreviation("FooBar").risAbbreviation("FooBar 2009").build());
+
+    repository.save(
+        Norm.builder().officialAbbreviation("FooBar").risAbbreviation("FooBar").build());
+
+    repository.save(
+        Norm.builder().officialAbbreviation("FooBar").risAbbreviation("BarBaz 2009").build());
+
+    NormsSearchParams params = new NormsSearchParams();
+    params.setRisAbbreviation(risAbbreviation);
+    var result =
+        normsService.simpleSearchNorms(new UniversalSearchParams(), params, Pageable.unpaged());
+
+    assertThat(result).hasSize(1);
+    assertThat(result.getSearchHits().getSearchHits().getFirst().getContent().getRisAbbreviation())
+        .isEqualTo("FooBar 2009");
+  }
+
+  @Test
+  void shouldFilterOnlyOnFullKeywordMatchesByRisAbbreviation() {
+    repository.save(Norm.builder().risAbbreviation("FooBar Baz 2009").build());
+
+    NormsSearchParams params = new NormsSearchParams();
+    params.setAbbreviation("Baz");
+    var result =
+        normsService.simpleSearchNorms(new UniversalSearchParams(), params, Pageable.unpaged());
+
+    assertThat(result).isEmpty();
+  }
 }

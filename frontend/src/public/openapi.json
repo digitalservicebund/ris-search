@@ -369,6 +369,15 @@
             "description" : "Filters the result set by the given abbreviation."
           }
         }, {
+          "name" : "risAbbreviation",
+          "in" : "query",
+          "description" : "Filters the result set by the given ris-abbreviation.",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "description" : "Filters the result set by the given ris-abbreviation."
+          }
+        }, {
           "name" : "searchTerm",
           "in" : "query",
           "description" : "Searches for the given tokens in searchTerm. If searchTerm contains more than one token, all tokens must be in the document for the document to match.",

@@ -325,7 +325,7 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
                 .getResponse()
                 .getContentAsString());
     assertThat(json.read("$.member.length()", Integer.class)).isEqualTo(1);
-    assertThat(json.read("$.member[0].item.abbreviation", String.class)).isEqualTo("TeG");
+    assertThat(json.read("$.member[0].item.alternateName", String.class)).isEqualTo("TestG1");
     assertThat(json.read("$.member[0].item.temporalCoverage", String.class))
         .isEqualTo("2025-11-01/..");
     assertThat(json.read("$.member[0].item.legislationLegalForce", String.class))
@@ -342,7 +342,7 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
                 .getResponse()
                 .getContentAsString());
     assertThat(json.read("$.member.length()", Integer.class)).isEqualTo(1);
-    assertThat(json.read("$.member[0].item.abbreviation", String.class)).isEqualTo("TeG3");
+    assertThat(json.read("$.member[0].item.alternateName", String.class)).isEqualTo("TestG3");
     assertThat(json.read("$.member[0].item.temporalCoverage", String.class))
         .isEqualTo("2025-11-03/2025-11-03");
     assertThat(json.read("$.member[0].item.legislationLegalForce", String.class))
@@ -373,8 +373,22 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
         .perform(get(uri).contentType(MediaType.APPLICATION_JSON))
         .andExpectAll(
             status().isOk(),
+            jsonPath("$.member", hasSize(3)),
+            jsonPath("$.member[0]['item'].abbreviation", is("TeG")),
+            jsonPath("$.member[1]['item'].abbreviation", is("TeG")),
+            jsonPath("$.member[2]['item'].abbreviation", is("TeG")));
+  }
+
+  @Test
+  @DisplayName("Should allow filtering norms by ris-abbreviation")
+  void shouldReturnNormsFilteringByRisAbbreviation() throws Exception {
+    final String uri = ApiConfig.Paths.LEGISLATION + "?risAbbreviation=Teg";
+    mockMvc
+        .perform(get(uri).contentType(MediaType.APPLICATION_JSON))
+        .andExpectAll(
+            status().isOk(),
             jsonPath("$.member", hasSize(1)),
-            jsonPath("$.member[0]['item'].abbreviation", is("TeG")));
+            jsonPath("$.member[0]['item'].alternateName", is("TestG1")));
   }
 
   @Test

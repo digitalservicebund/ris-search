@@ -316,7 +316,7 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
                 .contentType(MediaType.APPLICATION_JSON))
         .andDo(print())
         .andExpect(jsonPath("$.member", hasSize(1)))
-        .andExpect(jsonPath("$.member[0].item.abbreviation", Matchers.is("TeG2")))
+        .andExpect(jsonPath("$.member[0].item.alternateName", Matchers.is("TestG2")))
         .andExpect(status().isOk());
   }
 
@@ -332,7 +332,7 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
                 .contentType(MediaType.APPLICATION_JSON))
         .andDo(print())
         .andExpect(jsonPath("$.member", hasSize(1)))
-        .andExpect(jsonPath("$.member[0].item.abbreviation", Matchers.is("TeG3")))
+        .andExpect(jsonPath("$.member[0].item.alternateName", Matchers.is("TestG3")))
         .andExpect(status().isOk());
   }
 
@@ -348,7 +348,7 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
                 .contentType(MediaType.APPLICATION_JSON))
         .andDo(print())
         .andExpect(jsonPath("$.member", hasSize(1)))
-        .andExpect(jsonPath("$.member[0].item.abbreviation", Matchers.is("TeG")))
+        .andExpect(jsonPath("$.member[0].item.alternateName", Matchers.is("TestG1")))
         .andExpect(status().isOk());
   }
 
@@ -364,7 +364,7 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
                 .contentType(MediaType.APPLICATION_JSON))
         .andDo(print())
         .andExpect(jsonPath("$.member", hasSize(1)))
-        .andExpect(jsonPath("$.member[0].item.abbreviation", Matchers.is("TeG")))
+        .andExpect(jsonPath("$.member[0].item.alternateName", Matchers.is("TestG1")))
         .andExpect(status().isOk());
   }
 
@@ -390,10 +390,12 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
     mockMvc
         .perform(
             get(ApiConfig.Paths.LEGISLATION_ADVANCED_SEARCH
-                    + String.format("?query=%s:TeG2", queryParam))
+                    + String.format("?query=%s:TeG", queryParam))
                 .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(jsonPath("$.member", hasSize(1)))
-        .andExpect(jsonPath("$.member[0].item.abbreviation", Matchers.is("TeG2")))
+        .andExpect(jsonPath("$.member", hasSize(3)))
+        .andExpect(jsonPath("$.member[0].item.abbreviation", Matchers.is("TeG")))
+        .andExpect(jsonPath("$.member[1].item.abbreviation", Matchers.is("TeG")))
+        .andExpect(jsonPath("$.member[2].item.abbreviation", Matchers.is("TeG")))
         .andExpect(status().isOk());
   }
 
@@ -403,9 +405,9 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
     mockMvc
         .perform(
             get(ApiConfig.Paths.LEGISLATION_ADVANCED_SEARCH
-                    + String.format("?query=%s:TeG2 AND %s:TeG2", "official_abbreviation", "AB"))
+                    + String.format("?query=%s:TeG AND %s:TeG", "official_abbreviation", "AB"))
                 .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(jsonPath("$.member", hasSize(1)))
+        .andExpect(jsonPath("$.member", hasSize(3)))
         .andExpect(status().isOk());
   }
 
