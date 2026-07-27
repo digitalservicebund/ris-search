@@ -371,7 +371,7 @@ watch(searchStatus, async (newStatus, oldStatus) => {
           <output
             aria-atomic="true"
             aria-live="polite"
-            class="typo-label2-regular md:mr-auto border-b border-b-gray-400 pb-16 text-nowrap md:border-none md:pb-0"
+            class="typo-label2-regular border-b border-b-gray-400 pb-16 text-nowrap md:mr-auto md:border-none md:pb-0"
           >
             {{ formattedResultCount }}
           </output>

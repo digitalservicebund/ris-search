@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Message, ProgressSpinner, Select } from "primevue";
-import IcOutlineFilterAlt from "~icons/ic/outline-filter-alt";
 import IcBaselineSwapVert from "~icons/ic/baseline-swap-vert";
+import IcOutlineFilterAlt from "~icons/ic/outline-filter-alt";
 import { DocumentKind } from "~/types/api";
 import { isStrictDateFilterValue } from "~/utils/search/dateFilterType";
 import { itemsPerPageOptions } from "~/utils/search/itemsPerPageOptions";
@@ -379,7 +379,7 @@ watch(searchStatus, async (newStatus, oldStatus) => {
         </div>
 
         <aside
-          class="col-span-12 md:pb-10 md:col-span-4 lg:col-span-3"
+          class="col-span-12 md:col-span-4 md:pb-10 lg:col-span-3"
           :aria-labelledby="filterHeadingId"
         >
           <h2
