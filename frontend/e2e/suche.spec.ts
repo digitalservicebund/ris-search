@@ -1158,7 +1158,7 @@ test.describe("mobile filter and sort drawers", () => {
     test.skip(!isMobileTest);
   });
 
-  test("shows the 'Filtern' button only for document kinds with sub-filters", async ({
+  test("shows the 'Filtern' button for document kinds with sub-filters", async ({
     page,
   }) => {
     await navigate(page, "/suche");
