@@ -11,6 +11,7 @@ export const security: Partial<ModuleOptions> = {
   headers: {
     referrerPolicy: "same-origin",
     contentSecurityPolicy: {
+      "upgrade-insecure-requests": !isDevelopment,
       "default-src": "'self'",
       "style-src": ["'self'", "https:", "'unsafe-inline'"],
       "img-src": ["'self'", "data:", "'unsafe-inline'"],
