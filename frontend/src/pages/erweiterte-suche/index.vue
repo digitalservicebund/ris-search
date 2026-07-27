@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { Message, PanelMenu, Select } from "primevue";
 import type { MenuItem } from "primevue/menuitem";
-import IconFilterAlt from "~icons/ic/baseline-filter-alt";
-import IconSwapVert from "~icons/ic/baseline-swap-vert";
+import IcOutlineFilterAlt from "~icons/ic/outline-filter-alt";
+import IcBaselineSwapVert from "~icons/ic/baseline-swap-vert";
 import type { Statistics } from "~/types/api";
 import { DocumentKind } from "~/types/api";
 import { queryableDataFields } from "~/utils/search/dataFields";
@@ -336,7 +336,7 @@ watch(searchStatus, async (newStatus, oldStatus) => {
               v-model:visible="filterDrawerVisible"
               class="flex-1"
               label="Filtern"
-              :icon="IconFilterAlt"
+              :icon="IcOutlineFilterAlt"
               @reset="resetFilterDrawer"
               @apply="applyFilterDrawer"
             >
@@ -350,7 +350,7 @@ watch(searchStatus, async (newStatus, oldStatus) => {
               v-model:visible="sortDrawerVisible"
               class="flex-1"
               label="Sortieren"
-              :icon="IconSwapVert"
+              :icon="IcBaselineSwapVert"
               @reset="resetSortDrawer"
               @apply="applySortDrawer"
             >

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Message, ProgressSpinner, Select } from "primevue";
-import IconFilterAlt from "~icons/ic/baseline-filter-alt";
-import IconSwapVert from "~icons/ic/baseline-swap-vert";
+import IcOutlineFilterAlt from "~icons/ic/outline-filter-alt";
+import IcBaselineSwapVert from "~icons/ic/baseline-swap-vert";
 import { DocumentKind } from "~/types/api";
 import { isStrictDateFilterValue } from "~/utils/search/dateFilterType";
 import { itemsPerPageOptions } from "~/utils/search/itemsPerPageOptions";
@@ -304,7 +304,7 @@ watch(searchStatus, async (newStatus, oldStatus) => {
               v-model:visible="filterDrawerVisible"
               class="flex-1"
               label="Filtern"
-              :icon="IconFilterAlt"
+              :icon="IcOutlineFilterAlt"
               @reset="resetFilterDrawer"
               @apply="applyFilterDrawer"
             >
@@ -334,7 +334,7 @@ watch(searchStatus, async (newStatus, oldStatus) => {
               v-model:visible="sortDrawerVisible"
               class="flex-1"
               label="Sortieren"
-              :icon="IconSwapVert"
+              :icon="IcBaselineSwapVert"
               @reset="resetSortDrawer"
               @apply="applySortDrawer"
             >
