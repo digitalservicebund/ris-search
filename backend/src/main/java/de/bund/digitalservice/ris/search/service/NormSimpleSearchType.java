@@ -60,6 +60,11 @@ public class NormSimpleSearchType implements SimpleSearchType {
               Norm.Fields.OFFICIAL_ABBREVIATION_KEYWORD, normsSearchParams.getAbbreviation()));
     }
 
+    if (normsSearchParams.getRisAbbreviation() != null) {
+      query.must(
+          termQuery(Norm.Fields.RIS_ABBREVIATION_KEYWORD, normsSearchParams.getRisAbbreviation()));
+    }
+
     if (normsSearchParams.getMostRelevantOn() != null) {
       BoolQueryBuilder isNotNorm =
           QueryBuilders.boolQuery().mustNot(QueryBuilders.existsQuery(Norm.Fields.EXPRESSION_ELI));

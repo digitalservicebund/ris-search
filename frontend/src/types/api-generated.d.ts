@@ -2175,6 +2175,8 @@ export interface operations {
         mostRelevantOn?: string;
         /** Filters the result set by the given abbreviation. */
         abbreviation?: string;
+        /** Filters the result set by the given ris-abbreviation. */
+        risAbbreviation?: string;
         /**
          * Searches for the given tokens in searchTerm. If searchTerm contains
          * more than one token, all tokens must be in the document for the
