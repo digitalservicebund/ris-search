@@ -170,8 +170,8 @@
                         Testverordnung zur Musterregelung im Bereich Fruchtnektar und Fruchtsirup
                     </akn:docTitle>
                     <akn:shortTitle GUID="33333333-4444-5555-6666-777777777788" eId="einleitung-n1_doktitel-n1_text-n1_kurztitel-n1">
-                        (Bundeswahlgeräteverordnung - <akn:inline GUID="44444444-5555-6666-7777-888888888899" eId="einleitung-n1_doktitel-n1_text-n1_kurztitel-n1_inline-n1"
-                                                                  name="attributsemantik-noch-undefiniert" refersTo="amtliche-abkuerzung">BWahlGV</akn:inline>)
+                        (Bundeswahlfruchtnektarverordnung - <akn:inline GUID="44444444-5555-6666-7777-888888888899" eId="einleitung-n1_doktitel-n1_text-n1_kurztitel-n1_inline-n1"
+                                                                  name="attributsemantik-noch-undefiniert" refersTo="amtliche-abkuerzung">RisFrucht</akn:inline>)
                     </akn:shortTitle>
                 </akn:p>
             </akn:longTitle>

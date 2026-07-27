@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from "vitest";
 import { ref } from "vue";
 import type { RouteLocationNormalizedGeneric } from "vue-router";
 import type { LegislationExpression, SearchResult } from "~/types/api";
-import normAbbreviationRedirect from "./normsAbbreviationRedirect";
+import normRisAbbreviationRedirect from "./normsRisAbbreviationRedirect";
 
 const { useRisBackendMock } = vi.hoisted(() => ({
   useRisBackendMock: vi.fn(),
@@ -12,9 +12,9 @@ const { useRisBackendMock } = vi.hoisted(() => ({
 mockNuxtImport("useRisBackend", () => useRisBackendMock);
 mockNuxtImport("getCurrentDateInGermanyFormatted", () => () => "2024-01-01");
 
-function makeRoute(abbreviation: string): RouteLocationNormalizedGeneric {
+function makeRoute(risAbbreviation: string): RouteLocationNormalizedGeneric {
   return {
-    params: { abbreviation },
+    params: { risAbbreviation: risAbbreviation },
   } as unknown as RouteLocationNormalizedGeneric;
 }
 
@@ -31,19 +31,19 @@ function makeBackendResult(
 }
 
 describe("normsAbbreviationRedirect middleware", () => {
-  it("calls the backend with the abbreviation and current date", async () => {
+  it("calls the backend with the ris-abbreviation and current date", async () => {
     useRisBackendMock.mockReturnValue(makeBackendResult([]));
 
     await Promise.resolve(
-      normAbbreviationRedirect(makeRoute("BGB"), emptyRoute),
+      normRisAbbreviationRedirect(makeRoute("BGB"), emptyRoute),
     ).catch(() => {});
 
     expect(useRisBackendMock).toHaveBeenCalledWith("/v1/legislation", {
-      query: { abbreviation: "BGB", mostRelevantOn: "2024-01-01" },
+      query: { risAbbreviation: "BGB", mostRelevantOn: "2024-01-01" },
     });
   });
 
-  it("returns redirect url if exactly one expression was found for the abbreviation", async () => {
+  it("returns redirect url if exactly one expression was found for the ris-abbreviation", async () => {
     useRisBackendMock.mockReturnValue(
       makeBackendResult([
         {
@@ -53,20 +53,23 @@ describe("normsAbbreviationRedirect middleware", () => {
       ]),
     );
 
-    const result = await normAbbreviationRedirect(makeRoute("BGB"), emptyRoute);
+    const result = await normRisAbbreviationRedirect(
+      makeRoute("BGB"),
+      emptyRoute,
+    );
 
     expect(result).toBe("/gesetze/eliIdentifier");
   });
 
-  it("throws 404 when no expression is found for the abbreviation", async () => {
+  it("throws 404 when no expression is found for the ris-abbreviation", async () => {
     useRisBackendMock.mockReturnValue(makeBackendResult([]));
 
     await expect(
-      normAbbreviationRedirect(makeRoute("BGB"), emptyRoute),
+      normRisAbbreviationRedirect(makeRoute("BGB"), emptyRoute),
     ).rejects.toMatchObject({ status: 404 });
   });
 
-  it("throws 404 when multiple expressions are found for the abbreviation", async () => {
+  it("throws 404 when multiple expressions are found for the ris-abbreviation", async () => {
     useRisBackendMock.mockReturnValue(
       makeBackendResult([
         {
@@ -81,7 +84,7 @@ describe("normsAbbreviationRedirect middleware", () => {
     );
 
     await expect(
-      normAbbreviationRedirect(makeRoute("BGB"), emptyRoute),
+      normRisAbbreviationRedirect(makeRoute("BGB"), emptyRoute),
     ).rejects.toMatchObject({ status: 404 });
   });
 
@@ -92,7 +95,7 @@ describe("normsAbbreviationRedirect middleware", () => {
     });
 
     await expect(
-      normAbbreviationRedirect(makeRoute("BGB"), emptyRoute),
+      normRisAbbreviationRedirect(makeRoute("BGB"), emptyRoute),
     ).rejects.toMatchObject({ status: 503 });
   });
 });
