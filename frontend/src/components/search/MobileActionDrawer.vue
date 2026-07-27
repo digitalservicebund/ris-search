@@ -61,7 +61,7 @@ function handleApply() {
       position="bottom"
       v-model:visible="visible"
     >
-      <div class="flex flex-col gap-24">
+      <div class="space-y-24">
         <slot />
       </div>
 
