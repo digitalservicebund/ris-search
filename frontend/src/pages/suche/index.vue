@@ -352,7 +352,7 @@ watch(searchStatus, async (newStatus, oldStatus) => {
           <output
             aria-atomic="true"
             aria-live="polite"
-            class="typo-label1-regular border-b border-b-gray-400 pb-16 md:border-none md:pb-0"
+            class="typo-label2-regular border-b border-b-gray-400 pb-16 md:border-none md:pb-0"
           >
             {{ isLoading ? "Lade ..." : formattedResultCount }}
           </output>

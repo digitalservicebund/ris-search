@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { Message, PanelMenu, Select } from "primevue";
 import type { MenuItem } from "primevue/menuitem";
-import IcOutlineFilterAlt from "~icons/ic/outline-filter-alt";
 import IcBaselineSwapVert from "~icons/ic/baseline-swap-vert";
+import IcOutlineFilterAlt from "~icons/ic/outline-filter-alt";
 import type { Statistics } from "~/types/api";
 import { DocumentKind } from "~/types/api";
 import { queryableDataFields } from "~/utils/search/dataFields";
@@ -294,7 +294,7 @@ watch(searchStatus, async (newStatus, oldStatus) => {
         class="col-span-12 lg:col-span-4 lg:row-span-2 xl:col-span-3"
         aria-label="Filter"
       >
-        <fieldset class="mb-40">
+        <fieldset class="md:mb-40">
           <legend class="typo-label1-bold mb-8">Dokumentart</legend>
           <PanelMenu
             :model="documentKindMenuItems"
@@ -311,7 +311,10 @@ watch(searchStatus, async (newStatus, oldStatus) => {
         </div>
       </aside>
 
-      <div id="search" class="col-span-12 lg:col-span-8 lg:col-start-5">
+      <div
+        id="search"
+        class="col-span-12 row-2 md:row-auto lg:col-span-8 lg:col-start-5"
+      >
         <SearchDataFieldPicker
           v-model="localQuery"
           :data-fields="queryableDataFields"
@@ -326,10 +329,10 @@ watch(searchStatus, async (newStatus, oldStatus) => {
       <div
         ref="resultsContainerRef"
         id="search-results"
-        class="col-span-12 grid scroll-mt-16 grid-cols-subgrid gap-y-32 lg:col-span-8 lg:col-start-5"
+        class="col-span-12 grid scroll-mt-16 grid-cols-subgrid gap-y-24 md:gap-y-32 lg:col-span-8 lg:col-start-5"
       >
         <div
-          class="col-span-12 flex flex-col gap-16 md:flex-row md:items-center md:gap-48 lg:col-span-8"
+          class="col-span-12 flex flex-col gap-24 md:flex-row md:items-center md:gap-48 lg:col-span-8"
         >
           <div class="flex gap-8 md:hidden">
             <SearchMobileActionDrawer
@@ -368,7 +371,7 @@ watch(searchStatus, async (newStatus, oldStatus) => {
           <output
             aria-atomic="true"
             aria-live="polite"
-            class="typo-label2-regular mr-auto text-nowrap"
+            class="typo-label2-regular md:mr-auto border-b border-b-gray-400 pb-16 text-nowrap md:border-none md:pb-0"
           >
             {{ formattedResultCount }}
           </output>
