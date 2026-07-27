@@ -8,6 +8,9 @@ allowBuilds:
   protobufjs: false
   vue-demi: false
 
+overrides:
+  brace-expansion: 5.0.8
+
 minimumReleaseAge: 4320
 
 publicHoistPattern:
