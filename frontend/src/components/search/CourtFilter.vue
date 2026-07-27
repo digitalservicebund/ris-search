@@ -8,6 +8,15 @@ import type { AutoCompleteSuggestion } from "~/components/AutoComplete.vue";
 import type { CourtSearchResult, CourtsSearchParams } from "~/types/api";
 import { courtFilterDefaultSuggestions } from "~/utils/search/courtFilter";
 
+const { appendTo = "self" } = defineProps<{
+  /**
+   * Where to render the suggestions overlay. "self" (the default) keeps it
+   * width-matched to the field, but gets clipped by any scrollable ancestor
+   * (e.g. a Drawer). Use "body" in such contexts instead.
+   */
+  appendTo?: "self" | "body";
+}>();
+
 const model = defineModel<string | undefined>();
 
 const searchResults = ref<CourtSearchResult[]>([]);
@@ -87,15 +96,31 @@ const id = useId();
 
 <template>
   <div class="flex flex-col gap-8">
-    <label :id="id" class="typo-label2-regular">Bundesgericht</label>
+    <label :id="id" class="typo-label2-bold">Bundesgericht</label>
     <AutoComplete
       v-model="model"
       :aria-labelledby="id"
+      :append-to="appendTo"
       :suggestions
-      append-to="self"
       dropdown
       dropdown-mode="blank"
       placeholder="Auswählen oder suchen"
+      :pt="
+        appendTo === 'body'
+          ? {
+              // AutoComplete isn't customized by ris-ui, so this reproduces
+              // its default overlay classes without `w-full` - which forces
+              // the panel to the viewport's width when appended to body,
+              // pushing it flush against the screen edges instead of aligning
+              // with the field. Providing pt.overlay.class here replaces
+              // rather than merges with the default, so all of the classes
+              // need to be repeated.
+              overlay: {
+                class: 'mt-12 overflow-auto bg-white px-8 py-12 shadow-md',
+              },
+            }
+          : undefined
+      "
       typeahead
       @complete="onComplete"
       @dropdown-click="onDropdownClick"

@@ -1,17 +1,19 @@
 import type { DrawerProps } from "primevue";
-import type { ComponentPublicInstance } from "vue";
+import type { ComponentPublicInstance, Ref } from "vue";
 
 /**
  * Utilities to use with PrimeVue's Drawer component to enable additional
  * behaviors:
  *
- * - Returns `visible` ref to bind to the drawer's open state
+ * - Returns `visible` ref to bind to the drawer's open state. Pass an existing
+ *   ref (e.g. a `defineModel`) if the open state needs to be observed or
+ *   controlled from outside the component; otherwise one is created
+ *   internally.
  * - Place focus on an element when the drawer is closed. This should be set to
  *   the element that originally opened the drawer (accessibility requirement)
  * - Returns reusable default props for the close button
  */
-export function useDrawer() {
-  const visible = ref(false);
+export function useDrawer(visible: Ref<boolean> = ref(false)) {
   const triggerRef = ref<HTMLElement | ComponentPublicInstance | null>(null);
 
   watch(visible, async (isVisible) => {

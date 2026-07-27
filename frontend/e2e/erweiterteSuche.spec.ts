@@ -162,7 +162,8 @@ test.describe("general advanced search page features", () => {
     await expect(firstResultLink).toBeFocused();
   });
 
-  test("sort by date in ascending order", async ({ page }) => {
+  test("sort by date in ascending order", async ({ page, isMobileTest }) => {
+    test.skip(isMobileTest);
     await navigate(page, "/erweiterte-suche");
 
     await searchFor(page, {
@@ -180,7 +181,8 @@ test.describe("general advanced search page features", () => {
     ]);
   });
 
-  test("sort by date in descending order", async ({ page }) => {
+  test("sort by date in descending order", async ({ page, isMobileTest }) => {
+    test.skip(isMobileTest);
     await navigate(page, "/erweiterte-suche");
 
     await searchFor(page, {
@@ -198,7 +200,8 @@ test.describe("general advanced search page features", () => {
     ]);
   });
 
-  test("sort by relevance (default)", async ({ page }) => {
+  test("sort by relevance (default)", async ({ page, isMobileTest }) => {
+    test.skip(isMobileTest);
     await navigate(page, "/erweiterte-suche?q=und&documentKind=N&sort=date");
 
     await sortBy(page, "Relevanz");
@@ -211,7 +214,8 @@ test.describe("general advanced search page features", () => {
     await expect(resultCounter).toHaveText(nonZeroResultCount);
   });
 
-  test("change number of results per page", async ({ page }) => {
+  test("change number of results per page", async ({ page, isMobileTest }) => {
+    test.skip(isMobileTest);
     await navigate(
       page,
       "/erweiterte-suche?documentKind=R&dateFilterType=period&dateFilterFrom=2023-01-01&dateFilterTo=2025-12-31&itemsPerPage=10",
@@ -388,7 +392,9 @@ test.describe("searching legislation", () => {
 
   test("does not trigger a search when selecting a date filter type without entering a date", async ({
     page,
+    isMobileTest,
   }) => {
+    test.skip(isMobileTest);
     await navigate(page, "/erweiterte-suche");
     const initialUrl = page.url();
 
@@ -402,7 +408,9 @@ test.describe("searching legislation", () => {
 
   test("searches without date restrictions, shows validity badge", async ({
     page,
+    isMobileTest,
   }) => {
+    test.skip(isMobileTest);
     await navigate(page, "/erweiterte-suche");
 
     await searchFor(page, {
@@ -422,7 +430,9 @@ test.describe("searching legislation", () => {
 
   test("filters to show only currently valid, shows validity badge", async ({
     page,
+    isMobileTest,
   }) => {
+    test.skip(isMobileTest);
     await navigate(page, "/erweiterte-suche");
 
     await searchFor(page, {
@@ -436,7 +446,8 @@ test.describe("searching legislation", () => {
     expect(results).toHaveText(/Aktuell gültig/);
   });
 
-  test("filters to show specific date", async ({ page }) => {
+  test("filters to show specific date", async ({ page, isMobileTest }) => {
+    test.skip(isMobileTest);
     await navigate(page, "/erweiterte-suche");
 
     await searchFor(page, {
@@ -455,7 +466,8 @@ test.describe("searching legislation", () => {
     await expect(resultCounter).toHaveText(nonZeroResultCount);
   });
 
-  test("filters to show date range", async ({ page }) => {
+  test("filters to show date range", async ({ page, isMobileTest }) => {
+    test.skip(isMobileTest);
     await navigate(page, "/erweiterte-suche");
 
     await searchFor(page, {
@@ -565,7 +577,8 @@ test.describe("searching caselaw", () => {
     ).toBeVisible();
   });
 
-  test("searches without date restrictions", async ({ page }) => {
+  test("searches without date restrictions", async ({ page, isMobileTest }) => {
+    test.skip(isMobileTest);
     await navigate(page, "/erweiterte-suche");
 
     await searchFor(page, {
@@ -582,7 +595,8 @@ test.describe("searching caselaw", () => {
     await expect(resultCounter).toHaveText(nonZeroResultCount);
   });
 
-  test("filter to show specific date", async ({ page }) => {
+  test("filter to show specific date", async ({ page, isMobileTest }) => {
+    test.skip(isMobileTest);
     await navigate(page, "/erweiterte-suche");
 
     await searchFor(page, {
@@ -597,7 +611,8 @@ test.describe("searching caselaw", () => {
     await expect(results).toHaveText(/15.06.2024/);
   });
 
-  test("filters to show date range", async ({ page }) => {
+  test("filters to show date range", async ({ page, isMobileTest }) => {
+    test.skip(isMobileTest);
     await navigate(page, "/erweiterte-suche");
 
     await searchFor(page, {
@@ -615,7 +630,8 @@ test.describe("searching caselaw", () => {
     await expect(results).toHaveText([/22.11.2023/, /15.06.2024/]);
   });
 
-  test("sorts by court in ascending order", async ({ page }) => {
+  test("sorts by court in ascending order", async ({ page, isMobileTest }) => {
+    test.skip(isMobileTest);
     await navigate(page, "/erweiterte-suche");
 
     await searchFor(page, {
@@ -630,7 +646,8 @@ test.describe("searching caselaw", () => {
     await expect(results).toHaveText([/ArbG Köln/, /BDiG Frankfurt/]);
   });
 
-  test("sorts by court in descending order", async ({ page }) => {
+  test("sorts by court in descending order", async ({ page, isMobileTest }) => {
+    test.skip(isMobileTest);
     await navigate(page, "/erweiterte-suche");
 
     await searchFor(page, {
@@ -722,7 +739,8 @@ test.describe("searching literature", () => {
     ).toBeVisible();
   });
 
-  test("searches without date restrictions", async ({ page }) => {
+  test("searches without date restrictions", async ({ page, isMobileTest }) => {
+    test.skip(isMobileTest);
     await navigate(page, "/erweiterte-suche");
 
     await searchFor(page, {
@@ -739,7 +757,8 @@ test.describe("searching literature", () => {
     await expect(resultCounter).toHaveText(nonZeroResultCount);
   });
 
-  test("filter to show date range", async ({ page }) => {
+  test("filter to show date range", async ({ page, isMobileTest }) => {
+    test.skip(isMobileTest);
     await navigate(page, "/erweiterte-suche");
 
     await searchFor(page, {
@@ -895,7 +914,8 @@ test.describe("searching administrative directive", () => {
     await expect(results).toHaveText(/Beschluss über den Beschluss/);
   });
 
-  test("searches without date restrictions", async ({ page }) => {
+  test("searches without date restrictions", async ({ page, isMobileTest }) => {
+    test.skip(isMobileTest);
     await navigate(page, "/erweiterte-suche");
 
     await searchFor(page, {
@@ -912,7 +932,8 @@ test.describe("searching administrative directive", () => {
     await expect(resultCounter).toHaveText(nonZeroResultCount);
   });
 
-  test("filter to show specific date", async ({ page }) => {
+  test("filter to show specific date", async ({ page, isMobileTest }) => {
+    test.skip(isMobileTest);
     await navigate(page, "/erweiterte-suche");
 
     await searchFor(page, {
@@ -928,7 +949,8 @@ test.describe("searching administrative directive", () => {
     await expect(results).toHaveText(/01.07.2025/);
   });
 
-  test("filter to show date range", async ({ page }) => {
+  test("filter to show date range", async ({ page, isMobileTest }) => {
+    test.skip(isMobileTest);
     await navigate(page, "/erweiterte-suche");
 
     await searchFor(page, {
@@ -1001,6 +1023,118 @@ test.describe("responsive", () => {
     await dataFieldsToggle.click();
     await expect(dataFieldsList).toBeVisible();
   });
+
+  test("applies a date filter from the filter drawer", async ({ page }) => {
+    await navigate(page, "/erweiterte-suche");
+
+    await page.getByRole("button", { name: "Gerichtsentscheidungen" }).click();
+    await page.getByRole("searchbox").fill("urteil");
+    const initialSearch = page.waitForResponse(/v1\/document\/lucene-search/);
+    await page.getByRole("button", { name: "Suchen" }).click();
+    await initialSearch;
+
+    await page.getByRole("button", { name: "Filtern" }).click();
+    const dialog = page.getByRole("dialog", { name: "Filtern" });
+    await expect(dialog).toBeVisible();
+
+    await dialog.getByRole("radio", { name: "Bestimmtes Datum" }).click();
+    await dialog.getByRole("textbox", { name: "Datum" }).fill("15.06.2024");
+
+    await dialog.getByRole("button", { name: "Anwenden" }).click();
+
+    await expect(dialog).not.toBeVisible();
+    await expect(page).toHaveURL(/dateFilterType=specificDate/);
+    await expect(page).toHaveURL(/dateFilterFrom=2024-06-15/);
+
+    await expect(getSearchResults(page)).toHaveText(/15.06.2024/);
+  });
+
+  test("discards filter drawer changes when closed without applying", async ({
+    page,
+  }) => {
+    await navigate(page, "/erweiterte-suche?documentKind=R");
+
+    await page.getByRole("button", { name: "Filtern" }).click();
+    const dialog = page.getByRole("dialog", { name: "Filtern" });
+
+    await dialog.getByRole("radio", { name: "Bestimmtes Datum" }).click();
+    await dialog.getByRole("textbox", { name: "Datum" }).fill("15.06.2024");
+
+    await dialog.getByRole("button", { name: "Schließen" }).click();
+    await expect(dialog).not.toBeVisible();
+
+    await expect(page).not.toHaveURL(/dateFilterType=specificDate/);
+
+    // Reopening the drawer shows the field reset to the last committed value
+    await page.getByRole("button", { name: "Filtern" }).click();
+    await expect(
+      dialog.getByRole("radio", { name: "Keine zeitliche Begrenzung" }),
+    ).toBeChecked();
+  });
+
+  test("'Zurücksetzen' resets and immediately commits the filters", async ({
+    page,
+  }) => {
+    await navigate(
+      page,
+      "/erweiterte-suche?documentKind=R&dateFilterType=specificDate&dateFilterFrom=2024-06-15",
+    );
+
+    await page.getByRole("button", { name: "Filtern" }).click();
+    const dialog = page.getByRole("dialog", { name: "Filtern" });
+
+    await dialog.getByRole("button", { name: "Zurücksetzen" }).click();
+
+    await expect(dialog).not.toBeVisible();
+    await expect(page).not.toHaveURL(/dateFilterType=specificDate/);
+  });
+
+  test("applies sorting from the sort drawer", async ({ page }) => {
+    await navigate(page, "/erweiterte-suche");
+
+    await page.getByRole("button", { name: "Gerichtsentscheidungen" }).click();
+    await page
+      .getByRole("searchbox")
+      .fill('GERICHT:"ArbG Köln" OR GERICHT:"BDiG Frankfurt"');
+    const initialSearch = page.waitForResponse(/v1\/document\/lucene-search/);
+    await page.getByRole("button", { name: "Suchen" }).click();
+    await initialSearch;
+
+    await page.getByRole("button", { name: "Sortieren" }).click();
+    const dialog = page.getByRole("dialog", { name: "Sortieren" });
+    await expect(dialog).toBeVisible();
+
+    await dialog.getByRole("radio", { name: "Gericht: Von A nach Z" }).click();
+    await dialog.getByRole("button", { name: "Anwenden" }).click();
+
+    await expect(dialog).not.toBeVisible();
+    await expect(page).toHaveURL(/sort=courtName/);
+
+    await expect(getSearchResults(page)).toHaveText([
+      /ArbG Köln/,
+      /BDiG Frankfurt/,
+    ]);
+  });
+
+  test("applies page size from the sort drawer", async ({ page }) => {
+    await navigate(
+      page,
+      "/erweiterte-suche?documentKind=R&dateFilterType=period&dateFilterFrom=2023-01-01&dateFilterTo=2025-12-31&itemsPerPage=10",
+    );
+
+    const searchResults = getSearchResults(page);
+    await expect(searchResults).toHaveCount(10);
+
+    await page.getByRole("button", { name: "Sortieren" }).click();
+    const dialog = page.getByRole("dialog", { name: "Sortieren" });
+
+    await dialog.getByRole("radio", { name: "50" }).click();
+    await dialog.getByRole("button", { name: "Anwenden" }).click();
+
+    await expect(dialog).not.toBeVisible();
+    await expect(page).toHaveURL(/itemsPerPage=50/);
+    await expect(searchResults).toHaveCount(13);
+  });
 });
 
 test.describe("search by AND + OR operators", { tag: ["@RISDEV-8385"] }, () => {
@@ -1020,7 +1154,8 @@ test.describe("search by AND + OR operators", { tag: ["@RISDEV-8385"] }, () => {
       await expect(results).toHaveText(/Kontrolle/);
     });
 
-    test("searches with OR operator", async ({ page }) => {
+    test("searches with OR operator", async ({ page, isMobileTest }) => {
+      test.skip(isMobileTest);
       await navigate(page, "/erweiterte-suche");
 
       await searchFor(page, {
@@ -1054,7 +1189,8 @@ test.describe("search by AND + OR operators", { tag: ["@RISDEV-8385"] }, () => {
       await expect(results).toHaveText(/Urteil 4/);
     });
 
-    test("searches with OR operator", async ({ page }) => {
+    test("searches with OR operator", async ({ page, isMobileTest }) => {
+      test.skip(isMobileTest);
       await navigate(page, "/erweiterte-suche");
 
       await searchFor(page, {
@@ -1087,7 +1223,8 @@ test.describe("search by AND + OR operators", { tag: ["@RISDEV-8385"] }, () => {
       await expect(results).toHaveText(/Dokument/);
     });
 
-    test("searches with OR operator", async ({ page }) => {
+    test("searches with OR operator", async ({ page, isMobileTest }) => {
+      test.skip(isMobileTest);
       await navigate(page, "/erweiterte-suche");
 
       await searchFor(page, {
@@ -1128,7 +1265,8 @@ test.describe("search by AND + OR operators", { tag: ["@RISDEV-8385"] }, () => {
       await expect(results).toHaveCount(0);
     });
 
-    test("searches with OR operator", async ({ page }) => {
+    test("searches with OR operator", async ({ page, isMobileTest }) => {
+      test.skip(isMobileTest);
       await navigate(page, "/erweiterte-suche");
       await searchFor(page, {
         q: "Katze OR Beschluss",

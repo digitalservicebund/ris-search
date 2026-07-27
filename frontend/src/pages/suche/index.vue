@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { Message, ProgressSpinner, Select } from "primevue";
+import IcBaselineSwapVert from "~icons/ic/baseline-swap-vert";
+import IcOutlineFilterAlt from "~icons/ic/outline-filter-alt";
 import { DocumentKind } from "~/types/api";
 import { isStrictDateFilterValue } from "~/utils/search/dateFilterType";
 import { itemsPerPageOptions } from "~/utils/search/itemsPerPageOptions";
@@ -75,6 +77,71 @@ const documentKindAndGroup = computed(() => ({
   documentKind: documentKind.value,
   typeGroup: typeGroup.value,
 }));
+
+const hasSubFilters = computed(
+  () =>
+    documentKind.value === DocumentKind.CaseLaw ||
+    documentKind.value === DocumentKind.AdministrativeDirective ||
+    documentKind.value === DocumentKind.Literature,
+);
+
+// Mobile filter/sort drawers -------------------------------
+
+const filterDrawerVisible = ref(false);
+const sortDrawerVisible = ref(false);
+
+const courtDraft = useDraftValue(court, filterDrawerVisible, undefined);
+
+const dateFilterDraft = useDraftValue(dateFilter, filterDrawerVisible, {
+  type: SIMPLE_SEARCH_DEFAULTS.dateFilterType,
+});
+
+const sortDraft = useDraftValue(
+  sort,
+  sortDrawerVisible,
+  SIMPLE_SEARCH_DEFAULTS.sort,
+);
+
+const itemsPerPageDraft = useDraftValue(
+  itemsPerPage,
+  sortDrawerVisible,
+  SIMPLE_SEARCH_DEFAULTS.itemsPerPage,
+);
+
+function resetFilterDrawer() {
+  courtDraft.reset();
+  dateFilterDraft.reset();
+  applyFilterDrawer();
+}
+
+function applyFilterDrawer() {
+  const strictDraftDateFilter = isStrictDateFilterValue(
+    dateFilterDraft.draft.value,
+  )
+    ? dateFilterDraft.draft.value
+    : undefined;
+
+  navigateToSearch({
+    court: courtDraft.draft.value,
+    ...(strictDraftDateFilter ? { dateFilter: strictDraftDateFilter } : {}),
+    pageIndex: 0,
+  });
+}
+
+function resetSortDrawer() {
+  sortDraft.reset();
+  itemsPerPageDraft.reset();
+  applySortDrawer();
+}
+
+function applySortDrawer() {
+  navigateToSearch({
+    sort: sortDraft.draft.value ?? SIMPLE_SEARCH_DEFAULTS.sort,
+    itemsPerPage:
+      itemsPerPageDraft.draft.value ?? SIMPLE_SEARCH_DEFAULTS.itemsPerPage,
+    pageIndex: 0,
+  });
+}
 
 // Search results ------------------------------------------
 
@@ -227,19 +294,70 @@ watch(searchStatus, async (newStatus, oldStatus) => {
         </NuxtLink>
       </p>
 
-      <div class="content-grid mt-32 gap-y-32">
+      <div class="content-grid mt-32 gap-y-24 md:gap-y-32">
         <div
-          class="col-span-12 row-start-2 flex flex-wrap items-center justify-between gap-x-32 gap-y-16 md:row-auto"
+          class="col-span-12 row-start-2 flex flex-col gap-24 md:row-auto md:flex-row md:flex-wrap md:items-center md:justify-between md:gap-x-32"
         >
+          <div class="flex gap-8 md:hidden">
+            <SearchMobileActionDrawer
+              v-if="hasSubFilters"
+              v-model:visible="filterDrawerVisible"
+              class="flex-1"
+              label="Filtern"
+              :icon="IcOutlineFilterAlt"
+              @reset="resetFilterDrawer"
+              @apply="applyFilterDrawer"
+            >
+              <SearchCourtFilter
+                v-if="documentKind === DocumentKind.CaseLaw"
+                v-model="courtDraft.draft.value"
+                append-to="body"
+              />
+
+              <SearchDateRangeFilter
+                v-if="
+                  documentKind === DocumentKind.CaseLaw ||
+                  documentKind === DocumentKind.AdministrativeDirective
+                "
+                v-model="dateFilterDraft.draft.value"
+                append-to="body"
+              />
+
+              <SearchYearRangeFilter
+                v-else-if="documentKind === DocumentKind.Literature"
+                v-model="dateFilterDraft.draft.value"
+                append-to="body"
+              />
+            </SearchMobileActionDrawer>
+
+            <SearchMobileActionDrawer
+              v-model:visible="sortDrawerVisible"
+              class="flex-1"
+              label="Sortieren"
+              :icon="IcBaselineSwapVert"
+              @reset="resetSortDrawer"
+              @apply="applySortDrawer"
+            >
+              <SearchSortOptionsRadioGroup
+                v-model="sortDraft.draft.value"
+                :document-kind
+              />
+
+              <SearchItemsPerPageRadioGroup
+                v-model="itemsPerPageDraft.draft.value"
+              />
+            </SearchMobileActionDrawer>
+          </div>
+
           <output
             aria-atomic="true"
             aria-live="polite"
-            class="typo-label1-bold"
+            class="typo-label2-regular border-b border-b-gray-400 pb-16 md:border-none md:pb-0"
           >
             {{ isLoading ? "Lade ..." : formattedResultCount }}
           </output>
 
-          <div class="flex flex-wrap gap-x-32 gap-y-16">
+          <div class="hidden flex-wrap gap-x-32 gap-y-16 md:flex">
             <div class="flex items-center gap-8">
               <label :id="itemsPerPageLabelId" class="typo-label2-regular">
                 Einträge pro Seite
@@ -261,14 +379,14 @@ watch(searchStatus, async (newStatus, oldStatus) => {
         </div>
 
         <aside
-          class="col-span-12 pb-10 md:col-span-4 lg:col-span-3"
+          class="col-span-12 md:col-span-4 md:pb-10 lg:col-span-3"
           :aria-labelledby="filterHeadingId"
         >
           <h2
             :id="filterHeadingId"
-            class="typo-label1-regular mb-16 flex items-center"
+            class="typo-label1-bold mb-16 flex items-center"
           >
-            Filter
+            Ergebnisse anzeigen für:
           </h2>
 
           <div class="flex flex-col gap-24">
@@ -277,26 +395,28 @@ watch(searchStatus, async (newStatus, oldStatus) => {
               @update:model-value="updateCategoryFilter"
             />
 
-            <SearchCourtFilter
-              v-if="documentKind === DocumentKind.CaseLaw"
-              :model-value="court"
-              @update:model-value="updateCourt"
-            />
+            <div class="hidden flex-col gap-24 md:flex">
+              <SearchCourtFilter
+                v-if="documentKind === DocumentKind.CaseLaw"
+                :model-value="court"
+                @update:model-value="updateCourt"
+              />
 
-            <SearchDateRangeFilter
-              v-if="
-                documentKind === DocumentKind.CaseLaw ||
-                documentKind === DocumentKind.AdministrativeDirective
-              "
-              v-model="localDateFilter"
-              @update:model-value="updateDateFilter"
-            />
+              <SearchDateRangeFilter
+                v-if="
+                  documentKind === DocumentKind.CaseLaw ||
+                  documentKind === DocumentKind.AdministrativeDirective
+                "
+                v-model="localDateFilter"
+                @update:model-value="updateDateFilter"
+              />
 
-            <SearchYearRangeFilter
-              v-else-if="documentKind === DocumentKind.Literature"
-              v-model="localDateFilter"
-              @update:model-value="updateDateFilter"
-            />
+              <SearchYearRangeFilter
+                v-else-if="documentKind === DocumentKind.Literature"
+                v-model="localDateFilter"
+                @update:model-value="updateDateFilter"
+              />
+            </div>
           </div>
         </aside>
 

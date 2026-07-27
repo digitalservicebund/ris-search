@@ -139,7 +139,8 @@ test.describe("general search page features", () => {
     await expect(firstResultLink).toBeFocused();
   });
 
-  test("sort by date in ascending order", async ({ page }) => {
+  test("sort by date in ascending order", async ({ page, isMobileTest }) => {
+    test.skip(isMobileTest);
     await navigate(page, "/suche?query=fiktiv");
 
     await page.getByRole("combobox", { name: "Sortieren nach" }).click();
@@ -148,7 +149,8 @@ test.describe("general search page features", () => {
     await expect(page).toHaveURL(/sort=date/);
   });
 
-  test("sort by date in descending order", async ({ page }) => {
+  test("sort by date in descending order", async ({ page, isMobileTest }) => {
+    test.skip(isMobileTest);
     await navigate(page, "/suche?query=fiktiv");
 
     await page.getByRole("combobox", { name: "Sortieren nach" }).click();
@@ -157,7 +159,8 @@ test.describe("general search page features", () => {
     await expect(page).toHaveURL(/sort=-date/);
   });
 
-  test("sort by relevance (default)", async ({ page }) => {
+  test("sort by relevance (default)", async ({ page, isMobileTest }) => {
+    test.skip(isMobileTest);
     await navigate(page, "/suche?query=fiktiv&sort=date");
 
     await page.getByRole("combobox", { name: "Sortieren nach" }).click();
@@ -166,7 +169,8 @@ test.describe("general search page features", () => {
     await expect(page).toHaveURL(/sort=default/);
   });
 
-  test("change number of results per page", async ({ page }) => {
+  test("change number of results per page", async ({ page, isMobileTest }) => {
+    test.skip(isMobileTest);
     await navigate(page, "/suche?query=fiktiv&itemsPerPage=10");
 
     const searchResults = getSearchResults(page);
@@ -193,7 +197,11 @@ test.describe("general search page features", () => {
 });
 
 test.describe("searching all documents", () => {
-  test("shows search results for all document kinds", async ({ page }) => {
+  test("shows search results for all document kinds", async ({
+    page,
+    isMobileTest,
+  }) => {
+    test.skip(isMobileTest);
     await navigate(page, "/suche");
 
     await page.getByRole("combobox", { name: "Einträge pro Seite" }).click();
@@ -236,7 +244,7 @@ test.describe("searching legislation", () => {
     await expect(resultCounter).toHaveText(nonZeroResultCount);
 
     await page
-      .getByRole("complementary", { name: "Filter" })
+      .getByRole("complementary", { name: "Ergebnisse anzeigen für:" })
       .getByRole("button", { name: "Gesetze & Verordnungen" })
       .click();
 
@@ -458,7 +466,7 @@ test.describe("searching caselaw", () => {
     await expect(resultCounter).toHaveText(nonZeroResultCount);
 
     await page
-      .getByRole("complementary", { name: "Filter" })
+      .getByRole("complementary", { name: "Ergebnisse anzeigen für:" })
       .getByRole("button", { name: "Gerichtsentscheidungen" })
       .click();
 
@@ -581,7 +589,8 @@ test.describe("searching caselaw", () => {
     });
   });
 
-  test("searches by suggested court", async ({ page }) => {
+  test("searches by suggested court", async ({ page, isMobileTest }) => {
+    test.skip(isMobileTest);
     await navigate(page, "/suche?documentKind=R");
 
     await page.getByRole("button", { name: "Vorschläge anzeigen" }).click();
@@ -594,7 +603,8 @@ test.describe("searching caselaw", () => {
     // No search results
   });
 
-  test("searches by custom court", async ({ page }) => {
+  test("searches by custom court", async ({ page, isMobileTest }) => {
+    test.skip(isMobileTest);
     await navigate(page, "/suche?documentKind=R");
 
     await page.getByRole("combobox", { name: "Bundesgericht" }).fill("LG");
@@ -611,7 +621,9 @@ test.describe("searching caselaw", () => {
 
   test("does not trigger a search when selecting a date filter type without entering a date", async ({
     page,
+    isMobileTest,
   }) => {
+    test.skip(isMobileTest);
     await navigate(page, "/suche?documentKind=R");
     const initialUrl = page.url();
 
@@ -626,7 +638,11 @@ test.describe("searching caselaw", () => {
     await expect(page).toHaveURL(/dateFilterFrom=2025-04-10/);
   });
 
-  test("searches decision date before a date", async ({ page }) => {
+  test("searches decision date before a date", async ({
+    page,
+    isMobileTest,
+  }) => {
+    test.skip(isMobileTest);
     await navigate(page, "/suche?documentKind=R");
 
     await page.getByRole("combobox", { name: "Zeitraum" }).click();
@@ -641,7 +657,11 @@ test.describe("searching caselaw", () => {
     await expect(searchResults.nth(0)).toHaveText(/15.06.2024|22.11.2023/);
   });
 
-  test("searches decision date after a date", async ({ page }) => {
+  test("searches decision date after a date", async ({
+    page,
+    isMobileTest,
+  }) => {
+    test.skip(isMobileTest);
     await navigate(page, "/suche?documentKind=R");
 
     await page.getByRole("combobox", { name: "Zeitraum" }).click();
@@ -658,7 +678,11 @@ test.describe("searching caselaw", () => {
     await expect(searchResults).toHaveText(/10.04.2025/);
   });
 
-  test("searches decision date on a specific date", async ({ page }) => {
+  test("searches decision date on a specific date", async ({
+    page,
+    isMobileTest,
+  }) => {
+    test.skip(isMobileTest);
     await navigate(page, "/suche?documentKind=R");
 
     await page.getByRole("combobox", { name: "Zeitraum" }).click();
@@ -673,7 +697,8 @@ test.describe("searching caselaw", () => {
     await expect(searchResults).toHaveText(/15.06.2024/);
   });
 
-  test("searches decision date in a range", async ({ page }) => {
+  test("searches decision date in a range", async ({ page, isMobileTest }) => {
+    test.skip(isMobileTest);
     await navigate(page, "/suche?documentKind=R");
 
     await page.getByRole("combobox", { name: "Zeitraum" }).click();
@@ -694,7 +719,11 @@ test.describe("searching caselaw", () => {
     await expect(searchResults).toHaveCount(1);
   });
 
-  test("resets date input when switching filter types", async ({ page }) => {
+  test("resets date input when switching filter types", async ({
+    page,
+    isMobileTest,
+  }) => {
+    test.skip(isMobileTest);
     await navigate(
       page,
       "/suche?documentKind=R&dateFilterType=specificDate&dateFilterFrom=2020-01-01",
@@ -726,7 +755,7 @@ test.describe("searching caselaw", () => {
 
     // Switch to All Documents
     await page
-      .getByRole("complementary", { name: "Filter" })
+      .getByRole("complementary", { name: "Ergebnisse anzeigen für:" })
       .getByRole("button", { name: "Alle Dokumentarten" })
       .click();
 
@@ -751,7 +780,7 @@ test.describe("searching literature", () => {
     await expect(resultCounter).toHaveText(nonZeroResultCount);
 
     await page
-      .getByRole("complementary", { name: "Filter" })
+      .getByRole("complementary", { name: "Ergebnisse anzeigen für:" })
       .getByRole("button", { name: "Literaturnachweise" })
       .click();
 
@@ -829,7 +858,8 @@ test.describe("searching literature", () => {
     ).toBeVisible();
   });
 
-  test("searches until publication year", async ({ page }) => {
+  test("searches until publication year", async ({ page, isMobileTest }) => {
+    test.skip(isMobileTest);
     await navigate(page, "/suche?documentKind=L");
 
     await page.getByRole("combobox", { name: "Zeitraum" }).click();
@@ -842,7 +872,8 @@ test.describe("searching literature", () => {
     await expect(getSearchResults(page)).toHaveCount(4);
   });
 
-  test("searches from publication year", async ({ page }) => {
+  test("searches from publication year", async ({ page, isMobileTest }) => {
+    test.skip(isMobileTest);
     await navigate(page, "/suche?documentKind=L");
 
     await page.getByRole("combobox", { name: "Zeitraum" }).click();
@@ -857,7 +888,11 @@ test.describe("searching literature", () => {
     await expect(getSearchResults(page)).toHaveCount(3);
   });
 
-  test("searches for specific publication year", async ({ page }) => {
+  test("searches for specific publication year", async ({
+    page,
+    isMobileTest,
+  }) => {
+    test.skip(isMobileTest);
     await navigate(page, "/suche?documentKind=L");
 
     await page.getByRole("combobox", { name: "Zeitraum" }).click();
@@ -872,7 +907,11 @@ test.describe("searching literature", () => {
     await expect(getSearchResults(page)).toHaveCount(1);
   });
 
-  test("searches by publication year with range", async ({ page }) => {
+  test("searches by publication year with range", async ({
+    page,
+    isMobileTest,
+  }) => {
+    test.skip(isMobileTest);
     await navigate(page, "/suche?documentKind=L");
 
     await page.getByRole("combobox", { name: "Zeitraum" }).click();
@@ -888,7 +927,11 @@ test.describe("searching literature", () => {
     await expect(getSearchResults(page)).toHaveCount(6);
   });
 
-  test("resets year input when switching filter types", async ({ page }) => {
+  test("resets year input when switching filter types", async ({
+    page,
+    isMobileTest,
+  }) => {
+    test.skip(isMobileTest);
     await navigate(
       page,
       "/suche?documentKind=L&dateFilterType=period&dateFilterFrom=2020-01-01&dateFilterTo=2020-12-31",
@@ -918,7 +961,7 @@ test.describe("searching administrative directives", () => {
     await expect(resultCounter).toHaveText(nonZeroResultCount);
 
     await page
-      .getByRole("complementary", { name: "Filter" })
+      .getByRole("complementary", { name: "Ergebnisse anzeigen für:" })
       .getByRole("button", { name: "Verwaltungsvorschriften" })
       .click();
 
@@ -997,7 +1040,11 @@ test.describe("searching administrative directives", () => {
     ).toBeVisible();
   });
 
-  test("searches entry into force before a date", async ({ page }) => {
+  test("searches entry into force before a date", async ({
+    page,
+    isMobileTest,
+  }) => {
+    test.skip(isMobileTest);
     await navigate(page, "/suche?documentKind=V");
 
     await page.getByRole("combobox", { name: "Zeitraum" }).click();
@@ -1012,7 +1059,11 @@ test.describe("searching administrative directives", () => {
     await expect(searchResults.nth(0)).toHaveText(/14.03.2019/);
   });
 
-  test("searches entry into force after a date", async ({ page }) => {
+  test("searches entry into force after a date", async ({
+    page,
+    isMobileTest,
+  }) => {
+    test.skip(isMobileTest);
     await navigate(page, "/suche?documentKind=V");
 
     await page.getByRole("combobox", { name: "Zeitraum" }).click();
@@ -1029,7 +1080,11 @@ test.describe("searching administrative directives", () => {
     await expect(searchResults).toHaveText(/01.07.2025/);
   });
 
-  test("searches entry into force on a specific date", async ({ page }) => {
+  test("searches entry into force on a specific date", async ({
+    page,
+    isMobileTest,
+  }) => {
+    test.skip(isMobileTest);
     await navigate(page, "/suche?documentKind=V");
 
     await page.getByRole("combobox", { name: "Zeitraum" }).click();
@@ -1049,7 +1104,11 @@ test.describe("searching administrative directives", () => {
     await expect(searchResults).toHaveText(/24.12.2022/);
   });
 
-  test("searches entry into force in a range", async ({ page }) => {
+  test("searches entry into force in a range", async ({
+    page,
+    isMobileTest,
+  }) => {
+    test.skip(isMobileTest);
     await navigate(page, "/suche?documentKind=V");
 
     await page.getByRole("combobox", { name: "Zeitraum" }).click();
@@ -1069,7 +1128,8 @@ test.describe("searching administrative directives", () => {
     await expect(getSearchResults(page)).toHaveCount(2);
   });
 
-  test("sort by date", async ({ page }) => {
+  test("sort by date", async ({ page, isMobileTest }) => {
+    test.skip(isMobileTest);
     await navigate(page, "/suche?documentKind=V");
 
     await page.getByRole("combobox", { name: "Sortieren nach" }).click();
@@ -1090,6 +1150,148 @@ test.describe("searching administrative directives", () => {
     await expect(searchResults).toHaveCount(5);
 
     await expect(searchResults.nth(0)).toHaveText(/01.07.2025/);
+  });
+});
+
+test.describe("mobile filter and sort drawers", () => {
+  test.beforeEach(({ isMobileTest }) => {
+    test.skip(!isMobileTest);
+  });
+
+  test("shows the 'Filtern' button for document kinds with sub-filters", async ({
+    page,
+  }) => {
+    await navigate(page, "/suche");
+    await expect(
+      page.getByRole("button", { name: "Filtern" }),
+    ).not.toBeVisible();
+
+    await page
+      .getByRole("complementary", { name: "Ergebnisse anzeigen für:" })
+      .getByRole("button", { name: "Gerichtsentscheidungen" })
+      .click();
+
+    await expect(page.getByRole("button", { name: "Filtern" })).toBeVisible();
+  });
+
+  test("applies a court filter from the filter drawer", async ({ page }) => {
+    await navigate(page, "/suche?documentKind=R");
+
+    await page.getByRole("button", { name: "Filtern" }).click();
+    const dialog = page.getByRole("dialog", { name: "Filtern" });
+    await expect(dialog).toBeVisible();
+
+    await dialog.getByRole("combobox", { name: "Bundesgericht" }).fill("LG");
+    await page
+      .getByRole("option", { name: "Landgericht Hamburg Label" })
+      .click();
+
+    await dialog.getByRole("button", { name: "Anwenden" }).click();
+
+    await expect(dialog).not.toBeVisible();
+    await expect(page).toHaveURL(/court=LG\+Hamburg/);
+    await expect(getSearchResults(page)).toHaveText(
+      Array(3).fill(/LG Hamburg Label/),
+    );
+  });
+
+  test("applies a date filter from the filter drawer", async ({ page }) => {
+    await navigate(page, "/suche?documentKind=R");
+
+    await page.getByRole("button", { name: "Filtern" }).click();
+    const dialog = page.getByRole("dialog", { name: "Filtern" });
+    await expect(dialog).toBeVisible();
+
+    await dialog.getByRole("combobox", { name: "Zeitraum" }).click();
+    await page.getByRole("option", { name: "Bis zu einem Datum" }).click();
+    await dialog.getByRole("textbox", { name: "Datum" }).fill("31.12.2024");
+
+    await dialog.getByRole("button", { name: "Anwenden" }).click();
+
+    await expect(dialog).not.toBeVisible();
+    await expect(page).toHaveURL(/dateFilterFrom=&dateFilterTo=2024-12-31/);
+
+    const searchResults = getSearchResults(page);
+    await expect(searchResults).toHaveCount(2);
+    await expect(searchResults.nth(0)).toHaveText(/15.06.2024|22.11.2023/);
+  });
+
+  test("discards filter drawer changes when closed without applying", async ({
+    page,
+  }) => {
+    await navigate(page, "/suche?documentKind=R");
+
+    await page.getByRole("button", { name: "Filtern" }).click();
+    const dialog = page.getByRole("dialog", { name: "Filtern" });
+
+    await dialog.getByRole("combobox", { name: "Bundesgericht" }).fill("LG");
+    await page
+      .getByRole("option", { name: "Landgericht Hamburg Label" })
+      .click();
+
+    await dialog.getByRole("button", { name: "Schließen" }).click();
+    await expect(dialog).not.toBeVisible();
+
+    await expect(page).not.toHaveURL(/court=/);
+
+    // Reopening the drawer shows the field reset to the last committed value
+    await page.getByRole("button", { name: "Filtern" }).click();
+    await expect(
+      dialog.getByRole("combobox", { name: "Bundesgericht" }),
+    ).toHaveValue("");
+  });
+
+  test("'Zurücksetzen' resets and immediately commits the filters", async ({
+    page,
+  }) => {
+    await navigate(
+      page,
+      "/suche?documentKind=R&court=LG+Hamburg+Label&dateFilterType=period&dateFilterFrom=2025-01-01&dateFilterTo=2025-12-31",
+    );
+
+    await page.getByRole("button", { name: "Filtern" }).click();
+    const dialog = page.getByRole("dialog", { name: "Filtern" });
+
+    await dialog.getByRole("button", { name: "Zurücksetzen" }).click();
+
+    await expect(dialog).not.toBeVisible();
+    await expect(page).not.toHaveURL(/court=LG\+Hamburg/);
+    await expect(page).not.toHaveURL(/dateFilterFrom=2025-01-01/);
+  });
+
+  test("applies sorting from the sort drawer", async ({ page }) => {
+    await navigate(page, "/suche?documentKind=V");
+
+    await page.getByRole("button", { name: "Sortieren" }).click();
+    const dialog = page.getByRole("dialog", { name: "Sortieren" });
+    await expect(dialog).toBeVisible();
+
+    await dialog.getByRole("radio", { name: "Datum: Älteste zuerst" }).click();
+    await dialog.getByRole("button", { name: "Anwenden" }).click();
+
+    await expect(dialog).not.toBeVisible();
+    await expect(page).toHaveURL(/sort=date/);
+
+    const searchResults = getSearchResults(page);
+    await expect(searchResults).toHaveCount(5);
+    await expect(searchResults.nth(0)).toHaveText(/01.11.2004/);
+  });
+
+  test("applies page size from the sort drawer", async ({ page }) => {
+    await navigate(page, "/suche?query=fiktiv&itemsPerPage=10");
+
+    const searchResults = getSearchResults(page);
+    await expect(searchResults).toHaveCount(10);
+
+    await page.getByRole("button", { name: "Sortieren" }).click();
+    const dialog = page.getByRole("dialog", { name: "Sortieren" });
+
+    await dialog.getByRole("radio", { name: "50" }).click();
+    await dialog.getByRole("button", { name: "Anwenden" }).click();
+
+    await expect(dialog).not.toBeVisible();
+    await expect(page).toHaveURL(/itemsPerPage=50/);
+    await expect(searchResults).toHaveCount(18);
   });
 });
 
