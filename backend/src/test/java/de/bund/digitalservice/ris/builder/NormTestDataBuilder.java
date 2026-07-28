@@ -499,7 +499,7 @@ public class NormTestDataBuilder {
                             .children(List.of(attachmentTitle))
                             .build())
                     .build())
-            .body(Body.builder().children(mainBodyChildren).build())
+            .body(new Body(mainBodyChildren))
             .build());
 
     Attachments attachments =

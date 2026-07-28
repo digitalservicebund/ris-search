@@ -38,7 +38,7 @@ public class Act {
 
   @Builder.Default
   @XmlElement(namespace = NormTestDataBuilder.AKN_NS)
-  private Body body = Body.builder().build();
+  private Body body = new Body();
 
   @XmlElement(namespace = NormTestDataBuilder.AKN_NS)
   private Conclusions conclusions;

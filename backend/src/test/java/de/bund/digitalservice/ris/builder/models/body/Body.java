@@ -7,20 +7,20 @@ import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlSeeAlso;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 /** Represents the {@code akn:body} element, containing the norm's structural content. */
-@AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @XmlSeeAlso({Article.class, Chapter.class, Section.class, AknP.class})
 public class Body extends BaseElement {
 
-  @Builder.Default @XmlAttribute private String eId = "hauptteil-n1";
+  @XmlAttribute private String eId = "hauptteil-n1";
 
-  @Builder.Default @XmlAnyElement private List<BodyElement> children = new ArrayList<>();
+  @XmlAnyElement private List<BodyElement> children = new ArrayList<>();
+
+  public Body(List<BodyElement> children) {
+    this.children = new ArrayList<>(children);
+  }
 
   public void addChild(BodyElement child) {
     this.children.add(child);
