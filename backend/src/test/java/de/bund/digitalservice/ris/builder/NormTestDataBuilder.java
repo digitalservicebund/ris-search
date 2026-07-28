@@ -508,8 +508,7 @@ public class NormTestDataBuilder {
             .build());
 
     Attachments attachments =
-        Optional.ofNullable(this.document.getAct().getAttachments())
-            .orElse(Attachments.builder().build());
+        Optional.ofNullable(this.document.getAct().getAttachments()).orElse(new Attachments());
 
     attachments.addAttachment(
         manifestationEli, String.valueOf(attachments.getAttachmentCount() + 1));
