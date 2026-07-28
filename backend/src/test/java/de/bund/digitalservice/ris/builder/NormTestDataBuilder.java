@@ -364,17 +364,12 @@ public class NormTestDataBuilder {
   }
 
   /**
-   * Adds a section to the norm's body and lets the caller populate it.
+   * Adds a section to the norm's body.
    *
-   * @param heading the section heading text
-   * @param num the section number, e.g. "Abschnitt 1"
-   * @param sectionConsumer callback used to populate the created {@link Section}
+   * @param section the section to append to the body
    * @return this builder for chaining
    */
-  public NormTestDataBuilder section(
-      String heading, String num, Consumer<Section> sectionConsumer) {
-    Section section = new Section().addHeading(heading).addNum(num);
-    sectionConsumer.accept(section);
+  public NormTestDataBuilder section(Section section) {
     this.document.getAct().getBody().addChild(section);
     return this;
   }

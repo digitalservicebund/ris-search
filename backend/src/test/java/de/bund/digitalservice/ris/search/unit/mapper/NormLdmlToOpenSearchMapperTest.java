@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import de.bund.digitalservice.ris.builder.NormTestDataBuilder;
 import de.bund.digitalservice.ris.builder.models.body.Chapter;
+import de.bund.digitalservice.ris.builder.models.body.Section;
 import de.bund.digitalservice.ris.builder.models.common.AknP;
 import de.bund.digitalservice.ris.search.mapper.NormLdmlToOpenSearchMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
@@ -463,15 +464,12 @@ class NormLdmlToOpenSearchMapperTest {
         .chapter(
             new Chapter("Heading 2", "Kapitel 2", "kapitel-n2")
                 .addSection(
-                    "Heading 2.1",
-                    "Abschnitt 2.1",
-                    section -> {
-                      section.addArticle(
-                          builder
-                              .buildArticle("§ 3", "2020-01-01", null, "art-z3")
-                              .addHeading("Artikel 3", null)
-                              .addParagraph("Paragraf 1", "(1)"));
-                    }));
+                    new Section("Heading 2.1", "Abschnitt 2.1")
+                        .addArticle(
+                            builder
+                                .buildArticle("§ 3", "2020-01-01", null, "art-z3")
+                                .addHeading("Artikel 3", null)
+                                .addParagraph("Paragraf 1", "(1)"))));
 
     String xmlContent = builder.buildNormXml();
     Optional<Norm> maybeNorm =

@@ -9,7 +9,6 @@ import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 import lombok.NoArgsConstructor;
 
 /** Represents an {@code akn:chapter} element, grouping sections within the norm's body. */
@@ -39,16 +38,12 @@ public class Chapter extends BaseElement implements BodyElement {
   }
 
   /**
-   * Creates a section, lets the caller populate it, and adds it to this chapter.
+   * Adds the section to this chapter.
    *
-   * @param heading the section heading text
-   * @param num the section number, e.g. "Abschnitt 1"
-   * @param sectionConsumer callback used to populate the created {@link Section}
+   * @param section the section to add to the chapter
    * @return the created section
    */
-  public Chapter addSection(String heading, String num, Consumer<Section> sectionConsumer) {
-    Section section = new Section().addHeading(heading).addNum(num);
-    sectionConsumer.accept(section);
+  public Chapter addSection(Section section) {
     this.children.add(section);
     return this;
   }
