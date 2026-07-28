@@ -30,10 +30,7 @@ public class Attachments extends BaseElement {
    */
   public void addAttachment(String manifestationEli, String eIdNumber) {
     attachments.add(
-        Attachment.builder()
-            .eId("anlagen-n1_anlage-n" + eIdNumber)
-            .documentRef(DocumentRef.builder().href(manifestationEli).build())
-            .build());
+        new Attachment(eIdNumber, DocumentRef.builder().href(manifestationEli).build()));
   }
 
   public int getAttachmentCount() {
