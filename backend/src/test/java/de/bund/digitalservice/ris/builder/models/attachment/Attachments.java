@@ -24,8 +24,7 @@ public class Attachments extends BaseElement {
    * @param eIdNumber the number used to build the attachment's eId, e.g. "1"
    */
   public void addAttachment(String manifestationEli, String eIdNumber) {
-    attachments.add(
-        new Attachment(eIdNumber, DocumentRef.builder().href(manifestationEli).build()));
+    attachments.add(new Attachment(eIdNumber, new DocumentRef(manifestationEli)));
   }
 
   public int getAttachmentCount() {
