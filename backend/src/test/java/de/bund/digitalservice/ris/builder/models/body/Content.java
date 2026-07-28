@@ -6,19 +6,14 @@ import de.bund.digitalservice.ris.builder.models.common.BaseElement;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 /** Represents an {@code akn:content} element wrapping a paragraph's text. */
-@AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class Content extends BaseElement {
 
-  @Builder.Default @XmlAttribute private String eId = "art-z1_abs-z1_inhalt-n1";
+  @XmlAttribute private String eId = "art-z1_abs-z1_inhalt-n1";
 
-  @Builder.Default
   @XmlElement(name = "p", namespace = NormTestDataBuilder.AKN_NS)
   private AknP paragraph =
       AknP.builder()
@@ -26,11 +21,8 @@ public class Content extends BaseElement {
           .children(List.of("This is the first paragraph text content."))
           .build();
 
-  static Content withText(String paragraphText, String parentEId) {
-    String newEId = parentEId + "_inhalt-n1";
-    return Content.builder()
-        .eId(newEId)
-        .paragraph(AknP.builder().eId(newEId + "_text-n1").children(List.of(paragraphText)).build())
-        .build();
+  public Content(String paragraphText, String parentEId) {
+    this.eId = parentEId + "_inhalt-n1";
+    this.paragraph = AknP.builder().eId(eId + "_text-n1").children(List.of(paragraphText)).build();
   }
 }

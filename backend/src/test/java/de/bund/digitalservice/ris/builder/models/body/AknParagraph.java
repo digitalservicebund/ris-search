@@ -22,6 +22,6 @@ public class AknParagraph extends BaseElement {
     String newEid = parentEId + "_abs-z" + eIdNumber;
     this.eId = newEid;
     this.num = new AknNum(newEid, num);
-    this.content = Content.withText(paragraphText, newEid);
+    this.content = new Content(paragraphText, newEid);
   }
 }
