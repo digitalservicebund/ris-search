@@ -10,22 +10,18 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlTransient;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 /** Represents an {@code akn:article} element, the main structural unit of the norm's body. */
-@AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @XmlRootElement(namespace = NormTestDataBuilder.AKN_NS)
 public class Article extends BaseElement implements BodyElement {
 
-  @Builder.Default @XmlTransient private int paragraphCounter = 0;
+  @XmlTransient private int paragraphCounter = 0;
 
   @XmlAttribute private String eId;
 
-  @Builder.Default @XmlAttribute private String period = "#meta-n1_geltzeiten-n1_geltungszeitgr-n1";
+  @XmlAttribute private String period = "#meta-n1_geltzeiten-n1_geltungszeitgr-n1";
 
   @XmlElement(namespace = NormTestDataBuilder.AKN_NS)
   private AknNum num;
@@ -33,9 +29,14 @@ public class Article extends BaseElement implements BodyElement {
   @XmlElement(namespace = NormTestDataBuilder.AKN_NS)
   private Heading heading;
 
-  @Builder.Default
   @XmlElement(name = "paragraph", namespace = NormTestDataBuilder.AKN_NS)
   private List<AknParagraph> paragraphs = new ArrayList<>();
+
+  public Article(String eId, String temporalGroupEId, String num) {
+    this.eId = eId;
+    this.period = "#" + temporalGroupEId;
+    this.num = new AknNum(eId, num);
+  }
 
   /**
    * Sets the article's heading, optionally with an authorial note.
