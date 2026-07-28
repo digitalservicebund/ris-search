@@ -23,10 +23,7 @@ public class BlockContainer extends BaseElement {
   @Builder.Default
   @XmlElement(namespace = NormTestDataBuilder.AKN_NS)
   private Heading heading =
-      Heading.builder()
-          .eId("präambel-n1_blockcontainer-n1_überschrift-n1")
-          .headline(List.of("Inhaltsverzeichnis"))
-          .build();
+      new Heading("präambel-n1_blockcontainer-n1_überschrift-n1", List.of("Inhaltsverzeichnis"));
 
   @Builder.Default
   @XmlElement(namespace = NormTestDataBuilder.AKN_NS)

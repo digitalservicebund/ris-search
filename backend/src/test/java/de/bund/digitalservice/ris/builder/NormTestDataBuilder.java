@@ -453,21 +453,18 @@ public class NormTestDataBuilder {
             .eId("einleitung-n1_block-n1_doctitel-n1")
             .children(
                 List.of(
-                    Inline.builder()
-                        .eId("einleitung-n1_block-n1_doctitel-n1_inline-n1")
-                        .refersTo("anlageregelungstext-num")
-                        .content(num)
-                        .build(),
-                    Inline.builder()
-                        .eId("einleitung-n1_block-n1_doctitel-n1_inline-n2")
-                        .refersTo("anlageregelungstext-bezug")
-                        .content(bezug)
-                        .build(),
-                    Inline.builder()
-                        .eId("einleitung-n1_block-n1_doctitel-n1_inline-n3")
-                        .refersTo("anlageregelungstext-heading")
-                        .content(heading)
-                        .build()))
+                    new Inline(
+                        "einleitung-n1_block-n1_doctitel-n1_inline-n1",
+                        "anlageregelungstext-num",
+                        num),
+                    new Inline(
+                        "einleitung-n1_block-n1_doctitel-n1_inline-n2",
+                        "anlageregelungstext-bezug",
+                        bezug),
+                    new Inline(
+                        "einleitung-n1_block-n1_doctitel-n1_inline-n3",
+                        "anlageregelungstext-heading",
+                        heading)))
             .build();
 
     AkomaNtoso attachment = new AkomaNtoso();
@@ -483,11 +480,7 @@ public class NormTestDataBuilder {
             .preface(
                 Preface.builder()
                     .longTitle(null)
-                    .block(
-                        Block.builder()
-                            .eId("einleitung-n1_block-n1")
-                            .children(List.of(attachmentTitle))
-                            .build())
+                    .block(new Block("einleitung-n1_block-n1", List.of(attachmentTitle)))
                     .build())
             .body(new Body(mainBodyChildren))
             .build());

@@ -23,7 +23,7 @@ public class TocItem extends BaseElement {
 
   @Builder.Default
   @XmlElement(namespace = NormTestDataBuilder.AKN_NS)
-  private Span span = Span.builder().content("Eintrag 1").build();
+  private Span span = new Span("Eintrag 1");
 
   /**
    * Creates a table of contents entry with the given text, nesting level and eId.
@@ -34,10 +34,6 @@ public class TocItem extends BaseElement {
    * @return the built {@link TocItem}
    */
   public static TocItem withTextAndLevel(String text, String level, String eId) {
-    return TocItem.builder()
-        .level(level)
-        .eId(eId)
-        .span(Span.builder().eId(eId + "_span-n1").content(text).build())
-        .build();
+    return TocItem.builder().level(level).eId(eId).span(new Span(eId + "_span-n1", text)).build();
   }
 }

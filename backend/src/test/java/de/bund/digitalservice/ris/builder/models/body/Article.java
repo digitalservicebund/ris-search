@@ -48,10 +48,10 @@ public class Article extends BaseElement implements BodyElement {
   public Article addHeading(String text, String authorialNote) {
     List<Object> headingElements = new ArrayList<>(List.of(text));
     if (authorialNote != null) {
-      headingElements.add(AuthorialNote.withText(authorialNote));
+      headingElements.add(new AuthorialNote(authorialNote));
     }
 
-    this.heading = Heading.builder().eId(eId + "_überschrift-n1").headline(headingElements).build();
+    this.heading = new Heading(eId + "_überschrift-n1", headingElements);
     return this;
   }
 

@@ -1,30 +1,27 @@
 package de.bund.digitalservice.ris.builder.models.common;
 
 import de.bund.digitalservice.ris.builder.NormTestDataBuilder;
+import jakarta.xml.bind.annotation.XmlAnyElement;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlRootElement;
-import jakarta.xml.bind.annotation.XmlValue;
-import java.util.UUID;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 /** Represents an {@code akn:inline} element, e.g. an official abbreviation marker. */
-@AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @XmlRootElement(namespace = NormTestDataBuilder.AKN_NS)
-public class Inline {
-
-  @Builder.Default
-  @XmlAttribute(name = "GUID")
-  private String guid = UUID.randomUUID().toString();
+public class Inline extends BaseElement {
 
   @XmlAttribute private String eId;
 
-  @Builder.Default @XmlAttribute private String name = "attributsemantik-noch-undefiniert";
+  @XmlAttribute private String name = "attributsemantik-noch-undefiniert";
 
   @XmlAttribute private String refersTo;
 
-  @XmlValue private String content;
+  @XmlAnyElement private String content;
+
+  public Inline(String eId, String refersTo, String content) {
+    this.eId = eId;
+    this.refersTo = refersTo;
+    this.content = content;
+  }
 }

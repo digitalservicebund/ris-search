@@ -28,8 +28,7 @@ public class Section extends BaseElement implements BodyElement {
 
   public Section(String heading, String num) {
     this.num = new AknNum(eId, num);
-    this.heading =
-        Heading.builder().eId(eId + "_überschrift-n1").headline(List.of(heading)).build();
+    this.heading = new Heading(eId + "_überschrift-n1", List.of(heading));
   }
 
   /**

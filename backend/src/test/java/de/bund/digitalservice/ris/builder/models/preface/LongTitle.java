@@ -64,7 +64,7 @@ public class LongTitle extends BaseElement {
    * @param authorialNote optional authorial note text, or {@code null} for none
    */
   public void addAuthorialNote(String authorialNote) {
-    this.officialTitle.getChildren().add(AuthorialNote.withText(authorialNote));
+    this.officialTitle.getChildren().add(new AuthorialNote(authorialNote));
     setTitlesAndAbbreviation();
   }
 

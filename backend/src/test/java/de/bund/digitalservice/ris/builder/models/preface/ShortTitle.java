@@ -64,11 +64,10 @@ public class ShortTitle {
       this.abbreviation = null;
     } else {
       this.abbreviation =
-          Inline.builder()
-              .eId("einleitung-n1_doktitel-n1_text-n1_kurztitel-n1_inline-n1")
-              .refersTo("amtliche-abkuerzung")
-              .content(abbreviation)
-              .build();
+          new Inline(
+              "einleitung-n1_doktitel-n1_text-n1_kurztitel-n1_inline-n1",
+              "amtliche-abkuerzung",
+              abbreviation);
     }
 
     setTitleAndAbbreviation();
