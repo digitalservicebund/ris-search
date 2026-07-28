@@ -14,7 +14,7 @@ const { metadata, translationUrl } = defineProps<{
 }>();
 
 function normalizeRisAbbreviation(risAbbreviation: string) {
-  if (risAbbreviation.length > 0 && /^[a-zA-Z0-9\s]*$/.test(risAbbreviation)) {
+  if (risAbbreviation && /^[a-zA-Z0-9\s]*$/.test(risAbbreviation)) {
     return risAbbreviation.toLowerCase().replace(/\s+/g, "_");
   }
 
