@@ -187,11 +187,19 @@ test.describe("view norm page", async () => {
 });
 
 test.describe("actions menu", () => {
-  test.describe("can copy currently valid expression link", () => {
+  test.describe("can copy speakable url to currently valid expression", () => {
     testCopyLinkButton(
       "/gesetze/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu",
       "Link zur jeweils gültigen Fassung",
-      RegExp(".*/gesetze/eli/bund/bgbl-1/2024/383"),
+      RegExp(".*/gesetze/rismfg"),
+    );
+  });
+
+  test.describe("falls back to workEli link when risAbbreviation contains special characters", () => {
+    testCopyLinkButton(
+      "/gesetze/eli/bund/bgbl-1/2015/s3520/2022-10-21/3/deu",
+      "Link zur jeweils gültigen Fassung",
+      RegExp(".*/gesetze/eli/bund/bgbl-1/2015/s3520"),
     );
   });
 

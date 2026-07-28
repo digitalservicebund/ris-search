@@ -30,6 +30,7 @@ mockNuxtImport("useRequestURL", () => {
 
 const mockLegislation = {
   legislationIdentifier: "eli/bgbl-test-expression",
+  risAbbreviation: "",
   exampleOfWork: {
     legislationIdentifier: "eli/bgbl-test",
   },
@@ -86,28 +87,51 @@ describe("NormActionMenu", () => {
     expect(menuitems[4]).toHaveAccessibleName("XML anzeigen");
   });
 
-  it("can copy link to currently valid expression", async () => {
-    const user = userEvent.setup();
-    await renderNormActionMenu();
+  it.each([
+    {
+      risAbbreviation: "BGB",
+      expectedUrl: "https://example.com/bgb",
+      description: "alphanumeric abbreviation uses speakable URL",
+    },
+    {
+      risAbbreviation: "BGB Art 1",
+      expectedUrl: "https://example.com/bgb_art_1",
+      description: "abbreviation with spaces replaces them with underscores",
+    },
+    {
+      risAbbreviation: "SGB §1",
+      expectedUrl: "https://example.com/eli/bgbl-test",
+      description: "abbreviation with special characters falls back to workEli",
+    },
+    {
+      risAbbreviation: "",
+      expectedUrl: "https://example.com/eli/bgbl-test",
+      description: "empty abbreviation falls back to workEli",
+    },
+  ])(
+    "copies correct link to currently valid expression: $description",
+    async ({ risAbbreviation, expectedUrl }) => {
+      const user = userEvent.setup();
+      await renderNormActionMenu({ ...mockLegislation, risAbbreviation });
 
-    const copyButton = screen.getByRole("menuitem", {
-      name: "Link zur jeweils gültigen Fassung kopieren",
-    });
-    expect(copyButton).toBeVisible();
-    expect(copyButton).toBeEnabled();
+      const copyButton = screen.getByRole("menuitem", {
+        name: "Link zur jeweils gültigen Fassung kopieren",
+      });
 
-    await user.click(copyButton);
+      expect(copyButton).toBeVisible();
+      expect(copyButton).toBeEnabled();
 
-    expect(await navigator.clipboard.readText()).toEqual(
-      "https://example.com/eli/bgbl-test",
-    );
+      await user.click(copyButton);
 
-    expect(mockToastAdd).toHaveBeenCalledExactlyOnceWith(
-      expect.objectContaining({
-        summary: "Kopiert!",
-      }),
-    );
-  });
+      expect(await navigator.clipboard.readText()).toEqual(expectedUrl);
+
+      expect(mockToastAdd).toHaveBeenCalledExactlyOnceWith(
+        expect.objectContaining({
+          summary: "Kopiert!",
+        }),
+      );
+    },
+  );
 
   it("can copy link to the expression currently viewed", async () => {
     const user = userEvent.setup();
