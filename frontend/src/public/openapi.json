@@ -2945,6 +2945,11 @@
             "description" : "Amtliche Buchstabenabkürzung, if it exists. Otherwise ris-abkuerzung.",
             "example" : "KakaoV 2003"
           },
+          "risAbbreviation" : {
+            "type" : "string",
+            "description" : "The ris-abbreviation.",
+            "example" : "StVO 2013"
+          },
           "alternateName" : {
             "type" : [ "string", "null" ],
             "description" : "Amtliche Kurzüberschrift",
@@ -2982,7 +2987,7 @@
             }
           }
         },
-        "required" : [ "@id", "encoding", "exampleOfWork", "hasPart", "legislationIdentifier", "legislationLegalForce", "name", "temporalCoverage" ]
+        "required" : [ "@id", "encoding", "exampleOfWork", "hasPart", "legislationIdentifier", "legislationLegalForce", "name", "risAbbreviation", "temporalCoverage" ]
       },
       "StreamingResponseBody" : { },
       "AbstractDocumentSchema" : {

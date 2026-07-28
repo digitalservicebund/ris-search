@@ -61,6 +61,10 @@
                 <akn:p GUID="c1b2c3d4-cccc-4111-8111-363636363636" eId="einleitung-n1_doktitel-n1_text-n1">
                     <akn:docStage GUID="c1b2c3d4-dddd-4111-8111-373737373737" eId="einleitung-n1_doktitel-n1_text-n1_docstadium-n1"/>
                     <akn:docTitle GUID="c1b2c3d4-eeee-4111-8111-383838383838" eId="einleitung-n1_doktitel-n1_text-n1_doctitel-n1">Fiktive Verordnung zur Ausbildung in der Fruchtverarbeitung</akn:docTitle>
+                    <akn:shortTitle GUID="33333333-4444-5555-6666-777777777788" eId="einleitung-n1_doktitel-n1_text-n1_kurztitel-n1">
+                        (Bundeswahlfruchtverarbeitungsverordnung - <akn:inline GUID="44444444-5555-6666-7777-888888888899" eId="einleitung-n1_doktitel-n1_text-n1_kurztitel-n1_inline-n1"
+                                                                        name="attributsemantik-noch-undefiniert" refersTo="amtliche-abkuerzung">RisFrucht</akn:inline>)
+                    </akn:shortTitle>
                 </akn:p>
             </akn:longTitle>
         </akn:preface>

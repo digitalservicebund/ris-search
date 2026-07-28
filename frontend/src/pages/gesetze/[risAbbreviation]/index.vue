@@ -1,5 +1,5 @@
 <script setup lang="ts">
 definePageMeta({
-  middleware: "norms-abbreviation-redirect",
+  middleware: "norms-ris-abbreviation-redirect",
 });
 </script>

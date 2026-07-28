@@ -20,6 +20,7 @@ const mockSearchResult: SearchResult<LegislationExpression> = {
   item: {
     name: "Test Norm",
     abbreviation: "TN",
+    risAbbreviation: "",
     "@type": "Legislation",
     "@id": "eli/bund/bgbl-0/1999/ab/regelungstext-1",
     alternateName: "Alternate",

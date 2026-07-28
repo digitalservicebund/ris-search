@@ -26,6 +26,8 @@ class NormSchemaMapperTest {
             .expressionEli("expressionEli")
             .normsDate(LocalDate.of(2025, Month.JANUARY, 1))
             .datePublished(LocalDate.of(2026, Month.JANUARY, 1))
+            .officialAbbreviation("OffAbbrev")
+            .risAbbreviation("RisAbbrev")
             .tableOfContents(
                 List.of(
                     TableOfContentsItem.builder()
@@ -52,6 +54,8 @@ class NormSchemaMapperTest {
             .id("/v1/legislation/expressionEli")
             .legislationIdentifier("expressionEli")
             .legislationLegalForce(LegalForceStatus.IN_FORCE)
+            .abbreviation("OffAbbrev")
+            .risAbbreviation("RisAbbrev")
             .exampleOfWork(
                 new LegislationWorkSchema(
                     "/v1/legislation/workEli",

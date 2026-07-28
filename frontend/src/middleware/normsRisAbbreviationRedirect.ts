@@ -9,7 +9,7 @@ export default defineNuxtRouteMiddleware(async (from) => {
     JSONLDList<SearchResult<LegislationExpression>>
   >("/v1/legislation", {
     query: {
-      abbreviation: from.params.abbreviation,
+      risAbbreviation: from.params.risAbbreviation,
       mostRelevantOn: getCurrentDateInGermanyFormatted(),
     },
   });

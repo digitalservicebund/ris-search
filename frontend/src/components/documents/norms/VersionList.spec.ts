@@ -31,6 +31,7 @@ function createLegislationExpression(
     },
     name: "",
     alternateName: "",
+    risAbbreviation: "",
     encoding: [],
     hasPart: [],
   };
