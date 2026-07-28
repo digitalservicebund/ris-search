@@ -63,7 +63,7 @@ public class Article extends BaseElement implements BodyElement {
    */
   public Article addParagraph(String text, String num) {
     paragraphCounter++;
-    paragraphs.add(AknParagraph.withText(text, num, eId, String.valueOf(paragraphCounter)));
+    paragraphs.add(new AknParagraph(text, num, eId, String.valueOf(paragraphCounter)));
 
     return this;
   }
