@@ -68,5 +68,5 @@
       }
     ]
   },
-  "ignorePatterns": ["src/public/openapi.json"]
+  "ignorePatterns": ["src/public/openapi.json", "src/types/api-generated.d.ts"]
 }
