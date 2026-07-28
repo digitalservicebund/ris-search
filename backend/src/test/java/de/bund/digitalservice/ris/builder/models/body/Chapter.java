@@ -10,22 +10,14 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 /** Represents an {@code akn:chapter} element, grouping sections within the norm's body. */
-@AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @XmlRootElement(namespace = NormTestDataBuilder.AKN_NS)
 public class Chapter extends BaseElement implements BodyElement {
 
-  @Builder.Default @XmlAttribute private String eId = "kapitel-n1";
-
-  public void setEId(String eId) {
-    this.eId = eId;
-  }
+  @XmlAttribute private String eId = "kapitel-n1";
 
   @XmlElement(namespace = NormTestDataBuilder.AKN_NS)
   private AknNum num;
@@ -33,30 +25,17 @@ public class Chapter extends BaseElement implements BodyElement {
   @XmlElement(namespace = NormTestDataBuilder.AKN_NS)
   private Heading heading;
 
-  @Builder.Default @XmlAnyElement private List<BodyElement> children = new ArrayList<>();
+  @XmlAnyElement private List<BodyElement> children = new ArrayList<>();
 
-  /**
-   * Sets the chapter's number.
-   *
-   * @param num the chapter number, e.g. "Kapitel 1"
-   * @return this chapter for chaining
-   */
-  public Chapter addNum(String num) {
+  public Chapter(String heading, String num) {
     this.num = new AknNum(eId, num);
-
-    return this;
+    this.heading =
+        Heading.builder().eId(eId + "_überschrift-n1").headline(List.of(heading)).build();
   }
 
-  /**
-   * Sets the chapter's heading.
-   *
-   * @param text the heading text
-   * @return this chapter for chaining
-   */
-  public Chapter addHeading(String text) {
-    this.heading = Heading.builder().eId(eId + "_überschrift-n1").headline(List.of(text)).build();
-
-    return this;
+  public Chapter(String heading, String num, String eId) {
+    this(heading, num);
+    this.eId = eId;
   }
 
   /**
@@ -67,11 +46,11 @@ public class Chapter extends BaseElement implements BodyElement {
    * @param sectionConsumer callback used to populate the created {@link Section}
    * @return the created section
    */
-  public Section addSection(String heading, String num, Consumer<Section> sectionConsumer) {
+  public Chapter addSection(String heading, String num, Consumer<Section> sectionConsumer) {
     Section section = new Section().addHeading(heading).addNum(num);
     sectionConsumer.accept(section);
     this.children.add(section);
-    return section;
+    return this;
   }
 
   /**

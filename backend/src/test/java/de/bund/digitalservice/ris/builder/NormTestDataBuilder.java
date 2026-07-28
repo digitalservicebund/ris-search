@@ -353,17 +353,12 @@ public class NormTestDataBuilder {
   }
 
   /**
-   * Adds a chapter to the norm's body and lets the caller populate it.
+   * Adds a chapter to the norm's body.
    *
-   * @param heading the chapter heading text
-   * @param num the chapter number, e.g. "Kapitel 1"
-   * @param chapterConsumer callback used to populate the created {@link Chapter}
+   * @param chapter the chapter to append to the body
    * @return this builder for chaining
    */
-  public NormTestDataBuilder chapter(
-      String heading, String num, Consumer<Chapter> chapterConsumer) {
-    Chapter chapter = new Chapter().addHeading(heading).addNum(num);
-    chapterConsumer.accept(chapter);
+  public NormTestDataBuilder chapter(Chapter chapter) {
     this.document.getAct().getBody().addChild(chapter);
     return this;
   }
