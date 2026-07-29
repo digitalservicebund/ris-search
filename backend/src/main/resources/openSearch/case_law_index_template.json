@@ -401,6 +401,9 @@
         "indexed_at": {
           "type": "date"
         },
+        "abweichende_daten": {
+          "type": "date"
+        },
         "vorabdokument": {
           "type": "boolean"
         }

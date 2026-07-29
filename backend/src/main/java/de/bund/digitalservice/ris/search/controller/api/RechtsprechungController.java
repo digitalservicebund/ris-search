@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+/** REST controller for retrieving metadata of individual Rechtsprechung (case law) documents. */
 @Tag(name = "Rechtsprechung")
 @RestController
 @Profile({"default", "staging", "uat", "test", "prototype"})
@@ -31,6 +32,12 @@ public class RechtsprechungController {
     this.caseLawService = caseLawService;
   }
 
+  /**
+   * Returns metadata for a single Rechtsprechung (caselaw) document by document number.
+   *
+   * @param documentNumber unique document number of the case law document
+   * @return {@code 200 OK} with metadata when found, otherwise {@code 404 Not Found}
+   */
   @GetMapping(
       path = ApiConfig.Paths.RECHTSPRECHUNG + "/{documentNumber}",
       produces = MediaType.APPLICATION_JSON_VALUE)

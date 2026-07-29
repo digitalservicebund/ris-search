@@ -1,5 +1,7 @@
 package de.bund.digitalservice.ris.search.unit.mapper;
 
+import static de.bund.digitalservice.ris.SharedTestConstants.DATE_2023_01_02;
+import static de.bund.digitalservice.ris.SharedTestConstants.DATE_2024_01_01;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import de.bund.digitalservice.ris.SharedTestConstants;
@@ -45,6 +47,7 @@ class CaseLawSchemaMapperTest {
             .grounds("grounds")
             .guidingPrinciple("guidingPrinciple")
             .tenor("tenor")
+            .abweichendeDaten(List.of(DATE_2023_01_02, DATE_2024_01_01))
             .build();
 
     CaseLawSchema caseLawSchema = CaseLawSchemaMapper.fromDomain(documentationUnit);
@@ -104,8 +107,10 @@ class CaseLawSchemaMapperTest {
         .containsExactly("deviatingDocumentNumber");
     assertThat(rechtsprechungSchema.gruende()).isEqualTo("grounds");
     assertThat(rechtsprechungSchema.leitsatz()).isEqualTo("guidingPrinciple");
-    assertThat(caseLawSchema.tenor()).isEqualTo("tenor");
-    assertThat(caseLawSchema.inLanguage()).isEqualTo("de");
+    assertThat(rechtsprechungSchema.tenor()).isEqualTo("tenor");
+    assertThat(rechtsprechungSchema.inLanguage()).isEqualTo("de");
+    assertThat(rechtsprechungSchema.abweichendeDaten())
+        .containsExactly(DATE_2023_01_02, DATE_2024_01_01);
   }
 
   @Test

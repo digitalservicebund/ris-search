@@ -4,10 +4,17 @@ import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.schema.RechtsprechungSchema;
 
+/** Maps Rechtsprechung (case law document) objects to API schema models. */
 public class RechtsprechungSchemaMapper {
 
   private RechtsprechungSchemaMapper() {}
 
+  /**
+   * Creates a {@link RechtsprechungSchema} from a case law document.
+   *
+   * @param doc source domain object
+   * @return mapped schema representation for API responses
+   */
   public static RechtsprechungSchema fromDomain(CaseLawDocumentationUnit doc) {
     String entityURI = ApiConfig.Paths.RECHTSPRECHUNG + "/" + doc.documentNumber();
     var encodings = EncodingSchemaFactory.caselawEncodingSchemas(entityURI);
@@ -38,6 +45,7 @@ public class RechtsprechungSchemaMapper {
         .schlagwoerter(doc.keywords())
         .entscheidungsnamen(doc.decisionName())
         .abweichendeDokumentnummern(doc.deviatingDocumentNumber())
+        .abweichendeDaten(doc.abweichendeDaten())
         .courtName(doc.courtKeyword())
         .build();
   }

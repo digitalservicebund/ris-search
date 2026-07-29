@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.util.List;
 import lombok.Builder;
 
+/** API schema representing a Rechtsprechung (case law) resource in JSON-LD format. */
 @Builder
 public record RechtsprechungSchema(
     @Schema(example = "KARE000000000", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -27,6 +28,7 @@ public record RechtsprechungSchema(
     @Schema(description = "Sonstiger Langtext") String sonstigerLangtext,
     @Schema(description = "Tenor") String tenor,
     @Schema(description = "Datum", requiredMode = Schema.RequiredMode.REQUIRED) LocalDate datum,
+    @Schema(description = "Abweichende Daten") List<LocalDate> abweichendeDaten,
     @Schema(description = "Gliederung") String gliederung,
     @Schema(
             example = "BGH 123/23",

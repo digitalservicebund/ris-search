@@ -97,6 +97,7 @@ public class CaseLawLdmlToOpenSearchMapper {
         .grounds(extractContent(judgmentBody, DomainTerm.GROUNDS))
         .otherLongText(extractContent(judgmentBody, DomainTerm.OTHER_LONGTEXT))
         .dissentingOpinion(extractContent(judgmentBody, DomainTerm.DISSENTING_OPINION))
+        .abweichendeDaten(risMeta.getRisAbweichendeDaten())
         .previousDecisions(
             getLinkedJudgements(
                 meta, refs -> refs.getReferencesByType(ImplicitReference::getPrecedingJudgement)))

@@ -58,6 +58,8 @@ class CaseLawLdmlToOpenSearchMapperTest {
         .containsExactlyInAnyOrder(
             "ensuing decision file number, ensuing decision court type",
             "ensuing decision file number, ensuing decision court type");
+
+    assertThat(caseLaw.abweichendeDaten()).hasToString("[2020-03-03, 2022-02-04]");
     assertThat(caseLaw.vorabdokument()).isFalse();
   }
 

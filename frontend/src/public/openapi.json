@@ -47,6 +47,38 @@
         }
       }
     },
+    "/v1/rechtsprechung/{documentNumber}" : {
+      "get" : {
+        "tags" : [ "Rechtsprechung" ],
+        "summary" : "Judgment metadata (Metadaten eines Rechtsrechungsdokuments)",
+        "description" : "The endpoint returns a single judgment (Rechtsrechungsdokument) from our database.",
+        "operationId" : "getCaseLaw",
+        "parameters" : [ {
+          "name" : "documentNumber",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "example" : "STRE201770751"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RechtsprechungSchema"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        }
+      }
+    },
     "/v1/literature" : {
       "get" : {
         "tags" : [ "Literature" ],
@@ -1705,7 +1737,7 @@
         "tags" : [ "Case Law" ],
         "summary" : "Decision metadata",
         "description" : "The endpoint returns a single decision from our database.",
-        "operationId" : "getCaseLaw",
+        "operationId" : "getCaseLaw_1",
         "parameters" : [ {
           "name" : "documentNumber",
           "in" : "path",
@@ -2222,6 +2254,174 @@
           }
         },
         "required" : [ "count" ]
+      },
+      "CaseLawEncodingSchema" : {
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "example" : "MediaObject"
+          },
+          "@id" : {
+            "type" : "string"
+          },
+          "contentUrl" : {
+            "type" : "string"
+          },
+          "encodingFormat" : {
+            "type" : "string",
+            "example" : "text/html"
+          },
+          "inLanguage" : {
+            "type" : "string",
+            "example" : "de"
+          }
+        },
+        "required" : [ "@id", "contentUrl", "encodingFormat", "inLanguage" ]
+      },
+      "RechtsprechungSchema" : {
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "example" : "Rechtsprechung"
+          },
+          "dokumentNummer" : {
+            "type" : "string",
+            "example" : "KARE000000000"
+          },
+          "ecli" : {
+            "type" : "string",
+            "description" : "European Case Law Identifier",
+            "example" : "ECLI:DE:FGRLP:1969:0905.IV85.68.0A"
+          },
+          "tatbestand" : {
+            "type" : "string",
+            "description" : "Tatbestand"
+          },
+          "entscheidungsgruende" : {
+            "type" : "string",
+            "description" : "Entscheidungsgründe"
+          },
+          "abweichendeMeinung" : {
+            "type" : "string",
+            "description" : "Abweichende Meinung"
+          },
+          "gruende" : {
+            "type" : "string",
+            "description" : "Gründe"
+          },
+          "leitsatz" : {
+            "type" : "string",
+            "description" : "Leitsatz"
+          },
+          "headline" : {
+            "type" : "string",
+            "description" : "Überschrift"
+          },
+          "titelzeile" : {
+            "type" : "string",
+            "description" : "Titelzeile"
+          },
+          "orientierungssatz" : {
+            "type" : "string",
+            "description" : "Orientierungssatz"
+          },
+          "sonstigerOrientierungssatz" : {
+            "type" : "string",
+            "description" : "Sonstiger Orientierungssatz"
+          },
+          "sonstigerLangtext" : {
+            "type" : "string",
+            "description" : "Sonstiger Langtext"
+          },
+          "tenor" : {
+            "type" : "string",
+            "description" : "Tenor"
+          },
+          "datum" : {
+            "type" : "string",
+            "format" : "date",
+            "description" : "Datum"
+          },
+          "abweichendeDaten" : {
+            "type" : "array",
+            "description" : "Abweichende Daten",
+            "items" : {
+              "type" : "string",
+              "format" : "date"
+            }
+          },
+          "gliederung" : {
+            "type" : "string",
+            "description" : "Gliederung"
+          },
+          "aktenzeichenListe" : {
+            "type" : "array",
+            "description" : "Aktenzeichen",
+            "example" : "BGH 123/23",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "gericht" : {
+            "type" : "string",
+            "description" : "Gericht",
+            "example" : "FG Berlin"
+          },
+          "dokumenttyp" : {
+            "type" : "string",
+            "example" : "Urteil"
+          },
+          "spruchkoerper" : {
+            "type" : "string",
+            "description" : "Spruchkörper",
+            "example" : "Gericht"
+          },
+          "schlagwoerter" : {
+            "type" : "array",
+            "description" : "Schlagworte",
+            "example" : "3. Kammer",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "courtName" : {
+            "type" : "string",
+            "example" : "LArbG Hamm"
+          },
+          "entscheidungsnamen" : {
+            "type" : "array",
+            "description" : "Entscheidungsname",
+            "examples" : [ "Beispielentscheidung" ],
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "abweichendeDokumentnummern" : {
+            "type" : "array",
+            "description" : "Abweichende Dokumentnummer",
+            "example" : "DEV-123",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "@id" : {
+            "type" : "string",
+            "example" : "/v1/case-law/ECLI:DE:FGRLP:1969:0905.IV85.68.0A"
+          },
+          "inLanguage" : {
+            "type" : "string",
+            "example" : "de"
+          },
+          "encoding" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/CaseLawEncodingSchema"
+            }
+          }
+        },
+        "required" : [ "@id", "abweichendeDokumentnummern", "aktenzeichenListe", "datum", "dokumentNummer", "ecli", "encoding", "entscheidungsnamen", "inLanguage", "schlagwoerter" ]
       },
       "CollectionSchemaSearchMemberSchemaLiteratureSearchSchema" : {
         "type" : "object",
@@ -3091,30 +3291,6 @@
           }
         } ],
         "required" : [ "@id", "documentNumber", "documentType", "encoding", "referenceNumbers" ]
-      },
-      "CaseLawEncodingSchema" : {
-        "type" : "object",
-        "properties" : {
-          "@type" : {
-            "type" : "string",
-            "example" : "MediaObject"
-          },
-          "@id" : {
-            "type" : "string"
-          },
-          "contentUrl" : {
-            "type" : "string"
-          },
-          "encodingFormat" : {
-            "type" : "string",
-            "example" : "text/html"
-          },
-          "inLanguage" : {
-            "type" : "string",
-            "example" : "de"
-          }
-        },
-        "required" : [ "@id", "contentUrl", "encodingFormat", "inLanguage" ]
       },
       "CaseLawSearchSchema" : {
         "allOf" : [ {

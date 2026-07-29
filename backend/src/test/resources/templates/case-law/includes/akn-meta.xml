@@ -138,6 +138,10 @@
 </akn:references>
 <akn:proprietary source="#ris">
     <ris:meta>
+        <ris:abweichendeDaten domainTerm="Abweichende Daten">
+            <ris:abweichendesDatum domainTerm="Abweichendes Datum">2020-03-03</ris:abweichendesDatum>
+            <ris:abweichendesDatum domainTerm="Abweichendes Datum">2022-02-04</ris:abweichendesDatum>
+        </ris:abweichendeDaten>
         <ris:decisionNames>
             <ris:decisionName>Test decision name</ris:decisionName>
         </ris:decisionNames>

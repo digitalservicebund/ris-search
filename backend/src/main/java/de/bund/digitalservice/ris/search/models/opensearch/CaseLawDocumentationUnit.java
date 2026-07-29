@@ -47,6 +47,9 @@ public record CaseLawDocumentationUnit(
     @ElementCollection @Field(name = Fields.DECISION_NAME) List<String> decisionName,
     @ElementCollection @Field(name = Fields.DEVIATING_DOCUMENT_NUMBER)
         List<String> deviatingDocumentNumber,
+    @ElementCollection
+        @Field(name = Fields.ABWEICHENDE_DATEN, type = FieldType.Date, format = DateFormat.date)
+        List<LocalDate> abweichendeDaten,
     @JsonIgnore @Field(name = Fields.DOCUMENTATION_OFFICE) String documentationOffice,
     @JsonIgnore @Field(name = Fields.LEGAL_EFFECT) String legalEffect,
     @JsonIgnore @ElementCollection @Field(name = Fields.PREVIOUS_DECISIONS)
@@ -117,6 +120,7 @@ public record CaseLawDocumentationUnit(
     public static final String HAS_LEGISLATIVE_MANDATE = "has_legislative_mandate";
     public static final String INDEXED_AT = "indexed_at";
     public static final String ARTICLES = "articles";
+    public static final String ABWEICHENDE_DATEN = "abweichende_daten";
     public static final String VORABDOKUMENT = "vorabdokument";
   }
 }

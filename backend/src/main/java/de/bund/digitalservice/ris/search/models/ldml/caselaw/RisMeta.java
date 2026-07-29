@@ -2,6 +2,7 @@ package de.bund.digitalservice.ris.search.models.ldml.caselaw;
 
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlElementWrapper;
+import java.time.LocalDate;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -49,7 +50,7 @@ public class RisMeta {
 
   @XmlElementWrapper(name = "abweichendeDaten", namespace = CaseLawLdmlNamespaces.RIS_NS)
   @XmlElement(name = "abweichendesDatum", namespace = CaseLawLdmlNamespaces.RIS_NS)
-  private List<String> risAbweichendeDaten;
+  private List<LocalDate> risAbweichendeDaten;
 
   @XmlElementWrapper(name = "abweichendeDokumentnummern", namespace = CaseLawLdmlNamespaces.RIS_NS)
   @XmlElement(name = "abweichendeDokumentnummer", namespace = CaseLawLdmlNamespaces.RIS_NS)
