@@ -27,7 +27,7 @@ public class Act {
 
   @Builder.Default
   @XmlElement(namespace = NormTestDataBuilder.AKN_NS)
-  private Meta meta = Meta.builder().build();
+  private Meta meta = new Meta();
 
   @Builder.Default
   @XmlElement(namespace = NormTestDataBuilder.AKN_NS)

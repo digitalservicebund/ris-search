@@ -76,7 +76,7 @@ public class NormTestDataBuilder {
 
   private NormTestDataBuilder(boolean enforceValidation) {
     this.enforceValidation = enforceValidation;
-    this.document.setAct(Act.builder().meta(Meta.builder().build()).build());
+    this.document.setAct(Act.builder().meta(new Meta()).build());
   }
 
   public static NormTestDataBuilder builder() {
@@ -476,13 +476,7 @@ public class NormTestDataBuilder {
     AkomaNtoso attachment = new AkomaNtoso();
     attachment.setDoc(
         Doc.builder()
-            .meta(
-                Meta.builder()
-                    .lifecycle(null)
-                    .temporalData(null)
-                    .proprietary(null)
-                    .identification(new Identification(manifestationEli))
-                    .build())
+            .meta(new Meta(Identification.fromEli(manifestationEli)))
             .preface(
                 Preface.builder()
                     .longTitle(null)

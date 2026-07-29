@@ -11,7 +11,6 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,27 +18,29 @@ import lombok.Setter;
 /** Represents the {@code akn:meta} element, holding identification, lifecycle and RIS metadata. */
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @Getter
 @Setter
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Meta extends BaseElement {
 
-  @Builder.Default @XmlAttribute private String eId = "meta-n1";
+  @XmlAttribute private String eId = "meta-n1";
 
-  @Builder.Default
   @XmlElement(namespace = NormTestDataBuilder.AKN_NS)
   private Identification identification = new Identification();
 
-  @Builder.Default
   @XmlElement(namespace = NormTestDataBuilder.AKN_NS)
-  private Lifecycle lifecycle = Lifecycle.builder().build();
+  private Lifecycle lifecycle = new Lifecycle();
 
-  @Builder.Default
   @XmlElement(namespace = NormTestDataBuilder.AKN_NS)
-  private TemporalData temporalData = TemporalData.builder().build();
+  private TemporalData temporalData = new TemporalData();
 
-  @Builder.Default
   @XmlElement(namespace = NormTestDataBuilder.AKN_NS)
-  private Proprietary proprietary = Proprietary.builder().build();
+  private Proprietary proprietary = new Proprietary();
+
+  public Meta(Identification identification) {
+    this.identification = identification;
+    this.lifecycle = null;
+    this.temporalData = null;
+    this.proprietary = null;
+  }
 }
