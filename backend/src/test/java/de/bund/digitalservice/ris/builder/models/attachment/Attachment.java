@@ -15,6 +15,12 @@ public class Attachment extends BaseElement {
   @XmlElement(namespace = NormTestDataBuilder.AKN_NS)
   private DocumentRef documentRef;
 
+  /**
+   * Creates an attachment with the given number and document reference.
+   *
+   * @param eIdNumber the attachment number used to build the eId
+   * @param documentRef the referenced attachment document
+   */
   public Attachment(String eIdNumber, DocumentRef documentRef) {
     this.eId = "anlagen-n1_anlage-n" + eIdNumber;
     this.documentRef = documentRef;

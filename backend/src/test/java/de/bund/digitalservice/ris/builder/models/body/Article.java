@@ -32,6 +32,13 @@ public class Article extends BaseElement implements BodyElement {
   @XmlElement(name = "paragraph", namespace = NormTestDataBuilder.AKN_NS)
   private List<AknParagraph> paragraphs = new ArrayList<>();
 
+  /**
+   * Creates an article with the given eId, temporal group reference, and number.
+   *
+   * @param eId the article's eId
+   * @param temporalGroupEId the eId of the temporal group this article belongs to
+   * @param num the article number, e.g. "§ 1"
+   */
   public Article(String eId, String temporalGroupEId, String num) {
     this.eId = eId;
     this.period = "#" + temporalGroupEId;

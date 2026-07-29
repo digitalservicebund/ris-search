@@ -26,6 +26,12 @@ public class Section extends BaseElement implements BodyElement {
   @XmlElement(name = "article", namespace = NormTestDataBuilder.AKN_NS)
   private List<Article> articles = new ArrayList<>();
 
+  /**
+   * Creates a section with the given heading text and number.
+   *
+   * @param heading the section heading text
+   * @param num the section number, e.g. "1."
+   */
   public Section(String heading, String num) {
     this.num = new AknNum(eId, num);
     this.heading = new Heading(eId + "_überschrift-n1", List.of(heading));

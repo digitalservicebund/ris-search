@@ -17,6 +17,12 @@ public class Content extends BaseElement {
   private AknP paragraph =
       new AknP("art-n1_abs-z_inhalt-n1", "This is the first paragraph text content.");
 
+  /**
+   * Creates a content element with the given paragraph text and parent eId.
+   *
+   * @param paragraphText the text content of the wrapped paragraph
+   * @param parentEId the eId of the enclosing element, used to build this element's eId
+   */
   public Content(String paragraphText, String parentEId) {
     this.eId = parentEId + "_inhalt-n1";
     this.paragraph = new AknP(eId, paragraphText);

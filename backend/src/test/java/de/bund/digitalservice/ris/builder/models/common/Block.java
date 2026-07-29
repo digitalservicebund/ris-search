@@ -18,6 +18,12 @@ public class Block extends BaseElement {
 
   @XmlAnyElement private List<Object> children = new ArrayList<>();
 
+  /**
+   * Creates a block element with the given eId and children.
+   *
+   * @param eId the element's eId
+   * @param children the child elements or text nodes contained in this block
+   */
   public Block(String eId, List<Object> children) {
     this.eId = eId;
     this.children = new ArrayList<>(children);

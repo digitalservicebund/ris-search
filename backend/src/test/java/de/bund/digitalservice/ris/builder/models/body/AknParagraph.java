@@ -18,6 +18,14 @@ public class AknParagraph extends BaseElement {
   @XmlElement(namespace = NormTestDataBuilder.AKN_NS)
   private Content content;
 
+  /**
+   * Creates a paragraph with the given text, number, parent eId, and position.
+   *
+   * @param paragraphText the paragraph's text content
+   * @param num the paragraph number, e.g. "(1)"
+   * @param parentEId the eId of the enclosing article
+   * @param eIdNumber the position index used to build this paragraph's eId
+   */
   public AknParagraph(String paragraphText, String num, String parentEId, String eIdNumber) {
     String newEid = parentEId + "_abs-z" + eIdNumber;
     this.eId = newEid;

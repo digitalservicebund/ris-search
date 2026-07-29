@@ -25,15 +25,32 @@ public class AknP extends BaseElement implements BodyElement {
 
   @XmlAnyElement private List<Object> children = new ArrayList<>();
 
+  /**
+   * Creates a paragraph element with the given text content.
+   *
+   * @param text the text content of this paragraph
+   */
   public AknP(String text) {
     this.children = new ArrayList<>(List.of(text));
   }
 
+  /**
+   * Creates a paragraph element with the given parent eId and text content.
+   *
+   * @param parentEId the eId of the enclosing element, used to build this element's eId
+   * @param text the text content of this paragraph
+   */
   public AknP(String parentEId, String text) {
     this(text);
     this.eId = parentEId + "_" + eId;
   }
 
+  /**
+   * Creates a paragraph element with the given parent eId and mixed child elements.
+   *
+   * @param parentEId the eId of the enclosing element, used to build this element's eId
+   * @param children the child elements or text nodes of this paragraph
+   */
   public AknP(String parentEId, List<Object> children) {
     this.eId = parentEId + "_" + eId;
     this.children = new ArrayList<>(children);

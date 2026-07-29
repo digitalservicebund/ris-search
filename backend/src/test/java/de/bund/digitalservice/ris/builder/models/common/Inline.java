@@ -19,6 +19,13 @@ public class Inline extends BaseElement {
 
   @XmlAnyElement private String content;
 
+  /**
+   * Creates an inline element with the given eId, semantic reference, and text content.
+   *
+   * @param eId the element's eId
+   * @param refersTo the semantic reference target, e.g. "amtliche-abkuerzung"
+   * @param content the inline text content
+   */
   public Inline(String eId, String refersTo, String content) {
     this.eId = eId;
     this.refersTo = refersTo;

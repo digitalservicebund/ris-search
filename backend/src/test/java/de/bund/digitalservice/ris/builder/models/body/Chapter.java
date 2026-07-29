@@ -26,11 +26,24 @@ public class Chapter extends BaseElement implements BodyElement {
 
   @XmlAnyElement private List<BodyElement> children = new ArrayList<>();
 
+  /**
+   * Creates a chapter with the given heading text and number.
+   *
+   * @param heading the chapter heading text
+   * @param num the chapter number, e.g. "1."
+   */
   public Chapter(String heading, String num) {
     this.num = new AknNum(eId, num);
     this.heading = new Heading(eId + "_überschrift-n1", List.of(heading));
   }
 
+  /**
+   * Creates a chapter with the given heading, number, and explicit eId.
+   *
+   * @param heading the chapter heading text
+   * @param num the chapter number, e.g. "1."
+   * @param eId the explicit eId to assign to this chapter
+   */
   public Chapter(String heading, String num, String eId) {
     this(heading, num);
     this.eId = eId;
