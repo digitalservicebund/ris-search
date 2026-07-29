@@ -9,30 +9,27 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 /** Represents the {@code akn:preface} element, holding the norm's title and legislation date. */
-@AllArgsConstructor
 @NoArgsConstructor
-@Builder
-@Setter
-@Getter
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Preface extends BaseElement {
 
-  @Builder.Default @XmlAttribute private String eId = "einleitung-n1";
+  @XmlAttribute private String eId = "einleitung-n1";
 
-  @Builder.Default
   @XmlElement(namespace = NormTestDataBuilder.AKN_NS)
-  private LongTitle longTitle = LongTitle.builder().build();
+  @Getter
+  private LongTitle longTitle = new LongTitle();
 
-  @Builder.Default
   @XmlElement(namespace = NormTestDataBuilder.AKN_NS)
   private Block block = buildLegislationDateBlock("2002-01-01");
+
+  public Preface(Block block) {
+    this.longTitle = null;
+    this.block = block;
+  }
 
   public void setLegislationDate(String date) {
     this.block = buildLegislationDateBlock(date);

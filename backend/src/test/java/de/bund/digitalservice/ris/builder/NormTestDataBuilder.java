@@ -453,33 +453,25 @@ public class NormTestDataBuilder {
       String heading,
       List<BodyElement> mainBodyChildren) {
     DocTitle attachmentTitle =
-        DocTitle.builder()
-            .eId("einleitung-n1_block-n1_doctitel-n1")
-            .children(
-                List.of(
-                    new Inline(
-                        "einleitung-n1_block-n1_doctitel-n1_inline-n1",
-                        "anlageregelungstext-num",
-                        num),
-                    new Inline(
-                        "einleitung-n1_block-n1_doctitel-n1_inline-n2",
-                        "anlageregelungstext-bezug",
-                        bezug),
-                    new Inline(
-                        "einleitung-n1_block-n1_doctitel-n1_inline-n3",
-                        "anlageregelungstext-heading",
-                        heading)))
-            .build();
+        new DocTitle(
+            "einleitung-n1_block-n1_doctitel-n1",
+            List.of(
+                new Inline(
+                    "einleitung-n1_block-n1_doctitel-n1_inline-n1", "anlageregelungstext-num", num),
+                new Inline(
+                    "einleitung-n1_block-n1_doctitel-n1_inline-n2",
+                    "anlageregelungstext-bezug",
+                    bezug),
+                new Inline(
+                    "einleitung-n1_block-n1_doctitel-n1_inline-n3",
+                    "anlageregelungstext-heading",
+                    heading)));
 
     AkomaNtoso attachment = new AkomaNtoso();
     attachment.setDoc(
         Doc.builder()
             .meta(new Meta(new Identification(manifestationEli)))
-            .preface(
-                Preface.builder()
-                    .longTitle(null)
-                    .block(new Block("einleitung-n1_block-n1", List.of(attachmentTitle)))
-                    .build())
+            .preface(new Preface(new Block("einleitung-n1_block-n1", List.of(attachmentTitle))))
             .body(new Body(mainBodyChildren))
             .build());
 
@@ -501,7 +493,7 @@ public class NormTestDataBuilder {
    * @return this builder for chaining
    */
   public NormTestDataBuilder conclusion(String text) {
-    this.document.getAct().setConclusions(Conclusions.withText(text));
+    this.document.getAct().setConclusions(new Conclusions(text));
     return this;
   }
 

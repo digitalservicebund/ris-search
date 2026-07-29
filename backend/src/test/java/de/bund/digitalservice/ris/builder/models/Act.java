@@ -31,7 +31,7 @@ public class Act {
 
   @Builder.Default
   @XmlElement(namespace = NormTestDataBuilder.AKN_NS)
-  private Preface preface = Preface.builder().build();
+  private Preface preface = new Preface();
 
   @XmlElement(namespace = NormTestDataBuilder.AKN_NS)
   private Preamble preamble;

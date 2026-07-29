@@ -1,6 +1,7 @@
 package de.bund.digitalservice.ris.builder.models.preface;
 
 import de.bund.digitalservice.ris.builder.NormTestDataBuilder;
+import de.bund.digitalservice.ris.builder.models.common.BaseElement;
 import de.bund.digitalservice.ris.builder.models.common.Inline;
 import jakarta.xml.bind.annotation.XmlAnyElement;
 import jakarta.xml.bind.annotation.XmlAttribute;
@@ -9,18 +10,13 @@ import jakarta.xml.bind.annotation.XmlSeeAlso;
 import jakarta.xml.bind.annotation.XmlTransient;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 /** Represents the {@code akn:shortTitle} element, the norm's short title (Kurztitel). */
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
 @XmlSeeAlso({Inline.class})
 @XmlRootElement(namespace = NormTestDataBuilder.AKN_NS)
-public class ShortTitle {
+public class ShortTitle extends BaseElement {
 
   @XmlTransient private String shortTitle;
 
@@ -28,15 +24,9 @@ public class ShortTitle {
 
   @XmlTransient private Inline abbreviation;
 
-  @Builder.Default @XmlAttribute
-  private String eId = "einleitung-n1_doktitel-n1_text-n1_kurztitel-n1";
+  @XmlAttribute private String eId = "einleitung-n1_doktitel-n1_text-n1_kurztitel-n1";
 
-  @Builder.Default
-  @XmlAttribute(name = "GUID")
-  private String guid = UUID.randomUUID().toString();
-
-  @Builder.Default @XmlAnyElement
-  private List<Object> children = List.of("Short Title of the Legislation");
+  @XmlAnyElement private List<Object> children = List.of("Short Title of the Legislation");
 
   /**
    * Sets the short title text and suffix, and rebuilds the element's children.
