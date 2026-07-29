@@ -7,6 +7,7 @@ public class JsonldTypes {
   public static final String LEGISLATION = "Legislation";
   public static final String LEGISLATION_OBJECT = "LegislationObject";
   public static final String DECISION = "Decision";
+  public static final String RECHTSPRECHUNG = "Rechtsprechung";
   public static final String MEDIA_OBJECT = "MediaObject";
   public static final String ADMINISTRATIVE_DIRECTIVE = "AdministrativeDirective";
   public static final String HYDRA_COLLECTION = "hydra:Collection";

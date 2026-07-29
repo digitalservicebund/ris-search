@@ -26,7 +26,7 @@ public class FrbrElement {
   private List<FrbrAlias> frbrAlias;
 
   @XmlElement(name = "FRBRdate", namespace = CaseLawLdmlNamespaces.AKN_NS)
-  private FrbrDate frbrDate;
+  private List<FrbrDate> frbrDates;
 
   @XmlElement(name = "FRBRauthor", namespace = CaseLawLdmlNamespaces.AKN_NS)
   private FrbrAuthor frbrAuthor;
@@ -39,7 +39,7 @@ public class FrbrElement {
 
   private String getAliasValueByName(String aliasName) {
     return frbrAlias.stream()
-        .filter(alias -> alias.getName().equals(aliasName))
+        .filter(alias -> alias.getName().equalsIgnoreCase(aliasName))
         .findFirst()
         .map(FrbrAlias::getValue)
         .orElse(null);
@@ -47,5 +47,54 @@ public class FrbrElement {
 
   public String getEcliAliasValue() {
     return getAliasValueByName("ecli");
+  }
+
+  public String getAktenzeichenAliasValue() {
+    return getAliasValueByName("Aktenzeichen");
+  }
+
+  public String getCelexAliasValue() {
+    return getAliasValueByName("CELEX");
+  }
+
+  /**
+   * Returns the primary FRBRdate (named "Entscheidungsdatum"), or the first date present if none is
+   * explicitly named that.
+   *
+   * @return the primary {@link FrbrDate}, or {@code null} if no dates are present
+   */
+  public FrbrDate getFrbrDate() {
+    if (frbrDates == null || frbrDates.isEmpty()) {
+      return null;
+    }
+    return frbrDates.stream()
+        .filter(d -> "Entscheidungsdatum".equalsIgnoreCase(d.getName()))
+        .findFirst()
+        .orElse(frbrDates.get(0));
+  }
+
+  /**
+   * Looks up a FRBRdate's value by its {@code name} attribute.
+   *
+   * @param name the name attribute of the date to look up
+   * @return the date value, or {@code null} if not present
+   */
+  public String getDateByName(String name) {
+    if (frbrDates == null) {
+      return null;
+    }
+    return frbrDates.stream()
+        .filter(d -> name.equalsIgnoreCase(d.getName()))
+        .map(FrbrDate::getDate)
+        .findFirst()
+        .orElse(null);
+  }
+
+  public String getErstveroeffentlichungValue() {
+    return getDateByName("erstveroeffentlichung");
+  }
+
+  public String getMitteilungsdatumValue() {
+    return getDateByName("mitteilungsdatum");
   }
 }

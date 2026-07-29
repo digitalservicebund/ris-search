@@ -286,6 +286,16 @@
             }
           }
         },
+        "celex": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "normalizer": "normalized_keyword"
+            }
+          }
+        },
         "grounds": {
           "type": "text",
           "analyzer": "custom_german_analyzer",
@@ -308,6 +318,10 @@
           "type": "keyword"
         },
         "location": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "gerichtsbarkeit": {
           "type": "text",
           "analyzer": "custom_german_analyzer"
         },
@@ -401,8 +415,166 @@
         "indexed_at": {
           "type": "date"
         },
+        "abweichende_aktenzeichen": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "normalizer": "normalized_keyword"
+            }
+          }
+        },
+        "abweichende_daten": {
+          "type": "date"
+        },
+        "abweichende_eclis": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "normalizer": "normalized_keyword"
+            }
+          }
+        },
+        "berufsbilder": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "kuendigungsarten": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "herkunftslaender": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "regionen": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "fehlerhafte_gerichte": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "daten_der_muendlichen_verhandlung": {
+          "type": "date"
+        },
+        "definitionen": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
         "vorabdokument": {
           "type": "boolean"
+        },
+        "erledigung": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "erledigungsvermerk": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "erstveroeffentlichung": {
+          "type": "date"
+        },
+        "mitteilungsdatum": {
+          "type": "date"
+        },
+        "langtextdatum": {
+          "type": "date"
+        },
+        "letzte_veroeffentlichung": {
+          "type": "date"
+        },
+        "rechtsfrage_gesamt": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "rechtsfrage": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "rechtsmittelfuehrer": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "rechtsmittelzulassung": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "revision": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "sachgebiete": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "streitjahre": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "tarifvertraege": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "kuendigungsgruende": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "mitwirkende_richter": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "aktivzitierung_literatur_unselbstaendig": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "passivzitierung_literatur_unselbstaendig": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "aktivzitierung_literatur_selbstaendig": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "passivzitierung_literatur_selbstaendig": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "aktivzitierung_rechtsprechung": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "passivzitierung_rechtsprechung": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "aktivzitierung_verwaltungsvorschriften": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "passivzitierung_verwaltungsvorschriften": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "amtliche_fundstellen": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "nichtamtliche_fundstellen": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "gesetzeskraft": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "normenkette": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
         }
       }
     }

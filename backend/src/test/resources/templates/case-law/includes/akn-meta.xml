@@ -4,9 +4,11 @@
             <akn:FRBRuri value="{% if documentNumber %}{{documentNumber}}{% else %}testDocNumber{% endif %}"/>
             <akn:FRBRalias name="Übergreifende ID" value="testUUID"/>
             <akn:FRBRalias name="Dokumentnummer" value="{% if documentNumber %}{{documentNumber}}{% else %}testDocNumber{% endif %}"/>
-            <akn:FRBRalias name="ecli" value="{% if ecli %}{{ ecli }}{% else %}testEcli{% endif %}"/>
+            <akn:FRBRalias name="ecli" value="{% if ecli %}{{ ecli }}{% else %}testEcli{% endif %}" showAs="ECLI"/>
+            <akn:FRBRalias name="celex" value="testCelex" showAs="CELEX"/>
             <akn:FRBRalias eId="aktenzeichen" name="Aktenzeichen" value="fileNumber test"/>
             <akn:FRBRdate eId="entscheidungsdatum" date="{% if decisionDate %}{{ decisionDate }}{% else %}2020-01-01{% endif %}" name="Entscheidungsdatum"/>
+            <akn:FRBRdate eId="mitteilungsdatum" date="2020-01-01" name="mitteilungsdatum" showAs="Mitteilungsdatum"/>
             <akn:FRBRauthor href="#organisation-gericht-courttype-courtlocation"/>
             <akn:FRBRcountry value="de"/>
         </akn:FRBRWork>
@@ -21,16 +23,21 @@
             <akn:FRBRthis value="{% if documentNumber %}{{documentNumber}}{% else %}testDocNumber{% endif %}.xml"/>
             <akn:FRBRuri value="{% if documentNumber %}{{documentNumber}}{% else %}testDocNumber{% endif %}.xml"/>
             <akn:FRBRdate date="2020-01-01" name="XML Transformation"/>
+            <akn:FRBRdate date="2026-03-18" name="erstveroeffentlichung" showAs="Erstveröffentlichung"/>
             <akn:FRBRauthor href="#documentationoffice-dokumentationsstelle"/>
         </akn:FRBRManifestation>
 </akn:identification>
 <akn:analysis source="#ris">
     <akn:otherReferences source="#ris">
         <akn:implicitReference ris:domainTerm="Norm">
-            <ris:referenzNormen domainTerm="Norm">
+            <ris:referenzNorm domainTerm="Norm">
                 <ris:abkuerzung domainTerm="Abkürzung">normReference test</ris:abkuerzung>
                 <ris:einzelnorm domainTerm="Einzelnorm">
                     <ris:bezeichnung domainTerm="Bezeichnung">singleNorm test</ris:bezeichnung>
+                    <ris:gesetzeskraft domainTerm="Gesetzeskraft">
+                        <ris:gesetzeskraftTyp domainTerm="Typ der Gesetzeskraft">vereinbar mit höherrangigem Recht</ris:gesetzeskraftTyp>
+                        <ris:geltungsbereich domainTerm="Geltungsbereich">Bremen</ris:geltungsbereich>
+                    </ris:gesetzeskraft>
                     <ris:fassungsdatum domainTerm="Fassungsdatum">2021-02-05</ris:fassungsdatum>
                     <ris:jahr domainTerm="Jahr">2020</ris:jahr>
                 </ris:einzelnorm>
@@ -39,16 +46,16 @@
                     <ris:fassungsdatum domainTerm="Fassungsdatum">2022-03-06</ris:fassungsdatum>
                     <ris:jahr domainTerm="Jahr">2022</ris:jahr>
                 </ris:einzelnorm>
-            </ris:referenzNormen>
+            </ris:referenzNorm>
         </akn:implicitReference>
         <akn:implicitReference ris:domainTerm="Norm">
-            <ris:referenzNormen domainTerm="Norm">
+            <ris:referenzNorm domainTerm="Norm">
                 <ris:abkuerzung domainTerm="Abkürzung">normReference without SingleNorms</ris:abkuerzung>
                 <ris:titel domainTerm="Amtliche Langüberschrift">officialLongTitle</ris:titel>
-            </ris:referenzNormen>
+            </ris:referenzNorm>
         </akn:implicitReference>
         <akn:implicitReference ris:domainTerm="Rechtszug">
-            <ris:vorgehend domainTerm="Vorgehende Entscheidung">
+            <ris:vorgehendeEntscheidung domainTerm="Vorgehende Entscheidung">
                 <ris:dokumenttyp domainTerm="Dokumenttyp">previous decision document type</ris:dokumenttyp>
                 <ris:entscheidungsdatum domainTerm="Entscheidungsdatum">2020-01-01</ris:entscheidungsdatum>
                 <ris:dokumentnummer domainTerm="Dokumentnummer">previous decision document number 1</ris:dokumentnummer>
@@ -57,10 +64,10 @@
                     <ris:gerichtstyp domainTerm="Gerichtstyp">previous decision court type</ris:gerichtstyp>
                     <ris:gerichtsort domainTerm="Gerichtsort">previous decision court location</ris:gerichtsort>
                 </ris:gericht>
-            </ris:vorgehend>
+            </ris:vorgehendeEntscheidung>
         </akn:implicitReference>
         <akn:implicitReference ris:domainTerm="Rechtszug">
-            <ris:vorgehend domainTerm="Vorgehende Entscheidung">
+            <ris:vorgehendeEntscheidung domainTerm="Vorgehende Entscheidung">
                 <ris:dokumenttyp domainTerm="Dokumenttyp">previous decision document type</ris:dokumenttyp>
                 <ris:entscheidungsdatum domainTerm="Entscheidungsdatum">2020-01-01</ris:entscheidungsdatum>
                 <ris:dokumentnummer domainTerm="Dokumentnummer">previous decision document number 2</ris:dokumentnummer>
@@ -69,10 +76,10 @@
                     <ris:gerichtstyp domainTerm="Gerichtstyp">previous decision court type</ris:gerichtstyp>
                     <ris:gerichtsort domainTerm="Gerichtsort">previous decision court location</ris:gerichtsort>
                 </ris:gericht>
-            </ris:vorgehend>
+            </ris:vorgehendeEntscheidung>
         </akn:implicitReference>
         <akn:implicitReference ris:domainTerm="Rechtszug">
-            <ris:nachgehend art="anhängig" domainTerm="Nachgehende Entscheidung">
+            <ris:nachgehendeEntscheidung art="anhängig" domainTerm="Nachgehende Entscheidung">
                 <ris:dokumenttyp domainTerm="Dokumenttyp">ensuing decision document type</ris:dokumenttyp>
                 <ris:entscheidungsdatum domainTerm="Entscheidungsdatum">2022-10-01</ris:entscheidungsdatum>
                 <ris:dokumentnummer domainTerm="Dokumentnummer">ensuing decision document number 1</ris:dokumentnummer>
@@ -80,10 +87,10 @@
                 <ris:gericht domainTerm="Gericht">
                     <ris:gerichtstyp domainTerm="Gerichtstyp">ensuing decision court type</ris:gerichtstyp>
                 </ris:gericht>
-            </ris:nachgehend>
+            </ris:nachgehendeEntscheidung>
         </akn:implicitReference>
         <akn:implicitReference ris:domainTerm="Rechtszug">
-            <ris:nachgehend art="anhängig" domainTerm="Nachgehende Entscheidung">
+            <ris:nachgehendeEntscheidung art="anhängig" domainTerm="Nachgehende Entscheidung">
                 <ris:dokumenttyp domainTerm="Dokumenttyp">ensuing decision document type</ris:dokumenttyp>
                 <ris:entscheidungsdatum domainTerm="Entscheidungsdatum">2022-10-01</ris:entscheidungsdatum>
                 <ris:dokumentnummer domainTerm="Dokumentnummer">ensuing decision document number 2</ris:dokumentnummer>
@@ -92,7 +99,152 @@
                     <ris:gerichtstyp domainTerm="Gerichtstyp">ensuing decision court type</ris:gerichtstyp>
                 </ris:gericht>
                 <ris:vermerk domainTerm="Vermerk">ensuing decision note</ris:vermerk>
-            </ris:nachgehend>
+            </ris:nachgehendeEntscheidung>
+        </akn:implicitReference>
+        <akn:implicitReference ris:domainTerm="Referenz Unselbständige Literatur">
+            <ris:referenzUnselbststaendigeLiteratur domainTerm="Referenz Unselbstständige Literatur">
+                <ris:richtung domainTerm="Richtung der Referenzierung">aktiv</ris:richtung>
+                <ris:referenzArt domainTerm="Art der Referenz">uli</ris:referenzArt>
+                <ris:referenzURI domainTerm="URI der Referenz">ris:/literatur/STLU991393280</ris:referenzURI>
+                <ris:dokumentnummer domainTerm="Dokumentnummer">STLU991393280</ris:dokumentnummer>
+                <ris:autor domainTerm="Autor(en)">Schmidt-Liebig</ris:autor>
+                <ris:fundstelle domainTerm="Fundstelle">
+                    <ris:periodikum domainTerm="Periodikum">
+                        <ris:abkuerzung domainTerm="Abkürzung">Information StW</ris:abkuerzung>
+                        <ris:titel domainTerm="Titel">Die Information über Steuer und Wirtschaft</ris:titel>
+                    </ris:periodikum>
+                    <ris:zitatstelle domainTerm="Zitatstelle">1999, 641</ris:zitatstelle>
+                </ris:fundstelle>
+            </ris:referenzUnselbststaendigeLiteratur>
+        </akn:implicitReference>
+        <akn:implicitReference ris:domainTerm="Referenz Unselbstständige Literatur">
+            <ris:referenzUnselbststaendigeLiteratur domainTerm="Referenz Unselbstständige Literatur">
+                <ris:richtung domainTerm="Richtung der Referenzierung">passiv</ris:richtung>
+                <ris:referenzArt domainTerm="Art der Referenz">uli</ris:referenzArt>
+                <ris:referenzURI domainTerm="URI der Referenz">ris:/literatur/SBLU000539216</ris:referenzURI>
+                <ris:dokumentnummer domainTerm="Dokumentnummer">SBLU000539216</ris:dokumentnummer>
+                <ris:autor domainTerm="Autor(en)">Knopp, Lothar</ris:autor>
+                <ris:dokumenttyp domainTerm="Dokumenttyp">Aufsatz</ris:dokumenttyp>
+                <ris:fundstelle domainTerm="Fundstelle">
+                    <ris:periodikum domainTerm="Periodikum">
+                        <ris:abkuerzung domainTerm="Abkürzung">NVwZ</ris:abkuerzung>
+                        <ris:titel domainTerm="Titel">Neue Zeitschrift für Verwaltungsrecht</ris:titel>
+                    </ris:periodikum>
+                    <ris:zitatstelle domainTerm="Zitatstelle">2016, 1139-1141</ris:zitatstelle>
+                </ris:fundstelle>
+            </ris:referenzUnselbststaendigeLiteratur>
+        </akn:implicitReference>
+        <akn:implicitReference ris:domainTerm="Referenz Selbstständige Literatur">
+            <ris:referenzSelbststaendigeLiteratur domainTerm="Referenz Selbstständige Literatur">
+                <ris:richtung domainTerm="Richtung der Referenzierung">aktiv</ris:richtung>
+                <ris:referenzArt domainTerm="Art der Referenz">sli</ris:referenzArt>
+                <ris:referenzURI domainTerm="URI der Referenz">ris:/literatur/KSLS071671727</ris:referenzURI>
+                <ris:dokumentnummer domainTerm="Dokumentnummer">KSLS071671727</ris:dokumentnummer>
+                <ris:autor domainTerm="Autor(en)">Arnauld, Andreas von</ris:autor>
+                <ris:titel domainTerm="Titel">Die Freiheitsrechte und ihre Schranken</ris:titel>
+                <ris:veroeffentlichungsjahr domainTerm="Veröffentlichungsjahr">1999</ris:veroeffentlichungsjahr>
+            </ris:referenzSelbststaendigeLiteratur>
+        </akn:implicitReference>
+        <akn:implicitReference ris:domainTerm="Referenz Selbstständige Literatur">
+            <ris:referenzSelbststaendigeLiteratur domainTerm="Referenz Selbstständige Literatur">
+                <ris:richtung domainTerm="Richtung der Referenzierung">passiv</ris:richtung>
+                <ris:referenzArt domainTerm="Art der Referenz">sli</ris:referenzArt>
+                <ris:referenzURI domainTerm="URI der Referenz">ris:/literatur/KSLS071671728</ris:referenzURI>
+                <ris:dokumentnummer domainTerm="Dokumentnummer">KSLS071671728</ris:dokumentnummer>
+                <ris:autor domainTerm="Autor(en)">Mustermann, Max</ris:autor>
+                <ris:titel domainTerm="Titel">Die Grenzen der Freiheit</ris:titel>
+                <ris:veroeffentlichungsjahr domainTerm="Veröffentlichungsjahr">2001</ris:veroeffentlichungsjahr>
+            </ris:referenzSelbststaendigeLiteratur>
+        </akn:implicitReference>
+        <akn:implicitReference ris:domainTerm="Referenz Rechtsprechung">
+            <ris:referenzRechtsprechung domainTerm="Referenz Rechtsprechung">
+                <ris:richtung domainTerm="Richtung der Referenzierung">aktiv</ris:richtung>
+                <ris:referenzArt domainTerm="Art der Referenz">caselaw</ris:referenzArt>
+                <ris:referenzURI domainTerm="URI der Referenz">ris:/rechtsprechung/BVRE100338409</ris:referenzURI>
+                <ris:artDerZitierung domainTerm="Art der Zitierung">Vergleiche</ris:artDerZitierung>
+                <ris:dokumentnummer domainTerm="Dokumentnummer">BVRE100338409</ris:dokumentnummer>
+                <ris:gericht domainTerm="Gericht">
+                    <ris:gerichtstyp domainTerm="Gerichtstyp">VerfGH</ris:gerichtstyp>
+                    <ris:gerichtsort domainTerm="Gerichtsort">München</ris:gerichtsort>
+                    <ris:gerichtsbarkeit domainTerm="Gerichtsbarkeit">Verfassungsgerichtsbarkeit</ris:gerichtsbarkeit>
+                </ris:gericht>
+                <ris:entscheidungsdatum domainTerm="Entscheidungsdatum">1983-12-02</ris:entscheidungsdatum>
+                <ris:aktenzeichen domainTerm="Aktenzeichen">Vf. 94-VI-81</ris:aktenzeichen>
+            </ris:referenzRechtsprechung>
+        </akn:implicitReference>
+        <akn:implicitReference ris:domainTerm="Referenz Rechtsprechung">
+            <ris:referenzRechtsprechung domainTerm="Referenz Rechtsprechung">
+                <ris:richtung domainTerm="Richtung der Referenzierung">passiv</ris:richtung>
+                <ris:referenzArt domainTerm="Art der Referenz">caselaw</ris:referenzArt>
+                <ris:referenzURI domainTerm="Pfad zur Referenz">/case-law/JURE100074208</ris:referenzURI>
+                <ris:artDerZitierung domainTerm="Art der Zitierung">Vergleiche</ris:artDerZitierung>
+                <ris:dokumentnummer domainTerm="Dokumentnummer">JURE100074208</ris:dokumentnummer>
+                <ris:gericht domainTerm="Gericht">
+                    <ris:gerichtstyp domainTerm="Gerichtstyp">LArbG</ris:gerichtstyp>
+                    <ris:gerichtsort domainTerm="Gerichtsort">Kiel</ris:gerichtsort>
+                    <ris:gerichtsbarkeit domainTerm="Gerichtsbarkeit">Arbeitsgerichtsbarkeit</ris:gerichtsbarkeit>
+                </ris:gericht>
+                <ris:entscheidungsdatum domainTerm="Entscheidungsdatum">2010-10-26</ris:entscheidungsdatum>
+                <ris:aktenzeichen domainTerm="Aktenzeichen">3 Sa 315/10</ris:aktenzeichen>
+            </ris:referenzRechtsprechung>
+        </akn:implicitReference>
+        <akn:implicitReference ris:domainTerm="Referenz Verwaltungsvorschrift">
+            <ris:referenzVerwaltungsvorschrift domainTerm="Referenz Verwaltungsvorschrift">
+                <ris:richtung domainTerm="Richtung der Referenzierung">aktiv</ris:richtung>
+                <ris:referenzArt domainTerm="Art der Referenz">adm</ris:referenzArt>
+                <ris:referenzURI domainTerm="URI der Referenz">ris:/verwaltungsvorschrift/KSNR008561615</ris:referenzURI>
+                <ris:artDerZitierung domainTerm="Art der Zitierung">Vergleiche</ris:artDerZitierung>
+                <ris:dokumentnummer domainTerm="Dokumentnummer">KSNR008561615</ris:dokumentnummer>
+                <ris:jurisAbkuerzung domainTerm="juris-Abkürzung">VR VDR 1997-12-04 5883</ris:jurisAbkuerzung>
+                <ris:fundstelle domainTerm="Fundstelle">
+                    <ris:periodikum domainTerm="Periodikum">
+                        <ris:abkuerzung domainTerm="Abkürzung">MittLVA Oberfr</ris:abkuerzung>
+                        <ris:titel domainTerm="Titel">Mitteilungen der Landesversicherungsanstalt Oberfranken und Mittelfranken</ris:titel>
+                    </ris:periodikum>
+                    <ris:zitatstelle domainTerm="Zitatstelle">1997, 538-539</ris:zitatstelle>
+                </ris:fundstelle>
+            </ris:referenzVerwaltungsvorschrift>
+        </akn:implicitReference>
+        <akn:implicitReference ris:domainTerm="Referenz Verwaltungsvorschrift">
+            <ris:referenzVerwaltungsvorschrift domainTerm="Referenz Verwaltungsvorschrift">
+                <ris:richtung domainTerm="Richtung der Referenzierung">passiv</ris:richtung>
+                <ris:referenzArt domainTerm="Art der Referenz">adm</ris:referenzArt>
+                <ris:referenzURI domainTerm="URI der Referenz">ris:/verwaltungsvorschrift/KSNR006800006</ris:referenzURI>
+                <ris:artDerZitierung domainTerm="Art der Zitierung">Anwendung</ris:artDerZitierung>
+                <ris:dokumentnummer domainTerm="Dokumentnummer">KSNR006800006</ris:dokumentnummer>
+                <ris:jurisAbkuerzung domainTerm="juris-Abkürzung">VR BA 1986-01-16 16/86</ris:jurisAbkuerzung>
+                <ris:fundstelle domainTerm="Fundstelle">
+                    <ris:periodikum domainTerm="Periodikum">
+                        <ris:abkuerzung domainTerm="Abkürzung">Dienstbl BA RdErl</ris:abkuerzung>
+                        <ris:titel domainTerm="Titel">Dienstblatt der Bundesanstalt für Arbeit. Runderlasse</ris:titel>
+                    </ris:periodikum>
+                    <ris:zitatstelle domainTerm="Zitatstelle">1986, Nr 16, 1-8</ris:zitatstelle>
+                </ris:fundstelle>
+            </ris:referenzVerwaltungsvorschrift>
+        </akn:implicitReference>
+        <akn:implicitReference ris:domainTerm="Fundstelle">
+            <ris:fundstelle domainTerm="Fundstelle">
+                <ris:periodikum domainTerm="Periodikum">
+                    <ris:abkuerzung domainTerm="Abkürzung">BGHSt</ris:abkuerzung>
+                    <ris:periodikumTyp domainTerm="Art des Periodikums">amtlich</ris:periodikumTyp>
+                    <ris:titel domainTerm="Titel">Entscheidungssammlung des Bundesgerichtshofes in Strafsachen</ris:titel>
+                    <ris:untertitel domainTerm="Untertitel">Herausgegeben von den Mitgliedern des Bundesgerichtshofes und der Bundesanwaltschaft</ris:untertitel>
+                </ris:periodikum>
+                <ris:zitatstelle domainTerm="Zitatstelle">67, 273-284</ris:zitatstelle>
+                <ris:fundstellenTyp domainTerm="Art der Fundstelle">amtlich</ris:fundstellenTyp>
+            </ris:fundstelle>
+        </akn:implicitReference>
+        <akn:implicitReference ris:domainTerm="Fundstelle">
+            <ris:fundstelle domainTerm="Fundstelle">
+                <ris:periodikum domainTerm="Periodikum">
+                    <ris:abkuerzung domainTerm="Abkürzung">DStR</ris:abkuerzung>
+                    <ris:periodikumTyp domainTerm="Art des Periodikums">nichtamtlich</ris:periodikumTyp>
+                    <ris:titel domainTerm="Titel">Deutsches Steuerrecht</ris:titel>
+                    <ris:untertitel domainTerm="Untertitel">Wochenschrift für Steuerrecht, Wirtschaftsrecht und Betriebswirtschaft</ris:untertitel>
+                </ris:periodikum>
+                <ris:zitatstelle domainTerm="Zitatstelle">2023, 1430-1435</ris:zitatstelle>
+                <ris:fundstellenTyp domainTerm="Art der Fundstelle">nichtamtlich</ris:fundstellenTyp>
+            </ris:fundstelle>
         </akn:implicitReference>
     </akn:otherReferences>
 <akn:otherAnalysis source="#ris">
@@ -127,6 +279,12 @@
         <ris:entscheidungsnamen domainTerm="Entscheidungsnamen">
             <ris:entscheidungsname domainTerm="Entscheidungsname">Test decision name</ris:entscheidungsname>
         </ris:entscheidungsnamen>
+        <ris:erledigungsvermerk domainTerm="Erledigungsvermerk">
+            <akn:p>Erledigungsvermerk</akn:p>
+        </ris:erledigungsvermerk>
+        <ris:rechtsfrage domainTerm="Rechtsfrage">
+            <akn:p alternativeTo="textWrapper">Rechtsfrage</akn:p>
+        </ris:rechtsfrage>
     </ris:dokumentarischeKurztexte>
 </akn:otherAnalysis>
 </akn:analysis>
@@ -138,28 +296,78 @@
 </akn:references>
 <akn:proprietary source="#ris">
     <ris:meta>
+        <ris:abweichendeDaten domainTerm="Abweichende Daten">
+            <ris:abweichendesDatum domainTerm="Abweichendes Datum">2020-03-03</ris:abweichendesDatum>
+            <ris:abweichendesDatum domainTerm="Abweichendes Datum">2022-02-04</ris:abweichendesDatum>
+        </ris:abweichendeDaten>
+        <ris:abweichendeEclis domainTerm="Abweichende ECLIs">
+            <ris:abweichenderEcli domainTerm="Abweichender ECLI">ECLI 1</ris:abweichenderEcli>
+            <ris:abweichenderEcli domainTerm="Abweichender ECLI">ECLI 2</ris:abweichenderEcli>
+        </ris:abweichendeEclis>
+        <ris:berufsbilder domainTerm="Berufsbilder">
+            <ris:berufsbild domainTerm="Berufsbild">jobProfile test 1</ris:berufsbild>
+            <ris:berufsbild domainTerm="Berufsbild">jobProfile test 2</ris:berufsbild>
+        </ris:berufsbilder>
+        <ris:kuendigungsarten domainTerm="Kündigungsarten">
+            <ris:kuendigungsart domainTerm="Kündigungsart">dismissalType test</ris:kuendigungsart>
+        </ris:kuendigungsarten>
+        <ris:herkunftslaender domainTerm="Herkunftsländer">
+            <ris:herkunftsland domainTerm="Herkunftsland">Frankreich</ris:herkunftsland>
+            <ris:herkunftsland domainTerm="Herkunftsland">Deutschland</ris:herkunftsland>
+        </ris:herkunftslaender>
+        <ris:fehlerhafteGerichte domainTerm="Fehlerhafte Gerichte">
+            <ris:fehlerhaftesGericht domainTerm="Fehlerhaftes Gericht">deviating court 1</ris:fehlerhaftesGericht>
+            <ris:fehlerhaftesGericht domainTerm="Fehlerhaftes Gericht">deviating court 2</ris:fehlerhaftesGericht>
+        </ris:fehlerhafteGerichte>
+        <ris:datenDerMuendlichenVerhandlung domainTerm="Daten der mündlichen Verhandlung">
+            <ris:datumDerMuendlichenVerhandlung domainTerm="Datum der mündlichen Verhandlung">2021-02-03</ris:datumDerMuendlichenVerhandlung>
+        </ris:datenDerMuendlichenVerhandlung>
+        <ris:definitionen domainTerm="Definitionen">
+            <ris:definition domainTerm="Definition">
+                <ris:definierterBegriff domainTerm="Definierter Begriff">indirekte Steuern</ris:definierterBegriff>
+            </ris:definition>
+            <ris:definition domainTerm="Definition">
+                <ris:definierterBegriff domainTerm="Definierter Begriff">Sachgesamtheit</ris:definierterBegriff>
+            </ris:definition>
+        </ris:definitionen>
         <ris:decisionNames>
             <ris:decisionName>Test decision name</ris:decisionName>
         </ris:decisionNames>
         <ris:aktenzeichenListe domainTerm="Gericht">
             <ris:aktenzeichen domainTerm="Aktenzeichen" refersTo="#aktenzeichen">Test file number 1</ris:aktenzeichen>
             <ris:aktenzeichen domainTerm="Aktenzeichen" refersTo="#aktenzeichen">Test file number 2</ris:aktenzeichen>
+            <ris:aktenzeichen domainTerm="Abweichendes Aktenzeichen">1 BvR 839, 899/96</ris:aktenzeichen>
         </ris:aktenzeichenListe>
         <ris:dokumenttyp domainTerm="Dokumenttyp">{% if documentType %}{{ documentType }}{% else %}Urteil{% endif %}</ris:dokumenttyp>
         <ris:gericht domainTerm="Gericht" refersTo="#organisation-gericht-courttype-courtlocation" showAs="{% if courtLabel %}{{ courtLabel }}{% else %}Test court label{% endif %}">
             <ris:gerichtstyp domainTerm="Gerichtstyp">{% if courtType %}{{ courtType }}{% else %}Test court type{% endif %}</ris:gerichtstyp>
             <ris:gerichtsort domainTerm="Gerichtsort">{% if location %}{{ location }}{% else %}Test court location{% endif%}</ris:gerichtsort>
+            <ris:gerichtsbarkeit domainTerm="Gerichtsbarkeit">Test jurisdiction type</ris:gerichtsbarkeit>
             <ris:spruchkoerper domainTerm="Spruchkörper" refersTo="#spruchkoerper">Test judicial body</ris:spruchkoerper>
         </ris:gericht>
         <ris:legalForces>
             <ris:legalForce>Test legal force</ris:legalForce>
         </ris:legalForces>
-        <ris:legalEffect>JA</ris:legalEffect>
+        <ris:rechtskraft domainTerm="Rechtskraft">Ja</ris:rechtskraft>
+        <ris:erledigung domainTerm="Erledigung">Ja</ris:erledigung>
+        <ris:gesetzgebungsauftrag domainTerm="Gesetzgebungsauftrag">Ja</ris:gesetzgebungsauftrag>
+        <ris:langtextdatum domainTerm="Langtextdatum">2016-06-15</ris:langtextdatum>
+        <ris:rechtsmittelfuehrer domainTerm="Rechtsmittelführer">Rechtsmittelführer</ris:rechtsmittelfuehrer>
+        <ris:rechtsmittelzulassung domainTerm="Rechtsmittelzulassung">Rechtsmittelzulassung</ris:rechtsmittelzulassung>
+        <ris:revision domainTerm="Revision">Ja</ris:revision>
+        <akn:FRBRdate date="2026-03-20" name="letzteVeroeffentlichung" showAs="Letzte Veröffentlichung"/>
         <ris:fieldOfLaws>
             <ris:fieldOfLaw>Test field of law</ris:fieldOfLaw>
         </ris:fieldOfLaws>
+        <ris:sachgebiete domainTerm="Sachgebiete">
+            <ris:sachgebiet domainTerm="Sachgebiet" sachgebiet-id="ST-01-05-03-04">fieldOfLaw test</ris:sachgebiet>
+        </ris:sachgebiete>
+        <ris:streitjahre domainTerm="Streitjahre">
+            <ris:streitjahr domainTerm="Streitjahr">2024</ris:streitjahr>
+        </ris:streitjahre>
         <ris:abweichendeDokumentnummern domainTerm="Abweichende Dokumentnummern">
-            <ris:abweichendeDokumentnummer domainTerm="Abweichende Dokumentnummer">Test deviatingDocumentNumber</ris:abweichendeDokumentnummer>
+            <ris:abweichendeDokumentnummer domainTerm="Abweichende Dokumentnummer">ABC</ris:abweichendeDokumentnummer>
+            <ris:abweichendeDokumentnummer domainTerm="Abweichende Dokumentnummer">DEF</ris:abweichendeDokumentnummer>
         </ris:abweichendeDokumentnummern>
         <ris:previousDecisions>
             <ris:previousDecision date="2009-06-25">
@@ -177,6 +385,12 @@
         <ris:regionen domainTerm="Regionen">
             <ris:region domainTerm="Region">NW</ris:region>
         </ris:regionen>
+        <ris:tarifvertraege domainTerm="Tarifverträge">
+            <ris:tarifvertrag domainTerm="Tarifvertrag">Stehende Bühnen</ris:tarifvertrag>
+        </ris:tarifvertraege>
+        <ris:kuendigungsgruende domainTerm="Kündigungsgründe">
+            <ris:kuendigungsgrund domainTerm="Kündigungsgrund">Straftat</ris:kuendigungsgrund>
+        </ris:kuendigungsgruende>
         <ris:dokumentationsstelle domainTerm="Dokumentationsstelle" refersTo="#documentationoffice-dokumentationsstelle">documentationOffice</ris:dokumentationsstelle>
         <ris:personen domainTerm="Personen">
             <ris:person
@@ -193,7 +407,17 @@
             >
                 <ris:name domainTerm="Name">Maxima Mustermann</ris:name>
             </ris:person>
+            <ris:person domainTerm="Person" eId="person-meier" showAs="Meier">
+                <ris:name domainTerm="Name">Meier</ris:name>
+            </ris:person>
+            <ris:person domainTerm="Person" eId="person-mueller" showAs="Müller">
+                <ris:name domainTerm="Name">Müller</ris:name>
+            </ris:person>
         </ris:personen>
+        <ris:mitwirkendeRichter domainTerm="Mitwirkende Richter">
+            <ris:mitwirkenderRichter domainTerm="Mitwirkende Richterin oder Richter" refersTo="#person-meier">Meier</ris:mitwirkenderRichter>
+            <ris:mitwirkenderRichter domainTerm="Mitwirkende Richterin oder Richter" refersTo="#person-mueller">Müller</ris:mitwirkenderRichter>
+        </ris:mitwirkendeRichter>
     </ris:meta>
 </akn:proprietary>
 <akn:classification source="#ris">

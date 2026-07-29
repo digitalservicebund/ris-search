@@ -150,6 +150,12 @@
             </akn:motivation>
             {% endif %}
 
+            {% if not hideRechtsfrageGesamt %}
+            <akn:motivation ris:domainTerm="Rechtsfrage (gesamt)" xsi:type="ris:rechtsfrageGesamt">
+                <akn:p alternativeTo="textWrapper">Rechtsfrage (gesamt)</akn:p>
+            </akn:motivation>
+            {% endif %}
+
 
         </akn:judgmentBody>
     </akn:judgment>
