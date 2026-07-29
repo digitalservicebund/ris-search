@@ -74,7 +74,7 @@ public class NormsTestData {
                 "",
                 "Anlage zum Hauptdokument",
                 List.of(
-                    AknP.withText("Attachment content")
+                    new AknP("Attachment content")
                         .addChild(new AuthorialNote("Authorial note in attachment contents"))));
 
     result.put(version1ManifestationEli, version1Builder.buildNormXml());

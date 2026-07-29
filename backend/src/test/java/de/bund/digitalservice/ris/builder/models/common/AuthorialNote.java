@@ -21,6 +21,6 @@ public class AuthorialNote extends BaseElement {
   private AknP paragraph;
 
   public AuthorialNote(String note) {
-    this.paragraph = AknP.withText(note);
+    this.paragraph = new AknP(note);
   }
 }

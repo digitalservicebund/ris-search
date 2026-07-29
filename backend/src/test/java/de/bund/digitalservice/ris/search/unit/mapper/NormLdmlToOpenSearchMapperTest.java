@@ -347,7 +347,7 @@ class NormLdmlToOpenSearchMapperTest {
                 "(zu § 1)",
                 "",
                 List.of(
-                    AknP.withText(
+                    new AknP(
                         "This text appears in the attachment. This text also appears, inside a paragraph.")));
 
     Optional<Norm> maybeNorm =
@@ -421,7 +421,7 @@ class NormLdmlToOpenSearchMapperTest {
                 "Anlage T1",
                 "(zu § 1)",
                 "",
-                List.of(AknP.withText("Attachemtn Content")));
+                List.of(new AknP("Attachemtn Content")));
     String xmlContent = builder.buildNormXml();
     Optional<Norm> maybeNorm =
         NormLdmlToOpenSearchMapper.parseNorm("", xmlContent, builder.buildAttachmentXmls(), false);

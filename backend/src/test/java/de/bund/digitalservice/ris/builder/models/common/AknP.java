@@ -11,31 +11,32 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlSeeAlso;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 /**
  * Represents an {@code akn:p} paragraph element, a generic text container used throughout the norm.
  */
-@AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @XmlSeeAlso({DocStage.class, DocTitle.class, ShortTitle.class, AuthorialNote.class})
 @XmlRootElement(name = "p", namespace = NormTestDataBuilder.AKN_NS)
-public class AknP implements BodyElement {
+public class AknP extends BaseElement implements BodyElement {
 
-  @Builder.Default
-  @XmlAttribute(name = "GUID")
-  private String guid = UUID.randomUUID().toString();
+  @XmlAttribute private String eId = "text-n1";
 
-  @Builder.Default @XmlAttribute private String eId = "text-n1";
+  @XmlAnyElement private List<Object> children = new ArrayList<>();
 
-  @Builder.Default @XmlAnyElement private List<Object> children = new ArrayList<>();
+  public AknP(String text) {
+    this.children = new ArrayList<>(List.of(text));
+  }
 
-  public static AknP withText(String text) {
-    return AknP.builder().children(new ArrayList<>(List.of(text))).build();
+  public AknP(String parentEId, String text) {
+    this(text);
+    this.eId = parentEId + "_" + eId;
+  }
+
+  public AknP(String parentEId, List<Object> children) {
+    this.eId = parentEId + "_" + eId;
+    this.children = new ArrayList<>(children);
   }
 
   /**

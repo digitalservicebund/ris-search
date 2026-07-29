@@ -33,7 +33,7 @@ public class Conclusions extends BaseElement {
             Formula.builder()
                 .eId("schluss-n1_formel-n1")
                 .refersTo("schlussformel")
-                .paragraph(AknP.withText(text))
+                .paragraph(new AknP(text))
                 .build())
         .build();
   }
