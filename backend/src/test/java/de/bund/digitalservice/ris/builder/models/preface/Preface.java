@@ -39,15 +39,8 @@ public class Preface extends BaseElement {
   }
 
   private static Block buildLegislationDateBlock(String date) {
-    return Block.builder()
-        .eId("einleitung-n1_block-n1")
-        .children(
-            List.of(
-                AknDate.builder()
-                    .eId("einleitung-n1_block-n1_datum-n1")
-                    .refersTo("ausfertigung-datum")
-                    .date(date)
-                    .build()))
-        .build();
+    return new Block(
+        "einleitung-n1_block-n1",
+        List.of(new AknDate("einleitung-n1_block-n1_datum-n1", "ausfertigung-datum", date)));
   }
 }

@@ -33,14 +33,12 @@ public class LongTitle extends BaseElement {
   @Builder.Default
   @XmlElement(name = "p", namespace = NormTestDataBuilder.AKN_NS)
   private AknP paragraph =
-      AknP.builder()
-          .eId("einleitung-n1_doktitel-n1_text-n1")
-          .children(
-              List.of(
-                  DocStage.builder().build(),
-                  DocTitle.builder().build(),
-                  ShortTitle.builder().build()))
-          .build();
+      new AknP(
+          "einleitung-n1_doktitel-n1",
+          List.of(
+              DocStage.builder().build(),
+              DocTitle.builder().build(),
+              ShortTitle.builder().build()));
 
   /**
    * Sets the official title and rebuilds the paragraph.
@@ -64,7 +62,7 @@ public class LongTitle extends BaseElement {
    * @param authorialNote optional authorial note text, or {@code null} for none
    */
   public void addAuthorialNote(String authorialNote) {
-    this.officialTitle.getChildren().add(AuthorialNote.withText(authorialNote));
+    this.officialTitle.getChildren().add(new AuthorialNote(authorialNote));
     setTitlesAndAbbreviation();
   }
 
@@ -90,7 +88,6 @@ public class LongTitle extends BaseElement {
       childElements.add(this.shortTitle);
     }
 
-    this.paragraph =
-        AknP.builder().eId("einleitung-n1_doktitel-n1_text-n1").children(childElements).build();
+    this.paragraph = new AknP("einleitung-n1_doktitel-n1", childElements);
   }
 }

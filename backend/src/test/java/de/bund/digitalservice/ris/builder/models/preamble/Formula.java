@@ -5,7 +5,6 @@ import de.bund.digitalservice.ris.builder.models.common.AknP;
 import de.bund.digitalservice.ris.builder.models.common.BaseElement;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -32,9 +31,6 @@ public class Formula extends BaseElement {
    * @return the built {@link Formula}
    */
   public static Formula withText(String text) {
-    return Formula.builder()
-        .paragraph(
-            AknP.builder().eId("präambel-n1_formel-n1_text-n1").children(List.of(text)).build())
-        .build();
+    return Formula.builder().paragraph(new AknP("präambel-n1_formel-n1", text)).build();
   }
 }

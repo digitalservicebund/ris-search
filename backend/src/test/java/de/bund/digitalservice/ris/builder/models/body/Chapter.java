@@ -9,23 +9,14 @@ import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 /** Represents an {@code akn:chapter} element, grouping sections within the norm's body. */
-@AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @XmlRootElement(namespace = NormTestDataBuilder.AKN_NS)
 public class Chapter extends BaseElement implements BodyElement {
 
-  @Builder.Default @XmlAttribute private String eId = "kapitel-n1";
-
-  public void setEId(String eId) {
-    this.eId = eId;
-  }
+  @XmlAttribute private String eId = "kapitel-n1";
 
   @XmlElement(namespace = NormTestDataBuilder.AKN_NS)
   private AknNum num;
@@ -33,45 +24,40 @@ public class Chapter extends BaseElement implements BodyElement {
   @XmlElement(namespace = NormTestDataBuilder.AKN_NS)
   private Heading heading;
 
-  @Builder.Default @XmlAnyElement private List<BodyElement> children = new ArrayList<>();
+  @XmlAnyElement private List<BodyElement> children = new ArrayList<>();
 
   /**
-   * Sets the chapter's number.
+   * Creates a chapter with the given heading text and number.
    *
-   * @param num the chapter number, e.g. "Kapitel 1"
-   * @return this chapter for chaining
+   * @param heading the chapter heading text
+   * @param num the chapter number, e.g. "1."
    */
-  public Chapter addNum(String num) {
-    this.num = AknNum.builder().eId(eId + "_bezeichnung-n1").value(num).build();
-
-    return this;
+  public Chapter(String heading, String num) {
+    this.num = new AknNum(eId, num);
+    this.heading = new Heading(eId + "_überschrift-n1", List.of(heading));
   }
 
   /**
-   * Sets the chapter's heading.
+   * Creates a chapter with the given heading, number, and explicit eId.
    *
-   * @param text the heading text
-   * @return this chapter for chaining
+   * @param heading the chapter heading text
+   * @param num the chapter number, e.g. "1."
+   * @param eId the explicit eId to assign to this chapter
    */
-  public Chapter addHeading(String text) {
-    this.heading = Heading.builder().eId(eId + "_überschrift-n1").headline(List.of(text)).build();
-
-    return this;
+  public Chapter(String heading, String num, String eId) {
+    this(heading, num);
+    this.eId = eId;
   }
 
   /**
-   * Creates a section, lets the caller populate it, and adds it to this chapter.
+   * Adds the section to this chapter.
    *
-   * @param heading the section heading text
-   * @param num the section number, e.g. "Abschnitt 1"
-   * @param sectionConsumer callback used to populate the created {@link Section}
+   * @param section the section to add to the chapter
    * @return the created section
    */
-  public Section addSection(String heading, String num, Consumer<Section> sectionConsumer) {
-    Section section = new Section().addHeading(heading).addNum(num);
-    sectionConsumer.accept(section);
+  public Chapter addSection(Section section) {
     this.children.add(section);
-    return section;
+    return this;
   }
 
   /**

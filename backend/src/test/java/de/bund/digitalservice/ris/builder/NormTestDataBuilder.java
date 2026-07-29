@@ -353,33 +353,23 @@ public class NormTestDataBuilder {
   }
 
   /**
-   * Adds a chapter to the norm's body and lets the caller populate it.
+   * Adds a chapter to the norm's body.
    *
-   * @param heading the chapter heading text
-   * @param num the chapter number, e.g. "Kapitel 1"
-   * @param chapterConsumer callback used to populate the created {@link Chapter}
+   * @param chapter the chapter to append to the body
    * @return this builder for chaining
    */
-  public NormTestDataBuilder chapter(
-      String heading, String num, Consumer<Chapter> chapterConsumer) {
-    Chapter chapter = new Chapter().addHeading(heading).addNum(num);
-    chapterConsumer.accept(chapter);
+  public NormTestDataBuilder chapter(Chapter chapter) {
     this.document.getAct().getBody().addChild(chapter);
     return this;
   }
 
   /**
-   * Adds a section to the norm's body and lets the caller populate it.
+   * Adds a section to the norm's body.
    *
-   * @param heading the section heading text
-   * @param num the section number, e.g. "Abschnitt 1"
-   * @param sectionConsumer callback used to populate the created {@link Section}
+   * @param section the section to append to the body
    * @return this builder for chaining
    */
-  public NormTestDataBuilder section(
-      String heading, String num, Consumer<Section> sectionConsumer) {
-    Section section = new Section().addHeading(heading).addNum(num);
-    sectionConsumer.accept(section);
+  public NormTestDataBuilder section(Section section) {
     this.document.getAct().getBody().addChild(section);
     return this;
   }
@@ -424,7 +414,7 @@ public class NormTestDataBuilder {
             .getTemporalData()
             .addTemporalGroup(inForceEventEId, outOfForceEventEId);
 
-    return Article.builder().eId(eId).period("#" + temporalGroupEId).build().addNum(num);
+    return new Article(eId, temporalGroupEId, num);
   }
 
   /**
@@ -463,21 +453,18 @@ public class NormTestDataBuilder {
             .eId("einleitung-n1_block-n1_doctitel-n1")
             .children(
                 List.of(
-                    Inline.builder()
-                        .eId("einleitung-n1_block-n1_doctitel-n1_inline-n1")
-                        .refersTo("anlageregelungstext-num")
-                        .content(num)
-                        .build(),
-                    Inline.builder()
-                        .eId("einleitung-n1_block-n1_doctitel-n1_inline-n2")
-                        .refersTo("anlageregelungstext-bezug")
-                        .content(bezug)
-                        .build(),
-                    Inline.builder()
-                        .eId("einleitung-n1_block-n1_doctitel-n1_inline-n3")
-                        .refersTo("anlageregelungstext-heading")
-                        .content(heading)
-                        .build()))
+                    new Inline(
+                        "einleitung-n1_block-n1_doctitel-n1_inline-n1",
+                        "anlageregelungstext-num",
+                        num),
+                    new Inline(
+                        "einleitung-n1_block-n1_doctitel-n1_inline-n2",
+                        "anlageregelungstext-bezug",
+                        bezug),
+                    new Inline(
+                        "einleitung-n1_block-n1_doctitel-n1_inline-n3",
+                        "anlageregelungstext-heading",
+                        heading)))
             .build();
 
     AkomaNtoso attachment = new AkomaNtoso();
@@ -493,18 +480,13 @@ public class NormTestDataBuilder {
             .preface(
                 Preface.builder()
                     .longTitle(null)
-                    .block(
-                        Block.builder()
-                            .eId("einleitung-n1_block-n1")
-                            .children(List.of(attachmentTitle))
-                            .build())
+                    .block(new Block("einleitung-n1_block-n1", List.of(attachmentTitle)))
                     .build())
-            .body(Body.builder().children(mainBodyChildren).build())
+            .body(new Body(mainBodyChildren))
             .build());
 
     Attachments attachments =
-        Optional.ofNullable(this.document.getAct().getAttachments())
-            .orElse(Attachments.builder().build());
+        Optional.ofNullable(this.document.getAct().getAttachments()).orElse(new Attachments());
 
     attachments.addAttachment(
         manifestationEli, String.valueOf(attachments.getAttachmentCount() + 1));

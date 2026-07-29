@@ -10,22 +10,18 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlTransient;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 /** Represents an {@code akn:article} element, the main structural unit of the norm's body. */
-@AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @XmlRootElement(namespace = NormTestDataBuilder.AKN_NS)
 public class Article extends BaseElement implements BodyElement {
 
-  @Builder.Default @XmlTransient private int paragraphCounter = 0;
+  @XmlTransient private int paragraphCounter = 0;
 
   @XmlAttribute private String eId;
 
-  @Builder.Default @XmlAttribute private String period = "#meta-n1_geltzeiten-n1_geltungszeitgr-n1";
+  @XmlAttribute private String period = "#meta-n1_geltzeiten-n1_geltungszeitgr-n1";
 
   @XmlElement(namespace = NormTestDataBuilder.AKN_NS)
   private AknNum num;
@@ -33,20 +29,20 @@ public class Article extends BaseElement implements BodyElement {
   @XmlElement(namespace = NormTestDataBuilder.AKN_NS)
   private Heading heading;
 
-  @Builder.Default
   @XmlElement(name = "paragraph", namespace = NormTestDataBuilder.AKN_NS)
   private List<AknParagraph> paragraphs = new ArrayList<>();
 
   /**
-   * Sets the article's number.
+   * Creates an article with the given eId, temporal group reference, and number.
    *
+   * @param eId the article's eId
+   * @param temporalGroupEId the eId of the temporal group this article belongs to
    * @param num the article number, e.g. "§ 1"
-   * @return this article for chaining
    */
-  public Article addNum(String num) {
-    this.num = AknNum.builder().eId(eId + "_bezeichnung-n1").value(num).build();
-
-    return this;
+  public Article(String eId, String temporalGroupEId, String num) {
+    this.eId = eId;
+    this.period = "#" + temporalGroupEId;
+    this.num = new AknNum(eId, num);
   }
 
   /**
@@ -59,10 +55,10 @@ public class Article extends BaseElement implements BodyElement {
   public Article addHeading(String text, String authorialNote) {
     List<Object> headingElements = new ArrayList<>(List.of(text));
     if (authorialNote != null) {
-      headingElements.add(AuthorialNote.withText(authorialNote));
+      headingElements.add(new AuthorialNote(authorialNote));
     }
 
-    this.heading = Heading.builder().eId(eId + "_überschrift-n1").headline(headingElements).build();
+    this.heading = new Heading(eId + "_überschrift-n1", headingElements);
     return this;
   }
 
@@ -75,7 +71,7 @@ public class Article extends BaseElement implements BodyElement {
    */
   public Article addParagraph(String text, String num) {
     paragraphCounter++;
-    paragraphs.add(AknParagraph.withText(text, num, eId, String.valueOf(paragraphCounter)));
+    paragraphs.add(new AknParagraph(text, num, eId, String.valueOf(paragraphCounter)));
 
     return this;
   }
