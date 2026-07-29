@@ -34,11 +34,7 @@ public class LongTitle extends BaseElement {
   @XmlElement(name = "p", namespace = NormTestDataBuilder.AKN_NS)
   private AknP paragraph =
       new AknP(
-          "einleitung-n1_doktitel-n1",
-          List.of(
-              DocStage.builder().build(),
-              DocTitle.builder().build(),
-              ShortTitle.builder().build()));
+          "einleitung-n1_doktitel-n1", List.of(new DocStage(), new DocTitle(), new ShortTitle()));
 
   /**
    * Sets the official title and rebuilds the paragraph.
@@ -49,8 +45,7 @@ public class LongTitle extends BaseElement {
     if (officialTitle == null) {
       this.officialTitle = null;
     } else {
-      this.officialTitle =
-          DocTitle.builder().children(new ArrayList<>(List.of(officialTitle))).build();
+      this.officialTitle = new DocTitle(List.of(officialTitle));
     }
 
     setTitlesAndAbbreviation();
@@ -78,7 +73,7 @@ public class LongTitle extends BaseElement {
 
   private void setTitlesAndAbbreviation() {
     List<Object> childElements = new ArrayList<>();
-    childElements.add(DocStage.builder().build());
+    childElements.add(new DocStage());
 
     if (this.officialTitle != null) {
       childElements.add(this.officialTitle);

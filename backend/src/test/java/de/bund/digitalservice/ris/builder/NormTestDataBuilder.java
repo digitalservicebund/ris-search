@@ -76,7 +76,7 @@ public class NormTestDataBuilder {
 
   private NormTestDataBuilder(boolean enforceValidation) {
     this.enforceValidation = enforceValidation;
-    this.document.setAct(Act.builder().meta(Meta.builder().build()).build());
+    this.document.setAct(Act.builder().meta(new Meta()).build());
   }
 
   public static NormTestDataBuilder builder() {
@@ -332,8 +332,7 @@ public class NormTestDataBuilder {
    */
   public NormTestDataBuilder formula(String text) {
     Preamble preamble =
-        Optional.ofNullable(this.document.getAct().getPreamble())
-            .orElse(Preamble.builder().build());
+        Optional.ofNullable(this.document.getAct().getPreamble()).orElse(new Preamble());
     preamble.addFormula(text);
     this.document.getAct().setPreamble(preamble);
 
@@ -348,8 +347,7 @@ public class NormTestDataBuilder {
    */
   public NormTestDataBuilder toc(Consumer<Toc> tocConsumer) {
     Preamble preamble =
-        Optional.ofNullable(this.document.getAct().getPreamble())
-            .orElse(Preamble.builder().build());
+        Optional.ofNullable(this.document.getAct().getPreamble()).orElse(new Preamble());
     Toc toc = preamble.addToc();
     tocConsumer.accept(toc);
 
@@ -455,39 +453,25 @@ public class NormTestDataBuilder {
       String heading,
       List<BodyElement> mainBodyChildren) {
     DocTitle attachmentTitle =
-        DocTitle.builder()
-            .eId("einleitung-n1_block-n1_doctitel-n1")
-            .children(
-                List.of(
-                    new Inline(
-                        "einleitung-n1_block-n1_doctitel-n1_inline-n1",
-                        "anlageregelungstext-num",
-                        num),
-                    new Inline(
-                        "einleitung-n1_block-n1_doctitel-n1_inline-n2",
-                        "anlageregelungstext-bezug",
-                        bezug),
-                    new Inline(
-                        "einleitung-n1_block-n1_doctitel-n1_inline-n3",
-                        "anlageregelungstext-heading",
-                        heading)))
-            .build();
+        new DocTitle(
+            "einleitung-n1_block-n1_doctitel-n1",
+            List.of(
+                new Inline(
+                    "einleitung-n1_block-n1_doctitel-n1_inline-n1", "anlageregelungstext-num", num),
+                new Inline(
+                    "einleitung-n1_block-n1_doctitel-n1_inline-n2",
+                    "anlageregelungstext-bezug",
+                    bezug),
+                new Inline(
+                    "einleitung-n1_block-n1_doctitel-n1_inline-n3",
+                    "anlageregelungstext-heading",
+                    heading)));
 
     AkomaNtoso attachment = new AkomaNtoso();
     attachment.setDoc(
         Doc.builder()
-            .meta(
-                Meta.builder()
-                    .lifecycle(null)
-                    .temporalData(null)
-                    .proprietary(null)
-                    .identification(new Identification(manifestationEli))
-                    .build())
-            .preface(
-                Preface.builder()
-                    .longTitle(null)
-                    .block(new Block("einleitung-n1_block-n1", List.of(attachmentTitle)))
-                    .build())
+            .meta(new Meta(new Identification(manifestationEli)))
+            .preface(new Preface(new Block("einleitung-n1_block-n1", List.of(attachmentTitle))))
             .body(new Body(mainBodyChildren))
             .build());
 
@@ -509,7 +493,7 @@ public class NormTestDataBuilder {
    * @return this builder for chaining
    */
   public NormTestDataBuilder conclusion(String text) {
-    this.document.getAct().setConclusions(Conclusions.withText(text));
+    this.document.getAct().setConclusions(new Conclusions(text));
     return this;
   }
 

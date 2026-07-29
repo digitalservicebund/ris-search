@@ -27,11 +27,11 @@ public class Act {
 
   @Builder.Default
   @XmlElement(namespace = NormTestDataBuilder.AKN_NS)
-  private Meta meta = Meta.builder().build();
+  private Meta meta = new Meta();
 
   @Builder.Default
   @XmlElement(namespace = NormTestDataBuilder.AKN_NS)
-  private Preface preface = Preface.builder().build();
+  private Preface preface = new Preface();
 
   @XmlElement(namespace = NormTestDataBuilder.AKN_NS)
   private Preamble preamble;

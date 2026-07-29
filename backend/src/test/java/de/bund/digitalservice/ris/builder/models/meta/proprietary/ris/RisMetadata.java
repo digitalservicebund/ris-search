@@ -3,24 +3,19 @@ package de.bund.digitalservice.ris.builder.models.meta.proprietary.ris;
 import static de.bund.digitalservice.ris.builder.NormTestDataBuilder.RIS_NS;
 
 import jakarta.xml.bind.annotation.XmlElement;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
  * Represents the {@code ris:legalDocML.de_metadaten} element, holding RIS-specific norm metadata.
  */
-@AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class RisMetadata {
 
   private static class EmptyElement {}
 
-  @Builder.Default
   @XmlElement(name = "abkuerzung", namespace = RIS_NS)
-  private RisAbkuerzung internalAbbreviation = RisAbkuerzung.builder().build();
+  private RisAbkuerzung internalAbbreviation = new RisAbkuerzung();
 
   /**
    * Sets the RIS-internal abbreviation, or removes it if {@code null}.
@@ -31,7 +26,7 @@ public class RisMetadata {
     if (abbreviation == null) {
       this.internalAbbreviation = null;
     } else {
-      this.internalAbbreviation = RisAbkuerzung.builder().abbreviation(abbreviation).build();
+      this.internalAbbreviation = new RisAbkuerzung(abbreviation);
     }
   }
 
@@ -44,7 +39,7 @@ public class RisMetadata {
    * @param date the in-force date value
    */
   public void setInForce(String date) {
-    this.inForceDate = RisDate.builder().date(date).build();
+    this.inForceDate = new RisDate(date);
   }
 
   @XmlElement(name = "ausserkraft", namespace = RIS_NS)
@@ -56,7 +51,7 @@ public class RisMetadata {
    * @param date the out-of-force date value
    */
   public void setOutOfForce(String date) {
-    this.outOfForceDate = RisDate.builder().date(date).build();
+    this.outOfForceDate = new RisDate(date);
   }
 
   @Setter

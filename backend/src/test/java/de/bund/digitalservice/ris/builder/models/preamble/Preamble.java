@@ -4,17 +4,13 @@ import de.bund.digitalservice.ris.builder.NormTestDataBuilder;
 import de.bund.digitalservice.ris.builder.models.common.BaseElement;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 /** Represents the {@code akn:preamble} element, holding the table of contents and formula. */
-@AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class Preamble extends BaseElement {
 
-  @Builder.Default @XmlAttribute private String eId = "präambel-n1";
+  @XmlAttribute private String eId = "präambel-n1";
 
   // This holds the ToC
   @XmlElement(namespace = NormTestDataBuilder.AKN_NS)
@@ -24,7 +20,7 @@ public class Preamble extends BaseElement {
   private Formula formula;
 
   public void addFormula(String text) {
-    this.formula = Formula.withText(text);
+    this.formula = new Formula(text);
   }
 
   /**
@@ -33,8 +29,8 @@ public class Preamble extends BaseElement {
    * @return the created {@link Toc}
    */
   public Toc addToc() {
-    Toc toc = Toc.builder().build();
-    this.blockContainer = BlockContainer.builder().toc(toc).build();
+    Toc toc = new Toc();
+    this.blockContainer = new BlockContainer(toc);
 
     return toc;
   }
