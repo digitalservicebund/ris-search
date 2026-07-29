@@ -252,6 +252,7 @@ jobs:
           cache-to: type=gha,mode=max
           build-args: |
             SENTRY_RELEASE=${{ env.SENTRY_RELEASE }}
+            SENTRY_UPLOAD_SOURCEMAPS=${{ github.ref == 'refs/heads/main' }}
           secrets: |
             SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
 
