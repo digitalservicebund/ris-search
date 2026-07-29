@@ -29,7 +29,7 @@ public class Meta extends BaseElement {
 
   @Builder.Default
   @XmlElement(namespace = NormTestDataBuilder.AKN_NS)
-  private Identification identification = Identification.builder().build();
+  private Identification identification = new Identification();
 
   @Builder.Default
   @XmlElement(namespace = NormTestDataBuilder.AKN_NS)
