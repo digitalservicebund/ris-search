@@ -1,7 +1,6 @@
 package de.bund.digitalservice.ris.builder.models;
 
 import de.bund.digitalservice.ris.builder.NormTestDataBuilder;
-import de.bund.digitalservice.ris.builder.models.common.AknP;
 import de.bund.digitalservice.ris.builder.models.common.BaseElement;
 import de.bund.digitalservice.ris.builder.models.preamble.Formula;
 import jakarta.xml.bind.annotation.XmlAttribute;
@@ -29,12 +28,7 @@ public class Conclusions extends BaseElement {
    */
   public static Conclusions withText(String text) {
     return Conclusions.builder()
-        .formula(
-            Formula.builder()
-                .eId("schluss-n1_formel-n1")
-                .refersTo("schlussformel")
-                .paragraph(new AknP(text))
-                .build())
+        .formula(new Formula("schluss-n1_formel-n1", "schlussformel", text))
         .build();
   }
 }

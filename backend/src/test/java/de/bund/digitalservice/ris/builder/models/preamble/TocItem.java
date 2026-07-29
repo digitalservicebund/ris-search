@@ -5,23 +5,18 @@ import de.bund.digitalservice.ris.builder.models.common.BaseElement;
 import de.bund.digitalservice.ris.builder.models.common.Span;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 /** Represents an {@code akn:tocItem} element, a single entry in the table of contents. */
-@AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class TocItem extends BaseElement {
 
-  @Builder.Default @XmlAttribute private String eId = "eintrag-n1";
+  @XmlAttribute private String eId = "eintrag-n1";
 
-  @Builder.Default @XmlAttribute private String href = "";
+  @XmlAttribute private String href = "";
 
-  @Builder.Default @XmlAttribute private String level = "1";
+  @XmlAttribute private String level = "1";
 
-  @Builder.Default
   @XmlElement(namespace = NormTestDataBuilder.AKN_NS)
   private Span span = new Span("Eintrag 1");
 
@@ -33,7 +28,9 @@ public class TocItem extends BaseElement {
    * @param eId the eId of the entry
    * @return the built {@link TocItem}
    */
-  public static TocItem withTextAndLevel(String text, String level, String eId) {
-    return TocItem.builder().level(level).eId(eId).span(new Span(eId + "_span-n1", text)).build();
+  public TocItem(String text, String level, String eId) {
+    this.eId = eId;
+    this.span = new Span(eId + "_span-n1", text);
+    this.level = level;
   }
 }

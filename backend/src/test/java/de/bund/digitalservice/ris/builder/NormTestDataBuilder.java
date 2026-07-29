@@ -332,8 +332,7 @@ public class NormTestDataBuilder {
    */
   public NormTestDataBuilder formula(String text) {
     Preamble preamble =
-        Optional.ofNullable(this.document.getAct().getPreamble())
-            .orElse(Preamble.builder().build());
+        Optional.ofNullable(this.document.getAct().getPreamble()).orElse(new Preamble());
     preamble.addFormula(text);
     this.document.getAct().setPreamble(preamble);
 
@@ -348,8 +347,7 @@ public class NormTestDataBuilder {
    */
   public NormTestDataBuilder toc(Consumer<Toc> tocConsumer) {
     Preamble preamble =
-        Optional.ofNullable(this.document.getAct().getPreamble())
-            .orElse(Preamble.builder().build());
+        Optional.ofNullable(this.document.getAct().getPreamble()).orElse(new Preamble());
     Toc toc = preamble.addToc();
     tocConsumer.accept(toc);
 
@@ -476,7 +474,7 @@ public class NormTestDataBuilder {
     AkomaNtoso attachment = new AkomaNtoso();
     attachment.setDoc(
         Doc.builder()
-            .meta(new Meta(Identification.fromEli(manifestationEli)))
+            .meta(new Meta(new Identification(manifestationEli)))
             .preface(
                 Preface.builder()
                     .longTitle(null)
