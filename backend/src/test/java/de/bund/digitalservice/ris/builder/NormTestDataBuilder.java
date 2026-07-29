@@ -102,7 +102,7 @@ public class NormTestDataBuilder {
    * @return this builder for chaining
    */
   public NormTestDataBuilder eli(String manifestationEli) {
-    this.document.getAct().getMeta().setIdentification(Identification.fromEli(manifestationEli));
+    this.document.getAct().getMeta().setIdentification(new Identification(manifestationEli));
     return this;
   }
 
@@ -113,7 +113,13 @@ public class NormTestDataBuilder {
    * @return this builder for chaining
    */
   public NormTestDataBuilder workEli(String workEli) {
-    this.document.getAct().getMeta().getIdentification().getFrbrWork().setUri(workEli);
+    this.document
+        .getAct()
+        .getMeta()
+        .getIdentification()
+        .getFrbrWork()
+        .getFrbrUri()
+        .setValue(workEli);
     return this;
   }
 
@@ -475,7 +481,7 @@ public class NormTestDataBuilder {
                     .lifecycle(null)
                     .temporalData(null)
                     .proprietary(null)
-                    .identification(Identification.fromEli(manifestationEli))
+                    .identification(new Identification(manifestationEli))
                     .build())
             .preface(
                 Preface.builder()
