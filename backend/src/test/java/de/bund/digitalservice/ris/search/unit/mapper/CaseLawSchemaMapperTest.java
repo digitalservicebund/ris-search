@@ -4,9 +4,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import de.bund.digitalservice.ris.SharedTestConstants;
 import de.bund.digitalservice.ris.search.mapper.CaseLawSchemaMapper;
+import de.bund.digitalservice.ris.search.mapper.RechtsprechungSchemaMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.schema.CaseLawEncodingSchema;
 import de.bund.digitalservice.ris.search.schema.CaseLawSchema;
+import de.bund.digitalservice.ris.search.schema.RechtsprechungSchema;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -71,6 +73,37 @@ class CaseLawSchemaMapperTest {
     assertThat(caseLawSchema.deviatingDocumentNumber()).containsExactly("deviatingDocumentNumber");
     assertThat(caseLawSchema.grounds()).isEqualTo("grounds");
     assertThat(caseLawSchema.guidingPrinciple()).isEqualTo("guidingPrinciple");
+    assertThat(caseLawSchema.tenor()).isEqualTo("tenor");
+    assertThat(caseLawSchema.inLanguage()).isEqualTo("de");
+
+    RechtsprechungSchema rechtsprechungSchema =
+        RechtsprechungSchemaMapper.fromDomain(documentationUnit);
+
+    assertThat(rechtsprechungSchema.id()).isEqualTo("/v1/rechtsprechung/BFRE000087655");
+    assertThat(rechtsprechungSchema.dokumentNummer()).isEqualTo("BFRE000087655");
+    assertThat(rechtsprechungSchema.ecli()).isEqualTo("ECLI:DE:FGNI:1975:0526.IXL180.73.0A");
+    assertThat(rechtsprechungSchema.gericht()).isEqualTo("KG Berlin");
+    assertThat(rechtsprechungSchema.dokumenttyp()).isEqualTo("Urteil");
+    assertThat(rechtsprechungSchema.datum()).isEqualTo(SharedTestConstants.DATE_2024_01_02);
+    assertThat(rechtsprechungSchema.aktenzeichenListe()).containsExactly("FileNumberTest");
+    assertThat(rechtsprechungSchema.abweichendeMeinung()).isEqualTo("eine abweichende Meinung");
+    assertThat(rechtsprechungSchema.entscheidungsgruende()).isEqualTo("diese Entscheidungsgründe");
+    assertThat(rechtsprechungSchema.orientierungssatz()).isEqualTo("Orientierungssatz");
+    assertThat(rechtsprechungSchema.headline()).isEqualTo("Test");
+    assertThat(rechtsprechungSchema.titelzeile()).isEqualTo("Title line");
+    assertThat(rechtsprechungSchema.sonstigerOrientierungssatz())
+        .isEqualTo("Sonstiger Orientierungssatz");
+    assertThat(rechtsprechungSchema.sonstigerLangtext()).isEqualTo("Long text");
+    assertThat(rechtsprechungSchema.tatbestand()).isEqualTo("Tatbestand");
+    assertThat(rechtsprechungSchema.gliederung()).isEqualTo("outlineTest");
+    assertThat(rechtsprechungSchema.spruchkoerper()).isEqualTo("judicial body");
+    assertThat(rechtsprechungSchema.courtName()).isEqualTo("KG Berlin");
+    assertThat(rechtsprechungSchema.schlagwoerter()).containsExactly("one", "two");
+    assertThat(rechtsprechungSchema.entscheidungsnamen()).containsExactly("decisionName");
+    assertThat(rechtsprechungSchema.abweichendeDokumentnummern())
+        .containsExactly("deviatingDocumentNumber");
+    assertThat(rechtsprechungSchema.gruende()).isEqualTo("grounds");
+    assertThat(rechtsprechungSchema.leitsatz()).isEqualTo("guidingPrinciple");
     assertThat(caseLawSchema.tenor()).isEqualTo("tenor");
     assertThat(caseLawSchema.inLanguage()).isEqualTo("de");
   }
