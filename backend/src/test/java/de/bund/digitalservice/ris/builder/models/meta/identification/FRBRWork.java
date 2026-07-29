@@ -60,57 +60,38 @@ public class FRBRWork extends BaseElement {
     this.eId = "meta-n1_ident-n1_frbrwork-n1";
 
     this.frbrThis =
-        ValueLeaf.builder()
-            .eId("meta-n1_ident-n1_frbrwork-n1_frbrthis-n1")
-            .value(eli.toString() + "/regelungstext-verkuendung-1")
-            .build();
+        new ValueLeaf(
+            "meta-n1_ident-n1_frbrwork-n1_frbrthis-n1",
+            eli.toString() + "/regelungstext-verkuendung-1");
 
-    this.frbrUri =
-        ValueLeaf.builder()
-            .eId("meta-n1_ident-n1_frbrwork-n1_frbruri-n1")
-            .value(eli.toString())
-            .build();
+    this.frbrUri = new ValueLeaf("meta-n1_ident-n1_frbrwork-n1_frbruri-n1", eli.toString());
 
     this.frbrAlias =
-        NamedLeaf.builder()
-            .eId("meta-n1_ident-n1_frbrwork-n1_frbralias-n1")
-            .name("übergreifende-id")
-            .value("b29e7271-d0eb-5ae1-9513-27af3a7e69dd")
-            .build();
+        new NamedLeaf(
+            "meta-n1_ident-n1_frbrwork-n1_frbralias-n1",
+            "übergreifende-id",
+            "b29e7271-d0eb-5ae1-9513-27af3a7e69dd");
 
     this.frbrDate =
-        DateLeaf.builder()
-            .eId("meta-n1_ident-n1_frbrwork-n1_frbrdate-n1")
-            .date("2025-12-22")
-            .name("verkuendungsfassung-verkuendungsdatum")
-            .build();
+        new DateLeaf(
+            "meta-n1_ident-n1_frbrwork-n1_frbrdate-n1",
+            "2025-12-22",
+            "verkuendungsfassung-verkuendungsdatum");
 
     this.frbrAuthor =
-        HrefLeaf.builder()
-            .eId("meta-n1_ident-n1_frbrwork-n1_frbrauthor-n1")
-            .href("recht.bund.de/institution/bundesregierung")
-            .build();
+        new HrefLeaf(
+            "meta-n1_ident-n1_frbrwork-n1_frbrauthor-n1",
+            "recht.bund.de/institution/bundesregierung");
 
-    this.frbrCountry =
-        ValueLeaf.builder().eId("meta-n1_ident-n1_frbrwork-n1_frbrcountry-n1").value("de").build();
+    this.frbrCountry = new ValueLeaf("meta-n1_ident-n1_frbrwork-n1_frbrcountry-n1", "de");
 
     this.frbrNumber =
-        ValueLeaf.builder()
-            .eId("meta-n1_ident-n1_frbrwork-n1_frbrnumber-n1")
-            .value(eli.naturalIdentifier())
-            .build();
+        new ValueLeaf("meta-n1_ident-n1_frbrwork-n1_frbrnumber-n1", eli.naturalIdentifier());
 
-    this.frbrName =
-        ValueLeaf.builder()
-            .eId("meta-n1_ident-n1_frbrwork-n1_frbrname-n1")
-            .value(eli.agent())
-            .build();
+    this.frbrName = new ValueLeaf("meta-n1_ident-n1_frbrwork-n1_frbrname-n1", eli.agent());
 
     this.frbrSubtype =
-        ValueLeaf.builder()
-            .eId("meta-n1_ident-n1_frbrwork-n1_frbrsubtype-n1")
-            .value("regelungstext-verkuendung-1")
-            .build();
+        new ValueLeaf("meta-n1_ident-n1_frbrwork-n1_frbrsubtype-n1", "regelungstext-verkuendung-1");
   }
 
   /**
@@ -120,9 +101,7 @@ public class FRBRWork extends BaseElement {
    * @return this {@link FRBRWork} for chaining
    */
   public FRBRWork setName(String name) {
-    this.frbrName =
-        ValueLeaf.builder().eId("meta-n1_ident-n1_frbrwork-n1_frbrname-n1").value(name).build();
-
+    this.frbrName = new ValueLeaf("meta-n1_ident-n1_frbrwork-n1_frbrname-n1", name);
     return this;
   }
 
@@ -133,9 +112,7 @@ public class FRBRWork extends BaseElement {
    * @return this {@link FRBRWork} for chaining
    */
   public FRBRWork setNumber(String number) {
-    this.frbrNumber =
-        ValueLeaf.builder().eId("meta-n1_ident-n1_frbrwork-n1_frbrnumber-n1").value(number).build();
-
+    this.frbrNumber = new ValueLeaf("meta-n1_ident-n1_frbrwork-n1_frbrnumber-n1", number);
     return this;
   }
 
@@ -147,12 +124,10 @@ public class FRBRWork extends BaseElement {
    */
   public FRBRWork setDatePublished(String date) {
     this.frbrDate =
-        DateLeaf.builder()
-            .eId("meta-n1_ident-n1_frbrwork-n1_frbrdate-n1")
-            .date(date)
-            .name("verkuendungsfassung-verkuendungsdatum")
-            .build();
-
+        new DateLeaf(
+            "meta-n1_ident-n1_frbrwork-n1_frbrdate-n1",
+            date,
+            "verkuendungsfassung-verkuendungsdatum");
     return this;
   }
 }

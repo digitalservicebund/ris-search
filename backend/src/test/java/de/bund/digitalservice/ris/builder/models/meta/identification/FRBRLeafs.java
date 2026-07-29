@@ -3,7 +3,6 @@ package de.bund.digitalservice.ris.builder.models.meta.identification;
 import de.bund.digitalservice.ris.builder.models.common.BaseElement;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
@@ -15,17 +14,14 @@ public final class FRBRLeafs {
   /** An FRBR leaf element with an optional {@code eId} and a {@code value} attribute. */
   @AllArgsConstructor
   @NoArgsConstructor
-  @Builder
-  @Setter
   public static class ValueLeaf extends BaseElement {
 
     @XmlAttribute String eId;
-    @XmlAttribute String value;
+    @XmlAttribute @Setter String value;
   }
 
   @AllArgsConstructor
   @NoArgsConstructor
-  @Builder
   static class NamedLeaf extends BaseElement {
 
     @XmlAttribute String eId;
@@ -37,7 +33,6 @@ public final class FRBRLeafs {
 
   @AllArgsConstructor
   @NoArgsConstructor
-  @Builder
   static class DateLeaf extends BaseElement {
 
     @XmlAttribute String eId;
@@ -49,7 +44,6 @@ public final class FRBRLeafs {
 
   @AllArgsConstructor
   @NoArgsConstructor
-  @Builder
   static class HrefLeaf extends BaseElement {
 
     @XmlAttribute String eId;
@@ -59,7 +53,6 @@ public final class FRBRLeafs {
 
   @AllArgsConstructor
   @NoArgsConstructor
-  @Builder
   static class LanguageLeaf extends BaseElement {
 
     @XmlAttribute String eId;
@@ -69,7 +62,6 @@ public final class FRBRLeafs {
 
   @AllArgsConstructor
   @NoArgsConstructor
-  @Builder
   static class FormatLeaf extends BaseElement {
 
     @XmlAttribute String eId;

@@ -10,6 +10,7 @@ import de.bund.digitalservice.ris.search.utils.eli.ManifestationEli;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import java.time.LocalDate;
+import java.time.Month;
 import java.time.format.DateTimeFormatter;
 
 /**
@@ -43,10 +44,10 @@ public class FRBRManifestation extends BaseElement {
             "bgbl-1",
             "2025",
             "341",
-            LocalDate.of(2025, 12, 22),
+            LocalDate.of(2025, Month.DECEMBER, 22),
             1,
             "deu",
-            LocalDate.of(2025, 12, 22),
+            LocalDate.of(2025, Month.DECEMBER, 22),
             "regelungstext-verkuendung-1",
             "xml"));
   }
@@ -61,35 +62,23 @@ public class FRBRManifestation extends BaseElement {
     this.eId = "meta-n1_ident-n1_frbrmanifestation-n1";
 
     this.frbrThis =
-        ValueLeaf.builder()
-            .eId("meta-n1_ident-n1_frbrmanifestation-n1_frbrthis-n1")
-            .value(eli.toString())
-            .build();
+        new ValueLeaf("meta-n1_ident-n1_frbrmanifestation-n1_frbrthis-n1", eli.toString());
 
     this.frbrUri =
-        ValueLeaf.builder()
-            .eId("meta-n1_ident-n1_frbrmanifestation-n1_frbruri-n1")
-            .value(eli.getManifestationRoot())
-            .build();
+        new ValueLeaf(
+            "meta-n1_ident-n1_frbrmanifestation-n1_frbruri-n1", eli.getManifestationRoot());
 
     this.frbrDate =
-        DateLeaf.builder()
-            .eId("meta-n1_ident-n1_frbrmanifestation-n1_frbrdate-n1")
-            .date(eli.pointInTimeManifestation().format(DateTimeFormatter.ISO_LOCAL_DATE))
-            .name("generierung")
-            .build();
+        new DateLeaf(
+            "meta-n1_ident-n1_frbrmanifestation-n1_frbrdate-n1",
+            eli.pointInTimeManifestation().format(DateTimeFormatter.ISO_LOCAL_DATE),
+            "generierung");
 
     this.frbrAuthor =
-        HrefLeaf.builder()
-            .eId("meta-n1_ident-n1_frbrmanifestation-n1_frbrauthor-n1")
-            .href("recht.bund.de")
-            .build();
+        new HrefLeaf("meta-n1_ident-n1_frbrmanifestation-n1_frbrauthor-n1", "recht.bund.de");
 
     this.frbrFormat =
-        FormatLeaf.builder()
-            .eId("meta-n1_ident-n1_frbrmanifestation-n1_frbrformat-n1")
-            .value(eli.format())
-            .build();
+        new FormatLeaf("meta-n1_ident-n1_frbrmanifestation-n1_frbrformat-n1", eli.format());
   }
 
   /**
@@ -100,11 +89,7 @@ public class FRBRManifestation extends BaseElement {
    */
   public FRBRManifestation setThis(String manifestationEli) {
     this.frbrThis =
-        ValueLeaf.builder()
-            .eId("meta-n1_ident-n1_frbrmanifestation-n1_frbrthis-n1")
-            .value(manifestationEli)
-            .build();
-
+        new ValueLeaf("meta-n1_ident-n1_frbrmanifestation-n1_frbrthis-n1", manifestationEli);
     return this;
   }
 }

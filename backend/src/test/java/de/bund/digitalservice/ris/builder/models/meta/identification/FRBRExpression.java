@@ -11,6 +11,7 @@ import de.bund.digitalservice.ris.search.utils.eli.ExpressionEli;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import java.time.LocalDate;
+import java.time.Month;
 import java.time.format.DateTimeFormatter;
 
 /** Represents the {@code akn:FRBRExpression} element identifying the norm's expression level. */
@@ -43,7 +44,8 @@ public class FRBRExpression extends BaseElement {
   public FRBRExpression() {
     // eli/bund/bgbl-1/2025/341/2025-12-22/1/deu/regelungstext-verkuendung-1
     this(
-        new ExpressionEli("bund", "bgbl-1", "2025", "341", LocalDate.of(2025, 12, 22), 1, "deu"),
+        new ExpressionEli(
+            "bund", "bgbl-1", "2025", "341", LocalDate.of(2025, Month.DECEMBER, 22), 1, "deu"),
         "regelungstext-verkuendung-1");
   }
 
@@ -59,48 +61,34 @@ public class FRBRExpression extends BaseElement {
     this.eId = "meta-n1_ident-n1_frbrexpression-n1";
 
     this.frbrThis =
-        ValueLeaf.builder()
-            .eId("meta-n1_ident-n1_frbrexpression-n1_frbrthis-n1")
-            .value(eli + "/" + fileName)
-            .build();
+        new ValueLeaf("meta-n1_ident-n1_frbrexpression-n1_frbrthis-n1", eli + "/" + fileName);
 
-    this.frbrUri =
-        ValueLeaf.builder()
-            .eId("meta-n1_ident-n1_frbrexpression-n1_frbruri-n1")
-            .value(eli.toString())
-            .build();
+    this.frbrUri = new ValueLeaf("meta-n1_ident-n1_frbrexpression-n1_frbruri-n1", eli.toString());
 
     this.frbrAlias =
-        NamedLeaf.builder()
-            .eId("meta-n1_ident-n1_frbrexpression-n1_frbralias-n1")
-            .name("aktuelle-version-id")
-            .value("27204f61-13d2-5943-ad65-83411724b996")
-            .build();
+        new NamedLeaf(
+            "meta-n1_ident-n1_frbrexpression-n1_frbralias-n1",
+            "aktuelle-version-id",
+            "27204f61-13d2-5943-ad65-83411724b996");
 
     this.frbrAuthor =
-        HrefLeaf.builder()
-            .eId("meta-n1_ident-n1_frbrexpression-n1_frbrauthor-n1")
-            .href("recht.bund.de/institution/bundesregierung")
-            .build();
+        new HrefLeaf(
+            "meta-n1_ident-n1_frbrexpression-n1_frbrauthor-n1",
+            "recht.bund.de/institution/bundesregierung");
 
     this.frbrDate =
-        DateLeaf.builder()
-            .eId("meta-n1_ident-n1_frbrexpression-n1_frbrdate-n1")
-            .date(eli.pointInTime().format(DateTimeFormatter.ISO_LOCAL_DATE))
-            .name("verkuendung")
-            .build();
+        new DateLeaf(
+            "meta-n1_ident-n1_frbrexpression-n1_frbrdate-n1",
+            eli.pointInTime().format(DateTimeFormatter.ISO_LOCAL_DATE),
+            "verkuendung");
 
     this.frbrLanguage =
-        LanguageLeaf.builder()
-            .eId("meta-n1_ident-n1_frbrexpression-n1_frbrlanguage-n1")
-            .language(eli.language())
-            .build();
+        new LanguageLeaf("meta-n1_ident-n1_frbrexpression-n1_frbrlanguage-n1", eli.language());
 
     this.frbrVersionNumber =
-        ValueLeaf.builder()
-            .eId("meta-n1_ident-n1_frbrexpression-n1_frbrversionnumber-n1")
-            .value(String.valueOf(eli.version()))
-            .build();
+        new ValueLeaf(
+            "meta-n1_ident-n1_frbrexpression-n1_frbrversionnumber-n1",
+            String.valueOf(eli.version()));
   }
 
   /**
@@ -110,12 +98,7 @@ public class FRBRExpression extends BaseElement {
    * @return this {@link FRBRExpression} for chaining
    */
   public FRBRExpression setUri(String expressionEli) {
-    this.frbrUri =
-        ValueLeaf.builder()
-            .eId("meta-n1_ident-n1_frbrexpression-n1_frbruri-n1")
-            .value(expressionEli)
-            .build();
-
+    this.frbrUri = new ValueLeaf("meta-n1_ident-n1_frbrexpression-n1_frbruri-n1", expressionEli);
     return this;
   }
 }
