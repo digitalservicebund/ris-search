@@ -26,6 +26,7 @@ public class Preface extends BaseElement {
   @XmlElement(namespace = NormTestDataBuilder.AKN_NS)
   private Block block = buildLegislationDateBlock("2002-01-01");
 
+  /** Creates a Preface with the given block, without a long title. */
   public Preface(Block block) {
     this.longTitle = null;
     this.block = block;

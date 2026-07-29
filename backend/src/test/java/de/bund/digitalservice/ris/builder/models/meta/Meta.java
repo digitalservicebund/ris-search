@@ -37,6 +37,10 @@ public class Meta extends BaseElement {
   @XmlElement(namespace = NormTestDataBuilder.AKN_NS)
   private Proprietary proprietary = new Proprietary();
 
+  /**
+   * Creates a Meta with the given identification, omitting lifecycle, temporal data and
+   * proprietary.
+   */
   public Meta(Identification identification) {
     this.identification = identification;
     this.lifecycle = null;
