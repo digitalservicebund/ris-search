@@ -12,6 +12,7 @@ public final class FRBRLeafs {
 
   private FRBRLeafs() {}
 
+  /** An FRBR leaf element with an optional {@code eId} and a {@code value} attribute. */
   @AllArgsConstructor
   @NoArgsConstructor
   @Builder
