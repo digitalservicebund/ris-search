@@ -64,7 +64,7 @@ export function getTextFromElements(elements?: NodeListOf<Element>): string[] {
  * empty if the html `<body>` is empty or contains only a single headline
  * (`<h1>`).
  *
- * @param htmlDocument
+ * @param document
  */
 export function isDocumentEmpty(document?: Document): boolean {
   if (!document) {
