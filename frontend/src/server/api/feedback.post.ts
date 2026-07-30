@@ -55,14 +55,15 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    const params = new URLSearchParams({
-      text: body.text,
-      url: body.url || currentUrl,
-      user_id: body.user_id || "anonymous_feedback_user",
-      name: body.name || "",
+    await $fetch(useBackendUrl(`/v1/feedback`), {
+      method: "POST",
+      body: {
+        text: body.text,
+        url: body.url || currentUrl,
+        user_id: body.user_id || "anonymous_feedback_user",
+        name: body.name || "",
+      },
     });
-
-    await $fetch(useBackendUrl(`/v1/feedback?${params.toString()}`));
 
     return sendRedirect(
       event,

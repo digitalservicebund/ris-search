@@ -27,6 +27,10 @@ public class SecurityConfig {
 
   final String[] internalPaths = new String[] {"/actuator/**", "/nlex"};
 
+  // The feedback endpoint is a public, stateless API called from external clients (e.g. api-docs)
+  // without a session. CSRF protection is session-cookie-based and provides no value here.
+  final String[] csrfExemptPaths = new String[] {"/actuator/**", "/nlex", ApiConfig.Paths.FEEDBACK};
+
   @Value("${app.security.csp-header}")
   private String cspHeader;
 
@@ -35,7 +39,7 @@ public class SecurityConfig {
   }
 
   private void applyCommonConfiguration(HttpSecurity http) {
-    http.csrf(customizer -> customizer.ignoringRequestMatchers(internalPaths));
+    http.csrf(customizer -> customizer.ignoringRequestMatchers(csrfExemptPaths));
     http.headers(headers -> headers.contentSecurityPolicy(csp -> csp.policyDirectives(cspHeader)));
   }
 

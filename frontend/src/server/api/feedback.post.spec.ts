@@ -53,11 +53,15 @@ describe("feedback.post", () => {
 
     await feedbackHandler(mockEvent);
 
-    expect(mockFetch).toHaveBeenCalledWith(
-      expect.stringContaining(
-        "/v1/feedback?text=Great+app%21&url=%2Fsuche%3Fquery%3Dtest&user_id=anonymous_feedback_user&name=",
-      ),
-    );
+    expect(mockFetch).toHaveBeenCalledWith("/v1/feedback", {
+      method: "POST",
+      body: {
+        text: "Great app!",
+        url: "/suche?query=test",
+        user_id: "anonymous_feedback_user",
+        name: "",
+      },
+    });
   });
 
   it("uses provided url, user_id and honeypot value from form body", async () => {
@@ -72,11 +76,15 @@ describe("feedback.post", () => {
 
     await feedbackHandler(mockEvent);
 
-    expect(mockFetch).toHaveBeenCalledWith(
-      expect.stringContaining(
-        "/v1/feedback?text=Feedback+text&url=%2Fcustom-page&user_id=user123&name=honeypot-value",
-      ),
-    );
+    expect(mockFetch).toHaveBeenCalledWith("/v1/feedback", {
+      method: "POST",
+      body: {
+        text: "Feedback text",
+        url: "/custom-page",
+        user_id: "user123",
+        name: "honeypot-value",
+      },
+    });
   });
 
   it("redirects with error parameter when backend fails", async () => {
@@ -115,10 +123,14 @@ describe("feedback.post", () => {
 
     await feedbackHandler(mockEvent);
 
-    expect(mockFetch).toHaveBeenCalledWith(
-      expect.stringContaining(
-        "/v1/feedback?text=Feedback&url=%2Fpage%3Fparam%3Dvalue&user_id=anonymous_feedback_user&name=",
-      ),
-    );
+    expect(mockFetch).toHaveBeenCalledWith("/v1/feedback", {
+      method: "POST",
+      body: {
+        text: "Feedback",
+        url: "/page?param=value",
+        user_id: "anonymous_feedback_user",
+        name: "",
+      },
+    });
   });
 });

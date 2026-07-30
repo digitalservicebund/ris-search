@@ -148,13 +148,15 @@ export function usePostHog() {
   async function sendFeedbackToPostHog(text: string, honeypot: string) {
     const userId = await getUserPostHogId();
 
-    const params = new URLSearchParams({
-      text: text,
-      url: router.currentRoute.value.fullPath,
-      user_id: userId,
-      name: honeypot,
+    const { error } = await useRisBackend(`/v1/feedback`, {
+      method: "POST",
+      body: {
+        text: text,
+        url: router.currentRoute.value.fullPath,
+        user_id: userId,
+        name: honeypot,
+      },
     });
-    const { error } = await useRisBackend(`/v1/feedback?${params.toString()}`);
 
     if (error.value) {
       throw new Error(`Error sending feedback`);

@@ -81,7 +81,7 @@ public class CorsConfig {
 
         registry
             .addMapping("/v1/feedback")
-            .allowedMethods("GET")
+            .allowedMethods("POST")
             .allowedOriginPatterns(frontEndUrl, docsUrl)
             .allowedHeaders(CorsConfiguration.ALL);
 

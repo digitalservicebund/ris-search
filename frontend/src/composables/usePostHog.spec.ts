@@ -148,18 +148,30 @@ describe("usePostHog", () => {
     });
     await setTracking(true);
     await sendFeedbackToPostHog("good", "bot-trap-value");
-    expect(useRisBackendMock).toHaveBeenCalledWith(
-      feedbackURL + "?text=good&url=%2F&user_id=12345&name=bot-trap-value",
-    );
+    expect(useRisBackendMock).toHaveBeenCalledWith(feedbackURL, {
+      method: "POST",
+      body: {
+        text: "good",
+        url: "/",
+        user_id: "12345",
+        name: "bot-trap-value",
+      },
+    });
   });
 
   it("sendFeedbackToPostHog sends the data to backend as anonymous user when the user disables tracking", async () => {
     const { setTracking, sendFeedbackToPostHog } = usePostHog();
     await setTracking(false);
     await sendFeedbackToPostHog("test", "");
-    expect(useRisBackendMock).toHaveBeenCalledWith(
-      feedbackURL + "?text=test&url=%2F&user_id=anonymous_feedback_user&name=",
-    );
+    expect(useRisBackendMock).toHaveBeenCalledWith(feedbackURL, {
+      method: "POST",
+      body: {
+        text: "test",
+        url: "/",
+        user_id: "anonymous_feedback_user",
+        name: "",
+      },
+    });
   });
 
   it("captures search event when postHog is initialized and user consent is given", async () => {
