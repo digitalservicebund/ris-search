@@ -33,11 +33,9 @@ public class FeedbackController {
   public record FeedbackRequest(
       @NotNull String text,
       @NotNull String url,
-      /**
-       * The PostHog distinct ID of the user, or {@code "anonymous_feedback_user"} if not tracked.
-       */
+      // The PostHog distinct ID of the user, or "anonymous_feedback_user" if not tracked.
       @NotNull @JsonProperty("user_id") String userId,
-      /** Honeypot field: if non-empty the submission is silently dropped to block bots. */
+      // Honeypot field: if non-empty the submission is silently dropped to block bots.
       String name) {}
 
   private final PostHogService postHogService;
