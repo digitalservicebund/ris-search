@@ -82,9 +82,13 @@ jobs:
         working-directory: ./backend
         run: chmod +x gradlew
 
-      - name: Build with Gradle
+      - name: Check formatting
         working-directory: ./backend
         run: ./gradlew spotlessCheck
+
+      - name: Check style
+        working-directory: ./backend
+        run: ./gradlew checkstyleMain checkstyleTest
 
       - name: Send status to Slack
         uses: digitalservicebund/notify-on-failure-gha@671832f192aee0a068fd92b2f6deb975df794a84 # v1.6.1
