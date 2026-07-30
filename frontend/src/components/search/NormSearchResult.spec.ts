@@ -134,6 +134,24 @@ describe("NormSearchResult", () => {
     expect(highlightSection).toHaveLength(4);
   });
 
+  describe("temporal coverage date display with private features enabled", () => {
+    beforeEach(() => {
+      mocks.usePrivateFeaturesFlag.mockReturnValue(true);
+    });
+
+    it("shows only from date when temporal coverage has no to date", () => {
+      renderComponent(withTemporalCoverage("2000-01-01/.."));
+      expect(screen.getByText("01.01.2000")).toBeInTheDocument();
+      // Does not add a dash if no validity end date exists
+      expect(screen.queryByText("01.01.2000 -")).not.toBeInTheDocument();
+    });
+
+    it("shows from and to date when temporal coverage has both", () => {
+      renderComponent(withTemporalCoverage("2000-01-01/2024-12-31"));
+      expect(screen.getByText("01.01.2000 - 31.12.2024")).toBeInTheDocument();
+    });
+  });
+
   it("renders ausfertigungs datum when in prototype environment", () => {
     renderComponent();
     expect(screen.getByText("14.12.1999")).toBeInTheDocument();

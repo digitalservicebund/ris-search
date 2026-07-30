@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { Dayjs } from "dayjs";
 import IcBaselineBalance from "~icons/ic/baseline-balance";
 import type { RouteLocationRaw, RouteLocationAsPath } from "#vue-router";
 import type { SearchResultHeaderItem } from "~/components/search/SearchResultHeader.vue";
@@ -31,20 +30,23 @@ const secondaryTitle = computed<SearchResultHeaderItem | undefined>(() =>
 const resultTypeId = useId();
 
 const headerItems = computed<SearchResultHeaderItem[]>(() => {
-  let date: string | Dayjs | undefined =
-    searchResult.item.exampleOfWork.legislationDate;
+  let dateValue: string | undefined = dateFormattedDDMMYYYY(
+    searchResult.item.exampleOfWork.legislationDate,
+  );
 
   if (privateFeaturesEnabled) {
     const coverage = temporalCoverageToValidityInterval(
       searchResult.item.temporalCoverage,
     );
-    date = coverage?.from;
+    const from = dateFormattedDDMMYYYY(coverage?.from);
+    const to = dateFormattedDDMMYYYY(coverage?.to);
+    dateValue = from && to ? `${from} - ${to}` : from;
   }
 
   return [
     { value: "Norm", id: resultTypeId },
     { value: searchResult.item.abbreviation },
-    { value: dateFormattedDDMMYYYY(date) },
+    { value: dateValue },
   ].filter((i): i is SearchResultHeaderItem => i.value !== undefined);
 });
 

@@ -319,6 +319,20 @@ test.describe("searching legislation", () => {
     ).toBeVisible();
   });
 
+  test("shows from and to date when it exists and private features are enabled", async ({
+    page,
+    privateFeaturesEnabled,
+  }) => {
+    test.skip(!privateFeaturesEnabled);
+    await navigate(
+      page,
+      "/suche?query=Heimaturlaubsberechtigung&documentKind=N",
+    );
+
+    const searchResult = getSearchResults(page).first();
+    await expect(searchResult).toHaveText(/01\.04\.1990 - 31\.12\.1990/);
+  });
+
   test("doesn't show article highlights without a direct text match when private features are enabled", async ({
     page,
     privateFeaturesEnabled,
