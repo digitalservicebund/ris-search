@@ -6,11 +6,9 @@
 
     <div
       v-if="$slots.sidebar"
-      class="col-span-12 row-start-1 md:col-span-4 md:col-start-9 md:row-start-auto md:h-full md:border-l md:border-gray-400 print:hidden"
+      class="col-span-12 row-start-1 md:col-span-4 md:col-start-9 md:row-start-auto md:h-full md:min-h-0 md:border-l md:border-gray-400 print:hidden"
     >
-      <div
-        class="overflow-auto md:sticky md:top-0 md:max-h-[calc(min(100%,100dvh))]"
-      >
+      <div class="overflow-auto md:sticky md:top-0 md:max-h-[100dvh]">
         <slot name="sidebar" />
       </div>
     </div>
