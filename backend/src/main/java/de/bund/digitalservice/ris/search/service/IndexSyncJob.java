@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.message.StringMapMessage;
 import org.springframework.scheduling.annotation.Async;
 
 /**
@@ -76,7 +77,12 @@ public class IndexSyncJob implements Job {
       logger.error(ex);
       return ReturnCode.ERROR;
     }
-    logger.info("Finished index sync job for {}", statusFileName);
+    StringMapMessage msg =
+        new StringMapMessage()
+            .with("message", String.format("Finished index sync job for %s", statusFileName))
+            .with("job_state", "success");
+    logger.info(msg);
+
     return ReturnCode.SUCCESS;
   }
 
