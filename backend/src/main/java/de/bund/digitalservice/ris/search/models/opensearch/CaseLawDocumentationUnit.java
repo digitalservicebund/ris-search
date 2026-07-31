@@ -50,6 +50,7 @@ public record CaseLawDocumentationUnit(
     @ElementCollection
         @Field(name = Fields.ABWEICHENDE_DATEN, type = FieldType.Date, format = DateFormat.date)
         List<LocalDate> abweichendeDaten,
+    @ElementCollection @Field(name = Fields.ABWEICHENDE_ECLIS) List<String> abweichendeEclis,
     @JsonIgnore @Field(name = Fields.DOCUMENTATION_OFFICE) String documentationOffice,
     @JsonIgnore @Field(name = Fields.LEGAL_EFFECT) String legalEffect,
     @JsonIgnore @ElementCollection @Field(name = Fields.PREVIOUS_DECISIONS)
@@ -83,6 +84,7 @@ public record CaseLawDocumentationUnit(
     public static final String DOCUMENT_NUMBER = "document_number";
     public static final String DOCUMENT_NUMBER_KEYWORD = "document_number.keyword";
     public static final String ECLI = "ecli";
+    public static final String ABWEICHENDE_ECLIS = "abweichende_eclis";
     public static final String ECLI_KEYWORD = "ecli.keyword";
     public static final String CASE_FACTS = "case_facts";
     public static final String DECISION_GROUNDS = "decision_grounds";

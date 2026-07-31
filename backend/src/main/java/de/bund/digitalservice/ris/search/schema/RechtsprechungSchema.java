@@ -35,6 +35,7 @@ public record RechtsprechungSchema(
             description = "Aktenzeichen",
             requiredMode = Schema.RequiredMode.REQUIRED)
         List<String> aktenzeichenListe,
+    @Schema(description = "Abweichende ECLIs") List<String> abweichendeEclis,
     @Schema(example = "FG Berlin", description = "Gericht") String gericht,
     @Schema(example = "Urteil") String dokumenttyp,
     @Schema(example = "Gericht", description = "Spruchkörper") String spruchkoerper,

@@ -46,6 +46,7 @@ public class RechtsprechungSchemaMapper {
         .entscheidungsnamen(doc.decisionName())
         .abweichendeDokumentnummern(doc.deviatingDocumentNumber())
         .abweichendeDaten(doc.abweichendeDaten())
+        .abweichendeEclis(doc.abweichendeEclis())
         .courtName(doc.courtKeyword())
         .build();
   }

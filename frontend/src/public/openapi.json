@@ -2364,6 +2364,13 @@
               "type" : "string"
             }
           },
+          "abweichendeEclis" : {
+            "type" : "array",
+            "description" : "Abweichende ECLIs",
+            "items" : {
+              "type" : "string"
+            }
+          },
           "gericht" : {
             "type" : "string",
             "description" : "Gericht",

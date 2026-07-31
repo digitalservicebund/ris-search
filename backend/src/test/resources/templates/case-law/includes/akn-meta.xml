@@ -142,6 +142,10 @@
             <ris:abweichendesDatum domainTerm="Abweichendes Datum">2020-03-03</ris:abweichendesDatum>
             <ris:abweichendesDatum domainTerm="Abweichendes Datum">2022-02-04</ris:abweichendesDatum>
         </ris:abweichendeDaten>
+        <ris:abweichendeEclis domainTerm="Abweichende ECLIs">
+            <ris:abweichenderEcli domainTerm="Abweichender ECLI">ECLI 1</ris:abweichenderEcli>
+            <ris:abweichenderEcli domainTerm="Abweichender ECLI">ECLI 2</ris:abweichenderEcli>
+        </ris:abweichendeEclis>
         <ris:decisionNames>
             <ris:decisionName>Test decision name</ris:decisionName>
         </ris:decisionNames>

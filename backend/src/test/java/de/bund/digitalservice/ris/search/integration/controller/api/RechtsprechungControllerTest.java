@@ -103,6 +103,8 @@ class RechtsprechungControllerTest extends ContainersIntegrationBase {
             jsonPath("$.abweichendeDaten[1]").value("2022-02-04"),
             jsonPath("$.abweichendeDokumentnummern[0]").value("ABC"),
             jsonPath("$.abweichendeDokumentnummern[1]").value("DEF"),
+            jsonPath("$.abweichendeEclis[0]").value("ECLI 1"),
+            jsonPath("$.abweichendeEclis[1]").value("ECLI 2"),
             jsonPath(
                 "$.encoding[*]['@id']",
                 containsInAnyOrder(
