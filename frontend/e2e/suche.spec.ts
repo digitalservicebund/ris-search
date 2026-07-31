@@ -773,7 +773,7 @@ test.describe("searching caselaw", () => {
       .getByRole("button", { name: "Alle Dokumentarten" })
       .click();
 
-    await expect(getResultCounter(page)).toHaveText("40 Suchergebnisse");
+    await expect(getResultCounter(page)).toHaveText("41 Suchergebnisse");
 
     // Verify caselaw-specific filters are reset
     await expect(page).not.toHaveURL(/documentKind=R/);

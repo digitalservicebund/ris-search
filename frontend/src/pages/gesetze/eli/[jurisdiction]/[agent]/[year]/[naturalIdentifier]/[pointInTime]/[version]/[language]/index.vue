@@ -143,26 +143,31 @@ const metadataItems = computed(() => {
   ];
 });
 
-const views: OneOrMore<TabView> = [
-  {
+const views = computed<OneOrMore<TabView>>(() => {
+  const baseViews: OneOrMore<TabView> = [
+    {
+      path: "details",
+      label: "Details",
+      icon: IcOutlineInfo,
+      analyticsId: "norm-metadata-tab",
+    },
+    {
+      path: "versions",
+      label: "Fassungen",
+      icon: IcOutlineRestore,
+      analyticsId: "norm-versions-tab",
+    },
+  ] as const;
+
+  const textTab = {
     path: "text",
     label: "Text",
     icon: IcBaselineSubject,
     analyticsId: "norm-text-tab",
-  },
-  {
-    path: "details",
-    label: "Details",
-    icon: IcOutlineInfo,
-    analyticsId: "norm-metadata-tab",
-  },
-  {
-    path: "versions",
-    label: "Fassungen",
-    icon: IcOutlineRestore,
-    analyticsId: "norm-versions-tab",
-  },
-] as const;
+  } as const;
+
+  return data.value.hasEmptyBody ? baseViews : [textTab, ...baseViews];
+});
 
 const { dateFilterValue: fassungenDateFilterValue, filteredNormVersions } =
   useNormVersionFilter(normVersions);

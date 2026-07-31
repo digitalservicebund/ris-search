@@ -70,7 +70,7 @@ describe("useFetchNormContent", () => {
           <dd class="ris-standangabe" data-type="hinweis">Stand-Hinweis 2</dd>
       </dl>
    </section>
-   <div>Test HTML content</div>`;
+   <div class="akn-body">Test HTML content</div>`;
 
     mockFetch.mockReturnValueOnce(mockMetadata);
     mockFetch.mockReturnValueOnce(
@@ -92,6 +92,7 @@ describe("useFetchNormContent", () => {
         vollzitat: "Vollzitat",
         body: expectedHtml,
       },
+      hasEmptyBody: false,
     });
 
     expect(mockFetch).toHaveBeenCalledTimes(2);
@@ -229,5 +230,25 @@ describe("useFetchNormContent", () => {
     expect(
       doc.querySelector("#meta-n1_editfnote-n3_text-n1")?.textContent,
     ).toBe("Inhaltsübersicht: präambel Fußnote");
+  });
+
+  it("sets hasEmptyBody to false if akn-body has content", async () => {
+    mockFetch.mockReturnValueOnce(mockMetadata);
+    mockFetch.mockReturnValueOnce(
+      `<html><body><div class="akn-act"><div class="akn-body">Content</div></div></body></html>`,
+    );
+
+    const { data } = await useFetchNormContent(expressionEli);
+    expect(data.value.hasEmptyBody).toBe(false);
+  });
+
+  it("sets hasEmptyBody to true if akn-body div is empty", async () => {
+    mockFetch.mockReturnValueOnce(mockMetadata);
+    mockFetch.mockReturnValueOnce(
+      `<html><body><div class="akn-act"><div class="akn-body"></div></div></body></html>`,
+    );
+
+    const { data } = await useFetchNormContent(expressionEli);
+    expect(data.value.hasEmptyBody).toBe(true);
   });
 });

@@ -150,12 +150,12 @@ export function getNormMetadataItems(
 }
 
 /**
- * Determines if the given norm document is empty. A norm is considered empty if
- * the html `<div>` with class `akn-body` is empty.
+ * Checks if the document has a `<div>` with class `akn-body` and checks if it's
+ * empty.
  *
  * @param document
  */
-export function isNormDocumentEmpty(document?: Document): boolean {
+export function isNormBodyEmpty(document?: Document): boolean {
   if (!document) {
     return true;
   }
