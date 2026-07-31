@@ -47,7 +47,7 @@ class CaseLawLdmlToOpenSearchMapperTest {
     assertThat(caseLaw.judicialBody()).isEqualTo("Test judicial body");
     assertThat(caseLaw.keywords()).hasToString("[keyword1, keyword2]");
     assertThat(caseLaw.decisionName()).hasToString("[Test decision name]");
-    assertThat(caseLaw.deviatingDocumentNumber()).hasToString("[Test deviatingDocumentNumber]");
+    assertThat(caseLaw.deviatingDocumentNumber()).hasToString("[ABC, DEF]");
     assertThat(caseLaw.dissentingOpinion())
         .isEqualTo("dissenting test referenced opinions test 1 referenced opinions test 2");
     assertThat(caseLaw.previousDecisions())

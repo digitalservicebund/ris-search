@@ -163,7 +163,8 @@
             <ris:fieldOfLaw>Test field of law</ris:fieldOfLaw>
         </ris:fieldOfLaws>
         <ris:abweichendeDokumentnummern domainTerm="Abweichende Dokumentnummern">
-            <ris:abweichendeDokumentnummer domainTerm="Abweichende Dokumentnummer">Test deviatingDocumentNumber</ris:abweichendeDokumentnummer>
+            <ris:abweichendeDokumentnummer domainTerm="Abweichende Dokumentnummer">ABC</ris:abweichendeDokumentnummer>
+            <ris:abweichendeDokumentnummer domainTerm="Abweichende Dokumentnummer">DEF</ris:abweichendeDokumentnummer>
         </ris:abweichendeDokumentnummern>
         <ris:previousDecisions>
             <ris:previousDecision date="2009-06-25">

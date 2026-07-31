@@ -101,6 +101,8 @@ class RechtsprechungControllerTest extends ContainersIntegrationBase {
             jsonPath("$.documentationOffice").doesNotExist(),
             jsonPath("$.abweichendeDaten[0]").value("2020-03-03"),
             jsonPath("$.abweichendeDaten[1]").value("2022-02-04"),
+            jsonPath("$.abweichendeDokumentnummern[0]").value("ABC"),
+            jsonPath("$.abweichendeDokumentnummern[1]").value("DEF"),
             jsonPath(
                 "$.encoding[*]['@id']",
                 containsInAnyOrder(
