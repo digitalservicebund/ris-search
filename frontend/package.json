@@ -18,7 +18,7 @@
     "audit:licences": "bash -c 'license-checker-rseidelsohn --production --excludePrivatePackages --onlyAllow \"$(./parseAllowedLicences.sh)\" --csv --out ./frontend-licence-report.csv'"
   },
   "dependencies": {
-    "@digitalservicebund/ris-ui": "4.6.0",
+    "@digitalservicebund/ris-ui": "4.6.1",
     "@nuxtjs/mdc": "0.22.1",
     "@nuxtjs/sitemap": "8.2.2",
     "@sentry/nuxt": "10.64.0",

@@ -244,7 +244,7 @@ test.describe("searching legislation", () => {
     await expect(resultCounter).toHaveText(nonZeroResultCount);
 
     await page
-      .getByRole("complementary", { name: "Ergebnisse anzeigen für:" })
+      .getByRole("complementary", { name: "Dokumentart" })
       .getByRole("button", { name: "Gesetze & Verordnungen" })
       .click();
 
@@ -480,7 +480,7 @@ test.describe("searching caselaw", () => {
     await expect(resultCounter).toHaveText(nonZeroResultCount);
 
     await page
-      .getByRole("complementary", { name: "Ergebnisse anzeigen für:" })
+      .getByRole("complementary", { name: "Dokumentart" })
       .getByRole("button", { name: "Gerichtsentscheidungen" })
       .click();
 
@@ -769,7 +769,7 @@ test.describe("searching caselaw", () => {
 
     // Switch to All Documents
     await page
-      .getByRole("complementary", { name: "Ergebnisse anzeigen für:" })
+      .getByRole("complementary", { name: "Dokumentart" })
       .getByRole("button", { name: "Alle Dokumentarten" })
       .click();
 
@@ -794,7 +794,7 @@ test.describe("searching literature", () => {
     await expect(resultCounter).toHaveText(nonZeroResultCount);
 
     await page
-      .getByRole("complementary", { name: "Ergebnisse anzeigen für:" })
+      .getByRole("complementary", { name: "Dokumentart" })
       .getByRole("button", { name: "Literaturnachweise" })
       .click();
 
@@ -975,7 +975,7 @@ test.describe("searching administrative directives", () => {
     await expect(resultCounter).toHaveText(nonZeroResultCount);
 
     await page
-      .getByRole("complementary", { name: "Ergebnisse anzeigen für:" })
+      .getByRole("complementary", { name: "Dokumentart" })
       .getByRole("button", { name: "Verwaltungsvorschriften" })
       .click();
 
@@ -1181,7 +1181,7 @@ test.describe("mobile filter and sort drawers", () => {
     ).not.toBeVisible();
 
     await page
-      .getByRole("complementary", { name: "Ergebnisse anzeigen für:" })
+      .getByRole("complementary", { name: "Dokumentart" })
       .getByRole("button", { name: "Gerichtsentscheidungen" })
       .click();
 

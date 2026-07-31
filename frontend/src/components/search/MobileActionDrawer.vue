@@ -61,7 +61,7 @@ function handleApply() {
       position="bottom"
       v-model:visible="visible"
     >
-      <div class="space-y-24">
+      <div class="mobile-action-drawer-content space-y-24">
         <slot />
       </div>
 
@@ -84,3 +84,13 @@ function handleApply() {
     </Drawer>
   </div>
 </template>
+
+<style lang="css" scoped>
+@reference "~/assets/main.css";
+
+@supports not (container-type: scroll-state) {
+  .mobile-action-drawer-content {
+    @apply py-12;
+  }
+}
+</style>

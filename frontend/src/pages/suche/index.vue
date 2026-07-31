@@ -386,7 +386,7 @@ watch(searchStatus, async (newStatus, oldStatus) => {
             :id="filterHeadingId"
             class="typo-label1-bold mb-16 flex items-center"
           >
-            Ergebnisse anzeigen für:
+            Dokumentart
           </h2>
 
           <div class="flex flex-col gap-24">
