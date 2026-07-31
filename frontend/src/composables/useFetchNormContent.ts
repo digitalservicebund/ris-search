@@ -220,12 +220,13 @@ function getContentUrl(metadata: LegislationExpression) {
   const encoding = metadata?.encoding?.find(
     (e) => e.encodingFormat === "text/html",
   );
+
   const contentUrl = encoding?.contentUrl;
-  if (contentUrl) {
-    console.info("using manifestation", encoding?.["@id"]);
-  } else {
-    console.error("contentUrl is missing", metadata?.encoding);
-    throw new Error("contentUrl is missing");
+
+  if (!contentUrl) {
+    throw new Error("contentUrl is missing", {
+      cause: { encoding: metadata?.encoding },
+    });
   }
 
   return contentUrl;
