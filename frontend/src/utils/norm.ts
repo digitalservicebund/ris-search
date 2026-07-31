@@ -148,3 +148,18 @@ export function getNormMetadataItems(
     },
   ];
 }
+
+/**
+ * Checks if the document has a `<div>` with class `akn-body` and checks if it's
+ * empty.
+ *
+ * @param document
+ */
+export function isNormBodyEmpty(document?: Document): boolean {
+  if (!document) {
+    return true;
+  }
+
+  const aknBody = document.querySelector("div.akn-body");
+  return !aknBody || aknBody.innerHTML.trim() === "";
+}

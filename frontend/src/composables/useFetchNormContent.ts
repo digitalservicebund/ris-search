@@ -16,6 +16,7 @@ export type NormContent = {
     standangabenHinweis?: string[];
     body: string;
   };
+  hasEmptyBody: boolean;
 };
 
 export type UseFetchNormContentOptions = {
@@ -62,6 +63,7 @@ export function useFetchNormContent(
       return {
         legislation: metadata,
         htmlParts,
+        hasEmptyBody: isNormBodyEmpty(document),
       };
     },
     { server: true, lazy: false },

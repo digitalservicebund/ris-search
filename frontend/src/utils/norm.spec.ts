@@ -7,6 +7,7 @@ import type { LegislationExpression } from "~/types/api";
 import {
   getMostRelevantExpression,
   getValidityStatus,
+  isNormBodyEmpty,
   temporalCoverageToValidityInterval,
   type ValidityInterval,
 } from "~/utils/norm";
@@ -253,5 +254,40 @@ describe("getNormMetadataItems", () => {
       "06.05.2025",
       "31.03.2037",
     ]);
+  });
+});
+
+describe("isNormBodyEmpty", () => {
+  it("returns true if no document is given", () => {
+    expect(isNormBodyEmpty(undefined)).toBe(true);
+  });
+
+  it("returns true if the document has no akn-body div", () => {
+    const doc = new DOMParser().parseFromString("<div></div>", "text/html");
+    expect(isNormBodyEmpty(doc)).toBe(true);
+  });
+
+  it("returns true if the akn-body div is empty", () => {
+    const doc = new DOMParser().parseFromString(
+      '<div class="akn-body"></div>',
+      "text/html",
+    );
+    expect(isNormBodyEmpty(doc)).toBe(true);
+  });
+
+  it("returns true if the akn-body div contains only whitespaces", () => {
+    const doc = new DOMParser().parseFromString(
+      '<div class="akn-body">   </div>',
+      "text/html",
+    );
+    expect(isNormBodyEmpty(doc)).toBe(true);
+  });
+
+  it("returns false if the akn-body div has content", () => {
+    const doc = new DOMParser().parseFromString(
+      '<div class="akn-body"><p>Content</p></div>',
+      "text/html",
+    );
+    expect(isNormBodyEmpty(doc)).toBe(false);
   });
 });

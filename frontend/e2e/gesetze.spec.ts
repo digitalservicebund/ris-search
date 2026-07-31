@@ -6,6 +6,16 @@ import {
 } from "./utils/actionMenuHelper";
 import { expect, navigate, noJsTest, test } from "./utils/fixtures";
 
+test.describe("empty norm (no text content)", () => {
+  test("does not show the Text tab when the norm body is empty", async ({
+    page,
+  }) => {
+    await navigate(page, "/gesetze/eli/bund/bgbl-1/2025/999/2025-01-01/1/deu");
+
+    await expect(page.getByRole("tab", { name: "Text" })).toHaveCount(0);
+  });
+});
+
 test.describe("view norm page", async () => {
   test.setTimeout(60000);
 
