@@ -287,13 +287,13 @@ describe("filterType", () => {
         ).toBeUndefined();
       });
 
-      it("returns undefined for 'specificDate' filter", () => {
+      it("returns correct query for 'specificDate' filter", () => {
         expect(
           dateFilterToQuery(
             { type: "specificDate", from: "2024", to: undefined },
             DocumentKind.Literature,
           ),
-        ).toBeUndefined();
+        ).toBe("years_of_publication:2024");
       });
 
       it("returns correct query for 'period' filter", () => {
@@ -345,7 +345,10 @@ describe("filterType", () => {
       it("returns undefined for allTime filter", () => {
         const filter = { type: "allTime" } as const;
 
-        const result = dateFilterToSimpleSearchParams(filter);
+        const result = dateFilterToSimpleSearchParams(
+          filter,
+          DocumentKind.CaseLaw,
+        );
 
         expect(result).toBeUndefined();
       });
@@ -358,7 +361,10 @@ describe("filterType", () => {
           from: "2024-01-15",
         } as const;
 
-        const result = dateFilterToSimpleSearchParams(filter);
+        const result = dateFilterToSimpleSearchParams(
+          filter,
+          DocumentKind.CaseLaw,
+        );
 
         expect(result).toEqual({
           dateFrom: "2024-01-15",
@@ -369,9 +375,9 @@ describe("filterType", () => {
       it("throws error when specificDate filter is missing from date", () => {
         const filter = { type: "specificDate" } as const;
 
-        expect(() => dateFilterToSimpleSearchParams(filter)).toThrow(
-          "Missing 'from' date in filter type specificDate",
-        );
+        expect(() =>
+          dateFilterToSimpleSearchParams(filter, DocumentKind.CaseLaw),
+        ).toThrow("Missing 'from' date in filter type specificDate");
       });
     });
 
@@ -383,7 +389,10 @@ describe("filterType", () => {
           to: "2024-12-31",
         } as const;
 
-        const result = dateFilterToSimpleSearchParams(filter);
+        const result = dateFilterToSimpleSearchParams(
+          filter,
+          DocumentKind.CaseLaw,
+        );
 
         expect(result).toEqual({
           dateFrom: "2024-01-01",
@@ -394,25 +403,25 @@ describe("filterType", () => {
       it("throws error when period filter is missing from date", () => {
         const filter = { type: "period", to: "2024-12-31" } as const;
 
-        expect(() => dateFilterToSimpleSearchParams(filter)).toThrow(
-          "Missing 'from' or 'to' date in filter type period",
-        );
+        expect(() =>
+          dateFilterToSimpleSearchParams(filter, DocumentKind.CaseLaw),
+        ).toThrow("Missing 'from' or 'to' date in filter type period");
       });
 
       it("throws error when period filter is missing to date", () => {
         const filter = { type: "period", from: "2024-01-01" } as const;
 
-        expect(() => dateFilterToSimpleSearchParams(filter)).toThrow(
-          "Missing 'from' or 'to' date in filter type period",
-        );
+        expect(() =>
+          dateFilterToSimpleSearchParams(filter, DocumentKind.CaseLaw),
+        ).toThrow("Missing 'from' or 'to' date in filter type period");
       });
 
       it("throws error when period filter is missing both dates", () => {
         const filter = { type: "period" } as const;
 
-        expect(() => dateFilterToSimpleSearchParams(filter)).toThrow(
-          "Missing 'from' or 'to' date in filter type period",
-        );
+        expect(() =>
+          dateFilterToSimpleSearchParams(filter, DocumentKind.CaseLaw),
+        ).toThrow("Missing 'from' or 'to' date in filter type period");
       });
     });
 
@@ -420,7 +429,10 @@ describe("filterType", () => {
       it("returns only dateTo for before filter", () => {
         const filter = { type: "before", to: "2024-12-31" } as const;
 
-        const result = dateFilterToSimpleSearchParams(filter);
+        const result = dateFilterToSimpleSearchParams(
+          filter,
+          DocumentKind.CaseLaw,
+        );
 
         expect(result).toEqual({
           dateFrom: undefined,
@@ -431,9 +443,9 @@ describe("filterType", () => {
       it("throws error when before filter is missing to date", () => {
         const filter = { type: "before" } as const;
 
-        expect(() => dateFilterToSimpleSearchParams(filter)).toThrow(
-          "Missing 'to' date in filter type before",
-        );
+        expect(() =>
+          dateFilterToSimpleSearchParams(filter, DocumentKind.CaseLaw),
+        ).toThrow("Missing 'to' date in filter type before");
       });
 
       it("removes from date if present in before filter", () => {
@@ -443,7 +455,10 @@ describe("filterType", () => {
           to: "2024-12-31",
         } as const;
 
-        const result = dateFilterToSimpleSearchParams(filter);
+        const result = dateFilterToSimpleSearchParams(
+          filter,
+          DocumentKind.CaseLaw,
+        );
 
         expect(result).toEqual({
           dateFrom: undefined,
@@ -456,7 +471,10 @@ describe("filterType", () => {
       it("returns only dateFrom for after filter", () => {
         const filter = { type: "after", from: "2024-01-01" } as const;
 
-        const result = dateFilterToSimpleSearchParams(filter);
+        const result = dateFilterToSimpleSearchParams(
+          filter,
+          DocumentKind.CaseLaw,
+        );
 
         expect(result).toEqual({
           dateFrom: "2024-01-01",
@@ -467,9 +485,9 @@ describe("filterType", () => {
       it("throws error when after filter is missing from date", () => {
         const filter = { type: "after" } as const;
 
-        expect(() => dateFilterToSimpleSearchParams(filter)).toThrow(
-          "Missing 'from' date in filter type after",
-        );
+        expect(() =>
+          dateFilterToSimpleSearchParams(filter, DocumentKind.CaseLaw),
+        ).toThrow("Missing 'from' date in filter type after");
       });
 
       it("removes to date if present in after filter", () => {
@@ -479,7 +497,10 @@ describe("filterType", () => {
           to: "2024-12-31",
         } as const;
 
-        const result = dateFilterToSimpleSearchParams(filter);
+        const result = dateFilterToSimpleSearchParams(
+          filter,
+          DocumentKind.CaseLaw,
+        );
 
         expect(result).toEqual({
           dateFrom: "2024-01-01",
@@ -492,9 +513,41 @@ describe("filterType", () => {
       it("throws error for currentlyInForce filter", () => {
         const filter = { type: "currentlyInForce" } as const;
 
-        expect(() => dateFilterToSimpleSearchParams(filter)).toThrow(
+        expect(() =>
+          dateFilterToSimpleSearchParams(filter, DocumentKind.CaseLaw),
+        ).toThrow(
           "Attempted to convert unsupported filter type currentlyInForce to query",
         );
+      });
+    });
+
+    describe("literature (year expansion)", () => {
+      it("expands a specific year to cover the full year", () => {
+        const filter = { type: "specificDate", from: "2020" } as const;
+
+        const result = dateFilterToSimpleSearchParams(
+          filter,
+          DocumentKind.Literature,
+        );
+
+        expect(result).toEqual({
+          dateFrom: "2020-01-01",
+          dateTo: "2020-12-31",
+        });
+      });
+
+      it("expands a period of years to full ISO dates", () => {
+        const filter = { type: "period", from: "2020", to: "2024" } as const;
+
+        const result = dateFilterToSimpleSearchParams(
+          filter,
+          DocumentKind.Literature,
+        );
+
+        expect(result).toEqual({
+          dateFrom: "2020-01-01",
+          dateTo: "2024-12-31",
+        });
       });
     });
   });

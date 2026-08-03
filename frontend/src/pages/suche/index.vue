@@ -314,19 +314,10 @@ watch(searchStatus, async (newStatus, oldStatus) => {
                 append-to="body"
               />
 
-              <SearchDateRangeFilter
-                v-if="
-                  documentKind === DocumentKind.CaseLaw ||
-                  documentKind === DocumentKind.AdministrativeDirective
-                "
+              <SearchDateFilter
+                v-if="hasSubFilters"
                 v-model="dateFilterDraft.draft.value"
-                append-to="body"
-              />
-
-              <SearchYearRangeFilter
-                v-else-if="documentKind === DocumentKind.Literature"
-                v-model="dateFilterDraft.draft.value"
-                append-to="body"
+                :document-kind="documentKind"
               />
             </SearchMobileActionDrawer>
 
@@ -402,18 +393,10 @@ watch(searchStatus, async (newStatus, oldStatus) => {
                 @update:model-value="updateCourt"
               />
 
-              <SearchDateRangeFilter
-                v-if="
-                  documentKind === DocumentKind.CaseLaw ||
-                  documentKind === DocumentKind.AdministrativeDirective
-                "
+              <SearchDateFilter
+                v-if="hasSubFilters"
                 v-model="localDateFilter"
-                @update:model-value="updateDateFilter"
-              />
-
-              <SearchYearRangeFilter
-                v-else-if="documentKind === DocumentKind.Literature"
-                v-model="localDateFilter"
+                :document-kind="documentKind"
                 @update:model-value="updateDateFilter"
               />
             </div>

@@ -85,7 +85,10 @@ export async function useSimpleSearch(
     // Date filter
     const dateFilterVal = toValue(dateFilter);
     if (dateFilterVal) {
-      const filter = dateFilterToSimpleSearchParams(dateFilterVal);
+      const filter = dateFilterToSimpleSearchParams(
+        dateFilterVal,
+        documentKind,
+      );
       if (filter?.dateTo) result.dateTo = filter.dateTo;
       if (filter?.dateFrom) result.dateFrom = filter.dateFrom;
     }

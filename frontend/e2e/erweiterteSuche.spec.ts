@@ -473,7 +473,7 @@ test.describe("searching legislation", () => {
     await searchFor(page, {
       documentKind: "Gesetze & Verordnungen",
       q: "",
-      dateFilter: "Innerhalb einer Zeitspanne",
+      dateFilter: "Innerhalb eines Zeitraums",
       dateFilterFrom: "01.01.2001",
       dateFilterTo: "01.01.2022",
     });
@@ -618,7 +618,7 @@ test.describe("searching caselaw", () => {
     await searchFor(page, {
       documentKind: "Gerichtsentscheidungen",
       q: "urteil",
-      dateFilter: "Innerhalb einer Zeitspanne",
+      dateFilter: "Innerhalb eines Zeitraums",
       dateFilterFrom: "01.01.2020",
       dateFilterTo: "31.12.2024",
     });
@@ -764,7 +764,7 @@ test.describe("searching literature", () => {
     await searchFor(page, {
       documentKind: "Literaturnachweise",
       q: "",
-      dateFilter: "Innerhalb einer Zeitspanne",
+      dateFilter: "Innerhalb eines Zeitraums",
       dateFilterFrom: "2021",
       dateFilterTo: "2022",
     });
@@ -956,7 +956,7 @@ test.describe("searching administrative directive", () => {
     await searchFor(page, {
       documentKind: "Verwaltungsvorschriften",
       q: "",
-      dateFilter: "Innerhalb einer Zeitspanne",
+      dateFilter: "Innerhalb eines Zeitraums",
       dateFilterFrom: "01.01.2019",
       dateFilterTo: "31.12.2022",
     });

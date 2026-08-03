@@ -42,6 +42,12 @@ const filterLabel = computed(() => {
   }
 });
 
+const specificDateLabel = computed(() =>
+  documentKind === DocumentKind.Literature
+    ? "Bestimmtes Jahr"
+    : "Bestimmtes Datum",
+);
+
 const visibleFilters = computed(() => {
   return {
     currentlyInForce: documentKind === DocumentKind.Norm,
@@ -50,6 +56,7 @@ const visibleFilters = computed(() => {
       DocumentKind.Norm,
       DocumentKind.CaseLaw,
       DocumentKind.AdministrativeDirective,
+      DocumentKind.Literature,
     ].includes(documentKind),
     period: true,
   };
@@ -94,7 +101,7 @@ function setPeriodTo(value: string | undefined) {
         value="currentlyInForce"
         @update:model-value="setFilterType"
       />
-      <label :for="currentlyInForceId"> Aktuell gültig </label>
+      <label :for="currentlyInForceId">Aktuell gültig</label>
     </div>
 
     <div v-if="visibleFilters.allTime" class="flex items-center">
@@ -118,19 +125,30 @@ function setPeriodTo(value: string | undefined) {
             value="specificDate"
             @update:model-value="setFilterType"
           />
-          <label :for="specificDateId"> Bestimmtes Datum </label>
+          <label :for="specificDateId"> {{ specificDateLabel }} </label>
         </div>
 
         <div
           v-if="filter.type === 'specificDate'"
           class="flex flex-col pt-8 pl-40"
         >
-          <label :for="specificDateInputId" class="sr-only">Datum</label>
-          <DateInput
-            :id="specificDateInputId"
-            :model-value="filter.from"
-            @update:model-value="setSpecificDate($event)"
-          />
+          <template v-if="documentKind === DocumentKind.Literature">
+            <label :for="specificDateInputId" class="sr-only">Jahr</label>
+            <YearInput
+              :id="specificDateInputId"
+              :model-value="filter.from"
+              @update:model-value="setSpecificDate($event)"
+            />
+          </template>
+
+          <template v-else>
+            <label :for="specificDateInputId" class="sr-only">Datum</label>
+            <DateInput
+              :id="specificDateInputId"
+              :model-value="filter.from"
+              @update:model-value="setSpecificDate($event)"
+            />
+          </template>
         </div>
       </fieldset>
     </template>
@@ -145,7 +163,7 @@ function setPeriodTo(value: string | undefined) {
             value="period"
             @update:model-value="setFilterType"
           />
-          <label :for="periodId"> Innerhalb einer Zeitspanne </label>
+          <label :for="periodId">Innerhalb eines Zeitraums</label>
         </div>
 
         <template v-if="filter.type === 'period'">

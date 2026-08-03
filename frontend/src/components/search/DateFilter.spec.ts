@@ -32,7 +32,7 @@ describe("DateFilter", () => {
       ).toBeInTheDocument();
 
       expect(
-        screen.getByRole("radio", { name: "Innerhalb einer Zeitspanne" }),
+        screen.getByRole("radio", { name: "Innerhalb eines Zeitraums" }),
       ).toBeInTheDocument();
     });
 
@@ -95,7 +95,7 @@ describe("DateFilter", () => {
       expect(modelValue).toEqual({ type: "specificDate", from: "2026-01-01" });
     });
 
-    it("filters by 'Innerhalb einer Zeitspanne'", async () => {
+    it("filters by 'Innerhalb eines Zeitraums'", async () => {
       const user = userEvent.setup();
 
       const { emitted } = render(DateFilter, {
@@ -107,7 +107,7 @@ describe("DateFilter", () => {
       });
 
       await user.click(
-        screen.getByRole("radio", { name: "Innerhalb einer Zeitspanne" }),
+        screen.getByRole("radio", { name: "Innerhalb eines Zeitraums" }),
       );
 
       expect(emitted("update:modelValue")).toContainEqual([
@@ -188,7 +188,7 @@ describe("DateFilter", () => {
       ).toBeInTheDocument();
 
       expect(
-        screen.getByRole("radio", { name: "Innerhalb einer Zeitspanne" }),
+        screen.getByRole("radio", { name: "Innerhalb eines Zeitraums" }),
       ).toBeInTheDocument();
 
       expect(
@@ -273,7 +273,7 @@ describe("DateFilter", () => {
       expect(modelValue).toEqual({ type: "specificDate", from: "2026-01-01" });
     });
 
-    it("filters by 'Innerhalb einer Zeitspanne'", async () => {
+    it("filters by 'Innerhalb eines Zeitraums'", async () => {
       const user = userEvent.setup();
 
       const { emitted } = render(DateFilter, {
@@ -285,7 +285,7 @@ describe("DateFilter", () => {
       });
 
       await user.click(
-        screen.getByRole("radio", { name: "Innerhalb einer Zeitspanne" }),
+        screen.getByRole("radio", { name: "Innerhalb eines Zeitraums" }),
       );
 
       expect(emitted("update:modelValue")).toContainEqual([
@@ -370,7 +370,7 @@ describe("DateFilter", () => {
       ).toBeInTheDocument();
 
       expect(
-        screen.getByRole("radio", { name: "Innerhalb einer Zeitspanne" }),
+        screen.getByRole("radio", { name: "Innerhalb eines Zeitraums" }),
       ).toBeInTheDocument();
     });
 
@@ -433,7 +433,7 @@ describe("DateFilter", () => {
       expect(modelValue).toEqual({ type: "specificDate", from: "2026-01-01" });
     });
 
-    it("filters by 'Innerhalb einer Zeitspanne'", async () => {
+    it("filters by 'Innerhalb eines Zeitraums'", async () => {
       const user = userEvent.setup();
 
       const { emitted } = render(DateFilter, {
@@ -445,7 +445,7 @@ describe("DateFilter", () => {
       });
 
       await user.click(
-        screen.getByRole("radio", { name: "Innerhalb einer Zeitspanne" }),
+        screen.getByRole("radio", { name: "Innerhalb eines Zeitraums" }),
       );
 
       expect(emitted("update:modelValue")).toContainEqual([
@@ -530,7 +530,11 @@ describe("DateFilter", () => {
       ).not.toBeInTheDocument();
 
       expect(
-        screen.getByRole("radio", { name: "Innerhalb einer Zeitspanne" }),
+        screen.getByRole("radio", { name: "Bestimmtes Jahr" }),
+      ).toBeInTheDocument();
+
+      expect(
+        screen.getByRole("radio", { name: "Innerhalb eines Zeitraums" }),
       ).toBeInTheDocument();
     });
 
@@ -554,7 +558,43 @@ describe("DateFilter", () => {
       ]);
     });
 
-    it("filters by 'Innerhalb einer Zeitspanne'", async () => {
+    it("filters by 'Bestimmtes Jahr'", async () => {
+      const user = userEvent.setup();
+
+      const { emitted } = render(DateFilter, {
+        props: {
+          documentKind: DocumentKind.Literature,
+          modelValue: { type: "allTime" },
+        },
+        global: { stubs: { InputMask: InputText } },
+      });
+
+      await user.click(screen.getByRole("radio", { name: "Bestimmtes Jahr" }));
+
+      expect(emitted("update:modelValue")).toContainEqual([
+        { type: "specificDate", form: undefined, to: undefined },
+      ]);
+    });
+
+    it("sets a specific year", async () => {
+      const user = userEvent.setup();
+      let modelValue: DateFilterValue = { type: "specificDate" };
+
+      render(DateFilter, {
+        props: {
+          documentKind: DocumentKind.Literature,
+          modelValue,
+          "onUpdate:modelValue": (val) => (modelValue = val),
+        },
+        global: { stubs: { InputMask: InputText } },
+      });
+
+      await user.type(screen.getByRole("textbox", { name: "Jahr" }), "2020");
+
+      expect(modelValue).toEqual({ type: "specificDate", from: "2020" });
+    });
+
+    it("filters by 'Innerhalb eines Zeitraums'", async () => {
       const user = userEvent.setup();
 
       const { emitted } = render(DateFilter, {
@@ -566,7 +606,7 @@ describe("DateFilter", () => {
       });
 
       await user.click(
-        screen.getByRole("radio", { name: "Innerhalb einer Zeitspanne" }),
+        screen.getByRole("radio", { name: "Innerhalb eines Zeitraums" }),
       );
 
       expect(emitted("update:modelValue")).toContainEqual([

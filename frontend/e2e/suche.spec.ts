@@ -91,7 +91,7 @@ test.describe("general search page features", () => {
     await navigate(page, "/suche?documentKind=N");
 
     await expect(
-      page.getByRole("combobox", { name: "Zeitraum" }),
+      page.getByRole("radio", { name: "Keine zeitliche Begrenzung" }),
     ).not.toBeVisible();
   });
 
@@ -454,7 +454,7 @@ test.describe("searching legislation", () => {
     await navigate(page, "/suche?documentKind=N");
 
     await expect(
-      page.getByRole("combobox", { name: "Zeitraum" }),
+      page.getByRole("radio", { name: "Keine zeitliche Begrenzung" }),
     ).not.toBeVisible();
   });
 
@@ -644,52 +644,11 @@ test.describe("searching caselaw", () => {
     const resultCounter = getResultCounter(page);
     await expect(resultCounter).toHaveText(nonZeroResultCount);
 
-    await page.getByRole("combobox", { name: "Zeitraum" }).click();
-    await page.getByRole("option", { name: "Ab einem Datum" }).click();
+    await page.getByRole("radio", { name: "Bestimmtes Datum" }).click();
     expect(page.url()).toBe(initialUrl);
 
     await page.getByRole("textbox", { name: "Datum" }).fill("10.04.2025");
     await expect(page).toHaveURL(/dateFilterFrom=2025-04-10/);
-  });
-
-  test("searches decision date before a date", async ({
-    page,
-    isMobileTest,
-  }) => {
-    test.skip(isMobileTest);
-    await navigate(page, "/suche?documentKind=R");
-
-    await page.getByRole("combobox", { name: "Zeitraum" }).click();
-    await page.getByRole("option", { name: "Bis zu einem Datum" }).click();
-
-    await page.getByRole("textbox", { name: "Datum" }).fill("31.12.2024");
-
-    await expect(page).toHaveURL(/dateFilterFrom=&dateFilterTo=2024-12-31/);
-
-    const searchResults = getSearchResults(page);
-    await expect(searchResults).toHaveCount(4);
-    await expect(searchResults.nth(0)).toHaveText(/15.06.2024|22.11.2023/);
-  });
-
-  test("searches decision date after a date", async ({
-    page,
-    isMobileTest,
-  }) => {
-    test.skip(isMobileTest);
-    await navigate(page, "/suche?documentKind=R");
-
-    await page.getByRole("combobox", { name: "Zeitraum" }).click();
-    await page.getByRole("option", { name: "Ab einem Datum" }).click();
-
-    await page.getByRole("textbox", { name: "Datum" }).fill("10.04.2025");
-
-    await expect(page).toHaveURL(
-      /dateFilterFrom=2025-04-10&dateFilterTo=($|&)/,
-    );
-
-    const searchResults = getSearchResults(page);
-    await expect(searchResults).toHaveCount(1);
-    await expect(searchResults).toHaveText(/10.04.2025/);
   });
 
   test("searches decision date on a specific date", async ({
@@ -699,8 +658,7 @@ test.describe("searching caselaw", () => {
     test.skip(isMobileTest);
     await navigate(page, "/suche?documentKind=R");
 
-    await page.getByRole("combobox", { name: "Zeitraum" }).click();
-    await page.getByRole("option", { name: "An einem Datum" }).click();
+    await page.getByRole("radio", { name: "Bestimmtes Datum" }).click();
 
     await page.getByRole("textbox", { name: "Datum" }).fill("15.06.2024");
 
@@ -715,15 +673,12 @@ test.describe("searching caselaw", () => {
     test.skip(isMobileTest);
     await navigate(page, "/suche?documentKind=R");
 
-    await page.getByRole("combobox", { name: "Zeitraum" }).click();
-    await page.getByRole("option", { name: "In einem Zeitraum" }).click();
+    await page
+      .getByRole("radio", { name: "Innerhalb eines Zeitraums" })
+      .click();
 
-    await page
-      .getByRole("textbox", { name: "Ab dem Datum" })
-      .fill("01.01.2024");
-    await page
-      .getByRole("textbox", { name: "Bis zum Datum" })
-      .fill("31.12.2024");
+    await page.getByRole("textbox", { name: "von" }).fill("01.01.2024");
+    await page.getByRole("textbox", { name: "bis" }).fill("31.12.2024");
 
     await expect(page).toHaveURL(
       /dateFilterFrom=2024-01-01&dateFilterTo=2024-12-31/,
@@ -743,17 +698,16 @@ test.describe("searching caselaw", () => {
       "/suche?documentKind=R&dateFilterType=specificDate&dateFilterFrom=2020-01-01",
     );
 
-    const dateInput = page.getByRole("textbox", { name: "Datum" });
-    await expect(dateInput).toHaveValue("01.01.2020");
+    await expect(page.getByRole("textbox", { name: "Datum" })).toHaveValue(
+      "01.01.2020",
+    );
 
-    await page.getByRole("combobox", { name: "Zeitraum" }).click();
-    await page.getByRole("option", { name: "Ab einem Datum" }).click();
+    await page
+      .getByRole("radio", { name: "Innerhalb eines Zeitraums" })
+      .click();
 
-    // Type a partial date - if the input wasn't properly reset, this would
-    // result in a broken value due to the input mask carrying over state
-    await dateInput.press("2");
-
-    await expect(dateInput).toHaveValue("2_.__.____");
+    await expect(page.getByRole("textbox", { name: "von" })).toHaveValue("");
+    await expect(page.getByRole("textbox", { name: "bis" })).toHaveValue("");
   });
 
   test("resets caselaw-specific filters when switching to all documents", async ({
@@ -872,36 +826,6 @@ test.describe("searching literature", () => {
     ).toBeVisible();
   });
 
-  test("searches until publication year", async ({ page, isMobileTest }) => {
-    test.skip(isMobileTest);
-    await navigate(page, "/suche?documentKind=L");
-
-    await page.getByRole("combobox", { name: "Zeitraum" }).click();
-    await page.getByRole("option", { name: "Bis zu einem Jahr" }).click();
-
-    await page.getByRole("textbox", { name: "Jahr" }).fill("2013");
-
-    await expect(page).toHaveURL(/dateFilterFrom=&dateFilterTo=2013-12-31/);
-
-    await expect(getSearchResults(page)).toHaveCount(4);
-  });
-
-  test("searches from publication year", async ({ page, isMobileTest }) => {
-    test.skip(isMobileTest);
-    await navigate(page, "/suche?documentKind=L");
-
-    await page.getByRole("combobox", { name: "Zeitraum" }).click();
-    await page.getByRole("option", { name: "Ab einem Jahr" }).click();
-
-    await page.getByRole("textbox", { name: "Jahr" }).fill("2024");
-
-    await expect(page).toHaveURL(
-      /dateFilterFrom=2024-01-01&dateFilterTo=($|&)/,
-    );
-
-    await expect(getSearchResults(page)).toHaveCount(3);
-  });
-
   test("searches for specific publication year", async ({
     page,
     isMobileTest,
@@ -909,14 +833,11 @@ test.describe("searching literature", () => {
     test.skip(isMobileTest);
     await navigate(page, "/suche?documentKind=L");
 
-    await page.getByRole("combobox", { name: "Zeitraum" }).click();
-    await page.getByRole("option", { name: "In einem Jahr" }).click();
+    await page.getByRole("radio", { name: "Bestimmtes Jahr" }).click();
 
     await page.getByRole("textbox", { name: "Jahr" }).fill("2015");
 
-    await expect(page).toHaveURL(
-      /dateFilterFrom=2015-01-01&dateFilterTo=2015-12-31/,
-    );
+    await expect(page).toHaveURL(/dateFilterFrom=2015&dateFilterTo=($|&)/);
 
     await expect(getSearchResults(page)).toHaveCount(1);
   });
@@ -928,15 +849,14 @@ test.describe("searching literature", () => {
     test.skip(isMobileTest);
     await navigate(page, "/suche?documentKind=L");
 
-    await page.getByRole("combobox", { name: "Zeitraum" }).click();
-    await page.getByRole("option", { name: "In einem Zeitraum" }).click();
+    await page
+      .getByRole("radio", { name: "Innerhalb eines Zeitraums" })
+      .click();
 
-    await page.getByRole("textbox", { name: "Ab dem Jahr" }).fill("2015");
-    await page.getByRole("textbox", { name: "Bis zum Jahr" }).fill("2024");
+    await page.getByRole("textbox", { name: "von" }).fill("2015");
+    await page.getByRole("textbox", { name: "bis" }).fill("2024");
 
-    await expect(page).toHaveURL(
-      /dateFilterFrom=2015-01-01&dateFilterTo=2024-12-31/,
-    );
+    await expect(page).toHaveURL(/dateFilterFrom=2015&dateFilterTo=2024/);
 
     await expect(getSearchResults(page)).toHaveCount(6);
   });
@@ -948,20 +868,16 @@ test.describe("searching literature", () => {
     test.skip(isMobileTest);
     await navigate(
       page,
-      "/suche?documentKind=L&dateFilterType=period&dateFilterFrom=2020-01-01&dateFilterTo=2020-12-31",
+      "/suche?documentKind=L&dateFilterType=period&dateFilterFrom=2020&dateFilterTo=2024",
     );
 
-    const yearInput = page.getByRole("textbox", { name: "Jahr" });
-    await expect(yearInput).toHaveValue("2020");
+    await expect(page.getByRole("textbox", { name: "von" })).toHaveValue(
+      "2020",
+    );
 
-    await page.getByRole("combobox", { name: "Zeitraum" }).click();
-    await page.getByRole("option", { name: "Ab einem Jahr" }).click();
+    await page.getByRole("radio", { name: "Bestimmtes Jahr" }).click();
 
-    // Type a partial year - if the input wasn't properly reset, this would
-    // result in a broken value due to the input carrying over state
-    await yearInput.fill("1");
-
-    await expect(yearInput).toHaveValue("1___");
+    await expect(page.getByRole("textbox", { name: "Jahr" })).toHaveValue("");
   });
 });
 
@@ -1054,46 +970,6 @@ test.describe("searching administrative directives", () => {
     ).toBeVisible();
   });
 
-  test("searches entry into force before a date", async ({
-    page,
-    isMobileTest,
-  }) => {
-    test.skip(isMobileTest);
-    await navigate(page, "/suche?documentKind=V");
-
-    await page.getByRole("combobox", { name: "Zeitraum" }).click();
-    await page.getByRole("option", { name: "Bis zu einem Datum" }).click();
-
-    await page.getByRole("textbox", { name: "Datum" }).fill("15.03.2019");
-
-    await expect(page).toHaveURL(/dateFilterFrom=&dateFilterTo=2019-03-15/);
-
-    const searchResults = getSearchResults(page);
-    await expect(searchResults).toHaveCount(3);
-    await expect(searchResults.nth(0)).toHaveText(/14.03.2019/);
-  });
-
-  test("searches entry into force after a date", async ({
-    page,
-    isMobileTest,
-  }) => {
-    test.skip(isMobileTest);
-    await navigate(page, "/suche?documentKind=V");
-
-    await page.getByRole("combobox", { name: "Zeitraum" }).click();
-    await page.getByRole("option", { name: "Ab einem Datum" }).click();
-
-    await page.getByRole("textbox", { name: "Datum" }).fill("01.07.2025");
-
-    await expect(page).toHaveURL(
-      /dateFilterFrom=2025-07-01&dateFilterTo=($|&)/,
-    );
-
-    const searchResults = getSearchResults(page);
-    await expect(searchResults).toHaveCount(1);
-    await expect(searchResults).toHaveText(/01.07.2025/);
-  });
-
   test("searches entry into force on a specific date", async ({
     page,
     isMobileTest,
@@ -1101,8 +977,7 @@ test.describe("searching administrative directives", () => {
     test.skip(isMobileTest);
     await navigate(page, "/suche?documentKind=V");
 
-    await page.getByRole("combobox", { name: "Zeitraum" }).click();
-    await page.getByRole("option", { name: "An einem Datum" }).click();
+    await page.getByRole("radio", { name: "Bestimmtes Datum" }).click();
 
     await page.getByRole("textbox", { name: "Datum" }).fill("23.12.2022");
 
@@ -1125,15 +1000,12 @@ test.describe("searching administrative directives", () => {
     test.skip(isMobileTest);
     await navigate(page, "/suche?documentKind=V");
 
-    await page.getByRole("combobox", { name: "Zeitraum" }).click();
-    await page.getByRole("option", { name: "In einem Zeitraum" }).click();
+    await page
+      .getByRole("radio", { name: "Innerhalb eines Zeitraums" })
+      .click();
 
-    await page
-      .getByRole("textbox", { name: "Ab dem Datum" })
-      .fill("14.03.2019");
-    await page
-      .getByRole("textbox", { name: "Bis zum Datum" })
-      .fill("24.12.2022");
+    await page.getByRole("textbox", { name: "von" }).fill("14.03.2019");
+    await page.getByRole("textbox", { name: "bis" }).fill("24.12.2022");
 
     await expect(page).toHaveURL(
       /dateFilterFrom=2019-03-14&dateFilterTo=2022-12-24/,
@@ -1255,18 +1127,22 @@ test.describe("mobile filter and sort drawers", () => {
     const dialog = page.getByRole("dialog", { name: "Filtern" });
     await expect(dialog).toBeVisible();
 
-    await dialog.getByRole("combobox", { name: "Zeitraum" }).click();
-    await page.getByRole("option", { name: "Bis zu einem Datum" }).click();
-    await dialog.getByRole("textbox", { name: "Datum" }).fill("31.12.2024");
+    await dialog
+      .getByRole("radio", { name: "Innerhalb eines Zeitraums" })
+      .click();
+    await dialog.getByRole("textbox", { name: "von" }).fill("01.01.2024");
+    await dialog.getByRole("textbox", { name: "bis" }).fill("31.12.2024");
 
     await dialog.getByRole("button", { name: "Anwenden" }).click();
 
     await expect(dialog).not.toBeVisible();
-    await expect(page).toHaveURL(/dateFilterFrom=&dateFilterTo=2024-12-31/);
+    await expect(page).toHaveURL(
+      /dateFilterFrom=2024-01-01&dateFilterTo=2024-12-31/,
+    );
 
     const searchResults = getSearchResults(page);
-    await expect(searchResults).toHaveCount(4);
-    await expect(searchResults.nth(0)).toHaveText(/15.06.2024|22.11.2023/);
+    await expect(searchResults).toHaveCount(1);
+    await expect(searchResults.nth(0)).toHaveText(/15.06.2024/);
   });
 
   test("discards filter drawer changes when closed without applying", async ({
