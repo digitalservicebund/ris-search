@@ -181,7 +181,7 @@ onBeforeUnmount(stopAligningBodyOverlay);
 
 <template>
   <div class="flex flex-col gap-8">
-    <label :id="id" class="typo-label2-bold">Bundesgericht</label>
+    <label :id="id" class="typo-label1-bold">Bundesgericht</label>
     <div ref="fieldRef" data-testid="court-filter-field">
       <AutoComplete
         v-model="model"
