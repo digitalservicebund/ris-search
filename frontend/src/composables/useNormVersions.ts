@@ -1,5 +1,4 @@
-import { computed, type ComputedRef } from "vue";
-import type { AsyncDataRequestStatus } from "#app";
+import { computed } from "vue";
 import type {
   JSONLDList,
   LegislationExpression,
@@ -9,46 +8,12 @@ import type {
 } from "~/types/api";
 import { getCurrentDateInGermanyFormatted } from "~/utils/dateFormatting";
 
-interface UseNormVersions {
-  status: Ref<AsyncDataRequestStatus>;
-  sortedVersions: ComputedRef<LegislationExpression[]>;
-}
-
-export function useNormVersions(eli: string): UseNormVersions {
-  const { data, status } = getNormVersions(eli);
-  const sortedVersions = computed(() => data.value?.member ?? []);
-  return { status, sortedVersions };
-}
-
-function getNormVersions(eli: string) {
-  const immediate = true;
-  const { status, data, error } = useRisBackend<
+export function useNormVersions(eli: string) {
+  const { data, status, error } = useRisBackend<
     JSONLDList<LegislationExpression>
-  >(`/v1/legislation/work-example/${eli}`, {
-    immediate: immediate,
-  });
-
-  if (error?.value) {
-    throw createError(error.value);
-  }
-
-  return { status, data };
-}
-
-function getNorms(params: LegislationSearchParams) {
-  const immediate = params.eli !== undefined;
-  const { status, data, error } = useRisBackend<
-    JSONLDList<SearchResult<LegislationWork>>
-  >(`/v1/legislation`, {
-    params,
-    immediate: immediate,
-  });
-
-  if (error?.value) {
-    throw createError(error.value);
-  }
-
-  return { status, data };
+  >(`/v1/legislation/work-example/${eli}`, { immediate: true });
+  const sortedVersions = computed(() => data.value?.member ?? []);
+  return { data, status, error, sortedVersions };
 }
 
 export function useValidNormVersions(eli: string) {
@@ -59,4 +24,15 @@ export function useValidNormVersions(eli: string) {
     temporalCoverageTo: today,
     size: 300,
   });
+}
+
+function getNorms(params: LegislationSearchParams) {
+  const immediate = params.eli !== undefined;
+  return useRisBackend<JSONLDList<SearchResult<LegislationWork>>>(
+    `/v1/legislation`,
+    {
+      params,
+      immediate: immediate,
+    },
+  );
 }
