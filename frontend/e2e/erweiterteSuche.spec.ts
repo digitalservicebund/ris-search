@@ -505,7 +505,7 @@ test.describe("searching caselaw", () => {
 
     // Ensure all visible entries are of type caselaw
     await expect(searchResults).toHaveText(
-      Array(11).fill(/^(Beschluss|Urteil)/),
+      Array(12).fill(/^(Beschluss|Urteil)/),
     );
   });
 
