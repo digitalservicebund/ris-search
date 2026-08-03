@@ -106,6 +106,7 @@ public class CaseLawLdmlToOpenSearchMapper {
         // Internal (portal team) fields
         .indexedAt(Instant.now().toString())
         .articles(null)
+        .vorabdokument(isVorabdokument(judgmentBody))
         .build();
   }
 
@@ -224,6 +225,10 @@ public class CaseLawLdmlToOpenSearchMapper {
         .getContentByDomainTerm(term)
         .map(CaseLawLdmlToOpenSearchMapper::sanitize)
         .orElse(null);
+  }
+
+  private boolean isVorabdokument(JudgmentBody judgmentBody) {
+    return Objects.equals(judgmentBody.getStatus(), "incomplete");
   }
 
   private static String sanitize(JaxbHtml html) {

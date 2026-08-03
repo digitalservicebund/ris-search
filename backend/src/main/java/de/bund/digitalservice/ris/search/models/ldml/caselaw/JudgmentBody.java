@@ -1,5 +1,6 @@
 package de.bund.digitalservice.ris.search.models.ldml.caselaw;
 
+import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlElements;
 import java.util.List;
@@ -21,6 +22,12 @@ import lombok.NoArgsConstructor;
 @Getter
 @Builder
 public class JudgmentBody {
+  /**
+   * Status of the document.
+   *
+   * <p>Set to "incomplete" in case of a Vorabdokument.
+   */
+  @XmlAttribute private String status;
 
   /**
    * A list of introductory elements such as headnotes (Leitsätze) or outlines (Gliederungen) and

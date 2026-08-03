@@ -28,7 +28,7 @@
             </akn:p>
         </akn:header>
 
-        <akn:judgmentBody>
+        <akn:judgmentBody{% if vorabdokument%} status="incomplete" {% endif %}>
 
             <akn:introduction ris:domainTerm="Leitsatz">
                 <akn:p>{% if leitsatz %}{{ leitsatz }}{% else %}Example Leitsatz/GuidingPrinciple{% endif %}</akn:p>
