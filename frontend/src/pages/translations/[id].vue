@@ -31,7 +31,7 @@ const id = route.params.id as string;
 
 const { data, error } = await fetchTranslationAndHTML(id);
 if (error.value || !data.value) {
-  showError({ status: error.value?.status ?? 500 });
+  throw createError({ statusCode: error.value?.status ?? 500 });
 }
 
 const { legislation } = await getGermanOriginal(id);

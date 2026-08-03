@@ -196,6 +196,10 @@ const validVersions =
     ? undefined
     : useValidNormVersions(norm.value?.exampleOfWork.legislationIdentifier);
 
+if (validVersions?.error.value) {
+  throw createError(validVersions.error.value);
+}
+
 const inForceNormLink = computed(() => {
   if (
     !validVersions ||

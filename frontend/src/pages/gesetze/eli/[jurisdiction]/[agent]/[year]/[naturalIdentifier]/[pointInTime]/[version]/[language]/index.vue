@@ -110,8 +110,15 @@ const normBreadcrumbTitle = computed(() =>
   getNormBreadcrumbTitle(metadata.value),
 );
 
-const { status: normVersionsStatus, sortedVersions: normVersions } =
-  useNormVersions(metadata.value.exampleOfWork?.legislationIdentifier ?? "");
+const {
+  status: normVersionsStatus,
+  sortedVersions: normVersions,
+  error: normVersionsError,
+} = useNormVersions(metadata.value.exampleOfWork?.legislationIdentifier ?? "");
+
+if (normVersionsError.value) {
+  throw createError(normVersionsError.value);
+}
 
 const searchBackLink = useSearchBackLink(DocumentKind.Norm);
 
