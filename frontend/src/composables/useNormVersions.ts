@@ -29,7 +29,7 @@ function getNormVersions(eli: string) {
   });
 
   if (error?.value) {
-    showError(error.value);
+    throw createError(error.value);
   }
 
   return { status, data };
@@ -45,7 +45,7 @@ function getNorms(params: LegislationSearchParams) {
   });
 
   if (error?.value) {
-    showError(error.value);
+    throw createError(error.value);
   }
 
   return { status, data };

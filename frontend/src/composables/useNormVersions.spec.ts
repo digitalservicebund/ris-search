@@ -49,13 +49,12 @@ describe("useNormVersions", () => {
     );
   });
 
-  it("returns an empty list when an error occurs", () => {
+  it("throws when an error occurs", () => {
     vi.mocked(useRisBackendMock).mockReturnValue({
       status: ref("error"),
       data: computed(() => undefined),
       error: ref("Error occurred"),
     } as unknown as ReturnType<typeof useRisBackendMock>);
-    const { sortedVersions } = useNormVersions("dummy-eli");
-    expect(sortedVersions.value).toEqual([]);
+    expect(() => useNormVersions("dummy-eli")).toThrow();
   });
 });

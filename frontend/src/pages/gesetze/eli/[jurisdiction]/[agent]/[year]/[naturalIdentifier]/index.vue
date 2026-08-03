@@ -22,11 +22,11 @@ if (matchedExpressionEli.value) {
 }
 
 if (loadError?.value) {
-  showError(loadError.value);
+  throw createError(loadError.value);
 }
 
 if (data.value?.member?.length === 0) {
-  showError({
+  throw createError({
     statusCode: 404,
     statusMessage: "no norms found matching work ELI",
   });
