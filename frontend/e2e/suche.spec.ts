@@ -558,7 +558,7 @@ test.describe("searching caselaw", () => {
       await expect(page).toHaveURL(/typeGroup=urteil/);
 
       await expect(getSearchResults(page)).toHaveText(
-        Array.from<RegExp>({ length: 11 }).fill(/^Urteil/),
+        Array.from<RegExp>({ length: 12 }).fill(/^Urteil/),
       );
     });
 
@@ -572,7 +572,7 @@ test.describe("searching caselaw", () => {
       await expect(page).toHaveURL(/typeGroup=beschluss/);
 
       await expect(getSearchResults(page)).toHaveText(
-        Array.from<RegExp>({ length: 2 }).fill(/^Beschluss/),
+        Array.from<RegExp>({ length: 3 }).fill(/^Beschluss/),
       );
     });
 
@@ -598,7 +598,7 @@ test.describe("searching caselaw", () => {
       await expect(page).toHaveURL(/typeGroup=($|&)/);
 
       await expect(getSearchResults(page)).toHaveText(
-        Array(13).fill(/^(Beschluss|Urteil)/),
+        Array(15).fill(/^(Beschluss|Urteil)/),
       );
     });
   });
@@ -667,7 +667,7 @@ test.describe("searching caselaw", () => {
     await expect(page).toHaveURL(/dateFilterFrom=&dateFilterTo=2024-12-31/);
 
     const searchResults = getSearchResults(page);
-    await expect(searchResults).toHaveCount(2);
+    await expect(searchResults).toHaveCount(4);
     await expect(searchResults.nth(0)).toHaveText(/15.06.2024|22.11.2023/);
   });
 
@@ -773,7 +773,7 @@ test.describe("searching caselaw", () => {
       .getByRole("button", { name: "Alle Dokumentarten" })
       .click();
 
-    await expect(getResultCounter(page)).toHaveText("41 Suchergebnisse");
+    await expect(getResultCounter(page)).toHaveText("43 Suchergebnisse");
 
     // Verify caselaw-specific filters are reset
     await expect(page).not.toHaveURL(/documentKind=R/);
@@ -1265,7 +1265,7 @@ test.describe("mobile filter and sort drawers", () => {
     await expect(page).toHaveURL(/dateFilterFrom=&dateFilterTo=2024-12-31/);
 
     const searchResults = getSearchResults(page);
-    await expect(searchResults).toHaveCount(2);
+    await expect(searchResults).toHaveCount(4);
     await expect(searchResults.nth(0)).toHaveText(/15.06.2024|22.11.2023/);
   });
 

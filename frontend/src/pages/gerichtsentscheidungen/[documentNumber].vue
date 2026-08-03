@@ -38,6 +38,8 @@ const document = computed(() => {
   }
 });
 
+const isEmptyDocument = computed(() => isDocumentEmpty(document.value));
+
 useCaselawSeo({ caseLaw: caseLaw.value, document: document.value });
 
 // Page contents ------------------------------------------
@@ -116,6 +118,7 @@ const detailsSectionId = useId();
   <NuxtLayout
     name="document"
     :breadcrumbs
+    :is-empty-document="isEmptyDocument"
     :metadata="headerMetadata"
     :secondary-title
     :title

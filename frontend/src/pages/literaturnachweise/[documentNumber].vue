@@ -55,12 +55,14 @@ const textSectionId = useId();
 const detailsSectionId = useId();
 
 const title = computed(() => getTitle(literature.value));
-const document = html.value ? parseDocument(html.value) : undefined;
-const isEmptyDocument = computed(() => isDocumentEmpty(document));
+const document = computed(() =>
+  html.value ? parseDocument(html.value) : undefined,
+);
+const isEmptyDocument = computed(() => isDocumentEmpty(document.value));
 
 const tocEntries = computed<TreeItem[] | null>(() => {
-  return document
-    ? getAllSectionsFromDocument(document, "section").map((entry) => ({
+  return document.value
+    ? getAllSectionsFromDocument(document.value, "section").map((entry) => ({
         key: entry.id,
         subtitle: entry.title, // Subtitle for more subtle appearance
         to: { hash: `#${entry.id}`, query: { from: route.query.from } },
