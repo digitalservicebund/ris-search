@@ -101,6 +101,9 @@ dependencies {
     // CVE-2026-55831
     implementation(libs.netty.codec.http)
 
+    // CVE-2026-56819
+    implementation(libs.netty.codec.http2)
+
     // CVE-2026-59901
     implementation(libs.netty.codec.compression)
 
