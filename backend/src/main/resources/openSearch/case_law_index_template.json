@@ -400,6 +400,9 @@
         },
         "indexed_at": {
           "type": "date"
+        },
+        "vorabdokument": {
+          "type": "boolean"
         }
       }
     }
