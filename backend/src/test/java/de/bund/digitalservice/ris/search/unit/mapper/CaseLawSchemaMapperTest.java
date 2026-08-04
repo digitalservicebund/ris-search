@@ -25,6 +25,7 @@ class CaseLawSchemaMapperTest {
             .id("id1")
             .documentNumber("BFRE000087655")
             .ecli("ECLI:DE:FGNI:1975:0526.IXL180.73.0A")
+            .celex("62013CA0192")
             .courtType("KG")
             .location("Berlin")
             .documentType("Urteil")
@@ -86,6 +87,7 @@ class CaseLawSchemaMapperTest {
     assertThat(rechtsprechungSchema.id()).isEqualTo("/v1/rechtsprechung/BFRE000087655");
     assertThat(rechtsprechungSchema.dokumentNummer()).isEqualTo("BFRE000087655");
     assertThat(rechtsprechungSchema.ecli()).isEqualTo("ECLI:DE:FGNI:1975:0526.IXL180.73.0A");
+    assertThat(rechtsprechungSchema.celex()).isEqualTo("62013CA0192");
     assertThat(rechtsprechungSchema.gericht()).isEqualTo("KG Berlin");
     assertThat(rechtsprechungSchema.dokumenttyp()).isEqualTo("Urteil");
     assertThat(rechtsprechungSchema.datum()).isEqualTo(SharedTestConstants.DATE_2024_01_02);

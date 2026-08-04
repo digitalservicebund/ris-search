@@ -73,6 +73,7 @@ public class CaseLawLdmlToOpenSearchMapper {
         .id(uniqueId)
         .documentNumber(uniqueId)
         .ecli(work.getEcliAliasValue())
+        .celex(work.getCelexAliasValue())
         .decisionDate(DateUtils.nullSafeParseyyyyMMdd(work.getFrbrDate().getDate()))
         .fileNumber(work.getAktenzeichenAliasValue())
         .fileNumbers(risMeta.getAktenzeichen())

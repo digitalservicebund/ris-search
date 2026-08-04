@@ -286,6 +286,16 @@
             }
           }
         },
+        "celex": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "normalizer": "normalized_keyword"
+            }
+          }
+        },
         "grounds": {
           "type": "text",
           "analyzer": "custom_german_analyzer",

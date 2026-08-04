@@ -4,7 +4,8 @@
             <akn:FRBRuri value="{% if documentNumber %}{{documentNumber}}{% else %}testDocNumber{% endif %}"/>
             <akn:FRBRalias name="Übergreifende ID" value="testUUID"/>
             <akn:FRBRalias name="Dokumentnummer" value="{% if documentNumber %}{{documentNumber}}{% else %}testDocNumber{% endif %}"/>
-            <akn:FRBRalias name="ecli" value="{% if ecli %}{{ ecli }}{% else %}testEcli{% endif %}"/>
+            <akn:FRBRalias name="ecli" value="{% if ecli %}{{ ecli }}{% else %}testEcli{% endif %}" showAs="ECLI"/>
+            <akn:FRBRalias name="celex" value="testCelex" showAs="CELEX"/>
             <akn:FRBRalias eId="aktenzeichen" name="Aktenzeichen" value="fileNumber test"/>
             <akn:FRBRdate eId="entscheidungsdatum" date="{% if decisionDate %}{{ decisionDate }}{% else %}2020-01-01{% endif %}" name="Entscheidungsdatum"/>
             <akn:FRBRauthor href="#organisation-gericht-courttype-courtlocation"/>

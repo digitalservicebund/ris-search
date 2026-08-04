@@ -2295,6 +2295,10 @@
             "description" : "European Case Law Identifier",
             "example" : "ECLI:DE:FGRLP:1969:0905.IV85.68.0A"
           },
+          "celex" : {
+            "type" : "string",
+            "description" : "CELEX-Nummer"
+          },
           "tatbestand" : {
             "type" : "string",
             "description" : "Tatbestand"

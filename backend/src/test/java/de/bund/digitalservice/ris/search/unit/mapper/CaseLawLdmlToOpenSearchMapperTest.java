@@ -33,6 +33,7 @@ class CaseLawLdmlToOpenSearchMapperTest {
     assertThat(caseLaw.decisionGrounds()).isEqualTo("Example Entscheidungsgründe/DecisionGrounds");
     assertThat(caseLaw.documentNumber()).isEqualTo("testDocNumber");
     assertThat(caseLaw.ecli()).isEqualTo("testEcli");
+    assertThat(caseLaw.celex()).isEqualTo("testCelex");
     assertThat(caseLaw.guidingPrinciple()).isEqualTo("Example Leitsatz/GuidingPrinciple");
     assertThat(caseLaw.headline()).isEqualTo("the title");
     assertThat(caseLaw.titleLine()).isEqualTo("Title");

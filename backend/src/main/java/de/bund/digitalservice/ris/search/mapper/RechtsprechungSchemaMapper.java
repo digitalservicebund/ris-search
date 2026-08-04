@@ -26,6 +26,7 @@ public class RechtsprechungSchemaMapper {
         .dokumentNummer(doc.documentNumber())
         .dokumenttyp(doc.documentType())
         .ecli(doc.ecli())
+        .celex(doc.celex())
         .tatbestand(doc.caseFacts())
         .entscheidungsgruende(doc.decisionGrounds())
         .abweichendeMeinung(doc.dissentingOpinion())

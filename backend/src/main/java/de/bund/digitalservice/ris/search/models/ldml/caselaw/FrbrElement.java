@@ -39,7 +39,7 @@ public class FrbrElement {
 
   private String getAliasValueByName(String aliasName) {
     return frbrAlias.stream()
-        .filter(alias -> alias.getName().equals(aliasName))
+        .filter(alias -> alias.getName().equalsIgnoreCase(aliasName))
         .findFirst()
         .map(FrbrAlias::getValue)
         .orElse(null);
@@ -51,5 +51,9 @@ public class FrbrElement {
 
   public String getAktenzeichenAliasValue() {
     return getAliasValueByName("Aktenzeichen");
+  }
+
+  public String getCelexAliasValue() {
+    return getAliasValueByName("CELEX");
   }
 }

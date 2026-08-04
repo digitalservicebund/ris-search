@@ -16,6 +16,7 @@ public record RechtsprechungSchema(
             description = "European Case Law Identifier",
             requiredMode = Schema.RequiredMode.REQUIRED)
         String ecli,
+    @Schema(description = "CELEX-Nummer") String celex,
     @Schema(description = "Tatbestand") String tatbestand,
     @Schema(description = "Entscheidungsgründe") String entscheidungsgruende,
     @Schema(description = "Abweichende Meinung") String abweichendeMeinung,

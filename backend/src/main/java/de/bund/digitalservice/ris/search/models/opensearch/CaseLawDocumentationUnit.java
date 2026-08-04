@@ -23,6 +23,7 @@ public record CaseLawDocumentationUnit(
     @Field(name = Fields.DOCUMENT_NUMBER) String documentNumber,
     @Field(name = Literature.Fields.DOCUMENT_NUMBER_KEYWORD) String documentNumberKeyword,
     @Field(name = Fields.ECLI) String ecli,
+    @Field(name = Fields.CELEX) String celex,
     @Field(name = Fields.CASE_FACTS) String caseFacts,
     @Field(name = Fields.DECISION_GROUNDS) String decisionGrounds,
     @Field(name = Fields.DISSENTING_OPINION) String dissentingOpinion,
@@ -86,6 +87,7 @@ public record CaseLawDocumentationUnit(
     public static final String DOCUMENT_NUMBER = "document_number";
     public static final String DOCUMENT_NUMBER_KEYWORD = "document_number.keyword";
     public static final String ECLI = "ecli";
+    public static final String CELEX = "celex";
     public static final String ABWEICHENDE_ECLIS = "abweichende_eclis";
     public static final String ECLI_KEYWORD = "ecli.keyword";
     public static final String CASE_FACTS = "case_facts";
