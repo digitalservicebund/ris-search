@@ -5,12 +5,14 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
+import de.bund.digitalservice.ris.search.controller.api.FeedbackController.FeedbackRequest;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.service.PostHogService;
 import org.junit.jupiter.api.Tag;
@@ -21,83 +23,67 @@ import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @Tag("integration")
 class FeedbackControllerTest extends ContainersIntegrationBase {
   @Autowired private MockMvc mockMvc;
+  @Autowired private ObjectMapper objectMapper;
   @MockitoBean private PostHogService postHogService;
 
-  MultiValueMap<String, String> testParams =
-      new LinkedMultiValueMap<>() {
-        {
-          add("text", "test feedback");
-          add("url", "http://example.com");
-          add("user_id", "test-distinct-id");
-        }
-      };
+  private static final String TEXT = "test feedback";
+  private static final String URL = "http://example.com";
+  private static final String USER_ID = "test-distinct-id";
 
   @Test
   void feedbackCanBeSentSuccessfullyToPostHog() throws Exception {
+    var body = new FeedbackRequest(TEXT, URL, USER_ID, null);
+
     mockMvc
         .perform(
-            get(ApiConfig.Paths.FEEDBACK)
+            post(ApiConfig.Paths.FEEDBACK)
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
-                .params(testParams))
+                .content(objectMapper.writeValueAsString(body)))
         .andExpect(status().isOk())
         .andExpect(
             content()
                 .json(
                     """
-                                    {
-                                      "message": "Feedback sent successfully"
-                                    }
-                                    """));
+                    {
+                      "message": "Feedback sent successfully"
+                    }
+                    """));
   }
 
   @Test
   void throwsValidationErrorIfAParameterIsMissing() throws Exception {
-    MultiValueMap<String, String> invalidParams = testParams;
-    invalidParams.remove("user_id");
+    var body = new FeedbackRequest(TEXT, URL, null, null);
+
     mockMvc
         .perform(
-            get(ApiConfig.Paths.FEEDBACK)
+            post(ApiConfig.Paths.FEEDBACK)
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
-                .params(invalidParams))
+                .content(objectMapper.writeValueAsString(body)))
         .andExpect(status().isUnprocessableContent())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-        .andExpect(jsonPath("$.errors.*.code").value("information_missing"))
-        .andExpect(jsonPath("$.errors.*.parameter").value("user_id"))
-        .andExpect(
-            jsonPath("$.errors.*.message")
-                .value(
-                    "Required request parameter 'user_id' for method parameter type String is not present"));
-  }
-
-  MultiValueMap<String, String> testParams() {
-    MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-    params.add("text", "test feedback");
-    params.add("url", "http://example.com");
-    params.add("user_id", "test-distinct-id");
-    return params;
+        .andExpect(jsonPath("$.errors.*.code").value("invalid_parameter_value"))
+        .andExpect(jsonPath("$.errors.*.parameter").value("userId"))
+        .andExpect(jsonPath("$.errors.*.message").value("must not be null"));
   }
 
   @Test
   void feedbackIsIgnoredWhenHoneypotIsFilled() throws Exception {
-    MultiValueMap<String, String> botParams = testParams();
-    botParams.add("name", "I am a bot");
+    var body = new FeedbackRequest(TEXT, URL, USER_ID, "I am a bot");
 
     mockMvc
         .perform(
-            get(ApiConfig.Paths.FEEDBACK)
+            post(ApiConfig.Paths.FEEDBACK)
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
-                .params(botParams))
+                .content(objectMapper.writeValueAsString(body)))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.message").value("Feedback sent successfully"));
 
@@ -106,18 +92,16 @@ class FeedbackControllerTest extends ContainersIntegrationBase {
 
   @Test
   void feedbackIsProcessedWhenHoneypotIsEmpty() throws Exception {
-    MultiValueMap<String, String> humanParams = testParams();
-    humanParams.add("name", "");
+    var body = new FeedbackRequest(TEXT, URL, USER_ID, "");
 
     mockMvc
         .perform(
-            get(ApiConfig.Paths.FEEDBACK)
+            post(ApiConfig.Paths.FEEDBACK)
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
-                .params(humanParams))
+                .content(objectMapper.writeValueAsString(body)))
         .andExpect(status().isOk());
 
-    verify(postHogService, times(1))
-        .sendFeedback("test-distinct-id", "http://example.com", "test feedback");
+    verify(postHogService, times(1)).sendFeedback(USER_ID, URL, TEXT);
   }
 }
