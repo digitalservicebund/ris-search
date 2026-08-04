@@ -4,16 +4,13 @@ import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlElementWrapper;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-/**
- * Represents the RIS metadata for a legal case document. This class contains various fields that
- * describe the metadata attributes associated with a legal case, such as decision names, previous
- * and ensuing decisions, file numbers, document type, court information, legal forces, and more.
- */
+/** Represents the RIS-specific metadata block of a Case Law LDML document. */
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -63,12 +60,10 @@ public class RisMeta {
   @XmlElement(name = "dokumentationsstelle", namespace = CaseLawLdmlNamespaces.RIS_NS)
   private String risDokumentationsstelle;
 
-  /**
-   * Returns a combined court keyword consisting of court type and court location. If court location
-   * is not available, it returns only the court type.
-   *
-   * @return the combined court keyword
-   */
+  @XmlElementWrapper(name = "personen", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  @XmlElement(name = "person", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  private List<RisPerson> risPersonen;
+
   public String getCourtKeyword() {
     return risGericht.getShowAs();
   }
@@ -78,5 +73,21 @@ public class RisMeta {
         .filter(a -> "Aktenzeichen".equals(a.getDomainTerm()))
         .map(RisAktenzeichen::getValue)
         .toList();
+  }
+
+  /**
+   * Look up a person's display name by their eId.
+   *
+   * @param eId the eId of the person to look up
+   * @return the person's showAs value, or their name if showAs is not set, if found
+   */
+  public Optional<String> getPersonNameByEid(String eId) {
+    if (risPersonen == null || eId == null) {
+      return Optional.empty();
+    }
+    return risPersonen.stream()
+        .filter(person -> eId.equals(person.getEId()))
+        .map(person -> person.getShowAs() != null ? person.getShowAs() : person.getName())
+        .findFirst();
   }
 }

@@ -49,7 +49,8 @@ class CaseLawLdmlToOpenSearchMapperTest {
     assertThat(caseLaw.decisionName()).hasToString("[Test decision name]");
     assertThat(caseLaw.deviatingDocumentNumber()).hasToString("[ABC, DEF]");
     assertThat(caseLaw.dissentingOpinion())
-        .isEqualTo("dissenting test referenced opinions test 1 referenced opinions test 2");
+        .isEqualTo(
+            "dissenting test, Dr. Phil. Max Mustermann: referenced opinions test 1, Maxima Mustermann: referenced opinions test 2");
     assertThat(caseLaw.previousDecisions())
         .containsExactlyInAnyOrder(
             "previous decision file number, previous decision court type",
