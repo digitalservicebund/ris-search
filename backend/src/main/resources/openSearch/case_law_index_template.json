@@ -414,6 +414,10 @@
             }
           }
         },
+        "berufsbilder": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
         "vorabdokument": {
           "type": "boolean"
         }

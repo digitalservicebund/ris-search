@@ -48,6 +48,7 @@ class CaseLawSchemaMapperTest {
             .guidingPrinciple("guidingPrinciple")
             .tenor("tenor")
             .abweichendeDaten(List.of(DATE_2023_01_02, DATE_2024_01_01))
+            .berufsbilder(List.of("jobProfile test 1", "jobProfile test 2"))
             .build();
 
     CaseLawSchema caseLawSchema = CaseLawSchemaMapper.fromDomain(documentationUnit);
@@ -111,6 +112,8 @@ class CaseLawSchemaMapperTest {
     assertThat(rechtsprechungSchema.inLanguage()).isEqualTo("de");
     assertThat(rechtsprechungSchema.abweichendeDaten())
         .containsExactly(DATE_2023_01_02, DATE_2024_01_01);
+    assertThat(rechtsprechungSchema.berufsbilder())
+        .containsExactly("jobProfile test 1", "jobProfile test 2");
   }
 
   @Test

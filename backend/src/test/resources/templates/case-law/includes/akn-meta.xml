@@ -146,6 +146,10 @@
             <ris:abweichenderEcli domainTerm="Abweichender ECLI">ECLI 1</ris:abweichenderEcli>
             <ris:abweichenderEcli domainTerm="Abweichender ECLI">ECLI 2</ris:abweichenderEcli>
         </ris:abweichendeEclis>
+        <ris:berufsbilder domainTerm="Berufsbilder">
+            <ris:berufsbild domainTerm="Berufsbild">jobProfile test 1</ris:berufsbild>
+            <ris:berufsbild domainTerm="Berufsbild">jobProfile test 2</ris:berufsbild>
+        </ris:berufsbilder>
         <ris:decisionNames>
             <ris:decisionName>Test decision name</ris:decisionName>
         </ris:decisionNames>

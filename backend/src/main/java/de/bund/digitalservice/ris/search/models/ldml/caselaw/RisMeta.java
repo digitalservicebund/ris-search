@@ -57,6 +57,10 @@ public class RisMeta {
   @XmlElement(name = "abweichenderEcli", namespace = CaseLawLdmlNamespaces.RIS_NS)
   private List<String> risAbweichendeEclis;
 
+  @XmlElementWrapper(name = "berufsbilder", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  @XmlElement(name = "berufsbild", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  private List<String> risBerufsbilder;
+
   @XmlElement(name = "dokumentationsstelle", namespace = CaseLawLdmlNamespaces.RIS_NS)
   private String risDokumentationsstelle;
 

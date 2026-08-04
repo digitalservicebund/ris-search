@@ -62,6 +62,8 @@ class CaseLawLdmlToOpenSearchMapperTest {
             "ensuing decision file number, ensuing decision court type");
 
     assertThat(caseLaw.abweichendeDaten()).hasToString("[2020-03-03, 2022-02-04]");
+    assertThat(caseLaw.abweichendeEclis()).hasToString("[ECLI 1, ECLI 2]");
+    assertThat(caseLaw.berufsbilder()).hasToString("[jobProfile test 1, jobProfile test 2]");
     assertThat(caseLaw.vorabdokument()).isFalse();
   }
 

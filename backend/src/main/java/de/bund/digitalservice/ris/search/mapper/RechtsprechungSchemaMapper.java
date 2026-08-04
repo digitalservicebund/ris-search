@@ -48,6 +48,7 @@ public class RechtsprechungSchemaMapper {
         .abweichendeDokumentnummern(doc.deviatingDocumentNumber())
         .abweichendeDaten(doc.abweichendeDaten())
         .abweichendeEclis(doc.abweichendeEclis())
+        .berufsbilder(doc.berufsbilder())
         .courtName(doc.courtKeyword())
         .build();
   }
