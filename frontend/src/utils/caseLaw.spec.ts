@@ -32,6 +32,7 @@ describe("caselaw", () => {
           inLanguage: "de",
         },
       ],
+      vorabdokument: false,
     };
 
     it("returns the URL for a matching format", () => {

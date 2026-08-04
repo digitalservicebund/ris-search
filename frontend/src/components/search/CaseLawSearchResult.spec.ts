@@ -36,6 +36,7 @@ const searchResult: SearchResult<CaseLaw> = {
     decisionName: ["Decision Name"],
     titleLine: "Title line",
     documentType: "Document Type",
+    vorabdokument: false,
   },
   textMatches: [],
 };

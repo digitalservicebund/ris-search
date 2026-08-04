@@ -29,6 +29,7 @@ describe("anyDocument", () => {
         deviatingDocumentNumber: [],
         inLanguage: "",
         encoding: [],
+        vorabdokument: false,
       };
 
       expect(isCaselaw(doc)).toBe(true);
@@ -99,6 +100,7 @@ describe("anyDocument", () => {
         deviatingDocumentNumber: [],
         inLanguage: "",
         encoding: [],
+        vorabdokument: false,
       };
 
       expect(isLegislation(doc)).toBe(false);
@@ -201,6 +203,7 @@ describe("anyDocument", () => {
         deviatingDocumentNumber: [],
         inLanguage: "",
         encoding: [],
+        vorabdokument: false,
       };
 
       expect(getIdentifier(doc)).toBe("4711");

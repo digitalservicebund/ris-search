@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Message } from "primevue";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineFileDownload from "~icons/ic/outline-file-download";
 import IcOutlineInfo from "~icons/ic/outline-info";
@@ -126,6 +127,23 @@ const detailsSectionId = useId();
   >
     <template #actionMenu>
       <DocumentsActionMenuCaseLawActionMenu :case-law class="mb-auto" />
+    </template>
+
+    <template #message>
+      <Message
+        v-if="caseLaw?.vorabdokument"
+        severity="info"
+        class="typo-body-regular my-24 bg-white sm:my-32 md:my-40"
+      >
+        <template #icon>
+          <IcOutlineInfo />
+        </template>
+        <p>
+          Die Metadaten dieser Gerichtsentscheidung wurden bereits
+          veröffentlicht. Der Entscheidungstext ist derzeit noch nicht
+          verfügbar, wird aber in Kürze ergänzt.
+        </p>
+      </Message>
     </template>
 
     <template #details>
