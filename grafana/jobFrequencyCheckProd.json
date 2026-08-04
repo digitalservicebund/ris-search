@@ -2,7 +2,7 @@
   "orgID": 1,
   "folderUID": "ffpl1vm70vpq8b",
   "ruleGroup": "Portal alert group",
-  "title": "Job frequency check",
+  "title": "Job frequency check (PROD)",
   "labels": {
     "team": "portal"
   },
