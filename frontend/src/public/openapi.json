@@ -2386,6 +2386,14 @@
               "type" : "string"
             }
           },
+          "datenDerMuendlichenVerhandlung" : {
+            "type" : "array",
+            "description" : "Daten der mündlichen Verhandlung",
+            "items" : {
+              "type" : "string",
+              "format" : "date"
+            }
+          },
           "gericht" : {
             "type" : "string",
             "description" : "Gericht",

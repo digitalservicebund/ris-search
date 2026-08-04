@@ -61,6 +61,12 @@ public class RisMeta {
   @XmlElement(name = "berufsbild", namespace = CaseLawLdmlNamespaces.RIS_NS)
   private List<String> risBerufsbilder;
 
+  @XmlElementWrapper(
+      name = "datenDerMuendlichenVerhandlung",
+      namespace = CaseLawLdmlNamespaces.RIS_NS)
+  @XmlElement(name = "datumDerMuendlichenVerhandlung", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  private List<LocalDate> risDatenDerMuendlichenVerhandlung;
+
   @XmlElement(name = "dokumentationsstelle", namespace = CaseLawLdmlNamespaces.RIS_NS)
   private String risDokumentationsstelle;
 

@@ -2,6 +2,7 @@ package de.bund.digitalservice.ris.search.unit.mapper;
 
 import static de.bund.digitalservice.ris.SharedTestConstants.DATE_2023_01_02;
 import static de.bund.digitalservice.ris.SharedTestConstants.DATE_2024_01_01;
+import static de.bund.digitalservice.ris.SharedTestConstants.DATE_2024_01_03;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import de.bund.digitalservice.ris.SharedTestConstants;
@@ -47,6 +48,7 @@ class CaseLawSchemaMapperTest {
         .tenor("tenor")
         .abweichendeDaten(List.of(DATE_2023_01_02, DATE_2024_01_01))
         .berufsbilder(List.of("jobProfile test 1", "jobProfile test 2"))
+        .datenDerMuendlichenVerhandlung(List.of(DATE_2024_01_03))
         .build();
   }
 
@@ -136,6 +138,8 @@ class CaseLawSchemaMapperTest {
         .containsExactly(DATE_2023_01_02, DATE_2024_01_01);
     assertThat(rechtsprechungSchema.berufsbilder())
         .containsExactly("jobProfile test 1", "jobProfile test 2");
+    assertThat(rechtsprechungSchema.datenDerMuendlichenVerhandlung())
+        .containsExactly(DATE_2024_01_03);
   }
 
   @Test

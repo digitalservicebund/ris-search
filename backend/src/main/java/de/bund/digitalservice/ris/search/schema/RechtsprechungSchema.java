@@ -39,6 +39,8 @@ public record RechtsprechungSchema(
         List<String> aktenzeichenListe,
     @Schema(description = "Abweichende ECLIs") List<String> abweichendeEclis,
     @Schema(description = "Berufsbilder") List<String> berufsbilder,
+    @Schema(description = "Daten der mündlichen Verhandlung")
+        List<LocalDate> datenDerMuendlichenVerhandlung,
     @Schema(example = "FG Berlin", description = "Gericht") String gericht,
     @Schema(example = "Urteil") String dokumenttyp,
     @Schema(example = "Gericht", description = "Spruchkörper") String spruchkoerper,

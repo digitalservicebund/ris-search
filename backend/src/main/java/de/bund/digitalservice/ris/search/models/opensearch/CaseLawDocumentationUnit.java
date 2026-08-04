@@ -54,6 +54,12 @@ public record CaseLawDocumentationUnit(
         List<LocalDate> abweichendeDaten,
     @ElementCollection @Field(name = Fields.ABWEICHENDE_ECLIS) List<String> abweichendeEclis,
     @ElementCollection @Field(name = Fields.BERUFSBILDER) List<String> berufsbilder,
+    @ElementCollection
+        @Field(
+            name = Fields.DATEN_DER_MUENDLICHEN_VERHANDLUNG,
+            type = FieldType.Date,
+            format = DateFormat.date)
+        List<LocalDate> datenDerMuendlichenVerhandlung,
     @JsonIgnore @Field(name = Fields.DOCUMENTATION_OFFICE) String documentationOffice,
     @JsonIgnore @Field(name = Fields.LEGAL_EFFECT) String legalEffect,
     @JsonIgnore @ElementCollection @Field(name = Fields.PREVIOUS_DECISIONS)
@@ -130,6 +136,8 @@ public record CaseLawDocumentationUnit(
 
     public static final String ABWEICHENDE_DATEN = "abweichende_daten";
     public static final String BERUFSBILDER = "berufsbilder";
+    public static final String DATEN_DER_MUENDLICHEN_VERHANDLUNG =
+        "daten_der_muendlichen_verhandlung";
     public static final String VORABDOKUMENT = "vorabdokument";
   }
 }

@@ -102,6 +102,7 @@ public class CaseLawLdmlToOpenSearchMapper {
         .abweichendeDaten(risMeta.getRisAbweichendeDaten())
         .abweichendeEclis(risMeta.getRisAbweichendeEclis())
         .berufsbilder(risMeta.getRisBerufsbilder())
+        .datenDerMuendlichenVerhandlung(risMeta.getRisDatenDerMuendlichenVerhandlung())
         .previousDecisions(
             getLinkedJudgements(
                 meta, refs -> refs.getReferencesByType(ImplicitReference::getPrecedingJudgement)))
