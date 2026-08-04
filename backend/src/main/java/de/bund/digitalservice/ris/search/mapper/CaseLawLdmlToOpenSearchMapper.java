@@ -74,6 +74,7 @@ public class CaseLawLdmlToOpenSearchMapper {
         .documentNumber(uniqueId)
         .ecli(work.getEcliAliasValue())
         .decisionDate(DateUtils.nullSafeParseyyyyMMdd(work.getFrbrDate().getDate()))
+        .fileNumber(work.getAktenzeichenAliasValue())
         .fileNumbers(risMeta.getAktenzeichen())
         .courtType(risGericht.getGerichtstyp())
         .location(risGericht.getGerichtsort())

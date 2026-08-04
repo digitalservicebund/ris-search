@@ -48,4 +48,8 @@ public class FrbrElement {
   public String getEcliAliasValue() {
     return getAliasValueByName("ecli");
   }
+
+  public String getAktenzeichenAliasValue() {
+    return getAliasValueByName("Aktenzeichen");
+  }
 }

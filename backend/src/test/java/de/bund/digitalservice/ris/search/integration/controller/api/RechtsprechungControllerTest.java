@@ -88,6 +88,7 @@ class RechtsprechungControllerTest extends ContainersIntegrationBase {
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpectAll(
             status().isOk(),
+            jsonPath("$.aktenzeichen", Matchers.is("fileNumber test")),
             jsonPath("$.dokumentNummer", Matchers.is(this.documentNumber)),
             jsonPath("$.gericht", Matchers.is("Test court label")),
             jsonPath("$.dokumenttyp", Matchers.is("Urteil")),

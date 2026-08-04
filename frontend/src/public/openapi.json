@@ -2356,9 +2356,13 @@
             "type" : "string",
             "description" : "Gliederung"
           },
+          "aktenzeichen" : {
+            "type" : "string",
+            "description" : "Aktenzeichen"
+          },
           "aktenzeichenListe" : {
             "type" : "array",
-            "description" : "Aktenzeichen",
+            "description" : "Aktenzeichenliste",
             "example" : "BGH 123/23",
             "items" : {
               "type" : "string"

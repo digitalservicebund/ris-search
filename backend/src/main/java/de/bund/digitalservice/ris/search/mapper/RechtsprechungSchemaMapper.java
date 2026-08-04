@@ -38,6 +38,7 @@ public class RechtsprechungSchemaMapper {
         .sonstigerLangtext(doc.otherLongText())
         .tenor(doc.tenor())
         .datum(doc.decisionDate())
+        .aktenzeichen(doc.fileNumber())
         .aktenzeichenListe(doc.fileNumbers())
         .gericht(doc.courtKeyword())
         .gliederung(doc.outline())

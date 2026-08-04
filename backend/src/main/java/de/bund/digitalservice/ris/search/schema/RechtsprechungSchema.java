@@ -30,9 +30,10 @@ public record RechtsprechungSchema(
     @Schema(description = "Datum", requiredMode = Schema.RequiredMode.REQUIRED) LocalDate datum,
     @Schema(description = "Abweichende Daten") List<LocalDate> abweichendeDaten,
     @Schema(description = "Gliederung") String gliederung,
+    @Schema(description = "Aktenzeichen") String aktenzeichen,
     @Schema(
             example = "BGH 123/23",
-            description = "Aktenzeichen",
+            description = "Aktenzeichenliste",
             requiredMode = Schema.RequiredMode.REQUIRED)
         List<String> aktenzeichenListe,
     @Schema(description = "Abweichende ECLIs") List<String> abweichendeEclis,

@@ -36,6 +36,7 @@ public record CaseLawDocumentationUnit(
     @Field(name = Fields.TENOR, type = FieldType.Text) String tenor,
     @Field(name = Fields.DECISION_DATE, type = FieldType.Date, format = DateFormat.date)
         LocalDate decisionDate,
+    @Field(name = Fields.FILE_NUMBER) String fileNumber,
     @ElementCollection @Field(name = Fields.FILE_NUMBERS) List<String> fileNumbers,
     @Field(name = Fields.COURT_TYPE) String courtType,
     @Field(name = Fields.LOCATION) String location,
@@ -98,6 +99,7 @@ public record CaseLawDocumentationUnit(
     public static final String OTHER_LONG_TEXT = "other_long_text";
     public static final String TENOR = "tenor";
     public static final String DECISION_DATE = "decision_date";
+    public static final String FILE_NUMBER = "file_number";
     public static final String FILE_NUMBERS = "file_numbers";
     public static final String FILE_NUMBERS_KEYWORD = "file_numbers.keyword";
 

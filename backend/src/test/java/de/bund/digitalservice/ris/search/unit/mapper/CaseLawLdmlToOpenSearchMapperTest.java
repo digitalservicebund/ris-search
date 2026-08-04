@@ -38,6 +38,7 @@ class CaseLawLdmlToOpenSearchMapperTest {
     assertThat(caseLaw.titleLine()).isEqualTo("Title");
     assertThat(caseLaw.decisionDate()).isEqualTo(LocalDate.of(2020, Month.JANUARY, 1));
     assertThat(caseLaw.tenor()).isEqualTo("Example Tenor/Tenor");
+    assertThat(caseLaw.fileNumber()).isEqualTo("fileNumber test");
     assertThat(caseLaw.fileNumbers()).hasToString("[Test file number 1, Test file number 2]");
     assertThat(caseLaw.courtType()).isEqualTo("Test court type");
     assertThat(caseLaw.location()).isEqualTo("Test court location");
