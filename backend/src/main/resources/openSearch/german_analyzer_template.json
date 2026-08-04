@@ -101,11 +101,6 @@
           }
         },
         "char_filter": {
-          "replace_special_char_whitespace_filter": {
-            "type": "pattern_replace",
-            "pattern": "[/\\-. ]",
-            "replacement": ""
-          },
           "replace_article_character": {
             "type": "pattern_replace",
             "pattern": "\\u00A7",

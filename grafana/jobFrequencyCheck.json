@@ -1,0 +1,41 @@
+{
+  "orgID": 1,
+  "folderUID": "ffpl1vm70vpq8b",
+  "ruleGroup": "Portal alert group",
+  "title": "Job frequency check",
+  "labels": {
+    "team": "portal"
+  },
+  "condition": "A",
+  "data": [
+    {
+      "refId": "A",
+      "queryType": "instant",
+      "relativeTimeRange": {
+        "from": 600,
+        "to": 0
+      },
+      "datasourceUid": "prometheus-prod",
+      "model": {
+        "editorMode": "code",
+        "expr": "(time() - kube_cronjob_status_last_successful_time{cronjob=~\"ris-search-(index|bulk)-.*\"}) > (8*60*60)",
+        "hide": false,
+        "instant": true,
+        "intervalMs": 60000,
+        "maxDataPoints": 43200,
+        "queryType": "instant",
+        "refId": "A"
+      }
+    }
+  ],
+  "noDataState": "OK",
+  "execErrState": "Alerting",
+  "for": "1m",
+  "annotations": {
+    "summary": "A job that has succeeded at least once, hasn't succeeded in the last 8 hours.",
+    "description": "Problematic job : {{ $labels.cronjob }} in {{ $labels.namespace }}."
+  },
+  "notification_settings": {
+    "receiver": "neuris-portal-alerts-slack"
+  }
+}
