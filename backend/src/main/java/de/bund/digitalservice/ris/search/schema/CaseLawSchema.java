@@ -65,7 +65,7 @@ public record CaseLawSchema(
     @Schema(requiredMode = Schema.RequiredMode.REQUIRED) List<CaseLawEncodingSchema> encoding,
     @Schema(
             requiredMode = Schema.RequiredMode.REQUIRED,
-            description = "Whether or not the dokument is a Vorabdokumet")
+            description = "Whether or not the document is a Vorabdokument")
         boolean vorabdokument)
     implements JsonldResource {
 

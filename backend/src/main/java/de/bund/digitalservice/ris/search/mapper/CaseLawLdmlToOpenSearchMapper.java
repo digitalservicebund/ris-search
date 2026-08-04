@@ -227,7 +227,7 @@ public class CaseLawLdmlToOpenSearchMapper {
         .orElse(null);
   }
 
-  private boolean isVorabdokument(JudgmentBody judgmentBody) {
+  private static boolean isVorabdokument(JudgmentBody judgmentBody) {
     return Objects.equals(judgmentBody.getStatus(), "incomplete");
   }
 
