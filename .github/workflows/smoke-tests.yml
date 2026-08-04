@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       # Image version must match @playwright/test in frontend/package.json
-      image: mcr.microsoft.com/playwright@sha256:5b8f294aff9041b7191c34a4bab3ac270157a28774d4b0660e9743297b697e48 # v1.61.1-noble
+      image: mcr.microsoft.com/playwright@sha256:baed2032d533817f3dbe6425de795788430ba345e819a1201337009ba17c9d07 # v1.62.0-noble
       options: --user 1001
     permissions:
       contents: read
