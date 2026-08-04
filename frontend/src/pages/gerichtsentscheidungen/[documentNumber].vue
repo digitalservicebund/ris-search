@@ -136,7 +136,7 @@ const detailsSectionId = useId();
         class="typo-body-regular my-24 bg-white sm:my-32 md:my-40"
       >
         <template #icon>
-          <IcOutlineInfo />
+          <IcOutlineInfo class="text-blue-800" />
         </template>
         <p>
           Die Metadaten dieser Gerichtsentscheidung wurden bereits
