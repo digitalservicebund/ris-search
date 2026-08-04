@@ -1,3 +1,4 @@
+import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 // @vitest-environment node
 import type { EventHandlerRequest, H3Event } from "h3";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -31,7 +32,7 @@ vi.mock("~/composables/useBackendUrl", () => ({
   default: (url?: string) => url ?? "",
 }));
 
-vi.stubGlobal("$fetch", mockFetch);
+mockNuxtImport("$fetch", () => mockFetch);
 
 describe("feedback.post", () => {
   let mockEvent: H3Event<EventHandlerRequest>;
