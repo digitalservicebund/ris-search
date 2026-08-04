@@ -49,6 +49,7 @@ class CaseLawSchemaMapperTest {
         .abweichendeDaten(List.of(DATE_2023_01_02, DATE_2024_01_01))
         .berufsbilder(List.of("jobProfile test 1", "jobProfile test 2"))
         .datenDerMuendlichenVerhandlung(List.of(DATE_2024_01_03))
+        .definitionen(List.of("indirekte Steuern", "Sachgesamtheit"))
         .build();
   }
 
@@ -140,6 +141,8 @@ class CaseLawSchemaMapperTest {
         .containsExactly("jobProfile test 1", "jobProfile test 2");
     assertThat(rechtsprechungSchema.datenDerMuendlichenVerhandlung())
         .containsExactly(DATE_2024_01_03);
+    assertThat(rechtsprechungSchema.definitionen())
+        .containsExactly("indirekte Steuern", "Sachgesamtheit");
   }
 
   @Test

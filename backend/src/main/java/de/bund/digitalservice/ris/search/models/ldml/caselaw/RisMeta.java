@@ -67,6 +67,10 @@ public class RisMeta {
   @XmlElement(name = "datumDerMuendlichenVerhandlung", namespace = CaseLawLdmlNamespaces.RIS_NS)
   private List<LocalDate> risDatenDerMuendlichenVerhandlung;
 
+  @XmlElementWrapper(name = "definitionen", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  @XmlElement(name = "definition", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  private List<RisDefinition> risDefinitionen;
+
   @XmlElement(name = "dokumentationsstelle", namespace = CaseLawLdmlNamespaces.RIS_NS)
   private String risDokumentationsstelle;
 
@@ -83,6 +87,18 @@ public class RisMeta {
         .filter(a -> "Aktenzeichen".equals(a.getDomainTerm()))
         .map(RisAktenzeichen::getValue)
         .toList();
+  }
+
+  /**
+   * Returns the terms flagged as defined ({@code definierterBegriff}) within this document.
+   *
+   * @return the list of defined terms, or an empty list if none are present
+   */
+  public List<String> getDefinitionen() {
+    if (risDefinitionen == null) {
+      return List.of();
+    }
+    return risDefinitionen.stream().map(RisDefinition::getDefinierterBegriff).toList();
   }
 
   /**

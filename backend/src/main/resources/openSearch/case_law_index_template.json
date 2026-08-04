@@ -431,6 +431,10 @@
         "daten_der_muendlichen_verhandlung": {
           "type": "date"
         },
+        "definitionen": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
         "vorabdokument": {
           "type": "boolean"
         }

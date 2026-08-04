@@ -60,6 +60,7 @@ public record CaseLawDocumentationUnit(
             type = FieldType.Date,
             format = DateFormat.date)
         List<LocalDate> datenDerMuendlichenVerhandlung,
+    @ElementCollection @Field(name = Fields.DEFINITIONEN) List<String> definitionen,
     @JsonIgnore @Field(name = Fields.DOCUMENTATION_OFFICE) String documentationOffice,
     @JsonIgnore @Field(name = Fields.LEGAL_EFFECT) String legalEffect,
     @JsonIgnore @ElementCollection @Field(name = Fields.PREVIOUS_DECISIONS)
@@ -138,6 +139,7 @@ public record CaseLawDocumentationUnit(
     public static final String BERUFSBILDER = "berufsbilder";
     public static final String DATEN_DER_MUENDLICHEN_VERHANDLUNG =
         "daten_der_muendlichen_verhandlung";
+    public static final String DEFINITIONEN = "definitionen";
     public static final String VORABDOKUMENT = "vorabdokument";
   }
 }

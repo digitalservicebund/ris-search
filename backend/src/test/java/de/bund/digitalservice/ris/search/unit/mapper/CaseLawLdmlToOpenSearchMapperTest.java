@@ -71,6 +71,7 @@ class CaseLawLdmlToOpenSearchMapperTest {
     assertThat(caseLaw.abweichendeEclis()).hasToString("[ECLI 1, ECLI 2]");
     assertThat(caseLaw.berufsbilder()).hasToString("[jobProfile test 1, jobProfile test 2]");
     assertThat(caseLaw.datenDerMuendlichenVerhandlung()).hasToString("[2021-02-03]");
+    assertThat(caseLaw.definitionen()).hasToString("[indirekte Steuern, Sachgesamtheit]");
     assertThat(caseLaw.vorabdokument()).isFalse();
   }
 

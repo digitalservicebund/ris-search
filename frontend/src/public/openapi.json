@@ -2394,6 +2394,13 @@
               "format" : "date"
             }
           },
+          "definitionen" : {
+            "type" : "array",
+            "description" : "Definitionen",
+            "items" : {
+              "type" : "string"
+            }
+          },
           "gericht" : {
             "type" : "string",
             "description" : "Gericht",

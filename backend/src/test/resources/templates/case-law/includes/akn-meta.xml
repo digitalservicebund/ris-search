@@ -154,6 +154,14 @@
         <ris:datenDerMuendlichenVerhandlung domainTerm="Daten der mündlichen Verhandlung">
             <ris:datumDerMuendlichenVerhandlung domainTerm="Datum der mündlichen Verhandlung">2021-02-03</ris:datumDerMuendlichenVerhandlung>
         </ris:datenDerMuendlichenVerhandlung>
+        <ris:definitionen domainTerm="Definitionen">
+            <ris:definition domainTerm="Definition">
+                <ris:definierterBegriff domainTerm="Definierter Begriff">indirekte Steuern</ris:definierterBegriff>
+            </ris:definition>
+            <ris:definition domainTerm="Definition">
+                <ris:definierterBegriff domainTerm="Definierter Begriff">Sachgesamtheit</ris:definierterBegriff>
+            </ris:definition>
+        </ris:definitionen>
         <ris:decisionNames>
             <ris:decisionName>Test decision name</ris:decisionName>
         </ris:decisionNames>
