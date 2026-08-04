@@ -24,7 +24,7 @@ class CaseLawLdmlToOpenSearchMapperTest {
   }
 
   @Test
-  void shouldMapToCaseLawDocumentationUnitCorrectly() {
+  void shouldMapCoreCaseLawFieldsCorrectly() {
     CaseLawDocumentationUnit caseLaw = mapper.fromString(testCaseLawLdml);
 
     assertThat(caseLaw.id()).isEqualTo("testDocNumber");
@@ -40,19 +40,25 @@ class CaseLawLdmlToOpenSearchMapperTest {
     assertThat(caseLaw.decisionDate()).isEqualTo(LocalDate.of(2020, Month.JANUARY, 1));
     assertThat(caseLaw.tenor()).isEqualTo("Example Tenor/Tenor");
     assertThat(caseLaw.fileNumber()).isEqualTo("fileNumber test");
-    assertThat(caseLaw.fileNumbers()).hasToString("[Test file number 1, Test file number 2]");
     assertThat(caseLaw.courtType()).isEqualTo("Test court type");
     assertThat(caseLaw.location()).isEqualTo("Test court location");
     assertThat(caseLaw.courtKeyword()).isEqualTo("Test court label");
     assertThat(caseLaw.documentType()).isEqualTo("Urteil");
     assertThat(caseLaw.outline()).isEqualTo("Example Gliederung/Outline");
     assertThat(caseLaw.judicialBody()).isEqualTo("Test judicial body");
-    assertThat(caseLaw.keywords()).hasToString("[keyword1, keyword2]");
-    assertThat(caseLaw.decisionName()).hasToString("[Test decision name]");
-    assertThat(caseLaw.deviatingDocumentNumber()).hasToString("[ABC, DEF]");
     assertThat(caseLaw.dissentingOpinion())
         .isEqualTo(
             "dissenting test, Dr. Phil. Max Mustermann: referenced opinions test 1, Maxima Mustermann: referenced opinions test 2");
+  }
+
+  @Test
+  void shouldMapCaseLawCollectionsCorrectly() {
+    CaseLawDocumentationUnit caseLaw = mapper.fromString(testCaseLawLdml);
+
+    assertThat(caseLaw.fileNumbers()).hasToString("[Test file number 1, Test file number 2]");
+    assertThat(caseLaw.keywords()).hasToString("[keyword1, keyword2]");
+    assertThat(caseLaw.decisionName()).hasToString("[Test decision name]");
+    assertThat(caseLaw.deviatingDocumentNumber()).hasToString("[ABC, DEF]");
     assertThat(caseLaw.previousDecisions())
         .containsExactlyInAnyOrder(
             "previous decision file number, previous decision court type",
@@ -61,7 +67,6 @@ class CaseLawLdmlToOpenSearchMapperTest {
         .containsExactlyInAnyOrder(
             "ensuing decision file number, ensuing decision court type",
             "ensuing decision file number, ensuing decision court type");
-
     assertThat(caseLaw.abweichendeDaten()).hasToString("[2020-03-03, 2022-02-04]");
     assertThat(caseLaw.abweichendeEclis()).hasToString("[ECLI 1, ECLI 2]");
     assertThat(caseLaw.berufsbilder()).hasToString("[jobProfile test 1, jobProfile test 2]");
