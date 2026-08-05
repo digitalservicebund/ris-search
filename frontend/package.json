@@ -39,6 +39,7 @@
     "@iconify-json/ic": "1.2.4",
     "@nuxt/test-utils": "4.1.0",
     "@playwright/test": "1.62.0",
+    "@storybook/addon-docs": "10.5.5",
     "@storybook/vue3-vite": "10.5.5",
     "@tailwindcss/vite": "4.3.3",
     "@testing-library/dom": "10.4.1",

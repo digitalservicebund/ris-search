@@ -7,7 +7,7 @@ import { icons } from "../config/icons.ts";
 const config: StorybookConfig = {
   stories: ["../src/**/*.stories.@(ts|tsx)"],
 
-  addons: [],
+  addons: ["@storybook/addon-docs"],
 
   framework: {
     name: "@storybook/vue3-vite",
