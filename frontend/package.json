@@ -1,7 +1,7 @@
 {
   "type": "module",
   "scripts": {
-    "audit:licences": "bash -c 'license-checker-rseidelsohn --production --excludePrivatePackages --onlyAllow \"$(./parseAllowedLicences.sh)\" --csv --out ./frontend-licence-report.csv'",
+    "audit:licences": "bash -c 'license-checker-rseidelsohn --production --excludePrivatePackages --onlyAllow \"$(./parse-allowed-licences.sh)\" --csv --out ./frontend-licence-report.csv'",
     "build": "nuxt build",
     "build:storybook": "storybook build",
     "coverage": "TZ=UTC vitest run --coverage",
