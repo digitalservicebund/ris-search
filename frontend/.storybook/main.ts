@@ -5,7 +5,7 @@ import { mergeConfig } from "vite";
 import { icons } from "../config/icons.ts";
 
 const config: StorybookConfig = {
-  stories: ["../src/components/ui/**/*.stories.@(ts|tsx)"],
+  stories: ["../src/**/*.stories.@(ts|tsx)"],
 
   addons: [],
 
