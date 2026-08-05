@@ -1,7 +1,4 @@
-/dist
-/node_modules
-/.vitepress/cache
-/.cache
-/.idea
-/.env
-.DS_Store
+.cache
+.vitepress/cache
+dist
+node_modules

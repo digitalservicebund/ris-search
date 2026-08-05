@@ -4,5 +4,8 @@
   "jsdoc": true,
   "sortImports": {
     "newlinesBetween": false
+  },
+  "sortPackageJson": {
+    "sortScripts": true
   }
 }

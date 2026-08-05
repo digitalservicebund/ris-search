@@ -91,7 +91,7 @@ const relevantHighlights = computed(() =>
       :secondary-item="secondaryTitle"
     >
       <template #trailing>
-        <Badge
+        <UiBadge
           v-if="validityStatus"
           class="md:ml-auto"
           v-bind="validityStatus"

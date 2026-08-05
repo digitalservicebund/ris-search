@@ -103,7 +103,7 @@ async function handleSelectionUpdate(newSelection: TableRowData) {
     <Column header="Status">
       <template #body="{ data: { status } }">
         <div class="flex justify-between">
-          <Badge v-if="status" :label="status.label" :color="status.color" />
+          <UiBadge v-if="status" :label="status.label" :color="status.color" />
         </div>
       </template>
     </Column>

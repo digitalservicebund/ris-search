@@ -1,11 +1,11 @@
 {
   "type": "module",
   "scripts": {
-    "dev": "vitepress dev",
     "build": "vitepress build",
-    "preview": "vitepress preview",
+    "dev": "vitepress dev",
     "fmt": "oxfmt --no-error-on-unmatched-pattern",
     "lint": "oxlint --fix --no-error-on-unmatched-pattern",
+    "preview": "vitepress preview",
     "style:check": "oxfmt --check && oxlint --max-warnings=0",
     "style:fix": "pnpm fmt && pnpm lint",
     "typecheck": "vue-tsc --noEmit"

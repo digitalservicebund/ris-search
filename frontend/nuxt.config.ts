@@ -1,8 +1,7 @@
 import tailwindcss from "@tailwindcss/vite";
 import { defineNuxtConfig } from "nuxt/config";
-import { FileSystemIconLoader } from "unplugin-icons/loaders";
-import Icons from "unplugin-icons/vite";
 import { appHead } from "./config/appHead";
+import { icons } from "./config/icons";
 import { routeRules } from "./config/routeRules";
 import { runtimeConfig } from "./config/runtimeConfig";
 import { security } from "./config/security";
@@ -46,18 +45,7 @@ export default defineNuxtConfig({
 
   // Build
   vite: {
-    plugins: [
-      tailwindcss(),
-      Icons({
-        scale: 1.5,
-        customCollections: {
-          custom: FileSystemIconLoader("./src/assets/icons"),
-        },
-        iconCustomizer(collection, icon, props) {
-          props.role = "presentation";
-        },
-      }),
-    ],
+    plugins: [tailwindcss(), icons],
     optimizeDeps: {
       include: ["primevue", "@digitalservicebund/ris-ui/primevue"],
     },
