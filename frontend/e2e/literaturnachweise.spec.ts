@@ -398,6 +398,45 @@ test("shows detailed information in the 'Details' tab of sli documents", async (
   ]);
 });
 
+test("hides empty detail fields and only shows populated ones for uli documents", async ({
+  page,
+}) => {
+  await navigate(page, "/literaturnachweise/XXLU000000003");
+
+  await page.getByRole("tab", { name: "Details" }).click();
+
+  const detailsList = page.getByTestId("details-list");
+  const detailsEntries = detailsList
+    .getByRole("term")
+    .or(detailsList.getByRole("definition"));
+
+  await expect(detailsEntries).toHaveCount(2);
+  await expect(detailsEntries).toHaveText(["Sprache:", "deu"]);
+});
+
+test("hides empty detail fields and only shows populated ones for sli documents", async ({
+  page,
+}) => {
+  await navigate(page, "/literaturnachweise/XXLS000000002");
+
+  await page.getByRole("tab", { name: "Details" }).click();
+
+  const detailsList = page.getByTestId("details-list");
+  const detailsEntries = detailsList
+    .getByRole("term")
+    .or(detailsList.getByRole("definition"));
+
+  await expect(detailsEntries).toHaveCount(6);
+  await expect(detailsEntries).toHaveText([
+    "Norm:",
+    "GG, Art 3 Abs 1, 1949-05-23",
+    "Mitarbeiter:",
+    "Max Mustermann",
+    "Sprache:",
+    "deu",
+  ]);
+});
+
 test.describe("actions menu", () => {
   test.describe("can copy link to currently viewed page", () => {
     testCopyLinkButton(
@@ -443,18 +482,7 @@ test("hides tabs and shows details if document is empty", async ({ page }) => {
   const detailsList = page.getByTestId("details-list");
   await expect(
     detailsList.getByRole("term").or(detailsList.getByRole("definition")),
-  ).toHaveText([
-    "Norm:",
-    "nicht vorhanden",
-    "Mitarbeiter:",
-    "nicht vorhanden",
-    "Urheber:",
-    "nicht vorhanden",
-    "Sprache:",
-    "deu",
-    "Kongress:",
-    "nicht vorhanden",
-  ]);
+  ).toHaveText(["Sprache:", "deu"]);
 });
 
 test("displays references", async ({ page }) => {

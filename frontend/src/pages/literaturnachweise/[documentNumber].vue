@@ -109,15 +109,7 @@ const detailItems = computed(() => getLiteratureDetailItems(literature.value));
       >
         <h2 :id="detailsSectionId" class="typo-headline3-bold">Details</h2>
         <DocumentsIncompleteDataMessage class="my-24" />
-        <DocumentsDetailsList>
-          <template v-for="item in detailItems" :key="item.label">
-            <DocumentsDetailsListEntry
-              :label="item.label"
-              :value="item.value"
-              :value-list="item.valueList"
-            />
-          </template>
-        </DocumentsDetailsList>
+        <DocumentsDetailsListV2 :items="detailItems" />
       </section>
     </template>
 

@@ -727,7 +727,7 @@ test.describe("searching caselaw", () => {
       .getByRole("button", { name: "Alle Dokumentarten" })
       .click();
 
-    await expect(getResultCounter(page)).toHaveText("43 Suchergebnisse");
+    await expect(getResultCounter(page)).toHaveText("44 Suchergebnisse");
 
     // Verify caselaw-specific filters are reset
     await expect(page).not.toHaveURL(/documentKind=R/);
@@ -858,7 +858,7 @@ test.describe("searching literature", () => {
 
     await expect(page).toHaveURL(/dateFilterFrom=2015&dateFilterTo=2024/);
 
-    await expect(getSearchResults(page)).toHaveCount(6);
+    await expect(getSearchResults(page)).toHaveCount(7);
   });
 
   test("resets year input when switching filter types", async ({

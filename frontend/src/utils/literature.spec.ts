@@ -128,7 +128,11 @@ describe("getLiteratureDetailsItems", () => {
       const result = getLiteratureDetailItems({
         normReferences: normReferences,
       });
-      expect(result[0]).toEqual({ label: expectedLabel, value: expectedValue });
+      expect(result[0]).toEqual({
+        type: "text",
+        label: expectedLabel,
+        value: expectedValue,
+      });
     },
   );
 
@@ -147,6 +151,7 @@ describe("getLiteratureDetailsItems", () => {
         collaborators: collaborators,
       });
       expect(result[1]).toEqual({
+        type: "text",
         label: "Mitarbeiter:",
         value: expectedValue,
       });
@@ -167,7 +172,11 @@ describe("getLiteratureDetailsItems", () => {
       const result = getLiteratureDetailItems({
         originators: originators,
       });
-      expect(result[2]).toEqual({ label: "Urheber:", value: expectedValue });
+      expect(result[2]).toEqual({
+        type: "text",
+        label: "Urheber:",
+        value: expectedValue,
+      });
     },
   );
 
@@ -183,6 +192,7 @@ describe("getLiteratureDetailsItems", () => {
         languages: languages,
       });
       expect(result[3]).toEqual({
+        type: "text",
         label: expectedLabel,
         value: expectedValue,
       });
@@ -200,7 +210,11 @@ describe("getLiteratureDetailsItems", () => {
       const result = getLiteratureDetailItems({
         conferenceNotes: conferenceNotes,
       });
-      expect(result[4]).toEqual({ label: expectedLabel, value: expectedValue });
+      expect(result[4]).toEqual({
+        type: "text",
+        label: expectedLabel,
+        value: expectedValue,
+      });
     },
   );
 
@@ -228,57 +242,30 @@ describe("getLiteratureDetailsItems", () => {
     expect(new Set(result)).toEqual(
       new Set([
         {
+          type: "text",
           label: "Norm:",
           value: "GG, Art 6 Abs 2 S 1, 1949-05-23",
         },
+        { type: "text", label: "Bearbeiter:", value: "Editor Doe" },
+        { type: "text", label: "Mitarbeiter:", value: "John Doe, Jane Doe" },
+        { type: "text", label: "Urheber:", value: "FOO" },
+        { type: "text", label: "Begründer:", value: "Founder Doe" },
         {
-          label: "Bearbeiter:",
-          value: "Editor Doe",
-        },
-        {
-          label: "Mitarbeiter:",
-          value: "John Doe, Jane Doe",
-        },
-        {
-          label: "Urheber:",
-          value: "FOO",
-        },
-        {
-          label: "Begründer:",
-          value: "Founder Doe",
-        },
-        {
+          type: "text",
           label: "Herausgeber:",
           value: "Institution, Publisher Doe",
         },
+        { type: "text", label: "Verlag:", value: "Nomos, Baden-Baden" },
+        { type: "text", label: "Ausgabe:", value: "first edition" },
+        { type: "text", label: "Bestellnummer:", value: "ISBN-XXXX" },
+        { type: "list", label: "Teilband:", values: ["Teilband 1"] },
+        { type: "text", label: "Sprache:", value: "deu" },
         {
-          label: "Verlag:",
-          value: "Nomos, Baden-Baden",
-        },
-        {
-          label: "Ausgabe:",
-          value: "first edition",
-        },
-        {
-          label: "Bestellnummer:",
-          value: "ISBN-XXXX",
-        },
-        {
-          label: "Teilband:",
-          valueList: ["Teilband 1"],
-        },
-        {
-          label: "Sprache:",
-          value: "deu",
-        },
-        {
+          type: "text",
           label: "Kongress:",
           value: "Internationaler Kongress 2025, Berlin, GER",
         },
-        {
-          label: "Hochschule:",
-          value: "University",
-        },
+        { type: "text", label: "Hochschule:", value: "University" },
       ]),
     );
   });
@@ -313,55 +300,36 @@ describe("getLiteratureDetailsItems", () => {
     expect(new Set(result)).toEqual(
       new Set([
         {
+          type: "text",
           label: "Normen:",
           value:
             "GG, Art 6 Abs 2 S 1, 1949-05-23, GG, Art 4 Abs 3 S 1, 1949-05-23",
         },
+        { type: "text", label: "Bearbeiter:", value: "Editor Doe" },
+        { type: "text", label: "Mitarbeiter:", value: "John Doe, Jane Doe" },
+        { type: "text", label: "Urheber:", value: "FOO" },
+        { type: "text", label: "Begründer:", value: "Founder Doe" },
         {
-          label: "Bearbeiter:",
-          value: "Editor Doe",
-        },
-        {
-          label: "Mitarbeiter:",
-          value: "John Doe, Jane Doe",
-        },
-        {
-          label: "Urheber:",
-          value: "FOO",
-        },
-        {
-          label: "Begründer:",
-          value: "Founder Doe",
-        },
-        {
+          type: "text",
           label: "Herausgeber:",
           value: "Institution, Publisher Doe",
         },
+        { type: "text", label: "Verlag:", value: "Nomos, Baden-Baden" },
+        { type: "text", label: "Ausgabe:", value: "first edition" },
+        { type: "text", label: "Bestellnummer:", value: "ISBN-XXXX" },
         {
-          label: "Verlag:",
-          value: "Nomos, Baden-Baden",
-        },
-        {
-          label: "Ausgabe:",
-          value: "first edition",
-        },
-        {
-          label: "Bestellnummer:",
-          value: "ISBN-XXXX",
-        },
-        {
+          type: "list",
           label: "Teilband:",
-          valueList: ["Teilband 1", "Teilband 2"],
+          values: ["Teilband 1", "Teilband 2"],
         },
+        { type: "text", label: "Sprachen:", value: "deu, eng" },
         {
-          label: "Sprachen:",
-          value: "deu, eng",
-        },
-        {
+          type: "text",
           label: "Kongresse:",
           value: "Internationaler Kongress 2025, Berlin, GER, Kongress 2",
         },
         {
+          type: "text",
           label: "Hochschulen:",
           value: "University 1, University 2",
         },
@@ -376,58 +344,19 @@ describe("getLiteratureDetailsItems", () => {
 
     expect(new Set(result)).toEqual(
       new Set([
-        {
-          label: "Norm:",
-          value: undefined,
-        },
-        {
-          label: "Bearbeiter:",
-          value: undefined,
-        },
-        {
-          label: "Mitarbeiter:",
-          value: undefined,
-        },
-        {
-          label: "Urheber:",
-          value: undefined,
-        },
-        {
-          label: "Begründer:",
-          value: undefined,
-        },
-        {
-          label: "Herausgeber:",
-          value: undefined,
-        },
-        {
-          label: "Verlag:",
-          value: undefined,
-        },
-        {
-          label: "Ausgabe:",
-          value: undefined,
-        },
-        {
-          label: "Bestellnummer:",
-          value: undefined,
-        },
-        {
-          label: "Teilband:",
-          valueList: undefined,
-        },
-        {
-          label: "Sprache:",
-          value: undefined,
-        },
-        {
-          label: "Kongress:",
-          value: undefined,
-        },
-        {
-          label: "Hochschule:",
-          value: undefined,
-        },
+        { type: "text", label: "Norm:", value: undefined },
+        { type: "text", label: "Bearbeiter:", value: undefined },
+        { type: "text", label: "Mitarbeiter:", value: undefined },
+        { type: "text", label: "Urheber:", value: undefined },
+        { type: "text", label: "Begründer:", value: undefined },
+        { type: "text", label: "Herausgeber:", value: undefined },
+        { type: "text", label: "Verlag:", value: undefined },
+        { type: "text", label: "Ausgabe:", value: undefined },
+        { type: "text", label: "Bestellnummer:", value: undefined },
+        { type: "list", label: "Teilband:", values: [] },
+        { type: "text", label: "Sprache:", value: undefined },
+        { type: "text", label: "Kongress:", value: undefined },
+        { type: "text", label: "Hochschule:", value: undefined },
       ]),
     );
   });
@@ -442,9 +371,9 @@ describe("getLiteratureDetailsItems", () => {
     const herausgeberItem = result.find(
       (item) => item.label === "Herausgeber:",
     );
-    expect(herausgeberItem?.value).toBe(
-      "Institution1, Institution2, Publisher1 Doe, Publisher2 Doe",
-    );
+    expect(herausgeberItem).toMatchObject({
+      value: "Institution1, Institution2, Publisher1 Doe, Publisher2 Doe",
+    });
   });
 
   it("handles only publishers when publisherOrganizations is empty", () => {
@@ -457,7 +386,7 @@ describe("getLiteratureDetailsItems", () => {
     const herausgeberItem = result.find(
       (item) => item.label === "Herausgeber:",
     );
-    expect(herausgeberItem?.value).toBe("Publisher Doe");
+    expect(herausgeberItem).toMatchObject({ value: "Publisher Doe" });
   });
 
   it("handles only publisherOrganizations when publishers is empty", () => {
@@ -470,6 +399,6 @@ describe("getLiteratureDetailsItems", () => {
     const herausgeberItem = result.find(
       (item) => item.label === "Herausgeber:",
     );
-    expect(herausgeberItem?.value).toBe("Institution");
+    expect(herausgeberItem).toMatchObject({ value: "Institution" });
   });
 });
