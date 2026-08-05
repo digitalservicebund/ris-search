@@ -1,23 +1,23 @@
 {
   "type": "module",
   "scripts": {
+    "audit:licences": "bash -c 'license-checker-rseidelsohn --production --excludePrivatePackages --onlyAllow \"$(./parseAllowedLicences.sh)\" --csv --out ./frontend-licence-report.csv'",
     "build": "nuxt build",
-    "test": "TZ=UTC vitest run",
-    "test:watch": "TZ=UTC vitest",
+    "build:storybook": "storybook build",
     "coverage": "TZ=UTC vitest run --coverage",
     "dev": "nuxt dev",
-    "generate": "nuxt generate",
-    "preview": "nuxt preview",
-    "prepare": "nuxt prepare",
     "fmt": "oxfmt --no-error-on-unmatched-pattern",
+    "generate": "nuxt generate",
+    "generate-api-types": "openapi-typescript src/public/openapi.json -o src/types/api-generated.d.ts",
     "lint": "oxlint --fix --no-error-on-unmatched-pattern",
+    "prepare": "nuxt prepare",
+    "preview": "nuxt preview",
+    "storybook": "storybook dev -p 6006",
     "style:check": "oxfmt --check && oxlint --max-warnings=0",
     "style:fix": "pnpm fmt && pnpm lint",
-    "generate-api-types": "openapi-typescript src/public/openapi.json -o src/types/api-generated.d.ts",
-    "typecheck": "nuxt typecheck",
-    "storybook": "storybook dev -p 6006",
-    "build:storybook": "storybook build",
-    "audit:licences": "bash -c 'license-checker-rseidelsohn --production --excludePrivatePackages --onlyAllow \"$(./parseAllowedLicences.sh)\" --csv --out ./frontend-licence-report.csv'"
+    "test": "TZ=UTC vitest run",
+    "test:watch": "TZ=UTC vitest",
+    "typecheck": "nuxt typecheck"
   },
   "dependencies": {
     "@digitalservicebund/ris-ui": "4.6.1",

@@ -6,5 +6,8 @@
   "sortImports": {
     "newlinesBetween": false
   },
+  "sortPackageJson": {
+    "sortScripts": true
+  },
   "ignorePatterns": ["src/public/openapi.json", "src/types/api-generated.d.ts"]
 }
