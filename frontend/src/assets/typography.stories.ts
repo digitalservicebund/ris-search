@@ -185,7 +185,11 @@ export const ResponsiveMono: StoryObj<typeof meta> = {
 export const ResponsiveHeadlineSearchresult: StoryObj<typeof meta> = {
   render: () => ({
     setup() {},
-    template: html`<div class="typo-headline-searchresult">Headline search result</div>
-      <a href="#" class="typo-headline-searchresult">Headline search result</a>`,
+    template: html`<div class="typo-headline-searchresult">
+        Headline search result
+      </div>
+      <a href="#" class="typo-headline-searchresult"
+        >Headline search result</a
+      >`,
   }),
 };
