@@ -1,5 +1,5 @@
 import { vi } from "vitest";
-import { BadgeColor } from "~/components/Badge.vue";
+import { BadgeColor } from "~/components/ui/Badge.vue";
 import { DocumentKind } from "~/types/api";
 import { formatDocumentKind, formatNormValidity } from "./displayValues";
 

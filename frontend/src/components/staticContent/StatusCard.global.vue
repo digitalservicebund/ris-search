@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { BadgeColor } from "~/components/Badge.vue";
+import { BadgeColor } from "~/components/ui/Badge.vue";
 
 export type StatusCardType = "implemented" | "in_progress" | "planned";
 
@@ -41,7 +41,7 @@ const badge = computed(() => {
       <MDCSlot unwrap="p" />
     </div>
     <div v-if="badge" class="mt-auto self-start">
-      <Badge :label="badge.label" :color="badge.color" />
+      <UiBadge :label="badge.label" :color="badge.color" />
     </div>
   </div>
 </template>
