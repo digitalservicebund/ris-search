@@ -70,18 +70,37 @@ test.describe("view norm page", async () => {
 
     await expect(detailsList).toHaveText([
       "Ausfertigungsdatum:",
-      "nicht vorhanden",
+      "27.05.2000",
       "Vollzitat:",
       "Fiktive Fruchtsaft- und Erfrischungsgetränkeverordnung vom 27. Mai 2000 (BGBl. I S. 1016), zuletzt modifiziert im Testverfahren",
       "Stand:",
       "Zuletzt geändert durch Testanpassungen",
       "Neugefasst durch Testdaten",
       "Hinweis zum Stand:",
-      "nicht vorhanden",
+      "Hinweis Testdaten",
       "Fußnoten:",
       /\*T \(\+{3} Textnachweis ab: 27\.5\.2000 \+{3}\).*\(\+{3} Zur Anwendung vgl\. §§ 5, 12, 15 \+{3}\)/,
       "Download:",
       /FrSaftErfrischV als ZIP herunterladen/,
+    ]);
+  });
+
+  test("hides empty detail fields and only shows populated ones", async ({
+    page,
+  }) => {
+    await navigate(page, "/gesetze/eli/bund/bgbl-1/2025/999/2025-01-01/1/deu");
+
+    await page.getByRole("tab", { name: "Details" }).click();
+
+    const detailsList = page.getByTestId("details-list");
+    const detailsEntries = detailsList
+      .getByRole("term")
+      .or(detailsList.getByRole("definition"));
+
+    await expect(detailsEntries).toHaveCount(2);
+    await expect(detailsEntries).toHaveText([
+      "Download:",
+      "EmptyBodyTestG als ZIP herunterladen",
     ]);
   });
 

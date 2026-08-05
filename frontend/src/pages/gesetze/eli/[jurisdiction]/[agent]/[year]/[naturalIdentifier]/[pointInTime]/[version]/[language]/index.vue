@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { Button } from "primevue";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
-import IconFileDownload from "~icons/ic/outline-file-download";
 import IcOutlineInfo from "~icons/ic/outline-info";
 import IcOutlineRestore from "~icons/ic/outline-settings-backup-restore";
 import { NuxtLink } from "#components";
 import type { BreadcrumbItem } from "~/components/Breadcrumbs.vue";
+import type { DetailsListItem } from "~/components/documents/DetailsListV2.vue";
 import type { TabView } from "~/components/documents/TabsLayout.vue";
 import { useSearchBackLink } from "~/composables/useSearchBackLink";
 import { DocumentKind, type LegislationExpression } from "~/types/api";
@@ -68,6 +68,47 @@ const htmlParts = computed(() => data.value.htmlParts);
 const zipUrl = computed(() =>
   getManifestationUrl(metadata.value, "application/zip"),
 );
+
+const detailItems = computed<DetailsListItem[]>(() => [
+  {
+    type: "text",
+    label: "Ausfertigungsdatum:",
+    value: dateFormattedDDMMYYYY(metadata.value.exampleOfWork.legislationDate),
+  },
+  {
+    type: "text",
+    label: "Vollzitat:",
+    value: htmlParts.value.vollzitat,
+  },
+  {
+    type: "list",
+    label: "Stand:",
+    values: htmlParts.value.standangaben ?? [],
+  },
+  {
+    type: "list",
+    label: "Hinweis zum Stand:",
+    values: htmlParts.value.standangabenHinweis ?? [],
+  },
+  {
+    type: "html",
+    label: "Besonderer Hinweis:",
+    html: htmlParts.value.prefaceContainer,
+  },
+  {
+    type: "html",
+    label: "Fußnoten:",
+    html: htmlParts.value.headingNotes,
+    htmlClass: "footnotes",
+  },
+  {
+    type: "link",
+    label: "Download:",
+    url: zipUrl.value,
+    text: `${metadata.value.abbreviation ?? "Inhalte"} als ZIP herunterladen`,
+    dataAttr: "xml-zip-view",
+  },
+]);
 
 const tableOfContents = computed(() => {
   if (!metadata.value.hasPart) return [];
@@ -248,48 +289,7 @@ const fassungenDateFilterInputId = useId();
 
             <DocumentsIncompleteDataMessage class="my-24" />
 
-            <DocumentsDetailsList>
-              <DocumentsDetailsListEntry
-                label="Ausfertigungsdatum:"
-                :value="
-                  dateFormattedDDMMYYYY(metadata.exampleOfWork.legislationDate)
-                "
-              />
-              <DocumentsDetailsListEntry
-                label="Vollzitat:"
-                :value="htmlParts.vollzitat"
-              />
-              <DocumentsDetailsListEntry
-                label="Stand:"
-                :value-list="htmlParts.standangaben"
-              />
-              <DocumentsDetailsListEntry
-                label="Hinweis zum Stand:"
-                :value-list="htmlParts.standangabenHinweis"
-              />
-              <DocumentsDetailsListEntry
-                v-if="htmlParts.prefaceContainer"
-                label="Besonderer Hinweis:"
-              >
-                <div v-html="htmlParts.prefaceContainer" />
-              </DocumentsDetailsListEntry>
-              <DocumentsDetailsListEntry label="Fußnoten:">
-                <template v-if="htmlParts.headingNotes">
-                  <div class="footnotes" v-html="htmlParts.headingNotes" />
-                </template>
-              </DocumentsDetailsListEntry>
-              <DocumentsDetailsListEntry label="Download:">
-                <NuxtLink
-                  data-attr="xml-zip-view"
-                  class="typo-link-regular"
-                  external
-                  :to="zipUrl"
-                >
-                  <IconFileDownload class="mr-2 inline" />
-                  {{ metadata.abbreviation ?? "Inhalte" }} als ZIP herunterladen
-                </NuxtLink>
-              </DocumentsDetailsListEntry>
-            </DocumentsDetailsList>
+            <DocumentsDetailsListV2 :items="detailItems" />
           </div>
         </section>
       </template>
@@ -386,19 +386,19 @@ const fassungenDateFilterInputId = useId();
   }
 }
 
-.footnotes :deep(.nichtamtliche-fussnoten) {
+:deep(.footnotes .nichtamtliche-fussnoten) {
   @apply list-none p-0;
 }
 
-.footnotes :deep(.nichtamtliche-fussnoten .fussnote) {
+:deep(.footnotes .nichtamtliche-fussnoten .fussnote) {
   @apply mt-8 first:mt-0;
 }
 
-.footnotes :deep(.nichtamtliche-fussnoten .fussnote pre) {
+:deep(.footnotes .nichtamtliche-fussnoten .fussnote pre) {
   @apply typo-mono overflow-auto border border-gray-400 p-8;
 }
 
-.footnotes :deep(.nichtamtliche-fussnoten .fussnote:first-child pre) {
+:deep(.footnotes .nichtamtliche-fussnoten .fussnote:first-child pre) {
   @apply md:-mt-8;
 }
 </style>
