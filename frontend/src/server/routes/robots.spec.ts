@@ -4,6 +4,9 @@ import { afterEach, describe, expect, it, test, vi } from "vitest";
 import useBackendUrl from "~/composables/useBackendUrl";
 import middleware from "./robots.txt.get";
 
+const mockFetch = vi.hoisted(() => vi.fn());
+mockNuxtImport("$fetch", () => mockFetch);
+
 vi.mock("~/plugins/risBackend", () => ({
   default: vi.fn(),
   extendOnRequest: (...cbs: unknown[]) => cbs,
@@ -32,9 +35,7 @@ describe("robots txt route", () => {
   });
 
   it("should serve robots txt from backend api on justice crawler", async () => {
-    const fetchSpy = vi
-      .spyOn(globalThis as any, "$fetch")
-      .mockResolvedValue("");
+    mockFetch.mockResolvedValue("");
     mockPrivateFeaturesEnabled.mockReturnValue(false);
 
     const mockEvent: H3Event<EventHandlerRequest> = {
@@ -53,7 +54,7 @@ describe("robots txt route", () => {
     } as unknown as H3Event<EventHandlerRequest>;
 
     await middleware(mockEvent);
-    expect(fetchSpy).toHaveBeenCalledWith(
+    expect(mockFetch).toHaveBeenCalledWith(
       useBackendUrl("/v1/eclicrawler/robots.txt"),
       {
         method: "GET",
@@ -69,9 +70,7 @@ describe("robots txt route", () => {
   test.for(testCases)(
     "privateFeaturesEnabled flag = %s serves %s",
     async ([privateFeaturesEnabled, file]) => {
-      const fetchSpy = vi
-        .spyOn(globalThis as any, "$fetch")
-        .mockResolvedValue("");
+      mockFetch.mockResolvedValue("");
       mockPrivateFeaturesEnabled.mockReturnValue(privateFeaturesEnabled);
       mockBasicAuth.mockReturnValue("auth");
 
@@ -92,7 +91,7 @@ describe("robots txt route", () => {
       } as unknown as H3Event<EventHandlerRequest>;
 
       await middleware(mockEvent);
-      expect(fetchSpy).toHaveBeenCalledWith(`http://origin/${file}`, {
+      expect(mockFetch).toHaveBeenCalledWith(`http://origin/${file}`, {
         method: "GET",
         headers: {
           Authorization: "Basic auth",
