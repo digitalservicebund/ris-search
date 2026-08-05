@@ -5,7 +5,7 @@ import IcOutlineInfo from "~icons/ic/outline-info";
 import IcOutlineRestore from "~icons/ic/outline-settings-backup-restore";
 import { NuxtLink } from "#components";
 import type { BreadcrumbItem } from "~/components/Breadcrumbs.vue";
-import type { DetailsListItem } from "~/components/documents/DetailsListV2.vue";
+import type { DetailsListItem } from "~/components/documents/DetailsList.vue";
 import type { TabView } from "~/components/documents/TabsLayout.vue";
 import { useSearchBackLink } from "~/composables/useSearchBackLink";
 import { DocumentKind, type LegislationExpression } from "~/types/api";

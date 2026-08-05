@@ -1,4 +1,4 @@
-import type { DetailsListItem } from "~/components/documents/DetailsListV2.vue";
+import type { DetailsListItem } from "~/components/documents/DetailsList.vue";
 import type { MetadataItem } from "~/components/documents/Metadata.vue";
 import type { AdministrativeDirective } from "~/types/api";
 

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineInfo from "~icons/ic/outline-info";
-import type { DetailsListItem } from "~/components/documents/DetailsListV2.vue";
+import type { DetailsListItem } from "~/components/documents/DetailsList.vue";
 import type { MetadataItem } from "~/components/documents/Metadata.vue";
 import type { TabView } from "~/components/documents/TabsLayout.vue";
 import type { TreeItem } from "~/components/TreeView.vue";
