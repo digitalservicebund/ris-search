@@ -5,6 +5,7 @@ export type TextEntry = {
   type: "text";
   label: string;
   value?: string;
+  valueClass?: string;
 };
 
 export type ListEntry = {
@@ -66,6 +67,7 @@ const visibleItems = computed(() =>
       <dd
         v-if="item.type === 'text'"
         class="typo-label1-regular col-span-12 md:col-span-9 md:col-start-4 lg:col-span-6 lg:col-start-4"
+        :class="item.valueClass"
       >
         {{ item.value }}
       </dd>

@@ -44,6 +44,18 @@ describe("DetailsListV2", () => {
       expect(screen.getByRole("term")).toHaveTextContent("Gericht:");
       expect(screen.getByRole("definition")).toHaveTextContent("BGH");
     });
+
+    it("applies valueClass to the definition element", () => {
+      renderComponent([
+        {
+          type: "text",
+          label: "ECLI:",
+          value: "ECLI:DE:BGH:2024:1",
+          valueClass: "break-all",
+        },
+      ]);
+      expect(screen.getByRole("definition")).toHaveClass("break-all");
+    });
   });
 
   describe("list entries", () => {
