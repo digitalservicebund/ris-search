@@ -1,6 +1,10 @@
 import { describe, expect, it } from "vitest";
 import type { CaseLaw } from "~/types/api";
-import { getCaselawSecondaryTitle, getEncodingURL } from "~/utils/caseLaw";
+import {
+  getCaseLawDetailItems,
+  getCaselawSecondaryTitle,
+  getEncodingURL,
+} from "~/utils/caseLaw";
 import { truncateAtWord } from "~/utils/textFormatting";
 
 describe("caselaw", () => {
@@ -97,6 +101,82 @@ describe("caselaw", () => {
       expect(
         getCaselawSecondaryTitle({ decisionName: [fullTItle] }, false),
       ).toBe(fullTItle);
+    });
+  });
+
+  describe("getCaseLawDetailItems", () => {
+    it("creates correct labels", () => {
+      const result = getCaseLawDetailItems();
+      expect(result.map((item) => item.label)).toEqual([
+        "Spruchkörper:",
+        "ECLI:",
+        "Entscheidungsname:",
+        "Download:",
+      ]);
+    });
+
+    it("maps judicialBody to Spruchkörper", () => {
+      const result = getCaseLawDetailItems({ judicialBody: "8. Kammer" });
+      expect(result[0]).toEqual({
+        type: "text",
+        label: "Spruchkörper:",
+        value: "8. Kammer",
+      });
+    });
+
+    it("maps ecli to ECLI with break-all valueClass", () => {
+      const result = getCaseLawDetailItems({
+        ecli: "ECLI:DE:BGH:2024:1",
+      });
+      expect(result[1]).toEqual({
+        type: "text",
+        label: "ECLI:",
+        value: "ECLI:DE:BGH:2024:1",
+        valueClass: "break-all",
+      });
+    });
+
+    it.each([
+      [undefined, undefined],
+      [[], undefined],
+      [["Musterentscheidung"], "Musterentscheidung"],
+      [["Name A", "Name B"], "Name A, Name B"],
+    ])(
+      "given decisionName '%o' maps Entscheidungsname to '%s'",
+      (decisionName, expectedValue) => {
+        const result = getCaseLawDetailItems({ decisionName });
+        expect(result[2]).toEqual({
+          type: "text",
+          label: "Entscheidungsname:",
+          value: expectedValue,
+        });
+      },
+    );
+
+    it("maps zip encoding to Download link", () => {
+      const result = getCaseLawDetailItems({
+        encoding: [
+          {
+            "@type": "DecisionObject",
+            "@id": "enc-1",
+            encodingFormat: "application/zip",
+            contentUrl: "/v1/case-law/KORE600500000.zip",
+            inLanguage: "de",
+          },
+        ],
+      });
+      expect(result[3]).toEqual({
+        type: "link",
+        label: "Download:",
+        url: "/v1/case-law/KORE600500000.zip",
+        text: "Diese Gerichtsentscheidung als ZIP herunterladen",
+        dataAttr: "xml-zip-view",
+      });
+    });
+
+    it("maps missing zip encoding to undefined url", () => {
+      const result = getCaseLawDetailItems({ encoding: [] });
+      expect(result[3]).toMatchObject({ url: undefined });
     });
   });
 });

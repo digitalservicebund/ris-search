@@ -12,6 +12,7 @@
                     <akn:FRBRuri value="MWRE000500300"/>
                     <akn:FRBRalias name="Übergreifende ID" value="fake-uuid-0002"/>
                     <akn:FRBRalias name="Dokumentnummer" value="MWRE000500300" />
+                    <akn:FRBRalias name="ecli" value="ECLI:DE:LGTEST6:2025:0409.TS123456.25.0A" showAs="ECLI"/>
                     <akn:FRBRdate eId="Entscheidungsdatum" date="2025-04-09" name="Entscheidungsdatum"/>
                     <akn:FRBRauthor href="#organisation-gericht-courttype-courtlocation"/>
                     <akn:FRBRcountry value="de"/>

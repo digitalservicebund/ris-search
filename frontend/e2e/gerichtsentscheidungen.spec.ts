@@ -194,23 +194,38 @@ test("can view metadata", async ({ page }) => {
 });
 
 test("can view details", async ({ page }) => {
-  await navigate(page, "/gerichtsentscheidungen/KORE600500000");
+  await navigate(page, "/gerichtsentscheidungen/MWRE000500300");
   await page.getByRole("tab", { name: "Details" }).click();
   const detailsList = page.getByTestId("details-list");
 
   await expect(
     detailsList.getByRole("term").or(detailsList.getByRole("definition")),
   ).toHaveText([
-    "Spruchkörper:",
-    "8. Kammer",
+    "Spruchkörper:",
+    "27. Senat",
     "ECLI:",
-    "nicht vorhanden",
-    "Normen:",
-    "nicht vorhanden",
+    "ECLI:DE:LGTEST6:2025:0409.TS123456.25.0A",
     "Entscheidungsname:",
-    "nicht vorhanden",
-    "Vorinstanz:",
-    "nicht vorhanden",
+    "Beispielentscheid",
+    "Download:",
+    "Diese Gerichtsentscheidung als ZIP herunterladen",
+  ]);
+});
+
+test("hides empty detail fields and only shows populated ones", async ({
+  page,
+}) => {
+  await navigate(page, "/gerichtsentscheidungen/KORE600500000");
+  await page.getByRole("tab", { name: "Details" }).click();
+  const detailsList = page.getByTestId("details-list");
+  const detailsEntries = detailsList
+    .getByRole("term")
+    .or(detailsList.getByRole("definition"));
+
+  await expect(detailsEntries).toHaveCount(4);
+  await expect(detailsEntries).toHaveText([
+    "Spruchkörper:",
+    "8. Kammer",
     "Download:",
     "Diese Gerichtsentscheidung als ZIP herunterladen",
   ]);
