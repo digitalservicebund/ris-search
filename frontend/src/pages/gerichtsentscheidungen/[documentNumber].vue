@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineInfo from "~icons/ic/outline-info";
+import type { DetailsListItem } from "~/components/documents/DetailsListV2.vue";
 import type { MetadataItem } from "~/components/documents/Metadata.vue";
 import type { TabView } from "~/components/documents/TabsLayout.vue";
 import type { TreeItem } from "~/components/TreeView.vue";
 import { useSearchBackLink } from "~/composables/useSearchBackLink";
 import { type CaseLaw, DocumentKind } from "~/types/api";
-import { getCaseLawDetailItems } from "~/utils/caseLaw";
 
 definePageMeta({
   layout: false,
@@ -97,7 +97,31 @@ const headerMetadata = computed<MetadataItem[]>(() => [
   },
 ]);
 
-const detailItems = computed(() => getCaseLawDetailItems(caseLaw.value));
+const detailItems = computed<DetailsListItem[]>(() => [
+  {
+    type: "text",
+    label: "Spruchkörper:",
+    value: caseLaw.value?.judicialBody,
+  },
+  {
+    type: "text",
+    label: "ECLI:",
+    value: caseLaw.value?.ecli,
+    valueClass: "break-all",
+  },
+  {
+    type: "text",
+    label: "Entscheidungsname:",
+    value: formatArray(caseLaw.value?.decisionName ?? []),
+  },
+  {
+    type: "link",
+    label: "Download:",
+    url: getEncodingURL(caseLaw.value, "application/zip"),
+    text: "Diese Gerichtsentscheidung als ZIP herunterladen",
+    dataAttr: "xml-zip-view",
+  },
+]);
 
 const textSectionId = useId();
 const detailsSectionId = useId();
