@@ -38,3 +38,6 @@ frontend-licence-report.csv
 
 # Nuxt files
 components.d.ts
+
+# Storybook
+storybook-static
