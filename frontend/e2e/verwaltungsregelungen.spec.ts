@@ -253,6 +253,25 @@ test("shows detailed information in the 'Details' tab", async ({ page }) => {
   ]);
 });
 
+test("hides empty detail fields and only shows populated ones", async ({
+  page,
+}) => {
+  await navigate(page, "/verwaltungsregelungen/KSNR000000004");
+
+  const detailsList = page.getByTestId("details-list");
+  const detailsEntries = detailsList
+    .getByRole("term")
+    .or(detailsList.getByRole("definition"));
+
+  await expect(detailsEntries).toHaveCount(4);
+  await expect(detailsEntries).toHaveText([
+    "Fundstelle:",
+    "BazAbCd 2002, Nr 1",
+    "Zitierdaten:",
+    "24.12.2012, 28.06.2013",
+  ]);
+});
+
 test("hides tabs and shows details if document is empty", async ({ page }) => {
   await navigate(page, "/verwaltungsregelungen/KSNR000000004");
 
@@ -278,12 +297,6 @@ test("hides tabs and shows details if document is empty", async ({ page }) => {
     "BazAbCd 2002, Nr 1",
     "Zitierdaten:",
     "24.12.2012, 28.06.2013",
-    "Gültig bis:",
-    "nicht vorhanden",
-    "Dokumenttyp Zusatz:",
-    "nicht vorhanden",
-    "Norm:",
-    "nicht vorhanden",
   ]);
 });
 

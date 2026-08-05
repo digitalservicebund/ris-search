@@ -89,7 +89,11 @@ describe("getAdministrativeDirectiveDetailItems", () => {
       const result = getAdministrativeDirectiveDetailItems({
         references: references,
       });
-      expect(result[0]).toEqual({ label: expectedLabel, value: expectedValue });
+      expect(result[0]).toEqual({
+        type: "text",
+        label: expectedLabel,
+        value: expectedValue,
+      });
     },
   );
 
@@ -112,6 +116,7 @@ describe("getAdministrativeDirectiveDetailItems", () => {
         citationDates: citationDates,
       });
       expect(result[1]).toEqual({
+        type: "text",
         label: expectedLabel,
         value: expectedValue,
       });
@@ -128,7 +133,11 @@ describe("getAdministrativeDirectiveDetailItems", () => {
       const result = getAdministrativeDirectiveDetailItems({
         expiryDate: expiryDate,
       });
-      expect(result[2]).toEqual({ label: "Gültig bis:", value: expectedValue });
+      expect(result[2]).toEqual({
+        type: "text",
+        label: "Gültig bis:",
+        value: expectedValue,
+      });
     },
   );
 
@@ -142,6 +151,7 @@ describe("getAdministrativeDirectiveDetailItems", () => {
         documentTypeDetail: documentTypeDetail,
       });
       expect(result[3]).toEqual({
+        type: "text",
         label: "Dokumenttyp Zusatz:",
         value: expectedValue,
       });
@@ -159,7 +169,11 @@ describe("getAdministrativeDirectiveDetailItems", () => {
       const result = getAdministrativeDirectiveDetailItems({
         normReferences: normReferenecs,
       });
-      expect(result[4]).toEqual({ label: expectedLabel, value: expectedValue });
+      expect(result[4]).toEqual({
+        type: "text",
+        label: expectedLabel,
+        value: expectedValue,
+      });
     },
   );
 });
