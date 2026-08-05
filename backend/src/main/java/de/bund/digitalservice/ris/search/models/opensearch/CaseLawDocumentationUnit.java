@@ -57,7 +57,8 @@ public record CaseLawDocumentationUnit(
         List<String> pendingDecisions,
     @JsonIgnore @Field(name = Fields.HAS_LEGISLATIVE_MANDATE) String hasLegislativeMandate,
     @JsonIgnore @Field(name = Fields.INDEXED_AT) String indexedAt,
-    @Nullable @Field(name = Fields.ARTICLES) List<Article> articles)
+    @Nullable @Field(name = Fields.ARTICLES) List<Article> articles,
+    @Field(name = Fields.VORABDOKUMENT) boolean vorabdokument)
     implements AbstractSearchEntity {
 
   /**
@@ -116,5 +117,6 @@ public record CaseLawDocumentationUnit(
     public static final String HAS_LEGISLATIVE_MANDATE = "has_legislative_mandate";
     public static final String INDEXED_AT = "indexed_at";
     public static final String ARTICLES = "articles";
+    public static final String VORABDOKUMENT = "vorabdokument";
   }
 }

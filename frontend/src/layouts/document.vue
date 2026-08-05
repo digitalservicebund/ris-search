@@ -38,6 +38,8 @@ const { titlePlaceholder = "Titelzeile nicht vorhanden", views } = defineProps<{
           :placeholder="titlePlaceholder"
         />
 
+        <slot name="message" />
+
         <DocumentsMetadata
           v-if="metadata?.length"
           :items="metadata"

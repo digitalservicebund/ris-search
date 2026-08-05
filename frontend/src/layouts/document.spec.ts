@@ -60,6 +60,19 @@ describe("document", () => {
     );
   });
 
+  it("renders message slot", async () => {
+    await renderSuspended(DocumentLayout, {
+      props: {
+        views: defaultViews,
+      },
+      slots: {
+        message: () => "Some Message",
+      },
+    });
+
+    expect(screen.getByText("Some Message")).toBeVisible();
+  });
+
   it("renders breadcrumbs", async () => {
     await renderSuspended(DocumentLayout, {
       props: {

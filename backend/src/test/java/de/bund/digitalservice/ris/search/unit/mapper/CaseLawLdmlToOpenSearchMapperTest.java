@@ -8,6 +8,7 @@ import de.bund.digitalservice.ris.search.utils.CaseLawLdmlTemplateUtils;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -57,5 +58,14 @@ class CaseLawLdmlToOpenSearchMapperTest {
         .containsExactlyInAnyOrder(
             "ensuing decision file number, ensuing decision court type",
             "ensuing decision file number, ensuing decision court type");
+    assertThat(caseLaw.vorabdokument()).isFalse();
+  }
+
+  @Test
+  void setsVorabdokumentToTrueIfDocumentIsMarkedIncomplete() throws IOException {
+    String caselawXml = caseLawLdmlTemplateUtils.getXmlFromTemplate(Map.of("vorabdokument", true));
+
+    CaseLawDocumentationUnit caseLaw = mapper.fromString(caselawXml);
+    assertThat(caseLaw.vorabdokument()).isTrue();
   }
 }

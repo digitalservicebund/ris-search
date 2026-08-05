@@ -1356,6 +1356,8 @@ export interface components {
             /** @example de */
             inLanguage: string;
             encoding: components["schemas"]["CaseLawEncodingSchema"][];
+            /** @description Whether or not the document is a Vorabdokument */
+            vorabdokument: boolean;
         };
         CourtSearchResult: {
             /** @example BGH Karlsruhe */

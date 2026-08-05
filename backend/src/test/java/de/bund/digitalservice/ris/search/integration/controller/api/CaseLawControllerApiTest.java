@@ -4,6 +4,8 @@ import static de.bund.digitalservice.ris.ZipTestUtils.readZipStream;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.startsWithIgnoringCase;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -18,6 +20,7 @@ import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.models.PublicationStatus;
+import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.service.ChangelogService;
 import de.bund.digitalservice.ris.search.service.IndexCaselawService;
@@ -145,7 +148,26 @@ class CaseLawControllerApiTest extends ContainersIntegrationBase {
                 containsInAnyOrder(
                     "/v1/case-law/" + this.documentNumber + ".html",
                     "/v1/case-law/" + this.documentNumber + ".xml",
-                    "/v1/case-law/" + this.documentNumber + ".zip")));
+                    "/v1/case-law/" + this.documentNumber + ".zip")),
+            jsonPath("$.vorabdokument", is(false)));
+  }
+
+  @Test
+  @DisplayName("Should set vorabdokument to true if vorabdokument")
+  void responseContainsVorabdokumentValue() throws Exception {
+    CaseLawDocumentationUnit docUnit =
+        CaseLawDocumentationUnit.builder()
+            .documentNumber("FOOB000000001")
+            .vorabdokument(true)
+            .build();
+
+    this.caseLawRepository.save(docUnit);
+
+    mockMvc
+        .perform(
+            get(ApiConfig.Paths.CASELAW + "/FOOB000000001").contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.vorabdokument", equalTo(true)));
   }
 
   @Test

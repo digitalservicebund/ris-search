@@ -59,6 +59,7 @@ public class CaseLawSchemaMapper {
         .keywords(doc.keywords())
         .decisionName(doc.decisionName())
         .deviatingDocumentNumber(doc.deviatingDocumentNumber())
+        .vorabdokument(doc.vorabdokument())
         // fields with different name
         .courtName(doc.courtKeyword())
         // end

@@ -40,8 +40,14 @@ test("can view a single case law documentation unit", async ({ page }) => {
 });
 
 test.describe("hides text tabs for empty documents", () => {
-  test("hides text tab when empty vorabdokument", async ({ page }) => {
+  test("hides text tab when empty vorabdokument and shows info box", async ({
+    page,
+  }) => {
     await navigate(page, "/gerichtsentscheidungen/KORE000001234");
+
+    await expect(page.getByRole("alert")).toHaveText(
+      /Die Metadaten dieser Gerichtsentscheidung/,
+    );
 
     await expect(page.getByRole("tablist")).not.toBeVisible();
 
@@ -54,6 +60,8 @@ test.describe("hides text tabs for empty documents", () => {
 
   test("hides text tab when empty normal document", async ({ page }) => {
     await navigate(page, "/gerichtsentscheidungen/KORE000005678");
+
+    await expect(page.getByRole("alert")).not.toBeVisible();
 
     await expect(page.getByRole("tablist")).not.toBeVisible();
 

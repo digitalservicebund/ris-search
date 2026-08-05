@@ -3499,9 +3499,13 @@
             "items" : {
               "$ref" : "#/components/schemas/CaseLawEncodingSchema"
             }
+          },
+          "vorabdokument" : {
+            "type" : "boolean",
+            "description" : "Whether or not the document is a Vorabdokument"
           }
         },
-        "required" : [ "@id", "decisionDate", "decisionName", "deviatingDocumentNumber", "documentNumber", "ecli", "encoding", "fileNumbers", "inLanguage", "keywords" ]
+        "required" : [ "@id", "decisionDate", "decisionName", "deviatingDocumentNumber", "documentNumber", "ecli", "encoding", "fileNumbers", "inLanguage", "keywords", "vorabdokument" ]
       },
       "CourtSearchResult" : {
         "type" : "object",
