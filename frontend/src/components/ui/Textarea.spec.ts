@@ -35,6 +35,20 @@ describe("Textarea", () => {
     expect(textarea).toHaveAttribute("placeholder", "Feedback");
   });
 
+  it("forwards a fallthrough id to the textarea so a label can target it", () => {
+    render({
+      components: { Textarea },
+      template: `<div>
+        <label for="my-textarea">Feedback</label>
+        <Textarea id="my-textarea" />
+      </div>`,
+    });
+
+    const textarea = screen.getByLabelText("Feedback");
+    expect(textarea).toBeInstanceOf(HTMLTextAreaElement);
+    expect(textarea).toHaveAttribute("id", "my-textarea");
+  });
+
   it("reflects the disabled attribute", () => {
     render(Textarea, { attrs: { disabled: true } });
 
