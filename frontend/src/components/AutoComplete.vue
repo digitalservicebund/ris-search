@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { AutoComplete as BaseAutoComplete, ProgressSpinner } from "primevue";
+import { AutoComplete as BaseAutoComplete } from "primevue";
 import { type AutoCompleteProps as BaseAutoCompleteProps } from "primevue/autocomplete";
 import IcBaselineClose from "~icons/ic/baseline-close";
 import IcBaselineKeyboardArrowDown from "~icons/ic/baseline-keyboard-arrow-down";
@@ -118,7 +118,7 @@ const dropdownButtonFocus = ref(false);
     @hide="dropdownButtonFocus = false"
   >
     <template #loader>
-      <ProgressSpinner class="absolute inset-y-0 right-8 my-auto" />
+      <UiProgressSpinner class="absolute inset-y-0 right-8 my-auto" />
     </template>
     <template #dropdown="slotProps">
       <button
