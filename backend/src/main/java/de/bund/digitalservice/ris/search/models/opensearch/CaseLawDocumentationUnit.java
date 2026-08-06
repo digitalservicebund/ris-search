@@ -75,7 +75,7 @@ public record CaseLawDocumentationUnit(
         List<String> ensuingDecisions,
     @JsonIgnore @ElementCollection @Field(name = Fields.PENDING_DECISIONS)
         List<String> pendingDecisions,
-    @JsonIgnore @Field(name = Fields.HAS_LEGISLATIVE_MANDATE) String hasLegislativeMandate,
+    @Field(name = Fields.HAS_LEGISLATIVE_MANDATE) String hasLegislativeMandate,
     @JsonIgnore @Field(name = Fields.INDEXED_AT) String indexedAt,
     @Nullable @Field(name = Fields.ARTICLES) List<Article> articles,
     @Field(name = Fields.VORABDOKUMENT) boolean vorabdokument)

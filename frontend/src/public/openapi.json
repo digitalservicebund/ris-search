@@ -2413,6 +2413,11 @@
             "description" : "Erledigung",
             "example" : "Ja"
           },
+          "gesetzgebungsauftrag" : {
+            "type" : "string",
+            "description" : "Gesetzgebungsauftrag",
+            "example" : "Ja"
+          },
           "erledigungsvermerk" : {
             "type" : "string",
             "description" : "Erledigungsvermerk"
@@ -2426,6 +2431,10 @@
             "type" : "string",
             "description" : "Gericht",
             "example" : "FG Berlin"
+          },
+          "gerichtsbarkeit" : {
+            "type" : "string",
+            "description" : "Gerichtsbarkeit"
           },
           "dokumenttyp" : {
             "type" : "string",
