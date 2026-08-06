@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { InputGroup, InputGroupAddon, InputText } from "primevue";
+import { InputGroup, InputGroupAddon } from "primevue";
 import type { SkipLink } from "~";
 import IcBaselineSearch from "~icons/ic/baseline-search";
 import DataFieldList from "~/components/search/DataFieldList.vue";
@@ -76,8 +76,7 @@ function insertInQuery({ pattern }: DataField) {
   query.value = newQuery;
 
   nextTick().then(() => {
-    // @ts-expect-error -- Type is wrong here, $el does exist
-    const focusableInput = queryInputEl.value?.$el;
+    const focusableInput = queryInputEl.value?.input;
     if (!(focusableInput instanceof HTMLInputElement)) return;
 
     focusableInput.focus();
@@ -103,7 +102,7 @@ function submitUnlessLoading() {
       class="mb-16"
     >
       <InputGroup>
-        <InputText
+        <UiInputText
           :id="queryInputId"
           ref="queryInputEl"
           v-model="query"

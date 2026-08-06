@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { InputGroup, InputGroupAddon, InputText } from "primevue";
+import { InputGroup, InputGroupAddon } from "primevue";
 import IconSearch from "~icons/ic/search";
 
 const {
@@ -41,7 +41,7 @@ const searchInputId = useId();
   <search :class="{ 'max-w-md': !fullWidth }">
     <form action="/suche" @submit.prevent="performSearch">
       <InputGroup>
-        <InputText
+        <UiInputText
           :id="searchInputId"
           v-model="currentText"
           :aria-label="inputLabel"
