@@ -53,6 +53,7 @@ public class RechtsprechungSchemaMapper {
         .datenDerMuendlichenVerhandlung(doc.datenDerMuendlichenVerhandlung())
         .definitionen(doc.definitionen())
         .erledigung(doc.erledigung())
+        .erledigungsvermerk(doc.erledigungsvermerk())
         .courtName(doc.courtKeyword())
         .vorabdokument(doc.vorabdokument())
         .build();

@@ -50,6 +50,7 @@ class CaseLawLdmlToOpenSearchMapperTest {
         .isEqualTo(
             "dissenting test, Dr. Phil. Max Mustermann: referenced opinions test 1, Maxima Mustermann: referenced opinions test 2");
     assertThat(caseLaw.erledigung()).isEqualTo("Ja");
+    assertThat(caseLaw.erledigungsvermerk()).isEqualTo("Erledigungsvermerk");
   }
 
   @Test

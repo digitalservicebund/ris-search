@@ -441,6 +441,10 @@
         "erledigung": {
           "type": "text",
           "analyzer": "custom_german_analyzer"
+        },
+        "erledigungsvermerk": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
         }
       }
     }

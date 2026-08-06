@@ -51,6 +51,7 @@ class CaseLawSchemaMapperTest {
         .datenDerMuendlichenVerhandlung(List.of(DATE_2024_01_03))
         .definitionen(List.of("indirekte Steuern", "Sachgesamtheit"))
         .erledigung("Ja")
+        .erledigungsvermerk("Erledigungsvermerk")
         .build();
   }
 
@@ -124,6 +125,7 @@ class CaseLawSchemaMapperTest {
     assertThat(rechtsprechungSchema.tenor()).isEqualTo("tenor");
     assertThat(rechtsprechungSchema.inLanguage()).isEqualTo("de");
     assertThat(rechtsprechungSchema.erledigung()).isEqualTo("Ja");
+    assertThat(rechtsprechungSchema.erledigungsvermerk()).isEqualTo("Erledigungsvermerk");
   }
 
   @Test

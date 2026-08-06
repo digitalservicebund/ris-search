@@ -105,6 +105,7 @@ public class CaseLawLdmlToOpenSearchMapper {
         .datenDerMuendlichenVerhandlung(risMeta.getRisDatenDerMuendlichenVerhandlung())
         .definitionen(risMeta.getDefinitionen())
         .erledigung(risMeta.getRisErledigung())
+        .erledigungsvermerk(extractErledigungsvermerk(meta))
         .previousDecisions(
             getLinkedJudgements(
                 meta, refs -> refs.getReferencesByType(ImplicitReference::getPrecedingJudgement)))
@@ -206,6 +207,14 @@ public class CaseLawLdmlToOpenSearchMapper {
     return extractDocumentaryShortTexts(meta)
         .map(DocumentaryShortTexts::getRisTitelzeile)
         .map(DocumentaryShortTexts.RisTitelzeile::getContent)
+        .map(CaseLawLdmlToOpenSearchMapper::sanitize)
+        .orElse(null);
+  }
+
+  private static String extractErledigungsvermerk(Meta meta) {
+    return extractDocumentaryShortTexts(meta)
+        .map(DocumentaryShortTexts::getRisErledigungsvermerk)
+        .map(DocumentaryShortTexts.RisErledigungsvermerk::getContent)
         .map(CaseLawLdmlToOpenSearchMapper::sanitize)
         .orElse(null);
   }

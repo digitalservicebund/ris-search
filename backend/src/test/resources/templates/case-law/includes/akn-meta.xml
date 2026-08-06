@@ -128,6 +128,9 @@
         <ris:entscheidungsnamen domainTerm="Entscheidungsnamen">
             <ris:entscheidungsname domainTerm="Entscheidungsname">Test decision name</ris:entscheidungsname>
         </ris:entscheidungsnamen>
+        <ris:erledigungsvermerk domainTerm="Erledigungsvermerk">
+            <akn:p>Erledigungsvermerk</akn:p>
+        </ris:erledigungsvermerk>
     </ris:dokumentarischeKurztexte>
 </akn:otherAnalysis>
 </akn:analysis>
