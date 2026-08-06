@@ -432,6 +432,10 @@
           "type": "text",
           "analyzer": "custom_german_analyzer"
         },
+        "kuendigungsarten": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
         "fehlerhafte_gerichte": {
           "type": "text",
           "analyzer": "custom_german_analyzer"

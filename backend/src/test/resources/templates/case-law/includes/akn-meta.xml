@@ -155,6 +155,9 @@
             <ris:berufsbild domainTerm="Berufsbild">jobProfile test 1</ris:berufsbild>
             <ris:berufsbild domainTerm="Berufsbild">jobProfile test 2</ris:berufsbild>
         </ris:berufsbilder>
+        <ris:kuendigungsarten domainTerm="Kündigungsarten">
+            <ris:kuendigungsart domainTerm="Kündigungsart">dismissalType test</ris:kuendigungsart>
+        </ris:kuendigungsarten>
         <ris:fehlerhafteGerichte domainTerm="Fehlerhafte Gerichte">
             <ris:fehlerhaftesGericht domainTerm="Fehlerhaftes Gericht">deviating court 1</ris:fehlerhaftesGericht>
             <ris:fehlerhaftesGericht domainTerm="Fehlerhaftes Gericht">deviating court 2</ris:fehlerhaftesGericht>

@@ -104,6 +104,7 @@ public class CaseLawLdmlToOpenSearchMapper {
         .abweichendeDaten(risMeta.getRisAbweichendeDaten())
         .abweichendeEclis(risMeta.getRisAbweichendeEclis())
         .berufsbilder(risMeta.getRisBerufsbilder())
+        .kuendigungsarten(risMeta.getRisKuendigungsarten())
         .fehlerhafteGerichte(risMeta.getRisFehlerhafteGerichte())
         .datenDerMuendlichenVerhandlung(risMeta.getRisDatenDerMuendlichenVerhandlung())
         .definitionen(risMeta.getDefinitionen())

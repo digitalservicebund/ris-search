@@ -51,6 +51,7 @@ class CaseLawSchemaMapperTest {
         .tenor("tenor")
         .abweichendeDaten(List.of(DATE_2023_01_02, DATE_2024_01_01))
         .berufsbilder(List.of("jobProfile test 1", "jobProfile test 2"))
+        .kuendigungsarten(List.of("dismissalType test"))
         .fehlerhafteGerichte(List.of("deviating court 1", "deviating court 2"))
         .datenDerMuendlichenVerhandlung(List.of(DATE_2024_01_03))
         .definitionen(List.of("indirekte Steuern", "Sachgesamtheit"))
@@ -161,6 +162,7 @@ class CaseLawSchemaMapperTest {
         .containsExactly(DATE_2023_01_02, DATE_2024_01_01);
     assertThat(rechtsprechungSchema.berufsbilder())
         .containsExactly("jobProfile test 1", "jobProfile test 2");
+    assertThat(rechtsprechungSchema.kuendigungsarten()).containsExactly("dismissalType test");
     assertThat(rechtsprechungSchema.fehlerhafteGerichte())
         .containsExactly("deviating court 1", "deviating court 2");
     assertThat(rechtsprechungSchema.datenDerMuendlichenVerhandlung())

@@ -39,6 +39,7 @@ public record RechtsprechungSchema(
         List<String> aktenzeichenListe,
     @Schema(description = "Abweichende ECLIs") List<String> abweichendeEclis,
     @Schema(description = "Berufsbilder") List<String> berufsbilder,
+    @Schema(description = "Kündigungsarten") List<String> kuendigungsarten,
     @Schema(description = "Fehlerhafte Gerichte") List<String> fehlerhafteGerichte,
     @Schema(description = "Daten der mündlichen Verhandlung")
         List<LocalDate> datenDerMuendlichenVerhandlung,

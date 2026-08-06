@@ -55,6 +55,7 @@ public record CaseLawDocumentationUnit(
         List<LocalDate> abweichendeDaten,
     @ElementCollection @Field(name = Fields.ABWEICHENDE_ECLIS) List<String> abweichendeEclis,
     @ElementCollection @Field(name = Fields.BERUFSBILDER) List<String> berufsbilder,
+    @ElementCollection @Field(name = Fields.KUENDIGUNGSARTEN) List<String> kuendigungsarten,
     @ElementCollection @Field(name = Fields.FEHLERHAFTE_GERICHTE) List<String> fehlerhafteGerichte,
     @ElementCollection
         @Field(
@@ -144,6 +145,7 @@ public record CaseLawDocumentationUnit(
 
     public static final String ABWEICHENDE_DATEN = "abweichende_daten";
     public static final String BERUFSBILDER = "berufsbilder";
+    public static final String KUENDIGUNGSARTEN = "kuendigungsarten";
     public static final String FEHLERHAFTE_GERICHTE = "fehlerhafte_gerichte";
     public static final String DATEN_DER_MUENDLICHEN_VERHANDLUNG =
         "daten_der_muendlichen_verhandlung";

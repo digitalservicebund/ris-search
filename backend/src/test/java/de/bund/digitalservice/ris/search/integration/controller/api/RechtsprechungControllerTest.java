@@ -112,6 +112,7 @@ class RechtsprechungControllerTest extends ContainersIntegrationBase {
             jsonPath("$.abweichendeEclis[1]").value("ECLI 2"),
             jsonPath("$.berufsbilder[0]").value("jobProfile test 1"),
             jsonPath("$.berufsbilder[1]").value("jobProfile test 2"),
+            jsonPath("$.kuendigungsarten[0]").value("dismissalType test"),
             jsonPath("$.fehlerhafteGerichte[0]").value("deviating court 1"),
             jsonPath("$.fehlerhafteGerichte[1]").value("deviating court 2"),
             jsonPath("$.datenDerMuendlichenVerhandlung[0]").value("2021-02-03"),

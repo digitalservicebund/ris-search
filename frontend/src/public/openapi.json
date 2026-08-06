@@ -2386,6 +2386,13 @@
               "type" : "string"
             }
           },
+          "kuendigungsarten" : {
+            "type" : "array",
+            "description" : "Kündigungsarten",
+            "items" : {
+              "type" : "string"
+            }
+          },
           "fehlerhafteGerichte" : {
             "type" : "array",
             "description" : "Fehlerhafte Gerichte",
