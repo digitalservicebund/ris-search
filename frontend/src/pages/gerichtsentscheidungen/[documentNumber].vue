@@ -149,7 +149,7 @@ const detailsSectionId = useId();
       >
         <h2 :id="detailsSectionId" class="typo-headline3-bold">Details</h2>
         <DocumentsIncompleteDataMessage class="my-24" />
-        <DocumentsDetailsListV2 :items="detailItems" />
+        <DocumentsDetailsList :items="detailItems" />
       </section>
     </template>
 

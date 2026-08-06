@@ -289,7 +289,7 @@ const fassungenDateFilterInputId = useId();
 
             <DocumentsIncompleteDataMessage class="my-24" />
 
-            <DocumentsDetailsListV2 :items="detailItems" />
+            <DocumentsDetailsList :items="detailItems" />
           </div>
         </section>
       </template>
