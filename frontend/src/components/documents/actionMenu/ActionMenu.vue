@@ -109,7 +109,10 @@ const handleDrawerItemClick = async (item: ActionMenuItem) => {
         @click="item.command"
       >
         <template #icon>
-          <component :is="(item as ActionMenuItem).iconComponent" class="ris-label2-regular" />
+          <component
+            :is="(item as ActionMenuItem).iconComponent"
+            class="ris-label2-regular"
+          />
         </template>
       </UiButton>
     </li>
