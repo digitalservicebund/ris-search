@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { InputMask } from "primevue";
+import { vMaska } from "maska/vue";
 
 const props = withDefaults(
   defineProps<{
@@ -63,27 +63,25 @@ watch(inputValue, (is) => {
   }
 });
 
-const inputMaskEl = useTemplateRef("inputMaskEl");
+const inputEl = useTemplateRef("inputEl");
 
 /** Focus the input element programmatically. */
 function focus() {
-  // @ts-expect-error -- $el is not found, but this is what PrimeVue recommends
-  inputMaskEl.value?.$el.focus();
+  inputEl.value?.input?.focus();
 }
 
 defineExpose({ focus });
 </script>
 
 <template>
-  <InputMask
+  <UiInputText
     :id="id"
-    ref="inputMaskEl"
+    ref="inputEl"
     v-model="inputValue"
-    :auto-clear="false"
+    v-maska="'####'"
     :readonly="isReadOnly"
     :disabled="isReadOnly"
-    class="w-full"
-    mask="9999"
+    fluid
     placeholder="JJJJ"
   />
 </template>

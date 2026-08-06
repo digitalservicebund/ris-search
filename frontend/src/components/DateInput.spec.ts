@@ -1,6 +1,5 @@
 import { userEvent } from "@testing-library/user-event";
 import { render, screen } from "@testing-library/vue";
-import { InputText } from "primevue";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { nextTick } from "vue";
 import DateInput from "./DateInput.vue";
@@ -21,7 +20,6 @@ function renderComponent(options?: {
   modelValue?: string;
   isReadOnly?: boolean;
   showClear?: boolean;
-  stubs?: Record<string, object>;
 }) {
   const user = userEvent.setup();
   const props = {
@@ -30,12 +28,7 @@ function renderComponent(options?: {
     isReadOnly: options?.isReadOnly,
     showClear: options?.showClear,
   };
-  const utils = render(DateInput, {
-    props,
-    global: {
-      stubs: options?.stubs,
-    },
-  });
+  const utils = render(DateInput, { props });
   return { user, props, ...utils };
 }
 
@@ -48,15 +41,11 @@ describe("DateInput", () => {
     expect(input?.type).toBe("text");
   });
 
-  it("allows typing a date inside input (stubbed inputMask)", async () => {
-    renderComponent({
-      stubs: {
-        InputMask: InputText,
-      },
-    });
+  it("allows typing a date inside input", async () => {
+    const { user } = renderComponent();
     const input = screen.getByRole("textbox");
 
-    await userEvent.type(input, "12.05.2020");
+    await user.type(input, "12.05.2020");
 
     expect(input).toHaveValue("12.05.2020");
   });
@@ -69,16 +58,13 @@ describe("DateInput", () => {
   });
 
   it("emits model update event when input completed and valid", async () => {
-    const { emitted } = renderComponent({
+    const { user, emitted } = renderComponent({
       modelValue: "2022-05-13T18:08:14.036Z",
-      stubs: {
-        InputMask: InputText,
-      },
     });
     const input = screen.getByRole("textbox");
     expect(input).toHaveValue("13.05.2022");
-    await userEvent.clear(input);
-    await userEvent.type(input, "14.05.2022");
+    await user.clear(input);
+    await user.type(input, "14.05.2022");
     await nextTick();
 
     expect(input).toHaveValue("14.05.2022");
@@ -107,32 +93,23 @@ describe("DateInput", () => {
   });
 
   it("removes validation errors on backspace delete", async () => {
-    renderComponent({
-      modelValue: "2022-05-13",
-      stubs: {
-        InputMask: InputText,
-      },
-    });
+    const { user } = renderComponent({ modelValue: "2022-05-13" });
     const input = screen.getByRole("textbox");
     expect(input).toHaveValue("13.05.2022");
-    await userEvent.clear(input);
-    await userEvent.type(input, "40.05.2022");
+    await user.clear(input);
+    await user.type(input, "40.05.2022");
     expect(input).toHaveValue("40.05.2022");
     const errorLabel = screen.getByText("Kein valides Datum");
     expect(errorLabel).toBeVisible();
-    await userEvent.type(input, "{backspace}");
+    await user.type(input, "{backspace}");
 
     expect(errorLabel).not.toBeInTheDocument();
   });
 
   it("does not allow invalid dates", async () => {
-    const { emitted } = renderComponent({
-      stubs: {
-        InputMask: InputText,
-      },
-    });
+    const { user, emitted } = renderComponent();
     const input = screen.getByRole("textbox");
-    await userEvent.type(input, "29.02.2001");
+    await user.type(input, "29.02.2001");
     await nextTick();
 
     expect(input).toHaveValue("29.02.2001");
@@ -141,21 +118,21 @@ describe("DateInput", () => {
   });
 
   it("does not allow letters", async () => {
-    renderComponent();
+    const { user } = renderComponent();
     const input = screen.getByRole("textbox");
 
-    await userEvent.type(input, "AB.CD.EFGH");
+    await user.type(input, "AB.CD.EFGH");
     await nextTick();
 
-    expect(input).toHaveTextContent("");
+    expect(input).toHaveValue("");
   });
 
   it("does not allow incomplete dates", async () => {
-    const { emitted } = renderComponent();
+    const { user, emitted } = renderComponent();
     const input = screen.getByRole("textbox");
 
-    await userEvent.type(input, "03");
-    await userEvent.type(input, "{tab}");
+    await user.type(input, "03");
+    await user.type(input, "{tab}");
     await nextTick();
 
     expect(emitted("update:modelValue")).not.toBeTruthy();
@@ -173,7 +150,7 @@ describe("DateInput", () => {
   });
 
   describe("clear button", () => {
-    it("is not shown when withClearButton prop is not set", () => {
+    it("is not shown when showClear prop is not set", () => {
       renderComponent({ modelValue: "2024-04-22" });
       expect(
         screen.queryByRole("button", { name: "Entfernen" }),
@@ -195,13 +172,12 @@ describe("DateInput", () => {
     });
 
     it("clears the input when clicked", async () => {
-      const { emitted } = renderComponent({
+      const { user, emitted } = renderComponent({
         modelValue: "2024-04-22",
         showClear: true,
-        stubs: { InputMask: InputText },
       });
 
-      await userEvent.click(screen.getByRole("button", { name: "Entfernen" }));
+      await user.click(screen.getByRole("button", { name: "Entfernen" }));
       await nextTick();
 
       expect(screen.getByRole("textbox")).toHaveValue("");
@@ -209,18 +185,15 @@ describe("DateInput", () => {
     });
 
     it("resets the error message when clicked", async () => {
-      renderComponent({
-        showClear: true,
-        stubs: { InputMask: InputText },
-      });
+      const { user } = renderComponent({ showClear: true });
 
       const input = screen.getByRole("textbox");
-      await userEvent.type(input, "29.02.2025");
+      await user.type(input, "29.02.2025");
 
       const errorLabel = screen.getByText("Kein valides Datum");
       expect(errorLabel).toBeVisible();
 
-      await userEvent.click(screen.getByRole("button", { name: "Entfernen" }));
+      await user.click(screen.getByRole("button", { name: "Entfernen" }));
       await nextTick();
 
       expect(errorLabel).not.toBeVisible();

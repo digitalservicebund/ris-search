@@ -1,26 +1,12 @@
 import { userEvent } from "@testing-library/user-event";
 import { render, screen } from "@testing-library/vue";
-import { InputText } from "primevue";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 import { nextTick } from "vue";
 import YearInput from "./YearInput.vue";
-
-beforeEach(() => {
-  vi.spyOn(HTMLElement.prototype, "offsetParent", "get").mockImplementation(
-    function (this: HTMLElement) {
-      return this.parentNode as Element;
-    },
-  );
-});
-
-afterEach(() => {
-  vi.restoreAllMocks();
-});
 
 function renderComponent(options?: {
   modelValue?: string;
   isReadOnly?: boolean;
-  stubs?: Record<string, object>;
 }) {
   const user = userEvent.setup();
   const props = {
@@ -28,12 +14,7 @@ function renderComponent(options?: {
     modelValue: options?.modelValue,
     isReadOnly: options?.isReadOnly,
   };
-  const utils = render(YearInput, {
-    props,
-    global: {
-      stubs: options?.stubs,
-    },
-  });
+  const utils = render(YearInput, { props });
   return { user, props, ...utils };
 }
 
@@ -46,15 +27,11 @@ describe("YearInput", () => {
     expect(input?.type).toBe("text");
   });
 
-  it("allows typing a year inside input (stubbed inputMask)", async () => {
-    renderComponent({
-      stubs: {
-        InputMask: InputText,
-      },
-    });
+  it("allows typing a year inside input", async () => {
+    const { user } = renderComponent();
     const input = screen.getByRole("textbox");
 
-    await userEvent.type(input, "2024");
+    await user.type(input, "2024");
 
     expect(input).toHaveValue("2024");
   });
@@ -67,14 +44,10 @@ describe("YearInput", () => {
   });
 
   it("emits model update event when input is complete (4 digits)", async () => {
-    const { emitted } = renderComponent({
-      stubs: {
-        InputMask: InputText,
-      },
-    });
+    const { user, emitted } = renderComponent();
     const input = screen.getByRole("textbox");
 
-    await userEvent.type(input, "2024");
+    await user.type(input, "2024");
     await nextTick();
 
     expect(input).toHaveValue("2024");
@@ -82,14 +55,10 @@ describe("YearInput", () => {
   });
 
   it("does not emit model update for incomplete input", async () => {
-    const { emitted } = renderComponent({
-      stubs: {
-        InputMask: InputText,
-      },
-    });
+    const { user, emitted } = renderComponent();
     const input = screen.getByRole("textbox");
 
-    await userEvent.type(input, "202");
+    await user.type(input, "202");
     await nextTick();
 
     expect(input).toHaveValue("202");
@@ -97,16 +66,11 @@ describe("YearInput", () => {
   });
 
   it("emits undefined when input is cleared", async () => {
-    const { emitted } = renderComponent({
-      modelValue: "2022",
-      stubs: {
-        InputMask: InputText,
-      },
-    });
+    const { user, emitted } = renderComponent({ modelValue: "2022" });
     const input = screen.getByRole("textbox");
     expect(input).toHaveValue("2022");
 
-    await userEvent.clear(input);
+    await user.clear(input);
     await nextTick();
 
     expect(emitted("update:modelValue")).toEqual([[undefined]]);
@@ -133,13 +97,13 @@ describe("YearInput", () => {
   });
 
   it("does not allow letters", async () => {
-    renderComponent();
+    const { user } = renderComponent();
     const input = screen.getByRole("textbox");
 
-    await userEvent.type(input, "ABCD");
+    await user.type(input, "ABCD");
     await nextTick();
 
-    expect(input).toHaveTextContent("");
+    expect(input).toHaveValue("");
   });
 
   it("sets the input to readonly", () => {
