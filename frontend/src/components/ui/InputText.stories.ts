@@ -152,3 +152,20 @@ export const Clearable: Story = {
     />`,
   }),
 };
+
+export const SearchType: Story = {
+  args: { size: "large" },
+  render: (args) => ({
+    components: { UiInputText },
+    setup() {
+      const model = ref("Suchbegriff");
+      return { args, model };
+    },
+    template: html`<UiInputText
+      v-model="model"
+      aria-label="Suche"
+      type="search"
+      v-bind="args"
+    />`,
+  }),
+};
