@@ -32,7 +32,14 @@ The frontend will be available at [localhost:3000](http://localhost:3000).
 
 > [!NOTE]
 >
-> Instead of running a local backend, you can also connect the frontend dev server to our staging backend. This is slower, but will give you access to realistic data. Learn more 🔒 [here](<https://digitalservicebund.atlassian.net/wiki/spaces/VER/pages/1215889433/Portal+Infrastructure+and+Deployment+Guide#Local-Development-(Port-Forwarding)>).
+> Instead of running a local backend, you can also connect the frontend dev server to our staging backend. To do so, first make sure you have `NUXT_PUBLIC_RIS_BACKEND_URL=http:///localhost:8090` in your `.env` file. You can then start a reverse proxy by running:
+>
+> ```sh
+> # from the frontend/ directory
+> ./staging-proxy/run.sh
+> ```
+>
+> This will forward calls to `localhost:8090` to the actual staging backend.
 
 ### Feature Flags
 
@@ -153,16 +160,3 @@ All icons in the [Google Material](https://icon-sets.iconify.design/ic) sets can
 ```js
 import IcBaselineAccessAlarms from "~icons/ic/baseline-access-alarms";
 ```
-
-## Connect dev frontend to the staging backend
-
-Sometimes you want to test new frontend features against the actual staging backend. To do so, you can start a reverse-proxy locally by running (from the `frontend` directory):
-
-```bash
-./staging-proxy/run.sh
-```
-
-This will forward calls to `localhost:8090` to the actual staging backend.
-
-> [!NOTE]
-> Make sure you have `NUXT_PUBLIC_RIS_BACKEND_URL=http:///localhost:8090` in your `.env` file.
