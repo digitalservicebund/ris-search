@@ -151,7 +151,7 @@ pnpm storybook
 
 ## Icons
 
-All icons in the [Google Material](https://icon-sets.iconify.design/ic) sets can be used. To make the icon available in your code:
+All icons in the [Google Material](https://icones.js.org/collection/ic) sets can be used. To make the icon available in your code:
 
 - Find and select the icon in the catalog. We usually use the baseline or outline styles, depending on the icon.
 - In the icon detail panel, select "Component" as the format on the left, and "Unplugin Icons" as the framework on the top
