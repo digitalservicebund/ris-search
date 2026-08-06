@@ -67,7 +67,11 @@ public record RechtsprechungSchema(
         @JsonProperty("@id")
         String id,
     @Schema(example = "de", requiredMode = Schema.RequiredMode.REQUIRED) String inLanguage,
-    @Schema(requiredMode = Schema.RequiredMode.REQUIRED) List<CaseLawEncodingSchema> encoding)
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED) List<CaseLawEncodingSchema> encoding,
+    @Schema(
+            requiredMode = Schema.RequiredMode.REQUIRED,
+            description = "Whether or not the document is a Vorabdokument")
+        boolean vorabdokument)
     implements JsonldResource {
 
   @Override

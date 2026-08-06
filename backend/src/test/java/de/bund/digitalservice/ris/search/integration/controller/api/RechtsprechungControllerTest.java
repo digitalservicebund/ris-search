@@ -1,6 +1,7 @@
 package de.bund.digitalservice.ris.search.integration.controller.api;
 
 import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -9,6 +10,7 @@ import de.bund.digitalservice.ris.SharedTestConstants;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.models.PublicationStatus;
+import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.service.IndexCaselawService;
 import de.bund.digitalservice.ris.search.utils.CaseLawLdmlTemplateUtils;
@@ -127,6 +129,24 @@ class RechtsprechungControllerTest extends ContainersIntegrationBase {
                     "/v1/rechtsprechung/" + this.documentNumber + ".html",
                     "/v1/rechtsprechung/" + this.documentNumber + ".xml",
                     "/v1/rechtsprechung/" + this.documentNumber + ".zip")));
+  }
+
+  @Test
+  @DisplayName("Should set vorabdokument to true if vorabdokument")
+  void responseContainsVorabdokumentValue() throws Exception {
+    CaseLawDocumentationUnit docUnit =
+        CaseLawDocumentationUnit.builder()
+            .documentNumber("FOOB000000001")
+            .vorabdokument(true)
+            .build();
+
+    this.caseLawRepository.save(docUnit);
+
+    mockMvc
+        .perform(
+            get(ApiConfig.Paths.CASELAW + "/FOOB000000001").contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.vorabdokument", equalTo(true)));
   }
 
   @Test

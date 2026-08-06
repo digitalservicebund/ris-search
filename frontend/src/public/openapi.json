@@ -2456,9 +2456,13 @@
             "items" : {
               "$ref" : "#/components/schemas/CaseLawEncodingSchema"
             }
+          },
+          "vorabdokument" : {
+            "type" : "boolean",
+            "description" : "Whether or not the document is a Vorabdokument"
           }
         },
-        "required" : [ "@id", "abweichendeDokumentnummern", "aktenzeichenListe", "datum", "dokumentNummer", "ecli", "encoding", "entscheidungsnamen", "inLanguage", "schlagwoerter" ]
+        "required" : [ "@id", "abweichendeDokumentnummern", "aktenzeichenListe", "datum", "dokumentNummer", "ecli", "encoding", "entscheidungsnamen", "inLanguage", "schlagwoerter", "vorabdokument" ]
       },
       "CollectionSchemaSearchMemberSchemaLiteratureSearchSchema" : {
         "type" : "object",
