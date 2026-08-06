@@ -32,7 +32,14 @@ The frontend will be available at [localhost:3000](http://localhost:3000).
 
 > [!NOTE]
 >
-> Instead of running a local backend, you can also connect the frontend dev server to our staging backend. This is slower, but will give you access to realistic data. Learn more 🔒 [here](<https://digitalservicebund.atlassian.net/wiki/spaces/VER/pages/1215889433/Portal+Infrastructure+and+Deployment+Guide#Local-Development-(Port-Forwarding)>).
+> Instead of running a local backend, you can also connect the frontend dev server to our staging backend. To do so, first make sure you have `NUXT_PUBLIC_RIS_BACKEND_URL=http:///localhost:8090` in your `.env` file. You can then start a reverse proxy by running:
+>
+> ```sh
+> # from the frontend/ directory
+> ./staging-proxy/run.sh
+> ```
+>
+> This will forward calls to `localhost:8090` to the actual staging backend.
 
 ### Feature Flags
 
@@ -123,9 +130,28 @@ To run type checking:
 pnpm typecheck
 ```
 
+## Storybook
+
+We use [Storybook](https://storybook.js.org) for documenting our [core UI components](./src/components/ui), as well as some of our design tokens and typography classes. Any components in `ui/` need to follow these conventions:
+
+- They should be portable. They can't depend on Nuxt-specific functionality or any other components outside of `ui/`. They are allowed to depend on `utils/` and `composables/`, provided those don't use any Nuxt-specific functionality either.
+- They can't use auto-imports or aliases. Use relative imports instead.
+- They have a story named like `ComponentName.stories.ts`, placed next to the component.
+- Components are allowed to import icons from `~icons`, and to use Tailwind.
+
+> [!WARNING]
+>
+> Storybook does not understand any Nuxt-magic such as aliases, auto-imports, and globals. Stories of components relying on them will crash.
+
+To run Storybook:
+
+```sh
+pnpm storybook
+```
+
 ## Icons
 
-All icons in the [Google Material](https://icon-sets.iconify.design/ic) sets can be used. To make the icon available in your code:
+All icons in the [Google Material](https://icones.js.org/collection/ic) sets can be used. To make the icon available in your code:
 
 - Find and select the icon in the catalog. We usually use the baseline or outline styles, depending on the icon.
 - In the icon detail panel, select "Component" as the format on the left, and "Unplugin Icons" as the framework on the top
@@ -134,16 +160,3 @@ All icons in the [Google Material](https://icon-sets.iconify.design/ic) sets can
 ```js
 import IcBaselineAccessAlarms from "~icons/ic/baseline-access-alarms";
 ```
-
-## Connect dev frontend to the staging backend
-
-Sometimes you want to test new frontend features against the actual staging backend. To do so, you can start a reverse-proxy locally by running (from the `frontend` directory):
-
-```bash
-./staging-proxy/run.sh
-```
-
-This will forward calls to `localhost:8090` to the actual staging backend.
-
-> [!NOTE]
-> Make sure you have `NUXT_PUBLIC_RIS_BACKEND_URL=http:///localhost:8090` in your `.env` file.

@@ -12,7 +12,7 @@
     "lint": "oxlint --fix --no-error-on-unmatched-pattern",
     "prepare": "nuxt prepare",
     "preview": "nuxt preview",
-    "storybook": "storybook dev -p 6006",
+    "storybook": "storybook dev -p 6006 --no-open",
     "style:check": "oxfmt --check && oxlint --max-warnings=0",
     "style:fix": "pnpm fmt && pnpm lint",
     "test": "TZ=UTC vitest run",
@@ -68,5 +68,5 @@
   "engines": {
     "node": ">=26"
   },
-  "packageManager": "pnpm@11.10.0"
+  "packageManager": "pnpm@11.20.0"
 }
