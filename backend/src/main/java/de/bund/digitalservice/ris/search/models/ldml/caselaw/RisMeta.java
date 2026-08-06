@@ -44,9 +44,9 @@ public class RisMeta {
   @XmlElement(name = "spruchkoerper", namespace = CaseLawLdmlNamespaces.RIS_NS)
   private String risSpruchkoerper;
 
-  @XmlElementWrapper(name = "deviatingCourts", namespace = CaseLawLdmlNamespaces.RIS_NS)
-  @XmlElement(name = "deviatingCourt", namespace = CaseLawLdmlNamespaces.RIS_NS)
-  private List<String> deviatingCourt;
+  @XmlElementWrapper(name = "fehlerhafteGerichte", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  @XmlElement(name = "fehlerhaftesGericht", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  private List<String> risFehlerhafteGerichte;
 
   @XmlElementWrapper(name = "abweichendeDaten", namespace = CaseLawLdmlNamespaces.RIS_NS)
   @XmlElement(name = "abweichendesDatum", namespace = CaseLawLdmlNamespaces.RIS_NS)

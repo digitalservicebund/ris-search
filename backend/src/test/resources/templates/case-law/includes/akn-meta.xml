@@ -155,6 +155,10 @@
             <ris:berufsbild domainTerm="Berufsbild">jobProfile test 1</ris:berufsbild>
             <ris:berufsbild domainTerm="Berufsbild">jobProfile test 2</ris:berufsbild>
         </ris:berufsbilder>
+        <ris:fehlerhafteGerichte domainTerm="Fehlerhafte Gerichte">
+            <ris:fehlerhaftesGericht domainTerm="Fehlerhaftes Gericht">deviating court 1</ris:fehlerhaftesGericht>
+            <ris:fehlerhaftesGericht domainTerm="Fehlerhaftes Gericht">deviating court 2</ris:fehlerhaftesGericht>
+        </ris:fehlerhafteGerichte>
         <ris:datenDerMuendlichenVerhandlung domainTerm="Daten der mündlichen Verhandlung">
             <ris:datumDerMuendlichenVerhandlung domainTerm="Datum der mündlichen Verhandlung">2021-02-03</ris:datumDerMuendlichenVerhandlung>
         </ris:datenDerMuendlichenVerhandlung>

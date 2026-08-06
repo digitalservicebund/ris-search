@@ -428,6 +428,10 @@
           "type": "text",
           "analyzer": "custom_german_analyzer"
         },
+        "fehlerhafte_gerichte": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
         "daten_der_muendlichen_verhandlung": {
           "type": "date"
         },

@@ -50,6 +50,7 @@ public class RechtsprechungSchemaMapper {
         .abweichendeDaten(doc.abweichendeDaten())
         .abweichendeEclis(doc.abweichendeEclis())
         .berufsbilder(doc.berufsbilder())
+        .fehlerhafteGerichte(doc.fehlerhafteGerichte())
         .datenDerMuendlichenVerhandlung(doc.datenDerMuendlichenVerhandlung())
         .definitionen(doc.definitionen())
         .erledigung(doc.erledigung())

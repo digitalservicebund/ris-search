@@ -13,6 +13,7 @@ import de.bund.digitalservice.ris.search.schema.CaseLawEncodingSchema;
 import de.bund.digitalservice.ris.search.schema.CaseLawSchema;
 import de.bund.digitalservice.ris.search.schema.RechtsprechungSchema;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -49,11 +50,12 @@ class CaseLawSchemaMapperTest {
         .tenor("tenor")
         .abweichendeDaten(List.of(DATE_2023_01_02, DATE_2024_01_01))
         .berufsbilder(List.of("jobProfile test 1", "jobProfile test 2"))
+        .fehlerhafteGerichte(List.of("deviating court 1", "deviating court 2"))
         .datenDerMuendlichenVerhandlung(List.of(DATE_2024_01_03))
         .definitionen(List.of("indirekte Steuern", "Sachgesamtheit"))
         .erledigung("Ja")
         .erledigungsvermerk("Erledigungsvermerk")
-        .erstveroeffentlichung(LocalDate.of(2026, 3, 18))
+        .erstveroeffentlichung(LocalDate.of(2026, Month.MARCH, 18))
         .build();
   }
 
@@ -128,7 +130,8 @@ class CaseLawSchemaMapperTest {
     assertThat(rechtsprechungSchema.inLanguage()).isEqualTo("de");
     assertThat(rechtsprechungSchema.erledigung()).isEqualTo("Ja");
     assertThat(rechtsprechungSchema.erledigungsvermerk()).isEqualTo("Erledigungsvermerk");
-    assertThat(rechtsprechungSchema.erstveroeffentlichung()).isEqualTo(LocalDate.of(2026, 3, 18));
+    assertThat(rechtsprechungSchema.erstveroeffentlichung())
+        .isEqualTo(LocalDate.of(2026, Month.MARCH, 18));
   }
 
   @Test
@@ -146,6 +149,8 @@ class CaseLawSchemaMapperTest {
         .containsExactly(DATE_2023_01_02, DATE_2024_01_01);
     assertThat(rechtsprechungSchema.berufsbilder())
         .containsExactly("jobProfile test 1", "jobProfile test 2");
+    assertThat(rechtsprechungSchema.fehlerhafteGerichte())
+        .containsExactly("deviating court 1", "deviating court 2");
     assertThat(rechtsprechungSchema.datenDerMuendlichenVerhandlung())
         .containsExactly(DATE_2024_01_03);
     assertThat(rechtsprechungSchema.definitionen())

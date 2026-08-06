@@ -73,6 +73,7 @@ class CaseLawLdmlToOpenSearchMapperTest {
     assertThat(caseLaw.abweichendeDaten()).hasToString("[2020-03-03, 2022-02-04]");
     assertThat(caseLaw.abweichendeEclis()).hasToString("[ECLI 1, ECLI 2]");
     assertThat(caseLaw.berufsbilder()).hasToString("[jobProfile test 1, jobProfile test 2]");
+    assertThat(caseLaw.fehlerhafteGerichte()).hasToString("[deviating court 1, deviating court 2]");
     assertThat(caseLaw.datenDerMuendlichenVerhandlung()).hasToString("[2021-02-03]");
     assertThat(caseLaw.definitionen()).hasToString("[indirekte Steuern, Sachgesamtheit]");
     assertThat(caseLaw.vorabdokument()).isFalse();
