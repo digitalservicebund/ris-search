@@ -319,123 +319,133 @@ noJsTest("tabs work without JavaScript", async ({ page }) => {
   });
 });
 
-test("shows detailed information in the 'Details' tab", async ({ page }) => {
-  await navigate(page, "/literaturnachweise/XXLU000000001");
+test(
+  "shows detailed information in the 'Details' tab",
+  { tag: ["@RISDEV-12108"] },
+  async ({ page }) => {
+    await navigate(page, "/literaturnachweise/XXLU000000001");
 
-  const detailsLink = page.getByRole("tab", {
-    name: "Details",
-  });
-  await detailsLink.click();
+    const detailsLink = page.getByRole("tab", {
+      name: "Details",
+    });
+    await detailsLink.click();
 
-  await expect(page.getByRole("heading", { name: "Details" })).toBeVisible();
-  await expect(page.getByRole("main").getByRole("status")).toContainText(
-    "Dieser Service befindet sich in der Testphase",
-  );
+    await expect(page.getByRole("heading", { name: "Details" })).toBeVisible();
+    await expect(page.getByRole("main").getByRole("status")).toContainText(
+      "Dieser Service befindet sich in der Testphase",
+    );
 
-  const detailsList = page.getByTestId("details-list");
-  await expect(
-    detailsList.getByRole("term").or(detailsList.getByRole("definition")),
-  ).toHaveText([
-    "Normen:",
-    "BMV-Ä, GG, Art 6 Abs 2 S 1, 1949-05-23",
-    "Mitarbeiter:",
-    "Peter Foo",
-    "Urheber:",
-    "DGB",
-    "Sprache:",
-    "deu",
-    "Kongress:",
-    "Internationaler Kongreß für das Recht, 1991, Athen, GRC",
-  ]);
-});
+    const detailsList = page.getByTestId("details-list");
+    await expect(
+      detailsList.getByRole("term").or(detailsList.getByRole("definition")),
+    ).toHaveText([
+      "Normen:",
+      "BMV-Ä, GG, Art 6 Abs 2 S 1, 1949-05-23",
+      "Mitarbeiter:",
+      "Peter Foo",
+      "Urheber:",
+      "DGB",
+      "Sprache:",
+      "deu",
+      "Kongress:",
+      "Internationaler Kongreß für das Recht, 1991, Athen, GRC",
+    ]);
+  },
+);
 
-test("shows detailed information in the 'Details' tab of sli documents", async ({
-  page,
-}) => {
-  await navigate(page, "/literaturnachweise/XXLS000000001");
+test(
+  "shows detailed information in the 'Details' tab of sli documents",
+  { tag: ["@RISDEV-12108"] },
+  async ({ page }) => {
+    await navigate(page, "/literaturnachweise/XXLS000000001");
 
-  const detailsLink = page.getByRole("tab", {
-    name: "Details",
-  });
-  await detailsLink.click();
+    const detailsLink = page.getByRole("tab", {
+      name: "Details",
+    });
+    await detailsLink.click();
 
-  await expect(page.getByRole("heading", { name: "Details" })).toBeVisible();
-  await expect(page.getByRole("main").getByRole("status")).toContainText(
-    "Dieser Service befindet sich in der Testphase",
-  );
+    await expect(page.getByRole("heading", { name: "Details" })).toBeVisible();
+    await expect(page.getByRole("main").getByRole("status")).toContainText(
+      "Dieser Service befindet sich in der Testphase",
+    );
 
-  const detailsList = page.getByTestId("details-list");
-  await expect(
-    detailsList.getByRole("term").or(detailsList.getByRole("definition")),
-  ).toHaveText([
-    "Normen:",
-    "BMV-Ä, GG, Art 6 Abs 2 S 1, 1949-05-23",
-    "Bearbeiter:",
-    "Foo Bearbeiter",
-    "Mitarbeiter:",
-    "Peter Foo",
-    "Urheber:",
-    "DGB",
-    "Begründer:",
-    "Foo Begruender",
-    "Herausgeber:",
-    "herausgeber institution showAs, Mitarbeiter Eins",
-    "Verlag:",
-    "verlag, Berlin",
-    "Ausgabe:",
-    "1. Auflage",
-    "Bestellnummer:",
-    "ISBN 3-XXXXX-XX-X",
-    "Teilband:",
-    "Teilband 1",
-    "Teilband 2",
-    "Sprache:",
-    "deu",
-    "Kongress:",
-    "Internationaler Kongreß für das Recht, 1991, Athen, GRC",
-    "Hochschule:",
-    "Universität Foo",
-  ]);
-});
+    const detailsList = page.getByTestId("details-list");
+    await expect(
+      detailsList.getByRole("term").or(detailsList.getByRole("definition")),
+    ).toHaveText([
+      "Normen:",
+      "BMV-Ä, GG, Art 6 Abs 2 S 1, 1949-05-23",
+      "Bearbeiter:",
+      "Foo Bearbeiter",
+      "Mitarbeiter:",
+      "Peter Foo",
+      "Urheber:",
+      "DGB",
+      "Begründer:",
+      "Foo Begruender",
+      "Herausgeber:",
+      "herausgeber institution showAs, Mitarbeiter Eins",
+      "Verlag:",
+      "verlag, Berlin",
+      "Ausgabe:",
+      "1. Auflage",
+      "Bestellnummer:",
+      "ISBN 3-XXXXX-XX-X",
+      "Teilband:",
+      "Teilband 1",
+      "Teilband 2",
+      "Sprache:",
+      "deu",
+      "Kongress:",
+      "Internationaler Kongreß für das Recht, 1991, Athen, GRC",
+      "Hochschule:",
+      "Universität Foo",
+    ]);
+  },
+);
 
-test("hides empty detail fields and only shows populated ones for uli documents", async ({
-  page,
-}) => {
-  await navigate(page, "/literaturnachweise/XXLU000000003");
+test(
+  "hides empty detail fields and only shows populated ones for uli documents",
+  { tag: ["@RISDEV-12108"] },
+  async ({ page }) => {
+    await navigate(page, "/literaturnachweise/XXLU000000003");
 
-  await page.getByRole("tab", { name: "Details" }).click();
+    await page.getByRole("tab", { name: "Details" }).click();
 
-  const detailsList = page.getByTestId("details-list");
-  const detailsEntries = detailsList
-    .getByRole("term")
-    .or(detailsList.getByRole("definition"));
+    const detailsList = page.getByTestId("details-list");
+    const detailsEntries = detailsList
+      .getByRole("term")
+      .or(detailsList.getByRole("definition"));
 
-  await expect(detailsEntries).toHaveCount(2);
-  await expect(detailsEntries).toHaveText(["Sprache:", "deu"]);
-});
+    await expect(detailsEntries).toHaveCount(2);
+    await expect(detailsEntries).toHaveText(["Sprache:", "deu"]);
+  },
+);
 
-test("hides empty detail fields and only shows populated ones for sli documents", async ({
-  page,
-}) => {
-  await navigate(page, "/literaturnachweise/XXLS000000002");
+test(
+  "hides empty detail fields and only shows populated ones for sli documents",
+  { tag: ["@RISDEV-12108"] },
+  async ({ page }) => {
+    await navigate(page, "/literaturnachweise/XXLS000000002");
 
-  await page.getByRole("tab", { name: "Details" }).click();
+    await page.getByRole("tab", { name: "Details" }).click();
 
-  const detailsList = page.getByTestId("details-list");
-  const detailsEntries = detailsList
-    .getByRole("term")
-    .or(detailsList.getByRole("definition"));
+    const detailsList = page.getByTestId("details-list");
+    const detailsEntries = detailsList
+      .getByRole("term")
+      .or(detailsList.getByRole("definition"));
 
-  await expect(detailsEntries).toHaveCount(6);
-  await expect(detailsEntries).toHaveText([
-    "Norm:",
-    "GG, Art 3 Abs 1, 1949-05-23",
-    "Mitarbeiter:",
-    "Max Mustermann",
-    "Sprache:",
-    "deu",
-  ]);
-});
+    await expect(detailsEntries).toHaveCount(6);
+    await expect(detailsEntries).toHaveText([
+      "Norm:",
+      "GG, Art 3 Abs 1, 1949-05-23",
+      "Mitarbeiter:",
+      "Max Mustermann",
+      "Sprache:",
+      "deu",
+    ]);
+  },
+);
 
 test.describe("actions menu", () => {
   test.describe("can copy link to currently viewed page", () => {

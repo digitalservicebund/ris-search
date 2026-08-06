@@ -193,7 +193,7 @@ test("can view metadata", async ({ page }) => {
   ]);
 });
 
-test("can view details", async ({ page }) => {
+test("can view details", { tag: ["@RISDEV-12108"] }, async ({ page }) => {
   await navigate(page, "/gerichtsentscheidungen/MWRE000500300");
   await page.getByRole("tab", { name: "Details" }).click();
   const detailsList = page.getByTestId("details-list");
@@ -212,24 +212,26 @@ test("can view details", async ({ page }) => {
   ]);
 });
 
-test("hides empty detail fields and only shows populated ones", async ({
-  page,
-}) => {
-  await navigate(page, "/gerichtsentscheidungen/KORE600500000");
-  await page.getByRole("tab", { name: "Details" }).click();
-  const detailsList = page.getByTestId("details-list");
-  const detailsEntries = detailsList
-    .getByRole("term")
-    .or(detailsList.getByRole("definition"));
+test(
+  "hides empty detail fields and only shows populated ones",
+  { tag: ["@RISDEV-12108"] },
+  async ({ page }) => {
+    await navigate(page, "/gerichtsentscheidungen/KORE600500000");
+    await page.getByRole("tab", { name: "Details" }).click();
+    const detailsList = page.getByTestId("details-list");
+    const detailsEntries = detailsList
+      .getByRole("term")
+      .or(detailsList.getByRole("definition"));
 
-  await expect(detailsEntries).toHaveCount(4);
-  await expect(detailsEntries).toHaveText([
-    "Spruchkörper:",
-    "8. Kammer",
-    "Download:",
-    "Diese Gerichtsentscheidung als ZIP herunterladen",
-  ]);
-});
+    await expect(detailsEntries).toHaveCount(4);
+    await expect(detailsEntries).toHaveText([
+      "Spruchkörper:",
+      "8. Kammer",
+      "Download:",
+      "Diese Gerichtsentscheidung als ZIP herunterladen",
+    ]);
+  },
+);
 
 test("renders the download link", async ({ page }) => {
   await navigate(page, "/gerichtsentscheidungen/KORE600500000");
