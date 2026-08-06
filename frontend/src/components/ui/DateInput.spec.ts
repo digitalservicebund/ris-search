@@ -139,6 +139,11 @@ describe("DateInput", () => {
     expect(screen.getByText("Unvollständiges Datum")).toBeVisible();
   });
 
+  it("uses a numeric inputmode", () => {
+    renderComponent();
+    expect(screen.getByRole("textbox")).toHaveAttribute("inputmode", "numeric");
+  });
+
   it("sets the input to readonly", () => {
     renderComponent({ isReadOnly: true });
     expect(screen.getByRole("textbox")).toHaveAttribute("readonly");
@@ -150,22 +155,22 @@ describe("DateInput", () => {
   });
 
   describe("clear button", () => {
-    it("is not shown when showClear prop is not set", () => {
-      renderComponent({ modelValue: "2024-04-22" });
+    it("is not shown when showClear is false", () => {
+      renderComponent({ modelValue: "2024-04-22", showClear: false });
       expect(
         screen.queryByRole("button", { name: "Entfernen" }),
       ).not.toBeInTheDocument();
     });
 
     it("is not shown when the input is empty", () => {
-      renderComponent({ showClear: true });
+      renderComponent();
       expect(
         screen.queryByRole("button", { name: "Entfernen" }),
       ).not.toBeInTheDocument();
     });
 
-    it("is shown when the input has a value", () => {
-      renderComponent({ modelValue: "2024-04-22", showClear: true });
+    it("is shown by default when the input has a value", () => {
+      renderComponent({ modelValue: "2024-04-22" });
       expect(
         screen.getByRole("button", { name: "Entfernen" }),
       ).toBeInTheDocument();

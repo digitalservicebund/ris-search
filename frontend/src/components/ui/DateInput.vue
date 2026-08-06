@@ -31,7 +31,7 @@ const props = withDefaults(
     size: "small",
     isReadOnly: false,
     label: undefined,
-    showClear: false,
+    showClear: true,
   },
 );
 
@@ -117,6 +117,7 @@ defineExpose({ focus });
       :readonly="isReadOnly"
       :disabled="isReadOnly"
       fluid
+      inputmode="numeric"
       placeholder="TT.MM.JJJJ"
       @blur="onBlur"
       @clear="onClear"

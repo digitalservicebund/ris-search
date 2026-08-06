@@ -9,7 +9,7 @@ const meta: Meta<typeof UiDateInput> = {
   args: {
     id: "date-input",
     isReadOnly: false,
-    showClear: false,
+    showClear: true,
   },
 };
 
@@ -28,18 +28,6 @@ export const Default: Story = {
 };
 
 export const WithValue: Story = {
-  render: (args) => ({
-    components: { UiDateInput },
-    setup() {
-      const model = ref("2024-04-22");
-      return { args, model };
-    },
-    template: html`<UiDateInput v-model="model" v-bind="args" />`,
-  }),
-};
-
-export const Clearable: Story = {
-  args: { showClear: true },
   render: (args) => ({
     components: { UiDateInput },
     setup() {

@@ -89,6 +89,7 @@ defineExpose({ focus });
     :readonly="isReadOnly"
     :disabled="isReadOnly"
     fluid
+    inputmode="numeric"
     placeholder="JJJJ"
   />
 </template>

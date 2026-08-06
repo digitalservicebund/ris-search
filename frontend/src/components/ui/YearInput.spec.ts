@@ -120,6 +120,11 @@ describe("YearInput", () => {
     expect(input).toHaveValue("");
   });
 
+  it("uses a numeric inputmode", () => {
+    renderComponent();
+    expect(screen.getByRole("textbox")).toHaveAttribute("inputmode", "numeric");
+  });
+
   it("sets the input to readonly", () => {
     renderComponent({ isReadOnly: true });
     expect(screen.getByRole("textbox")).toHaveAttribute("readonly");
