@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { Button } from "primevue";
 import IcBaselineKeyboardArrowUp from "~icons/ic/baseline-keyboard-arrow-up";
 
 const scrollTarget = "top";
@@ -11,7 +10,7 @@ function scrollToTop() {
 
 <template>
   <div class="back-to-top-link">
-    <Button
+    <UiButton
       :href="`#${scrollTarget}`"
       aria-label="Zum Seitenanfang"
       as="a"
@@ -22,7 +21,7 @@ function scrollToTop() {
       <template #icon>
         <IcBaselineKeyboardArrowUp />
       </template>
-    </Button>
+    </UiButton>
   </div>
 </template>
 

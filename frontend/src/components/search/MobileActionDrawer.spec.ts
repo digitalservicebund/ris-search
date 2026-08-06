@@ -5,7 +5,10 @@ import MobileActionDrawer from "./MobileActionDrawer.vue";
 
 const renderDrawer = (slotContent = "<p>Body content</p>") =>
   renderSuspended(MobileActionDrawer, {
-    props: { label: "Filtern", icon: h("span", "FilterIcon") },
+    props: {
+      label: "Filtern",
+      icon: h("span", { "aria-hidden": "true" }, "FilterIcon"),
+    },
     slots: { default: slotContent },
   });
 

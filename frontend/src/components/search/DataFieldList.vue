@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { Button } from "primevue";
 import IcBaselinePlus from "~icons/ic/baseline-plus";
 import type { DataField } from "~/utils/search/dataFields";
 
@@ -22,7 +21,7 @@ defineEmits<{
     <li v-for="field in dataFields" :key="field.pattern">
       <!-- z-index is incresed for focused buttons to prevent visual glitches
       from overlapping buttons/focus outlines -->
-      <Button
+      <UiButton
         severity="info"
         size="small"
         rounded
@@ -34,7 +33,7 @@ defineEmits<{
         <template #icon>
           <IcBaselinePlus />
         </template>
-      </Button>
+      </UiButton>
     </li>
   </ul>
 </template>

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { Button } from "primevue";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineInfo from "~icons/ic/outline-info";
 import IcOutlineRestore from "~icons/ic/outline-settings-backup-restore";
@@ -351,13 +350,13 @@ const fassungenDateFilterInputId = useId();
                   Service testen.
                 </p>
 
-                <Button
+                <UiButton
                   :as="NuxtLink"
                   class="mt-16"
                   :to="{ name: 'nutzungstests' }"
                 >
                   Mehr über Nutzungstest erfahren
-                </Button>
+                </UiButton>
               </div>
             </div>
           </div>

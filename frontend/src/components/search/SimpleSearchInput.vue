@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Button, InputGroup, InputGroupAddon, InputText } from "primevue";
+import { InputGroup, InputGroupAddon, InputText } from "primevue";
 import IconSearch from "~icons/ic/search";
 
 const {
@@ -52,9 +52,9 @@ const searchInputId = useId();
           size="large"
         />
         <InputGroupAddon>
-          <Button :aria-label="submitLabel" type="submit" size="large">
+          <UiButton :aria-label="submitLabel" type="submit" size="large">
             <template #icon><IconSearch /></template>
-          </Button>
+          </UiButton>
         </InputGroupAddon>
       </InputGroup>
     </form>

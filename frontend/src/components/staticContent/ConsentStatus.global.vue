@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Button, Message } from "primevue";
+import { Message } from "primevue";
 import IconCheck from "~icons/ic/check";
 import IconClose from "~icons/ic/close";
 
@@ -71,7 +71,7 @@ async function handleSetTracking(value: boolean) {
       @submit.prevent="handleSetTracking(false)"
     >
       <input type="hidden" name="consent" value="false" />
-      <Button
+      <UiButton
         label="Cookies ablehnen"
         data-testid="settings-decline-cookie"
         type="submit"
@@ -84,7 +84,7 @@ async function handleSetTracking(value: boolean) {
       @submit.prevent="handleSetTracking(true)"
     >
       <input type="hidden" name="consent" value="true" />
-      <Button
+      <UiButton
         label="Cookies akzeptieren"
         data-testid="settings-accept-cookie"
         type="submit"
