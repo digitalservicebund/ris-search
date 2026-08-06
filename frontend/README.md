@@ -123,6 +123,25 @@ To run type checking:
 pnpm typecheck
 ```
 
+## Storybook
+
+We use [Storybook](https://storybook.js.org) for documenting our [core UI components](./src/components/ui), as well as some of our design tokens and typography classes. Any components in `ui/` need to follow these conventions:
+
+- They should be portable. They can't depend on Nuxt-specific functionality or any other components outside of `ui/`. They are allowed to depend on `utils/` and `composables/`, provided those don't use any Nuxt-specific functionality either.
+- They can't use auto-imports or aliases. Use relative imports instead.
+- They have a story named like `ComponentName.stories.ts`, placed next to the component.
+- Components are allowed to import icons from `~icons`, and to use Tailwind.
+
+> [!WARNING]
+>
+> Storybook does not understand any Nuxt-magic such as aliases, auto-imports, and globals. Stories of components relying on them will crash.
+
+To run Storybook:
+
+```sh
+pnpm storybook
+```
+
 ## Icons
 
 All icons in the [Google Material](https://icon-sets.iconify.design/ic) sets can be used. To make the icon available in your code:
