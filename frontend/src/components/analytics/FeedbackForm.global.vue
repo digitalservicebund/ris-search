@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { Textarea } from "primevue";
 import ErrorOutline from "~icons/ic/outline-error-outline";
 import { NuxtLink } from "#components";
 
@@ -95,10 +94,10 @@ watch(
           <label :for="feedbackMessageId" class="typo-label2-regular">
             Feedback
           </label>
-          <Textarea
+          <UiTextarea
             :id="feedbackMessageId"
             v-model="feedback"
-            :invalid="!isStringEmpty(errorMessage)"
+            :aria-invalid="isStringEmpty(errorMessage) ? undefined : 'true'"
             class="block min-h-160 w-full"
             placeholder="Feedback eingeben"
             name="text"

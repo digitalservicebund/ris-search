@@ -111,17 +111,6 @@ describe("FeedbackForm", () => {
       props: { hideIntro: true },
       global: {
         stubs: {
-          Textarea: {
-            name: "Textarea",
-            props: ["modelValue"],
-            template:
-              '<textarea :value="modelValue" @input="$emit(\'update:modelValue\', $event.target.value)" />',
-          },
-          Button: {
-            name: "Button",
-            props: ["type"],
-            template: '<button :type="type"><slot /></button>',
-          },
           "router-link": { template: "<a><slot /></a>" },
         },
       },

@@ -1,8 +1,10 @@
 <script lang="ts" setup>
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
-import { InputMask } from "primevue";
+import { vMaska } from "maska/vue";
+import { computed, ref, useTemplateRef, watch } from "vue";
 import IconErrorOutline from "~icons/ic/baseline-error-outline";
+import UiInputText from "./InputText.vue";
 
 const props = withDefaults(
   defineProps<{
@@ -29,7 +31,7 @@ const props = withDefaults(
     size: "small",
     isReadOnly: false,
     label: undefined,
-    showClear: false,
+    showClear: true,
   },
 );
 
@@ -83,7 +85,6 @@ const inputCompleted = computed(() => {
 });
 
 const errorMessage = ref<string | undefined>(undefined);
-const key = ref<string>();
 
 function onBlur() {
   if (!inputCompleted.value && inputValue.value) {
@@ -91,22 +92,14 @@ function onBlur() {
   }
 }
 
-const inputMaskEl = useTemplateRef("inputMaskEl");
+const inputEl = useTemplateRef("inputEl");
 
 function focus() {
-  // @ts-expect-error -- $el is not found, but this is what PrimeVue recommends
-  inputMaskEl.value?.$el.focus();
+  inputEl.value?.input?.focus();
 }
 
-async function clear() {
-  inputValue.value = "";
+function onClear() {
   errorMessage.value = undefined;
-  // Setting v-model to "" alone is apparently not enough to reset InputMask's internal
-  // buffer. Changing :key forces Vue to fully unmount and remount the component,
-  // which makes sure the input is actually cleared when the user starts typing again.
-  key.value = crypto.randomUUID();
-  await nextTick();
-  focus();
 }
 
 defineExpose({ focus });
@@ -114,26 +107,21 @@ defineExpose({ focus });
 
 <template>
   <div>
-    <WithClearButton
-      :clearButtonVisible="!!inputValue && props.showClear"
-      @clear="clear"
-    >
-      <InputMask
-        :id="id"
-        :key
-        ref="inputMaskEl"
-        v-model="inputValue"
-        :auto-clear="false"
-        :invalid="errorMessage !== undefined"
-        :readonly="isReadOnly"
-        :disabled="isReadOnly"
-        class="w-full"
-        :class="{ 'pr-[2.5em]': props.showClear }"
-        mask="99.99.9999"
-        placeholder="TT.MM.JJJJ"
-        @blur="onBlur"
-      />
-    </WithClearButton>
+    <UiInputText
+      :id="id"
+      ref="inputEl"
+      v-model="inputValue"
+      v-maska="'##.##.####'"
+      :aria-invalid="errorMessage !== undefined ? 'true' : undefined"
+      :clearable="props.showClear"
+      :readonly="isReadOnly"
+      :disabled="isReadOnly"
+      fluid
+      inputmode="numeric"
+      placeholder="TT.MM.JJJJ"
+      @blur="onBlur"
+      @clear="onClear"
+    />
 
     <small
       v-if="errorMessage"

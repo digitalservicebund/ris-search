@@ -27,6 +27,26 @@ if (globalThis?.window) {
   });
 }
 
+// maska (v3) registers its input listeners with an `AbortSignal` from Node's
+// global AbortController. jsdom only accepts an AbortSignal it created itself
+// and throws in addEventListener otherwise, so drop the signal option in tests.
+// This only disables listener auto-removal on destroy, which tests don't rely
+// on.
+if (globalThis?.window) {
+  const originalAddEventListener = EventTarget.prototype.addEventListener;
+  EventTarget.prototype.addEventListener = function (
+    type: string,
+    listener: EventListenerOrEventListenerObject | null,
+    options?: boolean | AddEventListenerOptions,
+  ) {
+    if (options && typeof options === "object" && "signal" in options) {
+      const { signal: _signal, ...rest } = options;
+      return originalAddEventListener.call(this, type, listener, rest);
+    }
+    return originalAddEventListener.call(this, type, listener, options);
+  };
+}
+
 class ResizeObserver {
   observe() {
     // empty mock method

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { InputGroup, InputGroupAddon, InputText } from "primevue";
 import type { SkipLink } from "~";
 import IcBaselineSearch from "~icons/ic/baseline-search";
 import DataFieldList from "~/components/search/DataFieldList.vue";
@@ -76,8 +75,7 @@ function insertInQuery({ pattern }: DataField) {
   query.value = newQuery;
 
   nextTick().then(() => {
-    // @ts-expect-error -- Type is wrong here, $el does exist
-    const focusableInput = queryInputEl.value?.$el;
+    const focusableInput = queryInputEl.value?.input;
     if (!(focusableInput instanceof HTMLInputElement)) return;
 
     focusableInput.focus();
@@ -102,8 +100,8 @@ function submitUnlessLoading() {
       @submit.prevent="submitUnlessLoading()"
       class="mb-16"
     >
-      <InputGroup>
-        <InputText
+      <div class="flex">
+        <UiInputText
           :id="queryInputId"
           ref="queryInputEl"
           v-model="query"
@@ -113,14 +111,12 @@ function submitUnlessLoading() {
           placeholder="Suchbegriff eingeben"
           type="search"
         />
-        <InputGroupAddon>
-          <UiButton aria-label="Suchen" size="large" type="submit" :loading>
-            <template #icon>
-              <IcBaselineSearch />
-            </template>
-          </UiButton>
-        </InputGroupAddon>
-      </InputGroup>
+        <UiButton aria-label="Suchen" size="large" type="submit" :loading>
+          <template #icon>
+            <IcBaselineSearch />
+          </template>
+        </UiButton>
+      </div>
 
       <SkipLink class="mt-8" :to="skipLinkTarget">Zu den Ergebnissen</SkipLink>
     </form>

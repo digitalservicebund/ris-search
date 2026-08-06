@@ -134,7 +134,7 @@ function setPeriodTo(value: string | undefined) {
         >
           <template v-if="documentKind === DocumentKind.Literature">
             <label :for="specificDateInputId" class="sr-only">Jahr</label>
-            <YearInput
+            <UiYearInput
               :id="specificDateInputId"
               :model-value="filter.from"
               @update:model-value="setSpecificDate($event)"
@@ -143,7 +143,7 @@ function setPeriodTo(value: string | undefined) {
 
           <template v-else>
             <label :for="specificDateInputId" class="sr-only">Datum</label>
-            <DateInput
+            <UiDateInput
               :id="specificDateInputId"
               :model-value="filter.from"
               @update:model-value="setSpecificDate($event)"
@@ -172,7 +172,7 @@ function setPeriodTo(value: string | undefined) {
             class="flex flex-col gap-8 pt-8 pl-40"
           >
             <label :for="periodFromYearInputId"> von </label>
-            <YearInput
+            <UiYearInput
               :id="periodFromYearInputId"
               :model-value="filter.from"
               @update:model-value="setPeriodFrom($event)"
@@ -181,7 +181,7 @@ function setPeriodTo(value: string | undefined) {
             <label :for="periodToYearInputId" class="typo-label2-regular mt-8">
               bis
             </label>
-            <YearInput
+            <UiYearInput
               :id="periodToYearInputId"
               :model-value="filter.to"
               @update:model-value="setPeriodTo($event)"
@@ -190,7 +190,7 @@ function setPeriodTo(value: string | undefined) {
 
           <div v-else class="flex flex-col gap-8 pt-8 pl-40">
             <label :for="periodFromDateInputId"> von </label>
-            <DateInput
+            <UiDateInput
               :id="periodFromDateInputId"
               :model-value="filter.from"
               @update:model-value="setPeriodFrom($event)"
@@ -199,7 +199,7 @@ function setPeriodTo(value: string | undefined) {
             <label :for="periodToDateInputId" class="typo-label2-regular mt-8">
               bis
             </label>
-            <DateInput
+            <UiDateInput
               :id="periodToDateInputId"
               :model-value="filter.to"
               @update:model-value="setPeriodTo($event)"
