@@ -52,6 +52,7 @@ public class RechtsprechungSchemaMapper {
         .berufsbilder(doc.berufsbilder())
         .datenDerMuendlichenVerhandlung(doc.datenDerMuendlichenVerhandlung())
         .definitionen(doc.definitionen())
+        .erledigung(doc.erledigung())
         .courtName(doc.courtKeyword())
         .vorabdokument(doc.vorabdokument())
         .build();

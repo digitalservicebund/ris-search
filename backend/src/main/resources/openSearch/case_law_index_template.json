@@ -437,6 +437,10 @@
         },
         "vorabdokument": {
           "type": "boolean"
+        },
+        "erledigung": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
         }
       }
     }

@@ -179,6 +179,7 @@
             <ris:legalForce>Test legal force</ris:legalForce>
         </ris:legalForces>
         <ris:legalEffect>JA</ris:legalEffect>
+        <ris:erledigung domainTerm="Erledigung">Ja</ris:erledigung>
         <ris:fieldOfLaws>
             <ris:fieldOfLaw>Test field of law</ris:fieldOfLaw>
         </ris:fieldOfLaws>

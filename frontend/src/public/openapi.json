@@ -2401,6 +2401,11 @@
               "type" : "string"
             }
           },
+          "erledigung" : {
+            "type" : "string",
+            "description" : "Erledigung",
+            "example" : "Ja"
+          },
           "gericht" : {
             "type" : "string",
             "description" : "Gericht",
@@ -2429,7 +2434,7 @@
           },
           "entscheidungsnamen" : {
             "type" : "array",
-            "description" : "Entscheidungsname",
+            "description" : "Entscheidungsnamen",
             "examples" : [ "Beispielentscheidung" ],
             "items" : {
               "type" : "string"

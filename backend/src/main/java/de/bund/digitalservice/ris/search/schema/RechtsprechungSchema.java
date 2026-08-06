@@ -42,6 +42,7 @@ public record RechtsprechungSchema(
     @Schema(description = "Daten der mündlichen Verhandlung")
         List<LocalDate> datenDerMuendlichenVerhandlung,
     @Schema(description = "Definitionen") List<String> definitionen,
+    @Schema(example = "Ja", description = "Erledigung") String erledigung,
     @Schema(example = "FG Berlin", description = "Gericht") String gericht,
     @Schema(example = "Urteil") String dokumenttyp,
     @Schema(example = "Gericht", description = "Spruchkörper") String spruchkoerper,
@@ -53,7 +54,7 @@ public record RechtsprechungSchema(
     @Schema(example = "LArbG Hamm") String courtName, // corresponds to courtKeyword
     @Schema(
             examples = {"Beispielentscheidung"},
-            description = "Entscheidungsname",
+            description = "Entscheidungsnamen",
             requiredMode = Schema.RequiredMode.REQUIRED)
         List<String> entscheidungsnamen,
     @Schema(

@@ -50,6 +50,7 @@ class CaseLawSchemaMapperTest {
         .berufsbilder(List.of("jobProfile test 1", "jobProfile test 2"))
         .datenDerMuendlichenVerhandlung(List.of(DATE_2024_01_03))
         .definitionen(List.of("indirekte Steuern", "Sachgesamtheit"))
+        .erledigung("Ja")
         .build();
   }
 
@@ -122,6 +123,7 @@ class CaseLawSchemaMapperTest {
     assertThat(rechtsprechungSchema.leitsatz()).isEqualTo("guidingPrinciple");
     assertThat(rechtsprechungSchema.tenor()).isEqualTo("tenor");
     assertThat(rechtsprechungSchema.inLanguage()).isEqualTo("de");
+    assertThat(rechtsprechungSchema.erledigung()).isEqualTo("Ja");
   }
 
   @Test

@@ -61,6 +61,7 @@ public record CaseLawDocumentationUnit(
             format = DateFormat.date)
         List<LocalDate> datenDerMuendlichenVerhandlung,
     @ElementCollection @Field(name = Fields.DEFINITIONEN) List<String> definitionen,
+    @Field(name = Fields.ERLEDIGUNG) String erledigung,
     @JsonIgnore @Field(name = Fields.DOCUMENTATION_OFFICE) String documentationOffice,
     @JsonIgnore @Field(name = Fields.LEGAL_EFFECT) String legalEffect,
     @JsonIgnore @ElementCollection @Field(name = Fields.PREVIOUS_DECISIONS)
@@ -141,5 +142,6 @@ public record CaseLawDocumentationUnit(
         "daten_der_muendlichen_verhandlung";
     public static final String DEFINITIONEN = "definitionen";
     public static final String VORABDOKUMENT = "vorabdokument";
+    public static final String ERLEDIGUNG = "erledigung";
   }
 }

@@ -104,6 +104,7 @@ public class CaseLawLdmlToOpenSearchMapper {
         .berufsbilder(risMeta.getRisBerufsbilder())
         .datenDerMuendlichenVerhandlung(risMeta.getRisDatenDerMuendlichenVerhandlung())
         .definitionen(risMeta.getDefinitionen())
+        .erledigung(risMeta.getRisErledigung())
         .previousDecisions(
             getLinkedJudgements(
                 meta, refs -> refs.getReferencesByType(ImplicitReference::getPrecedingJudgement)))

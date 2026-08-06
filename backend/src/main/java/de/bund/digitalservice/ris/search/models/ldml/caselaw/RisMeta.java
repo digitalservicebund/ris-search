@@ -30,6 +30,9 @@ public class RisMeta {
   @XmlElement(name = "rechtskraft", namespace = CaseLawLdmlNamespaces.RIS_NS)
   private String risRechtskraft;
 
+  @XmlElement(name = "erledigung", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  private String risErledigung;
+
   @XmlElementWrapper(name = "sachgebiete", namespace = CaseLawLdmlNamespaces.RIS_NS)
   @XmlElement(name = "sachgebiet", namespace = CaseLawLdmlNamespaces.RIS_NS)
   private List<String> risSachgebiete;
