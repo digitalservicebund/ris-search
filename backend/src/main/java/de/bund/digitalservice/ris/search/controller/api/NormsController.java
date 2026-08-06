@@ -334,7 +334,8 @@ public class NormsController {
     final Optional<byte[]> normFileByEli = normsService.getNormFileByEli(eli);
     if (normFileByEli.isPresent()) {
       final String body =
-          xsltTransformerService.transformNorm(normFileByEli.get(), language, resourceBasePath);
+          xsltTransformerService.transformNorm(
+              normFileByEli.get(), language, resourceBasePath, subtype);
       return ResponseEntity.ok(body);
     } else {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(HTML_FILE_NOT_FOUND);

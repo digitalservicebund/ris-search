@@ -1,0 +1,12 @@
+<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.8.2/">
+    <akn:body>
+        <akn:article eId="a">
+            Main article
+        </akn:article>
+    </akn:body>
+    <akn:attachments eId="anlagen-n1">
+        <akn:attachment eId="anlagen-n1_anlage-n1">
+            <akn:documentRef eId="anlagen-n1_anlage-n1_verweis-n1" href="eli/bund/bgbl-1/0000/s1000/2000-01-01/1/deu/2000-01-01/authorialNoteInDocAttachment.xml" showAs="/akn/ontology/de/concept/documenttype/bund/anlage-regelungstext"/>
+        </akn:attachment>
+    </akn:attachments>
+</akn:akomaNtoso>
