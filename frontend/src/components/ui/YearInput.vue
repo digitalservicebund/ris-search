@@ -1,5 +1,7 @@
 <script lang="ts" setup>
 import { vMaska } from "maska/vue";
+import { computed, ref, useTemplateRef, watch } from "vue";
+import UiInputText from "./InputText.vue";
 
 const props = withDefaults(
   defineProps<{
@@ -17,12 +19,16 @@ const props = withDefaults(
 
     /** Label of the form field. */
     label?: string;
+
+    /** Whether to show a clear button. */
+    showClear?: boolean;
   }>(),
   {
     modelValue: "",
     size: "small",
     isReadOnly: false,
     label: undefined,
+    showClear: true,
   },
 );
 
@@ -79,6 +85,7 @@ defineExpose({ focus });
     ref="inputEl"
     v-model="inputValue"
     v-maska="'####'"
+    :clearable="showClear"
     :readonly="isReadOnly"
     :disabled="isReadOnly"
     fluid

@@ -1,18 +1,32 @@
 import { userEvent } from "@testing-library/user-event";
 import { render, screen } from "@testing-library/vue";
-import { describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { nextTick } from "vue";
 import YearInput from "./YearInput.vue";
+
+beforeEach(() => {
+  vi.spyOn(HTMLElement.prototype, "offsetParent", "get").mockImplementation(
+    function (this: HTMLElement) {
+      return this.parentNode as Element;
+    },
+  );
+});
+
+afterEach(() => {
+  vi.restoreAllMocks();
+});
 
 function renderComponent(options?: {
   modelValue?: string;
   isReadOnly?: boolean;
+  showClear?: boolean;
 }) {
   const user = userEvent.setup();
   const props = {
     id: "identifier",
     modelValue: options?.modelValue,
     isReadOnly: options?.isReadOnly,
+    showClear: options?.showClear,
   };
   const utils = render(YearInput, { props });
   return { user, props, ...utils };
@@ -114,5 +128,38 @@ describe("YearInput", () => {
   it("sets the input to editable", () => {
     renderComponent({ isReadOnly: false });
     expect(screen.getByRole("textbox")).not.toHaveAttribute("readonly");
+  });
+
+  describe("clear button", () => {
+    it("is not shown when showClear is false", () => {
+      renderComponent({ modelValue: "2024", showClear: false });
+      expect(
+        screen.queryByRole("button", { name: "Entfernen" }),
+      ).not.toBeInTheDocument();
+    });
+
+    it("is not shown when the input is empty", () => {
+      renderComponent();
+      expect(
+        screen.queryByRole("button", { name: "Entfernen" }),
+      ).not.toBeInTheDocument();
+    });
+
+    it("is shown by default when the input has a value", () => {
+      renderComponent({ modelValue: "2024" });
+      expect(
+        screen.getByRole("button", { name: "Entfernen" }),
+      ).toBeInTheDocument();
+    });
+
+    it("clears the input when clicked", async () => {
+      const { user, emitted } = renderComponent({ modelValue: "2024" });
+
+      await user.click(screen.getByRole("button", { name: "Entfernen" }));
+      await nextTick();
+
+      expect(screen.getByRole("textbox")).toHaveValue("");
+      expect(emitted("update:modelValue")).toContainEqual([undefined]);
+    });
   });
 });
