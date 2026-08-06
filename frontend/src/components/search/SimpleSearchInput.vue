@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { InputGroup, InputGroupAddon } from "primevue";
 import IconSearch from "~icons/ic/search";
 
 const {
@@ -40,23 +39,21 @@ const searchInputId = useId();
 <template>
   <search :class="{ 'max-w-md': !fullWidth }">
     <form action="/suche" @submit.prevent="performSearch">
-      <InputGroup>
+      <div class="flex">
         <UiInputText
           :id="searchInputId"
           v-model="currentText"
           :aria-label="inputLabel"
           :placeholder="inputPlaceholder"
-          fluid
+          class="grow"
           name="query"
           type="search"
           size="large"
         />
-        <InputGroupAddon>
-          <UiButton :aria-label="submitLabel" type="submit" size="large">
-            <template #icon><IconSearch /></template>
-          </UiButton>
-        </InputGroupAddon>
-      </InputGroup>
+        <UiButton :aria-label="submitLabel" type="submit" size="large">
+          <template #icon><IconSearch /></template>
+        </UiButton>
+      </div>
     </form>
   </search>
 </template>

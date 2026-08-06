@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { InputGroup, InputGroupAddon } from "primevue";
 import type { SkipLink } from "~";
 import IcBaselineSearch from "~icons/ic/baseline-search";
 import DataFieldList from "~/components/search/DataFieldList.vue";
@@ -101,7 +100,7 @@ function submitUnlessLoading() {
       @submit.prevent="submitUnlessLoading()"
       class="mb-16"
     >
-      <InputGroup>
+      <div class="flex">
         <UiInputText
           :id="queryInputId"
           ref="queryInputEl"
@@ -112,14 +111,12 @@ function submitUnlessLoading() {
           placeholder="Suchbegriff eingeben"
           type="search"
         />
-        <InputGroupAddon>
-          <UiButton aria-label="Suchen" size="large" type="submit" :loading>
-            <template #icon>
-              <IcBaselineSearch />
-            </template>
-          </UiButton>
-        </InputGroupAddon>
-      </InputGroup>
+        <UiButton aria-label="Suchen" size="large" type="submit" :loading>
+          <template #icon>
+            <IcBaselineSearch />
+          </template>
+        </UiButton>
+      </div>
 
       <SkipLink class="mt-8" :to="skipLinkTarget">Zu den Ergebnissen</SkipLink>
     </form>
