@@ -94,6 +94,7 @@ class RechtsprechungControllerTest extends ContainersIntegrationBase {
             jsonPath("$.dokumentNummer", Matchers.is(this.documentNumber)),
             jsonPath("$.celex", Matchers.is("testCelex")),
             jsonPath("$.gericht", Matchers.is("Test court label")),
+            jsonPath("$.gerichtsbarkeit", Matchers.is("Test jurisdiction type")),
             jsonPath("$.dokumenttyp", Matchers.is("Urteil")),
             jsonPath("$.datum", Matchers.is("2023-01-02")),
             jsonPath("$.leitsatz", Matchers.is("Das ist der Leitsatz")),

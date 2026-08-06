@@ -47,6 +47,7 @@ public record RechtsprechungSchema(
     @Schema(description = "Erledigungsvermerk") String erledigungsvermerk,
     @Schema(description = "Erstveröffentlichung") LocalDate erstveroeffentlichung,
     @Schema(example = "FG Berlin", description = "Gericht") String gericht,
+    @Schema(description = "Gerichtsbarkeit") String gerichtsbarkeit,
     @Schema(example = "Urteil") String dokumenttyp,
     @Schema(example = "Gericht", description = "Spruchkörper") String spruchkoerper,
     @Schema(

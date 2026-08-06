@@ -28,6 +28,7 @@ class CaseLawSchemaMapperTest {
         .celex("62013CA0192")
         .courtType("KG")
         .location("Berlin")
+        .gerichtsbarkeit("Ordentliche Gerichtsbarkeit")
         .documentType("Urteil")
         .decisionDate(SharedTestConstants.DATE_2024_01_02)
         .fileNumbers(List.of("FileNumberTest"))
@@ -108,7 +109,6 @@ class CaseLawSchemaMapperTest {
     assertThat(rechtsprechungSchema.id()).isEqualTo("/v1/rechtsprechung/BFRE000087655");
     assertThat(rechtsprechungSchema.dokumentNummer()).isEqualTo("BFRE000087655");
     assertThat(rechtsprechungSchema.ecli()).isEqualTo("ECLI:DE:FGNI:1975:0526.IXL180.73.0A");
-    assertThat(rechtsprechungSchema.celex()).isEqualTo("62013CA0192");
     assertThat(rechtsprechungSchema.gericht()).isEqualTo("KG Berlin");
     assertThat(rechtsprechungSchema.dokumenttyp()).isEqualTo("Urteil");
     assertThat(rechtsprechungSchema.datum()).isEqualTo(SharedTestConstants.DATE_2024_01_02);
@@ -128,6 +128,16 @@ class CaseLawSchemaMapperTest {
     assertThat(rechtsprechungSchema.leitsatz()).isEqualTo("guidingPrinciple");
     assertThat(rechtsprechungSchema.tenor()).isEqualTo("tenor");
     assertThat(rechtsprechungSchema.inLanguage()).isEqualTo("de");
+  }
+
+  @Test
+  @DisplayName("Correctly maps additional scalar RechtsprechungSchema attributes")
+  void fromDomainSingleRechtsprechungSchemaAdditionalScalarAttributes() {
+    RechtsprechungSchema rechtsprechungSchema =
+        RechtsprechungSchemaMapper.fromDomain(buildDocumentationUnit());
+
+    assertThat(rechtsprechungSchema.celex()).isEqualTo("62013CA0192");
+    assertThat(rechtsprechungSchema.gerichtsbarkeit()).isEqualTo("Ordentliche Gerichtsbarkeit");
     assertThat(rechtsprechungSchema.erledigung()).isEqualTo("Ja");
     assertThat(rechtsprechungSchema.erledigungsvermerk()).isEqualTo("Erledigungsvermerk");
     assertThat(rechtsprechungSchema.erstveroeffentlichung())

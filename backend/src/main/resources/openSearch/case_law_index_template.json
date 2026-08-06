@@ -321,6 +321,10 @@
           "type": "text",
           "analyzer": "custom_german_analyzer"
         },
+        "gerichtsbarkeit": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
         "other_headnote": {
           "type": "text",
           "analyzer": "custom_german_analyzer",

@@ -42,6 +42,7 @@ public class RechtsprechungSchemaMapper {
         .aktenzeichen(doc.fileNumber())
         .aktenzeichenListe(doc.fileNumbers())
         .gericht(doc.courtKeyword())
+        .gerichtsbarkeit(doc.gerichtsbarkeit())
         .gliederung(doc.outline())
         .spruchkoerper(doc.judicialBody())
         .schlagwoerter(doc.keywords())

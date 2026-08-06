@@ -41,6 +41,7 @@ public record CaseLawDocumentationUnit(
     @ElementCollection @Field(name = Fields.FILE_NUMBERS) List<String> fileNumbers,
     @Field(name = Fields.COURT_TYPE) String courtType,
     @Field(name = Fields.LOCATION) String location,
+    @Field(name = Fields.GERICHTSBARKEIT) String gerichtsbarkeit,
     @Field(name = Fields.DOCUMENT_TYPE) String documentType,
     @Field(name = Fields.OUTLINE) String outline,
     @Field(name = Fields.JUDICIAL_BODY) String judicialBody,
@@ -122,6 +123,7 @@ public record CaseLawDocumentationUnit(
     public static final String COURT_TYPE = "court_type";
 
     public static final String LOCATION = "location";
+    public static final String GERICHTSBARKEIT = "gerichtsbarkeit";
     public static final String DOCUMENT_TYPE = "document_type";
     public static final String OUTLINE = "outline";
     public static final String JUDICIAL_BODY = "judicial_body";

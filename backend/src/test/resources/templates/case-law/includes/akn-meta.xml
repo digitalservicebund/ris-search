@@ -181,6 +181,7 @@
         <ris:gericht domainTerm="Gericht" refersTo="#organisation-gericht-courttype-courtlocation" showAs="{% if courtLabel %}{{ courtLabel }}{% else %}Test court label{% endif %}">
             <ris:gerichtstyp domainTerm="Gerichtstyp">{% if courtType %}{{ courtType }}{% else %}Test court type{% endif %}</ris:gerichtstyp>
             <ris:gerichtsort domainTerm="Gerichtsort">{% if location %}{{ location }}{% else %}Test court location{% endif%}</ris:gerichtsort>
+            <ris:gerichtsbarkeit domainTerm="Gerichtsbarkeit">Test jurisdiction type</ris:gerichtsbarkeit>
             <ris:spruchkoerper domainTerm="Spruchkörper" refersTo="#spruchkoerper">Test judicial body</ris:spruchkoerper>
         </ris:gericht>
         <ris:legalForces>
