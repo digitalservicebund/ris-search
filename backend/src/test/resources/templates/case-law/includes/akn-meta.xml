@@ -22,6 +22,7 @@
             <akn:FRBRthis value="{% if documentNumber %}{{documentNumber}}{% else %}testDocNumber{% endif %}.xml"/>
             <akn:FRBRuri value="{% if documentNumber %}{{documentNumber}}{% else %}testDocNumber{% endif %}.xml"/>
             <akn:FRBRdate date="2020-01-01" name="XML Transformation"/>
+            <akn:FRBRdate date="2026-03-18" name="erstveroeffentlichung" showAs="Erstveröffentlichung"/>
             <akn:FRBRauthor href="#documentationoffice-dokumentationsstelle"/>
         </akn:FRBRManifestation>
 </akn:identification>

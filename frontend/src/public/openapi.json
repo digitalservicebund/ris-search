@@ -2406,6 +2406,15 @@
             "description" : "Erledigung",
             "example" : "Ja"
           },
+          "erledigungsvermerk" : {
+            "type" : "string",
+            "description" : "Erledigungsvermerk"
+          },
+          "erstveroeffentlichung" : {
+            "type" : "string",
+            "format" : "date",
+            "description" : "Erstveröffentlichung"
+          },
           "gericht" : {
             "type" : "string",
             "description" : "Gericht",

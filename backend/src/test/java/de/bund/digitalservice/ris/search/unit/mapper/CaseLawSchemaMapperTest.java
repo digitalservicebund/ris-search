@@ -12,6 +12,7 @@ import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationU
 import de.bund.digitalservice.ris.search.schema.CaseLawEncodingSchema;
 import de.bund.digitalservice.ris.search.schema.CaseLawSchema;
 import de.bund.digitalservice.ris.search.schema.RechtsprechungSchema;
+import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -52,6 +53,7 @@ class CaseLawSchemaMapperTest {
         .definitionen(List.of("indirekte Steuern", "Sachgesamtheit"))
         .erledigung("Ja")
         .erledigungsvermerk("Erledigungsvermerk")
+        .erstveroeffentlichung(LocalDate.of(2026, 3, 18))
         .build();
   }
 
@@ -126,6 +128,7 @@ class CaseLawSchemaMapperTest {
     assertThat(rechtsprechungSchema.inLanguage()).isEqualTo("de");
     assertThat(rechtsprechungSchema.erledigung()).isEqualTo("Ja");
     assertThat(rechtsprechungSchema.erledigungsvermerk()).isEqualTo("Erledigungsvermerk");
+    assertThat(rechtsprechungSchema.erstveroeffentlichung()).isEqualTo(LocalDate.of(2026, 3, 18));
   }
 
   @Test

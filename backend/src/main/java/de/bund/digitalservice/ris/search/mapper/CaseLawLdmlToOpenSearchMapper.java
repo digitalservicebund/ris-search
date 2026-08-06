@@ -65,6 +65,7 @@ public class CaseLawLdmlToOpenSearchMapper {
     Meta meta = judgment.getMeta();
     RisMeta risMeta = meta.getProprietary().getRisMeta();
     FrbrElement work = meta.getIdentification().getFrbrWork();
+    FrbrElement manifestation = meta.getIdentification().getFrbrManifestation();
     String uniqueId = work.getFrbrThis().getValue();
     RisGericht risGericht = risMeta.getRisGericht();
     JudgmentBody judgmentBody = judgment.getJudgmentBody();
@@ -106,6 +107,10 @@ public class CaseLawLdmlToOpenSearchMapper {
         .definitionen(risMeta.getDefinitionen())
         .erledigung(risMeta.getRisErledigung())
         .erledigungsvermerk(extractErledigungsvermerk(meta))
+        .erstveroeffentlichung(
+            manifestation == null
+                ? null
+                : DateUtils.nullSafeParseyyyyMMdd(manifestation.getErstveroeffentlichungValue()))
         .previousDecisions(
             getLinkedJudgements(
                 meta, refs -> refs.getReferencesByType(ImplicitReference::getPrecedingJudgement)))

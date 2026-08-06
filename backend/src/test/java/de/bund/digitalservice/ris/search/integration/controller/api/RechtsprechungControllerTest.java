@@ -116,6 +116,7 @@ class RechtsprechungControllerTest extends ContainersIntegrationBase {
             jsonPath("$.definitionen[1]").value("Sachgesamtheit"),
             jsonPath("$.erledigung").value("Ja"),
             jsonPath("$.erledigungsvermerk").value("Erledigungsvermerk"),
+            jsonPath("$.erstveroeffentlichung").value("2026-03-18"),
             jsonPath("$.abweichendeMeinung")
                 .value(
                     "dissenting test, Dr. Phil. Max Mustermann: referenced opinions test 1, Maxima Mustermann: referenced opinions test 2"),
