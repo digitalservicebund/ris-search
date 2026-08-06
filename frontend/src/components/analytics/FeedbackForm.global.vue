@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Button, Textarea } from "primevue";
+import { Textarea } from "primevue";
 import ErrorOutline from "~icons/ic/outline-error-outline";
 import { NuxtLink } from "#components";
 
@@ -58,9 +58,9 @@ watch(
         an einer Nutzungsstudie teil und helfen Sie uns, Rechtsinformationen
         leichter zugänglich zu machen.
       </p>
-      <Button :as="NuxtLink" :to="{ name: 'nutzungstests' }">
+      <UiButton :as="NuxtLink" :to="{ name: 'nutzungstests' }">
         Zur Registrierungsseite
-      </Button>
+      </UiButton>
     </div>
 
     <form
@@ -116,11 +116,11 @@ watch(
       </div>
 
       <div class="flex flex-row">
-        <Button
+        <UiButton
           data-test-id="submit-feedback-button"
           class="w-auto"
           type="submit"
-          >Feedback senden</Button
+          >Feedback senden</UiButton
         >
       </div>
     </form>

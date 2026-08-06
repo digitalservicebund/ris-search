@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Button, Drawer } from "primevue";
+import { Drawer } from "primevue";
 import type { MenuItem } from "primevue/menuitem";
 import IcBaselineMoreVert from "~icons/ic/baseline-more-vert";
 import { NuxtLink } from "#components";
@@ -32,7 +32,7 @@ const handleDrawerItemClick = async (item: ActionMenuItem) => {
   <!-- data attribute can be used by the layout to adjust spacings when an action
   menu exists -->
   <div class="md:hidden" v-bind="$attrs" data-breadcrumbs-adjust="actionmenu">
-    <Button
+    <UiButton
       ref="drawerTriggerRef"
       aria-label="Aktionen anzeigen"
       text
@@ -44,7 +44,7 @@ const handleDrawerItemClick = async (item: ActionMenuItem) => {
       <template #icon>
         <IcBaselineMoreVert />
       </template>
-    </Button>
+    </UiButton>
 
     <Drawer
       :id="drawerId"
@@ -96,7 +96,7 @@ const handleDrawerItemClick = async (item: ActionMenuItem) => {
 
   <ul role="menubar" class="hidden items-center *:-mx-4 md:flex">
     <li v-for="item in actions" :key="item.label" role="presentation">
-      <Button
+      <UiButton
         v-tooltip.bottom="item.label"
         role="menuitem"
         text
@@ -109,9 +109,12 @@ const handleDrawerItemClick = async (item: ActionMenuItem) => {
         @click="item.command"
       >
         <template #icon>
-          <component :is="(item as ActionMenuItem).iconComponent" />
+          <component
+            :is="(item as ActionMenuItem).iconComponent"
+            class="ris-label2-regular"
+          />
         </template>
-      </Button>
+      </UiButton>
     </li>
   </ul>
 </template>

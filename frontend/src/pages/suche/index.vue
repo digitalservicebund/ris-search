@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Message, ProgressSpinner, Select } from "primevue";
+import { Message, Select } from "primevue";
 import IcBaselineSwapVert from "~icons/ic/baseline-swap-vert";
 import IcOutlineFilterAlt from "~icons/ic/outline-filter-alt";
 import { DocumentKind } from "~/types/api";
@@ -449,7 +449,7 @@ watch(searchStatus, async (newStatus, oldStatus) => {
               v-if="isLoading"
               class="flex h-full min-h-48 w-full items-center justify-center"
             >
-              <ProgressSpinner />
+              <UiProgressSpinner />
             </div>
           </Pagination>
         </div>

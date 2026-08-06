@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { Button } from "primevue";
 import type { SkipLink } from "~";
 import { NuxtLink } from "#components";
 
@@ -35,7 +34,7 @@ const linkTarget = computed(() => ({ ...route, hash: props.to }));
 </script>
 
 <template>
-  <Button
+  <UiButton
     :as="NuxtLink"
     :to="linkTarget"
     class="not-focus:sr-only focus-visible:outline-none!"
@@ -43,7 +42,7 @@ const linkTarget = computed(() => ({ ...route, hash: props.to }));
     @click="focusTarget"
   >
     <slot />
-  </Button>
+  </UiButton>
 </template>
 
 <style module>

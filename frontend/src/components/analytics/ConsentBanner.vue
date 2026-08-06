@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { Button } from "primevue";
-
 const { userConsent, isBannerVisible, setTracking } = usePostHog();
 
 if (import.meta.server) {
@@ -44,7 +42,7 @@ const headingId = useId();
           @submit.prevent="handleSetTracking(true)"
         >
           <input type="hidden" name="consent" value="true" />
-          <Button label="Akzeptieren" type="submit" />
+          <UiButton label="Akzeptieren" type="submit" />
         </form>
         <form
           action="/api/cookie-consent"
@@ -53,7 +51,7 @@ const headingId = useId();
           @submit.prevent="handleSetTracking(false)"
         >
           <input type="hidden" name="consent" value="false" />
-          <Button label="Ablehnen" type="submit" />
+          <UiButton label="Ablehnen" type="submit" />
         </form>
         <NuxtLink
           :to="{ name: 'datenschutzerklaerung' }"

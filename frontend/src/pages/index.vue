@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Button, Message } from "primevue";
+import { Message } from "primevue";
 import { ExternalLink, NuxtLink } from "#components";
 import bmjvLogo from "~/assets/img/bmjv-de-v1-web-farbig.svg";
 
@@ -100,12 +100,12 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
       </div>
 
       <div class="flex flex-wrap gap-16">
-        <Button :as="NuxtLink" to="/suche?documentKind=N">
+        <UiButton :as="NuxtLink" to="/suche?documentKind=N">
           Zu den Gesetzen und Verordnungen
-        </Button>
-        <Button :as="NuxtLink" to="/suche?documentKind=R">
+        </UiButton>
+        <UiButton :as="NuxtLink" to="/suche?documentKind=R">
           Zu den Gerichtsentscheidungen
-        </Button>
+        </UiButton>
       </div>
     </div>
 
@@ -121,9 +121,9 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
       </div>
 
       <div>
-        <Button :as="NuxtLink" :to="{ name: 'translations' }">
+        <UiButton :as="NuxtLink" :to="{ name: 'translations' }">
           Go to translations
-        </Button>
+        </UiButton>
       </div>
     </div>
 
@@ -141,12 +141,12 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
       </div>
 
       <div>
-        <Button
+        <UiButton
           :as="ExternalLink"
           url="https://docs.rechtsinformationen.bund.de"
         >
           Zur API-Dokumentation
-        </Button>
+        </UiButton>
       </div>
     </div>
 

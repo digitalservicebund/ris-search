@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Button, Drawer } from "primevue";
+import { Drawer } from "primevue";
 
 const { label, icon } = defineProps<{
   /** Used as both the trigger button's label and the drawer's title */
@@ -38,7 +38,7 @@ function handleApply() {
 
 <template>
   <div class="md:hidden" v-bind="$attrs">
-    <Button
+    <UiButton
       ref="triggerRef"
       :aria-controls="drawerId"
       :aria-expanded="visible"
@@ -50,7 +50,7 @@ function handleApply() {
       <template #icon>
         <component :is="icon" />
       </template>
-    </Button>
+    </UiButton>
 
     <Drawer
       :id="drawerId"
@@ -67,13 +67,13 @@ function handleApply() {
 
       <template #footer>
         <div class="flex gap-8">
-          <Button
+          <UiButton
             class="flex-1"
             label="Zurücksetzen"
             severity="secondary"
             @click="handleReset"
           />
-          <Button
+          <UiButton
             class="flex-1"
             label="Anwenden"
             severity="primary"

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { Button } from "primevue";
 import IconArrowBack from "~icons/ic/baseline-arrow-back";
 import IconArrowForward from "~icons/ic/baseline-arrow-forward";
 import { NuxtLink } from "#components";
@@ -112,7 +111,7 @@ const itemsOnPage = computed(() => buildItemsOnPageString(props.page));
       <div
         class="relative flex grow flex-wrap items-center justify-between gap-8"
       >
-        <Button
+        <UiButton
           v-if="!isOnlyPage"
           :to="previousPageRoute"
           :as="previousPageRoute ? NuxtLink : undefined"
@@ -123,7 +122,7 @@ const itemsOnPage = computed(() => buildItemsOnPageString(props.page));
           @click.prevent="previousPage()"
         >
           <template #icon><IconArrowBack /></template>
-        </Button>
+        </UiButton>
 
         <span class="typo-label1-regular only:m-auto">
           <span
@@ -135,7 +134,7 @@ const itemsOnPage = computed(() => buildItemsOnPageString(props.page));
           <span>{{ itemsOnPage }}</span>
         </span>
 
-        <Button
+        <UiButton
           v-if="!isOnlyPage"
           :to="nextPageRoute"
           :as="nextPageRoute ? NuxtLink : undefined"
@@ -149,7 +148,7 @@ const itemsOnPage = computed(() => buildItemsOnPageString(props.page));
           <template #icon="slot">
             <IconArrowForward :class="slot.class" />
           </template>
-        </Button>
+        </UiButton>
       </div>
     </div>
   </nav>

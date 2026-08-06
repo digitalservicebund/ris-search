@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Button, InputGroup, InputGroupAddon, InputText } from "primevue";
+import { InputGroup, InputGroupAddon, InputText } from "primevue";
 import type { SkipLink } from "~";
 import IcBaselineSearch from "~icons/ic/baseline-search";
 import DataFieldList from "~/components/search/DataFieldList.vue";
@@ -114,11 +114,11 @@ function submitUnlessLoading() {
           type="search"
         />
         <InputGroupAddon>
-          <Button aria-label="Suchen" size="large" type="submit" :loading>
+          <UiButton aria-label="Suchen" size="large" type="submit" :loading>
             <template #icon>
               <IcBaselineSearch />
             </template>
-          </Button>
+          </UiButton>
         </InputGroupAddon>
       </InputGroup>
 
