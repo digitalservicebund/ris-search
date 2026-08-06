@@ -53,37 +53,67 @@ test.describe("view norm page", async () => {
     });
   });
 
-  test("shows detailed information in the Details tab", async ({ page }) => {
-    await navigate(
-      page,
-      "/gesetze/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu",
-    );
+  test(
+    "shows detailed information in the Details tab",
+    { tag: ["@RISDEV-12108"] },
+    async ({ page }) => {
+      await navigate(
+        page,
+        "/gesetze/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu",
+      );
 
-    await page.getByRole("tab", { name: "Details" }).click();
+      await page.getByRole("tab", { name: "Details" }).click();
 
-    await expect(page.getByRole("heading", { name: "Details" })).toBeVisible();
+      await expect(
+        page.getByRole("heading", { name: "Details" }),
+      ).toBeVisible();
 
-    const detailsList = page
-      .getByTestId("details-list")
-      .getByRole("term")
-      .or(page.getByTestId("details-list").getByRole("definition"));
+      const detailsList = page
+        .getByTestId("details-list")
+        .getByRole("term")
+        .or(page.getByTestId("details-list").getByRole("definition"));
 
-    await expect(detailsList).toHaveText([
-      "Ausfertigungsdatum:",
-      "nicht vorhanden",
-      "Vollzitat:",
-      "Fiktive Fruchtsaft- und Erfrischungsgetränkeverordnung vom 27. Mai 2000 (BGBl. I S. 1016), zuletzt modifiziert im Testverfahren",
-      "Stand:",
-      "Zuletzt geändert durch Testanpassungen",
-      "Neugefasst durch Testdaten",
-      "Hinweis zum Stand:",
-      "nicht vorhanden",
-      "Fußnoten:",
-      /\*T \(\+{3} Textnachweis ab: 27\.5\.2000 \+{3}\).*\(\+{3} Zur Anwendung vgl\. §§ 5, 12, 15 \+{3}\)/,
-      "Download:",
-      /FrSaftErfrischV als ZIP herunterladen/,
-    ]);
-  });
+      await expect(detailsList).toHaveText([
+        "Ausfertigungsdatum:",
+        "27.05.2000",
+        "Vollzitat:",
+        "Fiktive Fruchtsaft- und Erfrischungsgetränkeverordnung vom 27. Mai 2000 (BGBl. I S. 1016), zuletzt modifiziert im Testverfahren",
+        "Stand:",
+        "Zuletzt geändert durch Testanpassungen",
+        "Neugefasst durch Testdaten",
+        "Hinweis zum Stand:",
+        "Hinweis Testdaten",
+        "Fußnoten:",
+        /\*T \(\+{3} Textnachweis ab: 27\.5\.2000 \+{3}\).*\(\+{3} Zur Anwendung vgl\. §§ 5, 12, 15 \+{3}\)/,
+        "Download:",
+        /FrSaftErfrischV als ZIP herunterladen/,
+      ]);
+    },
+  );
+
+  test(
+    "hides empty detail fields and only shows populated ones",
+    { tag: ["@RISDEV-12108"] },
+    async ({ page }) => {
+      await navigate(
+        page,
+        "/gesetze/eli/bund/bgbl-1/2025/999/2025-01-01/1/deu",
+      );
+
+      await page.getByRole("tab", { name: "Details" }).click();
+
+      const detailsList = page.getByTestId("details-list");
+      const detailsEntries = detailsList
+        .getByRole("term")
+        .or(detailsList.getByRole("definition"));
+
+      await expect(detailsEntries).toHaveCount(2);
+      await expect(detailsEntries).toHaveText([
+        "Download:",
+        "EmptyBodyTestG als ZIP herunterladen",
+      ]);
+    },
+  );
 
   test("official table of contents is visible and expandable", async ({
     page,

@@ -6,6 +6,7 @@ import IcOutlineInfo from "~icons/ic/outline-info";
 import IcOutlineWarning from "~icons/ic/outline-warning-amber";
 import { NuxtLink } from "#components";
 import NormTranslationActionMenu from "~/components/documents/actionMenu/NormTranslationActionMenu.vue";
+import type { DetailsListItem } from "~/components/documents/DetailsList.vue";
 import type { TabView } from "~/components/documents/TabsLayout.vue";
 import {
   fetchTranslationAndHTML,
@@ -44,14 +45,6 @@ useTranslationSeo({
   translationOfWork: currentTranslation.translationOfWork,
 });
 
-const versionInformation = computed(() => {
-  return removePrefix(currentTranslation.about, "Version information:");
-});
-
-const translatedBy = computed(() => {
-  return removePrefix(currentTranslation.translator, "Translation provided by");
-});
-
 const germanOriginalWorkEli = computed(() => {
   return legislation.value?.item?.legislationIdentifier;
 });
@@ -83,6 +76,22 @@ const views: OneOrMore<TabView> = [
     analyticsId: "translation-metadata-tab",
   },
 ] as const;
+
+const detailItems = computed<DetailsListItem[]>(() => [
+  {
+    type: "text",
+    label: "Translation provided by:",
+    value: removePrefix(
+      currentTranslation.translator,
+      "Translation provided by",
+    ),
+  },
+  {
+    type: "text",
+    label: "Version information:",
+    value: removePrefix(currentTranslation.about, "Version information:"),
+  },
+]);
 
 const textSectionId = useId();
 const detailsTabPanelTitleId = useId();
@@ -158,16 +167,7 @@ const detailsTabPanelTitleId = useId();
           <h2 :id="detailsTabPanelTitleId" class="typo-headline3-bold">
             Details
           </h2>
-          <DocumentsDetailsList class="mt-24">
-            <DocumentsDetailsListEntry
-              label="Translation provided by:"
-              :value="translatedBy"
-            />
-            <DocumentsDetailsListEntry
-              label="Version information:"
-              :value="versionInformation"
-            />
-          </DocumentsDetailsList>
+          <DocumentsDetailsList class="mt-24" :items="detailItems" />
         </section>
       </template>
     </DocumentsTabsLayout>

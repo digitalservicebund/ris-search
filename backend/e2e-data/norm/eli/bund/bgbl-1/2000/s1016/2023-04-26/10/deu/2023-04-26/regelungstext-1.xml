@@ -139,6 +139,7 @@
                     <ris:vollzitat>Fiktive Fruchtsaft- und Erfrischungsgetränkeverordnung vom 27. Mai 2000 (BGBl. I S. 1016), zuletzt modifiziert im Testverfahren</ris:vollzitat>
                     <ris:standangabe type="stand">Zuletzt geändert durch Testanpassungen</ris:standangabe>
                     <ris:standangabe type="neuf">Neugefasst durch Testdaten</ris:standangabe>
+                    <ris:standangabe type="hinweis">Hinweis Testdaten</ris:standangabe>
                 </ris:legalDocML.de_metadaten>
             </akn:proprietary>
         </akn:meta>
@@ -164,6 +165,9 @@
                     </akn:shortTitle>
                 </akn:p>
             </akn:longTitle>
+            <akn:block GUID="d8a00001-0000-0000-0000-000000000001" eId="einleitung-n1_block-n1" name="attributsemantik-noch-undefiniert">
+                <akn:date GUID="d8a00001-0000-0000-0000-000000000002" date="2000-05-27" eId="einleitung-n1_block-n1_datum-n1" refersTo="ausfertigung-datum"/>
+            </akn:block>
         </akn:preface>
         <akn:preamble GUID="d8888888-8888-8888-8888-888888888888" eId="präambel-n1">
             <akn:formula GUID="d9999999-9999-9999-9999-999999999999" eId="präambel-n1_formel-n1" name="attributsemantik-noch-undefiniert" refersTo="eingangsformel">

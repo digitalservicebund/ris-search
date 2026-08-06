@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { Message } from "primevue";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
-import IcOutlineFileDownload from "~icons/ic/outline-file-download";
 import IcOutlineInfo from "~icons/ic/outline-info";
+import type { DetailsListItem } from "~/components/documents/DetailsList.vue";
 import type { MetadataItem } from "~/components/documents/Metadata.vue";
 import type { TabView } from "~/components/documents/TabsLayout.vue";
 import type { TreeItem } from "~/components/TreeView.vue";
@@ -98,18 +98,31 @@ const headerMetadata = computed<MetadataItem[]>(() => [
   },
 ]);
 
-const detailsMetadata = computed(() => {
-  const zipUrl = getEncodingURL(caseLaw.value, "application/zip");
-  const decisionNames = formatArray(caseLaw.value?.decisionName ?? []);
-
-  return {
-    documentNumber: caseLaw.value?.documentNumber,
-    ecli: caseLaw.value?.ecli,
-    decisionNames,
-    judicialBody: caseLaw.value?.judicialBody,
-    zipUrl,
-  };
-});
+const detailItems = computed<DetailsListItem[]>(() => [
+  {
+    type: "text",
+    label: "Spruchkörper:",
+    value: caseLaw.value?.judicialBody,
+  },
+  {
+    type: "text",
+    label: "ECLI:",
+    value: caseLaw.value?.ecli,
+    valueClass: "break-all",
+  },
+  {
+    type: "text",
+    label: "Entscheidungsname:",
+    value: formatArray(caseLaw.value?.decisionName ?? []),
+  },
+  {
+    type: "link",
+    label: "Download:",
+    url: getEncodingURL(caseLaw.value, "application/zip"),
+    text: "Diese Gerichtsentscheidung als ZIP herunterladen",
+    dataAttr: "xml-zip-view",
+  },
+]);
 
 const textSectionId = useId();
 const detailsSectionId = useId();
@@ -154,38 +167,7 @@ const detailsSectionId = useId();
       >
         <h2 :id="detailsSectionId" class="typo-headline3-bold">Details</h2>
         <DocumentsIncompleteDataMessage class="my-24" />
-        <DocumentsDetailsList>
-          <DocumentsDetailsListEntry
-            label="Spruchkörper:"
-            :value="detailsMetadata.judicialBody"
-          />
-          <DocumentsDetailsListEntry
-            label="ECLI:"
-            :value="detailsMetadata.ecli"
-            valueClass="break-all"
-          />
-          <DocumentsDetailsListEntry label="Normen:" value="" />
-          <DocumentsDetailsListEntry
-            label="Entscheidungsname:"
-            :value="detailsMetadata.decisionNames"
-          />
-          <DocumentsDetailsListEntry label="Vorinstanz:" value="" />
-
-          <DocumentsDetailsListEntry
-            v-if="detailsMetadata.zipUrl"
-            label="Download:"
-          >
-            <NuxtLink
-              data-attr="xml-zip-view"
-              class="typo-link-regular"
-              external
-              :to="detailsMetadata.zipUrl"
-            >
-              <IcOutlineFileDownload class="mr-2 inline" />
-              Diese Gerichtsentscheidung als ZIP herunterladen
-            </NuxtLink>
-          </DocumentsDetailsListEntry>
-        </DocumentsDetailsList>
+        <DocumentsDetailsList :items="detailItems" />
       </section>
     </template>
 

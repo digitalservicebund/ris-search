@@ -46,6 +46,6 @@ public class FrbrElement {
   }
 
   public String getEcliAliasValue() {
-    return getAliasValueByName("ECLI");
+    return getAliasValueByName("ecli");
   }
 }

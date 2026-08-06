@@ -16,9 +16,9 @@ const ecli = computed(() => {
     Platzhalter
   </h1>
 
-  <DocumentsDetailsList>
-    <DocumentsDetailsListEntry label="ECLI" :value="ecli" />
-  </DocumentsDetailsList>
+  <DocumentsDetailsList
+    :items="[{ type: 'text', label: 'ECLI', value: ecli }]"
+  />
 
   <div>
     <div class="border border-yellow-300 bg-yellow-100 px-16 py-12">

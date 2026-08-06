@@ -1,3 +1,4 @@
+import type { DetailsListItem } from "~/components/documents/DetailsList.vue";
 import type { MetadataItem } from "~/components/documents/Metadata.vue";
 import type { AdministrativeDirective } from "~/types/api";
 
@@ -27,7 +28,7 @@ export function getAdministrativeDirectiveMetadataItems(
 
 export function getAdministrativeDirectiveDetailItems(
   administrativeDirective?: Partial<AdministrativeDirective>,
-): { label: string; value?: string }[] {
+): DetailsListItem[] {
   const formattedCitationDates =
     administrativeDirective?.citationDates
       ?.map(dateFormattedDDMMYYYY)
@@ -38,6 +39,7 @@ export function getAdministrativeDirectiveDetailItems(
 
   return [
     {
+      type: "text",
       label: getSingularOrPlural(
         "Fundstelle:",
         "Fundstellen:",
@@ -46,6 +48,7 @@ export function getAdministrativeDirectiveDetailItems(
       value: formatArray(references),
     },
     {
+      type: "text",
       label: getSingularOrPlural(
         "Zitierdatum:",
         "Zitierdaten:",
@@ -54,14 +57,17 @@ export function getAdministrativeDirectiveDetailItems(
       value: formatArray(formattedCitationDates),
     },
     {
+      type: "text",
       label: "Gültig bis:",
       value: dateFormattedDDMMYYYY(administrativeDirective?.expiryDate),
     },
     {
+      type: "text",
       label: "Dokumenttyp Zusatz:",
       value: administrativeDirective?.documentTypeDetail,
     },
     {
+      type: "text",
       label: getSingularOrPlural("Norm:", "Normen:", norms.length),
       value: formatArray(norms),
     },

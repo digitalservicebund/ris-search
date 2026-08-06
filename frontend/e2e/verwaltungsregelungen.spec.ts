@@ -224,34 +224,59 @@ noJsTest("tabs work without JavaScript", async ({ page }) => {
   });
 });
 
-test("shows detailed information in the 'Details' tab", async ({ page }) => {
-  await navigate(page, "/verwaltungsregelungen/KSNR000000001");
+test(
+  "shows detailed information in the 'Details' tab",
+  { tag: ["@RISDEV-12108"] },
+  async ({ page }) => {
+    await navigate(page, "/verwaltungsregelungen/KSNR000000001");
 
-  const detailsLink = page.getByRole("tab", {
-    name: "Details",
-  });
-  await detailsLink.click();
+    const detailsLink = page.getByRole("tab", {
+      name: "Details",
+    });
+    await detailsLink.click();
 
-  await expect(page.getByRole("heading", { name: "Details" })).toBeVisible();
-  await expect(page.getByRole("main").getByRole("status")).toContainText(
-    "Dieser Service befindet sich in der Testphase",
-  );
-  const detailsList = page.getByTestId("details-list");
-  await expect(
-    detailsList.getByRole("term").or(detailsList.getByRole("definition")),
-  ).toHaveText([
-    "Fundstelle:",
-    "FooBar 2025, Nr 1, 123",
-    "Zitierdatum:",
-    "01.06.2025",
-    "Gültig bis:",
-    "01.07.2030",
-    "Dokumenttyp Zusatz:",
-    "Bekanntmachung",
-    "Normen:",
-    "Baz § 16c Abs 2, Lol § 15 Abs 2",
-  ]);
-});
+    await expect(page.getByRole("heading", { name: "Details" })).toBeVisible();
+    await expect(page.getByRole("main").getByRole("status")).toContainText(
+      "Dieser Service befindet sich in der Testphase",
+    );
+    const detailsList = page.getByTestId("details-list");
+    await expect(
+      detailsList.getByRole("term").or(detailsList.getByRole("definition")),
+    ).toHaveText([
+      "Fundstelle:",
+      "FooBar 2025, Nr 1, 123",
+      "Zitierdatum:",
+      "01.06.2025",
+      "Gültig bis:",
+      "01.07.2030",
+      "Dokumenttyp Zusatz:",
+      "Bekanntmachung",
+      "Normen:",
+      "Baz § 16c Abs 2, Lol § 15 Abs 2",
+    ]);
+  },
+);
+
+test(
+  "hides empty detail fields and only shows populated ones",
+  { tag: ["@RISDEV-12108"] },
+  async ({ page }) => {
+    await navigate(page, "/verwaltungsregelungen/KSNR000000004");
+
+    const detailsList = page.getByTestId("details-list");
+    const detailsEntries = detailsList
+      .getByRole("term")
+      .or(detailsList.getByRole("definition"));
+
+    await expect(detailsEntries).toHaveCount(4);
+    await expect(detailsEntries).toHaveText([
+      "Fundstelle:",
+      "BazAbCd 2002, Nr 1",
+      "Zitierdaten:",
+      "24.12.2012, 28.06.2013",
+    ]);
+  },
+);
 
 test("hides tabs and shows details if document is empty", async ({ page }) => {
   await navigate(page, "/verwaltungsregelungen/KSNR000000004");
@@ -278,12 +303,6 @@ test("hides tabs and shows details if document is empty", async ({ page }) => {
     "BazAbCd 2002, Nr 1",
     "Zitierdaten:",
     "24.12.2012, 28.06.2013",
-    "Gültig bis:",
-    "nicht vorhanden",
-    "Dokumenttyp Zusatz:",
-    "nicht vorhanden",
-    "Norm:",
-    "nicht vorhanden",
   ]);
 });
 
