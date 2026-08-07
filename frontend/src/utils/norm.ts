@@ -89,7 +89,7 @@ export function getManifestationUrl(
  *   hash-only, absolute, or resource link).
  */
 export function getEinzelnormEIdFromHref(href: string): string | null {
-  const match = href.match(/^[^/#?:]+\/([^/#?]+)\.html$/);
+  const match = /^[^/#?:]+\/([^/#?]+)\.html$/.exec(href);
   return match?.[1] ?? null;
 }
 
