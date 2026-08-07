@@ -40,6 +40,7 @@ class CaseLawSchemaMapperTest {
         .otherHeadnote("Sonstiger Orientierungssatz")
         .otherLongText("Long text")
         .rechtsfrageGesamt("Rechtsfrage gesamt text")
+        .rechtsfrage("Rechtsfrage text")
         .caseFacts("Tatbestand")
         .outline("outlineTest")
         .judicialBody("judicial body")
@@ -152,6 +153,7 @@ class CaseLawSchemaMapperTest {
     assertThat(rechtsprechungSchema.letzteVeroeffentlichung())
         .isEqualTo(LocalDate.of(2026, Month.MARCH, 20));
     assertThat(rechtsprechungSchema.rechtsfrageGesamt()).isEqualTo("Rechtsfrage gesamt text");
+    assertThat(rechtsprechungSchema.rechtsfrage()).isEqualTo("Rechtsfrage text");
   }
 
   @Test

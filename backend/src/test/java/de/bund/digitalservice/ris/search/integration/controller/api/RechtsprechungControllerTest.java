@@ -101,6 +101,7 @@ class RechtsprechungControllerTest extends ContainersIntegrationBase {
             jsonPath("$.leitsatz", Matchers.is("Das ist der Leitsatz")),
             jsonPath("$.sonstigerLangtext", Matchers.is("Sonstiger Langtext")),
             jsonPath("$.rechtsfrageGesamt", Matchers.is("Rechtsfrage (gesamt)")),
+            jsonPath("$.rechtsfrage", Matchers.is("Rechtsfrage")),
             jsonPath("$.sonstigerOrientierungssatz", Matchers.is("Sonstiger Orientierungssatz")),
             jsonPath("$.tatbestand", Matchers.is("Example Tatbestand/CaseFacts. More background")),
             jsonPath("$.publicationStatus").doesNotExist(),

@@ -2343,6 +2343,10 @@
             "type" : "string",
             "description" : "Rechtsfrage (gesamt)"
           },
+          "rechtsfrage" : {
+            "type" : "string",
+            "description" : "Rechtsfrage"
+          },
           "tenor" : {
             "type" : "string",
             "description" : "Tenor"

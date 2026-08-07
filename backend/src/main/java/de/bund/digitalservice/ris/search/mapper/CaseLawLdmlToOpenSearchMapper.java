@@ -115,6 +115,7 @@ public class CaseLawLdmlToOpenSearchMapper {
         .letzteVeroeffentlichung(
             DateUtils.nullSafeParseyyyyMMdd(risMeta.getLetzteVeroeffentlichungValue()))
         .erledigungsvermerk(extractErledigungsvermerk(meta))
+        .rechtsfrage(extractRechtsfrage(meta))
         .erstveroeffentlichung(
             manifestation == null
                 ? null
@@ -228,6 +229,14 @@ public class CaseLawLdmlToOpenSearchMapper {
     return extractDocumentaryShortTexts(meta)
         .map(DocumentaryShortTexts::getRisErledigungsvermerk)
         .map(DocumentaryShortTexts.RisErledigungsvermerk::getContent)
+        .map(CaseLawLdmlToOpenSearchMapper::sanitize)
+        .orElse(null);
+  }
+
+  private static String extractRechtsfrage(Meta meta) {
+    return extractDocumentaryShortTexts(meta)
+        .map(DocumentaryShortTexts::getRisRechtsfrage)
+        .map(DocumentaryShortTexts.RisRechtsfrage::getContent)
         .map(CaseLawLdmlToOpenSearchMapper::sanitize)
         .orElse(null);
   }

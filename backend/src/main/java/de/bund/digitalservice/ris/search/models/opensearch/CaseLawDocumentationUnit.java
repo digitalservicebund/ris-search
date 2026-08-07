@@ -67,6 +67,7 @@ public record CaseLawDocumentationUnit(
     @ElementCollection @Field(name = Fields.DEFINITIONEN) List<String> definitionen,
     @Field(name = Fields.ERLEDIGUNG) String erledigung,
     @Field(name = Fields.ERLEDIGUNGSVERMERK) String erledigungsvermerk,
+    @Field(name = Fields.RECHTSFRAGE) String rechtsfrage,
     @Field(name = Fields.ERSTVEROEFFENTLICHUNG, type = FieldType.Date, format = DateFormat.date)
         LocalDate erstveroeffentlichung,
     @JsonIgnore @Field(name = Fields.DOCUMENTATION_OFFICE) String documentationOffice,
@@ -161,6 +162,7 @@ public record CaseLawDocumentationUnit(
     public static final String VORABDOKUMENT = "vorabdokument";
     public static final String ERLEDIGUNG = "erledigung";
     public static final String ERLEDIGUNGSVERMERK = "erledigungsvermerk";
+    public static final String RECHTSFRAGE = "rechtsfrage";
     public static final String ERSTVEROEFFENTLICHUNG = "erstveroeffentlichung";
   }
 }

@@ -470,6 +470,10 @@
         "rechtsfrage_gesamt": {
           "type": "text",
           "analyzer": "custom_german_analyzer"
+        },
+        "rechtsfrage": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
         }
       }
     }

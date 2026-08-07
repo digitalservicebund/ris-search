@@ -24,6 +24,9 @@ public class DocumentaryShortTexts {
   @XmlElement(name = "erledigungsvermerk", namespace = CaseLawLdmlNamespaces.RIS_NS)
   private RisErledigungsvermerk risErledigungsvermerk;
 
+  @XmlElement(name = "rechtsfrage", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  private RisRechtsfrage risRechtsfrage;
+
   /** List of decision names (Entscheidungsnamen). */
   @XmlElementWrapper(name = "entscheidungsnamen", namespace = CaseLawLdmlNamespaces.RIS_NS)
   @XmlElement(name = "entscheidungsname", namespace = CaseLawLdmlNamespaces.RIS_NS)
@@ -65,6 +68,14 @@ public class DocumentaryShortTexts {
   @Getter
   @Setter
   public static class RisErledigungsvermerk {
+    @XmlPath(".")
+    private JaxbHtml content;
+  }
+
+  /** Represents the legal question (Rechtsfrage) of a pending proceeding. */
+  @Getter
+  @Setter
+  public static class RisRechtsfrage {
     @XmlPath(".")
     private JaxbHtml content;
   }

@@ -62,6 +62,7 @@ class CaseLawLdmlToOpenSearchMapperTest {
     assertThat(caseLaw.letzteVeroeffentlichung()).isEqualTo(LocalDate.of(2026, Month.MARCH, 20));
     assertThat(caseLaw.erledigungsvermerk()).isEqualTo("Erledigungsvermerk");
     assertThat(caseLaw.rechtsfrageGesamt()).isEqualTo("Rechtsfrage (gesamt)");
+    assertThat(caseLaw.rechtsfrage()).isEqualTo("Rechtsfrage");
     assertThat(caseLaw.erstveroeffentlichung()).isEqualTo(LocalDate.of(2026, Month.MARCH, 18));
   }
 

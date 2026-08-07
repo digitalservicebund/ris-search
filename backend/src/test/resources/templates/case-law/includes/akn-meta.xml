@@ -132,6 +132,9 @@
         <ris:erledigungsvermerk domainTerm="Erledigungsvermerk">
             <akn:p>Erledigungsvermerk</akn:p>
         </ris:erledigungsvermerk>
+        <ris:rechtsfrage domainTerm="Rechtsfrage">
+            <akn:p alternativeTo="textWrapper">Rechtsfrage</akn:p>
+        </ris:rechtsfrage>
     </ris:dokumentarischeKurztexte>
 </akn:otherAnalysis>
 </akn:analysis>
