@@ -8,15 +8,12 @@ const nuxtLinkStub = {
   props: ["to"],
 };
 
-const iconStub = { template: "<span />" };
-
 function renderComponent(items: DetailsListItem[]) {
   return render(DetailsList, {
     props: { items },
     global: {
       stubs: {
         NuxtLink: nuxtLinkStub,
-        IcOutlineFileDownload: iconStub,
       },
     },
   });

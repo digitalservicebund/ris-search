@@ -87,7 +87,6 @@ const visibleItems = computed(() =>
         class="typo-label1-regular col-span-12 md:col-span-9 md:col-start-4 lg:col-span-6 lg:col-start-4"
         :class="item.htmlClass"
       >
-        <!-- eslint-disable-next-line vue/no-v-html -->
         <div v-html="item.html" />
       </dd>
 
