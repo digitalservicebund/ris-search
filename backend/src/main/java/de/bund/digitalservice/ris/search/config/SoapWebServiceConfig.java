@@ -16,12 +16,12 @@ import org.springframework.ws.transport.http.MessageDispatcherServlet;
  * {@link MessageDispatcherServlet} to manage incoming SOAP requests and define WSDL-related
  * transformations with a specific URL mapping.
  *
- * <p>The class is activated in the "prototype" and "default" application profiles. It ensures that
- * SOAP service endpoints are correctly exposed and their locations are properly transformed.
+ * <p>The class is activated in the "prototype" and "dev" application profiles. It ensures that SOAP
+ * service endpoints are correctly exposed and their locations are properly transformed.
  */
 @EnableWs
 @Configuration
-@Profile({"prototype", "default"})
+@Profile({"prototype", "dev"})
 public class SoapWebServiceConfig {
 
   /**

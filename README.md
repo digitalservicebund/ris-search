@@ -144,7 +144,6 @@ Additional guides:
 
 - [Container image](./doc/readme/container-image.md)
 - [Vulnerability scanning](./doc/readme/vulnerability-scan.md)
-- [Dump case law data to OpenSearch](./doc/readme/dump-caselaw-to-opensearch.md)
 - [OpenSearch index swap](./doc/readme/opensearch-index-swap.md)
 - [API keys](./doc/readme/api-keys.md)
 

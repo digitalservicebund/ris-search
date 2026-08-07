@@ -48,14 +48,14 @@ public class SecurityConfig {
   }
 
   /**
-   * Configures and builds a security filter chain for the "default" and "test" profiles. This
-   * filter chain allows unrestricted access to all requests and applies common security headers.
+   * Configures and builds a security filter chain for the "dev" and "test" profiles. This filter
+   * chain allows unrestricted access to all requests and applies common security headers.
    *
    * @param http the {@link HttpSecurity} object used to define security configurations
    * @return a {@link SecurityFilterChain} instance representing the configured HTTP security filter
    */
   @Bean
-  @Profile({"default", "test"})
+  @Profile({"dev", "test"})
   public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) {
     http.authorizeHttpRequests(requests -> requests.anyRequest().permitAll());
     applyCommonConfiguration(http);
