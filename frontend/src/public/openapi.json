@@ -2430,6 +2430,11 @@
             "format" : "date",
             "description" : "Langtextdatum"
           },
+          "letzteVeroeffentlichung" : {
+            "type" : "string",
+            "format" : "date",
+            "description" : "Letzte Veröffentlichung"
+          },
           "erledigungsvermerk" : {
             "type" : "string",
             "description" : "Erledigungsvermerk"

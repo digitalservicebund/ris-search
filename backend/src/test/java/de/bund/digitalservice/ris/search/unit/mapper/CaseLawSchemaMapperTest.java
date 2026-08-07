@@ -58,6 +58,7 @@ class CaseLawSchemaMapperTest {
         .erledigung("Ja")
         .hasLegislativeMandate("Ja")
         .langtextdatum(LocalDate.of(2016, Month.JUNE, 15))
+        .letzteVeroeffentlichung(LocalDate.of(2026, Month.MARCH, 20))
         .erledigungsvermerk("Erledigungsvermerk")
         .erstveroeffentlichung(LocalDate.of(2026, Month.MARCH, 18))
         .build();
@@ -147,6 +148,8 @@ class CaseLawSchemaMapperTest {
         .isEqualTo(LocalDate.of(2026, Month.MARCH, 18));
     assertThat(rechtsprechungSchema.gesetzgebungsauftrag()).isEqualTo("Ja");
     assertThat(rechtsprechungSchema.langtextdatum()).isEqualTo(LocalDate.of(2016, Month.JUNE, 15));
+    assertThat(rechtsprechungSchema.letzteVeroeffentlichung())
+        .isEqualTo(LocalDate.of(2026, Month.MARCH, 20));
   }
 
   @Test

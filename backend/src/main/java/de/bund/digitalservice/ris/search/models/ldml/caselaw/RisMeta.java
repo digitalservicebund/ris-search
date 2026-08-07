@@ -91,6 +91,9 @@ public class RisMeta {
   @XmlElement(name = "person", namespace = CaseLawLdmlNamespaces.RIS_NS)
   private List<RisPerson> risPersonen;
 
+  @XmlElement(name = "FRBRdate", namespace = CaseLawLdmlNamespaces.AKN_NS)
+  private List<FrbrDate> risFrbrDates;
+
   public String getCourtKeyword() {
     return risGericht.getShowAs();
   }
@@ -128,5 +131,26 @@ public class RisMeta {
         .filter(person -> eId.equals(person.getEId()))
         .map(person -> person.getShowAs() != null ? person.getShowAs() : person.getName())
         .findFirst();
+  }
+
+  /**
+   * Looks up an embedded akn:FRBRdate's value by its {@code name} attribute.
+   *
+   * @param name the name attribute of the date to look up
+   * @return the date value, or {@code null} if not present
+   */
+  public String getDateByName(String name) {
+    if (risFrbrDates == null) {
+      return null;
+    }
+    return risFrbrDates.stream()
+        .filter(d -> name.equalsIgnoreCase(d.getName()))
+        .map(FrbrDate::getDate)
+        .findFirst()
+        .orElse(null);
+  }
+
+  public String getLetzteVeroeffentlichungValue() {
+    return getDateByName("letzteVeroeffentlichung");
   }
 }

@@ -463,6 +463,9 @@
         },
         "langtextdatum": {
           "type": "date"
+        },
+        "letzte_veroeffentlichung": {
+          "type": "date"
         }
       }
     }
