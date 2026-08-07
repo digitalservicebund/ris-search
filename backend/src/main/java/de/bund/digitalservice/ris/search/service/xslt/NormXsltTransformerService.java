@@ -5,6 +5,7 @@ import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import de.bund.digitalservice.ris.search.service.exception.XMLElementNotFoundException;
 import de.bund.digitalservice.ris.search.utils.eli.EliFile;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
@@ -19,9 +20,6 @@ import org.springframework.web.util.UriUtils;
 /** Service for transforming LegalDocML norm and article documents to HTML using XSLT. */
 @Service
 public class NormXsltTransformerService extends XsltTransformer {
-
-  static final String DEBUGGING_FLAG = "debugging";
-  static final String DEBUGGING_VALUE = "false";
 
   private final NormsBucket normsBucket;
 
@@ -90,20 +88,19 @@ public class NormXsltTransformerService extends XsltTransformer {
   /**
    * Transforms a LegalDocML norm document.
    *
-   * @param source
-   * @param basePath
-   * @param resourcesBasePath
+   * @param source the xml file that will be transformed
+   * @param language This is the language from {@link
+   *     de.bund.digitalservice.ris.search.utils.eli.ManifestationEli#language()}.
+   * @param resourcesBasePath the base path of the resources. For example /v1/legislation/
+   * @param subtype This is the subtype from {@link
+   *     de.bund.digitalservice.ris.search.utils.eli.ManifestationEli#subtype()}.
    * @return the transformed norm as HTML string
    */
-  public String transformNorm(byte[] source, String basePath, String resourcesBasePath) {
-    Map<String, String> parameters =
-        Map.of(
-            "dokumentpfad",
-            basePath,
-            DEBUGGING_FLAG,
-            DEBUGGING_VALUE,
-            RESOURCE_PATH_KEY,
-            resourcesBasePath);
+  public String transformNorm(
+      byte[] source, String language, String resourcesBasePath, String subtype) {
+    var parameters = standardParameters(resourcesBasePath);
+    parameters.put("dokumentpfad", language);
+    parameters.put("subtype", subtype);
     return transformLegalDocMlFromBytes(source, parameters);
   }
 
@@ -111,33 +108,26 @@ public class NormXsltTransformerService extends XsltTransformer {
    * Transforms a LegalDocML article document. It is not guaranteed that an eId is encoded or not.
    * In case an identifier is not found a retry with a UTF-8 encoded identifier will be performed
    *
-   * @param source
-   * @param eId
-   * @param resourcesBasePath
+   * @param source the xml file that will be transformed
+   * @param eId the eid of the current article that is getting transformed
+   * @param resourcesBasePath the base path of the resources. For example /v1/legislation/
    * @return the transformed article as HTML string
    */
   public String transformArticle(byte[] source, String eId, String resourcesBasePath) {
+    var parameters = standardParameters(resourcesBasePath);
     try {
-      return transformLegalDocMlFromBytes(
-          source,
-          Map.of(
-              "article-eid",
-              eId,
-              DEBUGGING_FLAG,
-              DEBUGGING_VALUE,
-              RESOURCE_PATH_KEY,
-              resourcesBasePath));
+      parameters.put("article-eid", eId);
+      return transformLegalDocMlFromBytes(source, parameters);
     } catch (XMLElementNotFoundException ex) {
       String encodedId = UriUtils.encode(eId, StandardCharsets.UTF_8).toLowerCase(Locale.ROOT);
-      return transformLegalDocMlFromBytes(
-          source,
-          Map.of(
-              "article-eid",
-              encodedId,
-              DEBUGGING_FLAG,
-              DEBUGGING_VALUE,
-              RESOURCE_PATH_KEY,
-              resourcesBasePath));
+      parameters.put("article-eid", encodedId);
+      return transformLegalDocMlFromBytes(source, parameters);
     }
+  }
+
+  private Map<String, String> standardParameters(String resourcesBasePath) {
+    return new HashMap<>(
+        Map.ofEntries(
+            Map.entry("debugging", "false"), Map.entry("ressourcenpfad", resourcesBasePath)));
   }
 }

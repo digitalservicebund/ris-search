@@ -31,6 +31,8 @@
     <xsl:variable name="is-single-article" as="xs:boolean" select="$article-eid != ''"/>
     <!-- override param in inhalt.xsl -->
     <xsl:param name="erlaube-links-in-heading" select="$is-single-article"/>
+    <!-- subtype for the norm expression -->
+    <xsl:param name="subtype" as="xs:string" select="'/regelungstext-1'"/>
 
     <!-- File paths for debug output -->
     <xsl:variable name="quellpfad" select="base-uri(.)"/>
@@ -105,7 +107,7 @@
         <xsl:sequence select="akn:gliederungskommentar('Eingangsformel (akn:formula)')"/>
         <section class="{$eingangsformel}">
             <xsl:apply-templates select="@*"/>
-            <a href="{concat($dokumentpfad, '/', @eId)}">
+            <a href="{concat($subtype, '/', @eId,'.html')}">
                 <h2 class="{$einzelvorschrift}">
                     <span class="akn-heading">
                         Eingangsformel
@@ -120,7 +122,7 @@
         <div>
             <xsl:apply-templates select="@*" />
             <!-- wrap h2 in link that points to $dokumentpfad/@eId -->
-            <a href="{concat($dokumentpfad, '/', @eId)}">
+            <a href="{concat($subtype, '/', @eId,'.html')}">
                 <xsl:call-template name="num-and-heading-h2"/>
             </a>
             <!-- process remaining elements -->
@@ -225,7 +227,7 @@
         <xsl:sequence select="akn:gliederungskommentar('Regelungstext-Schluss (akn:conclusions)')"/>
         <section class="{$regelungstext-schluss}">
             <xsl:apply-templates select="@*"/>
-            <a href="{concat($dokumentpfad, '/', @eId)}">
+            <a href="{concat($subtype, '/', @eId,'.html')}">
                 <h2 class="{$einzelvorschrift}">
                     <span class="akn-heading">
                         Schlussformel
@@ -269,7 +271,7 @@
         <xsl:param name="attachment-eId" tunnel="yes"/>
         <xsl:choose>
             <xsl:when test="not($is-single-article)">
-                <a href="{concat($dokumentpfad, '/', $attachment-eId)}">
+                <a href="{concat($subtype, '/', $attachment-eId,'.html')}">
                     <h2 class="{$einzelvorschrift}">
                         <xsl:apply-templates/>
                     </h2>
@@ -296,7 +298,7 @@
         <div class="akn-doc" data-name="offene-struktur">
         <xsl:choose>
             <xsl:when test="not($is-single-article)">
-                <a href="{concat($dokumentpfad, '/', $attachment-eId)}">
+                <a href="{concat($subtype, '/', $attachment-eId,'.html')}">
                     <h2 class="{$einzelvorschrift}">
                         Anlage
                     </h2>

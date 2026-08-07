@@ -33,37 +33,56 @@ class NormXsltTransformerServiceTest {
   private final NormXsltTransformerService service =
       new NormXsltTransformerService(normsBucketMock);
 
-  String resourcesPath = getClass().getResource("/data/XsltTransformerServiceTest/").getPath();
+  private final String resourcesPath =
+      getClass().getResource("/data/XsltTransformerServiceTest/").getPath();
+
+  final Function<String, ResponseInputStream<GetObjectResponse>> makeInputStream =
+      filename -> {
+        try {
+          final var allBytes = Files.readAllBytes(Path.of(resourcesPath, filename));
+          final var stream = new ByteArrayInputStream(allBytes);
+          return new ResponseInputStream<>(mock(GetObjectResponse.class), stream);
+        } catch (IOException e) {
+          throw new RuntimeException(e);
+        }
+      };
 
   @ParameterizedTest(name = "{2}")
   @CsvSource({
-    "twoParagraphArticle.xml, twoParagraphArticle.html,                               Should transform an article with two paragraphs",
-    "list.xml, list.html,                                                             Should transform list to HTML",
-    "fullDepthArticle.xml, fullDepthArticle.html,                                     Should transform full depth article to HTML",
-    "nestedArticles.xml, nestedArticles.html,                                         Should transform articles at every level to HTML",
-    "formatting.xml, formatting.html,                                                 Should transform an article with formatting to HTML",
-    "heading.xml, heading.html,                                                       Should transform a heading with marker inside",
-    "authorialNote.xml, authorialNote.html,                                           Should transform authorialNotes to HTML",
-    "authorialNoteWithPlacementBase.xml, authorialNoteWithPlacementBase.html,         Should transform authorialNotes with placementBase",
-    "authorialNoteInDocTitle.xml, authorialNoteInDocTitle.html,                       Should transform authorialNotes in title",
-    "authorialNoteInDoc.xml, authorialNoteInDoc.html,                                 Should transform authorialNotes in attachment body",
-    "notes.xml, notes.html,                                                           Should transform notes",
-    "image.xml, image.html,                                                           Should transform img tag",
-    "pdf.xml, pdf.html,                                                               Should transform links with pdf file",
-    "noPdfLinks.xml, noPdfLinks.html,                                                 Should not apply any special transformation to non-pdf links",
-    "container.xml, container.html,                                                   Should transform container elements in the preface",
-    "preambleFormula.xml, preambleFormula.html,                                       Should transform a preamble formula",
-    "conclusionsFormula.xml, conclusionsFormula.html,                                 Should transform a conclusions formula",
-    "blockList.xml, blockList.html,                                                   Should transform a blockList",
-    "preformatted.xml, preformatted.html,                                             Should transform preformatted paragraphs",
-    "proprietary.xml, proprietary.html,                                               Should transform proprietary metadata",
-    "anlage-regelungstext-without-title.xml, anlage-regelungstext-without-title.html, Should transform an attachment without title",
+    "main,         twoParagraphArticle.xml, twoParagraphArticle.html,                               Should transform an article with two paragraphs",
+    "main,         list.xml, list.html,                                                             Should transform list to HTML",
+    "main,         fullDepthArticle.xml, fullDepthArticle.html,                                     Should transform full depth article to HTML",
+    "main,         nestedArticles.xml, nestedArticles.html,                                         Should transform articles at every level to HTML",
+    "main,         formatting.xml, formatting.html,                                                 Should transform an article with formatting to HTML",
+    "main,         heading.xml, heading.html,                                                       Should transform a heading with marker inside",
+    "main,         authorialNote.xml, authorialNote.html,                                           Should transform authorialNotes to HTML",
+    "main,         authorialNoteWithPlacementBase.xml, authorialNoteWithPlacementBase.html,         Should transform authorialNotes with placementBase",
+    "main,         authorialNoteInDocTitle.xml, authorialNoteInDocTitle.html,                       Should transform authorialNotes in title",
+    "attachment,   authorialNoteInDocParent.xml, authorialNoteInDoc.html,                           Should transform authorialNotes in attachment body",
+    "main,         notes.xml, notes.html,                                                           Should transform notes",
+    "main,         image.xml, image.html,                                                           Should transform img tag",
+    "main,         pdf.xml, pdf.html,                                                               Should transform links with pdf file",
+    "main,         noPdfLinks.xml, noPdfLinks.html,                                                 Should not apply any special transformation to non-pdf links",
+    "main,         container.xml, container.html,                                                   Should transform container elements in the preface",
+    "main,         preambleFormula.xml, preambleFormula.html,                                       Should transform a preamble formula",
+    "main,         conclusionsFormula.xml, conclusionsFormula.html,                                 Should transform a conclusions formula",
+    "main,         blockList.xml, blockList.html,                                                   Should transform a blockList",
+    "main,         preformatted.xml, preformatted.html,                                             Should transform preformatted paragraphs",
+    "main,         proprietary.xml, proprietary.html,                                               Should transform proprietary metadata"
   })
   void testTransformNormLegalDocMlFull(
-      String inputFileName, String expectedFileName, String testName) throws IOException {
+      String type, String inputFileName, String expectedFileName, String testName)
+      throws IOException, NoSuchKeyException {
     byte[] bytes = Files.readAllBytes(Path.of(resourcesPath, inputFileName));
 
-    var result = service.transformNorm(bytes, "subtype", RESOURCES_BASE_PATH);
+    when(normsBucketMock.getStream(
+            "eli/bund/bgbl-1/0000/s1000/2000-01-01/1/deu/2000-01-01/authorialNoteInDocAttachment.xml"))
+        .thenReturn(makeInputStream.apply("authorialNoteInDocAttachment.xml"));
+
+    var result =
+        type.equals("attachment")
+            ? service.transformArticle(bytes, "anlagen-n1_anlage-n1", RESOURCES_BASE_PATH)
+            : service.transformNorm(bytes, "deu", RESOURCES_BASE_PATH, "regelungstext-1");
 
     var outputSettings =
         new Document.OutputSettings()
@@ -94,17 +113,6 @@ class NormXsltTransformerServiceTest {
   void testTransformNormWithAttachments() throws IOException, NoSuchKeyException {
     byte[] bytes = Files.readAllBytes(Path.of(resourcesPath, "attachments.xml"));
 
-    final Function<String, ResponseInputStream<GetObjectResponse>> makeInputStream =
-        filename -> {
-          try {
-            final var allBytes = Files.readAllBytes(Path.of(resourcesPath, filename));
-            final var stream = new ByteArrayInputStream(allBytes);
-            return new ResponseInputStream<>(mock(GetObjectResponse.class), stream);
-          } catch (IOException e) {
-            throw new RuntimeException(e);
-          }
-        };
-
     when(normsBucketMock.getStream(
             "eli/bund/bgbl-1/0000/s1000/2000-01-01/1/deu/2000-01-01/anlage-regelungstext-1.xml"))
         .thenReturn(makeInputStream.apply("anlage-regelungstext-1.xml"));
@@ -112,7 +120,8 @@ class NormXsltTransformerServiceTest {
             "eli/bund/bgbl-1/0000/s1000/2000-01-01/1/deu/2000-01-01/anlage-regelungstext-2.xml"))
         .thenReturn(makeInputStream.apply("anlage-regelungstext-2.xml"));
 
-    var actualHtml = service.transformNorm(bytes, "subtype", RESOURCES_BASE_PATH);
+    var actualHtml =
+        service.transformNorm(bytes, "subtype", RESOURCES_BASE_PATH, "regelungstext-1");
 
     var expectedHtml = Files.readString(Path.of(resourcesPath, "attachments.html"));
     var expectedDocument = Jsoup.parse(expectedHtml);
@@ -130,7 +139,7 @@ class NormXsltTransformerServiceTest {
     FileTransformationException exception =
         Assertions.assertThrows(
             FileTransformationException.class,
-            () -> service.transformNorm(bytes, "subtype", RESOURCES_BASE_PATH));
+            () -> service.transformNorm(bytes, "subtype", RESOURCES_BASE_PATH, "regelungstext-1"));
     assertThat(exception.getMessage()).endsWith("anlage-regelungstext-1.xml");
   }
 
@@ -187,7 +196,7 @@ class NormXsltTransformerServiceTest {
         Files.readAllBytes(
             Path.of(
                 "src/test/resources/data/LDML/norm/eli/bund/bgbl-1/1991/s101/1991-01-01/1/deu/1991-01-01/regelungstext-1.xml"));
-    var html = service.transformNorm(xml, "subtype", RESOURCES_BASE_PATH);
+    var html = service.transformNorm(xml, "subtype", RESOURCES_BASE_PATH, "regelungstext-1");
     var expectedToc =
         """
         <div class="level-1">
