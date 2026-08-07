@@ -100,6 +100,7 @@ class RechtsprechungControllerTest extends ContainersIntegrationBase {
             jsonPath("$.datum", Matchers.is("2023-01-02")),
             jsonPath("$.leitsatz", Matchers.is("Das ist der Leitsatz")),
             jsonPath("$.sonstigerLangtext", Matchers.is("Sonstiger Langtext")),
+            jsonPath("$.rechtsfrageGesamt", Matchers.is("Rechtsfrage (gesamt)")),
             jsonPath("$.sonstigerOrientierungssatz", Matchers.is("Sonstiger Orientierungssatz")),
             jsonPath("$.tatbestand", Matchers.is("Example Tatbestand/CaseFacts. More background")),
             jsonPath("$.publicationStatus").doesNotExist(),

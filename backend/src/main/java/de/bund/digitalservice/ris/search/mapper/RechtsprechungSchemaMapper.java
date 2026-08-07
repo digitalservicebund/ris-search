@@ -37,6 +37,7 @@ public class RechtsprechungSchemaMapper {
         .orientierungssatz(doc.headnote())
         .sonstigerOrientierungssatz(doc.otherHeadnote())
         .sonstigerLangtext(doc.otherLongText())
+        .rechtsfrageGesamt(doc.rechtsfrageGesamt())
         .tenor(doc.tenor())
         .datum(doc.decisionDate())
         .aktenzeichen(doc.fileNumber())

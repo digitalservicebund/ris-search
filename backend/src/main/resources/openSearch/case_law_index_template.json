@@ -466,6 +466,10 @@
         },
         "letzte_veroeffentlichung": {
           "type": "date"
+        },
+        "rechtsfrage_gesamt": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
         }
       }
     }

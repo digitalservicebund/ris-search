@@ -34,6 +34,7 @@ public record CaseLawDocumentationUnit(
     @Field(name = Fields.HEADNOTE) String headnote,
     @Field(name = Fields.OTHER_HEADNOTE) String otherHeadnote,
     @Field(name = Fields.OTHER_LONG_TEXT) String otherLongText,
+    @Field(name = Fields.RECHTSFRAGE_GESAMT) String rechtsfrageGesamt,
     @Field(name = Fields.TENOR, type = FieldType.Text) String tenor,
     @Field(name = Fields.DECISION_DATE, type = FieldType.Date, format = DateFormat.date)
         LocalDate decisionDate,
@@ -118,6 +119,7 @@ public record CaseLawDocumentationUnit(
     public static final String HEADNOTE = "headnote";
     public static final String OTHER_HEADNOTE = "other_headnote";
     public static final String OTHER_LONG_TEXT = "other_long_text";
+    public static final String RECHTSFRAGE_GESAMT = "rechtsfrage_gesamt";
     public static final String TENOR = "tenor";
     public static final String DECISION_DATE = "decision_date";
     public static final String FILE_NUMBER = "file_number";

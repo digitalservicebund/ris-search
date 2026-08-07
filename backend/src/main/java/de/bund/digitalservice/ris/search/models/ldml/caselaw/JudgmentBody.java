@@ -48,6 +48,9 @@ public class JudgmentBody {
   @XmlPath("akn:motivation[starts-with(@ris:domainTerm, 'Rechtsfrage')]")
   private JaxbHtml rechtsfrage;
 
+  @XmlPath("akn:motivation[@ris:domainTerm='Rechtsfrage (gesamt)']")
+  private JaxbHtml rechtsfrageGesamt;
+
   @XmlPath("akn:motivation[@ris:domainTerm='Sonstiger Langtext']")
   private JaxbHtml sonstigerLangtext;
 

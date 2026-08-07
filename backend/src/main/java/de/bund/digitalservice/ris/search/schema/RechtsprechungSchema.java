@@ -27,6 +27,7 @@ public record RechtsprechungSchema(
     @Schema(description = "Orientierungssatz") String orientierungssatz,
     @Schema(description = "Sonstiger Orientierungssatz") String sonstigerOrientierungssatz,
     @Schema(description = "Sonstiger Langtext") String sonstigerLangtext,
+    @Schema(description = "Rechtsfrage (gesamt)") String rechtsfrageGesamt,
     @Schema(description = "Tenor") String tenor,
     @Schema(description = "Datum", requiredMode = Schema.RequiredMode.REQUIRED) LocalDate datum,
     @Schema(description = "Abweichende Daten") List<LocalDate> abweichendeDaten,

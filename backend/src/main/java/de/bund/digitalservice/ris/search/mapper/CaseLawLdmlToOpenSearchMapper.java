@@ -100,6 +100,7 @@ public class CaseLawLdmlToOpenSearchMapper {
         .decisionGrounds(sanitize(judgmentBody.getEntscheidungsgruende()))
         .grounds(sanitize(judgmentBody.getGruende()))
         .otherLongText(sanitize(judgmentBody.getSonstigerLangtext()))
+        .rechtsfrageGesamt(sanitize(judgmentBody.getRechtsfrageGesamt()))
         .dissentingOpinion(judgmentBody.getFormattedAbweichendeMeinung(risMeta).orElse(null))
         .abweichendeDaten(risMeta.getRisAbweichendeDaten())
         .abweichendeEclis(risMeta.getRisAbweichendeEclis())

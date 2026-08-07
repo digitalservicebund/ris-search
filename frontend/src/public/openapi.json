@@ -2339,6 +2339,10 @@
             "type" : "string",
             "description" : "Sonstiger Langtext"
           },
+          "rechtsfrageGesamt" : {
+            "type" : "string",
+            "description" : "Rechtsfrage (gesamt)"
+          },
           "tenor" : {
             "type" : "string",
             "description" : "Tenor"
