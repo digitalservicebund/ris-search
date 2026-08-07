@@ -76,7 +76,7 @@ jobs:
       - name: Start backend locally (background)
         working-directory: ./backend
         env:
-          SPRING_PROFILES_ACTIVE: e2e,default
+          SPRING_PROFILES_ACTIVE: dev,e2e
           OPENSEARCH_HOST: opensearch # use service name because it's inside the docker network
           GRADLE_USER_HOME: ${{ github.workspace }}/.gradle-cache
           THC_PORT: 8090

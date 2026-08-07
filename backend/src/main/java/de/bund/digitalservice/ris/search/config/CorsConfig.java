@@ -72,7 +72,7 @@ public class CorsConfig {
    * @return The web mvc configurer
    */
   @Bean
-  @Profile({"e2e", "prototype", "dev"})
+  @Profile({"prototype", "dev"})
   public WebMvcConfigurer publicCorsConfigurer() {
 
     return new WebMvcConfigurer() {

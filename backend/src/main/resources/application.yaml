@@ -2,20 +2,6 @@ spring:
   profiles:
     # all environments override this property, so it's only used locally.
     default: dev
-  jpa:
-    properties:
-      hibernate:
-        ddl-auto: none
-  datasource:
-    hikari:
-      connection-test-query: SELECT 1 FROM DUAL
-      connection-timeout: 600000
-      maximum-pool-size: 500
-      max-lifetime: 1800000
-      minimum-idle: 20
-      validation-timeout: 3000
-      idle-timeout: 60000
-
 
 server:
   port: 8080
