@@ -4,7 +4,8 @@
             <akn:FRBRuri value="{% if documentNumber %}{{documentNumber}}{% else %}testDocNumber{% endif %}"/>
             <akn:FRBRalias name="Übergreifende ID" value="testUUID"/>
             <akn:FRBRalias name="Dokumentnummer" value="{% if documentNumber %}{{documentNumber}}{% else %}testDocNumber{% endif %}"/>
-            <akn:FRBRalias name="ecli" value="{% if ecli %}{{ ecli }}{% else %}testEcli{% endif %}"/>
+            <akn:FRBRalias name="ecli" value="{% if ecli %}{{ ecli }}{% else %}testEcli{% endif %}" showAs="ECLI"/>
+            <akn:FRBRalias name="celex" value="testCelex" showAs="CELEX"/>
             <akn:FRBRalias eId="aktenzeichen" name="Aktenzeichen" value="fileNumber test"/>
             <akn:FRBRdate eId="entscheidungsdatum" date="{% if decisionDate %}{{ decisionDate }}{% else %}2020-01-01{% endif %}" name="Entscheidungsdatum"/>
             <akn:FRBRauthor href="#organisation-gericht-courttype-courtlocation"/>
@@ -21,6 +22,7 @@
             <akn:FRBRthis value="{% if documentNumber %}{{documentNumber}}{% else %}testDocNumber{% endif %}.xml"/>
             <akn:FRBRuri value="{% if documentNumber %}{{documentNumber}}{% else %}testDocNumber{% endif %}.xml"/>
             <akn:FRBRdate date="2020-01-01" name="XML Transformation"/>
+            <akn:FRBRdate date="2026-03-18" name="erstveroeffentlichung" showAs="Erstveröffentlichung"/>
             <akn:FRBRauthor href="#documentationoffice-dokumentationsstelle"/>
         </akn:FRBRManifestation>
 </akn:identification>
@@ -127,6 +129,12 @@
         <ris:entscheidungsnamen domainTerm="Entscheidungsnamen">
             <ris:entscheidungsname domainTerm="Entscheidungsname">Test decision name</ris:entscheidungsname>
         </ris:entscheidungsnamen>
+        <ris:erledigungsvermerk domainTerm="Erledigungsvermerk">
+            <akn:p>Erledigungsvermerk</akn:p>
+        </ris:erledigungsvermerk>
+        <ris:rechtsfrage domainTerm="Rechtsfrage">
+            <akn:p alternativeTo="textWrapper">Rechtsfrage</akn:p>
+        </ris:rechtsfrage>
     </ris:dokumentarischeKurztexte>
 </akn:otherAnalysis>
 </akn:analysis>
@@ -138,6 +146,36 @@
 </akn:references>
 <akn:proprietary source="#ris">
     <ris:meta>
+        <ris:abweichendeDaten domainTerm="Abweichende Daten">
+            <ris:abweichendesDatum domainTerm="Abweichendes Datum">2020-03-03</ris:abweichendesDatum>
+            <ris:abweichendesDatum domainTerm="Abweichendes Datum">2022-02-04</ris:abweichendesDatum>
+        </ris:abweichendeDaten>
+        <ris:abweichendeEclis domainTerm="Abweichende ECLIs">
+            <ris:abweichenderEcli domainTerm="Abweichender ECLI">ECLI 1</ris:abweichenderEcli>
+            <ris:abweichenderEcli domainTerm="Abweichender ECLI">ECLI 2</ris:abweichenderEcli>
+        </ris:abweichendeEclis>
+        <ris:berufsbilder domainTerm="Berufsbilder">
+            <ris:berufsbild domainTerm="Berufsbild">jobProfile test 1</ris:berufsbild>
+            <ris:berufsbild domainTerm="Berufsbild">jobProfile test 2</ris:berufsbild>
+        </ris:berufsbilder>
+        <ris:kuendigungsarten domainTerm="Kündigungsarten">
+            <ris:kuendigungsart domainTerm="Kündigungsart">dismissalType test</ris:kuendigungsart>
+        </ris:kuendigungsarten>
+        <ris:fehlerhafteGerichte domainTerm="Fehlerhafte Gerichte">
+            <ris:fehlerhaftesGericht domainTerm="Fehlerhaftes Gericht">deviating court 1</ris:fehlerhaftesGericht>
+            <ris:fehlerhaftesGericht domainTerm="Fehlerhaftes Gericht">deviating court 2</ris:fehlerhaftesGericht>
+        </ris:fehlerhafteGerichte>
+        <ris:datenDerMuendlichenVerhandlung domainTerm="Daten der mündlichen Verhandlung">
+            <ris:datumDerMuendlichenVerhandlung domainTerm="Datum der mündlichen Verhandlung">2021-02-03</ris:datumDerMuendlichenVerhandlung>
+        </ris:datenDerMuendlichenVerhandlung>
+        <ris:definitionen domainTerm="Definitionen">
+            <ris:definition domainTerm="Definition">
+                <ris:definierterBegriff domainTerm="Definierter Begriff">indirekte Steuern</ris:definierterBegriff>
+            </ris:definition>
+            <ris:definition domainTerm="Definition">
+                <ris:definierterBegriff domainTerm="Definierter Begriff">Sachgesamtheit</ris:definierterBegriff>
+            </ris:definition>
+        </ris:definitionen>
         <ris:decisionNames>
             <ris:decisionName>Test decision name</ris:decisionName>
         </ris:decisionNames>
@@ -149,17 +187,23 @@
         <ris:gericht domainTerm="Gericht" refersTo="#organisation-gericht-courttype-courtlocation" showAs="{% if courtLabel %}{{ courtLabel }}{% else %}Test court label{% endif %}">
             <ris:gerichtstyp domainTerm="Gerichtstyp">{% if courtType %}{{ courtType }}{% else %}Test court type{% endif %}</ris:gerichtstyp>
             <ris:gerichtsort domainTerm="Gerichtsort">{% if location %}{{ location }}{% else %}Test court location{% endif%}</ris:gerichtsort>
+            <ris:gerichtsbarkeit domainTerm="Gerichtsbarkeit">Test jurisdiction type</ris:gerichtsbarkeit>
             <ris:spruchkoerper domainTerm="Spruchkörper" refersTo="#spruchkoerper">Test judicial body</ris:spruchkoerper>
         </ris:gericht>
         <ris:legalForces>
             <ris:legalForce>Test legal force</ris:legalForce>
         </ris:legalForces>
         <ris:legalEffect>JA</ris:legalEffect>
+        <ris:erledigung domainTerm="Erledigung">Ja</ris:erledigung>
+        <ris:gesetzgebungsauftrag domainTerm="Gesetzgebungsauftrag">Ja</ris:gesetzgebungsauftrag>
+        <ris:langtextdatum domainTerm="Langtextdatum">2016-06-15</ris:langtextdatum>
+        <akn:FRBRdate date="2026-03-20" name="letzteVeroeffentlichung" showAs="Letzte Veröffentlichung"/>
         <ris:fieldOfLaws>
             <ris:fieldOfLaw>Test field of law</ris:fieldOfLaw>
         </ris:fieldOfLaws>
         <ris:abweichendeDokumentnummern domainTerm="Abweichende Dokumentnummern">
-            <ris:abweichendeDokumentnummer domainTerm="Abweichende Dokumentnummer">Test deviatingDocumentNumber</ris:abweichendeDokumentnummer>
+            <ris:abweichendeDokumentnummer domainTerm="Abweichende Dokumentnummer">ABC</ris:abweichendeDokumentnummer>
+            <ris:abweichendeDokumentnummer domainTerm="Abweichende Dokumentnummer">DEF</ris:abweichendeDokumentnummer>
         </ris:abweichendeDokumentnummern>
         <ris:previousDecisions>
             <ris:previousDecision date="2009-06-25">

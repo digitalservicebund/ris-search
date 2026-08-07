@@ -23,6 +23,7 @@ public record CaseLawDocumentationUnit(
     @Field(name = Fields.DOCUMENT_NUMBER) String documentNumber,
     @Field(name = Literature.Fields.DOCUMENT_NUMBER_KEYWORD) String documentNumberKeyword,
     @Field(name = Fields.ECLI) String ecli,
+    @Field(name = Fields.CELEX) String celex,
     @Field(name = Fields.CASE_FACTS) String caseFacts,
     @Field(name = Fields.DECISION_GROUNDS) String decisionGrounds,
     @Field(name = Fields.DISSENTING_OPINION) String dissentingOpinion,
@@ -33,12 +34,15 @@ public record CaseLawDocumentationUnit(
     @Field(name = Fields.HEADNOTE) String headnote,
     @Field(name = Fields.OTHER_HEADNOTE) String otherHeadnote,
     @Field(name = Fields.OTHER_LONG_TEXT) String otherLongText,
+    @Field(name = Fields.RECHTSFRAGE_GESAMT) String rechtsfrageGesamt,
     @Field(name = Fields.TENOR, type = FieldType.Text) String tenor,
     @Field(name = Fields.DECISION_DATE, type = FieldType.Date, format = DateFormat.date)
         LocalDate decisionDate,
+    @Field(name = Fields.FILE_NUMBER) String fileNumber,
     @ElementCollection @Field(name = Fields.FILE_NUMBERS) List<String> fileNumbers,
     @Field(name = Fields.COURT_TYPE) String courtType,
     @Field(name = Fields.LOCATION) String location,
+    @Field(name = Fields.GERICHTSBARKEIT) String gerichtsbarkeit,
     @Field(name = Fields.DOCUMENT_TYPE) String documentType,
     @Field(name = Fields.OUTLINE) String outline,
     @Field(name = Fields.JUDICIAL_BODY) String judicialBody,
@@ -47,6 +51,25 @@ public record CaseLawDocumentationUnit(
     @ElementCollection @Field(name = Fields.DECISION_NAME) List<String> decisionName,
     @ElementCollection @Field(name = Fields.DEVIATING_DOCUMENT_NUMBER)
         List<String> deviatingDocumentNumber,
+    @ElementCollection
+        @Field(name = Fields.ABWEICHENDE_DATEN, type = FieldType.Date, format = DateFormat.date)
+        List<LocalDate> abweichendeDaten,
+    @ElementCollection @Field(name = Fields.ABWEICHENDE_ECLIS) List<String> abweichendeEclis,
+    @ElementCollection @Field(name = Fields.BERUFSBILDER) List<String> berufsbilder,
+    @ElementCollection @Field(name = Fields.KUENDIGUNGSARTEN) List<String> kuendigungsarten,
+    @ElementCollection @Field(name = Fields.FEHLERHAFTE_GERICHTE) List<String> fehlerhafteGerichte,
+    @ElementCollection
+        @Field(
+            name = Fields.DATEN_DER_MUENDLICHEN_VERHANDLUNG,
+            type = FieldType.Date,
+            format = DateFormat.date)
+        List<LocalDate> datenDerMuendlichenVerhandlung,
+    @ElementCollection @Field(name = Fields.DEFINITIONEN) List<String> definitionen,
+    @Field(name = Fields.ERLEDIGUNG) String erledigung,
+    @Field(name = Fields.ERLEDIGUNGSVERMERK) String erledigungsvermerk,
+    @Field(name = Fields.RECHTSFRAGE) String rechtsfrage,
+    @Field(name = Fields.ERSTVEROEFFENTLICHUNG, type = FieldType.Date, format = DateFormat.date)
+        LocalDate erstveroeffentlichung,
     @JsonIgnore @Field(name = Fields.DOCUMENTATION_OFFICE) String documentationOffice,
     @JsonIgnore @Field(name = Fields.LEGAL_EFFECT) String legalEffect,
     @JsonIgnore @ElementCollection @Field(name = Fields.PREVIOUS_DECISIONS)
@@ -55,7 +78,11 @@ public record CaseLawDocumentationUnit(
         List<String> ensuingDecisions,
     @JsonIgnore @ElementCollection @Field(name = Fields.PENDING_DECISIONS)
         List<String> pendingDecisions,
-    @JsonIgnore @Field(name = Fields.HAS_LEGISLATIVE_MANDATE) String hasLegislativeMandate,
+    @Field(name = Fields.HAS_LEGISLATIVE_MANDATE) String hasLegislativeMandate,
+    @Field(name = Fields.LANGTEXTDATUM, type = FieldType.Date, format = DateFormat.date)
+        LocalDate langtextdatum,
+    @Field(name = Fields.LETZTE_VEROEFFENTLICHUNG, type = FieldType.Date, format = DateFormat.date)
+        LocalDate letzteVeroeffentlichung,
     @JsonIgnore @Field(name = Fields.INDEXED_AT) String indexedAt,
     @Nullable @Field(name = Fields.ARTICLES) List<Article> articles,
     @Field(name = Fields.VORABDOKUMENT) boolean vorabdokument)
@@ -80,6 +107,8 @@ public record CaseLawDocumentationUnit(
     public static final String DOCUMENT_NUMBER = "document_number";
     public static final String DOCUMENT_NUMBER_KEYWORD = "document_number.keyword";
     public static final String ECLI = "ecli";
+    public static final String CELEX = "celex";
+    public static final String ABWEICHENDE_ECLIS = "abweichende_eclis";
     public static final String ECLI_KEYWORD = "ecli.keyword";
     public static final String CASE_FACTS = "case_facts";
     public static final String DECISION_GROUNDS = "decision_grounds";
@@ -91,8 +120,10 @@ public record CaseLawDocumentationUnit(
     public static final String HEADNOTE = "headnote";
     public static final String OTHER_HEADNOTE = "other_headnote";
     public static final String OTHER_LONG_TEXT = "other_long_text";
+    public static final String RECHTSFRAGE_GESAMT = "rechtsfrage_gesamt";
     public static final String TENOR = "tenor";
     public static final String DECISION_DATE = "decision_date";
+    public static final String FILE_NUMBER = "file_number";
     public static final String FILE_NUMBERS = "file_numbers";
     public static final String FILE_NUMBERS_KEYWORD = "file_numbers.keyword";
 
@@ -100,6 +131,7 @@ public record CaseLawDocumentationUnit(
     public static final String COURT_TYPE = "court_type";
 
     public static final String LOCATION = "location";
+    public static final String GERICHTSBARKEIT = "gerichtsbarkeit";
     public static final String DOCUMENT_TYPE = "document_type";
     public static final String OUTLINE = "outline";
     public static final String JUDICIAL_BODY = "judicial_body";
@@ -115,8 +147,22 @@ public record CaseLawDocumentationUnit(
     public static final String ENSUING_DECISIONS = "ensuing_decisions";
     public static final String PENDING_DECISIONS = "pending_decisions";
     public static final String HAS_LEGISLATIVE_MANDATE = "has_legislative_mandate";
+    public static final String LANGTEXTDATUM = "langtextdatum";
+    public static final String LETZTE_VEROEFFENTLICHUNG = "letzte_veroeffentlichung";
     public static final String INDEXED_AT = "indexed_at";
     public static final String ARTICLES = "articles";
+
+    public static final String ABWEICHENDE_DATEN = "abweichende_daten";
+    public static final String BERUFSBILDER = "berufsbilder";
+    public static final String KUENDIGUNGSARTEN = "kuendigungsarten";
+    public static final String FEHLERHAFTE_GERICHTE = "fehlerhafte_gerichte";
+    public static final String DATEN_DER_MUENDLICHEN_VERHANDLUNG =
+        "daten_der_muendlichen_verhandlung";
+    public static final String DEFINITIONEN = "definitionen";
     public static final String VORABDOKUMENT = "vorabdokument";
+    public static final String ERLEDIGUNG = "erledigung";
+    public static final String ERLEDIGUNGSVERMERK = "erledigungsvermerk";
+    public static final String RECHTSFRAGE = "rechtsfrage";
+    public static final String ERSTVEROEFFENTLICHUNG = "erstveroeffentlichung";
   }
 }

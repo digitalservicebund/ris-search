@@ -27,6 +27,8 @@ public class ApiConfig {
     public static final String CASELAW = BASE + "/case-law";
     public static final String CASELAW_CHANGELOGS = CASELAW + CHANGELOGS;
 
+    public static final String RECHTSPRECHUNG = BASE + "/rechtsprechung";
+
     public static final String LITERATURE = BASE + "/literature";
     public static final String LITERATURE_CHANGELOGS = LITERATURE + CHANGELOGS;
 

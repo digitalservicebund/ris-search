@@ -47,6 +47,38 @@
         }
       }
     },
+    "/v1/rechtsprechung/{documentNumber}" : {
+      "get" : {
+        "tags" : [ "Rechtsprechung" ],
+        "summary" : "Judgment metadata (Metadaten eines Rechtsrechungsdokuments)",
+        "description" : "The endpoint returns a single judgment (Rechtsrechungsdokument) from our database.",
+        "operationId" : "getCaseLaw",
+        "parameters" : [ {
+          "name" : "documentNumber",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "example" : "STRE201770751"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RechtsprechungSchema"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        }
+      }
+    },
     "/v1/literature" : {
       "get" : {
         "tags" : [ "Literature" ],
@@ -1705,7 +1737,7 @@
         "tags" : [ "Case Law" ],
         "summary" : "Decision metadata",
         "description" : "The endpoint returns a single decision from our database.",
-        "operationId" : "getCaseLaw",
+        "operationId" : "getCaseLaw_1",
         "parameters" : [ {
           "name" : "documentNumber",
           "in" : "path",
@@ -2222,6 +2254,270 @@
           }
         },
         "required" : [ "count" ]
+      },
+      "CaseLawEncodingSchema" : {
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "example" : "MediaObject"
+          },
+          "@id" : {
+            "type" : "string"
+          },
+          "contentUrl" : {
+            "type" : "string"
+          },
+          "encodingFormat" : {
+            "type" : "string",
+            "example" : "text/html"
+          },
+          "inLanguage" : {
+            "type" : "string",
+            "example" : "de"
+          }
+        },
+        "required" : [ "@id", "contentUrl", "encodingFormat", "inLanguage" ]
+      },
+      "RechtsprechungSchema" : {
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "example" : "Rechtsprechung"
+          },
+          "dokumentNummer" : {
+            "type" : "string",
+            "example" : "KARE000000000"
+          },
+          "ecli" : {
+            "type" : "string",
+            "description" : "European Case Law Identifier",
+            "example" : "ECLI:DE:FGRLP:1969:0905.IV85.68.0A"
+          },
+          "celex" : {
+            "type" : "string",
+            "description" : "CELEX-Nummer"
+          },
+          "tatbestand" : {
+            "type" : "string",
+            "description" : "Tatbestand"
+          },
+          "entscheidungsgruende" : {
+            "type" : "string",
+            "description" : "Entscheidungsgründe"
+          },
+          "abweichendeMeinung" : {
+            "type" : "string",
+            "description" : "Abweichende Meinung"
+          },
+          "gruende" : {
+            "type" : "string",
+            "description" : "Gründe"
+          },
+          "leitsatz" : {
+            "type" : "string",
+            "description" : "Leitsatz"
+          },
+          "kurztitel" : {
+            "type" : "string",
+            "description" : "Kurztitel"
+          },
+          "titelzeile" : {
+            "type" : "string",
+            "description" : "Titelzeile"
+          },
+          "orientierungssatz" : {
+            "type" : "string",
+            "description" : "Orientierungssatz"
+          },
+          "sonstigerOrientierungssatz" : {
+            "type" : "string",
+            "description" : "Sonstiger Orientierungssatz"
+          },
+          "sonstigerLangtext" : {
+            "type" : "string",
+            "description" : "Sonstiger Langtext"
+          },
+          "rechtsfrageGesamt" : {
+            "type" : "string",
+            "description" : "Rechtsfrage (gesamt)"
+          },
+          "rechtsfrage" : {
+            "type" : "string",
+            "description" : "Rechtsfrage"
+          },
+          "tenor" : {
+            "type" : "string",
+            "description" : "Tenor"
+          },
+          "datum" : {
+            "type" : "string",
+            "format" : "date",
+            "description" : "Datum"
+          },
+          "abweichendeDaten" : {
+            "type" : "array",
+            "description" : "Abweichende Daten",
+            "items" : {
+              "type" : "string",
+              "format" : "date"
+            }
+          },
+          "gliederung" : {
+            "type" : "string",
+            "description" : "Gliederung"
+          },
+          "aktenzeichen" : {
+            "type" : "string",
+            "description" : "Aktenzeichen"
+          },
+          "aktenzeichenListe" : {
+            "type" : "array",
+            "description" : "Aktenzeichenliste",
+            "example" : "BGH 123/23",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "abweichendeEclis" : {
+            "type" : "array",
+            "description" : "Abweichende ECLIs",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "berufsbilder" : {
+            "type" : "array",
+            "description" : "Berufsbilder",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "kuendigungsarten" : {
+            "type" : "array",
+            "description" : "Kündigungsarten",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "fehlerhafteGerichte" : {
+            "type" : "array",
+            "description" : "Fehlerhafte Gerichte",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "datenDerMuendlichenVerhandlung" : {
+            "type" : "array",
+            "description" : "Daten der mündlichen Verhandlung",
+            "items" : {
+              "type" : "string",
+              "format" : "date"
+            }
+          },
+          "definitionen" : {
+            "type" : "array",
+            "description" : "Definitionen",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "erledigung" : {
+            "type" : "string",
+            "description" : "Erledigung",
+            "example" : "Ja"
+          },
+          "gesetzgebungsauftrag" : {
+            "type" : "string",
+            "description" : "Gesetzgebungsauftrag",
+            "example" : "Ja"
+          },
+          "langtextdatum" : {
+            "type" : "string",
+            "format" : "date",
+            "description" : "Langtextdatum"
+          },
+          "letzteVeroeffentlichung" : {
+            "type" : "string",
+            "format" : "date",
+            "description" : "Letzte Veröffentlichung"
+          },
+          "erledigungsvermerk" : {
+            "type" : "string",
+            "description" : "Erledigungsvermerk"
+          },
+          "erstveroeffentlichung" : {
+            "type" : "string",
+            "format" : "date",
+            "description" : "Erstveröffentlichung"
+          },
+          "gericht" : {
+            "type" : "string",
+            "description" : "Gericht",
+            "example" : "FG Berlin"
+          },
+          "gerichtsbarkeit" : {
+            "type" : "string",
+            "description" : "Gerichtsbarkeit"
+          },
+          "dokumenttyp" : {
+            "type" : "string",
+            "example" : "Urteil"
+          },
+          "spruchkoerper" : {
+            "type" : "string",
+            "description" : "Spruchkörper",
+            "example" : "Gericht"
+          },
+          "schlagwoerter" : {
+            "type" : "array",
+            "description" : "Schlagworte",
+            "example" : "3. Kammer",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "courtName" : {
+            "type" : "string",
+            "example" : "LArbG Hamm"
+          },
+          "entscheidungsnamen" : {
+            "type" : "array",
+            "description" : "Entscheidungsnamen",
+            "examples" : [ "Beispielentscheidung" ],
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "abweichendeDokumentnummern" : {
+            "type" : "array",
+            "description" : "Abweichende Dokumentnummer",
+            "example" : "DEV-123",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "@id" : {
+            "type" : "string",
+            "example" : "/v1/case-law/ECLI:DE:FGRLP:1969:0905.IV85.68.0A"
+          },
+          "inLanguage" : {
+            "type" : "string",
+            "example" : "de"
+          },
+          "encoding" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/CaseLawEncodingSchema"
+            }
+          },
+          "vorabdokument" : {
+            "type" : "boolean",
+            "description" : "Whether or not the document is a Vorabdokument"
+          }
+        },
+        "required" : [ "@id", "abweichendeDokumentnummern", "aktenzeichenListe", "datum", "dokumentNummer", "ecli", "encoding", "entscheidungsnamen", "inLanguage", "schlagwoerter", "vorabdokument" ]
       },
       "CollectionSchemaSearchMemberSchemaLiteratureSearchSchema" : {
         "type" : "object",
@@ -3091,30 +3387,6 @@
           }
         } ],
         "required" : [ "@id", "documentNumber", "documentType", "encoding", "referenceNumbers" ]
-      },
-      "CaseLawEncodingSchema" : {
-        "type" : "object",
-        "properties" : {
-          "@type" : {
-            "type" : "string",
-            "example" : "MediaObject"
-          },
-          "@id" : {
-            "type" : "string"
-          },
-          "contentUrl" : {
-            "type" : "string"
-          },
-          "encodingFormat" : {
-            "type" : "string",
-            "example" : "text/html"
-          },
-          "inLanguage" : {
-            "type" : "string",
-            "example" : "de"
-          }
-        },
-        "required" : [ "@id", "contentUrl", "encodingFormat", "inLanguage" ]
       },
       "CaseLawSearchSchema" : {
         "allOf" : [ {

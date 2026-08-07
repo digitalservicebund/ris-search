@@ -65,6 +65,7 @@ public class CaseLawLdmlToOpenSearchMapper {
     Meta meta = judgment.getMeta();
     RisMeta risMeta = meta.getProprietary().getRisMeta();
     FrbrElement work = meta.getIdentification().getFrbrWork();
+    FrbrElement manifestation = meta.getIdentification().getFrbrManifestation();
     String uniqueId = work.getFrbrThis().getValue();
     RisGericht risGericht = risMeta.getRisGericht();
     JudgmentBody judgmentBody = judgment.getJudgmentBody();
@@ -73,10 +74,13 @@ public class CaseLawLdmlToOpenSearchMapper {
         .id(uniqueId)
         .documentNumber(uniqueId)
         .ecli(work.getEcliAliasValue())
+        .celex(work.getCelexAliasValue())
         .decisionDate(DateUtils.nullSafeParseyyyyMMdd(work.getFrbrDate().getDate()))
+        .fileNumber(work.getAktenzeichenAliasValue())
         .fileNumbers(risMeta.getAktenzeichen())
         .courtType(risGericht.getGerichtstyp())
         .location(risGericht.getGerichtsort())
+        .gerichtsbarkeit(risGericht.getGerichtsbarkeit())
         .documentType(risMeta.getRisDokumentTyp())
         .judicialBody(risGericht.getSpruchkoerperValue())
         .courtKeyword(risMeta.getCourtKeyword())
@@ -93,10 +97,29 @@ public class CaseLawLdmlToOpenSearchMapper {
         .outline(extractContent(judgmentBody, DomainTerm.OUTLINE))
         .tenor(sanitize(judgmentBody.getDecision()))
         .caseFacts(sanitize(judgmentBody.getBackground()))
-        .decisionGrounds(extractContent(judgmentBody, DomainTerm.DECISION_GROUNDS))
-        .grounds(extractContent(judgmentBody, DomainTerm.GROUNDS))
-        .otherLongText(extractContent(judgmentBody, DomainTerm.OTHER_LONGTEXT))
-        .dissentingOpinion(extractContent(judgmentBody, DomainTerm.DISSENTING_OPINION))
+        .decisionGrounds(sanitize(judgmentBody.getEntscheidungsgruende()))
+        .grounds(sanitize(judgmentBody.getGruende()))
+        .otherLongText(sanitize(judgmentBody.getSonstigerLangtext()))
+        .rechtsfrageGesamt(sanitize(judgmentBody.getRechtsfrageGesamt()))
+        .dissentingOpinion(judgmentBody.getFormattedAbweichendeMeinung(risMeta).orElse(null))
+        .abweichendeDaten(risMeta.getRisAbweichendeDaten())
+        .abweichendeEclis(risMeta.getRisAbweichendeEclis())
+        .berufsbilder(risMeta.getRisBerufsbilder())
+        .kuendigungsarten(risMeta.getRisKuendigungsarten())
+        .fehlerhafteGerichte(risMeta.getRisFehlerhafteGerichte())
+        .datenDerMuendlichenVerhandlung(risMeta.getRisDatenDerMuendlichenVerhandlung())
+        .definitionen(risMeta.getDefinitionen())
+        .erledigung(risMeta.getRisErledigung())
+        .hasLegislativeMandate(risMeta.getRisGesetzgebungsauftrag())
+        .langtextdatum(risMeta.getRisLangtextdatum())
+        .letzteVeroeffentlichung(
+            DateUtils.nullSafeParseyyyyMMdd(risMeta.getLetzteVeroeffentlichungValue()))
+        .erledigungsvermerk(extractErledigungsvermerk(meta))
+        .rechtsfrage(extractRechtsfrage(meta))
+        .erstveroeffentlichung(
+            manifestation == null
+                ? null
+                : DateUtils.nullSafeParseyyyyMMdd(manifestation.getErstveroeffentlichungValue()))
         .previousDecisions(
             getLinkedJudgements(
                 meta, refs -> refs.getReferencesByType(ImplicitReference::getPrecedingJudgement)))
@@ -198,6 +221,22 @@ public class CaseLawLdmlToOpenSearchMapper {
     return extractDocumentaryShortTexts(meta)
         .map(DocumentaryShortTexts::getRisTitelzeile)
         .map(DocumentaryShortTexts.RisTitelzeile::getContent)
+        .map(CaseLawLdmlToOpenSearchMapper::sanitize)
+        .orElse(null);
+  }
+
+  private static String extractErledigungsvermerk(Meta meta) {
+    return extractDocumentaryShortTexts(meta)
+        .map(DocumentaryShortTexts::getRisErledigungsvermerk)
+        .map(DocumentaryShortTexts.RisErledigungsvermerk::getContent)
+        .map(CaseLawLdmlToOpenSearchMapper::sanitize)
+        .orElse(null);
+  }
+
+  private static String extractRechtsfrage(Meta meta) {
+    return extractDocumentaryShortTexts(meta)
+        .map(DocumentaryShortTexts::getRisRechtsfrage)
+        .map(DocumentaryShortTexts.RisRechtsfrage::getContent)
         .map(CaseLawLdmlToOpenSearchMapper::sanitize)
         .orElse(null);
   }
