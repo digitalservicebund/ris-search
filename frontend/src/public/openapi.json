@@ -2319,9 +2319,9 @@
             "type" : "string",
             "description" : "Leitsatz"
           },
-          "headline" : {
+          "kurztitel" : {
             "type" : "string",
-            "description" : "Überschrift"
+            "description" : "Kurztitel"
           },
           "titelzeile" : {
             "type" : "string",

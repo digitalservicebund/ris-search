@@ -117,7 +117,7 @@ class CaseLawSchemaMapperTest {
     assertThat(rechtsprechungSchema.abweichendeMeinung()).isEqualTo("eine abweichende Meinung");
     assertThat(rechtsprechungSchema.entscheidungsgruende()).isEqualTo("diese Entscheidungsgründe");
     assertThat(rechtsprechungSchema.orientierungssatz()).isEqualTo("Orientierungssatz");
-    assertThat(rechtsprechungSchema.headline()).isEqualTo("Test");
+    assertThat(rechtsprechungSchema.kurztitel()).isEqualTo("Test");
     assertThat(rechtsprechungSchema.titelzeile()).isEqualTo("Title line");
     assertThat(rechtsprechungSchema.sonstigerOrientierungssatz())
         .isEqualTo("Sonstiger Orientierungssatz");

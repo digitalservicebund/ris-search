@@ -32,7 +32,7 @@ public class RechtsprechungSchemaMapper {
         .abweichendeMeinung(doc.dissentingOpinion())
         .gruende(doc.grounds())
         .leitsatz(doc.guidingPrinciple())
-        .headline(doc.headline())
+        .kurztitel(doc.headline())
         .titelzeile(doc.titleLine())
         .orientierungssatz(doc.headnote())
         .sonstigerOrientierungssatz(doc.otherHeadnote())

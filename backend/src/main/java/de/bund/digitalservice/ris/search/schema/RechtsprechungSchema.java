@@ -22,7 +22,7 @@ public record RechtsprechungSchema(
     @Schema(description = "Abweichende Meinung") String abweichendeMeinung,
     @Schema(description = "Gründe") String gruende,
     @Schema(description = "Leitsatz") String leitsatz,
-    @Schema(description = "Überschrift") String headline,
+    @Schema(description = "Kurztitel") String kurztitel, // corresponds to headline
     @Schema(description = "Titelzeile") String titelzeile,
     @Schema(description = "Orientierungssatz") String orientierungssatz,
     @Schema(description = "Sonstiger Orientierungssatz") String sonstigerOrientierungssatz,
