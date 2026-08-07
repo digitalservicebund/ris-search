@@ -121,6 +121,7 @@ class RechtsprechungControllerTest extends ContainersIntegrationBase {
             jsonPath("$.definitionen[1]").value("Sachgesamtheit"),
             jsonPath("$.erledigung").value("Ja"),
             jsonPath("$.gesetzgebungsauftrag").value("Ja"),
+            jsonPath("$.langtextdatum").value("2016-06-15"),
             jsonPath("$.erledigungsvermerk").value("Erledigungsvermerk"),
             jsonPath("$.erstveroeffentlichung").value("2026-03-18"),
             jsonPath("$.abweichendeMeinung")

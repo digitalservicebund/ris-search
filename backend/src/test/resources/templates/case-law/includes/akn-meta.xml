@@ -193,6 +193,7 @@
         <ris:legalEffect>JA</ris:legalEffect>
         <ris:erledigung domainTerm="Erledigung">Ja</ris:erledigung>
         <ris:gesetzgebungsauftrag domainTerm="Gesetzgebungsauftrag">Ja</ris:gesetzgebungsauftrag>
+        <ris:langtextdatum domainTerm="Langtextdatum">2016-06-15</ris:langtextdatum>
         <ris:fieldOfLaws>
             <ris:fieldOfLaw>Test field of law</ris:fieldOfLaw>
         </ris:fieldOfLaws>

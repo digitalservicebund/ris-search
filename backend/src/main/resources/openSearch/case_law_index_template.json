@@ -460,6 +460,9 @@
         },
         "erstveroeffentlichung": {
           "type": "date"
+        },
+        "langtextdatum": {
+          "type": "date"
         }
       }
     }

@@ -50,8 +50,15 @@ class CaseLawLdmlToOpenSearchMapperTest {
     assertThat(caseLaw.dissentingOpinion())
         .isEqualTo(
             "dissenting test, Dr. Phil. Max Mustermann: referenced opinions test 1, Maxima Mustermann: referenced opinions test 2");
+  }
+
+  @Test
+  void shouldMapAdditionalCaseLawFieldsCorrectly() {
+    CaseLawDocumentationUnit caseLaw = mapper.fromString(testCaseLawLdml);
+
     assertThat(caseLaw.erledigung()).isEqualTo("Ja");
     assertThat(caseLaw.hasLegislativeMandate()).isEqualTo("Ja");
+    assertThat(caseLaw.langtextdatum()).isEqualTo(LocalDate.of(2016, Month.JUNE, 15));
     assertThat(caseLaw.erledigungsvermerk()).isEqualTo("Erledigungsvermerk");
     assertThat(caseLaw.erstveroeffentlichung()).isEqualTo(LocalDate.of(2026, Month.MARCH, 18));
   }

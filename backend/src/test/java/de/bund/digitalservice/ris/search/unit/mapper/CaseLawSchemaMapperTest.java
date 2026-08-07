@@ -57,6 +57,7 @@ class CaseLawSchemaMapperTest {
         .definitionen(List.of("indirekte Steuern", "Sachgesamtheit"))
         .erledigung("Ja")
         .hasLegislativeMandate("Ja")
+        .langtextdatum(LocalDate.of(2016, Month.JUNE, 15))
         .erledigungsvermerk("Erledigungsvermerk")
         .erstveroeffentlichung(LocalDate.of(2026, Month.MARCH, 18))
         .build();
@@ -145,6 +146,7 @@ class CaseLawSchemaMapperTest {
     assertThat(rechtsprechungSchema.erstveroeffentlichung())
         .isEqualTo(LocalDate.of(2026, Month.MARCH, 18));
     assertThat(rechtsprechungSchema.gesetzgebungsauftrag()).isEqualTo("Ja");
+    assertThat(rechtsprechungSchema.langtextdatum()).isEqualTo(LocalDate.of(2016, Month.JUNE, 15));
   }
 
   @Test

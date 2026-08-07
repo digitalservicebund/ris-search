@@ -77,6 +77,8 @@ public record CaseLawDocumentationUnit(
     @JsonIgnore @ElementCollection @Field(name = Fields.PENDING_DECISIONS)
         List<String> pendingDecisions,
     @Field(name = Fields.HAS_LEGISLATIVE_MANDATE) String hasLegislativeMandate,
+    @Field(name = Fields.LANGTEXTDATUM, type = FieldType.Date, format = DateFormat.date)
+        LocalDate langtextdatum,
     @JsonIgnore @Field(name = Fields.INDEXED_AT) String indexedAt,
     @Nullable @Field(name = Fields.ARTICLES) List<Article> articles,
     @Field(name = Fields.VORABDOKUMENT) boolean vorabdokument)
@@ -140,6 +142,7 @@ public record CaseLawDocumentationUnit(
     public static final String ENSUING_DECISIONS = "ensuing_decisions";
     public static final String PENDING_DECISIONS = "pending_decisions";
     public static final String HAS_LEGISLATIVE_MANDATE = "has_legislative_mandate";
+    public static final String LANGTEXTDATUM = "langtextdatum";
     public static final String INDEXED_AT = "indexed_at";
     public static final String ARTICLES = "articles";
 
