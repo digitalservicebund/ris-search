@@ -28,13 +28,24 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
 const { data, error } = await useFetchNormContent(expressionEli, {
   rewriteLink: (link) => {
     if (!link) return null;
+    if (link.startsWith("#")) return link;
+
+    const from = searchParamToString(route.query.from);
+
+    // Einzelnorm cross-links are emitted by the backend relative to the API URL
+    // structure (`{subtype}/{eId}.html`). Rewrite them to the portal single
+    // article route, which only carries the bare eId.
+    const eId = getEinzelnormEIdFromHref(link);
+    if (eId !== null) {
+      const target = new URL(`${route.path}/${eId}`, url);
+      if (from) target.searchParams.set("from", from);
+      return target.pathname + target.search + target.hash;
+    }
 
     const newLink = new URL(link, url);
     const isSameOrigin = newLink.origin === url.origin;
-    const isHashOnly = link.startsWith("#");
-    if (!isSameOrigin || isHashOnly) return link;
+    if (!isSameOrigin) return link;
 
-    const from = searchParamToString(route.query.from);
     if (from) newLink.searchParams.set("from", from);
 
     return newLink.pathname + newLink.search + newLink.hash;

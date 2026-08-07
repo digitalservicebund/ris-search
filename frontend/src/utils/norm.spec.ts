@@ -5,6 +5,7 @@ import { without } from "lodash-es";
 import { describe, expect, vi } from "vitest";
 import type { LegislationExpression } from "~/types/api";
 import {
+  getEinzelnormEIdFromHref,
   getMostRelevantExpression,
   getValidityStatus,
   isNormBodyEmpty,
@@ -289,5 +290,51 @@ describe("isNormBodyEmpty", () => {
       "text/html",
     );
     expect(isNormBodyEmpty(doc)).toBe(false);
+  });
+});
+
+describe("getEinzelnormEIdFromHref", () => {
+  it("extracts the bare eId from an einzelnorm link", () => {
+    expect(getEinzelnormEIdFromHref("regelungstext-1/art-z1.html")).toBe(
+      "art-z1",
+    );
+  });
+
+  it("extracts hierarchical eIds", () => {
+    expect(
+      getEinzelnormEIdFromHref(
+        "regelungstext-1/hauptteil-n1_abschnitt-n1_art-z1.html",
+      ),
+    ).toBe("hauptteil-n1_abschnitt-n1_art-z1");
+  });
+
+  it("keeps the eId segment percent-encoded as emitted by the backend", () => {
+    expect(
+      getEinzelnormEIdFromHref(
+        "regelungstext-1/pr%C3%A4ambel-n1_formel-n1.html",
+      ),
+    ).toBe("pr%C3%A4ambel-n1_formel-n1");
+  });
+
+  it("returns null for hash-only links", () => {
+    expect(getEinzelnormEIdFromHref("#footnote-1")).toBeNull();
+  });
+
+  it("returns null for absolute links", () => {
+    expect(getEinzelnormEIdFromHref("https://example.com/foo.html")).toBeNull();
+    expect(getEinzelnormEIdFromHref("/gesetze/eli/foo.html")).toBeNull();
+  });
+
+  it("returns null for relative links without the .html suffix", () => {
+    expect(getEinzelnormEIdFromHref("regelungstext-1/art-z1")).toBeNull();
+  });
+
+  it("returns null for links with a query or hash", () => {
+    expect(
+      getEinzelnormEIdFromHref("regelungstext-1/art-z1.html?foo=bar"),
+    ).toBeNull();
+    expect(
+      getEinzelnormEIdFromHref("regelungstext-1/art-z1.html#frag"),
+    ).toBeNull();
   });
 });

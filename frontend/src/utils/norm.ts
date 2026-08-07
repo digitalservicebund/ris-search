@@ -77,6 +77,22 @@ export function getManifestationUrl(
   return encoding?.contentUrl;
 }
 
+/**
+ * Extracts the bare eId from an einzelnorm cross-link found inside transformed
+ * legislation HTML. The backend generates these links relative to the API URL
+ * structure, shaped like `{subtype}/{eId}.html` (e.g.
+ * `regelungstext-1/art-z1.html`). The portal route only carries the bare eId
+ * (the manifestation/subtype are re-derived from metadata), so we strip the
+ * subtype prefix and the `.html` suffix.
+ *
+ * @returns The bare eId, or null if the href is not an einzelnorm link (e.g. a
+ *   hash-only, absolute, or resource link).
+ */
+export function getEinzelnormEIdFromHref(href: string): string | null {
+  const match = /^[^/#?:]+\/([^/#?]+)\.html$/.exec(href);
+  return match?.[1] ?? null;
+}
+
 export function getNormBreadcrumbTitle(norm: LegislationExpression): string {
   return norm.abbreviation || norm.alternateName || norm.name || "";
 }
