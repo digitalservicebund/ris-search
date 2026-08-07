@@ -43,7 +43,7 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
  * CaseLawController provides endpoints for managing and retrieving case law documentation in
  * various formats such as JSON, HTML, XML, and ZIP, as well as specific file resources.
  *
- * <p>This controller is accessible in the "default", "staging", "uat", "test", and "prototype"
+ * <p>This controller is accessible in the "dev", "staging", "uat", "test", and "prototype"
  * profiles.
  *
  * <p>Endpoints include functionalities for: - Retrieving case law metadata - Rendering case law
@@ -56,7 +56,7 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
  */
 @Tag(name = "Case Law")
 @RestController
-@Profile({"default", "staging", "uat", "test", "prototype"})
+@Profile({"dev", "staging", "uat", "test", "prototype"})
 public class CaseLawController {
 
   private final CaseLawService caseLawService;

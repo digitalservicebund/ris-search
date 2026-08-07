@@ -1,3 +1,6 @@
+server:
+  port: 8090
+
 local:
   file-storage: backend/e2e-data
 

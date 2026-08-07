@@ -1,5 +1,4 @@
 server:
-  port: 8080
   cms-url: https://content-management.ris.bund.de/
 
 spring:
@@ -34,16 +33,6 @@ sentry:
   traces-sample-rate: 0.01
   logging:
     minimum-event-level: error
-
-logging:
-  level:
-    de:
-      bund:
-        digitalservice:
-          ris:
-            search:
-              config:
-                httplogs: TRACE
 
 s3:
   file-storage:

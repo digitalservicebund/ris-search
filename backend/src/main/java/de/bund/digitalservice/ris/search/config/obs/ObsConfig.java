@@ -244,21 +244,21 @@ public class ObsConfig {
   }
 
   @Bean(name = "normS3Client")
-  @Profile({"default"})
+  @Profile({"dev"})
   public ObjectStorageClient mockNormS3Client(
       @Value("${local.file-storage}") String relativeLocalStorageDirectory) {
     return new LocalFilesystemObjectStorageClient("norm", relativeLocalStorageDirectory);
   }
 
   @Bean(name = "caseLawS3Client")
-  @Profile({"default"})
+  @Profile({"dev"})
   public ObjectStorageClient mockCaseLawS3Client(
       @Value("${local.file-storage}") String relativeLocalStorageDirectory) {
     return new LocalFilesystemObjectStorageClient("caselaw", relativeLocalStorageDirectory);
   }
 
   @Bean(name = "literatureS3Client")
-  @Profile({"default"})
+  @Profile({"dev"})
   public ObjectStorageClient mockLiteratureS3Client(
       @Value("${local.file-storage}") String relativeLocalStorageDirectory) {
     return new LocalFilesystemObjectStorageClient("literature", relativeLocalStorageDirectory);
@@ -274,7 +274,7 @@ public class ObsConfig {
    *     "administrative-directive" context
    */
   @Bean(name = "administrativeDirectiveS3Client")
-  @Profile({"default"})
+  @Profile({"dev"})
   public ObjectStorageClient mockAdministrativeDirectiveS3Client(
       @Value("${local.file-storage}") String relativeLocalStorageDirectory) {
     return new LocalFilesystemObjectStorageClient(
@@ -282,14 +282,14 @@ public class ObsConfig {
   }
 
   @Bean(name = "portalS3Client")
-  @Profile({"default"})
+  @Profile({"dev"})
   public ObjectStorageClient mockPortalS3Client(
       @Value("${local.file-storage}") String relativeLocalStorageDirectory) {
     return new LocalFilesystemObjectStorageClient("portal", relativeLocalStorageDirectory);
   }
 
   @Bean(name = "publicFilesS3Client")
-  @Profile({"default"})
+  @Profile({"dev"})
   public ObjectStorageClient mockPublicFilesS3Client(
       @Value("${s3.file-storage.public-files.bucket-name}") String bucketName,
       @Value("${local.file-storage}") String relativeLocalStorageDirectory) {

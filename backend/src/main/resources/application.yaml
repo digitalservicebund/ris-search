@@ -1,20 +1,10 @@
 spring:
-  jpa:
-    properties:
-      hibernate:
-        ddl-auto: none
-  datasource:
-    hikari:
-      connection-test-query: SELECT 1 FROM DUAL
-      connection-timeout: 600000
-      maximum-pool-size: 500
-      max-lifetime: 1800000
-      minimum-idle: 20
-      validation-timeout: 3000
-      idle-timeout: 60000
+  profiles:
+    # all environments override this property, so it's only used locally.
+    default: dev
 
 server:
-  port: 8090
+  port: 8080
   front-end-url: "http://localhost:3000/"
   docs-url: "https://localhost::5173/"
   cms-url: ""
@@ -108,3 +98,27 @@ app:
   security:
     csp-header: "default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src data: 'self'; connect-src 'self'; font-src 'self'; frame-src 'none'; object-src 'none'; media-src 'none';"
 
+logging:
+  level:
+    de:
+      bund:
+        digitalservice:
+          ris:
+            search:
+              config:
+                httplogs: TRACE
+      springframework:
+        ws:
+          server:
+            MessageTracing:
+              sent: DEBUG
+              received: TRACE
+
+---
+spring:
+  config:
+    activate:
+      on-profile: "staging | uat | production | prototype"
+    import:
+      - "kubernetes:"
+      - "optional:configtree:/etc/secrets/*/"

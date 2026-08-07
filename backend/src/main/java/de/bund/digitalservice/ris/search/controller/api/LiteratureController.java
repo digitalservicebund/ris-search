@@ -50,7 +50,7 @@ import org.springframework.web.bind.annotation.RestController;
 /** Controller responsible for handling literature-related endpoints. */
 @Tag(name = "Literature")
 @RestController
-@Profile({"default", "staging", "uat", "test", "prototype"})
+@Profile({"dev", "staging", "uat", "test", "prototype"})
 public class LiteratureController {
 
   private final LiteratureService literatureService;
