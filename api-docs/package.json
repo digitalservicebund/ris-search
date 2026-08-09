@@ -11,12 +11,12 @@
     "typecheck": "vue-tsc --noEmit"
   },
   "devDependencies": {
-    "@digitalservicebund/ris-ui": "4.6.0",
-    "oxfmt": "0.61.0",
-    "oxlint": "1.76.0",
+    "@digitalservicebund/ris-ui": "4.6.1",
+    "oxfmt": "0.62.0",
+    "oxlint": "1.77.0",
     "vitepress": "1.6.4",
-    "vue": "3.5.40",
-    "vue-tsc": "3.3.8"
+    "vue": "3.5.41",
+    "vue-tsc": "3.3.9"
   },
   "engines": {
     "node": ">=26"
