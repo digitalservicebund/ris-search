@@ -1,5 +1,5 @@
 import { mockNuxtImport, renderSuspended } from "@nuxt/test-utils/runtime";
-import { userEvent } from "@testing-library/user-event/dist/cjs/index.js";
+import { userEvent } from "@testing-library/user-event";
 import { screen } from "@testing-library/vue";
 import { describe, vi } from "vitest";
 import ErrorPage from "./error.vue";

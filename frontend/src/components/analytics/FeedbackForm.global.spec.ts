@@ -1,14 +1,19 @@
 import { renderSuspended } from "@nuxt/test-utils/runtime";
-import { fireEvent, screen, waitFor } from "@testing-library/vue";
+import { userEvent, type UserEvent } from "@testing-library/user-event";
+import { screen, waitFor } from "@testing-library/vue";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-async function clickSubmit() {
-  await fireEvent.submit(document.querySelector("form")!);
+async function clickSubmit(user: UserEvent) {
+  await user.click(screen.getByRole("button", { name: "Feedback senden" }));
   await waitFor(() => {}); // flush microtasks
 }
 
-async function fillFeedbackForm(feedback: string = "Some feedback") {
-  await fireEvent.update(screen.getByRole("textbox"), feedback);
+async function fillFeedbackForm(
+  user: UserEvent,
+  feedback: string = "Some feedback",
+) {
+  await user.clear(screen.getByRole("textbox"));
+  await user.type(screen.getByRole("textbox"), feedback);
 }
 
 function getErrorMessage() {
@@ -47,15 +52,16 @@ describe("FeedbackForm", () => {
   });
 
   it("shows an error when feedback input is empty and clears after the input is cleared", async () => {
+    const user = userEvent.setup();
     await factory();
-    await clickSubmit();
+    await clickSubmit(user);
     await waitFor(() =>
       expect(getErrorMessage()).toBe(
         "Geben Sie Ihr Feedback in das obere Textfeld ein.",
       ),
     );
 
-    await fillFeedbackForm("A new message to clear the error");
+    await fillFeedbackForm(user, "A new message to clear the error");
 
     expect(
       document.querySelector('[data-test-id="feedback-error-message"]'),
@@ -63,13 +69,14 @@ describe("FeedbackForm", () => {
   });
 
   it("shows an error when sending feedback using posthog store fails", async () => {
+    const user = userEvent.setup();
     mockSendFeedbackToPostHog(async () => {
       throw new Error(`Error sending feedback`);
     });
     await factory();
 
-    await fillFeedbackForm();
-    await clickSubmit();
+    await fillFeedbackForm(user);
+    await clickSubmit(user);
     await waitFor(() =>
       expect(getErrorMessage()).toBe(
         "Es gab leider einen Fehler. Probieren Sie es zu einem späteren Moment noch einmal.",
@@ -78,11 +85,12 @@ describe("FeedbackForm", () => {
   });
 
   it("shows a confirmation message when feedback is sent successfully", async () => {
+    const user = userEvent.setup();
     mockSendFeedbackToPostHog(async () => {});
 
     await factory();
-    await fillFeedbackForm();
-    await clickSubmit();
+    await fillFeedbackForm(user);
+    await clickSubmit(user);
     await waitFor(() => {
       const confirmationMessage = document.querySelector(
         '[data-test-id="feedback-sent-confirmation"]',
@@ -123,12 +131,13 @@ describe("FeedbackForm", () => {
   });
 
   it("clears error message when user types in textarea", async () => {
+    const user = userEvent.setup();
     await factory();
 
-    await clickSubmit();
+    await clickSubmit(user);
     await waitFor(() => expect(getErrorMessage()).toBeTruthy());
 
-    await fillFeedbackForm("New feedback");
+    await fillFeedbackForm(user, "New feedback");
 
     expect(
       document.querySelector('[data-test-id="feedback-error-message"]'),
@@ -148,18 +157,19 @@ describe("FeedbackForm", () => {
   });
 
   it("passes the honeypot value to the sendFeedbackToPostHog function", async () => {
+    const user = userEvent.setup();
     const mockedSend = vi.fn().mockResolvedValue(undefined);
     mockSendFeedbackToPostHog(mockedSend);
 
     await factory();
 
-    await fillFeedbackForm("Real feedback");
+    await fillFeedbackForm(user, "Real feedback");
 
     const honeypotInput =
       document.querySelector<HTMLInputElement>('input[name="name"]')!;
-    await fireEvent.update(honeypotInput, "I am a bot");
+    await user.type(honeypotInput, "I am a bot");
 
-    await clickSubmit();
+    await clickSubmit(user);
     await waitFor(() =>
       expect(mockedSend).toHaveBeenCalledWith("Real feedback", "I am a bot"),
     );

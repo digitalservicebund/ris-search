@@ -1,5 +1,6 @@
 import { renderSuspended } from "@nuxt/test-utils/runtime";
-import { fireEvent, screen } from "@testing-library/vue";
+import { userEvent } from "@testing-library/user-event";
+import { screen } from "@testing-library/vue";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import ConsentBanner from "./ConsentBanner.vue";
 
@@ -52,9 +53,9 @@ describe("ConsentBanner", () => {
   });
 
   it("sets tracking when clicking the Decline button", async () => {
+    const user = userEvent.setup();
     await factory(undefined);
-    const declineButton = screen.getByRole("button", { name: "Ablehnen" });
-    await fireEvent.submit(declineButton.closest("form")!);
+    await user.click(screen.getByRole("button", { name: "Ablehnen" }));
     expect(mockSetTracking).toHaveBeenCalledWith(false);
   });
 });
