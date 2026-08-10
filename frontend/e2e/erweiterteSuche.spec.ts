@@ -102,6 +102,7 @@ test.describe("general advanced search page features", () => {
     const searchInput = page.getByRole("searchbox");
     await searchInput.fill("Fiktiv");
     await page.getByRole("button", { name: "Suchen" }).click();
+    await page.waitForURL(/q=Fiktiv/);
     await expect(searchInput).toHaveValue("Fiktiv");
 
     await page.goBack();
