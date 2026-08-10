@@ -66,12 +66,15 @@ const large = tw`typo-label1-regular h-64 px-24 py-4`;
 
 const clearButton = tw`absolute inset-y-6 right-6 flex aspect-square cursor-pointer items-center justify-center text-blue-800 hover:bg-blue-800 hover:text-white focus-visible:bg-blue-800 focus-visible:text-white focus-visible:outline-none`;
 
+const clearButtonFocus = tw`group-has-[button:focus-visible]/input:outline-4 group-has-[button:focus-visible]/input:-outline-offset-4 not-aria-[invalid]:group-has-[button:focus-visible]/input:outline-blue-800`;
+
 const inputClass = computed(() => ({
   [base]: true,
-  [small]: props.size === "small",
+  [clearButtonFocus]: props.clearable,
   [large]: props.size === "large",
-  "w-full": props.fluid || props.clearable,
+  [small]: props.size === "small",
   "pr-[2.5em]": props.clearable,
+  "w-full": props.fluid || props.clearable,
 }));
 </script>
 
@@ -80,7 +83,7 @@ const inputClass = computed(() => ({
     v-if="clearable"
     :class="[{ 'w-full': fluid }, rootClass]"
     :style="rootStyle"
-    class="relative inline-flex"
+    class="group/input relative inline-flex"
   >
     <input
       ref="inputRef"
