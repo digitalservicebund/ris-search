@@ -49,6 +49,7 @@ test.describe("reach search from start page", () => {
     const searchInput = page.getByRole("searchbox");
     await searchInput.fill("Fiktiv");
     await page.getByRole("button", { name: "Suchen" }).click();
+    await page.waitForURL(/query=Fiktiv/);
     await expect(searchInput).toHaveValue("Fiktiv");
 
     await page.goBack();
