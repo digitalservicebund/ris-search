@@ -68,6 +68,20 @@ describe("InputText", () => {
     expect(input).toHaveAttribute("id", "my-input");
   });
 
+  it("applies a fallthrough class to the input", () => {
+    render(InputText, { attrs: { class: "grow" } });
+
+    expect(screen.getByRole("textbox")).toHaveClass("grow");
+  });
+
+  it("applies a fallthrough class to the wrapper when clearable", () => {
+    render(InputText, { props: { clearable: true }, attrs: { class: "grow" } });
+
+    const input = screen.getByRole("textbox");
+    expect(input).not.toHaveClass("grow");
+    expect(input.parentElement).toHaveClass("grow");
+  });
+
   it("reflects the disabled attribute", () => {
     render(InputText, { attrs: { disabled: true } });
 

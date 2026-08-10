@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, useTemplateRef } from "vue";
+import { computed, useAttrs, useTemplateRef, type StyleValue } from "vue";
 import IcBaselineClose from "~icons/ic/baseline-close";
 import { tw } from "../../utils/tags";
 
@@ -38,6 +38,24 @@ defineExpose({ input: inputRef });
 
 defineOptions({ inheritAttrs: false });
 
+// Attributes ---------------------------------------------
+
+const attrs = useAttrs();
+
+// `class` and `style` always target the root element, which is the wrapper when
+// the clear button is rendered. Everything else goes to the input. Vue
+// normalizes both before they reach `attrs`.
+const rootClass = computed(() => attrs.class as string | undefined);
+
+const rootStyle = computed(() => attrs.style as StyleValue);
+
+const inputAttrs = computed(() => {
+  const rest = { ...attrs };
+  delete rest.class;
+  delete rest.style;
+  return rest;
+});
+
 // Classes ------------------------------------------------
 
 const base = tw`[&+small]:typo-label2-regular border-2 border-blue-800 bg-white placeholder:text-gray-800 read-only:cursor-not-allowed read-only:border-blue-300 read-only:bg-blue-300 hover:outline-4 hover:-outline-offset-4 hover:outline-blue-800 focus-visible:outline-4 focus-visible:-outline-offset-4 focus-visible:outline-blue-800 disabled:border-blue-500 disabled:bg-white disabled:text-blue-500 disabled:outline-hidden aria-[invalid]:border-red-800 aria-[invalid]:bg-red-200 aria-[invalid]:outline-red-800 aria-[invalid]:disabled:outline-hidden [&+small]:mt-4 [&+small]:flex [&+small]:items-center [&+small]:gap-4 [&+small]:text-gray-900 [&[aria-invalid="true"]+small]:text-red-900`;
@@ -60,14 +78,15 @@ const inputClass = computed(() => ({
 <template>
   <span
     v-if="clearable"
-    :class="{ 'w-full': fluid }"
+    :class="[{ 'w-full': fluid }, rootClass]"
+    :style="rootStyle"
     class="relative inline-flex"
   >
     <input
       ref="inputRef"
       v-model="model"
       :class="inputClass"
-      v-bind="$attrs"
+      v-bind="inputAttrs"
     />
     <button
       v-if="showClearButton"

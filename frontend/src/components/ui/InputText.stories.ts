@@ -153,8 +153,10 @@ export const Clearable: Story = {
   }),
 };
 
+// The browser's native clear icon is hidden for search inputs, so `clearable`
+// is what provides the clear affordance here.
 export const SearchType: Story = {
-  args: { size: "large" },
+  args: { size: "large", clearable: true },
   render: (args) => ({
     components: { UiInputText },
     setup() {
