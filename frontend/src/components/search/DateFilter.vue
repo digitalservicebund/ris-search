@@ -90,7 +90,7 @@ function setPeriodTo(value: string | undefined) {
 </script>
 
 <template>
-  <form :aria-labelledby="formId" class="flex flex-col gap-16">
+  <form :aria-labelledby="formId" class="flex flex-col gap-16" @submit.prevent>
     <p :id="formId" class="typo-label1-bold">Filter nach {{ filterLabel }}</p>
 
     <div v-if="visibleFilters.currentlyInForce" class="flex items-center">
