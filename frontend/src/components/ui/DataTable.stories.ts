@@ -46,11 +46,6 @@ const rows: VersionRow[] = [
   },
 ];
 
-/**
- * The component is generic over the row type. Spelling the args out explicitly
- * keeps Storybook from resolving the type parameter to its constraint, which
- * would reject the column keys below.
- */
 type DataTableArgs = {
   columns: DataTableColumn<VersionRow>[];
   rowAs?: string;
@@ -58,8 +53,6 @@ type DataTableArgs = {
 };
 
 const meta: Meta<DataTableArgs> = {
-  // The component is generic, so its type doesn't match the concrete component
-  // signature Storybook expects. `DataTableArgs` above describes the props.
   component: UiDataTable as unknown as ConcreteComponent<DataTableArgs>,
   tags: ["autodocs"],
   args: {
@@ -82,11 +75,6 @@ export const Default: Story = {
   }),
 };
 
-/**
- * Whole rows become links by passing a link component (or a plain `a`) as
- * `rowAs`. The per-row target lives in `row.attrs`, so the browser's own
- * context menu works — unlike a click handler on the row.
- */
 export const Links: Story = {
   args: {
     rowAs: "a",
@@ -101,7 +89,6 @@ export const Links: Story = {
   }),
 };
 
-/** The row the user is currently on is highlighted and marked `aria-current`. */
 export const CurrentRow: Story = {
   args: {
     rowAs: "a",
@@ -120,10 +107,6 @@ export const CurrentRow: Story = {
   }),
 };
 
-/**
- * Cells render as plain text by default. A `cell-<key>` slot overrides a single
- * column, here to render the status as a badge.
- */
 export const CustomCell: Story = {
   render: () => ({
     components: { UiDataTable, UiBadge },

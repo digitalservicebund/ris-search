@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/vue3-vite";
 import { html } from "../../utils/tags";
-import Badge, { BadgeColor } from "./Badge.vue";
+import UiBadge, { BadgeColor } from "./Badge.vue";
 
-const meta: Meta<typeof Badge> = {
-  component: Badge,
+const meta: Meta<typeof UiBadge> = {
+  component: UiBadge,
   tags: ["autodocs"],
   args: {
     label: "Badge",
@@ -28,10 +28,10 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   render: (args) => ({
-    components: { Badge },
+    components: { UiBadge },
     setup() {
       return { args };
     },
-    template: html`<Badge v-bind="args" />`,
+    template: html`<UiBadge v-bind="args" />`,
   }),
 };
