@@ -24,7 +24,19 @@ const emit = defineEmits<{
 
 const inputRef = useTemplateRef<HTMLInputElement>("inputRef");
 
-const showClearButton = computed(() => props.clearable && !!model.value);
+const attrs = useAttrs();
+
+// `disabled` and `readonly` arrive as fallthrough attributes, and a valueless
+// one (`<InputText disabled />`) reaches us as an empty string.
+const hasBooleanAttr = (value: unknown) => value === "" || !!value;
+
+const showClearButton = computed(
+  () =>
+    props.clearable &&
+    !!model.value &&
+    !hasBooleanAttr(attrs.disabled) &&
+    !hasBooleanAttr(attrs.readonly),
+);
 
 function clear() {
   model.value = "";
@@ -39,8 +51,6 @@ defineExpose({ input: inputRef });
 defineOptions({ inheritAttrs: false });
 
 // Attributes ---------------------------------------------
-
-const attrs = useAttrs();
 
 // `class` and `style` always target the root element, which is the wrapper when
 // the clear button is rendered. Everything else goes to the input. Vue

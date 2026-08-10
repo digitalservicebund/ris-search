@@ -122,6 +122,50 @@ describe("InputText", () => {
       ).toBeInTheDocument();
     });
 
+    it("is not rendered when the input is disabled", () => {
+      render(InputText, {
+        props: { clearable: true, modelValue: "text" },
+        attrs: { disabled: true },
+      });
+
+      expect(
+        screen.queryByRole("button", { name: "Entfernen" }),
+      ).not.toBeInTheDocument();
+    });
+
+    it("is not rendered when the input is read-only", () => {
+      render(InputText, {
+        props: { clearable: true, modelValue: "text" },
+        attrs: { readonly: true },
+      });
+
+      expect(
+        screen.queryByRole("button", { name: "Entfernen" }),
+      ).not.toBeInTheDocument();
+    });
+
+    it("is not rendered for a valueless disabled attribute", () => {
+      render({
+        components: { InputText },
+        template: `<InputText clearable disabled model-value="text" />`,
+      });
+
+      expect(
+        screen.queryByRole("button", { name: "Entfernen" }),
+      ).not.toBeInTheDocument();
+    });
+
+    it("is rendered when disabled is explicitly false", () => {
+      render(InputText, {
+        props: { clearable: true, modelValue: "text" },
+        attrs: { disabled: false, readonly: false },
+      });
+
+      expect(
+        screen.getByRole("button", { name: "Entfernen" }),
+      ).toBeInTheDocument();
+    });
+
     it("clears the value and emits clear when clicked", async () => {
       const user = userEvent.setup();
       const { emitted } = render(InputText, {
