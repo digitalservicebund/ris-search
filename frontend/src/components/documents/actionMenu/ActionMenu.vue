@@ -97,7 +97,7 @@ const handleDrawerItemClick = async (item: ActionMenuItem) => {
   <ul role="menubar" class="hidden items-center *:-mx-4 md:flex">
     <li v-for="item in actions" :key="item.label" role="presentation">
       <UiButton
-        v-tooltip.bottom="item.label"
+        v-tooltip.bottom="item.disabled ? undefined : item.label"
         role="menuitem"
         text
         :disabled="item.disabled"

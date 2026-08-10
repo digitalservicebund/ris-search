@@ -89,11 +89,6 @@ export function testPdfButton(pageUrl: string) {
 
     const button = page.getByRole("menuitem", { name: "Als PDF speichern" });
 
-    await button.hover();
-    await expect(
-      page.getByRole("tooltip", { name: "Als PDF speichern" }),
-    ).toBeVisible({ timeout: 15000 });
-
     await expect(button).toBeDisabled();
   });
 

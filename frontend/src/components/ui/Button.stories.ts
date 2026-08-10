@@ -95,6 +95,21 @@ export const Text: Story = {
   }),
 };
 
+export const Disabled: Story = {
+  args: { disabled: true },
+  render: (args) => ({
+    components: { UiButton },
+    setup() {
+      return { args };
+    },
+    template: html`
+      <div class="flex flex-wrap items-center gap-16">
+        <UiButton v-bind="args" label="Primary" />
+      </div>
+    `,
+  }),
+};
+
 export const WithIcon: Story = {
   args: { iconPos: undefined },
   argTypes: {
