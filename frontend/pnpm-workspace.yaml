@@ -21,4 +21,4 @@ overrides:
   js-yaml: 4.3.1
 
 minimumReleaseAgeExclude:
-  - "@digitalservicebund/ris-ui@4.6.1"
+  - "@digitalservicebund/ris-ui@4.7.0"

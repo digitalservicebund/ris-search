@@ -13,8 +13,8 @@ importers:
   .:
     dependencies:
       '@digitalservicebund/ris-ui':
-        specifier: 4.6.1
-        version: 4.6.1(primevue@4.5.5(vue@3.5.41(typescript@6.0.3)))(tailwindcss@4.3.3)(vue@3.5.41(typescript@6.0.3))
+        specifier: 4.7.0
+        version: 4.7.0(primevue@4.5.5(vue@3.5.41(typescript@6.0.3)))(tailwindcss@4.3.3)(vue@3.5.41(typescript@6.0.3))
       '@nuxtjs/mdc':
         specifier: 0.22.2
         version: 0.22.2(magic-string@1.1.0)(magicast@0.5.4)(oxc-parser@0.140.0)(rolldown@1.2.3)(supports-color@10.2.2)(unplugin@3.3.0(esbuild@0.28.1)(rolldown@1.2.3)(rollup@4.62.4)(vite@8.2.1(@types/node@26.1.2)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.49.2)(yaml@2.9.0)))
@@ -33,6 +33,9 @@ importers:
       lodash-es:
         specifier: 4.18.1
         version: 4.18.1
+      maska:
+        specifier: 3.2.0
+        version: 3.2.0
       minisearch:
         specifier: 7.2.0
         version: 7.2.0
@@ -109,9 +112,6 @@ importers:
       license-checker-rseidelsohn:
         specifier: 5.0.1
         version: 5.0.1(supports-color@10.2.2)
-      maska:
-        specifier: 3.2.0
-        version: 3.2.0
       openapi-typescript:
         specifier: 7.13.0
         version: 7.13.0(typescript@6.0.3)
@@ -402,8 +402,8 @@ packages:
       '@devframes/hub':
         optional: true
 
-  '@digitalservicebund/ris-ui@4.6.1':
-    resolution: {integrity: sha512-oJUS032qfW3A2Vq7qOcJZIAO6WWQQObDiNJFmoMWR3oncPWZJtluu3k7abHXrfSeP+PLwZNkS3sIj+lpcDYn5g==}
+  '@digitalservicebund/ris-ui@4.7.0':
+    resolution: {integrity: sha512-alNBK5i5HNC3dPl23WT/b//vIYspRwC+Nq+eDTKgok23eYB00o8XSq+lX35g5qhFyV4MPPCH/36gk5azfdwgGA==}
     peerDependencies:
       primevue: ^4.0.0
       tailwindcss: ^4.0.0
@@ -7056,7 +7056,7 @@ snapshots:
       '@devframes/hub': 0.7.16(devframe@0.7.16(cac@7.0.0)(srvx@0.11.22)(typescript@6.0.3))
     optional: true
 
-  '@digitalservicebund/ris-ui@4.6.1(primevue@4.5.5(vue@3.5.41(typescript@6.0.3)))(tailwindcss@4.3.3)(vue@3.5.41(typescript@6.0.3))':
+  '@digitalservicebund/ris-ui@4.7.0(primevue@4.5.5(vue@3.5.41(typescript@6.0.3)))(tailwindcss@4.3.3)(vue@3.5.41(typescript@6.0.3))':
     dependencies:
       primevue: 4.5.5(vue@3.5.41(typescript@6.0.3))
       tailwindcss: 4.3.3
