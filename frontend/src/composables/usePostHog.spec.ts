@@ -58,6 +58,7 @@ describe("usePostHog", () => {
     resetPostHogState();
     cookieStoreBackend.clear();
     vi.clearAllMocks();
+    vi.stubGlobal("cookieStore", cookieStoreMock);
   });
 
   it("initializes postHog when userConsent is true", async () => {
@@ -136,6 +137,23 @@ describe("usePostHog", () => {
         sameSite: "lax",
       }),
     );
+    expect(userConsent.value).toBe(true);
+    expect(postHog.value?.opt_in_capturing).toHaveBeenCalled();
+  });
+
+  it("keeps working in browsers without the Cookie Store API", async () => {
+    vi.stubGlobal("cookieStore", undefined);
+    const { initialize, setTracking, isBannerVisible, userConsent, postHog } =
+      usePostHog();
+
+    // Would throw a `ReferenceError` if the API was accessed unconditionally,
+    // which breaks app initialization since the PostHog plugin awaits this.
+    await initialize();
+    expect(userConsent.value).toBeUndefined();
+    expect(isBannerVisible.value).toBe(true);
+
+    // Consent can't be persisted, but it still applies for the session
+    await setTracking(true);
     expect(userConsent.value).toBe(true);
     expect(postHog.value?.opt_in_capturing).toHaveBeenCalled();
   });
