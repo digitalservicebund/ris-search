@@ -629,6 +629,33 @@ describe("DateFilter", () => {
     });
   });
 
+  describe("form submission", () => {
+    it("prevents the default submit behavior", async () => {
+      render(DateFilter, {
+        props: {
+          documentKind: DocumentKind.CaseLaw,
+          modelValue: { type: "specificDate" },
+        },
+      });
+
+      const form = screen.getByRole("form", {
+        name: "Filter nach Entscheidungsdatum",
+      });
+
+      // Pressing enter in one of the date inputs triggers implicit submission
+      // of the surrounding form, which would reload the entire page. jsdom
+      // doesn't implement implicit submission, so the submit event is
+      // dispatched manually here.
+      const submitEvent = new Event("submit", {
+        bubbles: true,
+        cancelable: true,
+      });
+      form.dispatchEvent(submitEvent);
+
+      expect(submitEvent.defaultPrevented).toBe(true);
+    });
+  });
+
   describe("resetting filter when switching document kind", () => {
     it("defaults to 'all time' when switching to caselaw", async () => {
       let modelValue: DateFilterValue = { type: "currentlyInForce" };

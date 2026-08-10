@@ -54,7 +54,7 @@ const warn = tw`border-gray-1000 color-gray-1000 border-4 bg-yellow-500 underlin
 
 const info = tw`border border-blue-500 bg-white text-blue-800 hover:bg-gray-200 focus-visible:bg-gray-200 active:border-white active:bg-white disabled:border-blue-500 disabled:text-blue-500 disabled:hover:bg-white`;
 
-const primaryText = tw`border-2 border-transparent bg-transparent text-blue-800 underline hover:border-gray-500 hover:bg-white focus-visible:border-gray-500 active:border-blue-600 active:bg-blue-400 disabled:bg-transparent disabled:text-gray-500`;
+const primaryText = tw`border-2 border-transparent bg-transparent text-blue-800 underline hover:border-gray-500 hover:bg-white focus-visible:border-gray-500 active:border-blue-600 active:bg-blue-400 disabled:border-transparent disabled:bg-transparent disabled:text-gray-500`;
 
 const sizeClass = computed(() => {
   const { severity } = props;

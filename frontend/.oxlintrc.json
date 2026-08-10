@@ -43,6 +43,21 @@
     "no-restricted-imports": [
       "error",
       {
+        "paths": [
+          {
+            // fireEvent dispatches synthetic events that don't match what a
+            // browser does on real interaction. userEvent simulates the full
+            // event sequence instead.
+            "name": "@testing-library/vue",
+            "importNames": ["fireEvent"],
+            "message": "Use userEvent from \"@testing-library/user-event\" instead of fireEvent"
+          },
+          {
+            "name": "@testing-library/dom",
+            "importNames": ["fireEvent"],
+            "message": "Use userEvent from \"@testing-library/user-event\" instead of fireEvent"
+          }
+        ],
         "patterns": [
           {
             // Enforce consistent usage of ~ alias

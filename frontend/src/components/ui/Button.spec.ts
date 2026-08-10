@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/vue";
+import { userEvent } from "@testing-library/user-event";
+import { render, screen } from "@testing-library/vue";
 import { describe, it, expect, vi } from "vitest";
 import { h } from "vue";
 import Button from "./Button.vue";
@@ -58,10 +59,11 @@ describe("Button", () => {
   });
 
   it("emits click events", async () => {
+    const user = userEvent.setup();
     const onClick = vi.fn();
     render(Button, { props: { label: "x" }, attrs: { onClick } });
 
-    await fireEvent.click(screen.getByRole("button"));
+    await user.click(screen.getByRole("button"));
 
     expect(onClick).toHaveBeenCalledOnce();
   });
