@@ -5,7 +5,7 @@ spring-boot = "4.1.0"
 spring-boot-starter = "4.1.0"
 spring-dependency-management = "1.1.7"
 spotless = "8.9.0"
-sonarqube = "7.3.1.8318"
+sonarqube = "7.4.0.8496"
 license-report = "3.1.4"
 test-logger = "4.0.0"
 node-gradle = "7.1.0"
@@ -13,11 +13,11 @@ node-gradle = "7.1.0"
 jts = "1.20.0"
 test-containers = "1.21.4"
 spring-cloud-k8s = "5.0.2"
-springdoc-openapi = "3.0.3"
+springdoc-openapi = "3.1.0"
 prometheus = "1.17.0"
-sentry = "8.51.0"
+sentry = "8.52.0"
 commons-text = "1.15.0"
-junit5 = "1.4.2"
+junit5 = "1.5.0"
 mockito = "5.23.0"
 spring-security = "6.5.2"
 spring-security-test = "7.1.0"
@@ -78,19 +78,19 @@ restassured = { module = 'io.rest-assured:rest-assured', version.ref = "rest-ass
 jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version = "2.22.1" }
 
 # CVE-2026-5588
-bouncycastle-bcpkix = { module = "org.bouncycastle:bcpkix-jdk18on", version = "1.85" }
+bouncycastle-bcpkix = { module = "org.bouncycastle:bcpkix-jdk18on", version = "1.85.2" }
 
 # CVE-2026-0636
-bouncycastle-bcprov = { module = "org.bouncycastle:bcprov-jdk18on", version = "1.85" }
+bouncycastle-bcprov = { module = "org.bouncycastle:bcprov-jdk18on", version = "1.85.2" }
 
 # CVE-2026-55831
-netty-codec-http = { module = "io.netty:netty-codec-http", version = "4.2.16.Final" }
+netty-codec-http = { module = "io.netty:netty-codec-http", version = "4.2.17.Final" }
 
 # CVE-2026-56819
-netty-codec-http2 = { module = "io.netty:netty-codec-http2", version = "4.2.16.Final" }
+netty-codec-http2 = { module = "io.netty:netty-codec-http2", version = "4.2.17.Final" }
 
 # CVE-2026-59901
-netty-codec-compression = { module = "io.netty:netty-codec-compression", version = "4.2.16.Final" }
+netty-codec-compression = { module = "io.netty:netty-codec-compression", version = "4.2.17.Final" }
 
 [plugins]
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
