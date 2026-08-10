@@ -17,13 +17,11 @@ const update = (event: MenuItemCommandEvent) => {
 };
 
 const addUpdate = (items: MenuItem[]) => {
-  return items.map(
-    (item: MenuItem): MenuItem => ({
-      ...item,
-      command: update,
-      items: item.items ? addUpdate(item.items) : item.items,
-    }),
-  );
+  return items.map((item: MenuItem): MenuItem => ({
+    ...item,
+    command: update,
+    items: item.items ? addUpdate(item.items) : item.items,
+  }));
 };
 
 const selectedItems = addUpdate(categoryFilterItems);
