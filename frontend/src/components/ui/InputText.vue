@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, useAttrs, useTemplateRef, type StyleValue } from "vue";
-import IcBaselineClose from "~icons/ic/baseline-close";
+import CloseSmallIcon from "~icons/custom/closeSmall";
 import { tw } from "../../utils/tags";
 
 const props = withDefaults(
@@ -98,7 +98,7 @@ const inputClass = computed(() => ({
       type="button"
       @click="clear"
     >
-      <IcBaselineClose class="h-[1em] w-[1em]" />
+      <CloseSmallIcon />
     </button>
   </span>
   <input
