@@ -159,7 +159,10 @@ public class BulkExportService {
 
           Optional<byte[]> bytesOption = result.bytes;
           if (bytesOption.isEmpty()) {
-            throw new IOException("Object key not found: " + result.key());
+            // in case a file was deleted during zip creation we return early
+            log.info(
+                "File {} was deleted during zip creation. Aborting zip creation.", result.key());
+            break;
           }
 
           // Write to ZIP
