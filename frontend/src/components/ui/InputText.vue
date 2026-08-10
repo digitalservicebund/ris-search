@@ -46,7 +46,7 @@ const small = tw`typo-label2-regular h-48 px-16 py-4`;
 
 const large = tw`typo-label1-regular h-64 px-24 py-4`;
 
-const clearButton = tw`absolute inset-y-6 right-6 flex aspect-square cursor-pointer items-center justify-center text-blue-800 hover:bg-blue-100 hover:text-blue-800 focus-visible:bg-blue-800 focus-visible:text-white focus-visible:outline-none`;
+const clearButton = tw`absolute inset-y-6 right-6 flex aspect-square cursor-pointer items-center justify-center text-blue-800 hover:bg-blue-800 hover:text-white focus-visible:bg-blue-800 focus-visible:text-white focus-visible:outline-none`;
 
 const inputClass = computed(() => ({
   [base]: true,
@@ -67,7 +67,6 @@ const inputClass = computed(() => ({
       ref="inputRef"
       v-model="model"
       :class="inputClass"
-      :data-size="size"
       v-bind="$attrs"
     />
     <button
@@ -83,7 +82,6 @@ const inputClass = computed(() => ({
   <input
     v-else
     :class="inputClass"
-    :data-size="size"
     ref="inputRef"
     v-bind="$attrs"
     v-model="model"
@@ -91,24 +89,14 @@ const inputClass = computed(() => ({
 </template>
 
 <style scoped>
-@reference "../../assets/main.css";
-
 /*
- * Style the browser's native clear icon for search inputs. Kept here with the
- * component; the larger size matches the `large` input variant (via data-size).
+ * Remove the browser's native clear icon for search inputs. Its size, position
+ * and hover styling differ per engine and it is absent in Firefox entirely, so
+ * `clearable` provides a consistent replacement we fully control.
  */
-input[type="search"] {
-  &::-webkit-search-cancel-button {
-    @apply -mr-12 h-36 w-36 cursor-pointer appearance-none;
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-16 -16 52 52'><path fill='currentColor' d='M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12z'></path></svg>");
-  }
-
-  &::-webkit-search-cancel-button:hover {
-    @apply bg-blue-100;
-  }
-
-  &[data-size="large"]::-webkit-search-cancel-button {
-    @apply mr-[-1.125rem] h-48 w-48;
-  }
+input[type="search"]::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+  display: none;
 }
 </style>

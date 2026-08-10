@@ -108,6 +108,7 @@ function submitUnlessLoading() {
           aria-label="Suchbegriff eingeben"
           size="large"
           class="grow"
+          clearable
           placeholder="Suchbegriff eingeben"
           type="search"
         />

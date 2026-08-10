@@ -46,6 +46,7 @@ const searchInputId = useId();
           :aria-label="inputLabel"
           :placeholder="inputPlaceholder"
           class="grow"
+          clearable
           name="query"
           type="search"
           size="large"
