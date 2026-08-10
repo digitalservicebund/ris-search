@@ -1,5 +1,4 @@
 server:
-  port: 8080
   front-end-url: https://ris-search.uat.ds4g.net/
   cms-url: https://ris-cm.uat.tech.digitalservice.dev/
   technical-users: []
@@ -25,16 +24,6 @@ sentry:
   traces-sample-rate: 0.01
   logging:
     minimum-event-level: error
-
-logging:
-  level:
-    de:
-      bund:
-        digitalservice:
-          ris:
-            search:
-              config:
-                httplogs: TRACE
 
 management:
   endpoints:

@@ -1,5 +1,4 @@
 server:
-  port: 8080
   docs-url: "https://docs.rechtsinformationen.bund.de/"
   front-end-url: https://testphase.rechtsinformationen.bund.de/
 
@@ -34,22 +33,6 @@ management:
 
 sentry:
   traces-sample-rate: 0.01
-
-logging:
-  level:
-    de:
-      bund:
-        digitalservice:
-          ris:
-            search:
-              config:
-                httplogs: TRACE
-      springframework:
-        ws:
-          server:
-            MessageTracing:
-              sent: DEBUG
-              received: TRACE
 
 # Used for sending feedback to posthog
 posthog:
