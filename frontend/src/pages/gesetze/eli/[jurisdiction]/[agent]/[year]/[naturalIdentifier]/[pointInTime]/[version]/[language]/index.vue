@@ -327,7 +327,6 @@ const fassungenDateFilterInputId = useId();
                 />
               </div>
               <DocumentsNormsVersionList
-                :status="normVersionsStatus"
                 :current-legislation-identifier="
                   metadata.legislationIdentifier ?? ''
                 "
