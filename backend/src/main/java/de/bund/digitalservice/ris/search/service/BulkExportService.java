@@ -2,11 +2,9 @@ package de.bund.digitalservice.ris.search.service;
 
 import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
 import java.io.BufferedOutputStream;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
-import java.io.UncheckedIOException;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
@@ -15,12 +13,11 @@ import java.util.concurrent.CompletionService;
 import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import org.apache.commons.io.FileUtils;
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -78,8 +75,8 @@ public class BulkExportService {
         PipedInputStream pipedInputStream = new PipedInputStream(1024 * 1024 * 5);
         PipedOutputStream pipedOutputStream = new PipedOutputStream(pipedInputStream)) {
 
-      Future<Void> zipWorker =
-          CompletableFuture.runAsync(
+      CompletableFuture<ZipResult> zipWorker =
+          CompletableFuture.supplyAsync(
               new ZipStreamProducer(keysToZip, sourceBucket, pipedOutputStream), executor);
 
       // Main thread blocks here, piping input data directly to S3. S3ObjectStorageClient::putStream
@@ -88,16 +85,23 @@ public class BulkExportService {
       long byteCount = destinationBucket.putStream(resultObjectKey, pipedInputStream);
 
       // Check background worker health
-      zipWorker.get();
+      ZipResult zipResult = zipWorker.get();
 
-      logger.log(
-          Level.INFO,
-          () ->
-              "Added %s items to %s, compressed size: %s"
-                  .formatted(
-                      keysToZip.size(),
-                      resultObjectKey,
-                      FileUtils.byteCountToDisplaySize(byteCount)));
+      return switch (zipResult.status) {
+        case ZipStatus.FINISHED -> {
+          logger.info(
+              () ->
+                  "Added %s items to %s, compressed size: %s"
+                      .formatted(
+                          zipResult.processedFiles,
+                          resultObjectKey,
+                          FileUtils.byteCountToDisplaySize(byteCount)));
+          deleteArchives(obsoleteObjectKeys);
+          yield true;
+        }
+        case ZipStatus.CANCELLED -> true;
+        case ZipStatus.FAILED -> false;
+      };
 
     } catch (InterruptedException e) {
       logger.error("Bulk export execution was interrupted.", e);
@@ -107,23 +111,25 @@ public class BulkExportService {
       logger.error("Bulk export execution failed or was aborted due to structural error.", e);
       return false;
     }
-
-    // Clean up old backups exclusively on success. If deletion fails (and throws an exception) the
-    // job will fail. This is wanted. We will successfully have a zip, but will get an error to
-    // investigate.
-    deleteArchives(obsoleteObjectKeys);
-    return true;
   }
 
-  private record FetchResult(String key, Optional<byte[]> bytes) {}
+  enum ZipStatus {
+    FINISHED,
+    CANCELLED,
+    FAILED
+  }
 
-  private static final class ZipStreamProducer implements Runnable {
+  private record ZipResult(ZipStatus status, int processedFiles) {}
+
+  private static final class ZipStreamProducer implements Supplier<ZipResult> {
     private final List<String> keysToDownload;
     private final OutputStream outputPipe;
     private final int totalFileCount;
     private final ObjectStorage sourceBucket;
 
     private final Logger log = LogManager.getLogger(ZipStreamProducer.class);
+
+    private record FetchResult(String key, Optional<byte[]> bytes) {}
 
     public ZipStreamProducer(
         List<String> keysToDownload, ObjectStorage sourceBucket, OutputStream outputPipe) {
@@ -133,7 +139,7 @@ public class BulkExportService {
       this.totalFileCount = keysToDownload.size();
     }
 
-    public void run() {
+    public ZipResult get() {
       int processedCount = 0;
 
       // do not rely on the autoClosable of the ExecutorService to be able to force close on Error
@@ -162,7 +168,7 @@ public class BulkExportService {
             // in case a file was deleted during zip creation we return early
             log.info(
                 "File {} was deleted during zip creation. Aborting zip creation.", result.key());
-            break;
+            return new ZipResult(ZipStatus.CANCELLED, processedCount);
           }
 
           // Write to ZIP
@@ -182,6 +188,8 @@ public class BulkExportService {
             log.info("Bulk export progress: {}/{} files packaged", processedCount, totalFileCount);
           }
         }
+
+        return new ZipResult(ZipStatus.FINISHED, processedCount);
       } catch (Exception e) {
         // force close the executor in case of an error
         downloadExecutor.shutdownNow();
@@ -191,8 +199,7 @@ public class BulkExportService {
           Thread.currentThread().interrupt();
         }
 
-        throw new UncheckedIOException(
-            new IOException("ZIP production engine encountered a failure status", e));
+        return new ZipResult(ZipStatus.FAILED, processedCount);
       } finally {
         downloadExecutor.close();
       }
