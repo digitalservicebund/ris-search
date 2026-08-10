@@ -58,10 +58,14 @@ sonar {
     }
 }
 
-val xjc by configurations.creating
+val xjc = configurations.dependencyScope("xjc")
+val xjcClasspath =
+    configurations.resolvable("xjcClasspath") {
+        extendsFrom(xjc.get())
+    }
 
 dependencies {
-    xjc(libs.jaxb.moxy.xjc)
+    add("xjc", libs.jaxb.moxy.xjc)
 
     implementation(libs.spring.actuator)
     implementation(libs.spring.validation)
@@ -106,6 +110,9 @@ dependencies {
 
     // CVE-2026-59901
     implementation(libs.netty.codec.compression)
+
+    // CVE-2026-59889
+    implementation(libs.tools.jackson.databind)
 
     implementation(libs.ris.html.transformation)
 
@@ -177,7 +184,7 @@ tasks {
             mkdir(outputDir)
         }
         enabled = true
-        classpath(configurations["xjc"])
+        classpath(configurations["xjcClasspath"])
         mainClass = "org.eclipse.persistence.jaxb.xjc.MOXyXJC"
         args = listOf("src/main/resources/WEB_INF/nlex/simple_template.wsdl", "-wsdl", "-d", outputDir.get().asFile.path, "-p", "nlex")
     }
