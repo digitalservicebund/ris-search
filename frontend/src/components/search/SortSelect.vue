@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { Select } from "primevue";
 import { DocumentKind } from "~/types/api";
 import { validSortOptions } from "~/utils/search/sortOptions";
 
@@ -24,12 +23,9 @@ const sortLabelId = useId();
 <template>
   <span class="flex w-auto items-center gap-8">
     <label :id="sortLabelId" class="typo-label2-regular">Sortieren nach</label>
-    <Select
+    <UiSelect
       :aria-labelledby="sortLabelId"
       v-model="model"
-      scroll-height="20rem"
-      option-label="label"
-      option-value="value"
       :options="options"
     />
   </span>

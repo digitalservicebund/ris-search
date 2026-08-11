@@ -144,8 +144,9 @@ test.describe("general search page features", () => {
     test.skip(isMobileTest);
     await navigate(page, "/suche?query=fiktiv");
 
-    await page.getByRole("combobox", { name: "Sortieren nach" }).click();
-    await page.getByRole("option", { name: "Datum: Älteste zuerst" }).click();
+    await page
+      .getByRole("combobox", { name: "Sortieren nach" })
+      .selectOption({ label: "Datum: Älteste zuerst" });
 
     await expect(page).toHaveURL(/sort=date/);
   });
@@ -154,8 +155,9 @@ test.describe("general search page features", () => {
     test.skip(isMobileTest);
     await navigate(page, "/suche?query=fiktiv");
 
-    await page.getByRole("combobox", { name: "Sortieren nach" }).click();
-    await page.getByRole("option", { name: "Datum: Neueste zuerst" }).click();
+    await page
+      .getByRole("combobox", { name: "Sortieren nach" })
+      .selectOption({ label: "Datum: Neueste zuerst" });
 
     await expect(page).toHaveURL(/sort=-date/);
   });
@@ -164,8 +166,9 @@ test.describe("general search page features", () => {
     test.skip(isMobileTest);
     await navigate(page, "/suche?query=fiktiv&sort=date");
 
-    await page.getByRole("combobox", { name: "Sortieren nach" }).click();
-    await page.getByRole("option", { name: "Relevanz" }).click();
+    await page
+      .getByRole("combobox", { name: "Sortieren nach" })
+      .selectOption({ label: "Relevanz" });
 
     await expect(page).toHaveURL(/sort=default/);
   });
@@ -178,8 +181,9 @@ test.describe("general search page features", () => {
 
     await expect(searchResults).toHaveCount(10);
 
-    await page.getByRole("combobox", { name: "Einträge pro Seite" }).click();
-    await page.getByRole("option", { name: "50" }).click();
+    await page
+      .getByRole("combobox", { name: "Einträge pro Seite" })
+      .selectOption({ label: "50" });
 
     await expect(searchResults).toHaveCount(18);
   });
@@ -205,8 +209,9 @@ test.describe("searching all documents", () => {
     test.skip(isMobileTest);
     await navigate(page, "/suche");
 
-    await page.getByRole("combobox", { name: "Einträge pro Seite" }).click();
-    await page.getByRole("option", { name: "50" }).click();
+    await page
+      .getByRole("combobox", { name: "Einträge pro Seite" })
+      .selectOption({ label: "50" });
 
     // Norm
     await expect(
@@ -1019,8 +1024,9 @@ test.describe("searching administrative directives", () => {
     test.skip(isMobileTest);
     await navigate(page, "/suche?documentKind=V");
 
-    await page.getByRole("combobox", { name: "Sortieren nach" }).click();
-    await page.getByRole("option", { name: "Datum: Älteste zuerst" }).click();
+    await page
+      .getByRole("combobox", { name: "Sortieren nach" })
+      .selectOption({ label: "Datum: Älteste zuerst" });
 
     await expect(page).toHaveURL(/sort=date/);
 
@@ -1029,8 +1035,9 @@ test.describe("searching administrative directives", () => {
 
     await expect(searchResults.nth(0)).toHaveText(/01.11.2004/);
 
-    await page.getByRole("combobox", { name: "Sortieren nach" }).click();
-    await page.getByRole("option", { name: "Datum: Neueste zuerst" }).click();
+    await page
+      .getByRole("combobox", { name: "Sortieren nach" })
+      .selectOption({ label: "Datum: Neueste zuerst" });
 
     await expect(page).toHaveURL(/sort=-date/);
 

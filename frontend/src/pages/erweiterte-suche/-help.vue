@@ -2,7 +2,6 @@
 // This is an old version of the help page that is not currently in use, but will
 // be reworked at some point.
 
-import { Select } from "primevue";
 import { usePrivateFeaturesFlag } from "~/composables/usePrivateFeaturesFlag";
 import {
   type FieldType,
@@ -86,12 +85,11 @@ const availableFeatures: Feature[] = privateFeaturesEnabled
       <div>
         <div class="flex flex-row justify-between">
           <h2 class="typo-headline3-regular mb-20">Verfügbare Rubriken</h2>
-          <Select
+          <UiSelect
             v-model="filter"
-            class="ds-select-small w-auto"
+            aria-label="Rubriken filtern"
+            class="w-auto"
             :options="filters"
-            option-label="label"
-            option-value="value"
             placeholder="Bitte auswählen"
           />
         </div>
@@ -199,12 +197,11 @@ const availableFeatures: Feature[] = privateFeaturesEnabled
       <div>
         <div class="flex flex-row justify-between">
           <h2 class="typo-headline3-regular mb-20">Verfügbare Rubriken</h2>
-          <Select
+          <UiSelect
             v-model="filter"
-            class="ds-select-small w-auto"
+            aria-label="Rubriken filtern"
+            class="w-auto"
             :options="filters"
-            option-label="label"
-            option-value="value"
             placeholder="Bitte auswählen"
           />
         </div>

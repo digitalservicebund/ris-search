@@ -75,8 +75,11 @@ async function searchFor(
 
 async function sortBy(page: Page, prop: string) {
   const load = page.waitForResponse(/v1\/document\/lucene-search/);
-  await page.getByRole("combobox", { name: "Sortieren nach" }).click();
-  await page.getByRole("option", { name: prop }).click();
+  const select = page.getByRole("combobox", { name: "Sortieren nach" });
+  const value = await select
+    .getByRole("option", { name: prop })
+    .getAttribute("value");
+  await select.selectOption(value);
   await load;
 }
 
@@ -226,8 +229,9 @@ test.describe("general advanced search page features", () => {
 
     await expect(searchResults).toHaveCount(10);
 
-    await page.getByRole("combobox", { name: "Einträge pro Seite" }).click();
-    await page.getByRole("option", { name: "50" }).click();
+    await page
+      .getByRole("combobox", { name: "Einträge pro Seite" })
+      .selectOption({ label: "50" });
 
     await expect(searchResults).toHaveCount(13);
   });

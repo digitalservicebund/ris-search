@@ -380,7 +380,7 @@ watch(searchStatus, async (newStatus, oldStatus) => {
             <label :id="itemsPerPageLabelId" class="typo-label2-regular">
               Einträge pro Seite
             </label>
-            <Select
+            <UiSelect
               :model-value="itemsPerPage"
               :aria-labelledby="itemsPerPageLabelId"
               :options="itemsPerPageOptions"
