@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { RadioButton } from "primevue";
 import { DocumentKind } from "~/types/api";
 import { validSortOptions } from "~/utils/search/sortOptions";
 
@@ -32,9 +31,9 @@ const legendId = useId();
       :key="option.value"
       class="flex items-center gap-8"
     >
-      <RadioButton
+      <UiRadioButton
         v-model="model"
-        :input-id="`${name}-${option.value}`"
+        :id="`${name}-${option.value}`"
         :name="name"
         :value="option.value"
       />
