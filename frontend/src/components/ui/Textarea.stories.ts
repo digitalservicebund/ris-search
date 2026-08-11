@@ -2,7 +2,6 @@ import type { Meta, StoryObj } from "@storybook/vue3-vite";
 import { ref } from "vue";
 import IcBaselineErrorOutline from "~icons/ic/baseline-error-outline";
 import { html } from "../../utils/tags";
-// Imported as UiTextarea for consistency with the other ui stories.
 import UiTextarea from "./Textarea.vue";
 
 // placeholder/disabled/readonly are native attributes handled via fallthrough,

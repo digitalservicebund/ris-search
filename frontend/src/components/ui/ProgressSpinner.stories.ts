@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/vue3-vite";
 import { html } from "../../utils/tags";
-import ProgressSpinner from "./ProgressSpinner.vue";
+import UiProgressSpinner from "./ProgressSpinner.vue";
 
-const meta: Meta<typeof ProgressSpinner> = {
-  component: ProgressSpinner,
+const meta: Meta<typeof UiProgressSpinner> = {
+  component: UiProgressSpinner,
   tags: ["autodocs"],
 };
 
@@ -12,7 +12,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   render: () => ({
-    components: { ProgressSpinner },
-    template: html`<ProgressSpinner />`,
+    components: { UiProgressSpinner },
+    template: html`<UiProgressSpinner />`,
   }),
 };

@@ -1,111 +1,79 @@
 <script setup lang="ts">
-import { orderBy } from "lodash-es";
-import { Column, DataTable } from "primevue";
-import type { RouteLocationRaw } from "#vue-router";
+import { NuxtLink } from "#components";
+import { BadgeColor } from "~/components/ui/Badge.vue";
+import type {
+  DataTableColumn,
+  DataTableRow,
+} from "~/components/ui/DataTable.vue";
 import type { LegislationExpression } from "~/types/api";
 
 const props = defineProps<{
-  status: string;
   currentLegislationIdentifier: string;
   versions: LegislationExpression[];
 }>();
 
-type TableRowData = {
-  id: number;
+type VersionRow = DataTableRow & {
   fromDate: string;
   toDate: string;
-  status?: ReturnType<typeof formatNormValidity>;
-  link: RouteLocationRaw;
-  selectable: boolean;
+  status: { label: string; color: BadgeColor };
 };
 
 const route = useRoute();
 
-const selectedVersion = ref<TableRowData>();
+const columns: DataTableColumn<VersionRow>[] = [
+  { key: "fromDate", label: "Gültig ab" },
+  { key: "toDate", label: "Gültig bis" },
+  { key: "status", label: "Status" },
+];
 
-const tableRowData = computed<TableRowData[]>(() => {
-  const versionsSorted = orderBy(
-    props.versions,
-    [(version) => version.temporalCoverage],
-    ["desc"],
+const rows = computed<VersionRow[]>(() => {
+  // Newest Fassung first
+  const versionsSorted = props.versions.toSorted((a, b) =>
+    b.temporalCoverage.localeCompare(a.temporalCoverage),
   );
 
-  return versionsSorted.map((version, index) => {
+  return versionsSorted.map((version) => {
     const validityInterval = temporalCoverageToValidityInterval(
       version.temporalCoverage,
     );
 
-    const status = formatNormValidity(version.temporalCoverage);
+    const current =
+      version.legislationIdentifier === props.currentLegislationIdentifier;
 
-    const id = index;
-
-    const link: RouteLocationRaw = {
+    const to = {
       path: `/gesetze/${version.legislationIdentifier}`,
       query: { from: route.query.from },
     };
 
-    const selectable =
-      version.legislationIdentifier !== props.currentLegislationIdentifier;
-
-    const rowData: TableRowData = {
-      id: id,
-      fromDate: dateFormattedDDMMYYYY(validityInterval?.from) ?? "-",
-      toDate: dateFormattedDDMMYYYY(validityInterval?.to) ?? "-",
-      status: status,
-      link: link,
-      selectable: selectable,
+    const status = formatNormValidity(version.temporalCoverage) ?? {
+      label: "Unbekannt",
+      color: BadgeColor.BLUE,
     };
 
-    return rowData;
+    return {
+      key: version.legislationIdentifier ?? "",
+      attrs: { to },
+      current,
+      fromDate: dateFormattedDDMMYYYY(validityInterval?.from) ?? "–",
+      toDate: dateFormattedDDMMYYYY(validityInterval?.to) ?? "–",
+      status,
+    };
   });
 });
-
-const rowClass = (row: TableRowData) => {
-  return row.selectable
-    ? "group cursor-pointer"
-    : "cursor-not-allowed pointer-event-none bg-blue-100 text-gray-1000";
-};
-
-async function onRowSelect() {
-  if (selectedVersion.value) await navigateTo(selectedVersion.value.link);
-}
-
-async function handleSelectionUpdate(newSelection: TableRowData) {
-  // Necessary so the unselectable row is never highlighted as selected
-  if (newSelection.selectable) selectedVersion.value = newSelection;
-  else selectedVersion.value = undefined;
-}
 </script>
 
 <template>
-  <DataTable
-    v-model:selection="selectedVersion"
-    selection-mode="single"
-    data-key="id"
-    :value="tableRowData"
-    :loading="status === 'pending'"
-    :row-class="rowClass"
-    @row-select="onRowSelect"
-    @update:selection="handleSelectionUpdate"
-    :pt="{ emptyMessageCell: { class: 'ps-16 py-12 text-left text-gray-900' } }"
+  <UiDataTable
+    :columns="columns"
+    :row-as="NuxtLink"
+    :rows="rows"
+    aria-label="Fassungen"
+    class="-mx-16 md:mx-0"
   >
+    <template #cell-status="{ row }">
+      <UiBadge :label="row.status.label" :color="row.status.color" />
+    </template>
+
     <template #empty>Keine Ergebnisse gefunden</template>
-    <Column
-      field="fromDate"
-      header="Gültig ab"
-      header-class="whitespace-nowrap w-1"
-    />
-    <Column
-      field="toDate"
-      header="Gültig bis"
-      header-class="whitespace-nowrap w-1"
-    />
-    <Column header="Status">
-      <template #body="{ data: { status } }">
-        <div class="flex justify-between">
-          <UiBadge v-if="status" :label="status.label" :color="status.color" />
-        </div>
-      </template>
-    </Column>
-  </DataTable>
+  </UiDataTable>
 </template>

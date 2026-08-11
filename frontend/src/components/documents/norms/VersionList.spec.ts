@@ -1,8 +1,9 @@
 import {
-  mountSuspended,
+  renderSuspended,
   registerEndpoint,
   mockNuxtImport,
 } from "@nuxt/test-utils/runtime";
+import { screen } from "@testing-library/vue";
 import { vi } from "vitest";
 import type { JSONLDList, LegislationExpression } from "~/types/api";
 import VersionList from "./VersionList.vue";
@@ -69,19 +70,28 @@ registerEndpoint(`/v1/legislation`, () => {
   return data;
 });
 
-const { mockNavigateTo, useRouteMock } = vi.hoisted(() => ({
-  mockNavigateTo: vi.fn(),
+const { useRouteMock } = vi.hoisted(() => ({
   useRouteMock: vi.fn(() => ({ query: {} })),
 }));
-mockNuxtImport("navigateTo", () => mockNavigateTo);
 mockNuxtImport("useRoute", () => useRouteMock);
+
+/** Props for the list, with the second version being the displayed one. */
+function props(versions = data.member!) {
+  return {
+    currentLegislationIdentifier: data.member![1]?.legislationIdentifier ?? "",
+    versions,
+  };
+}
+
+function hrefs() {
+  return screen.getAllByRole("link").map((link) => link.getAttribute("href"));
+}
 
 describe("VersionList", () => {
   beforeEach(() => {
     vi.useFakeTimers();
     vi.setSystemTime(new Date("2025-01-01T12:00:00"));
 
-    mockNavigateTo.mockClear();
     useRouteMock.mockReturnValue({ query: {} });
   });
 
@@ -90,122 +100,81 @@ describe("VersionList", () => {
   });
 
   it("lists versions, sorted by date", async () => {
-    const wrapper = await mountSuspended(VersionList, {
-      props: {
-        status: "success",
-        currentLegislationIdentifier:
-          data.member![1]?.legislationIdentifier ?? "",
-        versions: data.member!,
-      },
-    });
+    await renderSuspended(VersionList, { props: props() });
 
-    const headerRowCells = wrapper.find("thead").findAll("th");
-    expect(headerRowCells.map((cell) => cell.text())).toEqual([
-      "Gültig ab",
-      "Gültig bis",
-      "Status",
-    ]);
+    const versions = screen.getAllByRole("listitem");
+    expect(versions).toHaveLength(3);
 
-    const tableBodyRows = wrapper.find("tbody").findAll("tr");
-    expect(tableBodyRows).toHaveLength(3);
+    expect(versions[0]).toHaveTextContent(
+      "Gültig ab: 01.01.2031 Gültig bis: – Status: Zukünftig in Kraft",
+    );
+    expect(versions[1]).toHaveTextContent(
+      "Gültig ab: 01.01.2020 Gültig bis: – Status: Aktuell gültig",
+    );
+    expect(versions[2]).toHaveTextContent(
+      "Gültig ab: 05.01.2000 Gültig bis: 31.12.2019 Status: Außer Kraft",
+    );
+  });
 
-    const futureVersionRowCells = tableBodyRows[0]?.findAll("td");
-    expect(futureVersionRowCells?.map((cell) => cell.text())).toEqual([
-      "01.01.2031",
-      "-",
-      "Zukünftig in Kraft",
-    ]);
+  it("renders the column labels as a header", async () => {
+    await renderSuspended(VersionList, { props: props() });
 
-    const currentVersionRowCells = tableBodyRows[1]?.findAll("td");
-    expect(currentVersionRowCells?.map((cell) => cell.text())).toEqual([
-      "01.01.2020",
-      "-",
-      "Aktuell gültig",
-    ]);
+    for (const label of ["Gültig ab", "Gültig bis", "Status"]) {
+      expect(screen.getByText(label)).toBeInTheDocument();
+    }
+  });
 
-    const pastVersionRowCells = tableBodyRows[2]?.findAll("td");
-    expect(pastVersionRowCells?.map((cell) => cell.text())).toEqual([
-      "05.01.2000",
-      "31.12.2019",
-      "Außer Kraft",
+  it("links every version, so it can be opened in a new tab", async () => {
+    await renderSuspended(VersionList, { props: props() });
+
+    expect(hrefs()).toEqual([
+      "/gesetze/eli/bund/bgbl-1/2000/s001/2030-01-01/1/deu/regelungstext-1",
+      "/gesetze/eli/bund/bgbl-1/2000/s001/2020-01-01/1/deu/regelungstext-1",
+      "/gesetze/eli/bund/bgbl-1/2000/s001/2000-01-01/1/deu/regelungstext-1",
     ]);
   });
 
-  it("navigates on row click if fassung is not currently displayed", async () => {
-    const wrapper = await mountSuspended(VersionList, {
-      props: {
-        status: "success",
-        currentLegislationIdentifier:
-          data.member![1]?.legislationIdentifier ?? "",
-        versions: data.member!,
-      },
-    });
+  it("marks the version currently displayed as the current page", async () => {
+    await renderSuspended(VersionList, { props: props() });
 
-    const futureVersionRow = wrapper.find("tbody").findAll("tr")[0];
-    await futureVersionRow?.trigger("click");
-
-    expect(mockNavigateTo).toHaveBeenCalledTimes(1);
-    expect(mockNavigateTo).toHaveBeenCalledWith({
-      path: "/gesetze/eli/bund/bgbl-1/2000/s001/2030-01-01/1/deu/regelungstext-1",
-      query: { from: undefined },
-    });
+    const links = screen.getAllByRole("link");
+    expect(links[0]).not.toHaveAttribute("aria-current");
+    expect(links[1]).toHaveAttribute("aria-current", "page");
+    expect(links[2]).not.toHaveAttribute("aria-current");
   });
 
-  it("does not nvigate to fassung currently displayed", async () => {
-    const wrapper = await mountSuspended(VersionList, {
-      props: {
-        status: "success",
-        currentLegislationIdentifier:
-          data.member![1]?.legislationIdentifier ?? "",
-        versions: data.member!,
-      },
-    });
-
-    const futureVersionRow = wrapper.find("tbody").findAll("tr")[1];
-    await futureVersionRow?.trigger("click");
-
-    expect(mockNavigateTo).toHaveBeenCalledTimes(0);
-  });
-
-  it("keeps the from query parameter when navigating to a version", async () => {
+  it("keeps the from query parameter in the version links", async () => {
     useRouteMock.mockReturnValue({ query: { from: "/suche?q=test" } });
 
-    const wrapper = await mountSuspended(VersionList, {
-      props: {
-        status: "success",
-        currentLegislationIdentifier:
-          data.member![1]?.legislationIdentifier ?? "",
-        versions: data.member!,
-      },
-    });
+    await renderSuspended(VersionList, { props: props() });
 
-    const futureVersionRow = wrapper.find("tbody").findAll("tr")[0];
-    await futureVersionRow?.trigger("click");
-
-    expect(mockNavigateTo).toHaveBeenCalledWith({
-      path: "/gesetze/eli/bund/bgbl-1/2000/s001/2030-01-01/1/deu/regelungstext-1",
-      query: { from: "/suche?q=test" },
-    });
+    for (const href of hrefs()) {
+      const url = new URL(href!, "http://localhost");
+      expect(url.pathname).toMatch(/^\/gesetze\/eli\/bund\/bgbl-1\/2000\//);
+      expect(url.searchParams.get("from")).toBe("/suche?q=test");
+    }
   });
 
-  it("keeps the from query parameter when navigating to a past version", async () => {
-    useRouteMock.mockReturnValue({ query: { from: "/suche?q=test" } });
+  it("labels the status as unknown when it can't be determined", async () => {
+    const withoutCoverage = createLegislationExpression(
+      "eli/bund/bgbl-1/2000/s001/2040-01-01/1/deu/regelungstext-1",
+      "",
+      "NotInForce",
+    );
 
-    const wrapper = await mountSuspended(VersionList, {
-      props: {
-        status: "success",
-        currentLegislationIdentifier:
-          data.member![1]?.legislationIdentifier ?? "",
-        versions: data.member!,
-      },
+    await renderSuspended(VersionList, {
+      props: props([withoutCoverage]),
     });
 
-    const pastVersionRow = wrapper.find("tbody").findAll("tr")[2];
-    await pastVersionRow?.trigger("click");
+    expect(screen.getByRole("listitem")).toHaveTextContent(
+      "Gültig ab: – Gültig bis: – Status: Unbekannt",
+    );
+  });
 
-    expect(mockNavigateTo).toHaveBeenCalledWith({
-      path: "/gesetze/eli/bund/bgbl-1/2000/s001/2000-01-01/1/deu/regelungstext-1",
-      query: { from: "/suche?q=test" },
-    });
+  it("shows a placeholder when there are no versions", async () => {
+    await renderSuspended(VersionList, { props: props([]) });
+
+    expect(screen.getByText("Keine Ergebnisse gefunden")).toBeInTheDocument();
+    expect(screen.queryAllByRole("link")).toHaveLength(0);
   });
 });
