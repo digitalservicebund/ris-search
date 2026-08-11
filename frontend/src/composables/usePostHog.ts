@@ -67,6 +67,16 @@ export function resetPostHogState() {
   userConsent.value = undefined;
 }
 
+/**
+ * Returns the Cookie Store API, or `undefined` in browsers that don't support
+ * it (e.g. older versions of Safari). Accessing the global unconditionally
+ * throws a `ReferenceError` there, which breaks app initialization because the
+ * PostHog plugin awaits `initialize()`. Consent can't be persisted without it.
+ */
+function getCookieStore(): typeof cookieStore | undefined {
+  return typeof cookieStore === "undefined" ? undefined : cookieStore;
+}
+
 /** Composable for managing PostHog analytics and user consent. */
 export function usePostHog() {
   const config = useRuntimeConfig();
@@ -89,7 +99,7 @@ export function usePostHog() {
    * application starts.
    */
   async function initialize() {
-    const cookie = await cookieStore.get(CONSENT_COOKIE_NAME);
+    const cookie = await getCookieStore()?.get(CONSENT_COOKIE_NAME);
     userConsent.value = cookie ? stringToBoolean(cookie.value) : undefined;
     if (userConsent.value) activatePostHog();
     else await deactivatePostHog();
@@ -114,19 +124,23 @@ export function usePostHog() {
     postHog.value?.clear_opt_in_out_capturing();
     postHog.value = undefined;
 
-    (await cookieStore.getAll()).forEach(({ name }) => {
-      if (name?.startsWith("ph_")) cookieStore.delete({ name, path: "/" });
+    const store = getCookieStore();
+    if (!store) return;
+
+    (await store.getAll()).forEach(({ name }) => {
+      if (name?.startsWith("ph_")) store.delete({ name, path: "/" });
     });
   }
 
   /** Retrieves the user's PostHog distinct ID from cookies. */
   async function getUserPostHogId() {
-    if (import.meta.server || typeof cookieStore === "undefined" || !key) {
+    const store = getCookieStore();
+    if (import.meta.server || !store || !key) {
       return "anonymous_feedback_user";
     }
 
     try {
-      const cookie = await cookieStore.get(`ph_${key}_posthog`);
+      const cookie = await store.get(`ph_${key}_posthog`);
       if (cookie?.value) {
         const phCookieObject = JSON.parse(cookie.value);
         return phCookieObject.distinct_id ?? "anonymous_feedback_user";
@@ -172,7 +186,7 @@ export function usePostHog() {
     const expiresAt = new Date();
     expiresAt.setFullYear(expiresAt.getFullYear() + 1);
 
-    await cookieStore.set({
+    await getCookieStore()?.set({
       name: CONSENT_COOKIE_NAME,
       value: userHasAccepted.toString(),
       expires: expiresAt.getTime(),
