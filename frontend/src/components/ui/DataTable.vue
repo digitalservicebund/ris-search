@@ -102,7 +102,7 @@ const gridTemplateColumns = computed(() =>
         <component
           :is="rowAs"
           :aria-current="row.current ? 'page' : undefined"
-          class="grid grid-cols-[max-content_minmax(0,1fr)] items-center gap-x-24 gap-y-16 p-16 focus-visible:outline-4 focus-visible:-outline-offset-4 focus-visible:outline-blue-800 md:col-span-full md:grid-cols-subgrid md:gap-0 md:p-0"
+          class="grid grid-cols-[max-content_minmax(0,1fr)] items-center gap-16 p-16 focus-visible:outline-4 focus-visible:-outline-offset-4 focus-visible:outline-blue-800 md:col-span-full md:grid-cols-subgrid md:gap-0 md:p-0"
           v-bind="row.attrs"
         >
           <template v-for="column in columns" :key="column.key">
