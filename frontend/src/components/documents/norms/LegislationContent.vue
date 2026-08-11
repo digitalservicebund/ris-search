@@ -11,14 +11,14 @@ defineProps<{
 </script>
 
 <template>
-  <SingleAccordion
+  <UiAccordion
     v-if="officialToc"
     class="mt-24"
     header-expanded="Amtliches Inhaltsverzeichnis ausblenden"
     header-collapsed="Amtliches Inhaltsverzeichnis einblenden"
   >
     <div v-html="officialToc" />
-  </SingleAccordion>
+  </UiAccordion>
   <div :class="['legislation', { 'single-article': singleArticle }]">
     <slot />
   </div>

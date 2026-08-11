@@ -10,14 +10,14 @@ const wrapFootnote = computed(
 
 <template>
   <div class="dokumentenkopf-fussnoten">
-    <SingleAccordion
+    <UiAccordion
       v-if="wrapFootnote"
       class="print:hidden"
       header-expanded="Fußnote ausblenden"
       header-collapsed="Fußnote anzeigen"
     >
       <div v-html="props.html"></div>
-    </SingleAccordion>
+    </UiAccordion>
 
     <div
       :data-show="!wrapFootnote"

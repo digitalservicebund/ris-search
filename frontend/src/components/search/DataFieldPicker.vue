@@ -135,7 +135,7 @@ function submitUnlessLoading() {
     </div>
 
     <div class="mt-8 mb-16 lg:hidden">
-      <SingleAccordion
+      <UiAccordion
         header-collapsed="Auswahl für gezielte Suche"
         header-expanded="Auswahl für gezielte Suche"
       >
@@ -144,7 +144,7 @@ function submitUnlessLoading() {
           :label-id="dataFieldListId"
           @click-data-field="insertInQuery"
         />
-      </SingleAccordion>
+      </UiAccordion>
     </div>
   </search>
 
