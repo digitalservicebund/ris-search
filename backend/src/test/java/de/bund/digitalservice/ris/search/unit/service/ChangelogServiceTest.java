@@ -1,6 +1,7 @@
 package de.bund.digitalservice.ris.search.unit.service;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.assertj.core.api.InstanceOfAssertFactories.LIST;
 import static org.assertj.core.api.InstanceOfAssertFactories.SET;
 import static org.mockito.ArgumentMatchers.any;
@@ -14,6 +15,7 @@ import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
 import de.bund.digitalservice.ris.search.service.ChangelogService;
 import java.time.Instant;
+import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
 import java.util.List;
@@ -218,5 +220,17 @@ class ChangelogServiceTest {
     Changelog result = changelogService.getChangesBetween(from, to);
 
     assertThat(result.isChangeAll()).isTrue();
+  }
+
+  @Test
+  void itReportsMalformedChangelogKeys() {
+    Instant from = Instant.parse("2026-07-03T12:00:00Z");
+    Instant to = Instant.parse("2027-01-01T12:00:00Z");
+
+    when(bucket.getAllKeysByPrefix(any())).thenReturn(List.of("changelogs/2026-07-03-norm.json"));
+
+    assertThatThrownBy(() -> changelogService.getChangesBetween(from, to))
+        .isInstanceOf(DateTimeParseException.class)
+        .hasMessageContaining("changelogs/2026-07-03-norm.json");
   }
 }

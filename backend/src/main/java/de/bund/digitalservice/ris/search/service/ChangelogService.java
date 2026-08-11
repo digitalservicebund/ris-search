@@ -8,6 +8,7 @@ import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
 import de.bund.digitalservice.ris.search.utils.StringUtils;
 import java.time.Instant;
+import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -136,7 +137,14 @@ public class ChangelogService<T extends ObjectStorage> {
   private Instant parseInstantFromKey(String key) {
     String fileName = key.substring(key.lastIndexOf('/') + 1);
     String timestampStr = fileName.substring(0, fileName.indexOf('Z') + 1);
-    return Instant.parse(timestampStr);
+
+    try {
+      return Instant.parse(timestampStr);
+    } catch (DateTimeParseException e) {
+      String msg =
+          String.format("Could not parse timestamp %s of changelog with key %s", timestampStr, key);
+      throw new DateTimeParseException(msg, e.getParsedString(), e.getErrorIndex());
+    }
   }
 
   /**
