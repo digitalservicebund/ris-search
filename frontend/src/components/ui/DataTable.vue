@@ -86,7 +86,7 @@ const gridTemplateColumns = computed(() =>
       <span
         v-for="column in columns"
         :key="column.key"
-        class="typo-label1-bold p-16"
+        class="typo-label1-bold flex min-h-48 items-center px-16 py-10"
       >
         {{ column.label }}
       </span>
@@ -102,13 +102,17 @@ const gridTemplateColumns = computed(() =>
         <component
           :is="rowAs"
           :aria-current="row.current ? 'page' : undefined"
-          class="grid grid-cols-[max-content_minmax(0,1fr)] items-center gap-16 p-16 focus-visible:outline-4 focus-visible:-outline-offset-4 focus-visible:outline-blue-800 md:col-span-full md:grid-cols-subgrid md:gap-0 md:p-0"
+          class="grid grid-cols-[max-content_minmax(0,1fr)] items-center gap-x-16 gap-y-8 p-16 focus-visible:outline-4 focus-visible:-outline-offset-4 focus-visible:outline-blue-800 md:col-span-full md:grid-cols-subgrid md:gap-0 md:p-0"
           v-bind="row.attrs"
         >
           <template v-for="column in columns" :key="column.key">
-            <span class="typo-label1-bold md:sr-only">{{ column.label }}:</span>
+            <span class="typo-label1-bold flex min-h-32 items-center md:sr-only"
+              >{{ column.label }}:</span
+            >
             {{ " " }}
-            <span class="typo-label1-regular md:p-16">
+            <span
+              class="typo-label1-regular flex min-h-32 items-center md:min-h-48 md:px-16"
+            >
               <slot :name="`cell-${column.key}`" :row="row" :column="column">
                 {{ row[column.key] }}
               </slot>
