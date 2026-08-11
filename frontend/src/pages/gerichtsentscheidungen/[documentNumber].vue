@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { Message } from "primevue";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineInfo from "~icons/ic/outline-info";
 import type { DetailsListItem } from "~/components/documents/DetailsList.vue";
@@ -143,7 +142,7 @@ const detailsSectionId = useId();
     </template>
 
     <template #message>
-      <Message
+      <UiMessage
         v-if="caseLaw?.vorabdokument"
         severity="info"
         class="typo-body-regular my-24 bg-white sm:my-32 md:my-40"
@@ -156,7 +155,7 @@ const detailsSectionId = useId();
           veröffentlicht. Der Entscheidungstext ist derzeit noch nicht
           verfügbar, wird aber in Kürze ergänzt.
         </p>
-      </Message>
+      </UiMessage>
     </template>
 
     <template #details>

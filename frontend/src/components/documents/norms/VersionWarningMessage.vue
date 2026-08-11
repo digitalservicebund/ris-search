@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { Message } from "primevue";
 import IcBaselineHistory from "~icons/ic/baseline-history";
 import IcBaselineUpdate from "~icons/ic/baseline-update";
 import type { RouteLocationRaw } from "#vue-router";
@@ -66,7 +65,7 @@ const versionLink = computed<
 
 <template>
   <div v-if="showWarningMessage" class="w-fit">
-    <Message :severity="warningMessageType" class="typo-label2-regular">
+    <UiMessage :severity="warningMessageType" class="typo-label2-regular">
       <template #icon>
         <IcBaselineUpdate
           v-if="currentVersionValidityStatus === 'InForce'"
@@ -93,6 +92,6 @@ const versionLink = computed<
           {{ versionLink.label }}
         </NuxtLink>
       </p>
-    </Message>
+    </UiMessage>
   </div>
 </template>

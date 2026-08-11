@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { Message } from "primevue";
 import IconCheck from "~icons/ic/check";
 import IconClose from "~icons/ic/close";
 
@@ -21,7 +20,7 @@ async function handleSetTracking(value: boolean) {
 
 <template>
   <div class="w-fit" data-testid="consent-status-wrapper">
-    <Message
+    <UiMessage
       role="status"
       severity="info"
       class="typo-body-regular mb-24 bg-white"
@@ -63,7 +62,7 @@ async function handleSetTracking(value: boolean) {
           </div>
         </template>
       </client-only>
-    </Message>
+    </UiMessage>
     <form
       v-if="userConsent"
       action="/api/cookie-consent"

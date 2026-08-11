@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Message, PanelMenu, Select } from "primevue";
+import { PanelMenu } from "primevue";
 import type { MenuItem } from "primevue/menuitem";
 import IcBaselineSwapVert from "~icons/ic/baseline-swap-vert";
 import IcOutlineFilterAlt from "~icons/ic/outline-filter-alt";
@@ -404,9 +404,9 @@ watch(searchStatus, async (newStatus, oldStatus) => {
             navigation-position="bottom"
             @update-page="handlePageUpdate"
           >
-            <Message v-if="!!searchError" severity="error">
+            <UiMessage v-if="!!searchError" severity="error" role="alert">
               {{ searchError.message }}
-            </Message>
+            </UiMessage>
 
             <ul
               v-if="searchResults"

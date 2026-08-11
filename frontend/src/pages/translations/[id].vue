@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import { Message } from "primevue";
 import { computed } from "vue";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineInfo from "~icons/ic/outline-info";
-import IcOutlineWarning from "~icons/ic/outline-warning-amber";
 import { NuxtLink } from "#components";
 import NormTranslationActionMenu from "~/components/documents/actionMenu/NormTranslationActionMenu.vue";
 import type { DetailsListItem } from "~/components/documents/DetailsList.vue";
@@ -123,14 +121,7 @@ const detailsTabPanelTitleId = useId();
         </h1>
       </hgroup>
 
-      <Message
-        v-if="legislation"
-        :closable="false"
-        class="my-24 space-y-24 sm:my-32 md:my-40"
-      >
-        <template #icon>
-          <IcOutlineWarning />
-        </template>
+      <UiMessage v-if="legislation" class="my-24 space-y-24 sm:my-32 md:my-40">
         <p class="typo-label2-bold mt-2">Version Information</p>
         <p class="typo-label2-regular mt-2">
           Translations may not be updated at the same time as the German legal
@@ -142,7 +133,7 @@ const detailsTabPanelTitleId = useId();
             Go to the German version</NuxtLink
           >.
         </p>
-      </Message>
+      </UiMessage>
     </div>
 
     <DocumentsTabsLayout :views>

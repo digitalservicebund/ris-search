@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { Message } from "primevue";
 import { ExternalLink, NuxtLink } from "#components";
 import bmjvLogo from "~/assets/img/bmjv-de-v1-web-farbig.svg";
 
@@ -69,12 +68,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
         @empty-search="() => redirectToSearch()"
       />
 
-      <Message
-        severity="warn"
-        class="ris-body2-regular"
-        role="status"
-        aria-live="off"
-      >
+      <UiMessage severity="warn" class="ris-body2-regular" role="status">
         <p class="ris-body2-bold mt-2">
           Dieser Service befindet sich in der Testphase.
         </p>
@@ -84,7 +78,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
           Inhalte. Für Recherchen nutzen Sie bitte weiterhin die bestehenden
           Webseiten Gesetze-im-Internet und Rechtsprechung-im-Internet.
         </p>
-      </Message>
+      </UiMessage>
     </div>
 
     <div class="feature-card">

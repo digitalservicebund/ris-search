@@ -26,6 +26,10 @@ describe("ArticleVersionWarning", () => {
       props: { inForceVersionLink, currentArticle },
     });
 
-    expect(screen.getByRole("alert")).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        /Sie lesen einen Paragrafen einer (historischen|zukünftigen) Fassung\./,
+      ),
+    ).toBeInTheDocument();
   });
 });
