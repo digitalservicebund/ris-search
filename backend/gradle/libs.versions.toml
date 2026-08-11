@@ -68,7 +68,6 @@ opensearch-testcontainers = { module = "org.opensearch:opensearch-testcontainers
 testcontainers-postgresql = { module = "org.testcontainers:postgresql", version.ref = "test-containers" }
 tools-jackson-core = { module = "tools.jackson.core:jackson-core", version.ref = "tools-jackson-core" }
 jaxb-moxy = { module = "org.eclipse.persistence:org.eclipse.persistence.moxy", version.ref = "jaxb-moxy" }
-jaxb-moxy-xjc = {module = "org.eclipse.persistence:org.eclipse.persistence.moxy.utils.xjc", version.ref = "jaxb-moxy"}
 pebble = { module = "io.pebbletemplates:pebble-spring-boot-starter", version.ref = "pebble" }
 ris-html-transformation = { module = "de.bund.digitalservice:ris-html-transformation", version.ref = "ris-html-transformation"}
 streamex = { module = 'one.util:streamex', version.ref = "streamex" }
