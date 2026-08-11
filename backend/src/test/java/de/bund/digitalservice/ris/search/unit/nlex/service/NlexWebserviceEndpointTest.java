@@ -48,7 +48,9 @@ class NlexWebserviceEndpointTest {
 
   @Test
   void onTestQueryItReturnsAValidTestQuery() throws JAXBException, IOException {
-    TestQueryResponse response = this.nlexServiceEndpoint.testQuery(new TestQuery());
+    TestQuery testQuery = new TestQuery();
+    testQuery.setType("optional");
+    TestQueryResponse response = this.nlexServiceEndpoint.testQuery(testQuery);
 
     JAXBContext ctx = JAXBContext.newInstance(Query.class);
     TestXmlUtils.validate(response.getQuery(), ctx);
@@ -56,8 +58,10 @@ class NlexWebserviceEndpointTest {
 
   @Test
   void onAboutConnectorItReturnsTheRisQuerySchemaDefinition() throws IOException {
+    AboutConnector aboutConnector = new AboutConnector();
+    aboutConnector.setType("query");
     String configContent =
-        this.nlexServiceEndpoint.aboutConnector(new AboutConnector()).getAboutConnectorResult();
+        this.nlexServiceEndpoint.aboutConnector(aboutConnector).getAboutConnectorResult();
     String expectedContent =
         IOUtils.toString(
             Objects.requireNonNull(
