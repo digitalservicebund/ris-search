@@ -145,24 +145,16 @@ public class ObjectStorage {
    *     the operation
    */
   public Optional<byte[]> get(String objectKey) throws ObjectStoreServiceException {
-    for (int i = 0; i < MAXIMUM_CALL_ATTEMPTS; i++) {
-      try {
-        final var response = getStream(objectKey);
-        return Optional.of(response.readAllBytes());
-      } catch (NoSuchKeyException e) {
-        logger.warn(String.format("Object key %s does not exist", objectKey));
-        return Optional.empty();
-      } catch (IOException | AwsServiceException | SdkClientException e) {
-        logger.warn(
-            "Object storage encountered an issue while trying to get object {}."
-                + " Attempt {} will try again.",
-            objectKey,
-            i,
-            e);
-      }
+    try {
+      final var response = getStream(objectKey);
+      return Optional.of(response.readAllBytes());
+    } catch (NoSuchKeyException e) {
+      logger.warn("Object key {} does not exist", objectKey);
+      return Optional.empty();
+    } catch (IOException | AwsServiceException | SdkClientException e) {
+      throw new ObjectStoreServiceException(
+          "Object storage encountered a fatal issue while trying to get object " + objectKey, e);
     }
-    throw new ObjectStoreServiceException(
-        "Object storage encountered an issue. All retries failed.");
   }
 
   public FilterInputStream getStream(String objectKey) throws NoSuchKeyException {
