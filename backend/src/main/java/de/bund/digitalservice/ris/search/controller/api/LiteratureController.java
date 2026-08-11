@@ -1,5 +1,7 @@
 package de.bund.digitalservice.ris.search.controller.api;
 
+import de.bund.digitalservice.ris.html.service.xslt.LiteratureXsltTransformer;
+import de.bund.digitalservice.ris.html.service.xslt.SliLiteratureXsltTransformer;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.exception.CustomValidationException;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
@@ -23,8 +25,6 @@ import de.bund.digitalservice.ris.search.schema.LiteratureSearchSchema;
 import de.bund.digitalservice.ris.search.schema.SearchMemberSchema;
 import de.bund.digitalservice.ris.search.service.ChangelogService;
 import de.bund.digitalservice.ris.search.service.LiteratureService;
-import de.bund.digitalservice.ris.search.service.xslt.LiteratureXsltTransformerService;
-import de.bund.digitalservice.ris.search.service.xslt.SliLiteratureXsltTransformerService;
 import de.bund.digitalservice.ris.search.utils.LuceneQueryTools;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -54,26 +54,26 @@ import org.springframework.web.bind.annotation.RestController;
 public class LiteratureController {
 
   private final LiteratureService literatureService;
-  private final LiteratureXsltTransformerService xsltTransformerService;
-  private final SliLiteratureXsltTransformerService sliXsltTransformerService;
+  private final LiteratureXsltTransformer xsltTransformer;
+  private final SliLiteratureXsltTransformer sliXsltTransformer;
   private final ChangelogService<LiteratureBucket> changelogService;
 
   /**
    * Constructor for LiteratureController.
    *
    * @param literatureService the service responsible for handling literature-related operations
-   * @param literatureXsltTransformerService the service responsible for performing XSLT
-   *     transformations for literature
+   * @param literatureXsltTransformer the service responsible for performing XSLT transformations
+   *     for literature
    */
   @Autowired
   public LiteratureController(
       LiteratureService literatureService,
-      LiteratureXsltTransformerService literatureXsltTransformerService,
-      SliLiteratureXsltTransformerService sliLiteratureXsltTransformerService,
+      LiteratureXsltTransformer literatureXsltTransformer,
+      SliLiteratureXsltTransformer sliLiteratureXsltTransformer,
       ChangelogService<LiteratureBucket> changelogService) {
     this.literatureService = literatureService;
-    this.xsltTransformerService = literatureXsltTransformerService;
-    this.sliXsltTransformerService = sliLiteratureXsltTransformerService;
+    this.xsltTransformer = literatureXsltTransformer;
+    this.sliXsltTransformer = sliLiteratureXsltTransformer;
     this.changelogService = changelogService;
   }
 
@@ -132,10 +132,10 @@ public class LiteratureController {
             file -> {
               switch (LiteratureType.getByDocumentNumber(documentNumber)) {
                 case SLI -> {
-                  return sliXsltTransformerService.transformLiterature(file);
+                  return sliXsltTransformer.transform(file);
                 }
                 case ULI -> {
-                  return xsltTransformerService.transformLiterature(file);
+                  return xsltTransformer.transform(file);
                 }
                 default -> {
                   return null;

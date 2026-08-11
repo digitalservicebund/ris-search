@@ -6,13 +6,11 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import de.bund.digitalservice.ris.html.service.xslt.LiteratureXsltTransformer;
+import de.bund.digitalservice.ris.html.service.xslt.SliLiteratureXsltTransformer;
 import de.bund.digitalservice.ris.search.controller.api.LiteratureController;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
-import de.bund.digitalservice.ris.search.repository.objectstorage.LiteratureBucket;
-import de.bund.digitalservice.ris.search.service.ChangelogService;
 import de.bund.digitalservice.ris.search.service.LiteratureService;
-import de.bund.digitalservice.ris.search.service.xslt.LiteratureXsltTransformerService;
-import de.bund.digitalservice.ris.search.service.xslt.SliLiteratureXsltTransformerService;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,13 +25,9 @@ class LiteratureControllerTest {
 
   @Mock LiteratureService literatureService;
 
-  @Mock LiteratureXsltTransformerService uliTransformer;
+  @Mock LiteratureXsltTransformer uliTransformer;
 
-  @Mock SliLiteratureXsltTransformerService sliTransformer;
-
-  @Mock LiteratureBucket bucket;
-
-  @Mock ChangelogService changelogService;
+  @Mock SliLiteratureXsltTransformer sliTransformer;
 
   @Test
   void itCallsTheUliTransformer() throws ObjectStoreServiceException {
@@ -43,11 +37,11 @@ class LiteratureControllerTest {
 
     when(literatureService.getFileByDocumentNumber(documentNumber))
         .thenReturn(Optional.of(content));
-    when(uliTransformer.transformLiterature(content)).thenReturn("uliHtml");
+    when(uliTransformer.transform(content)).thenReturn("uliHtml");
 
     var actual = controller.getLiteratureAsHtml(documentNumber);
 
-    verify(sliTransformer, never()).transformLiterature(any());
+    verify(sliTransformer, never()).transform(any());
     assertThat(actual.getBody()).isEqualTo("uliHtml");
   }
 
@@ -59,11 +53,11 @@ class LiteratureControllerTest {
 
     when(literatureService.getFileByDocumentNumber(documentNumber))
         .thenReturn(Optional.of(content));
-    when(sliTransformer.transformLiterature(content)).thenReturn("sliHtml");
+    when(sliTransformer.transform(content)).thenReturn("sliHtml");
 
     var actual = controller.getLiteratureAsHtml(documentNumber);
 
-    verify(uliTransformer, never()).transformLiterature(any());
+    verify(uliTransformer, never()).transform(any());
     assertThat(actual.getBody()).isEqualTo("sliHtml");
   }
 
