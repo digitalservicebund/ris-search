@@ -1,4 +1,4 @@
-FROM gradle:9.6.1-jdk21@sha256:a91a96d5f8530b4a6766f6502f563510bb5df157dc864ef50659c4214611a3d9 AS backend-builder
+FROM gradle:9.6.1-jdk25@sha256:e8aeffb8197b17151ce24607811f60e91125f0018f7a3b08dc504ba9168a9c4f AS backend-builder
 WORKDIR /app
 COPY . /app
 
