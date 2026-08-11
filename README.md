@@ -36,8 +36,8 @@ You will find the following services at these addresses:
 - Frontend at <http://localhost:3000>
 - OpenSearch at <http://localhost:9200>
 - OpenSearch Dashboards at <http://localhost:5601>
-- Backend at <http://localhost:8090>
-- Swagger API documentation at <http://localhost:8090/swagger-ui/index.html>
+- Backend at <http://localhost:8080>
+- Swagger API documentation at <http://localhost:8080/swagger-ui/index.html>
 
 ### Testing
 

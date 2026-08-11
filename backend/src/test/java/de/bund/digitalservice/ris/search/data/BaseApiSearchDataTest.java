@@ -15,7 +15,7 @@ import java.util.function.Function;
  */
 public abstract class BaseApiSearchDataTest {
 
-  public static final String BASE_URL = "http://localhost:8090";
+  public static final String BASE_URL = "http://localhost:8080";
 
   /**
    * Fetches search strings from a paginated API endpoint until the maximum number of entries is

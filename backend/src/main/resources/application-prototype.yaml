@@ -1,6 +1,10 @@
 server:
+  front-end-url: "https://testphase.rechtsinformationen.bund.de/"
   docs-url: "https://docs.rechtsinformationen.bund.de/"
-  front-end-url: https://testphase.rechtsinformationen.bund.de/
+
+swagger:
+  server:
+    url: "https://testphase.rechtsinformationen.bund.de/"
 
 spring:
   config:
@@ -15,36 +19,17 @@ spring:
           - name: ris-search-opensearch-prototype-config
           - name: posthog-config
 
-swagger:
-  server:
-    url: https://testphase.rechtsinformationen.bund.de/
-    description: Public API (preview)
-
-springdoc:
-  swagger-ui:
-    supportedSubmitMethods: ["get"]
-    defaultModelsExpandDepth: -1
-
 management:
   endpoints:
     web:
       exposure:
         include: health,info,prometheus
 
-sentry:
-  traces-sample-rate: 0.01
-
 # Used for sending feedback to posthog
 posthog:
   api-key:
   host:
   feedback-survey-id:
-
-app:
-  security:
-    # Since the api also hosts the swagger files, this header is used for both the api AND some of the docs pages
-    # https://testphase.rechtsinformationen.bund.de is in connect-src so the docs "try it out" can call the api
-    csp-header: "default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src data: 'self'; connect-src 'self' https://testphase.rechtsinformationen.bund.de; font-src 'self'; frame-src 'none'; object-src 'none'; media-src 'none';"
 
 s3:
   file-storage:

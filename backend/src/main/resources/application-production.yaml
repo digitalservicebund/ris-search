@@ -1,5 +1,9 @@
 server:
-  cms-url: https://content-management.ris.bund.de/
+  cms-url: "https://content-management.ris.bund.de/"
+
+swagger:
+  server:
+    url: "https://ris-portal.prod.tech.digitalservice.dev/"
 
 spring:
   config:
@@ -13,26 +17,11 @@ spring:
         sources:
           - name: ris-search-opensearch-config
 
-swagger:
-  server:
-    url: https://ris-portal.prod.ds4g.net/
-    description: Public production server
-
-springdoc:
-  swagger-ui:
-    supportedSubmitMethods: []
-    defaultModelsExpandDepth: -1
-
 management:
   endpoints:
     web:
       exposure:
         include: health,info,prometheus
-
-sentry:
-  traces-sample-rate: 0.01
-  logging:
-    minimum-event-level: error
 
 s3:
   file-storage:

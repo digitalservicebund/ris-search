@@ -9,5 +9,5 @@ ENV GH_PACKAGES_REPOSITORY_TOKEN=${GH_PACKAGES_REPOSITORY_TOKEN}
 
 COPY --chown=gradle:gradle . /app/backend
 WORKDIR /app/backend
-EXPOSE 8090
+EXPOSE 8080
 CMD ["gradle", "bootRun"]
