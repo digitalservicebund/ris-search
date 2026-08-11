@@ -73,7 +73,7 @@ const gridTemplateColumns = computed(() =>
 
 <template>
   <ul
-    class="border-t border-gray-400 md:grid md:[grid-template-columns:var(--data-table-columns)] md:border-t-0"
+    class="border-t border-gray-400 md:grid md:grid-cols-(--data-table-columns) md:border-t-0"
     :style="{ '--data-table-columns': gridTemplateColumns }"
   >
     <!-- Decorative: every row repeats the column labels for assistive
