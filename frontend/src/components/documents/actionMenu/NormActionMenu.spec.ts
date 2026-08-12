@@ -80,7 +80,7 @@ describe("NormActionMenu", () => {
       "Link zur jeweils gültigen Fassung kopieren",
     );
     expect(menuitems[1]).toHaveAccessibleName(
-      "Permalink zu dieser Fassung kopieren",
+      "Link zu dieser Fassung kopieren",
     );
     expect(menuitems[2]).toHaveAccessibleName("Drucken");
     expect(menuitems[3]).toHaveAccessibleName("Als PDF speichern");
@@ -138,7 +138,7 @@ describe("NormActionMenu", () => {
     await renderNormActionMenu();
 
     const copyButton = screen.getByRole("menuitem", {
-      name: "Permalink zu dieser Fassung kopieren",
+      name: "Link zu dieser Fassung kopieren",
     });
     expect(copyButton).toBeVisible();
     expect(copyButton).toBeEnabled();
