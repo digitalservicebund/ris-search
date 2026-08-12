@@ -59,9 +59,6 @@
                     <akn:implicitReference showAs="FooBar, 1982, 123-123">
                         <ris:fundstelleUnselbstaendig periodikum="FooBar" zitatstelle="1982, 123-123"/>
                     </akn:implicitReference>
-                    <akn:implicitReference showAs="17153/11, 17157/11, 17160/11, 17163/11, 17168/11, 17173/11, 17178/11, 17181/11, 17182/11, 17186/11, 17343/11, 17344/11, 17362/11, 17364/11, 17367/11, 17370/11, 17372/11, 17377/11, 17380/11, 17382/11, 17386/11, 17421/11, 17424/11, 17428/11, 17431/11, 17435/11, 17438/11, 17439/11, 17440/11 und 17443/11">
-                        <ris:fundstelleUnselbstaendig periodikum="" zitatstelle="17153/11, 17157/11, 17160/11, 17163/11, 17168/11, 17173/11, 17178/11, 17181/11, 17182/11, 17186/11, 17343/11, 17344/11, 17362/11, 17364/11, 17367/11, 17370/11, 17372/11, 17377/11, 17380/11, 17382/11, 17386/11, 17421/11, 17424/11, 17428/11, 17431/11, 17435/11, 17438/11, 17439/11, 17440/11 und 17443/11"/>
-                    </akn:implicitReference>
                     <akn:implicitReference showAs="SelbstFund, 1982, 123-123">
                         <ris:fundstelleSelbstaendig titel="SelbstFund" zitatstelle="2024, 456-456"/>
                     </akn:implicitReference>
