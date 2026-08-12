@@ -132,6 +132,7 @@
                 </akn:note>
                 <akn:note GUID="e139d37b-0714-4996-9269-6117aca521e2" eId="meta-n1_editfnote-n4" marker="#" placementBase="#präambel-n1_blockcontainer-n1" refersTo="aenderungsfussnote"><akn:p GUID="d3c6dd33-4847-4529-950f-f8e248c89715" eId="meta-n1_editfnote-n4_text-n1">Inhaltsübersicht: präambel Fußnote</akn:p></akn:note>
                 <akn:note GUID="e7777777-7777-7777-7777-777777777777" eId="meta-n1_editfnote-n5" marker="#" placementBase="#präambel-n1_formel-n1" refersTo="aenderungsfussnote"><akn:p GUID="e8888888-8888-8888-8888-888888888888" eId="meta-n1_editfnote-n5_text-n1">Eingangsformel: Diese Fußnote an der Eingangsformel wurde im End-to-end-Datenbestand ergänzt</akn:p></akn:note>
+                <akn:note GUID="e9999999-9999-9999-9999-999999999999" eId="meta-n1_editfnote-n6" marker="#" placementBase="#schluss-n1_formel-n1" refersTo="aenderungsfussnote"><akn:p GUID="7d8583f6-ae27-5308-9fe7-d1c4d6afa5c5" eId="meta-n1_editfnote-n6_text-n1">Schlussformel: Diese Fußnote an der Schlussformel wurde im End-to-end-Datenbestand ergänzt</akn:p></akn:note>
             </akn:notes>
             <akn:proprietary GUID="bb777777-7777-7777-7777-777777777777" eId="meta-n1_proprietary-n1" source="attributsemantik-noch-undefiniert">
                 <ris:legalDocML.de_metadaten xmlns:ris="http://MetadatenRIS.LegalDocML.de/1.8.2/" xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.8.2/ Grammatiken/legalDocML.de-metadaten-ris.xsd">

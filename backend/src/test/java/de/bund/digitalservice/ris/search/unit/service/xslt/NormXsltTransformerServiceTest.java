@@ -69,6 +69,7 @@ class NormXsltTransformerServiceTest {
     "main,         preambleFormulaNotes.xml, preambleFormulaNotes.html,                             Should output notes of a preamble formula",
     "main,         preambleFormulaAndTocNotes.xml, preambleFormulaAndTocNotes.html,                 Should output notes of a preamble formula and of the official toc in their own containers",
     "main,         conclusionsFormula.xml, conclusionsFormula.html,                                 Should transform a conclusions formula",
+    "main,         conclusionsFormulaNotes.xml, conclusionsFormulaNotes.html,                       Should output notes of a conclusions formula",
     "main,         blockList.xml, blockList.html,                                                   Should transform a blockList",
     "main,         preformatted.xml, preformatted.html,                                             Should transform preformatted paragraphs",
     "main,         proprietary.xml, proprietary.html,                                               Should transform proprietary metadata"

@@ -168,6 +168,21 @@ test.describe("view norm page", async () => {
     ).toBeVisible();
   });
 
+  test("shows the footnote of the Schlussformel", async ({ page }) => {
+    await navigate(
+      page,
+      "/gesetze/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu",
+    );
+
+    await expect(
+      page
+        .locator("section.schlussformel")
+        .getByText(
+          "Schlussformel: Diese Fußnote an der Schlussformel wurde im End-to-end-Datenbestand ergänzt",
+        ),
+    ).toBeVisible();
+  });
+
   test("view footnotes in title", async ({ page }) => {
     await navigate(
       page,
