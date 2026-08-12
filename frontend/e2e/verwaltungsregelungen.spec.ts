@@ -326,7 +326,7 @@ test.describe("actions menu", () => {
   test.describe("can use XML action to view administrative directive xml file", () => {
     testXmlButton(
       "/verwaltungsregelungen/KSNR000000001",
-      "http://localhost:8090/v1/administrative-directive/KSNR000000001.xml",
+      "http://localhost:8080/v1/administrative-directive/KSNR000000001.xml",
     );
   });
 });

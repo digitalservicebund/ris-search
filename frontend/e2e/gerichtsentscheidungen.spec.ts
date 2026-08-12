@@ -180,7 +180,7 @@ test.describe("actions menu", () => {
   test.describe("can use XML action to view caselaw xml file", () => {
     testXmlButton(
       "/gerichtsentscheidungen/JURE200030030",
-      "http://localhost:8090/v1/case-law/JURE200030030.xml",
+      "http://localhost:8080/v1/case-law/JURE200030030.xml",
     );
   });
 });

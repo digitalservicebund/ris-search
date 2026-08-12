@@ -32,14 +32,14 @@ The frontend will be available at [localhost:3000](http://localhost:3000).
 
 > [!NOTE]
 >
-> Instead of running a local backend, you can also connect the frontend dev server to our staging backend. To do so, first make sure you have `NUXT_PUBLIC_RIS_BACKEND_URL=http:///localhost:8090` in your `.env` file. You can then start a reverse proxy by running:
+> Instead of running a local backend, you can also connect the frontend dev server to our staging backend. To do so, first make sure you have `NUXT_PUBLIC_RIS_BACKEND_URL=http:///localhost:8080` in your `.env` file. You can then start a reverse proxy by running:
 >
 > ```sh
 > # from the frontend/ directory
 > ./staging-proxy/run.sh
 > ```
 >
-> This will forward calls to `localhost:8090` to the actual staging backend.
+> This will forward calls to `localhost:8080` to the actual staging backend.
 
 ### Feature Flags
 

@@ -76,10 +76,10 @@ jobs:
       - name: Start backend locally (background)
         working-directory: ./backend
         env:
-          SPRING_PROFILES_ACTIVE: dev,e2e
+          SPRING_PROFILES_ACTIVE: e2e
           OPENSEARCH_HOST: opensearch # use service name because it's inside the docker network
           GRADLE_USER_HOME: ${{ github.workspace }}/.gradle-cache
-          THC_PORT: 8090
+          THC_PORT: 8080
           NODE_OPTIONS: "--max_old_space_size=4096"
           GH_PACKAGES_REPOSITORY_USER: ${{ github.actor }}
           GH_PACKAGES_REPOSITORY_TOKEN: ${{ github.token }}
@@ -105,7 +105,7 @@ jobs:
         working-directory: ./frontend
         env:
           NUXT_PUBLIC_PRIVATE_FEATURES_ENABLED: ${{ matrix.private_features_enabled }}
-          NUXT_PUBLIC_RIS_BACKEND_URL: http://localhost:8090
+          NUXT_PUBLIC_RIS_BACKEND_URL: http://localhost:8080
           SENTRY_TELEMETRY: false
           CI: true
         run: |
@@ -113,8 +113,8 @@ jobs:
 
       - name: Wait for backend to respond
         run: |
-          echo "Waiting for backend on http://localhost:8090/actuator/health ..."
-          until curl --silent --fail http://localhost:8090/actuator/health; do
+          echo "Waiting for backend on http://localhost:8080/actuator/health ..."
+          until curl --silent --fail http://localhost:8080/actuator/health; do
             echo "Still waiting..."
             sleep 5
           done

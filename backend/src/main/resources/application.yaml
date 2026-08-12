@@ -1,12 +1,16 @@
+# Our convention is that all properties are explicitly in this file. If the property isn't used
+# everywhere it is set here with the empty string. Kubernetes import is the only exception to this.
+
 spring:
   profiles:
-    # all environments override this property, so it's only used locally.
+    # Set the default spring profile to dev. dev is used for local development. All other
+    # environments explicitly set a profile and therefore don't use the default.
     default: dev
 
 server:
   port: 8080
-  front-end-url: "http://localhost:3000/"
-  docs-url: "https://localhost::5173/"
+  front-end-url: ""
+  docs-url: ""
   cms-url: ""
   api-keys: []
 
@@ -20,8 +24,8 @@ rate-limit:
 
 swagger:
   server:
-    url: http://localhost:8090
-    description: Local development server
+    url: ""
+    description: "RIS API url"
 
 springdoc:
   swagger-ui:
@@ -39,64 +43,57 @@ opensearch:
   literature-index-name: literature
   documents-alias-name: documents
   administrative-directive-index-name: administrative_directive
-  authentication: disabled
 
-# The user and password to access postgres was created in the neuris-infra following the variable convention in that repo
-search:
-  database:
-    host: "${POSTGRES_CASELAW_HOST:localhost}"
-    port: 5432
-    user: "test"
-    password: "test"
-    database: "neuris"
-
+# bucket-name, access-key-id and secret-access-key are overridden my stackit secrets manager
+# versionPrefix is overridden in the respective application-ABC.yaml
 s3:
   file-storage:
     norm:
       endpoint: "https://object.storage.eu01.onstackit.cloud"
-      bucket-name: norm
-      access-key-id:
-      secret-access-key:
-      versionPrefix:
+      bucket-name: ""
+      access-key-id: ""
+      secret-access-key: ""
+      versionPrefix: ""
     case-law:
       endpoint: "https://object.storage.eu01.onstackit.cloud"
-      bucket-name: caselaw
-      access-key-id:
-      secret-access-key:
-      versionPrefix:
+      bucket-name: ""
+      access-key-id: ""
+      secret-access-key: ""
+      versionPrefix: ""
     literature:
       endpoint: "https://object.storage.eu01.onstackit.cloud"
-      bucket-name: literature
-      access-key-id:
-      secret-access-key:
-      versionPrefix:
+      bucket-name: ""
+      access-key-id: ""
+      secret-access-key: ""
+      versionPrefix: ""
     administrative-directive:
       endpoint: "https://object.storage.eu01.onstackit.cloud"
-      bucket-name: administrative-directive
-      access-key-id:
-      secret-access-key:
-      versionPrefix:
+      bucket-name: ""
+      access-key-id: ""
+      secret-access-key: ""
+      versionPrefix: ""
     portal:
       endpoint: "https://object.storage.eu01.onstackit.cloud"
-      bucket-name: portal
-      access-key-id:
-      secret-access-key:
+      bucket-name: ""
+      access-key-id: ""
+      secret-access-key: ""
     public-files:
       endpoint: "https://object.storage.eu01.onstackit.cloud"
-      bucket-name: public
-      access-key-id:
-      secret-access-key:
-
-local:
-  file-storage: backend/.local-storage
+      bucket-name: ""
+      access-key-id: ""
+      secret-access-key: ""
 
 sentry:
   release: "${SENTRY_RELEASE:default_release}"
   environment: "${SENTRY_ENVIRONMENT:}"
+  traces-sample-rate: 0.01
+  minimum-event-level: "error"
 
 app:
   security:
-    csp-header: "default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src data: 'self'; connect-src 'self'; font-src 'self'; frame-src 'none'; object-src 'none'; media-src 'none';"
+    # Since the api also hosts the swagger files, this header is used for both the api AND some of the docs pages
+    # https://testphase.rechtsinformationen.bund.de is in connect-src so the docs "try it out" can call the api
+    csp-header: "default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src data: 'self'; connect-src 'self' https://testphase.rechtsinformationen.bund.de; font-src 'self'; frame-src 'none'; object-src 'none'; media-src 'none';"
 
 logging:
   level:
@@ -113,12 +110,3 @@ logging:
             MessageTracing:
               sent: DEBUG
               received: TRACE
-
----
-spring:
-  config:
-    activate:
-      on-profile: "staging | uat | production | prototype"
-    import:
-      - "kubernetes:"
-      - "optional:configtree:/etc/secrets/*/"
