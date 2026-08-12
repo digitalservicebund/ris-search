@@ -4,7 +4,7 @@ import static org.apache.commons.lang3.StringUtils.deleteWhitespace;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import de.bund.digitalservice.ris.search.service.xslt.CaselawXsltTransformerService;
+import de.bund.digitalservice.ris.html.service.xslt.CaselawXsltTransformer;
 import de.bund.digitalservice.ris.search.utils.CaseLawLdmlTemplateUtils;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -16,14 +16,13 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 class CaselawXsltTransformerServiceTest {
-  private final CaselawXsltTransformerService service = new CaselawXsltTransformerService();
+  private final CaselawXsltTransformer transformer = new CaselawXsltTransformer();
   private final CaseLawLdmlTemplateUtils caseLawLdmlTemplateUtils = new CaseLawLdmlTemplateUtils();
 
   @Test
   void testTransformsCaselawHeaderCorrectly() throws IOException {
     var actualXml = caseLawLdmlTemplateUtils.getXmlFromTemplate(null);
-    var actualHtml =
-        service.transformCaseLaw(actualXml.getBytes(StandardCharsets.UTF_8), "api/v1/");
+    var actualHtml = transformer.transform(actualXml.getBytes(StandardCharsets.UTF_8), "api/v1/");
     var expectedHeader =
         """
         <h1 id="title">
@@ -36,8 +35,7 @@ class CaselawXsltTransformerServiceTest {
   @Test
   void testTransformsCaselawBorderNumberCorrectly() throws IOException {
     var actualXml = caseLawLdmlTemplateUtils.getXmlFromTemplate(null);
-    var actualHtml =
-        service.transformCaseLaw(actualXml.getBytes(StandardCharsets.UTF_8), "api/v1/");
+    var actualHtml = transformer.transform(actualXml.getBytes(StandardCharsets.UTF_8), "api/v1/");
     var expectedBorderNumber =
         """
             <dl class="border-number">
@@ -63,8 +61,7 @@ class CaselawXsltTransformerServiceTest {
   @Test
   void testTransformsCaselawTableCorrectlyWithStyles() throws IOException {
     var actualXml = caseLawLdmlTemplateUtils.getXmlFromTemplate(null);
-    var actualHtml =
-        service.transformCaseLaw(actualXml.getBytes(StandardCharsets.UTF_8), "api/v1/");
+    var actualHtml = transformer.transform(actualXml.getBytes(StandardCharsets.UTF_8), "api/v1/");
     var expectedTable =
         """
             <table cellpadding="2" cellspacing="0">
@@ -110,8 +107,7 @@ class CaselawXsltTransformerServiceTest {
     Map<String, Object> context = new HashMap<>();
     context.put("outline", text);
     var actualXml = caseLawLdmlTemplateUtils.getXmlFromTemplate(context);
-    var actualHtml =
-        service.transformCaseLaw(actualXml.getBytes(StandardCharsets.UTF_8), "api/v1/");
+    var actualHtml = transformer.transform(actualXml.getBytes(StandardCharsets.UTF_8), "api/v1/");
     String expectedSubstring = "<%s>Das ist der Leitsatz</%s>".formatted(expected, expected);
     assertThat(actualHtml).contains(expectedSubstring);
   }
@@ -126,8 +122,7 @@ class CaselawXsltTransformerServiceTest {
     context.put("outline", image);
 
     var actualXml = caseLawLdmlTemplateUtils.getXmlFromTemplate(context);
-    var actualHtml =
-        service.transformCaseLaw(actualXml.getBytes(StandardCharsets.UTF_8), "api/v1/");
+    var actualHtml = transformer.transform(actualXml.getBytes(StandardCharsets.UTF_8), "api/v1/");
     var expectedImage =
         """
             <img src="api/v1/bild1.jpg" alt="Abbildung" title="bild1.jpg">
@@ -138,8 +133,7 @@ class CaselawXsltTransformerServiceTest {
   @Test
   void testReturnsDissentingDecisionCorrectly() throws IOException {
     var actualXml = caseLawLdmlTemplateUtils.getXmlFromTemplate(null);
-    var actualHtml =
-        service.transformCaseLaw(actualXml.getBytes(StandardCharsets.UTF_8), "api/v1/");
+    var actualHtml = transformer.transform(actualXml.getBytes(StandardCharsets.UTF_8), "api/v1/");
     var expectedDissentingOpinionSection =
         """
                     <section id="abweichendeMeinung">

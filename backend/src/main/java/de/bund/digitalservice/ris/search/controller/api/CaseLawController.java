@@ -2,6 +2,7 @@ package de.bund.digitalservice.ris.search.controller.api;
 
 import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
 
+import de.bund.digitalservice.ris.html.service.xslt.CaselawXsltTransformer;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.exception.FileNotFoundException;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
@@ -15,7 +16,6 @@ import de.bund.digitalservice.ris.search.schema.CaseLawSchema;
 import de.bund.digitalservice.ris.search.schema.ChangelogResponse;
 import de.bund.digitalservice.ris.search.service.CaseLawService;
 import de.bund.digitalservice.ris.search.service.ChangelogService;
-import de.bund.digitalservice.ris.search.service.xslt.CaselawXsltTransformerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -60,22 +60,22 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
 public class CaseLawController {
 
   private final CaseLawService caseLawService;
-  private final CaselawXsltTransformerService xsltTransformerService;
+  private final CaselawXsltTransformer caselawXsltTransformer;
   private final ChangelogService<CaseLawBucket> changelogService;
 
   /**
    * Constructor for the CaseLawController class.
    *
    * @param caseLawService the service layer responsible for case law operations
-   * @param xsltTransformerService the service used for XSLT transformations related to case law
+   * @param caselawXsltTransformer the case law xslt transformer
    */
   @Autowired
   public CaseLawController(
       CaseLawService caseLawService,
-      CaselawXsltTransformerService xsltTransformerService,
+      CaselawXsltTransformer caselawXsltTransformer,
       ChangelogService<CaseLawBucket> changelogService) {
     this.caseLawService = caseLawService;
-    this.xsltTransformerService = xsltTransformerService;
+    this.caselawXsltTransformer = caselawXsltTransformer;
     this.changelogService = changelogService;
   }
 
@@ -134,7 +134,7 @@ public class CaseLawController {
     Optional<byte[]> bytes = caseLawService.getFileByDocumentNumber(documentNumber);
 
     if (bytes.isPresent()) {
-      String html = xsltTransformerService.transformCaseLaw(bytes.get(), resourcePath);
+      String html = caselawXsltTransformer.transform(bytes.get(), resourcePath);
       return ResponseEntity.ok(html);
     } else {
       return ResponseEntity.notFound().build();
