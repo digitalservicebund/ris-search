@@ -162,7 +162,7 @@ class NormXsltTransformerServiceTest {
 
   @Test
   @DisplayName("Outputs the same Eingangsformel footnotes in the norm and the single article view")
-  void testPreambleFormulaNotesInBothViews() throws IOException, NoSuchKeyException {
+  void testPreambleFormulaNotesInBothViews() throws IOException {
     byte[] bytes = Files.readAllBytes(Path.of(resourcesPath, "preambleFormulaNotes.xml"));
 
     var normView =
