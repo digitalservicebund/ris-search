@@ -1,15 +1,15 @@
 import type { DetailsListItem } from "~/components/documents/DetailsList.vue";
-import type { MetadataItemText } from "~/components/documents/Metadata.vue";
+import type { MetadataItem } from "~/components/documents/Metadata.vue";
 import type { AdministrativeDirective } from "~/types/api";
 
 export function getAdministrativeDirectiveMetadataItems(
   administrativeDirective?: Partial<AdministrativeDirective>,
-): MetadataItemText[] {
+): MetadataItem[] {
   return [
     {
-      type: "text",
+      type: "badge",
       label: "Aktenzeichen",
-      value: formatArray(administrativeDirective?.referenceNumbers ?? []),
+      values: administrativeDirective?.referenceNumbers ?? [],
     },
     {
       type: "text",

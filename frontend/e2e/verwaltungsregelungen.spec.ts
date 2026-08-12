@@ -13,88 +13,93 @@ async function getSidebar(page: Page) {
   return navigation;
 }
 
-test("displays administrative directive page with metadata and text tab by default", async ({
-  page,
-}) => {
-  await navigate(page, "/verwaltungsregelungen/KSNR000000001");
+test(
+  "displays administrative directive page with metadata and text tab by default",
+  { tag: ["@RISDEV-10568"] },
+  async ({ page }) => {
+    await navigate(page, "/verwaltungsregelungen/KSNR000000001");
 
-  // Main title
-  await expect(
-    page
-      .getByRole("main")
-      .getByRole("heading", {
-        level: 1,
-        name: "Verwaltungsvorschrift für das Testen des Portals zur Darstellung von Verwaltungsvorschriften",
-      })
-      .first(),
-  ).toBeVisible();
+    // Main title
+    await expect(
+      page
+        .getByRole("main")
+        .getByRole("heading", {
+          level: 1,
+          name: "Verwaltungsvorschrift für das Testen des Portals zur Darstellung von Verwaltungsvorschriften",
+        })
+        .first(),
+    ).toBeVisible();
 
-  // Metadata section
-  await expect(
-    page.getByRole("term").or(page.getByRole("definition")),
-  ).toHaveText([
-    "Aktenzeichen",
-    "Foo - 123 - 4",
-    "Normgeber",
-    "DEU Neuris",
-    "Dokumenttyp",
-    "VR",
-    "Gültig ab",
-    "01.07.2025",
-  ]);
+    // Metadata section
+    const metadataList = page.getByTestId("metadata-list");
+    const defs = metadataList.getByRole("definition");
 
-  // Text section
-  const textSection = page.getByRole("tabpanel", { name: "Text" });
-  await expect(textSection.getByRole("status")).toContainText(
-    "Dieser Service befindet sich in der Testphase",
-  );
+    await expect(metadataList.getByRole("term")).toHaveText([
+      "Aktenzeichen",
+      "Normgeber",
+      "Dokumenttyp",
+      "Gültig ab",
+    ]);
 
-  // Short report
-  await expect(
-    textSection.getByRole("heading", { level: 2, name: "Kurzreferat" }),
-  ).toBeVisible();
-  await expect(
-    textSection.getByText("Dies ist ein Testdokument. Katze und Maus. "),
-  ).toBeVisible();
-  await expect(
-    textSection.getByText("Lorem ipsum dolor sit amet"),
-  ).toBeVisible();
+    // Aktenzeichen are rendered as badges (spans)
+    await expect(defs.nth(0).locator("span")).toHaveText(["Foo - 123 - 4"]);
+    await expect(defs.nth(1)).toHaveText("DEU Neuris");
+    await expect(defs.nth(2)).toHaveText("VR");
+    await expect(defs.nth(3)).toHaveText("01.07.2025");
 
-  // Outline
-  await expect(
-    textSection.getByRole("heading", { level: 2, name: "Inhalt" }),
-  ).toBeVisible();
-  await expect(textSection.getByText("1. Allgemeines")).toBeVisible();
-  await expect(textSection.getByText("2. Genaues")).toBeVisible();
-  await expect(textSection.getByText("3. Unwichtiges")).toBeVisible();
-  await expect(textSection.getByText("4. Sonstiges")).toBeVisible();
+    // Text section
+    const textSection = page.getByRole("tabpanel", { name: "Text" });
+    await expect(textSection.getByRole("status")).toContainText(
+      "Dieser Service befindet sich in der Testphase",
+    );
 
-  // References
-  await expect(
-    textSection.getByRole("heading", { level: 2, name: "Verweise" }),
-  ).toBeVisible();
-  await expect(textSection.getByText("BVG § 16c Abs 2")).toBeVisible();
-  await expect(
-    textSection.getByText("Verweis 890C Section B § 4 Abs. 1 8"),
-  ).toBeVisible();
+    // Short report
+    await expect(
+      textSection.getByRole("heading", { level: 2, name: "Kurzreferat" }),
+    ).toBeVisible();
+    await expect(
+      textSection.getByText("Dies ist ein Testdokument. Katze und Maus. "),
+    ).toBeVisible();
+    await expect(
+      textSection.getByText("Lorem ipsum dolor sit amet"),
+    ).toBeVisible();
 
-  // Citations
-  await expect(
-    textSection.getByRole("heading", {
-      level: 2,
-      name: "Dieser Beitrag zitiert",
-    }),
-  ).toBeVisible();
-  await expect(
-    textSection.getByRole("heading", { level: 3, name: "Rechtsprechung" }),
-  ).toBeVisible();
-  await expect(
-    textSection.getByText("FOO BAR RefNr 123 2025-07-01"),
-  ).toBeVisible();
-  await expect(
-    textSection.getByText("ABC BAZ RefNr 456 2023-01-01"),
-  ).toBeVisible();
-});
+    // Outline
+    await expect(
+      textSection.getByRole("heading", { level: 2, name: "Inhalt" }),
+    ).toBeVisible();
+    await expect(textSection.getByText("1. Allgemeines")).toBeVisible();
+    await expect(textSection.getByText("2. Genaues")).toBeVisible();
+    await expect(textSection.getByText("3. Unwichtiges")).toBeVisible();
+    await expect(textSection.getByText("4. Sonstiges")).toBeVisible();
+
+    // References
+    await expect(
+      textSection.getByRole("heading", { level: 2, name: "Verweise" }),
+    ).toBeVisible();
+    await expect(textSection.getByText("BVG § 16c Abs 2")).toBeVisible();
+    await expect(
+      textSection.getByText("Verweis 890C Section B § 4 Abs. 1 8"),
+    ).toBeVisible();
+
+    // Citations
+    await expect(
+      textSection.getByRole("heading", {
+        level: 2,
+        name: "Dieser Beitrag zitiert",
+      }),
+    ).toBeVisible();
+    await expect(
+      textSection.getByRole("heading", { level: 3, name: "Rechtsprechung" }),
+    ).toBeVisible();
+    await expect(
+      textSection.getByText("FOO BAR RefNr 123 2025-07-01"),
+    ).toBeVisible();
+    await expect(
+      textSection.getByText("ABC BAZ RefNr 456 2023-01-01"),
+    ).toBeVisible();
+  },
+);
 
 test("sidebar TOC renders on desktop and clicking a link scrolls to the section", async ({
   page,
