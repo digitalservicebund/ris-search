@@ -143,18 +143,17 @@ test.describe("view norm page", async () => {
       "/gesetze/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu",
     );
 
-    const content = page.locator(".legislation");
-
     await expect(
-      content.getByText(
+      page.getByText(
         "Eingangsformel: Diese Fußnote an der Eingangsformel wurde im End-to-end-Datenbestand ergänzt",
       ),
     ).toBeVisible();
 
-    // The official table of contents and its footnote are only shown in the accordion
     await expect(
-      content.getByText("Inhaltsübersicht: präambel Fußnote"),
-    ).toBeHidden();
+      page
+        .getByText("Inhaltsübersicht: präambel Fußnote")
+        .filter({ visible: true }),
+    ).toHaveCount(0);
 
     await page
       .getByRole("button", { name: "Amtliches Inhaltsverzeichnis einblenden" })
@@ -175,11 +174,9 @@ test.describe("view norm page", async () => {
     );
 
     await expect(
-      page
-        .locator("section.schlussformel")
-        .getByText(
-          "Schlussformel: Diese Fußnote an der Schlussformel wurde im End-to-end-Datenbestand ergänzt",
-        ),
+      page.getByText(
+        "Schlussformel: Diese Fußnote an der Schlussformel wurde im End-to-end-Datenbestand ergänzt",
+      ),
     ).toBeVisible();
   });
 
@@ -192,11 +189,12 @@ test.describe("view norm page", async () => {
     const marker = await page.getByRole("superscript").innerText();
     expect(marker).toBe("❃");
 
-    const footnotes = page.locator(".dokumentenkopf-fussnoten");
-
-    await expect(footnotes).toContainText(
-      "(Diese Fußnote im Titel wurde im End-to-end-Datenbestand ergänzt",
-    );
+    await expect(
+      page.getByRole("listitem").filter({
+        hasText:
+          "(Diese Fußnote im Titel wurde im End-to-end-Datenbestand ergänzt",
+      }),
+    ).toBeVisible();
   });
 
   test("table of contents renders and clicking a link scrolls to the article", async ({
