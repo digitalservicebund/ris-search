@@ -1,10 +1,11 @@
 server:
+  port: 8090
   front-end-url: "http://localhost:3000"
-  docs-url: "http://localhost:8080"
+  docs-url: "http://localhost:8090"
 
 swagger:
   server:
-    url: "http://localhost:8080"
+    url: "http://localhost:8090"
 
 local:
   file-storage: backend/.local-storage

@@ -262,7 +262,7 @@ test.describe("actions menu", () => {
   test.describe("can use XML action to view norms xml file", () => {
     testXmlButton(
       "/gesetze/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu",
-      "http://localhost:8080/v1/legislation/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu/2024-12-19/regelungstext-1.xml",
+      "http://localhost:8090/v1/legislation/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu/2024-12-19/regelungstext-1.xml",
     );
   });
 

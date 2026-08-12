@@ -1,5 +1,5 @@
 server {
-    listen 8080;
+    listen 8090;
 
     location / {
         proxy_set_header Authorization "${BACKEND_AUTH_TOKEN}";

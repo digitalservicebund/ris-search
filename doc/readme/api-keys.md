@@ -49,5 +49,5 @@ Spring configuration mechanisms, under `server.api-keys`. They are read by `Conf
 5. Concatenate the prefix (step 1) and secret (step 2) to obtain the API key.
    You may test it using e.g. `curl`:
    ```shell
-   curl -H "X-Api-Key: ris_..." "http://localhost:8080/v1/legislation?size=1" -v
+   curl -H "X-Api-Key: ris_..." "http://localhost:8090/v1/legislation?size=1" -v
    ```

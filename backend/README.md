@@ -31,9 +31,9 @@ Make sure your system meets the prerequisites. Then, run the backend by running:
 ./gradlew bootRun
 ```
 
-The API will be available at [localhost:8080](http://localhost:8080).
+The API will be available at [localhost:8090](http://localhost:8090).
 
-Swagger API documentation is available at [localhost:8080/swagger-ui](http://localhost:8080/swagger-ui/index.html).
+Swagger API documentation is available at [localhost:8090/swagger-ui](http://localhost:8090/swagger-ui/index.html).
 
 ## Testing
 
