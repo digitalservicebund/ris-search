@@ -5,6 +5,12 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import de.bund.digitalservice.ris.TestXmlUtils;
+import de.bund.digitalservice.ris.search.nlex.generated.AboutConnector;
+import de.bund.digitalservice.ris.search.nlex.generated.Request;
+import de.bund.digitalservice.ris.search.nlex.generated.RequestResponse;
+import de.bund.digitalservice.ris.search.nlex.generated.TestQuery;
+import de.bund.digitalservice.ris.search.nlex.generated.TestQueryResponse;
+import de.bund.digitalservice.ris.search.nlex.generated.VERSIONResponse;
 import de.bund.digitalservice.ris.search.nlex.schema.query.Query;
 import de.bund.digitalservice.ris.search.nlex.schema.result.RequestResult;
 import de.bund.digitalservice.ris.search.nlex.service.NlexService;
@@ -17,12 +23,6 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
-import nlex.AboutConnector;
-import nlex.Request;
-import nlex.RequestResponse;
-import nlex.TestQuery;
-import nlex.TestQueryResponse;
-import nlex.VERSIONResponse;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.junit.jupiter.api.Assertions;
@@ -48,7 +48,9 @@ class NlexWebserviceEndpointTest {
 
   @Test
   void onTestQueryItReturnsAValidTestQuery() throws JAXBException, IOException {
-    TestQueryResponse response = this.nlexServiceEndpoint.testQuery(new TestQuery());
+    TestQuery testQuery = new TestQuery();
+    testQuery.setType("optional");
+    TestQueryResponse response = this.nlexServiceEndpoint.testQuery(testQuery);
 
     JAXBContext ctx = JAXBContext.newInstance(Query.class);
     TestXmlUtils.validate(response.getQuery(), ctx);
@@ -56,8 +58,10 @@ class NlexWebserviceEndpointTest {
 
   @Test
   void onAboutConnectorItReturnsTheRisQuerySchemaDefinition() throws IOException {
+    AboutConnector aboutConnector = new AboutConnector();
+    aboutConnector.setType("query");
     String configContent =
-        this.nlexServiceEndpoint.aboutConnector(new AboutConnector()).getAboutConnectorResult();
+        this.nlexServiceEndpoint.aboutConnector(aboutConnector).getAboutConnectorResult();
     String expectedContent =
         IOUtils.toString(
             Objects.requireNonNull(

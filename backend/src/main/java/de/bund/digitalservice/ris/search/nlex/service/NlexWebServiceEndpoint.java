@@ -1,5 +1,12 @@
 package de.bund.digitalservice.ris.search.nlex.service;
 
+import de.bund.digitalservice.ris.search.nlex.generated.AboutConnector;
+import de.bund.digitalservice.ris.search.nlex.generated.AboutConnectorResponse;
+import de.bund.digitalservice.ris.search.nlex.generated.Request;
+import de.bund.digitalservice.ris.search.nlex.generated.RequestResponse;
+import de.bund.digitalservice.ris.search.nlex.generated.TestQuery;
+import de.bund.digitalservice.ris.search.nlex.generated.TestQueryResponse;
+import de.bund.digitalservice.ris.search.nlex.generated.VERSIONResponse;
 import de.bund.digitalservice.ris.search.nlex.schema.query.Query;
 import de.bund.digitalservice.ris.search.nlex.schema.result.RequestResult;
 import jakarta.xml.bind.JAXBContext;
@@ -11,13 +18,6 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
-import nlex.AboutConnector;
-import nlex.AboutConnectorResponse;
-import nlex.Request;
-import nlex.RequestResponse;
-import nlex.TestQuery;
-import nlex.TestQueryResponse;
-import nlex.VERSIONResponse;
 import org.apache.commons.io.IOUtils;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
