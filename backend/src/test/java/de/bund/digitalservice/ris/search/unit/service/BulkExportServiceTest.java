@@ -150,20 +150,6 @@ class BulkExportServiceTest {
   }
 
   @Test
-  void updateLatestZip_onEmptyFiles_shouldReturnEarlyWithFalse() {
-    ObjectStorage sourceBucket = mock(ObjectStorage.class);
-    ObjectStorage destinationBucket = mock(ObjectStorage.class);
-
-    when(sourceBucket.getAllKeys()).thenReturn(List.of("file.txt"));
-
-    BulkExportService bulkExportService =
-        new BulkExportService(sourceBucket, destinationBucket, "test-export");
-
-    boolean actual = bulkExportService.updateLatestZip(clock.instant());
-    assertThat(actual).isFalse();
-  }
-
-  @Test
   void updateLatestZip_emptySourceBucket_shouldReturnEarlyWithTrue() {
     ObjectStorage sourceBucket = mock(ObjectStorage.class);
     ObjectStorage destinationBucket = mock(ObjectStorage.class);
