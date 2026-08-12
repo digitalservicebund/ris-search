@@ -10,18 +10,8 @@ import type {
   LegislationManifestation,
 } from "~/types/api";
 
-const { mockToastAdd } = vi.hoisted(() => ({
-  mockToastAdd: vi.fn(),
-}));
-
 vi.mock("~/composables/useBackendUrl", () => ({
   default: vi.fn((url?: string) => url),
-}));
-
-vi.mock("primevue/usetoast", () => ({
-  useToast: () => ({
-    add: mockToastAdd,
-  }),
 }));
 
 mockNuxtImport("useRequestURL", () => {
@@ -124,12 +114,6 @@ describe("NormActionMenu", () => {
       await user.click(copyButton);
 
       expect(await navigator.clipboard.readText()).toEqual(expectedUrl);
-
-      expect(mockToastAdd).toHaveBeenCalledExactlyOnceWith(
-        expect.objectContaining({
-          summary: "Kopiert!",
-        }),
-      );
     },
   );
 
@@ -147,12 +131,6 @@ describe("NormActionMenu", () => {
 
     expect(await navigator.clipboard.readText()).toEqual(
       "https://example.com/eli/foo",
-    );
-
-    expect(mockToastAdd).toHaveBeenCalledExactlyOnceWith(
-      expect.objectContaining({
-        summary: "Kopiert!",
-      }),
     );
   });
 

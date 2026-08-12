@@ -1,5 +1,3 @@
-// oxlint-disable-next-line no-restricted-imports
-import { useToast } from "primevue/usetoast";
 import IcBaselineCheck from "~icons/ic/baseline-check";
 import IconLink from "~icons/ic/outline-link";
 import type { ActionMenuItem } from "~/components/documents/actionMenu/ActionMenu.vue";
@@ -21,19 +19,12 @@ export function useCopyUrlActionItem(
   label?: string,
   icon?: Component,
 ): ActionMenuItem {
-  const toastService = useToast();
   const copied = ref(false);
 
   const command = async () => {
     if (!url) return;
 
     await navigator.clipboard.writeText(url);
-    toastService.add({
-      severity: "success",
-      summary: "Kopiert!",
-      life: COPY_MESSAGE_TIMEOUT,
-      closable: false,
-    });
 
     copied.value = true;
     setTimeout(() => {
