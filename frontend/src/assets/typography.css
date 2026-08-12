@@ -66,6 +66,6 @@
   @apply ris-subhead-bold md:ris-heading3-bold 2xl:ris-heading2-bold block;
 
   &:is(a) {
-    @apply link-hover text-blue-800 underline-offset-2;
+    @apply link-hover text-blue-800 underline-offset-2 outline-offset-4 outline-blue-800 focus-visible:outline-4;
   }
 }
