@@ -115,6 +115,11 @@
                 </h2>
             </a>
             <xsl:apply-templates/>
+            <!-- output authorialNote and note contents at the end of the Eingangsformel -->
+            <xsl:call-template name="authorial-notes-collection"/>
+            <xsl:call-template name="notes-collection">
+                <xsl:with-param name="thisId" select="@eId"/>
+            </xsl:call-template>
         </section>
     </xsl:template>
 

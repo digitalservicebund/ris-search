@@ -135,6 +135,39 @@ test.describe("view norm page", async () => {
     expect(toc.getByRole("listitem")).toBeVisible();
   });
 
+  test("shows the footnote of the Eingangsformel in place, and the one of the official table of contents in its accordion", async ({
+    page,
+  }) => {
+    await navigate(
+      page,
+      "/gesetze/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu",
+    );
+
+    const content = page.locator(".legislation");
+
+    await expect(
+      content.getByText(
+        "Eingangsformel: Diese Fußnote an der Eingangsformel wurde im End-to-end-Datenbestand ergänzt",
+      ),
+    ).toBeVisible();
+
+    // The official table of contents and its footnote are only shown in the accordion
+    await expect(
+      content.getByText("Inhaltsübersicht: präambel Fußnote"),
+    ).toBeHidden();
+
+    await page
+      .getByRole("button", { name: "Amtliches Inhaltsverzeichnis einblenden" })
+      .click();
+
+    const toc = page.getByRole("region", {
+      name: "Amtliches Inhaltsverzeichnis ausblenden",
+    });
+    await expect(
+      toc.getByText("Inhaltsübersicht: präambel Fußnote"),
+    ).toBeVisible();
+  });
+
   test("view footnotes in title", async ({ page }) => {
     await navigate(
       page,

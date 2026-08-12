@@ -166,11 +166,9 @@ Attributes from the Juris CALS format without a corresponding HTML attribute mig
   @apply hidden;
 }
 
-/* hide default table of contents, since it will be displayed behind an accordion section */
+/* hide default table of contents, since it will be displayed behind an accordion section.
+   This also covers the footnotes attached to it, which are nested inside its container. */
 :deep(.eingangsformel .inhaltsuebersicht) {
-  @apply hidden;
-}
-:deep(section.eingangsformel .nichtamtliche-fussnoten) {
   @apply hidden;
 }
 

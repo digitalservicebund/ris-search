@@ -103,7 +103,7 @@ function extractHtmlParts(
 
   const officialTocElements = Array.from(
     document.querySelectorAll(
-      ".official-toc, section.eingangsformel .nichtamtliche-fussnoten",
+      ".official-toc, .eingangsformel .inhaltsuebersicht .nichtamtliche-fussnoten",
     ),
   );
 

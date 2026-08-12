@@ -1,0 +1,29 @@
+<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.8.2/">
+    <akn:act name="regelungstext">
+        <akn:meta eId="meta-n1">
+            <akn:notes>
+                <akn:note eId="meta-n1_editfnote-n1" marker="#"
+                          placementBase="#präambel-n1_formel-n1" refersTo="kommentierende-fussnote">
+                    <akn:p eId="meta-n1_editfnote-n1_text-n1">Eingangsformel: Note attached to the Eingangsformel</akn:p>
+                </akn:note>
+                <akn:note eId="meta-n1_editfnote-n2" marker="#"
+                          placementBase="#präambel-n1_blockcontainer-n1" refersTo="aenderungsfussnote">
+                    <akn:p eId="meta-n1_editfnote-n2_text-n1">Inhaltsübersicht: Note attached to the official table of contents</akn:p>
+                </akn:note>
+            </akn:notes>
+        </akn:meta>
+        <akn:preamble eId="präambel-n1">
+            <akn:formula eId="präambel-n1_formel-n1" refersTo="eingangsformel">
+                <akn:p eId="präambel-n1_formel-n1_text-n1">Der Bundestag hat das folgende Gesetz beschlossen:</akn:p>
+            </akn:formula>
+            <akn:blockContainer eId="präambel-n1_blockcontainer-n1" refersTo="inhaltsuebersicht">
+                <akn:heading eId="präambel-n1_blockcontainer-n1_überschrift-n1">Inhaltsübersicht</akn:heading>
+                <akn:toc eId="präambel-n1_blockcontainer-n1_inhuebs-n1">
+                    <akn:tocItem eId="präambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n1" href="" level="1">
+                        <akn:span eId="präambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n1_span-n1">Abschnitt 1</akn:span>
+                    </akn:tocItem>
+                </akn:toc>
+            </akn:blockContainer>
+        </akn:preamble>
+    </akn:act>
+</akn:akomaNtoso>
