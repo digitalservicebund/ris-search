@@ -164,7 +164,7 @@ class BulkExportServiceTest {
   }
 
   @Test
-  void updateLatestZip_whenContentOfKeyIsNotFound_shouldReturnEarlyWithSuccess() {
+  void updateLatestZip_whenContentOfKeyIsNotFound_shouldReturnFalse() {
     ObjectStorage sourceBucket = mock(ObjectStorage.class);
     ObjectStorage destinationBucket = mock(ObjectStorage.class);
 
@@ -175,6 +175,6 @@ class BulkExportServiceTest {
         new BulkExportService(sourceBucket, destinationBucket, "test-export");
 
     boolean actual = bulkExportService.updateLatestZip(clock.instant());
-    assertThat(actual).isTrue();
+    assertThat(actual).isFalse();
   }
 }

@@ -99,8 +99,7 @@ public class BulkExportService {
           deleteArchives(obsoleteObjectKeys);
           yield true;
         }
-        case ZipStatus.CANCELLED -> true;
-        case ZipStatus.FAILED -> false;
+        case ZipStatus.CANCELLED, ZipStatus.FAILED -> false;
       };
 
     } catch (InterruptedException e) {
