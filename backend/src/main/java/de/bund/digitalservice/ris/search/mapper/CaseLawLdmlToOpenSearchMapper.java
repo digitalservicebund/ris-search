@@ -26,6 +26,7 @@ import de.bund.digitalservice.ris.search.utils.MappingUtils;
 import jakarta.xml.bind.DataBindingException;
 import jakarta.xml.bind.JAXB;
 import jakarta.xml.bind.ValidationException;
+import java.io.ByteArrayInputStream;
 import java.io.StringReader;
 import java.time.Instant;
 import java.util.Collection;
@@ -122,6 +123,17 @@ public class CaseLawLdmlToOpenSearchMapper {
   public CaseLawDocumentationUnit fromString(String ldmlFile) {
     try {
       StreamSource ldmlStreamSource = new StreamSource(new StringReader(ldmlFile));
+      CaseLawLdml ldml = JAXB.unmarshal(ldmlStreamSource, CaseLawLdml.class);
+
+      return mapToEntity(ldml);
+    } catch (DescriptorException | DataBindingException | ValidationException e) {
+      throw new OpenSearchMapperException("unable to parse file to DocumentationUnit", e);
+    }
+  }
+
+  public CaseLawDocumentationUnit fromByteArray(byte[] ldmlFile) {
+    try {
+      StreamSource ldmlStreamSource = new StreamSource(new ByteArrayInputStream(ldmlFile));
       CaseLawLdml ldml = JAXB.unmarshal(ldmlStreamSource, CaseLawLdml.class);
 
       return mapToEntity(ldml);

@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.concurrent.ArrayBlockingQueue;
 
 /**
@@ -24,7 +23,7 @@ public class ChangedEcliCrawlerDocumentsIterator implements Iterator<List<EcliCr
   /** Functional interface for supplying EcliCrawlerDocuments based on their identifier */
   @FunctionalInterface
   public interface Supplier {
-    Optional<EcliCrawlerDocument> get(String id);
+    List<EcliCrawlerDocument> get(List<String> ids);
   }
 
   /**
@@ -69,9 +68,17 @@ public class ChangedEcliCrawlerDocumentsIterator implements Iterator<List<EcliCr
    */
   private List<String> fillBuffer(List<String> ids, Supplier supplier) {
     int numTaken = 0;
-    for (int i = 0; i < ids.size() && ecliDocumentsBuffer.remainingCapacity() > 0; i++) {
-      supplier.get(ids.get(i)).ifPresent(ecliDocumentsBuffer::add);
-      numTaken++;
+    while (numTaken < ids.size() && ecliDocumentsBuffer.remainingCapacity() > 0) {
+      int chunkSize = Math.min(ids.size() - numTaken, ecliDocumentsBuffer.remainingCapacity());
+      List<String> batch = ids.subList(numTaken, numTaken + chunkSize);
+      List<EcliCrawlerDocument> documents = supplier.get(batch);
+
+      for (EcliCrawlerDocument doc : documents) {
+        if (ecliDocumentsBuffer.remainingCapacity() > 0) {
+          ecliDocumentsBuffer.add(doc);
+        }
+      }
+      numTaken += chunkSize;
     }
     return ids.subList(numTaken, ids.size());
   }

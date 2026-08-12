@@ -17,7 +17,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import org.apache.commons.collections4.ListUtils;
@@ -131,7 +130,7 @@ public class EcliCrawlerDocumentService {
             .toList();
 
     List<String> toBeDeleted;
-    try (Stream<EcliCrawlerDocument> allPublished = repository.findByIsPublishedIsTrue()) {
+    try (Stream<EcliCrawlerDocument> allPublished = repository.findFilenameByIsPublishedIsTrue()) {
       toBeDeleted =
           new ArrayList<>(
               allPublished
@@ -173,21 +172,25 @@ public class EcliCrawlerDocumentService {
     }
   }
 
-  private Optional<EcliCrawlerDocument> getFromBucket(String filename) {
-    return caselawService
-        .getFromBucket(filename)
-        .flatMap(
-            unit -> {
-              if (isValidEcliDocument(unit)) {
-                return Optional.of(
-                    EcliCrawlerDocumentMapper.fromCaseLawDocumentationUnit(
-                        documentUrl, filename, unit));
-              }
-              return Optional.empty();
-            });
+  private List<EcliCrawlerDocument> getFromBucket(List<String> ids) {
+    try {
+      return caselawService.getFromBucket(ids).stream()
+          .map(
+              unit -> {
+                if (isValidEcliDocument(unit)) {
+                  return EcliCrawlerDocumentMapper.fromCaseLawDocumentationUnit(
+                      documentUrl, unit.id(), unit);
+                }
+                return null;
+              })
+          .filter(Objects::nonNull)
+          .toList();
+    } catch (ObjectStoreServiceException e) {
+      throw new FatalEcliSitemapJobException("no connection to bucket");
+    }
   }
 
-  private Optional<EcliCrawlerDocument> getPublishedDocument(String filename) {
-    return repository.findByFilenameIn(filename).map(this::setDeleted);
+  private List<EcliCrawlerDocument> getPublishedDocument(List<String> filename) {
+    return repository.findByFilename(filename).map(this::setDeleted).toList();
   }
 }

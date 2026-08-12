@@ -2,13 +2,13 @@ package de.bund.digitalservice.ris.search.service;
 
 import de.bund.digitalservice.ris.search.config.opensearch.Configurations;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
-import de.bund.digitalservice.ris.search.exception.OpenSearchMapperException;
 import de.bund.digitalservice.ris.search.mapper.CaseLawLdmlToOpenSearchMapper;
 import de.bund.digitalservice.ris.search.models.CourtSearchResult;
 import de.bund.digitalservice.ris.search.models.api.parameters.CaseLawSearchParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
+import de.bund.digitalservice.ris.search.repository.objectstorage.StorageObject;
 import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository;
 import de.bund.digitalservice.ris.search.service.helper.CourtNameAbbreviationExpander;
 import de.bund.digitalservice.ris.search.service.helper.ZipManager;
@@ -186,23 +186,22 @@ public class CaseLawService {
    * the file content is not found or an error occurs during processing, an empty Optional is
    * returned.
    *
-   * @param filename the name of the file to retrieve from the bucket
+   * @param List of filenames to retrieve from the bucket
    * @return an Optional containing the `CaseLawDocumentationUnit` if successfully retrieved and
    *     parsed, or an empty Optional if not found or an error occurs
    * @throws ObjectStoreServiceException if an error occurs while accessing the object storage
    *     service
    */
-  public Optional<CaseLawDocumentationUnit> getFromBucket(String filename)
+  public List<CaseLawDocumentationUnit> getFromBucket(List<String> filenames)
       throws ObjectStoreServiceException {
-    Optional<String> contentOption = caseLawBucket.getFileAsString(filename);
+    List<StorageObject> objects = caseLawBucket.getObjects(filenames);
 
-    if (contentOption.isEmpty()) {
-      return Optional.empty();
+    if (objects.isEmpty()) {
+      return List.of();
     }
-    try {
-      return Optional.of(marshaller.fromString(contentOption.get()));
-    } catch (OpenSearchMapperException _) {
-      return Optional.empty();
-    }
+    return objects.stream()
+        .filter(object -> object.bytes().isPresent())
+        .map(object -> marshaller.fromByteArray(object.bytes().get()))
+        .toList();
   }
 }
