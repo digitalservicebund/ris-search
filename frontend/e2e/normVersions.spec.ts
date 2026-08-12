@@ -7,120 +7,128 @@ test.beforeAll(async ({ privateFeaturesEnabled }) => {
   );
 });
 
-test.describe("fassungen tab", async () => {
-  test("displays Fassungen in the Fassungen tab", async ({ page }) => {
-    await navigate(
+test.describe(
+  "fassungen tab",
+  { tag: ["@RISDEV-10909", "@RISDEV-12189"] },
+  async () => {
+    test("displays Fassungen in the Fassungen tab", async ({ page }) => {
+      await navigate(
+        page,
+        "/gesetze/eli/bund/bgbl-1/2020/s1126/2020-08-04/1/deu",
+      );
+
+      await page.getByRole("tab", { name: "Fassungen" }).click();
+
+      await expect(
+        page.getByRole("list", { name: "Fassungen" }).getByRole("listitem"),
+      ).toHaveText([
+        "Gültig ab: 04.08.2919 Gültig bis: – Status: Zukünftig in Kraft",
+        "Gültig ab: 04.08.2022 Gültig bis: 01.01.2030 Status: Aktuell gültig",
+        "Gültig ab: 04.08.2020 Gültig bis: 03.08.2022 Status: Außer Kraft",
+      ]);
+    });
+
+    test("marks the Fassung currently displayed as the current page", async ({
       page,
-      "/gesetze/eli/bund/bgbl-1/2020/s1126/2020-08-04/1/deu",
-    );
+    }) => {
+      await navigate(
+        page,
+        "/gesetze/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu?view=versions",
+      );
 
-    await page.getByRole("tab", { name: "Fassungen" }).click();
+      await expect(
+        page.getByRole("link", { name: /04\.08\.2022/ }),
+      ).toHaveAttribute("aria-current", "page");
+    });
 
-    await expect(
-      page.getByRole("list", { name: "Fassungen" }).getByRole("listitem"),
-    ).toHaveText([
-      "Gültig ab: 04.08.2919 Gültig bis: – Status: Zukünftig in Kraft",
-      "Gültig ab: 04.08.2022 Gültig bis: 01.01.2030 Status: Aktuell gültig",
-      "Gültig ab: 04.08.2020 Gültig bis: 03.08.2022 Status: Außer Kraft",
-    ]);
-  });
+    test("can navigate to a Fassung by clicking its link", async ({ page }) => {
+      await navigate(
+        page,
+        "/gesetze/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu?view=versions",
+      );
 
-  test("marks the Fassung currently displayed as the current page", async ({
-    page,
-  }) => {
-    await navigate(
+      await expect(
+        page.getByRole("heading", {
+          name: "Zum Testen von Fassungen - Aktuelle Fassung",
+        }),
+      ).toBeVisible();
+
+      await page.getByRole("link", { name: /04\.08\.2919/ }).click();
+
+      await expect(
+        page.getByRole("heading", {
+          name: "Zum Testen von Fassungen - Zukünftige Fassung",
+        }),
+      ).toBeVisible();
+    });
+
+    test("can filter Fassungen by date", async ({ page }) => {
+      await navigate(
+        page,
+        "/gesetze/eli/bund/bgbl-1/2020/s1126/2020-08-04/1/deu?view=versions",
+      );
+
+      const versions = page
+        .getByRole("list", { name: "Fassungen" })
+        .getByRole("listitem");
+
+      await expect(versions).toHaveCount(3);
+
+      await page.getByRole("textbox", { name: "Gültig am" }).fill("04.08.2020");
+
+      await expect(versions).toHaveText([
+        "Gültig ab: 04.08.2020 Gültig bis: 03.08.2022 Status: Außer Kraft",
+      ]);
+    });
+
+    test("shows no results placeholder when no Fassung found", async ({
       page,
-      "/gesetze/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu?view=versions",
-    );
+    }) => {
+      await navigate(
+        page,
+        "/gesetze/eli/bund/bgbl-1/2020/s1126/2020-08-04/1/deu?view=versions",
+      );
 
-    await expect(
-      page.getByRole("link", { name: /04\.08\.2022/ }),
-    ).toHaveAttribute("aria-current", "page");
-  });
+      const versions = page
+        .getByRole("list", { name: "Fassungen" })
+        .getByRole("listitem");
 
-  test("can navigate to a Fassung by clicking its link", async ({ page }) => {
-    await navigate(
+      await expect(versions).toHaveCount(3);
+
+      await page.getByRole("textbox", { name: "Gültig am" }).fill("04.08.1536");
+
+      await expect(versions).toHaveText(["Keine Ergebnisse gefunden"]);
+    });
+  },
+);
+
+test.describe(
+  "fassungen tab on a small screen",
+  { tag: ["@RISDEV-10909", "@RISDEV-12189"] },
+  () => {
+    test.beforeEach(({ isMobileTest }) => {
+      test.skip(!isMobileTest);
+    });
+
+    test("shows a label in front of every value instead of a header row", async ({
       page,
-      "/gesetze/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu?view=versions",
-    );
+    }) => {
+      await navigate(
+        page,
+        "/gesetze/eli/bund/bgbl-1/2020/s1126/2020-08-04/1/deu?view=versions",
+      );
 
-    await expect(
-      page.getByRole("heading", {
-        name: "Zum Testen von Fassungen - Aktuelle Fassung",
-      }),
-    ).toBeVisible();
+      const firstVersion = page
+        .getByRole("list", { name: "Fassungen" })
+        .getByRole("listitem")
+        .first();
 
-    await page.getByRole("link", { name: /04\.08\.2919/ }).click();
-
-    await expect(
-      page.getByRole("heading", {
-        name: "Zum Testen von Fassungen - Zukünftige Fassung",
-      }),
-    ).toBeVisible();
-  });
-
-  test("can filter Fassungen by date", async ({ page }) => {
-    await navigate(
-      page,
-      "/gesetze/eli/bund/bgbl-1/2020/s1126/2020-08-04/1/deu?view=versions",
-    );
-
-    const versions = page
-      .getByRole("list", { name: "Fassungen" })
-      .getByRole("listitem");
-
-    await expect(versions).toHaveCount(3);
-
-    await page.getByRole("textbox", { name: "Gültig am" }).fill("04.08.2020");
-
-    await expect(versions).toHaveText([
-      "Gültig ab: 04.08.2020 Gültig bis: 03.08.2022 Status: Außer Kraft",
-    ]);
-  });
-
-  test("shows no results placeholder when no Fassung found", async ({
-    page,
-  }) => {
-    await navigate(
-      page,
-      "/gesetze/eli/bund/bgbl-1/2020/s1126/2020-08-04/1/deu?view=versions",
-    );
-
-    const versions = page
-      .getByRole("list", { name: "Fassungen" })
-      .getByRole("listitem");
-
-    await expect(versions).toHaveCount(3);
-
-    await page.getByRole("textbox", { name: "Gültig am" }).fill("04.08.1536");
-
-    await expect(versions).toHaveText(["Keine Ergebnisse gefunden"]);
-  });
-});
-
-test.describe("fassungen tab on a small screen", () => {
-  test.beforeEach(({ isMobileTest }) => {
-    test.skip(!isMobileTest);
-  });
-
-  test("shows a label in front of every value instead of a header row", async ({
-    page,
-  }) => {
-    await navigate(
-      page,
-      "/gesetze/eli/bund/bgbl-1/2020/s1126/2020-08-04/1/deu?view=versions",
-    );
-
-    const firstVersion = page
-      .getByRole("list", { name: "Fassungen" })
-      .getByRole("listitem")
-      .first();
-
-    await expect(firstVersion.getByText("Gültig ab:")).toBeVisible();
-    await expect(firstVersion.getByText("Gültig bis:")).toBeVisible();
-    await expect(firstVersion.getByText("Status:")).toBeVisible();
-  });
-});
+      await expect(firstVersion.getByText("Gültig ab:")).toBeVisible();
+      await expect(firstVersion.getByText("Gültig bis:")).toBeVisible();
+      await expect(firstVersion.getByText("Status:")).toBeVisible();
+    });
+  },
+);
 
 test.describe("displays metadata correctly", async () => {
   test("currently valid norm", async ({ page }) => {

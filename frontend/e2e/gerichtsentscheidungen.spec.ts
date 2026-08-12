@@ -40,39 +40,45 @@ test("can view a single case law documentation unit", async ({ page }) => {
 });
 
 test.describe("hides text tabs for empty documents", () => {
-  test("hides text tab when empty vorabdokument and shows info box", async ({
-    page,
-  }) => {
-    await navigate(page, "/gerichtsentscheidungen/KORE000001234");
+  test(
+    "hides text tab when empty vorabdokument and shows info box",
+    { tag: ["@RISDEV-12197"] },
+    async ({ page }) => {
+      await navigate(page, "/gerichtsentscheidungen/KORE000001234");
 
-    await expect(
-      page.getByText(/Die Metadaten dieser Gerichtsentscheidung/),
-    ).toBeVisible();
+      await expect(
+        page.getByText(/Die Metadaten dieser Gerichtsentscheidung/),
+      ).toBeVisible();
 
-    await expect(page.getByRole("tablist")).not.toBeVisible();
+      await expect(page.getByRole("tablist")).not.toBeVisible();
 
-    await expect(
-      page.getByRole("heading", { level: 2, name: "Details" }),
-    ).toBeVisible();
+      await expect(
+        page.getByRole("heading", { level: 2, name: "Details" }),
+      ).toBeVisible();
 
-    await expect(page.getByTestId("details-list")).toBeVisible();
-  });
+      await expect(page.getByTestId("details-list")).toBeVisible();
+    },
+  );
 
-  test("hides text tab when empty normal document", async ({ page }) => {
-    await navigate(page, "/gerichtsentscheidungen/KORE000005678");
+  test(
+    "hides text tab when empty normal document",
+    { tag: ["@RISDEV-12197"] },
+    async ({ page }) => {
+      await navigate(page, "/gerichtsentscheidungen/KORE000005678");
 
-    await expect(
-      page.getByText(/Die Metadaten dieser Gerichtsentscheidung/),
-    ).not.toBeVisible();
+      await expect(
+        page.getByText(/Die Metadaten dieser Gerichtsentscheidung/),
+      ).not.toBeVisible();
 
-    await expect(page.getByRole("tablist")).not.toBeVisible();
+      await expect(page.getByRole("tablist")).not.toBeVisible();
 
-    await expect(
-      page.getByRole("heading", { level: 2, name: "Details" }),
-    ).toBeVisible();
+      await expect(
+        page.getByRole("heading", { level: 2, name: "Details" }),
+      ).toBeVisible();
 
-    await expect(page.getByTestId("details-list")).toBeVisible();
-  });
+      await expect(page.getByTestId("details-list")).toBeVisible();
+    },
+  );
 });
 
 test("sidebar TOC renders on desktop and clicking a link scrolls to the section", async ({

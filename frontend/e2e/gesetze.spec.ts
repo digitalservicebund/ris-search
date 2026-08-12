@@ -135,67 +135,79 @@ test.describe("view norm page", async () => {
     expect(toc.getByRole("listitem")).toBeVisible();
   });
 
-  test("shows the footnote of the Eingangsformel in place, and the one of the official table of contents in its accordion", async ({
-    page,
-  }) => {
-    await navigate(
-      page,
-      "/gesetze/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu",
-    );
+  test(
+    "shows the footnote of the Eingangsformel in place, and the one of the official table of contents in its accordion",
+    { tag: ["@RISDEV-12253"] },
+    async ({ page }) => {
+      await navigate(
+        page,
+        "/gesetze/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu",
+      );
 
-    await expect(
-      page.getByText(
-        "Eingangsformel: Diese Fußnote an der Eingangsformel wurde im End-to-end-Datenbestand ergänzt",
-      ),
-    ).toBeVisible();
+      await expect(
+        page.getByText(
+          "Eingangsformel: Diese Fußnote an der Eingangsformel wurde im End-to-end-Datenbestand ergänzt",
+        ),
+      ).toBeVisible();
 
-    await expect(
-      page
-        .getByText("Inhaltsübersicht: präambel Fußnote")
-        .filter({ visible: true }),
-    ).toHaveCount(0);
+      await expect(
+        page
+          .getByText("Inhaltsübersicht: präambel Fußnote")
+          .filter({ visible: true }),
+      ).toHaveCount(0);
 
-    await page
-      .getByRole("button", { name: "Amtliches Inhaltsverzeichnis einblenden" })
-      .click();
+      await page
+        .getByRole("button", {
+          name: "Amtliches Inhaltsverzeichnis einblenden",
+        })
+        .click();
 
-    const toc = page.getByRole("region", {
-      name: "Amtliches Inhaltsverzeichnis ausblenden",
-    });
-    await expect(
-      toc.getByText("Inhaltsübersicht: präambel Fußnote"),
-    ).toBeVisible();
-  });
+      const toc = page.getByRole("region", {
+        name: "Amtliches Inhaltsverzeichnis ausblenden",
+      });
+      await expect(
+        toc.getByText("Inhaltsübersicht: präambel Fußnote"),
+      ).toBeVisible();
+    },
+  );
 
-  test("shows the footnote of the Schlussformel", async ({ page }) => {
-    await navigate(
-      page,
-      "/gesetze/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu",
-    );
+  test(
+    "shows the footnote of the Schlussformel",
+    { tag: ["@RISDEV-12253"] },
+    async ({ page }) => {
+      await navigate(
+        page,
+        "/gesetze/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu",
+      );
 
-    await expect(
-      page.getByText(
-        "Schlussformel: Diese Fußnote an der Schlussformel wurde im End-to-end-Datenbestand ergänzt",
-      ),
-    ).toBeVisible();
-  });
+      await expect(
+        page.getByText(
+          "Schlussformel: Diese Fußnote an der Schlussformel wurde im End-to-end-Datenbestand ergänzt",
+        ),
+      ).toBeVisible();
+    },
+  );
 
-  test("view footnotes in title", async ({ page }) => {
-    await navigate(
-      page,
-      "/gesetze/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu",
-    );
+  test(
+    "view footnotes in title",
+    { tag: ["@RISDEV-12253"] },
+    async ({ page }) => {
+      await navigate(
+        page,
+        "/gesetze/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu",
+      );
 
-    const marker = await page.getByRole("superscript").innerText();
-    expect(marker).toBe("❃");
+      const marker = await page.getByRole("superscript").innerText();
+      expect(marker).toBe("❃");
 
-    await expect(
-      page.getByRole("listitem").filter({
-        hasText:
-          "(Diese Fußnote im Titel wurde im End-to-end-Datenbestand ergänzt",
-      }),
-    ).toBeVisible();
-  });
+      await expect(
+        page.getByRole("listitem").filter({
+          hasText:
+            "(Diese Fußnote im Titel wurde im End-to-end-Datenbestand ergänzt",
+        }),
+      ).toBeVisible();
+    },
+  );
 
   test("table of contents renders and clicking a link scrolls to the article", async ({
     page,
@@ -289,13 +301,17 @@ test.describe("actions menu", () => {
     );
   });
 
-  test.describe("can copy link to currently viewed expression", () => {
-    testCopyLinkButton(
-      "/gesetze/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu",
-      "Link zu dieser Fassung kopieren",
-      RegExp(".*/gesetze/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu"),
-    );
-  });
+  test.describe(
+    "can copy link to currently viewed expression",
+    { tag: ["@RISDEV-11118"] },
+    () => {
+      testCopyLinkButton(
+        "/gesetze/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu",
+        "Link zu dieser Fassung kopieren",
+        RegExp(".*/gesetze/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu"),
+      );
+    },
+  );
 
   test.describe("can use print action button to open print menu", () => {
     testPrintButton("/gesetze/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu");
