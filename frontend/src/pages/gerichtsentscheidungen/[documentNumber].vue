@@ -93,9 +93,9 @@ const headerMetadata = computed<MetadataItem[]>(() => [
     value: dateFormattedDDMMYYYY(caseLaw.value?.decisionDate),
   },
   {
-    type: "text",
+    type: "badge",
     label: "Aktenzeichen",
-    value: formatArray(caseLaw.value?.fileNumbers ?? []),
+    values: caseLaw.value?.fileNumbers ?? [],
   },
 ]);
 
