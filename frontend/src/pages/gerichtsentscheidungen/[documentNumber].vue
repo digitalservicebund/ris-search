@@ -237,6 +237,32 @@ const detailsSectionId = useId();
   @apply ml-(--border-number-min-width);
 }
 
+:deep(.case-law ul) {
+  @apply mb-16 list-outside list-disc pl-24;
+}
+
+:deep(.case-law ul ul) {
+  @apply mb-0 list-[circle];
+}
+
+:deep(.case-law ul ul ul) {
+  @apply list-[square];
+}
+
+:deep(.case-law ul > li > p:last-child) {
+  @apply mb-0;
+}
+
+/* nesting is often expressed as a list item that only wraps another list,
+   which should show the nested marker instead of one of its own */
+:deep(.case-law li:has(> ul:only-child)) {
+  @apply list-none;
+}
+
+:deep(.case-law section > ul) {
+  @apply ml-(--border-number-min-width);
+}
+
 :deep(.case-law #gliederung blockquote) {
   @apply ml-32;
 }

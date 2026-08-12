@@ -102,6 +102,54 @@
                         <akn:p>Eine fiktive Darstellung der Ereignisse wird hier exemplarisch dargestellt.</akn:p>
                     </akn:content>
                 </akn:hcontainer>
+                <akn:hcontainer ris:domainTerm="Randnummer" eId="randnummer-2" name="Randnummer">
+                    <akn:num>2</akn:num>
+                    <akn:content>
+                        <akn:ul>
+                            <akn:li>
+                                <akn:p>Erster Aufzählungspunkt auf der ersten Ebene.</akn:p>
+                            </akn:li>
+                            <akn:li>
+                                <akn:p>Zweiter Aufzählungspunkt auf der ersten Ebene, mit einem etwas
+                                    längeren Text, damit der Umbruch mehrzeiliger Listenpunkte
+                                    sichtbar wird.</akn:p>
+                            </akn:li>
+                        </akn:ul>
+                    </akn:content>
+                </akn:hcontainer>
+                <akn:hcontainer ris:domainTerm="Randnummer" eId="randnummer-3" name="Randnummer">
+                    <akn:num>3</akn:num>
+                    <akn:content>
+                        <akn:ul>
+                            <akn:li>
+                                <akn:ul>
+                                    <akn:li>
+                                        <akn:p>Aufzählungspunkt auf der zweiten Ebene, verschachtelt
+                                            über mehrere Randnummern hinweg.</akn:p>
+                                    </akn:li>
+                                </akn:ul>
+                            </akn:li>
+                        </akn:ul>
+                    </akn:content>
+                </akn:hcontainer>
+                <akn:hcontainer ris:domainTerm="Randnummer" eId="randnummer-4" name="Randnummer">
+                    <akn:num>4</akn:num>
+                    <akn:content>
+                        <akn:ul>
+                            <akn:li>
+                                <akn:ul>
+                                    <akn:li>
+                                        <akn:ul>
+                                            <akn:li>
+                                                <akn:p>Aufzählungspunkt auf der dritten Ebene.</akn:p>
+                                            </akn:li>
+                                        </akn:ul>
+                                    </akn:li>
+                                </akn:ul>
+                            </akn:li>
+                        </akn:ul>
+                    </akn:content>
+                </akn:hcontainer>
             </akn:background>
         </akn:judgmentBody>
     </akn:judgment>
