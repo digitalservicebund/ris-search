@@ -12,12 +12,6 @@ spring:
       - "kubernetes:"
       - "optional:configtree:/etc/secrets/*/"
 
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health,info,prometheus
-
 s3:
   file-storage:
     case-law:

@@ -11,18 +11,6 @@ spring:
     import:
       - "kubernetes:"
       - "optional:configtree:/etc/secrets/*/"
-  cloud:
-    kubernetes:
-      config:
-        fail-fast: true
-        sources:
-          - name: ris-search-opensearch-config
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health,info,prometheus
 
 s3:
   file-storage:

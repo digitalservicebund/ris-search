@@ -14,6 +14,12 @@ server:
   cms-url: ""
   api-keys: []
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+
 rate-limit:
   default:
     requests: 600
@@ -89,6 +95,11 @@ sentry:
   traces-sample-rate: 0.01
   minimum-event-level: "error"
 
+posthog:
+  api-key: ""
+  host: ""
+  feedback-survey-id: ""
+
 app:
   security:
     # Since the api also hosts the swagger files, this header is used for both the api AND some of the docs pages
@@ -97,16 +108,6 @@ app:
 
 logging:
   level:
-    de:
-      bund:
-        digitalservice:
-          ris:
-            search:
-              config:
-                httplogs: TRACE
-      springframework:
-        ws:
-          server:
-            MessageTracing:
-              sent: DEBUG
-              received: TRACE
+    de.bund.digitalservice.ris.search.config.httplogs: TRACE
+    springframework.ws.server.MessageTracing.sent: DEBUG
+    springframework.ws.server.MessageTracing.received: TRACE
