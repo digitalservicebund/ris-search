@@ -10,18 +10,8 @@ import type {
   LegislationManifestation,
 } from "~/types/api";
 
-const { mockToastAdd } = vi.hoisted(() => ({
-  mockToastAdd: vi.fn(),
-}));
-
 vi.mock("~/composables/useBackendUrl", () => ({
   default: vi.fn((url?: string) => url),
-}));
-
-vi.mock("primevue/usetoast", () => ({
-  useToast: () => ({
-    add: mockToastAdd,
-  }),
 }));
 
 mockNuxtImport("useRequestURL", () => {
@@ -80,7 +70,7 @@ describe("NormActionMenu", () => {
       "Link zur jeweils gültigen Fassung kopieren",
     );
     expect(menuitems[1]).toHaveAccessibleName(
-      "Permalink zu dieser Fassung kopieren",
+      "Link zu dieser Fassung kopieren",
     );
     expect(menuitems[2]).toHaveAccessibleName("Drucken");
     expect(menuitems[3]).toHaveAccessibleName("Als PDF speichern");
@@ -124,12 +114,6 @@ describe("NormActionMenu", () => {
       await user.click(copyButton);
 
       expect(await navigator.clipboard.readText()).toEqual(expectedUrl);
-
-      expect(mockToastAdd).toHaveBeenCalledExactlyOnceWith(
-        expect.objectContaining({
-          summary: "Kopiert!",
-        }),
-      );
     },
   );
 
@@ -138,7 +122,7 @@ describe("NormActionMenu", () => {
     await renderNormActionMenu();
 
     const copyButton = screen.getByRole("menuitem", {
-      name: "Permalink zu dieser Fassung kopieren",
+      name: "Link zu dieser Fassung kopieren",
     });
     expect(copyButton).toBeVisible();
     expect(copyButton).toBeEnabled();
@@ -147,12 +131,6 @@ describe("NormActionMenu", () => {
 
     expect(await navigator.clipboard.readText()).toEqual(
       "https://example.com/eli/foo",
-    );
-
-    expect(mockToastAdd).toHaveBeenCalledExactlyOnceWith(
-      expect.objectContaining({
-        summary: "Kopiert!",
-      }),
     );
   });
 

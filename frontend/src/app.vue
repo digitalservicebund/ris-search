@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { Toast } from "primevue";
-
 useHead({
   titleTemplate: (pageTitle) =>
     pageTitle
@@ -14,5 +12,4 @@ useHead({
   <NuxtLayout>
     <NuxtPage />
   </NuxtLayout>
-  <Toast />
 </template>
