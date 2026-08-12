@@ -140,53 +140,69 @@ test.describe("general search page features", () => {
     await expect(firstResultLink).toBeFocused();
   });
 
-  test("sort by date in ascending order", async ({ page, isMobileTest }) => {
-    test.skip(isMobileTest);
-    await navigate(page, "/suche?query=fiktiv");
+  test(
+    "sort by date in ascending order",
+    { tag: ["@RISDEV-12191"] },
+    async ({ page, isMobileTest }) => {
+      test.skip(isMobileTest);
+      await navigate(page, "/suche?query=fiktiv");
 
-    await page
-      .getByRole("combobox", { name: "Sortieren nach" })
-      .selectOption({ label: "Datum: Älteste zuerst" });
+      await page
+        .getByRole("combobox", { name: "Sortieren nach" })
+        .selectOption({ label: "Datum: Älteste zuerst" });
 
-    await expect(page).toHaveURL(/sort=date/);
-  });
+      await expect(page).toHaveURL(/sort=date/);
+    },
+  );
 
-  test("sort by date in descending order", async ({ page, isMobileTest }) => {
-    test.skip(isMobileTest);
-    await navigate(page, "/suche?query=fiktiv");
+  test(
+    "sort by date in descending order",
+    { tag: ["@RISDEV-12191"] },
+    async ({ page, isMobileTest }) => {
+      test.skip(isMobileTest);
+      await navigate(page, "/suche?query=fiktiv");
 
-    await page
-      .getByRole("combobox", { name: "Sortieren nach" })
-      .selectOption({ label: "Datum: Neueste zuerst" });
+      await page
+        .getByRole("combobox", { name: "Sortieren nach" })
+        .selectOption({ label: "Datum: Neueste zuerst" });
 
-    await expect(page).toHaveURL(/sort=-date/);
-  });
+      await expect(page).toHaveURL(/sort=-date/);
+    },
+  );
 
-  test("sort by relevance (default)", async ({ page, isMobileTest }) => {
-    test.skip(isMobileTest);
-    await navigate(page, "/suche?query=fiktiv&sort=date");
+  test(
+    "sort by relevance (default)",
+    { tag: ["@RISDEV-12191"] },
+    async ({ page, isMobileTest }) => {
+      test.skip(isMobileTest);
+      await navigate(page, "/suche?query=fiktiv&sort=date");
 
-    await page
-      .getByRole("combobox", { name: "Sortieren nach" })
-      .selectOption({ label: "Relevanz" });
+      await page
+        .getByRole("combobox", { name: "Sortieren nach" })
+        .selectOption({ label: "Relevanz" });
 
-    await expect(page).toHaveURL(/sort=default/);
-  });
+      await expect(page).toHaveURL(/sort=default/);
+    },
+  );
 
-  test("change number of results per page", async ({ page, isMobileTest }) => {
-    test.skip(isMobileTest);
-    await navigate(page, "/suche?query=fiktiv&itemsPerPage=10");
+  test(
+    "change number of results per page",
+    { tag: ["@RISDEV-12191"] },
+    async ({ page, isMobileTest }) => {
+      test.skip(isMobileTest);
+      await navigate(page, "/suche?query=fiktiv&itemsPerPage=10");
 
-    const searchResults = getSearchResults(page);
+      const searchResults = getSearchResults(page);
 
-    await expect(searchResults).toHaveCount(10);
+      await expect(searchResults).toHaveCount(10);
 
-    await page
-      .getByRole("combobox", { name: "Einträge pro Seite" })
-      .selectOption({ label: "50" });
+      await page
+        .getByRole("combobox", { name: "Einträge pro Seite" })
+        .selectOption({ label: "50" });
 
-    await expect(searchResults).toHaveCount(18);
-  });
+      await expect(searchResults).toHaveCount(18);
+    },
+  );
 
   test("falls back to last valid page when visiting an out-of-range pageIndex directly", async ({
     page,
@@ -202,42 +218,43 @@ test.describe("general search page features", () => {
 });
 
 test.describe("searching all documents", () => {
-  test("shows search results for all document kinds", async ({
-    page,
-    isMobileTest,
-  }) => {
-    test.skip(isMobileTest);
-    await navigate(page, "/suche");
+  test(
+    "shows search results for all document kinds",
+    { tag: ["@RISDEV-12191"] },
+    async ({ page, isMobileTest }) => {
+      test.skip(isMobileTest);
+      await navigate(page, "/suche");
 
-    await page
-      .getByRole("combobox", { name: "Einträge pro Seite" })
-      .selectOption({ label: "50" });
+      await page
+        .getByRole("combobox", { name: "Einträge pro Seite" })
+        .selectOption({ label: "50" });
 
-    // Norm
-    await expect(
-      page.getByText(
-        "Fiktives Gesetz zur Musterfinanzierung politischer Einrichtungen",
-      ),
-    ).toBeVisible();
+      // Norm
+      await expect(
+        page.getByText(
+          "Fiktives Gesetz zur Musterfinanzierung politischer Einrichtungen",
+        ),
+      ).toBeVisible();
 
-    // Caselaw Urteil
-    await expect(page.getByText("Testheader für Urteil 7.")).toBeVisible();
+      // Caselaw Urteil
+      await expect(page.getByText("Testheader für Urteil 7.")).toBeVisible();
 
-    // Caselaw Beschluss
-    await expect(
-      page.getByText("Beispielheader für den Beschlusstext."),
-    ).toBeVisible();
+      // Caselaw Beschluss
+      await expect(
+        page.getByText("Beispielheader für den Beschlusstext."),
+      ).toBeVisible();
 
-    // Literature
-    await expect(page.getByText("Erstes Test-Dokument ULI")).toBeVisible();
+      // Literature
+      await expect(page.getByText("Erstes Test-Dokument ULI")).toBeVisible();
 
-    // Administrative directive
-    await expect(
-      page.getByText(
-        "Verwaltungsvorschrift für das Testen des Portals zur Darstellung von Verwaltungsvorschriften",
-      ),
-    ).toBeVisible();
-  });
+      // Administrative directive
+      await expect(
+        page.getByText(
+          "Verwaltungsvorschrift für das Testen des Portals zur Darstellung von Verwaltungsvorschriften",
+        ),
+      ).toBeVisible();
+    },
+  );
 });
 
 test.describe("searching legislation", () => {
@@ -1020,31 +1037,35 @@ test.describe("searching administrative directives", () => {
     await expect(getSearchResults(page)).toHaveCount(2);
   });
 
-  test("sort by date", async ({ page, isMobileTest }) => {
-    test.skip(isMobileTest);
-    await navigate(page, "/suche?documentKind=V");
+  test(
+    "sort by date",
+    { tag: ["@RISDEV-12191"] },
+    async ({ page, isMobileTest }) => {
+      test.skip(isMobileTest);
+      await navigate(page, "/suche?documentKind=V");
 
-    await page
-      .getByRole("combobox", { name: "Sortieren nach" })
-      .selectOption({ label: "Datum: Älteste zuerst" });
+      await page
+        .getByRole("combobox", { name: "Sortieren nach" })
+        .selectOption({ label: "Datum: Älteste zuerst" });
 
-    await expect(page).toHaveURL(/sort=date/);
+      await expect(page).toHaveURL(/sort=date/);
 
-    const searchResults = getSearchResults(page);
-    await expect(searchResults).toHaveCount(5);
+      const searchResults = getSearchResults(page);
+      await expect(searchResults).toHaveCount(5);
 
-    await expect(searchResults.nth(0)).toHaveText(/01.11.2004/);
+      await expect(searchResults.nth(0)).toHaveText(/01.11.2004/);
 
-    await page
-      .getByRole("combobox", { name: "Sortieren nach" })
-      .selectOption({ label: "Datum: Neueste zuerst" });
+      await page
+        .getByRole("combobox", { name: "Sortieren nach" })
+        .selectOption({ label: "Datum: Neueste zuerst" });
 
-    await expect(page).toHaveURL(/sort=-date/);
+      await expect(page).toHaveURL(/sort=-date/);
 
-    await expect(searchResults).toHaveCount(5);
+      await expect(searchResults).toHaveCount(5);
 
-    await expect(searchResults.nth(0)).toHaveText(/01.07.2025/);
-  });
+      await expect(searchResults.nth(0)).toHaveText(/01.07.2025/);
+    },
+  );
 });
 
 test.describe("mobile filter and sort drawers", () => {
