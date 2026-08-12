@@ -467,7 +467,7 @@ test.describe("actions menu", () => {
   test.describe("can use XML action to view literature xml file", () => {
     testXmlButton(
       "/literaturnachweise/XXLU000000001",
-      "http://localhost:8090/v1/literature/XXLU000000001.xml",
+      "http://localhost:8080/v1/literature/XXLU000000001.xml",
     );
   });
 });
