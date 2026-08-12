@@ -6,6 +6,7 @@ import de.bund.digitalservice.ris.html.service.xslt.SliLiteratureXsltTransformer
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/** XsltTransformerConfiguration to configure Xslt transformers */
 @Configuration
 public class XsltTransformerConfiguration {
 
