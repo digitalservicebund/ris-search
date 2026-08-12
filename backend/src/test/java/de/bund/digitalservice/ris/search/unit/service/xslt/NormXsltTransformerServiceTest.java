@@ -12,6 +12,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.function.Function;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -65,7 +66,10 @@ class NormXsltTransformerServiceTest {
     "main,         noPdfLinks.xml, noPdfLinks.html,                                                 Should not apply any special transformation to non-pdf links",
     "main,         container.xml, container.html,                                                   Should transform container elements in the preface",
     "main,         preambleFormula.xml, preambleFormula.html,                                       Should transform a preamble formula",
+    "main,         preambleFormulaNotes.xml, preambleFormulaNotes.html,                             Should output notes of a preamble formula",
+    "main,         preambleFormulaAndTocNotes.xml, preambleFormulaAndTocNotes.html,                 Should output notes of a preamble formula and of the official toc in their own containers",
     "main,         conclusionsFormula.xml, conclusionsFormula.html,                                 Should transform a conclusions formula",
+    "main,         conclusionsFormulaNotes.xml, conclusionsFormulaNotes.html,                       Should output notes of a conclusions formula",
     "main,         blockList.xml, blockList.html,                                                   Should transform a blockList",
     "main,         preformatted.xml, preformatted.html,                                             Should transform preformatted paragraphs",
     "main,         proprietary.xml, proprietary.html,                                               Should transform proprietary metadata"
@@ -154,6 +158,28 @@ class NormXsltTransformerServiceTest {
         .isEqualTo(
             """
             <span class="akn-num" id="c_num-1">§ 1</span> <span class="akn-heading" id="c_heading-1">Article title <a href="#c_heading-1_amtlfnote-1"><sup>1</sup></a></span>""");
+  }
+
+  @Test
+  @DisplayName("Outputs the same Eingangsformel footnotes in the norm and the single article view")
+  void testPreambleFormulaNotesInBothViews() throws IOException {
+    byte[] bytes = Files.readAllBytes(Path.of(resourcesPath, "preambleFormulaNotes.xml"));
+
+    var normView =
+        Jsoup.parse(service.transformNorm(bytes, "deu", RESOURCES_BASE_PATH, "regelungstext-1"));
+    var articleView =
+        Jsoup.parse(service.transformArticle(bytes, "präambel-n1_formel-n1", RESOURCES_BASE_PATH));
+
+    for (Document view : List.of(normView, articleView)) {
+      assertThat(view.select("ul.nichtamtliche-fussnoten > li.fussnote").text())
+          .isEqualTo("Eingangsformel: Note attached to the Eingangsformel");
+      assertThat(view.select("ol.fussnoten > li.fussnote").text())
+          .startsWith("* Authorial note in the Eingangsformel");
+    }
+
+    // both lists belong to the Eingangsformel, not to the enclosing preamble
+    assertThat(normView.select("#präambel-n1_formel-n1 > ul.nichtamtliche-fussnoten")).hasSize(1);
+    assertThat(normView.select("#präambel-n1_formel-n1 > ol.fussnoten")).hasSize(1);
   }
 
   @Test

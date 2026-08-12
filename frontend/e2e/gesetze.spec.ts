@@ -135,6 +135,51 @@ test.describe("view norm page", async () => {
     expect(toc.getByRole("listitem")).toBeVisible();
   });
 
+  test("shows the footnote of the Eingangsformel in place, and the one of the official table of contents in its accordion", async ({
+    page,
+  }) => {
+    await navigate(
+      page,
+      "/gesetze/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu",
+    );
+
+    await expect(
+      page.getByText(
+        "Eingangsformel: Diese Fußnote an der Eingangsformel wurde im End-to-end-Datenbestand ergänzt",
+      ),
+    ).toBeVisible();
+
+    await expect(
+      page
+        .getByText("Inhaltsübersicht: präambel Fußnote")
+        .filter({ visible: true }),
+    ).toHaveCount(0);
+
+    await page
+      .getByRole("button", { name: "Amtliches Inhaltsverzeichnis einblenden" })
+      .click();
+
+    const toc = page.getByRole("region", {
+      name: "Amtliches Inhaltsverzeichnis ausblenden",
+    });
+    await expect(
+      toc.getByText("Inhaltsübersicht: präambel Fußnote"),
+    ).toBeVisible();
+  });
+
+  test("shows the footnote of the Schlussformel", async ({ page }) => {
+    await navigate(
+      page,
+      "/gesetze/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu",
+    );
+
+    await expect(
+      page.getByText(
+        "Schlussformel: Diese Fußnote an der Schlussformel wurde im End-to-end-Datenbestand ergänzt",
+      ),
+    ).toBeVisible();
+  });
+
   test("view footnotes in title", async ({ page }) => {
     await navigate(
       page,
@@ -144,11 +189,12 @@ test.describe("view norm page", async () => {
     const marker = await page.getByRole("superscript").innerText();
     expect(marker).toBe("❃");
 
-    const footnotes = page.locator(".dokumentenkopf-fussnoten");
-
-    await expect(footnotes).toContainText(
-      "(Diese Fußnote im Titel wurde im End-to-end-Datenbestand ergänzt",
-    );
+    await expect(
+      page.getByRole("listitem").filter({
+        hasText:
+          "(Diese Fußnote im Titel wurde im End-to-end-Datenbestand ergänzt",
+      }),
+    ).toBeVisible();
   });
 
   test("table of contents renders and clicking a link scrolls to the article", async ({

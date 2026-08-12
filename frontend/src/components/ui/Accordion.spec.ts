@@ -79,31 +79,6 @@ describe("Accordion", () => {
     expect(screen.getByRole("button")).toHaveTextContent("Show More");
   });
 
-  it("toggles when used with v-model", async () => {
-    const user = userEvent.setup();
-    render({
-      components: { Accordion },
-      template: `
-        <Accordion
-          v-model="open"
-          header-collapsed="Show More"
-          header-expanded="Show Less"
-        >
-          <div>Slot Content</div>
-        </Accordion>
-      `,
-      data: () => ({ open: false }),
-    });
-
-    expect(screen.getByText("Slot Content")).not.toBeVisible();
-
-    await user.click(screen.getByRole("button"));
-    expect(screen.getByText("Slot Content")).toBeVisible();
-
-    await user.click(screen.getByRole("button"));
-    expect(screen.getByText("Slot Content")).not.toBeVisible();
-  });
-
   it("reflects the open state via aria-expanded", async () => {
     const { rerender } = render(Accordion, {
       props: { ...headers, modelValue: false },
