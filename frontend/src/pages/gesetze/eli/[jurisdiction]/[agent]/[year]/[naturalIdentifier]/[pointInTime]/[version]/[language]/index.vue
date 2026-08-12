@@ -5,6 +5,7 @@ import IcOutlineRestore from "~icons/ic/outline-settings-backup-restore";
 import { NuxtLink } from "#components";
 import type { BreadcrumbItem } from "~/components/Breadcrumbs.vue";
 import type { DetailsListItem } from "~/components/documents/DetailsList.vue";
+import type { MetadataItem } from "~/components/documents/Metadata.vue";
 import type { TabView } from "~/components/documents/TabsLayout.vue";
 import { useSearchBackLink } from "~/composables/useSearchBackLink";
 import { DocumentKind, type LegislationExpression } from "~/types/api";
@@ -186,16 +187,18 @@ const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
   ];
 });
 
-const metadataItems = computed(() => {
+const metadataItems = computed<MetadataItem[]>(() => {
   if (privateFeaturesEnabled) {
     return getNormMetadataItems(metadata.value);
   }
   return [
     {
+      type: "text",
       label: "Abkürzung",
       value: abbreviation ?? "",
     },
     {
+      type: "text",
       label: "Status",
     },
   ];

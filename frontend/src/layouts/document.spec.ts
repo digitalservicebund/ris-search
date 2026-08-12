@@ -102,8 +102,8 @@ describe("document", () => {
       props: {
         titlePlaceholder: "Title Placeholder",
         metadata: [
-          { label: "Label 1", value: "Value 1" },
-          { label: "Label 2" },
+          { type: "text", label: "Label 1", value: "Value 1" },
+          { type: "text", label: "Label 2" },
         ],
         views: defaultViews,
       },

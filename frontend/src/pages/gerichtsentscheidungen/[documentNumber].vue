@@ -85,13 +85,15 @@ const tocEntries = computed<TreeItem[] | null>(() => {
 });
 
 const headerMetadata = computed<MetadataItem[]>(() => [
-  { label: "Gericht", value: caseLaw.value?.courtName },
-  { label: "Dokumenttyp", value: caseLaw.value?.documentType },
+  { type: "text", label: "Gericht", value: caseLaw.value?.courtName },
+  { type: "text", label: "Dokumenttyp", value: caseLaw.value?.documentType },
   {
+    type: "text",
     label: "Entscheidungsdatum",
     value: dateFormattedDDMMYYYY(caseLaw.value?.decisionDate),
   },
   {
+    type: "text",
     label: "Aktenzeichen",
     value: formatArray(caseLaw.value?.fileNumbers ?? []),
   },

@@ -1,25 +1,28 @@
 import type { DetailsListItem } from "~/components/documents/DetailsList.vue";
-import type { MetadataItem } from "~/components/documents/Metadata.vue";
+import type { MetadataItemText } from "~/components/documents/Metadata.vue";
 import type { AdministrativeDirective } from "~/types/api";
 
 export function getAdministrativeDirectiveMetadataItems(
   administrativeDirective?: Partial<AdministrativeDirective>,
-): MetadataItem[] {
+): MetadataItemText[] {
   return [
     {
+      type: "text",
       label: "Aktenzeichen",
       value: formatArray(administrativeDirective?.referenceNumbers ?? []),
     },
     {
+      type: "text",
       label: "Normgeber",
       value: administrativeDirective?.legislationAuthority,
     },
-
     {
+      type: "text",
       label: "Dokumenttyp",
       value: administrativeDirective?.documentType,
     },
     {
+      type: "text",
       label: "Gültig ab",
       value: dateFormattedDDMMYYYY(administrativeDirective?.entryIntoForceDate),
     },

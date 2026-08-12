@@ -61,4 +61,16 @@ describe("Badge", () => {
     const badge = container.firstChild as HTMLElement;
     expect(badge).toHaveClass("bg-red-200");
   });
+
+  it("applies gray styling for GRAY color", () => {
+    const { container } = render(Badge, {
+      props: {
+        label: "Gray Badge",
+        color: BadgeColor.GRAY,
+      },
+    });
+
+    const badge = container.firstChild as HTMLElement;
+    expect(badge).toHaveClass("bg-gray-100");
+  });
 });

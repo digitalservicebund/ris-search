@@ -19,19 +19,22 @@ export function getLiteratureMetadataItems(
   ];
   return [
     {
+      type: "text",
       label: "Dokumenttyp",
       value: formatArray(literature?.documentTypes ?? []),
     },
     {
+      type: "badge",
       label: "Fundstelle",
-      value: formatArray(references),
+      values: references,
     },
-
     {
+      type: "text",
       label: "Autor",
       value: formatArray(formatNames(literature?.authors ?? [])),
     },
     {
+      type: "text",
       label: "Veröffentlichungsjahr",
       value: formatArray(literature?.yearsOfPublication ?? []),
     },
