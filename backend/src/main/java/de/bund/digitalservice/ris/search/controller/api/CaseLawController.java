@@ -56,7 +56,7 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
  */
 @Tag(name = "Case Law")
 @RestController
-@Profile({"dev", "staging", "uat", "test", "prototype"})
+@Profile({"dev", "e2e", "staging", "uat", "test", "prototype"})
 public class CaseLawController {
 
   private final CaseLawService caseLawService;

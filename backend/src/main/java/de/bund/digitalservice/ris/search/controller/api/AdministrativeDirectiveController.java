@@ -50,7 +50,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Tag(name = "AdministrativeDirective")
 @RestController
-@Profile({"dev", "staging", "uat", "test", "prototype"})
+@Profile({"dev", "e2e", "staging", "uat", "test", "prototype"})
 public class AdministrativeDirectiveController {
 
   private final AdministrativeDirectiveService service;

@@ -55,7 +55,7 @@ public class SecurityConfig {
    * @return a {@link SecurityFilterChain} instance representing the configured HTTP security filter
    */
   @Bean
-  @Profile({"dev", "test"})
+  @Profile({"dev", "e2e", "test"})
   public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) {
     http.authorizeHttpRequests(requests -> requests.anyRequest().permitAll());
     applyCommonConfiguration(http);
