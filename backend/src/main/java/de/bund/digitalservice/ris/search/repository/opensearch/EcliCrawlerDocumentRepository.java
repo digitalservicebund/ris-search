@@ -23,9 +23,9 @@ public interface EcliCrawlerDocumentRepository
   Optional<EcliCrawlerDocument> findByFilenameIn(String filename);
 
   /**
-   * Stream filenames of all published crawler documents.
+   * Stream EcliCrawlerDocuments that are considered published.
    *
-   * @return stream of filenames where isPublished is true
+   * @return stream of EcliCrawlerDocuments where isPublished is true
    */
-  Stream<String> findFilenameByIsPublishedIsTrue();
+  Stream<EcliCrawlerDocument> findByIsPublishedIsTrue();
 }
