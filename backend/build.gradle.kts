@@ -106,6 +106,9 @@ dependencies {
     // CVE-2026-59889
     implementation(libs.tools.jackson.databind)
 
+    //  CVE-2026-54399
+    implementation(libs.apache.httpcore)
+
     implementation(libs.ris.html.transformation)
 
     compileOnly(libs.lombok)

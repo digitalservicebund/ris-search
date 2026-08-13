@@ -94,6 +94,9 @@ netty-codec-compression = { module = "io.netty:netty-codec-compression", version
 # CVE-2026-59889
 tools-jackson-databind = { module = "tools.jackson.core:jackson-databind", version = "3.1.5" }
 
+# CVE-2026-54399
+apache-httpcore = { module = "org.apache.httpcomponents.core5:httpcore5", version = "5.4.3" }
+
 [plugins]
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
 spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "spring-dependency-management" }
