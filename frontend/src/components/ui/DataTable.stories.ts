@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/vue3-vite";
 import type { ConcreteComponent } from "vue";
 import { html } from "../../utils/tags";
-import UiBadge, { BadgeColor } from "./Badge.vue";
+import UiBadge from "./Badge.vue";
 import UiDataTable, { type DataTableColumn } from "./DataTable.vue";
 
 type VersionRow = {
@@ -118,25 +118,25 @@ export const CustomCell: Story = {
             key: "unknown",
             fromDate: "–",
             toDate: "–",
-            status: { label: "Unbekannt", color: BadgeColor.BLUE },
+            status: { label: "Unbekannt", color: "blue" },
           },
           {
             key: "future",
             fromDate: "27.10.2026",
             toDate: "–",
-            status: { label: "Zukünftig in Kraft", color: BadgeColor.YELLOW },
+            status: { label: "Zukünftig in Kraft", color: "yellow" },
           },
           {
             key: "current",
             fromDate: "15.08.2025",
             toDate: "26.10.2026",
-            status: { label: "Aktuell gültig", color: BadgeColor.GREEN },
+            status: { label: "Aktuell gültig", color: "green" },
           },
           {
             key: "expired",
             fromDate: "28.02.2025",
             toDate: "14.08.2025",
-            status: { label: "Außer Kraft", color: BadgeColor.RED },
+            status: { label: "Außer Kraft", color: "red" },
           },
         ],
       };

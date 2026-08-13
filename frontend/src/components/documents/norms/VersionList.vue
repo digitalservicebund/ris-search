@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { NuxtLink } from "#components";
-import { BadgeColor } from "~/components/ui/Badge.vue";
+import type { BadgeColor } from "~/components/ui/Badge.vue";
 import type {
   DataTableColumn,
   DataTableRow,
@@ -47,7 +47,7 @@ const rows = computed<VersionRow[]>(() => {
 
     const status = formatNormValidity(version.temporalCoverage) ?? {
       label: "Unbekannt",
-      color: BadgeColor.BLUE,
+      color: "blue",
     };
 
     return {
