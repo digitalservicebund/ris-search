@@ -120,7 +120,7 @@ public class EcliSitemapJob implements Job {
         portalBucket.save(LAST_PROCESSED_CHANGELOG, changelogPaths.getLast());
       }
     } catch (RuntimeException e) {
-      logger.error(e.getMessage());
+      logger.error(e.getMessage(), e);
       return ReturnCode.ERROR;
     }
 
