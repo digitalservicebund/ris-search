@@ -230,6 +230,8 @@ const formattedResultCount = computed(() =>
   formatResultCount(totalItemCount.value),
 );
 
+const { isSearching } = useSearchLoadingIndicator(searchStatus);
+
 // User action handlers ------------------------------------
 
 function submit() {
@@ -319,7 +321,7 @@ watch(searchStatus, async (newStatus, oldStatus) => {
           v-model="localQuery"
           :data-fields="queryableDataFields"
           :document-kind
-          :loading="searchStatus === 'pending'"
+          :loading="isSearching"
           :form-id="searchFormId"
           :count
           @submit="submit"

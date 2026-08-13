@@ -210,6 +210,7 @@ const formattedResultCount = computed(() =>
   formatResultCount(totalItemCount.value),
 );
 
+const { isSearching } = useSearchLoadingIndicator(searchStatus);
 
 // User action handlers ------------------------------------
 
@@ -272,7 +273,7 @@ watch(searchStatus, async (newStatus, oldStatus) => {
       <div id="search">
         <SearchSimpleSearchInput
           :model-value="query"
-          :loading="searchStatus === 'pending'"
+          :loading="isSearching"
           @update:model-value="updateQuery"
           @empty-search="handleEmptySearch"
         />
