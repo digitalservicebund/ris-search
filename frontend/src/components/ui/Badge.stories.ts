@@ -21,6 +21,10 @@ const meta: Meta<typeof UiBadge> = {
         gray: BadgeColor.GRAY,
       },
     },
+    variant: {
+      control: "select",
+      options: ["extraSmall", "small", "medium", "large"],
+    },
   },
 };
 

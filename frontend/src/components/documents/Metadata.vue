@@ -32,6 +32,8 @@ const emptyValuePlaceholder = "—"; // Note: this is an 'em dash'
             :key="value"
             :color="BadgeColor.GRAY"
             :label="value"
+            variant="extraSmall"
+            class="font-bold!"
           ></UiBadge>
         </div>
       </dd>
