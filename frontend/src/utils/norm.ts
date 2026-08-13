@@ -147,18 +147,22 @@ export function getNormMetadataItems(
   );
   return [
     {
+      type: "text",
       label: "Abkürzung",
       value: norm?.abbreviation,
     },
     {
+      type: "text",
       label: "Status",
       value: formattedStatus,
     },
     {
+      type: "text",
       label: "Gültig ab",
       value: dateFormattedDDMMYYYY(validityInterval?.from),
     },
     {
+      type: "text",
       label: "Gültig bis",
       value: dateFormattedDDMMYYYY(validityInterval?.to),
     },

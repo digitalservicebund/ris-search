@@ -191,22 +191,23 @@ test.describe("actions menu", () => {
   });
 });
 
-test("can view metadata", async ({ page }) => {
+test("can view metadata", { tag: ["@RISDEV-10568"] }, async ({ page }) => {
   await navigate(page, "/gerichtsentscheidungen/KORE600500000");
   const metadataList = page.getByTestId("metadata-list");
+  const defs = metadataList.getByRole("definition");
 
-  await expect(
-    metadataList.getByRole("term").or(metadataList.getByRole("definition")),
-  ).toHaveText([
+  await expect(metadataList.getByRole("term")).toHaveText([
     "Gericht",
-    "LG Test6 Label",
     "Dokumenttyp",
-    "Urteil",
     "Entscheidungsdatum",
-    "09.04.2025",
     "Aktenzeichen",
-    "TS 123456",
   ]);
+
+  await expect(defs.nth(0)).toHaveText("LG Test6 Label");
+  await expect(defs.nth(1)).toHaveText("Urteil");
+  await expect(defs.nth(2)).toHaveText("09.04.2025");
+  // Aktenzeichen are rendered as badges (spans)
+  await expect(defs.nth(3).locator("span")).toHaveText(["TS 123456"]);
 });
 
 test("can view details", { tag: ["@RISDEV-12108"] }, async ({ page }) => {

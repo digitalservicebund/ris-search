@@ -15,33 +15,34 @@ describe("getAdministrativeDirectiveMetadataItems", () => {
       "Gültig ab",
     ]);
 
-    expect(result.map((item) => item.value)).toEqual([
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-    ]);
+    expect(result[0]).toMatchObject({ type: "badge", values: [] });
+    expect(result[1]).toMatchObject({ type: "text", value: undefined });
+    expect(result[2]).toMatchObject({ type: "text", value: undefined });
+    expect(result[3]).toMatchObject({ type: "text", value: undefined });
   });
 
-  it("maps empty referenceNumber to undefined", () => {
+  it("maps empty referenceNumbers to empty array", () => {
     const result = getAdministrativeDirectiveMetadataItems({
       referenceNumbers: [],
     });
-    expect(result[0]?.value).toBeUndefined();
+    expect(result[0]).toMatchObject({ type: "badge", values: [] });
   });
 
   it("maps single referenceNumber", () => {
     const result = getAdministrativeDirectiveMetadataItems({
       referenceNumbers: ["123"],
     });
-    expect(result[0]?.value).toBe("123");
+    expect(result[0]).toMatchObject({ type: "badge", values: ["123"] });
   });
 
   it("maps multiple referenceNumbers", () => {
     const result = getAdministrativeDirectiveMetadataItems({
       referenceNumbers: ["123", "456"],
     });
-    expect(result[0]?.value).toBe("123, 456");
+    expect(result[0]).toMatchObject({
+      type: "badge",
+      values: ["123", "456"],
+    });
   });
 
   it("maps legislationAuthority", () => {
@@ -49,7 +50,7 @@ describe("getAdministrativeDirectiveMetadataItems", () => {
       legislationAuthority: "authority",
     });
 
-    expect(result[1]?.value).toBe("authority");
+    expect(result[1]).toMatchObject({ type: "text", value: "authority" });
   });
 
   it("maps documentType", () => {
@@ -57,7 +58,7 @@ describe("getAdministrativeDirectiveMetadataItems", () => {
       documentType: "docType",
     });
 
-    expect(result[2]?.value).toBe("docType");
+    expect(result[2]).toMatchObject({ type: "text", value: "docType" });
   });
 
   it("formats valid entryIntoForceDate", () => {
@@ -65,7 +66,7 @@ describe("getAdministrativeDirectiveMetadataItems", () => {
       entryIntoForceDate: "2025-04-07",
     });
 
-    expect(result[3]?.value).toBe("07.04.2025");
+    expect(result[3]).toMatchObject({ type: "text", value: "07.04.2025" });
   });
 
   it("maps invalid entryIntoForceDate to undefined", () => {
@@ -73,7 +74,7 @@ describe("getAdministrativeDirectiveMetadataItems", () => {
       entryIntoForceDate: "foobar",
     });
 
-    expect(result[3]?.value).toBeUndefined();
+    expect(result[3]).toMatchObject({ type: "text", value: undefined });
   });
 });
 

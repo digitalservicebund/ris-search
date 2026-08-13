@@ -7,19 +7,22 @@ export function getAdministrativeDirectiveMetadataItems(
 ): MetadataItem[] {
   return [
     {
+      type: "badge",
       label: "Aktenzeichen",
-      value: formatArray(administrativeDirective?.referenceNumbers ?? []),
+      values: administrativeDirective?.referenceNumbers ?? [],
     },
     {
+      type: "text",
       label: "Normgeber",
       value: administrativeDirective?.legislationAuthority,
     },
-
     {
+      type: "text",
       label: "Dokumenttyp",
       value: administrativeDirective?.documentType,
     },
     {
+      type: "text",
       label: "Gültig ab",
       value: dateFormattedDDMMYYYY(administrativeDirective?.entryIntoForceDate),
     },
