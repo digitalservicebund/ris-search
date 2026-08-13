@@ -2,6 +2,8 @@
 import { computed } from "vue";
 import { tw } from "../../utils/tags";
 
+export type BadgeColor = "blue" | "green" | "yellow" | "red" | "gray";
+
 const props = withDefaults(
   defineProps<{
     label: string;
@@ -37,11 +39,11 @@ const rootClass = computed(() => {
   const { color, variant } = props;
   return {
     [base]: true,
-    [green]: color === BadgeColor.GREEN,
-    [yellow]: color === BadgeColor.YELLOW,
-    [blue]: color === BadgeColor.BLUE,
-    [red]: color === BadgeColor.RED,
-    [gray]: color === BadgeColor.GRAY,
+    [green]: color === "green",
+    [yellow]: color === "yellow",
+    [blue]: color === "blue",
+    [red]: color === "red",
+    [gray]: color === "gray",
     [standard]: variant === "standard",
     [extraSmall]: variant === "extraSmall",
     [small]: variant === "small",
@@ -49,16 +51,6 @@ const rootClass = computed(() => {
     [large]: variant === "large",
   };
 });
-</script>
-
-<script lang="ts">
-export enum BadgeColor {
-  BLUE,
-  GREEN,
-  YELLOW,
-  RED,
-  GRAY,
-}
 </script>
 
 <template>
