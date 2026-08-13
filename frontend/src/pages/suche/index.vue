@@ -274,6 +274,7 @@ watch(searchStatus, async (newStatus, oldStatus) => {
       <div id="search">
         <SearchSimpleSearchInput
           :model-value="query"
+          :loading="searchStatus === 'pending'"
           @update:model-value="updateQuery"
           @empty-search="handleEmptySearch"
         />
