@@ -22,9 +22,18 @@ if (!documentNumber) throw createError({ status: 404 });
 
 const documentMetadataUrl = `/v1/literature/${documentNumber}`;
 
-const { data: literature, error: metadataError } =
-  await useRisBackend<Literature>(documentMetadataUrl);
+const [
+  { data: literature, error: metadataError },
+  { data: html, error: contentError },
+] = await Promise.all([
+  useRisBackend<Literature>(documentMetadataUrl),
+  useRisBackend<string>(`${documentMetadataUrl}.html`, {
+    headers: { Accept: "text/html" },
+  }),
+]);
+
 if (metadataError?.value) throw createError(metadataError.value);
+if (contentError?.value) throw createError(contentError.value);
 
 useLiteratureSeo({
   documentTypes: literature.value?.documentTypes ?? [],
@@ -32,12 +41,6 @@ useLiteratureSeo({
   headline: literature.value?.headline,
   alternativeHeadline: literature.value?.alternativeHeadline,
 });
-
-const { data: html, error: contentError } = await useRisBackend<string>(
-  `${documentMetadataUrl}.html`,
-  { headers: { Accept: "text/html" } },
-);
-if (contentError?.value) throw createError(contentError.value);
 
 // Page contents ------------------------------------------
 

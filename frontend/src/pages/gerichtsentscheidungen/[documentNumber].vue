@@ -22,14 +22,15 @@ const route = useRoute();
 const documentNumber = route.params.documentNumber?.toString();
 if (!documentNumber) throw createError({ status: 404 });
 
-const { data: caseLaw, error: metadataError } = await useRisBackend<CaseLaw>(
-  `/v1/case-law/${documentNumber}`,
-);
-if (metadataError?.value) throw createError(metadataError.value);
+const [
+  { data: caseLaw, error: metadataError },
+  { data: html, error: contentError },
+] = await Promise.all([
+  useRisBackend<CaseLaw>(`/v1/case-law/${documentNumber}`),
+  useRisBackend<string>(`/v1/case-law/${documentNumber}.html`),
+]);
 
-const { data: html, error: contentError } = await useRisBackend<string>(
-  `/v1/case-law/${documentNumber}.html`,
-);
+if (metadataError?.value) throw createError(metadataError.value);
 if (contentError?.value) throw createError(contentError.value);
 
 const document = computed(() => {

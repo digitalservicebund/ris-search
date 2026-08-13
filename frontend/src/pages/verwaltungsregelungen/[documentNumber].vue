@@ -22,21 +22,22 @@ if (!documentNumber) throw createError({ status: 404 });
 
 const documentMetadataUrl = `/v1/administrative-directive/${documentNumber}`;
 
-const { data, error: metadataError } =
-  await useRisBackend<AdministrativeDirective>(documentMetadataUrl);
+const [{ data, error: metadataError }, { data: html, error: contentError }] =
+  await Promise.all([
+    useRisBackend<AdministrativeDirective>(documentMetadataUrl),
+    useRisBackend<string>(`${documentMetadataUrl}.html`, {
+      headers: { Accept: "text/html" },
+    }),
+  ]);
+
 if (metadataError?.value) throw createError(metadataError.value);
+if (contentError?.value) throw createError(contentError.value);
 
 useAdministrativeDirectiveSeo({
   documentType: data.value?.documentType,
   entryIntoForceDate: data.value?.entryIntoForceDate,
   headline: data.value?.headline,
 });
-
-const { data: html, error: contentError } = await useRisBackend<string>(
-  `${documentMetadataUrl}.html`,
-  { headers: { Accept: "text/html" } },
-);
-if (contentError?.value) throw createError(contentError.value);
 
 // Page contents ------------------------------------------
 
