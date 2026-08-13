@@ -63,14 +63,13 @@ const document = computed(() =>
 );
 const isEmptyDocument = computed(() => isDocumentEmpty(document.value));
 
-const tocEntries = computed<TreeItem[] | null>(() => {
-  return document.value
-    ? getAllSectionsFromDocument(document.value, "section").map((entry) => ({
-        key: entry.id,
-        subtitle: entry.title, // Subtitle for more subtle appearance
-        to: { hash: `#${entry.id}`, query: { from: route.query.from } },
-      }))
-    : null;
+const tocEntries = computed<TreeItem[]>(() => {
+  if (!document.value) return [];
+  return getAllSectionsFromDocument(document.value, "section").map((entry) => ({
+    key: entry.id,
+    subtitle: entry.title, // Subtitle for more subtle appearance
+    to: { hash: `#${entry.id}`, query: { from: route.query.from } },
+  }));
 });
 
 const searchBackLink = useSearchBackLink(DocumentKind.Literature);
