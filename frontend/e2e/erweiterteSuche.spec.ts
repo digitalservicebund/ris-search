@@ -134,7 +134,7 @@ test.describe("general advanced search page features", () => {
     await pagination.getByRole("link", { name: "Weiter" }).click();
     await page.waitForURL(/pageIndex=1/);
 
-    expect(resultCounter).toHaveText(nonZeroResultCount);
+    await expect(resultCounter).toHaveText(nonZeroResultCount);
     // Warning: this is potentially flaky and only works because the previous
     // assertion about the result counter has already "stabilized" the page.
     // Unfortunately there is no other way of asserting a number that isn't
@@ -430,7 +430,7 @@ test.describe("searching legislation", () => {
 
     const results = getSearchResults(page);
 
-    expect(results).toHaveText([
+    await expect(results).toHaveText([
       /Zukünftig in Kraft/,
       /Aktuell gültig/,
       /Außer Kraft/,
@@ -452,7 +452,7 @@ test.describe("searching legislation", () => {
 
     const results = getSearchResults(page);
 
-    expect(results).toHaveText(/Aktuell gültig/);
+    await expect(results).toHaveText(/Aktuell gültig/);
   });
 
   test("filters to show specific date", async ({ page, isMobileTest }) => {

@@ -32,9 +32,9 @@ beforeEach(() => {
 });
 
 describe("useNormVersions", () => {
-  it("returns a sorted list when there is no error", () => {
-    const { sortedVersions } = useNormVersions("dummy-eli");
-    expect(useRisBackendMock).toBeCalledWith(
+  it("returns a sorted list when there is no error", async () => {
+    const { sortedVersions } = await useNormVersions("dummy-eli");
+    expect(useRisBackendMock).toHaveBeenCalledWith(
       "/v1/legislation/work-example/dummy-eli",
       {
         immediate: true,
@@ -49,13 +49,13 @@ describe("useNormVersions", () => {
     );
   });
 
-  it("exposes the error without throwing when an error occurs", () => {
+  it("exposes the error without throwing when an error occurs", async () => {
     vi.mocked(useRisBackendMock).mockReturnValue({
       status: ref("error"),
       data: computed(() => undefined),
       error: ref("Error occurred"),
     } as unknown as ReturnType<typeof useRisBackendMock>);
-    const { error, sortedVersions } = useNormVersions("dummy-eli");
+    const { error, sortedVersions } = await useNormVersions("dummy-eli");
     expect(error.value).toBe("Error occurred");
     expect(sortedVersions.value).toEqual([]);
   });

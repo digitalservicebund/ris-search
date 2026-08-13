@@ -22,21 +22,22 @@ if (!documentNumber) throw createError({ status: 404 });
 
 const documentMetadataUrl = `/v1/administrative-directive/${documentNumber}`;
 
-const { data, error: metadataError } =
-  await useRisBackend<AdministrativeDirective>(documentMetadataUrl);
+const [{ data, error: metadataError }, { data: html, error: contentError }] =
+  await Promise.all([
+    useRisBackend<AdministrativeDirective>(documentMetadataUrl),
+    useRisBackend<string>(`${documentMetadataUrl}.html`, {
+      headers: { Accept: "text/html" },
+    }),
+  ]);
+
 if (metadataError?.value) throw createError(metadataError.value);
+if (contentError?.value) throw createError(contentError.value);
 
 useAdministrativeDirectiveSeo({
   documentType: data.value?.documentType,
   entryIntoForceDate: data.value?.entryIntoForceDate,
   headline: data.value?.headline,
 });
-
-const { data: html, error: contentError } = await useRisBackend<string>(
-  `${documentMetadataUrl}.html`,
-  { headers: { Accept: "text/html" } },
-);
-if (contentError?.value) throw createError(contentError.value);
 
 // Page contents ------------------------------------------
 
@@ -55,14 +56,13 @@ const document = computed(() =>
 );
 const isEmptyDocument = computed(() => isDocumentEmpty(document.value));
 
-const tocEntries = computed<TreeItem[] | null>(() => {
-  return document.value
-    ? getAllSectionsFromDocument(document.value, "section").map((entry) => ({
-        key: entry.id,
-        subtitle: entry.title, // Subtitle for more subtle appearance
-        to: { hash: `#${entry.id}`, query: { from: route.query.from } },
-      }))
-    : null;
+const tocEntries = computed<TreeItem[]>(() => {
+  if (!document.value) return [];
+  return getAllSectionsFromDocument(document.value, "section").map((entry) => ({
+    key: entry.id,
+    subtitle: entry.title, // Subtitle for more subtle appearance
+    to: { hash: `#${entry.id}`, query: { from: route.query.from } },
+  }));
 });
 
 const searchBackLink = useSearchBackLink(DocumentKind.AdministrativeDirective);
@@ -127,7 +127,7 @@ const detailItems = computed(() =>
         <template #sidebar>
           <client-only>
             <DocumentsTableOfContents
-              v-if="tocEntries?.length"
+              v-if="tocEntries.length"
               :table-of-contents="tocEntries"
             />
           </client-only>

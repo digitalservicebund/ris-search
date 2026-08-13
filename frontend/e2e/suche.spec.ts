@@ -1332,7 +1332,7 @@ noJsTest("pagination works without JavaScript", async ({ page }) => {
     .getByRole("navigation", { name: "Paginierung" })
     .getByRole("link", { name: "Zurück" })
     .click();
-  expect(page).not.toHaveURL(/pageIndex=\d+/);
+  await expect(page).not.toHaveURL(/pageIndex=\d+/);
 
   await expect(getResultCounter(page)).toHaveText(nonZeroResultCount);
   await expect(getSearchResults(page)).toHaveCount(10);

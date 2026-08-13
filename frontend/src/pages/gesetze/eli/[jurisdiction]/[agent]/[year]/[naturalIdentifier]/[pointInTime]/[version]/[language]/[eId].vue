@@ -195,24 +195,18 @@ const htmlTitle = computed(() => data.value.articleHeading);
 const validVersions =
   norm.value?.legislationLegalForce === "InForce"
     ? undefined
-    : useValidNormVersions(norm.value?.exampleOfWork.legislationIdentifier);
+    : await useValidNormVersions(
+        norm.value?.exampleOfWork.legislationIdentifier,
+      );
 
 if (validVersions?.error.value) {
   throw createError(validVersions.error.value);
 }
 
 const inForceNormLink = computed(() => {
-  if (
-    !validVersions ||
-    validVersions.status.value !== "success" ||
-    !validVersions.data.value?.member ||
-    validVersions.data.value.member.length === 0
-  ) {
-    return undefined;
-  }
-
-  const validVersion = validVersions.data.value.member[0];
-  return `/gesetze/${validVersion?.item.legislationIdentifier}`;
+  const validVersion = validVersions?.data.value?.member?.[0];
+  if (!validVersion) return undefined;
+  return `/gesetze/${validVersion.item.legislationIdentifier}`;
 });
 
 const metadataItems = computed<MetadataItem[]>(() => {
