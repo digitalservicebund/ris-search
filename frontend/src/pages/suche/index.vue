@@ -206,10 +206,9 @@ watch(
   { immediate: true },
 );
 
-const formattedResultCount = computed(() => {
-  if (isLoading.value) return "";
-  return formatResultCount(totalItemCount.value);
-});
+const formattedResultCount = computed(() =>
+  formatResultCount(totalItemCount.value),
+);
 
 
 // User action handlers ------------------------------------
