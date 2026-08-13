@@ -205,17 +205,32 @@ describe("useFetchNormContent", () => {
     );
   });
 
-  it("adds preamble footnotes to the official toc", async () => {
-    mockFetch.mockReturnValueOnce(mockMetadata);
-    mockFetch.mockReturnValueOnce(
-      `<div class="official-toc">
+  const preambleWithTocHtml = `
+    <section class="eingangsformel" id="präambel-n1">
+      <section class="eingangsformel" id="präambel-n1_formel-n1">
+        <p id="präambel-n1_formel-n1_text-n1">Der Bundestag hat …</p>
         <ul class="nichtamtliche-fussnoten">
           <li class="fussnote">
-           <p id="meta-n1_editfnote-n3_text-n1">Inhaltsübersicht: präambel Fußnote</p>
+            <p id="meta-n1_editfnote-n1_text-n1">Eingangsformel: Eingangsformel Fußnote</p>
           </li>
         </ul>
-      </div>`,
-    );
+      </section>
+      <div class="inhaltsuebersicht" id="präambel-n1_blockcontainer-n1">
+        <span class="akn-heading">Inhaltsübersicht</span>
+        <div class="official-toc">
+          <div class="level-1"><span class="akn-span">Abschnitt 1</span></div>
+        </div>
+        <ul class="nichtamtliche-fussnoten">
+          <li class="fussnote">
+            <p id="meta-n1_editfnote-n2_text-n1">Inhaltsübersicht: präambel Fußnote</p>
+          </li>
+        </ul>
+      </div>
+    </section>`;
+
+  it("adds official toc footnotes to the official toc", async () => {
+    mockFetch.mockReturnValueOnce(mockMetadata);
+    mockFetch.mockReturnValueOnce(preambleWithTocHtml);
 
     const { data } = await useFetchNormContent(expressionEli);
 
@@ -228,8 +243,23 @@ describe("useFetchNormContent", () => {
     expect(doc.querySelector(".official-toc")).not.toBeNull();
     expect(doc.querySelector(".fussnote")).not.toBeNull();
     expect(
-      doc.querySelector("#meta-n1_editfnote-n3_text-n1")?.textContent,
+      doc.querySelector("#meta-n1_editfnote-n2_text-n1")?.textContent,
     ).toBe("Inhaltsübersicht: präambel Fußnote");
+  });
+
+  it("keeps Eingangsformel footnotes out of the official toc", async () => {
+    mockFetch.mockReturnValueOnce(mockMetadata);
+    mockFetch.mockReturnValueOnce(preambleWithTocHtml);
+
+    const { data } = await useFetchNormContent(expressionEli);
+
+    expect(data.value.htmlParts.officialToc).not.toContain(
+      "Eingangsformel: Eingangsformel Fußnote",
+    );
+
+    expect(data.value.htmlParts.body).toContain(
+      "Eingangsformel: Eingangsformel Fußnote",
+    );
   });
 
   it("sets hasEmptyBody to false if akn-body has content", async () => {

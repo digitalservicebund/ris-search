@@ -7,18 +7,8 @@ import { describe, expect, it, vi } from "vitest";
 import CaseLawActionMenu from "~/components/documents/actionMenu/CaseLawActionMenu.vue";
 import type { CaseLaw } from "~/types/api";
 
-const { mockToastAdd } = vi.hoisted(() => ({
-  mockToastAdd: vi.fn(),
-}));
-
 vi.mock("~/composables/useBackendUrl", () => ({
   default: vi.fn((url?: string) => url),
-}));
-
-vi.mock("primevue/usetoast", () => ({
-  useToast: () => ({
-    add: mockToastAdd,
-  }),
 }));
 
 mockNuxtImport("useRequestURL", () => {
@@ -84,12 +74,6 @@ describe("CaseLawActionMenu", () => {
 
     expect(await navigator.clipboard.readText()).toEqual(
       "https://example.com/case-law",
-    );
-
-    expect(mockToastAdd).toHaveBeenCalledExactlyOnceWith(
-      expect.objectContaining({
-        summary: "Kopiert!",
-      }),
     );
   });
 

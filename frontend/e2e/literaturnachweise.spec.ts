@@ -13,118 +13,130 @@ async function getSidebar(page: Page) {
   return navigation;
 }
 
-test("displays literature page with metadata and text tab by default", async ({
-  page,
-}) => {
-  await navigate(page, "/literaturnachweise/XXLU000000001");
+test(
+  "displays literature page with metadata and text tab by default",
+  { tag: ["@RISDEV-10568"] },
+  async ({ page }) => {
+    await navigate(page, "/literaturnachweise/XXLU000000001");
 
-  // Main title
-  await expect(
-    page
-      .getByRole("main")
-      .getByRole("heading", { level: 1, name: "Erstes Test-Dokument ULI" })
-      .first(),
-  ).toBeVisible();
+    // Main title
+    await expect(
+      page
+        .getByRole("main")
+        .getByRole("heading", { level: 1, name: "Erstes Test-Dokument ULI" })
+        .first(),
+    ).toBeVisible();
 
-  // Metadata section
-  await expect(
-    page.getByRole("term").or(page.getByRole("definition")),
-  ).toHaveText([
-    "Dokumenttyp",
-    "Auf",
-    "Fundstelle",
-    "FooBar, 1982, 123-123, SelbstFund, 1982, 123-123",
-    "Autor",
-    "Sabine Musterfrau",
-    "Veröffentlichungsjahr",
-    "2024",
-  ]);
+    // Metadata section
+    const metadataList = page.getByTestId("metadata-list");
+    const defs = metadataList.getByRole("definition");
 
-  // Text section
-  const textSection = page.getByRole("tabpanel", { name: "Text" });
-  await expect(textSection.getByRole("status")).toContainText(
-    "Dieser Service befindet sich in der Testphase",
-  );
+    await expect(metadataList.getByRole("term")).toHaveText([
+      "Dokumenttyp",
+      "Fundstelle",
+      "Autor",
+      "Veröffentlichungsjahr",
+    ]);
 
-  await expect(
-    textSection.getByRole("heading", { level: 2, name: "Gliederung" }),
-  ).toBeVisible();
-  await expect(textSection.getByText("I. Problemstellung.")).toBeVisible();
-  await expect(textSection.getByText("II. Lösung.")).toBeVisible();
-  await expect(textSection.getByText("III. Zusammenfassung.")).toBeVisible();
+    await expect(defs.nth(0)).toHaveText("Auf");
+    // Fundstellen are rendered as badges (spans)
+    await expect(defs.nth(1).locator("span")).toHaveText([
+      "FooBar, 1982, 123-123",
+      "SelbstFund, 1982, 123-123",
+    ]);
+    await expect(defs.nth(2)).toHaveText("Sabine Musterfrau");
+    await expect(defs.nth(3)).toHaveText("2024");
 
-  await expect(
-    textSection.getByRole("heading", { level: 2, name: "Kurzreferat" }),
-  ).toBeVisible();
-  await expect(
-    textSection.getByText("Dies ist ein einfaches Test-Dokument."),
-  ).toBeVisible();
-  await expect(textSection.getByText("In sem neque")).toBeVisible();
+    // Text section
+    const textSection = page.getByRole("tabpanel", { name: "Text" });
+    await expect(textSection.getByRole("status")).toContainText(
+      "Dieser Service befindet sich in der Testphase",
+    );
 
-  await expect(
-    textSection.getByRole("heading", {
-      level: 2,
-      name: "Dieser Beitrag zitiert",
-    }),
-  ).toBeVisible();
-  await expect(
-    textSection.getByRole("heading", {
-      level: 3,
-      name: "Rechtsprechung",
-    }),
-  ).toBeVisible();
-  await expect(
-    textSection.getByText(
-      "Vergleiche aktiv EuGH 2. Kammer, 3. April 2008, Az: C-346/06",
-    ),
-  ).toBeVisible();
-  await expect(
-    textSection.getByText("Vergleiche aktiv FooBar 1. Kammer, 3. April 2008"),
-  ).toBeVisible();
+    await expect(
+      textSection.getByRole("heading", { level: 2, name: "Gliederung" }),
+    ).toBeVisible();
+    await expect(textSection.getByText("I. Problemstellung.")).toBeVisible();
+    await expect(textSection.getByText("II. Lösung.")).toBeVisible();
+    await expect(textSection.getByText("III. Zusammenfassung.")).toBeVisible();
 
-  await expect(
-    textSection
-      .getByRole("heading", {
+    await expect(
+      textSection.getByRole("heading", { level: 2, name: "Kurzreferat" }),
+    ).toBeVisible();
+    await expect(
+      textSection.getByText("Dies ist ein einfaches Test-Dokument."),
+    ).toBeVisible();
+    await expect(textSection.getByText("In sem neque")).toBeVisible();
+
+    await expect(
+      textSection.getByRole("heading", {
+        level: 2,
+        name: "Dieser Beitrag zitiert",
+      }),
+    ).toBeVisible();
+    await expect(
+      textSection.getByRole("heading", {
         level: 3,
-        name: "Literaturnachweise",
-      })
-      .first(),
-  ).toBeVisible();
-  await expect(
-    textSection.getByText("Vergleiche aktiv Selbstständigeliterature 2025"),
-  ).toBeVisible();
+        name: "Rechtsprechung",
+      }),
+    ).toBeVisible();
+    await expect(
+      textSection.getByText(
+        "Vergleiche aktiv EuGH 2. Kammer, 3. April 2008, Az: C-346/06",
+      ),
+    ).toBeVisible();
+    await expect(
+      textSection.getByText("Vergleiche aktiv FooBar 1. Kammer, 3. April 2008"),
+    ).toBeVisible();
 
-  await expect(
-    textSection.getByRole("heading", {
-      level: 2,
-      name: "Dieser Beitrag wird zitiert",
-    }),
-  ).toBeVisible();
-  await expect(
-    textSection.getByRole("heading", {
-      level: 3,
-      name: "Verwaltungsvorschriften",
-    }),
-  ).toBeVisible();
-  await expect(
-    textSection.getByText("Vergleiche passiv NaNu 1. Kammer, 2009, Az: XY"),
-  ).toBeVisible();
+    await expect(
+      textSection
+        .getByRole("heading", {
+          level: 3,
+          name: "Literaturnachweise",
+        })
+        .first(),
+    ).toBeVisible();
+    await expect(
+      textSection.getByText("Vergleiche aktiv Selbstständigeliterature 2025"),
+    ).toBeVisible();
 
-  await expect(
-    textSection
-      .getByRole("heading", {
+    await expect(
+      textSection.getByRole("heading", {
+        level: 2,
+        name: "Dieser Beitrag wird zitiert",
+      }),
+    ).toBeVisible();
+    await expect(
+      textSection.getByRole("heading", {
         level: 3,
-        name: "Literaturnachweise",
-      })
-      .nth(1),
-  ).toBeVisible();
-  await expect(
-    textSection.getByText("Vergleiche passiv Unselbstständigeliterature 2023"),
-  ).toBeVisible();
-  await expect(
-    textSection.getByText("Vergleiche passiv Unselbstständigeliterature 1989"),
-  ).toBeVisible();
-});
+        name: "Verwaltungsvorschriften",
+      }),
+    ).toBeVisible();
+    await expect(
+      textSection.getByText("Vergleiche passiv NaNu 1. Kammer, 2009, Az: XY"),
+    ).toBeVisible();
+
+    await expect(
+      textSection
+        .getByRole("heading", {
+          level: 3,
+          name: "Literaturnachweise",
+        })
+        .nth(1),
+    ).toBeVisible();
+    await expect(
+      textSection.getByText(
+        "Vergleiche passiv Unselbstständigeliterature 2023",
+      ),
+    ).toBeVisible();
+    await expect(
+      textSection.getByText(
+        "Vergleiche passiv Unselbstständigeliterature 1989",
+      ),
+    ).toBeVisible();
+  },
+);
 
 test("displays sli footnotes in text section", async ({ page }) => {
   await navigate(page, "/literaturnachweise/XXLS000000001");
@@ -467,7 +479,7 @@ test.describe("actions menu", () => {
   test.describe("can use XML action to view literature xml file", () => {
     testXmlButton(
       "/literaturnachweise/XXLU000000001",
-      "http://localhost:8090/v1/literature/XXLU000000001.xml",
+      "http://localhost:8080/v1/literature/XXLU000000001.xml",
     );
   });
 });

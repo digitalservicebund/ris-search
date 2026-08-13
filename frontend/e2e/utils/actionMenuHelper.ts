@@ -25,7 +25,9 @@ export function testCopyLinkButton(
 
     await button.click();
 
-    await expect(page.getByText("Kopiert!")).toBeVisible();
+    await expect(
+      page.getByRole("menuitem", { name: "Link kopiert" }),
+    ).toBeVisible();
     expect(await page.evaluate(() => navigator.clipboard.readText())).toMatch(
       linkRegex,
     );

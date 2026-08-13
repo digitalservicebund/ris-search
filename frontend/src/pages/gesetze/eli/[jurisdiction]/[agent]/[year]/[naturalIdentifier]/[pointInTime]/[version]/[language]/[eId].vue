@@ -7,6 +7,7 @@ import type {
   RouteLocationAsRelativeGeneric,
 } from "#vue-router";
 import type { BreadcrumbItem } from "~/components/Breadcrumbs.vue";
+import type { MetadataItem } from "~/components/documents/Metadata.vue";
 import { useArticleSeo } from "~/composables/useArticleSeo";
 import { useSearchBackLink } from "~/composables/useSearchBackLink";
 import {
@@ -214,16 +215,18 @@ const inForceNormLink = computed(() => {
   return `/gesetze/${validVersion?.item.legislationIdentifier}`;
 });
 
-const metadataItems = computed(() => {
+const metadataItems = computed<MetadataItem[]>(() => {
   const interval = temporalCoverageToValidityInterval(
     article.value?.temporalCoverage,
   );
   return [
     {
+      type: "text",
       label: "Gültig ab",
       value: dateFormattedDDMMYYYY(interval?.from),
     },
     {
+      type: "text",
       label: "Gültig bis",
       value: dateFormattedDDMMYYYY(interval?.to),
     },

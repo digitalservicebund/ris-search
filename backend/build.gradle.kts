@@ -58,15 +58,7 @@ sonar {
     }
 }
 
-val xjc = configurations.dependencyScope("xjc")
-val xjcClasspath =
-    configurations.resolvable("xjcClasspath") {
-        extendsFrom(xjc.get())
-    }
-
 dependencies {
-    add("xjc", libs.jaxb.moxy.xjc)
-
     implementation(libs.spring.actuator)
     implementation(libs.spring.validation)
     implementation(libs.spring.web)
@@ -114,6 +106,9 @@ dependencies {
     // CVE-2026-59889
     implementation(libs.tools.jackson.databind)
 
+    //  CVE-2026-54399
+    implementation(libs.apache.httpcore)
+
     implementation(libs.ris.html.transformation)
 
     compileOnly(libs.lombok)
@@ -138,10 +133,8 @@ dependencyLocking {
     lockAllConfigurations()
 }
 
-val generatedPath = "build/generated/**"
 spotless {
     java {
-        targetExclude(generatedPath)
         removeUnusedImports()
         googleJavaFormat()
         // Wildcard imports can't be resolved by spotless itself.
@@ -178,19 +171,7 @@ project.tasks.sonar {
 }
 
 tasks {
-    register("generate-nlex-wsdl", JavaExec::class) {
-        val outputDir = layout.buildDirectory.dir("generated/nlex")
-        doFirst {
-            mkdir(outputDir)
-        }
-        enabled = true
-        classpath(configurations["xjcClasspath"])
-        mainClass = "org.eclipse.persistence.jaxb.xjc.MOXyXJC"
-        args = listOf("src/main/resources/WEB_INF/nlex/simple_template.wsdl", "-wsdl", "-d", outputDir.get().asFile.path, "-p", "nlex")
-    }
-
     compileJava {
-        dependsOn("generate-nlex-wsdl")
         options.compilerArgs.addAll(arrayOf())
     }
 
@@ -282,8 +263,4 @@ tasks {
         }
         include("**/*.java")
     }
-}
-
-java.sourceSets["main"].java {
-    srcDirs("build/generated/nlex")
 }

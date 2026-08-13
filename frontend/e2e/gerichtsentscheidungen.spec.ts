@@ -40,37 +40,45 @@ test("can view a single case law documentation unit", async ({ page }) => {
 });
 
 test.describe("hides text tabs for empty documents", () => {
-  test("hides text tab when empty vorabdokument and shows info box", async ({
-    page,
-  }) => {
-    await navigate(page, "/gerichtsentscheidungen/KORE000001234");
+  test(
+    "hides text tab when empty vorabdokument and shows info box",
+    { tag: ["@RISDEV-12197"] },
+    async ({ page }) => {
+      await navigate(page, "/gerichtsentscheidungen/KORE000001234");
 
-    await expect(page.getByRole("alert")).toHaveText(
-      /Die Metadaten dieser Gerichtsentscheidung/,
-    );
+      await expect(
+        page.getByText(/Die Metadaten dieser Gerichtsentscheidung/),
+      ).toBeVisible();
 
-    await expect(page.getByRole("tablist")).not.toBeVisible();
+      await expect(page.getByRole("tablist")).not.toBeVisible();
 
-    await expect(
-      page.getByRole("heading", { level: 2, name: "Details" }),
-    ).toBeVisible();
+      await expect(
+        page.getByRole("heading", { level: 2, name: "Details" }),
+      ).toBeVisible();
 
-    await expect(page.getByTestId("details-list")).toBeVisible();
-  });
+      await expect(page.getByTestId("details-list")).toBeVisible();
+    },
+  );
 
-  test("hides text tab when empty normal document", async ({ page }) => {
-    await navigate(page, "/gerichtsentscheidungen/KORE000005678");
+  test(
+    "hides text tab when empty normal document",
+    { tag: ["@RISDEV-12197"] },
+    async ({ page }) => {
+      await navigate(page, "/gerichtsentscheidungen/KORE000005678");
 
-    await expect(page.getByRole("alert")).not.toBeVisible();
+      await expect(
+        page.getByText(/Die Metadaten dieser Gerichtsentscheidung/),
+      ).not.toBeVisible();
 
-    await expect(page.getByRole("tablist")).not.toBeVisible();
+      await expect(page.getByRole("tablist")).not.toBeVisible();
 
-    await expect(
-      page.getByRole("heading", { level: 2, name: "Details" }),
-    ).toBeVisible();
+      await expect(
+        page.getByRole("heading", { level: 2, name: "Details" }),
+      ).toBeVisible();
 
-    await expect(page.getByTestId("details-list")).toBeVisible();
-  });
+      await expect(page.getByTestId("details-list")).toBeVisible();
+    },
+  );
 });
 
 test("sidebar TOC renders on desktop and clicking a link scrolls to the section", async ({
@@ -178,27 +186,28 @@ test.describe("actions menu", () => {
   test.describe("can use XML action to view caselaw xml file", () => {
     testXmlButton(
       "/gerichtsentscheidungen/JURE200030030",
-      "http://localhost:8090/v1/case-law/JURE200030030.xml",
+      "http://localhost:8080/v1/case-law/JURE200030030.xml",
     );
   });
 });
 
-test("can view metadata", async ({ page }) => {
+test("can view metadata", { tag: ["@RISDEV-10568"] }, async ({ page }) => {
   await navigate(page, "/gerichtsentscheidungen/KORE600500000");
   const metadataList = page.getByTestId("metadata-list");
+  const defs = metadataList.getByRole("definition");
 
-  await expect(
-    metadataList.getByRole("term").or(metadataList.getByRole("definition")),
-  ).toHaveText([
+  await expect(metadataList.getByRole("term")).toHaveText([
     "Gericht",
-    "LG Test6 Label",
     "Dokumenttyp",
-    "Urteil",
     "Entscheidungsdatum",
-    "09.04.2025",
     "Aktenzeichen",
-    "TS 123456",
   ]);
+
+  await expect(defs.nth(0)).toHaveText("LG Test6 Label");
+  await expect(defs.nth(1)).toHaveText("Urteil");
+  await expect(defs.nth(2)).toHaveText("09.04.2025");
+  // Aktenzeichen are rendered as badges (spans)
+  await expect(defs.nth(3).locator("span")).toHaveText(["TS 123456"]);
 });
 
 test("can view details", { tag: ["@RISDEV-12108"] }, async ({ page }) => {

@@ -72,8 +72,8 @@
           {
             // Enforce consistent import for PrimeVue components. Note that this
             // is a 99% solution and some exceptions are legitimate (most
-            // relevant for us: Tooltip and useToast). However adding these to
-            // the rule here would be very complicated. Use a `// oxlint-disable
+            // relevant for us: Tooltip). However adding these to the rule here
+            // would be very complicated. Use a `// oxlint-disable
             // no-restricted-imports` directive when you need them.
             "group": ["primevue/*"],
             "allowTypeImports": true,

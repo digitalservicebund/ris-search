@@ -27,7 +27,7 @@ const isExpanded = ref(true);
 </script>
 
 <template>
-  <SingleAccordion
+  <UiAccordion
     v-model="isExpanded"
     header-collapsed="Hilfestellung zu Suchoperatoren"
     header-expanded="Hilfestellung zu Suchoperatoren"
@@ -61,5 +61,5 @@ const isExpanded = ref(true);
         </tbody>
       </table>
     </div>
-  </SingleAccordion>
+  </UiAccordion>
 </template>

@@ -1,30 +1,16 @@
 server:
-  front-end-url: https://ris-portal.dev.ds4g.net/
-  cms-url: https://ris-cm.staging.tech.digitalservice.dev/
-  technical-users: []
+  front-end-url: "https://ris-portal-staging.dev.tech.digitalservice.dev/"
+  cms-url: "https://ris-cm.staging.tech.digitalservice.dev/"
+
+swagger:
+  server:
+    url: "https://ris-portal-staging.dev.tech.digitalservice.dev/"
 
 spring:
   config:
     import:
       - "kubernetes:"
       - "optional:configtree:/etc/secrets/*/"
-  cloud:
-    kubernetes:
-      config:
-        fail-fast: true
-        sources:
-          - name: ris-search-opensearch-config
-          - name: ris-search-postgres-config
-
-swagger:
-  server:
-    url: https://ris-portal.dev.ds4g.net/
-    description: Public staging server
-
-sentry:
-  traces-sample-rate: 0.01
-  logging:
-    minimum-event-level: error
 
 management:
   endpoints:

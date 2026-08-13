@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { Message, Select } from "primevue";
 import IcBaselineSwapVert from "~icons/ic/baseline-swap-vert";
 import IcOutlineFilterAlt from "~icons/ic/outline-filter-alt";
 import { DocumentKind } from "~/types/api";
@@ -353,7 +352,7 @@ watch(searchStatus, async (newStatus, oldStatus) => {
               <label :id="itemsPerPageLabelId" class="typo-label2-regular">
                 Einträge pro Seite
               </label>
-              <Select
+              <UiSelect
                 :model-value="itemsPerPage"
                 :aria-labelledby="itemsPerPageLabelId"
                 :options="itemsPerPageOptions"
@@ -414,16 +413,11 @@ watch(searchStatus, async (newStatus, oldStatus) => {
             navigation-position="bottom"
             @update-page="updatePage"
           >
-            <Message v-if="!!searchError" severity="error">
+            <UiMessage v-if="!!searchError" severity="error" role="alert">
               {{ searchError.message }}
-            </Message>
+            </UiMessage>
 
-            <Message
-              severity="warn"
-              class="ris-body2-regular"
-              role="status"
-              aria-live="off"
-            >
+            <UiMessage severity="warn" class="ris-body2-regular" role="status">
               <p class="ris-body2-bold mt-2">
                 Dieser Service befindet sich in der Testphase.
               </p>
@@ -433,7 +427,7 @@ watch(searchStatus, async (newStatus, oldStatus) => {
                 Entwicklung. Wir arbeiten an der Ergänzung und Darstellung aller
                 Inhalte.
               </p>
-            </Message>
+            </UiMessage>
 
             <ul v-if="searchResults" aria-label="Suchergebnisse">
               <li

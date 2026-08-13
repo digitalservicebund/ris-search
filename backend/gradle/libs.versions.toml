@@ -34,7 +34,7 @@ jaxb-moxy = "5.0.1"
 posthog = "1.2.0"
 pebble = "4.1.2"
 rest-assured = "6.0.1"
-ris-html-transformation="0.0.5"
+ris-html-transformation="0.0.6"
 
 [libraries]
 spring-actuator = { module="org.springframework.boot:spring-boot-starter-actuator", version.ref="spring-boot-starter" }
@@ -68,7 +68,6 @@ opensearch-testcontainers = { module = "org.opensearch:opensearch-testcontainers
 testcontainers-postgresql = { module = "org.testcontainers:postgresql", version.ref = "test-containers" }
 tools-jackson-core = { module = "tools.jackson.core:jackson-core", version.ref = "tools-jackson-core" }
 jaxb-moxy = { module = "org.eclipse.persistence:org.eclipse.persistence.moxy", version.ref = "jaxb-moxy" }
-jaxb-moxy-xjc = {module = "org.eclipse.persistence:org.eclipse.persistence.moxy.utils.xjc", version.ref = "jaxb-moxy"}
 pebble = { module = "io.pebbletemplates:pebble-spring-boot-starter", version.ref = "pebble" }
 ris-html-transformation = { module = "de.bund.digitalservice:ris-html-transformation", version.ref = "ris-html-transformation"}
 streamex = { module = 'one.util:streamex', version.ref = "streamex" }
@@ -94,6 +93,9 @@ netty-codec-compression = { module = "io.netty:netty-codec-compression", version
 
 # CVE-2026-59889
 tools-jackson-databind = { module = "tools.jackson.core:jackson-databind", version = "3.1.5" }
+
+# CVE-2026-54399
+apache-httpcore = { module = "org.apache.httpcomponents.core5:httpcore5", version = "5.4.3" }
 
 [plugins]
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }

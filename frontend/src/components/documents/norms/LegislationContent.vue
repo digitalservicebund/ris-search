@@ -11,14 +11,14 @@ defineProps<{
 </script>
 
 <template>
-  <SingleAccordion
+  <UiAccordion
     v-if="officialToc"
     class="mt-24"
     header-expanded="Amtliches Inhaltsverzeichnis ausblenden"
     header-collapsed="Amtliches Inhaltsverzeichnis einblenden"
   >
     <div v-html="officialToc" />
-  </SingleAccordion>
+  </UiAccordion>
   <div :class="['legislation', { 'single-article': singleArticle }]">
     <slot />
   </div>
@@ -166,11 +166,9 @@ Attributes from the Juris CALS format without a corresponding HTML attribute mig
   @apply hidden;
 }
 
-/* hide default table of contents, since it will be displayed behind an accordion section */
+/* hide default table of contents, since it will be displayed behind an accordion section.
+   This also covers the footnotes attached to it, which are nested inside its container. */
 :deep(.eingangsformel .inhaltsuebersicht) {
-  @apply hidden;
-}
-:deep(section.eingangsformel .nichtamtliche-fussnoten) {
   @apply hidden;
 }
 

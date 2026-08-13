@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { RadioButton } from "primevue";
 import { DocumentKind } from "~/types/api";
 import type {
   DateFilterValue,
@@ -72,8 +71,8 @@ watch(
   },
 );
 
-function setFilterType(type: FilterType) {
-  filter.value = { type };
+function setFilterType(type: string) {
+  filter.value = { type: type as FilterType };
 }
 
 function setSpecificDate(value: string | undefined) {
@@ -94,9 +93,9 @@ function setPeriodTo(value: string | undefined) {
     <p :id="formId" class="typo-label1-bold">Filter nach {{ filterLabel }}</p>
 
     <div v-if="visibleFilters.currentlyInForce" class="flex items-center">
-      <RadioButton
+      <UiRadioButton
+        :id="currentlyInForceId"
         :model-value="filter.type"
-        :input-id="currentlyInForceId"
         name="filter"
         value="currentlyInForce"
         @update:model-value="setFilterType"
@@ -105,9 +104,9 @@ function setPeriodTo(value: string | undefined) {
     </div>
 
     <div v-if="visibleFilters.allTime" class="flex items-center">
-      <RadioButton
+      <UiRadioButton
+        :id="allTimeId"
         :model-value="filter.type"
-        :input-id="allTimeId"
         name="filter"
         value="allTime"
         @update:model-value="setFilterType"
@@ -118,9 +117,9 @@ function setPeriodTo(value: string | undefined) {
     <template v-if="visibleFilters.specificDate">
       <fieldset>
         <div class="flex items-center">
-          <RadioButton
+          <UiRadioButton
+            :id="specificDateId"
             :model-value="filter.type"
-            :input-id="specificDateId"
             name="filter"
             value="specificDate"
             @update:model-value="setFilterType"
@@ -156,9 +155,9 @@ function setPeriodTo(value: string | undefined) {
     <template v-if="visibleFilters.period">
       <fieldset>
         <div class="flex items-center">
-          <RadioButton
+          <UiRadioButton
+            :id="periodId"
             :model-value="filter.type"
-            :input-id="periodId"
             name="filter"
             value="period"
             @update:model-value="setFilterType"

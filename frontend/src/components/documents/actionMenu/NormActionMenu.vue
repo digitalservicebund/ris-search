@@ -42,7 +42,7 @@ const actions = computed(() => {
       "Link zur jeweils gültigen Fassung kopieren",
       UpdatingLinkIcon,
     ),
-    useCopyUrlActionItem(href, "Permalink zu dieser Fassung kopieren"),
+    useCopyUrlActionItem(href, "Link zu dieser Fassung kopieren"),
     usePrintActionItem(),
     usePdfActionItem(),
     useXmlActionItem(xmlUrl),

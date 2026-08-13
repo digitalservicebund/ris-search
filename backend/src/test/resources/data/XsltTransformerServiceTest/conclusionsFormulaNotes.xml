@@ -1,0 +1,20 @@
+<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.8.2/">
+    <akn:act name="regelungstext">
+        <akn:meta eId="meta-n1">
+            <akn:notes>
+                <akn:note eId="meta-n1_editfnote-n1" marker="#"
+                          placementBase="#schluss-n1_formel-n1" refersTo="kommentierende-fussnote">
+                    <akn:p eId="meta-n1_editfnote-n1_text-n1">Schlussformel: Note attached to the Schlussformel</akn:p>
+                </akn:note>
+            </akn:notes>
+        </akn:meta>
+        <akn:conclusions eId="schluss-n1">
+            <akn:formula eId="schluss-n1_formel-n1" refersTo="schlussformel">
+                <akn:p eId="schluss-n1_formel-n1_text-n1">Der Bundesrat hat zugestimmt.<akn:authorialNote
+                        eId="schluss-n1_formel-n1_amtlfnote-n1" marker="*">
+                    <akn:p eId="schluss-n1_formel-n1_amtlfnote-n1_text-n1">Authorial note in the Schlussformel</akn:p>
+                </akn:authorialNote></akn:p>
+            </akn:formula>
+        </akn:conclusions>
+    </akn:act>
+</akn:akomaNtoso>

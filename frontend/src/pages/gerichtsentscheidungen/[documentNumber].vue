@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { Message } from "primevue";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineInfo from "~icons/ic/outline-info";
 import type { DetailsListItem } from "~/components/documents/DetailsList.vue";
@@ -86,15 +85,17 @@ const tocEntries = computed<TreeItem[] | null>(() => {
 });
 
 const headerMetadata = computed<MetadataItem[]>(() => [
-  { label: "Gericht", value: caseLaw.value?.courtName },
-  { label: "Dokumenttyp", value: caseLaw.value?.documentType },
+  { type: "text", label: "Gericht", value: caseLaw.value?.courtName },
+  { type: "text", label: "Dokumenttyp", value: caseLaw.value?.documentType },
   {
+    type: "text",
     label: "Entscheidungsdatum",
     value: dateFormattedDDMMYYYY(caseLaw.value?.decisionDate),
   },
   {
+    type: "badge",
     label: "Aktenzeichen",
-    value: formatArray(caseLaw.value?.fileNumbers ?? []),
+    values: caseLaw.value?.fileNumbers ?? [],
   },
 ]);
 
@@ -143,7 +144,7 @@ const detailsSectionId = useId();
     </template>
 
     <template #message>
-      <Message
+      <UiMessage
         v-if="caseLaw?.vorabdokument"
         severity="info"
         class="typo-body-regular my-24 bg-white sm:my-32 md:my-40"
@@ -156,7 +157,7 @@ const detailsSectionId = useId();
           veröffentlicht. Der Entscheidungstext ist derzeit noch nicht
           verfügbar, wird aber in Kürze ergänzt.
         </p>
-      </Message>
+      </UiMessage>
     </template>
 
     <template #details>
@@ -235,6 +236,32 @@ const detailsSectionId = useId();
 }
 
 :deep(.case-law section > p) {
+  @apply ml-(--border-number-min-width);
+}
+
+:deep(.case-law ul) {
+  @apply mb-16 list-outside list-disc pl-24;
+}
+
+:deep(.case-law ul ul) {
+  @apply mb-0 list-[circle];
+}
+
+:deep(.case-law ul ul ul) {
+  @apply list-[square];
+}
+
+:deep(.case-law ul > li > p:last-child) {
+  @apply mb-0;
+}
+
+/* nesting is often expressed as a list item that only wraps another list,
+   which should show the nested marker instead of one of its own */
+:deep(.case-law li:has(> ul:only-child)) {
+  @apply list-none;
+}
+
+:deep(.case-law section > ul) {
   @apply ml-(--border-number-min-width);
 }
 

@@ -193,12 +193,10 @@ describe("getNormMetadataItems", () => {
       "Gültig bis",
     ]);
 
-    expect(result.map((item) => item.value)).toEqual([
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-    ]);
+    expect(result[0]).toMatchObject({ type: "text", value: undefined });
+    expect(result[1]).toMatchObject({ type: "text", value: undefined });
+    expect(result[2]).toMatchObject({ type: "text", value: undefined });
+    expect(result[3]).toMatchObject({ type: "text", value: undefined });
   });
 
   it("converts empty properties to undefined values", () => {
@@ -221,12 +219,10 @@ describe("getNormMetadataItems", () => {
       hasPart: [],
     });
 
-    expect(result.map((item) => item.value)).toEqual([
-      "",
-      undefined,
-      undefined,
-      undefined,
-    ]);
+    expect(result[0]).toMatchObject({ type: "text", value: "" });
+    expect(result[1]).toMatchObject({ type: "text", value: undefined });
+    expect(result[2]).toMatchObject({ type: "text", value: undefined });
+    expect(result[3]).toMatchObject({ type: "text", value: undefined });
   });
 
   it("converts properties to correct values", () => {
@@ -249,12 +245,10 @@ describe("getNormMetadataItems", () => {
       hasPart: [],
     });
 
-    expect(result.map((item) => item.value)).toEqual([
-      "ABC",
-      "Aktuell gültig",
-      "06.05.2025",
-      "31.03.2037",
-    ]);
+    expect(result[0]).toMatchObject({ type: "text", value: "ABC" });
+    expect(result[1]).toMatchObject({ type: "text", value: "Aktuell gültig" });
+    expect(result[2]).toMatchObject({ type: "text", value: "06.05.2025" });
+    expect(result[3]).toMatchObject({ type: "text", value: "31.03.2037" });
   });
 });
 

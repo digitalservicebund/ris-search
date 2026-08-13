@@ -6,16 +6,12 @@ import { sortMode } from "~/utils/search/sortMode";
 import SortOptionsComponent from "./SortSelect.vue";
 
 describe("SortSelect", () => {
-  it("computes correct sort options for 'all' document kind", async () => {
-    const user = userEvent.setup();
-
+  it("computes correct sort options for 'all' document kind", () => {
     render(SortOptionsComponent, {
       props: {
         documentKind: DocumentKind.All,
       },
     });
-
-    await user.click(screen.getByRole("combobox", { name: "Sortieren nach" }));
 
     const options = screen.getAllByRole("option");
     expect(options).toHaveLength(3);
@@ -24,16 +20,12 @@ describe("SortSelect", () => {
     expect(options[2]).toHaveTextContent("Datum: Neueste zuerst");
   });
 
-  it("computes correct sort options for 'norm' document kind", async () => {
-    const user = userEvent.setup();
-
+  it("computes correct sort options for 'norm' document kind", () => {
     render(SortOptionsComponent, {
       props: {
         documentKind: DocumentKind.Norm,
       },
     });
-
-    await user.click(screen.getByRole("combobox", { name: "Sortieren nach" }));
 
     const options = screen.getAllByRole("option");
     expect(options).toHaveLength(3);
@@ -42,16 +34,12 @@ describe("SortSelect", () => {
     expect(options[2]).toHaveTextContent("Ausfertigungsdatum: Neueste zuerst");
   });
 
-  it("computes correct sort options for 'caselaw' document kind", async () => {
-    const user = userEvent.setup();
-
+  it("computes correct sort options for 'caselaw' document kind", () => {
     render(SortOptionsComponent, {
       props: {
         documentKind: DocumentKind.CaseLaw,
       },
     });
-
-    await user.click(screen.getByRole("combobox", { name: "Sortieren nach" }));
 
     const options = screen.getAllByRole("option");
     expect(options).toHaveLength(5);
@@ -63,8 +51,6 @@ describe("SortSelect", () => {
   });
 
   it("updates sort options when the document kind changes", async () => {
-    const user = userEvent.setup();
-
     const { rerender } = render(SortOptionsComponent, {
       props: {
         documentKind: DocumentKind.All,
@@ -73,8 +59,6 @@ describe("SortSelect", () => {
 
     await rerender({ documentKind: DocumentKind.CaseLaw });
 
-    await user.click(screen.getByRole("combobox", { name: "Sortieren nach" }));
-
     const options = screen.getAllByRole("option");
     expect(options).toHaveLength(5);
     expect(options[0]).toHaveTextContent("Relevanz");
@@ -82,6 +66,18 @@ describe("SortSelect", () => {
     expect(options[2]).toHaveTextContent("Gericht: Von Z nach A");
     expect(options[3]).toHaveTextContent("Entscheidungsdatum: Älteste zuerst");
     expect(options[4]).toHaveTextContent("Entscheidungsdatum: Neueste zuerst");
+  });
+
+  it("is labelled for assistive technology", () => {
+    render(SortOptionsComponent, {
+      props: {
+        documentKind: DocumentKind.All,
+      },
+    });
+
+    expect(
+      screen.getByRole("combobox", { name: "Sortieren nach" }),
+    ).toBeInTheDocument();
   });
 
   it("emits the new model value when the dropdown value changes", async () => {
@@ -93,8 +89,8 @@ describe("SortSelect", () => {
       },
     });
 
-    await user.click(screen.getByRole("combobox", { name: "Sortieren nach" }));
-    await user.click(
+    await user.selectOptions(
+      screen.getByRole("combobox", { name: "Sortieren nach" }),
       screen.getByRole("option", { name: "Datum: Älteste zuerst" }),
     );
 

@@ -20,7 +20,7 @@ class CSPHeadersIntegrationTest extends ContainersIntegrationBase {
 
   private final String cspHeaderName = "Content-Security-Policy";
   private final String cspHeaderValue =
-      "default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src data: 'self'; connect-src 'self'; font-src 'self'; frame-src 'none'; object-src 'none'; media-src 'none';";
+      "default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src data: 'self'; connect-src 'self' https://testphase.rechtsinformationen.bund.de; font-src 'self'; frame-src 'none'; object-src 'none'; media-src 'none';";
 
   @Test
   void shouldExposeEndpointsWithCSP() throws Exception {

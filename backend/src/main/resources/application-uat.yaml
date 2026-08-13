@@ -1,7 +1,10 @@
 server:
-  front-end-url: https://ris-search.uat.ds4g.net/
-  cms-url: https://ris-cm.uat.tech.digitalservice.dev/
-  technical-users: []
+  front-end-url: "https://ris-portal.uat.tech.digitalservice.dev/"
+  cms-url: "https://ris-cm.uat.tech.digitalservice.dev/"
+
+swagger:
+  server:
+    url: "https://ris-portal.uat.tech.digitalservice.dev/"
 
 spring:
   config:
@@ -14,16 +17,6 @@ spring:
         fail-fast: true
         sources:
           - name: ris-search-opensearch-config
-
-swagger:
-  server:
-    url: https://ris-search.uat.ds4g.net/
-    description: Public uat server
-
-sentry:
-  traces-sample-rate: 0.01
-  logging:
-    minimum-event-level: error
 
 management:
   endpoints:

@@ -21,7 +21,7 @@ import org.springframework.ws.transport.http.MessageDispatcherServlet;
  */
 @EnableWs
 @Configuration
-@Profile({"prototype", "dev"})
+@Profile({"prototype", "dev", "e2e"})
 public class SoapWebServiceConfig {
 
   /**

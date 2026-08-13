@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { RadioButton } from "primevue";
 import { itemsPerPageOptions } from "~/utils/search/itemsPerPageOptions";
 
 const model = defineModel<string>();
@@ -18,9 +17,9 @@ const legendId = useId();
       :key="option"
       class="flex items-center gap-8"
     >
-      <RadioButton
+      <UiRadioButton
         v-model="model"
-        :input-id="`${name}-${option}`"
+        :id="`${name}-${option}`"
         :name="name"
         :value="option"
       />

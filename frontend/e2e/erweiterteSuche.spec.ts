@@ -75,8 +75,11 @@ async function searchFor(
 
 async function sortBy(page: Page, prop: string) {
   const load = page.waitForResponse(/v1\/document\/lucene-search/);
-  await page.getByRole("combobox", { name: "Sortieren nach" }).click();
-  await page.getByRole("option", { name: prop }).click();
+  const select = page.getByRole("combobox", { name: "Sortieren nach" });
+  const value = await select
+    .getByRole("option", { name: prop })
+    .getAttribute("value");
+  await select.selectOption(value);
   await load;
 }
 
@@ -215,22 +218,27 @@ test.describe("general advanced search page features", () => {
     await expect(resultCounter).toHaveText(nonZeroResultCount);
   });
 
-  test("change number of results per page", async ({ page, isMobileTest }) => {
-    test.skip(isMobileTest);
-    await navigate(
-      page,
-      "/erweiterte-suche?documentKind=R&dateFilterType=period&dateFilterFrom=2023-01-01&dateFilterTo=2025-12-31&itemsPerPage=10",
-    );
+  test(
+    "change number of results per page",
+    { tag: ["@RISDEV-12191"] },
+    async ({ page, isMobileTest }) => {
+      test.skip(isMobileTest);
+      await navigate(
+        page,
+        "/erweiterte-suche?documentKind=R&dateFilterType=period&dateFilterFrom=2023-01-01&dateFilterTo=2025-12-31&itemsPerPage=10",
+      );
 
-    const searchResults = getSearchResults(page);
+      const searchResults = getSearchResults(page);
 
-    await expect(searchResults).toHaveCount(10);
+      await expect(searchResults).toHaveCount(10);
 
-    await page.getByRole("combobox", { name: "Einträge pro Seite" }).click();
-    await page.getByRole("option", { name: "50" }).click();
+      await page
+        .getByRole("combobox", { name: "Einträge pro Seite" })
+        .selectOption({ label: "50" });
 
-    await expect(searchResults).toHaveCount(13);
-  });
+      await expect(searchResults).toHaveCount(13);
+    },
+  );
 
   test("falls back to last valid page when visiting an out-of-range pageIndex directly", async ({
     page,

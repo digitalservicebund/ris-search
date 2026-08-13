@@ -1,8 +1,54 @@
 <script setup lang="ts">
-defineProps<{
-  label: string;
-  color: BadgeColor;
-}>();
+import { computed } from "vue";
+import { tw } from "../../utils/tags";
+
+const props = withDefaults(
+  defineProps<{
+    label: string;
+    color: BadgeColor;
+    variant?: "standard" | "extraSmall" | "small" | "medium" | "large";
+  }>(),
+  {
+    variant: "standard",
+  },
+);
+
+const base = tw`inline-block rounded-xs border px-8 py-4 hyphens-auto`;
+
+const green = tw`border-green-400 bg-green-100 text-green-800`;
+const yellow = tw`border-yellow-600 bg-yellow-200 text-orange-800`;
+const blue = tw`border-blue-500 bg-blue-200 text-blue-800`;
+const red = tw`border-red-400 bg-red-200 text-red-800`;
+const gray = tw`text-gray-1000 border-gray-400 bg-gray-100`;
+
+// "old" styles, will be removed with the implementation of RISDEV-11103, RISDEV-12247
+// just kept for the transition phase
+const standard = tw`typo-label2-bold flex-none`;
+
+const extraSmall = tw`ris-label3-regular sm:ris-label2-regular 2xl:ris-label1-regular`;
+
+const small = tw`ris-label2-regular sm:ris-label1-regular`;
+
+const medium = tw`ris-label2-regular 2xl:ris-label1-regular`;
+
+const large = tw`typo-label1-regular`;
+
+const rootClass = computed(() => {
+  const { color, variant } = props;
+  return {
+    [base]: true,
+    [green]: color === BadgeColor.GREEN,
+    [yellow]: color === BadgeColor.YELLOW,
+    [blue]: color === BadgeColor.BLUE,
+    [red]: color === BadgeColor.RED,
+    [gray]: color === BadgeColor.GRAY,
+    [standard]: variant === "standard",
+    [extraSmall]: variant === "extraSmall",
+    [small]: variant === "small",
+    [medium]: variant === "medium",
+    [large]: variant === "large",
+  };
+});
 </script>
 
 <script lang="ts">
@@ -11,22 +57,12 @@ export enum BadgeColor {
   GREEN,
   YELLOW,
   RED,
+  GRAY,
 }
 </script>
 
 <template>
-  <span
-    class="typo-label2-bold inline-block flex-none px-8 py-4"
-    :class="{
-      'border border-green-400 bg-green-100 text-green-800':
-        color === BadgeColor.GREEN,
-      'border border-yellow-600 bg-yellow-200 text-orange-800':
-        color === BadgeColor.YELLOW,
-      'border border-blue-500 bg-blue-200 text-blue-800':
-        color === BadgeColor.BLUE,
-      'border border-red-400 bg-red-200 text-red-800': color === BadgeColor.RED,
-    }"
-  >
+  <span :class="rootClass">
     {{ label }}
   </span>
 </template>

@@ -44,13 +44,6 @@ describe("getLiteratureMetadataItems", () => {
       "Autor",
       "Veröffentlichungsjahr",
     ]);
-
-    expect(result.map((item) => item.value)).toEqual([
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-    ]);
   });
 
   it("converts empty properties to undefined values", () => {
@@ -61,12 +54,10 @@ describe("getLiteratureMetadataItems", () => {
       yearsOfPublication: [],
     });
 
-    expect(result.map((item) => item.value)).toEqual([
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-    ]);
+    expect(result[0]).toMatchObject({ type: "text", value: undefined });
+    expect(result[1]).toMatchObject({ type: "badge", values: [] });
+    expect(result[2]).toMatchObject({ type: "text", value: undefined });
+    expect(result[3]).toMatchObject({ type: "text", value: undefined });
   });
 
   it("converts properties with one value", () => {
@@ -77,12 +68,10 @@ describe("getLiteratureMetadataItems", () => {
       yearsOfPublication: ["2015"],
     });
 
-    expect(result.map((item) => item.value)).toEqual([
-      "Foo",
-      "Ref",
-      "Max Mustermann",
-      "2015",
-    ]);
+    expect(result[0]).toMatchObject({ type: "text", value: "Foo" });
+    expect(result[1]).toMatchObject({ type: "badge", values: ["Ref"] });
+    expect(result[2]).toMatchObject({ type: "text", value: "Max Mustermann" });
+    expect(result[3]).toMatchObject({ type: "text", value: "2015" });
   });
 
   it("converts properties with multiple values", () => {
@@ -93,12 +82,16 @@ describe("getLiteratureMetadataItems", () => {
       yearsOfPublication: ["2015", "2016"],
     });
 
-    expect(result.map((item) => item.value)).toEqual([
-      "Foo, Bar",
-      "Ref1, Ref2",
-      "Max Mustermann, Sabine Musterfrau",
-      "2015, 2016",
-    ]);
+    expect(result[0]).toMatchObject({ type: "text", value: "Foo, Bar" });
+    expect(result[1]).toMatchObject({
+      type: "badge",
+      values: ["Ref1", "Ref2"],
+    });
+    expect(result[2]).toMatchObject({
+      type: "text",
+      value: "Max Mustermann, Sabine Musterfrau",
+    });
+    expect(result[3]).toMatchObject({ type: "text", value: "2015, 2016" });
   });
 
   it("concatenates dependent and independent references if they exist", () => {
@@ -107,12 +100,10 @@ describe("getLiteratureMetadataItems", () => {
       independentReferences: ["Indep Ref"],
     });
 
-    expect(result.map((item) => item.value)).toEqual([
-      undefined,
-      "Dep Ref, Indep Ref",
-      undefined,
-      undefined,
-    ]);
+    expect(result[1]).toMatchObject({
+      type: "badge",
+      values: ["Dep Ref", "Indep Ref"],
+    });
   });
 });
 
