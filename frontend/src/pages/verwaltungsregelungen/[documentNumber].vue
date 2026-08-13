@@ -127,7 +127,7 @@ const detailItems = computed(() =>
         <template #sidebar>
           <client-only>
             <DocumentsTableOfContents
-              v-if="tocEntries?.length"
+              v-if="tocEntries.length"
               :table-of-contents="tocEntries"
             />
           </client-only>

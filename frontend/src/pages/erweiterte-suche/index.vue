@@ -398,7 +398,6 @@ watch(searchStatus, async (newStatus, oldStatus) => {
 
         <div class="col-span-12 lg:col-span-7">
           <Pagination
-            v-if="searchStatus !== 'idle'"
             :page="searchResults"
             navigation-position="bottom"
             @update-page="handlePageUpdate"

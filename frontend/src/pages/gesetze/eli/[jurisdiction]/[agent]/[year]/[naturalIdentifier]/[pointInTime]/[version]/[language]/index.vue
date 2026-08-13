@@ -79,9 +79,7 @@ const [
   { sortedVersions: normVersions, error: normVersionsError },
 ] = await Promise.all([
   fetchTranslationUrl(),
-  useNormVersions(
-    data.value.legislation.exampleOfWork?.legislationIdentifier ?? "",
-  ),
+  useNormVersions(data.value.legislation.exampleOfWork.legislationIdentifier),
 ]);
 
 if (normVersionsError.value) {
@@ -284,7 +282,7 @@ const fassungenDateFilterInputId = useId();
               <div v-html="htmlParts.body" />
             </DocumentsNormsLegislationContent>
 
-            <template #sidebar v-if="tableOfContents?.length">
+            <template #sidebar v-if="tableOfContents.length">
               <client-only>
                 <DocumentsTableOfContents
                   :subheading="normBreadcrumbTitle"
@@ -333,9 +331,7 @@ const fassungenDateFilterInputId = useId();
                 />
               </div>
               <DocumentsNormsVersionList
-                :current-legislation-identifier="
-                  metadata.legislationIdentifier ?? ''
-                "
+                :current-legislation-identifier="metadata.legislationIdentifier"
                 :versions="filteredNormVersions"
               />
             </template>

@@ -184,7 +184,7 @@ const detailsSectionId = useId();
           ></div>
         </section>
 
-        <template #sidebar v-if="tocEntries?.length">
+        <template #sidebar v-if="tocEntries.length">
           <client-only>
             <DocumentsTableOfContents :table-of-contents="tocEntries" />
           </client-only>
