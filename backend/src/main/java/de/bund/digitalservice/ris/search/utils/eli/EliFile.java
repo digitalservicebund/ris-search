@@ -84,7 +84,7 @@ public record EliFile(
                   matcher.group("pointInTimeManifestation"), DateTimeFormatter.ISO_LOCAL_DATE),
               matcher.group("fileName"),
               matcher.group("format")));
-    } catch (IllegalStateException | IllegalArgumentException | DateTimeParseException e) {
+    } catch (IllegalStateException | IllegalArgumentException | DateTimeParseException _) {
       return Optional.empty();
     }
   }

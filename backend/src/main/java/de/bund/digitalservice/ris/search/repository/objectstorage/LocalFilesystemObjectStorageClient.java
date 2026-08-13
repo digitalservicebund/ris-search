@@ -160,7 +160,7 @@ public class LocalFilesystemObjectStorageClient implements ObjectStorageClient {
           .filter(f -> f.toString().contains(prefix))
           .map(mappingFunction)
           .toList();
-    } catch (IOException e) {
+    } catch (IOException _) {
       LOGGER.info("Could not list files in {}", basePath);
       return List.of();
     }

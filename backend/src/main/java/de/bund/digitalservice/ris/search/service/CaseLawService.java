@@ -201,7 +201,7 @@ public class CaseLawService {
     }
     try {
       return Optional.of(marshaller.fromString(contentOption.get()));
-    } catch (OpenSearchMapperException ex) {
+    } catch (OpenSearchMapperException _) {
       return Optional.empty();
     }
   }

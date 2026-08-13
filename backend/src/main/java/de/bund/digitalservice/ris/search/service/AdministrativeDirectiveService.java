@@ -85,7 +85,7 @@ public class AdministrativeDirectiveService {
   public Optional<byte[]> getFileByDocumentNumber(String documentNumber) {
     try {
       return bucket.get(String.format("%s.akn.xml", documentNumber));
-    } catch (ObjectStoreServiceException e) {
+    } catch (ObjectStoreServiceException _) {
       return Optional.empty();
     }
   }
