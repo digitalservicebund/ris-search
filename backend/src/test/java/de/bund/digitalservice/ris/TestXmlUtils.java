@@ -60,7 +60,7 @@ public class TestXmlUtils {
       transformer.transform(new DOMSource(doc), new StreamResult(writer));
       return writer.toString();
     } catch (TransformerException e) {
-      throw new FileTransformationException("Error trying to convert XML document to string");
+      throw new FileTransformationException("Error trying to convert XML document to string", e);
     }
   }
 

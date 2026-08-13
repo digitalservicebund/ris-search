@@ -43,10 +43,11 @@ public abstract class MockS3Client implements S3Client {
   protected List<String> getFileNamesByPath(String directory) {
     try (Stream<Path> stream = Files.walk(Paths.get(directory))) {
       return stream.filter(Files::isRegularFile).map(Path::toString).toList();
-    } catch (NoSuchFileException e) {
+    } catch (NoSuchFileException _) {
       return new ArrayList<>();
     } catch (IOException e) {
-      throw new FileTransformationException(String.format("Could not list files in %s", directory));
+      throw new FileTransformationException(
+          String.format("Could not list files in %s", directory), e);
     }
   }
 

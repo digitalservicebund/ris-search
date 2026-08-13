@@ -112,11 +112,7 @@ public class EcliSitemapWriter {
    * @return An Optional containing the byte array of the sitemap file if found, otherwise empty.
    */
   public Optional<byte[]> getSitemapFile(String filename) {
-    try {
-      return portalBucket.get(PATH_PREFIX + filename);
-    } catch (ObjectStoreServiceException e) {
-      return Optional.empty();
-    }
+    return portalBucket.get(PATH_PREFIX + filename);
   }
 
   /**
@@ -125,11 +121,7 @@ public class EcliSitemapWriter {
    * @return An Optional containing the byte array of the robots.txt file if found, otherwise empty.
    */
   public Optional<byte[]> getRobots() {
-    try {
-      return portalBucket.get(ROBOTS_TXT_PATH);
-    } catch (ObjectStoreServiceException e) {
-      return Optional.empty();
-    }
+    return portalBucket.get(ROBOTS_TXT_PATH);
   }
 
   /** Write the initial robots.txt file to disallow all crawlers except DG_JUSTICE_CRAWLER. */

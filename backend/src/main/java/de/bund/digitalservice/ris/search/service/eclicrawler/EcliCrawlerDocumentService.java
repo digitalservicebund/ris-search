@@ -170,21 +170,17 @@ public class EcliCrawlerDocumentService {
   }
 
   private Optional<EcliCrawlerDocument> getFromBucket(String filename) {
-    try {
-      return caselawService
-          .getFromBucket(filename)
-          .flatMap(
-              unit -> {
-                if (isValidEcliDocument(unit)) {
-                  return Optional.of(
-                      EcliCrawlerDocumentMapper.fromCaseLawDocumentationUnit(
-                          documentUrl, filename, unit));
-                }
-                return Optional.empty();
-              });
-    } catch (ObjectStoreServiceException e) {
-      throw new FatalEcliSitemapJobException("no connection to bucket");
-    }
+    return caselawService
+        .getFromBucket(filename)
+        .flatMap(
+            unit -> {
+              if (isValidEcliDocument(unit)) {
+                return Optional.of(
+                    EcliCrawlerDocumentMapper.fromCaseLawDocumentationUnit(
+                        documentUrl, filename, unit));
+              }
+              return Optional.empty();
+            });
   }
 
   private Optional<EcliCrawlerDocument> getPublishedDocument(String filename) {

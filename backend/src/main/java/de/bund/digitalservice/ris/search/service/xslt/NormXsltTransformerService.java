@@ -118,7 +118,7 @@ public class NormXsltTransformerService extends XsltTransformer {
     try {
       parameters.put("article-eid", eId);
       return transformLegalDocMlFromBytes(source, parameters);
-    } catch (XMLElementNotFoundException ex) {
+    } catch (XMLElementNotFoundException _) {
       String encodedId = UriUtils.encode(eId, StandardCharsets.UTF_8).toLowerCase(Locale.ROOT);
       parameters.put("article-eid", encodedId);
       return transformLegalDocMlFromBytes(source, parameters);

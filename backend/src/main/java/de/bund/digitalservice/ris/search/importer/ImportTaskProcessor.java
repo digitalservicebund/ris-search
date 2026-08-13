@@ -125,7 +125,7 @@ public class ImportTaskProcessor {
         try {
           String target = args[i + 1];
           targets.add(target);
-        } catch (IndexOutOfBoundsException e) {
+        } catch (IndexOutOfBoundsException _) {
           throw new IllegalArgumentException(
               "Expected a target argument following %s".formatted(TASK_ARGUMENT));
         }
