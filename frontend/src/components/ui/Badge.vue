@@ -21,7 +21,7 @@ const green = tw`border-green-400 bg-green-100 text-green-800`;
 const yellow = tw`border-yellow-600 bg-yellow-200 text-orange-800`;
 const blue = tw`border-blue-500 bg-blue-200 text-blue-800`;
 const red = tw`border-red-400 bg-red-200 text-red-800`;
-const gray = tw`text-gray-1000 border-gray-400 bg-gray-100`;
+const gray = tw`text-gray-1000 border-gray-400`;
 
 // "old" styles, will be removed with the implementation of RISDEV-11103, RISDEV-12247
 // just kept for the transition phase

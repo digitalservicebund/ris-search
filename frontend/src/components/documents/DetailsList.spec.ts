@@ -73,6 +73,22 @@ describe("DetailsList", () => {
     });
   });
 
+  describe("badge entries", () => {
+    it("does not render entry when values array is empty", () => {
+      renderComponent([{ type: "badge", label: "Normen:", values: [] }]);
+      expect(screen.queryByRole("term")).not.toBeInTheDocument();
+    });
+
+    it("renders one badge element per value", () => {
+      renderComponent([
+        { type: "badge", label: "Normen:", values: ["BGB § 1", "BGB § 2"] },
+      ]);
+      expect(screen.getByRole("term")).toHaveTextContent("Normen:");
+      expect(screen.getByText("BGB § 1")).toBeInTheDocument();
+      expect(screen.getByText("BGB § 2")).toBeInTheDocument();
+    });
+  });
+
   describe("html entries", () => {
     it("does not render entry when html is undefined", () => {
       renderComponent([{ type: "html", label: "Fußnoten:" }]);

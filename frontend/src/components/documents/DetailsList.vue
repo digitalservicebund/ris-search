@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import IcOutlineFileDownload from "~icons/ic/outline-file-download";
+import { BadgeColor } from "~/components/ui/Badge.vue";
 
 export type TextEntry = {
   type: "text";
@@ -10,6 +11,12 @@ export type TextEntry = {
 
 export type ListEntry = {
   type: "list";
+  label: string;
+  values: string[];
+};
+
+export type BadgeEntry = {
+  type: "badge";
   label: string;
   values: string[];
 };
@@ -29,7 +36,12 @@ export type LinkEntry = {
   dataAttr?: string;
 };
 
-export type DetailsListItem = TextEntry | ListEntry | HtmlEntry | LinkEntry;
+export type DetailsListItem =
+  | TextEntry
+  | ListEntry
+  | BadgeEntry
+  | HtmlEntry
+  | LinkEntry;
 
 const props = defineProps<{
   items: DetailsListItem[];
@@ -41,6 +53,8 @@ const visibleItems = computed(() =>
       case "text":
         return !isStringEmpty(item.value);
       case "list":
+        return item.values.length > 0;
+      case "badge":
         return item.values.length > 0;
       case "html":
         return !isStringEmpty(item.html);
@@ -79,6 +93,22 @@ const visibleItems = computed(() =>
           class="typo-label1-regular col-span-12 md:col-span-9 md:col-start-4 lg:col-span-6 lg:col-start-4"
         >
           {{ value }}
+        </dd>
+      </template>
+
+      <template v-else-if="item.type === 'badge'">
+        <dd
+          class="col-span-12 md:col-span-9 md:col-start-4 lg:col-span-6 lg:col-start-4"
+        >
+          <div class="mt-4 flex flex-wrap gap-4 md:mt-0">
+            <UiBadge
+              v-for="value in item.values"
+              :key="value"
+              :color="BadgeColor.GRAY"
+              variant="large"
+              :label="value"
+            />
+          </div>
         </dd>
       </template>
 
