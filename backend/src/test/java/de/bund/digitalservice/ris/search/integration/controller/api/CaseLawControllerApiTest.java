@@ -44,7 +44,6 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.mockito.MockedConstruction;
 import org.mockito.Mockito;
 import org.opensearch.core.common.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -304,7 +303,7 @@ class CaseLawControllerApiTest extends ContainersIntegrationBase {
   @Test
   @DisplayName("Returns 500 if placeholder.png is missing")
   void shouldReturn500IfPlaceholderMissing() throws Exception {
-    try (MockedConstruction<ClassPathResource> ignored =
+    try (var _ =
         Mockito.mockConstruction(
             ClassPathResource.class,
             (mock, context) ->

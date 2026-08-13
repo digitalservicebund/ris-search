@@ -127,7 +127,7 @@ public class SitemapService {
       StringWriter sitemapFileContent = new StringWriter();
       mar.marshal(sitemapFile, sitemapFileContent);
       return sitemapFileContent.toString();
-    } catch (JAXBException exception) {
+    } catch (JAXBException _) {
       return "";
     }
   }
