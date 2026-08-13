@@ -22,9 +22,18 @@ if (!documentNumber) throw createError({ status: 404 });
 
 const documentMetadataUrl = `/v1/literature/${documentNumber}`;
 
-const { data: literature, error: metadataError } =
-  await useRisBackend<Literature>(documentMetadataUrl);
+const [
+  { data: literature, error: metadataError },
+  { data: html, error: contentError },
+] = await Promise.all([
+  useRisBackend<Literature>(documentMetadataUrl),
+  useRisBackend<string>(`${documentMetadataUrl}.html`, {
+    headers: { Accept: "text/html" },
+  }),
+]);
+
 if (metadataError?.value) throw createError(metadataError.value);
+if (contentError?.value) throw createError(contentError.value);
 
 useLiteratureSeo({
   documentTypes: literature.value?.documentTypes ?? [],
@@ -32,12 +41,6 @@ useLiteratureSeo({
   headline: literature.value?.headline,
   alternativeHeadline: literature.value?.alternativeHeadline,
 });
-
-const { data: html, error: contentError } = await useRisBackend<string>(
-  `${documentMetadataUrl}.html`,
-  { headers: { Accept: "text/html" } },
-);
-if (contentError?.value) throw createError(contentError.value);
 
 // Page contents ------------------------------------------
 
@@ -60,14 +63,13 @@ const document = computed(() =>
 );
 const isEmptyDocument = computed(() => isDocumentEmpty(document.value));
 
-const tocEntries = computed<TreeItem[] | null>(() => {
-  return document.value
-    ? getAllSectionsFromDocument(document.value, "section").map((entry) => ({
-        key: entry.id,
-        subtitle: entry.title, // Subtitle for more subtle appearance
-        to: { hash: `#${entry.id}`, query: { from: route.query.from } },
-      }))
-    : null;
+const tocEntries = computed<TreeItem[]>(() => {
+  if (!document.value) return [];
+  return getAllSectionsFromDocument(document.value, "section").map((entry) => ({
+    key: entry.id,
+    subtitle: entry.title, // Subtitle for more subtle appearance
+    to: { hash: `#${entry.id}`, query: { from: route.query.from } },
+  }));
 });
 
 const searchBackLink = useSearchBackLink(DocumentKind.Literature);
@@ -128,7 +130,7 @@ const detailItems = computed(() => getLiteratureDetailItems(literature.value));
         <template #sidebar>
           <client-only>
             <DocumentsTableOfContents
-              v-if="tocEntries?.length"
+              v-if="tocEntries.length"
               :table-of-contents="tocEntries"
             />
           </client-only>

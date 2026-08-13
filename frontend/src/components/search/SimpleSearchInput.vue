@@ -4,11 +4,13 @@ import IconSearch from "~icons/ic/search";
 const {
   inputLabel = "Suchbegriff eingeben",
   inputPlaceholder = "Suchbegriff eingeben",
+  loading = false,
   submitLabel = "Suchen",
 } = defineProps<{
   fullWidth?: boolean;
   inputLabel?: string;
   inputPlaceholder?: string;
+  loading?: boolean;
   submitLabel?: string;
 }>();
 
@@ -26,6 +28,8 @@ watch(model, (newValue) => {
 const emit = defineEmits(["emptySearch"]);
 
 const performSearch = () => {
+  if (loading) return;
+
   // if the user hasn't entered any text, updating the model will have no effect
   // since they might still want to trigger an empty search, use "emit"
   if (!currentText.value) emit("emptySearch");
@@ -51,7 +55,7 @@ const searchInputId = useId();
           type="search"
           size="large"
         />
-        <UiButton :aria-label="submitLabel" type="submit" size="large">
+        <UiButton :aria-label="submitLabel" type="submit" size="large" :loading>
           <template #icon><IconSearch /></template>
         </UiButton>
       </div>

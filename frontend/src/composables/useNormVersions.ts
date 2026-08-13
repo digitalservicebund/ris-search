@@ -8,15 +8,16 @@ import type {
 } from "~/types/api";
 import { getCurrentDateInGermanyFormatted } from "~/utils/dateFormatting";
 
-export function useNormVersions(eli: string) {
-  const { data, status, error } = useRisBackend<
+export async function useNormVersions(eli: string) {
+  const { data, status, error } = await useRisBackend<
     JSONLDList<LegislationExpression>
   >(`/v1/legislation/work-example/${eli}`, { immediate: true });
+
   const sortedVersions = computed(() => data.value?.member ?? []);
   return { data, status, error, sortedVersions };
 }
 
-export function useValidNormVersions(eli: string) {
+export async function useValidNormVersions(eli: string) {
   const today = getCurrentDateInGermanyFormatted();
   return getNorms({
     eli: eli,
@@ -30,9 +31,6 @@ function getNorms(params: LegislationSearchParams) {
   const immediate = params.eli !== undefined;
   return useRisBackend<JSONLDList<SearchResult<LegislationWork>>>(
     `/v1/legislation`,
-    {
-      params,
-      immediate: immediate,
-    },
+    { params, immediate: immediate },
   );
 }
