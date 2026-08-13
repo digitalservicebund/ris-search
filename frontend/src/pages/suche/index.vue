@@ -211,7 +211,6 @@ const formattedResultCount = computed(() => {
   return formatResultCount(totalItemCount.value);
 });
 
-const isLoading = computed(() => searchStatus.value === "pending");
 
 // User action handlers ------------------------------------
 
@@ -345,7 +344,7 @@ watch(searchStatus, async (newStatus, oldStatus) => {
             aria-live="polite"
             class="typo-label2-regular border-b border-b-gray-400 pb-16 md:border-none md:pb-0"
           >
-            {{ isLoading ? "Lade ..." : formattedResultCount }}
+            {{ formattedResultCount }}
           </output>
 
           <div class="hidden flex-wrap gap-x-32 gap-y-16 md:flex">
@@ -409,7 +408,6 @@ watch(searchStatus, async (newStatus, oldStatus) => {
           class="col-span-12 scroll-mt-16 flex-col justify-end gap-8 md:col-span-8 lg:col-span-8 lg:col-start-5 xl:col-span-7 xl:col-start-5"
         >
           <Pagination
-            :is-loading="isLoading"
             :page="searchResults"
             navigation-position="bottom"
             @update-page="updatePage"
@@ -439,13 +437,6 @@ watch(searchStatus, async (newStatus, oldStatus) => {
                 <SearchResult :search-result :order="index" />
               </li>
             </ul>
-
-            <div
-              v-if="isLoading"
-              class="flex h-full min-h-48 w-full items-center justify-center"
-            >
-              <UiProgressSpinner />
-            </div>
           </Pagination>
         </div>
       </div>

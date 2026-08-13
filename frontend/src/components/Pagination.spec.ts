@@ -52,15 +52,6 @@ describe("Pagination", () => {
     expect(container.querySelector("nav")).not.toBeInTheDocument();
   });
 
-  it("renders nothing when isLoading is true", async () => {
-    const page = createMockPage();
-    const { container } = await renderSuspended(Pagination, {
-      props: { page, isLoading: true },
-    });
-
-    expect(container.querySelector("nav")).not.toBeInTheDocument();
-  });
-
   it("renders page information with items on page", async () => {
     const page = createMockPage();
     await renderSuspended(Pagination, {
