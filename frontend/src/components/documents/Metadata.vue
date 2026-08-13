@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { BadgeColor } from "~/components/ui/Badge.vue";
-
 export type MetadataItemBadge = {
   type: "badge";
   label: string;
@@ -30,7 +28,7 @@ const emptyValuePlaceholder = "—"; // Note: this is an 'em dash'
           <UiBadge
             v-for="value in item.values"
             :key="value"
-            :color="BadgeColor.GRAY"
+            color="gray"
             :label="value"
             variant="extraSmall"
             class="font-bold!"

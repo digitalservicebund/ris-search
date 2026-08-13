@@ -1,4 +1,4 @@
-import { BadgeColor } from "~/components/ui/Badge.vue";
+import type { BadgeColor } from "~/components/ui/Badge.vue";
 import { DocumentKind } from "~/types/api";
 import {
   getValidityStatus,
@@ -50,16 +50,16 @@ export function formatNormValidity(
 
   switch (validityStatus) {
     case "InForce":
-      color = BadgeColor.GREEN;
+      color = "green";
       break;
     case "FutureInForce":
-      color = BadgeColor.YELLOW;
+      color = "yellow";
       break;
     case "Expired":
-      color = BadgeColor.RED;
+      color = "red";
       break;
     default:
-      color = BadgeColor.BLUE;
+      color = "blue";
       break;
   }
 

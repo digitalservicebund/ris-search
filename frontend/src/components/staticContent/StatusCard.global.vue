@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { BadgeColor } from "~/components/ui/Badge.vue";
+import type { BadgeColor } from "~/components/ui/Badge.vue";
 
 export type StatusCardType = "implemented" | "in_progress" | "planned";
 
@@ -9,22 +9,22 @@ interface Props {
 
 const props = defineProps<Props>();
 
-const badge = computed(() => {
+const badge = computed<{ label: string; color: BadgeColor } | undefined>(() => {
   switch (props.status) {
     case "implemented":
       return {
         label: "Erste Version verfügbar",
-        color: BadgeColor.GREEN,
+        color: "green",
       };
     case "in_progress":
       return {
         label: "In Arbeit",
-        color: BadgeColor.YELLOW,
+        color: "yellow",
       };
     case "planned":
       return {
         label: "Geplant",
-        color: BadgeColor.BLUE,
+        color: "blue",
       };
     default:
       return undefined;
