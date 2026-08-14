@@ -109,10 +109,10 @@ describe("getLiteratureMetadataItems", () => {
 
 describe("getLiteratureDetailsItems", () => {
   it.each([
-    [undefined, undefined, "Norm:"],
-    [[], undefined, "Norm:"],
-    [["Ref 1"], "Ref 1", "Norm:"],
-    [["Ref 1", "Ref 2"], "Ref 1, Ref 2", "Normen:"],
+    [undefined, [], "Norm:"],
+    [[], [], "Norm:"],
+    [["Ref 1"], ["Ref 1"], "Norm:"],
+    [["Ref 1", "Ref 2"], ["Ref 1", "Ref 2"], "Normen:"],
   ])(
     "given normReferences '%o' creates item with value '%s' labeled '%s'",
     (normReferences, expectedValue, expectedLabel) => {
@@ -120,9 +120,9 @@ describe("getLiteratureDetailsItems", () => {
         normReferences: normReferences,
       });
       expect(result[0]).toEqual({
-        type: "text",
+        type: "badge",
         label: expectedLabel,
-        value: expectedValue,
+        values: expectedValue,
       });
     },
   );
@@ -233,9 +233,9 @@ describe("getLiteratureDetailsItems", () => {
     expect(new Set(result)).toEqual(
       new Set([
         {
-          type: "text",
+          type: "badge",
           label: "Norm:",
-          value: "GG, Art 6 Abs 2 S 1, 1949-05-23",
+          values: ["GG, Art 6 Abs 2 S 1, 1949-05-23"],
         },
         { type: "text", label: "Bearbeiter:", value: "Editor Doe" },
         { type: "text", label: "Mitarbeiter:", value: "John Doe, Jane Doe" },
@@ -291,10 +291,12 @@ describe("getLiteratureDetailsItems", () => {
     expect(new Set(result)).toEqual(
       new Set([
         {
-          type: "text",
+          type: "badge",
           label: "Normen:",
-          value:
-            "GG, Art 6 Abs 2 S 1, 1949-05-23, GG, Art 4 Abs 3 S 1, 1949-05-23",
+          values: [
+            "GG, Art 6 Abs 2 S 1, 1949-05-23",
+            "GG, Art 4 Abs 3 S 1, 1949-05-23",
+          ],
         },
         { type: "text", label: "Bearbeiter:", value: "Editor Doe" },
         { type: "text", label: "Mitarbeiter:", value: "John Doe, Jane Doe" },
@@ -335,7 +337,7 @@ describe("getLiteratureDetailsItems", () => {
 
     expect(new Set(result)).toEqual(
       new Set([
-        { type: "text", label: "Norm:", value: undefined },
+        { type: "badge", label: "Norm:", values: [] },
         { type: "text", label: "Bearbeiter:", value: undefined },
         { type: "text", label: "Mitarbeiter:", value: undefined },
         { type: "text", label: "Urheber:", value: undefined },

@@ -42,13 +42,13 @@ export function getAdministrativeDirectiveDetailItems(
 
   return [
     {
-      type: "text",
+      type: "badge",
       label: getSingularOrPlural(
         "Fundstelle:",
         "Fundstellen:",
         references.length,
       ),
-      value: formatArray(references),
+      values: references,
     },
     {
       type: "text",
@@ -70,9 +70,9 @@ export function getAdministrativeDirectiveDetailItems(
       value: administrativeDirective?.documentTypeDetail,
     },
     {
-      type: "text",
+      type: "badge",
       label: getSingularOrPlural("Norm:", "Normen:", norms.length),
-      value: formatArray(norms),
+      values: norms,
     },
   ];
 }

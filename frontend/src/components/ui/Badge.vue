@@ -21,18 +21,22 @@ const green = tw`border-green-400 bg-green-100 text-green-800`;
 const yellow = tw`border-yellow-600 bg-yellow-200 text-orange-800`;
 const blue = tw`border-blue-500 bg-blue-200 text-blue-800`;
 const red = tw`border-red-400 bg-red-200 text-red-800`;
-const gray = tw`text-gray-1000 border-gray-400 bg-gray-100`;
+const gray = tw`text-gray-1000 border-gray-400`;
 
 // "old" styles, will be removed with the implementation of RISDEV-11103, RISDEV-12247
 // just kept for the transition phase
 const standard = tw`typo-label2-bold flex-none`;
 
+// for badges in the Metadata section of the document pages
 const extraSmall = tw`ris-label3-regular sm:ris-label2-regular 2xl:ris-label1-regular`;
 
+// for badges in the norm version list (fassungen tab)
 const small = tw`ris-label2-regular sm:ris-label1-regular`;
 
+// for badges in the search result header
 const medium = tw`ris-label2-regular 2xl:ris-label1-regular`;
 
+// for badges in the details tab and 'about this service' page
 const large = tw`typo-label1-regular`;
 
 const rootClass = computed(() => {
