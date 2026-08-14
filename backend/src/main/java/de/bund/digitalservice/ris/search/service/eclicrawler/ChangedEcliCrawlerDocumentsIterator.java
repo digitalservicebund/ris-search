@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Queue;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Iterator implementation for retrieving lists of EcliCrawlerDocument objects that represent
@@ -27,7 +28,7 @@ public class ChangedEcliCrawlerDocumentsIterator implements Iterator<List<EcliCr
   /** Functional interface for supplying EcliCrawlerDocuments based on their identifier */
   @FunctionalInterface
   public interface Supplier {
-    List<EcliCrawlerDocument> get(List<String> ids);
+    @NonNull List<EcliCrawlerDocument> get(List<String> ids);
   }
 
   /**
@@ -80,9 +81,7 @@ public class ChangedEcliCrawlerDocumentsIterator implements Iterator<List<EcliCr
       List<String> batch = ids.subList(numTaken, numTaken + currentBatchSize);
 
       List<EcliCrawlerDocument> documents = supplier.get(batch);
-      if (documents != null) {
-        ecliDocumentsBuffer.addAll(documents);
-      }
+      ecliDocumentsBuffer.addAll(documents);
 
       numTaken += currentBatchSize;
     }
