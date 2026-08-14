@@ -1,6 +1,6 @@
 # Backend
 
-Java 21 + Spring Boot REST API.
+Java 25 + Spring Boot REST API.
 
 ## Building
 
