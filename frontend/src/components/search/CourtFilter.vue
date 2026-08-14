@@ -21,13 +21,13 @@ const model = defineModel<string | undefined>();
 
 const searchResults = ref<CourtSearchResult[]>([]);
 
+const { $risBackend } = useNuxtApp();
+
 const search = async (prefix?: string) => {
-  const params: CourtsSearchParams = prefix ? { prefix } : {};
-  searchResults.value = await $fetch<CourtSearchResult[]>(
-    useBackendUrl("/v1/case-law/courts"),
-    {
-      params: params,
-    },
+  const query: CourtsSearchParams = prefix ? { prefix } : {};
+  searchResults.value = await $risBackend<CourtSearchResult[]>(
+    "/v1/case-law/courts",
+    { query },
   );
 };
 

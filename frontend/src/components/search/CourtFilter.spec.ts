@@ -1,4 +1,4 @@
-import { mockNuxtImport, renderSuspended } from "@nuxt/test-utils/runtime";
+import { renderSuspended } from "@nuxt/test-utils/runtime";
 import { userEvent } from "@testing-library/user-event";
 import { screen, waitFor } from "@testing-library/vue";
 import { afterEach, describe, expect, it, vi } from "vitest";
@@ -8,10 +8,11 @@ import { courtFilterDefaultSuggestions } from "~/utils/search/courtFilter";
 const mockData = [{ id: "TG Berlin", label: "Tagesgericht Berlin", count: 1 }];
 
 const mockFetch = vi.hoisted(() => vi.fn());
-mockNuxtImport("$fetch", () => mockFetch);
 
+// The component fetches via the $risBackend injection, so the plugin providing
+// it is replaced rather than $fetch itself.
 vi.mock("~/plugins/risBackend", () => ({
-  default: vi.fn(),
+  default: defineNuxtPlugin(() => ({ provide: { risBackend: mockFetch } })),
   extendOnRequest: (...cbs: unknown[]) => cbs,
 }));
 
@@ -63,10 +64,9 @@ describe("court autocomplete", () => {
       await user.type(input, "Ber");
 
       await waitFor(() => {
-        expect(mockFetch).toHaveBeenCalledWith(
-          expect.anything(),
-          expect.objectContaining({ params: { prefix: "Ber" } }),
-        );
+        expect(mockFetch).toHaveBeenCalledWith("/v1/case-law/courts", {
+          query: { prefix: "Ber" },
+        });
       });
 
       expect(screen.getByText("Tagesgericht Berlin")).toBeInTheDocument();
@@ -126,10 +126,9 @@ describe("court autocomplete", () => {
       );
 
       await waitFor(() => {
-        expect(mockFetch).toHaveBeenCalledWith(
-          expect.anything(),
-          expect.objectContaining({ params: { prefix: "existing court" } }),
-        );
+        expect(mockFetch).toHaveBeenCalledWith("/v1/case-law/courts", {
+          query: { prefix: "existing court" },
+        });
       });
     });
   });
