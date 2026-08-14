@@ -126,7 +126,13 @@ export async function useSimpleSearch(
     searchEndpointUrl,
     {
       query: combinedQuery,
+
+      // The page decides when to search, both for the initial load and for
+      // every later change, so neither the eager initial fetch nor refetching
+      // on the reactive sources is wanted here.
       watch: false,
+      immediate: false,
+
       dedupe: "defer",
 
       // PostHog integration
