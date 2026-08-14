@@ -209,7 +209,7 @@ public class CaseLawService {
             bytes -> {
               try {
                 return Optional.ofNullable(marshaller.fromByteArray(bytes));
-              } catch (OpenSearchMapperException e) {
+              } catch (OpenSearchMapperException _) {
                 return Optional.empty();
               }
             });

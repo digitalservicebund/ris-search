@@ -85,7 +85,6 @@ class CaseLawServiceTest {
   void itIgnoresInvalidLdmlFiles() {
     String filename = "docNr/docNr.xml";
     byte[] content = "content".getBytes(StandardCharsets.UTF_8);
-    CaseLawDocumentationUnit expectedUnit = CaseLawDocumentationUnit.builder().id("id").build();
 
     when(caseLawBucketMock.getObjects(List.of(filename)))
         .thenReturn(List.of(new StorageObject("key", Optional.of(content))));

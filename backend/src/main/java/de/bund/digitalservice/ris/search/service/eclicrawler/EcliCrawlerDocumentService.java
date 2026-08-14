@@ -179,22 +179,18 @@ public class EcliCrawlerDocumentService {
   }
 
   private List<EcliCrawlerDocument> getFromBucket(List<String> ids) {
-    try {
-      logger.info("retrieve {} documents", ids.size());
-      return caselawService.getFromBucket(ids).stream()
-          .map(
-              unit -> {
-                if (isValidEcliDocument(unit)) {
-                  return EcliCrawlerDocumentMapper.fromCaseLawDocumentationUnit(
-                      documentUrl, inferFilename(unit.documentNumber()), unit);
-                }
-                return null;
-              })
-          .filter(Objects::nonNull)
-          .toList();
-    } catch (ObjectStoreServiceException e) {
-      throw new FatalEcliSitemapJobException("no connection to bucket");
-    }
+    logger.info("retrieve {} documents", ids.size());
+    return caselawService.getFromBucket(ids).stream()
+        .map(
+            unit -> {
+              if (isValidEcliDocument(unit)) {
+                return EcliCrawlerDocumentMapper.fromCaseLawDocumentationUnit(
+                    documentUrl, inferFilename(unit.documentNumber()), unit);
+              }
+              return null;
+            })
+        .filter(Objects::nonNull)
+        .toList();
   }
 
   private List<EcliCrawlerDocument> getPublishedDocument(List<String> filename) {
