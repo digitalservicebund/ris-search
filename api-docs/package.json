@@ -21,12 +21,12 @@
   "devEngines": {
     "packageManager": {
       "name": "pnpm",
-      "version": "^11.20.0",
+      "version": "11.20.0",
       "onFail": "warn"
     },
     "runtime": {
       "name": "node",
-      "version": "^26.6.0",
+      "version": "26.6.0",
       "onFail": "warn"
     }
   }
