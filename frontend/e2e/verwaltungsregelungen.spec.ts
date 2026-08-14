@@ -231,7 +231,7 @@ noJsTest("tabs work without JavaScript", async ({ page }) => {
 
 test(
   "shows detailed information in the 'Details' tab",
-  { tag: ["@RISDEV-12108"] },
+  { tag: ["@RISDEV-12108", "@RISDEV-11103"] },
   async ({ page }) => {
     await navigate(page, "/verwaltungsregelungen/KSNR000000001");
 
@@ -245,71 +245,81 @@ test(
       "Dieser Service befindet sich in der Testphase",
     );
     const detailsList = page.getByTestId("details-list");
-    await expect(
-      detailsList.getByRole("term").or(detailsList.getByRole("definition")),
-    ).toHaveText([
+    const terms = detailsList.getByRole("term");
+    const defs = detailsList.getByRole("definition");
+
+    await expect(terms).toHaveText([
       "Fundstelle:",
-      "FooBar 2025, Nr 1, 123",
       "Zitierdatum:",
-      "01.06.2025",
       "Gültig bis:",
-      "01.07.2030",
       "Dokumenttyp Zusatz:",
-      "Bekanntmachung",
       "Normen:",
-      "Baz § 16c Abs 2, Lol § 15 Abs 2",
+    ]);
+    // Fundstelle and Normen are rendered as badges (spans)
+    await expect(defs.nth(0).locator("span")).toHaveText([
+      "FooBar 2025, Nr 1, 123",
+    ]);
+    await expect(defs.nth(1)).toHaveText("01.06.2025");
+    await expect(defs.nth(2)).toHaveText("01.07.2030");
+    await expect(defs.nth(3)).toHaveText("Bekanntmachung");
+    await expect(defs.nth(4).locator("span")).toHaveText([
+      "Baz § 16c Abs 2",
+      "Lol § 15 Abs 2",
     ]);
   },
 );
 
 test(
   "hides empty detail fields and only shows populated ones",
-  { tag: ["@RISDEV-12108"] },
+  { tag: ["@RISDEV-12108", "@RISDEV-11103"] },
   async ({ page }) => {
     await navigate(page, "/verwaltungsregelungen/KSNR000000004");
 
     const detailsList = page.getByTestId("details-list");
-    const detailsEntries = detailsList
-      .getByRole("term")
-      .or(detailsList.getByRole("definition"));
+    const terms = detailsList.getByRole("term");
+    const defs = detailsList.getByRole("definition");
 
-    await expect(detailsEntries).toHaveCount(4);
-    await expect(detailsEntries).toHaveText([
-      "Fundstelle:",
+    await expect(terms).toHaveText(["Fundstelle:", "Zitierdaten:"]);
+    // Fundstelle is rendered as a badge (span)
+    await expect(defs.nth(0).locator("span")).toHaveText([
       "BazAbCd 2002, Nr 1",
-      "Zitierdaten:",
-      "24.12.2012, 28.06.2013",
     ]);
+    await expect(defs.nth(1)).toHaveText("24.12.2012, 28.06.2013");
   },
 );
 
-test("hides tabs and shows details if document is empty", async ({ page }) => {
-  await navigate(page, "/verwaltungsregelungen/KSNR000000004");
+test(
+  "hides tabs and shows details if document is empty",
+  { tag: ["@RISDEV-11103"] },
+  async ({ page }) => {
+    await navigate(page, "/verwaltungsregelungen/KSNR000000004");
 
-  await expect(
-    page.getByRole("navigation", {
-      name: "Details",
-    }),
-  ).not.toBeVisible();
+    await expect(
+      page.getByRole("navigation", {
+        name: "Details",
+      }),
+    ).not.toBeVisible();
 
-  await expect(
-    page.getByRole("heading", { level: 2, name: "Details" }),
-  ).toBeVisible();
+    await expect(
+      page.getByRole("heading", { level: 2, name: "Details" }),
+    ).toBeVisible();
 
-  await expect(page.getByRole("main").getByRole("status")).toContainText(
-    "Dieser Service befindet sich in der Testphase",
-  );
+    await expect(page.getByRole("main").getByRole("status")).toContainText(
+      "Dieser Service befindet sich in der Testphase",
+    );
 
-  const detailsList = page.getByTestId("details-list");
-  await expect(
-    detailsList.getByRole("term").or(detailsList.getByRole("definition")),
-  ).toHaveText([
-    "Fundstelle:",
-    "BazAbCd 2002, Nr 1",
-    "Zitierdaten:",
-    "24.12.2012, 28.06.2013",
-  ]);
-});
+    const detailsList = page.getByTestId("details-list");
+    const terms = detailsList.getByRole("term");
+    const defs = detailsList.getByRole("definition");
+
+    await expect(terms).toHaveText(["Fundstelle:", "Zitierdaten:"]);
+    // Fundstelle is rendered as a badge (span)
+    await expect(defs.nth(0).locator("span")).toHaveText([
+      "BazAbCd 2002, Nr 1",
+    ]);
+    await expect(defs.nth(1)).toHaveText("24.12.2012, 28.06.2013");
+  },
+);
 
 test.describe("actions menu", () => {
   test.describe("can copy link to currently viewed page", () => {
