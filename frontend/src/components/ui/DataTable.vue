@@ -111,7 +111,7 @@ const gridTemplateColumns = computed(() =>
             >
             {{ " " }}
             <span
-              class="typo-label1-regular flex min-h-32 items-center md:min-h-48 md:px-16"
+              class="typo-label1-regular flex min-h-32 items-center md:min-h-48 md:px-16 md:py-10"
             >
               <slot :name="`cell-${column.key}`" :row="row" :column="column">
                 {{ row[column.key] }}
@@ -124,7 +124,9 @@ const gridTemplateColumns = computed(() =>
     </template>
 
     <template v-else>
-      <li class="px-16 py-12 text-left text-gray-900 md:col-span-full">
+      <li
+        class="border-b border-b-gray-400 px-16 py-12 text-left text-gray-900 md:col-span-full"
+      >
         <slot name="empty" />
       </li>
     </template>
