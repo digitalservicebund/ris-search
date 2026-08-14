@@ -78,7 +78,7 @@ export async function useAdvancedSearch(
     };
   });
 
-  const { data, error, status, pending, execute } = await useRisBackend<Page>(
+  const { data, error, status, execute } = await useRisBackend<Page>(
     searchEndpointUrl,
     {
       query: combinedQuery,
@@ -95,7 +95,6 @@ export async function useAdvancedSearch(
 
   return {
     searchError: error,
-    searchIsPending: pending,
     searchResults: data,
     searchStatus: status,
     submitSearch: execute,

@@ -36,9 +36,6 @@ describe("useNormVersions", () => {
     const { sortedVersions } = await useNormVersions("dummy-eli");
     expect(useRisBackendMock).toHaveBeenCalledWith(
       "/v1/legislation/work-example/dummy-eli",
-      {
-        immediate: true,
-      },
     );
     expect(sortedVersions.value).toHaveLength(2);
     expect(sortedVersions.value[0]?.temporalCoverage).toBe(
