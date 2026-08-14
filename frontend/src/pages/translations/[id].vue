@@ -28,7 +28,7 @@ useHead({
 const route = useRoute();
 const id = route.params.id as string;
 
-const [{ data, error }, { legislation }] = await Promise.all([
+const [{ data, error }, germanOriginal] = await Promise.all([
   fetchTranslationAndHTML(id),
   getGermanOriginal(id),
 ]);
@@ -45,9 +45,7 @@ useTranslationSeo({
   translationOfWork: currentTranslation.translationOfWork,
 });
 
-const germanOriginalWorkEli = computed(() => {
-  return legislation.value?.item?.legislationIdentifier;
-});
+const germanOriginalWorkEli = germanOriginal?.item?.legislationIdentifier;
 
 const breadcrumbItems = computed(() => {
   return [
@@ -123,7 +121,10 @@ const detailsTabPanelTitleId = useId();
         </h1>
       </hgroup>
 
-      <UiMessage v-if="legislation" class="my-24 space-y-24 sm:my-32 md:my-40">
+      <UiMessage
+        v-if="germanOriginal"
+        class="my-24 space-y-24 sm:my-32 md:my-40"
+      >
         <p class="typo-label2-bold mt-2">Version Information</p>
         <p class="typo-label2-regular mt-2">
           Translations may not be updated at the same time as the German legal
