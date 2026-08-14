@@ -103,8 +103,11 @@ dependencies {
     // CVE-2026-59889
     implementation(libs.tools.jackson.databind)
 
-    //  CVE-2026-54399
+    // CVE-2026-54399
     implementation(libs.apache.httpcore)
+
+    // CVE-2026-54428
+    implementation(libs.apache.httpcore.h2)
 
     implementation(libs.ris.html.transformation)
 
