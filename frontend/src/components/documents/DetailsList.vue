@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import IcOutlineFileDownload from "~icons/ic/outline-file-download";
-import { BadgeColor } from "~/components/ui/Badge.vue";
 
 export type TextEntry = {
   type: "text";
@@ -104,7 +103,7 @@ const visibleItems = computed(() =>
             <UiBadge
               v-for="value in item.values"
               :key="value"
-              :color="BadgeColor.GRAY"
+              color="gray"
               variant="large"
               :label="value"
             />

@@ -71,6 +71,6 @@ describe("Badge", () => {
     });
 
     const badge = container.firstChild as HTMLElement;
-    expect(badge).toHaveClass("bg-gray-100");
+    expect(badge).toHaveClass("border-gray-400");
   });
 });

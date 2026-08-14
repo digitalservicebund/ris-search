@@ -58,9 +58,9 @@ export function getUliLiteratureDetailItems(
   const conferenceNotes = literature?.conferenceNotes ?? [];
   return [
     {
-      type: "text",
+      type: "badge",
       label: getSingularOrPlural("Norm:", "Normen:", normReferences.length),
-      value: formatArray(normReferences),
+      values: normReferences,
     },
     {
       type: "text",
@@ -103,9 +103,9 @@ export function getSliLiteratureDetailItems(
 
   return [
     {
-      type: "text",
+      type: "badge",
       label: getSingularOrPlural("Norm:", "Normen:", normReferences.length),
-      value: formatArray(normReferences),
+      values: normReferences,
     },
     {
       type: "text",

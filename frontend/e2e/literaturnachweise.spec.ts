@@ -333,7 +333,7 @@ noJsTest("tabs work without JavaScript", async ({ page }) => {
 
 test(
   "shows detailed information in the 'Details' tab",
-  { tag: ["@RISDEV-12108"] },
+  { tag: ["@RISDEV-12108", "@RISDEV-11103"] },
   async ({ page }) => {
     await navigate(page, "/literaturnachweise/XXLU000000001");
 
@@ -348,26 +348,33 @@ test(
     );
 
     const detailsList = page.getByTestId("details-list");
-    await expect(
-      detailsList.getByRole("term").or(detailsList.getByRole("definition")),
-    ).toHaveText([
+    const terms = detailsList.getByRole("term");
+    const defs = detailsList.getByRole("definition");
+
+    await expect(terms).toHaveText([
       "Normen:",
-      "BMV-Ä, GG, Art 6 Abs 2 S 1, 1949-05-23",
       "Mitarbeiter:",
-      "Peter Foo",
       "Urheber:",
-      "DGB",
       "Sprache:",
-      "deu",
       "Kongress:",
-      "Internationaler Kongreß für das Recht, 1991, Athen, GRC",
     ]);
+    // Normen are rendered as badges (spans)
+    await expect(defs.nth(0).locator("span")).toHaveText([
+      "BMV-Ä",
+      "GG, Art 6 Abs 2 S 1, 1949-05-23",
+    ]);
+    await expect(defs.nth(1)).toHaveText("Peter Foo");
+    await expect(defs.nth(2)).toHaveText("DGB");
+    await expect(defs.nth(3)).toHaveText("deu");
+    await expect(defs.nth(4)).toHaveText(
+      "Internationaler Kongreß für das Recht, 1991, Athen, GRC",
+    );
   },
 );
 
 test(
   "shows detailed information in the 'Details' tab of sli documents",
-  { tag: ["@RISDEV-12108"] },
+  { tag: ["@RISDEV-12108", "@RISDEV-11103"] },
   async ({ page }) => {
     await navigate(page, "/literaturnachweise/XXLS000000001");
 
@@ -382,37 +389,46 @@ test(
     );
 
     const detailsList = page.getByTestId("details-list");
-    await expect(
-      detailsList.getByRole("term").or(detailsList.getByRole("definition")),
-    ).toHaveText([
+    const terms = detailsList.getByRole("term");
+    const defs = detailsList.getByRole("definition");
+
+    await expect(terms).toHaveText([
       "Normen:",
-      "BMV-Ä, GG, Art 6 Abs 2 S 1, 1949-05-23",
       "Bearbeiter:",
-      "Foo Bearbeiter",
       "Mitarbeiter:",
-      "Peter Foo",
       "Urheber:",
-      "DGB",
       "Begründer:",
-      "Foo Begruender",
       "Herausgeber:",
-      "herausgeber institution showAs, Mitarbeiter Eins",
       "Verlag:",
-      "verlag, Berlin",
       "Ausgabe:",
-      "1. Auflage",
       "Bestellnummer:",
-      "ISBN 3-XXXXX-XX-X",
       "Teilband:",
-      "Teilband 1",
-      "Teilband 2",
       "Sprache:",
-      "deu",
       "Kongress:",
-      "Internationaler Kongreß für das Recht, 1991, Athen, GRC",
       "Hochschule:",
-      "Universität Foo",
     ]);
+    // Normen are rendered as badges (spans)
+    await expect(defs.nth(0).locator("span")).toHaveText([
+      "BMV-Ä",
+      "GG, Art 6 Abs 2 S 1, 1949-05-23",
+    ]);
+    await expect(defs.nth(1)).toHaveText("Foo Bearbeiter");
+    await expect(defs.nth(2)).toHaveText("Peter Foo");
+    await expect(defs.nth(3)).toHaveText("DGB");
+    await expect(defs.nth(4)).toHaveText("Foo Begruender");
+    await expect(defs.nth(5)).toHaveText(
+      "herausgeber institution showAs, Mitarbeiter Eins",
+    );
+    await expect(defs.nth(6)).toHaveText("verlag, Berlin");
+    await expect(defs.nth(7)).toHaveText("1. Auflage");
+    await expect(defs.nth(8)).toHaveText("ISBN 3-XXXXX-XX-X");
+    await expect(defs.nth(9)).toHaveText("Teilband 1");
+    await expect(defs.nth(10)).toHaveText("Teilband 2");
+    await expect(defs.nth(11)).toHaveText("deu");
+    await expect(defs.nth(12)).toHaveText(
+      "Internationaler Kongreß für das Recht, 1991, Athen, GRC",
+    );
+    await expect(defs.nth(13)).toHaveText("Universität Foo");
   },
 );
 
@@ -436,26 +452,23 @@ test(
 
 test(
   "hides empty detail fields and only shows populated ones for sli documents",
-  { tag: ["@RISDEV-12108"] },
+  { tag: ["@RISDEV-12108", "@RISDEV-11103"] },
   async ({ page }) => {
     await navigate(page, "/literaturnachweise/XXLS000000002");
 
     await page.getByRole("tab", { name: "Details" }).click();
 
     const detailsList = page.getByTestId("details-list");
-    const detailsEntries = detailsList
-      .getByRole("term")
-      .or(detailsList.getByRole("definition"));
+    const terms = detailsList.getByRole("term");
+    const defs = detailsList.getByRole("definition");
 
-    await expect(detailsEntries).toHaveCount(6);
-    await expect(detailsEntries).toHaveText([
-      "Norm:",
+    await expect(terms).toHaveText(["Norm:", "Mitarbeiter:", "Sprache:"]);
+    // Norm is rendered as a badge (span)
+    await expect(defs.nth(0).locator("span")).toHaveText([
       "GG, Art 3 Abs 1, 1949-05-23",
-      "Mitarbeiter:",
-      "Max Mustermann",
-      "Sprache:",
-      "deu",
     ]);
+    await expect(defs.nth(1)).toHaveText("Max Mustermann");
+    await expect(defs.nth(2)).toHaveText("deu");
   },
 );
 

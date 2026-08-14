@@ -27,12 +27,16 @@ const gray = tw`text-gray-1000 border-gray-400`;
 // just kept for the transition phase
 const standard = tw`typo-label2-bold flex-none`;
 
+// for badges in the Metadata section of the document pages
 const extraSmall = tw`ris-label3-regular sm:ris-label2-regular 2xl:ris-label1-regular`;
 
+// for badges in the norm version list (fassungen tab)
 const small = tw`ris-label2-regular sm:ris-label1-regular`;
 
+// for badges in the search result header
 const medium = tw`ris-label2-regular 2xl:ris-label1-regular`;
 
+// for badges in the details tab and 'about this service' page
 const large = tw`typo-label1-regular`;
 
 const rootClass = computed(() => {
