@@ -7,9 +7,13 @@ import {
   sendRedirect,
 } from "h3";
 
+interface CookieConsentBody {
+  consent?: string | boolean;
+}
+
 export default defineEventHandler(async (event) => {
-  const body = await readBody(event);
-  const consent = body.consent === "true" || body.consent === true;
+  const body = await readBody<CookieConsentBody>(event);
+  const consent = body?.consent === "true" || body?.consent === true;
 
   const isDevMode = process.env.NODE_ENV === "development";
 
