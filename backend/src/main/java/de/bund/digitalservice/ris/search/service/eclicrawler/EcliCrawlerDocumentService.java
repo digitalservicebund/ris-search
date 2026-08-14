@@ -132,7 +132,7 @@ public class EcliCrawlerDocumentService {
             .collect(Collectors.toSet());
 
     List<String> toBeDeleted;
-    try (Stream<EcliCrawlerDocument> allPublished = repository.findFilenameByIsPublishedIsTrue()) {
+    try (Stream<EcliCrawlerDocument> allPublished = repository.findByIsPublishedIsTrue()) {
       toBeDeleted =
           new ArrayList<>(
               allPublished
