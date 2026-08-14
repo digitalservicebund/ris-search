@@ -2,6 +2,7 @@ package de.bund.digitalservice.ris.search.service;
 
 import de.bund.digitalservice.ris.search.config.opensearch.Configurations;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
+import de.bund.digitalservice.ris.search.exception.OpenSearchMapperException;
 import de.bund.digitalservice.ris.search.mapper.CaseLawLdmlToOpenSearchMapper;
 import de.bund.digitalservice.ris.search.models.CourtSearchResult;
 import de.bund.digitalservice.ris.search.models.api.parameters.CaseLawSearchParams;
@@ -186,9 +187,8 @@ public class CaseLawService {
    * the file content is not found or an error occurs during processing, an empty Optional is
    * returned.
    *
-   * @param List of filenames to retrieve from the bucket
-   * @return an Optional containing the `CaseLawDocumentationUnit` if successfully retrieved and
-   *     parsed, or an empty Optional if not found or an error occurs
+   * @param filenames List of filenames to retrieve from the bucket
+   * @return a List of CaseLawDocumentationUnits
    * @throws ObjectStoreServiceException if an error occurs while accessing the object storage
    *     service
    */
@@ -199,9 +199,19 @@ public class CaseLawService {
     if (objects.isEmpty()) {
       return List.of();
     }
-    return objects.stream()
-        .filter(object -> object.bytes().isPresent())
-        .map(object -> marshaller.fromByteArray(object.bytes().get()))
-        .toList();
+    return objects.stream().map(this::tryUnmarshal).flatMap(Optional::stream).toList();
+  }
+
+  private Optional<CaseLawDocumentationUnit> tryUnmarshal(StorageObject object) {
+    return object
+        .bytes()
+        .flatMap(
+            bytes -> {
+              try {
+                return Optional.ofNullable(marshaller.fromByteArray(bytes));
+              } catch (OpenSearchMapperException e) {
+                return Optional.empty();
+              }
+            });
   }
 }

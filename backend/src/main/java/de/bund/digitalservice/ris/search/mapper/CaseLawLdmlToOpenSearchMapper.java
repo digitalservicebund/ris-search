@@ -131,6 +131,14 @@ public class CaseLawLdmlToOpenSearchMapper {
     }
   }
 
+  /**
+   * Converts a given LDML file content bytearray into a {@link CaseLawDocumentationUnit}.
+   *
+   * @param ldmlFile the byteArray representation of the LDML file to be converted
+   * @return a {@link CaseLawDocumentationUnit} instance created from the provided LDML file string
+   * @throws OpenSearchMapperException if the LDML file cannot be parsed into a {@link
+   *     CaseLawDocumentationUnit}
+   */
   public CaseLawDocumentationUnit fromByteArray(byte[] ldmlFile) {
     try {
       StreamSource ldmlStreamSource = new StreamSource(new ByteArrayInputStream(ldmlFile));

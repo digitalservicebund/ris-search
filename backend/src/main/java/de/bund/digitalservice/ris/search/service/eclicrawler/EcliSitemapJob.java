@@ -113,6 +113,7 @@ public class EcliSitemapJob implements Job {
         }
         Changelog changelog = getMergedChanges(changelogPaths);
         if (changelog.isChangeAll()) {
+          logger.info("change all detected");
           ecliCrawlerDocumentService.writeFullDiff(apiUrl, today);
         } else {
           ecliCrawlerDocumentService.writeFromChangelog(apiUrl, today, changelog);

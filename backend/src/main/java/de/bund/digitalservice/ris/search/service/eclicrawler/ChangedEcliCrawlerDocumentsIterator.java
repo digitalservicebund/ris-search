@@ -72,7 +72,6 @@ public class ChangedEcliCrawlerDocumentsIterator implements Iterator<List<EcliCr
       int chunkSize = Math.min(ids.size() - numTaken, ecliDocumentsBuffer.remainingCapacity());
       List<String> batch = ids.subList(numTaken, numTaken + chunkSize);
       List<EcliCrawlerDocument> documents = supplier.get(batch);
-
       for (EcliCrawlerDocument doc : documents) {
         if (ecliDocumentsBuffer.remainingCapacity() > 0) {
           ecliDocumentsBuffer.add(doc);

@@ -104,6 +104,8 @@ public class EcliCrawlerDocumentService {
    */
   public void writeFromChangelog(String apiUrl, LocalDate day, Changelog changelog) {
 
+    logger.info("write sitemaps from changelog");
+
     ChangedEcliCrawlerDocumentsIterator iterator =
         new ChangedEcliCrawlerDocumentsIterator(
             this::getFromBucket,
@@ -126,9 +128,11 @@ public class EcliCrawlerDocumentService {
    *     indexing.
    */
   public void writeFullDiff(String apiUrl, LocalDate day) {
+    logger.info("write full diff. Retrieve all potential files");
     Set<String> allFiles =
         caselawBucket.getAllKeys().stream()
-            .filter(s -> s.endsWith(".xml") && !s.contains(ChangelogService.CHANGELOGS_PREFIX))
+            .filter(
+                s -> isCaseLawDocumentUnit(s) && !s.contains(ChangelogService.CHANGELOGS_PREFIX))
             .collect(Collectors.toSet());
 
     List<String> toBeDeleted;
@@ -176,12 +180,13 @@ public class EcliCrawlerDocumentService {
 
   private List<EcliCrawlerDocument> getFromBucket(List<String> ids) {
     try {
+      logger.info("retrieve {} documents", ids.size());
       return caselawService.getFromBucket(ids).stream()
           .map(
               unit -> {
                 if (isValidEcliDocument(unit)) {
                   return EcliCrawlerDocumentMapper.fromCaseLawDocumentationUnit(
-                      documentUrl, unit.id(), unit);
+                      documentUrl, inferFilename(unit.documentNumber()), unit);
                 }
                 return null;
               })
@@ -194,5 +199,17 @@ public class EcliCrawlerDocumentService {
 
   private List<EcliCrawlerDocument> getPublishedDocument(List<String> filename) {
     return repository.findByFilename(filename).map(this::setDeleted).toList();
+  }
+
+  private static String inferFilename(String documentNumber) {
+    return documentNumber + "/" + documentNumber + ".xml";
+  }
+
+  /** Checks if a filename adheres to the standard of a CaselawDocumentationUnit */
+  private static boolean isCaseLawDocumentUnit(String filename) {
+    if (filename == null) return false;
+
+    String[] parts = filename.split("/");
+    return parts.length == 2 && filename.equals(inferFilename(parts[0]));
   }
 }
