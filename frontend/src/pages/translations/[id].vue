@@ -33,7 +33,7 @@ const [{ data, error }, { legislation }] = await Promise.all([
   getGermanOriginal(id),
 ]);
 
-if (error.value || !data.value) {
+if (error.value) {
   throw createError({ statusCode: error.value?.status ?? 500 });
 }
 
