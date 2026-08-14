@@ -27,7 +27,9 @@ const [
   { data: html, error: contentError },
 ] = await Promise.all([
   useRisBackend<CaseLaw>(`/v1/case-law/${documentNumber}`),
-  useRisBackend<string>(`/v1/case-law/${documentNumber}.html`),
+  useRisBackend<string>(`/v1/case-law/${documentNumber}.html`, {
+    headers: { Accept: "text/html" },
+  }),
 ]);
 
 if (metadataError?.value) throw createError(metadataError.value);
