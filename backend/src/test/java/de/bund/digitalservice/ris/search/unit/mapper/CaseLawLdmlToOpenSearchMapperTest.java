@@ -6,6 +6,7 @@ import de.bund.digitalservice.ris.search.mapper.CaseLawLdmlToOpenSearchMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.utils.CaseLawLdmlTemplateUtils;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.Map;
@@ -59,6 +60,18 @@ class CaseLawLdmlToOpenSearchMapperTest {
             "ensuing decision file number, ensuing decision court type",
             "ensuing decision file number, ensuing decision court type");
     assertThat(caseLaw.vorabdokument()).isFalse();
+  }
+
+  @Test
+  void shouldMapToCaseLawDocumentationUnitFrombyteArray() {
+    CaseLawDocumentationUnit caseLawFromString = mapper.fromString(testCaseLawLdml);
+    CaseLawDocumentationUnit caseLawFromBytes =
+        mapper.fromByteArray(testCaseLawLdml.getBytes(StandardCharsets.UTF_8));
+
+    assertThat(caseLawFromBytes)
+        .usingRecursiveComparison()
+        .ignoringFields("indexedAt")
+        .isEqualTo(caseLawFromString);
   }
 
   @Test

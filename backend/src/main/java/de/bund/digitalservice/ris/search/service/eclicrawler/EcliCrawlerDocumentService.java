@@ -17,8 +17,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
+import java.util.Set;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.commons.collections4.ListUtils;
 import org.apache.logging.log4j.LogManager;
@@ -103,6 +104,8 @@ public class EcliCrawlerDocumentService {
    */
   public void writeFromChangelog(String apiUrl, LocalDate day, Changelog changelog) {
 
+    logger.info("write sitemaps from changelog");
+
     ChangedEcliCrawlerDocumentsIterator iterator =
         new ChangedEcliCrawlerDocumentsIterator(
             this::getFromBucket,
@@ -125,10 +128,12 @@ public class EcliCrawlerDocumentService {
    *     indexing.
    */
   public void writeFullDiff(String apiUrl, LocalDate day) {
-    List<String> allFiles =
+    logger.info("write full diff. Retrieve all potential files");
+    Set<String> allFiles =
         caselawBucket.getAllKeys().stream()
-            .filter(s -> s.endsWith(".xml") && !s.contains(ChangelogService.CHANGELOGS_PREFIX))
-            .toList();
+            .filter(
+                s -> isCaseLawDocumentUnit(s) && !s.contains(ChangelogService.CHANGELOGS_PREFIX))
+            .collect(Collectors.toSet());
 
     List<String> toBeDeleted;
     try (Stream<EcliCrawlerDocument> allPublished = repository.findByIsPublishedIsTrue()) {
@@ -144,7 +149,7 @@ public class EcliCrawlerDocumentService {
         new ChangedEcliCrawlerDocumentsIterator(
             this::getFromBucket,
             this::getPublishedDocument,
-            allFiles,
+            allFiles.stream().toList(),
             toBeDeleted,
             MAX_SITEMAP_URLS);
 
@@ -173,21 +178,34 @@ public class EcliCrawlerDocumentService {
     }
   }
 
-  private Optional<EcliCrawlerDocument> getFromBucket(String filename) {
-    return caselawService
-        .getFromBucket(filename)
-        .flatMap(
+  private List<EcliCrawlerDocument> getFromBucket(List<String> ids) {
+    logger.info("retrieve {} documents", ids.size());
+    return caselawService.getFromBucket(ids).stream()
+        .map(
             unit -> {
               if (isValidEcliDocument(unit)) {
-                return Optional.of(
-                    EcliCrawlerDocumentMapper.fromCaseLawDocumentationUnit(
-                        documentUrl, filename, unit));
+                return EcliCrawlerDocumentMapper.fromCaseLawDocumentationUnit(
+                    documentUrl, inferFilename(unit.documentNumber()), unit);
               }
-              return Optional.empty();
-            });
+              return null;
+            })
+        .filter(Objects::nonNull)
+        .toList();
   }
 
-  private Optional<EcliCrawlerDocument> getPublishedDocument(String filename) {
-    return repository.findByFilenameIn(filename).map(this::setDeleted);
+  private List<EcliCrawlerDocument> getPublishedDocument(List<String> filename) {
+    return repository.findByFilename(filename).map(this::setDeleted).toList();
+  }
+
+  private static String inferFilename(String documentNumber) {
+    return documentNumber + "/" + documentNumber + ".xml";
+  }
+
+  /** Checks if a filename adheres to the standard of a CaselawDocumentationUnit */
+  private static boolean isCaseLawDocumentUnit(String filename) {
+    if (filename == null) return false;
+
+    String[] parts = filename.split("/");
+    return parts.length == 2 && filename.equals(inferFilename(parts[0]));
   }
 }

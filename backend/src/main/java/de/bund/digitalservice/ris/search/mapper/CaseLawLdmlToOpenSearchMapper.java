@@ -26,6 +26,7 @@ import de.bund.digitalservice.ris.search.utils.MappingUtils;
 import jakarta.xml.bind.DataBindingException;
 import jakarta.xml.bind.JAXB;
 import jakarta.xml.bind.ValidationException;
+import java.io.ByteArrayInputStream;
 import java.io.StringReader;
 import java.time.Instant;
 import java.util.Collection;
@@ -122,6 +123,25 @@ public class CaseLawLdmlToOpenSearchMapper {
   public CaseLawDocumentationUnit fromString(String ldmlFile) {
     try {
       StreamSource ldmlStreamSource = new StreamSource(new StringReader(ldmlFile));
+      CaseLawLdml ldml = JAXB.unmarshal(ldmlStreamSource, CaseLawLdml.class);
+
+      return mapToEntity(ldml);
+    } catch (DescriptorException | DataBindingException | ValidationException e) {
+      throw new OpenSearchMapperException("unable to parse file to DocumentationUnit", e);
+    }
+  }
+
+  /**
+   * Converts a given LDML file content bytearray into a {@link CaseLawDocumentationUnit}.
+   *
+   * @param ldmlFile the byteArray representation of the LDML file to be converted
+   * @return a {@link CaseLawDocumentationUnit} instance created from the provided LDML file string
+   * @throws OpenSearchMapperException if the LDML file cannot be parsed into a {@link
+   *     CaseLawDocumentationUnit}
+   */
+  public CaseLawDocumentationUnit fromByteArray(byte[] ldmlFile) {
+    try {
+      StreamSource ldmlStreamSource = new StreamSource(new ByteArrayInputStream(ldmlFile));
       CaseLawLdml ldml = JAXB.unmarshal(ldmlStreamSource, CaseLawLdml.class);
 
       return mapToEntity(ldml);
