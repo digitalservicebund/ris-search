@@ -17,7 +17,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.commons.collections4.ListUtils;
 import org.apache.logging.log4j.LogManager;
@@ -124,10 +126,10 @@ public class EcliCrawlerDocumentService {
    *     indexing.
    */
   public void writeFullDiff(String apiUrl, LocalDate day) {
-    List<String> allFiles =
+    Set<String> allFiles =
         caselawBucket.getAllKeys().stream()
             .filter(s -> s.endsWith(".xml") && !s.contains(ChangelogService.CHANGELOGS_PREFIX))
-            .toList();
+            .collect(Collectors.toSet());
 
     List<String> toBeDeleted;
     try (Stream<EcliCrawlerDocument> allPublished = repository.findFilenameByIsPublishedIsTrue()) {
@@ -143,7 +145,7 @@ public class EcliCrawlerDocumentService {
         new ChangedEcliCrawlerDocumentsIterator(
             this::getFromBucket,
             this::getPublishedDocument,
-            allFiles,
+            allFiles.stream().toList(),
             toBeDeleted,
             MAX_SITEMAP_URLS);
 

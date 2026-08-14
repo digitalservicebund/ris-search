@@ -84,7 +84,7 @@ class CaseLawServiceTest {
 
     when(caseLawBucketMock.getFileAsString(filename)).thenReturn(Optional.of("content"));
     when(marshaller.fromString("content")).thenThrow(OpenSearchMapperException.class);
-    Assertions.assertTrue(caseLawService.getFromBucket(filename).isEmpty());
+    Assertions.assertTrue(caseLawService.getFromBucket(List.of(filename)).isEmpty());
   }
 
   @Test
@@ -92,7 +92,7 @@ class CaseLawServiceTest {
     String filename = "docNr/docNr.xml";
 
     when(caseLawBucketMock.getFileAsString(filename)).thenReturn(Optional.empty());
-    Assertions.assertTrue(caseLawService.getFromBucket(filename).isEmpty());
+    Assertions.assertTrue(caseLawService.getFromBucket(List.of(filename)).isEmpty());
   }
 
   @Test
@@ -102,8 +102,8 @@ class CaseLawServiceTest {
     when(caseLawBucketMock.getFileAsString(filename)).thenReturn(Optional.of("content"));
     when(marshaller.fromString("content")).thenReturn(unit);
 
-    var result = caseLawService.getFromBucket(filename);
+    var result = caseLawService.getFromBucket(List.of(filename));
 
-    Assertions.assertTrue(result.isPresent());
+    Assertions.assertFalse(result.isEmpty());
   }
 }
