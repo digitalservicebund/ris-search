@@ -18,8 +18,16 @@
     "vue": "3.5.41",
     "vue-tsc": "3.3.9"
   },
-  "engines": {
-    "node": ">=26"
-  },
-  "packageManager": "pnpm@11.20.0"
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "^11.20.0",
+      "onFail": "warn"
+    },
+    "runtime": {
+      "name": "node",
+      "version": "^26.6.0",
+      "onFail": "warn"
+    }
+  }
 }
