@@ -71,7 +71,12 @@ const rows = computed<VersionRow[]>(() => {
     class="-mx-16 md:mx-0"
   >
     <template #cell-status="{ row }">
-      <UiBadge :label="row.status.label" :color="row.status.color" />
+      <UiBadge
+        :color="row.status.color"
+        :label="row.status.label"
+        class="font-bold!"
+        variant="small"
+      />
     </template>
 
     <template #empty>Keine Ergebnisse gefunden</template>
