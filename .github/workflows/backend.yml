@@ -321,7 +321,7 @@ jobs:
           path: tmp/backend-code-documentation/
 
       - name: Upload code documentation to ris-reports
-        uses: digitalservicebund/add-ris-report@5980f8dc97ec0aea58656e79e391eea59a9dfea8
+        uses: digitalservicebund/add-ris-report@31a248ea368f94bfa3a012da3c202bcc6be2debe
         with:
           filePath: tmp/backend-code-documentation
           destinationDir: search-code-documentation/java
