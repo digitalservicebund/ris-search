@@ -63,7 +63,7 @@ public class EcliCrawlerDocumentService {
     this.repository = repository;
     this.caselawService = caselawService;
     this.sitemapWriter = sitemapWriter;
-    this.documentUrl = frontEndUrl + "case-law/";
+    this.documentUrl = frontEndUrl + "gerichtsentscheidungen/";
   }
 
   public void saveAll(List<EcliCrawlerDocument> docs) {

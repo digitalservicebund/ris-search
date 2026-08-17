@@ -76,7 +76,7 @@ class EcliCrawlerDocumentServiceTest {
         ecli,
         "BGH",
         "2025-01-01",
-        "frontend-url/case-law/" + docNumber,
+        "frontend-url/gerichtsentscheidungen/" + docNumber,
         isPublished);
   }
 

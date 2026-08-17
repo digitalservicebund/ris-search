@@ -7,6 +7,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Queue;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jspecify.annotations.NonNull;
 
 /**
@@ -17,6 +19,8 @@ import org.jspecify.annotations.NonNull;
 public class ChangedEcliCrawlerDocumentsIterator implements Iterator<List<EcliCrawlerDocument>> {
 
   private static final int ID_CHUNK_SIZE = 10_000;
+  private static final Logger logger =
+      LogManager.getLogger(ChangedEcliCrawlerDocumentsIterator.class);
 
   private final Queue<EcliCrawlerDocument> ecliDocumentsBuffer = new ArrayDeque<>();
   private final Supplier changedSupplier;
@@ -83,6 +87,7 @@ public class ChangedEcliCrawlerDocumentsIterator implements Iterator<List<EcliCr
       List<EcliCrawlerDocument> documents = supplier.get(batch);
       ecliDocumentsBuffer.addAll(documents);
 
+      logger.info("buffersize: {} of {}", ecliDocumentsBuffer.size(), resultSize);
       numTaken += currentBatchSize;
     }
 
