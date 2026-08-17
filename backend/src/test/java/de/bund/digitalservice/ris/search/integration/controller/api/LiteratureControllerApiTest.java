@@ -1,5 +1,6 @@
 package de.bund.digitalservice.ris.search.integration.controller.api;
 
+import static de.bund.digitalservice.ris.ZipTestUtils.readZipStream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasSize;
@@ -7,14 +8,17 @@ import static org.hamcrest.Matchers.startsWithIgnoringCase;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
+import de.bund.digitalservice.ris.search.mapper.LiteratureLdmlToOpenSearchMapper;
 import de.bund.digitalservice.ris.search.repository.objectstorage.LiteratureBucket;
 import de.bund.digitalservice.ris.search.service.ChangelogService;
+import java.io.ByteArrayInputStream;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +31,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.util.MultiValueMap;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -416,5 +421,31 @@ class LiteratureControllerApiTest extends ContainersIntegrationBase {
         .andExpect(jsonPath("$.changed[0].['@type']").value("MediaObject"))
         .andExpect(jsonPath("$.deleted[0].['@id']").value("/v1/literature/file2"))
         .andExpect(jsonPath("$.deleted[0].['@type']").value("Literature"));
+  }
+
+  @Test
+  @DisplayName("Should return all files belonging to a document in a zip archive")
+  void shouldReturnCaselawZip() throws Exception {
+
+    String filename = documentNumberPresentInBucket + ".akn.xml";
+
+    MvcResult result =
+        mockMvc
+            .perform(
+                get(ApiConfig.Paths.LITERATURE + "/" + documentNumberPresentInBucket + ".zip")
+                    .contentType(MediaType.valueOf("application/zip")))
+            .andExpect(request().asyncStarted())
+            .andDo(MvcResult::getAsyncResult)
+            .andExpectAll(status().isOk(), content().contentType("application/zip"))
+            .andReturn();
+
+    byte[] zipBytes = result.getResponse().getContentAsByteArray();
+    ByteArrayInputStream byteInputStream = new ByteArrayInputStream(zipBytes);
+    final Map<String, byte[]> files = readZipStream(byteInputStream);
+
+    assertThat(files.size()).isEqualTo(1);
+    assertThat(files.containsKey(filename));
+
+    LiteratureLdmlToOpenSearchMapper.mapLdml(new String(files.get(filename)));
   }
 }

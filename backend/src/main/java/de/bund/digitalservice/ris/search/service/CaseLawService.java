@@ -178,6 +178,10 @@ public class CaseLawService {
     ZipManager.writeZipArchive(caseLawBucket, keys, outputStream);
   }
 
+  /**
+   * @param documentNumber a given document
+   * @return a list of the filenames that match the provided document number
+   */
   public List<String> getAllFilenamesByDocumentNumber(String documentNumber) {
     return caseLawBucket.getAllKeysByPrefix(documentNumber);
   }
