@@ -19,9 +19,12 @@ import org.jsoup.nodes.Document;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.Mockito;
+import org.springframework.boot.test.system.CapturedOutput;
+import org.springframework.boot.test.system.OutputCaptureExtension;
 import org.xmlunit.builder.DiffBuilder;
 import org.xmlunit.diff.Diff;
 import software.amazon.awssdk.core.ResponseInputStream;
@@ -198,6 +201,19 @@ class NormXsltTransformerServiceTest {
             .html();
 
     assertThat(actualHtml).isEqualTo(expectedHtml);
+  }
+
+  @Test
+  @DisplayName("Does not log an error when an eId only matches in its encoded form")
+  @ExtendWith(OutputCaptureExtension.class)
+  void testEncodedEIdFallbackIsNotLoggedAsError(CapturedOutput output) throws IOException {
+    byte[] bytes =
+        Files.readAllBytes(Path.of(resourcesPath, "articleWithSpecialCharactersInId.xml"));
+
+    assertThat(service.transformArticle(bytes, "art-z§§ 1 bis 3", RESOURCES_BASE_PATH))
+        .isNotEmpty();
+
+    assertThat(output).doesNotContain("XSLT transformation error.");
   }
 
   @Test
