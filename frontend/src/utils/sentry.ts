@@ -1,6 +1,25 @@
+function isAbortError(err: unknown): err is DOMException {
+  if (!err) return false;
+  return typeof err === "object" && "name" in err && err.name === "AbortError";
+}
+
+function isOrContainsAbortError(error: unknown, maxDepth = 5): boolean {
+  let current = error;
+
+  // aborterror may be wrapped inside another error, we we recurse but cap it in
+  // case the error chain is circular.
+  for (let depth = 0; current && depth < maxDepth; depth++) {
+    if (isAbortError(current)) return true;
+    current = (current as { cause?: unknown }).cause;
+  }
+
+  return false;
+}
+
 /**
- * Whether an error captured by Sentry is a 3xx/4xx error page error, e.g. a 404
- * created via `createError` or `showError`, which we don't want to report.
+ * Whether an error captured by Sentry is an error we don't want to report:
+ * either an aborted request (see `isAbortError`), or a 3xx/4xx error page
+ * error, e.g. a 404 created via `createError` or `showError`.
  *
  * Checking `isNuxtError` is not sufficient here, because that is only true for
  * errors thrown on the client. An error thrown on the server is serialized to
@@ -15,6 +34,7 @@
  *   reported.
  */
 export function shouldSuppressSentryEvent(error: unknown): boolean {
+  if (isOrContainsAbortError(error)) return true;
   if (!error || typeof error !== "object") return false;
   if (error instanceof Error && !isNuxtError(error)) return false;
 
