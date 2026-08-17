@@ -55,9 +55,12 @@ public class OpensearchRetryConfiguration {
    * @return whether the request was rejected with a 4xx status
    */
   private static boolean isClientError(Throwable throwable) {
-    return throwable instanceof UncategorizedElasticsearchException exception
-        && exception.getStatusCode() != null
-        && HttpStatusCode.valueOf(exception.getStatusCode()).is4xxClientError();
+    if (!(throwable instanceof UncategorizedElasticsearchException exception)) {
+      return false;
+    }
+
+    Integer statusCode = exception.getStatusCode();
+    return statusCode != null && HttpStatusCode.valueOf(statusCode).is4xxClientError();
   }
 
   /**
