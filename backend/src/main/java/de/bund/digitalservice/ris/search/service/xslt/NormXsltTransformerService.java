@@ -116,11 +116,22 @@ public class NormXsltTransformerService extends XsltTransformer {
   public String transformArticle(byte[] source, String eId, String resourcesBasePath) {
     var parameters = standardParameters(resourcesBasePath);
     try {
-      parameters.put("article-eid", eId);
-      return transformLegalDocMlFromBytes(source, parameters);
-    } catch (XMLElementNotFoundException ex) {
+      // According to the original akn naming convention
+      // (https://docs.oasis-open.org/legaldocml/akn-nc/v1.0/akn-nc-v1.0.html) eids should be
+      // navigable (not have % in them), but LegalDocML.de has decided to deviate from this by
+      // setting the actual eid to a uri encoded modified version of the article name. For example
+      // an article called "1 1" will have the eid "art-z1%201". The actual eid has a % in it and
+      // therefore can no longer be used as a path variable.
+      // In the xslt files provided by Kosit, the work around is to skip uri encoding when building
+      // links to einzelnormen. Since normal web traffic performs uri decoding, we need to perform
+      // uri encoding here to get back the actual eid.
       String encodedId = UriUtils.encode(eId, StandardCharsets.UTF_8).toLowerCase(Locale.ROOT);
       parameters.put("article-eid", encodedId);
+      return transformLegalDocMlFromBytes(source, parameters);
+    } catch (XMLElementNotFoundException ex) {
+      // This code is a temporary fallback to check if the uri encoding strategy will work as
+      // expected. In theory these lines of code should never be reached.
+      parameters.put("article-eid", eId);
       return transformLegalDocMlFromBytes(source, parameters);
     }
   }

@@ -61,20 +61,17 @@ public abstract class XsltTransformer {
         return output.toString();
       }
     } catch (TransformerException | IOException e) {
+
+      logger.error("XSLT transformation error.", e);
       String termination = terminationMessage.get();
 
       if (termination != null && termination.startsWith("EID_NOT_FOUND: ")) {
-        logger.debug(termination);
         throw new XMLElementNotFoundException(termination, e);
-      }
-
-      logger.error("XSLT transformation error.", e);
-
-      if (termination != null && termination.startsWith("DOCUMENT_REF_NOT_FOUND")) {
+      } else if (termination != null) {
         throw new FileTransformationException(termination, e);
+      } else {
+        throw new FileTransformationException(e.getMessage(), e);
       }
-
-      throw new FileTransformationException(e.getMessage(), e);
     }
   }
 

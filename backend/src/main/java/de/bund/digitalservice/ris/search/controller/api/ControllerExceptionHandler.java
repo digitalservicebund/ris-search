@@ -186,7 +186,7 @@ public class ControllerExceptionHandler {
   }
 
   /**
-   * log a warning when requested xml elements are not found.
+   * log error when requested xml elements are not found
    *
    * @param ex {@link XMLElementNotFoundException}
    * @return {@link org.springframework.http.ResponseEntity} with empty body
@@ -195,7 +195,7 @@ public class ControllerExceptionHandler {
   public ResponseEntity<CustomErrorResponse> handleMissingServletRequestParameter(
       XMLElementNotFoundException ex) {
 
-    logger.warn(ex.getMessage(), ex);
+    logger.error(ex.getMessage(), ex);
     return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
   }
 
