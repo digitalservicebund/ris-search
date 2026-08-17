@@ -4,7 +4,6 @@ import type { RouteLocationRaw } from "#vue-router";
 import type { LegislationExpression } from "~/types/api";
 
 const props = defineProps<{
-  status: string;
   currentLegislationIdentifier: string;
   versions: LegislationExpression[];
   eId: string;
@@ -161,7 +160,7 @@ function formatGroupRange(group: VersionGroup): string {
 
 <template>
   <section
-    v-if="status === 'success' && groupedVersions.length"
+    v-if="groupedVersions.length"
     aria-label="Andere Fassungen dieses Paragrafen"
     class="mt-24"
   >

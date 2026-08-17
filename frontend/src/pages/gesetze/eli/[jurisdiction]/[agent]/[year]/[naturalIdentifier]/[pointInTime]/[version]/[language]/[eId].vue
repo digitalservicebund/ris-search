@@ -192,20 +192,38 @@ const breadcrumbItems: Ref<BreadcrumbItem[]> = computed(() => {
 
 const htmlTitle = computed(() => data.value.articleHeading);
 
-const validVersions =
-  norm.value?.legislationLegalForce === "InForce"
-    ? undefined
-    : await useValidNormVersions(
-        norm.value?.exampleOfWork.legislationIdentifier,
-      );
+const workEli = norm.value.exampleOfWork.legislationIdentifier;
+
+/**
+ * Loads the version of this norm that is currently in force, so we can link to
+ * it. Nothing to look up if the version being viewed is already the valid one.
+ */
+async function fetchValidVersions() {
+  if (norm.value.legislationLegalForce === "InForce") return undefined;
+  return useValidNormVersions(workEli);
+}
+
+/**
+ * Loads all versions of this norm. Prototype-only: the sole consumer is the
+ * per-article version list behind the private features flag.
+ */
+async function fetchArticleVersions() {
+  if (!privateFeaturesEnabled) return undefined;
+  return useNormVersions(workEli);
+}
+
+const [validVersions, articleVersions] = await Promise.all([
+  fetchValidVersions(),
+  fetchArticleVersions(),
+]);
 
 if (validVersions?.error.value) {
   throw createError(validVersions.error.value);
 }
 
-const articleVersions = privateFeaturesEnabled
-  ? useNormVersions(norm.value?.exampleOfWork.legislationIdentifier ?? "")
-  : undefined;
+if (articleVersions?.error.value) {
+  throw createError(articleVersions.error.value);
+}
 
 const inForceNormLink = computed(() => {
   const validVersion = validVersions?.data.value?.member?.[0];
@@ -302,8 +320,7 @@ const metadataItems = computed<MetadataItem[]>(() => {
           </nav>
 
           <DocumentsNormsArticleVersionList
-            v-if="privateFeaturesEnabled && articleVersions && norm && eId"
-            :status="articleVersions.status.value"
+            v-if="articleVersions && eId"
             :versions="articleVersions.sortedVersions.value"
             :current-legislation-identifier="norm.legislationIdentifier"
             :e-id="eId"
