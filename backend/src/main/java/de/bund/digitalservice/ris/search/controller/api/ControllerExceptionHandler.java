@@ -12,6 +12,7 @@ import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.Objects;
 import org.apache.catalina.connector.ClientAbortException;
+import org.apache.hc.core5.http.ConnectionClosedException;
 import org.apache.tomcat.util.http.InvalidParameterException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -237,6 +238,11 @@ public class ControllerExceptionHandler {
    * Handles exceptions of type {@link OpenSearchFetchException} and returns a standardized error
    * response with HTTP status 500 (Internal Server Error).
    *
+   * <p>A connection from the client's pool that OpenSearch has closed on its side surfaces as a
+   * {@link ConnectionClosedException} the next time that connection is used. This is transient, it
+   * happens during regular operation and the next request succeeds again, so it is logged with
+   * level warn.
+   *
    * @param ex the {@link OpenSearchFetchException} instance thrown during OpenSearch data retrieval
    *     failure
    * @return a {@link ResponseEntity} containing a {@link CustomErrorResponse} object with error
@@ -245,7 +251,12 @@ public class ControllerExceptionHandler {
   @ExceptionHandler(OpenSearchFetchException.class)
   public ResponseEntity<CustomErrorResponse> handleElasticsearchException(
       OpenSearchFetchException ex) {
-    logger.error("Opensearch fetch error", ex);
+    if (NestedExceptionUtils.getMostSpecificCause(ex) instanceof ConnectionClosedException) {
+      logger.warn("Opensearch connection closed by peer: {}", ex.getMessage());
+    } else {
+      logger.error("Opensearch fetch error", ex);
+    }
+
     CustomError error =
         new CustomError(
             HttpStatus.INTERNAL_SERVER_ERROR.toString(),
