@@ -147,7 +147,7 @@ public class TestMockS3Client extends MockS3Client implements S3Client {
       fileMap.put(key, bytes);
       return PutObjectResponse.builder().build();
     } catch (IOException e) {
-      LOGGER.error("Couldn't put object to local storage: {}", key);
+      LOGGER.error("Couldn't put object to local storage: {}", key, e);
       return null;
     }
   }

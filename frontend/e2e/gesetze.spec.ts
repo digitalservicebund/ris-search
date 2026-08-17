@@ -131,8 +131,8 @@ test.describe("view norm page", async () => {
     const toc = page.getByRole("region", {
       name: "Amtliches Inhaltsverzeichnis ausblenden",
     });
-    expect(toc).toBeVisible();
-    expect(toc.getByRole("listitem")).toBeVisible();
+    await expect(toc).toBeVisible();
+    await expect(toc.getByRole("listitem").first()).toBeVisible();
   });
 
   test(

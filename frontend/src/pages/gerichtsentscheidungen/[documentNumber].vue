@@ -22,14 +22,15 @@ const route = useRoute();
 const documentNumber = route.params.documentNumber?.toString();
 if (!documentNumber) throw createError({ status: 404 });
 
-const { data: caseLaw, error: metadataError } = await useRisBackend<CaseLaw>(
-  `/v1/case-law/${documentNumber}`,
-);
-if (metadataError?.value) throw createError(metadataError.value);
+const [
+  { data: caseLaw, error: metadataError },
+  { data: html, error: contentError },
+] = await Promise.all([
+  useRisBackend<CaseLaw>(`/v1/case-law/${documentNumber}`),
+  useRisBackend<string>(`/v1/case-law/${documentNumber}.html`),
+]);
 
-const { data: html, error: contentError } = await useRisBackend<string>(
-  `/v1/case-law/${documentNumber}.html`,
-);
+if (metadataError?.value) throw createError(metadataError.value);
 if (contentError?.value) throw createError(contentError.value);
 
 const document = computed(() => {
@@ -74,14 +75,13 @@ const breadcrumbs = computed(() => [
   { label: title.value ?? "Titelzeile nicht vorhanden" },
 ]);
 
-const tocEntries = computed<TreeItem[] | null>(() => {
-  return document.value
-    ? getAllSectionsFromDocument(document.value, "section").map((entry) => ({
-        key: entry.id,
-        subtitle: entry.title, // Subtitle for more subtle appearance
-        to: { hash: `#${entry.id}`, query: { from: route.query.from } },
-      }))
-    : null;
+const tocEntries = computed<TreeItem[]>(() => {
+  if (!document.value) return [];
+  return getAllSectionsFromDocument(document.value, "section").map((entry) => ({
+    key: entry.id,
+    subtitle: entry.title, // Subtitle for more subtle appearance
+    to: { hash: `#${entry.id}`, query: { from: route.query.from } },
+  }));
 });
 
 const headerMetadata = computed<MetadataItem[]>(() => [
@@ -184,7 +184,7 @@ const detailsSectionId = useId();
           ></div>
         </section>
 
-        <template #sidebar v-if="tocEntries?.length">
+        <template #sidebar v-if="tocEntries.length">
           <client-only>
             <DocumentsTableOfContents :table-of-contents="tocEntries" />
           </client-only>

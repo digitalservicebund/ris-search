@@ -1,5 +1,4 @@
 import { vi } from "vitest";
-import { BadgeColor } from "~/components/ui/Badge.vue";
 import { DocumentKind } from "~/types/api";
 import { formatDocumentKind, formatNormValidity } from "./displayValues";
 
@@ -57,7 +56,7 @@ describe("displayValues", () => {
       const result = formatNormValidity("2025-01-01/2025-12-31");
       expect(result).toEqual({
         label: "Aktuell gültig",
-        color: BadgeColor.GREEN,
+        color: "green",
       });
     });
 
@@ -65,7 +64,7 @@ describe("displayValues", () => {
       const result = formatNormValidity("2025-01-15/..");
       expect(result).toEqual({
         label: "Aktuell gültig",
-        color: BadgeColor.GREEN,
+        color: "green",
       });
     });
 
@@ -73,7 +72,7 @@ describe("displayValues", () => {
       const result = formatNormValidity("2024-01-01/2025-01-15");
       expect(result).toEqual({
         label: "Aktuell gültig",
-        color: BadgeColor.GREEN,
+        color: "green",
       });
     });
 
@@ -81,7 +80,7 @@ describe("displayValues", () => {
       const result = formatNormValidity("2024-01-01/..");
       expect(result).toEqual({
         label: "Aktuell gültig",
-        color: BadgeColor.GREEN,
+        color: "green",
       });
     });
 
@@ -89,7 +88,7 @@ describe("displayValues", () => {
       const result = formatNormValidity("2025-02-01/2025-12-31");
       expect(result).toEqual({
         label: "Zukünftig in Kraft",
-        color: BadgeColor.YELLOW,
+        color: "yellow",
       });
     });
 
@@ -97,7 +96,7 @@ describe("displayValues", () => {
       const result = formatNormValidity("2024-01-01/2024-12-31");
       expect(result).toEqual({
         label: "Außer Kraft",
-        color: BadgeColor.RED,
+        color: "red",
       });
     });
 
@@ -105,7 +104,7 @@ describe("displayValues", () => {
       const result = formatNormValidity("../2024-12-31");
       expect(result).toEqual({
         label: "Außer Kraft",
-        color: BadgeColor.RED,
+        color: "red",
       });
     });
 

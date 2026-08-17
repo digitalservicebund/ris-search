@@ -36,8 +36,15 @@ function buildRedirectPath(
   return redirectPath;
 }
 
+interface FeedbackBody {
+  text?: string;
+  url?: string;
+  user_id?: string;
+  name?: string;
+}
+
 export default defineEventHandler(async (event) => {
-  const body = await readBody(event);
+  const body = await readBody<FeedbackBody>(event);
 
   const referer = getHeader(event, "referer");
   let currentUrl = "/";
@@ -58,10 +65,10 @@ export default defineEventHandler(async (event) => {
     await $fetch(useBackendUrl(`/v1/feedback`), {
       method: "POST",
       body: {
-        text: body.text,
-        url: body.url || currentUrl,
-        user_id: body.user_id || "anonymous_feedback_user",
-        name: body.name || "",
+        text: body?.text,
+        url: body?.url || currentUrl,
+        user_id: body?.user_id || "anonymous_feedback_user",
+        name: body?.name || "",
       },
     });
 
@@ -75,10 +82,10 @@ export default defineEventHandler(async (event) => {
     // We redirect the user with error status so they see feedback was not sent
     console.error("Failed to submit feedback:", error, {
       body: {
-        text: body.text,
-        url: body.url,
-        user_id: body.user_id,
-        name: body.name,
+        text: body?.text,
+        url: body?.url,
+        user_id: body?.user_id,
+        name: body?.name,
       },
     });
     return sendRedirect(

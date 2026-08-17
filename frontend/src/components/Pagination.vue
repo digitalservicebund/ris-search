@@ -24,9 +24,8 @@ const props = withDefaults(
   defineProps<{
     page?: Page | null;
     navigationPosition?: "top" | "bottom";
-    isLoading?: boolean;
   }>(),
-  { page: undefined, navigationPosition: "top", isLoading: false },
+  { page: undefined, navigationPosition: "top" },
 );
 
 const emit = defineEmits<(e: "updatePage", page: number) => void>();
@@ -99,7 +98,7 @@ const itemsOnPage = computed(() => buildItemsOnPageString(props.page));
   <slot v-if="props.navigationPosition == 'bottom'" />
 
   <nav
-    v-if="page?.member && page?.member.length && !isLoading"
+    v-if="page?.member && page?.member.length"
     aria-label="Paginierung"
     class="flex flex-col items-center"
     :class="{

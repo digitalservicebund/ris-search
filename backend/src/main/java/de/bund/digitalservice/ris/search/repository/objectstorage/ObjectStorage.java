@@ -123,7 +123,7 @@ public class ObjectStorage {
             throw new ObjectStoreServiceException(e.getCause().getMessage());
           }
           logger.error("an exception occured furing object retrieval", e.getCause());
-        } catch (InterruptedException interruptedException) {
+        } catch (InterruptedException _) {
           downloadExecutor.shutdownNow();
           logger.error("object retrieval thread was interrupted");
           Thread.currentThread().interrupt();
@@ -149,7 +149,7 @@ public class ObjectStorage {
       final var response = getStream(objectKey);
       return Optional.of(response.readAllBytes());
     } catch (NoSuchKeyException e) {
-      logger.warn("Object key {} does not exist", objectKey);
+      logger.warn("Object key does not exist: {}", e.getMessage());
       return Optional.empty();
     } catch (IOException | AwsServiceException | SdkClientException e) {
       throw new ObjectStoreServiceException(

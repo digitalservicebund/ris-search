@@ -64,6 +64,36 @@ describe("SimpleSearchInput", () => {
     expect(emitted("update:modelValue")).toEqual([["test query"]]);
   });
 
+  it("shows a loading state on the submit button", () => {
+    const { container } = render(SimpleSearchInput, {
+      props: { loading: true },
+    });
+
+    expect(screen.getByRole("button", { name: "Suchen" })).toBeDisabled();
+    expect(
+      container.querySelector("[aria-label='Ladestatus']"),
+    ).toBeInTheDocument();
+  });
+
+  it("does not submit while loading", async () => {
+    const user = userEvent.setup();
+
+    const { container, emitted } = render(SimpleSearchInput, {
+      props: { loading: true },
+    });
+
+    await user.type(screen.getByRole("searchbox"), "test query");
+
+    const form = container.querySelector("form");
+    expect(form).toBeInTheDocument();
+    form?.dispatchEvent(
+      new Event("submit", { bubbles: true, cancelable: true }),
+    );
+    await nextTick();
+
+    expect(emitted("update:modelValue")).toBeFalsy();
+  });
+
   it("allows customizing labels via props", () => {
     render(SimpleSearchInput, {
       props: {

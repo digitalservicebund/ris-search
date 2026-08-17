@@ -22,9 +22,6 @@ plugins {
 group = "de.bund.digitalservice"
 version = "0.0.1-SNAPSHOT"
 
-java.sourceCompatibility = JavaVersion.VERSION_21
-java.targetCompatibility = JavaVersion.VERSION_21
-
 configurations {
     compileOnly { extendsFrom(annotationProcessor.get()) }
 }
@@ -106,8 +103,11 @@ dependencies {
     // CVE-2026-59889
     implementation(libs.tools.jackson.databind)
 
-    //  CVE-2026-54399
+    // CVE-2026-54399
     implementation(libs.apache.httpcore)
+
+    // CVE-2026-54428
+    implementation(libs.apache.httpcore.h2)
 
     implementation(libs.ris.html.transformation)
 
@@ -172,6 +172,7 @@ project.tasks.sonar {
 
 tasks {
     compileJava {
+        options.release.set(25)
         options.compilerArgs.addAll(arrayOf())
     }
 
@@ -262,5 +263,14 @@ tasks {
             addStringOption("Xmaxwarns", "1")
         }
         include("**/*.java")
+    }
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(25)
+    }
+    sourceSets["main"].java {
+        srcDirs("build/generated/nlex")
     }
 }

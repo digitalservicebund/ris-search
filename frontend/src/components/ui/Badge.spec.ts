@@ -1,24 +1,24 @@
 import { render, screen } from "@testing-library/vue";
 import { describe, it, expect } from "vitest";
-import Badge, { BadgeColor } from "./Badge.vue";
+import Badge from "./Badge.vue";
 
 describe("Badge", () => {
   it("renders the label text", () => {
     render(Badge, {
       props: {
         label: "Test Label",
-        color: BadgeColor.BLUE,
+        color: "blue",
       },
     });
 
     expect(screen.getByText("Test Label")).toBeInTheDocument();
   });
 
-  it("applies blue styling for BLUE color", () => {
+  it("applies blue styling for blue color", () => {
     const { container } = render(Badge, {
       props: {
         label: "Blue Badge",
-        color: BadgeColor.BLUE,
+        color: "blue",
       },
     });
 
@@ -26,11 +26,11 @@ describe("Badge", () => {
     expect(badge).toHaveClass("bg-blue-200");
   });
 
-  it("applies green styling for GREEN color", () => {
+  it("applies green styling for green color", () => {
     const { container } = render(Badge, {
       props: {
         label: "Green Badge",
-        color: BadgeColor.GREEN,
+        color: "green",
       },
     });
 
@@ -38,11 +38,11 @@ describe("Badge", () => {
     expect(badge).toHaveClass("bg-green-100");
   });
 
-  it("applies yellow styling for YELLOW color", () => {
+  it("applies yellow styling for yellow color", () => {
     const { container } = render(Badge, {
       props: {
         label: "Yellow Badge",
-        color: BadgeColor.YELLOW,
+        color: "yellow",
       },
     });
 
@@ -50,11 +50,11 @@ describe("Badge", () => {
     expect(badge).toHaveClass("bg-yellow-200");
   });
 
-  it("applies red styling for RED color", () => {
+  it("applies red styling for red color", () => {
     const { container } = render(Badge, {
       props: {
         label: "Red Badge",
-        color: BadgeColor.RED,
+        color: "red",
       },
     });
 
@@ -62,15 +62,15 @@ describe("Badge", () => {
     expect(badge).toHaveClass("bg-red-200");
   });
 
-  it("applies gray styling for GRAY color", () => {
+  it("applies gray styling for gray color", () => {
     const { container } = render(Badge, {
       props: {
         label: "Gray Badge",
-        color: BadgeColor.GRAY,
+        color: "gray",
       },
     });
 
     const badge = container.firstChild as HTMLElement;
-    expect(badge).toHaveClass("bg-gray-100");
+    expect(badge).toHaveClass("border-gray-400");
   });
 });

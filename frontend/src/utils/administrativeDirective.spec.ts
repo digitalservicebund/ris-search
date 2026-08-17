@@ -80,10 +80,10 @@ describe("getAdministrativeDirectiveMetadataItems", () => {
 
 describe("getAdministrativeDirectiveDetailItems", () => {
   it.each([
-    [undefined, undefined, "Fundstelle:"],
-    [[], undefined, "Fundstelle:"],
-    [["Foo 1"], "Foo 1", "Fundstelle:"],
-    [["Foo 1", "Foo 2"], "Foo 1, Foo 2", "Fundstellen:"],
+    [undefined, [], "Fundstelle:"],
+    [[], [], "Fundstelle:"],
+    [["Foo 1"], ["Foo 1"], "Fundstelle:"],
+    [["Foo 1", "Foo 2"], ["Foo 1", "Foo 2"], "Fundstellen:"],
   ])(
     "given references '%o' creates item with value '%s' labeled '%s'",
     (references, expectedValue, expectedLabel) => {
@@ -91,9 +91,9 @@ describe("getAdministrativeDirectiveDetailItems", () => {
         references: references,
       });
       expect(result[0]).toEqual({
-        type: "text",
+        type: "badge",
         label: expectedLabel,
-        value: expectedValue,
+        values: expectedValue,
       });
     },
   );
@@ -160,10 +160,10 @@ describe("getAdministrativeDirectiveDetailItems", () => {
   );
 
   it.each([
-    [undefined, undefined, "Norm:"],
-    [[], undefined, "Norm:"],
-    [["Ref 1"], "Ref 1", "Norm:"],
-    [["Ref 1", "Ref 2"], "Ref 1, Ref 2", "Normen:"],
+    [undefined, [], "Norm:"],
+    [[], [], "Norm:"],
+    [["Ref 1"], ["Ref 1"], "Norm:"],
+    [["Ref 1", "Ref 2"], ["Ref 1", "Ref 2"], "Normen:"],
   ])(
     "given normReferences '%o' creates item with value '%s' labeled '%s'",
     (normReferenecs, expectedValue, expectedLabel) => {
@@ -171,9 +171,9 @@ describe("getAdministrativeDirectiveDetailItems", () => {
         normReferences: normReferenecs,
       });
       expect(result[4]).toEqual({
-        type: "text",
+        type: "badge",
         label: expectedLabel,
-        value: expectedValue,
+        values: expectedValue,
       });
     },
   );

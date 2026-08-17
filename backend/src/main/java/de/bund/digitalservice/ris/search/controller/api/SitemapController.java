@@ -208,7 +208,7 @@ public class SitemapController {
       try {
         int batchNumber = Integer.parseInt(filename);
         file = portalBucket.get(sitemapService.getBatchSitemapPath(batchNumber, documentKind));
-      } catch (NumberFormatException exception) {
+      } catch (NumberFormatException _) {
         return ResponseEntity.notFound().build();
       }
     }

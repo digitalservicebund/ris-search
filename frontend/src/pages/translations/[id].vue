@@ -28,12 +28,14 @@ useHead({
 const route = useRoute();
 const id = route.params.id as string;
 
-const { data, error } = await fetchTranslationAndHTML(id);
+const [{ data, error }, { legislation }] = await Promise.all([
+  fetchTranslationAndHTML(id),
+  getGermanOriginal(id),
+]);
+
 if (error.value || !data.value) {
   throw createError({ statusCode: error.value?.status ?? 500 });
 }
-
-const { legislation } = await getGermanOriginal(id);
 
 const currentTranslation = data.value.content;
 const html = data.value.htmlBody;

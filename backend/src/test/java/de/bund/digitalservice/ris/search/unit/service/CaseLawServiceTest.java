@@ -1,5 +1,6 @@
 package de.bund.digitalservice.ris.search.unit.service;
 
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -10,9 +11,11 @@ import de.bund.digitalservice.ris.search.exception.OpenSearchMapperException;
 import de.bund.digitalservice.ris.search.mapper.CaseLawLdmlToOpenSearchMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
+import de.bund.digitalservice.ris.search.repository.objectstorage.StorageObject;
 import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository;
 import de.bund.digitalservice.ris.search.service.CaseLawService;
 import de.bund.digitalservice.ris.search.service.SimpleSearchQueryBuilder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
@@ -59,7 +62,7 @@ class CaseLawServiceTest {
 
   @Test
   @DisplayName("Should throw if file does not")
-  void shouldThrowIfFileNotFoundInFolder() throws ObjectStoreServiceException {
+  void shouldThrowIfFileNotFoundInFolder() {
     when(caseLawBucketMock.get(any())).thenThrow(ObjectStoreServiceException.class);
 
     Assertions.assertThrows(
@@ -79,31 +82,35 @@ class CaseLawServiceTest {
   }
 
   @Test
-  void itReturnsEmptyForInvalidLdmlFromFile() throws ObjectStoreServiceException {
+  void itIgnoresInvalidLdmlFiles() {
     String filename = "docNr/docNr.xml";
+    byte[] content = "content".getBytes(StandardCharsets.UTF_8);
 
-    when(caseLawBucketMock.getFileAsString(filename)).thenReturn(Optional.of("content"));
-    when(marshaller.fromString("content")).thenThrow(OpenSearchMapperException.class);
-    Assertions.assertTrue(caseLawService.getFromBucket(filename).isEmpty());
+    when(caseLawBucketMock.getObjects(List.of(filename)))
+        .thenReturn(List.of(new StorageObject("key", Optional.of(content))));
+    when(marshaller.fromByteArray(content)).thenThrow(OpenSearchMapperException.class);
+    Assertions.assertTrue(caseLawService.getFromBucket(List.of(filename)).isEmpty());
   }
 
   @Test
-  void itReturnsEmptyForMissingContentFromFile() throws ObjectStoreServiceException {
+  void itReturnsEmptyForMissingContentFromFile() {
     String filename = "docNr/docNr.xml";
 
-    when(caseLawBucketMock.getFileAsString(filename)).thenReturn(Optional.empty());
-    Assertions.assertTrue(caseLawService.getFromBucket(filename).isEmpty());
+    when(caseLawBucketMock.getObjects(List.of(filename))).thenReturn(List.of());
+    Assertions.assertTrue(caseLawService.getFromBucket(List.of(filename)).isEmpty());
   }
 
   @Test
-  void itReturnsACaseLawDocumentationUnit() throws ObjectStoreServiceException {
+  void itReturnsACaseLawDocumentationUnit() {
     String filename = "docNr/docNr.xml";
-    CaseLawDocumentationUnit unit = CaseLawDocumentationUnit.builder().id("id").build();
-    when(caseLawBucketMock.getFileAsString(filename)).thenReturn(Optional.of("content"));
-    when(marshaller.fromString("content")).thenReturn(unit);
+    byte[] content = "content".getBytes(StandardCharsets.UTF_8);
+    CaseLawDocumentationUnit expectedUnit = CaseLawDocumentationUnit.builder().id("id").build();
 
-    var result = caseLawService.getFromBucket(filename);
+    when(caseLawBucketMock.getObjects(List.of(filename)))
+        .thenReturn(List.of(new StorageObject("key", Optional.of(content))));
+    when(marshaller.fromByteArray(content)).thenReturn(expectedUnit);
 
-    Assertions.assertTrue(result.isPresent());
+    var result = caseLawService.getFromBucket(List.of(filename));
+    assertThat(result).containsExactly(expectedUnit);
   }
 }

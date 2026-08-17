@@ -63,16 +63,28 @@ const metadata: Ref<LegislationExpression> = computed(() => {
 
 const abbreviation = data.value.legislation.abbreviation;
 
-const { translations } = abbreviation
-  ? await fetchTranslationListWithIdFilter(abbreviation)
-  : { translations: { value: [] } };
+/**
+ * Resolves the link to the English translation of this norm, if one exists.
+ * Returns the finished URL rather than the request state, since it can no
+ * longer change once the page has loaded.
+ */
+async function fetchTranslationUrl() {
+  if (!abbreviation) return "";
+  const { translations } = await fetchTranslationListWithIdFilter(abbreviation);
+  return translations.value?.length ? `/translations/${abbreviation}` : "";
+}
 
-const translationUrl = computed(() => {
-  if (translations.value && translations.value.length > 0) {
-    return `/translations/${abbreviation}`;
-  }
-  return "";
-});
+const [
+  translationUrl,
+  { sortedVersions: normVersions, error: normVersionsError },
+] = await Promise.all([
+  fetchTranslationUrl(),
+  useNormVersions(data.value.legislation.exampleOfWork.legislationIdentifier),
+]);
+
+if (normVersionsError.value) {
+  throw createError(normVersionsError.value);
+}
 
 const htmlParts = computed(() => data.value.htmlParts);
 
@@ -161,16 +173,6 @@ useNormSeo({
 const normBreadcrumbTitle = computed(() =>
   getNormBreadcrumbTitle(metadata.value),
 );
-
-const {
-  status: normVersionsStatus,
-  sortedVersions: normVersions,
-  error: normVersionsError,
-} = useNormVersions(metadata.value.exampleOfWork?.legislationIdentifier ?? "");
-
-if (normVersionsError.value) {
-  throw createError(normVersionsError.value);
-}
 
 const searchBackLink = useSearchBackLink(DocumentKind.Norm);
 
@@ -261,7 +263,6 @@ const fassungenDateFilterInputId = useId();
       />
 
       <DocumentsNormsVersionWarning
-        v-if="normVersionsStatus === 'success'"
         :versions="normVersions"
         :current-version="metadata"
       />
@@ -281,7 +282,7 @@ const fassungenDateFilterInputId = useId();
               <div v-html="htmlParts.body" />
             </DocumentsNormsLegislationContent>
 
-            <template #sidebar v-if="tableOfContents?.length">
+            <template #sidebar v-if="tableOfContents.length">
               <client-only>
                 <DocumentsTableOfContents
                   :subheading="normBreadcrumbTitle"
@@ -330,9 +331,7 @@ const fassungenDateFilterInputId = useId();
                 />
               </div>
               <DocumentsNormsVersionList
-                :current-legislation-identifier="
-                  metadata.legislationIdentifier ?? ''
-                "
+                :current-legislation-identifier="metadata.legislationIdentifier"
                 :versions="filteredNormVersions"
               />
             </template>

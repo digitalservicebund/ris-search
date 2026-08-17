@@ -1,6 +1,7 @@
 package de.bund.digitalservice.ris.search.repository.opensearch;
 
 import de.bund.digitalservice.ris.search.models.opensearch.EcliCrawlerDocument;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
@@ -22,10 +23,12 @@ public interface EcliCrawlerDocumentRepository
    */
   Optional<EcliCrawlerDocument> findByFilenameIn(String filename);
 
+  Stream<EcliCrawlerDocument> findByFilename(List<String> filenames);
+
   /**
-   * Stream filenames of all published crawler documents.
+   * Stream EcliCrawlerDocuments that are considered published.
    *
-   * @return stream of filenames where isPublished is true
+   * @return stream of EcliCrawlerDocuments where isPublished is true
    */
-  Stream<String> findFilenameByIsPublishedIsTrue();
+  Stream<EcliCrawlerDocument> findByIsPublishedIsTrue();
 }

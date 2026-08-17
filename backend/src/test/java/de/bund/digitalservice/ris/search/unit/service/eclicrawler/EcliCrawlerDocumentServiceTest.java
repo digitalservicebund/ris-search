@@ -1,6 +1,7 @@
 package de.bund.digitalservice.ris.search.unit.service.eclicrawler;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.inOrder;
@@ -29,8 +30,8 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 import org.apache.commons.collections4.IteratorUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -71,21 +72,30 @@ class EcliCrawlerDocumentServiceTest {
   private EcliCrawlerDocument getTestDocument(String ecli, String docNumber, boolean isPublished) {
     return new EcliCrawlerDocument(
         docNumber,
-        docNumber + ".xml",
+        docNumber + "/" + docNumber + ".xml",
         ecli,
         "BGH",
         "2025-01-01",
-        "frontend-url/case-law/" + docNumber,
+        "frontend-url/gerichtsentscheidungen/" + docNumber,
         isPublished);
   }
 
   @Test
   void itSplitsSitemapsByMaxNumberOfUrls() throws ObjectStoreServiceException, JAXBException {
+    // Arrange
     LocalDate day = LocalDate.of(2025, Month.JANUARY, 1);
-    var filenames = IntStream.range(0, 11000).boxed().map(i -> "file_" + i + ".xml").toList();
+    List<String> filenames =
+        IntStream.range(0, 11000).mapToObj(i -> "file_" + i + "/file_" + i + ".xml").toList();
 
     when(caseLawBucket.getAllKeys()).thenReturn(filenames);
-    when(caselawService.getFromBucket(any())).thenReturn(Optional.of(getTestDocUnit("docNumber")));
+
+    // Dynamically map any incoming list of keys to mock units
+    when(caselawService.getFromBucket(anyList()))
+        .thenAnswer(
+            invocation -> {
+              List<String> keys = invocation.getArgument(0);
+              return keys.stream().map(_ -> getTestDocUnit("docNumber")).toList();
+            });
 
     when(sitemapWriter.writeUrlsToSitemap(eq(day), any(), eq(1)))
         .thenReturn(new Sitemap().setName("1"));
@@ -119,8 +129,8 @@ class EcliCrawlerDocumentServiceTest {
   @Test
   void itWritesFilesFromAChangelog() throws ObjectStoreServiceException, JAXBException {
     LocalDate day = LocalDate.of(2025, Month.JANUARY, 1);
-    String createdFilename = "createdDoc.xml";
-    String deletedFilename = "deletedDoc.xml";
+    String createdFilename = "createdDoc/createdDoc.xml";
+    String deletedFilename = "deletedDoc/deletedDoc.xml";
     Changelog changelog = new Changelog();
     changelog.setChanged(new HashSet<>(List.of(createdFilename)));
     changelog.setDeleted(new HashSet<>(List.of(deletedFilename)));
@@ -128,10 +138,10 @@ class EcliCrawlerDocumentServiceTest {
     var expectedCretedDocument = getTestDocument("ECLI:DE:XX:2025:1111111", "createdDoc", true);
     var expectedDeletedDocument = getTestDocument("ECLI:DE:XX:2025:1111112", "deletedDoc", false);
 
-    when(caselawService.getFromBucket(createdFilename))
-        .thenReturn(Optional.of(getTestDocUnit("createdDoc")));
-    when(repository.findByFilenameIn(deletedFilename))
-        .thenReturn(Optional.of(expectedDeletedDocument));
+    when(caselawService.getFromBucket(List.of(createdFilename)))
+        .thenReturn(List.of(getTestDocUnit("createdDoc")));
+    when(repository.findByFilename(List.of(deletedFilename)))
+        .thenReturn(Stream.of(expectedDeletedDocument));
 
     Url expectedCreatedUrl =
         new Url()

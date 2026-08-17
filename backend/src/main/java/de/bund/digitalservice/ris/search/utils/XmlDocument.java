@@ -136,7 +136,7 @@ public class XmlDocument {
   public Optional<Node> getFirstMatchedNodeByXpath(String xpath, Node item) {
     try {
       return Optional.ofNullable((Node) xpathInstance.evaluate(xpath, item, XPathConstants.NODE));
-    } catch (XPathExpressionException e) {
+    } catch (XPathExpressionException _) {
       return Optional.empty();
     }
   }

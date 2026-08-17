@@ -1,36 +1,48 @@
 package de.bund.digitalservice.ris.search.service.eclicrawler;
 
 import de.bund.digitalservice.ris.search.models.opensearch.EcliCrawlerDocument;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.concurrent.ArrayBlockingQueue;
+import java.util.Queue;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Iterator implementation for retrieving lists of EcliCrawlerDocument objects that represent
- * changed or deleted case law documents, based on provided identifiers and suppliers. *
+ * changed or deleted case law documents, based on provided identifiers and suppliers. The Iterator
+ * will return the Documents in chunks of 10000 except the last one, which might be less.
  */
 public class ChangedEcliCrawlerDocumentsIterator implements Iterator<List<EcliCrawlerDocument>> {
 
-  ArrayBlockingQueue<EcliCrawlerDocument> ecliDocumentsBuffer;
-  Supplier changedSupplier;
-  Supplier deleteSupplier;
-  List<String> changed;
-  List<String> deleted;
-  final int resultSize;
+  private static final int ID_CHUNK_SIZE = 10_000;
+  private static final Logger logger =
+      LogManager.getLogger(ChangedEcliCrawlerDocumentsIterator.class);
+
+  private final Queue<EcliCrawlerDocument> ecliDocumentsBuffer = new ArrayDeque<>();
+  private final Supplier changedSupplier;
+  private final Supplier deleteSupplier;
+  private List<String> changed;
+  private List<String> deleted;
+  private final int resultSize;
 
   /** Functional interface for supplying EcliCrawlerDocuments based on their identifier */
   @FunctionalInterface
   public interface Supplier {
-    Optional<EcliCrawlerDocument> get(String id);
+    @NonNull List<EcliCrawlerDocument> get(List<String> ids);
   }
 
   /**
    * Constructor
    *
    * @param changedSupplier Supplier for changed EcliCrawlerDocuments
+   * @param deleteSupplier Supplier for deleted EcliCrawlerDocuments
+   * @param changed List of changed document IDs
+   * @param deleted List of deleted document IDs
+   * @param resultSize Target batch size for iterator output
    */
   public ChangedEcliCrawlerDocumentsIterator(
       Supplier changedSupplier,
@@ -42,37 +54,43 @@ public class ChangedEcliCrawlerDocumentsIterator implements Iterator<List<EcliCr
     this.deleteSupplier = deleteSupplier;
     this.changed = new ArrayList<>(changed);
     this.deleted = new ArrayList<>(deleted);
-    ecliDocumentsBuffer = new ArrayBlockingQueue<>(resultSize);
     this.resultSize = resultSize;
     getNext();
   }
 
-  /** populate desired changes for changed and deleted until the resultSize is reached */
+  /** Populate buffer with documents until resultSize is reached or IDs are exhausted */
   private void getNext() {
-    ecliDocumentsBuffer.clear();
-
-    if (!changed.isEmpty()) {
-      changed = fillBuffer(changed, id -> changedSupplier.get(id));
+    while (ecliDocumentsBuffer.size() < resultSize && !changed.isEmpty()) {
+      changed = fillBuffer(changed, changedSupplier);
     }
-    if (!deleted.isEmpty()) {
-      deleted = fillBuffer(deleted, id -> deleteSupplier.get(id));
+    while (ecliDocumentsBuffer.size() < resultSize && !deleted.isEmpty()) {
+      deleted = fillBuffer(deleted, deleteSupplier);
     }
   }
 
   /**
-   * fills the accumulator up to the specified maximum size
+   * Greedily fetches chunks from supplier until the buffer reaches resultSize or the ID list is
+   * exhausted.
    *
-   * @param ids list of ids that return an Optional of EcliCrawlerDocument
-   * @param supplier Function that returns an Optional of EcliCrawlerDocument based on its
-   *     identifier
-   * @return remaining ids
+   * @param ids remaining ID list
+   * @param supplier Function returning documents for a list of IDs
+   * @return remaining IDs not yet queried
    */
   private List<String> fillBuffer(List<String> ids, Supplier supplier) {
     int numTaken = 0;
-    for (int i = 0; i < ids.size() && ecliDocumentsBuffer.remainingCapacity() > 0; i++) {
-      supplier.get(ids.get(i)).ifPresent(ecliDocumentsBuffer::add);
-      numTaken++;
+
+    while (numTaken < ids.size() && ecliDocumentsBuffer.size() < resultSize) {
+      // Safely calculate chunk size so we never exceed ids.size()
+      int currentBatchSize = Math.min(ID_CHUNK_SIZE, ids.size() - numTaken);
+      List<String> batch = ids.subList(numTaken, numTaken + currentBatchSize);
+
+      List<EcliCrawlerDocument> documents = supplier.get(batch);
+      ecliDocumentsBuffer.addAll(documents);
+
+      logger.info("buffersize: {} of {}", ecliDocumentsBuffer.size(), resultSize);
+      numTaken += currentBatchSize;
     }
+
     return ids.subList(numTaken, ids.size());
   }
 
@@ -83,12 +101,18 @@ public class ChangedEcliCrawlerDocumentsIterator implements Iterator<List<EcliCr
 
   @Override
   public List<EcliCrawlerDocument> next() {
-    if (ecliDocumentsBuffer.isEmpty()) {
+    if (!hasNext()) {
       throw new NoSuchElementException();
     }
-    List<EcliCrawlerDocument> next = new ArrayList<>(ecliDocumentsBuffer);
-    // populate upcoming iterator result in advance
+
+    List<EcliCrawlerDocument> result = new ArrayList<>();
+    while (!ecliDocumentsBuffer.isEmpty() && result.size() < resultSize) {
+      result.add(ecliDocumentsBuffer.poll());
+    }
+
+    // Top up buffer for subsequent hasNext() / next() calls
     getNext();
-    return next;
+
+    return result;
   }
 }
