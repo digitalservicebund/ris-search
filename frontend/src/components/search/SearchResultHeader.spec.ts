@@ -10,9 +10,7 @@ function renderComponent(
 ) {
   return render(SearchResultHeader, {
     props: {
-      icon: markRaw({
-        template: "<span>icon-stub</span>",
-      }),
+      documentType: { value: "DocumentType", id: "DocTypeID" },
       items: items,
       secondaryItem,
     },
@@ -20,16 +18,29 @@ function renderComponent(
 }
 
 describe("SearchResultHeader", () => {
-  it("renders icon", async () => {
+  it("renders documentType", async () => {
     renderComponent();
 
-    expect(screen.getByText("icon-stub")).toBeVisible();
+    const docTypeSpan = screen.getByText("DocumentType");
+    expect(docTypeSpan).toBeVisible();
+    expect(docTypeSpan).toHaveAttribute("id", "DocTypeID");
+    expect(docTypeSpan).toHaveClass(/bold/);
+  });
+
+  it("does not render documentType when undefined", async () => {
+    render(SearchResultHeader, {
+      props: {
+        items: [],
+      },
+    });
+
+    expect(screen.queryByText("DocumentType")).not.toBeInTheDocument();
   });
 
   it("renders plain text items", async () => {
     renderComponent([{ value: "Item 1" }, { value: "<mark>Item 2</mark>" }]);
 
-    expect(screen.getByText("icon-stub")).toBeVisible();
+    expect(screen.getByText("DocumentType")).toBeVisible();
     expect(screen.getByText("Item 1")).toBeVisible();
     expect(screen.getByText("<mark>Item 2</mark>")).toBeVisible();
   });
@@ -40,7 +51,7 @@ describe("SearchResultHeader", () => {
       { isMarkup: true, value: "<mark>Item 2</mark>" },
     ]);
 
-    expect(screen.getByText("icon-stub")).toBeVisible();
+    expect(screen.getByText("DocumentType")).toBeVisible();
     expect(screen.getByText("Item 1")).toBeVisible();
     expect(screen.getByText("Item 2")).toBeVisible();
 
@@ -51,9 +62,7 @@ describe("SearchResultHeader", () => {
   it("renders trailing component", async () => {
     render(SearchResultHeader, {
       props: {
-        icon: markRaw({
-          template: "<span>icon-stub</span>",
-        }),
+        documentType: { value: "DocumentType" },
         items: [],
       },
       slots: {
@@ -61,7 +70,7 @@ describe("SearchResultHeader", () => {
       },
     });
 
-    expect(screen.getByText("icon-stub")).toBeVisible();
+    expect(screen.getByText("DocumentType")).toBeVisible();
     expect(screen.getByText("trailing-component")).toBeVisible();
   });
 

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import IcBaselineBalance from "~icons/ic/baseline-balance";
 import type { RouteLocationRaw, RouteLocationAsPath } from "#vue-router";
 import type { SearchResultHeaderItem } from "~/components/search/SearchResultHeader.vue";
 import type { LegislationExpression, SearchResult } from "~/types/api";
@@ -29,7 +28,13 @@ const secondaryTitle = computed<SearchResultHeaderItem | undefined>(() =>
 
 const resultTypeId = useId();
 
-const headerItems = computed<SearchResultHeaderItem[]>(() => {
+const headerItems = computed(() => {
+  const items: SearchResultHeaderItem[] = [];
+
+  if (searchResult.item.abbreviation) {
+    items.push({ value: searchResult.item.abbreviation });
+  }
+
   let dateValue: string | undefined = dateFormattedDDMMYYYY(
     searchResult.item.exampleOfWork.legislationDate,
   );
@@ -43,11 +48,14 @@ const headerItems = computed<SearchResultHeaderItem[]>(() => {
     dateValue = from && to ? `${from} - ${to}` : from;
   }
 
-  return [
-    { value: "Norm", id: resultTypeId },
-    { value: searchResult.item.abbreviation },
-    { value: dateValue },
-  ].filter((i): i is SearchResultHeaderItem => i.value !== undefined);
+  if (dateValue) {
+    items.push({ value: dateValue });
+  }
+
+  return {
+    documentType: { value: "Norm", id: resultTypeId },
+    otherItems: items,
+  };
 });
 
 const validityStatus = computed(() =>
@@ -86,8 +94,8 @@ const relevantHighlights = computed(() =>
 <template>
   <div class="flex flex-col gap-8 hyphens-auto">
     <SearchResultHeader
-      :icon="IcBaselineBalance"
-      :items="headerItems"
+      :document-type="headerItems.documentType"
+      :items="headerItems.otherItems"
       :secondary-item="secondaryTitle"
     >
       <template #trailing>

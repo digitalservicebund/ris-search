@@ -5,8 +5,8 @@ export interface SearchResultHeaderItem {
   value: string;
 }
 
-const { icon, items, secondaryItem } = defineProps<{
-  icon?: Component;
+const { items, secondaryItem } = defineProps<{
+  documentType?: Omit<SearchResultHeaderItem, "isMarkup">;
   items: SearchResultHeaderItem[];
   secondaryItem?: SearchResultHeaderItem;
 }>();
@@ -17,14 +17,10 @@ const itemsWithContent = computed(() => items.filter((i) => !!i.value));
 <template>
   <div class="flex items-center gap-8">
     <div>
-      <p class="typo-label2-regular content-center space-x-8 hyphens-auto">
-        <span
-          v-if="icon"
-          class="inline-flex h-lh items-center align-text-bottom"
-        >
-          <component :is="icon" class="inline-block h-16 w-16 text-gray-900" />
-        </span>
-
+      <p class="typo-label2-regular content-center space-x-12 hyphens-auto">
+        <span v-if="documentType" class="font-bold!" :id="documentType.id">{{
+          documentType.value
+        }}</span>
         <template v-for="item in itemsWithContent" :key="item.value">
           <span v-if="item.isMarkup" :id="item.id" v-html="item.value" />
           <span v-else :id="item.id">{{ item.value }}</span>

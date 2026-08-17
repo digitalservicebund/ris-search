@@ -82,6 +82,11 @@ describe("LiteratureSearchResult", () => {
       expect(screen.getByText("Book")).toBeVisible();
     });
 
+    it("renders 'Literaturnachweis' if no documentType exists", async () => {
+      renderComponent({ item: { ...searchResult.item, documentTypes: [] } });
+      expect(screen.getByText("Literaturnachweis")).toBeVisible();
+    });
+
     it("renders first dependentReference", async () => {
       renderComponent();
       expect(screen.getByText("DEP-122")).toBeVisible();

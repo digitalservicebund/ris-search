@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import GavelIcon from "~icons/ic/outline-gavel";
 import type { SearchResultHeaderItem } from "~/components/search/SearchResultHeader.vue";
 import type { CaseLaw, SearchResult } from "~/types/api";
 import {
@@ -54,9 +53,7 @@ const resultTypeId = useId();
 const headerItems = computed(() => {
   const item = searchResult.item;
 
-  const items: SearchResultHeaderItem[] = [
-    { value: item.documentType || "Entscheidung", id: resultTypeId },
-  ];
+  const items: SearchResultHeaderItem[] = [];
 
   if (item.courtName) items.push({ value: item.courtName });
 
@@ -66,7 +63,13 @@ const headerItems = computed(() => {
   const fileNumbers = getFileNumbers(item);
   if (fileNumbers) items.push({ value: fileNumbers, isMarkup: true });
 
-  return items;
+  return {
+    documentType: {
+      value: searchResult.item.documentType || "Entscheidung",
+      id: resultTypeId,
+    },
+    otherItems: items,
+  };
 });
 
 function getFileNumbers(item: CaseLaw) {
@@ -109,8 +112,8 @@ function trackResultClick() {
 <template>
   <div class="flex flex-col gap-8 hyphens-auto">
     <SearchResultHeader
-      :icon="GavelIcon"
-      :items="headerItems"
+      :document-type="headerItems.documentType"
+      :items="headerItems.otherItems"
       :secondary-item="secondaryTitle"
     />
     <NuxtLink

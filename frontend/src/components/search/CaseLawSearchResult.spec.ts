@@ -62,6 +62,18 @@ function renderComponent({
 }
 
 describe("CaselawSearchResult", () => {
+  it("renders the documentType", () => {
+    renderComponent({});
+    expect(screen.getByText("Document Type")).toBeVisible();
+  });
+
+  it("renders 'Entscheidung' if documentType is undefined", () => {
+    renderComponent({
+      item: { ...searchResult.item, documentType: undefined },
+    });
+    expect(screen.getByText("Entscheidung")).toBeVisible();
+  });
+
   it("renders the expected title and secondary header row", () => {
     renderComponent({});
     expect(screen.getByRole("link")).toHaveTextContent("Test Headline");

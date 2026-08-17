@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import RuleIcon from "~icons/ic/outline-rule";
 import type { SearchResultHeaderItem } from "~/components/search/SearchResultHeader.vue";
 import type { AdministrativeDirective, SearchResult } from "~/types/api";
 import { getMatch, getTitleWithFallback } from "~/utils/search/searchResults";
@@ -28,14 +27,30 @@ const headline = computed(() =>
 
 const resultTypeId = useId();
 
-const headerItems = computed<SearchResultHeaderItem[]>(() => {
+const headerItems = computed(() => {
   const item = searchResult.item;
-  return [
-    { value: item.documentType, id: resultTypeId },
-    { value: item.legislationAuthority },
-    { value: item.referenceNumbers?.[0] },
-    { value: dateFormattedDDMMYYYY(item.entryIntoForceDate) },
-  ].filter((i): i is SearchResultHeaderItem => i.value !== undefined);
+
+  const items: SearchResultHeaderItem[] = [];
+
+  if (item.legislationAuthority) {
+    items.push({ value: item.legislationAuthority });
+  }
+
+  if (item.referenceNumbers?.[0]) {
+    items.push({ value: item.referenceNumbers?.[0] });
+  }
+
+  const formattedEntryIntoForce = dateFormattedDDMMYYYY(
+    item.entryIntoForceDate,
+  );
+  if (formattedEntryIntoForce) {
+    items.push({ value: formattedEntryIntoForce });
+  }
+
+  return {
+    documentType: { value: searchResult.item.documentType, id: resultTypeId },
+    otherItems: items,
+  };
 });
 
 const detailPageRoute = computed(() => ({
@@ -59,7 +74,10 @@ function trackResultClick() {
 
 <template>
   <div class="flex flex-col gap-8 hyphens-auto">
-    <SearchResultHeader :icon="RuleIcon" :items="headerItems" />
+    <SearchResultHeader
+      :document-type="headerItems.documentType"
+      :items="headerItems.otherItems"
+    />
     <NuxtLink
       :to="detailPageRoute"
       :aria-describedby="resultTypeId"
