@@ -10,6 +10,8 @@ import org.springframework.core.retry.RetryException;
 import org.springframework.core.retry.RetryPolicy;
 import org.springframework.core.retry.RetryTemplate;
 import org.springframework.core.retry.Retryable;
+import org.springframework.data.elasticsearch.UncategorizedElasticsearchException;
+import org.springframework.http.HttpStatusCode;
 
 /** RetryConfiguration fo configure behaviour of opensearch query retries */
 @Configuration
@@ -31,6 +33,9 @@ public class OpensearchRetryConfiguration {
             .multiplier(2.0) // Wait twice as long with each retry
             .predicate(
                 throwable -> {
+                  if (isClientError(throwable)) {
+                    return false;
+                  }
                   logger.warn(
                       "OpenSearch failure. Error: {}. Will attempt retry...",
                       throwable.getMessage());
@@ -39,6 +44,20 @@ public class OpensearchRetryConfiguration {
             .build();
 
     return new RetryTemplate(retryPolicy);
+  }
+
+  /**
+   * Whether the failure is Opensearch rejecting the request itself, e.g. because it can't parse the
+   * query. Retrying can't turn a client error into a success, it would only delay the response the
+   * caller is going to get anyway.
+   *
+   * @param throwable the failure to check
+   * @return whether the request was rejected with a 4xx status
+   */
+  private static boolean isClientError(Throwable throwable) {
+    return throwable instanceof UncategorizedElasticsearchException exception
+        && exception.getStatusCode() != null
+        && HttpStatusCode.valueOf(exception.getStatusCode()).is4xxClientError();
   }
 
   /**

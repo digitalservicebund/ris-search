@@ -22,6 +22,27 @@ class OpensearchRetryConfigurationTest {
               .predicate(t -> true)
               .build());
 
+  private final RetryPolicy configuredPolicy =
+      new OpensearchRetryConfiguration().openSearchRetryTemplate().getRetryPolicy();
+
+  @Test
+  void itDoesNotRetryRequestsOpensearchRejectedAsClientErrors() {
+    var parseFailure =
+        new UncategorizedElasticsearchException("all shards failed", 400, "response body", null);
+
+    assertThat(configuredPolicy.shouldRetry(parseFailure)).isFalse();
+  }
+
+  @Test
+  void itRetriesServerSideAndConnectionFailures() {
+    var serverFailure =
+        new UncategorizedElasticsearchException("all shards failed", 503, "response body", null);
+    var connectionFailure = new UncategorizedElasticsearchException("connection closed by peer");
+
+    assertThat(configuredPolicy.shouldRetry(serverFailure)).isTrue();
+    assertThat(configuredPolicy.shouldRetry(connectionFailure)).isTrue();
+  }
+
   @Test
   void itReturnsTheResultOfASuccessfulOperation() {
     assertThat(OpensearchRetryConfiguration.executeWithRetries(retryTemplate, () -> "result"))
