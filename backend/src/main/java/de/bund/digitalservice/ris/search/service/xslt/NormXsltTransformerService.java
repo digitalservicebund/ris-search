@@ -128,7 +128,7 @@ public class NormXsltTransformerService extends XsltTransformer {
       String encodedId = UriUtils.encode(eId, StandardCharsets.UTF_8).toLowerCase(Locale.ROOT);
       parameters.put("article-eid", encodedId);
       return transformLegalDocMlFromBytes(source, parameters);
-    } catch (XMLElementNotFoundException ex) {
+    } catch (XMLElementNotFoundException _) {
       // This code is a temporary fallback to check if the uri encoding strategy will work as
       // expected. In theory these lines of code should never be reached.
       parameters.put("article-eid", eId);
