@@ -429,6 +429,20 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
         .andExpect(jsonPath("$.errors[0].parameter").value("query"));
   }
 
+  @Test
+  @DisplayName("Should return an error when only Opensearch rejects the query as unparseable")
+  void queryOnlyOpensearchRejects() throws Exception {
+    // Valid Lucene, so it passes validation and matches norms, but the article query derived from
+    // it ends up with an empty clause, which Opensearch can't parse
+    mockMvc
+        .perform(
+            get(ApiConfig.Paths.LEGISLATION_ADVANCED_SEARCH + "?query=example OR \"\"")
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isUnprocessableContent())
+        .andExpect(jsonPath("$.errors[0].code").value("invalid_lucene_query"))
+        .andExpect(jsonPath("$.errors[0].parameter").value("query"));
+  }
+
   private static Stream<Arguments> provideSortTestData() {
     return Stream.of(
         Arguments.of(
