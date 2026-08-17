@@ -20,26 +20,23 @@ export type Page = {
   view: PartialCollectionView;
 };
 
-const props = withDefaults(
-  defineProps<{
-    page?: Page | null;
-    navigationPosition?: "top" | "bottom";
-  }>(),
-  { page: undefined, navigationPosition: "top" },
-);
+const { page, navigationPosition = "top" } = defineProps<{
+  page?: Page | null;
+  navigationPosition?: "top" | "bottom";
+}>();
 
 const emit = defineEmits<(e: "updatePage", page: number) => void>();
 
 const route = useRoute();
 
 const previousPageNumber = computed(() => {
-  if (!props.page?.view.previous) return undefined;
-  return parsePageNumber(props.page.view.previous).page;
+  if (!page?.view.previous) return undefined;
+  return parsePageNumber(page.view.previous).page;
 });
 
 const nextPageNumber = computed(() => {
-  if (!props.page?.view.next) return undefined;
-  return parsePageNumber(props.page.view.next).page;
+  if (!page?.view.next) return undefined;
+  return parsePageNumber(page.view.next).page;
 });
 
 const previousPageRoute = computed<RouteLocationRaw | undefined>(() => {
@@ -83,27 +80,25 @@ async function previousPage() {
 }
 
 const currentPageIndex = computed(() => {
-  if (!props.page?.["@id"]) return undefined;
-  return parsePageNumber(props.page["@id"]).page;
+  if (!page?.["@id"]) return undefined;
+  return parsePageNumber(page["@id"]).page;
 });
 
-const isOnlyPage = computed(
-  () => !(props.page?.view.previous || props.page?.view.next),
-);
+const isOnlyPage = computed(() => !(page?.view.previous || page?.view.next));
 
-const itemsOnPage = computed(() => buildItemsOnPageString(props.page));
+const itemsOnPage = computed(() => buildItemsOnPageString(page));
 </script>
 
 <template>
-  <slot v-if="props.navigationPosition == 'bottom'" />
+  <slot v-if="navigationPosition == 'bottom'" />
 
   <nav
     v-if="page?.member && page?.member.length"
     aria-label="Paginierung"
     class="flex flex-col items-center"
     :class="{
-      'mt-48': props.navigationPosition === 'bottom',
-      'mb-48': props.navigationPosition === 'top',
+      'mt-48': navigationPosition === 'bottom',
+      'mb-48': navigationPosition === 'top',
     }"
   >
     <div class="flex w-full items-center">
@@ -152,5 +147,5 @@ const itemsOnPage = computed(() => buildItemsOnPageString(props.page));
     </div>
   </nav>
 
-  <slot v-if="props.navigationPosition == 'top'" />
+  <slot v-if="navigationPosition == 'top'" />
 </template>
