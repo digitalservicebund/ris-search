@@ -194,7 +194,7 @@ class AdministrativeDirectiveControllerApiTest extends ContainersIntegrationBase
 
   @Test
   @DisplayName("Should return all files belonging to a document in a zip archive")
-  void shouldReturnCaselawZip() throws Exception {
+  void shouldReturnZip() throws Exception {
     String filename = documentNumberPresentInBucket + ".akn.xml";
 
     MvcResult result =
