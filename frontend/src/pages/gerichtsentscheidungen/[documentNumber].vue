@@ -98,6 +98,7 @@ const headerMetadata = computed<MetadataItem[]>(() => [
     type: "badge",
     label: "Aktenzeichen",
     values: caseLaw.value?.fileNumbers ?? [],
+    color: "gray",
   },
 ]);
 

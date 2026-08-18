@@ -10,6 +10,7 @@ export function getAdministrativeDirectiveMetadataItems(
       type: "badge",
       label: "Aktenzeichen",
       values: administrativeDirective?.referenceNumbers ?? [],
+      color: "gray",
     },
     {
       type: "text",

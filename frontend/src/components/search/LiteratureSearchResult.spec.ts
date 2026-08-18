@@ -82,9 +82,16 @@ describe("LiteratureSearchResult", () => {
       expect(screen.getByText("Book")).toBeVisible();
     });
 
+    it("renders 'Literaturnachweis' if no documentType exists", async () => {
+      renderComponent({ item: { ...searchResult.item, documentTypes: [] } });
+      expect(screen.getByText("Literaturnachweis")).toBeVisible();
+    });
+
     it("renders first dependentReference", async () => {
       renderComponent();
-      expect(screen.getByText("DEP-122")).toBeVisible();
+      const referenceNumberBadge = screen.getByText("DEP-122");
+      expect(referenceNumberBadge).toBeVisible();
+      expect(referenceNumberBadge).toHaveClass(/border-gray/);
     });
 
     it("renders first independentReference if no dependentReference exists", async () => {
@@ -94,7 +101,10 @@ describe("LiteratureSearchResult", () => {
           dependentReferences: [],
         },
       });
-      expect(screen.getByText("INDEP-124")).toBeVisible();
+
+      const referenceNumberBadge = screen.getByText("INDEP-124");
+      expect(referenceNumberBadge).toBeVisible();
+      expect(referenceNumberBadge).toHaveClass(/border-gray/);
     });
 
     it("renders first year of publication", async () => {

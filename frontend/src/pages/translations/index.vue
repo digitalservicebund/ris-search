@@ -137,8 +137,8 @@ const translationsListId = useId();
               <SearchResultHeader
                 lang="de"
                 :items="[
-                  { value: t['@id'] },
-                  { value: t.translationOfWork ?? '' },
+                  { type: 'text', value: t['@id'] },
+                  { type: 'text', value: t.translationOfWork ?? '' },
                 ]"
               />
 

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import sanitizeHtml from "sanitize-html";
 import { computed } from "vue";
 import { tw } from "../../utils/tags";
 
@@ -6,12 +7,14 @@ export type BadgeColor = "blue" | "green" | "yellow" | "red" | "gray";
 
 const props = withDefaults(
   defineProps<{
-    label: string;
+    label?: string;
     color: BadgeColor;
     variant?: "standard" | "extraSmall" | "small" | "medium" | "large";
+    isMarkup?: boolean;
   }>(),
   {
     variant: "standard",
+    isMarkup: false,
   },
 );
 
@@ -34,7 +37,7 @@ const extraSmall = tw`ris-label3-regular sm:ris-label2-regular 2xl:ris-label1-re
 const small = tw`ris-label2-regular sm:ris-label1-regular`;
 
 // for badges in the search result header
-const medium = tw`ris-label2-regular 2xl:ris-label1-regular`;
+const medium = tw`typo-label2-regular`;
 
 // for badges in the details tab and 'about this service' page
 const large = tw`typo-label1-regular`;
@@ -55,10 +58,15 @@ const rootClass = computed(() => {
     [large]: variant === "large",
   };
 });
+
+const sanitizedLabel = computed(() => {
+  return sanitizeHtml(props.label ?? "", { allowedTags: ["mark"] });
+});
 </script>
 
 <template>
-  <span :class="rootClass">
+  <span v-if="isMarkup" :class="rootClass" v-html="sanitizedLabel" />
+  <span v-else :class="rootClass">
     {{ label }}
   </span>
 </template>

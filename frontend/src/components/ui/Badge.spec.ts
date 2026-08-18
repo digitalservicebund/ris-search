@@ -3,7 +3,7 @@ import { describe, it, expect } from "vitest";
 import Badge from "./Badge.vue";
 
 describe("Badge", () => {
-  it("renders the label text", () => {
+  it("renders the label as plain text by default", () => {
     render(Badge, {
       props: {
         label: "Test Label",
@@ -12,6 +12,34 @@ describe("Badge", () => {
     });
 
     expect(screen.getByText("Test Label")).toBeInTheDocument();
+  });
+
+  it("renders content as html when 'isMarkup' is true", () => {
+    const { container } = render(Badge, {
+      props: {
+        label: "<mark>Highlighted Content</mark>",
+        color: "gray",
+        isMarkup: true,
+      },
+    });
+    expect(container.querySelector("mark")).toHaveTextContent(
+      "Highlighted Content",
+    );
+  });
+
+  it("sanitizes html content", () => {
+    const { container } = render(Badge, {
+      props: {
+        label: "<mark><script>CSS</script>Highlighted Content</mark>",
+        color: "gray",
+        isMarkup: true,
+      },
+    });
+
+    expect(container.querySelectorAll("script")).toHaveLength(0);
+    expect(container.querySelector("mark")).toHaveTextContent(
+      "Highlighted Content",
+    );
   });
 
   it("applies blue styling for blue color", () => {

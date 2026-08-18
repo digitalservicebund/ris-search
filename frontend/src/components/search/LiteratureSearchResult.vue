@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import OutlineBookIcon from "~icons/ic/outline-book";
-import type { SearchResultHeaderItem } from "~/components/search/SearchResultHeader.vue";
+import type {
+  SearchResultHeaderItem,
+  TextHeaderItem,
+} from "~/components/search/SearchResultHeader.vue";
 import type { Literature, SearchResult } from "~/types/api";
 import { getMatch, getTitleWithFallback } from "~/utils/search/searchResults";
 
@@ -30,15 +32,31 @@ const headline = computed(() =>
 
 const resultTypeId = useId();
 
-const headerItems = computed<SearchResultHeaderItem[]>(() => {
+const headerItems = computed(() => {
   const item = searchResult.item;
+  const items: SearchResultHeaderItem[] = [];
+
   const reference =
     item.dependentReferences?.[0] ?? item.independentReferences?.[0];
-  return [
-    { value: item.documentTypes?.[0], id: resultTypeId },
-    { value: reference },
-    { value: item.yearsOfPublication?.[0] },
-  ].filter((i): i is SearchResultHeaderItem => i.value !== undefined);
+
+  if (reference) {
+    items.push({ type: "badge", value: reference, color: "gray" });
+  }
+
+  if (item.yearsOfPublication?.[0]) {
+    items.push({ type: "text", value: item.yearsOfPublication?.[0] });
+  }
+
+  const docTypeItem: TextHeaderItem = {
+    type: "text",
+    value: item.documentTypes?.[0] ?? "Literaturnachweis",
+    id: resultTypeId,
+  };
+
+  return {
+    documentType: docTypeItem,
+    otherItems: items,
+  };
 });
 
 const detailPageRoute = computed(() => ({
@@ -60,7 +78,10 @@ function trackResultClick() {
 
 <template>
   <div class="flex flex-col gap-8 hyphens-auto">
-    <SearchResultHeader :icon="OutlineBookIcon" :items="headerItems" />
+    <SearchResultHeader
+      :document-type="headerItems.documentType"
+      :items="headerItems.otherItems"
+    />
     <NuxtLink
       :to="detailPageRoute"
       :aria-describedby="resultTypeId"

@@ -27,6 +27,7 @@ export function getLiteratureMetadataItems(
       type: "badge",
       label: "Fundstelle",
       values: references,
+      color: "gray",
     },
     {
       type: "text",

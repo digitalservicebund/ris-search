@@ -142,9 +142,8 @@ export function getNormMetadataItems(
   const validityInterval = temporalCoverageToValidityInterval(
     norm?.temporalCoverage,
   );
-  const formattedStatus = getValidityStatusLabel(
-    getValidityStatus(validityInterval),
-  );
+
+  const validityStatus = formatNormValidity(norm?.temporalCoverage);
   return [
     {
       type: "text",
@@ -152,9 +151,10 @@ export function getNormMetadataItems(
       value: norm?.abbreviation,
     },
     {
-      type: "text",
+      type: "badge",
       label: "Status",
-      value: formattedStatus,
+      values: validityStatus?.label ? [validityStatus.label] : [],
+      color: validityStatus?.color ?? "gray",
     },
     {
       type: "text",
