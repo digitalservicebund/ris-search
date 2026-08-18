@@ -60,6 +60,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/literature/{documentNumber}.zip": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Decision ZIP (XML and attachments)
+         * @description Returns all literature document files as a ZIP archive.
+         */
+        get: operations["getLiteratureDocumentAsZip"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/literature/{documentNumber}.xml": {
         parameters: {
             query?: never;
@@ -638,6 +658,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/administrative-directive/{documentNumber}.zip": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Decision ZIP (XML and attachments)
+         * @description Returns all administrative directive files as a ZIP archive.
+         */
+        get: operations["getAdministrativeDirectiveAsZip"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/administrative-directive/{documentNumber}.xml": {
         parameters: {
             query?: never;
@@ -918,6 +958,7 @@ export interface components {
             literatureType: string;
             encoding: components["schemas"]["LiteratureEncodingSchema"][];
         };
+        StreamingResponseBody: unknown;
         ChangelogChangedDocument: {
             /** @description unique identifier of the document */
             "@id": string;
@@ -1113,7 +1154,6 @@ export interface components {
             hasPart: components["schemas"]["LegislationExpressionPartSchema"][];
             encoding: components["schemas"]["LegislationObjectSchema"][];
         };
-        StreamingResponseBody: unknown;
         AbstractDocumentSchema: {
             "@type": string;
         };
@@ -1556,6 +1596,36 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["LiteratureSchema"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    getLiteratureDocumentAsZip: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @example XXLS201770751 */
+                documentNumber: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/zip": components["schemas"]["StreamingResponseBody"];
                 };
             };
             /** @description Not Found */
@@ -2685,6 +2755,36 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AdministrativeDirectiveSchema"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    getAdministrativeDirectiveAsZip: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @example XXLS201770751 */
+                documentNumber: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/zip": components["schemas"]["StreamingResponseBody"];
                 };
             };
             /** @description Not Found */
