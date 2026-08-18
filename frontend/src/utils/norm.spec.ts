@@ -192,16 +192,11 @@ describe("getNormMetadataItems", () => {
       "Gültig ab",
       "Gültig bis",
     ]);
-
-    expect(result[0]).toMatchObject({ type: "text", value: undefined });
-    expect(result[1]).toMatchObject({ type: "text", value: undefined });
-    expect(result[2]).toMatchObject({ type: "text", value: undefined });
-    expect(result[3]).toMatchObject({ type: "text", value: undefined });
   });
 
   it("converts empty properties to undefined values", () => {
     const result = getNormMetadataItems({
-      abbreviation: "",
+      abbreviation: undefined,
       legislationIdentifier: "",
       "@type": "Legislation",
       "@id": "",
@@ -219,8 +214,8 @@ describe("getNormMetadataItems", () => {
       hasPart: [],
     });
 
-    expect(result[0]).toMatchObject({ type: "text", value: "" });
-    expect(result[1]).toMatchObject({ type: "text", value: undefined });
+    expect(result[0]).toMatchObject({ type: "text", value: undefined });
+    expect(result[1]).toMatchObject({ type: "badge", values: [] });
     expect(result[2]).toMatchObject({ type: "text", value: undefined });
     expect(result[3]).toMatchObject({ type: "text", value: undefined });
   });
@@ -246,10 +241,43 @@ describe("getNormMetadataItems", () => {
     });
 
     expect(result[0]).toMatchObject({ type: "text", value: "ABC" });
-    expect(result[1]).toMatchObject({ type: "text", value: "Aktuell gültig" });
     expect(result[2]).toMatchObject({ type: "text", value: "06.05.2025" });
     expect(result[3]).toMatchObject({ type: "text", value: "31.03.2037" });
   });
+
+  it.each([
+    ["1900-01-01/1950-01-01", "Außer Kraft", "red"],
+    ["2025-05-06/2037-03-31", "Aktuell gültig", "green"],
+    ["2070-01-01/..", "Zukünftig in Kraft", "yellow"],
+  ])(
+    "displays validity status as badge with color %s and label %s",
+    (temporalCoverage, expectedLabel, expectedColor) => {
+      const result = getNormMetadataItems({
+        abbreviation: "ABC",
+        legislationIdentifier: "",
+        "@type": "Legislation",
+        "@id": "",
+        temporalCoverage: temporalCoverage,
+        legislationLegalForce: "InForce", // not relevant for validity status calculation
+        encoding: [
+          {
+            "@type": "LegislationObject",
+            "@id": "",
+            contentUrl: "",
+            encodingFormat: "",
+            inLanguage: "",
+          },
+        ],
+        hasPart: [],
+      });
+
+      expect(result[1]).toMatchObject({
+        type: "badge",
+        values: [expectedLabel],
+        color: expectedColor,
+      });
+    },
+  );
 });
 
 describe("isNormBodyEmpty", () => {

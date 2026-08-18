@@ -14,6 +14,7 @@ describe("Metadata", () => {
             type: "badge",
             label: "Label 2",
             values: [],
+            color: "gray",
           },
         ],
       },
@@ -53,11 +54,13 @@ describe("Metadata", () => {
             type: "badge",
             label: "Label 1",
             values: ["Badge 1"],
+            color: "gray",
           },
           {
             type: "badge",
             label: "Label 2",
             values: ["Badge 2", "Badge 3"],
+            color: "green",
           },
         ],
       },
@@ -66,11 +69,11 @@ describe("Metadata", () => {
     const terms = screen.getAllByRole("term");
 
     expect(terms[0]).toHaveTextContent("Label 1");
-    expect(screen.getByText("Badge 1")).toHaveClass("border-gray-400");
+    expect(screen.getByText("Badge 1")).toHaveClass(/border-gray/);
 
     expect(terms[1]).toHaveTextContent("Label 2");
-    expect(screen.getByText("Badge 2")).toHaveClass("border-gray-400");
-    expect(screen.getByText("Badge 3")).toHaveClass("border-gray-400");
+    expect(screen.getByText("Badge 2")).toHaveClass(/border-green/);
+    expect(screen.getByText("Badge 3")).toHaveClass(/border-green/);
   });
 
   it("renders mixed metadata items", async () => {
@@ -81,6 +84,7 @@ describe("Metadata", () => {
             type: "badge",
             label: "Label 1",
             values: ["Badge 1"],
+            color: "gray",
           },
           {
             type: "text",
@@ -94,7 +98,7 @@ describe("Metadata", () => {
     const terms = screen.getAllByRole("term");
 
     expect(terms[0]).toHaveTextContent("Label 1");
-    expect(screen.getByText("Badge 1")).toHaveClass("border-gray-400");
+    expect(screen.getByText("Badge 1")).toHaveClass(/border-gray/);
 
     expect(terms[1]).toHaveTextContent("Label 2");
     expect(terms[1]?.nextElementSibling).toHaveTextContent("Value 1");
