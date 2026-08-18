@@ -258,7 +258,7 @@ test.describe("searching all documents", () => {
 });
 
 test.describe("searching legislation", () => {
-  test("narrows search", async ({ page }) => {
+  test("narrows search", { tag: ["@RISDEV-12193"] }, async ({ page }) => {
     await navigate(page, "/suche?query=fiktiv");
 
     const searchResults = getSearchResults(page);
@@ -268,7 +268,7 @@ test.describe("searching legislation", () => {
 
     await page
       .getByRole("complementary", { name: "Dokumentart" })
-      .getByRole("button", { name: "Gesetze & Verordnungen" })
+      .getByRole("radio", { name: "Gesetze & Verordnungen" })
       .click();
 
     await expect(page).toHaveURL(/documentKind=N/);
@@ -494,7 +494,7 @@ test.describe("searching legislation", () => {
 });
 
 test.describe("searching caselaw", () => {
-  test("narrows search", async ({ page }) => {
+  test("narrows search", { tag: ["@RISDEV-12193"] }, async ({ page }) => {
     await navigate(page, "/suche?query=fiktiv");
 
     const searchResults = getSearchResults(page);
@@ -504,7 +504,7 @@ test.describe("searching caselaw", () => {
 
     await page
       .getByRole("complementary", { name: "Dokumentart" })
-      .getByRole("button", { name: "Gerichtsentscheidungen" })
+      .getByRole("radio", { name: "Gerichtsentscheidungen" })
       .click();
 
     await expect(page).toHaveURL(/documentKind=R/);
@@ -568,13 +568,13 @@ test.describe("searching caselaw", () => {
     ).toBeVisible();
   });
 
-  test("narrows by subtypes", async ({ page }) => {
+  test("narrows by subtypes", { tag: ["@RISDEV-12193"] }, async ({ page }) => {
     await navigate(page, "/suche?documentKind=R");
 
     await test.step("Urteil", async () => {
       await page
         .getByRole("group", { name: "Dokumentarten" })
-        .getByRole("treeitem", { name: "Urteil" })
+        .getByRole("radio", { name: "Urteil" })
         .click();
 
       await expect(page).toHaveURL(/documentKind=R/);
@@ -588,7 +588,7 @@ test.describe("searching caselaw", () => {
     await test.step("Beschluss", async () => {
       await page
         .getByRole("group", { name: "Dokumentarten" })
-        .getByRole("treeitem", { name: "Beschluss" })
+        .getByRole("radio", { name: "Beschluss" })
         .click();
 
       await expect(page).toHaveURL(/documentKind=R/);
@@ -602,7 +602,7 @@ test.describe("searching caselaw", () => {
     await test.step("Other", async () => {
       await page
         .getByRole("group", { name: "Dokumentarten" })
-        .getByRole("treeitem", { name: "Sonstige Entscheidungen" })
+        .getByRole("radio", { name: "Sonstige Entscheidungen" })
         .click();
 
       await expect(page).toHaveURL(/documentKind=R/);
@@ -614,7 +614,7 @@ test.describe("searching caselaw", () => {
     await test.step("reset", async () => {
       await page
         .getByRole("group", { name: "Dokumentarten" })
-        .getByRole("treeitem", { name: "Alle Gerichtsentscheidungen" })
+        .getByRole("radio", { name: "Gerichtsentscheidungen" })
         .click();
 
       await expect(page).toHaveURL(/documentKind=R/);
@@ -733,36 +733,38 @@ test.describe("searching caselaw", () => {
     await expect(page.getByRole("textbox", { name: "bis" })).toHaveValue("");
   });
 
-  test("resets caselaw-specific filters when switching to all documents", async ({
-    page,
-  }) => {
-    // Start with caselaw search with typeGroup, date filter, and court
-    await navigate(
-      page,
-      "/suche?documentKind=R&typeGroup=urteil&court=LG+Hamburg+Label&dateFilterType=period&dateFilterFrom=2025-01-01&dateFilterTo=2025-12-31",
-    );
+  test(
+    "resets caselaw-specific filters when switching to all documents",
+    { tag: ["@RISDEV-12193"] },
+    async ({ page }) => {
+      // Start with caselaw search with typeGroup, date filter, and court
+      await navigate(
+        page,
+        "/suche?documentKind=R&typeGroup=urteil&court=LG+Hamburg+Label&dateFilterType=period&dateFilterFrom=2025-01-01&dateFilterTo=2025-12-31",
+      );
 
-    await expect(getResultCounter(page)).toHaveText("3 Suchergebnisse");
+      await expect(getResultCounter(page)).toHaveText("3 Suchergebnisse");
 
-    // Switch to All Documents
-    await page
-      .getByRole("complementary", { name: "Dokumentart" })
-      .getByRole("button", { name: "Alle Dokumentarten" })
-      .click();
+      // Switch to All Documents
+      await page
+        .getByRole("complementary", { name: "Dokumentart" })
+        .getByRole("radio", { name: "Alle Dokumentarten" })
+        .click();
 
-    await expect(getResultCounter(page)).toHaveText("44 Suchergebnisse");
+      await expect(getResultCounter(page)).toHaveText("44 Suchergebnisse");
 
-    // Verify caselaw-specific filters are reset
-    await expect(page).not.toHaveURL(/documentKind=R/);
-    await expect(page).not.toHaveURL(/typeGroup=urteil/);
-    await expect(page).not.toHaveURL(/court=LG\+Hamburg/);
-    await expect(page).not.toHaveURL(/dateFilterFrom=2024-01-01/);
-    await expect(page).not.toHaveURL(/dateFilterTo=2024-12-31/);
-  });
+      // Verify caselaw-specific filters are reset
+      await expect(page).not.toHaveURL(/documentKind=R/);
+      await expect(page).not.toHaveURL(/typeGroup=urteil/);
+      await expect(page).not.toHaveURL(/court=LG\+Hamburg/);
+      await expect(page).not.toHaveURL(/dateFilterFrom=2024-01-01/);
+      await expect(page).not.toHaveURL(/dateFilterTo=2024-12-31/);
+    },
+  );
 });
 
 test.describe("searching literature", () => {
-  test("narrows search", async ({ page }) => {
+  test("narrows search", { tag: ["@RISDEV-12193"] }, async ({ page }) => {
     await navigate(page, "/suche?query=ein");
 
     const searchResults = getSearchResults(page);
@@ -772,7 +774,7 @@ test.describe("searching literature", () => {
 
     await page
       .getByRole("complementary", { name: "Dokumentart" })
-      .getByRole("button", { name: "Literaturnachweise" })
+      .getByRole("radio", { name: "Literaturnachweise" })
       .click();
 
     await expect(page).toHaveURL(/documentKind=L/);
@@ -905,7 +907,7 @@ test.describe("searching literature", () => {
 });
 
 test.describe("searching administrative directives", () => {
-  test("narrows search", async ({ page }) => {
+  test("narrows search", { tag: ["@RISDEV-12193"] }, async ({ page }) => {
     await navigate(page, "/suche?query=wurde");
 
     const searchResults = getSearchResults(page);
@@ -915,7 +917,7 @@ test.describe("searching administrative directives", () => {
 
     await page
       .getByRole("complementary", { name: "Dokumentart" })
-      .getByRole("button", { name: "Verwaltungsvorschriften" })
+      .getByRole("radio", { name: "Verwaltungsvorschriften" })
       .click();
 
     await expect(page).toHaveURL(/documentKind=V/);
@@ -1083,7 +1085,7 @@ test.describe("mobile filter and sort drawers", () => {
 
     await page
       .getByRole("complementary", { name: "Dokumentart" })
-      .getByRole("button", { name: "Gerichtsentscheidungen" })
+      .getByRole("radio", { name: "Gerichtsentscheidungen" })
       .click();
 
     await expect(page.getByRole("button", { name: "Filtern" })).toBeVisible();

@@ -29,14 +29,13 @@ describe("CategoryFilter", () => {
     expect(emitted("update:modelValue")).toContainEqual(["N"]);
   });
 
-  it("strips .all suffix when selecting 'all' subcategory", async () => {
+  it("clears the subcategory when selecting 'all' subcategory", async () => {
     const user = userEvent.setup();
 
     const { emitted } = await renderSuspended(CategoryFilter, {
-      props: { modelValue: "A" },
+      props: { modelValue: "R.urteil" },
     });
 
-    await user.click(screen.getByText("Gerichtsentscheidungen"));
     await user.click(screen.getByText("Alle Gerichtsentscheidungen"));
 
     expect(emitted("update:modelValue")).toContainEqual(["R"]);
@@ -53,5 +52,32 @@ describe("CategoryFilter", () => {
     await user.click(screen.getByText("Urteil"));
 
     expect(emitted("update:modelValue")).toContainEqual(["R.urteil"]);
+  });
+
+  it("selects all case law when the parent category is selected", async () => {
+    const user = userEvent.setup();
+
+    const { emitted } = await renderSuspended(CategoryFilter, {
+      props: { modelValue: "A" },
+    });
+
+    await user.click(screen.getByText("Gerichtsentscheidungen"));
+
+    expect(emitted("update:modelValue")).toContainEqual(["R"]);
+  });
+
+  it("hides the subcategories while another category is selected", async () => {
+    await renderSuspended(CategoryFilter, { props: { modelValue: "N" } });
+
+    expect(screen.queryByText("Urteil")).not.toBeInTheDocument();
+  });
+
+  it("shows the subcategories while case law is selected", async () => {
+    await renderSuspended(CategoryFilter, { props: { modelValue: "R" } });
+
+    expect(
+      screen.getByRole("radio", { name: "Gerichtsentscheidungen" }),
+    ).toBeChecked();
+    expect(screen.getByRole("radio", { name: "Urteil" })).toBeInTheDocument();
   });
 });

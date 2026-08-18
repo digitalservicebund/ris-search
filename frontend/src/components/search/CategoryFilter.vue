@@ -1,44 +1,51 @@
 <script setup lang="ts">
-import { PanelMenu } from "primevue";
-import type { MenuItem, MenuItemCommandEvent } from "primevue/menuitem";
-import {
-  computeExpandedKeys,
-  categoryFilterItems,
-} from "~/utils/search/categoryFilter";
+import type { RadioTreeItem } from "~/components/ui/RadioTree.vue";
+import { DocumentKind } from "~/types/api";
 
 const model = defineModel<string>({ required: true });
 
-const update = (event: MenuItemCommandEvent) => {
-  let key = event.item.key;
-  if (key?.endsWith(".all")) {
-    key = key.substring(0, key.length - 4);
-  }
-  if (key) model.value = key;
-};
-
-const addUpdate = (items: MenuItem[]) => {
-  return items.map((item: MenuItem): MenuItem => ({
-    ...item,
-    command: update,
-    items: item.items ? addUpdate(item.items) : item.items,
-  }));
-};
-
-const selectedItems = addUpdate(categoryFilterItems);
-
-const expandedKeys = computed(() => computeExpandedKeys(model.value));
-
-const panelMenuId = useId();
+const items: RadioTreeItem[] = [
+  {
+    label: "Alle Dokumentarten",
+    value: DocumentKind.All,
+  },
+  {
+    label: "Gesetze & Verordnungen",
+    value: DocumentKind.Norm,
+  },
+  {
+    label: "Gerichtsentscheidungen",
+    value: DocumentKind.CaseLaw,
+    selfLabel: "Alle Gerichtsentscheidungen",
+    children: [
+      {
+        label: "Urteil",
+        value: `${DocumentKind.CaseLaw}.urteil`,
+      },
+      {
+        label: "Beschluss",
+        value: `${DocumentKind.CaseLaw}.beschluss`,
+      },
+      {
+        label: "Sonstige Entscheidungen",
+        value: `${DocumentKind.CaseLaw}.other`,
+      },
+    ],
+  },
+  {
+    label: "Verwaltungsvorschriften",
+    value: DocumentKind.AdministrativeDirective,
+  },
+  {
+    label: "Literaturnachweise",
+    value: DocumentKind.Literature,
+  },
+];
 </script>
+
 <template>
-  <fieldset>
+  <fieldset class="w-full md:w-200">
     <legend class="sr-only">Dokumentarten</legend>
-    <PanelMenu
-      :id="panelMenuId"
-      :model="selectedItems"
-      :expanded-keys="expandedKeys"
-      class="w-full md:w-200"
-      ><template #submenuicon><i /></template
-    ></PanelMenu>
+    <UiRadioTree :items="items" v-model="model" />
   </fieldset>
 </template>
