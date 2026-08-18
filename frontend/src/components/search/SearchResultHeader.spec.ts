@@ -48,15 +48,6 @@ describe("SearchResultHeader", () => {
     expect(screen.getByText("<mark>Item 2</mark>")).toBeVisible();
   });
 
-  it("renders items as markup", async () => {
-    const { container } = renderComponent([
-      { type: "text", isMarkup: true, value: "<mark>Item 1</mark>" },
-    ]);
-
-    const markupSpan = container.querySelector("span:has(mark)");
-    expect(markupSpan?.innerHTML).toContain("<mark>Item 1</mark>");
-  });
-
   it("renders items as badges", async () => {
     renderComponent([
       { type: "badge", value: "Item 1", color: "green" },
@@ -110,7 +101,6 @@ describe("SearchResultHeader", () => {
     const { container } = renderComponent([
       { type: "text", value: "Item 1" },
       { type: "text", value: "" },
-      { type: "text", value: "", isMarkup: true },
       { type: "badge", value: "Item 2", color: "green" },
       { type: "badge", value: "", color: "green" },
       { type: "badge", value: "", color: "green", isMarkup: true },

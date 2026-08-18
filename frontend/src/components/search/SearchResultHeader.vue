@@ -5,7 +5,6 @@ export interface TextHeaderItem {
   type: "text";
   value: string;
   id?: string;
-  isMarkup?: boolean;
 }
 
 export interface BadgeHeaderItem {
@@ -20,9 +19,9 @@ export interface BadgeHeaderItem {
 export type SearchResultHeaderItem = TextHeaderItem | BadgeHeaderItem;
 
 const { items, secondaryItem } = defineProps<{
-  documentType?: Omit<TextHeaderItem, "isMarkup">;
+  documentType?: TextHeaderItem;
   items: SearchResultHeaderItem[];
-  secondaryItem?: Omit<TextHeaderItem, "id" | "isMarkup">;
+  secondaryItem?: Omit<TextHeaderItem, "id">;
 }>();
 
 const itemsWithContent = computed(() => items.filter((i) => !!i.value));
@@ -37,14 +36,7 @@ const itemsWithContent = computed(() => items.filter((i) => !!i.value));
         documentType.value
       }}</span>
       <template v-for="item in itemsWithContent" :key="item.value">
-        <span v-if="item.type === 'text' && !item.isMarkup" :id="item.id">{{
-          item.value
-        }}</span>
-        <span
-          v-if="item.type === 'text' && item.isMarkup"
-          :id="item.id"
-          v-html="item.value"
-        />
+        <span v-if="item.type === 'text'" :id="item.id">{{ item.value }}</span>
         <UiBadge
           v-if="item.type === 'badge'"
           :is-markup="item.isMarkup"

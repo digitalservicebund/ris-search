@@ -74,12 +74,14 @@ const headerItems = computed(() => {
     });
   }
 
+  const docTypeItem: TextHeaderItem = {
+    type: "text",
+    value: searchResult.item.documentType || "Entscheidung",
+    id: resultTypeId,
+  };
+
   return {
-    documentType: {
-      type: "text",
-      value: searchResult.item.documentType || "Entscheidung",
-      id: resultTypeId,
-    } as TextHeaderItem,
+    documentType: docTypeItem,
     otherItems: items,
   };
 });

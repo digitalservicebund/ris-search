@@ -69,12 +69,14 @@ const headerItems = computed(() => {
     items.push({ type: "text", value: dateValue });
   }
 
+  const docTypeItem: TextHeaderItem = {
+    type: "text",
+    value: "Norm",
+    id: resultTypeId,
+  };
+
   return {
-    documentType: {
-      type: "text",
-      value: "Norm",
-      id: resultTypeId,
-    } as TextHeaderItem,
+    documentType: docTypeItem,
     otherItems: items,
   };
 });

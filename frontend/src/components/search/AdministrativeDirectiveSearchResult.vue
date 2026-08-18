@@ -54,12 +54,14 @@ const headerItems = computed(() => {
     items.push({ type: "text", value: formattedEntryIntoForce });
   }
 
+  const docTypeItem: TextHeaderItem = {
+    type: "text",
+    value: searchResult.item.documentType,
+    id: resultTypeId,
+  };
+
   return {
-    documentType: {
-      type: "text",
-      value: searchResult.item.documentType,
-      id: resultTypeId,
-    } as TextHeaderItem,
+    documentType: docTypeItem,
     otherItems: items,
   };
 });

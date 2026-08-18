@@ -47,12 +47,14 @@ const headerItems = computed(() => {
     items.push({ type: "text", value: item.yearsOfPublication?.[0] });
   }
 
+  const docTypeItem: TextHeaderItem = {
+    type: "text",
+    value: item.documentTypes?.[0] ?? "Literaturnachweis",
+    id: resultTypeId,
+  };
+
   return {
-    documentType: {
-      type: "text",
-      value: item.documentTypes?.[0] ?? "Literaturnachweis",
-      id: resultTypeId,
-    } as TextHeaderItem,
+    documentType: docTypeItem,
     otherItems: items,
   };
 });
