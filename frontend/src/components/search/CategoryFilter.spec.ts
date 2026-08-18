@@ -76,7 +76,7 @@ describe("CategoryFilter", () => {
     await renderSuspended(CategoryFilter, { props: { modelValue: "R" } });
 
     expect(
-      screen.getByRole("radio", { name: "Gerichtsentscheidungen" }),
+      screen.getByRole("radio", { name: "Alle Gerichtsentscheidungen" }),
     ).toBeChecked();
     expect(screen.getByRole("radio", { name: "Urteil" })).toBeInTheDocument();
   });

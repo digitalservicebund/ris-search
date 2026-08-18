@@ -614,7 +614,7 @@ test.describe("searching caselaw", () => {
     await test.step("reset", async () => {
       await page
         .getByRole("group", { name: "Dokumentarten" })
-        .getByRole("radio", { name: "Gerichtsentscheidungen" })
+        .getByRole("radio", { name: "Alle Gerichtsentscheidungen" })
         .click();
 
       await expect(page).toHaveURL(/documentKind=R/);

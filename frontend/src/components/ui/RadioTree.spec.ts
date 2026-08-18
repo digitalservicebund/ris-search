@@ -77,7 +77,7 @@ describe("RadioTree", () => {
 
     expect(screen.getByRole("radio", { name: "Urteil" })).toBeChecked();
     expect(
-      screen.getByRole("radio", { name: "Gerichtsentscheidungen" }),
+      screen.getByRole("radio", { name: "Alle Gerichtsentscheidungen" }),
     ).not.toBeChecked();
   });
 
@@ -152,15 +152,23 @@ describe("RadioTree", () => {
       expect(emitted("update:modelValue")).toContainEqual(["R"]);
     });
 
-    it("is not announced separately from the radio it labels", () => {
+    it("names the radio it labels, rather than being announced separately", () => {
       render(RadioTree, { props: { items, modelValue: "R" } });
 
       expect(
-        screen.getByRole("radio", { name: "Gerichtsentscheidungen" }),
+        screen.getByRole("radio", { name: "Alle Gerichtsentscheidungen" }),
       ).toBeChecked();
       expect(
-        screen.queryByRole("radio", { name: "Alle Gerichtsentscheidungen" }),
-      ).not.toBeInTheDocument();
+        screen.getAllByRole("radio", { name: /Gerichtsentscheidungen/ }),
+      ).toHaveLength(1);
+    });
+
+    it("leaves the item named after its own row while collapsed", () => {
+      render(RadioTree, { props: { items, modelValue: "A" } });
+
+      expect(
+        screen.getByRole("radio", { name: "Gerichtsentscheidungen" }),
+      ).toBeInTheDocument();
     });
 
     it("is omitted for items without a selfLabel", () => {

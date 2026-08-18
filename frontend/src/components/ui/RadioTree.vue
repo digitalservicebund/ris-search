@@ -47,16 +47,19 @@ function isExpanded(item: RadioTreeItem) {
   );
 }
 
-/** Whether the item is repeated as the first row of its own children. */
 function hasSelfRow(item: RadioTreeItem) {
-  return !!item.selfLabel && !!item.children?.length && isExpanded(item);
+  return !!item.selfLabel && !!item.children?.length;
+}
+
+function showsSelfRow(item: RadioTreeItem) {
+  return hasSelfRow(item) && isExpanded(item);
 }
 
 const uid = useId();
 
 const inputId = (value: string) => `${uid}-${value}`;
 
-const labelId = (value: string) => `${uid}-${value}-label`;
+const selfLabelId = (value: string) => `${uid}-${value}-self-label`;
 
 // Classes ------------------------------------------------
 
@@ -64,7 +67,14 @@ const input = tw`peer absolute inset-0 cursor-pointer appearance-none opacity-0`
 
 const row = tw`flex w-full border-l-4 border-transparent p-16 pl-[1.125rem] text-left text-blue-800`;
 
-const radioRow = tw`pointer-events-none peer-hover:border-blue-500 peer-hover:bg-blue-200 peer-focus-visible:outline-4 peer-focus-visible:-outline-offset-4 peer-focus-visible:outline-blue-800 peer-active:border-blue-800 peer-active:bg-blue-300`;
+const radioRow = tw`pointer-events-none peer-hover:border-blue-500 peer-hover:bg-blue-200 peer-active:border-blue-800 peer-active:bg-blue-300`;
+
+// Focus of a row's own radio, which sits right next to it.
+const peerFocus = tw`peer-focus-visible:outline-4 peer-focus-visible:-outline-offset-4 peer-focus-visible:outline-blue-800`;
+
+// Focus of the radio belonging to the self row, which sits in the item's own
+// row further up rather than next to it.
+const selfFocus = tw`group-has-[>div>input:focus-visible]:outline-4 group-has-[>div>input:focus-visible]:-outline-offset-4 group-has-[>div>input:focus-visible]:outline-blue-800`;
 
 const selfRow = tw`cursor-pointer hover:border-blue-500 hover:bg-blue-200 active:border-blue-800 active:bg-blue-300`;
 
@@ -87,6 +97,7 @@ function itemClass(item: RadioTreeItem) {
     [inactive]: !isSelected && !isExpanded(item),
     [branch]: !isSelected && isExpanded(item),
     [selected]: isSelected,
+    [peerFocus]: !hasSelfRow(item),
   };
 }
 
@@ -94,6 +105,7 @@ function childClass(value: string) {
   return {
     [row]: true,
     [radioRow]: true,
+    [peerFocus]: true,
     [inactive]: value !== modelValue,
     [selected]: value === modelValue,
   };
@@ -103,6 +115,7 @@ function selfClass(item: RadioTreeItem) {
   return {
     [row]: true,
     [selfRow]: true,
+    [selfFocus]: true,
     [inactive]: item.value !== modelValue,
     [selected]: item.value === modelValue,
   };
@@ -111,10 +124,16 @@ function selfClass(item: RadioTreeItem) {
 
 <template>
   <ul :class="list">
-    <li v-for="item in items" :key="item.value">
+    <li v-for="item in items" :key="item.value" class="group">
       <div class="relative">
+        <!-- Two labels point at this radio once the self row is shown, and both
+        would end up in its accessible name. The self row is the one carrying
+        the selection and the focus ring by then, so the radio is named after
+        it. -->
         <input
-          :aria-labelledby="hasSelfRow(item) ? labelId(item.value) : undefined"
+          :aria-labelledby="
+            showsSelfRow(item) ? selfLabelId(item.value) : undefined
+          "
           :checked="item.value === modelValue"
           :class="input"
           :id="inputId(item.value)"
@@ -123,21 +142,21 @@ function selfClass(item: RadioTreeItem) {
           type="radio"
           @change="emit('update:modelValue', item.value)"
         />
-        <label
-          :class="itemClass(item)"
-          :for="inputId(item.value)"
-          :id="labelId(item.value)"
-        >
+        <label :class="itemClass(item)" :for="inputId(item.value)">
           {{ item.label }}
         </label>
       </div>
 
       <ul v-if="item.children?.length && isExpanded(item)" :class="nestedList">
         <!-- Hidden from assistive technology: this row is a second label for
-        the radio of the item above, so announcing it would repeat a control
-        that has already been announced under its own name. -->
-        <li v-if="hasSelfRow(item)" aria-hidden="true">
-          <label :class="selfClass(item)" :for="inputId(item.value)">
+        the radio of the item above, which is already announced under this
+        row's own text. -->
+        <li v-if="showsSelfRow(item)" aria-hidden="true">
+          <label
+            :class="selfClass(item)"
+            :for="inputId(item.value)"
+            :id="selfLabelId(item.value)"
+          >
             {{ item.selfLabel }}
           </label>
         </li>
