@@ -17,54 +17,47 @@ describe("CategoryFilter", () => {
     expect(screen.getByText("Literaturnachweise")).toBeInTheDocument();
   });
 
-  it("emits update when category is selected", async () => {
-    const user = userEvent.setup();
+  it.each([
+    {
+      selects: "a top-level category",
+      modelValue: "A",
+      rows: ["Gesetze & Verordnungen"],
+      expected: "N",
+    },
+    {
+      selects: "a category with subcategories",
+      modelValue: "A",
+      rows: ["Gerichtsentscheidungen"],
+      expected: "R",
+    },
+    {
+      selects: "the 'all' subcategory",
+      modelValue: "R.urteil",
+      rows: ["Alle Gerichtsentscheidungen"],
+      expected: "R",
+    },
+    {
+      selects: "a subcategory after opening its branch",
+      modelValue: "A",
+      rows: ["Gerichtsentscheidungen", "Urteil"],
+      expected: "R.urteil",
+    },
+  ])(
+    "emits $expected when selecting $selects",
+    async ({ modelValue, rows, expected }) => {
+      const user = userEvent.setup();
 
-    const { emitted } = await renderSuspended(CategoryFilter, {
-      props: { modelValue: "A" },
-    });
+      const { emitted } = await renderSuspended(CategoryFilter, {
+        props: { modelValue },
+      });
 
-    await user.click(screen.getByText("Gesetze & Verordnungen"));
+      for (const row of rows) {
+        await user.click(screen.getByText(row));
+      }
 
-    expect(emitted("update:modelValue")).toContainEqual(["N"]);
-  });
-
-  it("clears the subcategory when selecting 'all' subcategory", async () => {
-    const user = userEvent.setup();
-
-    const { emitted } = await renderSuspended(CategoryFilter, {
-      props: { modelValue: "R.urteil" },
-    });
-
-    await user.click(screen.getByText("Alle Gerichtsentscheidungen"));
-
-    expect(emitted("update:modelValue")).toContainEqual(["R"]);
-  });
-
-  it("sets specific subcategory when selected", async () => {
-    const user = userEvent.setup();
-
-    const { emitted } = await renderSuspended(CategoryFilter, {
-      props: { modelValue: "A" },
-    });
-
-    await user.click(screen.getByText("Gerichtsentscheidungen"));
-    await user.click(screen.getByText("Urteil"));
-
-    expect(emitted("update:modelValue")).toContainEqual(["R.urteil"]);
-  });
-
-  it("selects all case law when the parent category is selected", async () => {
-    const user = userEvent.setup();
-
-    const { emitted } = await renderSuspended(CategoryFilter, {
-      props: { modelValue: "A" },
-    });
-
-    await user.click(screen.getByText("Gerichtsentscheidungen"));
-
-    expect(emitted("update:modelValue")).toContainEqual(["R"]);
-  });
+      expect(emitted("update:modelValue")).toContainEqual([expected]);
+    },
+  );
 
   it("hides the subcategories while another category is selected", async () => {
     await renderSuspended(CategoryFilter, { props: { modelValue: "N" } });
