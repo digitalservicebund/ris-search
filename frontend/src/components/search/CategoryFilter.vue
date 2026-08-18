@@ -44,7 +44,7 @@ const items: RadioTreeItem[] = [
 </script>
 
 <template>
-  <fieldset class="w-full md:w-200">
+  <fieldset>
     <legend class="sr-only">Dokumentarten</legend>
     <UiRadioTree :items="items" v-model="model" />
   </fieldset>
