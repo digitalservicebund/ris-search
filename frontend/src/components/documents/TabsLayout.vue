@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { Tab, TabList, Tabs } from "primevue";
 import { NuxtLink } from "#components";
 
 export type TabView = {
@@ -23,27 +22,20 @@ const currentView = computed(
 <template>
   <div>
     <div class="border-b border-gray-400">
-      <nav class="content-wrapper -mb-1 overflow-x-auto pt-1" aria-label="Tab">
-        <Tabs :value="currentView" :show-navigators="false">
-          <TabList>
-            <!-- Note that we need to override aria-controls manually,
-                otherwise PrimeVue will insert the ID of a tab panel that
-                doesn't exist -->
-            <Tab
-              v-for="view in views"
-              :key="view.path"
-              :value="view.path"
-              :as="NuxtLink"
-              :to="{ query: { ...route.query, view: view.path } }"
-              :aria-controls="undefined"
-              :data-attr="view.analyticsId"
-              class="flex items-center gap-8"
-            >
-              <component :is="view.icon" />
-              {{ view.label }}
-            </Tab>
-          </TabList>
-        </Tabs>
+      <nav class="content-wrapper -mb-px" aria-label="Tab">
+        <UiTabs>
+          <UiTab
+            v-for="view in views"
+            :key="view.path"
+            :active="view.path === currentView"
+            :as="NuxtLink"
+            :to="{ query: { ...route.query, view: view.path } }"
+            :data-attr="view.analyticsId"
+          >
+            <component :is="view.icon" />
+            {{ view.label }}
+          </UiTab>
+        </UiTabs>
       </nav>
     </div>
 
