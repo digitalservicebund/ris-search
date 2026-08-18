@@ -24,6 +24,11 @@ public interface ArticlesRepository extends ElasticsearchRepository<Article, Str
   /** Delete all articles that do not have an indexedAt value set. */
   void deleteByIndexedAtIsNull();
 
-  /** Check if an article exists */
+  /**
+   * Check if an article exists
+   *
+   * @param id the id of the article to check
+   * @return true if the article exists, false otherwise
+   */
   boolean existsById(@NonNull String id);
 }
