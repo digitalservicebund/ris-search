@@ -1,5 +1,8 @@
 <script setup lang="ts">
-import type { SearchResultHeaderItem } from "~/components/search/SearchResultHeader.vue";
+import type {
+  SearchResultHeaderItem,
+  TextHeaderItem,
+} from "~/components/search/SearchResultHeader.vue";
 import type { AdministrativeDirective, SearchResult } from "~/types/api";
 import { getMatch, getTitleWithFallback } from "~/utils/search/searchResults";
 
@@ -33,22 +36,30 @@ const headerItems = computed(() => {
   const items: SearchResultHeaderItem[] = [];
 
   if (item.legislationAuthority) {
-    items.push({ value: item.legislationAuthority });
+    items.push({ type: "text", value: item.legislationAuthority });
   }
 
   if (item.referenceNumbers?.[0]) {
-    items.push({ value: item.referenceNumbers?.[0] });
+    items.push({
+      type: "badge",
+      value: item.referenceNumbers?.[0],
+      color: "gray",
+    });
   }
 
   const formattedEntryIntoForce = dateFormattedDDMMYYYY(
     item.entryIntoForceDate,
   );
   if (formattedEntryIntoForce) {
-    items.push({ value: formattedEntryIntoForce });
+    items.push({ type: "text", value: formattedEntryIntoForce });
   }
 
   return {
-    documentType: { value: searchResult.item.documentType, id: resultTypeId },
+    documentType: {
+      type: "text",
+      value: searchResult.item.documentType,
+      id: resultTypeId,
+    } as TextHeaderItem,
     otherItems: items,
   };
 });

@@ -47,11 +47,11 @@
 }
 
 @utility typo-label2-regular {
-  @apply ris-label2-regular 2xl:text-[1.125rem];
+  @apply ris-label2-regular 2xl:ris-label1-regular;
 }
 
 @utility typo-label2-bold {
-  @apply ris-label2-bold 2xl:text-[1.125rem];
+  @apply ris-label2-bold 2xl:ris-label1-bold;
 }
 
 @utility typo-mono {

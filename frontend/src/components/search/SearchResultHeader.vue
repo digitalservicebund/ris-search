@@ -1,14 +1,28 @@
 <script setup lang="ts">
-export interface SearchResultHeaderItem {
-  isMarkup?: boolean;
-  id?: string;
+import type { BadgeColor } from "~/components/ui/Badge.vue";
+
+export interface TextHeaderItem {
+  type: "text";
   value: string;
+  id?: string;
+  isMarkup?: boolean;
 }
 
+export interface BadgeHeaderItem {
+  type: "badge";
+  value: string;
+  color: BadgeColor;
+  isMarkup?: boolean;
+  id?: string;
+  class?: string;
+}
+
+export type SearchResultHeaderItem = TextHeaderItem | BadgeHeaderItem;
+
 const { items, secondaryItem } = defineProps<{
-  documentType?: Omit<SearchResultHeaderItem, "isMarkup">;
+  documentType?: Omit<TextHeaderItem, "isMarkup">;
   items: SearchResultHeaderItem[];
-  secondaryItem?: SearchResultHeaderItem;
+  secondaryItem?: Omit<TextHeaderItem, "id" | "isMarkup">;
 }>();
 
 const itemsWithContent = computed(() => items.filter((i) => !!i.value));
@@ -22,19 +36,31 @@ const itemsWithContent = computed(() => items.filter((i) => !!i.value));
           documentType.value
         }}</span>
         <template v-for="item in itemsWithContent" :key="item.value">
-          <span v-if="item.isMarkup" :id="item.id" v-html="item.value" />
-          <span v-else :id="item.id">{{ item.value }}</span>
+          <span v-if="item.type === 'text' && !item.isMarkup" :id="item.id">{{
+            item.value
+          }}</span>
+          <span
+            v-if="item.type === 'text' && item.isMarkup"
+            :id="item.id"
+            v-html="item.value"
+          />
+          <UiBadge
+            v-if="item.type === 'badge'"
+            :is-markup="item.isMarkup"
+            :class="item.class"
+            :variant="'medium'"
+            :label="item.value"
+            :color="item.color"
+            :id="item.id"
+          />
         </template>
       </p>
       <p
         v-if="secondaryItem?.value"
         class="typo-label1-regular mt-8 hyphens-auto"
       >
-        <span v-if="secondaryItem.isMarkup" v-html="secondaryItem.value" />
-        <span v-else>{{ secondaryItem.value }}</span>
+        <span>{{ secondaryItem.value }}</span>
       </p>
     </div>
-
-    <slot name="trailing" />
   </div>
 </template>

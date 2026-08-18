@@ -64,7 +64,9 @@ describe("AdministrativeDirectiveSearchResult", () => {
 
     it("renders first referenceNumber", async () => {
       await renderComponent();
-      expect(screen.getByText("Foo - 123")).toBeVisible();
+      const referenceNumberBadge = screen.getByText("Foo - 123");
+      expect(referenceNumberBadge).toBeVisible();
+      expect(referenceNumberBadge).toHaveClass(/border-gray/);
 
       // Don't render other referenceNumbers
       expect(screen.queryByText("Bar - 123")).not.toBeInTheDocument();

@@ -1,5 +1,8 @@
 <script setup lang="ts">
-import type { SearchResultHeaderItem } from "~/components/search/SearchResultHeader.vue";
+import type {
+  SearchResultHeaderItem,
+  TextHeaderItem,
+} from "~/components/search/SearchResultHeader.vue";
 import type { Literature, SearchResult } from "~/types/api";
 import { getMatch, getTitleWithFallback } from "~/utils/search/searchResults";
 
@@ -37,18 +40,19 @@ const headerItems = computed(() => {
     item.dependentReferences?.[0] ?? item.independentReferences?.[0];
 
   if (reference) {
-    items.push({ value: reference });
+    items.push({ type: "badge", value: reference, color: "gray" });
   }
 
   if (item.yearsOfPublication?.[0]) {
-    items.push({ value: item.yearsOfPublication?.[0] });
+    items.push({ type: "text", value: item.yearsOfPublication?.[0] });
   }
 
   return {
     documentType: {
+      type: "text",
       value: item.documentTypes?.[0] ?? "Literaturnachweis",
       id: resultTypeId,
-    },
+    } as TextHeaderItem,
     otherItems: items,
   };
 });
