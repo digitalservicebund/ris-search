@@ -16,7 +16,7 @@ const isNativeButton = computed(() => as === "button");
 
 // Classes ------------------------------------------------
 
-const base = tw`typo-label2-bold relative -mb-px flex h-64 shrink-0 items-center gap-8 border-x border-t border-transparent px-24 pb-4 has-[svg]:pl-20 whitespace-nowrap outline-0 -outline-offset-4 outline-blue-800 focus-visible:outline-4`;
+const base = tw`typo-label2-bold relative -mb-px flex h-64 shrink-0 items-center gap-8 border-x border-t border-transparent px-24 pb-4 whitespace-nowrap outline-0 -outline-offset-4 outline-blue-800 focus-visible:outline-4 has-[svg]:pl-20`;
 
 const activeTab = tw`border-x-gray-400 border-t-gray-400 bg-white text-black`;
 
