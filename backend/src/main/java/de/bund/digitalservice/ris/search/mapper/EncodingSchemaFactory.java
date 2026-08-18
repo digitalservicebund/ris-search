@@ -1,9 +1,7 @@
 package de.bund.digitalservice.ris.search.mapper;
 
-import de.bund.digitalservice.ris.search.schema.AdministrativeDirectiveEncodingSchema;
-import de.bund.digitalservice.ris.search.schema.CaseLawEncodingSchema;
+import de.bund.digitalservice.ris.search.schema.DocumentEncodingSchema;
 import de.bund.digitalservice.ris.search.schema.LegislationObjectSchema;
-import de.bund.digitalservice.ris.search.schema.LiteratureEncodingSchema;
 import java.util.Arrays;
 import java.util.List;
 import org.springframework.http.MediaType;
@@ -67,8 +65,8 @@ public class EncodingSchemaFactory {
         .build();
   }
 
-  private static CaseLawEncodingSchema caselawEncodingSchema(SchemaType type, String baseUrl) {
-    return CaseLawEncodingSchema.builder()
+  private static DocumentEncodingSchema caselawEncodingSchema(SchemaType type, String baseUrl) {
+    return DocumentEncodingSchema.builder()
         .id(id(type, baseUrl))
         .contentUrl(contentUrl(type, baseUrl))
         .encodingFormat(encodingFormat(type))
@@ -76,9 +74,8 @@ public class EncodingSchemaFactory {
         .build();
   }
 
-  private static LiteratureEncodingSchema literatureEncodingSchema(
-      SchemaType type, String baseUrl) {
-    return LiteratureEncodingSchema.builder()
+  private static DocumentEncodingSchema literatureEncodingSchema(SchemaType type, String baseUrl) {
+    return DocumentEncodingSchema.builder()
         .id(id(type, baseUrl))
         .contentUrl(contentUrl(type, baseUrl))
         .encodingFormat(encodingFormat(type))
@@ -86,9 +83,9 @@ public class EncodingSchemaFactory {
         .build();
   }
 
-  private static AdministrativeDirectiveEncodingSchema administrativeDirectiveEncodingSchema(
+  private static DocumentEncodingSchema administrativeDirectiveEncodingSchema(
       SchemaType type, String baseUrl) {
-    return AdministrativeDirectiveEncodingSchema.builder()
+    return DocumentEncodingSchema.builder()
         .id(id(type, baseUrl))
         .contentUrl(contentUrl(type, baseUrl))
         .encodingFormat(encodingFormat(type))
@@ -122,7 +119,7 @@ public class EncodingSchemaFactory {
    * @return a list of {@code CaseLawEncodingSchema} representing the encoding schemas for case law
    *     in various formats
    */
-  public static List<CaseLawEncodingSchema> caselawEncodingSchemas(String baseUrl) {
+  public static List<DocumentEncodingSchema> caselawEncodingSchemas(String baseUrl) {
     return Arrays.stream(SchemaType.values())
         .map(type -> caselawEncodingSchema(type, baseUrl))
         .toList();
@@ -135,7 +132,7 @@ public class EncodingSchemaFactory {
    * @return a list of {@code LiteratureEncodingSchema} representing the encoding schemas for
    *     literature in various formats
    */
-  public static List<LiteratureEncodingSchema> literatureEncodingSchemas(String baseUrl) {
+  public static List<DocumentEncodingSchema> literatureEncodingSchemas(String baseUrl) {
     return Arrays.stream(SchemaType.values())
         .map(type -> literatureEncodingSchema(type, baseUrl))
         .toList();
@@ -149,7 +146,7 @@ public class EncodingSchemaFactory {
    * @return a list of {@code AdministrativeDirectiveEncodingSchema} representing the encoding
    *     schemas for administrative directives in various formats
    */
-  public static List<AdministrativeDirectiveEncodingSchema> administrativeDirectiveEncodingSchemas(
+  public static List<DocumentEncodingSchema> administrativeDirectiveEncodingSchemas(
       String baseUrl) {
     return Arrays.stream(SchemaType.values())
         .map(type -> administrativeDirectiveEncodingSchema(type, baseUrl))

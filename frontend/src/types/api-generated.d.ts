@@ -765,7 +765,7 @@ export interface components {
             member: components["schemas"]["SearchMemberSchemaLiteratureSearchSchema"][];
             view: components["schemas"]["PartialCollectionViewSchema"];
         };
-        LiteratureEncodingSchema: {
+        DocumentEncodingSchema: {
             /** @example MediaObject */
             "@type"?: string;
             "@id": string;
@@ -838,7 +838,7 @@ export interface components {
              * @example ['sli', 'uli']
              */
             literatureType: string;
-            encoding: components["schemas"]["LiteratureEncodingSchema"][];
+            encoding: components["schemas"]["DocumentEncodingSchema"][];
         });
         PartialCollectionViewSchema: {
             /** @example hydra:PartialCollectionView */
@@ -956,7 +956,7 @@ export interface components {
              * @example ['sli', 'uli']
              */
             literatureType: string;
-            encoding: components["schemas"]["LiteratureEncodingSchema"][];
+            encoding: components["schemas"]["DocumentEncodingSchema"][];
         };
         StreamingResponseBody: unknown;
         ChangelogChangedDocument: {
@@ -1157,16 +1157,6 @@ export interface components {
         AbstractDocumentSchema: {
             "@type": string;
         };
-        AdministrativeDirectiveEncodingSchema: {
-            /** @example MediaObject */
-            "@type"?: string;
-            "@id": string;
-            contentUrl: string;
-            /** @example text/html */
-            encodingFormat: string;
-            /** @example de */
-            inLanguage: string;
-        };
         AdministrativeDirectiveSearchSchema: {
             "@type": "AdministrativeDirectiveSearchSchema";
         } & (Omit<components["schemas"]["AbstractDocumentSchema"], "@type"> & {
@@ -1203,18 +1193,8 @@ export interface components {
              * @example 2003-12-15
              */
             entryIntoForceDate?: string;
-            encoding: components["schemas"]["AdministrativeDirectiveEncodingSchema"][];
+            encoding: components["schemas"]["DocumentEncodingSchema"][];
         });
-        CaseLawEncodingSchema: {
-            /** @example MediaObject */
-            "@type"?: string;
-            "@id": string;
-            contentUrl: string;
-            /** @example text/html */
-            encodingFormat: string;
-            /** @example de */
-            inLanguage: string;
-        };
         CaseLawSearchSchema: {
             "@type": "CaseLawSearchSchema";
         } & (Omit<components["schemas"]["AbstractDocumentSchema"], "@type"> & {
@@ -1250,7 +1230,7 @@ export interface components {
             decisionName: string[];
             /** @example DEV-123 */
             deviatingDocumentNumber: string[];
-            encoding: components["schemas"]["CaseLawEncodingSchema"][];
+            encoding: components["schemas"]["DocumentEncodingSchema"][];
             /** @example /v1/case-law/ECLI:DE:FGRLP:1969:0905.IV85.68.0A */
             "@id": string;
             /** @example de */
@@ -1395,7 +1375,7 @@ export interface components {
             "@id": string;
             /** @example de */
             inLanguage: string;
-            encoding: components["schemas"]["CaseLawEncodingSchema"][];
+            encoding: components["schemas"]["DocumentEncodingSchema"][];
             /** @description Whether or not the document is a Vorabdokument */
             vorabdokument: boolean;
         };
@@ -1495,7 +1475,7 @@ export interface components {
             normReferences: string[];
             /** @description Gliederung */
             outline: string[];
-            encoding: components["schemas"]["AdministrativeDirectiveEncodingSchema"][];
+            encoding: components["schemas"]["DocumentEncodingSchema"][];
         };
     };
     responses: never;

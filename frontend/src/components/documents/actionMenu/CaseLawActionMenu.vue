@@ -12,7 +12,9 @@ const actions = computed(() => {
   requestUrl.search = "";
   const permalink = requestUrl.href;
 
-  const xmlUrl = useBackendUrl(getEncodingURL(caseLaw, "application/xml"));
+  const xmlUrl = useBackendUrl(
+    getEncodingURL(caseLaw?.encoding, "application/xml"),
+  );
 
   return [
     useCopyUrlActionItem(permalink),

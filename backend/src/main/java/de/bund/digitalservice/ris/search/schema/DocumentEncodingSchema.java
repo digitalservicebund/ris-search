@@ -9,7 +9,7 @@ import lombok.Builder;
  * guidelines.
  */
 @Builder
-public record AdministrativeDirectiveEncodingSchema(
+public record DocumentEncodingSchema(
     @Schema(requiredMode = Schema.RequiredMode.REQUIRED) @JsonProperty("@id") String id,
     @Schema(requiredMode = Schema.RequiredMode.REQUIRED) String contentUrl,
     @Schema(example = "text/html", requiredMode = Schema.RequiredMode.REQUIRED)

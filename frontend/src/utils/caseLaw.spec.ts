@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { CaseLaw } from "~/types/api";
-import { getCaselawSecondaryTitle, getEncodingURL } from "~/utils/caseLaw";
+import { getEncodingURL } from "~/utils/anyDocument";
+import { getCaselawSecondaryTitle } from "~/utils/caseLaw";
 import { truncateAtWord } from "~/utils/textFormatting";
 
 describe("caselaw", () => {
@@ -36,16 +37,16 @@ describe("caselaw", () => {
     };
 
     it("returns the URL for a matching format", () => {
-      expect(getEncodingURL(mockCaseLaw, "application/pdf")).toBe(
+      expect(getEncodingURL(mockCaseLaw.encoding, "application/pdf")).toBe(
         "https://example.com/doc.pdf",
       );
-      expect(getEncodingURL(mockCaseLaw, "application/xml")).toBe(
+      expect(getEncodingURL(mockCaseLaw.encoding, "application/xml")).toBe(
         "https://example.com/doc.xml",
       );
     });
 
     it("returns undefined for non-matching format", () => {
-      expect(getEncodingURL(mockCaseLaw, "text/html")).toBeUndefined();
+      expect(getEncodingURL(mockCaseLaw.encoding, "text/html")).toBeUndefined();
     });
 
     it("returns undefined for null/undefined caseLaw", () => {

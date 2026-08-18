@@ -122,7 +122,7 @@ const detailItems = computed<DetailsListItem[]>(() => [
   {
     type: "link",
     label: "Download:",
-    url: getEncodingURL(caseLaw.value, "application/zip"),
+    url: getEncodingURL(caseLaw.value?.encoding, "application/zip"),
     text: "Diese Gerichtsentscheidung als ZIP herunterladen",
     dataAttr: "xml-zip-view",
   },
