@@ -15,6 +15,7 @@ import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.mapper.AdministrativeDirectiveLdmlToOpenSearchMapper;
+import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
 import de.bund.digitalservice.ris.search.repository.objectstorage.AdministrativeDirectiveBucket;
 import de.bund.digitalservice.ris.search.service.ChangelogService;
 import java.io.ByteArrayInputStream;
@@ -213,11 +214,17 @@ class AdministrativeDirectiveControllerApiTest extends ContainersIntegrationBase
     ByteArrayInputStream byteInputStream = new ByteArrayInputStream(zipBytes);
     final Map<String, byte[]> files = readZipStream(byteInputStream);
 
-    assertThat(files.size()).isEqualTo(1);
-    assertThat(files.containsKey(filename));
+    assertThat(files).hasSize(1).containsKey(filename);
 
-    AdministrativeDirectiveLdmlToOpenSearchMapper.map(
-        new String(files.get(filename)),
-        de.bund.digitalservice.ris.SharedTestConstants.TIMESTAMP_2024_01_01_AS_INSTANT);
+    byte[] fileContent = files.get(filename);
+    assertThat(fileContent).isNotEmpty();
+
+    AdministrativeDirective mapped =
+        AdministrativeDirectiveLdmlToOpenSearchMapper.map(
+            new String(fileContent),
+            de.bund.digitalservice.ris.SharedTestConstants.TIMESTAMP_2024_01_01_AS_INSTANT);
+
+    assertThat(mapped).isNotNull();
+    assertThat(mapped.documentNumber()).isEqualTo(documentNumberPresentInBucket);
   }
 }

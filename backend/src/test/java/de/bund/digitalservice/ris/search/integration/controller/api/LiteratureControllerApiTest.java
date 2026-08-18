@@ -16,6 +16,7 @@ import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.mapper.LiteratureLdmlToOpenSearchMapper;
+import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.repository.objectstorage.LiteratureBucket;
 import de.bund.digitalservice.ris.search.service.ChangelogService;
 import java.io.ByteArrayInputStream;
@@ -443,9 +444,14 @@ class LiteratureControllerApiTest extends ContainersIntegrationBase {
     ByteArrayInputStream byteInputStream = new ByteArrayInputStream(zipBytes);
     final Map<String, byte[]> files = readZipStream(byteInputStream);
 
-    assertThat(files.size()).isEqualTo(1);
-    assertThat(files.containsKey(filename));
+    assertThat(files).hasSize(1).containsKey(filename);
 
-    LiteratureLdmlToOpenSearchMapper.mapLdml(new String(files.get(filename)));
+    byte[] fileContent = files.get(filename);
+    assertThat(fileContent).isNotEmpty();
+
+    Literature mapped = LiteratureLdmlToOpenSearchMapper.mapLdml(new String(fileContent));
+
+    assertThat(mapped).isNotNull();
+    assertThat(mapped.documentNumber()).isEqualTo(documentNumberPresentInBucket);
   }
 }
