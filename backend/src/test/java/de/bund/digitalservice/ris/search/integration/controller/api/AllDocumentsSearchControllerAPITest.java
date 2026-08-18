@@ -124,7 +124,8 @@ class AllDocumentsSearchControllerAPITest extends ContainersIntegrationBase {
         .andExpect(jsonPath("$.member", hasSize(3)))
         .andExpect(
             jsonPath(
-                "$.member[*].item.documentNumber", containsInAnyOrder("KSNR0000", "BFRE000087655")))
+                "$.member[*].item.documentNumber",
+                containsInAnyOrder("KSNR000000000", "BFRE000087655")))
         .andExpect(jsonPath("$.member[*].item.abbreviation", containsInAnyOrder("TeG")));
   }
 

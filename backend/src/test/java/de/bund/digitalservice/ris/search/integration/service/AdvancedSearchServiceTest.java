@@ -49,9 +49,9 @@ class AdvancedSearchServiceTest extends ContainersIntegrationBase {
             .searchNorm("expression_eli:2000-10-06", Pageable.unpaged())
             .getSearchHits());
     checkSingleSearchHitsEquivalence(
-        advancedSearchService.searchAll("KSNR0000", Pageable.unpaged()).getSearchHits(),
+        advancedSearchService.searchAll("KSNR000000000", Pageable.unpaged()).getSearchHits(),
         advancedSearchService
-            .searchAdministrativeDirective("KSNR0000", Pageable.unpaged())
+            .searchAdministrativeDirective("KSNR000000000", Pageable.unpaged())
             .getSearchHits());
   }
 
@@ -98,11 +98,11 @@ class AdvancedSearchServiceTest extends ContainersIntegrationBase {
 
     var searchHits =
         advancedSearchService
-            .searchAdministrativeDirective("KSNR0000", Pageable.unpaged())
+            .searchAdministrativeDirective("KSNR000000000", Pageable.unpaged())
             .getSearchHits();
     assertThat(searchHits).hasSize(1);
     AdministrativeDirective directive = searchHits.getSearchHit(0).getContent();
-    assertThat(directive.documentNumber()).isEqualTo("KSNR0000");
+    assertThat(directive.documentNumber()).isEqualTo("KSNR000000000");
   }
 
   @Test

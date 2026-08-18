@@ -45,7 +45,7 @@ class AdministrativeDirectiveControllerApiTest extends ContainersIntegrationBase
 
   @Autowired private AdministrativeDirectiveBucket bucket;
 
-  private final String documentNumberPresentInBucket = "KSNR0000";
+  private final String documentNumberPresentInBucket = "KSNR000000000";
 
   @Test
   @DisplayName("Should return not found when using document number is not found")
@@ -90,7 +90,7 @@ class AdministrativeDirectiveControllerApiTest extends ContainersIntegrationBase
   @Test
   @DisplayName("get by document number")
   void shouldReturnItem() throws Exception {
-    final String documentNumber = "KSNR0000";
+    final String documentNumber = "KSNR000000000";
 
     mockMvc
         .perform(
@@ -103,7 +103,7 @@ class AdministrativeDirectiveControllerApiTest extends ContainersIntegrationBase
   @Test
   @DisplayName("Search by document number")
   void shouldReturnItemWhenSearchingByDocumentNumber() throws Exception {
-    final String documentNumber = "KSNR0000";
+    final String documentNumber = "KSNR000000000";
 
     mockMvc
         .perform(
@@ -126,7 +126,7 @@ class AdministrativeDirectiveControllerApiTest extends ContainersIntegrationBase
         "-documentNumber"
       })
   void shouldReturnItemWhenSortingByValidParameter(String sortParameter) throws Exception {
-    final String documentNumber = "KSNR0000";
+    final String documentNumber = "KSNR000000000";
 
     mockMvc
         .perform(
@@ -226,5 +226,18 @@ class AdministrativeDirectiveControllerApiTest extends ContainersIntegrationBase
 
     assertThat(mapped).isNotNull();
     assertThat(mapped.documentNumber()).isEqualTo(documentNumberPresentInBucket);
+  }
+
+  @Test
+  @DisplayName("Should reject zip request with invalid documentNumber")
+  void shouldRejectInvalidDocumentNumberInZipRequest() throws Exception {
+    mockMvc
+        .perform(
+            get(ApiConfig.Paths.ADMINISTRATIVE_DIRECTIVE + "/invalid.zip")
+                .contentType(MediaType.valueOf("application/zip")))
+        .andExpect(status().isUnprocessableContent())
+        .andExpect(jsonPath("$.errors[0].code").value("invalid_parameter_value"))
+        .andExpect(jsonPath("$.errors[0].message").value("Invalid document number format"))
+        .andExpect(jsonPath("$.errors[0].parameter").value("documentNumber"));
   }
 }

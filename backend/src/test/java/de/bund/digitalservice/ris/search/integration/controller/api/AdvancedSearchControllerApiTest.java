@@ -479,6 +479,7 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
     mockMvc
         .perform(get(url).contentType(MediaType.APPLICATION_JSON))
         .andExpectAll(
-            status().is(200), jsonPath("$.member[0].item.documentNumber", Matchers.is("KSNR0000")));
+            status().is(200),
+            jsonPath("$.member[0].item.documentNumber", Matchers.is("KSNR000000000")));
   }
 }

@@ -231,6 +231,19 @@ class CaseLawControllerApiTest extends ContainersIntegrationBase {
   }
 
   @Test
+  @DisplayName("Should reject zip request with invalid documentNumber")
+  void shouldRejectInvalidDocumentNumberInZipRequest() throws Exception {
+    mockMvc
+        .perform(
+            get(getResourcePath("invalid", "zip"))
+                .contentType(MediaType.valueOf("application/zip")))
+        .andExpect(status().isUnprocessableContent())
+        .andExpect(jsonPath("$.errors[0].code").value("invalid_parameter_value"))
+        .andExpect(jsonPath("$.errors[0].message").value("Invalid document number format"))
+        .andExpect(jsonPath("$.errors[0].parameter").value("documentNumber"));
+  }
+
+  @Test
   @DisplayName("Should return 404 when using document number is not found")
   void shouldReturn404() throws Exception {
 

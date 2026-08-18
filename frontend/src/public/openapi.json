@@ -223,7 +223,8 @@
           "in" : "path",
           "required" : true,
           "schema" : {
-            "type" : "string"
+            "type" : "string",
+            "pattern" : "^[a-zA-Z]{4}\\d{9}$"
           },
           "example" : "XXLS201770751"
         } ],
@@ -1825,7 +1826,8 @@
           "in" : "path",
           "required" : true,
           "schema" : {
-            "type" : "string"
+            "type" : "string",
+            "pattern" : "^[a-zA-Z]{4}\\d{9}$"
           },
           "example" : "STRE201770751"
         } ],
@@ -2133,7 +2135,8 @@
           "in" : "path",
           "required" : true,
           "schema" : {
-            "type" : "string"
+            "type" : "string",
+            "pattern" : "^[a-zA-Z]{4}\\d{9}$"
           },
           "example" : "XXLS201770751"
         } ],

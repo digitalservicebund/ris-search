@@ -18,7 +18,7 @@ public class AdministrativeDirectiveTestData {
     allDocuments.add(
         AdministrativeDirective.builder()
             .id("/v1/administrative_directive/KN0000")
-            .documentNumber("KSNR0000")
+            .documentNumber("KSNR000000000")
             .headline("Test long title")
             .documentType("VR")
             .documentTypeDetail("Rundschreiben")
