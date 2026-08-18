@@ -87,13 +87,7 @@ export function getUliLiteratureDetailItems(
       ),
       value: formatArray(conferenceNotes),
     },
-    {
-      type: "link",
-      label: "Download:",
-      url: getEncodingURL(literature?.encoding, "application/zip"),
-      text: "Diese Gerichtsentscheidung als ZIP herunterladen",
-      dataAttr: "xml-zip-view",
-    },
+    getDownloadDetailItem(literature),
   ];
 }
 
@@ -183,12 +177,18 @@ export function getSliLiteratureDetailItems(
       ),
       value: formatArray(universityNotes),
     },
-    {
-      type: "link",
-      label: "Download:",
-      url: getEncodingURL(literature?.encoding, "application/zip"),
-      text: "Diese Gerichtsentscheidung als ZIP herunterladen",
-      dataAttr: "xml-zip-view",
-    },
+    getDownloadDetailItem(literature),
   ];
+}
+
+function getDownloadDetailItem(
+  literature?: Partial<Literature>,
+): DetailsListItem {
+  return {
+    type: "link",
+    label: "Download:",
+    url: getEncodingURL(literature?.encoding, "application/zip"),
+    text: "Diesen Literaturnachweis als ZIP herunterladen",
+    dataAttr: "xml-zip-view",
+  };
 }
