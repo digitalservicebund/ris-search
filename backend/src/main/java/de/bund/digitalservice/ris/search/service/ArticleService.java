@@ -122,4 +122,8 @@ public class ArticleService {
   public List<Article> findAllByExpressionEli(String expressionEli) {
     return articlesRepository.findAllByExpressionEli(expressionEli);
   }
+
+  public boolean doesArticleExist(String expressionEli, String eid) {
+    return articlesRepository.existsById(expressionEli + "/" + eid);
+  }
 }

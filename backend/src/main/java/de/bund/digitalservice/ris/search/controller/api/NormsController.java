@@ -22,6 +22,7 @@ import de.bund.digitalservice.ris.search.schema.CollectionSchema;
 import de.bund.digitalservice.ris.search.schema.LegislationExpressionSchema;
 import de.bund.digitalservice.ris.search.schema.LegislationExpressionSearchSchema;
 import de.bund.digitalservice.ris.search.schema.SearchMemberSchema;
+import de.bund.digitalservice.ris.search.service.ArticleService;
 import de.bund.digitalservice.ris.search.service.ChangelogService;
 import de.bund.digitalservice.ris.search.service.NormsService;
 import de.bund.digitalservice.ris.search.service.xslt.NormXsltTransformerService;
@@ -38,8 +39,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.net.URLConnection;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +57,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
+import org.springframework.web.util.UriUtils;
 
 /** Controller class for handling REST API requests for legislation. */
 @RestController
@@ -81,6 +85,7 @@ public class NormsController {
   public static final String NATURAL_IDENTIFIER_EXAMPLE = "s1325";
 
   private final NormsService normsService;
+  private final ArticleService articleService;
   private final NormXsltTransformerService xsltTransformerService;
   private final ChangelogService<NormsBucket> changelogService;
 
@@ -93,9 +98,11 @@ public class NormsController {
   @Autowired
   public NormsController(
       NormsService normsService,
+      ArticleService articleService,
       NormXsltTransformerService xsltTransformerService,
       ChangelogService<NormsBucket> changelogService) {
     this.normsService = normsService;
+    this.articleService = articleService;
     this.xsltTransformerService = xsltTransformerService;
     this.changelogService = changelogService;
   }
@@ -553,27 +560,44 @@ public class NormsController {
           @PathVariable
           String articleEid)
       throws ObjectStoreServiceException {
-    final String resourceBasePath = getResourceBasePath();
+    String resourceBasePath = getResourceBasePath();
+    // According to the original akn naming convention
+    // (https://docs.oasis-open.org/legaldocml/akn-nc/v1.0/akn-nc-v1.0.html) eids should be
+    // navigable (not have % in them), but LegalDocML.de has decided to deviate from this by
+    // setting the actual eid to a uri encoded modified version of the article name. For example
+    // an article called "1 1" will have the eid "art-z1%201". The actual eid has a % in it and
+    // therefore can no longer be used as a path variable.
+    // In the xslt files provided by Kosit, the work around is to skip uri encoding when building
+    // links to einzelnormen. Since normal web traffic performs uri decoding, we need to perform
+    // uri encoding here to get back the actual eid.
+    String actualEid = UriUtils.encode(articleEid, StandardCharsets.UTF_8).toLowerCase(Locale.ROOT);
+    var expressionEli =
+        new ExpressionEli(
+            jurisdiction, agent, year, naturalIdentifier, pointInTime, version, language);
+    if (articleService.doesArticleExist(expressionEli.toString(), actualEid)) {
+      var manifestationEli =
+          new ManifestationEli(
+              jurisdiction,
+              agent,
+              year,
+              naturalIdentifier,
+              pointInTime,
+              version,
+              language,
+              pointInTimeManifestation,
+              subtype,
+              "xml");
 
-    var eli =
-        new ManifestationEli(
-            jurisdiction,
-            agent,
-            year,
-            naturalIdentifier,
-            pointInTime,
-            version,
-            language,
-            pointInTimeManifestation,
-            subtype,
-            "xml");
-    final Optional<byte[]> normFileByEli = normsService.getNormFileByEli(eli);
-    return normFileByEli
-        .map(
-            bytes ->
-                ResponseEntity.ok(
-                    xsltTransformerService.transformArticle(bytes, articleEid, resourceBasePath)))
-        .orElseGet(() -> ResponseEntity.notFound().build());
+      final Optional<byte[]> normFileByEli = normsService.getNormFileByEli(manifestationEli);
+      return normFileByEli
+          .map(
+              bytes ->
+                  ResponseEntity.ok(
+                      xsltTransformerService.transformArticle(bytes, actualEid, resourceBasePath)))
+          .orElseGet(() -> ResponseEntity.notFound().build());
+    } else {
+      return ResponseEntity.notFound().build();
+    }
   }
 
   /**
