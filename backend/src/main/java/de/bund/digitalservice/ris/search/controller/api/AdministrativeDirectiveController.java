@@ -1,5 +1,7 @@
 package de.bund.digitalservice.ris.search.controller.api;
 
+import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
+
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.exception.CustomValidationException;
 import de.bund.digitalservice.ris.search.mapper.AdministrativeDirectiveSchemaMapper;
@@ -43,6 +45,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 /**
  * Controller for managing administrative directives. It provides endpoints to retrieve, search,
@@ -224,5 +227,35 @@ public class AdministrativeDirectiveController {
 
     return ResponseEntity.ok(
         ChangelogResponseMapper.mapChangelog(changelog, DocumentKind.ADMINISTRATIVE_DIRECTIVE));
+  }
+
+  /**
+   * Retrieves all files associated with an administrative directive doc number as a ZIP archive.
+   *
+   * @param documentNumber the unique identifier of the administrative directive to retrieve
+   * @return a ResponseEntity containing the ZIP file as a streaming response body if the document
+   *     is found, or a 404 Not Found response if no document matches the provided identifier
+   */
+  @GetMapping(
+      path = ApiConfig.Paths.ADMINISTRATIVE_DIRECTIVE + "/{documentNumber}.zip",
+      produces = "application/zip")
+  @Operation(
+      summary = "Decision ZIP (XML and attachments)",
+      description = "Returns all administrative directive files as a ZIP archive.")
+  @ApiResponse(responseCode = "200")
+  @ApiResponse(responseCode = "404", content = @Content(schema = @Schema()))
+  public ResponseEntity<StreamingResponseBody> getAdministrativeDirectiveAsZip(
+      @Parameter(example = "XXLS201770751") @PathVariable String documentNumber) {
+
+    String filename = documentNumber + ".zip";
+    List<String> keys = service.getAllFilenamesByDocumentNumber(documentNumber);
+
+    if (keys.isEmpty()) {
+      return ResponseEntity.notFound().build();
+    }
+    return ResponseEntity.ok()
+        .header(CONTENT_DISPOSITION, "attachment;filename=\"%s\"".formatted(filename))
+        .contentType(MediaType.valueOf("application/zip"))
+        .body(outputStream -> service.writeZipArchive(keys, outputStream));
   }
 }

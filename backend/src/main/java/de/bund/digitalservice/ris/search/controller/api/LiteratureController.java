@@ -244,7 +244,7 @@ public class LiteratureController {
   }
 
   /**
-   * Retrieves a literature document and its associated attachments as a ZIP archive.
+   * Retrieves all files associated with a literature doc number as a ZIP archive.
    *
    * @param documentNumber the unique identifier of the literature document to retrieve
    * @return a ResponseEntity containing the ZIP file as a streaming response body if the document
@@ -255,7 +255,7 @@ public class LiteratureController {
       produces = "application/zip")
   @Operation(
       summary = "Decision ZIP (XML and attachments)",
-      description = "Returns a literature document, including attachments, as a ZIP archive.")
+      description = "Returns all literature document files as a ZIP archive.")
   @ApiResponse(responseCode = "200")
   @ApiResponse(responseCode = "404", content = @Content(schema = @Schema()))
   public ResponseEntity<StreamingResponseBody> getLiteratureDocumentAsZip(
