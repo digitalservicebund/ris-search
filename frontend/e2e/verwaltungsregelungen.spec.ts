@@ -254,6 +254,7 @@ test(
       "Gültig bis:",
       "Dokumenttyp Zusatz:",
       "Normen:",
+      "Download:",
     ]);
     // Fundstelle and Normen are rendered as badges (spans)
     await expect(defs.nth(0).locator("span")).toHaveText([
@@ -279,7 +280,11 @@ test(
     const terms = detailsList.getByRole("term");
     const defs = detailsList.getByRole("definition");
 
-    await expect(terms).toHaveText(["Fundstelle:", "Zitierdaten:"]);
+    await expect(terms).toHaveText([
+      "Fundstelle:",
+      "Zitierdaten:",
+      "Download:",
+    ]);
     // Fundstelle is rendered as a badge (span)
     await expect(defs.nth(0).locator("span")).toHaveText([
       "BazAbCd 2002, Nr 1",
@@ -312,7 +317,11 @@ test(
     const terms = detailsList.getByRole("term");
     const defs = detailsList.getByRole("definition");
 
-    await expect(terms).toHaveText(["Fundstelle:", "Zitierdaten:"]);
+    await expect(terms).toHaveText([
+      "Fundstelle:",
+      "Zitierdaten:",
+      "Download:",
+    ]);
     // Fundstelle is rendered as a badge (span)
     await expect(defs.nth(0).locator("span")).toHaveText([
       "BazAbCd 2002, Nr 1",

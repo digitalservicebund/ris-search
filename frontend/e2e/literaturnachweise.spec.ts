@@ -357,6 +357,7 @@ test(
       "Urheber:",
       "Sprache:",
       "Kongress:",
+      "Download:",
     ]);
     // Normen are rendered as badges (spans)
     await expect(defs.nth(0).locator("span")).toHaveText([
@@ -406,6 +407,7 @@ test(
       "Sprache:",
       "Kongress:",
       "Hochschule:",
+      "Download:",
     ]);
     // Normen are rendered as badges (spans)
     await expect(defs.nth(0).locator("span")).toHaveText([
@@ -445,8 +447,13 @@ test(
       .getByRole("term")
       .or(detailsList.getByRole("definition"));
 
-    await expect(detailsEntries).toHaveCount(2);
-    await expect(detailsEntries).toHaveText(["Sprache:", "deu"]);
+    await expect(detailsEntries).toHaveCount(4);
+    await expect(detailsEntries).toHaveText([
+      "Sprache:",
+      "deu",
+      "Download:",
+      " Diesen Literaturnachweis als ZIP herunterladen",
+    ]);
   },
 );
 
@@ -462,7 +469,12 @@ test(
     const terms = detailsList.getByRole("term");
     const defs = detailsList.getByRole("definition");
 
-    await expect(terms).toHaveText(["Norm:", "Mitarbeiter:", "Sprache:"]);
+    await expect(terms).toHaveText([
+      "Norm:",
+      "Mitarbeiter:",
+      "Sprache:",
+      "Download:",
+    ]);
     // Norm is rendered as a badge (span)
     await expect(defs.nth(0).locator("span")).toHaveText([
       "GG, Art 3 Abs 1, 1949-05-23",
@@ -517,7 +529,12 @@ test("hides tabs and shows details if document is empty", async ({ page }) => {
   const detailsList = page.getByTestId("details-list");
   await expect(
     detailsList.getByRole("term").or(detailsList.getByRole("definition")),
-  ).toHaveText(["Sprache:", "deu"]);
+  ).toHaveText([
+    "Sprache:",
+    "deu",
+    "Download:",
+    " Diesen Literaturnachweis als ZIP herunterladen",
+  ]);
 });
 
 test("displays references", async ({ page }) => {
