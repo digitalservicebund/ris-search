@@ -31,6 +31,10 @@ public class OpensearchRetryConfiguration {
             .predicate(
                 throwable -> {
                   if (isClientError(throwable)) {
+                    logger.warn(
+                        "OpenSearch rejected the request as a client error. Error: {}. Not"
+                            + " retrying.",
+                        throwable.getMessage());
                     return false;
                   }
                   logger.warn(
