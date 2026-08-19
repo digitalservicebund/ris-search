@@ -151,11 +151,16 @@ public class LocalFilesystemObjectStorageClient implements ObjectStorageClient {
   }
 
   private <T> List<T> listKeysByPrefix(String prefix, Function<Path, T> mappingFunction) {
-    Path bucketDir = localStorageDirectory.resolve(bucket);
+    Path bucketDir = localStorageDirectory.resolve(bucket).normalize().toAbsolutePath();
 
     // Extract directory path up to the last slash; if none, search from bucket root
     String parentDir = prefix.contains("/") ? StringUtils.substringBeforeLast(prefix, "/") : "";
-    Path basePath = bucketDir.resolve(parentDir);
+    Path basePath = bucketDir.resolve(parentDir).normalize().toAbsolutePath();
+
+    if (!basePath.startsWith(bucketDir)) {
+      LOGGER.warn("Rejected. Path outside bucket directory for prefix: {}", prefix);
+      return List.of();
+    }
 
     if (!Files.exists(basePath)) {
       return List.of();
