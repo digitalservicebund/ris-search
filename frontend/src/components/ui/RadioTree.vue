@@ -63,7 +63,9 @@ const selfLabelId = (value: string) => `${uid}-${value}-self-label`;
 
 // Classes ------------------------------------------------
 
-const input = tw`peer absolute inset-0 cursor-pointer appearance-none opacity-0`;
+// We need both the inset-0 and explicit width and height to ensure the input
+// spans the full size of the control in all browsers
+const input = tw`peer absolute inset-0 h-full w-full cursor-pointer appearance-none opacity-0`;
 
 const row = tw`flex w-full border-l-4 border-transparent p-16 pl-[1.125rem] text-left text-blue-800`;
 
