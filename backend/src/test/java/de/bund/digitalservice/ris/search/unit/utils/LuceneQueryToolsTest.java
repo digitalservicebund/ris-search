@@ -31,21 +31,8 @@ class LuceneQueryToolsTest {
 
   @Test
   void testCheckForInvalidQueryException() throws IOException {
-    Response mockResponse = mock(Response.class);
-    when(mockResponse.getRequestLine())
-        .thenReturn(new RequestLine("GET", "uri", new ProtocolVersion("HTTP", 1, 1)));
-
-    when(mockResponse.getStatusLine())
-        .thenReturn(
-            new StatusLine(
-                new ProtocolVersion("HTTP", 1, 1),
-                422,
-                "No mapping found for [param_field] in order to sort on"));
-
-    var outerException = mock(UncategorizedElasticsearchException.class);
-    var innerException = new Exception("message");
-    innerException.addSuppressed(new ResponseException(mockResponse));
-    when(outerException.getCause()).thenReturn(innerException);
+    var outerException =
+        mockElasticsearchException("No mapping found for [param_field] in order to sort on");
 
     assertThatExceptionOfType(CustomValidationException.class)
         .isThrownBy(() -> checkForInvalidQuery(outerException))
@@ -55,6 +42,49 @@ class LuceneQueryToolsTest {
               assertThat(e.getErrors().getFirst().message())
                   .isEqualTo("Sorting is not supported for param_field");
             });
+  }
+
+  @Test
+  void testCheckForInvalidQueryReportsQueriesOpensearchCannotParse() throws IOException {
+    var outerException =
+        mockElasticsearchException(
+            """
+            {"error":{"root_cause":[{"type":"parse_exception","reason":"parse_exception: \
+            Encountered " <OR> "OR "" at line 1, column 32."}],"status":400}}\
+            """);
+
+    assertThatExceptionOfType(CustomValidationException.class)
+        .isThrownBy(() -> checkForInvalidQuery(outerException))
+        .satisfies(
+            e -> {
+              assertThat(e.getErrors().getFirst().code()).isEqualTo("invalid_lucene_query");
+              assertThat(e.getErrors().getFirst().parameter()).isEqualTo("query");
+              assertThat(e.getErrors().getFirst().message())
+                  .isEqualTo("The query could not be parsed");
+            });
+  }
+
+  @Test
+  void testCheckForInvalidQueryIgnoresFailuresThatAreNotCausedByTheRequest() throws IOException {
+    var outerException = mockElasticsearchException("all shards failed");
+
+    assertThatCode(() -> checkForInvalidQuery(outerException)).doesNotThrowAnyException();
+  }
+
+  /** Builds an exception shaped like the ones the Opensearch client throws for a failed request. */
+  private UncategorizedElasticsearchException mockElasticsearchException(String reason)
+      throws IOException {
+    Response mockResponse = mock(Response.class);
+    when(mockResponse.getRequestLine())
+        .thenReturn(new RequestLine("GET", "uri", new ProtocolVersion("HTTP", 1, 1)));
+    when(mockResponse.getStatusLine())
+        .thenReturn(new StatusLine(new ProtocolVersion("HTTP", 1, 1), 400, reason));
+
+    var outerException = mock(UncategorizedElasticsearchException.class);
+    var innerException = new Exception("message");
+    innerException.addSuppressed(new ResponseException(mockResponse));
+    when(outerException.getCause()).thenReturn(innerException);
+    return outerException;
   }
 
   @Test
