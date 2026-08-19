@@ -3,8 +3,11 @@ package de.bund.digitalservice.ris.search.service;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.repository.opensearch.ArticlesRepository;
 import de.bund.digitalservice.ris.search.utils.RisHighlightBuilder;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
 import java.util.Set;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -27,6 +30,7 @@ import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.SearchHitsImpl;
 import org.springframework.data.elasticsearch.core.TotalHitsRelation;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.UriUtils;
 
 /**
  * Service class for interacting with the database and return the search results. This class is
@@ -123,7 +127,31 @@ public class ArticleService {
     return articlesRepository.findAllByExpressionEli(expressionEli);
   }
 
-  public boolean doesArticleExist(String expressionEli, String eid) {
+  /**
+   * This method takes a possible eid and returns the best matching eid if one exists. An eid can
+   * contain % and therefore can't be directly used as a path variable. When it does contain %, all
+   * known cases are the result of a uri encoding, but not all eids are uri encoded. For example an
+   * eid could be präambel-n1 (not uri encoded) or art-za%20b (is a uri encoding of "artz-a b"). The
+   * xslt provides a partial workaround by skipping the normal uri encoding when building the url
+   * containing an eid. We still need to check both possibilities here because it's unclear which
+   * case we are dealing with.
+   *
+   * @param expressionEli expressionEli of the norm
+   * @param eidGiven the possible eid
+   * @return Optional<String> holding the real eid if it exists, or empty if it can't be found.
+   */
+  public Optional<String> getActualEid(String expressionEli, String eidGiven) {
+    if (articleExist(expressionEli, eidGiven)) {
+      return Optional.of(eidGiven);
+    }
+    String encodedEid = UriUtils.encode(eidGiven, StandardCharsets.UTF_8).toLowerCase(Locale.ROOT);
+    if (articleExist(expressionEli, encodedEid)) {
+      return Optional.of(encodedEid);
+    }
+    return Optional.empty();
+  }
+
+  private boolean articleExist(String expressionEli, String eid) {
     return articlesRepository.existsById(expressionEli + "/" + eid);
   }
 }

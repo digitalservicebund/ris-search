@@ -39,10 +39,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.net.URLConnection;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +55,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
-import org.springframework.web.util.UriUtils;
 
 /** Controller class for handling REST API requests for legislation. */
 @RestController
@@ -564,7 +561,7 @@ public class NormsController {
     var expressionEli =
         new ExpressionEli(
             jurisdiction, agent, year, naturalIdentifier, pointInTime, version, language);
-    Optional<String> actualEid = getActualEid(expressionEli.toString(), articleEid);
+    Optional<String> actualEid = articleService.getActualEid(expressionEli.toString(), articleEid);
 
     if (actualEid.isPresent()) {
 
@@ -590,23 +587,6 @@ public class NormsController {
       }
     }
     return ResponseEntity.notFound().build();
-  }
-
-  private Optional<String> getActualEid(String expressionEli, String eidGiven) {
-    // An eid can contain % and therefore can't be directly used as a path variable. When it does
-    // contain %, all known cases are the result of a uri encoding, but not all eids are uri
-    // encoded. For example an eid could be präambel-n1 (not uri encoded) or art-za%20b (is a uri
-    // encoding of "artz-a b"). The xslt provides a partial workaround by skipping the normal uri
-    // encoding when building the url containing an eid. We still need to check both possibilities
-    // here because it's unclear which case we are dealing with.
-    if (articleService.doesArticleExist(expressionEli, eidGiven)) {
-      return Optional.of(eidGiven);
-    }
-    String encodedEid = UriUtils.encode(eidGiven, StandardCharsets.UTF_8).toLowerCase(Locale.ROOT);
-    if (articleService.doesArticleExist(expressionEli, encodedEid)) {
-      return Optional.of(encodedEid);
-    }
-    return Optional.empty();
   }
 
   /**
