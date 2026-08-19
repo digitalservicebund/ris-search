@@ -22,8 +22,8 @@ const currentView = computed(
 <template>
   <div>
     <div class="border-b border-gray-400">
-      <nav class="content-wrapper -mb-px" aria-label="Tab">
-        <UiTabs>
+      <nav class="-mb-px" aria-label="Tab">
+        <UiTabs class="content-gutters">
           <UiTab
             v-for="view in views"
             :key="view.path"

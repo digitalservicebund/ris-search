@@ -2,6 +2,16 @@
   @apply mx-auto max-w-(--breakpoint-2xl) px-16 lg:px-24;
 }
 
+/*
+ * The insets of `content-wrapper`, expressed as padding instead of a centered
+ * max-width. Use it on content inside a full-bleed scroll container, where the
+ * gutters have to scroll along with the content.
+ */
+@utility content-gutters {
+  --content-gutters-padding: calc((100% - var(--breakpoint-2xl)) / 2 + 24px);
+  @apply px-16 lg:px-24 2xl:px-(--content-gutters-padding);
+}
+
 @utility content-grid {
   @apply grid auto-rows-auto grid-cols-12 gap-x-8 md:gap-x-16 lg:gap-x-24;
 }

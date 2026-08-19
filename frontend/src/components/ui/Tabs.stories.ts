@@ -88,7 +88,9 @@ export const AsLinks: StoryObj<typeof meta> = {
 
 /**
  * When the tabs are wider than the available space, the tab list scrolls
- * horizontally.
+ * horizontally. Gutters belong on the tab list — a class passed to `UiTabs`
+ * lands there — so that they scroll along with the tabs instead of clipping
+ * them.
  */
 export const Overflowing: StoryObj<typeof meta> = {
   render: () => ({
@@ -107,7 +109,7 @@ export const Overflowing: StoryObj<typeof meta> = {
       return { tabs, selected, wrapper, panel };
     },
     template: html`<div :class="[wrapper, 'max-w-sm']">
-      <UiTabs aria-label="Beispiel">
+      <UiTabs aria-label="Beispiel" class="px-16">
         <UiTab
           v-for="tab in tabs"
           :key="tab"

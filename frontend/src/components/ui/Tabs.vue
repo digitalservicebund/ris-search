@@ -16,12 +16,6 @@ const focusTab = (tab: HTMLElement | undefined) => {
   tab?.scrollIntoView?.({ block: "nearest", inline: "nearest" });
 };
 
-/**
- * Roving tabindex: only the active tab is tabbable, the arrow keys move focus
- * between tabs. Focusing a tab does not select it — selection happens on
- * activation (click, or Enter on the focused tab), which the tabs handle
- * themselves.
- */
 const onKeydown = (event: KeyboardEvent) => {
   const all = tabs();
   const current = (event.target as HTMLElement).closest('[role="tab"]');
