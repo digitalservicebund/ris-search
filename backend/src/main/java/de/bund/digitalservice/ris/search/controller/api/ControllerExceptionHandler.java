@@ -251,8 +251,9 @@ public class ControllerExceptionHandler {
   @ExceptionHandler(OpenSearchFetchException.class)
   public ResponseEntity<CustomErrorResponse> handleElasticsearchException(
       OpenSearchFetchException ex) {
-    if (NestedExceptionUtils.getMostSpecificCause(ex) instanceof ConnectionClosedException) {
-      logger.warn("Opensearch connection closed by peer: {}", ex.getMessage());
+    if (NestedExceptionUtils.getMostSpecificCause(ex) instanceof ConnectionClosedException
+        && ex.getMessage().equals("Connection closed by peer")) {
+      logger.warn("Opensearch connection closed by peer");
     } else {
       logger.error("Opensearch fetch error", ex);
     }
