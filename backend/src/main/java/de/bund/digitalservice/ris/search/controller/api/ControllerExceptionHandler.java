@@ -17,6 +17,7 @@ import org.apache.tomcat.util.http.InvalidParameterException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.NestedExceptionUtils;
+import org.springframework.data.elasticsearch.UncategorizedElasticsearchException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotWritableException;
@@ -266,6 +267,28 @@ public class ControllerExceptionHandler {
     CustomErrorResponse errorResponse =
         CustomErrorResponse.builder().errors(List.of(error)).build();
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+  }
+
+  /**
+   * Handles exceptions of type {@link UncategorizedElasticsearchException} and returns a
+   * standardized error response with HTTP status 500 (Internal Server Error).
+   *
+   * <p>This is reached once the {@code RetryTemplate} configured in {@code
+   * OpensearchRetryConfiguration} has given up: either the failure isn't retryable (e.g. a
+   * malformed query that a controller didn't already translate into a {@link
+   * de.bund.digitalservice.ris.search.exception.CustomValidationException}) or retries were
+   * exhausted. By this point there is nothing left to retry, so it is always logged as an error.
+   *
+   * @param ex the {@link UncategorizedElasticsearchException} instance thrown by an OpenSearch
+   *     operation
+   * @return a {@link ResponseEntity} containing a {@link CustomErrorResponse} object with error
+   *     details and an HTTP status of 500
+   */
+  @ExceptionHandler(UncategorizedElasticsearchException.class)
+  public ResponseEntity<CustomErrorResponse> handleUncategorizedElasticsearchException(
+      UncategorizedElasticsearchException ex) {
+    logger.error("OpenSearch request failed", ex);
+    return return500();
   }
 
   /**
