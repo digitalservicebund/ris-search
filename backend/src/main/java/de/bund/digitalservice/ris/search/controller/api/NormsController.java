@@ -561,20 +561,13 @@ public class NormsController {
           String articleEid)
       throws ObjectStoreServiceException {
     String resourceBasePath = getResourceBasePath();
-    // According to the original akn naming convention
-    // (https://docs.oasis-open.org/legaldocml/akn-nc/v1.0/akn-nc-v1.0.html) eids should be
-    // navigable (not have % in them), but LegalDocML.de has decided to deviate from this by
-    // setting the actual eid to a uri encoded modified version of the article name. For example
-    // an article called "1 1" will have the eid "art-z1%201". The actual eid has a % in it and
-    // therefore can no longer be used as a path variable.
-    // In the xslt files provided by Kosit, the work around is to skip uri encoding when building
-    // links to einzelnormen. Since normal web traffic performs uri decoding, we need to perform
-    // uri encoding here to get back the actual eid.
-    String actualEid = UriUtils.encode(articleEid, StandardCharsets.UTF_8).toLowerCase(Locale.ROOT);
     var expressionEli =
         new ExpressionEli(
             jurisdiction, agent, year, naturalIdentifier, pointInTime, version, language);
-    if (articleService.doesArticleExist(expressionEli.toString(), actualEid)) {
+    Optional<String> actualEid = getActualEid(expressionEli.toString(), articleEid);
+
+    if (actualEid.isPresent()) {
+
       var manifestationEli =
           new ManifestationEli(
               jurisdiction,
@@ -587,17 +580,33 @@ public class NormsController {
               pointInTimeManifestation,
               subtype,
               "xml");
+      Optional<byte[]> normFileByEli = normsService.getNormFileByEli(manifestationEli);
 
-      final Optional<byte[]> normFileByEli = normsService.getNormFileByEli(manifestationEli);
-      return normFileByEli
-          .map(
-              bytes ->
-                  ResponseEntity.ok(
-                      xsltTransformerService.transformArticle(bytes, actualEid, resourceBasePath)))
-          .orElseGet(() -> ResponseEntity.notFound().build());
-    } else {
-      return ResponseEntity.notFound().build();
+      if (normFileByEli.isPresent()) {
+        String transformed =
+            xsltTransformerService.transformArticle(
+                normFileByEli.get(), actualEid.get(), resourceBasePath);
+        return ResponseEntity.ok(transformed);
+      }
     }
+    return ResponseEntity.notFound().build();
+  }
+
+  private Optional<String> getActualEid(String expressionEli, String eidGiven) {
+    // An eid can contain % and therefore can't be directly used as a path variable. When it does
+    // contain %, all known cases are the result of a uri encoding, but not all eids are uri
+    // encoded. For example an eid could be präambel-n1 (not uri encoded) or art-za%20b (is a uri
+    // encoding of "artz-a b"). The xslt provides a partial workaround by skipping the normal uri
+    // encoding when building the url containing an eid. We still need to check both possibilities
+    // here because it's unclear which case we are dealing with.
+    if (articleService.doesArticleExist(expressionEli, eidGiven)) {
+      return Optional.of(eidGiven);
+    }
+    String encodedEid = UriUtils.encode(eidGiven, StandardCharsets.UTF_8).toLowerCase(Locale.ROOT);
+    if (articleService.doesArticleExist(expressionEli, encodedEid)) {
+      return Optional.of(encodedEid);
+    }
+    return Optional.empty();
   }
 
   /**
