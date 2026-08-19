@@ -20,11 +20,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
@@ -47,16 +47,58 @@ public class ControllerExceptionHandler {
    * errors from the exception and maps them to a list of custom error objects, which are included
    * in the error response.
    *
-   * @param ex the {@link MethodArgumentNotValidException} instance containing validation errors
-   *     that need to be processed and returned in the response
+   * @param ex the {@link MethodArgumentNotValidException} s the exception raised when validating a
+   *     method parameter individually.
    * @return a {@link ResponseEntity} containing a {@link CustomErrorResponse} object with the list
    *     of validation errors and an HTTP status of 422 (Unprocessable Entity)
    */
   @ExceptionHandler({MethodArgumentNotValidException.class})
-  public final ResponseEntity<CustomErrorResponse> handleException(
+  public final ResponseEntity<CustomErrorResponse> handleMethodArgumentNotValidException(
       MethodArgumentNotValidException ex) {
     List<CustomError> errors =
-        ex.getBindingResult().getAllErrors().stream().map(this::sanitizeError).toList();
+        ex.getBindingResult().getAllErrors().stream()
+            .map(
+                error -> {
+                  if (error instanceof FieldError e) {
+                    return getInvalidParameterError(e.getDefaultMessage(), e.getField());
+                  }
+                  return new CustomError("unknown", "Unknown error", "");
+                })
+            .toList();
+    CustomErrorResponse errorResponse = CustomErrorResponse.builder().errors(errors).build();
+    return ResponseEntity.status(HttpStatus.UNPROCESSABLE_CONTENT).body(errorResponse);
+  }
+
+  /**
+   * Handles exceptions of type {@link HandlerMethodValidationException} and returns a standardized
+   * error response with HTTP status 422 (Unprocessable Entity). This method extracts validation
+   * errors from the exception and maps them to a list of custom error objects, which are included
+   * in the error response. MethodArgumentNotValidException
+   *
+   * @param ex the {@link HandlerMethodValidationException} is the exception raised when validating
+   *     a method parameter individually.
+   * @return a {@link ResponseEntity} containing a {@link CustomErrorResponse} object with the list
+   *     of validation errors and an HTTP status of 422 (Unprocessable Entity)
+   */
+  @ExceptionHandler({HandlerMethodValidationException.class})
+  public final ResponseEntity<CustomErrorResponse> handleHandlerMethodValidationException(
+      HandlerMethodValidationException ex) {
+    List<CustomError> errors =
+        ex.getParameterValidationResults().stream()
+            .flatMap(
+                result -> {
+                  String paramName = result.getMethodParameter().getParameterName();
+                  return result.getResolvableErrors().stream()
+                      .map(
+                          error -> {
+                            if (error instanceof FieldError e) {
+                              return getInvalidParameterError(e.getDefaultMessage(), e.getField());
+                            }
+                            return getInvalidParameterError(error.getDefaultMessage(), paramName);
+                          });
+                })
+            .toList();
+
     CustomErrorResponse errorResponse = CustomErrorResponse.builder().errors(errors).build();
     return ResponseEntity.status(HttpStatus.UNPROCESSABLE_CONTENT).body(errorResponse);
   }
@@ -95,13 +137,8 @@ public class ControllerExceptionHandler {
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
   }
 
-  private CustomError sanitizeError(ObjectError error) {
-    if (error instanceof FieldError fieldError) {
-      return new CustomError(
-          "invalid_parameter_value", fieldError.getDefaultMessage(), fieldError.getField());
-    } else {
-      return new CustomError("unknown", "Unknown error", "");
-    }
+  private CustomError getInvalidParameterError(String message, String field) {
+    return new CustomError("invalid_parameter_value", message, field);
   }
 
   /**

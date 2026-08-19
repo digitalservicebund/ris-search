@@ -212,6 +212,39 @@
         }
       }
     },
+    "/v1/literature/{documentNumber}.zip" : {
+      "get" : {
+        "tags" : [ "Literature" ],
+        "summary" : "Decision ZIP (XML and attachments)",
+        "description" : "Returns all literature document files as a ZIP archive.",
+        "operationId" : "getLiteratureDocumentAsZip",
+        "parameters" : [ {
+          "name" : "documentNumber",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "pattern" : "^[a-zA-Z]{4}\\d{9}$"
+          },
+          "example" : "XXLS201770751"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/zip" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/StreamingResponseBody"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        }
+      }
+    },
     "/v1/literature/{documentNumber}.xml" : {
       "get" : {
         "tags" : [ "Literature" ],
@@ -1793,7 +1826,8 @@
           "in" : "path",
           "required" : true,
           "schema" : {
-            "type" : "string"
+            "type" : "string",
+            "pattern" : "^[a-zA-Z]{4}\\d{9}$"
           },
           "example" : "STRE201770751"
         } ],
@@ -2080,6 +2114,39 @@
               "application/json" : {
                 "schema" : {
                   "$ref" : "#/components/schemas/AdministrativeDirectiveSchema"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        }
+      }
+    },
+    "/v1/administrative-directive/{documentNumber}.zip" : {
+      "get" : {
+        "tags" : [ "AdministrativeDirective" ],
+        "summary" : "Decision ZIP (XML and attachments)",
+        "description" : "Returns all administrative directive files as a ZIP archive.",
+        "operationId" : "getAdministrativeDirectiveAsZip",
+        "parameters" : [ {
+          "name" : "documentNumber",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "pattern" : "^[a-zA-Z]{4}\\d{9}$"
+          },
+          "example" : "XXLS201770751"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/zip" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/StreamingResponseBody"
                 }
               }
             }
@@ -2636,6 +2703,7 @@
         },
         "required" : [ "@id", "authors", "collaborators", "conferenceNotes", "dependentReferences", "documentNumber", "documentTypes", "editors", "encoding", "founder", "inLanguage", "independentReferences", "internationalIdentifiers", "languages", "literatureType", "normReferences", "originators", "publisherOrganizations", "publishers", "publishingHouses", "universityNotes", "volumes", "yearsOfPublication" ]
       },
+      "StreamingResponseBody" : { },
       "ChangelogChangedDocument" : {
         "type" : "object",
         "properties" : {
@@ -2989,7 +3057,6 @@
         },
         "required" : [ "@id", "encoding", "exampleOfWork", "hasPart", "legislationIdentifier", "legislationLegalForce", "name", "risAbbreviation", "temporalCoverage" ]
       },
-      "StreamingResponseBody" : { },
       "AbstractDocumentSchema" : {
         "discriminator" : {
           "propertyName" : "@type"

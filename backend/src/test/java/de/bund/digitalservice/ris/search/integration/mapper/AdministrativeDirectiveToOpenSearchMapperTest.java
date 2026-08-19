@@ -18,7 +18,7 @@ class AdministrativeDirectiveToOpenSearchMapperTest {
   void itMapsLdmlToAnOpenSearchEntity() {
 
     String ldmlString =
-        LoadXmlUtils.loadXmlAsString(AdministrativeDirective.class, "KSNR0000.akn.xml");
+        LoadXmlUtils.loadXmlAsString(AdministrativeDirective.class, "KSNR000000000.akn.xml");
 
     Instant now = SharedTestConstants.TIMESTAMP_2024_01_01_AS_INSTANT;
     AdministrativeDirective entity =
@@ -26,8 +26,8 @@ class AdministrativeDirectiveToOpenSearchMapperTest {
 
     AdministrativeDirective expected =
         AdministrativeDirective.builder()
-            .id("KSNR0000")
-            .documentNumber("KSNR0000")
+            .id("KSNR000000000")
+            .documentNumber("KSNR000000000")
             .headline("administrative directive headline")
             .documentType("VR")
             .documentTypeDetail("Rundschreiben")

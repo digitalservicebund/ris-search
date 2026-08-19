@@ -42,15 +42,15 @@ class AdministrativeDirectiveIndexSyncJobTest extends ContainersIntegrationBase 
   @Test
   void itIndexesAdministrativeDirectivesOnFullReindex() throws ObjectStoreServiceException {
     String content =
-        LoadXmlUtils.loadXmlAsString(AdministrativeDirective.class, "KSNR0000.akn.xml");
+        LoadXmlUtils.loadXmlAsString(AdministrativeDirective.class, "KSNR000000000.akn.xml");
 
-    bucket.save("KSNR0000.akn.xml", content);
+    bucket.save("KSNR000000000.akn.xml", content);
     syncJob.runJob();
     await()
         .atMost(500, TimeUnit.MILLISECONDS)
         .until(() -> administrativeDirectiveRepository.findAll().iterator().hasNext());
     AdministrativeDirective expected = repository.findAll().iterator().next();
-    assertThat(expected.documentNumber()).isEqualTo("KSNR0000");
+    assertThat(expected.documentNumber()).isEqualTo("KSNR000000000");
     assertThat(portalBucket.getFileAsString(AdministrativeDirectiveIndexSyncJob.STATUS_FILENAME))
         .isNotEmpty();
   }
@@ -60,12 +60,12 @@ class AdministrativeDirectiveIndexSyncJobTest extends ContainersIntegrationBase 
       throws JsonProcessingException, ObjectStoreServiceException {
     // data
     String content =
-        LoadXmlUtils.loadXmlAsString(AdministrativeDirective.class, "KSNR0000.akn.xml");
-    bucket.save("KSNR0000.akn.xml", content);
+        LoadXmlUtils.loadXmlAsString(AdministrativeDirective.class, "KSNR000000000.akn.xml");
+    bucket.save("KSNR000000000.akn.xml", content);
 
     // changelog
     Changelog log = new Changelog();
-    log.setChanged(new HashSet<>(List.of("KSNR0000.akn.xml")));
+    log.setChanged(new HashSet<>(List.of("KSNR000000000.akn.xml")));
     ObjectMapper mapper = new ObjectMapper();
     bucket.save("changelogs/2025-07-12T13:34:34.392285Z.json", mapper.writeValueAsString(log));
 
@@ -82,7 +82,7 @@ class AdministrativeDirectiveIndexSyncJobTest extends ContainersIntegrationBase 
         .until(() -> administrativeDirectiveRepository.findAll().iterator().hasNext());
 
     AdministrativeDirective expected = repository.findAll().iterator().next();
-    assertThat(expected.documentNumber()).isEqualTo("KSNR0000");
+    assertThat(expected.documentNumber()).isEqualTo("KSNR000000000");
     assertThat(portalBucket.getFileAsString(AdministrativeDirectiveIndexSyncJob.STATUS_FILENAME))
         .isNotEmpty();
   }
