@@ -1,6 +1,5 @@
 package de.bund.digitalservice.ris.search.config.opensearch;
 
-import lombok.SneakyThrows;
 import org.opensearch.client.RestHighLevelClient;
 import org.opensearch.data.client.orhlc.AbstractOpenSearchConfiguration;
 import org.opensearch.data.client.orhlc.ClientConfiguration;
@@ -9,7 +8,6 @@ import org.opensearch.data.client.orhlc.RestClients;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.core.retry.RetryException;
 import org.springframework.core.retry.RetryTemplate;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.convert.ElasticsearchConverter;
@@ -63,14 +61,10 @@ public class RestClientConfigDev extends AbstractOpenSearchConfiguration {
       ElasticsearchConverter elasticsearchConverter, RestHighLevelClient elasticsearchClient) {
 
     return new OpenSearchRestTemplate(opensearchClient(), elasticsearchConverter) {
-      @SneakyThrows
       @Override
       public <T> T execute(OpenSearchRestTemplate.ClientCallback<T> callback) {
-        try {
-          return retryTemplate.execute(() -> super.execute(callback));
-        } catch (RetryException e) {
-          throw e.getCause();
-        }
+        return OpensearchRetryConfiguration.executeWithRetries(
+            retryTemplate, () -> super.execute(callback));
       }
     };
   }
