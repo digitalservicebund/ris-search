@@ -265,7 +265,7 @@ public class IndexNormsService implements IndexService {
 
     if (newestFileName.isEmpty()) {
       logger.error(
-          "Changelog file contained {}, but no manifestation files found for that norm expression.",
+          "Expression '{}' either doesn't exist or is missing a regelungstext-verkuendungsfassung.xml.",
           expressionEli);
       return Optional.empty();
     }
