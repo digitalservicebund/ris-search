@@ -71,6 +71,7 @@ const headerItems = computed(() => {
       isMarkup: true,
       value: fileNumber,
       color: "gray",
+      class: "-mr-8", // reduce spacing between fileNumbers to 4px
     });
   }
 

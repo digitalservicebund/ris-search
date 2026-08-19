@@ -30,7 +30,7 @@ const itemsWithContent = computed(() => items.filter((i) => !!i.value));
 <template>
   <div>
     <p
-      class="typo-label2-regular flex flex-wrap items-baseline gap-x-12 gap-y-8 hyphens-auto"
+      class="typo-label2-regular flex flex-wrap items-baseline gap-x-12 gap-y-4 hyphens-auto"
     >
       <span v-if="documentType" class="font-bold!" :id="documentType.id">{{
         documentType.value
