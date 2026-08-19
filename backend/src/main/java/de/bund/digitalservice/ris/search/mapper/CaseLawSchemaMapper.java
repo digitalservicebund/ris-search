@@ -27,7 +27,7 @@ public class CaseLawSchemaMapper {
    */
   public static CaseLawSchema fromDomain(CaseLawDocumentationUnit doc) {
     String entityURI = ApiConfig.Paths.CASELAW + "/" + doc.documentNumber();
-    var encodings = EncodingSchemaFactory.caselawEncodingSchemas(entityURI);
+    var encodings = EncodingSchemaFactory.documentEncodingSchemas(entityURI);
 
     return CaseLawSchema.builder()
         // JSON-LD-specific fields

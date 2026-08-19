@@ -220,8 +220,7 @@ class LiteratureSearchSchemaMapperTest {
             .outline("Gliederung")
             .headline("Hauptüberschrift")
             .literatureType("uli")
-            .encoding(
-                EncodingSchemaFactory.literatureEncodingSchemas("/v1/literature/XXLU000000001"))
+            .encoding(EncodingSchemaFactory.documentEncodingSchemas("/v1/literature/XXLU000000001"))
             .build();
 
     Assertions.assertThat(LiteratureSearchSchemaMapper.fromDomain(literature)).isEqualTo(expected);

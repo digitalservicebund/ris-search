@@ -65,26 +65,7 @@ public class EncodingSchemaFactory {
         .build();
   }
 
-  private static DocumentEncodingSchema caselawEncodingSchema(SchemaType type, String baseUrl) {
-    return DocumentEncodingSchema.builder()
-        .id(id(type, baseUrl))
-        .contentUrl(contentUrl(type, baseUrl))
-        .encodingFormat(encodingFormat(type))
-        .inLanguage(LANGUAGE)
-        .build();
-  }
-
-  private static DocumentEncodingSchema literatureEncodingSchema(SchemaType type, String baseUrl) {
-    return DocumentEncodingSchema.builder()
-        .id(id(type, baseUrl))
-        .contentUrl(contentUrl(type, baseUrl))
-        .encodingFormat(encodingFormat(type))
-        .inLanguage(LANGUAGE)
-        .build();
-  }
-
-  private static DocumentEncodingSchema administrativeDirectiveEncodingSchema(
-      SchemaType type, String baseUrl) {
+  private static DocumentEncodingSchema documentEncodingSchema(SchemaType type, String baseUrl) {
     return DocumentEncodingSchema.builder()
         .id(id(type, baseUrl))
         .contentUrl(contentUrl(type, baseUrl))
@@ -113,43 +94,15 @@ public class EncodingSchemaFactory {
   }
 
   /**
-   * Generates a list of case law encoding schemas based on the provided base URL.
+   * Generates a list of document encoding schemas based on the provided base URL.
    *
    * @param baseUrl the base URL to be used for constructing the encoding schema attributes
-   * @return a list of {@code CaseLawEncodingSchema} representing the encoding schemas for case law
+   * @return a list of {@code DocumentEncodingSchema} representing the encoding schemas for case law
    *     in various formats
    */
-  public static List<DocumentEncodingSchema> caselawEncodingSchemas(String baseUrl) {
+  public static List<DocumentEncodingSchema> documentEncodingSchemas(String baseUrl) {
     return Arrays.stream(SchemaType.values())
-        .map(type -> caselawEncodingSchema(type, baseUrl))
-        .toList();
-  }
-
-  /**
-   * Generates a list of literature encoding schemas based on the provided base URL.
-   *
-   * @param baseUrl the base URL to be used for constructing the encoding schema attributes
-   * @return a list of {@code LiteratureEncodingSchema} representing the encoding schemas for
-   *     literature in various formats
-   */
-  public static List<DocumentEncodingSchema> literatureEncodingSchemas(String baseUrl) {
-    return Arrays.stream(SchemaType.values())
-        .map(type -> literatureEncodingSchema(type, baseUrl))
-        .toList();
-  }
-
-  /**
-   * Generates a list of encoding schemas for administrative directives based on the provided base
-   * URL.
-   *
-   * @param baseUrl the base URL to be used for constructing the encoding schema attributes
-   * @return a list of {@code AdministrativeDirectiveEncodingSchema} representing the encoding
-   *     schemas for administrative directives in various formats
-   */
-  public static List<DocumentEncodingSchema> administrativeDirectiveEncodingSchemas(
-      String baseUrl) {
-    return Arrays.stream(SchemaType.values())
-        .map(type -> administrativeDirectiveEncodingSchema(type, baseUrl))
+        .map(type -> documentEncodingSchema(type, baseUrl))
         .toList();
   }
 }

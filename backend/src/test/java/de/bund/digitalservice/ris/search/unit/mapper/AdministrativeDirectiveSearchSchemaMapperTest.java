@@ -43,7 +43,7 @@ class AdministrativeDirectiveSearchSchemaMapperTest {
             .legislationAuthority("legislationAuthority")
             .entryIntoForceDate(LocalDate.of(2024, Month.JANUARY, 1))
             .encoding(
-                EncodingSchemaFactory.administrativeDirectiveEncodingSchemas(
+                EncodingSchemaFactory.documentEncodingSchemas(
                     "/v1/administrative-directive/KN0000"))
             .build();
 
