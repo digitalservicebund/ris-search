@@ -100,9 +100,6 @@ dependencies {
     // CVE-2026-59901
     implementation(libs.netty.codec.compression)
 
-    // CVE-2026-59889
-    implementation(libs.tools.jackson.databind)
-
     // CVE-2026-54399
     implementation(libs.apache.httpcore)
 
