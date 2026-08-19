@@ -1,6 +1,6 @@
 import userEvent from "@testing-library/user-event";
 import { render, screen } from "@testing-library/vue";
-import { describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import Tab from "./Tab.vue";
 import Tabs from "./Tabs.vue";
 
@@ -20,6 +20,16 @@ const renderTabs = () =>
 const tab = (name: string) => screen.getByRole("tab", { name });
 
 describe("Tabs", () => {
+  // jsdom doesn't implement scrolling
+  beforeEach(() => {
+    Element.prototype.scrollIntoView = vi.fn();
+  });
+
+  afterEach(() => {
+    // @ts-expect-error restore jsdom's state, which has no implementation
+    delete Element.prototype.scrollIntoView;
+  });
+
   it("renders a horizontal tab list containing the tabs", () => {
     renderTabs();
 
@@ -42,6 +52,10 @@ describe("Tabs", () => {
 
     await userEvent.keyboard("{ArrowRight}");
     expect(tab("Details")).toHaveFocus();
+    expect(tab("Details").scrollIntoView).toHaveBeenCalledWith({
+      block: "nearest",
+      inline: "nearest",
+    });
 
     await userEvent.keyboard("{ArrowRight}");
     expect(tab("Fassungen")).toHaveFocus();

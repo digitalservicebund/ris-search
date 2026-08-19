@@ -12,8 +12,7 @@ const tabs = () => [
 
 const focusTab = (tab: HTMLElement | undefined) => {
   tab?.focus();
-  // jsdom doesn't implement scrolling
-  tab?.scrollIntoView?.({ block: "nearest", inline: "nearest" });
+  tab?.scrollIntoView({ block: "nearest", inline: "nearest" });
 };
 
 const onKeydown = (event: KeyboardEvent) => {
