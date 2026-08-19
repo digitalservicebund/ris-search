@@ -51,18 +51,23 @@ public class OpensearchRetryConfiguration {
   }
 
   /**
-   * Runs an operation through the given retry template, unwrapping the {@link RetryException} that
-   * Spring throws once the operation either exhausts its retries or fails with an error the {@link
-   * RetryPolicy} decided not to retry.
+   * Runs the operation through the given retry template.
    *
-   * <p>Without unwrapping, callers only see a generic retry error and can no longer tell what made
-   * the operation fail, e.g. that OpenSearch rejected the query as unparseable. Rethrowing the
-   * original failure keeps the exceptions callers handle the same as if the operation hadn't been
-   * retried at all.
+   * <p>This method unwraps the {@link RetryException} that Spring throws in two cases:
+   *
+   * <ul>
+   *   <li>the operation uses all its retries
+   *   <li>the {@link RetryPolicy} does not retry the failure
+   * </ul>
+   *
+   * <p>Without this step, the caller sees only a generic retry error. The caller cannot tell why
+   * the operation failed. For example, the caller cannot tell that OpenSearch rejected the query
+   * because it could not parse the query. This method rethrows the original failure. As a result,
+   * callers handle the same exceptions as when the operation runs without retries.
    *
    * @param <T> the type the operation returns
-   * @param retryTemplate the retry template controlling the retry behaviour
-   * @param operation the operation to execute
+   * @param retryTemplate the retry template that controls the retry behavior
+   * @param operation the operation to run
    * @return the result of the operation
    */
   @SneakyThrows
