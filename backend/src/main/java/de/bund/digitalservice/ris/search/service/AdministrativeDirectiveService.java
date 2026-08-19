@@ -105,6 +105,11 @@ public class AdministrativeDirectiveService {
     return bucket.getAllKeysByPrefix(documentNumber);
   }
 
+  /**
+   * @param keys all object keys to be included in the archive
+   * @param outputStream Outputstream to which the ZIP archive data will be written
+   * @throws IOException if an I/O error occurs during file retrieval or while writing to the stream
+   */
   public void writeZipArchive(List<String> keys, OutputStream outputStream) throws IOException {
     ZipManager.writeZipArchive(bucket, keys, outputStream);
   }
