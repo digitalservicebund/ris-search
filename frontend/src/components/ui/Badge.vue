@@ -18,7 +18,8 @@ const props = withDefaults(
   },
 );
 
-const base = tw`inline-block rounded-xs border px-8 py-4 hyphens-auto`;
+// use 7px and 3px padding because the border adds 1px resulting in 8px and 4px
+const base = tw`inline-block rounded-xs border px-[7px] py-[3px] hyphens-auto`;
 
 const green = tw`border-green-400 bg-green-100 text-green-800`;
 const yellow = tw`border-yellow-600 bg-yellow-200 text-orange-800`;
