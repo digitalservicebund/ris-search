@@ -259,6 +259,24 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
   }
 
   @Test
+  @DisplayName("The article html endpoint should work with a special character eid")
+  void articleHtmlEndpointWorksWithSpecialCharacterEid() throws Exception {
+
+    var response =
+        mockMvc
+            .perform(
+                get(MANIFESTATION_URL_HTML.replace(".html", "/art-z§§ 4 bis 14.html"))
+                    .contentType(MediaType.TEXT_HTML))
+            .andExpectAll(status().isOk(), content().contentType("text/html;charset=UTF-8"))
+            .andReturn();
+    var content = response.getResponse().getContentAsString();
+    Document parsed = Jsoup.parse(content);
+
+    final var article = parsed.body().getElementById("art-z%c2%a7%c2%a7%204%20bis%2014");
+    assertThat(article).isNotNull();
+  }
+
+  @Test
   @DisplayName(
       "Html Endpoint Should return error html when requesting a single norm article not existing")
   void shouldReturnErrorMessageWhenRequestedNormArticleNotExisting() throws Exception {

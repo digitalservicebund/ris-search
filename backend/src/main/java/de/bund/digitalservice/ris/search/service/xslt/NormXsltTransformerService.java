@@ -2,11 +2,8 @@ package de.bund.digitalservice.ris.search.service.xslt;
 
 import de.bund.digitalservice.ris.search.exception.NoSuchKeyException;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
-import de.bund.digitalservice.ris.search.service.exception.XMLElementNotFoundException;
 import de.bund.digitalservice.ris.search.utils.eli.EliFile;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -15,7 +12,6 @@ import javax.xml.transform.URIResolver;
 import javax.xml.transform.stream.StreamSource;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
-import org.springframework.web.util.UriUtils;
 
 /** Service for transforming LegalDocML norm and article documents to HTML using XSLT. */
 @Service
@@ -115,25 +111,8 @@ public class NormXsltTransformerService extends XsltTransformer {
    */
   public String transformArticle(byte[] source, String eId, String resourcesBasePath) {
     var parameters = standardParameters(resourcesBasePath);
-    try {
-      // According to the original akn naming convention
-      // (https://docs.oasis-open.org/legaldocml/akn-nc/v1.0/akn-nc-v1.0.html) eids should be
-      // navigable (not have % in them), but LegalDocML.de has decided to deviate from this by
-      // setting the actual eid to a uri encoded modified version of the article name. For example
-      // an article called "1 1" will have the eid "art-z1%201". The actual eid has a % in it and
-      // therefore can no longer be used as a path variable.
-      // In the xslt files provided by Kosit, the work around is to skip uri encoding when building
-      // links to einzelnormen. Since normal web traffic performs uri decoding, we need to perform
-      // uri encoding here to get back the actual eid.
-      String encodedId = UriUtils.encode(eId, StandardCharsets.UTF_8).toLowerCase(Locale.ROOT);
-      parameters.put("article-eid", encodedId);
-      return transformLegalDocMlFromBytes(source, parameters);
-    } catch (XMLElementNotFoundException _) {
-      // This code is a temporary fallback to check if the uri encoding strategy will work as
-      // expected. In theory these lines of code should never be reached.
-      parameters.put("article-eid", eId);
-      return transformLegalDocMlFromBytes(source, parameters);
-    }
+    parameters.put("article-eid", eId);
+    return transformLegalDocMlFromBytes(source, parameters);
   }
 
   private Map<String, String> standardParameters(String resourcesBasePath) {
