@@ -19,7 +19,9 @@ import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(
+    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+    properties = "s3.file-storage.endpoint=s3-endpoint")
 @AutoConfigureMockMvc
 @Tag("integration")
 class BulkZipControllerTest extends ContainersIntegrationBase {
@@ -47,7 +49,7 @@ class BulkZipControllerTest extends ContainersIntegrationBase {
     publicFilesBucket.save(String.format(bulkZipPattern, LITERATURE, "02"), "");
     publicFilesBucket.save(String.format(bulkZipPattern, ADMIN, "02"), "");
 
-    String expectedPrefix = "https://object.storage.eu01.onstackit.cloud/public/snapshots/";
+    String expectedPrefix = "s3-endpoint/public/snapshots/";
 
     String responseJson =
         mockMvc
