@@ -3,6 +3,7 @@ package de.bund.digitalservice.ris.search.integration.controller.api.testData;
 import de.bund.digitalservice.ris.PebbleTemplateTestUtils;
 import de.bund.digitalservice.ris.SharedTestConstants;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
+import de.bund.digitalservice.ris.utils.CaseLawXmlValidator;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Month;
@@ -217,6 +218,7 @@ public class CaseLawTestData {
     if (context == null) {
       context = new HashMap<>();
     }
-    return PebbleTemplateTestUtils.getXmlFromTemplate(context, CASE_LAW_LDML_TEMPLATE);
+    return PebbleTemplateTestUtils.getXmlFromTemplateWithValidation(
+        context, CASE_LAW_LDML_TEMPLATE, CaseLawXmlValidator.Type.DECISION);
   }
 }

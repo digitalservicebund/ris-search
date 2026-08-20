@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import de.bund.digitalservice.ris.search.mapper.CaseLawLdmlToOpenSearchMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.utils.CaseLawLdmlTemplateUtils;
+import de.bund.digitalservice.ris.utils.CaseLawXmlValidator;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
@@ -21,7 +22,9 @@ class CaseLawLdmlToOpenSearchMapperTest {
 
   @BeforeEach
   void beforeEach() throws IOException {
-    testCaseLawLdml = caseLawLdmlTemplateUtils.getXmlFromTemplate(null);
+    testCaseLawLdml =
+        caseLawLdmlTemplateUtils.getXmlFromTemplateWithValidation(
+            null, CaseLawXmlValidator.Type.DECISION);
   }
 
   @Test
@@ -57,19 +60,28 @@ class CaseLawLdmlToOpenSearchMapperTest {
   void shouldMapAdditionalCaseLawFieldsCorrectly() {
     CaseLawDocumentationUnit caseLaw = mapper.fromString(testCaseLawLdml);
 
-    assertThat(caseLaw.erledigung()).isEqualTo("Ja");
     assertThat(caseLaw.hasLegislativeMandate()).isEqualTo("Ja");
     assertThat(caseLaw.langtextdatum()).isEqualTo(LocalDate.of(2016, Month.JUNE, 15));
-    assertThat(caseLaw.rechtsmittelfuehrer()).isEqualTo("Rechtsmittelführer");
-    assertThat(caseLaw.rechtsmittelzulassung()).isEqualTo("Rechtsmittelzulassung");
     assertThat(caseLaw.revision()).isEqualTo("Ja");
     assertThat(caseLaw.letzteVeroeffentlichung()).isEqualTo(LocalDate.of(2026, Month.MARCH, 20));
-    assertThat(caseLaw.erledigungsvermerk()).isEqualTo("Erledigungsvermerk");
-    assertThat(caseLaw.rechtsfrageGesamt()).isEqualTo("Rechtsfrage (gesamt)");
-    assertThat(caseLaw.rechtsfrage()).isEqualTo("Rechtsfrage");
     assertThat(caseLaw.legalEffect()).isEqualTo("Ja");
     assertThat(caseLaw.erstveroeffentlichung()).isEqualTo(LocalDate.of(2026, Month.MARCH, 18));
     assertThat(caseLaw.mitteilungsdatum()).isEqualTo(LocalDate.of(2020, Month.JANUARY, 1));
+  }
+
+  @Test
+  void shouldMapPendingProceedingFieldsCorrectly() throws IOException {
+    String pendingProceedingXml =
+        caseLawLdmlTemplateUtils.getXmlFromTemplateWithValidation(
+            Map.of("pendingProceeding", true), CaseLawXmlValidator.Type.PENDING_PROCEEDING);
+    CaseLawDocumentationUnit caseLaw = mapper.fromString(pendingProceedingXml);
+
+    assertThat(caseLaw.erledigung()).isEqualTo("Ja");
+    assertThat(caseLaw.rechtsmittelfuehrer()).isEqualTo("Rechtsmittelführer");
+    assertThat(caseLaw.rechtsmittelzulassung()).isEqualTo("Rechtsmittelzulassung");
+    assertThat(caseLaw.erledigungsvermerk()).isEqualTo("Erledigungsvermerk");
+    assertThat(caseLaw.rechtsfrageGesamt()).isEqualTo("Rechtsfrage (gesamt)");
+    assertThat(caseLaw.rechtsfrage()).isEqualTo("Rechtsfrage");
   }
 
   @Test
@@ -143,7 +155,9 @@ class CaseLawLdmlToOpenSearchMapperTest {
 
   @Test
   void setsVorabdokumentToTrueIfDocumentIsMarkedIncomplete() throws IOException {
-    String caselawXml = caseLawLdmlTemplateUtils.getXmlFromTemplate(Map.of("vorabdokument", true));
+    String caselawXml =
+        caseLawLdmlTemplateUtils.getXmlFromTemplateWithValidation(
+            Map.of("vorabdokument", true), CaseLawXmlValidator.Type.DECISION);
 
     CaseLawDocumentationUnit caseLaw = mapper.fromString(caselawXml);
     assertThat(caseLaw.vorabdokument()).isTrue();

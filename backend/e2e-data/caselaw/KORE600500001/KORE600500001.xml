@@ -57,24 +57,24 @@
             </akn:references>
             <akn:proprietary source="ris">
                 <ris:meta>
-                    <ris:aktenzeichenListe domainTerm="Liste der Aktenzeichen">
-                        <ris:aktenzeichen domainTerm="Aktenzeichen" akn:refersTo="#aktenzeichen">TS 234567</ris:aktenzeichen>
-                    </ris:aktenzeichenListe>
                     <ris:dokumenttyp domainTerm="Dokumenttyp">Urteil</ris:dokumenttyp>
                     <ris:gericht domainTerm="Gericht" refersTo="#organisation-gericht-courttype-courtlocation" showAs="LG Testort11 Label">
                         <ris:gerichtstyp domainTerm="Gerichtstyp">LG</ris:gerichtstyp>
                         <ris:gerichtsort domainTerm="Gerichtsort">Testort11</ris:gerichtsort>
-                        <ris:spruchkoerper domainTerm="Spruchkörper" refersTo="#spruchkoerper">5. Kammer</ris:spruchkoerper>
+                        <ris:spruchkoerper domainTerm="Spruchkörper">5. Kammer</ris:spruchkoerper>
                     </ris:gericht>
-                    <ris:rechtskraft domainTerm="Rechtskraft">Keine Angabe</ris:rechtskraft>
-                    <ris:sachgebiete domainTerm="Sachgebiete">
-                        <ris:sachgebiet domainTerm="Sachgebiet" notation="neu">Testverteilung</ris:sachgebiet>
-                        <ris:sachgebiet domainTerm="Sachgebiet" notation="neu">Testabschluss</ris:sachgebiet>
-                        <ris:sachgebiet domainTerm="Sachgebiet" notation="neu">Testpausierung</ris:sachgebiet>
-                        <ris:sachgebiet domainTerm="Sachgebiet" notation="neu">KalkulationY</ris:sachgebiet>
-                    </ris:sachgebiete>
                     <ris:dokumentationsstelle domainTerm="Dokumentationsstelle" refersTo="#lg-test11-dokumentationsstelle">LG Test11</ris:dokumentationsstelle>
-                </ris:meta>
+                    <ris:aktenzeichenListe domainTerm="Liste der Aktenzeichen">
+                        <ris:aktenzeichen domainTerm="Aktenzeichen" refersTo="#aktenzeichen">TS 234567</ris:aktenzeichen>
+                    </ris:aktenzeichenListe>
+                    <ris:sachgebiete domainTerm="Sachgebiete">
+                        <ris:sachgebiet domainTerm="Sachgebiet" sachgebiet-id="TT">Testverteilung</ris:sachgebiet>
+                        <ris:sachgebiet domainTerm="Sachgebiet" sachgebiet-id="TT">Testabschluss</ris:sachgebiet>
+                        <ris:sachgebiet domainTerm="Sachgebiet" sachgebiet-id="TT">Testpausierung</ris:sachgebiet>
+                        <ris:sachgebiet domainTerm="Sachgebiet" sachgebiet-id="TT">KalkulationY</ris:sachgebiet>
+                    </ris:sachgebiete>
+                    <ris:rechtskraft domainTerm="Rechtskraft">Keine Angabe</ris:rechtskraft>
+</ris:meta>
             </akn:proprietary>
         </akn:meta>
         <akn:header>

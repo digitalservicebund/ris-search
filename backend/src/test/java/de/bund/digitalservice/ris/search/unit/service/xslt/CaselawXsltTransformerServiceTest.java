@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import de.bund.digitalservice.ris.html.service.xslt.CaselawXsltTransformer;
 import de.bund.digitalservice.ris.search.utils.CaseLawLdmlTemplateUtils;
+import de.bund.digitalservice.ris.utils.CaseLawXmlValidator;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
@@ -18,10 +19,11 @@ import org.junit.jupiter.params.provider.CsvSource;
 class CaselawXsltTransformerServiceTest {
   private final CaselawXsltTransformer transformer = new CaselawXsltTransformer();
   private final CaseLawLdmlTemplateUtils caseLawLdmlTemplateUtils = new CaseLawLdmlTemplateUtils();
+  private static final CaseLawXmlValidator.Type DECISION = CaseLawXmlValidator.Type.DECISION;
 
   @Test
   void testTransformsCaselawHeaderCorrectly() throws IOException {
-    var actualXml = caseLawLdmlTemplateUtils.getXmlFromTemplate(null);
+    var actualXml = caseLawLdmlTemplateUtils.getXmlFromTemplateWithValidation(null, DECISION);
     var actualHtml = transformer.transform(actualXml.getBytes(StandardCharsets.UTF_8), "api/v1/");
     var expectedHeader =
         """
@@ -34,7 +36,7 @@ class CaselawXsltTransformerServiceTest {
 
   @Test
   void testTransformsCaselawBorderNumberCorrectly() throws IOException {
-    var actualXml = caseLawLdmlTemplateUtils.getXmlFromTemplate(null);
+    var actualXml = caseLawLdmlTemplateUtils.getXmlFromTemplateWithValidation(null, DECISION);
     var actualHtml = transformer.transform(actualXml.getBytes(StandardCharsets.UTF_8), "api/v1/");
     var expectedBorderNumber =
         """
@@ -60,7 +62,7 @@ class CaselawXsltTransformerServiceTest {
 
   @Test
   void testTransformsCaselawTableCorrectlyWithStyles() throws IOException {
-    var actualXml = caseLawLdmlTemplateUtils.getXmlFromTemplate(null);
+    var actualXml = caseLawLdmlTemplateUtils.getXmlFromTemplateWithValidation(null, DECISION);
     var actualHtml = transformer.transform(actualXml.getBytes(StandardCharsets.UTF_8), "api/v1/");
     var expectedTable =
         """
@@ -132,7 +134,7 @@ class CaselawXsltTransformerServiceTest {
 
   @Test
   void testReturnsDissentingDecisionCorrectly() throws IOException {
-    var actualXml = caseLawLdmlTemplateUtils.getXmlFromTemplate(null);
+    var actualXml = caseLawLdmlTemplateUtils.getXmlFromTemplateWithValidation(null, DECISION);
     var actualHtml = transformer.transform(actualXml.getBytes(StandardCharsets.UTF_8), "api/v1/");
     var expectedDissentingOpinionSection =
         """

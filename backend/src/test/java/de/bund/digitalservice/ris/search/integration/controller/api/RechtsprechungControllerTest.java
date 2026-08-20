@@ -14,6 +14,7 @@ import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationU
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.service.IndexCaselawService;
 import de.bund.digitalservice.ris.search.utils.CaseLawLdmlTemplateUtils;
+import de.bund.digitalservice.ris.utils.CaseLawXmlValidator;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Month;
@@ -68,7 +69,8 @@ class RechtsprechungControllerTest extends ContainersIntegrationBase {
                     </akn:p>
         """);
 
-    return caseLawLdmlTemplateUtils.getXmlFromTemplate(context);
+    return caseLawLdmlTemplateUtils.getXmlFromTemplateWithValidation(
+        context, CaseLawXmlValidator.Type.DECISION);
   }
 
   @BeforeEach
@@ -100,8 +102,6 @@ class RechtsprechungControllerTest extends ContainersIntegrationBase {
             jsonPath("$.datum", Matchers.is("2023-01-02")),
             jsonPath("$.leitsatz", Matchers.is("Das ist der Leitsatz")),
             jsonPath("$.sonstigerLangtext", Matchers.is("Sonstiger Langtext")),
-            jsonPath("$.rechtsfrageGesamt", Matchers.is("Rechtsfrage (gesamt)")),
-            jsonPath("$.rechtsfrage", Matchers.is("Rechtsfrage")),
             jsonPath("$.rechtskraft", Matchers.is("Ja")),
             jsonPath("$.sonstigerOrientierungssatz", Matchers.is("Sonstiger Orientierungssatz")),
             jsonPath("$.tatbestand", Matchers.is("Example Tatbestand/CaseFacts. More background")),
@@ -154,14 +154,10 @@ class RechtsprechungControllerTest extends ContainersIntegrationBase {
             jsonPath("$.datenDerMuendlichenVerhandlung[0]").value("2021-02-03"),
             jsonPath("$.definitionen[0]").value("indirekte Steuern"),
             jsonPath("$.definitionen[1]").value("Sachgesamtheit"),
-            jsonPath("$.erledigung").value("Ja"),
             jsonPath("$.gesetzgebungsauftrag").value("Ja"),
             jsonPath("$.langtextdatum").value("2016-06-15"),
-            jsonPath("$.rechtsmittelfuehrer").value("Rechtsmittelführer"),
-            jsonPath("$.rechtsmittelzulassung").value("Rechtsmittelzulassung"),
             jsonPath("$.revision").value("Ja"),
             jsonPath("$.letzteVeroeffentlichung").value("2026-03-20"),
-            jsonPath("$.erledigungsvermerk").value("Erledigungsvermerk"),
             jsonPath("$.erstveroeffentlichung").value("2026-03-18"),
             jsonPath("$.mitteilungsdatum").value("2020-01-01"),
             jsonPath("$.abweichendeMeinung")
@@ -179,6 +175,36 @@ class RechtsprechungControllerTest extends ContainersIntegrationBase {
                     "/v1/rechtsprechung/" + this.documentNumber + ".html",
                     "/v1/rechtsprechung/" + this.documentNumber + ".xml",
                     "/v1/rechtsprechung/" + this.documentNumber + ".zip")));
+  }
+
+  @Test
+  @DisplayName("Should return pending proceeding specific fields when using api endpoint")
+  void shouldReturnPendingProceedingFieldsInJson() throws Exception {
+    String pendingProceedingDocumentNumber = "BFRE000107056";
+    Map<String, Object> context = new HashMap<>();
+    context.put("documentNumber", pendingProceedingDocumentNumber);
+    context.put("pendingProceeding", true);
+    String pendingProceedingXml =
+        caseLawLdmlTemplateUtils.getXmlFromTemplateWithValidation(
+            context, CaseLawXmlValidator.Type.PENDING_PROCEEDING);
+    caseLawBucket.save(
+        pendingProceedingDocumentNumber + "/" + pendingProceedingDocumentNumber + ".xml",
+        pendingProceedingXml);
+
+    indexCaselawService.reindexAll(SharedTestConstants.TIMESTAMP_2024_01_01_AS_STRING);
+
+    mockMvc
+        .perform(
+            get(ApiConfig.Paths.RECHTSPRECHUNG + "/" + pendingProceedingDocumentNumber)
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpectAll(
+            status().isOk(),
+            jsonPath("$.erledigung").value("Ja"),
+            jsonPath("$.erledigungsvermerk").value("Erledigungsvermerk"),
+            jsonPath("$.rechtsfrageGesamt", Matchers.is("Rechtsfrage (gesamt)")),
+            jsonPath("$.rechtsfrage", Matchers.is("Rechtsfrage")),
+            jsonPath("$.rechtsmittelfuehrer").value("Rechtsmittelführer"),
+            jsonPath("$.rechtsmittelzulassung").value("Rechtsmittelzulassung"));
   }
 
   @Test

@@ -125,7 +125,9 @@ public class CaseLawLdmlToOpenSearchMapper {
         .rechtsmittelzulassung(risMeta.getRisRechtsmittelzulassung())
         .revision(risMeta.getRisRevision())
         .letzteVeroeffentlichung(
-            DateUtils.nullSafeParseyyyyMMdd(risMeta.getLetzteVeroeffentlichungValue()))
+            manifestation == null
+                ? null
+                : DateUtils.nullSafeParseyyyyMMdd(manifestation.getLetzteVeroeffentlichungValue()))
         .erledigungsvermerk(extractErledigungsvermerk(meta))
         .rechtsfrage(extractRechtsfrage(meta))
         .erstveroeffentlichung(

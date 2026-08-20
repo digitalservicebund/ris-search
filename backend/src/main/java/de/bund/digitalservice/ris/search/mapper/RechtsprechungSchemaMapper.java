@@ -17,7 +17,7 @@ public class RechtsprechungSchemaMapper {
    */
   public static RechtsprechungSchema fromDomain(CaseLawDocumentationUnit doc) {
     String entityURI = ApiConfig.Paths.RECHTSPRECHUNG + "/" + doc.documentNumber();
-    var encodings = EncodingSchemaFactory.caselawEncodingSchemas(entityURI);
+    var encodings = EncodingSchemaFactory.documentEncodingSchemas(entityURI);
 
     return RechtsprechungSchema.builder()
         .id(entityURI)

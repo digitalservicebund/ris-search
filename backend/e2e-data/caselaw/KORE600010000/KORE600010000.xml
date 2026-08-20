@@ -57,24 +57,24 @@
             </akn:references>
             <akn:proprietary source="ris">
                 <ris:meta>
-                    <ris:aktenzeichenListe domainTerm="Liste der Aktenzeichen">
-                        <ris:aktenzeichen domainTerm="Aktenzeichen" akn:refersTo="#aktenzeichen">PS 12345678</ris:aktenzeichen>
-                    </ris:aktenzeichenListe>
                     <ris:dokumenttyp domainTerm="Dokumenttyp">Urteil</ris:dokumenttyp>
                     <ris:gericht domainTerm="Gericht" refersTo="#organisation-gericht-courttype-courtlocation" showAs="LG Test Label">
                         <ris:gerichtstyp domainTerm="Gerichtstyp">LG</ris:gerichtstyp>
                         <ris:gerichtsort domainTerm="Gerichtsort">Testort5</ris:gerichtsort>
-                        <ris:spruchkoerper domainTerm="Spruchkörper" refersTo="#spruchkoerper">12. Kammer</ris:spruchkoerper>
+                        <ris:spruchkoerper domainTerm="Spruchkörper">12. Kammer</ris:spruchkoerper>
                     </ris:gericht>
-                    <ris:rechtskraft domainTerm="Rechtskraft">Ja</ris:rechtskraft>
-                    <ris:sachgebiete domainTerm="Sachgebiete">
-                        <ris:sachgebiet domainTerm="Sachgebiet" notation="neu">Testwerbung</ris:sachgebiet>
-                        <ris:sachgebiet domainTerm="Sachgebiet" notation="neu">Testdruck</ris:sachgebiet>
-                        <ris:sachgebiet domainTerm="Sachgebiet" notation="neu">Musterpostit (inkl. Testdaten)</ris:sachgebiet>
-                        <ris:sachgebiet domainTerm="Sachgebiet" notation="neu">Testbewertung</ris:sachgebiet>
-                    </ris:sachgebiete>
                     <ris:dokumentationsstelle domainTerm="Dokumentationsstelle" refersTo="#lg-test-dokumentationsstelle">LG Test</ris:dokumentationsstelle>
-                </ris:meta>
+                    <ris:aktenzeichenListe domainTerm="Liste der Aktenzeichen">
+                        <ris:aktenzeichen domainTerm="Aktenzeichen" refersTo="#aktenzeichen">PS 12345678</ris:aktenzeichen>
+                    </ris:aktenzeichenListe>
+                    <ris:sachgebiete domainTerm="Sachgebiete">
+                        <ris:sachgebiet domainTerm="Sachgebiet" sachgebiet-id="TT">Testwerbung</ris:sachgebiet>
+                        <ris:sachgebiet domainTerm="Sachgebiet" sachgebiet-id="TT">Testdruck</ris:sachgebiet>
+                        <ris:sachgebiet domainTerm="Sachgebiet" sachgebiet-id="TT">Musterpostit (inkl. Testdaten)</ris:sachgebiet>
+                        <ris:sachgebiet domainTerm="Sachgebiet" sachgebiet-id="TT">Testbewertung</ris:sachgebiet>
+                    </ris:sachgebiete>
+                    <ris:rechtskraft domainTerm="Rechtskraft">Ja</ris:rechtskraft>
+</ris:meta>
             </akn:proprietary>
         </akn:meta>
         <akn:header>

@@ -94,6 +94,10 @@ public class FrbrElement {
     return getDateByName("erstveroeffentlichung");
   }
 
+  public String getLetzteVeroeffentlichungValue() {
+    return getDateByName("letzteVeroeffentlichung");
+  }
+
   public String getMitteilungsdatumValue() {
     return getDateByName("mitteilungsdatum");
   }

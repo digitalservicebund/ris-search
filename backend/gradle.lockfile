@@ -66,6 +66,7 @@ commons-io:commons-io:2.20.0=compileClasspath,testCompileClasspath
 commons-io:commons-io:2.22.0=productionRuntimeClasspath,runtimeClasspath,testRuntimeClasspath
 commons-logging:commons-logging:1.3.6=compileClasspath,developmentOnly,productionRuntimeClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
 de.bund.digitalservice:ris-html-transformation:0.0.6=compileClasspath,productionRuntimeClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+de.bund.digitalservice:ris-xml-schema:0.3.6=testCompileClasspath,testRuntimeClasspath
 info.picocli:picocli:4.7.7=checkstyle
 io.grpc:grpc-api:1.80.0=productionRuntimeClasspath,runtimeClasspath,testRuntimeClasspath
 io.grpc:grpc-context:1.80.0=compileClasspath,productionRuntimeClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath

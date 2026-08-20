@@ -25,6 +25,7 @@ import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.service.ChangelogService;
 import de.bund.digitalservice.ris.search.service.IndexCaselawService;
 import de.bund.digitalservice.ris.search.utils.CaseLawLdmlTemplateUtils;
+import de.bund.digitalservice.ris.utils.CaseLawXmlValidator;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -93,7 +94,8 @@ class CaseLawControllerApiTest extends ContainersIntegrationBase {
                 </akn:p>
     """);
 
-    return caseLawLdmlTemplateUtils.getXmlFromTemplate(context);
+    return caseLawLdmlTemplateUtils.getXmlFromTemplateWithValidation(
+        context, CaseLawXmlValidator.Type.DECISION);
   }
 
   private String getResourcePath(String fileName, String extension) {
