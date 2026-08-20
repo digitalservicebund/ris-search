@@ -138,7 +138,7 @@ public class ArticleService {
    *
    * @param expressionEli expressionEli of the norm
    * @param eidGiven the possible eid
-   * @return Optional<String> holding the real eid if it exists, or empty if it can't be found.
+   * @return the real eid if it exists, or empty if it can't be found.
    */
   public Optional<String> getActualEid(String expressionEli, String eidGiven) {
     if (articleExist(expressionEli, eidGiven)) {
