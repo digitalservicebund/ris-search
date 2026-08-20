@@ -1,60 +1,8 @@
 import { describe, expect, it } from "vitest";
-import type { CaseLaw } from "~/types/api";
-import { getEncodingURL } from "~/utils/anyDocument";
 import { getCaselawSecondaryTitle } from "~/utils/caseLaw";
 import { truncateAtWord } from "~/utils/textFormatting";
 
 describe("caselaw", () => {
-  describe("getEncodingURL", () => {
-    const mockCaseLaw: CaseLaw = {
-      "@type": "Decision",
-      "@id": "test-id",
-      documentNumber: "TEST-123",
-      ecli: "ECLI:TEST:123",
-      decisionDate: "2024-01-01",
-      fileNumbers: [],
-      keywords: [],
-      decisionName: [],
-      deviatingDocumentNumber: [],
-      inLanguage: "de",
-      encoding: [
-        {
-          "@type": "DecisionObject",
-          "@id": "enc-1",
-          contentUrl: "https://example.com/doc.pdf",
-          encodingFormat: "application/pdf",
-          inLanguage: "de",
-        },
-        {
-          "@type": "DecisionObject",
-          "@id": "enc-2",
-          contentUrl: "https://example.com/doc.xml",
-          encodingFormat: "application/xml",
-          inLanguage: "de",
-        },
-      ],
-      vorabdokument: false,
-    };
-
-    it("returns the URL for a matching format", () => {
-      expect(getEncodingURL(mockCaseLaw.encoding, "application/pdf")).toBe(
-        "https://example.com/doc.pdf",
-      );
-      expect(getEncodingURL(mockCaseLaw.encoding, "application/xml")).toBe(
-        "https://example.com/doc.xml",
-      );
-    });
-
-    it("returns undefined for non-matching format", () => {
-      expect(getEncodingURL(mockCaseLaw.encoding, "text/html")).toBeUndefined();
-    });
-
-    it("returns undefined for null/undefined caseLaw", () => {
-      expect(getEncodingURL(null, "application/pdf")).toBeUndefined();
-      expect(getEncodingURL(undefined, "application/pdf")).toBeUndefined();
-    });
-  });
-
   describe("getCaselawSecondaryTitle", () => {
     it("joins all nonblank decision names", () => {
       expect(

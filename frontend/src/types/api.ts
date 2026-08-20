@@ -48,6 +48,7 @@ export type Literature = components["schemas"]["LiteratureSchema"];
 // Administrative directives
 export type AdministrativeDirective =
   components["schemas"]["AdministrativeDirectiveSchema"];
+
 export type DocumentEncodingSchema =
   components["schemas"]["DocumentEncodingSchema"];
 
