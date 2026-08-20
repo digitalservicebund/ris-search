@@ -810,7 +810,13 @@
         },
         "gesetzeskraft": {
           "type": "text",
-          "analyzer": "custom_german_analyzer"
+          "analyzer": "custom_german_analyzer",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "normalizer": "normalized_keyword"
+            }
+          }
         },
         "normenkette": {
           "type": "text",
