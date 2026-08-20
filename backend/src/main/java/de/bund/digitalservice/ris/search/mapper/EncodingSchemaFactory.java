@@ -97,8 +97,8 @@ public class EncodingSchemaFactory {
    * Generates a list of document encoding schemas based on the provided base URL.
    *
    * @param baseUrl the base URL to be used for constructing the encoding schema attributes
-   * @return a list of {@code DocumentEncodingSchema} representing the encoding schemas for case law
-   *     in various formats
+   * @return a list of {@code DocumentEncodingSchema} representing the encoding schemas for
+   *     documents
    */
   public static List<DocumentEncodingSchema> documentEncodingSchemas(String baseUrl) {
     return Arrays.stream(SchemaType.values())

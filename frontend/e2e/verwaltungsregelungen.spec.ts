@@ -231,7 +231,7 @@ noJsTest("tabs work without JavaScript", async ({ page }) => {
 
 test(
   "shows detailed information in the 'Details' tab",
-  { tag: ["@RISDEV-12108", "@RISDEV-11103"] },
+  { tag: ["@RISDEV-12108", "@RISDEV-11103", "@RISDEV-12241"] },
   async ({ page }) => {
     await navigate(page, "/verwaltungsregelungen/KSNR000000001");
 
@@ -267,12 +267,15 @@ test(
       "Baz § 16c Abs 2",
       "Lol § 15 Abs 2",
     ]);
+    await expect(defs.nth(5)).toHaveText(
+      " Diese Verwaltungsregelung als ZIP herunterladen",
+    );
   },
 );
 
 test(
   "hides empty detail fields and only shows populated ones",
-  { tag: ["@RISDEV-12108", "@RISDEV-11103"] },
+  { tag: ["@RISDEV-12108", "@RISDEV-11103", "@RISDEV-12241"] },
   async ({ page }) => {
     await navigate(page, "/verwaltungsregelungen/KSNR000000004");
 
@@ -290,12 +293,15 @@ test(
       "BazAbCd 2002, Nr 1",
     ]);
     await expect(defs.nth(1)).toHaveText("24.12.2012, 28.06.2013");
+    await expect(defs.nth(2)).toHaveText(
+      " Diese Verwaltungsregelung als ZIP herunterladen",
+    );
   },
 );
 
 test(
   "hides tabs and shows details if document is empty",
-  { tag: ["@RISDEV-11103"] },
+  { tag: ["@RISDEV-11103", "@RISDEV-12241"] },
   async ({ page }) => {
     await navigate(page, "/verwaltungsregelungen/KSNR000000004");
 
@@ -327,6 +333,9 @@ test(
       "BazAbCd 2002, Nr 1",
     ]);
     await expect(defs.nth(1)).toHaveText("24.12.2012, 28.06.2013");
+    await expect(defs.nth(2)).toHaveText(
+      " Diese Verwaltungsregelung als ZIP herunterladen",
+    );
   },
 );
 
