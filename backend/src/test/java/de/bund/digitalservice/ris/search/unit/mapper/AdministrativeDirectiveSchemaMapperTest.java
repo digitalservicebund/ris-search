@@ -49,7 +49,7 @@ class AdministrativeDirectiveSchemaMapperTest {
             .normReferences(List.of("norm"))
             .outline(List.of("item 1", "item 2"))
             .encoding(
-                EncodingSchemaFactory.administrativeDirectiveEncodingSchemas(
+                EncodingSchemaFactory.documentEncodingSchemas(
                     "/v1/administrative-directive/KN0000"))
             .build();
 

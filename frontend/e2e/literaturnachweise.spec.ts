@@ -333,7 +333,7 @@ noJsTest("tabs work without JavaScript", async ({ page }) => {
 
 test(
   "shows detailed information in the 'Details' tab",
-  { tag: ["@RISDEV-12108", "@RISDEV-11103"] },
+  { tag: ["@RISDEV-12108", "@RISDEV-11103", "@RISDEV-12241"] },
   async ({ page }) => {
     await navigate(page, "/literaturnachweise/XXLU000000001");
 
@@ -357,6 +357,7 @@ test(
       "Urheber:",
       "Sprache:",
       "Kongress:",
+      "Download:",
     ]);
     // Normen are rendered as badges (spans)
     await expect(defs.nth(0).locator("span")).toHaveText([
@@ -374,7 +375,7 @@ test(
 
 test(
   "shows detailed information in the 'Details' tab of sli documents",
-  { tag: ["@RISDEV-12108", "@RISDEV-11103"] },
+  { tag: ["@RISDEV-12108", "@RISDEV-11103", "@RISDEV-12241"] },
   async ({ page }) => {
     await navigate(page, "/literaturnachweise/XXLS000000001");
 
@@ -406,6 +407,7 @@ test(
       "Sprache:",
       "Kongress:",
       "Hochschule:",
+      "Download:",
     ]);
     // Normen are rendered as badges (spans)
     await expect(defs.nth(0).locator("span")).toHaveText([
@@ -434,7 +436,7 @@ test(
 
 test(
   "hides empty detail fields and only shows populated ones for uli documents",
-  { tag: ["@RISDEV-12108"] },
+  { tag: ["@RISDEV-12108", "@RISDEV-12241"] },
   async ({ page }) => {
     await navigate(page, "/literaturnachweise/XXLU000000003");
 
@@ -445,14 +447,19 @@ test(
       .getByRole("term")
       .or(detailsList.getByRole("definition"));
 
-    await expect(detailsEntries).toHaveCount(2);
-    await expect(detailsEntries).toHaveText(["Sprache:", "deu"]);
+    await expect(detailsEntries).toHaveCount(4);
+    await expect(detailsEntries).toHaveText([
+      "Sprache:",
+      "deu",
+      "Download:",
+      " Diesen Literaturnachweis als ZIP herunterladen",
+    ]);
   },
 );
 
 test(
   "hides empty detail fields and only shows populated ones for sli documents",
-  { tag: ["@RISDEV-12108", "@RISDEV-11103"] },
+  { tag: ["@RISDEV-12108", "@RISDEV-11103", "@RISDEV-12241"] },
   async ({ page }) => {
     await navigate(page, "/literaturnachweise/XXLS000000002");
 
@@ -462,7 +469,12 @@ test(
     const terms = detailsList.getByRole("term");
     const defs = detailsList.getByRole("definition");
 
-    await expect(terms).toHaveText(["Norm:", "Mitarbeiter:", "Sprache:"]);
+    await expect(terms).toHaveText([
+      "Norm:",
+      "Mitarbeiter:",
+      "Sprache:",
+      "Download:",
+    ]);
     // Norm is rendered as a badge (span)
     await expect(defs.nth(0).locator("span")).toHaveText([
       "GG, Art 3 Abs 1, 1949-05-23",
@@ -497,28 +509,37 @@ test.describe("actions menu", () => {
   });
 });
 
-test("hides tabs and shows details if document is empty", async ({ page }) => {
-  await navigate(page, "/literaturnachweise/XXLU000000005");
+test(
+  "hides tabs and shows details if document is empty",
+  { tag: ["@RISDEV-12241"] },
+  async ({ page }) => {
+    await navigate(page, "/literaturnachweise/XXLU000000005");
 
-  await expect(
-    page.getByRole("navigation", {
-      name: "Details",
-    }),
-  ).not.toBeVisible();
+    await expect(
+      page.getByRole("navigation", {
+        name: "Details",
+      }),
+    ).not.toBeVisible();
 
-  await expect(
-    page.getByRole("heading", { level: 2, name: "Details" }),
-  ).toBeVisible();
+    await expect(
+      page.getByRole("heading", { level: 2, name: "Details" }),
+    ).toBeVisible();
 
-  await expect(page.getByRole("main").getByRole("status")).toContainText(
-    "Dieser Service befindet sich in der Testphase",
-  );
+    await expect(page.getByRole("main").getByRole("status")).toContainText(
+      "Dieser Service befindet sich in der Testphase",
+    );
 
-  const detailsList = page.getByTestId("details-list");
-  await expect(
-    detailsList.getByRole("term").or(detailsList.getByRole("definition")),
-  ).toHaveText(["Sprache:", "deu"]);
-});
+    const detailsList = page.getByTestId("details-list");
+    await expect(
+      detailsList.getByRole("term").or(detailsList.getByRole("definition")),
+    ).toHaveText([
+      "Sprache:",
+      "deu",
+      "Download:",
+      " Diesen Literaturnachweis als ZIP herunterladen",
+    ]);
+  },
+);
 
 test("displays references", async ({ page }) => {
   await navigate(page, "/literaturnachweise/XXLU000000009");

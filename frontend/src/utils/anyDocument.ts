@@ -2,6 +2,7 @@ import type {
   AdministrativeDirective,
   AnyDocument,
   CaseLaw,
+  DocumentEncodingSchema,
   LegislationExpression,
   Literature,
 } from "~/types/api";
@@ -76,4 +77,12 @@ export function getIdentifier(document: AnyDocument): string {
     throw new Error(`Failed to identify document with ID ${document["@id"]}`);
 
   return id;
+}
+
+export function getEncodingURL(
+  encoding: DocumentEncodingSchema[] | null | undefined,
+  format: string,
+) {
+  const specificEncoding = encoding?.find((e) => e.encodingFormat === format);
+  return specificEncoding?.contentUrl;
 }

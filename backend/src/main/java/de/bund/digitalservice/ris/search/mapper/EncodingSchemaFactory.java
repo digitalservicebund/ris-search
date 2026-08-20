@@ -1,9 +1,7 @@
 package de.bund.digitalservice.ris.search.mapper;
 
-import de.bund.digitalservice.ris.search.schema.AdministrativeDirectiveEncodingSchema;
-import de.bund.digitalservice.ris.search.schema.CaseLawEncodingSchema;
+import de.bund.digitalservice.ris.search.schema.DocumentEncodingSchema;
 import de.bund.digitalservice.ris.search.schema.LegislationObjectSchema;
-import de.bund.digitalservice.ris.search.schema.LiteratureEncodingSchema;
 import java.util.Arrays;
 import java.util.List;
 import org.springframework.http.MediaType;
@@ -67,28 +65,8 @@ public class EncodingSchemaFactory {
         .build();
   }
 
-  private static CaseLawEncodingSchema caselawEncodingSchema(SchemaType type, String baseUrl) {
-    return CaseLawEncodingSchema.builder()
-        .id(id(type, baseUrl))
-        .contentUrl(contentUrl(type, baseUrl))
-        .encodingFormat(encodingFormat(type))
-        .inLanguage(LANGUAGE)
-        .build();
-  }
-
-  private static LiteratureEncodingSchema literatureEncodingSchema(
-      SchemaType type, String baseUrl) {
-    return LiteratureEncodingSchema.builder()
-        .id(id(type, baseUrl))
-        .contentUrl(contentUrl(type, baseUrl))
-        .encodingFormat(encodingFormat(type))
-        .inLanguage(LANGUAGE)
-        .build();
-  }
-
-  private static AdministrativeDirectiveEncodingSchema administrativeDirectiveEncodingSchema(
-      SchemaType type, String baseUrl) {
-    return AdministrativeDirectiveEncodingSchema.builder()
+  private static DocumentEncodingSchema documentEncodingSchema(SchemaType type, String baseUrl) {
+    return DocumentEncodingSchema.builder()
         .id(id(type, baseUrl))
         .contentUrl(contentUrl(type, baseUrl))
         .encodingFormat(encodingFormat(type))
@@ -116,43 +94,15 @@ public class EncodingSchemaFactory {
   }
 
   /**
-   * Generates a list of case law encoding schemas based on the provided base URL.
+   * Generates a list of document encoding schemas based on the provided base URL.
    *
    * @param baseUrl the base URL to be used for constructing the encoding schema attributes
-   * @return a list of {@code CaseLawEncodingSchema} representing the encoding schemas for case law
-   *     in various formats
+   * @return a list of {@code DocumentEncodingSchema} representing the encoding schemas for
+   *     documents
    */
-  public static List<CaseLawEncodingSchema> caselawEncodingSchemas(String baseUrl) {
+  public static List<DocumentEncodingSchema> documentEncodingSchemas(String baseUrl) {
     return Arrays.stream(SchemaType.values())
-        .map(type -> caselawEncodingSchema(type, baseUrl))
-        .toList();
-  }
-
-  /**
-   * Generates a list of literature encoding schemas based on the provided base URL.
-   *
-   * @param baseUrl the base URL to be used for constructing the encoding schema attributes
-   * @return a list of {@code LiteratureEncodingSchema} representing the encoding schemas for
-   *     literature in various formats
-   */
-  public static List<LiteratureEncodingSchema> literatureEncodingSchemas(String baseUrl) {
-    return Arrays.stream(SchemaType.values())
-        .map(type -> literatureEncodingSchema(type, baseUrl))
-        .toList();
-  }
-
-  /**
-   * Generates a list of encoding schemas for administrative directives based on the provided base
-   * URL.
-   *
-   * @param baseUrl the base URL to be used for constructing the encoding schema attributes
-   * @return a list of {@code AdministrativeDirectiveEncodingSchema} representing the encoding
-   *     schemas for administrative directives in various formats
-   */
-  public static List<AdministrativeDirectiveEncodingSchema> administrativeDirectiveEncodingSchemas(
-      String baseUrl) {
-    return Arrays.stream(SchemaType.values())
-        .map(type -> administrativeDirectiveEncodingSchema(type, baseUrl))
+        .map(type -> documentEncodingSchema(type, baseUrl))
         .toList();
   }
 }

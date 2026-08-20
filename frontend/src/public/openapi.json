@@ -2318,7 +2318,7 @@
         },
         "required" : [ "@id", "member", "totalItems", "view" ]
       },
-      "LiteratureEncodingSchema" : {
+      "DocumentEncodingSchema" : {
         "type" : "object",
         "properties" : {
           "@type" : {
@@ -2443,7 +2443,7 @@
             "encoding" : {
               "type" : "array",
               "items" : {
-                "$ref" : "#/components/schemas/LiteratureEncodingSchema"
+                "$ref" : "#/components/schemas/DocumentEncodingSchema"
               }
             }
           }
@@ -2697,7 +2697,7 @@
           "encoding" : {
             "type" : "array",
             "items" : {
-              "$ref" : "#/components/schemas/LiteratureEncodingSchema"
+              "$ref" : "#/components/schemas/DocumentEncodingSchema"
             }
           }
         },
@@ -3068,30 +3068,6 @@
         },
         "required" : [ "@type" ]
       },
-      "AdministrativeDirectiveEncodingSchema" : {
-        "type" : "object",
-        "properties" : {
-          "@type" : {
-            "type" : "string",
-            "example" : "MediaObject"
-          },
-          "@id" : {
-            "type" : "string"
-          },
-          "contentUrl" : {
-            "type" : "string"
-          },
-          "encodingFormat" : {
-            "type" : "string",
-            "example" : "text/html"
-          },
-          "inLanguage" : {
-            "type" : "string",
-            "example" : "de"
-          }
-        },
-        "required" : [ "@id", "contentUrl", "encodingFormat", "inLanguage" ]
-      },
       "AdministrativeDirectiveSearchSchema" : {
         "allOf" : [ {
           "$ref" : "#/components/schemas/AbstractDocumentSchema"
@@ -3152,36 +3128,12 @@
             "encoding" : {
               "type" : "array",
               "items" : {
-                "$ref" : "#/components/schemas/AdministrativeDirectiveEncodingSchema"
+                "$ref" : "#/components/schemas/DocumentEncodingSchema"
               }
             }
           }
         } ],
         "required" : [ "@id", "documentNumber", "documentType", "encoding", "referenceNumbers" ]
-      },
-      "CaseLawEncodingSchema" : {
-        "type" : "object",
-        "properties" : {
-          "@type" : {
-            "type" : "string",
-            "example" : "MediaObject"
-          },
-          "@id" : {
-            "type" : "string"
-          },
-          "contentUrl" : {
-            "type" : "string"
-          },
-          "encodingFormat" : {
-            "type" : "string",
-            "example" : "text/html"
-          },
-          "inLanguage" : {
-            "type" : "string",
-            "example" : "de"
-          }
-        },
-        "required" : [ "@id", "contentUrl", "encodingFormat", "inLanguage" ]
       },
       "CaseLawSearchSchema" : {
         "allOf" : [ {
@@ -3265,7 +3217,7 @@
             "encoding" : {
               "type" : "array",
               "items" : {
-                "$ref" : "#/components/schemas/CaseLawEncodingSchema"
+                "$ref" : "#/components/schemas/DocumentEncodingSchema"
               }
             },
             "@id" : {
@@ -3564,7 +3516,7 @@
           "encoding" : {
             "type" : "array",
             "items" : {
-              "$ref" : "#/components/schemas/CaseLawEncodingSchema"
+              "$ref" : "#/components/schemas/DocumentEncodingSchema"
             }
           },
           "vorabdokument" : {
@@ -3751,7 +3703,7 @@
           "encoding" : {
             "type" : "array",
             "items" : {
-              "$ref" : "#/components/schemas/AdministrativeDirectiveEncodingSchema"
+              "$ref" : "#/components/schemas/DocumentEncodingSchema"
             }
           }
         },

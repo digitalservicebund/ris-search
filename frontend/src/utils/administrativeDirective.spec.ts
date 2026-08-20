@@ -79,6 +79,26 @@ describe("getAdministrativeDirectiveMetadataItems", () => {
 });
 
 describe("getAdministrativeDirectiveDetailItems", () => {
+  it("displays a download link", () => {
+    const result = getAdministrativeDirectiveDetailItems({
+      encoding: [
+        {
+          "@id": "id",
+          inLanguage: "de",
+          "@type": "MediaObject",
+          encodingFormat: "application/zip",
+          contentUrl: "content.zip",
+        },
+      ],
+    });
+    expect(result[5]).toEqual({
+      dataAttr: "xml-zip-view",
+      label: "Download:",
+      text: "Diese Verwaltungsregelung als ZIP herunterladen",
+      type: "link",
+      url: "content.zip",
+    });
+  });
   it.each([
     [undefined, [], "Fundstelle:"],
     [[], [], "Fundstelle:"],

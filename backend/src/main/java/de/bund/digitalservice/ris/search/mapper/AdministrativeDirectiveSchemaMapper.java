@@ -29,7 +29,7 @@ public class AdministrativeDirectiveSchemaMapper {
    */
   public static AdministrativeDirectiveSchema fromDomain(AdministrativeDirective entity) {
     var entityURI = ApiConfig.Paths.ADMINISTRATIVE_DIRECTIVE + "/" + entity.documentNumber();
-    var encodings = EncodingSchemaFactory.administrativeDirectiveEncodingSchemas(entityURI);
+    var encodings = EncodingSchemaFactory.documentEncodingSchemas(entityURI);
 
     return AdministrativeDirectiveSchema.builder()
         .id(entityURI)

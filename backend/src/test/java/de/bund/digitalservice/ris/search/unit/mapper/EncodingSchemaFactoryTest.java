@@ -4,12 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import de.bund.digitalservice.ris.search.mapper.EncodingSchemaFactory;
 import java.util.List;
-import java.util.function.Function;
-import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
 
 class EncodingSchemaFactoryTest {
 
@@ -18,24 +13,10 @@ class EncodingSchemaFactoryTest {
   private final List<String> expectedXmlValues =
       List.of("baseUrl/xml", "baseUrl.xml", "application/xml", "de");
 
-  static Stream<Arguments> schemaFactories() {
-    return Stream.of(
-        Arguments.of(
-            "caselaw", (Function<String, List<?>>) EncodingSchemaFactory::caselawEncodingSchemas),
-        Arguments.of(
-            "literature",
-            (Function<String, List<?>>) EncodingSchemaFactory::literatureEncodingSchemas),
-        Arguments.of(
-            "administrativeDirective",
-            (Function<String, List<?>>)
-                EncodingSchemaFactory::administrativeDirectiveEncodingSchemas));
-  }
-
-  @ParameterizedTest(name = "generates {0} encoding schemas")
-  @MethodSource("schemaFactories")
-  void generatesEncodingSchemas(String name, Function<String, List<?>> factoryMethod) {
+  @Test()
+  void generatesDocumentEncodingSchemas() {
     var expectedZipValues = List.of("baseUrl/zip", "baseUrl.zip", "application/zip", "de");
-    var result = factoryMethod.apply("baseUrl");
+    var result = EncodingSchemaFactory.documentEncodingSchemas("baseUrl");
 
     assertThat(result).hasSize(3);
     assertThat(result.getFirst())

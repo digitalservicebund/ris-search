@@ -5,8 +5,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import de.bund.digitalservice.ris.SharedTestConstants;
 import de.bund.digitalservice.ris.search.mapper.CaseLawSchemaMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
-import de.bund.digitalservice.ris.search.schema.CaseLawEncodingSchema;
 import de.bund.digitalservice.ris.search.schema.CaseLawSchema;
+import de.bund.digitalservice.ris.search.schema.DocumentEncodingSchema;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -85,19 +85,19 @@ class CaseLawSchemaMapperTest {
 
     assertThat(caseLawSchema.encoding())
         .containsExactly(
-            CaseLawEncodingSchema.builder()
+            DocumentEncodingSchema.builder()
                 .id("/v1/case-law/BFRE000087655/html")
                 .contentUrl("/v1/case-law/BFRE000087655.html")
                 .encodingFormat("text/html")
                 .inLanguage("de")
                 .build(),
-            CaseLawEncodingSchema.builder()
+            DocumentEncodingSchema.builder()
                 .id("/v1/case-law/BFRE000087655/xml")
                 .contentUrl("/v1/case-law/BFRE000087655.xml")
                 .encodingFormat("application/xml")
                 .inLanguage("de")
                 .build(),
-            CaseLawEncodingSchema.builder()
+            DocumentEncodingSchema.builder()
                 .id("/v1/case-law/BFRE000087655/zip")
                 .contentUrl("/v1/case-law/BFRE000087655.zip")
                 .encodingFormat("application/zip")

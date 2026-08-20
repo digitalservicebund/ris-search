@@ -26,7 +26,6 @@ export type Statistics = components["schemas"]["StatisticsApiSchema"];
 
 // Case law
 export type CaseLaw = components["schemas"]["CaseLawSchema"];
-export type CaseLawEncoding = components["schemas"]["CaseLawEncodingSchema"];
 
 // Legislation
 export type LegislationWork = components["schemas"]["LegislationWorkSchema"];
@@ -45,14 +44,13 @@ export type Article = components["schemas"]["LegislationExpressionPartSchema"];
 
 // Literature
 export type Literature = components["schemas"]["LiteratureSchema"];
-export type LiteratureEncoding =
-  components["schemas"]["LiteratureEncodingSchema"];
 
 // Administrative directives
 export type AdministrativeDirective =
   components["schemas"]["AdministrativeDirectiveSchema"];
-export type AdministrativeDirectiveEncoding =
-  components["schemas"]["AdministrativeDirectiveEncodingSchema"];
+
+export type DocumentEncodingSchema =
+  components["schemas"]["DocumentEncodingSchema"];
 
 // Search / court
 export type CourtSearchResult = components["schemas"]["CourtSearchResult"];

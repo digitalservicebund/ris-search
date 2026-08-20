@@ -24,7 +24,7 @@ public class LiteratureSchemaMapper {
    */
   public static LiteratureSchema fromDomain(Literature entity) {
     var entityURI = ApiConfig.Paths.LITERATURE + "/" + entity.documentNumber();
-    var encodings = EncodingSchemaFactory.literatureEncodingSchemas(entityURI);
+    var encodings = EncodingSchemaFactory.documentEncodingSchemas(entityURI);
 
     return LiteratureSchema.builder()
         .id(entityURI)
