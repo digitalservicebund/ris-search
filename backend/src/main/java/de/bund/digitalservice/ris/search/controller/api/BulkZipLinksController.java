@@ -30,10 +30,10 @@ public class BulkZipLinksController {
   public BulkZipLinksController(
       PublicFilesBucket publicFilesBucket,
       @Value("${s3.file-storage.public-files.bucket-name}") String publicFilesBucketName,
-      @Value("${s3.file-storage.public-files.endpoint}") String publicFilesBucketEndpoint) {
+      @Value("${s3.file-storage.endpoint}") String s3Endpoint) {
     this.publicFilesBucket = publicFilesBucket;
     this.zipPrefix = BulkExportService.BULK_ZIP_PREFIX;
-    this.bucketUrl = publicFilesBucketEndpoint + "/" + publicFilesBucketName + "/";
+    this.bucketUrl = s3Endpoint + "/" + publicFilesBucketName + "/";
   }
 
   /**

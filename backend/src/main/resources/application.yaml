@@ -54,37 +54,32 @@ opensearch:
 # versionPrefix is overridden in the respective application-ABC.yaml
 s3:
   file-storage:
+    endpoint: ""
     norm:
-      endpoint: "https://object.storage.eu01.onstackit.cloud"
       bucket-name: ""
       access-key-id: ""
       secret-access-key: ""
       versionPrefix: ""
     case-law:
-      endpoint: "https://object.storage.eu01.onstackit.cloud"
       bucket-name: ""
       access-key-id: ""
       secret-access-key: ""
       versionPrefix: ""
     literature:
-      endpoint: "https://object.storage.eu01.onstackit.cloud"
       bucket-name: ""
       access-key-id: ""
       secret-access-key: ""
       versionPrefix: ""
     administrative-directive:
-      endpoint: "https://object.storage.eu01.onstackit.cloud"
       bucket-name: ""
       access-key-id: ""
       secret-access-key: ""
       versionPrefix: ""
     portal:
-      endpoint: "https://object.storage.eu01.onstackit.cloud"
       bucket-name: ""
       access-key-id: ""
       secret-access-key: ""
     public-files:
-      endpoint: "https://object.storage.eu01.onstackit.cloud"
       bucket-name: ""
       access-key-id: ""
       secret-access-key: ""
