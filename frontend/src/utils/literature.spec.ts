@@ -15,7 +15,7 @@ const getTitleDataTestData = [
   [undefined, "headline2", "headline3", "headline2"],
 ];
 
-const zipDownlinkLink = {
+const zipDownloadLink = {
   dataAttr: "xml-zip-view",
   label: "Download:",
   text: "Diesen Literaturnachweis als ZIP herunterladen",
@@ -236,6 +236,15 @@ describe("getLiteratureDetailsItems", () => {
       universityNotes: ["University"],
       literatureType: "sli",
       internationalIdentifiers: ["ISBN-XXXX"],
+      encoding: [
+        {
+          "@id": "id",
+          inLanguage: "de",
+          "@type": "MediaObject",
+          encodingFormat: "application/zip",
+          contentUrl: "content.zip",
+        },
+      ],
     });
 
     expect(new Set(result)).toEqual(
@@ -265,7 +274,7 @@ describe("getLiteratureDetailsItems", () => {
           value: "Internationaler Kongress 2025, Berlin, GER",
         },
         { type: "text", label: "Hochschule:", value: "University" },
-        zipDownlinkLink,
+        { ...zipDownloadLink, url: "content.zip" },
       ]),
     );
   });
@@ -335,7 +344,7 @@ describe("getLiteratureDetailsItems", () => {
           label: "Hochschulen:",
           value: "University 1, University 2",
         },
-        zipDownlinkLink,
+        zipDownloadLink,
       ]),
     );
   });
@@ -360,7 +369,7 @@ describe("getLiteratureDetailsItems", () => {
         { type: "text", label: "Sprache:", value: undefined },
         { type: "text", label: "Kongress:", value: undefined },
         { type: "text", label: "Hochschule:", value: undefined },
-        zipDownlinkLink,
+        zipDownloadLink,
       ]),
     );
   });
