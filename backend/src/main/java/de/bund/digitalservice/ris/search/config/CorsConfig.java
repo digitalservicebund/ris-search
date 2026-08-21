@@ -61,6 +61,7 @@ public class CorsConfig {
             .addMapping("/v1/**")
             .allowedMethods("GET", "HEAD", "OPTIONS")
             .allowedHeaders(CorsConfiguration.ALL)
+            .allowCredentials(true)
             .allowedOrigins(frontEndUrl, docsUrl, cmsUrl);
       }
     };
