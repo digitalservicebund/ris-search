@@ -5,7 +5,7 @@ pre-commit:
       tags: style
       root: backend
       stage_fixed: true
-      run: ./gradlew spotlessApply -DspotlessFiles=$(echo {staged_files} | sed 's/ /,/g')
+      run: ./gradlew spotlessApply -Dinclude={staged_files}
     check-format-frontend:
       root: frontend
       stage_fixed: true
@@ -19,10 +19,9 @@ pre-commit:
         pnpm fmt {staged_files} &&
         pnpm lint {staged_files}
     check-javadocs:
-      skip: true
       tags: check javadocs
       root: backend
-      run: ./gradlew checkstyleMain -Dinclude=$(echo {staged_files} | sed 's/ /,/g') && git add {staged_files}
+      run: ./gradlew checkstyleMain -Dinclude={staged_files}
 pre-push:
   parallel: true
   commands:
