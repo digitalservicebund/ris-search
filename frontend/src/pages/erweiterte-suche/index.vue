@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { PanelMenu } from "primevue";
-import type { MenuItem } from "primevue/menuitem";
 import IcBaselineSwapVert from "~icons/ic/baseline-swap-vert";
 import IcOutlineFilterAlt from "~icons/ic/outline-filter-alt";
+import type { RadioTreeItem } from "~/components/ui/RadioTree.vue";
 import type { Statistics } from "~/types/api";
 import { DocumentKind } from "~/types/api";
 import { queryableDataFields } from "~/utils/search/dataFields";
@@ -89,36 +88,19 @@ watch(query, (val) => {
 
 // Document kind -------------------------------------------
 
-const setDocumentKind: MenuItem["command"] = (e) => {
-  if (!e.item.key) return;
+const setDocumentKind = (value: string) => {
   navigateToSearch({
-    documentKind: e.item.key as DocumentKind,
+    documentKind: value as DocumentKind,
     pageIndex: 0,
   });
 };
 
-const documentKindMenuItems: MenuItem[] = [
-  {
-    key: DocumentKind.Norm,
-    label: formatDocumentKind(DocumentKind.Norm),
-    command: setDocumentKind,
-  },
-  {
-    key: DocumentKind.CaseLaw,
-    label: formatDocumentKind(DocumentKind.CaseLaw),
-    command: setDocumentKind,
-  },
-  {
-    key: DocumentKind.AdministrativeDirective,
-    label: formatDocumentKind(DocumentKind.AdministrativeDirective),
-    command: setDocumentKind,
-  },
-  {
-    key: DocumentKind.Literature,
-    label: formatDocumentKind(DocumentKind.Literature),
-    command: setDocumentKind,
-  },
-];
+const documentKindItems: RadioTreeItem[] = [
+  DocumentKind.Norm,
+  DocumentKind.CaseLaw,
+  DocumentKind.AdministrativeDirective,
+  DocumentKind.Literature,
+].map((kind) => ({ value: kind, label: formatDocumentKind(kind) }));
 
 // Mobile filter/sort drawers -------------------------------
 
@@ -298,9 +280,10 @@ watch(searchStatus, async (newStatus, oldStatus) => {
       >
         <fieldset class="md:mb-40">
           <legend class="typo-label1-bold mb-8">Dokumentart</legend>
-          <PanelMenu
-            :model="documentKindMenuItems"
-            :expanded-keys="{ [documentKind]: true }"
+          <UiRadioTree
+            :items="documentKindItems"
+            :model-value="documentKind"
+            @update:model-value="setDocumentKind"
           />
         </fieldset>
 

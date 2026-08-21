@@ -62,6 +62,18 @@ function renderComponent({
 }
 
 describe("CaselawSearchResult", () => {
+  it("renders the documentType", () => {
+    renderComponent({});
+    expect(screen.getByText("Document Type")).toBeVisible();
+  });
+
+  it("renders 'Entscheidung' if documentType is undefined", () => {
+    renderComponent({
+      item: { ...searchResult.item, documentType: undefined },
+    });
+    expect(screen.getByText("Entscheidung")).toBeVisible();
+  });
+
   it("renders the expected title and secondary header row", () => {
     renderComponent({});
     expect(screen.getByRole("link")).toHaveTextContent("Test Headline");
@@ -92,7 +104,7 @@ describe("CaselawSearchResult", () => {
     expect(highlightedElements[0]).toHaveTextContent("highlighted headline");
   });
 
-  it("displays highlighted file numbers", () => {
+  it("displays file numbers as badges", () => {
     const textMatch: TextMatch = {
       "@type": "SearchResultMatch",
       name: "fileNumbers",
@@ -102,17 +114,15 @@ describe("CaselawSearchResult", () => {
 
     const { container } = renderComponent({ textMatches: [textMatch] });
 
-    const highlightedElements = container.querySelectorAll("mark");
-    expect(highlightedElements).toHaveLength(1);
-    expect(highlightedElements[0]).toHaveTextContent("highlighted file number");
+    // first filenumber without markup
+    expect(screen.getByText("123")).toBeVisible();
 
-    expect(
-      screen.getByText(
-        (_, element) =>
-          element?.textContent ===
-          "123, testing highlighted file number is here",
-      ),
-    ).toBeInTheDocument();
+    // second filenumber with markup
+    const fileNumberWithMarkup = container.querySelector("span:has(mark)");
+    expect(fileNumberWithMarkup?.innerHTML).toContain(
+      "testing <mark>highlighted file number</mark> is here",
+    );
+    expect(fileNumberWithMarkup).toHaveClass(/border-gray/);
   });
 
   it("displays highlighted text with correct class", () => {

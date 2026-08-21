@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import GavelIcon from "~icons/ic/outline-gavel";
-import type { SearchResultHeaderItem } from "~/components/search/SearchResultHeader.vue";
+import type {
+  SearchResultHeaderItem,
+  TextHeaderItem,
+} from "~/components/search/SearchResultHeader.vue";
 import type { CaseLaw, SearchResult } from "~/types/api";
 import {
   getMatch,
@@ -44,9 +46,9 @@ const headline = computed(() =>
   ),
 );
 
-const secondaryTitle = computed<SearchResultHeaderItem | undefined>(() => {
+const secondaryTitle = computed<TextHeaderItem | undefined>(() => {
   const title = getCaselawSecondaryTitle(searchResult.item);
-  return title ? { value: title } : undefined;
+  return title ? { type: "text", value: title } : undefined;
 });
 
 const resultTypeId = useId();
@@ -54,19 +56,35 @@ const resultTypeId = useId();
 const headerItems = computed(() => {
   const item = searchResult.item;
 
-  const items: SearchResultHeaderItem[] = [
-    { value: item.documentType || "Entscheidung", id: resultTypeId },
-  ];
+  const items: SearchResultHeaderItem[] = [];
 
-  if (item.courtName) items.push({ value: item.courtName });
+  if (item.courtName) items.push({ type: "text", value: item.courtName });
 
   const formattedDate = dateFormattedDDMMYYYY(item.decisionDate);
-  if (formattedDate) items.push({ value: formattedDate });
+  if (formattedDate) items.push({ type: "text", value: formattedDate });
 
   const fileNumbers = getFileNumbers(item);
-  if (fileNumbers) items.push({ value: fileNumbers, isMarkup: true });
 
-  return items;
+  for (const fileNumber of fileNumbers) {
+    items.push({
+      type: "badge",
+      isMarkup: true,
+      value: fileNumber,
+      color: "gray",
+      class: "-mr-8", // reduce spacing between fileNumbers to 4px
+    });
+  }
+
+  const docTypeItem: TextHeaderItem = {
+    type: "text",
+    value: searchResult.item.documentType || "Entscheidung",
+    id: resultTypeId,
+  };
+
+  return {
+    documentType: docTypeItem,
+    otherItems: items,
+  };
 });
 
 function getFileNumbers(item: CaseLaw) {
@@ -82,10 +100,10 @@ function getFileNumbers(item: CaseLaw) {
       }
     }
 
-    return replaced.join(", ");
+    return replaced;
   }
 
-  return item.fileNumbers?.join(", ");
+  return item.fileNumbers ?? [];
 }
 
 const detailPageRoute = computed(() => ({
@@ -109,8 +127,8 @@ function trackResultClick() {
 <template>
   <div class="flex flex-col gap-8 hyphens-auto">
     <SearchResultHeader
-      :icon="GavelIcon"
-      :items="headerItems"
+      :document-type="headerItems.documentType"
+      :items="headerItems.otherItems"
       :secondary-item="secondaryTitle"
     />
     <NuxtLink

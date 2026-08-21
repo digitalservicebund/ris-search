@@ -76,8 +76,7 @@ class LiteratureSchemaMapperTest {
             .universityNotes(List.of("university note"))
             .volumes(List.of("volume 1", "volume 2"))
             .literatureType("uli")
-            .encoding(
-                EncodingSchemaFactory.literatureEncodingSchemas("/v1/literature/XXLU000000001"))
+            .encoding(EncodingSchemaFactory.documentEncodingSchemas("/v1/literature/XXLU000000001"))
             .build();
 
     LiteratureSchema literatureSchema = LiteratureSchemaMapper.fromDomain(literature);

@@ -8,12 +8,7 @@ if (config.public.sentryDSN) {
     environment: config.public.sentryEnvironment,
     tracesSampleRate: 1,
 
-    // Errors thrown via `createError` (e.g. 404s) surface through Nuxt's
-    // `vue:error` hook, which the Sentry SDK reports without filtering by status
-    // code at all, and through its `app:error` hook, which only filters errors
-    // it recognizes as Nuxt errors. Drop client errors here so they don't reach
-    // Sentry. Client-only: the server side already filters these via the Nitro
-    // error handler.
+    // Drops error noise, see `shouldSuppressSentryEvent`:
     beforeSend(event, hint) {
       return shouldSuppressSentryEvent(hint.originalException) ? null : event;
     },

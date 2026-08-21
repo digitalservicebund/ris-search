@@ -43,7 +43,7 @@ async function searchFor(
     dateFilterTo?: string;
   },
 ) {
-  await page.getByRole("button", { name: search.documentKind }).click();
+  await page.getByRole("radio", { name: search.documentKind }).click();
   await page.getByRole("searchbox").fill(search.q);
 
   if (search.dateFilter) {
@@ -252,21 +252,25 @@ test.describe("general advanced search page features", () => {
     await expect(getResultCounter(page)).toHaveText(nonZeroResultCount);
   });
 
-  test("clears query when switching document kind", async ({ page }) => {
-    await navigate(page, "/erweiterte-suche");
+  test(
+    "clears query when switching document kind",
+    { tag: ["@RISDEV-12193"] },
+    async ({ page }) => {
+      await navigate(page, "/erweiterte-suche");
 
-    await searchFor(page, {
-      q: "AB:FrSaftErfrischV",
-      documentKind: "Gesetze & Verordnungen",
-    });
+      await searchFor(page, {
+        q: "AB:FrSaftErfrischV",
+        documentKind: "Gesetze & Verordnungen",
+      });
 
-    const queryInput = page.getByRole("searchbox");
-    await expect(queryInput).toHaveValue("AB:FrSaftErfrischV");
+      const queryInput = page.getByRole("searchbox");
+      await expect(queryInput).toHaveValue("AB:FrSaftErfrischV");
 
-    await page.getByRole("button", { name: "Gerichtsentscheidungen" }).click();
+      await page.getByRole("radio", { name: "Gerichtsentscheidungen" }).click();
 
-    await expect(queryInput).toHaveValue("");
-  });
+      await expect(queryInput).toHaveValue("");
+    },
+  );
 
   test("reacts to browser back/forward navigation", async ({ page }) => {
     await navigate(page, "/erweiterte-suche");
@@ -1033,30 +1037,34 @@ test.describe("responsive", () => {
     await expect(dataFieldsList).toBeVisible();
   });
 
-  test("applies a date filter from the filter drawer", async ({ page }) => {
-    await navigate(page, "/erweiterte-suche");
+  test(
+    "applies a date filter from the filter drawer",
+    { tag: ["@RISDEV-12193"] },
+    async ({ page }) => {
+      await navigate(page, "/erweiterte-suche");
 
-    await page.getByRole("button", { name: "Gerichtsentscheidungen" }).click();
-    await page.getByRole("searchbox").fill("urteil");
-    const initialSearch = page.waitForResponse(/v1\/document\/lucene-search/);
-    await page.getByRole("button", { name: "Suchen" }).click();
-    await initialSearch;
+      await page.getByRole("radio", { name: "Gerichtsentscheidungen" }).click();
+      await page.getByRole("searchbox").fill("urteil");
+      const initialSearch = page.waitForResponse(/v1\/document\/lucene-search/);
+      await page.getByRole("button", { name: "Suchen" }).click();
+      await initialSearch;
 
-    await page.getByRole("button", { name: "Filtern" }).click();
-    const dialog = page.getByRole("dialog", { name: "Filtern" });
-    await expect(dialog).toBeVisible();
+      await page.getByRole("button", { name: "Filtern" }).click();
+      const dialog = page.getByRole("dialog", { name: "Filtern" });
+      await expect(dialog).toBeVisible();
 
-    await dialog.getByRole("radio", { name: "Bestimmtes Datum" }).click();
-    await dialog.getByRole("textbox", { name: "Datum" }).fill("15.06.2024");
+      await dialog.getByRole("radio", { name: "Bestimmtes Datum" }).click();
+      await dialog.getByRole("textbox", { name: "Datum" }).fill("15.06.2024");
 
-    await dialog.getByRole("button", { name: "Anwenden" }).click();
+      await dialog.getByRole("button", { name: "Anwenden" }).click();
 
-    await expect(dialog).not.toBeVisible();
-    await expect(page).toHaveURL(/dateFilterType=specificDate/);
-    await expect(page).toHaveURL(/dateFilterFrom=2024-06-15/);
+      await expect(dialog).not.toBeVisible();
+      await expect(page).toHaveURL(/dateFilterType=specificDate/);
+      await expect(page).toHaveURL(/dateFilterFrom=2024-06-15/);
 
-    await expect(getSearchResults(page)).toHaveText(/15.06.2024/);
-  });
+      await expect(getSearchResults(page)).toHaveText(/15.06.2024/);
+    },
+  );
 
   test("discards filter drawer changes when closed without applying", async ({
     page,
@@ -1098,32 +1106,38 @@ test.describe("responsive", () => {
     await expect(page).not.toHaveURL(/dateFilterType=specificDate/);
   });
 
-  test("applies sorting from the sort drawer", async ({ page }) => {
-    await navigate(page, "/erweiterte-suche");
+  test(
+    "applies sorting from the sort drawer",
+    { tag: ["@RISDEV-12193"] },
+    async ({ page }) => {
+      await navigate(page, "/erweiterte-suche");
 
-    await page.getByRole("button", { name: "Gerichtsentscheidungen" }).click();
-    await page
-      .getByRole("searchbox")
-      .fill('GERICHT:"ArbG Köln" OR GERICHT:"BDiG Frankfurt"');
-    const initialSearch = page.waitForResponse(/v1\/document\/lucene-search/);
-    await page.getByRole("button", { name: "Suchen" }).click();
-    await initialSearch;
+      await page.getByRole("radio", { name: "Gerichtsentscheidungen" }).click();
+      await page
+        .getByRole("searchbox")
+        .fill('GERICHT:"ArbG Köln" OR GERICHT:"BDiG Frankfurt"');
+      const initialSearch = page.waitForResponse(/v1\/document\/lucene-search/);
+      await page.getByRole("button", { name: "Suchen" }).click();
+      await initialSearch;
 
-    await page.getByRole("button", { name: "Sortieren" }).click();
-    const dialog = page.getByRole("dialog", { name: "Sortieren" });
-    await expect(dialog).toBeVisible();
+      await page.getByRole("button", { name: "Sortieren" }).click();
+      const dialog = page.getByRole("dialog", { name: "Sortieren" });
+      await expect(dialog).toBeVisible();
 
-    await dialog.getByRole("radio", { name: "Gericht: Von A nach Z" }).click();
-    await dialog.getByRole("button", { name: "Anwenden" }).click();
+      await dialog
+        .getByRole("radio", { name: "Gericht: Von A nach Z" })
+        .click();
+      await dialog.getByRole("button", { name: "Anwenden" }).click();
 
-    await expect(dialog).not.toBeVisible();
-    await expect(page).toHaveURL(/sort=courtName/);
+      await expect(dialog).not.toBeVisible();
+      await expect(page).toHaveURL(/sort=courtName/);
 
-    await expect(getSearchResults(page)).toHaveText([
-      /ArbG Köln/,
-      /BDiG Frankfurt/,
-    ]);
-  });
+      await expect(getSearchResults(page)).toHaveText([
+        /ArbG Köln/,
+        /BDiG Frankfurt/,
+      ]);
+    },
+  );
 
   test("applies page size from the sort drawer", async ({ page }) => {
     await navigate(

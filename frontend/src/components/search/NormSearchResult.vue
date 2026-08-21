@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import IcBaselineBalance from "~icons/ic/baseline-balance";
 import type { RouteLocationRaw, RouteLocationAsPath } from "#vue-router";
-import type { SearchResultHeaderItem } from "~/components/search/SearchResultHeader.vue";
+import type {
+  SearchResultHeaderItem,
+  TextHeaderItem,
+} from "~/components/search/SearchResultHeader.vue";
 import type { LegislationExpression, SearchResult } from "~/types/api";
 import { getMatch, getTitleWithFallback } from "~/utils/search/searchResults";
 
@@ -21,15 +23,35 @@ const headline = computed(() =>
   ),
 );
 
-const secondaryTitle = computed<SearchResultHeaderItem | undefined>(() =>
+const secondaryTitle = computed<TextHeaderItem | undefined>(() =>
   searchResult.item.alternateName
-    ? { value: truncateAtWord(searchResult.item.alternateName, 90, true) }
+    ? {
+        type: "text",
+        value: truncateAtWord(searchResult.item.alternateName, 90, true),
+      }
     : undefined,
 );
 
 const resultTypeId = useId();
 
-const headerItems = computed<SearchResultHeaderItem[]>(() => {
+const headerItems = computed(() => {
+  const items: SearchResultHeaderItem[] = [];
+
+  if (searchResult.item.abbreviation) {
+    items.push({ type: "text", value: searchResult.item.abbreviation });
+  }
+
+  const validityStatus = formatNormValidity(searchResult.item.temporalCoverage);
+
+  if (validityStatus) {
+    items.push({
+      type: "badge",
+      value: validityStatus.label,
+      color: validityStatus.color,
+      class: "font-bold!",
+    });
+  }
+
   let dateValue: string | undefined = dateFormattedDDMMYYYY(
     searchResult.item.exampleOfWork.legislationDate,
   );
@@ -43,16 +65,21 @@ const headerItems = computed<SearchResultHeaderItem[]>(() => {
     dateValue = from && to ? `${from} - ${to}` : from;
   }
 
-  return [
-    { value: "Norm", id: resultTypeId },
-    { value: searchResult.item.abbreviation },
-    { value: dateValue },
-  ].filter((i): i is SearchResultHeaderItem => i.value !== undefined);
-});
+  if (dateValue) {
+    items.push({ type: "text", value: dateValue });
+  }
 
-const validityStatus = computed(() =>
-  formatNormValidity(searchResult.item.temporalCoverage),
-);
+  const docTypeItem: TextHeaderItem = {
+    type: "text",
+    value: "Norm",
+    id: resultTypeId,
+  };
+
+  return {
+    documentType: docTypeItem,
+    otherItems: items,
+  };
+});
 
 const detailPageRoute = computed<RouteLocationAsPath>(() => ({
   path: `/gesetze/${searchResult.item.legislationIdentifier}`,
@@ -86,17 +113,10 @@ const relevantHighlights = computed(() =>
 <template>
   <div class="flex flex-col gap-8 hyphens-auto">
     <SearchResultHeader
-      :icon="IcBaselineBalance"
-      :items="headerItems"
+      :document-type="headerItems.documentType"
+      :items="headerItems.otherItems"
       :secondary-item="secondaryTitle"
     >
-      <template #trailing>
-        <UiBadge
-          v-if="validityStatus"
-          class="md:ml-auto"
-          v-bind="validityStatus"
-        />
-      </template>
     </SearchResultHeader>
 
     <NuxtLink

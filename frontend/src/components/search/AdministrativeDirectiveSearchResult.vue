@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import RuleIcon from "~icons/ic/outline-rule";
-import type { SearchResultHeaderItem } from "~/components/search/SearchResultHeader.vue";
+import type {
+  SearchResultHeaderItem,
+  TextHeaderItem,
+} from "~/components/search/SearchResultHeader.vue";
 import type { AdministrativeDirective, SearchResult } from "~/types/api";
 import { getMatch, getTitleWithFallback } from "~/utils/search/searchResults";
 
@@ -28,14 +30,40 @@ const headline = computed(() =>
 
 const resultTypeId = useId();
 
-const headerItems = computed<SearchResultHeaderItem[]>(() => {
+const headerItems = computed(() => {
   const item = searchResult.item;
-  return [
-    { value: item.documentType, id: resultTypeId },
-    { value: item.legislationAuthority },
-    { value: item.referenceNumbers?.[0] },
-    { value: dateFormattedDDMMYYYY(item.entryIntoForceDate) },
-  ].filter((i): i is SearchResultHeaderItem => i.value !== undefined);
+
+  const items: SearchResultHeaderItem[] = [];
+
+  if (item.legislationAuthority) {
+    items.push({ type: "text", value: item.legislationAuthority });
+  }
+
+  if (item.referenceNumbers?.[0]) {
+    items.push({
+      type: "badge",
+      value: item.referenceNumbers?.[0],
+      color: "gray",
+    });
+  }
+
+  const formattedEntryIntoForce = dateFormattedDDMMYYYY(
+    item.entryIntoForceDate,
+  );
+  if (formattedEntryIntoForce) {
+    items.push({ type: "text", value: formattedEntryIntoForce });
+  }
+
+  const docTypeItem: TextHeaderItem = {
+    type: "text",
+    value: searchResult.item.documentType,
+    id: resultTypeId,
+  };
+
+  return {
+    documentType: docTypeItem,
+    otherItems: items,
+  };
 });
 
 const detailPageRoute = computed(() => ({
@@ -59,7 +87,10 @@ function trackResultClick() {
 
 <template>
   <div class="flex flex-col gap-8 hyphens-auto">
-    <SearchResultHeader :icon="RuleIcon" :items="headerItems" />
+    <SearchResultHeader
+      :document-type="headerItems.documentType"
+      :items="headerItems.otherItems"
+    />
     <NuxtLink
       :to="detailPageRoute"
       :aria-describedby="resultTypeId"

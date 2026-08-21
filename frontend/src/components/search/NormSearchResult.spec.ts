@@ -116,11 +116,13 @@ describe("NormSearchResult", () => {
   it("renders correctly with all props", () => {
     mocks.usePrivateFeaturesFlag.mockReturnValue(true);
     renderComponent();
-    expect(screen.getByText("TN")).toBeInTheDocument();
     expect(screen.getByText(/Norm/)).toBeInTheDocument();
-    expect(screen.getByText("Alternate")).toBeInTheDocument();
+    expect(screen.getByText("TN")).toBeInTheDocument();
+    expect(screen.getByText("Aktuell gültig")).toBeInTheDocument();
     expect(screen.getByText("01.01.2000")).toBeInTheDocument();
     expect(screen.queryByText("14.12.1999")).not.toBeInTheDocument();
+
+    expect(screen.getByText("Alternate")).toBeInTheDocument();
 
     const heading = screen.getByRole("heading", { name: /Test Title/i });
     expect(heading.innerHTML).toBe("Highlighted <mark>Test Title</mark>");

@@ -54,37 +54,32 @@ opensearch:
 # versionPrefix is overridden in the respective application-ABC.yaml
 s3:
   file-storage:
+    endpoint: ""
     norm:
-      endpoint: ""
       bucket-name: ""
       access-key-id: ""
       secret-access-key: ""
       versionPrefix: ""
     case-law:
-      endpoint: ""
       bucket-name: ""
       access-key-id: ""
       secret-access-key: ""
       versionPrefix: ""
     literature:
-      endpoint: ""
       bucket-name: ""
       access-key-id: ""
       secret-access-key: ""
       versionPrefix: ""
     administrative-directive:
-      endpoint: ""
       bucket-name: ""
       access-key-id: ""
       secret-access-key: ""
       versionPrefix: ""
     portal:
-      endpoint: ""
       bucket-name: ""
       access-key-id: ""
       secret-access-key: ""
     public-files:
-      endpoint: ""
       bucket-name: ""
       access-key-id: ""
       secret-access-key: ""

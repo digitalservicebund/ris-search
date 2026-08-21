@@ -1,6 +1,5 @@
 package de.bund.digitalservice.ris.search.config.opensearch;
 
-import lombok.SneakyThrows;
 import org.opensearch.client.RestHighLevelClient;
 import org.opensearch.data.client.orhlc.AbstractOpenSearchConfiguration;
 import org.opensearch.data.client.orhlc.ClientConfiguration;
@@ -62,11 +61,10 @@ public class RestClientConfigDev extends AbstractOpenSearchConfiguration {
       ElasticsearchConverter elasticsearchConverter, RestHighLevelClient elasticsearchClient) {
 
     return new OpenSearchRestTemplate(opensearchClient(), elasticsearchConverter) {
-
-      @SneakyThrows
       @Override
       public <T> T execute(OpenSearchRestTemplate.ClientCallback<T> callback) {
-        return retryTemplate.execute(() -> super.execute(callback));
+        return OpensearchRetryConfiguration.executeWithRetries(
+            retryTemplate, () -> super.execute(callback));
       }
     };
   }

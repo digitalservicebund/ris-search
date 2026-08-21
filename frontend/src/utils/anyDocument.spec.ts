@@ -3,6 +3,7 @@ import type {
   AdministrativeDirective,
   AnyDocument,
   CaseLaw,
+  DocumentEncodingSchema,
   LegislationExpression,
   Literature,
 } from "~/types/api";
@@ -186,6 +187,45 @@ describe("anyDocument", () => {
       } as LegislationExpression;
 
       expect(isAdministrativeDirective(doc)).toBe(false);
+    });
+  });
+
+  describe("getEncodingURL", () => {
+    const zipEncoding: Partial<DocumentEncodingSchema> = {
+      encodingFormat: "application/zip",
+      contentUrl: "/v1/placeholder/docNumber.zip",
+    };
+    const xmlEncoding: Partial<DocumentEncodingSchema> = {
+      encodingFormat: "application/xml",
+      contentUrl: "/v1/placeholder/docNumber.xml",
+    };
+    const htmlEncoding: Partial<DocumentEncodingSchema> = {
+      encodingFormat: "text/html",
+      contentUrl: "/v1/placeholder/docNumber.html",
+    };
+    const encodingArray = [
+      zipEncoding,
+      xmlEncoding,
+      htmlEncoding,
+    ] as DocumentEncodingSchema[];
+    it("returns the URL for a matching format", () => {
+      expect(getEncodingURL(encodingArray, "application/zip")).toBe(
+        zipEncoding.contentUrl,
+      );
+      expect(getEncodingURL(encodingArray, "application/xml")).toBe(
+        xmlEncoding.contentUrl,
+      );
+      expect(getEncodingURL(encodingArray, "text/html")).toBe(
+        htmlEncoding.contentUrl,
+      );
+    });
+    it("returns undefined for non-matching format", () => {
+      expect(getEncodingURL(encodingArray, "application/json")).toBeUndefined();
+    });
+
+    it("returns undefined for null/undefined encoding array", () => {
+      expect(getEncodingURL(null, "text/html")).toBeUndefined();
+      expect(getEncodingURL(undefined, "text/html")).toBeUndefined();
     });
   });
 

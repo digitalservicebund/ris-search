@@ -1,19 +1,24 @@
 package de.bund.digitalservice.ris.search.integration.controller.api;
 
+import static de.bund.digitalservice.ris.ZipTestUtils.readZipStream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.startsWithIgnoringCase;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
+import de.bund.digitalservice.ris.search.mapper.AdministrativeDirectiveLdmlToOpenSearchMapper;
+import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
 import de.bund.digitalservice.ris.search.repository.objectstorage.AdministrativeDirectiveBucket;
 import de.bund.digitalservice.ris.search.service.ChangelogService;
+import java.io.ByteArrayInputStream;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +33,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.util.MultiValueMap;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -39,7 +45,7 @@ class AdministrativeDirectiveControllerApiTest extends ContainersIntegrationBase
 
   @Autowired private AdministrativeDirectiveBucket bucket;
 
-  private final String documentNumberPresentInBucket = "KSNR0000";
+  private final String documentNumberPresentInBucket = "KSNR000000000";
 
   @Test
   @DisplayName("Should return not found when using document number is not found")
@@ -84,7 +90,7 @@ class AdministrativeDirectiveControllerApiTest extends ContainersIntegrationBase
   @Test
   @DisplayName("get by document number")
   void shouldReturnItem() throws Exception {
-    final String documentNumber = "KSNR0000";
+    final String documentNumber = "KSNR000000000";
 
     mockMvc
         .perform(
@@ -97,7 +103,7 @@ class AdministrativeDirectiveControllerApiTest extends ContainersIntegrationBase
   @Test
   @DisplayName("Search by document number")
   void shouldReturnItemWhenSearchingByDocumentNumber() throws Exception {
-    final String documentNumber = "KSNR0000";
+    final String documentNumber = "KSNR000000000";
 
     mockMvc
         .perform(
@@ -120,7 +126,7 @@ class AdministrativeDirectiveControllerApiTest extends ContainersIntegrationBase
         "-documentNumber"
       })
   void shouldReturnItemWhenSortingByValidParameter(String sortParameter) throws Exception {
-    final String documentNumber = "KSNR0000";
+    final String documentNumber = "KSNR000000000";
 
     mockMvc
         .perform(
@@ -184,5 +190,54 @@ class AdministrativeDirectiveControllerApiTest extends ContainersIntegrationBase
         .andExpect(jsonPath("$.changed[0].['@type']").value("MediaObject"))
         .andExpect(jsonPath("$.deleted[0].['@id']").value("/v1/administrative-directive/file2"))
         .andExpect(jsonPath("$.deleted[0].['@type']").value("AdministrativeDirective"));
+  }
+
+  @Test
+  @DisplayName("Should return all files belonging to a document in a zip archive")
+  void shouldReturnZip() throws Exception {
+    String filename = documentNumberPresentInBucket + ".akn.xml";
+
+    MvcResult result =
+        mockMvc
+            .perform(
+                get(ApiConfig.Paths.ADMINISTRATIVE_DIRECTIVE
+                        + "/"
+                        + documentNumberPresentInBucket
+                        + ".zip")
+                    .contentType(MediaType.valueOf("application/zip")))
+            .andExpect(request().asyncStarted())
+            .andDo(MvcResult::getAsyncResult)
+            .andExpectAll(status().isOk(), content().contentType("application/zip"))
+            .andReturn();
+
+    byte[] zipBytes = result.getResponse().getContentAsByteArray();
+    ByteArrayInputStream byteInputStream = new ByteArrayInputStream(zipBytes);
+    final Map<String, byte[]> files = readZipStream(byteInputStream);
+
+    assertThat(files).hasSize(1).containsKey(filename);
+
+    byte[] fileContent = files.get(filename);
+    assertThat(fileContent).isNotEmpty();
+
+    AdministrativeDirective mapped =
+        AdministrativeDirectiveLdmlToOpenSearchMapper.map(
+            new String(fileContent),
+            de.bund.digitalservice.ris.SharedTestConstants.TIMESTAMP_2024_01_01_AS_INSTANT);
+
+    assertThat(mapped).isNotNull();
+    assertThat(mapped.documentNumber()).isEqualTo(documentNumberPresentInBucket);
+  }
+
+  @Test
+  @DisplayName("Should reject zip request with invalid documentNumber")
+  void shouldRejectInvalidDocumentNumberInZipRequest() throws Exception {
+    mockMvc
+        .perform(
+            get(ApiConfig.Paths.ADMINISTRATIVE_DIRECTIVE + "/invalid.zip")
+                .contentType(MediaType.valueOf("application/zip")))
+        .andExpect(status().isUnprocessableContent())
+        .andExpect(jsonPath("$.errors[0].code").value("invalid_parameter_value"))
+        .andExpect(jsonPath("$.errors[0].message").value("Invalid document number format"))
+        .andExpect(jsonPath("$.errors[0].parameter").value("documentNumber"));
   }
 }

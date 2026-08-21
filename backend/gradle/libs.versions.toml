@@ -15,7 +15,7 @@ test-containers = "1.21.4"
 spring-cloud-k8s = "5.0.2"
 springdoc-openapi = "3.1.0"
 prometheus = "1.17.0"
-sentry = "8.52.0"
+sentry = "8.53.0"
 commons-text = "1.15.0"
 junit5 = "1.5.0"
 mockito = "5.23.0"
@@ -29,7 +29,6 @@ commons-csv = "1.14.1"
 amazon-aws-sdk-s3 = "2.47.5"
 saxon-he = "13.0"
 streamex = "0.9.0"
-tools-jackson-core = "3.2.1"
 jaxb-moxy = "5.0.1"
 posthog = "1.2.0"
 pebble = "4.1.2"
@@ -66,7 +65,6 @@ mockito-junit-jupiter = { module = "org.mockito:mockito-junit-jupiter", version.
 testcontainers-junit-jupiter = { module = "org.testcontainers:junit-jupiter", version.ref = "test-containers" }
 opensearch-testcontainers = { module = "org.opensearch:opensearch-testcontainers", version.ref = "opensearch-test-containers" }
 testcontainers-postgresql = { module = "org.testcontainers:postgresql", version.ref = "test-containers" }
-tools-jackson-core = { module = "tools.jackson.core:jackson-core", version.ref = "tools-jackson-core" }
 jaxb-moxy = { module = "org.eclipse.persistence:org.eclipse.persistence.moxy", version.ref = "jaxb-moxy" }
 pebble = { module = "io.pebbletemplates:pebble-spring-boot-starter", version.ref = "pebble" }
 ris-html-transformation = { module = "de.bund.digitalservice:ris-html-transformation", version.ref = "ris-html-transformation"}
@@ -77,22 +75,16 @@ restassured = { module = 'io.rest-assured:rest-assured', version.ref = "rest-ass
 jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version = "2.22.1" }
 
 # CVE-2026-5588
-bouncycastle-bcpkix = { module = "org.bouncycastle:bcpkix-jdk18on", version = "1.84" }
-
-# CVE-2026-0636
-bouncycastle-bcprov = { module = "org.bouncycastle:bcprov-jdk18on", version = "1.84" }
+bouncycastle-bom = { module = "org.bouncycastle:bc-jdk18on-bom", version = "1.85.2" }
 
 # CVE-2026-55831
-netty-codec-http = { module = "io.netty:netty-codec-http", version = "4.2.16.Final" }
+netty-codec-http = { module = "io.netty:netty-codec-http", version = "4.2.17.Final" }
 
 # CVE-2026-56819
-netty-codec-http2 = { module = "io.netty:netty-codec-http2", version = "4.2.16.Final" }
+netty-codec-http2 = { module = "io.netty:netty-codec-http2", version = "4.2.17.Final" }
 
 # CVE-2026-59901
-netty-codec-compression = { module = "io.netty:netty-codec-compression", version = "4.2.16.Final" }
-
-# CVE-2026-59889
-tools-jackson-databind = { module = "tools.jackson.core:jackson-databind", version = "3.1.5" }
+netty-codec-compression = { module = "io.netty:netty-codec-compression", version = "4.2.17.Final" }
 
 # CVE-2026-54399
 apache-httpcore = { module = "org.apache.httpcomponents.core5:httpcore5", version = "5.4.3" }

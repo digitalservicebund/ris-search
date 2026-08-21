@@ -61,6 +61,29 @@ describe("sentry", () => {
       expect(shouldSuppressSentryEvent({ statusCode: 500 })).toBe(false);
     });
 
+    it("suppresses aborted requests", () => {
+      expect(
+        shouldSuppressSentryEvent(
+          new DOMException("The user aborted a request.", "AbortError"),
+        ),
+      ).toBe(true);
+    });
+
+    it("suppresses aborted requests wrapped in another error", () => {
+      const fetchError = new Error('[GET] "/v1/document": <no response>', {
+        cause: new DOMException("The user aborted a request.", "AbortError"),
+      });
+
+      expect(shouldSuppressSentryEvent(fetchError)).toBe(true);
+    });
+
+    it("reports errors with a circular cause chain and no abort error", () => {
+      const error: Error & { cause?: unknown } = new Error("Something failed");
+      error.cause = error;
+
+      expect(shouldSuppressSentryEvent(error)).toBe(false);
+    });
+
     it.each([undefined, null, "404", 404, {}, { status: "not a status" }])(
       "reports %o, which carries no usable status",
       (error) => {

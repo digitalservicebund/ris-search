@@ -23,6 +23,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Pattern;
 import java.io.IOException;
 import java.net.URLConnection;
 import java.util.List;
@@ -185,7 +186,10 @@ public class CaseLawController {
   @ApiResponse(responseCode = "200")
   @ApiResponse(responseCode = "404", content = @Content(schema = @Schema()))
   public ResponseEntity<StreamingResponseBody> getCaseLawDocumentationUnitAsZip(
-      @Parameter(example = "STRE201770751") @PathVariable String documentNumber) {
+      @Pattern(regexp = "^[a-zA-Z]{4}\\d{9}$", message = "Invalid document number format")
+          @Parameter(example = "STRE201770751")
+          @PathVariable
+          String documentNumber) {
 
     String filename = documentNumber + ".zip";
     List<String> keys = caseLawService.getAllFilenamesByDocumentNumber(documentNumber);

@@ -69,7 +69,7 @@ const visibleItems = computed(() =>
     <div
       v-for="item in visibleItems"
       :key="item.label"
-      class="col-span-12 grid grid-cols-subgrid"
+      class="col-span-12 grid grid-cols-subgrid items-baseline"
     >
       <dt
         class="typo-label1-bold col-span-12 hyphens-auto md:col-span-3 xl:col-span-2"

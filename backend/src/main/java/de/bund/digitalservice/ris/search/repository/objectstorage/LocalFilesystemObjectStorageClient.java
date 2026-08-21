@@ -151,17 +151,34 @@ public class LocalFilesystemObjectStorageClient implements ObjectStorageClient {
   }
 
   private <T> List<T> listKeysByPrefix(String prefix, Function<Path, T> mappingFunction) {
-    Path basePath =
-        localStorageDirectory.resolve(bucket).resolve(StringUtils.substringBeforeLast(prefix, "/"));
+    Path bucketDir = localStorageDirectory.resolve(bucket).normalize().toAbsolutePath();
+
+    // Extract directory path up to the last slash; if none, search from bucket root
+    String parentDir = prefix.contains("/") ? StringUtils.substringBeforeLast(prefix, "/") : "";
+    Path basePath = bucketDir.resolve(parentDir).normalize().toAbsolutePath();
+
+    if (!basePath.startsWith(bucketDir)) {
+      LOGGER.warn("Rejected. Path outside bucket directory for prefix: {}", prefix);
+      return List.of();
+    }
+
+    if (!Files.exists(basePath)) {
+      return List.of();
+    }
 
     try (Stream<Path> stream = Files.walk(basePath)) {
       return stream
           .filter(Files::isRegularFile)
-          .filter(f -> f.toString().contains(prefix))
+          .filter(
+              f -> {
+                // Normalize relative key to forward slashes for cross-platform matching
+                String relativeKey = bucketDir.relativize(f).toString().replace('\\', '/');
+                return relativeKey.startsWith(prefix);
+              })
           .map(mappingFunction)
           .toList();
-    } catch (IOException _) {
-      LOGGER.info("Could not list files in {}", basePath);
+    } catch (IOException e) {
+      LOGGER.info("Could not list files in {}", basePath, e);
       return List.of();
     }
   }

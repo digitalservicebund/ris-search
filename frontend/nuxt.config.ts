@@ -51,7 +51,7 @@ export default defineNuxtConfig({
     },
   },
   typescript: {
-    typeCheck: process.env.CI !== "true",
+    typeCheck: "build",
     tsConfig: {
       compilerOptions: {
         noUnusedLocals: true,

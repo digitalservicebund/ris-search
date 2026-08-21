@@ -123,7 +123,7 @@ public class CaseLawSearchSchemaMapper {
         // .publicationStatus(doc.publicationStatus())
         // fields with different name
         .courtName(doc.courtKeyword())
-        .encoding(EncodingSchemaFactory.caselawEncodingSchemas(entityURI))
+        .encoding(EncodingSchemaFactory.documentEncodingSchemas(entityURI))
         // end
         .build();
   }

@@ -39,7 +39,7 @@ test.describe("find and display norms", () => {
     const searchButton = page.getByRole("button", { name: "Suchen" });
     await searchButton.click();
 
-    await page.getByRole("button", { name: "Gesetze & Verordnungen" }).click();
+    await page.getByRole("radio", { name: "Gesetze & Verordnungen" }).click();
     await page
       .getByRole("link", { name: "Brennereiordnung", exact: true })
       .click();
@@ -78,7 +78,7 @@ test.describe("find and display caselaws", () => {
     const searchButton = page.getByRole("button", { name: "Suchen" });
     await searchButton.click();
 
-    await page.getByRole("button", { name: "Gerichtsentscheidungen" }).click();
+    await page.getByRole("radio", { name: "Gerichtsentscheidungen" }).click();
     await page
       .getByRole("link", {
         name: "BVerwG, Beschluss vom 7. Januar 2010 - 20 F 5/09",
@@ -118,7 +118,7 @@ test.describe("find and display literature", () => {
     const searchButton = page.getByRole("button", { name: "Suchen" });
     await searchButton.click();
 
-    await page.getByRole("button", { name: "Literaturnachweise" }).click();
+    await page.getByRole("radio", { name: "Literaturnachweise" }).click();
     await page
       .getByRole("link", {
         name: "Die Arbeitergilden der Gegenwart",
@@ -158,7 +158,7 @@ test.describe("find and display administrative directives", () => {
     const searchButton = page.getByRole("button", { name: "Suchen" });
     await searchButton.click();
 
-    await page.getByRole("button", { name: "Verwaltungsvorschrift" }).click();
+    await page.getByRole("radio", { name: "Verwaltungsvorschrift" }).click();
     await page
       .getByRole("link", {
         name: "Leistungsanspruch in der Dreiwochenfrist",

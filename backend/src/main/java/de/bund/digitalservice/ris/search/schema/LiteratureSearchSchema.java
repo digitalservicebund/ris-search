@@ -76,7 +76,7 @@ public record LiteratureSearchSchema(
             example = "['sli', 'uli']",
             requiredMode = Schema.RequiredMode.REQUIRED)
         String literatureType,
-    @Schema(requiredMode = Schema.RequiredMode.REQUIRED) List<LiteratureEncodingSchema> encoding)
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED) List<DocumentEncodingSchema> encoding)
     implements AbstractDocumentSchema, JsonldResource {
 
   @Override

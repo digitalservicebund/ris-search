@@ -86,10 +86,7 @@ dependencies {
     implementation(libs.jackson.databind)
 
     // CVE-2026-5588
-    implementation(libs.bouncycastle.bcpkix)
-
-    // CVE-2026-0636
-    implementation(libs.bouncycastle.bcprov)
+    implementation(platform(libs.bouncycastle.bom))
 
     // CVE-2026-55831
     implementation(libs.netty.codec.http)
@@ -99,9 +96,6 @@ dependencies {
 
     // CVE-2026-59901
     implementation(libs.netty.codec.compression)
-
-    // CVE-2026-59889
-    implementation(libs.tools.jackson.databind)
 
     // CVE-2026-54399
     implementation(libs.apache.httpcore)

@@ -58,8 +58,7 @@ public record AdministrativeDirectiveSchema(
         List<String> normReferences,
     @Schema(description = "Gliederung", requiredMode = Schema.RequiredMode.REQUIRED)
         List<String> outline,
-    @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
-        List<AdministrativeDirectiveEncodingSchema> encoding)
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED) List<DocumentEncodingSchema> encoding)
     implements JsonldResource {
 
   @Override

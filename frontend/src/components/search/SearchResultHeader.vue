@@ -1,44 +1,58 @@
 <script setup lang="ts">
-export interface SearchResultHeaderItem {
-  isMarkup?: boolean;
-  id?: string;
+import type { BadgeColor } from "~/components/ui/Badge.vue";
+
+export interface TextHeaderItem {
+  type: "text";
   value: string;
+  id?: string;
 }
 
-const { icon, items, secondaryItem } = defineProps<{
-  icon?: Component;
+export interface BadgeHeaderItem {
+  type: "badge";
+  value: string;
+  color: BadgeColor;
+  isMarkup?: boolean;
+  id?: string;
+  class?: string;
+}
+
+export type SearchResultHeaderItem = TextHeaderItem | BadgeHeaderItem;
+
+const { items, secondaryItem } = defineProps<{
+  documentType?: TextHeaderItem;
   items: SearchResultHeaderItem[];
-  secondaryItem?: SearchResultHeaderItem;
+  secondaryItem?: Omit<TextHeaderItem, "id">;
 }>();
 
 const itemsWithContent = computed(() => items.filter((i) => !!i.value));
 </script>
 
 <template>
-  <div class="flex items-center gap-8">
-    <div>
-      <p class="typo-label2-regular content-center space-x-8 hyphens-auto">
-        <span
-          v-if="icon"
-          class="inline-flex h-lh items-center align-text-bottom"
-        >
-          <component :is="icon" class="inline-block h-16 w-16 text-gray-900" />
-        </span>
-
-        <template v-for="item in itemsWithContent" :key="item.value">
-          <span v-if="item.isMarkup" :id="item.id" v-html="item.value" />
-          <span v-else :id="item.id">{{ item.value }}</span>
-        </template>
-      </p>
-      <p
-        v-if="secondaryItem?.value"
-        class="typo-label1-regular mt-8 hyphens-auto"
-      >
-        <span v-if="secondaryItem.isMarkup" v-html="secondaryItem.value" />
-        <span v-else>{{ secondaryItem.value }}</span>
-      </p>
-    </div>
-
-    <slot name="trailing" />
+  <div>
+    <p
+      class="typo-label2-regular flex flex-wrap items-baseline gap-x-12 gap-y-4 hyphens-auto"
+    >
+      <span v-if="documentType" class="font-bold!" :id="documentType.id">{{
+        documentType.value
+      }}</span>
+      <template v-for="item in itemsWithContent" :key="item.value">
+        <span v-if="item.type === 'text'" :id="item.id">{{ item.value }}</span>
+        <UiBadge
+          v-if="item.type === 'badge'"
+          :is-markup="item.isMarkup"
+          :class="item.class"
+          :variant="'medium'"
+          :label="item.value"
+          :color="item.color"
+          :id="item.id"
+        />
+      </template>
+    </p>
+    <p
+      v-if="secondaryItem?.value"
+      class="typo-label1-regular mt-8 hyphens-auto"
+    >
+      <span>{{ secondaryItem.value }}</span>
+    </p>
   </div>
 </template>

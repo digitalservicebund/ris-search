@@ -176,7 +176,7 @@ class CaseLawSearchSchemaMapperTest {
             .decisionName(List.of("decisionName"))
             .deviatingDocumentNumber(List.of("deviatingDocumentNumber"))
             .courtName("courtKeyword")
-            .encoding(EncodingSchemaFactory.caselawEncodingSchemas(expectedPath))
+            .encoding(EncodingSchemaFactory.documentEncodingSchemas(expectedPath))
             .build();
 
     assertEquals(expected, CaseLawSearchSchemaMapper.fromDomain(docUnit));

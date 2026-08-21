@@ -60,6 +60,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/literature/{documentNumber}.zip": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Decision ZIP (XML and attachments)
+         * @description Returns all literature document files as a ZIP archive.
+         */
+        get: operations["getLiteratureDocumentAsZip"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/literature/{documentNumber}.xml": {
         parameters: {
             query?: never;
@@ -638,6 +658,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/administrative-directive/{documentNumber}.zip": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Decision ZIP (XML and attachments)
+         * @description Returns all administrative directive files as a ZIP archive.
+         */
+        get: operations["getAdministrativeDirectiveAsZip"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/administrative-directive/{documentNumber}.xml": {
         parameters: {
             query?: never;
@@ -725,7 +765,7 @@ export interface components {
             member: components["schemas"]["SearchMemberSchemaLiteratureSearchSchema"][];
             view: components["schemas"]["PartialCollectionViewSchema"];
         };
-        LiteratureEncodingSchema: {
+        DocumentEncodingSchema: {
             /** @example MediaObject */
             "@type"?: string;
             "@id": string;
@@ -798,7 +838,7 @@ export interface components {
              * @example ['sli', 'uli']
              */
             literatureType: string;
-            encoding: components["schemas"]["LiteratureEncodingSchema"][];
+            encoding: components["schemas"]["DocumentEncodingSchema"][];
         });
         PartialCollectionViewSchema: {
             /** @example hydra:PartialCollectionView */
@@ -916,8 +956,9 @@ export interface components {
              * @example ['sli', 'uli']
              */
             literatureType: string;
-            encoding: components["schemas"]["LiteratureEncodingSchema"][];
+            encoding: components["schemas"]["DocumentEncodingSchema"][];
         };
+        StreamingResponseBody: unknown;
         ChangelogChangedDocument: {
             /** @description unique identifier of the document */
             "@id": string;
@@ -1113,19 +1154,8 @@ export interface components {
             hasPart: components["schemas"]["LegislationExpressionPartSchema"][];
             encoding: components["schemas"]["LegislationObjectSchema"][];
         };
-        StreamingResponseBody: unknown;
         AbstractDocumentSchema: {
             "@type": string;
-        };
-        AdministrativeDirectiveEncodingSchema: {
-            /** @example MediaObject */
-            "@type"?: string;
-            "@id": string;
-            contentUrl: string;
-            /** @example text/html */
-            encodingFormat: string;
-            /** @example de */
-            inLanguage: string;
         };
         AdministrativeDirectiveSearchSchema: {
             "@type": "AdministrativeDirectiveSearchSchema";
@@ -1163,18 +1193,8 @@ export interface components {
              * @example 2003-12-15
              */
             entryIntoForceDate?: string;
-            encoding: components["schemas"]["AdministrativeDirectiveEncodingSchema"][];
+            encoding: components["schemas"]["DocumentEncodingSchema"][];
         });
-        CaseLawEncodingSchema: {
-            /** @example MediaObject */
-            "@type"?: string;
-            "@id": string;
-            contentUrl: string;
-            /** @example text/html */
-            encodingFormat: string;
-            /** @example de */
-            inLanguage: string;
-        };
         CaseLawSearchSchema: {
             "@type": "CaseLawSearchSchema";
         } & (Omit<components["schemas"]["AbstractDocumentSchema"], "@type"> & {
@@ -1210,7 +1230,7 @@ export interface components {
             decisionName: string[];
             /** @example DEV-123 */
             deviatingDocumentNumber: string[];
-            encoding: components["schemas"]["CaseLawEncodingSchema"][];
+            encoding: components["schemas"]["DocumentEncodingSchema"][];
             /** @example /v1/case-law/ECLI:DE:FGRLP:1969:0905.IV85.68.0A */
             "@id": string;
             /** @example de */
@@ -1355,7 +1375,7 @@ export interface components {
             "@id": string;
             /** @example de */
             inLanguage: string;
-            encoding: components["schemas"]["CaseLawEncodingSchema"][];
+            encoding: components["schemas"]["DocumentEncodingSchema"][];
             /** @description Whether or not the document is a Vorabdokument */
             vorabdokument: boolean;
         };
@@ -1455,7 +1475,7 @@ export interface components {
             normReferences: string[];
             /** @description Gliederung */
             outline: string[];
-            encoding: components["schemas"]["AdministrativeDirectiveEncodingSchema"][];
+            encoding: components["schemas"]["DocumentEncodingSchema"][];
         };
     };
     responses: never;
@@ -1556,6 +1576,36 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["LiteratureSchema"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    getLiteratureDocumentAsZip: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @example XXLS201770751 */
+                documentNumber: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/zip": components["schemas"]["StreamingResponseBody"];
                 };
             };
             /** @description Not Found */
@@ -2685,6 +2735,36 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AdministrativeDirectiveSchema"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    getAdministrativeDirectiveAsZip: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @example XXLS201770751 */
+                documentNumber: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/zip": components["schemas"]["StreamingResponseBody"];
                 };
             };
             /** @description Not Found */
