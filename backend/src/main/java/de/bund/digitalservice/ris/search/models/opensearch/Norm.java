@@ -107,6 +107,9 @@ public final class Norm implements AbstractSearchEntity {
   @Field(name = Fields.ARTICLE_TEXTS)
   private List<String> articleTexts;
 
+  @Field(name = Fields.ARTICLE_FINGERPRINTS)
+  private List<String> articleFingerprints;
+
   @Field(name = Fields.INDEXED_AT)
   private String indexedAt;
 
@@ -136,6 +139,7 @@ public final class Norm implements AbstractSearchEntity {
     public static final String ARTICLES = "articles";
     public static final String ARTICLE_NAMES = "article_names";
     public static final String ARTICLE_TEXTS = "article_texts";
+    public static final String ARTICLE_FINGERPRINTS = "article_fingerprints";
     public static final String ENTRY_INTO_FORCE_DATE = "entry_into_force_date";
     public static final String EXPIRY_DATE = "expiry_date";
     public static final String FULL_CITATION = "full_citation";

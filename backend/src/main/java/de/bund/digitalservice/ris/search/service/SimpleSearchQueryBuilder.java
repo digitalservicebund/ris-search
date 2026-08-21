@@ -158,6 +158,9 @@ public class SimpleSearchQueryBuilder {
             .field(Norm.Fields.OFFICIAL_SHORT_TITLE_KEYWORD)
             .field(Norm.Fields.OFFICIAL_ABBREVIATION_KEYWORD)
             .boost(10.0f));
+
+    query.should(
+        QueryBuilders.matchQuery(Norm.Fields.ARTICLE_FINGERPRINTS, searchTerm).boost(10.0f));
   }
 
   private MultiMatchQueryBuilder buildOneClause(String searchedText, boolean phraseMatch) {

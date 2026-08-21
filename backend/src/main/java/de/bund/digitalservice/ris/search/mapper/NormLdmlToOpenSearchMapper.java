@@ -183,6 +183,8 @@ public class NormLdmlToOpenSearchMapper {
             xmlDocument, attachments, abbreviation, workEli, expressionEli, indexedAt);
     List<String> articleNames = articles.stream().map(Article::getName).toList();
     List<String> articleTexts = articles.stream().map(Article::getText).toList();
+    List<String> articleFingerprints =
+        articles.stream().map(Article::getArticleFingerprint).toList();
     String fullCitation = xmlDocument.getElementByXpath(X_PATH_FULL_CITATION);
     String officialToc =
         Optional.ofNullable(xmlDocument.getElementByXpath(X_PATH_OFFICIAL_TOC))
@@ -221,6 +223,7 @@ public class NormLdmlToOpenSearchMapper {
         .articles(articles)
         .articleNames(articleNames)
         .articleTexts(articleTexts)
+        .articleFingerprints(articleFingerprints)
         .officialFootNotes(getOfficialFootNotes(xmlDocument, attachments))
         .indexedAt(indexedAt)
         .build();
@@ -460,7 +463,7 @@ public class NormLdmlToOpenSearchMapper {
                           .filter(StringUtils::isNotBlank)
                           .collect(Collectors.joining(" "));
                   return Article.builder()
-                      .id(expressionEli + "/" + a.eId())
+                      .id(Article.buildId(expressionEli, a.eId()))
                       .eId(a.eId())
                       .expressionEli(expressionEli)
                       .workEli(workEli)
@@ -485,7 +488,7 @@ public class NormLdmlToOpenSearchMapper {
    * @return null if either part is missing, or the concatenation of both.
    */
   @Nullable
-  private static String getSearchKeyword(String marker, String abbreviation) {
+  private static String getArticleFingerprint(String marker, String abbreviation) {
     if (StringUtils.isBlank(abbreviation) || StringUtils.isBlank(marker)) {
       return null;
     }
@@ -501,13 +504,13 @@ public class NormLdmlToOpenSearchMapper {
       String indexedAt) {
     try {
       var articleXml = new XmlDocument(articleNode);
-      String marker = cleanText(articleXml.getSimpleElementByXpath(X_PATH_ARTICLE_NUM));
+      String articleNumber = cleanText(articleXml.getSimpleElementByXpath(X_PATH_ARTICLE_NUM));
       final var headingNode = articleXml.getFirstMatchedNodeByXpath(X_PATH_ARTICLE_HEADING);
       String heading =
           headingNode.map(node -> cleanText(XmlDocument.extractDirectChildText(node))).orElse("");
       String period = articleNode.getAttributes().getNamedItem("period").getTextContent();
       String eId = articleNode.getAttributes().getNamedItem("eId").getTextContent();
-      String id = expressionEli + "/" + eId;
+      String id = Article.buildId(expressionEli, eId);
       String guid = articleNode.getAttributes().getNamedItem("GUID").getTextContent();
       NodeList paragraphNodes = articleXml.getNodesByXpath(X_PATH_ARTICLE_PARAGRAPHS);
       String text = "";
@@ -526,7 +529,8 @@ public class NormLdmlToOpenSearchMapper {
         expiryDate = toLocalDate(timeInterval.end());
       }
 
-      final @Nullable String searchKeyword = getSearchKeyword(marker, abbreviation);
+      final @Nullable String articleFingerprint =
+          getArticleFingerprint(articleNumber, abbreviation);
 
       return Optional.of(
           Article.builder()
@@ -535,11 +539,11 @@ public class NormLdmlToOpenSearchMapper {
               .workEli(workEli)
               .expressionEli(expressionEli)
               .guid(guid)
-              .name(buildArticleHeader(marker, heading))
+              .name(buildArticleHeader(articleNumber, heading))
               .text(cleanText(text))
               .entryIntoForceDate(entryIntoForceDate)
               .expiryDate(expiryDate)
-              .searchKeyword(searchKeyword)
+              .articleFingerprint(articleFingerprint)
               .indexedAt(indexedAt)
               .build());
     } catch (XPathExpressionException | ParserConfigurationException e) {
@@ -559,7 +563,7 @@ public class NormLdmlToOpenSearchMapper {
     }
 
     return Article.builder()
-        .id(expressionEli + "/" + eIdAttribute.getTextContent())
+        .id(Article.buildId(expressionEli, eIdAttribute.getTextContent()))
         .eId(eIdAttribute.getTextContent())
         .workEli(workEli)
         .expressionEli(expressionEli)
