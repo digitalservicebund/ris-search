@@ -2,17 +2,15 @@ package de.bund.digitalservice.ris.search.models.ldml.caselaw;
 
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlElementWrapper;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-/**
- * Represents the RIS metadata for a legal case document. This class contains various fields that
- * describe the metadata attributes associated with a legal case, such as decision names, previous
- * and ensuing decisions, file numbers, document type, court information, legal forces, and more.
- */
+/** Represents the RIS-specific metadata block of a Case Law LDML document. */
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -32,6 +30,24 @@ public class RisMeta {
   @XmlElement(name = "rechtskraft", namespace = CaseLawLdmlNamespaces.RIS_NS)
   private String risRechtskraft;
 
+  @XmlElement(name = "erledigung", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  private String risErledigung;
+
+  @XmlElement(name = "gesetzgebungsauftrag", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  private String risGesetzgebungsauftrag;
+
+  @XmlElement(name = "langtextdatum", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  private LocalDate risLangtextdatum;
+
+  @XmlElement(name = "rechtsmittelfuehrer", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  private String risRechtsmittelfuehrer;
+
+  @XmlElement(name = "rechtsmittelzulassung", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  private String risRechtsmittelzulassung;
+
+  @XmlElement(name = "revision", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  private String risRevision;
+
   @XmlElementWrapper(name = "sachgebiete", namespace = CaseLawLdmlNamespaces.RIS_NS)
   @XmlElement(name = "sachgebiet", namespace = CaseLawLdmlNamespaces.RIS_NS)
   private List<String> risSachgebiete;
@@ -43,13 +59,13 @@ public class RisMeta {
   @XmlElement(name = "spruchkoerper", namespace = CaseLawLdmlNamespaces.RIS_NS)
   private String risSpruchkoerper;
 
-  @XmlElementWrapper(name = "deviatingCourts", namespace = CaseLawLdmlNamespaces.RIS_NS)
-  @XmlElement(name = "deviatingCourt", namespace = CaseLawLdmlNamespaces.RIS_NS)
-  private List<String> deviatingCourt;
+  @XmlElementWrapper(name = "fehlerhafteGerichte", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  @XmlElement(name = "fehlerhaftesGericht", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  private List<String> risFehlerhafteGerichte;
 
   @XmlElementWrapper(name = "abweichendeDaten", namespace = CaseLawLdmlNamespaces.RIS_NS)
   @XmlElement(name = "abweichendesDatum", namespace = CaseLawLdmlNamespaces.RIS_NS)
-  private List<String> risAbweichendeDaten;
+  private List<LocalDate> risAbweichendeDaten;
 
   @XmlElementWrapper(name = "abweichendeDokumentnummern", namespace = CaseLawLdmlNamespaces.RIS_NS)
   @XmlElement(name = "abweichendeDokumentnummer", namespace = CaseLawLdmlNamespaces.RIS_NS)
@@ -59,15 +75,51 @@ public class RisMeta {
   @XmlElement(name = "abweichenderEcli", namespace = CaseLawLdmlNamespaces.RIS_NS)
   private List<String> risAbweichendeEclis;
 
+  @XmlElementWrapper(name = "berufsbilder", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  @XmlElement(name = "berufsbild", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  private List<String> risBerufsbilder;
+
+  @XmlElementWrapper(name = "kuendigungsarten", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  @XmlElement(name = "kuendigungsart", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  private List<String> risKuendigungsarten;
+
+  @XmlElementWrapper(name = "herkunftslaender", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  @XmlElement(name = "herkunftsland", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  private List<String> risHerkunftslaender;
+
+  @XmlElementWrapper(name = "regionen", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  @XmlElement(name = "region", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  private List<String> risRegionen;
+
+  @XmlElementWrapper(name = "tarifvertraege", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  @XmlElement(name = "tarifvertrag", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  private List<String> risTarifvertraege;
+
+  @XmlElementWrapper(name = "kuendigungsgruende", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  @XmlElement(name = "kuendigungsgrund", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  private List<String> risKuendigungsgruende;
+
+  @XmlElementWrapper(
+      name = "datenDerMuendlichenVerhandlung",
+      namespace = CaseLawLdmlNamespaces.RIS_NS)
+  @XmlElement(name = "datumDerMuendlichenVerhandlung", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  private List<LocalDate> risDatenDerMuendlichenVerhandlung;
+
+  @XmlElementWrapper(name = "definitionen", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  @XmlElement(name = "definition", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  private List<RisDefinition> risDefinitionen;
+
   @XmlElement(name = "dokumentationsstelle", namespace = CaseLawLdmlNamespaces.RIS_NS)
   private String risDokumentationsstelle;
 
-  /**
-   * Returns a combined court keyword consisting of court type and court location. If court location
-   * is not available, it returns only the court type.
-   *
-   * @return the combined court keyword
-   */
+  @XmlElementWrapper(name = "personen", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  @XmlElement(name = "person", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  private List<RisPerson> risPersonen;
+
+  @XmlElementWrapper(name = "mitwirkendeRichter", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  @XmlElement(name = "mitwirkenderRichter", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  private List<String> risMitwirkendeRichter;
+
   public String getCourtKeyword() {
     return risGericht.getShowAs();
   }
@@ -77,5 +129,46 @@ public class RisMeta {
         .filter(a -> "Aktenzeichen".equals(a.getDomainTerm()))
         .map(RisAktenzeichen::getValue)
         .toList();
+  }
+
+  /**
+   * Returns the deviating file numbers ("Abweichendes Aktenzeichen") found within the
+   * aktenzeichenListe wrapper.
+   *
+   * @return the list of deviating file numbers, or an empty list if none are present
+   */
+  public List<String> getAbweichendeAktenzeichen() {
+    return risAktenzeichen.stream()
+        .filter(a -> "Abweichendes Aktenzeichen".equals(a.getDomainTerm()))
+        .map(RisAktenzeichen::getValue)
+        .toList();
+  }
+
+  /**
+   * Returns the terms flagged as defined ({@code definierterBegriff}) within this document.
+   *
+   * @return the list of defined terms, or an empty list if none are present
+   */
+  public List<String> getDefinitionen() {
+    if (risDefinitionen == null) {
+      return List.of();
+    }
+    return risDefinitionen.stream().map(RisDefinition::getDefinierterBegriff).toList();
+  }
+
+  /**
+   * Look up a person's display name by their eId.
+   *
+   * @param eId the eId of the person to look up
+   * @return the person's showAs value, or their name if showAs is not set, if found
+   */
+  public Optional<String> getPersonNameByEid(String eId) {
+    if (risPersonen == null || eId == null) {
+      return Optional.empty();
+    }
+    return risPersonen.stream()
+        .filter(person -> eId.equals(person.getEId()))
+        .map(person -> person.getShowAs() != null ? person.getShowAs() : person.getName())
+        .findFirst();
   }
 }

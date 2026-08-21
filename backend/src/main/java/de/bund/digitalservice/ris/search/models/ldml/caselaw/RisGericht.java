@@ -41,6 +41,10 @@ public class RisGericht {
   @XmlElement(name = "gerichtsort", namespace = CaseLawLdmlNamespaces.RIS_NS)
   private String gerichtsort;
 
+  /** The jurisdiction (Gerichtsbarkeit) the court belongs to. */
+  @XmlElement(name = "gerichtsbarkeit", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  private String gerichtsbarkeit;
+
   /** The specific judicial body or chamber (Spruchkörper) within the court. */
   @XmlElement(name = "spruchkoerper", namespace = CaseLawLdmlNamespaces.RIS_NS)
   private Spruchkoerper spruchkoerper;

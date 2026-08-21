@@ -57,24 +57,24 @@
           </akn:references>
          <akn:proprietary source="ris">
             <ris:meta>
-                <ris:aktenzeichenListe domainTerm="Liste der Aktenzeichen">
-                    <ris:aktenzeichen domainTerm="Aktenzeichen" akn:refersTo="#aktenzeichen">XVI VL 34/99</ris:aktenzeichen>
-                </ris:aktenzeichenListe>
                 <ris:dokumenttyp domainTerm="Dokumenttyp">Urteil</ris:dokumenttyp>
                 <ris:gericht domainTerm="Gericht" refersTo="#organisation-gericht-courttype-courtlocation" showAs="BDiG Frankfurt Label">
                     <ris:gerichtstyp domainTerm="Gerichtstyp">BDiG</ris:gerichtstyp>
                     <ris:gerichtsort domainTerm="Gerichtsort">Frankfurt</ris:gerichtsort>
-                    <ris:spruchkoerper domainTerm="Spruchkörper" refersTo="#spruchkoerper">16. Kammer</ris:spruchkoerper>
+                    <ris:spruchkoerper domainTerm="Spruchkörper">16. Kammer</ris:spruchkoerper>
                 </ris:gericht>
-                <ris:rechtskraft domainTerm="Rechtskraft">Ja</ris:rechtskraft>
-                <ris:sachgebiete domainTerm="Sachgebiete">
-                    <ris:sachgebiet domainTerm="Sachgebiet" notation="neu" sachgebiet-id="123">Testbeamtenpflicht</ris:sachgebiet>
-                    <ris:sachgebiet domainTerm="Sachgebiet" notation="neu" sachgebiet-id="456">Testverwaltungsrecht</ris:sachgebiet>
-                    <ris:sachgebiet domainTerm="Sachgebiet" notation="neu" sachgebiet-id="789">Testdisziplinarrecht</ris:sachgebiet>
-                    <ris:sachgebiet domainTerm="Sachgebiet" notation="neu" sachgebiet-id="1011">Testbeendigung</ris:sachgebiet>
-                </ris:sachgebiete>
                 <ris:dokumentationsstelle domainTerm="Dokumentationsstelle" refersTo="#OVGNW-dokumentationsstelle">OVGNW</ris:dokumentationsstelle>
-            </ris:meta>
+                <ris:aktenzeichenListe domainTerm="Liste der Aktenzeichen">
+                    <ris:aktenzeichen domainTerm="Aktenzeichen" refersTo="#aktenzeichen">XVI VL 34/99</ris:aktenzeichen>
+                </ris:aktenzeichenListe>
+                <ris:sachgebiete domainTerm="Sachgebiete">
+                    <ris:sachgebiet domainTerm="Sachgebiet" sachgebiet-id="TT">Testbeamtenpflicht</ris:sachgebiet>
+                    <ris:sachgebiet domainTerm="Sachgebiet" sachgebiet-id="TT">Testverwaltungsrecht</ris:sachgebiet>
+                    <ris:sachgebiet domainTerm="Sachgebiet" sachgebiet-id="TT">Testdisziplinarrecht</ris:sachgebiet>
+                    <ris:sachgebiet domainTerm="Sachgebiet" sachgebiet-id="TT">Testbeendigung</ris:sachgebiet>
+                </ris:sachgebiete>
+                <ris:rechtskraft domainTerm="Rechtskraft">Ja</ris:rechtskraft>
+</ris:meta>
          </akn:proprietary>
       </akn:meta>
       <akn:header>

@@ -40,6 +40,9 @@
             <akn:analysis source="#ris">
                 <akn:otherAnalysis source="#ris">
                     <ris:dokumentarischeKurztexte domainTerm="Dokumentarische Kurztexte">
+                        <ris:entscheidungsnamen domainTerm="Entscheidungsnamen">
+                            <ris:entscheidungsname domainTerm="Entscheidungsname">Beispielentscheid</ris:entscheidungsname>
+                        </ris:entscheidungsnamen>
                         <ris:titelzeile domainTerm="Titelzeile" eId="titelzeile">
                             <akn:p>Beispielbeschluss.</akn:p>
                         </ris:titelzeile>
@@ -47,9 +50,6 @@
                             <akn:p>1. Fiktiver Satz für Testzwecke im Beschluss.</akn:p>
                             <akn:p>2. Weitere fiktive Informationen zur Verfahrensbeschreibung.</akn:p>
                         </ris:orientierungssatz>
-                        <ris:entscheidungsnamen domainTerm="Entscheidungsnamen">
-                            <ris:entscheidungsname domainTerm="Entscheidungsname">Beispielentscheid</ris:entscheidungsname>
-                        </ris:entscheidungsnamen>
                     </ris:dokumentarischeKurztexte>
                 </akn:otherAnalysis>
             </akn:analysis>
@@ -61,26 +61,23 @@
             </akn:references>
             <akn:proprietary source="ris">
                 <ris:meta>
-                    <ris:entscheidungstextListe domainTerm="Liste der Entscheidungstexte">
-                        <ris:entscheidungstext domainTerm="Entscheidungstext">Beispielentscheid</ris:entscheidungstext>
-                    </ris:entscheidungstextListe>
-                    <ris:aktenzeichenListe domainTerm="Liste der Aktenzeichen">
-                        <ris:aktenzeichen domainTerm="Aktenzeichen" akn:refersTo="#aktenzeichen">34 X (xyz) 456/78</ris:aktenzeichen>
-                    </ris:aktenzeichenListe>
                     <ris:dokumenttyp domainTerm="Dokumenttyp">Beschluss</ris:dokumenttyp>
                     <ris:gericht domainTerm="Gericht" refersTo="#organisation-gericht-courttype-courtlocation" showAs="BPatG Label">
                         <ris:gerichtstyp domainTerm="Gerichtstyp">BPatG</ris:gerichtstyp>
                         <ris:gerichtsort domainTerm="Gerichtsort">Teststadt</ris:gerichtsort>
-                        <ris:spruchkoerper domainTerm="Spruchkörper" refersTo="#spruchkoerper">27. Senat</ris:spruchkoerper>
+                        <ris:spruchkoerper domainTerm="Spruchkörper">27. Senat</ris:spruchkoerper>
                     </ris:gericht>
-                    <ris:rechtskraft domainTerm="Rechtskraft">Keine Angabe</ris:rechtskraft>
-                    <ris:sachgebiete domainTerm="Sachgebiete">
-                        <ris:sachgebiet domainTerm="Sachgebiet" notation="neu">Testprozessrecht!!</ris:sachgebiet>
-                        <ris:sachgebiet domainTerm="Sachgebiet" notation="neu">Testmarkenrecht (Beispiel)</ris:sachgebiet>
-                        <ris:sachgebiet domainTerm="Sachgebiet" notation="neu">Beispielverfahren (inkl. Musterdaten)</ris:sachgebiet>
-                        <ris:sachgebiet domainTerm="Sachgebiet" notation="neu">Beiswertung</ris:sachgebiet>
-                    </ris:sachgebiete>
                     <ris:dokumentationsstelle domainTerm="Dokumentationsstelle" refersTo="#bpatg-dokumentationsstelle">BPatG</ris:dokumentationsstelle>
+                    <ris:aktenzeichenListe domainTerm="Liste der Aktenzeichen">
+                        <ris:aktenzeichen domainTerm="Aktenzeichen" refersTo="#aktenzeichen">34 X (xyz) 456/78</ris:aktenzeichen>
+                    </ris:aktenzeichenListe>
+                    <ris:sachgebiete domainTerm="Sachgebiete">
+                        <ris:sachgebiet domainTerm="Sachgebiet" sachgebiet-id="TT">Testprozessrecht!!</ris:sachgebiet>
+                        <ris:sachgebiet domainTerm="Sachgebiet" sachgebiet-id="TT">Testmarkenrecht (Beispiel)</ris:sachgebiet>
+                        <ris:sachgebiet domainTerm="Sachgebiet" sachgebiet-id="TT">Beispielverfahren (inkl. Musterdaten)</ris:sachgebiet>
+                        <ris:sachgebiet domainTerm="Sachgebiet" sachgebiet-id="TT">Beiswertung</ris:sachgebiet>
+                    </ris:sachgebiete>
+                    <ris:rechtskraft domainTerm="Rechtskraft">Keine Angabe</ris:rechtskraft>
                 </ris:meta>
             </akn:proprietary>
         </akn:meta>
