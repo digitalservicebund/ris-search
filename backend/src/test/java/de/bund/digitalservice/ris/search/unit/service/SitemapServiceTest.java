@@ -29,12 +29,12 @@ import org.springframework.test.util.ReflectionTestUtils;
 class SitemapServiceTest {
   private static final String TEST_ELI_FILE =
       "eli/bund/bgbl-1/1991/s101/1991-01-01/1/deu/1991-01-20/regelungstext-1.xml";
-  @InjectMocks private SitemapService sitemapService;
   @Mock private PortalBucket portalBucket;
+  SitemapService sitemapService;
 
   @BeforeEach
   void setUp() {
-    ReflectionTestUtils.setField(sitemapService, "baseUrl", "https://test.local/");
+      sitemapService = new SitemapService(portalBucket, "https://test.local/");
   }
 
   @Test
@@ -49,8 +49,8 @@ class SitemapServiceTest {
 
   @Test
   void testGenerateCaseLawSitemap() {
-    String caseLawSitemap = sitemapService.generateSitemap(List.of("KORE1"), "case-law");
-    assertTrue(caseLawSitemap.contains("<loc>https://test.local/case-law/KORE1</loc>"));
+    String caseLawSitemap = sitemapService.generateSitemap(List.of("KORE1"), DocumentKind.CASE_LAW);
+    assertTrue(caseLawSitemap.contains("<loc>https://test.local/gerichtsentscheidungen/KORE1</loc>"));
   }
 
   @Test
@@ -68,8 +68,8 @@ class SitemapServiceTest {
 
   @Test
   void testGenerateLiteratureSitemap() {
-    String caseLawSitemap = sitemapService.generateSitemap(List.of("XXLU000001"), "literature");
-    assertTrue(caseLawSitemap.contains("<loc>https://test.local/literature/XXLU000001</loc>"));
+    String caseLawSitemap = sitemapService.generateSitemap(List.of("XXLU000001"), DocumentKind.LITERATURE);
+    assertTrue(caseLawSitemap.contains("<loc>https://test.local/literaturnachweise/XXLU000001</loc>"));
   }
 
   @Test
@@ -88,7 +88,7 @@ class SitemapServiceTest {
   @Test
   void testGetNormsBatchSitemapPath() {
     assertEquals(
-        "sitemaps/norms/1.xml", sitemapService.getBatchSitemapPath(1, DocumentKind.LEGISLATION));
+        "sitemaps/norms/1.xml", sitemapService.getBatchSitemapS3Path(1, DocumentKind.LEGISLATION));
   }
 
   @Test
@@ -102,8 +102,8 @@ class SitemapServiceTest {
     Optional<EliFile> file = EliFile.fromString(TEST_ELI_FILE);
     assertTrue(file.isPresent());
     String id = file.get().getExpressionEli().toString();
-    String normSitemap = sitemapService.generateSitemap(List.of(id), "norms");
-    assertTrue(normSitemap.contains("<loc>https://test.local/norms/" + id + "</loc>"));
+    String normSitemap = sitemapService.generateSitemap(List.of(id), DocumentKind.LEGISLATION);
+    assertTrue(normSitemap.contains("<loc>https://test.local/gesetze/" + id + "</loc>"));
   }
 
   @Test
