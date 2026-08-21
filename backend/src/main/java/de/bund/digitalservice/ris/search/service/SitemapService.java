@@ -15,8 +15,6 @@ import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.util.List;
 import java.util.stream.IntStream;
-import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Strings;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -26,13 +24,20 @@ import org.springframework.stereotype.Service;
 public class SitemapService {
   private final String baseUrl;
 
-  public SitemapService(PortalBucket portalBucket, @Value("${server.front-end-url}") String baseUrl) {
+  /**
+   * Service for generating sitemaps.
+   *
+   * @param portalBucket PortalBucket
+   * @param baseUrl baseUrl of frontend application to reference changed sites
+   */
+  public SitemapService(
+      PortalBucket portalBucket, @Value("${server.front-end-url}") String baseUrl) {
     this.portalBucket = portalBucket;
-    //remove trailing / to cleanly concatenate with api paths
+    // remove trailing / to cleanly concatenate with api paths
     this.baseUrl = Strings.CS.removeEnd(baseUrl, "/");
   }
 
-  private static final String SITEMAP_PREFIX = "sitemaps/";
+  private static final String PORTAL_BUCKET_SITEMAP_PREFIX = "sitemaps/";
   public final PortalBucket portalBucket;
 
   private String getControllerPath(DocumentKind type) {
@@ -44,16 +49,16 @@ public class SitemapService {
     };
   }
 
-  private String getFrontendUrl(DocumentKind type) {
+  private String getFrontendPath(DocumentKind type) {
     return switch (type) {
-      case LEGISLATION -> "/gesetze";
-      case ADMINISTRATIVE_DIRECTIVE -> "/verwaltungsregelungen";
-      case LITERATURE -> "/literaturnachweise";
-      case CASE_LAW -> "/gerichtsentscheidungen";
+      case LEGISLATION -> "gesetze";
+      case ADMINISTRATIVE_DIRECTIVE -> "verwaltungsregelungen";
+      case LITERATURE -> "literaturnachweise";
+      case CASE_LAW -> "gerichtsentscheidungen";
     };
   }
 
-  private String getS3StorageLocation(DocumentKind type) {
+  private String getS3Path(DocumentKind type) {
     return switch (type) {
       case LEGISLATION -> "norms";
       case ADMINISTRATIVE_DIRECTIVE -> "administrative-directive";
@@ -70,7 +75,7 @@ public class SitemapService {
    * @return sitemap file path
    */
   public String getBatchSitemapS3Path(int batchNumber, DocumentKind type) {
-    return SITEMAP_PREFIX + String.format("%s/%d.xml", getS3StorageLocation(type), batchNumber);
+    return PORTAL_BUCKET_SITEMAP_PREFIX + String.format("%s/%d.xml", getS3Path(type), batchNumber);
   }
 
   /**
@@ -94,7 +99,7 @@ public class SitemapService {
    * @return sitemap index file path
    */
   public String getIndexSitemapPath(DocumentKind type) {
-    return SITEMAP_PREFIX + String.format("%s/index.xml", getS3StorageLocation(type));
+    return PORTAL_BUCKET_SITEMAP_PREFIX + String.format("%s/index.xml", getS3Path(type));
   }
 
   /**
@@ -114,7 +119,7 @@ public class SitemapService {
    * @param beforeDateTime date before which sitemap files should be deleted
    */
   public void deleteSitemapFiles(Instant beforeDateTime) {
-    portalBucket.getAllKeyInfosByPrefix(SITEMAP_PREFIX).stream()
+    portalBucket.getAllKeyInfosByPrefix(PORTAL_BUCKET_SITEMAP_PREFIX).stream()
         .filter(info -> info.lastModified().isBefore(beforeDateTime))
         .forEach(info -> portalBucket.delete(info.key()));
   }
@@ -129,8 +134,7 @@ public class SitemapService {
   public String generateSitemap(List<String> documentationUnitIds, DocumentKind documentKind) {
     List<Url> urls =
         documentationUnitIds.stream()
-            .map(
-                e -> new Url(String.format("%s%s/%s", baseUrl, getFrontendUrl(documentKind), e)))
+            .map(e -> new Url(String.format("%s/%s/%s", baseUrl, getFrontendPath(documentKind), e)))
             .toList();
     return marshal(new SitemapFile(urls));
   }

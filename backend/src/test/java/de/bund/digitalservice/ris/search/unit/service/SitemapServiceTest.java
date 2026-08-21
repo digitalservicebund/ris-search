@@ -20,10 +20,8 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.util.ReflectionTestUtils;
 
 @ExtendWith(MockitoExtension.class)
 class SitemapServiceTest {
@@ -34,7 +32,7 @@ class SitemapServiceTest {
 
   @BeforeEach
   void setUp() {
-      sitemapService = new SitemapService(portalBucket, "https://test.local/");
+    sitemapService = new SitemapService(portalBucket, "https://test.local/");
   }
 
   @Test
@@ -50,7 +48,8 @@ class SitemapServiceTest {
   @Test
   void testGenerateCaseLawSitemap() {
     String caseLawSitemap = sitemapService.generateSitemap(List.of("KORE1"), DocumentKind.CASE_LAW);
-    assertTrue(caseLawSitemap.contains("<loc>https://test.local/gerichtsentscheidungen/KORE1</loc>"));
+    assertTrue(
+        caseLawSitemap.contains("<loc>https://test.local/gerichtsentscheidungen/KORE1</loc>"));
   }
 
   @Test
@@ -68,8 +67,10 @@ class SitemapServiceTest {
 
   @Test
   void testGenerateLiteratureSitemap() {
-    String caseLawSitemap = sitemapService.generateSitemap(List.of("XXLU000001"), DocumentKind.LITERATURE);
-    assertTrue(caseLawSitemap.contains("<loc>https://test.local/literaturnachweise/XXLU000001</loc>"));
+    String caseLawSitemap =
+        sitemapService.generateSitemap(List.of("XXLU000001"), DocumentKind.LITERATURE);
+    assertTrue(
+        caseLawSitemap.contains("<loc>https://test.local/literaturnachweise/XXLU000001</loc>"));
   }
 
   @Test
