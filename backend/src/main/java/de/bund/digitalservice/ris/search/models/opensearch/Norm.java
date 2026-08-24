@@ -136,36 +136,36 @@ public final class Norm implements AbstractSearchEntity {
     public static final String ARTICLES = "articles";
     public static final String ARTICLE_NAMES = "article_names";
     public static final String ARTICLE_TEXTS = "article_texts";
+    public static final String CONCLUSIONS_FORMULA = "conclusions_formula";
+    public static final String DATE_PUBLISHED = "date_published";
     public static final String ENTRY_INTO_FORCE_DATE = "entry_into_force_date";
     public static final String EXPIRY_DATE = "expiry_date";
+    public static final String EXPRESSION_ELI = "expression_eli";
+    public static final String EXPRESSION_ELI_KEYWORD = "expression_eli.keyword";
     public static final String FULL_CITATION = "full_citation";
-    public static final String OFFICIAL_TOC = "official_toc";
-    public static final String TIME_RELEVANCE_START_DATE = "time_relevance_start_date";
-    public static final String TIME_RELEVANCE_END_DATE = "time_relevance_end_date";
     public static final String ID = "id";
     public static final String INDEXED_AT = "indexed_at";
+    public static final String LATEST_MANIFESTATION_ELI = "latest_manifestation_eli";
+    public static final String LATEST_MANIFESTATION_ELI_KEYWORD =
+        "latest_manifestation_eli.keyword";
     public static final String NORMS_DATE = "norms_date";
     public static final String NORMS_SORT_DATE = "norms_sort_date";
-    public static final String DATE_PUBLISHED = "date_published";
     public static final String OFFICIAL_ABBREVIATION = "official_abbreviation";
     public static final String OFFICIAL_ABBREVIATION_KEYWORD = "official_abbreviation.keyword";
-    public static final String RIS_ABBREVIATION = "ris_abbreviation";
-    public static final String RIS_ABBREVIATION_KEYWORD = "ris_abbreviation.keyword";
+    public static final String OFFICIAL_FOOT_NOTES = "official_foot_notes";
     public static final String OFFICIAL_SHORT_TITLE = "official_short_title";
     public static final String OFFICIAL_SHORT_TITLE_KEYWORD = "official_short_title.keyword";
     public static final String OFFICIAL_TITLE = "official_title";
     public static final String OFFICIAL_TITLE_KEYWORD = "official_title.keyword";
+    public static final String OFFICIAL_TOC = "official_toc";
+    public static final String PREAMBLE_FORMULA = "preamble_formula";
     public static final String PUBLISHED_IN = "published_in";
+    public static final String RIS_ABBREVIATION = "ris_abbreviation";
+    public static final String RIS_ABBREVIATION_KEYWORD = "ris_abbreviation.keyword";
+    public static final String TABLE_OF_CONTENTS = "table_of_contents";
+    public static final String TIME_RELEVANCE_END_DATE = "time_relevance_end_date";
+    public static final String TIME_RELEVANCE_START_DATE = "time_relevance_start_date";
     public static final String WORK_ELI = "work_eli";
     public static final String WORK_ELI_KEYWORD = "work_eli.keyword";
-    public static final String EXPRESSION_ELI = "expression_eli";
-    public static final String EXPRESSION_ELI_KEYWORD = "expression_eli.keyword";
-    public static final String LATEST_MANIFESTATION_ELI = "latest_manifestation_eli";
-    public static final String LATEST_MANIFESTATION_ELI_KEYWORD =
-        "latest_manifestation_eli.keyword";
-    public static final String TABLE_OF_CONTENTS = "table_of_contents";
-    public static final String CONCLUSIONS_FORMULA = "conclusions_formula";
-    public static final String PREAMBLE_FORMULA = "preamble_formula";
-    public static final String OFFICIAL_FOOT_NOTES = "official_foot_notes";
   }
 }

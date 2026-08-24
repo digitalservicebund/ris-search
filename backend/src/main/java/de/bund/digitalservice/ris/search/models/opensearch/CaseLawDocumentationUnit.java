@@ -5,7 +5,6 @@ import jakarta.persistence.ElementCollection;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.Builder;
-import org.opensearch.common.Nullable;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.DateFormat;
 import org.springframework.data.elasticsearch.annotations.Document;
@@ -37,12 +36,14 @@ public record CaseLawDocumentationUnit(
     @Field(name = Fields.DECISION_DATE, type = FieldType.Date, format = DateFormat.date)
         LocalDate decisionDate,
     @ElementCollection @Field(name = Fields.FILE_NUMBERS) List<String> fileNumbers,
+    // Field holding the type of court, e.g., FG, BVerwG
     @Field(name = Fields.COURT_TYPE) String courtType,
     @Field(name = Fields.LOCATION) String location,
     @Field(name = Fields.DOCUMENT_TYPE) String documentType,
     @Field(name = Fields.OUTLINE) String outline,
     @Field(name = Fields.JUDICIAL_BODY) String judicialBody,
     @ElementCollection @Field(name = Fields.KEYWORDS) List<String> keywords,
+    // Field holding the court type and court location
     @Field(name = Fields.COURT_KEYWORD) String courtKeyword,
     @ElementCollection @Field(name = Fields.DECISION_NAME) List<String> decisionName,
     @ElementCollection @Field(name = Fields.DEVIATING_DOCUMENT_NUMBER)
@@ -57,7 +58,6 @@ public record CaseLawDocumentationUnit(
         List<String> pendingDecisions,
     @JsonIgnore @Field(name = Fields.HAS_LEGISLATIVE_MANDATE) String hasLegislativeMandate,
     @JsonIgnore @Field(name = Fields.INDEXED_AT) String indexedAt,
-    @Nullable @Field(name = Fields.ARTICLES) List<Article> articles,
     @Field(name = Fields.VORABDOKUMENT) boolean vorabdokument)
     implements AbstractSearchEntity {
 
@@ -72,51 +72,45 @@ public record CaseLawDocumentationUnit(
   public static class Fields {
     private Fields() {}
 
-    /** Field holding the court type and court location */
-    public static final String COURT_KEYWORD = "court_keyword";
-
-    public static final String COURT_KEYWORD_KEYWORD = "court_keyword.keyword";
-    public static final String ID = "id";
-    public static final String DOCUMENT_NUMBER = "document_number";
-    public static final String DOCUMENT_NUMBER_KEYWORD = "document_number.keyword";
-    public static final String ECLI = "ecli";
-    public static final String ECLI_KEYWORD = "ecli.keyword";
     public static final String CASE_FACTS = "case_facts";
-    public static final String DECISION_GROUNDS = "decision_grounds";
-    public static final String DISSENTING_OPINION = "dissenting_opinion";
-    public static final String GROUNDS = "grounds";
-    public static final String GUIDING_PRINCIPLE = "guiding_principle";
-    public static final String HEADLINE = "headline";
-    public static final String TITLE_LINE = "title_line";
-    public static final String HEADNOTE = "headnote";
-    public static final String OTHER_HEADNOTE = "other_headnote";
-    public static final String OTHER_LONG_TEXT = "other_long_text";
-    public static final String TENOR = "tenor";
-    public static final String DECISION_DATE = "decision_date";
-    public static final String FILE_NUMBERS = "file_numbers";
-    public static final String FILE_NUMBERS_KEYWORD = "file_numbers.keyword";
-
-    /** Field holding the type of court, e.g., FG, BVerwG */
+    public static final String COURT_KEYWORD = "court_keyword";
+    public static final String COURT_KEYWORD_KEYWORD = "court_keyword.keyword";
     public static final String COURT_TYPE = "court_type";
-
-    public static final String LOCATION = "location";
-    public static final String DOCUMENT_TYPE = "document_type";
-    public static final String OUTLINE = "outline";
-    public static final String JUDICIAL_BODY = "judicial_body";
-    public static final String KEYWORDS = "keywords";
+    public static final String DECISION_DATE = "decision_date";
+    public static final String DECISION_GROUNDS = "decision_grounds";
     public static final String DECISION_NAME = "decision_name";
     public static final String DEVIATING_DOCUMENT_NUMBER = "deviating_document_number";
-    public static final String PUBLICATION_STATUS = "publication_status";
-    public static final String ERROR = "error";
+    public static final String DISSENTING_OPINION = "dissenting_opinion";
     public static final String DOCUMENTATION_OFFICE = "documentation_office";
-    public static final String PROCEDURES = "procedures";
-    public static final String LEGAL_EFFECT = "legal_effect";
-    public static final String PREVIOUS_DECISIONS = "previous_decisions";
+    public static final String DOCUMENT_NUMBER = "document_number";
+    public static final String DOCUMENT_NUMBER_KEYWORD = "document_number.keyword";
+    public static final String DOCUMENT_TYPE = "document_type";
+    public static final String ECLI = "ecli";
+    public static final String ECLI_KEYWORD = "ecli.keyword";
     public static final String ENSUING_DECISIONS = "ensuing_decisions";
-    public static final String PENDING_DECISIONS = "pending_decisions";
+    public static final String ERROR = "error";
+    public static final String FILE_NUMBERS = "file_numbers";
+    public static final String FILE_NUMBERS_KEYWORD = "file_numbers.keyword";
+    public static final String GROUNDS = "grounds";
+    public static final String GUIDING_PRINCIPLE = "guiding_principle";
     public static final String HAS_LEGISLATIVE_MANDATE = "has_legislative_mandate";
+    public static final String HEADLINE = "headline";
+    public static final String HEADNOTE = "headnote";
+    public static final String ID = "id";
     public static final String INDEXED_AT = "indexed_at";
-    public static final String ARTICLES = "articles";
+    public static final String JUDICIAL_BODY = "judicial_body";
+    public static final String KEYWORDS = "keywords";
+    public static final String LEGAL_EFFECT = "legal_effect";
+    public static final String LOCATION = "location";
+    public static final String OTHER_HEADNOTE = "other_headnote";
+    public static final String OTHER_LONG_TEXT = "other_long_text";
+    public static final String OUTLINE = "outline";
+    public static final String PENDING_DECISIONS = "pending_decisions";
+    public static final String PREVIOUS_DECISIONS = "previous_decisions";
+    public static final String PROCEDURES = "procedures";
+    public static final String PUBLICATION_STATUS = "publication_status";
+    public static final String TENOR = "tenor";
+    public static final String TITLE_LINE = "title_line";
     public static final String VORABDOKUMENT = "vorabdokument";
   }
 }

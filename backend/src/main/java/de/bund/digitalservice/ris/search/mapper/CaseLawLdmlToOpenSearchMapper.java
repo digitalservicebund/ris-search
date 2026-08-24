@@ -106,7 +106,6 @@ public class CaseLawLdmlToOpenSearchMapper {
                 meta, refs -> refs.getReferencesByType(ImplicitReference::getEnsuingJudgement)))
         // Internal (portal team) fields
         .indexedAt(Instant.now().toString())
-        .articles(null)
         .vorabdokument(isVorabdokument(judgmentBody))
         .build();
   }

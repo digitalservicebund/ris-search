@@ -1,5 +1,6 @@
 package de.bund.digitalservice.ris.search.service;
 
+import static de.bund.digitalservice.ris.search.service.SimpleSearchQueryBuilder.convertOrderingToBoost;
 import static org.opensearch.index.query.QueryBuilders.matchQuery;
 import static org.opensearch.index.query.QueryBuilders.termQuery;
 
@@ -7,6 +8,7 @@ import de.bund.digitalservice.ris.search.models.api.parameters.NormsSearchParams
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.utils.DateUtils;
 import java.util.List;
+import java.util.Map;
 import org.opensearch.index.query.BoolQueryBuilder;
 import org.opensearch.index.query.Operator;
 import org.opensearch.index.query.QueryBuilders;
@@ -15,6 +17,25 @@ import org.opensearch.search.fetch.subphase.highlight.HighlightBuilder;
 /** Service class for interacting with the database and return the search results. */
 public class NormSimpleSearchType implements SimpleSearchType {
 
+  public static final Map<String, Float> FIELD_BOOSTS =
+      Map.ofEntries(
+          Map.entry(Norm.Fields.ARTICLE_NAMES, convertOrderingToBoost(2)),
+          Map.entry(Norm.Fields.ARTICLE_TEXTS, convertOrderingToBoost(2)),
+          Map.entry(Norm.Fields.CONCLUSIONS_FORMULA, 1.0f),
+          Map.entry(Norm.Fields.EXPRESSION_ELI, 1.0f),
+          Map.entry(Norm.Fields.FULL_CITATION, 1.0f),
+          Map.entry(Norm.Fields.ID, 1.0f),
+          Map.entry(Norm.Fields.LATEST_MANIFESTATION_ELI, 1.0f),
+          Map.entry(Norm.Fields.OFFICIAL_ABBREVIATION, convertOrderingToBoost(1)),
+          Map.entry(Norm.Fields.OFFICIAL_FOOT_NOTES, 1.0f),
+          Map.entry(Norm.Fields.OFFICIAL_SHORT_TITLE, convertOrderingToBoost(1)),
+          Map.entry(Norm.Fields.OFFICIAL_TITLE, convertOrderingToBoost(1)),
+          Map.entry(Norm.Fields.OFFICIAL_TOC, 1.0f),
+          Map.entry(Norm.Fields.PREAMBLE_FORMULA, convertOrderingToBoost(2)),
+          Map.entry(Norm.Fields.PUBLISHED_IN, 1.0f),
+          Map.entry(Norm.Fields.RIS_ABBREVIATION, 1.0f),
+          Map.entry(Norm.Fields.TABLE_OF_CONTENTS, 1.0f),
+          Map.entry(Norm.Fields.WORK_ELI, 1.0f));
   public static final List<String> NORMS_FETCH_EXCLUDED_FIELDS =
       List.of(
           Norm.Fields.ARTICLE_NAMES,
@@ -26,6 +47,11 @@ public class NormSimpleSearchType implements SimpleSearchType {
 
   public NormSimpleSearchType(NormsSearchParams normsSearchParams) {
     this.normsSearchParams = normsSearchParams;
+  }
+
+  @Override
+  public Map<String, Float> getBoosts() {
+    return FIELD_BOOSTS;
   }
 
   @Override
