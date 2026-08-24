@@ -4,6 +4,7 @@ import de.bund.digitalservice.ris.search.models.ldml.FrbrAuthor;
 import de.bund.digitalservice.ris.search.models.ldml.FrbrLanguage;
 import jakarta.xml.bind.annotation.XmlElement;
 import java.util.List;
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -38,6 +39,9 @@ public class FrbrElement {
   private FrbrLanguage frbrLanguage;
 
   private String getAliasValueByName(String aliasName) {
+    if (frbrAlias == null) {
+      return null;
+    }
     return frbrAlias.stream()
         .filter(alias -> alias.getName().equalsIgnoreCase(aliasName))
         .findFirst()
@@ -58,19 +62,23 @@ public class FrbrElement {
   }
 
   /**
-   * Returns the primary FRBRdate (named "Entscheidungsdatum"), or the first date present if none is
-   * explicitly named that.
+   * Returns the value of the FRBRdate named "Entscheidungsdatum", or, if none is present, the
+   * FRBRdate named "mitteilungsdatum" as an explicit fallback.
    *
-   * @return the primary {@link FrbrDate}, or {@code null} if no dates are present
+   * @return the decision date value, or {@code null} if neither is present
    */
-  public FrbrDate getFrbrDate() {
-    if (frbrDates == null || frbrDates.isEmpty()) {
+  public String getEntscheidungsdatumValue() {
+    if (frbrDates == null) {
       return null;
     }
-    return frbrDates.stream()
-        .filter(d -> "Entscheidungsdatum".equalsIgnoreCase(d.getName()))
-        .findFirst()
-        .orElse(frbrDates.get(0));
+    return findDateByName("Entscheidungsdatum")
+        .or(() -> findDateByName("mitteilungsdatum"))
+        .map(FrbrDate::getDate)
+        .orElse(null);
+  }
+
+  private Optional<FrbrDate> findDateByName(String name) {
+    return frbrDates.stream().filter(d -> name.equalsIgnoreCase(d.getName())).findFirst();
   }
 
   /**
@@ -83,11 +91,7 @@ public class FrbrElement {
     if (frbrDates == null) {
       return null;
     }
-    return frbrDates.stream()
-        .filter(d -> name.equalsIgnoreCase(d.getName()))
-        .map(FrbrDate::getDate)
-        .findFirst()
-        .orElse(null);
+    return findDateByName(name).map(FrbrDate::getDate).orElse(null);
   }
 
   public String getErstveroeffentlichungValue() {

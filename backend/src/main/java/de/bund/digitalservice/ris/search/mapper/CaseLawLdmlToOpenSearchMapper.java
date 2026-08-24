@@ -76,7 +76,7 @@ public class CaseLawLdmlToOpenSearchMapper {
         .documentNumber(uniqueId)
         .ecli(work.getEcliAliasValue())
         .celex(work.getCelexAliasValue())
-        .decisionDate(DateUtils.nullSafeParseyyyyMMdd(work.getFrbrDate().getDate()))
+        .decisionDate(DateUtils.nullSafeParseyyyyMMdd(work.getEntscheidungsdatumValue()))
         .fileNumber(work.getAktenzeichenAliasValue())
         .fileNumbers(risMeta.getAktenzeichen())
         .abweichendeAktenzeichen(risMeta.getAbweichendeAktenzeichen())
@@ -213,7 +213,7 @@ public class CaseLawLdmlToOpenSearchMapper {
     FrbrElement work = meta.getIdentification().getFrbrWork();
     validateNotNull(work.getFrbrThis(), "FrbrThis missing");
 
-    if (work.getFrbrDate() == null || work.getFrbrDate().getDate().isBlank()) {
+    if (work.getEntscheidungsdatumValue() == null || work.getEntscheidungsdatumValue().isBlank()) {
       throw new ValidationException("Decision date missing");
     }
     validateNotNull(meta.getProprietary(), "Proprietary missing");
