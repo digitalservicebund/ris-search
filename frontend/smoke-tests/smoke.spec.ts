@@ -146,6 +146,32 @@ test.describe("find and display literature", () => {
   });
 });
 
+test.describe("serve ecli sitemaps", () => {
+  test("verify correct robots.txt is served for user-agent", async ({
+    request,
+  }) => {
+    const response = await request.get("/robots.txt", {
+      headers: {
+        "User-Agent": "DG_JUSTICE_CRAWLER",
+      },
+    });
+
+    expect(response.ok()).toBeTruthy();
+    const body = await response.text();
+    expect(body).toContain("DG_JUSTICE_CRAWLER");
+  });
+
+  test("verify sitemap route returns content", async ({ request }) => {
+    const response = await request.get(
+      "/v1/eclicrawler/2026/08/20/sitemap_1.xml",
+    );
+
+    expect(response.ok()).toBeTruthy();
+    const body = await response.text();
+    expect(body.length).toBeGreaterThan(0);
+  });
+});
+
 test.describe("find and display administrative directives", () => {
   test("open administrative directives from search results (client side rendered)", async ({
     page,
