@@ -60,9 +60,31 @@ const rows = computed<VersionRow[]>(() => {
     };
   });
 });
+
+// Filtering swaps the rows out in place, which assistive technology does not
+// announce. Report the new count instead. Opening the Fassungen tab mounts this
+// list, so the watcher skips the initial value and stays quiet.
+const announcement = ref("");
+
+watch(
+  () => rows.value.length,
+  (count) => {
+    if (count === 0) {
+      announcement.value = "Keine Ergebnisse gefunden";
+    } else if (count === 1) {
+      announcement.value = "1 Fassung";
+    } else {
+      announcement.value = `${count} Fassungen`;
+    }
+  },
+);
 </script>
 
 <template>
+  <output aria-atomic="true" aria-live="polite" class="sr-only">
+    {{ announcement }}
+  </output>
+
   <UiDataTable
     :columns="columns"
     :row-as="NuxtLink"
