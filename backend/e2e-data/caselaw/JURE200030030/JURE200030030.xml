@@ -37,6 +37,16 @@
                 <akn:keyword ris:domainTerm="Schlagwort" dictionary="" showAs="Testbeschleunigung" value="Testbeschleunigung"/>
             </akn:classification>
             <akn:analysis source="#ris">
+                <akn:otherReferences source="#ris">
+                    <akn:implicitReference ris:domainTerm="Rechtszug">
+                        <ris:vorgehendeEntscheidung domainTerm="Vorgehende Entscheidung">
+                            <ris:aktenzeichen domainTerm="Aktenzeichen">XY Z 12/34</ris:aktenzeichen>
+                            <ris:gericht domainTerm="Gericht">
+                                <ris:gerichtstyp domainTerm="Gerichtstyp">LArbG</ris:gerichtstyp>
+                            </ris:gericht>
+                        </ris:vorgehendeEntscheidung>
+                    </akn:implicitReference>
+                </akn:otherReferences>
                 <akn:otherAnalysis source="#ris">
                     <ris:dokumentarischeKurztexte domainTerm="Dokumentarische Kurztexte">
                         <ris:titelzeile domainTerm="Titelzeile" eId="titelzeile">
@@ -64,29 +74,23 @@
             </akn:references>
             <akn:proprietary source="ris">
                 <ris:meta>
-                    <ris:aktenzeichenListe domainTerm="Liste der Aktenzeichen">
-                        <ris:aktenzeichen domainTerm="Aktenzeichen" akn:refersTo="#aktenzeichen">AB 5678/90</ris:aktenzeichen>
-                    </ris:aktenzeichenListe>
                     <ris:dokumenttyp domainTerm="Dokumenttyp">Urteil</ris:dokumenttyp>
                     <ris:gericht domainTerm="Gericht" refersTo="#organisation-gericht-courttype-courtlocation" showAs="ArbG Köln Label">
                         <ris:gerichtstyp domainTerm="Gerichtstyp">ArbG</ris:gerichtstyp>
                         <ris:gerichtsort domainTerm="Gerichtsort">Köln</ris:gerichtsort>
-                        <ris:spruchkoerper domainTerm="Spruchkörper" refersTo="#spruchkoerper">5. Kammer</ris:spruchkoerper>
+                        <ris:spruchkoerper domainTerm="Spruchkörper">5. Kammer</ris:spruchkoerper>
                     </ris:gericht>
-                    <ris:rechtskraft domainTerm="Rechtskraft">Keine Angabe</ris:rechtskraft>
-                    <ris:sachgebiete domainTerm="Sachgebiete">
-                        <ris:sachgebiet domainTerm="Sachgebiet" notation="neu">Testarbeitsrecht</ris:sachgebiet>
-                        <ris:sachgebiet domainTerm="Sachgebiet" notation="neu">Testberufung</ris:sachgebiet>
-                        <ris:sachgebiet domainTerm="Sachgebiet" notation="neu">Testprozess (Testfall)</ris:sachgebiet>
-                        <ris:sachgebiet domainTerm="Sachgebiet" notation="neu">Testurlaub</ris:sachgebiet>
-                    </ris:sachgebiete>
                     <ris:dokumentationsstelle domainTerm="Dokumentationsstelle" refersTo="#bag-dokumentationsstelle">BAG</ris:dokumentationsstelle>
-                    <ris:vorgehendeEntscheidungen domainTerm="Vorgehende Entscheidungen">
-                        <ris:vorgehendeEntscheidung>
-                            <ris:aktenzeichen domainTerm="Aktenzeichen">XY Z 12/34</ris:aktenzeichen>
-                            <ris:gerichtstyp domainTerm="Gerichtstyp">LArbG</ris:gerichtstyp>
-                        </ris:vorgehendeEntscheidung>
-                    </ris:vorgehendeEntscheidungen>
+                    <ris:aktenzeichenListe domainTerm="Liste der Aktenzeichen">
+                        <ris:aktenzeichen domainTerm="Aktenzeichen" refersTo="#aktenzeichen">AB 5678/90</ris:aktenzeichen>
+                    </ris:aktenzeichenListe>
+                    <ris:sachgebiete domainTerm="Sachgebiete">
+                        <ris:sachgebiet domainTerm="Sachgebiet" sachgebiet-id="TT">Testarbeitsrecht</ris:sachgebiet>
+                        <ris:sachgebiet domainTerm="Sachgebiet" sachgebiet-id="TT">Testberufung</ris:sachgebiet>
+                        <ris:sachgebiet domainTerm="Sachgebiet" sachgebiet-id="TT">Testprozess (Testfall)</ris:sachgebiet>
+                        <ris:sachgebiet domainTerm="Sachgebiet" sachgebiet-id="TT">Testurlaub</ris:sachgebiet>
+                    </ris:sachgebiete>
+                    <ris:rechtskraft domainTerm="Rechtskraft">Keine Angabe</ris:rechtskraft>
                 </ris:meta>
             </akn:proprietary>
         </akn:meta>

@@ -7,6 +7,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 
 /** Utility methods for rendering Pebble XML templates in tests. */
 public final class PebbleTemplateTestUtils {
@@ -31,5 +32,22 @@ public final class PebbleTemplateTestUtils {
     Writer writer = new StringWriter();
     compiledTemplate.evaluate(writer, context);
     return writer.toString();
+  }
+
+  /**
+   * Renders a Pebble template from test resources with the provided context values, then validates
+   * the result before returning it.
+   *
+   * @param context template context variables, may be null.
+   * @param template template path relative to test resources.
+   * @param validator called with the rendered XML; expected to throw if it is invalid.
+   * @return rendered template content as a string.
+   * @throws IOException if the template cannot be loaded or rendered.
+   */
+  public static String getXmlFromTemplateWithValidation(
+      Map<String, Object> context, String template, Consumer<String> validator) throws IOException {
+    String xml = getXmlFromTemplate(context, template);
+    validator.accept(xml);
+    return xml;
   }
 }

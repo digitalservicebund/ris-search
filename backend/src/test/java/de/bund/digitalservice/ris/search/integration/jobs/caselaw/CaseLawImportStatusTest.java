@@ -8,6 +8,7 @@ import de.bund.digitalservice.ris.search.service.CaseLawIndexSyncJob;
 import de.bund.digitalservice.ris.search.service.IndexStatusService;
 import de.bund.digitalservice.ris.search.service.IndexingState;
 import de.bund.digitalservice.ris.search.utils.CaseLawLdmlTemplateUtils;
+import de.bund.digitalservice.ris.utils.CaseLawXmlValidator;
 import java.io.IOException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -38,7 +39,9 @@ class CaseLawImportStatusTest extends ContainersIntegrationBase {
     for (int i = 0; i < 5; i++) {
       try {
         caseLawBucket.save(
-            "caseLawTestLdml" + i + ".xml", caseLawLdmlTemplateUtils.getXmlFromTemplate(null));
+            "caseLawTestLdml" + i + ".xml",
+            caseLawLdmlTemplateUtils.getXmlFromTemplateWithValidation(
+                null, CaseLawXmlValidator.Type.DECISION));
       } catch (IOException e) {
         throw new RuntimeException(e);
       }
