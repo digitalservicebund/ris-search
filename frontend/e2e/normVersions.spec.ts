@@ -99,6 +99,35 @@ test.describe(
 
       await expect(versions).toHaveText(["Keine Ergebnisse gefunden"]);
     });
+
+    test("announces the number of Fassungen after filtering", async ({
+      page,
+    }) => {
+      await navigate(
+        page,
+        "/gesetze/eli/bund/bgbl-1/2020/s1126/2020-08-04/1/deu?view=versions",
+      );
+
+      // The tab holds a second status region, so match the element rather
+      // than the status role.
+      const announcement = page.locator("output[aria-live='polite']");
+      const dateFilter = page.getByRole("textbox", { name: "Gültig am" });
+
+      // Nothing to announce before the list changes
+      await expect(announcement).toHaveText("");
+
+      await dateFilter.fill("04.08.1536");
+
+      await expect(announcement).toHaveText("Keine Ergebnisse gefunden");
+
+      await dateFilter.fill("04.08.2020");
+
+      await expect(announcement).toHaveText("1 Fassung");
+
+      await dateFilter.fill("");
+
+      await expect(announcement).toHaveText("3 Fassungen");
+    });
   },
 );
 
