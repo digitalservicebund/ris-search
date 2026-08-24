@@ -57,31 +57,26 @@ class FrbrElementTest {
   }
 
   @Test
-  void getEntscheidungsdatumValuePrefersTheEntscheidungsdatumEvenWhenItIsNotFirst() {
+  void getEntscheidungsdatumValueReturnsTheSingleDatesValueRegardlessOfItsName() {
+    FrbrElement frbrElement =
+        FrbrElement.builder()
+            .frbrDates(List.of(date("datumDerZustellungAnVerkuendungsStatt", "2008-03-17")))
+            .build();
+
+    assertThat(frbrElement.getEntscheidungsdatumValue()).isEqualTo("2008-03-17");
+  }
+
+  @Test
+  void getEntscheidungsdatumValueReturnsTheFirstDateWhenMultipleArePresent() {
     FrbrElement frbrElement =
         FrbrElement.builder()
             .frbrDates(
-                List.of(date("Other date", "2024-05-10"), date("Entscheidungsdatum", "2024-05-01")))
+                List.of(
+                    date("Entscheidungsdatum", "2024-05-01"),
+                    date("mitteilungsdatum", "2024-05-10")))
             .build();
 
     assertThat(frbrElement.getEntscheidungsdatumValue()).isEqualTo("2024-05-01");
-  }
-
-  @Test
-  void getEntscheidungsdatumValueFallsBackToMitteilungsdatumWhenNoneIsNamedEntscheidungsdatum() {
-    FrbrElement frbrElement =
-        FrbrElement.builder().frbrDates(List.of(date("mitteilungsdatum", "2024-05-10"))).build();
-
-    assertThat(frbrElement.getEntscheidungsdatumValue()).isEqualTo("2024-05-10");
-  }
-
-  @Test
-  void
-      getEntscheidungsdatumValueReturnsNullWhenNeitherEntscheidungsdatumNorMitteilungsdatumIsPresent() {
-    FrbrElement frbrElement =
-        FrbrElement.builder().frbrDates(List.of(date("other date", "2024-05-10"))).build();
-
-    assertThat(frbrElement.getEntscheidungsdatumValue()).isNull();
   }
 
   @Test
@@ -89,6 +84,14 @@ class FrbrElementTest {
     FrbrElement frbrElement = FrbrElement.builder().build();
 
     assertThat(frbrElement.getEntscheidungsdatumValue()).isNull();
+  }
+
+  @Test
+  void getEntscheidungsdatumValueDoesNotFilterOutPlaceholderDates() {
+    FrbrElement frbrElement =
+        FrbrElement.builder().frbrDates(List.of(date("nicht-vorhanden", "0001-01-01"))).build();
+
+    assertThat(frbrElement.getEntscheidungsdatumValue()).isEqualTo("0001-01-01");
   }
 
   @Test
