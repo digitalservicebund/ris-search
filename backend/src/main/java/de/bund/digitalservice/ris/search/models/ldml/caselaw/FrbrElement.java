@@ -62,19 +62,17 @@ public class FrbrElement {
   }
 
   /**
-   * Returns the value of the FRBRdate named "Entscheidungsdatum", or, if none is present, the
-   * FRBRdate named "mitteilungsdatum" as an explicit fallback.
+   * Returns the value of this element's single FRBRdate, which represents the document's decision
+   * date regardless of its {@code name} attribute (e.g. "Entscheidungsdatum", "mitteilungsdatum",
+   * "datumDerZustellungAnVerkuendungsStatt").
    *
-   * @return the decision date value, or {@code null} if neither is present
+   * @return the decision date value, or {@code null} if no FRBRdate is present
    */
   public String getEntscheidungsdatumValue() {
-    if (frbrDates == null) {
+    if (frbrDates == null || frbrDates.isEmpty()) {
       return null;
     }
-    return findDateByName("Entscheidungsdatum")
-        .or(() -> findDateByName("mitteilungsdatum"))
-        .map(FrbrDate::getDate)
-        .orElse(null);
+    return frbrDates.get(0).getDate();
   }
 
   private Optional<FrbrDate> findDateByName(String name) {

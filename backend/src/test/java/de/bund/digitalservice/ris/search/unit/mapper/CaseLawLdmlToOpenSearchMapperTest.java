@@ -166,27 +166,32 @@ class CaseLawLdmlToOpenSearchMapperTest {
   }
 
   @Test
-  void decisionDateFallsBackToMitteilungsdatumWhenNoFrbrDateIsNamedEntscheidungsdatum()
-      throws IOException {
+  void decisionDateIsReadFromTheSingleFrbrDateRegardlessOfItsName() throws IOException {
     String xml =
         caseLawLdmlTemplateUtils
             .getXmlFromTemplateWithValidation(
                 Map.of("decisionDate", "2021-07-07"), CaseLawXmlValidator.Type.DECISION)
-            .replaceFirst("name=\"Entscheidungsdatum\"", "name=\"Other date\"");
+            .replaceFirst(
+                "name=\"Entscheidungsdatum\"", "name=\"datumDerZustellungAnVerkuendungsStatt\"");
 
     CaseLawDocumentationUnit caseLaw = mapper.fromString(xml);
 
-    assertThat(caseLaw.decisionDate()).isEqualTo(LocalDate.of(2020, Month.JANUARY, 1));
+    assertThat(caseLaw.decisionDate()).isEqualTo(LocalDate.of(2021, Month.JULY, 7));
   }
 
   @Test
-  void throwsWhenNeitherEntscheidungsdatumNorMitteilungsdatumIsPresent() {
-    String xmlWithoutAnyDecisionDate =
+  void throwsWhenNoFrbrDateIsPresentAtAll() {
+    String xmlWithoutAnyDate =
         testCaseLawLdml
-            .replaceFirst("name=\"Entscheidungsdatum\"", "name=\"Other date\"")
-            .replaceFirst("name=\"mitteilungsdatum\"", "name=\"Other date 2\"");
+            .replaceFirst(
+                "<akn:FRBRdate eId=\"entscheidungsdatum\" date=\"[^\"]*\" name=\"Entscheidungsdatum\"/>",
+                "")
+            .replaceFirst(
+                "<akn:FRBRdate eId=\"mitteilungsdatum\" date=\"[^\"]*\" name=\"mitteilungsdatum\""
+                    + " showAs=\"Mitteilungsdatum\"/>",
+                "");
 
-    assertThatThrownBy(() -> mapper.fromString(xmlWithoutAnyDecisionDate))
+    assertThatThrownBy(() -> mapper.fromString(xmlWithoutAnyDate))
         .isInstanceOf(OpenSearchMapperException.class)
         .cause()
         .hasMessageContaining("Decision date missing");
