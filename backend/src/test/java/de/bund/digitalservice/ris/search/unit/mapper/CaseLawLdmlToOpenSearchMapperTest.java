@@ -1,7 +1,9 @@
 package de.bund.digitalservice.ris.search.unit.mapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import de.bund.digitalservice.ris.search.exception.OpenSearchMapperException;
 import de.bund.digitalservice.ris.search.mapper.CaseLawLdmlToOpenSearchMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.utils.CaseLawLdmlTemplateUtils;
@@ -161,5 +163,32 @@ class CaseLawLdmlToOpenSearchMapperTest {
 
     CaseLawDocumentationUnit caseLaw = mapper.fromString(caselawXml);
     assertThat(caseLaw.vorabdokument()).isTrue();
+  }
+
+  @Test
+  void decisionDateFallsBackToMitteilungsdatumWhenNoFrbrDateIsNamedEntscheidungsdatum()
+      throws IOException {
+    String xml =
+        caseLawLdmlTemplateUtils
+            .getXmlFromTemplateWithValidation(
+                Map.of("decisionDate", "2021-07-07"), CaseLawXmlValidator.Type.DECISION)
+            .replaceFirst("name=\"Entscheidungsdatum\"", "name=\"Other date\"");
+
+    CaseLawDocumentationUnit caseLaw = mapper.fromString(xml);
+
+    assertThat(caseLaw.decisionDate()).isEqualTo(LocalDate.of(2020, Month.JANUARY, 1));
+  }
+
+  @Test
+  void throwsWhenNeitherEntscheidungsdatumNorMitteilungsdatumIsPresent() {
+    String xmlWithoutAnyDecisionDate =
+        testCaseLawLdml
+            .replaceFirst("name=\"Entscheidungsdatum\"", "name=\"Other date\"")
+            .replaceFirst("name=\"mitteilungsdatum\"", "name=\"Other date 2\"");
+
+    assertThatThrownBy(() -> mapper.fromString(xmlWithoutAnyDecisionDate))
+        .isInstanceOf(OpenSearchMapperException.class)
+        .cause()
+        .hasMessageContaining("Decision date missing");
   }
 }
