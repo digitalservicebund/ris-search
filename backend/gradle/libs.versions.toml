@@ -1,10 +1,10 @@
 [versions]
 # plugins
 jacoco = "0.8.15"
-spring-boot = "4.1.0"
-spring-boot-starter = "4.1.0"
+spring-boot = "4.1.1"
+spring-boot-starter = "4.1.1"
 spring-dependency-management = "1.1.7"
-spotless = "8.9.0"
+spotless = "8.10.0"
 sonarqube = "7.4.0.8496"
 license-report = "3.1.4"
 test-logger = "4.0.0"
@@ -12,15 +12,15 @@ node-gradle = "7.1.0"
 # libraries
 jts = "1.20.0"
 test-containers = "1.21.4"
-spring-cloud-k8s = "5.0.2"
+spring-cloud-k8s = "5.0.3"
 springdoc-openapi = "3.1.0"
-prometheus = "1.17.0"
+prometheus = "1.17.1"
 sentry = "8.53.0"
 commons-text = "1.15.0"
 junit5 = "1.5.0"
 mockito = "5.23.0"
 spring-security = "6.5.2"
-spring-security-test = "7.1.0"
+spring-security-test = "7.1.1"
 spring-data-opensearch = "3.1.1"
 opensearch-test-autoconfigure = "2.0.3"
 opensearch-test-containers = "4.1.0"
@@ -74,7 +74,7 @@ streamex = { module = 'one.util:streamex', version.ref = "streamex" }
 restassured = { module = 'io.rest-assured:rest-assured', version.ref = "rest-assured" }
 
 # CVE-2026-54515
-jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version = "2.22.1" }
+jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version = "2.22.2" }
 
 # CVE-2026-5588
 bouncycastle-bom = { module = "org.bouncycastle:bc-jdk18on-bom", version = "1.85.2" }
