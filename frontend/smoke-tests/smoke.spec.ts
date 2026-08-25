@@ -146,6 +146,36 @@ test.describe("find and display literature", () => {
   });
 });
 
+test.describe("serve document sitemaps", () => {
+  test("verify sitemap index referenced in robots.txt is reachable", async ({
+    request,
+  }) => {
+    const response = await request.get("/robots.txt");
+
+    expect(response.ok()).toBeTruthy();
+    const body = await response.text();
+
+    const sitemapReference = body
+      .split("\n")
+      .map((line) => line.trim())
+      .find((line) => line.toLowerCase().startsWith("sitemap:"));
+
+    const sitemapPath = sitemapReference
+      ? sitemapReference.slice(sitemapReference.lastIndexOf("/"))
+      : null;
+
+    expect(sitemapPath).not.toBeNull();
+
+    const sitemapIndexResponse = await request.get(sitemapPath!);
+    expect(sitemapIndexResponse.ok()).toBeTruthy();
+
+    const sitemapIndexContent = await sitemapIndexResponse.text();
+    expect(sitemapIndexContent).toContain(
+      "http://www.sitemaps.org/schemas/sitemap/0.9",
+    );
+  });
+});
+
 test.describe("serve ecli sitemaps", () => {
   test("verify correct robots.txt is served for user-agent", async ({
     request,

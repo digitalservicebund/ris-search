@@ -2,7 +2,6 @@ import tailwindcss from "@tailwindcss/vite";
 import { defineNuxtConfig } from "nuxt/config";
 import { appHead } from "./config/appHead";
 import { icons } from "./config/icons";
-import { routeRules } from "./config/routeRules";
 import { runtimeConfig } from "./config/runtimeConfig";
 import { security } from "./config/security";
 import { sentry } from "./config/sentry";
@@ -39,8 +38,7 @@ export default defineNuxtConfig({
     "**/**/*.{spec,test}.data.ts",
   ],
 
-  // Routing & runtime
-  routeRules,
+  // runtime
   runtimeConfig,
 
   // Build
