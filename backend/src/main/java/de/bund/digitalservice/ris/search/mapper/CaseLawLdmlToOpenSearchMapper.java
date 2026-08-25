@@ -155,7 +155,6 @@ public class CaseLawLdmlToOpenSearchMapper {
         .normenkette(extractNormenkette(meta))
         // Internal (portal team) fields
         .indexedAt(Instant.now().toString())
-        .articles(null)
         .vorabdokument(isVorabdokument(judgmentBody))
         .build();
   }

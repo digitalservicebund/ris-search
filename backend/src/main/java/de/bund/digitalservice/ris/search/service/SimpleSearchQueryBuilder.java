@@ -9,7 +9,6 @@ import de.bund.digitalservice.ris.search.utils.RisHighlightBuilder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
@@ -58,7 +57,10 @@ public class SimpleSearchQueryBuilder {
     ParsedSearchTerm parsedSearchTerm = searchTermParser.parse(params.getSearchTerm());
     if (StringUtils.isNotEmpty(parsedSearchTerm.original())) {
       applyMustLogic(
-          parsedSearchTerm.unquotedTokens(), parsedSearchTerm.quotedSearchPhrases(), boolQuery);
+          searchTypes,
+          parsedSearchTerm.unquotedTokens(),
+          parsedSearchTerm.quotedSearchPhrases(),
+          boolQuery);
       applyShouldLogic(parsedSearchTerm.original(), boolQuery);
     }
     // handle date
@@ -101,29 +103,11 @@ public class SimpleSearchQueryBuilder {
     return result;
   }
 
-  public static final Map<String, Float> caseLawFieldBoosts =
-      Map.of(
-          CaseLawDocumentationUnit.Fields.GUIDING_PRINCIPLE, convertOrderingToBoost(2),
-          CaseLawDocumentationUnit.Fields.HEADLINE, convertOrderingToBoost(3),
-          CaseLawDocumentationUnit.Fields.OTHER_HEADNOTE, convertOrderingToBoost(3),
-          CaseLawDocumentationUnit.Fields.TENOR, convertOrderingToBoost(3),
-          CaseLawDocumentationUnit.Fields.DECISION_GROUNDS, convertOrderingToBoost(4),
-          CaseLawDocumentationUnit.Fields.GROUNDS, convertOrderingToBoost(4),
-          CaseLawDocumentationUnit.Fields.CASE_FACTS, convertOrderingToBoost(5),
-          CaseLawDocumentationUnit.Fields.OTHER_LONG_TEXT, convertOrderingToBoost(6),
-          CaseLawDocumentationUnit.Fields.DISSENTING_OPINION, convertOrderingToBoost(7));
-
-  public static final Map<String, Float> normFieldBoosts =
-      Map.of(
-          Norm.Fields.OFFICIAL_ABBREVIATION, convertOrderingToBoost(1),
-          Norm.Fields.OFFICIAL_SHORT_TITLE, convertOrderingToBoost(1),
-          Norm.Fields.OFFICIAL_TITLE, convertOrderingToBoost(1),
-          Norm.Fields.PREAMBLE_FORMULA, convertOrderingToBoost(2),
-          Norm.Fields.ARTICLE_NAMES, convertOrderingToBoost(2),
-          Norm.Fields.ARTICLE_TEXTS, convertOrderingToBoost(2));
-
   private void applyMustLogic(
-      List<String> unquotedSearchTokens, List<String> quotedSearchPhrases, BoolQueryBuilder query) {
+      List<SimpleSearchType> searchTypes,
+      List<String> unquotedSearchTokens,
+      List<String> quotedSearchPhrases,
+      BoolQueryBuilder query) {
     // Our filtering logic is that all unquotedSearchTokens and all quotedSearchPhrases occur in at
     // least one (not necessarily the same) field. This is the so called "AND" logic.
     // The entirety of our filtering logic is in this method. The QueryBuilder classes only hold
@@ -135,12 +119,12 @@ public class SimpleSearchQueryBuilder {
     // In addition, to filtering the must clauses are responsible for ranking and boosting
 
     for (String term : unquotedSearchTokens) {
-      query.must(buildOneClause(term, false));
+      query.must(buildOneClause(searchTypes, term, false));
     }
 
     for (String phrase : quotedSearchPhrases) {
       // Quoted terms use opensearch phrase search
-      query.must(buildOneClause(phrase, true));
+      query.must(buildOneClause(searchTypes, phrase, true));
     }
   }
 
@@ -160,17 +144,18 @@ public class SimpleSearchQueryBuilder {
             .boost(10.0f));
   }
 
-  private MultiMatchQueryBuilder buildOneClause(String searchedText, boolean phraseMatch) {
+  private MultiMatchQueryBuilder buildOneClause(
+      List<SimpleSearchType> searchTypes, String searchedText, boolean phraseMatch) {
     // Use a Multi-Match query to search across multiple fields.
     // ZeroTermsQuery.ALL ensures that if the analyzer removes all terms (e.g., stop words),
     // the query still matches all documents instead of returning an empty result set.
     MultiMatchQueryBuilder result =
         new MultiMatchQueryBuilder(searchedText)
             .zeroTermsQuery(MatchQuery.ZeroTermsQuery.ALL)
-            .operator(Operator.AND)
-            .field("*", 1.0f)
-            .fields(caseLawFieldBoosts)
-            .fields(normFieldBoosts);
+            .operator(Operator.AND);
+    for (SimpleSearchType searchType : searchTypes) {
+      result.fields(searchType.getBoosts());
+    }
     if (phraseMatch) {
       result.type(MultiMatchQueryBuilder.Type.PHRASE);
     } else {
