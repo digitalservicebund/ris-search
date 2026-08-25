@@ -1,5 +1,6 @@
 package de.bund.digitalservice.ris.search.service;
 
+import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.models.DocumentKind;
 import de.bund.digitalservice.ris.search.models.sitemap.SitemapFile;
 import de.bund.digitalservice.ris.search.models.sitemap.SitemapIndex;
@@ -14,19 +15,57 @@ import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.util.List;
 import java.util.stream.IntStream;
-import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.Strings;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 /** Service for generating sitemaps. */
 @Service
-@RequiredArgsConstructor
 public class SitemapService {
-  @Value("${server.front-end-url}")
-  private String baseUrl;
+  private final String baseUrl;
 
-  private static final String SITEMAP_PREFIX = "sitemaps/";
+  /**
+   * Service for generating sitemaps.
+   *
+   * @param portalBucket PortalBucket
+   * @param baseUrl baseUrl of frontend application to reference changed sites
+   */
+  public SitemapService(
+      PortalBucket portalBucket, @Value("${server.front-end-url}") String baseUrl) {
+    this.portalBucket = portalBucket;
+    // remove trailing / to cleanly concatenate with api paths
+    this.baseUrl = Strings.CS.removeEnd(baseUrl, "/");
+  }
+
+  private static final String PORTAL_BUCKET_SITEMAP_PREFIX = "sitemaps/";
   public final PortalBucket portalBucket;
+
+  private String getControllerPath(DocumentKind type) {
+    return switch (type) {
+      case LEGISLATION -> ApiConfig.Paths.LEGISLATION_SITEMAPS;
+      case ADMINISTRATIVE_DIRECTIVE -> ApiConfig.Paths.ADMINISTRATIVE_DIRECTIVE_SITEMAPS;
+      case LITERATURE -> ApiConfig.Paths.LITERATURE_SITEMAPS;
+      case CASE_LAW -> ApiConfig.Paths.CASELAW_SITEMAPS;
+    };
+  }
+
+  private String getFrontendPath(DocumentKind type) {
+    return switch (type) {
+      case LEGISLATION -> "gesetze";
+      case ADMINISTRATIVE_DIRECTIVE -> "verwaltungsregelungen";
+      case LITERATURE -> "literaturnachweise";
+      case CASE_LAW -> "gerichtsentscheidungen";
+    };
+  }
+
+  private String getS3Path(DocumentKind type) {
+    return switch (type) {
+      case LEGISLATION -> "norms";
+      case ADMINISTRATIVE_DIRECTIVE -> "administrative-directive";
+      case LITERATURE -> "literature";
+      case CASE_LAW -> "case-law";
+    };
+  }
 
   /**
    * Returns the path of a sitemap file for a given batch number
@@ -35,8 +74,8 @@ public class SitemapService {
    * @param type the type of sitemap currently being generated
    * @return sitemap file path
    */
-  public String getBatchSitemapPath(int batchNumber, DocumentKind type) {
-    return SITEMAP_PREFIX + String.format("%s/%d.xml", type.getSiteMapPath(), batchNumber);
+  public String getBatchSitemapS3Path(int batchNumber, DocumentKind type) {
+    return PORTAL_BUCKET_SITEMAP_PREFIX + String.format("%s/%d.xml", getS3Path(type), batchNumber);
   }
 
   /**
@@ -49,8 +88,8 @@ public class SitemapService {
    */
   public void createBatchSitemap(
       int batchNumber, List<String> ids, DocumentKind docKind, String prefix) {
-    String path = getBatchSitemapPath(batchNumber, docKind);
-    portalBucket.save(path, generateSitemap(ids, prefix));
+    String path = getBatchSitemapS3Path(batchNumber, docKind);
+    portalBucket.save(path, generateSitemap(ids, docKind));
   }
 
   /**
@@ -60,7 +99,7 @@ public class SitemapService {
    * @return sitemap index file path
    */
   public String getIndexSitemapPath(DocumentKind type) {
-    return SITEMAP_PREFIX + String.format("%s/index.xml", type.getSiteMapPath());
+    return PORTAL_BUCKET_SITEMAP_PREFIX + String.format("%s/index.xml", getS3Path(type));
   }
 
   /**
@@ -80,7 +119,7 @@ public class SitemapService {
    * @param beforeDateTime date before which sitemap files should be deleted
    */
   public void deleteSitemapFiles(Instant beforeDateTime) {
-    portalBucket.getAllKeyInfosByPrefix(SITEMAP_PREFIX).stream()
+    portalBucket.getAllKeyInfosByPrefix(PORTAL_BUCKET_SITEMAP_PREFIX).stream()
         .filter(info -> info.lastModified().isBefore(beforeDateTime))
         .forEach(info -> portalBucket.delete(info.key()));
   }
@@ -89,13 +128,13 @@ public class SitemapService {
    * Deletes sitemap files older than the given date
    *
    * @param documentationUnitIds the list of ids to put in the sitemap file
-   * @param prefix the sitemap file prefix
+   * @param documentKind the DocumentKind the sitemap is generated for
    * @return sitemap xml content
    */
-  public String generateSitemap(List<String> documentationUnitIds, String prefix) {
+  public String generateSitemap(List<String> documentationUnitIds, DocumentKind documentKind) {
     List<Url> urls =
         documentationUnitIds.stream()
-            .map(e -> new Url(String.format("%s%s/%s", baseUrl, prefix, e)))
+            .map(e -> new Url(String.format("%s/%s/%s", baseUrl, getFrontendPath(documentKind), e)))
             .toList();
     return marshal(new SitemapFile(urls));
   }
@@ -111,9 +150,9 @@ public class SitemapService {
     List<Url> urls =
         IntStream.rangeClosed(1, size)
             .mapToObj(
-                e ->
+                batch ->
                     new Url(
-                        String.format("%sv1/%s", baseUrl, getBatchSitemapPath(e, type)),
+                        String.format("%s%s/%s.xml", baseUrl, getControllerPath(type), batch),
                         LocalDate.now(ZoneOffset.UTC)))
             .toList();
     return marshal(new SitemapIndex(urls));
