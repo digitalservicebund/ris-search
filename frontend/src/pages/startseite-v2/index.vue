@@ -32,7 +32,7 @@ useSeo({
       >
         <div class="col-span-12 md:col-span-8 2xl:col-span-6 2xl:col-start-2">
           <h1
-            class="typo-headline1-bold mb-8 wrap-break-word hyphens-auto md:mb-16 2xl:mb-24"
+            class="typo-headline1-bold mb-8 text-balance wrap-break-word hyphens-auto md:mb-16 2xl:mb-24"
           >
             Rechtsinformationen des Bundes
           </h1>
@@ -106,6 +106,6 @@ useSeo({
 @reference "~/assets/main.css";
 
 .document-link-card {
-  @apply typo-body-bold 2xl:ris-subhead-bold hover:bg-blue-500 flex cursor-pointer flex-row items-center bg-blue-300 p-16 wrap-break-word hyphens-auto text-blue-800 -outline-offset-4 outline-blue-800 focus-visible:shadow-[0px_0px_0px_4px_white] focus-visible:outline-4 md:h-128 md:flex-col md:items-start;
+  @apply typo-body-bold 2xl:ris-subhead-bold flex cursor-pointer flex-row items-center bg-blue-300 p-16 wrap-break-word hyphens-auto text-blue-800 -outline-offset-4 outline-blue-800 hover:bg-blue-500 focus-visible:shadow-[0px_0px_0px_4px_white] focus-visible:outline-4 md:h-128 md:flex-col md:items-start;
 }
 </style>
