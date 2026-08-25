@@ -20,6 +20,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/rechtsprechung/{documentNumber}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Judgment metadata (Metadaten eines Rechtsrechungsdokuments)
+         * @description The endpoint returns a single judgment (Rechtsrechungsdokument) from our database.
+         */
+        get: operations["getCaseLaw"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/literature": {
         parameters: {
             query?: never;
@@ -473,7 +493,7 @@ export interface paths {
          * Decision metadata
          * @description The endpoint returns a single decision from our database.
          */
-        get: operations["getCaseLaw"];
+        get: operations["getCaseLaw_1"];
         put?: never;
         post?: never;
         delete?: never;
@@ -752,6 +772,226 @@ export interface components {
             /** Format: int64 */
             count: number;
         };
+        DocumentEncodingSchema: {
+            /** @example MediaObject */
+            "@type"?: string;
+            "@id": string;
+            contentUrl: string;
+            /** @example text/html */
+            encodingFormat: string;
+            /** @example de */
+            inLanguage: string;
+        };
+        RechtsprechungSchema: {
+            /** @example Rechtsprechung */
+            "@type"?: string;
+            /** @example KARE000000000 */
+            dokumentNummer: string;
+            /**
+             * @description European Case Law Identifier
+             * @example ECLI:DE:FGRLP:1969:0905.IV85.68.0A
+             */
+            ecli: string;
+            /** @description CELEX-Nummer */
+            celex?: string;
+            /** @description Tatbestand */
+            tatbestand?: string;
+            /** @description Entscheidungsgründe */
+            entscheidungsgruende?: string;
+            /** @description Abweichende Meinung */
+            abweichendeMeinung?: string;
+            /** @description Gründe */
+            gruende?: string;
+            /** @description Leitsatz */
+            leitsatz?: string;
+            /** @description Kurztitel */
+            kurztitel?: string;
+            /** @description Titelzeile */
+            titelzeile?: string;
+            /** @description Orientierungssatz */
+            orientierungssatz?: string;
+            /** @description Sonstiger Orientierungssatz */
+            sonstigerOrientierungssatz?: string;
+            /** @description Sonstiger Langtext */
+            sonstigerLangtext?: string;
+            /** @description Rechtsfrage (gesamt) */
+            rechtsfrageGesamt?: string;
+            /** @description Rechtsfrage */
+            rechtsfrage?: string;
+            /** @description Tenor */
+            tenor?: string;
+            /**
+             * Format: date
+             * @description Datum
+             */
+            datum: string;
+            /** @description Abweichende Daten */
+            abweichendeDaten?: string[];
+            /** @description Gliederung */
+            gliederung?: string;
+            /** @description Aktenzeichen */
+            aktenzeichen?: string;
+            /**
+             * @description Aktenzeichenliste
+             * @example BGH 123/23
+             */
+            aktenzeichenListe: string[];
+            /**
+             * @description Abweichende Aktenzeichen
+             * @example 1
+             */
+            abweichendeAktenzeichen?: string[];
+            /** @description Abweichende ECLIs */
+            abweichendeEclis?: string[];
+            /** @description Berufsbilder */
+            berufsbilder?: string[];
+            /** @description Kündigungsarten */
+            kuendigungsarten?: string[];
+            /** @description Herkunftsländer */
+            herkunftslaender?: string[];
+            /** @description Regionen */
+            regionen?: string[];
+            /** @description Tarifverträge */
+            tarifvertraege?: string[];
+            /** @description Kündigungsgründe */
+            kuendigungsgruende?: string[];
+            /** @description Mitwirkende Richter */
+            mitwirkendeRichter?: string[];
+            /** @description Vorgehende Entscheidungen */
+            vorgehendeEntscheidungen?: string[];
+            /** @description Nachgehende Entscheidungen */
+            nachgehendeEntscheidungen?: string[];
+            /** @description Aktivzitierung Literatur Unselbstständig */
+            aktivzitierungLiteraturUnselbstaendig?: string[];
+            /** @description Passivzitierung Literatur Unselbstständig */
+            passivzitierungLiteraturUnselbstaendig?: string[];
+            /** @description Aktivzitierung Literatur Selbstständig */
+            aktivzitierungLiteraturSelbstaendig?: string[];
+            /** @description Passivzitierung Literatur Selbstständig */
+            passivzitierungLiteraturSelbstaendig?: string[];
+            /** @description Aktivzitierung Rechtsprechung */
+            aktivzitierungRechtsprechung?: string[];
+            /** @description Passivzitierung Rechtsprechung */
+            passivzitierungRechtsprechung?: string[];
+            /** @description Aktivzitierung Verwaltungsvorschriften */
+            aktivzitierungVerwaltungsvorschriften?: string[];
+            /** @description Passivzitierung Verwaltungsvorschriften */
+            passivzitierungVerwaltungsvorschriften?: string[];
+            /**
+             * @description Amtliche Fundstellen
+             * @example BGHSt 67, 273-284
+             */
+            amtlicheFundstellen?: string[];
+            /**
+             * @description Nichtamtliche Fundstellen
+             * @example DStR 2023, 1430-1435
+             */
+            nichtamtlicheFundstellen?: string[];
+            /**
+             * @description Gesetzeskraft
+             * @example vereinbar mit höherrangigem Recht (Bremen)
+             */
+            gesetzeskraft?: string[];
+            /**
+             * @description Normenkette
+             * @example BGB § 823
+             */
+            normenkette?: string[];
+            /** @description Sachgebiete */
+            sachgebiete?: string[];
+            /** @description Streitjahre */
+            streitjahre?: string[];
+            /** @description Fehlerhafte Gerichte */
+            fehlerhafteGerichte?: string[];
+            /** @description Daten der mündlichen Verhandlung */
+            datenDerMuendlichenVerhandlung?: string[];
+            /** @description Definitionen */
+            definitionen?: string[];
+            /**
+             * @description Erledigung
+             * @example Ja
+             */
+            erledigung?: string;
+            /**
+             * @description Rechtskraft
+             * @example Ja
+             */
+            rechtskraft?: string;
+            /**
+             * @description Gesetzgebungsauftrag
+             * @example Ja
+             */
+            gesetzgebungsauftrag?: string;
+            /**
+             * Format: date
+             * @description Langtextdatum
+             */
+            langtextdatum?: string;
+            /** @description Rechtsmittelführer */
+            rechtsmittelfuehrer?: string;
+            /** @description Rechtsmittelzulassung */
+            rechtsmittelzulassung?: string;
+            /**
+             * @description Revision
+             * @example Ja
+             */
+            revision?: string;
+            /**
+             * Format: date
+             * @description Letzte Veröffentlichung
+             */
+            letzteVeroeffentlichung?: string;
+            /** @description Erledigungsvermerk */
+            erledigungsvermerk?: string;
+            /**
+             * Format: date
+             * @description Erstveröffentlichung
+             */
+            erstveroeffentlichung?: string;
+            /**
+             * Format: date
+             * @description Mitteilungsdatum
+             */
+            mitteilungsdatum?: string;
+            /**
+             * @description Gericht
+             * @example FG Berlin
+             */
+            gericht?: string;
+            /** @description Gerichtsbarkeit */
+            gerichtsbarkeit?: string;
+            /** @example Urteil */
+            dokumenttyp?: string;
+            /**
+             * @description Spruchkörper
+             * @example Gericht
+             */
+            spruchkoerper?: string;
+            /**
+             * @description Schlagworte
+             * @example 3. Kammer
+             */
+            schlagwoerter: string[];
+            /** @example LArbG Hamm */
+            courtName?: string;
+            /**
+             * @description Entscheidungsnamen
+             * @example Beispielentscheidung
+             */
+            entscheidungsnamen: string[];
+            /**
+             * @description Abweichende Dokumentnummer
+             * @example DEV-123
+             */
+            abweichendeDokumentnummern: string[];
+            /** @example /v1/case-law/ECLI:DE:FGRLP:1969:0905.IV85.68.0A */
+            "@id": string;
+            /** @example de */
+            inLanguage: string;
+            encoding: components["schemas"]["DocumentEncodingSchema"][];
+            /** @description Whether or not the document is a Vorabdokument */
+            vorabdokument: boolean;
+        };
         CollectionSchemaSearchMemberSchemaLiteratureSearchSchema: {
             /** @example hydra:Collection */
             "@type"?: string;
@@ -764,16 +1004,6 @@ export interface components {
             totalItems: number;
             member: components["schemas"]["SearchMemberSchemaLiteratureSearchSchema"][];
             view: components["schemas"]["PartialCollectionViewSchema"];
-        };
-        DocumentEncodingSchema: {
-            /** @example MediaObject */
-            "@type"?: string;
-            "@id": string;
-            contentUrl: string;
-            /** @example text/html */
-            encodingFormat: string;
-            /** @example de */
-            inLanguage: string;
         };
         LiteratureSearchSchema: {
             "@type": "LiteratureSearchSchema";
@@ -1503,6 +1733,36 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["StatisticsApiSchema"];
                 };
+            };
+        };
+    };
+    getCaseLaw: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @example STRE201770751 */
+                documentNumber: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RechtsprechungSchema"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };
@@ -2450,7 +2710,7 @@ export interface operations {
             };
         };
     };
-    getCaseLaw: {
+    getCaseLaw_1: {
         parameters: {
             query?: never;
             header?: never;

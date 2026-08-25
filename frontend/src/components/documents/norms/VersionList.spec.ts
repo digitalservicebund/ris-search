@@ -177,4 +177,36 @@ describe("VersionList", () => {
     expect(screen.getByText("Keine Ergebnisse gefunden")).toBeInTheDocument();
     expect(screen.queryAllByRole("link")).toHaveLength(0);
   });
+
+  it("does not announce anything before the versions change", async () => {
+    await renderSuspended(VersionList, { props: props() });
+
+    expect(screen.getByRole("status")).toHaveTextContent("");
+  });
+
+  it("announces when the versions change to none", async () => {
+    const { rerender } = await renderSuspended(VersionList, {
+      props: props(),
+    });
+
+    await rerender(props([]));
+
+    expect(screen.getByRole("status")).toHaveTextContent(
+      "Keine Ergebnisse gefunden",
+    );
+  });
+
+  it("announces how many versions there are once there are some again", async () => {
+    const { rerender } = await renderSuspended(VersionList, {
+      props: props([]),
+    });
+
+    await rerender(props([data.member![0]!]));
+
+    expect(screen.getByRole("status")).toHaveTextContent("1 Fassung");
+
+    await rerender(props());
+
+    expect(screen.getByRole("status")).toHaveTextContent("3 Fassungen");
+  });
 });

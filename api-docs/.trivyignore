@@ -1,0 +1,4 @@
+# path-traversal vulnerability in Vite dev server on Windows.
+# Ignore since our Vite version doesn't have a fix, and we don't
+# use the dev server in production.
+CVE-2026-53571

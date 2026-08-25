@@ -3,6 +3,7 @@ package de.bund.digitalservice.ris.search.integration.controller.api.testData;
 import de.bund.digitalservice.ris.PebbleTemplateTestUtils;
 import de.bund.digitalservice.ris.SharedTestConstants;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
+import de.bund.digitalservice.ris.utils.CaseLawXmlValidator;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Month;
@@ -54,6 +55,46 @@ public class CaseLawTestData {
             .deviatingDocumentNumber(List.of("deviatingDocumentNumbers"))
             .documentationOffice("DS")
             .legalEffect("JA")
+            .celex("celexTest")
+            .gerichtsbarkeit("gerichtsbarkeitTest")
+            .berufsbilder(List.of("berufsbilderTest"))
+            .kuendigungsarten(List.of("kuendigungsartenTest"))
+            .herkunftslaender(List.of("herkunftslaenderTest"))
+            .regionen(List.of("regionenTest"))
+            .tarifvertraege(List.of("tarifvertraegeTest"))
+            .kuendigungsgruende(List.of("kuendigungsgruendeTest"))
+            .mitwirkendeRichter(List.of("mitwirkendeRichterTest"))
+            .sachgebiete(List.of("sachgebieteTest"))
+            .streitjahre(List.of("streitjahreTest"))
+            .fehlerhafteGerichte(List.of("fehlerhafteGerichteTest"))
+            .definitionen(List.of("definitionenTest"))
+            .erledigung("erledigungTest")
+            .erledigungsvermerk("erledigungsvermerkTest")
+            .rechtsfrage("rechtsfrageTest")
+            .rechtsfrageGesamt("rechtsfrageGesamtTest")
+            .previousDecisions(List.of("previousDecisionsTest"))
+            .ensuingDecisions(List.of("ensuingDecisionsTest"))
+            .aktivzitierungRechtsprechung(List.of("aktivzitierungRechtsprechungTest"))
+            .passivzitierungRechtsprechung(List.of("passivzitierungRechtsprechungTest"))
+            .aktivzitierungVerwaltungsvorschriften(
+                List.of("aktivzitierungVerwaltungsvorschriftenTest"))
+            .passivzitierungVerwaltungsvorschriften(
+                List.of("passivzitierungVerwaltungsvorschriftenTest"))
+            .amtlicheFundstellen(List.of("amtlicheFundstellenTest"))
+            .nichtamtlicheFundstellen(List.of("nichtamtlicheFundstellenTest"))
+            .normenkette(List.of("normenketteTest"))
+            .hasLegislativeMandate("hasLegislativeMandateTest")
+            .rechtsmittelfuehrer("rechtsmittelfuehrerTest")
+            .rechtsmittelzulassung("rechtsmittelzulassungTest")
+            .abweichendeEclis(List.of("abweichendeEclisTest"))
+            .abweichendeAktenzeichen(List.of("abweichendeAktenzeichenTest"))
+            .vorabdokument(true)
+            .letzteVeroeffentlichung(LocalDate.of(2024, Month.MAY, 8))
+            .datenDerMuendlichenVerhandlung(List.of(LocalDate.of(2024, Month.MAY, 6)))
+            .langtextdatum(LocalDate.of(2024, Month.MAY, 7))
+            .mitteilungsdatum(LocalDate.of(2024, Month.MAY, 10))
+            .erstveroeffentlichung(LocalDate.of(2024, Month.MAY, 9))
+            .abweichendeDaten(List.of(LocalDate.of(2024, Month.MAY, 5)))
             .build());
     allDocuments.add(
         CaseLawDocumentationUnit.builder()
@@ -177,6 +218,7 @@ public class CaseLawTestData {
     if (context == null) {
       context = new HashMap<>();
     }
-    return PebbleTemplateTestUtils.getXmlFromTemplate(context, CASE_LAW_LDML_TEMPLATE);
+    return PebbleTemplateTestUtils.getXmlFromTemplateWithValidation(
+        context, CASE_LAW_LDML_TEMPLATE, CaseLawXmlValidator.Type.DECISION);
   }
 }

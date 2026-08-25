@@ -16,7 +16,7 @@ jobs:
       pull-requests: write
       id-token: write
     steps:
-        - uses: chainguard-dev/actions/setup-gitsign@bed8050123fff65538e2db1902ff9404030c0221 #v1.6.31
+        - uses: chainguard-dev/actions/setup-gitsign@7bd1e94b2a1b7faa891392757de7d89489070c5c #v1.6.32
 
         - name: Bump chainguard/jre image
           uses: digitalservicebund/bump-chainguard-digest@5cef1778a56ae77fec46e2975f767a6a91049edf # v1.1.3
