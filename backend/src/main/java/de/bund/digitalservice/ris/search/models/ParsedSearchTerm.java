@@ -1,5 +1,6 @@
 package de.bund.digitalservice.ris.search.models;
 
+import de.bund.digitalservice.ris.search.exception.OpenSearchTermLimitExceeded;
 import java.util.List;
 
 /**
@@ -15,4 +16,24 @@ import java.util.List;
  *     quotation marks, preserving their original form.
  */
 public record ParsedSearchTerm(
-    String original, List<String> unquotedTokens, List<String> quotedSearchPhrases) {}
+    String original, List<String> unquotedTokens, List<String> quotedSearchPhrases) {
+
+  /**
+   * Compact constructor to check if the search term limit is reached
+   *
+   * @param original The original search term string as provided by the user.
+   * @param unquotedTokens A list of individual tokens derived from the search term, excluding any
+   *     quotes or quoted phrases.
+   * @param quotedSearchPhrases A list of phrases extracted from the search term that were enclosed
+   *     in quotation marks, preserving their original form.
+   * @throws de.bund.digitalservice.ris.search.exception.OpenSearchTermLimitExceeded when max search
+   *     term limit is exceeded
+   */
+  public ParsedSearchTerm {
+    int maxSearchTerms = 35;
+    int termCount = unquotedTokens.size() + quotedSearchPhrases.size();
+    if (termCount > maxSearchTerms) {
+      throw new OpenSearchTermLimitExceeded(termCount, maxSearchTerms);
+    }
+  }
+}

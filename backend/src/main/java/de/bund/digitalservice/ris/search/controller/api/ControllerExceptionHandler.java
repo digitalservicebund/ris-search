@@ -3,6 +3,7 @@ package de.bund.digitalservice.ris.search.controller.api;
 import de.bund.digitalservice.ris.search.exception.CustomValidationException;
 import de.bund.digitalservice.ris.search.exception.FileTransformationException;
 import de.bund.digitalservice.ris.search.exception.OpenSearchFetchException;
+import de.bund.digitalservice.ris.search.exception.OpenSearchTermLimitExceeded;
 import de.bund.digitalservice.ris.search.models.errors.CustomError;
 import de.bund.digitalservice.ris.search.models.errors.CustomErrorResponse;
 import de.bund.digitalservice.ris.search.service.exception.XMLElementNotFoundException;
@@ -431,7 +432,28 @@ public class ControllerExceptionHandler {
     logger.warn("Invalid parameter provided by api user : {}", ex.getMessage());
 
     CustomError error =
-        CustomError.builder().code("invalid_parameter").message("Invalid parameter").build();
+        CustomError.builder().code("invalid_parameter").message(ex.getMessage()).build();
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+  }
+
+  /**
+   * Handles exceptions of type {@link OpenSearchTermLimitExceeded} and returns a standardized error
+   * response with HTTP status 400 (Bad Request).
+   *
+   * @param ex the {@link OpenSearchTermLimitExceeded} containing the error
+   * @return a {@link ResponseEntity} containing a {@link CustomError} object with the error message
+   */
+  @ExceptionHandler(OpenSearchTermLimitExceeded.class)
+  public ResponseEntity<CustomErrorResponse> handleExceededSearchTermLimit(
+      OpenSearchTermLimitExceeded ex) {
+    CustomError error =
+        CustomError.builder()
+            .code("invalid_parameter")
+            .message(
+                "%s search terms exceeded the limit of %s"
+                    .formatted(ex.getActualTermCount(), ex.getLimit()))
+            .build();
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+        .body(CustomErrorResponse.builder().errors(List.of(error)).build());
   }
 }
