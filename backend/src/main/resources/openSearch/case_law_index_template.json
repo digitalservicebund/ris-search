@@ -205,22 +205,6 @@
           "type": "alias",
           "path": "deviating_document_number"
         },
-        "STATUS": {
-          "type": "alias",
-          "path": "publication_status"
-        },
-        "FEHLER": {
-          "type": "alias",
-          "path": "error"
-        },
-        "VORGANG": {
-          "type": "alias",
-          "path": "procedures"
-        },
-        "VG": {
-          "type": "alias",
-          "path": "procedures"
-        },
         "RECHTSKRAFT": {
           "type": "alias",
           "path": "legal_effect"
@@ -620,16 +604,7 @@
           "type": "text",
           "analyzer": "custom_german_analyzer"
         },
-        "publication_status": {
-          "type": "keyword"
-        },
-        "error": {
-          "type": "boolean"
-        },
         "documentation_office": {
-          "type": "keyword"
-        },
-        "procedures": {
           "type": "keyword"
         },
         "legal_effect": {
