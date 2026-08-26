@@ -75,19 +75,25 @@ public class CaseLawSimpleSearchType implements SimpleSearchType {
 
   public static final List<HighlightBuilder.Field> HIGHLIGHTED_FIELDS =
       List.of(
-          new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.HEADLINE).numOfFragments(0),
-          new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.GUIDING_PRINCIPLE),
-          new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.HEADNOTE),
-          new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.OTHER_HEADNOTE),
-          new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.OUTLINE),
-          new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.TENOR),
           new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.CASE_FACTS),
           new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.DECISION_GROUNDS),
-          new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.GROUNDS),
-          new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.OTHER_LONG_TEXT),
+          new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.DECISION_NAME),
+          new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.DEFINITIONEN),
           new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.DISSENTING_OPINION),
           new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.ECLI).noMatchSize(0),
-          new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.FILE_NUMBERS).noMatchSize(0));
+          new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.ERLEDIGUNGSVERMERK),
+          new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.FILE_NUMBERS).noMatchSize(0),
+          new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.GROUNDS),
+          new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.GUIDING_PRINCIPLE),
+          new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.HEADLINE).numOfFragments(0),
+          new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.HEADNOTE),
+          new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.OTHER_HEADNOTE),
+          new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.OTHER_LONG_TEXT),
+          new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.OUTLINE),
+          new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.RECHTSFRAGE),
+          new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.RECHTSFRAGE_GESAMT),
+          new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.TENOR),
+          new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.TITLE_LINE));
 
   private final CaseLawSearchParams searchParams;
 
