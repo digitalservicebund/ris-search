@@ -73,7 +73,7 @@ class CaseLawSchemaMapperTest {
         .passivzitierungVerwaltungsvorschriften(List.of("KSNR006800006"))
         .amtlicheFundstellen(List.of("BGHSt 67, 273-284"))
         .nichtamtlicheFundstellen(List.of("DStR 2023, 1430-1435"))
-        .gesetzeskraft(List.of("vereinbar mit höherrangigem Recht (Bremen)"))
+        .gesetzeskraft(List.of("vereinbar mit höherrangigem Recht, Bremen"))
         .normenkette(List.of("BGB § 823"))
         .sachgebiete(List.of("fieldOfLaw test"))
         .streitjahre(List.of("2024"))
@@ -252,7 +252,7 @@ class CaseLawSchemaMapperTest {
     assertThat(rechtsprechungSchema.nichtamtlicheFundstellen())
         .containsExactly("DStR 2023, 1430-1435");
     assertThat(rechtsprechungSchema.gesetzeskraft())
-        .containsExactly("vereinbar mit höherrangigem Recht (Bremen)");
+        .containsExactly("vereinbar mit höherrangigem Recht, Bremen");
     assertThat(rechtsprechungSchema.normenkette()).containsExactly("BGB § 823");
   }
 

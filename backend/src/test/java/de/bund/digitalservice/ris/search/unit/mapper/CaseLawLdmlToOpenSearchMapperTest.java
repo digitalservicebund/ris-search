@@ -137,7 +137,7 @@ class CaseLawLdmlToOpenSearchMapperTest {
     assertThat(caseLaw.amtlicheFundstellen()).containsExactly("BGHSt 67, 273-284");
     assertThat(caseLaw.nichtamtlicheFundstellen()).containsExactly("DStR 2023, 1430-1435");
     assertThat(caseLaw.gesetzeskraft())
-        .containsExactly("vereinbar mit höherrangigem Recht (Bremen)");
+        .containsExactly("vereinbar mit höherrangigem Recht, Bremen");
     assertThat(caseLaw.normenkette())
         .containsExactly(
             "normReference test singleNorm test",

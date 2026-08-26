@@ -143,7 +143,7 @@ class RechtsprechungControllerTest extends ContainersIntegrationBase {
             jsonPath("$.passivzitierungVerwaltungsvorschriften[0]").value("KSNR006800006"),
             jsonPath("$.amtlicheFundstellen[0]").value("BGHSt 67, 273-284"),
             jsonPath("$.nichtamtlicheFundstellen[0]").value("DStR 2023, 1430-1435"),
-            jsonPath("$.gesetzeskraft[0]").value("vereinbar mit höherrangigem Recht (Bremen)"),
+            jsonPath("$.gesetzeskraft[0]").value("vereinbar mit höherrangigem Recht, Bremen"),
             jsonPath("$.normenkette[0]").value("normReference test singleNorm test"),
             jsonPath("$.normenkette[1]").value("normReference test singleNorm 2 test"),
             jsonPath("$.normenkette[2]").value("normReference without SingleNorms"),
