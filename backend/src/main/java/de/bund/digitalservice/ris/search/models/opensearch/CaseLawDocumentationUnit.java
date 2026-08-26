@@ -133,8 +133,11 @@ public record CaseLawDocumentationUnit(
     private Fields() {}
 
     public static final String ABWEICHENDE_AKTENZEICHEN = "abweichende_aktenzeichen";
+    public static final String ABWEICHENDE_AKTENZEICHEN_KEYWORD =
+        "abweichende_aktenzeichen.keyword";
     public static final String ABWEICHENDE_DATEN = "abweichende_daten";
     public static final String ABWEICHENDE_ECLIS = "abweichende_eclis";
+    public static final String ABWEICHENDE_ECLIS_KEYWORD = "abweichende_eclis.keyword";
     public static final String AKTIVZITIERUNG_LITERATUR_SELBSTAENDIG =
         "aktivzitierung_literatur_selbstaendig";
     public static final String AKTIVZITIERUNG_LITERATUR_UNSELBSTAENDIG =
@@ -146,6 +149,7 @@ public record CaseLawDocumentationUnit(
     public static final String BERUFSBILDER = "berufsbilder";
     public static final String CASE_FACTS = "case_facts";
     public static final String CELEX = "celex";
+    public static final String CELEX_KEYWORD = "celex.keyword";
     public static final String COURT_KEYWORD = "court_keyword";
     public static final String COURT_KEYWORD_KEYWORD = "court_keyword.keyword";
     public static final String COURT_TYPE = "court_type";
