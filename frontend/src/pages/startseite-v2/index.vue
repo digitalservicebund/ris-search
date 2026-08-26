@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import IcBaselineArrowForward from "~icons/ic/baseline-arrow-forward";
+import { NuxtLink } from "#components";
 import { DocumentKind } from "~/types/api";
 
 function redirectToSearch(searchStr?: string) {
@@ -121,6 +122,47 @@ useSeo({
           @update:model-value="(query) => redirectToSearch(query)"
           @empty-search="() => redirectToSearch()"
         />
+      </div>
+    </div>
+
+    <div class="border-t border-gray-400 bg-gray-100">
+      <div
+        class="content-wrapper content-grid gap-y-24 py-24 md:py-40 lg:py-48 2xl:py-56"
+      >
+        <div
+          class="col-span-12 flex flex-col items-start md:col-span-6 xl:col-span-5 xl:col-start-2"
+        >
+          <h2 class="typo-headline2-bold mb-8 wrap-break-word hyphens-auto">
+            Das Portal im Überblick
+          </h2>
+          <p class="typo-body-regular mb-16 md:mb-24">
+            Hier erfahren Sie, welche Features und Funktionen zur Verfügung
+            stehen, welchen Umfang die Daten haben und was die
+            Open-Data-Strategie ist.
+          </p>
+          <UiButton
+            class="w-full md:w-auto"
+            :as="NuxtLink"
+            :to="{ name: 'ueber' }"
+          >
+            Mehr Infos zum Portal
+          </UiButton>
+        </div>
+
+        <div
+          class="col-span-12 flex flex-col items-start md:col-span-6 xl:col-span-5"
+        >
+          <h2 class="typo-headline2-bold mb-8 wrap-break-word hyphens-auto">
+            Zahlen und Fakten
+          </h2>
+          <p class="typo-body-regular mb-16 md:mb-24">
+            Hier erfahren Sie, in welchem Umfang Rechtsinformationen der
+            Öffentlichkeit zur Verfügung stehen und wie diese Anwendung finden.
+          </p>
+          <UiButton class="w-full md:w-auto" disabled>
+            Zu den Zahlen und Fakten
+          </UiButton>
+        </div>
       </div>
     </div>
   </section>
