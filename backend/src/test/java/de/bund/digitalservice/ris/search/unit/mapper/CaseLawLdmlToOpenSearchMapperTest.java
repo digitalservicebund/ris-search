@@ -1,9 +1,7 @@
 package de.bund.digitalservice.ris.search.unit.mapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import de.bund.digitalservice.ris.search.exception.OpenSearchMapperException;
 import de.bund.digitalservice.ris.search.mapper.CaseLawLdmlToOpenSearchMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.utils.CaseLawLdmlTemplateUtils;
@@ -19,6 +17,7 @@ import org.junit.jupiter.api.Test;
 class CaseLawLdmlToOpenSearchMapperTest {
 
   private String testCaseLawLdml;
+  private String testCaseLawLdmlWithMissingDate;
   private final CaseLawLdmlTemplateUtils caseLawLdmlTemplateUtils = new CaseLawLdmlTemplateUtils();
   private final CaseLawLdmlToOpenSearchMapper mapper = new CaseLawLdmlToOpenSearchMapper();
 
@@ -27,6 +26,9 @@ class CaseLawLdmlToOpenSearchMapperTest {
     testCaseLawLdml =
         caseLawLdmlTemplateUtils.getXmlFromTemplateWithValidation(
             null, CaseLawXmlValidator.Type.DECISION);
+    testCaseLawLdmlWithMissingDate =
+        caseLawLdmlTemplateUtils.getXmlFromTemplateWithValidation(
+            Map.of("hideDecisionDate", true), CaseLawXmlValidator.Type.DECISION);
   }
 
   @Test
@@ -180,20 +182,8 @@ class CaseLawLdmlToOpenSearchMapperTest {
   }
 
   @Test
-  void throwsWhenNoFrbrDateIsPresentAtAll() {
-    String xmlWithoutAnyDate =
-        testCaseLawLdml
-            .replaceFirst(
-                "<akn:FRBRdate eId=\"entscheidungsdatum\" date=\"[^\"]*\" name=\"Entscheidungsdatum\"/>",
-                "")
-            .replaceFirst(
-                "<akn:FRBRdate eId=\"mitteilungsdatum\" date=\"[^\"]*\" name=\"mitteilungsdatum\""
-                    + " showAs=\"Mitteilungsdatum\"/>",
-                "");
-
-    assertThatThrownBy(() -> mapper.fromString(xmlWithoutAnyDate))
-        .isInstanceOf(OpenSearchMapperException.class)
-        .cause()
-        .hasMessageContaining("Decision date missing");
+  void decisionDateIsNullWhenNoFrbrDateIsPresentAtAll() {
+    CaseLawDocumentationUnit caseLaw = mapper.fromString(testCaseLawLdmlWithMissingDate);
+    assertThat(caseLaw.decisionDate()).isNull();
   }
 }

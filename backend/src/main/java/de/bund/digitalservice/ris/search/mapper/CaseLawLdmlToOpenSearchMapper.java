@@ -212,9 +212,6 @@ public class CaseLawLdmlToOpenSearchMapper {
     FrbrElement work = meta.getIdentification().getFrbrWork();
     validateNotNull(work.getFrbrThis(), "FrbrThis missing");
 
-    if (work.getEntscheidungsdatumValue() == null || work.getEntscheidungsdatumValue().isBlank()) {
-      throw new ValidationException("Decision date missing");
-    }
     validateNotNull(meta.getProprietary(), "Proprietary missing");
     validateNotNull(meta.getProprietary().getRisMeta(), "RisMeta missing");
     validate(!meta.getProprietary().getRisMeta().getAktenzeichen().isEmpty(), "FileNumber missing");
