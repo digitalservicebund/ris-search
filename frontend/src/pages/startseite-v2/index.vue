@@ -2,6 +2,10 @@
 import IcBaselineArrowForward from "~icons/ic/baseline-arrow-forward";
 import { DocumentKind } from "~/types/api";
 
+function redirectToSearch(searchStr?: string) {
+  navigateTo({ name: "suche", query: searchStr ? { query: searchStr } : {} });
+}
+
 definePageMeta({
   skipLinks: [
     { label: "Zum Inhalt", to: "#main" },
@@ -30,7 +34,7 @@ useSeo({
       <div
         class="content-wrapper content-grid pt-40 pb-56 md:pt-64 md:pb-96 2xl:pt-80 2xl:pb-112"
       >
-        <div class="col-span-12 md:col-span-8 2xl:col-span-6 2xl:col-start-2">
+        <div class="content-grid-textblock text-balance xl:col-start-2">
           <h1
             class="typo-headline1-bold mb-8 text-balance wrap-break-word hyphens-auto md:mb-16 2xl:mb-24"
           >
@@ -45,9 +49,9 @@ useSeo({
       </div>
     </div>
 
-    <nav class="content-wrapper content-grid mb-8 2xl:mb-16">
+    <nav class="content-wrapper content-grid pb-8 2xl:pb-16">
       <ul
-        class="lg-gap-x-24 col-span-12 -mt-24 flex flex-col gap-8 md:-mt-48 md:flex-row md:gap-x-16 2xl:col-span-10 2xl:col-start-2"
+        class="lg-gap-x-24 col-span-12 -mt-24 flex flex-col gap-8 md:-mt-48 md:flex-row md:gap-x-16 lg:gap-24 xl:col-span-10 xl:col-start-2"
       >
         <li class="flex-1">
           <NuxtLink
@@ -57,7 +61,7 @@ useSeo({
               query: { documentKind: DocumentKind.Norm },
             }"
           >
-            Gesetze und Verordnungen
+            Gesetze und Verordnungen <span class="sr-only">öffnen</span>
             <IcBaselineArrowForward class="mt-auto ml-auto" />
           </NuxtLink>
         </li>
@@ -69,7 +73,7 @@ useSeo({
               query: { documentKind: DocumentKind.CaseLaw },
             }"
           >
-            Gerichtsentscheidungen
+            Gerichtsentscheidungen <span class="sr-only">öffnen</span>
             <IcBaselineArrowForward class="mt-auto ml-auto" />
           </NuxtLink>
         </li>
@@ -81,7 +85,7 @@ useSeo({
               query: { documentKind: DocumentKind.AdministrativeDirective },
             }"
           >
-            Verwaltungsvorschriften
+            Verwaltungsvorschriften <span class="sr-only">öffnen</span>
             <IcBaselineArrowForward class="mt-auto ml-auto" />
           </NuxtLink>
         </li>
@@ -93,12 +97,32 @@ useSeo({
               query: { documentKind: DocumentKind.Literature },
             }"
           >
-            Literaturnachweise
+            Literaturnachweise <span class="sr-only">öffnen</span>
             <IcBaselineArrowForward class="mt-auto ml-auto" />
           </NuxtLink>
         </li>
       </ul>
     </nav>
+
+    <div class="content-wrapper content-grid py-24 md:py-40 lg:py-48 2xl:py-56">
+      <div class="content-grid-textblock xl:col-start-2">
+        <h2 class="typo-headline2-bold mb-8 wrap-break-word hyphens-auto">
+          Rechtsinformationen finden
+        </h2>
+        <p class="typo-body-regular mb-16 md:mb-24">
+          Nutzen Sie Stichwörter, Themen oder direkte Angaben wie Paragrafen,
+          Normen oder Aktenzeichen.
+        </p>
+
+        <SearchSimpleSearchInput
+          full-width
+          input-placeholder="z.B. Mietrecht, § 535 BGB, 1 BvR 123/20 …"
+          model-value=""
+          @update:model-value="(query) => redirectToSearch(query)"
+          @empty-search="() => redirectToSearch()"
+        />
+      </div>
+    </div>
   </section>
 </template>
 
