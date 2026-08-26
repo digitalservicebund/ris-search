@@ -137,10 +137,14 @@ public class CaseLawLdmlToOpenSearchMapper {
         .mitteilungsdatum(DateUtils.nullSafeParseyyyyMMdd(work.getMitteilungsdatumValue()))
         .previousDecisions(
             getLinkedJudgements(
-                meta, refs -> refs.getReferencesByType(ImplicitReference::getPrecedingJudgement)))
+                meta,
+                refs -> refs.getReferencesByType(ImplicitReference::getPrecedingJudgement),
+                LinkedJudgement::asString))
         .ensuingDecisions(
             getLinkedJudgements(
-                meta, refs -> refs.getReferencesByType(ImplicitReference::getEnsuingJudgement)))
+                meta,
+                refs -> refs.getReferencesByType(ImplicitReference::getEnsuingJudgement),
+                LinkedJudgement::getEnsuingDecisionFormatted))
         .aktivzitierungLiteraturUnselbstaendig(extractAktivzitierungLiteraturUnselbstaendig(meta))
         .passivzitierungLiteraturUnselbstaendig(extractPassivzitierungLiteraturUnselbstaendig(meta))
         .aktivzitierungLiteraturSelbstaendig(extractAktivzitierungLiteraturSelbstaendig(meta))
@@ -284,14 +288,16 @@ public class CaseLawLdmlToOpenSearchMapper {
   }
 
   private static List<String> getLinkedJudgements(
-      Meta meta, Function<OtherReferences, List<LinkedJudgement>> extractor) {
+      Meta meta,
+      Function<OtherReferences, List<LinkedJudgement>> extractor,
+      Function<LinkedJudgement, String> formatter) {
     return Optional.ofNullable(meta.getAnalysis())
         .map(Analysis::getOtherReferences)
         .map(extractor)
         .stream()
         .flatMap(Collection::stream)
         .filter(Objects::nonNull)
-        .map(LinkedJudgement::asString)
+        .map(formatter)
         .toList();
   }
 

@@ -124,8 +124,10 @@ class CaseLawLdmlToOpenSearchMapperTest {
             "previous decision file number, previous decision court type");
     assertThat(caseLaw.ensuingDecisions())
         .containsExactlyInAnyOrder(
-            "ensuing decision file number, ensuing decision court type",
-            "ensuing decision file number, ensuing decision court type");
+            "ensuing decision court type, ensuing decision document type vom 1. Oktober 2022 -"
+                + " ensuing decision file number (anhängig)",
+            "ensuing decision court type, ensuing decision document type vom 1. Oktober 2022 -"
+                + " ensuing decision file number (anhängig)");
     assertThat(caseLaw.aktivzitierungLiteraturUnselbstaendig()).containsExactly("STLU991393280");
     assertThat(caseLaw.passivzitierungLiteraturUnselbstaendig()).containsExactly("SBLU000539216");
     assertThat(caseLaw.aktivzitierungLiteraturSelbstaendig()).containsExactly("KSLS071671727");

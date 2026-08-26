@@ -130,9 +130,13 @@ class RechtsprechungControllerTest extends ContainersIntegrationBase {
             jsonPath("$.vorgehendeEntscheidungen[1]")
                 .value("previous decision file number, previous decision court type"),
             jsonPath("$.nachgehendeEntscheidungen[0]")
-                .value("ensuing decision file number, ensuing decision court type"),
+                .value(
+                    "ensuing decision court type, ensuing decision document type vom 1. Oktober"
+                        + " 2022 - ensuing decision file number (anhängig)"),
             jsonPath("$.nachgehendeEntscheidungen[1]")
-                .value("ensuing decision file number, ensuing decision court type"),
+                .value(
+                    "ensuing decision court type, ensuing decision document type vom 1. Oktober"
+                        + " 2022 - ensuing decision file number (anhängig)"),
             jsonPath("$.aktivzitierungLiteraturUnselbstaendig[0]").value("STLU991393280"),
             jsonPath("$.passivzitierungLiteraturUnselbstaendig[0]").value("SBLU000539216"),
             jsonPath("$.aktivzitierungLiteraturSelbstaendig[0]").value("KSLS071671727"),
