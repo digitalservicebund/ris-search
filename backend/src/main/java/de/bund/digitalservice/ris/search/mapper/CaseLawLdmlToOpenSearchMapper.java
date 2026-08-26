@@ -89,7 +89,6 @@ public class CaseLawLdmlToOpenSearchMapper {
         .keywords(extractKeywords(meta))
         .decisionName(extractDecisionNames(meta))
         .deviatingDocumentNumber(risMeta.getRisAbweichendeDokumentnummern())
-        .documentationOffice(risMeta.getRisDokumentationsstelle())
         .legalEffect(risMeta.getRisRechtskraft())
         .headline(sanitize(judgment.getHeader().findShortTitle()))
         .titleLine(extractTitleLine(meta))

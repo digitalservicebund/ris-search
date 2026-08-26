@@ -109,9 +109,6 @@ public class RisMeta {
   @XmlElement(name = "definition", namespace = CaseLawLdmlNamespaces.RIS_NS)
   private List<RisDefinition> risDefinitionen;
 
-  @XmlElement(name = "dokumentationsstelle", namespace = CaseLawLdmlNamespaces.RIS_NS)
-  private String risDokumentationsstelle;
-
   @XmlElementWrapper(name = "personen", namespace = CaseLawLdmlNamespaces.RIS_NS)
   @XmlElement(name = "person", namespace = CaseLawLdmlNamespaces.RIS_NS)
   private List<RisPerson> risPersonen;

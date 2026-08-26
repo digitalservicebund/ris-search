@@ -57,7 +57,6 @@ public record CaseLawDocumentationUnit(
     @Field(name = Fields.DOCUMENT_NUMBER) String documentNumber,
     @Field(name = Fields.DOCUMENT_NUMBER_KEYWORD) String documentNumberKeyword,
     @Field(name = Fields.DOCUMENT_TYPE) String documentType,
-    @JsonIgnore @Field(name = Fields.DOCUMENTATION_OFFICE) String documentationOffice,
     @Field(name = Fields.ECLI) String ecli,
     @ElementCollection @Field(name = Fields.ENSUING_DECISIONS) List<String> ensuingDecisions,
     @Field(name = Fields.ERLEDIGUNG) String erledigung,
@@ -160,7 +159,6 @@ public record CaseLawDocumentationUnit(
     public static final String DOCUMENT_NUMBER = "document_number";
     public static final String DOCUMENT_NUMBER_KEYWORD = "document_number.keyword";
     public static final String DOCUMENT_TYPE = "document_type";
-    public static final String DOCUMENTATION_OFFICE = "documentation_office";
     public static final String ECLI = "ecli";
     public static final String ECLI_KEYWORD = "ecli.keyword";
     public static final String ENSUING_DECISIONS = "ensuing_decisions";

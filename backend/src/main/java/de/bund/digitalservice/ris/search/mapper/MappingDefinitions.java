@@ -97,7 +97,6 @@ public class MappingDefinitions {
             Map.entry(
                 CaseLawDocumentationUnit.Fields.DEVIATING_DOCUMENT_NUMBER,
                 "deviatingDocumentNumber"),
-            Map.entry(CaseLawDocumentationUnit.Fields.DOCUMENTATION_OFFICE, "documentationOffice"),
             Map.entry(CaseLawDocumentationUnit.Fields.LEGAL_EFFECT, "legalEffect"),
             Map.entry(CaseLawDocumentationUnit.Fields.INDEXED_AT, "indexedAt"),
             Map.entry(DATUM_FIELD, "date") // alias shared with norms
