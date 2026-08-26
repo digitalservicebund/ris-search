@@ -166,7 +166,6 @@ public record CaseLawDocumentationUnit(
     public static final String ENSUING_DECISIONS = "ensuing_decisions";
     public static final String ERLEDIGUNG = "erledigung";
     public static final String ERLEDIGUNGSVERMERK = "erledigungsvermerk";
-    public static final String ERROR = "error";
     public static final String ERSTVEROEFFENTLICHUNG = "erstveroeffentlichung";
     public static final String FEHLERHAFTE_GERICHTE = "fehlerhafte_gerichte";
     public static final String FILE_NUMBER = "file_number";
@@ -206,8 +205,6 @@ public record CaseLawDocumentationUnit(
         "passivzitierung_verwaltungsvorschriften";
     public static final String PENDING_DECISIONS = "pending_decisions";
     public static final String PREVIOUS_DECISIONS = "previous_decisions";
-    public static final String PROCEDURES = "procedures";
-    public static final String PUBLICATION_STATUS = "publication_status";
     public static final String RECHTSFRAGE = "rechtsfrage";
     public static final String RECHTSFRAGE_GESAMT = "rechtsfrage_gesamt";
     public static final String RECHTSMITTELFUEHRER = "rechtsmittelfuehrer";

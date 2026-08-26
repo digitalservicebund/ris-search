@@ -49,8 +49,6 @@ public class CaseLawSimpleSearchType implements SimpleSearchType {
           Map.entry(CaseLawDocumentationUnit.Fields.OUTLINE, 1.0f),
           Map.entry(CaseLawDocumentationUnit.Fields.PENDING_DECISIONS, 1.0f),
           Map.entry(CaseLawDocumentationUnit.Fields.PREVIOUS_DECISIONS, 1.0f),
-          Map.entry(CaseLawDocumentationUnit.Fields.PROCEDURES, 1.0f),
-          Map.entry(CaseLawDocumentationUnit.Fields.PUBLICATION_STATUS, 1.0f),
           Map.entry(CaseLawDocumentationUnit.Fields.TENOR, convertOrderingToBoost(3)),
           Map.entry(CaseLawDocumentationUnit.Fields.TITLE_LINE, 1.0f));
 
