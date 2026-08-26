@@ -109,7 +109,7 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
       arguments.add(Arguments.of(alias, "Tenor", documentsWithTenorCount));
     }
 
-    for (var alias : new String[] {"headline", "TITELZEILE", "TTZE", "txtttze"}) {
+    for (var alias : new String[] {"headline", "TITELZEILE", "TITEL", "TTZE", "txtttze"}) {
       arguments.add(Arguments.of(alias, "Titelzeile", 1));
     }
 
@@ -153,7 +153,9 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
       arguments.add(Arguments.of(alias, "deviatingDocumentNumbers", 1));
     }
 
-    arguments.add(Arguments.of("documentation_office", "DS", 1));
+    for (var alias : new String[] {"documentation_office", "DOKSTELLE", "DOKUMENTATIONSSTELLE"}) {
+      arguments.add(Arguments.of(alias, "DS", 1));
+    }
 
     for (var alias : new String[] {"legal_effect", "RECHTSKRAFT", "RK", "rechtskraft"}) {
       arguments.add(Arguments.of(alias, "JA", 2));
