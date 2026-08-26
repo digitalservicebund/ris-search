@@ -1,5 +1,6 @@
 package de.bund.digitalservice.ris.search.config.opensearch;
 
+import de.bund.digitalservice.ris.search.exception.OpenSearchTermLimitExceeded;
 import java.time.Duration;
 import lombok.SneakyThrows;
 import org.apache.logging.log4j.LogManager;
@@ -90,6 +91,13 @@ public class OpensearchRetryConfiguration {
   private static boolean isClientError(Throwable throwable) {
     if (!(throwable instanceof UncategorizedElasticsearchException exception)) {
       return false;
+    }
+
+    Throwable cause = exception.getRootCause();
+    if (cause != null
+        && cause.getMessage() != null
+        && cause.getMessage().contains("too_many_nested_clauses")) {
+      throw new OpenSearchTermLimitExceeded();
     }
 
     Integer statusCode = exception.getStatusCode();

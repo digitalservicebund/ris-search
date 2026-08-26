@@ -11,7 +11,8 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.Collections;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -124,14 +125,13 @@ class ErrorResponseTest extends ContainersIntegrationBase {
   @Test
   @DisplayName("Should return 400 on exceeded search term limit")
   void shouldReturn400OnExceededSearchTerms() throws Exception {
-    String searchTerm = String.join("+", Collections.nCopies(36, "token"));
+    String searchTerm =
+        IntStream.range(0, 35).mapToObj(i -> "token_" + i).collect(Collectors.joining("+"));
 
     mockMvc
-        .perform(get("/v1/legislation?searchTerm=" + searchTerm).contentType(MediaType.TEXT_HTML))
+        .perform(get("/v1/case-law?searchTerm=" + searchTerm).contentType(MediaType.TEXT_HTML))
         .andExpect(status().is4xxClientError())
-        .andExpect(
-            jsonPath(
-                "$.errors[0].message", Matchers.is("36 search terms exceeded the limit of 35")))
+        .andExpect(jsonPath("$.errors[0].message", Matchers.is("search query limit exceeded")))
         .andExpect(jsonPath("$.errors[0].code", Matchers.is("invalid_parameter")));
   }
 }

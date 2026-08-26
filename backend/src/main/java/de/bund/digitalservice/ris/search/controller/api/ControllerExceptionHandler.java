@@ -447,12 +447,7 @@ public class ControllerExceptionHandler {
   public ResponseEntity<CustomErrorResponse> handleExceededSearchTermLimit(
       OpenSearchTermLimitExceeded ex) {
     CustomError error =
-        CustomError.builder()
-            .code("invalid_parameter")
-            .message(
-                "%s search terms exceeded the limit of %s"
-                    .formatted(ex.getActualTermCount(), ex.getLimit()))
-            .build();
+        CustomError.builder().code("invalid_parameter").message(ex.getMessage()).build();
     return ResponseEntity.status(HttpStatus.BAD_REQUEST)
         .body(CustomErrorResponse.builder().errors(List.of(error)).build());
   }
