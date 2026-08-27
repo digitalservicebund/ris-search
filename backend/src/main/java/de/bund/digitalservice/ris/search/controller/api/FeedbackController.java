@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
  * with {@link RestController} and {@link RequestMapping} to define the base URL for handling export
  * in the API.
  */
-@Profile({"test", "prototype"})
+@Profile({"test", "prototype", "dev"})
 @Tag(name = "Feedback", description = "API endpoints to send feedback to posthog.")
 @RestController
 @RequestMapping(ApiConfig.Paths.FEEDBACK)

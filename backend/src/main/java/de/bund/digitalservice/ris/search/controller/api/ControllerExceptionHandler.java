@@ -23,6 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.validation.FieldError;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -450,5 +451,20 @@ public class ControllerExceptionHandler {
         CustomError.builder().code("invalid_parameter").message(ex.getMessage()).build();
     return ResponseEntity.status(HttpStatus.BAD_REQUEST)
         .body(CustomErrorResponse.builder().errors(List.of(error)).build());
+  }
+
+  /**
+   * handles HttpRequestMethodNotSupportedException
+   *
+   * @param ex HttpRequestMethodNotSupportedException ResponseEntity containing a
+   * @return a {@link CustomErrorResponse} object with error details and an HTTP status of 405
+   */
+  @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+  public ResponseEntity<CustomErrorResponse> handleMethodNotSupported(
+      HttpRequestMethodNotSupportedException ex) {
+    CustomError error =
+        CustomError.builder().code("method_not_allowed").message(ex.getMessage()).build();
+    return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED)
+        .body(new CustomErrorResponse(List.of(error)));
   }
 }
