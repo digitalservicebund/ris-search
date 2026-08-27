@@ -1,9 +1,5 @@
 import { expect, navigate, test } from "./utils/fixtures";
 
-test.beforeAll(({ privateFeaturesEnabled }) => {
-  test.skip(!privateFeaturesEnabled, "the new start page is not public yet");
-});
-
 test.describe(
   "search section on the new start page",
   { tag: ["@RISDEV-12431"] },

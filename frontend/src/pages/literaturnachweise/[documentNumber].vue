@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import IcBaselineSubject from "~icons/ic/baseline-subject";
-import IcOutlineInfo from "~icons/ic/outline-info";
 import type { TabView } from "~/components/documents/TabsLayout.vue";
 import type { TreeItem } from "~/components/TreeView.vue";
 import { useSearchBackLink } from "~/composables/useSearchBackLink";
@@ -45,11 +43,10 @@ useLiteratureSeo({
 // Page contents ------------------------------------------
 
 const views: TabView[] = [
-  { path: "text", label: "Text", icon: IcBaselineSubject },
+  { path: "text", label: "Text" },
   {
     path: "details",
     label: "Details",
-    icon: IcOutlineInfo,
     analyticsId: "literature-metadata-tab",
   },
 ];

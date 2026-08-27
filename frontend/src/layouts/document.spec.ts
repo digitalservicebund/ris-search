@@ -1,8 +1,6 @@
 import { mockNuxtImport, renderSuspended } from "@nuxt/test-utils/runtime";
 import { screen } from "@testing-library/vue";
 import { describe, expect, it, vi } from "vitest";
-import IcBaselineSubject from "~icons/ic/baseline-subject";
-import IcOutlineInfo from "~icons/ic/outline-info";
 import type { TabView } from "~/components/documents/TabsLayout.vue";
 import DocumentLayout from "./document.vue";
 
@@ -13,8 +11,8 @@ const { useRouteMock } = vi.hoisted(() => ({
 mockNuxtImport("useRoute", () => useRouteMock);
 
 const defaultViews: OneOrMore<TabView> = [
-  { label: "Text", path: "text", icon: IcBaselineSubject },
-  { label: "Details", path: "details", icon: IcOutlineInfo },
+  { label: "Text", path: "text" },
+  { label: "Details", path: "details" },
 ];
 
 describe("document", () => {

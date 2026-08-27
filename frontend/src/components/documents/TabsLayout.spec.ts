@@ -10,12 +10,9 @@ const { useRouteMock } = vi.hoisted(() => ({
 
 mockNuxtImport("useRoute", () => useRouteMock);
 
-const IconA = { template: `<svg aria-label="icon-a" />` };
-const IconB = { template: `<svg aria-label="icon-b" />` };
-
 const views: OneOrMore<TabView> = [
-  { label: "Tab A", path: "view-a", icon: IconA },
-  { label: "Tab B", path: "view-b", icon: IconB, analyticsId: "tab-b" },
+  { label: "Tab A", path: "view-a" },
+  { label: "Tab B", path: "view-b", analyticsId: "tab-b" },
 ];
 
 describe("TabsLayout", () => {
@@ -26,15 +23,6 @@ describe("TabsLayout", () => {
 
     expect(screen.getByRole("tab", { name: /Tab A/i })).toBeInTheDocument();
     expect(screen.getByRole("tab", { name: /Tab B/i })).toBeInTheDocument();
-  });
-
-  it("renders tab icons", async () => {
-    useRouteMock.mockReturnValue({ query: {} });
-
-    await renderSuspended(TabsLayout, { props: { views } });
-
-    expect(screen.getByLabelText("icon-a")).toBeInTheDocument();
-    expect(screen.getByLabelText("icon-b")).toBeInTheDocument();
   });
 
   it("marks only the first tab as active when no query param is set", async () => {

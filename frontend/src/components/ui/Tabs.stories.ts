@@ -1,7 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/vue3-vite";
 import { ref } from "vue";
-import IcBaselineSubject from "~icons/ic/baseline-subject";
-import IcOutlineInfo from "~icons/ic/outline-info";
 import { html } from "../../utils/tags";
 import UiTab from "./Tab.vue";
 import UiTabs from "./Tabs.vue";
@@ -36,29 +34,6 @@ export const Default: StoryObj<typeof meta> = {
           @click="selected = tab"
         >
           {{ tab }}
-        </UiTab>
-      </UiTabs>
-      <div :class="panel">Inhalt von „{{ selected }}“</div>
-    </div>`,
-  }),
-};
-
-export const WithIcons: StoryObj<typeof meta> = {
-  render: () => ({
-    components: { UiTabs, UiTab, IcBaselineSubject, IcOutlineInfo },
-    setup() {
-      const selected = ref("Text");
-      return { selected, wrapper, panel };
-    },
-    template: html`<div :class="wrapper">
-      <UiTabs aria-label="Beispiel">
-        <UiTab :active="selected === 'Text'" @click="selected = 'Text'">
-          <IcBaselineSubject />
-          Text
-        </UiTab>
-        <UiTab :active="selected === 'Details'" @click="selected = 'Details'">
-          <IcOutlineInfo />
-          Details
         </UiTab>
       </UiTabs>
       <div :class="panel">Inhalt von „{{ selected }}“</div>

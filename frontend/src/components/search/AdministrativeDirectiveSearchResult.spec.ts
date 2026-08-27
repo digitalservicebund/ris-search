@@ -3,6 +3,7 @@ import { screen } from "@testing-library/vue";
 import { describe } from "vitest";
 import AdministrativeDirectiveSearchResult from "~/components/search/AdministrativeDirectiveSearchResult.vue";
 import type { AdministrativeDirective, SearchResult } from "~/types/api";
+import type { SearchResultHeadingLevel } from "~/utils/search/searchResults";
 
 const { useRouteMock } = vi.hoisted(() => ({
   useRouteMock: vi.fn(() => ({
@@ -30,14 +31,17 @@ const searchResult: SearchResult<AdministrativeDirective> = {
 async function renderComponent({
   item = searchResult.item,
   textMatches = searchResult.textMatches,
-}: Partial<SearchResult<AdministrativeDirective>> = {}) {
+  headingLevel,
+}: Partial<SearchResult<AdministrativeDirective>> & {
+  headingLevel?: SearchResultHeadingLevel;
+} = {}) {
   const result: SearchResult<AdministrativeDirective> = {
     item,
     textMatches,
   };
 
   return await renderSuspended(AdministrativeDirectiveSearchResult, {
-    props: { searchResult: result, order: 0 },
+    props: { searchResult: result, order: 0, headingLevel },
     global: {
       stubs: {
         NuxtLink: {
@@ -249,5 +253,28 @@ describe("AdministrativeDirectiveSearchResult", () => {
       "data-from",
       "/suche?query=Vorschrift&documentKind=VS&pageIndex=0",
     );
+  });
+
+  describe("heading level", () => {
+    it("renders the title as an h2 with the responsive style by default", async () => {
+      await renderComponent();
+
+      const heading = screen.getByRole("heading", { level: 2 });
+      expect(heading).toBeInTheDocument();
+      expect(heading.closest("a")).toHaveClass("typo-headline-searchresult");
+    });
+
+    it("renders the title as an h3 with the compact style at level 3", async () => {
+      await renderComponent({ headingLevel: "3" });
+
+      const heading = screen.getByRole("heading", { level: 3 });
+      expect(heading).toBeInTheDocument();
+      expect(
+        screen.queryByRole("heading", { level: 2 }),
+      ).not.toBeInTheDocument();
+      expect(heading.closest("a")).toHaveClass(
+        "typo-headline-searchresult-compact",
+      );
+    });
   });
 });

@@ -12,13 +12,6 @@ definePageMeta({
     { label: "Zum Inhalt", to: "#main" },
     { label: "Zum Fußbereich", to: "#footer" },
   ],
-  middleware: () => {
-    // For some reason our private feature flag composable doesn't work in this
-    // context, falling back to the runtime config directly instead
-    const config = useRuntimeConfig();
-    if (!config.public.privateFeaturesEnabled)
-      return navigateTo({ name: "index" });
-  },
 });
 
 useSeo({
@@ -106,62 +99,72 @@ useSeo({
     </nav>
   </section>
 
-  <section
-    class="content-wrapper content-grid bg-white py-24 md:py-40 lg:py-48 2xl:py-56"
-  >
-    <div class="content-grid-textblock xl:col-start-2">
-      <h2 class="typo-headline2-bold mb-8 wrap-break-word hyphens-auto">
-        Rechtsinformationen finden
-      </h2>
-      <p class="typo-body-regular mb-16 md:mb-24">
-        Nutzen Sie Stichwörter, Themen oder direkte Angaben wie Paragrafen,
-        Normen oder Aktenzeichen.
-      </p>
+  <section class="bg-white">
+    <div class="content-wrapper content-grid py-24 md:py-40 lg:py-48 2xl:py-56">
+      <div class="content-grid-textblock xl:col-start-2">
+        <h2 class="typo-headline2-bold mb-8 wrap-break-word hyphens-auto">
+          Rechtsinformationen finden
+        </h2>
+        <p class="typo-body-regular mb-16 md:mb-24">
+          Nutzen Sie Stichwörter, Themen oder direkte Angaben wie Paragrafen,
+          Normen oder Aktenzeichen.
+        </p>
 
-      <SearchSimpleSearchInput
-        full-width
-        input-placeholder="z.B. Mietrecht, § 535 BGB, 1 BvR 123/20 …"
-        model-value=""
-        @update:model-value="(query) => redirectToSearch(query)"
-        @empty-search="() => redirectToSearch()"
-      />
+        <SearchSimpleSearchInput
+          full-width
+          input-placeholder="z.B. Mietrecht, § 535 BGB, 1 BvR 123/20 …"
+          model-value=""
+          @update:model-value="(query) => redirectToSearch(query)"
+          @empty-search="() => redirectToSearch()"
+        />
+      </div>
     </div>
   </section>
 
-  <section
-    class="content-wrapper content-grid gap-y-16 border-t border-gray-400 bg-white py-24 md:gap-y-24 md:py-40 lg:py-48 2xl:py-56"
-  >
-    <div
-      class="col-span-12 md:col-span-6 lg:col-span-6 xl:col-span-5 xl:col-start-2"
-    >
-      <h2 class="typo-headline2-bold mb-8 wrap-break-word hyphens-auto">
-        Offene Rechtsdaten für neue Anwendungen
-      </h2>
-      <p class="typo-body-regular mb-8">
-        Unsere Rechtsinformationen stehen als Open Data zur Verfügung. Über
-        unsere Programmierschnittstelle (API) lassen sich die Daten einfach
-        abrufen, weiterverarbeiten und für eigene Anwendungen und Services
-        nutzen.
-      </p>
-      <p class="typo-body-regular">
-        Analysieren Sie Trends oder integrieren Sie Rechtstexte in Ihre
-        Anwendungen. Die API-Dokumentation steht in englischer Sprache zur
-        Verfügung.
-      </p>
+  <section class="border-t border-gray-400">
+    <div class="content-wrapper content-grid py-24 md:py-40 lg:py-48 2xl:py-56">
+      <div class="col-span-12 xl:col-span-10 xl:col-start-2">
+        <RecentUpdates />
+      </div>
     </div>
+  </section>
 
-    <AppCodeExample
-      class="col-span-12 self-start md:col-span-6 md:row-span-2 lg:col-span-5 lg:col-start-8 xl:col-span-4 xl:col-start-8"
-    />
-
-    <div class="col-span-12 md:col-span-6 md:row-start-2 xl:col-start-2">
-      <UiButton
-        class="w-full md:w-auto"
-        :as="ExternalLink"
-        url="https://docs.rechtsinformationen.bund.de"
+  <section class="border-t border-gray-400 bg-white">
+    <div
+      class="content-wrapper content-grid gap-y-16 py-24 md:gap-y-24 md:py-40 lg:py-48 2xl:py-56"
+    >
+      <div
+        class="col-span-12 md:col-span-6 lg:col-span-6 xl:col-span-5 xl:col-start-2"
       >
-        Zur API-Dokumentation
-      </UiButton>
+        <h2 class="typo-headline2-bold mb-8 wrap-break-word hyphens-auto">
+          Offene Rechtsdaten für neue Anwendungen
+        </h2>
+        <p class="typo-body-regular mb-8">
+          Unsere Rechtsinformationen stehen als Open Data zur Verfügung. Über
+          unsere Programmierschnittstelle (API) lassen sich die Daten einfach
+          abrufen, weiterverarbeiten und für eigene Anwendungen und Services
+          nutzen.
+        </p>
+        <p class="typo-body-regular">
+          Analysieren Sie Trends oder integrieren Sie Rechtstexte in Ihre
+          Anwendungen. Die API-Dokumentation steht in englischer Sprache zur
+          Verfügung.
+        </p>
+      </div>
+
+      <AppCodeExample
+        class="col-span-12 self-start md:col-span-6 md:row-span-2 lg:col-span-5 lg:col-start-8 xl:col-span-4 xl:col-start-8"
+      />
+
+      <div class="col-span-12 md:col-span-6 md:row-start-2 xl:col-start-2">
+        <UiButton
+          class="w-full md:w-auto"
+          :as="ExternalLink"
+          url="https://docs.rechtsinformationen.bund.de"
+        >
+          Zur API-Dokumentation
+        </UiButton>
+      </div>
     </div>
   </section>
 
