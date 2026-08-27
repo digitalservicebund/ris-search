@@ -5,17 +5,12 @@ import jakarta.annotation.PreDestroy;
 import java.util.HashMap;
 import java.util.Map;
 
-/** Client for interacting with PostHog analytics service. */
-public class PostHogClient implements FeedbackClient {
-
-  private final PostHog postHog;
-
-  /**
-   * @param postHog the PostHog instance used for sending events
-   */
-  public PostHogClient(PostHog postHog) {
-    this.postHog = postHog;
-  }
+/**
+ * Client for interacting with PostHog analytics service.
+ *
+ * @param postHog the PostHog instance used for sending events
+ */
+public record PostHogClient(PostHog postHog) {
 
   /**
    * Submits user feedback to PostHog.

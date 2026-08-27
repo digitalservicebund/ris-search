@@ -1,7 +1,6 @@
 package de.bund.digitalservice.ris.search.config.posthog;
 
 import com.posthog.java.PostHog;
-import de.bund.digitalservice.ris.search.client.posthog.FeedbackClient;
 import de.bund.digitalservice.ris.search.client.posthog.PostHogClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,17 +26,8 @@ public class PostHogConfig {
    */
   @Bean
   @Profile({"test", "prototype"})
-  public FeedbackClient postHog(PosthogProperties properties) {
+  public PostHogClient postHog(PosthogProperties properties) {
     var postHog = new PostHog.Builder(properties.getApiKey()).host(properties.getHost()).build();
     return new PostHogClient(postHog);
-  }
-
-  /**
-   * @return dev feedback client
-   */
-  @Bean
-  @Profile("dev")
-  public FeedbackClient devPosthog() {
-    return (_, _, _, _) -> {};
   }
 }
