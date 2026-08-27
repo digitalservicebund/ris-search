@@ -28,7 +28,6 @@ public class CaseLawSimpleSearchType implements SimpleSearchType {
           Map.entry(CaseLawDocumentationUnit.Fields.DECISION_NAME, 1.0f),
           Map.entry(CaseLawDocumentationUnit.Fields.DEVIATING_DOCUMENT_NUMBER, 1.0f),
           Map.entry(CaseLawDocumentationUnit.Fields.DISSENTING_OPINION, convertOrderingToBoost(7)),
-          Map.entry(CaseLawDocumentationUnit.Fields.DOCUMENTATION_OFFICE, 1.0f),
           Map.entry(CaseLawDocumentationUnit.Fields.DOCUMENT_NUMBER, 1.0f),
           Map.entry(CaseLawDocumentationUnit.Fields.DOCUMENT_TYPE, 1.0f),
           Map.entry(CaseLawDocumentationUnit.Fields.ECLI, 1.0f),

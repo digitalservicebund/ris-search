@@ -126,7 +126,7 @@ class ErrorResponseTest extends ContainersIntegrationBase {
   @DisplayName("Should return 400 on exceeded search term limit")
   void shouldReturn400OnExceededSearchTerms() throws Exception {
     String searchTerm =
-        IntStream.range(0, 35).mapToObj(i -> "token_" + i).collect(Collectors.joining("+"));
+        IntStream.range(0, 36).mapToObj(i -> "token_" + i).collect(Collectors.joining("+"));
 
     mockMvc
         .perform(get("/v1/case-law?searchTerm=" + searchTerm).contentType(MediaType.TEXT_HTML))

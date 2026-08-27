@@ -29,14 +29,6 @@
           "type": "alias",
           "path": "document_type"
         },
-        "DOKUMENTATIONSSTELLE": {
-          "type": "alias",
-          "path": "documentation_office"
-        },
-        "DOKSTELLE": {
-          "type": "alias",
-          "path": "documentation_office"
-        },
         "ECLI": {
           "type": "alias",
           "path": "ecli"
@@ -603,9 +595,6 @@
         "deviating_document_number": {
           "type": "text",
           "analyzer": "custom_german_analyzer"
-        },
-        "documentation_office": {
-          "type": "keyword"
         },
         "legal_effect": {
           "type": "text",
