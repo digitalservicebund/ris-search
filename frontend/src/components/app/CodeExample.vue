@@ -11,7 +11,7 @@ const apiUrl = "https://testphase.rechtsinformationen.bund.de/v1/document";
 const curl = {
   id: "curl",
   label: "cURL",
-  code: `curl "${apiUrl}?searchTerm=Mietrecht&size=10"`,
+  code: `curl "${apiUrl}?size=10"`,
 };
 
 const javascript = {
@@ -19,7 +19,7 @@ const javascript = {
   label: "JavaScript",
   code: [
     `const url = "${apiUrl}";`,
-    "const response = await fetch(`${url}?searchTerm=Mietrecht&size=10`);",
+    "const response = await fetch(`${url}?size=10`);",
     "const { totalItems, member } = await response.json();",
   ].join("\n"),
 };
@@ -142,7 +142,7 @@ onUnmounted(() => clearTimeout(resetTimeout));
       class="panel"
       role="tabpanel"
     >
-      <pre><code><span aria-hidden="true" class="prompt">$ </span><span class="command">curl</span> <span class="string">"https://testphase.rechtsinformationen.bund.de/v1/document?searchTerm=Mietrecht&amp;size=10"</span></code></pre>
+      <pre><code><span aria-hidden="true" class="prompt">$ </span><span class="command">curl</span> <span class="string">"https://testphase.rechtsinformationen.bund.de/v1/document?size=10"</span></code></pre>
     </div>
 
     <div
@@ -153,7 +153,7 @@ onUnmounted(() => clearTimeout(resetTimeout));
       role="tabpanel"
     >
       <pre><code><span class="keyword">const</span> url = <span class="string">"https://testphase.rechtsinformationen.bund.de/v1/document"</span>;
-<span class="keyword">const</span> response = <span class="keyword">await</span> fetch(<span class="string">`${url}?searchTerm=Mietrecht&amp;size=10`</span>);
+<span class="keyword">const</span> response = <span class="keyword">await</span> fetch(<span class="string">`${url}?size=10`</span>);
 <span class="keyword">const</span> { totalItems, member } = <span class="keyword">await</span> response.json();</code></pre>
     </div>
 

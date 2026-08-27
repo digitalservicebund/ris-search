@@ -20,6 +20,8 @@ useSeo({
     "Nutzen Sie das neue Rechtsinformationsportal des Bundes – Gesetze, Verordnungen und Urteile auf einen Blick.",
   ogTitle: "Rechtsinformationen des Bundes",
 });
+
+const privateFeaturesEnabled = usePrivateFeaturesFlag();
 </script>
 
 <template>
@@ -112,11 +114,21 @@ useSeo({
 
         <SearchSimpleSearchInput
           full-width
-          input-placeholder="z.B. Mietrecht, § 535 BGB, 1 BvR 123/20 …"
+          input-placeholder="Suchbegriff eingeben..."
           model-value=""
           @update:model-value="(query) => redirectToSearch(query)"
           @empty-search="() => redirectToSearch()"
         />
+
+        <p v-if="privateFeaturesEnabled" class="typo-label2-regular mt-8">
+          Mehr Suchoptionen finden Sie unter
+          <NuxtLink
+            :to="{ name: 'erweiterte-suche' }"
+            class="ris-link2-bold 2xl:ris-link1-bold"
+          >
+            Erweiterte Suche
+          </NuxtLink>
+        </p>
       </div>
     </div>
   </section>

@@ -7,11 +7,11 @@ import CodeExample from "./CodeExample.vue";
 // The code is spelled out as markup in the template, these are the same
 // snippets as plain text
 const curlCode =
-  'curl "https://testphase.rechtsinformationen.bund.de/v1/document?searchTerm=Mietrecht&size=10"';
+  'curl "https://testphase.rechtsinformationen.bund.de/v1/document?size=10"';
 
 const javascriptCode = [
   'const url = "https://testphase.rechtsinformationen.bund.de/v1/document";',
-  "const response = await fetch(`${url}?searchTerm=Mietrecht&size=10`);",
+  "const response = await fetch(`${url}?size=10`);",
   "const { totalItems, member } = await response.json();",
 ].join("\n");
 
