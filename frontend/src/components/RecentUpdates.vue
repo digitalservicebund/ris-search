@@ -57,10 +57,6 @@ const activeTab = computed(() => {
 </script>
 
 <template>
-  <h2 class="typo-headline2-bold mb-4 wrap-break-word hyphens-auto md:mb-12">
-    Aktuelles
-  </h2>
-
   <UiTabs aria-label="Aktuelles nach Dokumentart" scroller-class="px-16 -mx-16">
     <UiTab
       v-for="tab in tabs"

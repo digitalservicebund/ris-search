@@ -10,6 +10,8 @@ function redirectToSearch(searchStr?: string) {
 definePageMeta({
   skipLinks: [
     { label: "Zum Inhalt", to: "#main" },
+    { label: "Zur Suche", to: "#search" },
+    { label: "Zu Aktuelles", to: "#updates" },
     { label: "Zum Fußbereich", to: "#footer" },
   ],
 });
@@ -22,6 +24,8 @@ useSeo({
 });
 
 const privateFeaturesEnabled = usePrivateFeaturesFlag();
+
+const recentUpdatesId = useId();
 </script>
 
 <template>
@@ -112,13 +116,15 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
           Normen oder Aktenzeichen.
         </p>
 
-        <SearchSimpleSearchInput
-          full-width
-          input-placeholder="Suchbegriff eingeben..."
-          model-value=""
-          @update:model-value="(query) => redirectToSearch(query)"
-          @empty-search="() => redirectToSearch()"
-        />
+        <div id="search">
+          <SearchSimpleSearchInput
+            full-width
+            input-placeholder="Suchbegriff eingeben..."
+            model-value=""
+            @update:model-value="(query) => redirectToSearch(query)"
+            @empty-search="() => redirectToSearch()"
+          />
+        </div>
 
         <p v-if="privateFeaturesEnabled" class="typo-label2-regular mt-8">
           Mehr Suchoptionen finden Sie unter
@@ -133,9 +139,19 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
     </div>
   </section>
 
-  <section class="border-t border-gray-400">
+  <section
+    :aria-labelledby="recentUpdatesId"
+    class="border-t border-gray-400"
+    id="updates"
+  >
     <div class="content-wrapper content-grid py-24 md:py-40 lg:py-48 2xl:py-56">
       <div class="col-span-12 xl:col-span-10 xl:col-start-2">
+        <h2
+          :id="recentUpdatesId"
+          class="typo-headline2-bold mb-4 wrap-break-word hyphens-auto md:mb-12"
+        >
+          Aktuelles
+        </h2>
         <RecentUpdates />
       </div>
     </div>
