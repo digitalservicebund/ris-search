@@ -12,13 +12,6 @@ definePageMeta({
     { label: "Zum Inhalt", to: "#main" },
     { label: "Zum Fußbereich", to: "#footer" },
   ],
-  middleware: () => {
-    // For some reason our private feature flag composable doesn't work in this
-    // context, falling back to the runtime config directly instead
-    const config = useRuntimeConfig();
-    if (!config.public.privateFeaturesEnabled)
-      return navigateTo({ name: "index" });
-  },
 });
 
 useSeo({
