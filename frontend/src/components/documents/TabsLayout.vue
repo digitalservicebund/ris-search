@@ -4,7 +4,6 @@ import { NuxtLink } from "#components";
 export type TabView = {
   label: string;
   path: string;
-  icon: Component;
   analyticsId?: string;
 };
 
@@ -32,7 +31,6 @@ const currentView = computed(
             :to="{ query: { ...route.query, view: view.path } }"
             :data-attr="view.analyticsId"
           >
-            <component :is="view.icon" />
             {{ view.label }}
           </UiTab>
         </UiTabs>

@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import IcBaselineSubject from "~icons/ic/baseline-subject";
-import IcOutlineInfo from "~icons/ic/outline-info";
-import IcOutlineRestore from "~icons/ic/outline-settings-backup-restore";
 import { NuxtLink } from "#components";
 import type { BreadcrumbItem } from "~/components/Breadcrumbs.vue";
 import type { DetailsListItem } from "~/components/documents/DetailsList.vue";
@@ -211,13 +208,11 @@ const views = computed<OneOrMore<TabView>>(() => {
     {
       path: "details",
       label: "Details",
-      icon: IcOutlineInfo,
       analyticsId: "norm-metadata-tab",
     },
     {
       path: "versions",
       label: "Fassungen",
-      icon: IcOutlineRestore,
       analyticsId: "norm-versions-tab",
     },
   ] as const;
@@ -225,7 +220,6 @@ const views = computed<OneOrMore<TabView>>(() => {
   const textTab = {
     path: "text",
     label: "Text",
-    icon: IcBaselineSubject,
     analyticsId: "norm-text-tab",
   } as const;
 

@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import IcBaselineSubject from "~icons/ic/baseline-subject";
-import IcOutlineInfo from "~icons/ic/outline-info";
 import type { TabView } from "~/components/documents/TabsLayout.vue";
 import type { TreeItem } from "~/components/TreeView.vue";
 import { useSearchBackLink } from "~/composables/useSearchBackLink";
@@ -42,8 +40,8 @@ useAdministrativeDirectiveSeo({
 // Page contents ------------------------------------------
 
 const views: TabView[] = [
-  { path: "text", label: "Text", icon: IcBaselineSubject },
-  { path: "details", label: "Details", icon: IcOutlineInfo },
+  { path: "text", label: "Text" },
+  { path: "details", label: "Details" },
 ];
 
 const textSectionId = useId();
