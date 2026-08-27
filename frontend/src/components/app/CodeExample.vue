@@ -157,7 +157,7 @@ onUnmounted(() => clearTimeout(resetTimeout));
 <span class="keyword">const</span> { totalItems, member } = <span class="keyword">await</span> response.json();</code></pre>
     </div>
 
-    <span class="sr-only" role="status">{{ copied ? "Kopiert" : "" }}</span>
+    <output class="sr-only">{{ copied ? "Kopiert" : "" }}</output>
   </div>
 </template>
 
