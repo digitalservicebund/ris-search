@@ -19,7 +19,7 @@ test.describe(
         ),
       ).toBeVisible();
       await expect(
-        page.getByPlaceholder("z.B. Mietrecht, § 535 BGB, 1 BvR 123/20 …"),
+        page.getByPlaceholder("Suchbegriff eingeben..."),
       ).toBeVisible();
     });
 
