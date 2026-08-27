@@ -7,7 +7,11 @@
             <akn:FRBRalias name="ecli" value="{% if ecli %}{{ ecli }}{% else %}testEcli{% endif %}" showAs="ECLI"/>
             <akn:FRBRalias name="celex" value="testCelex" showAs="CELEX"/>
             <akn:FRBRalias eId="aktenzeichen" name="Aktenzeichen" value="fileNumber test"/>
+            {% if not hideDecisionDate %}
             <akn:FRBRdate eId="entscheidungsdatum" date="{% if decisionDate %}{{ decisionDate }}{% else %}2020-01-01{% endif %}" name="Entscheidungsdatum"/>
+            {% else %}
+            <akn:FRBRdate date="0001-01-01" name="nicht-vorhanden"/>
+            {% endif %}
             <akn:FRBRdate eId="mitteilungsdatum" date="2020-01-01" name="mitteilungsdatum" showAs="Mitteilungsdatum"/>
             <akn:FRBRauthor href="#organisation-gericht-courttype-courtlocation"/>
             <akn:FRBRcountry value="de"/>

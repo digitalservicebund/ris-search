@@ -61,18 +61,27 @@ public class FrbrElement {
     return getAliasValueByName("CELEX");
   }
 
+  private static final String PLACEHOLDER_DATE = "0001-01-01";
+  private static final String PLACEHOLDER_DATE_NAME = "nicht-vorhanden";
+
   /**
    * Returns the value of this element's single FRBRdate, which represents the document's decision
    * date regardless of its {@code name} attribute (e.g. "Entscheidungsdatum", "mitteilungsdatum",
    * "datumDerZustellungAnVerkuendungsStatt").
    *
-   * @return the decision date value, or {@code null} if no FRBRdate is present
+   * @return the decision date value, or {@code null} if no FRBRdate is present, or if it is the
+   *     placeholder date ({@code date="0001-01-01" name="nicht-vorhanden"})
    */
   public String getEntscheidungsdatumValue() {
     if (frbrDates == null || frbrDates.isEmpty()) {
       return null;
     }
-    return frbrDates.get(0).getDate();
+    FrbrDate frbrDate = frbrDates.get(0);
+    if (PLACEHOLDER_DATE.equals(frbrDate.getDate())
+        && PLACEHOLDER_DATE_NAME.equalsIgnoreCase(frbrDate.getName())) {
+      return null;
+    }
+    return frbrDate.getDate();
   }
 
   private Optional<FrbrDate> findDateByName(String name) {
