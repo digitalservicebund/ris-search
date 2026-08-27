@@ -33,14 +33,11 @@ public class PostHogConfig {
   }
 
   /**
-   * @return terminal feedback client
+   * @return dev feedback client
    */
   @Bean
   @Profile("dev")
   public FeedbackClient devPosthog() {
-    return (userId, url, text, surveyId) -> {
-      System.out.println(userId + ":" + url + ":" + surveyId);
-      System.out.println(text);
-    };
+    return (_, _, _, _) -> {};
   }
 }
