@@ -45,7 +45,7 @@ const onKeydown = (event: KeyboardEvent) => {
 
 const scroller = tw`overflow-x-auto`;
 
-const tabList = tw`flex w-max min-w-full border-b border-gray-400`;
+const tabList = tw`flex w-max min-w-full gap-24 border-b border-gray-400`;
 </script>
 
 <template>
