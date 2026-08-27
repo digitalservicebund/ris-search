@@ -4,8 +4,9 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import Tab from "./Tab.vue";
 import Tabs from "./Tabs.vue";
 
-const renderTabs = () =>
+const renderTabs = (props?: { scrollerClass?: string }) =>
   render(Tabs, {
+    props,
     attrs: { "aria-label": "Ansichten" },
     slots: {
       default: [
@@ -43,6 +44,15 @@ describe("Tabs", () => {
     renderTabs();
 
     expect(screen.getByRole("tablist", { name: "Ansichten" })).toBeVisible();
+  });
+
+  it("adds the scroller class to the scrolling container", () => {
+    renderTabs({ scrollerClass: "px-24" });
+
+    const scroller = screen.getByRole("tablist").parentElement;
+
+    expect(scroller).toHaveClass("px-24");
+    expect(scroller).toHaveClass("overflow-x-auto");
   });
 
   it("moves focus to the next tab on ArrowRight, wrapping around", async () => {

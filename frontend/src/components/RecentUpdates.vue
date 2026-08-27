@@ -61,7 +61,7 @@ const activeTab = computed(() => {
     Aktuelles
   </h2>
 
-  <UiTabs aria-label="Aktuelles nach Dokumentart">
+  <UiTabs aria-label="Aktuelles nach Dokumentart" scroller-class="px-16 -mx-16">
     <UiTab
       v-for="tab in tabs"
       :id="tab.id"

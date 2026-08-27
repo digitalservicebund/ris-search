@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import { useTemplateRef } from "vue";
+import { useTemplateRef, type ClassValue } from "vue";
 import { tw } from "../../utils/tags";
 
 defineOptions({ inheritAttrs: false });
+
+defineProps<{ scrollerClass?: ClassValue }>();
 
 const list = useTemplateRef<HTMLElement>("list");
 
@@ -43,13 +45,13 @@ const onKeydown = (event: KeyboardEvent) => {
 
 // Classes ------------------------------------------------
 
-const scroller = tw`overflow-x-auto overflow-y-hidden`;
+const scroller = tw`overflow-x-auto`;
 
-const tabList = tw`flex w-max min-w-full scroll-px-12 gap-24 border-b border-gray-400 px-12`;
+const tabList = tw`flex w-max min-w-full scroll-px-12 gap-24 border-b border-gray-400`;
 </script>
 
 <template>
-  <div :class="scroller">
+  <div :class="[scroller, scrollerClass]">
     <div
       ref="list"
       v-bind="$attrs"
