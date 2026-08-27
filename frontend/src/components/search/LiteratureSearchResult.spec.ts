@@ -3,6 +3,7 @@ import { render, screen } from "@testing-library/vue";
 import { describe } from "vitest";
 import LiteratureSearchResult from "~/components/search/LiteratureSearchResult.vue";
 import type { Literature, SearchResult, TextMatch } from "~/types/api";
+import type { SearchResultHeadingLevel } from "~/utils/search/searchResults";
 
 const { useRouteMock } = vi.hoisted(() => ({
   useRouteMock: vi.fn(() => ({
@@ -55,14 +56,17 @@ Abschließend gibt das Werk Empfehlungen für die praktische Anwendung juristisc
 function renderComponent({
   item = searchResult.item,
   textMatches = [],
-}: Partial<SearchResult<Literature>> = {}) {
+  headingLevel,
+}: Partial<SearchResult<Literature>> & {
+  headingLevel?: SearchResultHeadingLevel;
+} = {}) {
   const result: SearchResult<Literature> = {
     item,
     textMatches,
   };
 
   return render(LiteratureSearchResult, {
-    props: { searchResult: result, order: 0 },
+    props: { searchResult: result, order: 0, headingLevel },
     global: {
       stubs: {
         NuxtLink: {
@@ -299,5 +303,28 @@ describe("LiteratureSearchResult", () => {
       "data-from",
       "/suche?query=Recht&documentKind=L&pageIndex=3",
     );
+  });
+
+  describe("heading level", () => {
+    it("renders the title as an h2 with the responsive style by default", () => {
+      renderComponent();
+
+      const heading = screen.getByRole("heading", { level: 2 });
+      expect(heading).toBeInTheDocument();
+      expect(heading.closest("a")).toHaveClass("typo-headline-searchresult");
+    });
+
+    it("renders the title as an h3 with the compact style at level 3", () => {
+      renderComponent({ headingLevel: "3" });
+
+      const heading = screen.getByRole("heading", { level: 3 });
+      expect(heading).toBeInTheDocument();
+      expect(
+        screen.queryByRole("heading", { level: 2 }),
+      ).not.toBeInTheDocument();
+      expect(heading.closest("a")).toHaveClass(
+        "typo-headline-searchresult-compact",
+      );
+    });
   });
 });

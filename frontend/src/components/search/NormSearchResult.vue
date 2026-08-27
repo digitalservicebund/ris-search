@@ -5,12 +5,26 @@ import type {
   TextHeaderItem,
 } from "~/components/search/SearchResultHeader.vue";
 import type { LegislationExpression, SearchResult } from "~/types/api";
-import { getMatch, getTitleWithFallback } from "~/utils/search/searchResults";
+import type { SearchResultHeadingLevel } from "~/utils/search/searchResults";
+import {
+  getMatch,
+  getSearchResultHeadline,
+  getTitleWithFallback,
+} from "~/utils/search/searchResults";
 
-const { searchResult, order } = defineProps<{
+const {
+  searchResult,
+  order,
+  headingLevel = "2",
+} = defineProps<{
   searchResult: SearchResult<LegislationExpression>;
   order: number;
+
+  /** Heading level of the result title. */
+  headingLevel?: SearchResultHeadingLevel;
 }>();
+
+const headlineStyle = computed(() => getSearchResultHeadline(headingLevel));
 
 const { searchResultClicked } = usePostHog();
 const privateFeaturesEnabled = usePrivateFeaturesFlag();
@@ -123,10 +137,10 @@ const relevantHighlights = computed(() =>
       v-if="detailPageRoute"
       :to="detailPageRoute"
       :aria-describedby="resultTypeId"
-      class="typo-headline-searchresult"
+      :class="headlineStyle.class"
       @click="searchResultClicked(detailPageRoute.path, order)"
     >
-      <h2 v-html="headline" />
+      <component :is="headlineStyle.tag" v-html="headline" />
     </NuxtLink>
 
     <div

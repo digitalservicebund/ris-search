@@ -6,6 +6,7 @@ import type {
   SearchResult,
   TextMatch,
 } from "~/types/api";
+import type { SearchResultHeadingLevel } from "~/utils/search/searchResults";
 import NormSearchResult from "./NormSearchResult.vue";
 
 const { useRouteMock } = vi.hoisted(() => ({
@@ -78,9 +79,10 @@ const mockSearchResult: SearchResult<LegislationExpression> = {
 function renderComponent(
   searchResult: SearchResult<LegislationExpression> = mockSearchResult,
   order: number = 0,
+  headingLevel?: SearchResultHeadingLevel,
 ) {
   return render(NormSearchResult, {
-    props: { searchResult, order },
+    props: { searchResult, order, headingLevel },
     global: {
       stubs: {
         NuxtLink: {
@@ -410,5 +412,28 @@ describe("NormSearchResult", () => {
       "data-from",
       "/suche?query=BGB&documentKind=N&pageIndex=1",
     );
+  });
+
+  describe("heading level", () => {
+    it("renders the title as an h2 with the responsive style by default", () => {
+      renderComponent();
+
+      expect(screen.getByRole("heading", { level: 2 })).toBeInTheDocument();
+      expect(screen.getByRole("link", { name: /Test Title/i })).toHaveClass(
+        "typo-headline-searchresult",
+      );
+    });
+
+    it("renders the title as an h3 with the compact style at level 3", () => {
+      renderComponent(mockSearchResult, 0, "3");
+
+      expect(screen.getByRole("heading", { level: 3 })).toBeInTheDocument();
+      expect(
+        screen.queryByRole("heading", { level: 2 }),
+      ).not.toBeInTheDocument();
+      expect(screen.getByRole("link", { name: /Test Title/i })).toHaveClass(
+        "typo-headline-searchresult-compact",
+      );
+    });
   });
 });
