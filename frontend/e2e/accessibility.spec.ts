@@ -14,6 +14,10 @@ const testPages = [
     url: "/",
   },
   {
+    name: "home v2",
+    url: "/startseite-v2",
+  },
+  {
     name: "contact",
     url: "/kontakt",
   },
