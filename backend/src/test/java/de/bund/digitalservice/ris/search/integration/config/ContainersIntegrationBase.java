@@ -5,6 +5,9 @@ import de.bund.digitalservice.ris.search.integration.controller.api.testData.Adm
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.CaseLawTestData;
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.LiteratureTestData;
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.NormsTestData;
+import de.bund.digitalservice.ris.search.models.api.parameters.NormsSearchParams;
+import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
+import de.bund.digitalservice.ris.search.models.opensearch.AbstractSearchEntity;
 import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
@@ -17,17 +20,28 @@ import de.bund.digitalservice.ris.search.repository.objectstorage.S3ObjectStorag
 import de.bund.digitalservice.ris.search.repository.opensearch.AdministrativeDirectiveRepository;
 import de.bund.digitalservice.ris.search.repository.opensearch.ArticlesRepository;
 import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository;
+import de.bund.digitalservice.ris.search.repository.opensearch.DocumentRepository;
 import de.bund.digitalservice.ris.search.repository.opensearch.LiteratureRepository;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
+import de.bund.digitalservice.ris.search.service.AdministrativeDirectiveService;
+import de.bund.digitalservice.ris.search.service.AllDocumentsService;
+import de.bund.digitalservice.ris.search.service.CaseLawService;
+import de.bund.digitalservice.ris.search.service.LiteratureService;
+import de.bund.digitalservice.ris.search.service.NormsService;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 import org.apache.commons.collections4.IteratorUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.elasticsearch.core.SearchHit;
+import org.springframework.data.elasticsearch.core.SearchPage;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.utility.TestcontainersConfiguration;
@@ -49,6 +63,11 @@ public class ContainersIntegrationBase {
   @Autowired protected NormsBucket normsBucket;
   @Autowired protected PublicFilesBucket publicFilesBucket;
   @Autowired protected AdministrativeDirectiveRepository administrativeDirectiveRepository;
+  @Autowired protected AllDocumentsService allDocumentsService;
+  @Autowired protected CaseLawService caseLawService;
+  @Autowired protected NormsService normsService;
+  @Autowired protected LiteratureService literatureService;
+  @Autowired protected AdministrativeDirectiveService administrativeDirectiveService;
 
   @Autowired
   @Qualifier("caseLawS3Client")
@@ -185,5 +204,72 @@ public class ContainersIntegrationBase {
             .name(articleName)
             .text(content)
             .build());
+  }
+
+  protected <T> List<T> getAll(DocumentRepository<T> repo, Predicate<T> predicate) {
+    return getAll(repo).stream().filter(predicate).toList();
+  }
+
+  protected <T> List<T> getAll(DocumentRepository<T> repo) {
+    return repo.findAll(PageRequest.of(0, 1000)).get().toList();
+  }
+
+  protected List<AbstractSearchEntity> searchAll(String searchTerm) {
+    return searchAllHit(searchTerm).get().map(SearchHit::getContent).toList();
+  }
+
+  protected SearchPage<AbstractSearchEntity> searchAllHit(String searchTerm) {
+    return allDocumentsService.simpleSearchAllDocuments(
+        UniversalSearchParams.builder().searchTerm(searchTerm).build(),
+        Pageable.ofSize(10000),
+        null);
+  }
+
+  protected List<Norm> searchNorms(String searchTerm) {
+    return searchNormsHit(searchTerm).get().map(SearchHit::getContent).toList();
+  }
+
+  protected SearchPage<Norm> searchNormsHit(String searchTerm) {
+    return searchNormsHit(searchTerm, null);
+  }
+
+  protected SearchPage<Norm> searchNormsHit(String searchTerm, NormsSearchParams normParams) {
+    return normsService.simpleSearchNorms(
+        UniversalSearchParams.builder().searchTerm(searchTerm).build(),
+        normParams,
+        Pageable.ofSize(10000));
+  }
+
+  protected List<CaseLawDocumentationUnit> searchCaseLaw(String searchTerm) {
+    return searchCaseLawHit(searchTerm).get().map(SearchHit::getContent).toList();
+  }
+
+  protected SearchPage<CaseLawDocumentationUnit> searchCaseLawHit(String searchTerm) {
+    return caseLawService.simpleSearchCaseLaw(
+        UniversalSearchParams.builder().searchTerm(searchTerm).build(),
+        null,
+        Pageable.ofSize(10000));
+  }
+
+  protected List<Literature> searchLiterature(String searchTerm) {
+    return searchLiteratureHit(searchTerm).get().map(SearchHit::getContent).toList();
+  }
+
+  protected SearchPage<Literature> searchLiteratureHit(String searchTerm) {
+    return literatureService.simpleSearchLiterature(
+        UniversalSearchParams.builder().searchTerm(searchTerm).build(),
+        null,
+        Pageable.ofSize(10000));
+  }
+
+  protected List<AdministrativeDirective> searchAdmin(String searchTerm) {
+    return searchAdminHit(searchTerm).get().map(SearchHit::getContent).toList();
+  }
+
+  protected SearchPage<AdministrativeDirective> searchAdminHit(String searchTerm) {
+    return administrativeDirectiveService.simpleSearch(
+        UniversalSearchParams.builder().searchTerm(searchTerm).build(),
+        null,
+        Pageable.ofSize(10000));
   }
 }

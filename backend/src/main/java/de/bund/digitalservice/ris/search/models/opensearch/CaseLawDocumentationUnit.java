@@ -5,6 +5,7 @@ import jakarta.persistence.ElementCollection;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.Builder;
+import lombok.Getter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.DateFormat;
 import org.springframework.data.elasticsearch.annotations.Document;
@@ -75,7 +76,7 @@ public record CaseLawDocumentationUnit(
     @Field(name = Fields.HEADLINE) String headline,
     @Field(name = Fields.HEADNOTE) String headnote,
     @ElementCollection @Field(name = Fields.HERKUNFTSLAENDER) List<String> herkunftslaender,
-    @JsonIgnore @Id @Field(name = Fields.ID) String id,
+    @Getter @JsonIgnore @Id @Field(name = Fields.ID) String id,
     @JsonIgnore @Field(name = Fields.INDEXED_AT) String indexedAt,
     @Field(name = Fields.JUDICIAL_BODY) String judicialBody,
     @ElementCollection @Field(name = Fields.KEYWORDS) List<String> keywords,

@@ -1,37 +1,13 @@
 package de.bund.digitalservice.ris.search.integration.controller.api.testData;
 
-import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.AbstractSearchEntity;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
-import de.bund.digitalservice.ris.search.service.AllDocumentsService;
 import java.util.List;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.elasticsearch.core.SearchHit;
-import org.springframework.data.elasticsearch.core.SearchPage;
 
 /** Utility class for generating and retrieving test data in search integration tests. */
 public class TestDataGenerator {
-
-  /**
-   * Searches all documents using the given AllDocumentsService and search term, returning a list of
-   * AbstractSearchEntity results.
-   *
-   * @param allDocumentsService The AllDocumentsService to use for the search.
-   * @param searchTerm The search term to use for the search.
-   * @return List of AbstractSearchEntity results matching the search term.
-   */
-  public static List<AbstractSearchEntity> searchAll(
-      AllDocumentsService allDocumentsService, String searchTerm) {
-    UniversalSearchParams universalSearchParams = new UniversalSearchParams();
-
-    universalSearchParams.setSearchTerm(searchTerm);
-    SearchPage<AbstractSearchEntity> result =
-        allDocumentsService.simpleSearchAllDocuments(
-            universalSearchParams, Pageable.ofSize(10000), null);
-    return result.get().map(SearchHit::getContent).toList();
-  }
 
   /**
    * Returns the IDs of all CaseLawDocumentationUnit entities in the given list.

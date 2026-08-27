@@ -80,10 +80,10 @@ public class NlexService {
    * @return RequestResult
    */
   private RequestResult runQuery(String searchTerm, int pageNumber) {
-    UniversalSearchParams searchParams = new UniversalSearchParams();
-    searchParams.setSearchTerm(searchTerm);
     Pageable page = Pageable.ofSize(20).withPage(pageNumber - 1);
-    SearchPage<Norm> normPage = normsService.simpleSearchNorms(searchParams, null, page);
+    SearchPage<Norm> normPage =
+        normsService.simpleSearchNorms(
+            UniversalSearchParams.builder().searchTerm(searchTerm).build(), null, page);
 
     String requestId = Base64.encode(searchTerm.getBytes());
     return RisToNlexMapper.normsToNlexRequestResult(requestId, frontendUrl, normPage);

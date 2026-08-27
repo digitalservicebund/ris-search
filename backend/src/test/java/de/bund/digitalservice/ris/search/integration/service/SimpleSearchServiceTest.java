@@ -3,34 +3,23 @@ package de.bund.digitalservice.ris.search.integration.service;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
-import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
-import de.bund.digitalservice.ris.search.service.AdministrativeDirectiveService;
-import de.bund.digitalservice.ris.search.service.CaseLawService;
-import de.bund.digitalservice.ris.search.service.LiteratureService;
-import de.bund.digitalservice.ris.search.service.NormsService;
 import de.bund.digitalservice.ris.search.utils.RisHighlightBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.elasticsearch.core.SearchHit;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @Tag("integration")
 class SimpleSearchServiceTest extends ContainersIntegrationBase {
-
-  @Autowired private NormsService normsService;
-  @Autowired private CaseLawService caseLawService;
-  @Autowired private LiteratureService literatureService;
-  @Autowired private AdministrativeDirectiveService administrativeDirectiveService;
 
   @BeforeEach
   void setup() {
@@ -51,10 +40,7 @@ class SimpleSearchServiceTest extends ContainersIntegrationBase {
             .officialTitle(title)
             .build());
 
-    var params = new UniversalSearchParams();
-    params.setSearchTerm(token);
-    var hit =
-        normsService.simpleSearchNorms(params, null, Pageable.unpaged()).getContent().getFirst();
+    SearchHit<Norm> hit = searchNormsHit(token).getContent().getFirst();
 
     assertThat(hit.getHighlightField("officialTitle")).containsExactly(highlight(title, token));
   }
@@ -72,13 +58,7 @@ class SimpleSearchServiceTest extends ContainersIntegrationBase {
             .headline(title)
             .build());
 
-    var params = new UniversalSearchParams();
-    params.setSearchTerm(token);
-    var hit =
-        caseLawService
-            .simpleSearchCaseLaw(params, null, Pageable.unpaged())
-            .getContent()
-            .getFirst();
+    var hit = searchCaseLawHit(token).getContent().getFirst();
 
     assertThat(hit.getHighlightField("headline")).containsExactly(highlight(title, token));
   }
@@ -96,14 +76,7 @@ class SimpleSearchServiceTest extends ContainersIntegrationBase {
             .mainTitle(title)
             .build());
 
-    var params = new UniversalSearchParams();
-    params.setSearchTerm(token);
-    var hit =
-        literatureService
-            .simpleSearchLiterature(params, null, Pageable.unpaged())
-            .getContent()
-            .getFirst();
-
+    var hit = searchLiteratureHit(token).getContent().getFirst();
     assertThat(hit.getHighlightField("mainTitle")).containsExactly(highlight(title, token));
   }
 
@@ -120,14 +93,7 @@ class SimpleSearchServiceTest extends ContainersIntegrationBase {
             .headline(title)
             .build());
 
-    var params = new UniversalSearchParams();
-    params.setSearchTerm(token);
-    var hit =
-        administrativeDirectiveService
-            .simpleSearch(params, null, Pageable.unpaged())
-            .getContent()
-            .getFirst();
-
+    var hit = searchAdminHit(token).getContent().getFirst();
     assertThat(hit.getHighlightField("headline")).containsExactly(highlight(title, token));
   }
 
