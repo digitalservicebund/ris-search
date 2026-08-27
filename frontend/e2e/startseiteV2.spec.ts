@@ -46,6 +46,21 @@ test.describe(
       await expect(page.getByRole("searchbox")).toHaveValue("Fiktiv");
     });
 
+    test("links to advanced search", async ({
+      page,
+      privateFeaturesEnabled,
+    }) => {
+      test.skip(!privateFeaturesEnabled);
+
+      await navigate(page, "/startseite-v2");
+
+      await page.getByRole("link", { name: "Erweiterte Suche" }).click();
+
+      await expect(
+        page.getByRole("heading", { level: 1, name: "Erweiterte Suche" }),
+      ).toBeVisible();
+    });
+
     test("supports an empty search", async ({ page }) => {
       await navigate(page, "/startseite-v2");
 
