@@ -49,13 +49,16 @@ const recentUpdatesId = useId();
       </div>
     </div>
 
-    <nav class="content-wrapper content-grid pb-8 2xl:pb-16">
+    <nav
+      class="content-wrapper content-grid pb-8 2xl:pb-16"
+      aria-label="Schnelleinstieg"
+    >
       <ul
         class="lg-gap-x-24 col-span-12 -mt-24 flex flex-col gap-8 md:-mt-48 md:flex-row md:gap-x-16 lg:gap-24 xl:col-span-10 xl:col-start-2"
       >
         <li class="flex-1">
           <NuxtLink
-            class="document-link-card"
+            class="document-kind-card"
             :to="{
               name: 'suche',
               query: { documentKind: DocumentKind.Norm },
@@ -67,7 +70,7 @@ const recentUpdatesId = useId();
         </li>
         <li class="flex-1">
           <NuxtLink
-            class="document-link-card"
+            class="document-kind-card"
             :to="{
               name: 'suche',
               query: { documentKind: DocumentKind.CaseLaw },
@@ -79,7 +82,7 @@ const recentUpdatesId = useId();
         </li>
         <li class="flex-1">
           <NuxtLink
-            class="document-link-card"
+            class="document-kind-card"
             :to="{
               name: 'suche',
               query: { documentKind: DocumentKind.AdministrativeDirective },
@@ -91,7 +94,7 @@ const recentUpdatesId = useId();
         </li>
         <li class="flex-1">
           <NuxtLink
-            class="document-link-card"
+            class="document-kind-card"
             :to="{
               name: 'suche',
               query: { documentKind: DocumentKind.Literature },
@@ -121,7 +124,7 @@ const recentUpdatesId = useId();
         <div id="search">
           <SearchSimpleSearchInput
             full-width
-            input-placeholder="Suchbegriff eingeben..."
+            input-placeholder="Suchbegriff eingeben"
             model-value=""
             @update:model-value="(query) => redirectToSearch(query)"
             @empty-search="() => redirectToSearch()"
@@ -132,7 +135,7 @@ const recentUpdatesId = useId();
           Mehr Suchoptionen finden Sie unter
           <NuxtLink
             :to="{ name: 'erweiterte-suche' }"
-            class="ris-link2-bold 2xl:ris-link1-bold"
+            class="ris-link2-regular 2xl:ris-link1-regular"
           >
             Erweiterte Suche
           </NuxtLink>
@@ -249,7 +252,7 @@ const recentUpdatesId = useId();
 <style scoped>
 @reference "~/assets/main.css";
 
-.document-link-card {
+.document-kind-card {
   @apply typo-body-bold 2xl:ris-subhead-bold flex cursor-pointer flex-row items-center bg-blue-300 p-16 wrap-break-word hyphens-auto text-blue-800 -outline-offset-4 outline-blue-800 hover:bg-blue-500 focus-visible:shadow-[0px_0px_0px_4px_white] focus-visible:outline-4 md:h-128 md:flex-col md:items-start;
 }
 </style>

@@ -18,9 +18,7 @@ test.describe(
           "Nutzen Sie Stichwörter, Themen oder direkte Angaben wie Paragrafen, Normen oder Aktenzeichen.",
         ),
       ).toBeVisible();
-      await expect(
-        page.getByPlaceholder("Suchbegriff eingeben..."),
-      ).toBeVisible();
+      await expect(page.getByPlaceholder("Suchbegriff eingeben")).toBeVisible();
     });
 
     test("searches for a query", async ({ page }) => {
