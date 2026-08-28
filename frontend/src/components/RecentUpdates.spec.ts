@@ -67,10 +67,7 @@ const { useRecentUpdatesMock } = vi.hoisted(() => ({
   useRecentUpdatesMock: vi.fn(),
 }));
 
-mockNuxtImport(
-  "useRecentUpdates",
-  () => useRecentUpdatesMock,
-);
+mockNuxtImport("useRecentUpdates", () => useRecentUpdatesMock);
 
 mockNuxtImport("useRoute", () => () => ({ fullPath: "/startseite-v2" }));
 

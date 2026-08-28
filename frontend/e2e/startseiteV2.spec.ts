@@ -74,3 +74,87 @@ test.describe(
     });
   },
 );
+
+test.describe(
+  "Aktuelles section on the new start page",
+  { tag: ["@RISDEV-12432"] },
+  () => {
+    const tabNames = [
+      "Gesetze und Verordnungen",
+      "Gerichtsentscheidungen",
+      "Verwaltungsvorschriften",
+      "Literaturnachweise",
+    ];
+
+    test("shows a tab per document kind", async ({ page }) => {
+      await navigate(page, "/startseite-v2");
+
+      await expect(
+        page.getByRole("heading", { name: "Aktuelles", level: 2 }),
+      ).toBeVisible();
+
+      const tabs = page.getByRole("tablist", {
+        name: "Aktuelles nach Dokumentart",
+      });
+      await expect(tabs.getByRole("tab")).toHaveText(tabNames);
+
+      // The first tab is the one selected on load
+      await expect(
+        tabs.getByRole("tab", { name: tabNames[0] }),
+      ).toHaveAttribute("aria-selected", "true");
+    });
+
+    test("shows the most recent documents of the selected kind", async ({
+      page,
+    }) => {
+      await navigate(page, "/startseite-v2");
+
+      await page.getByRole("tab", { name: "Gerichtsentscheidungen" }).click();
+
+      const panel = page.getByRole("tabpanel");
+      const results = panel.getByRole("listitem");
+      await expect(results).not.toHaveCount(0);
+      await expect(
+        results.first().getByRole("heading", { level: 3 }),
+      ).toBeVisible();
+      await expect(results.first().getByRole("link").first()).toHaveAttribute(
+        "href",
+        /^\/gerichtsentscheidungen\//,
+      );
+    });
+
+    test("switches between document kinds", async ({ page }) => {
+      await navigate(page, "/startseite-v2");
+
+      const panel = page.getByRole("tabpanel");
+      await expect(
+        panel.getByRole("link", { name: "Zu den Gesetzen und Verordnungen" }),
+      ).toBeVisible();
+
+      await page.getByRole("tab", { name: "Literaturnachweise" }).click();
+
+      await expect(
+        page.getByRole("tab", { name: "Literaturnachweise" }),
+      ).toHaveAttribute("aria-selected", "true");
+      await expect(
+        panel.getByRole("link", { name: "Zu den Literaturnachweisen" }),
+      ).toBeVisible();
+    });
+
+    test("links to the search for the selected document kind", async ({
+      page,
+    }) => {
+      await navigate(page, "/startseite-v2");
+
+      await page.getByRole("tab", { name: "Verwaltungsvorschriften" }).click();
+      await page
+        .getByRole("link", { name: "Zu den Verwaltungsvorschriften" })
+        .click();
+
+      await expect(page).toHaveURL("/suche?documentKind=V");
+      await expect(
+        page.getByRole("heading", { name: "Suche", level: 1 }),
+      ).toBeVisible();
+    });
+  },
+);
