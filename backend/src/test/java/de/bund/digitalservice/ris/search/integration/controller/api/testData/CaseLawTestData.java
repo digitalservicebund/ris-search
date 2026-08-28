@@ -32,9 +32,8 @@ public class CaseLawTestData {
   static {
     allDocuments.add(
         CaseLawDocumentationUnit.builder()
-            .id("id1")
+            .id("BFRE000087655")
             .documentNumber("BFRE000087655")
-            .fileNumber("file_number_1")
             .ecli("ECLI:DE:FGNI:1975:0526.IXL180.73.0A")
             .courtType("KG")
             .location("Berlin")
@@ -86,7 +85,7 @@ public class CaseLawTestData {
             .hasLegislativeMandate("hasLegislativeMandateTest")
             .rechtsmittelfuehrer("rechtsmittelfuehrerTest")
             .rechtsmittelzulassung("rechtsmittelzulassungTest")
-            .abweichendeEclis(List.of("abweichendeEclisTest"))
+            .abweichendeEclis(List.of("abweichendeEclisTest", "ECLI:DE:FGHH:1972:0630.III10.72.1"))
             .abweichendeAktenzeichen(List.of("abweichendeAktenzeichenTest"))
             .vorabdokument(true)
             .letzteVeroeffentlichung(LocalDate.of(2024, Month.MAY, 8))
@@ -98,7 +97,7 @@ public class CaseLawTestData {
             .build());
     allDocuments.add(
         CaseLawDocumentationUnit.builder()
-            .id("id2")
+            .id("BFRE000107055")
             .documentNumber("BFRE000107055")
             .ecli("ECLI:DE:FGRLP:1969:0905.IV85.68.0A")
             .celex("Celex 2")
@@ -108,8 +107,10 @@ public class CaseLawTestData {
             .courtKeyword("FG Berlin")
             .documentType("Versäumnisurteil")
             .decisionDate(SharedTestConstants.DATE_2024_01_03)
-            .guidingPrinciple("Leitsatz mit ein paar Wörtern und Ergänzungen")
+            .guidingPrinciple(
+                "Leitsatz mit ein paar Wörtern und Ergänzungen. Auch ECLI:DE:FGHH:1972:0630.III10.72.1 drinnen.")
             .fileNumbers(List.of("IX ZR 100/20"))
+            .abweichendeAktenzeichen(List.of("abweichende_aktenzeichen"))
             .otherLongText("Sonstiger Langtext " + matchAllTerm)
             .otherHeadnote("Sonstiger Orientierungssatz")
             .caseFacts("Tatbestand nach § 4 TBestG")
@@ -118,9 +119,11 @@ public class CaseLawTestData {
 
     allDocuments.add(
         CaseLawDocumentationUnit.builder()
-            .id("id3")
+            .id("BFRE000157356")
             .documentNumber("BFRE000157356")
             .ecli("ECLI:DE:FGHH:1972:0630.III10.72.0")
+            .abweichendeEclis(List.of("abweichendeEclisTest2"))
+            .abweichendeAktenzeichen(List.of("file_number_7"))
             .courtType("FG")
             .location("Hamburg")
             .courtKeyword("FG Hamburg")
@@ -136,16 +139,18 @@ public class CaseLawTestData {
 
     allDocuments.add(
         CaseLawDocumentationUnit.builder()
-            .id("id-b1")
+            .id("BFRE000157357")
             .documentNumber("BFRE000157357")
             .ecli("ECLI:DE:FGHH:1972:0630.III10.72.1")
+            .abweichendeEclis(List.of("abweichendeEclisTest3"))
+            .abweichendeAktenzeichen(List.of("abweichende_aktenzeichen"))
             .courtType("FG")
             .location("Gotha")
             .courtKeyword("FG Gotha")
             .documentType("Kammerbeschluss")
             .decisionDate(LocalDate.of(2025, Month.JANUARY, 1))
             .grounds("Beschlussgründe")
-            .guidingPrinciple("Leitsatz")
+            .guidingPrinciple("Leitsatz file_number_7")
             .otherLongText(matchAllTerm)
             .tenor("Tenor")
             .headline("Headline Beschluss")
@@ -153,9 +158,11 @@ public class CaseLawTestData {
 
     allDocuments.add(
         CaseLawDocumentationUnit.builder()
-            .id("id-e1")
+            .id("BFRE000157358")
             .documentNumber("BFRE000157358")
             .ecli("ECLI:DE:FGHH:1972:0630.III10.72.2")
+            .abweichendeEclis(List.of("abweichendeEclisTest4"))
+            .fileNumbers(List.of("file_number_1", "file_number_5", "file_number_7"))
             .courtType("FG")
             .location("Hannover")
             .courtKeyword("FG Hannover")
@@ -170,8 +177,9 @@ public class CaseLawTestData {
 
     allDocuments.add(
         CaseLawDocumentationUnit.builder()
-            .id("id-eugh1")
+            .id("BFRE000157359")
             .documentNumber("BFRE000157359")
+            .fileNumbers(List.of("file_number_3", "file_number_4"))
             .ecli("ECLI:DE:FGHH:1972:0630.III10.72.3")
             .courtType("LG")
             .location("Saarbrücken")
