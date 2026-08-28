@@ -287,7 +287,8 @@ watch(searchStatus, async (newStatus, oldStatus) => {
         Mehr Suchoptionen finden Sie unter
         <NuxtLink
           :to="{ name: 'erweiterte-suche' }"
-          class="ris-link2-bold 2xl:ris-link1-bold"
+
+          class="ris-link2-regular 2xl:ris-link1-regular"
         >
           Erweiterte Suche
         </NuxtLink>
