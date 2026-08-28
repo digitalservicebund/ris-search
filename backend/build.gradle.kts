@@ -89,26 +89,8 @@ dependencies {
     implementation(libs.pebble)
     implementation(libs.streamex)
 
-    // CVE-2026-54515
-    implementation(libs.jackson.databind)
-
     // CVE-2026-5588
     implementation(platform(libs.bouncycastle.bom))
-
-    // CVE-2026-55831
-    implementation(libs.netty.codec.http)
-
-    // CVE-2026-56819
-    implementation(libs.netty.codec.http2)
-
-    // CVE-2026-59901
-    implementation(libs.netty.codec.compression)
-
-    // CVE-2026-54399
-    implementation(libs.apache.httpcore)
-
-    // CVE-2026-54428
-    implementation(libs.apache.httpcore.h2)
 
     implementation(libs.ris.html.transformation)
 

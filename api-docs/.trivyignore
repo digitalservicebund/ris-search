@@ -1,4 +1,3 @@
-# path-traversal vulnerability in Vite dev server on Windows.
-# Ignore since our Vite version doesn't have a fix, and we don't
-# use the dev server in production.
-CVE-2026-53571
+# Ignoring vulnerabilities here should be a last resort to solve trivy
+# complaints from vulnerable dependencies in the base image that are not
+# actually used in the production application.
