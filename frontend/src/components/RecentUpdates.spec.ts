@@ -41,7 +41,7 @@ type Search = {
 };
 
 function mockSearches(searches: Search[]) {
-  useRecentSectionSearchResultsMock.mockResolvedValue(
+  useRecentUpdatesMock.mockResolvedValue(
     searches.map(({ documentKind, results = [], error }) => ({
       documentKind,
       searchResults: computed(() => results),
@@ -63,14 +63,11 @@ const defaultSearches: Search[] = [
   },
 ];
 
-const { useRecentSectionSearchResultsMock } = vi.hoisted(() => ({
-  useRecentSectionSearchResultsMock: vi.fn(),
+const { useRecentUpdatesMock } = vi.hoisted(() => ({
+  useRecentUpdatesMock: vi.fn(),
 }));
 
-mockNuxtImport(
-  "useRecentSectionSearchResults",
-  () => useRecentSectionSearchResultsMock,
-);
+mockNuxtImport("useRecentUpdates", () => useRecentUpdatesMock);
 
 mockNuxtImport("useRoute", () => () => ({ fullPath: "/startseite-v2" }));
 

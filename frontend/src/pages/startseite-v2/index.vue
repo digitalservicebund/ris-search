@@ -108,7 +108,9 @@ const recentUpdatesId = useId();
   <section class="bg-white">
     <div class="content-wrapper content-grid py-24 md:py-40 lg:py-48 2xl:py-56">
       <div class="content-grid-textblock xl:col-start-2">
-        <h2 class="typo-headline2-bold mb-8 wrap-break-word hyphens-auto">
+        <h2
+          class="typo-headline2-bold mb-8 text-balance wrap-break-word hyphens-auto"
+        >
           Rechtsinformationen finden
         </h2>
         <p class="typo-body-regular mb-16 md:mb-24">
@@ -148,7 +150,7 @@ const recentUpdatesId = useId();
       <div class="col-span-12 xl:col-span-10 xl:col-start-2">
         <h2
           :id="recentUpdatesId"
-          class="typo-headline2-bold mb-4 wrap-break-word hyphens-auto md:mb-12"
+          class="typo-headline2-bold mb-4 text-balance wrap-break-word hyphens-auto md:mb-12"
         >
           Aktuelles
         </h2>
@@ -164,7 +166,9 @@ const recentUpdatesId = useId();
       <div
         class="col-span-12 md:col-span-6 lg:col-span-6 xl:col-span-5 xl:col-start-2"
       >
-        <h2 class="typo-headline2-bold mb-8 wrap-break-word hyphens-auto">
+        <h2
+          class="typo-headline2-bold mb-8 text-balance wrap-break-word hyphens-auto"
+        >
           Offene Rechtsdaten für neue Anwendungen
         </h2>
         <p class="typo-body-regular mb-8">
@@ -203,7 +207,9 @@ const recentUpdatesId = useId();
       <div
         class="col-span-12 flex flex-col items-start md:col-span-6 xl:col-span-5 xl:col-start-2"
       >
-        <h2 class="typo-headline2-bold mb-8 wrap-break-word hyphens-auto">
+        <h2
+          class="typo-headline2-bold mb-8 text-balance wrap-break-word hyphens-auto"
+        >
           Das Portal im Überblick
         </h2>
         <p class="typo-body-regular mb-16 md:mb-24">
@@ -223,7 +229,9 @@ const recentUpdatesId = useId();
       <div
         class="col-span-12 flex flex-col items-start md:col-span-6 xl:col-span-5"
       >
-        <h2 class="typo-headline2-bold mb-8 wrap-break-word hyphens-auto">
+        <h2
+          class="typo-headline2-bold mb-8 text-balance wrap-break-word hyphens-auto"
+        >
           Zahlen und Fakten
         </h2>
         <p class="typo-body-regular mb-16 md:mb-24">
