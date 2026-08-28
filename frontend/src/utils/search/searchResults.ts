@@ -32,3 +32,22 @@ export function getTitleWithFallback(
   const value = candidates.find((c) => !!c) ?? TITLE_FALLBACK;
   return sanitizeSearchResult(value);
 }
+
+/** Heading levels a search result title can be rendered at. */
+export type SearchResultHeadingLevel = "2" | "3";
+
+/**
+ * Returns the tag name and typography class for a search result title.
+ *
+ * @param level Heading level to render the title at
+ * @returns Tag name and typography class to apply
+ */
+export function getSearchResultHeadline(level: SearchResultHeadingLevel) {
+  return {
+    tag: `h${level}`,
+    class:
+      level === "2"
+        ? "typo-headline-searchresult"
+        : "typo-headline-searchresult-compact",
+  };
+}

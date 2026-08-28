@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineInfo from "~icons/ic/outline-info";
 import type { DetailsListItem } from "~/components/documents/DetailsList.vue";
 import type { MetadataItem } from "~/components/documents/Metadata.vue";
@@ -48,11 +47,10 @@ useCaselawSeo({ caseLaw: caseLaw.value, document: document.value });
 // Page contents ------------------------------------------
 
 const views: TabView[] = [
-  { path: "text", label: "Text", icon: IcBaselineSubject },
+  { path: "text", label: "Text" },
   {
     path: "details",
     label: "Details",
-    icon: IcOutlineInfo,
     analyticsId: "caselaw-metadata-tab",
   },
 ];

@@ -54,7 +54,6 @@ public class CaseLawTestData {
             .keywords(keywords)
             .decisionName(List.of("decisionNames"))
             .deviatingDocumentNumber(List.of("deviatingDocumentNumbers"))
-            .documentationOffice("DS")
             .legalEffect("JA")
             .celex("celexTest")
             .gerichtsbarkeit("gerichtsbarkeitTest")

@@ -155,7 +155,7 @@ class ImplicitReferenceTest {
     reference.setReferenzNorm(referenzNorm);
 
     assertThat(reference.getGesetzeskraftFormattedList())
-        .containsExactly("vereinbar mit höherrangigem Recht (Bremen)");
+        .containsExactly("vereinbar mit höherrangigem Recht, Bremen");
   }
 
   @Test

@@ -3,6 +3,7 @@ import { render, screen } from "@testing-library/vue";
 import { describe, expect, it } from "vitest";
 import CaselawRecord from "~/components/search/CaselawSearchResult.vue";
 import type { CaseLaw, SearchResult, TextMatch } from "~/types/api";
+import type { SearchResultHeadingLevel } from "~/utils/search/searchResults";
 
 const { useRouteMock } = vi.hoisted(() => ({
   useRouteMock: vi.fn(() => ({
@@ -44,11 +45,14 @@ const searchResult: SearchResult<CaseLaw> = {
 function renderComponent({
   item = searchResult.item,
   textMatches = [],
-}: Partial<SearchResult<CaseLaw>>) {
+  headingLevel,
+}: Partial<SearchResult<CaseLaw>> & {
+  headingLevel?: SearchResultHeadingLevel;
+}) {
   const result: SearchResult<CaseLaw> = { item, textMatches };
 
   return render(CaselawRecord, {
-    props: { searchResult: result, order: 0 },
+    props: { searchResult: result, order: 0, headingLevel },
     global: {
       stubs: {
         NuxtLink: {
@@ -478,5 +482,28 @@ describe("CaselawSearchResult", () => {
       "data-from",
       "/suche?query=BGB&documentKind=R&pageIndex=2",
     );
+  });
+
+  describe("heading level", () => {
+    it("renders the title as an h2 with the responsive style by default", () => {
+      renderComponent({});
+
+      const heading = screen.getByRole("heading", { level: 2 });
+      expect(heading).toBeInTheDocument();
+      expect(heading.closest("a")).toHaveClass("typo-headline-searchresult");
+    });
+
+    it("renders the title as an h3 with the compact style at level 3", () => {
+      renderComponent({ headingLevel: "3" });
+
+      const heading = screen.getByRole("heading", { level: 3 });
+      expect(heading).toBeInTheDocument();
+      expect(
+        screen.queryByRole("heading", { level: 2 }),
+      ).not.toBeInTheDocument();
+      expect(heading.closest("a")).toHaveClass(
+        "typo-headline-searchresult-compact",
+      );
+    });
   });
 });

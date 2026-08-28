@@ -87,11 +87,30 @@ class FrbrElementTest {
   }
 
   @Test
-  void getEntscheidungsdatumValueDoesNotFilterOutPlaceholderDates() {
+  void getEntscheidungsdatumValueReturnsNullForThePlaceholderDate() {
     FrbrElement frbrElement =
         FrbrElement.builder().frbrDates(List.of(date("nicht-vorhanden", "0001-01-01"))).build();
 
-    assertThat(frbrElement.getEntscheidungsdatumValue()).isEqualTo("0001-01-01");
+    assertThat(frbrElement.getEntscheidungsdatumValue()).isNull();
+  }
+
+  @Test
+  void getEntscheidungsdatumValueReturnsNullForThePlaceholderDateCaseInsensitively() {
+    FrbrElement frbrElement =
+        FrbrElement.builder().frbrDates(List.of(date("Nicht-Vorhanden", "0001-01-01"))).build();
+
+    assertThat(frbrElement.getEntscheidungsdatumValue()).isNull();
+  }
+
+  @Test
+  void getEntscheidungsdatumValueDoesNotFilterOutOtherDatesMatchingOnlyOneAttribute() {
+    FrbrElement frbrElementWithOtherName =
+        FrbrElement.builder().frbrDates(List.of(date("Entscheidungsdatum", "0001-01-01"))).build();
+    FrbrElement frbrElementWithOtherDate =
+        FrbrElement.builder().frbrDates(List.of(date("nicht-vorhanden", "2024-05-01"))).build();
+
+    assertThat(frbrElementWithOtherName.getEntscheidungsdatumValue()).isEqualTo("0001-01-01");
+    assertThat(frbrElementWithOtherDate.getEntscheidungsdatumValue()).isEqualTo("2024-05-01");
   }
 
   @Test

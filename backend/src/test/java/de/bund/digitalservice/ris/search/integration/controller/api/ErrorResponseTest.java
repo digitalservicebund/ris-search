@@ -145,4 +145,13 @@ class ErrorResponseTest extends ContainersIntegrationBase {
         .andExpect(jsonPath("$.errors[0].message", Matchers.is("search query limit exceeded")))
         .andExpect(jsonPath("$.errors[0].code", Matchers.is("invalid_parameter")));
   }
+
+  @Test
+  @DisplayName("Should return 405 on method not allowed")
+  void shouldReturn405OnMethodNotAllowed() throws Exception {
+    mockMvc
+        .perform(get("/v1/feedback"))
+        .andExpect(status().is(405))
+        .andExpect(jsonPath("$.errors[0].code", Matchers.is("method_not_allowed")));
+  }
 }

@@ -21,6 +21,16 @@ const scenarios: Scenario[] = [
     ],
   },
   {
+    name: "start page v2",
+    url: "/startseite-v2",
+    skipLinks: [
+      { label: "Zum Inhalt", target: "#main" },
+      { label: "Zur Suche", target: "#search" },
+      { label: "Zu Aktuelles", target: "#updates" },
+      { label: "Zum Fußbereich", target: "#footer" },
+    ],
+  },
+  {
     name: "search page",
     url: "/suche",
     skipLinks: [
