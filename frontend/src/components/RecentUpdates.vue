@@ -82,7 +82,7 @@ const activeTab = computed(() => {
       <li
         v-for="(searchResult, order) in activeTab.results"
         :key="getIdentifier(searchResult.item)"
-        class="border border-gray-400 bg-white p-16"
+        class="border border-gray-200 bg-white p-16"
       >
         <SearchResult :search-result :order heading-level="3" />
       </li>
