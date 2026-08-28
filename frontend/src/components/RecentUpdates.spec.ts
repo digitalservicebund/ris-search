@@ -93,12 +93,12 @@ describe("RecentUpdates", () => {
     mockSearches(defaultSearches);
   });
 
-  it("renders the section heading", async () => {
+  it("labels the tab list", async () => {
     await renderComponent();
 
-    expect(
-      screen.getByRole("heading", { level: 2, name: "Aktuelles" }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole("tablist")).toHaveAccessibleName(
+      "Aktuelles nach Dokumentart",
+    );
   });
 
   it("renders one tab per document kind", async () => {
