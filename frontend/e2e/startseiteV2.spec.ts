@@ -104,24 +104,37 @@ test.describe(
       ).toHaveAttribute("aria-selected", "true");
     });
 
-    test("shows the most recent documents of the selected kind", async ({
-      page,
-    }) => {
-      await navigate(page, "/startseite-v2");
+    // Norms are left out: they are filtered to a window around the current
+    // date, which the fixtures with their fixed dates never fall into
+    const kindsWithResults = [
+      {
+        tab: "Gerichtsentscheidungen",
+        detailPath: /^\/gerichtsentscheidungen\//,
+      },
+      {
+        tab: "Verwaltungsvorschriften",
+        detailPath: /^\/verwaltungsregelungen\//,
+      },
+      { tab: "Literaturnachweise", detailPath: /^\/literaturnachweise\// },
+    ];
 
-      await page.getByRole("tab", { name: "Gerichtsentscheidungen" }).click();
+    for (const { tab, detailPath } of kindsWithResults) {
+      test(`shows the most recent documents under ${tab}`, async ({ page }) => {
+        await navigate(page, "/startseite-v2");
 
-      const panel = page.getByRole("tabpanel");
-      const results = panel.getByRole("listitem");
-      await expect(results).not.toHaveCount(0);
-      await expect(
-        results.first().getByRole("heading", { level: 3 }),
-      ).toBeVisible();
-      await expect(results.first().getByRole("link").first()).toHaveAttribute(
-        "href",
-        /^\/gerichtsentscheidungen\//,
-      );
-    });
+        await page.getByRole("tab", { name: tab }).click();
+
+        const results = page.getByRole("tabpanel").getByRole("listitem");
+        await expect(results).not.toHaveCount(0);
+        await expect(
+          results.first().getByRole("heading", { level: 3 }),
+        ).toBeVisible();
+        await expect(results.first().getByRole("link").first()).toHaveAttribute(
+          "href",
+          detailPath,
+        );
+      });
+    }
 
     test("switches between document kinds", async ({ page }) => {
       await navigate(page, "/startseite-v2");
