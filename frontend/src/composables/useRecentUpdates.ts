@@ -1,5 +1,5 @@
 import type { Dayjs } from "dayjs";
-import { sortBy } from "lodash-es";
+import { orderBy, sortBy } from "lodash-es";
 import type { ComputedRef, Ref } from "vue";
 import type { Page } from "~/components/Pagination.vue";
 import type { AnyDocument, SearchResult } from "~/types/api";
@@ -78,34 +78,44 @@ function pickNorms(
 
   const today = getCurrentDateInGermany().startOf("day");
 
-  const distanceToToday = (searchResult: SearchResult<AnyDocument>) => {
-    const date = getNormDate(searchResult);
-    return date ? Math.abs(date.diff(today, "day")) : Infinity;
-  };
+  const rank = (searchResults: SearchResult<AnyDocument>[]) =>
+    sortBy(
+      searchResults.map((searchResult) => {
+        const date = getNormDate(searchResult);
+        return {
+          searchResult,
+          distanceToToday: date ? Math.abs(date.diff(today, "day")) : Infinity,
+          timestamp: date?.valueOf() ?? -Infinity,
+        };
+      }),
+      "distanceToToday",
+    );
 
-  const descendingByDate = (searchResult: SearchResult<AnyDocument>) =>
-    -(getNormDate(searchResult)?.valueOf() ?? -Infinity);
+  const nearestPast = rank(past);
+  const nearestFuture = rank(future);
 
-  const nearestPast = sortBy(past, distanceToToday);
-  const nearestFuture = sortBy(future, distanceToToday);
-
-  const picked = [
+  const reserved = [
     ...nearestPast.slice(0, reservedPerHalf),
     ...nearestFuture.slice(0, reservedPerHalf),
-    ...sortBy(
-      [
-        ...nearestPast.slice(reservedPerHalf),
-        ...nearestFuture.slice(reservedPerHalf),
-      ],
-      distanceToToday,
-    ),
-  ].slice(0, RESULTS_PER_KIND);
+  ];
 
-  return sortBy(picked, descendingByDate);
+  const remaining = sortBy(
+    [
+      ...nearestPast.slice(reservedPerHalf),
+      ...nearestFuture.slice(reservedPerHalf),
+    ],
+    "distanceToToday",
+  );
+
+  const picked = [...reserved, ...remaining].slice(0, RESULTS_PER_KIND);
+
+  return orderBy(picked, "timestamp", "desc").map(
+    ({ searchResult }) => searchResult,
+  );
 }
 
 const normWindowQuery = (range: string) =>
-  buildLuceneQuery(range, { type: "allTime" }, DocumentKind.Norm);
+  buildLuceneQuery(range, undefined, DocumentKind.Norm);
 
 function searchNorms() {
   const normWindowDays = 10;
