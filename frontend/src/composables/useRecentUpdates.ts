@@ -17,8 +17,28 @@ export const RECENT_UPDATES_DOCUMENT_KINDS = [
 export type RecentUpdatesDocumentKind =
   (typeof RECENT_UPDATES_DOCUMENT_KINDS)[number];
 
-/** Number of results shown per document kind. */
-const RESULTS_PER_KIND = 5;
+const queries: Record<RecentUpdatesDocumentKind, string> = {
+  [DocumentKind.Norm]: buildLuceneQuery(
+    "DATUM:[now-10d/d TO now+10d/d]",
+    { type: "allTime" },
+    DocumentKind.Norm,
+  ),
+  [DocumentKind.CaseLaw]: buildLuceneQuery(
+    "",
+    { type: getDefaultDateFilterType(DocumentKind.CaseLaw) },
+    DocumentKind.CaseLaw,
+  ),
+  [DocumentKind.Literature]: buildLuceneQuery(
+    "",
+    { type: getDefaultDateFilterType(DocumentKind.Literature) },
+    DocumentKind.Literature,
+  ),
+  [DocumentKind.AdministrativeDirective]: buildLuceneQuery(
+    "",
+    { type: getDefaultDateFilterType(DocumentKind.AdministrativeDirective) },
+    DocumentKind.AdministrativeDirective,
+  ),
+};
 
 /**
  * Loads the results shown in the "Aktuelles" section of the landing page.
@@ -29,20 +49,11 @@ export async function useRecentUpdates() {
   const searches = RECENT_UPDATES_DOCUMENT_KINDS.map((documentKind) => {
     const url = getLuceneSearchPath(documentKind);
 
-    const query = buildLuceneQuery(
-      "",
-      { type: getDefaultDateFilterType(documentKind) },
-      documentKind,
-    );
+    const query = queries[documentKind];
 
     const request = useRisBackend<Page>(url, {
       key: `recent-updates-${documentKind}`,
-      query: {
-        query,
-        size: RESULTS_PER_KIND,
-        sort: ADVANCED_SEARCH_DEFAULTS.sort,
-        pageIndex: ADVANCED_SEARCH_DEFAULTS.pageIndex,
-      },
+      query: { query, size: 5, sort: "-date", pageIndex: 0 },
     });
 
     return {

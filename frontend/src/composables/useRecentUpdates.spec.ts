@@ -83,23 +83,23 @@ describe("useRecentUpdates", () => {
     ]);
   });
 
-  it("requests five results per document kind with the default sort", async () => {
+  it("requests the five most recent results per document kind", async () => {
     await useRecentUpdates();
 
     for (const call of useRisBackendMock.mock.calls) {
       expect(call[1].query).toMatchObject({
         size: 5,
-        sort: "default",
+        sort: "-date",
         pageIndex: 0,
       });
     }
   });
 
-  it("filters legislation down to the currently valid versions", async () => {
+  it("restricts legislation to the ten days around today", async () => {
     await useRecentUpdates();
 
-    expect(useRisBackendMock.mock.calls[0]![1].query.query).toMatch(
-      /^\(entry_into_force_date:<\d{4}-\d{2}-\d{2} AND \(\(expiry_date:>\d{4}-\d{2}-\d{2}\) OR \(NOT _exists_:expiry_date\)\)\)$/,
+    expect(useRisBackendMock.mock.calls[0]![1].query.query).toBe(
+      "(DATUM:[now-10d/d TO now+10d/d])",
     );
   });
 
