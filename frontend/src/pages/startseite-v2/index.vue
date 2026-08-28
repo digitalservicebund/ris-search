@@ -49,7 +49,10 @@ const recentUpdatesId = useId();
       </div>
     </div>
 
-    <nav class="content-wrapper content-grid pb-8 2xl:pb-16" aria-label="Schnelleinstieg">
+    <nav
+      class="content-wrapper content-grid pb-8 2xl:pb-16"
+      aria-label="Schnelleinstieg"
+    >
       <ul
         class="lg-gap-x-24 col-span-12 -mt-24 flex flex-col gap-8 md:-mt-48 md:flex-row md:gap-x-16 lg:gap-24 xl:col-span-10 xl:col-start-2"
       >
