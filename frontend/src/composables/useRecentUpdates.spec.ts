@@ -5,9 +5,9 @@ import { ref } from "vue";
 import type { AnyDocument, SearchResult } from "~/types/api";
 import { DocumentKind } from "~/types/api";
 import {
-  RECENT_SECTION_DOCUMENT_KINDS,
-  useRecentSectionSearchResults,
-} from "./useRecentSectionSearchResults";
+  RECENT_UPDATES_DOCUMENT_KINDS,
+  useRecentUpdates,
+} from "./useRecentUpdates";
 
 type MockedOptions = {
   key: string;
@@ -53,17 +53,17 @@ const { useRisBackendMock } = vi.hoisted(() => ({
 
 mockNuxtImport("useRisBackend", () => useRisBackendMock);
 
-describe("useRecentSectionSearchResults", () => {
+describe("useRecentUpdates", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     useRisBackendMock.mockImplementation((url) => mockRequest([result(url)]));
   });
 
   it("issues one search per document kind", async () => {
-    const searches = await useRecentSectionSearchResults();
+    const searches = await useRecentUpdates();
 
     expect(useRisBackendMock).toHaveBeenCalledTimes(4);
-    expect(RECENT_SECTION_DOCUMENT_KINDS).toHaveLength(4);
+    expect(RECENT_UPDATES_DOCUMENT_KINDS).toHaveLength(4);
     expect(searches.map((s) => s.documentKind)).toEqual([
       DocumentKind.Norm,
       DocumentKind.CaseLaw,
@@ -73,7 +73,7 @@ describe("useRecentSectionSearchResults", () => {
   });
 
   it("calls the lucene endpoint matching each document kind", async () => {
-    await useRecentSectionSearchResults();
+    await useRecentUpdates();
 
     expect(useRisBackendMock.mock.calls.map((call) => call[0])).toEqual([
       "/v1/document/lucene-search/legislation",
@@ -84,7 +84,7 @@ describe("useRecentSectionSearchResults", () => {
   });
 
   it("requests five results per document kind with the default sort", async () => {
-    await useRecentSectionSearchResults();
+    await useRecentUpdates();
 
     for (const call of useRisBackendMock.mock.calls) {
       expect(call[1].query).toMatchObject({
@@ -96,7 +96,7 @@ describe("useRecentSectionSearchResults", () => {
   });
 
   it("filters legislation down to the currently valid versions", async () => {
-    await useRecentSectionSearchResults();
+    await useRecentUpdates();
 
     expect(useRisBackendMock.mock.calls[0]![1].query.query).toMatch(
       /^\(entry_into_force_date:<\d{4}-\d{2}-\d{2} AND \(\(expiry_date:>\d{4}-\d{2}-\d{2}\) OR \(NOT _exists_:expiry_date\)\)\)$/,
@@ -104,7 +104,7 @@ describe("useRecentSectionSearchResults", () => {
   });
 
   it("submits an empty query for the other document kinds", async () => {
-    await useRecentSectionSearchResults();
+    await useRecentUpdates();
 
     for (const call of useRisBackendMock.mock.calls.slice(1)) {
       expect(call[1].query.query).toBe("");
@@ -112,14 +112,14 @@ describe("useRecentSectionSearchResults", () => {
   });
 
   it("uses a unique payload key per document kind", async () => {
-    await useRecentSectionSearchResults();
+    await useRecentUpdates();
 
     const keys = useRisBackendMock.mock.calls.map((call) => call[1].key);
     expect(new Set(keys).size).toBe(4);
   });
 
   it("exposes the results of each search", async () => {
-    const searches = await useRecentSectionSearchResults();
+    const searches = await useRecentUpdates();
 
     expect(searches[0]!.searchResults.value).toEqual([
       result("/v1/document/lucene-search/legislation"),
@@ -129,7 +129,7 @@ describe("useRecentSectionSearchResults", () => {
   it("falls back to an empty list when a search returns no data", async () => {
     useRisBackendMock.mockImplementation(() => mockRequest(null));
 
-    const searches = await useRecentSectionSearchResults();
+    const searches = await useRecentUpdates();
 
     expect(searches[0]!.searchResults.value).toEqual([]);
   });
@@ -143,7 +143,7 @@ describe("useRecentSectionSearchResults", () => {
         : mockRequest([result("Some document")]),
     );
 
-    const searches = await useRecentSectionSearchResults();
+    const searches = await useRecentUpdates();
 
     const caseLaw = searches.find(
       (s) => s.documentKind === DocumentKind.CaseLaw,

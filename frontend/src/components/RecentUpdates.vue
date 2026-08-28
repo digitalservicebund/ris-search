@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { NuxtLink } from "#components";
-import type { RecentSectionDocumentKind } from "~/composables/useRecentSectionSearchResults";
+import type { RecentUpdatesDocumentKind } from "~/composables/useRecentUpdates";
 import { DocumentKind } from "~/types/api";
 
 const labels: Record<
-  RecentSectionDocumentKind,
+  RecentUpdatesDocumentKind,
   { tab: string; button: string }
 > = {
   [DocumentKind.Norm]: {
@@ -27,13 +27,13 @@ const labels: Record<
 
 const idBase = useId();
 
-const tabId = (documentKind: RecentSectionDocumentKind) =>
+const tabId = (documentKind: RecentUpdatesDocumentKind) =>
   `${idBase}-${documentKind}`;
 
-const searches = await useRecentSectionSearchResults();
+const searches = await useRecentUpdates();
 
-const selected = ref<RecentSectionDocumentKind>(
-  RECENT_SECTION_DOCUMENT_KINDS[0],
+const selected = ref<RecentUpdatesDocumentKind>(
+  RECENT_UPDATES_DOCUMENT_KINDS[0],
 );
 
 const tabs = searches.map(({ documentKind }) => ({

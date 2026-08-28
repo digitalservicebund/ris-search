@@ -6,7 +6,7 @@ import {
 } from "~/utils/search/luceneSearch";
 
 /** Document kinds shown in the "Aktuelles" section. */
-export const RECENT_SECTION_DOCUMENT_KINDS = [
+export const RECENT_UPDATES_DOCUMENT_KINDS = [
   DocumentKind.Norm,
   DocumentKind.CaseLaw,
   DocumentKind.AdministrativeDirective,
@@ -14,8 +14,8 @@ export const RECENT_SECTION_DOCUMENT_KINDS = [
 ] as const;
 
 /** A document kind shown in the "Aktuelles" section. */
-export type RecentSectionDocumentKind =
-  (typeof RECENT_SECTION_DOCUMENT_KINDS)[number];
+export type RecentUpdatesDocumentKind =
+  (typeof RECENT_UPDATES_DOCUMENT_KINDS)[number];
 
 /** Number of results shown per document kind. */
 const RESULTS_PER_KIND = 5;
@@ -25,8 +25,8 @@ const RESULTS_PER_KIND = 5;
  *
  * @returns Search results
  */
-export async function useRecentSectionSearchResults() {
-  const searches = RECENT_SECTION_DOCUMENT_KINDS.map((documentKind) => {
+export async function useRecentUpdates() {
+  const searches = RECENT_UPDATES_DOCUMENT_KINDS.map((documentKind) => {
     const url = getLuceneSearchPath(documentKind);
 
     const query = buildLuceneQuery(
@@ -36,7 +36,7 @@ export async function useRecentSectionSearchResults() {
     );
 
     const request = useRisBackend<Page>(url, {
-      key: `recent-section-${documentKind}`,
+      key: `recent-updates-${documentKind}`,
       query: {
         query,
         size: RESULTS_PER_KIND,
