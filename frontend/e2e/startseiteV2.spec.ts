@@ -19,7 +19,7 @@ test.describe(
         ),
       ).toBeVisible();
       await expect(
-        page.getByPlaceholder("Suchbegriff eingeben..."),
+        page.getByPlaceholder("Suchbegriff eingeben"),
       ).toBeVisible();
     });
 

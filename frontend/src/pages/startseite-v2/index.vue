@@ -121,7 +121,7 @@ const recentUpdatesId = useId();
         <div id="search">
           <SearchSimpleSearchInput
             full-width
-            input-placeholder="Suchbegriff eingeben..."
+            input-placeholder="Suchbegriff eingeben"
             model-value=""
             @update:model-value="(query) => redirectToSearch(query)"
             @empty-search="() => redirectToSearch()"
