@@ -37,6 +37,32 @@
             <akn:keyword ris:domainTerm="Schlagwort" dictionary="" showAs="Disziplinarwert" value="Disziplinarwert"/>
          </akn:classification>
          <akn:analysis source="#ris">
+             <akn:otherReferences source="#ris">
+                 <akn:implicitReference ris:domainTerm="Rechtszug">
+                     <ris:vorgehendeEntscheidung domainTerm="Vorgehende Entscheidung">
+                         <ris:dokumenttyp domainTerm="Dokumenttyp">Beschluss</ris:dokumenttyp>
+                         <ris:entscheidungsdatum domainTerm="Entscheidungsdatum">2024-11-12</ris:entscheidungsdatum>
+                         <ris:dokumentnummer domainTerm="Dokumentnummer">BDRE000700000</ris:dokumentnummer>
+                         <ris:aktenzeichen domainTerm="Aktenzeichen">XVI VL 34/99</ris:aktenzeichen>
+                         <ris:gericht domainTerm="Gericht">
+                             <ris:gerichtstyp domainTerm="Gerichtstyp">VG</ris:gerichtstyp>
+                             <ris:gerichtsort domainTerm="Gerichtsort">Frankfurt</ris:gerichtsort>
+                         </ris:gericht>
+                     </ris:vorgehendeEntscheidung>
+                 </akn:implicitReference>
+                 <akn:implicitReference ris:domainTerm="Rechtszug">
+                     <ris:nachgehendeEntscheidung domainTerm="Nachgehende Entscheidung" art="anhängig">
+                         <ris:dokumenttyp domainTerm="Dokumenttyp">Beschluss</ris:dokumenttyp>
+                         <ris:entscheidungsdatum domainTerm="Entscheidungsdatum">2025-06-01</ris:entscheidungsdatum>
+                         <ris:dokumentnummer domainTerm="Dokumentnummer">BDRE000900000</ris:dokumentnummer>
+                         <ris:aktenzeichen domainTerm="Aktenzeichen">XVI VL 34/99</ris:aktenzeichen>
+                         <ris:gericht domainTerm="Gericht">
+                             <ris:gerichtstyp domainTerm="Gerichtstyp">OVG</ris:gerichtstyp>
+                             <ris:gerichtsort domainTerm="Gerichtsort">Münster</ris:gerichtsort>
+                         </ris:gericht>
+                     </ris:nachgehendeEntscheidung>
+                 </akn:implicitReference>
+             </akn:otherReferences>
              <akn:otherAnalysis source="#ris">
                  <ris:dokumentarischeKurztexte domainTerm="Dokumentarische Kurztexte">
                      <ris:titelzeile domainTerm="Titelzeile" eId="titelzeile">

@@ -120,8 +120,10 @@ class CaseLawLdmlToOpenSearchMapperTest {
 
     assertThat(caseLaw.previousDecisions())
         .containsExactlyInAnyOrder(
-            "previous decision file number, previous decision court type",
-            "previous decision file number, previous decision court type");
+            "previous decision court type previous decision court location, previous decision"
+                + " document type vom 1. Januar 2020 - previous decision file number",
+            "previous decision court type previous decision court location, previous decision"
+                + " document type vom 1. Januar 2020 - previous decision file number");
     assertThat(caseLaw.ensuingDecisions())
         .containsExactlyInAnyOrder(
             "ensuing decision court type, ensuing decision document type vom 1. Oktober 2022 -"
