@@ -3959,6 +3959,35 @@
               "type" : "string"
             }
           },
+          "previousDecisions" : {
+            "type" : "array",
+            "description" : "Vorgehende Entscheidungen",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "ensuingDecisions" : {
+            "type" : "array",
+            "description" : "Nachgehende Entscheidungen",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "gesetzeskraft" : {
+            "type" : "array",
+            "description" : "Gesetzeskraft",
+            "example" : "vereinbar mit höherrangigem Recht (Bremen)",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "streitjahre" : {
+            "type" : "array",
+            "description" : "Streitjahre",
+            "items" : {
+              "type" : "string"
+            }
+          },
           "@id" : {
             "type" : "string",
             "example" : "/v1/case-law/ECLI:DE:FGRLP:1969:0905.IV85.68.0A"
