@@ -1,5 +1,6 @@
 package de.bund.digitalservice.ris.search.integration.controller.api;
 
+import static com.apicatalog.jsonld.JsonLdOptions.ProcessingPolicy.Fail;
 import static de.bund.digitalservice.ris.ZipTestUtils.readZipStream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.contains;
@@ -16,6 +17,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.apicatalog.jsonld.JsonLd;
+import com.apicatalog.jsonld.document.JsonDocument;
+import com.apicatalog.jsonld.loader.DocumentLoader;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
@@ -27,7 +31,10 @@ import de.bund.digitalservice.ris.search.integration.controller.api.testData.Nor
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.service.ChangelogService;
 import de.bund.digitalservice.ris.search.service.IndexNormsService;
+import jakarta.json.JsonArray;
+import jakarta.json.JsonObject;
 import java.io.ByteArrayInputStream;
+import java.io.StringReader;
 import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -57,6 +64,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.util.MultiValueMap;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -783,5 +792,46 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
             jsonPath("$.deleted[0].['@id']")
                 .value("/v1/legislation/eli/bund/bgbl-1/2000/identifier/2026-01-01/1/deu"))
         .andExpect(jsonPath("$.deleted[0].['@type']").value("Legislation"));
+  }
+
+  @Test
+  void singleNormEnpdointIsJsonLdCompliant() throws Exception {
+    String jsonResponse =
+        mockMvc
+            .perform(
+                get(ApiConfig.Paths.LEGISLATION_SINGLE + "/bund/bgbl-1/1000/test/2000-10-06/2/deu")
+                    .contentType(MediaType.APPLICATION_JSON))
+            .andReturn()
+            .getResponse()
+            .getContentAsString();
+
+    DocumentLoader mockContextLoader =
+        (_, _) -> {
+          String contextJson = null;
+          try {
+            contextJson =
+                mockMvc
+                    .perform(MockMvcRequestBuilders.get("/v1/context.jsonld"))
+                    .andExpect(MockMvcResultMatchers.status().isOk())
+                    .andReturn()
+                    .getResponse()
+                    .getContentAsString();
+          } catch (Exception e) {
+            throw new RuntimeException(e);
+          }
+
+          return JsonDocument.of(new StringReader(contextJson));
+        };
+
+    JsonDocument document = JsonDocument.of(new StringReader(jsonResponse));
+
+    JsonArray expanded =
+        JsonLd.expand(document).loader(mockContextLoader).undefinedTermsPolicy(Fail).get();
+
+    assertThat(expanded).isNotEmpty();
+  }
+
+  private String getValue(JsonObject jsonObject, String propertyUri) {
+    return jsonObject.getJsonArray(propertyUri).getJsonObject(0).getString("@value");
   }
 }

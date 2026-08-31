@@ -35,6 +35,9 @@ pebble = "4.1.2"
 rest-assured = "6.0.1"
 ris-html-transformation="0.0.6"
 ris-xml-schema="0.3.6"
+titanium-json="1.7.0"
+jakarta-json="2.0.1"
+
 
 [libraries]
 spring-actuator = { module="org.springframework.boot:spring-boot-starter-actuator", version.ref="spring-boot-starter" }
@@ -72,6 +75,8 @@ ris-html-transformation = { module = "de.bund.digitalservice:ris-html-transforma
 ris-xml-schema = { module = "de.bund.digitalservice:ris-xml-schema", version.ref = "ris-xml-schema"}
 streamex = { module = 'one.util:streamex', version.ref = "streamex" }
 restassured = { module = 'io.rest-assured:rest-assured', version.ref = "rest-assured" }
+apicatalog-titanium-json = { module="com.apicatalog:titanium-json-ld", version.ref = "titanium-json"}
+glassfish-jakarta-json = { module = "org.glassfish:jakarta.json", version.ref = "jakarta-json"}
 
 # CVE-2026-5588
 bouncycastle-bom = { module = "org.bouncycastle:bc-jdk18on-bom", version = "1.85.2" }

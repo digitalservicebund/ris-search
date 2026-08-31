@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
 import lombok.Builder;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 /**
  * Representation of a legislative expression schema, designed to encapsulate metadata about a
@@ -93,5 +94,12 @@ public record LegislationExpressionSchema(
   @Schema(example = JsonldTypes.LEGISLATION)
   public String getType() {
     return JsonldTypes.LEGISLATION;
+  }
+
+  @JsonProperty("@context")
+  public String getContext() {
+    return ServletUriComponentsBuilder.fromCurrentContextPath()
+        .path("/v1/context.jsonld")
+        .toUriString();
   }
 }
