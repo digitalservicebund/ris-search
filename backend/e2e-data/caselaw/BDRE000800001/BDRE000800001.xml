@@ -75,7 +75,7 @@
                      </ris:nachgehendeEntscheidung>
                  </akn:implicitReference>
                  <akn:implicitReference ris:domainTerm="Rechtszug">
-                     <ris:nachgehendeEntscheidung domainTerm="Nachgehende Entscheidung">
+                     <ris:nachgehendeEntscheidung domainTerm="Nachgehende Entscheidung" art="nachgehend">
                          <ris:dokumenttyp domainTerm="Dokumenttyp">Urteil</ris:dokumenttyp>
                          <ris:entscheidungsdatum domainTerm="Entscheidungsdatum">2025-09-15</ris:entscheidungsdatum>
                          <ris:dokumentnummer domainTerm="Dokumentnummer">BDRE001000000</ris:dokumentnummer>
@@ -87,7 +87,7 @@
                      </ris:nachgehendeEntscheidung>
                  </akn:implicitReference>
                  <akn:implicitReference ris:domainTerm="Rechtszug">
-                     <ris:nachgehendeEntscheidung domainTerm="Nachgehende Entscheidung">
+                     <ris:nachgehendeEntscheidung domainTerm="Nachgehende Entscheidung" art="nachgehend">
                          <ris:dokumenttyp domainTerm="Dokumenttyp">Beschluss</ris:dokumenttyp>
                          <ris:entscheidungsdatum domainTerm="Entscheidungsdatum">2025-11-03</ris:entscheidungsdatum>
                          <ris:dokumentnummer domainTerm="Dokumentnummer">BDRE001100000</ris:dokumentnummer>
