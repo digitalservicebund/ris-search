@@ -31,33 +31,25 @@ public class LinkedJudgement {
   private RisGericht risGericht;
 
   /**
-   * Returns a simplified string representation containing the file number and court type.
+   * Formats this linked judgement (previous or ensuing decision) as "Gerichtstyp Gerichtsort, Typ
+   * vom Datum - Aktenzeichen", appending " (anhängig)" if it is a pending proceeding (i.e. its
+   * {@code art} attribute is "anhängig"; only ensuing decisions can have this attribute).
    *
-   * @return a comma-separated string of the judgement details
+   * @return the formatted judgement, or {@code null} if none of its parts are present
    */
-  public String asString() {
-    String courtType = (risGericht != null) ? risGericht.getGerichtstyp() : null;
-
-    return Stream.of(fileNumber, courtType)
-        .filter(Objects::nonNull)
-        .collect(Collectors.joining(", "));
-  }
-
-  /**
-   * Formats this ensuing decision (nachgehende Entscheidung) as "Gericht, Typ vom Datum -
-   * Aktenzeichen", appending " (anhängig)" if it is a pending proceeding (i.e. its {@code art}
-   * attribute is "anhängig").
-   *
-   * @return the formatted ensuing decision, or {@code null} if none of its parts are present
-   */
-  public String getEnsuingDecisionFormatted() {
+  public String getFormatted() {
     String gerichtstyp = (risGericht != null) ? risGericht.getGerichtstyp() : null;
+    String gerichtsort = (risGericht != null) ? risGericht.getGerichtsort() : null;
+    String gericht =
+        Stream.of(gerichtstyp, gerichtsort)
+            .filter(Objects::nonNull)
+            .collect(Collectors.joining(" "));
     String formatiertesDatum =
         DateUtils.toGermanLongDateString(DateUtils.nullSafeParseyyyyMMdd(decisionDate));
 
     StringBuilder result =
         new StringBuilder(
-            Stream.of(gerichtstyp, documentType)
+            Stream.of(gericht.isBlank() ? null : gericht, documentType)
                 .filter(Objects::nonNull)
                 .collect(Collectors.joining(", ")));
 

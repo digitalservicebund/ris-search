@@ -126,9 +126,15 @@ class RechtsprechungControllerTest extends ContainersIntegrationBase {
             jsonPath("$.mitwirkendeRichter[0]").value("Meier"),
             jsonPath("$.mitwirkendeRichter[1]").value("Müller"),
             jsonPath("$.vorgehendeEntscheidungen[0]")
-                .value("previous decision file number, previous decision court type"),
+                .value(
+                    "previous decision court type previous decision court location, previous"
+                        + " decision document type vom 1. Januar 2020 - previous decision file"
+                        + " number"),
             jsonPath("$.vorgehendeEntscheidungen[1]")
-                .value("previous decision file number, previous decision court type"),
+                .value(
+                    "previous decision court type previous decision court location, previous"
+                        + " decision document type vom 1. Januar 2020 - previous decision file"
+                        + " number"),
             jsonPath("$.nachgehendeEntscheidungen[0]")
                 .value(
                     "ensuing decision court type, ensuing decision document type vom 1. Oktober"
