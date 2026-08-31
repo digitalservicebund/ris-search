@@ -1601,6 +1601,17 @@ export interface components {
              * @example DEV-123
              */
             deviatingDocumentNumber: string[];
+            /** @description Vorgehende Entscheidungen */
+            previousDecisions?: string[];
+            /** @description Nachgehende Entscheidungen */
+            ensuingDecisions?: string[];
+            /**
+             * @description Gesetzeskraft
+             * @example vereinbar mit höherrangigem Recht (Bremen)
+             */
+            gesetzeskraft?: string[];
+            /** @description Streitjahre */
+            streitjahre?: string[];
             /** @example /v1/case-law/ECLI:DE:FGRLP:1969:0905.IV85.68.0A */
             "@id": string;
             /** @example de */

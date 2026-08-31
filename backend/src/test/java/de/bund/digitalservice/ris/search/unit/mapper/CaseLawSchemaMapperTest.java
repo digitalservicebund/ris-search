@@ -131,6 +131,13 @@ class CaseLawSchemaMapperTest {
     assertThat(caseLawSchema.keywords()).containsExactly("one", "two");
     assertThat(caseLawSchema.decisionName()).containsExactly("decisionName");
     assertThat(caseLawSchema.deviatingDocumentNumber()).containsExactly("deviatingDocumentNumber");
+    assertThat(caseLawSchema.previousDecisions())
+        .containsExactly("previous decision file number, previous decision court type");
+    assertThat(caseLawSchema.ensuingDecisions())
+        .containsExactly("ensuing decision file number, ensuing decision court type");
+    assertThat(caseLawSchema.gesetzeskraft())
+        .containsExactly("vereinbar mit höherrangigem Recht, Bremen");
+    assertThat(caseLawSchema.streitjahre()).containsExactly("2024");
   }
 
   @Test
