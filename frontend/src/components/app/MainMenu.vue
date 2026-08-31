@@ -8,10 +8,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
 
 <template>
   <div>
-    <ul
-      class="flex flex-col justify-end gap-x-28 md:flex-row md:items-center"
-      :class="listClass"
-    >
+    <ul :class="listClass">
       <li>
         <NuxtLink
           class="nav-link"

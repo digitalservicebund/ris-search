@@ -14,18 +14,23 @@ const mobileMenuId = useId();
 <template>
   <header id="top" class="border-b border-b-gray-400 bg-white print:hidden">
     <AppBanner />
-    <nav
-      class="content-wrapper flex flex-col gap-24 py-20"
-      aria-label="Hauptmenü"
-    >
-      <div class="flex items-center justify-between gap-16">
+    <AppServiceMenu
+      class="content-wrapper hidden py-16 md:flex md:justify-end"
+      list-class="flex flex-row items-center gap-24"
+      @select-item="toggleMenu()"
+    ></AppServiceMenu>
+    <nav class="flex flex-col pt-16 md:gap-24 md:pt-0" aria-label="Hauptmenü">
+      <!-- Desktop nav -->
+      <div
+        class="content-gutters flex items-center justify-between gap-16 pb-16"
+      >
         <AppLogo />
 
         <!-- Mobile menu toggle -->
-        <div class="float-end lg:hidden">
+        <div class="float-end md:hidden">
           <button
             type="button"
-            class="typo-label1-regular hover:typo-link-regular flex cursor-pointer items-center gap-8 outline-offset-4 outline-blue-800 focus-visible:outline-4"
+            class="ris-label3-regular inline-flex cursor-pointer flex-col items-center gap-4 text-[0.875rem] text-blue-800 outline-offset-4 outline-blue-800 focus-visible:outline-4"
             :aria-expanded="open"
             :aria-controls="mobileMenuId"
             @click="toggleMenu()"
@@ -36,19 +41,29 @@ const mobileMenuId = useId();
           </button>
         </div>
 
-        <!-- Desktop nav -->
-        <AppHeaderNav class="hidden lg:inline-block" list-class="items-end" />
+        <AppMainMenu
+          class="hidden md:inline-block"
+          list-class="flex justify-end gap-x-28 flex-row items-center"
+        />
       </div>
 
       <!-- Mobile nav -->
-      <AppHeaderNav
+      <AppMainMenu
         :id="mobileMenuId"
         :hidden="!open"
-        data-testid="mobile-nav"
-        class="inline-block lg:hidden"
-        list-class="items-start gap-y-8"
+        data-testid="mobile-main-menu"
+        class="inline-block border-t border-gray-400 py-24 md:hidden"
+        list-class="content-gutters flex flex-col items-start gap-16"
         @select-item="toggleMenu()"
       />
+      <AppServiceMenu
+        :id="mobileMenuId"
+        :hidden="!open"
+        data-testid="mobile-service-menu"
+        class="inline-block border-t border-gray-400 py-24 md:hidden"
+        list-class="content-gutters flex flex-col items-start gap-16"
+        @select-item="toggleMenu()"
+      ></AppServiceMenu>
     </nav>
   </header>
 </template>

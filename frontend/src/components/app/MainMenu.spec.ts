@@ -2,30 +2,19 @@ import { renderSuspended } from "@nuxt/test-utils/runtime";
 import { userEvent } from "@testing-library/user-event";
 import { screen } from "@testing-library/vue";
 import { describe, it, expect, vi } from "vitest";
-import AppHeaderNav from "./HeaderNav.vue";
-
-const NuxtLinkStub = {
-  name: "NuxtLink",
-  props: ["to"],
-  template: `<a :href="'/' + to.name"><slot/></a>`,
-};
+import AppMainMenu from "./MainMenu.vue";
 
 const mockPrivateFeaturesEnabled = vi.fn(() => false);
 vi.mock("~/composables/usePrivateFeaturesFlag", () => ({
   usePrivateFeaturesFlag: () => mockPrivateFeaturesEnabled(),
 }));
 
-describe("HeaderNav", () => {
+describe("MainMenu", () => {
   it('emits "selectItem" for each NuxtLink that has been clicked', async () => {
     const user = userEvent.setup();
-    const { emitted } = await renderSuspended(AppHeaderNav, {
+    const { emitted } = await renderSuspended(AppMainMenu, {
       props: {
         listClass: "test-class",
-      },
-      global: {
-        stubs: {
-          NuxtLink: NuxtLinkStub,
-        },
       },
     });
 
@@ -39,14 +28,9 @@ describe("HeaderNav", () => {
 
   it("displays links 'Suche', 'Erweitere Suche' and 'Über diesen Service' when private features enabled", async () => {
     mockPrivateFeaturesEnabled.mockReturnValue(true);
-    await renderSuspended(AppHeaderNav, {
+    await renderSuspended(AppMainMenu, {
       props: {
         listClass: "test-class",
-      },
-      global: {
-        stubs: {
-          NuxtLink: NuxtLinkStub,
-        },
       },
     });
 
@@ -67,14 +51,9 @@ describe("HeaderNav", () => {
 
   it("displays links 'Suche', 'Feedback geben' and 'Über diesen Service' when private features disabled", async () => {
     mockPrivateFeaturesEnabled.mockReturnValue(false);
-    await renderSuspended(AppHeaderNav, {
+    await renderSuspended(AppMainMenu, {
       props: {
         listClass: "test-class",
-      },
-      global: {
-        stubs: {
-          NuxtLink: NuxtLinkStub,
-        },
       },
     });
 
