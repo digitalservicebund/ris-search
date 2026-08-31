@@ -44,7 +44,7 @@ describe("ServiceMenu", () => {
     expect(translationsLink).toHaveAttribute("href", "/translations");
 
     const apiDocsLink = screen.getByRole("link", {
-      name: "API-Dokumentation",
+      name: /API-Dokumentation/,
     });
     expect(apiDocsLink).toBeVisible();
     expect(apiDocsLink).toHaveAttribute(
@@ -86,7 +86,7 @@ describe("ServiceMenu", () => {
     expect(translationsLink).toHaveAttribute("href", "/translations");
 
     const apiDocsLink = screen.getByRole("link", {
-      name: "API-Dokumentation",
+      name: /API-Dokumentation/,
     });
     expect(apiDocsLink).toBeVisible();
     expect(apiDocsLink).toHaveAttribute(

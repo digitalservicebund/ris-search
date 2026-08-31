@@ -19,7 +19,7 @@ const mobileServiceMenuId = useId();
       class="content-wrapper hidden py-16 md:flex md:justify-end"
       list-class="flex flex-row items-center gap-24"
       @select-item="toggleMenu()"
-    ></AppServiceMenu>
+    />
     <nav class="flex flex-col pt-16 md:gap-24 md:pt-0" aria-label="Hauptmenü">
       <!-- Desktop nav -->
       <div
@@ -64,7 +64,7 @@ const mobileServiceMenuId = useId();
         class="inline-block border-t border-gray-400 py-24 md:hidden"
         list-class="content-gutters flex flex-col items-start gap-16"
         @select-item="toggleMenu()"
-      ></AppServiceMenu>
+      />
     </nav>
   </header>
 </template>
