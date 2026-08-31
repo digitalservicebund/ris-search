@@ -8,7 +8,8 @@ function toggleMenu() {
   open.value = !open.value;
 }
 
-const mobileMenuId = useId();
+const mobileMainMenuId = useId();
+const mobileServiceMenuId = useId();
 </script>
 
 <template>
@@ -32,7 +33,7 @@ const mobileMenuId = useId();
             type="button"
             class="ris-label3-regular inline-flex cursor-pointer flex-col items-center gap-4 text-[0.875rem] text-blue-800 outline-offset-4 outline-blue-800 focus-visible:outline-4"
             :aria-expanded="open"
-            :aria-controls="mobileMenuId"
+            :aria-controls="`${mobileMainMenuId} ${mobileServiceMenuId}`"
             @click="toggleMenu()"
           >
             <IcBaselineMenu v-if="!open" size="1.25em" />
@@ -49,7 +50,7 @@ const mobileMenuId = useId();
 
       <!-- Mobile nav -->
       <AppMainMenu
-        :id="mobileMenuId"
+        :id="mobileMainMenuId"
         :hidden="!open"
         data-testid="mobile-main-menu"
         class="inline-block border-t border-gray-400 py-24 md:hidden"
@@ -57,7 +58,7 @@ const mobileMenuId = useId();
         @select-item="toggleMenu()"
       />
       <AppServiceMenu
-        :id="mobileMenuId"
+        :id="mobileServiceMenuId"
         :hidden="!open"
         data-testid="mobile-service-menu"
         class="inline-block border-t border-gray-400 py-24 md:hidden"
