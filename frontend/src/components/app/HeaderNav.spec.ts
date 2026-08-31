@@ -1,14 +1,19 @@
 import { renderSuspended } from "@nuxt/test-utils/runtime";
 import { userEvent } from "@testing-library/user-event";
 import { screen } from "@testing-library/vue";
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import AppHeaderNav from "./HeaderNav.vue";
 
 const NuxtLinkStub = {
   name: "NuxtLink",
   props: ["to"],
-  template: `<a :href="typeof to === 'string' ? to : '/'" v-bind="$attrs"><slot /></a>`,
+  template: `<a :href="'/' + to.name"><slot/></a>`,
 };
+
+const mockPrivateFeaturesEnabled = vi.fn(() => false);
+vi.mock("~/composables/usePrivateFeaturesFlag", () => ({
+  usePrivateFeaturesFlag: () => mockPrivateFeaturesEnabled(),
+}));
 
 describe("HeaderNav", () => {
   it('emits "selectItem" for each NuxtLink that has been clicked', async () => {
@@ -30,5 +35,61 @@ describe("HeaderNav", () => {
     }
     expect(emitted("selectItem")).toBeTruthy();
     expect(emitted("selectItem")?.length).toBe(searchLinks.length);
+  });
+
+  it("displays links 'Suche', 'Erweitere Suche' and 'Über diesen Service' when private features enabled", async () => {
+    mockPrivateFeaturesEnabled.mockReturnValue(true);
+    await renderSuspended(AppHeaderNav, {
+      props: {
+        listClass: "test-class",
+      },
+      global: {
+        stubs: {
+          NuxtLink: NuxtLinkStub,
+        },
+      },
+    });
+
+    const searchLink = screen.getByRole("link", { name: "Suche" });
+    expect(searchLink).toBeVisible();
+    expect(searchLink).toHaveAttribute("href", "/suche");
+
+    const advancedSearchLink = screen.getByRole("link", {
+      name: "Erweiterte Suche",
+    });
+    expect(advancedSearchLink).toBeVisible();
+    expect(advancedSearchLink).toHaveAttribute("href", "/erweiterte-suche");
+
+    const aboutLink = screen.getByRole("link", { name: "Über den Service" });
+    expect(aboutLink).toBeVisible();
+    expect(aboutLink).toHaveAttribute("href", "/ueber");
+  });
+
+  it("displays links 'Suche', 'Feedback geben' and 'Über diesen Service' when private features disabled", async () => {
+    mockPrivateFeaturesEnabled.mockReturnValue(false);
+    await renderSuspended(AppHeaderNav, {
+      props: {
+        listClass: "test-class",
+      },
+      global: {
+        stubs: {
+          NuxtLink: NuxtLinkStub,
+        },
+      },
+    });
+
+    const searchLink = screen.getByRole("link", { name: "Suche" });
+    expect(searchLink).toBeVisible();
+    expect(searchLink).toHaveAttribute("href", "/suche");
+
+    const advancedSearchLink = screen.getByRole("link", {
+      name: "Feedback geben",
+    });
+    expect(advancedSearchLink).toBeVisible();
+    expect(advancedSearchLink).toHaveAttribute("href", "/feedback");
+
+    const aboutLink = screen.getByRole("link", { name: "Über den Service" });
+    expect(aboutLink).toBeVisible();
+    expect(aboutLink).toHaveAttribute("href", "/ueber");
   });
 });

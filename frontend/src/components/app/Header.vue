@@ -45,8 +45,8 @@ const mobileMenuId = useId();
         :id="mobileMenuId"
         :hidden="!open"
         data-testid="mobile-nav"
-        class="inline-block items-center lg:hidden"
-        list-class="items-center gap-y-8"
+        class="inline-block lg:hidden"
+        list-class="items-start gap-y-8"
         @select-item="toggleMenu()"
       />
     </nav>
