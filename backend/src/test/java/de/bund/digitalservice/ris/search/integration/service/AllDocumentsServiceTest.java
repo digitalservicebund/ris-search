@@ -11,13 +11,11 @@ import de.bund.digitalservice.ris.search.mapper.DocumentResponseMapper;
 import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.AbstractSearchEntity;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
-import de.bund.digitalservice.ris.search.service.AllDocumentsService;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.data.domain.Pageable;
@@ -27,8 +25,6 @@ import org.springframework.data.elasticsearch.core.SearchPage;
 @AutoConfigureMockMvc
 @Tag("integration")
 class AllDocumentsServiceTest extends ContainersIntegrationBase {
-
-  @Autowired private AllDocumentsService allDocumentsService;
 
   @BeforeEach
   void setUpSearchControllerApiTest() {
@@ -42,8 +38,7 @@ class AllDocumentsServiceTest extends ContainersIntegrationBase {
     caseLawRepository.save(CaseLawTestData.simple("caselaw2", "no match"));
     saveSimpleNorm("norm1", "Bundessozialgericht");
     saveSimpleNorm("norm2", "other no match");
-    List<AbstractSearchEntity> searchResults =
-        TestDataGenerator.searchAll(allDocumentsService, "BSG");
+    List<AbstractSearchEntity> searchResults = searchAll("BSG");
     List<String> caselaws = TestDataGenerator.getCaseLawIds(searchResults);
     List<String> norms = TestDataGenerator.getNormIds(searchResults);
     assertThat(caselaws).containsExactly("caselaw1");
@@ -57,8 +52,7 @@ class AllDocumentsServiceTest extends ContainersIntegrationBase {
     caseLawRepository.save(CaseLawTestData.simple("caselaw2", "no match"));
     saveSimpleNorm("norm1", "Abgasreduzierend");
     saveSimpleNorm("norm2", "other no match");
-    List<AbstractSearchEntity> searchResults =
-        TestDataGenerator.searchAll(allDocumentsService, "Abgas reduzierend");
+    List<AbstractSearchEntity> searchResults = searchAll("Abgas reduzierend");
     List<String> caselaws = TestDataGenerator.getCaseLawIds(searchResults);
     List<String> norms = TestDataGenerator.getNormIds(searchResults);
     assertThat(caselaws).containsExactly("caselaw1");
@@ -74,8 +68,7 @@ class AllDocumentsServiceTest extends ContainersIntegrationBase {
     // eser is not a standard suffix and is not expected to match
     caseLawRepository.save(CaseLawTestData.simple("caselaw3", "Abgasreduzierendeser"));
     // es is a standard suffix
-    List<AbstractSearchEntity> searchResults =
-        TestDataGenerator.searchAll(allDocumentsService, "Abgas reduzierendes");
+    List<AbstractSearchEntity> searchResults = searchAll("Abgas reduzierendes");
     List<String> caselawIds = TestDataGenerator.getCaseLawIds(searchResults);
     assertThat(caselawIds).containsExactlyInAnyOrder("caselaw1", "caselaw2");
   }
@@ -86,8 +79,7 @@ class AllDocumentsServiceTest extends ContainersIntegrationBase {
     caseLawRepository.save(CaseLawTestData.simple("caselaw1", "urlaub"));
     literatureRepository.save(LiteratureTestData.simple("literature1", "urlaub"));
     saveSimpleNorm("norm1", "urlaub");
-    List<AbstractSearchEntity> searchResults =
-        TestDataGenerator.searchAll(allDocumentsService, "urlaub");
+    List<AbstractSearchEntity> searchResults = searchAll("urlaub");
     List<String> caselawIds = TestDataGenerator.getCaseLawIds(searchResults);
     assertThat(caselawIds).containsExactlyInAnyOrder("caselaw1");
     List<String> literatureIds = TestDataGenerator.getLiteratureIds(searchResults);
@@ -107,11 +99,11 @@ class AllDocumentsServiceTest extends ContainersIntegrationBase {
             .build();
     caseLawRepository.save(unit);
 
-    UniversalSearchParams searchParams = new UniversalSearchParams();
-    searchParams.setSearchTerm("be fragmented");
-
     SearchPage<AbstractSearchEntity> searchResult =
-        allDocumentsService.simpleSearchAllDocuments(searchParams, Pageable.ofSize(10), null);
+        allDocumentsService.simpleSearchAllDocuments(
+            UniversalSearchParams.builder().searchTerm("be fragmented").build(),
+            Pageable.ofSize(10),
+            null);
     var collection = DocumentResponseMapper.fromDomain(searchResult, ApiConfig.Paths.DOCUMENT);
 
     String expectedTextMatch =

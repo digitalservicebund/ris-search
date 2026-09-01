@@ -5,6 +5,7 @@ import jakarta.persistence.ElementCollection;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.Builder;
+import lombok.Getter;
 import org.jspecify.annotations.Nullable;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.DateFormat;
@@ -32,7 +33,7 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 @Builder
 @Document(indexName = "#{@configurations.getAdministrativeDirectiveIndexName()}")
 public record AdministrativeDirective(
-    @Id @Field(name = Fields.ID) String id,
+    @Getter @Id @Field(name = Fields.ID) String id,
     @Field(name = Fields.DOCUMENT_NUMBER) String documentNumber,
     @Field(name = Literature.Fields.DOCUMENT_NUMBER_KEYWORD) String documentNumberKeyword,
     @Nullable @Field(name = Fields.HEADLINE) String headline,

@@ -21,7 +21,11 @@ public class CaseLawSimpleSearchType implements SimpleSearchType {
 
   public static final Map<String, Float> FIELD_BOOSTS =
       Map.ofEntries(
+          Map.entry(CaseLawDocumentationUnit.Fields.ABWEICHENDE_ECLIS, 1.0f),
+          Map.entry(CaseLawDocumentationUnit.Fields.ABWEICHENDE_AKTENZEICHEN, 1.0f),
+          Map.entry(CaseLawDocumentationUnit.Fields.AMTLICHE_FUNDSTELLEN, 1.0f),
           Map.entry(CaseLawDocumentationUnit.Fields.CASE_FACTS, convertOrderingToBoost(5)),
+          Map.entry(CaseLawDocumentationUnit.Fields.CELEX, 1.0f),
           Map.entry(CaseLawDocumentationUnit.Fields.COURT_KEYWORD, 1.0f),
           Map.entry(CaseLawDocumentationUnit.Fields.COURT_TYPE, 1.0f),
           Map.entry(CaseLawDocumentationUnit.Fields.DECISION_GROUNDS, convertOrderingToBoost(4)),
@@ -32,22 +36,28 @@ public class CaseLawSimpleSearchType implements SimpleSearchType {
           Map.entry(CaseLawDocumentationUnit.Fields.DOCUMENT_TYPE, 1.0f),
           Map.entry(CaseLawDocumentationUnit.Fields.ECLI, 1.0f),
           Map.entry(CaseLawDocumentationUnit.Fields.ENSUING_DECISIONS, 1.0f),
+          Map.entry(CaseLawDocumentationUnit.Fields.ERLEDIGUNGSVERMERK, 1.0f),
           Map.entry(CaseLawDocumentationUnit.Fields.FILE_NUMBERS, 1.0f),
+          Map.entry(CaseLawDocumentationUnit.Fields.GERICHTSBARKEIT, 1.0f),
           Map.entry(CaseLawDocumentationUnit.Fields.GROUNDS, convertOrderingToBoost(4)),
           Map.entry(CaseLawDocumentationUnit.Fields.GUIDING_PRINCIPLE, convertOrderingToBoost(2)),
-          Map.entry(CaseLawDocumentationUnit.Fields.HAS_LEGISLATIVE_MANDATE, 1.0f),
           Map.entry(CaseLawDocumentationUnit.Fields.HEADLINE, convertOrderingToBoost(3)),
           Map.entry(CaseLawDocumentationUnit.Fields.HEADNOTE, 1.0f),
-          Map.entry(CaseLawDocumentationUnit.Fields.ID, 1.0f),
           Map.entry(CaseLawDocumentationUnit.Fields.JUDICIAL_BODY, 1.0f),
           Map.entry(CaseLawDocumentationUnit.Fields.KEYWORDS, 1.0f),
           Map.entry(CaseLawDocumentationUnit.Fields.LEGAL_EFFECT, 1.0f),
           Map.entry(CaseLawDocumentationUnit.Fields.LOCATION, 1.0f),
+          Map.entry(CaseLawDocumentationUnit.Fields.MITWIRKENDE_RICHTER, 1.0f),
+          Map.entry(CaseLawDocumentationUnit.Fields.NICHTAMTLICHE_FUNDSTELLEN, 1.0f),
+          Map.entry(CaseLawDocumentationUnit.Fields.NORMENKETTE, 1.0f),
           Map.entry(CaseLawDocumentationUnit.Fields.OTHER_HEADNOTE, convertOrderingToBoost(3)),
           Map.entry(CaseLawDocumentationUnit.Fields.OTHER_LONG_TEXT, convertOrderingToBoost(6)),
           Map.entry(CaseLawDocumentationUnit.Fields.OUTLINE, 1.0f),
-          Map.entry(CaseLawDocumentationUnit.Fields.PENDING_DECISIONS, 1.0f),
           Map.entry(CaseLawDocumentationUnit.Fields.PREVIOUS_DECISIONS, 1.0f),
+          Map.entry(CaseLawDocumentationUnit.Fields.RECHTSFRAGE, convertOrderingToBoost(6)),
+          Map.entry(CaseLawDocumentationUnit.Fields.RECHTSFRAGE_GESAMT, convertOrderingToBoost(6)),
+          Map.entry(CaseLawDocumentationUnit.Fields.RECHTSMITTELFUEHRER, convertOrderingToBoost(6)),
+          Map.entry(CaseLawDocumentationUnit.Fields.SACHGEBIETE, 1.0f),
           Map.entry(CaseLawDocumentationUnit.Fields.TENOR, convertOrderingToBoost(3)),
           Map.entry(CaseLawDocumentationUnit.Fields.TITLE_LINE, 1.0f));
 
@@ -65,19 +75,25 @@ public class CaseLawSimpleSearchType implements SimpleSearchType {
 
   public static final List<HighlightBuilder.Field> HIGHLIGHTED_FIELDS =
       List.of(
-          new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.HEADLINE).numOfFragments(0),
-          new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.GUIDING_PRINCIPLE),
-          new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.HEADNOTE),
-          new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.OTHER_HEADNOTE),
-          new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.OUTLINE),
-          new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.TENOR),
           new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.CASE_FACTS),
           new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.DECISION_GROUNDS),
-          new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.GROUNDS),
-          new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.OTHER_LONG_TEXT),
+          new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.DECISION_NAME),
+          new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.DEFINITIONEN),
           new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.DISSENTING_OPINION),
           new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.ECLI).noMatchSize(0),
-          new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.FILE_NUMBERS).noMatchSize(0));
+          new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.ERLEDIGUNGSVERMERK),
+          new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.FILE_NUMBERS).noMatchSize(0),
+          new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.GROUNDS),
+          new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.GUIDING_PRINCIPLE),
+          new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.HEADLINE).numOfFragments(0),
+          new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.HEADNOTE),
+          new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.OTHER_HEADNOTE),
+          new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.OTHER_LONG_TEXT),
+          new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.OUTLINE),
+          new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.RECHTSFRAGE),
+          new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.RECHTSFRAGE_GESAMT),
+          new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.TENOR),
+          new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.TITLE_LINE));
 
   private final CaseLawSearchParams searchParams;
 

@@ -133,6 +133,7 @@ public class SimpleSearchQueryBuilder {
     // should get a very large boost.
     query.should(
         new MultiMatchQueryBuilder(searchTerm)
+            .field(CaseLawDocumentationUnit.Fields.CELEX_KEYWORD)
             .field(CaseLawDocumentationUnit.Fields.DOCUMENT_NUMBER_KEYWORD)
             .field(CaseLawDocumentationUnit.Fields.ECLI_KEYWORD)
             .field(CaseLawDocumentationUnit.Fields.FILE_NUMBERS_KEYWORD)
@@ -142,6 +143,11 @@ public class SimpleSearchQueryBuilder {
             .field(Norm.Fields.OFFICIAL_SHORT_TITLE_KEYWORD)
             .field(Norm.Fields.OFFICIAL_ABBREVIATION_KEYWORD)
             .boost(10.0f));
+    query.should(
+        new MultiMatchQueryBuilder(searchTerm)
+            .field(CaseLawDocumentationUnit.Fields.ABWEICHENDE_AKTENZEICHEN_KEYWORD)
+            .field(CaseLawDocumentationUnit.Fields.ABWEICHENDE_ECLIS_KEYWORD)
+            .boost(8.0f));
   }
 
   private MultiMatchQueryBuilder buildOneClause(
