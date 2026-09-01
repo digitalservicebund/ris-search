@@ -26,7 +26,7 @@ describe("MainMenu", () => {
     expect(emitted("selectItem")?.length).toBe(searchLinks.length);
   });
 
-  it("displays links 'Suche', 'Erweitere Suche' and 'Über diesen Service' when private features enabled", async () => {
+  it("displays links 'Suche', 'Erweiterte Suche' and 'Über den Service' when private features enabled", async () => {
     mockPrivateFeaturesEnabled.mockReturnValue(true);
     await renderSuspended(AppMainMenu, {
       props: {
@@ -49,7 +49,7 @@ describe("MainMenu", () => {
     expect(aboutLink).toHaveAttribute("href", "/ueber");
   });
 
-  it("displays links 'Suche', 'Feedback geben' and 'Über diesen Service' when private features disabled", async () => {
+  it("displays links 'Suche', 'Feedback geben' and 'Über den Service' when private features disabled", async () => {
     mockPrivateFeaturesEnabled.mockReturnValue(false);
     await renderSuspended(AppMainMenu, {
       props: {

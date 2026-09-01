@@ -62,6 +62,6 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
 @reference "~/assets/main.css";
 
 .nav-link {
-  @apply ris-link2-regular link-hover flex items-center gap-4 text-gray-900! aria-[current=page]:underline aria-[current=page]:decoration-[0.1875rem] 2xl:text-[1.125rem];
+  @apply ris-link2-regular link-hover flex items-center gap-4 text-gray-900! aria-[current=page]:underline aria-[current=page]:decoration-2 2xl:text-[1.125rem];
 }
 </style>
