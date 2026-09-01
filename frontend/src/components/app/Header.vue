@@ -13,10 +13,13 @@ const mobileServiceMenuId = useId();
 </script>
 
 <template>
-  <header id="top" class="border-b border-b-gray-400 bg-white print:hidden">
+  <header
+    id="top"
+    class="flex flex-col border-b border-b-gray-400 bg-white print:hidden"
+  >
     <AppBanner />
     <AppServiceMenu
-      class="content-wrapper hidden py-16 md:flex md:justify-end"
+      class="content-gutters hidden py-16 md:flex md:justify-end"
       list-class="flex flex-row items-center gap-24"
       @select-item="toggleMenu()"
     />
@@ -57,14 +60,14 @@ const mobileServiceMenuId = useId();
         list-class="content-gutters flex flex-col items-start gap-16"
         @select-item="toggleMenu()"
       />
-      <AppServiceMenu
-        :id="mobileServiceMenuId"
-        :hidden="!open"
-        data-testid="mobile-service-menu"
-        class="inline-block border-t border-gray-400 py-24 md:hidden"
-        list-class="content-gutters flex flex-col items-start gap-16"
-        @select-item="toggleMenu()"
-      />
     </nav>
+    <AppServiceMenu
+      :id="mobileServiceMenuId"
+      :hidden="!open"
+      data-testid="mobile-service-menu"
+      class="inline-block border-t border-gray-400 py-24 md:hidden"
+      list-class="content-gutters flex flex-col items-start gap-16"
+      @select-item="toggleMenu()"
+    />
   </header>
 </template>

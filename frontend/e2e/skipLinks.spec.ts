@@ -182,7 +182,7 @@ test.describe("mobile", () => {
 
     await page
       .getByRole("navigation")
-      .getByRole("link", { name: "Suche" })
+      .getByRole("link", { name: "Suche", exact: true })
       .click();
 
     await expect(
