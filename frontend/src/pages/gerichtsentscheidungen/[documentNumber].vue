@@ -118,6 +118,29 @@ const detailItems = computed<DetailsListItem[]>(() => [
     value: formatArray(caseLaw.value?.decisionName ?? []),
   },
   {
+    type: "list",
+    label: "Gesetzeskraft:",
+    values: caseLaw.value?.gesetzeskraft ?? [],
+  },
+  {
+    type: "list",
+    label: "Streitjahre:",
+    values: caseLaw.value?.streitjahre ?? [],
+  },
+  {
+    type: "list",
+    label: "Vorgehende\nEntscheidungen:",
+    labelClass: "md:whitespace-pre-line",
+    values: caseLaw.value?.previousDecisions ?? [],
+  },
+  {
+    type: "list",
+    label: "Nachgehende\nEntscheidungen:",
+    labelClass: "md:whitespace-pre-line",
+    values: caseLaw.value?.ensuingDecisions ?? [],
+  },
+
+  {
     type: "link",
     label: "Download:",
     url: getEncodingURL(caseLaw.value?.encoding, "application/zip"),
