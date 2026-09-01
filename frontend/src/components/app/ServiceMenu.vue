@@ -18,7 +18,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
           >API-Dokumentation
         </ExternalLink>
       </li>
-      <li>
+      <li v-if="privateFeaturesEnabled">
         <NuxtLink
           class="nav-link"
           :to="{ name: 'translations' }"
@@ -33,7 +33,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
           :to="{ name: 'gebaerdensprache' }"
           @click="$emit('selectItem')"
         >
-          <IcBaselineSignLanguage class="h-24 w-24" />Gebärdensprache
+          <IcBaselineSignLanguage class="size-16" />Gebärdensprache
         </NuxtLink>
       </li>
       <li v-if="privateFeaturesEnabled">
@@ -42,7 +42,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
           :to="{ name: 'leichte-sprache' }"
           @click="$emit('selectItem')"
         >
-          <IcBaselineLocalLibrary class="h-24 w-24" />Leichte Sprache
+          <IcBaselineLocalLibrary class="size-16" />Leichte Sprache
         </NuxtLink>
       </li>
       <li>
