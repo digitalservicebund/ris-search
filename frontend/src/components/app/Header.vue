@@ -34,7 +34,7 @@ const mobileServiceMenuId = useId();
         <div class="float-end md:hidden">
           <button
             type="button"
-            class="ris-label3-regular inline-flex cursor-pointer flex-col items-center gap-4 text-[0.875rem] text-blue-800 outline-offset-4 outline-blue-800 focus-visible:outline-4"
+            class="ris-label3-regular inline-flex cursor-pointer flex-col items-center gap-4 text-blue-800 outline-offset-4 outline-blue-800 focus-visible:outline-4"
             :aria-expanded="open"
             :aria-controls="`${mobileMainMenuId} ${mobileServiceMenuId}`"
             @click="toggleMenu()"
@@ -47,7 +47,7 @@ const mobileServiceMenuId = useId();
 
         <AppMainMenu
           class="hidden md:inline-block"
-          list-class="flex justify-end gap-x-28 flex-row items-center"
+          list-class="flex justify-end gap-28 flex-row items-center"
         />
       </div>
 

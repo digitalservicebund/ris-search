@@ -27,7 +27,7 @@ describe("ServiceMenu", () => {
     expect(emitted("selectItem")?.length).toBe(2);
   });
 
-  it("displays 5 when private features enabled", async () => {
+  it("displays 5 links when private features enabled", async () => {
     mockPrivateFeaturesEnabled.mockReturnValue(true);
     await renderSuspended(ServiceMenu, {
       props: {
@@ -69,7 +69,7 @@ describe("ServiceMenu", () => {
     expect(contactLink).toHaveAttribute("href", "/kontakt");
   });
 
-  it("displays 3 when private features disabled", async () => {
+  it("displays 3 links when private features disabled", async () => {
     mockPrivateFeaturesEnabled.mockReturnValue(false);
     await renderSuspended(ServiceMenu, {
       props: {
