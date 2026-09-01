@@ -84,7 +84,12 @@ const activeTab = computed(() => {
         :key="getIdentifier(searchResult.item)"
         class="border border-gray-200 bg-white p-16"
       >
-        <SearchResult :search-result :order heading-level="3" />
+        <SearchResult
+          class="max-w-4xl"
+          :search-result
+          :order
+          heading-level="3"
+        />
       </li>
     </ul>
 

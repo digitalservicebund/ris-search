@@ -34,7 +34,7 @@ const recentUpdatesId = useId();
       <div
         class="content-wrapper content-grid pt-40 pb-56 md:pt-64 md:pb-96 2xl:pt-80 2xl:pb-112"
       >
-        <div class="content-grid-textblock text-balance xl:col-start-2">
+        <div class="content-grid-textblock text-balance">
           <h1
             class="typo-headline1-bold mb-8 text-balance wrap-break-word hyphens-auto md:mb-16 2xl:mb-24"
           >
@@ -54,7 +54,7 @@ const recentUpdatesId = useId();
       aria-label="Schnelleinstieg"
     >
       <ul
-        class="lg-gap-x-24 col-span-12 -mt-24 flex flex-col gap-8 md:-mt-48 md:flex-row md:gap-x-16 lg:gap-24 xl:col-span-10 xl:col-start-2"
+        class="lg-gap-x-24 col-span-12 -mt-24 flex flex-col gap-8 md:-mt-48 md:flex-row md:gap-x-16 lg:gap-24 xl:col-span-10"
       >
         <li class="flex-1">
           <NuxtLink
@@ -110,7 +110,7 @@ const recentUpdatesId = useId();
 
   <section class="bg-white">
     <div class="content-wrapper content-grid py-24 md:py-40 lg:py-48 2xl:py-56">
-      <div class="content-grid-textblock xl:col-start-2">
+      <div class="content-grid-textblock">
         <h2
           class="typo-headline2-bold mb-8 text-balance wrap-break-word hyphens-auto"
         >
@@ -150,7 +150,7 @@ const recentUpdatesId = useId();
     id="updates"
   >
     <div class="content-wrapper content-grid py-24 md:py-40 lg:py-48 2xl:py-56">
-      <div class="col-span-12 xl:col-span-10 xl:col-start-2">
+      <div class="col-span-12 xl:col-span-10">
         <h2
           :id="recentUpdatesId"
           class="typo-headline2-bold mb-4 text-balance wrap-break-word hyphens-auto md:mb-12"
@@ -166,9 +166,7 @@ const recentUpdatesId = useId();
     <div
       class="content-wrapper content-grid gap-y-16 py-24 md:gap-y-24 md:py-40 lg:py-48 2xl:py-56"
     >
-      <div
-        class="col-span-12 md:col-span-6 lg:col-span-6 xl:col-span-5 xl:col-start-2"
-      >
+      <div class="col-span-12 md:col-span-6 lg:col-span-6 xl:col-span-5">
         <h2
           class="typo-headline2-bold mb-8 text-balance wrap-break-word hyphens-auto"
         >
@@ -191,7 +189,7 @@ const recentUpdatesId = useId();
         class="col-span-12 self-start md:col-span-6 md:row-span-2 lg:col-span-5 lg:col-start-8 xl:col-span-4 xl:col-start-8"
       />
 
-      <div class="col-span-12 md:col-span-6 md:row-start-2 xl:col-start-2">
+      <div class="col-span-12 md:col-span-6 md:row-start-2">
         <UiButton
           class="w-full md:w-auto"
           :as="ExternalLink"
@@ -208,7 +206,7 @@ const recentUpdatesId = useId();
       class="content-wrapper content-grid gap-y-24 py-24 md:py-40 lg:py-48 2xl:py-56"
     >
       <div
-        class="col-span-12 flex flex-col items-start md:col-span-6 xl:col-span-5 xl:col-start-2"
+        class="col-span-12 flex flex-col items-start md:col-span-6 xl:col-span-5"
       >
         <h2
           class="typo-headline2-bold mb-8 text-balance wrap-break-word hyphens-auto"
