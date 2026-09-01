@@ -16,7 +16,7 @@ const isNativeButton = computed(() => as === "button");
 
 // Classes ------------------------------------------------
 
-const base = tw`typo-label1-regular relative -mb-px flex h-48 shrink-0 items-center whitespace-nowrap outline-0 after:absolute after:inset-x-0 after:bottom-0 after:h-4 after:content-[""]`;
+const base = tw`typo-label1-regular relative -mb-px flex h-48 shrink-0 items-end pb-16 whitespace-nowrap outline-0 after:absolute after:inset-x-0 after:bottom-0 after:h-4 after:content-[""]`;
 
 // Pseudo element so we can give it some horizontal distance from the text while
 // keeping the vertical inset
