@@ -12,6 +12,13 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
   <nav aria-label="Servicemenü">
     <ul :class="listClass">
       <li>
+        <ExternalLink
+          class="nav-link gap-0!"
+          url="https://docs.rechtsinformationen.bund.de"
+          >API-Dokumentation
+        </ExternalLink>
+      </li>
+      <li>
         <NuxtLink
           class="nav-link"
           :to="{ name: 'translations' }"
@@ -19,13 +26,6 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
         >
           English translations
         </NuxtLink>
-      </li>
-      <li>
-        <ExternalLink
-          class="nav-link"
-          url="https://docs.rechtsinformationen.bund.de"
-          >API-Dokumentation
-        </ExternalLink>
       </li>
       <li v-if="privateFeaturesEnabled">
         <NuxtLink
