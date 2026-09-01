@@ -145,7 +145,7 @@ test("skip links are focused after client-side navigation", async ({
 
   await page
     .getByRole("navigation")
-    .getByRole("link", { name: "Suche" })
+    .getByRole("link", { name: "Suche", exact: true })
     .click();
 
   await expect(
