@@ -95,7 +95,10 @@ test.describe("general advanced search page features", () => {
   test("browser back restores previous state", async ({ page }) => {
     await navigate(page, "/suche");
 
-    await page.getByRole("link", { name: "Erweiterte Suche" }).click();
+    await page
+      .getByRole("main")
+      .getByRole("link", { name: "Erweiterte Suche" })
+      .click();
     const advancedSearchHeading = page.getByRole("heading", {
       level: 1,
       name: "Erweiterte Suche",

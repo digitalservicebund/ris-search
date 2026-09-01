@@ -1,28 +1,34 @@
 <script lang="ts" setup>
-import IconSearch from "~icons/ic/search";
-
 defineProps<{ listClass: string }>();
 
 defineEmits<{ selectItem: [] }>();
+
+const privateFeaturesEnabled = usePrivateFeaturesFlag();
 </script>
 
 <template>
   <div>
-    <ul
-      class="flex flex-col justify-end gap-x-28 md:flex-row md:items-center"
-      :class="listClass"
-    >
+    <ul :class="listClass">
       <li>
         <NuxtLink
           class="nav-link"
           :to="{ name: 'suche' }"
           @click="$emit('selectItem')"
         >
-          <IconSearch />Suche
+          Suche
         </NuxtLink>
       </li>
       <li>
         <NuxtLink
+          v-if="privateFeaturesEnabled"
+          class="nav-link"
+          :to="{ name: 'erweiterte-suche' }"
+          @click="$emit('selectItem')"
+        >
+          Erweiterte Suche
+        </NuxtLink>
+        <NuxtLink
+          v-else
           class="nav-link"
           :to="{ name: 'feedback' }"
           @click="$emit('selectItem')"
