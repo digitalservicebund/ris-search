@@ -48,6 +48,11 @@ const fields = new Map([
     "decisionGrounds",
     { id: "entscheidungsgruende", title: "Entscheidungsgründe" },
   ],
+  ["rechtsfrageGesamt", { id: "rechtsfrage", title: "Rechtsfrage" }],
+  [
+    "erledigungsvermerk",
+    { id: "erledigungsvermerk", title: "Erledigungsvermerk" },
+  ],
 ]);
 
 const headline = computed(() =>

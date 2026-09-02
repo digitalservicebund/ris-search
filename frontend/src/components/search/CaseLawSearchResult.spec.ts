@@ -221,8 +221,8 @@ describe("CaselawSearchResult", () => {
     expect(screen.getByText("a".repeat(90) + "…")).toBeVisible();
   });
 
-  describe("fields when only one text match is returned", () => {
-    const fields = [
+  describe("field matches and highlights", () => {
+    it.each([
       {
         field: "guidingPrinciple",
         value: "Leitsatz.",
@@ -250,201 +250,207 @@ describe("CaselawSearchResult", () => {
         value: "Entscheidungsgründe.",
         text: "<mark>Entscheidungsgründe</mark>.",
       },
-    ];
+      {
+        field: "rechtsfrageGesamt",
+        value: "Rechtsfrage.",
+        text: "<mark>Rechtsfrage</mark>.",
+      },
+      {
+        field: "erledigungsvermerk",
+        value: "Erledigungsvermerk.",
+        text: "<mark>Erledigungsvermerk</mark>.",
+      },
+    ])(`displays '$value' for field '$field'`, ({ field, value, text }) => {
+      const textMatches: TextMatch[] = [
+        {
+          name: field,
+          text,
+          "@type": "SearchResultMatch",
+          location: undefined,
+        },
+      ];
 
-    fields.forEach(({ field, value, text }) => {
-      it(`displays '${value}'`, () => {
-        const textMatches: TextMatch[] = [
-          {
-            name: field,
-            text,
-            "@type": "SearchResultMatch",
-            location: undefined,
-          },
-        ];
+      renderComponent({ textMatches });
 
-        renderComponent({ textMatches });
-
-        const contentItems = screen.getAllByTestId("highlighted-field");
-        expect(contentItems).toHaveLength(1);
-        expect(contentItems[0]).toHaveTextContent(value);
-      });
+      const contentItems = screen.getAllByTestId("highlighted-field");
+      expect(contentItems).toHaveLength(1);
+      expect(contentItems[0]).toHaveTextContent(value);
     });
-  });
 
-  it("sorts fields by field map order", () => {
-    const textMatches: TextMatch[] = [
-      {
-        "@type": "SearchResultMatch",
-        name: "caseFacts",
-        text: "<mark>Tatbestand</mark>.",
-        location: undefined,
-      },
-      {
-        "@type": "SearchResultMatch",
-        name: "guidingPrinciple",
-        text: "<mark>Leitsatz</mark>.",
-        location: undefined,
-      },
-    ];
-
-    renderComponent({ textMatches });
-
-    const contentItems = screen.getAllByTestId("highlighted-field");
-    expect(contentItems).toHaveLength(2);
-    expect(contentItems[0]).toHaveTextContent("Leitsatz.");
-    expect(contentItems[1]).toHaveTextContent("Tatbestand.");
-  });
-
-  it("displays guiding principle first, if available, then up to 3 other matching items", () => {
-    const guidingPrinciple: TextMatch = {
-      "@type": "SearchResultMatch",
-      name: "guidingPrinciple",
-      text: "Guiding <mark>Principle</mark>.",
-      location: undefined,
-    };
-    const textMatches: TextMatch[] = [
-      {
-        "@type": "SearchResultMatch",
-        name: "headnote",
-        text: "<mark>Headnote</mark>.",
-        location: undefined,
-      },
-      guidingPrinciple,
-      {
-        "@type": "SearchResultMatch",
-        name: "otherHeadnote",
-        text: "<mark>Other Headnote</mark>.",
-        location: undefined,
-      },
-      {
-        "@type": "SearchResultMatch",
-        name: "tenor",
-        text: "<mark>Tenor</mark>.",
-        location: undefined,
-      },
-      {
-        "@type": "SearchResultMatch",
-        name: "grounds",
-        text: "<mark>Grounds</mark>.",
-        location: undefined,
-      },
-    ];
-
-    renderComponent({ textMatches });
-
-    const contentItems = screen.getAllByTestId("highlighted-field");
-
-    expect(contentItems).toHaveLength(4);
-    expect(contentItems[0]?.innerHTML).toBe(guidingPrinciple.text);
-    expect(contentItems[1]?.innerHTML).toBe(textMatches[0]?.text);
-    expect(contentItems[2]?.innerHTML).toBe(textMatches[2]?.text);
-    expect(contentItems[3]?.innerHTML).toBe(textMatches[3]?.text);
-  });
-
-  it("returns an empty array when there are no caselaw fields", () => {
-    const searchResultWithoutFields = {
-      item: {
-        ...searchResult.item,
-        guidingPrinciple: "",
-        headnote: "",
-        otherHeadnote: "",
-        tenor: "",
-        grounds: "",
-        caseFacts: "",
-        decisionGrounds: "",
-      },
-      textMatches: [],
-    };
-
-    renderComponent(searchResultWithoutFields);
-
-    const contentItems = screen.queryAllByTestId("highlighted-field");
-    expect(contentItems).toHaveLength(0);
-  });
-
-  it("shows all returned text matches", () => {
-    const textMatches: TextMatch[] = [
-      {
-        "@type": "SearchResultMatch",
-        name: "guidingPrinciple",
-        text: "<mark>Guiding Principle</mark>.",
-        location: undefined,
-      },
-      {
-        "@type": "SearchResultMatch",
-        name: "headnote",
-        text: "<mark>Headnote</mark>.",
-        location: undefined,
-      },
-    ] as TextMatch[];
-
-    renderComponent({ textMatches });
-
-    const contentItems = screen.getAllByTestId("highlighted-field");
-    expect(contentItems).toHaveLength(2);
-    expect(contentItems[0]).toHaveTextContent("Guiding Principle.");
-    expect(contentItems[1]).toHaveTextContent("Headnote.");
-  });
-
-  it("shows up to 4 fields sorted by field map order", () => {
-    const textMatches: TextMatch[] = [
-      {
-        "@type": "SearchResultMatch",
-        name: "grounds",
-        text: "<mark>Grounds</mark>.",
-        location: undefined,
-      },
-      {
-        "@type": "SearchResultMatch",
-        name: "headnote",
-        text: "<mark>Headnote</mark>.",
-        location: undefined,
-      },
-      {
-        "@type": "SearchResultMatch",
-        name: "guidingPrinciple",
-        text: "<mark>Guiding Principle</mark>.",
-        location: undefined,
-      },
-      {
-        "@type": "SearchResultMatch",
-        name: "otherHeadnote",
-        text: "<mark>Other Headnote</mark>.",
-        location: undefined,
-      },
-      {
-        "@type": "SearchResultMatch",
-        name: "tenor",
-        text: "<mark>Tenor</mark>.",
-        location: undefined,
-      },
-    ];
-
-    renderComponent({ textMatches });
-
-    const contentItems = screen.getAllByTestId("highlighted-field");
-
-    expect(contentItems).toHaveLength(4);
-    expect(contentItems[0]).toHaveTextContent("Guiding Principle.");
-    expect(contentItems[1]).toHaveTextContent("Headnote.");
-    expect(contentItems[2]).toHaveTextContent("Other Headnote.");
-    expect(contentItems[3]).toHaveTextContent("Tenor.");
-  });
-
-  it("does not display a field when the text match has no highlight", () => {
-    renderComponent({
-      textMatches: [
+    it("sorts fields by field map order", () => {
+      const textMatches: TextMatch[] = [
+        {
+          "@type": "SearchResultMatch",
+          name: "caseFacts",
+          text: "<mark>Tatbestand</mark>.",
+          location: undefined,
+        },
         {
           "@type": "SearchResultMatch",
           name: "guidingPrinciple",
-          text: "plain text without any highlight",
+          text: "<mark>Leitsatz</mark>.",
           location: undefined,
         },
-      ],
+      ];
+
+      renderComponent({ textMatches });
+
+      const contentItems = screen.getAllByTestId("highlighted-field");
+      expect(contentItems).toHaveLength(2);
+      expect(contentItems[0]).toHaveTextContent("Leitsatz.");
+      expect(contentItems[1]).toHaveTextContent("Tatbestand.");
     });
 
-    expect(screen.queryAllByTestId("highlighted-field")).toHaveLength(0);
+    it("displays guiding principle first, if available, then up to 3 other matching items", () => {
+      const guidingPrinciple: TextMatch = {
+        "@type": "SearchResultMatch",
+        name: "guidingPrinciple",
+        text: "Guiding <mark>Principle</mark>.",
+        location: undefined,
+      };
+      const textMatches: TextMatch[] = [
+        {
+          "@type": "SearchResultMatch",
+          name: "headnote",
+          text: "<mark>Headnote</mark>.",
+          location: undefined,
+        },
+        guidingPrinciple,
+        {
+          "@type": "SearchResultMatch",
+          name: "otherHeadnote",
+          text: "<mark>Other Headnote</mark>.",
+          location: undefined,
+        },
+        {
+          "@type": "SearchResultMatch",
+          name: "tenor",
+          text: "<mark>Tenor</mark>.",
+          location: undefined,
+        },
+        {
+          "@type": "SearchResultMatch",
+          name: "grounds",
+          text: "<mark>Grounds</mark>.",
+          location: undefined,
+        },
+      ];
+
+      renderComponent({ textMatches });
+
+      const contentItems = screen.getAllByTestId("highlighted-field");
+
+      expect(contentItems).toHaveLength(4);
+      expect(contentItems[0]?.innerHTML).toBe(guidingPrinciple.text);
+      expect(contentItems[1]?.innerHTML).toBe(textMatches[0]?.text);
+      expect(contentItems[2]?.innerHTML).toBe(textMatches[2]?.text);
+      expect(contentItems[3]?.innerHTML).toBe(textMatches[3]?.text);
+    });
+
+    it("returns an empty array when there are no caselaw fields", () => {
+      const searchResultWithoutFields = {
+        item: {
+          ...searchResult.item,
+          guidingPrinciple: "",
+          headnote: "",
+          otherHeadnote: "",
+          tenor: "",
+          grounds: "",
+          caseFacts: "",
+          decisionGrounds: "",
+        },
+        textMatches: [],
+      };
+
+      renderComponent(searchResultWithoutFields);
+
+      const contentItems = screen.queryAllByTestId("highlighted-field");
+      expect(contentItems).toHaveLength(0);
+    });
+
+    it("shows all returned text matches", () => {
+      const textMatches: TextMatch[] = [
+        {
+          "@type": "SearchResultMatch",
+          name: "guidingPrinciple",
+          text: "<mark>Guiding Principle</mark>.",
+          location: undefined,
+        },
+        {
+          "@type": "SearchResultMatch",
+          name: "headnote",
+          text: "<mark>Headnote</mark>.",
+          location: undefined,
+        },
+      ] as TextMatch[];
+
+      renderComponent({ textMatches });
+
+      const contentItems = screen.getAllByTestId("highlighted-field");
+      expect(contentItems).toHaveLength(2);
+      expect(contentItems[0]).toHaveTextContent("Guiding Principle.");
+      expect(contentItems[1]).toHaveTextContent("Headnote.");
+    });
+
+    it("shows up to 4 fields sorted by field map order", () => {
+      const textMatches: TextMatch[] = [
+        {
+          "@type": "SearchResultMatch",
+          name: "grounds",
+          text: "<mark>Grounds</mark>.",
+          location: undefined,
+        },
+        {
+          "@type": "SearchResultMatch",
+          name: "headnote",
+          text: "<mark>Headnote</mark>.",
+          location: undefined,
+        },
+        {
+          "@type": "SearchResultMatch",
+          name: "guidingPrinciple",
+          text: "<mark>Guiding Principle</mark>.",
+          location: undefined,
+        },
+        {
+          "@type": "SearchResultMatch",
+          name: "otherHeadnote",
+          text: "<mark>Other Headnote</mark>.",
+          location: undefined,
+        },
+        {
+          "@type": "SearchResultMatch",
+          name: "tenor",
+          text: "<mark>Tenor</mark>.",
+          location: undefined,
+        },
+      ];
+
+      renderComponent({ textMatches });
+
+      const contentItems = screen.getAllByTestId("highlighted-field");
+
+      expect(contentItems).toHaveLength(4);
+      expect(contentItems[0]).toHaveTextContent("Guiding Principle.");
+      expect(contentItems[1]).toHaveTextContent("Headnote.");
+      expect(contentItems[2]).toHaveTextContent("Other Headnote.");
+      expect(contentItems[3]).toHaveTextContent("Tenor.");
+    });
+
+    it("does not display a field when the text match has no highlight", () => {
+      renderComponent({
+        textMatches: [
+          {
+            "@type": "SearchResultMatch",
+            name: "guidingPrinciple",
+            text: "plain text without any highlight",
+            location: undefined,
+          },
+        ],
+      });
+
+      expect(screen.queryAllByTestId("highlighted-field")).toHaveLength(0);
+    });
   });
 
   it("includes the current search URL as query param in the detail page link", () => {
