@@ -164,29 +164,6 @@ tasks {
         enabled = false
     }
 
-    bootBuildImage {
-        val containerRegistry = System.getenv("CONTAINER_REGISTRY") ?: "ghcr.io"
-        val containerImageTag = System.getenv("CONTAINER_IMAGE_TAG")
-
-        imageName.set(containerImageTag)
-        builder.set("paketobuildpacks/builder-jammy-tiny")
-        publish.set(false)
-        docker {
-            publishRegistry {
-                username.set(System.getenv("CONTAINER_REGISTRY_USER") ?: "")
-                password.set(System.getenv("CONTAINER_REGISTRY_PASSWORD") ?: "")
-                url.set("https://$containerRegistry")
-            }
-        }
-        environment.set(mapOf("BP_HEALTH_CHECKER_ENABLED" to "true"))
-        buildpacks.set(
-            listOf(
-                "urn:cnb:builder:paketo-buildpacks/java",
-                "docker.io/paketobuildpacks/health-checker:latest",
-            ),
-        )
-    }
-
     test {
         useJUnitPlatform {
             excludeTags("integration", "data")
