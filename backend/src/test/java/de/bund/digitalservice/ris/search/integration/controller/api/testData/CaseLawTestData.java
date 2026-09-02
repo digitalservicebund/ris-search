@@ -44,6 +44,7 @@ public class CaseLawTestData {
             .decisionGrounds("diese Entscheidungsgründe")
             .headnote("Orientierungssatz")
             .headline("Test mit 1.000 € im Titel")
+            .titleLine("Test mit 1.000 € im Titel")
             .otherHeadnote("Sonstiger Orientierungssatz")
             .otherLongText(matchAllTerm)
             .caseFacts("Tatbestand")
@@ -79,6 +80,13 @@ public class CaseLawTestData {
                 List.of("aktivzitierungVerwaltungsvorschriftenTest"))
             .passivzitierungVerwaltungsvorschriften(
                 List.of("passivzitierungVerwaltungsvorschriftenTest"))
+            .aktivzitierungLiteraturSelbstaendig(List.of("aktivzitierungLiteraturSelbstaendigTest"))
+            .aktivzitierungLiteraturUnselbstaendig(
+                List.of("aktivzitierungLiteraturUnselbstaendigTest"))
+            .passivzitierungLiteraturSelbstaendig(
+                List.of("passivzitierungLiteraturSelbstaendigTest"))
+            .passivzitierungLiteraturUnselbstaendig(
+                List.of("passivzitierungLiteraturUnselbstaendigTest"))
             .amtlicheFundstellen(List.of("amtlicheFundstellenTest"))
             .nichtamtlicheFundstellen(List.of("nichtamtlicheFundstellenTest"))
             .normenkette(List.of("normenketteTest"))
@@ -135,6 +143,7 @@ public class CaseLawTestData {
             .otherLongText(matchAllTerm)
             .tenor("Tenor")
             .headline("Titelzeile")
+            .titleLine("Titelzeile")
             .build());
 
     allDocuments.add(
