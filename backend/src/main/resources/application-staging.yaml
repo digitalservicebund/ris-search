@@ -1,7 +1,3 @@
-server:
-  front-end-url: "https://ris-portal-staging.dev.tech.digitalservice.dev/"
-  cms-url: "https://ris-cm.staging.tech.digitalservice.dev/"
-
 swagger:
   server:
     url: "https://ris-portal-staging.dev.tech.digitalservice.dev/"
