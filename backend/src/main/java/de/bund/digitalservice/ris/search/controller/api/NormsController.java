@@ -42,8 +42,10 @@ import java.net.URLConnection;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import org.apache.commons.lang3.Strings;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.UncategorizedElasticsearchException;
@@ -85,6 +87,7 @@ public class NormsController {
   private final ArticleService articleService;
   private final NormXsltTransformerService xsltTransformerService;
   private final ChangelogService<NormsBucket> changelogService;
+  private final String backEndUrl;
 
   /**
    * Constructor for the NormsController class.
@@ -97,11 +100,13 @@ public class NormsController {
       NormsService normsService,
       ArticleService articleService,
       NormXsltTransformerService xsltTransformerService,
-      ChangelogService<NormsBucket> changelogService) {
+      ChangelogService<NormsBucket> changelogService,
+      @Value("${server.back-end-url}") String backEndUrl) {
     this.normsService = normsService;
     this.articleService = articleService;
     this.xsltTransformerService = xsltTransformerService;
     this.changelogService = changelogService;
+    this.backEndUrl = backEndUrl;
   }
 
   /**
@@ -216,8 +221,11 @@ public class NormsController {
             jurisdiction, agent, year, naturalIdentifier, pointInTime, version, language);
     Optional<Norm> result = normsService.getByExpressionEli(eli);
 
+    String remoteJsonContext =
+        Strings.CS.removeEnd(backEndUrl, "/") + ApiConfig.Paths.JSONLD_CONTEXT;
+
     return result
-        .map(r -> ResponseEntity.ok(NormSchemaMapper.fromDomain(r)))
+        .map(r -> ResponseEntity.ok(NormSchemaMapper.fromDomain(r, remoteJsonContext)))
         .orElse(ResponseEntity.notFound().build());
   }
 

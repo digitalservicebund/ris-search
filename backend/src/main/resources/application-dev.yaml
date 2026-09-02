@@ -1,5 +1,6 @@
 server:
   front-end-url: "http://localhost:3000/"
+  back-end-url: "http://localhost:8080/"
   docs-url: "http://localhost:8080"
 
 swagger:

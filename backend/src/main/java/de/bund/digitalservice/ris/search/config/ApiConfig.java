@@ -16,6 +16,7 @@ public class ApiConfig {
    * <p>This class is a utility class and cannot be instantiated.
    */
   public static class Paths {
+
     private Paths() {}
 
     public static final String BASE = "/v1";
@@ -61,6 +62,7 @@ public class ApiConfig {
     public static final String ECLICRAWLER = BASE + "/eclicrawler";
     public static final String STATISTICS = BASE + "/statistics";
     public static final String BULK_ZIP_LINKS = BASE + "/bulk-zip-links";
+    public static final String JSONLD_CONTEXT = BASE + "/context.jsonld";
   }
 
   public static final String VERSION = "1";

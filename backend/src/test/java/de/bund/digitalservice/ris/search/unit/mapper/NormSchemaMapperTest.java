@@ -51,6 +51,7 @@ class NormSchemaMapperTest {
 
     LegislationExpressionSchema expectedResponse =
         LegislationExpressionSchema.builder()
+            .context("remoteJsonContext")
             .id("/v1/legislation/expressionEli")
             .legislationIdentifier("expressionEli")
             .legislationLegalForce(LegalForceStatus.IN_FORCE)
@@ -103,7 +104,8 @@ class NormSchemaMapperTest {
                         .build()))
             .build();
 
-    Assertions.assertEquals(expectedResponse, NormSchemaMapper.fromDomain(norm));
+    Assertions.assertEquals(
+        expectedResponse, NormSchemaMapper.fromDomain(norm, "remoteJsonContext"));
   }
 
   @Test
@@ -245,6 +247,7 @@ class NormSchemaMapperTest {
                             .build()))
                 .build());
 
-    Assertions.assertEquals(expectedParts, NormSchemaMapper.fromDomain(norm).hasPart());
+    Assertions.assertEquals(
+        expectedParts, NormSchemaMapper.fromDomain(norm, "remoteJsonContext").hasPart());
   }
 }
