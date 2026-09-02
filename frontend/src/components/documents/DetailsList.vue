@@ -4,7 +4,6 @@ import IcOutlineFileDownload from "~icons/ic/outline-file-download";
 export type TextEntry = {
   type: "text";
   label: string;
-  labelClass?: string;
   value?: string;
   valueClass?: string;
 };
@@ -12,21 +11,18 @@ export type TextEntry = {
 export type ListEntry = {
   type: "list";
   label: string;
-  labelClass?: string;
   values: string[];
 };
 
 export type BadgeEntry = {
   type: "badge";
   label: string;
-  labelClass?: string;
   values: string[];
 };
 
 export type HtmlEntry = {
   type: "html";
   label: string;
-  labelClass?: string;
   html?: string;
   htmlClass?: string;
 };
@@ -34,7 +30,6 @@ export type HtmlEntry = {
 export type LinkEntry = {
   type: "link";
   label: string;
-  labelClass?: string;
   url?: string;
   text: string;
   dataAttr?: string;
@@ -78,7 +73,6 @@ const visibleItems = computed(() =>
     >
       <dt
         class="typo-label1-bold col-span-12 hyphens-auto md:col-span-3 md:h-0 md:self-start md:overflow-visible xl:col-span-2"
-        :class="item.labelClass"
       >
         {{ item.label }}
       </dt>
