@@ -1,7 +1,3 @@
-server:
-  front-end-url: "https://ris-portal.uat.tech.digitalservice.dev/"
-  cms-url: "https://ris-cm.uat.tech.digitalservice.dev/"
-
 swagger:
   server:
     url: "https://ris-portal.uat.tech.digitalservice.dev/"
