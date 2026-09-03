@@ -32,6 +32,7 @@ function createLegislationExpression(
     },
     name: "",
     alternateName: "",
+    abbreviation: "",
     risAbbreviation: "",
     encoding: [],
     hasPart: [],

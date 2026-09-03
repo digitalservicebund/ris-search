@@ -42,7 +42,8 @@ public record LegislationExpressionSearchSchema(
         String temporalCoverage,
     @Schema(
             example = "KakaoV 2003",
-            description = "Amtliche Buchstabenabkürzung, if it exists. Otherwise ris-abkuerzung.")
+            description = "Amtliche Buchstabenabkürzung, if it exists. Otherwise ris-abkuerzung.",
+            requiredMode = Schema.RequiredMode.REQUIRED)
         String abbreviation,
     @Nullable
         @Schema(

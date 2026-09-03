@@ -1270,7 +1270,7 @@ export interface components {
              * @description Amtliche Buchstabenabkürzung, if it exists. Otherwise ris-abkuerzung.
              * @example KakaoV 2003
              */
-            abbreviation?: string;
+            abbreviation: string;
             /**
              * @description Amtliche Kurzüberschrift
              * @example Kakaoverordnung

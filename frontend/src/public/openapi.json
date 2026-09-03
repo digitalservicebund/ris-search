@@ -3328,7 +3328,7 @@
           }
         } ],
         "description" : "A legislation expression and references to its manifestations.",
-        "required" : [ "@id", "encoding", "exampleOfWork", "legislationIdentifier", "legislationLegalForce", "name", "temporalCoverage" ]
+        "required" : [ "@id", "abbreviation", "encoding", "exampleOfWork", "legislationIdentifier", "legislationLegalForce", "name", "temporalCoverage" ]
       },
       "LegislationObjectSchema" : {
         "type" : "object",
