@@ -2816,7 +2816,7 @@
             "$ref" : "#/components/schemas/PartialCollectionViewSchema"
           }
         },
-        "required" : [ "@id", "member", "totalItems", "view" ]
+        "required" : [ "@context", "@id", "member", "totalItems", "view" ]
       },
       "LiteratureSearchSchema" : {
         "allOf" : [ {
@@ -3270,7 +3270,7 @@
             "$ref" : "#/components/schemas/PartialCollectionViewSchema"
           }
         },
-        "required" : [ "@id", "member", "totalItems", "view" ]
+        "required" : [ "@context", "@id", "member", "totalItems", "view" ]
       },
       "LegislationExpressionSearchSchema" : {
         "allOf" : [ {
@@ -3537,7 +3537,7 @@
             }
           }
         },
-        "required" : [ "@id", "encoding", "exampleOfWork", "hasPart", "legislationIdentifier", "legislationLegalForce", "name", "risAbbreviation", "temporalCoverage" ]
+        "required" : [ "@context", "@id", "encoding", "exampleOfWork", "hasPart", "legislationIdentifier", "legislationLegalForce", "name", "risAbbreviation", "temporalCoverage" ]
       },
       "AbstractDocumentSchema" : {
         "discriminator" : {
@@ -3743,7 +3743,7 @@
             "$ref" : "#/components/schemas/PartialCollectionViewSchema"
           }
         },
-        "required" : [ "@id", "member", "totalItems", "view" ]
+        "required" : [ "@context", "@id", "member", "totalItems", "view" ]
       },
       "SearchMemberSchemaAbstractDocumentSchema" : {
         "type" : "object",
@@ -3801,7 +3801,7 @@
             "$ref" : "#/components/schemas/PartialCollectionViewSchema"
           }
         },
-        "required" : [ "@id", "member", "totalItems", "view" ]
+        "required" : [ "@context", "@id", "member", "totalItems", "view" ]
       },
       "SearchMemberSchemaCaseLawSearchSchema" : {
         "type" : "object",
@@ -3851,7 +3851,7 @@
             "$ref" : "#/components/schemas/PartialCollectionViewSchema"
           }
         },
-        "required" : [ "@id", "member", "totalItems", "view" ]
+        "required" : [ "@context", "@id", "member", "totalItems", "view" ]
       },
       "SearchMemberSchemaAdministrativeDirectiveSearchSchema" : {
         "type" : "object",
