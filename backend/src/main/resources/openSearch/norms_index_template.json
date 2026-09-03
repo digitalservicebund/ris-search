@@ -103,6 +103,16 @@
             }
           }
         },
+        "abbreviation": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "normalizer": "normalized_keyword"
+            }
+          }
+        },
         "ris_abbreviation": {
           "type": "text",
           "analyzer": "custom_german_analyzer",
