@@ -124,19 +124,29 @@ const detailItems = computed<DetailsListItem[]>(() => [
   },
   {
     type: "list",
-    label: "Streitjahre:",
+    label: getSingularOrPlural(
+      "Streitjahr:",
+      "Streitjahre:",
+      caseLaw.value?.streitjahre?.length,
+    ),
     values: caseLaw.value?.streitjahre ?? [],
   },
   {
     type: "list",
-    label: "Vorgehende\nEntscheidungen:",
-    labelClass: "md:whitespace-pre-line",
+    label: getSingularOrPlural(
+      "Vorgehende Entscheidung:",
+      "Vorgehende Entscheidungen:",
+      caseLaw.value?.previousDecisions?.length,
+    ),
     values: caseLaw.value?.previousDecisions ?? [],
   },
   {
     type: "list",
-    label: "Nachgehende\nEntscheidungen:",
-    labelClass: "md:whitespace-pre-line",
+    label: getSingularOrPlural(
+      "Nachgehende Entscheidung:",
+      "Nachgehende Entscheidungen:",
+      caseLaw.value?.ensuingDecisions?.length,
+    ),
     values: caseLaw.value?.ensuingDecisions ?? [],
   },
 
