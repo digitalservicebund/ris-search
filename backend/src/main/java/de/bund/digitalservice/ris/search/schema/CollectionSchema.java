@@ -9,7 +9,7 @@ import lombok.Builder;
 /** A DTO for collections of resources, following schema.org naming guidelines. */
 @Builder
 public record CollectionSchema<T>(
-    @JsonProperty("@context") String context,
+    @JsonProperty("@context") @Schema(requiredMode = Schema.RequiredMode.REQUIRED) String context,
     @JsonProperty("@id")
         @Schema(
             example = ApiConfig.Paths.DOCUMENT + "?pageIndex=0&size=5",

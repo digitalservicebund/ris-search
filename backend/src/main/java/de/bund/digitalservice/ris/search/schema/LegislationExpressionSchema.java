@@ -35,7 +35,7 @@ import org.jetbrains.annotations.Nullable;
 @Builder
 @Schema(description = "A legislation expression and references to its manifestations.")
 public record LegislationExpressionSchema(
-    @JsonProperty("@context") String context,
+    @JsonProperty("@context") @Schema(requiredMode = Schema.RequiredMode.REQUIRED) String context,
     @JsonProperty("@id")
         @Schema(
             example = ApiConfig.Paths.LEGISLATION + "/eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu",
