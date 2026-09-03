@@ -76,6 +76,9 @@ restassured = { module = 'io.rest-assured:rest-assured', version.ref = "rest-ass
 # CVE-2026-5588
 bouncycastle-bom = { module = "org.bouncycastle:bc-jdk18on-bom", version = "1.85.2" }
 
+# CVE-2026-65182
+tomcat-embed-core = { module = "org.apache.tomcat.embed:tomcat-embed-core" , version = "11.0.25" }
+
 [plugins]
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
 spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "spring-dependency-management" }
