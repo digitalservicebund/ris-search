@@ -647,7 +647,7 @@ test.describe("searching caselaw", () => {
     test.skip(isMobileTest);
     await navigate(page, "/suche?documentKind=R");
 
-    await page.getByRole("combobox", { name: "Bundesgericht" }).fill("LG");
+    await page.getByRole("combobox", { name: "Gericht" }).fill("LG");
     await page
       .getByRole("option", { name: "Landgericht Hamburg Label" })
       .click();
@@ -1101,7 +1101,7 @@ test.describe("mobile filter and sort drawers", () => {
     const dialog = page.getByRole("dialog", { name: "Filtern" });
     await expect(dialog).toBeVisible();
 
-    await dialog.getByRole("combobox", { name: "Bundesgericht" }).fill("LG");
+    await dialog.getByRole("combobox", { name: "Gericht" }).fill("LG");
     await page
       .getByRole("option", { name: "Landgericht Hamburg Label" })
       .click();
@@ -1125,7 +1125,7 @@ test.describe("mobile filter and sort drawers", () => {
     await expect(dialog).toBeVisible();
 
     const field = dialog.getByTestId("court-filter-field");
-    await dialog.getByRole("combobox", { name: "Bundesgericht" }).fill("LG");
+    await dialog.getByRole("combobox", { name: "Gericht" }).fill("LG");
 
     // The overlay is teleported to <body>, so it's not a descendant of the
     // dialog - only one instance of it can be open at a time though. Its
@@ -1187,7 +1187,7 @@ test.describe("mobile filter and sort drawers", () => {
     await page.getByRole("button", { name: "Filtern" }).click();
     const dialog = page.getByRole("dialog", { name: "Filtern" });
 
-    await dialog.getByRole("combobox", { name: "Bundesgericht" }).fill("LG");
+    await dialog.getByRole("combobox", { name: "Gericht" }).fill("LG");
     await page
       .getByRole("option", { name: "Landgericht Hamburg Label" })
       .click();
@@ -1199,9 +1199,9 @@ test.describe("mobile filter and sort drawers", () => {
 
     // Reopening the drawer shows the field reset to the last committed value
     await page.getByRole("button", { name: "Filtern" }).click();
-    await expect(
-      dialog.getByRole("combobox", { name: "Bundesgericht" }),
-    ).toHaveValue("");
+    await expect(dialog.getByRole("combobox", { name: "Gericht" })).toHaveValue(
+      "",
+    );
   });
 
   test("'Zurücksetzen' resets and immediately commits the filters", async ({

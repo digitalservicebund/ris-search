@@ -21,114 +21,110 @@ describe("court autocomplete", () => {
     vi.resetAllMocks();
   });
 
-  it("is not visible by default", async () => {
+  it("exposes the label and hint text to assistive technology", async () => {
     await renderSuspended(CourtFilter);
 
-    expect(screen.queryByLabelText("Gericht")).not.toBeInTheDocument();
+    const input = screen.getByRole("combobox");
+    expect(input).toHaveAccessibleName("Gericht");
+    expect(input).toHaveAccessibleDescription(
+      "Bundesgericht auswählen oder weiteres Gericht suchen",
+    );
   });
 
-  it("is not visible for non-CaseLaw categories", async () => {
+  it("renders an empty input field", async () => {
     await renderSuspended(CourtFilter);
 
-    expect(screen.queryByLabelText("Gericht")).not.toBeInTheDocument();
+    const input = screen.getByRole("combobox");
+    expect(input).toBeInTheDocument();
+    expect(input).toHaveValue("");
   });
 
-  describe("when category is set to CaseLaw", () => {
-    it("renders an empty input field", async () => {
-      await renderSuspended(CourtFilter);
-
-      const input = screen.getByRole("combobox");
-      expect(input).toBeInTheDocument();
-      expect(input).toHaveValue("");
+  it("displays the passed model value", async () => {
+    const courtId = mockData[0]?.id;
+    await renderSuspended(CourtFilter, {
+      props: {
+        modelValue: courtId,
+      },
     });
 
-    it("displays the passed model value", async () => {
-      const courtId = mockData[0]?.id;
-      await renderSuspended(CourtFilter, {
-        props: {
-          modelValue: courtId,
-        },
+    const input = screen.getByRole("combobox");
+    expect(input).toHaveValue(courtId);
+  });
+
+  it("calls the API when typing and shows suggestions", async () => {
+    mockFetch.mockResolvedValue(mockData);
+    const user = userEvent.setup();
+
+    await renderSuspended(CourtFilter);
+
+    const input = screen.getByRole("combobox");
+    await user.type(input, "Ber");
+
+    await waitFor(() => {
+      expect(mockFetch).toHaveBeenCalledWith("/v1/case-law/courts", {
+        query: { prefix: "Ber" },
       });
-
-      const input = screen.getByRole("combobox");
-      expect(input).toHaveValue(courtId);
     });
 
-    it("calls the API when typing and shows suggestions", async () => {
-      mockFetch.mockResolvedValue(mockData);
-      const user = userEvent.setup();
+    expect(screen.getByText("Tagesgericht Berlin")).toBeInTheDocument();
+  });
 
-      await renderSuspended(CourtFilter);
+  it("shows default suggestions when dropdown is opened without input", async () => {
+    mockFetch.mockResolvedValue(mockData);
+    const user = userEvent.setup();
 
-      const input = screen.getByRole("combobox");
-      await user.type(input, "Ber");
+    await renderSuspended(CourtFilter);
 
-      await waitFor(() => {
-        expect(mockFetch).toHaveBeenCalledWith("/v1/case-law/courts", {
-          query: { prefix: "Ber" },
-        });
-      });
+    await user.click(
+      screen.getByRole("button", {
+        name: "Vorschläge anzeigen",
+      }),
+    );
 
-      expect(screen.getByText("Tagesgericht Berlin")).toBeInTheDocument();
+    // Default suggestions should appear without API call
+    await waitFor(() => {
+      expect(mockFetch).not.toHaveBeenCalled();
     });
 
-    it("shows default suggestions when dropdown is opened without input", async () => {
-      mockFetch.mockResolvedValue(mockData);
-      const user = userEvent.setup();
+    // Check that default suggestions are shown
+    for (const suggestion of courtFilterDefaultSuggestions) {
+      expect(screen.getByText(suggestion.label)).toBeInTheDocument();
+    }
+  });
 
-      await renderSuspended(CourtFilter);
+  it("emits update when selecting a suggestion", async () => {
+    const user = userEvent.setup();
 
-      await user.click(
-        screen.getByRole("button", {
-          name: "Vorschläge anzeigen",
-        }),
-      );
+    const { emitted } = await renderSuspended(CourtFilter);
 
-      // Default suggestions should appear without API call
-      await waitFor(() => {
-        expect(mockFetch).not.toHaveBeenCalled();
-      });
+    const dropdownButton = screen.getByRole("button");
+    await user.click(dropdownButton);
 
-      // Check that default suggestions are shown
-      for (const suggestion of courtFilterDefaultSuggestions) {
-        expect(screen.getByText(suggestion.label)).toBeInTheDocument();
-      }
+    const firstSuggestion = courtFilterDefaultSuggestions[0]!;
+    await user.click(screen.getByText(firstSuggestion.label));
+
+    expect(emitted("update:modelValue")).toContainEqual([firstSuggestion.id]);
+  });
+
+  it("uses current value as search prefix when dropdown is opened", async () => {
+    mockFetch.mockResolvedValue(mockData);
+    const user = userEvent.setup();
+
+    await renderSuspended(CourtFilter, {
+      props: {
+        modelValue: "existing court",
+      },
     });
 
-    it("emits update when selecting a suggestion", async () => {
-      const user = userEvent.setup();
+    await user.click(
+      screen.getByRole("button", {
+        name: "Vorschläge anzeigen",
+      }),
+    );
 
-      const { emitted } = await renderSuspended(CourtFilter);
-
-      const dropdownButton = screen.getByRole("button");
-      await user.click(dropdownButton);
-
-      const firstSuggestion = courtFilterDefaultSuggestions[0]!;
-      await user.click(screen.getByText(firstSuggestion.label));
-
-      expect(emitted("update:modelValue")).toContainEqual([firstSuggestion.id]);
-    });
-
-    it("uses current value as search prefix when dropdown is opened", async () => {
-      mockFetch.mockResolvedValue(mockData);
-      const user = userEvent.setup();
-
-      await renderSuspended(CourtFilter, {
-        props: {
-          modelValue: "existing court",
-        },
-      });
-
-      await user.click(
-        screen.getByRole("button", {
-          name: "Vorschläge anzeigen",
-        }),
-      );
-
-      await waitFor(() => {
-        expect(mockFetch).toHaveBeenCalledWith("/v1/case-law/courts", {
-          query: { prefix: "existing court" },
-        });
+    await waitFor(() => {
+      expect(mockFetch).toHaveBeenCalledWith("/v1/case-law/courts", {
+        query: { prefix: "existing court" },
       });
     });
   });
