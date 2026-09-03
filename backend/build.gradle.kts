@@ -92,6 +92,9 @@ dependencies {
     // CVE-2026-5588
     implementation(platform(libs.bouncycastle.bom))
 
+    // CVE-2026-65182
+    implementation(libs.tomcat.embed.core)
+
     implementation(libs.ris.html.transformation)
 
     compileOnly(libs.lombok)
