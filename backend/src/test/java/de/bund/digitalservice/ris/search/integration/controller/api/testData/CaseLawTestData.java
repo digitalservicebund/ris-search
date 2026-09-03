@@ -19,6 +19,30 @@ public class CaseLawTestData {
 
   public static String matchAllTerm = "Recht";
 
+  public static CaseLawDocumentationUnit highlightExample =
+      CaseLawDocumentationUnit.builder()
+          .id("BFRE000157360")
+          .documentNumber("BFRE000157360")
+          .caseFacts("highlight_caseFacts")
+          .decisionGrounds("highlight_decisionGrounds")
+          .decisionName(List.of("highlight_decisionName"))
+          .dissentingOpinion("highlight_dissentingOpinion")
+          .ecli("highlight_ecli")
+          .erledigungsvermerk("highlight_erledigungsvermerk")
+          .fileNumbers(List.of("highlight_fileNumbers"))
+          .grounds("highlight_grounds")
+          .guidingPrinciple("highlight_guidingPrinciple")
+          .headline("highlight_headline")
+          .headnote("highlight_headnote")
+          .otherHeadnote("highlight_otherHeadnote")
+          .otherLongText("highlight_otherLongText")
+          .outline("highlight_outline")
+          .rechtsfrage("highlight_rechtsfrage")
+          .rechtsfrageGesamt("highlight_rechtsfrageGesamt")
+          .tenor("highlight_tenor")
+          .titleLine("highlight_titleLine")
+          .build();
+
   public static List<CaseLawDocumentationUnit> allDocuments = new ArrayList<>();
 
   public static final int URTEIL_COUNT = 3;
@@ -201,6 +225,8 @@ public class CaseLawTestData {
             .tenor("Tenor")
             .headline("Headline EuGH-Vorlage")
             .build());
+
+    allDocuments.add(highlightExample);
 
     WITH_LEITSATZ_COUNT =
         (int)

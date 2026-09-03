@@ -1,5 +1,8 @@
 package de.bund.digitalservice.ris.search.integration.config;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+
+import de.bund.digitalservice.ris.TestJsonUtils;
 import de.bund.digitalservice.ris.search.config.obs.TestMockS3Client;
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.AdministrativeDirectiveTestData;
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.CaseLawTestData;
@@ -23,6 +26,7 @@ import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository
 import de.bund.digitalservice.ris.search.repository.opensearch.DocumentRepository;
 import de.bund.digitalservice.ris.search.repository.opensearch.LiteratureRepository;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
+import de.bund.digitalservice.ris.search.schema.TextMatchSchema;
 import de.bund.digitalservice.ris.search.service.AdministrativeDirectiveService;
 import de.bund.digitalservice.ris.search.service.AllDocumentsService;
 import de.bund.digitalservice.ris.search.service.CaseLawService;
@@ -42,8 +46,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchPage;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.test.web.servlet.MockMvc;
 import org.testcontainers.utility.TestcontainersConfiguration;
 
 /**
@@ -271,5 +277,21 @@ public class ContainersIntegrationBase {
         UniversalSearchParams.builder().searchTerm(searchTerm).build(),
         null,
         Pageable.ofSize(10000));
+  }
+
+  protected List<TextMatchSchema> getTopHitTextMatches(MockMvc mockMvc, String url) {
+    try {
+      return TestJsonUtils.parseJsonResult(
+              mockMvc
+                  .perform(get(url).contentType(MediaType.APPLICATION_JSON))
+                  .andReturn()
+                  .getResponse()
+                  .getContentAsString())
+          .member()
+          .getFirst()
+          .textMatches();
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
   }
 }
