@@ -17,7 +17,7 @@ public record CollectionSchema<T>(
     @Schema(example = "1", requiredMode = Schema.RequiredMode.REQUIRED) long totalItems,
     @Schema(requiredMode = Schema.RequiredMode.REQUIRED) List<T> member,
     @Schema(requiredMode = Schema.RequiredMode.REQUIRED) PartialCollectionViewSchema view)
-    implements JsonldResource, JsonldContext {
+    implements JsonldResource {
 
   @Override
   @Schema(example = JsonldTypes.HYDRA_COLLECTION)

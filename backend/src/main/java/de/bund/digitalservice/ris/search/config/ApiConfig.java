@@ -16,7 +16,6 @@ public class ApiConfig {
    * <p>This class is a utility class and cannot be instantiated.
    */
   public static class Paths {
-
     private Paths() {}
 
     public static final String BASE = "/v1";

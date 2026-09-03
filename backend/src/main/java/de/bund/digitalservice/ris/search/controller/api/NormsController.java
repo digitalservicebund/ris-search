@@ -26,6 +26,7 @@ import de.bund.digitalservice.ris.search.service.ArticleService;
 import de.bund.digitalservice.ris.search.service.ChangelogService;
 import de.bund.digitalservice.ris.search.service.NormsService;
 import de.bund.digitalservice.ris.search.service.xslt.NormXsltTransformerService;
+import de.bund.digitalservice.ris.search.utils.JsonLdUtils;
 import de.bund.digitalservice.ris.search.utils.LuceneQueryTools;
 import de.bund.digitalservice.ris.search.utils.eli.ExpressionEli;
 import de.bund.digitalservice.ris.search.utils.eli.ManifestationEli;
@@ -42,7 +43,6 @@ import java.net.URLConnection;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import org.apache.commons.lang3.Strings;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -221,8 +221,7 @@ public class NormsController {
             jurisdiction, agent, year, naturalIdentifier, pointInTime, version, language);
     Optional<Norm> result = normsService.getByExpressionEli(eli);
 
-    String remoteJsonContext =
-        Strings.CS.removeEnd(backEndUrl, "/") + ApiConfig.Paths.JSONLD_CONTEXT;
+    String remoteJsonContext = JsonLdUtils.getJsonldPath();
 
     return result
         .map(r -> ResponseEntity.ok(NormSchemaMapper.fromDomain(r, remoteJsonContext)))

@@ -105,7 +105,8 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
                 "$.hasPart[0].@id",
                 is("/v1/legislation/eli/bund/bgbl-1/1000/test/2000-10-06/2/deu#art-z1")),
             jsonPath("$.hasPart[0].name", is("1")),
-            jsonPath("$.hasPart[0].temporalCoverage", is("2023-12-31/3000-01-02")));
+            jsonPath("$.hasPart[0].temporalCoverage", is("2023-12-31/3000-01-02")))
+        .andExpect(isJsonLdCompliant());
   }
 
   @Test
@@ -784,14 +785,5 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
             jsonPath("$.deleted[0].['@id']")
                 .value("/v1/legislation/eli/bund/bgbl-1/2000/identifier/2026-01-01/1/deu"))
         .andExpect(jsonPath("$.deleted[0].['@type']").value("Legislation"));
-  }
-
-  @Test
-  void singleNormEnpdointIsJsonLdCompliant() throws Exception {
-    mockMvc
-        .perform(
-            get(ApiConfig.Paths.LEGISLATION_SINGLE + "/bund/bgbl-1/1000/test/2000-10-06/2/deu")
-                .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(isJsonLdCompliant());
   }
 }
