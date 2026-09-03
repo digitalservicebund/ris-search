@@ -462,6 +462,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/context.jsonld": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["getContext"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/case-law": {
         parameters: {
             query?: never;
@@ -995,6 +1011,7 @@ export interface components {
         CollectionSchemaSearchMemberSchemaLiteratureSearchSchema: {
             /** @example hydra:Collection */
             "@type"?: string;
+            "@context"?: string;
             /** @example /v1/document?pageIndex=0&size=5 */
             "@id": string;
             /**
@@ -1216,6 +1233,7 @@ export interface components {
         CollectionSchemaSearchMemberSchemaLegislationExpressionSearchSchema: {
             /** @example hydra:Collection */
             "@type"?: string;
+            "@context"?: string;
             /** @example /v1/document?pageIndex=0&size=5 */
             "@id": string;
             /**
@@ -1344,6 +1362,7 @@ export interface components {
         LegislationExpressionSchema: {
             /** @example Legislation */
             "@type"?: string;
+            "@context"?: string;
             /** @example /v1/legislation/eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu */
             "@id": string;
             /**
@@ -1469,6 +1488,7 @@ export interface components {
         CollectionSchemaSearchMemberSchemaAbstractDocumentSchema: {
             /** @example hydra:Collection */
             "@type"?: string;
+            "@context"?: string;
             /** @example /v1/document?pageIndex=0&size=5 */
             "@id": string;
             /**
@@ -1488,6 +1508,7 @@ export interface components {
         CollectionSchemaSearchMemberSchemaCaseLawSearchSchema: {
             /** @example hydra:Collection */
             "@type"?: string;
+            "@context"?: string;
             /** @example /v1/document?pageIndex=0&size=5 */
             "@id": string;
             /**
@@ -1507,6 +1528,7 @@ export interface components {
         CollectionSchemaSearchMemberSchemaAdministrativeDirectiveSearchSchema: {
             /** @example hydra:Collection */
             "@type"?: string;
+            "@context"?: string;
             /** @example /v1/document?pageIndex=0&size=5 */
             "@id": string;
             /**
@@ -2662,6 +2684,26 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+        };
+    };
+    getContext: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/ld+json": string;
+                };
             };
         };
     };

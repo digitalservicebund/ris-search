@@ -1616,6 +1616,25 @@
         }
       }
     },
+    "/v1/context.jsonld" : {
+      "get" : {
+        "tags" : [ "json-ld-context-controller" ],
+        "operationId" : "getContext",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/ld+json" : {
+                "schema" : {
+                  "type" : "string",
+                  "format" : "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/case-law" : {
       "get" : {
         "tags" : [ "Case Law" ],
@@ -2775,6 +2794,9 @@
             "type" : "string",
             "example" : "hydra:Collection"
           },
+          "@context" : {
+            "type" : "string"
+          },
           "@id" : {
             "type" : "string",
             "example" : "/v1/document?pageIndex=0&size=5"
@@ -3226,6 +3248,9 @@
             "type" : "string",
             "example" : "hydra:Collection"
           },
+          "@context" : {
+            "type" : "string"
+          },
           "@id" : {
             "type" : "string",
             "example" : "/v1/document?pageIndex=0&size=5"
@@ -3452,6 +3477,9 @@
           "@type" : {
             "type" : "string",
             "example" : "Legislation"
+          },
+          "@context" : {
+            "type" : "string"
           },
           "@id" : {
             "type" : "string",
@@ -3693,6 +3721,9 @@
             "type" : "string",
             "example" : "hydra:Collection"
           },
+          "@context" : {
+            "type" : "string"
+          },
           "@id" : {
             "type" : "string",
             "example" : "/v1/document?pageIndex=0&size=5"
@@ -3748,6 +3779,9 @@
             "type" : "string",
             "example" : "hydra:Collection"
           },
+          "@context" : {
+            "type" : "string"
+          },
           "@id" : {
             "type" : "string",
             "example" : "/v1/document?pageIndex=0&size=5"
@@ -3794,6 +3828,9 @@
           "@type" : {
             "type" : "string",
             "example" : "hydra:Collection"
+          },
+          "@context" : {
+            "type" : "string"
           },
           "@id" : {
             "type" : "string",
