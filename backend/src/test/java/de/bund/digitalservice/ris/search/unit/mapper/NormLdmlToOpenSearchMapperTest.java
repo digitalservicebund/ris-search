@@ -57,7 +57,7 @@ class NormLdmlToOpenSearchMapperTest {
         .isEqualTo(
             "Verordnung zur Durchführung des § 88 Abs. 2 Nr. 8 des Bundessozialhilfegesetzes");
     assertThat(norm.getOfficialShortTitle()).isEqualTo("Kurztitel");
-    assertThat(norm.getOfficialAbbreviation()).isEqualTo("ABK");
+    assertThat(norm.getAbbreviation()).isEqualTo("ABK");
     assertThat(norm.getEntryIntoForceDate()).isEqualTo(LocalDate.parse("2000-01-01"));
     assertThat(norm.getExpiryDate()).isEqualTo(LocalDate.parse("2000-01-07"));
     assertThat(norm.getNormsDate()).isEqualTo(LocalDate.parse("1962-07-15"));
@@ -151,7 +151,7 @@ class NormLdmlToOpenSearchMapperTest {
         NormLdmlToOpenSearchMapper.parseNorm("", xmlContent, Map.of(), false);
 
     assertThat(maybeNorm).isNotEmpty();
-    assertThat(maybeNorm.get().getOfficialAbbreviation()).isEqualTo("OffAbb");
+    assertThat(maybeNorm.get().getAbbreviation()).isEqualTo("OffAbb");
   }
 
   @Test
@@ -165,7 +165,7 @@ class NormLdmlToOpenSearchMapperTest {
         NormLdmlToOpenSearchMapper.parseNorm("", xmlContent, Map.of(), false);
 
     assertThat(maybeNorm).isNotEmpty();
-    assertThat(maybeNorm.get().getOfficialAbbreviation()).isEqualTo("RisAbb");
+    assertThat(maybeNorm.get().getAbbreviation()).isEqualTo("RisAbb");
   }
 
   @Test

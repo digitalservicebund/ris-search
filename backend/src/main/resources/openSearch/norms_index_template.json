@@ -31,7 +31,7 @@
         },
         "AB": {
           "type": "alias",
-          "path": "official_abbreviation"
+          "path": "abbreviation"
         },
         "DATUM": {
           "type": "alias",
@@ -84,16 +84,6 @@
           "type": "date"
         },
         "official_short_title": {
-          "type": "text",
-          "analyzer": "custom_german_analyzer",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "normalizer": "normalized_keyword"
-            }
-          }
-        },
-        "official_abbreviation": {
           "type": "text",
           "analyzer": "custom_german_analyzer",
           "fields": {

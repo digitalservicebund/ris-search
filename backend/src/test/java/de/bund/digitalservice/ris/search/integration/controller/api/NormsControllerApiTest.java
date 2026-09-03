@@ -422,7 +422,7 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
     normsRepository.save(
         Norm.builder()
             .id("eli/2024/teg/4/exp")
-            .officialAbbreviation("TeG")
+            .abbreviation("TeG")
             .officialTitle("This is it")
             .entryIntoForceDate(date)
             .expiryDate(date)

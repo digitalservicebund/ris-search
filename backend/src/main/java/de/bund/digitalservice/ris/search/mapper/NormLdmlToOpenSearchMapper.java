@@ -208,7 +208,7 @@ public class NormLdmlToOpenSearchMapper {
         .manifestationEliExample(manifestationEli)
         .officialTitle(getOfficialTitleByXmlDocument(xmlDocument))
         .officialShortTitle(getOfficialShortTitleByXmlDocument(xmlDocument))
-        .officialAbbreviation(abbreviation)
+        .abbreviation(abbreviation)
         .risAbbreviation(risAbbreviation)
         .normsDate(legislationDate)
         .normsSortDate(normsSortDate)

@@ -59,8 +59,8 @@ public final class Norm implements AbstractSearchEntity {
   @Field(name = Fields.OFFICIAL_SHORT_TITLE)
   private String officialShortTitle;
 
-  @Field(name = Fields.OFFICIAL_ABBREVIATION)
-  private String officialAbbreviation;
+  @Field(name = Fields.ABBREVIATION)
+  private String abbreviation;
 
   @Field(name = Fields.RIS_ABBREVIATION)
   private String risAbbreviation;
@@ -150,8 +150,8 @@ public final class Norm implements AbstractSearchEntity {
         "latest_manifestation_eli.keyword";
     public static final String NORMS_DATE = "norms_date";
     public static final String NORMS_SORT_DATE = "norms_sort_date";
-    public static final String OFFICIAL_ABBREVIATION = "official_abbreviation";
-    public static final String OFFICIAL_ABBREVIATION_KEYWORD = "official_abbreviation.keyword";
+    public static final String ABBREVIATION = "abbreviation";
+    public static final String ABBREVIATION_KEYWORD = "abbreviation.keyword";
     public static final String OFFICIAL_FOOT_NOTES = "official_foot_notes";
     public static final String OFFICIAL_SHORT_TITLE = "official_short_title";
     public static final String OFFICIAL_SHORT_TITLE_KEYWORD = "official_short_title.keyword";

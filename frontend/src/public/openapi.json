@@ -3537,7 +3537,7 @@
             }
           }
         },
-        "required" : [ "@context", "@id", "encoding", "exampleOfWork", "hasPart", "legislationIdentifier", "legislationLegalForce", "name", "risAbbreviation", "temporalCoverage" ]
+        "required" : [ "@context", "@id", "abbreviation", "encoding", "exampleOfWork", "hasPart", "legislationIdentifier", "legislationLegalForce", "name", "risAbbreviation", "temporalCoverage" ]
       },
       "AbstractDocumentSchema" : {
         "discriminator" : {

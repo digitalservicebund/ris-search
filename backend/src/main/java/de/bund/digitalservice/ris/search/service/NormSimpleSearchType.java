@@ -26,7 +26,7 @@ public class NormSimpleSearchType implements SimpleSearchType {
           Map.entry(Norm.Fields.FULL_CITATION, 1.0f),
           Map.entry(Norm.Fields.ID, 1.0f),
           Map.entry(Norm.Fields.LATEST_MANIFESTATION_ELI, 1.0f),
-          Map.entry(Norm.Fields.OFFICIAL_ABBREVIATION, convertOrderingToBoost(1)),
+          Map.entry(Norm.Fields.ABBREVIATION, convertOrderingToBoost(1)),
           Map.entry(Norm.Fields.OFFICIAL_FOOT_NOTES, 1.0f),
           Map.entry(Norm.Fields.OFFICIAL_SHORT_TITLE, convertOrderingToBoost(1)),
           Map.entry(Norm.Fields.OFFICIAL_TITLE, convertOrderingToBoost(1)),
@@ -81,9 +81,7 @@ public class NormSimpleSearchType implements SimpleSearchType {
     }
 
     if (normsSearchParams.getAbbreviation() != null) {
-      query.must(
-          termQuery(
-              Norm.Fields.OFFICIAL_ABBREVIATION_KEYWORD, normsSearchParams.getAbbreviation()));
+      query.must(termQuery(Norm.Fields.ABBREVIATION_KEYWORD, normsSearchParams.getAbbreviation()));
     }
 
     if (normsSearchParams.getRisAbbreviation() != null) {

@@ -26,7 +26,7 @@ class NormSchemaMapperTest {
             .expressionEli("expressionEli")
             .normsDate(LocalDate.of(2025, Month.JANUARY, 1))
             .datePublished(LocalDate.of(2026, Month.JANUARY, 1))
-            .officialAbbreviation("OffAbbrev")
+            .abbreviation("OffAbbrev")
             .risAbbreviation("RisAbbrev")
             .tableOfContents(
                 List.of(
