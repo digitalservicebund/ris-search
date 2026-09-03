@@ -21,14 +21,14 @@ describe("court autocomplete", () => {
     vi.resetAllMocks();
   });
 
-  it("exposes the label and hint text to assistive technology", async () => {
+  it("exposes the label to assistive technology and shows hint text", async () => {
     await renderSuspended(CourtFilter);
 
     const input = screen.getByRole("combobox");
     expect(input).toHaveAccessibleName("Gericht");
-    expect(input).toHaveAccessibleDescription(
-      "Bundesgericht auswählen oder weiteres Gericht suchen",
-    );
+    expect(
+      screen.getByText("Bundesgericht auswählen oder weiteres Gericht suchen"),
+    ).toBeVisible();
   });
 
   it("renders an empty input field", async () => {

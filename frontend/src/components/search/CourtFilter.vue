@@ -92,7 +92,6 @@ const suggestions = computed<AutoCompleteSuggestion[]>(() =>
 );
 
 const id = useId();
-const hintId = useId();
 
 /*
  * When appendTo="body", PrimeVue's own overlay positioning (alignOverlay in
@@ -183,7 +182,7 @@ onBeforeUnmount(stopAligningBodyOverlay);
 <template>
   <div class="flex flex-col gap-4">
     <label :id="id" class="typo-label1-bold">Gericht</label>
-    <small :id="hintId" class="ris-label3-regular md:ris-label2-regular">
+    <small class="ris-label3-regular md:ris-label2-regular">
       Bundesgericht auswählen oder weiteres Gericht suchen
     </small>
     <div ref="fieldRef" data-testid="court-filter-field">
@@ -195,14 +194,8 @@ onBeforeUnmount(stopAligningBodyOverlay);
         dropdown
         dropdown-mode="blank"
         placeholder="Auswählen oder suchen"
-        :pt="{
-          // AutoComplete has no ariaDescribedby prop, so the hint text above
-          // the field is tied to the input as its accessible description via
-          // passthrough instead. In non-multiple mode (our case), AutoComplete
-          // renders the input as a nested InputText, whose own root section
-          // *is* the input element - hence the extra nesting.
-          pcInputText: { root: { 'aria-describedby': hintId } },
-          ...(appendTo === 'body'
+        :pt="
+          appendTo === 'body'
             ? {
                 // AutoComplete isn't customized by ris-ui, so this reproduces
                 // its default overlay classes, minus the theme's own
@@ -217,8 +210,8 @@ onBeforeUnmount(stopAligningBodyOverlay);
                   class: `mt-12 overflow-auto bg-white px-8 py-12 shadow-md ${OVERLAY_MARKER_CLASS}`,
                 },
               }
-            : {}),
-        }"
+            : undefined
+        "
         typeahead
         @before-show="watchForBodyOverlay"
         @complete="onComplete"
