@@ -1,6 +1,7 @@
 package de.bund.digitalservice.ris.search.controller.api;
 
 import de.bund.digitalservice.ris.search.config.ApiConfig;
+import de.bund.digitalservice.ris.search.config.ServerConfig;
 import de.bund.digitalservice.ris.search.exception.CustomValidationException;
 import de.bund.digitalservice.ris.search.mapper.AdministrativeDirectiveSearchSchemaMapper;
 import de.bund.digitalservice.ris.search.mapper.CaseLawSearchSchemaMapper;
@@ -27,7 +28,6 @@ import de.bund.digitalservice.ris.search.schema.LegislationExpressionSearchSchem
 import de.bund.digitalservice.ris.search.schema.LiteratureSearchSchema;
 import de.bund.digitalservice.ris.search.schema.SearchMemberSchema;
 import de.bund.digitalservice.ris.search.service.AdvancedSearchService;
-import de.bund.digitalservice.ris.search.utils.JsonLdUtils;
 import de.bund.digitalservice.ris.search.utils.LuceneQueryTools;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -56,7 +56,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class AdvancedSearchController {
   private final AdvancedSearchService advancedSearchService;
-  private final JsonLdUtils jsonLdUtils;
+  private String jsonldContextPath;
 
   /**
    * Constructs an instance of AdvancedSearchController with the provided services.
@@ -65,9 +65,9 @@ public class AdvancedSearchController {
    */
   @Autowired
   public AdvancedSearchController(
-      AdvancedSearchService advancedSearchService, JsonLdUtils jsonLdUtils) {
+      AdvancedSearchService advancedSearchService, ServerConfig serverConfig) {
     this.advancedSearchService = advancedSearchService;
-    this.jsonLdUtils = jsonLdUtils;
+    this.jsonldContextPath = serverConfig.getBackEndUrl() + ApiConfig.Paths.JSONLD_CONTEXT;
   }
 
   /**
@@ -144,7 +144,7 @@ public class AdvancedSearchController {
           .contentType(MediaType.APPLICATION_JSON)
           .body(
               NormSearchResponseMapper.fromDomain(
-                  page, ApiConfig.Paths.LEGISLATION_ADVANCED_SEARCH, jsonLdUtils.getJsonldPath()));
+                  page, ApiConfig.Paths.LEGISLATION_ADVANCED_SEARCH, jsonldContextPath));
     } catch (UncategorizedElasticsearchException e) {
       LuceneQueryTools.checkForInvalidQuery(e);
       throw e;

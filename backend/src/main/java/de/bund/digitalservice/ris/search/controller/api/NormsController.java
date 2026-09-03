@@ -3,6 +3,7 @@ package de.bund.digitalservice.ris.search.controller.api;
 import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
 
 import de.bund.digitalservice.ris.search.config.ApiConfig;
+import de.bund.digitalservice.ris.search.config.ServerConfig;
 import de.bund.digitalservice.ris.search.exception.CustomValidationException;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.mapper.ChangelogResponseMapper;
@@ -26,7 +27,6 @@ import de.bund.digitalservice.ris.search.service.ArticleService;
 import de.bund.digitalservice.ris.search.service.ChangelogService;
 import de.bund.digitalservice.ris.search.service.NormsService;
 import de.bund.digitalservice.ris.search.service.xslt.NormXsltTransformerService;
-import de.bund.digitalservice.ris.search.utils.JsonLdUtils;
 import de.bund.digitalservice.ris.search.utils.LuceneQueryTools;
 import de.bund.digitalservice.ris.search.utils.eli.ExpressionEli;
 import de.bund.digitalservice.ris.search.utils.eli.ManifestationEli;
@@ -86,7 +86,8 @@ public class NormsController {
   private final ArticleService articleService;
   private final NormXsltTransformerService xsltTransformerService;
   private final ChangelogService<NormsBucket> changelogService;
-  private final JsonLdUtils jsonLdUtils;
+
+  private final String jsonldContextPath;
 
   /**
    * Constructor for the NormsController class.
@@ -100,12 +101,12 @@ public class NormsController {
       ArticleService articleService,
       NormXsltTransformerService xsltTransformerService,
       ChangelogService<NormsBucket> changelogService,
-      JsonLdUtils jsonLdUtils) {
+      ServerConfig serverConfig) {
     this.normsService = normsService;
     this.articleService = articleService;
     this.xsltTransformerService = xsltTransformerService;
     this.changelogService = changelogService;
-    this.jsonLdUtils = jsonLdUtils;
+    this.jsonldContextPath = serverConfig.getBackEndUrl() + ApiConfig.Paths.JSONLD_CONTEXT;
   }
 
   /**
@@ -172,7 +173,7 @@ public class NormsController {
           normsService.simpleSearchNorms(
               universalSearchParams, normsSearchParams, sortedPageRequest);
       return NormSearchResponseMapper.fromDomain(
-          resultPage, ApiConfig.Paths.LEGISLATION, jsonLdUtils.getJsonldPath());
+          resultPage, ApiConfig.Paths.LEGISLATION, jsonldContextPath);
     } catch (UncategorizedElasticsearchException e) {
       LuceneQueryTools.checkForInvalidQuery(e);
       throw e;
@@ -221,10 +222,8 @@ public class NormsController {
             jurisdiction, agent, year, naturalIdentifier, pointInTime, version, language);
     Optional<Norm> result = normsService.getByExpressionEli(eli);
 
-    String remoteJsonContext = jsonLdUtils.getJsonldPath();
-
     return result
-        .map(r -> ResponseEntity.ok(NormSchemaMapper.fromDomain(r, remoteJsonContext)))
+        .map(r -> ResponseEntity.ok(NormSchemaMapper.fromDomain(r, jsonldContextPath)))
         .orElse(ResponseEntity.notFound().build());
   }
 
@@ -267,7 +266,7 @@ public class NormsController {
             eli, PageRequest.of(pagination.getPageIndex(), pagination.getSize()));
 
     return NormSearchResponseMapper.fromNormsPage(
-        expressions, ApiConfig.Paths.LEGISLATION_WORK_EXAMPLE, jsonLdUtils.getJsonldPath());
+        expressions, ApiConfig.Paths.LEGISLATION_WORK_EXAMPLE, jsonldContextPath);
   }
 
   /**

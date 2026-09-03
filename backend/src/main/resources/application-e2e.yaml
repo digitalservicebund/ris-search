@@ -1,6 +1,6 @@
 server:
   front-end-url: "http://localhost:3000/"
-  back-end-url: "http://localhost:8080/"
+  back-end-url: "http://localhost:8080"
 
 local:
   file-storage: backend/e2e-data

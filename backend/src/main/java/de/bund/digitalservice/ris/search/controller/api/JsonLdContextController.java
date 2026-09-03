@@ -3,7 +3,6 @@ package de.bund.digitalservice.ris.search.controller.api;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,8 +15,6 @@ public class JsonLdContextController {
 
   @GetMapping(path = ApiConfig.Paths.JSONLD_CONTEXT, produces = "application/ld+json")
   public ResponseEntity<Resource> getContext() {
-    return ResponseEntity.ok()
-        .header(HttpHeaders.CACHE_CONTROL, "public, max-age=31536000, immutable")
-        .body(contextResource);
+    return ResponseEntity.ok().body(contextResource);
   }
 }
