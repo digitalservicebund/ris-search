@@ -9,14 +9,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class JsonLdUtils {
 
-  private static String backEndUrl;
+  private String backEndUrl;
 
   @Value("${server.back-end-url}")
   public void setBackEndUrl(String url) {
-    JsonLdUtils.backEndUrl = Strings.CS.removeEnd(url, "/");
+    backEndUrl = Strings.CS.removeEnd(url, "/");
   }
 
-  public static String getJsonldPath() {
+  public String getJsonldPath() {
     return backEndUrl + ApiConfig.Paths.JSONLD_CONTEXT;
   }
 }

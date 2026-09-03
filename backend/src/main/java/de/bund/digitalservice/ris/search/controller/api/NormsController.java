@@ -45,7 +45,6 @@ import java.util.List;
 import java.util.Optional;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.UncategorizedElasticsearchException;
@@ -87,7 +86,7 @@ public class NormsController {
   private final ArticleService articleService;
   private final NormXsltTransformerService xsltTransformerService;
   private final ChangelogService<NormsBucket> changelogService;
-  private final String backEndUrl;
+  private final JsonLdUtils jsonLdUtils;
 
   /**
    * Constructor for the NormsController class.
@@ -101,12 +100,12 @@ public class NormsController {
       ArticleService articleService,
       NormXsltTransformerService xsltTransformerService,
       ChangelogService<NormsBucket> changelogService,
-      @Value("${server.back-end-url}") String backEndUrl) {
+      JsonLdUtils jsonLdUtils) {
     this.normsService = normsService;
     this.articleService = articleService;
     this.xsltTransformerService = xsltTransformerService;
     this.changelogService = changelogService;
-    this.backEndUrl = backEndUrl;
+    this.jsonLdUtils = jsonLdUtils;
   }
 
   /**
@@ -172,7 +171,8 @@ public class NormsController {
       SearchPage<Norm> resultPage =
           normsService.simpleSearchNorms(
               universalSearchParams, normsSearchParams, sortedPageRequest);
-      return NormSearchResponseMapper.fromDomain(resultPage, ApiConfig.Paths.LEGISLATION);
+      return NormSearchResponseMapper.fromDomain(
+          resultPage, ApiConfig.Paths.LEGISLATION, jsonLdUtils.getJsonldPath());
     } catch (UncategorizedElasticsearchException e) {
       LuceneQueryTools.checkForInvalidQuery(e);
       throw e;
@@ -221,7 +221,7 @@ public class NormsController {
             jurisdiction, agent, year, naturalIdentifier, pointInTime, version, language);
     Optional<Norm> result = normsService.getByExpressionEli(eli);
 
-    String remoteJsonContext = JsonLdUtils.getJsonldPath();
+    String remoteJsonContext = jsonLdUtils.getJsonldPath();
 
     return result
         .map(r -> ResponseEntity.ok(NormSchemaMapper.fromDomain(r, remoteJsonContext)))
@@ -267,7 +267,7 @@ public class NormsController {
             eli, PageRequest.of(pagination.getPageIndex(), pagination.getSize()));
 
     return NormSearchResponseMapper.fromNormsPage(
-        expressions, ApiConfig.Paths.LEGISLATION_WORK_EXAMPLE);
+        expressions, ApiConfig.Paths.LEGISLATION_WORK_EXAMPLE, jsonLdUtils.getJsonldPath());
   }
 
   /**

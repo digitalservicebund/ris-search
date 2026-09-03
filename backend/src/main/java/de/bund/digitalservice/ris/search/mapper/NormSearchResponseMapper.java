@@ -169,16 +169,18 @@ public class NormSearchResponseMapper {
    *
    * @param page The {@link SearchPage} containing {@link Norm} elements to be transformed.
    * @param path The base path used for constructing the collection's ID and view metadata.
+   * @param jsonldContext route to the jsonld context
    * @return A {@link CollectionSchema} initialized with members mapped from the input page, the
    *     total number of items, and the corresponding view metadata.
    */
   public static CollectionSchema<SearchMemberSchema<LegislationExpressionSearchSchema>> fromDomain(
-      final SearchPage<Norm> page, String path) {
+      final SearchPage<Norm> page, String path, String jsonldContext) {
     String id = String.format("%s?pageIndex=%d&size=%d", path, page.getNumber(), page.getSize());
     PartialCollectionViewSchema view = PartialCollectionViewMapper.fromPage(path, page);
 
     return CollectionSchema.<SearchMemberSchema<LegislationExpressionSearchSchema>>builder()
         .id(id)
+        .context(jsonldContext)
         .totalItems(page.getTotalElements())
         .member(page.stream().map(NormSearchResponseMapper::fromSearchHit).toList())
         .view(view)
@@ -191,16 +193,18 @@ public class NormSearchResponseMapper {
    * @param page the {@link org.springframework.data.domain.Page} of {@link Norm} instances returned
    *     by OpenSearch
    * @param path api path that was used to retrieve norms
+   * @param jsonldContext route to the jsonld context
    * @return a {@link CollectionSchema} containing {@link LegislationExpressionSearchSchema} items
    */
   public static CollectionSchema<LegislationExpressionSearchSchema> fromNormsPage(
-      Page<Norm> page, String path) {
+      Page<Norm> page, String path, String jsonldContext) {
     String id = String.format("%s?pageIndex=%d&size=%d", path, page.getNumber(), page.getSize());
     PartialCollectionViewSchema view = PartialCollectionViewMapper.fromPage(path, page);
 
     return CollectionSchema.<LegislationExpressionSearchSchema>builder()
         .id(id)
         .totalItems(page.getTotalElements())
+        .context(jsonldContext)
         .member(page.stream().map(NormSearchResponseMapper::fromDomain).toList())
         .view(view)
         .build();

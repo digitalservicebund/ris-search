@@ -328,7 +328,8 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
         .andExpectAll(
             status().isOk(),
             jsonPath("$.member", hasSize(3)),
-            jsonPath("$.member[0]['item'].abbreviation", is("TeG")));
+            jsonPath("$.member[0]['item'].abbreviation", is("TeG")))
+        .andExpect(isJsonLdCompliant());
   }
 
   @Test
@@ -382,7 +383,8 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
             jsonPath(
                 "$.member[0].item.legislationIdentifier",
                 is("eli/bund/bgbl-1/1000/test/2000-10-06/2/deu")))
-        .andExpect(status().isOk());
+        .andExpect(status().isOk())
+        .andExpect(isJsonLdCompliant());
   }
 
   @Test
@@ -494,7 +496,8 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
         .andExpect(jsonPath("$.member[*].articles", hasSize(0)))
         .andExpect(jsonPath("$.member[*].textMatches").value(hasSize(3)))
         .andExpect(jsonPath("$.member[0].textMatches[0].@type").value(equalTo("SearchResultMatch")))
-        .andExpect(jsonPath("$.member[0].textMatches[*].text").value(contains(highlightedMatch)));
+        .andExpect(jsonPath("$.member[0].textMatches[*].text").value(contains(highlightedMatch)))
+        .andExpect(isJsonLdCompliant());
   }
 
   @Test
@@ -522,7 +525,8 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
                 containsInAnyOrder(
                     "<mark>Test</mark> Gesetz",
                     "<mark>example</mark> text 1",
-                    "<mark>example</mark> text 2")));
+                    "<mark>example</mark> text 2")))
+        .andExpect(isJsonLdCompliant());
   }
 
   @ParameterizedTest

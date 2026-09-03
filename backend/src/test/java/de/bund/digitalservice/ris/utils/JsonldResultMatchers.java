@@ -13,6 +13,10 @@ import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 import org.springframework.test.web.servlet.ResultMatcher;
 
+/**
+ * Supplies ResutlMatchers to test the structure of api responses according to our jsonld
+ * constraints
+ */
 public class JsonldResultMatchers {
 
   private static final Document CACHED_CONTEXT_DOC;
@@ -30,6 +34,11 @@ public class JsonldResultMatchers {
 
   private static final DocumentLoader CACHED_LOADER = (_, _) -> CACHED_CONTEXT_DOC;
 
+  /**
+   * Checks if a json response can be fully expanded according to its jsonld context.
+   *
+   * @return ResultMatcher
+   */
   public static ResultMatcher isJsonLdCompliant() {
     return result -> {
       String jsonResponse = result.getResponse().getContentAsString();

@@ -27,6 +27,7 @@ import de.bund.digitalservice.ris.search.schema.LegislationExpressionSearchSchem
 import de.bund.digitalservice.ris.search.schema.LiteratureSearchSchema;
 import de.bund.digitalservice.ris.search.schema.SearchMemberSchema;
 import de.bund.digitalservice.ris.search.service.AdvancedSearchService;
+import de.bund.digitalservice.ris.search.utils.JsonLdUtils;
 import de.bund.digitalservice.ris.search.utils.LuceneQueryTools;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -55,6 +56,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class AdvancedSearchController {
   private final AdvancedSearchService advancedSearchService;
+  private final JsonLdUtils jsonLdUtils;
 
   /**
    * Constructs an instance of AdvancedSearchController with the provided services.
@@ -62,8 +64,10 @@ public class AdvancedSearchController {
    * @param advancedSearchService a service to advanced search
    */
   @Autowired
-  public AdvancedSearchController(AdvancedSearchService advancedSearchService) {
+  public AdvancedSearchController(
+      AdvancedSearchService advancedSearchService, JsonLdUtils jsonLdUtils) {
     this.advancedSearchService = advancedSearchService;
+    this.jsonLdUtils = jsonLdUtils;
   }
 
   /**
@@ -140,7 +144,7 @@ public class AdvancedSearchController {
           .contentType(MediaType.APPLICATION_JSON)
           .body(
               NormSearchResponseMapper.fromDomain(
-                  page, ApiConfig.Paths.LEGISLATION_ADVANCED_SEARCH));
+                  page, ApiConfig.Paths.LEGISLATION_ADVANCED_SEARCH, jsonLdUtils.getJsonldPath()));
     } catch (UncategorizedElasticsearchException e) {
       LuceneQueryTools.checkForInvalidQuery(e);
       throw e;
