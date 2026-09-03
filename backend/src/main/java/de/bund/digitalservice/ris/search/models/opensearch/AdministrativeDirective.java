@@ -5,6 +5,7 @@ import jakarta.persistence.ElementCollection;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.Builder;
+import lombok.Getter;
 import org.jspecify.annotations.Nullable;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.DateFormat;
@@ -32,7 +33,7 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 @Builder
 @Document(indexName = "#{@configurations.getAdministrativeDirectiveIndexName()}")
 public record AdministrativeDirective(
-    @Id @Field(name = Fields.ID) String id,
+    @Getter @Id @Field(name = Fields.ID) String id,
     @Field(name = Fields.DOCUMENT_NUMBER) String documentNumber,
     @Field(name = Literature.Fields.DOCUMENT_NUMBER_KEYWORD) String documentNumberKeyword,
     @Nullable @Field(name = Fields.HEADLINE) String headline,
@@ -72,45 +73,26 @@ public record AdministrativeDirective(
   public static class Fields {
     private Fields() {}
 
-    public static final String ID = "id";
-
-    public static final String DOCUMENT_NUMBER = "document_number";
-
-    public static final String HEADLINE = "headline";
-
-    public static final String DOCUMENT_TYPE_DETAIL = "document_type_detail";
-
-    public static final String DOCUMENT_TYPE = "document_type";
-
-    public static final String SHORT_REPORT = "short_report";
-
-    public static final String LEGISLATION_AUTHORITY = "legislation_authority";
-
-    public static final String ENTRY_INTO_EFFECT_DATE = "entry_into_effect_date";
-
-    public static final String EXPIRY_DATE = "expiry_date";
-
-    public static final String NORM_REFERENCES = "norm_references";
-
-    public static final String CASELAW_REFERENCES = "caselaw_references";
-
-    public static final String REFERENCES = "references";
-
-    public static final String CITATION_DATES = "citation_dates";
-
-    public static final String REFERENCE_NUMBERS = "reference_numbers";
-
     public static final String ACTIVE_ADMINISTRATIVE_REFERENCES =
         "active_administrative_references";
-
     public static final String ACTIVE_NORM_REFERENCES = "active_norm_references";
-
-    public static final String KEYWORDS = "keywords";
-
+    public static final String CASELAW_REFERENCES = "caselaw_references";
+    public static final String CITATION_DATES = "citation_dates";
+    public static final String DOCUMENT_NUMBER = "document_number";
+    public static final String DOCUMENT_TYPE = "document_type";
+    public static final String DOCUMENT_TYPE_DETAIL = "document_type_detail";
+    public static final String ENTRY_INTO_EFFECT_DATE = "entry_into_effect_date";
+    public static final String EXPIRY_DATE = "expiry_date";
     public static final String FIELDS_OF_LAW = "fields_of_law";
-
-    public static final String OUTLINE = "outline";
-
+    public static final String HEADLINE = "headline";
+    public static final String ID = "id";
     public static final String INDEXED_AT = "indexed_at";
+    public static final String KEYWORDS = "keywords";
+    public static final String LEGISLATION_AUTHORITY = "legislation_authority";
+    public static final String NORM_REFERENCES = "norm_references";
+    public static final String OUTLINE = "outline";
+    public static final String REFERENCES = "references";
+    public static final String REFERENCE_NUMBERS = "reference_numbers";
+    public static final String SHORT_REPORT = "short_report";
   }
 }

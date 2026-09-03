@@ -1,0 +1,1 @@
+# Informationen in Leichter Sprache

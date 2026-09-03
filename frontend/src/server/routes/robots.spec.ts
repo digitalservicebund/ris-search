@@ -36,7 +36,6 @@ describe("robots txt route", () => {
 
   it("should serve robots txt from backend api on justice crawler", async () => {
     mockFetch.mockResolvedValue("");
-    mockPrivateFeaturesEnabled.mockReturnValue(false);
 
     const mockEvent: H3Event<EventHandlerRequest> = {
       node: {
@@ -57,6 +56,9 @@ describe("robots txt route", () => {
     expect(mockFetch).toHaveBeenCalledWith(
       useBackendUrl("/v1/eclicrawler/robots.txt"),
       {
+        headers: {
+          Authorization: "Basic ",
+        },
         method: "GET",
       },
     );

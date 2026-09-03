@@ -1,11 +1,12 @@
 import { toValue } from "vue";
 import type { Page } from "~/components/Pagination.vue";
-import { DocumentKind, type LuceneSearchParams } from "~/types/api";
-import {
-  dateFilterToQuery,
-  type StrictDateFilterValue,
-} from "~/utils/search/dateFilterType";
+import type { DocumentKind, LuceneSearchParams } from "~/types/api";
+import type { StrictDateFilterValue } from "~/utils/search/dateFilterType";
 import { itemsPerPageDefault } from "~/utils/search/itemsPerPageOptions";
+import {
+  buildLuceneQuery,
+  getLuceneSearchPath,
+} from "~/utils/search/luceneSearch";
 
 /** Additional configuration for search API calls */
 type AdvancedSearchOptions = {
@@ -41,42 +42,20 @@ export async function useAdvancedSearch(
     sort = "default",
   }: Partial<AdvancedSearchOptions>,
 ) {
-  const searchEndpointUrl = computed(() => {
-    const documentKindVal = toValue(documentKind);
-    const baseUrl = "/v1/document/lucene-search";
+  const searchEndpointUrl = computed(() =>
+    getLuceneSearchPath(toValue(documentKind)),
+  );
 
-    if (documentKindVal === DocumentKind.CaseLaw) {
-      return baseUrl + "/case-law";
-    } else if (documentKindVal === DocumentKind.Norm) {
-      return baseUrl + "/legislation";
-    } else if (documentKindVal === DocumentKind.Literature) {
-      return baseUrl + "/literature";
-    } else if (documentKindVal === DocumentKind.AdministrativeDirective) {
-      return baseUrl + "/administrative-directive";
-    } else return baseUrl;
-  });
-
-  const combinedQuery = computed<AdvancedSearchEndpointParams>(() => {
-    const result = [toValue(query)];
-
-    const filterVal = toValue(dateFilter);
-    if (filterVal) {
-      const dateQuery = dateFilterToQuery(filterVal, toValue(documentKind));
-      if (dateQuery) result.push(dateQuery);
-    }
-
-    const resultStr = result
-      .filter((i) => !!i.trim())
-      .map((i) => `(${i.trim()})`)
-      .join(" AND ");
-
-    return {
-      query: resultStr,
-      size: toValue(itemsPerPage),
-      sort: toValue(sort),
-      pageIndex: toValue(pageIndex),
-    };
-  });
+  const combinedQuery = computed<AdvancedSearchEndpointParams>(() => ({
+    query: buildLuceneQuery(
+      toValue(query),
+      toValue(dateFilter),
+      toValue(documentKind),
+    ),
+    size: toValue(itemsPerPage),
+    sort: toValue(sort),
+    pageIndex: toValue(pageIndex),
+  }));
 
   const { data, error, status, execute } = await useRisBackend<Page>(
     searchEndpointUrl,

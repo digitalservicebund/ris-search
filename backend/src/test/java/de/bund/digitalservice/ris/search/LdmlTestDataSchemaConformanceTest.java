@@ -1,5 +1,6 @@
 package de.bund.digitalservice.ris.search;
 
+import de.bund.digitalservice.ris.utils.CaseLawXmlValidator;
 import de.bund.digitalservice.ris.utils.LiteratureXmlValidator;
 import de.bund.digitalservice.ris.utils.NormXmlValidator;
 import java.io.IOException;
@@ -56,6 +57,22 @@ class LdmlTestDataSchemaConformanceTest {
     }
   }
 
+  private CaseLawXmlValidator.Type caseLawSchemaTypeForFile(Path ldmlFilePath) throws IOException {
+    String content = Files.readString(ldmlFilePath);
+    if (content.contains("rechtsprechung/anhaengiges-verfahren")) {
+      return CaseLawXmlValidator.Type.PENDING_PROCEEDING;
+    }
+    return CaseLawXmlValidator.Type.DECISION;
+  }
+
+  private void assertCaseLawIsSchemaValid(Path ldmlFilePath) {
+    try {
+      CaseLawXmlValidator.validateFile(ldmlFilePath, caseLawSchemaTypeForFile(ldmlFilePath));
+    } catch (Exception e) {
+      Assertions.fail("Case law: " + ldmlFilePath + " is not schema conform: \n" + e.getMessage());
+    }
+  }
+
   private static Stream<Arguments> argumentsForNormE2EDataSchemaConformance() throws IOException {
     return testDataPathForDirectory("e2e-data/norm/eli/");
   }
@@ -86,5 +103,16 @@ class LdmlTestDataSchemaConformanceTest {
   @MethodSource("argumentsForLiteratureE2EDataSchemaConformance")
   void literatureLdmlE2ETestDataShouldBeSchemaConform(Path ldmlFilePath) {
     assertLiteratureIsSchemaValid(ldmlFilePath);
+  }
+
+  private static Stream<Arguments> argumentsForCaseLawE2EDataSchemaConformance()
+      throws IOException {
+    return testDataPathForDirectory("e2e-data/caselaw/");
+  }
+
+  @ParameterizedTest
+  @MethodSource("argumentsForCaseLawE2EDataSchemaConformance")
+  void caseLawLdmlE2ETestDataShouldBeSchemaConform(Path ldmlFilePath) {
+    assertCaseLawIsSchemaValid(ldmlFilePath);
   }
 }

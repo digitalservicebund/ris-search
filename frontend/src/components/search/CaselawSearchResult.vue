@@ -4,16 +4,27 @@ import type {
   TextHeaderItem,
 } from "~/components/search/SearchResultHeader.vue";
 import type { CaseLaw, SearchResult } from "~/types/api";
+import type { SearchResultHeadingLevel } from "~/utils/search/searchResults";
 import {
   getMatch,
   getMatches,
   getTitleWithFallback,
+  getSearchResultHeadline,
 } from "~/utils/search/searchResults";
 
-const { searchResult, order } = defineProps<{
+const {
+  searchResult,
+  order,
+  headingLevel = "2",
+} = defineProps<{
   searchResult: SearchResult<CaseLaw>;
   order: number;
+
+  /** Heading level of the result title. */
+  headingLevel?: SearchResultHeadingLevel;
 }>();
+
+const headlineStyle = computed(() => getSearchResultHeadline(headingLevel));
 
 const { searchResultClicked } = usePostHog();
 
@@ -36,6 +47,11 @@ const fields = new Map([
   [
     "decisionGrounds",
     { id: "entscheidungsgruende", title: "Entscheidungsgründe" },
+  ],
+  ["rechtsfrageGesamt", { id: "rechtsfrage", title: "Rechtsfrage" }],
+  [
+    "erledigungsvermerk",
+    { id: "erledigungsvermerk", title: "Erledigungsvermerk" },
   ],
 ]);
 
@@ -134,10 +150,10 @@ function trackResultClick() {
     <NuxtLink
       :to="detailPageRoute"
       :aria-describedby="resultTypeId"
-      class="typo-headline-searchresult"
+      :class="headlineStyle.class"
       @click="trackResultClick()"
     >
-      <h2><span v-html="headline" /></h2>
+      <component :is="headlineStyle.tag"><span v-html="headline" /></component>
     </NuxtLink>
 
     <div v-if="previewSections.length" class="flex w-full flex-col gap-6">

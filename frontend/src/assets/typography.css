@@ -69,3 +69,11 @@
     @apply link-hover text-blue-800 underline-offset-2 outline-offset-4 outline-blue-800 focus-visible:outline-4;
   }
 }
+
+@utility typo-headline-searchresult-compact {
+  @apply ris-subhead-bold 2xl:ris-heading3-bold block;
+
+  &:is(a) {
+    @apply link-hover text-blue-800 underline-offset-2 outline-offset-4 outline-blue-800 focus-visible:outline-4;
+  }
+}

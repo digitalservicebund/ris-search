@@ -12,11 +12,11 @@
   },
   "devDependencies": {
     "@digitalservicebund/ris-ui": "4.7.0",
-    "oxfmt": "0.63.0",
-    "oxlint": "1.78.0",
+    "oxfmt": "0.65.0",
+    "oxlint": "1.80.0",
     "vitepress": "1.6.4",
     "vue": "3.5.41",
-    "vue-tsc": "3.3.9"
+    "vue-tsc": "3.3.11"
   },
   "devEngines": {
     "packageManager": {

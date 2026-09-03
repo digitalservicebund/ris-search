@@ -105,4 +105,45 @@ describe("SearchResult", () => {
 
     expect(container).toBeEmptyDOMElement();
   });
+
+  it("forwards the heading level to the result component", () => {
+    const { container } = render(SearchResultComponent, {
+      props: {
+        searchResult: {
+          item: { "@type": "Decision" },
+        } as SearchResult<CaseLaw>,
+        order: 0,
+        headingLevel: "3" as const,
+      },
+      global: {
+        stubs: {
+          SearchCaselawSearchResult: true,
+        },
+      },
+    });
+
+    expect(
+      container.querySelector("search-caselaw-search-result-stub"),
+    ).toHaveAttribute("headinglevel", "3");
+  });
+
+  it("defaults the heading level to 2", () => {
+    const { container } = render(SearchResultComponent, {
+      props: {
+        searchResult: {
+          item: { "@type": "Decision" },
+        } as SearchResult<CaseLaw>,
+        order: 0,
+      },
+      global: {
+        stubs: {
+          SearchCaselawSearchResult: true,
+        },
+      },
+    });
+
+    expect(
+      container.querySelector("search-caselaw-search-result-stub"),
+    ).toHaveAttribute("headinglevel", "2");
+  });
 });

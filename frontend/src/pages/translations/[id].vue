@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import IcBaselineSubject from "~icons/ic/baseline-subject";
-import IcOutlineInfo from "~icons/ic/outline-info";
 import { NuxtLink } from "#components";
 import NormTranslationActionMenu from "~/components/documents/actionMenu/NormTranslationActionMenu.vue";
 import type { DetailsListItem } from "~/components/documents/DetailsList.vue";
@@ -64,13 +62,11 @@ const views: OneOrMore<TabView> = [
   {
     path: "text",
     label: "Text",
-    icon: IcBaselineSubject,
     analyticsId: "translation-text-tab",
   },
   {
     path: "details",
     label: "Details",
-    icon: IcOutlineInfo,
     analyticsId: "translation-metadata-tab",
   },
 ] as const;

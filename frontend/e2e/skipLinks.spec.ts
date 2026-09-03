@@ -21,6 +21,16 @@ const scenarios: Scenario[] = [
     ],
   },
   {
+    name: "start page v2",
+    url: "/startseite-v2",
+    skipLinks: [
+      { label: "Zum Inhalt", target: "#main" },
+      { label: "Zur Suche", target: "#search" },
+      { label: "Zu Aktuelles", target: "#updates" },
+      { label: "Zum Fußbereich", target: "#footer" },
+    ],
+  },
+  {
     name: "search page",
     url: "/suche",
     skipLinks: [
@@ -135,7 +145,7 @@ test("skip links are focused after client-side navigation", async ({
 
   await page
     .getByRole("navigation")
-    .getByRole("link", { name: "Suche" })
+    .getByRole("link", { name: "Suche", exact: true })
     .click();
 
   await expect(
@@ -172,7 +182,7 @@ test.describe("mobile", () => {
 
     await page
       .getByRole("navigation")
-      .getByRole("link", { name: "Suche" })
+      .getByRole("link", { name: "Suche", exact: true })
       .click();
 
     await expect(

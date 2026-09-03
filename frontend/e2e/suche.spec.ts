@@ -69,7 +69,10 @@ test.describe("links to advanced search", () => {
 
     await navigate(page, "/suche");
 
-    await page.getByRole("link", { name: "Erweiterte Suche" }).click();
+    await page
+      .getByRole("main")
+      .getByRole("link", { name: "Erweiterte Suche" })
+      .click();
 
     await expect(
       page.getByRole("heading", { level: 1, name: "Erweiterte Suche" }),

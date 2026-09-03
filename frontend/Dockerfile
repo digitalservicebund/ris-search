@@ -17,7 +17,7 @@ RUN --mount=type=secret,id=SENTRY_AUTH_TOKEN,required=false \
   SENTRY_UPLOAD_SOURCEMAPS=${SENTRY_UPLOAD_SOURCEMAPS} \
   pnpm run prepare && NODE_OPTIONS="--max-old-space-size=4096" pnpm build
 
-FROM cgr.dev/chainguard/node@sha256:3a3fbc052438535cca1ac0eed75c2dabf04a7ce7de749667cd265f98dbf9c771
+FROM cgr.dev/chainguard/node@sha256:a422ef283675c760d801378646f2a7fdc96f4e2023121a247e215ed3cd39f199
 ARG SENTRY_RELEASE
 USER node
 WORKDIR /app

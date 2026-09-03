@@ -3,6 +3,7 @@ package de.bund.digitalservice.ris.search.controller.api;
 import de.bund.digitalservice.ris.search.exception.CustomValidationException;
 import de.bund.digitalservice.ris.search.exception.FileTransformationException;
 import de.bund.digitalservice.ris.search.exception.OpenSearchFetchException;
+import de.bund.digitalservice.ris.search.exception.OpenSearchTermLimitExceeded;
 import de.bund.digitalservice.ris.search.models.errors.CustomError;
 import de.bund.digitalservice.ris.search.models.errors.CustomErrorResponse;
 import de.bund.digitalservice.ris.search.service.exception.XMLElementNotFoundException;
@@ -22,6 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.validation.FieldError;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -431,7 +433,38 @@ public class ControllerExceptionHandler {
     logger.warn("Invalid parameter provided by api user : {}", ex.getMessage());
 
     CustomError error =
-        CustomError.builder().code("invalid_parameter").message("Invalid parameter").build();
+        CustomError.builder().code("invalid_parameter").message(ex.getMessage()).build();
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+  }
+
+  /**
+   * Handles exceptions of type {@link OpenSearchTermLimitExceeded} and returns a standardized error
+   * response with HTTP status 400 (Bad Request).
+   *
+   * @param ex the {@link OpenSearchTermLimitExceeded} containing the error
+   * @return a {@link ResponseEntity} containing a {@link CustomError} object with the error message
+   */
+  @ExceptionHandler(OpenSearchTermLimitExceeded.class)
+  public ResponseEntity<CustomErrorResponse> handleExceededSearchTermLimit(
+      OpenSearchTermLimitExceeded ex) {
+    CustomError error =
+        CustomError.builder().code("invalid_parameter").message(ex.getMessage()).build();
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+        .body(CustomErrorResponse.builder().errors(List.of(error)).build());
+  }
+
+  /**
+   * handles HttpRequestMethodNotSupportedException
+   *
+   * @param ex HttpRequestMethodNotSupportedException ResponseEntity containing a
+   * @return a {@link CustomErrorResponse} object with error details and an HTTP status of 405
+   */
+  @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+  public ResponseEntity<CustomErrorResponse> handleMethodNotSupported(
+      HttpRequestMethodNotSupportedException ex) {
+    CustomError error =
+        CustomError.builder().code("method_not_allowed").message(ex.getMessage()).build();
+    return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED)
+        .body(new CustomErrorResponse(List.of(error)));
   }
 }

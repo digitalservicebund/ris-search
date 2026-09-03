@@ -35,6 +35,13 @@ repositories {
             password = System.getenv("GH_PACKAGES_REPOSITORY_TOKEN") ?: project.findProperty("global_gh_packages_token") as String?
         }
     }
+    maven {
+        url = uri("https://maven.pkg.github.com/digitalservicebund/ris-xml-schema")
+        credentials {
+            username = System.getenv("GH_PACKAGES_REPOSITORY_USER") ?: project.findProperty("global_gh_packages_user") as String?
+            password = System.getenv("GH_PACKAGES_REPOSITORY_TOKEN") ?: project.findProperty("global_gh_packages_token") as String?
+        }
+    }
 }
 
 jacoco { toolVersion = libs.versions.jacoco.get() }
@@ -82,26 +89,8 @@ dependencies {
     implementation(libs.pebble)
     implementation(libs.streamex)
 
-    // CVE-2026-54515
-    implementation(libs.jackson.databind)
-
     // CVE-2026-5588
     implementation(platform(libs.bouncycastle.bom))
-
-    // CVE-2026-55831
-    implementation(libs.netty.codec.http)
-
-    // CVE-2026-56819
-    implementation(libs.netty.codec.http2)
-
-    // CVE-2026-59901
-    implementation(libs.netty.codec.compression)
-
-    // CVE-2026-54399
-    implementation(libs.apache.httpcore)
-
-    // CVE-2026-54428
-    implementation(libs.apache.httpcore.h2)
 
     implementation(libs.ris.html.transformation)
 
@@ -121,6 +110,7 @@ dependencies {
     testImplementation(libs.opensearch.testcontainers)
     testImplementation(libs.testcontainers.postgresql)
     testImplementation(libs.restassured)
+    testImplementation(libs.ris.xml.schema)
 }
 
 dependencyLocking {
@@ -172,29 +162,6 @@ tasks {
 
     jar {
         enabled = false
-    }
-
-    bootBuildImage {
-        val containerRegistry = System.getenv("CONTAINER_REGISTRY") ?: "ghcr.io"
-        val containerImageTag = System.getenv("CONTAINER_IMAGE_TAG")
-
-        imageName.set(containerImageTag)
-        builder.set("paketobuildpacks/builder-jammy-tiny")
-        publish.set(false)
-        docker {
-            publishRegistry {
-                username.set(System.getenv("CONTAINER_REGISTRY_USER") ?: "")
-                password.set(System.getenv("CONTAINER_REGISTRY_PASSWORD") ?: "")
-                url.set("https://$containerRegistry")
-            }
-        }
-        environment.set(mapOf("BP_HEALTH_CHECKER_ENABLED" to "true"))
-        buildpacks.set(
-            listOf(
-                "urn:cnb:builder:paketo-buildpacks/java",
-                "docker.io/paketobuildpacks/health-checker:latest",
-            ),
-        )
     }
 
     test {

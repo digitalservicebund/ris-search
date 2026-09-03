@@ -4,7 +4,6 @@ import { NuxtLink } from "#components";
 export type TabView = {
   label: string;
   path: string;
-  icon: Component;
   analyticsId?: string;
 };
 
@@ -23,7 +22,7 @@ const currentView = computed(
   <div>
     <div class="border-b border-gray-400">
       <nav class="-mb-px" aria-label="Tab">
-        <UiTabs class="content-gutters">
+        <UiTabs scroller-class="content-gutters">
           <UiTab
             v-for="view in views"
             :key="view.path"
@@ -32,7 +31,6 @@ const currentView = computed(
             :to="{ query: { ...route.query, view: view.path } }"
             :data-attr="view.analyticsId"
           >
-            <component :is="view.icon" />
             {{ view.label }}
           </UiTab>
         </UiTabs>

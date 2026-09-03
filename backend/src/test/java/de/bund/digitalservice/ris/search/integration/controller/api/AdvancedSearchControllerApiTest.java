@@ -51,7 +51,7 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
 
   private static Stream<Arguments> caseLawAdvancedSearchParams() {
     var arguments = new ArrayList<Arguments>();
-    for (var alias : new String[] {"document_type", "DOKUMENTTYP", "TYP", "DT"}) {
+    for (var alias : new String[] {"document_type", "DOKUMENTTYP", "TYP", "DT", "DTYP"}) {
       arguments.add(Arguments.of(alias, "Urteil", CaseLawTestData.URTEIL_COUNT));
     }
     arguments.add(Arguments.of("location", "Berlin", 2));
@@ -66,7 +66,7 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
             "[2024-01-01 TO 2024-12-31]",
             3)); // DATUM and DAT aliases are tested separately
 
-    for (var alias : new String[] {"ecli", "ECLI"}) {
+    for (var alias : new String[] {"ECLI"}) {
       arguments.add(Arguments.of(alias, "\"ECLI:DE:FGHH:1972:0630.III10.72.0\"", 1));
     }
 
@@ -74,27 +74,28 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
       arguments.add(Arguments.of(alias, "folgende", 1));
     }
 
-    for (var alias : new String[] {"decision_grounds", "ENTSCHEIDUNGSGRUENDE", "EGR"}) {
+    for (var alias :
+        new String[] {"decision_grounds", "ENTSCHEIDUNGSGRUENDE", "EGR", "TXTGRUENDE"}) {
       arguments.add(Arguments.of(alias, "Entscheidungsgründe", 1));
     }
 
-    for (var alias : new String[] {"guiding_principle", "LEITSATZ", "LS"}) {
+    for (var alias : new String[] {"guiding_principle", "LEITSATZ", "LS", "TXTLS"}) {
       arguments.add(Arguments.of(alias, "Leitsatz", CaseLawTestData.WITH_LEITSATZ_COUNT));
     }
 
-    for (var alias : new String[] {"headnote", "ORIENTIERUNGSSATZ", "OSATZ", "OS"}) {
+    for (var alias : new String[] {"headnote", "ORIENTIERUNGSSATZ", "OSATZ", "OS", "TXTOS"}) {
       arguments.add(Arguments.of(alias, "Orientierungssatz", 1));
     }
 
-    for (var alias : new String[] {"other_long_text", "SLANGTEXT", "STEXT"}) {
+    for (var alias : new String[] {"other_long_text", "SLANGTEXT", "STEXT", "TXTSONSTLT"}) {
       arguments.add(Arguments.of(alias, "Sonstiger", 1));
     }
 
-    for (var alias : new String[] {"other_headnote", "SORIENTIERUNGSSATZ", "SOSATZ"}) {
+    for (var alias : new String[] {"other_headnote", "SORIENTIERUNGSSATZ", "SOSATZ", "TXTSOSATZ"}) {
       arguments.add(Arguments.of(alias, "Sonstiger Orientierungssatz", 2));
     }
 
-    for (var alias : new String[] {"case_facts", "TATBESTAND", "TB"}) {
+    for (var alias : new String[] {"case_facts", "TATBESTAND", "TB", "TXTTB"}) {
       arguments.add(Arguments.of(alias, "Tatbestand", 2));
     }
 
@@ -104,11 +105,15 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
                 .filter(d -> Objects.equals(d.tenor(), "Tenor"))
                 .count();
     Assertions.assertTrue(documentsWithTenorCount > 0);
-    for (var alias : new String[] {"tenor", "TENOR", "TN"}) {
+    for (var alias : new String[] {"TENOR", "TN", "TXTTN"}) {
       arguments.add(Arguments.of(alias, "Tenor", documentsWithTenorCount));
     }
 
-    for (var alias : new String[] {"headline", "TITELZEILE", "TTZE"}) {
+    for (var alias : new String[] {"headline", "SHORTTITLE"}) {
+      arguments.add(Arguments.of(alias, "Titelzeile", 1));
+    }
+
+    for (var alias : new String[] {"TITELZEILE", "TITEL", "TTZE", "TXTTTZE"}) {
       arguments.add(Arguments.of(alias, "Titelzeile", 1));
     }
 
@@ -116,7 +121,7 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
       arguments.add(Arguments.of(alias, "outlineTest", 1));
     }
 
-    for (var alias : new String[] {"judicial_body", "SPRUCHKOERPER", "SK"}) {
+    for (var alias : new String[] {"judicial_body", "SPRUCHKOERPER", "SK", "GERSK"}) {
       arguments.add(Arguments.of(alias, "judicialbodyTest", 1));
     }
 
@@ -152,10 +157,176 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
       arguments.add(Arguments.of(alias, "deviatingDocumentNumbers", 1));
     }
 
-    arguments.add(Arguments.of("documentation_office", "DS", 1));
-
     for (var alias : new String[] {"legal_effect", "RECHTSKRAFT", "RK"}) {
       arguments.add(Arguments.of(alias, "JA", 2));
+    }
+
+    for (var alias : new String[] {"celex", "CELEXNR"}) {
+      arguments.add(Arguments.of(alias, "celexTest", 1));
+    }
+
+    for (var alias : new String[] {"gerichtsbarkeit", "GERB"}) {
+      arguments.add(Arguments.of(alias, "gerichtsbarkeitTest", 1));
+    }
+
+    for (var alias : new String[] {"berufsbilder", "BERB"}) {
+      arguments.add(Arguments.of(alias, "berufsbilderTest", 1));
+    }
+
+    for (var alias : new String[] {"kuendigungsarten", "KUENDIGUNGSART"}) {
+      arguments.add(Arguments.of(alias, "kuendigungsartenTest", 1));
+    }
+
+    for (var alias : new String[] {"herkunftslaender", "HERKL"}) {
+      arguments.add(Arguments.of(alias, "herkunftslaenderTest", 1));
+    }
+
+    for (var alias : new String[] {"regionen", "REGION"}) {
+      arguments.add(Arguments.of(alias, "regionenTest", 1));
+    }
+
+    for (var alias : new String[] {"tarifvertraege", "TV"}) {
+      arguments.add(Arguments.of(alias, "tarifvertraegeTest", 1));
+    }
+
+    for (var alias : new String[] {"kuendigungsgruende", "KUENDIGUNGSGRUND"}) {
+      arguments.add(Arguments.of(alias, "kuendigungsgruendeTest", 1));
+    }
+
+    for (var alias : new String[] {"mitwirkende_richter", "MWRICHTER"}) {
+      arguments.add(Arguments.of(alias, "mitwirkendeRichterTest", 1));
+    }
+
+    for (var alias : new String[] {"sachgebiete", "SG"}) {
+      arguments.add(Arguments.of(alias, "sachgebieteTest", 1));
+    }
+
+    for (var alias : new String[] {"streitjahre", "STREITJAHR"}) {
+      arguments.add(Arguments.of(alias, "streitjahreTest", 1));
+    }
+
+    for (var alias : new String[] {"fehlerhafte_gerichte", "ABWGER"}) {
+      arguments.add(Arguments.of(alias, "fehlerhafteGerichteTest", 1));
+    }
+
+    for (var alias : new String[] {"definitionen", "DEF"}) {
+      arguments.add(Arguments.of(alias, "definitionenTest", 1));
+    }
+
+    for (var alias : new String[] {"erledigung", "ANHERLEDIGT"}) {
+      arguments.add(Arguments.of(alias, "erledigungTest", 1));
+    }
+
+    for (var alias : new String[] {"erledigungsvermerk", "ANHERLVERM"}) {
+      arguments.add(Arguments.of(alias, "erledigungsvermerkTest", 1));
+    }
+
+    for (var alias : new String[] {"rechtsfrage", "ANHRECHTSFRAGE"}) {
+      arguments.add(Arguments.of(alias, "rechtsfrageTest", 1));
+    }
+
+    for (var alias : new String[] {"rechtsfrage_gesamt", "TXTRECHTSFRAGE"}) {
+      arguments.add(Arguments.of(alias, "rechtsfrageGesamtTest", 1));
+    }
+
+    for (var alias : new String[] {"previous_decisions", "VORGEHEND"}) {
+      arguments.add(Arguments.of(alias, "previousDecisionsTest", 1));
+    }
+
+    for (var alias : new String[] {"ensuing_decisions", "NACHGEHEND"}) {
+      arguments.add(Arguments.of(alias, "ensuingDecisionsTest", 1));
+    }
+
+    for (var alias : new String[] {"aktivzitierung_rechtsprechung", "ZITRSPR"}) {
+      arguments.add(Arguments.of(alias, "aktivzitierungRechtsprechungTest", 1));
+    }
+
+    for (var alias : new String[] {"passivzitierung_rechtsprechung", "PZITRSPR"}) {
+      arguments.add(Arguments.of(alias, "passivzitierungRechtsprechungTest", 1));
+    }
+
+    for (var alias : new String[] {"aktivzitierung_verwaltungsvorschriften", "ZITVWV"}) {
+      arguments.add(Arguments.of(alias, "aktivzitierungVerwaltungsvorschriftenTest", 1));
+    }
+
+    for (var alias : new String[] {"passivzitierung_verwaltungsvorschriften", "PZITVWV"}) {
+      arguments.add(Arguments.of(alias, "passivzitierungVerwaltungsvorschriftenTest", 1));
+    }
+
+    for (var alias : new String[] {"aktivzitierung_literatur_selbstaendig", "ZITLITSELBST"}) {
+      arguments.add(Arguments.of(alias, "aktivzitierungLiteraturSelbstaendigTest", 1));
+    }
+
+    for (var alias : new String[] {"aktivzitierung_literatur_unselbstaendig", "ZITLITUNSELBST"}) {
+      arguments.add(Arguments.of(alias, "aktivzitierungLiteraturUnselbstaendigTest", 1));
+    }
+
+    for (var alias : new String[] {"passivzitierung_literatur_selbstaendig", "PZITLITSELBST"}) {
+      arguments.add(Arguments.of(alias, "passivzitierungLiteraturSelbstaendigTest", 1));
+    }
+
+    for (var alias : new String[] {"passivzitierung_literatur_unselbstaendig", "PZITLITUNSELBST"}) {
+      arguments.add(Arguments.of(alias, "passivzitierungLiteraturUnselbstaendigTest", 1));
+    }
+
+    for (var alias : new String[] {"amtliche_fundstellen", "FS"}) {
+      arguments.add(Arguments.of(alias, "amtlicheFundstellenTest", 1));
+    }
+
+    for (var alias : new String[] {"nichtamtliche_fundstellen", "FSNAMTL"}) {
+      arguments.add(Arguments.of(alias, "nichtamtlicheFundstellenTest", 1));
+    }
+
+    for (var alias : new String[] {"normenkette", "NORM"}) {
+      arguments.add(Arguments.of(alias, "normenketteTest", 1));
+    }
+
+    for (var alias : new String[] {"has_legislative_mandate", "GESETZGEBUNGSAUFTRAG"}) {
+      arguments.add(Arguments.of(alias, "hasLegislativeMandateTest", 1));
+    }
+
+    for (var alias : new String[] {"rechtsmittelfuehrer", "ANHRMFUEHRER"}) {
+      arguments.add(Arguments.of(alias, "rechtsmittelfuehrerTest", 1));
+    }
+
+    for (var alias : new String[] {"rechtsmittelzulassung", "ANHRMZULASSUNG"}) {
+      arguments.add(Arguments.of(alias, "rechtsmittelzulassungTest", 1));
+    }
+
+    for (var alias : new String[] {"abweichende_eclis", "ABWECLI"}) {
+      arguments.add(Arguments.of(alias, "abweichendeEclisTest", 1));
+    }
+
+    for (var alias : new String[] {"abweichende_aktenzeichen", "ABWAZ"}) {
+      arguments.add(Arguments.of(alias, "abweichendeAktenzeichenTest", 1));
+    }
+
+    for (var alias : new String[] {"vorabdokument", "DVORAB"}) {
+      arguments.add(Arguments.of(alias, "true", 1));
+    }
+
+    for (var alias : new String[] {"abweichende_daten", "ABWDAT"}) {
+      arguments.add(Arguments.of(alias, "[2024-05-05 TO 2024-05-05]", 1));
+    }
+
+    for (var alias : new String[] {"daten_der_muendlichen_verhandlung", "MDLVERHDAT"}) {
+      arguments.add(Arguments.of(alias, "[2024-05-06 TO 2024-05-06]", 1));
+    }
+
+    for (var alias : new String[] {"langtextdatum", "LANGTEXTDAT"}) {
+      arguments.add(Arguments.of(alias, "[2024-05-07 TO 2024-05-07]", 1));
+    }
+
+    for (var alias : new String[] {"letzte_veroeffentlichung", "LASTPUBLDATE"}) {
+      arguments.add(Arguments.of(alias, "[2024-05-08 TO 2024-05-08]", 1));
+    }
+
+    for (var alias : new String[] {"erstveroeffentlichung", "FIRSTPUBLDATE"}) {
+      arguments.add(Arguments.of(alias, "[2024-05-09 TO 2024-05-09]", 1));
+    }
+
+    for (var alias : new String[] {"mitteilungsdatum", "ANHMITT"}) {
+      arguments.add(Arguments.of(alias, "[2024-05-10 TO 2024-05-10]", 1));
     }
 
     return arguments.stream();
@@ -177,7 +348,7 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {"decision_date", "DATUM", "DAT"})
+  @ValueSource(strings = {"decision_date", "DATUM", "DAT", "AVSDAT"})
   @DisplayName("Case law date and alias field find 2 documents")
   void caseLawDateAndAliasFieldsFind2Documents(String queryParam) throws Exception {
     mockMvc
@@ -244,7 +415,7 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {"document_number", "DOKUMENTNUMMER", "NR"})
+  @ValueSource(strings = {"document_number", "DOKUMENTNUMMER", "NR", "DNR"})
   @DisplayName("Should return 200 when looking for a specific document number and aliases")
   void shouldReturnOkDocumentNumberQuery(String queryParam) throws Exception {
 
@@ -414,15 +585,17 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
   @ParameterizedTest
   @ValueSource(
       strings = {
-        ApiConfig.Paths.DOCUMENT_ADVANCED_SEARCH + "?query=id:foobar OR",
-        ApiConfig.Paths.LEGISLATION_ADVANCED_SEARCH + "?query=work_eli:foobar OR",
-        ApiConfig.Paths.CASELAW_ADVANCED_SEARCH + "?query=document_number:BFRE000047655 OR"
+        "?query=id:foobar OR",
+        "?query=work_eli:foobar OR",
+        "?query=document_number:BFRE000047655 OR"
       })
   @DisplayName("Should return an error when the search has invalid lucene query")
   void invalidLuceneQuery(String url) throws Exception {
 
     mockMvc
-        .perform(get(url).contentType(MediaType.APPLICATION_JSON))
+        .perform(
+            get(ApiConfig.Paths.DOCUMENT_ADVANCED_SEARCH + url)
+                .contentType(MediaType.APPLICATION_JSON))
         .andDo(print())
         .andExpect(status().isUnprocessableContent())
         .andExpect(jsonPath("$.errors[0].code").value("invalid_lucene_query"))

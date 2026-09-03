@@ -3,6 +3,7 @@ package de.bund.digitalservice.ris.search.integration.controller.api.testData;
 import de.bund.digitalservice.ris.PebbleTemplateTestUtils;
 import de.bund.digitalservice.ris.SharedTestConstants;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
+import de.bund.digitalservice.ris.utils.CaseLawXmlValidator;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Month;
@@ -31,7 +32,7 @@ public class CaseLawTestData {
   static {
     allDocuments.add(
         CaseLawDocumentationUnit.builder()
-            .id("id1")
+            .id("BFRE000087655")
             .documentNumber("BFRE000087655")
             .ecli("ECLI:DE:FGNI:1975:0526.IXL180.73.0A")
             .courtType("KG")
@@ -43,6 +44,7 @@ public class CaseLawTestData {
             .decisionGrounds("diese Entscheidungsgründe")
             .headnote("Orientierungssatz")
             .headline("Test mit 1.000 € im Titel")
+            .titleLine("Test mit 1.000 € im Titel")
             .otherHeadnote("Sonstiger Orientierungssatz")
             .otherLongText(matchAllTerm)
             .caseFacts("Tatbestand")
@@ -52,21 +54,71 @@ public class CaseLawTestData {
             .keywords(keywords)
             .decisionName(List.of("decisionNames"))
             .deviatingDocumentNumber(List.of("deviatingDocumentNumbers"))
-            .documentationOffice("DS")
             .legalEffect("JA")
+            .celex("celexTest")
+            .gerichtsbarkeit("gerichtsbarkeitTest")
+            .berufsbilder(List.of("berufsbilderTest"))
+            .kuendigungsarten(List.of("kuendigungsartenTest"))
+            .herkunftslaender(List.of("herkunftslaenderTest"))
+            .regionen(List.of("regionenTest"))
+            .tarifvertraege(List.of("tarifvertraegeTest"))
+            .kuendigungsgruende(List.of("kuendigungsgruendeTest"))
+            .mitwirkendeRichter(List.of("mitwirkendeRichterTest"))
+            .sachgebiete(List.of("sachgebieteTest"))
+            .streitjahre(List.of("streitjahreTest"))
+            .fehlerhafteGerichte(List.of("fehlerhafteGerichteTest"))
+            .definitionen(List.of("definitionenTest"))
+            .erledigung("erledigungTest")
+            .erledigungsvermerk("erledigungsvermerkTest")
+            .rechtsfrage("rechtsfrageTest")
+            .rechtsfrageGesamt("rechtsfrageGesamtTest")
+            .previousDecisions(List.of("previousDecisionsTest"))
+            .ensuingDecisions(List.of("ensuingDecisionsTest"))
+            .aktivzitierungRechtsprechung(List.of("aktivzitierungRechtsprechungTest"))
+            .passivzitierungRechtsprechung(List.of("passivzitierungRechtsprechungTest"))
+            .aktivzitierungVerwaltungsvorschriften(
+                List.of("aktivzitierungVerwaltungsvorschriftenTest"))
+            .passivzitierungVerwaltungsvorschriften(
+                List.of("passivzitierungVerwaltungsvorschriftenTest"))
+            .aktivzitierungLiteraturSelbstaendig(List.of("aktivzitierungLiteraturSelbstaendigTest"))
+            .aktivzitierungLiteraturUnselbstaendig(
+                List.of("aktivzitierungLiteraturUnselbstaendigTest"))
+            .passivzitierungLiteraturSelbstaendig(
+                List.of("passivzitierungLiteraturSelbstaendigTest"))
+            .passivzitierungLiteraturUnselbstaendig(
+                List.of("passivzitierungLiteraturUnselbstaendigTest"))
+            .amtlicheFundstellen(List.of("amtlicheFundstellenTest"))
+            .nichtamtlicheFundstellen(List.of("nichtamtlicheFundstellenTest"))
+            .normenkette(List.of("normenketteTest"))
+            .hasLegislativeMandate("hasLegislativeMandateTest")
+            .rechtsmittelfuehrer("rechtsmittelfuehrerTest")
+            .rechtsmittelzulassung("rechtsmittelzulassungTest")
+            .abweichendeEclis(List.of("abweichendeEclisTest", "ECLI:DE:FGHH:1972:0630.III10.72.1"))
+            .abweichendeAktenzeichen(List.of("abweichendeAktenzeichenTest"))
+            .vorabdokument(true)
+            .letzteVeroeffentlichung(LocalDate.of(2024, Month.MAY, 8))
+            .datenDerMuendlichenVerhandlung(List.of(LocalDate.of(2024, Month.MAY, 6)))
+            .langtextdatum(LocalDate.of(2024, Month.MAY, 7))
+            .mitteilungsdatum(LocalDate.of(2024, Month.MAY, 10))
+            .erstveroeffentlichung(LocalDate.of(2024, Month.MAY, 9))
+            .abweichendeDaten(List.of(LocalDate.of(2024, Month.MAY, 5)))
             .build());
     allDocuments.add(
         CaseLawDocumentationUnit.builder()
-            .id("id2")
+            .id("BFRE000107055")
             .documentNumber("BFRE000107055")
             .ecli("ECLI:DE:FGRLP:1969:0905.IV85.68.0A")
+            .celex("Celex 2")
+            .fileNumber("file_number_2")
             .courtType("FG")
             .location("Berlin")
             .courtKeyword("FG Berlin")
             .documentType("Versäumnisurteil")
             .decisionDate(SharedTestConstants.DATE_2024_01_03)
-            .guidingPrinciple("Leitsatz mit ein paar Wörtern und Ergänzungen")
+            .guidingPrinciple(
+                "Leitsatz mit ein paar Wörtern und Ergänzungen. Auch ECLI:DE:FGHH:1972:0630.III10.72.1 drinnen.")
             .fileNumbers(List.of("IX ZR 100/20"))
+            .abweichendeAktenzeichen(List.of("abweichende_aktenzeichen"))
             .otherLongText("Sonstiger Langtext " + matchAllTerm)
             .otherHeadnote("Sonstiger Orientierungssatz")
             .caseFacts("Tatbestand nach § 4 TBestG")
@@ -75,9 +127,11 @@ public class CaseLawTestData {
 
     allDocuments.add(
         CaseLawDocumentationUnit.builder()
-            .id("id3")
+            .id("BFRE000157356")
             .documentNumber("BFRE000157356")
             .ecli("ECLI:DE:FGHH:1972:0630.III10.72.0")
+            .abweichendeEclis(List.of("abweichendeEclisTest2"))
+            .abweichendeAktenzeichen(List.of("file_number_7"))
             .courtType("FG")
             .location("Hamburg")
             .courtKeyword("FG Hamburg")
@@ -89,20 +143,23 @@ public class CaseLawTestData {
             .otherLongText(matchAllTerm)
             .tenor("Tenor")
             .headline("Titelzeile")
+            .titleLine("Titelzeile")
             .build());
 
     allDocuments.add(
         CaseLawDocumentationUnit.builder()
-            .id("id-b1")
+            .id("BFRE000157357")
             .documentNumber("BFRE000157357")
             .ecli("ECLI:DE:FGHH:1972:0630.III10.72.1")
+            .abweichendeEclis(List.of("abweichendeEclisTest3"))
+            .abweichendeAktenzeichen(List.of("abweichende_aktenzeichen"))
             .courtType("FG")
             .location("Gotha")
             .courtKeyword("FG Gotha")
             .documentType("Kammerbeschluss")
             .decisionDate(LocalDate.of(2025, Month.JANUARY, 1))
             .grounds("Beschlussgründe")
-            .guidingPrinciple("Leitsatz")
+            .guidingPrinciple("Leitsatz file_number_7")
             .otherLongText(matchAllTerm)
             .tenor("Tenor")
             .headline("Headline Beschluss")
@@ -110,9 +167,11 @@ public class CaseLawTestData {
 
     allDocuments.add(
         CaseLawDocumentationUnit.builder()
-            .id("id-e1")
+            .id("BFRE000157358")
             .documentNumber("BFRE000157358")
             .ecli("ECLI:DE:FGHH:1972:0630.III10.72.2")
+            .abweichendeEclis(List.of("abweichendeEclisTest4"))
+            .fileNumbers(List.of("file_number_1", "file_number_5", "file_number_7"))
             .courtType("FG")
             .location("Hannover")
             .courtKeyword("FG Hannover")
@@ -127,8 +186,9 @@ public class CaseLawTestData {
 
     allDocuments.add(
         CaseLawDocumentationUnit.builder()
-            .id("id-eugh1")
+            .id("BFRE000157359")
             .documentNumber("BFRE000157359")
+            .fileNumbers(List.of("file_number_3", "file_number_4"))
             .ecli("ECLI:DE:FGHH:1972:0630.III10.72.3")
             .courtType("LG")
             .location("Saarbrücken")
@@ -177,6 +237,7 @@ public class CaseLawTestData {
     if (context == null) {
       context = new HashMap<>();
     }
-    return PebbleTemplateTestUtils.getXmlFromTemplate(context, CASE_LAW_LDML_TEMPLATE);
+    return PebbleTemplateTestUtils.getXmlFromTemplateWithValidation(
+        context, CASE_LAW_LDML_TEMPLATE, CaseLawXmlValidator.Type.DECISION);
   }
 }

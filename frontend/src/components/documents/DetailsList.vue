@@ -62,6 +62,10 @@ const visibleItems = computed(() =>
     }
   }),
 );
+
+function labelRowSpan(item: DetailsListItem): number {
+  return item.type === "list" ? Math.max(item.values.length, 1) : 1;
+}
 </script>
 
 <template>
@@ -72,7 +76,8 @@ const visibleItems = computed(() =>
       class="col-span-12 grid grid-cols-subgrid items-baseline"
     >
       <dt
-        class="typo-label1-bold col-span-12 hyphens-auto md:col-span-3 xl:col-span-2"
+        class="typo-label1-bold col-span-12 text-balance hyphens-auto md:col-span-3 xl:col-span-2"
+        :style="{ gridRow: `span ${labelRowSpan(item)}` }"
       >
         {{ item.label }}
       </dt>

@@ -1,9 +1,3 @@
-server:
-  #This url will change before go live
-  front-end-url: "https://ris-portal.prod.tech.digitalservice.dev/"
-  docs-url: "https://docs.rechtsinformationen.bund.de/"
-  cms-url: "https://content-management.ris.bund.de/"
-
 swagger:
   server:
     #This url will change before go live

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineInfo from "~icons/ic/outline-info";
 import type { DetailsListItem } from "~/components/documents/DetailsList.vue";
 import type { MetadataItem } from "~/components/documents/Metadata.vue";
@@ -48,11 +47,10 @@ useCaselawSeo({ caseLaw: caseLaw.value, document: document.value });
 // Page contents ------------------------------------------
 
 const views: TabView[] = [
-  { path: "text", label: "Text", icon: IcBaselineSubject },
+  { path: "text", label: "Text" },
   {
     path: "details",
     label: "Details",
-    icon: IcOutlineInfo,
     analyticsId: "caselaw-metadata-tab",
   },
 ];
@@ -119,6 +117,39 @@ const detailItems = computed<DetailsListItem[]>(() => [
     label: "Entscheidungsname:",
     value: formatArray(caseLaw.value?.decisionName ?? []),
   },
+  {
+    type: "list",
+    label: "Gesetzeskraft:",
+    values: caseLaw.value?.gesetzeskraft ?? [],
+  },
+  {
+    type: "list",
+    label: getSingularOrPlural(
+      "Streitjahr:",
+      "Streitjahre:",
+      caseLaw.value?.streitjahre?.length,
+    ),
+    values: caseLaw.value?.streitjahre ?? [],
+  },
+  {
+    type: "list",
+    label: getSingularOrPlural(
+      "Vorgehende Entscheidung:",
+      "Vorgehende Entscheidungen:",
+      caseLaw.value?.previousDecisions?.length,
+    ),
+    values: caseLaw.value?.previousDecisions ?? [],
+  },
+  {
+    type: "list",
+    label: getSingularOrPlural(
+      "Nachgehende Entscheidung:",
+      "Nachgehende Entscheidungen:",
+      caseLaw.value?.ensuingDecisions?.length,
+    ),
+    values: caseLaw.value?.ensuingDecisions ?? [],
+  },
+
   {
     type: "link",
     label: "Download:",

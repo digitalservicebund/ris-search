@@ -11,6 +11,8 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -118,5 +120,38 @@ class ErrorResponseTest extends ContainersIntegrationBase {
       HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
       assertThat(response.statusCode()).isEqualTo(400);
     }
+  }
+
+  @Test
+  @DisplayName("Should return 200 on 20 token search")
+  void shouldReturn200On20TokenSearch() throws Exception {
+    String searchTerm =
+        IntStream.range(0, 20).mapToObj(i -> "token_" + i).collect(Collectors.joining("+"));
+
+    mockMvc
+        .perform(get("/v1/case-law?searchTerm=" + searchTerm).contentType(MediaType.TEXT_HTML))
+        .andExpect(status().isOk());
+  }
+
+  @Test
+  @DisplayName("Should return 400 on exceeded search term limit")
+  void shouldReturn400OnExceededSearchTerms() throws Exception {
+    String searchTerm =
+        IntStream.range(0, 50).mapToObj(i -> "token_" + i).collect(Collectors.joining("+"));
+
+    mockMvc
+        .perform(get("/v1/case-law?searchTerm=" + searchTerm).contentType(MediaType.TEXT_HTML))
+        .andExpect(status().is4xxClientError())
+        .andExpect(jsonPath("$.errors[0].message", Matchers.is("search query limit exceeded")))
+        .andExpect(jsonPath("$.errors[0].code", Matchers.is("invalid_parameter")));
+  }
+
+  @Test
+  @DisplayName("Should return 405 on method not allowed")
+  void shouldReturn405OnMethodNotAllowed() throws Exception {
+    mockMvc
+        .perform(get("/v1/feedback"))
+        .andExpect(status().is(405))
+        .andExpect(jsonPath("$.errors[0].code", Matchers.is("method_not_allowed")));
   }
 }

@@ -27,6 +27,8 @@ public class ApiConfig {
     public static final String CASELAW = BASE + "/case-law";
     public static final String CASELAW_CHANGELOGS = CASELAW + CHANGELOGS;
 
+    public static final String RECHTSPRECHUNG = BASE + "/rechtsprechung";
+
     public static final String LITERATURE = BASE + "/literature";
     public static final String LITERATURE_CHANGELOGS = LITERATURE + CHANGELOGS;
 
@@ -51,6 +53,11 @@ public class ApiConfig {
         DOCUMENT + "/lucene-search/administrative-directive";
 
     public static final String SITEMAP = BASE + "/sitemaps";
+    public static final String LEGISLATION_SITEMAPS = SITEMAP + "/norms";
+    public static final String CASELAW_SITEMAPS = SITEMAP + "/case-law";
+    public static final String ADMINISTRATIVE_DIRECTIVE_SITEMAPS =
+        SITEMAP + "/administrative-directives";
+    public static final String LITERATURE_SITEMAPS = SITEMAP + "/literature";
     public static final String ECLICRAWLER = BASE + "/eclicrawler";
     public static final String STATISTICS = BASE + "/statistics";
     public static final String BULK_ZIP_LINKS = BASE + "/bulk-zip-links";

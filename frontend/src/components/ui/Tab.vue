@@ -16,14 +16,19 @@ const isNativeButton = computed(() => as === "button");
 
 // Classes ------------------------------------------------
 
-const base = tw`typo-label2-bold relative -mb-px flex h-64 shrink-0 items-center gap-8 border-x border-t border-transparent px-24 pb-4 whitespace-nowrap outline-0 -outline-offset-4 outline-blue-800 focus-visible:outline-4 has-[svg]:pl-20`;
+const base = tw`typo-label1-regular relative -mb-px flex h-48 shrink-0 items-end pb-16 whitespace-nowrap outline-0 after:absolute after:inset-x-0 after:bottom-0 after:h-4 after:content-[""]`;
 
-const activeTab = tw`border-x-gray-400 border-t-gray-400 bg-white text-black`;
+// Pseudo element so we can give it some horizontal distance from the text while
+// keeping the vertical inset
+const focusRing = tw`before:pointer-events-none before:absolute before:-inset-x-12 before:inset-y-0 before:z-10 before:hidden before:border-4 before:border-blue-800 before:content-[""] focus-visible:before:block`;
 
-const inactiveTab = tw`cursor-pointer text-blue-800 after:absolute after:-inset-x-1 after:bottom-0 after:h-4 after:content-[""] hover:after:bg-blue-800`;
+const activeTab = tw`text-gray-1000 after:bg-gray-1000`;
+
+const inactiveTab = tw`cursor-pointer text-blue-800 hover:after:bg-blue-800`;
 
 const rootClass = computed(() => ({
   [base]: true,
+  [focusRing]: true,
   [activeTab]: active,
   [inactiveTab]: !active,
 }));

@@ -55,6 +55,11 @@ public record CaseLawSchema(
             description = "Abweichende Dokumentnummer",
             requiredMode = Schema.RequiredMode.REQUIRED)
         List<String> deviatingDocumentNumber,
+    @Schema(description = "Vorgehende Entscheidungen") List<String> previousDecisions,
+    @Schema(description = "Nachgehende Entscheidungen") List<String> ensuingDecisions,
+    @Schema(example = "vereinbar mit höherrangigem Recht (Bremen)", description = "Gesetzeskraft")
+        List<String> gesetzeskraft,
+    @Schema(description = "Streitjahre") List<String> streitjahre,
     // fields that aren't shared with CaseLawDocumentationUnit
     @Schema(
             example = "/v1/case-law/ECLI:DE:FGRLP:1969:0905.IV85.68.0A",

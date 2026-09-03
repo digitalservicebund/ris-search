@@ -16,8 +16,5 @@ publicHoistPattern:
 
 savePrefix: ""
 
-overrides:
-  nanoid: "3.3.18"
-
 minimumReleaseAgeExclude:
   - "@digitalservicebund/ris-ui@4.7.0"

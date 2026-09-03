@@ -52,7 +52,7 @@ public class SitemapController {
    *     the object store.
    */
   @GetMapping(
-      path = ApiConfig.Paths.SITEMAP + "/administrative-directives/{filename}.xml",
+      path = ApiConfig.Paths.ADMINISTRATIVE_DIRECTIVE_SITEMAPS + "/{filename}.xml",
       produces = MediaType.APPLICATION_XML_VALUE)
   @Operation(
       summary = "Get administrative directive sitemap files",
@@ -91,7 +91,7 @@ public class SitemapController {
    *     the object store.
    */
   @GetMapping(
-      path = ApiConfig.Paths.SITEMAP + "/case-law/{filename}.xml",
+      path = ApiConfig.Paths.CASELAW_SITEMAPS + "/{filename}.xml",
       produces = MediaType.APPLICATION_XML_VALUE)
   @Operation(
       summary = "Get case law sitemap files",
@@ -130,7 +130,7 @@ public class SitemapController {
    *     the object store.
    */
   @GetMapping(
-      path = ApiConfig.Paths.SITEMAP + "/literature/{filename}.xml",
+      path = ApiConfig.Paths.LITERATURE_SITEMAPS + "/{filename}.xml",
       produces = MediaType.APPLICATION_XML_VALUE)
   @Operation(
       summary = "Get literature sitemap files",
@@ -169,7 +169,7 @@ public class SitemapController {
    *     the object store.
    */
   @GetMapping(
-      path = ApiConfig.Paths.SITEMAP + "/norms/{filename}.xml",
+      path = ApiConfig.Paths.LEGISLATION_SITEMAPS + "/{filename}.xml",
       produces = MediaType.APPLICATION_XML_VALUE)
   @Operation(
       summary = "Get norm sitemap files",
@@ -207,7 +207,7 @@ public class SitemapController {
     } else {
       try {
         int batchNumber = Integer.parseInt(filename);
-        file = portalBucket.get(sitemapService.getBatchSitemapPath(batchNumber, documentKind));
+        file = portalBucket.get(sitemapService.getBatchSitemapS3Path(batchNumber, documentKind));
       } catch (NumberFormatException _) {
         return ResponseEntity.notFound().build();
       }

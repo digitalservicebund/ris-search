@@ -47,6 +47,38 @@
         }
       }
     },
+    "/v1/rechtsprechung/{documentNumber}" : {
+      "get" : {
+        "tags" : [ "Rechtsprechung" ],
+        "summary" : "Judgment metadata (Metadaten eines Rechtsrechungsdokuments)",
+        "description" : "The endpoint returns a single judgment (Rechtsrechungsdokument) from our database.",
+        "operationId" : "getCaseLaw",
+        "parameters" : [ {
+          "name" : "documentNumber",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "example" : "STRE201770751"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RechtsprechungSchema"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        }
+      }
+    },
     "/v1/literature" : {
       "get" : {
         "tags" : [ "Literature" ],
@@ -1738,7 +1770,7 @@
         "tags" : [ "Case Law" ],
         "summary" : "Decision metadata",
         "description" : "The endpoint returns a single decision from our database.",
-        "operationId" : "getCaseLaw",
+        "operationId" : "getCaseLaw_1",
         "parameters" : [ {
           "name" : "documentNumber",
           "in" : "path",
@@ -2290,6 +2322,452 @@
         },
         "required" : [ "count" ]
       },
+      "DocumentEncodingSchema" : {
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "example" : "MediaObject"
+          },
+          "@id" : {
+            "type" : "string"
+          },
+          "contentUrl" : {
+            "type" : "string"
+          },
+          "encodingFormat" : {
+            "type" : "string",
+            "example" : "text/html"
+          },
+          "inLanguage" : {
+            "type" : "string",
+            "example" : "de"
+          }
+        },
+        "required" : [ "@id", "contentUrl", "encodingFormat", "inLanguage" ]
+      },
+      "RechtsprechungSchema" : {
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "example" : "Rechtsprechung"
+          },
+          "dokumentNummer" : {
+            "type" : "string",
+            "example" : "KARE000000000"
+          },
+          "ecli" : {
+            "type" : "string",
+            "description" : "European Case Law Identifier",
+            "example" : "ECLI:DE:FGRLP:1969:0905.IV85.68.0A"
+          },
+          "celex" : {
+            "type" : "string",
+            "description" : "CELEX-Nummer"
+          },
+          "tatbestand" : {
+            "type" : "string",
+            "description" : "Tatbestand"
+          },
+          "entscheidungsgruende" : {
+            "type" : "string",
+            "description" : "Entscheidungsgründe"
+          },
+          "abweichendeMeinung" : {
+            "type" : "string",
+            "description" : "Abweichende Meinung"
+          },
+          "gruende" : {
+            "type" : "string",
+            "description" : "Gründe"
+          },
+          "leitsatz" : {
+            "type" : "string",
+            "description" : "Leitsatz"
+          },
+          "kurztitel" : {
+            "type" : "string",
+            "description" : "Kurztitel"
+          },
+          "titelzeile" : {
+            "type" : "string",
+            "description" : "Titelzeile"
+          },
+          "orientierungssatz" : {
+            "type" : "string",
+            "description" : "Orientierungssatz"
+          },
+          "sonstigerOrientierungssatz" : {
+            "type" : "string",
+            "description" : "Sonstiger Orientierungssatz"
+          },
+          "sonstigerLangtext" : {
+            "type" : "string",
+            "description" : "Sonstiger Langtext"
+          },
+          "rechtsfrageGesamt" : {
+            "type" : "string",
+            "description" : "Rechtsfrage (gesamt)"
+          },
+          "rechtsfrage" : {
+            "type" : "string",
+            "description" : "Rechtsfrage"
+          },
+          "tenor" : {
+            "type" : "string",
+            "description" : "Tenor"
+          },
+          "datum" : {
+            "type" : "string",
+            "format" : "date",
+            "description" : "Datum"
+          },
+          "abweichendeDaten" : {
+            "type" : "array",
+            "description" : "Abweichende Daten",
+            "items" : {
+              "type" : "string",
+              "format" : "date"
+            }
+          },
+          "gliederung" : {
+            "type" : "string",
+            "description" : "Gliederung"
+          },
+          "aktenzeichen" : {
+            "type" : "string",
+            "description" : "Aktenzeichen"
+          },
+          "aktenzeichenListe" : {
+            "type" : "array",
+            "description" : "Aktenzeichenliste",
+            "example" : "BGH 123/23",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "abweichendeAktenzeichen" : {
+            "type" : "array",
+            "description" : "Abweichende Aktenzeichen",
+            "example" : 1,
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "abweichendeEclis" : {
+            "type" : "array",
+            "description" : "Abweichende ECLIs",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "berufsbilder" : {
+            "type" : "array",
+            "description" : "Berufsbilder",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "kuendigungsarten" : {
+            "type" : "array",
+            "description" : "Kündigungsarten",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "herkunftslaender" : {
+            "type" : "array",
+            "description" : "Herkunftsländer",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "regionen" : {
+            "type" : "array",
+            "description" : "Regionen",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "tarifvertraege" : {
+            "type" : "array",
+            "description" : "Tarifverträge",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "kuendigungsgruende" : {
+            "type" : "array",
+            "description" : "Kündigungsgründe",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "mitwirkendeRichter" : {
+            "type" : "array",
+            "description" : "Mitwirkende Richter",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "vorgehendeEntscheidungen" : {
+            "type" : "array",
+            "description" : "Vorgehende Entscheidungen",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "nachgehendeEntscheidungen" : {
+            "type" : "array",
+            "description" : "Nachgehende Entscheidungen",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "aktivzitierungLiteraturUnselbstaendig" : {
+            "type" : "array",
+            "description" : "Aktivzitierung Literatur Unselbstständig",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "passivzitierungLiteraturUnselbstaendig" : {
+            "type" : "array",
+            "description" : "Passivzitierung Literatur Unselbstständig",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "aktivzitierungLiteraturSelbstaendig" : {
+            "type" : "array",
+            "description" : "Aktivzitierung Literatur Selbstständig",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "passivzitierungLiteraturSelbstaendig" : {
+            "type" : "array",
+            "description" : "Passivzitierung Literatur Selbstständig",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "aktivzitierungRechtsprechung" : {
+            "type" : "array",
+            "description" : "Aktivzitierung Rechtsprechung",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "passivzitierungRechtsprechung" : {
+            "type" : "array",
+            "description" : "Passivzitierung Rechtsprechung",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "aktivzitierungVerwaltungsvorschriften" : {
+            "type" : "array",
+            "description" : "Aktivzitierung Verwaltungsvorschriften",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "passivzitierungVerwaltungsvorschriften" : {
+            "type" : "array",
+            "description" : "Passivzitierung Verwaltungsvorschriften",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "amtlicheFundstellen" : {
+            "type" : "array",
+            "description" : "Amtliche Fundstellen",
+            "example" : "BGHSt 67, 273-284",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "nichtamtlicheFundstellen" : {
+            "type" : "array",
+            "description" : "Nichtamtliche Fundstellen",
+            "example" : "DStR 2023, 1430-1435",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "gesetzeskraft" : {
+            "type" : "array",
+            "description" : "Gesetzeskraft",
+            "example" : "vereinbar mit höherrangigem Recht (Bremen)",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "normenkette" : {
+            "type" : "array",
+            "description" : "Normenkette",
+            "example" : "BGB § 823",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "sachgebiete" : {
+            "type" : "array",
+            "description" : "Sachgebiete",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "streitjahre" : {
+            "type" : "array",
+            "description" : "Streitjahre",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "fehlerhafteGerichte" : {
+            "type" : "array",
+            "description" : "Fehlerhafte Gerichte",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "datenDerMuendlichenVerhandlung" : {
+            "type" : "array",
+            "description" : "Daten der mündlichen Verhandlung",
+            "items" : {
+              "type" : "string",
+              "format" : "date"
+            }
+          },
+          "definitionen" : {
+            "type" : "array",
+            "description" : "Definitionen",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "erledigung" : {
+            "type" : "string",
+            "description" : "Erledigung",
+            "example" : "Ja"
+          },
+          "rechtskraft" : {
+            "type" : "string",
+            "description" : "Rechtskraft",
+            "example" : "Ja"
+          },
+          "gesetzgebungsauftrag" : {
+            "type" : "string",
+            "description" : "Gesetzgebungsauftrag",
+            "example" : "Ja"
+          },
+          "langtextdatum" : {
+            "type" : "string",
+            "format" : "date",
+            "description" : "Langtextdatum"
+          },
+          "rechtsmittelfuehrer" : {
+            "type" : "string",
+            "description" : "Rechtsmittelführer"
+          },
+          "rechtsmittelzulassung" : {
+            "type" : "string",
+            "description" : "Rechtsmittelzulassung"
+          },
+          "revision" : {
+            "type" : "string",
+            "description" : "Revision",
+            "example" : "Ja"
+          },
+          "letzteVeroeffentlichung" : {
+            "type" : "string",
+            "format" : "date",
+            "description" : "Letzte Veröffentlichung"
+          },
+          "erledigungsvermerk" : {
+            "type" : "string",
+            "description" : "Erledigungsvermerk"
+          },
+          "erstveroeffentlichung" : {
+            "type" : "string",
+            "format" : "date",
+            "description" : "Erstveröffentlichung"
+          },
+          "mitteilungsdatum" : {
+            "type" : "string",
+            "format" : "date",
+            "description" : "Mitteilungsdatum"
+          },
+          "gericht" : {
+            "type" : "string",
+            "description" : "Gericht",
+            "example" : "FG Berlin"
+          },
+          "gerichtsbarkeit" : {
+            "type" : "string",
+            "description" : "Gerichtsbarkeit"
+          },
+          "dokumenttyp" : {
+            "type" : "string",
+            "example" : "Urteil"
+          },
+          "spruchkoerper" : {
+            "type" : "string",
+            "description" : "Spruchkörper",
+            "example" : "Gericht"
+          },
+          "schlagwoerter" : {
+            "type" : "array",
+            "description" : "Schlagworte",
+            "example" : "3. Kammer",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "courtName" : {
+            "type" : "string",
+            "example" : "LArbG Hamm"
+          },
+          "entscheidungsnamen" : {
+            "type" : "array",
+            "description" : "Entscheidungsnamen",
+            "examples" : [ "Beispielentscheidung" ],
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "abweichendeDokumentnummern" : {
+            "type" : "array",
+            "description" : "Abweichende Dokumentnummer",
+            "example" : "DEV-123",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "@id" : {
+            "type" : "string",
+            "example" : "/v1/case-law/ECLI:DE:FGRLP:1969:0905.IV85.68.0A"
+          },
+          "inLanguage" : {
+            "type" : "string",
+            "example" : "de"
+          },
+          "encoding" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/DocumentEncodingSchema"
+            }
+          },
+          "vorabdokument" : {
+            "type" : "boolean",
+            "description" : "Whether or not the document is a Vorabdokument"
+          }
+        },
+        "required" : [ "@id", "abweichendeDokumentnummern", "aktenzeichenListe", "datum", "dokumentNummer", "ecli", "encoding", "entscheidungsnamen", "inLanguage", "schlagwoerter", "vorabdokument" ]
+      },
       "CollectionSchemaSearchMemberSchemaLiteratureSearchSchema" : {
         "type" : "object",
         "properties" : {
@@ -2317,30 +2795,6 @@
           }
         },
         "required" : [ "@id", "member", "totalItems", "view" ]
-      },
-      "DocumentEncodingSchema" : {
-        "type" : "object",
-        "properties" : {
-          "@type" : {
-            "type" : "string",
-            "example" : "MediaObject"
-          },
-          "@id" : {
-            "type" : "string"
-          },
-          "contentUrl" : {
-            "type" : "string"
-          },
-          "encodingFormat" : {
-            "type" : "string",
-            "example" : "text/html"
-          },
-          "inLanguage" : {
-            "type" : "string",
-            "example" : "de"
-          }
-        },
-        "required" : [ "@id", "contentUrl", "encodingFormat", "inLanguage" ]
       },
       "LiteratureSearchSchema" : {
         "allOf" : [ {
@@ -3501,6 +3955,35 @@
             "type" : "array",
             "description" : "Abweichende Dokumentnummer",
             "example" : "DEV-123",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "previousDecisions" : {
+            "type" : "array",
+            "description" : "Vorgehende Entscheidungen",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "ensuingDecisions" : {
+            "type" : "array",
+            "description" : "Nachgehende Entscheidungen",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "gesetzeskraft" : {
+            "type" : "array",
+            "description" : "Gesetzeskraft",
+            "example" : "vereinbar mit höherrangigem Recht (Bremen)",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "streitjahre" : {
+            "type" : "array",
+            "description" : "Streitjahre",
             "items" : {
               "type" : "string"
             }

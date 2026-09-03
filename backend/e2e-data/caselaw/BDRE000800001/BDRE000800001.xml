@@ -37,6 +37,92 @@
             <akn:keyword ris:domainTerm="Schlagwort" dictionary="" showAs="Disziplinarwert" value="Disziplinarwert"/>
          </akn:classification>
          <akn:analysis source="#ris">
+             <akn:otherReferences source="#ris">
+                 <akn:implicitReference ris:domainTerm="Rechtszug">
+                     <ris:vorgehendeEntscheidung domainTerm="Vorgehende Entscheidung">
+                         <ris:dokumenttyp domainTerm="Dokumenttyp">Beschluss</ris:dokumenttyp>
+                         <ris:entscheidungsdatum domainTerm="Entscheidungsdatum">2024-11-12</ris:entscheidungsdatum>
+                         <ris:dokumentnummer domainTerm="Dokumentnummer">BDRE000700000</ris:dokumentnummer>
+                         <ris:aktenzeichen domainTerm="Aktenzeichen">XVI VL 34/99</ris:aktenzeichen>
+                         <ris:gericht domainTerm="Gericht">
+                             <ris:gerichtstyp domainTerm="Gerichtstyp">VG</ris:gerichtstyp>
+                             <ris:gerichtsort domainTerm="Gerichtsort">Frankfurt</ris:gerichtsort>
+                         </ris:gericht>
+                     </ris:vorgehendeEntscheidung>
+                 </akn:implicitReference>
+                 <akn:implicitReference ris:domainTerm="Rechtszug">
+                     <ris:vorgehendeEntscheidung domainTerm="Vorgehende Entscheidung">
+                         <ris:dokumenttyp domainTerm="Dokumenttyp">Urteil</ris:dokumenttyp>
+                         <ris:entscheidungsdatum domainTerm="Entscheidungsdatum">2023-05-20</ris:entscheidungsdatum>
+                         <ris:dokumentnummer domainTerm="Dokumentnummer">BDRE000600000</ris:dokumentnummer>
+                         <ris:aktenzeichen domainTerm="Aktenzeichen">XVI VL 12/97</ris:aktenzeichen>
+                         <ris:gericht domainTerm="Gericht">
+                             <ris:gerichtstyp domainTerm="Gerichtstyp">AG</ris:gerichtstyp>
+                             <ris:gerichtsort domainTerm="Gerichtsort">Wiesbaden</ris:gerichtsort>
+                         </ris:gericht>
+                     </ris:vorgehendeEntscheidung>
+                 </akn:implicitReference>
+                 <akn:implicitReference ris:domainTerm="Rechtszug">
+                     <ris:nachgehendeEntscheidung domainTerm="Nachgehende Entscheidung" art="anhängig">
+                         <ris:dokumenttyp domainTerm="Dokumenttyp">Beschluss</ris:dokumenttyp>
+                         <ris:entscheidungsdatum domainTerm="Entscheidungsdatum">2025-06-01</ris:entscheidungsdatum>
+                         <ris:dokumentnummer domainTerm="Dokumentnummer">BDRE000900000</ris:dokumentnummer>
+                         <ris:aktenzeichen domainTerm="Aktenzeichen">XVI VL 34/99</ris:aktenzeichen>
+                         <ris:gericht domainTerm="Gericht">
+                             <ris:gerichtstyp domainTerm="Gerichtstyp">OVG</ris:gerichtstyp>
+                             <ris:gerichtsort domainTerm="Gerichtsort">Münster</ris:gerichtsort>
+                         </ris:gericht>
+                     </ris:nachgehendeEntscheidung>
+                 </akn:implicitReference>
+                 <akn:implicitReference ris:domainTerm="Rechtszug">
+                     <ris:nachgehendeEntscheidung domainTerm="Nachgehende Entscheidung" art="nachgehend">
+                         <ris:dokumenttyp domainTerm="Dokumenttyp">Urteil</ris:dokumenttyp>
+                         <ris:entscheidungsdatum domainTerm="Entscheidungsdatum">2025-09-15</ris:entscheidungsdatum>
+                         <ris:dokumentnummer domainTerm="Dokumentnummer">BDRE001000000</ris:dokumentnummer>
+                         <ris:aktenzeichen domainTerm="Aktenzeichen">XVI VL 34/99</ris:aktenzeichen>
+                         <ris:gericht domainTerm="Gericht">
+                             <ris:gerichtstyp domainTerm="Gerichtstyp">BVerwG</ris:gerichtstyp>
+                             <ris:gerichtsort domainTerm="Gerichtsort">Leipzig</ris:gerichtsort>
+                         </ris:gericht>
+                     </ris:nachgehendeEntscheidung>
+                 </akn:implicitReference>
+                 <akn:implicitReference ris:domainTerm="Rechtszug">
+                     <ris:nachgehendeEntscheidung domainTerm="Nachgehende Entscheidung" art="nachgehend">
+                         <ris:dokumenttyp domainTerm="Dokumenttyp">Beschluss</ris:dokumenttyp>
+                         <ris:entscheidungsdatum domainTerm="Entscheidungsdatum">2025-11-03</ris:entscheidungsdatum>
+                         <ris:dokumentnummer domainTerm="Dokumentnummer">BDRE001100000</ris:dokumentnummer>
+                         <ris:aktenzeichen domainTerm="Aktenzeichen">XVI VL 34/99</ris:aktenzeichen>
+                         <ris:gericht domainTerm="Gericht">
+                             <ris:gerichtstyp domainTerm="Gerichtstyp">OVG</ris:gerichtstyp>
+                             <ris:gerichtsort domainTerm="Gerichtsort">Berlin</ris:gerichtsort>
+                         </ris:gericht>
+                     </ris:nachgehendeEntscheidung>
+                 </akn:implicitReference>
+                 <akn:implicitReference ris:domainTerm="Rechtszug">
+                     <ris:nachgehendeEntscheidung domainTerm="Nachgehende Entscheidung" art="anhängig">
+                         <ris:dokumenttyp domainTerm="Dokumenttyp">Revision</ris:dokumenttyp>
+                         <ris:entscheidungsdatum domainTerm="Entscheidungsdatum">2026-02-18</ris:entscheidungsdatum>
+                         <ris:dokumentnummer domainTerm="Dokumentnummer">BDRE001200000</ris:dokumentnummer>
+                         <ris:aktenzeichen domainTerm="Aktenzeichen">XVI VL 34/99</ris:aktenzeichen>
+                         <ris:gericht domainTerm="Gericht">
+                             <ris:gerichtstyp domainTerm="Gerichtstyp">BVerwG</ris:gerichtstyp>
+                             <ris:gerichtsort domainTerm="Gerichtsort">Leipzig</ris:gerichtsort>
+                         </ris:gericht>
+                     </ris:nachgehendeEntscheidung>
+                 </akn:implicitReference>
+                 <akn:implicitReference ris:domainTerm="Norm">
+                     <ris:referenzNorm domainTerm="Norm">
+                         <ris:abkuerzung domainTerm="Abkürzung">BDG</ris:abkuerzung>
+                         <ris:einzelnorm domainTerm="Einzelnorm">
+                             <ris:bezeichnung domainTerm="Bezeichnung">§ 34</ris:bezeichnung>
+                             <ris:gesetzeskraft domainTerm="Gesetzeskraft">
+                                 <ris:gesetzeskraftTyp domainTerm="Typ der Gesetzeskraft">vereinbar mit höherrangigem Recht</ris:gesetzeskraftTyp>
+                                 <ris:geltungsbereich domainTerm="Geltungsbereich">Hessen</ris:geltungsbereich>
+                             </ris:gesetzeskraft>
+                         </ris:einzelnorm>
+                     </ris:referenzNorm>
+                 </akn:implicitReference>
+             </akn:otherReferences>
              <akn:otherAnalysis source="#ris">
                  <ris:dokumentarischeKurztexte domainTerm="Dokumentarische Kurztexte">
                      <ris:titelzeile domainTerm="Titelzeile" eId="titelzeile">
@@ -57,24 +143,28 @@
           </akn:references>
          <akn:proprietary source="ris">
             <ris:meta>
-                <ris:aktenzeichenListe domainTerm="Liste der Aktenzeichen">
-                    <ris:aktenzeichen domainTerm="Aktenzeichen" akn:refersTo="#aktenzeichen">XVI VL 34/99</ris:aktenzeichen>
-                </ris:aktenzeichenListe>
                 <ris:dokumenttyp domainTerm="Dokumenttyp">Urteil</ris:dokumenttyp>
                 <ris:gericht domainTerm="Gericht" refersTo="#organisation-gericht-courttype-courtlocation" showAs="BDiG Frankfurt Label">
                     <ris:gerichtstyp domainTerm="Gerichtstyp">BDiG</ris:gerichtstyp>
                     <ris:gerichtsort domainTerm="Gerichtsort">Frankfurt</ris:gerichtsort>
-                    <ris:spruchkoerper domainTerm="Spruchkörper" refersTo="#spruchkoerper">16. Kammer</ris:spruchkoerper>
+                    <ris:spruchkoerper domainTerm="Spruchkörper">16. Kammer</ris:spruchkoerper>
                 </ris:gericht>
-                <ris:rechtskraft domainTerm="Rechtskraft">Ja</ris:rechtskraft>
-                <ris:sachgebiete domainTerm="Sachgebiete">
-                    <ris:sachgebiet domainTerm="Sachgebiet" notation="neu" sachgebiet-id="123">Testbeamtenpflicht</ris:sachgebiet>
-                    <ris:sachgebiet domainTerm="Sachgebiet" notation="neu" sachgebiet-id="456">Testverwaltungsrecht</ris:sachgebiet>
-                    <ris:sachgebiet domainTerm="Sachgebiet" notation="neu" sachgebiet-id="789">Testdisziplinarrecht</ris:sachgebiet>
-                    <ris:sachgebiet domainTerm="Sachgebiet" notation="neu" sachgebiet-id="1011">Testbeendigung</ris:sachgebiet>
-                </ris:sachgebiete>
                 <ris:dokumentationsstelle domainTerm="Dokumentationsstelle" refersTo="#OVGNW-dokumentationsstelle">OVGNW</ris:dokumentationsstelle>
-            </ris:meta>
+                <ris:aktenzeichenListe domainTerm="Liste der Aktenzeichen">
+                    <ris:aktenzeichen domainTerm="Aktenzeichen" refersTo="#aktenzeichen">XVI VL 34/99</ris:aktenzeichen>
+                </ris:aktenzeichenListe>
+                <ris:sachgebiete domainTerm="Sachgebiete">
+                    <ris:sachgebiet domainTerm="Sachgebiet" sachgebiet-id="TT">Testbeamtenpflicht</ris:sachgebiet>
+                    <ris:sachgebiet domainTerm="Sachgebiet" sachgebiet-id="TT">Testverwaltungsrecht</ris:sachgebiet>
+                    <ris:sachgebiet domainTerm="Sachgebiet" sachgebiet-id="TT">Testdisziplinarrecht</ris:sachgebiet>
+                    <ris:sachgebiet domainTerm="Sachgebiet" sachgebiet-id="TT">Testbeendigung</ris:sachgebiet>
+                </ris:sachgebiete>
+                <ris:rechtskraft domainTerm="Rechtskraft">Ja</ris:rechtskraft>
+                <ris:streitjahre domainTerm="Streitjahre">
+                    <ris:streitjahr domainTerm="Streitjahr">2024</ris:streitjahr>
+                    <ris:streitjahr domainTerm="Streitjahr">2025</ris:streitjahr>
+                </ris:streitjahre>
+</ris:meta>
          </akn:proprietary>
       </akn:meta>
       <akn:header>

@@ -79,6 +79,7 @@ class AllDocumentsSearchControllerAPITest extends ContainersIntegrationBase {
                                 "otherHeadnote",
                                 "caseFacts",
                                 "headline",
+                                "titleLine",
                                 "outline",
                                 "longText",
                                 "otherLongText",

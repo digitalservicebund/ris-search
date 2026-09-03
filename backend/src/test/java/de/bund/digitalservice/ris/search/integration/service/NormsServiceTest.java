@@ -4,12 +4,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.models.api.parameters.NormsSearchParams;
-import de.bund.digitalservice.ris.search.models.api.parameters.PaginationParams;
-import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
-import de.bund.digitalservice.ris.search.service.NormsService;
 import de.bund.digitalservice.ris.search.utils.eli.WorkEli;
 import java.time.LocalDate;
 import java.time.Month;
@@ -22,7 +19,6 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.SearchPage;
 
@@ -30,8 +26,6 @@ import org.springframework.data.elasticsearch.core.SearchPage;
 @AutoConfigureMockMvc
 @Tag("integration")
 class NormsServiceTest extends ContainersIntegrationBase {
-
-  @Autowired private NormsService normsService;
 
   @Autowired private NormsRepository repository;
 
@@ -121,13 +115,7 @@ class NormsServiceTest extends ContainersIntegrationBase {
   @DisplayName("Should return highlights matching the norm article using search query")
   void shouldReturnHighlightsMatchingANormArticleUsingSearchQuery() {
     String articleName = "§ 1 Example article";
-    NormsSearchParams normsSearchParams = new NormsSearchParams();
-    UniversalSearchParams universalSearchParams = new UniversalSearchParams();
-    PaginationParams pagination = new PaginationParams();
-    universalSearchParams.setSearchTerm("text");
-    PageRequest pageable = PageRequest.of(pagination.getPageIndex(), pagination.getSize());
-    SearchPage<Norm> result =
-        normsService.simpleSearchNorms(universalSearchParams, normsSearchParams, pageable);
+    SearchPage<Norm> result = searchNormsHit("text");
     assertThat(result.getContent()).hasSize(1);
     var searchHits =
         result.getContent().getFirst().getInnerHits().get("top_three_articles").getSearchHits();
@@ -156,8 +144,7 @@ class NormsServiceTest extends ContainersIntegrationBase {
 
     NormsSearchParams params = new NormsSearchParams();
     params.setAbbreviation(abbreviationParam);
-    var result =
-        normsService.simpleSearchNorms(new UniversalSearchParams(), params, Pageable.unpaged());
+    var result = searchNormsHit("", params);
 
     assertThat(result).hasSize(1);
     assertThat(
@@ -176,9 +163,7 @@ class NormsServiceTest extends ContainersIntegrationBase {
 
     NormsSearchParams params = new NormsSearchParams();
     params.setAbbreviation("Baz");
-    var result =
-        normsService.simpleSearchNorms(new UniversalSearchParams(), params, Pageable.unpaged());
-
+    var result = searchNormsHit("Baz", params);
     assertThat(result).isEmpty();
   }
 
@@ -196,8 +181,7 @@ class NormsServiceTest extends ContainersIntegrationBase {
 
     NormsSearchParams params = new NormsSearchParams();
     params.setRisAbbreviation(risAbbreviation);
-    var result =
-        normsService.simpleSearchNorms(new UniversalSearchParams(), params, Pageable.unpaged());
+    var result = searchNormsHit("", params);
 
     assertThat(result).hasSize(1);
     assertThat(result.getSearchHits().getSearchHits().getFirst().getContent().getRisAbbreviation())
@@ -210,8 +194,7 @@ class NormsServiceTest extends ContainersIntegrationBase {
 
     NormsSearchParams params = new NormsSearchParams();
     params.setAbbreviation("Baz");
-    var result =
-        normsService.simpleSearchNorms(new UniversalSearchParams(), params, Pageable.unpaged());
+    var result = searchNormsHit("Baz", params);
 
     assertThat(result).isEmpty();
   }

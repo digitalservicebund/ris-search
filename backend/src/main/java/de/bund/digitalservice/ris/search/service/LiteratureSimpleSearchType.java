@@ -6,6 +6,7 @@ import de.bund.digitalservice.ris.search.models.api.parameters.LiteratureSearchP
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import org.opensearch.index.query.BoolQueryBuilder;
 import org.opensearch.index.query.Operator;
 import org.opensearch.index.query.QueryBuilders;
@@ -14,6 +15,38 @@ import org.opensearch.search.fetch.subphase.highlight.HighlightBuilder;
 /** Service class for interacting with the database and return the search results. */
 public class LiteratureSimpleSearchType implements SimpleSearchType {
 
+  public static final Map<String, Float> FIELD_BOOSTS =
+      Map.ofEntries(
+          Map.entry(Literature.Fields.ADDITIONAL_TITLES, 1.0f),
+          Map.entry(Literature.Fields.AUTHORS, 1.0f),
+          Map.entry(Literature.Fields.COLLABORATORS, 1.0f),
+          Map.entry(Literature.Fields.CONFERENCE_NOTE, 1.0f),
+          Map.entry(Literature.Fields.DEPENDENT_REFERENCES, 1.0f),
+          Map.entry(Literature.Fields.DOCUMENTARY_TITLE, 1.0f),
+          Map.entry(Literature.Fields.DOCUMENT_NUMBER, 1.0f),
+          Map.entry(Literature.Fields.DOCUMENT_TYPES, 1.0f),
+          Map.entry(Literature.Fields.EDITION, 1.0f),
+          Map.entry(Literature.Fields.EDITOR, 1.0f),
+          Map.entry(Literature.Fields.FOOTNOTES, 1.0f),
+          Map.entry(Literature.Fields.FOUNDER, 1.0f),
+          Map.entry(Literature.Fields.FULL_TITLE_ADDITIONS, 1.0f),
+          Map.entry(Literature.Fields.ID, 1.0f),
+          Map.entry(Literature.Fields.INDEPENDENT_REFERENCES, 1.0f),
+          Map.entry(Literature.Fields.INTERNATIONAL_IDENTIFIERS, 1.0f),
+          Map.entry(Literature.Fields.LANGUAGE, 1.0f),
+          Map.entry(Literature.Fields.MAIN_TITLE, 1.0f),
+          Map.entry(Literature.Fields.MAIN_TITLE_ADDITIONS, 1.0f),
+          Map.entry(Literature.Fields.NORM_REFERENCES, 1.0f),
+          Map.entry(Literature.Fields.ORIGINATOR, 1.0f),
+          Map.entry(Literature.Fields.OUTLINE, 1.0f),
+          Map.entry(Literature.Fields.PUBLISHER_INFORMATION, 1.0f),
+          Map.entry(Literature.Fields.PUBLISHER_ORGANIZATIONS, 1.0f),
+          Map.entry(Literature.Fields.PUBLISHER_PERSONS, 1.0f),
+          Map.entry(Literature.Fields.SHORT_REPORT, 1.0f),
+          Map.entry(Literature.Fields.SHORT_TITLES, 1.0f),
+          Map.entry(Literature.Fields.UNIVERSITY_NOTES, 1.0f),
+          Map.entry(Literature.Fields.VOLUMES, 1.0f),
+          Map.entry(Literature.Fields.YEARS_OF_PUBLICATION, 1.0f));
   private static final List<String> LITERATURE_FETCH_EXCLUDED_FIELDS =
       List.of(Literature.Fields.OUTLINE);
 
@@ -29,6 +62,11 @@ public class LiteratureSimpleSearchType implements SimpleSearchType {
         new HighlightBuilder.Field(Literature.Fields.DOCUMENTARY_TITLE).numOfFragments(0),
         new HighlightBuilder.Field(Literature.Fields.OUTLINE),
         new HighlightBuilder.Field(Literature.Fields.SHORT_REPORT));
+  }
+
+  @Override
+  public Map<String, Float> getBoosts() {
+    return FIELD_BOOSTS;
   }
 
   @Override

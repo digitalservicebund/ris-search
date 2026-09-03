@@ -4,6 +4,7 @@ import static de.bund.digitalservice.ris.ZipTestUtils.readZipStream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.startsWithIgnoringCase;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.asyncDispatch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -197,16 +198,20 @@ class AdministrativeDirectiveControllerApiTest extends ContainersIntegrationBase
   void shouldReturnZip() throws Exception {
     String filename = documentNumberPresentInBucket + ".akn.xml";
 
-    MvcResult result =
+    MvcResult mvcResult =
         mockMvc
             .perform(
                 get(ApiConfig.Paths.ADMINISTRATIVE_DIRECTIVE
                         + "/"
                         + documentNumberPresentInBucket
                         + ".zip")
-                    .contentType(MediaType.valueOf("application/zip")))
+                    .accept(MediaType.valueOf("application/zip")))
             .andExpect(request().asyncStarted())
-            .andDo(MvcResult::getAsyncResult)
+            .andReturn();
+
+    MvcResult result =
+        mockMvc
+            .perform(asyncDispatch(mvcResult))
             .andExpectAll(status().isOk(), content().contentType("application/zip"))
             .andReturn();
 
