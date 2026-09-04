@@ -184,7 +184,7 @@ public class AdvancedSearchController {
           advancedSearchService.searchCaseLaw(query, sortedPageable);
       return ResponseEntity.ok()
           .contentType(MediaType.APPLICATION_JSON)
-          .body(CaseLawSearchSchemaMapper.fromSearchPage(page));
+          .body(CaseLawSearchSchemaMapper.fromSearchPage(page, jsonldContextPath));
     } catch (UncategorizedElasticsearchException e) {
       LuceneQueryTools.checkForInvalidQuery(e);
       throw e;

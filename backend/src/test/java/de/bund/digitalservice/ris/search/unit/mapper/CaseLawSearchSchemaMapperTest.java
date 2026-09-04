@@ -59,7 +59,7 @@ class CaseLawSearchSchemaMapperTest {
         SearchHitSupport.searchPageFor(searchHits, PageRequest.of(0, 1));
 
     CollectionSchema<SearchMemberSchema<CaseLawSearchSchema>> destination =
-        CaseLawSearchSchemaMapper.fromSearchPage(source);
+        CaseLawSearchSchemaMapper.fromSearchPage(source, "jsonldContext");
     CaseLawSearchSchema expectedItem = destination.member().get(0).item();
     assertEquals(element.documentNumber(), expectedItem.documentNumber());
     assertEquals(1, destination.totalItems());
@@ -98,15 +98,15 @@ class CaseLawSearchSchemaMapperTest {
 
     var firstPageImpl = createSearchPage(firstPageContents, 0, pageSize, total);
     CollectionSchema<SearchMemberSchema<CaseLawSearchSchema>> firstPage =
-        CaseLawSearchSchemaMapper.fromSearchPage(firstPageImpl);
+        CaseLawSearchSchemaMapper.fromSearchPage(firstPageImpl, "jsonldContext");
 
     var middlePageImpl = createSearchPage(middlePageContents, 1, pageSize, total);
     CollectionSchema<SearchMemberSchema<CaseLawSearchSchema>> middlePage =
-        CaseLawSearchSchemaMapper.fromSearchPage(middlePageImpl);
+        CaseLawSearchSchemaMapper.fromSearchPage(middlePageImpl, "jsonldContext");
 
     var lastPageImpl = createSearchPage(lastPageContents, 2, pageSize, total);
     CollectionSchema<SearchMemberSchema<CaseLawSearchSchema>> lastPage =
-        CaseLawSearchSchemaMapper.fromSearchPage(lastPageImpl);
+        CaseLawSearchSchemaMapper.fromSearchPage(lastPageImpl, "jsonldContext");
 
     String prefix = ApiConfig.Paths.CASELAW + "/doc-";
 

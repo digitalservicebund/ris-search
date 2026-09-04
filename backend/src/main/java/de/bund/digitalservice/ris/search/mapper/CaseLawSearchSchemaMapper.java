@@ -135,11 +135,12 @@ public class CaseLawSearchSchemaMapper {
    *
    * @param <T> The type of the elements in the input SearchPage.
    * @param page The search page containing the results and pagination details to be mapped.
+   * @param remoteJsonContext remoteJsonContext url to retrieve jsonld context
    * @return A CollectionSchema containing SearchMemberSchema items for CaseLawSearchSchema, along
    *     with pagination and metadata information.
    */
   public static <T> CollectionSchema<SearchMemberSchema<CaseLawSearchSchema>> fromSearchPage(
-      final SearchPage<T> page) {
+      final SearchPage<T> page, String remoteJsonContext) {
     String collectionBasePath = ApiConfig.Paths.CASELAW;
     PartialCollectionViewSchema view =
         PartialCollectionViewMapper.fromPage(collectionBasePath, page);
@@ -150,6 +151,7 @@ public class CaseLawSearchSchemaMapper {
 
     return CollectionSchema.<SearchMemberSchema<CaseLawSearchSchema>>builder()
         .id(id)
+        .context(remoteJsonContext)
         .totalItems(page.getTotalElements())
         .member(page.stream().map(CaseLawSearchSchemaMapper::fromSearchHit).toList())
         .view(view)

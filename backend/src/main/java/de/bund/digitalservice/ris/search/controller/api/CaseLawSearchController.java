@@ -1,6 +1,7 @@
 package de.bund.digitalservice.ris.search.controller.api;
 
 import de.bund.digitalservice.ris.search.config.ApiConfig;
+import de.bund.digitalservice.ris.search.config.ServerConfig;
 import de.bund.digitalservice.ris.search.exception.CustomValidationException;
 import de.bund.digitalservice.ris.search.mapper.CaseLawSearchSchemaMapper;
 import de.bund.digitalservice.ris.search.mapper.SortParamsConverter;
@@ -44,10 +45,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class CaseLawSearchController {
   private final CaseLawService caseLawService;
+  private final ServerConfig serverConfig;
 
+  /**
+   * Constructor for the CaseLawSearchController class.
+   *
+   * @param caseLawService the service layer responsible for case law operations
+   * @param serverConfig serverconfig of the application
+   */
   @Autowired
-  public CaseLawSearchController(CaseLawService caseLawService) {
+  public CaseLawSearchController(CaseLawService caseLawService, ServerConfig serverConfig) {
+
     this.caseLawService = caseLawService;
+    this.serverConfig = serverConfig;
   }
 
   /**
@@ -85,7 +95,9 @@ public class CaseLawSearchController {
               universalSearchParams, caseLawSearchParams, sortedPageRequest);
       return ResponseEntity.ok()
           .contentType(MediaType.APPLICATION_JSON)
-          .body(CaseLawSearchSchemaMapper.fromSearchPage(page));
+          .body(
+              CaseLawSearchSchemaMapper.fromSearchPage(
+                  page, serverConfig.getBackEndUrl() + ApiConfig.Paths.JSONLD_CONTEXT));
     } catch (UncategorizedElasticsearchException e) {
       LuceneQueryTools.checkForInvalidQuery(e);
       throw e;

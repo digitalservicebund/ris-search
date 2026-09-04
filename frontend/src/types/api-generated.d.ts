@@ -1548,6 +1548,7 @@ export interface components {
         CaseLawSchema: {
             /** @example Decision */
             "@type"?: string;
+            "@context": string;
             /** @example KARE000000000 */
             documentNumber: string;
             /**
