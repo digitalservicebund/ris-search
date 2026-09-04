@@ -4,6 +4,7 @@ import static de.bund.digitalservice.ris.search.integration.controller.api.testD
 import static de.bund.digitalservice.ris.search.integration.controller.api.testData.CaseLawTestData.OTHER_COUNT;
 import static de.bund.digitalservice.ris.search.integration.controller.api.testData.CaseLawTestData.URTEIL_COUNT;
 import static de.bund.digitalservice.ris.search.integration.controller.api.testData.CaseLawTestData.matchAllTerm;
+import static de.bund.digitalservice.ris.utils.JsonldResultMatchers.isJsonLdCompliant;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.everyItem;
@@ -63,7 +64,8 @@ class CaseLawSearchControllerApiTest extends ContainersIntegrationBase {
         .andExpect(jsonPath("$.member[0]['item'].ecli", Matchers.is(ecli)))
         .andExpect(jsonPath("$.member[0]['textMatches'][*]['name']", Matchers.hasItem("ecli")))
         .andExpect(jsonPath("$.member[0]['textMatches'][*]['text']", Matchers.hasItem(markedEcli)))
-        .andExpect(status().isOk());
+        .andExpect(status().isOk())
+        .andExpect(isJsonLdCompliant());
   }
 
   @Test

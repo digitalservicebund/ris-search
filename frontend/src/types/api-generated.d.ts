@@ -1022,9 +1022,7 @@ export interface components {
             member: components["schemas"]["SearchMemberSchemaLiteratureSearchSchema"][];
             view: components["schemas"]["PartialCollectionViewSchema"];
         };
-        LiteratureSearchSchema: {
-            "@type": "LiteratureSearchSchema";
-        } & (Omit<components["schemas"]["AbstractDocumentSchema"], "@type"> & {
+        LiteratureSearchSchema: Omit<components["schemas"]["AbstractDocumentSchema"], "@type"> & {
             /** @example Literature */
             "@type"?: string;
             /** @example KALU000000000 */
@@ -1086,7 +1084,13 @@ export interface components {
              */
             literatureType: string;
             encoding: components["schemas"]["DocumentEncodingSchema"][];
-        });
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            "@type": "Literature";
+        };
         PartialCollectionViewSchema: {
             /** @example hydra:PartialCollectionView */
             "@type"?: string;
@@ -1245,9 +1249,7 @@ export interface components {
             view: components["schemas"]["PartialCollectionViewSchema"];
         };
         /** @description A legislation expression and references to its manifestations. */
-        LegislationExpressionSearchSchema: {
-            "@type": "LegislationExpressionSearchSchema";
-        } & (Omit<components["schemas"]["AbstractDocumentSchema"], "@type"> & {
+        LegislationExpressionSearchSchema: Omit<components["schemas"]["AbstractDocumentSchema"], "@type"> & {
             /** @example Legislation */
             "@type"?: string;
             /** @example /v1/legislation/eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu */
@@ -1282,7 +1284,13 @@ export interface components {
              */
             legislationLegalForce: "InForce" | "NotInForce" | "PartiallyInForce";
             encoding: components["schemas"]["LegislationObjectSchema"][];
-        });
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            "@type": "Legislation";
+        };
         LegislationObjectSchema: {
             /** @example LegislationObject */
             "@type"?: string;
@@ -1406,9 +1414,7 @@ export interface components {
         AbstractDocumentSchema: {
             "@type": string;
         };
-        AdministrativeDirectiveSearchSchema: {
-            "@type": "AdministrativeDirectiveSearchSchema";
-        } & (Omit<components["schemas"]["AbstractDocumentSchema"], "@type"> & {
+        AdministrativeDirectiveSearchSchema: Omit<components["schemas"]["AbstractDocumentSchema"], "@type"> & {
             /** @example AdministrativeDirective */
             "@type"?: string;
             /** @example KALU000000000 */
@@ -1443,10 +1449,14 @@ export interface components {
              */
             entryIntoForceDate?: string;
             encoding: components["schemas"]["DocumentEncodingSchema"][];
-        });
-        CaseLawSearchSchema: {
-            "@type": "CaseLawSearchSchema";
-        } & (Omit<components["schemas"]["AbstractDocumentSchema"], "@type"> & {
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            "@type": "AdministrativeDirective";
+        };
+        CaseLawSearchSchema: Omit<components["schemas"]["AbstractDocumentSchema"], "@type"> & {
             /** @example Decision */
             "@type"?: string;
             /** @example KARE000000000 */
@@ -1484,7 +1494,13 @@ export interface components {
             "@id": string;
             /** @example de */
             inLanguage: string;
-        });
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            "@type": "Decision";
+        };
         CollectionSchemaSearchMemberSchemaAbstractDocumentSchema: {
             /** @example hydra:Collection */
             "@type"?: string;
@@ -1548,6 +1564,7 @@ export interface components {
         CaseLawSchema: {
             /** @example Decision */
             "@type"?: string;
+            "@context": string;
             /** @example KARE000000000 */
             documentNumber: string;
             /**

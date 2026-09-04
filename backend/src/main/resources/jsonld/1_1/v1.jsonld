@@ -30,6 +30,7 @@
       "name": "schema:name",
       "LegislationObject": "schema:LegislationObject",
       "PublicationIssue": "schema:PublicationIssue",
+      "MediaObject": "schema:MediaObject",
       "Legislation": {
         "@id": "schema:Legislation",
         "@context": {
@@ -46,6 +47,40 @@
           "temporalCoverage": "schema:temporalCoverage",
           "hasPart": "schema:hasPart",
           "headline": "schema:headline"
+        }
+      },
+      "Decision": {
+        "@id": "ris:Decision",
+        "@context": {
+          "documentNumber": "schema:identifier",
+          "ecli": "ris:ecli",
+          "caseFacts": "ris:caseFacts",
+          "decisionGrounds": "ris:decisionGrounds",
+          "dissentingOpinion": "ris:dissentingOpinion",
+          "grounds": "ris:grounds",
+          "guidingPrinciple": "ris:guidingPrinciple",
+          "headline": "schema:headline",
+          "titleLine": "ris:titleLine",
+          "headnote": "ris:headnote",
+          "otherHeadnote": "ris:otherHeadnote",
+          "otherLongText": "ris:otherLongText",
+          "tenor": "ris:tenor",
+          "decisionDate": "ris:decisionDate",
+          "fileNumbers": "ris:fileNumber",
+          "courtType": "ris:courtType",
+          "location": "schema:location",
+          "documentType": "ris:documentType",
+          "outline": "ris:outline",
+          "judicialBody": "ris:judicialBody",
+          "keywords": "schema:keywords",
+          "courtName": "ris:courtName",
+          "decisionName": "schema:name",
+          "deviatingDocumentNumber": "ris:deviatingDocumentNumber",
+          "previousDecisions": "ris:previousDecisions",
+          "ensuingDecisions": "ris:ensuingDecisions",
+          "gesetzeskraft": "ris:gesetzeskraft",
+          "streitjahre": "ris:streitjahre",
+          "vorabdokument": "ris:vorabdokument"
         }
       },
       "SearchResult": {

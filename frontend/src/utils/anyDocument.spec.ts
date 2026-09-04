@@ -2,7 +2,7 @@ import { describe } from "vitest";
 import type {
   AdministrativeDirective,
   AnyDocument,
-  CaseLaw,
+  CaseLawSearchSchema,
   DocumentEncodingSchema,
   LegislationExpression,
   Literature,
@@ -18,19 +18,17 @@ import {
 describe("anyDocument", () => {
   describe("isCaselaw", () => {
     it("returns true if the document is a caselaw document", () => {
-      const doc: CaseLaw = {
+      const doc: CaseLawSearchSchema = {
         "@id": "4711",
         "@type": "Decision",
         documentNumber: "",
         ecli: "",
         decisionDate: "",
         fileNumbers: [],
-        keywords: [],
         decisionName: [],
         deviatingDocumentNumber: [],
         inLanguage: "",
         encoding: [],
-        vorabdokument: false,
       };
 
       expect(isCaselaw(doc)).toBe(true);
@@ -93,19 +91,17 @@ describe("anyDocument", () => {
     });
 
     it("returns false if the document is not a legislation work document", () => {
-      const doc: CaseLaw = {
+      const doc: CaseLawSearchSchema = {
         "@id": "4711",
         "@type": "Decision",
         documentNumber: "",
         ecli: "",
         decisionDate: "",
         fileNumbers: [],
-        keywords: [],
         decisionName: [],
         deviatingDocumentNumber: [],
         inLanguage: "",
         encoding: [],
-        vorabdokument: false,
       };
 
       expect(isLegislation(doc)).toBe(false);
@@ -237,19 +233,17 @@ describe("anyDocument", () => {
 
   describe("getIdentifier", () => {
     it("identifies a caselaw document", () => {
-      const doc: CaseLaw = {
+      const doc: CaseLawSearchSchema = {
         "@id": "",
         "@type": "Decision",
         documentNumber: "4711",
         ecli: "",
         decisionDate: "",
         fileNumbers: [],
-        keywords: [],
         decisionName: [],
         deviatingDocumentNumber: [],
         inLanguage: "",
         encoding: [],
-        vorabdokument: false,
       };
 
       expect(getIdentifier(doc)).toBe("4711");

@@ -1,6 +1,7 @@
 package de.bund.digitalservice.ris.search.integration.controller.api;
 
 import static de.bund.digitalservice.ris.ZipTestUtils.readZipStream;
+import static de.bund.digitalservice.ris.utils.JsonldResultMatchers.isJsonLdCompliant;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.containsString;
@@ -123,6 +124,7 @@ class CaseLawControllerApiTest extends ContainersIntegrationBase {
         .perform(
             get(ApiConfig.Paths.CASELAW + "/" + this.documentNumber)
                 .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(isJsonLdCompliant())
         .andExpectAll(
             status().isOk(),
             jsonPath("$.documentNumber", Matchers.is(this.documentNumber)),
@@ -168,6 +170,7 @@ class CaseLawControllerApiTest extends ContainersIntegrationBase {
         .perform(
             get(ApiConfig.Paths.CASELAW + "/FOOB000000001").contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
+        .andExpect(isJsonLdCompliant())
         .andExpect(jsonPath("$.vorabdokument", equalTo(true)));
   }
 

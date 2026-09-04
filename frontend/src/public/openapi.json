@@ -3541,7 +3541,13 @@
       },
       "AbstractDocumentSchema" : {
         "discriminator" : {
-          "propertyName" : "@type"
+          "propertyName" : "@type",
+          "mapping" : {
+            "Decision" : "#/components/schemas/CaseLawSearchSchema",
+            "Literature" : "#/components/schemas/LiteratureSearchSchema",
+            "Legislation" : "#/components/schemas/LegislationExpressionSearchSchema",
+            "AdministrativeDirective" : "#/components/schemas/AdministrativeDirectiveSearchSchema"
+          }
         },
         "properties" : {
           "@type" : {
@@ -3879,6 +3885,9 @@
             "type" : "string",
             "example" : "Decision"
           },
+          "@context" : {
+            "type" : "string"
+          },
           "documentNumber" : {
             "type" : "string",
             "example" : "KARE000000000"
@@ -4044,7 +4053,7 @@
             "description" : "Whether or not the document is a Vorabdokument"
           }
         },
-        "required" : [ "@id", "decisionDate", "decisionName", "deviatingDocumentNumber", "documentNumber", "ecli", "encoding", "fileNumbers", "inLanguage", "keywords", "vorabdokument" ]
+        "required" : [ "@context", "@id", "decisionDate", "decisionName", "deviatingDocumentNumber", "documentNumber", "ecli", "encoding", "fileNumbers", "inLanguage", "keywords", "vorabdokument" ]
       },
       "CourtSearchResult" : {
         "type" : "object",
