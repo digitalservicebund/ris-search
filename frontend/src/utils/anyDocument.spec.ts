@@ -38,6 +38,7 @@ describe("anyDocument", () => {
 
     it("returns false if the document is not a caselaw document", () => {
       const doc: LegislationExpression = {
+        "@context": "http://localhost:8080/v1/context.jsonld",
         "@type": "Legislation",
         "@id": "4711",
         name: "",
@@ -51,6 +52,7 @@ describe("anyDocument", () => {
           isPartOf: { name: "" },
         },
         alternateName: "",
+        abbreviation: "",
         risAbbreviation: "",
         legislationLegalForce: "InForce",
         temporalCoverage: "",
@@ -65,6 +67,7 @@ describe("anyDocument", () => {
   describe("isLegislation", () => {
     it("returns true if the document is a legislation work document", () => {
       const doc: LegislationExpression = {
+        "@context": "http://localhost:8080/v1/context.jsonld",
         "@type": "Legislation",
         "@id": "4711",
         name: "",
@@ -78,6 +81,7 @@ describe("anyDocument", () => {
           isPartOf: { name: "" },
         },
         alternateName: "",
+        abbreviation: "",
         risAbbreviation: "",
         legislationLegalForce: "InForce",
         temporalCoverage: "",
@@ -148,6 +152,7 @@ describe("anyDocument", () => {
 
     it("returns false if the document is not a literature document", () => {
       const doc: LegislationExpression = {
+        "@context": "http://localhost:8080/v1/context.jsonld",
         "@type": "Legislation",
         "@id": "4711",
         name: "",
@@ -161,6 +166,7 @@ describe("anyDocument", () => {
           isPartOf: { name: "" },
         },
         alternateName: "",
+        abbreviation: "",
         risAbbreviation: "",
         legislationLegalForce: "InForce",
         temporalCoverage: "",
@@ -251,6 +257,7 @@ describe("anyDocument", () => {
 
     it("identifies a legislation work document", () => {
       const doc: LegislationExpression = {
+        "@context": "http://localhost:8080/v1/context.jsonld",
         "@type": "Legislation",
         "@id": "4712",
         name: "",
@@ -264,6 +271,7 @@ describe("anyDocument", () => {
           isPartOf: { name: "" },
         },
         alternateName: "",
+        abbreviation: "",
         risAbbreviation: "",
         legislationLegalForce: "InForce",
         temporalCoverage: "",

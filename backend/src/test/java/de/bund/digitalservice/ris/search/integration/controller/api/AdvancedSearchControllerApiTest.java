@@ -554,9 +554,9 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {"official_abbreviation", "AB"})
-  @DisplayName("Should return 200 when looking for official abbreviation and aliases")
-  void shouldReturnOkOfficialAbbreviation(String queryParam) throws Exception {
+  @ValueSource(strings = {"abbreviation", "AB"})
+  @DisplayName("Should return 200 when looking for the abbreviation and aliases")
+  void shouldReturnOkAbbreviation(String queryParam) throws Exception {
 
     mockMvc
         .perform(
@@ -576,7 +576,7 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
     mockMvc
         .perform(
             get(ApiConfig.Paths.LEGISLATION_ADVANCED_SEARCH
-                    + String.format("?query=%s:TeG AND %s:TeG", "official_abbreviation", "AB"))
+                    + String.format("?query=%s:TeG AND %s:TeG", "abbreviation", "AB"))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$.member", hasSize(3)))
         .andExpect(status().isOk());

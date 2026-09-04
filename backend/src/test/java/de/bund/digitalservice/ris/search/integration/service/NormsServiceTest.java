@@ -48,7 +48,7 @@ class NormsServiceTest extends ContainersIntegrationBase {
             .datePublished(LocalDate.of(2022, Month.JANUARY, 1))
             .officialShortTitle("latest short title")
             .normsDate(LocalDate.of(2022, Month.JANUARY, 1))
-            .officialAbbreviation("latest abbr")
+            .abbreviation("latest abbr")
             .workEli("eli/bund/bgbl-1/2020/s1126")
             .build();
 
@@ -64,7 +64,7 @@ class NormsServiceTest extends ContainersIntegrationBase {
             .datePublished(LocalDate.of(2020, Month.JANUARY, 1))
             .officialShortTitle("oldest short title")
             .normsDate(LocalDate.of(2020, Month.JANUARY, 1))
-            .officialAbbreviation("oldest abbr")
+            .abbreviation("oldest abbr")
             .workEli("eli/bund/bgbl-1/2020/s1126")
             .build();
     repository.save(olderExpression);
@@ -136,30 +136,24 @@ class NormsServiceTest extends ContainersIntegrationBase {
   @ParameterizedTest
   @ValueSource(strings = {"FooBar 2009", "foobar 2009"})
   void shouldFilterNormByAbbreviation(String abbreviationParam) {
-    repository.save(Norm.builder().officialAbbreviation("FooBar 2009").build());
+    repository.save(Norm.builder().abbreviation("FooBar 2009").build());
 
-    repository.save(Norm.builder().officialAbbreviation("FooBar").build());
+    repository.save(Norm.builder().abbreviation("FooBar").build());
 
-    repository.save(Norm.builder().officialAbbreviation("BarBaz 2009").build());
+    repository.save(Norm.builder().abbreviation("BarBaz 2009").build());
 
     NormsSearchParams params = new NormsSearchParams();
     params.setAbbreviation(abbreviationParam);
     var result = searchNormsHit("", params);
 
     assertThat(result).hasSize(1);
-    assertThat(
-            result
-                .getSearchHits()
-                .getSearchHits()
-                .getFirst()
-                .getContent()
-                .getOfficialAbbreviation())
+    assertThat(result.getSearchHits().getSearchHits().getFirst().getContent().getAbbreviation())
         .isEqualTo("FooBar 2009");
   }
 
   @Test
   void shouldFilterOnlyOnFullKeywordMatchesByAbbreviation() {
-    repository.save(Norm.builder().officialAbbreviation("FooBar Baz 2009").build());
+    repository.save(Norm.builder().abbreviation("FooBar Baz 2009").build());
 
     NormsSearchParams params = new NormsSearchParams();
     params.setAbbreviation("Baz");
@@ -170,14 +164,11 @@ class NormsServiceTest extends ContainersIntegrationBase {
   @ParameterizedTest
   @ValueSource(strings = {"FooBar 2009", "foobar 2009", "foobar_2009"})
   void shouldFilterNormByRisAbbreviation(String risAbbreviation) {
-    repository.save(
-        Norm.builder().officialAbbreviation("FooBar").risAbbreviation("FooBar 2009").build());
+    repository.save(Norm.builder().abbreviation("FooBar").risAbbreviation("FooBar 2009").build());
 
-    repository.save(
-        Norm.builder().officialAbbreviation("FooBar").risAbbreviation("FooBar").build());
+    repository.save(Norm.builder().abbreviation("FooBar").risAbbreviation("FooBar").build());
 
-    repository.save(
-        Norm.builder().officialAbbreviation("FooBar").risAbbreviation("BarBaz 2009").build());
+    repository.save(Norm.builder().abbreviation("FooBar").risAbbreviation("BarBaz 2009").build());
 
     NormsSearchParams params = new NormsSearchParams();
     params.setRisAbbreviation(risAbbreviation);

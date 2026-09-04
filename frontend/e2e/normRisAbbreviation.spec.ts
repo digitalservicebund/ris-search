@@ -30,7 +30,7 @@ test.describe("open norm by ris-abbreviation", async () => {
   );
 
   test("redirect does not work for amtliche abbreviation", async ({ page }) => {
-    // Two works have this amtliche abvreviation -> expect an error page
+    // Two works have this amtliche abbreviation -> expect an error page
     await navigate(page, "/gesetze/RisFrucht");
 
     await page.waitForURL("/gesetze/RisFrucht");
