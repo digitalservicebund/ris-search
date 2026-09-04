@@ -62,6 +62,10 @@ class SwaggerIntegrationTest extends ContainersIntegrationBase {
                 Matchers.is("Legislation")))
         .andExpect(
             jsonPath(
+                "$.components.schemas.LegislationExpressionSchema.properties['@type'].example",
+                Matchers.is("Legislation")))
+        .andExpect(
+            jsonPath(
                 "$.tags[*].name",
                 Matchers.containsInAnyOrder(
                     "All documents",
