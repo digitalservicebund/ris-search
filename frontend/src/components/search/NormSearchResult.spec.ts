@@ -22,6 +22,7 @@ const mockSearchResult: SearchResult<LegislationExpression> = {
     name: "Test Norm",
     abbreviation: "TN",
     risAbbreviation: "",
+    "@context": "http://localhost:8080/v1/context.jsonld",
     "@type": "Legislation",
     "@id": "eli/bund/bgbl-0/1999/ab/regelungstext-1",
     alternateName: "Alternate",
