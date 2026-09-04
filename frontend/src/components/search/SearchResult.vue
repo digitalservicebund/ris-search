@@ -2,7 +2,7 @@
 import type {
   AdministrativeDirective,
   AnyDocument,
-  CaseLaw,
+  CaseLawSearchSchema,
   LegislationExpression,
   Literature,
   SearchResult,
@@ -19,7 +19,7 @@ const { headingLevel = "2" } = defineProps<{
 <template>
   <SearchCaselawSearchResult
     v-if="isCaselaw(searchResult.item)"
-    :search-result="searchResult as SearchResult<CaseLaw>"
+    :search-result="searchResult as SearchResult<CaseLawSearchSchema>"
     :order="order"
     :heading-level="headingLevel"
   />
