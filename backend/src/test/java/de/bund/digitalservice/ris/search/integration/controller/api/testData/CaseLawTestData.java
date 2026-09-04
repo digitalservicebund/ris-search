@@ -24,7 +24,7 @@ public class CaseLawTestData {
           // fields just to make other tests pass
           .id("BFRE000157360")
           .documentNumber("BFRE000157360")
-          .decisionDate(LocalDate.of(1901, 1, 1))
+          .decisionDate(LocalDate.of(1901, Month.JANUARY, 1))
           .courtKeyword("FG Berlin")
           // highlightable fields
           .caseFacts("highlight_caseFacts")
