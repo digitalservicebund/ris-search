@@ -19,6 +19,7 @@ mockNuxtImport("useRoute", () => useRouteMock);
 
 const mockSearchResult: SearchResult<LegislationExpression> = {
   item: {
+    "@context": "remoteContext",
     name: "Test Norm",
     abbreviation: "TN",
     risAbbreviation: "",

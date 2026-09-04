@@ -1011,7 +1011,7 @@ export interface components {
         CollectionSchemaSearchMemberSchemaLiteratureSearchSchema: {
             /** @example hydra:Collection */
             "@type"?: string;
-            "@context"?: string;
+            "@context": string;
             /** @example /v1/document?pageIndex=0&size=5 */
             "@id": string;
             /**
@@ -1233,7 +1233,7 @@ export interface components {
         CollectionSchemaSearchMemberSchemaLegislationExpressionSearchSchema: {
             /** @example hydra:Collection */
             "@type"?: string;
-            "@context"?: string;
+            "@context": string;
             /** @example /v1/document?pageIndex=0&size=5 */
             "@id": string;
             /**
@@ -1362,7 +1362,7 @@ export interface components {
         LegislationExpressionSchema: {
             /** @example Legislation */
             "@type"?: string;
-            "@context"?: string;
+            "@context": string;
             /** @example /v1/legislation/eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu */
             "@id": string;
             /**
@@ -1488,7 +1488,7 @@ export interface components {
         CollectionSchemaSearchMemberSchemaAbstractDocumentSchema: {
             /** @example hydra:Collection */
             "@type"?: string;
-            "@context"?: string;
+            "@context": string;
             /** @example /v1/document?pageIndex=0&size=5 */
             "@id": string;
             /**
@@ -1508,7 +1508,7 @@ export interface components {
         CollectionSchemaSearchMemberSchemaCaseLawSearchSchema: {
             /** @example hydra:Collection */
             "@type"?: string;
-            "@context"?: string;
+            "@context": string;
             /** @example /v1/document?pageIndex=0&size=5 */
             "@id": string;
             /**
@@ -1528,7 +1528,7 @@ export interface components {
         CollectionSchemaSearchMemberSchemaAdministrativeDirectiveSearchSchema: {
             /** @example hydra:Collection */
             "@type"?: string;
-            "@context"?: string;
+            "@context": string;
             /** @example /v1/document?pageIndex=0&size=5 */
             "@id": string;
             /**

@@ -15,6 +15,7 @@ function createLegislationExpression(
 ): LegislationExpression {
   const workIdentifier = expressionEli.split("/").slice(0, 5).join("/");
   return {
+    "@context": "remoteContext",
     "@type": "Legislation",
     "@id": `/v1/legislation/${expressionEli}`,
     legislationIdentifier: expressionEli,
