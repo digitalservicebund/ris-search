@@ -20,6 +20,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/rechtsprechung": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List and search decisions
+         * @description The endpoint returns a list of decisions from our database. The list is paginated and can be filtered and sorted.
+         */
+        get: operations["searchAndFilter"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/rechtsprechung/{documentNumber}": {
         parameters: {
             query?: never;
@@ -40,6 +60,126 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/rechtsprechung/{documentNumber}/{name}.{extension}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Caselaw resource
+         * @description Returns a specific resource of a particular caselaw.
+         */
+        get: operations["getImage"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/rechtsprechung/{documentNumber}.zip": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Decision ZIP (XML and attachments)
+         * @description Returns a case law decision, including attachments, as a ZIP archive.
+         */
+        get: operations["getCaseLawDocumentationUnitAsZip"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/rechtsprechung/{documentNumber}.xml": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Decision XML
+         * @description Returns a case law decision as XML. This content is used as a source for the HTML endpoint.
+         */
+        get: operations["getCaseLawDocumentationUnitAsXml"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/rechtsprechung/{documentNumber}.html": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Decision HTML
+         * @description Renders and returns a case law decision as HTML.
+         */
+        get: operations["getCaseLawDocumentationUnitAsHtml"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/rechtsprechung/courts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List courts
+         * @description Lists courts with long and short name and number of associated decisions. The prefix parameter may be used to filter this list. Only includes courts whose decisions have been published in this database.
+         */
+        get: operations["getCourts"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/rechtsprechung/changelog": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Caselaw changelog
+         * @description Returns references of document changes that occurred in between two points in time.
+         */
+        get: operations["getChangelogs"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/literature": {
         parameters: {
             query?: never;
@@ -51,7 +191,7 @@ export interface paths {
          * List and search literature
          * @description The endpoint returns a list of literature from our database. The list is paginated and can be filtered and sorted.
          */
-        get: operations["searchAndFilter"];
+        get: operations["searchAndFilter_1"];
         put?: never;
         post?: never;
         delete?: never;
@@ -151,7 +291,7 @@ export interface paths {
          * Literature changelog
          * @description Returns references of document changes that occurred in between two points in time.
          */
-        get: operations["getChangelogs"];
+        get: operations["getChangelogs_1"];
         put?: never;
         post?: never;
         delete?: never;
@@ -195,7 +335,7 @@ export interface paths {
          *     GET /v1/legislation?eli=eli/bund/bgbl-1/1979/s1325
          *     ```
          */
-        get: operations["searchAndFilter_1"];
+        get: operations["searchAndFilter_2"];
         put?: never;
         post?: never;
         delete?: never;
@@ -344,7 +484,7 @@ export interface paths {
          * Legislation changelog
          * @description Returns references of document changes that occurred in between two points in time.
          */
-        get: operations["getChangelogs_1"];
+        get: operations["getChangelogs_2"];
         put?: never;
         post?: never;
         delete?: never;
@@ -368,7 +508,7 @@ export interface paths {
          *
          *     Default sorting is by relevance from most relevant to least relevant. Multiple factors are combined to boost the most relevant documents to the top of the result list. Additionally, sorting by date is possible by setting the sort query parameter to date.
          */
-        get: operations["searchAndFilter_2"];
+        get: operations["searchAndFilter_3"];
         put?: never;
         post?: never;
         delete?: never;
@@ -489,7 +629,7 @@ export interface paths {
          * List and search decisions
          * @description The endpoint returns a list of decisions from our database. The list is paginated and can be filtered and sorted.
          */
-        get: operations["searchAndFilter_3"];
+        get: operations["searchAndFilter_4"];
         put?: never;
         post?: never;
         delete?: never;
@@ -529,7 +669,7 @@ export interface paths {
          * Caselaw resource
          * @description Returns a specific resource of a particular caselaw.
          */
-        get: operations["getImage"];
+        get: operations["getImage_1"];
         put?: never;
         post?: never;
         delete?: never;
@@ -549,7 +689,7 @@ export interface paths {
          * Decision ZIP (XML and attachments)
          * @description Returns a case law decision, including attachments, as a ZIP archive.
          */
-        get: operations["getCaseLawDocumentationUnitAsZip"];
+        get: operations["getCaseLawDocumentationUnitAsZip_1"];
         put?: never;
         post?: never;
         delete?: never;
@@ -569,7 +709,7 @@ export interface paths {
          * Decision XML
          * @description Returns a case law decision as XML. This content is used as a source for the HTML endpoint.
          */
-        get: operations["getCaseLawDocumentationUnitAsXml"];
+        get: operations["getCaseLawDocumentationUnitAsXml_1"];
         put?: never;
         post?: never;
         delete?: never;
@@ -589,7 +729,7 @@ export interface paths {
          * Decision HTML
          * @description Renders and returns a case law decision as HTML.
          */
-        get: operations["getCaseLawDocumentationUnitAsHtml"];
+        get: operations["getCaseLawDocumentationUnitAsHtml_1"];
         put?: never;
         post?: never;
         delete?: never;
@@ -609,7 +749,7 @@ export interface paths {
          * List courts
          * @description Lists courts with long and short name and number of associated decisions. The prefix parameter may be used to filter this list. Only includes courts whose decisions have been published in this database.
          */
-        get: operations["getCourts"];
+        get: operations["getCourts_1"];
         put?: never;
         post?: never;
         delete?: never;
@@ -629,7 +769,7 @@ export interface paths {
          * Caselaw changelog
          * @description Returns references of document changes that occurred in between two points in time.
          */
-        get: operations["getChangelogs_2"];
+        get: operations["getChangelogs_3"];
         put?: never;
         post?: never;
         delete?: never;
@@ -665,7 +805,7 @@ export interface paths {
          * List and search administrative directives
          * @description The endpoint returns a list of administrative directives from our database. The list is paginated and can be filtered and sorted.
          */
-        get: operations["searchAndFilter_4"];
+        get: operations["searchAndFilter_5"];
         put?: never;
         post?: never;
         delete?: never;
@@ -765,7 +905,7 @@ export interface paths {
          * Administrative Directive changelog
          * @description Returns references of document changes that occurred in between two points in time.
          */
-        get: operations["getChangelogs_3"];
+        get: operations["getChangelogs_4"];
         put?: never;
         post?: never;
         delete?: never;
@@ -788,6 +928,61 @@ export interface components {
             /** Format: int64 */
             count: number;
         };
+        CaseLawSearchSchema: {
+            "@type": "CaseLawSearchSchema";
+        } & (Omit<components["schemas"]["AbstractDocumentSchema"], "@type"> & {
+            /** @example Decision */
+            "@type"?: string;
+            /** @example KARE000000000 */
+            documentNumber: string;
+            /** @example ECLI:DE:FGRLP:1969:0905.IV85.68.0A */
+            ecli: string;
+            /** @example Überschrift */
+            headline?: string;
+            /** @example Titelzeile */
+            titleLine?: string;
+            /** @example Sonstiger Langtext */
+            otherLongText?: string;
+            /** Format: date */
+            decisionDate: string;
+            /** @example BGH 123/23 */
+            fileNumbers: string[];
+            /** @example FG */
+            courtType?: string;
+            /** @example Berlin */
+            location?: string;
+            /** @example Urteil */
+            documentType?: string;
+            /** @example Leitsatz */
+            outline?: string;
+            /** @example Gericht */
+            judicialBody?: string;
+            /** @example LArbG Hamm */
+            courtName?: string;
+            /** @example Beispielentscheidung */
+            decisionName: string[];
+            /** @example DEV-123 */
+            deviatingDocumentNumber: string[];
+            encoding: components["schemas"]["DocumentEncodingSchema"][];
+            /** @example /v1/case-law/ECLI:DE:FGRLP:1969:0905.IV85.68.0A */
+            "@id": string;
+            /** @example de */
+            inLanguage: string;
+        });
+        CollectionSchemaSearchMemberSchemaCaseLawSearchSchema: {
+            /** @example hydra:Collection */
+            "@type"?: string;
+            "@context": string;
+            /** @example /v1/document?pageIndex=0&size=5 */
+            "@id": string;
+            /**
+             * Format: int64
+             * @example 1
+             */
+            totalItems: number;
+            member: components["schemas"]["SearchMemberSchemaCaseLawSearchSchema"][];
+            view: components["schemas"]["PartialCollectionViewSchema"];
+        };
         DocumentEncodingSchema: {
             /** @example MediaObject */
             "@type"?: string;
@@ -797,6 +992,27 @@ export interface components {
             encodingFormat: string;
             /** @example de */
             inLanguage: string;
+        };
+        PartialCollectionViewSchema: {
+            /** @example hydra:PartialCollectionView */
+            "@type"?: string;
+            first?: string;
+            previous?: string;
+            next?: string;
+            last?: string;
+        };
+        SearchMemberSchemaCaseLawSearchSchema: {
+            /** @example SearchResult */
+            "@type"?: string;
+            item: components["schemas"]["CaseLawSearchSchema"];
+            textMatches: components["schemas"]["TextMatchSchema"][];
+        };
+        TextMatchSchema: {
+            /** @example SearchResultMatch */
+            "@type"?: string;
+            name: string;
+            text: string;
+            location?: string | null;
         };
         RechtsprechungSchema: {
             /** @example Rechtsprechung */
@@ -1008,6 +1224,42 @@ export interface components {
             /** @description Whether or not the document is a Vorabdokument */
             vorabdokument: boolean;
         };
+        StreamingResponseBody: unknown;
+        CourtSearchResult: {
+            /** @example BGH Karlsruhe */
+            id?: string;
+            /**
+             * Format: int64
+             * @example 10000
+             */
+            count?: number;
+            /** @example Bundesgerichtshof Karlsruhe */
+            label?: string;
+        };
+        ChangelogChangedDocument: {
+            /** @description unique identifier of the document */
+            "@id": string;
+            /** @description type of the document */
+            "@type": string;
+            contentUrl: string;
+        };
+        ChangelogDeletedDocument: {
+            /** @description unique identifier of the document */
+            "@id": string;
+            /** @description type of the document */
+            "@type": string;
+        };
+        ChangelogResponse: {
+            "@context"?: {
+                [key: string]: unknown;
+            };
+            /** @description Set of changed documents */
+            changed: components["schemas"]["ChangelogChangedDocument"][];
+            /** @description Set of deleted documents */
+            deleted: components["schemas"]["ChangelogDeletedDocument"][];
+            /** @description flag to communicate that the whole storage got rebuilt */
+            allChanged: boolean;
+        };
         CollectionSchemaSearchMemberSchemaLiteratureSearchSchema: {
             /** @example hydra:Collection */
             "@type"?: string;
@@ -1087,26 +1339,11 @@ export interface components {
             literatureType: string;
             encoding: components["schemas"]["DocumentEncodingSchema"][];
         });
-        PartialCollectionViewSchema: {
-            /** @example hydra:PartialCollectionView */
-            "@type"?: string;
-            first?: string;
-            previous?: string;
-            next?: string;
-            last?: string;
-        };
         SearchMemberSchemaLiteratureSearchSchema: {
             /** @example SearchResult */
             "@type"?: string;
             item: components["schemas"]["LiteratureSearchSchema"];
             textMatches: components["schemas"]["TextMatchSchema"][];
-        };
-        TextMatchSchema: {
-            /** @example SearchResultMatch */
-            "@type"?: string;
-            name: string;
-            text: string;
-            location?: string | null;
         };
         LiteratureSchema: {
             /** @example Literature */
@@ -1204,31 +1441,6 @@ export interface components {
              */
             literatureType: string;
             encoding: components["schemas"]["DocumentEncodingSchema"][];
-        };
-        StreamingResponseBody: unknown;
-        ChangelogChangedDocument: {
-            /** @description unique identifier of the document */
-            "@id": string;
-            /** @description type of the document */
-            "@type": string;
-            contentUrl: string;
-        };
-        ChangelogDeletedDocument: {
-            /** @description unique identifier of the document */
-            "@id": string;
-            /** @description type of the document */
-            "@type": string;
-        };
-        ChangelogResponse: {
-            "@context"?: {
-                [key: string]: unknown;
-            };
-            /** @description Set of changed documents */
-            changed: components["schemas"]["ChangelogChangedDocument"][];
-            /** @description Set of deleted documents */
-            deleted: components["schemas"]["ChangelogDeletedDocument"][];
-            /** @description flag to communicate that the whole storage got rebuilt */
-            allChanged: boolean;
         };
         CollectionSchemaSearchMemberSchemaLegislationExpressionSearchSchema: {
             /** @example hydra:Collection */
@@ -1444,47 +1656,6 @@ export interface components {
             entryIntoForceDate?: string;
             encoding: components["schemas"]["DocumentEncodingSchema"][];
         });
-        CaseLawSearchSchema: {
-            "@type": "CaseLawSearchSchema";
-        } & (Omit<components["schemas"]["AbstractDocumentSchema"], "@type"> & {
-            /** @example Decision */
-            "@type"?: string;
-            /** @example KARE000000000 */
-            documentNumber: string;
-            /** @example ECLI:DE:FGRLP:1969:0905.IV85.68.0A */
-            ecli: string;
-            /** @example Überschrift */
-            headline?: string;
-            /** @example Titelzeile */
-            titleLine?: string;
-            /** @example Sonstiger Langtext */
-            otherLongText?: string;
-            /** Format: date */
-            decisionDate: string;
-            /** @example BGH 123/23 */
-            fileNumbers: string[];
-            /** @example FG */
-            courtType?: string;
-            /** @example Berlin */
-            location?: string;
-            /** @example Urteil */
-            documentType?: string;
-            /** @example Leitsatz */
-            outline?: string;
-            /** @example Gericht */
-            judicialBody?: string;
-            /** @example LArbG Hamm */
-            courtName?: string;
-            /** @example Beispielentscheidung */
-            decisionName: string[];
-            /** @example DEV-123 */
-            deviatingDocumentNumber: string[];
-            encoding: components["schemas"]["DocumentEncodingSchema"][];
-            /** @example /v1/case-law/ECLI:DE:FGRLP:1969:0905.IV85.68.0A */
-            "@id": string;
-            /** @example de */
-            inLanguage: string;
-        });
         CollectionSchemaSearchMemberSchemaAbstractDocumentSchema: {
             /** @example hydra:Collection */
             "@type"?: string;
@@ -1503,26 +1674,6 @@ export interface components {
             /** @example SearchResult */
             "@type"?: string;
             item: components["schemas"]["AdministrativeDirectiveSearchSchema"] | components["schemas"]["CaseLawSearchSchema"] | components["schemas"]["LegislationExpressionSearchSchema"] | components["schemas"]["LiteratureSearchSchema"];
-            textMatches: components["schemas"]["TextMatchSchema"][];
-        };
-        CollectionSchemaSearchMemberSchemaCaseLawSearchSchema: {
-            /** @example hydra:Collection */
-            "@type"?: string;
-            "@context": string;
-            /** @example /v1/document?pageIndex=0&size=5 */
-            "@id": string;
-            /**
-             * Format: int64
-             * @example 1
-             */
-            totalItems: number;
-            member: components["schemas"]["SearchMemberSchemaCaseLawSearchSchema"][];
-            view: components["schemas"]["PartialCollectionViewSchema"];
-        };
-        SearchMemberSchemaCaseLawSearchSchema: {
-            /** @example SearchResult */
-            "@type"?: string;
-            item: components["schemas"]["CaseLawSearchSchema"];
             textMatches: components["schemas"]["TextMatchSchema"][];
         };
         CollectionSchemaSearchMemberSchemaAdministrativeDirectiveSearchSchema: {
@@ -1642,17 +1793,6 @@ export interface components {
             /** @description Whether or not the document is a Vorabdokument */
             vorabdokument: boolean;
         };
-        CourtSearchResult: {
-            /** @example BGH Karlsruhe */
-            id?: string;
-            /**
-             * Format: int64
-             * @example 10000
-             */
-            count?: number;
-            /** @example Bundesgerichtshof Karlsruhe */
-            label?: string;
-        };
         /** @description Represents a <a href="https://schema.org/DataCatalog">schema.org/DataCatalog</a>. */
         ZipDataCatalogSchema: {
             /** @example https://schema.org/ */
@@ -1769,6 +1909,62 @@ export interface operations {
             };
         };
     };
+    searchAndFilter: {
+        parameters: {
+            query?: {
+                fileNumber?: string;
+                ecli?: string;
+                /** @description Filter by court name (Finanzgericht Münster, FG Münster, ArbG Köln) or court type (Finanzgericht, FG, ArbG). Supports both long and short names. */
+                court?: string;
+                /** @description Corresponds to “Rechtskraft”, meaning that the decision referred to is legally binding. */
+                legalEffect?: "JA" | "NEIN" | "KEINE_ANGABE" | "FALSCHE_ANGABE";
+                /** @description Filter by document type (Urteil, Versäumnisurteil, Entscheidung etc.). Multiple values may be specified as a comma-separated list or by repeating the parameter. */
+                type?: string[];
+                /** @description Extended filter by type group. Multiple values may be specified as a comma-separated list or by repeating the parameter. */
+                typeGroup?: "Urteil" | "Beschluss" | "other";
+                /** @description Searches for the given tokens in searchTerm. If searchTerm contains more than one token, all tokens must be in the document for the document to match. */
+                searchTerm?: string;
+                /** @description The from (greater than or equal) parameter returns all entities where date is later than, or equal to, the given date. */
+                dateFrom?: string;
+                /** @description The to (less than or equal) parameter returns all entities where date is earlier than, or equal to, the given date. */
+                dateTo?: string;
+                /**
+                 * @description The number of entities per page
+                 * @example 100
+                 */
+                size?: number;
+                /**
+                 * @description The number of the page to request. The page starts with the value 0
+                 * @example 0
+                 */
+                pageIndex?: number;
+                /** @description The field to sort the results by. Default is the relevance score calculated by OpenSearch. Valid usage of the sort field are : date, courtName, documentNumber and not setting the sort field (sort by relevance descending).Add a leading - to set the order to descending (-date) */
+                sort?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Success */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CollectionSchemaSearchMemberSchemaCaseLawSearchSchema"];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     getCaseLaw: {
         parameters: {
             query?: never;
@@ -1799,7 +1995,176 @@ export interface operations {
             };
         };
     };
-    searchAndFilter: {
+    getImage: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @example BDRE000800001 */
+                documentNumber: string;
+                /** @example image */
+                name: string;
+                /** @example jpg */
+                extension: "png" | "jpg" | "jpeg" | "gif" | "wmf" | "emf" | "bitmap";
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": string;
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    getCaseLawDocumentationUnitAsZip: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @example STRE201770751 */
+                documentNumber: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/zip": components["schemas"]["StreamingResponseBody"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    getCaseLawDocumentationUnitAsXml: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @example STRE201770751 */
+                documentNumber: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/xml": string;
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    getCaseLawDocumentationUnitAsHtml: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @example STRE201770751 */
+                documentNumber: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/html": string;
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    getCourts: {
+        parameters: {
+            query?: {
+                prefix?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CourtSearchResult"][];
+                };
+            };
+        };
+    };
+    getChangelogs: {
+        parameters: {
+            query: {
+                from: string;
+                to: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ChangelogResponse"];
+                };
+            };
+        };
+    };
+    searchAndFilter_1: {
         parameters: {
             query?: {
                 documentNumber?: string;
@@ -1970,7 +2335,7 @@ export interface operations {
             };
         };
     };
-    getChangelogs: {
+    getChangelogs_1: {
         parameters: {
             query: {
                 from: string;
@@ -1993,7 +2358,7 @@ export interface operations {
             };
         };
     };
-    searchAndFilter_1: {
+    searchAndFilter_2: {
         parameters: {
             query?: {
                 /** @description Search by European Legislation Identifier (ELI). Right now only searching by work ELI is supported, but a general eli prefix match might be supported in the future. */
@@ -2403,7 +2768,7 @@ export interface operations {
             };
         };
     };
-    getChangelogs_1: {
+    getChangelogs_2: {
         parameters: {
             query: {
                 from: string;
@@ -2426,7 +2791,7 @@ export interface operations {
             };
         };
     };
-    searchAndFilter_2: {
+    searchAndFilter_3: {
         parameters: {
             query?: {
                 /** @description Searches for the given tokens in searchTerm. If searchTerm contains more than one token, all tokens must be in the document for the document to match. */
@@ -2707,7 +3072,7 @@ export interface operations {
             };
         };
     };
-    searchAndFilter_3: {
+    searchAndFilter_4: {
         parameters: {
             query?: {
                 fileNumber?: string;
@@ -2793,7 +3158,7 @@ export interface operations {
             };
         };
     };
-    getImage: {
+    getImage_1: {
         parameters: {
             query?: never;
             header?: never;
@@ -2827,7 +3192,7 @@ export interface operations {
             };
         };
     };
-    getCaseLawDocumentationUnitAsZip: {
+    getCaseLawDocumentationUnitAsZip_1: {
         parameters: {
             query?: never;
             header?: never;
@@ -2857,7 +3222,7 @@ export interface operations {
             };
         };
     };
-    getCaseLawDocumentationUnitAsXml: {
+    getCaseLawDocumentationUnitAsXml_1: {
         parameters: {
             query?: never;
             header?: never;
@@ -2887,7 +3252,7 @@ export interface operations {
             };
         };
     };
-    getCaseLawDocumentationUnitAsHtml: {
+    getCaseLawDocumentationUnitAsHtml_1: {
         parameters: {
             query?: never;
             header?: never;
@@ -2917,7 +3282,7 @@ export interface operations {
             };
         };
     };
-    getCourts: {
+    getCourts_1: {
         parameters: {
             query?: {
                 prefix?: string;
@@ -2939,7 +3304,7 @@ export interface operations {
             };
         };
     };
-    getChangelogs_2: {
+    getChangelogs_3: {
         parameters: {
             query: {
                 from: string;
@@ -2982,7 +3347,7 @@ export interface operations {
             };
         };
     };
-    searchAndFilter_4: {
+    searchAndFilter_5: {
         parameters: {
             query?: {
                 documentNumber?: string;
@@ -3149,7 +3514,7 @@ export interface operations {
             };
         };
     };
-    getChangelogs_3: {
+    getChangelogs_4: {
         parameters: {
             query: {
                 from: string;
