@@ -179,6 +179,8 @@ public class SimpleSearchQueryBuilder {
       case 5 -> 1.5f;
       case 6 -> 1.4f;
       case 7 -> 1.3f;
+      case 8 -> 1.2f;
+      case 9 -> 1.1f;
       default -> throw new IllegalArgumentException("Unknown ordering: " + ordering);
     };
   }

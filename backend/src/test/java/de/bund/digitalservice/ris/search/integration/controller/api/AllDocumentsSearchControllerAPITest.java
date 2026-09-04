@@ -132,10 +132,10 @@ class AllDocumentsSearchControllerAPITest extends ContainersIntegrationBase {
 
   @ParameterizedTest
   @CsvSource({
-    "documentNumber, 10, $.member[*].item.documentNumber",
-    "-documentNumber, 10, $.member[*].item.documentNumber",
-    "courtName, 6, $.member[*].item.courtName",
-    "-courtName, 6, $.member[*].item.courtName"
+    "documentNumber, 11, $.member[*].item.documentNumber",
+    "-documentNumber, 11, $.member[*].item.documentNumber",
+    "courtName, 7, $.member[*].item.courtName",
+    "-courtName, 7, $.member[*].item.courtName"
   })
   @DisplayName("Should return correct ordering")
   void shouldReturnCorrectOrdering(String sortParam, int expectedCount, String jsonPattern)
@@ -175,9 +175,10 @@ class AllDocumentsSearchControllerAPITest extends ContainersIntegrationBase {
   }
 
   @ParameterizedTest
-  @CsvSource({"date, 13", "-date, 13", "'', 13"})
+  @CsvSource({"date", "-date", "''"})
   @DisplayName("Should return correct date ordering")
-  void shouldReturnCorrectDateOrdering(String sortParam, int expectedCount) throws Exception {
+  void shouldReturnCorrectDateOrdering(String sortParam) throws Exception {
+    long expectedCount = allDocCount();
     String url = ApiConfig.Paths.DOCUMENT + String.format("?sort=%s", sortParam);
 
     var result =
