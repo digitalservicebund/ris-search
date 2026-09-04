@@ -433,7 +433,12 @@ public class NormLdmlToOpenSearchMapper {
     if (preambleFormulaNode.isPresent()) {
       articles.add(
           getNodeAsArticle(
-              preambleFormulaNode.get(), EINGANGSFORMEL, indexedAt, workEli, expressionEli));
+              preambleFormulaNode.get(),
+              EINGANGSFORMEL,
+              indexedAt,
+              workEli,
+              expressionEli,
+              abbreviation));
     }
     for (int i = 0; i < nodes.getLength(); i++) {
       getArticleNodeAsArticle(
@@ -451,7 +456,12 @@ public class NormLdmlToOpenSearchMapper {
     if (conclusionsFormulaNode.isPresent()) {
       articles.add(
           getNodeAsArticle(
-              conclusionsFormulaNode.get(), SCHLUSSFORMEL, indexedAt, workEli, expressionEli));
+              conclusionsFormulaNode.get(),
+              SCHLUSSFORMEL,
+              indexedAt,
+              workEli,
+              expressionEli,
+              abbreviation));
     }
 
     var attachmentsAsArticles =
@@ -469,6 +479,7 @@ public class NormLdmlToOpenSearchMapper {
                       .workEli(workEli)
                       .text(a.textContent())
                       .name(name)
+                      .articleFingerprint(getArticleFingerprint(name, abbreviation))
                       .indexedAt(indexedAt)
                       .manifestationEli(a.manifestationEli())
                       .build();
@@ -553,7 +564,12 @@ public class NormLdmlToOpenSearchMapper {
   }
 
   private static Article getNodeAsArticle(
-      Node node, String name, String indexedAt, String workEli, String expressionEli)
+      Node node,
+      String name,
+      String indexedAt,
+      String workEli,
+      String expressionEli,
+      String abbreviation)
       throws ValidationException {
     Node eIdAttribute = node.getAttributes().getNamedItem("eId");
     if (Objects.isNull(eIdAttribute)) {
@@ -569,6 +585,7 @@ public class NormLdmlToOpenSearchMapper {
         .expressionEli(expressionEli)
         .text(cleanText(node.getTextContent()))
         .name(cleanText(name))
+        .articleFingerprint(getArticleFingerprint(cleanText(name), abbreviation))
         .indexedAt(indexedAt)
         .build();
   }
