@@ -1,10 +1,10 @@
 import { renderSuspended } from "@nuxt/test-utils/runtime";
 import { screen } from "@testing-library/vue";
 import { describe, expect, it } from "vitest";
-import type { SearchResult, CaseLaw } from "~/types/api";
+import type { SearchResult, CaseLawSearchSchema } from "~/types/api";
 import Pagination, { type Page } from "./Pagination.vue";
 
-const createMockSearchResult = (): SearchResult<CaseLaw> => ({
+const createMockSearchResult = (): SearchResult<CaseLawSearchSchema> => ({
   item: {
     "@type": "Decision",
     "@id": "test-id",
@@ -12,12 +12,10 @@ const createMockSearchResult = (): SearchResult<CaseLaw> => ({
     ecli: "ECLI:TEST:123",
     decisionDate: "2024-01-01",
     fileNumbers: [],
-    keywords: [],
     decisionName: [],
     deviatingDocumentNumber: [],
     inLanguage: "de",
     encoding: [],
-    vorabdokument: false,
   },
   textMatches: [],
 });

@@ -121,6 +121,7 @@ class CaseLawSchemaMapperTest {
     assertThat(caseLawSchema.guidingPrinciple()).isEqualTo("guidingPrinciple");
     assertThat(caseLawSchema.tenor()).isEqualTo("tenor");
     assertThat(caseLawSchema.inLanguage()).isEqualTo("de");
+    assertThat(caseLawSchema.context()).isEqualTo("jsonLdContext");
   }
 
   @Test

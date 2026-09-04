@@ -2,7 +2,7 @@ import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import { render, screen } from "@testing-library/vue";
 import { describe, expect, it } from "vitest";
 import CaselawRecord from "~/components/search/CaselawSearchResult.vue";
-import type { CaseLaw, SearchResult, TextMatch } from "~/types/api";
+import type { CaseLawSearchSchema, SearchResult, TextMatch } from "~/types/api";
 import type { SearchResultHeadingLevel } from "~/utils/search/searchResults";
 
 const { useRouteMock } = vi.hoisted(() => ({
@@ -13,7 +13,7 @@ const { useRouteMock } = vi.hoisted(() => ({
 
 mockNuxtImport("useRoute", () => useRouteMock);
 
-const searchResult: SearchResult<CaseLaw> = {
+const searchResult: SearchResult<CaseLawSearchSchema> = {
   item: {
     "@id": "",
     "@type": "Decision",
@@ -21,23 +21,14 @@ const searchResult: SearchResult<CaseLaw> = {
     ecli: "",
     encoding: [],
     inLanguage: "",
-    keywords: [],
     documentNumber: "123",
     headline: "(Test Headline)",
-    guidingPrinciple: "Guiding Principle",
-    headnote: "Headnote",
-    otherHeadnote: "Other Headnote",
-    tenor: "Tenor",
-    grounds: "Grounds",
-    caseFacts: "Case Facts",
-    decisionGrounds: "Decision Grounds",
     courtName: "Test Court",
     decisionDate: "2023-01-01",
     fileNumbers: ["123", "testing highlighted file number is here"],
     decisionName: ["Decision Name"],
     titleLine: "Title line",
     documentType: "Document Type",
-    vorabdokument: false,
   },
   textMatches: [],
 };
@@ -46,10 +37,10 @@ function renderComponent({
   item = searchResult.item,
   textMatches = [],
   headingLevel,
-}: Partial<SearchResult<CaseLaw>> & {
+}: Partial<SearchResult<CaseLawSearchSchema>> & {
   headingLevel?: SearchResultHeadingLevel;
 }) {
-  const result: SearchResult<CaseLaw> = { item, textMatches };
+  const result: SearchResult<CaseLawSearchSchema> = { item, textMatches };
 
   return render(CaselawRecord, {
     props: { searchResult: result, order: 0, headingLevel },

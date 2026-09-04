@@ -3,7 +3,7 @@ import { describe, it, expect } from "vitest";
 import type {
   AdministrativeDirective,
   AnyDocument,
-  CaseLaw,
+  CaseLawSearchSchema,
   LegislationExpression,
   Literature,
   SearchResult,
@@ -16,7 +16,7 @@ describe("SearchResult", () => {
       props: {
         searchResult: {
           item: { "@type": "Decision" },
-        } as SearchResult<CaseLaw>,
+        } as SearchResult<CaseLawSearchSchema>,
         order: 0,
       },
       global: {
@@ -111,7 +111,7 @@ describe("SearchResult", () => {
       props: {
         searchResult: {
           item: { "@type": "Decision" },
-        } as SearchResult<CaseLaw>,
+        } as SearchResult<CaseLawSearchSchema>,
         order: 0,
         headingLevel: "3" as const,
       },
@@ -132,7 +132,7 @@ describe("SearchResult", () => {
       props: {
         searchResult: {
           item: { "@type": "Decision" },
-        } as SearchResult<CaseLaw>,
+        } as SearchResult<CaseLawSearchSchema>,
         order: 0,
       },
       global: {

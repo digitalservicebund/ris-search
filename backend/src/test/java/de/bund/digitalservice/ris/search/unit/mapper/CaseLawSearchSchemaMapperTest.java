@@ -65,6 +65,7 @@ class CaseLawSearchSchemaMapperTest {
     assertEquals(1, destination.totalItems());
     assertEquals(destination.member().size(), destination.totalItems());
     assertTrue(destination.id().startsWith(ApiConfig.Paths.CASELAW));
+    assertThat(destination.context()).isEqualTo("jsonldContext");
   }
 
   @Test
