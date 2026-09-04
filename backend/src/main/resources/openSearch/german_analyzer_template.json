@@ -36,6 +36,22 @@
               "replace_article_character",
               "replace_euro_character"
             ]
+          },
+          "custom_german_fingerprint_analyzer": {
+            "type": "custom",
+            "tokenizer": "standard",
+            "filter": [
+              "lowercase",
+              "german_normalization",
+              "german_stemmer",
+              "court_type_synonyms",
+              "golem_thesaurus_synonyms",
+              "fingerprint"
+            ],
+            "char_filter": [
+              "replace_article_character",
+              "replace_euro_character"
+            ]
           }
         },
         "filter": {

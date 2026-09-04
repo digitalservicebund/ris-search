@@ -387,6 +387,15 @@ class NormLdmlToOpenSearchMapperTest {
         .isEqualTo(LocalDate.of(2003, Month.NOVEMBER, 1));
     assertThat(thirdArticle.getExpiryDate()).isNull();
 
+    List<String> fingerprints = norm.getArticleFingerprints();
+    assertThat(fingerprints)
+        .containsExactlyInAnyOrder(
+            "Eingangsformel RisAbk",
+            "§ 1 RisAbk",
+            "§ 2 RisAbk",
+            "§ 3 RisAbk",
+            "Anlage T1 (zu § 1) RisAbk");
+
     String workEli = "eli/bund/bgbl-1/1962/s514";
     String expressionEli = workEli + "/2010-04-27/1/deu";
     String manifestationEli = expressionEli + "/2010-04-27/offenestruktur-1.xml";
@@ -404,7 +413,7 @@ class NormLdmlToOpenSearchMapperTest {
                 null,
                 null,
                 manifestationEli,
-                null,
+                "Anlage T1 (zu § 1) RisAbk",
                 attachment.getIndexedAt()));
   }
 

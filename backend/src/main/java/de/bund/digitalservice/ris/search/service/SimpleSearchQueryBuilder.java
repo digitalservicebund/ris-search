@@ -148,6 +148,9 @@ public class SimpleSearchQueryBuilder {
             .field(CaseLawDocumentationUnit.Fields.ABWEICHENDE_AKTENZEICHEN_KEYWORD)
             .field(CaseLawDocumentationUnit.Fields.ABWEICHENDE_ECLIS_KEYWORD)
             .boost(8.0f));
+
+    query.should(
+        QueryBuilders.matchQuery(Norm.Fields.ARTICLE_FINGERPRINTS, searchTerm).boost(10.0f));
   }
 
   private MultiMatchQueryBuilder buildOneClause(

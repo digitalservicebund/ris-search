@@ -16,7 +16,6 @@ import org.opensearch.data.client.orhlc.NativeSearchQuery;
 import org.opensearch.data.client.orhlc.NativeSearchQueryBuilder;
 import org.opensearch.index.query.BoolQueryBuilder;
 import org.opensearch.index.query.InnerHitBuilder;
-import org.opensearch.index.query.MatchPhraseQueryBuilder;
 import org.opensearch.index.query.MultiMatchQueryBuilder;
 import org.opensearch.index.query.Operator;
 import org.opensearch.index.query.QueryBuilders;
@@ -70,7 +69,7 @@ public class ArticleService {
     }
 
     BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
-    boolQuery.filter(QueryBuilders.termsQuery("expression_eli", expressionElis));
+    boolQuery.filter(QueryBuilders.termsQuery(Article.Fields.EXPRESSION_ELI, expressionElis));
 
     if (isLuceneQuery) {
       boolQuery.must(QueryBuilders.queryStringQuery(searchString));
@@ -80,14 +79,12 @@ public class ArticleService {
               .type(MultiMatchQueryBuilder.Type.CROSS_FIELDS)
               .operator(Operator.OR));
 
-      // Allow searching articles by a combined "search keyword" (e.g., article number and norm
-      // abbreviation).
-      // Slop is added to account for re-ordering of the components.
-      boolQuery.should(new MatchPhraseQueryBuilder("search_keyword", searchString).slop(3));
+      boolQuery.should(
+          QueryBuilders.matchQuery(Article.Fields.ARTICLE_FINGERPRINT, searchString).boost(10.0f));
     }
 
     HighlightBuilder highlightBuilder =
-        RisHighlightBuilder.baseHighlighter().field("name").field("text");
+        RisHighlightBuilder.baseHighlighter().field(Article.Fields.NAME).field(Article.Fields.TEXT);
 
     InnerHitBuilder innerHitBuilder =
         new InnerHitBuilder()
@@ -99,7 +96,7 @@ public class ArticleService {
             .setHighlightBuilder(highlightBuilder);
 
     CollapseBuilder collapseBuilder =
-        new CollapseBuilder("expression_eli").setInnerHits(innerHitBuilder);
+        new CollapseBuilder(Article.Fields.EXPRESSION_ELI).setInnerHits(innerHitBuilder);
 
     NativeSearchQuery articleQuery =
         new NativeSearchQueryBuilder()
@@ -152,6 +149,6 @@ public class ArticleService {
   }
 
   private boolean articleExist(String expressionEli, String eid) {
-    return articlesRepository.existsById(expressionEli + "/" + eid);
+    return articlesRepository.existsById(Article.buildId(expressionEli, eid));
   }
 }

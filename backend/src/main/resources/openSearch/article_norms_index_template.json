@@ -49,9 +49,9 @@
         "expiry_date": {
           "type": "date"
         },
-        "search_keyword": {
+        "article_fingerprint": {
           "type": "text",
-          "analyzer": "custom_german_analyzer"
+          "analyzer": "custom_german_fingerprint_analyzer"
         },
         "indexed_at": {
           "type": "date"
