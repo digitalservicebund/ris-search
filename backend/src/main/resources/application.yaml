@@ -10,6 +10,7 @@ spring:
 server:
   port: 8080
   front-end-url: ""
+  back-end-url: ""
   docs-url: ""
   cms-url: ""
   api-keys: []

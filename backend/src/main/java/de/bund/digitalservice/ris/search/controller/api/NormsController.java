@@ -3,6 +3,7 @@ package de.bund.digitalservice.ris.search.controller.api;
 import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
 
 import de.bund.digitalservice.ris.search.config.ApiConfig;
+import de.bund.digitalservice.ris.search.config.ServerConfig;
 import de.bund.digitalservice.ris.search.exception.CustomValidationException;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.mapper.ChangelogResponseMapper;
@@ -86,6 +87,8 @@ public class NormsController {
   private final NormXsltTransformerService xsltTransformerService;
   private final ChangelogService<NormsBucket> changelogService;
 
+  private final String jsonldContextPath;
+
   /**
    * Constructor for the NormsController class.
    *
@@ -97,11 +100,13 @@ public class NormsController {
       NormsService normsService,
       ArticleService articleService,
       NormXsltTransformerService xsltTransformerService,
-      ChangelogService<NormsBucket> changelogService) {
+      ChangelogService<NormsBucket> changelogService,
+      ServerConfig serverConfig) {
     this.normsService = normsService;
     this.articleService = articleService;
     this.xsltTransformerService = xsltTransformerService;
     this.changelogService = changelogService;
+    this.jsonldContextPath = serverConfig.getBackEndUrl() + ApiConfig.Paths.JSONLD_CONTEXT;
   }
 
   /**
@@ -167,7 +172,8 @@ public class NormsController {
       SearchPage<Norm> resultPage =
           normsService.simpleSearchNorms(
               universalSearchParams, normsSearchParams, sortedPageRequest);
-      return NormSearchResponseMapper.fromDomain(resultPage, ApiConfig.Paths.LEGISLATION);
+      return NormSearchResponseMapper.fromDomain(
+          resultPage, ApiConfig.Paths.LEGISLATION, jsonldContextPath);
     } catch (UncategorizedElasticsearchException e) {
       LuceneQueryTools.checkForInvalidQuery(e);
       throw e;
@@ -217,7 +223,7 @@ public class NormsController {
     Optional<Norm> result = normsService.getByExpressionEli(eli);
 
     return result
-        .map(r -> ResponseEntity.ok(NormSchemaMapper.fromDomain(r)))
+        .map(r -> ResponseEntity.ok(NormSchemaMapper.fromDomain(r, jsonldContextPath)))
         .orElse(ResponseEntity.notFound().build());
   }
 
@@ -260,7 +266,7 @@ public class NormsController {
             eli, PageRequest.of(pagination.getPageIndex(), pagination.getSize()));
 
     return NormSearchResponseMapper.fromNormsPage(
-        expressions, ApiConfig.Paths.LEGISLATION_WORK_EXAMPLE);
+        expressions, ApiConfig.Paths.LEGISLATION_WORK_EXAMPLE, jsonldContextPath);
   }
 
   /**

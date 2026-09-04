@@ -32,10 +32,11 @@ public class NormSchemaMapper {
    *
    * @param norm the {@link Norm} instance to be converted; it contains all necessary fields such as
    *     ELI references, metadata, and publication information.
+   * @param remoteJsonContext remoteJsonContext url to retrieve jsonld context
    * @return a {@link LegislationExpressionSchema} object representing the input {@link Norm} with
    *     its associated legal force, temporal coverage, and publication details.
    */
-  public static LegislationExpressionSchema fromDomain(Norm norm) {
+  public static LegislationExpressionSchema fromDomain(Norm norm, String remoteJsonContext) {
     String expressionEli = norm.getExpressionEli();
     String manifestationEliXml = norm.getManifestationEliExample();
 
@@ -56,6 +57,7 @@ public class NormSchemaMapper {
 
     return LegislationExpressionSchema.builder()
         .id(CONTENT_BASE_URL + norm.getExpressionEli())
+        .context(remoteJsonContext)
         .abbreviation(norm.getOfficialAbbreviation())
         .risAbbreviation(norm.getRisAbbreviation())
         .alternateName(norm.getOfficialShortTitle())

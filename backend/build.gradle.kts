@@ -114,6 +114,8 @@ dependencies {
     testImplementation(libs.testcontainers.postgresql)
     testImplementation(libs.restassured)
     testImplementation(libs.ris.xml.schema)
+    testImplementation(libs.apicatalog.titanium.json)
+    testImplementation(libs.glassfish.jakarta.json)
 }
 
 dependencyLocking {

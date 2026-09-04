@@ -1616,6 +1616,25 @@
         }
       }
     },
+    "/v1/context.jsonld" : {
+      "get" : {
+        "tags" : [ "json-ld-context-controller" ],
+        "operationId" : "getContext",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/ld+json" : {
+                "schema" : {
+                  "type" : "string",
+                  "format" : "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/case-law" : {
       "get" : {
         "tags" : [ "Case Law" ],
@@ -2775,6 +2794,9 @@
             "type" : "string",
             "example" : "hydra:Collection"
           },
+          "@context" : {
+            "type" : "string"
+          },
           "@id" : {
             "type" : "string",
             "example" : "/v1/document?pageIndex=0&size=5"
@@ -2794,7 +2816,7 @@
             "$ref" : "#/components/schemas/PartialCollectionViewSchema"
           }
         },
-        "required" : [ "@id", "member", "totalItems", "view" ]
+        "required" : [ "@context", "@id", "member", "totalItems", "view" ]
       },
       "LiteratureSearchSchema" : {
         "allOf" : [ {
@@ -3226,6 +3248,9 @@
             "type" : "string",
             "example" : "hydra:Collection"
           },
+          "@context" : {
+            "type" : "string"
+          },
           "@id" : {
             "type" : "string",
             "example" : "/v1/document?pageIndex=0&size=5"
@@ -3245,7 +3270,7 @@
             "$ref" : "#/components/schemas/PartialCollectionViewSchema"
           }
         },
-        "required" : [ "@id", "member", "totalItems", "view" ]
+        "required" : [ "@context", "@id", "member", "totalItems", "view" ]
       },
       "LegislationExpressionSearchSchema" : {
         "allOf" : [ {
@@ -3453,6 +3478,9 @@
             "type" : "string",
             "example" : "Legislation"
           },
+          "@context" : {
+            "type" : "string"
+          },
           "@id" : {
             "type" : "string",
             "example" : "/v1/legislation/eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu"
@@ -3509,7 +3537,7 @@
             }
           }
         },
-        "required" : [ "@id", "encoding", "exampleOfWork", "hasPart", "legislationIdentifier", "legislationLegalForce", "name", "risAbbreviation", "temporalCoverage" ]
+        "required" : [ "@context", "@id", "encoding", "exampleOfWork", "hasPart", "legislationIdentifier", "legislationLegalForce", "name", "risAbbreviation", "temporalCoverage" ]
       },
       "AbstractDocumentSchema" : {
         "discriminator" : {
@@ -3693,6 +3721,9 @@
             "type" : "string",
             "example" : "hydra:Collection"
           },
+          "@context" : {
+            "type" : "string"
+          },
           "@id" : {
             "type" : "string",
             "example" : "/v1/document?pageIndex=0&size=5"
@@ -3712,7 +3743,7 @@
             "$ref" : "#/components/schemas/PartialCollectionViewSchema"
           }
         },
-        "required" : [ "@id", "member", "totalItems", "view" ]
+        "required" : [ "@context", "@id", "member", "totalItems", "view" ]
       },
       "SearchMemberSchemaAbstractDocumentSchema" : {
         "type" : "object",
@@ -3748,6 +3779,9 @@
             "type" : "string",
             "example" : "hydra:Collection"
           },
+          "@context" : {
+            "type" : "string"
+          },
           "@id" : {
             "type" : "string",
             "example" : "/v1/document?pageIndex=0&size=5"
@@ -3767,7 +3801,7 @@
             "$ref" : "#/components/schemas/PartialCollectionViewSchema"
           }
         },
-        "required" : [ "@id", "member", "totalItems", "view" ]
+        "required" : [ "@context", "@id", "member", "totalItems", "view" ]
       },
       "SearchMemberSchemaCaseLawSearchSchema" : {
         "type" : "object",
@@ -3795,6 +3829,9 @@
             "type" : "string",
             "example" : "hydra:Collection"
           },
+          "@context" : {
+            "type" : "string"
+          },
           "@id" : {
             "type" : "string",
             "example" : "/v1/document?pageIndex=0&size=5"
@@ -3814,7 +3851,7 @@
             "$ref" : "#/components/schemas/PartialCollectionViewSchema"
           }
         },
-        "required" : [ "@id", "member", "totalItems", "view" ]
+        "required" : [ "@context", "@id", "member", "totalItems", "view" ]
       },
       "SearchMemberSchemaAdministrativeDirectiveSearchSchema" : {
         "type" : "object",

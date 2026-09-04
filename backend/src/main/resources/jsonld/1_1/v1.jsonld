@@ -1,0 +1,66 @@
+{
+  "@context": {
+      "@version": 1.1,
+      "schema": "https://schema.org/",
+      "hydra": "http://www.w3.org/ns/hydra/core#",
+      "ris": "https://rechtsinformationen.bund.de/vocab#",
+      "totalItems": "hydra:totalItems",
+      "member": "hydra:member",
+      "view": "hydra:view",
+      "first": {
+        "@id": "hydra:first",
+        "@type": "@id"
+      },
+      "previous": {
+        "@id": "hydra:previous",
+        "@type": "@id"
+      },
+      "next": {
+        "@id": "hydra:next",
+        "@type": "@id"
+      },
+      "last": {
+        "@id": "hydra:last",
+        "@type": "@id"
+      },
+      "encoding": "schema:encoding",
+      "contentUrl": "schema:contentUrl",
+      "encodingFormat": "schema:encodingFormat",
+      "inLanguage": "schema:inLanguage",
+      "name": "schema:name",
+      "LegislationObject": "schema:LegislationObject",
+      "PublicationIssue": "schema:PublicationIssue",
+      "Legislation": {
+        "@id": "schema:Legislation",
+        "@context": {
+          "eId": "ris:eId",
+          "abbreviation": "schema:alternateName",
+          "risAbbreviation": "schema:alternateName",
+          "alternateName": "schema:alternateName",
+          "exampleOfWork": "schema:exampleOfWork",
+          "legislationIdentifier": "schema:legislationIdentifier",
+          "legislationLegalForce": "schema:legislationLegalForce",
+          "legislationDate": "schema:legislationDate",
+          "datePublished": "schema:datePublished",
+          "isPartOf": "schema:isPartOf",
+          "temporalCoverage": "schema:temporalCoverage",
+          "hasPart": "schema:hasPart",
+          "headline": "schema:headline"
+        }
+      },
+      "SearchResult": {
+        "@id": "ris:SearchResult",
+        "@context": {
+          "item": "ris:item",
+          "textMatches": "ris:SearchResultMatch"
+        }
+      },
+      "SearchResultMatch": {
+        "@id": "ris:SearchResultMatch",
+        "@context": {
+          "location": "ris:matchLocation",
+          "text": "schema:text"
+        }
+      }
+   }
+}
