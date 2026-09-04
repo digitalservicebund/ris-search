@@ -17,12 +17,16 @@ import org.apache.commons.lang3.Strings;
 public class CaseLawTestData {
   static List<String> keywords = List.of("keywordsTest");
 
-  public static String matchAllTerm = "Recht";
+  public static String matchMultipleTerm = "Recht";
 
   public static CaseLawDocumentationUnit highlightExample =
       CaseLawDocumentationUnit.builder()
+          // fields just to make other tests pass
           .id("BFRE000157360")
           .documentNumber("BFRE000157360")
+          .decisionDate(LocalDate.of(1901, 1, 1))
+          .courtKeyword("FG Berlin")
+          // highlightable fields
           .caseFacts("highlight_caseFacts")
           .decisionGrounds("highlight_decisionGrounds")
           .decisionName(List.of("highlight_decisionName"))
@@ -70,7 +74,7 @@ public class CaseLawTestData {
             .headline("Test mit 1.000 € im Titel")
             .titleLine("Test mit 1.000 € im Titel")
             .otherHeadnote("Sonstiger Orientierungssatz")
-            .otherLongText(matchAllTerm)
+            .otherLongText(matchMultipleTerm)
             .caseFacts("Tatbestand")
             .outline("outlineTest")
             .judicialBody("judicialbodyTest")
@@ -143,7 +147,7 @@ public class CaseLawTestData {
                 "Leitsatz mit ein paar Wörtern und Ergänzungen. Auch ECLI:DE:FGHH:1972:0630.III10.72.1 drinnen.")
             .fileNumbers(List.of("IX ZR 100/20"))
             .abweichendeAktenzeichen(List.of("abweichende_aktenzeichen"))
-            .otherLongText("Sonstiger Langtext " + matchAllTerm)
+            .otherLongText("Sonstiger Langtext " + matchMultipleTerm)
             .otherHeadnote("Sonstiger Orientierungssatz")
             .caseFacts("Tatbestand nach § 4 TBestG")
             .legalEffect("JA")
@@ -164,7 +168,7 @@ public class CaseLawTestData {
             .decisionDate(SharedTestConstants.DATE_2024_01_01)
             .grounds("Folgende Gründe gibt es.")
             .guidingPrinciple("Leitsatz")
-            .otherLongText(matchAllTerm)
+            .otherLongText(matchMultipleTerm)
             .tenor("Tenor")
             .headline("Titelzeile")
             .titleLine("Titelzeile")
@@ -184,7 +188,7 @@ public class CaseLawTestData {
             .decisionDate(LocalDate.of(2025, Month.JANUARY, 1))
             .grounds("Beschlussgründe")
             .guidingPrinciple("Leitsatz file_number_7")
-            .otherLongText(matchAllTerm)
+            .otherLongText(matchMultipleTerm)
             .tenor("Tenor")
             .headline("Headline Beschluss")
             .build());
@@ -203,7 +207,7 @@ public class CaseLawTestData {
             .decisionDate(LocalDate.of(2026, Month.JANUARY, 1))
             .grounds("Beschlussgründe")
             .guidingPrinciple("Leitsatz")
-            .otherLongText(matchAllTerm)
+            .otherLongText(matchMultipleTerm)
             .tenor("Tenor")
             .headline("Headline decision one")
             .build());
@@ -221,7 +225,7 @@ public class CaseLawTestData {
             .decisionDate(LocalDate.of(2025, Month.FEBRUARY, 2))
             .grounds("Beschlussgründe")
             .guidingPrinciple("Leitsatz")
-            .otherLongText(matchAllTerm)
+            .otherLongText(matchMultipleTerm)
             .tenor("Tenor")
             .headline("Headline EuGH-Vorlage")
             .build());

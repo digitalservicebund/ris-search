@@ -61,6 +61,7 @@ import org.testcontainers.utility.TestcontainersConfiguration;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class ContainersIntegrationBase {
 
+  @Autowired protected AdministrativeDirectiveRepository administrativeDirectiveRepository;
   @Autowired protected CaseLawRepository caseLawRepository;
   @Autowired protected LiteratureRepository literatureRepository;
   @Autowired protected NormsRepository normsRepository;
@@ -68,7 +69,6 @@ public class ContainersIntegrationBase {
   @Autowired protected CaseLawBucket caseLawBucket;
   @Autowired protected NormsBucket normsBucket;
   @Autowired protected PublicFilesBucket publicFilesBucket;
-  @Autowired protected AdministrativeDirectiveRepository administrativeDirectiveRepository;
   @Autowired protected AllDocumentsService allDocumentsService;
   @Autowired protected CaseLawService caseLawService;
   @Autowired protected NormsService normsService;
@@ -293,5 +293,12 @@ public class ContainersIntegrationBase {
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
+  }
+
+  protected long allDocCount() {
+    return administrativeDirectiveRepository.count()
+        + caseLawRepository.count()
+        + literatureRepository.count()
+        + normsRepository.count();
   }
 }
