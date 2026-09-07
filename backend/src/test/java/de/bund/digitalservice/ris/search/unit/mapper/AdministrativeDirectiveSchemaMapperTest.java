@@ -35,6 +35,7 @@ class AdministrativeDirectiveSchemaMapperTest {
 
     AdministrativeDirectiveSchema expected =
         AdministrativeDirectiveSchema.builder()
+            .context("jsonLdContext")
             .id("/v1/administrative-directive/KN0000")
             .documentNumber("KN0000")
             .documentType("VV")
@@ -53,6 +54,7 @@ class AdministrativeDirectiveSchemaMapperTest {
                     "/v1/administrative-directive/KN0000"))
             .build();
 
-    assertThat(expected).isEqualTo(AdministrativeDirectiveSchemaMapper.fromDomain(entity));
+    assertThat(expected)
+        .isEqualTo(AdministrativeDirectiveSchemaMapper.fromDomain(entity, "jsonLdContext"));
   }
 }

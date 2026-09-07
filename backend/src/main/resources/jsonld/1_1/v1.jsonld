@@ -113,6 +113,23 @@
           "literatureType": "ris:literatureType"
         }
       },
+      "AdministrativeDirective": {
+        "@id": "ris:AdministrativeDirective",
+        "@context": {
+          "headline": "schema:headline",
+          "shortReport": "schema:abstract",
+          "documentType": "ris:documentType",
+          "documentTypeDetail": "ris:documentTypeDetail",
+          "referenceNumbers": "ris:fileNumber",
+          "entryIntoForceDate": "schema:validFrom",
+          "expiryDate": "schema:validThrough",
+          "legislationAuthority": "schema:legislationPassedBy",
+          "references": "ris:reference",
+          "citationDates": "ris:citationDate",
+          "normReferences": "ris:normReference",
+          "outline": "ris:outline"
+        }
+      },
       "SearchResult": {
         "@id": "ris:SearchResult",
         "@context": {

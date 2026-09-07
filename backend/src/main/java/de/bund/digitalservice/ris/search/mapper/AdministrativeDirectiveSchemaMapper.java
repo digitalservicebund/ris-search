@@ -24,15 +24,18 @@ public class AdministrativeDirectiveSchemaMapper {
    *
    * @param entity the {@code AdministrativeDirective} entity containing metadata about an
    *     administrative directive
+   * @param remoteJsonContext remoteJsonContext url to retrieve jsonld context
    * @return an {@code AdministrativeDirectiveSchema} object representing the input entity in a
    *     JSON-LD compatible format
    */
-  public static AdministrativeDirectiveSchema fromDomain(AdministrativeDirective entity) {
+  public static AdministrativeDirectiveSchema fromDomain(
+      AdministrativeDirective entity, String remoteJsonContext) {
     var entityURI = ApiConfig.Paths.ADMINISTRATIVE_DIRECTIVE + "/" + entity.documentNumber();
     var encodings = EncodingSchemaFactory.documentEncodingSchemas(entityURI);
 
     return AdministrativeDirectiveSchema.builder()
         .id(entityURI)
+        .context(remoteJsonContext)
         .documentNumber(entity.documentNumber())
         .documentType(entity.documentType())
         .headline(entity.headline())

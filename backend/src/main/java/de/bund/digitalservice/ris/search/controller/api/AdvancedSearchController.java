@@ -267,7 +267,7 @@ public class AdvancedSearchController {
           advancedSearchService.searchAdministrativeDirective(query, sortedPageable);
       return ResponseEntity.ok()
           .contentType(MediaType.APPLICATION_JSON)
-          .body(AdministrativeDirectiveSearchSchemaMapper.fromSearchPage(page));
+          .body(AdministrativeDirectiveSearchSchemaMapper.fromSearchPage(page, jsonldContextPath));
     } catch (UncategorizedElasticsearchException e) {
       LuceneQueryTools.checkForInvalidQuery(e);
       throw e;
