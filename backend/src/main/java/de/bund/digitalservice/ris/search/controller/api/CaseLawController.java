@@ -4,6 +4,7 @@ import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
 
 import de.bund.digitalservice.ris.html.service.xslt.CaselawXsltTransformer;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
+import de.bund.digitalservice.ris.search.config.ServerConfig;
 import de.bund.digitalservice.ris.search.exception.FileNotFoundException;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.mapper.CaseLawSchemaMapper;
@@ -63,21 +64,26 @@ public class CaseLawController {
   private final CaseLawService caseLawService;
   private final CaselawXsltTransformer caselawXsltTransformer;
   private final ChangelogService<CaseLawBucket> changelogService;
+  private final ServerConfig serverConfig;
 
   /**
    * Constructor for the CaseLawController class.
    *
    * @param caseLawService the service layer responsible for case law operations
    * @param caselawXsltTransformer the case law xslt transformer
+   * @param changelogService service to retrieve and aggregate changelogs
+   * @param serverConfig serverconfig of the application
    */
   @Autowired
   public CaseLawController(
       CaseLawService caseLawService,
       CaselawXsltTransformer caselawXsltTransformer,
-      ChangelogService<CaseLawBucket> changelogService) {
+      ChangelogService<CaseLawBucket> changelogService,
+      ServerConfig serverConfig) {
     this.caseLawService = caseLawService;
     this.caselawXsltTransformer = caselawXsltTransformer;
     this.changelogService = changelogService;
+    this.serverConfig = serverConfig;
   }
 
   /**
@@ -106,7 +112,9 @@ public class CaseLawController {
     CaseLawDocumentationUnit unit = result.getFirst();
     return ResponseEntity.ok()
         .contentType(MediaType.APPLICATION_JSON)
-        .body(CaseLawSchemaMapper.fromDomain(unit));
+        .body(
+            CaseLawSchemaMapper.fromDomain(
+                unit, serverConfig.getBackEndUrl() + ApiConfig.Paths.JSONLD_CONTEXT));
   }
 
   /**

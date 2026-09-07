@@ -3,7 +3,7 @@ import type {
   SearchResultHeaderItem,
   TextHeaderItem,
 } from "~/components/search/SearchResultHeader.vue";
-import type { CaseLaw, SearchResult } from "~/types/api";
+import type { CaseLawSearchSchema, SearchResult } from "~/types/api";
 import type { SearchResultHeadingLevel } from "~/utils/search/searchResults";
 import {
   getMatch,
@@ -17,7 +17,7 @@ const {
   order,
   headingLevel = "2",
 } = defineProps<{
-  searchResult: SearchResult<CaseLaw>;
+  searchResult: SearchResult<CaseLawSearchSchema>;
   order: number;
 
   /** Heading level of the result title. */
@@ -103,7 +103,7 @@ const headerItems = computed(() => {
   };
 });
 
-function getFileNumbers(item: CaseLaw) {
+function getFileNumbers(item: CaseLawSearchSchema) {
   const matches = getMatches("fileNumbers", searchResult.textMatches);
 
   if (matches.length) {

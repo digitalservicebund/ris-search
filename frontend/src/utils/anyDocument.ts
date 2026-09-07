@@ -1,7 +1,7 @@
 import type {
   AdministrativeDirective,
   AnyDocument,
-  CaseLaw,
+  CaseLawSearchSchema,
   DocumentEncodingSchema,
   LegislationExpression,
   Literature,
@@ -13,7 +13,9 @@ import type {
  * @param candidate Document to check
  * @returns True if the document is a caselaw document.
  */
-export function isCaselaw(candidate: AnyDocument): candidate is CaseLaw {
+export function isCaselaw(
+  candidate: AnyDocument,
+): candidate is CaseLawSearchSchema {
   return candidate["@type"] === "Decision";
 }
 

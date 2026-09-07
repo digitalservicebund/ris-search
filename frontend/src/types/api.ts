@@ -26,6 +26,7 @@ export type Statistics = components["schemas"]["StatisticsApiSchema"];
 
 // Case law
 export type CaseLaw = components["schemas"]["CaseLawSchema"];
+export type CaseLawSearchSchema = components["schemas"]["CaseLawSearchSchema"];
 
 // Legislation
 export type LegislationWork = components["schemas"]["LegislationWorkSchema"];
@@ -67,7 +68,7 @@ export type CourtsSearchParams = QueryParams<"getCourts">;
 
 // Frontend-only types
 export type AnyDocument =
-  | CaseLaw
+  | CaseLawSearchSchema
   | LegislationExpression
   | Literature
   | AdministrativeDirective;

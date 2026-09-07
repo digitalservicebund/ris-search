@@ -22,16 +22,18 @@ public class CaseLawSchemaMapper {
    * {@link CaseLawSchema}.
    *
    * @param doc the domain model representing a case law documentation unit to be transformed
+   * @param remoteJsonContext remoteJsonContext url to retrieve jsonld context
    * @return a {@link CaseLawSchema} object representing the specified domain model in the desired
    *     schema
    */
-  public static CaseLawSchema fromDomain(CaseLawDocumentationUnit doc) {
+  public static CaseLawSchema fromDomain(CaseLawDocumentationUnit doc, String remoteJsonContext) {
     String entityURI = ApiConfig.Paths.CASELAW + "/" + doc.documentNumber();
     var encodings = EncodingSchemaFactory.documentEncodingSchemas(entityURI);
 
     return CaseLawSchema.builder()
         // JSON-LD-specific fields
         .id(entityURI)
+        .context(remoteJsonContext)
         .inLanguage("de")
         // links to other resource representations
         .encoding(encodings)

@@ -9,6 +9,7 @@ import lombok.Builder;
 /** A DTO for court decisions in a specific encoding, following schema.org naming guidelines. */
 @Builder
 public record CaseLawSchema(
+    @JsonProperty("@context") @Schema(requiredMode = Schema.RequiredMode.REQUIRED) String context,
     @Schema(example = "KARE000000000", requiredMode = Schema.RequiredMode.REQUIRED)
         String documentNumber,
     @Schema(

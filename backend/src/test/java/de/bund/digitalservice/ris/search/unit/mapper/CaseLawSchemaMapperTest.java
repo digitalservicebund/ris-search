@@ -96,7 +96,8 @@ class CaseLawSchemaMapperTest {
   @Test
   @DisplayName("Correctly maps scalar CaseLawSchema attributes")
   void fromDomainSingleCaseLawSchemaScalarAttributes() {
-    CaseLawSchema caseLawSchema = CaseLawSchemaMapper.fromDomain(buildDocumentationUnit());
+    CaseLawSchema caseLawSchema =
+        CaseLawSchemaMapper.fromDomain(buildDocumentationUnit(), "jsonLdContext");
 
     assertThat(caseLawSchema.id()).isEqualTo("/v1/case-law/BFRE000087655");
     assertThat(caseLawSchema.documentNumber()).isEqualTo("BFRE000087655");
@@ -120,12 +121,14 @@ class CaseLawSchemaMapperTest {
     assertThat(caseLawSchema.guidingPrinciple()).isEqualTo("guidingPrinciple");
     assertThat(caseLawSchema.tenor()).isEqualTo("tenor");
     assertThat(caseLawSchema.inLanguage()).isEqualTo("de");
+    assertThat(caseLawSchema.context()).isEqualTo("jsonLdContext");
   }
 
   @Test
   @DisplayName("Correctly maps collection CaseLawSchema attributes")
   void fromDomainSingleCaseLawSchemaCollectionAttributes() {
-    CaseLawSchema caseLawSchema = CaseLawSchemaMapper.fromDomain(buildDocumentationUnit());
+    CaseLawSchema caseLawSchema =
+        CaseLawSchemaMapper.fromDomain(buildDocumentationUnit(), "jsonLdContext");
 
     assertThat(caseLawSchema.fileNumbers()).containsExactly("FileNumberTest");
     assertThat(caseLawSchema.keywords()).containsExactly("one", "two");
@@ -269,7 +272,8 @@ class CaseLawSchemaMapperTest {
     var documentationUnit =
         CaseLawDocumentationUnit.builder().documentNumber("BFRE000087655").build();
 
-    CaseLawSchema caseLawSchema = CaseLawSchemaMapper.fromDomain(documentationUnit);
+    CaseLawSchema caseLawSchema =
+        CaseLawSchemaMapper.fromDomain(documentationUnit, "jsonLdContext");
 
     assertThat(caseLawSchema.encoding())
         .containsExactly(
