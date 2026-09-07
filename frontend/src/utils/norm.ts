@@ -93,12 +93,8 @@ export function getEinzelnormEIdFromHref(href: string): string | null {
   return match?.[1] ?? null;
 }
 
-export function getNormBreadcrumbTitle(norm: LegislationExpression): string {
-  return norm.abbreviation || norm.alternateName || norm.name || "";
-}
-
 export function getNormTitle(norm: LegislationExpression): string {
-  return norm.name || norm.alternateName || norm.abbreviation || "";
+  return norm.name || norm.alternateName || norm.abbreviation;
 }
 
 export function getMostRelevantExpression(
@@ -136,19 +132,21 @@ export function getMostRelevantExpression(
   throw new Error("Could not identify the most relevant expression");
 }
 
-export function getNormMetadataItems(
-  norm?: Partial<LegislationExpression>,
-): MetadataItem[] {
-  const validityInterval = temporalCoverageToValidityInterval(
-    norm?.temporalCoverage,
-  );
+export function getNormMetadataItems({
+  abbreviation,
+  temporalCoverage,
+}: {
+  abbreviation: string;
+  temporalCoverage: string;
+}): MetadataItem[] {
+  const validityInterval = temporalCoverageToValidityInterval(temporalCoverage);
 
-  const validityStatus = formatNormValidity(norm?.temporalCoverage);
+  const validityStatus = formatNormValidity(temporalCoverage);
   return [
     {
       type: "text",
       label: "Abkürzung",
-      value: norm?.abbreviation,
+      value: abbreviation,
     },
     {
       type: "badge",

@@ -184,7 +184,10 @@ describe("getMostRelevantExpression", () => {
 
 describe("getNormMetadataItems", () => {
   it("creates correct labels", () => {
-    const result = getNormMetadataItems();
+    const result = getNormMetadataItems({
+      abbreviation: "",
+      temporalCoverage: "",
+    });
 
     expect(result.map((item) => item.label)).toEqual([
       "Abkürzung",
@@ -194,27 +197,12 @@ describe("getNormMetadataItems", () => {
     ]);
   });
 
-  it("converts empty properties to undefined values", () => {
+  it("converts invalid temporalCoverage to undefined/empty values", () => {
     const result = getNormMetadataItems({
-      abbreviation: undefined,
-      legislationIdentifier: "",
-      "@type": "Legislation",
-      "@id": "",
+      abbreviation: "",
       temporalCoverage: "",
-      legislationLegalForce: "NotInForce",
-      encoding: [
-        {
-          "@type": "LegislationObject",
-          "@id": "",
-          contentUrl: "",
-          encodingFormat: "",
-          inLanguage: "",
-        },
-      ],
-      hasPart: [],
     });
 
-    expect(result[0]).toMatchObject({ type: "text", value: undefined });
     expect(result[1]).toMatchObject({ type: "badge", values: [] });
     expect(result[2]).toMatchObject({ type: "text", value: undefined });
     expect(result[3]).toMatchObject({ type: "text", value: undefined });
@@ -223,21 +211,7 @@ describe("getNormMetadataItems", () => {
   it("converts properties to correct values", () => {
     const result = getNormMetadataItems({
       abbreviation: "ABC",
-      legislationIdentifier: "",
-      "@type": "Legislation",
-      "@id": "",
       temporalCoverage: "2025-05-06/2037-03-31",
-      legislationLegalForce: "NotInForce",
-      encoding: [
-        {
-          "@type": "LegislationObject",
-          "@id": "",
-          contentUrl: "",
-          encodingFormat: "",
-          inLanguage: "",
-        },
-      ],
-      hasPart: [],
     });
 
     expect(result[0]).toMatchObject({ type: "text", value: "ABC" });
@@ -254,21 +228,7 @@ describe("getNormMetadataItems", () => {
     (temporalCoverage, expectedLabel, expectedColor) => {
       const result = getNormMetadataItems({
         abbreviation: "ABC",
-        legislationIdentifier: "",
-        "@type": "Legislation",
-        "@id": "",
         temporalCoverage: temporalCoverage,
-        legislationLegalForce: "InForce", // not relevant for validity status calculation
-        encoding: [
-          {
-            "@type": "LegislationObject",
-            "@id": "",
-            contentUrl: "",
-            encodingFormat: "",
-            inLanguage: "",
-          },
-        ],
-        hasPart: [],
       });
 
       expect(result[1]).toMatchObject({

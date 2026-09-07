@@ -50,7 +50,7 @@ if (error.value || !data.value) {
 
 const norm = computed(() => data.value.legislation);
 
-const normTitle = computed(() => getNormBreadcrumbTitle(norm.value));
+const normAbbreviation = computed(() => norm.value.abbreviation);
 
 const articleHtml = computed(() => data.value.htmlBody);
 
@@ -93,7 +93,7 @@ const article: Ref<Article | undefined> = computed(() =>
 );
 
 useArticleSeo({
-  abbreviation: norm.value?.abbreviation,
+  abbreviation: normAbbreviation.value,
   article: article.value,
   articleHeadlineHtml: data.value.articleHeading,
   articleHtml: data.value.htmlBody,
@@ -155,7 +155,11 @@ const breadcrumbItems: Ref<BreadcrumbItem[]> = computed(() => {
     ? (findNodePath(tableOfContents.value, eId.value) ?? [])
     : [];
 
-  const title = truncateAtWord(normTitle.value, NORM_INFO_MAX_LENGTH, true);
+  const title = truncateAtWord(
+    normAbbreviation.value,
+    NORM_INFO_MAX_LENGTH,
+    true,
+  );
 
   const fromQuery = route.query.from
     ? { from: route.query.from as string }
@@ -169,7 +173,7 @@ const breadcrumbItems: Ref<BreadcrumbItem[]> = computed(() => {
     {
       label: title,
       route: { path: normExpressionPath, query: fromQuery },
-      extendedLabel: normTitle.value,
+      extendedLabel: normAbbreviation.value,
     },
   ];
 
@@ -245,7 +249,7 @@ const metadataItems = computed<MetadataItem[]>(() => {
       class="content-wrapper mb-24 space-y-24 sm:mb-32 sm:space-y-32 md:mb-40 md:space-y-40"
     >
       <p class="typo-headline3-regular mb-8">
-        {{ normTitle }}
+        {{ normAbbreviation }}
       </p>
       <h1
         class="typo-headline1-bold wrap-break-word hyphens-auto"
@@ -301,7 +305,7 @@ const metadataItems = computed<MetadataItem[]>(() => {
         <template #sidebar>
           <DocumentsTableOfContents
             v-if="tableOfContents.length"
-            :subheading="normTitle"
+            :subheading="normAbbreviation"
             :subheading-to="normExpressionRoute"
             :table-of-contents="tableOfContents"
             :selected-key="eId"
