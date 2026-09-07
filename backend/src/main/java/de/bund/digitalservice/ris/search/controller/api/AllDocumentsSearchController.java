@@ -63,6 +63,7 @@ public class AllDocumentsSearchController {
    */
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   @Operation(
+      operationId = "searchAllDocuments",
       summary = "Global search / list",
       description =
           """

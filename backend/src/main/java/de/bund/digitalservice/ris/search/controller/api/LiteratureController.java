@@ -192,6 +192,7 @@ public class LiteratureController {
    */
   @GetMapping(path = ApiConfig.Paths.LITERATURE, produces = MediaType.APPLICATION_JSON_VALUE)
   @Operation(
+      operationId = "searchLiterature",
       summary = "List and search literature",
       description =
           "The endpoint returns a list of literature from our database. The list is paginated and can be filtered and sorted.")

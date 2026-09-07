@@ -124,6 +124,7 @@ public class NormsController {
    */
   @GetMapping(value = ApiConfig.Paths.LEGISLATION, produces = MediaType.APPLICATION_JSON_VALUE)
   @Operation(
+      operationId = "searchAndFilterLegislation",
       summary = "List and search legislation",
       description =
           """

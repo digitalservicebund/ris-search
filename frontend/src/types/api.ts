@@ -65,10 +65,10 @@ type QueryParams<T extends keyof operations> = NonNullable<
   operations[T]["parameters"]["query"]
 >;
 
-export type DocumentSearchParams = QueryParams<"searchAndFilter_2">;
+export type DocumentSearchParams = QueryParams<"searchAllDocuments">;
 export type LuceneSearchParams = QueryParams<"search">;
-export type LegislationSearchParams = QueryParams<"searchAndFilter_1">;
-export type CourtsSearchParams = QueryParams<"getCourts">;
+export type LegislationSearchParams = QueryParams<"searchAndFilterLegislation">;
+export type CourtsSearchParams = QueryParams<"getCaseLawCourts">;
 
 // Frontend-only types
 export type AnyDocument =

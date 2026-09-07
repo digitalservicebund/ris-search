@@ -66,6 +66,7 @@ public class RechtsprechungSearchController {
    */
   @GetMapping(path = ApiConfig.Paths.RECHTSPRECHUNG, produces = MediaType.APPLICATION_JSON_VALUE)
   @Operation(
+      operationId = "searchRechtsprechung",
       summary = "List and search decisions",
       description =
           "The endpoint returns a list of decisions from our database. The list is paginated and can be filtered and sorted.")
@@ -109,6 +110,7 @@ public class RechtsprechungSearchController {
       path = ApiConfig.Paths.RECHTSPRECHUNG + "/courts",
       produces = MediaType.APPLICATION_JSON_VALUE)
   @Operation(
+      operationId = "getRechtsprechungCourts",
       summary = "List courts",
       description =
           "Lists courts with long and short name and number of associated decisions. The prefix parameter may be used to filter this list. Only includes courts whose decisions have been published in this database.")

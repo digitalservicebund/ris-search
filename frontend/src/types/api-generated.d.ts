@@ -31,7 +31,7 @@ export interface paths {
          * List and search decisions
          * @description The endpoint returns a list of decisions from our database. The list is paginated and can be filtered and sorted.
          */
-        get: operations["searchAndFilter"];
+        get: operations["searchRechtsprechung"];
         put?: never;
         post?: never;
         delete?: never;
@@ -151,7 +151,7 @@ export interface paths {
          * List courts
          * @description Lists courts with long and short name and number of associated decisions. The prefix parameter may be used to filter this list. Only includes courts whose decisions have been published in this database.
          */
-        get: operations["getCourts"];
+        get: operations["getRechtsprechungCourts"];
         put?: never;
         post?: never;
         delete?: never;
@@ -191,7 +191,7 @@ export interface paths {
          * List and search literature
          * @description The endpoint returns a list of literature from our database. The list is paginated and can be filtered and sorted.
          */
-        get: operations["searchAndFilter_1"];
+        get: operations["searchLiterature"];
         put?: never;
         post?: never;
         delete?: never;
@@ -335,7 +335,7 @@ export interface paths {
          *     GET /v1/legislation?eli=eli/bund/bgbl-1/1979/s1325
          *     ```
          */
-        get: operations["searchAndFilter_2"];
+        get: operations["searchAndFilterLegislation"];
         put?: never;
         post?: never;
         delete?: never;
@@ -508,7 +508,7 @@ export interface paths {
          *
          *     Default sorting is by relevance from most relevant to least relevant. Multiple factors are combined to boost the most relevant documents to the top of the result list. Additionally, sorting by date is possible by setting the sort query parameter to date.
          */
-        get: operations["searchAndFilter_3"];
+        get: operations["searchAllDocuments"];
         put?: never;
         post?: never;
         delete?: never;
@@ -629,7 +629,7 @@ export interface paths {
          * List and search decisions
          * @description The endpoint returns a list of decisions from our database. The list is paginated and can be filtered and sorted.
          */
-        get: operations["searchAndFilter_4"];
+        get: operations["searchCaseLaw"];
         put?: never;
         post?: never;
         delete?: never;
@@ -749,7 +749,7 @@ export interface paths {
          * List courts
          * @description Lists courts with long and short name and number of associated decisions. The prefix parameter may be used to filter this list. Only includes courts whose decisions have been published in this database.
          */
-        get: operations["getCourts_1"];
+        get: operations["getCaseLawCourts"];
         put?: never;
         post?: never;
         delete?: never;
@@ -805,7 +805,7 @@ export interface paths {
          * List and search administrative directives
          * @description The endpoint returns a list of administrative directives from our database. The list is paginated and can be filtered and sorted.
          */
-        get: operations["searchAndFilter_5"];
+        get: operations["searchAdministrativeDirective"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1922,7 +1922,7 @@ export interface operations {
             };
         };
     };
-    searchAndFilter: {
+    searchRechtsprechung: {
         parameters: {
             query?: {
                 fileNumber?: string;
@@ -2132,7 +2132,7 @@ export interface operations {
             };
         };
     };
-    getCourts: {
+    getRechtsprechungCourts: {
         parameters: {
             query?: {
                 prefix?: string;
@@ -2177,7 +2177,7 @@ export interface operations {
             };
         };
     };
-    searchAndFilter_1: {
+    searchLiterature: {
         parameters: {
             query?: {
                 documentNumber?: string;
@@ -2371,7 +2371,7 @@ export interface operations {
             };
         };
     };
-    searchAndFilter_2: {
+    searchAndFilterLegislation: {
         parameters: {
             query?: {
                 /** @description Search by European Legislation Identifier (ELI). Right now only searching by work ELI is supported, but a general eli prefix match might be supported in the future. */
@@ -2804,7 +2804,7 @@ export interface operations {
             };
         };
     };
-    searchAndFilter_3: {
+    searchAllDocuments: {
         parameters: {
             query?: {
                 /** @description Searches for the given tokens in searchTerm. If searchTerm contains more than one token, all tokens must be in the document for the document to match. */
@@ -3085,7 +3085,7 @@ export interface operations {
             };
         };
     };
-    searchAndFilter_4: {
+    searchCaseLaw: {
         parameters: {
             query?: {
                 fileNumber?: string;
@@ -3295,7 +3295,7 @@ export interface operations {
             };
         };
     };
-    getCourts_1: {
+    getCaseLawCourts: {
         parameters: {
             query?: {
                 prefix?: string;
@@ -3360,7 +3360,7 @@ export interface operations {
             };
         };
     };
-    searchAndFilter_5: {
+    searchAdministrativeDirective: {
         parameters: {
             query?: {
                 documentNumber?: string;
