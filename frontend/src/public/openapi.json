@@ -2849,12 +2849,6 @@
                 "type" : "string"
               }
             },
-            "firstPublicationDate" : {
-              "type" : "string",
-              "format" : "date",
-              "description" : "Erstes Veröffentlichungsdatum",
-              "example" : "2014-01-01"
-            },
             "documentTypes" : {
               "type" : "array",
               "description" : "Dokumenttypen",
@@ -2924,7 +2918,7 @@
             }
           }
         } ],
-        "required" : [ "@id", "authors", "collaborators", "dependentReferences", "documentNumber", "documentTypes", "encoding", "firstPublicationDate", "inLanguage", "independentReferences", "literatureType", "yearsOfPublication" ]
+        "required" : [ "@id", "authors", "collaborators", "dependentReferences", "documentNumber", "documentTypes", "encoding", "inLanguage", "independentReferences", "literatureType", "yearsOfPublication" ]
       },
       "PartialCollectionViewSchema" : {
         "type" : "object",
@@ -2991,6 +2985,9 @@
           "@type" : {
             "type" : "string",
             "example" : "Literature"
+          },
+          "@context" : {
+            "type" : "string"
           },
           "@id" : {
             "type" : "string",
@@ -3177,7 +3174,7 @@
             }
           }
         },
-        "required" : [ "@id", "authors", "collaborators", "conferenceNotes", "dependentReferences", "documentNumber", "documentTypes", "editors", "encoding", "founder", "inLanguage", "independentReferences", "internationalIdentifiers", "languages", "literatureType", "normReferences", "originators", "publisherOrganizations", "publishers", "publishingHouses", "universityNotes", "volumes", "yearsOfPublication" ]
+        "required" : [ "@context", "@id", "authors", "collaborators", "conferenceNotes", "dependentReferences", "documentNumber", "documentTypes", "editors", "encoding", "founder", "inLanguage", "independentReferences", "internationalIdentifiers", "languages", "literatureType", "normReferences", "originators", "publisherOrganizations", "publishers", "publishingHouses", "universityNotes", "volumes", "yearsOfPublication" ]
       },
       "StreamingResponseBody" : { },
       "ChangelogChangedDocument" : {

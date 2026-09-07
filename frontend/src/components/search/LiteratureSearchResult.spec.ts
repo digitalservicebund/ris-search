@@ -2,7 +2,11 @@ import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import { render, screen } from "@testing-library/vue";
 import { describe } from "vitest";
 import LiteratureSearchResult from "~/components/search/LiteratureSearchResult.vue";
-import type { Literature, SearchResult, TextMatch } from "~/types/api";
+import type {
+  LiteratureSearchSchema,
+  SearchResult,
+  TextMatch,
+} from "~/types/api";
 import type { SearchResultHeadingLevel } from "~/utils/search/searchResults";
 
 const { useRouteMock } = vi.hoisted(() => ({
@@ -13,7 +17,7 @@ const { useRouteMock } = vi.hoisted(() => ({
 
 mockNuxtImport("useRoute", () => useRouteMock);
 
-const searchResult: SearchResult<Literature> = {
+const searchResult: SearchResult<LiteratureSearchSchema> = {
   item: {
     "@id": "",
     "@type": "Literature",
@@ -23,15 +27,10 @@ const searchResult: SearchResult<Literature> = {
     documentTypes: ["Book", "Article"],
     dependentReferences: ["DEP-122", "DEP-121"],
     independentReferences: ["INDEP-124", "INDEP-125"],
-    normReferences: ["GG, Art 6 Abs 2 S 1, 1949-05-23"],
     headline: "Eine Untersuchung der juristischen Methoden im 21. Jahrhundert",
     alternativeHeadline: "Study of Legal Methodologies in the 21st Century",
-    headlineAdditions: "Zusatz zur Hauptüberschrift",
     authors: ["Mustermann, Max", "Musterfrau, Erika"],
     collaborators: ["Doe, John", "Doe, Jane"],
-    originators: ["FOO"],
-    conferenceNotes: ["Internationaler Kongress 2025, Berlin, GER"],
-    languages: ["deu", "eng"],
     shortReport: `Dieses Werk analysiert die Entwicklung der juristischen Methoden seit Beginn des 21. Jahrhunderts mit besonderem Fokus auf europäische Rechtssysteme.
 Es werden die Unterschiede zwischen nationalen Rechtstraditionen dargestellt und ihre Auswirkungen auf internationale Verträge erläutert.
 Darüber hinaus untersucht die Studie die Rolle von Präzedenzfällen in modernen Gerichtsbarkeiten und diskutiert aktuelle Trends in der Gesetzesauslegung.
@@ -39,16 +38,7 @@ Abschließend gibt das Werk Empfehlungen für die praktische Anwendung juristisc
     outline:
       "1. Einführung\n2. Historischer Überblick\n3. Aktuelle Entwicklungen\n4. Schlussfolgerungen",
     encoding: [],
-    universityNotes: [],
     literatureType: "uli",
-    editors: [],
-    founder: [],
-    publishers: [],
-    publisherOrganizations: [],
-    publishingHouses: [],
-    edition: undefined,
-    volumes: [],
-    internationalIdentifiers: [],
   },
   textMatches: [],
 };
@@ -57,10 +47,10 @@ function renderComponent({
   item = searchResult.item,
   textMatches = [],
   headingLevel,
-}: Partial<SearchResult<Literature>> & {
+}: Partial<SearchResult<LiteratureSearchSchema>> & {
   headingLevel?: SearchResultHeadingLevel;
 } = {}) {
-  const result: SearchResult<Literature> = {
+  const result: SearchResult<LiteratureSearchSchema> = {
     item,
     textMatches,
   };

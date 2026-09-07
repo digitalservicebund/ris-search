@@ -111,6 +111,7 @@ describe("anyDocument", () => {
   describe("isLiterature", () => {
     it("returns true if the document is a literature document", () => {
       const doc: Literature = {
+        "@context": "http://localhost:8080/v1/context.jsonld",
         "@id": "4711",
         "@type": "Literature",
         inLanguage: "",
@@ -278,6 +279,7 @@ describe("anyDocument", () => {
 
     it("identifies a literature document", () => {
       const doc: Literature = {
+        "@context": "http://backend/v1/context.jsonld",
         "@id": "",
         "@type": "Literature",
         inLanguage: "",
@@ -315,6 +317,7 @@ describe("anyDocument", () => {
 
     it("throws if the identifier is falsy", () => {
       const doc: Literature = {
+        "@context": "http://localhost:8080/v1/context.jsonld",
         "@id": "",
         "@type": "Literature",
         inLanguage: "",

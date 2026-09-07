@@ -45,6 +45,8 @@ export type Article = components["schemas"]["LegislationExpressionPartSchema"];
 
 // Literature
 export type Literature = components["schemas"]["LiteratureSchema"];
+export type LiteratureSearchSchema =
+  components["schemas"]["LiteratureSearchSchema"];
 
 // Administrative directives
 export type AdministrativeDirective =

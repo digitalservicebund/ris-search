@@ -4,7 +4,7 @@ import type {
   AnyDocument,
   CaseLawSearchSchema,
   LegislationExpression,
-  Literature,
+  LiteratureSearchSchema,
   SearchResult,
 } from "~/types/api";
 import type { SearchResultHeadingLevel } from "~/utils/search/searchResults";
@@ -33,7 +33,7 @@ const { headingLevel = "2" } = defineProps<{
 
   <SearchLiteratureSearchResult
     v-else-if="isLiterature(searchResult.item)"
-    :search-result="searchResult as SearchResult<Literature>"
+    :search-result="searchResult as SearchResult<LiteratureSearchSchema>"
     :order="order"
     :heading-level="headingLevel"
   />
