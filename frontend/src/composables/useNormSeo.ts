@@ -30,7 +30,7 @@ function buildTitle(
     ? `, ${getValidityStatusLabel(validityStatus)}`
     : "";
 
-  return `${norm.abbreviation || "Gesetz"}${validityIntervalPart}${validityStatusPart}`;
+  return `${norm.abbreviation}${validityIntervalPart}${validityStatusPart}`;
 }
 
 /**
@@ -67,10 +67,7 @@ function buildOgTitle(
   validFrom?: Dayjs,
   normValidityStatus?: ValidityStatus,
 ) {
-  const shortTitle = norm.alternateName?.trim();
-  const baseTitle = norm.abbreviation?.trim() || shortTitle;
-
-  if (!baseTitle) return undefined;
+  const baseTitle = norm.abbreviation.trim();
 
   const parts: string[] = [];
 

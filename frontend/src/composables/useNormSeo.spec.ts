@@ -43,14 +43,6 @@ describe("useNormSeo", () => {
       );
     });
 
-    it("uses 'Gesetz' as fallback if abbreviation is missing", () => {
-      useNormSeo({ norm: {} as LegislationExpression });
-
-      expect(useSeo).toHaveBeenCalledWith(
-        expect.objectContaining({ title: "Gesetz" }),
-      );
-    });
-
     it.each([
       [undefined, undefined, ""],
       [dayjs("01-01-2025"), undefined, ", vom 01.01.2025"],
@@ -98,7 +90,9 @@ describe("useNormSeo", () => {
 
   describe("norm description", () => {
     it("returns empty string if norm has no alternateName or name", () => {
-      useNormSeo({ norm: {} as LegislationExpression });
+      useNormSeo({
+        norm: { abbreviation: "FooBar" } as LegislationExpression,
+      });
 
       expect(useSeo).toHaveBeenCalledWith(
         expect.objectContaining({ description: "" }),
@@ -108,6 +102,7 @@ describe("useNormSeo", () => {
     it("uses alternateName as description", () => {
       useNormSeo({
         norm: {
+          abbreviation: "FooBar",
           name: "Gesetz über Foo und Bar",
           alternateName: "Foo Bar Gesetz",
         } as LegislationExpression,
@@ -120,7 +115,10 @@ describe("useNormSeo", () => {
 
     it("falls back to name if alternateName is absent", () => {
       useNormSeo({
-        norm: { name: "Gesetz über Foo und Bar" } as LegislationExpression,
+        norm: {
+          abbreviation: "FooBar",
+          name: "Gesetz über Foo und Bar",
+        } as LegislationExpression,
       });
 
       expect(useSeo).toHaveBeenCalledWith(
@@ -131,7 +129,10 @@ describe("useNormSeo", () => {
     it("truncates description at 150 characters", () => {
       const longTitle = "Ein sehr langes Gesetz ".repeat(7).trim(); // 154 chars
       useNormSeo({
-        norm: { alternateName: longTitle } as LegislationExpression,
+        norm: {
+          abbreviation: "FooBar",
+          alternateName: longTitle,
+        } as LegislationExpression,
       });
 
       expect(useSeo).toHaveBeenCalledWith(
@@ -144,16 +145,6 @@ describe("useNormSeo", () => {
   });
 
   describe("norm og:title", () => {
-    it("empty if norm has no abbreviation or alternateName", () => {
-      useNormSeo({
-        norm: {} as LegislationExpression,
-      });
-
-      expect(useSeo).toHaveBeenCalledWith(
-        expect.objectContaining({ ogTitle: undefined }),
-      );
-    });
-
     it("uses abbreviation as base title", () => {
       useNormSeo({
         norm: {
@@ -164,16 +155,6 @@ describe("useNormSeo", () => {
 
       expect(useSeo).toHaveBeenCalledWith(
         expect.objectContaining({ ogTitle: "FooBar" }),
-      );
-    });
-
-    it("falls back to alternateName if abbreviation is absent", () => {
-      useNormSeo({
-        norm: { alternateName: "Foo Bar Gesetz" } as LegislationExpression,
-      });
-
-      expect(useSeo).toHaveBeenCalledWith(
-        expect.objectContaining({ ogTitle: "Foo Bar Gesetz" }),
       );
     });
 

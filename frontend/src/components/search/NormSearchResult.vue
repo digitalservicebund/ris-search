@@ -51,9 +51,7 @@ const resultTypeId = useId();
 const headerItems = computed(() => {
   const items: SearchResultHeaderItem[] = [];
 
-  if (searchResult.item.abbreviation) {
-    items.push({ type: "text", value: searchResult.item.abbreviation });
-  }
+  items.push({ type: "text", value: searchResult.item.abbreviation });
 
   const validityStatus = formatNormValidity(searchResult.item.temporalCoverage);
 

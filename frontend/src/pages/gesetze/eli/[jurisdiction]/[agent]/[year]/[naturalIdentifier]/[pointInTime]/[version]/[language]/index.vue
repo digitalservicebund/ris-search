@@ -66,7 +66,6 @@ const abbreviation = data.value.legislation.abbreviation;
  * longer change once the page has loaded.
  */
 async function fetchTranslationUrl() {
-  if (!abbreviation) return "";
   const { translations } = await fetchTranslationListWithIdFilter(abbreviation);
   return translations.value?.length ? `/translations/${abbreviation}` : "";
 }
@@ -125,7 +124,7 @@ const detailItems = computed<DetailsListItem[]>(() => [
     type: "link",
     label: "Download:",
     url: zipUrl.value,
-    text: `${metadata.value.abbreviation ?? "Inhalte"} als ZIP herunterladen`,
+    text: `${metadata.value.abbreviation} als ZIP herunterladen`,
     dataAttr: "xml-zip-view",
   },
 ]);
@@ -167,9 +166,7 @@ useNormSeo({
   validityStatus: validityStatus.value,
 });
 
-const normBreadcrumbTitle = computed(() =>
-  getNormBreadcrumbTitle(metadata.value),
-);
+const normBreadcrumbTitle = computed(() => metadata.value.abbreviation);
 
 const searchBackLink = useSearchBackLink(DocumentKind.Norm);
 
@@ -194,7 +191,7 @@ const metadataItems = computed<MetadataItem[]>(() => {
     {
       type: "text",
       label: "Abkürzung",
-      value: abbreviation ?? "",
+      value: abbreviation,
     },
     {
       type: "text",
