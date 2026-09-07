@@ -2,7 +2,6 @@ package de.bund.digitalservice.ris.search.schema;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.time.LocalDate;
 import java.util.List;
 import lombok.Builder;
 
@@ -37,11 +36,6 @@ public record LiteratureSearchSchema(
             example = "[2014, 2024-09]",
             requiredMode = Schema.RequiredMode.REQUIRED)
         List<String> yearsOfPublication,
-    @Schema(
-            description = "Erstes Veröffentlichungsdatum",
-            example = "2014-01-01",
-            requiredMode = Schema.RequiredMode.REQUIRED)
-        LocalDate firstPublicationDate,
     @Schema(
             description = "Dokumenttypen",
             example = "['Auf']",

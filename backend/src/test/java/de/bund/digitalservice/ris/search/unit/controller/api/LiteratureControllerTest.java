@@ -8,26 +8,39 @@ import static org.mockito.Mockito.when;
 
 import de.bund.digitalservice.ris.html.service.xslt.LiteratureXsltTransformer;
 import de.bund.digitalservice.ris.html.service.xslt.SliLiteratureXsltTransformer;
+import de.bund.digitalservice.ris.search.config.ServerConfig;
 import de.bund.digitalservice.ris.search.controller.api.LiteratureController;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
+import de.bund.digitalservice.ris.search.service.ChangelogService;
 import de.bund.digitalservice.ris.search.service.LiteratureService;
 import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 class LiteratureControllerTest {
 
-  @InjectMocks LiteratureController controller;
+  LiteratureController controller;
 
   @Mock LiteratureService literatureService;
 
   @Mock LiteratureXsltTransformer uliTransformer;
 
   @Mock SliLiteratureXsltTransformer sliTransformer;
+
+  @Mock ChangelogService changelogService;
+
+  @BeforeEach
+  void setup() {
+    ServerConfig config = new ServerConfig();
+    config.setBackEndUrl("http://backendUrl");
+    controller =
+        new LiteratureController(
+            literatureService, uliTransformer, sliTransformer, changelogService, config);
+  }
 
   @Test
   void itCallsTheUliTransformer() throws ObjectStoreServiceException {

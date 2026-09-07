@@ -76,7 +76,7 @@ public class SortingTestArguments {
     List<String> literatureDates =
         new ArrayList<>(
             LiteratureTestData.allDocuments.stream()
-                .map(d -> d.firstPublicationDate().toString())
+                .map(d -> d.yearsOfPublication().getFirst())
                 .sorted()
                 .toList());
     List<String> administrativeDirectivesDates =
@@ -96,7 +96,7 @@ public class SortingTestArguments {
             "date",
             combinedSize,
             jsonPath("$.member[*].item.decisionDate", Matchers.is(caseLawDates)),
-            jsonPath("$.member[*].item.firstPublicationDate", Matchers.is(literatureDates)),
+            jsonPath("$.member[*].item.yearsOfPublication[0]", Matchers.is(literatureDates)),
             jsonPath("$.member[*].item.citationDates", Matchers.is(administrativeDirectivesDates)),
             jsonPath("$.member[*].item.legislationDate", Matchers.is(normsDates))));
 
@@ -113,7 +113,8 @@ public class SortingTestArguments {
             "-date",
             combinedSize,
             jsonPath("$.member[*].item.decisionDate", Matchers.is(invertedCaseLawDates)),
-            jsonPath("$.member[*].item.firstPublicationDate", Matchers.is(invertedLiteratureDates)),
+            jsonPath(
+                "$.member[*].item.yearsOfPublication[0]", Matchers.is(invertedLiteratureDates)),
             jsonPath("$.member[*].item.citationDates", Matchers.is(invertedAdminsitrativeDates)),
             jsonPath("$.member[*].item.legislationDate", Matchers.is(invertedNormsDates))));
 

@@ -104,7 +104,6 @@ public class LiteratureSearchSchemaMapper {
         .inLanguage("de")
         .documentNumber(doc.documentNumber())
         .yearsOfPublication(doc.yearsOfPublication())
-        .firstPublicationDate(doc.firstPublicationDate())
         .documentTypes(doc.documentTypes())
         .dependentReferences(doc.dependentReferences())
         .independentReferences(doc.independentReferences())
