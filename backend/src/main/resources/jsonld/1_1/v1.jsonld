@@ -31,6 +31,7 @@
       "LegislationObject": "schema:LegislationObject",
       "PublicationIssue": "schema:PublicationIssue",
       "MediaObject": "schema:MediaObject",
+      "documentNumber": "schema:identifier",
       "Legislation": {
         "@id": "schema:Legislation",
         "@context": {
@@ -52,7 +53,6 @@
       "Decision": {
         "@id": "ris:Decision",
         "@context": {
-          "documentNumber": "schema:identifier",
           "ecli": "ris:ecli",
           "caseFacts": "ris:caseFacts",
           "decisionGrounds": "ris:decisionGrounds",
@@ -81,6 +81,36 @@
           "gesetzeskraft": "ris:gesetzeskraft",
           "streitjahre": "ris:streitjahre",
           "vorabdokument": "ris:vorabdokument"
+        }
+      },
+      "Literature": {
+        "@id": "ris:Literature",
+        "@context": {
+          "yearsOfPublication": "ris:yearsOfPublication",
+          "documentTypes": "ris:documentTypes",
+          "dependentReferences": "ris:dependentReferences",
+          "independentReferences": "ris:independentReferences",
+          "normReferences": "ris:normReferences",
+          "headline": "schema:headline",
+          "headlineAdditions": "ris:headlineAdditions",
+          "alternativeHeadline": "schema:alternativeHeadline",
+          "edition": "ris:edition",
+          "internationalIdentifiers": "ris:internationalIdentifiers",
+          "authors": "schema:author",
+          "collaborators": "schema:contributor",
+          "editors": "schema:editor",
+          "founder": "ris:founder",
+          "publishers": "schema:publisher",
+          "publisherOrganizations": "ris:publisherOrganizations",
+          "publishingHouses": "ris:publishingHouses",
+          "languages": "ris:languages",
+          "originators": "schema:creator",
+          "conferenceNotes": "ris:conferenceNotes",
+          "shortReport": "schema:abstract",
+          "outline": "ris:outline",
+          "universityNotes": "ris:universityNotes",
+          "volumes": "ris:volumes",
+          "literatureType": "ris:literatureType"
         }
       },
       "SearchResult": {
