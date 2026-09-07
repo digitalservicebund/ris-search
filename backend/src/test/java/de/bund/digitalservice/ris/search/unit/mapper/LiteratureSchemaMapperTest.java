@@ -47,6 +47,7 @@ class LiteratureSchemaMapperTest {
 
     LiteratureSchema expected =
         LiteratureSchema.builder()
+            .context("jsonLdContext")
             .id("/v1/literature/XXLU000000001")
             .languages(List.of("de"))
             .documentNumber("XXLU000000001")
@@ -79,7 +80,8 @@ class LiteratureSchemaMapperTest {
             .encoding(EncodingSchemaFactory.documentEncodingSchemas("/v1/literature/XXLU000000001"))
             .build();
 
-    LiteratureSchema literatureSchema = LiteratureSchemaMapper.fromDomain(literature);
+    LiteratureSchema literatureSchema =
+        LiteratureSchemaMapper.fromDomain(literature, "jsonLdContext");
     assertThat(literatureSchema).isEqualTo(expected);
   }
 }

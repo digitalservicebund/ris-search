@@ -16,7 +16,8 @@ class LiteratureTypeMapperTest {
   @CsvSource({"XXLU00001,uli", "XXLS000001,sli"})
   void itDeterminesTheDocumentTypeBasedOnDocumentNumber(String docNumber, String expected) {
     Literature literature = Literature.builder().id(docNumber).documentNumber(docNumber).build();
-    assertThat(LiteratureSchemaMapper.fromDomain(literature).literatureType()).isEqualTo(expected);
+    assertThat(LiteratureSchemaMapper.fromDomain(literature, "jsonLdContext").literatureType())
+        .isEqualTo(expected);
     assertThat(LiteratureSearchSchemaMapper.fromDomain(literature).literatureType())
         .isEqualTo(expected);
   }
@@ -27,7 +28,7 @@ class LiteratureTypeMapperTest {
     assertThrows(
         IllegalStateException.class,
         () -> {
-          LiteratureSchemaMapper.fromDomain(literature);
+          LiteratureSchemaMapper.fromDomain(literature, "jsonLdContext");
         });
   }
 }
