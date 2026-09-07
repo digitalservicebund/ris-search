@@ -59,7 +59,7 @@ public class CaseLawSimpleSearchType implements SimpleSearchType {
           Map.entry(CaseLawDocumentationUnit.Fields.RECHTSMITTELFUEHRER, convertOrderingToBoost(6)),
           Map.entry(CaseLawDocumentationUnit.Fields.SACHGEBIETE, 1.0f),
           Map.entry(CaseLawDocumentationUnit.Fields.TENOR, convertOrderingToBoost(3)),
-          Map.entry(CaseLawDocumentationUnit.Fields.TITLE_LINE, 1.0f));
+          Map.entry(CaseLawDocumentationUnit.Fields.TITLE_LINE, convertOrderingToBoost(3)));
 
   private static final List<String> EXCLUDED_FIELDS =
       List.of(
