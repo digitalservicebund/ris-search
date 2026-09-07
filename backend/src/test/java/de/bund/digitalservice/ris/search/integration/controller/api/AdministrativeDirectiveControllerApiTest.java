@@ -207,6 +207,7 @@ class AdministrativeDirectiveControllerApiTest extends ContainersIntegrationBase
                         + ".zip")
                     .accept(MediaType.valueOf("application/zip")))
             .andExpect(request().asyncStarted())
+            .andDo(MvcResult::getAsyncResult)
             .andReturn();
 
     MvcResult result =
