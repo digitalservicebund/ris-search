@@ -3,7 +3,7 @@ package de.bund.digitalservice.ris.search.integration.controller.api;
 import static de.bund.digitalservice.ris.search.integration.controller.api.testData.CaseLawTestData.BESCHLUSS_COUNT;
 import static de.bund.digitalservice.ris.search.integration.controller.api.testData.CaseLawTestData.OTHER_COUNT;
 import static de.bund.digitalservice.ris.search.integration.controller.api.testData.CaseLawTestData.URTEIL_COUNT;
-import static de.bund.digitalservice.ris.search.integration.controller.api.testData.CaseLawTestData.matchAllTerm;
+import static de.bund.digitalservice.ris.search.integration.controller.api.testData.CaseLawTestData.matchMultipleTerm;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.everyItem;
@@ -57,7 +57,7 @@ class CaseLawSearchControllerApiTest extends ContainersIntegrationBase {
     mockMvc
         .perform(
             get(ApiConfig.Paths.CASELAW
-                    + String.format("?searchTerm=%s&ecli=%s", matchAllTerm, ecli))
+                    + String.format("?searchTerm=%s&ecli=%s", matchMultipleTerm, ecli))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$.member", hasSize(1)))
         .andExpect(jsonPath("$.member[0]['item'].ecli", Matchers.is(ecli)))
@@ -72,7 +72,7 @@ class CaseLawSearchControllerApiTest extends ContainersIntegrationBase {
     mockMvc
         .perform(
             get(ApiConfig.Paths.CASELAW
-                    + String.format("?searchTerm=%s&legalEffect=true", matchAllTerm))
+                    + String.format("?searchTerm=%s&legalEffect=true", matchMultipleTerm))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$.member", hasSize(2)))
         .andExpect(status().isOk());
@@ -81,7 +81,7 @@ class CaseLawSearchControllerApiTest extends ContainersIntegrationBase {
   @Test
   @DisplayName("Should return correct items when looking for a specific court")
   void shouldReturnDocumentationUnitsWhenSearchingForSpecificCourt() throws Exception {
-    String query = String.format("?searchTerm=%s&court=FG Berlin", matchAllTerm);
+    String query = String.format("?searchTerm=%s&court=FG Berlin", matchMultipleTerm);
     mockMvc
         .perform(get(ApiConfig.Paths.CASELAW + query).contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$.member", hasSize(1)))
@@ -92,7 +92,7 @@ class CaseLawSearchControllerApiTest extends ContainersIntegrationBase {
   @Test
   @DisplayName("Should return correct items when looking for court type")
   void shouldReturnDocumentationUnitsWhenSearchingForCourtType() throws Exception {
-    String query = String.format("?searchTerm=%s&court=FG", matchAllTerm);
+    String query = String.format("?searchTerm=%s&court=FG", matchMultipleTerm);
     mockMvc
         .perform(get(ApiConfig.Paths.CASELAW + query).contentType(MediaType.APPLICATION_JSON))
         .andExpectAll(
@@ -105,7 +105,8 @@ class CaseLawSearchControllerApiTest extends ContainersIntegrationBase {
   @ValueSource(strings = {"IX ZR 100/10", "ix zr 100 10", "iX ZR 100 / 10"})
   @DisplayName("Should return only correct item when looking for a file number as such")
   void testFileNumberSearch(String fileNumberFormat) throws Exception {
-    String query = String.format("?searchTerm=%s&fileNumber=%s", matchAllTerm, fileNumberFormat);
+    String query =
+        String.format("?searchTerm=%s&fileNumber=%s", matchMultipleTerm, fileNumberFormat);
     mockMvc
         .perform(get(ApiConfig.Paths.CASELAW + query).contentType(MediaType.APPLICATION_JSON))
         .andExpectAll(
@@ -179,7 +180,7 @@ class CaseLawSearchControllerApiTest extends ContainersIntegrationBase {
   @MethodSource("documentTypeParameters")
   @DisplayName("documentType filter")
   void shouldFilterByDocumentType(String queryStringPart, int expectedCount) throws Exception {
-    String query = "?searchTerm=%s&%s".formatted(matchAllTerm, queryStringPart);
+    String query = "?searchTerm=%s&%s".formatted(matchMultipleTerm, queryStringPart);
     mockMvc
         .perform(get(ApiConfig.Paths.CASELAW + query).contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$.member", hasSize(expectedCount)));
@@ -333,8 +334,7 @@ class CaseLawSearchControllerApiTest extends ContainersIntegrationBase {
     var perform =
         mockMvc
             .perform(
-                get(ApiConfig.Paths.CASELAW
-                        + String.format("?searchTerm=%s&sort=%s", matchAllTerm, sortParam))
+                get(ApiConfig.Paths.CASELAW + String.format("?sort=%s", sortParam))
                     .contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.member", hasSize(CaseLawTestData.allDocuments.size())));
 
