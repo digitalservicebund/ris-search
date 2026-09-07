@@ -1,6 +1,7 @@
 package de.bund.digitalservice.ris.search.schema;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
 import java.util.List;
@@ -8,6 +9,7 @@ import lombok.Builder;
 
 /** A DTO for court decisions in a specific encoding, following schema.org naming guidelines. */
 @Builder
+@JsonTypeName("Decision")
 public record CaseLawSearchSchema(
     @Schema(example = "KARE000000000", requiredMode = Schema.RequiredMode.REQUIRED)
         String documentNumber,

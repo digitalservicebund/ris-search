@@ -3541,7 +3541,13 @@
       },
       "AbstractDocumentSchema" : {
         "discriminator" : {
-          "propertyName" : "@type"
+          "propertyName" : "@type",
+          "mapping" : {
+            "Decision" : "#/components/schemas/CaseLawSearchSchema",
+            "Literature" : "#/components/schemas/LiteratureSearchSchema",
+            "Legislation" : "#/components/schemas/LegislationExpressionSearchSchema",
+            "AdministrativeDirective" : "#/components/schemas/AdministrativeDirectiveSearchSchema"
+          }
         },
         "properties" : {
           "@type" : {

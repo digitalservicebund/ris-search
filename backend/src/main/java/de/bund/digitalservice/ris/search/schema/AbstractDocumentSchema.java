@@ -2,6 +2,8 @@ package de.bund.digitalservice.ris.search.schema;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import io.swagger.v3.oas.annotations.media.DiscriminatorMapping;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
  * Represents a base interface for document search schemas used in various legal or informational
@@ -38,6 +40,18 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
       value = AdministrativeDirectiveSearchSchema.class,
       name = "AdministrativeDirective")
 })
+@Schema(
+    discriminatorProperty = "@type",
+    discriminatorMapping = {
+      @DiscriminatorMapping(schema = CaseLawSearchSchema.class, value = "Decision"),
+      @DiscriminatorMapping(schema = LiteratureSearchSchema.class, value = "Literature"),
+      @DiscriminatorMapping(
+          schema = LegislationExpressionSearchSchema.class,
+          value = "Legislation"),
+      @DiscriminatorMapping(
+          schema = AdministrativeDirectiveSearchSchema.class,
+          value = "AdministrativeDirective")
+    })
 public sealed interface AbstractDocumentSchema
     permits AdministrativeDirectiveSearchSchema,
         CaseLawSearchSchema,
