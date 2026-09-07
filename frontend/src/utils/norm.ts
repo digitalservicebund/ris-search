@@ -103,33 +103,31 @@ export function getMostRelevantExpression(
   if (expressions.length === 0) {
     return null;
   }
+
   const activeExpressions = expressions.filter(
     (expression) => expression.legislationLegalForce === "InForce",
   );
+
   if (activeExpressions.length > 0) {
-    if (activeExpressions.length > 1) {
-      console.info(
-        "found more than one matching active expressions",
-        activeExpressions,
-      );
-    }
     return activeExpressions[0]?.legislationIdentifier;
   }
+
   const referenceDate = getCurrentDateInGermanyFormatted();
   const [future, past] = partition(
     expressions,
     (item) => item.temporalCoverage >= referenceDate,
   );
+
   if (future.length > 0) {
     return sortBy(future, "legislationLegalForce")[0]?.legislationIdentifier;
   }
+
   if (past.length > 0) {
     return (
       sortBy(past, "legislationLegalForce").at(-1)?.legislationIdentifier ??
       null
     );
   }
-  throw new Error("Could not identify the most relevant expression");
 }
 
 export function getNormMetadataItems({
