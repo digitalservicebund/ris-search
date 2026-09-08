@@ -9,6 +9,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.startsWithIgnoringCase;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.asyncDispatch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -215,12 +216,17 @@ class CaseLawControllerApiTest extends ContainersIntegrationBase {
   @DisplayName("Should return case law and attachment in zip when using api endpoint for zip")
   void shouldReturnCaselawZip() throws Exception {
 
+    MvcResult asyncResult =
+        mockMvc
+            .perform(get(getResourcePath("zip")).contentType("application/zip"))
+            .andExpect(request().asyncStarted())
+            .andReturn();
+
     MvcResult result =
         mockMvc
-            .perform(get(getResourcePath("zip")).contentType(MediaType.valueOf("application/zip")))
-            .andExpect(request().asyncStarted())
-            .andDo(MvcResult::getAsyncResult)
-            .andExpectAll(status().isOk(), content().contentType("application/zip"))
+            .perform(asyncDispatch(asyncResult))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType("application/zip"))
             .andReturn();
 
     byte[] zipBytes = result.getResponse().getContentAsByteArray();

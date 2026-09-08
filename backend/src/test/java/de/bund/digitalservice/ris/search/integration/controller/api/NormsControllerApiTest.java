@@ -10,6 +10,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.startsWith;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.asyncDispatch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -199,12 +200,17 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
   @Test
   @DisplayName("ZIP endpoint should return a ZIP all relevant files")
   void zipEndpointWithRelevantFiles() throws Exception {
+    MvcResult asyncResult =
+        mockMvc
+            .perform(get(MANIFESTATION_PREFIX_URL_ZIP).contentType("application/zip"))
+            .andExpect(request().asyncStarted())
+            .andReturn();
+
     MvcResult result =
         mockMvc
-            .perform(get(MANIFESTATION_PREFIX_URL_ZIP))
-            .andExpect(request().asyncStarted())
-            .andDo(MvcResult::getAsyncResult)
-            .andExpectAll(status().isOk(), content().contentType("application/zip"))
+            .perform(asyncDispatch(asyncResult))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType("application/zip"))
             .andReturn();
 
     byte[] zipBytes = result.getResponse().getContentAsByteArray();
