@@ -42,19 +42,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 /**
- * CaseLawController provides endpoints for managing and retrieving case law documentation in
- * various formats such as JSON, HTML, XML, and ZIP, as well as specific file resources.
- *
- * <p>This controller is accessible in the "dev", "staging", "uat", "test", and "prototype"
- * profiles.
- *
- * <p>Endpoints include functionalities for: - Retrieving case law metadata - Rendering case law
- * decisions as HTML or XML - Generating ZIP archives containing case law and related attachments -
- * Fetching specific resources such as images or other attachments
- *
- * <p>Dependencies and services injected into this controller: - CaseLawService: Handles core
- * operations for retrieving and managing case law data. - CaselawXsltTransformerService:
- * Responsible for transforming case law content into HTML format using XSLT.
+ * CaseLawController provides endpoints for managing and retrieving case law documents in various
+ * formats such as JSON, HTML, XML, and ZIP, as well as specific file resources. *
  */
 @Tag(name = "Case Law")
 @RestController

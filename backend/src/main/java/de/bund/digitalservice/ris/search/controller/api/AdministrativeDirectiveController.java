@@ -130,6 +130,7 @@ public class AdministrativeDirectiveController {
       path = ApiConfig.Paths.ADMINISTRATIVE_DIRECTIVE,
       produces = MediaType.APPLICATION_JSON_VALUE)
   @Operation(
+      operationId = "searchAdministrativeDirective",
       summary = "List and search administrative directives",
       description =
           "The endpoint returns a list of administrative directives from our database. The list is paginated and can be filtered and sorted.")

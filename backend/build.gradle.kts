@@ -59,6 +59,15 @@ sonar {
             "sonar.coverage.exclusions",
             "**/config/**, **/e2e/**, **/CustomErrorController.java, **/RestClientConfigStackit.java",
         )
+        // RechtsprechungController intentionally duplicates CaseLawController's and
+        // CaseLawSearchController's endpoint bodies (see class Javadoc) so both
+        // /v1/case-law/** and /v1/rechtsprechung/** work in parallel while the frontend
+        // migrates. Remove this exclusion once /v1/case-law/** is deleted and the duplication with
+        // it.
+        property(
+            "sonar.cpd.exclusions",
+            "**/controller/api/RechtsprechungController.java",
+        )
     }
 }
 
