@@ -104,7 +104,6 @@ public class LiteratureSearchSchemaMapper {
         .inLanguage("de")
         .documentNumber(doc.documentNumber())
         .yearsOfPublication(doc.yearsOfPublication())
-        .firstPublicationDate(doc.firstPublicationDate())
         .documentTypes(doc.documentTypes())
         .dependentReferences(doc.dependentReferences())
         .independentReferences(doc.independentReferences())
@@ -128,11 +127,12 @@ public class LiteratureSearchSchemaMapper {
    * @param <T> The type of content contained in the given {@link SearchPage}.
    * @param page The {@link SearchPage} object containing the search results and pagination data
    *     that will be transformed into a collection schema.
+   * @param remoteJsonContext the URL of the JSON-LD context document
    * @return A {@link CollectionSchema} containing a collection of {@link SearchMemberSchema}
    *     objects with transformed search results and metadata.
    */
   public static <T> CollectionSchema<SearchMemberSchema<LiteratureSearchSchema>> fromSearchPage(
-      final SearchPage<T> page) {
+      final SearchPage<T> page, String remoteJsonContext) {
     String collectionBasePath = ApiConfig.Paths.LITERATURE;
     PartialCollectionViewSchema view =
         PartialCollectionViewMapper.fromPage(collectionBasePath, page);
@@ -143,6 +143,7 @@ public class LiteratureSearchSchemaMapper {
 
     return CollectionSchema.<SearchMemberSchema<LiteratureSearchSchema>>builder()
         .id(id)
+        .context(remoteJsonContext)
         .totalItems(page.getTotalElements())
         .member(page.stream().map(LiteratureSearchSchemaMapper::fromSearchHit).toList())
         .view(view)

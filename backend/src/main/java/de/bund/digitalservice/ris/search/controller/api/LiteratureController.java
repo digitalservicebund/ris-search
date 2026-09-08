@@ -5,6 +5,7 @@ import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
 import de.bund.digitalservice.ris.html.service.xslt.LiteratureXsltTransformer;
 import de.bund.digitalservice.ris.html.service.xslt.SliLiteratureXsltTransformer;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
+import de.bund.digitalservice.ris.search.config.ServerConfig;
 import de.bund.digitalservice.ris.search.exception.CustomValidationException;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.mapper.ChangelogResponseMapper;
@@ -61,6 +62,7 @@ public class LiteratureController {
   private final LiteratureXsltTransformer xsltTransformer;
   private final SliLiteratureXsltTransformer sliXsltTransformer;
   private final ChangelogService<LiteratureBucket> changelogService;
+  private final String jsonldContextPath;
 
   /**
    * Constructor for LiteratureController.
@@ -74,11 +76,13 @@ public class LiteratureController {
       LiteratureService literatureService,
       LiteratureXsltTransformer literatureXsltTransformer,
       SliLiteratureXsltTransformer sliLiteratureXsltTransformer,
-      ChangelogService<LiteratureBucket> changelogService) {
+      ChangelogService<LiteratureBucket> changelogService,
+      ServerConfig serverConfig) {
     this.literatureService = literatureService;
     this.xsltTransformer = literatureXsltTransformer;
     this.sliXsltTransformer = sliLiteratureXsltTransformer;
     this.changelogService = changelogService;
+    this.jsonldContextPath = serverConfig.getBackEndUrl() + ApiConfig.Paths.JSONLD_CONTEXT;
   }
 
   /**
@@ -105,7 +109,7 @@ public class LiteratureController {
     Literature unit = result.getFirst();
     return ResponseEntity.ok()
         .contentType(MediaType.APPLICATION_JSON)
-        .body(LiteratureSchemaMapper.fromDomain(unit));
+        .body(LiteratureSchemaMapper.fromDomain(unit, jsonldContextPath));
   }
 
   /**
@@ -212,7 +216,7 @@ public class LiteratureController {
               universalSearchParams, literatureSearchParams, sortedPageRequest);
       return ResponseEntity.ok()
           .contentType(MediaType.APPLICATION_JSON)
-          .body(LiteratureSearchSchemaMapper.fromSearchPage(page));
+          .body(LiteratureSearchSchemaMapper.fromSearchPage(page, jsonldContextPath));
     } catch (UncategorizedElasticsearchException e) {
       LuceneQueryTools.checkForInvalidQuery(e);
       throw e;

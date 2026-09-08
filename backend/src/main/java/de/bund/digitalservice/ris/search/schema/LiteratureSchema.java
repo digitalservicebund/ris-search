@@ -35,6 +35,7 @@ import org.jetbrains.annotations.Nullable;
  */
 @Builder
 public record LiteratureSchema(
+    @JsonProperty("@context") @Schema(requiredMode = Schema.RequiredMode.REQUIRED) String context,
     @Schema(example = "KALU000000000", requiredMode = Schema.RequiredMode.REQUIRED)
         @JsonProperty("@id")
         String id,

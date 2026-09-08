@@ -224,7 +224,7 @@ public class AdvancedSearchController {
       SearchPage<Literature> page = advancedSearchService.searchLiterature(query, sortedPageable);
       return ResponseEntity.ok()
           .contentType(MediaType.APPLICATION_JSON)
-          .body(LiteratureSearchSchemaMapper.fromSearchPage(page));
+          .body(LiteratureSearchSchemaMapper.fromSearchPage(page, jsonldContextPath));
     } catch (UncategorizedElasticsearchException e) {
       LuceneQueryTools.checkForInvalidQuery(e);
       throw e;

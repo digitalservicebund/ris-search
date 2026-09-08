@@ -1040,12 +1040,6 @@ export interface components {
              */
             yearsOfPublication: string[];
             /**
-             * Format: date
-             * @description Erstes Veröffentlichungsdatum
-             * @example 2014-01-01
-             */
-            firstPublicationDate: string;
-            /**
              * @description Dokumenttypen
              * @example ['Auf']
              */
@@ -1115,6 +1109,7 @@ export interface components {
         LiteratureSchema: {
             /** @example Literature */
             "@type"?: string;
+            "@context": string;
             /** @example KALU000000000 */
             "@id": string;
             /** @example de */

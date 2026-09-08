@@ -3,7 +3,7 @@ import type {
   SearchResultHeaderItem,
   TextHeaderItem,
 } from "~/components/search/SearchResultHeader.vue";
-import type { Literature, SearchResult } from "~/types/api";
+import type { LiteratureSearchSchema, SearchResult } from "~/types/api";
 import type { SearchResultHeadingLevel } from "~/utils/search/searchResults";
 import {
   getMatch,
@@ -16,7 +16,7 @@ const {
   order,
   headingLevel = "2",
 } = defineProps<{
-  searchResult: SearchResult<Literature>;
+  searchResult: SearchResult<LiteratureSearchSchema>;
   order: number;
 
   /** Heading level of the result title. */

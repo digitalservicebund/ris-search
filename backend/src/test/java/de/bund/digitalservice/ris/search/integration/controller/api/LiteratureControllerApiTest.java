@@ -1,6 +1,7 @@
 package de.bund.digitalservice.ris.search.integration.controller.api;
 
 import static de.bund.digitalservice.ris.ZipTestUtils.readZipStream;
+import static de.bund.digitalservice.ris.utils.JsonldResultMatchers.isJsonLdCompliant;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasSize;
@@ -57,6 +58,7 @@ class LiteratureControllerApiTest extends ContainersIntegrationBase {
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpectAll(
             status().isOk(),
+            isJsonLdCompliant(),
             jsonPath("$.documentNumber", Matchers.is(documentNumberPersistedInTest)),
             jsonPath("$.yearsOfPublication", Matchers.containsInAnyOrder("1999", "2000", "2001")),
             jsonPath("$.documentTypes", Matchers.containsInAnyOrder("Kommentar", "Aufsatz")),
@@ -171,6 +173,7 @@ class LiteratureControllerApiTest extends ContainersIntegrationBase {
             get(ApiConfig.Paths.LITERATURE + String.format("?searchTerm=%s", searchTerm))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
+        .andExpect(isJsonLdCompliant())
         .andExpect(jsonPath("$.member", hasSize(1)))
         .andExpect(jsonPath("$.member[0]['item'].documentNumber", Matchers.is("KALU000000001")))
         .andExpect(

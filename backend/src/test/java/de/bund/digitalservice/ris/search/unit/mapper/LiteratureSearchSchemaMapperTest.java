@@ -55,12 +55,13 @@ class LiteratureSearchSchemaMapperTest {
         SearchHitSupport.searchPageFor(searchHits, PageRequest.of(0, 1));
 
     CollectionSchema<SearchMemberSchema<LiteratureSearchSchema>> destination =
-        LiteratureSearchSchemaMapper.fromSearchPage(source);
-    LiteratureSearchSchema expectedItem = destination.member().get(0).item();
+        LiteratureSearchSchemaMapper.fromSearchPage(source, "jsonLdContext");
+    LiteratureSearchSchema expectedItem = destination.member().getFirst().item();
     assertEquals(literature.documentNumber(), expectedItem.documentNumber());
     assertEquals(1, destination.totalItems());
     assertEquals(destination.member().size(), destination.totalItems());
     assertTrue(destination.id().startsWith(ApiConfig.Paths.LITERATURE));
+    assertThat(destination.context()).isEqualTo("jsonLdContext");
   }
 
   @Test
@@ -94,15 +95,15 @@ class LiteratureSearchSchemaMapperTest {
 
     var firstPageImpl = createSearchPage(firstPageContents, 0, pageSize, total);
     CollectionSchema<SearchMemberSchema<LiteratureSearchSchema>> firstPage =
-        LiteratureSearchSchemaMapper.fromSearchPage(firstPageImpl);
+        LiteratureSearchSchemaMapper.fromSearchPage(firstPageImpl, "jsonLdContext");
 
     var middlePageImpl = createSearchPage(middlePageContents, 1, pageSize, total);
     CollectionSchema<SearchMemberSchema<LiteratureSearchSchema>> middlePage =
-        LiteratureSearchSchemaMapper.fromSearchPage(middlePageImpl);
+        LiteratureSearchSchemaMapper.fromSearchPage(middlePageImpl, "jsonLdContext");
 
     var lastPageImpl = createSearchPage(lastPageContents, 2, pageSize, total);
     CollectionSchema<SearchMemberSchema<LiteratureSearchSchema>> lastPage =
-        LiteratureSearchSchemaMapper.fromSearchPage(lastPageImpl);
+        LiteratureSearchSchemaMapper.fromSearchPage(lastPageImpl, "jsonLdContext");
 
     String prefix = ApiConfig.Paths.LITERATURE + "/XXLU-";
 

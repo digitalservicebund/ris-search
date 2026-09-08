@@ -20,14 +20,16 @@ public class LiteratureSchemaMapper {
    *
    * @param entity the {@link Literature} domain entity representing the literature details to be
    *     mapped
+   * @param remoteJsonContext the URL of the JSON-LD context document
    * @return a {@link LiteratureSchema} object containing the mapped literature data
    */
-  public static LiteratureSchema fromDomain(Literature entity) {
+  public static LiteratureSchema fromDomain(Literature entity, String remoteJsonContext) {
     var entityURI = ApiConfig.Paths.LITERATURE + "/" + entity.documentNumber();
     var encodings = EncodingSchemaFactory.documentEncodingSchemas(entityURI);
 
     return LiteratureSchema.builder()
         .id(entityURI)
+        .context(remoteJsonContext)
         .inLanguage("de")
         .documentNumber(entity.documentNumber())
         .yearsOfPublication(entity.yearsOfPublication())
