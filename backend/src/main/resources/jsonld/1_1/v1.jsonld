@@ -143,6 +143,23 @@
           "location": "ris:matchLocation",
           "text": "schema:text"
         }
-      }
+      },
+     "Changelog": {
+       "@id": "schema:DataFeed",
+       "@context": {
+         "changed": {
+           "@id": "ris:changed",
+           "@container": "@set"
+         },
+         "deleted": {
+           "@id": "ris:deleted",
+           "@container": "@set"
+         },
+         "allChanged": {
+           "@id": "ris:allChanged",
+           "@type": "schema:Boolean"
+         }
+       }
+     }
    }
 }

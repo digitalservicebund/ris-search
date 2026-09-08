@@ -786,6 +786,7 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
             get(ApiConfig.Paths.LEGISLATION_CHANGELOGS)
                 .params(MultiValueMap.fromSingleValue(Map.of("from", from, "to", to))))
         .andExpect(status().isOk())
+        .andExpect(isJsonLdCompliant())
         .andExpect(
             jsonPath("$.changed[0].['@id']")
                 .value(

@@ -26,7 +26,8 @@ class ChangelogResponseMapperTest {
             new HashSet<>(List.of("ABCD00001/ABCD00001-attachment.xml", "ABCD00001/ABCD00001.jpg")),
             false);
 
-    ChangelogResponse actual = ChangelogResponseMapper.mapChangelog(changelog, documentKind);
+    ChangelogResponse actual =
+        ChangelogResponseMapper.mapChangelog(changelog, documentKind, "remoteContext");
 
     assertThat(actual.deleted()).asInstanceOf(SET).isEmpty();
     assertThat(actual.changed())
@@ -45,7 +46,8 @@ class ChangelogResponseMapperTest {
         new Changelog(
             new HashSet<>(List.of()), new HashSet<>(List.of("ABCD00002/ABCD00002.xml")), false);
 
-    ChangelogResponse actual = ChangelogResponseMapper.mapChangelog(changelog, documentKind);
+    ChangelogResponse actual =
+        ChangelogResponseMapper.mapChangelog(changelog, documentKind, "remoteContext");
 
     assertThat(actual.changed()).asInstanceOf(SET).isEmpty();
     assertThat(actual.deleted())
@@ -68,7 +70,7 @@ class ChangelogResponseMapperTest {
             false);
 
     ChangelogResponse actual =
-        ChangelogResponseMapper.mapChangelog(changelog, DocumentKind.LEGISLATION);
+        ChangelogResponseMapper.mapChangelog(changelog, DocumentKind.LEGISLATION, "remoteContext");
 
     // Should ignore the anlage and non-root files, leaving deleted empty
     assertThat(actual.deleted()).asInstanceOf(SET).isEmpty();
@@ -93,7 +95,7 @@ class ChangelogResponseMapperTest {
             false);
 
     ChangelogResponse actual =
-        ChangelogResponseMapper.mapChangelog(changelog, DocumentKind.LEGISLATION);
+        ChangelogResponseMapper.mapChangelog(changelog, DocumentKind.LEGISLATION, "remoteContext");
 
     // Should ignore the anlage and non-root files, leaving deleted empty
     assertThat(actual.changed()).asInstanceOf(SET).isEmpty();

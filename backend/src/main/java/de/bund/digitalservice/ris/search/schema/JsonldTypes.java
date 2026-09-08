@@ -19,4 +19,5 @@ public class JsonldTypes {
   public static final String DATA_CATALOG = "DataCatalog";
   public static final String DATASET = "Dataset";
   public static final String DATA_DOWNLOAD = "DataDownload";
+  public static final String CHANGELOG = "Changelog";
 }

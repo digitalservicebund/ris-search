@@ -25,26 +25,31 @@ public class ChangelogResponseMapper {
    * filename that matches the parent directory is considered the root.
    *
    * @param changelog Changelog object to be mapped
+   * @param remoteJsonContext remoteJsonContext url to retrieve jsonld context
    * @param documentKind documentKind of the response
    * @return api response of a specific Changelog
    */
-  public static ChangelogResponse mapChangelog(Changelog changelog, DocumentKind documentKind) {
+  public static ChangelogResponse mapChangelog(
+      Changelog changelog, DocumentKind documentKind, String remoteJsonContext) {
     return switch (documentKind) {
-      case LEGISLATION -> mapLegislation(changelog);
+      case LEGISLATION -> mapLegislation(changelog, remoteJsonContext);
       case CASE_LAW ->
-          mapStandardDocument(changelog, ApiConfig.Paths.CASELAW, JsonldTypes.DECISION);
+          mapStandardDocument(
+              changelog, ApiConfig.Paths.CASELAW, JsonldTypes.DECISION, remoteJsonContext);
       case LITERATURE ->
-          mapStandardDocument(changelog, ApiConfig.Paths.LITERATURE, JsonldTypes.LITERATURE);
+          mapStandardDocument(
+              changelog, ApiConfig.Paths.LITERATURE, JsonldTypes.LITERATURE, remoteJsonContext);
       case ADMINISTRATIVE_DIRECTIVE ->
           mapStandardDocument(
               changelog,
               ApiConfig.Paths.ADMINISTRATIVE_DIRECTIVE,
-              JsonldTypes.ADMINISTRATIVE_DIRECTIVE);
+              JsonldTypes.ADMINISTRATIVE_DIRECTIVE,
+              remoteJsonContext);
     };
   }
 
   private static ChangelogResponse mapStandardDocument(
-      Changelog changelog, String apiPath, String jsonldType) {
+      Changelog changelog, String apiPath, String jsonldType, String remoteContext) {
     return createResponse(
         changelog,
         path ->
@@ -56,10 +61,11 @@ public class ChangelogResponseMapper {
           }
           return Stream.of(
               new ChangelogDeletedDocument(getDocumentBaseUrl(apiPath, path), jsonldType));
-        });
+        },
+        remoteContext);
   }
 
-  private static ChangelogResponse mapLegislation(Changelog changelog) {
+  private static ChangelogResponse mapLegislation(Changelog changelog, String remoteContext) {
     return createResponse(
         changelog,
         id ->
@@ -76,13 +82,15 @@ public class ChangelogResponseMapper {
                     eli ->
                         new ChangelogDeletedDocument(
                             getLegislationBaseUrl(eli.getExpressionEli().toString()),
-                            JsonldTypes.LEGISLATION)));
+                            JsonldTypes.LEGISLATION)),
+        remoteContext);
   }
 
   private static ChangelogResponse createResponse(
       Changelog changelog,
       Function<String, Stream<ChangelogChangedDocument>> changeMapper,
-      Function<String, Stream<ChangelogDeletedDocument>> deleteMapper) {
+      Function<String, Stream<ChangelogDeletedDocument>> deleteMapper,
+      String remoteContext) {
 
     Set<ChangelogChangedDocument> changed =
         changelog.getChanged().stream().flatMap(changeMapper).collect(Collectors.toSet());
@@ -90,7 +98,7 @@ public class ChangelogResponseMapper {
     Set<ChangelogDeletedDocument> deleted =
         changelog.getDeleted().stream().flatMap(deleteMapper).collect(Collectors.toSet());
 
-    return new ChangelogResponse(changed, deleted, changelog.isChangeAll());
+    return new ChangelogResponse(remoteContext, changed, deleted, changelog.isChangeAll());
   }
 
   private static boolean isRootDocument(String path) {

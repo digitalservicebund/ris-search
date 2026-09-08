@@ -246,7 +246,8 @@ public class LiteratureController {
             params.getFrom().toInstant(), params.getTo().toInstant());
 
     return ResponseEntity.ok(
-        ChangelogResponseMapper.mapChangelog(changelog, DocumentKind.LITERATURE));
+        ChangelogResponseMapper.mapChangelog(
+            changelog, DocumentKind.LITERATURE, jsonldContextPath));
   }
 
   /**

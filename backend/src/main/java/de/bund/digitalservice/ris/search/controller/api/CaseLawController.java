@@ -53,7 +53,7 @@ public class CaseLawController {
   private final CaseLawService caseLawService;
   private final CaselawXsltTransformer caselawXsltTransformer;
   private final ChangelogService<CaseLawBucket> changelogService;
-  private final ServerConfig serverConfig;
+  private final String jsonldContextPath;
 
   /**
    * Constructor for the CaseLawController class.
@@ -72,7 +72,7 @@ public class CaseLawController {
     this.caseLawService = caseLawService;
     this.caselawXsltTransformer = caselawXsltTransformer;
     this.changelogService = changelogService;
-    this.serverConfig = serverConfig;
+    this.jsonldContextPath = serverConfig.getBackEndUrl() + ApiConfig.Paths.JSONLD_CONTEXT;
   }
 
   /**
@@ -101,9 +101,7 @@ public class CaseLawController {
     CaseLawDocumentationUnit unit = result.getFirst();
     return ResponseEntity.ok()
         .contentType(MediaType.APPLICATION_JSON)
-        .body(
-            CaseLawSchemaMapper.fromDomain(
-                unit, serverConfig.getBackEndUrl() + ApiConfig.Paths.JSONLD_CONTEXT));
+        .body(CaseLawSchemaMapper.fromDomain(unit, jsonldContextPath));
   }
 
   /**
@@ -286,6 +284,6 @@ public class CaseLawController {
         changelogService.getChangesBetween(
             params.getFrom().toInstant(), params.getTo().toInstant());
     return ResponseEntity.ok(
-        ChangelogResponseMapper.mapChangelog(changelog, DocumentKind.CASE_LAW));
+        ChangelogResponseMapper.mapChangelog(changelog, DocumentKind.CASE_LAW, jsonldContextPath));
   }
 }
