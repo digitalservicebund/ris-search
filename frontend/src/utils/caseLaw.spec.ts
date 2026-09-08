@@ -7,7 +7,7 @@ describe("caselaw", () => {
     it("joins all nonblank decision names", () => {
       expect(
         getCaselawSecondaryTitle({
-          decisionName: ["", "Decision name", "Another decision name"],
+          decisionNames: ["", "Decision name", "Another decision name"],
           titleLine: "Title line",
         }),
       ).toBe("Decision name, Another decision name");
@@ -16,19 +16,19 @@ describe("caselaw", () => {
     it("falls back to the Titlezeile", () => {
       expect(
         getCaselawSecondaryTitle({
-          decisionName: [],
+          decisionNames: [],
           titleLine: "Title line",
         }),
       ).toBe("Title line");
     });
 
     it("returns undefined without a decision name or Titlezeile", () => {
-      expect(getCaselawSecondaryTitle({ decisionName: [] })).toBeUndefined();
+      expect(getCaselawSecondaryTitle({ decisionNames: [] })).toBeUndefined();
     });
 
     it("truncates the secondary title to 90 characters", () => {
       expect(
-        getCaselawSecondaryTitle({ decisionName: ["a".repeat(100)] }),
+        getCaselawSecondaryTitle({ decisionNames: ["a".repeat(100)] }),
       ).toBe("a".repeat(90) + "…");
     });
 
@@ -37,7 +37,7 @@ describe("caselaw", () => {
       const decisionName2 = "b".repeat(50);
       expect(
         getCaselawSecondaryTitle({
-          decisionName: [decisionName1, decisionName2],
+          decisionNames: [decisionName1, decisionName2],
         }),
       ).toBe(truncateAtWord(`${decisionName1}, ${decisionName2}`, 90, true));
     });
@@ -45,7 +45,7 @@ describe("caselaw", () => {
     it("does not truncate the title when disabled", () => {
       const fullTItle = "a".repeat(100);
       expect(
-        getCaselawSecondaryTitle({ decisionName: [fullTItle] }, false),
+        getCaselawSecondaryTitle({ decisionNames: [fullTItle] }, false),
       ).toBe(fullTItle);
     });
   });

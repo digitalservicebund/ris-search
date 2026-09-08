@@ -5,7 +5,7 @@ import type { MetadataItem } from "~/components/documents/Metadata.vue";
 import type { TabView } from "~/components/documents/TabsLayout.vue";
 import type { TreeItem } from "~/components/TreeView.vue";
 import { useSearchBackLink } from "~/composables/useSearchBackLink";
-import { type CaseLaw, DocumentKind } from "~/types/api";
+import { DocumentKind, type Rechtsprechung } from "~/types/api";
 
 definePageMeta({
   layout: false,
@@ -25,8 +25,8 @@ const [
   { data: caseLaw, error: metadataError },
   { data: html, error: contentError },
 ] = await Promise.all([
-  useRisBackend<CaseLaw>(`/v1/case-law/${documentNumber}`),
-  useRisBackend<string>(`/v1/case-law/${documentNumber}.html`, {
+  useRisBackend<Rechtsprechung>(`/v1/rechtsprechung/${documentNumber}`),
+  useRisBackend<string>(`/v1/rechtsprechung/${documentNumber}.html`, {
     headers: { Accept: "text/html" },
   }),
 ]);
@@ -56,13 +56,19 @@ const views: TabView[] = [
 ];
 
 const title = computed(() => {
-  return caseLaw.value?.headline
-    ? removeOuterParentheses(caseLaw.value?.headline)
+  return caseLaw.value?.kurztitel
+    ? removeOuterParentheses(caseLaw.value?.kurztitel)
     : undefined;
 });
 
 const secondaryTitle = computed(() =>
-  getCaselawSecondaryTitle(caseLaw.value, false),
+  getCaselawSecondaryTitle(
+    {
+      decisionNames: caseLaw.value?.entscheidungsnamen ?? [],
+      titleLine: caseLaw.value?.titelzeile,
+    },
+    false,
+  ),
 );
 
 const searchBackLink = useSearchBackLink(DocumentKind.CaseLaw);
@@ -86,16 +92,16 @@ const tocEntries = computed<TreeItem[]>(() => {
 
 const headerMetadata = computed<MetadataItem[]>(() => [
   { type: "text", label: "Gericht", value: caseLaw.value?.courtName },
-  { type: "text", label: "Dokumenttyp", value: caseLaw.value?.documentType },
+  { type: "text", label: "Dokumenttyp", value: caseLaw.value?.dokumenttyp },
   {
     type: "text",
     label: "Entscheidungsdatum",
-    value: dateFormattedDDMMYYYY(caseLaw.value?.decisionDate),
+    value: dateFormattedDDMMYYYY(caseLaw.value?.datum),
   },
   {
     type: "badge",
     label: "Aktenzeichen",
-    values: caseLaw.value?.fileNumbers ?? [],
+    values: caseLaw.value?.aktenzeichenListe ?? [],
     color: "gray",
   },
 ]);
@@ -104,7 +110,7 @@ const detailItems = computed<DetailsListItem[]>(() => [
   {
     type: "text",
     label: "Spruchkörper:",
-    value: caseLaw.value?.judicialBody,
+    value: caseLaw.value?.spruchkoerper,
   },
   {
     type: "text",
@@ -115,7 +121,7 @@ const detailItems = computed<DetailsListItem[]>(() => [
   {
     type: "text",
     label: "Entscheidungsname:",
-    value: formatArray(caseLaw.value?.decisionName ?? []),
+    value: formatArray(caseLaw.value?.entscheidungsnamen ?? []),
   },
   {
     type: "list",
@@ -136,18 +142,18 @@ const detailItems = computed<DetailsListItem[]>(() => [
     label: getSingularOrPlural(
       "Vorgehende Entscheidung:",
       "Vorgehende Entscheidungen:",
-      caseLaw.value?.previousDecisions?.length,
+      caseLaw.value?.vorgehendeEntscheidungen?.length,
     ),
-    values: caseLaw.value?.previousDecisions ?? [],
+    values: caseLaw.value?.vorgehendeEntscheidungen ?? [],
   },
   {
     type: "list",
     label: getSingularOrPlural(
       "Nachgehende Entscheidung:",
       "Nachgehende Entscheidungen:",
-      caseLaw.value?.ensuingDecisions?.length,
+      caseLaw.value?.nachgehendeEntscheidungen?.length,
     ),
-    values: caseLaw.value?.ensuingDecisions ?? [],
+    values: caseLaw.value?.nachgehendeEntscheidungen ?? [],
   },
 
   {

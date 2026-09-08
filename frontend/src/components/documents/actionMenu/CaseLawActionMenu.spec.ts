@@ -5,7 +5,7 @@ import { screen } from "@testing-library/vue";
 import Tooltip from "primevue/tooltip";
 import { describe, expect, it, vi } from "vitest";
 import CaseLawActionMenu from "~/components/documents/actionMenu/CaseLawActionMenu.vue";
-import type { CaseLaw } from "~/types/api";
+import type { Rechtsprechung } from "~/types/api";
 
 vi.mock("~/composables/useBackendUrl", () => ({
   default: vi.fn((url?: string) => url),
@@ -22,7 +22,7 @@ const mockedCaselaw = {
       encodingFormat: "application/xml",
     },
   ],
-} as CaseLaw;
+} as Rechtsprechung;
 
 function renderCaseLawActionMenu() {
   return renderSuspended(CaseLawActionMenu, {
