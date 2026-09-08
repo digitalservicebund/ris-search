@@ -186,7 +186,7 @@ test.describe("actions menu", () => {
   test.describe("can use XML action to view caselaw xml file", () => {
     testXmlButton(
       "/gerichtsentscheidungen/JURE200030030",
-      "http://localhost:8080/v1/case-law/JURE200030030.xml",
+      "http://localhost:8080/v1/rechtsprechung/JURE200030030.xml",
     );
   });
 });
@@ -292,7 +292,7 @@ test("renders the download link", async ({ page }) => {
   await expect(zipLink).toBeVisible();
   await expect(zipLink).toHaveAttribute(
     "href",
-    "/v1/case-law/KORE600500000.zip",
+    "/v1/rechtsprechung/KORE600500000.zip",
   );
 });
 
