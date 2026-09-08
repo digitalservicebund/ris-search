@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type {
-  AdministrativeDirective,
+  AdministrativeDirectiveSearchSchema,
   AnyDocument,
   CaseLawSearchSchema,
   LegislationExpression,
@@ -40,7 +40,9 @@ const { headingLevel = "2" } = defineProps<{
 
   <SearchAdministrativeDirectiveSearchResult
     v-else-if="isAdministrativeDirective(searchResult.item)"
-    :search-result="searchResult as SearchResult<AdministrativeDirective>"
+    :search-result="
+      searchResult as SearchResult<AdministrativeDirectiveSearchSchema>
+    "
     :order="order"
     :heading-level="headingLevel"
   />

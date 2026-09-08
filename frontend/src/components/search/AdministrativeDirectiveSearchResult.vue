@@ -3,7 +3,10 @@ import type {
   SearchResultHeaderItem,
   TextHeaderItem,
 } from "~/components/search/SearchResultHeader.vue";
-import type { AdministrativeDirective, SearchResult } from "~/types/api";
+import type {
+  AdministrativeDirectiveSearchSchema,
+  SearchResult,
+} from "~/types/api";
 import type { SearchResultHeadingLevel } from "~/utils/search/searchResults";
 import {
   getMatch,
@@ -16,7 +19,7 @@ const {
   order,
   headingLevel = "2",
 } = defineProps<{
-  searchResult: SearchResult<AdministrativeDirective>;
+  searchResult: SearchResult<AdministrativeDirectiveSearchSchema>;
   order: number;
 
   /** Heading level of the result title. */

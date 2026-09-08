@@ -116,12 +116,13 @@ public class AdministrativeDirectiveSearchSchemaMapper {
    * @param <T> The type parameter of the paginated search result.
    * @param page The paginated search result containing the data to be transformed. This includes
    *     the page information and the content.
+   * @param remoteJsonContext remoteJsonContext url to retrieve jsonld context
    * @return A collection schema representing the administrative directive search results, including
    *     metadata such as total items, a unique identifier, and a list of member schemas.
    */
   public static <T>
       CollectionSchema<SearchMemberSchema<AdministrativeDirectiveSearchSchema>> fromSearchPage(
-          final SearchPage<T> page) {
+          final SearchPage<T> page, String remoteJsonContext) {
     String collectionBasePath = ApiConfig.Paths.ADMINISTRATIVE_DIRECTIVE;
     PartialCollectionViewSchema view =
         PartialCollectionViewMapper.fromPage(collectionBasePath, page);
@@ -132,6 +133,7 @@ public class AdministrativeDirectiveSearchSchemaMapper {
 
     return CollectionSchema.<SearchMemberSchema<AdministrativeDirectiveSearchSchema>>builder()
         .id(id)
+        .context(remoteJsonContext)
         .totalItems(page.getTotalElements())
         .member(
             page.stream().map(AdministrativeDirectiveSearchSchemaMapper::fromSearchHit).toList())

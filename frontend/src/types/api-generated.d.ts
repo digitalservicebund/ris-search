@@ -1699,6 +1699,7 @@ export interface components {
         AdministrativeDirectiveSchema: {
             /** @example AdministrativeDirective */
             "@type"?: string;
+            "@context": string;
             /** @example KALU000000000 */
             "@id": string;
             /**

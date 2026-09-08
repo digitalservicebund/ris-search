@@ -1,6 +1,7 @@
 package de.bund.digitalservice.ris.search.integration.controller.api;
 
 import static de.bund.digitalservice.ris.ZipTestUtils.readZipStream;
+import static de.bund.digitalservice.ris.utils.JsonldResultMatchers.isJsonLdCompliant;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.startsWithIgnoringCase;
@@ -98,6 +99,7 @@ class AdministrativeDirectiveControllerApiTest extends ContainersIntegrationBase
             get(ApiConfig.Paths.ADMINISTRATIVE_DIRECTIVE + "/" + documentNumber)
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
+        .andExpect(isJsonLdCompliant())
         .andExpect(jsonPath("$.documentNumber", Matchers.is(documentNumber)));
   }
 
@@ -111,6 +113,7 @@ class AdministrativeDirectiveControllerApiTest extends ContainersIntegrationBase
             get(ApiConfig.Paths.ADMINISTRATIVE_DIRECTIVE + "?documentNumber=" + documentNumber)
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
+        .andExpect(isJsonLdCompliant())
         .andExpect(jsonPath("$.member", hasSize(1)))
         .andExpect(jsonPath("$.member[0].item.documentNumber", Matchers.is(documentNumber)));
   }

@@ -4145,6 +4145,9 @@
             "type" : "string",
             "example" : "AdministrativeDirective"
           },
+          "@context" : {
+            "type" : "string"
+          },
           "@id" : {
             "type" : "string",
             "example" : "KALU000000000"
@@ -4233,7 +4236,7 @@
             }
           }
         },
-        "required" : [ "@id", "citationDates", "documentNumber", "documentType", "encoding", "normReferences", "outline", "referenceNumbers", "references" ]
+        "required" : [ "@context", "@id", "citationDates", "documentNumber", "documentType", "encoding", "normReferences", "outline", "referenceNumbers", "references" ]
       }
     }
   }

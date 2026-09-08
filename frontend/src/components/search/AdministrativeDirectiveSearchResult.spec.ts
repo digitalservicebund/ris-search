@@ -2,7 +2,10 @@ import { mockNuxtImport, renderSuspended } from "@nuxt/test-utils/runtime";
 import { screen } from "@testing-library/vue";
 import { describe } from "vitest";
 import AdministrativeDirectiveSearchResult from "~/components/search/AdministrativeDirectiveSearchResult.vue";
-import type { AdministrativeDirective, SearchResult } from "~/types/api";
+import type {
+  AdministrativeDirectiveSearchSchema,
+  SearchResult,
+} from "~/types/api";
 import type { SearchResultHeadingLevel } from "~/utils/search/searchResults";
 
 const { useRouteMock } = vi.hoisted(() => ({
@@ -13,7 +16,7 @@ const { useRouteMock } = vi.hoisted(() => ({
 
 mockNuxtImport("useRoute", () => useRouteMock);
 
-const searchResult: SearchResult<AdministrativeDirective> = {
+const searchResult: SearchResult<AdministrativeDirectiveSearchSchema> = {
   item: {
     "@type": "AdministrativeDirective",
     "@id": "/v1/administrative-directive/KSNR000000001",
@@ -24,7 +27,7 @@ const searchResult: SearchResult<AdministrativeDirective> = {
     documentType: "VR",
     referenceNumbers: ["Foo - 123", "Bar - 123"],
     entryIntoForceDate: "2025-07-01",
-  } as AdministrativeDirective,
+  } as AdministrativeDirectiveSearchSchema,
   textMatches: [],
 };
 
@@ -32,10 +35,10 @@ async function renderComponent({
   item = searchResult.item,
   textMatches = searchResult.textMatches,
   headingLevel,
-}: Partial<SearchResult<AdministrativeDirective>> & {
+}: Partial<SearchResult<AdministrativeDirectiveSearchSchema>> & {
   headingLevel?: SearchResultHeadingLevel;
 } = {}) {
-  const result: SearchResult<AdministrativeDirective> = {
+  const result: SearchResult<AdministrativeDirectiveSearchSchema> = {
     item,
     textMatches,
   };

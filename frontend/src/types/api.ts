@@ -51,6 +51,8 @@ export type LiteratureSearchSchema =
 // Administrative directives
 export type AdministrativeDirective =
   components["schemas"]["AdministrativeDirectiveSchema"];
+export type AdministrativeDirectiveSearchSchema =
+  components["schemas"]["AdministrativeDirectiveSearchSchema"];
 
 export type DocumentEncodingSchema =
   components["schemas"]["DocumentEncodingSchema"];

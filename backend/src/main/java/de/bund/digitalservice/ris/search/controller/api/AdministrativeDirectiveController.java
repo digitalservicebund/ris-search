@@ -3,6 +3,7 @@ package de.bund.digitalservice.ris.search.controller.api;
 import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
 
 import de.bund.digitalservice.ris.search.config.ApiConfig;
+import de.bund.digitalservice.ris.search.config.ServerConfig;
 import de.bund.digitalservice.ris.search.exception.CustomValidationException;
 import de.bund.digitalservice.ris.search.mapper.AdministrativeDirectiveSchemaMapper;
 import de.bund.digitalservice.ris.search.mapper.AdministrativeDirectiveSearchSchemaMapper;
@@ -60,6 +61,7 @@ public class AdministrativeDirectiveController {
   private final AdministrativeDirectiveService service;
   private final AdministrativeDirectiveXsltTransformerService transformerService;
   private final ChangelogService<AdministrativeDirectiveBucket> changelogService;
+  private final ServerConfig serverConfig;
 
   /**
    * Constructor for the AdministrativeDirectiveController, used to initialize the controller with
@@ -68,15 +70,18 @@ public class AdministrativeDirectiveController {
    * @param service the service responsible for handling administrative directive operations
    * @param transformerService the service responsible for transforming administrative directives
    *     using XSLT
+   * @param serverConfig serverconfig of the application
    */
   @Autowired
   public AdministrativeDirectiveController(
       AdministrativeDirectiveService service,
       AdministrativeDirectiveXsltTransformerService transformerService,
-      ChangelogService<AdministrativeDirectiveBucket> changelogService) {
+      ChangelogService<AdministrativeDirectiveBucket> changelogService,
+      ServerConfig serverConfig) {
     this.service = service;
     this.transformerService = transformerService;
     this.changelogService = changelogService;
+    this.serverConfig = serverConfig;
   }
 
   /**
@@ -106,7 +111,9 @@ public class AdministrativeDirectiveController {
     AdministrativeDirective unit = result.getFirst();
     return ResponseEntity.ok()
         .contentType(MediaType.APPLICATION_JSON)
-        .body(AdministrativeDirectiveSchemaMapper.fromDomain(unit));
+        .body(
+            AdministrativeDirectiveSchemaMapper.fromDomain(
+                unit, serverConfig.getBackEndUrl() + ApiConfig.Paths.JSONLD_CONTEXT));
   }
 
   /**
@@ -146,7 +153,9 @@ public class AdministrativeDirectiveController {
           service.simpleSearch(universalSearchParams, searchParams, sortedPageRequest);
       return ResponseEntity.ok()
           .contentType(MediaType.APPLICATION_JSON)
-          .body(AdministrativeDirectiveSearchSchemaMapper.fromSearchPage(page));
+          .body(
+              AdministrativeDirectiveSearchSchemaMapper.fromSearchPage(
+                  page, serverConfig.getBackEndUrl() + ApiConfig.Paths.JSONLD_CONTEXT));
     } catch (UncategorizedElasticsearchException e) {
       LuceneQueryTools.checkForInvalidQuery(e);
       throw e;

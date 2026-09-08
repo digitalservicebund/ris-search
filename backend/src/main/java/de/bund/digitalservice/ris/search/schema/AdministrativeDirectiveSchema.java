@@ -20,6 +20,7 @@ import org.jspecify.annotations.Nullable;
  */
 @Builder
 public record AdministrativeDirectiveSchema(
+    @JsonProperty("@context") @Schema(requiredMode = Schema.RequiredMode.REQUIRED) String context,
     @Schema(example = "KALU000000000", requiredMode = Schema.RequiredMode.REQUIRED)
         @JsonProperty("@id")
         String id,
