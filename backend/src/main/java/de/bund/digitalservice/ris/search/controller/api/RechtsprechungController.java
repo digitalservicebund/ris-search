@@ -4,18 +4,31 @@ import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
 
 import de.bund.digitalservice.ris.html.service.xslt.CaselawXsltTransformer;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
+import de.bund.digitalservice.ris.search.config.ServerConfig;
+import de.bund.digitalservice.ris.search.exception.CustomValidationException;
 import de.bund.digitalservice.ris.search.exception.FileNotFoundException;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
+import de.bund.digitalservice.ris.search.mapper.CaseLawSearchSchemaMapper;
 import de.bund.digitalservice.ris.search.mapper.ChangelogResponseMapper;
 import de.bund.digitalservice.ris.search.mapper.RechtsprechungSchemaMapper;
+import de.bund.digitalservice.ris.search.mapper.SortParamsConverter;
+import de.bund.digitalservice.ris.search.models.CourtSearchResult;
 import de.bund.digitalservice.ris.search.models.DocumentKind;
+import de.bund.digitalservice.ris.search.models.api.parameters.CaseLawSearchParams;
+import de.bund.digitalservice.ris.search.models.api.parameters.CaseLawSortParam;
 import de.bund.digitalservice.ris.search.models.api.parameters.ChangelogParams;
+import de.bund.digitalservice.ris.search.models.api.parameters.PaginationParams;
+import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
+import de.bund.digitalservice.ris.search.schema.CaseLawSearchSchema;
 import de.bund.digitalservice.ris.search.schema.ChangelogResponse;
+import de.bund.digitalservice.ris.search.schema.CollectionSchema;
 import de.bund.digitalservice.ris.search.schema.RechtsprechungSchema;
+import de.bund.digitalservice.ris.search.schema.SearchMemberSchema;
 import de.bund.digitalservice.ris.search.service.CaseLawService;
 import de.bund.digitalservice.ris.search.service.ChangelogService;
+import de.bund.digitalservice.ris.search.utils.LuceneQueryTools;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -28,10 +41,14 @@ import java.io.IOException;
 import java.net.URLConnection;
 import java.util.List;
 import java.util.Optional;
+import org.jspecify.annotations.Nullable;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.elasticsearch.UncategorizedElasticsearchException;
+import org.springframework.data.elasticsearch.core.SearchPage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +57,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
-/** REST controller for retrieving Rechtsprechung (case law) documents. */
+/**
+ * REST controller for retrieving and searching Rechtsprechung (case law) documents.
+ *
+ * <p>Unlike the legacy {@code /v1/case-law/**} endpoints, which split search from single-document
+ * retrieval across {@link CaseLawSearchController} and {@link CaseLawController}, this controller
+ * keeps all {@code /v1/rechtsprechung/**} functionality in one place, since there was no existing
+ * usage to stay consistent with when this controller was created.
+ */
 @Tag(name = "Rechtsprechung")
 @RestController
 @Profile({"dev", "e2e", "default", "staging", "uat", "test", "prototype"})
@@ -49,6 +73,7 @@ public class RechtsprechungController {
   private final CaseLawService caseLawService;
   private final CaselawXsltTransformer caselawXsltTransformer;
   private final ChangelogService<CaseLawBucket> changelogService;
+  private final ServerConfig serverConfig;
 
   /**
    * Constructor for the RechtsprechungController class.
@@ -56,15 +81,83 @@ public class RechtsprechungController {
    * @param caseLawService the service layer responsible for case law operations
    * @param caselawXsltTransformer the case law xslt transformer
    * @param changelogService the service layer responsible for changelog operations
+   * @param serverConfig serverconfig of the application
    */
   @Autowired
   public RechtsprechungController(
       CaseLawService caseLawService,
       CaselawXsltTransformer caselawXsltTransformer,
-      ChangelogService<CaseLawBucket> changelogService) {
+      ChangelogService<CaseLawBucket> changelogService,
+      ServerConfig serverConfig) {
     this.caseLawService = caseLawService;
     this.caselawXsltTransformer = caselawXsltTransformer;
     this.changelogService = changelogService;
+    this.serverConfig = serverConfig;
+  }
+
+  /**
+   * Search for documents in the OpenSearch index with filters. For more information on the
+   * parameters, refer to the OpenAPI documentation.
+   *
+   * @param caseLawSearchParams Parameters to search with for case law.
+   * @param universalSearchParams Parameters to search with for all document types.
+   * @param paginationParams The number of entities and page index to request.
+   * @param sortParams Parameters to sort the results.
+   * @return The search results
+   */
+  @GetMapping(path = ApiConfig.Paths.RECHTSPRECHUNG, produces = MediaType.APPLICATION_JSON_VALUE)
+  @Operation(
+      operationId = "searchRechtsprechung",
+      summary = "List and search decisions",
+      description =
+          "The endpoint returns a list of decisions from our database. The list is paginated and can be filtered and sorted.")
+  @ApiResponse(responseCode = "200", description = "Success")
+  @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content)
+  public ResponseEntity<CollectionSchema<SearchMemberSchema<CaseLawSearchSchema>>> searchAndFilter(
+      @ParameterObject() CaseLawSearchParams caseLawSearchParams,
+      @ParameterObject UniversalSearchParams universalSearchParams,
+      @ParameterObject() @Valid PaginationParams paginationParams,
+      @ParameterObject @Valid CaseLawSortParam sortParams)
+      throws CustomValidationException {
+
+    var pageRequest = PageRequest.of(paginationParams.getPageIndex(), paginationParams.getSize());
+
+    var sortedPageRequest =
+        pageRequest.withSort(SortParamsConverter.buildSort(sortParams.getSort()));
+
+    try {
+      SearchPage<CaseLawDocumentationUnit> page =
+          caseLawService.simpleSearchCaseLaw(
+              universalSearchParams, caseLawSearchParams, sortedPageRequest);
+      return ResponseEntity.ok()
+          .contentType(MediaType.APPLICATION_JSON)
+          .body(
+              CaseLawSearchSchemaMapper.fromSearchPage(
+                  page, serverConfig.getBackEndUrl() + ApiConfig.Paths.JSONLD_CONTEXT));
+    } catch (UncategorizedElasticsearchException e) {
+      LuceneQueryTools.checkForInvalidQuery(e);
+      throw e;
+    }
+  }
+
+  /**
+   * Retrieves a list of courts with their long and short names and the number of associated
+   * decisions.
+   *
+   * @param prefix an optional parameter to filter courts by their name prefix; can be null
+   * @return a ResponseEntity containing a list of CourtSearchResult objects
+   */
+  @GetMapping(
+      path = ApiConfig.Paths.RECHTSPRECHUNG + "/courts",
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @Operation(
+      operationId = "getRechtsprechungCourts",
+      summary = "List courts",
+      description =
+          "Lists courts with long and short name and number of associated decisions. The prefix parameter may be used to filter this list. Only includes courts whose decisions have been published in this database.")
+  public ResponseEntity<List<CourtSearchResult>> getCourts(@Nullable String prefix) {
+    var result = caseLawService.getCourts(prefix);
+    return ResponseEntity.ok(result);
   }
 
   /**
@@ -190,7 +283,6 @@ public class RechtsprechungController {
 
   /**
    * Retrieves a specific image resource for a particular caselaw based on the provided parameters.
-   * *
    *
    * @param documentNumber the unique document number identifying the caselaw resource (e.g.,
    *     "BDRE000800001")
