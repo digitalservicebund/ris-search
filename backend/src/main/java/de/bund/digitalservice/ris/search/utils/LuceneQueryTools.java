@@ -40,17 +40,17 @@ public class LuceneQueryTools {
     try {
       QueryParser queryParser = new QueryParser("", analyzer);
       queryParser.parse(query);
-    } catch (ParseException e) {
-      throw buildLuceneErrorMessage(e);
+    } catch (ParseException | IllegalArgumentException e) {
+      throw buildLuceneErrorMessage(e.getMessage());
     }
   }
 
-  private static CustomValidationException buildLuceneErrorMessage(ParseException e) {
+  private static CustomValidationException buildLuceneErrorMessage(String errorMessage) {
     return new CustomValidationException(
         CustomError.builder()
             .code("invalid_lucene_query")
             .parameter("query")
-            .message(e.getMessage())
+            .message(errorMessage)
             .build());
   }
 
@@ -75,7 +75,7 @@ public class LuceneQueryTools {
           .map(t -> t.field().isBlank() ? t.text() : t.field() + ":" + t.text())
           .collect(Collectors.joining(" OR "));
     } catch (ParseException e) {
-      throw buildLuceneErrorMessage(e);
+      throw buildLuceneErrorMessage(e.getMessage());
     }
   }
 
