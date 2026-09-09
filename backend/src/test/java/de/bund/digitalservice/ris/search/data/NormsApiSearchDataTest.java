@@ -20,14 +20,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @Tag("data")
-@Disabled
 class NormsApiSearchDataTest extends BaseApiSearchDataTest {
 
   private static final Logger logger = LogManager.getLogger(NormsApiSearchDataTest.class);
@@ -123,13 +121,10 @@ class NormsApiSearchDataTest extends BaseApiSearchDataTest {
             member -> {
               String abbreviation =
                   (String) ((Map<String, Object>) member.get("item")).get("abbreviation");
-              String detailUrl =
-                  ((Map<String, Object>)
-                          ((Map<String, Object>) member.get("item")).get("workExample"))
-                      .get("@id")
-                      .toString();
+              String detailUrl = ((Map<String, Object>) member.get("item")).get("@id").toString();
+
               Response detailResponse = NormsApiSearchDataTest.this.fetchPageResponse(detailUrl);
-              var articleNames = (List<String>) detailResponse.path("workExample.hasPart.name");
+              var articleNames = (List<String>) detailResponse.path("hasPart.name");
               Pattern pattern = Pattern.compile("§ \\d+");
               return articleNames.stream()
                   .map(
@@ -188,7 +183,7 @@ class NormsApiSearchDataTest extends BaseApiSearchDataTest {
           "No text matches in result {}, looking for article number {}", match, articleNumber);
       return false;
     }
-    String name = textMatches.getFirst().get("name");
+    String name = textMatches.getFirst().get("name").replace("<mark>", "").replace("</mark>", "");
     final boolean nameHasExpectedPrefix = name.startsWith(articleNumber);
     if (!nameHasExpectedPrefix) {
       logger.warn("Unexpected article name {}, expected {}", name, articleNumber);
