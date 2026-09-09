@@ -123,7 +123,7 @@ describe("useCaselawSeo", () => {
     it("builds ogTitle with court, documentType, date, and fileNumber", () => {
       useCaselawSeo({
         caseLaw: {
-          courtName: "Bundesgerichtshof",
+          gericht: "Bundesgerichtshof",
           dokumenttyp: "Urteil",
           datum: "2023-06-15",
           aktenzeichenListe: ["VIII ZR 12/23"],
@@ -140,7 +140,7 @@ describe("useCaselawSeo", () => {
     it("uses 'Gerichtsentscheidung' as documentType fallback", () => {
       useCaselawSeo({
         caseLaw: {
-          courtName: "Bundesgerichtshof",
+          gericht: "Bundesgerichtshof",
           datum: "2023-06-15",
           aktenzeichenListe: ["VIII ZR 12/23"],
         } as Rechtsprechung,
@@ -154,7 +154,7 @@ describe("useCaselawSeo", () => {
       );
     });
 
-    it("omits court when courtName is missing", () => {
+    it("omits court when gericht is missing", () => {
       useCaselawSeo({
         caseLaw: {
           dokumenttyp: "Urteil",
@@ -173,7 +173,7 @@ describe("useCaselawSeo", () => {
     it("truncates ogTitle at word boundary to 55 characters", () => {
       useCaselawSeo({
         caseLaw: {
-          courtName: "Oberverwaltungsgericht Nordrhein-Westfalen Münster",
+          gericht: "Oberverwaltungsgericht Nordrhein-Westfalen Münster",
           dokumenttyp: "Beschluss",
         } as Rechtsprechung,
       });

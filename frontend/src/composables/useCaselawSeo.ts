@@ -45,7 +45,7 @@ function buildOgTitle(caseLaw?: Rechtsprechung) {
   const fallback = "Gerichtsentscheidung";
   if (!caseLaw) return fallback;
 
-  const court = caseLaw.courtName?.trim() || "";
+  const court = caseLaw.gericht?.trim() || "";
   const dtype = caseLaw.dokumenttyp || fallback;
   const date = caseLaw.datum ? dateFormattedDDMMYYYY(caseLaw.datum) : "";
   const file = caseLaw.aktenzeichenListe?.[0] || "";

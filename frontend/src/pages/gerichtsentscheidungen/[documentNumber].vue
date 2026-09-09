@@ -91,7 +91,7 @@ const tocEntries = computed<TreeItem[]>(() => {
 });
 
 const headerMetadata = computed<MetadataItem[]>(() => [
-  { type: "text", label: "Gericht", value: caseLaw.value?.courtName },
+  { type: "text", label: "Gericht", value: caseLaw.value?.gericht },
   { type: "text", label: "Dokumenttyp", value: caseLaw.value?.dokumenttyp },
   {
     type: "text",
