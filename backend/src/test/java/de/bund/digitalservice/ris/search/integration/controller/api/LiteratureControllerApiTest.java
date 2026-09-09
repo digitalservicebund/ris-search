@@ -422,6 +422,7 @@ class LiteratureControllerApiTest extends ContainersIntegrationBase {
             get(ApiConfig.Paths.LITERATURE_CHANGELOGS)
                 .params(MultiValueMap.fromSingleValue(Map.of("from", from, "to", to))))
         .andExpect(status().isOk())
+        .andExpect(isJsonLdCompliant())
         .andExpect(jsonPath("$.changed[0].['@id']").value("/v1/literature/file1/zip"))
         .andExpect(jsonPath("$.changed[0].['@type']").value("MediaObject"))
         .andExpect(jsonPath("$.deleted[0].['@id']").value("/v1/literature/file2"))

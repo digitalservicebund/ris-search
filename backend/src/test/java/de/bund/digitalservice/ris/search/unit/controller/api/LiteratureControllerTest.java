@@ -11,6 +11,7 @@ import de.bund.digitalservice.ris.html.service.xslt.SliLiteratureXsltTransformer
 import de.bund.digitalservice.ris.search.config.ServerConfig;
 import de.bund.digitalservice.ris.search.controller.api.LiteratureController;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
+import de.bund.digitalservice.ris.search.repository.objectstorage.LiteratureBucket;
 import de.bund.digitalservice.ris.search.service.ChangelogService;
 import de.bund.digitalservice.ris.search.service.LiteratureService;
 import java.util.Optional;
@@ -31,7 +32,7 @@ class LiteratureControllerTest {
 
   @Mock SliLiteratureXsltTransformer sliTransformer;
 
-  @Mock ChangelogService changelogService;
+  @Mock ChangelogService<LiteratureBucket> changelogService;
 
   @BeforeEach
   void setup() {

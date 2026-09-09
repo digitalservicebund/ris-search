@@ -61,7 +61,7 @@ public class AdministrativeDirectiveController {
   private final AdministrativeDirectiveService service;
   private final AdministrativeDirectiveXsltTransformerService transformerService;
   private final ChangelogService<AdministrativeDirectiveBucket> changelogService;
-  private final ServerConfig serverConfig;
+  private final String jsonldContextPath;
 
   /**
    * Constructor for the AdministrativeDirectiveController, used to initialize the controller with
@@ -81,7 +81,7 @@ public class AdministrativeDirectiveController {
     this.service = service;
     this.transformerService = transformerService;
     this.changelogService = changelogService;
-    this.serverConfig = serverConfig;
+    this.jsonldContextPath = serverConfig.getBackEndUrl() + ApiConfig.Paths.JSONLD_CONTEXT;
   }
 
   /**
@@ -111,9 +111,7 @@ public class AdministrativeDirectiveController {
     AdministrativeDirective unit = result.getFirst();
     return ResponseEntity.ok()
         .contentType(MediaType.APPLICATION_JSON)
-        .body(
-            AdministrativeDirectiveSchemaMapper.fromDomain(
-                unit, serverConfig.getBackEndUrl() + ApiConfig.Paths.JSONLD_CONTEXT));
+        .body(AdministrativeDirectiveSchemaMapper.fromDomain(unit, jsonldContextPath));
   }
 
   /**
@@ -154,9 +152,7 @@ public class AdministrativeDirectiveController {
           service.simpleSearch(universalSearchParams, searchParams, sortedPageRequest);
       return ResponseEntity.ok()
           .contentType(MediaType.APPLICATION_JSON)
-          .body(
-              AdministrativeDirectiveSearchSchemaMapper.fromSearchPage(
-                  page, serverConfig.getBackEndUrl() + ApiConfig.Paths.JSONLD_CONTEXT));
+          .body(AdministrativeDirectiveSearchSchemaMapper.fromSearchPage(page, jsonldContextPath));
     } catch (UncategorizedElasticsearchException e) {
       LuceneQueryTools.checkForInvalidQuery(e);
       throw e;
@@ -237,7 +233,8 @@ public class AdministrativeDirectiveController {
             params.getFrom().toInstant(), params.getTo().toInstant());
 
     return ResponseEntity.ok(
-        ChangelogResponseMapper.mapChangelog(changelog, DocumentKind.ADMINISTRATIVE_DIRECTIVE));
+        ChangelogResponseMapper.mapChangelog(
+            changelog, DocumentKind.ADMINISTRATIVE_DIRECTIVE, jsonldContextPath));
   }
 
   /**

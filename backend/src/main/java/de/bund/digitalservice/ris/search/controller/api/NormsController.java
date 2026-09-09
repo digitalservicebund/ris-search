@@ -699,7 +699,8 @@ public class NormsController {
         changelogService.getChangesBetween(
             params.getFrom().toInstant(), params.getTo().toInstant());
     return ResponseEntity.ok(
-        ChangelogResponseMapper.mapChangelog(changelog, DocumentKind.LEGISLATION));
+        ChangelogResponseMapper.mapChangelog(
+            changelog, DocumentKind.LEGISLATION, jsonldContextPath));
   }
 
   /**

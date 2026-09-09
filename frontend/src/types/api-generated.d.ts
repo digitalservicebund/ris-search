@@ -1254,9 +1254,8 @@ export interface components {
             "@type": string;
         };
         ChangelogResponse: {
-            "@context"?: {
-                [key: string]: unknown;
-            };
+            "@type"?: string;
+            "@context": string;
             /** @description Set of changed documents */
             changed: components["schemas"]["ChangelogChangedDocument"][];
             /** @description Set of deleted documents */

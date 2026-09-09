@@ -54,8 +54,6 @@ class RechtsprechungControllerTest {
 
   @Test
   void itSearchesAndFilters() throws Exception {
-    when(serverConfig.getBackEndUrl()).thenReturn("https://testphase.rechtsinformationen.bund.de");
-
     var searchHits =
         new SearchHitsImpl<CaseLawDocumentationUnit>(
             0,

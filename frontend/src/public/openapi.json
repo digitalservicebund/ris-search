@@ -3392,9 +3392,11 @@
       "ChangelogResponse" : {
         "type" : "object",
         "properties" : {
+          "@type" : {
+            "type" : "string"
+          },
           "@context" : {
-            "type" : "object",
-            "additionalProperties" : { }
+            "type" : "string"
           },
           "changed" : {
             "type" : "array",
@@ -3417,7 +3419,7 @@
             "description" : "flag to communicate that the whole storage got rebuilt"
           }
         },
-        "required" : [ "allChanged", "changed", "deleted" ]
+        "required" : [ "@context", "allChanged", "changed", "deleted" ]
       },
       "CollectionSchemaSearchMemberSchemaLiteratureSearchSchema" : {
         "type" : "object",
