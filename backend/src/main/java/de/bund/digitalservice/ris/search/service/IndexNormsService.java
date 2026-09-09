@@ -308,6 +308,7 @@ public class IndexNormsService implements IndexService {
   private void clearOldNorms(String timestamp) {
     normsRepository.deleteByIndexedAtBefore(timestamp);
     normsRepository.deleteByIndexedAtIsNull();
+    articlesRepository.deleteByIndexedAtBefore(timestamp);
     articlesRepository.deleteByIndexedAtIsNull();
   }
 

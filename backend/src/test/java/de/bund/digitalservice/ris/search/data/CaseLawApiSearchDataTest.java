@@ -11,14 +11,12 @@ import java.util.Objects;
 import java.util.Optional;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @Tag("data")
-@Disabled
 class CaseLawApiSearchDataTest extends BaseApiSearchDataTest {
 
   private final int maxEntries = 500;
