@@ -300,6 +300,7 @@ test(
       "Vorgehende Entscheidungen:",
       "VG Frankfurt, Beschluss vom 12. November 2024 - XVI VL 34/99",
       "AG Wiesbaden, Urteil vom 20. Mai 2023 - XVI VL 12/97",
+      "VG Frankfurt, Beschluss vom 4. September 2026 - Foo Bar 2361/26.F",
       "Nachgehende Entscheidungen:",
       "OVG Münster, Beschluss vom 1. Juni 2025 - XVI VL 34/99 (anhängig)",
       "BVerwG Leipzig, Urteil vom 15. September 2025 - XVI VL 34/99",
