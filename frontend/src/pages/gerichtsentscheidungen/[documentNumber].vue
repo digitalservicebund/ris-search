@@ -44,16 +44,35 @@ const isEmptyDocument = computed(() => isDocumentEmpty(document.value));
 
 useCaselawSeo({ caseLaw: caseLaw.value, document: document.value });
 
+const verweiseGroups = computed(() =>
+  document.value ? getVerweiseGroups(document.value) : [],
+);
+
+const shouldRenderVerweise = computed(() => {
+  return usePrivateFeaturesFlag() && verweiseGroups.value.length;
+});
+
 // Page contents ------------------------------------------
 
-const views: TabView[] = [
-  { path: "text", label: "Text" },
-  {
-    path: "details",
-    label: "Details",
-    analyticsId: "caselaw-metadata-tab",
-  },
-];
+const views = computed<TabView[]>(() => {
+  const baseViews = [
+    { path: "text", label: "Text" },
+    {
+      path: "details",
+      label: "Details",
+      analyticsId: "caselaw-metadata-tab",
+    },
+  ];
+
+  if (shouldRenderVerweise.value) {
+    baseViews.push({
+      path: "verweise",
+      label: "Verweise",
+    });
+  }
+
+  return baseViews;
+});
 
 const title = computed(() => {
   return caseLaw.value?.headline
@@ -161,6 +180,7 @@ const detailItems = computed<DetailsListItem[]>(() => [
 
 const textSectionId = useId();
 const detailsSectionId = useId();
+const verweiseSectionId = useId();
 </script>
 
 <template>
@@ -225,11 +245,44 @@ const detailsSectionId = useId();
         </template>
       </SidebarLayout>
     </template>
+
+    <template #verweise>
+      <section
+        v-if="shouldRenderVerweise"
+        role="tabpanel"
+        :aria-labelledby="verweiseSectionId"
+        class="pt-32 pb-32 md:pb-56"
+      >
+        <h2 :id="verweiseSectionId" class="typo-headline3-bold">Verweise</h2>
+        <div class="verweise">
+          <div v-for="group in verweiseGroups" :key="group.id">
+            <h3 class="typo-body-bold pt-16 pb-8">
+              {{ group.label }}
+            </h3>
+            <div v-html="group.html" />
+          </div>
+        </div>
+      </section>
+    </template>
   </NuxtLayout>
 </template>
 
 <style scoped>
 @reference "~/assets/main.css";
+
+:deep(.verweise) {
+  a {
+    @apply typo-link-regular;
+  }
+
+  ul {
+    @apply mb-16;
+  }
+
+  li {
+    @apply typo-label1-regular;
+  }
+}
 
 .case-law {
   --border-number-min-width: 3rem;

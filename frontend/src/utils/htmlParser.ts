@@ -1,4 +1,5 @@
 import type { JSDOM } from "jsdom";
+import sanitizeHtml from "sanitize-html";
 
 type Section = {
   id: string;
@@ -57,6 +58,67 @@ export function getTextFromElements(elements?: NodeListOf<Element>): string[] {
     (element) => element.textContent,
   );
   return textElements.filter(Boolean) as string[];
+}
+
+export type VerweiseGroup = {
+  id: string;
+  label: string;
+  html: string;
+};
+
+/**
+ * Verweise categories in display order, matching the `<template id="...">`
+ * elements the case-law HTML transformation places in `<head>` (one per
+ * category, e.g. `referenzNorm`, `vorgehendeEntscheidung`), each containing a
+ * `<ul>` of `<li>` entries.
+ */
+const VERWEISE_CATEGORIES: { id: string; label: string }[] = [
+  { id: "referenzNorm", label: "Normen" },
+  { id: "referenzRechtsprechungAktiv", label: "Zitierte Rechtsprechung" },
+  { id: "referenzRechtsprechungPassiv", label: "Verweisende Rechtsprechung" },
+  {
+    id: "referenzVerwaltungsvorschriftAktiv",
+    label: "Zitierte Verwaltungsvorschriften",
+  },
+  {
+    id: "referenzVerwaltungsvorschriftPassiv",
+    label: "Verweisende Verwaltungsvorschriften",
+  },
+  {
+    id: "referenzUnselbstaendigeLiteraturAktiv",
+    label: "Zitierte unselbständige Literatur",
+  },
+  {
+    id: "referenzUnselbstaendigeLiteraturPassiv",
+    label: "Verweisende unselbständige Literatur",
+  },
+  {
+    id: "referenzSelbstaendigeLiteraturAktiv",
+    label: "Zitierte selbständige Literatur",
+  },
+  {
+    id: "referenzSelbstaendigeLiteraturPassiv",
+    label: "Verweisende selbständige Literatur",
+  },
+  { id: "vorgehendeEntscheidung", label: "Vorgehende Entscheidungen" },
+  { id: "nachgehendeEntscheidung", label: "Nachgehende Entscheidungen" },
+];
+
+/**
+ * Extracts the verweise categories present in the document's `<head>`, paired
+ * with a display label. Categories without a matching template (or with no
+ * content) are omitted. The list markup is sanitized down to `<ul>`, `<li>` and
+ * `<a>` elements only.
+ */
+export function getVerweiseGroups(document: Document): VerweiseGroup[] {
+  return VERWEISE_CATEGORIES.flatMap(({ id, label }) => {
+    const rawHtml = document.head.querySelector<HTMLTemplateElement>(
+      `template#${id}`,
+    )?.innerHTML;
+    const html =
+      rawHtml && sanitizeHtml(rawHtml, { allowedTags: ["ul", "li", "a"] });
+    return html ? [{ id, label, html }] : [];
+  });
 }
 
 /**
