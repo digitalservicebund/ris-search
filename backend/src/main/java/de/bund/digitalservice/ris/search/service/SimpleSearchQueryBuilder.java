@@ -2,8 +2,6 @@ package de.bund.digitalservice.ris.search.service;
 
 import de.bund.digitalservice.ris.search.models.ParsedSearchTerm;
 import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
-import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
-import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.utils.DateUtils;
 import de.bund.digitalservice.ris.search.utils.RisHighlightBuilder;
 import java.util.ArrayList;
@@ -61,7 +59,6 @@ public class SimpleSearchQueryBuilder {
           parsedSearchTerm.unquotedTokens(),
           parsedSearchTerm.quotedSearchPhrases(),
           boolQuery);
-      applyShouldLogic(parsedSearchTerm.original(), boolQuery);
     }
     // handle date
     DateUtils.buildQuery("DATUM", params.getDateFrom(), params.getDateTo())
@@ -82,9 +79,14 @@ public class SimpleSearchQueryBuilder {
             .values();
     highlightedFields.forEach(highlightBuilder::field);
 
+    // apply logic that is different across search types
     for (SimpleSearchType searchType : searchTypes) {
       excludedFields.addAll(searchType.getExcludedFields());
-      searchType.addExtraLogic(params.getSearchTerm(), boolQuery);
+      searchType.addExtraLogic(parsedSearchTerm.original(), boolQuery);
+
+      if (StringUtils.isNotEmpty(parsedSearchTerm.original())) {
+        searchType.getTargetedSearchQueries(parsedSearchTerm.original()).forEach(boolQuery::should);
+      }
     }
 
     // add pagination and other parameters
@@ -126,31 +128,6 @@ public class SimpleSearchQueryBuilder {
       // Quoted terms use opensearch phrase search
       query.must(buildOneClause(searchTypes, phrase, true));
     }
-  }
-
-  private void applyShouldLogic(String searchTerm, BoolQueryBuilder query) {
-    // Targeted search. If the entire search term is an exact match for a unique identifier it
-    // should get a very large boost.
-    query.should(
-        new MultiMatchQueryBuilder(searchTerm)
-            .field(CaseLawDocumentationUnit.Fields.CELEX_KEYWORD)
-            .field(CaseLawDocumentationUnit.Fields.DOCUMENT_NUMBER_KEYWORD)
-            .field(CaseLawDocumentationUnit.Fields.ECLI_KEYWORD)
-            .field(CaseLawDocumentationUnit.Fields.FILE_NUMBERS_KEYWORD)
-            .field(Norm.Fields.WORK_ELI_KEYWORD)
-            .field(Norm.Fields.EXPRESSION_ELI_KEYWORD)
-            .field(Norm.Fields.OFFICIAL_TITLE_KEYWORD)
-            .field(Norm.Fields.OFFICIAL_SHORT_TITLE_KEYWORD)
-            .field(Norm.Fields.ABBREVIATION_KEYWORD)
-            .boost(10.0f));
-    query.should(
-        new MultiMatchQueryBuilder(searchTerm)
-            .field(CaseLawDocumentationUnit.Fields.ABWEICHENDE_AKTENZEICHEN_KEYWORD)
-            .field(CaseLawDocumentationUnit.Fields.ABWEICHENDE_ECLIS_KEYWORD)
-            .boost(8.0f));
-
-    query.should(
-        QueryBuilders.matchQuery(Norm.Fields.ARTICLE_FINGERPRINTS, searchTerm).boost(10.0f));
   }
 
   private MultiMatchQueryBuilder buildOneClause(

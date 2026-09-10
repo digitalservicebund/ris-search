@@ -12,7 +12,9 @@ import java.util.List;
 import java.util.Map;
 import org.jetbrains.annotations.NotNull;
 import org.opensearch.index.query.BoolQueryBuilder;
+import org.opensearch.index.query.MultiMatchQueryBuilder;
 import org.opensearch.index.query.Operator;
+import org.opensearch.index.query.QueryBuilder;
 import org.opensearch.index.query.QueryBuilders;
 import org.opensearch.search.fetch.subphase.highlight.HighlightBuilder;
 
@@ -151,6 +153,21 @@ public class CaseLawSimpleSearchType implements SimpleSearchType {
     if (searchParams.getTypeGroup() != null) {
       queryDocumentTypeGroup(searchParams.getTypeGroup(), query);
     }
+  }
+
+  @Override
+  public List<QueryBuilder> getTargetedSearchQueries(String searchTerm) {
+    return List.of(
+        new MultiMatchQueryBuilder(searchTerm)
+            .field(CaseLawDocumentationUnit.Fields.CELEX_KEYWORD)
+            .field(CaseLawDocumentationUnit.Fields.DOCUMENT_NUMBER_KEYWORD)
+            .field(CaseLawDocumentationUnit.Fields.ECLI_KEYWORD)
+            .field(CaseLawDocumentationUnit.Fields.FILE_NUMBERS_KEYWORD)
+            .boost(10.0f),
+        new MultiMatchQueryBuilder(searchTerm)
+            .field(CaseLawDocumentationUnit.Fields.ABWEICHENDE_AKTENZEICHEN_KEYWORD)
+            .field(CaseLawDocumentationUnit.Fields.ABWEICHENDE_ECLIS_KEYWORD)
+            .boost(8.0f));
   }
 
   private static void queryDocumentTypeGroup(
