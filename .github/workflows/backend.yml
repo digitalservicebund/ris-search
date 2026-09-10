@@ -314,6 +314,17 @@ jobs:
       - generate-backend-code-documentation
     if: ${{ github.ref == 'refs/heads/main' }}
     steps:
+      - name: Checkout ris-search repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          path: ris-search
+      # Copy ADRs into tmp folder
+      - name: Copy ADRs
+        run: |
+          mkdir -p tmp/adr-source
+          find ris-search/doc/adr/ -type f -exec cp {} tmp/adr-source/ \;
+          ls -l tmp/adr-source
+
       - name: Backend Code Documentation - Download
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
         with:
@@ -326,6 +337,16 @@ jobs:
           filePath: tmp/backend-code-documentation
           destinationDir: search-code-documentation/java
           reportIsDirectory: true
+          BUCKET_ACCESS_KEY_ID: ${{ secrets.REPORTS_BUCKET_ACCESS_KEY_ID }}
+          BUCKET_SECRET_ACCESS_KEY: ${{ secrets.REPORTS_BUCKET_SECRET_ACCESS_KEY }}
+
+      - name: add ADRs to report
+        uses: digitalservicebund/add-ris-report@31a248ea368f94bfa3a012da3c202bcc6be2debe
+        with:
+          filePath: tmp/adr-source
+          destinationDir: adr/ris-search
+          reportIsDirectory: true
+          keepAllVersions: false
           BUCKET_ACCESS_KEY_ID: ${{ secrets.REPORTS_BUCKET_ACCESS_KEY_ID }}
           BUCKET_SECRET_ACCESS_KEY: ${{ secrets.REPORTS_BUCKET_SECRET_ACCESS_KEY }}
 
