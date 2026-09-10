@@ -182,7 +182,7 @@ onBeforeUnmount(stopAligningBodyOverlay);
 <template>
   <div class="flex flex-col gap-4">
     <label :id="id" class="typo-label1-bold">Gericht</label>
-    <small class="ris-label3-regular md:ris-label2-regular">
+    <small class="ris-label2-regular text-pretty">
       Bundesgericht auswählen oder weiteres Gericht suchen
     </small>
     <div ref="fieldRef" data-testid="court-filter-field">
