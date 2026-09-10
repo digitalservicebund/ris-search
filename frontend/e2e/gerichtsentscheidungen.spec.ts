@@ -229,6 +229,56 @@ test("can view details", { tag: ["@RISDEV-12108"] }, async ({ page }) => {
   ]);
 });
 
+test.describe("can view verweise", { tag: ["@RISDEV-12560"] }, () => {
+  test("can view verweise if private features enabled and verweise exist", async ({
+    page,
+    privateFeaturesEnabled,
+  }) => {
+    test.skip(!privateFeaturesEnabled);
+    await navigate(page, "/gerichtsentscheidungen/BDRE000800001");
+    await page.getByRole("tab", { name: "Verweise" }).click();
+
+    const tabPanel = page.getByRole("tabpanel", { name: "Verweise" });
+
+    await expect(tabPanel.getByRole("heading", { level: 2 })).toHaveText(
+      "Verweise",
+    );
+
+    await expect(tabPanel.getByText("Normen")).toBeVisible();
+    await expect(
+      tabPanel.getByText("BDG § 34, vereinbar mit höherrangigem Recht Hessen"),
+    ).toBeVisible();
+
+    const linkedVerweis = tabPanel.getByRole("link", {
+      name: "VG Frankfurt, Beschluss vom 4. September 2026 - Foo Bar 2361/26.F",
+    });
+    await expect(linkedVerweis).toBeVisible();
+    await linkedVerweis.click();
+
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+      "Testheader für Urteil 8.",
+    );
+  });
+
+  test("does not show verweise if private features enabled but no verweise exist", async ({
+    page,
+    privateFeaturesEnabled,
+  }) => {
+    test.skip(!privateFeaturesEnabled);
+    await navigate(page, "/gerichtsentscheidungen/BORE040030050");
+    await expect(page.getByRole("tab", { name: "Verweise" })).not.toBeVisible();
+  });
+
+  test("does not show verweise if private features disabled", async ({
+    page,
+    privateFeaturesEnabled,
+  }) => {
+    test.skip(privateFeaturesEnabled);
+    await navigate(page, "/gerichtsentscheidungen/BDRE000800001");
+    await expect(page.getByRole("tab", { name: "Verweise" })).not.toBeVisible();
+  });
+});
+
 test(
   "can view Gesetzeskraft, Streitjahre and linked decisions",
   { tag: ["@RISDEV-12471"] },
@@ -250,6 +300,7 @@ test(
       "Vorgehende Entscheidungen:",
       "VG Frankfurt, Beschluss vom 12. November 2024 - XVI VL 34/99",
       "AG Wiesbaden, Urteil vom 20. Mai 2023 - XVI VL 12/97",
+      "VG Frankfurt, Beschluss vom 4. September 2026 - Foo Bar 2361/26.F",
       "Nachgehende Entscheidungen:",
       "OVG Münster, Beschluss vom 1. Juni 2025 - XVI VL 34/99 (anhängig)",
       "BVerwG Leipzig, Urteil vom 15. September 2025 - XVI VL 34/99",

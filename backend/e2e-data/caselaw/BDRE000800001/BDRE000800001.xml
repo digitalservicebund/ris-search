@@ -75,6 +75,20 @@
                      </ris:nachgehendeEntscheidung>
                  </akn:implicitReference>
                  <akn:implicitReference ris:domainTerm="Rechtszug">
+                     <ris:vorgehendeEntscheidung domainTerm="Vorgehende Entscheidung">
+                         <ris:referenzURI domainTerm="URI der Referenz">ris:/rechtsprechung/BORE040030050</ris:referenzURI>
+                         <ris:dokumenttyp domainTerm="Dokumenttyp">Beschluss</ris:dokumenttyp>
+                         <ris:entscheidungsdatum domainTerm="Entscheidungsdatum">2026-09-04</ris:entscheidungsdatum>
+                         <ris:dokumentnummer domainTerm="Dokumentnummer">BORE040030050</ris:dokumentnummer>
+                         <ris:aktenzeichen domainTerm="Aktenzeichen">Foo Bar 2361/26.F</ris:aktenzeichen>
+                         <ris:gericht domainTerm="Gericht" showAs="VG Frankfurt">
+                             <ris:gerichtstyp domainTerm="Gerichtstyp">VG</ris:gerichtstyp>
+                             <ris:gerichtsort domainTerm="Gerichtsort">Frankfurt</ris:gerichtsort>
+                             <ris:gerichtsbarkeit domainTerm="Gerichtsbarkeit">Verwaltungsgerichtsbarkeit</ris:gerichtsbarkeit>
+                         </ris:gericht>
+                     </ris:vorgehendeEntscheidung>
+                 </akn:implicitReference>
+                 <akn:implicitReference ris:domainTerm="Rechtszug">
                      <ris:nachgehendeEntscheidung domainTerm="Nachgehende Entscheidung" art="nachgehend">
                          <ris:dokumenttyp domainTerm="Dokumenttyp">Urteil</ris:dokumenttyp>
                          <ris:entscheidungsdatum domainTerm="Entscheidungsdatum">2025-09-15</ris:entscheidungsdatum>
