@@ -61,7 +61,7 @@ describe("court autocomplete", () => {
     await user.type(input, "Ber");
 
     await waitFor(() => {
-      expect(mockFetch).toHaveBeenCalledWith("/v1/case-law/courts", {
+      expect(mockFetch).toHaveBeenCalledWith("/v1/rechtsprechung/courts", {
         query: { prefix: "Ber" },
       });
     });
@@ -123,7 +123,7 @@ describe("court autocomplete", () => {
     );
 
     await waitFor(() => {
-      expect(mockFetch).toHaveBeenCalledWith("/v1/case-law/courts", {
+      expect(mockFetch).toHaveBeenCalledWith("/v1/rechtsprechung/courts", {
         query: { prefix: "existing court" },
       });
     });

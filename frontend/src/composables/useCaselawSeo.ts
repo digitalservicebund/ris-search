@@ -1,7 +1,7 @@
-import { type CaseLaw } from "~/types/api";
+import { type Rechtsprechung } from "~/types/api";
 
 export type UseCaselawSeoInput = {
-  caseLaw?: CaseLaw;
+  caseLaw?: Rechtsprechung;
   document?: Document;
 };
 
@@ -13,18 +13,16 @@ export function useCaselawSeo({ caseLaw, document }: UseCaselawSeoInput) {
   });
 }
 
-function buildTitle(caseLaw?: CaseLaw) {
-  return caseLaw?.headline || "Gerichtsentscheidung";
+function buildTitle(caseLaw?: Rechtsprechung) {
+  return caseLaw?.kurztitel || "Gerichtsentscheidung";
 }
 
 function buildDescription(
-  caseLaw: CaseLaw | undefined,
+  caseLaw: Rechtsprechung | undefined,
   document: Document | undefined,
 ) {
-  if (caseLaw?.guidingPrinciple) {
-    const sentences = caseLaw.guidingPrinciple
-      .split(/(?<=[.!?])\s+/)
-      .filter(Boolean);
+  if (caseLaw?.leitsatz) {
+    const sentences = caseLaw.leitsatz.split(/(?<=[.!?])\s+/).filter(Boolean);
 
     return truncateAtWord(sentences.slice(0, 2).join(" "), 150);
   }
@@ -43,16 +41,14 @@ function buildDescription(
 // TODO: The truncation can cause parts of the fileNumber to not be displayed
 // which is probably not the wanted behavior - this should be clarified and fixed in
 // https://digitalservicebund.atlassian.net/browse/RISDEV-11649
-function buildOgTitle(caseLaw?: CaseLaw) {
+function buildOgTitle(caseLaw?: Rechtsprechung) {
   const fallback = "Gerichtsentscheidung";
   if (!caseLaw) return fallback;
 
-  const court = caseLaw.courtName?.trim() || "";
-  const dtype = caseLaw.documentType || fallback;
-  const date = caseLaw.decisionDate
-    ? dateFormattedDDMMYYYY(caseLaw.decisionDate)
-    : "";
-  const file = caseLaw.fileNumbers?.[0] || "";
+  const court = caseLaw.gericht?.trim() || "";
+  const dtype = caseLaw.dokumenttyp || fallback;
+  const date = caseLaw.datum ? dateFormattedDDMMYYYY(caseLaw.datum) : "";
+  const file = caseLaw.aktenzeichenListe?.[0] || "";
 
   const parts = [
     court && `${court}:`,

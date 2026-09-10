@@ -112,7 +112,7 @@ describe("useSimpleSearch", () => {
 
       expect(useRisBackendMock).toHaveBeenCalled();
       const url = useRisBackendMock.mock.calls[0]![0];
-      expect(url.value).toBe("/v1/case-law");
+      expect(url.value).toBe("/v1/rechtsprechung");
     });
 
     it("calls the endpoint for legislation with correct URL", async () => {
