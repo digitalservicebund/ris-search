@@ -33,6 +33,7 @@ jaxb-moxy = "5.0.1"
 posthog = "1.2.0"
 pebble = "4.1.2"
 rest-assured = "6.0.1"
+commons-io = "2.22.0"
 ris-html-transformation="0.0.8"
 ris-xml-schema="0.3.6"
 titanium-json="1.7.0"
@@ -77,6 +78,7 @@ streamex = { module = 'one.util:streamex', version.ref = "streamex" }
 restassured = { module = 'io.rest-assured:rest-assured', version.ref = "rest-assured" }
 apicatalog-titanium-json = { module="com.apicatalog:titanium-json-ld", version.ref = "titanium-json"}
 glassfish-jakarta-json = { module = "org.glassfish:jakarta.json", version.ref = "jakarta-json"}
+commons-io = { module = "commons-io:commons-io", version.ref = "commons-io" }
 
 # CVE-2026-5588
 bouncycastle-bom = { module = "org.bouncycastle:bc-jdk18on-bom", version = "1.85.2" }
