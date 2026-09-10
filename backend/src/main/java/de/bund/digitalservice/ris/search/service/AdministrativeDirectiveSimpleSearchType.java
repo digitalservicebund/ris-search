@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import org.opensearch.index.query.BoolQueryBuilder;
 import org.opensearch.index.query.Operator;
+import org.opensearch.index.query.QueryBuilder;
 import org.opensearch.search.fetch.subphase.highlight.HighlightBuilder;
 
 /** Simple search type for administrative directives. */
@@ -77,5 +78,10 @@ public class AdministrativeDirectiveSimpleSearchType implements SimpleSearchType
                   AdministrativeDirective.Fields.DOCUMENT_NUMBER, searchParams.getDocumentNumber())
               .operator(Operator.AND));
     }
+  }
+
+  @Override
+  public List<QueryBuilder> getTargetedSearchQueries(String searchTerm) {
+    return List.of();
   }
 }

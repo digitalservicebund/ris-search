@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import org.opensearch.index.query.BoolQueryBuilder;
 import org.opensearch.index.query.Operator;
+import org.opensearch.index.query.QueryBuilder;
 import org.opensearch.index.query.QueryBuilders;
 import org.opensearch.search.fetch.subphase.highlight.HighlightBuilder;
 
@@ -103,6 +104,11 @@ public class LiteratureSimpleSearchType implements SimpleSearchType {
     addArrayFilter(query, Literature.Fields.DOCUMENT_TYPES, searchParams.getDocumentType());
     addArrayFilter(query, Literature.Fields.AUTHORS, searchParams.getAuthor());
     addArrayFilter(query, Literature.Fields.COLLABORATORS, searchParams.getCollaborator());
+  }
+
+  @Override
+  public List<QueryBuilder> getTargetedSearchQueries(String searchTerm) {
+    return List.of();
   }
 
   /**
