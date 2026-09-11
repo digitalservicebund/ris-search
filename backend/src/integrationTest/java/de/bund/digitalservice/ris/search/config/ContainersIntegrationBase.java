@@ -144,6 +144,7 @@ public class ContainersIntegrationBase {
       ((TestMockS3Client) literatureS3Client.getS3Client()).emptyBucket();
       ((TestMockS3Client) normS3Client.getS3Client()).emptyBucket();
       ((TestMockS3Client) administrativeDirectiveS3Client.getS3Client()).emptyBucket();
+      ((TestMockS3Client) portalS3Client.getS3Client()).emptyBucket();
     } catch (IOException e) {
       throw new RuntimeException(e);
     }

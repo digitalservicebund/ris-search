@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.opensearch.action.search.SearchType;
@@ -149,6 +151,13 @@ public class ArticleService {
   }
 
   private boolean articleExist(String expressionEli, String eid) {
+    System.err.println("expressionEli: " + expressionEli);
+    System.err.println("eid: " + eid);
+    System.err.println(
+        "articlesRepository contents: "
+            + StreamSupport.stream(articlesRepository.findAll().spliterator(), false)
+                .map(Article::getEId)
+                .collect(Collectors.joining(", ")));
     return articlesRepository.existsById(Article.buildId(expressionEli, eid));
   }
 }
