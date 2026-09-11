@@ -127,34 +127,29 @@ dependencyLocking {
     lockAllConfigurations()
 }
 
-// Test deps shared by the unit ("test") and "integrationTest" suites, which both boot a
-// Spring (Boot) test context.
-val commonTestDependencies: JvmComponentDependencies.() -> Unit = {
-    implementation(libs.spring.boot.starter.test)
-    implementation(libs.spring.security.test)
-    implementation(libs.spring.boot.starter.webmvc.test)
-    implementation(libs.mockito.junit.jupiter)
-}
-
 testing {
     suites {
+        withType(JvmTestSuite::class).matching { it.name in listOf("test", "integrationTest") }.configureEach {
+            useJUnitJupiter()
+            dependencies {
+                implementation(sourceSets["main"].output)
+                implementation(testFixtures(project()))
+                implementation(libs.spring.boot.starter.test)
+                implementation(libs.spring.security.test)
+                implementation(libs.spring.boot.starter.webmvc.test)
+                implementation(libs.mockito.junit.jupiter)
+            }
+        }
+
         val test =
             named<JvmTestSuite>("test") {
-                useJUnitJupiter()
                 dependencies {
-                    implementation(sourceSets["main"].output)
-                    implementation(testFixtures(project()))
-                    commonTestDependencies()
                     implementation(libs.archunit.junit5)
                 }
             }
 
         register<JvmTestSuite>("integrationTest") {
-            useJUnitJupiter()
             dependencies {
-                implementation(sourceSets["main"].output)
-                implementation(testFixtures(project()))
-                commonTestDependencies()
                 implementation(libs.testcontainers.junit.jupiter)
                 implementation(libs.opensearch.testcontainers)
                 implementation(libs.testcontainers.postgresql)
