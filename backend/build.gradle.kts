@@ -133,8 +133,12 @@ testing {
             targets.all {
                 testTask.configure {
                     testLogging {
-                        showStandardStreams = true
-                        events("failed", "skipped")
+                        showStandardStreams = false
+                        events(
+                            org.gradle.api.tasks.testing.logging.TestLogEvent.STANDARD_ERROR,
+                            org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED,
+                            org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED,
+                        )
                     }
                 }
             }

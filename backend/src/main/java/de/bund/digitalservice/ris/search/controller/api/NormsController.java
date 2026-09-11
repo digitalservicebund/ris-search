@@ -40,6 +40,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.net.URLConnection;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -564,11 +565,13 @@ public class NormsController {
           @PathVariable
           String articleEid)
       throws ObjectStoreServiceException {
+    System.err.println("Entered controller");
     String resourceBasePath = getResourceBasePath();
     var expressionEli =
         new ExpressionEli(
             jurisdiction, agent, year, naturalIdentifier, pointInTime, version, language);
     Optional<String> actualEid = articleService.getActualEid(expressionEli.toString(), articleEid);
+    System.err.println("Eid :" + actualEid.orElse("eid not present"));
 
     if (actualEid.isPresent()) {
 
@@ -584,12 +587,23 @@ public class NormsController {
               pointInTimeManifestation,
               subtype,
               "xml");
+
+      System.err.println("manifestationEli :" + manifestationEli);
+
       Optional<byte[]> normFileByEli = normsService.getNormFileByEli(manifestationEli);
 
+      System.err.println(
+          "normFileByEli :"
+              + normFileByEli
+                  .map(e -> new String(e, StandardCharsets.UTF_8).substring(0, 100))
+                  .orElse("normFileByEli not present"));
+
       if (normFileByEli.isPresent()) {
+
         String transformed =
             xsltTransformerService.transformArticle(
                 normFileByEli.get(), actualEid.get(), resourceBasePath);
+        System.err.println("transformed :" + transformed.substring(0, 100));
         return ResponseEntity.ok(transformed);
       }
     }
