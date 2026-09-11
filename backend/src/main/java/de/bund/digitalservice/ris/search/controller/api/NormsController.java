@@ -568,9 +568,7 @@ public class NormsController {
     var expressionEli =
         new ExpressionEli(
             jurisdiction, agent, year, naturalIdentifier, pointInTime, version, language);
-    System.err.println("articleEid: " + articleEid);
     Optional<String> actualEid = articleService.getActualEid(expressionEli.toString(), articleEid);
-    System.err.println("actualEid: " + actualEid.orElse("actualEid not present"));
 
     if (actualEid.isPresent()) {
 
