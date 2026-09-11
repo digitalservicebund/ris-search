@@ -18,7 +18,7 @@ The repository previously used **Talisman** as a tool to check for secrets befor
 GitHub Secrets Push Prevention is a built-in feature (free for public repos and paid for private ones), that helps prevent sensitive information, such as API keys and passwords, from being pushed to a GitHub repository. It works by scanning commits for known secret patterns, and if something is found, it sends it for verification to Github's partners and if the secret is real, it blocks the push that contain sensitive data without the need for a commit hook or any other tool that can be bypassed on the user side. This feature is integrated into GitHub's workflow, making it easier for developers to avoid accidentally exposing secrets and harder for them to override without needing permissions to do so.
 The following diagram illustrates how GitHub Secrets Push Prevention works:
 
-![Github Push Protection Process](https://docs.github.com/assets/cb-89330/mw-1440/images/help/security/secret-scanning-flow.webp)
+![Github Push Protection Process](https://docs.github.com/assets/cb-89330/images/help/security/secret-scanning-flow.png)
 
 Now that the repository is public, we can leverage **GitHub's built-in secrets push prevention** feature, which is free and provides an out-of-the-box solution to prevent secrets from being pushed to the repository.
 
