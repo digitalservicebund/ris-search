@@ -138,17 +138,18 @@ val commonTestDependencies: JvmComponentDependencies.() -> Unit = {
 
 testing {
     suites {
-        val test by getting(JvmTestSuite::class) {
-            useJUnitJupiter()
-            dependencies {
-                implementation(sourceSets["main"].output)
-                implementation(testFixtures(project()))
-                commonTestDependencies()
-                implementation(libs.archunit.junit5)
+        val test =
+            named<JvmTestSuite>("test") {
+                useJUnitJupiter()
+                dependencies {
+                    implementation(sourceSets["main"].output)
+                    implementation(testFixtures(project()))
+                    commonTestDependencies()
+                    implementation(libs.archunit.junit5)
+                }
             }
-        }
 
-        val integrationTest by registering(JvmTestSuite::class) {
+        register<JvmTestSuite>("integrationTest") {
             useJUnitJupiter()
             dependencies {
                 implementation(sourceSets["main"].output)
@@ -172,7 +173,7 @@ testing {
             }
         }
 
-        val dataTest by registering(JvmTestSuite::class) {
+        register<JvmTestSuite>("dataTest") {
             useJUnitJupiter()
             dependencies {
                 implementation(sourceSets["main"].output)
