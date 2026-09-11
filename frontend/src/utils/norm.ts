@@ -69,6 +69,35 @@ export function getValidityStatus(
   return undefined;
 }
 
+const DOKNR_STABLE_ID_LENGTH = 21;
+
+/**
+ * Parses the `ris:doknr` lookup table embedded in a norm expression's raw
+ * LegalDocML XML: `<ris:doknr source="#{eId}">{doknr}</ris:doknr>`, one entry
+ * per addressable element (same eId coverage as `hasPart`: articles, section
+ * containers, preamble/conclusion formulas — not paragraphs/sentences).
+ */
+export function parseDoknrMap(xml: string): Map<string, string> {
+  const map = new Map<string, string>();
+  for (const match of xml.matchAll(
+    /<ris:doknr source="#([^"]+)">([^<]+)<\/ris:doknr>/g,
+  )) {
+    const [, eId, doknr] = match;
+    if (!eId || !doknr) continue;
+    map.set(decodeURIComponent(eId), doknr);
+  }
+  return map;
+}
+
+/**
+ * The first 21 characters of a doknr reliably identify the same provision
+ * across expressions of a work; the remaining characters are a version counter
+ * that changes only when that provision's content changed.
+ */
+export function getDoknrStableId(doknr: string): string {
+  return doknr.slice(0, DOKNR_STABLE_ID_LENGTH);
+}
+
 export function getManifestationUrl(
   metadata: LegislationExpression | undefined,
   format: string,
