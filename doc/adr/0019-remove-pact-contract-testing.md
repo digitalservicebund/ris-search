@@ -1,4 +1,4 @@
-# 18. Removing Pact Contract Testing in Favor of Integration & E2E Tests
+# 19. Removing Pact Contract Testing in Favor of Integration & E2E Tests
 
 **Date:** 2025-12-05
 **Status:** Accepted

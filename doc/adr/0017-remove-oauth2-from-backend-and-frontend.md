@@ -1,4 +1,4 @@
-# 16. Remove OAuth2 in Favor of Basic Auth for Staging
+# 17. Remove OAuth2 in Favor of Basic Auth for Staging
 
 Date: 2025-11-04
 
@@ -18,7 +18,7 @@ While this setup supports more security for features that are not yet public, it
 
 The OAuth2 setup requires running a local Keycloak server, configuring client secrets, and maintaining middleware and proxy logic in both backend and frontend.
 End-to-end tests also depend on programmatic login via OAuth2, adding complexity and fragility to the pipeline.
-At this stage of the project, a simple and smooth developer workflow is more valuable on non-production environments, while 
+At this stage of the project, a simple and smooth developer workflow is more valuable on non-production environments, while
 Staging environment can be easily protected with basic auth.
 
 ## Decision

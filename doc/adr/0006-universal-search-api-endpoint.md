@@ -1,4 +1,4 @@
-# 5. Universal Search API Endpoint
+# 6. Universal Search API Endpoint
 
 Date: 2024-08-21
 

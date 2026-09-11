@@ -1,4 +1,4 @@
-# 13. Replace Talisman with GitHub Secrets Check
+# 14. Replace Talisman with GitHub Secrets Check
 
 Date: 2025-05-07
 
@@ -51,13 +51,13 @@ Summary of the discussion around the decision in Slack: [here](https://digitalse
 ### Advantages
 - **Improved Developer Experience:** No need to maintain additional configuration files or update lefthook: With GitHub Secrets Push Prevention, we no longer need to manage a separate tool like Talisman or adjust regex patterns in configuration files. Developers can rely on GitHub's native tools, which integrate seamlessly into their workflow.
 - **Seamless integration:** GitHub's secrets push prevention works directly with the repository, removing the need for additional setup or tools. This creates a smoother experience for developers.
-- **Reducing false positives:** GitHub's built-in validation against known third-party partners ensures that only real secrets are flagged, reducing the chance of false positives. This is achieved by checking secrets against a list of [partners](https://docs.github.com/en/code-security/secret-scanning/introduction/supported-secret-scanning-patterns#supported-secrets), such as AWS, which provides an extra layer of security. 
+- **Reducing false positives:** GitHub's built-in validation against known third-party partners ensures that only real secrets are flagged, reducing the chance of false positives. This is achieved by checking secrets against a list of [partners](https://docs.github.com/en/code-security/secret-scanning/introduction/supported-secret-scanning-patterns#supported-secrets), such as AWS, which provides an extra layer of security.
   - **Example**: GitHub's mechanism works by checking the format of a secret, and if it matches a pattern like AWS_SECRET_ACCESS_KEY, it then verifies whether it's real by calling AWS's API. If the secret is fake, the push proceeds, but an alert is still sent.  This approach avoids the unnecessary noise that comes with flagging fake tokens or dummy values used for testing. As Carl mentioned, GitHub's system is smarter in avoiding unnecessary alerts, providing a better overall experience.
 - **Enhanced Security with Minimal Maintenance:** Admin-only override: By restricting the ability to push without checks to only admin accounts, we ensure that only trusted team members can bypass the prevention mechanism. This provides stricter control over the repository and its contents.
 - **Custom regex patterns:** While GitHub's predefined patterns handle a wide range of common secrets (like AWS keys, Google API keys), we can still extend it with custom regex patterns for additional coverage. As Haytham mentioned, this allows us to port over Talisman's patterns to GitHub and get the benefits of both worlds.
 
 ### Downsides
-- **Customization Limitations:** 
+- **Customization Limitations:**
   - **GitHub's predefined patterns:** While GitHub’s push protection is designed to prevent real secret leaks, it works only with predefined patterns for high-risk services like AWS and Google Cloud. If a secret does not match one of these patterns (e.g., a password for a custom service), it won’t trigger a violation unless we manually define a custom pattern.
   - **Mitigation Strategy:** To address this, we can add custom regex patterns in the repository settings. This allows us to cover additional secret types that are not included in GitHub's predefined patterns. However, this may lead to a higher number of false positives, similar to the issues faced with Talisman.
 - **Team and Role Management:**
