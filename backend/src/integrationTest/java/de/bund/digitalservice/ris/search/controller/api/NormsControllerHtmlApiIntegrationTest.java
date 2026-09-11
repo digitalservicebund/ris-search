@@ -48,6 +48,7 @@ class NormsControllerHtmlApiIntegrationTest extends ContainersIntegrationBase {
   @Test
   @DisplayName("Html endpoint should return HTML when requesting a single norm")
   void shouldReturnHtmlWhenRequestingNormAsHtml() throws Exception {
+    System.out.println("Norm files: " + normsBucket.getAllKeys());
     var response =
         mockMvc
             .perform(get(MANIFESTATION_URL_HTML).contentType(MediaType.TEXT_HTML))
@@ -69,6 +70,7 @@ class NormsControllerHtmlApiIntegrationTest extends ContainersIntegrationBase {
   @Test
   @DisplayName("Html endpoint should adapt img src paths")
   void shouldReturnHtmlWithAdaptedImgSrcAttributes() throws Exception {
+    System.out.println("Norm files: " + normsBucket.getAllKeys());
     final MockHttpServletRequestBuilder requestBuilder =
         get(MANIFESTATION_URL_HTML).contentType(MediaType.TEXT_HTML);
 
@@ -92,6 +94,7 @@ class NormsControllerHtmlApiIntegrationTest extends ContainersIntegrationBase {
   @Test
   @DisplayName("Html Endpoint Should return html when requesting a single norm article")
   void shouldReturnHtmlWhenRequestingNormArticleAsHtml() throws Exception {
+    System.out.println("Norm files: " + normsBucket.getAllKeys());
 
     var response =
         mockMvc
@@ -110,6 +113,7 @@ class NormsControllerHtmlApiIntegrationTest extends ContainersIntegrationBase {
   @Test
   @DisplayName("The article html endpoint should work with a special character eid")
   void articleHtmlEndpointWorksWithSpecialCharacterEid() throws Exception {
+    System.out.println("Norm files: " + normsBucket.getAllKeys());
 
     var response =
         mockMvc
@@ -129,6 +133,7 @@ class NormsControllerHtmlApiIntegrationTest extends ContainersIntegrationBase {
   @DisplayName(
       "Html Endpoint Should return error html when requesting a single norm article not existing")
   void shouldReturnErrorMessageWhenRequestedNormArticleNotExisting() throws Exception {
+    System.out.println("Norm files: " + normsBucket.getAllKeys());
 
     mockMvc
         .perform(
@@ -140,6 +145,7 @@ class NormsControllerHtmlApiIntegrationTest extends ContainersIntegrationBase {
   @Test
   @DisplayName("Html Endpoint Should return error html when requesting a single norm not in bucket")
   void shouldReturnErrorMessageWhenRequestedNormNotInBucket() throws Exception {
+    System.out.println("Norm files: " + normsBucket.getAllKeys());
 
     mockMvc
         .perform(
@@ -158,6 +164,7 @@ class NormsControllerHtmlApiIntegrationTest extends ContainersIntegrationBase {
       "Html Endpoint should resolve article html with different encodings and UTF-8 variants of eId")
   void shouldResolveArticleWithVariousEidFormats(String articleEid, boolean isEncoded)
       throws Exception {
+    System.out.println("Norm files: " + normsBucket.getAllKeys());
 
     String url = MANIFESTATION_URL_HTML.replace(".html", "/" + articleEid + ".html");
     var request = isEncoded ? get(URI.create(url)) : get(url);
@@ -182,6 +189,8 @@ class NormsControllerHtmlApiIntegrationTest extends ContainersIntegrationBase {
   @Test
   @DisplayName("Html Endpoint Should return 404 for encoded article eId not present in XML")
   void shouldReturn404ForNonexistingEncodedArticleEid() throws Exception {
+    System.out.println("Norm files: " + normsBucket.getAllKeys());
+
     String encodedMissing = "art-z%c2%a7%c2%a7%20999%20bis%201234";
     URI uri = URI.create(MANIFESTATION_URL_HTML.replace(".html", "/" + encodedMissing + ".html"));
     mockMvc.perform(get(uri).contentType(MediaType.TEXT_HTML)).andExpect(status().isNotFound());
