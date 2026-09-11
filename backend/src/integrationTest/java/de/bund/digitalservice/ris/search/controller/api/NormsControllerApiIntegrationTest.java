@@ -5,6 +5,7 @@ import static de.bund.digitalservice.ris.utils.JsonldResultMatchers.isJsonLdComp
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -17,19 +18,32 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
+import de.bund.digitalservice.ris.SharedTestConstants;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.controller.api.testData.NormsTestData;
+import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
+import de.bund.digitalservice.ris.search.models.opensearch.Norm;
+import de.bund.digitalservice.ris.search.service.ChangelogService;
+import de.bund.digitalservice.ris.search.service.IndexNormsService;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.time.LocalDate;
+import java.time.Month;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Stream;
-import org.junit.jupiter.api.BeforeAll;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -43,6 +57,8 @@ import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.util.MultiValueMap;
 
 @SuppressWarnings("unchecked")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -53,16 +69,19 @@ class NormsControllerApiIntegrationTest extends ContainersIntegrationBase {
   static final String MANIFESTATION_URL_PREFIX =
       ApiConfig.Paths.LEGISLATION_SINGLE
           + "/bund/bgbl-1/1991/s101/1991-01-01/1/deu/1991-01-01/regelungstext-1";
+  static final String MANIFESTATION_URL_HTML = MANIFESTATION_URL_PREFIX + ".html";
   static final String MANIFESTATION_URL_XML = MANIFESTATION_URL_PREFIX + ".xml";
   static final String MANIFESTATION_PREFIX_URL_ZIP =
       ApiConfig.Paths.LEGISLATION_SINGLE + "/bund/bgbl-1/1991/s101/1991-01-01/1/deu/1991-01-01.zip";
 
-  @BeforeAll
-  public void loadDefaults() {
+  @Autowired private IndexNormsService indexNormsService;
+  @Autowired private MockMvc mockMvc;
+
+  @BeforeEach
+  void setUpSearchControllerApiTest() {
+    cleanup();
     loadDefaultData();
   }
-
-  @Autowired private MockMvc mockMvc;
 
   private byte[] readResourceBytes(String resourcePath) throws IOException {
     try (InputStream in = getClass().getResourceAsStream(resourcePath)) {
@@ -97,6 +116,27 @@ class NormsControllerApiIntegrationTest extends ContainersIntegrationBase {
         .andExpect(isJsonLdCompliant());
   }
 
+  @Test
+  @DisplayName("Html endpoint should return HTML when requesting a single norm")
+  void shouldReturnHtmlWhenRequestingNormAsHtml() throws Exception {
+    var response =
+        mockMvc
+            .perform(get(MANIFESTATION_URL_HTML).contentType(MediaType.TEXT_HTML))
+            .andExpectAll(status().isOk(), content().contentType("text/html;charset=UTF-8"))
+            .andReturn();
+
+    var document = Jsoup.parse(response.getResponse().getContentAsString());
+    assertThat(document.head().getElementsByTag("title").text())
+        .isEqualTo("Formatting Test Document (MFT)");
+
+    Element h1Element =
+        Objects.requireNonNull(
+            document.body().getElementById("einleitung-n1_doktitel-n1_text-n1_doctitel-n1"));
+    assertThat(h1Element.outerHtml())
+        .isEqualTo(
+            "<h1 class=\"titel\" id=\"einleitung-n1_doktitel-n1_text-n1_doctitel-n1\">Formatting Test Document</h1>");
+  }
+
   public static Stream<Arguments> fileTestArguments() {
     String baseUrl = MANIFESTATION_URL_PREFIX.replace("regelungstext-1", "");
     return Stream.of(
@@ -116,6 +156,29 @@ class NormsControllerApiIntegrationTest extends ContainersIntegrationBase {
   void shouldReturnFilesWhenRequestedAndIfExtensionIsSupported(
       String ignoredTestDescription, int status, String path) throws Exception {
     mockMvc.perform(get(path)).andExpect(status().is(status));
+  }
+
+  @Test
+  @DisplayName("Html endpoint should adapt img src paths")
+  void shouldReturnHtmlWithAdaptedImgSrcAttributes() throws Exception {
+    final MockHttpServletRequestBuilder requestBuilder =
+        get(MANIFESTATION_URL_HTML).contentType(MediaType.TEXT_HTML);
+
+    var response =
+        mockMvc
+            .perform(requestBuilder)
+            .andExpectAll(status().isOk(), content().contentType("text/html;charset=UTF-8"))
+            .andReturn();
+
+    var document = Jsoup.parse(response.getResponse().getContentAsString());
+
+    Element image =
+        Objects.requireNonNull(
+            document.body().getElementById("art-z5_abs-z1_inhalt-n1_text-n1_bild-n1"));
+
+    final String srcInLDML = "eli/bund/bgbl-1/1991/s101/1991-01-01/1/deu/1991-01-01/bild_1.jpg";
+    String expectedSrc = "/v1/legislation/" + srcInLDML;
+    assertThat(image.attr("src")).isEqualTo(expectedSrc);
   }
 
   @Test
@@ -186,6 +249,69 @@ class NormsControllerApiIntegrationTest extends ContainersIntegrationBase {
   void zipEndpointNotFound() throws Exception {
     mockMvc
         .perform(get(MANIFESTATION_PREFIX_URL_ZIP.replace("bund/bgbl-1/", "bund/bgbl-10000/")))
+        .andExpect(status().isNotFound());
+  }
+
+  @Test
+  @DisplayName("Html Endpoint Should return html when requesting a single norm article")
+  void shouldReturnHtmlWhenRequestingNormArticleAsHtml() throws Exception {
+
+    var response =
+        mockMvc
+            .perform(
+                get(MANIFESTATION_URL_HTML.replace(".html", "/art-z1.html"))
+                    .contentType(MediaType.TEXT_HTML))
+            .andExpectAll(status().isOk(), content().contentType("text/html;charset=UTF-8"))
+            .andReturn();
+    var content = response.getResponse().getContentAsString();
+    Document parsed = Jsoup.parse(content);
+
+    final var article = parsed.body().getElementById("art-z1");
+    assertThat(article).isNotNull();
+  }
+
+  @Test
+  @DisplayName("The article html endpoint should work with a special character eid")
+  void articleHtmlEndpointWorksWithSpecialCharacterEid() throws Exception {
+
+    var response =
+        mockMvc
+            .perform(
+                get(MANIFESTATION_URL_HTML.replace(".html", "/art-z§§ 4 bis 14.html"))
+                    .contentType(MediaType.TEXT_HTML))
+            .andExpectAll(status().isOk(), content().contentType("text/html;charset=UTF-8"))
+            .andReturn();
+    var content = response.getResponse().getContentAsString();
+    Document parsed = Jsoup.parse(content);
+
+    final var article = parsed.body().getElementById("art-z%c2%a7%c2%a7%204%20bis%2014");
+    assertThat(article).isNotNull();
+  }
+
+  @Test
+  @DisplayName(
+      "Html Endpoint Should return error html when requesting a single norm article not existing")
+  void shouldReturnErrorMessageWhenRequestedNormArticleNotExisting() throws Exception {
+
+    mockMvc
+        .perform(
+            get(MANIFESTATION_URL_HTML.replace(".html", "/art-z10.html"))
+                .contentType(MediaType.TEXT_HTML))
+        .andExpect(status().isNotFound());
+  }
+
+  @Test
+  @DisplayName("Html Endpoint Should return error html when requesting a single norm not in bucket")
+  void shouldReturnErrorMessageWhenRequestedNormNotInBucket() throws Exception {
+
+    mockMvc
+        .perform(
+            get(ApiConfig.Paths.LEGISLATION_SINGLE
+                    + "/bund/bgbl-1/1000/s999/1000-01-01/1/epo/1000-01-02/reguliga teksto-1.html")
+                .contentType(MediaType.TEXT_HTML))
+        .andDo(print())
+        .andExpect(content().string(containsString("<div>LegalDocML file not found</div>")))
+        .andExpect(content().contentType("text/html;charset=UTF-8"))
         .andExpect(status().isNotFound());
   }
 
@@ -295,6 +421,31 @@ class NormsControllerApiIntegrationTest extends ContainersIntegrationBase {
             status().isOk(),
             jsonPath("$.member", hasSize(1)),
             jsonPath("$.member[0]['item'].alternateName", is("TestG1")));
+  }
+
+  @Test
+  @DisplayName("Should allow filtering norms by abbreviation and most relevantOn date")
+  void shouldReturnNormsFilteringByAbbreviationAndMostRelevantOn() throws Exception {
+    // Note a Norm with the same abbreviation but different date is
+    // already added via the ContainerIntegrationBase class
+    LocalDate date = LocalDate.of(2025, Month.NOVEMBER, 3);
+    normsRepository.save(
+        Norm.builder()
+            .id("eli/2024/teg/4/exp")
+            .abbreviation("TeG")
+            .officialTitle("This is it")
+            .entryIntoForceDate(date)
+            .expiryDate(date)
+            .build());
+
+    final String uri = ApiConfig.Paths.LEGISLATION + "?abbreviation=Teg&mostRelevantOn=2025-11-03";
+    mockMvc
+        .perform(get(uri).contentType(MediaType.APPLICATION_JSON))
+        .andExpectAll(
+            status().isOk(),
+            jsonPath("$.member", hasSize(1)),
+            jsonPath("$.member[0]['item'].abbreviation", is("TeG")),
+            jsonPath("$.member[0]['item'].name", is("This is it")));
   }
 
   @Test
@@ -449,6 +600,150 @@ class NormsControllerApiIntegrationTest extends ContainersIntegrationBase {
   }
 
   @Test
+  void itSortsByTemporalCoverageFrom() throws Exception {
+
+    normsRepository.deleteAll();
+
+    var normTestOne =
+        Norm.builder()
+            .id("n1")
+            .officialTitle("title1")
+            .entryIntoForceDate(LocalDate.of(2026, Month.JANUARY, 1))
+            .build();
+
+    var normTestTwo =
+        Norm.builder()
+            .id("id2")
+            .officialTitle("title2")
+            .entryIntoForceDate(LocalDate.of(2025, Month.JANUARY, 1))
+            .build();
+
+    normsRepository.saveAll(List.of(normTestOne, normTestTwo));
+
+    mockMvc
+        .perform(
+            get(ApiConfig.Paths.LEGISLATION + String.format("?sort=%s", "temporalCoverageFrom"))
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("$.member[*].item.name", is(List.of("title2", "title1"))));
+
+    mockMvc
+        .perform(
+            get(ApiConfig.Paths.LEGISLATION + String.format("?sort=%s", "-temporalCoverageFrom"))
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("$.member[*].item.name", is(List.of("title1", "title2"))));
+  }
+
+  @Test
+  @DisplayName("Should return most relevant expression for a day")
+  void shouldReturnMostRelevantExpressionForADay() throws Exception {
+    addNormXmlFiles(NormsTestData.s102WorkExpressions);
+    indexNormsService.reindexAll(SharedTestConstants.TIMESTAMP_2024_01_01_AS_STRING);
+
+    // A very old date should return the oldest expression
+    DocumentContext json =
+        JsonPath.parse(
+            mockMvc
+                .perform(
+                    get(ApiConfig.Paths.LEGISLATION
+                            + "?eli="
+                            + NormsTestData.S_102_WORK_ELI
+                            + "&mostRelevantOn=1900-01-01")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andReturn()
+                .getResponse()
+                .getContentAsString());
+    assertThat(json.read("$.member.length()", Integer.class)).isEqualTo(1);
+    assertThat(json.read("$.member[0].item.legislationIdentifier", String.class))
+        .isEqualTo("eli/bund/bgbl-1/1991/s102/1991-01-01/1/deu");
+
+    // A date where 1 expression was in force return that expression
+    json =
+        JsonPath.parse(
+            mockMvc
+                .perform(
+                    get(ApiConfig.Paths.LEGISLATION
+                            + "?eli="
+                            + NormsTestData.S_102_WORK_ELI
+                            + "&mostRelevantOn=1991-06-01")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andReturn()
+                .getResponse()
+                .getContentAsString());
+    assertThat(json.read("$.member.length()", Integer.class)).isEqualTo(1);
+    assertThat(json.read("$.member[0].item.legislationIdentifier", String.class))
+        .isEqualTo("eli/bund/bgbl-1/1991/s102/1991-01-01/1/deu");
+
+    // A date where no expressions were in force should return the next to be in force
+    json =
+        JsonPath.parse(
+            mockMvc
+                .perform(
+                    get(ApiConfig.Paths.LEGISLATION
+                            + "?eli="
+                            + NormsTestData.S_102_WORK_ELI
+                            + "&mostRelevantOn=1996-01-01")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andReturn()
+                .getResponse()
+                .getContentAsString());
+    assertThat(json.read("$.member.length()", Integer.class)).isEqualTo(1);
+    assertThat(json.read("$.member[0].item.legislationIdentifier", String.class))
+        .isEqualTo("eli/bund/bgbl-1/1991/s102/2020-01-01/1/deu");
+
+    // A date far in the future will return the last expression (ausserkraft undefined)
+    json =
+        JsonPath.parse(
+            mockMvc
+                .perform(
+                    get(ApiConfig.Paths.LEGISLATION
+                            + "?eli="
+                            + NormsTestData.S_102_WORK_ELI
+                            + "&mostRelevantOn=5000-01-01")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andReturn()
+                .getResponse()
+                .getContentAsString());
+    assertThat(json.read("$.member.length()", Integer.class)).isEqualTo(1);
+    assertThat(json.read("$.member[0].item.legislationIdentifier", String.class))
+        .isEqualTo("eli/bund/bgbl-1/1991/s102/2050-01-01/1/deu");
+  }
+
+  @ParameterizedTest(name = "HTML Endpoint should resolve article with eId={0}")
+  @MethodSource("articleEidProvider")
+  @DisplayName(
+      "Html Endpoint should resolve article html with different encodings and UTF-8 variants of eId")
+  void shouldResolveArticleWithVariousEidFormats(String articleEid, boolean isEncoded)
+      throws Exception {
+
+    String url = MANIFESTATION_URL_HTML.replace(".html", "/" + articleEid + ".html");
+    var request = isEncoded ? get(URI.create(url)) : get(url);
+    var response =
+        mockMvc
+            .perform(request.contentType(MediaType.TEXT_HTML))
+            .andExpect(status().isOk())
+            .andReturn();
+
+    Document parsed = Jsoup.parse(response.getResponse().getContentAsString());
+    var article = parsed.body().getElementById("art-z%c2%a7%c2%a7%204%20bis%2014");
+    assertThat(article).isNotNull();
+  }
+
+  static Stream<Arguments> articleEidProvider() {
+    return Stream.of(
+        Arguments.of("art-z§§ 4 bis 14", false),
+        Arguments.of("art-z%C2%A7%C2%A7%204%20bis%2014", true),
+        Arguments.of("art-z%c2%a7%c2%a7%204%20bis%2014", true));
+  }
+
+  @Test
+  @DisplayName("Html Endpoint Should return 404 for encoded article eId not present in XML")
+  void shouldReturn404ForNonexistingEncodedArticleEid() throws Exception {
+    String encodedMissing = "art-z%c2%a7%c2%a7%20999%20bis%201234";
+    URI uri = URI.create(MANIFESTATION_URL_HTML.replace(".html", "/" + encodedMissing + ".html"));
+    mockMvc.perform(get(uri).contentType(MediaType.TEXT_HTML)).andExpect(status().isNotFound());
+  }
+
+  @Test
   @DisplayName("It returns all workExamples of a given expressionEli")
   void itReturnsTheWorkExmapleOfAGivenWorkEli() throws Exception {
 
@@ -471,5 +766,40 @@ class NormsControllerApiIntegrationTest extends ContainersIntegrationBase {
                 equalTo("eli/bund/bgbl-1/1000/test/2000-10-06/2/deu")))
         .andExpect(jsonPath("$.member[0].temporalCoverage", equalTo("2025-11-01/..")))
         .andExpect(jsonPath("$.member[0].legislationLegalForce", equalTo("InForce")));
+  }
+
+  @Test
+  void itReturnsFileChangesBetweenTimestamps() throws Exception {
+    Changelog changelog =
+        new Changelog(
+            new HashSet<>(
+                List.of(
+                    "eli/bund/bgbl-1/1999/identifier/2026-01-01/1/deu/2026-01-01/regelungstext-verkuendung-1.xml")),
+            new HashSet<>(
+                List.of(
+                    "eli/bund/bgbl-1/2000/identifier/2026-01-01/1/deu/2026-01-01/regelungstext-verkuendung-1.xml")),
+            false);
+    String changelogContent = new ObjectMapper().writeValueAsString(changelog);
+    normsBucket.save(
+        ChangelogService.CHANGELOGS_PREFIX + "2026-07-03T12:00:00.276525407Z", changelogContent);
+
+    String from = "2026-07-03T12:00:00Z";
+    String to = "2026-07-04T12:00:00Z";
+
+    mockMvc
+        .perform(
+            get(ApiConfig.Paths.LEGISLATION_CHANGELOGS)
+                .params(MultiValueMap.fromSingleValue(Map.of("from", from, "to", to))))
+        .andExpect(status().isOk())
+        .andExpect(isJsonLdCompliant())
+        .andExpect(
+            jsonPath("$.changed[0].['@id']")
+                .value(
+                    "/v1/legislation/eli/bund/bgbl-1/1999/identifier/2026-01-01/1/deu/2026-01-01/zip"))
+        .andExpect(jsonPath("$.changed[0].['@type']").value("LegislationObject"))
+        .andExpect(
+            jsonPath("$.deleted[0].['@id']")
+                .value("/v1/legislation/eli/bund/bgbl-1/2000/identifier/2026-01-01/1/deu"))
+        .andExpect(jsonPath("$.deleted[0].['@type']").value("Legislation"));
   }
 }

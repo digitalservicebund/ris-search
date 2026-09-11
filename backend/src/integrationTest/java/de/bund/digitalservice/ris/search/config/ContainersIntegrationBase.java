@@ -163,6 +163,7 @@ public class ContainersIntegrationBase {
     caseLawRepository.deleteAll();
     literatureRepository.deleteAll();
     normsRepository.deleteAll();
+    articlesRepository.deleteAll();
     administrativeDirectiveRepository.deleteAll();
   }
 

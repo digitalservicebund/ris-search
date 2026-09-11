@@ -130,18 +130,6 @@ testing {
     suites {
         withType(JvmTestSuite::class).matching { it.name in listOf("test", "integrationTest") }.configureEach {
             useJUnitJupiter()
-            targets.all {
-                testTask.configure {
-                    testLogging {
-                        showStandardStreams = false
-                        events(
-                            org.gradle.api.tasks.testing.logging.TestLogEvent.STANDARD_ERROR,
-                            org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED,
-                            org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED,
-                        )
-                    }
-                }
-            }
             dependencies {
                 implementation(sourceSets["main"].output)
                 implementation(testFixtures(project()))
