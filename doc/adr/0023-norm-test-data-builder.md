@@ -1,4 +1,4 @@
-# 22. Use NormTestDataBuilder for norm LDML test data
+# 23. Use NormTestDataBuilder for norm LDML test data
 
 Date: 2026-07-13
 
@@ -33,7 +33,7 @@ template-based generation.
 The builder generates valid LDML XML programmatically and takes care of
 boilerplate such as GUIDs and eIds automatically, so tests only need to
 specify the values relevant to what they actually verify. It also validates
-the produced XMLs against the xsd files to make sure the test data is 
+the produced XMLs against the xsd files to make sure the test data is
 schema conform.
 
 This allows a fluent and readable creation of test data that is schema conform
