@@ -138,6 +138,7 @@ public class ContainersIntegrationBase {
     }
   }
 
+  /** Clears all data from the buckets. */
   public void clearBuckets() {
     try {
       ((TestMockS3Client) caseLawS3Client.getS3Client()).emptyBucket();
