@@ -9,7 +9,6 @@ buildscript { repositories { mavenCentral() } }
 plugins {
     jacoco
     java
-    `jvm-test-suite`
     `java-test-fixtures`
     checkstyle
     alias(libs.plugins.spring.boot)
