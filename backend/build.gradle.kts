@@ -130,6 +130,14 @@ testing {
     suites {
         withType(JvmTestSuite::class).matching { it.name in listOf("test", "integrationTest") }.configureEach {
             useJUnitJupiter()
+            targets.all {
+                testTask.configure {
+                    testLogging {
+                        showStandardStreams = true
+                        events("failed", "skipped")
+                    }
+                }
+            }
             dependencies {
                 implementation(sourceSets["main"].output)
                 implementation(testFixtures(project()))
