@@ -9,6 +9,7 @@ buildscript { repositories { mavenCentral() } }
 plugins {
     jacoco
     java
+    `java-test-fixtures`
     checkstyle
     alias(libs.plugins.spring.boot)
     alias(libs.plugins.spring.dependency.management)
@@ -108,27 +109,81 @@ dependencies {
 
     compileOnly(libs.lombok)
     annotationProcessor(libs.lombok)
-    testCompileOnly(libs.lombok)
-    testAnnotationProcessor(libs.lombok)
 
     developmentOnly(libs.spring.boot.devtools)
-    testImplementation(libs.spring.boot.starter.test)
-    testImplementation(libs.spring.security.test)
-    testImplementation(libs.archunit.junit5)
-    testImplementation(libs.mockito.junit.jupiter)
-    testImplementation(libs.spring.boot.starter.webmvc.test)
 
-    testImplementation(libs.testcontainers.junit.jupiter)
-    testImplementation(libs.opensearch.testcontainers)
-    testImplementation(libs.testcontainers.postgresql)
-    testImplementation(libs.restassured)
-    testImplementation(libs.ris.xml.schema)
-    testImplementation(libs.apicatalog.titanium.json)
-    testImplementation(libs.glassfish.jakarta.json)
+    // Shared test fixtures (src/testFixtures) - XML/schema validators and norm XML builders
+    // used by both the unit and integration suites.
+    testFixturesCompileOnly(libs.lombok)
+    testFixturesAnnotationProcessor(libs.lombok)
+    testFixturesImplementation(sourceSets["main"].output)
+    testFixturesImplementation(libs.jaxb.moxy)
+    testFixturesImplementation(libs.ris.xml.schema)
+    testFixturesImplementation(libs.commons.io)
 }
 
 dependencyLocking {
     lockAllConfigurations()
+}
+
+testing {
+    suites {
+        withType(JvmTestSuite::class).matching { it.name in listOf("test", "integrationTest") }.configureEach {
+            useJUnitJupiter()
+            dependencies {
+                implementation(sourceSets["main"].output)
+                implementation(testFixtures(project()))
+                implementation(libs.spring.boot.starter.test)
+                implementation(libs.spring.security.test)
+                implementation(libs.spring.boot.starter.webmvc.test)
+                implementation(libs.mockito.junit.jupiter)
+            }
+        }
+
+        val test =
+            named<JvmTestSuite>("test") {
+                dependencies {
+                    implementation(libs.archunit.junit5)
+                }
+            }
+
+        register<JvmTestSuite>("integrationTest") {
+            dependencies {
+                implementation(libs.testcontainers.junit.jupiter)
+                implementation(libs.opensearch.testcontainers)
+                implementation(libs.testcontainers.postgresql)
+                implementation(libs.restassured)
+                implementation(libs.apicatalog.titanium.json)
+                implementation(libs.glassfish.jakarta.json)
+            }
+            targets {
+                all {
+                    testTask.configure {
+                        shouldRunAfter(test)
+                        mustRunAfter(tasks.check)
+                        finalizedBy("jacocoTestReport")
+                    }
+                }
+            }
+        }
+
+        register<JvmTestSuite>("dataTest") {
+            useJUnitJupiter()
+            dependencies {
+                implementation(sourceSets["main"].output)
+                implementation(libs.spring.boot.starter.test)
+                implementation(libs.restassured)
+            }
+            targets {
+                all {
+                    testTask.configure {
+                        shouldRunAfter(test)
+                        mustRunAfter(tasks.check)
+                    }
+                }
+            }
+        }
+    }
 }
 
 spotless {
@@ -178,35 +233,6 @@ tasks {
         enabled = false
     }
 
-    test {
-        useJUnitPlatform {
-            excludeTags("integration", "data")
-        }
-    }
-
-    register<Test>("dataTest") {
-        description = "Runs the data tests."
-        group = "verification"
-        useJUnitPlatform {
-            includeTags("data")
-        }
-        testClassesDirs = sourceSets["test"].output.classesDirs
-        classpath = sourceSets["test"].runtimeClasspath
-        mustRunAfter(check)
-    }
-
-    register<Test>("integrationTest") {
-        description = "Runs the integration tests."
-        group = "verification"
-        useJUnitPlatform {
-            includeTags("integration")
-        }
-        testClassesDirs = sourceSets["test"].output.classesDirs
-        classpath = sourceSets["test"].runtimeClasspath
-        mustRunAfter(check)
-        finalizedBy("jacocoTestReport")
-    }
-
     jacocoTestReport {
         // Jacoco hooks into all tasks of type: Test automatically, but results for each of these
         // tasks are kept separately and are not combined out of the box.. we want to gather
@@ -249,3 +275,19 @@ java {
         srcDirs("build/generated/nlex")
     }
 }
+
+// `jar` is disabled above (this is a Spring Boot app using bootJar instead), which breaks the
+// self-project dependency that `java-test-fixtures`/`jvm-test-suite` would otherwise set up
+// automatically to give each suite main's own *third-party* dependencies (AWS SDK, Jackson,
+// OpenSearch client, etc., which integration tests exercise directly; main's own classes are
+// already handled above via `implementation(sourceSets["main"].output)`). Replicate, for every
+// suite, what the `java` plugin already wires up for the built-in "test" configuration by
+// convention:
+configurations.named("testImplementation") { extendsFrom(configurations["implementation"]) }
+configurations.named("testRuntimeOnly") { extendsFrom(configurations["runtimeOnly"]) }
+configurations.named("testFixturesImplementation") { extendsFrom(configurations["implementation"]) }
+configurations.named("testFixturesRuntimeOnly") { extendsFrom(configurations["runtimeOnly"]) }
+configurations.named("integrationTestImplementation") { extendsFrom(configurations["implementation"]) }
+configurations.named("integrationTestRuntimeOnly") { extendsFrom(configurations["runtimeOnly"]) }
+configurations.named("dataTestImplementation") { extendsFrom(configurations["implementation"]) }
+configurations.named("dataTestRuntimeOnly") { extendsFrom(configurations["runtimeOnly"]) }

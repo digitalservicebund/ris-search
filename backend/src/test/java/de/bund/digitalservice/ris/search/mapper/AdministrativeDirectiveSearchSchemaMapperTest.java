@@ -1,0 +1,70 @@
+package de.bund.digitalservice.ris.search.mapper;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
+import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
+import de.bund.digitalservice.ris.search.schema.AdministrativeDirectiveSearchSchema;
+import java.time.LocalDate;
+import java.time.Month;
+import java.util.List;
+import java.util.Map;
+import org.junit.jupiter.api.Test;
+import org.springframework.data.elasticsearch.core.SearchHit;
+
+class AdministrativeDirectiveSearchSchemaMapperTest {
+
+  @Test
+  void itMapsFromEntityToSearchSchemaSchema() {
+
+    AdministrativeDirective entity =
+        AdministrativeDirective.builder()
+            .id("KN0000")
+            .documentNumber("KN0000")
+            .headline("headline")
+            .documentType("VV")
+            .shortReport("shortReport")
+            .referenceNumbers(List.of("RNR"))
+            .legislationAuthority("legislationAuthority")
+            .entryIntoEffectDate(LocalDate.of(2024, Month.JANUARY, 1))
+            .tableOfContentsEntries(List.of("outline entry"))
+            .build();
+
+    AdministrativeDirectiveSearchSchema expected =
+        AdministrativeDirectiveSearchSchema.builder()
+            .id("/v1/administrative-directive/KN0000")
+            .documentNumber("KN0000")
+            .headline("headline")
+            .shortReport("shortReport")
+            .outline(List.of("outline entry"))
+            .documentType("VV")
+            .referenceNumbers(List.of("RNR"))
+            .legislationAuthority("legislationAuthority")
+            .entryIntoForceDate(LocalDate.of(2024, Month.JANUARY, 1))
+            .encoding(
+                EncodingSchemaFactory.documentEncodingSchemas(
+                    "/v1/administrative-directive/KN0000"))
+            .build();
+
+    assertThat(expected).isEqualTo(AdministrativeDirectiveSearchSchemaMapper.fromDomain(entity));
+  }
+
+  @Test
+  void convertTextmatchKeys() {
+    var searchHit =
+        new SearchHit<>(
+            "my-index",
+            "1",
+            null,
+            1.0f,
+            null,
+            Map.of("snake_case.text", List.of("match")),
+            Map.of(),
+            null,
+            null,
+            null,
+            AdministrativeDirective.builder().id("id").build());
+
+    var list = AdministrativeDirectiveSearchSchemaMapper.getTextMatches(searchHit);
+    assertThat(list.getFirst().name()).isEqualTo("snakeCase");
+  }
+}
