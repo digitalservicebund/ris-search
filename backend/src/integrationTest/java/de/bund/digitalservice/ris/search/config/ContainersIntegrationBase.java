@@ -38,7 +38,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 import org.apache.commons.collections4.IteratorUtils;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -110,18 +110,19 @@ public class ContainersIntegrationBase {
     registry.add("opensearch.port", openSearchContainer::getFirstMappedPort);
   }
 
-  @BeforeAll
-  void beforeAllWrapper() {
-    reset();
+  @AfterAll
+  protected void cleanup() {
+    clearBuckets();
+    clearRepositoryData();
   }
 
-  protected void reset() {
-    resetBuckets();
-    resetRepositories();
+  protected void loadDefaultData() {
+    loadDefaultFiles();
+    loadDefaultEntites();
   }
 
   /** Resets all S3 buckets with the test data. */
-  public void resetBuckets() {
+  public void loadDefaultFiles() {
     try {
       ((TestMockS3Client) caseLawS3Client.getS3Client()).loadDefaultFiles();
       ((TestMockS3Client) literatureS3Client.getS3Client()).loadDefaultFiles();
@@ -137,9 +138,19 @@ public class ContainersIntegrationBase {
     }
   }
 
+  public void clearBuckets() {
+    try {
+      ((TestMockS3Client) caseLawS3Client.getS3Client()).emptyBucket();
+      ((TestMockS3Client) literatureS3Client.getS3Client()).emptyBucket();
+      ((TestMockS3Client) normS3Client.getS3Client()).emptyBucket();
+      ((TestMockS3Client) administrativeDirectiveS3Client.getS3Client()).emptyBucket();
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
   /** Resets all repositories with the test data. */
-  public void resetRepositories() {
-    clearRepositoryData();
+  public void loadDefaultEntites() {
     caseLawRepository.saveAll(CaseLawTestData.allDocuments);
     literatureRepository.saveAll(LiteratureTestData.allDocuments);
     normsRepository.saveAll(NormsTestData.allNorms);
@@ -231,10 +242,6 @@ public class ContainersIntegrationBase {
         null);
   }
 
-  protected List<Norm> searchNorms(String searchTerm) {
-    return searchNormsHit(searchTerm).get().map(SearchHit::getContent).toList();
-  }
-
   protected SearchPage<Norm> searchNormsHit(String searchTerm) {
     return searchNormsHit(searchTerm, null);
   }
@@ -257,19 +264,11 @@ public class ContainersIntegrationBase {
         Pageable.ofSize(10000));
   }
 
-  protected List<Literature> searchLiterature(String searchTerm) {
-    return searchLiteratureHit(searchTerm).get().map(SearchHit::getContent).toList();
-  }
-
   protected SearchPage<Literature> searchLiteratureHit(String searchTerm) {
     return literatureService.simpleSearchLiterature(
         UniversalSearchParams.builder().searchTerm(searchTerm).build(),
         null,
         Pageable.ofSize(10000));
-  }
-
-  protected List<AdministrativeDirective> searchAdmin(String searchTerm) {
-    return searchAdminHit(searchTerm).get().map(SearchHit::getContent).toList();
   }
 
   protected SearchPage<AdministrativeDirective> searchAdminHit(String searchTerm) {

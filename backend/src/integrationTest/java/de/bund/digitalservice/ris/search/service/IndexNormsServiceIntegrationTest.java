@@ -24,8 +24,8 @@ class IndexNormsServiceIntegrationTest extends ContainersIntegrationBase {
 
   @BeforeEach
   void setUpSearchControllerApiTest() {
-    resetBuckets();
-    clearRepositoryData();
+    clearBuckets();
+    loadDefaultFiles();
   }
 
   @Test

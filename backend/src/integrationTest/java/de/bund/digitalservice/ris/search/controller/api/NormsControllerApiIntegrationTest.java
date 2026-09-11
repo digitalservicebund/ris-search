@@ -60,6 +60,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.util.MultiValueMap;
 
+@SuppressWarnings("unchecked")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 class NormsControllerApiIntegrationTest extends ContainersIntegrationBase {
@@ -78,7 +79,8 @@ class NormsControllerApiIntegrationTest extends ContainersIntegrationBase {
 
   @BeforeEach
   void setUpSearchControllerApiTest() {
-    reset();
+    cleanup();
+    loadDefaultData();
   }
 
   private byte[] readResourceBytes(String resourcePath) throws IOException {
@@ -96,7 +98,7 @@ class NormsControllerApiIntegrationTest extends ContainersIntegrationBase {
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpectAll(
             status().isOk(),
-            jsonPath("$.@type", is("Legislation")),
+            jsonPath("$['@type']", is("Legislation")),
             jsonPath("$.name", is("Test Gesetz")),
             jsonPath("$.legislationIdentifier", is("eli/bund/bgbl-1/1000/test/2000-10-06/2/deu")),
             jsonPath("$.alternateName", is("TestG1")),
@@ -104,10 +106,10 @@ class NormsControllerApiIntegrationTest extends ContainersIntegrationBase {
             jsonPath("$.exampleOfWork.legislationDate", is("2024-01-02")),
             jsonPath("$.exampleOfWork.datePublished", is("2024-01-03")),
             jsonPath("$.hasPart", hasSize(3)),
-            jsonPath("$.hasPart[0].@type", is("Legislation")),
+            jsonPath("$.hasPart[0]['@type']", is("Legislation")),
             jsonPath("$.hasPart[0].eId", is("art-z1")),
             jsonPath(
-                "$.hasPart[0].@id",
+                "$.hasPart[0]['@id']",
                 is("/v1/legislation/eli/bund/bgbl-1/1000/test/2000-10-06/2/deu#art-z1")),
             jsonPath("$.hasPart[0].name", is("1")),
             jsonPath("$.hasPart[0].temporalCoverage", is("2023-12-31/3000-01-02")))
@@ -321,7 +323,7 @@ class NormsControllerApiIntegrationTest extends ContainersIntegrationBase {
         .perform(get(ApiConfig.Paths.LEGISLATION).contentType(MediaType.APPLICATION_JSON))
         .andDo(print())
         .andExpect(jsonPath("$.member", hasSize(expectedSize)))
-        .andExpect(jsonPath("$.@type", is("hydra:Collection")))
+        .andExpect(jsonPath("$['@type']", is("hydra:Collection")))
         .andExpect(jsonPath("$.totalItems", is(expectedSize)))
         .andExpect(status().isOk());
   }
@@ -503,7 +505,8 @@ class NormsControllerApiIntegrationTest extends ContainersIntegrationBase {
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.member[*].articles", hasSize(0)))
         .andExpect(jsonPath("$.member[*].textMatches").value(hasSize(3)))
-        .andExpect(jsonPath("$.member[0].textMatches[0].@type").value(equalTo("SearchResultMatch")))
+        .andExpect(
+            jsonPath("$.member[0].textMatches[0]['@type']").value(equalTo("SearchResultMatch")))
         .andExpect(jsonPath("$.member[0].textMatches[*].text").value(contains(highlightedMatch)))
         .andExpect(isJsonLdCompliant());
   }
@@ -518,7 +521,7 @@ class NormsControllerApiIntegrationTest extends ContainersIntegrationBase {
         .andExpectAll(
             status().isOk(),
             jsonPath("$.member[0].textMatches[*]", hasSize(3)),
-            jsonPath("$.member[0].textMatches[0].@type", equalTo("SearchResultMatch")),
+            jsonPath("$.member[0].textMatches[0]['@type']", equalTo("SearchResultMatch")),
             jsonPath(
                 "$.member[0].textMatches[*].name",
                 containsInAnyOrder(
@@ -749,13 +752,13 @@ class NormsControllerApiIntegrationTest extends ContainersIntegrationBase {
             get(ApiConfig.Paths.LEGISLATION_WORK_EXAMPLE + "/bund/bgbl-1/1000/test")
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.@type", equalTo("hydra:Collection")))
+        .andExpect(jsonPath("$['@type']", equalTo("hydra:Collection")))
         .andExpect(
-            jsonPath("$.@id", equalTo("/v1/legislation/work-example/eli?pageIndex=0&size=100")))
-        .andExpect(jsonPath("$.member[0].@type", equalTo("Legislation")))
+            jsonPath("$['@id']", equalTo("/v1/legislation/work-example/eli?pageIndex=0&size=100")))
+        .andExpect(jsonPath("$.member[0]['@type']", equalTo("Legislation")))
         .andExpect(
             jsonPath(
-                "$.member[0].@id",
+                "$.member[0].['@id']",
                 equalTo("/v1/legislation/eli/bund/bgbl-1/1000/test/2000-10-06/2/deu")))
         .andExpect(
             jsonPath(
