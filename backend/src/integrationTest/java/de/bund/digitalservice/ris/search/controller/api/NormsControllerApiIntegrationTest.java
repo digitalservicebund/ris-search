@@ -34,7 +34,7 @@ import java.util.stream.Stream;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -64,8 +64,9 @@ class NormsControllerApiIntegrationTest extends ContainersIntegrationBase {
   static final String MANIFESTATION_PREFIX_URL_ZIP =
       ApiConfig.Paths.LEGISLATION_SINGLE + "/bund/bgbl-1/1991/s101/1991-01-01/1/deu/1991-01-01.zip";
 
-  @BeforeAll
+  @BeforeEach
   public void loadDefaults() {
+    cleanup();
     loadDefaultData();
   }
 
