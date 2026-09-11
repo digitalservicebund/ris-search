@@ -19,6 +19,7 @@ import de.bund.digitalservice.ris.search.nlex.schema.result.RequestResult;
 import de.bund.digitalservice.ris.search.nlex.service.NlexService;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class NlexServiceIntegrationTest extends ContainersIntegrationBase {
+
+  @BeforeAll
+  public void loadDefaults() {
+    loadDefaultData();
+  }
 
   @Autowired() NormsService service;
   NlexService nlexService;

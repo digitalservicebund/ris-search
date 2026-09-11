@@ -25,6 +25,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -40,6 +41,11 @@ import org.springframework.util.MultiValueMap;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 class AdministrativeDirectiveControllerApiIntegrationTest extends ContainersIntegrationBase {
+
+  @BeforeAll
+  public void loadDefaults() {
+    loadDefaultData();
+  }
 
   @Autowired private MockMvc mockMvc;
 

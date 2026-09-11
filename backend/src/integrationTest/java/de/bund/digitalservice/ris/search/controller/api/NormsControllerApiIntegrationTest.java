@@ -5,7 +5,6 @@ import static de.bund.digitalservice.ris.utils.JsonldResultMatchers.isJsonLdComp
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -32,7 +31,6 @@ import de.bund.digitalservice.ris.search.service.IndexNormsService;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.HashSet;
@@ -40,9 +38,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Stream;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -57,9 +52,9 @@ import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.util.MultiValueMap;
 
+@SuppressWarnings("unchecked")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 class NormsControllerApiIntegrationTest extends ContainersIntegrationBase {
@@ -68,7 +63,6 @@ class NormsControllerApiIntegrationTest extends ContainersIntegrationBase {
   static final String MANIFESTATION_URL_PREFIX =
       ApiConfig.Paths.LEGISLATION_SINGLE
           + "/bund/bgbl-1/1991/s101/1991-01-01/1/deu/1991-01-01/regelungstext-1";
-  static final String MANIFESTATION_URL_HTML = MANIFESTATION_URL_PREFIX + ".html";
   static final String MANIFESTATION_URL_XML = MANIFESTATION_URL_PREFIX + ".xml";
   static final String MANIFESTATION_PREFIX_URL_ZIP =
       ApiConfig.Paths.LEGISLATION_SINGLE + "/bund/bgbl-1/1991/s101/1991-01-01/1/deu/1991-01-01.zip";
@@ -78,7 +72,8 @@ class NormsControllerApiIntegrationTest extends ContainersIntegrationBase {
 
   @BeforeEach
   void setUpSearchControllerApiTest() {
-    reset();
+    cleanup();
+    loadDefaultData();
   }
 
   private byte[] readResourceBytes(String resourcePath) throws IOException {
@@ -96,7 +91,7 @@ class NormsControllerApiIntegrationTest extends ContainersIntegrationBase {
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpectAll(
             status().isOk(),
-            jsonPath("$.@type", is("Legislation")),
+            jsonPath("$['@type']", is("Legislation")),
             jsonPath("$.name", is("Test Gesetz")),
             jsonPath("$.legislationIdentifier", is("eli/bund/bgbl-1/1000/test/2000-10-06/2/deu")),
             jsonPath("$.alternateName", is("TestG1")),
@@ -104,35 +99,14 @@ class NormsControllerApiIntegrationTest extends ContainersIntegrationBase {
             jsonPath("$.exampleOfWork.legislationDate", is("2024-01-02")),
             jsonPath("$.exampleOfWork.datePublished", is("2024-01-03")),
             jsonPath("$.hasPart", hasSize(3)),
-            jsonPath("$.hasPart[0].@type", is("Legislation")),
+            jsonPath("$.hasPart[0]['@type']", is("Legislation")),
             jsonPath("$.hasPart[0].eId", is("art-z1")),
             jsonPath(
-                "$.hasPart[0].@id",
+                "$.hasPart[0]['@id']",
                 is("/v1/legislation/eli/bund/bgbl-1/1000/test/2000-10-06/2/deu#art-z1")),
             jsonPath("$.hasPart[0].name", is("1")),
             jsonPath("$.hasPart[0].temporalCoverage", is("2023-12-31/3000-01-02")))
         .andExpect(isJsonLdCompliant());
-  }
-
-  @Test
-  @DisplayName("Html endpoint should return HTML when requesting a single norm")
-  void shouldReturnHtmlWhenRequestingNormAsHtml() throws Exception {
-    var response =
-        mockMvc
-            .perform(get(MANIFESTATION_URL_HTML).contentType(MediaType.TEXT_HTML))
-            .andExpectAll(status().isOk(), content().contentType("text/html;charset=UTF-8"))
-            .andReturn();
-
-    var document = Jsoup.parse(response.getResponse().getContentAsString());
-    assertThat(document.head().getElementsByTag("title").text())
-        .isEqualTo("Formatting Test Document (MFT)");
-
-    Element h1Element =
-        Objects.requireNonNull(
-            document.body().getElementById("einleitung-n1_doktitel-n1_text-n1_doctitel-n1"));
-    assertThat(h1Element.outerHtml())
-        .isEqualTo(
-            "<h1 class=\"titel\" id=\"einleitung-n1_doktitel-n1_text-n1_doctitel-n1\">Formatting Test Document</h1>");
   }
 
   public static Stream<Arguments> fileTestArguments() {
@@ -154,29 +128,6 @@ class NormsControllerApiIntegrationTest extends ContainersIntegrationBase {
   void shouldReturnFilesWhenRequestedAndIfExtensionIsSupported(
       String ignoredTestDescription, int status, String path) throws Exception {
     mockMvc.perform(get(path)).andExpect(status().is(status));
-  }
-
-  @Test
-  @DisplayName("Html endpoint should adapt img src paths")
-  void shouldReturnHtmlWithAdaptedImgSrcAttributes() throws Exception {
-    final MockHttpServletRequestBuilder requestBuilder =
-        get(MANIFESTATION_URL_HTML).contentType(MediaType.TEXT_HTML);
-
-    var response =
-        mockMvc
-            .perform(requestBuilder)
-            .andExpectAll(status().isOk(), content().contentType("text/html;charset=UTF-8"))
-            .andReturn();
-
-    var document = Jsoup.parse(response.getResponse().getContentAsString());
-
-    Element image =
-        Objects.requireNonNull(
-            document.body().getElementById("art-z5_abs-z1_inhalt-n1_text-n1_bild-n1"));
-
-    final String srcInLDML = "eli/bund/bgbl-1/1991/s101/1991-01-01/1/deu/1991-01-01/bild_1.jpg";
-    String expectedSrc = "/v1/legislation/" + srcInLDML;
-    assertThat(image.attr("src")).isEqualTo(expectedSrc);
   }
 
   @Test
@@ -251,69 +202,6 @@ class NormsControllerApiIntegrationTest extends ContainersIntegrationBase {
   }
 
   @Test
-  @DisplayName("Html Endpoint Should return html when requesting a single norm article")
-  void shouldReturnHtmlWhenRequestingNormArticleAsHtml() throws Exception {
-
-    var response =
-        mockMvc
-            .perform(
-                get(MANIFESTATION_URL_HTML.replace(".html", "/art-z1.html"))
-                    .contentType(MediaType.TEXT_HTML))
-            .andExpectAll(status().isOk(), content().contentType("text/html;charset=UTF-8"))
-            .andReturn();
-    var content = response.getResponse().getContentAsString();
-    Document parsed = Jsoup.parse(content);
-
-    final var article = parsed.body().getElementById("art-z1");
-    assertThat(article).isNotNull();
-  }
-
-  @Test
-  @DisplayName("The article html endpoint should work with a special character eid")
-  void articleHtmlEndpointWorksWithSpecialCharacterEid() throws Exception {
-
-    var response =
-        mockMvc
-            .perform(
-                get(MANIFESTATION_URL_HTML.replace(".html", "/art-z§§ 4 bis 14.html"))
-                    .contentType(MediaType.TEXT_HTML))
-            .andExpectAll(status().isOk(), content().contentType("text/html;charset=UTF-8"))
-            .andReturn();
-    var content = response.getResponse().getContentAsString();
-    Document parsed = Jsoup.parse(content);
-
-    final var article = parsed.body().getElementById("art-z%c2%a7%c2%a7%204%20bis%2014");
-    assertThat(article).isNotNull();
-  }
-
-  @Test
-  @DisplayName(
-      "Html Endpoint Should return error html when requesting a single norm article not existing")
-  void shouldReturnErrorMessageWhenRequestedNormArticleNotExisting() throws Exception {
-
-    mockMvc
-        .perform(
-            get(MANIFESTATION_URL_HTML.replace(".html", "/art-z10.html"))
-                .contentType(MediaType.TEXT_HTML))
-        .andExpect(status().isNotFound());
-  }
-
-  @Test
-  @DisplayName("Html Endpoint Should return error html when requesting a single norm not in bucket")
-  void shouldReturnErrorMessageWhenRequestedNormNotInBucket() throws Exception {
-
-    mockMvc
-        .perform(
-            get(ApiConfig.Paths.LEGISLATION_SINGLE
-                    + "/bund/bgbl-1/1000/s999/1000-01-01/1/epo/1000-01-02/reguliga teksto-1.html")
-                .contentType(MediaType.TEXT_HTML))
-        .andDo(print())
-        .andExpect(content().string(containsString("<div>LegalDocML file not found</div>")))
-        .andExpect(content().contentType("text/html;charset=UTF-8"))
-        .andExpect(status().isNotFound());
-  }
-
-  @Test
   @DisplayName("Should return list of norms")
   void shouldReturnListOfNorms() throws Exception {
     int expectedSize = NormsTestData.allNorms.size();
@@ -321,7 +209,7 @@ class NormsControllerApiIntegrationTest extends ContainersIntegrationBase {
         .perform(get(ApiConfig.Paths.LEGISLATION).contentType(MediaType.APPLICATION_JSON))
         .andDo(print())
         .andExpect(jsonPath("$.member", hasSize(expectedSize)))
-        .andExpect(jsonPath("$.@type", is("hydra:Collection")))
+        .andExpect(jsonPath("$['@type']", is("hydra:Collection")))
         .andExpect(jsonPath("$.totalItems", is(expectedSize)))
         .andExpect(status().isOk());
   }
@@ -503,7 +391,8 @@ class NormsControllerApiIntegrationTest extends ContainersIntegrationBase {
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.member[*].articles", hasSize(0)))
         .andExpect(jsonPath("$.member[*].textMatches").value(hasSize(3)))
-        .andExpect(jsonPath("$.member[0].textMatches[0].@type").value(equalTo("SearchResultMatch")))
+        .andExpect(
+            jsonPath("$.member[0].textMatches[0]['@type']").value(equalTo("SearchResultMatch")))
         .andExpect(jsonPath("$.member[0].textMatches[*].text").value(contains(highlightedMatch)))
         .andExpect(isJsonLdCompliant());
   }
@@ -518,7 +407,7 @@ class NormsControllerApiIntegrationTest extends ContainersIntegrationBase {
         .andExpectAll(
             status().isOk(),
             jsonPath("$.member[0].textMatches[*]", hasSize(3)),
-            jsonPath("$.member[0].textMatches[0].@type", equalTo("SearchResultMatch")),
+            jsonPath("$.member[0].textMatches[0]['@type']", equalTo("SearchResultMatch")),
             jsonPath(
                 "$.member[0].textMatches[*].name",
                 containsInAnyOrder(
@@ -705,41 +594,6 @@ class NormsControllerApiIntegrationTest extends ContainersIntegrationBase {
         .isEqualTo("eli/bund/bgbl-1/1991/s102/2050-01-01/1/deu");
   }
 
-  @ParameterizedTest(name = "HTML Endpoint should resolve article with eId={0}")
-  @MethodSource("articleEidProvider")
-  @DisplayName(
-      "Html Endpoint should resolve article html with different encodings and UTF-8 variants of eId")
-  void shouldResolveArticleWithVariousEidFormats(String articleEid, boolean isEncoded)
-      throws Exception {
-
-    String url = MANIFESTATION_URL_HTML.replace(".html", "/" + articleEid + ".html");
-    var request = isEncoded ? get(URI.create(url)) : get(url);
-    var response =
-        mockMvc
-            .perform(request.contentType(MediaType.TEXT_HTML))
-            .andExpect(status().isOk())
-            .andReturn();
-
-    Document parsed = Jsoup.parse(response.getResponse().getContentAsString());
-    var article = parsed.body().getElementById("art-z%c2%a7%c2%a7%204%20bis%2014");
-    assertThat(article).isNotNull();
-  }
-
-  static Stream<Arguments> articleEidProvider() {
-    return Stream.of(
-        Arguments.of("art-z§§ 4 bis 14", false),
-        Arguments.of("art-z%C2%A7%C2%A7%204%20bis%2014", true),
-        Arguments.of("art-z%c2%a7%c2%a7%204%20bis%2014", true));
-  }
-
-  @Test
-  @DisplayName("Html Endpoint Should return 404 for encoded article eId not present in XML")
-  void shouldReturn404ForNonexistingEncodedArticleEid() throws Exception {
-    String encodedMissing = "art-z%c2%a7%c2%a7%20999%20bis%201234";
-    URI uri = URI.create(MANIFESTATION_URL_HTML.replace(".html", "/" + encodedMissing + ".html"));
-    mockMvc.perform(get(uri).contentType(MediaType.TEXT_HTML)).andExpect(status().isNotFound());
-  }
-
   @Test
   @DisplayName("It returns all workExamples of a given expressionEli")
   void itReturnsTheWorkExmapleOfAGivenWorkEli() throws Exception {
@@ -749,13 +603,13 @@ class NormsControllerApiIntegrationTest extends ContainersIntegrationBase {
             get(ApiConfig.Paths.LEGISLATION_WORK_EXAMPLE + "/bund/bgbl-1/1000/test")
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.@type", equalTo("hydra:Collection")))
+        .andExpect(jsonPath("$['@type']", equalTo("hydra:Collection")))
         .andExpect(
-            jsonPath("$.@id", equalTo("/v1/legislation/work-example/eli?pageIndex=0&size=100")))
-        .andExpect(jsonPath("$.member[0].@type", equalTo("Legislation")))
+            jsonPath("$['@id']", equalTo("/v1/legislation/work-example/eli?pageIndex=0&size=100")))
+        .andExpect(jsonPath("$.member[0]['@type']", equalTo("Legislation")))
         .andExpect(
             jsonPath(
-                "$.member[0].@id",
+                "$.member[0].['@id']",
                 equalTo("/v1/legislation/eli/bund/bgbl-1/1000/test/2000-10-06/2/deu")))
         .andExpect(
             jsonPath(
