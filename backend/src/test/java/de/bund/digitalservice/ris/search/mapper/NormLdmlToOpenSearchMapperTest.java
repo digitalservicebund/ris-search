@@ -314,6 +314,7 @@ class NormLdmlToOpenSearchMapperTest {
                 "2003-11-03",
                 null,
                 "art-z1",
+                "DKNR0E80B0026DKNR000100000",
                 article -> {
                   article
                       .addHeading("Heading 1", null)
@@ -324,6 +325,7 @@ class NormLdmlToOpenSearchMapperTest {
                 "2003-11-03",
                 "2003-11-06",
                 "art-z2",
+                "DKNR0E80B0026DKNR000200000",
                 article -> {
                   article
                       .addHeading("Heading 2", null)
@@ -337,6 +339,7 @@ class NormLdmlToOpenSearchMapperTest {
                 "2003-11-01",
                 null,
                 "art-z3",
+                "DKNR0E80B0026DKNR000300000",
                 article -> {
                   article.addHeading("Heading 3", null).addParagraph("Mit Text.", "");
                 })
@@ -349,9 +352,9 @@ class NormLdmlToOpenSearchMapperTest {
                     new AknP(
                         "This text appears in the attachment. This text also appears, inside a paragraph.")));
 
+    String xmlContent = builder.buildNormXml();
     Optional<Norm> maybeNorm =
-        NormLdmlToOpenSearchMapper.parseNorm(
-            "", builder.buildNormXml(), builder.buildAttachmentXmls(), true);
+        NormLdmlToOpenSearchMapper.parseNorm("", xmlContent, builder.buildAttachmentXmls(), true);
 
     assertThat(maybeNorm).isNotEmpty();
 
@@ -373,6 +376,7 @@ class NormLdmlToOpenSearchMapperTest {
 
     assertThat(firstArticle.getName()).isEqualTo("§ 1 Heading 1");
     assertThat(firstArticle.getText()).isEqualTo("(1) Das ist ein Satz. Das ist noch ein Satz.");
+    assertThat(firstArticle.getDocumentNumber()).isEqualTo("DKNR0E80B0026DKNR000100000");
 
     assertThat(secondArticle.getName()).isEqualTo("§ 2 Heading 2");
     assertThat(secondArticle.getText())
@@ -381,10 +385,12 @@ class NormLdmlToOpenSearchMapperTest {
     assertThat(secondArticle.getEntryIntoForceDate())
         .isEqualTo(LocalDate.of(2003, Month.NOVEMBER, 3));
     assertThat(secondArticle.getExpiryDate()).isEqualTo(LocalDate.of(2003, Month.NOVEMBER, 6));
+    assertThat(secondArticle.getDocumentNumber()).isEqualTo("DKNR0E80B0026DKNR000200000");
 
     assertThat(thirdArticle.getEntryIntoForceDate())
         .isEqualTo(LocalDate.of(2003, Month.NOVEMBER, 1));
     assertThat(thirdArticle.getExpiryDate()).isNull();
+    assertThat(thirdArticle.getDocumentNumber()).isEqualTo("DKNR0E80B0026DKNR000300000");
 
     List<String> fingerprints = norm.getArticleFingerprints();
     assertThat(fingerprints)
@@ -413,7 +419,8 @@ class NormLdmlToOpenSearchMapperTest {
                 null,
                 manifestationEli,
                 "Anlage T1 (zu § 1) RisAbk",
-                attachment.getIndexedAt()));
+                attachment.getIndexedAt(),
+                null));
   }
 
   @Test
@@ -522,6 +529,7 @@ class NormLdmlToOpenSearchMapperTest {
                 "2003-11-03",
                 "2004-05-12",
                 "art-z1",
+                "",
                 article -> {
                   article.addHeading("Heading 1", null).addParagraph("Article content 1", "(1)");
                 })
@@ -530,6 +538,7 @@ class NormLdmlToOpenSearchMapperTest {
                 "2003-11-03",
                 null,
                 "art-z%c2%a7%c2%a7%204%20bis%2014",
+                "",
                 article -> {
                   article.addHeading("Heading 2", null).addParagraph("Article content 2", "(1)");
                 })

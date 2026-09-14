@@ -16,6 +16,7 @@ import de.bund.digitalservice.ris.builder.models.meta.Meta;
 import de.bund.digitalservice.ris.builder.models.meta.identification.FRBRWork;
 import de.bund.digitalservice.ris.builder.models.meta.identification.Identification;
 import de.bund.digitalservice.ris.builder.models.meta.lifecycle.Lifecycle;
+import de.bund.digitalservice.ris.builder.models.meta.proprietary.ris.RisDokNr;
 import de.bund.digitalservice.ris.builder.models.preamble.Preamble;
 import de.bund.digitalservice.ris.builder.models.preamble.Toc;
 import de.bund.digitalservice.ris.builder.models.preface.DocTitle;
@@ -32,6 +33,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.persistence.oxm.NamespacePrefixMapper;
 
 /**
@@ -389,10 +391,24 @@ public class NormTestDataBuilder {
    * @return this builder for chaining
    */
   public NormTestDataBuilder article(
-      String num, String startDate, String endDate, String eId, Consumer<Article> articleConsumer) {
+      String num,
+      String startDate,
+      String endDate,
+      String eId,
+      String dokNr,
+      Consumer<Article> articleConsumer) {
     Article article = buildArticle(num, startDate, endDate, eId);
     articleConsumer.accept(article);
     this.document.getAct().getBody().addChild(article);
+
+    if (StringUtils.isNotEmpty(dokNr)) {
+      this.document
+          .getAct()
+          .getMeta()
+          .getProprietary()
+          .getRisMetadata()
+          .addDokNr(new RisDokNr("#" + eId, dokNr));
+    }
     return this;
   }
 
