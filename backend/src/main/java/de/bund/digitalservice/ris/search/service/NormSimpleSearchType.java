@@ -10,7 +10,9 @@ import de.bund.digitalservice.ris.search.utils.DateUtils;
 import java.util.List;
 import java.util.Map;
 import org.opensearch.index.query.BoolQueryBuilder;
+import org.opensearch.index.query.MultiMatchQueryBuilder;
 import org.opensearch.index.query.Operator;
+import org.opensearch.index.query.QueryBuilder;
 import org.opensearch.index.query.QueryBuilders;
 import org.opensearch.search.fetch.subphase.highlight.HighlightBuilder;
 
@@ -109,5 +111,18 @@ public class NormSimpleSearchType implements SimpleSearchType {
     DateUtils.buildQueryForTemporalCoverage(
             normsSearchParams.getTemporalCoverageFrom(), normsSearchParams.getTemporalCoverageTo())
         .ifPresent(query::filter);
+  }
+
+  @Override
+  public List<QueryBuilder> getTargetedSearchQueries(String searchTerm) {
+    return List.of(
+        new MultiMatchQueryBuilder(searchTerm)
+            .field(Norm.Fields.WORK_ELI_KEYWORD)
+            .field(Norm.Fields.EXPRESSION_ELI_KEYWORD)
+            .field(Norm.Fields.OFFICIAL_TITLE_KEYWORD)
+            .field(Norm.Fields.OFFICIAL_SHORT_TITLE_KEYWORD)
+            .field(Norm.Fields.ABBREVIATION_KEYWORD)
+            .boost(10.0f),
+        QueryBuilders.matchQuery(Norm.Fields.ARTICLE_FINGERPRINTS, searchTerm).boost(10.0f));
   }
 }
