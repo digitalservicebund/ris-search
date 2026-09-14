@@ -4,7 +4,7 @@ Date: 2022-05-03
 
 ## Status
 
-Superseded by [ADR 11](./0011-use-java-21.md).
+Superseded by [ADR 12](./0012-use-java-21.md).
 
 ## Context
 

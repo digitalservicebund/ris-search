@@ -1,4 +1,4 @@
-# 21. Generate TypeScript types from OpenAPI spec
+# 22. Generate TypeScript types from OpenAPI spec
 
 Date: 2026-03-04
 

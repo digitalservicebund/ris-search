@@ -1,4 +1,4 @@
-# 20. Adopt Oxlint for frontend linting
+# 21. Adopt Oxlint for frontend linting
 
 Date: 2026-01-22
 

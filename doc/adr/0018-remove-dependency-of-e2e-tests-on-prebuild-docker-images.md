@@ -1,4 +1,4 @@
-# 17. Remove Dependency of End-to-End Tests on Prebuilt Docker Images
+# 18. Remove Dependency of End-to-End Tests on Prebuilt Docker Images
 
 Date: 2025-11-20
 

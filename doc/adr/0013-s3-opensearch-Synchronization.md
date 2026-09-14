@@ -1,10 +1,10 @@
-# 12. S3 Buckets and OpenSearch Synchronization
+# 13. S3 Buckets and OpenSearch Synchronization
 
 Date: 2025-03-07
 
 ## Status
 
-Superseded by ADR 0013
+Superseded by ADR 0015
 
 ## Context
 
