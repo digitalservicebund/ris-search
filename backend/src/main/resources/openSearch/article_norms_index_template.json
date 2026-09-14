@@ -55,6 +55,9 @@
         },
         "indexed_at": {
           "type": "date"
+        },
+        "document_number": {
+          "type": "keyword"
         }
       }
     }
