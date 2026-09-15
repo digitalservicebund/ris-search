@@ -3,6 +3,7 @@ package de.bund.digitalservice.ris.search.repository.opensearch;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import java.util.List;
 import org.jspecify.annotations.NonNull;
+import org.springframework.data.elasticsearch.annotations.Query;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 
 /**
@@ -12,6 +13,9 @@ import org.springframework.data.elasticsearch.repository.ElasticsearchRepository
  */
 public interface ArticlesRepository extends ElasticsearchRepository<Article, String> {
   List<Article> findAllByExpressionEli(String expressionEli);
+
+  @Query("{\"prefix\": {\"document_number\": \"?0\"}}")
+  List<Article> findAllByDocumentNumberStartingWith(String documentNumber);
 
   /**
    * Delete articles for the given workEli that were indexed before the provided timestamp.
