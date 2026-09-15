@@ -61,6 +61,10 @@ const normExpressionRoute = computed<RouteLocationRaw>(() => ({
   query: { from: route.query.from },
 }));
 
+const expressionValidityLabel = computed(() =>
+  tocHeadlineAdditionLabel(norm.value?.temporalCoverage),
+);
+
 const tableOfContents = computed(() => {
   if (!norm.value?.hasPart) return [];
   return tocItemsToTreeViewItems(
@@ -307,6 +311,7 @@ const metadataItems = computed<MetadataItem[]>(() => {
             v-if="tableOfContents.length"
             :subheading="normAbbreviation"
             :subheading-to="normExpressionRoute"
+            :subheading-addition="expressionValidityLabel"
             :table-of-contents="tableOfContents"
             :selected-key="eId"
           />
