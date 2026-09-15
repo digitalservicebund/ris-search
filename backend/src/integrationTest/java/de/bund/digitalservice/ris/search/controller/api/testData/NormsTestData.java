@@ -63,6 +63,7 @@ public class NormsTestData {
                 "1991-01-01",
                 "1991-01-01",
                 "art-z1",
+                null,
                 article -> {
                   article
                       .addHeading("Erster Artikel", "Authorial note in an article title.")
@@ -183,6 +184,7 @@ public class NormsTestData {
                         "guid1",
                         manifestationEli,
                         "§ 1 TeG",
+                        null,
                         null),
                     new Article(
                         expressionEli + "/" + "art-z2",
@@ -196,6 +198,7 @@ public class NormsTestData {
                         "guid2",
                         manifestationEli,
                         "§ 2 TeG",
+                        null,
                         null)))
             .tableOfContents(nestedToC)
             .build();

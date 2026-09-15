@@ -16,6 +16,7 @@ import de.bund.digitalservice.ris.builder.models.meta.Meta;
 import de.bund.digitalservice.ris.builder.models.meta.identification.FRBRWork;
 import de.bund.digitalservice.ris.builder.models.meta.identification.Identification;
 import de.bund.digitalservice.ris.builder.models.meta.lifecycle.Lifecycle;
+import de.bund.digitalservice.ris.builder.models.meta.proprietary.ris.RisDokNr;
 import de.bund.digitalservice.ris.builder.models.preamble.Preamble;
 import de.bund.digitalservice.ris.builder.models.preamble.Toc;
 import de.bund.digitalservice.ris.builder.models.preface.DocTitle;
@@ -32,7 +33,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.persistence.oxm.NamespacePrefixMapper;
+import org.jspecify.annotations.Nullable;
 
 /**
  * This class allows to construct norms for testing purposes using the builder pattern.
@@ -385,14 +388,45 @@ public class NormTestDataBuilder {
    * @param startDate date the article starts being valid
    * @param endDate date the article stops being valid
    * @param eId eId of the article, e.g. "art-z1"
+   * @param dokNr document number mapped to this article
    * @param articleConsumer callback used to populate the created {@link Article}
    * @return this builder for chaining
    */
   public NormTestDataBuilder article(
-      String num, String startDate, String endDate, String eId, Consumer<Article> articleConsumer) {
-    Article article = buildArticle(num, startDate, endDate, eId);
+      String num,
+      String startDate,
+      String endDate,
+      String eId,
+      String dokNr,
+      Consumer<Article> articleConsumer) {
+    Article article = buildArticle(num, startDate, endDate, eId, dokNr);
     articleConsumer.accept(article);
     this.document.getAct().getBody().addChild(article);
+
+    return this;
+  }
+
+  /**
+   * Adds an article to the norm's body with default heading and paragraph content.
+   *
+   * @param num the article number, e.g. "§ 1"
+   * @param startDate date the article starts being valid
+   * @param endDate date the article stops being valid
+   * @param eId eId of the article, e.g. "art-z1"
+   * @param dokNr document number mapped to this article
+   * @return this builder for chaining
+   */
+  public NormTestDataBuilder article(
+      String num, String startDate, String endDate, String eId, String dokNr) {
+    this.article(
+        num,
+        startDate,
+        endDate,
+        eId,
+        dokNr,
+        article -> {
+          article.addHeading("Heading", null).addParagraph("Some paragraph content", "(1)");
+        });
     return this;
   }
 
@@ -404,9 +438,11 @@ public class NormTestDataBuilder {
    * @param startDate date the Article starts being valid
    * @param endDate date the Article stops being valid
    * @param eId eId of the article e.g. "art-z1"
+   * @param dokNr document number mapped to this article
    * @return Article
    */
-  public Article buildArticle(String num, String startDate, String endDate, String eId) {
+  public Article buildArticle(
+      String num, String startDate, String endDate, String eId, @Nullable String dokNr) {
     Lifecycle lifecycle = this.document.getAct().getMeta().getLifecycle();
     String inForceEventEId = lifecycle.addInForceEvent(startDate);
     String outOfForceEventEId = lifecycle.addOutOfForce(endDate);
@@ -418,6 +454,14 @@ public class NormTestDataBuilder {
             .getTemporalData()
             .addTemporalGroup(inForceEventEId, outOfForceEventEId);
 
+    if (StringUtils.isNotBlank(dokNr)) {
+      this.document
+          .getAct()
+          .getMeta()
+          .getProprietary()
+          .getRisMetadata()
+          .addDokNr(new RisDokNr("#" + eId, dokNr));
+    }
     return new Article(eId, temporalGroupEId, num);
   }
 
@@ -428,7 +472,7 @@ public class NormTestDataBuilder {
    */
   public NormTestDataBuilder defaultArticle() {
     Article article =
-        this.buildArticle("§ 1", "2025-01-01", "2025-07-01", "art-z1")
+        this.buildArticle("§ 1", "2025-01-01", "2025-07-01", "art-z1", "DKNR0E80B0026DKNR000100000")
             .addHeading("Article number one", null)
             .addParagraph("Paragraph one", "(1)");
 

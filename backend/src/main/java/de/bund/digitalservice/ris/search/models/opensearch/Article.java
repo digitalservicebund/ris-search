@@ -73,6 +73,9 @@ public final class Article implements AbstractSearchEntity {
   @Field(name = Fields.INDEXED_AT)
   private String indexedAt;
 
+  @Field(name = Fields.DOCUMENT_NUMBER)
+  private String documentNumber;
+
   /**
    * Builds the composite document id used for articles, combining the norm's expressionEli and the
    * article's eId.
@@ -108,5 +111,6 @@ public final class Article implements AbstractSearchEntity {
     public static final String MANIFESTATION_ELI = "manifestation_eli";
     public static final String ARTICLE_FINGERPRINT = "article_fingerprint";
     public static final String INDEXED_AT = "indexed_at";
+    public static final String DOCUMENT_NUMBER = "document_number";
   }
 }

@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
@@ -102,6 +103,7 @@ public class NormLdmlToOpenSearchMapper {
       "//*[local-name()='conclusions']/*[local-name()='formula']";
   private static final String X_PATH_PREAMBLE_FORMULA =
       "//*[local-name()='preamble']/*[local-name()='formula']";
+  private static final String X_PATH_DOKNR = AKN_RIS_METADATA + "ris:doknr";
   public static final String X_PATH_OFFICIAL_FOOTNOTES = "//*[local-name()='authorialNote']";
 
   private static final String EINGANGSFORMEL = "Eingangsformel";
@@ -178,9 +180,17 @@ public class NormLdmlToOpenSearchMapper {
 
     String indexedAt = Instant.now().toString();
 
+    Map<String, String> eIdToDocnrMap = getEidToDoknrMap(xmlDocument);
+
     List<Article> articles =
         getArticlesByXmlDocument(
-            xmlDocument, attachments, abbreviation, workEli, expressionEli, indexedAt);
+            xmlDocument,
+            attachments,
+            abbreviation,
+            workEli,
+            expressionEli,
+            indexedAt,
+            eIdToDocnrMap);
     List<String> articleNames = articles.stream().map(Article::getName).toList();
     List<String> articleTexts = articles.stream().map(Article::getText).toList();
     List<String> articleFingerprints =
@@ -410,7 +420,8 @@ public class NormLdmlToOpenSearchMapper {
       String abbreviation,
       String workEli,
       String expressionEli,
-      String indexedAt)
+      String indexedAt,
+      Map<String, String> eIdToDoknrMap)
       throws ValidationException {
 
     NodeList nodes = null;
@@ -447,7 +458,8 @@ public class NormLdmlToOpenSearchMapper {
               abbreviation,
               workEli,
               expressionEli,
-              indexedAt)
+              indexedAt,
+              eIdToDoknrMap)
           .ifPresent(articles::add);
     }
 
@@ -512,7 +524,8 @@ public class NormLdmlToOpenSearchMapper {
       String abbreviation,
       String workEli,
       String expressionEli,
-      String indexedAt) {
+      String indexedAt,
+      Map<String, String> eIdToDokNrMap) {
     try {
       var articleXml = new XmlDocument(articleNode);
       String articleNumber = cleanText(articleXml.getSimpleElementByXpath(X_PATH_ARTICLE_NUM));
@@ -523,6 +536,7 @@ public class NormLdmlToOpenSearchMapper {
       String eId = articleNode.getAttributes().getNamedItem("eId").getTextContent();
       String id = Article.buildId(expressionEli, eId);
       String guid = articleNode.getAttributes().getNamedItem("GUID").getTextContent();
+      String documentNumber = eIdToDokNrMap.get(eId);
       NodeList paragraphNodes = articleXml.getNodesByXpath(X_PATH_ARTICLE_PARAGRAPHS);
       String text = "";
       for (int j = 0; j < paragraphNodes.getLength(); j++) {
@@ -547,6 +561,7 @@ public class NormLdmlToOpenSearchMapper {
           Article.builder()
               .id(id)
               .eId(eId)
+              .documentNumber(documentNumber)
               .workEli(workEli)
               .expressionEli(expressionEli)
               .guid(guid)
@@ -596,5 +611,21 @@ public class NormLdmlToOpenSearchMapper {
     } else if (!articleMarker.isEmpty()) {
       return articleMarker;
     } else return Objects.requireNonNullElse(articleHeading, "");
+  }
+
+  private static Map<String, String> getEidToDoknrMap(XmlDocument xmlDocument)
+      throws XPathExpressionException {
+    NodeList nodes = xmlDocument.getNodesByXpath(X_PATH_DOKNR);
+
+    return IntStream.range(0, nodes.getLength())
+        .mapToObj(nodes::item)
+        .filter(Element.class::isInstance)
+        .map(Element.class::cast)
+        .collect(
+            Collectors.toMap(
+                el -> el.getAttribute("source").replaceFirst("^#", ""),
+                Element::getTextContent,
+                (existing, replacement) -> existing // handles duplicate keys if any
+                ));
   }
 }

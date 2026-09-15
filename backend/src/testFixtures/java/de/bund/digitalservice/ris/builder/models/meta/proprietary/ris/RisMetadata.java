@@ -3,6 +3,8 @@ package de.bund.digitalservice.ris.builder.models.meta.proprietary.ris;
 import static de.bund.digitalservice.ris.builder.NormTestDataBuilder.RIS_NS;
 
 import jakarta.xml.bind.annotation.XmlElement;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
@@ -68,6 +70,13 @@ public class RisMetadata {
 
   @XmlElement(namespace = RIS_NS)
   private EmptyElement gegenstandslos;
+
+  @XmlElement(name = "doknr", namespace = RIS_NS)
+  private List<RisDokNr> dokNrList = new ArrayList<>();
+
+  public void addDokNr(RisDokNr dokNr) {
+    dokNrList.add(dokNr);
+  }
 
   /** Marks the norm as {@code gegenstandslos}. */
   public void setGegenstandslos() {

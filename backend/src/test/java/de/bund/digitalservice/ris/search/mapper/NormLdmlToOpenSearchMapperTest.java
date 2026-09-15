@@ -314,6 +314,7 @@ class NormLdmlToOpenSearchMapperTest {
                 "2003-11-03",
                 null,
                 "art-z1",
+                "DKNR0E80B0026DKNR000100000",
                 article -> {
                   article
                       .addHeading("Heading 1", null)
@@ -324,6 +325,7 @@ class NormLdmlToOpenSearchMapperTest {
                 "2003-11-03",
                 "2003-11-06",
                 "art-z2",
+                "DKNR0E80B0026DKNR000200000",
                 article -> {
                   article
                       .addHeading("Heading 2", null)
@@ -337,6 +339,7 @@ class NormLdmlToOpenSearchMapperTest {
                 "2003-11-01",
                 null,
                 "art-z3",
+                "DKNR0E80B0026DKNR000300000",
                 article -> {
                   article.addHeading("Heading 3", null).addParagraph("Mit Text.", "");
                 })
@@ -349,9 +352,9 @@ class NormLdmlToOpenSearchMapperTest {
                     new AknP(
                         "This text appears in the attachment. This text also appears, inside a paragraph.")));
 
+    String xmlContent = builder.buildNormXml();
     Optional<Norm> maybeNorm =
-        NormLdmlToOpenSearchMapper.parseNorm(
-            "", builder.buildNormXml(), builder.buildAttachmentXmls(), true);
+        NormLdmlToOpenSearchMapper.parseNorm("", xmlContent, builder.buildAttachmentXmls(), true);
 
     assertThat(maybeNorm).isNotEmpty();
 
@@ -373,6 +376,7 @@ class NormLdmlToOpenSearchMapperTest {
 
     assertThat(firstArticle.getName()).isEqualTo("§ 1 Heading 1");
     assertThat(firstArticle.getText()).isEqualTo("(1) Das ist ein Satz. Das ist noch ein Satz.");
+    assertThat(firstArticle.getDocumentNumber()).isEqualTo("DKNR0E80B0026DKNR000100000");
 
     assertThat(secondArticle.getName()).isEqualTo("§ 2 Heading 2");
     assertThat(secondArticle.getText())
@@ -381,10 +385,12 @@ class NormLdmlToOpenSearchMapperTest {
     assertThat(secondArticle.getEntryIntoForceDate())
         .isEqualTo(LocalDate.of(2003, Month.NOVEMBER, 3));
     assertThat(secondArticle.getExpiryDate()).isEqualTo(LocalDate.of(2003, Month.NOVEMBER, 6));
+    assertThat(secondArticle.getDocumentNumber()).isEqualTo("DKNR0E80B0026DKNR000200000");
 
     assertThat(thirdArticle.getEntryIntoForceDate())
         .isEqualTo(LocalDate.of(2003, Month.NOVEMBER, 1));
     assertThat(thirdArticle.getExpiryDate()).isNull();
+    assertThat(thirdArticle.getDocumentNumber()).isEqualTo("DKNR0E80B0026DKNR000300000");
 
     List<String> fingerprints = norm.getArticleFingerprints();
     assertThat(fingerprints)
@@ -413,7 +419,8 @@ class NormLdmlToOpenSearchMapperTest {
                 null,
                 manifestationEli,
                 "Anlage T1 (zu § 1) RisAbk",
-                attachment.getIndexedAt()));
+                attachment.getIndexedAt(),
+                null));
   }
 
   @Test
@@ -461,12 +468,12 @@ class NormLdmlToOpenSearchMapperTest {
             new Chapter("Heading 1", "Kapitel 1")
                 .addArticle(
                     builder
-                        .buildArticle("§ 1", "2020-01-01", null, "art-z1")
+                        .buildArticle("§ 1", "2020-01-01", null, "art-z1", null)
                         .addHeading("Artikel 1", null)
                         .addParagraph("Paragraf 1", "(1)"))
                 .addArticle(
                     builder
-                        .buildArticle("§ 2", "2020-01-01", null, "art-z2")
+                        .buildArticle("§ 2", "2020-01-01", null, "art-z2", null)
                         .addHeading("", null)
                         .addParagraph("Paragraf 1", "(1)")))
         .chapter(
@@ -475,7 +482,7 @@ class NormLdmlToOpenSearchMapperTest {
                     new Section("Heading 2.1", "Abschnitt 2.1")
                         .addArticle(
                             builder
-                                .buildArticle("§ 3", "2020-01-01", null, "art-z3")
+                                .buildArticle("§ 3", "2020-01-01", null, "art-z3", null)
                                 .addHeading("Artikel 3", null)
                                 .addParagraph("Paragraf 1", "(1)"))));
 
@@ -522,6 +529,7 @@ class NormLdmlToOpenSearchMapperTest {
                 "2003-11-03",
                 "2004-05-12",
                 "art-z1",
+                "",
                 article -> {
                   article.addHeading("Heading 1", null).addParagraph("Article content 1", "(1)");
                 })
@@ -530,6 +538,7 @@ class NormLdmlToOpenSearchMapperTest {
                 "2003-11-03",
                 null,
                 "art-z%c2%a7%c2%a7%204%20bis%2014",
+                "",
                 article -> {
                   article.addHeading("Heading 2", null).addParagraph("Article content 2", "(1)");
                 })
@@ -576,5 +585,32 @@ class NormLdmlToOpenSearchMapperTest {
   @DisplayName("It removes parenthesis and trailing dashes from short titles")
   void itParsesTheShortTitle(String input, String expected) {
     assertThat(NormLdmlToOpenSearchMapper.parseShortTitle(input)).isEqualTo(expected);
+  }
+
+  @Test
+  @DisplayName("It maps empty document numbers")
+  void itMapsEmptyDocumentNumbers() {
+    NormTestDataBuilder builder =
+        NormTestDataBuilder.builder()
+            .eli("eli/bund/bgbl-1/1962/s514/2010-04-27/1/deu/2010-04-27/regelungstext-1.xml")
+            .formula("Preamble")
+            .article("§ 1", "2003-11-03", null, "art-z1", "")
+            .article("§ 2", "2003-11-03", "2003-11-06", "art-z2", null);
+
+    String xmlContent = builder.buildNormXml();
+    Optional<Norm> maybeNorm =
+        NormLdmlToOpenSearchMapper.parseNorm("", xmlContent, builder.buildAttachmentXmls(), true);
+
+    assertThat(maybeNorm).isNotEmpty();
+
+    Norm norm = maybeNorm.get();
+
+    Article firstArticle = norm.getArticles().get(1);
+    Article secondArticle = norm.getArticles().get(2);
+    assertThat(firstArticle.getEId()).isEqualTo("art-z1");
+    assertThat(firstArticle.getDocumentNumber()).isNull();
+
+    assertThat(secondArticle.getEId()).isEqualTo("art-z2");
+    assertThat(secondArticle.getDocumentNumber()).isNull();
   }
 }
