@@ -468,12 +468,12 @@ class NormLdmlToOpenSearchMapperTest {
             new Chapter("Heading 1", "Kapitel 1")
                 .addArticle(
                     builder
-                        .buildArticle("§ 1", "2020-01-01", null, "art-z1")
+                        .buildArticle("§ 1", "2020-01-01", null, "art-z1", null)
                         .addHeading("Artikel 1", null)
                         .addParagraph("Paragraf 1", "(1)"))
                 .addArticle(
                     builder
-                        .buildArticle("§ 2", "2020-01-01", null, "art-z2")
+                        .buildArticle("§ 2", "2020-01-01", null, "art-z2", null)
                         .addHeading("", null)
                         .addParagraph("Paragraf 1", "(1)")))
         .chapter(
@@ -482,7 +482,7 @@ class NormLdmlToOpenSearchMapperTest {
                     new Section("Heading 2.1", "Abschnitt 2.1")
                         .addArticle(
                             builder
-                                .buildArticle("§ 3", "2020-01-01", null, "art-z3")
+                                .buildArticle("§ 3", "2020-01-01", null, "art-z3", null)
                                 .addHeading("Artikel 3", null)
                                 .addParagraph("Paragraf 1", "(1)"))));
 
