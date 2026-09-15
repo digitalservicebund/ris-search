@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/** Represents {@code ris:dokNr} mapping an eId to the immutable dokNr */
 @Getter
 @Setter
 @NoArgsConstructor

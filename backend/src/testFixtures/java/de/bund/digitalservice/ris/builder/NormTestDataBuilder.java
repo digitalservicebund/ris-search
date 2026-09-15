@@ -387,6 +387,7 @@ public class NormTestDataBuilder {
    * @param startDate date the article starts being valid
    * @param endDate date the article stops being valid
    * @param eId eId of the article, e.g. "art-z1"
+   * @param dokNr document number mapped to this article
    * @param articleConsumer callback used to populate the created {@link Article}
    * @return this builder for chaining
    */
