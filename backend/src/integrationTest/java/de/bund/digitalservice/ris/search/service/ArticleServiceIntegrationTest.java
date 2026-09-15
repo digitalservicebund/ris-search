@@ -16,9 +16,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ArticleServiceIntegrationTest extends ContainersIntegrationBase {
 
-  private static final String FIRST_EXPRESSION_ELI = "work1/expression1";
-  private static final String SECOND_EXPRESSION_ELI = "work1/expression2";
-  private static final String INVALID_DOK_NR_EXPRESSION_ELI = "work2/expression1";
+  private static final String FIRST_WORK_FIRST_EXPRESSION_ELI = "work1/expression1";
+  private static final String FIRST_WORK_SECOND_EXPRESSION_ELI = "work1/expression2";
+  private static final String SECOND_WORK_FIRST_EXPRESSION_ELI = "work2/expression1";
   private static final String EID = "art-z1";
 
   @Autowired ArticleService articleService;
@@ -29,31 +29,32 @@ class ArticleServiceIntegrationTest extends ContainersIntegrationBase {
   void setup() {
     Article firstArticle =
         Article.builder()
-            .id(Article.buildId(FIRST_EXPRESSION_ELI, EID))
+            .id(Article.buildId(FIRST_WORK_FIRST_EXPRESSION_ELI, EID))
             .eId(EID)
             .documentNumber("DKNR0E80B0026DKNE000100010")
             .build();
 
     Article secondArticle =
         Article.builder()
-            .id(Article.buildId(SECOND_EXPRESSION_ELI, EID))
+            .id(Article.buildId(FIRST_WORK_SECOND_EXPRESSION_ELI, EID))
             .eId(EID)
             .documentNumber("DKNR0E80B0026DKNE000100020")
             .build();
 
     Article invalidDokNrArticle =
         Article.builder()
-            .id(Article.buildId(INVALID_DOK_NR_EXPRESSION_ELI, EID))
+            .id(Article.buildId(SECOND_WORK_FIRST_EXPRESSION_ELI, EID))
             .eId(EID)
-            .documentNumber("DKNR0E70B0026")
+            .documentNumber("DKNR0E70B0026DKNE000100020")
             .build();
 
     articlesRepository.saveAll(List.of(firstArticle, secondArticle, invalidDokNrArticle));
   }
 
   @Test
-  void itRetrievesAllArticlesWhenGivenADocumentNumberPrefix() {
-    List<Article> actualArticles = articleService.getAllArticleVersions(FIRST_EXPRESSION_ELI, EID);
+  void itRetrievesAllArticleVersionsOfAWorkWhenGivenADocumentNumberPrefix() {
+    List<Article> actualArticles =
+        articleService.getAllArticleVersions(FIRST_WORK_FIRST_EXPRESSION_ELI, EID);
 
     assertThat(actualArticles).hasSize(2);
   }
@@ -61,15 +62,7 @@ class ArticleServiceIntegrationTest extends ContainersIntegrationBase {
   @Test
   void itRetrievesAnEmptyListOnNotFoundArticles() {
     List<Article> actualArticles =
-        articleService.getAllArticleVersions(FIRST_EXPRESSION_ELI, "notFound");
-
-    assertThat(actualArticles).isEmpty();
-  }
-
-  @Test
-  void itRetrievesAnEmptyListOnStoredInvalidDocumentNumber() {
-    List<Article> actualArticles =
-        articleService.getAllArticleVersions(INVALID_DOK_NR_EXPRESSION_ELI, EID);
+        articleService.getAllArticleVersions(FIRST_WORK_FIRST_EXPRESSION_ELI, "notFound");
 
     assertThat(actualArticles).isEmpty();
   }

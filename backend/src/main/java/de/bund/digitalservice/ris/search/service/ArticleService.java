@@ -170,6 +170,14 @@ public class ArticleService {
         .orElseGet(List::of);
   }
 
+  /**
+   * Retrieves a List of all versions of an Article across the whole work it belongs to. The
+   * documentNumber is used as the article discriminator. Restricts prefix lookup to minimum-length
+   * document numbers to avoid unintended matches.
+   *
+   * @param documentNumber of a given article
+   * @return List of Article objects of the same article across all its expressions
+   */
   private List<Article> getAllArticleVersionsByDocumentNumber(String documentNumber) {
     if (documentNumber == null || documentNumber.length() < MIN_DOC_NUMBER_LENGTH) {
       return List.of();
