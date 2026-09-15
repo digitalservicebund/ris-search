@@ -586,4 +586,54 @@ class NormLdmlToOpenSearchMapperTest {
   void itParsesTheShortTitle(String input, String expected) {
     assertThat(NormLdmlToOpenSearchMapper.parseShortTitle(input)).isEqualTo(expected);
   }
+
+  @Test
+  @DisplayName("It maps empty document numbers")
+  void itMapsEmptyDocumentNumbers() {
+    NormTestDataBuilder builder =
+        NormTestDataBuilder.builder()
+            .eli("eli/bund/bgbl-1/1962/s514/2010-04-27/1/deu/2010-04-27/regelungstext-1.xml")
+            .formula("Preamble")
+            .article(
+                "§ 1",
+                "2003-11-03",
+                null,
+                "art-z1",
+                "",
+                article -> {
+                  article
+                      .addHeading("Heading 1", null)
+                      .addParagraph("Das ist ein Satz. Das ist noch ein Satz.", "(1)");
+                })
+            .article(
+                "§ 2",
+                "2003-11-03",
+                "2003-11-06",
+                "art-z2",
+                null,
+                article -> {
+                  article
+                      .addHeading("Heading 2", null)
+                      .addParagraph(
+                          "Ein weiterer Satz mit einem Punkt in einer Aufzählung und noch einem Punkt.",
+                          "(1)")
+                      .addParagraph("Noch ein wichtiger Satz. Das ist der letzte Satz.", "(2)");
+                });
+
+    String xmlContent = builder.buildNormXml();
+    Optional<Norm> maybeNorm =
+        NormLdmlToOpenSearchMapper.parseNorm("", xmlContent, builder.buildAttachmentXmls(), true);
+
+    assertThat(maybeNorm).isNotEmpty();
+
+    Norm norm = maybeNorm.get();
+
+    Article firstArticle = norm.getArticles().get(1);
+    Article secondArticle = norm.getArticles().get(2);
+    assertThat(firstArticle.getEId()).isEqualTo("art-z1");
+    assertThat(firstArticle.getDocumentNumber()).isNull();
+
+    assertThat(secondArticle.getEId()).isEqualTo("art-z2");
+    assertThat(secondArticle.getDocumentNumber()).isNull();
+  }
 }
