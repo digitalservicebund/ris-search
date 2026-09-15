@@ -42,6 +42,9 @@ public class ArticleService {
   private final ElasticsearchOperations operations;
   private final ArticlesRepository articlesRepository;
 
+  private static final int MIN_DOC_NUMBER_LENGTH = 26;
+  private static final int DOC_NUMBER_VERSION_SUFFIX_LENGTH = 5;
+
   /**
    * Constructs a new instance of {@code ArticleService}.
    *
@@ -146,6 +149,36 @@ public class ArticleService {
       return Optional.of(encodedEid);
     }
     return Optional.empty();
+  }
+
+  /**
+   * Retrieves a List of all versions of an Article across the whole work it belongs to. A
+   * combination of expressionEli and eId is is used to retrieve the dokNr from the ris metadata.
+   * The eId is not guaranteed to be an immutable discriminator across all expressions. This dokNr
+   * is not exposed by the api yet.
+   *
+   * @param expressionEli expressionEli of the norm
+   * @param eidGiven the possible eid
+   * @return List of version of that article across the whole work
+   */
+  public List<Article> getAllArticleVersions(String expressionEli, String eidGiven) {
+    return getActualEid(expressionEli, eidGiven)
+        .flatMap(
+            actualEid -> articlesRepository.findById(Article.buildId(expressionEli, actualEid)))
+        .map(Article::getDocumentNumber)
+        .map(this::getAllArticleVersionsByDocumentNumber)
+        .orElseGet(List::of);
+  }
+
+  private List<Article> getAllArticleVersionsByDocumentNumber(String documentNumber) {
+    if (documentNumber == null || documentNumber.length() < MIN_DOC_NUMBER_LENGTH) {
+      return List.of();
+    }
+
+    String documentNumberPrefix =
+        documentNumber.substring(0, documentNumber.length() - DOC_NUMBER_VERSION_SUFFIX_LENGTH);
+
+    return articlesRepository.findAllByDocumentNumberStartingWith(documentNumberPrefix);
   }
 
   private boolean articleExist(String expressionEli, String eid) {
