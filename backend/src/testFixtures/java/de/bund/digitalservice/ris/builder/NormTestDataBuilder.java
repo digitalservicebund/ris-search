@@ -414,6 +414,30 @@ public class NormTestDataBuilder {
   }
 
   /**
+   * Adds an article to the norm's body with default heading and paragraph content.
+   *
+   * @param num the article number, e.g. "§ 1"
+   * @param startDate date the article starts being valid
+   * @param endDate date the article stops being valid
+   * @param eId eId of the article, e.g. "art-z1"
+   * @param dokNr document number mapped to this article
+   * @return this builder for chaining
+   */
+  public NormTestDataBuilder article(
+      String num, String startDate, String endDate, String eId, String dokNr) {
+    this.article(
+        num,
+        startDate,
+        endDate,
+        eId,
+        dokNr,
+        article -> {
+          article.addHeading("Heading", null).addParagraph("Some paragraph content", "(1)");
+        });
+    return this;
+  }
+
+  /**
    * Creates the article element and the separate temporal group and lifecycle events and links them
    * together.
    *

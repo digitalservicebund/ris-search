@@ -594,31 +594,8 @@ class NormLdmlToOpenSearchMapperTest {
         NormTestDataBuilder.builder()
             .eli("eli/bund/bgbl-1/1962/s514/2010-04-27/1/deu/2010-04-27/regelungstext-1.xml")
             .formula("Preamble")
-            .article(
-                "§ 1",
-                "2003-11-03",
-                null,
-                "art-z1",
-                "",
-                article -> {
-                  article
-                      .addHeading("Heading 1", null)
-                      .addParagraph("Das ist ein Satz. Das ist noch ein Satz.", "(1)");
-                })
-            .article(
-                "§ 2",
-                "2003-11-03",
-                "2003-11-06",
-                "art-z2",
-                null,
-                article -> {
-                  article
-                      .addHeading("Heading 2", null)
-                      .addParagraph(
-                          "Ein weiterer Satz mit einem Punkt in einer Aufzählung und noch einem Punkt.",
-                          "(1)")
-                      .addParagraph("Noch ein wichtiger Satz. Das ist der letzte Satz.", "(2)");
-                });
+            .article("§ 1", "2003-11-03", null, "art-z1", "")
+            .article("§ 2", "2003-11-03", "2003-11-06", "art-z2", null);
 
     String xmlContent = builder.buildNormXml();
     Optional<Norm> maybeNorm =
