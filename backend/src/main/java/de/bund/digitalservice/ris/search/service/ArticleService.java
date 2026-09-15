@@ -42,8 +42,8 @@ public class ArticleService {
   private final ElasticsearchOperations operations;
   private final ArticlesRepository articlesRepository;
 
-  private static final int MIN_DOC_NUMBER_LENGTH = 26;
-  private static final int DOC_NUMBER_VERSION_SUFFIX_LENGTH = 5;
+  // the first 21 characters of the document number identify an article across expressions
+  private static final int DOC_NUMBER_PREFIX_LENGTH = 21;
 
   /**
    * Constructs a new instance of {@code ArticleService}.
@@ -154,8 +154,7 @@ public class ArticleService {
   /**
    * Retrieves a List of all versions of an Article across the whole work it belongs to. A
    * combination of expressionEli and eId is is used to retrieve the dokNr from the ris metadata.
-   * The eId is not guaranteed to be an immutable discriminator across all expressions. This dokNr
-   * is not exposed by the api yet.
+   * The eId is not guaranteed to be a stable identifier across all expressions.
    *
    * @param expressionEli expressionEli of the norm
    * @param eidGiven the possible eid
@@ -166,17 +165,24 @@ public class ArticleService {
         .flatMap(
             actualEid -> articlesRepository.findById(Article.buildId(expressionEli, actualEid)))
         .map(Article::getDocumentNumber)
-        .map(this::getAllArticleVersionsByDocumentNumber)
+        .map(this::getAllArticleVersionsByDocumentNumberPrefix)
         .orElseGet(List::of);
   }
 
-  private List<Article> getAllArticleVersionsByDocumentNumber(String documentNumber) {
-    if (documentNumber == null || documentNumber.length() < MIN_DOC_NUMBER_LENGTH) {
+  /**
+   * Retrieves a List of all versions of an Article across the whole work it belongs to. The
+   * documentNumber is used as the article identifier. Restricts prefix lookup to minimum-length
+   * document numbers to avoid unintended matches.
+   *
+   * @param documentNumber of a given article
+   * @return List of Article objects of the same article across all its expressions
+   */
+  private List<Article> getAllArticleVersionsByDocumentNumberPrefix(String documentNumber) {
+    if (documentNumber.length() < DOC_NUMBER_PREFIX_LENGTH) {
       return List.of();
     }
 
-    String documentNumberPrefix =
-        documentNumber.substring(0, documentNumber.length() - DOC_NUMBER_VERSION_SUFFIX_LENGTH);
+    String documentNumberPrefix = documentNumber.substring(0, DOC_NUMBER_PREFIX_LENGTH);
 
     return articlesRepository.findAllByDocumentNumberStartingWith(documentNumberPrefix);
   }
