@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import IcBaselineArrowBack from "~icons/ic/baseline-arrow-back";
 import IcBaselineArrowForward from "~icons/ic/baseline-arrow-Forward";
+import { NuxtLink } from "#components";
 import type {
   RouteLocationRaw,
   RouteLocationAsPath,
@@ -8,6 +9,7 @@ import type {
 } from "#vue-router";
 import type { BreadcrumbItem } from "~/components/Breadcrumbs.vue";
 import type { MetadataItem } from "~/components/documents/Metadata.vue";
+import type { TabView } from "~/components/documents/TabsLayout.vue";
 import { useArticleSeo } from "~/composables/useArticleSeo";
 import { useSearchBackLink } from "~/composables/useSearchBackLink";
 import {
@@ -217,6 +219,21 @@ const inForceNormLink = computed(() => {
   return `/gesetze/${validVersion.item.legislationIdentifier}`;
 });
 
+const views = computed<OneOrMore<TabView>>(() => {
+  return [
+    {
+      path: "text",
+      label: "Text",
+      analyticsId: "article-text-tab",
+    },
+    {
+      path: "geltungszeiten",
+      label: "Geltungszeiträume",
+      analyticsId: "article-versions-tab",
+    },
+  ];
+});
+
 const metadataItems = computed<MetadataItem[]>(() => {
   const interval = temporalCoverageToValidityInterval(
     article.value?.temporalCoverage,
@@ -234,6 +251,9 @@ const metadataItems = computed<MetadataItem[]>(() => {
     },
   ];
 });
+
+const textTabPanelTitleId = useId();
+const geltungszeitenTabPanelTitleId = useId();
 </script>
 
 <template>
@@ -269,54 +289,115 @@ const metadataItems = computed<MetadataItem[]>(() => {
       <DocumentsMetadata v-if="privateFeaturesEnabled" :items="metadataItems" />
     </div>
 
-    <div id="content" class="border-t border-t-gray-400 bg-white">
-      <SidebarLayout class="content-wrapper">
-        <template v-if="!!articleHtml">
-          <DocumentsIncompleteDataMessage />
-          <DocumentsNormsLegislationContent single-article>
-            <div class="akn-act" v-html="articleHtml" />
-          </DocumentsNormsLegislationContent>
+    <DocumentsTabsLayout :views>
+      <template #text>
+        <section role="tabpanel" :aria-labelledby="textTabPanelTitleId">
+          <SidebarLayout>
+            <template v-if="!!articleHtml">
+              <DocumentsIncompleteDataMessage />
+              <DocumentsNormsLegislationContent single-article>
+                <div class="akn-act" v-html="articleHtml" />
+              </DocumentsNormsLegislationContent>
 
-          <nav class="flex flex-row justify-between" aria-label="Paragrafen">
-            <div class="flex flex-col">
-              <NuxtLink
-                v-if="previousArticleUrl"
-                :to="previousArticleUrl"
-                class="typo-link-regular link-hover"
+              <nav
+                class="flex flex-row justify-between"
+                aria-label="Paragrafen"
               >
-                <div class="flex items-center space-x-8">
-                  <IcBaselineArrowBack class="mt-1 shrink-0" />
-                  <span>Vorheriger Paragraf</span>
+                <div class="flex flex-col">
+                  <NuxtLink
+                    v-if="previousArticleUrl"
+                    :to="previousArticleUrl"
+                    class="typo-link-regular link-hover"
+                  >
+                    <div class="flex items-center space-x-8">
+                      <IcBaselineArrowBack class="mt-1 shrink-0" />
+                      <span>Vorheriger Paragraf</span>
+                    </div>
+                  </NuxtLink>
                 </div>
-              </NuxtLink>
+
+                <div class="flex flex-col">
+                  <NuxtLink
+                    v-if="nextArticleUrl"
+                    :to="nextArticleUrl"
+                    class="typo-link-regular link-hover"
+                  >
+                    <div class="flex items-center space-x-8">
+                      <span>Nächster Paragraf</span>
+                      <IcBaselineArrowForward class="mt-1 shrink-0" />
+                    </div>
+                  </NuxtLink>
+                </div>
+              </nav>
+            </template>
+
+            <template #sidebar>
+              <DocumentsTableOfContents
+                v-if="tableOfContents.length"
+                :subheading="normAbbreviation"
+                :subheading-to="normExpressionRoute"
+                :subheading-addition="expressionValidityLabel"
+                :table-of-contents="tableOfContents"
+                :selected-key="eId"
+              />
+            </template>
+          </SidebarLayout>
+        </section>
+      </template>
+
+      <template #geltungszeiten>
+        <section
+          role="tabpanel"
+          :aria-labelledby="geltungszeitenTabPanelTitleId"
+        >
+          <div class="content-grid pt-32 pb-32 md:pb-56">
+            <div
+              class="col-span-12 md:col-span-8 xl:col-span-7"
+              v-if="privateFeaturesEnabled"
+            >
+              <h2
+                :id="geltungszeitenTabPanelTitleId"
+                class="typo-headline3-bold"
+              >
+                Weitere Geltungszeiträume dieser Einzelnorm
+              </h2>
             </div>
 
-            <div class="flex flex-col">
-              <NuxtLink
-                v-if="nextArticleUrl"
-                :to="nextArticleUrl"
-                class="typo-link-regular link-hover"
+            <div class="content-grid-textblock" v-else>
+              <h2
+                :id="geltungszeitenTabPanelTitleId"
+                class="typo-headline3-bold mb-24"
               >
-                <div class="flex items-center space-x-8">
-                  <span>Nächster Paragraf</span>
-                  <IcBaselineArrowForward class="mt-1 shrink-0" />
-                </div>
-              </NuxtLink>
-            </div>
-          </nav>
-        </template>
+                Geltungszeiträume sind noch nicht verfügbar
+              </h2>
+              <p>
+                Mit dem Livegang des neuen Rechtsinformationsportals werden auch
+                außer Kraft getretene und zukünftig in Kraft tretende Fassungen
+                der Einzelnormen zur Verfügung gestellt.
+              </p>
 
-        <template #sidebar>
-          <DocumentsTableOfContents
-            v-if="tableOfContents.length"
-            :subheading="normAbbreviation"
-            :subheading-to="normExpressionRoute"
-            :subheading-addition="expressionValidityLabel"
-            :table-of-contents="tableOfContents"
-            :selected-key="eId"
-          />
-        </template>
-      </SidebarLayout>
-    </div>
+              <h3 class="typo-headline3-bold mt-48 mb-24">
+                Unterstützen Sie uns bei der Entwicklung dieser Funktion
+              </h3>
+
+              <p>
+                Unser Ziel ist es, Rechtsinformationen für Bürgerinnen und
+                Bürger leichter zugänglich zu machen. Deshalb suchen wir
+                Menschen, die ihre Erfahrungen mit uns teilen und unseren
+                Service testen.
+              </p>
+
+              <UiButton
+                :as="NuxtLink"
+                class="mt-16"
+                :to="{ name: 'nutzungstests' }"
+              >
+                Mehr über Nutzungstest erfahren
+              </UiButton>
+            </div>
+          </div>
+        </section>
+      </template>
+    </DocumentsTabsLayout>
   </NuxtLayout>
 </template>
