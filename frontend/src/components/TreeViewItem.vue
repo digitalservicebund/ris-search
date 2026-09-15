@@ -195,7 +195,7 @@ function onToggleDeep() {
   }
 
   .header {
-    @apply text-gray-1000 ris-label1-regular mb-2 flex gap-8 border-l-4 border-l-transparent py-8 pr-8 pl-12 hover:border-blue-500 hover:bg-blue-200 active:border-blue-800 active:bg-blue-300;
+    @apply text-gray-1000 ris-label1-regular mb-2 flex gap-8 border-l-4 border-l-transparent py-8 pr-8 pl-12 text-[1rem] hover:border-blue-500 hover:bg-blue-200 active:border-blue-800 active:bg-blue-300 sm:text-[1.125rem];
   }
 
   .content {
@@ -242,7 +242,7 @@ function onToggleDeep() {
     }
 
     .content .title {
-      @apply ris-label1-bold;
+      @apply ris-label1-bold text-[1rem] sm:text-[1.125rem];
     }
   }
 
@@ -264,11 +264,11 @@ function onToggleDeep() {
       }
 
       .title {
-        @apply ris-label1-bold flex-none;
+        @apply ris-label1-bold flex-none text-[1rem] sm:text-[1.125rem];
       }
 
       .subtitle {
-        @apply ris-label1-regular text-gray-1000;
+        @apply ris-label1-regular text-gray-1000 text-[1rem] sm:text-[1.125rem];
       }
 
       &:hover {
@@ -286,7 +286,7 @@ function onToggleDeep() {
 
     .content {
       .title {
-        @apply ris-label1-bold flex-none;
+        @apply ris-label1-bold flex-none text-[1rem] sm:text-[1.125rem];
       }
 
       .subtitle {
@@ -295,7 +295,7 @@ function onToggleDeep() {
     }
 
     &:not([aria-expanded]) .title {
-      @apply ris-label1-bold;
+      @apply ris-label1-bold text-[1rem] sm:text-[1.125rem];
     }
   }
 
