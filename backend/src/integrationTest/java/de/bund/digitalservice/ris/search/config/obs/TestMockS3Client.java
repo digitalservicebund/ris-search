@@ -48,7 +48,7 @@ public class TestMockS3Client extends MockS3Client implements S3Client {
 
   private Path localStorageDirectory;
 
-  private Map<String, byte[]> fileMap;
+  private final Map<String, byte[]> fileMap = new HashMap<>();
 
   /**
    * Constructs a TestMockS3Client with the specified bucket name and local storage directory.
@@ -77,7 +77,10 @@ public class TestMockS3Client extends MockS3Client implements S3Client {
   @Override
   public void close() {
     fileMap.clear();
-    fileMap = null;
+  }
+
+  public void emptyBucket() throws IOException {
+    fileMap.clear();
   }
 
   /**
@@ -86,7 +89,6 @@ public class TestMockS3Client extends MockS3Client implements S3Client {
    * @throws IOException if an I/O error occurs reading the files
    */
   public void loadDefaultFiles() throws IOException {
-    fileMap = new HashMap<>();
     File bucket = localStorageDirectory.resolve(bucketname).toFile();
     List<String> files = getFileNamesByPath(bucket.getAbsolutePath());
     for (String file : files) {

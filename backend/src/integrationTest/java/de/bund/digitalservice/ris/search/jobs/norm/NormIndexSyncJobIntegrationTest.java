@@ -31,8 +31,8 @@ class NormIndexSyncJobIntegrationTest extends ContainersIntegrationBase {
 
   @BeforeEach
   void beforeEach() {
-    resetBuckets();
-    clearRepositoryData();
+    cleanup();
+    loadDefaultFiles();
     indexStatusService.saveStatus(NormIndexSyncJob.NORM_STATUS_FILENAME, getMockState());
   }
 

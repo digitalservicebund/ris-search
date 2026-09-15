@@ -10,6 +10,7 @@ import de.bund.digitalservice.ris.search.service.IndexStatusService;
 import de.bund.digitalservice.ris.search.service.IndexingState;
 import de.bund.digitalservice.ris.search.service.LiteratureIndexSyncJob;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 class LiteratureImportStatusIntegrationTest extends ContainersIntegrationBase {
+
+  @BeforeAll
+  public void loadDefaults() {
+    loadDefaultData();
+  }
 
   @Autowired LiteratureBucket literatureBucket;
   @Autowired PortalBucket portalBucket;

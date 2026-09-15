@@ -6,6 +6,7 @@ import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.controller.api.testData.CaseLawTestData;
 import de.bund.digitalservice.ris.search.schema.TextMatchSchema;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,11 @@ import org.springframework.test.web.servlet.MockMvc;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 class HighlightedSearchIntegrationTest extends ContainersIntegrationBase {
+
+  @BeforeAll
+  public void loadDefaults() {
+    loadDefaultData();
+  }
 
   String allDocUrl = ApiConfig.Paths.DOCUMENT + "?searchTerm=%s";
   String caseLawUrl = ApiConfig.Paths.CASELAW + "?searchTerm=%s";

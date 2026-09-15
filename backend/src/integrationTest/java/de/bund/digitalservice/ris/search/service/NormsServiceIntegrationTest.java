@@ -29,7 +29,8 @@ class NormsServiceIntegrationTest extends ContainersIntegrationBase {
 
   @BeforeEach
   void setup() {
-    reset();
+    cleanup();
+    loadDefaultData();
   }
 
   @Test

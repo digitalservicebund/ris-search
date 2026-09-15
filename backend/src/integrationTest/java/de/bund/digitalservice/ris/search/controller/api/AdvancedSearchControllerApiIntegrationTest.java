@@ -23,6 +23,7 @@ import java.util.Objects;
 import java.util.stream.Stream;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -37,9 +38,15 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultMatcher;
 
+@SuppressWarnings("unchecked")
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 class AdvancedSearchControllerApiIntegrationTest extends ContainersIntegrationBase {
+
+  @BeforeAll
+  public void loadDefaults() {
+    loadDefaultData();
+  }
 
   @Autowired private MockMvc mockMvc;
 

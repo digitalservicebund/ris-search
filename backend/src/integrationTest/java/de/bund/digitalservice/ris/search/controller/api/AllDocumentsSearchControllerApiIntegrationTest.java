@@ -45,6 +45,7 @@ import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+@SuppressWarnings("unchecked")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 class AllDocumentsSearchControllerApiIntegrationTest extends ContainersIntegrationBase {
@@ -54,7 +55,8 @@ class AllDocumentsSearchControllerApiIntegrationTest extends ContainersIntegrati
 
   @BeforeEach
   void setup() {
-    resetRepositories();
+    clearRepositoryData();
+    loadDefaultEntites();
   }
 
   @Test

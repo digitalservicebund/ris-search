@@ -23,7 +23,8 @@ class StatisticsControllerIntegrationTest extends ContainersIntegrationBase {
 
   @BeforeEach
   void setUpSearchControllerApiTest() {
-    resetRepositories();
+    clearRepositoryData();
+    loadDefaultEntites();
   }
 
   @Test

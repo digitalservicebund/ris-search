@@ -32,8 +32,8 @@ class IndexCaselawServiceIntegrationTest extends ContainersIntegrationBase {
 
   @BeforeEach
   void setUpSearchControllerApiTest() {
-    resetBuckets();
-    clearRepositoryData();
+    clearBuckets();
+    loadDefaultFiles();
   }
 
   @Test

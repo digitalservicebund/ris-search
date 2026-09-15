@@ -21,7 +21,8 @@ class SimpleSearchServiceIntegrationTest extends ContainersIntegrationBase {
 
   @BeforeEach
   void setup() {
-    reset();
+    cleanup();
+    loadDefaultData();
   }
 
   @Test
