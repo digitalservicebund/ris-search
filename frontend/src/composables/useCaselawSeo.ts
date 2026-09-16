@@ -1,28 +1,33 @@
 import { type Rechtsprechung } from "~/types/api";
 
 export type UseCaselawSeoInput = {
-  caseLaw?: Rechtsprechung;
+  rechtsprechung?: Rechtsprechung;
   document?: Document;
 };
 
-export function useCaselawSeo({ caseLaw, document }: UseCaselawSeoInput) {
+export function useCaselawSeo({
+  rechtsprechung,
+  document,
+}: UseCaselawSeoInput) {
   useSeo({
-    title: buildTitle(caseLaw),
-    description: buildDescription(caseLaw, document),
-    ogTitle: buildOgTitle(caseLaw),
+    title: buildTitle(rechtsprechung),
+    description: buildDescription(rechtsprechung, document),
+    ogTitle: buildOgTitle(rechtsprechung),
   });
 }
 
-function buildTitle(caseLaw?: Rechtsprechung) {
-  return caseLaw?.kurztitel || "Gerichtsentscheidung";
+function buildTitle(rechtsprechung?: Rechtsprechung) {
+  return rechtsprechung?.kurztitel || "Gerichtsentscheidung";
 }
 
 function buildDescription(
-  caseLaw: Rechtsprechung | undefined,
+  rechtsprechung: Rechtsprechung | undefined,
   document: Document | undefined,
 ) {
-  if (caseLaw?.leitsatz) {
-    const sentences = caseLaw.leitsatz.split(/(?<=[.!?])\s+/).filter(Boolean);
+  if (rechtsprechung?.leitsatz) {
+    const sentences = rechtsprechung.leitsatz
+      .split(/(?<=[.!?])\s+/)
+      .filter(Boolean);
 
     return truncateAtWord(sentences.slice(0, 2).join(" "), 150);
   }
@@ -41,14 +46,16 @@ function buildDescription(
 // TODO: The truncation can cause parts of the fileNumber to not be displayed
 // which is probably not the wanted behavior - this should be clarified and fixed in
 // https://digitalservicebund.atlassian.net/browse/RISDEV-11649
-function buildOgTitle(caseLaw?: Rechtsprechung) {
+function buildOgTitle(rechtsprechung?: Rechtsprechung) {
   const fallback = "Gerichtsentscheidung";
-  if (!caseLaw) return fallback;
+  if (!rechtsprechung) return fallback;
 
-  const court = caseLaw.gericht?.trim() || "";
-  const dtype = caseLaw.dokumenttyp || fallback;
-  const date = caseLaw.datum ? dateFormattedDDMMYYYY(caseLaw.datum) : "";
-  const file = caseLaw.aktenzeichenListe?.[0] || "";
+  const court = rechtsprechung.gericht?.trim() || "";
+  const dtype = rechtsprechung.dokumenttyp || fallback;
+  const date = rechtsprechung.datum
+    ? dateFormattedDDMMYYYY(rechtsprechung.datum)
+    : "";
+  const file = rechtsprechung.aktenzeichenListe?.[0] || "";
 
   const parts = [
     court && `${court}:`,

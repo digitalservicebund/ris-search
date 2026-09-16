@@ -15,10 +15,10 @@ mockNuxtImport("useRequestURL", () => {
   return () => new URL("https://example.com/case-law?foo=bar");
 });
 
-const mockedCaselaw = {
+const mockedRechtsprechung = {
   encoding: [
     {
-      contentUrl: "https://example.com/v1/case-law/CSLW000000001.xml",
+      contentUrl: "https://example.com/v1/rechtsprechung/CSLW000000001.xml",
       encodingFormat: "application/xml",
     },
   ],
@@ -27,7 +27,7 @@ const mockedCaselaw = {
 function renderCaseLawActionMenu() {
   return renderSuspended(CaseLawActionMenu, {
     props: {
-      caseLaw: mockedCaselaw,
+      rechtsprechung: mockedRechtsprechung,
     },
     global: {
       directives: { tooltip: Tooltip },
@@ -113,7 +113,7 @@ describe("CaseLawActionMenu", () => {
     expect(xmlLink).toBeEnabled();
     expect(xmlLink).toHaveAttribute(
       "href",
-      "https://example.com/v1/case-law/CSLW000000001.xml",
+      "https://example.com/v1/rechtsprechung/CSLW000000001.xml",
     );
   });
 });

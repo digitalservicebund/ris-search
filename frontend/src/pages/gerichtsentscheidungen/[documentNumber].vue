@@ -22,7 +22,7 @@ const documentNumber = route.params.documentNumber?.toString();
 if (!documentNumber) throw createError({ status: 404 });
 
 const [
-  { data: caseLaw, error: metadataError },
+  { data: rechtsprechung, error: metadataError },
   { data: html, error: contentError },
 ] = await Promise.all([
   useRisBackend<Rechtsprechung>(`/v1/rechtsprechung/${documentNumber}`),
@@ -42,7 +42,10 @@ const document = computed(() => {
 
 const isEmptyDocument = computed(() => isDocumentEmpty(document.value));
 
-useCaselawSeo({ caseLaw: caseLaw.value, document: document.value });
+useCaselawSeo({
+  rechtsprechung: rechtsprechung.value,
+  document: document.value,
+});
 
 // Page contents ------------------------------------------
 
@@ -56,16 +59,16 @@ const views: TabView[] = [
 ];
 
 const title = computed(() => {
-  return caseLaw.value?.kurztitel
-    ? removeOuterParentheses(caseLaw.value?.kurztitel)
+  return rechtsprechung.value?.kurztitel
+    ? removeOuterParentheses(rechtsprechung.value?.kurztitel)
     : undefined;
 });
 
 const secondaryTitle = computed(() =>
   getCaselawSecondaryTitle(
     {
-      decisionNames: caseLaw.value?.entscheidungsnamen ?? [],
-      titleLine: caseLaw.value?.titelzeile,
+      decisionNames: rechtsprechung.value?.entscheidungsnamen ?? [],
+      titleLine: rechtsprechung.value?.titelzeile,
     },
     false,
   ),
@@ -91,17 +94,21 @@ const tocEntries = computed<TreeItem[]>(() => {
 });
 
 const headerMetadata = computed<MetadataItem[]>(() => [
-  { type: "text", label: "Gericht", value: caseLaw.value?.gericht },
-  { type: "text", label: "Dokumenttyp", value: caseLaw.value?.dokumenttyp },
+  { type: "text", label: "Gericht", value: rechtsprechung.value?.gericht },
+  {
+    type: "text",
+    label: "Dokumenttyp",
+    value: rechtsprechung.value?.dokumenttyp,
+  },
   {
     type: "text",
     label: "Entscheidungsdatum",
-    value: dateFormattedDDMMYYYY(caseLaw.value?.datum),
+    value: dateFormattedDDMMYYYY(rechtsprechung.value?.datum),
   },
   {
     type: "badge",
     label: "Aktenzeichen",
-    values: caseLaw.value?.aktenzeichenListe ?? [],
+    values: rechtsprechung.value?.aktenzeichenListe ?? [],
     color: "gray",
   },
 ]);
@@ -110,56 +117,56 @@ const detailItems = computed<DetailsListItem[]>(() => [
   {
     type: "text",
     label: "Spruchkörper:",
-    value: caseLaw.value?.spruchkoerper,
+    value: rechtsprechung.value?.spruchkoerper,
   },
   {
     type: "text",
     label: "ECLI:",
-    value: caseLaw.value?.ecli,
+    value: rechtsprechung.value?.ecli,
     valueClass: "break-all",
   },
   {
     type: "text",
     label: "Entscheidungsname:",
-    value: formatArray(caseLaw.value?.entscheidungsnamen ?? []),
+    value: formatArray(rechtsprechung.value?.entscheidungsnamen ?? []),
   },
   {
     type: "list",
     label: "Gesetzeskraft:",
-    values: caseLaw.value?.gesetzeskraft ?? [],
+    values: rechtsprechung.value?.gesetzeskraft ?? [],
   },
   {
     type: "list",
     label: getSingularOrPlural(
       "Streitjahr:",
       "Streitjahre:",
-      caseLaw.value?.streitjahre?.length,
+      rechtsprechung.value?.streitjahre?.length,
     ),
-    values: caseLaw.value?.streitjahre ?? [],
+    values: rechtsprechung.value?.streitjahre ?? [],
   },
   {
     type: "list",
     label: getSingularOrPlural(
       "Vorgehende Entscheidung:",
       "Vorgehende Entscheidungen:",
-      caseLaw.value?.vorgehendeEntscheidungen?.length,
+      rechtsprechung.value?.vorgehendeEntscheidungen?.length,
     ),
-    values: caseLaw.value?.vorgehendeEntscheidungen ?? [],
+    values: rechtsprechung.value?.vorgehendeEntscheidungen ?? [],
   },
   {
     type: "list",
     label: getSingularOrPlural(
       "Nachgehende Entscheidung:",
       "Nachgehende Entscheidungen:",
-      caseLaw.value?.nachgehendeEntscheidungen?.length,
+      rechtsprechung.value?.nachgehendeEntscheidungen?.length,
     ),
-    values: caseLaw.value?.nachgehendeEntscheidungen ?? [],
+    values: rechtsprechung.value?.nachgehendeEntscheidungen ?? [],
   },
 
   {
     type: "link",
     label: "Download:",
-    url: getEncodingURL(caseLaw.value?.encoding, "application/zip"),
+    url: getEncodingURL(rechtsprechung.value?.encoding, "application/zip"),
     text: "Diese Gerichtsentscheidung als ZIP herunterladen",
     dataAttr: "xml-zip-view",
   },
@@ -180,12 +187,12 @@ const detailsSectionId = useId();
     :views
   >
     <template #actionMenu>
-      <DocumentsActionMenuCaseLawActionMenu :case-law class="mb-auto" />
+      <DocumentsActionMenuCaseLawActionMenu :rechtsprechung class="mb-auto" />
     </template>
 
     <template #message>
       <UiMessage
-        v-if="caseLaw?.vorabdokument"
+        v-if="rechtsprechung?.vorabdokument"
         severity="info"
         class="typo-body-regular my-24 bg-white sm:my-32 md:my-40"
       >

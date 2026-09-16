@@ -5,7 +5,9 @@ import { usePrintActionItem } from "~/composables/useActionMenuItem/usePrintActi
 import { useXmlActionItem } from "~/composables/useActionMenuItem/useXmlActionItem";
 import type { Rechtsprechung } from "~/types/api";
 
-const { caseLaw } = defineProps<{ caseLaw: Rechtsprechung | undefined }>();
+const { rechtsprechung } = defineProps<{
+  rechtsprechung: Rechtsprechung | undefined;
+}>();
 
 const actions = computed(() => {
   const requestUrl = useRequestURL();
@@ -13,7 +15,7 @@ const actions = computed(() => {
   const permalink = requestUrl.href;
 
   const xmlUrl = useBackendUrl(
-    getEncodingURL(caseLaw?.encoding, "application/xml"),
+    getEncodingURL(rechtsprechung?.encoding, "application/xml"),
   );
 
   return [
