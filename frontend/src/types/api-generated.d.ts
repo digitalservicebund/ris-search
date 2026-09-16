@@ -1572,6 +1572,11 @@ export interface components {
              * @example 1998-02-06/..
              */
             temporalCoverage: string;
+            /**
+             * @description Specifies the type of the part of a Legislation Expression.
+             * @enum {string}
+             */
+            partType?: "preamble" | "article" | "conclusion" | "attachment";
             /** @description The source data for this part, if available on its own */
             encoding?: components["schemas"]["LegislationObjectSchema"][];
             hasPart?: components["schemas"]["LegislationExpressionPartSchema"][];

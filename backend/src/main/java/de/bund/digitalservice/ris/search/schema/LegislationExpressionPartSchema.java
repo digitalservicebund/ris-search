@@ -55,7 +55,7 @@ public record LegislationExpressionPartSchema(
         @Schema(
             description =
                 """
-                        Specifies the kind of part of a Legislation Expression.
+                        Specifies the type of the part of a Legislation Expression.
                     """)
         LegislationExpressionPartType partType,
     @Nullable @Schema(description = "The source data for this part, if available on its own")
