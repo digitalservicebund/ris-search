@@ -73,4 +73,18 @@ class ArticleServiceIntegrationTest extends ContainersIntegrationBase {
         articleService.getAllArticleVersions("work1/expression1", "notFound");
     assertThat(actualArticles).isEmpty();
   }
+
+  @Test
+  void itRetrievesAnEmptyListOnDocumentNumbersThatAreTooShort() {
+    articlesRepository.save(
+        Article.builder()
+            .id(Article.buildId("work1/expression1", "einleitung-n1"))
+            .eId("einleitung-n1")
+            .documentNumber("DKNR0E80B0026")
+            .build());
+
+    List<Article> actualArticles =
+        articleService.getAllArticleVersions("work1/expression1", "einleitung-n1");
+    assertThat(actualArticles).isEmpty();
+  }
 }
