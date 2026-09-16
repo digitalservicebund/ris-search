@@ -195,10 +195,8 @@ public class NormSchemaMapper {
         .build();
   }
 
-  private static @Nullable LegislationExpressionPartType mapLegislationPartType(
-      @Nullable LegislationPartType type) {
+  private static LegislationExpressionPartType mapLegislationPartType(LegislationPartType type) {
     return switch (type) {
-      case null -> null;
       case ARTICLE -> LegislationExpressionPartType.ARTICLE;
       case ATTACHMENT -> LegislationExpressionPartType.ATTACHMENT;
       case CONCLUSION -> LegislationExpressionPartType.CONCLUSION;

@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
+import de.bund.digitalservice.ris.search.models.opensearch.LegislationPartType;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.schema.LegalForceStatus;
 import de.bund.digitalservice.ris.search.schema.LegislationExpressionSearchSchema;
@@ -24,7 +25,12 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 class NormSearchResponseMapperTest {
   private static Article createArticle(String name, String text) {
-    return Article.builder().eId("eid1").name(name).text(text).build();
+    return Article.builder()
+        .eId("eid1")
+        .type(LegislationPartType.ARTICLE)
+        .name(name)
+        .text(text)
+        .build();
   }
 
   @ParameterizedTest
@@ -88,6 +94,7 @@ class NormSearchResponseMapperTest {
                         .eId("eId")
                         .text("attachmentText")
                         .manifestationEli("eli")
+                        .type(LegislationPartType.ATTACHMENT)
                         .build()))
             .manifestationEliExample("manifestationEli/regelungstext-1.xml")
             .workEli("workEli")

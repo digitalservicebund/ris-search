@@ -45,6 +45,7 @@ class NormSchemaMapperTest {
                         .manifestationEli("eli")
                         .entryIntoForceDate(LocalDate.of(2024, Month.JANUARY, 1))
                         .expiryDate(LocalDate.of(2025, Month.JANUARY, 1))
+                        .type(LegislationPartType.ATTACHMENT)
                         .build()))
             .manifestationEliExample("manifestationEli/regelungstext-1.xml")
             .workEli("workEli")
@@ -94,6 +95,7 @@ class NormSchemaMapperTest {
                         .headline("heading")
                         .temporalCoverage("2024-01-01/2025-01-01")
                         .hasPart(List.of())
+                        .partType(LegislationExpressionPartType.ATTACHMENT)
                         .encoding(
                             List.of(
                                 LegislationObjectSchema.builder()
