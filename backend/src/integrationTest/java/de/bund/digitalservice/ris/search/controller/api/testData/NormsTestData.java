@@ -8,6 +8,7 @@ import de.bund.digitalservice.ris.builder.NormTestDataBuilder;
 import de.bund.digitalservice.ris.builder.models.common.AknP;
 import de.bund.digitalservice.ris.builder.models.common.AuthorialNote;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
+import de.bund.digitalservice.ris.search.models.opensearch.LegislationPartType;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.models.opensearch.TableOfContentsItem;
 import java.time.LocalDate;
@@ -185,7 +186,8 @@ public class NormsTestData {
                         manifestationEli,
                         "§ 1 TeG",
                         null,
-                        null),
+                        null,
+                        LegislationPartType.ARTICLE),
                     new Article(
                         expressionEli + "/" + "art-z2",
                         "art-z2",
@@ -199,7 +201,8 @@ public class NormsTestData {
                         manifestationEli,
                         "§ 2 TeG",
                         null,
-                        null)))
+                        null,
+                        LegislationPartType.ARTICLE)))
             .tableOfContents(nestedToC)
             .build();
 
