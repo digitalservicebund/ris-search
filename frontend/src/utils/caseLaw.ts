@@ -1,13 +1,17 @@
-import { type CaseLaw } from "~/types/api";
 import { formatArray, truncateAtWord } from "~/utils/textFormatting";
 
+export type SecondaryTitleInput = {
+  decisionNames: string[];
+  titleLine?: string;
+};
+
 export function getCaselawSecondaryTitle(
-  caseLaw: Pick<CaseLaw, "decisionName" | "titleLine"> | undefined,
+  { decisionNames, titleLine }: SecondaryTitleInput,
   truncate = true,
 ): string | undefined {
-  const decisionNames = caseLaw?.decisionName.filter((name) => name.trim());
-  const formattedDecisionNames = formatArray(decisionNames ?? []);
-  const title = formattedDecisionNames ?? caseLaw?.titleLine;
+  const nonBlankDecisionNames = decisionNames.filter((name) => name.trim());
+  const formattedDecisionNames = formatArray(nonBlankDecisionNames);
+  const title = formattedDecisionNames ?? titleLine;
 
   if (!title) return undefined;
   return truncate ? truncateAtWord(title, 90, true) : title;

@@ -63,7 +63,10 @@ const headline = computed(() =>
 );
 
 const secondaryTitle = computed<TextHeaderItem | undefined>(() => {
-  const title = getCaselawSecondaryTitle(searchResult.item);
+  const title = getCaselawSecondaryTitle({
+    decisionNames: searchResult.item.decisionName,
+    titleLine: searchResult.item.titleLine,
+  });
   return title ? { type: "text", value: title } : undefined;
 });
 

@@ -5,7 +5,7 @@ import type { MetadataItem } from "~/components/documents/Metadata.vue";
 import type { TabView } from "~/components/documents/TabsLayout.vue";
 import type { TreeItem } from "~/components/TreeView.vue";
 import { useSearchBackLink } from "~/composables/useSearchBackLink";
-import { type CaseLaw, DocumentKind } from "~/types/api";
+import { DocumentKind, type Rechtsprechung } from "~/types/api";
 
 definePageMeta({
   layout: false,
@@ -22,11 +22,11 @@ const documentNumber = route.params.documentNumber?.toString();
 if (!documentNumber) throw createError({ status: 404 });
 
 const [
-  { data: caseLaw, error: metadataError },
+  { data: rechtsprechung, error: metadataError },
   { data: html, error: contentError },
 ] = await Promise.all([
-  useRisBackend<CaseLaw>(`/v1/case-law/${documentNumber}`),
-  useRisBackend<string>(`/v1/case-law/${documentNumber}.html`, {
+  useRisBackend<Rechtsprechung>(`/v1/rechtsprechung/${documentNumber}`),
+  useRisBackend<string>(`/v1/rechtsprechung/${documentNumber}.html`, {
     headers: { Accept: "text/html" },
   }),
 ]);
@@ -42,7 +42,10 @@ const document = computed(() => {
 
 const isEmptyDocument = computed(() => isDocumentEmpty(document.value));
 
-useCaselawSeo({ caseLaw: caseLaw.value, document: document.value });
+useCaselawSeo({
+  rechtsprechung: rechtsprechung.value,
+  document: document.value,
+});
 
 const verweiseGroups = computed(() =>
   document.value ? getVerweiseGroups(document.value) : [],
@@ -75,13 +78,19 @@ const views = computed<TabView[]>(() => {
 });
 
 const title = computed(() => {
-  return caseLaw.value?.headline
-    ? removeOuterParentheses(caseLaw.value?.headline)
+  return rechtsprechung.value?.kurztitel
+    ? removeOuterParentheses(rechtsprechung.value?.kurztitel)
     : undefined;
 });
 
 const secondaryTitle = computed(() =>
-  getCaselawSecondaryTitle(caseLaw.value, false),
+  getCaselawSecondaryTitle(
+    {
+      decisionNames: rechtsprechung.value?.entscheidungsnamen ?? [],
+      titleLine: rechtsprechung.value?.titelzeile,
+    },
+    false,
+  ),
 );
 
 const searchBackLink = useSearchBackLink(DocumentKind.CaseLaw);
@@ -104,17 +113,21 @@ const tocEntries = computed<TreeItem[]>(() => {
 });
 
 const headerMetadata = computed<MetadataItem[]>(() => [
-  { type: "text", label: "Gericht", value: caseLaw.value?.courtName },
-  { type: "text", label: "Dokumenttyp", value: caseLaw.value?.documentType },
+  { type: "text", label: "Gericht", value: rechtsprechung.value?.gericht },
+  {
+    type: "text",
+    label: "Dokumenttyp",
+    value: rechtsprechung.value?.dokumenttyp,
+  },
   {
     type: "text",
     label: "Entscheidungsdatum",
-    value: dateFormattedDDMMYYYY(caseLaw.value?.decisionDate),
+    value: dateFormattedDDMMYYYY(rechtsprechung.value?.datum),
   },
   {
     type: "badge",
     label: "Aktenzeichen",
-    values: caseLaw.value?.fileNumbers ?? [],
+    values: rechtsprechung.value?.aktenzeichenListe ?? [],
     color: "gray",
   },
 ]);
@@ -123,56 +136,56 @@ const detailItems = computed<DetailsListItem[]>(() => [
   {
     type: "text",
     label: "Spruchkörper:",
-    value: caseLaw.value?.judicialBody,
+    value: rechtsprechung.value?.spruchkoerper,
   },
   {
     type: "text",
     label: "ECLI:",
-    value: caseLaw.value?.ecli,
+    value: rechtsprechung.value?.ecli,
     valueClass: "break-all",
   },
   {
     type: "text",
     label: "Entscheidungsname:",
-    value: formatArray(caseLaw.value?.decisionName ?? []),
+    value: formatArray(rechtsprechung.value?.entscheidungsnamen ?? []),
   },
   {
     type: "list",
     label: "Gesetzeskraft:",
-    values: caseLaw.value?.gesetzeskraft ?? [],
+    values: rechtsprechung.value?.gesetzeskraft ?? [],
   },
   {
     type: "list",
     label: getSingularOrPlural(
       "Streitjahr:",
       "Streitjahre:",
-      caseLaw.value?.streitjahre?.length,
+      rechtsprechung.value?.streitjahre?.length,
     ),
-    values: caseLaw.value?.streitjahre ?? [],
+    values: rechtsprechung.value?.streitjahre ?? [],
   },
   {
     type: "list",
     label: getSingularOrPlural(
       "Vorgehende Entscheidung:",
       "Vorgehende Entscheidungen:",
-      caseLaw.value?.previousDecisions?.length,
+      rechtsprechung.value?.vorgehendeEntscheidungen?.length,
     ),
-    values: caseLaw.value?.previousDecisions ?? [],
+    values: rechtsprechung.value?.vorgehendeEntscheidungen ?? [],
   },
   {
     type: "list",
     label: getSingularOrPlural(
       "Nachgehende Entscheidung:",
       "Nachgehende Entscheidungen:",
-      caseLaw.value?.ensuingDecisions?.length,
+      rechtsprechung.value?.nachgehendeEntscheidungen?.length,
     ),
-    values: caseLaw.value?.ensuingDecisions ?? [],
+    values: rechtsprechung.value?.nachgehendeEntscheidungen ?? [],
   },
 
   {
     type: "link",
     label: "Download:",
-    url: getEncodingURL(caseLaw.value?.encoding, "application/zip"),
+    url: getEncodingURL(rechtsprechung.value?.encoding, "application/zip"),
     text: "Diese Gerichtsentscheidung als ZIP herunterladen",
     dataAttr: "xml-zip-view",
   },
@@ -194,12 +207,12 @@ const verweiseSectionId = useId();
     :views
   >
     <template #actionMenu>
-      <DocumentsActionMenuCaseLawActionMenu :case-law class="mb-auto" />
+      <DocumentsActionMenuCaseLawActionMenu :rechtsprechung class="mb-auto" />
     </template>
 
     <template #message>
       <UiMessage
-        v-if="caseLaw?.vorabdokument"
+        v-if="rechtsprechung?.vorabdokument"
         severity="info"
         class="typo-body-regular my-24 bg-white sm:my-32 md:my-40"
       >

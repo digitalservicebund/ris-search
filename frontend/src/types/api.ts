@@ -25,7 +25,7 @@ export interface JSONLDList<T> {
 export type Statistics = components["schemas"]["StatisticsApiSchema"];
 
 // Case law
-export type CaseLaw = components["schemas"]["CaseLawSchema"];
+export type Rechtsprechung = components["schemas"]["RechtsprechungSchema"];
 export type CaseLawSearchSchema = components["schemas"]["CaseLawSearchSchema"];
 
 // Legislation
@@ -68,7 +68,7 @@ type QueryParams<T extends keyof operations> = NonNullable<
 export type DocumentSearchParams = QueryParams<"searchAllDocuments">;
 export type LuceneSearchParams = QueryParams<"search">;
 export type LegislationSearchParams = QueryParams<"searchAndFilterLegislation">;
-export type CourtsSearchParams = QueryParams<"getCaseLawCourts">;
+export type CourtsSearchParams = QueryParams<"getRechtsprechungCourts">;
 
 // Frontend-only types
 export type AnyDocument =

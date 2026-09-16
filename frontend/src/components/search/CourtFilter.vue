@@ -26,7 +26,7 @@ const { $risBackend } = useNuxtApp();
 const search = async (prefix?: string) => {
   const query: CourtsSearchParams = prefix ? { prefix } : {};
   searchResults.value = await $risBackend<CourtSearchResult[]>(
-    "/v1/case-law/courts",
+    "/v1/rechtsprechung/courts",
     { query },
   );
 };
