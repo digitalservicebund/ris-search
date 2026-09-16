@@ -1,6 +1,28 @@
-import { expect, navigate, test } from "./utils/fixtures";
+import { expect, navigate, noJsTest, test } from "./utils/fixtures";
 
 test.describe("view norm article page", () => {
+  test(
+    "displays text tab by default",
+    { tag: ["@RISDEV-11132"] },
+    async ({ page }) => {
+      await navigate(
+        page,
+        "gesetze/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/hauptteil-n1_abschnitt-n1_art-z1",
+      );
+
+      await expect(
+        page.getByRole("tab", { name: "Text", selected: true }),
+      ).toBeVisible();
+
+      await expect(
+        page.getByRole("heading", {
+          name: "§ 1 Anwendungsbereich",
+          level: 1,
+        }),
+      ).toBeVisible();
+    },
+  );
+
   test("can navigate to a single norm article and between articles", async ({
     page,
   }) => {
@@ -403,6 +425,54 @@ test.describe("view norm article page", () => {
   });
 });
 
+test.describe("geltungszeiträume tab", { tag: ["@RISDEV-11132"] }, () => {
+  test("displays geltungszeiträume when private features enabled", async ({
+    page,
+    privateFeaturesEnabled,
+  }) => {
+    test.skip(!privateFeaturesEnabled);
+
+    await navigate(
+      page,
+      "gesetze/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/hauptteil-n1_abschnitt-n1_art-z1",
+    );
+
+    await page.getByRole("tab", { name: "Geltungszeiträume" }).click();
+
+    await expect(
+      page.getByRole("heading", {
+        name: "Weitere Geltungszeiträume dieser Einzelnorm",
+        level: 2,
+      }),
+    ).toBeVisible();
+  });
+
+  test("displays placeholder message when private features disabled", async ({
+    page,
+    privateFeaturesEnabled,
+  }) => {
+    test.skip(privateFeaturesEnabled);
+
+    await navigate(
+      page,
+      "gesetze/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/hauptteil-n1_abschnitt-n1_art-z1",
+    );
+
+    await page.getByRole("tab", { name: "Geltungszeiträume" }).click();
+
+    await expect(
+      page.getByRole("heading", {
+        name: "Geltungszeiträume sind noch nicht verfügbar",
+        level: 2,
+      }),
+    ).toBeVisible();
+
+    await expect(
+      page.getByRole("link", { name: "Mehr über Nutzungstest erfahren" }),
+    ).toBeVisible();
+  });
+});
+
 test.describe("can view metadata of norm articles", () => {
   test("can view full set of metadata in a single article when private Features enabled", async ({
     page,
@@ -708,3 +778,28 @@ test.describe("mobile breadcrumbs", () => {
     ).toBeVisible();
   });
 });
+
+noJsTest(
+  "tabs work without JavaScript",
+  { tag: ["@RISDEV-11132"] },
+  async ({ page }) => {
+    await navigate(
+      page,
+      "gesetze/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/hauptteil-n1_abschnitt-n1_art-z1",
+    );
+
+    await test.step("text", async () => {
+      await expect(
+        page.getByRole("tab", { name: "Text", selected: true }),
+      ).toBeVisible();
+    });
+
+    await test.step("geltungszeiträume", async () => {
+      await page.getByRole("tab", { name: "Geltungszeiträume" }).click();
+
+      await expect(
+        page.getByRole("tab", { name: "Geltungszeiträume", selected: true }),
+      ).toBeVisible();
+    });
+  },
+);

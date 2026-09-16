@@ -83,6 +83,13 @@ const testPages = [
   {
     name: "norm view - single article",
     url: "/gesetze/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/hauptteil-n1_abschnitt-n2_art-z1",
+    tabs: [
+      {
+        name: "Geltungszeiträume",
+        heading:
+          /^(Weitere Geltungszeiträume dieser Einzelnorm|Geltungszeiträume sind noch nicht verfügbar)$/,
+      },
+    ],
   },
   {
     name: "caselaw view",
