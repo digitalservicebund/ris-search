@@ -63,6 +63,8 @@ public class ApiConfig {
     public static final String STATISTICS = BASE + "/statistics";
     public static final String BULK_ZIP_LINKS = BASE + "/bulk-zip-links";
     public static final String JSONLD_CONTEXT = BASE + "/context.jsonld";
+
+    public static final String ARTICLE = BASE + "/article";
   }
 
   public static final String VERSION = "1";
