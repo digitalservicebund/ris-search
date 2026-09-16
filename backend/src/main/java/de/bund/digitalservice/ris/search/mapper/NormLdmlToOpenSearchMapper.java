@@ -5,6 +5,7 @@ import static de.bund.digitalservice.ris.search.utils.MappingUtils.cleanText;
 import de.bund.digitalservice.ris.search.models.Attachment;
 import de.bund.digitalservice.ris.search.models.ldml.TimeInterval;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
+import de.bund.digitalservice.ris.search.models.opensearch.LegislationPartType;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.models.opensearch.TableOfContentsItem;
 import de.bund.digitalservice.ris.search.utils.LdmlTemporalData;
@@ -449,7 +450,8 @@ public class NormLdmlToOpenSearchMapper {
               indexedAt,
               workEli,
               expressionEli,
-              abbreviation));
+              abbreviation,
+              LegislationPartType.PREAMBLE));
     }
     for (int i = 0; i < nodes.getLength(); i++) {
       getArticleNodeAsArticle(
@@ -473,7 +475,8 @@ public class NormLdmlToOpenSearchMapper {
               indexedAt,
               workEli,
               expressionEli,
-              abbreviation));
+              abbreviation,
+              LegislationPartType.CONCLUSION));
     }
 
     var attachmentsAsArticles =
@@ -494,6 +497,7 @@ public class NormLdmlToOpenSearchMapper {
                       .articleFingerprint(getArticleFingerprint(name, abbreviation))
                       .indexedAt(indexedAt)
                       .manifestationEli(a.manifestationEli())
+                      .type(LegislationPartType.ATTACHMENT)
                       .build();
                 })
             .toList();
@@ -571,6 +575,7 @@ public class NormLdmlToOpenSearchMapper {
               .expiryDate(expiryDate)
               .articleFingerprint(articleFingerprint)
               .indexedAt(indexedAt)
+              .type(LegislationPartType.ARTICLE)
               .build());
     } catch (XPathExpressionException | ParserConfigurationException e) {
       logger.warn("Error parsing xml", e);
@@ -584,7 +589,8 @@ public class NormLdmlToOpenSearchMapper {
       String indexedAt,
       String workEli,
       String expressionEli,
-      String abbreviation)
+      String abbreviation,
+      LegislationPartType type)
       throws ValidationException {
     Node eIdAttribute = node.getAttributes().getNamedItem("eId");
     if (Objects.isNull(eIdAttribute)) {
@@ -602,6 +608,7 @@ public class NormLdmlToOpenSearchMapper {
         .name(cleanText(name))
         .articleFingerprint(getArticleFingerprint(cleanText(name), abbreviation))
         .indexedAt(indexedAt)
+        .type(type)
         .build();
   }
 

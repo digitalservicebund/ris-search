@@ -47,6 +47,7 @@
           "isPartOf": "schema:isPartOf",
           "temporalCoverage": "schema:temporalCoverage",
           "hasPart": "schema:hasPart",
+          "partType": "ris:legislationPartType",
           "headline": "schema:headline"
         }
       },

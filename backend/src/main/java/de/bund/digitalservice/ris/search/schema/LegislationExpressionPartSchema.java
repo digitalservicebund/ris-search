@@ -51,6 +51,13 @@ public record LegislationExpressionPartSchema(
             example = "1998-02-06/..",
             requiredMode = Schema.RequiredMode.REQUIRED)
         String temporalCoverage,
+    @Nullable
+        @Schema(
+            description =
+                """
+                        Specifies the kind of part of a Legislation Expression.
+                    """)
+        LegislationExpressionPartType partType,
     @Nullable @Schema(description = "The source data for this part, if available on its own")
         List<LegislationObjectSchema> encoding,
     @ArraySchema(schema = @Schema(implementation = LegislationExpressionPartSchema.class))
