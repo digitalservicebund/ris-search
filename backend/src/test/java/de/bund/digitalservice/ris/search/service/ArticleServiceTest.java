@@ -5,6 +5,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
+import de.bund.digitalservice.ris.search.models.opensearch.LegislationPartType;
 import de.bund.digitalservice.ris.search.repository.opensearch.ArticlesRepository;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,10 +44,12 @@ class ArticleServiceTest {
                     .eId(eId)
                     .expressionEli(expressionEli)
                     .documentNumber("DKNR0E80B0026DKNE000100010")
+                    .documentType(LegislationPartType.ARTICLE)
                     .build()));
     service.getAllArticleVersions(expressionEli, eId);
 
     verify(articlesRepository, times(1))
-        .findAllByDocumentNumberStartingWith("DKNR0E80B0026DKNE0001");
+        .findAllByDocumentNumberStartingWithAndDocumentType(
+            "DKNR0E80B0026DKNE0001", LegislationPartType.ARTICLE);
   }
 }

@@ -1,6 +1,7 @@
 package de.bund.digitalservice.ris.search.service;
 
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
+import de.bund.digitalservice.ris.search.models.opensearch.LegislationPartType;
 import de.bund.digitalservice.ris.search.repository.opensearch.ArticlesRepository;
 import de.bund.digitalservice.ris.search.utils.RisHighlightBuilder;
 import java.nio.charset.StandardCharsets;
@@ -184,7 +185,8 @@ public class ArticleService {
 
     String documentNumberPrefix = documentNumber.substring(0, DOC_NUMBER_PREFIX_LENGTH);
 
-    return articlesRepository.findAllByDocumentNumberStartingWith(documentNumberPrefix);
+    return articlesRepository.findAllByDocumentNumberStartingWithAndDocumentType(
+        documentNumberPrefix, LegislationPartType.ARTICLE);
   }
 
   private boolean articleExist(String expressionEli, String eid) {
