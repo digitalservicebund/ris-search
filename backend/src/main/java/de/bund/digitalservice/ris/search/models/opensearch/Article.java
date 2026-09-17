@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.DateFormat;
 import org.springframework.data.elasticsearch.annotations.Document;
@@ -77,7 +76,6 @@ public final class Article implements AbstractSearchEntity {
   @Field(name = Fields.DOCUMENT_NUMBER)
   private String documentNumber;
 
-  @NonNull
   @Field(name = Fields.TYPE)
   private LegislationPartType type;
 
