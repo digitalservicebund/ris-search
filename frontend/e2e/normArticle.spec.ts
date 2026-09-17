@@ -426,7 +426,7 @@ test.describe("view norm article page", () => {
 });
 
 test.describe("geltungszeiträume tab", { tag: ["@RISDEV-11132"] }, () => {
-  test("displays geltungszeiträume when private features enabled", async ({
+  test("displays geltungszeiträume when private features enabled and einzelnorm is an article", async ({
     page,
     privateFeaturesEnabled,
   }) => {
@@ -445,6 +445,22 @@ test.describe("geltungszeiträume tab", { tag: ["@RISDEV-11132"] }, () => {
         level: 2,
       }),
     ).toBeVisible();
+  });
+
+  test("hides geltungszeiträume tab when private features enabled and einzelnorm not an article", async ({
+    page,
+    privateFeaturesEnabled,
+  }) => {
+    test.skip(!privateFeaturesEnabled);
+
+    await navigate(
+      page,
+      "gesetze/eli/bund/bgbl-1/2025/130/2025-05-05/1/deu/präambel-n1_formel-n1",
+    );
+
+    await expect(
+      page.getByRole("navigation", { name: "Tab" }),
+    ).not.toBeVisible();
   });
 
   test("displays placeholder message when private features disabled", async ({

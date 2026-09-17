@@ -25,6 +25,45 @@ describe("TabsLayout", () => {
     expect(screen.getByRole("tab", { name: /Tab B/i })).toBeInTheDocument();
   });
 
+  it("hides tab-bar when only one view exists", async () => {
+    useRouteMock.mockReturnValue({ query: {} });
+
+    await renderSuspended(TabsLayout, {
+      props: { views: [{ label: "Tab A", path: "view-a" }] },
+      slots: { "view-a": "Content A", "view-b": "Content B" },
+    });
+
+    expect(
+      screen.queryByRole("tab", { name: /Tab A/i }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("navigation", { name: "Tab" }),
+    ).not.toBeInTheDocument();
+    expect(screen.getByText("Content A")).toBeVisible();
+    expect(screen.queryByText("Content B")).not.toBeInTheDocument();
+  });
+
+  it("does ignore query parameter for tab with no corresponding view", async () => {
+    const route = reactive({ query: { view: "view-a" } });
+    useRouteMock.mockReturnValue(route);
+
+    await renderSuspended(TabsLayout, {
+      props: { views: [{ label: "Tab A", path: "view-a" }] },
+      slots: { "view-a": "Content A", "view-b": "Content B" },
+    });
+
+    // tab a is rendered
+    expect(screen.getByText("Content A")).toBeVisible();
+    expect(screen.queryByText("Content B")).not.toBeInTheDocument();
+
+    route.query = { view: "view-b" };
+    await nextTick();
+
+    // tab a is still rendered and query is ignored
+    expect(screen.getByText("Content A")).toBeVisible();
+    expect(screen.queryByText("Content B")).not.toBeInTheDocument();
+  });
+
   it("marks only the first tab as active when no query param is set", async () => {
     useRouteMock.mockReturnValue({ query: {} });
 
