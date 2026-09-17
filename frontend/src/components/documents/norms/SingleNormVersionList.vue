@@ -49,12 +49,12 @@ function isExpanded(row: VersionRow) {
   return row.key === currentlyExpandedRowKey.value;
 }
 
-function onRowClick(row: VersionRow) {
-  if (isExpanded(row)) {
-    currentlyExpandedRowKey.value = undefined;
-  } else {
-    currentlyExpandedRowKey.value = row.key;
-  }
+// <details name="..."> makes the rows a mutually exclusive accordion natively,
+// even without JS. This handler only keeps the v-model in sync with that
+// native state; it never drives the expand/collapse behavior itself.
+function onToggle(row: VersionRow, event: Event) {
+  const details = event.currentTarget as HTMLDetailsElement;
+  currentlyExpandedRowKey.value = details.open ? row.key : undefined;
 }
 
 // Filtering swaps the rows out in place, which assistive technology does not
@@ -82,7 +82,8 @@ watch(
   </output>
 
   <ul
-    class="-mx-16 grid grid-cols-[max-content_minmax(0,1fr)_max-content] border-t border-gray-400 md:mx-0 md:border-t-0"
+    aria-label="Geltungszeiträume"
+    class="-mx-16 grid grid-cols-[auto_minmax(0,1fr)_max-content] border-t border-gray-400 md:mx-0 md:border-t-0"
   >
     <!-- Decorative: every row repeats the column labels for assistive
          technology, so exposing them here as well would only add noise. -->
@@ -107,13 +108,18 @@ watch(
         :class="{ 'bg-gray-100': row.current }"
         class="col-span-full grid grid-cols-subgrid border-b border-gray-400"
       >
-        <button
-          :aria-expanded="isExpanded(row)"
-          class="col-span-full grid cursor-pointer list-none grid-cols-subgrid items-start gap-8 p-16 text-left hover:bg-gray-100 focus-visible:outline-4 focus-visible:-outline-offset-4 focus-visible:outline-blue-800 md:items-center md:gap-0 md:p-0"
-          role="button"
-          @click.prevent="onRowClick(row)"
+        <!-- The current version is already the one being displayed on this
+             page, so it isn't made expandable, and can't use <details>, which
+             has no way to disable toggling. -->
+        <div
+          v-if="row.current"
+          :aria-label="`Gültig ab: ${row.fromDate}, Gültig bis: ${row.toDate}`"
+          aria-current="true"
+          role="group"
+          class="col-span-full grid grid-cols-subgrid items-start gap-8 p-16 md:items-center md:gap-0 md:p-0"
         >
-          <div
+          <span
+            aria-hidden="true"
             class="col-span-2 grid grid-cols-[max-content_minmax(0,1fr)] gap-8 md:grid-cols-subgrid md:gap-0"
           >
             <template v-for="column in columns" :key="column.key">
@@ -131,26 +137,58 @@ watch(
               </span>
               {{ " " }}
             </template>
-          </div>
-          <IcChevronRightIcon
-            class="mx-16 size-24 self-center text-blue-800"
-            :class="isExpanded(row) ? '-rotate-90' : 'rotate-90'"
-          />
-        </button>
+          </span>
+        </div>
 
-        <section
-          v-show="isExpanded(row)"
-          :aria-labelledby="`version-heading-${row.key}`"
-          class="col-span-full"
+        <details
+          v-else
+          name="single-norm-versions"
+          class="group contents details-content:col-span-full"
+          :open="isExpanded(row)"
+          @toggle="onToggle(row, $event)"
         >
-          Html content coming soon...
-        </section>
+          <summary
+            class="col-span-full grid cursor-pointer list-none grid-cols-subgrid items-start gap-8 p-16 hover:bg-gray-100 focus-visible:outline-4 focus-visible:-outline-offset-4 focus-visible:outline-blue-800 md:items-center md:gap-0 md:p-0 [&::-webkit-details-marker]:hidden"
+          >
+            <span
+              class="col-span-2 grid grid-cols-[max-content_minmax(0,1fr)] gap-8 md:grid-cols-subgrid md:gap-0"
+            >
+              <template v-for="column in columns" :key="column.key">
+                <span
+                  class="typo-label1-bold flex min-h-32 items-center md:sr-only"
+                  >{{ column.label }}:</span
+                >
+                {{ " " }}
+                <span
+                  class="typo-label1-regular flex min-h-32 items-center md:min-h-48 md:px-16 md:py-10"
+                >
+                  <slot
+                    :name="`cell-${column.key}`"
+                    :row="row"
+                    :column="column"
+                  >
+                    {{ row[column.key] }}
+                  </slot>
+                </span>
+                {{ " " }}
+              </template>
+            </span>
+            <IcChevronRightIcon
+              aria-hidden="true"
+              class="mx-16 size-24 rotate-90 self-center text-blue-800 group-open:-rotate-90"
+            />
+          </summary>
+
+          <section class="col-span-full">
+            <p>Html content coming soon...</p>
+          </section>
+        </details>
       </li>
     </template>
 
     <template v-else>
       <li
-        class="border-b border-b-gray-400 px-16 py-12 text-left text-gray-900 md:col-span-full"
+        class="border-b border-gray-400 px-16 py-12 text-left text-gray-900 md:col-span-full"
       >
         Keine Ergebnisse gefunden
       </li>
