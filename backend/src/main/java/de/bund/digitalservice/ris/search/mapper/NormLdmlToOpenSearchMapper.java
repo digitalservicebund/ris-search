@@ -497,7 +497,7 @@ public class NormLdmlToOpenSearchMapper {
                       .articleFingerprint(getArticleFingerprint(name, abbreviation))
                       .indexedAt(indexedAt)
                       .manifestationEli(a.manifestationEli())
-                      .type(LegislationPartType.ATTACHMENT)
+                      .documentType(LegislationPartType.ATTACHMENT)
                       .build();
                 })
             .toList();
@@ -575,7 +575,7 @@ public class NormLdmlToOpenSearchMapper {
               .expiryDate(expiryDate)
               .articleFingerprint(articleFingerprint)
               .indexedAt(indexedAt)
-              .type(LegislationPartType.ARTICLE)
+              .documentType(LegislationPartType.ARTICLE)
               .build());
     } catch (XPathExpressionException | ParserConfigurationException e) {
       logger.warn("Error parsing xml", e);
@@ -608,7 +608,7 @@ public class NormLdmlToOpenSearchMapper {
         .name(cleanText(name))
         .articleFingerprint(getArticleFingerprint(cleanText(name), abbreviation))
         .indexedAt(indexedAt)
-        .type(type)
+        .documentType(type)
         .build();
   }
 

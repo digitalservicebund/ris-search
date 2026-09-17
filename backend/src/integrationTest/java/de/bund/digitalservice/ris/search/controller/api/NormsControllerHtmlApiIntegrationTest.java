@@ -100,7 +100,7 @@ class NormsControllerHtmlApiIntegrationTest extends ContainersIntegrationBase {
     articlesRepository.save(
         Article.builder()
             .id("eli/bund/bgbl-1/1991/s101/1991-01-01/1/deu/art-z1")
-            .type(LegislationPartType.ARTICLE)
+            .documentType(LegislationPartType.ARTICLE)
             .build());
     var response =
         mockMvc
@@ -122,7 +122,7 @@ class NormsControllerHtmlApiIntegrationTest extends ContainersIntegrationBase {
     articlesRepository.save(
         Article.builder()
             .id("eli/bund/bgbl-1/1991/s101/1991-01-01/1/deu/art-z%c2%a7%c2%a7%204%20bis%2014")
-            .type(LegislationPartType.ARTICLE)
+            .documentType(LegislationPartType.ARTICLE)
             .build());
 
     var response =
@@ -175,7 +175,10 @@ class NormsControllerHtmlApiIntegrationTest extends ContainersIntegrationBase {
     String expressionEli = "eli/bund/bgbl-1/1991/s101/1991-01-01/1/deu";
     String eid = "art-z%c2%a7%c2%a7%204%20bis%2014";
     articlesRepository.save(
-        Article.builder().id(expressionEli + "/" + eid).type(LegislationPartType.ARTICLE).build());
+        Article.builder()
+            .id(expressionEli + "/" + eid)
+            .documentType(LegislationPartType.ARTICLE)
+            .build());
 
     String url = MANIFESTATION_URL_HTML.replace(".html", "/" + articleEid + ".html");
     var request = isEncoded ? get(URI.create(url)) : get(url);

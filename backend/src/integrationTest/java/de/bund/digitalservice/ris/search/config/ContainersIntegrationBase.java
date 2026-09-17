@@ -220,7 +220,7 @@ public class ContainersIntegrationBase {
                     Article.builder()
                         .name(articleName)
                         .text(content)
-                        .type(LegislationPartType.ARTICLE)
+                        .documentType(LegislationPartType.ARTICLE)
                         .build()))
             .build());
     articlesRepository.save(
@@ -230,7 +230,7 @@ public class ContainersIntegrationBase {
             .expressionEli(expressionEli)
             .name(articleName)
             .text(content)
-            .type(LegislationPartType.ARTICLE)
+            .documentType(LegislationPartType.ARTICLE)
             .build());
   }
 

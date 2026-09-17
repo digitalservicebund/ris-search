@@ -27,7 +27,7 @@ class NormSearchResponseMapperTest {
   private static Article createArticle(String name, String text) {
     return Article.builder()
         .eId("eid1")
-        .type(LegislationPartType.ARTICLE)
+        .documentType(LegislationPartType.ARTICLE)
         .name(name)
         .text(text)
         .build();
@@ -94,7 +94,7 @@ class NormSearchResponseMapperTest {
                         .eId("eId")
                         .text("attachmentText")
                         .manifestationEli("eli")
-                        .type(LegislationPartType.ATTACHMENT)
+                        .documentType(LegislationPartType.ATTACHMENT)
                         .build()))
             .manifestationEliExample("manifestationEli/regelungstext-1.xml")
             .workEli("workEli")
