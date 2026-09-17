@@ -46,6 +46,8 @@ const { data, error } = await useFetchNormArticleContent(
   eId.value,
 );
 
+const versions = await useSingleNormVersions();
+
 if (error.value || !data.value) {
   throw createError({ status: error.value?.status ?? 500 });
 }
@@ -357,10 +359,14 @@ const geltungszeitenTabPanelTitleId = useId();
             >
               <h2
                 :id="geltungszeitenTabPanelTitleId"
-                class="typo-headline3-bold"
+                class="typo-headline3-bold pb-16"
               >
                 Weitere Geltungszeiträume dieser Einzelnorm
               </h2>
+              <DocumentsNormsSingleNormVersionList
+                current-single-norm-identifier=""
+                :versions="versions"
+              />
             </div>
 
             <div class="content-grid-textblock" v-else>
