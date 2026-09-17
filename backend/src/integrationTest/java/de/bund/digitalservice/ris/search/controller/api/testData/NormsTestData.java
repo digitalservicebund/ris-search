@@ -244,6 +244,11 @@ public class NormsTestData {
     return new ArrayList<>(List.of(normTestOne, normTestTwo, normTestThree));
   }
 
+  /**
+   * Builds a test norm calling all the small parts to make it consistent.
+   *
+   * @return a test Norm
+   */
   public static Norm buildTestNorm(
       String name, List<String> articleNames, List<String> articleTexts) {
     String expressionEli = "ExpressionPrefix" + name;
