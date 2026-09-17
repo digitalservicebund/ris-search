@@ -3,6 +3,7 @@ package de.bund.digitalservice.ris.search.miscellaneous;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import de.bund.digitalservice.ris.search.config.ContainersIntegrationBase;
+import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
@@ -13,7 +14,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.SearchHit;
+import org.springframework.data.elasticsearch.core.SearchPage;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
@@ -114,5 +117,12 @@ class SimpleSearchServiceIntegrationTest extends ContainersIntegrationBase {
     return title.replace(
         token,
         RisHighlightBuilder.HIGHLIGHT_PRE_TAG + token + RisHighlightBuilder.HIGHLIGHT_POST_TAG);
+  }
+
+  SearchPage<Norm> searchNormsHit(String searchTerm) {
+    return normsService.simpleSearchNorms(
+        UniversalSearchParams.builder().searchTerm(searchTerm).build(),
+        null,
+        Pageable.ofSize(10000));
   }
 }

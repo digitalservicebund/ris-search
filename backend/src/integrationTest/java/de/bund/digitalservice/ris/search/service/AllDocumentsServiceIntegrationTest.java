@@ -6,11 +6,13 @@ import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.controller.api.testData.CaseLawTestData;
 import de.bund.digitalservice.ris.search.controller.api.testData.LiteratureTestData;
+import de.bund.digitalservice.ris.search.controller.api.testData.NormsTestData;
 import de.bund.digitalservice.ris.search.controller.api.testData.TestDataGenerator;
 import de.bund.digitalservice.ris.search.mapper.DocumentResponseMapper;
 import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.AbstractSearchEntity;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
+import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -18,6 +20,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchPage;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -26,7 +29,7 @@ class AllDocumentsServiceIntegrationTest extends ContainersIntegrationBase {
 
   @BeforeEach
   void setUpSearchControllerApiTest() {
-    clearRepositoryData();
+    cleanup();
   }
 
   @Test
@@ -108,5 +111,48 @@ class AllDocumentsServiceIntegrationTest extends ContainersIntegrationBase {
         "this headline. Should not - <mark>be</mark> <mark>fragmented</mark>.";
     assertThat(collection.member().getFirst().textMatches())
         .anyMatch(m -> expectedTextMatch.equals(m.text()));
+  }
+
+  @Test
+  @DisplayName("a targeted article is at the top of the results")
+  void aTargetedArticleIsAtTheTopOfResults() {
+    // Given 2 norms each with 3 articles
+    Norm norm1 =
+        NormsTestData.buildTestNorm(
+            "StVO",
+            List.of("§ 1", "§ 2", "§ 3"),
+            List.of("blah", "blah", "§ paragraph paragraf article artikel art abs"));
+    Norm norm2 =
+        NormsTestData.buildTestNorm(
+            "StVO AusnV 3",
+            List.of("Eingangsformel", "§ 1", "§ 2"),
+            List.of("blah", "blah", "§ paragraph paragraf article artikel art abs"));
+    normsRepository.saveAll(List.of(norm1, norm2));
+    // AND that search for "§ 3 StVO blah" makes norm2 rank higher
+    var allDocs = searchAll("§ 3 StVO blah");
+    assertThat(allDocs.getFirst().getId()).isEqualTo(norm2.getId());
+
+    // When we search various targeted article searches, then it makes norm1 rank on top
+    assertThat(searchAll("§ 3 StVO").getFirst().getId()).isEqualTo(norm1.getId());
+    assertThat(searchAll("3 StVO").getFirst().getId()).isEqualTo(norm1.getId());
+    assertThat(searchAll("3 StVO § paragraph paragraf article artikel art abs").getFirst().getId())
+        .isEqualTo(norm1.getId());
+  }
+
+  List<AbstractSearchEntity> searchAll(String searchTerm) {
+    return searchAllHit(searchTerm).get().map(SearchHit::getContent).toList();
+  }
+
+  SearchPage<AbstractSearchEntity> searchAllHit(String searchTerm) {
+    return allDocumentsService.simpleSearchAllDocuments(
+        UniversalSearchParams.builder().searchTerm(searchTerm).build(),
+        Pageable.ofSize(10000),
+        null);
+  }
+
+  void saveSimpleNorm(String id, String content) {
+    Norm theNorm = NormsTestData.buildTestNorm(id, List.of("Article 1"), List.of(content));
+    normsRepository.save(theNorm);
+    articlesRepository.saveAll(theNorm.getArticles());
   }
 }

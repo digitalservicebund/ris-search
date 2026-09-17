@@ -12,7 +12,7 @@ public class CustomOpensearchContainer extends OpenSearchContainer {
   private static final String DISCOVERY_TYPE = "discovery.type";
   private static final String DISCOVERY_TYPE_SINGLE_NODE = "single-node";
   private static final String DISABLE_SECURITY_PLUGIN = "DISABLE_SECURITY_PLUGIN";
-  private static final int HOST_PORT = 9300;
+  private static final int HOST_PORT = 9301;
   private static final int CONTAINER_PORT = 9200;
 
   /**

@@ -243,4 +243,37 @@ public class NormsTestData {
 
     return new ArrayList<>(List.of(normTestOne, normTestTwo, normTestThree));
   }
+
+  public static Norm buildTestNorm(
+      String name, List<String> articleNames, List<String> articleTexts) {
+    String expressionEli = "ExpressionPrefix" + name;
+    String workEli = "WorkPrefix" + expressionEli;
+
+    List<Article> articles = new ArrayList<>();
+    for (int i = 0; i < articleNames.size(); i++) {
+      articles.add(
+          Article.builder()
+              .id(expressionEli + "/" + "eid" + i)
+              .workEli(workEli)
+              .expressionEli(expressionEli)
+              .name(articleNames.get(i))
+              .text(articleTexts.get(i))
+              .articleFingerprint(articleNames.get(i) + " " + name)
+              .documentType(LegislationPartType.ARTICLE)
+              .build());
+    }
+
+    return Norm.builder()
+        .id(expressionEli)
+        .workEli(workEli)
+        .expressionEli(expressionEli)
+        .abbreviation(name)
+        .officialShortTitle(name)
+        .officialTitle(name)
+        .articleNames(articles.stream().map(Article::getName).toList())
+        .articleTexts(articles.stream().map(Article::getText).toList())
+        .articleFingerprints(articles.stream().map(Article::getArticleFingerprint).toList())
+        .articles(articles)
+        .build();
+  }
 }

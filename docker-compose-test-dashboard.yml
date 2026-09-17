@@ -1,0 +1,17 @@
+services:
+  opensearch-test-dashboards:
+    image: opensearchproject/opensearch-dashboards:2.11.0
+    restart: unless-stopped
+    ports:
+      - "5602:5601"
+    expose:
+      - 5602
+    environment:
+      OPENSEARCH_HOSTS: '["http://172.17.0.1:9301"]'
+      DISABLE_SECURITY_DASHBOARDS_PLUGIN: "true"
+    networks:
+      - ris-portal
+
+networks:
+  ris-portal:
+    driver: bridge

@@ -3,11 +3,17 @@ package de.bund.digitalservice.ris.search.miscellaneous;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import de.bund.digitalservice.ris.search.config.ContainersIntegrationBase;
+import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
+import de.bund.digitalservice.ris.search.models.opensearch.AbstractSearchEntity;
 import io.micrometer.common.util.StringUtils;
+import java.util.List;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.elasticsearch.core.SearchHit;
+import org.springframework.data.elasticsearch.core.SearchPage;
 import org.springframework.util.CollectionUtils;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
@@ -104,5 +110,16 @@ class TargetedSearchIntegrationTest extends ContainersIntegrationBase {
     assertThat(caseLawResults.get(0).getId()).isEqualTo("BFRE000157358");
     assertThat(caseLawResults.get(1).getId()).isEqualTo("BFRE000157356");
     assertThat(caseLawResults.get(2).getId()).isEqualTo("BFRE000157357");
+  }
+
+  List<AbstractSearchEntity> searchAll(String searchTerm) {
+    return searchAllHit(searchTerm).get().map(SearchHit::getContent).toList();
+  }
+
+  SearchPage<AbstractSearchEntity> searchAllHit(String searchTerm) {
+    return allDocumentsService.simpleSearchAllDocuments(
+        UniversalSearchParams.builder().searchTerm(searchTerm).build(),
+        Pageable.ofSize(10000),
+        null);
   }
 }
