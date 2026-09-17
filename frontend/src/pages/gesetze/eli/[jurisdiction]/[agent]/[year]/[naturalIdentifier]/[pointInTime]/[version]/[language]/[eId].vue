@@ -364,7 +364,7 @@ const geltungszeitenTabPanelTitleId = useId();
                 Weitere Geltungszeiträume dieser Einzelnorm
               </h2>
               <DocumentsNormsSingleNormVersionList
-                current-single-norm-identifier=""
+                current-single-norm-identifier="eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu#art-z1"
                 :versions="versions"
               />
             </div>
