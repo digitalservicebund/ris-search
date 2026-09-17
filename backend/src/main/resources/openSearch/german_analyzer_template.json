@@ -43,13 +43,11 @@
             "filter": [
               "lowercase",
               "german_normalization",
+              "article_fingerprint_removed_tokens",
               "german_stemmer",
-              "court_type_synonyms",
-              "golem_thesaurus_synonyms",
               "fingerprint"
             ],
             "char_filter": [
-              "replace_article_character",
               "replace_euro_character"
             ]
           }
@@ -114,6 +112,10 @@
             "synonyms": [
               "Abgas Reduzierend, Abgasreduzierend"
             ]
+          },
+          "article_fingerprint_removed_tokens": {
+            "type": "stop",
+            "stopwords": ["§", "paragraph", "paragraf", "article", "artikel", "art", "abs"]
           }
         },
         "char_filter": {
