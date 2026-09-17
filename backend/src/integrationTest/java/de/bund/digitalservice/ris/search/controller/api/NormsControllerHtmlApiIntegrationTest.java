@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
+import de.bund.digitalservice.ris.search.models.opensearch.LegislationPartType;
 import de.bund.digitalservice.ris.search.service.IndexNormsService;
 import java.net.URI;
 import java.util.Objects;
@@ -97,7 +98,10 @@ class NormsControllerHtmlApiIntegrationTest extends ContainersIntegrationBase {
   @DisplayName("Html Endpoint Should return html when requesting a single norm article")
   void shouldReturnHtmlWhenRequestingNormArticleAsHtml() throws Exception {
     articlesRepository.save(
-        Article.builder().id("eli/bund/bgbl-1/1991/s101/1991-01-01/1/deu/art-z1").build());
+        Article.builder()
+            .id("eli/bund/bgbl-1/1991/s101/1991-01-01/1/deu/art-z1")
+            .type(LegislationPartType.ARTICLE)
+            .build());
     var response =
         mockMvc
             .perform(
@@ -118,6 +122,7 @@ class NormsControllerHtmlApiIntegrationTest extends ContainersIntegrationBase {
     articlesRepository.save(
         Article.builder()
             .id("eli/bund/bgbl-1/1991/s101/1991-01-01/1/deu/art-z%c2%a7%c2%a7%204%20bis%2014")
+            .type(LegislationPartType.ARTICLE)
             .build());
 
     var response =
@@ -169,7 +174,8 @@ class NormsControllerHtmlApiIntegrationTest extends ContainersIntegrationBase {
       throws Exception {
     String expressionEli = "eli/bund/bgbl-1/1991/s101/1991-01-01/1/deu";
     String eid = "art-z%c2%a7%c2%a7%204%20bis%2014";
-    articlesRepository.save(Article.builder().id(expressionEli + "/" + eid).build());
+    articlesRepository.save(
+        Article.builder().id(expressionEli + "/" + eid).type(LegislationPartType.ARTICLE).build());
 
     String url = MANIFESTATION_URL_HTML.replace(".html", "/" + articleEid + ".html");
     var request = isEncoded ? get(URI.create(url)) : get(url);

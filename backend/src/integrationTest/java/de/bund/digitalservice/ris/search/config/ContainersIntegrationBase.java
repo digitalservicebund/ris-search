@@ -14,6 +14,7 @@ import de.bund.digitalservice.ris.search.models.opensearch.AbstractSearchEntity;
 import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
+import de.bund.digitalservice.ris.search.models.opensearch.LegislationPartType;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
@@ -214,7 +215,13 @@ public class ContainersIntegrationBase {
             .workEli(workEli)
             .expressionEli(expressionEli)
             .articleTexts(List.of(content))
-            .articles(List.of(Article.builder().name(articleName).text(content).build()))
+            .articles(
+                List.of(
+                    Article.builder()
+                        .name(articleName)
+                        .text(content)
+                        .type(LegislationPartType.ARTICLE)
+                        .build()))
             .build());
     articlesRepository.save(
         Article.builder()
@@ -223,6 +230,7 @@ public class ContainersIntegrationBase {
             .expressionEli(expressionEli)
             .name(articleName)
             .text(content)
+            .type(LegislationPartType.ARTICLE)
             .build());
   }
 

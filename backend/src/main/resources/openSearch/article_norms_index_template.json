@@ -58,6 +58,9 @@
         },
         "document_number": {
           "type": "keyword"
+        },
+        "document_type": {
+          "type": "keyword"
         }
       }
     }

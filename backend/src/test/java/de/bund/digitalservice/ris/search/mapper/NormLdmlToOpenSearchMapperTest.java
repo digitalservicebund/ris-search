@@ -7,6 +7,7 @@ import de.bund.digitalservice.ris.builder.models.body.Chapter;
 import de.bund.digitalservice.ris.builder.models.body.Section;
 import de.bund.digitalservice.ris.builder.models.common.AknP;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
+import de.bund.digitalservice.ris.search.models.opensearch.LegislationPartType;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.models.opensearch.TableOfContentsItem;
 import java.time.LocalDate;
@@ -343,6 +344,7 @@ class NormLdmlToOpenSearchMapperTest {
                 article -> {
                   article.addHeading("Heading 3", null).addParagraph("Mit Text.", "");
                 })
+            .conclusion("conclusion")
             .attachment(
                 "eli/bund/bgbl-1/1962/s514/2010-04-27/1/deu/2010-04-27/offenestruktur-1.xml",
                 "Anlage T1",
@@ -360,16 +362,23 @@ class NormLdmlToOpenSearchMapperTest {
 
     Norm norm = maybeNorm.get();
 
-    assertThat(norm.getArticles()).hasSize(5);
+    assertThat(norm.getArticles()).hasSize(6);
 
     Article preamble = norm.getArticles().get(0);
     Article firstArticle = norm.getArticles().get(1);
     Article secondArticle = norm.getArticles().get(2);
     Article thirdArticle = norm.getArticles().get(3);
-    Article attachment = norm.getArticles().get(4);
+    Article conclusion = norm.getArticles().get(4);
+    Article attachment = norm.getArticles().get(5);
 
     assertThat(preamble.getName()).isEqualTo("Eingangsformel");
     assertThat(preamble.getText()).isEqualTo("Preamble");
+    assertThat(preamble.getType()).isEqualTo(LegislationPartType.PREAMBLE);
+
+    assertThat(conclusion.getName()).isEqualTo("Schlussformel");
+    assertThat(conclusion.getText()).isEqualTo("conclusion");
+    assertThat(conclusion.getType()).isEqualTo(LegislationPartType.CONCLUSION);
+
     assertThat(firstArticle.getEntryIntoForceDate())
         .isEqualTo(LocalDate.of(2003, Month.NOVEMBER, 3));
     assertThat(firstArticle.getExpiryDate()).isNull();
@@ -399,12 +408,17 @@ class NormLdmlToOpenSearchMapperTest {
             "§ 1 RisAbk",
             "§ 2 RisAbk",
             "§ 3 RisAbk",
+            "Schlussformel RisAbk",
             "Anlage T1 (zu § 1) RisAbk");
 
     String workEli = "eli/bund/bgbl-1/1962/s514";
     String expressionEli = workEli + "/2010-04-27/1/deu";
     String manifestationEli = expressionEli + "/2010-04-27/offenestruktur-1.xml";
     String eid = "anlagen-n1_anlage-n1";
+
+    Stream.of(firstArticle, secondArticle, thirdArticle)
+        .forEach(article -> assertThat(article.getType()).isEqualTo(LegislationPartType.ARTICLE));
+
     assertThat(attachment)
         .isEqualTo(
             new Article(
@@ -420,7 +434,8 @@ class NormLdmlToOpenSearchMapperTest {
                 manifestationEli,
                 "Anlage T1 (zu § 1) RisAbk",
                 attachment.getIndexedAt(),
-                null));
+                null,
+                LegislationPartType.ATTACHMENT));
   }
 
   @Test
