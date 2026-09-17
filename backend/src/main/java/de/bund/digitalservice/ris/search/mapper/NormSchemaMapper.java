@@ -190,7 +190,7 @@ public class NormSchemaMapper {
             DateUtils.toDateIntervalString(
                 article.getEntryIntoForceDate(), article.getExpiryDate()))
         .encoding(encoding)
-        .partType(mapLegislationPartType(article.getType()))
+        .partType(mapLegislationPartType(article.getDocumentType()))
         .hasPart(List.of())
         .build();
   }

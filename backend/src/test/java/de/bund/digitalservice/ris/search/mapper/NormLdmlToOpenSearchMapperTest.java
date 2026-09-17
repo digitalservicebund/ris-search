@@ -373,11 +373,11 @@ class NormLdmlToOpenSearchMapperTest {
 
     assertThat(preamble.getName()).isEqualTo("Eingangsformel");
     assertThat(preamble.getText()).isEqualTo("Preamble");
-    assertThat(preamble.getType()).isEqualTo(LegislationPartType.PREAMBLE);
+    assertThat(preamble.getDocumentType()).isEqualTo(LegislationPartType.PREAMBLE);
 
     assertThat(conclusion.getName()).isEqualTo("Schlussformel");
     assertThat(conclusion.getText()).isEqualTo("conclusion");
-    assertThat(conclusion.getType()).isEqualTo(LegislationPartType.CONCLUSION);
+    assertThat(conclusion.getDocumentType()).isEqualTo(LegislationPartType.CONCLUSION);
 
     assertThat(firstArticle.getEntryIntoForceDate())
         .isEqualTo(LocalDate.of(2003, Month.NOVEMBER, 3));
@@ -417,7 +417,9 @@ class NormLdmlToOpenSearchMapperTest {
     String eid = "anlagen-n1_anlage-n1";
 
     Stream.of(firstArticle, secondArticle, thirdArticle)
-        .forEach(article -> assertThat(article.getType()).isEqualTo(LegislationPartType.ARTICLE));
+        .forEach(
+            article ->
+                assertThat(article.getDocumentType()).isEqualTo(LegislationPartType.ARTICLE));
 
     assertThat(attachment)
         .isEqualTo(
