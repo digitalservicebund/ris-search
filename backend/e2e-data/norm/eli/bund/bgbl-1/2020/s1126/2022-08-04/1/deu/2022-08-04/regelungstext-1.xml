@@ -55,8 +55,8 @@
                     <ris:inkraft date="2022-08-04"/>
                     <ris:ausserkraft date="2030-01-01"/>
                     <ris:doknr source="#einleitung-n1">DKNR0E80B0026</ris:doknr>
-                    <ris:doknr source="#hauptteil-n1_abschnitt-n2_art-z1">DKNR0E80B0026DKNE000100000</ris:doknr>
-                    <ris:doknr source="#hauptteil-n1_abschnitt-n2_art-z2">DKNR0E80B0026DKNE000200000</ris:doknr>
+                    <ris:doknr source="#hauptteil-n1_abschnitt-n2_art-z1">DKNR0E80B0026DKNE000100001</ris:doknr>
+                    <ris:doknr source="#hauptteil-n1_abschnitt-n2_art-z2">DKNR0E80B0026DKNE000200001</ris:doknr>
                 </ris:legalDocML.de_metadaten>
             </akn:proprietary>
         </akn:meta>

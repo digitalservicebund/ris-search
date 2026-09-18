@@ -170,11 +170,11 @@ public class ArticleService {
       ExpressionEli expressionEli, String eidGiven, Pageable pageable) {
     String expressionEliString = expressionEli.toString();
 
+    Sort sort = Sort.by(Sort.Direction.DESC, "entryIntoForceDate");
     Pageable sortedPageable =
-        PageRequest.of(
-            pageable.getPageNumber(),
-            pageable.getPageSize(),
-            Sort.by(Sort.Direction.DESC, "entryIntoForceDate"));
+        pageable.isPaged()
+            ? PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort)
+            : Pageable.unpaged(sort);
 
     return getActualEid(expressionEliString, eidGiven)
         .flatMap(

@@ -1,11 +1,8 @@
 package de.bund.digitalservice.ris.search.repository.opensearch;
 
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
-import de.bund.digitalservice.ris.search.models.opensearch.LegislationPartType;
 import java.util.List;
 import org.jspecify.annotations.NonNull;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 
 /**
@@ -13,11 +10,9 @@ import org.springframework.data.elasticsearch.repository.ElasticsearchRepository
  * interface extends {@link ElasticsearchRepository} and focuses on operations related to {@link
  * Article}.
  */
-public interface ArticlesRepository extends ElasticsearchRepository<Article, String> {
+public interface ArticlesRepository
+    extends ElasticsearchRepository<Article, String>, ArticlesRepositoryCustom {
   List<Article> findAllByExpressionEli(String expressionEli);
-
-  Page<Article> findAllByDocumentNumberStartingWithAndDocumentType(
-      String documentNumber, LegislationPartType type, Pageable pageable);
 
   /**
    * Delete articles for the given workEli that were indexed before the provided timestamp.
