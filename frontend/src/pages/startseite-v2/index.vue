@@ -40,7 +40,7 @@ const recentUpdatesId = useId();
           >
             Rechtsinformationen des Bundes
           </h1>
-          <p class="typo-body-regular 2xl:ris-subhead-regular">
+          <p class="typo-landingpage-lead-regular">
             Ein schneller und direkter Zugang zu Gesetzen, Verordnungen,
             Gerichtsentscheidungen, Verwaltungsvorschriften und
             Literaturnachweisen des Bundes – zentral an einem Ort.
@@ -135,7 +135,7 @@ const recentUpdatesId = useId();
           Mehr Suchoptionen finden Sie unter
           <NuxtLink
             :to="{ name: 'erweiterte-suche' }"
-            class="ris-link2-regular 2xl:ris-link1-regular"
+            class="typo-link2-regular"
           >
             Erweiterte Suche
           </NuxtLink>
@@ -251,6 +251,6 @@ const recentUpdatesId = useId();
 @reference "~/assets/main.css";
 
 .document-kind-card {
-  @apply typo-body-bold 2xl:ris-subhead-bold flex cursor-pointer flex-row items-center bg-blue-300 p-16 wrap-break-word hyphens-auto text-blue-800 -outline-offset-4 outline-blue-800 hover:bg-blue-500 focus-visible:shadow-[0px_0px_0px_4px_white] focus-visible:outline-4 md:h-128 md:flex-col md:items-start;
+  @apply typo-landingpage-lead-bold flex cursor-pointer flex-row items-center bg-blue-300 p-16 wrap-break-word hyphens-auto text-blue-800 -outline-offset-4 outline-blue-800 hover:bg-blue-500 focus-visible:shadow-[0px_0px_0px_4px_white] focus-visible:outline-4 md:h-128 md:flex-col md:items-start;
 }
 </style>

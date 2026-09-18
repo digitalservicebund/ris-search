@@ -130,7 +130,7 @@ const drawerId = useId();
           v-if="i.route && i !== itemsWithHome.at(-1)"
           :to="i.route"
           @click="drawerVisible = false"
-          class="typo-link-regular link-hover flex py-12"
+          class="typo-link1-regular link-hover flex py-12"
         >
           {{ i.extendedLabel ?? i.label }}
         </NuxtLink>

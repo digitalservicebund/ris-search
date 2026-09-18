@@ -163,7 +163,7 @@ function trackResultClick() {
       <div v-for="section in previewSections" :key="section?.id">
         <NuxtLink
           :to="{ ...detailPageRoute, hash: `#${section?.id}` }"
-          class="typo-link-bold link-hover"
+          class="typo-link1-bold link-hover"
           external
           @click="trackResultClick()"
           >{{ section?.title }}:</NuxtLink

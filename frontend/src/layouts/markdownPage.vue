@@ -31,7 +31,7 @@ defineProps<{
 see: https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@scope */
 @scope (.markdown-content) to (.no-markdown-content) {
   :scope {
-    @apply ris-body2-regular sm:ris-body1-regular 2xl:text-[1.25rem];
+    @apply typo-body-regular;
   }
 
   :is(h2, h3, h4, h5, h6, p, ol, ul) {
@@ -39,7 +39,7 @@ see: https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@scope 
   }
 
   h1 {
-    @apply ris-heading3-bold md:ris-heading2-bold col-span-12 pb-8 hyphens-auto md:hyphens-none 2xl:text-[2.5rem];
+    @apply typo-headline1-bold col-span-12 pb-8 hyphens-auto md:hyphens-none;
   }
 
   h2 {
@@ -55,11 +55,11 @@ see: https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@scope 
   }
 
   h5 {
-    @apply ris-body2-bold sm:ris-body1-bold py-8 2xl:text-[1.25rem];
+    @apply typo-body-bold py-8;
   }
 
   a {
-    @apply ris-link2-regular sm:ris-link1-regular 2xl:text-[1.25rem];
+    @apply typo-link1-regular;
   }
 
   :is(p, ul, ol, li) {

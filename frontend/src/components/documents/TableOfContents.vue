@@ -60,7 +60,7 @@ const drawerId = useId();
         </div>
         <span
           v-if="subheading && subheadingAddition"
-          class="ris-label2-regular line-clamp-1"
+          class="typo-label2-regular line-clamp-1"
           >{{ subheadingAddition }}</span
         >
       </div>
@@ -86,7 +86,7 @@ const drawerId = useId();
         </div>
         <span
           v-if="subheading && subheadingAddition"
-          class="ris-label2-regular line-clamp-1"
+          class="typo-label2-regular line-clamp-1"
           >{{ subheadingAddition }}</span
         >
       </div>
@@ -95,10 +95,10 @@ const drawerId = useId();
       <NuxtLink
         v-if="subheadingTo"
         :to="subheadingTo"
-        class="ris-label1-regular text-[1rem] text-blue-800 sm:text-[1.125rem]"
+        class="typo-label1-compact-regular text-blue-800"
       >
         <div
-          class="-mx-16 -mt-8 flex items-center justify-between border-b border-b-gray-400 p-16"
+          class="subheading-to-border -mx-16 -mt-8 flex items-center justify-between border-b border-b-gray-400 p-16"
         >
           <span>Zur Gesamtausgabe</span>
           <IcBaselineArrowForward class="size-24" />
@@ -115,7 +115,8 @@ const drawerId = useId();
       />
     </div>
   </Drawer>
-  <!-- Desktop  -->
+
+  <!-- desktop -->
   <TreeView
     :items="tableOfContents"
     :selected="selectedKey"
@@ -127,3 +128,18 @@ const drawerId = useId();
     class="hidden h-full md:block md:pt-16"
   />
 </template>
+
+<style scoped>
+@reference "~/assets/main.css";
+
+/*
+ * In browsers that don't support scroll-state queries, a border is already drawn above the
+ * subheading link as a fallback. Don't add the border in those browsers to avoid a duplicate
+ * border.
+ */
+@supports (container-type: scroll-state) {
+  .subheading-to-border {
+    @apply border-t border-t-gray-400;
+  }
+}
+</style>

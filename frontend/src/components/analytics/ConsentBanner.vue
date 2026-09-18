@@ -55,13 +55,13 @@ const headingId = useId();
         </form>
         <NuxtLink
           :to="{ name: 'datenschutzerklaerung' }"
-          class="typo-link-regular"
+          class="typo-link1-regular"
         >
           Datenschutzerklärung
         </NuxtLink>
         <NuxtLink
           :to="{ name: 'cookie-einstellungen' }"
-          class="typo-link-regular"
+          class="typo-link1-regular"
         >
           Cookie-Einstellungen
         </NuxtLink>
