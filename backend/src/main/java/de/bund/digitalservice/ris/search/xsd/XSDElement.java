@@ -1,5 +1,4 @@
 package de.bund.digitalservice.ris.search.xsd;
 
-public interface XSDElement {
-
-}
+/** The XSD element that a {@link DocumentationElement} is documenting: a type or an element. */
+public interface XSDElement {}

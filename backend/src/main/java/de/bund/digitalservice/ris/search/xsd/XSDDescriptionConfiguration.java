@@ -6,11 +6,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ResourceLoader;
 
+/** Wires up the {@link XSDDescriptionParser} and its springdoc {@link PropertyCustomizer}. */
 @Configuration
 @EnableConfigurationProperties(XSDDescriptionProperties.class)
 public class XSDDescriptionConfiguration {
   @Bean
-  XSDDescriptionParser xsdDescriptionParser(XSDDescriptionProperties properties, ResourceLoader resourceLoader) {
+  XSDDescriptionParser xsdDescriptionParser(
+      XSDDescriptionProperties properties, ResourceLoader resourceLoader) {
     return new XSDDescriptionParser(properties, resourceLoader);
   }
 

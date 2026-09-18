@@ -24,15 +24,23 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+/**
+ * Parses the configured XSD schema files (and any {@code import}/{@code include}/{@code redefine}
+ * they reference) into {@link DescriptionKey} entries, so that field descriptions can be sourced
+ * from the XSD's {@code xs:documentation} elements instead of being duplicated in Java code.
+ */
 @Slf4j
 public class XSDDescriptionParser {
   private final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
   private final XPath xPath = XPathFactory.newDefaultInstance().newXPath();
   private final Map<String, String> namespacePrefixes = new HashMap<>();
 
-  @Getter
-  private final Set<DescriptionKey> descriptions = new TreeSet<>();
+  @Getter private final Set<DescriptionKey> descriptions = new TreeSet<>();
 
+  /**
+   * Parses every XSD location configured for the {@code caselaw}, {@code adm}, and {@code
+   * literature} document kinds, populating {@link #descriptions}.
+   */
   public XSDDescriptionParser(XSDDescriptionProperties properties, ResourceLoader resourceLoader) {
     factory.setNamespaceAware(true);
     try {
@@ -45,22 +53,28 @@ public class XSDDescriptionParser {
 
     if (properties.getXsdLocations().containsKey("caselaw")) {
       var mainSchemaLocations = properties.getXsdLocations().get("caselaw");
-      parseXSDAndCreateDescriptions(mainSchemaLocations, resourceLoader, properties, DocumentKind.CASE_LAW);
+      parseXSDAndCreateDescriptions(
+          mainSchemaLocations, resourceLoader, properties, DocumentKind.CASE_LAW);
     }
 
     if (properties.getXsdLocations().containsKey("adm")) {
       var mainSchemaLocations = properties.getXsdLocations().get("adm");
-      parseXSDAndCreateDescriptions(mainSchemaLocations, resourceLoader, properties, DocumentKind.ADMINISTRATIVE_DIRECTIVE);
+      parseXSDAndCreateDescriptions(
+          mainSchemaLocations, resourceLoader, properties, DocumentKind.ADMINISTRATIVE_DIRECTIVE);
     }
 
     if (properties.getXsdLocations().containsKey("literature")) {
       var mainSchemaLocations = properties.getXsdLocations().get("literature");
-      parseXSDAndCreateDescriptions(mainSchemaLocations, resourceLoader, properties, DocumentKind.LITERATURE);
+      parseXSDAndCreateDescriptions(
+          mainSchemaLocations, resourceLoader, properties, DocumentKind.LITERATURE);
     }
   }
 
-  private void parseXSDAndCreateDescriptions(String[] mainSchemaLocations,
-      ResourceLoader resourceLoader, XSDDescriptionProperties properties, DocumentKind documentKind) {
+  private void parseXSDAndCreateDescriptions(
+      String[] mainSchemaLocations,
+      ResourceLoader resourceLoader,
+      XSDDescriptionProperties properties,
+      DocumentKind documentKind) {
     Map<String, Document> documents = new HashMap<>();
     for (String mainSchemaLocation : mainSchemaLocations) {
       var mainDocument = getDocumentForLocation(mainSchemaLocation, resourceLoader);
@@ -99,37 +113,52 @@ public class XSDDescriptionParser {
     }
   }
 
-  private void createDescriptions(List<DocumentationElement> documentationElements,
-      Map<String, List<String>> elementsByType, DocumentKind documentKind) {
-    documentationElements.forEach(documentationElement -> {
-      if (documentationElement.getParent() instanceof TypeElement typeElement) {
-        var typeName = typeElement.name();
-        if (!typeName.contains(":")) {
-          typeName = namespacePrefixes.get(typeElement.namespaceUri()) + ":" + typeName;
-        }
+  private void createDescriptions(
+      List<DocumentationElement> documentationElements,
+      Map<String, List<String>> elementsByType,
+      DocumentKind documentKind) {
+    documentationElements.forEach(
+        documentationElement -> {
+          if (documentationElement.getParent() instanceof TypeElement typeElement) {
+            var typeName = typeElement.name();
+            if (!typeName.contains(":")) {
+              typeName = namespacePrefixes.get(typeElement.namespaceUri()) + ":" + typeName;
+            }
 
-        if (!elementsByType.containsKey(typeName)) {
-          return;
-        }
+            if (!elementsByType.containsKey(typeName)) {
+              return;
+            }
 
-        elementsByType.get(typeName).forEach(elementName ->
-            descriptions.add(new DescriptionKey(elementName, documentationElement.getDocumentation(),
-                documentationElement.getLanguage(), documentKind))
-        );
-      } else {
-        if (documentationElement.getParent() != null) {
-          descriptions.add(
-              new DescriptionKey(((ElementElement) documentationElement.getParent()).name(),
-                  documentationElement.getDocumentation(), documentationElement.getLanguage(), documentKind));
-        }
-      }
-    });
+            elementsByType
+                .get(typeName)
+                .forEach(
+                    elementName ->
+                        descriptions.add(
+                            new DescriptionKey(
+                                elementName,
+                                documentationElement.getDocumentation(),
+                                documentationElement.getLanguage(),
+                                documentKind)));
+          } else {
+            if (documentationElement.getParent() != null) {
+              descriptions.add(
+                  new DescriptionKey(
+                      ((ElementElement) documentationElement.getParent()).name(),
+                      documentationElement.getDocumentation(),
+                      documentationElement.getLanguage(),
+                      documentKind));
+            }
+          }
+        });
   }
 
   private void findAllElementsForType(Document document, Map<String, List<String>> elementsByType) {
     try {
-      var elements = (NodeList) xPath.compile("//*[local-name()='element']")
-          .evaluate(document, XPathConstants.NODESET);
+      var elements =
+          (NodeList)
+              xPath
+                  .compile("//*[local-name()='element']")
+                  .evaluate(document, XPathConstants.NODESET);
       for (int i = 0; i < elements.getLength(); i++) {
         var element = (Element) elements.item(i);
         var name = element.getAttribute("name");
@@ -146,7 +175,11 @@ public class XSDDescriptionParser {
     }
   }
 
-  private void getRelatedXSD(Document document, ResourceLoader resourceLoader, Map<String, Document> documents, String schemaPrefix) {
+  private void getRelatedXSD(
+      Document document,
+      ResourceLoader resourceLoader,
+      Map<String, Document> documents,
+      String schemaPrefix) {
     extractNamespacePrefixes(document);
 
     try {
@@ -166,7 +199,11 @@ public class XSDDescriptionParser {
     }
   }
 
-  private void getXSDInChildren(NodeList nodeList, ResourceLoader resourceLoader, Map<String, Document> documents, String schemaPrefix) {
+  private void getXSDInChildren(
+      NodeList nodeList,
+      ResourceLoader resourceLoader,
+      Map<String, Document> documents,
+      String schemaPrefix) {
     for (int i = 0; i < nodeList.getLength(); i++) {
       Element importElement = (Element) nodeList.item(i);
 
@@ -227,11 +264,28 @@ public class XSDDescriptionParser {
     return schema.getAttribute("targetNamespace");
   }
 
+  /**
+   * Looks up the parsed XSD description for the given element/type key and language.
+   *
+   * @param key the XSD element/type key (e.g. "ris:dokumentnummer") to look up
+   * @param language the language of the documentation text to match (e.g. "de")
+   * @return the description text, if one was parsed from the XSD for that key and language
+   */
   public Optional<String> findDescription(String key, String language) {
-    return descriptions.stream().filter(descriptionKey -> descriptionKey.key().equals(key) && descriptionKey.lang().equals(language)).findFirst()
+    return descriptions.stream()
+        .filter(
+            descriptionKey ->
+                descriptionKey.key().equals(key) && descriptionKey.lang().equals(language))
+        .findFirst()
         .map(DescriptionKey::description);
   }
 
+  /**
+   * Returns all parsed descriptions belonging to the given document kind.
+   *
+   * @param documentKind the document kind to filter descriptions by
+   * @return all descriptions parsed for that document kind
+   */
   public List<DescriptionKey> getDescriptions(DocumentKind documentKind) {
     return descriptions.stream()
         .filter(descriptionKey -> descriptionKey.documentKind() == documentKind)

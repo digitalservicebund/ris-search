@@ -1,5 +1,4 @@
 package de.bund.digitalservice.ris.search.xsd;
 
-public record ElementElement(String namespaceUri, String name) implements XSDElement {
-
-}
+/** An XSD {@code xs:element} identified by its namespace and name. */
+public record ElementElement(String namespaceUri, String name) implements XSDElement {}

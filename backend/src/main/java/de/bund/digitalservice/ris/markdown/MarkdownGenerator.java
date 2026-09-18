@@ -19,11 +19,16 @@ import org.springframework.boot.jdbc.autoconfigure.DataSourceAutoConfiguration;
 import org.springframework.boot.webmvc.autoconfigure.WebMvcAutoConfiguration;
 import org.springframework.context.annotation.Import;
 
-@SpringBootApplication(exclude = {
-    DataSourceAutoConfiguration.class,
-    HibernateJpaAutoConfiguration.class,
-    WebMvcAutoConfiguration.class
-})
+/**
+ * Standalone CLI application that parses the XSD schema documentation and writes the resulting
+ * field descriptions to Markdown tables under {@code doc/readme}, one file per document kind.
+ */
+@SpringBootApplication(
+    exclude = {
+      DataSourceAutoConfiguration.class,
+      HibernateJpaAutoConfiguration.class,
+      WebMvcAutoConfiguration.class
+    })
 @Import(XSDDescriptionConfiguration.class)
 @EnableConfigurationProperties({XSDDescriptionProperties.class})
 public class MarkdownGenerator implements CommandLineRunner {
@@ -49,11 +54,17 @@ public class MarkdownGenerator implements CommandLineRunner {
     StringBuilder stringBuilder = new StringBuilder();
     stringBuilder.append("| Key | Language | Description |").append(System.lineSeparator());
     stringBuilder.append("| --- | --- | --- |").append(System.lineSeparator());
-    descriptions.forEach(description ->
-      stringBuilder.append("| ").append(description.key()).append(" | ")
-          .append(description.lang()).append(" | ").append(description.description()).append(" |")
-          .append(System.lineSeparator())
-    );
+    descriptions.forEach(
+        description ->
+            stringBuilder
+                .append("| ")
+                .append(description.key())
+                .append(" | ")
+                .append(description.lang())
+                .append(" | ")
+                .append(description.description())
+                .append(" |")
+                .append(System.lineSeparator()));
 
     try {
       var path = Paths.get(System.getProperty("user.dir") + "/../doc/readme", filename);

@@ -5,17 +5,22 @@ import lombok.extern.slf4j.Slf4j;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
+/**
+ * A parsed {@code xs:documentation} element: the description text and language it carries, plus the
+ * {@link XSDElement} (type or element) it documents.
+ */
 @Slf4j
 public class DocumentationElement {
-  @Getter
-  private final XSDElement parent;
+  @Getter private final XSDElement parent;
 
-  @Getter
-  private final String documentation;
+  @Getter private final String documentation;
 
-  @Getter
-  private final String language;
+  @Getter private final String language;
 
+  /**
+   * Parses the given {@code xs:documentation} DOM element, resolving its documented parent (type or
+   * element) and normalizing its language to {@code de} when unset.
+   */
   public DocumentationElement(Element element, String targetNamespaceURI) {
     this.parent = getParent(element, targetNamespaceURI);
     this.documentation = preprocessContent(element.getTextContent().trim());
@@ -56,7 +61,8 @@ public class DocumentationElement {
     }
 
     if (parentNode instanceof Element parentElement) {
-      if (parentElement.getTagName().equals("xs:simpleType") || parentElement.getTagName().equals("xs:complexType")) {
+      if (parentElement.getTagName().equals("xs:simpleType")
+          || parentElement.getTagName().equals("xs:complexType")) {
         var name = parentElement.getAttribute("name");
         var namespaceURI = parentElement.getNamespaceURI();
         if (!name.contains(":")) {
