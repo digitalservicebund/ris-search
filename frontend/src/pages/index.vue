@@ -38,7 +38,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
         <h1 class="typo-headline1-bold wrap-break-word hyphens-auto">
           Rechtsinformationen des Bundes
         </h1>
-        <p class="typo-body-regular 2xl:ris-subhead-regular">
+        <p class="typo-landingpage-lead-regular">
           Schneller und direkter Zugang zu Gesetzen, Verordnungen,
           Gerichtsentscheidungen und künftig auch Verwaltungsvorschriften des
           Bundes – an einem zentralen Ort.
