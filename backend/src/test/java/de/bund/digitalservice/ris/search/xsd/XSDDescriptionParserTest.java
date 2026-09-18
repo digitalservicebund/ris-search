@@ -15,8 +15,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -25,7 +23,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ExtendWith({SpringExtension.class, SoftAssertionsExtension.class})
 class XSDDescriptionParserTest {
 
-  private static final Logger log = LoggerFactory.getLogger(XSDDescriptionParserTest.class);
   @MockitoBean ResourceLoader context;
 
   @InjectSoftAssertions private SoftAssertions softAssertions;

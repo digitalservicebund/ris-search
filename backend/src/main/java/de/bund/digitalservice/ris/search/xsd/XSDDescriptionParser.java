@@ -47,8 +47,8 @@ public class XSDDescriptionParser {
       factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
       factory.setFeature("http://xml.org/sax/features/external-general-entities", false);
       factory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
-    } catch (ParserConfigurationException ignored) {
-      //
+    } catch (ParserConfigurationException _) {
+      // these features are always supported by the default DocumentBuilderFactory implementation
     }
 
     if (properties.getXsdLocations().containsKey("caselaw")) {
@@ -119,10 +119,11 @@ public class XSDDescriptionParser {
       DocumentKind documentKind) {
     documentationElements.forEach(
         documentationElement -> {
-          if (documentationElement.getParent() instanceof TypeElement typeElement) {
-            var typeName = typeElement.name();
+          if (documentationElement.getParent()
+              instanceof TypeElement(String namespaceUri, String name)) {
+            var typeName = name;
             if (!typeName.contains(":")) {
-              typeName = namespacePrefixes.get(typeElement.namespaceUri()) + ":" + typeName;
+              typeName = namespacePrefixes.get(namespaceUri) + ":" + typeName;
             }
 
             if (!elementsByType.containsKey(typeName)) {
@@ -171,7 +172,8 @@ public class XSDDescriptionParser {
         }
         elementsByType.get(type).add(name);
       }
-    } catch (Exception ignored) {
+    } catch (XPathExpressionException e) {
+      log.error("error by getting elements for type", e);
     }
   }
 

@@ -59,7 +59,7 @@ public class XSDPropertyCustomizer implements PropertyCustomizer {
                     Method customMethod =
                         RISSchema.class.getMethod(methodName, method.getParameterTypes());
                     return customMethod.invoke(myAnno);
-                  } catch (NoSuchMethodException e) {
+                  } catch (NoSuchMethodException _) {
                     return method.getDefaultValue();
                   }
                 });
@@ -83,7 +83,7 @@ public class XSDPropertyCustomizer implements PropertyCustomizer {
             Method setter = Schema.class.getMethod(setterName, method.getReturnType());
             setter.invoke(target, value);
           }
-        } catch (Exception ignored) {
+        } catch (Exception _) {
           // Setzer-Abweichungen oder fehlende Methoden ignorieren
         }
       }
