@@ -1,6 +1,7 @@
 package de.bund.digitalservice.ris.search.service;
 
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
+import de.bund.digitalservice.ris.search.models.opensearch.ArticleWithExpressions;
 import de.bund.digitalservice.ris.search.models.opensearch.LegislationPartType;
 import de.bund.digitalservice.ris.search.repository.opensearch.ArticlesRepository;
 import de.bund.digitalservice.ris.search.utils.RisHighlightBuilder;
@@ -182,27 +183,32 @@ public class ArticleService {
                 articlesRepository.findById(Article.buildId(expressionEliString, actualEid)))
         .map(Article::getDocumentNumber)
         .map(docNr -> this.getAllArticleVersionsByDocumentNumberPrefix(docNr, sortedPageable))
+        .map(page -> page.map(ArticleWithExpressions::article))
         .orElseGet(Page::empty);
   }
 
   /**
-   * Retrieves a List of all versions of an Article across the whole work it belongs to. The
-   * documentNumber is used as the article identifier. Restricts prefix lookup to minimum-length
-   * document numbers to avoid unintended matches.
+   * Retrieves a List of all versions of an Article across the whole work it belongs to, together
+   * with the expressionElis every version occurs in. The documentNumber is used as the article
+   * identifier. Restricts prefix lookup to minimum-length document numbers to avoid unintended
+   * matches.
    *
    * @param documentNumber of a given article
-   * @return List of Article objects of the same article across all its expressions
+   * @return List of Article objects of the same article across all its expressions, with their
+   *     expressionElis
    */
-  private Page<Article> getAllArticleVersionsByDocumentNumberPrefix(
+  private Page<ArticleWithExpressions> getAllArticleVersionsByDocumentNumberPrefix(
       String documentNumber, Pageable page) {
     if (documentNumber.length() < DOC_NUMBER_PREFIX_LENGTH) {
-      Page.empty();
+      return Page.empty();
     }
 
     String documentNumberPrefix = documentNumber.substring(0, DOC_NUMBER_PREFIX_LENGTH);
 
-    return articlesRepository.findAllByDocumentNumberStartingWithAndDocumentType(
-        documentNumberPrefix, LegislationPartType.ARTICLE, page);
+    var result =
+        articlesRepository.findAllByDocumentNumberStartingWithAndDocumentType(
+            documentNumberPrefix, LegislationPartType.ARTICLE, page);
+    return result;
   }
 
   private boolean articleExist(String expressionEli, String eid) {
