@@ -10,7 +10,7 @@ import static de.bund.digitalservice.ris.search.controller.api.NormsController.Y
 import static de.bund.digitalservice.ris.search.controller.api.NormsController.YEAR_EXAMPLE;
 
 import de.bund.digitalservice.ris.search.config.ApiConfig;
-import de.bund.digitalservice.ris.search.mapper.ArticleResponseMapper;
+import de.bund.digitalservice.ris.search.mapper.LegislationExpressionPartSchemaMapper;
 import de.bund.digitalservice.ris.search.models.api.parameters.PaginationParams;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.schema.CollectionSchema;
@@ -36,9 +36,10 @@ public class ArticleController {
 
   private final ArticleService articleService;
 
-  private final ArticleResponseMapper articleMapper;
+  private final LegislationExpressionPartSchemaMapper articleMapper;
 
-  ArticleController(ArticleService articleService, ArticleResponseMapper articleMapper) {
+  ArticleController(
+      ArticleService articleService, LegislationExpressionPartSchemaMapper articleMapper) {
     this.articleService = articleService;
     this.articleMapper = articleMapper;
   }

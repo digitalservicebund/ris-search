@@ -7,22 +7,24 @@ import de.bund.digitalservice.ris.search.models.opensearch.LegislationPartType;
 import de.bund.digitalservice.ris.search.schema.CollectionSchema;
 import de.bund.digitalservice.ris.search.schema.LegislationExpressionPartSchema;
 import de.bund.digitalservice.ris.search.schema.LegislationExpressionPartType;
+import de.bund.digitalservice.ris.search.schema.LegislationObjectSchema;
 import de.bund.digitalservice.ris.search.schema.PartialCollectionViewSchema;
 import de.bund.digitalservice.ris.search.utils.DateUtils;
 import java.util.List;
+import java.util.Objects;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 /** Maps Articles to Api response Objects */
 @Service
-public class ArticleResponseMapper {
+public class LegislationExpressionPartSchemaMapper {
 
   private final String jsonldContextPath;
 
   /**
    * @param serverConfig to configure jsonld context path
    */
-  public ArticleResponseMapper(ServerConfig serverConfig) {
+  public LegislationExpressionPartSchemaMapper(ServerConfig serverConfig) {
     this.jsonldContextPath = serverConfig.getBackEndUrl() + ApiConfig.Paths.JSONLD_CONTEXT;
   }
 
@@ -33,6 +35,7 @@ public class ArticleResponseMapper {
    * @return LegislationExpressionPartSchema
    */
   public LegislationExpressionPartSchema fromDomain(Article article) {
+
     return new LegislationExpressionPartSchema(
         "v1/article/" + article.getExpressionEli() + "#" + article.getEId(),
         article.getEId(),
@@ -40,7 +43,7 @@ public class ArticleResponseMapper {
         "",
         DateUtils.toDateIntervalString(article.getEntryIntoForceDate(), article.getExpiryDate()),
         mapLegislationPartType(article.getDocumentType()),
-        List.of(),
+        getEncoding(article),
         List.of());
   }
 
@@ -77,5 +80,31 @@ public class ArticleResponseMapper {
       case CONCLUSION -> LegislationExpressionPartType.CONCLUSION;
       case PREAMBLE -> LegislationExpressionPartType.PREAMBLE;
     };
+  }
+
+  private List<LegislationObjectSchema> getEncoding(Article article) {
+    if (article.getDocumentType().equals(LegislationPartType.ATTACHMENT)
+        && Objects.nonNull(article.getManifestationEli())) {
+      // build encoding
+    }
+
+    return List.of(
+        EncodingSchemaFactory.legislationEncodingSchema(
+            EncodingSchemaFactory.SchemaType.HTML,
+            ApiConfig.Paths.LEGISLATION
+                + "/"
+                + article.getExpressionEli()
+                + "/"
+                + article.getEId()));
+  }
+
+  /**
+   * construct the baseUrl for encoding objects from the manifestationEli
+   *
+   * @param manifestationEli of a legislation object
+   * @return contentBaseUrl of a legislation object
+   */
+  private static String getEncodingBaseUrlFromManifestationEli(String manifestationEli) {
+    return ApiConfig.Paths.LEGISLATION + "/" + manifestationEli.replace(".xml", "");
   }
 }
