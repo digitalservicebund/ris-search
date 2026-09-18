@@ -7,7 +7,6 @@ import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.models.opensearch.TableOfContentsItem;
 import de.bund.digitalservice.ris.search.schema.LegalForceStatus;
 import de.bund.digitalservice.ris.search.schema.LegislationExpressionPartSchema;
-import de.bund.digitalservice.ris.search.schema.LegislationExpressionPartType;
 import de.bund.digitalservice.ris.search.schema.LegislationExpressionSchema;
 import de.bund.digitalservice.ris.search.schema.LegislationObjectSchema;
 import de.bund.digitalservice.ris.search.schema.LegislationWorkSchema;
@@ -172,7 +171,9 @@ public class NormSchemaMapper {
       Article article, String idPrefix, String marker, String heading) {
     List<LegislationObjectSchema> encoding;
     // Only attachments have their own manifestationELi and receive an encoding object.
-    if (article.getManifestationEli() != null) {
+    // Einzelnormen will reference the latest manifestation they are a part of
+    if (article.getDocumentType().equals(LegislationPartType.ATTACHMENT)
+        && article.getManifestationEli() != null) {
       final LegislationObjectSchema encodingItem =
           EncodingSchemaFactory.legislationEncodingSchema(
               EncodingSchemaFactory.SchemaType.XML,
@@ -190,18 +191,9 @@ public class NormSchemaMapper {
             DateUtils.toDateIntervalString(
                 article.getEntryIntoForceDate(), article.getExpiryDate()))
         .encoding(encoding)
-        .partType(mapLegislationPartType(article.getDocumentType()))
+        .partType(
+            LegislationExpressionPartSchemaMapper.mapLegislationPartType(article.getDocumentType()))
         .hasPart(List.of())
         .build();
-  }
-
-  private static LegislationExpressionPartType mapLegislationPartType(LegislationPartType type) {
-    return switch (type) {
-      case null -> null;
-      case ARTICLE -> LegislationExpressionPartType.ARTICLE;
-      case ATTACHMENT -> LegislationExpressionPartType.ATTACHMENT;
-      case CONCLUSION -> LegislationExpressionPartType.CONCLUSION;
-      case PREAMBLE -> LegislationExpressionPartType.PREAMBLE;
-    };
   }
 }

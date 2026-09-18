@@ -191,7 +191,8 @@ public class NormLdmlToOpenSearchMapper {
             workEli,
             expressionEli,
             indexedAt,
-            eIdToDocnrMap);
+            eIdToDocnrMap,
+            manifestationEli);
     List<String> articleNames = articles.stream().map(Article::getName).toList();
     List<String> articleTexts = articles.stream().map(Article::getText).toList();
     List<String> articleFingerprints =
@@ -422,7 +423,8 @@ public class NormLdmlToOpenSearchMapper {
       String workEli,
       String expressionEli,
       String indexedAt,
-      Map<String, String> eIdToDoknrMap)
+      Map<String, String> eIdToDoknrMap,
+      String latestManifestationEli)
       throws ValidationException {
 
     NodeList nodes = null;
@@ -451,7 +453,8 @@ public class NormLdmlToOpenSearchMapper {
               workEli,
               expressionEli,
               abbreviation,
-              LegislationPartType.PREAMBLE));
+              LegislationPartType.PREAMBLE,
+              latestManifestationEli));
     }
     for (int i = 0; i < nodes.getLength(); i++) {
       getArticleNodeAsArticle(
@@ -461,7 +464,8 @@ public class NormLdmlToOpenSearchMapper {
               workEli,
               expressionEli,
               indexedAt,
-              eIdToDoknrMap)
+              eIdToDoknrMap,
+              latestManifestationEli)
           .ifPresent(articles::add);
     }
 
@@ -476,7 +480,8 @@ public class NormLdmlToOpenSearchMapper {
               workEli,
               expressionEli,
               abbreviation,
-              LegislationPartType.CONCLUSION));
+              LegislationPartType.CONCLUSION,
+              latestManifestationEli));
     }
 
     var attachmentsAsArticles =
@@ -529,7 +534,8 @@ public class NormLdmlToOpenSearchMapper {
       String workEli,
       String expressionEli,
       String indexedAt,
-      Map<String, String> eIdToDokNrMap) {
+      Map<String, String> eIdToDokNrMap,
+      String manifestionEli) {
     try {
       var articleXml = new XmlDocument(articleNode);
       String articleNumber = cleanText(articleXml.getSimpleElementByXpath(X_PATH_ARTICLE_NUM));
@@ -576,6 +582,7 @@ public class NormLdmlToOpenSearchMapper {
               .articleFingerprint(articleFingerprint)
               .indexedAt(indexedAt)
               .documentType(LegislationPartType.ARTICLE)
+              .manifestationEli(manifestionEli)
               .build());
     } catch (XPathExpressionException | ParserConfigurationException e) {
       logger.warn("Error parsing xml", e);
@@ -590,7 +597,8 @@ public class NormLdmlToOpenSearchMapper {
       String workEli,
       String expressionEli,
       String abbreviation,
-      LegislationPartType type)
+      LegislationPartType type,
+      String latestManifestationEli)
       throws ValidationException {
     Node eIdAttribute = node.getAttributes().getNamedItem("eId");
     if (Objects.isNull(eIdAttribute)) {
@@ -604,6 +612,7 @@ public class NormLdmlToOpenSearchMapper {
         .eId(eIdAttribute.getTextContent())
         .workEli(workEli)
         .expressionEli(expressionEli)
+        .manifestationEli(latestManifestationEli)
         .text(cleanText(node.getTextContent()))
         .name(cleanText(name))
         .articleFingerprint(getArticleFingerprint(cleanText(name), abbreviation))
