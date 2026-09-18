@@ -60,7 +60,7 @@ const drawerId = useId();
         </div>
         <span
           v-if="subheading && subheadingAddition"
-          class="ris-label2-regular line-clamp-1"
+          class="typo-label2-regular line-clamp-1"
           >{{ subheadingAddition }}</span
         >
       </div>
@@ -86,7 +86,7 @@ const drawerId = useId();
         </div>
         <span
           v-if="subheading && subheadingAddition"
-          class="ris-label2-regular line-clamp-1"
+          class="typo-label2-regular line-clamp-1"
           >{{ subheadingAddition }}</span
         >
       </div>
