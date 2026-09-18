@@ -208,7 +208,10 @@ class NormsServiceIntegrationTest extends ContainersIntegrationBase {
   @Test
   @DisplayName("a targeted article is at the top of the results")
   void aTargetedArticleIsAtTheTopOfResults() {
-    // Given 2 norms each with 3 articles
+    // GIVEN : 2 norms each with 3 articles where norm2 ranks higher for the search "§ 3 StVO blah"
+    // norm2 ranks higher because both norms contain all 4 tokens (passed filtering logic), and have
+    // the same tokens in the same fields, except norm2 has 3 in the abbreviation and norm1 only has
+    // it in an article name. Abbreviation is boosted more than article name.
     Norm norm1 =
         NormsTestData.buildTestNorm(
             "StVO",
@@ -220,12 +223,11 @@ class NormsServiceIntegrationTest extends ContainersIntegrationBase {
             List.of("Eingangsformel", "§ 1", "§ 2"),
             List.of("blah", "blah", "§ paragraph paragraf article artikel art abs"));
     normsRepository.saveAll(List.of(norm1, norm2));
-    // AND that search for "§ 3 StVO blah" makes norm2 rank higher (because a norm2 has '3' in the
-    // abbreviation)
+    // check norm2 actually ranks higher to make sure this logic doesn't silently fail later
     var norms = searchNorms("§ 3 StVO blah");
     assertThat(norms.getFirst().getId()).isEqualTo(norm2.getId());
 
-    // When we search various targeted article searches, then it makes norm1 rank on top
+    // WHEN : we search various targeted article searches, THEN : it makes norm1 rank on top
     assertThat(searchNorms("§ 3 StVO").getFirst().getId()).isEqualTo(norm1.getId());
     assertThat(searchNorms("3 StVO").getFirst().getId()).isEqualTo(norm1.getId());
     assertThat(
