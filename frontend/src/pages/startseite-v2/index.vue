@@ -135,7 +135,7 @@ const recentUpdatesId = useId();
           Mehr Suchoptionen finden Sie unter
           <NuxtLink
             :to="{ name: 'erweiterte-suche' }"
-            class="ris-link2-regular 2xl:ris-link1-regular"
+            class="typo-link2-regular"
           >
             Erweiterte Suche
           </NuxtLink>

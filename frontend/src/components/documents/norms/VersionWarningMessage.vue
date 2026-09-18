@@ -86,7 +86,7 @@ const versionLink = computed<
         <NuxtLink
           v-if="versionLink"
           :to="versionLink.to"
-          class="ris-link2-regular 2xl:ris-link1-regular"
+          class="typo-link2-regular"
           :aria-describedby="versionTextId"
         >
           {{ versionLink.label }}
