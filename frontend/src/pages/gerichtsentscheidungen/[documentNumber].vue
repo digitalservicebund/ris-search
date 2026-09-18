@@ -58,23 +58,26 @@ const shouldRenderVerweise = computed(() => {
 // Page contents ------------------------------------------
 
 const views = computed<TabView[]>(() => {
-  const baseViews = [
-    { path: "text", label: "Text" },
-    {
-      path: "details",
-      label: "Details",
-      analyticsId: "caselaw-metadata-tab",
-    },
-  ];
+  const tabViews = [];
+
+  if (!isEmptyDocument.value) {
+    tabViews.push({ path: "text", label: "Text" });
+  }
+
+  tabViews.push({
+    path: "details",
+    label: "Details",
+    analyticsId: "caselaw-metadata-tab",
+  });
 
   if (shouldRenderVerweise.value) {
-    baseViews.push({
+    tabViews.push({
       path: "verweise",
       label: "Verweise",
     });
   }
 
-  return baseViews;
+  return tabViews;
 });
 
 const title = computed(() => {
@@ -200,7 +203,6 @@ const verweiseSectionId = useId();
   <NuxtLayout
     name="document"
     :breadcrumbs
-    :is-empty-document="isEmptyDocument"
     :metadata="headerMetadata"
     :secondary-title
     :title

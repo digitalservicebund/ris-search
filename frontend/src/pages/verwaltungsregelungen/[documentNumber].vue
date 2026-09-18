@@ -39,10 +39,16 @@ useAdministrativeDirectiveSeo({
 
 // Page contents ------------------------------------------
 
-const views: TabView[] = [
-  { path: "text", label: "Text" },
-  { path: "details", label: "Details" },
-];
+const views = computed<TabView[]>(() => {
+  const tabViews: TabView[] = [];
+  if (!isEmptyDocument.value) {
+    tabViews.push({ path: "text", label: "Text" });
+  }
+
+  tabViews.push({ path: "details", label: "Details" });
+
+  return tabViews;
+});
 
 const textSectionId = useId();
 const detailsSectionId = useId();
@@ -83,14 +89,7 @@ const detailItems = computed(() =>
 </script>
 
 <template>
-  <NuxtLayout
-    name="document"
-    :breadcrumbs
-    :is-empty-document="isEmptyDocument"
-    :metadata
-    :title
-    :views
-  >
+  <NuxtLayout name="document" :breadcrumbs :metadata :title :views>
     <template #actionMenu>
       <DocumentsActionMenuAdministrativeDirectiveActionMenu
         class="mb-auto"

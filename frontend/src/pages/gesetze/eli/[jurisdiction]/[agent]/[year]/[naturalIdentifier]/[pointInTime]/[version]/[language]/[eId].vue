@@ -98,6 +98,8 @@ const article: Ref<Article | undefined> = computed(() =>
   ),
 );
 
+const isArticle = computed(() => article.value?.partType === "article");
+
 useArticleSeo({
   abbreviation: normAbbreviation.value,
   article: article.value,
@@ -220,18 +222,23 @@ const inForceNormLink = computed(() => {
 });
 
 const views = computed<OneOrMore<TabView>>(() => {
-  return [
+  const tabViews: OneOrMore<TabView> = [
     {
       path: "text",
       label: "Text",
       analyticsId: "article-text-tab",
     },
-    {
+  ];
+
+  if (isArticle.value) {
+    tabViews.push({
       path: "geltungszeiten",
       label: "Geltungszeiträume",
       analyticsId: "article-versions-tab",
-    },
-  ];
+    });
+  }
+
+  return tabViews;
 });
 
 const metadataItems = computed<MetadataItem[]>(() => {
