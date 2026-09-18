@@ -46,6 +46,8 @@ const { data, error } = await useFetchNormArticleContent(
   eId.value,
 );
 
+const versions = await useSingleNormVersions();
+
 if (error.value || !data.value) {
   throw createError({ status: error.value?.status ?? 500 });
 }
@@ -364,10 +366,14 @@ const geltungszeitenTabPanelTitleId = useId();
             >
               <h2
                 :id="geltungszeitenTabPanelTitleId"
-                class="typo-headline3-bold"
+                class="typo-headline3-bold pb-16"
               >
                 Weitere Geltungszeiträume dieser Einzelnorm
               </h2>
+              <DocumentsNormsSingleNormVersionList
+                current-single-norm-identifier="eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu#art-z1"
+                :versions="versions"
+              />
             </div>
 
             <div class="content-grid-textblock" v-else>
