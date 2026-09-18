@@ -6,6 +6,8 @@ import de.bund.digitalservice.ris.search.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.LegislationPartType;
 import de.bund.digitalservice.ris.search.repository.opensearch.ArticlesRepository;
+import de.bund.digitalservice.ris.search.utils.eli.ExpressionEli;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -23,16 +25,22 @@ class ArticleServiceIntegrationTest extends ContainersIntegrationBase {
   void itRetrievesAllArticleVersionsOfAWorkWhenGivenADocumentNumberPrefix() {
 
     List<Article> articles = new ArrayList<>();
+    ExpressionEli work1Expression1 =
+        new ExpressionEli("bund", "bgbl-1", "2020", "s1126", LocalDate.of(2025, 5, 5), 1, "deu");
+    ExpressionEli work1Expression2 =
+        new ExpressionEli("bund", "bgbl-1", "2020", "s1126", LocalDate.of(2026, 5, 5), 1, "deu");
+    ExpressionEli work2Expression1 =
+        new ExpressionEli("bund", "bgbl-1", "2020", "s2222", LocalDate.of(2025, 5, 5), 1, "deu");
     articles.add(
         Article.builder()
-            .id(Article.buildId("work1/expression1", "art-z1"))
+            .id(Article.buildId(work1Expression1.toString(), "art-z1"))
             .eId("art-z1")
             .documentNumber("DKNR0E80B0026DKNE000100010")
             .documentType(LegislationPartType.ARTICLE)
             .build());
     articles.add(
         Article.builder()
-            .id(Article.buildId("work1/expression1", "art-z2"))
+            .id(Article.buildId(work1Expression1.toString(), "art-z2"))
             .eId("art-z2")
             .documentNumber("DKNR0E80B0026DKNE000200010")
             .documentType(LegislationPartType.ARTICLE)
@@ -40,14 +48,14 @@ class ArticleServiceIntegrationTest extends ContainersIntegrationBase {
 
     articles.add(
         Article.builder()
-            .id(Article.buildId("work1/expression2", "art-I"))
+            .id(Article.buildId(work1Expression2.toString(), "art-I"))
             .eId("art-I")
             .documentNumber("DKNR0E80B0026DKNE000100020")
             .documentType(LegislationPartType.ARTICLE)
             .build());
     articles.add(
         Article.builder()
-            .id(Article.buildId("work1/expression2", "art-II"))
+            .id(Article.buildId(work1Expression2.toString(), "art-II"))
             .eId("art-II")
             .documentNumber("DKNR0E80B0026DKNE000200010")
             .documentType(LegislationPartType.ARTICLE)
@@ -55,7 +63,7 @@ class ArticleServiceIntegrationTest extends ContainersIntegrationBase {
 
     articles.add(
         Article.builder()
-            .id(Article.buildId("work2/expression1", "art-zi"))
+            .id(Article.buildId(work2Expression1.toString(), "art-zi"))
             .eId("art-zi")
             .documentNumber("DKNR0E70B0026DKNE000100020")
             .build());
@@ -63,8 +71,7 @@ class ArticleServiceIntegrationTest extends ContainersIntegrationBase {
     articlesRepository.saveAll(articles);
 
     // retrieve all versions of the article 1 of work 1
-    List<Article> actualArticles =
-        articleService.getAllArticleVersions("work1/expression1", "art-z1");
+    List<Article> actualArticles = articleService.getAllArticleVersions(work1Expression1, "art-z1");
 
     assertThat(actualArticles).hasSize(2);
     assertThat(actualArticles)
@@ -75,29 +82,33 @@ class ArticleServiceIntegrationTest extends ContainersIntegrationBase {
   @Test
   void itRetrievesAnEmptyListOnNotFoundArticles() {
     List<Article> actualArticles =
-        articleService.getAllArticleVersions("work1/expression1", "notFound");
+        articleService.getAllArticleVersions(
+            new ExpressionEli(
+                "bund", "bgbl-1", "2020", "s1126", LocalDate.of(2025, 5, 5), 1, "deu"),
+            "notFound");
     assertThat(actualArticles).isEmpty();
   }
 
   @Test
   void itOnlyRetrievesArticlesOfTypeArticle() {
+    ExpressionEli eli =
+        new ExpressionEli("bund", "bgbl-1", "2020", "s1126", LocalDate.of(2025, 5, 5), 1, "deu");
     articlesRepository.saveAll(
         List.of(
             Article.builder()
-                .id(Article.buildId("work1/expression1", "einleitung-n1"))
+                .id(Article.buildId(eli.toString(), "einleitung-n1"))
                 .eId("einleitung-n1")
                 .documentNumber("DKNR0E80B0026")
                 .documentType(LegislationPartType.PREAMBLE)
                 .build(),
             Article.builder()
-                .id(Article.buildId("work1/expression1", "art-z1"))
+                .id(Article.buildId(eli.toString(), "art-z1"))
                 .eId("art-z1")
                 .documentNumber("DKNR0E80B0026DKNE000100010")
                 .documentType(LegislationPartType.ARTICLE)
                 .build()));
 
-    List<Article> actualArticles =
-        articleService.getAllArticleVersions("work1/expression1", "art-z1");
+    List<Article> actualArticles = articleService.getAllArticleVersions(eli, "art-z1");
     assertThat(actualArticles).hasSize(1);
     assertThat(actualArticles.getFirst().getDocumentNumber())
         .isEqualTo("DKNR0E80B0026DKNE000100010");

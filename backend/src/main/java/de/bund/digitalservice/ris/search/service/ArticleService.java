@@ -4,6 +4,7 @@ import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.LegislationPartType;
 import de.bund.digitalservice.ris.search.repository.opensearch.ArticlesRepository;
 import de.bund.digitalservice.ris.search.utils.RisHighlightBuilder;
+import de.bund.digitalservice.ris.search.utils.eli.ExpressionEli;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.List;
@@ -161,10 +162,12 @@ public class ArticleService {
    * @param eidGiven the possible eid
    * @return List of version of that article across the whole work
    */
-  public List<Article> getAllArticleVersions(String expressionEli, String eidGiven) {
-    return getActualEid(expressionEli, eidGiven)
+  public List<Article> getAllArticleVersions(ExpressionEli expressionEli, String eidGiven) {
+    String expressionEliString = expressionEli.toString();
+    return getActualEid(expressionEliString, eidGiven)
         .flatMap(
-            actualEid -> articlesRepository.findById(Article.buildId(expressionEli, actualEid)))
+            actualEid ->
+                articlesRepository.findById(Article.buildId(expressionEliString, actualEid)))
         .map(Article::getDocumentNumber)
         .map(this::getAllArticleVersionsByDocumentNumberPrefix)
         .orElseGet(List::of);
