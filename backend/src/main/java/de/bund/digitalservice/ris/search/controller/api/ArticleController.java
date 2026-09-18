@@ -16,7 +16,7 @@ import de.bund.digitalservice.ris.search.utils.eli.ExpressionEli;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
-import java.util.List;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -66,7 +66,7 @@ public class ArticleController {
         new ExpressionEli(
             jurisdiction, agent, year, naturalIdentifier, pointInTime, version, language);
 
-    List<Article> articles = articleService.getAllArticleVersions(eli, eId);
+    Page<Article> articles = articleService.getAllArticleVersions(eli, eId);
 
     return;
   }

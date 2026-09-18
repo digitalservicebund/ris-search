@@ -13,6 +13,7 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 
 @SpringBootTest
 class ArticleServiceIntegrationTest extends ContainersIntegrationBase {
@@ -71,9 +72,9 @@ class ArticleServiceIntegrationTest extends ContainersIntegrationBase {
     articlesRepository.saveAll(articles);
 
     // retrieve all versions of the article 1 of work 1
-    List<Article> actualArticles = articleService.getAllArticleVersions(work1Expression1, "art-z1");
+    Page<Article> actualArticles = articleService.getAllArticleVersions(work1Expression1, "art-z1");
 
-    assertThat(actualArticles).hasSize(2);
+    assertThat(actualArticles.toList()).hasSize(2);
     assertThat(actualArticles)
         .extracting(Article::getDocumentNumber)
         .contains("DKNR0E80B0026DKNE000100010", "DKNR0E80B0026DKNE000100020");
@@ -81,12 +82,12 @@ class ArticleServiceIntegrationTest extends ContainersIntegrationBase {
 
   @Test
   void itRetrievesAnEmptyListOnNotFoundArticles() {
-    List<Article> actualArticles =
+    Page<Article> actualArticles =
         articleService.getAllArticleVersions(
             new ExpressionEli(
                 "bund", "bgbl-1", "2020", "s1126", LocalDate.of(2025, 5, 5), 1, "deu"),
             "notFound");
-    assertThat(actualArticles).isEmpty();
+    assertThat(actualArticles.toList()).isEmpty();
   }
 
   @Test
@@ -108,9 +109,9 @@ class ArticleServiceIntegrationTest extends ContainersIntegrationBase {
                 .documentType(LegislationPartType.ARTICLE)
                 .build()));
 
-    List<Article> actualArticles = articleService.getAllArticleVersions(eli, "art-z1");
+    Page<Article> actualArticles = articleService.getAllArticleVersions(eli, "art-z1");
     assertThat(actualArticles).hasSize(1);
-    assertThat(actualArticles.getFirst().getDocumentNumber())
+    assertThat(actualArticles.toList().getFirst().getDocumentNumber())
         .isEqualTo("DKNR0E80B0026DKNE000100010");
   }
 }

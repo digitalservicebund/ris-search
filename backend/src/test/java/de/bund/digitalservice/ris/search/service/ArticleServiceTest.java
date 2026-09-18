@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 
 @ExtendWith(MockitoExtension.class)
@@ -54,6 +55,6 @@ class ArticleServiceTest {
 
     verify(articlesRepository, times(1))
         .findAllByDocumentNumberStartingWithAndDocumentType(
-            "DKNR0E80B0026DKNE0001", LegislationPartType.ARTICLE);
+            "DKNR0E80B0026DKNE0001", LegislationPartType.ARTICLE, Pageable.unpaged());
   }
 }
