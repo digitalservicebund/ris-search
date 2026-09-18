@@ -247,6 +247,9 @@ public class NormsTestData {
   /**
    * Builds a test norm calling all the small parts to make it consistent.
    *
+   * @param name the name of the norm
+   * @param articleNames a list of the article names
+   * @param articleTexts a list of the article texts
    * @return a test Norm
    */
   public static Norm buildTestNorm(
