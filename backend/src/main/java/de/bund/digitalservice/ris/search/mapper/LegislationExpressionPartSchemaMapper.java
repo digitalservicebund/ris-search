@@ -10,6 +10,7 @@ import de.bund.digitalservice.ris.search.schema.LegislationExpressionPartType;
 import de.bund.digitalservice.ris.search.schema.LegislationObjectSchema;
 import de.bund.digitalservice.ris.search.schema.PartialCollectionViewSchema;
 import de.bund.digitalservice.ris.search.utils.DateUtils;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import org.springframework.data.domain.Page;
@@ -83,19 +84,22 @@ public class LegislationExpressionPartSchemaMapper {
   }
 
   private List<LegislationObjectSchema> getEncoding(Article article) {
-    if (article.getDocumentType().equals(LegislationPartType.ATTACHMENT)
-        && Objects.nonNull(article.getManifestationEli())) {
-      // build encoding
+    List<LegislationObjectSchema> encoding = new ArrayList<>();
+    if (Objects.nonNull(article.getManifestationEli())) {
+      if (article.getDocumentType().equals(LegislationPartType.ATTACHMENT)) {
+        //
+      } else {
+        encoding.add(
+            EncodingSchemaFactory.legislationEncodingSchema(
+                EncodingSchemaFactory.SchemaType.HTML,
+                ApiConfig.Paths.LEGISLATION
+                    + "/"
+                    + article.getManifestationEli().replace(".xml", "")
+                    + "/"
+                    + article.getEId()));
+      }
     }
-
-    return List.of(
-        EncodingSchemaFactory.legislationEncodingSchema(
-            EncodingSchemaFactory.SchemaType.HTML,
-            ApiConfig.Paths.LEGISLATION
-                + "/"
-                + article.getExpressionEli()
-                + "/"
-                + article.getEId()));
+    return encoding;
   }
 
   /**
