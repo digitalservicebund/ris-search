@@ -287,7 +287,7 @@ const verweiseSectionId = useId();
 
 :deep(.verweise) {
   a {
-    @apply typo-link-regular;
+    @apply typo-link1-regular;
   }
 
   ul {
@@ -334,7 +334,7 @@ const verweiseSectionId = useId();
 }
 
 :deep(.case-law .border-number-link) {
-  @apply typo-link-regular pl-[0.25ch];
+  @apply typo-link1-regular pl-[0.25ch];
 }
 
 :deep(.case-law section > p) {

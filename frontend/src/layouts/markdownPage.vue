@@ -59,7 +59,7 @@ see: https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@scope 
   }
 
   a {
-    @apply typo-link-regular;
+    @apply typo-link1-regular;
   }
 
   :is(p, ul, ol, li) {

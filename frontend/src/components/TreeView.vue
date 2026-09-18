@@ -284,7 +284,7 @@ function onKeydown(event: KeyboardEvent) {
       <NuxtLink
         v-if="subheading && subheadingTo"
         :to="subheadingTo"
-        class="typo-link-regular link-hover line-clamp-1"
+        class="typo-link1-regular link-hover line-clamp-1"
       >
         {{ subheading }}
       </NuxtLink>

@@ -127,11 +127,11 @@ export const ResponsiveBody: StoryObj<typeof meta> = {
   }),
 };
 
-export const ResponsiveLink: StoryObj<typeof meta> = {
+export const ResponsiveLink1: StoryObj<typeof meta> = {
   render: () => ({
     setup() {},
-    template: html`<div><a href="#" class="typo-link-regular">Link</a></div>
-      <div><a href="#" class="typo-link-bold">Link</a></div>`,
+    template: html`<div><a href="#" class="typo-link1-regular">Link 1</a></div>
+      <div><a href="#" class="typo-link1-bold">Link 1</a></div>`,
   }),
 };
 

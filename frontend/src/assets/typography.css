@@ -6,11 +6,11 @@
   @apply ris-body2-bold sm:ris-body1-bold 2xl:text-[1.25rem];
 }
 
-@utility typo-link-regular {
+@utility typo-link1-regular {
   @apply ris-link2-regular sm:ris-link1-regular 2xl:text-[1.25rem];
 }
 
-@utility typo-link-bold {
+@utility typo-link1-bold {
   @apply ris-link2-bold sm:ris-link1-bold 2xl:text-[1.25rem];
 }
 

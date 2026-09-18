@@ -314,7 +314,7 @@ const geltungszeitenTabPanelTitleId = useId();
                   <NuxtLink
                     v-if="previousArticleUrl"
                     :to="previousArticleUrl"
-                    class="typo-link-regular link-hover"
+                    class="typo-link1-regular link-hover"
                   >
                     <div class="flex items-center space-x-8">
                       <IcBaselineArrowBack class="mt-1 shrink-0" />
@@ -327,7 +327,7 @@ const geltungszeitenTabPanelTitleId = useId();
                   <NuxtLink
                     v-if="nextArticleUrl"
                     :to="nextArticleUrl"
-                    class="typo-link-regular link-hover"
+                    class="typo-link1-regular link-hover"
                   >
                     <div class="flex items-center space-x-8">
                       <span>Nächster Paragraf</span>

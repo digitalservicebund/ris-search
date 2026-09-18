@@ -129,7 +129,7 @@ function labelRowSpan(item: DetailsListItem): number {
         class="typo-label1-regular col-span-12 md:col-span-9 md:col-start-4 lg:col-span-6 lg:col-start-4"
       >
         <NuxtLink
-          class="typo-link-regular"
+          class="typo-link1-regular"
           external
           :data-attr="item.dataAttr"
           :to="item.url!"
