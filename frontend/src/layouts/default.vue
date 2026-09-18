@@ -1,15 +1,14 @@
-<script setup lang="ts">
-// The default layout provides a container, but uses the base layout, which
-// provides header and footer elements. Pages that need to use full-width
-// ("hero style") elements should use the base layout directly.
-
-import BaseLayout from "./base.vue";
-</script>
-
 <template>
-  <BaseLayout>
-    <div class="container py-32 lg:py-64">
+  <NuxtLoadingIndicator :color="false" class="bg-blue-800" />
+
+  <AnalyticsConsentBanner />
+
+  <div class="min-h-[50vh] bg-gray-100">
+    <AppHeader />
+    <main id="main">
       <slot />
-    </div>
-  </BaseLayout>
+    </main>
+  </div>
+
+  <AppFooter />
 </template>

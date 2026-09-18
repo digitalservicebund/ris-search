@@ -1,9 +1,8 @@
 import { mockNuxtImport, renderSuspended } from "@nuxt/test-utils/runtime";
 import { screen } from "@testing-library/vue";
 import { describe, expect, it, vi } from "vitest";
-import IcBaselineSubject from "~icons/ic/baseline-subject";
-import IcOutlineInfo from "~icons/ic/outline-info";
-import DocumentLayout, { type DocumentView } from "./document.vue";
+import type { TabView } from "~/components/documents/TabsLayout.vue";
+import DocumentLayout from "./document.vue";
 
 const { useRouteMock } = vi.hoisted(() => ({
   useRouteMock: vi.fn(() => ({ query: {} })),
@@ -11,9 +10,9 @@ const { useRouteMock } = vi.hoisted(() => ({
 
 mockNuxtImport("useRoute", () => useRouteMock);
 
-const defaultViews: OneOrMore<DocumentView> = [
-  { label: "Text", path: "text", icon: IcBaselineSubject },
-  { label: "Details", path: "details", icon: IcOutlineInfo },
+const defaultViews: OneOrMore<TabView> = [
+  { label: "Text", path: "text" },
+  { label: "Details", path: "details" },
 ];
 
 describe("document", () => {
@@ -31,6 +30,21 @@ describe("document", () => {
     );
   });
 
+  it("renders an optional secondary title above the main title", async () => {
+    await renderSuspended(DocumentLayout, {
+      props: {
+        secondaryTitle: "Secondary title",
+        title: "Title",
+        views: defaultViews,
+      },
+    });
+
+    expect(screen.getByText("Secondary title")).toBeVisible();
+    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
+      "Title",
+    );
+  });
+
   it("renders title placeholder if no title provided", async () => {
     await renderSuspended(DocumentLayout, {
       props: {
@@ -42,6 +56,19 @@ describe("document", () => {
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
       "Title Placeholder",
     );
+  });
+
+  it("renders message slot", async () => {
+    await renderSuspended(DocumentLayout, {
+      props: {
+        views: defaultViews,
+      },
+      slots: {
+        message: () => "Some Message",
+      },
+    });
+
+    expect(screen.getByText("Some Message")).toBeVisible();
   });
 
   it("renders breadcrumbs", async () => {
@@ -73,8 +100,8 @@ describe("document", () => {
       props: {
         titlePlaceholder: "Title Placeholder",
         metadata: [
-          { label: "Label 1", value: "Value 1" },
-          { label: "Label 2" },
+          { type: "text", label: "Label 1", value: "Value 1" },
+          { type: "text", label: "Label 2" },
         ],
         views: defaultViews,
       },

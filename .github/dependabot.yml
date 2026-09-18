@@ -33,6 +33,9 @@ updates:
         update-types:
           - minor
           - patch
+    ignore:
+      - dependency-name: "primevue"
+        versions: [">=5.0.0"]
   - package-ecosystem: "npm"
     directories:
       - "/api-docs"
@@ -60,6 +63,3 @@ updates:
       day: "sunday"
     cooldown:
       default-days: 3
-    ignore:
-      # The chainguard images is updated separately, see: update-chainguard-image-version-cronjob.yml
-      - dependency-name: "chainguard/jre"

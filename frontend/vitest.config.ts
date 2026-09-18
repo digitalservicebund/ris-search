@@ -50,6 +50,7 @@ export default defineVitestConfig({
         "src/plugins/**/*",
         "src/server/plugins/**/*",
         "src/tests/**/*",
+        "src/**/*.stories.ts",
       ],
     },
 

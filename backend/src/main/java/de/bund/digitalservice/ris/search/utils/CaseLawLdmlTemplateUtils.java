@@ -7,6 +7,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * Utility class that provides methods for processing and generating XML content from templates
@@ -34,5 +35,21 @@ public class CaseLawLdmlTemplateUtils {
     Writer writer = new StringWriter();
     compiledTemplate.evaluate(writer, context);
     return writer.toString();
+  }
+
+  /**
+   * Generates an XML string based on a predefined template and a given context, then validates the
+   * result before returning it.
+   *
+   * @param context template context variables, may be null.
+   * @param validator called with the rendered XML; expected to throw if it is invalid.
+   * @return a string containing the generated, validated XML.
+   * @throws IOException if an error occurs during template processing.
+   */
+  public String getXmlFromTemplateWithValidation(
+      Map<String, Object> context, Consumer<String> validator) throws IOException {
+    String xml = getXmlFromTemplate(context);
+    validator.accept(xml);
+    return xml;
   }
 }

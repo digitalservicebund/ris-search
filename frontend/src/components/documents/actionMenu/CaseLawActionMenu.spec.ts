@@ -5,41 +5,29 @@ import { screen } from "@testing-library/vue";
 import Tooltip from "primevue/tooltip";
 import { describe, expect, it, vi } from "vitest";
 import CaseLawActionMenu from "~/components/documents/actionMenu/CaseLawActionMenu.vue";
-import type { CaseLaw } from "~/types/api";
-
-const { mockToastAdd } = vi.hoisted(() => ({
-  mockToastAdd: vi.fn(),
-}));
+import type { Rechtsprechung } from "~/types/api";
 
 vi.mock("~/composables/useBackendUrl", () => ({
   default: vi.fn((url?: string) => url),
 }));
 
-vi.mock("primevue/usetoast", () => ({
-  useToast: () => ({
-    add: mockToastAdd,
-  }),
-}));
-
 mockNuxtImport("useRequestURL", () => {
-  return () => ({
-    href: "https://example.com/case-law",
-  });
+  return () => new URL("https://example.com/case-law?foo=bar");
 });
 
-const mockedCaselaw = {
+const mockedRechtsprechung = {
   encoding: [
     {
-      contentUrl: "https://example.com/v1/case-law/CSLW000000001.xml",
+      contentUrl: "https://example.com/v1/rechtsprechung/CSLW000000001.xml",
       encodingFormat: "application/xml",
     },
   ],
-} as CaseLaw;
+} as Rechtsprechung;
 
 function renderCaseLawActionMenu() {
   return renderSuspended(CaseLawActionMenu, {
     props: {
-      caseLaw: mockedCaselaw,
+      rechtsprechung: mockedRechtsprechung,
     },
     global: {
       directives: { tooltip: Tooltip },
@@ -87,12 +75,6 @@ describe("CaseLawActionMenu", () => {
     expect(await navigator.clipboard.readText()).toEqual(
       "https://example.com/case-law",
     );
-
-    expect(mockToastAdd).toHaveBeenCalledExactlyOnceWith(
-      expect.objectContaining({
-        summary: "Kopiert!",
-      }),
-    );
   });
 
   it("can open the print dialog", async () => {
@@ -131,7 +113,7 @@ describe("CaseLawActionMenu", () => {
     expect(xmlLink).toBeEnabled();
     expect(xmlLink).toHaveAttribute(
       "href",
-      "https://example.com/v1/case-law/CSLW000000001.xml",
+      "https://example.com/v1/rechtsprechung/CSLW000000001.xml",
     );
   });
 });

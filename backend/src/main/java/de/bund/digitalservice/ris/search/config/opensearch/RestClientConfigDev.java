@@ -1,6 +1,5 @@
 package de.bund.digitalservice.ris.search.config.opensearch;
 
-import lombok.SneakyThrows;
 import org.opensearch.client.RestHighLevelClient;
 import org.opensearch.data.client.orhlc.AbstractOpenSearchConfiguration;
 import org.opensearch.data.client.orhlc.ClientConfiguration;
@@ -12,11 +11,12 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.core.retry.RetryTemplate;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.convert.ElasticsearchConverter;
+import org.springframework.data.elasticsearch.core.index.MappingParametersCustomizer;
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 
 /** Class to configure the REST client which connects to opensearch in local environment */
 @Configuration
-@Profile("default | test")
+@Profile({"dev", "e2e", "test"})
 @EnableElasticsearchRepositories(
     basePackages = "de.bund.digitalservice.ris.search.repository.opensearch")
 public class RestClientConfigDev extends AbstractOpenSearchConfiguration {
@@ -59,14 +59,15 @@ public class RestClientConfigDev extends AbstractOpenSearchConfiguration {
 
   @Override
   public ElasticsearchOperations elasticsearchOperations(
-      ElasticsearchConverter elasticsearchConverter, RestHighLevelClient elasticsearchClient) {
+      ElasticsearchConverter elasticsearchConverter,
+      RestHighLevelClient elasticsearchClient,
+      MappingParametersCustomizer customizer) {
 
-    return new OpenSearchRestTemplate(opensearchClient(), elasticsearchConverter) {
-
-      @SneakyThrows
+    return new OpenSearchRestTemplate(opensearchClient(), elasticsearchConverter, customizer) {
       @Override
       public <T> T execute(OpenSearchRestTemplate.ClientCallback<T> callback) {
-        return retryTemplate.execute(() -> super.execute(callback));
+        return OpensearchRetryConfiguration.executeWithRetries(
+            retryTemplate, () -> super.execute(callback));
       }
     };
   }

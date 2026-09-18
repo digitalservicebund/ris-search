@@ -38,6 +38,7 @@ public record AdministrativeDirectiveSearchSchema(
         String documentNumber,
     @Nullable @Schema(description = "Haupttitel") String headline,
     @Nullable @Schema(description = "Kurzreferat") String shortReport,
+    @Nullable @Schema(description = "Gliederung") List<String> outline,
     @Schema(
             description = "Dokumenttyp",
             example = "VV",
@@ -51,8 +52,7 @@ public record AdministrativeDirectiveSearchSchema(
     @Nullable @Schema(description = "Normgeber") String legislationAuthority,
     @Nullable @Schema(description = "Gültig ab Datum", example = "2003-12-15")
         LocalDate entryIntoForceDate,
-    @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
-        List<AdministrativeDirectiveEncodingSchema> encoding)
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED) List<DocumentEncodingSchema> encoding)
     implements AbstractDocumentSchema, JsonldResource {
 
   @Override

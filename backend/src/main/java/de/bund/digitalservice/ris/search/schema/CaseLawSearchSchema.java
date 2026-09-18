@@ -1,6 +1,7 @@
 package de.bund.digitalservice.ris.search.schema;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
 import java.util.List;
@@ -8,6 +9,7 @@ import lombok.Builder;
 
 /** A DTO for court decisions in a specific encoding, following schema.org naming guidelines. */
 @Builder
+@JsonTypeName("Decision")
 public record CaseLawSearchSchema(
     @Schema(example = "KARE000000000", requiredMode = Schema.RequiredMode.REQUIRED)
         String documentNumber,
@@ -16,6 +18,7 @@ public record CaseLawSearchSchema(
             requiredMode = Schema.RequiredMode.REQUIRED)
         String ecli,
     @Schema(example = "Überschrift") String headline,
+    @Schema(example = "Titelzeile") String titleLine,
     @Schema(example = "Sonstiger Langtext") String otherLongText,
     @Schema(requiredMode = Schema.RequiredMode.REQUIRED) LocalDate decisionDate,
     @Schema(example = "BGH 123/23", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -32,7 +35,7 @@ public record CaseLawSearchSchema(
         List<String> decisionName,
     @Schema(example = "DEV-123", requiredMode = Schema.RequiredMode.REQUIRED)
         List<String> deviatingDocumentNumber,
-    @Schema(requiredMode = Schema.RequiredMode.REQUIRED) List<CaseLawEncodingSchema> encoding,
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED) List<DocumentEncodingSchema> encoding,
     // fields that aren't shared with CaseLawDocumentationUnit
     @Schema(
             example = "/v1/case-law/ECLI:DE:FGRLP:1969:0905.IV85.68.0A",

@@ -25,8 +25,8 @@ export interface JSONLDList<T> {
 export type Statistics = components["schemas"]["StatisticsApiSchema"];
 
 // Case law
-export type CaseLaw = components["schemas"]["CaseLawSchema"];
-export type CaseLawEncoding = components["schemas"]["CaseLawEncodingSchema"];
+export type Rechtsprechung = components["schemas"]["RechtsprechungSchema"];
+export type CaseLawSearchSchema = components["schemas"]["CaseLawSearchSchema"];
 
 // Legislation
 export type LegislationWork = components["schemas"]["LegislationWorkSchema"];
@@ -45,14 +45,17 @@ export type Article = components["schemas"]["LegislationExpressionPartSchema"];
 
 // Literature
 export type Literature = components["schemas"]["LiteratureSchema"];
-export type LiteratureEncoding =
-  components["schemas"]["LiteratureEncodingSchema"];
+export type LiteratureSearchSchema =
+  components["schemas"]["LiteratureSearchSchema"];
 
 // Administrative directives
 export type AdministrativeDirective =
   components["schemas"]["AdministrativeDirectiveSchema"];
-export type AdministrativeDirectiveEncoding =
-  components["schemas"]["AdministrativeDirectiveEncodingSchema"];
+export type AdministrativeDirectiveSearchSchema =
+  components["schemas"]["AdministrativeDirectiveSearchSchema"];
+
+export type DocumentEncodingSchema =
+  components["schemas"]["DocumentEncodingSchema"];
 
 // Search / court
 export type CourtSearchResult = components["schemas"]["CourtSearchResult"];
@@ -62,14 +65,14 @@ type QueryParams<T extends keyof operations> = NonNullable<
   operations[T]["parameters"]["query"]
 >;
 
-export type DocumentSearchParams = QueryParams<"searchAndFilter_2">;
+export type DocumentSearchParams = QueryParams<"searchAllDocuments">;
 export type LuceneSearchParams = QueryParams<"search">;
-export type LegislationSearchParams = QueryParams<"searchAndFilter_1">;
-export type CourtsSearchParams = QueryParams<"getCourts">;
+export type LegislationSearchParams = QueryParams<"searchAndFilterLegislation">;
+export type CourtsSearchParams = QueryParams<"getRechtsprechungCourts">;
 
 // Frontend-only types
 export type AnyDocument =
-  | CaseLaw
+  | CaseLawSearchSchema
   | LegislationExpression
   | Literature
   | AdministrativeDirective;

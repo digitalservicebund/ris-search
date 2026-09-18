@@ -1,46 +1,15 @@
-server:
-  port: 8080
-  cms-url: https://content-management.ris.bund.de/
+swagger:
+  server:
+    #This url will change before go live
+    url: "https://ris-portal.prod.tech.digitalservice.dev/"
 
 spring:
   config:
     import:
       - "kubernetes:"
       - "optional:configtree:/etc/secrets/*/"
-  cloud:
-    kubernetes:
-      config:
-        fail-fast: true
-        sources:
-          - name: ris-search-opensearch-config
 
-swagger:
-  server:
-    url: https://ris-portal.prod.ds4g.net/
-    description: Public production server
-
-springdoc:
-  swagger-ui:
-    supportedSubmitMethods: []
-    defaultModelsExpandDepth: -1
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health,info,prometheus
-
-sentry:
-  traces-sample-rate: 0.01
-  logging:
-    minimum-event-level: error
-
-logging:
-  level:
-    de:
-      bund:
-        digitalservice:
-          ris:
-            search:
-              config:
-                httplogs: TRACE
+s3:
+  file-storage:
+    case-law:
+      versionPrefix: "V1/"

@@ -1,6 +1,11 @@
 package de.bund.digitalservice.ris.search.controller.api;
 
+import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
+
+import de.bund.digitalservice.ris.html.service.xslt.LiteratureXsltTransformer;
+import de.bund.digitalservice.ris.html.service.xslt.SliLiteratureXsltTransformer;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
+import de.bund.digitalservice.ris.search.config.ServerConfig;
 import de.bund.digitalservice.ris.search.exception.CustomValidationException;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.mapper.ChangelogResponseMapper;
@@ -23,8 +28,6 @@ import de.bund.digitalservice.ris.search.schema.LiteratureSearchSchema;
 import de.bund.digitalservice.ris.search.schema.SearchMemberSchema;
 import de.bund.digitalservice.ris.search.service.ChangelogService;
 import de.bund.digitalservice.ris.search.service.LiteratureService;
-import de.bund.digitalservice.ris.search.service.xslt.LiteratureXsltTransformerService;
-import de.bund.digitalservice.ris.search.service.xslt.SliLiteratureXsltTransformerService;
 import de.bund.digitalservice.ris.search.utils.LuceneQueryTools;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -33,6 +36,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Pattern;
 import java.util.List;
 import java.util.Optional;
 import org.springdoc.core.annotations.ParameterObject;
@@ -46,35 +50,39 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 /** Controller responsible for handling literature-related endpoints. */
 @Tag(name = "Literature")
 @RestController
-@Profile({"default", "staging", "uat", "test", "prototype"})
+@Profile({"dev", "e2e", "staging", "uat", "test", "prototype"})
 public class LiteratureController {
 
   private final LiteratureService literatureService;
-  private final LiteratureXsltTransformerService xsltTransformerService;
-  private final SliLiteratureXsltTransformerService sliXsltTransformerService;
+  private final LiteratureXsltTransformer xsltTransformer;
+  private final SliLiteratureXsltTransformer sliXsltTransformer;
   private final ChangelogService<LiteratureBucket> changelogService;
+  private final String jsonldContextPath;
 
   /**
    * Constructor for LiteratureController.
    *
    * @param literatureService the service responsible for handling literature-related operations
-   * @param literatureXsltTransformerService the service responsible for performing XSLT
-   *     transformations for literature
+   * @param literatureXsltTransformer the service responsible for performing XSLT transformations
+   *     for literature
    */
   @Autowired
   public LiteratureController(
       LiteratureService literatureService,
-      LiteratureXsltTransformerService literatureXsltTransformerService,
-      SliLiteratureXsltTransformerService sliLiteratureXsltTransformerService,
-      ChangelogService<LiteratureBucket> changelogService) {
+      LiteratureXsltTransformer literatureXsltTransformer,
+      SliLiteratureXsltTransformer sliLiteratureXsltTransformer,
+      ChangelogService<LiteratureBucket> changelogService,
+      ServerConfig serverConfig) {
     this.literatureService = literatureService;
-    this.xsltTransformerService = literatureXsltTransformerService;
-    this.sliXsltTransformerService = sliLiteratureXsltTransformerService;
+    this.xsltTransformer = literatureXsltTransformer;
+    this.sliXsltTransformer = sliLiteratureXsltTransformer;
     this.changelogService = changelogService;
+    this.jsonldContextPath = serverConfig.getBackEndUrl() + ApiConfig.Paths.JSONLD_CONTEXT;
   }
 
   /**
@@ -101,7 +109,7 @@ public class LiteratureController {
     Literature unit = result.getFirst();
     return ResponseEntity.ok()
         .contentType(MediaType.APPLICATION_JSON)
-        .body(LiteratureSchemaMapper.fromDomain(unit));
+        .body(LiteratureSchemaMapper.fromDomain(unit, jsonldContextPath));
   }
 
   /**
@@ -132,10 +140,10 @@ public class LiteratureController {
             file -> {
               switch (LiteratureType.getByDocumentNumber(documentNumber)) {
                 case SLI -> {
-                  return sliXsltTransformerService.transformLiterature(file);
+                  return sliXsltTransformer.transform(file);
                 }
                 case ULI -> {
-                  return xsltTransformerService.transformLiterature(file);
+                  return xsltTransformer.transform(file);
                 }
                 default -> {
                   return null;
@@ -184,6 +192,7 @@ public class LiteratureController {
    */
   @GetMapping(path = ApiConfig.Paths.LITERATURE, produces = MediaType.APPLICATION_JSON_VALUE)
   @Operation(
+      operationId = "searchLiterature",
       summary = "List and search literature",
       description =
           "The endpoint returns a list of literature from our database. The list is paginated and can be filtered and sorted.")
@@ -208,7 +217,7 @@ public class LiteratureController {
               universalSearchParams, literatureSearchParams, sortedPageRequest);
       return ResponseEntity.ok()
           .contentType(MediaType.APPLICATION_JSON)
-          .body(LiteratureSearchSchemaMapper.fromSearchPage(page));
+          .body(LiteratureSearchSchemaMapper.fromSearchPage(page, jsonldContextPath));
     } catch (UncategorizedElasticsearchException e) {
       LuceneQueryTools.checkForInvalidQuery(e);
       throw e;
@@ -237,6 +246,40 @@ public class LiteratureController {
             params.getFrom().toInstant(), params.getTo().toInstant());
 
     return ResponseEntity.ok(
-        ChangelogResponseMapper.mapChangelog(changelog, DocumentKind.LITERATURE));
+        ChangelogResponseMapper.mapChangelog(
+            changelog, DocumentKind.LITERATURE, jsonldContextPath));
+  }
+
+  /**
+   * Retrieves all files associated with a literature doc number as a ZIP archive.
+   *
+   * @param documentNumber the unique identifier of the literature document to retrieve
+   * @return a ResponseEntity containing the ZIP file as a streaming response body if the document
+   *     is found, or a 404 Not Found response if no document matches the provided identifier
+   */
+  @GetMapping(
+      path = ApiConfig.Paths.LITERATURE + "/{documentNumber}.zip",
+      produces = "application/zip")
+  @Operation(
+      summary = "Decision ZIP (XML and attachments)",
+      description = "Returns all literature document files as a ZIP archive.")
+  @ApiResponse(responseCode = "200")
+  @ApiResponse(responseCode = "404", content = @Content(schema = @Schema()))
+  public ResponseEntity<StreamingResponseBody> getLiteratureDocumentAsZip(
+      @Pattern(regexp = "^[a-zA-Z]{4}\\d{9}$", message = "Invalid document number format")
+          @Parameter(example = "XXLS201770751")
+          @PathVariable
+          String documentNumber) {
+
+    String filename = documentNumber + ".zip";
+    List<String> keys = literatureService.getAllFilenamesByDocumentNumber(documentNumber);
+
+    if (keys.isEmpty()) {
+      return ResponseEntity.notFound().build();
+    }
+    return ResponseEntity.ok()
+        .header(CONTENT_DISPOSITION, "attachment;filename=\"%s\"".formatted(filename))
+        .contentType(MediaType.valueOf("application/zip"))
+        .body(outputStream -> literatureService.writeZipArchive(keys, outputStream));
   }
 }

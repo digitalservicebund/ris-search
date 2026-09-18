@@ -9,6 +9,7 @@ import de.bund.digitalservice.ris.search.models.api.parameters.CaseLawSearchPara
 import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
+import de.bund.digitalservice.ris.search.repository.objectstorage.StorageObject;
 import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository;
 import de.bund.digitalservice.ris.search.service.helper.CourtNameAbbreviationExpander;
 import de.bund.digitalservice.ris.search.service.helper.ZipManager;
@@ -45,7 +46,6 @@ public class CaseLawService {
   private final CaseLawRepository caseLawRepository;
   private final CaseLawBucket caseLawBucket;
   private final ElasticsearchOperations operations;
-  private final CourtNameAbbreviationExpander courtNameAbbreviationExpander;
   private final Configurations configurations;
   private final CaseLawLdmlToOpenSearchMapper marshaller;
   private final SimpleSearchQueryBuilder simpleSearchQueryBuilder;
@@ -73,7 +73,6 @@ public class CaseLawService {
     this.caseLawBucket = caseLawBucket;
     this.operations = operations;
     this.configurations = configurations;
-    this.courtNameAbbreviationExpander = new CourtNameAbbreviationExpander();
     this.marshaller = marshaller;
     this.simpleSearchQueryBuilder = simpleSearchQueryBuilder;
   }
@@ -134,20 +133,18 @@ public class CaseLawService {
             IndexCoordinates.of(configurations.getCaseLawsIndexName()));
 
     var buckets = getBuckets(searchHits, aggregationName);
-    var firstToken = CourtNameAbbreviationExpander.extractFirstToken(searchPrefix);
     return buckets.stream()
         .map(
             item -> {
               String key = item.getKeyAsString();
               long count = item.getDocCount();
-              String label =
-                  courtNameAbbreviationExpander.getLabelExpandingSynonyms(key, firstToken);
+              String label = CourtNameAbbreviationExpander.getLabelExpandingSynonyms(key);
               return new CourtSearchResult(key, count, label);
             })
         .toList();
   }
 
-  private static List<? extends Terms.Bucket> getBuckets(
+  private List<? extends Terms.Bucket> getBuckets(
       SearchHits<Void> searchHits, String aggregationName) {
     OpenSearchAggregations aggregationsWrapper =
         (OpenSearchAggregations) searchHits.getAggregations();
@@ -159,9 +156,15 @@ public class CaseLawService {
   }
 
   public List<CaseLawDocumentationUnit> getByDocumentNumber(String documentNumber) {
-    return caseLawRepository.findByDocumentNumber(documentNumber);
+    return caseLawRepository.findByDocumentNumberKeyword(documentNumber);
   }
 
+  /**
+   * Get a file by its document number.
+   *
+   * @param documentNumber the document number of the file to get
+   * @return the file
+   */
   public Optional<byte[]> getFileByDocumentNumber(String documentNumber)
       throws ObjectStoreServiceException {
     return caseLawBucket.get(String.format("%s/%s.xml", documentNumber, documentNumber));
@@ -171,10 +174,19 @@ public class CaseLawService {
     return caseLawBucket.get(path);
   }
 
+  /**
+   * @param keys all object keys to be included in the archive
+   * @param outputStream Outputstream to which the ZIP archive data will be written
+   * @throws IOException if an I/O error occurs during file retrieval or while writing to the stream
+   */
   public void writeZipArchive(List<String> keys, OutputStream outputStream) throws IOException {
     ZipManager.writeZipArchive(caseLawBucket, keys, outputStream);
   }
 
+  /**
+   * @param documentNumber a given document
+   * @return a list of the filenames that match the provided document number
+   */
   public List<String> getAllFilenamesByDocumentNumber(String documentNumber) {
     return caseLawBucket.getAllKeysByPrefix(documentNumber);
   }
@@ -184,23 +196,31 @@ public class CaseLawService {
    * the file content is not found or an error occurs during processing, an empty Optional is
    * returned.
    *
-   * @param filename the name of the file to retrieve from the bucket
-   * @return an Optional containing the `CaseLawDocumentationUnit` if successfully retrieved and
-   *     parsed, or an empty Optional if not found or an error occurs
+   * @param filenames List of filenames to retrieve from the bucket
+   * @return a List of CaseLawDocumentationUnits
    * @throws ObjectStoreServiceException if an error occurs while accessing the object storage
    *     service
    */
-  public Optional<CaseLawDocumentationUnit> getFromBucket(String filename)
+  public List<CaseLawDocumentationUnit> getFromBucket(List<String> filenames)
       throws ObjectStoreServiceException {
-    Optional<String> contentOption = caseLawBucket.getFileAsString(filename);
+    List<StorageObject> objects = caseLawBucket.getObjects(filenames);
 
-    if (contentOption.isEmpty()) {
-      return Optional.empty();
+    if (objects.isEmpty()) {
+      return List.of();
     }
-    try {
-      return Optional.of(marshaller.fromString(contentOption.get()));
-    } catch (OpenSearchMapperException ex) {
-      return Optional.empty();
-    }
+    return objects.stream().map(this::tryUnmarshal).flatMap(Optional::stream).toList();
+  }
+
+  private Optional<CaseLawDocumentationUnit> tryUnmarshal(StorageObject object) {
+    return object
+        .bytes()
+        .flatMap(
+            bytes -> {
+              try {
+                return Optional.ofNullable(marshaller.fromByteArray(bytes));
+              } catch (OpenSearchMapperException _) {
+                return Optional.empty();
+              }
+            });
   }
 }

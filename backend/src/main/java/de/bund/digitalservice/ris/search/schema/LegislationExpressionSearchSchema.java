@@ -35,17 +35,21 @@ public record LegislationExpressionSearchSchema(
     @Schema(
             description =
                 """
-                         Textual string indicating a time period in [ISO 8601 time interval format](https://en.wikipedia.org/wiki/ISO_8601#Time_intervals)
-                         """,
+                                Textual string indicating a time period in [ISO 8601 time interval format](https://en.wikipedia.org/wiki/ISO_8601#Time_intervals)
+                                """,
             example = "1998-02-06/..",
             requiredMode = Schema.RequiredMode.REQUIRED)
         String temporalCoverage,
-    @Nullable @Schema(example = "KakaoV 2003", description = "Amtliche Buchstabenabkürzung")
-        String abbreviation,
     @Schema(
+            example = "KakaoV 2003",
+            description = "Amtliche Buchstabenabkürzung, if it exists. Otherwise ris-abkuerzung.",
+            requiredMode = Schema.RequiredMode.REQUIRED)
+        String abbreviation,
+    @Nullable
+        @Schema(
             example = "Kakaoverordnung",
             description = "Amtliche Kurzüberschrift",
-            requiredMode = Schema.RequiredMode.REQUIRED)
+            nullable = true)
         String alternateName,
     @Schema(
             description = "Whether the legislation expression is currently in force.",

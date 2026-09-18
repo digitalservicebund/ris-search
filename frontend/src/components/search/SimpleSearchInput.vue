@@ -1,15 +1,16 @@
 <script setup lang="ts">
-import { Button, InputGroup, InputGroupAddon, InputText } from "primevue";
 import IconSearch from "~icons/ic/search";
 
 const {
   inputLabel = "Suchbegriff eingeben",
   inputPlaceholder = "Suchbegriff eingeben",
+  loading = false,
   submitLabel = "Suchen",
 } = defineProps<{
   fullWidth?: boolean;
   inputLabel?: string;
   inputPlaceholder?: string;
+  loading?: boolean;
   submitLabel?: string;
 }>();
 
@@ -27,6 +28,8 @@ watch(model, (newValue) => {
 const emit = defineEmits(["emptySearch"]);
 
 const performSearch = () => {
+  if (loading) return;
+
   // if the user hasn't entered any text, updating the model will have no effect
   // since they might still want to trigger an empty search, use "emit"
   if (!currentText.value) emit("emptySearch");
@@ -39,23 +42,23 @@ const searchInputId = useId();
 
 <template>
   <search :class="{ 'max-w-md': !fullWidth }">
-    <form action="/search" @submit.prevent="performSearch">
-      <InputGroup>
-        <InputText
+    <form action="/suche" @submit.prevent="performSearch">
+      <div class="flex">
+        <UiInputText
           :id="searchInputId"
           v-model="currentText"
           :aria-label="inputLabel"
           :placeholder="inputPlaceholder"
-          fluid
+          class="grow"
+          clearable
           name="query"
           type="search"
+          size="large"
         />
-        <InputGroupAddon>
-          <Button :aria-label="submitLabel" type="submit">
-            <template #icon><IconSearch /></template>
-          </Button>
-        </InputGroupAddon>
-      </InputGroup>
+        <UiButton :aria-label="submitLabel" type="submit" size="large" :loading>
+          <template #icon><IconSearch /></template>
+        </UiButton>
+      </div>
     </form>
   </search>
 </template>

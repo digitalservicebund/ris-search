@@ -6,20 +6,8 @@ import Tooltip from "primevue/tooltip";
 import { describe, expect, it, vi } from "vitest";
 import NormTranslationActionMenu from "~/components/documents/actionMenu/NormTranslationActionMenu.vue";
 
-const { mockToastAdd } = vi.hoisted(() => ({
-  mockToastAdd: vi.fn(),
-}));
-
-vi.mock("primevue/usetoast", () => ({
-  useToast: () => ({
-    add: mockToastAdd,
-  }),
-}));
-
 mockNuxtImport("useRequestURL", () => {
-  return () => ({
-    href: "https://example.com/translations",
-  });
+  return () => new URL("https://example.com/translations?foo=bar");
 });
 
 function renderLiteratureActionMenu() {
@@ -68,12 +56,6 @@ describe("NormTranslationActionMenu", () => {
 
     expect(await navigator.clipboard.readText()).toEqual(
       "https://example.com/translations",
-    );
-
-    expect(mockToastAdd).toHaveBeenCalledExactlyOnceWith(
-      expect.objectContaining({
-        summary: "Kopiert!",
-      }),
     );
   });
 

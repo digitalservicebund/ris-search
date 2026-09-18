@@ -13,6 +13,7 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Document;
@@ -135,7 +136,7 @@ public class XmlDocument {
   public Optional<Node> getFirstMatchedNodeByXpath(String xpath, Node item) {
     try {
       return Optional.ofNullable((Node) xpathInstance.evaluate(xpath, item, XPathConstants.NODE));
-    } catch (XPathExpressionException e) {
+    } catch (XPathExpressionException _) {
       return Optional.empty();
     }
   }
@@ -178,6 +179,37 @@ public class XmlDocument {
       logger.warn(String.format("Error finding element by xpath: %s", xpath), exception);
       return null;
     }
+  }
+
+  /**
+   * Retrieves the text content of the first XML element that matches the given XPath expression,
+   * returning a non-empty {@code Optional} only when the value is present and non-blank.
+   *
+   * @param xpath the XPath expression to evaluate against the XML document
+   * @return an {@code Optional} containing the trimmed text content, or empty if the node is
+   *     missing, blank, or an error occurs
+   */
+  public Optional<String> getNonEmptyElementByXpath(String xpath) {
+    return Optional.ofNullable(getElementByXpath(xpath)).filter(StringUtils::isNotBlank);
+  }
+
+  /**
+   * Tries to extract the value at the given xpath returns it if it's not blank. Otherwise, throws
+   * an {@code IllegalArgumentException} with the provided errorMessage.
+   *
+   * @param xpath of the element to extract
+   * @param errorMessage added to the exception in case the element couldn't be extracted
+   * @return the element if found
+   * @throws IllegalArgumentException if the element was not found
+   */
+  public String getNonEmptyElementOrThrow(String xpath, String errorMessage) {
+    Optional<String> value = getNonEmptyElementByXpath(xpath);
+
+    if (value.isPresent()) {
+      return value.get();
+    }
+
+    throw new IllegalArgumentException(errorMessage);
   }
 
   /**

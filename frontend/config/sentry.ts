@@ -8,8 +8,8 @@ export const sentry: NuxtConfig["sentry"] = {
   project: "ris-search",
   authToken: process.env.SENTRY_AUTH_TOKEN,
   sourceMapsUploadOptions: {
-    // Only upload the source maps when build on main
-    enabled: process.env.GITHUB_REF_NAME === "main",
+    // Only upload the source maps when built on main (set via SENTRY_UPLOAD_SOURCEMAPS docker build arg)
+    enabled: process.env.SENTRY_UPLOAD_SOURCEMAPS === "true",
   },
   telemetry: false,
 };

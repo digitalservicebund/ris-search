@@ -3,6 +3,7 @@ package de.bund.digitalservice.ris.search.controller.api;
 import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
 
 import de.bund.digitalservice.ris.search.config.ApiConfig;
+import de.bund.digitalservice.ris.search.config.ServerConfig;
 import de.bund.digitalservice.ris.search.exception.CustomValidationException;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.mapper.ChangelogResponseMapper;
@@ -22,6 +23,7 @@ import de.bund.digitalservice.ris.search.schema.CollectionSchema;
 import de.bund.digitalservice.ris.search.schema.LegislationExpressionSchema;
 import de.bund.digitalservice.ris.search.schema.LegislationExpressionSearchSchema;
 import de.bund.digitalservice.ris.search.schema.SearchMemberSchema;
+import de.bund.digitalservice.ris.search.service.ArticleService;
 import de.bund.digitalservice.ris.search.service.ChangelogService;
 import de.bund.digitalservice.ris.search.service.NormsService;
 import de.bund.digitalservice.ris.search.service.xslt.NormXsltTransformerService;
@@ -81,8 +83,11 @@ public class NormsController {
   public static final String NATURAL_IDENTIFIER_EXAMPLE = "s1325";
 
   private final NormsService normsService;
+  private final ArticleService articleService;
   private final NormXsltTransformerService xsltTransformerService;
   private final ChangelogService<NormsBucket> changelogService;
+
+  private final String jsonldContextPath;
 
   /**
    * Constructor for the NormsController class.
@@ -93,11 +98,15 @@ public class NormsController {
   @Autowired
   public NormsController(
       NormsService normsService,
+      ArticleService articleService,
       NormXsltTransformerService xsltTransformerService,
-      ChangelogService<NormsBucket> changelogService) {
+      ChangelogService<NormsBucket> changelogService,
+      ServerConfig serverConfig) {
     this.normsService = normsService;
+    this.articleService = articleService;
     this.xsltTransformerService = xsltTransformerService;
     this.changelogService = changelogService;
+    this.jsonldContextPath = serverConfig.getBackEndUrl() + ApiConfig.Paths.JSONLD_CONTEXT;
   }
 
   /**
@@ -115,6 +124,7 @@ public class NormsController {
    */
   @GetMapping(value = ApiConfig.Paths.LEGISLATION, produces = MediaType.APPLICATION_JSON_VALUE)
   @Operation(
+      operationId = "searchAndFilterLegislation",
       summary = "List and search legislation",
       description =
           """
@@ -163,7 +173,8 @@ public class NormsController {
       SearchPage<Norm> resultPage =
           normsService.simpleSearchNorms(
               universalSearchParams, normsSearchParams, sortedPageRequest);
-      return NormSearchResponseMapper.fromDomain(resultPage, ApiConfig.Paths.LEGISLATION);
+      return NormSearchResponseMapper.fromDomain(
+          resultPage, ApiConfig.Paths.LEGISLATION, jsonldContextPath);
     } catch (UncategorizedElasticsearchException e) {
       LuceneQueryTools.checkForInvalidQuery(e);
       throw e;
@@ -213,7 +224,7 @@ public class NormsController {
     Optional<Norm> result = normsService.getByExpressionEli(eli);
 
     return result
-        .map(r -> ResponseEntity.ok(NormSchemaMapper.fromDomain(r)))
+        .map(r -> ResponseEntity.ok(NormSchemaMapper.fromDomain(r, jsonldContextPath)))
         .orElse(ResponseEntity.notFound().build());
   }
 
@@ -256,7 +267,7 @@ public class NormsController {
             eli, PageRequest.of(pagination.getPageIndex(), pagination.getSize()));
 
     return NormSearchResponseMapper.fromNormsPage(
-        expressions, ApiConfig.Paths.LEGISLATION_WORK_EXAMPLE);
+        expressions, ApiConfig.Paths.LEGISLATION_WORK_EXAMPLE, jsonldContextPath);
   }
 
   /**
@@ -334,7 +345,8 @@ public class NormsController {
     final Optional<byte[]> normFileByEli = normsService.getNormFileByEli(eli);
     if (normFileByEli.isPresent()) {
       final String body =
-          xsltTransformerService.transformNorm(normFileByEli.get(), language, resourceBasePath);
+          xsltTransformerService.transformNorm(
+              normFileByEli.get(), language, resourceBasePath, subtype);
       return ResponseEntity.ok(body);
     } else {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(HTML_FILE_NOT_FOUND);
@@ -552,27 +564,36 @@ public class NormsController {
           @PathVariable
           String articleEid)
       throws ObjectStoreServiceException {
-    final String resourceBasePath = getResourceBasePath();
+    String resourceBasePath = getResourceBasePath();
+    var expressionEli =
+        new ExpressionEli(
+            jurisdiction, agent, year, naturalIdentifier, pointInTime, version, language);
+    Optional<String> actualEid = articleService.getActualEid(expressionEli.toString(), articleEid);
 
-    var eli =
-        new ManifestationEli(
-            jurisdiction,
-            agent,
-            year,
-            naturalIdentifier,
-            pointInTime,
-            version,
-            language,
-            pointInTimeManifestation,
-            subtype,
-            "xml");
-    final Optional<byte[]> normFileByEli = normsService.getNormFileByEli(eli);
-    return normFileByEli
-        .map(
-            bytes ->
-                ResponseEntity.ok(
-                    xsltTransformerService.transformArticle(bytes, articleEid, resourceBasePath)))
-        .orElseGet(() -> ResponseEntity.notFound().build());
+    if (actualEid.isPresent()) {
+
+      var manifestationEli =
+          new ManifestationEli(
+              jurisdiction,
+              agent,
+              year,
+              naturalIdentifier,
+              pointInTime,
+              version,
+              language,
+              pointInTimeManifestation,
+              subtype,
+              "xml");
+      Optional<byte[]> normFileByEli = normsService.getNormFileByEli(manifestationEli);
+
+      if (normFileByEli.isPresent()) {
+        String transformed =
+            xsltTransformerService.transformArticle(
+                normFileByEli.get(), actualEid.get(), resourceBasePath);
+        return ResponseEntity.ok(transformed);
+      }
+    }
+    return ResponseEntity.notFound().build();
   }
 
   /**
@@ -678,7 +699,8 @@ public class NormsController {
         changelogService.getChangesBetween(
             params.getFrom().toInstant(), params.getTo().toInstant());
     return ResponseEntity.ok(
-        ChangelogResponseMapper.mapChangelog(changelog, DocumentKind.LEGISLATION));
+        ChangelogResponseMapper.mapChangelog(
+            changelog, DocumentKind.LEGISLATION, jsonldContextPath));
   }
 
   /**

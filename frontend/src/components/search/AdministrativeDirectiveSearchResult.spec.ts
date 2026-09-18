@@ -1,10 +1,22 @@
-import { renderSuspended } from "@nuxt/test-utils/runtime";
+import { mockNuxtImport, renderSuspended } from "@nuxt/test-utils/runtime";
 import { screen } from "@testing-library/vue";
 import { describe } from "vitest";
 import AdministrativeDirectiveSearchResult from "~/components/search/AdministrativeDirectiveSearchResult.vue";
-import type { AdministrativeDirective, SearchResult } from "~/types/api";
+import type {
+  AdministrativeDirectiveSearchSchema,
+  SearchResult,
+} from "~/types/api";
+import type { SearchResultHeadingLevel } from "~/utils/search/searchResults";
 
-const searchResult: SearchResult<AdministrativeDirective> = {
+const { useRouteMock } = vi.hoisted(() => ({
+  useRouteMock: vi.fn(() => ({
+    fullPath: "/suche?query=test&documentKind=VS",
+  })),
+}));
+
+mockNuxtImport("useRoute", () => useRouteMock);
+
+const searchResult: SearchResult<AdministrativeDirectiveSearchSchema> = {
   item: {
     "@type": "AdministrativeDirective",
     "@id": "/v1/administrative-directive/KSNR000000001",
@@ -15,34 +27,33 @@ const searchResult: SearchResult<AdministrativeDirective> = {
     documentType: "VR",
     referenceNumbers: ["Foo - 123", "Bar - 123"],
     entryIntoForceDate: "2025-07-01",
-  } as AdministrativeDirective,
-  textMatches: [
-    {
-      "@type": "SearchResultMatch",
-      name: "shortReport",
-      text: "Inhalt eines Kurzreferats.",
-      location: undefined,
-    },
-    {
-      "@type": "SearchResultMatch",
-      name: "headline",
-      text: "Verwaltungsvorschrift Überschrift",
-      location: undefined,
-    },
-  ],
+  } as AdministrativeDirectiveSearchSchema,
+  textMatches: [],
 };
 
 async function renderComponent({
   item = searchResult.item,
   textMatches = searchResult.textMatches,
-}: Partial<SearchResult<AdministrativeDirective>> = {}) {
-  const result: SearchResult<AdministrativeDirective> = {
+  headingLevel,
+}: Partial<SearchResult<AdministrativeDirectiveSearchSchema>> & {
+  headingLevel?: SearchResultHeadingLevel;
+} = {}) {
+  const result: SearchResult<AdministrativeDirectiveSearchSchema> = {
     item,
     textMatches,
   };
 
   return await renderSuspended(AdministrativeDirectiveSearchResult, {
-    props: { searchResult: result, order: 0 },
+    props: { searchResult: result, order: 0, headingLevel },
+    global: {
+      stubs: {
+        NuxtLink: {
+          template:
+            '<a :href="to.path ?? to" :data-from="to.query?.from"><slot /></a>',
+          props: ["to"],
+        },
+      },
+    },
   });
 }
 
@@ -60,7 +71,9 @@ describe("AdministrativeDirectiveSearchResult", () => {
 
     it("renders first referenceNumber", async () => {
       await renderComponent();
-      expect(screen.getByText("Foo - 123")).toBeVisible();
+      const referenceNumberBadge = screen.getByText("Foo - 123");
+      expect(referenceNumberBadge).toBeVisible();
+      expect(referenceNumberBadge).toHaveClass(/border-gray/);
 
       // Don't render other referenceNumbers
       expect(screen.queryByText("Bar - 123")).not.toBeInTheDocument();
@@ -112,8 +125,21 @@ describe("AdministrativeDirectiveSearchResult", () => {
       expect(mark.tagName).toBe("MARK");
     });
 
-    it("renders placeholder title with correct link", async () => {
+    it("uses item headline as fallback when no text match is present", async () => {
       await renderComponent({
+        textMatches: [],
+      });
+
+      expect(
+        screen.getByRole("link", {
+          name: "Verwaltungsvorschrift Überschrift",
+        }),
+      ).toBeVisible();
+    });
+
+    it("renders placeholder title when neither text match nor item headline is present", async () => {
+      await renderComponent({
+        item: { ...searchResult.item, headline: undefined },
         textMatches: [],
       });
 
@@ -125,82 +151,133 @@ describe("AdministrativeDirectiveSearchResult", () => {
     });
   });
 
-  describe("shortReport", () => {
-    it("renders shortReport match without ellipses", async () => {
+  describe("preview sections", () => {
+    it("renders matches", async () => {
+      await renderComponent({
+        textMatches: [
+          {
+            "@type": "SearchResultMatch",
+            name: "shortReport",
+            text: "testing <mark>highlighted Text</mark> is here",
+            location: undefined,
+          },
+          {
+            "@type": "SearchResultMatch",
+            name: "tableOfContentsEntries",
+            text: "<mark>I. Einführung</mark>",
+            location: undefined,
+          },
+        ],
+      });
+
+      expect(
+        screen.getByRole("link", { name: "Kurzreferat:" }),
+      ).toBeInTheDocument();
+      const linkMark = screen.getByText("highlighted Text");
+      expect(linkMark.tagName).toBe("MARK");
+
+      expect(screen.getByRole("link", { name: "Inhalt:" })).toBeInTheDocument();
+      const shortReportMark = screen.getByText("I. Einführung");
+      expect(shortReportMark.tagName).toBe("MARK");
+    });
+
+    it("filters HTML tags except mark, i, b", async () => {
+      const text =
+        '<mark>mark</mark> <i>i</i> <b>b</b> <img src="" alt="do not show"> <div>div</div> plain_text.';
+      const expectedSanitized =
+        "<mark>mark</mark> <i>i</i> <b>b</b>  div plain_text.";
+
+      await renderComponent({
+        textMatches: [
+          {
+            "@type": "SearchResultMatch",
+            name: "shortReport",
+            text,
+            location: undefined,
+          },
+        ],
+      });
+
+      const items = screen.getAllByTestId("highlighted-field");
+      expect(items).toHaveLength(1);
+      expect(items[0]?.innerHTML).toBe(expectedSanitized);
+    });
+
+    it("does not render a section when the text match has no highlight", async () => {
+      await renderComponent({
+        textMatches: [
+          {
+            "@type": "SearchResultMatch",
+            name: "shortReport",
+            text: "plain text without any highlight",
+            location: undefined,
+          },
+        ],
+      });
+
+      expect(screen.queryAllByTestId("highlighted-field")).toHaveLength(0);
+    });
+  });
+
+  it("includes the current search URL as query param in the detail page link", async () => {
+    useRouteMock.mockReturnValue({
+      fullPath: "/suche?query=Vorschrift&documentKind=VS&pageIndex=0",
+    });
+
+    await renderComponent();
+
+    const link = screen.getByRole("link", {
+      name: "Verwaltungsvorschrift Überschrift",
+    });
+    expect(link).toHaveAttribute(
+      "data-from",
+      "/suche?query=Vorschrift&documentKind=VS&pageIndex=0",
+    );
+  });
+
+  it("includes the current search URL as query param in preview section links", async () => {
+    useRouteMock.mockReturnValue({
+      fullPath: "/suche?query=Vorschrift&documentKind=VS&pageIndex=0",
+    });
+
+    await renderComponent({
+      textMatches: [
+        {
+          "@type": "SearchResultMatch",
+          name: "shortReport",
+          text: "testing <mark>highlighted</mark> text",
+          location: undefined,
+        },
+      ],
+    });
+
+    const sectionLink = screen.getByRole("link", { name: "Kurzreferat:" });
+    expect(sectionLink).toHaveAttribute(
+      "data-from",
+      "/suche?query=Vorschrift&documentKind=VS&pageIndex=0",
+    );
+  });
+
+  describe("heading level", () => {
+    it("renders the title as an h2 with the responsive style by default", async () => {
       await renderComponent();
-      expect(screen.getByText("Inhalt eines Kurzreferats.")).toBeVisible();
+
+      const heading = screen.getByRole("heading", { level: 2 });
+      expect(heading).toBeInTheDocument();
+      expect(heading.closest("a")).toHaveClass("typo-headline-searchresult");
     });
 
-    it("renders shortReport match with ellipses at start", async () => {
-      await renderComponent({
-        item: {
-          ...searchResult.item,
-          shortReport: "Dies ist der lange Inhalt eines Kurzreferats.",
-        },
-      });
-      expect(screen.getByText("… Inhalt eines Kurzreferats.")).toBeVisible();
-    });
+    it("renders the title as an h3 with the compact style at level 3", async () => {
+      await renderComponent({ headingLevel: "3" });
 
-    it("renders shortReport match with ellipses at end", async () => {
-      await renderComponent({
-        item: {
-          ...searchResult.item,
-          shortReport: "Inhalt eines Kurzreferats. Weitere Inhalt.",
-        },
-      });
-      expect(screen.getByText("Inhalt eines Kurzreferats. …")).toBeVisible();
-    });
-
-    it("renders shortReport match with ellipses at start and end", async () => {
-      await renderComponent({
-        item: {
-          ...searchResult.item,
-          shortReport:
-            "Dies ist der lange Inhalt eines Kurzreferats. Weitere Inhalt.",
-        },
-      });
-      expect(screen.getByText("… Inhalt eines Kurzreferats. …")).toBeVisible();
-    });
-
-    it("renders shortReport match with markup", async () => {
-      await renderComponent({
-        item: {
-          ...searchResult.item,
-          shortReport: "Inhalt eines Kurzreferats. Weiterer Inhalt.",
-        },
-        textMatches: [
-          {
-            "@type": "SearchResultMatch",
-            name: "shortReport",
-            text: "<b>Inhalt</b> <i>eines</i> <mark>Kurzreferats.</mark> <a>Weiterer Inhalt.</a>",
-            location: undefined,
-          },
-        ],
-      });
-      expect(screen.getByText("Inhalt").tagName).toBe("B");
-      expect(screen.getByText("eines").tagName).toBe("I");
-      expect(screen.getByText("Kurzreferats.").tagName).toBe("MARK");
-      // Does not render other tags
-      expect(screen.getByText("Weiterer Inhalt.").tagName).not.toBe("A");
-    });
-
-    it("renders shortReport match with markup and ellipses", async () => {
-      await renderComponent({
-        item: {
-          ...searchResult.item,
-          shortReport: "Inhalt eines Kurzreferats. Weiterer Inhalt.",
-        },
-        textMatches: [
-          {
-            "@type": "SearchResultMatch",
-            name: "shortReport",
-            text: "<mark>Inhalt</mark> eines Kurzreferats.",
-            location: undefined,
-          },
-        ],
-      });
-      expect(screen.getByText("Inhalt").tagName).toBe("MARK");
-      expect(screen.getByText("eines Kurzreferats. …")).toBeVisible();
+      const heading = screen.getByRole("heading", { level: 3 });
+      expect(heading).toBeInTheDocument();
+      expect(
+        screen.queryByRole("heading", { level: 2 }),
+      ).not.toBeInTheDocument();
+      expect(heading.closest("a")).toHaveClass(
+        "typo-headline-searchresult-compact",
+      );
     });
   });
 });

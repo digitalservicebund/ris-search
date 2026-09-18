@@ -6,7 +6,10 @@ import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchPa
 import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
 import de.bund.digitalservice.ris.search.repository.objectstorage.AdministrativeDirectiveBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.AdministrativeDirectiveRepository;
+import de.bund.digitalservice.ris.search.service.helper.ZipManager;
 import de.bund.digitalservice.ris.search.utils.PageUtils;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 import java.util.Optional;
 import lombok.SneakyThrows;
@@ -85,12 +88,29 @@ public class AdministrativeDirectiveService {
   public Optional<byte[]> getFileByDocumentNumber(String documentNumber) {
     try {
       return bucket.get(String.format("%s.akn.xml", documentNumber));
-    } catch (ObjectStoreServiceException e) {
+    } catch (ObjectStoreServiceException _) {
       return Optional.empty();
     }
   }
 
   public List<AdministrativeDirective> getByDocumentNumber(String documentNumber) {
-    return repository.findByDocumentNumber(documentNumber);
+    return repository.findByDocumentNumberKeyword(documentNumber);
+  }
+
+  /**
+   * @param documentNumber a given document
+   * @return a list of the filenames that match the provided document number
+   */
+  public List<String> getAllFilenamesByDocumentNumber(String documentNumber) {
+    return bucket.getAllKeysByPrefix(documentNumber);
+  }
+
+  /**
+   * @param keys all object keys to be included in the archive
+   * @param outputStream Outputstream to which the ZIP archive data will be written
+   * @throws IOException if an I/O error occurs during file retrieval or while writing to the stream
+   */
+  public void writeZipArchive(List<String> keys, OutputStream outputStream) throws IOException {
+    ZipManager.writeZipArchive(bucket, keys, outputStream);
   }
 }

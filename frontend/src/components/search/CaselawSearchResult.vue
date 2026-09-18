@@ -1,56 +1,37 @@
 <script setup lang="ts">
-import { partition } from "lodash-es";
-import GavelIcon from "~icons/ic/outline-gavel";
-import type { RouteLocationRaw } from "#vue-router";
-import type { SearchResultHeaderItem } from "~/components/search/SearchResultHeader.vue";
-import { usePostHog } from "~/composables/usePostHog";
-import type { CaseLaw, SearchResult, TextMatch } from "~/types/api";
-import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
-import { sanitizeSearchResult } from "~/utils/sanitize";
-import { addEllipsis, removeOuterParentheses } from "~/utils/textFormatting";
+import type {
+  SearchResultHeaderItem,
+  TextHeaderItem,
+} from "~/components/search/SearchResultHeader.vue";
+import type { CaseLawSearchSchema, SearchResult } from "~/types/api";
+import type { SearchResultHeadingLevel } from "~/utils/search/searchResults";
+import {
+  getMatch,
+  getMatches,
+  getTitleWithFallback,
+  getSearchResultHeadline,
+} from "~/utils/search/searchResults";
+
+const {
+  searchResult,
+  order,
+  headingLevel = "2",
+} = defineProps<{
+  searchResult: SearchResult<CaseLawSearchSchema>;
+  order: number;
+
+  /** Heading level of the result title. */
+  headingLevel?: SearchResultHeadingLevel;
+}>();
+
+const headlineStyle = computed(() => getSearchResultHeadline(headingLevel));
 
 const { searchResultClicked } = usePostHog();
 
-const props = defineProps<{
-  searchResult: SearchResult<CaseLaw>;
-  order: number;
-}>();
+const router = useRouter();
+const route = useRoute();
 
-type CaseLawMetadata = {
-  headline: string;
-  route: RouteLocationRaw;
-  url: string;
-  decisionName: string;
-};
-
-function getMatch(match: string, matches: TextMatch[]) {
-  return matches.find((highlight) => highlight.name === match)?.text;
-}
-
-function getMatches(match: string, matches: TextMatch[]) {
-  return matches
-    .filter((highlight) => highlight.name === match)
-    .map((highlight) => highlight.text);
-}
-
-type Key =
-  | "guidingPrinciple"
-  | "headnote"
-  | "otherHeadnote"
-  | "tenor"
-  | "grounds"
-  | "caseFacts"
-  | "decisionGrounds";
-
-interface FieldDisplayProperties {
-  id: string;
-  title: string;
-}
-
-type ExtendedTextMatch = TextMatch & FieldDisplayProperties;
-
-// field definitions. A Map is used to preserve order, with the first present item
-const fields: Map<Key, FieldDisplayProperties> = new Map([
+const fields = new Map([
   ["guidingPrinciple", { id: "leitsatz", title: "Leitsatz" }],
   ["headnote", { id: "orientierungssatz", title: "Orientierungssatz" }],
   [
@@ -67,139 +48,131 @@ const fields: Map<Key, FieldDisplayProperties> = new Map([
     "decisionGrounds",
     { id: "entscheidungsgruende", title: "Entscheidungsgründe" },
   ],
+  ["rechtsfrageGesamt", { id: "rechtsfrage", title: "Rechtsfrage" }],
+  [
+    "erledigungsvermerk",
+    { id: "erledigungsvermerk", title: "Erledigungsvermerk" },
+  ],
 ]);
 
-function getFileNumbers(item: CaseLaw) {
-  const matches = getMatches("fileNumbers", props.searchResult.textMatches);
-  if (matches.length) {
-    const replaced = [...item.fileNumbers];
-    for (const match of matches) {
-      const stripped = sanitizeSearchResult(match, []);
-      const index = item.fileNumbers.indexOf(stripped);
-      if (index !== -1) {
-        replaced[index] = match;
-      }
-    }
-    return replaced.join(", ");
-  }
-  return item.fileNumbers?.join(", ");
-}
+const headline = computed(() =>
+  getTitleWithFallback(
+    removeOuterParentheses(getMatch("headline", searchResult.textMatches)),
+    removeOuterParentheses(searchResult.item.headline),
+  ),
+);
 
-const metadata = computed(() => {
-  const item = props.searchResult.item;
-  return {
-    headline:
-      getMatch("headline", props.searchResult.textMatches) ||
-      item.headline ||
-      "Titelzeile nicht vorhanden",
-    route: {
-      name: "case-law-documentNumber",
-      params: { documentNumber: props.searchResult.item.documentNumber },
-    },
-    // The URL is currently needed for PostHog tracking but should not be used
-    // for navigation. Use `route` for navigation instead.
-    url: `/case-law/${props.searchResult.item.documentNumber}`,
-    decisionName: item.decisionName?.at(0),
-  } as CaseLawMetadata;
-});
-
-const previewSections = computed<ExtendedTextMatch[]>(() => {
-  const textMatches = props.searchResult.textMatches;
-  const foundFields = new Set<Key>();
-  const relevantMatches = textMatches
-    .filter((match) => fields.has(match.name as Key))
-    .map((match) => {
-      foundFields.add(match.name as Key);
-      return {
-        ...match,
-        text: addEllipsis(match.text),
-        ...fields.get(match.name as Key),
-      } as ExtendedTextMatch;
-    });
-
-  // always show the most relevant field, regardless of highlight status
-  const firstFieldName = [...fields.keys()].find((key) => foundFields.has(key));
-  const [firstFields, otherFields] = partition(
-    relevantMatches,
-    (match) => match.name === firstFieldName,
-  );
-
-  // show up to 4 fields
-  const slice: ExtendedTextMatch[] = [...firstFields, ...otherFields]
-    .slice(0, 4)
-    .filter((i) => !!i);
-
-  if (slice.length === 0) return [];
-
-  const haveHighlight = slice.some((field) => field.text.includes("<mark>"));
-
-  // if no fields have a highlight, show only the first one
-  // casting because TypeScript doesn't realize we already ensured it's not undefined
-  if (!haveHighlight) return [slice[0] as ExtendedTextMatch];
-
-  return slice;
+const secondaryTitle = computed<TextHeaderItem | undefined>(() => {
+  const title = getCaselawSecondaryTitle({
+    decisionNames: searchResult.item.decisionName,
+    titleLine: searchResult.item.titleLine,
+  });
+  return title ? { type: "text", value: title } : undefined;
 });
 
 const resultTypeId = useId();
 
 const headerItems = computed(() => {
-  const item = props.searchResult.item;
+  const item = searchResult.item;
 
-  const items: SearchResultHeaderItem[] = [
-    { value: item.documentType || "Entscheidung", id: resultTypeId },
-  ];
+  const items: SearchResultHeaderItem[] = [];
 
-  if (item.courtName) items.push({ value: item.courtName });
+  if (item.courtName) items.push({ type: "text", value: item.courtName });
 
   const formattedDate = dateFormattedDDMMYYYY(item.decisionDate);
-  if (formattedDate) items.push({ value: formattedDate });
+  if (formattedDate) items.push({ type: "text", value: formattedDate });
 
   const fileNumbers = getFileNumbers(item);
-  if (fileNumbers) items.push({ value: fileNumbers, isMarkup: true });
 
-  return items;
+  for (const fileNumber of fileNumbers) {
+    items.push({
+      type: "badge",
+      isMarkup: true,
+      value: fileNumber,
+      color: "gray",
+      class: "-mr-8", // reduce spacing between fileNumbers to 4px
+    });
+  }
+
+  const docTypeItem: TextHeaderItem = {
+    type: "text",
+    value: searchResult.item.documentType || "Entscheidung",
+    id: resultTypeId,
+  };
+
+  return {
+    documentType: docTypeItem,
+    otherItems: items,
+  };
 });
 
-const headline = computed(() =>
-  sanitizeSearchResult(removeOuterParentheses(metadata.value.headline)),
+function getFileNumbers(item: CaseLawSearchSchema) {
+  const matches = getMatches("fileNumbers", searchResult.textMatches);
+
+  if (matches.length) {
+    const replaced = [...item.fileNumbers];
+    for (const match of matches) {
+      const stripped = stripAllHtml(match);
+      const index = item.fileNumbers.indexOf(stripped);
+      if (index !== -1) {
+        replaced[index] = match;
+      }
+    }
+
+    return replaced;
+  }
+
+  return item.fileNumbers ?? [];
+}
+
+const detailPageRoute = computed(() => ({
+  name: "gerichtsentscheidungen-documentNumber",
+  params: { documentNumber: searchResult.item.documentNumber },
+  query: { from: route.fullPath },
+}));
+
+const previewSections = useSearchResultSections(
+  () => searchResult.textMatches,
+  fields,
+  4,
 );
 
-function trackResultClick(url: string) {
-  searchResultClicked(url, props.order);
+function trackResultClick() {
+  const url = router.resolve(detailPageRoute.value).href;
+  searchResultClicked(url, order);
 }
 </script>
 
 <template>
-  <div class="my-36 flex flex-col gap-8 hyphens-auto">
-    <SearchResultHeader :icon="GavelIcon" :items="headerItems" />
+  <div class="flex flex-col gap-8 hyphens-auto">
+    <SearchResultHeader
+      :document-type="headerItems.documentType"
+      :items="headerItems.otherItems"
+      :secondary-item="secondaryTitle"
+    />
     <NuxtLink
-      :to="metadata.route"
+      :to="detailPageRoute"
       :aria-describedby="resultTypeId"
-      class="ris-heading3-bold! ris-link1-regular link-hover block"
-      @click="trackResultClick(metadata.url)"
+      :class="headlineStyle.class"
+      @click="trackResultClick()"
     >
-      <h2>
-        <span v-if="!!metadata.decisionName">
-          {{ metadata.decisionName }} —
-        </span>
-        <span v-html="headline" />
-      </h2>
+      <component :is="headlineStyle.tag"><span v-html="headline" /></component>
     </NuxtLink>
 
-    <div class="flex w-full flex-col gap-6">
+    <div v-if="previewSections.length" class="flex w-full flex-col gap-6">
       <div v-for="section in previewSections" :key="section?.id">
         <NuxtLink
-          :to="{ path: `${metadata.url}`, hash: `#${section?.id}` }"
-          class="ris-link1-bold link-hover"
+          :to="{ ...detailPageRoute, hash: `#${section?.id}` }"
+          class="typo-link-bold link-hover"
           external
-          @click="trackResultClick(`${metadata.url}#${section?.id}`)"
+          @click="trackResultClick()"
           >{{ section?.title }}:</NuxtLink
         >{{ " " }}
         <span
           v-if="section.text"
           data-testid="highlighted-field"
-          class="ris-label1-regular"
-          v-html="sanitizeSearchResult(section.text)"
+          class="typo-label1-regular"
+          v-html="section.text"
         />
       </div>
     </div>

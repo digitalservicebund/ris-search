@@ -1,60 +1,100 @@
 <script setup lang="ts">
-import RuleIcon from "~icons/ic/outline-rule";
-import type { SearchResultHeaderItem } from "~/components/search/SearchResultHeader.vue";
-import { usePostHog } from "~/composables/usePostHog";
-import type { AdministrativeDirective, SearchResult } from "~/types/api";
-import { sanitizeSearchResult } from "~/utils/sanitize";
+import type {
+  SearchResultHeaderItem,
+  TextHeaderItem,
+} from "~/components/search/SearchResultHeader.vue";
+import type {
+  AdministrativeDirectiveSearchSchema,
+  SearchResult,
+} from "~/types/api";
+import type { SearchResultHeadingLevel } from "~/utils/search/searchResults";
+import {
+  getMatch,
+  getSearchResultHeadline,
+  getTitleWithFallback,
+} from "~/utils/search/searchResults";
 
-const { searchResultClicked } = usePostHog();
-const router = useRouter();
-
-const { searchResult, order } = defineProps<{
-  searchResult: SearchResult<AdministrativeDirective>;
+const {
+  searchResult,
+  order,
+  headingLevel = "2",
+} = defineProps<{
+  searchResult: SearchResult<AdministrativeDirectiveSearchSchema>;
   order: number;
+
+  /** Heading level of the result title. */
+  headingLevel?: SearchResultHeadingLevel;
 }>();
 
-const detailPageRoute = computed(() => ({
-  name: "administrative-directives-documentNumber",
-  params: {
-    documentNumber: searchResult.item.documentNumber,
-  },
-}));
+const headlineStyle = computed(() => getSearchResultHeadline(headingLevel));
+
+const { searchResultClicked } = usePostHog();
+
+const router = useRouter();
+const route = useRoute();
+
+const fields = new Map([
+  ["tableOfContentsEntries", { id: "inhalt", title: "Inhalt" }],
+  ["shortReport", { id: "kurzreferat", title: "Kurzreferat" }],
+]);
+
+const headline = computed(() =>
+  getTitleWithFallback(
+    getMatch("headline", searchResult.textMatches),
+    searchResult.item.headline,
+  ),
+);
 
 const resultTypeId = useId();
 
-const headerItems = computed<SearchResultHeaderItem[]>(() => {
+const headerItems = computed(() => {
   const item = searchResult.item;
-  return [
-    { value: item.documentType, id: resultTypeId },
-    { value: item.legislationAuthority },
-    { value: item.referenceNumbers?.[0] },
-    { value: dateFormattedDDMMYYYY(item.entryIntoForceDate) },
-  ].filter((i): i is SearchResultHeaderItem => i.value !== undefined);
+
+  const items: SearchResultHeaderItem[] = [];
+
+  if (item.legislationAuthority) {
+    items.push({ type: "text", value: item.legislationAuthority });
+  }
+
+  if (item.referenceNumbers?.[0]) {
+    items.push({
+      type: "badge",
+      value: item.referenceNumbers?.[0],
+      color: "gray",
+    });
+  }
+
+  const formattedEntryIntoForce = dateFormattedDDMMYYYY(
+    item.entryIntoForceDate,
+  );
+  if (formattedEntryIntoForce) {
+    items.push({ type: "text", value: formattedEntryIntoForce });
+  }
+
+  const docTypeItem: TextHeaderItem = {
+    type: "text",
+    value: searchResult.item.documentType,
+    id: resultTypeId,
+  };
+
+  return {
+    documentType: docTypeItem,
+    otherItems: items,
+  };
 });
 
-const headline = computed(() =>
-  sanitizeSearchResult(getMatch("headline") || "Titelzeile nicht vorhanden"),
+const detailPageRoute = computed(() => ({
+  name: "verwaltungsregelungen-documentNumber",
+  params: {
+    documentNumber: searchResult.item.documentNumber,
+  },
+  query: { from: route.fullPath },
+}));
+
+const previewSections = useSearchResultSections(
+  () => searchResult.textMatches,
+  fields,
 );
-
-const text = computed(() => {
-  const shortReportMatch = getMatch("shortReport");
-  if (!shortReportMatch) return undefined;
-
-  const plainShortReportMatch = sanitizeSearchResult(shortReportMatch, []);
-  const fullShortReport = searchResult.item.shortReport;
-  const sanitizedShortReport = sanitizeSearchResult(shortReportMatch);
-
-  if (plainShortReportMatch === fullShortReport) return sanitizedShortReport;
-
-  const prefix = fullShortReport?.startsWith(plainShortReportMatch) ? "" : "… ";
-  const postfix = fullShortReport?.endsWith(plainShortReportMatch) ? "" : " …";
-
-  return `${prefix}${sanitizedShortReport}${postfix}`;
-});
-
-function getMatch(name: string) {
-  return searchResult.textMatches.find((match) => match.name === name)?.text;
-}
 
 function trackResultClick() {
   const url = router.resolve(detailPageRoute.value).href;
@@ -63,21 +103,38 @@ function trackResultClick() {
 </script>
 
 <template>
-  <div class="my-36 flex flex-col gap-8 hyphens-auto">
-    <SearchResultHeader :icon="RuleIcon" :items="headerItems" />
+  <div class="flex flex-col gap-8 hyphens-auto">
+    <SearchResultHeader
+      :document-type="headerItems.documentType"
+      :items="headerItems.otherItems"
+    />
     <NuxtLink
       :to="detailPageRoute"
       :aria-describedby="resultTypeId"
-      class="ris-heading3-bold! ris-link1-regular link-hover block"
+      :class="headlineStyle.class"
       @click="trackResultClick()"
     >
-      <h2>
+      <component :is="headlineStyle.tag">
         <span v-html="headline" />
-      </h2>
+      </component>
     </NuxtLink>
 
-    <div v-if="text" class="flex w-full flex-col gap-6">
-      <span data-testid="highlighted-field" v-html="text"> </span>
+    <div v-if="previewSections.length" class="flex w-full flex-col gap-6">
+      <div v-for="section in previewSections" :key="section.id">
+        <NuxtLink
+          :to="{ ...detailPageRoute, hash: `#${section.id}` }"
+          class="ris-link1-bold link-hover"
+          external
+          @click="trackResultClick()"
+          >{{ section.title }}:</NuxtLink
+        >{{ " " }}
+        <span
+          v-if="section.text"
+          data-testid="highlighted-field"
+          class="ris-label1-regular"
+          v-html="section.text"
+        />
+      </div>
     </div>
   </div>
 </template>

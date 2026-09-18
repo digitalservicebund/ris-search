@@ -26,8 +26,12 @@ public class RisGericht {
   @XmlAttribute private String domainTerm;
 
   /** Reference to a formal definition or IRI within the Akoma Ntoso namespace. */
-  @XmlAttribute(name = "refersTo", namespace = CaseLawLdmlNamespaces.AKN_NS)
+  @XmlAttribute(name = "refersTo")
   private String refersTo;
+
+  /** Reference to a formal definition or IRI within the Akoma Ntoso namespace. */
+  @XmlAttribute(name = "showAs")
+  private String showAs;
 
   /** The type of court (e.g., Amtsgericht, Landgericht). */
   @XmlElement(name = "gerichtstyp", namespace = CaseLawLdmlNamespaces.RIS_NS)
@@ -36,6 +40,10 @@ public class RisGericht {
   /** The geographic location/seat of the court. */
   @XmlElement(name = "gerichtsort", namespace = CaseLawLdmlNamespaces.RIS_NS)
   private String gerichtsort;
+
+  /** The jurisdiction (Gerichtsbarkeit) the court belongs to. */
+  @XmlElement(name = "gerichtsbarkeit", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  private String gerichtsbarkeit;
 
   /** The specific judicial body or chamber (Spruchkörper) within the court. */
   @XmlElement(name = "spruchkoerper", namespace = CaseLawLdmlNamespaces.RIS_NS)

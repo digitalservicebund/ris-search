@@ -1,6 +1,7 @@
 package de.bund.digitalservice.ris.search.controller.api;
 
 import de.bund.digitalservice.ris.search.config.ApiConfig;
+import de.bund.digitalservice.ris.search.config.ServerConfig;
 import de.bund.digitalservice.ris.search.exception.CustomValidationException;
 import de.bund.digitalservice.ris.search.mapper.AdministrativeDirectiveSearchSchemaMapper;
 import de.bund.digitalservice.ris.search.mapper.CaseLawSearchSchemaMapper;
@@ -55,6 +56,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class AdvancedSearchController {
   private final AdvancedSearchService advancedSearchService;
+  private String jsonldContextPath;
 
   /**
    * Constructs an instance of AdvancedSearchController with the provided services.
@@ -62,8 +64,10 @@ public class AdvancedSearchController {
    * @param advancedSearchService a service to advanced search
    */
   @Autowired
-  public AdvancedSearchController(AdvancedSearchService advancedSearchService) {
+  public AdvancedSearchController(
+      AdvancedSearchService advancedSearchService, ServerConfig serverConfig) {
     this.advancedSearchService = advancedSearchService;
+    this.jsonldContextPath = serverConfig.getBackEndUrl() + ApiConfig.Paths.JSONLD_CONTEXT;
   }
 
   /**
@@ -140,7 +144,7 @@ public class AdvancedSearchController {
           .contentType(MediaType.APPLICATION_JSON)
           .body(
               NormSearchResponseMapper.fromDomain(
-                  page, ApiConfig.Paths.LEGISLATION_ADVANCED_SEARCH));
+                  page, ApiConfig.Paths.LEGISLATION_ADVANCED_SEARCH, jsonldContextPath));
     } catch (UncategorizedElasticsearchException e) {
       LuceneQueryTools.checkForInvalidQuery(e);
       throw e;
@@ -180,7 +184,7 @@ public class AdvancedSearchController {
           advancedSearchService.searchCaseLaw(query, sortedPageable);
       return ResponseEntity.ok()
           .contentType(MediaType.APPLICATION_JSON)
-          .body(CaseLawSearchSchemaMapper.fromSearchPage(page));
+          .body(CaseLawSearchSchemaMapper.fromSearchPage(page, jsonldContextPath));
     } catch (UncategorizedElasticsearchException e) {
       LuceneQueryTools.checkForInvalidQuery(e);
       throw e;
@@ -220,7 +224,7 @@ public class AdvancedSearchController {
       SearchPage<Literature> page = advancedSearchService.searchLiterature(query, sortedPageable);
       return ResponseEntity.ok()
           .contentType(MediaType.APPLICATION_JSON)
-          .body(LiteratureSearchSchemaMapper.fromSearchPage(page));
+          .body(LiteratureSearchSchemaMapper.fromSearchPage(page, jsonldContextPath));
     } catch (UncategorizedElasticsearchException e) {
       LuceneQueryTools.checkForInvalidQuery(e);
       throw e;
@@ -263,7 +267,7 @@ public class AdvancedSearchController {
           advancedSearchService.searchAdministrativeDirective(query, sortedPageable);
       return ResponseEntity.ok()
           .contentType(MediaType.APPLICATION_JSON)
-          .body(AdministrativeDirectiveSearchSchemaMapper.fromSearchPage(page));
+          .body(AdministrativeDirectiveSearchSchemaMapper.fromSearchPage(page, jsonldContextPath));
     } catch (UncategorizedElasticsearchException e) {
       LuceneQueryTools.checkForInvalidQuery(e);
       throw e;

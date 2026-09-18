@@ -35,6 +35,7 @@ import org.jetbrains.annotations.Nullable;
 @Builder
 @Schema(description = "A legislation expression and references to its manifestations.")
 public record LegislationExpressionSchema(
+    @JsonProperty("@context") @Schema(requiredMode = Schema.RequiredMode.REQUIRED) String context,
     @JsonProperty("@id")
         @Schema(
             example = ApiConfig.Paths.LEGISLATION + "/eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu",
@@ -45,12 +46,21 @@ public record LegislationExpressionSchema(
             description = "Amtliche Langüberschrift",
             requiredMode = Schema.RequiredMode.REQUIRED)
         String name,
-    @Nullable @Schema(example = "KakaoV 2003", description = "Amtliche Buchstabenabkürzung")
+    @Schema(
+            example = "KakaoV 2003",
+            description = "Amtliche Buchstabenabkürzung, if it exists. Otherwise ris-abkuerzung.",
+            requiredMode = Schema.RequiredMode.REQUIRED)
         String abbreviation,
     @Schema(
+            example = "StVO 2013",
+            description = "The ris-abbreviation.",
+            requiredMode = Schema.RequiredMode.REQUIRED)
+        String risAbbreviation,
+    @Nullable
+        @Schema(
             example = "Kakaoverordnung",
             description = "Amtliche Kurzüberschrift",
-            requiredMode = Schema.RequiredMode.REQUIRED)
+            nullable = true)
         String alternateName,
     @Schema(
             description = "The work the expression is based on",
@@ -63,8 +73,8 @@ public record LegislationExpressionSchema(
     @Schema(
             description =
                 """
-                         Textual string indicating a time period in [ISO 8601 time interval format](https://en.wikipedia.org/wiki/ISO_8601#Time_intervals)
-                         """,
+                                Textual string indicating a time period in [ISO 8601 time interval format](https://en.wikipedia.org/wiki/ISO_8601#Time_intervals)
+                                """,
             example = "1998-02-06/..",
             requiredMode = Schema.RequiredMode.REQUIRED)
         String temporalCoverage,

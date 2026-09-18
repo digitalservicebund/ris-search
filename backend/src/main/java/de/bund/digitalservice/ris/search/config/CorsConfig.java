@@ -61,6 +61,7 @@ public class CorsConfig {
             .addMapping("/v1/**")
             .allowedMethods("GET", "HEAD", "OPTIONS")
             .allowedHeaders(CorsConfiguration.ALL)
+            .allowCredentials(true)
             .allowedOrigins(frontEndUrl, docsUrl, cmsUrl);
       }
     };
@@ -72,7 +73,7 @@ public class CorsConfig {
    * @return The web mvc configurer
    */
   @Bean
-  @Profile({"e2e", "prototype", "default"})
+  @Profile({"prototype", "dev", "e2e"})
   public WebMvcConfigurer publicCorsConfigurer() {
 
     return new WebMvcConfigurer() {
@@ -81,7 +82,7 @@ public class CorsConfig {
 
         registry
             .addMapping("/v1/feedback")
-            .allowedMethods("GET")
+            .allowedMethods("POST")
             .allowedOriginPatterns(frontEndUrl, docsUrl)
             .allowedHeaders(CorsConfiguration.ALL);
 

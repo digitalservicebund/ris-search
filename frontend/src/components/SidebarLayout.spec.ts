@@ -7,7 +7,7 @@ describe("SidebarLayout", () => {
   it("renders content and sidebar", async () => {
     await renderSuspended(SidebarLayout, {
       slots: {
-        content: "Main content",
+        default: "Main content",
         sidebar: "Sidebar content",
       },
     });
@@ -19,7 +19,7 @@ describe("SidebarLayout", () => {
   it("does not render the sidebar container when the sidebar slot is empty", async () => {
     const { container } = await renderSuspended(SidebarLayout, {
       slots: {
-        content: "Main content",
+        default: "Main content",
       },
     });
 

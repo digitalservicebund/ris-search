@@ -1,6 +1,5 @@
 import { userEvent } from "@testing-library/user-event";
 import { render, screen } from "@testing-library/vue";
-import { InputText } from "primevue";
 import { DocumentKind } from "~/types/api";
 import type { DateFilterValue } from "~/utils/search/dateFilterType";
 import DateFilter from "./DateFilter.vue";
@@ -12,7 +11,6 @@ describe("DateFilter", () => {
         props: {
           documentKind: DocumentKind.CaseLaw,
         },
-        global: { stubs: { InputMask: InputText } },
       });
 
       expect(
@@ -32,7 +30,7 @@ describe("DateFilter", () => {
       ).toBeInTheDocument();
 
       expect(
-        screen.getByRole("radio", { name: "Innerhalb einer Zeitspanne" }),
+        screen.getByRole("radio", { name: "Innerhalb eines Zeitraums" }),
       ).toBeInTheDocument();
     });
 
@@ -44,7 +42,6 @@ describe("DateFilter", () => {
           documentKind: DocumentKind.CaseLaw,
           modelValue: { type: "specificDate", from: "2025-09-26" },
         },
-        global: { stubs: { InputMask: InputText } },
       });
 
       await user.click(
@@ -64,7 +61,6 @@ describe("DateFilter", () => {
           documentKind: DocumentKind.CaseLaw,
           modelValue: { type: "allTime" },
         },
-        global: { stubs: { InputMask: InputText } },
       });
 
       await user.click(screen.getByRole("radio", { name: "Bestimmtes Datum" }));
@@ -84,7 +80,6 @@ describe("DateFilter", () => {
           modelValue,
           "onUpdate:modelValue": (val) => (modelValue = val),
         },
-        global: { stubs: { InputMask: InputText } },
       });
 
       await user.type(
@@ -95,7 +90,7 @@ describe("DateFilter", () => {
       expect(modelValue).toEqual({ type: "specificDate", from: "2026-01-01" });
     });
 
-    it("filters by 'Innerhalb einer Zeitspanne'", async () => {
+    it("filters by 'Innerhalb eines Zeitraums'", async () => {
       const user = userEvent.setup();
 
       const { emitted } = render(DateFilter, {
@@ -103,11 +98,10 @@ describe("DateFilter", () => {
           documentKind: DocumentKind.CaseLaw,
           modelValue: { type: "allTime" },
         },
-        global: { stubs: { InputMask: InputText } },
       });
 
       await user.click(
-        screen.getByRole("radio", { name: "Innerhalb einer Zeitspanne" }),
+        screen.getByRole("radio", { name: "Innerhalb eines Zeitraums" }),
       );
 
       expect(emitted("update:modelValue")).toContainEqual([
@@ -125,7 +119,6 @@ describe("DateFilter", () => {
           modelValue,
           "onUpdate:modelValue": (val) => (modelValue = val),
         },
-        global: { stubs: { InputMask: InputText } },
       });
 
       await user.type(
@@ -150,7 +143,6 @@ describe("DateFilter", () => {
           modelValue,
           "onUpdate:modelValue": (val) => (modelValue = val),
         },
-        global: { stubs: { InputMask: InputText } },
       });
 
       await user.type(
@@ -172,7 +164,6 @@ describe("DateFilter", () => {
         props: {
           documentKind: DocumentKind.Norm,
         },
-        global: { stubs: { InputMask: InputText } },
       });
 
       expect(
@@ -188,7 +179,7 @@ describe("DateFilter", () => {
       ).toBeInTheDocument();
 
       expect(
-        screen.getByRole("radio", { name: "Innerhalb einer Zeitspanne" }),
+        screen.getByRole("radio", { name: "Innerhalb eines Zeitraums" }),
       ).toBeInTheDocument();
 
       expect(
@@ -204,7 +195,6 @@ describe("DateFilter", () => {
           documentKind: DocumentKind.Norm,
           modelValue: { type: "specificDate", from: "2025-09-26" },
         },
-        global: { stubs: { InputMask: InputText } },
       });
 
       await user.click(screen.getByRole("radio", { name: "Aktuell gültig" }));
@@ -222,7 +212,6 @@ describe("DateFilter", () => {
           documentKind: DocumentKind.Norm,
           modelValue: { type: "currentlyInForce" },
         },
-        global: { stubs: { InputMask: InputText } },
       });
 
       await user.click(
@@ -242,7 +231,6 @@ describe("DateFilter", () => {
           documentKind: DocumentKind.Norm,
           modelValue: { type: "allTime" },
         },
-        global: { stubs: { InputMask: InputText } },
       });
 
       await user.click(screen.getByRole("radio", { name: "Bestimmtes Datum" }));
@@ -262,7 +250,6 @@ describe("DateFilter", () => {
           modelValue,
           "onUpdate:modelValue": (val) => (modelValue = val),
         },
-        global: { stubs: { InputMask: InputText } },
       });
 
       await user.type(
@@ -273,7 +260,7 @@ describe("DateFilter", () => {
       expect(modelValue).toEqual({ type: "specificDate", from: "2026-01-01" });
     });
 
-    it("filters by 'Innerhalb einer Zeitspanne'", async () => {
+    it("filters by 'Innerhalb eines Zeitraums'", async () => {
       const user = userEvent.setup();
 
       const { emitted } = render(DateFilter, {
@@ -281,11 +268,10 @@ describe("DateFilter", () => {
           documentKind: DocumentKind.Norm,
           modelValue: { type: "allTime" },
         },
-        global: { stubs: { InputMask: InputText } },
       });
 
       await user.click(
-        screen.getByRole("radio", { name: "Innerhalb einer Zeitspanne" }),
+        screen.getByRole("radio", { name: "Innerhalb eines Zeitraums" }),
       );
 
       expect(emitted("update:modelValue")).toContainEqual([
@@ -303,7 +289,6 @@ describe("DateFilter", () => {
           modelValue,
           "onUpdate:modelValue": (val) => (modelValue = val),
         },
-        global: { stubs: { InputMask: InputText } },
       });
 
       await user.type(
@@ -328,7 +313,6 @@ describe("DateFilter", () => {
           modelValue,
           "onUpdate:modelValue": (val) => (modelValue = val),
         },
-        global: { stubs: { InputMask: InputText } },
       });
 
       await user.type(
@@ -350,7 +334,6 @@ describe("DateFilter", () => {
         props: {
           documentKind: DocumentKind.AdministrativeDirective,
         },
-        global: { stubs: { InputMask: InputText } },
       });
 
       expect(
@@ -370,7 +353,7 @@ describe("DateFilter", () => {
       ).toBeInTheDocument();
 
       expect(
-        screen.getByRole("radio", { name: "Innerhalb einer Zeitspanne" }),
+        screen.getByRole("radio", { name: "Innerhalb eines Zeitraums" }),
       ).toBeInTheDocument();
     });
 
@@ -382,7 +365,6 @@ describe("DateFilter", () => {
           documentKind: DocumentKind.AdministrativeDirective,
           modelValue: { type: "specificDate", from: "2025-09-26" },
         },
-        global: { stubs: { InputMask: InputText } },
       });
 
       await user.click(
@@ -402,7 +384,6 @@ describe("DateFilter", () => {
           documentKind: DocumentKind.AdministrativeDirective,
           modelValue: { type: "allTime" },
         },
-        global: { stubs: { InputMask: InputText } },
       });
 
       await user.click(screen.getByRole("radio", { name: "Bestimmtes Datum" }));
@@ -422,7 +403,6 @@ describe("DateFilter", () => {
           modelValue,
           "onUpdate:modelValue": (val) => (modelValue = val),
         },
-        global: { stubs: { InputMask: InputText } },
       });
 
       await user.type(
@@ -433,7 +413,7 @@ describe("DateFilter", () => {
       expect(modelValue).toEqual({ type: "specificDate", from: "2026-01-01" });
     });
 
-    it("filters by 'Innerhalb einer Zeitspanne'", async () => {
+    it("filters by 'Innerhalb eines Zeitraums'", async () => {
       const user = userEvent.setup();
 
       const { emitted } = render(DateFilter, {
@@ -441,11 +421,10 @@ describe("DateFilter", () => {
           documentKind: DocumentKind.AdministrativeDirective,
           modelValue: { type: "allTime" },
         },
-        global: { stubs: { InputMask: InputText } },
       });
 
       await user.click(
-        screen.getByRole("radio", { name: "Innerhalb einer Zeitspanne" }),
+        screen.getByRole("radio", { name: "Innerhalb eines Zeitraums" }),
       );
 
       expect(emitted("update:modelValue")).toContainEqual([
@@ -463,7 +442,6 @@ describe("DateFilter", () => {
           modelValue,
           "onUpdate:modelValue": (val) => (modelValue = val),
         },
-        global: { stubs: { InputMask: InputText } },
       });
 
       await user.type(
@@ -488,7 +466,6 @@ describe("DateFilter", () => {
           modelValue,
           "onUpdate:modelValue": (val) => (modelValue = val),
         },
-        global: { stubs: { InputMask: InputText } },
       });
 
       await user.type(
@@ -510,7 +487,6 @@ describe("DateFilter", () => {
         props: {
           documentKind: DocumentKind.Literature,
         },
-        global: { stubs: { InputMask: InputText } },
       });
 
       expect(
@@ -530,7 +506,11 @@ describe("DateFilter", () => {
       ).not.toBeInTheDocument();
 
       expect(
-        screen.getByRole("radio", { name: "Innerhalb einer Zeitspanne" }),
+        screen.getByRole("radio", { name: "Bestimmtes Jahr" }),
+      ).toBeInTheDocument();
+
+      expect(
+        screen.getByRole("radio", { name: "Innerhalb eines Zeitraums" }),
       ).toBeInTheDocument();
     });
 
@@ -542,7 +522,6 @@ describe("DateFilter", () => {
           documentKind: DocumentKind.Literature,
           modelValue: { type: "period", from: "2020", to: "2024" },
         },
-        global: { stubs: { InputMask: InputText } },
       });
 
       await user.click(
@@ -554,7 +533,7 @@ describe("DateFilter", () => {
       ]);
     });
 
-    it("filters by 'Innerhalb einer Zeitspanne'", async () => {
+    it("filters by 'Bestimmtes Jahr'", async () => {
       const user = userEvent.setup();
 
       const { emitted } = render(DateFilter, {
@@ -562,11 +541,44 @@ describe("DateFilter", () => {
           documentKind: DocumentKind.Literature,
           modelValue: { type: "allTime" },
         },
-        global: { stubs: { InputMask: InputText } },
+      });
+
+      await user.click(screen.getByRole("radio", { name: "Bestimmtes Jahr" }));
+
+      expect(emitted("update:modelValue")).toContainEqual([
+        { type: "specificDate", form: undefined, to: undefined },
+      ]);
+    });
+
+    it("sets a specific year", async () => {
+      const user = userEvent.setup();
+      let modelValue: DateFilterValue = { type: "specificDate" };
+
+      render(DateFilter, {
+        props: {
+          documentKind: DocumentKind.Literature,
+          modelValue,
+          "onUpdate:modelValue": (val) => (modelValue = val),
+        },
+      });
+
+      await user.type(screen.getByRole("textbox", { name: "Jahr" }), "2020");
+
+      expect(modelValue).toEqual({ type: "specificDate", from: "2020" });
+    });
+
+    it("filters by 'Innerhalb eines Zeitraums'", async () => {
+      const user = userEvent.setup();
+
+      const { emitted } = render(DateFilter, {
+        props: {
+          documentKind: DocumentKind.Literature,
+          modelValue: { type: "allTime" },
+        },
       });
 
       await user.click(
-        screen.getByRole("radio", { name: "Innerhalb einer Zeitspanne" }),
+        screen.getByRole("radio", { name: "Innerhalb eines Zeitraums" }),
       );
 
       expect(emitted("update:modelValue")).toContainEqual([
@@ -584,7 +596,6 @@ describe("DateFilter", () => {
           modelValue,
           "onUpdate:modelValue": (val) => (modelValue = val),
         },
-        global: { stubs: { InputMask: InputText } },
       });
 
       await user.type(screen.getByRole("textbox", { name: "von" }), "2020");
@@ -606,7 +617,6 @@ describe("DateFilter", () => {
           modelValue,
           "onUpdate:modelValue": (val) => (modelValue = val),
         },
-        global: { stubs: { InputMask: InputText } },
       });
 
       await user.type(screen.getByRole("textbox", { name: "bis" }), "2024");
@@ -616,6 +626,33 @@ describe("DateFilter", () => {
         from: "2020",
         to: "2024",
       });
+    });
+  });
+
+  describe("form submission", () => {
+    it("prevents the default submit behavior", async () => {
+      render(DateFilter, {
+        props: {
+          documentKind: DocumentKind.CaseLaw,
+          modelValue: { type: "specificDate" },
+        },
+      });
+
+      const form = screen.getByRole("form", {
+        name: "Filter nach Entscheidungsdatum",
+      });
+
+      // Pressing enter in one of the date inputs triggers implicit submission
+      // of the surrounding form, which would reload the entire page. jsdom
+      // doesn't implement implicit submission, so the submit event is
+      // dispatched manually here.
+      const submitEvent = new Event("submit", {
+        bubbles: true,
+        cancelable: true,
+      });
+      form.dispatchEvent(submitEvent);
+
+      expect(submitEvent.defaultPrevented).toBe(true);
     });
   });
 
@@ -629,7 +666,6 @@ describe("DateFilter", () => {
           modelValue,
           "onUpdate:modelValue": (val) => (modelValue = val),
         },
-        global: { stubs: { InputMask: InputText } },
       });
 
       await rerender({ documentKind: DocumentKind.CaseLaw });
@@ -650,7 +686,6 @@ describe("DateFilter", () => {
           modelValue,
           "onUpdate:modelValue": (val) => (modelValue = val),
         },
-        global: { stubs: { InputMask: InputText } },
       });
 
       await rerender({ documentKind: DocumentKind.Norm });
@@ -670,7 +705,6 @@ describe("DateFilter", () => {
           modelValue,
           "onUpdate:modelValue": (val) => (modelValue = val),
         },
-        global: { stubs: { InputMask: InputText } },
       });
 
       await rerender({ documentKind: DocumentKind.Literature });
@@ -690,7 +724,6 @@ describe("DateFilter", () => {
           modelValue,
           "onUpdate:modelValue": (val) => (modelValue = val),
         },
-        global: { stubs: { InputMask: InputText } },
       });
 
       await rerender({ documentKind: DocumentKind.AdministrativeDirective });

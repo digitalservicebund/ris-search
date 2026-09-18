@@ -5,8 +5,12 @@ import { without } from "lodash-es";
 import { describe, expect, vi } from "vitest";
 import type { LegislationExpression } from "~/types/api";
 import {
+  getEinzelnormEIdFromHref,
+  getManifestationUrl,
   getMostRelevantExpression,
+  getNormTitle,
   getValidityStatus,
+  isNormBodyEmpty,
   temporalCoverageToValidityInterval,
   type ValidityInterval,
 } from "~/utils/norm";
@@ -105,6 +109,54 @@ describe("getValidityStatus", () => {
   });
 });
 
+describe("getManifestationUrl", () => {
+  type EncodingExpression = Pick<LegislationExpression, "encoding">;
+
+  it("returns undefined if metadata is undefined", () => {
+    expect(getManifestationUrl(undefined, "application/xml")).toBeUndefined();
+  });
+
+  it("returns undefined if no encoding matches the format", () => {
+    const metadata: EncodingExpression = {
+      encoding: [
+        {
+          "@id": "",
+          contentUrl: "html-url",
+          encodingFormat: "text/html",
+          inLanguage: "de",
+        },
+      ],
+    };
+
+    expect(
+      getManifestationUrl(metadata as LegislationExpression, "application/xml"),
+    ).toBeUndefined();
+  });
+
+  it("returns the contentUrl of the matching encoding", () => {
+    const metadata: EncodingExpression = {
+      encoding: [
+        {
+          "@id": "",
+          contentUrl: "html-url",
+          encodingFormat: "text/html",
+          inLanguage: "de",
+        },
+        {
+          "@id": "",
+          contentUrl: "xml-url",
+          encodingFormat: "application/xml",
+          inLanguage: "de",
+        },
+      ],
+    };
+
+    expect(
+      getManifestationUrl(metadata as LegislationExpression, "application/xml"),
+    ).toBe("xml-url");
+  });
+});
+
 type PartialExpression = Pick<
   LegislationExpression,
   "legislationLegalForce" | "temporalCoverage" | "legislationIdentifier"
@@ -114,6 +166,12 @@ const currentExpression: PartialExpression = {
   legislationLegalForce: "InForce",
   temporalCoverage: "1999-01-01/..",
   legislationIdentifier: "currentExpression",
+};
+
+const secondCurrentExpression: PartialExpression = {
+  legislationLegalForce: "InForce",
+  temporalCoverage: "1999-06-01/..",
+  legislationIdentifier: "secondCurrentExpression",
 };
 
 const veryOldExpression: PartialExpression = {
@@ -148,6 +206,45 @@ function transform(
   );
 }
 
+describe("getNormTitle", () => {
+  type TitleExpression = Pick<
+    LegislationExpression,
+    "name" | "alternateName" | "abbreviation"
+  >;
+
+  it("uses name if present", () => {
+    const norm: TitleExpression = {
+      name: "Gesetz über Foo und Bar",
+      alternateName: "Foo Bar Gesetz",
+      abbreviation: "FooBar",
+    };
+
+    expect(getNormTitle(norm as LegislationExpression)).toBe(
+      "Gesetz über Foo und Bar",
+    );
+  });
+
+  it("falls back to alternateName if name is empty", () => {
+    const norm: TitleExpression = {
+      name: "",
+      alternateName: "Foo Bar Gesetz",
+      abbreviation: "FooBar",
+    };
+
+    expect(getNormTitle(norm as LegislationExpression)).toBe("Foo Bar Gesetz");
+  });
+
+  it("falls back to abbreviation if name and alternateName are absent", () => {
+    const norm: TitleExpression = {
+      name: "",
+      alternateName: undefined,
+      abbreviation: "FooBar",
+    };
+
+    expect(getNormTitle(norm as LegislationExpression)).toBe("FooBar");
+  });
+});
+
 describe("getMostRelevantExpression", () => {
   beforeAll(() => {
     vi.useFakeTimers();
@@ -178,11 +275,24 @@ describe("getMostRelevantExpression", () => {
     const testCase = transform([veryOldExpression, oldExpression]);
     expect(getMostRelevantExpression(testCase)).toBe("oldExpression");
   });
+
+  it("picks the first active expression if there is more than one", () => {
+    const testCase = transform([currentExpression, secondCurrentExpression]);
+
+    expect(getMostRelevantExpression(testCase)).toBe("currentExpression");
+  });
+
+  it("returns null if there are no expressions", () => {
+    expect(getMostRelevantExpression([])).toBeNull();
+  });
 });
 
 describe("getNormMetadataItems", () => {
   it("creates correct labels", () => {
-    const result = getNormMetadataItems();
+    const result = getNormMetadataItems({
+      abbreviation: "",
+      temporalCoverage: "",
+    });
 
     expect(result.map((item) => item.label)).toEqual([
       "Abkürzung",
@@ -190,68 +300,128 @@ describe("getNormMetadataItems", () => {
       "Gültig ab",
       "Gültig bis",
     ]);
-
-    expect(result.map((item) => item.value)).toEqual([
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-    ]);
   });
 
-  it("converts empty properties to undefined values", () => {
+  it("converts invalid temporalCoverage to undefined/empty values", () => {
     const result = getNormMetadataItems({
       abbreviation: "",
-      legislationIdentifier: "",
-      "@type": "Legislation",
-      "@id": "",
       temporalCoverage: "",
-      legislationLegalForce: "NotInForce",
-      encoding: [
-        {
-          "@type": "LegislationObject",
-          "@id": "",
-          contentUrl: "",
-          encodingFormat: "",
-          inLanguage: "",
-        },
-      ],
-      hasPart: [],
     });
 
-    expect(result.map((item) => item.value)).toEqual([
-      "",
-      undefined,
-      undefined,
-      undefined,
-    ]);
+    expect(result[1]).toMatchObject({ type: "badge", values: [] });
+    expect(result[2]).toMatchObject({ type: "text", value: undefined });
+    expect(result[3]).toMatchObject({ type: "text", value: undefined });
   });
 
   it("converts properties to correct values", () => {
     const result = getNormMetadataItems({
       abbreviation: "ABC",
-      legislationIdentifier: "",
-      "@type": "Legislation",
-      "@id": "",
       temporalCoverage: "2025-05-06/2037-03-31",
-      legislationLegalForce: "NotInForce",
-      encoding: [
-        {
-          "@type": "LegislationObject",
-          "@id": "",
-          contentUrl: "",
-          encodingFormat: "",
-          inLanguage: "",
-        },
-      ],
-      hasPart: [],
     });
 
-    expect(result.map((item) => item.value)).toEqual([
-      "ABC",
-      "Aktuell gültig",
-      "06.05.2025",
-      "31.03.2037",
-    ]);
+    expect(result[0]).toMatchObject({ type: "text", value: "ABC" });
+    expect(result[2]).toMatchObject({ type: "text", value: "06.05.2025" });
+    expect(result[3]).toMatchObject({ type: "text", value: "31.03.2037" });
+  });
+
+  it.each([
+    ["1900-01-01/1950-01-01", "Außer Kraft", "red"],
+    ["2025-05-06/2037-03-31", "Aktuell gültig", "green"],
+    ["2070-01-01/..", "Zukünftig in Kraft", "yellow"],
+  ])(
+    "displays validity status as badge with color %s and label %s",
+    (temporalCoverage, expectedLabel, expectedColor) => {
+      const result = getNormMetadataItems({
+        abbreviation: "ABC",
+        temporalCoverage: temporalCoverage,
+      });
+
+      expect(result[1]).toMatchObject({
+        type: "badge",
+        values: [expectedLabel],
+        color: expectedColor,
+      });
+    },
+  );
+});
+
+describe("isNormBodyEmpty", () => {
+  it("returns true if no document is given", () => {
+    expect(isNormBodyEmpty(undefined)).toBe(true);
+  });
+
+  it("returns true if the document has no akn-body div", () => {
+    const doc = new DOMParser().parseFromString("<div></div>", "text/html");
+    expect(isNormBodyEmpty(doc)).toBe(true);
+  });
+
+  it("returns true if the akn-body div is empty", () => {
+    const doc = new DOMParser().parseFromString(
+      '<div class="akn-body"></div>',
+      "text/html",
+    );
+    expect(isNormBodyEmpty(doc)).toBe(true);
+  });
+
+  it("returns true if the akn-body div contains only whitespaces", () => {
+    const doc = new DOMParser().parseFromString(
+      '<div class="akn-body">   </div>',
+      "text/html",
+    );
+    expect(isNormBodyEmpty(doc)).toBe(true);
+  });
+
+  it("returns false if the akn-body div has content", () => {
+    const doc = new DOMParser().parseFromString(
+      '<div class="akn-body"><p>Content</p></div>',
+      "text/html",
+    );
+    expect(isNormBodyEmpty(doc)).toBe(false);
+  });
+});
+
+describe("getEinzelnormEIdFromHref", () => {
+  it("extracts the bare eId from an einzelnorm link", () => {
+    expect(getEinzelnormEIdFromHref("regelungstext-1/art-z1.html")).toBe(
+      "art-z1",
+    );
+  });
+
+  it("extracts hierarchical eIds", () => {
+    expect(
+      getEinzelnormEIdFromHref(
+        "regelungstext-1/hauptteil-n1_abschnitt-n1_art-z1.html",
+      ),
+    ).toBe("hauptteil-n1_abschnitt-n1_art-z1");
+  });
+
+  it("keeps the eId segment percent-encoded as emitted by the backend", () => {
+    expect(
+      getEinzelnormEIdFromHref(
+        "regelungstext-1/pr%C3%A4ambel-n1_formel-n1.html",
+      ),
+    ).toBe("pr%C3%A4ambel-n1_formel-n1");
+  });
+
+  it("returns null for hash-only links", () => {
+    expect(getEinzelnormEIdFromHref("#footnote-1")).toBeNull();
+  });
+
+  it("returns null for absolute links", () => {
+    expect(getEinzelnormEIdFromHref("https://example.com/foo.html")).toBeNull();
+    expect(getEinzelnormEIdFromHref("/gesetze/eli/foo.html")).toBeNull();
+  });
+
+  it("returns null for relative links without the .html suffix", () => {
+    expect(getEinzelnormEIdFromHref("regelungstext-1/art-z1")).toBeNull();
+  });
+
+  it("returns null for links with a query or hash", () => {
+    expect(
+      getEinzelnormEIdFromHref("regelungstext-1/art-z1.html?foo=bar"),
+    ).toBeNull();
+    expect(
+      getEinzelnormEIdFromHref("regelungstext-1/art-z1.html#frag"),
+    ).toBeNull();
   });
 });

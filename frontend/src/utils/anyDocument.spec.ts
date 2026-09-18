@@ -2,7 +2,8 @@ import { describe } from "vitest";
 import type {
   AdministrativeDirective,
   AnyDocument,
-  CaseLaw,
+  CaseLawSearchSchema,
+  DocumentEncodingSchema,
   LegislationExpression,
   Literature,
 } from "~/types/api";
@@ -17,14 +18,13 @@ import {
 describe("anyDocument", () => {
   describe("isCaselaw", () => {
     it("returns true if the document is a caselaw document", () => {
-      const doc: CaseLaw = {
+      const doc: CaseLawSearchSchema = {
         "@id": "4711",
         "@type": "Decision",
         documentNumber: "",
         ecli: "",
         decisionDate: "",
         fileNumbers: [],
-        keywords: [],
         decisionName: [],
         deviatingDocumentNumber: [],
         inLanguage: "",
@@ -36,6 +36,7 @@ describe("anyDocument", () => {
 
     it("returns false if the document is not a caselaw document", () => {
       const doc: LegislationExpression = {
+        "@context": "http://localhost:8080/v1/context.jsonld",
         "@type": "Legislation",
         "@id": "4711",
         name: "",
@@ -49,6 +50,8 @@ describe("anyDocument", () => {
           isPartOf: { name: "" },
         },
         alternateName: "",
+        abbreviation: "",
+        risAbbreviation: "",
         legislationLegalForce: "InForce",
         temporalCoverage: "",
         encoding: [],
@@ -62,6 +65,7 @@ describe("anyDocument", () => {
   describe("isLegislation", () => {
     it("returns true if the document is a legislation work document", () => {
       const doc: LegislationExpression = {
+        "@context": "http://localhost:8080/v1/context.jsonld",
         "@type": "Legislation",
         "@id": "4711",
         name: "",
@@ -75,6 +79,8 @@ describe("anyDocument", () => {
           isPartOf: { name: "" },
         },
         alternateName: "",
+        abbreviation: "",
+        risAbbreviation: "",
         legislationLegalForce: "InForce",
         temporalCoverage: "",
         encoding: [],
@@ -85,14 +91,13 @@ describe("anyDocument", () => {
     });
 
     it("returns false if the document is not a legislation work document", () => {
-      const doc: CaseLaw = {
+      const doc: CaseLawSearchSchema = {
         "@id": "4711",
         "@type": "Decision",
         documentNumber: "",
         ecli: "",
         decisionDate: "",
         fileNumbers: [],
-        keywords: [],
         decisionName: [],
         deviatingDocumentNumber: [],
         inLanguage: "",
@@ -106,6 +111,7 @@ describe("anyDocument", () => {
   describe("isLiterature", () => {
     it("returns true if the document is a literature document", () => {
       const doc: Literature = {
+        "@context": "http://localhost:8080/v1/context.jsonld",
         "@id": "4711",
         "@type": "Literature",
         inLanguage: "",
@@ -143,6 +149,7 @@ describe("anyDocument", () => {
 
     it("returns false if the document is not a literature document", () => {
       const doc: LegislationExpression = {
+        "@context": "http://localhost:8080/v1/context.jsonld",
         "@type": "Legislation",
         "@id": "4711",
         name: "",
@@ -156,6 +163,8 @@ describe("anyDocument", () => {
           isPartOf: { name: "" },
         },
         alternateName: "",
+        abbreviation: "",
+        risAbbreviation: "",
         legislationLegalForce: "InForce",
         temporalCoverage: "",
         encoding: [],
@@ -184,16 +193,54 @@ describe("anyDocument", () => {
     });
   });
 
+  describe("getEncodingURL", () => {
+    const zipEncoding: Partial<DocumentEncodingSchema> = {
+      encodingFormat: "application/zip",
+      contentUrl: "/v1/placeholder/docNumber.zip",
+    };
+    const xmlEncoding: Partial<DocumentEncodingSchema> = {
+      encodingFormat: "application/xml",
+      contentUrl: "/v1/placeholder/docNumber.xml",
+    };
+    const htmlEncoding: Partial<DocumentEncodingSchema> = {
+      encodingFormat: "text/html",
+      contentUrl: "/v1/placeholder/docNumber.html",
+    };
+    const encodingArray = [
+      zipEncoding,
+      xmlEncoding,
+      htmlEncoding,
+    ] as DocumentEncodingSchema[];
+    it("returns the URL for a matching format", () => {
+      expect(getEncodingURL(encodingArray, "application/zip")).toBe(
+        zipEncoding.contentUrl,
+      );
+      expect(getEncodingURL(encodingArray, "application/xml")).toBe(
+        xmlEncoding.contentUrl,
+      );
+      expect(getEncodingURL(encodingArray, "text/html")).toBe(
+        htmlEncoding.contentUrl,
+      );
+    });
+    it("returns undefined for non-matching format", () => {
+      expect(getEncodingURL(encodingArray, "application/json")).toBeUndefined();
+    });
+
+    it("returns undefined for null/undefined encoding array", () => {
+      expect(getEncodingURL(null, "text/html")).toBeUndefined();
+      expect(getEncodingURL(undefined, "text/html")).toBeUndefined();
+    });
+  });
+
   describe("getIdentifier", () => {
     it("identifies a caselaw document", () => {
-      const doc: CaseLaw = {
+      const doc: CaseLawSearchSchema = {
         "@id": "",
         "@type": "Decision",
         documentNumber: "4711",
         ecli: "",
         decisionDate: "",
         fileNumbers: [],
-        keywords: [],
         decisionName: [],
         deviatingDocumentNumber: [],
         inLanguage: "",
@@ -205,6 +252,7 @@ describe("anyDocument", () => {
 
     it("identifies a legislation work document", () => {
       const doc: LegislationExpression = {
+        "@context": "http://localhost:8080/v1/context.jsonld",
         "@type": "Legislation",
         "@id": "4712",
         name: "",
@@ -218,6 +266,8 @@ describe("anyDocument", () => {
           isPartOf: { name: "" },
         },
         alternateName: "",
+        abbreviation: "",
+        risAbbreviation: "",
         legislationLegalForce: "InForce",
         temporalCoverage: "",
         encoding: [],
@@ -229,6 +279,7 @@ describe("anyDocument", () => {
 
     it("identifies a literature document", () => {
       const doc: Literature = {
+        "@context": "http://backend/v1/context.jsonld",
         "@id": "",
         "@type": "Literature",
         inLanguage: "",
@@ -266,6 +317,7 @@ describe("anyDocument", () => {
 
     it("throws if the identifier is falsy", () => {
       const doc: Literature = {
+        "@context": "http://localhost:8080/v1/context.jsonld",
         "@id": "",
         "@type": "Literature",
         inLanguage: "",

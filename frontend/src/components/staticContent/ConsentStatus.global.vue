@@ -1,8 +1,6 @@
 <script setup lang="ts">
-import { Button, Message } from "primevue";
 import IconCheck from "~icons/ic/check";
 import IconClose from "~icons/ic/close";
-import { CONSENT_COOKIE_NAME, usePostHog } from "~/composables/usePostHog";
 
 const { userConsent, initialize, setTracking } = usePostHog();
 
@@ -22,10 +20,10 @@ async function handleSetTracking(value: boolean) {
 
 <template>
   <div class="w-fit" data-testid="consent-status-wrapper">
-    <Message
+    <UiMessage
       role="status"
       severity="info"
-      class="ris-body2-regular mb-24 bg-white"
+      class="typo-body-regular mb-24 bg-white"
     >
       <template #icon>
         <IconCheck v-if="userConsent" class="text-blue-800" />
@@ -33,20 +31,20 @@ async function handleSetTracking(value: boolean) {
       </template>
       <client-only>
         <div v-if="userConsent">
-          <p class="ris-body2-bold">
+          <p class="typo-body-bold">
             Ich bin mit der Nutzung von Analyse-Cookies einverstanden.
           </p>
           <p>Damit helfen Sie uns, das Portal weiter zu verbessern.</p>
         </div>
         <div v-else>
-          <p class="ris-body2-bold">
+          <p class="typo-body-bold">
             Ich bin mit der Nutzung von Analyse-Cookies nicht einverstanden.
           </p>
           <p>Ihre Nutzung des Portals wird nicht zu Analysezwecken erfasst.</p>
         </div>
         <template #fallback>
           <div v-if="userConsent">
-            <p class="ris-body2-bold">
+            <p class="typo-body-bold">
               Ich bin mit der Nutzung von System-Cookies einverstanden.
             </p>
             <p>
@@ -55,7 +53,7 @@ async function handleSetTracking(value: boolean) {
             </p>
           </div>
           <div v-else>
-            <p class="ris-body2-bold">
+            <p class="typo-body-bold">
               Ich bin mit der Nutzung von Analyse-Cookies nicht einverstanden.
             </p>
             <p>
@@ -64,7 +62,7 @@ async function handleSetTracking(value: boolean) {
           </div>
         </template>
       </client-only>
-    </Message>
+    </UiMessage>
     <form
       v-if="userConsent"
       action="/api/cookie-consent"
@@ -72,7 +70,7 @@ async function handleSetTracking(value: boolean) {
       @submit.prevent="handleSetTracking(false)"
     >
       <input type="hidden" name="consent" value="false" />
-      <Button
+      <UiButton
         label="Cookies ablehnen"
         data-testid="settings-decline-cookie"
         type="submit"
@@ -85,7 +83,7 @@ async function handleSetTracking(value: boolean) {
       @submit.prevent="handleSetTracking(true)"
     >
       <input type="hidden" name="consent" value="true" />
-      <Button
+      <UiButton
         label="Cookies akzeptieren"
         data-testid="settings-accept-cookie"
         type="submit"

@@ -1,25 +1,33 @@
 {
-  "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vitepress dev",
     "build": "vitepress build",
+    "dev": "vitepress dev",
+    "fmt": "oxfmt --no-error-on-unmatched-pattern",
+    "lint": "oxlint --fix --no-error-on-unmatched-pattern",
     "preview": "vitepress preview",
-    "fmt": "oxfmt",
-    "lint": "oxlint --fix",
     "style:check": "oxfmt --check && oxlint --max-warnings=0",
     "style:fix": "pnpm fmt && pnpm lint",
     "typecheck": "vue-tsc --noEmit"
   },
   "devDependencies": {
-    "oxfmt": "0.53.0",
-    "oxlint": "1.68.0",
+    "@digitalservicebund/ris-ui": "4.7.0",
+    "oxfmt": "0.67.0",
+    "oxlint": "1.82.0",
     "vitepress": "1.6.4",
-    "vue": "3.5.35",
-    "vue-tsc": "3.3.3"
+    "vue": "3.5.42",
+    "vue-tsc": "3.3.11"
   },
-  "engines": {
-    "node": ">=26"
-  },
-  "packageManager": "pnpm@11.5.2"
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "11.20.0",
+      "onFail": "warn"
+    },
+    "runtime": {
+      "name": "node",
+      "version": "26.6.0",
+      "onFail": "warn"
+    }
+  }
 }

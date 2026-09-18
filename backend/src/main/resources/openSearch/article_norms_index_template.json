@@ -29,7 +29,7 @@
           "path": "name"
         },
         "eid": {
-          "type": "text"
+          "type": "keyword"
         },
         "guid": {
           "type": "text"
@@ -49,12 +49,18 @@
         "expiry_date": {
           "type": "date"
         },
-        "search_keyword": {
+        "article_fingerprint": {
           "type": "text",
-          "analyzer": "custom_german_analyzer"
+          "analyzer": "custom_german_fingerprint_analyzer"
         },
         "indexed_at": {
           "type": "date"
+        },
+        "document_number": {
+          "type": "keyword"
+        },
+        "document_type": {
+          "type": "keyword"
         }
       }
     }

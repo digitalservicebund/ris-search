@@ -25,7 +25,15 @@ public class SecurityConfig {
 
   final AuthProperties authProperties;
 
-  final String[] internalPaths = new String[] {"/actuator/**", "/nlex"};
+  private static final String ACTUATOR_PATH = "/actuator/**";
+  private static final String NLEX_PATH = "/nlex";
+
+  final String[] internalPaths = new String[] {ACTUATOR_PATH, NLEX_PATH};
+
+  // The feedback endpoint is a public, stateless API called from external clients (e.g. api-docs)
+  // without a session. CSRF protection is session-cookie-based and provides no value here.
+  final String[] csrfExemptPaths =
+      new String[] {ACTUATOR_PATH, NLEX_PATH, ApiConfig.Paths.FEEDBACK};
 
   @Value("${app.security.csp-header}")
   private String cspHeader;
@@ -35,19 +43,19 @@ public class SecurityConfig {
   }
 
   private void applyCommonConfiguration(HttpSecurity http) {
-    http.csrf(customizer -> customizer.ignoringRequestMatchers(internalPaths));
+    http.csrf(customizer -> customizer.ignoringRequestMatchers(csrfExemptPaths));
     http.headers(headers -> headers.contentSecurityPolicy(csp -> csp.policyDirectives(cspHeader)));
   }
 
   /**
-   * Configures and builds a security filter chain for the "default" and "test" profiles. This
-   * filter chain allows unrestricted access to all requests and applies common security headers.
+   * Configures and builds a security filter chain for the "dev" and "test" profiles. This filter
+   * chain allows unrestricted access to all requests and applies common security headers.
    *
    * @param http the {@link HttpSecurity} object used to define security configurations
    * @return a {@link SecurityFilterChain} instance representing the configured HTTP security filter
    */
   @Bean
-  @Profile({"default", "test"})
+  @Profile({"dev", "e2e", "test"})
   public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) {
     http.authorizeHttpRequests(requests -> requests.anyRequest().permitAll());
     applyCommonConfiguration(http);
@@ -97,7 +105,7 @@ public class SecurityConfig {
         requests ->
             requests
                 .requestMatchers(
-                    "/actuator/**", "/.well-known/**", "/swagger-ui/**", "/v3/**", "/api/**")
+                    ACTUATOR_PATH, "/.well-known/**", "/swagger-ui/**", "/v3/**", "/api/**")
                 .permitAll()
                 .requestMatchers(apiKeyRequestMatcher)
                 .permitAll()

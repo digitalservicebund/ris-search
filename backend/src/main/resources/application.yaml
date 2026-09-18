@@ -1,24 +1,25 @@
+# Our convention is that all properties are explicitly in this file. If the property isn't used
+# everywhere it is set here with the empty string. Kubernetes import is the only exception to this.
+
 spring:
-  jpa:
-    properties:
-      hibernate:
-        ddl-auto: none
-  datasource:
-    hikari:
-      connection-test-query: SELECT 1 FROM DUAL
-      connection-timeout: 600000
-      maximum-pool-size: 500
-      max-lifetime: 1800000
-      minimum-idle: 20
-      validation-timeout: 3000
-      idle-timeout: 60000
+  profiles:
+    # Set the default spring profile to dev. dev is used for local development. All other
+    # environments explicitly set a profile and therefore don't use the default.
+    default: dev
 
 server:
-  port: 8090
-  front-end-url: "http://localhost:3000/"
-  docs-url: "https://localhost::5173/"
+  port: 8080
+  front-end-url: ""
+  back-end-url: ""
+  docs-url: ""
   cms-url: ""
   api-keys: []
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
 
 rate-limit:
   default:
@@ -30,8 +31,8 @@ rate-limit:
 
 swagger:
   server:
-    url: http://localhost:8090
-    description: Local development server
+    url: ""
+    description: "RIS API url"
 
 springdoc:
   swagger-ui:
@@ -49,60 +50,57 @@ opensearch:
   literature-index-name: literature
   documents-alias-name: documents
   administrative-directive-index-name: administrative_directive
-  authentication: disabled
 
-# The user and password to access postgres was created in the neuris-infra following the variable convention in that repo
-search:
-  database:
-    host: "${POSTGRES_CASELAW_HOST:localhost}"
-    port: 5432
-    user: "test"
-    password: "test"
-    database: "neuris"
-
+# bucket-name, access-key-id and secret-access-key are overridden my stackit secrets manager
+# versionPrefix is overridden in the respective application-ABC.yaml
 s3:
   file-storage:
+    endpoint: ""
     norm:
-      endpoint: https://obs.eu-de.otc.t-systems.com
-      bucket-name: norm
-      access-key-id:
-      secret-access-key:
+      bucket-name: ""
+      access-key-id: ""
+      secret-access-key: ""
+      versionPrefix: ""
     case-law:
-      endpoint: https://obs.eu-de.otc.t-systems.com
-      bucket-name: caselaw
-      access-key-id:
-      secret-access-key:
+      bucket-name: ""
+      access-key-id: ""
+      secret-access-key: ""
+      versionPrefix: ""
     literature:
-      endpoint: https://obs.eu-de.otc.t-systems.com
-      bucket-name: literature
-      access-key-id:
-      secret-access-key:
+      bucket-name: ""
+      access-key-id: ""
+      secret-access-key: ""
+      versionPrefix: ""
     administrative-directive:
-      endpoint: https://obs.eu-de.otc.t-systems.com
-      bucket-name: administrative-directive
-      access-key-id:
-      secret-access-key:
+      bucket-name: ""
+      access-key-id: ""
+      secret-access-key: ""
+      versionPrefix: ""
     portal:
-      endpoint: https://obs.eu-de.otc.t-systems.com
-      bucket-name: portal
-      access-key-id:
-      secret-access-key:
+      bucket-name: ""
+      access-key-id: ""
+      secret-access-key: ""
     public-files:
-      endpoint:
-      bucket-name: public
-      access-key-id:
-      secret-access-key:
-
-local:
-  file-storage: backend/.local-storage
+      bucket-name: ""
+      access-key-id: ""
+      secret-access-key: ""
 
 sentry:
   release: "${SENTRY_RELEASE:default_release}"
   environment: "${SENTRY_ENVIRONMENT:}"
+  traces-sample-rate: 0.01
+  minimum-event-level: "error"
+
+posthog:
+  api-key: ""
+  host: ""
+  feedback-survey-id: ""
 
 app:
   security:
-    csp-header: "default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src data: 'self'; connect-src 'self'; font-src 'self'; frame-src 'none'; object-src 'none'; media-src 'none';"
+    # Since the api also hosts the swagger files, this header is used for both the api AND some of the docs pages
+    # https://testphase.rechtsinformationen.bund.de is in connect-src so the docs "try it out" can call the api
+    csp-header: "default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src data: 'self'; connect-src 'self' https://testphase.rechtsinformationen.bund.de; font-src 'self'; frame-src 'none'; object-src 'none'; media-src 'none';"
 
 xsd:
   schema-prefix: "classpath:schema/"
@@ -110,3 +108,9 @@ xsd:
     caselaw: [ "classpath:schema/caselaw-decision.xsd", "classpath:schema/caselaw-pending-proceeding.xsd" ]
     adm: [ "classpath:schema/adm.xsd" ]
     literature: [ "classpath:schema/literature-sli.xsd", "classpath:schema/literature-uli.xsd" ]
+
+logging:
+  level:
+    de.bund.digitalservice.ris.search.config.httplogs: TRACE
+    springframework.ws.server.MessageTracing.sent: DEBUG
+    springframework.ws.server.MessageTracing.received: TRACE

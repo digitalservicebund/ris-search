@@ -8,8 +8,11 @@ import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchPa
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.repository.objectstorage.LiteratureBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.LiteratureRepository;
+import de.bund.digitalservice.ris.search.service.helper.ZipManager;
 import de.bund.digitalservice.ris.search.utils.PageUtils;
 import de.bund.digitalservice.ris.search.utils.RisHighlightBuilder;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 import java.util.Optional;
 import lombok.SneakyThrows;
@@ -110,7 +113,7 @@ public class LiteratureService {
    * @return the list of items
    */
   public List<Literature> getByDocumentNumber(String documentNumber) {
-    return literatureRepository.findByDocumentNumber(documentNumber);
+    return literatureRepository.findByDocumentNumberKeyword(documentNumber);
   }
 
   /**
@@ -123,5 +126,22 @@ public class LiteratureService {
   public Optional<byte[]> getFileByDocumentNumber(String documentNumber)
       throws ObjectStoreServiceException {
     return literatureBucket.get(String.format("%s.akn.xml", documentNumber));
+  }
+
+  /**
+   * @param documentNumber a given document
+   * @return a list of the filenames that match the provided document number
+   */
+  public List<String> getAllFilenamesByDocumentNumber(String documentNumber) {
+    return literatureBucket.getAllKeysByPrefix(documentNumber);
+  }
+
+  /**
+   * @param keys all object keys to be included in the archive
+   * @param outputStream Outputstream to which the ZIP archive data will be written
+   * @throws IOException if an I/O error occurs during file retrieval or while writing to the stream
+   */
+  public void writeZipArchive(List<String> keys, OutputStream outputStream) throws IOException {
+    ZipManager.writeZipArchive(literatureBucket, keys, outputStream);
   }
 }

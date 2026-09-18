@@ -21,8 +21,18 @@ const scenarios: Scenario[] = [
     ],
   },
   {
+    name: "start page v2",
+    url: "/startseite-v2",
+    skipLinks: [
+      { label: "Zum Inhalt", target: "#main" },
+      { label: "Zur Suche", target: "#search" },
+      { label: "Zu Aktuelles", target: "#updates" },
+      { label: "Zum Fußbereich", target: "#footer" },
+    ],
+  },
+  {
     name: "search page",
-    url: "/search",
+    url: "/suche",
     skipLinks: [
       { label: "Zur Suche", target: "#search" },
       { label: "Zum Inhalt", target: "#main" },
@@ -31,7 +41,7 @@ const scenarios: Scenario[] = [
   },
   {
     name: "advanced search page",
-    url: "/advanced-search",
+    url: "/erweiterte-suche",
     requiresPrivateFeatures: true,
     skipLinks: [
       { label: "Zur Suche", target: "#search" },
@@ -41,7 +51,7 @@ const scenarios: Scenario[] = [
   },
   {
     name: "norm page",
-    url: "/norms/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu",
+    url: "/gesetze/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu",
     skipLinks: [
       { label: "Zum Inhalt", target: "#main" },
       { label: "Zum Gesetzestext", target: "#content" },
@@ -50,7 +60,7 @@ const scenarios: Scenario[] = [
   },
   {
     name: "norm article page",
-    url: "/norms/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu/art-z1",
+    url: "/gesetze/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu/art-z1",
     skipLinks: [
       { label: "Zum Gesetzestext", target: "#content" },
       { label: "Zum Fußbereich", target: "#footer" },
@@ -58,7 +68,7 @@ const scenarios: Scenario[] = [
   },
   {
     name: "case-law page",
-    url: "/case-law/KORE600500000",
+    url: "/gerichtsentscheidungen/KORE600500000",
     skipLinks: [
       { label: "Zum Inhalt", target: "#main" },
       { label: "Zum Entscheidungstext", target: "#content" },
@@ -67,7 +77,7 @@ const scenarios: Scenario[] = [
   },
   {
     name: "literature page",
-    url: "/literature/XXLU000000001",
+    url: "/literaturnachweise/XXLU000000001",
     skipLinks: [
       { label: "Zum Inhalt", target: "#main" },
       { label: "Zum Text", target: "#content" },
@@ -76,7 +86,7 @@ const scenarios: Scenario[] = [
   },
   {
     name: "administrative directive page",
-    url: "/administrative-directives/KSNR000000001",
+    url: "/verwaltungsregelungen/KSNR000000001",
     skipLinks: [
       { label: "Zum Inhalt", target: "#main" },
       { label: "Zum Text", target: "#content" },
@@ -110,7 +120,7 @@ const scenarios: Scenario[] = [
   {
     // representative all static content pages
     name: "about page",
-    url: "/about",
+    url: "/ueber",
     skipLinks: [
       { label: "Zum Inhalt", target: "#main" },
       { label: "Zum Fußbereich", target: "#footer" },
@@ -135,7 +145,7 @@ test("skip links are focused after client-side navigation", async ({
 
   await page
     .getByRole("navigation")
-    .getByRole("link", { name: "Suche" })
+    .getByRole("link", { name: "Suche", exact: true })
     .click();
 
   await expect(
@@ -172,7 +182,7 @@ test.describe("mobile", () => {
 
     await page
       .getByRole("navigation")
-      .getByRole("link", { name: "Suche" })
+      .getByRole("link", { name: "Suche", exact: true })
       .click();
 
     await expect(

@@ -10,7 +10,7 @@ useHead({
 });
 
 function redirectToSearch(searchStr?: string) {
-  navigateTo({ name: "search", query: searchStr ? { query: searchStr } : {} });
+  navigateTo({ name: "suche", query: searchStr ? { query: searchStr } : {} });
 }
 
 const props = defineProps({
@@ -48,9 +48,9 @@ useHead({ title: pageTitle });
   />
 
   <NuxtLayout name="default">
-    <div class="container pt-48 pb-24" data-testid="error-message">
+    <div class="content-wrapper pt-48 pb-24" data-testid="error-message">
       <template v-if="isNotFoundError">
-        <h1 class="ris-heading2-bold inline-block">
+        <h1 class="typo-headline2-bold inline-block">
           Diese Seite existiert nicht
         </h1>
         <p class="mt-8">
@@ -66,7 +66,7 @@ useHead({ title: pageTitle });
         />
       </template>
       <template v-else>
-        <h1 class="ris-heading2-bold inline-block">
+        <h1 class="typo-headline2-bold inline-block">
           Es gab leider einen Fehler
         </h1>
         <p v-if="isInternalServerError" class="mt-24">

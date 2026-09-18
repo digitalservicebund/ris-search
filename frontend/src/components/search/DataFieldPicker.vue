@@ -1,13 +1,9 @@
 <script setup lang="ts">
-import { Button, InputGroup, InputGroupAddon, InputText } from "primevue";
 import type { SkipLink } from "~";
 import IcBaselineSearch from "~icons/ic/baseline-search";
 import DataFieldList from "~/components/search/DataFieldList.vue";
 import type { DocumentKind } from "~/types/api";
-import { formatDocumentKind } from "~/utils/displayValues";
-import { formatNumberWithSeparators } from "~/utils/numberFormatting";
 import type { DataField } from "~/utils/search/dataFields";
-import OperatorsHelp from "./OperatorsHelp.vue";
 
 const {
   dataFields = {},
@@ -79,8 +75,7 @@ function insertInQuery({ pattern }: DataField) {
   query.value = newQuery;
 
   nextTick().then(() => {
-    // @ts-expect-error -- Type is wrong here, $el does exist
-    const focusableInput = queryInputEl.value?.$el;
+    const focusableInput = queryInputEl.value?.input;
     if (!(focusableInput instanceof HTMLInputElement)) return;
 
     focusableInput.focus();
@@ -94,8 +89,8 @@ function submitUnlessLoading() {
 </script>
 
 <template>
-  <search class="flex flex-col gap-8">
-    <p class="ris-label2-bold lg:ris-label1-regular" aria-hidden="true">
+  <search class="flex flex-col">
+    <p class="typo-label1-bold mb-8" aria-hidden="true">
       In {{ formattedCount }} {{ formattedDocumentKind }} suchen
     </p>
 
@@ -103,32 +98,32 @@ function submitUnlessLoading() {
       :id="formId"
       data-testid="form"
       @submit.prevent="submitUnlessLoading()"
+      class="mb-16"
     >
-      <InputGroup>
-        <InputText
+      <div class="flex">
+        <UiInputText
           :id="queryInputId"
           ref="queryInputEl"
           v-model="query"
           aria-label="Suchbegriff eingeben"
           size="large"
           class="grow"
+          clearable
           placeholder="Suchbegriff eingeben"
           type="search"
         />
-        <InputGroupAddon>
-          <Button aria-label="Suchen" size="large" type="submit" :loading>
-            <template #icon>
-              <IcBaselineSearch />
-            </template>
-          </Button>
-        </InputGroupAddon>
-      </InputGroup>
+        <UiButton aria-label="Suchen" size="large" type="submit" :loading>
+          <template #icon>
+            <IcBaselineSearch />
+          </template>
+        </UiButton>
+      </div>
 
       <SkipLink class="mt-8" :to="skipLinkTarget">Zu den Ergebnissen</SkipLink>
     </form>
 
     <div class="hidden lg:block">
-      <p class="ris-label2-bold mb-8">
+      <p class="typo-label2-regular mb-8">
         Diese Datenfelder können gezielt durchsucht werden:
       </p>
 
@@ -140,7 +135,7 @@ function submitUnlessLoading() {
     </div>
 
     <div class="mt-8 mb-16 lg:hidden">
-      <SingleAccordion
+      <UiAccordion
         header-collapsed="Auswahl für gezielte Suche"
         header-expanded="Auswahl für gezielte Suche"
       >
@@ -149,9 +144,9 @@ function submitUnlessLoading() {
           :label-id="dataFieldListId"
           @click-data-field="insertInQuery"
         />
-      </SingleAccordion>
+      </UiAccordion>
     </div>
   </search>
 
-  <OperatorsHelp class="lg:mt-32" />
+  <SearchOperatorsHelp class="lg:mt-32" />
 </template>

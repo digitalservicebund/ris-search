@@ -18,7 +18,6 @@ import org.apache.lucene.queryparser.classic.QueryParserBase;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.QueryVisitor;
-import org.jspecify.annotations.NonNull;
 import org.springframework.data.elasticsearch.UncategorizedElasticsearchException;
 
 /** Class to store the Lucene query tools */
@@ -41,17 +40,17 @@ public class LuceneQueryTools {
     try {
       QueryParser queryParser = new QueryParser("", analyzer);
       queryParser.parse(query);
-    } catch (ParseException e) {
-      throw buildLuceneErrorMessage(e);
+    } catch (ParseException | IllegalArgumentException e) {
+      throw buildLuceneErrorMessage(e.getMessage());
     }
   }
 
-  private static CustomValidationException buildLuceneErrorMessage(ParseException e) {
+  private static CustomValidationException buildLuceneErrorMessage(String errorMessage) {
     return new CustomValidationException(
         CustomError.builder()
             .code("invalid_lucene_query")
             .parameter("query")
-            .message(e.getMessage())
+            .message(errorMessage)
             .build());
   }
 
@@ -63,9 +62,8 @@ public class LuceneQueryTools {
    * @return A new query string with all terms OR-combined
    * @throws CustomValidationException in case a queryString is invalid
    */
-  public static String joinAllTermsWithOr(@NonNull String queryString)
-      throws CustomValidationException {
-    if (queryString.isBlank()) {
+  public static String joinAllTermsWithOr(String queryString) throws CustomValidationException {
+    if (queryString == null || queryString.isBlank()) {
       return "";
     }
 
@@ -77,7 +75,7 @@ public class LuceneQueryTools {
           .map(t -> t.field().isBlank() ? t.text() : t.field() + ":" + t.text())
           .collect(Collectors.joining(" OR "));
     } catch (ParseException e) {
-      throw buildLuceneErrorMessage(e);
+      throw buildLuceneErrorMessage(e.getMessage());
     }
   }
 
@@ -114,18 +112,25 @@ public class LuceneQueryTools {
       Pattern.compile("No mapping found for \\[([^]]+)] in order to sort on");
 
   /**
-   * Checks for invalid sort queries in an Elasticsearch exception and throws a custom validation
+   * Opensearch reports a query it can't parse as a {@code parse_exception}, both as the type of the
+   * root cause and in the reason of every exception wrapping it.
+   */
+  static final Pattern PARSE_EXCEPTION_PATTERN = Pattern.compile("parse_exception");
+
+  /**
+   * Checks for invalid queries in an Elasticsearch exception and throws a custom validation
    * exception if necessary.
    *
    * <p>The method identifies if the exception contains a suppressed cause with an error message
-   * indicating that a sort parameter is unsupported due to missing mapping. If such a condition is
-   * met, a {@code CustomValidationException} is constructed and thrown with detailed error
-   * information.
+   * indicating that a sort parameter is unsupported due to missing mapping, or that Opensearch
+   * could not parse the query. If such a condition is met, a {@code CustomValidationException} is
+   * constructed and thrown with detailed error information. Since both are caused by the request
+   * itself, they are client errors rather than failures we can act on.
    *
    * @param e An instance of {@code UncategorizedElasticsearchException} containing details of the
    *     error encountered in Elasticsearch operation.
    * @throws CustomValidationException If the exception indicates that sorting is not supported for
-   *     a given parameter due to missing mappings.
+   *     a given parameter due to missing mappings, or that the query could not be parsed.
    */
   public static void checkForInvalidQuery(UncategorizedElasticsearchException e)
       throws CustomValidationException {
@@ -133,7 +138,9 @@ public class LuceneQueryTools {
       return;
     }
     Throwable suppressed = e.getCause().getSuppressed()[0];
-    Matcher matcher = NO_MAPPING_FOUND_PATTERN.matcher(suppressed.getMessage());
+    String suppressedMessage = StringUtils.defaultString(suppressed.getMessage());
+
+    Matcher matcher = NO_MAPPING_FOUND_PATTERN.matcher(suppressedMessage);
     if (matcher.find()) {
       String parameter = matcher.group(1);
       String message = "Sorting is not supported for %s".formatted(parameter);
@@ -142,6 +149,16 @@ public class LuceneQueryTools {
               .code("invalid_sort_parameter")
               .parameter("sort")
               .message(message)
+              .build();
+      throw new CustomValidationException(error);
+    }
+
+    if (PARSE_EXCEPTION_PATTERN.matcher(suppressedMessage).find()) {
+      CustomError error =
+          CustomError.builder()
+              .code("invalid_lucene_query")
+              .parameter("query")
+              .message("The query could not be parsed")
               .build();
       throw new CustomValidationException(error);
     }

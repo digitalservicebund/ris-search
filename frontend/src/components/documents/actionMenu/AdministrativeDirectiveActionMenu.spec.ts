@@ -7,24 +7,12 @@ import { describe, expect, it, vi } from "vitest";
 import AdministrativeDirectiveActionMenu from "~/components/documents/actionMenu/AdministrativeDirectiveActionMenu.vue";
 import type { AdministrativeDirective } from "~/types/api";
 
-const { mockToastAdd } = vi.hoisted(() => ({
-  mockToastAdd: vi.fn(),
-}));
-
 vi.mock("~/composables/useBackendUrl", () => ({
   default: vi.fn((url?: string) => url),
 }));
 
-vi.mock("primevue/usetoast", () => ({
-  useToast: () => ({
-    add: mockToastAdd,
-  }),
-}));
-
 mockNuxtImport("useRequestURL", () => {
-  return () => ({
-    href: "https://example.com/administrative-directive",
-  });
+  return () => new URL("https://example.com/administrative-directive?foo=bar");
 });
 
 const mockedAdministrativeDirective = {
@@ -87,12 +75,6 @@ describe("AdministrativeDirectiveActionMenu", () => {
 
     expect(await navigator.clipboard.readText()).toEqual(
       "https://example.com/administrative-directive",
-    );
-
-    expect(mockToastAdd).toHaveBeenCalledExactlyOnceWith(
-      expect.objectContaining({
-        summary: "Kopiert!",
-      }),
     );
   });
 

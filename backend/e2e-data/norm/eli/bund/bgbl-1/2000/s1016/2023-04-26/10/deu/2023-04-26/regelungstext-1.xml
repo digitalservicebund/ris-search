@@ -131,13 +131,17 @@
                     <akn:p GUID="e6666666-6666-6666-6666-666666666666" eId="meta-n1_editfnote-n3_text-n1">Die V wurde von der Bundesregierung erlassen*.</akn:p>
                 </akn:note>
                 <akn:note GUID="e139d37b-0714-4996-9269-6117aca521e2" eId="meta-n1_editfnote-n4" marker="#" placementBase="#präambel-n1_blockcontainer-n1" refersTo="aenderungsfussnote"><akn:p GUID="d3c6dd33-4847-4529-950f-f8e248c89715" eId="meta-n1_editfnote-n4_text-n1">Inhaltsübersicht: präambel Fußnote</akn:p></akn:note>
+                <akn:note GUID="e7777777-7777-7777-7777-777777777777" eId="meta-n1_editfnote-n5" marker="#" placementBase="#präambel-n1_formel-n1" refersTo="aenderungsfussnote"><akn:p GUID="e8888888-8888-8888-8888-888888888888" eId="meta-n1_editfnote-n5_text-n1">Eingangsformel: Diese Fußnote an der Eingangsformel wurde im End-to-end-Datenbestand ergänzt</akn:p></akn:note>
+                <akn:note GUID="e9999999-9999-9999-9999-999999999999" eId="meta-n1_editfnote-n6" marker="#" placementBase="#schluss-n1_formel-n1" refersTo="aenderungsfussnote"><akn:p GUID="7d8583f6-ae27-5308-9fe7-d1c4d6afa5c5" eId="meta-n1_editfnote-n6_text-n1">Schlussformel: Diese Fußnote an der Schlussformel wurde im End-to-end-Datenbestand ergänzt</akn:p></akn:note>
             </akn:notes>
             <akn:proprietary GUID="bb777777-7777-7777-7777-777777777777" eId="meta-n1_proprietary-n1" source="attributsemantik-noch-undefiniert">
                 <ris:legalDocML.de_metadaten xmlns:ris="http://MetadatenRIS.LegalDocML.de/1.8.2/" xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.8.2/ Grammatiken/legalDocML.de-metadaten-ris.xsd">
+                    <ris:abkuerzung refersTo="interne-abkuerzung">RisFrSaftErfrischV</ris:abkuerzung>
                     <ris:inkraft date="2023-04-29"/>
                     <ris:vollzitat>Fiktive Fruchtsaft- und Erfrischungsgetränkeverordnung vom 27. Mai 2000 (BGBl. I S. 1016), zuletzt modifiziert im Testverfahren</ris:vollzitat>
                     <ris:standangabe type="stand">Zuletzt geändert durch Testanpassungen</ris:standangabe>
                     <ris:standangabe type="neuf">Neugefasst durch Testdaten</ris:standangabe>
+                    <ris:standangabe type="hinweis">Hinweis Testdaten</ris:standangabe>
                 </ris:legalDocML.de_metadaten>
             </akn:proprietary>
         </akn:meta>
@@ -163,6 +167,9 @@
                     </akn:shortTitle>
                 </akn:p>
             </akn:longTitle>
+            <akn:block GUID="d8a00001-0000-0000-0000-000000000001" eId="einleitung-n1_block-n1" name="attributsemantik-noch-undefiniert">
+                <akn:date GUID="d8a00001-0000-0000-0000-000000000002" date="2000-05-27" eId="einleitung-n1_block-n1_datum-n1" refersTo="ausfertigung-datum"/>
+            </akn:block>
         </akn:preface>
         <akn:preamble GUID="d8888888-8888-8888-8888-888888888888" eId="präambel-n1">
             <akn:formula GUID="d9999999-9999-9999-9999-999999999999" eId="präambel-n1_formel-n1" name="attributsemantik-noch-undefiniert" refersTo="eingangsformel">

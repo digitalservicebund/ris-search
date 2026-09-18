@@ -13,16 +13,18 @@ import static org.mockito.Mockito.when;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.channels.Channels;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import software.amazon.awssdk.awscore.exception.AwsServiceException;
 import software.amazon.awssdk.core.exception.SdkException;
 import software.amazon.awssdk.core.sync.RequestBody;
@@ -39,6 +41,7 @@ import software.amazon.awssdk.services.s3.model.S3Object;
 import software.amazon.awssdk.services.s3.model.UploadPartRequest;
 import software.amazon.awssdk.services.s3.model.UploadPartResponse;
 
+@ExtendWith(MockitoExtension.class)
 class S3ObjectStorageClientTest {
 
   private static final String BUCKET_NAME = "test-bucket";
@@ -69,7 +72,6 @@ class S3ObjectStorageClientTest {
 
   @BeforeEach
   void setUp() {
-    MockitoAnnotations.openMocks(this);
     s3Service = new S3ObjectStorageClient(s3Client, BUCKET_NAME);
   }
 
@@ -242,7 +244,7 @@ class S3ObjectStorageClientTest {
     InputStream inputStream = new ByteArrayInputStream(data);
     byte[] buffer = new byte[10];
 
-    int bytesRead = s3Service.readChunk(inputStream, buffer);
+    int bytesRead = s3Service.readChunk(Channels.newChannel(inputStream), buffer);
 
     assertThat(bytesRead).isEqualTo(data.length);
     assertThat(buffer).isEqualTo("short\0\0\0\0\0".getBytes());
@@ -255,7 +257,7 @@ class S3ObjectStorageClientTest {
     byte[] buffer = new byte[data.length];
     int maxByteCount = data.length;
 
-    int bytesRead = s3Service.readChunk(inputStream, buffer);
+    int bytesRead = s3Service.readChunk(Channels.newChannel(inputStream), buffer);
 
     assertEquals(maxByteCount, bytesRead);
     assertArrayEquals(data, buffer);
@@ -272,7 +274,7 @@ class S3ObjectStorageClientTest {
     int bytesRead;
 
     while (totalBytesRead < maxByteCount) {
-      bytesRead = s3Service.readChunk(inputStream, buffer);
+      bytesRead = s3Service.readChunk(Channels.newChannel(inputStream), buffer);
       if (bytesRead > 0) {
         System.arraycopy(buffer, 0, readData, totalBytesRead, bytesRead);
         totalBytesRead += bytesRead;

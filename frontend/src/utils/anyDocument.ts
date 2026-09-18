@@ -1,7 +1,8 @@
 import type {
   AdministrativeDirective,
   AnyDocument,
-  CaseLaw,
+  CaseLawSearchSchema,
+  DocumentEncodingSchema,
   LegislationExpression,
   Literature,
 } from "~/types/api";
@@ -12,7 +13,9 @@ import type {
  * @param candidate Document to check
  * @returns True if the document is a caselaw document.
  */
-export function isCaselaw(candidate: AnyDocument): candidate is CaseLaw {
+export function isCaselaw(
+  candidate: AnyDocument,
+): candidate is CaseLawSearchSchema {
   return candidate["@type"] === "Decision";
 }
 
@@ -76,4 +79,12 @@ export function getIdentifier(document: AnyDocument): string {
     throw new Error(`Failed to identify document with ID ${document["@id"]}`);
 
   return id;
+}
+
+export function getEncodingURL(
+  encoding: DocumentEncodingSchema[] | null | undefined,
+  format: string,
+) {
+  const specificEncoding = encoding?.find((e) => e.encodingFormat === format);
+  return specificEncoding?.contentUrl;
 }

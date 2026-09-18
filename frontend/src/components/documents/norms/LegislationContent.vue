@@ -11,14 +11,14 @@ defineProps<{
 </script>
 
 <template>
-  <SingleAccordion
+  <UiAccordion
     v-if="officialToc"
     class="mt-24"
     header-expanded="Amtliches Inhaltsverzeichnis ausblenden"
     header-collapsed="Amtliches Inhaltsverzeichnis einblenden"
   >
     <div v-html="officialToc" />
-  </SingleAccordion>
+  </UiAccordion>
   <div :class="['legislation', { 'single-article': singleArticle }]">
     <slot />
   </div>
@@ -26,10 +26,6 @@ defineProps<{
 
 <style scoped>
 @reference "~/assets/main.css";
-
-.legislation {
-  @apply max-w-prose print:max-w-none;
-}
 
 /* AKN */
 :deep(.akn-act) {
@@ -123,7 +119,7 @@ defineProps<{
 }
 
 :deep(.akn-act pre) {
-  @apply ris-body3-regular overflow-x-auto font-[monospace];
+  @apply typo-mono overflow-x-auto;
 }
 
 :deep(.akn-act .akn-paragraph),
@@ -170,11 +166,9 @@ Attributes from the Juris CALS format without a corresponding HTML attribute mig
   @apply hidden;
 }
 
-/* hide default table of contents, since it will be displayed behind an accordion section */
+/* hide default table of contents, since it will be displayed behind an accordion section.
+   This also covers the footnotes attached to it, which are nested inside its container. */
 :deep(.eingangsformel .inhaltsuebersicht) {
-  @apply hidden;
-}
-:deep(section.eingangsformel .nichtamtliche-fussnoten) {
   @apply hidden;
 }
 
@@ -187,7 +181,7 @@ Attributes from the Juris CALS format without a corresponding HTML attribute mig
 
 /* Einzelvorschrift :: Überschrift  */
 :deep(h2.einzelvorschrift) {
-  @apply ris-heading3-bold my-24 inline-block break-after-avoid not-print:wrap-break-word not-print:hyphens-auto;
+  @apply typo-headline2-bold my-24 inline-block break-after-avoid not-print:wrap-break-word not-print:hyphens-auto;
 }
 
 :deep(.akn-heading a) {
@@ -215,7 +209,7 @@ Attributes from the Juris CALS format without a corresponding HTML attribute mig
   h2,
   p,
   table {
-    @apply max-w-prose;
+    @apply max-w-full;
   }
 
   table.pgwide {
@@ -260,7 +254,7 @@ Attributes from the Juris CALS format without a corresponding HTML attribute mig
 :deep(.akn-subsection > .akn-num),
 :deep(.akn-title > .akn-num),
 :deep(.akn-subtitle > .akn-num) {
-  @apply ris-heading3-bold float-none mb-4 block text-center;
+  @apply typo-headline2-bold float-none mb-4 block text-center;
 }
 
 :deep(.akn-book > .akn-heading),
@@ -271,7 +265,7 @@ Attributes from the Juris CALS format without a corresponding HTML attribute mig
 :deep(.akn-subsection > .akn-heading),
 :deep(.akn-title > .akn-heading),
 :deep(.akn-subtitle > .akn-heading) {
-  @apply ris-heading3-regular float-none mb-24 block border-b border-gray-400 pb-16 text-center text-gray-900;
+  @apply typo-headline2-regular float-none mb-24 block border-b border-gray-400 pb-16 text-center text-gray-900;
 }
 
 :deep(.akn-book + .akn-book),
@@ -290,7 +284,7 @@ Attributes from the Juris CALS format without a corresponding HTML attribute mig
 
 :deep(.fussnoten),
 :deep(.nichtamtliche-fussnoten) {
-  @apply ris-body2-regular my-16 list-none pl-0 text-gray-900;
+  @apply ris-label3-regular md:ris-label2-regular 2xl:ris-label1-regular my-16 list-none pl-0 text-gray-900;
 }
 
 /* Show a 10 character wide separator above the collected notes  */

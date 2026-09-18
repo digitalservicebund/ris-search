@@ -1,40 +1,26 @@
 # Logs
-logs
 *.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
+logs
 
-# misc folders
-node_modules
-.output
-.nuxt
+# Misc files and folders
 .env
-dist
-dist-ssr
+.nuxt
+.output
 coverage
+node_modules
 test-results
 
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
-.DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-
-licence-report.csv
+# Licence report
 frontend-licence-report.csv
-/test-results/
-/playwright-report/
+
+# Playwright
 /blob-report/
-/playwright/.cache/
+/playwright-report/
 /playwright/.auth/user.json
+/playwright/.cache/
 
 # Nuxt files
 components.d.ts
+
+# Storybook
+storybook-static

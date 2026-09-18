@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Drawer } from "primevue";
+import IcBaselineArrowForward from "~icons/ic/baseline-arrow-Forward";
 import IcBaselineList from "~icons/ic/baseline-list";
 import type { RouteLocationRaw } from "#vue-router";
 import type { TreeItem } from "~/components/TreeView.vue";
@@ -9,9 +10,20 @@ interface Props {
   selectedKey?: string;
   subheading?: string;
   subheadingTo?: RouteLocationRaw;
+  subheadingAddition?: string;
 }
 
 const props = defineProps<Props>();
+
+const desktopSubheading = computed(() => {
+  if (props.subheading && props.subheadingAddition) {
+    return props.subheading + " " + props.subheadingAddition;
+  } else if (props.subheading) {
+    return props.subheading;
+  } else {
+    return undefined;
+  }
+});
 
 const {
   visible: mobileTocVisible,
@@ -24,6 +36,7 @@ const drawerId = useId();
 </script>
 
 <template>
+  <!-- mobile closed toc -->
   <Transition
     enter-active-class="transition-transform duration-300 ease-in-out delay-150"
     enter-from-class="translate-y-full"
@@ -32,6 +45,7 @@ const drawerId = useId();
   >
     <button
       v-if="!mobileTocVisible"
+      type="button"
       ref="openButtonRef"
       class="shadow-gray-1000/15 fixed inset-x-0 bottom-0 z-10 flex cursor-pointer items-center justify-between gap-8 bg-white p-16 text-left shadow-[0_0_0.5rem] -outline-offset-4 outline-blue-800 focus-visible:outline-4 md:hidden"
       data-back-to-top-adjust="drawer"
@@ -39,15 +53,23 @@ const drawerId = useId();
       :aria-controls="drawerId"
       @click="mobileTocVisible = true"
     >
-      <div class="line-clamp-1">
-        <span class="ris-subhead-bold">Inhalte</span>{{ " " }}
-        <span class="ris-subhead-regular">{{ subheading }}</span>
+      <div class="flex flex-col gap-4">
+        <div class="line-clamp-1">
+          <span class="typo-headline3-bold">Inhalte</span>{{ " " }}
+          <span class="typo-headline3-regular">{{ subheading }}</span>
+        </div>
+        <span
+          v-if="subheading && subheadingAddition"
+          class="ris-label2-regular line-clamp-1"
+          >{{ subheadingAddition }}</span
+        >
       </div>
 
-      <IcBaselineList class="ris-body2-regular flex-none text-blue-800" />
+      <IcBaselineList class="typo-body-regular flex-none text-blue-800" />
     </button>
   </Transition>
 
+  <!-- mobile open toc -->
   <Drawer
     v-model:visible="mobileTocVisible"
     aria-label="Inhalte"
@@ -57,29 +79,49 @@ const drawerId = useId();
     :close-button-props="closeButtonProps"
   >
     <template #header>
-      <div class="line-clamp-1">
-        <span class="ris-subhead-bold">Inhalte</span>{{ " " }}
-        <span class="ris-subhead-regular">{{ subheading }}</span>
+      <div class="flex flex-col gap-4">
+        <div class="line-clamp-1">
+          <span class="typo-headline3-bold">Inhalte</span>{{ " " }}
+          <span class="typo-headline3-regular">{{ subheading }}</span>
+        </div>
+        <span
+          v-if="subheading && subheadingAddition"
+          class="ris-label2-regular line-clamp-1"
+          >{{ subheadingAddition }}</span
+        >
       </div>
     </template>
-
-    <TreeView
-      :items="tableOfContents"
-      :selected="selectedKey"
-      :expand-to-key="selectedKey"
-      :selection-enabled="!!selectedKey"
-      label="Inhalte"
-      class="-mx-16 h-full"
-      @click="mobileTocVisible = false"
-    />
+    <div>
+      <NuxtLink
+        v-if="subheadingTo"
+        :to="subheadingTo"
+        class="ris-label1-regular text-[1rem] text-blue-800 sm:text-[1.125rem]"
+      >
+        <div
+          class="-mx-16 -mt-8 flex items-center justify-between border-b border-b-gray-400 p-16"
+        >
+          <span>Zur Gesamtausgabe</span>
+          <IcBaselineArrowForward class="size-24" />
+        </div>
+      </NuxtLink>
+      <TreeView
+        :items="tableOfContents"
+        :selected="selectedKey"
+        :expand-to-key="selectedKey"
+        :selection-enabled="!!selectedKey"
+        label="Inhalte"
+        class="-mx-16 h-full"
+        @click="mobileTocVisible = false"
+      />
+    </div>
   </Drawer>
-
+  <!-- Desktop  -->
   <TreeView
     :items="tableOfContents"
     :selected="selectedKey"
     :expand-to-key="selectedKey"
     :selection-enabled="!!selectedKey"
-    :subheading="subheading"
+    :subheading="desktopSubheading"
     :subheading-to="subheadingTo"
     heading="Inhalte"
     class="hidden h-full md:block md:pt-16"

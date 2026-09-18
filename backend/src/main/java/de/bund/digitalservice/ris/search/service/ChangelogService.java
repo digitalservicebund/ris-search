@@ -6,12 +6,15 @@ import com.fasterxml.jackson.databind.ObjectReader;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
+import de.bund.digitalservice.ris.search.utils.StringUtils;
 import java.time.Instant;
+import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -21,10 +24,9 @@ public class ChangelogService<T extends ObjectStorage> {
 
   private static final Logger logger = LogManager.getLogger(ChangelogService.class);
 
-  private final ObjectStorage bucket;
-
   public static final String CHANGELOGS_PREFIX = "changelogs/";
 
+  private final ObjectStorage bucket;
   private final ObjectReader changelogReader;
 
   /**
@@ -82,12 +84,26 @@ public class ChangelogService<T extends ObjectStorage> {
       return Optional.empty();
     } else {
       try {
-        return Optional.of(changelogReader.readValue(changelogContent.get()));
+        return Optional.of(
+            stripVersionPrefix(
+                bucket.getVersionPrefix(), changelogReader.readValue(changelogContent.get())));
       } catch (JsonProcessingException e) {
         logger.error("Error while parsing changelog file {} in bucket {}", filename, bucket, e);
         return Optional.empty();
       }
     }
+  }
+
+  private Changelog stripVersionPrefix(String versionPrefix, Changelog input) {
+    input.setChanged(
+        input.getChanged().stream()
+            .map(e -> StringUtils.stripPrefix(e, versionPrefix))
+            .collect(Collectors.toCollection(HashSet::new)));
+    input.setDeleted(
+        input.getDeleted().stream()
+            .map(e -> StringUtils.stripPrefix(e, versionPrefix))
+            .collect(Collectors.toCollection(HashSet::new)));
+    return input;
   }
 
   /**
@@ -96,17 +112,17 @@ public class ChangelogService<T extends ObjectStorage> {
    *
    * @param from the starting timestamp boundary (inclusive)
    * @param to the ending timestamp boundary (inclusive)
+   * @throws de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException If an error
+   *     occurs while accessing the object storage.
    * @return Changelog object including all changes that were indexed
    */
-  public Changelog getChangesBetween(Instant from, Instant to) {
-
+  public Changelog getChangesBetween(Instant from, Instant to) throws ObjectStoreServiceException {
     var changelogs =
         bucket.getAllKeysByPrefix(CHANGELOGS_PREFIX).stream()
-            .filter(e -> !CHANGELOGS_PREFIX.equals(e))
+            .filter(key -> !CHANGELOGS_PREFIX.equals(key))
             .filter(
-                e -> {
-                  Instant changelogTime =
-                      Instant.parse(e.substring(CHANGELOGS_PREFIX.length(), e.indexOf("Z") + 1));
+                key -> {
+                  Instant changelogTime = parseInstantFromKey(key);
                   // get all changelogs between timestamps inclusive
                   return !changelogTime.isBefore(from) && !changelogTime.isAfter(to);
                 })
@@ -118,25 +134,36 @@ public class ChangelogService<T extends ObjectStorage> {
     return foldChangelogs(changelogs);
   }
 
+  private Instant parseInstantFromKey(String key) {
+    String fileName = key.substring(key.lastIndexOf('/') + 1);
+    String timestampStr = fileName.substring(0, fileName.indexOf('Z') + 1);
+
+    try {
+      return Instant.parse(timestampStr);
+    } catch (DateTimeParseException e) {
+      String msg =
+          String.format("Could not parse timestamp %s of changelog with key %s", timestampStr, key);
+      throw new DateTimeParseException(msg, e.getParsedString(), e.getErrorIndex());
+    }
+  }
+
   /**
-   * Parses multiple changelog files from the given object storage and converts its content to a
-   * List of {@link de.bund.digitalservice.ris.search.importer.changelog.Changelog} objects.
+   * Parses multiple changelog files from the given object storage and collapses them into a single
+   * changelog. If no changes occurred the changed and deleted lists will be empty.
    *
-   * <p>The method fetches the file content from the object storage using the provided filename. If
-   * no content is found, or if there is an error during parsing, the method logs an error and
-   * continues with the following files.
-   *
-   * @param filenames the list of changelogfiles to be parsed.
-   * @return A {@link de.bund.digitalservice.ris.search.importer.changelog.Changelog} object if
-   *     parsing is successful, or null if the file could not be retrieved or parsed.
+   * @param filenames the list of changelog files to be collapsed.
+   * @return A {@link de.bund.digitalservice.ris.search.importer.changelog.Changelog} object. If
+   *     there were no changes, the lists in the object are empty.
    * @throws de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException If an error
    *     occurs while accessing the object storage.
    */
   public Changelog getChangesFromFiles(List<String> filenames) throws ObjectStoreServiceException {
-
-    List<Changelog> changelogs =
-        filenames.stream().map(this::parseOneChangelog).flatMap(Optional::stream).toList();
-    return foldChangelogs(changelogs);
+    return foldChangelogs(
+        filenames.stream()
+            .sorted()
+            .map(this::parseOneChangelog)
+            .flatMap(Optional::stream)
+            .toList());
   }
 
   /**
@@ -152,14 +179,17 @@ public class ChangelogService<T extends ObjectStorage> {
   /**
    * Folds multiple changelogs into a single changelog. If a file is marked as changed and deleted
    * in the same changelog, it will be marked as deleted. When a changelog with changeAll is
-   * encountered the method short circuits and returns a changeAll=true changelog.
+   * encountered the method short circuits and returns a changeAll=true changelog. When no changes
+   * are present the changed and deleted lists are empty.
    *
    * @param changelogs the list of changelogs to merge
    * @return the merged changelog
    */
   private Changelog foldChangelogs(List<Changelog> changelogs) {
+    Changelog result = new Changelog();
     if (containsChangeAll(changelogs)) {
-      return new Changelog(new HashSet<>(), new HashSet<>(), true);
+      result.setChangeAll(true);
+      return result;
     }
 
     enum Action {
@@ -171,16 +201,15 @@ public class ChangelogService<T extends ObjectStorage> {
       log.getChanged().forEach(filename -> mergedChanges.put(filename, Action.CHANGED));
       log.getDeleted().forEach(filename -> mergedChanges.put(filename, Action.DELETED));
     }
-    Changelog mergedChangelog = new Changelog();
     mergedChanges.forEach(
         (id, type) -> {
           if (Action.CHANGED.equals(type)) {
-            mergedChangelog.getChanged().add(id);
+            result.getChanged().add(id);
           } else {
-            mergedChangelog.getDeleted().add(id);
+            result.getDeleted().add(id);
           }
         });
 
-    return mergedChangelog;
+    return result;
   }
 }

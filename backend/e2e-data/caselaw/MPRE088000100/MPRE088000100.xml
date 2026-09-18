@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"
-                xmlns:ris="http://rechtsinformationen.bund.de/schema/ris/0.1/"
+                xmlns:ris="http://rechtsinformationen.bund.de/schema/ris/0.1"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xsi:schemaLocation="http://docs.oasis-open.org/legaldocml/ns/akn/3.0 https://docs.oasis-open.org/legaldocml/akn-core/v1.0/os/part2-specs/schemas/akomantoso30.xsd">
+                xsi:schemaLocation="http://docs.oasis-open.org/legaldocml/ns/akn/3.0 https://docs.oasis-open.org/legaldocml/akn-core/v2.0/cs01/part2-specs/schemas/akomantoso30.xsd">
 
     <akn:judgment name="/akn/ontology/de/concept/documenttype/bund/rechtsprechung/entscheidung">
         <akn:meta>
@@ -57,26 +57,23 @@
             </akn:references>
             <akn:proprietary source="ris">
                 <ris:meta>
-                    <ris:entscheidungstextListe domainTerm="Liste der Entscheidungstexte">
-                        <ris:entscheidungstext domainTerm="Entscheidungstext">FiktiverEntscheid2</ris:entscheidungstext>
-                    </ris:entscheidungstextListe>
-                    <ris:aktenzeichenListe domainTerm="Liste der Aktenzeichen">
-                        <ris:aktenzeichen domainTerm="Aktenzeichen" akn:refersTo="#aktenzeichen">AB C 78/90</ris:aktenzeichen>
-                    </ris:aktenzeichenListe>
                     <ris:dokumenttyp domainTerm="Dokumenttyp">Beschluss</ris:dokumenttyp>
-                    <ris:gericht domainTerm="Gericht" refersTo="#organisation-gericht-courttype-courtlocation">
+                    <ris:gericht domainTerm="Gericht" refersTo="#organisation-gericht-courttype-courtlocation" showAs="BPatG Label">
                         <ris:gerichtstyp domainTerm="Gerichtstyp">BPatG</ris:gerichtstyp>
                         <ris:gerichtsort domainTerm="Gerichtsort">Beispielstadt</ris:gerichtsort>
-                        <ris:spruchkoerper domainTerm="Spruchkörper" refersTo="#spruchkoerper">15. Senat</ris:spruchkoerper>
+                        <ris:spruchkoerper domainTerm="Spruchkörper">15. Senat</ris:spruchkoerper>
                     </ris:gericht>
-                    <ris:rechtskraft domainTerm="Rechtskraft">Keine Angabe</ris:rechtskraft>
-                    <ris:sachgebiete domainTerm="Sachgebiete">
-                        <ris:sachgebiet domainTerm="Sachgebiet" notation="neu">Testmarkenrecht!!</ris:sachgebiet>
-                        <ris:sachgebiet domainTerm="Sachgebiet" notation="neu">Testregulierungsrecht</ris:sachgebiet>
-                        <ris:sachgebiet domainTerm="Sachgebiet" notation="neu">Musterrecht (inkl. Beispieldaten)</ris:sachgebiet>
-                        <ris:sachgebiet domainTerm="Sachgebiet" notation="neu">Beiswertung2</ris:sachgebiet>
-                    </ris:sachgebiete>
                     <ris:dokumentationsstelle domainTerm="Dokumentationsstelle" refersTo="#bpatg-dokumentationsstelle">BPatG</ris:dokumentationsstelle>
+                    <ris:aktenzeichenListe domainTerm="Liste der Aktenzeichen">
+                        <ris:aktenzeichen domainTerm="Aktenzeichen" refersTo="#aktenzeichen">AB C 78/90</ris:aktenzeichen>
+                    </ris:aktenzeichenListe>
+                    <ris:sachgebiete domainTerm="Sachgebiete">
+                        <ris:sachgebiet domainTerm="Sachgebiet" sachgebiet-id="TT">Testmarkenrecht!!</ris:sachgebiet>
+                        <ris:sachgebiet domainTerm="Sachgebiet" sachgebiet-id="TT">Testregulierungsrecht</ris:sachgebiet>
+                        <ris:sachgebiet domainTerm="Sachgebiet" sachgebiet-id="TT">Musterrecht (inkl. Beispieldaten)</ris:sachgebiet>
+                        <ris:sachgebiet domainTerm="Sachgebiet" sachgebiet-id="TT">Beiswertung2</ris:sachgebiet>
+                    </ris:sachgebiete>
+                    <ris:rechtskraft domainTerm="Rechtskraft">Keine Angabe</ris:rechtskraft>
                 </ris:meta>
             </akn:proprietary>
         </akn:meta>

@@ -1,9 +1,23 @@
+import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import { render, screen } from "@testing-library/vue";
 import { describe } from "vitest";
 import LiteratureSearchResult from "~/components/search/LiteratureSearchResult.vue";
-import type { Literature, SearchResult, TextMatch } from "~/types/api";
+import type {
+  LiteratureSearchSchema,
+  SearchResult,
+  TextMatch,
+} from "~/types/api";
+import type { SearchResultHeadingLevel } from "~/utils/search/searchResults";
 
-const searchResult: SearchResult<Literature> = {
+const { useRouteMock } = vi.hoisted(() => ({
+  useRouteMock: vi.fn(() => ({
+    fullPath: "/suche?query=test&documentKind=L",
+  })),
+}));
+
+mockNuxtImport("useRoute", () => useRouteMock);
+
+const searchResult: SearchResult<LiteratureSearchSchema> = {
   item: {
     "@id": "",
     "@type": "Literature",
@@ -13,15 +27,10 @@ const searchResult: SearchResult<Literature> = {
     documentTypes: ["Book", "Article"],
     dependentReferences: ["DEP-122", "DEP-121"],
     independentReferences: ["INDEP-124", "INDEP-125"],
-    normReferences: ["GG, Art 6 Abs 2 S 1, 1949-05-23"],
     headline: "Eine Untersuchung der juristischen Methoden im 21. Jahrhundert",
     alternativeHeadline: "Study of Legal Methodologies in the 21st Century",
-    headlineAdditions: "Zusatz zur Hauptüberschrift",
     authors: ["Mustermann, Max", "Musterfrau, Erika"],
     collaborators: ["Doe, John", "Doe, Jane"],
-    originators: ["FOO"],
-    conferenceNotes: ["Internationaler Kongress 2025, Berlin, GER"],
-    languages: ["deu", "eng"],
     shortReport: `Dieses Werk analysiert die Entwicklung der juristischen Methoden seit Beginn des 21. Jahrhunderts mit besonderem Fokus auf europäische Rechtssysteme.
 Es werden die Unterschiede zwischen nationalen Rechtstraditionen dargestellt und ihre Auswirkungen auf internationale Verträge erläutert.
 Darüber hinaus untersucht die Studie die Rolle von Präzedenzfällen in modernen Gerichtsbarkeiten und diskutiert aktuelle Trends in der Gesetzesauslegung.
@@ -29,16 +38,7 @@ Abschließend gibt das Werk Empfehlungen für die praktische Anwendung juristisc
     outline:
       "1. Einführung\n2. Historischer Überblick\n3. Aktuelle Entwicklungen\n4. Schlussfolgerungen",
     encoding: [],
-    universityNotes: [],
     literatureType: "uli",
-    editors: [],
-    founder: [],
-    publishers: [],
-    publisherOrganizations: [],
-    publishingHouses: [],
-    edition: undefined,
-    volumes: [],
-    internationalIdentifiers: [],
   },
   textMatches: [],
 };
@@ -46,19 +46,22 @@ Abschließend gibt das Werk Empfehlungen für die praktische Anwendung juristisc
 function renderComponent({
   item = searchResult.item,
   textMatches = [],
-}: Partial<SearchResult<Literature>> = {}) {
-  const result: SearchResult<Literature> = {
+  headingLevel,
+}: Partial<SearchResult<LiteratureSearchSchema>> & {
+  headingLevel?: SearchResultHeadingLevel;
+} = {}) {
+  const result: SearchResult<LiteratureSearchSchema> = {
     item,
     textMatches,
   };
 
   return render(LiteratureSearchResult, {
-    props: { searchResult: result, order: 0 },
+    props: { searchResult: result, order: 0, headingLevel },
     global: {
       stubs: {
         NuxtLink: {
           template:
-            '<a :href="to" :aria-describedby="ariaDescribedby"><slot /></a>',
+            '<a :href="to.path ?? to" :data-from="to.query?.from" :aria-describedby="ariaDescribedby"><slot /></a>',
           props: ["to", "ariaDescribedby"],
         },
       },
@@ -67,193 +70,22 @@ function renderComponent({
 }
 
 describe("LiteratureSearchResult", () => {
-  it("renders the expected title", async () => {
-    renderComponent({});
-    expect(
-      screen.getByText(
-        "Eine Untersuchung der juristischen Methoden im 21. Jahrhundert",
-      ),
-    ).toBeInTheDocument();
-  });
-
-  it("has accessible description linking to result type", async () => {
-    renderComponent({});
-    expect(
-      screen.getByRole("link", {
-        name: "Eine Untersuchung der juristischen Methoden im 21. Jahrhundert",
-        description: "Book",
-      }),
-    ).toBeInTheDocument();
-  });
-
-  it("renders placeholder title if title is missing", async () => {
-    const searchResultWithoutTitle = {
-      item: {
-        ...searchResult.item,
-        headline: undefined,
-        alternativeHeadline: undefined,
-      },
-      textMatches: [],
-    };
-    renderComponent(searchResultWithoutTitle);
-    expect(screen.getByText("Titelzeile nicht vorhanden")).toBeInTheDocument();
-  });
-
-  it("displays highlighted headline when mainTitle", async () => {
-    const textMatch: TextMatch = {
-      "@type": "SearchResultMatch",
-      name: "mainTitle",
-      text: `testing <mark>highlighted main title</mark> is here`,
-      location: undefined,
-    };
-
-    renderComponent({ textMatches: [textMatch] });
-
-    const mark = screen.getByText("highlighted main title");
-    expect(mark.tagName).toBe("MARK");
-  });
-
-  it("displays highlighted headline when documentary title has markup", async () => {
-    const textMatch: TextMatch = {
-      "@type": "SearchResultMatch",
-      name: "documentaryTitle",
-      text: `testing <mark>highlighted documentary title</mark> is here`,
-      location: undefined,
-    };
-
-    // Clone the item but set headline to undefined
-    const itemWithoutHeadline = { ...searchResult.item, headline: undefined };
-
-    renderComponent({ item: itemWithoutHeadline, textMatches: [textMatch] });
-
-    const mark = screen.getByText("highlighted documentary title");
-    expect(mark.tagName).toBe("MARK");
-  });
-
-  it("displays alternative title when headline is not present", async () => {
-    const itemWithoutHeadline = { ...searchResult.item, headline: "" };
-    renderComponent({ item: itemWithoutHeadline });
-    expect(
-      screen.getByText("Study of Legal Methodologies in the 21st Century"),
-    ).toBeInTheDocument();
-  });
-
-  it("displays highlighted text with correct class", async () => {
-    const textMatch: TextMatch = {
-      "@type": "SearchResultMatch",
-      name: "shortReport",
-      text: "testing <mark>highlighted Text</mark> is here",
-      location: undefined,
-    };
-
-    renderComponent({ textMatches: [textMatch] });
-
-    const mark = screen.getByText("highlighted Text");
-    expect(mark.tagName).toBe("MARK");
-  });
-
-  it("renders full shortReport when no match is present", async () => {
-    renderComponent({});
-    expect(
-      screen.getByText(/Dieses Werk analysiert die Entwicklung/),
-    ).toBeInTheDocument();
-  });
-
-  it("applies line-clamp-3 class only when no highlight exists", async () => {
-    // No highlight
-    const { rerender } = renderComponent({});
-    const span = screen.getByTestId("highlighted-field");
-    expect(span).toHaveClass("line-clamp-3");
-
-    // With highlight
-    const match: TextMatch = {
-      "@type": "SearchResultMatch",
-      name: "shortReport",
-      text: `<mark>Dieses</mark> Werk analysiert`,
-      location: undefined,
-    };
-    await rerender({
-      searchResult: { item: searchResult.item, textMatches: [match] },
-    });
-    expect(screen.getByTestId("highlighted-field")).not.toHaveClass(
-      "line-clamp-3",
-    );
-  });
-
-  it("highlights a word in the middle of shortReport", async () => {
-    const match: TextMatch = {
-      "@type": "SearchResultMatch",
-      name: "shortReport",
-      text: `… Rolle von <mark>Präzedenzfällen</mark> in modernen Gerichtsbarkeiten …`,
-      location: undefined,
-    };
-
-    renderComponent({ textMatches: [match] });
-
-    const mark = screen.getByText("Präzedenzfällen");
-    expect(mark).toBeInTheDocument();
-    expect(mark.tagName).toBe("MARK");
-  });
-
-  it("highlights a word at the end of shortReport", async () => {
-    const match: TextMatch = {
-      "@type": "SearchResultMatch",
-      name: "shortReport",
-      text: `… automatisierter <mark>Entscheidungsfindung</mark>`,
-      location: undefined,
-    };
-
-    renderComponent({ textMatches: [match] });
-
-    const mark = screen.getByText("Entscheidungsfindung");
-    expect(mark).toBeInTheDocument();
-    expect(mark.tagName).toBe("MARK");
-  });
-
-  it("limits shortReport snippet length and preserves highlight", async () => {
-    const match: TextMatch = {
-      "@type": "SearchResultMatch",
-      name: "shortReport",
-      text: `… Rolle von <mark>Präzedenzfällen</mark> in modernen Gerichtsbarkeiten …`,
-      location: undefined,
-    };
-
-    renderComponent({ textMatches: [match] });
-
-    const snippet = screen.getByTestId("highlighted-field");
-    expect(snippet).toHaveTextContent("Präzedenzfällen");
-    expect(snippet.textContent?.length ?? 0).toBeLessThanOrEqual(280);
-  });
-
-  it("applies line-clamp-3 class only when no highlight exists", async () => {
-    // No match
-    const { rerender } = renderComponent({});
-    let span = screen.getByTestId("highlighted-field");
-    expect(span).toHaveClass("line-clamp-3");
-
-    // With match
-    const match: TextMatch = {
-      "@type": "SearchResultMatch",
-      name: "shortReport",
-      text: `<mark>Dieses</mark> Werk analysiert`,
-      location: undefined,
-    };
-    await rerender({
-      searchResult: { item: searchResult.item, textMatches: [match] },
-    });
-    span = screen.getByTestId("highlighted-field");
-    expect(span).not.toHaveClass("line-clamp-3");
-  });
-
   describe("metadata", () => {
     it("renders first documentType", async () => {
       renderComponent();
       expect(screen.getByText("Book")).toBeVisible();
     });
 
+    it("renders 'Literaturnachweis' if no documentType exists", async () => {
+      renderComponent({ item: { ...searchResult.item, documentTypes: [] } });
+      expect(screen.getByText("Literaturnachweis")).toBeVisible();
+    });
+
     it("renders first dependentReference", async () => {
       renderComponent();
-      expect(screen.getByText("DEP-122")).toBeVisible();
+      const referenceNumberBadge = screen.getByText("DEP-122");
+      expect(referenceNumberBadge).toBeVisible();
+      expect(referenceNumberBadge).toHaveClass(/border-gray/);
     });
 
     it("renders first independentReference if no dependentReference exists", async () => {
@@ -263,12 +95,226 @@ describe("LiteratureSearchResult", () => {
           dependentReferences: [],
         },
       });
-      expect(screen.getByText("INDEP-124")).toBeVisible();
+
+      const referenceNumberBadge = screen.getByText("INDEP-124");
+      expect(referenceNumberBadge).toBeVisible();
+      expect(referenceNumberBadge).toHaveClass(/border-gray/);
     });
 
     it("renders first year of publication", async () => {
       renderComponent();
       expect(screen.getByText("2021")).toBeVisible();
+    });
+  });
+
+  describe("headline", () => {
+    it("renders the expected title", async () => {
+      renderComponent({});
+      expect(
+        screen.getByText(
+          "Eine Untersuchung der juristischen Methoden im 21. Jahrhundert",
+        ),
+      ).toBeInTheDocument();
+    });
+
+    it("has accessible description linking to result type", async () => {
+      renderComponent({});
+      expect(
+        screen.getByRole("link", {
+          name: "Eine Untersuchung der juristischen Methoden im 21. Jahrhundert",
+          description: "Book",
+        }),
+      ).toBeInTheDocument();
+    });
+
+    it("renders placeholder title if title is missing", async () => {
+      const searchResultWithoutTitle = {
+        item: {
+          ...searchResult.item,
+          headline: undefined,
+          alternativeHeadline: undefined,
+        },
+        textMatches: [],
+      };
+      renderComponent(searchResultWithoutTitle);
+      expect(
+        screen.getByText("Titelzeile nicht vorhanden"),
+      ).toBeInTheDocument();
+    });
+
+    it("displays highlighted headline when main title has highlights", async () => {
+      const textMatch: TextMatch = {
+        "@type": "SearchResultMatch",
+        name: "mainTitle",
+        text: `testing <mark>highlighted main title</mark> is here`,
+        location: undefined,
+      };
+
+      renderComponent({ textMatches: [textMatch] });
+
+      const mark = screen.getByText("highlighted main title");
+      expect(mark.tagName).toBe("MARK");
+    });
+
+    it("displays highlighted headline when documentary title has markup", async () => {
+      const textMatch: TextMatch = {
+        "@type": "SearchResultMatch",
+        name: "documentaryTitle",
+        text: `testing <mark>highlighted documentary title</mark> is here`,
+        location: undefined,
+      };
+
+      const itemWithoutHeadline = { ...searchResult.item, headline: undefined };
+
+      renderComponent({ item: itemWithoutHeadline, textMatches: [textMatch] });
+
+      const mark = screen.getByText("highlighted documentary title");
+      expect(mark.tagName).toBe("MARK");
+    });
+
+    it("displays alternative title when headline is not present", async () => {
+      const itemWithoutHeadline = { ...searchResult.item, headline: "" };
+      renderComponent({ item: itemWithoutHeadline });
+      expect(
+        screen.getByText("Study of Legal Methodologies in the 21st Century"),
+      ).toBeInTheDocument();
+    });
+  });
+
+  describe("preview sections", () => {
+    it("renders no highlights when text matches is empty", () => {
+      renderComponent({});
+      expect(screen.queryAllByTestId("highlighted-field")).toHaveLength(0);
+    });
+
+    it("renders matches", () => {
+      const textMatches: TextMatch[] = [
+        {
+          "@type": "SearchResultMatch",
+          name: "outline",
+          text: "<mark>I. Einführung</mark>",
+          location: undefined,
+        },
+        {
+          "@type": "SearchResultMatch",
+          name: "shortReport",
+          text: "testing <mark>highlighted Text</mark> is here",
+          location: undefined,
+        },
+      ];
+
+      renderComponent({ textMatches });
+
+      expect(
+        screen.getByRole("link", { name: "Gliederung:" }),
+      ).toBeInTheDocument();
+      const outlineMark = screen.getByText("I. Einführung");
+      expect(outlineMark.tagName).toBe("MARK");
+
+      expect(
+        screen.getByRole("link", { name: "Kurzreferat:" }),
+      ).toBeInTheDocument();
+      const shortReportMark = screen.getByText("highlighted Text");
+      expect(shortReportMark.tagName).toBe("MARK");
+    });
+
+    it("filters HTML tags except mark, i, b", () => {
+      const text =
+        '<mark>mark</mark> <i>i</i> <b>b</b> <img src="" alt="do not show"> <div>div</div> plain_text.';
+      const expectedSanitized =
+        "<mark>mark</mark> <i>i</i> <b>b</b>  div plain_text.";
+
+      const textMatches: TextMatch[] = [
+        {
+          "@type": "SearchResultMatch",
+          name: "shortReport",
+          text,
+          location: undefined,
+        },
+      ];
+
+      renderComponent({ textMatches });
+
+      const contentItems = screen.getAllByTestId("highlighted-field");
+      expect(contentItems).toHaveLength(1);
+      expect(contentItems[0]?.innerHTML).toBe(expectedSanitized);
+    });
+
+    it("does not render a section when the text match has no highlight", () => {
+      renderComponent({
+        textMatches: [
+          {
+            "@type": "SearchResultMatch",
+            name: "shortReport",
+            text: "plain text without any highlight",
+            location: undefined,
+          },
+        ],
+      });
+
+      expect(screen.queryAllByTestId("highlighted-field")).toHaveLength(0);
+    });
+  });
+
+  it("includes the current search URL as query param in the detail page link", () => {
+    useRouteMock.mockReturnValue({
+      fullPath: "/suche?query=Recht&documentKind=L&pageIndex=3",
+    });
+
+    renderComponent({});
+
+    const link = screen.getByRole("link", {
+      name: "Eine Untersuchung der juristischen Methoden im 21. Jahrhundert",
+    });
+    expect(link).toHaveAttribute(
+      "data-from",
+      "/suche?query=Recht&documentKind=L&pageIndex=3",
+    );
+  });
+
+  it("includes the current search URL as query param in preview section links", () => {
+    useRouteMock.mockReturnValue({
+      fullPath: "/suche?query=Recht&documentKind=L&pageIndex=3",
+    });
+
+    renderComponent({
+      textMatches: [
+        {
+          "@type": "SearchResultMatch",
+          name: "shortReport",
+          text: "testing <mark>highlighted</mark> text",
+          location: undefined,
+        },
+      ],
+    });
+
+    const sectionLink = screen.getByRole("link", { name: "Kurzreferat:" });
+    expect(sectionLink).toHaveAttribute(
+      "data-from",
+      "/suche?query=Recht&documentKind=L&pageIndex=3",
+    );
+  });
+
+  describe("heading level", () => {
+    it("renders the title as an h2 with the responsive style by default", () => {
+      renderComponent();
+
+      const heading = screen.getByRole("heading", { level: 2 });
+      expect(heading).toBeInTheDocument();
+      expect(heading.closest("a")).toHaveClass("typo-headline-searchresult");
+    });
+
+    it("renders the title as an h3 with the compact style at level 3", () => {
+      renderComponent({ headingLevel: "3" });
+
+      const heading = screen.getByRole("heading", { level: 3 });
+      expect(heading).toBeInTheDocument();
+      expect(
+        screen.queryByRole("heading", { level: 2 }),
+      ).not.toBeInTheDocument();
+      expect(heading.closest("a")).toHaveClass(
+        "typo-headline-searchresult-compact",
+      );
     });
   });
 });

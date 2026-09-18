@@ -2,6 +2,7 @@ package de.bund.digitalservice.ris.search.repository.opensearch;
 
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import java.util.List;
+import org.jspecify.annotations.NonNull;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 
 /**
@@ -20,6 +21,21 @@ public interface ArticlesRepository extends ElasticsearchRepository<Article, Str
    */
   void deleteByWorkEliAndIndexedAtBefore(String workEli, String indexedAt);
 
+  /**
+   * Delete articles that were indexed before the provided timestamp.
+   *
+   * @param indexedAt ISO-8601 timestamp string cutoff
+   */
+  void deleteByIndexedAtBefore(String indexedAt);
+
   /** Delete all articles that do not have an indexedAt value set. */
   void deleteByIndexedAtIsNull();
+
+  /**
+   * Check if an article exists
+   *
+   * @param id the id of the article to check
+   * @return true if the article exists, false otherwise
+   */
+  boolean existsById(@NonNull String id);
 }

@@ -1,7 +1,5 @@
 name: Update-Chainguard-Image-Version-Cronjob
 on:
-  schedule:
-    - cron: '0 18 * * 0' # Runs at 6:00pm UTC (7 winter time/8 summer time in Germany) on Sundays
   # Allow manual workflow trigger
   workflow_dispatch:
 
@@ -18,10 +16,10 @@ jobs:
       pull-requests: write
       id-token: write
     steps:
-        - uses: chainguard-dev/actions/setup-gitsign@05fbd381f7c158bd33c9bbf3a28f67852269fdf8 #v1.6.21
+        - uses: chainguard-dev/actions/setup-gitsign@142d22e4cec7c824db396585b9bc86f76f7c1732 #v1.6.35
 
         - name: Bump chainguard/jre image
-          uses: digitalservicebund/bump-chainguard-digest@937cc7a12750bfd06419f32cabcaa79a37f32705 # v1.1.3
+          uses: digitalservicebund/bump-chainguard-digest@5cef1778a56ae77fec46e2975f767a6a91049edf # v1.1.3
           with:
             image_name: jre
             file_path: backend/Dockerfile.prod
@@ -29,7 +27,7 @@ jobs:
             branch: bump-chaingurad-jre-image-version
 
         - name: Bump chainguard/nginx image
-          uses: digitalservicebund/bump-chainguard-digest@937cc7a12750bfd06419f32cabcaa79a37f32705 # v1.1.3
+          uses: digitalservicebund/bump-chainguard-digest@5cef1778a56ae77fec46e2975f767a6a91049edf # v1.1.3
           with:
             image_name: nginx
             file_path: api-docs/Dockerfile
@@ -37,7 +35,7 @@ jobs:
             branch: bump-chaingurad-nginx-image-version
 
         - name: Bump chainguard/node image
-          uses: digitalservicebund/bump-chainguard-digest@937cc7a12750bfd06419f32cabcaa79a37f32705 # v1.1.3
+          uses: digitalservicebund/bump-chainguard-digest@5cef1778a56ae77fec46e2975f767a6a91049edf # v1.1.3
           with:
             image_name: node
             file_path: frontend/Dockerfile

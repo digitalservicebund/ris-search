@@ -1,6 +1,9 @@
 package de.bund.digitalservice.ris.search.controller.api;
 
+import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
+
 import de.bund.digitalservice.ris.search.config.ApiConfig;
+import de.bund.digitalservice.ris.search.config.ServerConfig;
 import de.bund.digitalservice.ris.search.exception.CustomValidationException;
 import de.bund.digitalservice.ris.search.mapper.AdministrativeDirectiveSchemaMapper;
 import de.bund.digitalservice.ris.search.mapper.AdministrativeDirectiveSearchSchemaMapper;
@@ -30,6 +33,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Pattern;
 import java.util.List;
 import java.util.Optional;
 import org.springdoc.core.annotations.ParameterObject;
@@ -43,6 +47,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 /**
  * Controller for managing administrative directives. It provides endpoints to retrieve, search,
@@ -50,12 +55,13 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Tag(name = "AdministrativeDirective")
 @RestController
-@Profile({"default", "staging", "uat", "test", "prototype"})
+@Profile({"dev", "e2e", "staging", "uat", "test", "prototype"})
 public class AdministrativeDirectiveController {
 
   private final AdministrativeDirectiveService service;
   private final AdministrativeDirectiveXsltTransformerService transformerService;
   private final ChangelogService<AdministrativeDirectiveBucket> changelogService;
+  private final String jsonldContextPath;
 
   /**
    * Constructor for the AdministrativeDirectiveController, used to initialize the controller with
@@ -64,15 +70,18 @@ public class AdministrativeDirectiveController {
    * @param service the service responsible for handling administrative directive operations
    * @param transformerService the service responsible for transforming administrative directives
    *     using XSLT
+   * @param serverConfig serverconfig of the application
    */
   @Autowired
   public AdministrativeDirectiveController(
       AdministrativeDirectiveService service,
       AdministrativeDirectiveXsltTransformerService transformerService,
-      ChangelogService<AdministrativeDirectiveBucket> changelogService) {
+      ChangelogService<AdministrativeDirectiveBucket> changelogService,
+      ServerConfig serverConfig) {
     this.service = service;
     this.transformerService = transformerService;
     this.changelogService = changelogService;
+    this.jsonldContextPath = serverConfig.getBackEndUrl() + ApiConfig.Paths.JSONLD_CONTEXT;
   }
 
   /**
@@ -102,7 +111,7 @@ public class AdministrativeDirectiveController {
     AdministrativeDirective unit = result.getFirst();
     return ResponseEntity.ok()
         .contentType(MediaType.APPLICATION_JSON)
-        .body(AdministrativeDirectiveSchemaMapper.fromDomain(unit));
+        .body(AdministrativeDirectiveSchemaMapper.fromDomain(unit, jsonldContextPath));
   }
 
   /**
@@ -119,6 +128,7 @@ public class AdministrativeDirectiveController {
       path = ApiConfig.Paths.ADMINISTRATIVE_DIRECTIVE,
       produces = MediaType.APPLICATION_JSON_VALUE)
   @Operation(
+      operationId = "searchAdministrativeDirective",
       summary = "List and search administrative directives",
       description =
           "The endpoint returns a list of administrative directives from our database. The list is paginated and can be filtered and sorted.")
@@ -142,7 +152,7 @@ public class AdministrativeDirectiveController {
           service.simpleSearch(universalSearchParams, searchParams, sortedPageRequest);
       return ResponseEntity.ok()
           .contentType(MediaType.APPLICATION_JSON)
-          .body(AdministrativeDirectiveSearchSchemaMapper.fromSearchPage(page));
+          .body(AdministrativeDirectiveSearchSchemaMapper.fromSearchPage(page, jsonldContextPath));
     } catch (UncategorizedElasticsearchException e) {
       LuceneQueryTools.checkForInvalidQuery(e);
       throw e;
@@ -223,6 +233,40 @@ public class AdministrativeDirectiveController {
             params.getFrom().toInstant(), params.getTo().toInstant());
 
     return ResponseEntity.ok(
-        ChangelogResponseMapper.mapChangelog(changelog, DocumentKind.ADMINISTRATIVE_DIRECTIVE));
+        ChangelogResponseMapper.mapChangelog(
+            changelog, DocumentKind.ADMINISTRATIVE_DIRECTIVE, jsonldContextPath));
+  }
+
+  /**
+   * Retrieves all files associated with an administrative directive doc number as a ZIP archive.
+   *
+   * @param documentNumber the unique identifier of the administrative directive to retrieve
+   * @return a ResponseEntity containing the ZIP file as a streaming response body if the document
+   *     is found, or a 404 Not Found response if no document matches the provided identifier
+   */
+  @GetMapping(
+      path = ApiConfig.Paths.ADMINISTRATIVE_DIRECTIVE + "/{documentNumber}.zip",
+      produces = "application/zip")
+  @Operation(
+      summary = "Decision ZIP (XML and attachments)",
+      description = "Returns all administrative directive files as a ZIP archive.")
+  @ApiResponse(responseCode = "200")
+  @ApiResponse(responseCode = "404", content = @Content(schema = @Schema()))
+  public ResponseEntity<StreamingResponseBody> getAdministrativeDirectiveAsZip(
+      @Pattern(regexp = "^[a-zA-Z]{4}\\d{9}$", message = "Invalid document number format")
+          @Parameter(example = "XXLS201770751")
+          @PathVariable
+          String documentNumber) {
+
+    String filename = documentNumber + ".zip";
+    List<String> keys = service.getAllFilenamesByDocumentNumber(documentNumber);
+
+    if (keys.isEmpty()) {
+      return ResponseEntity.notFound().build();
+    }
+    return ResponseEntity.ok()
+        .header(CONTENT_DISPOSITION, "attachment;filename=\"%s\"".formatted(filename))
+        .contentType(MediaType.valueOf("application/zip"))
+        .body(outputStream -> service.writeZipArchive(keys, outputStream));
   }
 }

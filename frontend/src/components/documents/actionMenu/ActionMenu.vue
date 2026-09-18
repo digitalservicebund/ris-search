@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Button, Drawer } from "primevue";
+import { Drawer } from "primevue";
 import type { MenuItem } from "primevue/menuitem";
 import IcBaselineMoreVert from "~icons/ic/baseline-more-vert";
 import { NuxtLink } from "#components";
@@ -29,8 +29,10 @@ const handleDrawerItemClick = async (item: ActionMenuItem) => {
 </script>
 
 <template>
-  <div class="md:hidden" v-bind="$attrs">
-    <Button
+  <!-- data attribute can be used by the layout to adjust spacings when an action
+  menu exists -->
+  <div class="md:hidden" v-bind="$attrs" data-breadcrumbs-adjust="actionmenu">
+    <UiButton
       ref="drawerTriggerRef"
       aria-label="Aktionen anzeigen"
       text
@@ -42,7 +44,7 @@ const handleDrawerItemClick = async (item: ActionMenuItem) => {
       <template #icon>
         <IcBaselineMoreVert />
       </template>
-    </Button>
+    </UiButton>
 
     <Drawer
       :id="drawerId"
@@ -58,7 +60,7 @@ const handleDrawerItemClick = async (item: ActionMenuItem) => {
           <button
             v-if="item.disabled"
             type="button"
-            class="body-font flex w-full cursor-not-allowed items-center gap-8 py-12 text-left text-gray-800"
+            class="typo-body-regular flex w-full cursor-not-allowed items-center gap-8 py-12 text-left text-gray-800"
             disabled
           >
             <component :is="item.iconComponent" class="shrink-0" />
@@ -67,7 +69,7 @@ const handleDrawerItemClick = async (item: ActionMenuItem) => {
 
           <NuxtLink
             v-else-if="item.url"
-            class="body-font flex items-center gap-8 py-12 no-underline"
+            class="typo-body-regular flex items-center gap-8 py-12 no-underline"
             external
             :data-attr="(item as ActionMenuItem).analyticsId"
             :to="item.url"
@@ -80,7 +82,7 @@ const handleDrawerItemClick = async (item: ActionMenuItem) => {
           <button
             v-else
             type="button"
-            class="body-font flex w-full items-center gap-8 py-12 text-left"
+            class="typo-body-regular flex w-full items-center gap-8 py-12 text-left"
             :data-attr="(item as ActionMenuItem).analyticsId"
             @click="handleDrawerItemClick(item)"
           >
@@ -94,8 +96,8 @@ const handleDrawerItemClick = async (item: ActionMenuItem) => {
 
   <ul role="menubar" class="hidden items-center *:-mx-4 md:flex">
     <li v-for="item in actions" :key="item.label" role="presentation">
-      <Button
-        v-tooltip.bottom="item.label"
+      <UiButton
+        v-tooltip.bottom="item.disabled ? undefined : item.label"
         role="menuitem"
         text
         :disabled="item.disabled"
@@ -107,9 +109,12 @@ const handleDrawerItemClick = async (item: ActionMenuItem) => {
         @click="item.command"
       >
         <template #icon>
-          <component :is="(item as ActionMenuItem).iconComponent" />
+          <component
+            :is="(item as ActionMenuItem).iconComponent"
+            class="ris-label2-regular"
+          />
         </template>
-      </Button>
+      </UiButton>
     </li>
   </ul>
 </template>

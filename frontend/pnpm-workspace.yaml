@@ -1,26 +1,20 @@
 packages: []
 
-overrides:
-
 allowBuilds:
   "@parcel/watcher": true
   "@sentry/cli": false
   core-js: false
   esbuild: true
   protobufjs: false
+  vue-demi: false
 
 minimumReleaseAge: 4320
-minimumReleaseAgeExclude:
-  - playwright
-  - playwright-core
-  - "@playwright/test"
-  - "@tailwindcss/oxide"
-  - tailwindcss
-  - "@tailwindcss/node"
-  - "@tailwindcss/vite"
 
 publicHoistPattern:
   - "vue"
   - "vite"
 
 savePrefix: ""
+
+minimumReleaseAgeExclude:
+  - "@digitalservicebund/ris-ui@4.7.0"

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { Button } from "primevue";
 import IconArrowBack from "~icons/ic/baseline-arrow-back";
 import IconArrowForward from "~icons/ic/baseline-arrow-forward";
 import { NuxtLink } from "#components";
@@ -21,27 +20,23 @@ export type Page = {
   view: PartialCollectionView;
 };
 
-const props = withDefaults(
-  defineProps<{
-    page?: Page | null;
-    navigationPosition?: "top" | "bottom";
-    isLoading?: boolean;
-  }>(),
-  { page: undefined, navigationPosition: "top", isLoading: false },
-);
+const { page, navigationPosition = "top" } = defineProps<{
+  page?: Page | null;
+  navigationPosition?: "top" | "bottom";
+}>();
 
 const emit = defineEmits<(e: "updatePage", page: number) => void>();
 
 const route = useRoute();
 
 const previousPageNumber = computed(() => {
-  if (!props.page?.view.previous) return undefined;
-  return parsePageNumber(props.page.view.previous).page;
+  if (!page?.view.previous) return undefined;
+  return parsePageNumber(page.view.previous).page;
 });
 
 const nextPageNumber = computed(() => {
-  if (!props.page?.view.next) return undefined;
-  return parsePageNumber(props.page.view.next).page;
+  if (!page?.view.next) return undefined;
+  return parsePageNumber(page.view.next).page;
 });
 
 const previousPageRoute = computed<RouteLocationRaw | undefined>(() => {
@@ -85,34 +80,32 @@ async function previousPage() {
 }
 
 const currentPageIndex = computed(() => {
-  if (!props.page?.["@id"]) return undefined;
-  return parsePageNumber(props.page["@id"]).page;
+  if (!page?.["@id"]) return undefined;
+  return parsePageNumber(page["@id"]).page;
 });
 
-const isOnlyPage = computed(
-  () => !(props.page?.view.previous || props.page?.view.next),
-);
+const isOnlyPage = computed(() => !(page?.view.previous || page?.view.next));
 
-const itemsOnPage = computed(() => buildItemsOnPageString(props.page));
+const itemsOnPage = computed(() => buildItemsOnPageString(page));
 </script>
 
 <template>
-  <slot v-if="props.navigationPosition == 'bottom'" />
+  <slot v-if="navigationPosition == 'bottom'" />
 
   <nav
-    v-if="page?.member && page?.member.length && !isLoading"
+    v-if="page?.member && page?.member.length"
     aria-label="Paginierung"
     class="flex flex-col items-center"
     :class="{
-      'mt-20': props.navigationPosition === 'bottom',
-      'mb-20': props.navigationPosition === 'top',
+      'mt-48': navigationPosition === 'bottom',
+      'mb-48': navigationPosition === 'top',
     }"
   >
     <div class="flex w-full items-center">
       <div
         class="relative flex grow flex-wrap items-center justify-between gap-8"
       >
-        <Button
+        <UiButton
           v-if="!isOnlyPage"
           :to="previousPageRoute"
           :as="previousPageRoute ? NuxtLink : undefined"
@@ -123,19 +116,19 @@ const itemsOnPage = computed(() => buildItemsOnPageString(props.page));
           @click.prevent="previousPage()"
         >
           <template #icon><IconArrowBack /></template>
-        </Button>
+        </UiButton>
 
-        <span class="ris-label1-regular only:m-auto">
+        <span class="typo-label1-regular only:m-auto">
           <span
             v-if="!isOnlyPage && currentPageIndex !== undefined"
-            class="ris-label1-bold"
+            class="typo-label1-bold"
           >
             Seite {{ currentPageIndex + 1 }}:
           </span>
           <span>{{ itemsOnPage }}</span>
         </span>
 
-        <Button
+        <UiButton
           v-if="!isOnlyPage"
           :to="nextPageRoute"
           :as="nextPageRoute ? NuxtLink : undefined"
@@ -149,10 +142,10 @@ const itemsOnPage = computed(() => buildItemsOnPageString(props.page));
           <template #icon="slot">
             <IconArrowForward :class="slot.class" />
           </template>
-        </Button>
+        </UiButton>
       </div>
     </div>
   </nav>
 
-  <slot v-if="props.navigationPosition == 'top'" />
+  <slot v-if="navigationPosition == 'top'" />
 </template>

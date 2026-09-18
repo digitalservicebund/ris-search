@@ -1,3 +1,4 @@
+import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 // @vitest-environment node
 import type { EventHandlerRequest, H3Event } from "h3";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -31,7 +32,7 @@ vi.mock("~/composables/useBackendUrl", () => ({
   default: (url?: string) => url ?? "",
 }));
 
-vi.stubGlobal("$fetch", mockFetch);
+mockNuxtImport("$fetch", () => mockFetch);
 
 describe("feedback.post", () => {
   let mockEvent: H3Event<EventHandlerRequest>;
@@ -45,7 +46,7 @@ describe("feedback.post", () => {
 
   it("forwards feedback and empty honeypot to the backend by default", async () => {
     mockReadBody.mockResolvedValue({ text: "Great app!" });
-    mockGetHeader.mockReturnValue("https://example.com/search?query=test");
+    mockGetHeader.mockReturnValue("https://example.com/suche?query=test");
     mockGetRequestURL.mockReturnValue(
       new URL("https://example.com/api/feedback"),
     );
@@ -53,11 +54,15 @@ describe("feedback.post", () => {
 
     await feedbackHandler(mockEvent);
 
-    expect(mockFetch).toHaveBeenCalledWith(
-      expect.stringContaining(
-        "/v1/feedback?text=Great+app%21&url=%2Fsearch%3Fquery%3Dtest&user_id=anonymous_feedback_user&name=",
-      ),
-    );
+    expect(mockFetch).toHaveBeenCalledWith("/v1/feedback", {
+      method: "POST",
+      body: {
+        text: "Great app!",
+        url: "/suche?query=test",
+        user_id: "anonymous_feedback_user",
+        name: "",
+      },
+    });
   });
 
   it("uses provided url, user_id and honeypot value from form body", async () => {
@@ -72,11 +77,15 @@ describe("feedback.post", () => {
 
     await feedbackHandler(mockEvent);
 
-    expect(mockFetch).toHaveBeenCalledWith(
-      expect.stringContaining(
-        "/v1/feedback?text=Feedback+text&url=%2Fcustom-page&user_id=user123&name=honeypot-value",
-      ),
-    );
+    expect(mockFetch).toHaveBeenCalledWith("/v1/feedback", {
+      method: "POST",
+      body: {
+        text: "Feedback text",
+        url: "/custom-page",
+        user_id: "user123",
+        name: "honeypot-value",
+      },
+    });
   });
 
   it("redirects with error parameter when backend fails", async () => {
@@ -115,10 +124,14 @@ describe("feedback.post", () => {
 
     await feedbackHandler(mockEvent);
 
-    expect(mockFetch).toHaveBeenCalledWith(
-      expect.stringContaining(
-        "/v1/feedback?text=Feedback&url=%2Fpage%3Fparam%3Dvalue&user_id=anonymous_feedback_user&name=",
-      ),
-    );
+    expect(mockFetch).toHaveBeenCalledWith("/v1/feedback", {
+      method: "POST",
+      body: {
+        text: "Feedback",
+        url: "/page?param=value",
+        user_id: "anonymous_feedback_user",
+        name: "",
+      },
+    });
   });
 });

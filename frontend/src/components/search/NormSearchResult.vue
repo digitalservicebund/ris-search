@@ -1,127 +1,167 @@
 <script setup lang="ts">
-import IcBaselineBalance from "~icons/ic/baseline-balance";
-import Badge from "~/components/Badge.vue";
-import type { SearchResultHeaderItem } from "~/components/search/SearchResultHeader.vue";
-import { usePostHog } from "~/composables/usePostHog";
-import { usePrivateFeaturesFlag } from "~/composables/usePrivateFeaturesFlag";
+import type { RouteLocationRaw, RouteLocationAsPath } from "#vue-router";
 import type {
-  LegislationExpression,
-  SearchResult,
-  TextMatch,
-} from "~/types/api";
-import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
-import { formatNormValidity } from "~/utils/displayValues";
-import { temporalCoverageToValidityInterval } from "~/utils/norm";
-import { sanitizeSearchResult } from "~/utils/sanitize";
-import { addEllipsis } from "~/utils/textFormatting";
+  SearchResultHeaderItem,
+  TextHeaderItem,
+} from "~/components/search/SearchResultHeader.vue";
+import type { LegislationExpression, SearchResult } from "~/types/api";
+import type { SearchResultHeadingLevel } from "~/utils/search/searchResults";
+import {
+  getMatch,
+  getSearchResultHeadline,
+  getTitleWithFallback,
+} from "~/utils/search/searchResults";
 
-const props = defineProps<{
+const {
+  searchResult,
+  order,
+  headingLevel = "2",
+} = defineProps<{
   searchResult: SearchResult<LegislationExpression>;
   order: number;
+
+  /** Heading level of the result title. */
+  headingLevel?: SearchResultHeadingLevel;
 }>();
 
+const headlineStyle = computed(() => getSearchResultHeadline(headingLevel));
+
 const { searchResultClicked } = usePostHog();
+const privateFeaturesEnabled = usePrivateFeaturesFlag();
+const route = useRoute();
 
-const item = computed(() => props.searchResult.item);
-
-const textMatches: ComputedRef<TextMatch[]> = computed(
-  () => props.searchResult.textMatches,
+const headline = computed(() =>
+  getTitleWithFallback(
+    getMatch("name", searchResult.textMatches),
+    searchResult.item.name,
+  ),
 );
 
-const headline = computed(() => {
-  const match =
-    getMatch("name", textMatches.value) ||
-    item.value.name ||
-    "Titelzeile nicht vorhanden";
-
-  return sanitizeSearchResult(match);
-});
-
-function getMatch(match: string, highlights: TextMatch[]) {
-  return highlights.find((highlight) => highlight.name === match)?.text;
-}
-
-const link = computed(() => {
-  const prefix = "/norms/";
-  const expressionEli = item.value.legislationIdentifier;
-  if (!expressionEli) return null;
-  return prefix + expressionEli;
-});
-
-const privateFeaturesEnabled = usePrivateFeaturesFlag();
-
-const formattedDate = computed(() => {
-  const date = privateFeaturesEnabled
-    ? temporalCoverageToValidityInterval(item.value?.temporalCoverage)?.from
-    : item.value?.exampleOfWork.legislationDate;
-
-  return dateFormattedDDMMYYYY(date);
-});
-
-const relevantHighlights = computed(() => {
-  return textMatches.value
-    .filter((highlight) => highlight.name != "name")
-    .map((hl) => ({ ...hl, text: addEllipsis(hl.text) }) as TextMatch);
-});
-
-function openResult(url: string) {
-  searchResultClicked(url, props.order);
-}
-
-const validityStatus = computed(() => {
-  return formatNormValidity(item.value.temporalCoverage);
-});
+const secondaryTitle = computed<TextHeaderItem | undefined>(() =>
+  searchResult.item.alternateName
+    ? {
+        type: "text",
+        value: truncateAtWord(searchResult.item.alternateName, 90, true),
+      }
+    : undefined,
+);
 
 const resultTypeId = useId();
 
-const headerItems = computed<SearchResultHeaderItem[]>(() => {
-  return [
-    { value: "Norm", id: resultTypeId },
-    { value: item.value.abbreviation },
-    { value: formattedDate.value },
-  ].filter((i): i is SearchResultHeaderItem => i.value !== undefined);
+const headerItems = computed(() => {
+  const items: SearchResultHeaderItem[] = [];
+
+  items.push({ type: "text", value: searchResult.item.abbreviation });
+
+  const validityStatus = formatNormValidity(searchResult.item.temporalCoverage);
+
+  if (validityStatus) {
+    items.push({
+      type: "badge",
+      value: validityStatus.label,
+      color: validityStatus.color,
+      class: "font-bold!",
+    });
+  }
+
+  let dateValue: string | undefined = dateFormattedDDMMYYYY(
+    searchResult.item.exampleOfWork.legislationDate,
+  );
+
+  if (privateFeaturesEnabled) {
+    const coverage = temporalCoverageToValidityInterval(
+      searchResult.item.temporalCoverage,
+    );
+    const from = dateFormattedDDMMYYYY(coverage?.from);
+    const to = dateFormattedDDMMYYYY(coverage?.to);
+    dateValue = from && to ? `${from} - ${to}` : from;
+  }
+
+  if (dateValue) {
+    items.push({ type: "text", value: dateValue });
+  }
+
+  const docTypeItem: TextHeaderItem = {
+    type: "text",
+    value: "Norm",
+    id: resultTypeId,
+  };
+
+  return {
+    documentType: docTypeItem,
+    otherItems: items,
+  };
 });
 
-const getArticleUrl = (highlight: TextMatch) =>
-  `${link.value}/${highlight.location ?? ""}`;
+const detailPageRoute = computed<RouteLocationAsPath>(() => ({
+  path: `/gesetze/${searchResult.item.legislationIdentifier}`,
+  query: { from: route.fullPath },
+}));
+
+const relevantHighlights = computed(() =>
+  searchResult.textMatches
+    .filter((highlight) => highlight.name != "name")
+    .map((hl) => {
+      const textHasHighlight = hl.text.includes("<mark>");
+      const text = textHasHighlight
+        ? sanitizeSearchResult(addEllipsis(hl.text))
+        : "";
+
+      const highlightRoute: RouteLocationRaw = {
+        ...detailPageRoute.value,
+        path: `${detailPageRoute.value.path}/${hl.location}`,
+      };
+
+      return {
+        location: hl.location,
+        name: sanitizeSearchResult(hl.name),
+        route: highlightRoute,
+        text,
+      };
+    }),
+);
 </script>
 
 <template>
-  <div class="my-36 flex flex-col gap-8 hyphens-auto">
-    <SearchResultHeader :icon="IcBaselineBalance" :items="headerItems">
-      <template #trailing>
-        <Badge
-          v-if="validityStatus"
-          class="md:ml-auto"
-          v-bind="validityStatus"
-        />
-      </template>
-    </SearchResultHeader>
-    <NuxtLink
-      v-if="!!link"
-      :to="link"
-      :aria-describedby="resultTypeId"
-      class="ris-heading3-bold! ris-link1-regular link-hover block"
-      @click="openResult(link)"
+  <div class="flex flex-col gap-8 hyphens-auto">
+    <SearchResultHeader
+      :document-type="headerItems.documentType"
+      :items="headerItems.otherItems"
+      :secondary-item="secondaryTitle"
     >
-      <h2 v-html="headline" />
+    </SearchResultHeader>
+
+    <NuxtLink
+      v-if="detailPageRoute"
+      :to="detailPageRoute"
+      :aria-describedby="resultTypeId"
+      :class="headlineStyle.class"
+      @click="searchResultClicked(detailPageRoute.path, order)"
+    >
+      <component :is="headlineStyle.tag" v-html="headline" />
     </NuxtLink>
 
-    <div class="flex w-full flex-col gap-6" data-testid="highlights">
+    <div
+      v-if="relevantHighlights.length"
+      class="flex w-full flex-col gap-6"
+      data-testid="highlights"
+    >
       <div
         v-for="(highlight, index) in relevantHighlights"
         :key="highlight.name + index"
         class="flex flex-col"
       >
         <NuxtLink
-          class="ris-link1-bold link-hover"
-          :to="getArticleUrl(highlight)"
-          @click="openResult(getArticleUrl(highlight))"
+          class="typo-link-bold link-hover"
+          :to="highlight.route"
+          @click="searchResultClicked(highlight.route.path, order)"
         >
-          <span v-html="sanitizeSearchResult(highlight.name)" />
+          <span v-html="highlight.name" />
         </NuxtLink>
         <div
-          v-html="highlight.text ? sanitizeSearchResult(highlight.text) : ''"
+          v-if="highlight.text"
+          data-testid="highlighted-field"
+          v-html="highlight.text"
         />
       </div>
     </div>

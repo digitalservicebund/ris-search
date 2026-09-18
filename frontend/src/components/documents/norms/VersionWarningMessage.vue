@@ -1,12 +1,8 @@
 <script setup lang="ts">
-import { Message } from "primevue";
 import IcBaselineHistory from "~icons/ic/baseline-history";
 import IcBaselineUpdate from "~icons/ic/baseline-update";
 import type { RouteLocationRaw } from "#vue-router";
 import type { LegislationExpression } from "~/types/api";
-import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
-import type { ValidityStatus } from "~/utils/norm";
-import { temporalCoverageToValidityInterval } from "~/utils/norm";
 
 const {
   currentVersionValidityStatus,
@@ -19,8 +15,10 @@ const {
   futureVersion?: LegislationExpression;
   futureWarningMessage: string;
   historicalWarningMessage: string;
-  inForceVersionLink?: string;
+  inForceVersionLink?: RouteLocationRaw;
 }>();
+
+const route = useRoute();
 
 const warningMessageType = computed(() =>
   currentVersionValidityStatus === "InForce" ? "info" : "warn",
@@ -53,20 +51,21 @@ const versionLink = computed<
 >(() => {
   if (currentVersionValidityStatus === "InForce" && futureVersion) {
     return {
-      to: `/norms/${futureVersion.legislationIdentifier}`,
+      to: {
+        path: `/gesetze/${futureVersion.legislationIdentifier}`,
+        query: { from: route.query.from },
+      },
       label: "Zur zukünftigen Fassung",
     };
   } else if (inForceVersionLink) {
     return { to: inForceVersionLink, label: "Zur aktuell gültigen Fassung" };
-  } else {
-    return undefined;
-  }
+  } else return undefined;
 });
 </script>
 
 <template>
-  <div v-if="showWarningMessage" class="mb-40 w-fit">
-    <Message :severity="warningMessageType" class="ris-body2-regular">
+  <div v-if="showWarningMessage" class="w-fit">
+    <UiMessage :severity="warningMessageType" class="typo-label2-regular">
       <template #icon>
         <IcBaselineUpdate
           v-if="currentVersionValidityStatus === 'InForce'"
@@ -79,7 +78,7 @@ const versionLink = computed<
       </template>
 
       <p>
-        <span :id="versionTextId" class="ris-label2-bold">{{
+        <span :id="versionTextId" class="typo-label2-bold">{{
           versionText
         }}</span
         >{{ " " }}
@@ -87,12 +86,12 @@ const versionLink = computed<
         <NuxtLink
           v-if="versionLink"
           :to="versionLink.to"
-          class="ris-link2-regular"
+          class="ris-link2-regular 2xl:ris-link1-regular"
           :aria-describedby="versionTextId"
         >
           {{ versionLink.label }}
         </NuxtLink>
       </p>
-    </Message>
+    </UiMessage>
   </div>
 </template>

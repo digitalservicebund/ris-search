@@ -1,72 +1,21 @@
 @import "tailwindcss";
 @import "../../node_modules/@digitalservicebund/ris-ui/dist/style.css";
-
 @source "../../node_modules/@digitalservicebund/ris-ui/dist/**/*.{js,vue,ts}";
 
-@import "./print.css";
+@import "./global.css" layer(base);
+@import "./print.css" layer(base);
+@import "./typography.css";
+@import "./layout.css";
 
 @theme {
   --font-mono:
     ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, Consolas,
     "DejaVu Sans Mono", monospace;
 
-  --max-width-prose: 45rem;
-}
-
-@layer base {
-  :root {
-    --p-tabs-tab-border-color: var(--color-gray-400);
-    --p-tabs-tablist-border-color: var(--color-gray-400);
-  }
-
-  body {
-    @apply ris-body1-regular antialiased;
-  }
-}
-
-@utility container {
-  @apply mx-auto px-16;
-}
-
-@utility link-hover {
-  @apply no-underline hover:underline;
-}
-
-/* Added as part of RISDEV-11283 (mobile action menu) for initial responsive
-typography. Should be moved to RIS UI when implementing all of responsive
-typography (RISDEV-10826). */
-@utility body-font {
-  @apply ris-body2-regular sm:ris-body1-regular;
-}
-
-/* Added as part of RISDEV-11282 (mobile breadcrumbs) for initial responsive
-typography. Should be moved to RIS UI when implementing all of responsive
-typography (RISDEV-10826). */
-@utility body-font-link {
-  @apply ris-link2-regular sm:ris-link1-regular;
-}
-
-@utility mono-font {
-  @apply font-mono text-base leading-20;
-}
-
-mark {
-  @apply bg-yellow-200;
-}
-
-input[type="search"] {
-  &[data-size="large"] {
-    &::-webkit-search-cancel-button {
-      @apply mr-[-1.125rem] h-48 w-48;
-    }
-  }
-
-  &::-webkit-search-cancel-button {
-    @apply -mr-12 h-36 w-36 cursor-pointer appearance-none;
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-16 -16 52 52'><path fill='currentColor' d='M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12z'></path></svg>");
-  }
-}
-
-input[type="search"]::-webkit-search-cancel-button:hover {
-  @apply bg-blue-100;
+  /* explicitly define breakpoints to align with the design */
+  --breakpoint-sm: 24rem; /* 384 */
+  --breakpoint-md: 48rem; /* 768px */
+  --breakpoint-lg: 64rem; /* 1024px */
+  --breakpoint-xl: 80rem; /* 1280px */
+  --breakpoint-2xl: 96rem; /* 1536px */
 }

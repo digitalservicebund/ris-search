@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import ActionMenu from "~/components/documents/actionMenu/ActionMenu.vue";
 import { useCopyUrlActionItem } from "~/composables/useActionMenuItem/useCopyUrlActionItem";
 import { usePdfActionItem } from "~/composables/useActionMenuItem/usePdfActionItem";
 import { usePrintActionItem } from "~/composables/useActionMenuItem/usePrintActionItem";
@@ -11,7 +10,9 @@ const { administrativeDirective } = defineProps<{
 }>();
 
 const actions = computed(() => {
-  const permalink = useRequestURL().href;
+  const requestUrl = useRequestURL();
+  requestUrl.search = "";
+  const permalink = requestUrl.href;
 
   const xmlUrl = useBackendUrl(
     administrativeDirective?.encoding?.find(
@@ -29,5 +30,5 @@ const actions = computed(() => {
 </script>
 
 <template>
-  <ActionMenu :actions />
+  <DocumentsActionMenu :actions />
 </template>

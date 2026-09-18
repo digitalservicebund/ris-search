@@ -1,0 +1,166 @@
+{
+  "@context": {
+      "@version": 1.1,
+      "schema": "https://schema.org/",
+      "hydra": "http://www.w3.org/ns/hydra/core#",
+      "ris": "https://rechtsinformationen.bund.de/vocab#",
+      "totalItems": "hydra:totalItems",
+      "member": "hydra:member",
+      "view": "hydra:view",
+      "first": {
+        "@id": "hydra:first",
+        "@type": "@id"
+      },
+      "previous": {
+        "@id": "hydra:previous",
+        "@type": "@id"
+      },
+      "next": {
+        "@id": "hydra:next",
+        "@type": "@id"
+      },
+      "last": {
+        "@id": "hydra:last",
+        "@type": "@id"
+      },
+      "encoding": "schema:encoding",
+      "contentUrl": "schema:contentUrl",
+      "encodingFormat": "schema:encodingFormat",
+      "inLanguage": "schema:inLanguage",
+      "name": "schema:name",
+      "LegislationObject": "schema:LegislationObject",
+      "PublicationIssue": "schema:PublicationIssue",
+      "MediaObject": "schema:MediaObject",
+      "documentNumber": "schema:identifier",
+      "Legislation": {
+        "@id": "schema:Legislation",
+        "@context": {
+          "eId": "ris:eId",
+          "abbreviation": "schema:alternateName",
+          "risAbbreviation": "schema:alternateName",
+          "alternateName": "schema:alternateName",
+          "exampleOfWork": "schema:exampleOfWork",
+          "legislationIdentifier": "schema:legislationIdentifier",
+          "legislationLegalForce": "schema:legislationLegalForce",
+          "legislationDate": "schema:legislationDate",
+          "datePublished": "schema:datePublished",
+          "isPartOf": "schema:isPartOf",
+          "temporalCoverage": "schema:temporalCoverage",
+          "hasPart": "schema:hasPart",
+          "partType": "ris:legislationPartType",
+          "headline": "schema:headline"
+        }
+      },
+      "Decision": {
+        "@id": "ris:Decision",
+        "@context": {
+          "ecli": "ris:ecli",
+          "caseFacts": "ris:caseFacts",
+          "decisionGrounds": "ris:decisionGrounds",
+          "dissentingOpinion": "ris:dissentingOpinion",
+          "grounds": "ris:grounds",
+          "guidingPrinciple": "ris:guidingPrinciple",
+          "headline": "schema:headline",
+          "titleLine": "ris:titleLine",
+          "headnote": "ris:headnote",
+          "otherHeadnote": "ris:otherHeadnote",
+          "otherLongText": "ris:otherLongText",
+          "tenor": "ris:tenor",
+          "decisionDate": "ris:decisionDate",
+          "fileNumbers": "ris:fileNumber",
+          "courtType": "ris:courtType",
+          "location": "schema:location",
+          "documentType": "ris:documentType",
+          "outline": "ris:outline",
+          "judicialBody": "ris:judicialBody",
+          "keywords": "schema:keywords",
+          "courtName": "ris:courtName",
+          "decisionName": "schema:name",
+          "deviatingDocumentNumber": "ris:deviatingDocumentNumber",
+          "previousDecisions": "ris:previousDecisions",
+          "ensuingDecisions": "ris:ensuingDecisions",
+          "gesetzeskraft": "ris:gesetzeskraft",
+          "streitjahre": "ris:streitjahre",
+          "vorabdokument": "ris:vorabdokument"
+        }
+      },
+      "Literature": {
+        "@id": "ris:Literature",
+        "@context": {
+          "yearsOfPublication": "ris:yearsOfPublication",
+          "documentTypes": "ris:documentTypes",
+          "dependentReferences": "ris:dependentReferences",
+          "independentReferences": "ris:independentReferences",
+          "normReferences": "ris:normReferences",
+          "headline": "schema:headline",
+          "headlineAdditions": "ris:headlineAdditions",
+          "alternativeHeadline": "schema:alternativeHeadline",
+          "edition": "ris:edition",
+          "internationalIdentifiers": "ris:internationalIdentifiers",
+          "authors": "schema:author",
+          "collaborators": "schema:contributor",
+          "editors": "schema:editor",
+          "founder": "ris:founder",
+          "publishers": "schema:publisher",
+          "publisherOrganizations": "ris:publisherOrganizations",
+          "publishingHouses": "ris:publishingHouses",
+          "languages": "ris:languages",
+          "originators": "schema:creator",
+          "conferenceNotes": "ris:conferenceNotes",
+          "shortReport": "schema:abstract",
+          "outline": "ris:outline",
+          "universityNotes": "ris:universityNotes",
+          "volumes": "ris:volumes",
+          "literatureType": "ris:literatureType"
+        }
+      },
+      "AdministrativeDirective": {
+        "@id": "ris:AdministrativeDirective",
+        "@context": {
+          "headline": "schema:headline",
+          "shortReport": "schema:abstract",
+          "documentType": "ris:documentType",
+          "documentTypeDetail": "ris:documentTypeDetail",
+          "referenceNumbers": "ris:fileNumber",
+          "entryIntoForceDate": "schema:validFrom",
+          "expiryDate": "schema:validThrough",
+          "legislationAuthority": "schema:legislationPassedBy",
+          "references": "ris:reference",
+          "citationDates": "ris:citationDate",
+          "normReferences": "ris:normReference",
+          "outline": "ris:outline"
+        }
+      },
+      "SearchResult": {
+        "@id": "ris:SearchResult",
+        "@context": {
+          "item": "ris:item",
+          "textMatches": "ris:SearchResultMatch"
+        }
+      },
+      "SearchResultMatch": {
+        "@id": "ris:SearchResultMatch",
+        "@context": {
+          "location": "ris:matchLocation",
+          "text": "schema:text"
+        }
+      },
+     "Changelog": {
+       "@id": "schema:DataFeed",
+       "@context": {
+         "changed": {
+           "@id": "ris:changed",
+           "@container": "@set"
+         },
+         "deleted": {
+           "@id": "ris:deleted",
+           "@container": "@set"
+         },
+         "allChanged": {
+           "@id": "ris:allChanged",
+           "@type": "schema:Boolean"
+         }
+       }
+     }
+   }
+}

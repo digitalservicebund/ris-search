@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="Grammatiken/Norms/legalDocML.de.sch" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.8.2/"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.8.2/ Grammatiken/Norms/legalDocML.de-metadaten-ris.xsd http://MetadatenRegelungstext.LegalDocML.de/1.8.2/ Grammatiken/legalDocML.de-metadaten-regelungstext.xsd http://MetadatenRechtsetzungsdokument.LegalDocML.de/1.8.2/ Grammatiken/legalDocML.de-metadaten-rechtsetzungsdokument.xsd http://Inhaltsdaten.LegalDocML.de/1.8.2/ Grammatiken/legalDocML.de-regelungstextverkuendungsfassung.xsd">
+    <akn:act name="/akn/ontology/de/concept/documenttype/bund/regelungstext-verkuendung">
+        <akn:meta GUID="a1000000-0000-0000-0000-000000000001" eId="meta-n1">
+            <akn:identification GUID="a1000000-0000-0000-0000-000000000002" eId="meta-n1_ident-n1" source="attributsemantik-noch-undefiniert">
+                <akn:FRBRWork GUID="a1000000-0000-0000-0000-000000000003" eId="meta-n1_ident-n1_frbrwork-n1">
+                    <akn:FRBRthis GUID="a1000000-0000-0000-0000-000000000004" eId="meta-n1_ident-n1_frbrwork-n1_frbrthis-n1" value="eli/bund/bgbl-1/2025/999/regelungstext-1"/>
+                    <akn:FRBRuri GUID="a1000000-0000-0000-0000-000000000005" eId="meta-n1_ident-n1_frbrwork-n1_frbruri-n1" value="eli/bund/bgbl-1/2025/999"/>
+                    <akn:FRBRalias GUID="a1000000-0000-0000-0000-000000000006" eId="meta-n1_ident-n1_frbrwork-n1_frbralias-n1" name="übergreifende-id" value="a1000000-0000-0000-0000-000000000099"/>
+                    <akn:FRBRdate GUID="a1000000-0000-0000-0000-000000000007" date="2025-01-01" eId="meta-n1_ident-n1_frbrwork-n1_frbrdate-n1" name="verkuendungsfassung-verkuendungsdatum"/>
+                    <akn:FRBRauthor GUID="a1000000-0000-0000-0000-000000000008" eId="meta-n1_ident-n1_frbrwork-n1_frbrauthor-n1" href="recht.bund.de/institution/bundesregierung"/>
+                    <akn:FRBRcountry GUID="a1000000-0000-0000-0000-000000000009" eId="meta-n1_ident-n1_frbrwork-n1_frbrcountry-n1" value="de"/>
+                    <akn:FRBRnumber GUID="a1000000-0000-0000-0000-000000000010" eId="meta-n1_ident-n1_frbrwork-n1_frbrnumber-n1" value="999"/>
+                    <akn:FRBRname GUID="a1000000-0000-0000-0000-000000000011" eId="meta-n1_ident-n1_frbrwork-n1_frbrname-n1" value="bgbl-1"/>
+                    <akn:FRBRsubtype GUID="a1000000-0000-0000-0000-000000000012" eId="meta-n1_ident-n1_frbrwork-n1_frbrsubtype-n1" value="regelungstext-1"/>
+                </akn:FRBRWork>
+                <akn:FRBRExpression GUID="a1000000-0000-0000-0000-000000000013" eId="meta-n1_ident-n1_frbrexpression-n1">
+                    <akn:FRBRthis GUID="a1000000-0000-0000-0000-000000000014" eId="meta-n1_ident-n1_frbrexpression-n1_frbrthis-n1" value="eli/bund/bgbl-1/2025/999/2025-01-01/1/deu/regelungstext-1"/>
+                    <akn:FRBRuri GUID="a1000000-0000-0000-0000-000000000015" eId="meta-n1_ident-n1_frbrexpression-n1_frbruri-n1" value="eli/bund/bgbl-1/2025/999/2025-01-01/1/deu"/>
+                    <akn:FRBRalias GUID="a1000000-0000-0000-0000-000000000016" eId="meta-n1_ident-n1_frbrexpression-n1_frbralias-n1" name="aktuelle-version-id" value="a1000000-0000-0000-0000-000000000098"/>
+                    <akn:FRBRauthor GUID="a1000000-0000-0000-0000-000000000017" eId="meta-n1_ident-n1_frbrexpression-n1_frbrauthor-n1" href="recht.bund.de/institution/bundesregierung"/>
+                    <akn:FRBRdate GUID="a1000000-0000-0000-0000-000000000018" date="2025-01-01" eId="meta-n1_ident-n1_frbrexpression-n1_frbrdate-n1" name="verkuendung"/>
+                    <akn:FRBRlanguage GUID="a1000000-0000-0000-0000-000000000019" eId="meta-n1_ident-n1_frbrexpression-n1_frbrlanguage-n1" language="deu"/>
+                    <akn:FRBRversionNumber GUID="a1000000-0000-0000-0000-000000000020" eId="meta-n1_ident-n1_frbrexpression-n1_frbrversionnumber-n1" value="1"/>
+                </akn:FRBRExpression>
+                <akn:FRBRManifestation GUID="a1000000-0000-0000-0000-000000000021" eId="meta-n1_ident-n1_frbrmanifestation-n1">
+                    <akn:FRBRthis GUID="a1000000-0000-0000-0000-000000000022" eId="meta-n1_ident-n1_frbrmanifestation-n1_frbrthis-n1" value="eli/bund/bgbl-1/2025/999/2025-01-01/1/deu/2025-01-01/regelungstext-1.xml"/>
+                    <akn:FRBRuri GUID="a1000000-0000-0000-0000-000000000023" eId="meta-n1_ident-n1_frbrmanifestation-n1_frbruri-n1" value="eli/bund/bgbl-1/2025/999/2025-01-01/1/deu/2025-01-01/regelungstext-1.xml"/>
+                    <akn:FRBRdate GUID="a1000000-0000-0000-0000-000000000024" date="2025-01-01" eId="meta-n1_ident-n1_frbrmanifestation-n1_frbrdate-n1" name="generierung"/>
+                    <akn:FRBRauthor GUID="a1000000-0000-0000-0000-000000000025" eId="meta-n1_ident-n1_frbrmanifestation-n1_frbrauthor-n1" href="recht.bund.de"/>
+                    <akn:FRBRformat GUID="a1000000-0000-0000-0000-000000000026" eId="meta-n1_ident-n1_frbrmanifestation-n1_frbrformat-n1" value="xml"/>
+                </akn:FRBRManifestation>
+            </akn:identification>
+            <akn:lifecycle GUID="a1000000-0000-0000-0000-000000000027" eId="meta-n1_lebzykl-n1" source="attributsemantik-noch-undefiniert">
+                <akn:eventRef GUID="a1000000-0000-0000-0000-000000000028" date="2025-01-01" eId="meta-n1_lebzykl-n1_ereignis-n1" refersTo="ausfertigung" source="attributsemantik-noch-undefiniert" type="generation"/>
+            </akn:lifecycle>
+            <akn:temporalData GUID="a1000000-0000-0000-0000-000000000029" eId="meta-n1_geltzeiten-n1" source="attributsemantik-noch-undefiniert">
+                <akn:temporalGroup GUID="a1000000-0000-0000-0000-000000000030" eId="meta-n1_geltzeiten-n1_geltungszeitgr-n1">
+                    <akn:timeInterval GUID="a1000000-0000-0000-0000-000000000031" eId="meta-n1_geltzeiten-n1_geltungszeitgr-n1_gelzeitintervall-n1" refersTo="geltungszeit" start="#meta-n1_lebzykl-n1_ereignis-n1"/>
+                </akn:temporalGroup>
+            </akn:temporalData>
+            <akn:proprietary GUID="a1000000-0000-0000-0000-000000000032" eId="meta-n1_proprietary-n1" source="attributsemantik-noch-undefiniert">
+                <ris:legalDocML.de_metadaten xmlns:ris="http://MetadatenRIS.LegalDocML.de/1.8.2/" xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.8.2/ ../schema/legalDocML.de-metadaten-ris.xsd">
+                    <ris:abkuerzung refersTo="interne-abkuerzung">EmptyBodyTestG</ris:abkuerzung>
+                    <ris:inkraft date="2025-01-01"/>
+                </ris:legalDocML.de_metadaten>
+            </akn:proprietary>
+        </akn:meta>
+        <akn:preface GUID="a1000000-0000-0000-0000-000000000033" eId="einleitung-n1">
+            <akn:longTitle GUID="a1000000-0000-0000-0000-000000000034" eId="einleitung-n1_doktitel-n1">
+                <akn:p GUID="a1000000-0000-0000-0000-000000000035" eId="einleitung-n1_doktitel-n1_text-n1">
+                    <akn:docTitle GUID="a1000000-0000-0000-0000-000000000036" eId="einleitung-n1_doktitel-n1_text-n1_doctitel-n1">Gesetz mit leerem Gesetzestext</akn:docTitle>
+                    <akn:shortTitle GUID="a1000000-0000-0000-0000-000000000037" eId="einleitung-n1_doktitel-n1_text-n1_kurztitel-n1">(EmptyBodyTestG)</akn:shortTitle>
+                </akn:p>
+            </akn:longTitle>
+        </akn:preface>
+        <akn:body GUID="a1000000-0000-0000-0000-000000000038" eId="hauptteil-n1">
+        </akn:body>
+    </akn:act>
+</akn:akomaNtoso>

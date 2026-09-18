@@ -10,7 +10,6 @@ import org.opensearch.search.fetch.subphase.highlight.HighlightBuilder;
 public final class RisHighlightBuilder {
 
   public static final int HIGHLIGHT_FRAGMENT_SIZE = 320;
-  public static final int NO_MATCH_SIZE = 160;
   public static final String HIGHLIGHT_PRE_TAG = "<mark>";
   public static final String HIGHLIGHT_POST_TAG = "</mark>";
 
@@ -31,6 +30,6 @@ public final class RisHighlightBuilder {
         .numOfFragments(1)
         .preTags(HIGHLIGHT_PRE_TAG)
         .postTags(HIGHLIGHT_POST_TAG)
-        .noMatchSize(NO_MATCH_SIZE);
+        .noMatchSize(0);
   }
 }

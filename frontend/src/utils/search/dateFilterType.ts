@@ -171,6 +171,8 @@ export function dateFilterToQuery(
   else if (documentKind === DocumentKind.Literature) {
     if (strictFilter.type === "period") {
       filterStr = `years_of_publication:[${strictFilter.from} TO ${strictFilter.to}]`;
+    } else if (strictFilter.type === "specificDate") {
+      filterStr = `years_of_publication:${strictFilter.from}`;
     }
   }
 
@@ -185,6 +187,8 @@ export function dateFilterToQuery(
  * use it will throw an error.
  *
  * @param filter Date filter to convert
+ * @param documentKind Kind of document being searched. For literature the
+ *   filter stores plain years, which are expanded to full ISO dates here.
  * @returns Filter object or undefined if the filter is "allTime"
  * @throws If the provided filter is in an inconsistent state (e.g. required
  *   parameters for the current type are missing) or unsupported in the simple
@@ -192,6 +196,7 @@ export function dateFilterToQuery(
  */
 export function dateFilterToSimpleSearchParams(
   filter: DateFilterValue,
+  documentKind: DocumentKind,
 ): { dateFrom?: string; dateTo?: string } | undefined {
   if (filter.type === "currentlyInForce") {
     throw new Error(
@@ -207,6 +212,13 @@ export function dateFilterToSimpleSearchParams(
   // When searching for a specific date, the API expects the from and to
   // properties of the filter to be set to the same date
   if (type === "specificDate") to = from;
+
+  // For literature the filter stores plain years, but the simple search
+  // endpoint expects full ISO dates. Expand the year to cover Jan 1 - Dec 31.
+  if (documentKind === DocumentKind.Literature) {
+    if (from) from = `${from}-01-01`;
+    if (to) to = `${to}-12-31`;
+  }
 
   return { dateFrom: from, dateTo: to };
 }

@@ -2,6 +2,8 @@
   "template": {
     "settings":
     {
+      "number_of_shards": 3,
+      "number_of_replicas": 1,
       "analysis": {
         "analyzer": {
           "custom_german_analyzer": {
@@ -32,6 +34,20 @@
             ],
             "char_filter": [
               "replace_article_character",
+              "replace_euro_character"
+            ]
+          },
+          "custom_german_fingerprint_analyzer": {
+            "type": "custom",
+            "tokenizer": "standard",
+            "filter": [
+              "lowercase",
+              "german_normalization",
+              "article_fingerprint_removed_tokens",
+              "german_stemmer",
+              "fingerprint"
+            ],
+            "char_filter": [
               "replace_euro_character"
             ]
           }
@@ -96,14 +112,13 @@
             "synonyms": [
               "Abgas Reduzierend, Abgasreduzierend"
             ]
+          },
+          "article_fingerprint_removed_tokens": {
+            "type": "stop",
+            "stopwords": ["§", "paragraph", "paragraf", "article", "artikel", "art", "abs"]
           }
         },
         "char_filter": {
-          "replace_special_char_whitespace_filter": {
-            "type": "pattern_replace",
-            "pattern": "[/\\-. ]",
-            "replacement": ""
-          },
           "replace_article_character": {
             "type": "pattern_replace",
             "pattern": "\\u00A7",
@@ -113,12 +128,22 @@
             "type": "pattern_replace",
             "pattern": "\\u20AC",
             "replacement": "eur"
+          },
+          "whitespace_to_underscore": {
+            "type": "pattern_replace",
+            "pattern": "\\s+",
+            "replacement": "_"
           }
         },
         "normalizer": {
           "normalized_keyword": {
             "type": "custom",
             "char_filter": [],
+            "filter": ["asciifolding", "lowercase"]
+          },
+          "norm_abbreviation_normalized_keyword": {
+            "type": "custom",
+            "char_filter": ["whitespace_to_underscore"],
             "filter": ["asciifolding", "lowercase"]
           }
         }

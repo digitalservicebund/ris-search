@@ -12,11 +12,16 @@ pre-commit:
       run: >-
         pnpm fmt {staged_files} &&
         pnpm lint {staged_files}
+    check-format-api-docs:
+      root: api-docs
+      stage_fixed: true
+      run: >-
+        pnpm fmt {staged_files} &&
+        pnpm lint {staged_files}
     check-javadocs:
-      skip: true
       tags: check javadocs
       root: backend
-      run: ./gradlew checkstyleMain -Dinclude=$(echo {staged_files} | sed 's/ /,/g') && git add {staged_files}
+      run: ./gradlew checkstyleMain -Dinclude=$(echo {staged_files} | sed 's/ /,/g')
 pre-push:
   parallel: true
   commands:

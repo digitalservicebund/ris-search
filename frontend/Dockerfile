@@ -1,5 +1,6 @@
 FROM node:26.3.0-alpine3.22@sha256:c7932b9e5e337b0e733d6e16abc1b0e104759e8b05e59ed56586cce967d26dfe AS build
 ARG SENTRY_RELEASE
+ARG SENTRY_UPLOAD_SOURCEMAPS=false
 RUN npm install -g corepack
 RUN corepack enable
 WORKDIR /app
@@ -13,9 +14,10 @@ RUN --mount=type=secret,id=SENTRY_AUTH_TOKEN,required=false \
   if [ -f /run/secrets/SENTRY_AUTH_TOKEN ]; then \
   export SENTRY_AUTH_TOKEN="$(cat /run/secrets/SENTRY_AUTH_TOKEN)"; \
   fi && \
+  SENTRY_UPLOAD_SOURCEMAPS=${SENTRY_UPLOAD_SOURCEMAPS} \
   pnpm run prepare && NODE_OPTIONS="--max-old-space-size=4096" pnpm build
 
-FROM cgr.dev/chainguard/node@sha256:5b82401fc180a4ffc657dc9df3dcdd403633dd2da52d340ea2508e6014c7508d
+FROM cgr.dev/chainguard/node@sha256:1f903d44fc11a6f6e74447fc2c6a3c141f112217576be5d96c283210116b5d25
 ARG SENTRY_RELEASE
 USER node
 WORKDIR /app

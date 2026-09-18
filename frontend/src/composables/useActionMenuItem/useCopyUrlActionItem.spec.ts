@@ -4,16 +4,6 @@ import IcBaselineCheck from "~icons/ic/baseline-check";
 import IconLink from "~icons/ic/outline-link";
 import { useCopyUrlActionItem } from "~/composables/useActionMenuItem/useCopyUrlActionItem";
 
-const { mockToastAdd } = vi.hoisted(() => ({
-  mockToastAdd: vi.fn(),
-}));
-
-vi.mock("primevue/usetoast", () => ({
-  useToast: () => ({
-    add: mockToastAdd,
-  }),
-}));
-
 describe("useCopyUrlActionItem", () => {
   beforeEach(() => {
     vi.resetAllMocks();
@@ -32,13 +22,11 @@ describe("useCopyUrlActionItem", () => {
     expect(item.disabled).toBeTruthy();
 
     expect(navigator.clipboard.writeText).not.toHaveBeenCalled();
-    expect(mockToastAdd).not.toHaveBeenCalled();
 
     // command should do nothing when no url is given
     await item.command?.();
 
     expect(navigator.clipboard.writeText).not.toHaveBeenCalled();
-    expect(mockToastAdd).not.toHaveBeenCalled();
   });
 
   it("creates an ActionMenuItem with provided values", async () => {
@@ -49,18 +37,11 @@ describe("useCopyUrlActionItem", () => {
     expect(item.disabled).toBeFalsy();
 
     expect(navigator.clipboard.writeText).not.toHaveBeenCalled();
-    expect(mockToastAdd).not.toHaveBeenCalled();
 
     await item.command?.();
 
     expect(navigator.clipboard.writeText).toHaveBeenCalledExactlyOnceWith(
       "https://example.com",
-    );
-
-    expect(mockToastAdd).toHaveBeenCalledExactlyOnceWith(
-      expect.objectContaining({
-        summary: "Kopiert!",
-      }),
     );
   });
 

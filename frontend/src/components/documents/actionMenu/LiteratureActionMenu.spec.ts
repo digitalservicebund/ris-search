@@ -7,24 +7,12 @@ import { describe, expect, it, vi } from "vitest";
 import LiteratureActionMenu from "~/components/documents/actionMenu/LiteratureActionMenu.vue";
 import type { Literature } from "~/types/api";
 
-const { mockToastAdd } = vi.hoisted(() => ({
-  mockToastAdd: vi.fn(),
-}));
-
 vi.mock("~/composables/useBackendUrl", () => ({
   default: vi.fn((url?: string) => url),
 }));
 
-vi.mock("primevue/usetoast", () => ({
-  useToast: () => ({
-    add: mockToastAdd,
-  }),
-}));
-
 mockNuxtImport("useRequestURL", () => {
-  return () => ({
-    href: "https://example.com/literature",
-  });
+  return () => new URL("https://example.com/literature?foo=bar");
 });
 
 const mockedLiterature = {
@@ -86,12 +74,6 @@ describe("LiteratureActionMenu", () => {
 
     expect(await navigator.clipboard.readText()).toEqual(
       "https://example.com/literature",
-    );
-
-    expect(mockToastAdd).toHaveBeenCalledExactlyOnceWith(
-      expect.objectContaining({
-        summary: "Kopiert!",
-      }),
     );
   });
 

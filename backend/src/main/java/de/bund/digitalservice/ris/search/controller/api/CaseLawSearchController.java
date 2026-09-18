@@ -1,6 +1,7 @@
 package de.bund.digitalservice.ris.search.controller.api;
 
 import de.bund.digitalservice.ris.search.config.ApiConfig;
+import de.bund.digitalservice.ris.search.config.ServerConfig;
 import de.bund.digitalservice.ris.search.exception.CustomValidationException;
 import de.bund.digitalservice.ris.search.mapper.CaseLawSearchSchemaMapper;
 import de.bund.digitalservice.ris.search.mapper.SortParamsConverter;
@@ -44,10 +45,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class CaseLawSearchController {
   private final CaseLawService caseLawService;
+  private final ServerConfig serverConfig;
 
+  /**
+   * Constructor for the CaseLawSearchController class.
+   *
+   * @param caseLawService the service layer responsible for case law operations
+   * @param serverConfig serverconfig of the application
+   */
   @Autowired
-  public CaseLawSearchController(CaseLawService caseLawService) {
+  public CaseLawSearchController(CaseLawService caseLawService, ServerConfig serverConfig) {
+
     this.caseLawService = caseLawService;
+    this.serverConfig = serverConfig;
   }
 
   /**
@@ -62,6 +72,7 @@ public class CaseLawSearchController {
    */
   @GetMapping(path = ApiConfig.Paths.CASELAW, produces = MediaType.APPLICATION_JSON_VALUE)
   @Operation(
+      operationId = "searchCaseLaw",
       summary = "List and search decisions",
       description =
           "The endpoint returns a list of decisions from our database. The list is paginated and can be filtered and sorted.")
@@ -85,7 +96,9 @@ public class CaseLawSearchController {
               universalSearchParams, caseLawSearchParams, sortedPageRequest);
       return ResponseEntity.ok()
           .contentType(MediaType.APPLICATION_JSON)
-          .body(CaseLawSearchSchemaMapper.fromSearchPage(page));
+          .body(
+              CaseLawSearchSchemaMapper.fromSearchPage(
+                  page, serverConfig.getBackEndUrl() + ApiConfig.Paths.JSONLD_CONTEXT));
     } catch (UncategorizedElasticsearchException e) {
       LuceneQueryTools.checkForInvalidQuery(e);
       throw e;
@@ -104,6 +117,7 @@ public class CaseLawSearchController {
       path = ApiConfig.Paths.CASELAW + "/courts",
       produces = MediaType.APPLICATION_JSON_VALUE)
   @Operation(
+      operationId = "getCaseLawCourts",
       summary = "List courts",
       description =
           "Lists courts with long and short name and number of associated decisions. The prefix parameter may be used to filter this list. Only includes courts whose decisions have been published in this database.")

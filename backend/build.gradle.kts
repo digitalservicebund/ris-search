@@ -9,6 +9,7 @@ buildscript { repositories { mavenCentral() } }
 plugins {
     jacoco
     java
+    `java-test-fixtures`
     checkstyle
     alias(libs.plugins.spring.boot)
     alias(libs.plugins.spring.dependency.management)
@@ -22,9 +23,6 @@ plugins {
 group = "de.bund.digitalservice"
 version = "0.0.1-SNAPSHOT"
 
-java.sourceCompatibility = JavaVersion.VERSION_21
-java.targetCompatibility = JavaVersion.VERSION_21
-
 configurations {
     compileOnly { extendsFrom(annotationProcessor.get()) }
 }
@@ -32,10 +30,17 @@ configurations {
 repositories {
     mavenCentral()
     maven {
+        url = uri("https://maven.pkg.github.com/digitalservicebund/ris-html-transformation")
+        credentials {
+            username = System.getenv("GH_PACKAGES_REPOSITORY_USER") ?: project.findProperty("global_gh_packages_user") as String?
+            password = System.getenv("GH_PACKAGES_REPOSITORY_TOKEN") ?: project.findProperty("global_gh_packages_token") as String?
+        }
+    }
+    maven {
         url = uri("https://maven.pkg.github.com/digitalservicebund/ris-xml-schema")
         credentials {
-            username = System.getenv("GH_PACKAGES_REPOSITORY_USER")
-            password = System.getenv("GH_PACKAGES_REPOSITORY_TOKEN")
+            username = System.getenv("GH_PACKAGES_REPOSITORY_USER") ?: project.findProperty("global_gh_packages_user") as String?
+            password = System.getenv("GH_PACKAGES_REPOSITORY_TOKEN") ?: project.findProperty("global_gh_packages_token") as String?
         }
     }
 }
@@ -59,14 +64,19 @@ sonar {
             "sonar.coverage.exclusions",
             "**/config/**, **/e2e/**, **/CustomErrorController.java, **/RestClientConfigStackit.java",
         )
+        // RechtsprechungController intentionally duplicates CaseLawController's and
+        // CaseLawSearchController's endpoint bodies (see class Javadoc) so both
+        // /v1/case-law/** and /v1/rechtsprechung/** work in parallel while the frontend
+        // migrates. Remove this exclusion once /v1/case-law/** is deleted and the duplication with
+        // it.
+        property(
+            "sonar.cpd.exclusions",
+            "**/controller/api/RechtsprechungController.java",
+        )
     }
 }
 
-val xjc by configurations.creating
-
 dependencies {
-    xjc(libs.jaxb.moxy.xjc)
-
     implementation(libs.spring.actuator)
     implementation(libs.spring.validation)
     implementation(libs.spring.web)
@@ -93,19 +103,13 @@ dependencies {
     implementation(libs.pebble)
     implementation(libs.streamex)
 
-    // Override sub-dependency 1.8 with 1.84 to avoid CVE-2026-5588 CVE-2026-0636
-    implementation(libs.bouncycastle)
+    // CVE-2026-5588
+    implementation(platform(libs.bouncycastle.bom))
 
-    // CVE-2026-42583, CVE-2026-42584, CVE-2026-42587
-    implementation(libs.netty.http)
-    implementation(libs.netty.http2)
-    implementation(libs.netty.compression)
+    // CVE-2026-65182
+    implementation(libs.tomcat.embed.core)
 
-    // CVE-2026-44249 CVE-2026-45416
-    implementation(libs.netty.handler)
-
-    // CVE-2026-41293, CVE-2026-43512, CVE-2026-41284, CVE-2026-42498, CVE-2026-43513
-    implementation(libs.tomcat.embed)
+    implementation(libs.ris.html.transformation)
 
     implementation(libs.ris.xml.schema)
 
@@ -113,28 +117,96 @@ dependencies {
     annotationProcessor(libs.lombok)
 
     developmentOnly(libs.spring.boot.devtools)
-    testImplementation(libs.spring.boot.starter.test)
-    testImplementation(libs.spring.security.test)
-    testImplementation(libs.archunit.junit5)
-    testImplementation(libs.mockito.junit.jupiter)
-    testImplementation(libs.spring.boot.starter.webmvc.test)
 
-    testImplementation(libs.testcontainers.junit.jupiter)
-    testImplementation(libs.opensearch.testcontainers)
-    testImplementation(libs.testcontainers.postgresql)
-    testImplementation(libs.restassured)
-
-    testImplementation(libs.reflections)
+    // Shared test fixtures (src/testFixtures) - XML/schema validators and norm XML builders
+    // used by both the unit and integration suites.
+    testFixturesCompileOnly(libs.lombok)
+    testFixturesAnnotationProcessor(libs.lombok)
+    testFixturesImplementation(sourceSets["main"].output)
+    testFixturesImplementation(libs.jaxb.moxy)
+    testFixturesImplementation(libs.ris.xml.schema)
+    testFixturesImplementation(libs.commons.io)
 }
 
 dependencyLocking {
     lockAllConfigurations()
 }
 
-val generatedPath = "build/generated/**"
+testing {
+    suites {
+        withType(JvmTestSuite::class).matching { it.name in listOf("test", "integrationTest") }.configureEach {
+            useJUnitJupiter()
+            targets.all {
+                testTask.configure {
+                    testLogging {
+                        showStandardStreams = false
+                        events(
+                            org.gradle.api.tasks.testing.logging.TestLogEvent.STANDARD_ERROR,
+                            org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED,
+                            org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED,
+                        )
+                    }
+                }
+            }
+            dependencies {
+                implementation(sourceSets["main"].output)
+                implementation(testFixtures(project()))
+                implementation(libs.spring.boot.starter.test)
+                implementation(libs.spring.security.test)
+                implementation(libs.spring.boot.starter.webmvc.test)
+                implementation(libs.mockito.junit.jupiter)
+            }
+        }
+
+        val test =
+            named<JvmTestSuite>("test") {
+                dependencies {
+                    implementation(libs.archunit.junit5)
+                    implementation(libs.reflections)
+                }
+            }
+
+        register<JvmTestSuite>("integrationTest") {
+            dependencies {
+                implementation(libs.testcontainers.junit.jupiter)
+                implementation(libs.opensearch.testcontainers)
+                implementation(libs.testcontainers.postgresql)
+                implementation(libs.restassured)
+                implementation(libs.apicatalog.titanium.json)
+                implementation(libs.glassfish.jakarta.json)
+            }
+            targets {
+                all {
+                    testTask.configure {
+                        shouldRunAfter(test)
+                        mustRunAfter(tasks.check)
+                        finalizedBy("jacocoTestReport")
+                    }
+                }
+            }
+        }
+
+        register<JvmTestSuite>("dataTest") {
+            useJUnitJupiter()
+            dependencies {
+                implementation(sourceSets["main"].output)
+                implementation(libs.spring.boot.starter.test)
+                implementation(libs.restassured)
+            }
+            targets {
+                all {
+                    testTask.configure {
+                        shouldRunAfter(test)
+                        mustRunAfter(tasks.check)
+                    }
+                }
+            }
+        }
+    }
+}
+
 spotless {
     java {
-        targetExclude(generatedPath)
         removeUnusedImports()
         googleJavaFormat()
         // Wildcard imports can't be resolved by spotless itself.
@@ -159,10 +231,6 @@ spotless {
     }
 }
 
-tasks.named<Checkstyle>("checkstyleMain") {
-    source("src")
-}
-
 licenseReport {
 // If there's a new dependency with a yet unknown license causing this task to fail
 // the license(s) will be listed in build/reports/dependency-license/dependencies-without-allowed-license.json
@@ -175,17 +243,6 @@ project.tasks.sonar {
 }
 
 tasks {
-    register("generate-nlex-wsdl", JavaExec::class) {
-        val outputDir = layout.buildDirectory.dir("generated/nlex")
-        doFirst {
-            mkdir(outputDir)
-        }
-        enabled = true
-        classpath(configurations["xjc"])
-        mainClass = "org.eclipse.persistence.jaxb.xjc.MOXyXJC"
-        args = listOf("src/main/resources/WEB_INF/nlex/simple_template.wsdl", "-wsdl", "-d", outputDir.get().asFile.path, "-p", "nlex")
-    }
-
     register<JavaExec>("xsdDocumentation") {
         group = "documentation"
         description = "Generiert Markdown für XSD Dokumentationselemente"
@@ -194,64 +251,12 @@ tasks {
     }
 
     compileJava {
-        dependsOn("generate-nlex-wsdl")
+        options.release.set(25)
         options.compilerArgs.addAll(arrayOf())
     }
 
     jar {
         enabled = false
-    }
-
-    bootBuildImage {
-        val containerRegistry = System.getenv("CONTAINER_REGISTRY") ?: "ghcr.io"
-        val containerImageTag = System.getenv("CONTAINER_IMAGE_TAG")
-
-        imageName.set(containerImageTag)
-        builder.set("paketobuildpacks/builder-jammy-tiny")
-        publish.set(false)
-        docker {
-            publishRegistry {
-                username.set(System.getenv("CONTAINER_REGISTRY_USER") ?: "")
-                password.set(System.getenv("CONTAINER_REGISTRY_PASSWORD") ?: "")
-                url.set("https://$containerRegistry")
-            }
-        }
-        environment.set(mapOf("BP_HEALTH_CHECKER_ENABLED" to "true"))
-        buildpacks.set(
-            listOf(
-                "urn:cnb:builder:paketo-buildpacks/java",
-                "docker.io/paketobuildpacks/health-checker:latest",
-            ),
-        )
-    }
-
-    test {
-        useJUnitPlatform {
-            excludeTags("integration", "data")
-        }
-    }
-
-    register<Test>("dataTest") {
-        description = "Runs the data tests."
-        group = "verification"
-        useJUnitPlatform {
-            includeTags("data")
-        }
-        testClassesDirs = sourceSets["test"].output.classesDirs
-        classpath = sourceSets["test"].runtimeClasspath
-        mustRunAfter(check)
-    }
-
-    register<Test>("integrationTest") {
-        description = "Runs the integration tests."
-        group = "verification"
-        useJUnitPlatform {
-            includeTags("integration")
-        }
-        testClassesDirs = sourceSets["test"].output.classesDirs
-        classpath = sourceSets["test"].runtimeClasspath
-        mustRunAfter(check)
-        finalizedBy("jacocoTestReport")
     }
 
     jacocoTestReport {
@@ -288,6 +293,24 @@ tasks {
     }
 }
 
-java.sourceSets["main"].java {
-    srcDirs("build/generated/nlex")
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(25)
+    }
 }
+
+// `jar` is disabled above (this is a Spring Boot app using bootJar instead), which breaks the
+// self-project dependency that `java-test-fixtures`/`jvm-test-suite` would otherwise set up
+// automatically to give each suite main's own *third-party* dependencies (AWS SDK, Jackson,
+// OpenSearch client, etc., which integration tests exercise directly; main's own classes are
+// already handled above via `implementation(sourceSets["main"].output)`). Replicate, for every
+// suite, what the `java` plugin already wires up for the built-in "test" configuration by
+// convention:
+configurations.named("testImplementation") { extendsFrom(configurations["implementation"]) }
+configurations.named("testRuntimeOnly") { extendsFrom(configurations["runtimeOnly"]) }
+configurations.named("testFixturesImplementation") { extendsFrom(configurations["implementation"]) }
+configurations.named("testFixturesRuntimeOnly") { extendsFrom(configurations["runtimeOnly"]) }
+configurations.named("integrationTestImplementation") { extendsFrom(configurations["implementation"]) }
+configurations.named("integrationTestRuntimeOnly") { extendsFrom(configurations["runtimeOnly"]) }
+configurations.named("dataTestImplementation") { extendsFrom(configurations["implementation"]) }
+configurations.named("dataTestRuntimeOnly") { extendsFrom(configurations["runtimeOnly"]) }

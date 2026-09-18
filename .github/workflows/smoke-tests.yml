@@ -2,6 +2,13 @@ name: Smoke tests
 
 on:
   workflow_call:
+    secrets:
+      SLACK_BOT_TOKEN:
+        required: true
+      STAGING_BASIC_AUTH_PASSWORD:
+        required: true
+      STAGING_BASIC_AUTH_USERNAME:
+        required: true
   workflow_dispatch:
 
 permissions:
@@ -15,23 +22,24 @@ jobs:
     runs-on: ubuntu-latest
     container:
       # Image version must match @playwright/test in frontend/package.json
-      image: mcr.microsoft.com/playwright@sha256:9bd26ad900bb5e0f4dee75839e957a89ae89c2b7ab1e76050e559790e946b948 # v1.60.0-noble
+      image: mcr.microsoft.com/playwright@sha256:eff16c30e6f3f4af0a03fa4b706120d5e9b0891c344a27d64559aff5900a4a27 # v1.63.0-noble
       options: --user 1001
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@0e279bb959325dab635dd2c09392533439d90093 # v6.0.8
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          package_json_file: ./frontend/package.json
+          persist-credentials: false
 
-      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
+      - name: Setup pnpm and Node
+        uses: pnpm/setup@703c52620218391530e48b9e8870d5c0082e1b9b # v2.1.0
         with:
-          node-version: 24
-          cache: "pnpm"
+          package-json-file: ./frontend/package.json
+          cache: true
           cache-dependency-path: ./frontend/pnpm-lock.yaml
+          # The action would install in the repository root, which has no
+          # package.json. We run `pnpm ci` in ./frontend instead.
+          install: false
 
       - name: Install Node modules
         run: pnpm ci

@@ -1,0 +1,50 @@
+package de.bund.digitalservice.ris.builder.models.meta;
+
+import de.bund.digitalservice.ris.builder.NormTestDataBuilder;
+import de.bund.digitalservice.ris.builder.models.common.BaseElement;
+import de.bund.digitalservice.ris.builder.models.meta.identification.Identification;
+import de.bund.digitalservice.ris.builder.models.meta.lifecycle.Lifecycle;
+import de.bund.digitalservice.ris.builder.models.meta.proprietary.Proprietary;
+import de.bund.digitalservice.ris.builder.models.meta.temporal.TemporalData;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlAttribute;
+import jakarta.xml.bind.annotation.XmlElement;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+/** Represents the {@code akn:meta} element, holding identification, lifecycle and RIS metadata. */
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@XmlAccessorType(XmlAccessType.FIELD)
+public class Meta extends BaseElement {
+
+  @XmlAttribute private String eId = "meta-n1";
+
+  @XmlElement(namespace = NormTestDataBuilder.AKN_NS)
+  private Identification identification = new Identification();
+
+  @XmlElement(namespace = NormTestDataBuilder.AKN_NS)
+  private Lifecycle lifecycle = new Lifecycle();
+
+  @XmlElement(namespace = NormTestDataBuilder.AKN_NS)
+  private TemporalData temporalData = new TemporalData();
+
+  @XmlElement(namespace = NormTestDataBuilder.AKN_NS)
+  private Proprietary proprietary = new Proprietary();
+
+  /**
+   * Creates a Meta with the given identification, omitting lifecycle, temporal data and
+   * proprietary.
+   */
+  public Meta(Identification identification) {
+    this.identification = identification;
+    this.lifecycle = null;
+    this.temporalData = null;
+    this.proprietary = null;
+  }
+}

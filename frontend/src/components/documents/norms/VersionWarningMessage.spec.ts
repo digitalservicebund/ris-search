@@ -1,10 +1,16 @@
-import { renderSuspended } from "@nuxt/test-utils/runtime";
+import { mockNuxtImport, renderSuspended } from "@nuxt/test-utils/runtime";
 import { screen } from "@testing-library/vue";
 import type { LegislationExpression } from "~/types/api";
 import VersionWarningMessage from "./VersionWarningMessage.vue";
 
+const { useRouteMock } = vi.hoisted(() => ({
+  useRouteMock: vi.fn(() => ({ query: {} })),
+}));
+
+mockNuxtImport("useRoute", () => useRouteMock);
+
 const baseProps = {
-  inForceVersionLink: "/norms/eli/bund/bgbl-1/2000/s100/2000-01-01/1/deu",
+  inForceVersionLink: "/gesetze/eli/bund/bgbl-1/2000/s100/2000-01-01/1/deu",
   historicalWarningMessage: "Paragraf einer historischen Fassung.",
   futureWarningMessage: "Paragraf einer zukünftigen Fassung.",
 };
@@ -103,5 +109,58 @@ describe("VersionWarningMessage", () => {
         description: "Paragraf einer zukünftigen Fassung.",
       }),
     ).toBeInTheDocument();
+  });
+
+  it("keeps the from query parameter in the future version link", async () => {
+    useRouteMock.mockReturnValue({ query: { from: "/suche?q=test" } });
+
+    await renderSuspended(VersionWarningMessage, {
+      props: {
+        ...baseProps,
+        currentVersionValidityStatus: "InForce",
+        futureVersion: futureVersion,
+      },
+      global: {
+        stubs: {
+          NuxtLink: {
+            template:
+              '<a :href="to.path" :data-from="to.query?.from"><slot /></a>',
+            props: ["to"],
+          },
+        },
+      },
+    });
+
+    const link = screen.getByRole("link", { name: "Zur zukünftigen Fassung" });
+    expect(link).toHaveAttribute("data-from", "/suche?q=test");
+  });
+
+  it("keeps the from query parameter in the in-force version link for expired versions", async () => {
+    const inForceLink = {
+      path: "/gesetze/eli/bund/bgbl-1/2000/s100/2020-01-01/1/deu",
+      query: { from: "/suche?q=test" },
+    };
+
+    await renderSuspended(VersionWarningMessage, {
+      props: {
+        ...baseProps,
+        inForceVersionLink: inForceLink,
+        currentVersionValidityStatus: "Expired",
+      },
+      global: {
+        stubs: {
+          NuxtLink: {
+            template:
+              '<a :href="to.path" :data-from="to.query?.from"><slot /></a>',
+            props: ["to"],
+          },
+        },
+      },
+    });
+
+    const link = screen.getByRole("link", {
+      name: "Zur aktuell gültigen Fassung",
+    });
+    expect(link).toHaveAttribute("data-from", "/suche?q=test");
   });
 });

@@ -2,7 +2,9 @@ package de.bund.digitalservice.ris.search.controller.api;
 
 import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
 
+import de.bund.digitalservice.ris.html.service.xslt.CaselawXsltTransformer;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
+import de.bund.digitalservice.ris.search.config.ServerConfig;
 import de.bund.digitalservice.ris.search.exception.FileNotFoundException;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.mapper.CaseLawSchemaMapper;
@@ -15,7 +17,6 @@ import de.bund.digitalservice.ris.search.schema.CaseLawSchema;
 import de.bund.digitalservice.ris.search.schema.ChangelogResponse;
 import de.bund.digitalservice.ris.search.service.CaseLawService;
 import de.bund.digitalservice.ris.search.service.ChangelogService;
-import de.bund.digitalservice.ris.search.service.xslt.CaselawXsltTransformerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -23,6 +24,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Pattern;
 import java.io.IOException;
 import java.net.URLConnection;
 import java.util.List;
@@ -40,43 +42,37 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 /**
- * CaseLawController provides endpoints for managing and retrieving case law documentation in
- * various formats such as JSON, HTML, XML, and ZIP, as well as specific file resources.
- *
- * <p>This controller is accessible in the "default", "staging", "uat", "test", and "prototype"
- * profiles.
- *
- * <p>Endpoints include functionalities for: - Retrieving case law metadata - Rendering case law
- * decisions as HTML or XML - Generating ZIP archives containing case law and related attachments -
- * Fetching specific resources such as images or other attachments
- *
- * <p>Dependencies and services injected into this controller: - CaseLawService: Handles core
- * operations for retrieving and managing case law data. - CaselawXsltTransformerService:
- * Responsible for transforming case law content into HTML format using XSLT.
+ * CaseLawController provides endpoints for managing and retrieving case law documents in various
+ * formats such as JSON, HTML, XML, and ZIP, as well as specific file resources. *
  */
 @Tag(name = "Case Law")
 @RestController
-@Profile({"default", "staging", "uat", "test", "prototype"})
+@Profile({"dev", "e2e", "staging", "uat", "test", "prototype"})
 public class CaseLawController {
 
   private final CaseLawService caseLawService;
-  private final CaselawXsltTransformerService xsltTransformerService;
+  private final CaselawXsltTransformer caselawXsltTransformer;
   private final ChangelogService<CaseLawBucket> changelogService;
+  private final String jsonldContextPath;
 
   /**
    * Constructor for the CaseLawController class.
    *
    * @param caseLawService the service layer responsible for case law operations
-   * @param xsltTransformerService the service used for XSLT transformations related to case law
+   * @param caselawXsltTransformer the case law xslt transformer
+   * @param changelogService service to retrieve and aggregate changelogs
+   * @param serverConfig serverconfig of the application
    */
   @Autowired
   public CaseLawController(
       CaseLawService caseLawService,
-      CaselawXsltTransformerService xsltTransformerService,
-      ChangelogService<CaseLawBucket> changelogService) {
+      CaselawXsltTransformer caselawXsltTransformer,
+      ChangelogService<CaseLawBucket> changelogService,
+      ServerConfig serverConfig) {
     this.caseLawService = caseLawService;
-    this.xsltTransformerService = xsltTransformerService;
+    this.caselawXsltTransformer = caselawXsltTransformer;
     this.changelogService = changelogService;
+    this.jsonldContextPath = serverConfig.getBackEndUrl() + ApiConfig.Paths.JSONLD_CONTEXT;
   }
 
   /**
@@ -105,7 +101,7 @@ public class CaseLawController {
     CaseLawDocumentationUnit unit = result.getFirst();
     return ResponseEntity.ok()
         .contentType(MediaType.APPLICATION_JSON)
-        .body(CaseLawSchemaMapper.fromDomain(unit));
+        .body(CaseLawSchemaMapper.fromDomain(unit, jsonldContextPath));
   }
 
   /**
@@ -134,7 +130,7 @@ public class CaseLawController {
     Optional<byte[]> bytes = caseLawService.getFileByDocumentNumber(documentNumber);
 
     if (bytes.isPresent()) {
-      String html = xsltTransformerService.transformCaseLaw(bytes.get(), resourcePath);
+      String html = caselawXsltTransformer.transform(bytes.get(), resourcePath);
       return ResponseEntity.ok(html);
     } else {
       return ResponseEntity.notFound().build();
@@ -185,7 +181,10 @@ public class CaseLawController {
   @ApiResponse(responseCode = "200")
   @ApiResponse(responseCode = "404", content = @Content(schema = @Schema()))
   public ResponseEntity<StreamingResponseBody> getCaseLawDocumentationUnitAsZip(
-      @Parameter(example = "STRE201770751") @PathVariable String documentNumber) {
+      @Pattern(regexp = "^[a-zA-Z]{4}\\d{9}$", message = "Invalid document number format")
+          @Parameter(example = "STRE201770751")
+          @PathVariable
+          String documentNumber) {
 
     String filename = documentNumber + ".zip";
     List<String> keys = caseLawService.getAllFilenamesByDocumentNumber(documentNumber);
@@ -285,6 +284,6 @@ public class CaseLawController {
         changelogService.getChangesBetween(
             params.getFrom().toInstant(), params.getTo().toInstant());
     return ResponseEntity.ok(
-        ChangelogResponseMapper.mapChangelog(changelog, DocumentKind.CASE_LAW));
+        ChangelogResponseMapper.mapChangelog(changelog, DocumentKind.CASE_LAW, jsonldContextPath));
   }
 }

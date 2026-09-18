@@ -12,7 +12,7 @@ describe("AutoComplete", () => {
 
   it("renders the ProgressSpinner when loading", async () => {
     await renderSuspended(AutoComplete, { props: { loading: true } });
-    expect(document.querySelector(".p-progressspinner")).toBeInTheDocument();
+    expect(screen.getByLabelText("Ladestatus")).toBeInTheDocument();
   });
 
   it("renders the dropdown button", async () => {

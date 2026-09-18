@@ -15,33 +15,34 @@ describe("getAdministrativeDirectiveMetadataItems", () => {
       "Gültig ab",
     ]);
 
-    expect(result.map((item) => item.value)).toEqual([
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-    ]);
+    expect(result[0]).toMatchObject({ type: "badge", values: [] });
+    expect(result[1]).toMatchObject({ type: "text", value: undefined });
+    expect(result[2]).toMatchObject({ type: "text", value: undefined });
+    expect(result[3]).toMatchObject({ type: "text", value: undefined });
   });
 
-  it("maps empty referenceNumber to undefined", () => {
+  it("maps empty referenceNumbers to empty array", () => {
     const result = getAdministrativeDirectiveMetadataItems({
       referenceNumbers: [],
     });
-    expect(result[0]?.value).toBeUndefined();
+    expect(result[0]).toMatchObject({ type: "badge", values: [] });
   });
 
   it("maps single referenceNumber", () => {
     const result = getAdministrativeDirectiveMetadataItems({
       referenceNumbers: ["123"],
     });
-    expect(result[0]?.value).toBe("123");
+    expect(result[0]).toMatchObject({ type: "badge", values: ["123"] });
   });
 
   it("maps multiple referenceNumbers", () => {
     const result = getAdministrativeDirectiveMetadataItems({
       referenceNumbers: ["123", "456"],
     });
-    expect(result[0]?.value).toBe("123, 456");
+    expect(result[0]).toMatchObject({
+      type: "badge",
+      values: ["123", "456"],
+    });
   });
 
   it("maps legislationAuthority", () => {
@@ -49,7 +50,7 @@ describe("getAdministrativeDirectiveMetadataItems", () => {
       legislationAuthority: "authority",
     });
 
-    expect(result[1]?.value).toBe("authority");
+    expect(result[1]).toMatchObject({ type: "text", value: "authority" });
   });
 
   it("maps documentType", () => {
@@ -57,7 +58,7 @@ describe("getAdministrativeDirectiveMetadataItems", () => {
       documentType: "docType",
     });
 
-    expect(result[2]?.value).toBe("docType");
+    expect(result[2]).toMatchObject({ type: "text", value: "docType" });
   });
 
   it("formats valid entryIntoForceDate", () => {
@@ -65,7 +66,7 @@ describe("getAdministrativeDirectiveMetadataItems", () => {
       entryIntoForceDate: "2025-04-07",
     });
 
-    expect(result[3]?.value).toBe("07.04.2025");
+    expect(result[3]).toMatchObject({ type: "text", value: "07.04.2025" });
   });
 
   it("maps invalid entryIntoForceDate to undefined", () => {
@@ -73,23 +74,47 @@ describe("getAdministrativeDirectiveMetadataItems", () => {
       entryIntoForceDate: "foobar",
     });
 
-    expect(result[3]?.value).toBeUndefined();
+    expect(result[3]).toMatchObject({ type: "text", value: undefined });
   });
 });
 
 describe("getAdministrativeDirectiveDetailItems", () => {
+  it("displays a download link", () => {
+    const result = getAdministrativeDirectiveDetailItems({
+      encoding: [
+        {
+          "@id": "id",
+          inLanguage: "de",
+          "@type": "MediaObject",
+          encodingFormat: "application/zip",
+          contentUrl: "content.zip",
+        },
+      ],
+    });
+    expect(result[5]).toEqual({
+      dataAttr: "xml-zip-view",
+      label: "Download:",
+      text: "Diese Verwaltungsregelung als ZIP herunterladen",
+      type: "link",
+      url: "content.zip",
+    });
+  });
   it.each([
-    [undefined, undefined, "Fundstelle:"],
-    [[], undefined, "Fundstelle:"],
-    [["Foo 1"], "Foo 1", "Fundstelle:"],
-    [["Foo 1", "Foo 2"], "Foo 1, Foo 2", "Fundstellen:"],
+    [undefined, [], "Fundstelle:"],
+    [[], [], "Fundstelle:"],
+    [["Foo 1"], ["Foo 1"], "Fundstelle:"],
+    [["Foo 1", "Foo 2"], ["Foo 1", "Foo 2"], "Fundstellen:"],
   ])(
     "given references '%o' creates item with value '%s' labeled '%s'",
     (references, expectedValue, expectedLabel) => {
       const result = getAdministrativeDirectiveDetailItems({
         references: references,
       });
-      expect(result[0]).toEqual({ label: expectedLabel, value: expectedValue });
+      expect(result[0]).toEqual({
+        type: "badge",
+        label: expectedLabel,
+        values: expectedValue,
+      });
     },
   );
 
@@ -112,6 +137,7 @@ describe("getAdministrativeDirectiveDetailItems", () => {
         citationDates: citationDates,
       });
       expect(result[1]).toEqual({
+        type: "text",
         label: expectedLabel,
         value: expectedValue,
       });
@@ -128,7 +154,11 @@ describe("getAdministrativeDirectiveDetailItems", () => {
       const result = getAdministrativeDirectiveDetailItems({
         expiryDate: expiryDate,
       });
-      expect(result[2]).toEqual({ label: "Gültig bis:", value: expectedValue });
+      expect(result[2]).toEqual({
+        type: "text",
+        label: "Gültig bis:",
+        value: expectedValue,
+      });
     },
   );
 
@@ -142,6 +172,7 @@ describe("getAdministrativeDirectiveDetailItems", () => {
         documentTypeDetail: documentTypeDetail,
       });
       expect(result[3]).toEqual({
+        type: "text",
         label: "Dokumenttyp Zusatz:",
         value: expectedValue,
       });
@@ -149,17 +180,21 @@ describe("getAdministrativeDirectiveDetailItems", () => {
   );
 
   it.each([
-    [undefined, undefined, "Norm:"],
-    [[], undefined, "Norm:"],
-    [["Ref 1"], "Ref 1", "Norm:"],
-    [["Ref 1", "Ref 2"], "Ref 1, Ref 2", "Normen:"],
+    [undefined, [], "Norm:"],
+    [[], [], "Norm:"],
+    [["Ref 1"], ["Ref 1"], "Norm:"],
+    [["Ref 1", "Ref 2"], ["Ref 1", "Ref 2"], "Normen:"],
   ])(
     "given normReferences '%o' creates item with value '%s' labeled '%s'",
     (normReferenecs, expectedValue, expectedLabel) => {
       const result = getAdministrativeDirectiveDetailItems({
         normReferences: normReferenecs,
       });
-      expect(result[4]).toEqual({ label: expectedLabel, value: expectedValue });
+      expect(result[4]).toEqual({
+        type: "badge",
+        label: expectedLabel,
+        values: expectedValue,
+      });
     },
   );
 });

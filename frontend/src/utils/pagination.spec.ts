@@ -44,7 +44,7 @@ describe("buildItemsOnPageString", () => {
     );
     expect(string).toBe("Treffer 1–5 von 5");
   });
-  it("correctly describes a full second page", () => {
+  it("correctly describes a full second page at the end of the list", () => {
     const string = buildItemsOnPageString(
       getPage({ page: 1, size: 10, itemsOnPage: 5, totalItems: 15 }),
     );

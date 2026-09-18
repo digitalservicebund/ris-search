@@ -1,0 +1,1310 @@
+import type { Page } from "@playwright/test";
+import { expect, navigate, test } from "./utils/fixtures";
+
+test.beforeAll(({ privateFeaturesEnabled }) => {
+  test.skip(
+    !privateFeaturesEnabled,
+    "advanced search is not publicly available",
+  );
+});
+
+function getSearchResults(page: Page) {
+  return page
+    .getByRole("list", { name: "Suchergebnisse" })
+    .getByRole("listitem");
+}
+
+function getResultCounter(page: Page) {
+  // Not an ideal way for selecting this but I can't find a more semantic option
+  // of doing it given the current page structure
+  return page.getByText(/[\d.]+ Suchergebnis(se)?/, { exact: true });
+}
+
+const nonZeroResultCount = /[1-9][\d.]* Suchergebnis(se)?/;
+
+function getTotalDocumentCounter(page: Page) {
+  return page.getByText(
+    /In [\d.]+ (Gesetze & Verordnungen|Gerichtsentscheidungen|Literaturnachweise|Verwaltungsvorschriften) suchen/,
+    { exact: true },
+  );
+}
+
+const nonZeroTotalDocumentCount = (documentKind: string) =>
+  new RegExp(`[1-9][\\d.]* ${documentKind}`);
+
+async function searchFor(
+  page: Page,
+  search: {
+    q: string;
+    documentKind: string;
+    dateFilter?: string;
+    dateFilterSpecificDate?: string;
+    dateFilterFrom?: string;
+    dateFilterTo?: string;
+  },
+) {
+  await page.getByRole("radio", { name: search.documentKind }).click();
+  await page.getByRole("searchbox").fill(search.q);
+
+  if (search.dateFilter) {
+    await page.getByRole("radio", { name: search.dateFilter }).click();
+  }
+
+  if (search.dateFilterSpecificDate) {
+    await page
+      .getByRole("textbox", { name: "Datum" })
+      .fill(search.dateFilterSpecificDate);
+  }
+
+  if (search.dateFilterFrom) {
+    await page
+      .getByRole("textbox", { name: "von" })
+      .fill(search.dateFilterFrom);
+  }
+
+  if (search.dateFilterTo) {
+    await page.getByRole("textbox", { name: "bis" }).fill(search.dateFilterTo);
+  }
+
+  const results = page.waitForResponse(/v1\/document\/lucene-search/);
+
+  await page.getByRole("button", { name: "Suchen" }).click();
+
+  await results;
+}
+
+async function sortBy(page: Page, prop: string) {
+  const load = page.waitForResponse(/v1\/document\/lucene-search/);
+  const select = page.getByRole("combobox", { name: "Sortieren nach" });
+  const value = await select
+    .getByRole("option", { name: prop })
+    .getAttribute("value");
+  await select.selectOption(value);
+  await load;
+}
+
+test.describe("general advanced search page features", () => {
+  test("reachable through the erweiterte-suche alias", async ({ page }) => {
+    await navigate(page, "/erweiterte-suche");
+
+    await expect(
+      page.getByRole("heading", { level: 1, name: "Erweiterte Suche" }),
+    ).toBeVisible();
+  });
+
+  test("browser back restores previous state", async ({ page }) => {
+    await navigate(page, "/suche");
+
+    await page
+      .getByRole("main")
+      .getByRole("link", { name: "Erweiterte Suche" })
+      .click();
+    const advancedSearchHeading = page.getByRole("heading", {
+      level: 1,
+      name: "Erweiterte Suche",
+    });
+    await expect(advancedSearchHeading).toBeVisible();
+
+    const searchInput = page.getByRole("searchbox");
+    await searchInput.fill("Fiktiv");
+    await page.getByRole("button", { name: "Suchen" }).click();
+    await page.waitForURL(/q=Fiktiv/);
+    await expect(searchInput).toHaveValue("Fiktiv");
+
+    await page.goBack();
+    await expect(advancedSearchHeading).toBeVisible();
+    await expect(searchInput).toBeEmpty();
+
+    await page.goBack();
+    await expect(page).toHaveURL("/suche");
+  });
+
+  test("pagination switches pages", async ({ page }) => {
+    await navigate(
+      page,
+      "/erweiterte-suche?documentKind=R&dateFilterType=period&dateFilterFrom=2023-01-01&dateFilterTo=2025-12-31&itemsPerPage=10",
+    );
+
+    const resultCounter = getResultCounter(page);
+    await expect(resultCounter).toHaveText(nonZeroResultCount);
+
+    const searchResults = getSearchResults(page);
+    await expect(searchResults).toHaveCount(10);
+
+    const pagination = page.getByRole("navigation", { name: "Paginierung" });
+    await expect(pagination).toHaveText(/Seite 1: Treffer 1–10 von \d+/);
+
+    await pagination.getByRole("link", { name: "Weiter" }).click();
+    await page.waitForURL(/pageIndex=1/);
+
+    await expect(resultCounter).toHaveText(nonZeroResultCount);
+    // Warning: this is potentially flaky and only works because the previous
+    // assertion about the result counter has already "stabilized" the page.
+    // Unfortunately there is no other way of asserting a number that isn't
+    // exact.
+    expect(await searchResults.count()).toBeGreaterThan(1);
+    await expect(pagination).toHaveText(/Seite 2: Treffer 11–\d+ von \d+/);
+
+    await pagination.getByRole("link", { name: "Zurück" }).click();
+    await page.waitForURL(/pageIndex=0/);
+    await expect(searchResults).toHaveCount(10);
+  });
+
+  test("focuses first search result after pagination", async ({ page }) => {
+    await navigate(
+      page,
+      "/erweiterte-suche?documentKind=R&dateFilterType=period&dateFilterFrom=2023-01-01&dateFilterTo=2025-12-31&itemsPerPage=10",
+    );
+
+    await page
+      .getByRole("navigation", { name: "Paginierung" })
+      .getByRole("link", { name: "Weiter" })
+      .click();
+    await page.waitForURL(/pageIndex=1/);
+
+    const firstResultLink = page
+      .getByRole("list", { name: "Suchergebnisse" })
+      .getByRole("link")
+      .first();
+    await expect(firstResultLink).toBeFocused();
+  });
+
+  test("sort by date in ascending order", async ({ page, isMobileTest }) => {
+    test.skip(isMobileTest);
+    await navigate(page, "/erweiterte-suche");
+
+    await searchFor(page, {
+      q: "FrSaftErfrischV OR BWahlGV",
+      documentKind: "Gesetze & Verordnungen",
+    });
+
+    await sortBy(page, "Ausfertigungsdatum: Älteste zuerst");
+
+    await expect(page).toHaveURL(/sort=date/);
+
+    await expect(getSearchResults(page)).toHaveText([
+      /24.04.1999/,
+      /29.04.2023/,
+    ]);
+  });
+
+  test("sort by date in descending order", async ({ page, isMobileTest }) => {
+    test.skip(isMobileTest);
+    await navigate(page, "/erweiterte-suche");
+
+    await searchFor(page, {
+      q: "FrSaftErfrischV OR BWahlGV",
+      documentKind: "Gesetze & Verordnungen",
+    });
+
+    await sortBy(page, "Ausfertigungsdatum: Neueste zuerst");
+
+    await expect(page).toHaveURL(/sort=-date/);
+
+    await expect(getSearchResults(page)).toHaveText([
+      /29.04.2023/,
+      /24.04.1999/,
+    ]);
+  });
+
+  test("sort by relevance (default)", async ({ page, isMobileTest }) => {
+    test.skip(isMobileTest);
+    await navigate(page, "/erweiterte-suche?q=und&documentKind=N&sort=date");
+
+    await sortBy(page, "Relevanz");
+
+    // Don't have a great way of asserting relevance, so just making sure the
+    // parameter is handled correctly
+    await expect(page).toHaveURL(/sort=default/);
+
+    const resultCounter = getResultCounter(page);
+    await expect(resultCounter).toHaveText(nonZeroResultCount);
+  });
+
+  test(
+    "change number of results per page",
+    { tag: ["@RISDEV-12191"] },
+    async ({ page, isMobileTest }) => {
+      test.skip(isMobileTest);
+      await navigate(
+        page,
+        "/erweiterte-suche?documentKind=R&dateFilterType=period&dateFilterFrom=2023-01-01&dateFilterTo=2025-12-31&itemsPerPage=10",
+      );
+
+      const searchResults = getSearchResults(page);
+
+      await expect(searchResults).toHaveCount(10);
+
+      await page
+        .getByRole("combobox", { name: "Einträge pro Seite" })
+        .selectOption({ label: "50" });
+
+      await expect(searchResults).toHaveCount(13);
+    },
+  );
+
+  test("falls back to last valid page when visiting an out-of-range pageIndex directly", async ({
+    page,
+  }) => {
+    const nonExistingUrl =
+      "/erweiterte-suche?documentKind=R&dateFilterType=period&dateFilterFrom=2023-01-01&dateFilterTo=2025-12-31&itemsPerPage=100&pageIndex=10";
+    await navigate(page, nonExistingUrl);
+    await expect(page).not.toHaveURL(/pageIndex=10/);
+    const searchResults = await getSearchResults(page).all();
+    expect(searchResults.length).toBeGreaterThan(0);
+    await expect(getResultCounter(page)).toHaveText(nonZeroResultCount);
+  });
+
+  test(
+    "clears query when switching document kind",
+    { tag: ["@RISDEV-12193"] },
+    async ({ page }) => {
+      await navigate(page, "/erweiterte-suche");
+
+      await searchFor(page, {
+        q: "AB:FrSaftErfrischV",
+        documentKind: "Gesetze & Verordnungen",
+      });
+
+      const queryInput = page.getByRole("searchbox");
+      await expect(queryInput).toHaveValue("AB:FrSaftErfrischV");
+
+      await page.getByRole("radio", { name: "Gerichtsentscheidungen" }).click();
+
+      await expect(queryInput).toHaveValue("");
+    },
+  );
+
+  test("reacts to browser back/forward navigation", async ({ page }) => {
+    await navigate(page, "/erweiterte-suche");
+
+    await searchFor(page, {
+      q: "AB:FrSaftErfrischV",
+      documentKind: "Gesetze & Verordnungen",
+    });
+
+    const searchResults = getSearchResults(page);
+
+    await expect(searchResults).toHaveText([/FrSaftErfrischV/]);
+
+    await searchFor(page, {
+      q: "AB:NLV",
+      documentKind: "Gesetze & Verordnungen",
+    });
+
+    await expect(searchResults).toHaveText([/NLV/]);
+
+    await page.goBack();
+
+    await expect(page.getByRole("searchbox")).toHaveValue("AB:FrSaftErfrischV");
+
+    await expect(searchResults).toHaveText([/FrSaftErfrischV/]);
+  });
+
+  test("restores search state when navigating back from a different route", async ({
+    page,
+  }) => {
+    await navigate(page, "/erweiterte-suche");
+
+    await searchFor(page, {
+      q: 'AZ:"KL 1234/56"',
+      documentKind: "Gerichtsentscheidungen",
+    });
+
+    const searchResults = getSearchResults(page);
+
+    await expect(searchResults).toHaveText(/KL 1234\/56/);
+
+    await page.getByRole("link", { name: "Datenschutzerklärung" }).click();
+
+    await expect(
+      page.getByRole("heading", {
+        level: 1,
+        name: "Datenschutzerklärung",
+      }),
+    ).toBeVisible();
+
+    await page.goBack();
+
+    await expect(page.getByRole("searchbox")).toHaveValue('AZ:"KL 1234/56"');
+
+    await expect(searchResults).toHaveText(/KL 1234\/56/);
+  });
+});
+
+test.describe("searching legislation", () => {
+  test("only shows legislation results", async ({ page }) => {
+    await navigate(page, "/erweiterte-suche");
+
+    await searchFor(page, {
+      q: "fiktiv",
+      documentKind: "Gesetze & Verordnungen",
+    });
+
+    const searchResults = getSearchResults(page);
+    const resultCounter = getResultCounter(page);
+
+    await expect(resultCounter).toHaveText(nonZeroResultCount);
+
+    // Ensure all visible entries are of type legislation
+    await expect(searchResults).toHaveText(Array(5).fill(/^Norm/));
+  });
+
+  test("shows total document count", async ({ page }) => {
+    await navigate(page, "/erweiterte-suche?documentKind=N");
+
+    const count = getTotalDocumentCounter(page);
+
+    await expect(count).toHaveText(
+      nonZeroTotalDocumentCount("Gesetze & Verordnungen"),
+    );
+  });
+
+  test("shows the search result contents", async ({ page }) => {
+    await navigate(page, "/erweiterte-suche");
+
+    await searchFor(page, {
+      q: "FrSaftErfrischV",
+      documentKind: "Gesetze & Verordnungen",
+    });
+
+    const searchResult = getSearchResults(page).first();
+
+    // Header
+    await expect(searchResult).toHaveText(/Norm/);
+    await expect(searchResult).toHaveText(/FrSaftErfrischV/);
+    await expect(searchResult).toHaveText(/Aktuell gültig/);
+    await expect(searchResult).toHaveText(
+      /Fruchtsaft- und Erfrischungsgetränkeverordnung/,
+    );
+
+    // Result detail link
+    await expect(
+      searchResult.getByRole("link", {
+        name: "Fiktive Fruchtsaft- und Erfrischungsgetränkeverordnung zu Testzwecken",
+      }),
+    ).toBeVisible();
+
+    // Advanced search of norms doesn't support highlights
+  });
+
+  test("navigates to the document detail page", async ({ page }) => {
+    await navigate(page, "/erweiterte-suche?q=FrSaftErfrischV&documentKind=N");
+
+    // Result detail link
+    await page
+      .getByRole("link", {
+        name: "Fiktive Fruchtsaft- und Erfrischungsgetränkeverordnung zu Testzwecken",
+      })
+      .click();
+
+    await expect(
+      page.getByRole("heading", {
+        level: 1,
+        name: "Fiktive Fruchtsaft- und Erfrischungsgetränkeverordnung zu Testzwecken",
+      }),
+    ).toBeVisible();
+  });
+
+  test("does not trigger a search when selecting a date filter type without entering a date", async ({
+    page,
+    isMobileTest,
+  }) => {
+    test.skip(isMobileTest);
+    await navigate(page, "/erweiterte-suche");
+    const initialUrl = page.url();
+
+    await page.getByRole("radio", { name: "Bestimmtes Datum" }).click();
+    expect(page.url()).toBe(initialUrl);
+
+    await page.getByRole("textbox", { name: "Datum" }).fill("01.01.2001");
+    await expect(page).toHaveURL(/dateFilterType=specificDate/);
+    await expect(page).toHaveURL(/dateFilterFrom=2001-01-01/);
+  });
+
+  test("searches without date restrictions, shows validity badge", async ({
+    page,
+    isMobileTest,
+  }) => {
+    test.skip(isMobileTest);
+    await navigate(page, "/erweiterte-suche");
+
+    await searchFor(page, {
+      q: 'LU:"Zum Testen von Fassungen"',
+      documentKind: "Gesetze & Verordnungen",
+      dateFilter: "Keine zeitliche Begrenzung",
+    });
+
+    const results = getSearchResults(page);
+
+    await expect(results).toHaveText([
+      /Zukünftig in Kraft/,
+      /Aktuell gültig/,
+      /Außer Kraft/,
+    ]);
+  });
+
+  test("filters to show only currently valid, shows validity badge", async ({
+    page,
+    isMobileTest,
+  }) => {
+    test.skip(isMobileTest);
+    await navigate(page, "/erweiterte-suche");
+
+    await searchFor(page, {
+      q: 'LU:"Zum Testen von Fassungen"',
+      documentKind: "Gesetze & Verordnungen",
+      dateFilter: "Aktuell gültig",
+    });
+
+    const results = getSearchResults(page);
+
+    await expect(results).toHaveText(/Aktuell gültig/);
+  });
+
+  test("filters to show specific date", async ({ page, isMobileTest }) => {
+    test.skip(isMobileTest);
+    await navigate(page, "/erweiterte-suche");
+
+    await searchFor(page, {
+      documentKind: "Gesetze & Verordnungen",
+      q: "",
+      dateFilter: "Bestimmtes Datum",
+      dateFilterSpecificDate: "01.01.2001",
+    });
+
+    // Don't have a great way of asserting this filter, so just making sure the
+    // parameter is handled correctly
+    await expect(page).toHaveURL(/dateFilterType=specificDate/);
+    await expect(page).toHaveURL(/dateFilterFrom=2001-01-01/);
+
+    const resultCounter = getResultCounter(page);
+    await expect(resultCounter).toHaveText(nonZeroResultCount);
+  });
+
+  test("filters to show date range", async ({ page, isMobileTest }) => {
+    test.skip(isMobileTest);
+    await navigate(page, "/erweiterte-suche");
+
+    await searchFor(page, {
+      documentKind: "Gesetze & Verordnungen",
+      q: "",
+      dateFilter: "Innerhalb eines Zeitraums",
+      dateFilterFrom: "01.01.2001",
+      dateFilterTo: "01.01.2022",
+    });
+
+    // Don't have a great way of asserting this filter, so just making sure the
+    // parameter is handled correctly
+    await expect(page).toHaveURL(/dateFilterType=period/);
+    await expect(page).toHaveURL(/dateFilterFrom=2001-01-01/);
+    await expect(page).toHaveURL(/dateFilterTo=2022-01-01/);
+
+    const resultCounter = getResultCounter(page);
+    await expect(resultCounter).toHaveText(nonZeroResultCount);
+  });
+});
+
+test.describe("searching caselaw", () => {
+  test("only shows caselaw results", async ({ page }) => {
+    await navigate(page, "/erweiterte-suche");
+
+    await searchFor(page, {
+      q: "urteil",
+      documentKind: "Gerichtsentscheidungen",
+    });
+
+    const searchResults = getSearchResults(page);
+    const resultCounter = getResultCounter(page);
+
+    await expect(resultCounter).toHaveText(nonZeroResultCount);
+
+    // Ensure all visible entries are of type caselaw
+    await expect(searchResults).toHaveText(
+      Array(12).fill(/^(Beschluss|Urteil)/),
+    );
+  });
+
+  test("shows total document count", async ({ page }) => {
+    await navigate(page, "/erweiterte-suche?documentKind=R");
+
+    const count = getTotalDocumentCounter(page);
+
+    await expect(count).toHaveText(
+      nonZeroTotalDocumentCount("Gerichtsentscheidungen"),
+    );
+  });
+
+  test("shows the search result contents", async ({ page }) => {
+    await navigate(page, "/erweiterte-suche");
+
+    await searchFor(page, {
+      q: 'AZ:"34 X (xyz) 456/78" Verfahrensbeschreibung',
+      documentKind: "Gerichtsentscheidungen",
+    });
+
+    const searchResult = getSearchResults(page).first();
+
+    // Header
+    await expect(searchResult).toHaveText(/Beschluss/);
+    await expect(searchResult).toHaveText(/BPatG Label/);
+    await expect(searchResult).toHaveText(/09.04.2025/);
+    await expect(searchResult).toHaveText(/34 X \(xyz\) 456\/78/);
+    await expect(searchResult).toHaveText(/Beispielentscheid/);
+
+    // Result detail link
+    await expect(
+      searchResult.getByRole("link", {
+        name: "Beispielheader für den Beschlusstext.",
+      }),
+    ).toBeVisible();
+
+    // Highlights
+    await expect(
+      searchResult.getByRole("link", { name: "Orientierungssatz:" }),
+    ).toBeVisible();
+    await expect(
+      searchResult.getByText(
+        /Weitere fiktive Informationen zur Verfahrensbeschreibung./,
+      ),
+    ).toBeVisible();
+  });
+
+  test("navigates to the document detail page", async ({ page }) => {
+    await navigate(page, "/erweiterte-suche");
+
+    await searchFor(page, {
+      q: 'AZ:"34 X (xyz) 456/78"',
+      documentKind: "Gerichtsentscheidungen",
+    });
+
+    // Result detail link
+    await page
+      .getByRole("link", {
+        name: "Beispielheader für den Beschlusstext.",
+      })
+      .click();
+
+    await expect(
+      page.getByRole("heading", {
+        level: 1,
+        name: "Beispielheader für den Beschlusstext.",
+      }),
+    ).toBeVisible();
+  });
+
+  test("searches without date restrictions", async ({ page, isMobileTest }) => {
+    test.skip(isMobileTest);
+    await navigate(page, "/erweiterte-suche");
+
+    await searchFor(page, {
+      documentKind: "Gerichtsentscheidungen",
+      q: "urteil",
+      dateFilter: "Keine zeitliche Begrenzung",
+    });
+
+    // Don't have a great way of asserting this filter, so just making sure the
+    // parameter is handled correctly
+    await expect(page).toHaveURL(/dateFilterType=allTime/);
+
+    const resultCounter = getResultCounter(page);
+    await expect(resultCounter).toHaveText(nonZeroResultCount);
+  });
+
+  test("filter to show specific date", async ({ page, isMobileTest }) => {
+    test.skip(isMobileTest);
+    await navigate(page, "/erweiterte-suche");
+
+    await searchFor(page, {
+      documentKind: "Gerichtsentscheidungen",
+      q: "urteil",
+      dateFilter: "Bestimmtes Datum",
+      dateFilterSpecificDate: "15.06.2024",
+    });
+
+    const results = getSearchResults(page);
+
+    await expect(results).toHaveText(/15.06.2024/);
+  });
+
+  test("filters to show date range", async ({ page, isMobileTest }) => {
+    test.skip(isMobileTest);
+    await navigate(page, "/erweiterte-suche");
+
+    await searchFor(page, {
+      documentKind: "Gerichtsentscheidungen",
+      q: "urteil",
+      dateFilter: "Innerhalb eines Zeitraums",
+      dateFilterFrom: "01.01.2020",
+      dateFilterTo: "31.12.2024",
+    });
+
+    await sortBy(page, "Entscheidungsdatum: Älteste zuerst");
+
+    const results = getSearchResults(page);
+
+    await expect(results).toHaveText([/22.11.2023/, /15.06.2024/]);
+  });
+
+  test("sorts by court in ascending order", async ({ page, isMobileTest }) => {
+    test.skip(isMobileTest);
+    await navigate(page, "/erweiterte-suche");
+
+    await searchFor(page, {
+      documentKind: "Gerichtsentscheidungen",
+      q: 'GERICHT:"ArbG Köln" OR GERICHT:"BDiG Frankfurt"',
+    });
+
+    await sortBy(page, "Gericht: Von A nach Z");
+
+    const results = getSearchResults(page);
+
+    await expect(results).toHaveText([/ArbG Köln/, /BDiG Frankfurt/]);
+  });
+
+  test("sorts by court in descending order", async ({ page, isMobileTest }) => {
+    test.skip(isMobileTest);
+    await navigate(page, "/erweiterte-suche");
+
+    await searchFor(page, {
+      documentKind: "Gerichtsentscheidungen",
+      q: 'GERICHT:"ArbG Köln" OR GERICHT:"BDiG Frankfurt"',
+    });
+
+    await sortBy(page, "Gericht: Von Z nach A");
+
+    const results = getSearchResults(page);
+
+    await expect(results).toHaveText([/BDiG Frankfurt/, /ArbG Köln/]);
+  });
+});
+
+test.describe("searching literature", () => {
+  test("only shows literature results", async ({ page }) => {
+    await navigate(page, "/erweiterte-suche");
+
+    await searchFor(page, {
+      q: "und",
+      documentKind: "Literaturnachweise",
+    });
+
+    const searchResults = getSearchResults(page);
+    const resultCounter = getResultCounter(page);
+
+    await expect(resultCounter).toHaveText(nonZeroResultCount);
+
+    // Ensure all visible entries are of type literature
+    await expect(searchResults).toHaveText([/^Auf/]);
+  });
+
+  test("shows total document count", async ({ page }) => {
+    await navigate(page, "/erweiterte-suche?documentKind=L");
+
+    const count = getTotalDocumentCounter(page);
+
+    await expect(count).toHaveText(
+      nonZeroTotalDocumentCount("Literaturnachweise"),
+    );
+  });
+
+  test("shows the search result contents", async ({ page }) => {
+    await navigate(page, "/erweiterte-suche");
+
+    await searchFor(page, {
+      q: 'main_title:"Erstes Test-Dokument ULI" "einfaches Test-Dokument"',
+      documentKind: "Literaturnachweise",
+    });
+
+    const searchResult = getSearchResults(page).first();
+
+    // Header
+    await expect(searchResult).toHaveText(/FooBar, 1982, 123-123/);
+    await expect(searchResult).toHaveText(/2024/);
+    await expect(searchResult).toHaveText(/Erstes Test-Dokument ULI/);
+
+    // Result detail link
+    await expect(
+      searchResult.getByRole("link", { name: "Erstes Test-Dokument ULI" }),
+    ).toBeVisible();
+
+    // Highlights
+    await expect(
+      searchResult.getByRole("link", { name: "Kurzreferat:" }),
+    ).toBeVisible();
+    await expect(
+      searchResult.getByText(/einfaches Test-Dokument/),
+    ).toBeVisible();
+  });
+
+  test("navigates to the document detail page", async ({ page }) => {
+    await navigate(page, "/erweiterte-suche");
+
+    await searchFor(page, {
+      q: 'main_title:"Erstes Test-Dokument ULI"',
+      documentKind: "Literaturnachweise",
+    });
+
+    // Result detail link
+    await page.getByRole("link", { name: "Erstes Test-Dokument ULI" }).click();
+
+    await expect(
+      page.getByRole("heading", {
+        level: 1,
+        name: "Erstes Test-Dokument ULI",
+      }),
+    ).toBeVisible();
+  });
+
+  test("searches without date restrictions", async ({ page, isMobileTest }) => {
+    test.skip(isMobileTest);
+    await navigate(page, "/erweiterte-suche");
+
+    await searchFor(page, {
+      documentKind: "Literaturnachweise",
+      q: "und",
+      dateFilter: "Keine zeitliche Begrenzung",
+    });
+
+    // Don't have a great way of asserting this filter, so just making sure the
+    // parameter is handled correctly
+    await expect(page).toHaveURL(/dateFilterType=allTime/);
+
+    const resultCounter = getResultCounter(page);
+    await expect(resultCounter).toHaveText(nonZeroResultCount);
+  });
+
+  test("filter to show date range", async ({ page, isMobileTest }) => {
+    test.skip(isMobileTest);
+    await navigate(page, "/erweiterte-suche");
+
+    await searchFor(page, {
+      documentKind: "Literaturnachweise",
+      q: "",
+      dateFilter: "Innerhalb eines Zeitraums",
+      dateFilterFrom: "2021",
+      dateFilterTo: "2022",
+    });
+
+    await sortBy(page, "Datum: Älteste zuerst");
+
+    const results = getSearchResults(page);
+
+    await expect(results).toHaveText([/2021/, /2022/]);
+  });
+});
+
+test.describe("searching administrative directive", () => {
+  test("only shows administrative directive results", async ({ page }) => {
+    await navigate(page, "/erweiterte-suche");
+
+    await searchFor(page, {
+      q: "und",
+      documentKind: "Verwaltungsvorschriften",
+    });
+
+    const searchResults = getSearchResults(page);
+    const resultCounter = getResultCounter(page);
+
+    await expect(resultCounter).toHaveText(nonZeroResultCount);
+
+    // Ensure all visible entries are of type administrative directive
+    await expect(searchResults).toHaveText([/^(VB|VR|VV)/]);
+  });
+
+  test("shows total document count", async ({ page }) => {
+    await navigate(page, "/erweiterte-suche?documentKind=V");
+
+    const count = getTotalDocumentCounter(page);
+
+    await expect(count).toHaveText(
+      nonZeroTotalDocumentCount("Verwaltungsvorschriften"),
+    );
+  });
+
+  test("shows the search result contents", async ({ page }) => {
+    await navigate(page, "/erweiterte-suche");
+
+    await searchFor(page, {
+      q: 'VT:"Beschlüsse beschlossen werden"',
+      documentKind: "Verwaltungsvorschriften",
+    });
+
+    const searchResult = getSearchResults(page).first();
+
+    // Header
+    await expect(searchResult).toHaveText(/VB/);
+    await expect(searchResult).toHaveText(/FooBar/);
+    await expect(searchResult).toHaveText(/Baz - 121 - 1/);
+    await expect(searchResult).toHaveText(/24.12.2022/);
+
+    // Title and detail link
+    await expect(
+      searchResult.getByRole("link").getByRole("heading", { level: 2 }),
+    ).toHaveText(/Beschluss über den Beschluss/);
+
+    // Text preview (only checking the first two sentences)
+    await expect(
+      searchResult.getByRole("link", { name: "Kurzreferat:" }),
+    ).toBeVisible();
+    await expect(searchResult).toHaveText(
+      /Beschlossen wurde, das Beschlüsse beschlossen werden müssen. /,
+    );
+  });
+
+  test("navigates to the document detail page", async ({ page }) => {
+    await navigate(page, "/erweiterte-suche");
+
+    await searchFor(page, {
+      q: "'Beschlüsse beschlossen werden'",
+      documentKind: "Verwaltungsvorschriften",
+    });
+
+    // Result detail link
+    await page
+      .getByRole("link", { name: "Beschluss über den Beschluss" })
+      .click();
+
+    await expect(
+      page.getByRole("heading", {
+        level: 1,
+        name: "Beschluss über den Beschluss",
+      }),
+    ).toBeVisible();
+  });
+
+  test("can search in field 'Normgeber'", async ({ page }) => {
+    await navigate(page, "/erweiterte-suche");
+
+    await searchFor(page, {
+      documentKind: "Verwaltungsvorschriften",
+      q: "NG:FooBar",
+    });
+
+    const results = getSearchResults(page);
+
+    await expect(results).toHaveCount(1);
+    await expect(results).toHaveText(/FooBar/);
+  });
+
+  test("can search in field 'Fundstelle'", async ({ page }) => {
+    await navigate(page, "/erweiterte-suche");
+
+    await searchFor(page, {
+      documentKind: "Verwaltungsvorschriften",
+      q: 'FU:"FooBar 2022, Nr 1, 123"',
+    });
+
+    const results = getSearchResults(page);
+
+    await expect(results).toHaveCount(1);
+    await expect(results).toHaveText(/Beschluss über den Beschluss/);
+  });
+
+  test("can search in field 'Überschrift'", async ({ page }) => {
+    await navigate(page, "/erweiterte-suche");
+
+    await searchFor(page, {
+      documentKind: "Verwaltungsvorschriften",
+      q: "U:das",
+    });
+
+    const results = getSearchResults(page);
+
+    await expect(results).toHaveCount(1);
+    await expect(results).toHaveText(
+      /Verwaltungsvorschrift für das Testen des Portals zur Darstellung von Verwaltungsvorschriften/,
+    );
+  });
+
+  test("can search in field 'Volltext'", async ({ page }) => {
+    await navigate(page, "/erweiterte-suche");
+
+    await searchFor(page, {
+      documentKind: "Verwaltungsvorschriften",
+      q: "VT:das",
+    });
+
+    const results = getSearchResults(page);
+
+    await expect(results).toHaveCount(1);
+    await expect(results).toHaveText(/Beschluss über den Beschluss/);
+  });
+
+  test("searches without date restrictions", async ({ page, isMobileTest }) => {
+    test.skip(isMobileTest);
+    await navigate(page, "/erweiterte-suche");
+
+    await searchFor(page, {
+      documentKind: "Verwaltungsvorschriften",
+      q: "und",
+      dateFilter: "Keine zeitliche Begrenzung",
+    });
+
+    // Don't have a great way of asserting this filter, so just making sure the
+    // parameter is handled correctly
+    await expect(page).toHaveURL(/dateFilterType=allTime/);
+
+    const resultCounter = getResultCounter(page);
+    await expect(resultCounter).toHaveText(nonZeroResultCount);
+  });
+
+  test("filter to show specific date", async ({ page, isMobileTest }) => {
+    test.skip(isMobileTest);
+    await navigate(page, "/erweiterte-suche");
+
+    await searchFor(page, {
+      documentKind: "Verwaltungsvorschriften",
+      q: "ipsum",
+      dateFilter: "Bestimmtes Datum",
+      dateFilterSpecificDate: "01.07.2025",
+    });
+
+    const results = getSearchResults(page);
+
+    await expect(results).toHaveCount(1);
+    await expect(results).toHaveText(/01.07.2025/);
+  });
+
+  test("filter to show date range", async ({ page, isMobileTest }) => {
+    test.skip(isMobileTest);
+    await navigate(page, "/erweiterte-suche");
+
+    await searchFor(page, {
+      documentKind: "Verwaltungsvorschriften",
+      q: "",
+      dateFilter: "Innerhalb eines Zeitraums",
+      dateFilterFrom: "01.01.2019",
+      dateFilterTo: "31.12.2022",
+    });
+
+    await sortBy(page, "Datum: Älteste zuerst");
+
+    const results = getSearchResults(page);
+
+    await expect(results).toHaveCount(2);
+    await expect(results).toHaveText([/2019/, /2022/]);
+  });
+});
+
+test("restores search state from document breadcrumbs", async ({ page }) => {
+  await navigate(page, "/erweiterte-suche");
+
+  await searchFor(page, {
+    q: "FrSaftErfrischV",
+    documentKind: "Gesetze & Verordnungen",
+  });
+
+  await page
+    .getByRole("link", {
+      name: "Fiktive Fruchtsaft- und Erfrischungsgetränkeverordnung zu Testzwecken",
+    })
+    .click();
+
+  await expect(
+    page.getByRole("heading", {
+      level: 1,
+      name: "Fiktive Fruchtsaft- und Erfrischungsgetränkeverordnung zu Testzwecken",
+    }),
+  ).toBeVisible();
+
+  await page
+    .getByRole("navigation", { name: "Pfadnavigation" })
+    .getByRole("link", { name: "Erweiterte Suche" })
+    .click();
+
+  await expect(page.getByRole("searchbox")).toHaveValue("FrSaftErfrischV");
+});
+
+test.describe("responsive", () => {
+  test.beforeEach(({ isMobileTest }) => {
+    test.skip(!isMobileTest);
+  });
+
+  test("displays the available data fields in an accordion", async ({
+    page,
+  }) => {
+    await navigate(page, "/erweiterte-suche");
+
+    const dataFieldsToggle = page.getByRole("button", {
+      name: "Auswahl für gezielte Suche",
+    });
+
+    const dataFieldsList = page.getByRole("list", {
+      name: "Durchsuchbare Datenfelder",
+    });
+
+    await expect(dataFieldsToggle).toBeVisible();
+    await expect(dataFieldsList).not.toBeVisible();
+
+    await dataFieldsToggle.click();
+    await expect(dataFieldsList).toBeVisible();
+  });
+
+  test(
+    "applies a date filter from the filter drawer",
+    { tag: ["@RISDEV-12193"] },
+    async ({ page }) => {
+      await navigate(page, "/erweiterte-suche");
+
+      await page.getByRole("radio", { name: "Gerichtsentscheidungen" }).click();
+      await page.getByRole("searchbox").fill("urteil");
+      const initialSearch = page.waitForResponse(/v1\/document\/lucene-search/);
+      await page.getByRole("button", { name: "Suchen" }).click();
+      await initialSearch;
+
+      await page.getByRole("button", { name: "Filtern" }).click();
+      const dialog = page.getByRole("dialog", { name: "Filtern" });
+      await expect(dialog).toBeVisible();
+
+      await dialog.getByRole("radio", { name: "Bestimmtes Datum" }).click();
+      await dialog.getByRole("textbox", { name: "Datum" }).fill("15.06.2024");
+
+      await dialog.getByRole("button", { name: "Anwenden" }).click();
+
+      await expect(dialog).not.toBeVisible();
+      await expect(page).toHaveURL(/dateFilterType=specificDate/);
+      await expect(page).toHaveURL(/dateFilterFrom=2024-06-15/);
+
+      await expect(getSearchResults(page)).toHaveText(/15.06.2024/);
+    },
+  );
+
+  test("discards filter drawer changes when closed without applying", async ({
+    page,
+  }) => {
+    await navigate(page, "/erweiterte-suche?documentKind=R");
+
+    await page.getByRole("button", { name: "Filtern" }).click();
+    const dialog = page.getByRole("dialog", { name: "Filtern" });
+
+    await dialog.getByRole("radio", { name: "Bestimmtes Datum" }).click();
+    await dialog.getByRole("textbox", { name: "Datum" }).fill("15.06.2024");
+
+    await dialog.getByRole("button", { name: "Schließen" }).click();
+    await expect(dialog).not.toBeVisible();
+
+    await expect(page).not.toHaveURL(/dateFilterType=specificDate/);
+
+    // Reopening the drawer shows the field reset to the last committed value
+    await page.getByRole("button", { name: "Filtern" }).click();
+    await expect(
+      dialog.getByRole("radio", { name: "Keine zeitliche Begrenzung" }),
+    ).toBeChecked();
+  });
+
+  test("'Zurücksetzen' resets and immediately commits the filters", async ({
+    page,
+  }) => {
+    await navigate(
+      page,
+      "/erweiterte-suche?documentKind=R&dateFilterType=specificDate&dateFilterFrom=2024-06-15",
+    );
+
+    await page.getByRole("button", { name: "Filtern" }).click();
+    const dialog = page.getByRole("dialog", { name: "Filtern" });
+
+    await dialog.getByRole("button", { name: "Zurücksetzen" }).click();
+
+    await expect(dialog).not.toBeVisible();
+    await expect(page).not.toHaveURL(/dateFilterType=specificDate/);
+  });
+
+  test(
+    "applies sorting from the sort drawer",
+    { tag: ["@RISDEV-12193"] },
+    async ({ page }) => {
+      await navigate(page, "/erweiterte-suche");
+
+      await page.getByRole("radio", { name: "Gerichtsentscheidungen" }).click();
+      await page
+        .getByRole("searchbox")
+        .fill('GERICHT:"ArbG Köln" OR GERICHT:"BDiG Frankfurt"');
+      const initialSearch = page.waitForResponse(/v1\/document\/lucene-search/);
+      await page.getByRole("button", { name: "Suchen" }).click();
+      await initialSearch;
+
+      await page.getByRole("button", { name: "Sortieren" }).click();
+      const dialog = page.getByRole("dialog", { name: "Sortieren" });
+      await expect(dialog).toBeVisible();
+
+      await dialog
+        .getByRole("radio", { name: "Gericht: Von A nach Z" })
+        .click();
+      await dialog.getByRole("button", { name: "Anwenden" }).click();
+
+      await expect(dialog).not.toBeVisible();
+      await expect(page).toHaveURL(/sort=courtName/);
+
+      await expect(getSearchResults(page)).toHaveText([
+        /ArbG Köln/,
+        /BDiG Frankfurt/,
+      ]);
+    },
+  );
+
+  test("applies page size from the sort drawer", async ({ page }) => {
+    await navigate(
+      page,
+      "/erweiterte-suche?documentKind=R&dateFilterType=period&dateFilterFrom=2023-01-01&dateFilterTo=2025-12-31&itemsPerPage=10",
+    );
+
+    const searchResults = getSearchResults(page);
+    await expect(searchResults).toHaveCount(10);
+
+    await page.getByRole("button", { name: "Sortieren" }).click();
+    const dialog = page.getByRole("dialog", { name: "Sortieren" });
+
+    await dialog.getByRole("radio", { name: "50" }).click();
+    await dialog.getByRole("button", { name: "Anwenden" }).click();
+
+    await expect(dialog).not.toBeVisible();
+    await expect(page).toHaveURL(/itemsPerPage=50/);
+    await expect(searchResults).toHaveCount(13);
+  });
+});
+
+test.describe("search by AND + OR operators", { tag: ["@RISDEV-8385"] }, () => {
+  test.describe("legislation", () => {
+    test("searches with AND operator", async ({ page }) => {
+      await navigate(page, "/erweiterte-suche");
+
+      await searchFor(page, {
+        q: 'LU:"Verordnung" AND LU:"Kontrolle"',
+        documentKind: "Gesetze & Verordnungen",
+      });
+
+      const results = getSearchResults(page);
+
+      await expect(results).toHaveCount(1);
+      await expect(results).toHaveText(/Verordnung/);
+      await expect(results).toHaveText(/Kontrolle/);
+    });
+
+    test("searches with OR operator", async ({ page, isMobileTest }) => {
+      test.skip(isMobileTest);
+      await navigate(page, "/erweiterte-suche");
+
+      await searchFor(page, {
+        q: "LU:Fruchtsaft OR LU:Fruchtsirup",
+        documentKind: "Gesetze & Verordnungen",
+        dateFilter: "Keine zeitliche Begrenzung",
+      });
+
+      await sortBy(page, "Datum: Älteste zuerst");
+
+      const results = getSearchResults(page);
+
+      await expect(results).toHaveCount(2);
+      await expect(results).toHaveText([/Fruchtsirup/, /Fruchtsaft/]);
+    });
+  });
+
+  test.describe("caselaw", () => {
+    test("searches with AND operator", async ({ page }) => {
+      await navigate(page, "/erweiterte-suche");
+
+      await searchFor(page, {
+        q: 'GERICHT:"LG Hamburg" AND "Urteil 4"',
+        documentKind: "Gerichtsentscheidungen",
+      });
+
+      const results = getSearchResults(page);
+
+      await expect(results).toHaveCount(1);
+      await expect(results).toHaveText(/LG Hamburg/);
+      await expect(results).toHaveText(/Urteil 4/);
+    });
+
+    test("searches with OR operator", async ({ page, isMobileTest }) => {
+      test.skip(isMobileTest);
+      await navigate(page, "/erweiterte-suche");
+
+      await searchFor(page, {
+        q: 'GERICHT:"ArbG Köln" OR GERICHT:"BDiG Frankfurt"',
+        documentKind: "Gerichtsentscheidungen",
+      });
+
+      await sortBy(page, "Datum: Älteste zuerst");
+
+      const results = getSearchResults(page);
+
+      await expect(results).toHaveCount(2);
+      await expect(results).toHaveText([/ArbG Köln/, /BDiG Frankfurt/]);
+    });
+  });
+
+  test.describe("literature", () => {
+    test("searches with AND operator", async ({ page }) => {
+      await navigate(page, "/erweiterte-suche");
+
+      await searchFor(page, {
+        q: "Erstes AND Dokument",
+        documentKind: "Literaturnachweise",
+      });
+
+      const results = getSearchResults(page);
+
+      await expect(results).toHaveCount(1);
+      await expect(results).toHaveText(/Erstes/);
+      await expect(results).toHaveText(/Dokument/);
+    });
+
+    test("searches with OR operator", async ({ page, isMobileTest }) => {
+      test.skip(isMobileTest);
+      await navigate(page, "/erweiterte-suche");
+
+      await searchFor(page, {
+        q: "Erstes OR Zweites",
+        documentKind: "Literaturnachweise",
+      });
+
+      await sortBy(page, "Datum: Älteste zuerst");
+
+      const results = getSearchResults(page);
+
+      await expect(results).toHaveCount(2);
+      await expect(results).toHaveText([/Zweites/, /Erstes/]);
+    });
+  });
+
+  test.describe("administrative directive", () => {
+    test("searches with AND operator", async ({ page }) => {
+      await navigate(page, "/erweiterte-suche");
+
+      await searchFor(page, {
+        q: "Beschlüsse AND Beschluss",
+        documentKind: "Verwaltungsvorschriften",
+      });
+
+      const results = getSearchResults(page);
+
+      await expect(results).toHaveCount(1);
+      await expect(results).toHaveText(/Beschlüsse/);
+      await expect(results).toHaveText(/Beschluss/);
+
+      // Should not match anything if one of the values does not exist
+      await searchFor(page, {
+        q: "Beschlüsse AND DoesNotExist",
+        documentKind: "Verwaltungsvorschriften",
+      });
+
+      await expect(results).toHaveCount(0);
+    });
+
+    test("searches with OR operator", async ({ page, isMobileTest }) => {
+      test.skip(isMobileTest);
+      await navigate(page, "/erweiterte-suche");
+      await searchFor(page, {
+        q: "Katze OR Beschluss",
+        documentKind: "Verwaltungsvorschriften",
+      });
+
+      await sortBy(page, "Datum: Älteste zuerst");
+
+      const results = getSearchResults(page);
+
+      await expect(results).toHaveCount(2);
+      await expect(results).toHaveText([/Beschluss/, /Katze/]);
+    });
+  });
+});

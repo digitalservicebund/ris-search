@@ -6,6 +6,13 @@
   "priority": 500,
   "template": {
     "mappings": {
+      "_source": {
+        "excludes": [
+          "article_texts",
+          "article_names",
+          "article_fingerprints"
+        ]
+      },
       "properties": {
         "AL": {
           "type": "alias",
@@ -25,7 +32,7 @@
         },
         "AB": {
           "type": "alias",
-          "path": "official_abbreviation"
+          "path": "abbreviation"
         },
         "DATUM": {
           "type": "alias",
@@ -87,13 +94,23 @@
             }
           }
         },
-        "official_abbreviation": {
+        "abbreviation": {
           "type": "text",
           "analyzer": "custom_german_analyzer",
           "fields": {
             "keyword": {
               "type": "keyword",
               "normalizer": "normalized_keyword"
+            }
+          }
+        },
+        "ris_abbreviation": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "normalizer": "norm_abbreviation_normalized_keyword"
             }
           }
         },
@@ -144,6 +161,10 @@
           "type": "text",
           "analyzer": "custom_german_analyzer",
           "index_options": "offsets"
+        },
+        "article_fingerprints": {
+          "type": "text",
+          "analyzer": "custom_german_fingerprint_analyzer"
         },
         "indexed_at": {
           "type": "date"

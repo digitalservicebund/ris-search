@@ -10,7 +10,9 @@ import lombok.Builder;
 /** A DTO for court decisions in a specific encoding, following schema.org naming guidelines. */
 @Builder
 public record CaseLawSchema(
-    @RISSchema(name = "ris:dokumentnummer", example = "KARE000000000", requiredMode = Schema.RequiredMode.REQUIRED)
+    @JsonProperty("@context") @Schema(requiredMode = Schema.RequiredMode.REQUIRED) String context,
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
+        @RISSchema(name = "ris:dokumentnummer", example = "KARE000000000")
         String documentNumber,
     @Schema(
             example = "ECLI:DE:FGRLP:1969:0905.IV85.68.0A",
@@ -23,41 +25,49 @@ public record CaseLawSchema(
     @Schema(description = "Gründe") String grounds,
     @Schema(description = "Leitsatz") String guidingPrinciple,
     @Schema(description = "Überschrift") String headline,
+    @Schema(description = "Titelzeile") String titleLine,
     @Schema(description = "Orientierungssatz") String headnote,
     @Schema(description = "Sonstiger Orientierungssatz") String otherHeadnote,
     @Schema(description = "Sonstiger Langtext") String otherLongText,
     @Schema(description = "Tenor") String tenor,
-    @RISSchema(name = "ris:entscheidungsdatum", description = "Entscheidungsdatum", requiredMode = Schema.RequiredMode.REQUIRED)
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
+        @RISSchema(name = "ris:entscheidungsdatum", description = "Entscheidungsdatum")
         LocalDate decisionDate,
-    @RISSchema(
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
+        @RISSchema(
             name = "ris:aktenzeichenListe",
             example = "BGH 123/23",
-            description = "Aktenzeichen",
-            requiredMode = Schema.RequiredMode.REQUIRED)
+            description = "Aktenzeichen")
         List<String> fileNumbers,
-    @RISSchema(name = "ris:gerichtstyp", example = "FG", description = "Gerichtstyp") String courtType,
-    @RISSchema(name = "ris:gerichtsort", example = "Berlin", description = "Gerichtssitz") String location,
+    @RISSchema(name = "ris:gerichtstyp", example = "FG", description = "Gerichtstyp")
+        String courtType,
+    @RISSchema(name = "ris:gerichtsort", example = "Berlin", description = "Gerichtssitz")
+        String location,
     @RISSchema(example = "Urteil", name = "ris:dokumenttyp") String documentType,
     @Schema(description = "Leitsatz") String outline,
-    @RISSchema(name = "ris:spruchkoerper", example = "1. Senat", description = "Spruchkörper") String judicialBody,
-    @RISSchema(
-            name = "",
-            example = "Kündigung",
-            description = "Schlagworte",
-            requiredMode = Schema.RequiredMode.REQUIRED)
+    @RISSchema(name = "ris:spruchkoerper", example = "1. Senat", description = "Spruchkörper")
+        String judicialBody,
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
+        @RISSchema(name = "", example = "Kündigung", description = "Schlagworte")
         List<String> keywords,
-    @RISSchema(name = "ris:gericht", example = "LArbG Hamm") String courtName, // corresponds to courtKeyword
+    @RISSchema(name = "ris:gericht", example = "LArbG Hamm")
+        String courtName, // corresponds to courtKeyword
     @Schema(
             examples = {"Beispielentscheidung"},
             description = "Entscheidungsname",
             requiredMode = Schema.RequiredMode.REQUIRED)
         List<String> decisionName,
-    @RISSchema(
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
+        @RISSchema(
             name = "ris:abweichendeDokumentnummer",
             example = "DEV-123",
-            description = "Abweichende Dokumentnummer",
-            requiredMode = Schema.RequiredMode.REQUIRED)
+            description = "Abweichende Dokumentnummer")
         List<String> deviatingDocumentNumber,
+    @Schema(description = "Vorgehende Entscheidungen") List<String> previousDecisions,
+    @Schema(description = "Nachgehende Entscheidungen") List<String> ensuingDecisions,
+    @Schema(example = "vereinbar mit höherrangigem Recht (Bremen)", description = "Gesetzeskraft")
+        List<String> gesetzeskraft,
+    @Schema(description = "Streitjahre") List<String> streitjahre,
     // fields that aren't shared with CaseLawDocumentationUnit
     @Schema(
             example = "/v1/case-law/ECLI:DE:FGRLP:1969:0905.IV85.68.0A",
@@ -65,7 +75,11 @@ public record CaseLawSchema(
         @JsonProperty("@id")
         String id,
     @Schema(example = "de", requiredMode = Schema.RequiredMode.REQUIRED) String inLanguage,
-    @Schema(requiredMode = Schema.RequiredMode.REQUIRED) List<CaseLawEncodingSchema> encoding)
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED) List<DocumentEncodingSchema> encoding,
+    @Schema(
+            requiredMode = Schema.RequiredMode.REQUIRED,
+            description = "Whether or not the document is a Vorabdokument")
+        boolean vorabdokument)
     implements JsonldResource {
 
   @Override

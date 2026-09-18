@@ -39,7 +39,7 @@ test.describe("find and display norms", () => {
     const searchButton = page.getByRole("button", { name: "Suchen" });
     await searchButton.click();
 
-    await page.getByRole("button", { name: "Gesetze & Verordnungen" }).click();
+    await page.getByRole("radio", { name: "Gesetze & Verordnungen" }).click();
     await page
       .getByRole("link", { name: "Brennereiordnung", exact: true })
       .click();
@@ -53,7 +53,7 @@ test.describe("find and display norms", () => {
   });
 
   test("open norm directly (server side rendered)", async ({ page }) => {
-    await page.goto("/norms/eli/bund/banz-at/1922/s717/1922-09-12/1/deu");
+    await page.goto("/gesetze/eli/bund/banz-at/1922/s717/1922-09-12/1/deu");
 
     await expect(
       page.getByRole("heading", {
@@ -71,15 +71,17 @@ test.describe("find and display caselaws", () => {
     await page.goto("/");
 
     const searchInput = page.getByRole("searchbox");
-    await searchInput.fill("Rechtmäßigkeit einer Sperrerklärung");
+    await searchInput.fill(
+      '"BVerwG, Beschluss vom 7. Januar 2010 - 20 F 5/09"',
+    );
 
     const searchButton = page.getByRole("button", { name: "Suchen" });
     await searchButton.click();
 
-    await page.getByRole("button", { name: "Gerichtsentscheidungen" }).click();
+    await page.getByRole("radio", { name: "Gerichtsentscheidungen" }).click();
     await page
       .getByRole("link", {
-        name: "Rechtmäßigkeit einer Sperrerklärung",
+        name: "BVerwG, Beschluss vom 7. Januar 2010 - 20 F 5/09",
         exact: true,
       })
       .click();
@@ -87,18 +89,18 @@ test.describe("find and display caselaws", () => {
     await expect(
       page.getByRole("heading", {
         level: 1,
-        name: "Rechtmäßigkeit einer Sperrerklärung",
+        name: "BVerwG, Beschluss vom 7. Januar 2010 - 20 F 5/09",
       }),
     ).toBeVisible();
   });
 
   test("open caselaw directly (server side rendered)", async ({ page }) => {
-    await page.goto("/case-law/JURE100055708");
+    await page.goto("/gerichtsentscheidungen/JURE100055708");
 
     await expect(
       page.getByRole("heading", {
         level: 1,
-        name: "Rechtmäßigkeit einer Sperrerklärung",
+        name: "BVerwG, Beschluss vom 7. Januar 2010 - 20 F 5/09",
       }),
     ).toBeVisible();
   });
@@ -116,7 +118,7 @@ test.describe("find and display literature", () => {
     const searchButton = page.getByRole("button", { name: "Suchen" });
     await searchButton.click();
 
-    await page.getByRole("button", { name: "Literaturnachweise" }).click();
+    await page.getByRole("radio", { name: "Literaturnachweise" }).click();
     await page
       .getByRole("link", {
         name: "Die Arbeitergilden der Gegenwart",
@@ -133,7 +135,7 @@ test.describe("find and display literature", () => {
   });
 
   test("open literature directly (server side rendered)", async ({ page }) => {
-    await page.goto("/literature/KSLS051342704");
+    await page.goto("/literaturnachweise/KSLS051342704");
 
     await expect(
       page.getByRole("heading", {
@@ -141,6 +143,62 @@ test.describe("find and display literature", () => {
         name: "Die Arbeitergilden der Gegenwart",
       }),
     ).toBeVisible();
+  });
+});
+
+test.describe("serve document sitemaps", () => {
+  test("verify sitemap index referenced in robots.txt is reachable", async ({
+    request,
+  }) => {
+    const response = await request.get("/robots.txt");
+
+    expect(response.ok()).toBeTruthy();
+    const body = await response.text();
+
+    const sitemapReference = body
+      .split("\n")
+      .map((line) => line.trim())
+      .find((line) => line.toLowerCase().startsWith("sitemap:"));
+
+    const sitemapPath = sitemapReference
+      ? sitemapReference.slice(sitemapReference.lastIndexOf("/"))
+      : null;
+
+    expect(sitemapPath).not.toBeNull();
+
+    const sitemapIndexResponse = await request.get(sitemapPath!);
+    expect(sitemapIndexResponse.ok()).toBeTruthy();
+
+    const sitemapIndexContent = await sitemapIndexResponse.text();
+    expect(sitemapIndexContent).toContain(
+      "http://www.sitemaps.org/schemas/sitemap/0.9",
+    );
+  });
+});
+
+test.describe("serve ecli sitemaps", () => {
+  test("verify correct robots.txt is served for user-agent", async ({
+    request,
+  }) => {
+    const response = await request.get("/robots.txt", {
+      headers: {
+        "User-Agent": "DG_JUSTICE_CRAWLER",
+      },
+    });
+
+    expect(response.ok()).toBeTruthy();
+    const body = await response.text();
+    expect(body).toContain("DG_JUSTICE_CRAWLER");
+  });
+
+  test("verify sitemap route returns content", async ({ request }) => {
+    const response = await request.get(
+      "/v1/eclicrawler/2026/08/20/sitemap_1.xml",
+    );
+
+    expect(response.ok()).toBeTruthy();
+    const body = await response.text();
+    expect(body.length).toBeGreaterThan(0);
   });
 });
 
@@ -156,7 +214,7 @@ test.describe("find and display administrative directives", () => {
     const searchButton = page.getByRole("button", { name: "Suchen" });
     await searchButton.click();
 
-    await page.getByRole("button", { name: "Verwaltungsvorschrift" }).click();
+    await page.getByRole("radio", { name: "Verwaltungsvorschrift" }).click();
     await page
       .getByRole("link", {
         name: "Leistungsanspruch in der Dreiwochenfrist",
@@ -175,7 +233,7 @@ test.describe("find and display administrative directives", () => {
   test("open administrative directives directly (server side rendered)", async ({
     page,
   }) => {
-    await page.goto("/administrative-directives/KSNR132460020");
+    await page.goto("/verwaltungsregelungen/KSNR132460020");
 
     await expect(
       page.getByRole("heading", {

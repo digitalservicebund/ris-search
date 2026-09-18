@@ -60,7 +60,7 @@ export async function useSimpleSearch(
     const baseUrl = `/v1`;
 
     if (documentKind === DocumentKind.CaseLaw) {
-      return baseUrl + "/case-law";
+      return baseUrl + "/rechtsprechung";
     } else if (documentKind === DocumentKind.Norm) {
       return baseUrl + "/legislation";
     } else if (documentKind === DocumentKind.Literature) {
@@ -85,7 +85,10 @@ export async function useSimpleSearch(
     // Date filter
     const dateFilterVal = toValue(dateFilter);
     if (dateFilterVal) {
-      const filter = dateFilterToSimpleSearchParams(dateFilterVal);
+      const filter = dateFilterToSimpleSearchParams(
+        dateFilterVal,
+        documentKind,
+      );
       if (filter?.dateTo) result.dateTo = filter.dateTo;
       if (filter?.dateFrom) result.dateFrom = filter.dateFrom;
     }
@@ -123,7 +126,13 @@ export async function useSimpleSearch(
     searchEndpointUrl,
     {
       query: combinedQuery,
+
+      // The page decides when to search, both for the initial load and for
+      // every later change, so neither the eager initial fetch nor refetching
+      // on the reactive sources is wanted here.
       watch: false,
+      immediate: false,
+
       dedupe: "defer",
 
       // PostHog integration

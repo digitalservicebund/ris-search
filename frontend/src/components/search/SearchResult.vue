@@ -1,51 +1,49 @@
 <script setup lang="ts">
-import AdministrativeDirectiveSearchResult from "~/components/search/AdministrativeDirectiveSearchResult.vue";
-import CaselawSearchResult from "~/components/search/CaselawSearchResult.vue";
-import LiteratureSearchResult from "~/components/search/LiteratureSearchResult.vue";
-import NormSearchResult from "~/components/search/NormSearchResult.vue";
 import type {
-  AdministrativeDirective,
+  AdministrativeDirectiveSearchSchema,
   AnyDocument,
-  CaseLaw,
+  CaseLawSearchSchema,
   LegislationExpression,
-  Literature,
+  LiteratureSearchSchema,
   SearchResult,
 } from "~/types/api";
-import {
-  isCaselaw,
-  isLegislation,
-  isLiterature,
-  isAdministrativeDirective,
-} from "~/utils/anyDocument";
+import type { SearchResultHeadingLevel } from "~/utils/search/searchResults";
 
-const props = defineProps<{
+const { headingLevel = "2" } = defineProps<{
   searchResult: SearchResult<AnyDocument>;
   order: number;
+  headingLevel?: SearchResultHeadingLevel;
 }>();
 </script>
 
 <template>
-  <CaselawSearchResult
-    v-if="isCaselaw(props.searchResult.item)"
-    :search-result="props.searchResult as SearchResult<CaseLaw>"
-    :order="props.order"
+  <SearchCaselawSearchResult
+    v-if="isCaselaw(searchResult.item)"
+    :search-result="searchResult as SearchResult<CaseLawSearchSchema>"
+    :order="order"
+    :heading-level="headingLevel"
   />
 
-  <NormSearchResult
-    v-else-if="isLegislation(props.searchResult.item)"
-    :search-result="props.searchResult as SearchResult<LegislationExpression>"
-    :order="props.order"
+  <SearchNormSearchResult
+    v-else-if="isLegislation(searchResult.item)"
+    :search-result="searchResult as SearchResult<LegislationExpression>"
+    :order="order"
+    :heading-level="headingLevel"
   />
 
-  <LiteratureSearchResult
-    v-else-if="isLiterature(props.searchResult.item)"
-    :search-result="props.searchResult as SearchResult<Literature>"
-    :order="props.order"
+  <SearchLiteratureSearchResult
+    v-else-if="isLiterature(searchResult.item)"
+    :search-result="searchResult as SearchResult<LiteratureSearchSchema>"
+    :order="order"
+    :heading-level="headingLevel"
   />
 
-  <AdministrativeDirectiveSearchResult
-    v-else-if="isAdministrativeDirective(props.searchResult.item)"
-    :search-result="props.searchResult as SearchResult<AdministrativeDirective>"
-    :order="props.order"
+  <SearchAdministrativeDirectiveSearchResult
+    v-else-if="isAdministrativeDirective(searchResult.item)"
+    :search-result="
+      searchResult as SearchResult<AdministrativeDirectiveSearchSchema>
+    "
+    :order="order"
+    :heading-level="headingLevel"
   />
 </template>

@@ -20,6 +20,7 @@ import org.jspecify.annotations.Nullable;
  */
 @Builder
 public record AdministrativeDirectiveSchema(
+    @JsonProperty("@context") @Schema(requiredMode = Schema.RequiredMode.REQUIRED) String context,
     @Schema(example = "KALU000000000", requiredMode = Schema.RequiredMode.REQUIRED)
         @JsonProperty("@id")
         String id,
@@ -58,8 +59,7 @@ public record AdministrativeDirectiveSchema(
         List<String> normReferences,
     @Schema(description = "Gliederung", requiredMode = Schema.RequiredMode.REQUIRED)
         List<String> outline,
-    @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
-        List<AdministrativeDirectiveEncodingSchema> encoding)
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED) List<DocumentEncodingSchema> encoding)
     implements JsonldResource {
 
   @Override

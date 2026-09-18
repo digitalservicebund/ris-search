@@ -117,6 +117,40 @@ describe("ActionMenu (desktop)", () => {
     await user.click(disabledButton);
     expect(mockCommand).not.toHaveBeenCalled();
   });
+
+  it("does not show a tooltip for disabled action items", async () => {
+    const user = userEvent.setup();
+
+    await renderSuspended(ActionMenu, {
+      props: {
+        actions: [
+          {
+            label: "Disabled Action",
+            iconComponent: h("span", "DisabledIcon"),
+            command: mockCommand,
+            disabled: true,
+          },
+          {
+            label: "Enabled Action",
+            iconComponent: h("span", "EnabledIcon"),
+            command: mockCommand,
+          },
+        ],
+      },
+      global: {
+        directives: { tooltip: Tooltip },
+      },
+    });
+
+    await user.hover(screen.getByRole("menuitem", { name: "Disabled Action" }));
+    expect(screen.queryByRole("tooltip")).not.toBeInTheDocument();
+
+    await user.hover(screen.getByRole("menuitem", { name: "Enabled Action" }));
+    expect(await screen.findByRole("tooltip")).toHaveTextContent(
+      "Enabled Action",
+    );
+    expect(screen.getAllByRole("tooltip")).toHaveLength(1);
+  });
 });
 
 describe("ActionMenu (mobile)", () => {

@@ -1,8 +1,54 @@
 :root {
+  --vp-font-family-base:
+    BundesSansWeb, Calibri, Verdana, Arial, Helvetica, sans-serif;
+  --vp-custom-block-font-size: 0.875rem;
+  --vp-code-font-size: 0.875rem;
+
   --vp-c-brand-1: #004b76;
   --vp-c-brand-2: #336f91;
   --vp-c-brand-3: #004b76;
   --vp-c-brand-soft: #ccdbe4;
+}
+
+html {
+  font-size: 18px;
+}
+
+body {
+  font-size: 1rem;
+}
+
+.VPNavBarTitle .title {
+  font-size: 1rem;
+}
+
+.VPSidebarItem .text {
+  font-size: 0.875rem;
+}
+
+.VPDocAsideOutline .outline-title {
+  font-size: 0.875rem;
+}
+
+.VPDocOutlineItem .outline-link {
+  font-size: 0.875rem;
+}
+
+.VPDocFooter .title {
+  font-size: 0.875rem;
+}
+
+.VPDocFooter .desc {
+  font-size: 0.75rem;
+}
+
+.VPDocFooter .VPLastUpdated {
+  font-size: 0.875rem;
+}
+
+.vp-doc th,
+.vp-doc td {
+  font-size: 0.875rem;
 }
 
 .dark {

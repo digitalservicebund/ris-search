@@ -6,6 +6,7 @@ import static de.bund.digitalservice.ris.search.models.opensearch.Norm.Fields.EX
 import java.time.Clock;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.TimeZone;
@@ -27,6 +28,8 @@ public class DateUtils {
 
   private static final Logger logger = LogManager.getLogger(DateUtils.class);
   public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+  public static final DateTimeFormatter GERMAN_LONG_DATE_FORMATTER =
+      DateTimeFormatter.ofPattern("d. MMMM yyyy", Locale.GERMANY);
 
   private DateUtils() {}
 
@@ -126,6 +129,20 @@ public class DateUtils {
       return null;
     }
     return date.format(DATE_FORMATTER);
+  }
+
+  /**
+   * Converts a {@link LocalDate} object to its German long-form string representation, e.g. "25.
+   * August 2026". If the input date is null, the method returns null.
+   *
+   * @param date the {@link LocalDate} object to format. If null, the output will also be null.
+   * @return the formatted date as a string, or null if the input date is null.
+   */
+  public static String toGermanLongDateString(LocalDate date) {
+    if (date == null) {
+      return null;
+    }
+    return date.format(GERMAN_LONG_DATE_FORMATTER);
   }
 
   /**

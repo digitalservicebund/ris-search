@@ -1,7 +1,6 @@
-import type { MetadataItem } from "~/components/Metadata.vue";
+import type { DetailsListItem } from "~/components/documents/DetailsList.vue";
+import type { MetadataItem } from "~/components/documents/Metadata.vue";
 import type { Literature } from "~/types/api";
-
-export const LITERATURE_TITLE_PLACEHOLDER = "Titelzeile nicht vorhanden";
 
 export function getTitle(literature?: Partial<Literature>) {
   return [
@@ -20,19 +19,23 @@ export function getLiteratureMetadataItems(
   ];
   return [
     {
+      type: "text",
       label: "Dokumenttyp",
       value: formatArray(literature?.documentTypes ?? []),
     },
     {
+      type: "badge",
       label: "Fundstelle",
-      value: formatArray(references),
+      values: references,
+      color: "gray",
     },
-
     {
+      type: "text",
       label: "Autor",
       value: formatArray(formatNames(literature?.authors ?? [])),
     },
     {
+      type: "text",
       label: "Veröffentlichungsjahr",
       value: formatArray(literature?.yearsOfPublication ?? []),
     },
@@ -41,7 +44,7 @@ export function getLiteratureMetadataItems(
 
 export function getLiteratureDetailItems(
   literature?: Partial<Literature>,
-): { label: string; value?: string; valueList?: string[] }[] {
+): DetailsListItem[] {
   if (literature?.literatureType == "sli") {
     return getSliLiteratureDetailItems(literature);
   }
@@ -50,28 +53,33 @@ export function getLiteratureDetailItems(
 
 export function getUliLiteratureDetailItems(
   literature?: Partial<Literature>,
-): { label: string; value?: string }[] {
+): DetailsListItem[] {
   const normReferences = literature?.normReferences ?? [];
   const languages = literature?.languages ?? [];
   const conferenceNotes = literature?.conferenceNotes ?? [];
   return [
     {
+      type: "badge",
       label: getSingularOrPlural("Norm:", "Normen:", normReferences.length),
-      value: formatArray(normReferences),
+      values: normReferences,
     },
     {
+      type: "text",
       label: "Mitarbeiter:",
       value: formatArray(formatNames(literature?.collaborators ?? [])),
     },
     {
+      type: "text",
       label: "Urheber:",
       value: formatArray(formatNames(literature?.originators ?? [])),
     },
     {
+      type: "text",
       label: getSingularOrPlural("Sprache:", "Sprachen:", languages.length),
       value: formatArray(languages),
     },
     {
+      type: "text",
       label: getSingularOrPlural(
         "Kongress:",
         "Kongresse:",
@@ -79,12 +87,13 @@ export function getUliLiteratureDetailItems(
       ),
       value: formatArray(conferenceNotes),
     },
+    getDownloadDetailItem(literature),
   ];
 }
 
 export function getSliLiteratureDetailItems(
   literature?: Partial<Literature>,
-): { label: string; value?: string; valueList?: string[] }[] {
+): DetailsListItem[] {
   const normReferences = literature?.normReferences ?? [];
   const languages = literature?.languages ?? [];
   const conferenceNotes = literature?.conferenceNotes ?? [];
@@ -96,50 +105,62 @@ export function getSliLiteratureDetailItems(
 
   return [
     {
+      type: "badge",
       label: getSingularOrPlural("Norm:", "Normen:", normReferences.length),
-      value: formatArray(normReferences),
+      values: normReferences,
     },
     {
+      type: "text",
       label: "Bearbeiter:",
       value: formatArray(formatNames(literature?.editors ?? [])),
     },
     {
+      type: "text",
       label: "Mitarbeiter:",
       value: formatArray(formatNames(literature?.collaborators ?? [])),
     },
     {
+      type: "text",
       label: "Urheber:",
       value: formatArray(formatNames(literature?.originators ?? [])),
     },
     {
+      type: "text",
       label: "Begründer:",
       value: formatArray(formatNames(literature?.founder ?? [])),
     },
     {
+      type: "text",
       label: "Herausgeber:",
       value: formatArray(mergedPublishers),
     },
     {
+      type: "text",
       label: "Verlag:",
       value: formatArray(literature?.publishingHouses ?? []),
     },
     {
+      type: "text",
       label: "Ausgabe:",
       value: literature?.edition ?? undefined,
     },
     {
+      type: "text",
       label: "Bestellnummer:",
       value: formatArray(literature?.internationalIdentifiers ?? []),
     },
     {
+      type: "list",
       label: "Teilband:",
-      valueList: literature?.volumes,
+      values: literature?.volumes ?? [],
     },
     {
+      type: "text",
       label: getSingularOrPlural("Sprache:", "Sprachen:", languages.length),
       value: formatArray(languages),
     },
     {
+      type: "text",
       label: getSingularOrPlural(
         "Kongress:",
         "Kongresse:",
@@ -148,6 +169,7 @@ export function getSliLiteratureDetailItems(
       value: formatArray(conferenceNotes),
     },
     {
+      type: "text",
       label: getSingularOrPlural(
         "Hochschule:",
         "Hochschulen:",
@@ -155,5 +177,18 @@ export function getSliLiteratureDetailItems(
       ),
       value: formatArray(universityNotes),
     },
+    getDownloadDetailItem(literature),
   ];
+}
+
+function getDownloadDetailItem(
+  literature?: Partial<Literature>,
+): DetailsListItem {
+  return {
+    type: "link",
+    label: "Download:",
+    url: getEncodingURL(literature?.encoding, "application/zip"),
+    text: "Diesen Literaturnachweis als ZIP herunterladen",
+    dataAttr: "xml-zip-view",
+  };
 }

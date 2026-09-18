@@ -279,7 +279,7 @@
         <section class="{$eingangsformel}">
             <xsl:apply-templates select="node() | @*"/>
             <xsl:call-template name="notes-collection">
-                <xsl:with-param name="thisId" select="akn:blockContainer/@eId" />
+                <xsl:with-param name="thisId" select="@eId" />
             </xsl:call-template>
         </section>
     </xsl:template>
@@ -439,11 +439,17 @@
         </section>
     </xsl:template>
 
-    <!-- Regelungstext-Schluss :: Signaturblock -->
+    <!-- Regelungstext-Schluss :: Signaturblock
+         Dieses Template verarbeitet auch die Inhaltsübersicht (akn:blockContainer innerhalb von
+         akn:preamble). Eventuelle nichtamtliche Fußnoten folgen jeweils am Ende des Containers,
+         damit die HTML-Verschachtelung dem @placementBase der Fußnote entspricht. -->
     <xsl:template match="akn:blockContainer">
         <xsl:sequence select="akn:gliederungskommentar('Signaturblock (akn:blockContainer innerhalb von akn:conclusions)')"/>
         <div>
             <xsl:apply-templates select="node() | @*"/>
+            <xsl:call-template name="notes-collection">
+                <xsl:with-param name="thisId" select="@eId"/>
+            </xsl:call-template>
         </div>
     </xsl:template>
 

@@ -2,10 +2,12 @@ package de.bund.digitalservice.ris.search.mapper;
 
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
+import de.bund.digitalservice.ris.search.models.opensearch.LegislationPartType;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.models.opensearch.TableOfContentsItem;
 import de.bund.digitalservice.ris.search.schema.LegalForceStatus;
 import de.bund.digitalservice.ris.search.schema.LegislationExpressionPartSchema;
+import de.bund.digitalservice.ris.search.schema.LegislationExpressionPartType;
 import de.bund.digitalservice.ris.search.schema.LegislationExpressionSchema;
 import de.bund.digitalservice.ris.search.schema.LegislationObjectSchema;
 import de.bund.digitalservice.ris.search.schema.LegislationWorkSchema;
@@ -32,10 +34,11 @@ public class NormSchemaMapper {
    *
    * @param norm the {@link Norm} instance to be converted; it contains all necessary fields such as
    *     ELI references, metadata, and publication information.
+   * @param remoteJsonContext remoteJsonContext url to retrieve jsonld context
    * @return a {@link LegislationExpressionSchema} object representing the input {@link Norm} with
    *     its associated legal force, temporal coverage, and publication details.
    */
-  public static LegislationExpressionSchema fromDomain(Norm norm) {
+  public static LegislationExpressionSchema fromDomain(Norm norm, String remoteJsonContext) {
     String expressionEli = norm.getExpressionEli();
     String manifestationEliXml = norm.getManifestationEliExample();
 
@@ -56,7 +59,9 @@ public class NormSchemaMapper {
 
     return LegislationExpressionSchema.builder()
         .id(CONTENT_BASE_URL + norm.getExpressionEli())
-        .abbreviation(norm.getOfficialAbbreviation())
+        .context(remoteJsonContext)
+        .abbreviation(norm.getAbbreviation())
+        .risAbbreviation(norm.getRisAbbreviation())
         .alternateName(norm.getOfficialShortTitle())
         .exampleOfWork(
             new LegislationWorkSchema(
@@ -149,6 +154,7 @@ public class NormSchemaMapper {
           tocItem.marker(),
           tocItem.heading(),
           "",
+          null,
           List.of(),
           buildNestedHasPart(tocItem.children(), idPrefix, articles));
     }
@@ -184,7 +190,18 @@ public class NormSchemaMapper {
             DateUtils.toDateIntervalString(
                 article.getEntryIntoForceDate(), article.getExpiryDate()))
         .encoding(encoding)
+        .partType(mapLegislationPartType(article.getDocumentType()))
         .hasPart(List.of())
         .build();
+  }
+
+  private static LegislationExpressionPartType mapLegislationPartType(LegislationPartType type) {
+    return switch (type) {
+      case null -> null;
+      case ARTICLE -> LegislationExpressionPartType.ARTICLE;
+      case ATTACHMENT -> LegislationExpressionPartType.ATTACHMENT;
+      case CONCLUSION -> LegislationExpressionPartType.CONCLUSION;
+      case PREAMBLE -> LegislationExpressionPartType.PREAMBLE;
+    };
   }
 }

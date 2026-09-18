@@ -1,0 +1,590 @@
+import type { Page } from "@playwright/test";
+import {
+  testCopyLinkButton,
+  testPdfButton,
+  testPrintButton,
+  testXmlButton,
+} from "./utils/actionMenuHelper";
+import { expect, test, noJsTest, navigate } from "./utils/fixtures";
+
+async function getSidebar(page: Page) {
+  const navigation = page.getByRole("navigation", { name: "Inhalte" });
+  await expect(navigation).toBeVisible();
+  return navigation;
+}
+
+test(
+  "displays literature page with metadata and text tab by default",
+  { tag: ["@RISDEV-10568"] },
+  async ({ page }) => {
+    await navigate(page, "/literaturnachweise/XXLU000000001");
+
+    // Main title
+    await expect(
+      page
+        .getByRole("main")
+        .getByRole("heading", { level: 1, name: "Erstes Test-Dokument ULI" })
+        .first(),
+    ).toBeVisible();
+
+    // Metadata section
+    const metadataList = page.getByTestId("metadata-list");
+    const defs = metadataList.getByRole("definition");
+
+    await expect(metadataList.getByRole("term")).toHaveText([
+      "Dokumenttyp",
+      "Fundstelle",
+      "Autor",
+      "Veröffentlichungsjahr",
+    ]);
+
+    await expect(defs.nth(0)).toHaveText("Auf");
+    // Fundstellen are rendered as badges (spans)
+    await expect(defs.nth(1).locator("span")).toHaveText([
+      "FooBar, 1982, 123-123",
+      "SelbstFund, 1982, 123-123",
+    ]);
+    await expect(defs.nth(2)).toHaveText("Sabine Musterfrau");
+    await expect(defs.nth(3)).toHaveText("2024");
+
+    // Text section
+    const textSection = page.getByRole("tabpanel", { name: "Text" });
+    await expect(textSection.getByRole("status")).toContainText(
+      "Dieser Service befindet sich in der Testphase",
+    );
+
+    await expect(
+      textSection.getByRole("heading", { level: 2, name: "Gliederung" }),
+    ).toBeVisible();
+    await expect(textSection.getByText("I. Problemstellung.")).toBeVisible();
+    await expect(textSection.getByText("II. Lösung.")).toBeVisible();
+    await expect(textSection.getByText("III. Zusammenfassung.")).toBeVisible();
+
+    await expect(
+      textSection.getByRole("heading", { level: 2, name: "Kurzreferat" }),
+    ).toBeVisible();
+    await expect(
+      textSection.getByText("Dies ist ein einfaches Test-Dokument."),
+    ).toBeVisible();
+    await expect(textSection.getByText("In sem neque")).toBeVisible();
+
+    await expect(
+      textSection.getByRole("heading", {
+        level: 2,
+        name: "Dieser Beitrag zitiert",
+      }),
+    ).toBeVisible();
+    await expect(
+      textSection.getByRole("heading", {
+        level: 3,
+        name: "Rechtsprechung",
+      }),
+    ).toBeVisible();
+    await expect(
+      textSection.getByText(
+        "Vergleiche aktiv EuGH 2. Kammer, 3. April 2008, Az: C-346/06",
+      ),
+    ).toBeVisible();
+    await expect(
+      textSection.getByText("Vergleiche aktiv FooBar 1. Kammer, 3. April 2008"),
+    ).toBeVisible();
+
+    await expect(
+      textSection
+        .getByRole("heading", {
+          level: 3,
+          name: "Literaturnachweise",
+        })
+        .first(),
+    ).toBeVisible();
+    await expect(
+      textSection.getByText("Vergleiche aktiv Selbstständigeliterature 2025"),
+    ).toBeVisible();
+
+    await expect(
+      textSection.getByRole("heading", {
+        level: 2,
+        name: "Dieser Beitrag wird zitiert",
+      }),
+    ).toBeVisible();
+    await expect(
+      textSection.getByRole("heading", {
+        level: 3,
+        name: "Verwaltungsvorschriften",
+      }),
+    ).toBeVisible();
+    await expect(
+      textSection.getByText("Vergleiche passiv NaNu 1. Kammer, 2009, Az: XY"),
+    ).toBeVisible();
+
+    await expect(
+      textSection
+        .getByRole("heading", {
+          level: 3,
+          name: "Literaturnachweise",
+        })
+        .nth(1),
+    ).toBeVisible();
+    await expect(
+      textSection.getByText(
+        "Vergleiche passiv Unselbstständigeliterature 2023",
+      ),
+    ).toBeVisible();
+    await expect(
+      textSection.getByText(
+        "Vergleiche passiv Unselbstständigeliterature 1989",
+      ),
+    ).toBeVisible();
+  },
+);
+
+test("displays sli footnotes in text section", async ({ page }) => {
+  await navigate(page, "/literaturnachweise/XXLS000000001");
+
+  await expect(
+    page
+      .getByRole("main")
+      .getByRole("heading", { level: 1, name: "Test-Dokument SLI" })
+      .first(),
+  ).toBeVisible();
+
+  const textSection = page.getByRole("tabpanel", { name: "Text" });
+  await expect(
+    textSection.getByRole("heading", {
+      level: 2,
+      name: "Fußnoten",
+    }),
+  ).toBeVisible();
+  await expect(textSection.getByText("Eine Fußnote.")).toBeVisible();
+  await expect(
+    textSection.getByText("Dies ist eine andere längere Fußnote."),
+  ).toBeVisible();
+});
+
+test("displays all titles", async ({ page }) => {
+  await navigate(page, "/literaturnachweise/XXLU000000002");
+
+  await expect(
+    page
+      .getByRole("main")
+      .getByRole("heading", { level: 1, name: "Zweites Test-Dokument ULI" })
+      .first(),
+  ).toBeVisible();
+
+  const textSection = page.getByRole("tabpanel", { name: "Text" });
+  await expect(
+    textSection.getByRole("heading", {
+      level: 2,
+      name: "Zusätzliche Titel",
+    }),
+  ).toBeVisible();
+
+  await expect(textSection).toContainText("Dokumentarischer Titel");
+  await expect(textSection).toContainText("Zusatz zum Haupttitel");
+});
+
+test("displays all sli titles", async ({ page }) => {
+  await navigate(page, "/literaturnachweise/XXLS000000001");
+
+  await expect(
+    page
+      .getByRole("main")
+      .getByRole("heading", { level: 1, name: "Test-Dokument SLI" })
+      .first(),
+  ).toBeVisible();
+
+  const textSection = page.getByRole("tabpanel", { name: "Text" });
+  await expect(
+    textSection.getByRole("heading", {
+      level: 2,
+      name: "Zusätzliche Titel",
+    }),
+  ).toBeVisible();
+
+  await expect(textSection).toContainText("Dokumentarischer Titel");
+  await expect(textSection).toContainText("Zusatz zum Haupttitel");
+  await expect(textSection).toContainText("Gesamttitel Bandbezeichnung");
+  await expect(textSection).toContainText("Gesamttitel 2 Bandbezeichnung 2");
+  await expect(textSection).toContainText("Titel Kurzform");
+  await expect(textSection).toContainText("sonstiger Titel");
+});
+
+test("sidebar TOC renders on desktop and clicking a link scrolls to the section", async ({
+  page,
+  isMobileTest,
+}) => {
+  test.skip(isMobileTest);
+
+  await navigate(page, "/literaturnachweise/XXLU000000001");
+
+  const sidebar = await getSidebar(page);
+  await sidebar.getByRole("link", { name: "Kurzreferat" }).click();
+
+  await expect(page).toHaveURL("/literaturnachweise/XXLU000000001#kurzreferat");
+
+  const heading = page.getByRole("heading", { name: "Kurzreferat" });
+  await expect(heading).toBeInViewport();
+  const box = await heading.boundingBox();
+  expect(box!.y).toBeLessThan(100);
+});
+
+test("sidebar TOC is not shown when document has no text sections", async ({
+  page,
+  isMobileTest,
+}) => {
+  test.skip(isMobileTest);
+
+  await navigate(page, "/literaturnachweise/XXLU000000005");
+
+  await expect(
+    page.getByRole("navigation", { name: "Inhalte" }),
+  ).not.toBeVisible();
+});
+
+test.describe("mobile table of contents", () => {
+  test("floating button for the TOC is visible", async ({
+    page,
+    isMobileTest,
+  }) => {
+    test.skip(!isMobileTest);
+    await navigate(page, "/literaturnachweise/XXLU000000001");
+
+    await expect(page.getByRole("button", { name: "Inhalte" })).toBeVisible();
+  });
+
+  test("clicking the floating button opens the TOC", async ({
+    page,
+    isMobileTest,
+  }) => {
+    test.skip(!isMobileTest);
+    await navigate(page, "/literaturnachweise/XXLU000000001");
+
+    await page.getByRole("button", { name: "Inhalte" }).click();
+
+    await expect(page.getByRole("dialog", { name: "Inhalte" })).toBeVisible();
+  });
+
+  test("clicking a TOC link closes the TOC and scrolls to the element", async ({
+    page,
+    isMobileTest,
+  }) => {
+    test.skip(!isMobileTest);
+    await navigate(page, "/literaturnachweise/XXLU000000001");
+
+    await page.getByRole("button", { name: "Inhalte" }).click();
+
+    const dialog = page.getByRole("dialog", { name: "Inhalte" });
+    await expect(dialog).toBeVisible();
+
+    await dialog.getByRole("link", { name: "Kurzreferat" }).click();
+    await expect(dialog).not.toBeVisible();
+
+    const targetHeading = page
+      .getByRole("main")
+      .getByRole("heading", { name: "Kurzreferat" });
+
+    await expect(targetHeading).toBeInViewport();
+  });
+});
+
+test("shows correct breadcrumbs for literature", async ({ page }) => {
+  await navigate(
+    page,
+    "/literaturnachweise/XXLU000000001?from=/suche?query=example",
+  );
+
+  const breadcrumb = page.getByRole("navigation", { name: "Pfadnavigation" });
+
+  await expect(breadcrumb.getByRole("link", { name: "Start" })).toBeVisible();
+
+  const searchBreadcrumb = breadcrumb.getByRole("link", { name: "Suche" });
+  await expect(searchBreadcrumb).toBeVisible();
+  await expect(searchBreadcrumb).toHaveAttribute(
+    "href",
+    "/suche?query=example",
+  );
+
+  await expect(breadcrumb.getByText("Erstes Test-Dokument ULI")).toBeVisible();
+});
+
+noJsTest("tabs work without JavaScript", async ({ page }) => {
+  await navigate(page, "/literaturnachweise/XXLU000000001");
+
+  await test.step("text", async () => {
+    await expect(
+      page.getByRole("heading", { name: "Kurzreferat" }),
+    ).toBeVisible();
+
+    await expect(
+      page.getByRole("tab", { name: "Text", selected: true }),
+    ).toBeVisible();
+  });
+
+  await test.step("details", async () => {
+    await page.getByRole("tab", { name: "Details" }).click();
+
+    await expect(page.getByRole("heading", { name: "Details" })).toBeVisible();
+
+    await expect(
+      page.getByRole("tab", { name: "Details", selected: true }),
+    ).toBeVisible();
+  });
+});
+
+test(
+  "shows detailed information in the 'Details' tab",
+  { tag: ["@RISDEV-12108", "@RISDEV-11103", "@RISDEV-12241"] },
+  async ({ page }) => {
+    await navigate(page, "/literaturnachweise/XXLU000000001");
+
+    const detailsLink = page.getByRole("tab", {
+      name: "Details",
+    });
+    await detailsLink.click();
+
+    await expect(page.getByRole("heading", { name: "Details" })).toBeVisible();
+    await expect(page.getByRole("main").getByRole("status")).toContainText(
+      "Dieser Service befindet sich in der Testphase",
+    );
+
+    const detailsList = page.getByTestId("details-list");
+    const terms = detailsList.getByRole("term");
+    const defs = detailsList.getByRole("definition");
+
+    await expect(terms).toHaveText([
+      "Normen:",
+      "Mitarbeiter:",
+      "Urheber:",
+      "Sprache:",
+      "Kongress:",
+      "Download:",
+    ]);
+    // Normen are rendered as badges (spans)
+    await expect(defs.nth(0).locator("span")).toHaveText([
+      "BMV-Ä",
+      "GG, Art 6 Abs 2 S 1, 1949-05-23",
+    ]);
+    await expect(defs.nth(1)).toHaveText("Peter Foo");
+    await expect(defs.nth(2)).toHaveText("DGB");
+    await expect(defs.nth(3)).toHaveText("deu");
+    await expect(defs.nth(4)).toHaveText(
+      "Internationaler Kongreß für das Recht, 1991, Athen, GRC",
+    );
+  },
+);
+
+test(
+  "shows detailed information in the 'Details' tab of sli documents",
+  { tag: ["@RISDEV-12108", "@RISDEV-11103", "@RISDEV-12241"] },
+  async ({ page }) => {
+    await navigate(page, "/literaturnachweise/XXLS000000001");
+
+    const detailsLink = page.getByRole("tab", {
+      name: "Details",
+    });
+    await detailsLink.click();
+
+    await expect(page.getByRole("heading", { name: "Details" })).toBeVisible();
+    await expect(page.getByRole("main").getByRole("status")).toContainText(
+      "Dieser Service befindet sich in der Testphase",
+    );
+
+    const detailsList = page.getByTestId("details-list");
+    const terms = detailsList.getByRole("term");
+    const defs = detailsList.getByRole("definition");
+
+    await expect(terms).toHaveText([
+      "Normen:",
+      "Bearbeiter:",
+      "Mitarbeiter:",
+      "Urheber:",
+      "Begründer:",
+      "Herausgeber:",
+      "Verlag:",
+      "Ausgabe:",
+      "Bestellnummer:",
+      "Teilband:",
+      "Sprache:",
+      "Kongress:",
+      "Hochschule:",
+      "Download:",
+    ]);
+    // Normen are rendered as badges (spans)
+    await expect(defs.nth(0).locator("span")).toHaveText([
+      "BMV-Ä",
+      "GG, Art 6 Abs 2 S 1, 1949-05-23",
+    ]);
+    await expect(defs.nth(1)).toHaveText("Foo Bearbeiter");
+    await expect(defs.nth(2)).toHaveText("Peter Foo");
+    await expect(defs.nth(3)).toHaveText("DGB");
+    await expect(defs.nth(4)).toHaveText("Foo Begruender");
+    await expect(defs.nth(5)).toHaveText(
+      "herausgeber institution showAs, Mitarbeiter Eins",
+    );
+    await expect(defs.nth(6)).toHaveText("verlag, Berlin");
+    await expect(defs.nth(7)).toHaveText("1. Auflage");
+    await expect(defs.nth(8)).toHaveText("ISBN 3-XXXXX-XX-X");
+    await expect(defs.nth(9)).toHaveText("Teilband 1");
+    await expect(defs.nth(10)).toHaveText("Teilband 2");
+    await expect(defs.nth(11)).toHaveText("deu");
+    await expect(defs.nth(12)).toHaveText(
+      "Internationaler Kongreß für das Recht, 1991, Athen, GRC",
+    );
+    await expect(defs.nth(13)).toHaveText("Universität Foo");
+  },
+);
+
+test(
+  "hides empty detail fields and only shows populated ones for uli documents",
+  { tag: ["@RISDEV-12108", "@RISDEV-12241"] },
+  async ({ page }) => {
+    await navigate(page, "/literaturnachweise/XXLU000000003");
+
+    await page.getByRole("tab", { name: "Details" }).click();
+
+    const detailsList = page.getByTestId("details-list");
+    const detailsEntries = detailsList
+      .getByRole("term")
+      .or(detailsList.getByRole("definition"));
+
+    await expect(detailsEntries).toHaveCount(4);
+    await expect(detailsEntries).toHaveText([
+      "Sprache:",
+      "deu",
+      "Download:",
+      " Diesen Literaturnachweis als ZIP herunterladen",
+    ]);
+  },
+);
+
+test(
+  "hides empty detail fields and only shows populated ones for sli documents",
+  { tag: ["@RISDEV-12108", "@RISDEV-11103", "@RISDEV-12241"] },
+  async ({ page }) => {
+    await navigate(page, "/literaturnachweise/XXLS000000002");
+
+    await page.getByRole("tab", { name: "Details" }).click();
+
+    const detailsList = page.getByTestId("details-list");
+    const terms = detailsList.getByRole("term");
+    const defs = detailsList.getByRole("definition");
+
+    await expect(terms).toHaveText([
+      "Norm:",
+      "Mitarbeiter:",
+      "Sprache:",
+      "Download:",
+    ]);
+    // Norm is rendered as a badge (span)
+    await expect(defs.nth(0).locator("span")).toHaveText([
+      "GG, Art 3 Abs 1, 1949-05-23",
+    ]);
+    await expect(defs.nth(1)).toHaveText("Max Mustermann");
+    await expect(defs.nth(2)).toHaveText("deu");
+  },
+);
+
+test.describe("actions menu", () => {
+  test.describe("can copy link to currently viewed page", () => {
+    testCopyLinkButton(
+      "/literaturnachweise/XXLU000000001",
+      "Link kopieren",
+      RegExp(".*/literaturnachweise/XXLU000000001"),
+    );
+  });
+
+  test.describe("can use print action button to open print menu", () => {
+    testPrintButton("/literaturnachweise/XXLU000000001");
+  });
+
+  test.describe("can't use PDF action as it is disabled", () => {
+    testPdfButton("/literaturnachweise/XXLU000000001");
+  });
+
+  test.describe("can use XML action to view literature xml file", () => {
+    testXmlButton(
+      "/literaturnachweise/XXLU000000001",
+      "http://localhost:8080/v1/literature/XXLU000000001.xml",
+    );
+  });
+});
+
+test(
+  "hides tabs and shows details if document is empty",
+  { tag: ["@RISDEV-12241"] },
+  async ({ page }) => {
+    await navigate(page, "/literaturnachweise/XXLU000000005");
+
+    await expect(
+      page.getByRole("navigation", {
+        name: "Details",
+      }),
+    ).not.toBeVisible();
+
+    await expect(
+      page.getByRole("heading", { level: 2, name: "Details" }),
+    ).toBeVisible();
+
+    await expect(page.getByRole("main").getByRole("status")).toContainText(
+      "Dieser Service befindet sich in der Testphase",
+    );
+
+    const detailsList = page.getByTestId("details-list");
+    await expect(
+      detailsList.getByRole("term").or(detailsList.getByRole("definition")),
+    ).toHaveText([
+      "Sprache:",
+      "deu",
+      "Download:",
+      " Diesen Literaturnachweis als ZIP herunterladen",
+    ]);
+  },
+);
+
+test("displays references", async ({ page }) => {
+  await navigate(page, "/literaturnachweise/XXLU000000009");
+
+  await expect(
+    page
+      .getByRole("main")
+      .getByRole("heading", { level: 1, name: "Lit Ausschließlich Verweise" })
+      .first(),
+  ).toBeVisible();
+
+  // Text section
+  // Make sure the text section with references is displayed even when
+  // references are the only "text" content
+  const textSection = page.getByRole("tabpanel", { name: "Text" });
+
+  await expect(
+    textSection.getByRole("heading", {
+      level: 2,
+      name: "Dieser Beitrag zitiert",
+    }),
+  ).toBeVisible();
+  await expect(
+    textSection.getByRole("heading", {
+      level: 3,
+      name: "Rechtsprechung",
+    }),
+  ).toBeVisible();
+  await expect(
+    textSection.getByText("Vergleiche aktiv FooBar 1. Kammer, 3. April 2008"),
+  ).toBeVisible();
+
+  await expect(
+    textSection.getByRole("heading", {
+      level: 2,
+      name: "Dieser Beitrag wird zitiert",
+    }),
+  ).toBeVisible();
+  await expect(
+    textSection.getByRole("heading", {
+      level: 3,
+      name: "Verwaltungsvorschriften",
+    }),
+  ).toBeVisible();
+  await expect(
+    textSection.getByText("Vergleiche passiv NaNu 1. Kammer, 2009, Az: XY"),
+  ).toBeVisible();
+});

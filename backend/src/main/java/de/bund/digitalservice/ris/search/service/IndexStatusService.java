@@ -55,7 +55,7 @@ public class IndexStatusService {
         return new IndexingState();
       }
       return mapper.readValue(content, IndexingState.class);
-    } catch (JsonProcessingException e) {
+    } catch (JsonProcessingException _) {
       return new IndexingState();
     }
   }

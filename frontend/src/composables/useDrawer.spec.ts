@@ -52,4 +52,30 @@ describe("useDrawer", () => {
   it("returns a default value for the drawer close button", () => {
     expect(useDrawer().closeButtonProps).toBeTruthy();
   });
+
+  it("reuses an externally provided visible ref instead of creating its own", async () => {
+    let drawer!: ReturnType<typeof useDrawer>;
+    const externalVisible = ref(false);
+
+    await mountSuspended(
+      defineComponent({
+        setup() {
+          drawer = useDrawer(externalVisible);
+        },
+        template: "<div/>",
+      }),
+    );
+
+    expect(drawer.visible).toBe(externalVisible);
+
+    const button = document.createElement("button");
+    document.body.appendChild(button);
+    drawer.triggerRef.value = button;
+
+    externalVisible.value = true;
+    await nextTick();
+    externalVisible.value = false;
+
+    await vi.waitFor(() => expect(document.activeElement).toBe(button));
+  });
 });

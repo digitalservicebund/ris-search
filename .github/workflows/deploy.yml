@@ -2,6 +2,17 @@ name: Deploy
 
 on:
   workflow_call:
+    secrets:
+      ARGOCD_AUTH_TOKEN:
+        required: true
+      ARGOCD_SERVER_STACKIT:
+        required: true
+      GITOPS_NEURIS_APP_ID:
+        required: true
+      GITOPS_NEURIS_APP_PRIVATE_KEY:
+        required: true
+      SLACK_BOT_TOKEN:
+        required: true
     inputs:
       image-tag:
         description: 'The tag of the image to deploy'

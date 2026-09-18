@@ -14,6 +14,10 @@ const testPages = [
     url: "/",
   },
   {
+    name: "home v2",
+    url: "/startseite-v2",
+  },
+  {
     name: "contact",
     url: "/kontakt",
   },
@@ -23,7 +27,7 @@ const testPages = [
   },
   {
     name: "data protection",
-    url: "/datenschutz",
+    url: "/datenschutzerklaerung",
   },
   {
     name: "accessibility",
@@ -47,27 +51,27 @@ const testPages = [
   },
   {
     name: "user tests data protection",
-    url: "/nutzungstests-datenschutz",
+    url: "/nutzungstests-datenschutzerklaerung",
   },
   {
     name: "simple search - all documents",
-    url: "/search",
+    url: "/suche",
   },
   {
     name: "simple search - legislation",
-    url: "/search?documentKind=N",
+    url: "/suche?documentKind=N",
   },
   {
     name: "simple search - caselaw",
-    url: "/search?documentKind=R",
+    url: "/suche?documentKind=R",
   },
   {
     name: "advanced search",
-    url: "/advanced-search",
+    url: "/erweiterte-suche",
   },
   {
     name: "norm view",
-    url: "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu",
+    url: "/gesetze/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu",
     tabs: [
       { name: "Details" },
       {
@@ -78,21 +82,28 @@ const testPages = [
   },
   {
     name: "norm view - single article",
-    url: "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/art-z1",
+    url: "/gesetze/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/hauptteil-n1_abschnitt-n2_art-z1",
+    tabs: [
+      {
+        name: "Geltungszeiträume",
+        heading:
+          /^(Weitere Geltungszeiträume dieser Einzelnorm|Geltungszeiträume sind noch nicht verfügbar)$/,
+      },
+    ],
   },
   {
     name: "caselaw view",
-    url: "/case-law/STRE300770800",
+    url: "/gerichtsentscheidungen/STRE300770800",
     tabs: [{ name: "Details" }],
   },
   {
     name: "literature view",
-    url: "/literature/XXLU000000001",
+    url: "/literaturnachweise/XXLU000000001",
     tabs: [{ name: "Details" }],
   },
   {
     name: "administrative directive view",
-    url: "/administrative-directives/KSNR000000001",
+    url: "/verwaltungsregelungen/KSNR000000001",
   },
   {
     name: "translations",

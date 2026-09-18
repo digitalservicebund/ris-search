@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import { Button } from "primevue";
-import { usePostHog } from "~/composables/usePostHog";
-
 const { userConsent, isBannerVisible, setTracking } = usePostHog();
 
 if (import.meta.server) {
@@ -19,11 +16,11 @@ const headingId = useId();
 <template>
   <section
     v-if="isBannerVisible"
-    class="ris-body2-regular lg:ris-body1-regular flex flex-col gap-24 bg-blue-200 px-8 py-16 lg:p-24"
+    class="typo-body-regular flex flex-col gap-24 bg-blue-200 px-16 py-24"
     :aria-labelledby="headingId"
   >
-    <div class="container">
-      <p :id="headingId" class="ris-heading3-bold text-xl lg:text-2xl">
+    <div class="content-wrapper">
+      <p :id="headingId" class="typo-headline2-bold">
         Cookie-Einstellungen akzeptieren oder ablehnen
       </p>
 
@@ -37,7 +34,7 @@ const headingId = useId();
         </p>
       </div>
 
-      <div class="flex flex-wrap items-center gap-x-24 gap-y-12 pt-16 lg:pt-24">
+      <div class="flex flex-wrap items-center gap-x-24 gap-y-8 pt-16 lg:pt-24">
         <form
           action="/api/cookie-consent"
           method="POST"
@@ -45,7 +42,7 @@ const headingId = useId();
           @submit.prevent="handleSetTracking(true)"
         >
           <input type="hidden" name="consent" value="true" />
-          <Button label="Akzeptieren" type="submit" />
+          <UiButton label="Akzeptieren" type="submit" />
         </form>
         <form
           action="/api/cookie-consent"
@@ -54,12 +51,18 @@ const headingId = useId();
           @submit.prevent="handleSetTracking(false)"
         >
           <input type="hidden" name="consent" value="false" />
-          <Button label="Ablehnen" type="submit" />
+          <UiButton label="Ablehnen" type="submit" />
         </form>
-        <NuxtLink :to="{ name: 'data-protection' }" class="ris-link1-regular">
+        <NuxtLink
+          :to="{ name: 'datenschutzerklaerung' }"
+          class="typo-link-regular"
+        >
           Datenschutzerklärung
         </NuxtLink>
-        <NuxtLink :to="{ name: 'cookie-settings' }" class="ris-link1-regular">
+        <NuxtLink
+          :to="{ name: 'cookie-einstellungen' }"
+          class="typo-link-regular"
+        >
           Cookie-Einstellungen
         </NuxtLink>
       </div>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import DefaultLayout from "./default.vue";
+import BreadcrumbPageLayout from "./breadcrumbPage.vue";
 
 defineProps<{
   staticContent: string;
@@ -7,15 +7,15 @@ defineProps<{
 </script>
 
 <template>
-  <DefaultLayout>
-    <div>
+  <BreadcrumbPageLayout>
+    <template #breadcrumb>
       <slot name="breadcrumb" />
-    </div>
+    </template>
 
-    <div class="prose">
-      <MDC :value="staticContent"></MDC>
+    <div class="content-wrapper pb-32 md:pb-56">
+      <MDC :value="staticContent" class="markdown-content content-grid"></MDC>
     </div>
-  </DefaultLayout>
+  </BreadcrumbPageLayout>
 </template>
 
 <style>
@@ -29,33 +29,37 @@ defineProps<{
   styles defined here.
 
 see: https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@scope */
-@scope (.prose) to (.no-prose) {
+@scope (.markdown-content) to (.no-markdown-content) {
   :scope {
-    @apply max-w-prose;
+    @apply ris-body2-regular sm:ris-body1-regular 2xl:text-[1.25rem];
+  }
+
+  :is(h2, h3, h4, h5, h6, p, ol, ul) {
+    @apply content-grid-textblock col-start-1;
   }
 
   h1 {
-    @apply ris-heading1-regular pt-32 pb-24 hyphens-auto max-sm:leading-48 md:hyphens-none;
+    @apply ris-heading3-bold md:ris-heading2-bold col-span-12 pb-8 hyphens-auto md:hyphens-none 2xl:text-[2.5rem];
   }
 
   h2 {
-    @apply ris-heading2-regular py-24;
+    @apply ris-heading3-regular md:ris-heading2-regular pt-24 pb-8;
   }
 
   h3 {
-    @apply ris-heading3-regular py-16;
+    @apply ris-subhead-regular md:ris-heading3-regular pt-16 pb-8;
   }
 
   h4 {
-    @apply ris-subhead-bold py-8;
+    @apply ris-body1-bold sm:ris-subhead-bold py-8;
   }
 
   h5 {
-    @apply ris-body1-bold pb-8;
+    @apply ris-body2-bold sm:ris-body1-bold py-8 2xl:text-[1.25rem];
   }
 
   a {
-    @apply ris-link1-regular;
+    @apply ris-link2-regular sm:ris-link1-regular 2xl:text-[1.25rem];
   }
 
   :is(p, ul, ol, li) {
@@ -65,5 +69,9 @@ see: https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@scope 
   :is(ul, ol) {
     @apply list-outside list-disc pl-24;
   }
+}
+
+.no-markdown-content {
+  @apply content-grid-textblock col-start-1;
 }
 </style>

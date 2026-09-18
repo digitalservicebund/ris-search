@@ -17,6 +17,7 @@ export default defineEventHandler(async (event) => {
   if (userAgent === "DG_JUSTICE_CRAWLER") {
     return await $fetch<string>(useBackendUrl(`/v1/eclicrawler/robots.txt`), {
       method: "GET",
+      headers: { Authorization: `Basic ${config.basicAuth}` },
     });
   }
 

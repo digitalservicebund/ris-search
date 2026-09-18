@@ -3,8 +3,11 @@ package de.bund.digitalservice.ris.search.service;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.repository.opensearch.ArticlesRepository;
 import de.bund.digitalservice.ris.search.utils.RisHighlightBuilder;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
 import java.util.Set;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,20 +16,20 @@ import org.opensearch.data.client.orhlc.NativeSearchQuery;
 import org.opensearch.data.client.orhlc.NativeSearchQueryBuilder;
 import org.opensearch.index.query.BoolQueryBuilder;
 import org.opensearch.index.query.InnerHitBuilder;
-import org.opensearch.index.query.MatchAllQueryBuilder;
-import org.opensearch.index.query.MatchPhraseQueryBuilder;
 import org.opensearch.index.query.MultiMatchQueryBuilder;
 import org.opensearch.index.query.Operator;
 import org.opensearch.index.query.QueryBuilders;
-import org.opensearch.index.search.MatchQuery;
 import org.opensearch.search.collapse.CollapseBuilder;
 import org.opensearch.search.fetch.subphase.highlight.HighlightBuilder;
+import org.opensearch.search.sort.SortBuilders;
+import org.opensearch.search.sort.SortOrder;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.SearchHitsImpl;
 import org.springframework.data.elasticsearch.core.TotalHitsRelation;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.UriUtils;
 
 /**
  * Service class for interacting with the database and return the search results. This class is
@@ -66,39 +69,34 @@ public class ArticleService {
     }
 
     BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
-    boolQuery.filter(QueryBuilders.termsQuery("expression_eli", expressionElis));
+    boolQuery.filter(QueryBuilders.termsQuery(Article.Fields.EXPRESSION_ELI, expressionElis));
 
     if (isLuceneQuery) {
-      boolQuery.should(QueryBuilders.queryStringQuery(searchString));
+      boolQuery.must(QueryBuilders.queryStringQuery(searchString));
     } else {
-      boolQuery.should(
+      boolQuery.must(
           new MultiMatchQueryBuilder(searchString)
-              .zeroTermsQuery(MatchQuery.ZeroTermsQuery.ALL)
               .type(MultiMatchQueryBuilder.Type.CROSS_FIELDS)
               .operator(Operator.OR));
 
-      // Allow searching articles by a combined "search keyword" (e.g., article number and norm
-      // abbreviation).
-      // Slop is added to account for re-ordering of the components.
-      boolQuery.should(new MatchPhraseQueryBuilder("search_keyword", searchString).slop(3));
-
-      // Include a MatchAllQuery with boost 0 to ensure all articles are considered for display,
-      // even if they don't explicitly match the query, but without influencing their ranking.
-      // This is useful for filling in results if few highly relevant articles are found.
-      boolQuery.should(new MatchAllQueryBuilder().boost(0));
+      boolQuery.should(
+          QueryBuilders.matchQuery(Article.Fields.ARTICLE_FINGERPRINT, searchString).boost(10.0f));
     }
 
     HighlightBuilder highlightBuilder =
-        RisHighlightBuilder.baseHighlighter().field("name").field("text");
+        RisHighlightBuilder.baseHighlighter().field(Article.Fields.NAME).field(Article.Fields.TEXT);
 
     InnerHitBuilder innerHitBuilder =
         new InnerHitBuilder()
             .setName("top_three_articles")
             .setSize(3)
+            .addSort(SortBuilders.scoreSort().order(SortOrder.DESC))
+            // Secondary tie-breaker sort
+            .addSort(SortBuilders.fieldSort("_id").order(SortOrder.ASC))
             .setHighlightBuilder(highlightBuilder);
 
     CollapseBuilder collapseBuilder =
-        new CollapseBuilder("expression_eli").setInnerHits(innerHitBuilder);
+        new CollapseBuilder(Article.Fields.EXPRESSION_ELI).setInnerHits(innerHitBuilder);
 
     NativeSearchQuery articleQuery =
         new NativeSearchQueryBuilder()
@@ -124,5 +122,33 @@ public class ArticleService {
    */
   public List<Article> findAllByExpressionEli(String expressionEli) {
     return articlesRepository.findAllByExpressionEli(expressionEli);
+  }
+
+  /**
+   * This method takes a possible eid and returns the best matching eid if one exists. An eid can
+   * contain % and therefore can't be directly used as a path variable. When it does contain %, all
+   * known cases are the result of a uri encoding, but not all eids are uri encoded. For example an
+   * eid could be präambel-n1 (not uri encoded) or art-za%20b (is a uri encoding of "artz-a b"). The
+   * xslt provides a partial workaround by skipping the normal uri encoding when building the url
+   * containing an eid. We still need to check both possibilities here because it's unclear which
+   * case we are dealing with.
+   *
+   * @param expressionEli expressionEli of the norm
+   * @param eidGiven the possible eid
+   * @return the real eid if it exists, or empty if it can't be found.
+   */
+  public Optional<String> getActualEid(String expressionEli, String eidGiven) {
+    if (articleExist(expressionEli, eidGiven)) {
+      return Optional.of(eidGiven);
+    }
+    String encodedEid = UriUtils.encode(eidGiven, StandardCharsets.UTF_8).toLowerCase(Locale.ROOT);
+    if (articleExist(expressionEli, encodedEid)) {
+      return Optional.of(encodedEid);
+    }
+    return Optional.empty();
+  }
+
+  private boolean articleExist(String expressionEli, String eid) {
+    return articlesRepository.existsById(Article.buildId(expressionEli, eid));
   }
 }

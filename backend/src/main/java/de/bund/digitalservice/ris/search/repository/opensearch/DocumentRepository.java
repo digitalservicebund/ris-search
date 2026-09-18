@@ -35,10 +35,10 @@ public interface DocumentRepository<T> extends ElasticsearchRepository<T, String
   void deleteAllById(@NotNull Iterable<? extends String> ids);
 
   /**
-   * Find documents by their document number.
+   * Find documents by their document number keyword.
    *
    * @param documentNumber the document number to search for
    * @return list of matching documents; may be empty
    */
-  List<T> findByDocumentNumber(String documentNumber);
+  List<T> findByDocumentNumberKeyword(String documentNumber);
 }

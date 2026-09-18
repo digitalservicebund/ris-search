@@ -1,16 +1,12 @@
 <script setup lang="ts">
-import { Button, Message } from "primevue";
 import { ExternalLink, NuxtLink } from "#components";
-import bmjvLogo from "~/assets/img/BMJV_de_v1__Web_farbig.svg";
-import SimpleSearchInput from "~/components/search/SimpleSearchInput.vue";
-import { usePrivateFeaturesFlag } from "~/composables/usePrivateFeaturesFlag";
+import bmjvLogo from "~/assets/img/bmjv-de-v1-web-farbig.svg";
 
 function redirectToSearch(searchStr?: string) {
-  navigateTo({ name: "search", query: searchStr ? { query: searchStr } : {} });
+  navigateTo({ name: "suche", query: searchStr ? { query: searchStr } : {} });
 }
 
 definePageMeta({
-  layout: "base",
   skipLinks: [
     { label: "Zum Inhalt", to: "#main" },
     { label: "Zum Fußbereich", to: "#footer" },
@@ -28,28 +24,35 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
 </script>
 
 <template>
-  <div class="flex gap-16 bg-blue-800 pt-64 pb-96 text-white">
-    <div class="container max-w-prose">
+  <div class="bg-blue-800 text-white">
+    <div class="content-wrapper content-grid">
       <div
-        class="ris-label3-bold mb-8 inline-block rounded-sm border border-white/10 bg-blue-700 px-8 py-4 uppercase"
+        class="col-span-12 flex flex-col items-start gap-16 px-16 py-40 sm:px-24 md:px-48 md:py-64 lg:col-span-10 lg:col-start-2 lg:px-80 xl:col-span-8 xl:col-start-3 2xl:gap-24 2xl:px-96 2xl:py-80"
       >
-        Testphase
+        <div
+          class="typo-label2-bold inline-block rounded-sm border border-white/10 bg-blue-700 px-8 py-4"
+        >
+          Testphase
+        </div>
+
+        <h1 class="typo-headline1-bold wrap-break-word hyphens-auto">
+          Rechtsinformationen des Bundes
+        </h1>
+        <p class="typo-body-regular 2xl:ris-subhead-regular">
+          Schneller und direkter Zugang zu Gesetzen, Verordnungen,
+          Gerichtsentscheidungen und künftig auch Verwaltungsvorschriften des
+          Bundes – an einem zentralen Ort.
+        </p>
       </div>
-      <h1 class="ris-heading1-regular wrap-break-word hyphens-auto">
-        Rechtsinformationen des Bundes
-      </h1>
-      <p class="ris-subhead-regular mt-24">
-        Schneller und direkter Zugang zu Gesetzen, Verordnungen,
-        Gerichtsentscheidungen und künftig auch Verwaltungsvorschriften des
-        Bundes – an einem zentralen Ort.
-      </p>
     </div>
   </div>
 
-  <div class="container flex max-w-prose flex-col gap-24 py-56">
-    <FeatureCard>
+  <div
+    class="content-wrapper content-grid gap-y-16 pt-16 pb-32 sm:gap-y-24 sm:pt-24 md:pb-56"
+  >
+    <div class="feature-card">
       <div>
-        <h2 class="ris-heading3-bold wrap-break-word hyphens-auto">
+        <h2 class="typo-headline2-bold wrap-break-word hyphens-auto">
           Testen Sie die Suche
         </h2>
         <p class="mt-8">
@@ -57,18 +60,15 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
           Bundesgerichte.
         </p>
       </div>
-      <SimpleSearchInput
+
+      <SearchSimpleSearchInput
         full-width
         model-value=""
         @update:model-value="(query) => redirectToSearch(query)"
         @empty-search="() => redirectToSearch()"
       />
-      <Message
-        severity="warn"
-        class="ris-body2-regular"
-        role="status"
-        aria-live="off"
-      >
+
+      <UiMessage severity="warn" class="ris-body2-regular" role="status">
         <p class="ris-body2-bold mt-2">
           Dieser Service befindet sich in der Testphase.
         </p>
@@ -78,12 +78,12 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
           Inhalte. Für Recherchen nutzen Sie bitte weiterhin die bestehenden
           Webseiten Gesetze-im-Internet und Rechtsprechung-im-Internet.
         </p>
-      </Message>
-    </FeatureCard>
+      </UiMessage>
+    </div>
 
-    <FeatureCard>
+    <div class="feature-card">
       <div>
-        <h2 class="ris-heading3-bold wrap-break-word hyphens-auto">
+        <h2 class="typo-headline2-bold wrap-break-word hyphens-auto">
           Testen Sie die Darstellung aktueller Gesetze, Verordnungen und
           Gerichtsentscheidungen
         </h2>
@@ -92,19 +92,20 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
           uns, die Inhalte klarer und zugänglicher zu machen.
         </p>
       </div>
-      <div class="flex flex-wrap gap-16">
-        <Button :as="NuxtLink" to="/search?documentKind=N">
-          Zu den Gesetzen und Verordnungen
-        </Button>
-        <Button :as="NuxtLink" to="/search?documentKind=R">
-          Zu den Gerichtsentscheidungen
-        </Button>
-      </div>
-    </FeatureCard>
 
-    <FeatureCard v-if="privateFeaturesEnabled">
+      <div class="flex flex-wrap gap-16">
+        <UiButton :as="NuxtLink" to="/suche?documentKind=N">
+          Zu den Gesetzen und Verordnungen
+        </UiButton>
+        <UiButton :as="NuxtLink" to="/suche?documentKind=R">
+          Zu den Gerichtsentscheidungen
+        </UiButton>
+      </div>
+    </div>
+
+    <div class="feature-card" v-if="privateFeaturesEnabled">
       <div>
-        <h2 class="ris-heading3-bold wrap-break-word hyphens-auto">
+        <h2 class="typo-headline2-bold wrap-break-word hyphens-auto">
           English translation of German laws and regulations
         </h2>
         <p class="mt-8">
@@ -114,15 +115,15 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
       </div>
 
       <div>
-        <Button :as="NuxtLink" :to="{ name: 'translations' }">
+        <UiButton :as="NuxtLink" :to="{ name: 'translations' }">
           Go to translations
-        </Button>
+        </UiButton>
       </div>
-    </FeatureCard>
+    </div>
 
-    <FeatureCard>
+    <div class="feature-card">
       <div>
-        <h2 class="ris-heading3-bold wrap-break-word hyphens-auto">
+        <h2 class="typo-headline2-bold wrap-break-word hyphens-auto">
           Testen Sie die Programmierschnittstelle
         </h2>
         <p class="mt-8">
@@ -134,36 +135,48 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
       </div>
 
       <div>
-        <Button
+        <UiButton
           :as="ExternalLink"
           url="https://docs.rechtsinformationen.bund.de"
         >
           Zur API-Dokumentation
-        </Button>
+        </UiButton>
       </div>
-    </FeatureCard>
+    </div>
 
-    <FeatureCard inner-class="gap-x-64 gap-y-32 sm:flex-row">
+    <div class="feature-card bmjv-card">
       <img
-        class="mt-20 ml-20 self-start sm:mt-4 md:ml-0"
+        class="mt-20 ml-20 self-start md:mt-4 md:ml-0"
         :src="bmjvLogo"
         alt="Bundesministerium der Justiz und für Verbraucherschutz"
       />
       <div class="space-y-8">
-        <h3 class="ris-body2-bold wrap-break-word hyphens-auto">
+        <h3 class="typo-body-bold wrap-break-word hyphens-auto">
           Ein Service im Auftrag des Bundesministeriums der Justiz und für
           Verbraucherschutz
         </h3>
-        <p class="ris-body2-regular">
+        <p class="typo-body-regular">
           Dieser Service befindet sich in der Testphase. Sie haben die
           Möglichkeit, erste Funktionen frühzeitig zu testen und Feedback zu
           geben. Die Funktionen und der Umfang der Daten werden schrittweise
           erweitert.
         </p>
-        <NuxtLink class="ris-link2-regular" :to="{ name: 'about' }"
+        <NuxtLink class="typo-link-regular" :to="{ name: 'ueber' }"
           >Weitere Informationen zur Testphase</NuxtLink
         >
       </div>
-    </FeatureCard>
+    </div>
   </div>
 </template>
+
+<style scoped>
+@reference "~/assets/main.css";
+
+.feature-card {
+  @apply col-span-12 flex flex-col gap-16 bg-white p-16 sm:p-24 md:gap-24 md:p-48 lg:col-span-10 lg:col-start-2 lg:px-80 xl:col-span-8 xl:col-start-3 2xl:px-96 2xl:py-56;
+}
+
+.bmjv-card {
+  @apply gap-x-64 gap-y-32 md:flex-row;
+}
+</style>

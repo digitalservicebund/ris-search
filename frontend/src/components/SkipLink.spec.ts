@@ -34,7 +34,7 @@ describe("SkipLink", () => {
 
   it("renders a link with the given hash and retains the current route query", async () => {
     useRouteMock.mockReturnValue({
-      path: "/search",
+      path: "/suche",
       query: { query: "test", documentKind: "R" },
       hash: "",
     });

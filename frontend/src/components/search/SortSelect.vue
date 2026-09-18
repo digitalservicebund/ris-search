@@ -1,57 +1,13 @@
 <script setup lang="ts">
-import { Select } from "primevue";
-import { computed } from "vue";
 import { DocumentKind } from "~/types/api";
-import { sortMode } from "~/utils/search/sortMode";
+import { validSortOptions } from "~/utils/search/sortOptions";
 
 const props = defineProps<{ documentKind: DocumentKind }>();
 const model = defineModel<string>();
 
-const reversedSortMode = (name: string) => "-" + name;
+const options = computed(() => validSortOptions(props.documentKind));
 
-const sharedSortOptions = [
-  { label: "Relevanz", value: "default" },
-  { label: "Datum: Älteste zuerst", value: sortMode.date },
-  { label: "Datum: Neueste zuerst", value: reversedSortMode(sortMode.date) },
-];
-
-const caselawSortOptions = [
-  { label: "Relevanz", value: "default" },
-  { label: "Gericht: Von A nach Z", value: sortMode.courtName },
-  {
-    label: "Gericht: Von Z nach A",
-    value: reversedSortMode(sortMode.courtName),
-  },
-  { label: "Entscheidungsdatum: Älteste zuerst", value: sortMode.date },
-  {
-    label: "Entscheidungsdatum: Neueste zuerst",
-    value: reversedSortMode(sortMode.date),
-  },
-];
-
-const legislationSortOptions = [
-  { label: "Relevanz", value: "default" },
-  { label: "Ausfertigungsdatum: Älteste zuerst", value: sortMode.date },
-  {
-    label: "Ausfertigungsdatum: Neueste zuerst",
-    value: reversedSortMode(sortMode.date),
-  },
-];
-
-const validSortOptions = computed(() => {
-  switch (props.documentKind) {
-    case DocumentKind.All:
-      return sharedSortOptions;
-    case DocumentKind.Norm:
-      return legislationSortOptions;
-    case DocumentKind.CaseLaw:
-      return caselawSortOptions;
-    default:
-      return sharedSortOptions;
-  }
-});
-
-watch(validSortOptions, (newVal) => {
+watch(options, (newVal) => {
   // Reset to a sensible default if the document kind doesn't support the current
   // sort value
   if (!model.value) return;
@@ -66,14 +22,11 @@ const sortLabelId = useId();
 
 <template>
   <span class="flex w-auto items-center gap-8">
-    <label :id="sortLabelId" class="ris-label2-regular">Sortieren nach</label>
-    <Select
+    <label :id="sortLabelId" class="typo-label2-regular">Sortieren nach</label>
+    <UiSelect
       :aria-labelledby="sortLabelId"
       v-model="model"
-      scroll-height="20rem"
-      option-label="label"
-      option-value="value"
-      :options="validSortOptions"
+      :options="options"
     />
   </span>
 </template>

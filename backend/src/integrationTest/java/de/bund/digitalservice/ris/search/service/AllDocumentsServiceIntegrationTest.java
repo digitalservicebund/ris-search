@@ -1,0 +1,112 @@
+package de.bund.digitalservice.ris.search.service;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+import de.bund.digitalservice.ris.search.config.ApiConfig;
+import de.bund.digitalservice.ris.search.config.ContainersIntegrationBase;
+import de.bund.digitalservice.ris.search.controller.api.testData.CaseLawTestData;
+import de.bund.digitalservice.ris.search.controller.api.testData.LiteratureTestData;
+import de.bund.digitalservice.ris.search.controller.api.testData.TestDataGenerator;
+import de.bund.digitalservice.ris.search.mapper.DocumentResponseMapper;
+import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
+import de.bund.digitalservice.ris.search.models.opensearch.AbstractSearchEntity;
+import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
+import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.elasticsearch.core.SearchPage;
+
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@AutoConfigureMockMvc
+class AllDocumentsServiceIntegrationTest extends ContainersIntegrationBase {
+
+  @BeforeEach
+  void setUpSearchControllerApiTest() {
+    clearRepositoryData();
+  }
+
+  @Test
+  @DisplayName("Two different court names match each other")
+  void courtSynonymTest() {
+    caseLawRepository.save(CaseLawTestData.simple("caselaw1", "Bundessozialgericht"));
+    caseLawRepository.save(CaseLawTestData.simple("caselaw2", "no match"));
+    saveSimpleNorm("norm1", "Bundessozialgericht");
+    saveSimpleNorm("norm2", "other no match");
+    List<AbstractSearchEntity> searchResults = searchAll("BSG");
+    List<String> caselaws = TestDataGenerator.getCaseLawIds(searchResults);
+    List<String> norms = TestDataGenerator.getNormIds(searchResults);
+    assertThat(caselaws).containsExactly("caselaw1");
+    assertThat(norms).containsExactly("ExpressionPrefixnorm1");
+  }
+
+  @Test
+  @DisplayName("Synonyms in the golem thesaurus match each other")
+  void golemThesaurusSynonymTest() {
+    caseLawRepository.save(CaseLawTestData.simple("caselaw1", "Abgasreduzierend"));
+    caseLawRepository.save(CaseLawTestData.simple("caselaw2", "no match"));
+    saveSimpleNorm("norm1", "Abgasreduzierend");
+    saveSimpleNorm("norm2", "other no match");
+    List<AbstractSearchEntity> searchResults = searchAll("Abgas reduzierend");
+    List<String> caselaws = TestDataGenerator.getCaseLawIds(searchResults);
+    List<String> norms = TestDataGenerator.getNormIds(searchResults);
+    assertThat(caselaws).containsExactly("caselaw1");
+    assertThat(norms).containsExactly("ExpressionPrefixnorm1");
+  }
+
+  @Test
+  @DisplayName("Synonyms should match even with different standard suffixes")
+  void synonymWithStemmingMatchTest() {
+    // expected matches
+    caseLawRepository.save(CaseLawTestData.simple("caselaw1", "Abgasreduzierend"));
+    caseLawRepository.save(CaseLawTestData.simple("caselaw2", "Abgasreduzierende"));
+    // eser is not a standard suffix and is not expected to match
+    caseLawRepository.save(CaseLawTestData.simple("caselaw3", "Abgasreduzierendeser"));
+    // es is a standard suffix
+    List<AbstractSearchEntity> searchResults = searchAll("Abgas reduzierendes");
+    List<String> caselawIds = TestDataGenerator.getCaseLawIds(searchResults);
+    assertThat(caselawIds).containsExactlyInAnyOrder("caselaw1", "caselaw2");
+  }
+
+  @Test
+  @DisplayName("Three Different Document kinds are all found")
+  void threeDifferentDocumentKindsAreAllFoundTest() {
+    caseLawRepository.save(CaseLawTestData.simple("caselaw1", "urlaub"));
+    literatureRepository.save(LiteratureTestData.simple("literature1", "urlaub"));
+    saveSimpleNorm("norm1", "urlaub");
+    List<AbstractSearchEntity> searchResults = searchAll("urlaub");
+    List<String> caselawIds = TestDataGenerator.getCaseLawIds(searchResults);
+    assertThat(caselawIds).containsExactlyInAnyOrder("caselaw1");
+    List<String> literatureIds = TestDataGenerator.getLiteratureIds(searchResults);
+    assertThat(literatureIds).containsExactlyInAnyOrder("literature1");
+    List<String> normIds = TestDataGenerator.getNormIds(searchResults);
+    assertThat(normIds).containsExactlyInAnyOrder("ExpressionPrefixnorm1");
+  }
+
+  @Test
+  @DisplayName("titles are not fragmented in textMatches")
+  void titlesAreNotFragmentedInTheHighlighter() {
+    CaseLawDocumentationUnit unit =
+        CaseLawDocumentationUnit.builder()
+            .id("IDXXX")
+            .caseFacts("Test")
+            .headline("this headline. Should not - be fragmented.")
+            .build();
+    caseLawRepository.save(unit);
+
+    SearchPage<AbstractSearchEntity> searchResult =
+        allDocumentsService.simpleSearchAllDocuments(
+            UniversalSearchParams.builder().searchTerm("be fragmented").build(),
+            Pageable.ofSize(10),
+            null);
+    var collection = DocumentResponseMapper.fromDomain(searchResult, ApiConfig.Paths.DOCUMENT);
+
+    String expectedTextMatch =
+        "this headline. Should not - <mark>be</mark> <mark>fragmented</mark>.";
+    assertThat(collection.member().getFirst().textMatches())
+        .anyMatch(m -> expectedTextMatch.equals(m.text()));
+  }
+}

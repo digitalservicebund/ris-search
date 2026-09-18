@@ -58,6 +58,7 @@ describe("usePostHog", () => {
     resetPostHogState();
     cookieStoreBackend.clear();
     vi.clearAllMocks();
+    vi.stubGlobal("cookieStore", cookieStoreMock);
   });
 
   it("initializes postHog when userConsent is true", async () => {
@@ -140,6 +141,23 @@ describe("usePostHog", () => {
     expect(postHog.value?.opt_in_capturing).toHaveBeenCalled();
   });
 
+  it("keeps working in browsers without the Cookie Store API", async () => {
+    vi.stubGlobal("cookieStore", undefined);
+    const { initialize, setTracking, isBannerVisible, userConsent, postHog } =
+      usePostHog();
+
+    // Would throw a `ReferenceError` if the API was accessed unconditionally,
+    // which breaks app initialization since the PostHog plugin awaits this.
+    await initialize();
+    expect(userConsent.value).toBeUndefined();
+    expect(isBannerVisible.value).toBe(true);
+
+    // Consent can't be persisted, but it still applies for the session
+    await setTracking(true);
+    expect(userConsent.value).toBe(true);
+    expect(postHog.value?.opt_in_capturing).toHaveBeenCalled();
+  });
+
   it("sendFeedbackToPostHog sends the user feedback and tracking information to backend when user enables tracking", async () => {
     const { setTracking, sendFeedbackToPostHog } = usePostHog();
     cookieStoreBackend.set("ph_key_posthog", {
@@ -148,18 +166,30 @@ describe("usePostHog", () => {
     });
     await setTracking(true);
     await sendFeedbackToPostHog("good", "bot-trap-value");
-    expect(useRisBackendMock).toHaveBeenCalledWith(
-      feedbackURL + "?text=good&url=%2F&user_id=12345&name=bot-trap-value",
-    );
+    expect(useRisBackendMock).toHaveBeenCalledWith(feedbackURL, {
+      method: "POST",
+      body: {
+        text: "good",
+        url: "/",
+        user_id: "12345",
+        name: "bot-trap-value",
+      },
+    });
   });
 
   it("sendFeedbackToPostHog sends the data to backend as anonymous user when the user disables tracking", async () => {
     const { setTracking, sendFeedbackToPostHog } = usePostHog();
     await setTracking(false);
     await sendFeedbackToPostHog("test", "");
-    expect(useRisBackendMock).toHaveBeenCalledWith(
-      feedbackURL + "?text=test&url=%2F&user_id=anonymous_feedback_user&name=",
-    );
+    expect(useRisBackendMock).toHaveBeenCalledWith(feedbackURL, {
+      method: "POST",
+      body: {
+        text: "test",
+        url: "/",
+        user_id: "anonymous_feedback_user",
+        name: "",
+      },
+    });
   });
 
   it("captures search event when postHog is initialized and user consent is given", async () => {

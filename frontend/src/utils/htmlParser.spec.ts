@@ -1,5 +1,9 @@
 import { afterEach } from "vitest";
-import { getTextFromElements, parseDocument } from "./htmlParser";
+import {
+  getVerweiseGroups,
+  getTextFromElements,
+  parseDocument,
+} from "./htmlParser";
 
 describe("getTextFromElements", () => {
   afterEach(() => {
@@ -54,6 +58,53 @@ describe("parseDocument", () => {
   it("parses fragments by auto-wrapping", () => {
     const doc = parseDocument("<p>Hello</p><p>World</p>");
     expect(doc.body?.textContent).toMatch(/Hello\s*World/);
+  });
+});
+
+describe("getVerweiseGroups", () => {
+  const parser = new DOMParser();
+
+  it("returns only the categories present in the document, in display order", () => {
+    const doc = parser.parseFromString(
+      `<!DOCTYPE HTML><html><head>
+        <template id="nachgehendeEntscheidung"><ul><li>B</li></ul></template>
+        <template id="referenzNorm"><ul><li>A</li></ul></template>
+      </head><body></body></html>`,
+      "text/html",
+    );
+
+    const result = getVerweiseGroups(doc);
+
+    expect(result).toEqual([
+      { id: "referenzNorm", label: "Normen", html: "<ul><li>A</li></ul>" },
+      {
+        id: "nachgehendeEntscheidung",
+        label: "Nachgehende Entscheidungen",
+        html: "<ul><li>B</li></ul>",
+      },
+    ]);
+  });
+
+  it("returns an empty array when no verweise templates are present", () => {
+    const doc = parser.parseFromString(
+      "<!DOCTYPE HTML><html><head></head><body></body></html>",
+      "text/html",
+    );
+
+    expect(getVerweiseGroups(doc)).toEqual([]);
+  });
+
+  it("sanitizes the list markup down to ul, li and a", () => {
+    const doc = parser.parseFromString(
+      `<!DOCTYPE HTML><html><head><template id="referenzNorm"><ul><li onclick="evil()"><a href="/x" class="foo">GG Art. 1</a></li><li><script>alert(1)</script>BGB</li></ul></template></head><body></body></html>`,
+      "text/html",
+    );
+
+    const [group] = getVerweiseGroups(doc);
+
+    expect(group?.html).toBe(
+      '<ul><li><a href="/x">GG Art. 1</a></li><li>BGB</li></ul>',
+    );
   });
 });
 

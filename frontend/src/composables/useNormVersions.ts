@@ -1,5 +1,4 @@
-import { computed, type ComputedRef } from "vue";
-import type { AsyncDataRequestStatus } from "#app";
+import { computed } from "vue";
 import type {
   JSONLDList,
   LegislationExpression,
@@ -9,54 +8,27 @@ import type {
 } from "~/types/api";
 import { getCurrentDateInGermanyFormatted } from "~/utils/dateFormatting";
 
-interface UseNormVersions {
-  status: Ref<AsyncDataRequestStatus>;
-  sortedVersions: ComputedRef<LegislationExpression[]>;
-}
-
-export function useNormVersions(eli: string): UseNormVersions {
-  const { data, status } = getNormVersions(eli);
-  const sortedVersions = computed(() => data.value?.member ?? []);
-  return { status, sortedVersions };
-}
-
-function getNormVersions(eli: string) {
-  const immediate = true;
-  const { status, data, error } = useRisBackend<
+export async function useNormVersions(eli: string) {
+  const { data, error } = await useRisBackend<
     JSONLDList<LegislationExpression>
-  >(`/v1/legislation/work-example/${eli}`, {
-    immediate: immediate,
-  });
+  >(`/v1/legislation/work-example/${eli}`);
 
-  if (error?.value) {
-    showError(error.value);
-  }
-
-  return { status, data };
+  const sortedVersions = computed(() => data.value?.member ?? []);
+  return { error, sortedVersions };
 }
 
-function getNorms(params: LegislationSearchParams) {
-  const immediate = params.eli !== undefined;
-  const { status, data, error } = useRisBackend<
-    JSONLDList<SearchResult<LegislationWork>>
-  >(`/v1/legislation`, {
-    params,
-    immediate: immediate,
-  });
-
-  if (error?.value) {
-    showError(error.value);
-  }
-
-  return { status, data };
-}
-
-export function useValidNormVersions(eli: string) {
+export async function useValidNormVersions(eli: string) {
   const today = getCurrentDateInGermanyFormatted();
-  return getNorms({
-    eli: eli,
+
+  const query: LegislationSearchParams = {
+    eli,
     temporalCoverageFrom: today,
     temporalCoverageTo: today,
     size: 300,
-  });
+  };
+
+  return useRisBackend<JSONLDList<SearchResult<LegislationWork>>>(
+    "/v1/legislation",
+    { query },
+  );
 }

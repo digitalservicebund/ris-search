@@ -26,10 +26,6 @@ concurrency:
 
 permissions:
   contents: read
-  pull-requests: read # SonarQube PR decoration
-  packages: write # Push images in build-and-push-image and scan-attest-sign-image
-  id-token: write # Sigstore/Fulcio identity challenge in build-and-push-image and scan-attest-sign-image
-  security-events: write # Upload Trivy SARIF results in scan-attest-sign-image
 
 env:
   RUN_ID: ${{ github.run_id }}
@@ -37,18 +33,42 @@ env:
 jobs:
   e2e-tests:
     uses: ./.github/workflows/pipeline-e2e.yml
-    secrets: inherit
+    permissions:
+      packages: read
+      contents: read
+    secrets:
+      SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+      REPORTS_BUCKET_ACCESS_KEY_ID: ${{ secrets.REPORTS_BUCKET_ACCESS_KEY_ID }}
+      REPORTS_BUCKET_SECRET_ACCESS_KEY: ${{ secrets.REPORTS_BUCKET_SECRET_ACCESS_KEY }}
 
   backend-jobs:
     uses: ./.github/workflows/backend.yml
-    secrets: inherit
+    permissions:
+      contents: read
+      pull-requests: read
+      packages: write
+      id-token: write
+      security-events: write
+    secrets:
+      SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      REPORTS_BUCKET_ACCESS_KEY_ID: ${{ secrets.REPORTS_BUCKET_ACCESS_KEY_ID }}
+      REPORTS_BUCKET_SECRET_ACCESS_KEY: ${{ secrets.REPORTS_BUCKET_SECRET_ACCESS_KEY }}
     with:
       container-registry: ghcr.io
       image-reference: ghcr.io/${{ github.repository }}:${{ github.sha }}
 
   frontend-jobs:
     uses: ./.github/workflows/frontend.yml
-    secrets: inherit
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+      security-events: write
+    secrets:
+      SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
     with:
       container-registry: ghcr.io
       image-reference: ghcr.io/${{ github.repository }}/frontend:${{ github.sha }}
@@ -59,7 +79,12 @@ jobs:
       - frontend-jobs
       - e2e-tests
     uses: ./.github/workflows/deploy.yml
-    secrets: inherit
+    secrets:
+      ARGOCD_AUTH_TOKEN: ${{ secrets.ARGOCD_AUTH_TOKEN }}
+      ARGOCD_SERVER_STACKIT: ${{ secrets.ARGOCD_SERVER_STACKIT }}
+      GITOPS_NEURIS_APP_ID: ${{ secrets.GITOPS_NEURIS_APP_ID }}
+      GITOPS_NEURIS_APP_PRIVATE_KEY: ${{ secrets.GITOPS_NEURIS_APP_PRIVATE_KEY }}
+      SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
     with:
       image-tag: ${{ github.sha }}
       deployment-environment: staging
@@ -68,13 +93,21 @@ jobs:
     needs:
       - deploy-staging
     uses: ./.github/workflows/smoke-tests.yml
-    secrets: inherit
+    secrets:
+      SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+      STAGING_BASIC_AUTH_PASSWORD: ${{ secrets.STAGING_BASIC_AUTH_PASSWORD }}
+      STAGING_BASIC_AUTH_USERNAME: ${{ secrets.STAGING_BASIC_AUTH_USERNAME }}
 
   deploy-uat:
     needs:
       - smoke-tests
     uses: ./.github/workflows/deploy.yml
-    secrets: inherit
+    secrets:
+      ARGOCD_AUTH_TOKEN: ${{ secrets.ARGOCD_AUTH_TOKEN }}
+      ARGOCD_SERVER_STACKIT: ${{ secrets.ARGOCD_SERVER_STACKIT }}
+      GITOPS_NEURIS_APP_ID: ${{ secrets.GITOPS_NEURIS_APP_ID }}
+      GITOPS_NEURIS_APP_PRIVATE_KEY: ${{ secrets.GITOPS_NEURIS_APP_PRIVATE_KEY }}
+      SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
     with:
       image-tag: ${{ github.sha }}
       deployment-environment: uat
@@ -83,7 +116,12 @@ jobs:
     needs:
       - deploy-uat
     uses: ./.github/workflows/deploy.yml
-    secrets: inherit
+    secrets:
+      ARGOCD_AUTH_TOKEN: ${{ secrets.ARGOCD_AUTH_TOKEN }}
+      ARGOCD_SERVER_STACKIT: ${{ secrets.ARGOCD_SERVER_STACKIT }}
+      GITOPS_NEURIS_APP_ID: ${{ secrets.GITOPS_NEURIS_APP_ID }}
+      GITOPS_NEURIS_APP_PRIVATE_KEY: ${{ secrets.GITOPS_NEURIS_APP_PRIVATE_KEY }}
+      SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
     with:
       image-tag: ${{ github.sha }}
       deployment-environment: prototype
@@ -92,7 +130,12 @@ jobs:
     needs:
       - deploy-prototype
     uses: ./.github/workflows/deploy.yml
-    secrets: inherit
+    secrets:
+      ARGOCD_AUTH_TOKEN: ${{ secrets.ARGOCD_AUTH_TOKEN }}
+      ARGOCD_SERVER_STACKIT: ${{ secrets.ARGOCD_SERVER_STACKIT }}
+      GITOPS_NEURIS_APP_ID: ${{ secrets.GITOPS_NEURIS_APP_ID }}
+      GITOPS_NEURIS_APP_PRIVATE_KEY: ${{ secrets.GITOPS_NEURIS_APP_PRIVATE_KEY }}
+      SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
     with:
       image-tag: ${{ github.sha }}
       deployment-environment: prod

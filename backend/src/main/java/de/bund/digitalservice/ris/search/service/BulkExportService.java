@@ -1,131 +1,221 @@
 package de.bund.digitalservice.ris.search.service;
 
 import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
-import de.bund.digitalservice.ris.search.service.helper.ZipManager;
 import java.io.BufferedOutputStream;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
-import java.io.UncheckedIOException;
 import java.time.Instant;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionService;
+import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.function.Predicate;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 import org.apache.commons.io.FileUtils;
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /** Service for creating and managing bulk exports of objects from ObjectStorage. */
-public class BulkExportService implements Job {
+public class BulkExportService {
 
   private final Logger logger = LogManager.getLogger(BulkExportService.class);
 
   private final ObjectStorage sourceBucket;
   private final ObjectStorage destinationBucket;
-  private final String outputName;
-  private final String prefix;
-  private final Predicate<String> keyFilter;
+  public static final String BULK_ZIP_PREFIX = "snapshots/";
+  public static final String JOB_STATE_STORAGE_PREFIX = "snapshot-job-state/";
+
+  private final String archivePrefix;
 
   /**
-   * Job to include potentially all files from a source bucket in a zip file and store it in a
+   * Service to include potentially all files from a source bucket in a zip file and store it in a
    * destination bucket.
    *
    * @param sourceBucket the ObjectStorage bucket to read files from
    * @param destinationBucket the ObjectStorage bucket to upload the ZIP archive to
    * @param outputName the base name for the output ZIP file
-   * @param prefix the prefix to filter objects in the sourceBucket
-   * @param keyFilter filter to exclude files based on their keys
    */
   public BulkExportService(
-      ObjectStorage sourceBucket,
-      ObjectStorage destinationBucket,
-      String outputName,
-      String prefix,
-      Predicate<String> keyFilter) {
+      ObjectStorage sourceBucket, ObjectStorage destinationBucket, String outputName) {
     this.sourceBucket = sourceBucket;
     this.destinationBucket = destinationBucket;
-    this.outputName = outputName;
-    this.prefix = prefix;
-    this.keyFilter = keyFilter;
+    this.archivePrefix = BULK_ZIP_PREFIX + outputName;
   }
 
   /**
-   * Creates a ZIP archive of all objects in the sourceBucket with the given prefix, uploads it to
-   * the destinationBucket, and deletes obsolete archives.
+   * starts the archiving process
    *
-   * @return ReturnCode
+   * @param timestamp start of the snapshot creation
+   * @return true if successful, false on error
    */
-  public ReturnCode runJob() {
+  public boolean updateLatestZip(Instant timestamp) {
+    String resultObjectKey = archivePrefix + "_" + timestamp + ".zip";
+    // collect already existing archive to be deleted after a successful snapshot or a detected file
+    // deletion
+    List<String> obsoleteObjectKeys = destinationBucket.getAllKeysByPrefix(archivePrefix);
 
-    String timestamp = Instant.now().toString();
+    logger.info("Creating snapshot");
     List<String> keysToZip =
-        sourceBucket.getAllKeysByPrefix(prefix).stream().filter(keyFilter).toList();
+        sourceBucket.getAllKeys().stream()
+            .filter(key -> !key.startsWith(ChangelogService.CHANGELOGS_PREFIX))
+            .toList();
 
     if (keysToZip.isEmpty()) {
-      logger.error("No files found for bucket {}", sourceBucket.getClass());
-      return ReturnCode.ERROR;
+      logger.info("No files found for bucket {}", sourceBucket.getClass());
+      return true;
     }
 
-    String affectedPrefix = "snapshots/" + outputName;
-    String resultObjectKey = affectedPrefix + "_" + timestamp + ".zip";
-    List<String> obsoleteObjectKeys = destinationBucket.getAllKeysByPrefix(affectedPrefix);
+    try (ExecutorService executor = Executors.newSingleThreadExecutor();
+        PipedInputStream pipedInputStream = new PipedInputStream(1024 * 1024 * 5);
+        PipedOutputStream pipedOutputStream = new PipedOutputStream(pipedInputStream)) {
 
-    // Setup the pipe with a larger buffer (5MB) to reduce thread context-switching
-    try (PipedInputStream pipedInputStream = new PipedInputStream(1024 * 1024 * 5);
-        PipedOutputStream pipedOutputStream = new PipedOutputStream(pipedInputStream);
-        ExecutorService executorService = Executors.newFixedThreadPool(1)) {
+      CompletableFuture<ZipResult> zipWorker =
+          CompletableFuture.supplyAsync(
+              new ZipStreamProducer(keysToZip, sourceBucket, pipedOutputStream), executor);
 
-      // Background Task: Run the ZIP engine on the thread pool
-      Future<?> zipFuture =
-          executorService.submit(
-              () -> {
-                // Wrap in BufferedOutputStream to prevent tiny, slow writes to the pipe
-                try (OutputStream bufferedOut = new BufferedOutputStream(pipedOutputStream)) {
-                  ZipManager.writeZipArchive(sourceBucket, keysToZip, bufferedOut);
-                } catch (IOException e) {
-                  logger.error("Error inside ZIP background thread.", e);
-                  // trigger ExecutionException when retrieving result of zip thread
-                  throw new UncheckedIOException(e);
-                }
-              });
-
-      // Stream the data directly into the destination bucket
-      // putStream blocks here and pulls data out of the pipe as the background thread pushes it in
+      // Main thread blocks here, piping input data directly to S3. S3ObjectStorageClient::putStream
+      // uses a ReadableByteChannel which, unlike InputStream, listens for interruptions and
+      // gracefully cancels the multipart upload.
       long byteCount = destinationBucket.putStream(resultObjectKey, pipedInputStream);
 
-      // Ensure the background thread finished completely and check for errors
-      zipFuture.get();
+      // Check background worker health
+      ZipResult zipResult = zipWorker.get();
 
-      logger.log(
-          Level.INFO,
-          () ->
-              "Added %s items to %s, compressed size: %s"
-                  .formatted(
-                      keysToZip.size(),
-                      resultObjectKey,
-                      FileUtils.byteCountToDisplaySize(byteCount)));
+      return switch (zipResult.status) {
+        case ZipStatus.FINISHED -> {
+          logger.info(
+              () ->
+                  "Added %s items to %s, compressed size: %s"
+                      .formatted(
+                          zipResult.processedFiles,
+                          resultObjectKey,
+                          FileUtils.byteCountToDisplaySize(byteCount)));
+          deleteArchives(obsoleteObjectKeys);
+          yield true;
+        }
+        case ZipStatus.CANCELLED, ZipStatus.FAILED -> false;
+      };
 
     } catch (InterruptedException e) {
-      logger.error("Job execution was interrupted", e);
+      logger.error("Bulk export execution was interrupted.", e);
       Thread.currentThread().interrupt();
-      return ReturnCode.ERROR;
+      return false;
+    } catch (Exception e) {
+      logger.error("Bulk export execution failed or was aborted due to structural error.", e);
+      return false;
+    }
+  }
 
-    } catch (ExecutionException | IOException e) {
-      logger.error("Error processing key '{}'", keysToZip, e);
-      return ReturnCode.ERROR;
+  enum ZipStatus {
+    FINISHED,
+    CANCELLED,
+    FAILED
+  }
+
+  private record ZipResult(ZipStatus status, int processedFiles) {}
+
+  private static final class ZipStreamProducer implements Supplier<ZipResult> {
+    private final List<String> keysToDownload;
+    private final OutputStream outputPipe;
+    private final int totalFileCount;
+    private final ObjectStorage sourceBucket;
+
+    private final Logger log = LogManager.getLogger(ZipStreamProducer.class);
+
+    private record FetchResult(String key, Optional<byte[]> bytes) {}
+
+    public ZipStreamProducer(
+        List<String> keysToDownload, ObjectStorage sourceBucket, OutputStream outputPipe) {
+      this.keysToDownload = keysToDownload;
+      this.sourceBucket = sourceBucket;
+      this.outputPipe = outputPipe;
+      this.totalFileCount = keysToDownload.size();
     }
 
-    // Clean up old backups now that the new one is safely uploaded
-    logger.info("deleting obsolete archive objects {}", obsoleteObjectKeys);
+    public ZipResult get() {
+      int processedCount = 0;
+
+      // do not rely on the autoClosable of the ExecutorService to be able to force close on Error
+      ExecutorService downloadExecutor = Executors.newVirtualThreadPerTaskExecutor();
+      try (ZipOutputStream zos = new ZipOutputStream(new BufferedOutputStream(outputPipe))) {
+        int maxConcurrentDownloads = 30;
+        int submittedCount = 0;
+
+        CompletionService<FetchResult> completionService =
+            new ExecutorCompletionService<>(downloadExecutor);
+
+        // preload the queue of concurrent file downloads
+        int itemsToPreload = Math.min(maxConcurrentDownloads, totalFileCount);
+        for (int i = 0; i < itemsToPreload; i++) {
+          String key = keysToDownload.get(i);
+          completionService.submit(() -> new FetchResult(key, sourceBucket.get(key)));
+          submittedCount++;
+        }
+
+        for (int i = 0; i < totalFileCount; i++) {
+          // Pull the next available completed file
+          FetchResult result = completionService.take().get(5, TimeUnit.MINUTES);
+
+          Optional<byte[]> bytesOption = result.bytes;
+          if (bytesOption.isEmpty()) {
+            // in case a file was deleted during zip creation we return early
+            log.info(
+                "File {} was deleted during zip creation. Aborting zip creation.", result.key());
+            return new ZipResult(ZipStatus.CANCELLED, processedCount);
+          }
+
+          // Write to ZIP
+          ZipEntry entry = new ZipEntry(result.key());
+          zos.putNextEntry(entry);
+          zos.write(bytesOption.get());
+          zos.closeEntry();
+          processedCount++;
+
+          // Immediately feed a new file into the pipeline to maintain maximum active downloads
+          if (submittedCount < totalFileCount) {
+            String nextKey = keysToDownload.get(submittedCount++);
+            completionService.submit(() -> new FetchResult(nextKey, sourceBucket.get(nextKey)));
+          }
+
+          if (processedCount % 10000 == 0 || processedCount == totalFileCount) {
+            log.info("Bulk export progress: {}/{} files packaged", processedCount, totalFileCount);
+          }
+        }
+
+        return new ZipResult(ZipStatus.FINISHED, processedCount);
+      } catch (Exception e) {
+        // force close the executor in case of an error
+        downloadExecutor.shutdownNow();
+
+        if (e instanceof InterruptedException) {
+          log.error("Download thread was interrupted.", e);
+          Thread.currentThread().interrupt();
+        }
+
+        return new ZipResult(ZipStatus.FAILED, processedCount);
+      } finally {
+        downloadExecutor.close();
+      }
+    }
+  }
+
+  /** Delete all archives for the document kind this service manages */
+  public void deleteArchives() {
+    logger.info("deleting all archives for prefix: {}", archivePrefix);
+    List<String> files = destinationBucket.getAllKeysByPrefix(archivePrefix);
+    deleteArchives(files);
+  }
+
+  private void deleteArchives(List<String> obsoleteObjectKeys) {
+    logger.info("Deleting archive objects {}", obsoleteObjectKeys);
     for (String obsoleteObjectKey : obsoleteObjectKeys) {
       destinationBucket.delete(obsoleteObjectKey);
     }
-
-    return ReturnCode.SUCCESS;
   }
 }

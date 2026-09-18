@@ -1,9 +1,7 @@
 import tailwindcss from "@tailwindcss/vite";
 import { defineNuxtConfig } from "nuxt/config";
-import { FileSystemIconLoader } from "unplugin-icons/loaders";
-import Icons from "unplugin-icons/vite";
 import { appHead } from "./config/appHead";
-import { routeRules } from "./config/routeRules";
+import { icons } from "./config/icons";
 import { runtimeConfig } from "./config/runtimeConfig";
 import { security } from "./config/security";
 import { sentry } from "./config/sentry";
@@ -40,30 +38,18 @@ export default defineNuxtConfig({
     "**/**/*.{spec,test}.data.ts",
   ],
 
-  // Routing & runtime
-  routeRules,
+  // runtime
   runtimeConfig,
 
   // Build
   vite: {
-    plugins: [
-      tailwindcss(),
-      Icons({
-        scale: 1.5,
-        customCollections: {
-          custom: FileSystemIconLoader("./src/assets/icons"),
-        },
-        iconCustomizer(collection, icon, props) {
-          props.role = "presentation";
-        },
-      }),
-    ],
+    plugins: [tailwindcss(), icons],
     optimizeDeps: {
       include: ["primevue", "@digitalservicebund/ris-ui/primevue"],
     },
   },
   typescript: {
-    typeCheck: process.env.CI !== "true",
+    typeCheck: "build",
     tsConfig: {
       compilerOptions: {
         noUnusedLocals: true,
@@ -84,7 +70,7 @@ export default defineNuxtConfig({
       // i.e. not try to resolve it as a component. Workaround to be able to
       // use this element while waiting for https://github.com/vuejs/core/pull/9249
       // to be released.
-      isCustomElement: (tag) => ["search"].includes(tag),
+      isCustomElement: (tag: string) => ["search"].includes(tag),
     },
   },
 

@@ -8,6 +8,9 @@ describe("Header", () => {
   it("renders correctly", async () => {
     await renderSuspended(AppHeader);
     expect(
+      screen.getByRole("navigation", { name: "Servicemenü" }),
+    ).toBeInTheDocument();
+    expect(
       screen.getByRole("navigation", { name: "Hauptmenü" }),
     ).toBeInTheDocument();
   });
@@ -20,10 +23,12 @@ describe("Header", () => {
 
     await user.click(menuBtn);
     expect(menuBtn).toHaveAttribute("aria-expanded", "true");
-    expect(screen.getByTestId("mobile-nav")).toBeVisible();
+    expect(screen.getByTestId("mobile-main-menu")).toBeVisible();
+    expect(screen.getByTestId("mobile-service-menu")).toBeVisible();
 
     await user.click(menuBtn);
     expect(menuBtn).toHaveAttribute("aria-expanded", "false");
-    expect(screen.getByTestId("mobile-nav")).not.toBeVisible();
+    expect(screen.getByTestId("mobile-main-menu")).not.toBeVisible();
+    expect(screen.getByTestId("mobile-service-menu")).not.toBeVisible();
   });
 });

@@ -64,7 +64,7 @@ public class MappingDefinitions {
             Map.entry(Norm.Fields.WORK_ELI_KEYWORD, "legislationIdentifier"),
             Map.entry(Norm.Fields.OFFICIAL_TITLE, "name"),
             Map.entry(Norm.Fields.OFFICIAL_SHORT_TITLE, "alternateName"),
-            Map.entry(Norm.Fields.OFFICIAL_ABBREVIATION, "abbreviation"),
+            Map.entry(Norm.Fields.ABBREVIATION, "abbreviation"),
             Map.entry(Norm.Fields.NORMS_DATE, "legislationDate"),
             Map.entry(Norm.Fields.ENTRY_INTO_FORCE_DATE, "temporalCoverageFrom"),
             Map.entry(DATUM_FIELD, "date") // alias shared with caseLaw
@@ -97,10 +97,6 @@ public class MappingDefinitions {
             Map.entry(
                 CaseLawDocumentationUnit.Fields.DEVIATING_DOCUMENT_NUMBER,
                 "deviatingDocumentNumber"),
-            Map.entry(CaseLawDocumentationUnit.Fields.PUBLICATION_STATUS, "publicationStatus"),
-            Map.entry(CaseLawDocumentationUnit.Fields.ERROR, "error"),
-            Map.entry(CaseLawDocumentationUnit.Fields.DOCUMENTATION_OFFICE, "documentationOffice"),
-            Map.entry(CaseLawDocumentationUnit.Fields.PROCEDURES, "procedures"),
             Map.entry(CaseLawDocumentationUnit.Fields.LEGAL_EFFECT, "legalEffect"),
             Map.entry(CaseLawDocumentationUnit.Fields.INDEXED_AT, "indexedAt"),
             Map.entry(DATUM_FIELD, "date") // alias shared with norms

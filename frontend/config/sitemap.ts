@@ -7,10 +7,10 @@ export const sitemap: Partial<ModuleOptions> = {
     static: {
       includeAppSources: true,
       exclude: [
-        "/administrative-directives/**",
-        "/case‑law/**",
-        "/literature/**",
-        "/norms/eli/**",
+        "/verwaltungsregelungen/**",
+        "/gerichtsentscheidungen/**",
+        "/literaturnachweise/**",
+        "/gesetze/eli/**",
       ],
       defaults: { priority: 0.7 },
     },

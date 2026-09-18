@@ -36,8 +36,8 @@ You will find the following services at these addresses:
 - Frontend at <http://localhost:3000>
 - OpenSearch at <http://localhost:9200>
 - OpenSearch Dashboards at <http://localhost:5601>
-- Backend at <http://localhost:8090>
-- Swagger API documentation at <http://localhost:8090/swagger-ui/index.html>
+- Backend at <http://localhost:8080>
+- Swagger API documentation at <http://localhost:8080/swagger-ui/index.html>
 
 ### Testing
 
@@ -101,9 +101,11 @@ This is a mono-repository containing:
 
 | Directory                 | Description                                                                     |
 | ------------------------- | ------------------------------------------------------------------------------- |
-| [`backend`](./backend/)   | The backend service (Java 21 + Spring Boot)                                     |
+| [`api-docs`](./api-docs/) | Documentation website for the public API                                        |
+| [`backend`](./backend/)   | The backend service (Java 25 + Spring Boot)                                     |
 | [`doc`](./doc/)           | Additional documentation, including [Architecture Decision Records](./doc/adr/) |
 | [`frontend`](./frontend/) | A browser-based interface for users (TypeScript + Vue + Nuxt + Tailwind)        |
+| [`grafana`](./grafana/)   | Dashboards for monitoring                                                       |
 | [`scripts`](./scripts/)   | Utility scripts                                                                 |
 
 ## Prerequisites
@@ -111,7 +113,7 @@ This is a mono-repository containing:
 To build and run the application, you'll need:
 
 - Docker, for services like OpenSearch
-- A Java 21-compatible JDK
+- A Java 25-compatible JDK
 - Node.js and pnpm (you'll find the exact versions [here](./frontend/package.json))
 
 If you would like to make changes to the application, you'll also need:
@@ -124,7 +126,7 @@ If you would like to make changes to the application, you'll also need:
 If you use [Homebrew](https://brew.sh/), you can install all of them like this:
 
 ```sh
-brew install openjdk@21 lefthook nvm pnpm adr-tools
+brew install openjdk@25 lefthook nvm pnpm adr-tools
 brew install --cask docker # or `brew install docker` if you don't want the desktop app
 ```
 
@@ -144,7 +146,6 @@ Additional guides:
 
 - [Container image](./doc/readme/container-image.md)
 - [Vulnerability scanning](./doc/readme/vulnerability-scan.md)
-- [Dump case law data to OpenSearch](./doc/readme/dump-caselaw-to-opensearch.md)
 - [OpenSearch index swap](./doc/readme/opensearch-index-swap.md)
 - [API keys](./doc/readme/api-keys.md)
 

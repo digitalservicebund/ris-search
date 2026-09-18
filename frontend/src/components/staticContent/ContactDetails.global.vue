@@ -3,7 +3,7 @@
     Per E-Mail:
     <a
       href="mailto:rechtsinformationen@digitalservice.bund.de"
-      class="ris-link1-regular"
+      class="typo-link-regular"
       >rechtsinformationen@digitalservice.bund.de</a
     >
   </p>

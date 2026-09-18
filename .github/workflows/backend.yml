@@ -15,12 +15,24 @@ on:
         required: false
         type: string
         default: ghcr.io
+    secrets:
+      REPORTS_BUCKET_ACCESS_KEY_ID:
+        required: true
+      REPORTS_BUCKET_SECRET_ACCESS_KEY:
+        required: true
+      SLACK_BOT_TOKEN:
+        required: true
+      SONAR_TOKEN:
+        required: true
 
 env:
   RUN_ID: ${{ github.run_id }}
 
   TRIVY_DB_REPOSITORY: ghcr.io/aquasecurity/trivy-db,public.ecr.aws/aquasecurity/trivy-db
   TRIVY_JAVA_DB_REPOSITORY: ghcr.io/aquasecurity/trivy-java-db,public.ecr.aws/aquasecurity/trivy-java-db
+
+  GH_PACKAGES_REPOSITORY_USER: ${{ github.actor }}
+  GH_PACKAGES_REPOSITORY_TOKEN: ${{ github.token }}
 
 permissions:
   contents: read
@@ -35,10 +47,12 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Validate gradle wrapper
-        uses: gradle/actions/wrapper-validation@50e97c2cd7a37755bbfafc9c5b7cafaece252f6e #v6.1.0
+        uses: gradle/actions/wrapper-validation@9c971963bec38e04b3d30dcc455b5382be2fdbfb #v6.3.0
 
       - name: Send status to Slack
         uses: digitalservicebund/notify-on-failure-gha@671832f192aee0a068fd92b2f6deb975df794a84 # v1.6.1
@@ -53,12 +67,14 @@ jobs:
       contents: read
     needs: validate-gradle-wrapper
     steps:
-      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Set up JDK
-        uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5
+        uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
         with:
-          java-version: "21.0"
+          java-version: "25.0"
           distribution: "temurin"
           cache: gradle
 
@@ -66,9 +82,13 @@ jobs:
         working-directory: ./backend
         run: chmod +x gradlew
 
-      - name: Build with Gradle
+      - name: Check formatting
         working-directory: ./backend
         run: ./gradlew spotlessCheck
+
+      - name: Check style
+        working-directory: ./backend
+        run: ./gradlew checkstyleMain checkstyleTest
 
       - name: Send status to Slack
         uses: digitalservicebund/notify-on-failure-gha@671832f192aee0a068fd92b2f6deb975df794a84 # v1.6.1
@@ -83,12 +103,14 @@ jobs:
       contents: read
     needs: validate-gradle-wrapper
     steps:
-      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Set up JDK
-        uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5
+        uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
         with:
-          java-version: "21.0"
+          java-version: "25.0"
           distribution: "temurin"
           cache: gradle
 
@@ -114,19 +136,20 @@ jobs:
       contents: read
       pull-requests: read # SonarQube uses GITHUB_TOKEN to read PR information for analysis decoration
     steps:
-      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
+          persist-credentials: false
 
       - name: Set up JDK
-        uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5
+        uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
         with:
-          java-version: "21.0"
+          java-version: "25.0"
           distribution: "temurin"
           cache: gradle
 
       - name: Cache SonarQube packages
-        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v5
         with:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
@@ -136,7 +159,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Run Tests and Scan with SonarQube
-        if: ${{ github.actor != 'dependabot[bot]' }}
+        if: ${{ github.event.pull_request.user.login != 'dependabot[bot]' }}
         id: sonarqube-tests
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
@@ -146,8 +169,8 @@ jobs:
         run: ./gradlew sonar
 
       - name: Check SonarQube Quality Gate
-        uses: sonarsource/sonarqube-quality-gate-action@cf038b0e0cdecfa9e56c198bbb7d21d751d62c3b # v1.2.0
-        if: ${{ github.actor != 'dependabot[bot]' }}
+        uses: sonarsource/sonarqube-quality-gate-action@7a5fffe8e523c40e0c740b6bc2712ab503e52efa # v1.2.1
+        if: ${{ github.event.pull_request.user.login != 'dependabot[bot]' }}
         with:
           scanMetadataReportFile: backend/build/sonar/report-task.txt
         timeout-minutes: 3 # Force to fail step after specific time
@@ -157,7 +180,7 @@ jobs:
         # Dependabot does not have access to org tokens like SONAR_TOKEN
         # thus run the tests without sonar in dependabot PRs
       - name: Run unit and integration tests
-        if: ${{ github.actor == 'dependabot[bot]' }}
+        if: ${{ github.event.pull_request.user.login == 'dependabot[bot]' }}
         working-directory: ./backend
         run: ./gradlew integrationTest
 
@@ -182,12 +205,14 @@ jobs:
     outputs:
       image-digest: ${{ steps.build-push-image.outputs.digest }}
     steps:
-      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Set up JDK
-        uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5
+        uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
         with:
-          java-version: "21.0"
+          java-version: "25.0"
           distribution: "temurin"
           cache: gradle
 
@@ -197,18 +222,18 @@ jobs:
 
       - name: Log into container registry
         # Third-party action, pin to commit SHA!
-        uses: docker/login-action@650006c6eb7dba73a995cc03b0b2d7f5ca915bee # v4
+        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4
         with:
           registry: ${{ inputs.container-registry }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@d7f5e7f509e45cec5c76c4d5afdd7de93d0b3df5 # v4
+        uses: docker/setup-buildx-action@37fe631027851001ddb9b187196cc803df7f5f0e # v4
 
       - name: Build backend image
         id: build-push-image
-        uses: docker/build-push-action@f9f3042f7e2789586610d6e8b85c8f03e5195baf # v7.2.0
+        uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7.3.0
         # Note: We set the sentry release to the current commit sha so it is baked into the docker image
         # and supplied to the backend application at runtime so it can associate errors with the correct sentry release.
         # There is no need to create a sentry release in the backend pipeline as we already create one in the frontend pipeline
@@ -218,9 +243,11 @@ jobs:
           context: backend
           tags: ${{ inputs.image-reference }}
           push: true
+          secrets: |
+            GH_PACKAGES_REPOSITORY_USER=${{ github.actor }}
+            GH_PACKAGES_REPOSITORY_TOKEN=${{ secrets.GITHUB_TOKEN }}
           build-args: |
             SENTRY_RELEASE=${{ github.sha }}
-            
       - name: Send status to Slack
         uses: digitalservicebund/notify-on-failure-gha@671832f192aee0a068fd92b2f6deb975df794a84 # v1.6.1
         if: ${{ failure() && github.ref == 'refs/heads/main' }}
@@ -231,7 +258,8 @@ jobs:
   scan-attest-and-sign-image:
     needs: build-and-push-image
     uses: ./.github/workflows/scan-attest-sign-image.yml
-    secrets: inherit
+    secrets:
+      SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
     with:
       # Use image digest instead of tag to uniquely identify the image
       image-reference: ${{ inputs.container-registry}}/${{ github.repository }}@${{ needs.build-and-push-image.outputs.image-digest }}
@@ -245,12 +273,14 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Set up JDK
-        uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5
+        uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
         with:
-          java-version: "21.0"
+          java-version: "25.0"
           distribution: "temurin"
           cache: gradle
 
@@ -284,6 +314,17 @@ jobs:
       - generate-backend-code-documentation
     if: ${{ github.ref == 'refs/heads/main' }}
     steps:
+      - name: Checkout ris-search repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          path: ris-search
+      # Copy ADRs into tmp folder
+      - name: Copy ADRs
+        run: |
+          mkdir -p tmp/adr-source
+          find ris-search/doc/adr/ -type f -exec cp {} tmp/adr-source/ \;
+          ls -l tmp/adr-source
+
       - name: Backend Code Documentation - Download
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
         with:
@@ -291,11 +332,21 @@ jobs:
           path: tmp/backend-code-documentation/
 
       - name: Upload code documentation to ris-reports
-        uses: digitalservicebund/add-ris-report@5980f8dc97ec0aea58656e79e391eea59a9dfea8
+        uses: digitalservicebund/add-ris-report@31a248ea368f94bfa3a012da3c202bcc6be2debe
         with:
           filePath: tmp/backend-code-documentation
           destinationDir: search-code-documentation/java
           reportIsDirectory: true
+          BUCKET_ACCESS_KEY_ID: ${{ secrets.REPORTS_BUCKET_ACCESS_KEY_ID }}
+          BUCKET_SECRET_ACCESS_KEY: ${{ secrets.REPORTS_BUCKET_SECRET_ACCESS_KEY }}
+
+      - name: add ADRs to report
+        uses: digitalservicebund/add-ris-report@31a248ea368f94bfa3a012da3c202bcc6be2debe
+        with:
+          filePath: tmp/adr-source
+          destinationDir: adr/ris-search
+          reportIsDirectory: true
+          keepAllVersions: false
           BUCKET_ACCESS_KEY_ID: ${{ secrets.REPORTS_BUCKET_ACCESS_KEY_ID }}
           BUCKET_SECRET_ACCESS_KEY: ${{ secrets.REPORTS_BUCKET_SECRET_ACCESS_KEY }}
 

@@ -1,7 +1,6 @@
 <script lang="ts" setup>
-import { AutoComplete as BaseAutoComplete, ProgressSpinner } from "primevue";
+import { AutoComplete as BaseAutoComplete } from "primevue";
 import { type AutoCompleteProps as BaseAutoCompleteProps } from "primevue/autocomplete";
-import { ref } from "vue";
 import IcBaselineClose from "~icons/ic/baseline-close";
 import IcBaselineKeyboardArrowDown from "~icons/ic/baseline-keyboard-arrow-down";
 
@@ -12,11 +11,12 @@ export interface AutoCompleteSuggestion {
 }
 
 /*
-To keep TypeScript for the inner component's props, this wrapper component explicitly declares them
-even though they are only passed through.
-Ideally, they would be passed on using v-bind="mergeProps($attrs, props)" instead of being declared one-by-one,
-but using this approach broke the forwarding of emits.
-*/
+ * To keep TypeScript for the inner component's props, this wrapper component
+ * explicitly declares them even though they are only passed through. Ideally,
+ * they would be passed on using v-bind="mergeProps($attrs, props)" instead of
+ * being declared one-by-one, but using this approach broke the forwarding of
+ * emits.
+ */
 export type AutoCompleteProps = Pick<
   BaseAutoCompleteProps,
   | "dropdown"
@@ -54,12 +54,15 @@ defineOptions({
 });
 
 /*
-This wrapper component exposes its own v-model, which holds the ID of the currently selected item.
-This is different from the PrimeVue AutoComplete behavior, where the model either holds the prefix
-currently being typed by the user, or the selected object.
-The outer model is changed
-- in the @option-select emit, and
-- in @update:model-value emit, only if the typed input resets to "".
+ * This wrapper component exposes its own v-model, which holds the ID of the
+ * currently selected item. This is different from the PrimeVue AutoComplete
+ * behavior, where the model either holds the prefix currently being typed by
+ * the user, or the selected object.
+ *
+ * The outer model is changed
+ *
+ * - in the @option-select emit, and
+ * - in @update:model-value emit, only if the typed input resets to "".
  */
 
 const innerValue = ref(props.initialLabel ?? model.value);
@@ -115,11 +118,12 @@ const dropdownButtonFocus = ref(false);
     @hide="dropdownButtonFocus = false"
   >
     <template #loader>
-      <ProgressSpinner class="absolute inset-y-0 right-8 my-auto" />
+      <UiProgressSpinner class="absolute inset-y-0 right-8 my-auto" />
     </template>
     <template #dropdown="slotProps">
       <button
         v-if="innerValue"
+        type="button"
         class="cursor-pointer p-8 text-blue-800 hover:bg-blue-100 hover:text-blue-800 focus-visible:bg-blue-800 focus-visible:text-white focus-visible:outline-none"
         aria-label="Entfernen"
         @click="onClear"
@@ -133,6 +137,7 @@ const dropdownButtonFocus = ref(false);
           'bg-blue-800 text-white': dropdownButtonFocus,
           'hover:bg-blue-100 hover:text-blue-800': !dropdownButtonFocus,
         }"
+        type="button"
         aria-label="Vorschläge anzeigen"
         aria-haspopup="listbox"
         @click="slotProps.toggleCallback"
@@ -145,12 +150,12 @@ const dropdownButtonFocus = ref(false);
         :data-variant="isActiveOption(slotProps.option) && 'active'"
         class="flex min-h-48 flex-col justify-center gap-2 border-l-4 border-transparent px-12 py-10 data-[variant=active]:-ml-4 data-[variant=active]:border-blue-800 data-[variant=active]:bg-blue-200"
       >
-        <div class="ris-label1-regular">
+        <div class="typo-label1-regular">
           {{ slotProps.option.label }}
         </div>
         <div
           v-if="slotProps.option.secondaryLabel"
-          class="ris-label2-regular text-gray-900"
+          class="typo-label1-regular text-gray-900"
         >
           {{ slotProps.option.secondaryLabel }}
         </div>

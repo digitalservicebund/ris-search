@@ -1,12 +1,16 @@
-FROM gradle:9.5.1-jdk21@sha256:4a011ed0edfe2feb7dace27d1fedf22caf217918b59932a95605cb7beec142c4 AS backend-builder
+FROM gradle:9.7.1-jdk25@sha256:8d906d59029e66a8d5bf0ff44f19709a6963599feec6ee692ef190de7e812315 AS backend-builder
 WORKDIR /app
 COPY . /app
-RUN ./gradlew build -x integrationTest -x test -x spotlessCheck
 
+RUN --mount=type=secret,id=GH_PACKAGES_REPOSITORY_USER \
+    --mount=type=secret,id=GH_PACKAGES_REPOSITORY_TOKEN \
+    export GH_PACKAGES_REPOSITORY_USER=$(cat /run/secrets/GH_PACKAGES_REPOSITORY_USER) && \
+    export GH_PACKAGES_REPOSITORY_TOKEN=$(cat /run/secrets/GH_PACKAGES_REPOSITORY_TOKEN) && \
+    ./gradlew build -x integrationTest -x test -x spotlessCheck
 
-FROM cgr.dev/chainguard/jre@sha256:ac25195ff090d363291571dad3043f79630d9ae2c2977b5cfec6b34cb3b91196
+FROM cgr.dev/chainguard/jre@sha256:c0f7f49d473bf630a06a9becda45d16ad3a186eb6e2c31d8c586357e0deddf24
 ARG SENTRY_RELEASE
 COPY --from=backend-builder /app/build/libs/ris-search-*.jar /app/app.jar
-EXPOSE 8090
+EXPOSE 8080
 ENV SENTRY_RELEASE=${SENTRY_RELEASE}
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]

@@ -87,7 +87,7 @@ public class AdvancedSearchService {
 
     Set<HighlightBuilder.Field> highlightFields =
         Stream.of(
-                CaseLawSimpleSearchType.getHighlightedFieldsStatic(),
+                CaseLawSimpleSearchType.HIGHLIGHTED_FIELDS,
                 LiteratureSimpleSearchType.getHighlightedFieldsStatic(),
                 NormSimpleSearchType.getHighlightedFieldsStatic(),
                 AdministrativeDirectiveSimpleSearchType.getHighlightedFieldsStatic())
@@ -120,7 +120,7 @@ public class AdvancedSearchService {
 
     HighlightBuilder highlightBuilder = RisHighlightBuilder.baseHighlighter();
 
-    CaseLawSimpleSearchType.getHighlightedFieldsStatic().forEach(highlightBuilder::field);
+    CaseLawSimpleSearchType.HIGHLIGHTED_FIELDS.forEach(highlightBuilder::field);
     return SearchHitSupport.searchPageFor(
         callOpenSearch(search, highlightBuilder, null, pageable, CaseLawDocumentationUnit.class),
         pageable);

@@ -31,7 +31,7 @@ public class ObjectStorageClientDummy implements ObjectStorageClient {
 
   @Override
   public void save(String fileName, String fileContent) {
-    /* no need to implement persist operations on dummy implementation */
+    throw unsupported();
   }
 
   @Override
@@ -41,11 +41,16 @@ public class ObjectStorageClientDummy implements ObjectStorageClient {
 
   @Override
   public void delete(String fileName) {
-    /* no need to implement persist operations on dummy implementation */
+    throw unsupported();
   }
 
   @Override
   public long putStream(String resultObjectKey, InputStream pipedInputStream) throws IOException {
-    return 0;
+    throw unsupported();
+  }
+
+  private UnsupportedOperationException unsupported() {
+    return new UnsupportedOperationException(
+        "persistent operations are not supported on the dummy storage client.");
   }
 }

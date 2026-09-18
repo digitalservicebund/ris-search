@@ -3,14 +3,6 @@
     --max-width-prose: 100%;
   }
 
-  body {
-    @apply text-sm;
-  }
-
-  .ris-heading2-bold {
-    @apply text-2xl;
-  }
-
   article {
     @apply break-inside-avoid-page;
 

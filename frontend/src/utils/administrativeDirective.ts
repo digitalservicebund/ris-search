@@ -1,4 +1,5 @@
-import type { MetadataItem } from "~/components/Metadata.vue";
+import type { DetailsListItem } from "~/components/documents/DetailsList.vue";
+import type { MetadataItem } from "~/components/documents/Metadata.vue";
 import type { AdministrativeDirective } from "~/types/api";
 
 export function getAdministrativeDirectiveMetadataItems(
@@ -6,19 +7,23 @@ export function getAdministrativeDirectiveMetadataItems(
 ): MetadataItem[] {
   return [
     {
+      type: "badge",
       label: "Aktenzeichen",
-      value: formatArray(administrativeDirective?.referenceNumbers ?? []),
+      values: administrativeDirective?.referenceNumbers ?? [],
+      color: "gray",
     },
     {
+      type: "text",
       label: "Normgeber",
       value: administrativeDirective?.legislationAuthority,
     },
-
     {
+      type: "text",
       label: "Dokumenttyp",
       value: administrativeDirective?.documentType,
     },
     {
+      type: "text",
       label: "Gültig ab",
       value: dateFormattedDDMMYYYY(administrativeDirective?.entryIntoForceDate),
     },
@@ -27,7 +32,7 @@ export function getAdministrativeDirectiveMetadataItems(
 
 export function getAdministrativeDirectiveDetailItems(
   administrativeDirective?: Partial<AdministrativeDirective>,
-): { label: string; value?: string }[] {
+): DetailsListItem[] {
   const formattedCitationDates =
     administrativeDirective?.citationDates
       ?.map(dateFormattedDDMMYYYY)
@@ -38,14 +43,16 @@ export function getAdministrativeDirectiveDetailItems(
 
   return [
     {
+      type: "badge",
       label: getSingularOrPlural(
         "Fundstelle:",
         "Fundstellen:",
         references.length,
       ),
-      value: formatArray(references),
+      values: references,
     },
     {
+      type: "text",
       label: getSingularOrPlural(
         "Zitierdatum:",
         "Zitierdaten:",
@@ -54,16 +61,26 @@ export function getAdministrativeDirectiveDetailItems(
       value: formatArray(formattedCitationDates),
     },
     {
+      type: "text",
       label: "Gültig bis:",
       value: dateFormattedDDMMYYYY(administrativeDirective?.expiryDate),
     },
     {
+      type: "text",
       label: "Dokumenttyp Zusatz:",
       value: administrativeDirective?.documentTypeDetail,
     },
     {
+      type: "badge",
       label: getSingularOrPlural("Norm:", "Normen:", norms.length),
-      value: formatArray(norms),
+      values: norms,
+    },
+    {
+      type: "link",
+      label: "Download:",
+      url: getEncodingURL(administrativeDirective?.encoding, "application/zip"),
+      text: "Diese Verwaltungsregelung als ZIP herunterladen",
+      dataAttr: "xml-zip-view",
     },
   ];
 }

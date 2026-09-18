@@ -1,0 +1,392 @@
+import type { Page } from "@playwright/test";
+import {
+  testCopyLinkButton,
+  testPdfButton,
+  testPrintButton,
+  testXmlButton,
+} from "./utils/actionMenuHelper";
+import { expect, navigate, noJsTest, test } from "./utils/fixtures";
+
+async function getSidebar(page: Page) {
+  const navigation = page.getByRole("navigation", { name: "Inhalte" });
+  await expect(navigation).toBeVisible();
+  return navigation;
+}
+
+test("shows 404 page when case law is not found", async ({ page }) => {
+  await page.goto("/gerichtsentscheidungen/NONEXISTENT123");
+
+  await expect(
+    page.getByRole("heading", { name: "Diese Seite existiert nicht" }),
+  ).toBeVisible();
+});
+
+test("can view a single case law documentation unit", async ({ page }) => {
+  await navigate(page, "/gerichtsentscheidungen/KORE600500000");
+
+  await expect(page.getByText("Urteil 6.", { exact: true })).toBeVisible();
+
+  await expect(
+    page.getByRole("heading", { name: "Testheader für Urteil 6." }).first(),
+  ).toBeVisible();
+
+  const firstSectionHeader = page
+    .getByRole("main")
+    .getByRole("heading", { level: 2 })
+    .first();
+  await expect(firstSectionHeader).toBeVisible();
+
+  await firstSectionHeader.scrollIntoViewIfNeeded();
+});
+
+test.describe("hides text tabs for empty documents", () => {
+  test(
+    "hides text tab when empty vorabdokument and shows info box",
+    { tag: ["@RISDEV-12197"] },
+    async ({ page }) => {
+      await navigate(page, "/gerichtsentscheidungen/KORE000001234");
+
+      await expect(
+        page.getByText(/Die Metadaten dieser Gerichtsentscheidung/),
+      ).toBeVisible();
+
+      await expect(page.getByRole("tablist")).not.toBeVisible();
+
+      await expect(
+        page.getByRole("heading", { level: 2, name: "Details" }),
+      ).toBeVisible();
+
+      await expect(page.getByTestId("details-list")).toBeVisible();
+    },
+  );
+
+  test(
+    "hides text tab when empty normal document",
+    { tag: ["@RISDEV-12197"] },
+    async ({ page }) => {
+      await navigate(page, "/gerichtsentscheidungen/KORE000005678");
+
+      await expect(
+        page.getByText(/Die Metadaten dieser Gerichtsentscheidung/),
+      ).not.toBeVisible();
+
+      await expect(page.getByRole("tablist")).not.toBeVisible();
+
+      await expect(
+        page.getByRole("heading", { level: 2, name: "Details" }),
+      ).toBeVisible();
+
+      await expect(page.getByTestId("details-list")).toBeVisible();
+    },
+  );
+});
+
+test("sidebar TOC renders on desktop and clicking a link scrolls to the section", async ({
+  page,
+  isMobileTest,
+}) => {
+  test.skip(isMobileTest);
+  await navigate(page, "/gerichtsentscheidungen/JURE200030030");
+
+  const sidebar = await getSidebar(page);
+  await sidebar.getByRole("link", { name: "Tatbestand" }).click();
+
+  await expect(page).toHaveURL(
+    "/gerichtsentscheidungen/JURE200030030#tatbestand",
+  );
+
+  const heading = page.getByRole("heading", { name: "Tatbestand" });
+  await expect(heading).toBeInViewport();
+  const box = await heading.boundingBox();
+  expect(box!.y).toBeLessThan(100);
+});
+
+test.describe("mobile table of contents", () => {
+  test("floating button for the TOC is visible", async ({
+    page,
+    isMobileTest,
+  }) => {
+    test.skip(!isMobileTest);
+    await navigate(page, "/gerichtsentscheidungen/JURE200030030");
+
+    await expect(page.getByRole("button", { name: "Inhalte" })).toBeVisible();
+  });
+
+  test("clicking the floating button opens the TOC", async ({
+    page,
+    isMobileTest,
+  }) => {
+    test.skip(!isMobileTest);
+    await navigate(page, "/gerichtsentscheidungen/JURE200030030");
+
+    await page.getByRole("button", { name: "Inhalte" }).click();
+
+    await expect(page.getByRole("dialog", { name: "Inhalte" })).toBeVisible();
+  });
+
+  test("clicking a TOC link closes the TOC and scrolls to the element", async ({
+    page,
+    isMobileTest,
+  }) => {
+    test.skip(!isMobileTest);
+    await navigate(page, "/gerichtsentscheidungen/JURE200030030");
+
+    await page.getByRole("button", { name: "Inhalte" }).click();
+
+    const dialog = page.getByRole("dialog", { name: "Inhalte" });
+    await expect(dialog).toBeVisible();
+
+    await dialog.getByRole("link", { name: "Tatbestand" }).click();
+    await expect(dialog).not.toBeVisible();
+
+    const targetHeading = page
+      .getByRole("main")
+      .getByRole("heading", { name: "Tatbestand" });
+
+    await expect(targetHeading).toBeInViewport();
+  });
+});
+
+test("jumps to Randnummern", async ({ page }) => {
+  await navigate(page, "/gerichtsentscheidungen/BORE040077911?from=/suche");
+
+  const link = page.getByRole("link", { name: "Springe zu Randnummer: 1" });
+
+  await expect(link).toBeVisible();
+
+  await link.click();
+
+  await expect(page).toHaveURL(/#randnummer-1$/);
+  await expect(page).toHaveURL(/\?from=\/suche/);
+
+  await expect(
+    page.getByText(
+      "Fiktiver Hintergrundtext für den Testfall zur Randnummernverlinkung.",
+    ),
+  ).toBeInViewport();
+});
+
+test.describe("actions menu", () => {
+  test.describe("can copy link to currently viewed page", () => {
+    testCopyLinkButton(
+      "/gerichtsentscheidungen/JURE200030030",
+      "Link kopieren",
+      RegExp(".*/gerichtsentscheidungen/JURE200030030"),
+    );
+  });
+
+  test.describe("can use print action button to open print menu", () => {
+    testPrintButton("/gerichtsentscheidungen/JURE200030030");
+  });
+
+  test.describe("can't use PDF action as it is disabled", () => {
+    testPdfButton("/gerichtsentscheidungen/JURE200030030");
+  });
+
+  test.describe("can use XML action to view caselaw xml file", () => {
+    testXmlButton(
+      "/gerichtsentscheidungen/JURE200030030",
+      "http://localhost:8080/v1/rechtsprechung/JURE200030030.xml",
+    );
+  });
+});
+
+test("can view metadata", { tag: ["@RISDEV-10568"] }, async ({ page }) => {
+  await navigate(page, "/gerichtsentscheidungen/KORE600500000");
+  const metadataList = page.getByTestId("metadata-list");
+  const defs = metadataList.getByRole("definition");
+
+  await expect(metadataList.getByRole("term")).toHaveText([
+    "Gericht",
+    "Dokumenttyp",
+    "Entscheidungsdatum",
+    "Aktenzeichen",
+  ]);
+
+  await expect(defs.nth(0)).toHaveText("LG Test6 Label");
+  await expect(defs.nth(1)).toHaveText("Urteil");
+  await expect(defs.nth(2)).toHaveText("09.04.2025");
+  // Aktenzeichen are rendered as badges (spans)
+  await expect(defs.nth(3).locator("span")).toHaveText(["TS 123456"]);
+});
+
+test("can view details", { tag: ["@RISDEV-12108"] }, async ({ page }) => {
+  await navigate(page, "/gerichtsentscheidungen/MWRE000500300");
+  await page.getByRole("tab", { name: "Details" }).click();
+  const detailsList = page.getByTestId("details-list");
+
+  await expect(
+    detailsList.getByRole("term").or(detailsList.getByRole("definition")),
+  ).toHaveText([
+    "Spruchkörper:",
+    "27. Senat",
+    "ECLI:",
+    "ECLI:DE:LGTEST6:2025:0409.TS123456.25.0A",
+    "Entscheidungsname:",
+    "Beispielentscheid",
+    "Download:",
+    "Diese Gerichtsentscheidung als ZIP herunterladen",
+  ]);
+});
+
+test.describe("can view verweise", { tag: ["@RISDEV-12560"] }, () => {
+  test("can view verweise if private features enabled and verweise exist", async ({
+    page,
+    privateFeaturesEnabled,
+  }) => {
+    test.skip(!privateFeaturesEnabled);
+    await navigate(page, "/gerichtsentscheidungen/BDRE000800001");
+    await page.getByRole("tab", { name: "Verweise" }).click();
+
+    const tabPanel = page.getByRole("tabpanel", { name: "Verweise" });
+
+    await expect(tabPanel.getByRole("heading", { level: 2 })).toHaveText(
+      "Verweise",
+    );
+
+    await expect(tabPanel.getByText("Normen")).toBeVisible();
+    await expect(
+      tabPanel.getByText("BDG § 34, vereinbar mit höherrangigem Recht Hessen"),
+    ).toBeVisible();
+
+    const linkedVerweis = tabPanel.getByRole("link", {
+      name: "VG Frankfurt, Beschluss vom 4. September 2026 - Foo Bar 2361/26.F",
+    });
+    await expect(linkedVerweis).toBeVisible();
+    await linkedVerweis.click();
+
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+      "Testheader für Urteil 8.",
+    );
+  });
+
+  test("does not show verweise if private features enabled but no verweise exist", async ({
+    page,
+    privateFeaturesEnabled,
+  }) => {
+    test.skip(!privateFeaturesEnabled);
+    await navigate(page, "/gerichtsentscheidungen/BORE040030050");
+    await expect(page.getByRole("tab", { name: "Verweise" })).not.toBeVisible();
+  });
+
+  test("does not show verweise if private features disabled", async ({
+    page,
+    privateFeaturesEnabled,
+  }) => {
+    test.skip(privateFeaturesEnabled);
+    await navigate(page, "/gerichtsentscheidungen/BDRE000800001");
+    await expect(page.getByRole("tab", { name: "Verweise" })).not.toBeVisible();
+  });
+});
+
+test(
+  "can view Gesetzeskraft, Streitjahre and linked decisions",
+  { tag: ["@RISDEV-12471"] },
+  async ({ page }) => {
+    await navigate(page, "/gerichtsentscheidungen/BDRE000800001");
+    await page.getByRole("tab", { name: "Details" }).click();
+    const detailsList = page.getByTestId("details-list");
+
+    await expect(
+      detailsList.getByRole("term").or(detailsList.getByRole("definition")),
+    ).toHaveText([
+      "Spruchkörper:",
+      "16. Kammer",
+      "Gesetzeskraft:",
+      "vereinbar mit höherrangigem Recht, Hessen",
+      "Streitjahre:",
+      "2024",
+      "2025",
+      "Vorgehende Entscheidungen:",
+      "VG Frankfurt, Beschluss vom 12. November 2024 - XVI VL 34/99",
+      "AG Wiesbaden, Urteil vom 20. Mai 2023 - XVI VL 12/97",
+      "VG Frankfurt, Beschluss vom 4. September 2026 - Foo Bar 2361/26.F",
+      "Nachgehende Entscheidungen:",
+      "OVG Münster, Beschluss vom 1. Juni 2025 - XVI VL 34/99 (anhängig)",
+      "BVerwG Leipzig, Urteil vom 15. September 2025 - XVI VL 34/99",
+      "OVG Berlin, Beschluss vom 3. November 2025 - XVI VL 34/99",
+      "BVerwG Leipzig, Revision vom 18. Februar 2026 - XVI VL 34/99 (anhängig)",
+      "Download:",
+      "Diese Gerichtsentscheidung als ZIP herunterladen",
+    ]);
+  },
+);
+
+test(
+  "hides empty detail fields and only shows populated ones",
+  { tag: ["@RISDEV-12108"] },
+  async ({ page }) => {
+    await navigate(page, "/gerichtsentscheidungen/KORE600500000");
+    await page.getByRole("tab", { name: "Details" }).click();
+    const detailsList = page.getByTestId("details-list");
+    const detailsEntries = detailsList
+      .getByRole("term")
+      .or(detailsList.getByRole("definition"));
+
+    await expect(detailsEntries).toHaveCount(4);
+    await expect(detailsEntries).toHaveText([
+      "Spruchkörper:",
+      "8. Kammer",
+      "Download:",
+      "Diese Gerichtsentscheidung als ZIP herunterladen",
+    ]);
+  },
+);
+
+test("renders the download link", async ({ page }) => {
+  await navigate(page, "/gerichtsentscheidungen/KORE600500000");
+  await page.getByRole("tab", { name: "Details" }).click();
+
+  const zipLink = page.getByRole("link", {
+    name: "Diese Gerichtsentscheidung als ZIP herunterladen",
+  });
+  await expect(zipLink).toBeVisible();
+  await expect(zipLink).toHaveAttribute(
+    "href",
+    "/v1/rechtsprechung/KORE600500000.zip",
+  );
+});
+
+noJsTest("tabs work without JavaScript", async ({ page }) => {
+  await navigate(page, "/gerichtsentscheidungen/JURE200030030");
+
+  await test.step("text", async () => {
+    await expect(
+      page.getByRole("heading", { name: "Orientierungssatz" }),
+    ).toBeVisible();
+
+    await expect(
+      page.getByRole("tab", { name: "Text", selected: true }),
+    ).toBeVisible();
+  });
+
+  await test.step("details", async () => {
+    await page.getByRole("tab", { name: "Details" }).click();
+
+    await expect(page.getByRole("heading", { name: "Details" })).toBeVisible();
+
+    await expect(
+      page.getByRole("tab", { name: "Details", selected: true }),
+    ).toBeVisible();
+  });
+});
+
+test("shows correct breadcrumbs for case law", async ({ page }) => {
+  await navigate(
+    page,
+    "/gerichtsentscheidungen/KORE600500000?from=/suche?query=example",
+  );
+
+  const breadcrumb = page.getByRole("navigation", { name: "Pfadnavigation" });
+
+  await expect(breadcrumb.getByRole("link", { name: "Start" })).toBeVisible();
+
+  const searchBreadcrumb = breadcrumb.getByRole("link", { name: "Suche" });
+  await expect(searchBreadcrumb).toBeVisible();
+  await expect(searchBreadcrumb).toHaveAttribute(
+    "href",
+    "/suche?query=example",
+  );
+
+  await expect(breadcrumb.getByText("Testheader für Urteil 6.")).toBeVisible();
+});

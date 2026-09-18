@@ -76,7 +76,8 @@ public class IndexSyncJob implements Job {
       logger.error(ex);
       return ReturnCode.ERROR;
     }
-    logger.info("Finished index sync job for {}", statusFileName);
+    logger.info("Index sync job finished successfully for {}", statusFileName);
+
     return ReturnCode.SUCCESS;
   }
 

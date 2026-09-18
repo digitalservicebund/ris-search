@@ -52,11 +52,10 @@ describe("fetchTranslationList", () => {
   it("returns a list when there is no error", async () => {
     const mockTranslationResponse = [{ "@id": "Cde" }, { "@id": "AbC" }];
     dataRef.value = mockTranslationResponse;
-    const { translations, translationsError } = await fetchTranslationList();
+    const { translations } = await fetchTranslationList();
 
     expect(useRisBackendMock).toHaveBeenCalledWith("/v1/translatedLegislation");
     expect(translations.value).toEqual(mockTranslationResponse);
-    expect(translationsError.value).toBeNull();
   });
 });
 
@@ -170,54 +169,31 @@ describe("getGermanOriginal", () => {
     vi.useRealTimers();
   });
 
-  it("returns first legislation work when API returns results", async () => {
+  it("returns the first legislation work when the abbreviation matches", async () => {
     const mockResult = { item: { abbreviation: "test-id" } };
     dataRef.value = { member: [mockResult] };
 
-    const { legislation, legislationSearchError } =
-      await getGermanOriginal("test-id");
-
-    expect(legislation.value).toEqual(mockResult);
-    expect(legislationSearchError.value).toBeNull();
+    expect(await getGermanOriginal("test-id")).toEqual(mockResult);
     expect(useRisBackendMock).toHaveBeenCalledWith(
       "/v1/legislation?searchTerm=test-id&temporalCoverageFrom=2025-10-13&temporalCoverageTo=2025-10-13&size=100&pageIndex=0",
     );
   });
 
-  it("returns 404 error when API returns empty member list", async () => {
+  it("returns null when the API returns an empty member list", async () => {
     dataRef.value = { member: [] };
 
-    const { legislation, legislationSearchError, legislationSearchStatus } =
-      await getGermanOriginal("test-id");
-
-    expect(legislation.value).toBeNull();
-    expect(legislationSearchError.value).not.toBeNull();
-    expect(legislationSearchStatus.value).toBe("404");
-    expect(legislationSearchError.value?.message).toBe(
-      "The fetched legislation does not match the requested ID: test-id",
-    );
+    expect(await getGermanOriginal("test-id")).toBeNull();
   });
 
-  it("returns 404 error when API returns null", async () => {
+  it("returns null when the API returns no data", async () => {
     dataRef.value = null;
 
-    const { legislation, legislationSearchError, legislationSearchStatus } =
-      await getGermanOriginal("test-id");
-
-    expect(legislation.value).toBeNull();
-    expect(legislationSearchError.value).not.toBeNull();
-    expect(legislationSearchStatus.value).toBe("404");
-    expect(legislationSearchError.value?.message).toBe(
-      "No results found for test-id",
-    );
+    expect(await getGermanOriginal("test-id")).toBeNull();
   });
-  it("throws an error when the ids don't macht", async () => {
-    dataRef.value = {
-      member: [{ item: { abbreviation: "test-id" } }],
-    };
-    const { legislationSearchError } = await getGermanOriginal("cde");
-    expect(legislationSearchError.value?.message).toBe(
-      "The fetched legislation does not match the requested ID: cde",
-    );
+
+  it("returns null when the returned abbreviation does not match", async () => {
+    dataRef.value = { member: [{ item: { abbreviation: "test-id" } }] };
+
+    expect(await getGermanOriginal("cde")).toBeNull();
   });
 });

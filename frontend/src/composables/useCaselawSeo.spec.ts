@@ -1,6 +1,6 @@
 import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { CaseLaw } from "~/types/api";
+import type { Rechtsprechung } from "~/types/api";
 import { useCaselawSeo } from "./useCaselawSeo";
 
 const { useSeo } = vi.hoisted(() => ({
@@ -14,7 +14,7 @@ describe("useCaselawSeo", () => {
     vi.clearAllMocks();
   });
 
-  it("falls back to defaults when caseLaw and document is undefined", () => {
+  it("falls back to defaults when rechtsprechung and document is undefined", () => {
     useCaselawSeo({});
 
     expect(useSeo).toHaveBeenCalledWith(
@@ -27,110 +27,42 @@ describe("useCaselawSeo", () => {
   });
 
   describe("buildTitle", () => {
-    it("builds a full title from court, documentType, date, and fileNumber", () => {
+    it("uses the kurztitel", () => {
       useCaselawSeo({
-        caseLaw: {
-          courtName: "Bundesgerichtshof",
-          documentType: "Urteil",
-          decisionDate: "2023-06-15",
-          fileNumbers: ["VIII ZR 12/23"],
-        } as CaseLaw,
+        rechtsprechung: {
+          kurztitel: "Caselaw short title",
+        } as Rechtsprechung,
       });
 
       expect(useSeo).toHaveBeenCalledWith(
         expect.objectContaining({
-          title: "Bundesgerichtshof, Urteil vom 15.06.2023 - VIII ZR 12/23",
+          title: "Caselaw short title",
         }),
       );
     });
 
-    it("falls back to 'Gerichtsentscheidung' when documentType is missing", () => {
-      useCaselawSeo({
-        caseLaw: {
-          courtName: "Bundesgerichtshof",
-          decisionDate: "2023-06-15",
-          fileNumbers: ["VIII ZR 12/23"],
-        } as CaseLaw,
-      });
+    it("falls back to 'Gerichtsentscheidung' without a kurztitel", () => {
+      useCaselawSeo({ rechtsprechung: {} as Rechtsprechung });
 
       expect(useSeo).toHaveBeenCalledWith(
         expect.objectContaining({
-          title:
-            "Bundesgerichtshof, Gerichtsentscheidung vom 15.06.2023 - VIII ZR 12/23",
-        }),
-      );
-    });
-
-    it("omits court when courtName is missing", () => {
-      useCaselawSeo({
-        caseLaw: {
-          documentType: "Urteil",
-          decisionDate: "2023-06-15",
-          fileNumbers: ["VIII ZR 12/23"],
-        } as CaseLaw,
-      });
-
-      expect(useSeo).toHaveBeenCalledWith(
-        expect.objectContaining({
-          title: "Urteil vom 15.06.2023 - VIII ZR 12/23",
-        }),
-      );
-    });
-
-    it("omits date when decisionDate is missing", () => {
-      useCaselawSeo({
-        caseLaw: {
-          courtName: "Bundesgerichtshof",
-          documentType: "Urteil",
-          fileNumbers: ["VIII ZR 12/23"],
-        } as CaseLaw,
-      });
-
-      expect(useSeo).toHaveBeenCalledWith(
-        expect.objectContaining({
-          title: "Bundesgerichtshof, Urteil - VIII ZR 12/23",
-        }),
-      );
-    });
-
-    it("omits fileNumber when fileNumbers is undefined", () => {
-      useCaselawSeo({
-        caseLaw: {
-          courtName: "Bundesgerichtshof",
-          documentType: "Urteil",
-          decisionDate: "2023-06-15",
-        } as CaseLaw,
-      });
-
-      expect(useSeo).toHaveBeenCalledWith(
-        expect.objectContaining({
-          title: "Bundesgerichtshof, Urteil vom 15.06.2023",
-        }),
-      );
-    });
-
-    it("uses first of multiple fileNumbers", () => {
-      useCaselawSeo({ caseLaw: { fileNumbers: ["X1", "X2"] } as CaseLaw });
-
-      expect(useSeo).toHaveBeenCalledWith(
-        expect.objectContaining({
-          title: "Gerichtsentscheidung - X1",
+          title: "Gerichtsentscheidung",
         }),
       );
     });
   });
 
   describe("buildDescription", () => {
-    it("uses guidingPrinciple's first two sentences", () => {
+    it("uses leitsatz's first two sentences", () => {
       const doc = new DOMParser().parseFromString(
         "<html lang='de'><body><section><p>Not used in this case.</p></section></body></html>",
         "text/html",
       );
       useCaselawSeo({
-        caseLaw: {
-          guidingPrinciple:
+        rechtsprechung: {
+          leitsatz:
             "Fist sentence. Second sentence. Third sentence should be cut off.",
-        } as CaseLaw,
+        } as Rechtsprechung,
         document: doc,
       });
 
@@ -141,7 +73,7 @@ describe("useCaselawSeo", () => {
       );
     });
 
-    it("falls back to first paragraph from document when guidingPrinciple missing", () => {
+    it("falls back to first paragraph from document when leitsatz missing", () => {
       const doc = new DOMParser().parseFromString(
         "<html lang='de'><body><section><p>Paragraph text here.</p></section></body></html>",
         "text/html",
@@ -161,7 +93,7 @@ describe("useCaselawSeo", () => {
         "text/html",
       );
       useCaselawSeo({
-        caseLaw: {} as CaseLaw,
+        rechtsprechung: {} as Rechtsprechung,
         document: doc,
       });
 
@@ -171,10 +103,10 @@ describe("useCaselawSeo", () => {
     });
 
     it("truncates description at 150 characters word boundary", () => {
-      const guidingPrinciple =
+      const leitsatz =
         "This is a long text " +
         "LongWordWithoutWhiteSpacesShouldGetTruncated".repeat(3).trim();
-      useCaselawSeo({ caseLaw: { guidingPrinciple } as CaseLaw });
+      useCaselawSeo({ rechtsprechung: { leitsatz } as Rechtsprechung });
 
       expect(useSeo).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -190,12 +122,12 @@ describe("useCaselawSeo", () => {
   describe.skip("buildOgTitle", () => {
     it("builds ogTitle with court, documentType, date, and fileNumber", () => {
       useCaselawSeo({
-        caseLaw: {
-          courtName: "Bundesgerichtshof",
-          documentType: "Urteil",
-          decisionDate: "2023-06-15",
-          fileNumbers: ["VIII ZR 12/23"],
-        } as CaseLaw,
+        rechtsprechung: {
+          gericht: "Bundesgerichtshof",
+          dokumenttyp: "Urteil",
+          datum: "2023-06-15",
+          aktenzeichenListe: ["VIII ZR 12/23"],
+        } as Rechtsprechung,
       });
 
       expect(useSeo).toHaveBeenCalledWith(
@@ -207,11 +139,11 @@ describe("useCaselawSeo", () => {
 
     it("uses 'Gerichtsentscheidung' as documentType fallback", () => {
       useCaselawSeo({
-        caseLaw: {
-          courtName: "Bundesgerichtshof",
-          decisionDate: "2023-06-15",
-          fileNumbers: ["VIII ZR 12/23"],
-        } as CaseLaw,
+        rechtsprechung: {
+          gericht: "Bundesgerichtshof",
+          datum: "2023-06-15",
+          aktenzeichenListe: ["VIII ZR 12/23"],
+        } as Rechtsprechung,
       });
 
       expect(useSeo).toHaveBeenCalledWith(
@@ -222,13 +154,13 @@ describe("useCaselawSeo", () => {
       );
     });
 
-    it("omits court when courtName is missing", () => {
+    it("omits court when gericht is missing", () => {
       useCaselawSeo({
-        caseLaw: {
-          documentType: "Urteil",
-          decisionDate: "2023-06-15",
-          fileNumbers: ["VIII ZR 12/23"],
-        } as CaseLaw,
+        rechtsprechung: {
+          dokumenttyp: "Urteil",
+          datum: "2023-06-15",
+          aktenzeichenListe: ["VIII ZR 12/23"],
+        } as Rechtsprechung,
       });
 
       expect(useSeo).toHaveBeenCalledWith(
@@ -240,10 +172,10 @@ describe("useCaselawSeo", () => {
 
     it("truncates ogTitle at word boundary to 55 characters", () => {
       useCaselawSeo({
-        caseLaw: {
-          courtName: "Oberverwaltungsgericht Nordrhein-Westfalen Münster",
-          documentType: "Beschluss",
-        } as CaseLaw,
+        rechtsprechung: {
+          gericht: "Oberverwaltungsgericht Nordrhein-Westfalen Münster",
+          dokumenttyp: "Beschluss",
+        } as Rechtsprechung,
       });
 
       expect(useSeo).toHaveBeenCalledWith(

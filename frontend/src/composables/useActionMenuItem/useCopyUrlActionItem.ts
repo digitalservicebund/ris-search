@@ -1,16 +1,14 @@
-// oxlint-disable-next-line no-restricted-imports
-import { useToast } from "primevue/usetoast";
 import IcBaselineCheck from "~icons/ic/baseline-check";
 import IconLink from "~icons/ic/outline-link";
 import type { ActionMenuItem } from "~/components/documents/actionMenu/ActionMenu.vue";
 
-const COPY_MESSAGE_TIMEOUT = 3000;
+const COPY_MESSAGE_TIMEOUT = 6000;
 
 /**
  * Use this function to create an action item where the action is to copy the
  * given url to the clipboard. Returns a reactive object: after copying, label
  * and iconComponent automatically switch to the confirmation state ("Link
- * kopiert" + check icon) for 3 seconds, then revert.
+ * kopiert" + check icon) for a few seconds, then revert.
  *
  * @param url
  * @param label
@@ -21,19 +19,12 @@ export function useCopyUrlActionItem(
   label?: string,
   icon?: Component,
 ): ActionMenuItem {
-  const toastService = useToast();
   const copied = ref(false);
 
   const command = async () => {
     if (!url) return;
 
     await navigator.clipboard.writeText(url);
-    toastService.add({
-      severity: "success",
-      summary: "Kopiert!",
-      life: COPY_MESSAGE_TIMEOUT,
-      closable: false,
-    });
 
     copied.value = true;
     setTimeout(() => {

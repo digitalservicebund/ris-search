@@ -15,14 +15,17 @@ const submitFeedback = async () => {
     return;
   }
   try {
-    const params = new URLSearchParams({
-      text: feedback.value,
-      url: globalThis.location.href,
-      user_id: "anonymous_api_documentation_user",
-    });
     const result = await fetch(
-      `https://testphase.rechtsinformationen.bund.de/v1/feedback?${params.toString()}`,
-      { method: "GET" },
+      `https://testphase.rechtsinformationen.bund.de/v1/feedback`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          text: feedback.value,
+          url: globalThis.location.href,
+          user_id: "anonymous_api_documentation_user",
+        }),
+      },
     );
 
     if (!result.ok) {
@@ -70,10 +73,9 @@ const submitFeedback = async () => {
 
 <style module>
 .form {
-  max-width: 65ch;
-
   & h3 {
     margin-top: 0;
+    font-size: 1.25rem;
   }
 }
 

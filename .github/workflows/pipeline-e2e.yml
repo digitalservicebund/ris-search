@@ -2,10 +2,18 @@ name: End-to-end tests
 
 on:
   workflow_call:
+    secrets:
+      REPORTS_BUCKET_ACCESS_KEY_ID:
+        required: true
+      REPORTS_BUCKET_SECRET_ACCESS_KEY:
+        required: true
+      SLACK_BOT_TOKEN:
+        required: true
   workflow_dispatch:
 
 permissions:
   contents: read
+  packages: read
 
 env:
   RUN_ID: ${{ github.run_id }}
@@ -15,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       # Image version must match @playwright/test in frontend/package.json
-      image: mcr.microsoft.com/playwright@sha256:9bd26ad900bb5e0f4dee75839e957a89ae89c2b7ab1e76050e559790e946b948 # v1.60.0-noble
+      image: mcr.microsoft.com/playwright@sha256:eff16c30e6f3f4af0a03fa4b706120d5e9b0891c344a27d64559aff5900a4a27 # v1.63.0-noble
       options: --user 1001
     permissions:
       contents: read
@@ -44,16 +52,18 @@ jobs:
           --health-timeout 3s
           --health-start-period 10s
     steps:
-      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Set up JDK
-        uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5
+        uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
         with:
-          java-version: "21.0"
+          java-version: "25.0"
           distribution: "temurin"
 
       - name: Cache Gradle packages
-        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v5
         with:
           path: .gradle-cache
           key: gradle-${{ runner.os }}-${{ hashFiles('backend/**/*.gradle*', 'backend/gradle/wrapper/gradle-wrapper.properties') }}
@@ -66,24 +76,25 @@ jobs:
       - name: Start backend locally (background)
         working-directory: ./backend
         env:
-          SPRING_PROFILES_ACTIVE: e2e,default
+          SPRING_PROFILES_ACTIVE: e2e
           OPENSEARCH_HOST: opensearch # use service name because it's inside the docker network
           GRADLE_USER_HOME: ${{ github.workspace }}/.gradle-cache
-          THC_PORT: 8090
+          THC_PORT: 8080
           NODE_OPTIONS: "--max_old_space_size=4096"
+          GH_PACKAGES_REPOSITORY_USER: ${{ github.actor }}
+          GH_PACKAGES_REPOSITORY_TOKEN: ${{ github.token }}
         run: |
           nohup ./gradlew bootRun --no-daemon > backend.log 2>&1 &
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@0e279bb959325dab635dd2c09392533439d90093 #v6.0.8
+      - name: Setup pnpm and Node
+        uses: pnpm/setup@703c52620218391530e48b9e8870d5c0082e1b9b # v2.1.0
         with:
-          package_json_file: ./frontend/package.json
-
-      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
-        with:
-          node-version: 24
-          cache: "pnpm"
+          package-json-file: ./frontend/package.json
+          cache: true
           cache-dependency-path: ./frontend/pnpm-lock.yaml
+          # The action would install in the repository root, which has no
+          # package.json. We run `pnpm ci` in ./frontend instead.
+          install: false
 
       - name: Install Node modules
         run: pnpm ci
@@ -93,7 +104,7 @@ jobs:
         working-directory: ./frontend
         env:
           NUXT_PUBLIC_PRIVATE_FEATURES_ENABLED: ${{ matrix.private_features_enabled }}
-          NUXT_PUBLIC_RIS_BACKEND_URL: http://localhost:8090
+          NUXT_PUBLIC_RIS_BACKEND_URL: http://localhost:8080
           SENTRY_TELEMETRY: false
           CI: true
         run: |
@@ -101,8 +112,8 @@ jobs:
 
       - name: Wait for backend to respond
         run: |
-          echo "Waiting for backend on http://localhost:8090/actuator/health ..."
-          until curl --silent --fail http://localhost:8090/actuator/health; do
+          echo "Waiting for backend on http://localhost:8080/actuator/health ..."
+          until curl --silent --fail http://localhost:8080/actuator/health; do
             echo "Still waiting..."
             sleep 5
           done
@@ -176,7 +187,7 @@ jobs:
           pattern: playwright-e2e-tests-report-*
 
       - name: Upload test reports to ris-reports
-        uses: digitalservicebund/add-ris-report@5980f8dc97ec0aea58656e79e391eea59a9dfea8
+        uses: digitalservicebund/add-ris-report@31a248ea368f94bfa3a012da3c202bcc6be2debe
         with:
           filePath: tmp/playwright-report/
           destinationDir: test-reports/ris-search

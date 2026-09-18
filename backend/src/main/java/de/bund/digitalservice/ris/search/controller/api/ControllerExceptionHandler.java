@@ -3,6 +3,7 @@ package de.bund.digitalservice.ris.search.controller.api;
 import de.bund.digitalservice.ris.search.exception.CustomValidationException;
 import de.bund.digitalservice.ris.search.exception.FileTransformationException;
 import de.bund.digitalservice.ris.search.exception.OpenSearchFetchException;
+import de.bund.digitalservice.ris.search.exception.OpenSearchTermLimitExceeded;
 import de.bund.digitalservice.ris.search.models.errors.CustomError;
 import de.bund.digitalservice.ris.search.models.errors.CustomErrorResponse;
 import de.bund.digitalservice.ris.search.service.exception.XMLElementNotFoundException;
@@ -11,16 +12,23 @@ import jakarta.validation.Path;
 import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.Objects;
+import org.apache.catalina.connector.ClientAbortException;
+import org.apache.hc.core5.http.ConnectionClosedException;
+import org.apache.tomcat.util.http.InvalidParameterException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.NestedExceptionUtils;
+import org.springframework.data.elasticsearch.UncategorizedElasticsearchException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
@@ -43,16 +51,58 @@ public class ControllerExceptionHandler {
    * errors from the exception and maps them to a list of custom error objects, which are included
    * in the error response.
    *
-   * @param ex the {@link MethodArgumentNotValidException} instance containing validation errors
-   *     that need to be processed and returned in the response
+   * @param ex the {@link MethodArgumentNotValidException} s the exception raised when validating a
+   *     method parameter individually.
    * @return a {@link ResponseEntity} containing a {@link CustomErrorResponse} object with the list
    *     of validation errors and an HTTP status of 422 (Unprocessable Entity)
    */
   @ExceptionHandler({MethodArgumentNotValidException.class})
-  public final ResponseEntity<CustomErrorResponse> handleException(
+  public final ResponseEntity<CustomErrorResponse> handleMethodArgumentNotValidException(
       MethodArgumentNotValidException ex) {
     List<CustomError> errors =
-        ex.getBindingResult().getAllErrors().stream().map(this::sanitizeError).toList();
+        ex.getBindingResult().getAllErrors().stream()
+            .map(
+                error -> {
+                  if (error instanceof FieldError e) {
+                    return getInvalidParameterError(e.getDefaultMessage(), e.getField());
+                  }
+                  return new CustomError("unknown", "Unknown error", "");
+                })
+            .toList();
+    CustomErrorResponse errorResponse = CustomErrorResponse.builder().errors(errors).build();
+    return ResponseEntity.status(HttpStatus.UNPROCESSABLE_CONTENT).body(errorResponse);
+  }
+
+  /**
+   * Handles exceptions of type {@link HandlerMethodValidationException} and returns a standardized
+   * error response with HTTP status 422 (Unprocessable Entity). This method extracts validation
+   * errors from the exception and maps them to a list of custom error objects, which are included
+   * in the error response. MethodArgumentNotValidException
+   *
+   * @param ex the {@link HandlerMethodValidationException} is the exception raised when validating
+   *     a method parameter individually.
+   * @return a {@link ResponseEntity} containing a {@link CustomErrorResponse} object with the list
+   *     of validation errors and an HTTP status of 422 (Unprocessable Entity)
+   */
+  @ExceptionHandler({HandlerMethodValidationException.class})
+  public final ResponseEntity<CustomErrorResponse> handleHandlerMethodValidationException(
+      HandlerMethodValidationException ex) {
+    List<CustomError> errors =
+        ex.getParameterValidationResults().stream()
+            .flatMap(
+                result -> {
+                  String paramName = result.getMethodParameter().getParameterName();
+                  return result.getResolvableErrors().stream()
+                      .map(
+                          error -> {
+                            if (error instanceof FieldError e) {
+                              return getInvalidParameterError(e.getDefaultMessage(), e.getField());
+                            }
+                            return getInvalidParameterError(error.getDefaultMessage(), paramName);
+                          });
+                })
+            .toList();
+
     CustomErrorResponse errorResponse = CustomErrorResponse.builder().errors(errors).build();
     return ResponseEntity.status(HttpStatus.UNPROCESSABLE_CONTENT).body(errorResponse);
   }
@@ -91,13 +141,8 @@ public class ControllerExceptionHandler {
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
   }
 
-  private CustomError sanitizeError(ObjectError error) {
-    if (error instanceof FieldError fieldError) {
-      return new CustomError(
-          "invalid_parameter_value", fieldError.getDefaultMessage(), fieldError.getField());
-    } else {
-      return new CustomError("unknown", "Unknown error", "");
-    }
+  private CustomError getInvalidParameterError(String message, String field) {
+    return new CustomError("invalid_parameter_value", message, field);
   }
 
   /**
@@ -112,7 +157,7 @@ public class ControllerExceptionHandler {
   @ExceptionHandler(CustomValidationException.class)
   public ResponseEntity<CustomErrorResponse> handleCustomValidationException(
       CustomValidationException exception) {
-    logger.warn(exception.getMessage());
+    logger.warn("Validation failed: {}", exception.getErrors());
     var errorResponse = CustomErrorResponse.builder().errors(exception.getErrors()).build();
     return ResponseEntity.status(HttpStatus.UNPROCESSABLE_CONTENT).body(errorResponse);
   }
@@ -233,6 +278,11 @@ public class ControllerExceptionHandler {
    * Handles exceptions of type {@link OpenSearchFetchException} and returns a standardized error
    * response with HTTP status 500 (Internal Server Error).
    *
+   * <p>A connection from the client's pool that OpenSearch has closed on its side surfaces as a
+   * {@link ConnectionClosedException} the next time that connection is used. This is transient, it
+   * happens during regular operation and the next request succeeds again, so it is logged with
+   * level warn.
+   *
    * @param ex the {@link OpenSearchFetchException} instance thrown during OpenSearch data retrieval
    *     failure
    * @return a {@link ResponseEntity} containing a {@link CustomErrorResponse} object with error
@@ -241,7 +291,13 @@ public class ControllerExceptionHandler {
   @ExceptionHandler(OpenSearchFetchException.class)
   public ResponseEntity<CustomErrorResponse> handleElasticsearchException(
       OpenSearchFetchException ex) {
-    logger.error("Opensearch fetch error", ex);
+    if (NestedExceptionUtils.getMostSpecificCause(ex) instanceof ConnectionClosedException
+        && ex.getMessage().equals("Connection closed by peer")) {
+      logger.warn("Opensearch connection closed by peer");
+    } else {
+      logger.error("Opensearch fetch error", ex);
+    }
+
     CustomError error =
         new CustomError(
             HttpStatus.INTERNAL_SERVER_ERROR.toString(),
@@ -250,6 +306,28 @@ public class ControllerExceptionHandler {
     CustomErrorResponse errorResponse =
         CustomErrorResponse.builder().errors(List.of(error)).build();
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+  }
+
+  /**
+   * Handles exceptions of type {@link UncategorizedElasticsearchException} and returns a
+   * standardized error response with HTTP status 500 (Internal Server Error).
+   *
+   * <p>This is reached once the {@code RetryTemplate} configured in {@code
+   * OpensearchRetryConfiguration} has given up: either the failure isn't retryable (e.g. a
+   * malformed query that a controller didn't already translate into a {@link
+   * de.bund.digitalservice.ris.search.exception.CustomValidationException}) or retries were
+   * exhausted. By this point there is nothing left to retry, so it is always logged as an error.
+   *
+   * @param ex the {@link UncategorizedElasticsearchException} instance thrown by an OpenSearch
+   *     operation
+   * @return a {@link ResponseEntity} containing a {@link CustomErrorResponse} object with error
+   *     details and an HTTP status of 500
+   */
+  @ExceptionHandler(UncategorizedElasticsearchException.class)
+  public ResponseEntity<CustomErrorResponse> handleUncategorizedElasticsearchException(
+      UncategorizedElasticsearchException ex) {
+    logger.error("OpenSearch request failed", ex);
+    return return500();
   }
 
   /**
@@ -306,5 +384,87 @@ public class ControllerExceptionHandler {
     CustomErrorResponse errorResponse =
         CustomErrorResponse.builder().errors(List.of(error)).build();
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+  }
+
+  /**
+   * Checks if a HttpMessageNotWritableException is wrapping a ClientAbortException and delegates to
+   * that handler. This might happen if a client aborts a request during json serialization.
+   *
+   * @param exception HttpMessageNotWritableException
+   * @return standard 500 ResponseEntity or null in case of a clientAbortException
+   */
+  @ExceptionHandler({HttpMessageNotWritableException.class})
+  public ResponseEntity<CustomErrorResponse> handleHttpMessageNotWritableException(
+      HttpMessageNotWritableException exception) {
+    Throwable rootCause = NestedExceptionUtils.getMostSpecificCause(exception);
+
+    if (rootCause instanceof ClientAbortException clientabortexception) {
+      handleClientAbortException(clientabortexception);
+      // return null since the connection is already lost
+      return null;
+    }
+    logger.error(exception.getMessage(), exception);
+    return return500();
+  }
+
+  /**
+   * Logs ClientAbortExceptions with log level warn. Does not return a ResponseEntity since the
+   * connection is lost already.
+   *
+   * @param exception ClientAbortException
+   */
+  @ExceptionHandler({ClientAbortException.class})
+  public void handleClientAbortException(ClientAbortException exception) {
+    logger.warn("connection closed by client: {}", exception.getMessage());
+  }
+
+  /**
+   * Handles exceptions of type {@link InvalidParameterException} and returns a standardized error
+   * response with HTTP status 400 (Bad Request).
+   *
+   * @param ex the {@link InvalidParameterException} containing the error
+   * @return a {@link ResponseEntity} containing a {@link CustomError} object with the error message
+   */
+  @ExceptionHandler(InvalidParameterException.class)
+  public ResponseEntity<CustomError> handleInvalidTomcatParameter(InvalidParameterException ex) {
+    // NOTE : This is org.apache.tomcat.util.http.InvalidParameterException and not
+    // java.security.InvalidParameterException therefore represents a client error
+
+    logger.warn("Invalid parameter provided by api user : {}", ex.getMessage());
+
+    CustomError error =
+        CustomError.builder().code("invalid_parameter").message(ex.getMessage()).build();
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+  }
+
+  /**
+   * Handles exceptions of type {@link OpenSearchTermLimitExceeded} and returns a standardized error
+   * response with HTTP status 400 (Bad Request).
+   *
+   * @param ex the {@link OpenSearchTermLimitExceeded} containing the error
+   * @return a {@link ResponseEntity} containing a {@link CustomError} object with the error message
+   */
+  @ExceptionHandler(OpenSearchTermLimitExceeded.class)
+  public ResponseEntity<CustomErrorResponse> handleExceededSearchTermLimit(
+      OpenSearchTermLimitExceeded ex) {
+    CustomError error =
+        CustomError.builder().code("invalid_parameter").message(ex.getMessage()).build();
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+        .body(CustomErrorResponse.builder().errors(List.of(error)).build());
+  }
+
+  /**
+   * handles HttpRequestMethodNotSupportedException
+   *
+   * @param ex HttpRequestMethodNotSupportedException ResponseEntity containing a
+   * @return a {@link CustomErrorResponse} object with error details and an HTTP status of 405
+   */
+  @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+  public ResponseEntity<CustomErrorResponse> handleMethodNotSupported(
+      HttpRequestMethodNotSupportedException ex) {
+    CustomError error =
+        CustomError.builder().code("method_not_allowed").message(ex.getMessage()).build();
+    return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED)
+        .body(new CustomErrorResponse(List.of(error)));
   }
 }

@@ -1,18 +1,22 @@
 <script setup lang="ts">
-import ActionMenu from "~/components/documents/actionMenu/ActionMenu.vue";
 import { useCopyUrlActionItem } from "~/composables/useActionMenuItem/useCopyUrlActionItem";
 import { usePdfActionItem } from "~/composables/useActionMenuItem/usePdfActionItem";
 import { usePrintActionItem } from "~/composables/useActionMenuItem/usePrintActionItem";
 import { useXmlActionItem } from "~/composables/useActionMenuItem/useXmlActionItem";
-import type { CaseLaw } from "~/types/api";
-import { getEncodingURL } from "~/utils/caseLaw";
+import type { Rechtsprechung } from "~/types/api";
 
-const { caseLaw } = defineProps<{ caseLaw: CaseLaw | undefined }>();
+const { rechtsprechung } = defineProps<{
+  rechtsprechung: Rechtsprechung | undefined;
+}>();
 
 const actions = computed(() => {
-  const permalink = useRequestURL().href;
+  const requestUrl = useRequestURL();
+  requestUrl.search = "";
+  const permalink = requestUrl.href;
 
-  const xmlUrl = useBackendUrl(getEncodingURL(caseLaw, "application/xml"));
+  const xmlUrl = useBackendUrl(
+    getEncodingURL(rechtsprechung?.encoding, "application/xml"),
+  );
 
   return [
     useCopyUrlActionItem(permalink),
@@ -24,5 +28,5 @@ const actions = computed(() => {
 </script>
 
 <template>
-  <ActionMenu :actions />
+  <DocumentsActionMenu :actions />
 </template>

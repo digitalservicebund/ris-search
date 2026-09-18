@@ -1,0 +1,394 @@
+import type { Page } from "@playwright/test";
+import {
+  testCopyLinkButton,
+  testPdfButton,
+  testPrintButton,
+  testXmlButton,
+} from "./utils/actionMenuHelper";
+import { expect, test, navigate, noJsTest } from "./utils/fixtures";
+
+async function getSidebar(page: Page) {
+  const navigation = page.getByRole("navigation", { name: "Inhalte" });
+  await expect(navigation).toBeVisible();
+  return navigation;
+}
+
+test(
+  "displays administrative directive page with metadata and text tab by default",
+  { tag: ["@RISDEV-10568"] },
+  async ({ page }) => {
+    await navigate(page, "/verwaltungsregelungen/KSNR000000001");
+
+    // Main title
+    await expect(
+      page
+        .getByRole("main")
+        .getByRole("heading", {
+          level: 1,
+          name: "Verwaltungsvorschrift für das Testen des Portals zur Darstellung von Verwaltungsvorschriften",
+        })
+        .first(),
+    ).toBeVisible();
+
+    // Metadata section
+    const metadataList = page.getByTestId("metadata-list");
+    const defs = metadataList.getByRole("definition");
+
+    await expect(metadataList.getByRole("term")).toHaveText([
+      "Aktenzeichen",
+      "Normgeber",
+      "Dokumenttyp",
+      "Gültig ab",
+    ]);
+
+    // Aktenzeichen are rendered as badges (spans)
+    await expect(defs.nth(0).locator("span")).toHaveText(["Foo - 123 - 4"]);
+    await expect(defs.nth(1)).toHaveText("DEU Neuris");
+    await expect(defs.nth(2)).toHaveText("VR");
+    await expect(defs.nth(3)).toHaveText("01.07.2025");
+
+    // Text section
+    const textSection = page.getByRole("tabpanel", { name: "Text" });
+    await expect(textSection.getByRole("status")).toContainText(
+      "Dieser Service befindet sich in der Testphase",
+    );
+
+    // Short report
+    await expect(
+      textSection.getByRole("heading", { level: 2, name: "Kurzreferat" }),
+    ).toBeVisible();
+    await expect(
+      textSection.getByText("Dies ist ein Testdokument. Katze und Maus. "),
+    ).toBeVisible();
+    await expect(
+      textSection.getByText("Lorem ipsum dolor sit amet"),
+    ).toBeVisible();
+
+    // Outline
+    await expect(
+      textSection.getByRole("heading", { level: 2, name: "Inhalt" }),
+    ).toBeVisible();
+    await expect(textSection.getByText("1. Allgemeines")).toBeVisible();
+    await expect(textSection.getByText("2. Genaues")).toBeVisible();
+    await expect(textSection.getByText("3. Unwichtiges")).toBeVisible();
+    await expect(textSection.getByText("4. Sonstiges")).toBeVisible();
+
+    // References
+    await expect(
+      textSection.getByRole("heading", { level: 2, name: "Verweise" }),
+    ).toBeVisible();
+    await expect(textSection.getByText("BVG § 16c Abs 2")).toBeVisible();
+    await expect(
+      textSection.getByText("Verweis 890C Section B § 4 Abs. 1 8"),
+    ).toBeVisible();
+
+    // Citations
+    await expect(
+      textSection.getByRole("heading", {
+        level: 2,
+        name: "Dieser Beitrag zitiert",
+      }),
+    ).toBeVisible();
+    await expect(
+      textSection.getByRole("heading", { level: 3, name: "Rechtsprechung" }),
+    ).toBeVisible();
+    await expect(
+      textSection.getByText("FOO BAR RefNr 123 2025-07-01"),
+    ).toBeVisible();
+    await expect(
+      textSection.getByText("ABC BAZ RefNr 456 2023-01-01"),
+    ).toBeVisible();
+  },
+);
+
+test("sidebar TOC renders on desktop and clicking a link scrolls to the section", async ({
+  page,
+  isMobileTest,
+}) => {
+  test.skip(isMobileTest);
+
+  await navigate(page, "/verwaltungsregelungen/KSNR000000001");
+
+  const sidebar = await getSidebar(page);
+  await sidebar.getByRole("link", { name: "Verweise" }).click();
+
+  await expect(page).toHaveURL("/verwaltungsregelungen/KSNR000000001#verweise");
+
+  const heading = page.getByRole("heading", { name: "Verweise" });
+  await expect(heading).toBeInViewport();
+  const box = await heading.boundingBox();
+  expect(box!.y).toBeLessThan(100);
+});
+
+test("sidebar TOC is not shown when document has no text sections", async ({
+  page,
+  isMobileTest,
+}) => {
+  test.skip(isMobileTest);
+
+  await navigate(page, "/verwaltungsregelungen/KSNR000000004");
+
+  await expect(
+    page.getByRole("navigation", { name: "Inhalte" }),
+  ).not.toBeVisible();
+});
+
+test.describe("mobile table of contents", () => {
+  test("floating button for the TOC is visible", async ({
+    page,
+    isMobileTest,
+  }) => {
+    test.skip(!isMobileTest);
+    await navigate(page, "/verwaltungsregelungen/KSNR000000001");
+
+    await expect(page.getByRole("button", { name: "Inhalte" })).toBeVisible();
+  });
+
+  test("clicking the floating button opens the TOC", async ({
+    page,
+    isMobileTest,
+  }) => {
+    test.skip(!isMobileTest);
+    await navigate(page, "/verwaltungsregelungen/KSNR000000001");
+
+    await page.getByRole("button", { name: "Inhalte" }).click();
+
+    await expect(page.getByRole("dialog", { name: "Inhalte" })).toBeVisible();
+  });
+
+  test("clicking a TOC link closes the TOC and scrolls to the element", async ({
+    page,
+    isMobileTest,
+  }) => {
+    test.skip(!isMobileTest);
+    await navigate(page, "/verwaltungsregelungen/KSNR000000001");
+
+    await page.getByRole("button", { name: "Inhalte" }).click();
+
+    const dialog = page.getByRole("dialog", { name: "Inhalte" });
+    await expect(dialog).toBeVisible();
+
+    await dialog.getByRole("link", { name: "Verweise" }).click();
+    await expect(dialog).not.toBeVisible();
+
+    const targetHeading = page
+      .getByRole("main")
+      .getByRole("heading", { name: "Verweise" });
+
+    await expect(targetHeading).toBeInViewport();
+  });
+});
+
+test("shows correct breadcrumbs for administrative diectives", async ({
+  page,
+}) => {
+  await navigate(
+    page,
+    "/verwaltungsregelungen/KSNR000000001?from=/suche?query=example",
+  );
+
+  const breadcrumb = page.getByRole("navigation", { name: "Pfadnavigation" });
+
+  await expect(breadcrumb.getByRole("link", { name: "Start" })).toBeVisible();
+
+  const searchBreadcrumb = breadcrumb.getByRole("link", { name: "Suche" });
+  await expect(searchBreadcrumb).toBeVisible();
+  await expect(searchBreadcrumb).toHaveAttribute(
+    "href",
+    "/suche?query=example",
+  );
+
+  await expect(
+    breadcrumb.getByText(
+      "Verwaltungsvorschrift für das Testen des Portals zur Darstellung von Verwaltungsvorschriften",
+    ),
+  ).toBeVisible();
+});
+
+noJsTest("tabs work without JavaScript", async ({ page }) => {
+  await navigate(page, "/verwaltungsregelungen/KSNR000000001");
+
+  await test.step("text", async () => {
+    await expect(
+      page.getByRole("heading", { name: "Kurzreferat" }),
+    ).toBeVisible();
+
+    await expect(
+      page.getByRole("tab", { name: "Text", selected: true }),
+    ).toBeVisible();
+  });
+
+  await test.step("details", async () => {
+    await page.getByRole("tab", { name: "Details" }).click();
+
+    await expect(page.getByRole("heading", { name: "Details" })).toBeVisible();
+
+    await expect(
+      page.getByRole("tab", { name: "Details", selected: true }),
+    ).toBeVisible();
+  });
+});
+
+test(
+  "shows detailed information in the 'Details' tab",
+  { tag: ["@RISDEV-12108", "@RISDEV-11103", "@RISDEV-12241"] },
+  async ({ page }) => {
+    await navigate(page, "/verwaltungsregelungen/KSNR000000001");
+
+    const detailsLink = page.getByRole("tab", {
+      name: "Details",
+    });
+    await detailsLink.click();
+
+    await expect(page.getByRole("heading", { name: "Details" })).toBeVisible();
+    await expect(page.getByRole("main").getByRole("status")).toContainText(
+      "Dieser Service befindet sich in der Testphase",
+    );
+    const detailsList = page.getByTestId("details-list");
+    const terms = detailsList.getByRole("term");
+    const defs = detailsList.getByRole("definition");
+
+    await expect(terms).toHaveText([
+      "Fundstelle:",
+      "Zitierdatum:",
+      "Gültig bis:",
+      "Dokumenttyp Zusatz:",
+      "Normen:",
+      "Download:",
+    ]);
+    // Fundstelle and Normen are rendered as badges (spans)
+    await expect(defs.nth(0).locator("span")).toHaveText([
+      "FooBar 2025, Nr 1, 123",
+    ]);
+    await expect(defs.nth(1)).toHaveText("01.06.2025");
+    await expect(defs.nth(2)).toHaveText("01.07.2030");
+    await expect(defs.nth(3)).toHaveText("Bekanntmachung");
+    await expect(defs.nth(4).locator("span")).toHaveText([
+      "Baz § 16c Abs 2",
+      "Lol § 15 Abs 2",
+    ]);
+    await expect(defs.nth(5)).toHaveText(
+      " Diese Verwaltungsregelung als ZIP herunterladen",
+    );
+  },
+);
+
+test(
+  "hides empty detail fields and only shows populated ones",
+  { tag: ["@RISDEV-12108", "@RISDEV-11103", "@RISDEV-12241"] },
+  async ({ page }) => {
+    await navigate(page, "/verwaltungsregelungen/KSNR000000004");
+
+    const detailsList = page.getByTestId("details-list");
+    const terms = detailsList.getByRole("term");
+    const defs = detailsList.getByRole("definition");
+
+    await expect(terms).toHaveText([
+      "Fundstelle:",
+      "Zitierdaten:",
+      "Download:",
+    ]);
+    // Fundstelle is rendered as a badge (span)
+    await expect(defs.nth(0).locator("span")).toHaveText([
+      "BazAbCd 2002, Nr 1",
+    ]);
+    await expect(defs.nth(1)).toHaveText("24.12.2012, 28.06.2013");
+    await expect(defs.nth(2)).toHaveText(
+      " Diese Verwaltungsregelung als ZIP herunterladen",
+    );
+  },
+);
+
+test(
+  "hides tabs and shows details if document is empty",
+  { tag: ["@RISDEV-11103", "@RISDEV-12241"] },
+  async ({ page }) => {
+    await navigate(page, "/verwaltungsregelungen/KSNR000000004");
+
+    await expect(
+      page.getByRole("navigation", {
+        name: "Details",
+      }),
+    ).not.toBeVisible();
+
+    await expect(
+      page.getByRole("heading", { level: 2, name: "Details" }),
+    ).toBeVisible();
+
+    await expect(page.getByRole("main").getByRole("status")).toContainText(
+      "Dieser Service befindet sich in der Testphase",
+    );
+
+    const detailsList = page.getByTestId("details-list");
+    const terms = detailsList.getByRole("term");
+    const defs = detailsList.getByRole("definition");
+
+    await expect(terms).toHaveText([
+      "Fundstelle:",
+      "Zitierdaten:",
+      "Download:",
+    ]);
+    // Fundstelle is rendered as a badge (span)
+    await expect(defs.nth(0).locator("span")).toHaveText([
+      "BazAbCd 2002, Nr 1",
+    ]);
+    await expect(defs.nth(1)).toHaveText("24.12.2012, 28.06.2013");
+    await expect(defs.nth(2)).toHaveText(
+      " Diese Verwaltungsregelung als ZIP herunterladen",
+    );
+  },
+);
+
+test.describe("actions menu", () => {
+  test.describe("can copy link to currently viewed page", () => {
+    testCopyLinkButton(
+      "/verwaltungsregelungen/KSNR000000001",
+      "Link kopieren",
+      RegExp(".*/verwaltungsregelungen/KSNR000000001"),
+    );
+  });
+
+  test.describe("can use print action button to open print menu", () => {
+    testPrintButton("/verwaltungsregelungen/KSNR000000001");
+  });
+
+  test.describe("can't use PDF action as it is disabled", () => {
+    testPdfButton("/verwaltungsregelungen/KSNR000000001");
+  });
+
+  test.describe("can use XML action to view administrative directive xml file", () => {
+    testXmlButton(
+      "/verwaltungsregelungen/KSNR000000001",
+      "http://localhost:8080/v1/administrative-directive/KSNR000000001.xml",
+    );
+  });
+});
+
+test("displays references", async ({ page }) => {
+  await navigate(page, "/verwaltungsregelungen/KSNR000000005");
+
+  await expect(
+    page
+      .getByRole("main")
+      .getByRole("heading", { level: 1, name: "VV Ausschließlich Verweise" })
+      .first(),
+  ).toBeVisible();
+
+  // Text section
+  // Make sure the text section with references is displayed even when
+  // references are the only "text" content
+  const textSection = page.getByRole("tabpanel", { name: "Text" });
+
+  await expect(
+    textSection.getByRole("heading", {
+      level: 2,
+      name: "Dieser Beitrag zitiert",
+    }),
+  ).toBeVisible();
+  await expect(
+    textSection.getByRole("heading", { level: 3, name: "Rechtsprechung" }),
+  ).toBeVisible();
+  await expect(
+    textSection.getByText("FOO BAR RefNr 123 2025-07-01"),
+  ).toBeVisible();
+});

@@ -2,6 +2,7 @@ package de.bund.digitalservice.ris.search.models.api.parameters;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,6 +16,7 @@ import lombok.Setter;
  */
 @Setter
 @Getter
+@Builder
 public class UniversalSearchParams {
   @Schema(
       description =

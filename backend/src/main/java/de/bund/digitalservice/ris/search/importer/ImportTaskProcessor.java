@@ -1,7 +1,7 @@
 package de.bund.digitalservice.ris.search.importer;
 
 import de.bund.digitalservice.ris.search.service.AdministrativeDirectiveIndexSyncJob;
-import de.bund.digitalservice.ris.search.service.BulkExportService;
+import de.bund.digitalservice.ris.search.service.BulkExportJob;
 import de.bund.digitalservice.ris.search.service.CaseLawIndexSyncJob;
 import de.bund.digitalservice.ris.search.service.Job;
 import de.bund.digitalservice.ris.search.service.LiteratureIndexSyncJob;
@@ -35,8 +35,10 @@ public class ImportTaskProcessor {
   private final SitemapsUpdateJob sitemapsUpdateJob;
   private final EcliSitemapJob ecliSitemapJob;
   private final AdministrativeDirectiveIndexSyncJob administrativeDirectiveUpdateJob;
-  private final BulkExportService normsBulkExport;
-  private final BulkExportService caseLawBulkExport;
+  private final BulkExportJob normsBulkExport;
+  private final BulkExportJob caseLawBulkExport;
+  private final BulkExportJob adminBulkExport;
+  private final BulkExportJob literatureBulkExport;
 
   private static final Logger logger = LogManager.getLogger(ImportTaskProcessor.class);
 
@@ -60,8 +62,10 @@ public class ImportTaskProcessor {
       LiteratureIndexSyncJob literatureIndexSyncJob,
       EcliSitemapJob ecliSitemapJob,
       AdministrativeDirectiveIndexSyncJob administrativeDirectiveUpdateJob,
-      @Qualifier("normsBulkExport") BulkExportService normsBulkExport,
-      @Qualifier("caseLawBulkExport") BulkExportService caseLawBulkExport) {
+      @Qualifier("normsBulkExport") BulkExportJob normsBulkExport,
+      @Qualifier("caseLawBulkExport") BulkExportJob caseLawBulkExport,
+      @Qualifier("adminBulkExport") BulkExportJob adminBulkExport,
+      @Qualifier("literatureBulkExport") BulkExportJob literatureBulkExport) {
     this.normIndexSyncJob = normIndexSyncJob;
     this.caseLawIndexSyncJob = caseLawIndexSyncJob;
     this.literatureIndexSyncJob = literatureIndexSyncJob;
@@ -70,6 +74,8 @@ public class ImportTaskProcessor {
     this.administrativeDirectiveUpdateJob = administrativeDirectiveUpdateJob;
     this.normsBulkExport = normsBulkExport;
     this.caseLawBulkExport = caseLawBulkExport;
+    this.adminBulkExport = adminBulkExport;
+    this.literatureBulkExport = literatureBulkExport;
   }
 
   public boolean shouldRun(String[] args) {
@@ -119,7 +125,7 @@ public class ImportTaskProcessor {
         try {
           String target = args[i + 1];
           targets.add(target);
-        } catch (IndexOutOfBoundsException e) {
+        } catch (IndexOutOfBoundsException _) {
           throw new IllegalArgumentException(
               "Expected a target argument following %s".formatted(TASK_ARGUMENT));
         }
@@ -137,10 +143,8 @@ public class ImportTaskProcessor {
    * predefined job types such as importing norms, case law, literature, administrative directives,
    * or updating sitemaps.
    *
-   * @param target the identifier of the task to execute. Expected values include: "import_norms",
-   *     "import_caselaw", "import_literature", "import_administrative_directive",
-   *     "update_sitemaps", and "generate_ecli_sitemaps".
-   * @return the return code of the executed job. Typically indicates the success or failure of a
+   * @param target the identifier of the task to execute.
+   * @return the return code of the executed job. Typically, indicates the success or failure of a
    *     task, with success represented by a specific constant.
    * @throws IllegalArgumentException if the provided target is not recognized.
    */
@@ -154,6 +158,8 @@ public class ImportTaskProcessor {
       case "generate_ecli_sitemaps" -> runTask(ecliSitemapJob);
       case "generate_norms_snapshot" -> runTask(normsBulkExport);
       case "generate_caselaw_snapshot" -> runTask(caseLawBulkExport);
+      case "generate_admin_snapshot" -> runTask(adminBulkExport);
+      case "generate_literature_snapshot" -> runTask(literatureBulkExport);
       default -> throw new IllegalArgumentException("Unexpected target '%s'".formatted(target));
     };
   }

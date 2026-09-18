@@ -1,0 +1,284 @@
+import type { FetchHook } from "ofetch";
+import { describe, expect, it, vi } from "vitest";
+import type {
+  LegislationExpression,
+  LegislationManifestation,
+} from "~/types/api";
+import {
+  useFetchNormArticleContent,
+  useFetchNormContent,
+} from "./useFetchNormContent";
+
+const { mockFetch } = vi.hoisted(() => {
+  return {
+    mockFetch: vi.fn(),
+  };
+});
+
+vi.mock("~/plugins/risBackend", () => ({
+  default: defineNuxtPlugin(() => ({ provide: { risBackend: mockFetch } })),
+  extendOnRequest: (...cbs: FetchHook[]) => cbs,
+}));
+
+describe("useFetchNormContent", () => {
+  const consoleInfoMock = vi
+    .spyOn(console, "info")
+    .mockImplementation(() => undefined);
+  const consoleErrorMock = vi
+    .spyOn(console, "error")
+    .mockImplementation(() => undefined);
+
+  afterAll(() => {
+    consoleInfoMock.mockReset();
+    consoleErrorMock.mockReset();
+  });
+  beforeEach(() => {
+    mockFetch.mockReset();
+    // Needed because useAsyncData caches its result for the same keys
+    clearNuxtData();
+  });
+
+  const expressionEli = "test-eli";
+  const mockMetadata = {
+    encoding: [
+      {
+        "@id": "test-encoding-id",
+        encodingFormat: "text/html",
+        contentUrl: "/v1/test-content-url.html",
+        "@type": "LegislationObject",
+        inLanguage: "deu",
+      },
+    ],
+    hasPart: [],
+  } as Partial<LegislationExpression>;
+
+  it("should fetch JSON and HTML data", async () => {
+    const expectedHtml = `
+    <section class="dokumentenkopf">
+      <div class="fussnoten">Footnote content</div>
+      <div class="titel">Title</div>
+      <div class="akn-container"><p>Besonderer Hinweis</p></div>
+      <ul class="nichtamtliche-fussnoten"><li>Notes</li></ul>
+    </section>
+    <section class="akn-proprietary">
+      <dl>
+        <dt>Vollzitat</dt>
+          <dd class="ris-vollzitat">Vollzitat</dd>
+        <dt>Standangabe</dt>
+          <dd class="ris-standangabe" data-type="stand">Stand-Stand</dd>
+          <dd class="ris-standangabe" data-type="hinweis">Stand-Hinweis 1;</dd>
+          <dd class="ris-standangabe" data-type="hinweis">Stand-Hinweis 2</dd>
+      </dl>
+   </section>
+   <div class="akn-body">Test HTML content</div>`;
+
+    mockFetch.mockReturnValueOnce(mockMetadata);
+    mockFetch.mockReturnValueOnce(
+      "<html><body>" + expectedHtml + "</body></html>",
+    );
+
+    const { data } = await useFetchNormContent(expressionEli);
+    expect(data.value).toEqual({
+      legislation: mockMetadata,
+      htmlParts: {
+        officialToc: undefined,
+        heading: `<div class="titel">Title</div>`,
+        headingAuthorialNotes: `<div class="fussnoten">Footnote content</div>`,
+        headingAuthorialNotesLength: 16,
+        headingNotes: `<ul class="nichtamtliche-fussnoten"><li>Notes</li></ul>`,
+        prefaceContainer: `<div class="akn-container"><p>Besonderer Hinweis</p></div>`,
+        standangaben: ["Stand-Stand"],
+        standangabenHinweis: ["Stand-Hinweis 1;", "Stand-Hinweis 2"],
+        vollzitat: "Vollzitat",
+        body: expectedHtml,
+      },
+      hasEmptyBody: false,
+    });
+
+    expect(mockFetch).toHaveBeenCalledTimes(2);
+    expect(mockFetch).toHaveBeenCalledWith("/v1/legislation/eli/test-eli");
+    expect(mockFetch).toHaveBeenCalledWith("/v1/test-content-url.html", {
+      headers: {
+        Accept: "text/html",
+      },
+    });
+  });
+
+  it("should fetch JSON and HTML data for articles", async () => {
+    const articleEId = "eid-1";
+    const html = `<h2 class="einzelvorschrift">§ 1 Some article</h2><div>Test HTML content</div>`;
+    mockFetch.mockReturnValueOnce(mockMetadata);
+    mockFetch.mockReturnValueOnce("<html><body>" + html + "</body></html>");
+
+    const { data } = await useFetchNormArticleContent(
+      expressionEli,
+      articleEId,
+    );
+    expect(data.value).toEqual({
+      legislation: mockMetadata,
+      htmlBody: html,
+      articleHeading: "§ 1 Some article",
+    });
+
+    expect(mockFetch).toHaveBeenCalledTimes(2);
+    expect(mockFetch).toHaveBeenCalledWith("/v1/legislation/eli/test-eli");
+
+    expect(mockFetch).toHaveBeenCalledWith("/v1/test-content-url/eid-1.html", {
+      headers: {
+        Accept: "text/html",
+      },
+    });
+  });
+
+  it("should throw an error if contentUrl is missing", async () => {
+    const mockMetadataWithouContentUrl = {
+      encoding: [
+        {
+          "@id": "test-encoding-id",
+          encodingFormat: "application/json",
+        } as Partial<LegislationManifestation>,
+      ],
+    };
+
+    mockFetch.mockReturnValueOnce(mockMetadataWithouContentUrl);
+
+    const { error } = await useFetchNormContent(expressionEli);
+    expect(error.value?.message).toEqual("contentUrl is missing");
+    expect(mockFetch).toHaveBeenCalledTimes(1);
+    expect(mockFetch).toHaveBeenCalledWith("/v1/legislation/eli/test-eli");
+  });
+
+  it("does not return partial data when the HTML request fails", async () => {
+    mockFetch.mockReturnValueOnce(mockMetadata);
+    mockFetch.mockRejectedValueOnce(new Error("HTML request failed"));
+
+    const { data, error } = await useFetchNormContent(expressionEli);
+
+    expect(data.value).toBeUndefined();
+    expect(error.value?.message).toBe("HTML request failed");
+    expect(mockFetch).toHaveBeenCalledTimes(2);
+  });
+
+  it.each([
+    ["simple footnote", 15],
+    ["<span>with html</span>", 9],
+    ["\n   <span>With\n  whitespace  \n</span>   \n", 15],
+  ])(
+    "returns the text length for authorial note '%s'",
+    async (footnote, expectedLength) => {
+      mockFetch.mockReturnValueOnce(mockMetadata);
+      mockFetch.mockReturnValueOnce(
+        `<section class="dokumentenkopf"><div class="fussnoten">${footnote}</div></section>`,
+      );
+
+      const { data } = await useFetchNormContent(expressionEli);
+      expect(data.value.htmlParts.headingAuthorialNotesLength).toBe(
+        expectedLength,
+      );
+    },
+  );
+
+  it("inserts line breaks between consecutive bracketed blocks in footnotes", async () => {
+    mockFetch.mockReturnValueOnce(mockMetadata);
+    mockFetch.mockReturnValueOnce(
+      `<section class="dokumentenkopf"><ul class="nichtamtliche-fussnoten"><li class="fussnote"><p>(+++ Textnachweis ab: 1.1.2000 +++) (+++ Zur Anwendung vgl. § 5 +++)</p></li></ul></section>`,
+    );
+
+    const { data } = await useFetchNormContent(expressionEli);
+    expect(data.value.htmlParts.headingNotes).toContain(
+      "(+++ Textnachweis ab: 1.1.2000 +++)<br />(+++ Zur Anwendung vgl. § 5 +++)",
+    );
+  });
+
+  it("rewrites links", async () => {
+    mockFetch.mockReturnValueOnce(mockMetadata);
+    mockFetch.mockReturnValueOnce(
+      `<html><body><a href="/original/path">link</a></body></html>`,
+    );
+
+    const { data } = await useFetchNormContent("rewrite-test-eli", {
+      rewriteLink: (href) => (href ? `/rewritten${href}` : null),
+    });
+
+    expect(data.value.htmlParts.body).toContain(
+      `href="/rewritten/original/path"`,
+    );
+  });
+
+  const preambleWithTocHtml = `
+    <section class="eingangsformel" id="präambel-n1">
+      <section class="eingangsformel" id="präambel-n1_formel-n1">
+        <p id="präambel-n1_formel-n1_text-n1">Der Bundestag hat …</p>
+        <ul class="nichtamtliche-fussnoten">
+          <li class="fussnote">
+            <p id="meta-n1_editfnote-n1_text-n1">Eingangsformel: Eingangsformel Fußnote</p>
+          </li>
+        </ul>
+      </section>
+      <div class="inhaltsuebersicht" id="präambel-n1_blockcontainer-n1">
+        <span class="akn-heading">Inhaltsübersicht</span>
+        <div class="official-toc">
+          <div class="level-1"><span class="akn-span">Abschnitt 1</span></div>
+        </div>
+        <ul class="nichtamtliche-fussnoten">
+          <li class="fussnote">
+            <p id="meta-n1_editfnote-n2_text-n1">Inhaltsübersicht: präambel Fußnote</p>
+          </li>
+        </ul>
+      </div>
+    </section>`;
+
+  it("adds official toc footnotes to the official toc", async () => {
+    mockFetch.mockReturnValueOnce(mockMetadata);
+    mockFetch.mockReturnValueOnce(preambleWithTocHtml);
+
+    const { data } = await useFetchNormContent(expressionEli);
+
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(
+      data.value.htmlParts.officialToc!,
+      "text/html",
+    );
+
+    expect(doc.querySelector(".official-toc")).not.toBeNull();
+    expect(doc.querySelector(".fussnote")).not.toBeNull();
+    expect(
+      doc.querySelector("#meta-n1_editfnote-n2_text-n1")?.textContent,
+    ).toBe("Inhaltsübersicht: präambel Fußnote");
+  });
+
+  it("keeps Eingangsformel footnotes out of the official toc", async () => {
+    mockFetch.mockReturnValueOnce(mockMetadata);
+    mockFetch.mockReturnValueOnce(preambleWithTocHtml);
+
+    const { data } = await useFetchNormContent(expressionEli);
+
+    expect(data.value.htmlParts.officialToc).not.toContain(
+      "Eingangsformel: Eingangsformel Fußnote",
+    );
+
+    expect(data.value.htmlParts.body).toContain(
+      "Eingangsformel: Eingangsformel Fußnote",
+    );
+  });
+
+  it("sets hasEmptyBody to false if akn-body has content", async () => {
+    mockFetch.mockReturnValueOnce(mockMetadata);
+    mockFetch.mockReturnValueOnce(
+      `<html><body><div class="akn-act"><div class="akn-body">Content</div></div></body></html>`,
+    );
+
+    const { data } = await useFetchNormContent(expressionEli);
+    expect(data.value.hasEmptyBody).toBe(false);
+  });
+
+  it("sets hasEmptyBody to true if akn-body div is empty", async () => {
+    mockFetch.mockReturnValueOnce(mockMetadata);
+    mockFetch.mockReturnValueOnce(
+      `<html><body><div class="akn-act"><div class="akn-body"></div></div></body></html>`,
+    );
+
+    const { data } = await useFetchNormContent(expressionEli);
+    expect(data.value.hasEmptyBody).toBe(true);
+  });
+});

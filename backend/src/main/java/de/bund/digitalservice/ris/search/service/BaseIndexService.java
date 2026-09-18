@@ -3,6 +3,7 @@ package de.bund.digitalservice.ris.search.service;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
+import de.bund.digitalservice.ris.search.repository.objectstorage.StorageObject;
 import de.bund.digitalservice.ris.search.repository.opensearch.DocumentRepository;
 import de.bund.digitalservice.ris.search.utils.DateUtils;
 import java.time.Instant;
@@ -17,7 +18,7 @@ import org.apache.logging.log4j.Logger;
 /** Base class for index services. */
 public abstract class BaseIndexService<T> implements IndexService {
 
-  private static final Integer IMPORT_BATCH_SIZE = 1000;
+  private static final Integer IMPORT_BATCH_SIZE = 100;
   protected static final Logger logger = LogManager.getLogger(BaseIndexService.class);
 
   protected final ObjectStorage objectStorage;
@@ -68,8 +69,7 @@ public abstract class BaseIndexService<T> implements IndexService {
       Set<String> deletedIds =
           changelog.getDeleted().stream()
               .map(this::getIdFromFilename)
-              .filter(Optional::isPresent)
-              .map(Optional::get)
+              .flatMap(Optional::stream)
               .collect(Collectors.toSet());
 
       deleteAllEntitiesById(deletedIds);
@@ -90,14 +90,26 @@ public abstract class BaseIndexService<T> implements IndexService {
   }
 
   private void indexOneBatch(List<String> filenames) throws ObjectStoreServiceException {
-    for (String filename : filenames) {
-      Optional<String> content = objectStorage.getFileAsString(filename);
-      if (content.isPresent()) {
-        mapFileToEntity(filename, content.get()).ifPresent(this::saveEntity);
-      } else {
-        logger.warn("Tried to index file {}, but it doesn't exist.", filename);
-      }
+    List<StorageObject> results = objectStorage.getObjects(filenames);
+
+    List<T> allParsedEntities =
+        results.stream().map(this::fetchAndMapEntity).flatMap(Optional::stream).toList();
+
+    logger.info("Sending {} entities to OpenSearch", allParsedEntities.size());
+
+    documentRepository.saveAll(allParsedEntities);
+  }
+
+  private Optional<T> fetchAndMapEntity(StorageObject result) {
+
+    Optional<byte[]> content = result.bytes();
+
+    if (content.isEmpty()) {
+      logger.warn("Tried to index file {}, but it doesn't exist.", result.key());
+      return Optional.empty();
     }
+
+    return mapFileToEntity(result.key(), new String(content.get()));
   }
 
   protected abstract Optional<T> mapFileToEntity(String filename, String fileContent);
@@ -115,10 +127,6 @@ public abstract class BaseIndexService<T> implements IndexService {
 
   protected void deleteAllEntitiesById(Iterable<String> ids) {
     documentRepository.deleteAllById(ids);
-  }
-
-  protected void saveEntity(T entity) {
-    documentRepository.save(entity);
   }
 
   public int getNumberOfIndexedEntities() {

@@ -1,10 +1,10 @@
 import { renderSuspended } from "@nuxt/test-utils/runtime";
 import { screen } from "@testing-library/vue";
 import { describe, expect, it } from "vitest";
-import type { SearchResult, CaseLaw } from "~/types/api";
+import type { SearchResult, CaseLawSearchSchema } from "~/types/api";
 import Pagination, { type Page } from "./Pagination.vue";
 
-const createMockSearchResult = (): SearchResult<CaseLaw> => ({
+const createMockSearchResult = (): SearchResult<CaseLawSearchSchema> => ({
   item: {
     "@type": "Decision",
     "@id": "test-id",
@@ -12,7 +12,6 @@ const createMockSearchResult = (): SearchResult<CaseLaw> => ({
     ecli: "ECLI:TEST:123",
     decisionDate: "2024-01-01",
     fileNumbers: [],
-    keywords: [],
     decisionName: [],
     deviatingDocumentNumber: [],
     inLanguage: "de",
@@ -23,12 +22,12 @@ const createMockSearchResult = (): SearchResult<CaseLaw> => ({
 
 const createMockPage = (overrides?: Partial<Page>): Page => ({
   member: [createMockSearchResult(), createMockSearchResult()],
-  "@id": "/api/search?pageIndex=0&size=10",
+  "@id": "/api/suche?pageIndex=0&size=10",
   totalItems: 100,
   view: {
-    first: "/api/search?pageIndex=0&size=10",
-    next: "/api/search?pageIndex=1&size=10",
-    last: "/api/search?pageIndex=9&size=10",
+    first: "/api/suche?pageIndex=0&size=10",
+    next: "/api/suche?pageIndex=1&size=10",
+    last: "/api/suche?pageIndex=9&size=10",
   },
   ...overrides,
 });
@@ -51,15 +50,6 @@ describe("Pagination", () => {
     expect(container.querySelector("nav")).not.toBeInTheDocument();
   });
 
-  it("renders nothing when isLoading is true", async () => {
-    const page = createMockPage();
-    const { container } = await renderSuspended(Pagination, {
-      props: { page, isLoading: true },
-    });
-
-    expect(container.querySelector("nav")).not.toBeInTheDocument();
-  });
-
   it("renders page information with items on page", async () => {
     const page = createMockPage();
     await renderSuspended(Pagination, {
@@ -75,7 +65,7 @@ describe("Pagination", () => {
       member: [createMockSearchResult()],
       totalItems: 1,
       view: {
-        first: "/api/search?pageIndex=0&size=10",
+        first: "/api/suche?pageIndex=0&size=10",
       },
     });
     await renderSuspended(Pagination, {
@@ -90,12 +80,12 @@ describe("Pagination", () => {
 
   it("renders navigation buttons when there are multiple pages", async () => {
     const page = createMockPage({
-      "@id": "/api/search?pageIndex=1&size=10",
+      "@id": "/api/suche?pageIndex=1&size=10",
       view: {
-        first: "/api/search?pageIndex=0&size=10",
-        previous: "/api/search?pageIndex=0&size=10",
-        next: "/api/search?pageIndex=2&size=10",
-        last: "/api/search?pageIndex=9&size=10",
+        first: "/api/suche?pageIndex=0&size=10",
+        previous: "/api/suche?pageIndex=0&size=10",
+        next: "/api/suche?pageIndex=2&size=10",
+        last: "/api/suche?pageIndex=9&size=10",
       },
     });
     await renderSuspended(Pagination, {
@@ -109,9 +99,9 @@ describe("Pagination", () => {
   it("hides previous button from accessibility tree on first page", async () => {
     const page = createMockPage({
       view: {
-        first: "/api/search?pageIndex=0&size=10",
-        next: "/api/search?pageIndex=1&size=10",
-        last: "/api/search?pageIndex=9&size=10",
+        first: "/api/suche?pageIndex=0&size=10",
+        next: "/api/suche?pageIndex=1&size=10",
+        last: "/api/suche?pageIndex=9&size=10",
       },
     });
     await renderSuspended(Pagination, { props: { page } });
@@ -125,11 +115,11 @@ describe("Pagination", () => {
 
   it("hides next button from accessibility tree on last page", async () => {
     const page = createMockPage({
-      "@id": "/api/search?pageIndex=9&size=10",
+      "@id": "/api/suche?pageIndex=9&size=10",
       view: {
-        first: "/api/search?pageIndex=0&size=10",
-        previous: "/api/search?pageIndex=8&size=10",
-        last: "/api/search?pageIndex=9&size=10",
+        first: "/api/suche?pageIndex=0&size=10",
+        previous: "/api/suche?pageIndex=8&size=10",
+        last: "/api/suche?pageIndex=9&size=10",
       },
     });
     await renderSuspended(Pagination, { props: { page } });
@@ -153,12 +143,12 @@ describe("Pagination", () => {
 
   it("previous button links to correct page", async () => {
     const page = createMockPage({
-      "@id": "/api/search?pageIndex=2&size=10",
+      "@id": "/api/suche?pageIndex=2&size=10",
       view: {
-        first: "/api/search?pageIndex=0&size=10",
-        previous: "/api/search?pageIndex=1&size=10",
-        next: "/api/search?pageIndex=3&size=10",
-        last: "/api/search?pageIndex=9&size=10",
+        first: "/api/suche?pageIndex=0&size=10",
+        previous: "/api/suche?pageIndex=1&size=10",
+        next: "/api/suche?pageIndex=3&size=10",
+        last: "/api/suche?pageIndex=9&size=10",
       },
     });
     await renderSuspended(Pagination, {
@@ -171,12 +161,12 @@ describe("Pagination", () => {
 
   it("previous button removes pageIndex param when going to first page", async () => {
     const page = createMockPage({
-      "@id": "/api/search?pageIndex=1&size=10",
+      "@id": "/api/suche?pageIndex=1&size=10",
       view: {
-        first: "/api/search?pageIndex=0&size=10",
-        previous: "/api/search?pageIndex=0&size=10",
-        next: "/api/search?pageIndex=2&size=10",
-        last: "/api/search?pageIndex=9&size=10",
+        first: "/api/suche?pageIndex=0&size=10",
+        previous: "/api/suche?pageIndex=0&size=10",
+        next: "/api/suche?pageIndex=2&size=10",
+        last: "/api/suche?pageIndex=9&size=10",
       },
     });
     await renderSuspended(Pagination, {
@@ -189,12 +179,12 @@ describe("Pagination", () => {
 
   it("displays correct page number for middle page", async () => {
     const page = createMockPage({
-      "@id": "/api/search?pageIndex=5&size=10",
+      "@id": "/api/suche?pageIndex=5&size=10",
       view: {
-        first: "/api/search?pageIndex=0&size=10",
-        previous: "/api/search?pageIndex=4&size=10",
-        next: "/api/search?pageIndex=6&size=10",
-        last: "/api/search?pageIndex=9&size=10",
+        first: "/api/suche?pageIndex=0&size=10",
+        previous: "/api/suche?pageIndex=4&size=10",
+        next: "/api/suche?pageIndex=6&size=10",
+        last: "/api/suche?pageIndex=9&size=10",
       },
     });
     await renderSuspended(Pagination, {
@@ -261,7 +251,7 @@ describe("Pagination", () => {
 
   it("formats large item counts with German locale", async () => {
     const page = createMockPage({
-      "@id": "/api/search?pageIndex=0&size=10",
+      "@id": "/api/suche?pageIndex=0&size=10",
       member: Array.from({ length: 10 }, () => createMockSearchResult()),
       totalItems: 1234,
     });
@@ -285,14 +275,14 @@ describe("Pagination", () => {
 
   it("handles single item on page correctly", async () => {
     const page = createMockPage({
-      "@id": "/api/search?pageIndex=2&size=10",
+      "@id": "/api/suche?pageIndex=2&size=10",
       member: [createMockSearchResult()],
       totalItems: 100,
       view: {
-        first: "/api/search?pageIndex=0&size=10",
-        previous: "/api/search?pageIndex=1&size=10",
-        next: "/api/search?pageIndex=3&size=10",
-        last: "/api/search?pageIndex=9&size=10",
+        first: "/api/suche?pageIndex=0&size=10",
+        previous: "/api/suche?pageIndex=1&size=10",
+        next: "/api/suche?pageIndex=3&size=10",
+        last: "/api/suche?pageIndex=9&size=10",
       },
     });
     await renderSuspended(Pagination, {

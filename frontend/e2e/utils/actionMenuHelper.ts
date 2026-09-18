@@ -25,7 +25,9 @@ export function testCopyLinkButton(
 
     await button.click();
 
-    await expect(page.getByText("Kopiert!")).toBeVisible();
+    await expect(
+      page.getByRole("menuitem", { name: "Link kopiert" }),
+    ).toBeVisible();
     expect(await page.evaluate(() => navigator.clipboard.readText())).toMatch(
       linkRegex,
     );
@@ -88,11 +90,6 @@ export function testPdfButton(pageUrl: string) {
     await navigate(page, pageUrl);
 
     const button = page.getByRole("menuitem", { name: "Als PDF speichern" });
-
-    await button.hover();
-    await expect(
-      page.getByRole("tooltip", { name: "Als PDF speichern" }),
-    ).toBeVisible({ timeout: 15000 });
 
     await expect(button).toBeDisabled();
   });

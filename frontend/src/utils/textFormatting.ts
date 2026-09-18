@@ -29,8 +29,8 @@ export function getStringOrUndefined(
   return isStringEmpty(string) ? undefined : (string as string);
 }
 
-export function addEllipsis(text?: string) {
-  if (!text?.length) return text;
+export function addEllipsis(text: string) {
+  if (!text.length) return text;
 
   const startsWithLowercase = text[0]?.toUpperCase() !== text[0];
   if (startsWithLowercase) {
@@ -59,7 +59,7 @@ export function stringToBoolean(
 }
 
 export function normalizeSpaces(text: string): string {
-  return text.trim().split(/\s+/).join(" ");
+  return text.trim().replaceAll(/\s+/g, " ");
 }
 
 export function truncateAtWord(

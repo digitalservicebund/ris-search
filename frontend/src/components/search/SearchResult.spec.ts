@@ -3,7 +3,7 @@ import { describe, it, expect } from "vitest";
 import type {
   AdministrativeDirective,
   AnyDocument,
-  CaseLaw,
+  CaseLawSearchSchema,
   LegislationExpression,
   Literature,
   SearchResult,
@@ -16,18 +16,18 @@ describe("SearchResult", () => {
       props: {
         searchResult: {
           item: { "@type": "Decision" },
-        } as SearchResult<CaseLaw>,
+        } as SearchResult<CaseLawSearchSchema>,
         order: 0,
       },
       global: {
         stubs: {
-          CaselawSearchResult: true,
+          SearchCaselawSearchResult: true,
         },
       },
     });
 
     expect(
-      container.querySelector("caselaw-search-result-stub"),
+      container.querySelector("search-caselaw-search-result-stub"),
     ).toBeInTheDocument();
   });
 
@@ -41,13 +41,13 @@ describe("SearchResult", () => {
       },
       global: {
         stubs: {
-          NormSearchResult: true,
+          SearchNormSearchResult: true,
         },
       },
     });
 
     expect(
-      container.querySelector("norm-search-result-stub"),
+      container.querySelector("search-norm-search-result-stub"),
     ).toBeInTheDocument();
   });
 
@@ -61,13 +61,13 @@ describe("SearchResult", () => {
       },
       global: {
         stubs: {
-          LiteratureSearchResult: true,
+          SearchLiteratureSearchResult: true,
         },
       },
     });
 
     expect(
-      container.querySelector("literature-search-result-stub"),
+      container.querySelector("search-literature-search-result-stub"),
     ).toBeInTheDocument();
   });
 
@@ -81,13 +81,15 @@ describe("SearchResult", () => {
       },
       global: {
         stubs: {
-          AdministrativeDirectiveSearchResult: true,
+          SearchAdministrativeDirectiveSearchResult: true,
         },
       },
     });
 
     expect(
-      container.querySelector("administrative-directive-search-result-stub"),
+      container.querySelector(
+        "search-administrative-directive-search-result-stub",
+      ),
     ).toBeInTheDocument();
   });
 
@@ -102,5 +104,46 @@ describe("SearchResult", () => {
     });
 
     expect(container).toBeEmptyDOMElement();
+  });
+
+  it("forwards the heading level to the result component", () => {
+    const { container } = render(SearchResultComponent, {
+      props: {
+        searchResult: {
+          item: { "@type": "Decision" },
+        } as SearchResult<CaseLawSearchSchema>,
+        order: 0,
+        headingLevel: "3" as const,
+      },
+      global: {
+        stubs: {
+          SearchCaselawSearchResult: true,
+        },
+      },
+    });
+
+    expect(
+      container.querySelector("search-caselaw-search-result-stub"),
+    ).toHaveAttribute("headinglevel", "3");
+  });
+
+  it("defaults the heading level to 2", () => {
+    const { container } = render(SearchResultComponent, {
+      props: {
+        searchResult: {
+          item: { "@type": "Decision" },
+        } as SearchResult<CaseLawSearchSchema>,
+        order: 0,
+      },
+      global: {
+        stubs: {
+          SearchCaselawSearchResult: true,
+        },
+      },
+    });
+
+    expect(
+      container.querySelector("search-caselaw-search-result-stub"),
+    ).toHaveAttribute("headinglevel", "2");
   });
 });

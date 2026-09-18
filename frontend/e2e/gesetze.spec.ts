@@ -1,0 +1,555 @@
+import {
+  testCopyLinkButton,
+  testPdfButton,
+  testPrintButton,
+  testXmlButton,
+} from "./utils/actionMenuHelper";
+import { expect, navigate, noJsTest, test } from "./utils/fixtures";
+
+test.describe("empty norm (no text content)", () => {
+  test("does not show the Text tab when the norm body is empty", async ({
+    page,
+  }) => {
+    await navigate(page, "/gesetze/eli/bund/bgbl-1/2025/999/2025-01-01/1/deu");
+
+    await expect(page.getByRole("tab", { name: "Text" })).toHaveCount(0);
+  });
+});
+
+test.describe("view norm page", async () => {
+  test.setTimeout(60000);
+
+  noJsTest("tabs work without JavaScript", async ({ page }) => {
+    await navigate(page, "/gesetze/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu");
+
+    await test.step("text", async () => {
+      await expect(
+        page.getByRole("heading", { name: "Text", exact: false }),
+      ).toBeVisible();
+
+      await expect(
+        page.getByRole("tab", { name: "Text", selected: true }),
+      ).toBeVisible();
+    });
+
+    await test.step("details", async () => {
+      await page.getByRole("tab", { name: "Details" }).click();
+
+      await expect(
+        page.getByRole("heading", { name: "Details" }),
+      ).toBeVisible();
+
+      await expect(
+        page.getByRole("tab", { name: "Details", selected: true }),
+      ).toBeVisible();
+    });
+
+    await test.step("versions", async () => {
+      await page.getByRole("tab", { name: "Fassungen" }).click();
+
+      await expect(
+        page.getByRole("tab", { name: "Fassungen", selected: true }),
+      ).toBeVisible();
+    });
+  });
+
+  test(
+    "shows detailed information in the Details tab",
+    { tag: ["@RISDEV-12108"] },
+    async ({ page }) => {
+      await navigate(
+        page,
+        "/gesetze/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu",
+      );
+
+      await page.getByRole("tab", { name: "Details" }).click();
+
+      await expect(
+        page.getByRole("heading", { name: "Details" }),
+      ).toBeVisible();
+
+      const detailsList = page
+        .getByTestId("details-list")
+        .getByRole("term")
+        .or(page.getByTestId("details-list").getByRole("definition"));
+
+      await expect(detailsList).toHaveText([
+        "Ausfertigungsdatum:",
+        "27.05.2000",
+        "Vollzitat:",
+        "Fiktive Fruchtsaft- und Erfrischungsgetränkeverordnung vom 27. Mai 2000 (BGBl. I S. 1016), zuletzt modifiziert im Testverfahren",
+        "Stand:",
+        "Zuletzt geändert durch Testanpassungen",
+        "Neugefasst durch Testdaten",
+        "Hinweis zum Stand:",
+        "Hinweis Testdaten",
+        "Fußnoten:",
+        /\*T \(\+{3} Textnachweis ab: 27\.5\.2000 \+{3}\).*\(\+{3} Zur Anwendung vgl\. §§ 5, 12, 15 \+{3}\)/,
+        "Download:",
+        /FrSaftErfrischV als ZIP herunterladen/,
+      ]);
+    },
+  );
+
+  test(
+    "hides empty detail fields and only shows populated ones",
+    { tag: ["@RISDEV-12108"] },
+    async ({ page }) => {
+      await navigate(
+        page,
+        "/gesetze/eli/bund/bgbl-1/2025/999/2025-01-01/1/deu",
+      );
+
+      await page.getByRole("tab", { name: "Details" }).click();
+
+      const detailsList = page.getByTestId("details-list");
+      const detailsEntries = detailsList
+        .getByRole("term")
+        .or(detailsList.getByRole("definition"));
+
+      await expect(detailsEntries).toHaveCount(2);
+      await expect(detailsEntries).toHaveText([
+        "Download:",
+        "EmptyBodyTestG als ZIP herunterladen",
+      ]);
+    },
+  );
+
+  test("official table of contents is visible and expandable", async ({
+    page,
+  }) => {
+    await navigate(
+      page,
+      "/gesetze/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu",
+    );
+
+    const button = page.getByRole("button", {
+      name: "Amtliches Inhaltsverzeichnis einblenden",
+    });
+
+    await button.click();
+    const toc = page.getByRole("region", {
+      name: "Amtliches Inhaltsverzeichnis ausblenden",
+    });
+    await expect(toc).toBeVisible();
+    await expect(toc.getByRole("listitem").first()).toBeVisible();
+  });
+
+  test(
+    "shows the footnote of the Eingangsformel in place, and the one of the official table of contents in its accordion",
+    { tag: ["@RISDEV-12253"] },
+    async ({ page }) => {
+      await navigate(
+        page,
+        "/gesetze/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu",
+      );
+
+      await expect(
+        page.getByText(
+          "Eingangsformel: Diese Fußnote an der Eingangsformel wurde im End-to-end-Datenbestand ergänzt",
+        ),
+      ).toBeVisible();
+
+      await expect(
+        page
+          .getByText("Inhaltsübersicht: präambel Fußnote")
+          .filter({ visible: true }),
+      ).toHaveCount(0);
+
+      await page
+        .getByRole("button", {
+          name: "Amtliches Inhaltsverzeichnis einblenden",
+        })
+        .click();
+
+      const toc = page.getByRole("region", {
+        name: "Amtliches Inhaltsverzeichnis ausblenden",
+      });
+      await expect(
+        toc.getByText("Inhaltsübersicht: präambel Fußnote"),
+      ).toBeVisible();
+    },
+  );
+
+  test(
+    "shows the footnote of the Schlussformel",
+    { tag: ["@RISDEV-12253"] },
+    async ({ page }) => {
+      await navigate(
+        page,
+        "/gesetze/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu",
+      );
+
+      await expect(
+        page.getByText(
+          "Schlussformel: Diese Fußnote an der Schlussformel wurde im End-to-end-Datenbestand ergänzt",
+        ),
+      ).toBeVisible();
+    },
+  );
+
+  test(
+    "view footnotes in title",
+    { tag: ["@RISDEV-12253"] },
+    async ({ page }) => {
+      await navigate(
+        page,
+        "/gesetze/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu",
+      );
+
+      const marker = await page.getByRole("superscript").innerText();
+      expect(marker).toBe("❃");
+
+      await expect(
+        page.getByRole("listitem").filter({
+          hasText:
+            "(Diese Fußnote im Titel wurde im End-to-end-Datenbestand ergänzt",
+        }),
+      ).toBeVisible();
+    },
+  );
+
+  test("table of contents renders and clicking a link scrolls to the article", async ({
+    page,
+    isMobileTest,
+  }) => {
+    test.skip(isMobileTest);
+    const normUrl = "/gesetze/eli/bund/bgbl-1/1964/s902/2009-02-05/19/deu";
+
+    await navigate(page, normUrl);
+
+    const tocNav = page.getByRole("navigation", { name: "Inhalte" });
+    await expect(tocNav).toBeVisible();
+
+    const articleLink = tocNav.getByRole("link", { name: "§ 1" }).first();
+    await articleLink.click();
+
+    await expect(page).toHaveURL(/#art-z1$/);
+
+    const targetHeading = page
+      .getByRole("main")
+      .getByRole("heading", { name: /§\s*1\s+Erlaubnis/i });
+
+    await expect(targetHeading).toBeInViewport();
+  });
+
+  test("scrolls to an article with encoded hash in URL", async ({
+    page,
+    isMobileTest,
+  }) => {
+    test.skip(isMobileTest);
+    const normUrl = "/gesetze/eli/bund/bgbl-1/1964/s902/2009-02-05/19/deu";
+
+    await navigate(page, normUrl);
+
+    const articleLink = page.getByRole("treeitem").getByRole("link", {
+      name: /§\s*18\s*bis\s*21/i,
+    });
+    await articleLink.click();
+
+    await expect(page).toHaveURL(/#art-z.*18.*21/i);
+
+    const targetHeading = page
+      .getByRole("main")
+      .getByRole("heading", {
+        name: /§\s*18\s*bis\s*21/i,
+      })
+      .first();
+
+    await expect(targetHeading).toBeVisible();
+    await expect(targetHeading).toBeInViewport();
+  });
+
+  test("clicking Eingangsformel in TOC scrolls to Eingangsformel section", async ({
+    page,
+    isMobileTest,
+  }) => {
+    test.skip(isMobileTest);
+    await navigate(
+      page,
+      "/gesetze/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu",
+    );
+
+    const sidebar = page.getByRole("navigation", { name: "Inhalte" });
+    await sidebar.getByRole("link", { name: "Eingangsformel" }).click();
+
+    await expect(page).toHaveURL(
+      "/gesetze/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu#präambel-n1_formel-n1",
+    );
+
+    const heading = page.getByRole("heading", { name: "Eingangsformel" });
+    await expect(heading).toBeInViewport();
+    const box = await heading.boundingBox();
+    expect(box!.y).toBeLessThan(100);
+  });
+});
+
+test.describe("actions menu", () => {
+  test.describe("can copy speakable url to currently valid expression", () => {
+    testCopyLinkButton(
+      "/gesetze/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu",
+      "Link zur jeweils gültigen Fassung",
+      RegExp(".*/gesetze/rismfg"),
+    );
+  });
+
+  test.describe("falls back to workEli link when risAbbreviation contains special characters", () => {
+    testCopyLinkButton(
+      "/gesetze/eli/bund/bgbl-1/2015/s3520/2022-10-21/3/deu",
+      "Link zur jeweils gültigen Fassung",
+      RegExp(".*/gesetze/eli/bund/bgbl-1/2015/s3520"),
+    );
+  });
+
+  test.describe(
+    "can copy link to currently viewed expression",
+    { tag: ["@RISDEV-11118"] },
+    () => {
+      testCopyLinkButton(
+        "/gesetze/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu",
+        "Link zu dieser Fassung kopieren",
+        RegExp(".*/gesetze/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu"),
+      );
+    },
+  );
+
+  test.describe("can use print action button to open print menu", () => {
+    testPrintButton("/gesetze/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu");
+  });
+
+  test.describe("can't use PDF action as it is disabled", () => {
+    testPdfButton("/gesetze/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu");
+  });
+
+  test.describe("can use XML action to view norms xml file", () => {
+    testXmlButton(
+      "/gesetze/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu",
+      "http://localhost:8080/v1/legislation/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu/2024-12-19/regelungstext-1.xml",
+    );
+  });
+
+  test.describe("can navigate to english translation if available", () => {
+    test("desktop", async ({ page, isMobileTest }) => {
+      test.skip(isMobileTest);
+      await navigate(
+        page,
+        "/gesetze/eli/bund/bgbl-1/1964/s902/2009-02-05/19/deu",
+      );
+
+      const button = page.getByRole("menuitem", {
+        name: "Zur englischen Übersetzung",
+      });
+
+      await button.hover();
+      await expect(
+        page.getByRole("tooltip", { name: "Zur englischen Übersetzung" }),
+      ).toBeVisible({
+        timeout: 15000,
+      });
+
+      await button.click();
+      await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+        "Test Regulation for the Model Framework of the Public Service",
+      );
+    });
+
+    test("mobile", async ({ page, isMobileTest }) => {
+      test.skip(!isMobileTest);
+      await navigate(
+        page,
+        "/gesetze/eli/bund/bgbl-1/1964/s902/2009-02-05/19/deu",
+      );
+
+      await page.getByLabel("Aktionen anzeigen").click();
+
+      const button = page.getByRole("link", {
+        name: "Zur englischen Übersetzung",
+      });
+
+      await button.click();
+      await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+        "Test Regulation for the Model Framework of the Public Service",
+      );
+    });
+  });
+
+  test.describe("does not show english translation link if no translation exists", () => {
+    test("desktop", async ({ page, isMobileTest }) => {
+      test.skip(isMobileTest);
+      await navigate(
+        page,
+        "/gesetze/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu",
+      );
+
+      await expect(
+        page.getByRole("menuitem", {
+          name: "Zur englischen Übersetzung",
+        }),
+      ).toHaveCount(0);
+    });
+
+    test("mobile", async ({ page, isMobileTest }) => {
+      test.skip(!isMobileTest);
+      await navigate(
+        page,
+        "/gesetze/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu",
+      );
+
+      await page.getByLabel("Aktionen anzeigen").click();
+
+      await expect(
+        page.getByRole("link", {
+          name: "Zur englischen Übersetzung",
+        }),
+      ).toHaveCount(0);
+    });
+  });
+});
+
+test.describe("can view metadata of norms", () => {
+  test("can view full set of metadata when private Features enabled", async ({
+    page,
+    privateFeaturesEnabled,
+  }) => {
+    test.skip(!privateFeaturesEnabled);
+    await navigate(page, "/gesetze/eli/bund/bgbl-1/2025/130/2025-05-05/1/deu");
+
+    const metadataList = page.getByTestId("metadata-list");
+
+    await expect(
+      metadataList.getByRole("term").or(metadataList.getByRole("definition")),
+    ).toHaveText([
+      "Abkürzung",
+      "GeGuGe 2025",
+      "Status",
+      "Aktuell gültig",
+      "Gültig ab",
+      "06.05.2025",
+      "Gültig bis",
+      "31.03.2037",
+    ]);
+  });
+
+  test("can view reduced set of metadata when private Features are disabled", async ({
+    page,
+    privateFeaturesEnabled,
+  }) => {
+    test.skip(privateFeaturesEnabled);
+    await navigate(page, "/gesetze/eli/bund/bgbl-1/2025/130/2025-05-05/1/deu");
+
+    const metadataList = page.getByTestId("metadata-list");
+
+    await expect(
+      metadataList.getByRole("term").or(metadataList.getByRole("definition")),
+    ).toHaveText(["Abkürzung", "GeGuGe 2025", "Status", "—"]);
+  });
+});
+
+test("shows correct breadcrumbs for a norm", async ({ page }) => {
+  await navigate(
+    page,
+    "/gesetze/eli/bund/bgbl-1/1972/s2459/1999-04-20/4/deu?from=/suche?query=example",
+  );
+
+  const breadcrumb = page.getByRole("navigation", { name: "Pfadnavigation" });
+
+  await expect(breadcrumb.getByRole("link", { name: "Start" })).toBeVisible();
+
+  const searchBreadcrumb = breadcrumb.getByRole("link", { name: "Suche" });
+  await expect(searchBreadcrumb).toBeVisible();
+  await expect(searchBreadcrumb).toHaveAttribute(
+    "href",
+    "/suche?query=example",
+  );
+
+  await expect(breadcrumb.getByText("BWahlGV")).toBeVisible();
+});
+
+test.describe("mobile table of contents", () => {
+  test("floating button for the TOC is visible", async ({
+    page,
+    isMobileTest,
+  }) => {
+    test.skip(!isMobileTest);
+    await navigate(
+      page,
+      "/gesetze/eli/bund/bgbl-1/1972/s2459/1999-04-20/4/deu",
+    );
+
+    await expect(
+      page.getByRole("button", { name: "Inhalte BWahlGV" }),
+    ).toBeVisible();
+  });
+
+  test("clicking the floating button opens the TOC", async ({
+    page,
+    isMobileTest,
+  }) => {
+    test.skip(!isMobileTest);
+    await navigate(
+      page,
+      "/gesetze/eli/bund/bgbl-1/1972/s2459/1999-04-20/4/deu",
+    );
+
+    await page.getByRole("button", { name: "Inhalte BWahlGV" }).click();
+
+    await expect(page.getByRole("dialog", { name: "Inhalte" })).toBeVisible();
+  });
+
+  test("expanding a TOC item does not close the TOC", async ({
+    page,
+    isMobileTest,
+  }) => {
+    test.skip(!isMobileTest);
+    await navigate(
+      page,
+      "/gesetze/eli/bund/bgbl-1/1972/s2459/1999-04-20/4/deu",
+    );
+
+    await page.getByRole("button", { name: "Inhalte BWahlGV" }).click();
+
+    const dialog = page.getByRole("dialog", { name: "Inhalte" });
+    await expect(dialog).toBeVisible();
+
+    await dialog.getByRole("button", { name: "Ebene öffnen" }).first().click();
+
+    await expect(dialog.getByRole("link", { name: "§ 1" })).toBeVisible();
+    await expect(dialog).toBeVisible();
+  });
+
+  test("clicking a TOC link closes the TOC and scrolls to the element", async ({
+    page,
+    isMobileTest,
+  }) => {
+    test.skip(!isMobileTest);
+    await navigate(
+      page,
+      "/gesetze/eli/bund/bgbl-1/1972/s2459/1999-04-20/4/deu",
+    );
+
+    await page.getByRole("button", { name: "Inhalte BWahlGV" }).click();
+
+    const dialog = page.getByRole("dialog", { name: "Inhalte" });
+    await expect(dialog).toBeVisible();
+
+    await dialog
+      .getByRole("treeitem", { name: /Dritter Abschnitt/ })
+      .getByRole("button", { name: "Ebene öffnen" })
+      .first()
+      .click();
+
+    await dialog
+      .getByRole("treeitem", { name: /Erster Unterabschnitt/ })
+      .getByRole("button", { name: "Ebene öffnen" })
+      .first()
+      .click();
+
+    await dialog.getByRole("link", { name: /§ 9/ }).click();
+    await expect(dialog).not.toBeVisible();
+    const targetHeading = page
+      .getByRole("main")
+      .getByRole("heading", { name: "§ 9 Datenschutzanforderungen" });
+
+    await expect(targetHeading).toBeInViewport();
+  });
+});

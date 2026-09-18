@@ -7,6 +7,7 @@ import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.ArticlesRepository;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
+import de.bund.digitalservice.ris.search.utils.BatchUtils;
 import de.bund.digitalservice.ris.search.utils.DateUtils;
 import de.bund.digitalservice.ris.search.utils.eli.EliFile;
 import de.bund.digitalservice.ris.search.utils.eli.ExpressionEli;
@@ -17,17 +18,14 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.time.Period;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.apache.commons.collections4.ListUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +47,8 @@ public class IndexNormsService implements IndexService {
   // We can't use LocalDate.MIN or LocalDate.MAX because opensearch min and max differ from java
   public static final LocalDate TIME_RELEVANCE_MIN = LocalDate.of(1, Month.JANUARY, 1);
   public static final LocalDate TIME_RELEVANCE_MAX = LocalDate.of(9999, Month.JANUARY, 1);
+
+  private static final int BATCH_SIZE = 100;
 
   /**
    * Constructor for IndexNormsService.
@@ -75,7 +75,8 @@ public class IndexNormsService implements IndexService {
    */
   public void reindexAll(String startingTimestamp) {
     DateUtils.avoidOpenSearchSubMillisecondDateBug();
-    Set<WorkEli> workElis = getWorks(normsBucket.getAllKeysByPrefix("eli/").stream());
+    List<String> allFiles = normsBucket.getAllKeysByPrefix("eli/");
+    Map<WorkEli, List<String>> workElis = groupFilesByWorkEli(allFiles.stream());
     processWorkEliUpdates(workElis, startingTimestamp);
     clearOldNorms(startingTimestamp);
   }
@@ -85,12 +86,24 @@ public class IndexNormsService implements IndexService {
     try {
       Set<WorkEli> workElis =
           getWorks(Stream.concat(changelog.getChanged().stream(), changelog.getDeleted().stream()));
-      processWorkEliUpdates(workElis, Instant.now().toString());
+
+      // retrieve all file paths for the given workElis
+      Map<WorkEli, List<String>> allFilesByWorkEli = new HashMap<>();
+      for (WorkEli workEli : workElis) {
+        allFilesByWorkEli.put(workEli, normsBucket.getAllKeysByPrefix(workEli.toString() + "/"));
+      }
+      processWorkEliUpdates(allFilesByWorkEli, Instant.now().toString());
     } catch (IllegalArgumentException e) {
       logger.error("Error while reading changelog file: {}", e.getMessage());
     }
   }
 
+  /**
+   * retrieves a Set of workElis from a stream of files
+   *
+   * @param files list of file paths
+   * @return Set of WorkElis
+   */
   private Set<WorkEli> getWorks(Stream<String> files) {
     return files
         .map(EliFile::fromString)
@@ -101,21 +114,41 @@ public class IndexNormsService implements IndexService {
         .collect(Collectors.toSet());
   }
 
-  private void processWorkEliUpdates(Collection<WorkEli> workElis, String startingTimestamp) {
-    List<List<WorkEli>> batches = ListUtils.partition(workElis.stream().toList(), 100);
-    for (int i = 0; i < batches.size(); i++) {
-      List<WorkEli> oneBatch = batches.get(i);
-      logger.info("Indexing batch {} of {}", i + 1, batches.size());
-      for (WorkEli eli : oneBatch) {
-        processOneNormWork(eli, startingTimestamp);
+  /**
+   * takes a list of File paths and groups them by workEli
+   *
+   * @param files list of file paths
+   * @return Map of the paths grouped by workEli
+   */
+  private Map<WorkEli, List<String>> groupFilesByWorkEli(Stream<String> files) {
+    return files
+        .map(EliFile::fromString)
+        .flatMap(Optional::stream)
+        .collect(
+            Collectors.groupingBy(
+                EliFile::getWorkEli, Collectors.mapping(EliFile::toString, Collectors.toList())));
+  }
+
+  private void processWorkEliUpdates(
+      Map<WorkEli, List<String>> workElis, String startingTimestamp) {
+    int processedWorkEli = 0;
+    int totalWorkElis = workElis.size();
+
+    for (Map.Entry<WorkEli, List<String>> entry : workElis.entrySet()) {
+      processOneNormWork(entry.getKey(), entry.getValue(), startingTimestamp);
+
+      processedWorkEli++;
+      if (processedWorkEli % BATCH_SIZE == 0 || processedWorkEli == totalWorkElis) {
+        logger.info("index progress: {}/{} works processed", processedWorkEli, totalWorkElis);
       }
     }
   }
 
-  private void processOneNormWork(WorkEli workEli, String startingTimestamp) {
-    // Get all expressions for the current work from the bucket
+  private void processOneNormWork(
+      WorkEli workEli, List<String> filenames, String startingTimestamp) {
+
     Set<ExpressionEli> expressionElis =
-        normsBucket.getAllKeysByPrefix(workEli.toString() + "/").stream()
+        filenames.stream()
             .map(EliFile::fromString)
             .flatMap(Optional::stream)
             .map(EliFile::getExpressionEli)
@@ -125,7 +158,7 @@ public class IndexNormsService implements IndexService {
     List<Norm> normExpressions = new ArrayList<>();
     for (ExpressionEli expressionEli : expressionElis) {
       try {
-        getNormFromS3(expressionEli).ifPresent(normExpressions::add);
+        getNormFromS3(expressionEli, filenames).ifPresent(normExpressions::add);
       } catch (ObjectStoreServiceException e) {
         // If we can't get the content of an expression we log an error and move on
         // That means on failure of a work "changed" it will end up deleted
@@ -135,11 +168,9 @@ public class IndexNormsService implements IndexService {
 
     addTimeRelevanceWindows(workEli.toString(), normExpressions);
 
+    BatchUtils.processInBatches(normExpressions, BATCH_SIZE, normsRepository::saveAll);
     for (Norm norm : normExpressions) {
-      // saving norms in a batch caused an error due to opensearch request being too large
-      //noinspection UseBulkOperation
-      normsRepository.save(norm);
-      articlesRepository.saveAll(norm.getArticles());
+      BatchUtils.processInBatches(norm.getArticles(), BATCH_SIZE, articlesRepository::saveAll);
     }
 
     // delete the expressions from this work that were indexed before the start time
@@ -212,12 +243,12 @@ public class IndexNormsService implements IndexService {
     return !norm2.getEntryIntoForceDate().isAfter(norm1.getExpiryDate());
   }
 
-  private Optional<Norm> getNormFromS3(ExpressionEli expressionEli)
+  private Optional<Norm> getNormFromS3(ExpressionEli expressionEli, List<String> filenames)
       throws ObjectStoreServiceException {
 
     // Get all files for the current expression.
     final List<String> keysMatchingExpressionEli =
-        normsBucket.getAllKeysByPrefix(expressionEli.toString());
+        filenames.stream().filter(n -> n.startsWith(expressionEli.toString())).toList();
 
     Optional<String> newestFileName =
         keysMatchingExpressionEli.stream()
@@ -234,7 +265,7 @@ public class IndexNormsService implements IndexService {
 
     if (newestFileName.isEmpty()) {
       logger.error(
-          "Changelog file contained {}, but no manifestation files found for that norm expression.",
+          "Expression '{}' either doesn't exist or is missing a regelungstext-verkuendungsfassung.xml.",
           expressionEli);
       return Optional.empty();
     }
@@ -245,32 +276,39 @@ public class IndexNormsService implements IndexService {
       return Optional.empty();
     }
 
-    /*
-    Find offenestruktur-*.xml (attachment) files that share the same manifestation ELI prefix and download their
-    contents for processing.
-     */
-    String prefix = fileName.substring(0, fileName.lastIndexOf("/"));
+    Map<String, String> attachments = getXmlAttachments(fileName, keysMatchingExpressionEli);
+
+    return NormLdmlToOpenSearchMapper.parseNorm(
+        fileName,
+        fileContent.get(),
+        attachments,
+        environment.acceptsProfiles(Profiles.of("prototype")));
+  }
+
+  /**
+   * retrieves all contents of attachments belonging to a specific parent file from a list of object
+   * keys
+   *
+   * @param parentFile parent manifestation file the attachments belong to
+   * @param keys list of object keys
+   * @return Hashmap of key and content of all found attachments
+   */
+  private Map<String, String> getXmlAttachments(String parentFile, List<String> keys) {
     Map<String, String> attachments = new HashMap<>();
-    for (String key : keysMatchingExpressionEli) {
-      if (key.startsWith(prefix) && !Objects.equals(key, fileName)) {
+    String mainFilePath = parentFile.substring(0, parentFile.lastIndexOf("/"));
+    for (String key : keys) {
+      if (key.startsWith(mainFilePath + "/anlage-") && key.endsWith(".xml")) {
         Optional<String> attachment = normsBucket.getFileAsString(key);
-        attachment.ifPresent(a -> attachments.put(key, a));
+        attachment.ifPresent(content -> attachments.put(key, content));
       }
     }
-    Optional<Norm> norm =
-        NormLdmlToOpenSearchMapper.parseNorm(
-            fileContent.get(), attachments, environment.acceptsProfiles(Profiles.of("prototype")));
-    if (norm.isEmpty()) {
-      logger.error("Unknown error while processing file {} during Norm import.", fileName);
-      return Optional.empty();
-    } else {
-      return norm;
-    }
+    return attachments;
   }
 
   private void clearOldNorms(String timestamp) {
     normsRepository.deleteByIndexedAtBefore(timestamp);
     normsRepository.deleteByIndexedAtIsNull();
+    articlesRepository.deleteByIndexedAtBefore(timestamp);
     articlesRepository.deleteByIndexedAtIsNull();
   }
 

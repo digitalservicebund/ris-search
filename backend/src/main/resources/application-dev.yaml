@@ -1,0 +1,11 @@
+server:
+  front-end-url: "http://localhost:3000/"
+  back-end-url: "http://localhost:8080"
+  docs-url: "http://localhost:8080"
+
+swagger:
+  server:
+    url: "http://localhost:8080"
+
+local:
+  file-storage: backend/.local-storage

@@ -1,9 +1,18 @@
-import type { CaseLaw } from "~/types/api";
+import { formatArray, truncateAtWord } from "~/utils/textFormatting";
 
-export function getEncodingURL(
-  caseLaw: CaseLaw | null | undefined,
-  format: string,
-) {
-  const encoding = caseLaw?.encoding?.find((e) => e.encodingFormat === format);
-  return encoding?.contentUrl;
+export type SecondaryTitleInput = {
+  decisionNames: string[];
+  titleLine?: string;
+};
+
+export function getCaselawSecondaryTitle(
+  { decisionNames, titleLine }: SecondaryTitleInput,
+  truncate = true,
+): string | undefined {
+  const nonBlankDecisionNames = decisionNames.filter((name) => name.trim());
+  const formattedDecisionNames = formatArray(nonBlankDecisionNames);
+  const title = formattedDecisionNames ?? titleLine;
+
+  if (!title) return undefined;
+  return truncate ? truncateAtWord(title, 90, true) : title;
 }

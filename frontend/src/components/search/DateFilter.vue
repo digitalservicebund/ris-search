@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import { RadioButton } from "primevue";
-import DateInput from "~/components/DateInput.vue";
-import YearInput from "~/components/YearInput.vue";
 import { DocumentKind } from "~/types/api";
 import type {
   DateFilterValue,
@@ -14,7 +11,9 @@ const { documentKind } = defineProps<{
 }>();
 
 /** The currently active filter */
-const filter = defineModel<DateFilterValue>({ default: { type: "allTime" } });
+const filter = defineModel<DateFilterValue>({
+  default: () => ({ type: "allTime" }),
+});
 
 const formId = useId();
 const currentlyInForceId = useId();
@@ -42,6 +41,12 @@ const filterLabel = computed(() => {
   }
 });
 
+const specificDateLabel = computed(() =>
+  documentKind === DocumentKind.Literature
+    ? "Bestimmtes Jahr"
+    : "Bestimmtes Datum",
+);
+
 const visibleFilters = computed(() => {
   return {
     currentlyInForce: documentKind === DocumentKind.Norm,
@@ -50,6 +55,7 @@ const visibleFilters = computed(() => {
       DocumentKind.Norm,
       DocumentKind.CaseLaw,
       DocumentKind.AdministrativeDirective,
+      DocumentKind.Literature,
     ].includes(documentKind),
     period: true,
   };
@@ -65,8 +71,8 @@ watch(
   },
 );
 
-function setFilterType(type: FilterType) {
-  filter.value = { type };
+function setFilterType(type: string) {
+  filter.value = { type: type as FilterType };
 }
 
 function setSpecificDate(value: string | undefined) {
@@ -83,60 +89,65 @@ function setPeriodTo(value: string | undefined) {
 </script>
 
 <template>
-  <form :aria-labelledby="formId" class="flex flex-col gap-24">
-    <p :id="formId" class="ris-label1-bold">Filter nach {{ filterLabel }}</p>
+  <form :aria-labelledby="formId" class="flex flex-col gap-16" @submit.prevent>
+    <p :id="formId" class="typo-label1-bold">Filter nach {{ filterLabel }}</p>
 
     <div v-if="visibleFilters.currentlyInForce" class="flex items-center">
-      <RadioButton
+      <UiRadioButton
+        :id="currentlyInForceId"
         :model-value="filter.type"
-        :input-id="currentlyInForceId"
         name="filter"
         value="currentlyInForce"
         @update:model-value="setFilterType"
       />
-      <label :for="currentlyInForceId" class="ris-label1-regular">
-        Aktuell gültig
-      </label>
+      <label :for="currentlyInForceId">Aktuell gültig</label>
     </div>
 
     <div v-if="visibleFilters.allTime" class="flex items-center">
-      <RadioButton
+      <UiRadioButton
+        :id="allTimeId"
         :model-value="filter.type"
-        :input-id="allTimeId"
         name="filter"
         value="allTime"
         @update:model-value="setFilterType"
       />
-      <label :for="allTimeId" class="ris-label1-regular">
-        Keine zeitliche Begrenzung
-      </label>
+      <label :for="allTimeId"> Keine zeitliche Begrenzung </label>
     </div>
 
     <template v-if="visibleFilters.specificDate">
       <fieldset>
         <div class="flex items-center">
-          <RadioButton
+          <UiRadioButton
+            :id="specificDateId"
             :model-value="filter.type"
-            :input-id="specificDateId"
             name="filter"
             value="specificDate"
             @update:model-value="setFilterType"
           />
-          <label :for="specificDateId" class="ris-label1-regular">
-            Bestimmtes Datum
-          </label>
+          <label :for="specificDateId"> {{ specificDateLabel }} </label>
         </div>
 
         <div
           v-if="filter.type === 'specificDate'"
           class="flex flex-col pt-8 pl-40"
         >
-          <label :for="specificDateInputId" class="sr-only">Datum</label>
-          <DateInput
-            :id="specificDateInputId"
-            :model-value="filter.from"
-            @update:model-value="setSpecificDate($event)"
-          />
+          <template v-if="documentKind === DocumentKind.Literature">
+            <label :for="specificDateInputId" class="sr-only">Jahr</label>
+            <UiYearInput
+              :id="specificDateInputId"
+              :model-value="filter.from"
+              @update:model-value="setSpecificDate($event)"
+            />
+          </template>
+
+          <template v-else>
+            <label :for="specificDateInputId" class="sr-only">Datum</label>
+            <UiDateInput
+              :id="specificDateInputId"
+              :model-value="filter.from"
+              @update:model-value="setSpecificDate($event)"
+            />
+          </template>
         </div>
       </fieldset>
     </template>
@@ -144,16 +155,14 @@ function setPeriodTo(value: string | undefined) {
     <template v-if="visibleFilters.period">
       <fieldset>
         <div class="flex items-center">
-          <RadioButton
+          <UiRadioButton
+            :id="periodId"
             :model-value="filter.type"
-            :input-id="periodId"
             name="filter"
             value="period"
             @update:model-value="setFilterType"
           />
-          <label :for="periodId" class="ris-label1-regular">
-            Innerhalb einer Zeitspanne
-          </label>
+          <label :for="periodId">Innerhalb eines Zeitraums</label>
         </div>
 
         <template v-if="filter.type === 'period'">
@@ -161,19 +170,17 @@ function setPeriodTo(value: string | undefined) {
             v-if="documentKind === DocumentKind.Literature"
             class="flex flex-col gap-8 pt-8 pl-40"
           >
-            <label :for="periodFromYearInputId" class="ris-label2-regular">
-              von
-            </label>
-            <YearInput
+            <label :for="periodFromYearInputId"> von </label>
+            <UiYearInput
               :id="periodFromYearInputId"
               :model-value="filter.from"
               @update:model-value="setPeriodFrom($event)"
             />
 
-            <label :for="periodToYearInputId" class="ris-label2-regular mt-8">
+            <label :for="periodToYearInputId" class="typo-label2-regular mt-8">
               bis
             </label>
-            <YearInput
+            <UiYearInput
               :id="periodToYearInputId"
               :model-value="filter.to"
               @update:model-value="setPeriodTo($event)"
@@ -181,19 +188,17 @@ function setPeriodTo(value: string | undefined) {
           </div>
 
           <div v-else class="flex flex-col gap-8 pt-8 pl-40">
-            <label :for="periodFromDateInputId" class="ris-label2-regular">
-              von
-            </label>
-            <DateInput
+            <label :for="periodFromDateInputId"> von </label>
+            <UiDateInput
               :id="periodFromDateInputId"
               :model-value="filter.from"
               @update:model-value="setPeriodFrom($event)"
             />
 
-            <label :for="periodToDateInputId" class="ris-label2-regular mt-8">
+            <label :for="periodToDateInputId" class="typo-label2-regular mt-8">
               bis
             </label>
-            <DateInput
+            <UiDateInput
               :id="periodToDateInputId"
               :model-value="filter.to"
               @update:model-value="setPeriodTo($event)"

@@ -6,8 +6,14 @@ import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import lombok.Getter;
 import org.apache.logging.log4j.Logger;
 import software.amazon.awssdk.awscore.exception.AwsServiceException;
 import software.amazon.awssdk.core.exception.SdkClientException;
@@ -25,6 +31,8 @@ public class ObjectStorage {
   public static final int MAXIMUM_CALL_ATTEMPTS = 3;
   private final Logger logger;
   private final ObjectStorageClient client;
+  @Getter // This getter is so that the ChangelogService knows how to strip off the prefix
+  private final String versionPrefix;
 
   /**
    * Constructs an ObjectStorage instance.
@@ -32,14 +40,16 @@ public class ObjectStorage {
    * @param client the object storage client used for operations such as saving, retrieving, and
    *     deleting objects
    * @param logger the logger used for logging activities and errors within the object storage
+   * @param versionPrefix the prefix for the currently active version of the data in the bucket
    */
-  public ObjectStorage(ObjectStorageClient client, Logger logger) {
+  public ObjectStorage(ObjectStorageClient client, Logger logger, String versionPrefix) {
     this.client = client;
     this.logger = logger;
+    this.versionPrefix = versionPrefix;
   }
 
   /**
-   * Retrieves a list of all keys stored in the object storage.
+   * Retrieves a list of all keys stored in the object storage under the current versionPrefix.
    *
    * @return a list of keys as strings, where each key represents an object stored in the object
    *     storage
@@ -55,7 +65,9 @@ public class ObjectStorage {
    * @return a list of matched object keys as strings
    */
   public List<String> getAllKeysByPrefix(String path) {
-    return client.listKeysByPrefix(path);
+    return client.listKeysByPrefix(versionPrefix + path).stream()
+        .map(e -> e.substring(versionPrefix.length()))
+        .toList();
   }
 
   /**
@@ -67,7 +79,7 @@ public class ObjectStorage {
    *     their last modified timestamps
    */
   public List<ObjectKeyInfo> getAllKeyInfosByPrefix(String path) {
-    return client.listByPrefixWithLastModified(path);
+    return client.listByPrefixWithLastModified(versionPrefix + path);
   }
 
   /**
@@ -85,6 +97,43 @@ public class ObjectStorage {
   }
 
   /**
+   * Retrieves a list of objects from the object storage based on the given object keys. Not found
+   * keys will be ignored in the result list without an exception thrown.
+   *
+   * @param keys list of keys identifying the objects in the storage
+   * @return a List of StoreObjects
+   * @throws ObjectStoreServiceException if all retries fail or an unexpected error occurs during
+   *     the operation
+   */
+  public List<StorageObject> getObjects(List<String> keys) {
+
+    List<Future<StorageObject>> tasks = new ArrayList<>(keys.size());
+    List<StorageObject> content = new ArrayList<>(keys.size());
+
+    try (ExecutorService downloadExecutor = Executors.newVirtualThreadPerTaskExecutor()) {
+      for (String key : keys) {
+        tasks.add(downloadExecutor.submit(() -> new StorageObject(key, this.get(key))));
+      }
+      for (Future<StorageObject> task : tasks) {
+        try {
+          content.add(task.get());
+        } catch (ExecutionException e) {
+          if (e.getCause() instanceof ObjectStoreServiceException) {
+            downloadExecutor.shutdownNow();
+            throw new ObjectStoreServiceException(e.getCause().getMessage());
+          }
+          logger.error("an exception occured furing object retrieval", e.getCause());
+        } catch (InterruptedException _) {
+          downloadExecutor.shutdownNow();
+          logger.error("object retrieval thread was interrupted");
+          Thread.currentThread().interrupt();
+        }
+      }
+    }
+    return content;
+  }
+
+  /**
    * Retrieves an object from the object storage based on the given object key. Attempts up to a
    * fixed number of retries if an error occurs during retrieval, and handles scenarios where the
    * object key does not exist.
@@ -96,36 +145,28 @@ public class ObjectStorage {
    *     the operation
    */
   public Optional<byte[]> get(String objectKey) throws ObjectStoreServiceException {
-    for (int i = 0; i < MAXIMUM_CALL_ATTEMPTS; i++) {
-      try {
-        final var response = getStream(objectKey);
-        return Optional.of(response.readAllBytes());
-      } catch (NoSuchKeyException e) {
-        logger.warn(String.format("Object key %s does not exist", objectKey));
-        return Optional.empty();
-      } catch (IOException | AwsServiceException | SdkClientException e) {
-        logger.warn(
-            "Object storage encountered an issue while trying to get object {}."
-                + " Attempt {} will try again.",
-            objectKey,
-            i,
-            e);
-      }
+    try {
+      final var response = getStream(objectKey);
+      return Optional.of(response.readAllBytes());
+    } catch (NoSuchKeyException e) {
+      logger.warn("Object key does not exist: {}", e.getMessage());
+      return Optional.empty();
+    } catch (IOException | AwsServiceException | SdkClientException e) {
+      throw new ObjectStoreServiceException(
+          "Object storage encountered a fatal issue while trying to get object " + objectKey, e);
     }
-    throw new ObjectStoreServiceException(
-        "Object storage encountered an issue. All retries failed.");
   }
 
   public FilterInputStream getStream(String objectKey) throws NoSuchKeyException {
-    return client.getStream(objectKey);
+    return client.getStream(versionPrefix + objectKey);
   }
 
   public void delete(String fileName) {
-    client.delete(fileName);
+    client.delete(versionPrefix + fileName);
   }
 
   public void save(String fileName, String fileContent) {
-    client.save(fileName, fileContent);
+    client.save(versionPrefix + fileName, fileContent);
   }
 
   public void close() {
@@ -133,6 +174,6 @@ public class ObjectStorage {
   }
 
   public long putStream(String objectKey, InputStream inputStream) throws IOException {
-    return client.putStream(objectKey, inputStream);
+    return client.putStream(versionPrefix + objectKey, inputStream);
   }
 }

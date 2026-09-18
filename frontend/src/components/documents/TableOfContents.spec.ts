@@ -2,6 +2,7 @@ import { renderSuspended } from "@nuxt/test-utils/runtime";
 import { userEvent } from "@testing-library/user-event";
 import { screen, within } from "@testing-library/vue";
 import { beforeEach, describe, expect, it } from "vitest";
+import type { RouteLocationRaw } from "vue-router";
 import type { LegislationExpressionPartSchema } from "~/types/api";
 import { tocItemsToTreeViewItems } from "~/utils/tableOfContents";
 import TableOfContents from "./TableOfContents.vue";
@@ -70,7 +71,7 @@ const createItems = (items = mockTocItems) =>
   tocItemsToTreeViewItems(
     items,
     (id) => ({ path: "/", hash: `#${id}` }),
-    (id) => ({ path: "/about", hash: `#${id}` }),
+    (id) => ({ path: "/ueber", hash: `#${id}` }),
   );
 
 async function renderComponent(props?: {
@@ -78,12 +79,16 @@ async function renderComponent(props?: {
   items?: ReturnType<typeof createItems>;
   selectionEnabled?: boolean;
   subheading?: string;
+  subheadingTo?: RouteLocationRaw;
+  subheadingAddition?: string;
 }) {
   return renderSuspended(TableOfContents, {
     props: {
       tableOfContents: props?.items ?? createItems(),
       selectedKey: props?.selectedKey,
       subheading: props?.subheading,
+      subheadingTo: props?.subheadingTo,
+      subheadingAddition: props?.subheadingAddition,
     },
   });
 }
@@ -112,7 +117,26 @@ describe("TableOfContents", () => {
   it("renders the navigation subtitle", async () => {
     await renderComponent({ subheading: "Norm abbreviation" });
 
-    expect(screen.getAllByText("Norm abbreviation").length).toBeGreaterThan(0);
+    // Exactly one on desktop and one on mobile
+    expect(screen.getAllByText("Norm abbreviation")).toHaveLength(2);
+  });
+
+  it("renders the subtitle addition", async () => {
+    await renderComponent({
+      subheading: "subheading",
+      subheadingAddition: "title addition",
+    });
+
+    expect(screen.getByText("subheading title addition")).toBeVisible();
+  });
+
+  it("does not render the subtitle addition if no subheading is given", async () => {
+    await renderComponent({
+      subheading: undefined,
+      subheadingAddition: "title addition",
+    });
+
+    expect(screen.queryByText(/title addition/)).not.toBeInTheDocument();
   });
 
   it("does not expand any nodes by default", async () => {
@@ -170,6 +194,36 @@ describe("TableOfContents", () => {
 
     const dialog = screen.getByRole("dialog", { name: "Inhalte" });
     expect(dialog).toBeVisible();
+  });
+
+  it("does not render a link to the expression inside the mobile drawer when subheadingTo is missing", async () => {
+    const user = userEvent.setup();
+    await renderComponent({ subheading: "Test Norm" });
+
+    await user.click(screen.getByRole("button", { name: "Inhalte Test Norm" }));
+
+    const dialog = screen.getByRole("dialog", { name: "Inhalte" });
+    expect(
+      within(dialog).queryByRole("link", { name: /Zur Gesamtausgabe/ }),
+    ).not.toBeInTheDocument();
+  });
+
+  it("renders a link to the expression inside the mobile drawer", async () => {
+    const user = userEvent.setup();
+    const expressionRouteLocation = "/expressionLink";
+    await renderComponent({
+      subheading: "Test Norm",
+      subheadingTo: expressionRouteLocation,
+    });
+
+    await user.click(screen.getByRole("button", { name: "Inhalte Test Norm" }));
+
+    const dialog = screen.getByRole("dialog", { name: "Inhalte" });
+    const expressionLink = within(dialog).getByRole("link", {
+      name: /Zur Gesamtausgabe/,
+    });
+    expect(expressionLink).toBeVisible();
+    expect(expressionLink).toHaveAttribute("href", expressionRouteLocation);
   });
 
   it("renders a TOC tree inside the mobile drawer", async () => {

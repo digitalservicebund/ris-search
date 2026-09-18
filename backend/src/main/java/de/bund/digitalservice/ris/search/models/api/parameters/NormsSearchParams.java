@@ -64,6 +64,12 @@ public class NormsSearchParams {
   @Schema(description = MOST_RELEVANT_ON_DESCRIPTION)
   LocalDate mostRelevantOn;
 
+  @Schema(description = "Filters the result set by the given abbreviation.")
+  String abbreviation;
+
+  @Schema(description = "Filters the result set by the given ris-abbreviation.")
+  String risAbbreviation;
+
   /**
    * Validates the temporal coverage range for the search parameters.
    *

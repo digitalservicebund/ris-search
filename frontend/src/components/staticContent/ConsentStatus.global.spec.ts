@@ -1,5 +1,6 @@
 import { renderSuspended } from "@nuxt/test-utils/runtime";
-import { fireEvent, screen } from "@testing-library/vue";
+import { userEvent } from "@testing-library/user-event";
+import { screen } from "@testing-library/vue";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import ConsentStatus from "./ConsentStatus.global.vue";
 
@@ -40,18 +41,18 @@ describe("ConsentStatus", () => {
 
   it("renders without error", async () => {
     await factory(undefined);
-    expect(screen.queryByTestId("consent-status-wrapper")).toBeInTheDocument();
+    expect(screen.getByTestId("consent-status-wrapper")).toBeInTheDocument();
   });
 
   it("shows accept button when consent is not given", async () => {
     await factory(false);
-    expect(screen.queryByTestId(acceptButtonTestId)).toBeInTheDocument();
+    expect(screen.getByTestId(acceptButtonTestId)).toBeInTheDocument();
     expect(screen.queryByTestId(declineButtonTestId)).not.toBeInTheDocument();
   });
 
   it("shows decline button when consent is given", async () => {
     await factory(true);
-    expect(screen.queryByTestId(declineButtonTestId)).toBeInTheDocument();
+    expect(screen.getByTestId(declineButtonTestId)).toBeInTheDocument();
     expect(screen.queryByTestId(acceptButtonTestId)).not.toBeInTheDocument();
   });
 
@@ -70,18 +71,16 @@ describe("ConsentStatus", () => {
   });
 
   it("calls setTracking(true) when clicking accept button", async () => {
+    const user = userEvent.setup();
     await factory(false);
-    await fireEvent.submit(
-      screen.getByTestId(acceptButtonTestId).closest("form")!,
-    );
+    await user.click(screen.getByTestId(acceptButtonTestId));
     expect(mockSetTracking).toHaveBeenCalledWith(true);
   });
 
   it("calls setTracking(false) when clicking decline button", async () => {
+    const user = userEvent.setup();
     await factory(true);
-    await fireEvent.submit(
-      screen.getByTestId(declineButtonTestId).closest("form")!,
-    );
+    await user.click(screen.getByTestId(declineButtonTestId));
     expect(mockSetTracking).toHaveBeenCalledWith(false);
   });
 });
