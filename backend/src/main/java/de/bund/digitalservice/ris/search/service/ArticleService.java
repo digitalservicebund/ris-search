@@ -26,7 +26,9 @@ import org.opensearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.opensearch.search.sort.SortBuilders;
 import org.opensearch.search.sort.SortOrder;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.SearchHitsImpl;
@@ -161,16 +163,25 @@ public class ArticleService {
    *
    * @param expressionEli expressionEli of the norm
    * @param eidGiven the possible eid
+   * @param pageable the pagination parameters defining page size and index
    * @return List of version of that article across the whole work
    */
-  public Page<Article> getAllArticleVersions(ExpressionEli expressionEli, String eidGiven) {
+  public Page<Article> getAllArticleVersions(
+      ExpressionEli expressionEli, String eidGiven, Pageable pageable) {
     String expressionEliString = expressionEli.toString();
+
+    Pageable sortedPageable =
+        PageRequest.of(
+            pageable.getPageNumber(),
+            pageable.getPageSize(),
+            Sort.by(Sort.Direction.DESC, "entryIntoForceDate"));
+
     return getActualEid(expressionEliString, eidGiven)
         .flatMap(
             actualEid ->
                 articlesRepository.findById(Article.buildId(expressionEliString, actualEid)))
         .map(Article::getDocumentNumber)
-        .map(this::getAllArticleVersionsByDocumentNumberPrefix)
+        .map(docNr -> this.getAllArticleVersionsByDocumentNumberPrefix(docNr, sortedPageable))
         .orElseGet(Page::empty);
   }
 
@@ -182,7 +193,8 @@ public class ArticleService {
    * @param documentNumber of a given article
    * @return List of Article objects of the same article across all its expressions
    */
-  private Page<Article> getAllArticleVersionsByDocumentNumberPrefix(String documentNumber) {
+  private Page<Article> getAllArticleVersionsByDocumentNumberPrefix(
+      String documentNumber, Pageable page) {
     if (documentNumber.length() < DOC_NUMBER_PREFIX_LENGTH) {
       Page.empty();
     }
@@ -190,7 +202,7 @@ public class ArticleService {
     String documentNumberPrefix = documentNumber.substring(0, DOC_NUMBER_PREFIX_LENGTH);
 
     return articlesRepository.findAllByDocumentNumberStartingWithAndDocumentType(
-        documentNumberPrefix, LegislationPartType.ARTICLE, Pageable.unpaged());
+        documentNumberPrefix, LegislationPartType.ARTICLE, page);
   }
 
   private boolean articleExist(String expressionEli, String eid) {

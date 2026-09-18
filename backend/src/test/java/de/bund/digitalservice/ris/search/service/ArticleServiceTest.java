@@ -51,7 +51,7 @@ class ArticleServiceTest {
                     .documentNumber("DKNR0E80B0026DKNE000100010")
                     .documentType(LegislationPartType.ARTICLE)
                     .build()));
-    service.getAllArticleVersions(eli, eId);
+    service.getAllArticleVersions(eli, eId, Pageable.unpaged());
 
     verify(articlesRepository, times(1))
         .findAllByDocumentNumberStartingWithAndDocumentType(
