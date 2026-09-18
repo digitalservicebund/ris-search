@@ -4277,6 +4277,7 @@
           },
           "documentNumber" : {
             "type" : "string",
+            "description" : "Dokumentnummer<br>",
             "example" : "KARE000000000"
           },
           "ecli" : {
@@ -4331,28 +4332,31 @@
           "decisionDate" : {
             "type" : "string",
             "format" : "date",
-            "description" : "Entscheidungsdatum"
+            "description" : "Datum der Entscheidung, hier kann es zu Dopplungen mit anderen Entscheidungen kommen, auch in Kombination mit Aktenzeichen und Gericht.<br>"
           },
           "fileNumbers" : {
             "type" : "array",
-            "description" : "Aktenzeichen",
+            "description" : "Aktenzeichen des Dokuments<br><br>Der erste Eintrag ist das primäre Aktenzeichen.<br>Weitere Einträge sind abweichende Aktenzeichen, die auch für dieses<br>Dokument verwendet werden.<br>",
             "example" : "BGH 123/23",
             "items" : {
-              "type" : "string"
+              "type" : "string",
+              "description" : "Aktenzeichen des Dokuments<br><br>Der erste Eintrag ist das primäre Aktenzeichen.<br>Weitere Einträge sind abweichende Aktenzeichen, die auch für dieses<br>Dokument verwendet werden.<br>",
+              "example" : "BGH 123/23"
             }
           },
           "courtType" : {
             "type" : "string",
-            "description" : "Gerichtstyp",
+            "description" : "Inhalt ist die Angabe des Typs des Gerichtes, das das Dokument verfasst hat.<br>",
             "example" : "FG"
           },
           "location" : {
             "type" : "string",
-            "description" : "Gerichtssitz",
+            "description" : "Ort des Gerichtssitzes.<br>",
             "example" : "Berlin"
           },
           "documentType" : {
             "type" : "string",
+            "description" : "Innerhalb der Dokumentart „Rechtsprechung“ werden folgende Dokumenttypen unterschieden:<br><br><ul><li>Äuß: Äußerung</li><li>Ant: EuGH-Vorlage</li><li>AnU: Anerkenntnisurteil</li><li>Bes: Beschluss</li><li>Buß: Bußgeldbescheid</li><li>DrB: Dreierausschussbeschluss</li><li>EiA: Einstweilige Anordnung</li><li>Ent: Entscheidung</li><li>EVg: Einstellungsverfügung der Staatsanwaltschaft</li><li>GeB: Gerichtsbescheid</li><li>Gut: Gutachten</li><li>GWF: Gegenstandswertfestsetzung im verfassungsgerichtlichen Verfahren</li><li>KaB: Kammerbeschluss</li><li>KbN: Nichtannahmebeschluss</li><li>KbS: Stattgebender Kammerbeschluss</li><li>KoB: Kammerbeschluss ohne Begründung</li><li>PkH: Prozesskostenhilfebeschluss</li><li>ReM: Rechtsentscheid in Mietsachen</li><li>Sch: Schiedsgerichtsentscheidung</li><li>Ste: Stellungnahme</li><li>Str: Streitwertbeschluss</li><li>TeB: Teilbeschluss</li><li>TeU: Teilurteil</li><li>Urt: Urteil</li><li>Vgl: Vergleich</li><li>Vor: Vorlagebeschluss</li><li>VsU: Versäumnisurteil</li><li>VzU: Verzichtsurteil</li><li>ZwB: Zwischenbeschluss</li><li>ZwU: Zwischenurteil</li><li>TVU: Teilversäumnisurteil</li><li>Vfg: Verfügung</li><li>Vorab: Ersuchen um Vorabentscheidung</li><li>Anh: Anhängiges Verfahren</li><li>End: Endurteil</li><li>KfB: Kostenfestsetzungsbeschluss</li>",
             "example" : "Urteil"
           },
           "outline" : {
@@ -4361,19 +4365,22 @@
           },
           "judicialBody" : {
             "type" : "string",
-            "description" : "Spruchkörper",
-            "example" : "Gericht"
+            "description" : "Inhalt ist die Angabe des Spruchkörpers, von dem das Dokument stammt (z.B. 1. Zivilsenat, 3. Strafkammer, Großer Senat).<br>",
+            "example" : "1. Senat"
           },
           "keywords" : {
             "type" : "array",
             "description" : "Schlagworte",
-            "example" : "3. Kammer",
+            "example" : "Kündigung",
             "items" : {
-              "type" : "string"
+              "type" : "string",
+              "description" : "Schlagworte",
+              "example" : "Kündigung"
             }
           },
           "courtName" : {
             "type" : "string",
+            "description" : "Gericht<br>",
             "example" : "LArbG Hamm"
           },
           "decisionName" : {
@@ -4386,10 +4393,12 @@
           },
           "deviatingDocumentNumber" : {
             "type" : "array",
-            "description" : "Abweichende Dokumentnummer",
+            "description" : "Abweichende Dokumentnummer<br>",
             "example" : "DEV-123",
             "items" : {
-              "type" : "string"
+              "type" : "string",
+              "description" : "Abweichende Dokumentnummer<br>",
+              "example" : "DEV-123"
             }
           },
           "previousDecisions" : {
