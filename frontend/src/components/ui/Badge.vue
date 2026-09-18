@@ -35,7 +35,7 @@ const standard = tw`typo-label2-bold flex-none`;
 const extraSmall = tw`ris-label3-regular sm:ris-label2-regular 2xl:ris-label1-regular`;
 
 // for badges in the norm version list (fassungen tab)
-const small = tw`ris-label2-regular sm:ris-label1-regular`;
+const small = tw`typo-label1-compact-regular`;
 
 // for badges in the search result header
 const medium = tw`typo-label2-regular`;

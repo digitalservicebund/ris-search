@@ -95,7 +95,7 @@ const drawerId = useId();
       <NuxtLink
         v-if="subheadingTo"
         :to="subheadingTo"
-        class="ris-label1-regular text-[1rem] text-blue-800 sm:text-[1.125rem]"
+        class="typo-label1-compact-regular text-blue-800"
       >
         <div
           class="-mx-16 -mt-8 flex items-center justify-between border-b border-b-gray-400 p-16"
@@ -115,7 +115,8 @@ const drawerId = useId();
       />
     </div>
   </Drawer>
-  <!-- Desktop  -->
+
+  <!-- desktop -->
   <TreeView
     :items="tableOfContents"
     :selected="selectedKey"
