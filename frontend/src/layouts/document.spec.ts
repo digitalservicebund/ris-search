@@ -133,25 +133,7 @@ describe("document", () => {
     expect(screen.getByText("Text Content")).toBeVisible();
   });
 
-  it("renders details slot for empty documents", async () => {
-    await renderSuspended(DocumentLayout, {
-      props: {
-        title: "Title",
-        titlePlaceholder: "Title Placeholder",
-        isEmptyDocument: true,
-        views: defaultViews,
-      },
-      slots: {
-        details: () => "Empty Document Details",
-      },
-    });
-
-    expect(screen.getByText("Empty Document Details")).toBeVisible();
-    // Tabs should not be rendered for empty documents
-    expect(screen.queryByRole("tablist")).not.toBeInTheDocument();
-  });
-
-  it("renders tabs for non-empty documents", async () => {
+  it("renders tabs", async () => {
     await renderSuspended(DocumentLayout, {
       props: {
         title: "Title",

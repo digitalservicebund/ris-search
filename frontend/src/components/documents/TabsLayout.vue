@@ -16,10 +16,13 @@ const route = useRoute();
 const singleTab = computed(() => views.length === 1);
 
 const currentView = computed(() => {
-  if (singleTab.value) {
-    return views[0].path;
+  const allowedPaths = views.map((view) => view.path);
+  const queryPath = route.query.view?.toString();
+
+  if (queryPath && allowedPaths.includes(queryPath)) {
+    return queryPath;
   } else {
-    return route.query.view?.toString() ?? views[0].path;
+    return views[0].path;
   }
 });
 </script>

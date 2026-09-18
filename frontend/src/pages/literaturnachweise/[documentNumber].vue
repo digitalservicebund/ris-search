@@ -42,14 +42,21 @@ useLiteratureSeo({
 
 // Page contents ------------------------------------------
 
-const views: TabView[] = [
-  { path: "text", label: "Text" },
-  {
+const views = computed<TabView[]>(() => {
+  const tabViews: TabView[] = [];
+
+  if (!isEmptyDocument.value) {
+    tabViews.push({ path: "text", label: "Text" });
+  }
+
+  tabViews.push({
     path: "details",
     label: "Details",
     analyticsId: "literature-metadata-tab",
-  },
-];
+  });
+
+  return tabViews;
+});
 
 const textSectionId = useId();
 const detailsSectionId = useId();
@@ -85,14 +92,7 @@ const detailItems = computed(() => getLiteratureDetailItems(literature.value));
 </script>
 
 <template>
-  <NuxtLayout
-    name="document"
-    :breadcrumbs
-    :is-empty-document="isEmptyDocument"
-    :metadata
-    :title
-    :views
-  >
+  <NuxtLayout name="document" :breadcrumbs :metadata :title :views>
     <template #actionMenu>
       <DocumentsActionMenuLiteratureActionMenu
         :literature="literature"
