@@ -26,9 +26,11 @@ import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
 import de.bund.digitalservice.ris.search.schema.TextMatchSchema;
 import de.bund.digitalservice.ris.search.service.AdministrativeDirectiveService;
 import de.bund.digitalservice.ris.search.service.AllDocumentsService;
+import de.bund.digitalservice.ris.search.service.BulkExportService;
 import de.bund.digitalservice.ris.search.service.CaseLawService;
 import de.bund.digitalservice.ris.search.service.LiteratureService;
 import de.bund.digitalservice.ris.search.service.NormsService;
+import de.bund.digitalservice.ris.search.service.PostHogService;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +48,7 @@ import org.springframework.data.elasticsearch.core.SearchPage;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.testcontainers.utility.TestcontainersConfiguration;
 
@@ -58,19 +61,15 @@ import org.testcontainers.utility.TestcontainersConfiguration;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class ContainersIntegrationBase {
 
+  // Autowire Persistence layer
   @Autowired protected AdministrativeDirectiveRepository administrativeDirectiveRepository;
-  @Autowired protected CaseLawRepository caseLawRepository;
+  @MockitoSpyBean protected CaseLawRepository caseLawRepository;
   @Autowired protected LiteratureRepository literatureRepository;
   @Autowired protected NormsRepository normsRepository;
   @Autowired protected ArticlesRepository articlesRepository;
   @Autowired protected CaseLawBucket caseLawBucket;
   @Autowired protected NormsBucket normsBucket;
   @Autowired protected PublicFilesBucket publicFilesBucket;
-  @Autowired protected AllDocumentsService allDocumentsService;
-  @Autowired protected CaseLawService caseLawService;
-  @Autowired protected NormsService normsService;
-  @Autowired protected LiteratureService literatureService;
-  @Autowired protected AdministrativeDirectiveService administrativeDirectiveService;
 
   @Autowired
   @Qualifier("caseLawS3Client")
@@ -92,6 +91,20 @@ public class ContainersIntegrationBase {
   @Qualifier("portalS3Client")
   private S3ObjectStorageClient portalS3Client;
 
+  // Autowire Service layer
+  @Autowired protected AllDocumentsService allDocumentsService;
+  @Autowired protected CaseLawService caseLawService;
+  @Autowired protected NormsService normsService;
+  @Autowired protected LiteratureService literatureService;
+  @Autowired protected AdministrativeDirectiveService administrativeDirectiveService;
+
+  @Qualifier("normsBulkExportService")
+  @MockitoSpyBean
+  protected BulkExportService normsBulkExportService;
+
+  @MockitoSpyBean protected PostHogService postHogService;
+
+  // Setup Testcontainers
   public static final CustomOpensearchContainer openSearchContainer =
       new CustomOpensearchContainer();
 
@@ -106,6 +119,8 @@ public class ContainersIntegrationBase {
   static void registerDynamicProperties(DynamicPropertyRegistry registry) {
     registry.add("opensearch.port", openSearchContainer::getFirstMappedPort);
   }
+
+  // Shared cleanup
 
   @AfterAll
   protected void cleanup() {
@@ -165,6 +180,8 @@ public class ContainersIntegrationBase {
     articlesRepository.deleteAll();
     administrativeDirectiveRepository.deleteAll();
   }
+
+  // Shared helper methods
 
   /**
    * Adds the given norm XML files to the norms bucket.

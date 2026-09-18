@@ -10,7 +10,6 @@ import de.bund.digitalservice.ris.search.controller.api.testData.CaseLawTestData
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
-import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
@@ -21,14 +20,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class IndexCaselawServiceIntegrationTest extends ContainersIntegrationBase {
 
   @Autowired IndexCaselawService service;
   @Autowired CaseLawBucket caseLawBucket;
-  @MockitoSpyBean CaseLawRepository repo;
 
   @BeforeEach
   void setUpSearchControllerApiTest() {
@@ -45,9 +42,9 @@ class IndexCaselawServiceIntegrationTest extends ContainersIntegrationBase {
     String startingTimestamp = SharedTestConstants.TIMESTAMP_2024_01_01_AS_STRING;
     this.service.reindexAll(startingTimestamp);
 
-    assertThat(repo.count()).isEqualTo(1);
-    assertThat(repo.findByDocumentNumberKeyword("TEST080020093")).hasSize(1);
-    verify(repo, times(1)).deleteByIndexedAtBefore(startingTimestamp);
+    assertThat(caseLawRepository.count()).isEqualTo(1);
+    assertThat(caseLawRepository.findByDocumentNumberKeyword("TEST080020093")).hasSize(1);
+    verify(caseLawRepository, times(1)).deleteByIndexedAtBefore(startingTimestamp);
   }
 
   @Test
@@ -59,8 +56,8 @@ class IndexCaselawServiceIntegrationTest extends ContainersIntegrationBase {
     Changelog changelog = new Changelog();
     changelog.setChanged(Sets.newHashSet(List.of("TEST080020093.xml")));
     service.indexChangelog(changelog);
-    assertThat(repo.count()).isEqualTo(1);
-    assertThat(repo.findByDocumentNumberKeyword("TEST080020093")).hasSize(1);
+    assertThat(caseLawRepository.count()).isEqualTo(1);
+    assertThat(caseLawRepository.findByDocumentNumberKeyword("TEST080020093")).hasSize(1);
   }
 
   @Test
@@ -72,8 +69,8 @@ class IndexCaselawServiceIntegrationTest extends ContainersIntegrationBase {
     Changelog changelog = new Changelog();
     changelog.setChangeAll(true);
     service.indexChangelog(changelog);
-    assertThat(repo.count()).isEqualTo(1);
-    assertThat(repo.findByDocumentNumberKeyword("TEST080020093")).hasSize(1);
+    assertThat(caseLawRepository.count()).isEqualTo(1);
+    assertThat(caseLawRepository.findByDocumentNumberKeyword("TEST080020093")).hasSize(1);
   }
 
   @Test
@@ -88,8 +85,8 @@ class IndexCaselawServiceIntegrationTest extends ContainersIntegrationBase {
         new HashSet<>(Set.of("TEST080020093/TEST080020093.xml", "TEST080020093/picture.png")));
     service.indexChangelog(changelog);
 
-    assertThat(repo.count()).isEqualTo(1);
-    assertThat(repo.findByDocumentNumberKeyword("TEST080020093")).hasSize(1);
+    assertThat(caseLawRepository.count()).isEqualTo(1);
+    assertThat(caseLawRepository.findByDocumentNumberKeyword("TEST080020093")).hasSize(1);
   }
 
   @Test
@@ -99,7 +96,7 @@ class IndexCaselawServiceIntegrationTest extends ContainersIntegrationBase {
         new HashSet<>(Set.of("TEST080020093.xml", "TEST080020094/TEST080020094.xml")));
     service.indexChangelog(changelog);
 
-    verify(repo, times(1)).deleteAllById(Set.of("TEST080020093", "TEST080020094"));
+    verify(caseLawRepository, times(1)).deleteAllById(Set.of("TEST080020093", "TEST080020094"));
   }
 
   @Test
