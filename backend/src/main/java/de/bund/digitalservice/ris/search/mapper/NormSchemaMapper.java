@@ -2,6 +2,7 @@ package de.bund.digitalservice.ris.search.mapper;
 
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
+import de.bund.digitalservice.ris.search.models.opensearch.LegislationPartType;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.models.opensearch.TableOfContentsItem;
 import de.bund.digitalservice.ris.search.schema.LegalForceStatus;
@@ -170,7 +171,9 @@ public class NormSchemaMapper {
       Article article, String idPrefix, String marker, String heading) {
     List<LegislationObjectSchema> encoding;
     // Only attachments have their own manifestationELi and receive an encoding object.
-    if (article.getManifestationEli() != null) {
+    // Einzelnormen will reference the latest manifestation they are a part of
+    if (article.getDocumentType().equals(LegislationPartType.ATTACHMENT)
+        && article.getManifestationEli() != null) {
       final LegislationObjectSchema encodingItem =
           EncodingSchemaFactory.legislationEncodingSchema(
               EncodingSchemaFactory.SchemaType.XML,
