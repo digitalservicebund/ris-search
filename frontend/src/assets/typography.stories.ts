@@ -135,6 +135,14 @@ export const ResponsiveLink: StoryObj<typeof meta> = {
   }),
 };
 
+export const ResponsiveLink2: StoryObj<typeof meta> = {
+  render: () => ({
+    setup() {},
+    template: html`<div><a href="#" class="typo-link2-regular">Link 2</a></div>
+      <div><a href="#" class="typo-link2-bold">Link 2</a></div>`,
+  }),
+};
+
 export const ResponsiveHeadline1: StoryObj<typeof meta> = {
   render: () => ({
     setup() {},
@@ -167,6 +175,16 @@ export const ResponsiveLabel1: StoryObj<typeof meta> = {
   }),
 };
 
+export const ResponsiveLabel1Compact: StoryObj<typeof meta> = {
+  render: () => ({
+    setup() {},
+    template: html`<div class="typo-label1-compact-regular">
+        Label 1 compact
+      </div>
+      <div class="typo-label1-compact-bold">Label 1 compact</div>`,
+  }),
+};
+
 export const ResponsiveLabel2: StoryObj<typeof meta> = {
   render: () => ({
     setup() {},
@@ -191,5 +209,27 @@ export const ResponsiveHeadlineSearchresult: StoryObj<typeof meta> = {
       <a href="#" class="typo-headline-searchresult"
         >Headline search result</a
       >`,
+  }),
+};
+
+export const ResponsiveHeadlineSearchresultCompact: StoryObj<typeof meta> = {
+  render: () => ({
+    setup() {},
+    template: html`<div class="typo-headline-searchresult-compact">
+        Headline search result compact
+      </div>
+      <a href="#" class="typo-headline-searchresult-compact"
+        >Headline search result compact</a
+      >`,
+  }),
+};
+
+export const ResponsiveLandingpageLead: StoryObj<typeof meta> = {
+  render: () => ({
+    setup() {},
+    template: html`<div class="typo-landingpage-lead-regular">
+        Landing page lead
+      </div>
+      <div class="typo-landingpage-lead-bold">Landing page lead</div>`,
   }),
 };
