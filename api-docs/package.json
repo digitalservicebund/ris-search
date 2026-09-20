@@ -12,8 +12,8 @@
   },
   "devDependencies": {
     "@digitalservicebund/ris-ui": "4.7.0",
-    "oxfmt": "0.67.0",
-    "oxlint": "1.82.0",
+    "oxfmt": "0.68.0",
+    "oxlint": "1.83.0",
     "vitepress": "1.6.4",
     "vue": "3.5.42",
     "vue-tsc": "3.3.11"
