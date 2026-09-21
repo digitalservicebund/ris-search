@@ -183,16 +183,12 @@ public class NormLdmlToOpenSearchMapper {
 
     Map<String, String> eIdToDocnrMap = getEidToDoknrMap(xmlDocument);
 
+    ArticleParsingContext articleParsingContextcontext =
+        new ArticleParsingContext(
+            abbreviation, workEli, expressionEli, indexedAt, eIdToDocnrMap, manifestationEli);
+
     List<Article> articles =
-        getArticlesByXmlDocument(
-            xmlDocument,
-            attachments,
-            abbreviation,
-            workEli,
-            expressionEli,
-            indexedAt,
-            eIdToDocnrMap,
-            manifestationEli);
+        getArticlesByXmlDocument(xmlDocument, attachments, articleParsingContextcontext);
     List<String> articleNames = articles.stream().map(Article::getName).toList();
     List<String> articleTexts = articles.stream().map(Article::getText).toList();
     List<String> articleFingerprints =
@@ -416,15 +412,16 @@ public class NormLdmlToOpenSearchMapper {
     return Optional.empty();
   }
 
-  private static List<Article> getArticlesByXmlDocument(
-      XmlDocument xmlDocument,
-      List<Attachment> attachments,
-      String abbreviation,
+  record ArticleParsingContext(
+      String normAbbreviation,
       String workEli,
       String expressionEli,
       String indexedAt,
       Map<String, String> eIdToDoknrMap,
-      String latestManifestationEli)
+      String latestManifestationEli) {}
+
+  private static List<Article> getArticlesByXmlDocument(
+      XmlDocument xmlDocument, List<Attachment> attachments, ArticleParsingContext context)
       throws ValidationException {
 
     NodeList nodes = null;
@@ -447,25 +444,10 @@ public class NormLdmlToOpenSearchMapper {
     if (preambleFormulaNode.isPresent()) {
       articles.add(
           getNodeAsArticle(
-              preambleFormulaNode.get(),
-              EINGANGSFORMEL,
-              indexedAt,
-              workEli,
-              expressionEli,
-              abbreviation,
-              LegislationPartType.PREAMBLE,
-              latestManifestationEli));
+              preambleFormulaNode.get(), EINGANGSFORMEL, LegislationPartType.PREAMBLE, context));
     }
     for (int i = 0; i < nodes.getLength(); i++) {
-      getArticleNodeAsArticle(
-              nodes.item(i),
-              temporalGroupsWithDates,
-              abbreviation,
-              workEli,
-              expressionEli,
-              indexedAt,
-              eIdToDoknrMap,
-              latestManifestationEli)
+      getArticleNodeAsArticle(nodes.item(i), temporalGroupsWithDates, context)
           .ifPresent(articles::add);
     }
 
@@ -476,12 +458,8 @@ public class NormLdmlToOpenSearchMapper {
           getNodeAsArticle(
               conclusionsFormulaNode.get(),
               SCHLUSSFORMEL,
-              indexedAt,
-              workEli,
-              expressionEli,
-              abbreviation,
               LegislationPartType.CONCLUSION,
-              latestManifestationEli));
+              context));
     }
 
     var attachmentsAsArticles =
@@ -493,14 +471,14 @@ public class NormLdmlToOpenSearchMapper {
                           .filter(StringUtils::isNotBlank)
                           .collect(Collectors.joining(" "));
                   return Article.builder()
-                      .id(Article.buildId(expressionEli, a.eId()))
+                      .id(Article.buildId(context.expressionEli, a.eId()))
                       .eId(a.eId())
-                      .expressionEli(expressionEli)
-                      .workEli(workEli)
+                      .expressionEli(context.expressionEli)
+                      .workEli(context.workEli)
                       .text(a.textContent())
                       .name(name)
-                      .articleFingerprint(getArticleFingerprint(name, abbreviation))
-                      .indexedAt(indexedAt)
+                      .articleFingerprint(getArticleFingerprint(name, context.normAbbreviation))
+                      .indexedAt(context.indexedAt)
                       .manifestationEli(a.manifestationEli())
                       .documentType(LegislationPartType.ATTACHMENT)
                       .build();
@@ -530,12 +508,7 @@ public class NormLdmlToOpenSearchMapper {
   private static Optional<Article> getArticleNodeAsArticle(
       Node articleNode,
       Map<String, TimeInterval> temporalGroupsWithDates,
-      String abbreviation,
-      String workEli,
-      String expressionEli,
-      String indexedAt,
-      Map<String, String> eIdToDokNrMap,
-      String manifestionEli) {
+      ArticleParsingContext context) {
     try {
       var articleXml = new XmlDocument(articleNode);
       String articleNumber = cleanText(articleXml.getSimpleElementByXpath(X_PATH_ARTICLE_NUM));
@@ -544,9 +517,9 @@ public class NormLdmlToOpenSearchMapper {
           headingNode.map(node -> cleanText(XmlDocument.extractDirectChildText(node))).orElse("");
       String period = articleNode.getAttributes().getNamedItem("period").getTextContent();
       String eId = articleNode.getAttributes().getNamedItem("eId").getTextContent();
-      String id = Article.buildId(expressionEli, eId);
+      String id = Article.buildId(context.expressionEli, eId);
       String guid = articleNode.getAttributes().getNamedItem("GUID").getTextContent();
-      String documentNumber = eIdToDokNrMap.get(eId);
+      String documentNumber = context.eIdToDoknrMap.get(eId);
       NodeList paragraphNodes = articleXml.getNodesByXpath(X_PATH_ARTICLE_PARAGRAPHS);
       String text = "";
       for (int j = 0; j < paragraphNodes.getLength(); j++) {
@@ -565,24 +538,24 @@ public class NormLdmlToOpenSearchMapper {
       }
 
       final @Nullable String articleFingerprint =
-          getArticleFingerprint(articleNumber, abbreviation);
+          getArticleFingerprint(articleNumber, context.normAbbreviation);
 
       return Optional.of(
           Article.builder()
               .id(id)
               .eId(eId)
               .documentNumber(documentNumber)
-              .workEli(workEli)
-              .expressionEli(expressionEli)
+              .workEli(context.workEli)
+              .expressionEli(context.expressionEli)
               .guid(guid)
               .name(buildArticleHeader(articleNumber, heading))
               .text(cleanText(text))
               .entryIntoForceDate(entryIntoForceDate)
               .expiryDate(expiryDate)
               .articleFingerprint(articleFingerprint)
-              .indexedAt(indexedAt)
+              .indexedAt(context.indexedAt)
               .documentType(LegislationPartType.ARTICLE)
-              .manifestationEli(manifestionEli)
+              .manifestationEli(context.latestManifestationEli)
               .build());
     } catch (XPathExpressionException | ParserConfigurationException e) {
       logger.warn("Error parsing xml", e);
@@ -591,32 +564,26 @@ public class NormLdmlToOpenSearchMapper {
   }
 
   private static Article getNodeAsArticle(
-      Node node,
-      String name,
-      String indexedAt,
-      String workEli,
-      String expressionEli,
-      String abbreviation,
-      LegislationPartType type,
-      String latestManifestationEli)
+      Node node, String name, LegislationPartType type, ArticleParsingContext context)
       throws ValidationException {
     Node eIdAttribute = node.getAttributes().getNamedItem("eId");
     if (Objects.isNull(eIdAttribute)) {
       throw new ValidationException(
           String.format(
-              "missing eId in node with name %s and expressionEli %s", name, expressionEli));
+              "missing eId in node with name %s and expressionEli %s",
+              name, context.expressionEli));
     }
 
     return Article.builder()
-        .id(Article.buildId(expressionEli, eIdAttribute.getTextContent()))
+        .id(Article.buildId(context.expressionEli, eIdAttribute.getTextContent()))
         .eId(eIdAttribute.getTextContent())
-        .workEli(workEli)
-        .expressionEli(expressionEli)
-        .manifestationEli(latestManifestationEli)
+        .workEli(context.workEli)
+        .expressionEli(context.expressionEli)
+        .manifestationEli(context.latestManifestationEli)
         .text(cleanText(node.getTextContent()))
         .name(cleanText(name))
-        .articleFingerprint(getArticleFingerprint(cleanText(name), abbreviation))
-        .indexedAt(indexedAt)
+        .articleFingerprint(getArticleFingerprint(cleanText(name), context.normAbbreviation))
+        .indexedAt(context.indexedAt)
         .documentType(type)
         .build();
   }

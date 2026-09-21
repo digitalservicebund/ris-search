@@ -9,6 +9,7 @@ import de.bund.digitalservice.ris.search.models.opensearch.LegislationPartType;
 import de.bund.digitalservice.ris.search.repository.opensearch.ArticlesRepository;
 import de.bund.digitalservice.ris.search.utils.eli.ExpressionEli;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,7 +37,8 @@ class ArticleServiceTest {
   @Test
   void getAllArticleVersionsQueriesRepositoryUsingDocumentNumberPrefix() {
     ExpressionEli eli =
-        new ExpressionEli("bund", "bgbl-1", "2020", "s1126", LocalDate.of(2025, 5, 5), 1, "deu");
+        new ExpressionEli(
+            "bund", "bgbl-1", "2020", "s1126", LocalDate.of(2025, Month.MAY, 5), 1, "deu");
 
     String eId = "art-z1";
     String id = Article.buildId(eli.toString(), eId);

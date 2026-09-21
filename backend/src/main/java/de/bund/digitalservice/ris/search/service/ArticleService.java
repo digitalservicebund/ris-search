@@ -204,10 +204,8 @@ public class ArticleService {
 
     String documentNumberPrefix = documentNumber.substring(0, DOC_NUMBER_PREFIX_LENGTH);
 
-    var result =
-        articlesRepository.findAllByDocumentNumberStartingWithAndDocumentType(
-            documentNumberPrefix, LegislationPartType.ARTICLE, page);
-    return result;
+    return articlesRepository.findAllByDocumentNumberStartingWithAndDocumentType(
+        documentNumberPrefix, LegislationPartType.ARTICLE, page);
   }
 
   private boolean articleExist(String expressionEli, String eid) {
