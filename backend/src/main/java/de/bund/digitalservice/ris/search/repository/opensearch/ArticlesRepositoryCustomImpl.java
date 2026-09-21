@@ -22,7 +22,6 @@ public class ArticlesRepositoryCustomImpl implements ArticlesRepositoryCustom {
 
   private static final String EXPRESSIONS_INNER_HIT_NAME = "expressions";
 
-  // upper bound on how many expressions a single document number can plausibly occur in
   private static final int MAX_EXPRESSIONS_PER_ARTICLE = 100;
 
   private final ElasticsearchOperations operations;

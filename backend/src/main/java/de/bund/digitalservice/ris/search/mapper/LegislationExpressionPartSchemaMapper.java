@@ -2,6 +2,7 @@ package de.bund.digitalservice.ris.search.mapper;
 
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
+import de.bund.digitalservice.ris.search.models.opensearch.ArticleWithExpressions;
 import de.bund.digitalservice.ris.search.models.opensearch.LegislationPartType;
 import de.bund.digitalservice.ris.search.schema.CollectionSchema;
 import de.bund.digitalservice.ris.search.schema.LegislationExpressionPartSchema;
@@ -22,10 +23,11 @@ public class LegislationExpressionPartSchemaMapper {
   /**
    * Maps an article to a LegislationExpressionPartSchema
    *
-   * @param article Article to map
+   * @param articleWithExpressions ArticleWithExpressions to map
    * @return LegislationExpressionPartSchema
    */
-  public LegislationExpressionPartSchema fromDomain(Article article) {
+  public LegislationExpressionPartSchema fromDomain(ArticleWithExpressions articleWithExpressions) {
+    Article article = articleWithExpressions.article();
 
     return new LegislationExpressionPartSchema(
         "v1/article/" + article.getExpressionEli() + "#" + article.getEId(),
@@ -45,7 +47,7 @@ public class LegislationExpressionPartSchemaMapper {
    * @return return Collection of LegislationExpressionPartSchema objects
    */
   public CollectionSchema<LegislationExpressionPartSchema> fromArticlePage(
-      Page<Article> page, String path, String remoteJsonContext) {
+      Page<ArticleWithExpressions> page, String path, String remoteJsonContext) {
     String id = String.format("%s?pageIndex=%d&size=%d", path, page.getNumber(), page.getSize());
     PartialCollectionViewSchema view = PartialCollectionViewMapper.fromPage(path, page);
 

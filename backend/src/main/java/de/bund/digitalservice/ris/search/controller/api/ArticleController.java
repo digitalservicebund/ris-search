@@ -13,7 +13,7 @@ import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.config.ServerConfig;
 import de.bund.digitalservice.ris.search.mapper.LegislationExpressionPartSchemaMapper;
 import de.bund.digitalservice.ris.search.models.api.parameters.PaginationParams;
-import de.bund.digitalservice.ris.search.models.opensearch.Article;
+import de.bund.digitalservice.ris.search.models.opensearch.ArticleWithExpressions;
 import de.bund.digitalservice.ris.search.schema.CollectionSchema;
 import de.bund.digitalservice.ris.search.schema.LegislationExpressionPartSchema;
 import de.bund.digitalservice.ris.search.service.ArticleService;
@@ -88,7 +88,7 @@ public class ArticleController {
         new ExpressionEli(
             jurisdiction, agent, year, naturalIdentifier, pointInTime, version, language);
 
-    Page<Article> articles =
+    Page<ArticleWithExpressions> articles =
         articleService.getAllArticleVersions(
             eli, eId, PageRequest.of(pagination.getPageIndex(), pagination.getSize()));
 

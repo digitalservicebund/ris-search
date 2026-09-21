@@ -167,7 +167,7 @@ public class ArticleService {
    * @param pageable the pagination parameters defining page size and index
    * @return List of version of that article across the whole work
    */
-  public Page<Article> getAllArticleVersions(
+  public Page<ArticleWithExpressions> getAllArticleVersions(
       ExpressionEli expressionEli, String eidGiven, Pageable pageable) {
     String expressionEliString = expressionEli.toString();
 
@@ -183,7 +183,6 @@ public class ArticleService {
                 articlesRepository.findById(Article.buildId(expressionEliString, actualEid)))
         .map(Article::getDocumentNumber)
         .map(docNr -> this.getAllArticleVersionsByDocumentNumberPrefix(docNr, sortedPageable))
-        .map(page -> page.map(ArticleWithExpressions::article))
         .orElseGet(Page::empty);
   }
 
