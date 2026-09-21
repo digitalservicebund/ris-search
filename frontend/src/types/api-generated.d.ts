@@ -1053,6 +1053,7 @@ export interface components {
         RechtsprechungSchema: {
             /** @example Rechtsprechung */
             "@type"?: string;
+            "@context": string;
             /** @example KARE000000000 */
             dokumentNummer: string;
             /**

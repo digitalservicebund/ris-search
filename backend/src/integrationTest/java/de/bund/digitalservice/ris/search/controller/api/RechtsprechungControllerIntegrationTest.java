@@ -1,5 +1,6 @@
 package de.bund.digitalservice.ris.search.controller.api;
 
+import static de.bund.digitalservice.ris.utils.JsonldResultMatchers.isJsonLdCompliant;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -88,6 +89,7 @@ class RechtsprechungControllerIntegrationTest extends ContainersIntegrationBase 
         .perform(
             get(ApiConfig.Paths.RECHTSPRECHUNG + "/" + this.documentNumber)
                 .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(isJsonLdCompliant())
         .andExpectAll(
             status().isOk(),
             jsonPath("$.aktenzeichen", Matchers.is("fileNumber test")),

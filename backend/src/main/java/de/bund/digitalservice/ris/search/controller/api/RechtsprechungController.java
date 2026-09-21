@@ -182,7 +182,7 @@ public class RechtsprechungController {
     CaseLawDocumentationUnit unit = result.getFirst();
     return ResponseEntity.ok()
         .contentType(MediaType.APPLICATION_JSON)
-        .body(RechtsprechungSchemaMapper.fromDomain(unit));
+        .body(RechtsprechungSchemaMapper.fromDomain(unit, jsonldContextPath));
   }
 
   /**
