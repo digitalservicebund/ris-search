@@ -14,11 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import org.springframework.data.domain.Page;
-import org.springframework.stereotype.Service;
 
 /** Maps Articles to Api response Objects */
-@Service
 public class LegislationExpressionPartSchemaMapper {
+
+  private LegislationExpressionPartSchemaMapper() {}
 
   /**
    * Maps an article to a LegislationExpressionPartSchema
@@ -26,7 +26,8 @@ public class LegislationExpressionPartSchemaMapper {
    * @param articleWithExpressions ArticleWithExpressions to map
    * @return LegislationExpressionPartSchema
    */
-  public LegislationExpressionPartSchema fromDomain(ArticleWithExpressions articleWithExpressions) {
+  public static LegislationExpressionPartSchema fromDomain(
+      ArticleWithExpressions articleWithExpressions) {
     Article article = articleWithExpressions.article();
 
     return new LegislationExpressionPartSchema(
@@ -46,7 +47,7 @@ public class LegislationExpressionPartSchemaMapper {
    * @param remoteJsonContext remoteJsonContext url to retrieve jsonld context
    * @return return Collection of LegislationExpressionPartSchema objects
    */
-  public CollectionSchema<LegislationExpressionPartSchema> fromArticlePage(
+  public static CollectionSchema<LegislationExpressionPartSchema> fromArticlePage(
       Page<ArticleWithExpressions> page, String path, String remoteJsonContext) {
     String id = String.format("%s?pageIndex=%d&size=%d", path, page.getNumber(), page.getSize());
     PartialCollectionViewSchema view = PartialCollectionViewMapper.fromPage(path, page);
@@ -55,7 +56,7 @@ public class LegislationExpressionPartSchemaMapper {
         .id(id)
         .totalItems(page.getTotalElements())
         .context(remoteJsonContext)
-        .member(page.stream().map(this::fromDomain).toList())
+        .member(page.stream().map(LegislationExpressionPartSchemaMapper::fromDomain).toList())
         .view(view)
         .build();
   }
@@ -76,7 +77,7 @@ public class LegislationExpressionPartSchemaMapper {
     };
   }
 
-  private List<LegislationObjectSchema> getEncoding(Article article) {
+  private static List<LegislationObjectSchema> getEncoding(Article article) {
     List<LegislationObjectSchema> encoding = new ArrayList<>();
     if (Objects.nonNull(article.getManifestationEli())) {
       if (article.getDocumentType().equals(LegislationPartType.ATTACHMENT)) {

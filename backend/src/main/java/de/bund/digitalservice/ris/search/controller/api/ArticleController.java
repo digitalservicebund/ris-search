@@ -33,16 +33,10 @@ public class ArticleController {
 
   private final ArticleService articleService;
 
-  private final LegislationExpressionPartSchemaMapper articleMapper;
-
   private final String jsonldContextPath;
 
-  ArticleController(
-      ArticleService articleService,
-      LegislationExpressionPartSchemaMapper articleMapper,
-      ServerConfig serverConfig) {
+  ArticleController(ArticleService articleService, ServerConfig serverConfig) {
     this.articleService = articleService;
-    this.articleMapper = articleMapper;
     this.jsonldContextPath = serverConfig.getBackEndUrl() + ApiConfig.Paths.JSONLD_CONTEXT;
   }
 
@@ -87,7 +81,7 @@ public class ArticleController {
     return ResponseEntity.ok()
         .contentType(MediaType.APPLICATION_JSON)
         .body(
-            articleMapper.fromArticlePage(
+            LegislationExpressionPartSchemaMapper.fromArticlePage(
                 articles,
                 ApiConfig.Paths.ARTICLE_WORK_EXAMPLE + eli + "/" + eId,
                 jsonldContextPath));

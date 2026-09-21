@@ -55,7 +55,7 @@ class ArticleServiceTest {
                     .documentNumber("DKNR0E80B0026DKNE000100010")
                     .documentType(LegislationPartType.ARTICLE)
                     .build()));
-    service.getAllArticleVersions(eli, eId, Pageable.unpaged());
+    service.getAllArticleVersions(eli, eId);
 
     verify(articlesRepository, times(1))
         .findAllByDocumentNumberStartingWithAndDocumentType(
@@ -74,6 +74,6 @@ class ArticleServiceTest {
     String id = Article.buildId(eli.toString(), eId);
     when(articlesRepository.existsById(id)).thenReturn(false);
 
-    assertThat(service.getAllArticleVersions(eli, eId, Pageable.unpaged())).isEmpty();
+    assertThat(service.getAllArticleVersions(eli, eId)).isEmpty();
   }
 }
