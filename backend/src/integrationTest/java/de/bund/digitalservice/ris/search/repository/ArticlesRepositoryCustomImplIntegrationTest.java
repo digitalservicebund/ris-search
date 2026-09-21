@@ -84,6 +84,9 @@ class ArticlesRepositoryCustomImplIntegrationTest extends ContainersIntegrationB
             "DKNR0E80B0026DKNE0001", LegislationPartType.ARTICLE, Pageable.unpaged());
 
     assertThat(actual.toList()).hasSize(2);
+    // 3 articles (one per expressionEli) match the prefix, but they collapse into 2 distinct
+    // document numbers - totalElements must reflect the distinct count, not the raw hit count.
+    assertThat(actual.getTotalElements()).isEqualTo(2);
     assertThat(actual)
         .extracting(a -> a.article().getDocumentNumber())
         .containsExactlyInAnyOrder("DKNR0E80B0026DKNE000100010", "DKNR0E80B0026DKNE000100020");
