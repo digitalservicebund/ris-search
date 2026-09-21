@@ -29,7 +29,7 @@ class FeedbackControllerIntegrationTest extends ContainersIntegrationBase {
   @Autowired private MockMvc mockMvc;
   @Autowired private ObjectMapper objectMapper;
 
-  @MockitoSpyBean protected PostHogService postHogService;
+  @MockitoSpyBean PostHogService postHogService;
 
   private static final String TEXT = "test feedback";
   private static final String URL = "http://example.com";
