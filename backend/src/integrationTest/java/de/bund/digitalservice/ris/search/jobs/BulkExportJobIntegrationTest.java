@@ -12,7 +12,6 @@ import de.bund.digitalservice.ris.search.models.DocumentKind;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
 import de.bund.digitalservice.ris.search.service.BulkExportJob;
-import de.bund.digitalservice.ris.search.service.BulkExportService;
 import de.bund.digitalservice.ris.search.service.ChangelogService;
 import de.bund.digitalservice.ris.search.service.Job;
 import java.time.Instant;
@@ -21,7 +20,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class BulkExportJobIntegrationTest extends ContainersIntegrationBase {
@@ -32,10 +30,6 @@ class BulkExportJobIntegrationTest extends ContainersIntegrationBase {
   @Autowired
   BulkExportJob bulkExportJob;
 
-  @Qualifier("normsBulkExportService")
-  @MockitoSpyBean
-  BulkExportService bulkExportService;
-
   @Autowired private NormsBucket normsBucket;
 
   @Test
@@ -44,7 +38,7 @@ class BulkExportJobIntegrationTest extends ContainersIntegrationBase {
         JOB_STATE_STORAGE_PREFIX + DocumentKind.LEGISLATION.getBulkZipPath(),
         Instant.now().minus(25, ChronoUnit.HOURS).toString());
     assertThat(bulkExportJob.runJob()).isEqualTo(Job.ReturnCode.SUCCESS);
-    verify(bulkExportService, never()).updateLatestZip(any());
+    verify(normsBulkExportService, never()).updateLatestZip(any());
   }
 
   @Test
@@ -57,7 +51,7 @@ class BulkExportJobIntegrationTest extends ContainersIntegrationBase {
         "{\"changed\":[\"something.xml\"]}");
 
     assertThat(bulkExportJob.runJob()).isEqualTo(Job.ReturnCode.SUCCESS);
-    verify(bulkExportService, never()).updateLatestZip(any());
+    verify(normsBulkExportService, never()).updateLatestZip(any());
   }
 
   @Test
@@ -70,7 +64,7 @@ class BulkExportJobIntegrationTest extends ContainersIntegrationBase {
         "{\"deleted\":[\"something.xml\"]}");
 
     assertThat(bulkExportJob.runJob()).isEqualTo(Job.ReturnCode.SUCCESS);
-    verify(bulkExportService, times(1)).deleteArchives();
-    verify(bulkExportService, times(1)).updateLatestZip(any());
+    verify(normsBulkExportService, times(1)).deleteArchives();
+    verify(normsBulkExportService, times(1)).updateLatestZip(any());
   }
 }
