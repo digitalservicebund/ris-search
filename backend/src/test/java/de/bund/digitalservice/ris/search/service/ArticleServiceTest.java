@@ -1,5 +1,6 @@
 package de.bund.digitalservice.ris.search.service;
 
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -35,7 +36,7 @@ class ArticleServiceTest {
   }
 
   @Test
-  void getAllArticleVersionsQueriesRepositoryUsingDocumentNumberPrefix() {
+  void getAllArticleVersionsQueriesRepositoryUsingDocumentNumberPrefixInDescendingOrder() {
     ExpressionEli eli =
         new ExpressionEli(
             "bund", "bgbl-1", "2020", "s1126", LocalDate.of(2025, Month.MAY, 5), 1, "deu");
@@ -61,5 +62,18 @@ class ArticleServiceTest {
             "DKNR0E80B0026DKNE0001",
             LegislationPartType.ARTICLE,
             Pageable.unpaged(Sort.by(Sort.Direction.DESC, "entryIntoForceDate")));
+  }
+
+  @Test
+  void getAllArticleVersionReturnsEmptyOnNotFoundExpressionEliAndEid() {
+    ExpressionEli eli =
+        new ExpressionEli(
+            "bund", "bgbl-1", "2020", "s1126", LocalDate.of(2025, Month.MAY, 5), 1, "deu");
+
+    String eId = "art-z1";
+    String id = Article.buildId(eli.toString(), eId);
+    when(articlesRepository.existsById(id)).thenReturn(false);
+
+    assertThat(service.getAllArticleVersions(eli, eId, Pageable.unpaged())).isEmpty();
   }
 }
