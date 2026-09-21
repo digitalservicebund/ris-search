@@ -3013,6 +3013,9 @@
             "type" : "string",
             "example" : "Rechtsprechung"
           },
+          "@context" : {
+            "type" : "string"
+          },
           "dokumentNummer" : {
             "type" : "string",
             "example" : "KARE000000000"
@@ -3426,7 +3429,7 @@
             "description" : "Whether or not the document is a Vorabdokument"
           }
         },
-        "required" : [ "@id", "abweichendeDokumentnummern", "aktenzeichenListe", "datum", "dokumentNummer", "ecli", "encoding", "entscheidungsnamen", "inLanguage", "schlagwoerter", "vorabdokument" ]
+        "required" : [ "@context", "@id", "abweichendeDokumentnummern", "aktenzeichenListe", "datum", "dokumentNummer", "ecli", "encoding", "entscheidungsnamen", "inLanguage", "schlagwoerter", "vorabdokument" ]
       },
       "StreamingResponseBody" : { },
       "CourtSearchResult" : {

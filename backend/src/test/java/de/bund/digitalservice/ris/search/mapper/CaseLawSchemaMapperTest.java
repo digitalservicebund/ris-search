@@ -145,7 +145,7 @@ class CaseLawSchemaMapperTest {
   @DisplayName("Correctly maps scalar RechtsprechungSchema attributes")
   void fromDomainSingleRechtsprechungSchemaScalarAttributes() {
     RechtsprechungSchema rechtsprechungSchema =
-        RechtsprechungSchemaMapper.fromDomain(buildDocumentationUnit());
+        RechtsprechungSchemaMapper.fromDomain(buildDocumentationUnit(), "jsonLdContext");
 
     assertThat(rechtsprechungSchema.id()).isEqualTo("/v1/rechtsprechung/BFRE000087655");
     assertThat(rechtsprechungSchema.dokumentNummer()).isEqualTo("BFRE000087655");
@@ -169,13 +169,14 @@ class CaseLawSchemaMapperTest {
     assertThat(rechtsprechungSchema.leitsatz()).isEqualTo("guidingPrinciple");
     assertThat(rechtsprechungSchema.tenor()).isEqualTo("tenor");
     assertThat(rechtsprechungSchema.inLanguage()).isEqualTo("de");
+    assertThat(rechtsprechungSchema.context()).isEqualTo("jsonLdContext");
   }
 
   @Test
   @DisplayName("Correctly maps additional scalar RechtsprechungSchema attributes")
   void fromDomainSingleRechtsprechungSchemaAdditionalScalarAttributes() {
     RechtsprechungSchema rechtsprechungSchema =
-        RechtsprechungSchemaMapper.fromDomain(buildDocumentationUnit());
+        RechtsprechungSchemaMapper.fromDomain(buildDocumentationUnit(), "jsonLdContext");
 
     assertThat(rechtsprechungSchema.celex()).isEqualTo("62013CA0192");
     assertThat(rechtsprechungSchema.gerichtsbarkeit()).isEqualTo("Ordentliche Gerichtsbarkeit");
@@ -201,7 +202,7 @@ class CaseLawSchemaMapperTest {
   @DisplayName("Correctly maps collection RechtsprechungSchema attributes")
   void fromDomainSingleRechtsprechungSchemaCollectionAttributes() {
     RechtsprechungSchema rechtsprechungSchema =
-        RechtsprechungSchemaMapper.fromDomain(buildDocumentationUnit());
+        RechtsprechungSchemaMapper.fromDomain(buildDocumentationUnit(), "jsonLdContext");
 
     assertThat(rechtsprechungSchema.aktenzeichenListe()).containsExactly("FileNumberTest");
     assertThat(rechtsprechungSchema.abweichendeAktenzeichen()).containsExactly("1 BvR 839, 899/96");
@@ -234,7 +235,7 @@ class CaseLawSchemaMapperTest {
   @DisplayName("Correctly maps reference collection RechtsprechungSchema attributes")
   void fromDomainSingleRechtsprechungSchemaReferenceCollectionAttributes() {
     RechtsprechungSchema rechtsprechungSchema =
-        RechtsprechungSchemaMapper.fromDomain(buildDocumentationUnit());
+        RechtsprechungSchemaMapper.fromDomain(buildDocumentationUnit(), "jsonLdContext");
 
     assertThat(rechtsprechungSchema.vorgehendeEntscheidungen())
         .containsExactly("previous decision file number, previous decision court type");

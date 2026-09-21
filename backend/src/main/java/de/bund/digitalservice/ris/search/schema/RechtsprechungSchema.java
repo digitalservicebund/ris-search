@@ -9,6 +9,7 @@ import lombok.Builder;
 /** API schema representing a Rechtsprechung (case law) resource in JSON-LD format. */
 @Builder
 public record RechtsprechungSchema(
+    @JsonProperty("@context") @Schema(requiredMode = Schema.RequiredMode.REQUIRED) String context,
     @Schema(example = "KARE000000000", requiredMode = Schema.RequiredMode.REQUIRED)
         String dokumentNummer,
     @Schema(
