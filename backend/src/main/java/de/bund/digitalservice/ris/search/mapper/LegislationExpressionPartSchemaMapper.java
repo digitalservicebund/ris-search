@@ -1,7 +1,6 @@
 package de.bund.digitalservice.ris.search.mapper;
 
 import de.bund.digitalservice.ris.search.config.ApiConfig;
-import de.bund.digitalservice.ris.search.config.ServerConfig;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.LegislationPartType;
 import de.bund.digitalservice.ris.search.schema.CollectionSchema;
@@ -19,15 +18,6 @@ import org.springframework.stereotype.Service;
 /** Maps Articles to Api response Objects */
 @Service
 public class LegislationExpressionPartSchemaMapper {
-
-  private final String jsonldContextPath;
-
-  /**
-   * @param serverConfig to configure jsonld context path
-   */
-  public LegislationExpressionPartSchemaMapper(ServerConfig serverConfig) {
-    this.jsonldContextPath = serverConfig.getBackEndUrl() + ApiConfig.Paths.JSONLD_CONTEXT;
-  }
 
   /**
    * Maps an article to a LegislationExpressionPartSchema
@@ -51,17 +41,18 @@ public class LegislationExpressionPartSchemaMapper {
   /**
    * @param page Page of Article objects
    * @param path original path that executed that query
+   * @param remoteJsonContext remoteJsonContext url to retrieve jsonld context
    * @return return Collection of LegislationExpressionPartSchema objects
    */
   public CollectionSchema<LegislationExpressionPartSchema> fromArticlePage(
-      Page<Article> page, String path) {
+      Page<Article> page, String path, String remoteJsonContext) {
     String id = String.format("%s?pageIndex=%d&size=%d", path, page.getNumber(), page.getSize());
     PartialCollectionViewSchema view = PartialCollectionViewMapper.fromPage(path, page);
 
     return CollectionSchema.<LegislationExpressionPartSchema>builder()
         .id(id)
         .totalItems(page.getTotalElements())
-        .context(jsonldContextPath)
+        .context(remoteJsonContext)
         .member(page.stream().map(this::fromDomain).toList())
         .view(view)
         .build();
@@ -100,15 +91,5 @@ public class LegislationExpressionPartSchemaMapper {
       }
     }
     return encoding;
-  }
-
-  /**
-   * construct the baseUrl for encoding objects from the manifestationEli
-   *
-   * @param manifestationEli of a legislation object
-   * @return contentBaseUrl of a legislation object
-   */
-  private static String getEncodingBaseUrlFromManifestationEli(String manifestationEli) {
-    return ApiConfig.Paths.LEGISLATION + "/" + manifestationEli.replace(".xml", "");
   }
 }

@@ -10,6 +10,7 @@ import static de.bund.digitalservice.ris.search.controller.api.NormsController.Y
 import static de.bund.digitalservice.ris.search.controller.api.NormsController.YEAR_EXAMPLE;
 
 import de.bund.digitalservice.ris.search.config.ApiConfig;
+import de.bund.digitalservice.ris.search.config.ServerConfig;
 import de.bund.digitalservice.ris.search.mapper.LegislationExpressionPartSchemaMapper;
 import de.bund.digitalservice.ris.search.models.api.parameters.PaginationParams;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
@@ -38,10 +39,15 @@ public class ArticleController {
 
   private final LegislationExpressionPartSchemaMapper articleMapper;
 
+  private final String jsonldContextPath;
+
   ArticleController(
-      ArticleService articleService, LegislationExpressionPartSchemaMapper articleMapper) {
+      ArticleService articleService,
+      LegislationExpressionPartSchemaMapper articleMapper,
+      ServerConfig serverConfig) {
     this.articleService = articleService;
     this.articleMapper = articleMapper;
+    this.jsonldContextPath = serverConfig.getBackEndUrl() + ApiConfig.Paths.JSONLD_CONTEXT;
   }
 
   /**
@@ -88,6 +94,8 @@ public class ArticleController {
 
     return ResponseEntity.ok()
         .contentType(MediaType.APPLICATION_JSON)
-        .body(articleMapper.fromArticlePage(articles, ApiConfig.Paths.ARTICLE_WORK_EXAMPLE));
+        .body(
+            articleMapper.fromArticlePage(
+                articles, ApiConfig.Paths.ARTICLE_WORK_EXAMPLE, jsonldContextPath));
   }
 }
