@@ -27,7 +27,6 @@ import org.opensearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.opensearch.search.sort.SortBuilders;
 import org.opensearch.search.sort.SortOrder;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
@@ -164,18 +163,14 @@ public class ArticleService {
    *
    * @param expressionEli expressionEli of the norm
    * @param eidGiven the possible eid
-   * @param pageable the pagination parameters defining page size and index
    * @return List of version of that article across the whole work
    */
   public Page<ArticleWithExpressions> getAllArticleVersions(
-      ExpressionEli expressionEli, String eidGiven, Pageable pageable) {
+      ExpressionEli expressionEli, String eidGiven) {
     String expressionEliString = expressionEli.toString();
 
     Sort sort = Sort.by(Sort.Direction.DESC, "entryIntoForceDate");
-    Pageable sortedPageable =
-        pageable.isPaged()
-            ? PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort)
-            : Pageable.unpaged(sort);
+    Pageable sortedPageable = Pageable.unpaged(sort);
 
     return getActualEid(expressionEliString, eidGiven)
         .flatMap(

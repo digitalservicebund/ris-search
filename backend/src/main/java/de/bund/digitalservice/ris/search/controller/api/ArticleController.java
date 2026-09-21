@@ -12,7 +12,6 @@ import static de.bund.digitalservice.ris.search.controller.api.NormsController.Y
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.config.ServerConfig;
 import de.bund.digitalservice.ris.search.mapper.LegislationExpressionPartSchemaMapper;
-import de.bund.digitalservice.ris.search.models.api.parameters.PaginationParams;
 import de.bund.digitalservice.ris.search.models.opensearch.ArticleWithExpressions;
 import de.bund.digitalservice.ris.search.schema.CollectionSchema;
 import de.bund.digitalservice.ris.search.schema.LegislationExpressionPartSchema;
@@ -20,11 +19,8 @@ import de.bund.digitalservice.ris.search.service.ArticleService;
 import de.bund.digitalservice.ris.search.utils.eli.ExpressionEli;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.Valid;
 import java.time.LocalDate;
-import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -61,7 +57,6 @@ public class ArticleController {
    * @param version the version of the document
    * @param language the language of the document
    * @param eId The identifier that denotes the specific article (§) within the legislation.
-   * @param pagination the pagination parameters defining page size and index
    * @return response object of a Collection of LegislationExpressionPartSchema
    */
   @GetMapping(
@@ -81,21 +76,20 @@ public class ArticleController {
       @Parameter(example = "2020-06-19") @PathVariable LocalDate pointInTime,
       @Parameter(example = "2") @PathVariable Integer version,
       @Parameter(example = "deu") @PathVariable String language,
-      @Parameter(example = "art-z1") @PathVariable String eId,
-      @ParameterObject @Valid PaginationParams pagination) {
+      @Parameter(example = "art-z1") @PathVariable String eId) {
 
     ExpressionEli eli =
         new ExpressionEli(
             jurisdiction, agent, year, naturalIdentifier, pointInTime, version, language);
 
-    Page<ArticleWithExpressions> articles =
-        articleService.getAllArticleVersions(
-            eli, eId, PageRequest.of(pagination.getPageIndex(), pagination.getSize()));
+    Page<ArticleWithExpressions> articles = articleService.getAllArticleVersions(eli, eId);
 
     return ResponseEntity.ok()
         .contentType(MediaType.APPLICATION_JSON)
         .body(
             articleMapper.fromArticlePage(
-                articles, ApiConfig.Paths.ARTICLE_WORK_EXAMPLE, jsonldContextPath));
+                articles,
+                ApiConfig.Paths.ARTICLE_WORK_EXAMPLE + eli + "/" + eId,
+                jsonldContextPath));
   }
 }
