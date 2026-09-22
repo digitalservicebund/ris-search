@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { Breadcrumb, Drawer } from "primevue";
-import type { MenuItem } from "primevue/menuitem";
+import { Drawer } from "primevue";
 import IcBaselineMoreHoriz from "~icons/ic/baseline-more-horiz";
 import ChevronRightIcon from "~icons/ic/outline-chevron-right";
 import { NuxtLink } from "#components";
@@ -41,15 +40,24 @@ const itemsWithHome = computed(() => [
   ...items,
 ]);
 
+type EffectiveBreadcrumbItem = {
+  label: string;
+  route?: RouteLocationRaw;
+  command?: (event: {
+    item: EffectiveBreadcrumbItem;
+    originalEvent: Event;
+  }) => void;
+};
+
 const effectiveItems = computed(() => {
   const collapseAfter = 3;
 
   const all = [...itemsWithHome.value];
   const shouldCollapse = collapse && all.length > collapseAfter;
-  let result: MenuItem[] = all;
+  let result: EffectiveBreadcrumbItem[] = all;
 
   if (shouldCollapse) {
-    const drawerMenuItem: MenuItem = {
+    const drawerMenuItem: EffectiveBreadcrumbItem = {
       label: "Navigiere zu",
       command: () => (drawerVisible.value = true),
     };
@@ -70,7 +78,7 @@ const drawerId = useId();
 </script>
 
 <template>
-  <Breadcrumb
+  <UiBreadcrumb
     :model="effectiveItems"
     :aria-label="label"
     :class="[
@@ -113,7 +121,7 @@ const drawerId = useId();
     <template #separator>
       <ChevronRightIcon width="1rem" height="1rem" />
     </template>
-  </Breadcrumb>
+  </UiBreadcrumb>
 
   <Drawer
     v-model:visible="drawerVisible"
