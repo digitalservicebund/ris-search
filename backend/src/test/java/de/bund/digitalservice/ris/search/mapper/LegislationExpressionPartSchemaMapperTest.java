@@ -60,6 +60,10 @@ class LegislationExpressionPartSchemaMapperTest {
                         .inLanguage("de")
                         .build()))
             .hasPart(List.of())
+            .isPartOf(
+                List.of(
+                    new LegislationExpressionPartSchema.IsPartOfReference(
+                        "/v1/legislationeli/bund/bgbl-1/1975/s1000/1975-01-01/1/deu")))
             .build();
 
     assertEquals(remoteJsonContext, result.context());

@@ -61,12 +61,41 @@ public record LegislationExpressionPartSchema(
     @Nullable @Schema(description = "The source data for this part, if available on its own")
         List<LegislationObjectSchema> encoding,
     @ArraySchema(schema = @Schema(implementation = LegislationExpressionPartSchema.class))
-        List<LegislationExpressionPartSchema> hasPart)
+        List<LegislationExpressionPartSchema> hasPart,
+    @ArraySchema(
+            schema =
+                @Schema(implementation = LegislationExpressionPartSchema.IsPartOfReference.class))
+        List<LegislationExpressionPartSchema.IsPartOfReference> isPartOf)
     implements JsonldResource {
 
   @Override
   @Schema(example = JsonldTypes.LEGISLATION)
   public String getType() {
     return JsonldTypes.LEGISLATION;
+  }
+
+  /**
+   * Legislation Reference that is a parent of a LegislationExpressionpartSchema
+   *
+   * @param id
+   */
+  @Schema(description = "A reference to another legislation expression part")
+  public record IsPartOfReference(
+      @JsonProperty("@id")
+          @Schema(
+              example =
+                  ApiConfig.Paths.LEGISLATION
+                      + "/eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu/art-z1",
+              requiredMode = Schema.RequiredMode.REQUIRED)
+          String id)
+      implements JsonldResource {
+    @Override
+    public String getType() {
+      return JsonldTypes.LEGISLATION;
+    }
+
+    public static IsPartOfReference fromExpressionEli(String expressionEli) {
+      return new IsPartOfReference(ApiConfig.Paths.LEGISLATION + "/" + expressionEli);
+    }
   }
 }

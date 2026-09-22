@@ -38,7 +38,8 @@ public class LegislationExpressionPartSchemaMapper {
         DateUtils.toDateIntervalString(article.getEntryIntoForceDate(), article.getExpiryDate()),
         mapLegislationPartType(article.getDocumentType()),
         getEncoding(article),
-        List.of());
+        List.of(),
+        getIsPartOf(articleWithExpressions));
   }
 
   /**
@@ -75,6 +76,13 @@ public class LegislationExpressionPartSchemaMapper {
       case CONCLUSION -> LegislationExpressionPartType.CONCLUSION;
       case PREAMBLE -> LegislationExpressionPartType.PREAMBLE;
     };
+  }
+
+  private static List<LegislationExpressionPartSchema.IsPartOfReference> getIsPartOf(
+      ArticleWithExpressions articleWithExpressions) {
+    return articleWithExpressions.expressionElis().stream()
+        .map(LegislationExpressionPartSchema.IsPartOfReference::fromExpressionEli)
+        .toList();
   }
 
   private static List<LegislationObjectSchema> getEncoding(Article article) {

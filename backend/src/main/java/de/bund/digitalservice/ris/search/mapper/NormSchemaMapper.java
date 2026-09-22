@@ -155,7 +155,8 @@ public class NormSchemaMapper {
           "",
           null,
           List.of(),
-          buildNestedHasPart(tocItem.children(), idPrefix, articles));
+          buildNestedHasPart(tocItem.children(), idPrefix, articles),
+          null);
     }
   }
 
