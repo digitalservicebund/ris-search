@@ -2415,6 +2415,118 @@
         }
       }
     },
+    "/v1/article/work-example/eli/{jurisdiction}/{agent}/{year}/{naturalIdentifier}/{pointInTime}/{version}/{language}/{eId}" : {
+      "get" : {
+        "tags" : [ "article-controller" ],
+        "operationId" : "getArticleVersions",
+        "parameters" : [ {
+          "name" : "jurisdiction",
+          "in" : "path",
+          "description" : "Country or regional code for the jurisdiction",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "bund" ]
+          }
+        }, {
+          "name" : "agent",
+          "in" : "path",
+          "description" : "Agent or authority issuing the legislation, e.g., 'bgbl-1' for Bundesgesetzblatt Teil I (Federal Law Gazette part I)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "example" : "bgbl-1"
+        }, {
+          "name" : "year",
+          "in" : "path",
+          "description" : "Year the legislation was enacted or published",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "example" : 1979
+        }, {
+          "name" : "naturalIdentifier",
+          "in" : "path",
+          "description" : "Unique natural identifier for the legislation, specific to the jurisdiction and agent",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "example" : "s1325"
+        }, {
+          "name" : "pointInTime",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "date"
+          },
+          "example" : "2020-06-19"
+        }, {
+          "name" : "version",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "example" : 2
+        }, {
+          "name" : "language",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "example" : "deu"
+        }, {
+          "name" : "eId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "example" : "art-z1"
+        }, {
+          "name" : "size",
+          "in" : "query",
+          "description" : "The number of entities per page",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "maximum" : 300,
+            "minimum" : 1
+          },
+          "example" : 100
+        }, {
+          "name" : "pageIndex",
+          "in" : "query",
+          "description" : "The number of the page to request. The page starts with the value 0",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "minimum" : 0
+          },
+          "example" : 0
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CollectionSchemaLegislationExpressionPartSchema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/administrative-directive" : {
       "get" : {
         "tags" : [ "AdministrativeDirective" ],
@@ -4509,6 +4621,37 @@
           }
         },
         "required" : [ "description", "name" ]
+      },
+      "CollectionSchemaLegislationExpressionPartSchema" : {
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "example" : "hydra:Collection"
+          },
+          "@context" : {
+            "type" : "string"
+          },
+          "@id" : {
+            "type" : "string",
+            "example" : "/v1/document?pageIndex=0&size=5"
+          },
+          "totalItems" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 1
+          },
+          "member" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/LegislationExpressionPartSchema"
+            }
+          },
+          "view" : {
+            "$ref" : "#/components/schemas/PartialCollectionViewSchema"
+          }
+        },
+        "required" : [ "@context", "@id", "member", "totalItems", "view" ]
       },
       "AdministrativeDirectiveSchema" : {
         "type" : "object",

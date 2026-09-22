@@ -794,6 +794,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/article/work-example/eli/{jurisdiction}/{agent}/{year}/{naturalIdentifier}/{pointInTime}/{version}/{language}/{eId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["getArticleVersions"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/administrative-directive": {
         parameters: {
             query?: never;
@@ -1839,6 +1855,20 @@ export interface components {
             description: string;
             /** @description The downloadable form of this dataset. */
             distribution?: components["schemas"]["ZipDataDownloadSchema"];
+        };
+        CollectionSchemaLegislationExpressionPartSchema: {
+            /** @example hydra:Collection */
+            "@type"?: string;
+            "@context": string;
+            /** @example /v1/document?pageIndex=0&size=5 */
+            "@id": string;
+            /**
+             * Format: int64
+             * @example 1
+             */
+            totalItems: number;
+            member: components["schemas"]["LegislationExpressionPartSchema"][];
+            view: components["schemas"]["PartialCollectionViewSchema"];
         };
         AdministrativeDirectiveSchema: {
             /** @example AdministrativeDirective */
@@ -3360,6 +3390,63 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ZipDataCatalogSchema"];
+                };
+            };
+        };
+    };
+    getArticleVersions: {
+        parameters: {
+            query?: {
+                /**
+                 * @description The number of entities per page
+                 * @example 100
+                 */
+                size?: number;
+                /**
+                 * @description The number of the page to request. The page starts with the value 0
+                 * @example 0
+                 */
+                pageIndex?: number;
+            };
+            header?: never;
+            path: {
+                /** @description Country or regional code for the jurisdiction */
+                jurisdiction: "bund";
+                /**
+                 * @description Agent or authority issuing the legislation, e.g., 'bgbl-1' for Bundesgesetzblatt Teil I (Federal Law Gazette part I)
+                 * @example bgbl-1
+                 */
+                agent: string;
+                /**
+                 * @description Year the legislation was enacted or published
+                 * @example 1979
+                 */
+                year: string;
+                /**
+                 * @description Unique natural identifier for the legislation, specific to the jurisdiction and agent
+                 * @example s1325
+                 */
+                naturalIdentifier: string;
+                /** @example 2020-06-19 */
+                pointInTime: string;
+                /** @example 2 */
+                version: number;
+                /** @example deu */
+                language: string;
+                /** @example art-z1 */
+                eId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CollectionSchemaLegislationExpressionPartSchema"];
                 };
             };
         };

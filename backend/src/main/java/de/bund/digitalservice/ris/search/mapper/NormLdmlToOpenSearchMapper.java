@@ -183,12 +183,11 @@ public class NormLdmlToOpenSearchMapper {
 
     Map<String, String> eIdToDocnrMap = getEidToDoknrMap(xmlDocument);
 
-    ArticleParsingContext articleParsingContextcontext =
-        new ArticleParsingContext(
+    NormContext normContext =
+        new NormContext(
             abbreviation, workEli, expressionEli, indexedAt, eIdToDocnrMap, manifestationEli);
 
-    List<Article> articles =
-        getArticlesByXmlDocument(xmlDocument, attachments, articleParsingContextcontext);
+    List<Article> articles = getArticlesByXmlDocument(xmlDocument, attachments, normContext);
     List<String> articleNames = articles.stream().map(Article::getName).toList();
     List<String> articleTexts = articles.stream().map(Article::getText).toList();
     List<String> articleFingerprints =
@@ -412,7 +411,7 @@ public class NormLdmlToOpenSearchMapper {
     return Optional.empty();
   }
 
-  record ArticleParsingContext(
+  record NormContext(
       String normAbbreviation,
       String workEli,
       String expressionEli,
@@ -421,7 +420,7 @@ public class NormLdmlToOpenSearchMapper {
       String latestManifestationEli) {}
 
   private static List<Article> getArticlesByXmlDocument(
-      XmlDocument xmlDocument, List<Attachment> attachments, ArticleParsingContext context)
+      XmlDocument xmlDocument, List<Attachment> attachments, NormContext context)
       throws ValidationException {
 
     NodeList nodes = null;
@@ -506,9 +505,7 @@ public class NormLdmlToOpenSearchMapper {
   }
 
   private static Optional<Article> getArticleNodeAsArticle(
-      Node articleNode,
-      Map<String, TimeInterval> temporalGroupsWithDates,
-      ArticleParsingContext context) {
+      Node articleNode, Map<String, TimeInterval> temporalGroupsWithDates, NormContext context) {
     try {
       var articleXml = new XmlDocument(articleNode);
       String articleNumber = cleanText(articleXml.getSimpleElementByXpath(X_PATH_ARTICLE_NUM));
@@ -564,7 +561,7 @@ public class NormLdmlToOpenSearchMapper {
   }
 
   private static Article getNodeAsArticle(
-      Node node, String name, LegislationPartType type, ArticleParsingContext context)
+      Node node, String name, LegislationPartType type, NormContext context)
       throws ValidationException {
     Node eIdAttribute = node.getAttributes().getNamedItem("eId");
     if (Objects.isNull(eIdAttribute)) {

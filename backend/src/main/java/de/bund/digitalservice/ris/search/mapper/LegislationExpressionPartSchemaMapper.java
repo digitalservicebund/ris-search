@@ -81,7 +81,12 @@ public class LegislationExpressionPartSchemaMapper {
     List<LegislationObjectSchema> encoding = new ArrayList<>();
     if (Objects.nonNull(article.getManifestationEli())) {
       if (article.getDocumentType().equals(LegislationPartType.ATTACHMENT)) {
-        //
+        encoding.add(
+            EncodingSchemaFactory.legislationEncodingSchema(
+                EncodingSchemaFactory.SchemaType.XML,
+                ApiConfig.Paths.LEGISLATION
+                    + "/"
+                    + article.getManifestationEli().replace(".xml", "")));
       } else {
         encoding.add(
             EncodingSchemaFactory.legislationEncodingSchema(
