@@ -15,7 +15,7 @@ public interface ArticlesRepositoryCustom {
   /**
    * Retrieves articles whose document number starts with the given prefix, collapsed on the full
    * document number so that only one {@link Article} per distinct document number is returned. Each
-   * result also carries the expressionElis of every expression that document number occurs in.
+   * result also carries the expressionElis of every expression that article occurs in.
    *
    * @param documentNumber the document number prefix
    * @param type the legislation part type to filter on

@@ -45,17 +45,17 @@ class ArticlesRepositoryCustomImplIntegrationTest extends ContainersIntegrationB
                 buildArticle(
                     work1Expression1,
                     "art-zi",
-                    "DKNR0E80B0026DKNE000100010",
+                    "DKNR0E1000000D000000100010",
                     LegislationPartType.ARTICLE),
                 buildArticle(
                     work1Expression2,
                     "art-z1",
-                    "DKNR0E80B0026DKNE000100010",
+                    "DKNR0E1000000D000000100010",
                     LegislationPartType.ARTICLE),
                 buildArticle(
                     work1Expression3,
                     "art-I",
-                    "DKNR0E80B0026DKNE000100020",
+                    "DKNR0E1000000D000000100020",
                     LegislationPartType.ARTICLE)));
 
     // articles that are not expected in the result
@@ -64,24 +64,24 @@ class ArticlesRepositoryCustomImplIntegrationTest extends ContainersIntegrationB
             buildArticle(
                 work1Expression1,
                 "art-z2",
-                "DKNR0E80B0026DKNE000200010",
+                "DKNR0000000000000000200010",
                 LegislationPartType.ARTICLE),
             buildArticle(
                 work1Expression1,
                 "art-II",
-                "DKNR0E80B0026DKNE000200010",
+                "DKNR0000000000000000200010",
                 LegislationPartType.ARTICLE),
             buildArticle(
                 work2Expression1,
                 "art-zi",
-                "DKNR0E70B0026DKNE000100020",
+                "DKNR0000000000000000300010",
                 LegislationPartType.ARTICLE)));
 
     articlesRepository.saveAll(articles);
 
     Page<ArticleWithExpressions> actual =
         articlesRepository.findAllByDocumentNumberStartingWithAndDocumentType(
-            "DKNR0E80B0026DKNE0001", LegislationPartType.ARTICLE, Pageable.unpaged());
+            "DKNR0E1000000D0000001", LegislationPartType.ARTICLE, Pageable.unpaged());
 
     assertThat(actual.toList()).hasSize(2);
     // 3 articles (one per expressionEli) match the prefix, but they collapse into 2 distinct
@@ -89,12 +89,12 @@ class ArticlesRepositoryCustomImplIntegrationTest extends ContainersIntegrationB
     assertThat(actual.getTotalElements()).isEqualTo(2);
     assertThat(actual)
         .extracting(a -> a.article().getDocumentNumber())
-        .containsExactlyInAnyOrder("DKNR0E80B0026DKNE000100010", "DKNR0E80B0026DKNE000100020");
+        .containsExactlyInAnyOrder("DKNR0E1000000D000000100010", "DKNR0E1000000D000000100020");
 
     // article 1 in version 1 should be grouped together with the expressionElis its part of
     ArticleWithExpressions article1v1 =
         actual.stream()
-            .filter(a -> a.article().getDocumentNumber().equals("DKNR0E80B0026DKNE000100010"))
+            .filter(a -> a.article().getDocumentNumber().equals("DKNR0E1000000D000000100010"))
             .findFirst()
             .orElseThrow();
     assertThat(article1v1.expressionElis())
@@ -103,7 +103,7 @@ class ArticlesRepositoryCustomImplIntegrationTest extends ContainersIntegrationB
     // article 1 in version 2 is only part of expression 3
     ArticleWithExpressions article1v2 =
         actual.stream()
-            .filter(a -> a.article().getDocumentNumber().equals("DKNR0E80B0026DKNE000100020"))
+            .filter(a -> a.article().getDocumentNumber().equals("DKNR0E1000000D000000100020"))
             .findFirst()
             .orElseThrow();
     assertThat(article1v2.expressionElis()).containsExactlyInAnyOrder(work1Expression3.toString());
@@ -119,9 +119,9 @@ class ArticlesRepositoryCustomImplIntegrationTest extends ContainersIntegrationB
 
   @ParameterizedTest
   @CsvSource({
-    "PREAMBLE, DKNR0E10B0026DKNE000100000",
-    "ARTICLE, DKNR0E20B0026DKNE000100000",
-    "CONCLUSION, DKNR0E30B0026DKNE000100000"
+    "PREAMBLE, DKNR0E1000000D000000100000",
+    "ARTICLE, DKNR0E2000000D000000100000",
+    "CONCLUSION, DKNR0E3000000D000000100000"
   })
   void itFiltersByDocumentType(LegislationPartType type, String expectedDocNumber) {
     ExpressionEli eli =
@@ -130,12 +130,12 @@ class ArticlesRepositoryCustomImplIntegrationTest extends ContainersIntegrationB
     articlesRepository.saveAll(
         List.of(
             buildArticle(
-                eli, "einleitung-n1", "DKNR0E10B0026DKNE000100000", LegislationPartType.PREAMBLE),
-            buildArticle(eli, "art-z1", "DKNR0E20B0026DKNE000100000", LegislationPartType.ARTICLE),
+                eli, "einleitung-n1", "DKNR0E1000000D000000100000", LegislationPartType.PREAMBLE),
+            buildArticle(eli, "art-z1", "DKNR0E2000000D000000100000", LegislationPartType.ARTICLE),
             buildArticle(
                 eli,
                 "conclusion-1",
-                "DKNR0E30B0026DKNE000100000",
+                "DKNR0E3000000D000000100000",
                 LegislationPartType.CONCLUSION)));
 
     Page<ArticleWithExpressions> page =
