@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { Drawer } from "primevue";
-
 const { label, icon } = defineProps<{
   /** Used as both the trigger button's label and the drawer's title */
   label: string;
@@ -17,11 +15,8 @@ const emit = defineEmits<{
 /** The drawer's open state, exposed so callers can react to it opening/closing */
 const visible = defineModel<boolean>("visible", { default: false });
 
-const {
-  // @ts-expect-error -- usage in template not detected
-  triggerRef,
-  closeButtonProps,
-} = useDrawer(visible);
+// @ts-expect-error -- usage in template not detected
+const { triggerRef } = useDrawer(visible);
 
 const drawerId = useId();
 
@@ -52,13 +47,10 @@ function handleApply() {
       </template>
     </UiButton>
 
-    <Drawer
+    <UiDrawer
       :id="drawerId"
       :aria-label="label"
-      :close-button-props="closeButtonProps"
       :header="label"
-      block-scroll
-      position="bottom"
       v-model:visible="visible"
     >
       <div class="mobile-action-drawer-content space-y-24">
@@ -81,7 +73,7 @@ function handleApply() {
           />
         </div>
       </template>
-    </Drawer>
+    </UiDrawer>
   </div>
 </template>
 

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { Drawer } from "primevue";
 import IcBaselineMoreHoriz from "~icons/ic/baseline-more-horiz";
 import ChevronRightIcon from "~icons/ic/outline-chevron-right";
 import { NuxtLink } from "#components";
@@ -71,7 +70,6 @@ const {
   visible: drawerVisible,
   // @ts-expect-error -- usage in template not detected
   triggerRef: drawerTriggerRef,
-  closeButtonProps,
 } = useDrawer();
 
 const drawerId = useId();
@@ -123,14 +121,11 @@ const drawerId = useId();
     </template>
   </UiBreadcrumb>
 
-  <Drawer
+  <UiDrawer
     v-model:visible="drawerVisible"
     aria-label="Navigiere zu"
-    block-scroll
     header="Navigiere zu"
-    position="bottom"
     :id="drawerId"
-    :close-button-props="closeButtonProps"
   >
     <ul class="-mt-8">
       <li v-for="i in itemsWithHome" :key="i.label">
@@ -151,5 +146,5 @@ const drawerId = useId();
         </span>
       </li>
     </ul>
-  </Drawer>
+  </UiDrawer>
 </template>
