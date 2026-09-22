@@ -56,7 +56,7 @@ public class ArticleController {
   @GetMapping(
       path =
           ApiConfig.Paths.ARTICLE_WORK_EXAMPLE
-              + "/{jurisdiction}/{agent}/{year}/{naturalIdentifier}/{pointInTime}/{version}/{language}/{eId}")
+              + "/eli/{jurisdiction}/{agent}/{year}/{naturalIdentifier}/{pointInTime}/{version}/{language}/{eId}")
   public ResponseEntity<CollectionSchema<LegislationExpressionPartSchema>> getArticleVersions(
       @Parameter(description = BUND_DESCRIPTION, schema = @Schema(allowableValues = {BUND_EXAMPLE}))
           @PathVariable
@@ -83,7 +83,7 @@ public class ArticleController {
         .body(
             LegislationExpressionPartSchemaMapper.fromArticlePage(
                 articles,
-                ApiConfig.Paths.ARTICLE_WORK_EXAMPLE + eli + "/" + eId,
+                ApiConfig.Paths.ARTICLE_WORK_EXAMPLE + "/" + eli + "/" + eId,
                 jsonldContextPath));
   }
 }

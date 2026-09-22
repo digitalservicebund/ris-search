@@ -43,7 +43,7 @@ class LegislationExpressionPartSchemaMapperTest {
 
     LegislationExpressionPartSchema expectedMember =
         LegislationExpressionPartSchema.builder()
-            .id("/v1/legislationeli/bund/bgbl-1/1975/s1000/1975-01-01/1/deu#art-z1")
+            .id("/v1/legislation/eli/bund/bgbl-1/1975/s1000/1975-01-01/1/deu#art-z1")
             .eId("art-z1")
             .name("§ 1")
             .headline("")

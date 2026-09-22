@@ -54,11 +54,15 @@ class ArticleControllerIntegrationTest extends ContainersIntegrationBase {
     mockMvc
         .perform(
             get(ApiConfig.Paths.ARTICLE_WORK_EXAMPLE
-                    + "/bund/bgbl-1/1975/s1000/1975-01-01/1/deu/art-z1")
+                    + "/eli/bund/bgbl-1/1975/s1000/1975-01-01/1/deu/art-z1")
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpectAll(
             status().isOk(),
             isJsonLdCompliant(),
+            jsonPath(
+                "$.@id",
+                is(
+                    "/v1/article/work-example/eli/bund/bgbl-1/1975/s1000/1975-01-01/1/deu/art-z1?pageIndex=0&size=1")),
             jsonPath("$.member", hasSize(1)),
             jsonPath("$.member[0].eId", is("art-z1")));
   }
@@ -81,7 +85,7 @@ class ArticleControllerIntegrationTest extends ContainersIntegrationBase {
     mockMvc
         .perform(
             get(ApiConfig.Paths.ARTICLE_WORK_EXAMPLE
-                    + "/bund/bgbl-1/1975/s1000/1975-01-01/1/deu/art-z1")
+                    + "/eli/bund/bgbl-1/1975/s1000/1975-01-01/1/deu/art-z1")
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpectAll(status().isOk(), isJsonLdCompliant(), jsonPath("$.member", hasSize(0)));
   }

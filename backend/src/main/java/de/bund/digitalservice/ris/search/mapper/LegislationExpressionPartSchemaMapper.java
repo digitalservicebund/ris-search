@@ -31,7 +31,7 @@ public class LegislationExpressionPartSchemaMapper {
     Article article = articleWithExpressions.article();
 
     return new LegislationExpressionPartSchema(
-        ApiConfig.Paths.LEGISLATION + article.getExpressionEli() + "#" + article.getEId(),
+        ApiConfig.Paths.LEGISLATION + "/" + article.getExpressionEli() + "#" + article.getEId(),
         article.getEId(),
         article.getName(),
         "",
