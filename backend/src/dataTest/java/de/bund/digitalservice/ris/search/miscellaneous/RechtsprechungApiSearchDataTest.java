@@ -15,13 +15,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-class CaseLawApiSearchDataTest extends BaseApiSearchDataTest {
+class RechtsprechungApiSearchDataTest extends BaseApiSearchDataTest {
 
   private final int maxEntries = 500;
 
   private final double threshold = 95.0;
 
-  private final String apiUrl = "/v1/case-law";
+  private final String apiUrl = "/v1/rechtsprechung";
 
   @BeforeAll
   static void setup() {
@@ -30,7 +30,7 @@ class CaseLawApiSearchDataTest extends BaseApiSearchDataTest {
   }
 
   @Test
-  void testCaseLawFileNumberSearchResults() {
+  void testRechtsprechungFileNumberSearchResults() {
     List<String> searchStrings =
         fetchSearchStrings(
             maxEntries,
@@ -52,7 +52,7 @@ class CaseLawApiSearchDataTest extends BaseApiSearchDataTest {
   }
 
   @Test
-  void testCaseLawECLISearchResults() {
+  void testRechtsprechungECLISearchResults() {
     List<String> searchStrings =
         fetchSearchStrings(
             maxEntries,
