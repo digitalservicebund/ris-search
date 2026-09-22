@@ -113,7 +113,7 @@ public record RechtsprechungSchema(
             requiredMode = Schema.RequiredMode.REQUIRED)
         List<String> abweichendeDokumentnummern,
     @Schema(
-            example = "/v1/case-law/ECLI:DE:FGRLP:1969:0905.IV85.68.0A",
+            example = "/v1/rechtsprechung/ECLI:DE:FGRLP:1969:0905.IV85.68.0A",
             requiredMode = Schema.RequiredMode.REQUIRED)
         @JsonProperty("@id")
         String id,

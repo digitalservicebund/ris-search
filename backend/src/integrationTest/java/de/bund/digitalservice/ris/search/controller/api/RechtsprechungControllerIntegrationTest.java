@@ -1,35 +1,61 @@
 package de.bund.digitalservice.ris.search.controller.api;
 
+import static de.bund.digitalservice.ris.ZipTestUtils.readZipStream;
 import static de.bund.digitalservice.ris.utils.JsonldResultMatchers.isJsonLdCompliant;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.startsWithIgnoringCase;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.asyncDispatch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import de.bund.digitalservice.ris.SharedTestConstants;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.config.ContainersIntegrationBase;
+import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.models.PublicationStatus;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
+import de.bund.digitalservice.ris.search.service.ChangelogService;
 import de.bund.digitalservice.ris.search.service.IndexCaselawService;
 import de.bund.digitalservice.ris.search.utils.CaseLawLdmlTemplateUtils;
 import de.bund.digitalservice.ris.utils.CaseLawXmlValidator;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import org.assertj.core.api.Assertions;
 import org.hamcrest.Matchers;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Element;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.mockito.Mockito;
+import org.opensearch.core.common.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.util.MultiValueMap;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
@@ -70,6 +96,14 @@ class RechtsprechungControllerIntegrationTest extends ContainersIntegrationBase 
 
     return caseLawLdmlTemplateUtils.getXmlFromTemplateWithValidation(
         context, CaseLawXmlValidator.Type.DECISION);
+  }
+
+  private String getResourcePath(String fileName, String extension) {
+    return ApiConfig.Paths.RECHTSPRECHUNG + "/" + fileName + "." + extension;
+  }
+
+  private String getResourcePath(String extension) {
+    return getResourcePath(this.documentNumber, extension);
   }
 
   @BeforeEach
@@ -230,8 +264,10 @@ class RechtsprechungControllerIntegrationTest extends ContainersIntegrationBase 
 
     mockMvc
         .perform(
-            get(ApiConfig.Paths.CASELAW + "/FOOB000000001").contentType(MediaType.APPLICATION_JSON))
+            get(ApiConfig.Paths.RECHTSPRECHUNG + "/FOOB000000001")
+                .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
+        .andExpect(isJsonLdCompliant())
         .andExpect(jsonPath("$.vorabdokument", equalTo(true)));
   }
 
@@ -243,5 +279,186 @@ class RechtsprechungControllerIntegrationTest extends ContainersIntegrationBase 
         .perform(
             get(ApiConfig.Paths.RECHTSPRECHUNG + "/TEST").contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isNotFound());
+  }
+
+  @Test
+  @DisplayName("Should return XML version of a decision")
+  void textLegislationXMLEndpoint() throws Exception {
+    mockMvc
+        .perform(get(getResourcePath("xml")).contentType(MediaType.APPLICATION_XML))
+        .andExpectAll(
+            status().isOk(),
+            content().string(startsWithIgnoringCase("<?xml version=\"1.0\" encoding=\"UTF-8\"?>")),
+            content().contentType("application/xml"));
+  }
+
+  @Test
+  @DisplayName("Should return rechtsprechung as html when using api endpoint with document number")
+  void shouldReturnSingleRechtsprechungHtml() throws Exception {
+
+    String responseContent =
+        mockMvc
+            .perform(get(getResourcePath("html")).contentType(MediaType.TEXT_HTML))
+            .andExpect(status().isOk())
+            .andReturn()
+            .getResponse()
+            .getContentAsString();
+
+    assertThat(responseContent, containsString("Das ist der Leitsatz"));
+    assertThat(responseContent, containsString("Sonstiger Orientierungssatz"));
+    assertThat(responseContent, containsString("Tatbestand"));
+  }
+
+  @Test
+  @DisplayName("Should return rechtsprechung and attachment in zip when using api endpoint for zip")
+  void shouldReturnRechtsprechungZip() throws Exception {
+
+    MvcResult asyncResult =
+        mockMvc
+            .perform(get(getResourcePath("zip")).contentType("application/zip"))
+            .andExpect(request().asyncStarted())
+            .andReturn();
+
+    MvcResult result =
+        mockMvc
+            .perform(asyncDispatch(asyncResult))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType("application/zip"))
+            .andReturn();
+
+    byte[] zipBytes = result.getResponse().getContentAsByteArray();
+    ByteArrayInputStream byteInputStream = new ByteArrayInputStream(zipBytes);
+    final Map<String, byte[]> files = readZipStream(byteInputStream);
+
+    Assertions.assertThat(files)
+        .containsOnly(
+            Map.entry(
+                this.documentNumber + "/" + this.documentNumber + ".xml",
+                createTestCaseLawLdml().getBytes()),
+            Map.entry(this.documentNumber + "/Attachment.png", "picture".getBytes()));
+  }
+
+  @Test
+  @DisplayName("Should reject zip request with invalid documentNumber")
+  void shouldRejectInvalidDocumentNumberInZipRequest() throws Exception {
+    mockMvc
+        .perform(
+            get(getResourcePath("invalid", "zip"))
+                .contentType(MediaType.valueOf("application/zip")))
+        .andExpect(status().isUnprocessableContent())
+        .andExpect(jsonPath("$.errors[0].code").value("invalid_parameter_value"))
+        .andExpect(jsonPath("$.errors[0].message").value("Invalid document number format"))
+        .andExpect(jsonPath("$.errors[0].parameter").value("documentNumber"));
+  }
+
+  @Test
+  @DisplayName("Should return 404 when using document number is not found")
+  void shouldReturn404ForHtml() throws Exception {
+
+    mockMvc
+        .perform(get(getResourcePath("test", "html")).contentType(MediaType.TEXT_HTML))
+        .andExpect(status().isNotFound());
+  }
+
+  @ParameterizedTest
+  @CsvSource({",/v1/rechtsprechung/"})
+  @DisplayName("Html endpoint should adapt img src paths")
+  void shouldReturnHtmlWithAdaptedImgSrcAttributes(String header, String expectedPrefix)
+      throws Exception {
+    final MockHttpServletRequestBuilder requestBuilder =
+        get(getResourcePath("html")).contentType(MediaType.TEXT_HTML);
+
+    if (!Strings.isEmpty(header)) {
+      requestBuilder.header("get-resources-via", header);
+    }
+
+    var response =
+        mockMvc
+            .perform(requestBuilder)
+            .andExpectAll(status().isOk(), content().contentType("text/html;charset=UTF-8"))
+            .andReturn();
+
+    var document = Jsoup.parse(response.getResponse().getContentAsString());
+
+    Element image = Objects.requireNonNull(document.body().getElementsByTag("img").first());
+
+    final String srcInLDML = this.documentNumber + "/Attachment.png";
+    String expectedSrc = expectedPrefix + srcInLDML;
+    Assertions.assertThat(image.attr("src")).isEqualTo(expectedSrc);
+  }
+
+  @Test
+  @DisplayName("Serves images via the API with correct contentType")
+  void shouldReturnReferencedImageWithContentType() throws Exception {
+    mockMvc
+        .perform(get(getResourcePath(this.documentNumber + "/Attachment", "png")))
+        .andExpectAll(status().isOk(), content().contentType(MediaType.IMAGE_PNG));
+  }
+
+  @Test
+  @DisplayName("Returns 404 for disallowed image extensions")
+  void shouldReturn404ForDisallowedImageExtensions() throws Exception {
+    String[] disallowed = {"exe", "svg", "txt", "pdf"};
+    for (String ext : disallowed) {
+      mockMvc
+          .perform(get(getResourcePath(this.documentNumber + "/Attachment", ext)))
+          .andExpect(status().isNotFound());
+    }
+  }
+
+  @Test
+  @DisplayName("Returns placeholder.png if requested image does not exist")
+  void shouldReturnPlaceholderIfImageMissing() throws Exception {
+    byte[] expected = new ClassPathResource("placeholder.png").getInputStream().readAllBytes();
+
+    mockMvc
+        .perform(get(getResourcePath(this.documentNumber + "/NonExistent", "png")))
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.IMAGE_PNG))
+        .andExpect(content().bytes(expected))
+        .andReturn()
+        .getResponse()
+        .getContentAsByteArray();
+  }
+
+  @Test
+  @DisplayName("Returns 500 if placeholder.png is missing")
+  void shouldReturn500IfPlaceholderMissing() throws Exception {
+    try (var _ =
+        Mockito.mockConstruction(
+            ClassPathResource.class,
+            (mock, context) ->
+                when(mock.getInputStream()).thenThrow(new IOException("not found")))) {
+      mockMvc
+          .perform(get(getResourcePath(this.documentNumber + "/NonExistent", "png")))
+          .andExpect(status().isInternalServerError());
+    }
+  }
+
+  @Test
+  void itReturnsFileChangesBetweenTimestamps() throws Exception {
+    Changelog changelog =
+        new Changelog(
+            new HashSet<>(List.of("file1/file1.xml")),
+            new HashSet<>(List.of("file2/file2.xml")),
+            false);
+    String changelogContent = new ObjectMapper().writeValueAsString(changelog);
+
+    bucket.save(
+        ChangelogService.CHANGELOGS_PREFIX + "2026-07-03T12:00:00.276525407Z", changelogContent);
+
+    String from = "2026-07-03T12:00:00Z";
+    String to = "2026-07-04T12:00:00Z";
+
+    mockMvc
+        .perform(
+            get(ApiConfig.Paths.RECHTSPRECHUNG_CHANGELOGS)
+                .params(MultiValueMap.fromSingleValue(Map.of("from", from, "to", to))))
+        .andExpect(status().isOk())
+        .andExpect(isJsonLdCompliant())
+        .andExpect(jsonPath("$.changed[0].['@id']").value("/v1/rechtsprechung/file1/zip"))
+        .andExpect(jsonPath("$.changed[0].['@type']").value("MediaObject"))
+        .andExpect(jsonPath("$.deleted[0].['@id']").value("/v1/rechtsprechung/file2"))
+        .andExpect(jsonPath("$.deleted[0].['@type']").value("Rechtsprechung"));
   }
 }
