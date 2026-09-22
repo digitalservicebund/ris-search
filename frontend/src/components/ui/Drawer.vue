@@ -13,21 +13,22 @@ const visible = defineModel<boolean>("visible", { default: false });
 const slots = useSlots();
 const dialogRef = ref<HTMLDialogElement | null>(null);
 
-// Mount content lazily on first open, so closed drawers don't duplicate
-// content (headings, links, ...) in the DOM.
-const hasOpened = ref(visible.value);
+// A fixed-position, always-present child of the dialog that slotted content
+// can teleport interactive overlays into (e.g. a dropdown panel) instead of
+// document.body. A native modal dialog makes everything outside its own DOM
+// subtree inert: not just visually behind it, but unclickable, even for
+// content that's separately promoted into the top layer.
+const appendTargetRef = ref<HTMLElement | null>(null);
 
-// Drives the visual open/closed state (translate, opacity, backdrop),
-// separate from the dialog's native `open` attribute. Safari removes
-// <dialog>/popover elements from the top layer the instant close() is
-// called, skipping any CSS exit transition. WebKit disabled `display`
-// transitions for them entirely, see
-// https://github.com/mdn/browser-compat-data/issues/30560. The workaround
-// keeps the dialog open until our own exit transition finishes, then calls
-// close(); see closeDialog() below.
+// Mounted only while open (or animating closed), so closed drawers don't
+// duplicate content (headings, links, ...) in the DOM, and each open gets a
+// fresh mount, so components inside (e.g. a draft form field) can't carry
+// stale state across a close/reopen cycle.
+const showContent = ref(visible.value);
+
 const isOpen = ref(visible.value);
 
-const EXIT_DURATION_MS = 150; // matches .drawer-root's transition-duration
+const EXIT_DURATION_MS = 150; // match .drawer-root's transition-duration
 
 let previousBodyOverflow: string | null = null;
 let cleanupPendingClose: (() => void) | undefined;
@@ -58,7 +59,7 @@ function openDialog() {
     return;
   }
 
-  hasOpened.value = true;
+  showContent.value = true;
   dialog.showModal();
   lockScroll();
 
@@ -85,14 +86,13 @@ function closeDialog() {
     clearTimeout(timeoutId);
     dialog.removeEventListener("transitionend", onTransitionEnd);
     cleanupPendingClose = undefined;
-    dialog.close(); // fires the native "close" event, see handleClose()
+    dialog.close();
   };
 
   // Fallback in case the transition never fires (e.g. reduced motion).
   const timeoutId = setTimeout(finish, EXIT_DURATION_MS + 50);
   dialog.addEventListener("transitionend", onTransitionEnd);
 
-  // Lets openDialog() bail out of this pending close without finishing it.
   cleanupPendingClose = () => {
     clearTimeout(timeoutId);
     dialog.removeEventListener("transitionend", onTransitionEnd);
@@ -116,12 +116,11 @@ function handleKeydown(event: KeyboardEvent) {
 function handleClose() {
   visible.value = false;
   isOpen.value = false;
+  showContent.value = false;
   unlockScroll();
 }
 
 function handleBackdropClick(event: MouseEvent) {
-  // Clicks on the ::backdrop pseudo-element target the dialog itself; clicks
-  // on the header/content/footer target those elements instead.
   if (event.target === dialogRef.value) close();
 }
 
@@ -141,7 +140,9 @@ onBeforeUnmount(() => {
 
 // Classes ------------------------------------------------
 
-const root = tw`drawer-root shadow-gray-1000/15 fixed inset-x-0 top-auto bottom-0 m-0 max-h-[85dvh] w-full max-w-none overflow-auto border-0 bg-white p-0 shadow-[0_0_0.5rem] print:hidden`;
+const root = tw`drawer-root shadow-gray-1000/15 fixed inset-x-0 top-auto m-0 max-h-[85dvh] w-full max-w-none overflow-auto border-0 bg-white p-0 shadow-[0_0_0.5rem] print:hidden`;
+
+const appendTargetClass = tw`drawer-append-target pointer-events-none fixed inset-0 z-20`;
 
 const headerClass = tw`drawer-header sticky top-0 z-10 flex min-h-64 items-center justify-between gap-8 bg-white px-16 py-8`;
 
@@ -163,7 +164,9 @@ const footerClass = tw`drawer-footer sticky bottom-0 bg-white px-16 pt-16 pb-24`
     @close="handleClose"
     @keydown="handleKeydown"
   >
-    <template v-if="hasOpened">
+    <div ref="appendTargetRef" :class="appendTargetClass" />
+
+    <template v-if="showContent">
       <div :class="headerClass">
         <span :class="titleClass">
           <slot name="header">{{ header }}</slot>
@@ -176,7 +179,7 @@ const footerClass = tw`drawer-footer sticky bottom-0 bg-white px-16 pt-16 pb-24`
       </div>
 
       <div :class="contentClass">
-        <slot />
+        <slot :append-target="appendTargetRef" />
       </div>
 
       <div v-if="slots.footer" :class="footerClass">
@@ -189,16 +192,19 @@ const footerClass = tw`drawer-footer sticky bottom-0 bg-white px-16 pt-16 pb-24`
 <style scoped>
 .drawer-root {
   container-type: scroll-state;
-  translate: 0 100%;
+  bottom: -100dvh;
   opacity: 0;
+  pointer-events: none;
   transition:
-    translate 150ms ease-in-out,
-    opacity 150ms ease-in-out;
+    bottom 150ms ease-in-out,
+    opacity 150ms ease-in-out,
+    pointer-events 150ms allow-discrete;
 }
 
 .drawer-root.drawer-open {
-  translate: 0 0;
+  bottom: 0;
   opacity: 1;
+  pointer-events: auto;
   transition-duration: 300ms;
 }
 

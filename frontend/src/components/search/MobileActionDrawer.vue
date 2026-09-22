@@ -53,9 +53,11 @@ function handleApply() {
       :header="label"
       v-model:visible="visible"
     >
-      <div class="mobile-action-drawer-content space-y-24">
-        <slot />
-      </div>
+      <template #default="{ appendTarget }">
+        <div class="mobile-action-drawer-content space-y-24">
+          <slot :append-target="appendTarget" />
+        </div>
+      </template>
 
       <template #footer>
         <div class="flex gap-8">
