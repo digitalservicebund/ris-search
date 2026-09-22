@@ -13,9 +13,8 @@ const visible = defineModel<boolean>("visible", { default: false });
 const slots = useSlots();
 const dialogRef = ref<HTMLDialogElement | null>(null);
 
-// The dialog's content is only mounted once the drawer has been opened for
-// the first time, so unopened drawers don't leave inert duplicate content
-// (headings, links, ...) sitting in the DOM.
+// Mount content lazily on first open, so closed drawers don't duplicate
+// content (headings, links, ...) in the DOM.
 const hasOpened = ref(visible.value);
 
 let previousBodyOverflow: string | null = null;
@@ -47,10 +46,8 @@ function close() {
   visible.value = false;
 }
 
-// The dialog's native "close" event fires both for our own close() calls
-// (button/backdrop click -> visible=false -> watcher -> dialog.close()) and
-// for the browser's own default action (Escape) - syncing visible here
-// covers both without duplicating close logic.
+// Covers both close paths in one place: our close() (visible=false, then
+// the watcher calls dialog.close()) and the browser's native Escape handling.
 function handleClose() {
   visible.value = false;
   unlockScroll();
@@ -77,14 +74,12 @@ onBeforeUnmount(() => {
 
 // Classes ------------------------------------------------
 
-// translate isn't animated here via Tailwind's translate-y-* utilities:
-// Safari's @starting-style fails to pick up the starting value when it's
-// held in a custom property (Tailwind's translate utilities route through
-// --tw-translate-y), so the slide-in silently no-ops there while opacity
-// (a plain value, no custom property) still animates. See
-// https://github.com/tailwindlabs/tailwindcss/discussions/18304. Fixed
-// below in a scoped <style> block using direct `translate` values instead.
-const root = tw`drawer-root shadow-gray-1000/15 fixed inset-x-0 top-auto bottom-0 m-0 max-h-[85dvh] w-full max-w-none overflow-auto border-0 bg-white p-0 shadow-[0_0_0.5rem] backdrop:bg-gray-900/30 backdrop:transition-all backdrop:transition-discrete backdrop:duration-300 backdrop:ease-in-out not-open:backdrop:bg-gray-900/0 starting:open:backdrop:bg-gray-900/0 print:hidden`;
+// Not using Tailwind's translate-y-* utilities here: Safari's
+// @starting-style ignores values held in a custom property, so the entrance
+// slide silently breaks there (opacity, a plain value, still animates). See
+// https://github.com/tailwindlabs/tailwindcss/discussions/18304.
+// The scoped <style> below uses direct `translate` values instead.
+const root = tw`drawer-root shadow-gray-1000/15 fixed inset-x-0 top-auto bottom-0 m-0 max-h-[85dvh] w-full max-w-none overflow-auto border-0 bg-white p-0 shadow-[0_0_0.5rem] backdrop:bg-gray-900/30 backdrop:transition-all backdrop:transition-discrete backdrop:duration-300 backdrop:ease-in-out not-open:backdrop:bg-gray-900/0 not-open:backdrop:duration-150 starting:open:backdrop:bg-gray-900/0 print:hidden`;
 
 const headerClass = tw`drawer-header sticky top-0 z-10 flex min-h-64 items-center justify-between gap-8 bg-white px-16 py-8`;
 
@@ -131,16 +126,18 @@ const footerClass = tw`drawer-footer sticky bottom-0 bg-white px-16 pt-16 pb-24`
 .drawer-root {
   translate: 0 0;
   opacity: 1;
-  transition:
-    translate 200ms ease-in-out,
-    opacity 200ms ease-in-out,
-    overlay 200ms ease-in-out allow-discrete,
-    display 200ms ease-in-out allow-discrete;
+  transition-property: translate, opacity, overlay, display;
+  transition-duration: 300ms;
+  transition-timing-function: ease-in-out;
+  transition-behavior: allow-discrete;
 }
 
 .drawer-root:not([open]) {
   translate: 0 100%;
   opacity: 0;
+  /* CSS transitions take their duration from the state being transitioned
+     into, so this is what makes the drawer close faster than it opens. */
+  transition-duration: 150ms;
 }
 
 @starting-style {
