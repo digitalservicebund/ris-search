@@ -55,17 +55,9 @@
         "@id": "ris:Decision",
         "@context": {
           "ecli": "ris:ecli",
-          "caseFacts": "ris:caseFacts",
-          "decisionGrounds": "ris:decisionGrounds",
-          "dissentingOpinion": "ris:dissentingOpinion",
-          "grounds": "ris:grounds",
-          "guidingPrinciple": "ris:guidingPrinciple",
           "headline": "schema:headline",
           "titleLine": "ris:titleLine",
-          "headnote": "ris:headnote",
-          "otherHeadnote": "ris:otherHeadnote",
           "otherLongText": "ris:otherLongText",
-          "tenor": "ris:tenor",
           "decisionDate": "ris:decisionDate",
           "fileNumbers": "ris:fileNumber",
           "courtType": "ris:courtType",
@@ -73,15 +65,9 @@
           "documentType": "ris:documentType",
           "outline": "ris:outline",
           "judicialBody": "ris:judicialBody",
-          "keywords": "schema:keywords",
           "courtName": "ris:courtName",
           "decisionName": "schema:name",
-          "deviatingDocumentNumber": "ris:deviatingDocumentNumber",
-          "previousDecisions": "ris:previousDecisions",
-          "ensuingDecisions": "ris:ensuingDecisions",
-          "gesetzeskraft": "ris:gesetzeskraft",
-          "streitjahre": "ris:streitjahre",
-          "vorabdokument": "ris:vorabdokument"
+          "deviatingDocumentNumber": "ris:deviatingDocumentNumber"
         }
       },
       "Rechtsprechung": {
