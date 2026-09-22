@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { Drawer } from "primevue";
 import IcBaselineArrowForward from "~icons/ic/baseline-arrow-Forward";
 import IcBaselineList from "~icons/ic/baseline-list";
 import type { RouteLocationRaw } from "#vue-router";
@@ -29,7 +28,6 @@ const {
   visible: mobileTocVisible,
   // @ts-expect-error -- usage in template not detected
   triggerRef: openButtonRef,
-  closeButtonProps,
 } = useDrawer();
 
 const drawerId = useId();
@@ -70,13 +68,10 @@ const drawerId = useId();
   </Transition>
 
   <!-- mobile open toc -->
-  <Drawer
+  <UiDrawer
     v-model:visible="mobileTocVisible"
     aria-label="Inhalte"
-    block-scroll
-    position="bottom"
     :id="drawerId"
-    :close-button-props="closeButtonProps"
   >
     <template #header>
       <div class="flex flex-col gap-4">
@@ -114,7 +109,7 @@ const drawerId = useId();
         @click="mobileTocVisible = false"
       />
     </div>
-  </Drawer>
+  </UiDrawer>
 
   <!-- desktop -->
   <TreeView

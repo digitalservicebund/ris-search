@@ -303,11 +303,12 @@ watch(searchStatus, async (newStatus, oldStatus) => {
               :icon="IcOutlineFilterAlt"
               @reset="resetFilterDrawer"
               @apply="applyFilterDrawer"
+              v-slot="{ appendTarget }"
             >
               <SearchCourtFilter
                 v-if="documentKind === DocumentKind.CaseLaw"
                 v-model="courtDraft.draft.value"
-                append-to="body"
+                :append-to="appendTarget ?? 'self'"
               />
 
               <SearchDateFilter
