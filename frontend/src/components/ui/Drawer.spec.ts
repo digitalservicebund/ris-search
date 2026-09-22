@@ -106,6 +106,18 @@ describe("Drawer", () => {
     expect(emitted("update:visible")).toBeUndefined();
   });
 
+  it("emits update:visible false when Escape is pressed", async () => {
+    const user = userEvent.setup();
+    const { emitted } = render(Drawer, {
+      props: { visible: true, header: "Filtern" },
+    });
+
+    screen.getByRole("button", { name: "Schließen" }).focus();
+    await user.keyboard("{Escape}");
+
+    expect(emitted("update:visible")).toEqual([[false]]);
+  });
+
   it("emits update:visible false when the dialog fires a native close event", () => {
     const { emitted } = render(Drawer, {
       props: { visible: true, header: "Filtern" },

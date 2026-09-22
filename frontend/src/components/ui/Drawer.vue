@@ -17,7 +17,20 @@ const dialogRef = ref<HTMLDialogElement | null>(null);
 // content (headings, links, ...) in the DOM.
 const hasOpened = ref(visible.value);
 
+// Drives the visual open/closed state (translate, opacity, backdrop),
+// separate from the dialog's native `open` attribute. Safari removes
+// <dialog>/popover elements from the top layer the instant close() is
+// called, skipping any CSS exit transition. WebKit disabled `display`
+// transitions for them entirely, see
+// https://github.com/mdn/browser-compat-data/issues/30560. The workaround
+// keeps the dialog open until our own exit transition finishes, then calls
+// close(); see closeDialog() below.
+const isOpen = ref(visible.value);
+
+const EXIT_DURATION_MS = 150; // matches .drawer-root's transition-duration
+
 let previousBodyOverflow: string | null = null;
+let cleanupPendingClose: (() => void) | undefined;
 
 function lockScroll() {
   previousBodyOverflow = document.body.style.overflow;
@@ -32,24 +45,77 @@ function unlockScroll() {
 }
 
 function openDialog() {
-  if (dialogRef.value?.open) return;
+  const dialog = dialogRef.value;
+  if (!dialog) return;
+
+  cleanupPendingClose?.();
+  cleanupPendingClose = undefined;
+
+  if (dialog.open) {
+    // Already in the top layer, possibly mid-exit-animation. Just make sure
+    // it ends up visually open again.
+    isOpen.value = true;
+    return;
+  }
+
   hasOpened.value = true;
-  dialogRef.value?.showModal();
+  dialog.showModal();
   lockScroll();
+
+  // Let the closed state paint first, so switching to drawer-open is a real
+  // transition instead of the dialog's very first style.
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      if (dialog.open) isOpen.value = true;
+    });
+  });
 }
 
 function closeDialog() {
-  if (dialogRef.value?.open) dialogRef.value.close();
+  const dialog = dialogRef.value;
+  if (!dialog?.open) return;
+
+  isOpen.value = false;
+
+  const onTransitionEnd = (event: TransitionEvent) => {
+    if (event.target === dialog) finish();
+  };
+
+  const finish = () => {
+    clearTimeout(timeoutId);
+    dialog.removeEventListener("transitionend", onTransitionEnd);
+    cleanupPendingClose = undefined;
+    dialog.close(); // fires the native "close" event, see handleClose()
+  };
+
+  // Fallback in case the transition never fires (e.g. reduced motion).
+  const timeoutId = setTimeout(finish, EXIT_DURATION_MS + 50);
+  dialog.addEventListener("transitionend", onTransitionEnd);
+
+  // Lets openDialog() bail out of this pending close without finishing it.
+  cleanupPendingClose = () => {
+    clearTimeout(timeoutId);
+    dialog.removeEventListener("transitionend", onTransitionEnd);
+  };
 }
 
 function close() {
   visible.value = false;
 }
 
-// Covers both close paths in one place: our close() (visible=false, then
-// the watcher calls dialog.close()) and the browser's native Escape handling.
+function handleCancel(event: Event) {
+  // Run our animated close instead of the browser's default instant one.
+  event.preventDefault();
+  close();
+}
+
+function handleKeydown(event: KeyboardEvent) {
+  if (event.key === "Escape") close();
+}
+
 function handleClose() {
   visible.value = false;
+  isOpen.value = false;
   unlockScroll();
 }
 
@@ -69,17 +135,13 @@ onMounted(() => {
 });
 
 onBeforeUnmount(() => {
+  cleanupPendingClose?.();
   if (dialogRef.value?.open) unlockScroll();
 });
 
 // Classes ------------------------------------------------
 
-// Not using Tailwind's translate-y-* utilities here: Safari's
-// @starting-style ignores values held in a custom property, so the entrance
-// slide silently breaks there (opacity, a plain value, still animates). See
-// https://github.com/tailwindlabs/tailwindcss/discussions/18304.
-// The scoped <style> below uses direct `translate` values instead.
-const root = tw`drawer-root shadow-gray-1000/15 fixed inset-x-0 top-auto bottom-0 m-0 max-h-[85dvh] w-full max-w-none overflow-auto border-0 bg-white p-0 shadow-[0_0_0.5rem] backdrop:bg-gray-900/30 backdrop:transition-all backdrop:transition-discrete backdrop:duration-300 backdrop:ease-in-out not-open:backdrop:bg-gray-900/0 not-open:backdrop:duration-150 starting:open:backdrop:bg-gray-900/0 print:hidden`;
+const root = tw`drawer-root shadow-gray-1000/15 fixed inset-x-0 top-auto bottom-0 m-0 max-h-[85dvh] w-full max-w-none overflow-auto border-0 bg-white p-0 shadow-[0_0_0.5rem] print:hidden`;
 
 const headerClass = tw`drawer-header sticky top-0 z-10 flex min-h-64 items-center justify-between gap-8 bg-white px-16 py-8`;
 
@@ -95,9 +157,11 @@ const footerClass = tw`drawer-footer sticky bottom-0 bg-white px-16 pt-16 pb-24`
 <template>
   <dialog
     ref="dialogRef"
-    :class="root"
+    :class="[root, { 'drawer-open': isOpen }]"
+    @cancel="handleCancel"
     @click="handleBackdropClick"
     @close="handleClose"
+    @keydown="handleKeydown"
   >
     <template v-if="hasOpened">
       <div :class="headerClass">
@@ -124,31 +188,46 @@ const footerClass = tw`drawer-footer sticky bottom-0 bg-white px-16 pt-16 pb-24`
 
 <style scoped>
 .drawer-root {
-  translate: 0 0;
-  opacity: 1;
-  transition-property: translate, opacity, overlay, display;
-  transition-duration: 300ms;
-  transition-timing-function: ease-in-out;
-  transition-behavior: allow-discrete;
-}
-
-.drawer-root:not([open]) {
+  container-type: scroll-state;
   translate: 0 100%;
   opacity: 0;
-  /* CSS transitions take their duration from the state being transitioned
-     into, so this is what makes the drawer close faster than it opens. */
-  transition-duration: 150ms;
+  transition:
+    translate 150ms ease-in-out,
+    opacity 150ms ease-in-out;
 }
 
-@starting-style {
-  .drawer-root[open] {
-    translate: 0 100%;
-    opacity: 0;
+.drawer-root.drawer-open {
+  translate: 0 0;
+  opacity: 1;
+  transition-duration: 300ms;
+}
+
+.drawer-root::backdrop {
+  background-color: color-mix(in srgb, var(--color-gray-900) 0%, transparent);
+  transition: background-color 150ms ease-in-out;
+}
+
+.drawer-root.drawer-open::backdrop {
+  background-color: color-mix(in srgb, var(--color-gray-900) 30%, transparent);
+  transition-duration: 300ms;
+}
+
+@supports (color: color-mix(in lab, red, red)) {
+  .drawer-root::backdrop {
+    background-color: color-mix(
+      in oklab,
+      var(--color-gray-900) 0%,
+      transparent
+    );
   }
-}
 
-.drawer-root {
-  container-type: scroll-state;
+  .drawer-root.drawer-open::backdrop {
+    background-color: color-mix(
+      in oklab,
+      var(--color-gray-900) 30%,
+      transparent
+    );
+  }
 }
 
 .drawer-header,
