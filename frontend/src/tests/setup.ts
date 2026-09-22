@@ -47,6 +47,20 @@ if (globalThis?.window) {
   };
 }
 
+// jsdom doesn't implement dialog's showModal/close - approximate them via the
+// "open" attribute they're specified to toggle, and the "close" event close()
+// is specified to dispatch. See https://github.com/jsdom/jsdom/issues/3294
+if (globalThis?.window) {
+  HTMLDialogElement.prototype.showModal = function (this: HTMLDialogElement) {
+    this.setAttribute("open", "");
+  };
+  HTMLDialogElement.prototype.close = function (this: HTMLDialogElement) {
+    if (!this.open) return;
+    this.removeAttribute("open");
+    this.dispatchEvent(new Event("close"));
+  };
+}
+
 class ResizeObserver {
   observe() {
     // empty mock method
