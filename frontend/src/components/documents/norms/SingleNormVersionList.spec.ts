@@ -1,7 +1,9 @@
+import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import { userEvent } from "@testing-library/user-event";
 import { render, screen, within } from "@testing-library/vue";
-import { describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { SingleNorm } from "~/composables/useSingleNormVersions";
+import type { HtmlCacheEntry } from "~/composables/useSingleNormVersionsHtml";
 import SingleNormVersionList from "./SingleNormVersionList.vue";
 
 /**
@@ -12,6 +14,18 @@ import SingleNormVersionList from "./SingleNormVersionList.vue";
 function flushToggleEvent() {
   return new Promise((resolve) => setTimeout(resolve, 0));
 }
+
+const { updateRowsHtmlMock } = vi.hoisted(() => {
+  return {
+    updateRowsHtmlMock: vi.fn(),
+  };
+});
+
+const rowsHtml = ref(new Map<string, HtmlCacheEntry>());
+
+mockNuxtImport("useSingleNormVersionsHtml", () => {
+  return () => ({ rowsHtml, updateRowsHtml: updateRowsHtmlMock });
+});
 
 function createSingleNorm(
   identifier: string,
@@ -50,6 +64,11 @@ function props(
 }
 
 describe("SingleNormVersionList", () => {
+  beforeEach(() => {
+    rowsHtml.value = new Map();
+    updateRowsHtmlMock.mockReset();
+  });
+
   it("lists versions, sorted by date, newest first", () => {
     render(SingleNormVersionList, { props: props() });
 
@@ -83,11 +102,6 @@ describe("SingleNormVersionList", () => {
     expect(currentRow).toHaveTextContent(
       "Gültig ab: 01.01.2020 Gültig bis: 31.12.2030",
     );
-
-    // Unlike the other versions, the current one has no expandable content
-    expect(
-      within(currentRow).queryByText("Html content coming soon..."),
-    ).not.toBeInTheDocument();
   });
 
   it("current version is not expandable", async () => {
@@ -99,9 +113,7 @@ describe("SingleNormVersionList", () => {
     await user.click(currentRow);
     await flushToggleEvent();
 
-    expect(
-      within(currentRow).queryByText("Html content coming soon..."),
-    ).not.toBeInTheDocument();
+    expect(updateRowsHtmlMock).not.toHaveBeenCalled();
   });
 
   it("renders the other versions as a closed accordion by default", () => {
@@ -112,61 +124,86 @@ describe("SingleNormVersionList", () => {
     const pastVersionRow = rows[2]!;
 
     expect(
-      within(futureVersionRow).getByText("Html content coming soon..."),
-    ).not.toBeVisible();
+      within(futureVersionRow).queryByRole("status"),
+    ).not.toBeInTheDocument();
     expect(
-      within(pastVersionRow).getByText("Html content coming soon..."),
-    ).not.toBeVisible();
+      within(pastVersionRow).queryByRole("status"),
+    ).not.toBeInTheDocument();
   });
 
-  it("expands a version and updates the model when it's opened", async () => {
+  it("requests the HTML for a version when it's expanded", async () => {
     const user = userEvent.setup();
-    const { emitted } = render(SingleNormVersionList, { props: props() });
+    render(SingleNormVersionList, { props: props() });
     const futureVersionRow = screen.getAllByRole("listitem")[0]!;
 
     await user.click(within(futureVersionRow).getByText("01.01.2031"));
     await flushToggleEvent();
 
-    expect(
-      within(futureVersionRow).getByText("Html content coming soon..."),
-    ).toBeVisible();
-    expect(emitted("update:modelValue")?.at(-1)).toEqual([
+    expect(updateRowsHtmlMock).toHaveBeenCalledWith(
       futureVersion["@id"],
-    ]);
+      futureVersion.encoding.contentUrl,
+    );
   });
 
-  it("collapses a version and clears the model when it's closed again", async () => {
+  it("shows a loading spinner while the HTML is being fetched", async () => {
     const user = userEvent.setup();
-    const { emitted } = render(SingleNormVersionList, { props: props() });
+    render(SingleNormVersionList, { props: props() });
+    const futureVersionRow = screen.getAllByRole("listitem")[0]!;
+
+    await user.click(within(futureVersionRow).getByText("01.01.2031"));
+    await flushToggleEvent();
+
+    expect(within(futureVersionRow).getByLabelText("Ladestatus")).toBeVisible();
+  });
+
+  it("shows the fetched HTML once it becomes available", async () => {
+    updateRowsHtmlMock.mockImplementation(async (rowKey: string) => {
+      rowsHtml.value.set(rowKey, {
+        html: "<p>Norm content</p>",
+        error: false,
+      });
+    });
+    const user = userEvent.setup();
+    render(SingleNormVersionList, { props: props() });
+    const futureVersionRow = screen.getAllByRole("listitem")[0]!;
+
+    await user.click(within(futureVersionRow).getByText("01.01.2031"));
+    await flushToggleEvent();
+
+    expect(within(futureVersionRow).getByText("Norm content")).toBeVisible();
+  });
+
+  it("shows an error message when fetching the HTML fails", async () => {
+    updateRowsHtmlMock.mockImplementation(async (rowKey: string) => {
+      rowsHtml.value.set(rowKey, { error: true });
+    });
+    const user = userEvent.setup();
+    render(SingleNormVersionList, { props: props() });
+    const futureVersionRow = screen.getAllByRole("listitem")[0]!;
+
+    await user.click(within(futureVersionRow).getByText("01.01.2031"));
+    await flushToggleEvent();
+
+    const errorMessage = within(futureVersionRow).getByRole("alert");
+    expect(errorMessage).toHaveTextContent("Es ist ein Fehler aufgetreten.");
+  });
+
+  it("hides the content again when the accordion is collapsed", async () => {
+    const user = userEvent.setup();
+    render(SingleNormVersionList, { props: props() });
     const futureVersionRow = screen.getAllByRole("listitem")[0]!;
     const toggle = within(futureVersionRow).getByText("01.01.2031");
 
     await user.click(toggle);
     await flushToggleEvent();
+    expect(within(futureVersionRow).getByLabelText("Ladestatus")).toBeVisible();
+
     await user.click(toggle);
     await flushToggleEvent();
 
     expect(
-      within(futureVersionRow).getByText("Html content coming soon..."),
-    ).not.toBeVisible();
-    expect(emitted("update:modelValue")?.at(-1)).toEqual([undefined]);
-  });
-
-  it("opens the version matching the model value", () => {
-    render(SingleNormVersionList, {
-      props: { ...props(), modelValue: futureVersion["@id"] },
-    });
-
-    const rows = screen.getAllByRole("listitem");
-    const futureVersionRow = rows[0]!;
-    const pastVersionRow = rows[2]!;
-
-    expect(
-      within(futureVersionRow).getByText("Html content coming soon..."),
-    ).toBeVisible();
-    expect(
-      within(pastVersionRow).getByText("Html content coming soon..."),
-    ).not.toBeVisible();
+      within(futureVersionRow).queryByLabelText("Ladestatus"),
+    ).not.toBeInTheDocument();
   });
 
   it("shows a placeholder when there are no versions", () => {

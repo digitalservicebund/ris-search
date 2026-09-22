@@ -22,7 +22,7 @@ const dummyResponse: SingleNormVersionCollection = {
       isPartOf: [{ "@id": "eli/bund/bgbl-1/2020/s1126/2020-08-04/1/deu" }],
       encoding: {
         contentUrl:
-          "/v1/legislation/eli/bund/bgbl-1/2020/s1126/2020-08-04/1/deu#art-z1.html",
+          "/v1/legislation/eli/bund/bgbl-1/2020/s1126/2020-08-04/1/deu/2020-08-04/regelungstext-1/hauptteil-n1_abschnitt-n1_art-z1.html",
       },
     },
     {
@@ -32,7 +32,7 @@ const dummyResponse: SingleNormVersionCollection = {
       isPartOf: [{ "@id": "eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu" }],
       encoding: {
         contentUrl:
-          "/v1/legislation/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu#art-z1.html",
+          "/v1/legislation/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/2022-08-04/regelungstext-1/hauptteil-n1_abschnitt-n1_art-z1.html",
       },
     },
     {
@@ -42,7 +42,7 @@ const dummyResponse: SingleNormVersionCollection = {
       isPartOf: [{ "@id": "eli/bund/bgbl-1/2020/s1126/2920-08-04/1/deu" }],
       encoding: {
         contentUrl:
-          "/v1/legislation/eli/bund/bgbl-1/2020/s1126/2920-08-04/1/deu#art-z1.html",
+          "/v1/legislation/eli/bund/bgbl-1/2020/s1126/2920-08-04/1/deu/2920-08-04/regelungstext-1/hauptteil-n1_abschnitt-n1_art-z1.html",
       },
     },
   ],

@@ -14,6 +14,7 @@ const props = defineProps<{
 type VersionRow = DataTableRow & {
   fromDate: string;
   toDate: string;
+  contentUrl: string;
 };
 
 const columns: DataTableColumn<VersionRow>[] = [
@@ -39,22 +40,23 @@ const rows = computed<VersionRow[]>(() => {
       current,
       fromDate: dateFormattedDDMMYYYY(validityInterval?.from) ?? "–",
       toDate: dateFormattedDDMMYYYY(validityInterval?.to) ?? "–",
+      contentUrl: version.encoding.contentUrl,
     };
   });
 });
 
-const currentlyExpandedRowKey = defineModel<string | undefined>();
-
-function isExpanded(row: VersionRow) {
-  return row.key === currentlyExpandedRowKey.value;
-}
+const expandedRowKey = ref<string | undefined>();
+const { rowsHtml, updateRowsHtml } = useSingleNormVersionsHtml();
 
 // <details name="..."> makes the rows a mutually exclusive accordion natively,
-// even without JS. This handler only keeps the v-model in sync with that
+// even without JS. This handler only keeps the ref in sync with that
 // native state; it never drives the expand/collapse behavior itself.
-function onToggle(row: VersionRow, event: Event) {
+async function onToggle(row: VersionRow, event: Event) {
   const details = event.currentTarget as HTMLDetailsElement;
-  currentlyExpandedRowKey.value = details.open ? row.key : undefined;
+  expandedRowKey.value = details.open ? row.key : undefined;
+  if (details.open) {
+    await updateRowsHtml(row.key, row.contentUrl);
+  }
 }
 
 // Filtering swaps the rows out in place, which assistive technology does not
@@ -74,6 +76,8 @@ watch(
     }
   },
 );
+
+const currentRowId = useId();
 </script>
 
 <template>
@@ -113,7 +117,7 @@ watch(
              has no way to disable toggling. -->
         <div
           v-if="row.current"
-          :aria-label="`Gültig ab: ${row.fromDate}, Gültig bis: ${row.toDate}`"
+          :aria-labelledby="currentRowId"
           aria-current="true"
           role="group"
           class="col-span-full grid grid-cols-subgrid items-start gap-8 p-16 md:items-center md:gap-0 md:p-0"
@@ -121,6 +125,7 @@ watch(
           <span
             aria-hidden="true"
             class="col-span-2 grid grid-cols-[max-content_minmax(0,1fr)] gap-8 md:grid-cols-subgrid md:gap-0"
+            :id="currentRowId"
           >
             <template v-for="column in columns" :key="column.key">
               <span
@@ -144,7 +149,6 @@ watch(
           v-else
           name="single-norm-versions"
           class="group contents details-content:col-span-full"
-          :open="isExpanded(row)"
           @toggle="onToggle(row, $event)"
         >
           <summary
@@ -180,7 +184,28 @@ watch(
           </summary>
 
           <section class="col-span-full">
-            <p>Html content coming soon...</p>
+            <template v-if="expandedRowKey === row.key">
+              <DocumentsNormsLegislationContent
+                v-if="rowsHtml.get(expandedRowKey)?.html"
+                single-article
+              >
+                <div
+                  class="akn-act -mt-16 px-16"
+                  v-html="rowsHtml.get(expandedRowKey)?.html"
+                />
+              </DocumentsNormsLegislationContent>
+              <UiMessage
+                v-else-if="rowsHtml.get(expandedRowKey)?.error"
+                severity="error"
+                class="m-16"
+                role="alert"
+              >
+                Es ist ein Fehler aufgetreten.
+              </UiMessage>
+              <div v-else class="flex justify-center p-16">
+                <UiProgressSpinner />
+              </div>
+            </template>
           </section>
         </details>
       </li>
