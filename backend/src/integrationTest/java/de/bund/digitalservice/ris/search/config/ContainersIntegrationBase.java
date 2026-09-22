@@ -26,11 +26,9 @@ import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
 import de.bund.digitalservice.ris.search.schema.TextMatchSchema;
 import de.bund.digitalservice.ris.search.service.AdministrativeDirectiveService;
 import de.bund.digitalservice.ris.search.service.AllDocumentsService;
-import de.bund.digitalservice.ris.search.service.BulkExportService;
 import de.bund.digitalservice.ris.search.service.CaseLawService;
 import de.bund.digitalservice.ris.search.service.LiteratureService;
 import de.bund.digitalservice.ris.search.service.NormsService;
-import de.bund.digitalservice.ris.search.service.PostHogService;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -97,12 +95,6 @@ public class ContainersIntegrationBase {
   @Autowired protected NormsService normsService;
   @Autowired protected LiteratureService literatureService;
   @Autowired protected AdministrativeDirectiveService administrativeDirectiveService;
-
-  @Qualifier("normsBulkExportService")
-  @MockitoSpyBean
-  protected BulkExportService normsBulkExportService;
-
-  @MockitoSpyBean protected PostHogService postHogService;
 
   // Setup Testcontainers
   public static final CustomOpensearchContainer openSearchContainer =

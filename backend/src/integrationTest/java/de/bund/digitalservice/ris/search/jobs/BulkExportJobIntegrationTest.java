@@ -12,6 +12,7 @@ import de.bund.digitalservice.ris.search.models.DocumentKind;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
 import de.bund.digitalservice.ris.search.service.BulkExportJob;
+import de.bund.digitalservice.ris.search.service.BulkExportService;
 import de.bund.digitalservice.ris.search.service.ChangelogService;
 import de.bund.digitalservice.ris.search.service.Job;
 import java.time.Instant;
@@ -20,6 +21,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class BulkExportJobIntegrationTest extends ContainersIntegrationBase {
@@ -31,6 +33,10 @@ class BulkExportJobIntegrationTest extends ContainersIntegrationBase {
   BulkExportJob bulkExportJob;
 
   @Autowired private NormsBucket normsBucket;
+
+  @Qualifier("normsBulkExportService")
+  @MockitoSpyBean
+  BulkExportService normsBulkExportService;
 
   @Test
   void runJob_returnsEarlyWhenNoChangesAreDetected() {
