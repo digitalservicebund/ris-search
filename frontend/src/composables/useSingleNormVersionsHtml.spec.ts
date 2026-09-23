@@ -49,6 +49,14 @@ describe("useSingleNormVersionsHtml", () => {
     expect(mockFetch).toHaveBeenCalledTimes(1);
   });
 
+  it("stores an error entry when there is no content URL", async () => {
+    const { rowsHtml, updateRowsHtml } = useSingleNormVersionsHtml();
+    await updateRowsHtml("row-1", undefined);
+
+    expect(mockFetch).not.toHaveBeenCalled();
+    expect(rowsHtml.value.get("row-1")).toEqual({ error: true });
+  });
+
   it("stores an error entry when the request fails", async () => {
     mockFetch.mockRejectedValueOnce(new Error("request failed"));
 
