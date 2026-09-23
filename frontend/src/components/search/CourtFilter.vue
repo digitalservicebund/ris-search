@@ -2,7 +2,10 @@
 import { debounce } from "lodash-es";
 import type { ComboboxOption } from "~/components/ui/Combobox.vue";
 import type { CourtSearchResult, CourtsSearchParams } from "~/types/api";
-import { courtFilterDefaultSuggestions } from "~/utils/search/courtFilter";
+import {
+  courtFilterDefaultSuggestions,
+  knownCourtLabels,
+} from "~/utils/search/courtFilter";
 
 const { appendTo } = defineProps<{
   /**
@@ -56,18 +59,22 @@ watch(searchTerm, (term) => {
   if (term) searchDebounced(term);
 });
 
-// Labels for ids seen so far, kept even after searchResults is cleared.
-// selecting an option clears it before we can read the label back out.
-const knownLabels = new Map<string, string>();
-
 watch(
   searchResults,
   (results) => {
     for (const result of results) {
-      if (result.id && result.label) knownLabels.set(result.id, result.label);
+      if (result.id && result.label)
+        knownCourtLabels.set(result.id, result.label);
     }
   },
   { immediate: true },
+);
+
+// Shows immediately for a modelValue whose label we already know, e.g. right
+// after this component remounts (mobile filter drawer) with a court already
+// selected.
+const initialLabel = computed(() =>
+  modelValue.value ? knownCourtLabels.get(modelValue.value) : undefined,
 );
 
 // searchTerm also holds the selected option's label after selecting it, not
@@ -76,7 +83,7 @@ const lastSelectedLabel = ref<string>();
 
 watch(modelValue, (selectedId) => {
   lastSelectedLabel.value = selectedId
-    ? knownLabels.get(selectedId)
+    ? knownCourtLabels.get(selectedId)
     : undefined;
   searchResults.value = [];
 });
@@ -113,6 +120,7 @@ const id = useId();
       v-model:search-term="searchTerm"
       :append-to="appendTo"
       :aria-labelledby="id"
+      :initial-label="initialLabel"
       :loading="loading"
       :options="options"
       placeholder="Auswählen oder suchen"
