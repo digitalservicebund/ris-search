@@ -1,7 +1,7 @@
 import { renderSuspended } from "@nuxt/test-utils/runtime";
 import { userEvent } from "@testing-library/user-event";
 import { screen, waitFor } from "@testing-library/vue";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import CourtFilter from "~/components/search/CourtFilter.vue";
 import { courtFilterDefaultSuggestions } from "~/utils/search/courtFilter";
 
@@ -17,8 +17,16 @@ vi.mock("~/plugins/risBackend", () => ({
 }));
 
 describe("court autocomplete", () => {
+  // jsdom doesn't implement scrolling; Reka scrolls the highlighted option
+  // into view when the suggestion list opens.
+  beforeEach(() => {
+    Element.prototype.scrollIntoView = vi.fn();
+  });
+
   afterEach(() => {
     vi.resetAllMocks();
+    // @ts-expect-error restore jsdom's state, which has no implementation
+    delete Element.prototype.scrollIntoView;
   });
 
   it("exposes the label to assistive technology and shows hint text", async () => {

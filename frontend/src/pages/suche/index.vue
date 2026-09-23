@@ -308,7 +308,7 @@ watch(searchStatus, async (newStatus, oldStatus) => {
               <SearchCourtFilter
                 v-if="documentKind === DocumentKind.CaseLaw"
                 v-model="courtDraft.draft.value"
-                :append-to="appendTarget ?? 'self'"
+                :append-to="appendTarget ?? undefined"
               />
 
               <SearchDateFilter
