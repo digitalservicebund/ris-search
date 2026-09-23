@@ -136,4 +136,29 @@ describe("court autocomplete", () => {
       });
     });
   });
+
+  it("re-searches by the selected court's id, not its label, when reopening", async () => {
+    mockFetch.mockResolvedValue(mockData);
+    const user = userEvent.setup();
+
+    await renderSuspended(CourtFilter);
+
+    await user.click(
+      screen.getByRole("button", { name: "Vorschläge anzeigen" }),
+    );
+    await user.click(screen.getByText("Bundesverfassungsgericht"));
+
+    // The input now displays the expanded label, not the id. Reopening
+    // should still search by "BVerfG" (what the backend's court filter
+    // matches on), not "Bundesverfassungsgericht".
+    await user.click(
+      screen.getByRole("button", { name: "Vorschläge anzeigen" }),
+    );
+
+    await waitFor(() => {
+      expect(mockFetch).toHaveBeenCalledWith("/v1/rechtsprechung/courts", {
+        query: { prefix: "BVerfG" },
+      });
+    });
+  });
 });

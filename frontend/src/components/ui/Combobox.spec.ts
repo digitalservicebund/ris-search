@@ -131,6 +131,62 @@ describe("Combobox", () => {
     ).not.toBeInTheDocument();
   });
 
+  it("keeps a selected option's label once it drops out of options", async () => {
+    const user = userEvent.setup();
+    const { rerender } = render(Combobox, { props: { options } });
+
+    await user.click(
+      screen.getByRole("button", { name: "Vorschläge anzeigen" }),
+    );
+    await user.click(screen.getByRole("option", { name: "Bundesgerichtshof" }));
+
+    expect(screen.getByRole("combobox")).toHaveValue("Bundesgerichtshof");
+
+    // Simulates a parent clearing its suggestion list once a selection is
+    // made, e.g. CourtFilter resetting search results after modelValue changes.
+    await rerender({ options: [] });
+
+    expect(screen.getByRole("combobox")).toHaveValue("Bundesgerichtshof");
+  });
+
+  it("shows a message when there are no options", async () => {
+    const user = userEvent.setup();
+    render(Combobox, { props: { options: [] } });
+
+    await user.click(
+      screen.getByRole("button", { name: "Vorschläge anzeigen" }),
+    );
+
+    expect(screen.getByText("Keine Ergebnisse gefunden")).toBeInTheDocument();
+  });
+
+  it("does not show the empty message when there are options", async () => {
+    const user = userEvent.setup();
+    render(Combobox, { props: { options } });
+
+    await user.click(
+      screen.getByRole("button", { name: "Vorschläge anzeigen" }),
+    );
+
+    expect(
+      screen.queryByText("Keine Ergebnisse gefunden"),
+    ).not.toBeInTheDocument();
+  });
+
+  it("keeps the clear and trigger buttons reachable via Tab", async () => {
+    const user = userEvent.setup();
+    render(Combobox, { props: { options, modelValue: "BGH" } });
+
+    await user.click(screen.getByRole("combobox"));
+    await user.tab();
+    expect(screen.getByRole("button", { name: "Entfernen" })).toHaveFocus();
+
+    await user.tab();
+    expect(
+      screen.getByRole("button", { name: "Vorschläge anzeigen" }),
+    ).toHaveFocus();
+  });
+
   it("forwards placeholder and aria-labelledby to the input", () => {
     render({
       components: { Combobox },
