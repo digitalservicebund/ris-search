@@ -4635,16 +4635,11 @@
             "description" : "Textual string indicating a time period in [ISO 8601 time interval format](https://en.wikipedia.org/wiki/ISO_8601#Time_intervals)\n",
             "example" : "1998-02-06/.."
           },
-          "partType" : {
-            "type" : "string",
-            "description" : "    Specifies the type of the part of a Legislation Expression.\n",
-            "enum" : [ "preamble", "article", "conclusion", "attachment" ]
-          },
           "encoding" : {
             "type" : "array",
-            "description" : "The source data for this part, if available on its own",
             "items" : {
-              "$ref" : "#/components/schemas/LegislationObjectSchema"
+              "$ref" : "#/components/schemas/LegislationObjectSchema",
+              "description" : "The source data for this part, if available on its own"
             }
           },
           "isPartOf" : {
