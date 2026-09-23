@@ -25,7 +25,7 @@ public interface ArticlesRepositoryCustom {
    * @param pageable the pagination parameters defining page size and index
    * @return a page of articles, one per distinct document number, with their expressionElis
    */
-  Page<ArticleWithExpressions> findAllByDocumentNumberStartingWithAndDocumentType(
+  Page<ArticleWithExpressions> findAllVersionsByDocumentNumber(
       String documentNumber,
       LegislationPartType type,
       String preferredExpressionEli,

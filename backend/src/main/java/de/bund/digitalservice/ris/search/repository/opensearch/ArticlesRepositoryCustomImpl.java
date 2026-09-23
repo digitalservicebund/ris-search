@@ -33,6 +33,9 @@ public class ArticlesRepositoryCustomImpl implements ArticlesRepositoryCustom {
 
   private final ElasticsearchOperations operations;
 
+  // the first 21 characters of the document number identify an article across expressions
+  private static final int DOC_NUMBER_PREFIX_LENGTH = 21;
+
   public ArticlesRepositoryCustomImpl(ElasticsearchOperations operations) {
     this.operations = operations;
   }
@@ -53,11 +56,16 @@ public class ArticlesRepositoryCustomImpl implements ArticlesRepositoryCustom {
    * @return Page of ArticleWithExpressions
    */
   @Override
-  public Page<ArticleWithExpressions> findAllByDocumentNumberStartingWithAndDocumentType(
+  public Page<ArticleWithExpressions> findAllVersionsByDocumentNumber(
       String documentNumber,
       LegislationPartType type,
       String preferredExpressionEli,
       Pageable pageable) {
+
+    if (documentNumber.length() <= DOC_NUMBER_PREFIX_LENGTH) {
+      throw new IllegalArgumentException("document number is too short");
+    }
+    String prefix = documentNumber.substring(0, DOC_NUMBER_PREFIX_LENGTH);
 
     CollapseBuilder collapseBuilder =
         new CollapseBuilder(Article.Fields.DOCUMENT_NUMBER)
@@ -75,8 +83,7 @@ public class ArticlesRepositoryCustomImpl implements ArticlesRepositoryCustom {
         new NativeSearchQueryBuilder()
             .withQuery(
                 QueryBuilders.boolQuery()
-                    .filter(
-                        QueryBuilders.prefixQuery(Article.Fields.DOCUMENT_NUMBER, documentNumber))
+                    .filter(QueryBuilders.prefixQuery(Article.Fields.DOCUMENT_NUMBER, prefix))
                     .filter(QueryBuilders.termQuery(Article.Fields.DOCUMENT_TYPE, type.name())))
             .withCollapseBuilder(collapseBuilder)
             .withAggregations(distinctDocumentNumbersAggregation)
@@ -87,7 +94,7 @@ public class ArticlesRepositoryCustomImpl implements ArticlesRepositoryCustom {
     SearchPage<Article> searchPage = PageUtils.unwrapSearchHits(hits, pageable);
     List<ArticleWithExpressions> content =
         searchPage.stream()
-            .map(hit -> toArticleWithExpressions(hit, preferredExpressionEli))
+            .map(hit -> toArticleWithExpressions(hit, preferredExpressionEli, documentNumber))
             .toList();
     return new PageImpl<>(content, pageable, getDistinctDocumentNumberCount(hits));
   }
@@ -106,18 +113,21 @@ public class ArticlesRepositoryCustomImpl implements ArticlesRepositoryCustom {
   }
 
   private ArticleWithExpressions toArticleWithExpressions(
-      SearchHit<Article> hit, String preferredExpressionEli) {
+      SearchHit<Article> hit, String preferredExpressionEli, String documentNumber) {
     SearchHits<?> innerHits = hit.getInnerHits().get(EXPRESSIONS_INNER_HIT_NAME);
     List<Article> versions =
         innerHits == null
             ? List.of(hit.getContent())
             : innerHits.stream().map(innerHit -> (Article) innerHit.getContent()).toList();
 
-    Article representative =
-        versions.stream()
-            .filter(article -> article.getExpressionEli().equals(preferredExpressionEli))
-            .findFirst()
-            .orElseGet(hit::getContent);
+    Article representative = hit.getContent();
+    if (representative.getDocumentNumber().equals(documentNumber)) {
+      representative =
+          versions.stream()
+              .filter(article -> article.getExpressionEli().equals(preferredExpressionEli))
+              .findFirst()
+              .orElse(representative);
+    }
 
     List<String> expressionElis =
         versions.stream().map(Article::getExpressionEli).distinct().toList();

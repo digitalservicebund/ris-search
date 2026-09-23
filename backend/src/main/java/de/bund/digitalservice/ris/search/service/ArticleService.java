@@ -47,9 +47,6 @@ public class ArticleService {
   private final ElasticsearchOperations operations;
   private final ArticlesRepository articlesRepository;
 
-  // the first 21 characters of the document number identify an article across expressions
-  private static final int DOC_NUMBER_PREFIX_LENGTH = 21;
-
   /**
    * Constructs a new instance of {@code ArticleService}.
    *
@@ -199,14 +196,13 @@ public class ArticleService {
    */
   private Page<ArticleWithExpressions> getAllArticleVersionsByDocumentNumberPrefix(
       String documentNumber, String preferredExpressionEli, Pageable page) {
-    if (documentNumber.length() < DOC_NUMBER_PREFIX_LENGTH) {
+
+    try {
+      return articlesRepository.findAllVersionsByDocumentNumber(
+          documentNumber, LegislationPartType.ARTICLE, preferredExpressionEli, page);
+    } catch (IllegalArgumentException e) {
       return Page.empty();
     }
-
-    String documentNumberPrefix = documentNumber.substring(0, DOC_NUMBER_PREFIX_LENGTH);
-
-    return articlesRepository.findAllByDocumentNumberStartingWithAndDocumentType(
-        documentNumberPrefix, LegislationPartType.ARTICLE, preferredExpressionEli, page);
   }
 
   private boolean articleExist(String expressionEli, String eid) {
