@@ -21,7 +21,7 @@ describe("Combobox", () => {
     delete Element.prototype.scrollIntoView;
   });
 
-  it("renders without error with reasonable defaults", () => {
+  it("renders without error", () => {
     render(Combobox);
 
     expect(screen.getByRole("combobox")).toBeInTheDocument();

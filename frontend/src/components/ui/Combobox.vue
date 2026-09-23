@@ -3,6 +3,7 @@ import {
   ComboboxAnchor,
   ComboboxCancel,
   ComboboxContent,
+  ComboboxEmpty,
   ComboboxInput,
   ComboboxItem,
   ComboboxPortal,
@@ -51,17 +52,33 @@ const open = defineModel<boolean>("open", { default: false });
  * The public model is the selected option's id (a plain string), so callers
  * don't need to hold onto option objects. ComboboxRoot's own model needs the
  * full object (for `display-value` and the `by="id"` comparator), so this
- * bridges the two. For an id that isn't in `options` yet (e.g. a preselected
- * value before its label has loaded), falls back to `initialLabel`, and to
- * the raw id itself if that isn't given either, rather than showing nothing.
+ * bridges the two. `options` is a rolling suggestion list that can go empty
+ * or change after a selection (e.g. the search term resets, or the panel is
+ * reopened), so a selected option is cached here rather than re-derived from
+ * `options` on every read - otherwise its label would revert to the raw id
+ * the moment it drops out of the list. For an id that was never in `options`
+ * (e.g. a preselected value before its label has loaded), falls back to
+ * `initialLabel`, and to the raw id itself if that isn't given either, rather
+ * than showing nothing.
  */
+const knownOptions = new Map<string, ComboboxOption>();
+
 const selectedOption = computed<ComboboxOption | undefined>({
-  get: () =>
-    options.find((option) => option.id === modelValue.value) ??
-    (modelValue.value
-      ? { id: modelValue.value, label: initialLabel ?? modelValue.value }
-      : undefined),
+  get: () => {
+    const found = options.find((option) => option.id === modelValue.value);
+    if (found) knownOptions.set(found.id, found);
+    return (
+      found ??
+      (modelValue.value
+        ? (knownOptions.get(modelValue.value) ?? {
+            id: modelValue.value,
+            label: initialLabel ?? modelValue.value,
+          })
+        : undefined)
+    );
+  },
   set: (option) => {
+    if (option) knownOptions.set(option.id, option);
     modelValue.value = option?.id;
   },
 });

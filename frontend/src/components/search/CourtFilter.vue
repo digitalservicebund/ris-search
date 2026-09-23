@@ -38,27 +38,6 @@ const search = async (prefix?: string) => {
 
 const searchDebounced = debounce(search, 250);
 
-watch(searchTerm, (term) => {
-  if (term) searchDebounced(term);
-});
-
-watch(open, (isOpen) => {
-  if (!isOpen) {
-    searchResults.value = [];
-    return;
-  }
-  // Typing already drives a search via the searchTerm watcher above; this
-  // only covers opening via the dropdown button, either blank or reusing an
-  // existing selection as the prefix.
-  if (searchTerm.value) return;
-  if (modelValue.value) search(modelValue.value);
-  else searchResults.value = [...courtFilterDefaultSuggestions];
-});
-
-watch(modelValue, () => {
-  searchResults.value = [];
-});
-
 const options = computed<ComboboxOption[]>(() =>
   searchResults.value
     .filter(
@@ -70,6 +49,41 @@ const options = computed<ComboboxOption[]>(() =>
       secondaryLabel: i.id,
     })),
 );
+
+watch(searchTerm, (term) => {
+  if (term) searchDebounced(term);
+});
+
+// The combobox writes the selected option's expanded label into searchTerm
+// once a selection is made (so it displays as the input value), not just
+// what the user actually typed. Tracked here to tell the two apart: the
+// court search endpoint filters by court key (e.g. "BGH"), and an expanded
+// label like "Bundesgerichtshof" wouldn't match a court's key prefix.
+const lastSelectedLabel = ref<string>();
+
+watch(open, (isOpen) => {
+  if (!isOpen) {
+    searchResults.value = [];
+    return;
+  }
+  // Re-run the search whenever the panel opens, rather than relying on the
+  // searchTerm watcher above: searchTerm can already hold a value without
+  // the user having typed anything since results were last cleared on close.
+  if (searchTerm.value && searchTerm.value !== lastSelectedLabel.value) {
+    searchDebounced(searchTerm.value);
+  } else if (modelValue.value) {
+    search(modelValue.value);
+  } else {
+    searchResults.value = [...courtFilterDefaultSuggestions];
+  }
+});
+
+watch(modelValue, (selectedId) => {
+  lastSelectedLabel.value = selectedId
+    ? options.value.find((option) => option.id === selectedId)?.label
+    : undefined;
+  searchResults.value = [];
+});
 
 const id = useId();
 </script>
