@@ -91,25 +91,26 @@ const handleDrawerItemClick = async (item: ActionMenuItem) => {
 
   <ul role="menubar" class="hidden items-center *:-mx-4 md:flex">
     <li v-for="item in actions" :key="item.label" role="presentation">
-      <UiButton
-        v-tooltip.bottom="item.disabled ? undefined : item.label"
-        role="menuitem"
-        text
-        :disabled="item.disabled"
-        :aria-label="item.label"
-        :to="item.url"
-        :as="item.url ? NuxtLink : undefined"
-        :data-attr="(item as ActionMenuItem).analyticsId"
-        external
-        @click="item.command"
-      >
-        <template #icon>
-          <component
-            :is="(item as ActionMenuItem).iconComponent"
-            class="ris-label2-regular"
-          />
-        </template>
-      </UiButton>
+      <UiTooltip :text="item.disabled ? undefined : item.label" side="bottom">
+        <UiButton
+          role="menuitem"
+          text
+          :disabled="item.disabled"
+          :aria-label="item.label"
+          :to="item.url"
+          :as="item.url ? NuxtLink : undefined"
+          :data-attr="(item as ActionMenuItem).analyticsId"
+          external
+          @click="item.command"
+        >
+          <template #icon>
+            <component
+              :is="(item as ActionMenuItem).iconComponent"
+              class="ris-label2-regular"
+            />
+          </template>
+        </UiButton>
+      </UiTooltip>
     </li>
   </ul>
 </template>
