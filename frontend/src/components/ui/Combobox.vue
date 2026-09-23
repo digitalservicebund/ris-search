@@ -89,6 +89,8 @@ const triggerActiveClass = tw`bg-blue-800 text-white hover:bg-blue-800 hover:tex
 const contentClass = tw`pointer-events-auto z-20 max-h-[min(14rem,var(--reka-combobox-content-available-height))] w-[var(--reka-combobox-trigger-width)] overflow-auto bg-white p-8 shadow-md`;
 
 const itemClass = tw`flex min-h-48 cursor-pointer flex-col justify-center gap-2 border-l-4 border-transparent px-12 py-10 data-[highlighted]:border-blue-600 data-[highlighted]:bg-blue-200 data-[state=checked]:border-blue-800 data-[state=checked]:bg-blue-200`;
+
+const emptyClass = tw`typo-label2-regular flex min-h-48 items-center p-8 text-gray-900`;
 </script>
 
 <template>
@@ -133,6 +135,10 @@ const itemClass = tw`flex min-h-48 cursor-pointer flex-col justify-center gap-2 
     <ComboboxPortal :to="appendTo">
       <ComboboxContent position="popper" :class="contentClass">
         <ComboboxViewport>
+          <ComboboxEmpty :class="emptyClass"
+            >Keine Ergebnisse gefunden</ComboboxEmpty
+          >
+
           <ComboboxItem
             v-for="option in options"
             :key="option.id"
