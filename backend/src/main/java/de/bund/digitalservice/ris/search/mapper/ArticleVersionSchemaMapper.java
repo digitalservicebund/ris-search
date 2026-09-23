@@ -20,10 +20,10 @@ public class ArticleVersionSchemaMapper {
   private ArticleVersionSchemaMapper() {}
 
   /**
-   * Maps an article to a LegislationExpressionPartSchema
+   * Maps an article to a ArticleVersionSchema
    *
    * @param articleWithExpressions ArticleWithExpressions to map
-   * @return LegislationExpressionPartSchema
+   * @return ArticleVersionSchema
    */
   public static ArticleVersionSchema fromArticleWithExpressions(
       ArticleWithExpressions articleWithExpressions) {
@@ -34,7 +34,6 @@ public class ArticleVersionSchemaMapper {
         article.getEId(),
         article.getName(),
         DateUtils.toDateIntervalString(article.getEntryIntoForceDate(), article.getExpiryDate()),
-        LegislationExpressionPartSchemaMapper.mapLegislationPartType(article.getDocumentType()),
         getEncoding(article),
         getIsPartOf(articleWithExpressions));
   }
@@ -43,7 +42,7 @@ public class ArticleVersionSchemaMapper {
    * @param page Page of Article objects
    * @param path original path that executed that query
    * @param remoteJsonContext remoteJsonContext url to retrieve jsonld context
-   * @return return Collection of LegislationExpressionPartSchema objects
+   * @return return Collection of ArticleVersionSchema objects
    */
   public static CollectionSchema<ArticleVersionSchema> fromArticlePage(
       Page<ArticleWithExpressions> page, String path, String remoteJsonContext) {

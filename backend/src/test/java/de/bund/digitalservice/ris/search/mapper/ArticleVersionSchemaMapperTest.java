@@ -7,7 +7,6 @@ import de.bund.digitalservice.ris.search.models.opensearch.ArticleWithExpression
 import de.bund.digitalservice.ris.search.models.opensearch.LegislationPartType;
 import de.bund.digitalservice.ris.search.schema.ArticleVersionSchema;
 import de.bund.digitalservice.ris.search.schema.CollectionSchema;
-import de.bund.digitalservice.ris.search.schema.LegislationExpressionPartType;
 import de.bund.digitalservice.ris.search.schema.LegislationObjectSchema;
 import de.bund.digitalservice.ris.search.schema.PartialCollectionViewSchema;
 import java.time.LocalDate;
@@ -47,7 +46,6 @@ class ArticleVersionSchemaMapperTest {
             .eId("art-z1")
             .name("§ 1")
             .temporalCoverage("1975-01-01/..")
-            .partType(LegislationExpressionPartType.ARTICLE)
             .encoding(
                 List.of(
                     LegislationObjectSchema.builder()

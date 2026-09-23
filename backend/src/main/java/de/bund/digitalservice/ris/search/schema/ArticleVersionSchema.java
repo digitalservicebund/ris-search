@@ -6,13 +6,10 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
 import lombok.Builder;
-import org.jetbrains.annotations.Nullable;
 
 /**
- * A schema definition for representing an article a legislative expression
- *
- * <p>The schema helps to uniquely identify a unique article across it's versions and the
- * expressions each version is part of.
+ * A schema definition for representing an article a legislative expression. The schema uniquely
+ * identifies an article across its versions and all expressions that specific version is part of.
  */
 @Builder
 @Schema(description = "A specific part of a legislation expression")
@@ -43,14 +40,9 @@ public record ArticleVersionSchema(
             example = "1998-02-06/..",
             requiredMode = Schema.RequiredMode.REQUIRED)
         String temporalCoverage,
-    @Nullable
-        @Schema(
-            description =
-                """
-                        Specifies the type of the part of a Legislation Expression.
-                    """)
-        LegislationExpressionPartType partType,
-    @Nullable @Schema(description = "The source data for this part, if available on its own")
+    @ArraySchema(
+            schema =
+                @Schema(description = "The source data for this part, if available on its own"))
         List<LegislationObjectSchema> encoding,
     @ArraySchema(schema = @Schema(implementation = ArticleVersionSchema.IsPartOfReference.class))
         List<ArticleVersionSchema.IsPartOfReference> isPartOf)
