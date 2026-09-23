@@ -33,6 +33,7 @@
     "nuxt-security": "2.6.0",
     "posthog-js": "1.431.1",
     "primevue": "4.5.5",
+    "reka-ui": "2.10.4",
     "sanitize-html": "2.17.7"
   },
   "devDependencies": {
