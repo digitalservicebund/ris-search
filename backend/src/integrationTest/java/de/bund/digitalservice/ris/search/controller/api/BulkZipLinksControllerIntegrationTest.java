@@ -64,7 +64,7 @@ class BulkZipLinksControllerIntegrationTest extends ContainersIntegrationBase {
                 .toList())
         .containsExactly(
             expectedPrefix + "administrative-directives_2026-01-02T00:00:00.zip",
-            expectedPrefix + "case-law_2026-01-02T00:00:00.zip",
+            expectedPrefix + CASE_LAW + "_2026-01-02T00:00:00.zip",
             expectedPrefix + "legislation_2026-01-02T00:00:00.zip",
             expectedPrefix + "literature_2026-01-02T00:00:00.zip");
   }
