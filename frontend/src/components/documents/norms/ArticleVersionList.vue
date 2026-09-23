@@ -1,20 +1,20 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import IcChevronRightIcon from "~icons/ic/outline-chevron-right";
-import type {
-  DataTableColumn,
-  DataTableRow,
-} from "~/components/ui/DataTable.vue";
+import type { DataTableColumn } from "~/components/ui/DataTable.vue";
+import type { Article } from "~/types/api.ts";
 
 const props = defineProps<{
-  currentSingleNormIdentifier: string;
-  versions: SingleNorm[];
+  currentArticleId: string;
+  versions: Article[];
 }>();
 
-type VersionRow = DataTableRow & {
+type VersionRow = {
+  key: string;
   fromDate: string;
   toDate: string;
-  contentUrl: string;
+  contentUrl?: string;
+  disabled: boolean;
 };
 
 const columns: DataTableColumn<VersionRow>[] = [
@@ -33,14 +33,15 @@ const rows = computed<VersionRow[]>(() => {
       version.temporalCoverage,
     );
 
-    const current = version["@id"] === props.currentSingleNormIdentifier;
+    const disabled = version["@id"] === props.currentArticleId;
+    const encodingUrl = getEncodingURL(version.encoding, "text/html");
 
     return {
       key: version["@id"],
-      current,
       fromDate: dateFormattedDDMMYYYY(validityInterval?.from) ?? "–",
       toDate: dateFormattedDDMMYYYY(validityInterval?.to) ?? "–",
-      contentUrl: version.encoding.contentUrl,
+      contentUrl: encodingUrl,
+      disabled,
     };
   });
 });
@@ -53,9 +54,15 @@ const { rowsHtml, updateRowsHtml } = useSingleNormVersionsHtml();
 // native state; it never drives the expand/collapse behavior itself.
 async function onToggle(row: VersionRow, event: Event) {
   const details = event.currentTarget as HTMLDetailsElement;
-  expandedRowKey.value = details.open ? row.key : undefined;
+  // When one row is open and another row is clicked it will send two events.
+  // First one with open == true for the row that was clicked
+  // and then one with open == false for the other row that implicitly
+  // gets closed.
   if (details.open) {
+    expandedRowKey.value = row.key;
     await updateRowsHtml(row.key, row.contentUrl);
+  } else if (expandedRowKey.value === row.key) {
+    expandedRowKey.value = undefined;
   }
 }
 
@@ -109,14 +116,14 @@ const currentRowId = useId();
       <li
         v-for="row in rows"
         :key="row.key"
-        :class="{ 'bg-gray-100': row.current }"
+        :class="{ 'bg-gray-100': row.disabled }"
         class="col-span-full grid grid-cols-subgrid border-b border-gray-400"
       >
         <!-- The current version is already the one being displayed on this
              page, so it isn't made expandable, and can't use <details>, which
              has no way to disable toggling. -->
         <div
-          v-if="row.current"
+          v-if="row.disabled"
           :aria-labelledby="currentRowId"
           aria-current="true"
           role="group"

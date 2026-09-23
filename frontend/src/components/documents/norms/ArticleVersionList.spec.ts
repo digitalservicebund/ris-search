@@ -1,10 +1,9 @@
-import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import { userEvent } from "@testing-library/user-event";
 import { render, screen, within } from "@testing-library/vue";
+import type { FetchHook } from "ofetch";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { SingleNorm } from "~/composables/useSingleNormVersions";
-import type { HtmlCacheEntry } from "~/composables/useSingleNormVersionsHtml";
-import SingleNormVersionList from "./SingleNormVersionList.vue";
+import type { Article } from "~/types/api.ts";
+import ArticleVersionList from "./ArticleVersionList.vue";
 
 /**
  * The native `toggle` event for `<details>` is queued as a task rather than
@@ -15,62 +14,66 @@ function flushToggleEvent() {
   return new Promise((resolve) => setTimeout(resolve, 0));
 }
 
-const { updateRowsHtmlMock } = vi.hoisted(() => {
+const { mockFetch } = vi.hoisted(() => {
   return {
-    updateRowsHtmlMock: vi.fn(),
+    mockFetch: vi.fn(),
   };
 });
 
-const rowsHtml = ref(new Map<string, HtmlCacheEntry>());
+vi.mock("~/plugins/risBackend", () => ({
+  default: defineNuxtPlugin(() => ({ provide: { risBackend: mockFetch } })),
+  extendOnRequest: (...cbs: FetchHook[]) => cbs,
+}));
 
-mockNuxtImport("useSingleNormVersionsHtml", () => {
-  return () => ({ rowsHtml, updateRowsHtml: updateRowsHtmlMock });
-});
-
-function createSingleNorm(
-  identifier: string,
-  temporalCoverage: string,
-): SingleNorm {
+function createArticle(identifier: string, temporalCoverage: string): Article {
   return {
     "@id": identifier,
     eId: "art-1",
+    name: "§ 1",
+    headline: "",
     temporalCoverage,
-    isPartOf: [{ "@id": identifier.split("#")[0]! }],
-    encoding: { contentUrl: `/v1/legislation/${identifier}.html` },
+    hasPart: [],
+    encoding: [
+      {
+        "@id": "",
+        contentUrl: `/v1/legislation/${identifier}.html`,
+        encodingFormat: "text/html",
+        inLanguage: "deu",
+      },
+    ],
   };
 }
 
-const futureVersion = createSingleNorm(
+const futureVersion = createArticle(
   "eli/bund/bgbl-1/2000/s001/2031-01-01/1/deu#art-1",
   "2031-01-01/..",
 );
-const currentVersion = createSingleNorm(
+const currentVersion = createArticle(
   "eli/bund/bgbl-1/2000/s001/2020-01-01/1/deu#art-1",
   "2020-01-01/2030-12-31",
 );
-const pastVersion = createSingleNorm(
+const pastVersion = createArticle(
   "eli/bund/bgbl-1/2000/s001/2000-01-01/1/deu#art-1",
   "2000-01-05/2019-12-31",
 );
 
 /** Props for the list, with the middle version being the displayed one. */
 function props(
-  versions: SingleNorm[] = [pastVersion, currentVersion, futureVersion],
+  versions: Article[] = [pastVersion, currentVersion, futureVersion],
 ) {
   return {
-    currentSingleNormIdentifier: currentVersion["@id"],
+    currentArticleId: currentVersion["@id"],
     versions,
   };
 }
 
-describe("SingleNormVersionList", () => {
+describe("ArticleVersionList", () => {
   beforeEach(() => {
-    rowsHtml.value = new Map();
-    updateRowsHtmlMock.mockReset();
+    mockFetch.mockReset();
   });
 
   it("lists versions, sorted by date, newest first", () => {
-    render(SingleNormVersionList, { props: props() });
+    render(ArticleVersionList, { props: props() });
 
     const rows = screen.getAllByRole("listitem");
     expect(rows).toHaveLength(3);
@@ -86,7 +89,7 @@ describe("SingleNormVersionList", () => {
   });
 
   it("shows the column labels as a header, but keeps it from SR", () => {
-    render(SingleNormVersionList, { props: props() });
+    render(ArticleVersionList, { props: props() });
 
     expect(screen.getByText("Gültig ab")).toBeInTheDocument();
     expect(screen.getByText("Gültig bis")).toBeInTheDocument();
@@ -96,7 +99,7 @@ describe("SingleNormVersionList", () => {
   });
 
   it("marks the current version as the current entry", () => {
-    render(SingleNormVersionList, { props: props() });
+    render(ArticleVersionList, { props: props() });
 
     const currentRow = screen.getByRole("group", { current: true });
     expect(currentRow).toHaveTextContent(
@@ -106,18 +109,18 @@ describe("SingleNormVersionList", () => {
 
   it("current version is not expandable", async () => {
     const user = userEvent.setup();
-    render(SingleNormVersionList, { props: props() });
+    render(ArticleVersionList, { props: props() });
 
     const currentRow = screen.getByRole("group", { current: true });
 
     await user.click(currentRow);
     await flushToggleEvent();
 
-    expect(updateRowsHtmlMock).not.toHaveBeenCalled();
+    expect(within(currentRow).queryByRole("status")).not.toBeInTheDocument();
   });
 
   it("renders the other versions as a closed accordion by default", () => {
-    render(SingleNormVersionList, { props: props() });
+    render(ArticleVersionList, { props: props() });
 
     const rows = screen.getAllByRole("listitem");
     const futureVersionRow = rows[0]!;
@@ -131,23 +134,10 @@ describe("SingleNormVersionList", () => {
     ).not.toBeInTheDocument();
   });
 
-  it("requests the HTML for a version when it's expanded", async () => {
-    const user = userEvent.setup();
-    render(SingleNormVersionList, { props: props() });
-    const futureVersionRow = screen.getAllByRole("listitem")[0]!;
-
-    await user.click(within(futureVersionRow).getByText("01.01.2031"));
-    await flushToggleEvent();
-
-    expect(updateRowsHtmlMock).toHaveBeenCalledWith(
-      futureVersion["@id"],
-      futureVersion.encoding.contentUrl,
-    );
-  });
-
   it("shows a loading spinner while the HTML is being fetched", async () => {
+    mockFetch.mockReturnValue(new Promise(() => {}));
     const user = userEvent.setup();
-    render(SingleNormVersionList, { props: props() });
+    render(ArticleVersionList, { props: props() });
     const futureVersionRow = screen.getAllByRole("listitem")[0]!;
 
     await user.click(within(futureVersionRow).getByText("01.01.2031"));
@@ -157,14 +147,11 @@ describe("SingleNormVersionList", () => {
   });
 
   it("shows the fetched HTML once it becomes available", async () => {
-    updateRowsHtmlMock.mockImplementation(async (rowKey: string) => {
-      rowsHtml.value.set(rowKey, {
-        html: "<p>Norm content</p>",
-        error: false,
-      });
-    });
+    mockFetch.mockResolvedValueOnce(
+      "<html><body><p>Norm content</p></body></html>",
+    );
     const user = userEvent.setup();
-    render(SingleNormVersionList, { props: props() });
+    render(ArticleVersionList, { props: props() });
     const futureVersionRow = screen.getAllByRole("listitem")[0]!;
 
     await user.click(within(futureVersionRow).getByText("01.01.2031"));
@@ -174,11 +161,9 @@ describe("SingleNormVersionList", () => {
   });
 
   it("shows an error message when fetching the HTML fails", async () => {
-    updateRowsHtmlMock.mockImplementation(async (rowKey: string) => {
-      rowsHtml.value.set(rowKey, { error: true });
-    });
+    mockFetch.mockRejectedValueOnce(new Error("request failed"));
     const user = userEvent.setup();
-    render(SingleNormVersionList, { props: props() });
+    render(ArticleVersionList, { props: props() });
     const futureVersionRow = screen.getAllByRole("listitem")[0]!;
 
     await user.click(within(futureVersionRow).getByText("01.01.2031"));
@@ -189,8 +174,9 @@ describe("SingleNormVersionList", () => {
   });
 
   it("hides the content again when the accordion is collapsed", async () => {
+    mockFetch.mockReturnValue(new Promise(() => {}));
     const user = userEvent.setup();
-    render(SingleNormVersionList, { props: props() });
+    render(ArticleVersionList, { props: props() });
     const futureVersionRow = screen.getAllByRole("listitem")[0]!;
     const toggle = within(futureVersionRow).getByText("01.01.2031");
 
@@ -207,20 +193,20 @@ describe("SingleNormVersionList", () => {
   });
 
   it("shows a placeholder when there are no versions", () => {
-    render(SingleNormVersionList, { props: props([]) });
+    render(ArticleVersionList, { props: props([]) });
 
     expect(screen.getByText("Keine Ergebnisse gefunden")).toBeInTheDocument();
     expect(screen.queryAllByRole("group")).toHaveLength(0);
   });
 
   it("does not announce anything before the versions change", () => {
-    render(SingleNormVersionList, { props: props() });
+    render(ArticleVersionList, { props: props() });
 
     expect(screen.getByRole("status")).toHaveTextContent("");
   });
 
   it("announces when the versions change to none", async () => {
-    const { rerender } = render(SingleNormVersionList, { props: props() });
+    const { rerender } = render(ArticleVersionList, { props: props() });
 
     await rerender(props([]));
 
@@ -230,7 +216,7 @@ describe("SingleNormVersionList", () => {
   });
 
   it("announces how many versions there are once there are some again", async () => {
-    const { rerender } = render(SingleNormVersionList, {
+    const { rerender } = render(ArticleVersionList, {
       props: props([]),
     });
 
