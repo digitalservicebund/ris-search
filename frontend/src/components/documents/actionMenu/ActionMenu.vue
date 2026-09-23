@@ -1,12 +1,14 @@
 <script setup lang="ts">
-import type { MenuItem } from "primevue/menuitem";
 import IcBaselineMoreVert from "~icons/ic/baseline-more-vert";
 import { NuxtLink } from "#components";
 
-export type ActionMenuItem = Omit<MenuItem, "icon"> & {
+export type ActionMenuItem = {
+  label: string;
+  disabled?: boolean;
+  url?: string;
+  command?: () => void | Promise<void>;
   iconComponent: Component;
   analyticsId?: string;
-  command?: () => void | Promise<void>;
   keepDrawerOpen?: boolean;
 };
 
