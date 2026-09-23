@@ -1,6 +1,6 @@
 # Frontend
 
-[Vue](https://vuejs.org/) + [Nuxt](https://nuxt.com/) application using [TypeScript](https://www.typescriptlang.org/), [Tailwind](https://tailwindcss.com/), and [RIS UI](https://github.com/digitalservicebund/ris-ui), a component library and theme for [PrimeVue](https://primevue.org/).
+[Vue](https://vuejs.org/) + [Nuxt](https://nuxt.com/) application using [TypeScript](https://www.typescriptlang.org/) and [Tailwind](https://tailwindcss.com/).
 
 The frontend also includes our E2E tests.
 
