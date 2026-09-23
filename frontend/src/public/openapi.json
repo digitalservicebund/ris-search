@@ -2621,6 +2621,7 @@
           },
           "dokumentNummer" : {
             "type" : "string",
+            "description" : "Dokumentnummer",
             "example" : "KARE000000000"
           },
           "ecli" : {
@@ -2658,7 +2659,7 @@
           },
           "titelzeile" : {
             "type" : "string",
-            "description" : "Titelzeile"
+            "description" : "Vom Dokumentar gebildete Kurzzusammenfassung, bezogen auf die gesamten Kurztexte."
           },
           "orientierungssatz" : {
             "type" : "string",
@@ -2687,14 +2688,15 @@
           "datum" : {
             "type" : "string",
             "format" : "date",
-            "description" : "Datum"
+            "description" : "Datum der Entscheidung, hier kann es zu Dopplungen mit anderen Entscheidungen kommen, auch in Kombination mit Aktenzeichen und Gericht."
           },
           "abweichendeDaten" : {
             "type" : "array",
             "description" : "Abweichende Daten",
             "items" : {
               "type" : "string",
-              "format" : "date"
+              "format" : "date",
+              "description" : "Abweichende Daten"
             }
           },
           "gliederung" : {
@@ -2703,14 +2705,16 @@
           },
           "aktenzeichen" : {
             "type" : "string",
-            "description" : "Aktenzeichen"
+            "description" : "Aktenzeichen der Entscheidung, hier kann es zu Dopplungen mit anderen Entscheidungen kommen, auch in Kombination mit Entscheidungsdatum und Gericht."
           },
           "aktenzeichenListe" : {
             "type" : "array",
-            "description" : "Aktenzeichenliste",
+            "description" : "Aktenzeichen des Dokuments\n\nDer erste Eintrag ist das primäre Aktenzeichen.\nWeitere Einträge sind abweichende Aktenzeichen, die auch für dieses\nDokument verwendet werden.",
             "example" : "BGH 123/23",
             "items" : {
-              "type" : "string"
+              "type" : "string",
+              "description" : "Aktenzeichen des Dokuments\n\nDer erste Eintrag ist das primäre Aktenzeichen.\nWeitere Einträge sind abweichende Aktenzeichen, die auch für dieses\nDokument verwendet werden.",
+              "example" : "BGH 123/23"
             }
           },
           "abweichendeAktenzeichen" : {
@@ -2732,7 +2736,8 @@
             "type" : "array",
             "description" : "Berufsbilder",
             "items" : {
-              "type" : "string"
+              "type" : "string",
+              "description" : "Berufsbilder"
             }
           },
           "kuendigungsarten" : {
@@ -2751,9 +2756,10 @@
           },
           "regionen" : {
             "type" : "array",
-            "description" : "Regionen",
+            "description" : "Regionen in denen dieses Dokument eine Bedeutung hat",
             "items" : {
-              "type" : "string"
+              "type" : "string",
+              "description" : "Regionen in denen dieses Dokument eine Bedeutung hat"
             }
           },
           "tarifvertraege" : {
@@ -2779,16 +2785,18 @@
           },
           "vorgehendeEntscheidungen" : {
             "type" : "array",
-            "description" : "Vorgehende Entscheidungen",
+            "description" : "Nachgewiesen werden gerichtliche Entscheidungen, die im Rahmen eines Verfahrens (einschl. Nebenverfahren) der zu dokumentierenden Entscheidung vorausgehen.",
             "items" : {
-              "type" : "string"
+              "type" : "string",
+              "description" : "Nachgewiesen werden gerichtliche Entscheidungen, die im Rahmen eines Verfahrens (einschl. Nebenverfahren) der zu dokumentierenden Entscheidung vorausgehen."
             }
           },
           "nachgehendeEntscheidungen" : {
             "type" : "array",
-            "description" : "Nachgehende Entscheidungen",
+            "description" : "Nachgewiesen werden die gerichtlichen Entscheidungen, die ihrerseits in der Rubrik „vorgehende Entscheidung“ die vorliegende Entscheidung nennen.",
             "items" : {
-              "type" : "string"
+              "type" : "string",
+              "description" : "Nachgewiesen werden die gerichtlichen Entscheidungen, die ihrerseits in der Rubrik „vorgehende Entscheidung“ die vorliegende Entscheidung nennen."
             }
           },
           "aktivzitierungLiteraturUnselbstaendig" : {
@@ -2865,10 +2873,12 @@
           },
           "gesetzeskraft" : {
             "type" : "array",
-            "description" : "Gesetzeskraft",
+            "description" : "Information über die Gesetzeskraft der Einzelnorm",
             "example" : "vereinbar mit höherrangigem Recht (Bremen)",
             "items" : {
-              "type" : "string"
+              "type" : "string",
+              "description" : "Information über die Gesetzeskraft der Einzelnorm",
+              "example" : "vereinbar mit höherrangigem Recht (Bremen)"
             }
           },
           "normenkette" : {
@@ -2883,7 +2893,8 @@
             "type" : "array",
             "description" : "Sachgebiete",
             "items" : {
-              "type" : "string"
+              "type" : "string",
+              "description" : "Sachgebiete"
             }
           },
           "streitjahre" : {
@@ -2895,9 +2906,10 @@
           },
           "fehlerhafteGerichte" : {
             "type" : "array",
-            "description" : "Fehlerhafte Gerichte",
+            "description" : "Fehlerhafte Angaben zu Gerichten",
             "items" : {
-              "type" : "string"
+              "type" : "string",
+              "description" : "Fehlerhafte Angaben zu Gerichten"
             }
           },
           "datenDerMuendlichenVerhandlung" : {
@@ -2910,9 +2922,10 @@
           },
           "definitionen" : {
             "type" : "array",
-            "description" : "Definitionen",
+            "description" : "Definitionen von Begriffen",
             "items" : {
-              "type" : "string"
+              "type" : "string",
+              "description" : "Definitionen von Begriffen"
             }
           },
           "erledigung" : {
@@ -2978,11 +2991,12 @@
           },
           "dokumenttyp" : {
             "type" : "string",
+            "description" : "Innerhalb der Dokumentart „Rechtsprechung“ werden folgende Dokumenttypen unterschieden:\n\n- Äuß: Äußerung\n- Ant: EuGH-Vorlage\n- AnU: Anerkenntnisurteil\n- Bes: Beschluss\n- Buß: Bußgeldbescheid\n- DrB: Dreierausschussbeschluss\n- EiA: Einstweilige Anordnung\n- Ent: Entscheidung\n- EVg: Einstellungsverfügung der Staatsanwaltschaft\n- GeB: Gerichtsbescheid\n- Gut: Gutachten\n- GWF: Gegenstandswertfestsetzung im verfassungsgerichtlichen Verfahren\n- KaB: Kammerbeschluss\n- KbN: Nichtannahmebeschluss\n- KbS: Stattgebender Kammerbeschluss\n- KoB: Kammerbeschluss ohne Begründung\n- PkH: Prozesskostenhilfebeschluss\n- ReM: Rechtsentscheid in Mietsachen\n- Sch: Schiedsgerichtsentscheidung\n- Ste: Stellungnahme\n- Str: Streitwertbeschluss\n- TeB: Teilbeschluss\n- TeU: Teilurteil\n- Urt: Urteil\n- Vgl: Vergleich\n- Vor: Vorlagebeschluss\n- VsU: Versäumnisurteil\n- VzU: Verzichtsurteil\n- ZwB: Zwischenbeschluss\n- ZwU: Zwischenurteil\n- TVU: Teilversäumnisurteil\n- Vfg: Verfügung\n- Vorab: Ersuchen um Vorabentscheidung\n- Anh: Anhängiges Verfahren\n- End: Endurteil\n- KfB: Kostenfestsetzungsbeschluss",
             "example" : "Urteil"
           },
           "spruchkoerper" : {
             "type" : "string",
-            "description" : "Spruchkörper",
+            "description" : "Inhalt ist die Angabe des Spruchkörpers, von dem das Dokument stammt (z.B. 1. Zivilsenat, 3. Strafkammer, Großer Senat).",
             "example" : "Gericht"
           },
           "schlagwoerter" : {
@@ -3007,10 +3021,12 @@
           },
           "abweichendeDokumentnummern" : {
             "type" : "array",
-            "description" : "Abweichende Dokumentnummer",
+            "description" : "Abweichende Dokumentnummern\n\nWeitere Dokumentnummern die für dieses Dokument verwendet werden",
             "example" : "DEV-123",
             "items" : {
-              "type" : "string"
+              "type" : "string",
+              "description" : "Abweichende Dokumentnummern\n\nWeitere Dokumentnummern die für dieses Dokument verwendet werden",
+              "example" : "DEV-123"
             }
           },
           "@id" : {
@@ -3032,7 +3048,7 @@
             "description" : "Whether or not the document is a Vorabdokument"
           }
         },
-        "required" : [ "@context", "@id", "abweichendeDokumentnummern", "aktenzeichenListe", "datum", "dokumentNummer", "ecli", "encoding", "entscheidungsnamen", "inLanguage", "schlagwoerter", "vorabdokument" ]
+        "required" : [ "@context", "@id", "ecli", "encoding", "entscheidungsnamen", "inLanguage", "schlagwoerter", "vorabdokument" ]
       },
       "StreamingResponseBody" : { },
       "CourtSearchResult" : {
