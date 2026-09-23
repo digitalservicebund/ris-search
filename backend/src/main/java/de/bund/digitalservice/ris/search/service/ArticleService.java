@@ -200,7 +200,7 @@ public class ArticleService {
     try {
       return articlesRepository.findAllVersionsByDocumentNumber(
           documentNumber, LegislationPartType.ARTICLE, preferredExpressionEli, page);
-    } catch (IllegalArgumentException e) {
+    } catch (IllegalArgumentException _) {
       return Page.empty();
     }
   }

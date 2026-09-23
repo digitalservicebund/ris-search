@@ -33,7 +33,7 @@ public class ArticlesRepositoryCustomImpl implements ArticlesRepositoryCustom {
 
   private final ElasticsearchOperations operations;
 
-  // the first 21 characters of the document number identify an article across expressions
+  // the first 21 characters of the document number identify an article across its versions
   private static final int DOC_NUMBER_PREFIX_LENGTH = 21;
 
   public ArticlesRepositoryCustomImpl(ElasticsearchOperations operations) {
@@ -54,6 +54,7 @@ public class ArticlesRepositoryCustomImpl implements ArticlesRepositoryCustom {
    *     would otherwise pick; may be {@code null} to leave the default selection untouched
    * @param pageable the pagination parameters defining page size and index
    * @return Page of ArticleWithExpressions
+   * @throws java.lang.IllegalArgumentException on invalid document numbers
    */
   @Override
   public Page<ArticleWithExpressions> findAllVersionsByDocumentNumber(
@@ -99,6 +100,13 @@ public class ArticlesRepositoryCustomImpl implements ArticlesRepositoryCustom {
     return new PageImpl<>(content, pageable, getDistinctDocumentNumberCount(hits));
   }
 
+  /**
+   * A cardinality aggregation on the collapse field is used to report the correct total number of
+   * distinct document numbers.
+   *
+   * @param hits SearchHits of a versions query
+   * @return total count of distinct documentNumbers
+   */
   private long getDistinctDocumentNumberCount(SearchHits<Article> hits) {
     if (!(hits.getAggregations() instanceof OpenSearchAggregations aggregationsWrapper)) {
       return hits.getTotalHits();
@@ -112,6 +120,18 @@ public class ArticlesRepositoryCustomImpl implements ArticlesRepositoryCustom {
     return cardinality.getValue();
   }
 
+  /**
+   * Maps a version query Article SearchHit to an Article With all expressions it is part of. In
+   * case the same article is found across multiple expressionElis the article matching the
+   * preferredExpressionEli takes precedence as the result. The expressions list itself is not
+   * affected.
+   *
+   * @param hit SearchHit the versions query
+   * @param preferredExpressionEli to display article of a specific expression in the result if
+   *     multiple are valid
+   * @param documentNumber used to only check preferredExpressionEli on matching documentNumbers
+   * @return ArticleWithExpressions
+   */
   private ArticleWithExpressions toArticleWithExpressions(
       SearchHit<Article> hit, String preferredExpressionEli, String documentNumber) {
     SearchHits<?> innerHits = hit.getInnerHits().get(EXPRESSIONS_INNER_HIT_NAME);

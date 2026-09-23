@@ -79,14 +79,14 @@ class ArticleServiceTest {
   }
 
   @Test
-  void getAllArticleVersionsReturnsEmptyWhenRepositoryRejectsTheDocumentNumber() {
+  void getAllArticleVersionsReturnsEmptyWhenRepositoryThrowsIllegalArgumentException() {
     ExpressionEli eli =
         new ExpressionEli(
             "bund", "bgbl-1", "2020", "s1126", LocalDate.of(2025, Month.MAY, 5), 1, "deu");
 
     String eId = "art-z1";
     String id = Article.buildId(eli.toString(), eId);
-    String documentNumber = "DKNR0E80B0026DKNE000100010";
+    String documentNumber = "DKNR0E80B0026DKNE0";
 
     when(articlesRepository.existsById(id)).thenReturn(true);
     when(articlesRepository.findById(id))

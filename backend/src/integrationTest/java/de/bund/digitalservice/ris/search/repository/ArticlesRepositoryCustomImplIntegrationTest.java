@@ -158,7 +158,7 @@ class ArticlesRepositoryCustomImplIntegrationTest extends ContainersIntegrationB
   }
 
   @Test
-  void itReturnsAnEmptyPageWhenNoDocumentNumberMatchesThePrefix() {
+  void itThrowsAnIllegalArgumentExceptionOnInvalidDocumentNumber() {
     assertThatThrownBy(
             () -> {
               articlesRepository.findAllVersionsByDocumentNumber(
