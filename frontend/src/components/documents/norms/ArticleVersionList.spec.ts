@@ -2,7 +2,7 @@ import { userEvent } from "@testing-library/user-event";
 import { render, screen, within } from "@testing-library/vue";
 import type { FetchHook } from "ofetch";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { Article } from "~/types/api.ts";
+import type { ArticleVersion } from "~/types/api.ts";
 import ArticleVersionList from "./ArticleVersionList.vue";
 
 /**
@@ -25,14 +25,17 @@ vi.mock("~/plugins/risBackend", () => ({
   extendOnRequest: (...cbs: FetchHook[]) => cbs,
 }));
 
-function createArticle(identifier: string, temporalCoverage: string): Article {
+function createArticleVersion(
+  identifier: string,
+  temporalCoverage: string,
+  isPartOf: string[] = [],
+): ArticleVersion {
   return {
     "@id": identifier,
     eId: "art-1",
     name: "§ 1",
-    headline: "",
     temporalCoverage,
-    hasPart: [],
+    isPartOf: isPartOf.map((id) => ({ "@id": id })),
     encoding: [
       {
         "@id": "",
@@ -44,25 +47,29 @@ function createArticle(identifier: string, temporalCoverage: string): Article {
   };
 }
 
-const futureVersion = createArticle(
+const currentExpressionId =
+  "/v1/legislation/eli/bund/bgbl-1/2000/s001/2020-01-01/1/deu";
+
+const futureVersion = createArticleVersion(
   "eli/bund/bgbl-1/2000/s001/2031-01-01/1/deu#art-1",
   "2031-01-01/..",
 );
-const currentVersion = createArticle(
+const currentVersion = createArticleVersion(
   "eli/bund/bgbl-1/2000/s001/2020-01-01/1/deu#art-1",
   "2020-01-01/2030-12-31",
+  [currentExpressionId],
 );
-const pastVersion = createArticle(
+const pastVersion = createArticleVersion(
   "eli/bund/bgbl-1/2000/s001/2000-01-01/1/deu#art-1",
   "2000-01-05/2019-12-31",
 );
 
 /** Props for the list, with the middle version being the displayed one. */
 function props(
-  versions: Article[] = [pastVersion, currentVersion, futureVersion],
+  versions: ArticleVersion[] = [pastVersion, currentVersion, futureVersion],
 ) {
   return {
-    currentArticleId: currentVersion["@id"],
+    currentArticleId: currentExpressionId,
     versions,
   };
 }
