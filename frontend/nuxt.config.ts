@@ -44,9 +44,6 @@ export default defineNuxtConfig({
   // Build
   vite: {
     plugins: [tailwindcss(), icons],
-    optimizeDeps: {
-      include: ["primevue", "@digitalservicebund/ris-ui/primevue"],
-    },
   },
   typescript: {
     typeCheck: "build",
