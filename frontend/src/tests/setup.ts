@@ -1,14 +1,8 @@
 import "@testing-library/jest-dom";
-import { config } from "@vue/test-utils";
-// oxlint-disable-next-line no-restricted-imports
-import PrimeVue from "primevue/config";
 import { vi } from "vitest";
 import "~/tests/cookieStoreMock";
 
 vi.mock("~/middleware/checkLogin.global.ts", () => ({ default: vi.fn() }));
-
-// Enable PrimeVue plugin because we need that in many tests
-config.global.plugins = [PrimeVue];
 
 // see https://jestjs.io/docs/manual-mocks#mocking-methods-which-are-not-implemented-in-jsdom
 if (globalThis?.window) {
