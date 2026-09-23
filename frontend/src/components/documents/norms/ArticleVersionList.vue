@@ -2,11 +2,11 @@
 import { computed } from "vue";
 import IcChevronRightIcon from "~icons/ic/outline-chevron-right";
 import type { DataTableColumn } from "~/components/ui/DataTable.vue";
-import type { Article } from "~/types/api.ts";
+import type { ArticleVersion } from "~/types/api.ts";
 
-const props = defineProps<{
+const { currentArticleId, versions } = defineProps<{
   currentArticleId: string;
-  versions: Article[];
+  versions: ArticleVersion[];
 }>();
 
 type VersionRow = {
@@ -24,7 +24,7 @@ const columns: DataTableColumn<VersionRow>[] = [
 
 const rows = computed<VersionRow[]>(() => {
   // newest single norm first
-  const versionsSorted = props.versions.toSorted((a, b) =>
+  const versionsSorted = versions.toSorted((a, b) =>
     b.temporalCoverage.localeCompare(a.temporalCoverage),
   );
 
@@ -33,7 +33,9 @@ const rows = computed<VersionRow[]>(() => {
       version.temporalCoverage,
     );
 
-    const disabled = version["@id"] === props.currentArticleId;
+    const disabled = (version.isPartOf ?? [])
+      .map((expression) => expression["@id"])
+      .includes(currentArticleId);
     const encodingUrl = getEncodingURL(version.encoding, "text/html");
 
     return {

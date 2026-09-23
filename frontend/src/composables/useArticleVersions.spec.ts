@@ -1,6 +1,6 @@
 import type { FetchHook } from "ofetch";
 import { describe, expect, it, vi } from "vitest";
-import type { Article, JSONLDList } from "~/types/api";
+import type { ArticleVersion, JSONLDList } from "~/types/api";
 import { useArticleVersions } from "./useArticleVersions.ts";
 
 const { mockFetch } = vi.hoisted(() => {
@@ -25,10 +25,10 @@ describe("useArticleVersions", () => {
   const articleEId = "eid-1";
 
   it("fetches article versions for the given eli and eId", async () => {
-    const articles = [{ "@id": "foo" }] as Article[];
+    const articles = [{ "@id": "foo" }] as ArticleVersion[];
     mockFetch.mockResolvedValueOnce({
       member: articles,
-    } as JSONLDList<Article>);
+    } as JSONLDList<ArticleVersion>);
 
     const { data } = await useArticleVersions(expressionEli, articleEId);
 

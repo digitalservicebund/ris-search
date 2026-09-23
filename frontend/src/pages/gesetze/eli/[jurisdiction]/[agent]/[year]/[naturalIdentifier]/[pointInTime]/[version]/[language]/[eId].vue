@@ -14,6 +14,7 @@ import { useArticleSeo } from "~/composables/useArticleSeo";
 import { useSearchBackLink } from "~/composables/useSearchBackLink";
 import {
   type Article,
+  type ArticleVersion,
   DocumentKind,
   type LegislationExpressionPartSchema,
 } from "~/types/api";
@@ -64,7 +65,7 @@ const article: Ref<Article | undefined> = computed(() =>
 
 const isArticle = computed(() => article.value?.partType === "article");
 
-let articleVersions = ref<Article[]>([]);
+let articleVersions = ref<ArticleVersion[]>([]);
 
 if (isArticle) {
   const { data: versions, error: versionsError } = await useArticleVersions(
@@ -383,7 +384,7 @@ const geltungszeitenTabPanelTitleId = useId();
               >
                 Weitere Geltungszeiträume dieser Einzelnorm
               </h2>
-              <DocumentsNormsSingleNormVersionList
+              <DocumentsNormsArticleVersionList
                 :current-article-id="articleId"
                 :versions="articleVersions"
               />
