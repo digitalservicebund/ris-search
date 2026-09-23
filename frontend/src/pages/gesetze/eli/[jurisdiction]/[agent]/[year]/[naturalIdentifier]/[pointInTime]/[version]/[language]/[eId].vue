@@ -98,6 +98,8 @@ const article: Ref<Article | undefined> = computed(() =>
   ),
 );
 
+const isArticle = computed(() => article.value?.partType === "article");
+
 useArticleSeo({
   abbreviation: normAbbreviation.value,
   article: article.value,
@@ -220,18 +222,23 @@ const inForceNormLink = computed(() => {
 });
 
 const views = computed<OneOrMore<TabView>>(() => {
-  return [
+  const tabViews: OneOrMore<TabView> = [
     {
       path: "text",
       label: "Text",
       analyticsId: "article-text-tab",
     },
-    {
+  ];
+
+  if (isArticle.value) {
+    tabViews.push({
       path: "geltungszeiten",
       label: "Geltungszeiträume",
       analyticsId: "article-versions-tab",
-    },
-  ];
+    });
+  }
+
+  return tabViews;
 });
 
 const metadataItems = computed<MetadataItem[]>(() => {
@@ -307,7 +314,7 @@ const geltungszeitenTabPanelTitleId = useId();
                   <NuxtLink
                     v-if="previousArticleUrl"
                     :to="previousArticleUrl"
-                    class="typo-link-regular link-hover"
+                    class="typo-link1-regular link-hover"
                   >
                     <div class="flex items-center space-x-8">
                       <IcBaselineArrowBack class="mt-1 shrink-0" />
@@ -320,7 +327,7 @@ const geltungszeitenTabPanelTitleId = useId();
                   <NuxtLink
                     v-if="nextArticleUrl"
                     :to="nextArticleUrl"
-                    class="typo-link-regular link-hover"
+                    class="typo-link1-regular link-hover"
                   >
                     <div class="flex items-center space-x-8">
                       <span>Nächster Paragraf</span>

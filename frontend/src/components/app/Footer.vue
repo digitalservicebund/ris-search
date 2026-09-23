@@ -28,7 +28,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
           <div>
             <p class="typo-body-regular">
               Ein Service im Auftrag des
-              <ExternalLink class="typo-link-regular" url="https://www.bmj.de"
+              <ExternalLink class="typo-link1-regular" url="https://www.bmj.de"
                 >Bundesministeriums der Justiz und für
                 Verbraucherschutz</ExternalLink
               >
@@ -36,7 +36,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
             <p class="typo-body-regular">
               Umsetzung und Betrieb durch
               <ExternalLink
-                class="typo-link-regular"
+                class="typo-link1-regular"
                 url="https://digitalservice.bund.de"
                 >DigitalService GmbH des Bundes</ExternalLink
               >
@@ -53,63 +53,63 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
           >
             <li>
               <NuxtLink
-                class="typo-link-regular link-hover"
+                class="typo-link1-regular link-hover"
                 :to="{ name: 'kontakt' }"
                 >Kontakt</NuxtLink
               >
             </li>
             <li>
               <NuxtLink
-                class="typo-link-regular link-hover"
+                class="typo-link1-regular link-hover"
                 :to="{ name: 'impressum' }"
                 >Impressum</NuxtLink
               >
             </li>
             <li>
               <NuxtLink
-                class="typo-link-regular link-hover"
+                class="typo-link1-regular link-hover"
                 :to="{ name: 'datenschutzerklaerung' }"
                 >Datenschutzerklärung</NuxtLink
               >
             </li>
             <li>
               <NuxtLink
-                class="typo-link-regular link-hover"
+                class="typo-link1-regular link-hover"
                 :to="{ name: 'barrierefreiheit' }"
                 >Barrierefreiheit</NuxtLink
               >
             </li>
             <li>
               <NuxtLink
-                class="typo-link-regular link-hover"
+                class="typo-link1-regular link-hover"
                 :to="{ name: 'cookie-einstellungen' }"
                 >Cookie-Einstellungen</NuxtLink
               >
             </li>
             <li v-if="privateFeaturesEnabled">
               <NuxtLink
-                class="typo-link-regular link-hover"
+                class="typo-link1-regular link-hover"
                 :to="{ name: 'translations' }"
                 >English translations</NuxtLink
               >
             </li>
             <li>
               <NuxtLink
-                class="typo-link-regular link-hover"
+                class="typo-link1-regular link-hover"
                 :to="{ name: 'open-source' }"
                 >Open Source</NuxtLink
               >
             </li>
             <li>
               <ExternalLink
-                class="typo-link-regular link-hover"
+                class="typo-link1-regular link-hover"
                 url="https://docs.rechtsinformationen.bund.de"
                 >API-Dokumentation</ExternalLink
               >
             </li>
             <li>
               <NuxtLink
-                class="typo-link-regular link-hover"
+                class="typo-link1-regular link-hover"
                 :to="{ name: 'nutzungstests' }"
                 >Nutzungstests</NuxtLink
               >

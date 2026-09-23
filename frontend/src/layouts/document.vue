@@ -8,7 +8,6 @@ const { titlePlaceholder = "Titelzeile nicht vorhanden", views } = defineProps<{
   title?: string;
   secondaryTitle?: string;
   titlePlaceholder?: string;
-  isEmptyDocument?: boolean;
   breadcrumbs?: BreadcrumbItem[];
   metadata?: MetadataItem[];
   views: OneOrMore<TabView>;
@@ -47,17 +46,7 @@ const { titlePlaceholder = "Titelzeile nicht vorhanden", views } = defineProps<{
         />
       </div>
 
-      <!-- Empty documents -->
-      <div
-        v-if="isEmptyDocument"
-        class="min-h-96 border-t border-t-gray-400 bg-white print:py-0"
-      >
-        <div class="content-wrapper">
-          <slot name="details" />
-        </div>
-      </div>
-
-      <div v-else>
+      <div>
         <!-- Tabs -->
         <DocumentsTabsLayout :views>
           <template v-for="(_, name) in $slots" #[name]>

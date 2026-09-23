@@ -10,7 +10,8 @@ import org.springframework.data.elasticsearch.repository.ElasticsearchRepository
  * interface extends {@link ElasticsearchRepository} and focuses on operations related to {@link
  * Article}.
  */
-public interface ArticlesRepository extends ElasticsearchRepository<Article, String> {
+public interface ArticlesRepository
+    extends ElasticsearchRepository<Article, String>, ArticlesRepositoryCustom {
   List<Article> findAllByExpressionEli(String expressionEli);
 
   /**

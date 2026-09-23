@@ -285,10 +285,7 @@ watch(searchStatus, async (newStatus, oldStatus) => {
 
       <p v-if="privateFeaturesEnabled" class="typo-label2-regular mt-8">
         Mehr Suchoptionen finden Sie unter
-        <NuxtLink
-          :to="{ name: 'erweiterte-suche' }"
-          class="ris-link2-regular 2xl:ris-link1-regular"
-        >
+        <NuxtLink :to="{ name: 'erweiterte-suche' }" class="typo-link2-regular">
           Erweiterte Suche
         </NuxtLink>
       </p>
@@ -306,11 +303,12 @@ watch(searchStatus, async (newStatus, oldStatus) => {
               :icon="IcOutlineFilterAlt"
               @reset="resetFilterDrawer"
               @apply="applyFilterDrawer"
+              v-slot="{ appendTarget }"
             >
               <SearchCourtFilter
                 v-if="documentKind === DocumentKind.CaseLaw"
                 v-model="courtDraft.draft.value"
-                append-to="body"
+                :append-to="appendTarget ?? undefined"
               />
 
               <SearchDateFilter

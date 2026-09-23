@@ -38,7 +38,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
         <h1 class="typo-headline1-bold wrap-break-word hyphens-auto">
           Rechtsinformationen des Bundes
         </h1>
-        <p class="typo-body-regular 2xl:ris-subhead-regular">
+        <p class="typo-landingpage-lead-regular">
           Schneller und direkter Zugang zu Gesetzen, Verordnungen,
           Gerichtsentscheidungen und künftig auch Verwaltungsvorschriften des
           Bundes – an einem zentralen Ort.
@@ -161,7 +161,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
           geben. Die Funktionen und der Umfang der Daten werden schrittweise
           erweitert.
         </p>
-        <NuxtLink class="typo-link-regular" :to="{ name: 'ueber' }"
+        <NuxtLink class="typo-link1-regular" :to="{ name: 'ueber' }"
           >Weitere Informationen zur Testphase</NuxtLink
         >
       </div>

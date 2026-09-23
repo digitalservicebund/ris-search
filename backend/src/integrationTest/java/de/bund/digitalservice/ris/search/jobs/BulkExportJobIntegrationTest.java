@@ -32,11 +32,11 @@ class BulkExportJobIntegrationTest extends ContainersIntegrationBase {
   @Autowired
   BulkExportJob bulkExportJob;
 
+  @Autowired private NormsBucket normsBucket;
+
   @Qualifier("normsBulkExportService")
   @MockitoSpyBean
-  BulkExportService bulkExportService;
-
-  @Autowired private NormsBucket normsBucket;
+  BulkExportService normsBulkExportService;
 
   @Test
   void runJob_returnsEarlyWhenNoChangesAreDetected() {
@@ -44,7 +44,7 @@ class BulkExportJobIntegrationTest extends ContainersIntegrationBase {
         JOB_STATE_STORAGE_PREFIX + DocumentKind.LEGISLATION.getBulkZipPath(),
         Instant.now().minus(25, ChronoUnit.HOURS).toString());
     assertThat(bulkExportJob.runJob()).isEqualTo(Job.ReturnCode.SUCCESS);
-    verify(bulkExportService, never()).updateLatestZip(any());
+    verify(normsBulkExportService, never()).updateLatestZip(any());
   }
 
   @Test
@@ -57,7 +57,7 @@ class BulkExportJobIntegrationTest extends ContainersIntegrationBase {
         "{\"changed\":[\"something.xml\"]}");
 
     assertThat(bulkExportJob.runJob()).isEqualTo(Job.ReturnCode.SUCCESS);
-    verify(bulkExportService, never()).updateLatestZip(any());
+    verify(normsBulkExportService, never()).updateLatestZip(any());
   }
 
   @Test
@@ -70,7 +70,7 @@ class BulkExportJobIntegrationTest extends ContainersIntegrationBase {
         "{\"deleted\":[\"something.xml\"]}");
 
     assertThat(bulkExportJob.runJob()).isEqualTo(Job.ReturnCode.SUCCESS);
-    verify(bulkExportService, times(1)).deleteArchives();
-    verify(bulkExportService, times(1)).updateLatestZip(any());
+    verify(normsBulkExportService, times(1)).deleteArchives();
+    verify(normsBulkExportService, times(1)).updateLatestZip(any());
   }
 }

@@ -49,10 +49,6 @@ describe("useDrawer", () => {
     await vi.waitFor(() => expect(document.activeElement).toBe(button));
   });
 
-  it("returns a default value for the drawer close button", () => {
-    expect(useDrawer().closeButtonProps).toBeTruthy();
-  });
-
   it("reuses an externally provided visible ref instead of creating its own", async () => {
     let drawer!: ReturnType<typeof useDrawer>;
     const externalVisible = ref(false);

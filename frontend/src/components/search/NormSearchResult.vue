@@ -152,7 +152,7 @@ const relevantHighlights = computed(() =>
         class="flex flex-col"
       >
         <NuxtLink
-          class="typo-link-bold link-hover"
+          class="typo-link1-bold link-hover"
           :to="highlight.route"
           @click="searchResultClicked(highlight.route.path, order)"
         >

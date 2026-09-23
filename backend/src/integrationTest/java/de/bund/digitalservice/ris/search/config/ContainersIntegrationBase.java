@@ -8,13 +8,9 @@ import de.bund.digitalservice.ris.search.controller.api.testData.AdministrativeD
 import de.bund.digitalservice.ris.search.controller.api.testData.CaseLawTestData;
 import de.bund.digitalservice.ris.search.controller.api.testData.LiteratureTestData;
 import de.bund.digitalservice.ris.search.controller.api.testData.NormsTestData;
-import de.bund.digitalservice.ris.search.models.api.parameters.NormsSearchParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
-import de.bund.digitalservice.ris.search.models.opensearch.AbstractSearchEntity;
 import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
-import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
-import de.bund.digitalservice.ris.search.models.opensearch.LegislationPartType;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
@@ -50,6 +46,7 @@ import org.springframework.data.elasticsearch.core.SearchPage;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.testcontainers.utility.TestcontainersConfiguration;
 
@@ -62,19 +59,15 @@ import org.testcontainers.utility.TestcontainersConfiguration;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class ContainersIntegrationBase {
 
+  // Autowire Persistence layer
   @Autowired protected AdministrativeDirectiveRepository administrativeDirectiveRepository;
-  @Autowired protected CaseLawRepository caseLawRepository;
+  @MockitoSpyBean protected CaseLawRepository caseLawRepository;
   @Autowired protected LiteratureRepository literatureRepository;
   @Autowired protected NormsRepository normsRepository;
   @Autowired protected ArticlesRepository articlesRepository;
   @Autowired protected CaseLawBucket caseLawBucket;
   @Autowired protected NormsBucket normsBucket;
   @Autowired protected PublicFilesBucket publicFilesBucket;
-  @Autowired protected AllDocumentsService allDocumentsService;
-  @Autowired protected CaseLawService caseLawService;
-  @Autowired protected NormsService normsService;
-  @Autowired protected LiteratureService literatureService;
-  @Autowired protected AdministrativeDirectiveService administrativeDirectiveService;
 
   @Autowired
   @Qualifier("caseLawS3Client")
@@ -96,6 +89,14 @@ public class ContainersIntegrationBase {
   @Qualifier("portalS3Client")
   private S3ObjectStorageClient portalS3Client;
 
+  // Autowire Service layer
+  @Autowired protected AllDocumentsService allDocumentsService;
+  @Autowired protected CaseLawService caseLawService;
+  @Autowired protected NormsService normsService;
+  @Autowired protected LiteratureService literatureService;
+  @Autowired protected AdministrativeDirectiveService administrativeDirectiveService;
+
+  // Setup Testcontainers
   public static final CustomOpensearchContainer openSearchContainer =
       new CustomOpensearchContainer();
 
@@ -110,6 +111,8 @@ public class ContainersIntegrationBase {
   static void registerDynamicProperties(DynamicPropertyRegistry registry) {
     registry.add("opensearch.port", openSearchContainer::getFirstMappedPort);
   }
+
+  // Shared cleanup
 
   @AfterAll
   protected void cleanup() {
@@ -170,6 +173,8 @@ public class ContainersIntegrationBase {
     administrativeDirectiveRepository.deleteAll();
   }
 
+  // Shared helper methods
+
   /**
    * Adds the given norm XML files to the norms bucket.
    *
@@ -205,63 +210,12 @@ public class ContainersIntegrationBase {
     return result;
   }
 
-  protected void saveSimpleNorm(String id, String content) {
-    String expressionEli = "ExpressionPrefix" + id;
-    String workEli = "WorkPrefix" + expressionEli;
-    String articleName = "Article 1";
-    normsRepository.save(
-        Norm.builder()
-            .id(expressionEli)
-            .workEli(workEli)
-            .expressionEli(expressionEli)
-            .articleTexts(List.of(content))
-            .articles(
-                List.of(
-                    Article.builder()
-                        .name(articleName)
-                        .text(content)
-                        .documentType(LegislationPartType.ARTICLE)
-                        .build()))
-            .build());
-    articlesRepository.save(
-        Article.builder()
-            .id(expressionEli + "/" + "eid1")
-            .workEli(workEli)
-            .expressionEli(expressionEli)
-            .name(articleName)
-            .text(content)
-            .documentType(LegislationPartType.ARTICLE)
-            .build());
-  }
-
   protected <T> List<T> getAll(DocumentRepository<T> repo, Predicate<T> predicate) {
     return getAll(repo).stream().filter(predicate).toList();
   }
 
   protected <T> List<T> getAll(DocumentRepository<T> repo) {
     return repo.findAll(PageRequest.of(0, 1000)).get().toList();
-  }
-
-  protected List<AbstractSearchEntity> searchAll(String searchTerm) {
-    return searchAllHit(searchTerm).get().map(SearchHit::getContent).toList();
-  }
-
-  protected SearchPage<AbstractSearchEntity> searchAllHit(String searchTerm) {
-    return allDocumentsService.simpleSearchAllDocuments(
-        UniversalSearchParams.builder().searchTerm(searchTerm).build(),
-        Pageable.ofSize(10000),
-        null);
-  }
-
-  protected SearchPage<Norm> searchNormsHit(String searchTerm) {
-    return searchNormsHit(searchTerm, null);
-  }
-
-  protected SearchPage<Norm> searchNormsHit(String searchTerm, NormsSearchParams normParams) {
-    return normsService.simpleSearchNorms(
-        UniversalSearchParams.builder().searchTerm(searchTerm).build(),
-        normParams,
-        Pageable.ofSize(10000));
   }
 
   protected List<CaseLawDocumentationUnit> searchCaseLaw(String searchTerm) {

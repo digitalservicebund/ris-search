@@ -6,12 +6,20 @@
   @apply ris-body2-bold sm:ris-body1-bold 2xl:text-[1.25rem];
 }
 
-@utility typo-link-regular {
+@utility typo-link1-regular {
   @apply ris-link2-regular sm:ris-link1-regular 2xl:text-[1.25rem];
 }
 
-@utility typo-link-bold {
+@utility typo-link1-bold {
   @apply ris-link2-bold sm:ris-link1-bold 2xl:text-[1.25rem];
+}
+
+@utility typo-link2-regular {
+  @apply ris-link2-regular 2xl:ris-link1-regular;
+}
+
+@utility typo-link2-bold {
+  @apply ris-link2-bold 2xl:ris-link1-bold;
 }
 
 @utility typo-headline1-regular {
@@ -46,6 +54,16 @@
   @apply ris-label2-bold sm:ris-label1-bold 2xl:text-[1.25rem];
 }
 
+/** Like label1-regular, but capped at the sm breakpoint */
+@utility typo-label1-compact-regular {
+  @apply ris-label2-regular sm:ris-label1-regular;
+}
+
+/** Like label1-bold, but capped at the sm breakpoint */
+@utility typo-label1-compact-bold {
+  @apply ris-label2-bold sm:ris-label1-bold;
+}
+
 @utility typo-label2-regular {
   @apply ris-label2-regular 2xl:ris-label1-regular;
 }
@@ -62,6 +80,8 @@
   @apply no-underline hover:underline sm:no-underline sm:hover:underline;
 }
 
+/* Exceptions ------------------------------------------ */
+
 @utility typo-headline-searchresult {
   @apply ris-subhead-bold md:ris-heading3-bold 2xl:ris-heading2-bold block;
 
@@ -76,4 +96,12 @@
   &:is(a) {
     @apply link-hover text-blue-800 underline-offset-2 outline-offset-4 outline-blue-800 focus-visible:outline-4;
   }
+}
+
+@utility typo-landingpage-lead-regular {
+  @apply typo-body-regular 2xl:ris-subhead-regular;
+}
+
+@utility typo-landingpage-lead-bold {
+  @apply typo-body-bold 2xl:ris-subhead-bold;
 }

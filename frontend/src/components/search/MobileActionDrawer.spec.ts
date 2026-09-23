@@ -78,13 +78,7 @@ describe("MobileActionDrawer", () => {
     const { emitted } = await renderDrawer();
 
     await user.click(screen.getByRole("button", { name: "Filtern" }));
-    // The close button's visible label is "Schließen" (set via useDrawer()'s
-    // closeButtonProps), but PrimeVue's Drawer also sets an explicit
-    // aria-label, which takes precedence over the visible text for the
-    // accessible name. It defaults to English ("Close") here because this
-    // isolated component test doesn't load the app's German PrimeVue locale
-    // plugin (src/plugins/risUi.ts) - the real app renders "Schließen".
-    await user.click(screen.getByRole("button", { name: "Close" }));
+    await user.click(screen.getByRole("button", { name: "Schließen" }));
 
     expect(emitted("apply")).toBeFalsy();
     await waitFor(() =>
@@ -100,7 +94,7 @@ describe("MobileActionDrawer", () => {
 
     const triggerButton = screen.getByRole("button", { name: "Filtern" });
     await user.click(triggerButton);
-    await user.click(screen.getByRole("button", { name: "Close" }));
+    await user.click(screen.getByRole("button", { name: "Schließen" }));
 
     await waitFor(() => expect(triggerButton).toHaveFocus());
   });
