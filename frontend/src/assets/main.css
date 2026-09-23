@@ -1,8 +1,8 @@
 @import "tailwindcss";
+
 @import "./tokens.css";
 @import "./fonts.css";
-
-@import "./global.css" layer(base);
-@import "./print.css" layer(base);
 @import "./typography.css";
 @import "./layout.css";
+
+@import "./print.css" layer(base);

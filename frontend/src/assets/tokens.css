@@ -132,12 +132,15 @@
 
 @layer base {
   body {
-    color: var(--color-black);
-    font-family: var(--font-sans);
+    @apply typo-body-regular font-sans text-black antialiased;
   }
 
   ::placeholder {
     font-family: var(--font-sans);
     font-style: normal;
+  }
+
+  mark {
+    @apply bg-yellow-200;
   }
 }
