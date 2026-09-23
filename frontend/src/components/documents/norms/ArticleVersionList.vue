@@ -4,8 +4,8 @@ import IcChevronRightIcon from "~icons/ic/outline-chevron-right";
 import type { DataTableColumn } from "~/components/ui/DataTable.vue";
 import type { ArticleVersion } from "~/types/api.ts";
 
-const { currentArticleId, versions } = defineProps<{
-  currentArticleId: string;
+const { currentExpressionId, versions } = defineProps<{
+  currentExpressionId: string;
   versions: ArticleVersion[];
 }>();
 
@@ -35,7 +35,7 @@ const rows = computed<VersionRow[]>(() => {
 
     const disabled = (version.isPartOf ?? [])
       .map((expression) => expression["@id"])
-      .includes(currentArticleId);
+      .includes(currentExpressionId);
     const encodingUrl = getEncodingURL(version.encoding, "text/html");
 
     return {

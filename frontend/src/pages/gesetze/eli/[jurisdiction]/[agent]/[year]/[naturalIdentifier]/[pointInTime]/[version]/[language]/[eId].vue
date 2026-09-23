@@ -53,9 +53,15 @@ const { data, error } = await useFetchNormArticleContent(
 
 if (error.value) throw createError(error.value);
 
+const norm = computed(() => data.value.legislation);
+
+const singleViewParts = computed(() =>
+  getPartsLeafNodes(norm.value?.hasPart ?? []),
+);
+
 const article: Ref<Article | undefined> = computed(() =>
   // The eId is taken from the router, which always automatically decodes URIs.
-  // However some eIds are pre-encoded in the XML data (e.g. "art-z§§ 1 bis 3"
+  // However, some eIds are pre-encoded in the XML data (e.g. "art-z§§ 1 bis 3"
   // is encoded in the XML but will automatically be decoded by the router).
   // For this reason, we need to also decode the eId in the data to make them
   // comparable.
@@ -66,25 +72,25 @@ const article: Ref<Article | undefined> = computed(() =>
 
 const isArticle = computed(() => article.value?.partType === "article");
 
-let articleVersions = ref<ArticleVersion[]>([]);
+const articleVersions = ref<ArticleVersion[]>([]);
 
-if (isArticle) {
+if (isArticle.value) {
   const fetchUrl = `/v1/article/work-example/eli/${expressionEli}/${eId.value}`;
   const { data: versionsCollection, error: versionsError } =
     await useRisBackend<JSONLDList<ArticleVersion>>(fetchUrl);
 
   if (versionsError.value) throw createError(versionsError.value);
 
-  articleVersions = ref(versionsCollection.value?.member ?? []);
+  articleVersions.value = versionsCollection.value?.member ?? [];
 }
-
-const norm = computed(() => data.value.legislation);
 
 const normAbbreviation = computed(() => norm.value.abbreviation);
 
 const articleHtml = computed(() => data.value.htmlBody);
 
-const articleId = computed(() => `/v1/legislation/eli/${expressionEli}`);
+const currentExpressionId = computed(
+  () => `/v1/legislation/eli/${expressionEli}`,
+);
 
 const normExpressionPath = `/gesetze/eli/${expressionEli}`;
 
@@ -112,10 +118,6 @@ const tableOfContents = computed(() => {
     }),
   );
 });
-
-const singleViewParts = computed(() =>
-  getPartsLeafNodes(norm.value?.hasPart ?? []),
-);
 
 useArticleSeo({
   abbreviation: normAbbreviation.value,
@@ -386,7 +388,7 @@ const geltungszeitenTabPanelTitleId = useId();
                 Weitere Geltungszeiträume dieser Einzelnorm
               </h2>
               <DocumentsNormsArticleVersionList
-                :current-article-id="articleId"
+                :currentExpressionId
                 :versions="articleVersions"
               />
             </div>

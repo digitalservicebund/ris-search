@@ -69,7 +69,7 @@ function props(
   versions: ArticleVersion[] = [pastVersion, currentVersion, futureVersion],
 ) {
   return {
-    currentArticleId: currentExpressionId,
+    currentExpressionId: currentExpressionId,
     versions,
   };
 }
