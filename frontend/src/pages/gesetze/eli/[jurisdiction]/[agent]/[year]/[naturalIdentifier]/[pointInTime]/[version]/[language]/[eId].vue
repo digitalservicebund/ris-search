@@ -37,7 +37,10 @@ const eId = computed(() => {
   const eIdParam = Array.isArray(route.params.eId)
     ? route.params.eId[0]
     : route.params.eId;
-  if (!eIdParam) return undefined;
+  if (!eIdParam) {
+    throw createError({ status: 404 });
+  }
+
   return eIdParam.endsWith(".html") ? eIdParam.slice(0, -5) : eIdParam;
 });
 
@@ -46,10 +49,31 @@ const { data, error } = await useFetchNormArticleContent(
   eId.value,
 );
 
-const versions = await useSingleNormVersions();
+if (error.value) throw createError(error.value);
 
-if (error.value || !data.value) {
-  throw createError({ status: error.value?.status ?? 500 });
+const article: Ref<Article | undefined> = computed(() =>
+  // The eId is taken from the router, which always automatically decodes URIs.
+  // However some eIds are pre-encoded in the XML data (e.g. "art-z§§ 1 bis 3"
+  // is encoded in the XML but will automatically be decoded by the router).
+  // For this reason, we need to also decode the eId in the data to make them
+  // comparable.
+  singleViewParts.value?.find(
+    (part) => decodeURIComponent(part.eId) == eId.value,
+  ),
+);
+
+const isArticle = computed(() => article.value?.partType === "article");
+
+let articleVersions = ref<Article[]>([]);
+
+if (isArticle) {
+  const { data: versions, error: versionsError } = await useArticleVersions(
+    expressionEli,
+    eId.value,
+  );
+  if (versionsError.value) throw createError(versionsError.value);
+
+  articleVersions = versions;
 }
 
 const norm = computed(() => data.value.legislation);
@@ -57,6 +81,8 @@ const norm = computed(() => data.value.legislation);
 const normAbbreviation = computed(() => norm.value.abbreviation);
 
 const articleHtml = computed(() => data.value.htmlBody);
+
+const articleId = computed(() => `/v1/legislation/eli/${expressionEli}`);
 
 const normExpressionPath = `/gesetze/eli/${expressionEli}`;
 
@@ -88,19 +114,6 @@ const tableOfContents = computed(() => {
 const singleViewParts = computed(() =>
   getPartsLeafNodes(norm.value?.hasPart ?? []),
 );
-
-const article: Ref<Article | undefined> = computed(() =>
-  // The eId is taken from the router, which always automatically decodes URIs.
-  // However some eIds are pre-encoded in the XML data (e.g. "art-z§§ 1 bis 3"
-  // is encoded in the XML but will automatically be decoded by the router).
-  // For this reason, we need to also decode the eId in the data to make them
-  // comparable.
-  singleViewParts.value?.find(
-    (part) => decodeURIComponent(part.eId) == eId.value,
-  ),
-);
-
-const isArticle = computed(() => article.value?.partType === "article");
 
 useArticleSeo({
   abbreviation: normAbbreviation.value,
@@ -371,8 +384,8 @@ const geltungszeitenTabPanelTitleId = useId();
                 Weitere Geltungszeiträume dieser Einzelnorm
               </h2>
               <DocumentsNormsSingleNormVersionList
-                current-single-norm-identifier="eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu#art-z1"
-                :versions="versions"
+                :current-article-id="articleId"
+                :versions="articleVersions"
               />
             </div>
 
