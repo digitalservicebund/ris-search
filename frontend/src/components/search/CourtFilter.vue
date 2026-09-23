@@ -6,10 +6,9 @@ import { courtFilterDefaultSuggestions } from "~/utils/search/courtFilter";
 
 const { appendTo } = defineProps<{
   /**
-   * Where to portal the suggestion panel. Pass a Drawer's `append-target` (from
-   * its default slot scope) when rendering inside one: a native `<dialog>`
-   * makes everything outside its own DOM subtree inert, so the default of
-   * `document.body` is unreachable there.
+   * Where to portal the suggestion panel. Defaults to `document.body`. Pass a
+   * Drawer's `append-target` when rendering inside one to guarantee correct
+   * placement of the overlay.
    */
   appendTo?: HTMLElement;
 }>();
@@ -17,8 +16,11 @@ const { appendTo } = defineProps<{
 const modelValue = defineModel<string | undefined>();
 
 const searchResults = ref<CourtSearchResult[]>([]);
+
 const searchTerm = ref("");
+
 const open = ref(false);
+
 const loading = ref(false);
 
 const { $risBackend } = useNuxtApp();
@@ -54,21 +56,38 @@ watch(searchTerm, (term) => {
   if (term) searchDebounced(term);
 });
 
-// The combobox writes the selected option's expanded label into searchTerm
-// once a selection is made (so it displays as the input value), not just
-// what the user actually typed. Tracked here to tell the two apart: the
-// court search endpoint filters by court key (e.g. "BGH"), and an expanded
-// label like "Bundesgerichtshof" wouldn't match a court's key prefix.
+// Labels for ids seen so far, kept even after searchResults is cleared.
+// selecting an option clears it before we can read the label back out.
+const knownLabels = new Map<string, string>();
+
+watch(
+  searchResults,
+  (results) => {
+    for (const result of results) {
+      if (result.id && result.label) knownLabels.set(result.id, result.label);
+    }
+  },
+  { immediate: true },
+);
+
+// searchTerm also holds the selected option's label after selecting it, not
+// just typed text. Tracked so we can tell those apart below.
 const lastSelectedLabel = ref<string>();
+
+watch(modelValue, (selectedId) => {
+  lastSelectedLabel.value = selectedId
+    ? knownLabels.get(selectedId)
+    : undefined;
+  searchResults.value = [];
+});
 
 watch(open, (isOpen) => {
   if (!isOpen) {
     searchResults.value = [];
     return;
   }
-  // Re-run the search whenever the panel opens, rather than relying on the
-  // searchTerm watcher above: searchTerm can already hold a value without
-  // the user having typed anything since results were last cleared on close.
+
+  // Ignore searchTerm if it's just the selected label, not a real query.
   if (searchTerm.value && searchTerm.value !== lastSelectedLabel.value) {
     searchDebounced(searchTerm.value);
   } else if (modelValue.value) {
@@ -78,30 +97,24 @@ watch(open, (isOpen) => {
   }
 });
 
-watch(modelValue, (selectedId) => {
-  lastSelectedLabel.value = selectedId
-    ? options.value.find((option) => option.id === selectedId)?.label
-    : undefined;
-  searchResults.value = [];
-});
-
 const id = useId();
 </script>
 
 <template>
   <div class="flex flex-col gap-4">
-    <label :id="id" class="typo-label1-bold">Gericht</label>
+    <label class="typo-label1-bold" :id="id">Gericht</label>
     <small class="ris-label2-regular text-pretty">
       Bundesgericht auswählen oder weiteres Gericht suchen
     </small>
+
     <UiCombobox
       v-model="modelValue"
-      v-model:search-term="searchTerm"
       v-model:open="open"
-      :options="options"
-      :loading="loading"
+      v-model:search-term="searchTerm"
       :append-to="appendTo"
       :aria-labelledby="id"
+      :loading="loading"
+      :options="options"
       placeholder="Auswählen oder suchen"
     />
   </div>

@@ -29,54 +29,45 @@ const {
   initialLabel,
   appendTo,
 } = defineProps<{
-  /** The list of currently offered options, e.g. search results. */
   options?: ComboboxOption[];
-  /** Shows a spinner instead of the trigger icon while a search is in flight. */
   loading?: boolean;
   /** Display text for a preselected value, used before `options` contains it. */
   initialLabel?: string;
   /**
    * Where to portal the suggestion panel. Defaults to `document.body`. Pass a
-   * Drawer's `append-target` when rendering inside one: a native `<dialog>`
-   * makes everything outside its own DOM subtree inert, so `document.body` is
-   * unreachable there.
+   * Drawer's `append-target` when rendering inside one to guarantee correct
+   * placement of the overlay.
    */
   appendTo?: HTMLElement;
 }>();
 
 const modelValue = defineModel<string>();
+
 const searchTerm = defineModel<string>("searchTerm", { default: "" });
+
 const open = defineModel<boolean>("open", { default: false });
 
-/*
- * The public model is the selected option's id (a plain string), so callers
- * don't need to hold onto option objects. ComboboxRoot's own model needs the
- * full object (for `display-value` and the `by="id"` comparator), so this
- * bridges the two. `options` is a rolling suggestion list that can go empty
- * or change after a selection (e.g. the search term resets, or the panel is
- * reopened), so a selected option is cached here rather than re-derived from
- * `options` on every read - otherwise its label would revert to the raw id
- * the moment it drops out of the list. For an id that was never in `options`
- * (e.g. a preselected value before its label has loaded), falls back to
- * `initialLabel`, and to the raw id itself if that isn't given either, rather
- * than showing nothing.
- */
+// modelValue is just an id; ComboboxRoot needs the full option. Selections are
+// cached here so the label survives `options` changing after selection (e.g.
+// after performing a search). Falls back to initialLabel, then the raw id.
 const knownOptions = new Map<string, ComboboxOption>();
 
 const selectedOption = computed<ComboboxOption | undefined>({
   get: () => {
+    if (!modelValue.value) return undefined;
+
     const found = options.find((option) => option.id === modelValue.value);
-    if (found) knownOptions.set(found.id, found);
-    return (
-      found ??
-      (modelValue.value
-        ? (knownOptions.get(modelValue.value) ?? {
-            id: modelValue.value,
-            label: initialLabel ?? modelValue.value,
-          })
-        : undefined)
-    );
+    if (found) {
+      knownOptions.set(found.id, found);
+      return found;
+    }
+
+    const known = knownOptions.get(modelValue.value);
+    if (known) return known;
+
+    return { id: modelValue.value, label: initialLabel ?? modelValue.value };
   },
+
   set: (option) => {
     if (option) knownOptions.set(option.id, option);
     modelValue.value = option?.id;
@@ -92,7 +83,7 @@ defineOptions({ inheritAttrs: false });
 
 const anchorClass = tw`typo-label2-regular flex min-h-48 w-full cursor-pointer border-2 border-blue-800 bg-white py-4 pr-4 pl-16 -outline-offset-4 outline-blue-800 hover:outline-4 has-focus-visible:outline-4`;
 
-const inputClass = tw`w-full bg-transparent focus-visible:outline-hidden placeholder:text-gray-800`;
+const inputClass = tw`w-full bg-transparent placeholder:text-gray-800 focus-visible:outline-hidden`;
 
 const buttonClass = tw`flex size-36 shrink-0 cursor-pointer items-center justify-center self-center text-blue-800 hover:bg-blue-100 hover:text-blue-800 focus-visible:bg-blue-800 focus-visible:text-white focus-visible:outline-none`;
 
@@ -133,35 +124,35 @@ const emptyClass = tw`typo-label2-regular flex min-h-48 items-center p-8 text-gr
 
       <ComboboxCancel
         v-if="searchTerm || modelValue"
-        tabindex="0"
-        :class="buttonClass"
         aria-label="Entfernen"
+        :class="buttonClass"
+        tabindex="0"
       >
         <IcBaselineClose class="h-[1em] w-[1em]" />
       </ComboboxCancel>
 
       <ComboboxTrigger
-        tabindex="0"
-        :class="[buttonClass, { [triggerActiveClass]: open }]"
         aria-label="Vorschläge anzeigen"
+        :class="[buttonClass, { [triggerActiveClass]: open }]"
+        tabindex="0"
       >
         <IcBaselineKeyboardArrowDown class="h-[1.25em] w-[1.25em]" />
       </ComboboxTrigger>
     </ComboboxAnchor>
 
     <ComboboxPortal :to="appendTo">
-      <ComboboxContent position="popper" :class="contentClass">
+      <ComboboxContent :class="contentClass" position="popper">
         <ComboboxViewport>
-          <ComboboxEmpty :class="emptyClass"
-            >Keine Ergebnisse gefunden</ComboboxEmpty
-          >
+          <ComboboxEmpty :class="emptyClass">
+            Keine Ergebnisse gefunden
+          </ComboboxEmpty>
 
           <ComboboxItem
             v-for="option in options"
             :key="option.id"
-            :value="option"
-            :text-value="option.label"
             :class="itemClass"
+            :text-value="option.label"
+            :value="option"
           >
             <div class="typo-label1-regular">{{ option.label }}</div>
             <div
