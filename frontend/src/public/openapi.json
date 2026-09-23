@@ -2489,29 +2489,6 @@
             "type" : "string"
           },
           "example" : "art-z1"
-        }, {
-          "name" : "size",
-          "in" : "query",
-          "description" : "The number of entities per page",
-          "required" : false,
-          "schema" : {
-            "type" : "integer",
-            "format" : "int32",
-            "maximum" : 300,
-            "minimum" : 1
-          },
-          "example" : 100
-        }, {
-          "name" : "pageIndex",
-          "in" : "query",
-          "description" : "The number of the page to request. The page starts with the value 0",
-          "required" : false,
-          "schema" : {
-            "type" : "integer",
-            "format" : "int32",
-            "minimum" : 0
-          },
-          "example" : 0
         } ],
         "responses" : {
           "200" : {
@@ -2519,7 +2496,7 @@
             "content" : {
               "*/*" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/CollectionSchemaLegislationExpressionPartSchema"
+                  "$ref" : "#/components/schemas/CollectionSchemaArticleVersionSchema"
                 }
               }
             }
@@ -4622,7 +4599,55 @@
         },
         "required" : [ "description", "name" ]
       },
-      "CollectionSchemaLegislationExpressionPartSchema" : {
+      "ArticleVersionSchema" : {
+        "type" : "object",
+        "description" : "A specific part of a legislation expression",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "example" : "Legislation"
+          },
+          "@id" : {
+            "type" : "string",
+            "example" : "/v1/legislation/eli/bund/bgbl-1/1975/s1760/regelungstext-1.xml#hauptteitel-para-1"
+          },
+          "eId" : {
+            "type" : "string",
+            "description" : "Expression-level identifier, uniquely identifying this element in an FRBR expression",
+            "example" : "hauptteitel-para-1"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "Numerical identifier of a specific legislation part",
+            "example" : "§ 1"
+          },
+          "temporalCoverage" : {
+            "type" : "string",
+            "description" : "Textual string indicating a time period in [ISO 8601 time interval format](https://en.wikipedia.org/wiki/ISO_8601#Time_intervals)\n",
+            "example" : "1998-02-06/.."
+          },
+          "partType" : {
+            "type" : "string",
+            "description" : "    Specifies the type of the part of a Legislation Expression.\n",
+            "enum" : [ "preamble", "article", "conclusion", "attachment" ]
+          },
+          "encoding" : {
+            "type" : "array",
+            "description" : "The source data for this part, if available on its own",
+            "items" : {
+              "$ref" : "#/components/schemas/LegislationObjectSchema"
+            }
+          },
+          "isPartOf" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/IsPartOfReference"
+            }
+          }
+        },
+        "required" : [ "@id", "eId", "name", "temporalCoverage" ]
+      },
+      "CollectionSchemaArticleVersionSchema" : {
         "type" : "object",
         "properties" : {
           "@type" : {
@@ -4644,7 +4669,7 @@
           "member" : {
             "type" : "array",
             "items" : {
-              "$ref" : "#/components/schemas/LegislationExpressionPartSchema"
+              "$ref" : "#/components/schemas/ArticleVersionSchema"
             }
           },
           "view" : {
@@ -4652,6 +4677,20 @@
           }
         },
         "required" : [ "@context", "@id", "member", "totalItems", "view" ]
+      },
+      "IsPartOfReference" : {
+        "type" : "object",
+        "description" : "A reference to another expression that the article is part of",
+        "properties" : {
+          "@type" : {
+            "type" : "string"
+          },
+          "@id" : {
+            "type" : "string",
+            "example" : "/v1/legislation/eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu/art-z1"
+          }
+        },
+        "required" : [ "@id" ]
       },
       "AdministrativeDirectiveSchema" : {
         "type" : "object",

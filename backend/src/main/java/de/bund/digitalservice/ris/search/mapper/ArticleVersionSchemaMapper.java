@@ -4,9 +4,8 @@ import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.ArticleWithExpressions;
 import de.bund.digitalservice.ris.search.models.opensearch.LegislationPartType;
+import de.bund.digitalservice.ris.search.schema.ArticleVersionSchema;
 import de.bund.digitalservice.ris.search.schema.CollectionSchema;
-import de.bund.digitalservice.ris.search.schema.LegislationExpressionPartSchema;
-import de.bund.digitalservice.ris.search.schema.LegislationExpressionPartType;
 import de.bund.digitalservice.ris.search.schema.LegislationObjectSchema;
 import de.bund.digitalservice.ris.search.schema.PartialCollectionViewSchema;
 import de.bund.digitalservice.ris.search.utils.DateUtils;
@@ -15,66 +14,48 @@ import java.util.List;
 import java.util.Objects;
 import org.springframework.data.domain.Page;
 
-/** Maps Articles to Api response Objects */
-public class LegislationExpressionPartSchemaMapper {
+/** */
+public class ArticleVersionSchemaMapper {
 
-  private LegislationExpressionPartSchemaMapper() {}
+  private ArticleVersionSchemaMapper() {}
 
   /**
-   * Maps an article to a LegislationExpressionPartSchema
+   * Maps an article to a ArticleVersionSchema
    *
    * @param articleWithExpressions ArticleWithExpressions to map
-   * @return LegislationExpressionPartSchema
+   * @return ArticleVersionSchema
    */
-  public static LegislationExpressionPartSchema fromDomain(
+  public static ArticleVersionSchema fromArticleWithExpressions(
       ArticleWithExpressions articleWithExpressions) {
     Article article = articleWithExpressions.article();
 
-    return new LegislationExpressionPartSchema(
+    return new ArticleVersionSchema(
         ApiConfig.Paths.LEGISLATION + "/" + article.getExpressionEli() + "#" + article.getEId(),
         article.getEId(),
         article.getName(),
-        "",
         DateUtils.toDateIntervalString(article.getEntryIntoForceDate(), article.getExpiryDate()),
-        mapLegislationPartType(article.getDocumentType()),
         getEncoding(article),
-        List.of());
+        getIsPartOf(articleWithExpressions));
   }
 
   /**
    * @param page Page of Article objects
    * @param path original path that executed that query
    * @param remoteJsonContext remoteJsonContext url to retrieve jsonld context
-   * @return return Collection of LegislationExpressionPartSchema objects
+   * @return return Collection of ArticleVersionSchema objects
    */
-  public static CollectionSchema<LegislationExpressionPartSchema> fromArticlePage(
+  public static CollectionSchema<ArticleVersionSchema> fromArticlePage(
       Page<ArticleWithExpressions> page, String path, String remoteJsonContext) {
     String id = String.format("%s?pageIndex=%d&size=%d", path, page.getNumber(), page.getSize());
     PartialCollectionViewSchema view = PartialCollectionViewMapper.fromPage(path, page);
 
-    return CollectionSchema.<LegislationExpressionPartSchema>builder()
+    return CollectionSchema.<ArticleVersionSchema>builder()
         .id(id)
         .totalItems(page.getTotalElements())
         .context(remoteJsonContext)
-        .member(page.stream().map(LegislationExpressionPartSchemaMapper::fromDomain).toList())
+        .member(page.stream().map(ArticleVersionSchemaMapper::fromArticleWithExpressions).toList())
         .view(view)
         .build();
-  }
-
-  /**
-   * maps an opensearch LegislationPartType to an LegislationExpressionPartType
-   *
-   * @param type opensearch LegislationPartType
-   * @return partType of the Api Schema
-   */
-  public static LegislationExpressionPartType mapLegislationPartType(LegislationPartType type) {
-    return switch (type) {
-      case null -> null;
-      case ARTICLE -> LegislationExpressionPartType.ARTICLE;
-      case ATTACHMENT -> LegislationExpressionPartType.ATTACHMENT;
-      case CONCLUSION -> LegislationExpressionPartType.CONCLUSION;
-      case PREAMBLE -> LegislationExpressionPartType.PREAMBLE;
-    };
   }
 
   private static List<LegislationObjectSchema> getEncoding(Article article) {
@@ -99,5 +80,12 @@ public class LegislationExpressionPartSchemaMapper {
       }
     }
     return encoding;
+  }
+
+  private static List<ArticleVersionSchema.IsPartOfReference> getIsPartOf(
+      ArticleWithExpressions articleWithExpressions) {
+    return articleWithExpressions.expressionElis().stream()
+        .map(ArticleVersionSchema.IsPartOfReference::fromExpressionEli)
+        .toList();
   }
 }

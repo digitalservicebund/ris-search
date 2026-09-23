@@ -11,10 +11,10 @@ import static de.bund.digitalservice.ris.search.controller.api.NormsController.Y
 
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.config.ServerConfig;
-import de.bund.digitalservice.ris.search.mapper.LegislationExpressionPartSchemaMapper;
+import de.bund.digitalservice.ris.search.mapper.ArticleVersionSchemaMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.ArticleWithExpressions;
+import de.bund.digitalservice.ris.search.schema.ArticleVersionSchema;
 import de.bund.digitalservice.ris.search.schema.CollectionSchema;
-import de.bund.digitalservice.ris.search.schema.LegislationExpressionPartSchema;
 import de.bund.digitalservice.ris.search.service.ArticleService;
 import de.bund.digitalservice.ris.search.utils.eli.ExpressionEli;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -51,13 +51,13 @@ public class ArticleController {
    * @param version the version of the document
    * @param language the language of the document
    * @param eId The identifier that denotes the specific article (§) within the legislation.
-   * @return response object of a Collection of LegislationExpressionPartSchema
+   * @return response object of a Collection of ArticleVersionSchema
    */
   @GetMapping(
       path =
           ApiConfig.Paths.ARTICLE_WORK_EXAMPLE
               + "/eli/{jurisdiction}/{agent}/{year}/{naturalIdentifier}/{pointInTime}/{version}/{language}/{eId}")
-  public ResponseEntity<CollectionSchema<LegislationExpressionPartSchema>> getArticleVersions(
+  public ResponseEntity<CollectionSchema<ArticleVersionSchema>> getArticleVersions(
       @Parameter(description = BUND_DESCRIPTION, schema = @Schema(allowableValues = {BUND_EXAMPLE}))
           @PathVariable
           String jurisdiction,
@@ -81,7 +81,7 @@ public class ArticleController {
     return ResponseEntity.ok()
         .contentType(MediaType.APPLICATION_JSON)
         .body(
-            LegislationExpressionPartSchemaMapper.fromArticlePage(
+            ArticleVersionSchemaMapper.fromArticlePage(
                 articles,
                 ApiConfig.Paths.ARTICLE_WORK_EXAMPLE + "/" + eli + "/" + eId,
                 jsonldContextPath));
