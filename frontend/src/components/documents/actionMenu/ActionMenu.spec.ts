@@ -1,8 +1,6 @@
 import { renderSuspended } from "@nuxt/test-utils/runtime";
 import { userEvent } from "@testing-library/user-event";
 import { screen, waitFor } from "@testing-library/vue";
-// oxlint-disable-next-line no-restricted-imports
-import Tooltip from "primevue/tooltip";
 import { vi } from "vitest";
 import ActionMenu, {
   type ActionMenuItem,
@@ -40,7 +38,6 @@ describe("ActionMenu (desktop)", () => {
         actions: actions,
       },
       global: {
-        directives: { tooltip: Tooltip },
         stubs: {
           NuxtLink: nuxtLinkStub,
         },
@@ -59,9 +56,9 @@ describe("ActionMenu (desktop)", () => {
 
     // Shows tooltip when hovered
     await user.hover(commandActionButton);
-    expect(await screen.findByRole("tooltip")).toHaveTextContent(
-      "Command Action",
-    );
+    expect(
+      await screen.findByRole("tooltip", { hidden: true }),
+    ).toHaveTextContent("Command Action");
 
     // Executes provided command when clicked
     expect(mockCommand).not.toHaveBeenCalled();
@@ -81,9 +78,9 @@ describe("ActionMenu (desktop)", () => {
 
     // Shows tooltip when hovered
     await user.hover(navigateActionLink);
-    expect(await screen.findByRole("tooltip")).toHaveTextContent(
-      "Navigate Action",
-    );
+    expect(
+      await screen.findByRole("tooltip", { hidden: true }),
+    ).toHaveTextContent("Navigate Action");
   });
 
   it("renders disabled action items", async () => {
@@ -99,9 +96,6 @@ describe("ActionMenu (desktop)", () => {
             disabled: true,
           },
         ],
-      },
-      global: {
-        directives: { tooltip: Tooltip },
       },
     });
 
@@ -137,19 +131,18 @@ describe("ActionMenu (desktop)", () => {
           },
         ],
       },
-      global: {
-        directives: { tooltip: Tooltip },
-      },
     });
 
     await user.hover(screen.getByRole("menuitem", { name: "Disabled Action" }));
-    expect(screen.queryByRole("tooltip")).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("tooltip", { hidden: true }),
+    ).not.toBeInTheDocument();
 
     await user.hover(screen.getByRole("menuitem", { name: "Enabled Action" }));
-    expect(await screen.findByRole("tooltip")).toHaveTextContent(
-      "Enabled Action",
-    );
-    expect(screen.getAllByRole("tooltip")).toHaveLength(1);
+    expect(
+      await screen.findByRole("tooltip", { hidden: true }),
+    ).toHaveTextContent("Enabled Action");
+    expect(screen.getAllByRole("tooltip", { hidden: true })).toHaveLength(1);
   });
 });
 
