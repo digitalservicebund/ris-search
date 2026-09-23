@@ -38,7 +38,7 @@ ris-html-transformation="0.0.10"
 ris-xml-schema="0.3.6"
 titanium-json="1.7.0"
 jakarta-json="2.0.1"
-
+reflections = "0.10.2"
 
 [libraries]
 spring-actuator = { module="org.springframework.boot:spring-boot-starter-actuator", version.ref="spring-boot-starter" }
@@ -82,6 +82,8 @@ commons-io = { module = "commons-io:commons-io", version.ref = "commons-io" }
 
 # CVE-2026-5588
 bouncycastle-bom = { module = "org.bouncycastle:bc-jdk18on-bom", version = "1.86.1" }
+
+reflections = { module = "org.reflections:reflections", version.ref = "reflections" }
 
 # CVE-2026-65182
 tomcat-embed-core = { module = "org.apache.tomcat.embed:tomcat-embed-core" , version = "11.0.26" }
