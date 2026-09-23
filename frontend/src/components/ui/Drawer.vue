@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref, useSlots, watch } from "vue";
 import IcBaselineClose from "~icons/ic/baseline-close";
-import { tw } from "../../utils/tags";
 
 const { header } = defineProps<{
   /** Title shown in the header. Overridden by the #header slot. */
@@ -137,52 +136,51 @@ onBeforeUnmount(() => {
   cleanupPendingClose?.();
   if (dialogRef.value?.open) unlockScroll();
 });
-
-// Classes ------------------------------------------------
-
-const root = tw`drawer-root shadow-gray-1000/15 fixed inset-x-0 top-auto m-0 max-h-[85dvh] w-full max-w-none overflow-auto border-0 bg-white p-0 shadow-[0_0_0.5rem] print:hidden`;
-
-const appendTargetClass = tw`drawer-append-target pointer-events-none fixed inset-0 z-20`;
-
-const headerClass = tw`drawer-header sticky top-0 z-10 flex min-h-64 items-center justify-between gap-8 bg-white px-16 py-8`;
-
-const titleClass = tw`typo-headline3-bold`;
-
-const closeButtonClass = tw`typo-label2-regular flex cursor-pointer items-center gap-6 py-12 text-blue-800 outline-offset-4 outline-blue-800 focus-visible:outline-4`;
-
-const contentClass = tw`px-16 py-8`;
-
-const footerClass = tw`drawer-footer sticky bottom-0 bg-white px-16 pt-16 pb-24`;
 </script>
 
 <template>
   <dialog
     ref="dialogRef"
-    :class="[root, { 'drawer-open': isOpen }]"
+    :class="[
+      'drawer-root shadow-gray-1000/15 fixed inset-x-0 top-auto m-0 max-h-[85dvh] w-full max-w-none overflow-auto border-0 bg-white p-0 shadow-[0_0_0.5rem] print:hidden',
+      { 'drawer-open': isOpen },
+    ]"
     @cancel="handleCancel"
     @click="handleBackdropClick"
     @close="handleClose"
     @keydown="handleKeydown"
   >
-    <div ref="appendTargetRef" :class="appendTargetClass" />
+    <div
+      ref="appendTargetRef"
+      class="drawer-append-target pointer-events-none fixed inset-0 z-20"
+    />
 
     <template v-if="showContent">
-      <div :class="headerClass">
-        <span :class="titleClass">
+      <div
+        class="drawer-header sticky top-0 z-10 flex min-h-64 items-center justify-between gap-8 bg-white px-16 py-8"
+      >
+        <span class="typo-headline3-bold">
           <slot name="header">{{ header }}</slot>
         </span>
 
-        <button type="button" :class="closeButtonClass" @click="close">
+        <button
+          type="button"
+          class="typo-label2-regular flex cursor-pointer items-center gap-6 py-12 text-blue-800 outline-offset-4 outline-blue-800 focus-visible:outline-4"
+          @click="close"
+        >
           Schließen
           <IcBaselineClose class="size-20" />
         </button>
       </div>
 
-      <div :class="contentClass">
+      <div class="px-16 py-8">
         <slot :append-target="appendTargetRef" />
       </div>
 
-      <div v-if="slots.footer" :class="footerClass">
+      <div
+        v-if="slots.footer"
+        class="drawer-footer sticky bottom-0 bg-white px-16 pt-16 pb-24"
+      >
         <slot name="footer" />
       </div>
     </template>

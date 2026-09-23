@@ -79,26 +79,8 @@ const displayValue = (option: ComboboxOption | undefined) =>
 
 defineOptions({ inheritAttrs: false });
 
-// Classes ------------------------------------------------
-
-const anchorClass = tw`typo-label2-regular flex min-h-48 w-full cursor-pointer border-2 border-blue-800 bg-white py-4 pr-4 pl-16 -outline-offset-4 outline-blue-800 hover:outline-4 has-focus-visible:outline-4`;
-
-const inputClass = tw`w-full bg-transparent placeholder:text-gray-800 focus-visible:outline-hidden`;
-
+// Shared between the cancel and trigger buttons.
 const buttonClass = tw`flex size-36 shrink-0 cursor-pointer items-center justify-center self-center text-blue-800 hover:bg-blue-100 hover:text-blue-800 focus-visible:bg-blue-800 focus-visible:text-white focus-visible:outline-none`;
-
-const triggerActiveClass = tw`bg-blue-800 text-white hover:bg-blue-800 hover:text-white`;
-
-// When portaled into a Drawer's `append-target`, that target is
-// `pointer-events-none` by default (it only exists to escape the enclosing
-// native <dialog>'s inertness), so content placed inside it needs its own
-// `pointer-events-auto` to stay interactive. Harmless when portaled to
-// `document.body` instead, which doesn't set `pointer-events` at all.
-const contentClass = tw`pointer-events-auto z-20 max-h-[min(14rem,var(--reka-combobox-content-available-height))] w-[var(--reka-combobox-trigger-width)] overflow-auto bg-white p-8 shadow-md`;
-
-const itemClass = tw`flex min-h-48 cursor-pointer flex-col justify-center gap-2 border-l-4 border-transparent px-12 py-10 data-[highlighted]:border-blue-600 data-[highlighted]:bg-blue-200 data-[state=checked]:border-blue-800 data-[state=checked]:bg-blue-200`;
-
-const emptyClass = tw`typo-label2-regular flex min-h-48 items-center p-8 text-gray-900`;
 </script>
 
 <template>
@@ -109,11 +91,13 @@ const emptyClass = tw`typo-label2-regular flex min-h-48 items-center p-8 text-gr
     ignore-filter
     reset-model-value-on-clear
   >
-    <ComboboxAnchor :class="anchorClass">
+    <ComboboxAnchor
+      class="typo-label2-regular flex min-h-48 w-full cursor-pointer border-2 border-blue-800 bg-white py-4 pr-4 pl-16 -outline-offset-4 outline-blue-800 hover:outline-4 has-focus-visible:outline-4"
+    >
       <ComboboxInput
         v-bind="$attrs"
         v-model="searchTerm"
-        :class="inputClass"
+        class="w-full bg-transparent placeholder:text-gray-800 focus-visible:outline-hidden"
         :display-value="displayValue"
       />
 
@@ -133,7 +117,12 @@ const emptyClass = tw`typo-label2-regular flex min-h-48 items-center p-8 text-gr
 
       <ComboboxTrigger
         aria-label="Vorschläge anzeigen"
-        :class="[buttonClass, { [triggerActiveClass]: open }]"
+        :class="[
+          buttonClass,
+          {
+            'bg-blue-800 text-white hover:bg-blue-800 hover:text-white': open,
+          },
+        ]"
         tabindex="0"
       >
         <IcBaselineKeyboardArrowDown class="h-[1.25em] w-[1.25em]" />
@@ -141,16 +130,26 @@ const emptyClass = tw`typo-label2-regular flex min-h-48 items-center p-8 text-gr
     </ComboboxAnchor>
 
     <ComboboxPortal :to="appendTo">
-      <ComboboxContent :class="contentClass" position="popper">
+      <!-- When portaled into a Drawer's `append-target`, that target is
+      `pointer-events-none` by default (it only exists to escape the enclosing
+      native <dialog>'s inertness), so content placed inside it needs its own
+      `pointer-events-auto` to stay interactive. Harmless when portaled to
+      `document.body` instead, which doesn't set `pointer-events` at all. -->
+      <ComboboxContent
+        class="pointer-events-auto z-20 max-h-[min(14rem,var(--reka-combobox-content-available-height))] w-(--reka-combobox-trigger-width) overflow-auto bg-white p-8 shadow-md"
+        position="popper"
+      >
         <ComboboxViewport>
-          <ComboboxEmpty :class="emptyClass">
+          <ComboboxEmpty
+            class="typo-label2-regular flex min-h-48 items-center p-8 text-gray-900"
+          >
             Keine Ergebnisse gefunden
           </ComboboxEmpty>
 
           <ComboboxItem
             v-for="option in options"
             :key="option.id"
-            :class="itemClass"
+            class="flex min-h-48 cursor-pointer flex-col justify-center gap-2 border-l-4 border-transparent px-12 py-10 data-highlighted:border-blue-600 data-highlighted:bg-blue-200 data-[state=checked]:border-blue-800 data-[state=checked]:bg-blue-200"
             :text-value="option.label"
             :value="option"
           >
