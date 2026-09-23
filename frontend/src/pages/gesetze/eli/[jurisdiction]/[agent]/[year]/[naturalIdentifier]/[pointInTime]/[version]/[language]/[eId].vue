@@ -16,6 +16,7 @@ import {
   type Article,
   type ArticleVersion,
   DocumentKind,
+  type JSONLDList,
   type LegislationExpressionPartSchema,
 } from "~/types/api";
 
@@ -68,13 +69,13 @@ const isArticle = computed(() => article.value?.partType === "article");
 let articleVersions = ref<ArticleVersion[]>([]);
 
 if (isArticle) {
-  const { data: versions, error: versionsError } = await useArticleVersions(
-    expressionEli,
-    eId.value,
-  );
+  const fetchUrl = `/v1/article/work-example/eli/${expressionEli}/${eId.value}`;
+  const { data: versionsCollection, error: versionsError } =
+    await useRisBackend<JSONLDList<ArticleVersion>>(fetchUrl);
+
   if (versionsError.value) throw createError(versionsError.value);
 
-  articleVersions = versions;
+  articleVersions = ref(versionsCollection.value?.member ?? []);
 }
 
 const norm = computed(() => data.value.legislation);
