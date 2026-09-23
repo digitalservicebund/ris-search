@@ -61,6 +61,7 @@ class ArticleServiceTest {
         .findAllByDocumentNumberStartingWithAndDocumentType(
             "DKNR0E80B0026DKNE0001",
             LegislationPartType.ARTICLE,
+            eli.toString(),
             Pageable.unpaged(Sort.by(Sort.Direction.DESC, "entryIntoForceDate")));
   }
 

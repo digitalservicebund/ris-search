@@ -46,12 +46,18 @@ public class ArticlesRepositoryCustomImpl implements ArticlesRepositoryCustom {
    *
    * @param documentNumber the document number prefix
    * @param type the legislation part type to filter on
+   * @param preferredExpressionEli if this expressionEli occurs in a collapse group, that group's
+   *     Article is returned as the representative instead of whichever one OpenSearch's collapsing
+   *     would otherwise pick; may be {@code null} to leave the default selection untouched
    * @param pageable the pagination parameters defining page size and index
    * @return Page of ArticleWithExpressions
    */
   @Override
   public Page<ArticleWithExpressions> findAllByDocumentNumberStartingWithAndDocumentType(
-      String documentNumber, LegislationPartType type, Pageable pageable) {
+      String documentNumber,
+      LegislationPartType type,
+      String preferredExpressionEli,
+      Pageable pageable) {
 
     CollapseBuilder collapseBuilder =
         new CollapseBuilder(Article.Fields.DOCUMENT_NUMBER)
@@ -80,7 +86,9 @@ public class ArticlesRepositoryCustomImpl implements ArticlesRepositoryCustom {
     SearchHits<Article> hits = operations.search(query, Article.class);
     SearchPage<Article> searchPage = PageUtils.unwrapSearchHits(hits, pageable);
     List<ArticleWithExpressions> content =
-        searchPage.stream().map(this::toArticleWithExpressions).toList();
+        searchPage.stream()
+            .map(hit -> toArticleWithExpressions(hit, preferredExpressionEli))
+            .toList();
     return new PageImpl<>(content, pageable, getDistinctDocumentNumberCount(hits));
   }
 
@@ -97,15 +105,23 @@ public class ArticlesRepositoryCustomImpl implements ArticlesRepositoryCustom {
     return cardinality.getValue();
   }
 
-  private ArticleWithExpressions toArticleWithExpressions(SearchHit<Article> hit) {
+  private ArticleWithExpressions toArticleWithExpressions(
+      SearchHit<Article> hit, String preferredExpressionEli) {
     SearchHits<?> innerHits = hit.getInnerHits().get(EXPRESSIONS_INNER_HIT_NAME);
-    List<String> expressionElis =
+    List<Article> versions =
         innerHits == null
-            ? List.of(hit.getContent().getExpressionEli())
-            : innerHits.stream()
-                .map(innerHit -> ((Article) innerHit.getContent()).getExpressionEli())
-                .distinct()
-                .toList();
-    return new ArticleWithExpressions(hit.getContent(), expressionElis);
+            ? List.of(hit.getContent())
+            : innerHits.stream().map(innerHit -> (Article) innerHit.getContent()).toList();
+
+    Article representative =
+        versions.stream()
+            .filter(article -> article.getExpressionEli().equals(preferredExpressionEli))
+            .findFirst()
+            .orElseGet(hit::getContent);
+
+    List<String> expressionElis =
+        versions.stream().map(Article::getExpressionEli).distinct().toList();
+
+    return new ArticleWithExpressions(representative, expressionElis);
   }
 }

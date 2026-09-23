@@ -177,7 +177,10 @@ public class ArticleService {
             actualEid ->
                 articlesRepository.findById(Article.buildId(expressionEliString, actualEid)))
         .map(Article::getDocumentNumber)
-        .map(docNr -> this.getAllArticleVersionsByDocumentNumberPrefix(docNr, sortedPageable))
+        .map(
+            docNr ->
+                this.getAllArticleVersionsByDocumentNumberPrefix(
+                    docNr, expressionEliString, sortedPageable))
         .orElseGet(Page::empty);
   }
 
@@ -188,11 +191,14 @@ public class ArticleService {
    * matches.
    *
    * @param documentNumber of a given article
+   * @param preferredExpressionEli the expressionEli that was originally queried; if it occurs among
+   *     a version group's expressions, that group's returned Article is forced to be the one
+   *     belonging to this expressionEli, instead of an arbitrary one
    * @return List of Article objects of the same article across all its expressions, with their
    *     expressionElis
    */
   private Page<ArticleWithExpressions> getAllArticleVersionsByDocumentNumberPrefix(
-      String documentNumber, Pageable page) {
+      String documentNumber, String preferredExpressionEli, Pageable page) {
     if (documentNumber.length() < DOC_NUMBER_PREFIX_LENGTH) {
       return Page.empty();
     }
@@ -200,7 +206,7 @@ public class ArticleService {
     String documentNumberPrefix = documentNumber.substring(0, DOC_NUMBER_PREFIX_LENGTH);
 
     return articlesRepository.findAllByDocumentNumberStartingWithAndDocumentType(
-        documentNumberPrefix, LegislationPartType.ARTICLE, page);
+        documentNumberPrefix, LegislationPartType.ARTICLE, preferredExpressionEli, page);
   }
 
   private boolean articleExist(String expressionEli, String eid) {

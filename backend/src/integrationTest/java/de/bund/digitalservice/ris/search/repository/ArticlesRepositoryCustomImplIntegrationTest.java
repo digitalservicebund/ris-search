@@ -81,7 +81,7 @@ class ArticlesRepositoryCustomImplIntegrationTest extends ContainersIntegrationB
 
     Page<ArticleWithExpressions> actual =
         articlesRepository.findAllByDocumentNumberStartingWithAndDocumentType(
-            "DKNR0E1000000D0000001", LegislationPartType.ARTICLE, Pageable.unpaged());
+            "DKNR0E1000000D0000001", LegislationPartType.ARTICLE, null, Pageable.unpaged());
 
     assertThat(actual.toList()).hasSize(2);
     // 3 articles (one per expressionEli) match the prefix, but they collapse into 2 distinct
@@ -110,10 +110,57 @@ class ArticlesRepositoryCustomImplIntegrationTest extends ContainersIntegrationB
   }
 
   @Test
+  void itPrefersTheGivenExpressionEliAsTheRepresentativeArticle() {
+    ExpressionEli work1Expression1 =
+        new ExpressionEli("bund", "bgbl-1", "2020", "s1126", LocalDate.of(2025, 5, 5), 1, "deu");
+    ExpressionEli work1Expression2 =
+        new ExpressionEli("bund", "bgbl-1", "2020", "s1126", LocalDate.of(2026, 5, 5), 1, "deu");
+
+    // Given is an article that exists in the same exact version across two expressions, so
+    // OpenSearch's collapsing could pick either one as the representative document.
+    articlesRepository.saveAll(
+        List.of(
+            buildArticle(
+                work1Expression1,
+                "art-z1",
+                "DKNR0E1000000D000000100010",
+                LegislationPartType.ARTICLE),
+            buildArticle(
+                work1Expression2,
+                "art-z1",
+                "DKNR0E1000000D000000100010",
+                LegislationPartType.ARTICLE)));
+
+    Page<ArticleWithExpressions> actualFirstExpression =
+        articlesRepository.findAllByDocumentNumberStartingWithAndDocumentType(
+            "DKNR0E1000000D0000001",
+            LegislationPartType.ARTICLE,
+            work1Expression1.toString(),
+            Pageable.unpaged());
+
+    assertThat(actualFirstExpression)
+        .singleElement()
+        .extracting(a -> a.article().getExpressionEli())
+        .isEqualTo(work1Expression1.toString());
+
+    Page<ArticleWithExpressions> actualSecondExpression =
+        articlesRepository.findAllByDocumentNumberStartingWithAndDocumentType(
+            "DKNR0E1000000D0000001",
+            LegislationPartType.ARTICLE,
+            work1Expression2.toString(),
+            Pageable.unpaged());
+
+    assertThat(actualSecondExpression)
+        .singleElement()
+        .extracting(a -> a.article().getExpressionEli())
+        .isEqualTo(work1Expression2.toString());
+  }
+
+  @Test
   void itReturnsAnEmptyPageWhenNoDocumentNumberMatchesThePrefix() {
     Page<ArticleWithExpressions> actual =
         articlesRepository.findAllByDocumentNumberStartingWithAndDocumentType(
-            "notFound", LegislationPartType.ARTICLE, Pageable.unpaged());
+            "notFound", LegislationPartType.ARTICLE, null, Pageable.unpaged());
     assertThat(actual.toList()).isEmpty();
   }
 
@@ -140,7 +187,7 @@ class ArticlesRepositoryCustomImplIntegrationTest extends ContainersIntegrationB
 
     Page<ArticleWithExpressions> page =
         articlesRepository.findAllByDocumentNumberStartingWithAndDocumentType(
-            "DKNR", type, Pageable.ofSize(100));
+            "DKNR", type, null, Pageable.ofSize(100));
 
     assertThat(page)
         .singleElement()
