@@ -9,17 +9,14 @@ import lombok.Builder;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * A schema definition for representing a part of a legislative expression, adhering to schema.org
- * guidelines. This record encapsulates details about specific components of a legislative
- * expression, including metadata such as unique identifiers, names, validity dates, and optional
- * encoding information.
+ * A schema definition for representing an article a legislative expression
  *
- * <p>The legislation expression part schema helps to uniquely identify and describe specific
- * elements within a broader legislative context.
+ * <p>The schema helps to uniquely identify a unique article across it's versions and the
+ * expressions each version is part of.
  */
 @Builder
 @Schema(description = "A specific part of a legislation expression")
-public record LegislationExpressionPartSchema(
+public record ArticleVersionSchema(
     @JsonProperty("@id")
         @Schema(
             example =
@@ -39,11 +36,6 @@ public record LegislationExpressionPartSchema(
             requiredMode = Schema.RequiredMode.REQUIRED)
         String name,
     @Schema(
-            description = "Headline of a specific legislation part",
-            example = "Beginn der Rechtsfähigkeit",
-            requiredMode = Schema.RequiredMode.REQUIRED)
-        String headline,
-    @Schema(
             description =
                 """
                              Textual string indicating a time period in [ISO 8601 time interval format](https://en.wikipedia.org/wiki/ISO_8601#Time_intervals)
@@ -60,13 +52,38 @@ public record LegislationExpressionPartSchema(
         LegislationExpressionPartType partType,
     @Nullable @Schema(description = "The source data for this part, if available on its own")
         List<LegislationObjectSchema> encoding,
-    @ArraySchema(schema = @Schema(implementation = LegislationExpressionPartSchema.class))
-        List<LegislationExpressionPartSchema> hasPart)
+    @ArraySchema(schema = @Schema(implementation = ArticleVersionSchema.IsPartOfReference.class))
+        List<ArticleVersionSchema.IsPartOfReference> isPartOf)
     implements JsonldResource {
 
   @Override
   @Schema(example = JsonldTypes.LEGISLATION)
   public String getType() {
     return JsonldTypes.LEGISLATION;
+  }
+
+  /**
+   * Legislation Reference that is a parent of an article version
+   *
+   * @param id
+   */
+  @Schema(description = "A reference to another expression that the article is part of")
+  public record IsPartOfReference(
+      @JsonProperty("@id")
+          @Schema(
+              example =
+                  ApiConfig.Paths.LEGISLATION
+                      + "/eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu/art-z1",
+              requiredMode = Schema.RequiredMode.REQUIRED)
+          String id)
+      implements JsonldResource {
+    @Override
+    public String getType() {
+      return JsonldTypes.LEGISLATION;
+    }
+
+    public static IsPartOfReference fromExpressionEli(String expressionEli) {
+      return new IsPartOfReference(ApiConfig.Paths.LEGISLATION + "/" + expressionEli);
+    }
   }
 }

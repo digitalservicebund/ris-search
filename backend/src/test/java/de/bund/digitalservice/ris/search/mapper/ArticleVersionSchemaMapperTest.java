@@ -5,8 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.ArticleWithExpressions;
 import de.bund.digitalservice.ris.search.models.opensearch.LegislationPartType;
+import de.bund.digitalservice.ris.search.schema.ArticleVersionSchema;
 import de.bund.digitalservice.ris.search.schema.CollectionSchema;
-import de.bund.digitalservice.ris.search.schema.LegislationExpressionPartSchema;
 import de.bund.digitalservice.ris.search.schema.LegislationExpressionPartType;
 import de.bund.digitalservice.ris.search.schema.LegislationObjectSchema;
 import de.bund.digitalservice.ris.search.schema.PartialCollectionViewSchema;
@@ -17,7 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
-class LegislationExpressionPartSchemaMapperTest {
+class ArticleVersionSchemaMapperTest {
 
   @Test
   void itMapsAPageOfArticlesToACollectionSchema() {
@@ -38,15 +38,14 @@ class LegislationExpressionPartSchemaMapperTest {
     String path = "/v1/legislation/work/eli/bund/bgbl-1/1975/s1000/art-z1";
     String remoteJsonContext = "/v1/jsonld/context";
 
-    CollectionSchema<LegislationExpressionPartSchema> result =
-        LegislationExpressionPartSchemaMapper.fromArticlePage(page, path, remoteJsonContext);
+    CollectionSchema<ArticleVersionSchema> result =
+        ArticleVersionSchemaMapper.fromArticlePage(page, path, remoteJsonContext);
 
-    LegislationExpressionPartSchema expectedMember =
-        LegislationExpressionPartSchema.builder()
+    ArticleVersionSchema expectedMember =
+        ArticleVersionSchema.builder()
             .id("/v1/legislation/eli/bund/bgbl-1/1975/s1000/1975-01-01/1/deu#art-z1")
             .eId("art-z1")
             .name("§ 1")
-            .headline("")
             .temporalCoverage("1975-01-01/..")
             .partType(LegislationExpressionPartType.ARTICLE)
             .encoding(
@@ -59,11 +58,10 @@ class LegislationExpressionPartSchemaMapperTest {
                         .encodingFormat("text/html")
                         .inLanguage("de")
                         .build()))
-            .hasPart(List.of())
             .isPartOf(
                 List.of(
-                    new LegislationExpressionPartSchema.IsPartOfReference(
-                        "/v1/legislationeli/bund/bgbl-1/1975/s1000/1975-01-01/1/deu")))
+                    new ArticleVersionSchema.IsPartOfReference(
+                        "/v1/legislation/eli/bund/bgbl-1/1975/s1000/1975-01-01/1/deu")))
             .build();
 
     assertEquals(remoteJsonContext, result.context());
