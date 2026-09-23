@@ -17,6 +17,8 @@ import org.springframework.data.domain.Page;
 /** */
 public class ArticleVersionSchemaMapper {
 
+  private ArticleVersionSchemaMapper() {}
+
   /**
    * Maps an article to a LegislationExpressionPartSchema
    *

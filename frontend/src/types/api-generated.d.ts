@@ -1856,7 +1856,37 @@ export interface components {
             /** @description The downloadable form of this dataset. */
             distribution?: components["schemas"]["ZipDataDownloadSchema"];
         };
-        CollectionSchemaLegislationExpressionPartSchema: {
+        /** @description A specific part of a legislation expression */
+        ArticleVersionSchema: {
+            /** @example Legislation */
+            "@type"?: string;
+            /** @example /v1/legislation/eli/bund/bgbl-1/1975/s1760/regelungstext-1.xml#hauptteitel-para-1 */
+            "@id": string;
+            /**
+             * @description Expression-level identifier, uniquely identifying this element in an FRBR expression
+             * @example hauptteitel-para-1
+             */
+            eId: string;
+            /**
+             * @description Numerical identifier of a specific legislation part
+             * @example § 1
+             */
+            name: string;
+            /**
+             * @description Textual string indicating a time period in [ISO 8601 time interval format](https://en.wikipedia.org/wiki/ISO_8601#Time_intervals)
+             * @example 1998-02-06/..
+             */
+            temporalCoverage: string;
+            /**
+             * @description Specifies the type of the part of a Legislation Expression.
+             * @enum {string}
+             */
+            partType?: "preamble" | "article" | "conclusion" | "attachment";
+            /** @description The source data for this part, if available on its own */
+            encoding?: components["schemas"]["LegislationObjectSchema"][];
+            isPartOf?: components["schemas"]["IsPartOfReference"][];
+        };
+        CollectionSchemaArticleVersionSchema: {
             /** @example hydra:Collection */
             "@type"?: string;
             "@context": string;
@@ -1867,8 +1897,14 @@ export interface components {
              * @example 1
              */
             totalItems: number;
-            member: components["schemas"]["LegislationExpressionPartSchema"][];
+            member: components["schemas"]["ArticleVersionSchema"][];
             view: components["schemas"]["PartialCollectionViewSchema"];
+        };
+        /** @description A reference to another expression that the article is part of */
+        IsPartOfReference: {
+            "@type"?: string;
+            /** @example /v1/legislation/eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu/art-z1 */
+            "@id": string;
         };
         AdministrativeDirectiveSchema: {
             /** @example AdministrativeDirective */
@@ -3396,18 +3432,7 @@ export interface operations {
     };
     getArticleVersions: {
         parameters: {
-            query?: {
-                /**
-                 * @description The number of entities per page
-                 * @example 100
-                 */
-                size?: number;
-                /**
-                 * @description The number of the page to request. The page starts with the value 0
-                 * @example 0
-                 */
-                pageIndex?: number;
-            };
+            query?: never;
             header?: never;
             path: {
                 /** @description Country or regional code for the jurisdiction */
@@ -3446,7 +3471,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["CollectionSchemaLegislationExpressionPartSchema"];
+                    "*/*": components["schemas"]["CollectionSchemaArticleVersionSchema"];
                 };
             };
         };
