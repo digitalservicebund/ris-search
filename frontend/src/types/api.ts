@@ -43,6 +43,8 @@ export type LegislationExpressionPartSchema =
 
 export type Article = components["schemas"]["LegislationExpressionPartSchema"];
 
+export type ArticleVersion = components["schemas"]["ArticleVersionSchema"];
+
 // Literature
 export type Literature = components["schemas"]["LiteratureSchema"];
 export type LiteratureSearchSchema =

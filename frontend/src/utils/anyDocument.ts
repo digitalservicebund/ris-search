@@ -83,7 +83,11 @@ export function getIdentifier(document: AnyDocument): string {
 
 export function getEncodingURL(
   encoding: DocumentEncodingSchema[] | null | undefined,
-  format: string,
+  format:
+    | "text/html"
+    | "application/xml"
+    | "application/json"
+    | "application/zip",
 ) {
   const specificEncoding = encoding?.find((e) => e.encodingFormat === format);
   return specificEncoding?.contentUrl;

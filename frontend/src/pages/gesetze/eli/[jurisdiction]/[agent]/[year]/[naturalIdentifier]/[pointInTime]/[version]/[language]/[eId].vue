@@ -14,7 +14,9 @@ import { useArticleSeo } from "~/composables/useArticleSeo";
 import { useSearchBackLink } from "~/composables/useSearchBackLink";
 import {
   type Article,
+  type ArticleVersion,
   DocumentKind,
+  type JSONLDList,
   type LegislationExpressionPartSchema,
 } from "~/types/api";
 
@@ -37,7 +39,10 @@ const eId = computed(() => {
   const eIdParam = Array.isArray(route.params.eId)
     ? route.params.eId[0]
     : route.params.eId;
-  if (!eIdParam) return undefined;
+  if (!eIdParam) {
+    throw createError({ status: 404 });
+  }
+
   return eIdParam.endsWith(".html") ? eIdParam.slice(0, -5) : eIdParam;
 });
 
@@ -46,15 +51,46 @@ const { data, error } = await useFetchNormArticleContent(
   eId.value,
 );
 
-if (error.value || !data.value) {
-  throw createError({ status: error.value?.status ?? 500 });
-}
+if (error.value) throw createError(error.value);
 
 const norm = computed(() => data.value.legislation);
+
+const singleViewParts = computed(() =>
+  getPartsLeafNodes(norm.value?.hasPart ?? []),
+);
+
+const article: Ref<Article | undefined> = computed(() =>
+  // The eId is taken from the router, which always automatically decodes URIs.
+  // However, some eIds are pre-encoded in the XML data (e.g. "art-z§§ 1 bis 3"
+  // is encoded in the XML but will automatically be decoded by the router).
+  // For this reason, we need to also decode the eId in the data to make them
+  // comparable.
+  singleViewParts.value?.find(
+    (part) => decodeURIComponent(part.eId) == eId.value,
+  ),
+);
+
+const isArticle = computed(() => article.value?.partType === "article");
+
+const articleVersions = ref<ArticleVersion[]>([]);
+
+if (isArticle.value) {
+  const fetchUrl = `/v1/article/work-example/eli/${expressionEli}/${eId.value}`;
+  const { data: versionsCollection, error: versionsError } =
+    await useRisBackend<JSONLDList<ArticleVersion>>(fetchUrl);
+
+  if (versionsError.value) throw createError(versionsError.value);
+
+  articleVersions.value = versionsCollection.value?.member ?? [];
+}
 
 const normAbbreviation = computed(() => norm.value.abbreviation);
 
 const articleHtml = computed(() => data.value.htmlBody);
+
+const currentExpressionId = computed(
+  () => `/v1/legislation/eli/${expressionEli}`,
+);
 
 const normExpressionPath = `/gesetze/eli/${expressionEli}`;
 
@@ -82,23 +118,6 @@ const tableOfContents = computed(() => {
     }),
   );
 });
-
-const singleViewParts = computed(() =>
-  getPartsLeafNodes(norm.value?.hasPart ?? []),
-);
-
-const article: Ref<Article | undefined> = computed(() =>
-  // The eId is taken from the router, which always automatically decodes URIs.
-  // However some eIds are pre-encoded in the XML data (e.g. "art-z§§ 1 bis 3"
-  // is encoded in the XML but will automatically be decoded by the router).
-  // For this reason, we need to also decode the eId in the data to make them
-  // comparable.
-  singleViewParts.value?.find(
-    (part) => decodeURIComponent(part.eId) == eId.value,
-  ),
-);
-
-const isArticle = computed(() => article.value?.partType === "article");
 
 useArticleSeo({
   abbreviation: normAbbreviation.value,
@@ -364,10 +383,14 @@ const geltungszeitenTabPanelTitleId = useId();
             >
               <h2
                 :id="geltungszeitenTabPanelTitleId"
-                class="typo-headline3-bold"
+                class="typo-headline3-bold pb-16"
               >
                 Weitere Geltungszeiträume dieser Einzelnorm
               </h2>
+              <DocumentsNormsArticleVersionList
+                :currentExpressionId
+                :versions="articleVersions"
+              />
             </div>
 
             <div class="content-grid-textblock" v-else>
