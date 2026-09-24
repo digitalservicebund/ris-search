@@ -19,6 +19,10 @@ on:
         required: true
       SENTRY_AUTH_TOKEN:
         required: true
+      REPORTS_BUCKET_ACCESS_KEY_ID:
+        required: true
+      REPORTS_BUCKET_SECRET_ACCESS_KEY:
+        required: true
 
 permissions:
   contents: read
@@ -131,6 +135,54 @@ jobs:
           name: licence-reports-frontend
           retention-days: 3
           path: frontend/frontend-licence-report.csv
+
+      - name: Send status to Slack
+        uses: digitalservicebund/notify-on-failure-gha@671832f192aee0a068fd92b2f6deb975df794a84 # v1.6.1
+        if: ${{ failure() && github.ref == 'refs/heads/main' }}
+        with:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          SLACK_CHANNEL_ID: ${{ vars.NEURIS_PORTAL_ALERTS_SLACK_CHANNEL_ID }}
+
+  build-storybook:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    timeout-minutes: 10
+    env:
+      NODE_NO_WARNINGS: 1
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup pnpm and Node
+        uses: pnpm/setup@703c52620218391530e48b9e8870d5c0082e1b9b # v2.1.0
+        with:
+          package-json-file: ./frontend/package.json
+          cache: true
+          cache-dependency-path: ./frontend/pnpm-lock.yaml
+          # The action would install in the repository root, which has no
+          # package.json. We run `pnpm ci` in ./frontend instead.
+          install: false
+
+      - name: Install Node modules
+        run: pnpm ci
+        working-directory: ./frontend
+
+      - name: Build Storybook
+        run: pnpm run build:storybook
+        working-directory: ./frontend
+
+      - name: Upload Storybook to ris-reports
+        if: ${{ github.ref == 'refs/heads/main' }}
+        uses: digitalservicebund/add-ris-report@31a248ea368f94bfa3a012da3c202bcc6be2debe
+        with:
+          filePath: frontend/storybook-static
+          destinationDir: style-guide/ris-search
+          reportIsDirectory: true
+          keepAllVersions: false
+          BUCKET_ACCESS_KEY_ID: ${{ secrets.REPORTS_BUCKET_ACCESS_KEY_ID }}
+          BUCKET_SECRET_ACCESS_KEY: ${{ secrets.REPORTS_BUCKET_SECRET_ACCESS_KEY }}
 
       - name: Send status to Slack
         uses: digitalservicebund/notify-on-failure-gha@671832f192aee0a068fd92b2f6deb975df794a84 # v1.6.1
