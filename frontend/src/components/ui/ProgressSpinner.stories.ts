@@ -3,6 +3,7 @@ import { html } from "../../utils/tags";
 import UiProgressSpinner from "./ProgressSpinner.vue";
 
 const meta: Meta<typeof UiProgressSpinner> = {
+  title: "ProgressSpinner",
   component: UiProgressSpinner,
   tags: ["autodocs"],
 };

@@ -4,6 +4,7 @@ import { html } from "../../utils/tags";
 import UiYearInput from "./YearInput.vue";
 
 const meta: Meta<typeof UiYearInput> = {
+  title: "YearInput",
   component: UiYearInput,
   tags: ["autodocs"],
   args: {

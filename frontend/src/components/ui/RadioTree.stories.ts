@@ -4,6 +4,7 @@ import { html } from "../../utils/tags";
 import UiRadioTree, { type RadioTreeItem } from "./RadioTree.vue";
 
 const meta: Meta<typeof UiRadioTree> = {
+  title: "RadioTree",
   component: UiRadioTree,
   tags: ["autodocs"],
 };

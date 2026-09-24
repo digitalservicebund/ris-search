@@ -4,6 +4,7 @@ import { html } from "../../utils/tags";
 import UiRadioButton from "./RadioButton.vue";
 
 const meta: Meta<typeof UiRadioButton> = {
+  title: "RadioButton",
   component: UiRadioButton,
 
   tags: ["autodocs"],

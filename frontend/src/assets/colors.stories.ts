@@ -2,8 +2,18 @@ import type { Meta, StoryObj } from "@storybook/vue3-vite";
 import { html } from "../utils/tags";
 
 const meta: Meta<never> = {
-  title: "tailwind/colors",
+  title: "Farben",
   tags: ["autodocs"],
+  parameters: {
+    docs: {
+      description: {
+        component: [
+          "Farben schaffen Orientierung, vermitteln Hierarchien und prägen den visuellen Charakter unseres Interfaces. Unsere Farbpalette definiert die Grundlage für eine konsistente und zugängliche Gestaltung über alle digitalen Anwendungen hinweg.",
+          "Bei der Verwendung der Farben sind insbesondere Kontrast, Barrierefreiheit und der konsistente Einsatz innerhalb der definierten UI-Komponenten zu berücksichtigen.\nDie Farben orientieren sich am Styleguide der Bundesregierung.",
+        ].join("\n\n"),
+      },
+    },
+  },
 };
 
 export default meta;

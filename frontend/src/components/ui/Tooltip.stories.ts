@@ -4,6 +4,7 @@ import UiButton from "./Button.vue";
 import UiTooltip from "./Tooltip.vue";
 
 const meta: Meta<typeof UiTooltip> = {
+  title: "Tooltip",
   component: UiTooltip,
   tags: ["autodocs"],
   args: {
