@@ -155,6 +155,7 @@ public class NormSchemaMapper {
           tocItem.heading(),
           "",
           null,
+          null,
           List.of(),
           buildNestedHasPart(tocItem.children(), idPrefix, articles));
     }
@@ -193,6 +194,7 @@ public class NormSchemaMapper {
                 article.getEntryIntoForceDate(), article.getExpiryDate()))
         .encoding(encoding)
         .partType(NormSchemaMapper.mapLegislationPartType(article.getDocumentType()))
+        .revision(article.getDocumentNumber())
         .hasPart(List.of())
         .build();
   }
