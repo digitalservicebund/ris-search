@@ -1,7 +1,0 @@
-body {
-  @apply typo-body-regular antialiased;
-}
-
-mark {
-  @apply bg-yellow-200;
-}

@@ -15,6 +15,3 @@ publicHoistPattern:
   - "vite"
 
 savePrefix: ""
-
-minimumReleaseAgeExclude:
-  - "@digitalservicebund/ris-ui@4.7.0"

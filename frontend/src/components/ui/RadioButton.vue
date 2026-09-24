@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed, useAttrs, type StyleValue } from "vue";
-import { tw } from "../../utils/tags";
 
 const props = defineProps<{
   /** The value this radio button contributes when selected. */
@@ -42,30 +41,28 @@ const inputAttrs = computed(() => {
   delete rest.style;
   return rest;
 });
-
-// Classes ------------------------------------------------
-
-const root = tw`[&+label]:typo-label1-regular relative inline-block h-32 w-32 [&+label]:ml-8`;
-
-const input = tw`peer h-full w-full cursor-pointer appearance-none rounded-full border-2 border-blue-800 bg-white hover:outline hover:outline-4 hover:-outline-offset-4 hover:outline-blue-800 focus-visible:outline focus-visible:outline-4 focus-visible:-outline-offset-4 focus-visible:outline-blue-800 active:outline-hidden disabled:cursor-not-allowed disabled:border-gray-600 aria-[invalid]:border-red-800 aria-[invalid]:outline-red-800 aria-[invalid]:active:outline-hidden aria-[invalid]:disabled:outline-hidden`;
-
-const box = tw`pointer-events-none absolute inset-0 flex items-center justify-center text-transparent peer-checked:text-blue-800 peer-disabled:text-gray-600 peer-aria-[invalid]:text-red-800`;
-
-const dot = tw`h-16 w-16 rounded-full bg-current`;
 </script>
 
 <template>
-  <span :class="[root, rootClass]" :style="rootStyle">
+  <span
+    :class="[
+      '[&+label]:typo-label1-regular relative inline-block h-32 w-32 [&+label]:ml-8',
+      rootClass,
+    ]"
+    :style="rootStyle"
+  >
     <input
       :checked="checked"
-      :class="input"
+      class="peer h-full w-full cursor-pointer appearance-none rounded-full border-2 border-blue-800 bg-white hover:outline hover:outline-4 hover:-outline-offset-4 hover:outline-blue-800 focus-visible:outline focus-visible:outline-4 focus-visible:-outline-offset-4 focus-visible:outline-blue-800 active:outline-hidden disabled:cursor-not-allowed disabled:border-gray-600 aria-[invalid]:border-red-800 aria-[invalid]:outline-red-800 aria-[invalid]:active:outline-hidden aria-[invalid]:disabled:outline-hidden"
       :value="value"
       type="radio"
       v-bind="inputAttrs"
       @change="select"
     />
-    <span :class="box">
-      <span :class="dot" />
+    <span
+      class="pointer-events-none absolute inset-0 flex items-center justify-center text-transparent peer-checked:text-blue-800 peer-disabled:text-gray-600 peer-aria-[invalid]:text-red-800"
+    >
+      <span class="h-16 w-16 rounded-full bg-current" />
     </span>
   </span>
 </template>

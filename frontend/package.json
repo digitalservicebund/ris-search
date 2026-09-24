@@ -20,7 +20,6 @@
     "typecheck": "nuxt typecheck"
   },
   "dependencies": {
-    "@digitalservicebund/ris-ui": "4.7.0",
     "@nuxtjs/mdc": "0.23.1",
     "@nuxtjs/sitemap": "8.5.1",
     "@sentry/nuxt": "10.75.0",
@@ -32,7 +31,6 @@
     "nuxt": "4.5.2",
     "nuxt-security": "2.6.0",
     "posthog-js": "1.434.2",
-    "primevue": "4.5.5",
     "reka-ui": "2.10.4",
     "sanitize-html": "2.17.7"
   },

@@ -1,6 +1,4 @@
 <script setup lang="ts" generic="T extends BreadcrumbItem">
-import { tw } from "../../utils/tags";
-
 export type BreadcrumbItem = {
   label: string;
   url?: string;
@@ -9,21 +7,17 @@ export type BreadcrumbItem = {
 const { model = [] } = defineProps<{
   model?: T[];
 }>();
-
-// Classes ------------------------------------------------
-
-const list = tw`m-0 flex flex-wrap items-center gap-x-2 gap-y-4 p-0 md:flex-nowrap`;
-
-const item = tw`ris-label2-regular [&>a]:ris-link2-regular flex flex-nowrap items-center text-gray-900 *:line-clamp-1 md:flex-none md:last:flex-auto [&>a]:not-hover:no-underline`;
-
-const separator = tw`flex items-center text-gray-800`;
 </script>
 
 <template>
   <nav>
-    <ol :class="list">
+    <ol
+      class="m-0 flex flex-wrap items-center gap-x-2 gap-y-4 p-0 md:flex-nowrap"
+    >
       <template v-for="(breadcrumbItem, index) in model" :key="index">
-        <li :class="item">
+        <li
+          class="ris-label2-regular [&>a]:ris-link2-regular flex flex-nowrap items-center text-gray-900 *:line-clamp-1 md:flex-none md:last:flex-auto [&>a]:not-hover:no-underline"
+        >
           <slot name="item" :item="breadcrumbItem" :index="index">{{
             breadcrumbItem.label
           }}</slot>
@@ -31,7 +25,7 @@ const separator = tw`flex items-center text-gray-800`;
 
         <li
           v-if="index < model.length - 1"
-          :class="separator"
+          class="flex items-center text-gray-800"
           aria-hidden="true"
         >
           <slot name="separator">/</slot>
