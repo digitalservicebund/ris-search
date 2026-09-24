@@ -7,6 +7,8 @@ import org.jspecify.annotations.NonNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.Optional;
+
 /**
  * Custom {@link ArticlesRepository} operations that can't be expressed as derived Spring Data query
  * methods.
