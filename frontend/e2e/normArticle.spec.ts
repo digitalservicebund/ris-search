@@ -459,6 +459,52 @@ test.describe("geltungszeiträume tab", { tag: ["@RISDEV-11132"] }, () => {
     ]);
   });
 
+  test("can filter geltungszeiträume by date", async ({
+    page,
+    privateFeaturesEnabled,
+  }) => {
+    test.skip(!privateFeaturesEnabled);
+
+    await navigate(
+      page,
+      "gesetze/eli/bund/bgbl-1/2020/s1234/2020-01-01/1/deu/art-z1?view=geltungszeiten",
+    );
+
+    const listItems = page
+      .getByRole("list", { name: "Geltungszeiträume" })
+      .getByRole("listitem");
+
+    await expect(listItems).toHaveCount(3);
+
+    await page.getByRole("textbox", { name: "Gültig am" }).fill("01.07.2021");
+
+    await expect(listItems).toHaveText([
+      "Gültig ab: 01.01.2021 Gültig bis: 31.12.2021",
+    ]);
+  });
+
+  test("shows no results placeholder when no geltungszeitraum found", async ({
+    page,
+    privateFeaturesEnabled,
+  }) => {
+    test.skip(!privateFeaturesEnabled);
+
+    await navigate(
+      page,
+      "gesetze/eli/bund/bgbl-1/2020/s1234/2020-01-01/1/deu/art-z1?view=geltungszeiten",
+    );
+
+    const listItems = page
+      .getByRole("list", { name: "Geltungszeiträume" })
+      .getByRole("listitem");
+
+    await expect(listItems).toHaveCount(3);
+
+    await page.getByRole("textbox", { name: "Gültig am" }).fill("01.07.1536");
+
+    await expect(listItems).toHaveText(["Keine Ergebnisse gefunden"]);
+  });
+
   test("can view the content of different article version", async ({
     page,
     privateFeaturesEnabled,

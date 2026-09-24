@@ -1,23 +1,22 @@
 import dayjs from "dayjs";
 import { computed, ref } from "vue";
-import type { LegislationExpression } from "~/types/api";
 import { temporalCoverageToValidityInterval } from "~/utils/norm";
 
-export function useNormVersionFilter(
-  normVersions: Ref<LegislationExpression[]>,
+export function useVersionDateFilter<T extends { temporalCoverage: string }>(
+  versions: Ref<T[]>,
 ) {
   const dateFilterValue = ref<string>();
 
-  const filteredNormVersions = computed<LegislationExpression[]>(() => {
+  const filteredVersions = computed<T[]>(() => {
     const filterDate = dateFilterValue.value
       ? dayjs(dateFilterValue.value, "YYYY-MM-DD").tz("Europe/Berlin")
       : undefined;
 
-    if (!filterDate) return normVersions.value;
+    if (!filterDate) return versions.value;
 
-    const matchingExpression = normVersions.value.find((expression) => {
+    const matchingVersion = versions.value.find((version) => {
       const validityInterval = temporalCoverageToValidityInterval(
-        expression.temporalCoverage,
+        version.temporalCoverage,
       );
 
       const inForceDate = validityInterval?.from;
@@ -35,8 +34,8 @@ export function useNormVersionFilter(
       return isOnOrAfterInForce && isOnOrBeforeOutOfForce;
     });
 
-    return matchingExpression ? [matchingExpression] : [];
+    return matchingVersion ? [matchingVersion] : [];
   });
 
-  return { dateFilterValue, filteredNormVersions };
+  return { dateFilterValue, filteredVersions };
 }
