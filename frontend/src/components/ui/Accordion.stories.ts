@@ -4,6 +4,7 @@ import { html } from "../../utils/tags";
 import UiAccordion from "./Accordion.vue";
 
 const meta: Meta<typeof UiAccordion> = {
+  title: "Accordion",
   component: UiAccordion,
 
   tags: ["autodocs"],

@@ -2,8 +2,18 @@ import type { Meta, StoryObj } from "@storybook/vue3-vite";
 import { html } from "../utils/tags";
 
 const meta: Meta<never> = {
-  title: "tailwind/typography",
+  title: "Typographie",
   tags: ["autodocs"],
+  parameters: {
+    docs: {
+      description: {
+        component: [
+          "Typografie schafft Hierarchie, Orientierung und Konsistenz innerhalb der Benutzeroberfläche. Die definierten Schriftstile und Textgrößen bilden die Grundlage für eine klare und einheitliche Darstellung von Inhalten.",
+          "Die folgenden Vorgaben zeigen die verfügbaren Textstile, Größen und Hierarchiestufen. Sie unterstützen dabei, Inhalte visuell zu strukturieren und die Lesbarkeit über alle Anwendungen und Screens hinweg konsistent zu halten.",
+        ].join("\n\n"),
+      },
+    },
+  },
 };
 
 export default meta;

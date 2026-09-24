@@ -5,6 +5,7 @@ import UiTab from "./Tab.vue";
 import UiTabs from "./Tabs.vue";
 
 const meta: Meta<typeof UiTabs> = {
+  title: "Tabs",
   component: UiTabs,
 
   tags: ["autodocs"],

@@ -53,6 +53,7 @@ type DataTableArgs = {
 };
 
 const meta: Meta<DataTableArgs> = {
+  title: "DataTable",
   component: UiDataTable as unknown as ConcreteComponent<DataTableArgs>,
   tags: ["autodocs"],
   args: {

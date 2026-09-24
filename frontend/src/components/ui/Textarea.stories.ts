@@ -13,6 +13,7 @@ type TextareaArgs = InstanceType<typeof UiTextarea>["$props"] & {
 };
 
 const meta: Meta<TextareaArgs> = {
+  title: "Textarea",
   component: UiTextarea,
   tags: ["autodocs"],
   args: {

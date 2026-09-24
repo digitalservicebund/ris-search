@@ -13,6 +13,7 @@ const options: ComboboxOption[] = [
 ];
 
 const meta: Meta<typeof UiCombobox> = {
+  title: "Combobox",
   component: UiCombobox,
   tags: ["autodocs"],
   args: {

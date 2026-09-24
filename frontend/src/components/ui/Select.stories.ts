@@ -12,6 +12,7 @@ const options = [
 ];
 
 const meta: Meta<typeof UiSelect> = {
+  title: "Select",
   component: UiSelect,
 
   tags: ["autodocs"],
