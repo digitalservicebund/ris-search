@@ -1,0 +1,39 @@
+@font-face {
+  font-family: BundesSansWeb;
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src:
+    url("./fonts/BundesSansWeb-Regular.woff2") format("woff2"),
+    url("./fonts/BundesSansWeb-Regular.woff") format("woff");
+}
+
+@font-face {
+  font-family: BundesSansWeb;
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src:
+    url("./fonts/BundesSansWeb-Italic.woff2") format("woff2"),
+    url("./fonts/BundesSansWeb-Italic.woff") format("woff");
+}
+
+@font-face {
+  font-family: BundesSansWeb;
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src:
+    url("./fonts/BundesSansWeb-Bold.woff2") format("woff2"),
+    url("./fonts/BundesSansWeb-Bold.woff") format("woff");
+}
+
+@font-face {
+  font-family: BundesSansWeb;
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+  src:
+    url("./fonts/BundesSansWeb-BoldItalic.woff2") format("woff2"),
+    url("./fonts/BundesSansWeb-BoldItalic.woff") format("woff");
+}
