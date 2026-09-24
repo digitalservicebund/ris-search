@@ -1,54 +1,32 @@
 :root {
   --vp-font-family-base:
     BundesSansWeb, Calibri, Verdana, Arial, Helvetica, sans-serif;
-  --vp-custom-block-font-size: 0.875rem;
-  --vp-code-font-size: 0.875rem;
 
   --vp-c-brand-1: #004b76;
   --vp-c-brand-2: #336f91;
   --vp-c-brand-3: #004b76;
   --vp-c-brand-soft: #ccdbe4;
+
+  --ris-font-scale: 1.125;
+
+  --vp-custom-block-font-size: calc(0.875rem * var(--ris-font-scale));
 }
 
-html {
-  font-size: 18px;
+.vp-doc {
+  font-size: calc(1rem * var(--ris-font-scale));
 }
 
-body {
-  font-size: 1rem;
-}
-
-.VPNavBarTitle .title {
-  font-size: 1rem;
-}
-
-.VPSidebarItem .text {
-  font-size: 0.875rem;
-}
-
-.VPDocAsideOutline .outline-title {
-  font-size: 0.875rem;
-}
-
-.VPDocOutlineItem .outline-link {
-  font-size: 0.875rem;
-}
-
-.VPDocFooter .title {
-  font-size: 0.875rem;
+.VPSidebarItem .text,
+.VPDocAsideOutline .outline-title,
+.VPDocOutlineItem .outline-link,
+.VPDocFooter .title,
+.VPDocFooter .VPLastUpdated,
+.vp-doc :is(th, td) {
+  font-size: calc(0.875rem * var(--ris-font-scale));
 }
 
 .VPDocFooter .desc {
-  font-size: 0.75rem;
-}
-
-.VPDocFooter .VPLastUpdated {
-  font-size: 0.875rem;
-}
-
-.vp-doc th,
-.vp-doc td {
-  font-size: 0.875rem;
+  font-size: calc(0.75rem * var(--ris-font-scale));
 }
 
 .dark {
@@ -70,9 +48,9 @@ body {
     color 0.25s,
     border-color 0.25s,
     background-color 0.25s;
-  padding: 0 1.25rem;
-  line-height: 2.375rem;
-  font-size: 0.875rem;
+  padding: 0 calc(1.25rem * var(--ris-font-scale));
+  line-height: calc(2.375rem * var(--ris-font-scale));
+  font-size: calc(0.875rem * var(--ris-font-scale));
   border-color: var(--vp-button-brand-border);
   color: var(--vp-button-brand-text);
   background-color: var(--vp-button-brand-bg);

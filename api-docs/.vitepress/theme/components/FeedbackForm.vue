@@ -75,7 +75,7 @@ const submitFeedback = async () => {
 .form {
   & h3 {
     margin-top: 0;
-    font-size: 1.25rem;
+    font-size: calc(1.25rem * var(--ris-font-scale));
   }
 }
 
@@ -92,7 +92,7 @@ const submitFeedback = async () => {
   border: 2px solid var(--vp-c-brand-1);
   border-radius: 4px;
   font: inherit;
-  font-size: 1rem;
+  font-size: calc(1rem * var(--ris-font-scale));
   resize: vertical;
   background: var(--vp-c-bg);
   color: var(--vp-c-text-1);
