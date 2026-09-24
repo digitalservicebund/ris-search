@@ -1,5 +1,6 @@
 package de.bund.digitalservice.ris.search.repository;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 import de.bund.digitalservice.ris.search.config.ContainersIntegrationBase;
@@ -13,7 +14,7 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -80,8 +81,8 @@ class ArticlesRepositoryCustomImplIntegrationTest extends ContainersIntegrationB
     articlesRepository.saveAll(articles);
 
     Page<ArticleWithExpressions> actual =
-        articlesRepository.findAllByDocumentNumberStartingWithAndDocumentType(
-            "DKNR0E1000000D0000001", LegislationPartType.ARTICLE, Pageable.unpaged());
+        articlesRepository.findAllVersionsByDocumentNumber(
+            "DKNR0E1000000D000000100010", LegislationPartType.ARTICLE, null, Pageable.unpaged());
 
     assertThat(actual.toList()).hasSize(2);
     // 3 articles (one per expressionEli) match the prefix, but they collapse into 2 distinct
@@ -110,37 +111,80 @@ class ArticlesRepositoryCustomImplIntegrationTest extends ContainersIntegrationB
   }
 
   @Test
-  void itReturnsAnEmptyPageWhenNoDocumentNumberMatchesThePrefix() {
-    Page<ArticleWithExpressions> actual =
-        articlesRepository.findAllByDocumentNumberStartingWithAndDocumentType(
-            "notFound", LegislationPartType.ARTICLE, Pageable.unpaged());
-    assertThat(actual.toList()).isEmpty();
-  }
-
-  @ParameterizedTest
-  @CsvSource({
-    "PREAMBLE, DKNR0E1000000D000000100000",
-    "ARTICLE, DKNR0E2000000D000000100000",
-    "CONCLUSION, DKNR0E3000000D000000100000"
-  })
-  void itFiltersByDocumentType(LegislationPartType type, String expectedDocNumber) {
-    ExpressionEli eli =
+  void itPrefersTheGivenExpressionEliAsTheRepresentativeArticle() {
+    ExpressionEli work1Expression1 =
         new ExpressionEli("bund", "bgbl-1", "2020", "s1126", LocalDate.of(2025, 5, 5), 1, "deu");
+    ExpressionEli work1Expression2 =
+        new ExpressionEli("bund", "bgbl-1", "2020", "s1126", LocalDate.of(2026, 5, 5), 1, "deu");
 
+    // Given is an article that exists in the same exact version across two expressions, so
+    // OpenSearch's collapsing could pick either one as the representative document.
     articlesRepository.saveAll(
         List.of(
             buildArticle(
-                eli, "einleitung-n1", "DKNR0E1000000D000000100000", LegislationPartType.PREAMBLE),
-            buildArticle(eli, "art-z1", "DKNR0E2000000D000000100000", LegislationPartType.ARTICLE),
+                work1Expression1,
+                "art-z1",
+                "DKNR0E1000000D000000100010",
+                LegislationPartType.ARTICLE),
             buildArticle(
-                eli,
-                "conclusion-1",
-                "DKNR0E3000000D000000100000",
-                LegislationPartType.CONCLUSION)));
+                work1Expression2,
+                "art-z1",
+                "DKNR0E1000000D000000100010",
+                LegislationPartType.ARTICLE)));
+
+    Page<ArticleWithExpressions> requestedFirstExpression =
+        articlesRepository.findAllVersionsByDocumentNumber(
+            "DKNR0E1000000D000000100010",
+            LegislationPartType.ARTICLE,
+            work1Expression1.toString(),
+            Pageable.unpaged());
+
+    assertThat(requestedFirstExpression)
+        .singleElement()
+        .extracting(a -> a.article().getExpressionEli())
+        .isEqualTo(work1Expression1.toString());
+
+    Page<ArticleWithExpressions> requestedSecondExpression =
+        articlesRepository.findAllVersionsByDocumentNumber(
+            "DKNR0E1000000D000000100010",
+            LegislationPartType.ARTICLE,
+            work1Expression2.toString(),
+            Pageable.unpaged());
+
+    assertThat(requestedSecondExpression)
+        .singleElement()
+        .extracting(a -> a.article().getExpressionEli())
+        .isEqualTo(work1Expression2.toString());
+  }
+
+  @Test
+  void itThrowsAnIllegalArgumentExceptionOnInvalidDocumentNumber() {
+    assertThatThrownBy(
+            () -> {
+              articlesRepository.findAllVersionsByDocumentNumber(
+                  "notFound", LegislationPartType.ARTICLE, null, Pageable.unpaged());
+            })
+        .isInstanceOf(IllegalArgumentException.class);
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {"PREAMBLE", "ARTICLE", "CONCLUSION"})
+  void itFiltersByDocumentType(LegislationPartType type) {
+    ExpressionEli eli =
+        new ExpressionEli("bund", "bgbl-1", "2020", "s1126", LocalDate.of(2025, 5, 5), 1, "deu");
+
+    // we use the same docNumber across all entities to check the filter
+    String expectedDocNumber = "DKNR0E1000000D000000100000";
+
+    articlesRepository.saveAll(
+        List.of(
+            buildArticle(eli, "einleitung-n1", expectedDocNumber, LegislationPartType.PREAMBLE),
+            buildArticle(eli, "art-z1", expectedDocNumber, LegislationPartType.ARTICLE),
+            buildArticle(eli, "conclusion-1", expectedDocNumber, LegislationPartType.CONCLUSION)));
 
     Page<ArticleWithExpressions> page =
-        articlesRepository.findAllByDocumentNumberStartingWithAndDocumentType(
-            "DKNR", type, Pageable.ofSize(100));
+        articlesRepository.findAllVersionsByDocumentNumber(
+            expectedDocNumber, type, null, Pageable.ofSize(100));
 
     assertThat(page)
         .singleElement()

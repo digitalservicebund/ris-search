@@ -1731,7 +1731,10 @@ export interface components {
             /** @example Decision */
             "@type"?: string;
             "@context": string;
-            /** @example KARE000000000 */
+            /**
+             * @description Dokumentnummer<br>
+             * @example KARE000000000
+             */
             documentNumber: string;
             /**
              * @description European Case Law Identifier
@@ -1762,39 +1765,45 @@ export interface components {
             tenor?: string;
             /**
              * Format: date
-             * @description Entscheidungsdatum
+             * @description Datum der Entscheidung, hier kann es zu Dopplungen mit anderen Entscheidungen kommen, auch in Kombination mit Aktenzeichen und Gericht.<br>
              */
             decisionDate: string;
             /**
-             * @description Aktenzeichen
+             * @description Aktenzeichen des Dokuments<br><br>Der erste Eintrag ist das primäre Aktenzeichen.<br>Weitere Einträge sind abweichende Aktenzeichen, die auch für dieses<br>Dokument verwendet werden.<br>
              * @example BGH 123/23
              */
             fileNumbers: string[];
             /**
-             * @description Gerichtstyp
+             * @description Inhalt ist die Angabe des Typs des Gerichtes, das das Dokument verfasst hat.<br>
              * @example FG
              */
             courtType?: string;
             /**
-             * @description Gerichtssitz
+             * @description Ort des Gerichtssitzes.<br>
              * @example Berlin
              */
             location?: string;
-            /** @example Urteil */
+            /**
+             * @description Innerhalb der Dokumentart „Rechtsprechung“ werden folgende Dokumenttypen unterschieden:<br><br><ul><li>Äuß: Äußerung</li><li>Ant: EuGH-Vorlage</li><li>AnU: Anerkenntnisurteil</li><li>Bes: Beschluss</li><li>Buß: Bußgeldbescheid</li><li>DrB: Dreierausschussbeschluss</li><li>EiA: Einstweilige Anordnung</li><li>Ent: Entscheidung</li><li>EVg: Einstellungsverfügung der Staatsanwaltschaft</li><li>GeB: Gerichtsbescheid</li><li>Gut: Gutachten</li><li>GWF: Gegenstandswertfestsetzung im verfassungsgerichtlichen Verfahren</li><li>KaB: Kammerbeschluss</li><li>KbN: Nichtannahmebeschluss</li><li>KbS: Stattgebender Kammerbeschluss</li><li>KoB: Kammerbeschluss ohne Begründung</li><li>PkH: Prozesskostenhilfebeschluss</li><li>ReM: Rechtsentscheid in Mietsachen</li><li>Sch: Schiedsgerichtsentscheidung</li><li>Ste: Stellungnahme</li><li>Str: Streitwertbeschluss</li><li>TeB: Teilbeschluss</li><li>TeU: Teilurteil</li><li>Urt: Urteil</li><li>Vgl: Vergleich</li><li>Vor: Vorlagebeschluss</li><li>VsU: Versäumnisurteil</li><li>VzU: Verzichtsurteil</li><li>ZwB: Zwischenbeschluss</li><li>ZwU: Zwischenurteil</li><li>TVU: Teilversäumnisurteil</li><li>Vfg: Verfügung</li><li>Vorab: Ersuchen um Vorabentscheidung</li><li>Anh: Anhängiges Verfahren</li><li>End: Endurteil</li><li>KfB: Kostenfestsetzungsbeschluss</li>
+             * @example Urteil
+             */
             documentType?: string;
             /** @description Leitsatz */
             outline?: string;
             /**
-             * @description Spruchkörper
-             * @example Gericht
+             * @description Inhalt ist die Angabe des Spruchkörpers, von dem das Dokument stammt (z.B. 1. Zivilsenat, 3. Strafkammer, Großer Senat).<br>
+             * @example 1. Senat
              */
             judicialBody?: string;
             /**
              * @description Schlagworte
-             * @example 3. Kammer
+             * @example Kündigung
              */
             keywords: string[];
-            /** @example LArbG Hamm */
+            /**
+             * @description Gericht<br>
+             * @example LArbG Hamm
+             */
             courtName?: string;
             /**
              * @description Entscheidungsname
@@ -1802,7 +1811,7 @@ export interface components {
              */
             decisionName: string[];
             /**
-             * @description Abweichende Dokumentnummer
+             * @description Abweichende Dokumentnummer<br>
              * @example DEV-123
              */
             deviatingDocumentNumber: string[];
@@ -1877,12 +1886,6 @@ export interface components {
              * @example 1998-02-06/..
              */
             temporalCoverage: string;
-            /**
-             * @description Specifies the type of the part of a Legislation Expression.
-             * @enum {string}
-             */
-            partType?: "preamble" | "article" | "conclusion" | "attachment";
-            /** @description The source data for this part, if available on its own */
             encoding?: components["schemas"]["LegislationObjectSchema"][];
             isPartOf?: components["schemas"]["IsPartOfReference"][];
         };

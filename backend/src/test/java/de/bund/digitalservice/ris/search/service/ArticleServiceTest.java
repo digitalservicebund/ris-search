@@ -58,9 +58,10 @@ class ArticleServiceTest {
     service.getAllArticleVersions(eli, eId);
 
     verify(articlesRepository, times(1))
-        .findAllByDocumentNumberStartingWithAndDocumentType(
-            "DKNR0E80B0026DKNE0001",
+        .findAllVersionsByDocumentNumber(
+            "DKNR0E80B0026DKNE000100010",
             LegislationPartType.ARTICLE,
+            eli.toString(),
             Pageable.unpaged(Sort.by(Sort.Direction.DESC, "entryIntoForceDate")));
   }
 
@@ -73,6 +74,37 @@ class ArticleServiceTest {
     String eId = "art-z1";
     String id = Article.buildId(eli.toString(), eId);
     when(articlesRepository.existsById(id)).thenReturn(false);
+
+    assertThat(service.getAllArticleVersions(eli, eId)).isEmpty();
+  }
+
+  @Test
+  void getAllArticleVersionsReturnsEmptyWhenRepositoryThrowsIllegalArgumentException() {
+    ExpressionEli eli =
+        new ExpressionEli(
+            "bund", "bgbl-1", "2020", "s1126", LocalDate.of(2025, Month.MAY, 5), 1, "deu");
+
+    String eId = "art-z1";
+    String id = Article.buildId(eli.toString(), eId);
+    String documentNumber = "DKNR0E80B0026DKNE0";
+
+    when(articlesRepository.existsById(id)).thenReturn(true);
+    when(articlesRepository.findById(id))
+        .thenReturn(
+            Optional.of(
+                Article.builder()
+                    .id(id)
+                    .eId(eId)
+                    .expressionEli(eli.toString())
+                    .documentNumber(documentNumber)
+                    .documentType(LegislationPartType.ARTICLE)
+                    .build()));
+    when(articlesRepository.findAllVersionsByDocumentNumber(
+            documentNumber,
+            LegislationPartType.ARTICLE,
+            eli.toString(),
+            Pageable.unpaged(Sort.by(Sort.Direction.DESC, "entryIntoForceDate"))))
+        .thenThrow(new IllegalArgumentException("document number is too short"));
 
     assertThat(service.getAllArticleVersions(eli, eId)).isEmpty();
   }
