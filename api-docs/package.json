@@ -14,7 +14,7 @@
     "oxfmt": "0.68.0",
     "oxlint": "1.83.0",
     "vitepress": "1.6.4",
-    "vue": "3.5.42",
+    "vue": "3.5.43",
     "vue-tsc": "3.3.11"
   },
   "devEngines": {
