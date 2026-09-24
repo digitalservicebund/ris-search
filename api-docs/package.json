@@ -11,8 +11,8 @@
     "typecheck": "vue-tsc --noEmit"
   },
   "devDependencies": {
-    "oxfmt": "0.68.0",
-    "oxlint": "1.83.0",
+    "oxfmt": "0.69.0",
+    "oxlint": "1.84.0",
     "vitepress": "2.0.0-alpha.20",
     "vue": "3.5.43",
     "vue-tsc": "3.3.11"
