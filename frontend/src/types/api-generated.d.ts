@@ -794,6 +794,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/article/work-example/{revision}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["getArticleVersionsByRevision"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/article/work-example/eli/{jurisdiction}/{agent}/{year}/{naturalIdentifier}/{pointInTime}/{version}/{language}/{eId}": {
         parameters: {
             query?: never;
@@ -1599,6 +1615,8 @@ export interface components {
              * @enum {string}
              */
             partType?: "preamble" | "article" | "conclusion" | "attachment";
+            /** @description the specific revision of that legislation part independent from its parent object */
+            revision?: string;
             /** @description The source data for this part, if available on its own */
             encoding?: components["schemas"]["LegislationObjectSchema"][];
             hasPart?: components["schemas"]["LegislationExpressionPartSchema"][];
@@ -3435,6 +3453,28 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ZipDataCatalogSchema"];
+                };
+            };
+        };
+    };
+    getArticleVersionsByRevision: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                revision: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CollectionSchemaArticleVersionSchema"];
                 };
             };
         };
