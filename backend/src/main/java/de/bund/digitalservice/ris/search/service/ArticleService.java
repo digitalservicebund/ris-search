@@ -1,9 +1,11 @@
 package de.bund.digitalservice.ris.search.service;
 
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
+import de.bund.digitalservice.ris.search.models.opensearch.ArticleWithExpressions;
 import de.bund.digitalservice.ris.search.models.opensearch.LegislationPartType;
 import de.bund.digitalservice.ris.search.repository.opensearch.ArticlesRepository;
 import de.bund.digitalservice.ris.search.utils.RisHighlightBuilder;
+import de.bund.digitalservice.ris.search.utils.eli.ExpressionEli;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.List;
@@ -24,7 +26,9 @@ import org.opensearch.search.collapse.CollapseBuilder;
 import org.opensearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.opensearch.search.sort.SortBuilders;
 import org.opensearch.search.sort.SortOrder;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.SearchHitsImpl;
@@ -161,32 +165,42 @@ public class ArticleService {
    * @param eidGiven the possible eid
    * @return List of version of that article across the whole work
    */
-  public List<Article> getAllArticleVersions(String expressionEli, String eidGiven) {
-    return getActualEid(expressionEli, eidGiven)
+  public Page<ArticleWithExpressions> getAllArticleVersions(
+      ExpressionEli expressionEli, String eidGiven) {
+    String expressionEliString = expressionEli.toString();
+
+    Sort sort = Sort.by(Sort.Direction.DESC, "entryIntoForceDate");
+    Pageable sortedPageable = Pageable.unpaged(sort);
+
+    return getActualEid(expressionEliString, eidGiven)
         .flatMap(
-            actualEid -> articlesRepository.findById(Article.buildId(expressionEli, actualEid)))
+            actualEid ->
+                articlesRepository.findById(Article.buildId(expressionEliString, actualEid)))
         .map(Article::getDocumentNumber)
-        .map(this::getAllArticleVersionsByDocumentNumberPrefix)
-        .orElseGet(List::of);
+        .map(docNr -> this.getAllArticleVersionsByDocumentNumberPrefix(docNr, sortedPageable))
+        .orElseGet(Page::empty);
   }
 
   /**
-   * Retrieves a List of all versions of an Article across the whole work it belongs to. The
-   * documentNumber is used as the article identifier. Restricts prefix lookup to minimum-length
-   * document numbers to avoid unintended matches.
+   * Retrieves a List of all versions of an Article across the whole work it belongs to, together
+   * with the expressionElis every version occurs in. The documentNumber is used as the article
+   * identifier. Restricts prefix lookup to minimum-length document numbers to avoid unintended
+   * matches.
    *
    * @param documentNumber of a given article
-   * @return List of Article objects of the same article across all its expressions
+   * @return List of Article objects of the same article across all its expressions, with their
+   *     expressionElis
    */
-  private List<Article> getAllArticleVersionsByDocumentNumberPrefix(String documentNumber) {
+  private Page<ArticleWithExpressions> getAllArticleVersionsByDocumentNumberPrefix(
+      String documentNumber, Pageable page) {
     if (documentNumber.length() < DOC_NUMBER_PREFIX_LENGTH) {
-      return List.of();
+      return Page.empty();
     }
 
     String documentNumberPrefix = documentNumber.substring(0, DOC_NUMBER_PREFIX_LENGTH);
 
     return articlesRepository.findAllByDocumentNumberStartingWithAndDocumentType(
-        documentNumberPrefix, LegislationPartType.ARTICLE);
+        documentNumberPrefix, LegislationPartType.ARTICLE, page);
   }
 
   private boolean articleExist(String expressionEli, String eid) {

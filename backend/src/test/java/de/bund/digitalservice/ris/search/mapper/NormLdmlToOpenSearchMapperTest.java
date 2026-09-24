@@ -418,8 +418,11 @@ class NormLdmlToOpenSearchMapperTest {
 
     Stream.of(firstArticle, secondArticle, thirdArticle)
         .forEach(
-            article ->
-                assertThat(article.getDocumentType()).isEqualTo(LegislationPartType.ARTICLE));
+            article -> {
+              assertThat(article.getDocumentType()).isEqualTo(LegislationPartType.ARTICLE);
+              assertThat(article.getManifestationEli())
+                  .isEqualTo(norm.getManifestationEliExample());
+            });
 
     assertThat(attachment)
         .isEqualTo(

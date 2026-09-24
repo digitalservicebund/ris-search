@@ -1,14 +1,8 @@
 import "@testing-library/jest-dom";
-import { config } from "@vue/test-utils";
-// oxlint-disable-next-line no-restricted-imports
-import PrimeVue from "primevue/config";
 import { vi } from "vitest";
 import "~/tests/cookieStoreMock";
 
 vi.mock("~/middleware/checkLogin.global.ts", () => ({ default: vi.fn() }));
-
-// Enable PrimeVue plugin because we need that in many tests
-config.global.plugins = [PrimeVue];
 
 // see https://jestjs.io/docs/manual-mocks#mocking-methods-which-are-not-implemented-in-jsdom
 if (globalThis?.window) {
@@ -44,6 +38,21 @@ if (globalThis?.window) {
       return originalAddEventListener.call(this, type, listener, rest);
     }
     return originalAddEventListener.call(this, type, listener, options);
+  };
+}
+
+// jsdom doesn't implement dialog's showModal/close. Approximate them via the
+// "open" attribute they're specified to toggle, and the "close" event
+// close() is specified to dispatch. See
+// https://github.com/jsdom/jsdom/issues/3294
+if (globalThis?.window) {
+  HTMLDialogElement.prototype.showModal = function (this: HTMLDialogElement) {
+    this.setAttribute("open", "");
+  };
+  HTMLDialogElement.prototype.close = function (this: HTMLDialogElement) {
+    if (!this.open) return;
+    this.removeAttribute("open");
+    this.dispatchEvent(new Event("close"));
   };
 }
 

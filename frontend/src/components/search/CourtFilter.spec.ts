@@ -1,9 +1,12 @@
 import { renderSuspended } from "@nuxt/test-utils/runtime";
 import { userEvent } from "@testing-library/user-event";
 import { screen, waitFor } from "@testing-library/vue";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import CourtFilter from "~/components/search/CourtFilter.vue";
-import { courtFilterDefaultSuggestions } from "~/utils/search/courtFilter";
+import {
+  courtFilterDefaultSuggestions,
+  knownCourtLabels,
+} from "~/utils/search/courtFilter";
 
 const mockData = [{ id: "TG Berlin", label: "Tagesgericht Berlin", count: 1 }];
 
@@ -17,8 +20,17 @@ vi.mock("~/plugins/risBackend", () => ({
 }));
 
 describe("court autocomplete", () => {
+  // jsdom doesn't implement scrolling; Reka scrolls the highlighted option
+  // into view when the suggestion list opens.
+  beforeEach(() => {
+    Element.prototype.scrollIntoView = vi.fn();
+  });
+
   afterEach(() => {
     vi.resetAllMocks();
+    knownCourtLabels.clear();
+    // @ts-expect-error restore jsdom's state, which has no implementation
+    delete Element.prototype.scrollIntoView;
   });
 
   it("exposes the label to assistive technology and shows hint text", async () => {
@@ -127,5 +139,49 @@ describe("court autocomplete", () => {
         query: { prefix: "existing court" },
       });
     });
+  });
+
+  it("re-searches by the selected court's id, not its label, when reopening", async () => {
+    mockFetch.mockResolvedValue(mockData);
+    const user = userEvent.setup();
+
+    await renderSuspended(CourtFilter);
+
+    await user.click(
+      screen.getByRole("button", { name: "Vorschläge anzeigen" }),
+    );
+    await user.click(screen.getByText("Bundesverfassungsgericht"));
+
+    // The input now displays the expanded label, not the id. Reopening
+    // should still search by "BVerfG" (what the backend's court filter
+    // matches on), not "Bundesverfassungsgericht".
+    await user.click(
+      screen.getByRole("button", { name: "Vorschläge anzeigen" }),
+    );
+
+    await waitFor(() => {
+      expect(mockFetch).toHaveBeenCalledWith("/v1/rechtsprechung/courts", {
+        query: { prefix: "BVerfG" },
+      });
+    });
+  });
+
+  it("shows the label after remounting with an already-known id", async () => {
+    // Simulates the mobile filter drawer, which unmounts and remounts
+    // CourtFilter on every close/open instead of keeping it alive.
+    const user = userEvent.setup();
+    const { unmount } = await renderSuspended(CourtFilter);
+
+    await user.click(
+      screen.getByRole("button", { name: "Vorschläge anzeigen" }),
+    );
+    await user.click(screen.getByText("Bundesverfassungsgericht"));
+    unmount();
+
+    await renderSuspended(CourtFilter, { props: { modelValue: "BVerfG" } });
+
+    expect(screen.getByRole("combobox")).toHaveValue(
+      "Bundesverfassungsgericht",
+    );
   });
 });

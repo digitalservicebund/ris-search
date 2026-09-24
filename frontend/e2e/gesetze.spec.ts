@@ -342,7 +342,10 @@ test.describe("actions menu", () => {
 
       await button.hover();
       await expect(
-        page.getByRole("tooltip", { name: "Zur englischen Übersetzung" }),
+        page.getByRole("tooltip", {
+          includeHidden: true,
+          name: "Zur englischen Übersetzung",
+        }),
       ).toBeVisible({
         timeout: 15000,
       });

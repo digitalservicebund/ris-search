@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import { Drawer } from "primevue";
-import type { MenuItem } from "primevue/menuitem";
 import IcBaselineMoreVert from "~icons/ic/baseline-more-vert";
 import { NuxtLink } from "#components";
 
-export type ActionMenuItem = Omit<MenuItem, "icon"> & {
+export type ActionMenuItem = {
+  label: string;
+  disabled?: boolean;
+  url?: string;
+  command?: () => void | Promise<void>;
   iconComponent: Component;
   analyticsId?: string;
-  command?: () => void | Promise<void>;
   keepDrawerOpen?: boolean;
 };
 
@@ -17,7 +18,6 @@ const {
   visible: drawerVisible,
   // @ts-expect-error -- usage in template not detected
   triggerRef: drawerTriggerRef,
-  closeButtonProps,
 } = useDrawer();
 
 const drawerId = useId();
@@ -46,14 +46,11 @@ const handleDrawerItemClick = async (item: ActionMenuItem) => {
       </template>
     </UiButton>
 
-    <Drawer
+    <UiDrawer
       :id="drawerId"
       v-model:visible="drawerVisible"
       aria-label="Aktionen"
-      block-scroll
       header="Aktionen"
-      position="bottom"
-      :close-button-props="closeButtonProps"
     >
       <ul class="-mt-8">
         <li v-for="item in actions">
@@ -91,30 +88,31 @@ const handleDrawerItemClick = async (item: ActionMenuItem) => {
           </button>
         </li>
       </ul>
-    </Drawer>
+    </UiDrawer>
   </div>
 
   <ul role="menubar" class="hidden items-center *:-mx-4 md:flex">
     <li v-for="item in actions" :key="item.label" role="presentation">
-      <UiButton
-        v-tooltip.bottom="item.disabled ? undefined : item.label"
-        role="menuitem"
-        text
-        :disabled="item.disabled"
-        :aria-label="item.label"
-        :to="item.url"
-        :as="item.url ? NuxtLink : undefined"
-        :data-attr="(item as ActionMenuItem).analyticsId"
-        external
-        @click="item.command"
-      >
-        <template #icon>
-          <component
-            :is="(item as ActionMenuItem).iconComponent"
-            class="ris-label2-regular"
-          />
-        </template>
-      </UiButton>
+      <UiTooltip :text="item.disabled ? undefined : item.label" side="bottom">
+        <UiButton
+          role="menuitem"
+          text
+          :disabled="item.disabled"
+          :aria-label="item.label"
+          :to="item.url"
+          :as="item.url ? NuxtLink : undefined"
+          :data-attr="(item as ActionMenuItem).analyticsId"
+          external
+          @click="item.command"
+        >
+          <template #icon>
+            <component
+              :is="(item as ActionMenuItem).iconComponent"
+              class="ris-label2-regular"
+            />
+          </template>
+        </UiButton>
+      </UiTooltip>
     </li>
   </ul>
 </template>

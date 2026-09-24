@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { Breadcrumb, Drawer } from "primevue";
-import type { MenuItem } from "primevue/menuitem";
 import IcBaselineMoreHoriz from "~icons/ic/baseline-more-horiz";
 import ChevronRightIcon from "~icons/ic/outline-chevron-right";
 import { NuxtLink } from "#components";
@@ -41,15 +39,24 @@ const itemsWithHome = computed(() => [
   ...items,
 ]);
 
+type EffectiveBreadcrumbItem = {
+  label: string;
+  route?: RouteLocationRaw;
+  command?: (event: {
+    item: EffectiveBreadcrumbItem;
+    originalEvent: Event;
+  }) => void;
+};
+
 const effectiveItems = computed(() => {
   const collapseAfter = 3;
 
   const all = [...itemsWithHome.value];
   const shouldCollapse = collapse && all.length > collapseAfter;
-  let result: MenuItem[] = all;
+  let result: EffectiveBreadcrumbItem[] = all;
 
   if (shouldCollapse) {
-    const drawerMenuItem: MenuItem = {
+    const drawerMenuItem: EffectiveBreadcrumbItem = {
       label: "Navigiere zu",
       command: () => (drawerVisible.value = true),
     };
@@ -63,14 +70,13 @@ const {
   visible: drawerVisible,
   // @ts-expect-error -- usage in template not detected
   triggerRef: drawerTriggerRef,
-  closeButtonProps,
 } = useDrawer();
 
 const drawerId = useId();
 </script>
 
 <template>
-  <Breadcrumb
+  <UiBreadcrumb
     :model="effectiveItems"
     :aria-label="label"
     :class="[
@@ -113,16 +119,13 @@ const drawerId = useId();
     <template #separator>
       <ChevronRightIcon width="1rem" height="1rem" />
     </template>
-  </Breadcrumb>
+  </UiBreadcrumb>
 
-  <Drawer
+  <UiDrawer
     v-model:visible="drawerVisible"
     aria-label="Navigiere zu"
-    block-scroll
     header="Navigiere zu"
-    position="bottom"
     :id="drawerId"
-    :close-button-props="closeButtonProps"
   >
     <ul class="-mt-8">
       <li v-for="i in itemsWithHome" :key="i.label">
@@ -143,5 +146,5 @@ const drawerId = useId();
         </span>
       </li>
     </ul>
-  </Drawer>
+  </UiDrawer>
 </template>

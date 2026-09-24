@@ -2415,6 +2415,95 @@
         }
       }
     },
+    "/v1/article/work-example/eli/{jurisdiction}/{agent}/{year}/{naturalIdentifier}/{pointInTime}/{version}/{language}/{eId}" : {
+      "get" : {
+        "tags" : [ "article-controller" ],
+        "operationId" : "getArticleVersions",
+        "parameters" : [ {
+          "name" : "jurisdiction",
+          "in" : "path",
+          "description" : "Country or regional code for the jurisdiction",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "bund" ]
+          }
+        }, {
+          "name" : "agent",
+          "in" : "path",
+          "description" : "Agent or authority issuing the legislation, e.g., 'bgbl-1' for Bundesgesetzblatt Teil I (Federal Law Gazette part I)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "example" : "bgbl-1"
+        }, {
+          "name" : "year",
+          "in" : "path",
+          "description" : "Year the legislation was enacted or published",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "example" : 1979
+        }, {
+          "name" : "naturalIdentifier",
+          "in" : "path",
+          "description" : "Unique natural identifier for the legislation, specific to the jurisdiction and agent",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "example" : "s1325"
+        }, {
+          "name" : "pointInTime",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "date"
+          },
+          "example" : "2020-06-19"
+        }, {
+          "name" : "version",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "example" : 2
+        }, {
+          "name" : "language",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "example" : "deu"
+        }, {
+          "name" : "eId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "example" : "art-z1"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CollectionSchemaArticleVersionSchema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/administrative-directive" : {
       "get" : {
         "tags" : [ "AdministrativeDirective" ],
@@ -4277,6 +4366,7 @@
           },
           "documentNumber" : {
             "type" : "string",
+            "description" : "Dokumentnummer<br>",
             "example" : "KARE000000000"
           },
           "ecli" : {
@@ -4331,28 +4421,31 @@
           "decisionDate" : {
             "type" : "string",
             "format" : "date",
-            "description" : "Entscheidungsdatum"
+            "description" : "Datum der Entscheidung, hier kann es zu Dopplungen mit anderen Entscheidungen kommen, auch in Kombination mit Aktenzeichen und Gericht.<br>"
           },
           "fileNumbers" : {
             "type" : "array",
-            "description" : "Aktenzeichen",
+            "description" : "Aktenzeichen des Dokuments<br><br>Der erste Eintrag ist das primäre Aktenzeichen.<br>Weitere Einträge sind abweichende Aktenzeichen, die auch für dieses<br>Dokument verwendet werden.<br>",
             "example" : "BGH 123/23",
             "items" : {
-              "type" : "string"
+              "type" : "string",
+              "description" : "Aktenzeichen des Dokuments<br><br>Der erste Eintrag ist das primäre Aktenzeichen.<br>Weitere Einträge sind abweichende Aktenzeichen, die auch für dieses<br>Dokument verwendet werden.<br>",
+              "example" : "BGH 123/23"
             }
           },
           "courtType" : {
             "type" : "string",
-            "description" : "Gerichtstyp",
+            "description" : "Inhalt ist die Angabe des Typs des Gerichtes, das das Dokument verfasst hat.<br>",
             "example" : "FG"
           },
           "location" : {
             "type" : "string",
-            "description" : "Gerichtssitz",
+            "description" : "Ort des Gerichtssitzes.<br>",
             "example" : "Berlin"
           },
           "documentType" : {
             "type" : "string",
+            "description" : "Innerhalb der Dokumentart „Rechtsprechung“ werden folgende Dokumenttypen unterschieden:<br><br><ul><li>Äuß: Äußerung</li><li>Ant: EuGH-Vorlage</li><li>AnU: Anerkenntnisurteil</li><li>Bes: Beschluss</li><li>Buß: Bußgeldbescheid</li><li>DrB: Dreierausschussbeschluss</li><li>EiA: Einstweilige Anordnung</li><li>Ent: Entscheidung</li><li>EVg: Einstellungsverfügung der Staatsanwaltschaft</li><li>GeB: Gerichtsbescheid</li><li>Gut: Gutachten</li><li>GWF: Gegenstandswertfestsetzung im verfassungsgerichtlichen Verfahren</li><li>KaB: Kammerbeschluss</li><li>KbN: Nichtannahmebeschluss</li><li>KbS: Stattgebender Kammerbeschluss</li><li>KoB: Kammerbeschluss ohne Begründung</li><li>PkH: Prozesskostenhilfebeschluss</li><li>ReM: Rechtsentscheid in Mietsachen</li><li>Sch: Schiedsgerichtsentscheidung</li><li>Ste: Stellungnahme</li><li>Str: Streitwertbeschluss</li><li>TeB: Teilbeschluss</li><li>TeU: Teilurteil</li><li>Urt: Urteil</li><li>Vgl: Vergleich</li><li>Vor: Vorlagebeschluss</li><li>VsU: Versäumnisurteil</li><li>VzU: Verzichtsurteil</li><li>ZwB: Zwischenbeschluss</li><li>ZwU: Zwischenurteil</li><li>TVU: Teilversäumnisurteil</li><li>Vfg: Verfügung</li><li>Vorab: Ersuchen um Vorabentscheidung</li><li>Anh: Anhängiges Verfahren</li><li>End: Endurteil</li><li>KfB: Kostenfestsetzungsbeschluss</li>",
             "example" : "Urteil"
           },
           "outline" : {
@@ -4361,19 +4454,22 @@
           },
           "judicialBody" : {
             "type" : "string",
-            "description" : "Spruchkörper",
-            "example" : "Gericht"
+            "description" : "Inhalt ist die Angabe des Spruchkörpers, von dem das Dokument stammt (z.B. 1. Zivilsenat, 3. Strafkammer, Großer Senat).<br>",
+            "example" : "1. Senat"
           },
           "keywords" : {
             "type" : "array",
             "description" : "Schlagworte",
-            "example" : "3. Kammer",
+            "example" : "Kündigung",
             "items" : {
-              "type" : "string"
+              "type" : "string",
+              "description" : "Schlagworte",
+              "example" : "Kündigung"
             }
           },
           "courtName" : {
             "type" : "string",
+            "description" : "Gericht<br>",
             "example" : "LArbG Hamm"
           },
           "decisionName" : {
@@ -4386,10 +4482,12 @@
           },
           "deviatingDocumentNumber" : {
             "type" : "array",
-            "description" : "Abweichende Dokumentnummer",
+            "description" : "Abweichende Dokumentnummer<br>",
             "example" : "DEV-123",
             "items" : {
-              "type" : "string"
+              "type" : "string",
+              "description" : "Abweichende Dokumentnummer<br>",
+              "example" : "DEV-123"
             }
           },
           "previousDecisions" : {
@@ -4509,6 +4607,99 @@
           }
         },
         "required" : [ "description", "name" ]
+      },
+      "ArticleVersionSchema" : {
+        "type" : "object",
+        "description" : "A specific part of a legislation expression",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "example" : "Legislation"
+          },
+          "@id" : {
+            "type" : "string",
+            "example" : "/v1/legislation/eli/bund/bgbl-1/1975/s1760/regelungstext-1.xml#hauptteitel-para-1"
+          },
+          "eId" : {
+            "type" : "string",
+            "description" : "Expression-level identifier, uniquely identifying this element in an FRBR expression",
+            "example" : "hauptteitel-para-1"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "Numerical identifier of a specific legislation part",
+            "example" : "§ 1"
+          },
+          "temporalCoverage" : {
+            "type" : "string",
+            "description" : "Textual string indicating a time period in [ISO 8601 time interval format](https://en.wikipedia.org/wiki/ISO_8601#Time_intervals)\n",
+            "example" : "1998-02-06/.."
+          },
+          "partType" : {
+            "type" : "string",
+            "description" : "    Specifies the type of the part of a Legislation Expression.\n",
+            "enum" : [ "preamble", "article", "conclusion", "attachment" ]
+          },
+          "encoding" : {
+            "type" : "array",
+            "description" : "The source data for this part, if available on its own",
+            "items" : {
+              "$ref" : "#/components/schemas/LegislationObjectSchema"
+            }
+          },
+          "isPartOf" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/IsPartOfReference"
+            }
+          }
+        },
+        "required" : [ "@id", "eId", "name", "temporalCoverage" ]
+      },
+      "CollectionSchemaArticleVersionSchema" : {
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "example" : "hydra:Collection"
+          },
+          "@context" : {
+            "type" : "string"
+          },
+          "@id" : {
+            "type" : "string",
+            "example" : "/v1/document?pageIndex=0&size=5"
+          },
+          "totalItems" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 1
+          },
+          "member" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ArticleVersionSchema"
+            }
+          },
+          "view" : {
+            "$ref" : "#/components/schemas/PartialCollectionViewSchema"
+          }
+        },
+        "required" : [ "@context", "@id", "member", "totalItems", "view" ]
+      },
+      "IsPartOfReference" : {
+        "type" : "object",
+        "description" : "A reference to another expression that the article is part of",
+        "properties" : {
+          "@type" : {
+            "type" : "string"
+          },
+          "@id" : {
+            "type" : "string",
+            "example" : "/v1/legislation/eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu/art-z1"
+          }
+        },
+        "required" : [ "@id" ]
       },
       "AdministrativeDirectiveSchema" : {
         "type" : "object",

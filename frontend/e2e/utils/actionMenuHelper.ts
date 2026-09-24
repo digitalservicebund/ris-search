@@ -17,6 +17,7 @@ export function testCopyLinkButton(
     await button.hover();
     await expect(
       page.getByRole("tooltip", {
+        includeHidden: true,
         name: buttonName,
       }),
     ).toBeVisible({
@@ -60,7 +61,9 @@ export function testPrintButton(onPageUrl: string) {
     const button = page.getByRole("menuitem", { name: "Drucken" });
 
     await button.hover();
-    await expect(page.getByRole("tooltip", { name: "Drucken" })).toBeVisible({
+    await expect(
+      page.getByRole("tooltip", { includeHidden: true, name: "Drucken" }),
+    ).toBeVisible({
       timeout: 15000,
     });
 
@@ -116,7 +119,7 @@ export function testXmlButton(pageUrl: string, expectedXmlUrl: string) {
 
     await button.hover();
     await expect(
-      page.getByRole("tooltip", { name: "XML anzeigen" }),
+      page.getByRole("tooltip", { includeHidden: true, name: "XML anzeigen" }),
     ).toBeVisible({ timeout: 15000 });
 
     await button.click();

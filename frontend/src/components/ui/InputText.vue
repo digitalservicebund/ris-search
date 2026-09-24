@@ -74,16 +74,10 @@ const small = tw`typo-label2-regular h-48 px-16 py-4`;
 
 const large = tw`typo-label1-regular h-64 px-24 py-4`;
 
-const clearWrapperClass = tw`group/input relative inline-flex`;
-
-const clearButtonClass = tw`absolute inset-y-6 right-6 flex aspect-square cursor-pointer items-center justify-center text-blue-800 hover:bg-blue-800 hover:text-white focus-visible:bg-blue-800 focus-visible:text-white focus-visible:outline-none`;
-
 const clearButtonFocus = tw`group-has-[button:focus-visible]/input:outline-4 group-has-[button:focus-visible]/input:-outline-offset-4 not-aria-[invalid]:group-has-[button:focus-visible]/input:outline-blue-800`;
 
-const clearButtonIconClass = computed(() => ({
-  "w-32 h-32": props.size === "large",
-}));
-
+// Combines the two size variants and the clear-button-related adjustments;
+// used identically by both template branches below.
 const inputClass = computed(() => ({
   [base]: true,
   [clearButtonFocus]: props.clearable,
@@ -97,7 +91,11 @@ const inputClass = computed(() => ({
 <template>
   <span
     v-if="clearable"
-    :class="[{ 'w-full': fluid }, rootClass, clearWrapperClass]"
+    :class="[
+      { 'w-full': fluid },
+      rootClass,
+      'group/input relative inline-flex',
+    ]"
     :style="rootStyle"
   >
     <input
@@ -108,12 +106,12 @@ const inputClass = computed(() => ({
     />
     <button
       v-if="showClearButton"
-      :class="clearButtonClass"
+      class="absolute inset-y-6 right-6 flex aspect-square cursor-pointer items-center justify-center text-blue-800 hover:bg-blue-800 hover:text-white focus-visible:bg-blue-800 focus-visible:text-white focus-visible:outline-none"
       aria-label="Entfernen"
       type="button"
       @click="clear"
     >
-      <CloseSmallIcon :class="clearButtonIconClass" />
+      <CloseSmallIcon :class="{ 'h-32 w-32': size === 'large' }" />
     </button>
   </span>
   <input

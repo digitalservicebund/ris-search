@@ -294,9 +294,7 @@ test("displays validity in breadcrumb navigation", async ({
   const breadcrumbLinks = breadcrumb.getByRole("listitem");
   await expect(breadcrumbLinks).toContainText([
     "Start",
-    "", // Empty items are separators
     "Suche",
-    "",
     "FrSaftErfrischV",
   ]);
 });

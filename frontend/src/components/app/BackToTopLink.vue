@@ -39,6 +39,13 @@ function scrollToTop() {
   }
 }
 
+:root:has([data-back-to-top-adjust="drawer-addition"]) {
+  .back-to-top-link {
+    /* drawer height (with subheading addition) + 1rem on mobile */
+    @apply [--offset-bottom:6.25rem] md:[--offset-bottom:1rem];
+  }
+}
+
 @supports (animation-range: normal) {
   .back-to-top-link {
     @apply animate-[slide-in_linear_both] [animation-range:normal_8rem] [animation-timeline:scroll(root)];

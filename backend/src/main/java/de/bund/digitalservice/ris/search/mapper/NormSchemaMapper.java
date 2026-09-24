@@ -172,7 +172,9 @@ public class NormSchemaMapper {
       Article article, String idPrefix, String marker, String heading) {
     List<LegislationObjectSchema> encoding;
     // Only attachments have their own manifestationELi and receive an encoding object.
-    if (article.getManifestationEli() != null) {
+    // Einzelnormen will reference the latest manifestation they are a part of
+    if (article.getDocumentType().equals(LegislationPartType.ATTACHMENT)
+        && article.getManifestationEli() != null) {
       final LegislationObjectSchema encodingItem =
           EncodingSchemaFactory.legislationEncodingSchema(
               EncodingSchemaFactory.SchemaType.XML,
@@ -190,7 +192,7 @@ public class NormSchemaMapper {
             DateUtils.toDateIntervalString(
                 article.getEntryIntoForceDate(), article.getExpiryDate()))
         .encoding(encoding)
-        .partType(mapLegislationPartType(article.getDocumentType()))
+        .partType(NormSchemaMapper.mapLegislationPartType(article.getDocumentType()))
         .hasPart(List.of())
         .build();
   }
