@@ -43,6 +43,27 @@ public class ArticleController {
   /**
    * Retrieve all work examples of a given Article
    *
+   * @param revision The identifier of the article revision
+   * @return response object of a Collection of ArticleVersionSchema
+   */
+  @GetMapping(path = ApiConfig.Paths.ARTICLE_WORK_EXAMPLE + "/{revision}")
+  public ResponseEntity<CollectionSchema<ArticleVersionSchema>> getArticleVersionsByRevision(
+      @Parameter() @PathVariable String revision) {
+
+    Page<ArticleWithExpressions> articles = articleService.getAllArticleVersions(revision);
+
+    return ResponseEntity.ok()
+        .contentType(MediaType.APPLICATION_JSON)
+        .body(
+            ArticleVersionSchemaMapper.fromArticlePage(
+                articles,
+                ApiConfig.Paths.ARTICLE_WORK_EXAMPLE + "/" + revision,
+                jsonldContextPath));
+  }
+
+  /**
+   * Retrieve all work examples of a given Article
+   *
    * @param jurisdiction the jurisdiction to which the legal document belongs
    * @param agent the agent responsible for the legal document
    * @param year the year of issuance for the legal document

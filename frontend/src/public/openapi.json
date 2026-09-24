@@ -2415,6 +2415,32 @@
         }
       }
     },
+    "/v1/article/work-example/{revision}" : {
+      "get" : {
+        "tags" : [ "article-controller" ],
+        "operationId" : "getArticleVersionsByRevision",
+        "parameters" : [ {
+          "name" : "revision",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CollectionSchemaArticleVersionSchema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/article/work-example/eli/{jurisdiction}/{agent}/{year}/{naturalIdentifier}/{pointInTime}/{version}/{language}/{eId}" : {
       "get" : {
         "tags" : [ "article-controller" ],
@@ -4082,6 +4108,10 @@
             "type" : "string",
             "description" : "    Specifies the type of the part of a Legislation Expression.\n",
             "enum" : [ "preamble", "article", "conclusion", "attachment" ]
+          },
+          "revision" : {
+            "type" : "string",
+            "description" : "the specific revision of that legislation part independent from its parent object"
           },
           "encoding" : {
             "type" : "array",
