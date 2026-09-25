@@ -8,7 +8,9 @@ import de.bund.digitalservice.ris.search.xsd.XSDDescriptionProperties;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -51,18 +53,27 @@ public class MarkdownGenerator implements CommandLineRunner {
   }
 
   private void generateMarkdown(List<DescriptionKey> descriptions, String filename) {
-    StringBuilder stringBuilder = new StringBuilder();
-    stringBuilder.append("| Key | Language | Description |").append(System.lineSeparator());
-    stringBuilder.append("| --- | --- | --- |").append(System.lineSeparator());
+    Map<String, Map<String, String>> descriptionsByKey = new LinkedHashMap<>();
     descriptions.forEach(
         description ->
+            descriptionsByKey
+                .computeIfAbsent(description.key(), _ -> new LinkedHashMap<>())
+                .put(description.lang(), description.description()));
+
+    StringBuilder stringBuilder = new StringBuilder();
+    stringBuilder
+        .append("| Key | Description DE | Description EN |")
+        .append(System.lineSeparator());
+    stringBuilder.append("| --- | --- | --- |").append(System.lineSeparator());
+    descriptionsByKey.forEach(
+        (key, descriptionsByLang) ->
             stringBuilder
                 .append("| ")
-                .append(description.key())
+                .append(key)
                 .append(" | ")
-                .append(description.lang())
+                .append(descriptionsByLang.getOrDefault("de", ""))
                 .append(" | ")
-                .append(description.description())
+                .append(descriptionsByLang.getOrDefault("en", ""))
                 .append(" |")
                 .append(System.lineSeparator()));
 
