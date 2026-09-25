@@ -7,6 +7,7 @@ import de.bund.digitalservice.ris.search.xsd.XSDDescriptionParser;
 import de.bund.digitalservice.ris.search.xsd.XSDDescriptionProperties;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -53,6 +54,36 @@ public class MarkdownGenerator implements CommandLineRunner {
   }
 
   private void generateMarkdown(List<DescriptionKey> descriptions, String filename) {
+    var path = Paths.get(System.getProperty("user.dir") + "/../doc/readme", filename);
+    writeMarkdownFile(buildMarkdownTable(descriptions), path);
+  }
+
+  /**
+   * Writes the given Markdown content to {@code path}, creating the file first if it doesn't
+   * already exist.
+   *
+   * @param markdown the file content to write
+   * @param path the file to write it to
+   */
+  static void writeMarkdownFile(String markdown, Path path) {
+    try {
+      if (Files.notExists(path)) {
+        Files.createFile(path);
+      }
+      Files.writeString(path, markdown);
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  /**
+   * Builds a Markdown table with one row per description key, listing its German and English
+   * documentation (if present) in separate columns.
+   *
+   * @param descriptions the parsed XSD descriptions to render
+   * @return the Markdown table as a string
+   */
+  static String buildMarkdownTable(List<DescriptionKey> descriptions) {
     Map<String, Map<String, String>> descriptionsByKey = new LinkedHashMap<>();
     descriptions.forEach(
         description ->
@@ -77,14 +108,6 @@ public class MarkdownGenerator implements CommandLineRunner {
                 .append(" |")
                 .append(System.lineSeparator()));
 
-    try {
-      var path = Paths.get(System.getProperty("user.dir") + "/../doc/readme", filename);
-      if (Files.notExists(path)) {
-        Files.createFile(path);
-      }
-      Files.writeString(path, stringBuilder.toString());
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
+    return stringBuilder.toString();
   }
 }

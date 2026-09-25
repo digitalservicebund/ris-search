@@ -204,34 +204,37 @@ public class XSDDescriptionParser {
   private void getXSDInChildren(
       NodeList nodeList, Resource currentResource, Map<String, Document> documents) {
     for (int i = 0; i < nodeList.getLength(); i++) {
-      Element importElement = (Element) nodeList.item(i);
-
-      var schemaLocationAttr = importElement.getAttribute("schemaLocation");
-      if (schemaLocationAttr.isBlank()) {
-        continue;
-      }
-
-      Resource resource;
-      try {
-        resource = currentResource.createRelative(schemaLocationAttr);
-      } catch (IOException e) {
-        log.error("error resolving relative schema location: {}", schemaLocationAttr, e);
-        continue;
-      }
-
-      var key = resource.getDescription();
-      if (documents.containsKey(key)) {
-        continue;
-      }
-
-      var document = getDocumentForLocation(resource);
-      if (document == null) {
-        continue;
-      }
-
-      documents.put(key, document);
-      getRelatedXSD(document, resource, documents);
+      resolveAndParseSchemaLocation((Element) nodeList.item(i), currentResource, documents);
     }
+  }
+
+  private void resolveAndParseSchemaLocation(
+      Element importElement, Resource currentResource, Map<String, Document> documents) {
+    var schemaLocationAttr = importElement.getAttribute("schemaLocation");
+    if (schemaLocationAttr.isBlank()) {
+      return;
+    }
+
+    Resource resource;
+    try {
+      resource = currentResource.createRelative(schemaLocationAttr);
+    } catch (IOException e) {
+      log.error("error resolving relative schema location: {}", schemaLocationAttr, e);
+      return;
+    }
+
+    var key = resource.getDescription();
+    if (documents.containsKey(key)) {
+      return;
+    }
+
+    var document = getDocumentForLocation(resource);
+    if (document == null) {
+      return;
+    }
+
+    documents.put(key, document);
+    getRelatedXSD(document, resource, documents);
   }
 
   private void extractNamespacePrefixes(Document document) {
