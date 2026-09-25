@@ -80,8 +80,8 @@ class ArticleServiceTest {
 
   @Test
   void getAllArticleVersionsReturnsEmptyWhenRepositoryThrowsIllegalArgumentException() {
-    ExpressionEli eli =
-        new ExpressionEli(
+    ExpressionEliPath eli =
+        new ExpressionEliPath(
             "bund", "bgbl-1", "2020", "s1126", LocalDate.of(2025, Month.MAY, 5), 1, "deu");
 
     String eId = "art-z1";
