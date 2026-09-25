@@ -625,7 +625,7 @@ public class NormLdmlToOpenSearchMapper {
     try {
       String path = new URI(uri).getPath();
       return org.springframework.util.StringUtils.trimLeadingCharacter(path, '/');
-    } catch (URISyntaxException e) {
+    } catch (URISyntaxException _) {
       throw new IllegalArgumentException(errorMessage);
     }
   }
