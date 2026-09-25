@@ -1,6 +1,7 @@
 package de.bund.digitalservice.ris.search.xsd;
 
 import de.bund.digitalservice.ris.search.models.DocumentKind;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -53,35 +54,31 @@ public class XSDDescriptionParser {
 
     if (properties.getXsdLocations().containsKey("caselaw")) {
       var mainSchemaLocations = properties.getXsdLocations().get("caselaw");
-      parseXSDAndCreateDescriptions(
-          mainSchemaLocations, resourceLoader, properties, DocumentKind.CASE_LAW);
+      parseXSDAndCreateDescriptions(mainSchemaLocations, resourceLoader, DocumentKind.CASE_LAW);
     }
 
     if (properties.getXsdLocations().containsKey("adm")) {
       var mainSchemaLocations = properties.getXsdLocations().get("adm");
       parseXSDAndCreateDescriptions(
-          mainSchemaLocations, resourceLoader, properties, DocumentKind.ADMINISTRATIVE_DIRECTIVE);
+          mainSchemaLocations, resourceLoader, DocumentKind.ADMINISTRATIVE_DIRECTIVE);
     }
 
     if (properties.getXsdLocations().containsKey("literature")) {
       var mainSchemaLocations = properties.getXsdLocations().get("literature");
-      parseXSDAndCreateDescriptions(
-          mainSchemaLocations, resourceLoader, properties, DocumentKind.LITERATURE);
+      parseXSDAndCreateDescriptions(mainSchemaLocations, resourceLoader, DocumentKind.LITERATURE);
     }
   }
 
   private void parseXSDAndCreateDescriptions(
-      String[] mainSchemaLocations,
-      ResourceLoader resourceLoader,
-      XSDDescriptionProperties properties,
-      DocumentKind documentKind) {
+      String[] mainSchemaLocations, ResourceLoader resourceLoader, DocumentKind documentKind) {
     Map<String, Document> documents = new HashMap<>();
     for (String mainSchemaLocation : mainSchemaLocations) {
-      var mainDocument = getDocumentForLocation(mainSchemaLocation, resourceLoader);
+      var resource = resourceLoader.getResource(mainSchemaLocation);
+      var mainDocument = getDocumentForLocation(resource);
 
       documents.put(mainSchemaLocation, mainDocument);
 
-      getRelatedXSD(mainDocument, resourceLoader, documents, properties.getSchemaPrefix());
+      getRelatedXSD(mainDocument, resource, documents);
     }
 
     Map<String, List<String>> elementsByType = new HashMap<>();
@@ -97,9 +94,8 @@ public class XSDDescriptionParser {
     createDescriptions(documentationElements, elementsByType, documentKind);
   }
 
-  private Document getDocumentForLocation(String location, ResourceLoader resourceLoader) {
+  private Document getDocumentForLocation(Resource resource) {
     try {
-      Resource resource = resourceLoader.getResource(location);
       if (!resource.exists()) {
         return null;
       }
@@ -108,7 +104,7 @@ public class XSDDescriptionParser {
         return factory.newDocumentBuilder().parse(inputStream);
       }
     } catch (Exception ex) {
-      log.error("error by getting document for location: {}", location, ex);
+      log.error("error by getting document for resource: {}", resource, ex);
       return null;
     }
   }
@@ -126,30 +122,31 @@ public class XSDDescriptionParser {
               typeName = namespacePrefixes.get(namespaceUri) + ":" + typeName;
             }
 
-            if (!elementsByType.containsKey(typeName)) {
-              return;
-            }
+            // Some named types (e.g. ris:rechtsfrageGesamt) are only ever selected on an
+            // instance via xsi:type and have no xs:element statically bound to them, so the
+            // type's own name must also be registered as a lookup key in its own right.
+            descriptions.add(
+                new DescriptionKey(
+                    typeName,
+                    documentationElement.getDocumentation(),
+                    documentationElement.getLanguage(),
+                    documentKind));
 
-            elementsByType
-                .get(typeName)
-                .forEach(
-                    elementName ->
-                        descriptions.add(
-                            new DescriptionKey(
-                                elementName,
-                                documentationElement.getDocumentation(),
-                                documentationElement.getLanguage(),
-                                documentKind)));
-          } else {
-            if (documentationElement.getParent() != null) {
-              descriptions.add(
-                  new DescriptionKey(
-                      ((ElementElement) documentationElement.getParent()).name(),
-                      documentationElement.getDocumentation(),
-                      documentationElement.getLanguage(),
-                      documentKind));
+            if (elementsByType.containsKey(typeName)) {
+              elementsByType
+                  .get(typeName)
+                  .forEach(
+                      elementName ->
+                          descriptions.add(
+                              new DescriptionKey(
+                                  elementName,
+                                  documentationElement.getDocumentation(),
+                                  documentationElement.getLanguage(),
+                                  documentKind)));
             }
           }
+          // Local annotations on generic element refs (e.g. akn:motivation) are intentionally
+          // not registered here: only descriptions for named ris:<typeName> types are supported.
         });
   }
 
@@ -178,46 +175,62 @@ public class XSDDescriptionParser {
   }
 
   private void getRelatedXSD(
-      Document document,
-      ResourceLoader resourceLoader,
-      Map<String, Document> documents,
-      String schemaPrefix) {
+      Document document, Resource currentResource, Map<String, Document> documents) {
     extractNamespacePrefixes(document);
 
     try {
       var expression = xPath.compile("//*[local-name()='import']");
       var imports = (NodeList) expression.evaluate(document, XPathConstants.NODESET);
-      getXSDInChildren(imports, resourceLoader, documents, schemaPrefix);
+      getXSDInChildren(imports, currentResource, documents);
 
       expression = xPath.compile("//*[local-name()='include']");
       var includes = (NodeList) expression.evaluate(document, XPathConstants.NODESET);
-      getXSDInChildren(includes, resourceLoader, documents, schemaPrefix);
+      getXSDInChildren(includes, currentResource, documents);
 
       expression = xPath.compile("//*[local-name()='redefine']");
       var redefines = (NodeList) expression.evaluate(document, XPathConstants.NODESET);
-      getXSDInChildren(redefines, resourceLoader, documents, schemaPrefix);
+      getXSDInChildren(redefines, currentResource, documents);
     } catch (XPathExpressionException e) {
       log.error("error by getting related xsd", e);
     }
   }
 
+  /**
+   * Resolves each {@code schemaLocation} relative to the resource that references it (not to a
+   * single fixed prefix), so that files inside a subdirectory (e.g. {@code schema/ris/ris.xsd})
+   * correctly resolve their own relative/bare {@code schemaLocation} siblings within that same
+   * subdirectory instead of accidentally falling back to the top-level schema directory.
+   */
   private void getXSDInChildren(
-      NodeList nodeList,
-      ResourceLoader resourceLoader,
-      Map<String, Document> documents,
-      String schemaPrefix) {
+      NodeList nodeList, Resource currentResource, Map<String, Document> documents) {
     for (int i = 0; i < nodeList.getLength(); i++) {
       Element importElement = (Element) nodeList.item(i);
 
-      var schemaLocation = importElement.getAttribute("schemaLocation");
-      schemaLocation = schemaPrefix + schemaLocation;
-      var document = getDocumentForLocation(schemaLocation, resourceLoader);
-      if (documents.containsKey(schemaLocation) || document == null) {
+      var schemaLocationAttr = importElement.getAttribute("schemaLocation");
+      if (schemaLocationAttr.isBlank()) {
         continue;
       }
 
-      documents.put(schemaLocation, document);
-      getRelatedXSD(document, resourceLoader, documents, schemaPrefix);
+      Resource resource;
+      try {
+        resource = currentResource.createRelative(schemaLocationAttr);
+      } catch (IOException e) {
+        log.error("error resolving relative schema location: {}", schemaLocationAttr, e);
+        continue;
+      }
+
+      var key = resource.getDescription();
+      if (documents.containsKey(key)) {
+        continue;
+      }
+
+      var document = getDocumentForLocation(resource);
+      if (document == null) {
+        continue;
+      }
+
+      documents.put(key, document);
+      getRelatedXSD(document, resource, documents);
     }
   }
 
