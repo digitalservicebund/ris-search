@@ -35,7 +35,7 @@ class MarkdownGeneratorTest {
   }
 
   @Test
-  void buildMarkdownTableMergesGermanAndEnglishDescriptionsOfTheSameKeyIntoOneRow() {
+  void buildMarkdownTableMergesLanguagesIntoOneRow() {
     var descriptions =
         List.of(
             new DescriptionKey("ris:gericht", "Gericht", "de", DocumentKind.CASE_LAW),
@@ -43,8 +43,9 @@ class MarkdownGeneratorTest {
 
     var table = MarkdownGenerator.buildMarkdownTable(descriptions);
 
-    assertThat(table).contains("| ris:gericht | Gericht | Court |" + System.lineSeparator());
-    assertThat(table).containsOnlyOnce("ris:gericht");
+    assertThat(table)
+        .contains("| ris:gericht | Gericht | Court |" + System.lineSeparator())
+        .containsOnlyOnce("ris:gericht");
   }
 
   @Test
