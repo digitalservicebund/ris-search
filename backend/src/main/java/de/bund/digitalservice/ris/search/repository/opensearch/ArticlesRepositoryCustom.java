@@ -19,9 +19,15 @@ public interface ArticlesRepositoryCustom {
    *
    * @param documentNumber the document number prefix
    * @param type the legislation part type to filter on
+   * @param preferredExpressionEli if this expressionEli occurs in a collapse group, that group's
+   *     Article is returned as the representative instead of whichever one OpenSearch's collapsing
+   *     would otherwise pick; may be {@code null} to leave the default selection untouched
    * @param pageable the pagination parameters defining page size and index
    * @return a page of articles, one per distinct document number, with their expressionElis
    */
-  Page<ArticleWithExpressions> findAllByDocumentNumberStartingWithAndDocumentType(
-      String documentNumber, LegislationPartType type, Pageable pageable);
+  Page<ArticleWithExpressions> findAllVersionsByDocumentNumber(
+      String documentNumber,
+      LegislationPartType type,
+      String preferredExpressionEli,
+      Pageable pageable);
 }

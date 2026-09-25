@@ -1,8 +1,6 @@
 import { mockNuxtImport, renderSuspended } from "@nuxt/test-utils/runtime";
 import { userEvent } from "@testing-library/user-event/dist/cjs/index.js";
 import { screen } from "@testing-library/vue";
-// oxlint-disable-next-line no-restricted-imports
-import Tooltip from "primevue/tooltip";
 import { describe, expect, it, vi } from "vitest";
 import LiteratureActionMenu from "~/components/documents/actionMenu/LiteratureActionMenu.vue";
 import type { Literature } from "~/types/api";
@@ -30,7 +28,6 @@ function renderLiteratureActionMenu() {
       literature: mockedLiterature,
     },
     global: {
-      directives: { tooltip: Tooltip },
       stubs: {
         NuxtLink: {
           template: '<a :href="to"><slot /></a>',

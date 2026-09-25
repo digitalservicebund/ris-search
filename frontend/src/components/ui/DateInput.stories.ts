@@ -4,6 +4,7 @@ import { html } from "../../utils/tags";
 import UiDateInput from "./DateInput.vue";
 
 const meta: Meta<typeof UiDateInput> = {
+  title: "DateInput",
   component: UiDateInput,
   tags: ["autodocs"],
   args: {

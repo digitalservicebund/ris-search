@@ -63,10 +63,6 @@ const selfLabelId = (value: string) => `${uid}-${value}-self-label`;
 
 // Classes ------------------------------------------------
 
-// We need both the inset-0 and explicit width and height to ensure the input
-// spans the full size of the control in all browsers
-const input = tw`peer absolute inset-0 h-full w-full cursor-pointer appearance-none opacity-0`;
-
 const row = tw`flex w-full border-l-4 border-transparent p-16 pl-[1.125rem] text-left text-blue-800`;
 
 const radioRow = tw`pointer-events-none peer-hover:border-blue-500 peer-hover:bg-blue-200 peer-active:border-blue-800 peer-active:bg-blue-300`;
@@ -85,10 +81,6 @@ const inactive = tw`typo-label1-regular`;
 const branch = tw`typo-label1-bold border-l-blue-500 bg-blue-200 text-blue-900 peer-hover:border-l-blue-500 peer-hover:bg-blue-300 peer-active:border-l-blue-800 peer-active:bg-blue-300`;
 
 const selected = tw`typo-label1-bold border-l-blue-800 bg-blue-300 text-blue-900 peer-hover:border-l-blue-900 peer-hover:bg-blue-500 peer-active:border-l-blue-900 peer-active:bg-blue-500 hover:border-l-blue-900 hover:bg-blue-500`;
-
-const list = tw`flex flex-col gap-2`;
-
-const nestedList = tw`mt-2 flex flex-col gap-2 pl-20`;
 
 function itemClass(item: RadioTreeItem) {
   const isSelected = item.value === modelValue && !hasSelfRow(item);
@@ -125,19 +117,21 @@ function selfClass(item: RadioTreeItem) {
 </script>
 
 <template>
-  <ul :class="list">
+  <ul class="flex flex-col gap-2">
     <li v-for="item in items" :key="item.value" class="group">
       <div class="relative">
         <!-- Two labels point at this radio once the self row is shown, and both
         would end up in its accessible name. The self row is the one carrying
         the selection and the focus ring by then, so the radio is named after
         it. -->
+        <!-- We need both `inset-0` and explicit width/height to ensure the
+        input spans the full size of the control in all browsers. -->
         <input
           :aria-labelledby="
             showsSelfRow(item) ? selfLabelId(item.value) : undefined
           "
           :checked="item.value === modelValue"
-          :class="input"
+          class="peer absolute inset-0 h-full w-full cursor-pointer appearance-none opacity-0"
           :id="inputId(item.value)"
           :name="uid"
           :value="item.value"
@@ -149,7 +143,10 @@ function selfClass(item: RadioTreeItem) {
         </label>
       </div>
 
-      <ul v-if="item.children?.length && isExpanded(item)" :class="nestedList">
+      <ul
+        v-if="item.children?.length && isExpanded(item)"
+        class="mt-2 flex flex-col gap-2 pl-20"
+      >
         <!-- Hidden from assistive technology: this row is a second label for
         the radio of the item above, which is already announced under this
         row's own text. -->
@@ -164,9 +161,11 @@ function selfClass(item: RadioTreeItem) {
         </li>
 
         <li v-for="child in item.children" :key="child.value" class="relative">
+          <!-- We need both `inset-0` and explicit width/height to ensure the
+          input spans the full size of the control in all browsers. -->
           <input
             :checked="child.value === modelValue"
-            :class="input"
+            class="peer absolute inset-0 h-full w-full cursor-pointer appearance-none opacity-0"
             :id="inputId(child.value)"
             :name="uid"
             :value="child.value"

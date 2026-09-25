@@ -5,6 +5,7 @@ import UiButton from "./Button.vue";
 import UiDrawer from "./Drawer.vue";
 
 const meta: Meta<typeof UiDrawer> = {
+  title: "Drawer",
   component: UiDrawer,
   tags: ["autodocs"],
   args: {

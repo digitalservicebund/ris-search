@@ -22,6 +22,7 @@ type BreadcrumbArgs = {
 };
 
 const meta: Meta<BreadcrumbArgs> = {
+  title: "Breadcrumb",
   component: UiBreadcrumb as unknown as ConcreteComponent<BreadcrumbArgs>,
   tags: ["autodocs"],
   args: {

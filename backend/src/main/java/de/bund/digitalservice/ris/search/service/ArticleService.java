@@ -47,9 +47,6 @@ public class ArticleService {
   private final ElasticsearchOperations operations;
   private final ArticlesRepository articlesRepository;
 
-  // the first 21 characters of the document number identify an article across expressions
-  private static final int DOC_NUMBER_PREFIX_LENGTH = 21;
-
   /**
    * Constructs a new instance of {@code ArticleService}.
    *
@@ -177,7 +174,10 @@ public class ArticleService {
             actualEid ->
                 articlesRepository.findById(Article.buildId(expressionEliString, actualEid)))
         .map(Article::getDocumentNumber)
-        .map(docNr -> this.getAllArticleVersionsByDocumentNumberPrefix(docNr, sortedPageable))
+        .map(
+            docNr ->
+                this.getAllArticleVersionsByDocumentNumberPrefix(
+                    docNr, expressionEliString, sortedPageable))
         .orElseGet(Page::empty);
   }
 
@@ -188,19 +188,21 @@ public class ArticleService {
    * matches.
    *
    * @param documentNumber of a given article
+   * @param preferredExpressionEli the expressionEli that was originally queried; if it occurs among
+   *     a version group's expressions, that group's returned Article is forced to be the one
+   *     belonging to this expressionEli, instead of an arbitrary one
    * @return List of Article objects of the same article across all its expressions, with their
    *     expressionElis
    */
   private Page<ArticleWithExpressions> getAllArticleVersionsByDocumentNumberPrefix(
-      String documentNumber, Pageable page) {
-    if (documentNumber.length() < DOC_NUMBER_PREFIX_LENGTH) {
+      String documentNumber, String preferredExpressionEli, Pageable page) {
+
+    try {
+      return articlesRepository.findAllVersionsByDocumentNumber(
+          documentNumber, LegislationPartType.ARTICLE, preferredExpressionEli, page);
+    } catch (IllegalArgumentException _) {
       return Page.empty();
     }
-
-    String documentNumberPrefix = documentNumber.substring(0, DOC_NUMBER_PREFIX_LENGTH);
-
-    return articlesRepository.findAllByDocumentNumberStartingWithAndDocumentType(
-        documentNumberPrefix, LegislationPartType.ARTICLE, page);
   }
 
   private boolean articleExist(String expressionEli, String eid) {

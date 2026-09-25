@@ -754,7 +754,7 @@ test.describe("searching caselaw", () => {
         .getByRole("radio", { name: "Alle Dokumentarten" })
         .click();
 
-      await expect(getResultCounter(page)).toHaveText("44 Suchergebnisse");
+      await expect(getResultCounter(page)).toHaveText("45 Suchergebnisse");
 
       // Verify caselaw-specific filters are reset
       await expect(page).not.toHaveURL(/documentKind=R/);
@@ -1115,44 +1115,44 @@ test.describe("mobile filter and sort drawers", () => {
     );
   });
 
-  test("aligns the court suggestions overlay with the input field", async ({
-    page,
-  }) => {
-    await navigate(page, "/suche?documentKind=R");
+  test(
+    "aligns the court suggestions overlay with the input field",
+    { tag: ["@RISDEV-12188"] },
+    async ({ page }) => {
+      await navigate(page, "/suche?documentKind=R");
 
-    await page.getByRole("button", { name: "Filtern" }).click();
-    const dialog = page.getByRole("dialog", { name: "Filtern" });
-    await expect(dialog).toBeVisible();
+      await page.getByRole("button", { name: "Filtern" }).click();
+      const dialog = page.getByRole("dialog", { name: "Filtern" });
+      await expect(dialog).toBeVisible();
 
-    const field = dialog.getByTestId("court-filter-field");
-    await dialog.getByRole("combobox", { name: "Gericht" }).fill("LG");
+      const input = dialog.getByRole("combobox", { name: "Gericht" });
+      // The combobox's bordered wrapper (input + buttons) is what the
+      // popover is sized and positioned against, not just the input itself.
+      const field = input.locator("..");
+      await input.fill("LG");
 
-    // The overlay is teleported to <body>, so it's not a descendant of the
-    // dialog - only one instance of it can be open at a time though. Its
-    // `role="listbox"` sits on the inner options list, which is inset from
-    // the outer panel by padding, so the panel (identified by the marker
-    // class CourtFilter.vue applies for its own alignment fix) is what
-    // needs to line up with the field, not the listbox itself.
-    const overlayPanel = page.locator(".court-filter-overlay");
+      // Teleported to <body>, so not a descendant of the dialog - only one
+      // instance can be open at a time though.
+      const overlayPanel = page.getByRole("listbox");
 
-    // Wait for the actual search results, not just the overlay shell - the
-    // option list keeps resizing (and re-triggering PrimeVue's own,
-    // overridden alignment) until the debounced search resolves.
-    await expect(
-      page.getByRole("option", { name: "Landgericht Hamburg Label" }),
-    ).toBeVisible();
+      // Wait for the actual search results, not just the overlay shell - the
+      // option list keeps resizing until the debounced search resolves.
+      await expect(
+        page.getByRole("option", { name: "Landgericht Hamburg Label" }),
+      ).toBeVisible();
 
-    const fieldBox = await field.boundingBox();
-    const overlayBox = await overlayPanel.boundingBox();
-    expect(fieldBox).not.toBeNull();
-    expect(overlayBox).not.toBeNull();
+      const fieldBox = await field.boundingBox();
+      const overlayBox = await overlayPanel.boundingBox();
+      expect(fieldBox).not.toBeNull();
+      expect(overlayBox).not.toBeNull();
 
-    expect(overlayBox!.x).toBeCloseTo(fieldBox!.x, 0);
-    expect(overlayBox!.x + overlayBox!.width).toBeCloseTo(
-      fieldBox!.x + fieldBox!.width,
-      0,
-    );
-  });
+      expect(overlayBox!.x).toBeCloseTo(fieldBox!.x, 0);
+      expect(overlayBox!.x + overlayBox!.width).toBeCloseTo(
+        fieldBox!.x + fieldBox!.width,
+        0,
+      );
+    },
+  );
 
   test("applies a date filter from the filter drawer", async ({ page }) => {
     await navigate(page, "/suche?documentKind=R");

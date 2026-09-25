@@ -43,7 +43,7 @@ jobs:
           persist-credentials: false
 
       - name: Setup pnpm and Node
-        uses: pnpm/setup@703c52620218391530e48b9e8870d5c0082e1b9b # v2.1.0
+        uses: pnpm/setup@fbda4c85fc2e1e08721cd8763afea8f48d60f024 # v3.0.0
         with:
           package-json-file: ${{ env.API_DOCS_ROOT }}/package.json
           cache: true
@@ -76,7 +76,7 @@ jobs:
           persist-credentials: false
 
       - name: Setup pnpm and Node
-        uses: pnpm/setup@703c52620218391530e48b9e8870d5c0082e1b9b # v2.1.0
+        uses: pnpm/setup@fbda4c85fc2e1e08721cd8763afea8f48d60f024 # v3.0.0
         with:
           package-json-file: ${{ env.API_DOCS_ROOT }}/package.json
           cache: true
@@ -115,7 +115,7 @@ jobs:
           persist-credentials: false
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@37fe631027851001ddb9b187196cc803df7f5f0e # v4
+        uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4
 
       - name: Log into container registry
         uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4

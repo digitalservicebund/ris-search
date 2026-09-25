@@ -4,6 +4,7 @@ import { html } from "../../utils/tags";
 import UiMessage from "./Message.vue";
 
 const meta: Meta<typeof UiMessage> = {
+  title: "Message",
   component: UiMessage,
 
   tags: ["autodocs"],

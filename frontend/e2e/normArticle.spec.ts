@@ -434,7 +434,7 @@ test.describe("geltungszeiträume tab", { tag: ["@RISDEV-11132"] }, () => {
 
     await navigate(
       page,
-      "gesetze/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/hauptteil-n1_abschnitt-n1_art-z1",
+      "gesetze/eli/bund/bgbl-1/2020/s1234/2020-01-01/1/deu/art-z1",
     );
 
     await page.getByRole("tab", { name: "Geltungszeiträume" }).click();
@@ -445,6 +445,117 @@ test.describe("geltungszeiträume tab", { tag: ["@RISDEV-11132"] }, () => {
         level: 2,
       }),
     ).toBeVisible();
+
+    const geltungszeitenList = page.getByRole("list", {
+      name: "Geltungszeiträume",
+    });
+    await expect(geltungszeitenList).toBeVisible();
+
+    const listItems = geltungszeitenList.getByRole("listitem");
+    await expect(listItems).toHaveText([
+      "Gültig ab: 01.01.2022 Gültig bis: –",
+      "Gültig ab: 01.01.2021 Gültig bis: 31.12.2021",
+      "Gültig ab: 01.01.2020 Gültig bis: 31.12.2020",
+    ]);
+  });
+
+  test("can filter geltungszeiträume by date", async ({
+    page,
+    privateFeaturesEnabled,
+  }) => {
+    test.skip(!privateFeaturesEnabled);
+
+    await navigate(
+      page,
+      "gesetze/eli/bund/bgbl-1/2020/s1234/2020-01-01/1/deu/art-z1?view=geltungszeiten",
+    );
+
+    const listItems = page
+      .getByRole("list", { name: "Geltungszeiträume" })
+      .getByRole("listitem");
+
+    await expect(listItems).toHaveCount(3);
+
+    await page.getByRole("textbox", { name: "Gültig am" }).fill("01.07.2021");
+
+    await expect(listItems).toHaveText([
+      "Gültig ab: 01.01.2021 Gültig bis: 31.12.2021",
+    ]);
+  });
+
+  test("shows no results placeholder when no geltungszeitraum found", async ({
+    page,
+    privateFeaturesEnabled,
+  }) => {
+    test.skip(!privateFeaturesEnabled);
+
+    await navigate(
+      page,
+      "gesetze/eli/bund/bgbl-1/2020/s1234/2020-01-01/1/deu/art-z1?view=geltungszeiten",
+    );
+
+    const listItems = page
+      .getByRole("list", { name: "Geltungszeiträume" })
+      .getByRole("listitem");
+
+    await expect(listItems).toHaveCount(3);
+
+    await page.getByRole("textbox", { name: "Gültig am" }).fill("01.07.1536");
+
+    await expect(listItems).toHaveText(["Keine Ergebnisse gefunden"]);
+  });
+
+  test("can view the content of different article version", async ({
+    page,
+    privateFeaturesEnabled,
+  }) => {
+    test.skip(!privateFeaturesEnabled);
+
+    await navigate(
+      page,
+      "gesetze/eli/bund/bgbl-1/2020/s1234/2020-01-01/1/deu/art-z1?view=geltungszeiten",
+    );
+
+    // no row is expanded
+    await expect(page.getByText("Erste Version des § 1.")).not.toBeVisible();
+    await expect(page.getByText("Zweite Version des § 1.")).not.toBeVisible();
+    await expect(page.getByText("Dritte Version des § 1.")).not.toBeVisible();
+
+    // expand the first row
+    await page.getByText("Gültig ab: 01.01.2022 Gültig bis: –").click();
+    await expect(page.getByText("Dritte Version des § 1.")).toBeVisible();
+
+    // clicking a different row closes the previous and expands the new one
+    await page
+      .getByText("Gültig ab: 01.01.2021 Gültig bis: 31.12.2021")
+      .click();
+    await expect(page.getByText("Dritte Version des § 1.")).not.toBeVisible();
+    await expect(page.getByText("Zweite Version des § 1.")).toBeVisible();
+
+    // clicking an expanded row again closes it
+    await page
+      .getByText("Gültig ab: 01.01.2021 Gültig bis: 31.12.2021")
+      .click();
+    await expect(page.getByText("Zweite Version des § 1.")).not.toBeVisible();
+  });
+
+  test("can't expand the row of the current article", async ({
+    page,
+    privateFeaturesEnabled,
+  }) => {
+    test.skip(!privateFeaturesEnabled);
+
+    await navigate(
+      page,
+      "gesetze/eli/bund/bgbl-1/2020/s1234/2020-01-01/1/deu/art-z1?view=geltungszeiten",
+    );
+
+    // try to expand the disabled row
+    await page
+      .getByText("Gültig ab: 01.01.2020 Gültig bis: 31.12.2020")
+      .click();
+    // content is not displayed
+    await expect(page.getByText("Erste Version des § 1.")).not.toBeVisible();
   });
 
   test("hides geltungszeiträume tab when private features enabled and einzelnorm not an article", async ({

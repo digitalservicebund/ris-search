@@ -45,6 +45,10 @@ repositories {
     }
 }
 
+springBoot {
+    mainClass = "de.bund.digitalservice.ris.search.Application"
+}
+
 jacoco { toolVersion = libs.versions.jacoco.get() }
 
 testlogger {
@@ -107,6 +111,8 @@ dependencies {
 
     implementation(libs.ris.html.transformation)
 
+    implementation(libs.ris.xml.schema)
+
     compileOnly(libs.lombok)
     annotationProcessor(libs.lombok)
 
@@ -156,6 +162,7 @@ testing {
             named<JvmTestSuite>("test") {
                 dependencies {
                     implementation(libs.archunit.junit5)
+                    implementation(libs.reflections)
                 }
             }
 
@@ -236,6 +243,13 @@ project.tasks.sonar {
 }
 
 tasks {
+    register<JavaExec>("xsdDocumentation") {
+        group = "documentation"
+        description = "Generiert Markdown für XSD Dokumentationselemente"
+        mainClass.set("de.bund.digitalservice.ris.markdown.MarkdownGenerator")
+        classpath = sourceSets["main"].runtimeClasspath
+    }
+
     compileJava {
         options.release.set(25)
         options.compilerArgs.addAll(arrayOf())
@@ -282,9 +296,6 @@ tasks {
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(25)
-    }
-    sourceSets["main"].java {
-        srcDirs("build/generated/nlex")
     }
 }
 

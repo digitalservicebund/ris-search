@@ -7,6 +7,7 @@ import { html } from "../../utils/tags";
 import UiButton from "./Button.vue";
 
 const meta: Meta<typeof UiButton> = {
+  title: "Button",
   component: UiButton,
   tags: ["autodocs"],
   args: {

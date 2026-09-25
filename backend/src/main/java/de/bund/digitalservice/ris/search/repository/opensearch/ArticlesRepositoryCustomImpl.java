@@ -33,6 +33,9 @@ public class ArticlesRepositoryCustomImpl implements ArticlesRepositoryCustom {
 
   private final ElasticsearchOperations operations;
 
+  // the first 21 characters of the document number identify an article across its versions
+  private static final int DOC_NUMBER_PREFIX_LENGTH = 21;
+
   public ArticlesRepositoryCustomImpl(ElasticsearchOperations operations) {
     this.operations = operations;
   }
@@ -46,12 +49,24 @@ public class ArticlesRepositoryCustomImpl implements ArticlesRepositoryCustom {
    *
    * @param documentNumber the document number prefix
    * @param type the legislation part type to filter on
+   * @param preferredExpressionEli if this expressionEli occurs in a collapse group, that group's
+   *     Article is returned as the representative instead of whichever one OpenSearch's collapsing
+   *     would otherwise pick; may be {@code null} to leave the default selection untouched
    * @param pageable the pagination parameters defining page size and index
    * @return Page of ArticleWithExpressions
+   * @throws java.lang.IllegalArgumentException on invalid document numbers
    */
   @Override
-  public Page<ArticleWithExpressions> findAllByDocumentNumberStartingWithAndDocumentType(
-      String documentNumber, LegislationPartType type, Pageable pageable) {
+  public Page<ArticleWithExpressions> findAllVersionsByDocumentNumber(
+      String documentNumber,
+      LegislationPartType type,
+      String preferredExpressionEli,
+      Pageable pageable) {
+
+    if (documentNumber.length() <= DOC_NUMBER_PREFIX_LENGTH) {
+      throw new IllegalArgumentException("document number is too short");
+    }
+    String prefix = documentNumber.substring(0, DOC_NUMBER_PREFIX_LENGTH);
 
     CollapseBuilder collapseBuilder =
         new CollapseBuilder(Article.Fields.DOCUMENT_NUMBER)
@@ -69,8 +84,7 @@ public class ArticlesRepositoryCustomImpl implements ArticlesRepositoryCustom {
         new NativeSearchQueryBuilder()
             .withQuery(
                 QueryBuilders.boolQuery()
-                    .filter(
-                        QueryBuilders.prefixQuery(Article.Fields.DOCUMENT_NUMBER, documentNumber))
+                    .filter(QueryBuilders.prefixQuery(Article.Fields.DOCUMENT_NUMBER, prefix))
                     .filter(QueryBuilders.termQuery(Article.Fields.DOCUMENT_TYPE, type.name())))
             .withCollapseBuilder(collapseBuilder)
             .withAggregations(distinctDocumentNumbersAggregation)
@@ -80,10 +94,19 @@ public class ArticlesRepositoryCustomImpl implements ArticlesRepositoryCustom {
     SearchHits<Article> hits = operations.search(query, Article.class);
     SearchPage<Article> searchPage = PageUtils.unwrapSearchHits(hits, pageable);
     List<ArticleWithExpressions> content =
-        searchPage.stream().map(this::toArticleWithExpressions).toList();
+        searchPage.stream()
+            .map(hit -> toArticleWithExpressions(hit, preferredExpressionEli, documentNumber))
+            .toList();
     return new PageImpl<>(content, pageable, getDistinctDocumentNumberCount(hits));
   }
 
+  /**
+   * A cardinality aggregation on the collapse field is used to report the correct total number of
+   * distinct document numbers.
+   *
+   * @param hits SearchHits of a versions query
+   * @return total count of distinct documentNumbers
+   */
   private long getDistinctDocumentNumberCount(SearchHits<Article> hits) {
     if (!(hits.getAggregations() instanceof OpenSearchAggregations aggregationsWrapper)) {
       return hits.getTotalHits();
@@ -97,15 +120,38 @@ public class ArticlesRepositoryCustomImpl implements ArticlesRepositoryCustom {
     return cardinality.getValue();
   }
 
-  private ArticleWithExpressions toArticleWithExpressions(SearchHit<Article> hit) {
+  /**
+   * Maps a version query Article SearchHit to an Article With all expressions it is part of. In
+   * case the same article is found across multiple expressionElis the article matching the
+   * preferredExpressionEli takes precedence as the result. The expressions list itself is not
+   * affected.
+   *
+   * @param hit SearchHit the versions query
+   * @param preferredExpressionEli to display article of a specific expression in the result if
+   *     multiple are valid
+   * @param documentNumber used to only check preferredExpressionEli on matching documentNumbers
+   * @return ArticleWithExpressions
+   */
+  private ArticleWithExpressions toArticleWithExpressions(
+      SearchHit<Article> hit, String preferredExpressionEli, String documentNumber) {
     SearchHits<?> innerHits = hit.getInnerHits().get(EXPRESSIONS_INNER_HIT_NAME);
-    List<String> expressionElis =
+    List<Article> versions =
         innerHits == null
-            ? List.of(hit.getContent().getExpressionEli())
-            : innerHits.stream()
-                .map(innerHit -> ((Article) innerHit.getContent()).getExpressionEli())
-                .distinct()
-                .toList();
-    return new ArticleWithExpressions(hit.getContent(), expressionElis);
+            ? List.of(hit.getContent())
+            : innerHits.stream().map(innerHit -> (Article) innerHit.getContent()).toList();
+
+    Article representative = hit.getContent();
+    if (representative.getDocumentNumber().equals(documentNumber)) {
+      representative =
+          versions.stream()
+              .filter(article -> article.getExpressionEli().equals(preferredExpressionEli))
+              .findFirst()
+              .orElse(representative);
+    }
+
+    List<String> expressionElis =
+        versions.stream().map(Article::getExpressionEli).distinct().toList();
+
+    return new ArticleWithExpressions(representative, expressionElis);
   }
 }

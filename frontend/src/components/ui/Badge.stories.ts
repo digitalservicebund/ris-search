@@ -3,6 +3,7 @@ import { html } from "../../utils/tags";
 import UiBadge from "./Badge.vue";
 
 const meta: Meta<typeof UiBadge> = {
+  title: "Badge",
   component: UiBadge,
   tags: ["autodocs"],
   args: {

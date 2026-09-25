@@ -6,8 +6,17 @@ import { icons } from "../config/icons.ts";
 
 const config: StorybookConfig = {
   stories: [
-    "../src/assets/**/*.stories.ts",
-    "../src/components/ui/**/*.stories.ts",
+    "./Startseite.mdx",
+    {
+      directory: "../src/assets",
+      files: "**/*.stories.ts",
+      titlePrefix: "Styleguide",
+    },
+    {
+      directory: "../src/components/ui",
+      files: "**/*.stories.ts",
+      titlePrefix: "Komponenten",
+    },
   ],
 
   addons: ["@storybook/addon-docs"],

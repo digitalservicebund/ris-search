@@ -87,14 +87,6 @@ const rootClass = computed(() => {
     [primaryText]: text && severity === "primary",
   };
 });
-
-const iconClass = computed(() => ({ "order-last": props.iconPos === "right" }));
-
-const loadingIconClass = computed(() =>
-  props.size === "large"
-    ? "!h-24 !w-24 !text-current"
-    : "!h-[1.34em] !w-[1.34em] !text-current",
-);
 </script>
 
 <template>
@@ -106,10 +98,14 @@ const loadingIconClass = computed(() =>
   >
     <ProgressSpinner
       v-if="loading"
-      :class="loadingIconClass"
+      :class="
+        size === 'large'
+          ? 'h-24! w-24! text-current!'
+          : 'h-[1.34em]! w-[1.34em]! text-current!'
+      "
       aria-hidden="true"
     />
-    <slot v-else name="icon" :class="iconClass" />
+    <slot v-else name="icon" :class="{ 'order-last': iconPos === 'right' }" />
     <span v-if="hasLabel">
       <slot>{{ label }}</slot>
     </span>

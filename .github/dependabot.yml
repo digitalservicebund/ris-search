@@ -33,9 +33,6 @@ updates:
         update-types:
           - minor
           - patch
-    ignore:
-      - dependency-name: "primevue"
-        versions: [">=5.0.0"]
   - package-ecosystem: "npm"
     directories:
       - "/api-docs"
@@ -47,6 +44,10 @@ updates:
     labels:
       - "api-docs"
       - "dependencies"
+    ignore:
+      # VitePress is pinned to a 2.0 prerelease. Every alpha so far has shipped
+      # breaking changes, so bump it by hand. Remove this once 2.0 is stable.
+      - dependency-name: "vitepress"
     groups:
       all-api-docs-non-major-dependencies:
         update-types:

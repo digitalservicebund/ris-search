@@ -15,6 +15,7 @@ type InputTextArgs = InstanceType<typeof UiInputText>["$props"] & {
 };
 
 const meta: Meta<InputTextArgs> = {
+  title: "InputText",
   component: UiInputText,
   tags: ["autodocs"],
   args: {

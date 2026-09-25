@@ -174,7 +174,7 @@ export interface NormArticleContent {
  */
 export function useFetchNormArticleContent(
   expressionEli: string,
-  articleEId?: string,
+  articleEId: string,
 ): AsyncData<
   NormArticleContent,
   NuxtError<NormContent> | NuxtError<null> | undefined
