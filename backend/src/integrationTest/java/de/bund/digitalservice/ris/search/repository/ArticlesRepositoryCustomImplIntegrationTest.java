@@ -7,7 +7,7 @@ import de.bund.digitalservice.ris.search.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.ArticleWithExpressions;
 import de.bund.digitalservice.ris.search.models.opensearch.LegislationPartType;
-import de.bund.digitalservice.ris.search.utils.eli.ExpressionEli;
+import de.bund.digitalservice.ris.search.utils.eli.ExpressionEliPath;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,14 +29,18 @@ class ArticlesRepositoryCustomImplIntegrationTest extends ContainersIntegrationB
 
   @Test
   void itGroupsArticlesByDocumentNumberAndReturnsTheirExpressionElis() {
-    ExpressionEli work1Expression1 =
-        new ExpressionEli("bund", "bgbl-1", "2020", "s1126", LocalDate.of(2025, 5, 5), 1, "deu");
-    ExpressionEli work1Expression2 =
-        new ExpressionEli("bund", "bgbl-1", "2020", "s1126", LocalDate.of(2026, 5, 5), 1, "deu");
-    ExpressionEli work1Expression3 =
-        new ExpressionEli("bund", "bgbl-1", "2020", "s1126", LocalDate.of(2027, 5, 5), 1, "deu");
-    ExpressionEli work2Expression1 =
-        new ExpressionEli("bund", "bgbl-1", "2020", "s2222", LocalDate.of(2025, 5, 5), 1, "deu");
+    ExpressionEliPath work1Expression1 =
+        new ExpressionEliPath(
+            "bund", "bgbl-1", "2020", "s1126", LocalDate.of(2025, 5, 5), 1, "deu");
+    ExpressionEliPath work1Expression2 =
+        new ExpressionEliPath(
+            "bund", "bgbl-1", "2020", "s1126", LocalDate.of(2026, 5, 5), 1, "deu");
+    ExpressionEliPath work1Expression3 =
+        new ExpressionEliPath(
+            "bund", "bgbl-1", "2020", "s1126", LocalDate.of(2027, 5, 5), 1, "deu");
+    ExpressionEliPath work2Expression1 =
+        new ExpressionEliPath(
+            "bund", "bgbl-1", "2020", "s2222", LocalDate.of(2025, 5, 5), 1, "deu");
 
     // Given is an article that exists in the same exact version across expression 1 and 2 and in
     // another version on expression 3
@@ -112,10 +116,12 @@ class ArticlesRepositoryCustomImplIntegrationTest extends ContainersIntegrationB
 
   @Test
   void itPrefersTheGivenExpressionEliAsTheRepresentativeArticle() {
-    ExpressionEli work1Expression1 =
-        new ExpressionEli("bund", "bgbl-1", "2020", "s1126", LocalDate.of(2025, 5, 5), 1, "deu");
-    ExpressionEli work1Expression2 =
-        new ExpressionEli("bund", "bgbl-1", "2020", "s1126", LocalDate.of(2026, 5, 5), 1, "deu");
+    ExpressionEliPath work1Expression1 =
+        new ExpressionEliPath(
+            "bund", "bgbl-1", "2020", "s1126", LocalDate.of(2025, 5, 5), 1, "deu");
+    ExpressionEliPath work1Expression2 =
+        new ExpressionEliPath(
+            "bund", "bgbl-1", "2020", "s1126", LocalDate.of(2026, 5, 5), 1, "deu");
 
     // Given is an article that exists in the same exact version across two expressions, so
     // OpenSearch's collapsing could pick either one as the representative document.
@@ -170,8 +176,9 @@ class ArticlesRepositoryCustomImplIntegrationTest extends ContainersIntegrationB
   @ParameterizedTest
   @ValueSource(strings = {"PREAMBLE", "ARTICLE", "CONCLUSION"})
   void itFiltersByDocumentType(LegislationPartType type) {
-    ExpressionEli eli =
-        new ExpressionEli("bund", "bgbl-1", "2020", "s1126", LocalDate.of(2025, 5, 5), 1, "deu");
+    ExpressionEliPath eli =
+        new ExpressionEliPath(
+            "bund", "bgbl-1", "2020", "s1126", LocalDate.of(2025, 5, 5), 1, "deu");
 
     // we use the same docNumber across all entities to check the filter
     String expectedDocNumber = "DKNR0E1000000D000000100000";
@@ -194,7 +201,7 @@ class ArticlesRepositoryCustomImplIntegrationTest extends ContainersIntegrationB
   }
 
   private Article buildArticle(
-      ExpressionEli eli, String eId, String docNum, LegislationPartType type) {
+      ExpressionEliPath eli, String eId, String docNum, LegislationPartType type) {
     return Article.builder()
         .id(Article.buildId(eli.toString(), eId))
         .expressionEli(eli.toString())

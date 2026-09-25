@@ -10,9 +10,9 @@ import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
 import de.bund.digitalservice.ris.search.service.helper.ZipManager;
 import de.bund.digitalservice.ris.search.utils.PageUtils;
-import de.bund.digitalservice.ris.search.utils.eli.ExpressionEli;
-import de.bund.digitalservice.ris.search.utils.eli.ManifestationEli;
-import de.bund.digitalservice.ris.search.utils.eli.WorkEli;
+import de.bund.digitalservice.ris.search.utils.eli.ExpressionEliPath;
+import de.bund.digitalservice.ris.search.utils.eli.ManifestationEliPath;
+import de.bund.digitalservice.ris.search.utils.eli.WorkEliPath;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
@@ -101,11 +101,11 @@ public class NormsService {
   /**
    * Returns a {@link Norm} by its expression-level ELI.
    *
-   * @param expressionEli the expression-level ELI of the Norm to return
+   * @param expressionEliPath the expression-level ELI of the Norm to return
    * @return an {@link Optional} containing the Norm if found, or empty if not found
    */
-  public Optional<Norm> getByExpressionEli(final ExpressionEli expressionEli) {
-    Norm result = normsRepository.getByExpressionEliKeyword(expressionEli.toString());
+  public Optional<Norm> getByExpressionEli(final ExpressionEliPath expressionEliPath) {
+    Norm result = normsRepository.getByExpressionEliKeyword(expressionEliPath.toString());
     if (result != null) {
       result.setArticles(articleService.findAllByExpressionEli(result.getExpressionEli()));
     }
@@ -120,7 +120,7 @@ public class NormsService {
    * @throws ObjectStoreServiceException when a non recoverable objectsStore service exception
    *     occurred
    */
-  public Optional<byte[]> getNormFileByEli(ManifestationEli eli)
+  public Optional<byte[]> getNormFileByEli(ManifestationEliPath eli)
       throws ObjectStoreServiceException {
     return normsBucket.get(eli.toString());
   }
@@ -135,7 +135,7 @@ public class NormsService {
    * @param pageable pagination
    * @return Paginated Norms containing work_example metadata
    */
-  public Page<Norm> getWorkExpressions(WorkEli workEli, Pageable pageable) {
+  public Page<Norm> getWorkExpressions(WorkEliPath workEli, Pageable pageable) {
     Pageable sortedPageable =
         PageRequest.of(
             pageable.getPageNumber(),

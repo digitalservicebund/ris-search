@@ -1,19 +1,22 @@
-<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.8.2/">
-    <akn:act>
-        <akn:body>
-            <akn:article GUID="to-be-removed" eId="a">
-                <akn:num eId="b">§ 1</akn:num>
-                <akn:heading eId="c">Art 1</akn:heading>
-                <akn:paragraph eId="d">
-                    <akn:num eId="e">(1)</akn:num>
-                    <akn:content eId="f">
-                        <akn:p eId="g">This is inside the first p block</akn:p>
+<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.9/"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.9/ Grammatiken/Norms/legalDocML.de-metadaten-ris.xsd http://MetadatenRegelungstext.LegalDocML.de/1.9/ Grammatiken/legalDocML.de-metadaten-regelungstext.xsd http://MetadatenRechtsetzungsdokument.LegalDocML.de/1.9/ Grammatiken/legalDocML.de-metadaten-rechtsetzungsdokument.xsd http://Inhaltsdaten.LegalDocML.de/1.9/ Grammatiken/legalDocML.de-regelungstext.xsd">
+    <akn:act name="/akn/ontology/de/concept/documenttype/bund/regelungstext">
+        <akn:meta GUID="6039e45a-c57f-4e2c-863f-ab1270ae3cc5" eId="meta-n1"/>
+        <akn:body GUID="b33c4e2a-dff6-4cef-87bb-79318b8f4623" eId="hauptteil-n1">
+            <akn:article GUID="to-be-removed" eId="a" period="#meta-n1_geltzeiten-n1_geltungszeitgr-n1">
+                <akn:num  GUID="b33c4e2a-dff6-4cef-87bb-79318b8f4624" eId="b">§ 1</akn:num>
+                <akn:heading  GUID="b33c4e2a-dff6-4cef-87bb-79318b8f4625" eId="c">Art 1</akn:heading>
+                <akn:paragraph  GUID="b33c4e2a-dff6-4cef-87bb-79318b8f4626" eId="d">
+                    <akn:num  GUID="b33c4e2a-dff6-4cef-87bb-79318b8f4627" eId="e">(1)</akn:num>
+                    <akn:content  GUID="b33c4e2a-dff6-4cef-87bb-79318b8f4628" eId="f">
+                        <akn:p  GUID="b33c4e2a-dff6-4cef-87bb-79318b8f4629" eId="g">This is inside the first p block</akn:p>
                     </akn:content>
                 </akn:paragraph>
-                <akn:paragraph eId="h">
-                    <akn:num eId="i">(2)</akn:num>
-                    <akn:content eId="j">
-                        <akn:p eId="k">This is inside the second p block</akn:p>
+                <akn:paragraph  GUID="b33c4e2a-dff6-4cef-87bb-79318b8f4630" eId="h">
+                    <akn:num  GUID="b33c4e2a-dff6-4cef-87bb-79318b8f4631" eId="i">(2)</akn:num>
+                    <akn:content  GUID="b33c4e2a-dff6-4cef-87bb-79318b8f4632" eId="j">
+                        <akn:p  GUID="b33c4e2a-dff6-4cef-87bb-79318b8f4633" eId="k">This is inside the second p block</akn:p>
                     </akn:content>
                 </akn:paragraph>
             </akn:article>

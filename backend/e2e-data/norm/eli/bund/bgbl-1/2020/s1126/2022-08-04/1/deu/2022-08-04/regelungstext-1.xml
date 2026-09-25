@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-model href="Grammatiken/Norms/legalDocML.de.sch" schematypens="http://purl.oclc.org/dsdl/schematron"?>
-<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.8.2/"
-                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.8.2/ ../../../../../../../../../../../src/testFixtures/resources/Grammatiken/Norms/legalDocML.de-metadaten-ris.xsd http://Inhaltsdaten.LegalDocML.de/1.8.2/ ../../../../../../../../../../../src/testFixtures/resources/Grammatiken/Norms/legalDocML.de-regelungstextverkuendungsfassung.xsd">
-    <akn:act name="/akn/ontology/de/concept/documenttype/bund/regelungstext-verkuendung">
+<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.9/"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.9/ Grammatiken/Norms/legalDocML.de-metadaten-ris.xsd http://MetadatenRegelungstext.LegalDocML.de/1.9/ Grammatiken/legalDocML.de-metadaten-regelungstext.xsd http://MetadatenRechtsetzungsdokument.LegalDocML.de/1.9/ Grammatiken/legalDocML.de-metadaten-rechtsetzungsdokument.xsd http://Inhaltsdaten.LegalDocML.de/1.9/ Grammatiken/legalDocML.de-regelungstext.xsd">
+    <akn:act name="/akn/ontology/de/concept/documenttype/bund/regelungstext">
         <akn:meta GUID="f1e2d3c4-b5a6-4789-8cde-f01234567890" eId="meta-n1">
             <akn:identification GUID="e2d3c4b5-a6b7-4890-8cde-f1234567890a" eId="meta-n1_ident-n1" source="attributsemantik-noch-undefiniert">
                 <akn:FRBRWork GUID="d3c4b5a6-7890-8cde-f123-4567890ab1c2" eId="meta-n1_ident-n1_frbrwork-n1">
                     <akn:FRBRthis GUID="c4b5a6d7-8901-8cde-f234-567890ab1c2d" eId="meta-n1_ident-n1_frbrwork-n1_frbrthis-n1" value="eli/bund/bgbl-1/2020/s1126/regelungstext-1"/>
                     <akn:FRBRuri GUID="b5a6d7c4-9012-8cde-f345-67890ab1c2d3" eId="meta-n1_ident-n1_frbrwork-n1_frbruri-n1" value="eli/bund/bgbl-1/2020/s1126"/>
                     <akn:FRBRalias GUID="a6d7c4b5-0123-8cde-f456-7890ab1c2d3e" eId="meta-n1_ident-n1_frbrwork-n1_frbralias-n1" name="übergreifende-id" value="14c59287-d2fb-483f-b3fd-81abe4030e2e"/>
-                    <akn:FRBRdate GUID="d7c4b5a6-1234-8cde-f567-890ab1c2d3e4" date="2020-08-08" eId="meta-n1_ident-n1_frbrwork-n1_frbrdate-n1" name="verkuendungsfassung-verkuendungsdatum"/>
+                    <akn:FRBRdate GUID="d7c4b5a6-1234-8cde-f567-890ab1c2d3e4" date="2020-08-08" eId="meta-n1_ident-n1_frbrwork-n1_frbrdate-n1" name="verkuendungsdatum"/>
                     <akn:FRBRauthor GUID="c4b5a6d7-2345-8cde-f678-90ab1c2d3e4f" eId="meta-n1_ident-n1_frbrwork-n1_frbrauthor-n1" href="recht.bund.de/institution/bundesregierung"/>
                     <akn:FRBRcountry GUID="b5a6d7c4-3456-8cde-f789-0ab1c2d3e4f5" eId="meta-n1_ident-n1_frbrwork-n1_frbrcountry-n1" value="de"/>
                     <akn:FRBRnumber GUID="a6d7c4b5-4567-8cde-f890-1b2c3d4e5f60" eId="meta-n1_ident-n1_frbrwork-n1_frbrnumber-n1" value="s1126"/>
@@ -50,7 +51,9 @@
                 </akn:temporalGroup>
             </akn:temporalData>
             <akn:proprietary GUID="b0c1d2e3-f4a5-4890-abcd-901abcde1234" eId="meta-n1_proprietary-n1" source="attributsemantik-noch-undefiniert">
-                <ris:legalDocML.de_metadaten xmlns:ris="http://MetadatenRIS.LegalDocML.de/1.8.2/">
+                <ris:legalDocML.de_metadaten xmlns:ris="http://MetadatenRIS.LegalDocML.de/1.9/"
+                                             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                                             xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.9/ Grammatiken/Norms/legalDocML.de-metadaten-ris.xsd">
                     <ris:abkuerzung refersTo="interne-abkuerzung">RisFassTest</ris:abkuerzung>
                     <ris:inkraft date="2022-08-04"/>
                     <ris:ausserkraft date="2030-01-01"/>
@@ -68,10 +71,10 @@
                 </akn:p>
             </akn:longTitle>
         </akn:preface>
-        <akn:preamble GUID="b6c7d8e9-f0a1-4890-abcd-5678abcde123" eId="präambel-n1">
-            <akn:formula GUID="dddddddd-eeee-ffff-0000-222222222222" eId="präambel-n1_formel-n1" name="attributsemantik-noch-undefiniert"
+        <akn:preamble GUID="b6c7d8e9-f0a1-4890-abcd-5678abcde123" eId="praeambel-n1">
+            <akn:formula GUID="dddddddd-eeee-ffff-0000-222222222222" eId="praeambel-n1_formel-n1" name="attributsemantik-noch-undefiniert"
                          refersTo="eingangsformel">
-                <akn:p GUID="eeeeeeee-ffff-0000-1111-333333333333" eId="präambel-n1_formel-n1_text-n1">
+                <akn:p GUID="eeeeeeee-ffff-0000-1111-333333333333" eId="praeambel-n1_formel-n1_text-n1">
                     Fiktiver einleitender Prolog zum Testen von Fassungen des Gesetzes.
                 </akn:p>
             </akn:formula>
@@ -81,14 +84,14 @@
                 <akn:num GUID="22222222-aaaa-bbbb-cccc-222222222222" eId="hauptteil-n1_abschnitt-n1_bezeichnung-n1">
                     Abschnitt 1
                 </akn:num>
-                <akn:heading GUID="33333333-aaaa-bbbb-cccc-333333333333" eId="hauptteil-n1_abschnitt-n1_überschrift-n1">
+                <akn:heading GUID="33333333-aaaa-bbbb-cccc-333333333333" eId="hauptteil-n1_abschnitt-n1_ueberschrift-n1">
                     Anwendungsbereich
                 </akn:heading>
                 <akn:article GUID="44444444-aaaa-bbbb-cccc-444444444444" eId="hauptteil-n1_abschnitt-n1_art-z1" period="#meta-n1_geltzeiten-n1_geltungszeitgr-n1" refersTo="stammform">
                     <akn:num GUID="55555555-aaaa-bbbb-cccc-555555555555" eId="hauptteil-n1_abschnitt-n1_art-z1_bezeichnung-n1">
                         § 1
                     </akn:num>
-                    <akn:heading GUID="66666666-aaaa-bbbb-cccc-666666666666" eId="hauptteil-n1_abschnitt-n1_art-z1_überschrift-n1">
+                    <akn:heading GUID="66666666-aaaa-bbbb-cccc-666666666666" eId="hauptteil-n1_abschnitt-n1_art-z1_ueberschrift-n1">
                         Anwendungsbereich
                     </akn:heading>
                     <akn:paragraph GUID="77777777-aaaa-bbbb-cccc-777777777777" eId="hauptteil-n1_abschnitt-n1_art-z1_abs-z1">
@@ -111,10 +114,10 @@
             </akn:section>
             <akn:section GUID="d8e9f0a1-b2c3-4890-abcd-7890abcde123" eId="hauptteil-n1_abschnitt-n2">
                 <akn:num GUID="e9f0a1b2-c3d4-4890-abcd-890abcdef123" eId="hauptteil-n1_abschnitt-n2_bezeichnung-n1">Abschnitt 2</akn:num>
-                <akn:heading GUID="f0a1b2c3-d4e5-4890-abcd-901abcdef123" eId="hauptteil-n1_abschnitt-n2_überschrift-n1">Schluss- und Übergangsbestimmungen</akn:heading>
+                <akn:heading GUID="f0a1b2c3-d4e5-4890-abcd-901abcdef123" eId="hauptteil-n1_abschnitt-n2_ueberschrift-n1">Schluss- und Übergangsbestimmungen</akn:heading>
                 <akn:article GUID="a8e9f0a1-b2c3-4890-abcd-7890abcde123" eId="hauptteil-n1_abschnitt-n2_art-z1" period="#meta-n1_geltzeiten-n1_geltungszeitgr-n2" refersTo="stammform">
                     <akn:num GUID="a9f0a1b2-c3d4-4890-abcd-890abcdef123" eId="hauptteil-n1_abschnitt-n2_art-z1_bezeichnung-n1">Art 1</akn:num>
-                    <akn:heading GUID="0aa1b2c3-d4e5-4890-abcd-901abcdef123" eId="hauptteil-n1_abschnitt-n2_art-z1_überschrift-n1">Fiktive Bestimmungen zur Einführung</akn:heading>
+                    <akn:heading GUID="0aa1b2c3-d4e5-4890-abcd-901abcdef123" eId="hauptteil-n1_abschnitt-n2_art-z1_ueberschrift-n1">Fiktive Bestimmungen zur Einführung</akn:heading>
                     <akn:paragraph GUID="a1b2c3d4-e5f6-4890-abcd-0123456789ac" eId="hauptteil-n1_abschnitt-n2_art-z1_abs-z1">
                         <akn:num GUID="b2c3d4e5-f6a7-4890-abcd-1234567890bd" eId="hauptteil-n1_abschnitt-n2_art-z1_abs-z1_bezeichnung-n1">(1)</akn:num>
                         <akn:content GUID="c3d4e5f6-a7b8-4890-abcd-234567890cde" eId="hauptteil-n1_abschnitt-n2_art-z1_abs-z1_inhalt-n1">
@@ -130,7 +133,7 @@
                 </akn:article>
                 <akn:article GUID="c9d0e1f2-a3b4-4890-abcd-890cdef12345" eId="hauptteil-n1_abschnitt-n2_art-z2" period="#meta-n1_geltzeiten-n1_geltungszeitgr-n1" refersTo="stammform">
                     <akn:num GUID="d0e1f2a3-b4c5-4890-abcd-901cdef12345" eId="hauptteil-n1_abschnitt-n2_art-z2_bezeichnung-n1">Art 2</akn:num>
-                    <akn:heading GUID="e1f2a3b4-c5d6-4890-abcd-0123def12345" eId="hauptteil-n1_abschnitt-n2_art-z2_überschrift-n1"/>
+                    <akn:heading GUID="e1f2a3b4-c5d6-4890-abcd-0123def12345" eId="hauptteil-n1_abschnitt-n2_art-z2_ueberschrift-n1"/>
                     <akn:paragraph GUID="f2a3b4c5-d6e7-4890-abcd-1234ef123456" eId="hauptteil-n1_abschnitt-n2_art-z2_abs-z1">
                         <akn:num GUID="a3b4c5d6-e7f8-4890-abcd-2345ef123456" eId="hauptteil-n1_abschnitt-n2_art-z2_abs-z1_bezeichnung-n1">(1)</akn:num>
                         <akn:content GUID="b4c5d6e7-f8a9-4890-abcd-3456ef123456" eId="hauptteil-n1_abschnitt-n2_art-z2_abs-z1_inhalt-n1">

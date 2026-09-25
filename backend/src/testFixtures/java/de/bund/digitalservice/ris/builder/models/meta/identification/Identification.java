@@ -45,8 +45,8 @@ public class Identification extends BaseElement {
 
     EliFile eli = parsedEli.get();
 
-    this.frbrWork = new FRBRWork(eli.getWorkEli());
-    this.frbrExpression = new FRBRExpression(eli.getExpressionEli(), eli.fileName());
-    this.frbrManifestation = new FRBRManifestation(eli.getManifestationEli());
+    this.frbrWork = new FRBRWork(eli.getWorkEliPath());
+    this.frbrExpression = new FRBRExpression(eli.getExpressionEliPath(), eli.fileName());
+    this.frbrManifestation = new FRBRManifestation(eli.getManifestationEliPath());
   }
 }

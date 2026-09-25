@@ -10,9 +10,9 @@ import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
 import de.bund.digitalservice.ris.search.utils.BatchUtils;
 import de.bund.digitalservice.ris.search.utils.DateUtils;
 import de.bund.digitalservice.ris.search.utils.eli.EliFile;
-import de.bund.digitalservice.ris.search.utils.eli.ExpressionEli;
-import de.bund.digitalservice.ris.search.utils.eli.ManifestationEli;
-import de.bund.digitalservice.ris.search.utils.eli.WorkEli;
+import de.bund.digitalservice.ris.search.utils.eli.ExpressionEliPath;
+import de.bund.digitalservice.ris.search.utils.eli.ManifestationEliPath;
+import de.bund.digitalservice.ris.search.utils.eli.WorkEliPath;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.Month;
@@ -76,23 +76,24 @@ public class IndexNormsService implements IndexService {
   public void reindexAll(String startingTimestamp) {
     DateUtils.avoidOpenSearchSubMillisecondDateBug();
     List<String> allFiles = normsBucket.getAllKeysByPrefix("eli/");
-    Map<WorkEli, List<String>> workElis = groupFilesByWorkEli(allFiles.stream());
-    processWorkEliUpdates(workElis, startingTimestamp);
+    Map<WorkEliPath, List<String>> workEliPaths = groupFilesByWorkEliPath(allFiles.stream());
+    processNormWorkUpdates(workEliPaths, startingTimestamp);
     clearOldNorms(startingTimestamp);
   }
 
   @Override
   public void indexChangelog(Changelog changelog) {
     try {
-      Set<WorkEli> workElis =
+      Set<WorkEliPath> workEliPaths =
           getWorks(Stream.concat(changelog.getChanged().stream(), changelog.getDeleted().stream()));
 
-      // retrieve all file paths for the given workElis
-      Map<WorkEli, List<String>> allFilesByWorkEli = new HashMap<>();
-      for (WorkEli workEli : workElis) {
-        allFilesByWorkEli.put(workEli, normsBucket.getAllKeysByPrefix(workEli.toString() + "/"));
+      // retrieve all file paths for the given workEliPaths
+      Map<WorkEliPath, List<String>> allFilesByWorkEliPath = new HashMap<>();
+      for (WorkEliPath workEliPath : workEliPaths) {
+        allFilesByWorkEliPath.put(
+            workEliPath, normsBucket.getAllKeysByPrefix(workEliPath.toString() + "/"));
       }
-      processWorkEliUpdates(allFilesByWorkEli, Instant.now().toString());
+      processNormWorkUpdates(allFilesByWorkEliPath, Instant.now().toString());
     } catch (IllegalArgumentException e) {
       logger.error("Error while reading changelog file: {}", e.getMessage());
     }
@@ -104,69 +105,70 @@ public class IndexNormsService implements IndexService {
    * @param files list of file paths
    * @return Set of WorkElis
    */
-  private Set<WorkEli> getWorks(Stream<String> files) {
+  private Set<WorkEliPath> getWorks(Stream<String> files) {
     return files
         .map(EliFile::fromString)
         // this filters out the files that are not an EliFile
         .flatMap(Optional::stream)
-        .map(EliFile::getWorkEli)
+        .map(EliFile::getWorkEliPath)
         // collecting to a set makes sure each work eli occurs at most once
         .collect(Collectors.toSet());
   }
 
   /**
-   * takes a list of File paths and groups them by workEli
+   * takes a list of File paths and groups them by workEliPath
    *
    * @param files list of file paths
-   * @return Map of the paths grouped by workEli
+   * @return Map of the paths grouped by workEliPath
    */
-  private Map<WorkEli, List<String>> groupFilesByWorkEli(Stream<String> files) {
+  private Map<WorkEliPath, List<String>> groupFilesByWorkEliPath(Stream<String> files) {
     return files
         .map(EliFile::fromString)
         .flatMap(Optional::stream)
         .collect(
             Collectors.groupingBy(
-                EliFile::getWorkEli, Collectors.mapping(EliFile::toString, Collectors.toList())));
+                EliFile::getWorkEliPath,
+                Collectors.mapping(EliFile::toString, Collectors.toList())));
   }
 
-  private void processWorkEliUpdates(
-      Map<WorkEli, List<String>> workElis, String startingTimestamp) {
-    int processedWorkEli = 0;
-    int totalWorkElis = workElis.size();
+  private void processNormWorkUpdates(
+      Map<WorkEliPath, List<String>> workEliPaths, String startingTimestamp) {
+    int processedNormWork = 0;
+    int totalNormWorks = workEliPaths.size();
 
-    for (Map.Entry<WorkEli, List<String>> entry : workElis.entrySet()) {
+    for (Map.Entry<WorkEliPath, List<String>> entry : workEliPaths.entrySet()) {
       processOneNormWork(entry.getKey(), entry.getValue(), startingTimestamp);
 
-      processedWorkEli++;
-      if (processedWorkEli % BATCH_SIZE == 0 || processedWorkEli == totalWorkElis) {
-        logger.info("index progress: {}/{} works processed", processedWorkEli, totalWorkElis);
+      processedNormWork++;
+      if (processedNormWork % BATCH_SIZE == 0 || processedNormWork == totalNormWorks) {
+        logger.info("index progress: {}/{} works processed", processedNormWork, totalNormWorks);
       }
     }
   }
 
   private void processOneNormWork(
-      WorkEli workEli, List<String> filenames, String startingTimestamp) {
+      WorkEliPath workEliPath, List<String> filenames, String startingTimestamp) {
 
-    Set<ExpressionEli> expressionElis =
+    Set<ExpressionEliPath> expressionEliPathPaths =
         filenames.stream()
             .map(EliFile::fromString)
             .flatMap(Optional::stream)
-            .map(EliFile::getExpressionEli)
+            .map(EliFile::getExpressionEliPath)
             .collect(Collectors.toSet());
 
     // parse the norms
     List<Norm> normExpressions = new ArrayList<>();
-    for (ExpressionEli expressionEli : expressionElis) {
+    for (ExpressionEliPath expressionEliPath : expressionEliPathPaths) {
       try {
-        getNormFromS3(expressionEli, filenames).ifPresent(normExpressions::add);
+        getNormFromS3(expressionEliPath, filenames).ifPresent(normExpressions::add);
       } catch (ObjectStoreServiceException e) {
         // If we can't get the content of an expression we log an error and move on
         // That means on failure of a work "changed" it will end up deleted
-        logger.error("Error while reading norm file {}. {}", expressionEli, e.getMessage());
+        logger.error("Error while reading norm file {}. {}", expressionEliPath, e.getMessage());
       }
     }
 
-    addTimeRelevanceWindows(workEli.toString(), normExpressions);
+    addTimeRelevanceWindows(workEliPath.toString(), normExpressions);
 
     BatchUtils.processInBatches(normExpressions, BATCH_SIZE, normsRepository::saveAll);
     for (Norm norm : normExpressions) {
@@ -174,11 +176,11 @@ public class IndexNormsService implements IndexService {
     }
 
     // delete the expressions from this work that were indexed before the start time
-    normsRepository.deleteByWorkEliAndIndexedAtBefore(workEli.toString(), startingTimestamp);
-    articlesRepository.deleteByWorkEliAndIndexedAtBefore(workEli.toString(), startingTimestamp);
+    normsRepository.deleteByWorkEliAndIndexedAtBefore(workEliPath.toString(), startingTimestamp);
+    articlesRepository.deleteByWorkEliAndIndexedAtBefore(workEliPath.toString(), startingTimestamp);
   }
 
-  private void addTimeRelevanceWindows(String workEli, List<Norm> norms) {
+  private void addTimeRelevanceWindows(String workEliPath, List<Norm> norms) {
     // Prototype won't have valid norms (in terms of ris:inkraft) until 2028
     // This check is for prototype
     if (norms.size() == 1) {
@@ -187,7 +189,7 @@ public class IndexNormsService implements IndexService {
       return;
     }
 
-    filterAndSortNorms(workEli, norms);
+    filterAndSortNorms(workEliPath, norms);
 
     if (norms.isEmpty()) {
       return;
@@ -207,12 +209,13 @@ public class IndexNormsService implements IndexService {
     norms.getLast().setTimeRelevanceEndDate(TIME_RELEVANCE_MAX);
   }
 
-  private void filterAndSortNorms(String workEli, List<Norm> norms) {
+  private void filterAndSortNorms(String workEliPath, List<Norm> norms) {
     // remove the norms that don't have inkraft defined
     norms.removeIf(e -> e.getEntryIntoForceDate() == null);
 
     if (norms.isEmpty()) {
-      logger.warn("Trying to index {}, but no expressions have EntryIntoForce defined", workEli);
+      logger.warn(
+          "Trying to index {}, but no expressions have EntryIntoForce defined", workEliPath);
       return;
     }
 
@@ -225,14 +228,14 @@ public class IndexNormsService implements IndexService {
     norms.removeIf(e -> e.getExpiryDate() == null && !lastNormId.equals(e.getId()));
 
     // validate that in force ranges don't overlap
-    validateExpressionsDontOverlap(workEli, norms);
+    validateExpressionsDontOverlap(workEliPath, norms);
   }
 
-  private static void validateExpressionsDontOverlap(String workEli, List<Norm> norms) {
+  private static void validateExpressionsDontOverlap(String workEliPath, List<Norm> norms) {
     for (int i = 1; i < norms.size(); i++) {
       if (norm2StartsBeforeNorm1Ends(norms.get(i - 1), norms.get(i))) {
         logger.warn(
-            "Trying to index {}, but expressions' inkraft and ausserkraft overlap.", workEli);
+            "Trying to index {}, but expressions' inkraft and ausserkraft overlap.", workEliPath);
         norms.clear();
         return;
       }
@@ -243,30 +246,30 @@ public class IndexNormsService implements IndexService {
     return !norm2.getEntryIntoForceDate().isAfter(norm1.getExpiryDate());
   }
 
-  private Optional<Norm> getNormFromS3(ExpressionEli expressionEli, List<String> filenames)
+  private Optional<Norm> getNormFromS3(ExpressionEliPath expressionEliPath, List<String> filenames)
       throws ObjectStoreServiceException {
 
     // Get all files for the current expression.
-    final List<String> keysMatchingExpressionEli =
-        filenames.stream().filter(n -> n.startsWith(expressionEli.toString())).toList();
+    final List<String> keysMatchingExpressionEliPath =
+        filenames.stream().filter(n -> n.startsWith(expressionEliPath.toString())).toList();
 
     Optional<String> newestFileName =
-        keysMatchingExpressionEli.stream()
+        keysMatchingExpressionEliPath.stream()
             // filter only valid Eli files
             .map(EliFile::fromString)
             .flatMap(Optional::stream)
             // Convert to manifestation Eli. This will create duplicates, but it doesn't matter
-            .map(EliFile::getManifestationEli)
+            .map(EliFile::getManifestationEliPath)
             // only get the manifestation files that represent expression xml files
             .filter(e -> e.subtype().startsWith("regelungstext-"))
             // take the manifestation with the latest pointInTimeManifestation
-            .map(ManifestationEli::toString)
+            .map(ManifestationEliPath::toString)
             .max(java.util.Comparator.naturalOrder());
 
     if (newestFileName.isEmpty()) {
       logger.error(
           "Expression '{}' either doesn't exist or is missing a regelungstext-verkuendungsfassung.xml.",
-          expressionEli);
+          expressionEliPath);
       return Optional.empty();
     }
     String fileName = newestFileName.get();
@@ -276,7 +279,7 @@ public class IndexNormsService implements IndexService {
       return Optional.empty();
     }
 
-    Map<String, String> attachments = getXmlAttachments(fileName, keysMatchingExpressionEli);
+    Map<String, String> attachments = getXmlAttachments(fileName, keysMatchingExpressionEliPath);
 
     return NormLdmlToOpenSearchMapper.parseNorm(
         fileName,
@@ -323,12 +326,12 @@ public class IndexNormsService implements IndexService {
    * @return The number of indexable documents in the norms bucket.
    */
   public int getNumberOfIndexableDocumentsInBucket() {
-    Set<ExpressionEli> norms =
+    Set<ExpressionEliPath> norms =
         normsBucket.getAllKeysByPrefix("eli/").stream()
             .map(EliFile::fromString)
             .flatMap(Optional::stream)
             .filter(e -> e.fileName().startsWith("regelungstext-"))
-            .map(EliFile::getExpressionEli)
+            .map(EliFile::getExpressionEliPath)
             .collect(Collectors.toSet());
     return norms.size();
   }

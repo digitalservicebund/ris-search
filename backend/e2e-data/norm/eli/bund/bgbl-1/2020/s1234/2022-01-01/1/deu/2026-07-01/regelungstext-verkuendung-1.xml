@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<akn:akomaNtoso xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.8.2/ ../ris-norms-ldml-schema-extensions/1.8.2/legalDocML.de-metadaten-ris.xsdhttp://MetadatenRegelungstext.LegalDocML.de/1.8.2/ Grammatiken/legalDocML.de-metadaten-regelungstext.xsdhttp://MetadatenRechtsetzungsdokument.LegalDocML.de/1.8.2/ Grammatiken/legalDocML.de-metadaten-rechtsetzungsdokument.xsdhttp://Inhaltsdaten.LegalDocML.de/1.8.2/ Grammatiken/legalDocML.de-regelungstextverkuendungsfassung.xsd" xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.8.2/" xmlns:ris="http://MetadatenRIS.LegalDocML.de/1.8.2/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <akn:act name="/akn/ontology/de/concept/documenttype/bund/regelungstext-verkuendung">
+<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.9/"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.9/ Grammatiken/Norms/legalDocML.de-metadaten-ris.xsd http://MetadatenRegelungstext.LegalDocML.de/1.9/ Grammatiken/legalDocML.de-metadaten-regelungstext.xsd http://MetadatenRechtsetzungsdokument.LegalDocML.de/1.9/ Grammatiken/legalDocML.de-metadaten-rechtsetzungsdokument.xsd http://Inhaltsdaten.LegalDocML.de/1.9/ Grammatiken/legalDocML.de-regelungstext.xsd">
+    <akn:act name="/akn/ontology/de/concept/documenttype/bund/regelungstext">
         <akn:meta GUID="953dbcc3-b7a1-4783-80e0-7f8bce931445" eId="meta-n1">
             <akn:identification GUID="7bcda38b-65d2-4368-b392-daeb7f48f74c" eId="meta-n1_ident-n1" source="attributsemantik-noch-undefiniert">
                 <akn:FRBRWork GUID="73f0b9c6-39ff-4ddd-a443-e4c74b86d8d0" eId="meta-n1_ident-n1_frbrwork-n1">
                     <akn:FRBRthis GUID="ee6367e1-158b-4134-9202-dba23fbcceeb" eId="meta-n1_ident-n1_frbrwork-n1_frbrthis-n1" value="eli/bund/bgbl-1/2020/s1234/regelungstext-verkuendung-1"/>
                     <akn:FRBRuri GUID="9f057d8a-6073-49bd-8de6-2eede0a0b451" eId="meta-n1_ident-n1_frbrwork-n1_frbruri-n1" value="eli/bund/bgbl-1/2020/s1234"/>
                     <akn:FRBRalias GUID="248d09ab-fbe5-4933-aa3f-f00966b4e156" eId="meta-n1_ident-n1_frbrwork-n1_frbralias-n1" name="übergreifende-id" value="b29e7271-d0eb-5ae1-9513-27af3a7e69dd"/>
-                    <akn:FRBRdate GUID="91dd7870-0e28-4fc8-ae5e-497b761f9bc9" eId="meta-n1_ident-n1_frbrwork-n1_frbrdate-n1" date="2025-12-22" name="verkuendungsfassung-verkuendungsdatum"/>
+                    <akn:FRBRdate GUID="91dd7870-0e28-4fc8-ae5e-497b761f9bc9" eId="meta-n1_ident-n1_frbrwork-n1_frbrdate-n1" date="2025-12-22" name="verkuendungsdatum"/>
                     <akn:FRBRauthor GUID="b3bbf5af-6a47-491e-8b06-cb666ccf45da" eId="meta-n1_ident-n1_frbrwork-n1_frbrauthor-n1" href="recht.bund.de/institution/bundesregierung"/>
                     <akn:FRBRcountry GUID="cb30bd66-923c-47b7-b7d4-c26b4e337032" eId="meta-n1_ident-n1_frbrwork-n1_frbrcountry-n1" value="de"/>
                     <akn:FRBRnumber GUID="7ad2c88e-aac1-428f-98c9-3ba692f2bc47" eId="meta-n1_ident-n1_frbrwork-n1_frbrnumber-n1" value="s1234"/>
@@ -49,7 +51,9 @@
                 </akn:temporalGroup>
             </akn:temporalData>
             <akn:proprietary GUID="69cc30f7-47c6-4d52-bdda-442073a4bccd" eId="meta-n1_proprietary-n1" source="attributsemantik-noch-undefiniert">
-                <ris:legalDocML.de_metadaten>
+                <ris:legalDocML.de_metadaten xmlns:ris="http://MetadatenRIS.LegalDocML.de/1.9/"
+                                             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                                             xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.9/ Grammatiken/Norms/legalDocML.de-metadaten-ris.xsd">
                     <ris:abkuerzung refersTo="interne-abkuerzung">RisAbk</ris:abkuerzung>
                     <ris:inkraft date="2022-01-01"/>
                     <ris:doknr source="#art-z1">DKNR000000000BJNE00010002</ris:doknr>
@@ -72,7 +76,7 @@
         <akn:body GUID="b0edafe0-ce73-4212-a3c9-30276e9d7234" eId="hauptteil-n1">
             <akn:article GUID="79c85e95-dbed-49fd-b646-4521aaaa17c7" eId="art-z1" period="#meta-n1_geltzeiten-n1_geltungszeitgr-n2">
                 <akn:num GUID="c2c9d38a-0b27-43e3-a44f-8ab454b173d6" eId="art-z1_bezeichnung-n1">§ 1</akn:num>
-                <akn:heading GUID="644cbf32-abcd-4f40-9e71-024b01434ac7" eId="art-z1_überschrift-n1">Erster Artikel</akn:heading>
+                <akn:heading GUID="644cbf32-abcd-4f40-9e71-024b01434ac7" eId="art-z1_ueberschrift-n1">Erster Artikel</akn:heading>
                 <akn:paragraph GUID="5c97e12c-2373-420c-a565-5855293162d2" eId="art-z1_abs-z1">
                     <akn:num GUID="87f3cee6-31ed-4372-abd5-ca45971b714a" eId="art-z1_abs-z1_bezeichnung-n1">(1)</akn:num>
                     <akn:content GUID="d701c254-6e86-4a1f-bf54-37cf1c5c11cf" eId="art-z1_abs-z1_inhalt-n1">
@@ -82,7 +86,7 @@
             </akn:article>
             <akn:article GUID="1c0c1f0c-0861-4434-bbfe-4d54aa0ad6ee" eId="art-z2" period="#meta-n1_geltzeiten-n1_geltungszeitgr-n3">
                 <akn:num GUID="07e1ed9a-168e-4fb3-9e05-542b9547cb14" eId="art-z2_bezeichnung-n1">§ 2</akn:num>
-                <akn:heading GUID="f2b5e746-9e4d-41cf-94f0-a752f41255d3" eId="art-z2_überschrift-n1">Zweiter Artikel</akn:heading>
+                <akn:heading GUID="f2b5e746-9e4d-41cf-94f0-a752f41255d3" eId="art-z2_ueberschrift-n1">Zweiter Artikel</akn:heading>
                 <akn:paragraph GUID="e3f4e7f6-ccae-4aa7-878e-05832643c622" eId="art-z2_abs-z1">
                     <akn:num GUID="fa8b7fbb-9391-4721-bd30-c530ee8c156a" eId="art-z2_abs-z1_bezeichnung-n1">(1)</akn:num>
                     <akn:content GUID="2e9c0275-8921-496f-8bbf-1fc6164533a7" eId="art-z2_abs-z1_inhalt-n1">

@@ -1,13 +1,15 @@
 <?xml-model href="Grammatiken/legalDocML.de.sch" schematypens="http://purl.oclc.org/dsdl/schematron"?>
-<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.8.2/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.8.2/ ../ris-norms-ldml-schema-extensions/1.8.2/legalDocML.de-metadaten-ris.xsd http://MetadatenRegelungstext.LegalDocML.de/1.8.2/ Grammatiken/legalDocML.de-metadaten-regelungstext.xsd http://MetadatenRechtsetzungsdokument.LegalDocML.de/1.8.2/ Grammatiken/legalDocML.de-metadaten-rechtsetzungsdokument.xsd http://Inhaltsdaten.LegalDocML.de/1.8.2/ Grammatiken/legalDocML.de-regelungstextverkuendungsfassung.xsd">
-    <akn:act name="/akn/ontology/de/concept/documenttype/bund/regelungstext-verkuendung">
+<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.9/"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.9/ Grammatiken/Norms/legalDocML.de-metadaten-ris.xsd http://MetadatenRegelungstext.LegalDocML.de/1.9/ Grammatiken/legalDocML.de-metadaten-regelungstext.xsd http://MetadatenRechtsetzungsdokument.LegalDocML.de/1.9/ Grammatiken/legalDocML.de-metadaten-rechtsetzungsdokument.xsd http://Inhaltsdaten.LegalDocML.de/1.9/ Grammatiken/legalDocML.de-regelungstext.xsd">
+    <akn:act name="/akn/ontology/de/concept/documenttype/bund/regelungstext">
         <akn:meta GUID="8d7113d1-e517-4fa7-8b1f-28a1f8b506a4" eId="meta-n1">
             <akn:identification GUID="1173c7e4-2d7e-435a-888f-1e70d59cd090" eId="meta-n1_ident-n1" source="attributsemantik-noch-undefiniert">
                 <akn:FRBRWork GUID="fccb94b5-9001-457e-8d83-e5903e7c2194" eId="meta-n1_ident-n1_frbrwork-n1">
                     <akn:FRBRthis GUID="a14d714f-0823-4377-8ff9-851bcea551b3" eId="meta-n1_ident-n1_frbrwork-n1_frbrthis-n1" value="eli/bund/bgbl-1/2025/130/regelungstext-verkuendung-1"/>
                     <akn:FRBRuri GUID="5cfabd40-a843-4a84-9f30-ba1af2e4b927" eId="meta-n1_ident-n1_frbrwork-n1_frbruri-n1" value="eli/bund/bgbl-1/2025/130"/>
                     <akn:FRBRalias GUID="170bc651-ab53-4b25-8aa5-e9ef923fd7e6" eId="meta-n1_ident-n1_frbrwork-n1_frbralias-n1" name="übergreifende-id" value="73f9b3cc-2843-4887-a31a-5d8483567f68"/>
-                    <akn:FRBRdate GUID="b93b61fc-02a7-4327-b0e9-9d2f0bee489a" date="2025-05-05" eId="meta-n1_ident-n1_frbrwork-n1_frbrdate-n1" name="verkuendungsfassung-verkuendungsdatum"/>
+                    <akn:FRBRdate GUID="b93b61fc-02a7-4327-b0e9-9d2f0bee489a" date="2025-05-05" eId="meta-n1_ident-n1_frbrwork-n1_frbrdate-n1" name="verkuendungsdatum"/>
                     <akn:FRBRauthor GUID="bf6d77c7-4afb-4dd2-880b-ed187be66646" eId="meta-n1_ident-n1_frbrwork-n1_frbrauthor-n1" href="recht.bund.de/institution/bundesregierung"/>
                     <akn:FRBRcountry GUID="1eb3231a-6c5f-4eb1-b654-2213f4ce77d2" eId="meta-n1_ident-n1_frbrwork-n1_frbrcountry-n1" value="de"/>
                     <akn:FRBRnumber GUID="acb9b18e-b0db-4277-b888-1ea06caf2c3d" eId="meta-n1_ident-n1_frbrwork-n1_frbrnumber-n1" value="130"/>
@@ -52,11 +54,15 @@
                 </akn:note>
             </akn:notes>
             <akn:proprietary GUID="a2bbae34-974e-48cc-9731-f99f56d4a346" eId="meta-n1_proprietary-n1" source="attributsemantik-noch-undefiniert">
-                <regtxt:legalDocML.de_metadaten xmlns:regtxt="http://MetadatenRegelungstext.LegalDocML.de/1.8.2/" xsi:schemaLocation="http://MetadatenRegelungstext.LegalDocML.de/1.8.2/ Grammatiken/legalDocML.de-metadaten-regelungstext.xsd">
+                <regtxt:legalDocML.de_metadaten xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                                                xsi:schemaLocation="http://MetadatenRegelungstext.LegalDocML.de/1.9/ Grammatiken/legalDocML.de-metadaten-regelungstext.xsd"
+                                                xmlns:regtxt="http://MetadatenRegelungstext.LegalDocML.de/1.9/">
                     <regtxt:typ>verordnung</regtxt:typ>
                     <regtxt:form>stammform</regtxt:form>
                 </regtxt:legalDocML.de_metadaten>
-                <ris:legalDocML.de_metadaten xmlns:ris="http://MetadatenRIS.LegalDocML.de/1.8.2/" xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.8.2/ ../ris-norms-ldml-schema-extensions/1.8.2/legalDocML.de-metadaten-ris.xsd">
+                <ris:legalDocML.de_metadaten xmlns:ris="http://MetadatenRIS.LegalDocML.de/1.9/"
+                                             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                                             xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.9/ Grammatiken/Norms/legalDocML.de-metadaten-ris.xsd">
                     <ris:abkuerzung refersTo="interne-abkuerzung">GeGuGe 2025</ris:abkuerzung>
                     <ris:inkraft date="2025-05-06"/>
                     <ris:ausserkraft date="2037-03-31"/>
@@ -81,15 +87,15 @@
                 <akn:date GUID="b77a6580-9501-42e1-b0d0-3acdb823541d" date="2025-05-05" eId="einleitung-n1_block-n1_datum-n1" refersTo="ausfertigung-datum"/>
             </akn:block>
         </akn:preface>
-        <akn:preamble GUID="dca6fbcc-6a7c-4dba-8c3d-e0e026969479" eId="präambel-n1">
-            <akn:formula GUID="7de4b557-612b-4e98-bf23-497ceddc9d52" eId="präambel-n1_formel-n1" name="attributsemantik-noch-undefiniert" refersTo="eingangsformel">
-                <akn:p GUID="46d59b62-02ec-4bd1-ac0f-5ca7348ee22b" eId="präambel-n1_formel-n1_text-n1">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat:</akn:p>
+        <akn:preamble GUID="dca6fbcc-6a7c-4dba-8c3d-e0e026969479" eId="praeambel-n1">
+            <akn:formula GUID="7de4b557-612b-4e98-bf23-497ceddc9d52" eId="praeambel-n1_formel-n1" name="attributsemantik-noch-undefiniert" refersTo="eingangsformel">
+                <akn:p GUID="46d59b62-02ec-4bd1-ac0f-5ca7348ee22b" eId="praeambel-n1_formel-n1_text-n1">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat:</akn:p>
             </akn:formula>
         </akn:preamble>
         <akn:body GUID="d32baca2-acf3-48f0-904f-d3c0b7457538" eId="hauptteil-n1">
             <akn:article GUID="7875f695-e238-4671-88dd-7eed28fe9ca7" eId="art-z1" period="#meta-n1_geltzeiten-n1_geltungszeitgr-n1">
                 <akn:num GUID="507d362a-a4d4-4a55-a683-f5c4a5376a27" eId="art-z1_bezeichnung-n1">§ 1</akn:num>
-                <akn:heading GUID="26bdf2f5-5bf1-472a-959e-713735137b22" eId="art-z1_überschrift-n1">Gültiger Paragraph</akn:heading>
+                <akn:heading GUID="26bdf2f5-5bf1-472a-959e-713735137b22" eId="art-z1_ueberschrift-n1">Gültiger Paragraph</akn:heading>
                 <akn:paragraph GUID="07fa0ebc-62b6-4415-856c-4d1bfba93c63" eId="art-z1_abs-z">
                     <akn:num GUID="dbf0b2ff-a9c2-4115-bb49-5c2e9d89ea28" eId="art-z1_abs-z_bezeichnung-n1"/>
                     <akn:content GUID="3915e06c-865b-4a47-a085-9ab5e8c3597f" eId="art-z1_abs-z_inhalt-n1">
@@ -132,7 +138,7 @@
             </akn:article>
             <akn:article GUID="2c6741e9-dce7-43e9-8ca3-b6a5190034c0" eId="art-z2" period="#meta-n1_geltzeiten-n1_geltungszeitgr-n1" refersTo="geltungszeitregel-ausserkrafttreten">
                 <akn:num GUID="9a79bf4c-d4c4-4204-b8df-e807365377f0" eId="art-z2_bezeichnung-n1">§ 2</akn:num>
-                <akn:heading GUID="a5758b49-889d-487a-a76d-8e4064ce12ec" eId="art-z2_überschrift-n1">Außerkrafttreten</akn:heading>
+                <akn:heading GUID="a5758b49-889d-487a-a76d-8e4064ce12ec" eId="art-z2_ueberschrift-n1">Außerkrafttreten</akn:heading>
                 <akn:paragraph GUID="31696588-1949-4a9f-bd96-58e5ae7d5e25" eId="art-z2_abs-z">
                     <akn:num GUID="ede2a36d-628a-46ea-b18e-768029d26a6c" eId="art-z2_abs-z_bezeichnung-n1"/>
                     <akn:content GUID="8514cb4e-0763-4b2a-bf83-0a9fb5047d7a" eId="art-z2_abs-z_inhalt-n1">
@@ -145,7 +151,7 @@
             </akn:article>
             <akn:article GUID="d7514fb0-ed59-4819-ad6a-0e7e2229b758" eId="art-z3" period="#meta-n1_geltzeiten-n1_geltungszeitgr-n1" refersTo="geltungszeitregel-inkrafttreten">
                 <akn:num GUID="bf2b3742-45c3-4692-9ade-caf17f6b608f" eId="art-z3_bezeichnung-n1">§ 3</akn:num>
-                <akn:heading GUID="9a4ce542-76d5-4252-b03a-1459b7d0b836" eId="art-z3_überschrift-n1">Inkrafttreten</akn:heading>
+                <akn:heading GUID="9a4ce542-76d5-4252-b03a-1459b7d0b836" eId="art-z3_ueberschrift-n1">Inkrafttreten</akn:heading>
                 <akn:paragraph GUID="f71eaaba-36be-4c4e-8671-dbfd07378133" eId="art-z3_abs-z">
                     <akn:num GUID="ed31d243-2de8-4ed5-9788-92a7c6cc3701" eId="art-z3_abs-z_bezeichnung-n1"/>
                     <akn:content GUID="7c14918c-db0c-47de-a5c8-54697be9ee88" eId="art-z3_abs-z_inhalt-n1">

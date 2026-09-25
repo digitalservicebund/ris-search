@@ -23,7 +23,7 @@ import lombok.Setter;
 public class Act {
 
   @Builder.Default @XmlAttribute
-  private String name = "/akn/ontology/de/concept/documenttype/bund/regelungstext-verkuendung";
+  private String name = "/akn/ontology/de/concept/documenttype/bund/regelungstext";
 
   @Builder.Default
   @XmlElement(namespace = NormTestDataBuilder.AKN_NS)
