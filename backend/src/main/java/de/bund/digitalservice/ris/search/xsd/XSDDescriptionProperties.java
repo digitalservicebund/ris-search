@@ -11,6 +11,5 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Getter
 @ConfigurationProperties(prefix = "xsd")
 public class XSDDescriptionProperties {
-  private String schemaPrefix;
   private Map<String, String[]> xsdLocations = new HashMap<>();
 }
