@@ -19,11 +19,11 @@
     "name" : "Document bulk download links",
     "description" : "Returns a link that can be used to download a bulk zip for each document kind."
   }, {
-    "name" : "Case Law",
-    "description" : "This group of endpoints provides judgments and decisions of the Federal Constitutional Court, the supreme courts of the Federal Republic of Germany, the Federal Patent Court, and others that were documented by the documentation units of these courts. The documents are anonymized and published in full, and the database is updated daily."
-  }, {
     "name" : "Legislation",
     "description" : "Retrieve current and historical versions of laws and decrees.\nThe endpoints operate on the levels of \"work\", \"expression\", and \"manifestation\". See\n<a href=\"https://en.wikipedia.org/wiki/Functional_Requirements_for_Bibliographic_Records\">Functional\nRequirements for Bibliographic Records (FRBR)</a> for more information.\n"
+  }, {
+    "name" : "Rechtsprechung",
+    "description" : "This group of endpoints provides judgments and decisions of the Federal Constitutional Court, the supreme courts of the Federal Republic of Germany, the Federal Patent Court, and others that were documented by the documentation units of these courts. The documents are anonymized and published in full, and the database is updated daily."
   }, {
     "name" : "Statistics",
     "description" : "Returns document count statistics for all document kinds exposed by the API."
@@ -2000,403 +2000,6 @@
         }
       }
     },
-    "/v1/case-law" : {
-      "get" : {
-        "tags" : [ "Case Law" ],
-        "summary" : "List and search decisions",
-        "description" : "The endpoint returns a list of decisions from our database. The list is paginated and can be filtered and sorted.",
-        "operationId" : "searchCaseLaw",
-        "parameters" : [ {
-          "name" : "fileNumber",
-          "in" : "query",
-          "required" : false,
-          "schema" : {
-            "type" : "string"
-          }
-        }, {
-          "name" : "ecli",
-          "in" : "query",
-          "required" : false,
-          "schema" : {
-            "type" : "string"
-          }
-        }, {
-          "name" : "court",
-          "in" : "query",
-          "description" : "Filter by court name (Finanzgericht Münster, FG Münster, ArbG Köln) or court type (Finanzgericht, FG, ArbG). Supports both long and short names.",
-          "required" : false,
-          "schema" : {
-            "type" : "string",
-            "description" : "Filter by court name (Finanzgericht Münster, FG Münster, ArbG Köln) or court type (Finanzgericht, FG, ArbG). Supports both long and short names."
-          }
-        }, {
-          "name" : "legalEffect",
-          "in" : "query",
-          "description" : "Corresponds to “Rechtskraft”, meaning that the decision referred to is legally binding.",
-          "required" : false,
-          "schema" : {
-            "type" : "string",
-            "description" : "Corresponds to “Rechtskraft”, meaning that the decision referred to is legally binding.",
-            "enum" : [ "JA", "NEIN", "KEINE_ANGABE", "FALSCHE_ANGABE" ]
-          }
-        }, {
-          "name" : "type",
-          "in" : "query",
-          "description" : "Filter by document type (Urteil, Versäumnisurteil, Entscheidung etc.). Multiple values may be specified as a comma-separated list or by repeating the parameter.",
-          "required" : false,
-          "schema" : {
-            "type" : "array",
-            "description" : "Filter by document type (Urteil, Versäumnisurteil, Entscheidung etc.). Multiple values may be specified as a comma-separated list or by repeating the parameter.",
-            "examples" : [ "Versäumnisurteil", "Entscheidung" ],
-            "items" : {
-              "type" : "string",
-              "description" : "Filter by document type (Urteil, Versäumnisurteil, Entscheidung etc.). Multiple values may be specified as a comma-separated list or by repeating the parameter.",
-              "examples" : [ "Versäumnisurteil", "Entscheidung" ]
-            }
-          }
-        }, {
-          "name" : "typeGroup",
-          "in" : "query",
-          "description" : "Extended filter by type group. Multiple values may be specified as a comma-separated list or by repeating the parameter.",
-          "required" : false,
-          "schema" : {
-            "type" : "array",
-            "description" : "Extended filter by type group. Multiple values may be specified as a comma-separated list or by repeating the parameter.",
-            "enum" : [ "Urteil", "Beschluss", "other" ],
-            "items" : {
-              "type" : "string",
-              "description" : "Extended filter by type group. Multiple values may be specified as a comma-separated list or by repeating the parameter.",
-              "enum" : [ "URTEIL", "BESCHLUSS", "OTHER", "Urteil", "Beschluss", "other" ]
-            }
-          }
-        }, {
-          "name" : "searchTerm",
-          "in" : "query",
-          "description" : "Searches for the given tokens in searchTerm. If searchTerm contains more than one token, all tokens must be in the document for the document to match.",
-          "required" : false,
-          "schema" : {
-            "type" : "string",
-            "description" : "Searches for the given tokens in searchTerm. If searchTerm contains more than one token, all tokens must be in the document for the document to match."
-          }
-        }, {
-          "name" : "dateFrom",
-          "in" : "query",
-          "description" : "The from (greater than or equal) parameter returns all entities where date is later than, or equal to, the given date.",
-          "required" : false,
-          "schema" : {
-            "type" : "string",
-            "format" : "date",
-            "description" : "The from (greater than or equal) parameter returns all entities where date is later than, or equal to, the given date."
-          }
-        }, {
-          "name" : "dateTo",
-          "in" : "query",
-          "description" : "The to (less than or equal) parameter returns all entities where date is earlier than, or equal to, the given date.",
-          "required" : false,
-          "schema" : {
-            "type" : "string",
-            "format" : "date",
-            "description" : "The to (less than or equal) parameter returns all entities where date is earlier than, or equal to, the given date."
-          }
-        }, {
-          "name" : "size",
-          "in" : "query",
-          "description" : "The number of entities per page",
-          "required" : false,
-          "schema" : {
-            "type" : "integer",
-            "format" : "int32",
-            "maximum" : 300,
-            "minimum" : 1
-          },
-          "example" : 100
-        }, {
-          "name" : "pageIndex",
-          "in" : "query",
-          "description" : "The number of the page to request. The page starts with the value 0",
-          "required" : false,
-          "schema" : {
-            "type" : "integer",
-            "format" : "int32",
-            "minimum" : 0
-          },
-          "example" : 0
-        }, {
-          "name" : "sort",
-          "in" : "query",
-          "description" : "The field to sort the results by. Default is the relevance score calculated by OpenSearch. Valid usage of the sort field are : date, courtName, documentNumber and not setting the sort field (sort by relevance descending).Add a leading - to set the order to descending (-date)",
-          "required" : false,
-          "schema" : {
-            "type" : "string",
-            "description" : "The field to sort the results by. Default is the relevance score calculated by OpenSearch. Valid usage of the sort field are : date, courtName, documentNumber and not setting the sort field (sort by relevance descending).Add a leading - to set the order to descending (-date)",
-            "pattern" : "^-?(|default|date|DATUM|courtName|documentNumber)$"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "Success",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/CollectionSchemaSearchMemberSchemaCaseLawSearchSchema"
-                }
-              }
-            }
-          },
-          "500" : {
-            "description" : "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/v1/case-law/{documentNumber}" : {
-      "get" : {
-        "tags" : [ "Case Law" ],
-        "summary" : "Decision metadata",
-        "description" : "The endpoint returns a single decision from our database.",
-        "operationId" : "getCaseLaw_1",
-        "parameters" : [ {
-          "name" : "documentNumber",
-          "in" : "path",
-          "required" : true,
-          "schema" : {
-            "type" : "string"
-          },
-          "example" : "STRE201770751"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "OK",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/CaseLawSchema"
-                }
-              }
-            }
-          },
-          "404" : {
-            "description" : "Not Found"
-          }
-        }
-      }
-    },
-    "/v1/case-law/{documentNumber}/{name}.{extension}" : {
-      "get" : {
-        "tags" : [ "Case Law" ],
-        "summary" : "Caselaw resource",
-        "description" : "Returns a specific resource of a particular caselaw.",
-        "operationId" : "getImage_1",
-        "parameters" : [ {
-          "name" : "documentNumber",
-          "in" : "path",
-          "required" : true,
-          "schema" : {
-            "type" : "string"
-          },
-          "example" : "BDRE000800001"
-        }, {
-          "name" : "name",
-          "in" : "path",
-          "required" : true,
-          "schema" : {
-            "type" : "string"
-          },
-          "example" : "image"
-        }, {
-          "name" : "extension",
-          "in" : "path",
-          "required" : true,
-          "schema" : {
-            "type" : "string",
-            "enum" : [ "png", "jpg", "jpeg", "gif", "wmf", "emf", "bitmap" ]
-          },
-          "example" : "jpg"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "OK",
-            "content" : {
-              "*/*" : {
-                "schema" : {
-                  "type" : "string",
-                  "format" : "byte"
-                }
-              }
-            }
-          },
-          "404" : {
-            "description" : "Not Found"
-          }
-        }
-      }
-    },
-    "/v1/case-law/{documentNumber}.zip" : {
-      "get" : {
-        "tags" : [ "Case Law" ],
-        "summary" : "Decision ZIP (XML and attachments)",
-        "description" : "Returns a case law decision, including attachments, as a ZIP archive.",
-        "operationId" : "getCaseLawDocumentationUnitAsZip_1",
-        "parameters" : [ {
-          "name" : "documentNumber",
-          "in" : "path",
-          "required" : true,
-          "schema" : {
-            "type" : "string",
-            "pattern" : "^[a-zA-Z]{4}\\d{9}$"
-          },
-          "example" : "STRE201770751"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "OK",
-            "content" : {
-              "application/zip" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/StreamingResponseBody"
-                }
-              }
-            }
-          },
-          "404" : {
-            "description" : "Not Found"
-          }
-        }
-      }
-    },
-    "/v1/case-law/{documentNumber}.xml" : {
-      "get" : {
-        "tags" : [ "Case Law" ],
-        "summary" : "Decision XML",
-        "description" : "Returns a case law decision as XML. This content is used as a source for the HTML endpoint.",
-        "operationId" : "getCaseLawDocumentationUnitAsXml_1",
-        "parameters" : [ {
-          "name" : "documentNumber",
-          "in" : "path",
-          "required" : true,
-          "schema" : {
-            "type" : "string"
-          },
-          "example" : "STRE201770751"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "OK",
-            "content" : {
-              "application/xml" : {
-                "schema" : {
-                  "type" : "string",
-                  "format" : "byte"
-                }
-              }
-            }
-          },
-          "404" : {
-            "description" : "Not Found"
-          }
-        }
-      }
-    },
-    "/v1/case-law/{documentNumber}.html" : {
-      "get" : {
-        "tags" : [ "Case Law" ],
-        "summary" : "Decision HTML",
-        "description" : "Renders and returns a case law decision as HTML.",
-        "operationId" : "getCaseLawDocumentationUnitAsHtml_1",
-        "parameters" : [ {
-          "name" : "documentNumber",
-          "in" : "path",
-          "required" : true,
-          "schema" : {
-            "type" : "string"
-          },
-          "example" : "STRE201770751"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "OK",
-            "content" : {
-              "text/html" : {
-                "schema" : {
-                  "type" : "string"
-                }
-              }
-            }
-          },
-          "404" : {
-            "description" : "Not Found"
-          }
-        }
-      }
-    },
-    "/v1/case-law/courts" : {
-      "get" : {
-        "tags" : [ "Case Law" ],
-        "summary" : "List courts",
-        "description" : "Lists courts with long and short name and number of associated decisions. The prefix parameter may be used to filter this list. Only includes courts whose decisions have been published in this database.",
-        "operationId" : "getCaseLawCourts",
-        "parameters" : [ {
-          "name" : "prefix",
-          "in" : "query",
-          "required" : false,
-          "schema" : {
-            "type" : "string"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "OK",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "type" : "array",
-                  "items" : {
-                    "$ref" : "#/components/schemas/CourtSearchResult"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/case-law/changelog" : {
-      "get" : {
-        "tags" : [ "Case Law" ],
-        "summary" : "Caselaw changelog",
-        "description" : "Returns references of document changes that occurred in between two points in time.",
-        "operationId" : "getChangelogs_3",
-        "parameters" : [ {
-          "name" : "from",
-          "in" : "query",
-          "required" : true,
-          "schema" : {
-            "type" : "string",
-            "format" : "date-time"
-          }
-        }, {
-          "name" : "to",
-          "in" : "query",
-          "required" : true,
-          "schema" : {
-            "type" : "string",
-            "format" : "date-time"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "OK",
-            "content" : {
-              "*/*" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/ChangelogResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/v1/bulk-zip-links" : {
       "get" : {
         "tags" : [ "Document bulk download links" ],
@@ -2732,7 +2335,7 @@
         "tags" : [ "AdministrativeDirective" ],
         "summary" : "Administrative Directive changelog",
         "description" : "Returns references of document changes that occurred in between two points in time.",
-        "operationId" : "getChangelogs_4",
+        "operationId" : "getChangelogs_3",
         "parameters" : [ {
           "name" : "from",
           "in" : "query",
@@ -2882,7 +2485,7 @@
             },
             "@id" : {
               "type" : "string",
-              "example" : "/v1/case-law/ECLI:DE:FGRLP:1969:0905.IV85.68.0A"
+              "example" : "/v1/rechtsprechung/ECLI:DE:FGRLP:1969:0905.IV85.68.0A"
             },
             "inLanguage" : {
               "type" : "string",
@@ -3013,8 +2616,12 @@
             "type" : "string",
             "example" : "Rechtsprechung"
           },
+          "@context" : {
+            "type" : "string"
+          },
           "dokumentNummer" : {
             "type" : "string",
+            "description" : "Dokumentnummer",
             "example" : "KARE000000000"
           },
           "ecli" : {
@@ -3052,7 +2659,7 @@
           },
           "titelzeile" : {
             "type" : "string",
-            "description" : "Titelzeile"
+            "description" : "Vom Dokumentar gebildete Kurzzusammenfassung, bezogen auf die gesamten Kurztexte."
           },
           "orientierungssatz" : {
             "type" : "string",
@@ -3081,14 +2688,15 @@
           "datum" : {
             "type" : "string",
             "format" : "date",
-            "description" : "Datum"
+            "description" : "Datum der Entscheidung, hier kann es zu Dopplungen mit anderen Entscheidungen kommen, auch in Kombination mit Aktenzeichen und Gericht."
           },
           "abweichendeDaten" : {
             "type" : "array",
             "description" : "Abweichende Daten",
             "items" : {
               "type" : "string",
-              "format" : "date"
+              "format" : "date",
+              "description" : "Abweichende Daten"
             }
           },
           "gliederung" : {
@@ -3097,14 +2705,16 @@
           },
           "aktenzeichen" : {
             "type" : "string",
-            "description" : "Aktenzeichen"
+            "description" : "Aktenzeichen der Entscheidung, hier kann es zu Dopplungen mit anderen Entscheidungen kommen, auch in Kombination mit Entscheidungsdatum und Gericht."
           },
           "aktenzeichenListe" : {
             "type" : "array",
-            "description" : "Aktenzeichenliste",
+            "description" : "Aktenzeichen des Dokuments\n\nDer erste Eintrag ist das primäre Aktenzeichen.\nWeitere Einträge sind abweichende Aktenzeichen, die auch für dieses\nDokument verwendet werden.",
             "example" : "BGH 123/23",
             "items" : {
-              "type" : "string"
+              "type" : "string",
+              "description" : "Aktenzeichen des Dokuments\n\nDer erste Eintrag ist das primäre Aktenzeichen.\nWeitere Einträge sind abweichende Aktenzeichen, die auch für dieses\nDokument verwendet werden.",
+              "example" : "BGH 123/23"
             }
           },
           "abweichendeAktenzeichen" : {
@@ -3126,7 +2736,8 @@
             "type" : "array",
             "description" : "Berufsbilder",
             "items" : {
-              "type" : "string"
+              "type" : "string",
+              "description" : "Berufsbilder"
             }
           },
           "kuendigungsarten" : {
@@ -3145,9 +2756,10 @@
           },
           "regionen" : {
             "type" : "array",
-            "description" : "Regionen",
+            "description" : "Regionen in denen dieses Dokument eine Bedeutung hat",
             "items" : {
-              "type" : "string"
+              "type" : "string",
+              "description" : "Regionen in denen dieses Dokument eine Bedeutung hat"
             }
           },
           "tarifvertraege" : {
@@ -3173,16 +2785,18 @@
           },
           "vorgehendeEntscheidungen" : {
             "type" : "array",
-            "description" : "Vorgehende Entscheidungen",
+            "description" : "Nachgewiesen werden gerichtliche Entscheidungen, die im Rahmen eines Verfahrens (einschl. Nebenverfahren) der zu dokumentierenden Entscheidung vorausgehen.",
             "items" : {
-              "type" : "string"
+              "type" : "string",
+              "description" : "Nachgewiesen werden gerichtliche Entscheidungen, die im Rahmen eines Verfahrens (einschl. Nebenverfahren) der zu dokumentierenden Entscheidung vorausgehen."
             }
           },
           "nachgehendeEntscheidungen" : {
             "type" : "array",
-            "description" : "Nachgehende Entscheidungen",
+            "description" : "Nachgewiesen werden die gerichtlichen Entscheidungen, die ihrerseits in der Rubrik „vorgehende Entscheidung“ die vorliegende Entscheidung nennen.",
             "items" : {
-              "type" : "string"
+              "type" : "string",
+              "description" : "Nachgewiesen werden die gerichtlichen Entscheidungen, die ihrerseits in der Rubrik „vorgehende Entscheidung“ die vorliegende Entscheidung nennen."
             }
           },
           "aktivzitierungLiteraturUnselbstaendig" : {
@@ -3259,10 +2873,12 @@
           },
           "gesetzeskraft" : {
             "type" : "array",
-            "description" : "Gesetzeskraft",
+            "description" : "Information über die Gesetzeskraft der Einzelnorm",
             "example" : "vereinbar mit höherrangigem Recht (Bremen)",
             "items" : {
-              "type" : "string"
+              "type" : "string",
+              "description" : "Information über die Gesetzeskraft der Einzelnorm",
+              "example" : "vereinbar mit höherrangigem Recht (Bremen)"
             }
           },
           "normenkette" : {
@@ -3277,7 +2893,8 @@
             "type" : "array",
             "description" : "Sachgebiete",
             "items" : {
-              "type" : "string"
+              "type" : "string",
+              "description" : "Sachgebiete"
             }
           },
           "streitjahre" : {
@@ -3289,9 +2906,10 @@
           },
           "fehlerhafteGerichte" : {
             "type" : "array",
-            "description" : "Fehlerhafte Gerichte",
+            "description" : "Fehlerhafte Angaben zu Gerichten",
             "items" : {
-              "type" : "string"
+              "type" : "string",
+              "description" : "Fehlerhafte Angaben zu Gerichten"
             }
           },
           "datenDerMuendlichenVerhandlung" : {
@@ -3304,9 +2922,10 @@
           },
           "definitionen" : {
             "type" : "array",
-            "description" : "Definitionen",
+            "description" : "Definitionen von Begriffen",
             "items" : {
-              "type" : "string"
+              "type" : "string",
+              "description" : "Definitionen von Begriffen"
             }
           },
           "erledigung" : {
@@ -3372,11 +2991,12 @@
           },
           "dokumenttyp" : {
             "type" : "string",
+            "description" : "Innerhalb der Dokumentart „Rechtsprechung“ werden folgende Dokumenttypen unterschieden:\n\n- Äuß: Äußerung\n- Ant: EuGH-Vorlage\n- AnU: Anerkenntnisurteil\n- Bes: Beschluss\n- Buß: Bußgeldbescheid\n- DrB: Dreierausschussbeschluss\n- EiA: Einstweilige Anordnung\n- Ent: Entscheidung\n- EVg: Einstellungsverfügung der Staatsanwaltschaft\n- GeB: Gerichtsbescheid\n- Gut: Gutachten\n- GWF: Gegenstandswertfestsetzung im verfassungsgerichtlichen Verfahren\n- KaB: Kammerbeschluss\n- KbN: Nichtannahmebeschluss\n- KbS: Stattgebender Kammerbeschluss\n- KoB: Kammerbeschluss ohne Begründung\n- PkH: Prozesskostenhilfebeschluss\n- ReM: Rechtsentscheid in Mietsachen\n- Sch: Schiedsgerichtsentscheidung\n- Ste: Stellungnahme\n- Str: Streitwertbeschluss\n- TeB: Teilbeschluss\n- TeU: Teilurteil\n- Urt: Urteil\n- Vgl: Vergleich\n- Vor: Vorlagebeschluss\n- VsU: Versäumnisurteil\n- VzU: Verzichtsurteil\n- ZwB: Zwischenbeschluss\n- ZwU: Zwischenurteil\n- TVU: Teilversäumnisurteil\n- Vfg: Verfügung\n- Vorab: Ersuchen um Vorabentscheidung\n- Anh: Anhängiges Verfahren\n- End: Endurteil\n- KfB: Kostenfestsetzungsbeschluss",
             "example" : "Urteil"
           },
           "spruchkoerper" : {
             "type" : "string",
-            "description" : "Spruchkörper",
+            "description" : "Inhalt ist die Angabe des Spruchkörpers, von dem das Dokument stammt (z.B. 1. Zivilsenat, 3. Strafkammer, Großer Senat).",
             "example" : "Gericht"
           },
           "schlagwoerter" : {
@@ -3401,15 +3021,17 @@
           },
           "abweichendeDokumentnummern" : {
             "type" : "array",
-            "description" : "Abweichende Dokumentnummer",
+            "description" : "Abweichende Dokumentnummern\n\nWeitere Dokumentnummern die für dieses Dokument verwendet werden",
             "example" : "DEV-123",
             "items" : {
-              "type" : "string"
+              "type" : "string",
+              "description" : "Abweichende Dokumentnummern\n\nWeitere Dokumentnummern die für dieses Dokument verwendet werden",
+              "example" : "DEV-123"
             }
           },
           "@id" : {
             "type" : "string",
-            "example" : "/v1/case-law/ECLI:DE:FGRLP:1969:0905.IV85.68.0A"
+            "example" : "/v1/rechtsprechung/ECLI:DE:FGRLP:1969:0905.IV85.68.0A"
           },
           "inLanguage" : {
             "type" : "string",
@@ -3426,7 +3048,7 @@
             "description" : "Whether or not the document is a Vorabdokument"
           }
         },
-        "required" : [ "@id", "abweichendeDokumentnummern", "aktenzeichenListe", "datum", "dokumentNummer", "ecli", "encoding", "entscheidungsnamen", "inLanguage", "schlagwoerter", "vorabdokument" ]
+        "required" : [ "@context", "@id", "ecli", "encoding", "entscheidungsnamen", "inLanguage", "schlagwoerter", "vorabdokument" ]
       },
       "StreamingResponseBody" : { },
       "CourtSearchResult" : {
@@ -4353,192 +3975,6 @@
           }
         },
         "required" : [ "item", "textMatches" ]
-      },
-      "CaseLawSchema" : {
-        "type" : "object",
-        "properties" : {
-          "@type" : {
-            "type" : "string",
-            "example" : "Decision"
-          },
-          "@context" : {
-            "type" : "string"
-          },
-          "documentNumber" : {
-            "type" : "string",
-            "description" : "Dokumentnummer<br>",
-            "example" : "KARE000000000"
-          },
-          "ecli" : {
-            "type" : "string",
-            "description" : "European Case Law Identifier",
-            "example" : "ECLI:DE:FGRLP:1969:0905.IV85.68.0A"
-          },
-          "caseFacts" : {
-            "type" : "string",
-            "description" : "Tatbestand"
-          },
-          "decisionGrounds" : {
-            "type" : "string",
-            "description" : "Entscheidungsgründe"
-          },
-          "dissentingOpinion" : {
-            "type" : "string",
-            "description" : "Abweichende Meinung"
-          },
-          "grounds" : {
-            "type" : "string",
-            "description" : "Gründe"
-          },
-          "guidingPrinciple" : {
-            "type" : "string",
-            "description" : "Leitsatz"
-          },
-          "headline" : {
-            "type" : "string",
-            "description" : "Überschrift"
-          },
-          "titleLine" : {
-            "type" : "string",
-            "description" : "Titelzeile"
-          },
-          "headnote" : {
-            "type" : "string",
-            "description" : "Orientierungssatz"
-          },
-          "otherHeadnote" : {
-            "type" : "string",
-            "description" : "Sonstiger Orientierungssatz"
-          },
-          "otherLongText" : {
-            "type" : "string",
-            "description" : "Sonstiger Langtext"
-          },
-          "tenor" : {
-            "type" : "string",
-            "description" : "Tenor"
-          },
-          "decisionDate" : {
-            "type" : "string",
-            "format" : "date",
-            "description" : "Datum der Entscheidung, hier kann es zu Dopplungen mit anderen Entscheidungen kommen, auch in Kombination mit Aktenzeichen und Gericht.<br>"
-          },
-          "fileNumbers" : {
-            "type" : "array",
-            "description" : "Aktenzeichen des Dokuments<br><br>Der erste Eintrag ist das primäre Aktenzeichen.<br>Weitere Einträge sind abweichende Aktenzeichen, die auch für dieses<br>Dokument verwendet werden.<br>",
-            "example" : "BGH 123/23",
-            "items" : {
-              "type" : "string",
-              "description" : "Aktenzeichen des Dokuments<br><br>Der erste Eintrag ist das primäre Aktenzeichen.<br>Weitere Einträge sind abweichende Aktenzeichen, die auch für dieses<br>Dokument verwendet werden.<br>",
-              "example" : "BGH 123/23"
-            }
-          },
-          "courtType" : {
-            "type" : "string",
-            "description" : "Inhalt ist die Angabe des Typs des Gerichtes, das das Dokument verfasst hat.<br>",
-            "example" : "FG"
-          },
-          "location" : {
-            "type" : "string",
-            "description" : "Ort des Gerichtssitzes.<br>",
-            "example" : "Berlin"
-          },
-          "documentType" : {
-            "type" : "string",
-            "description" : "Innerhalb der Dokumentart „Rechtsprechung“ werden folgende Dokumenttypen unterschieden:<br><br><ul><li>Äuß: Äußerung</li><li>Ant: EuGH-Vorlage</li><li>AnU: Anerkenntnisurteil</li><li>Bes: Beschluss</li><li>Buß: Bußgeldbescheid</li><li>DrB: Dreierausschussbeschluss</li><li>EiA: Einstweilige Anordnung</li><li>Ent: Entscheidung</li><li>EVg: Einstellungsverfügung der Staatsanwaltschaft</li><li>GeB: Gerichtsbescheid</li><li>Gut: Gutachten</li><li>GWF: Gegenstandswertfestsetzung im verfassungsgerichtlichen Verfahren</li><li>KaB: Kammerbeschluss</li><li>KbN: Nichtannahmebeschluss</li><li>KbS: Stattgebender Kammerbeschluss</li><li>KoB: Kammerbeschluss ohne Begründung</li><li>PkH: Prozesskostenhilfebeschluss</li><li>ReM: Rechtsentscheid in Mietsachen</li><li>Sch: Schiedsgerichtsentscheidung</li><li>Ste: Stellungnahme</li><li>Str: Streitwertbeschluss</li><li>TeB: Teilbeschluss</li><li>TeU: Teilurteil</li><li>Urt: Urteil</li><li>Vgl: Vergleich</li><li>Vor: Vorlagebeschluss</li><li>VsU: Versäumnisurteil</li><li>VzU: Verzichtsurteil</li><li>ZwB: Zwischenbeschluss</li><li>ZwU: Zwischenurteil</li><li>TVU: Teilversäumnisurteil</li><li>Vfg: Verfügung</li><li>Vorab: Ersuchen um Vorabentscheidung</li><li>Anh: Anhängiges Verfahren</li><li>End: Endurteil</li><li>KfB: Kostenfestsetzungsbeschluss</li>",
-            "example" : "Urteil"
-          },
-          "outline" : {
-            "type" : "string",
-            "description" : "Leitsatz"
-          },
-          "judicialBody" : {
-            "type" : "string",
-            "description" : "Inhalt ist die Angabe des Spruchkörpers, von dem das Dokument stammt (z.B. 1. Zivilsenat, 3. Strafkammer, Großer Senat).<br>",
-            "example" : "1. Senat"
-          },
-          "keywords" : {
-            "type" : "array",
-            "description" : "Schlagworte",
-            "example" : "Kündigung",
-            "items" : {
-              "type" : "string",
-              "description" : "Schlagworte",
-              "example" : "Kündigung"
-            }
-          },
-          "courtName" : {
-            "type" : "string",
-            "description" : "Gericht<br>",
-            "example" : "LArbG Hamm"
-          },
-          "decisionName" : {
-            "type" : "array",
-            "description" : "Entscheidungsname",
-            "examples" : [ "Beispielentscheidung" ],
-            "items" : {
-              "type" : "string"
-            }
-          },
-          "deviatingDocumentNumber" : {
-            "type" : "array",
-            "description" : "Abweichende Dokumentnummer<br>",
-            "example" : "DEV-123",
-            "items" : {
-              "type" : "string",
-              "description" : "Abweichende Dokumentnummer<br>",
-              "example" : "DEV-123"
-            }
-          },
-          "previousDecisions" : {
-            "type" : "array",
-            "description" : "Vorgehende Entscheidungen",
-            "items" : {
-              "type" : "string"
-            }
-          },
-          "ensuingDecisions" : {
-            "type" : "array",
-            "description" : "Nachgehende Entscheidungen",
-            "items" : {
-              "type" : "string"
-            }
-          },
-          "gesetzeskraft" : {
-            "type" : "array",
-            "description" : "Gesetzeskraft",
-            "example" : "vereinbar mit höherrangigem Recht (Bremen)",
-            "items" : {
-              "type" : "string"
-            }
-          },
-          "streitjahre" : {
-            "type" : "array",
-            "description" : "Streitjahre",
-            "items" : {
-              "type" : "string"
-            }
-          },
-          "@id" : {
-            "type" : "string",
-            "example" : "/v1/case-law/ECLI:DE:FGRLP:1969:0905.IV85.68.0A"
-          },
-          "inLanguage" : {
-            "type" : "string",
-            "example" : "de"
-          },
-          "encoding" : {
-            "type" : "array",
-            "items" : {
-              "$ref" : "#/components/schemas/DocumentEncodingSchema"
-            }
-          },
-          "vorabdokument" : {
-            "type" : "boolean",
-            "description" : "Whether or not the document is a Vorabdokument"
-          }
-        },
-        "required" : [ "@context", "@id", "decisionDate", "decisionName", "deviatingDocumentNumber", "documentNumber", "ecli", "encoding", "fileNumbers", "inLanguage", "keywords", "vorabdokument" ]
       },
       "ZipDataCatalogSchema" : {
         "type" : "object",

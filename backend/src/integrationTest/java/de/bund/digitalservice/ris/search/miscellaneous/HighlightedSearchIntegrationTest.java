@@ -24,7 +24,7 @@ class HighlightedSearchIntegrationTest extends ContainersIntegrationBase {
   }
 
   String allDocUrl = ApiConfig.Paths.DOCUMENT + "?searchTerm=%s";
-  String caseLawUrl = ApiConfig.Paths.CASELAW + "?searchTerm=%s";
+  String caseLawUrl = ApiConfig.Paths.RECHTSPRECHUNG + "?searchTerm=%s";
 
   @Autowired private MockMvc mockMvc;
 

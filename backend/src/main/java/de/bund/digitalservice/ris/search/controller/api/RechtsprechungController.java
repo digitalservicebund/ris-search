@@ -60,12 +60,13 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
 /**
  * REST controller for retrieving and searching Rechtsprechung (case law) documents.
  *
- * <p>Unlike the legacy {@code /v1/case-law/**} endpoints, which split search from single-document
- * retrieval across {@link CaseLawSearchController} and {@link CaseLawController}, this controller
- * keeps all {@code /v1/rechtsprechung/**} functionality in one place, since there was no existing
- * usage to stay consistent with when this controller was created.
+ * <p>Keeps all {@code /v1/rechtsprechung/**} functionality (search, single-document retrieval,
+ * html/xml/zip rendering, and changelogs) in one place.
  */
-@Tag(name = "Rechtsprechung")
+@Tag(
+    name = "Rechtsprechung",
+    description =
+        "This group of endpoints provides judgments and decisions of the Federal Constitutional Court, the supreme courts of the Federal Republic of Germany, the Federal Patent Court, and others that were documented by the documentation units of these courts. The documents are anonymized and published in full, and the database is updated daily.")
 @RestController
 @Profile({"dev", "e2e", "default", "staging", "uat", "test", "prototype"})
 public class RechtsprechungController {
@@ -182,7 +183,7 @@ public class RechtsprechungController {
     CaseLawDocumentationUnit unit = result.getFirst();
     return ResponseEntity.ok()
         .contentType(MediaType.APPLICATION_JSON)
-        .body(RechtsprechungSchemaMapper.fromDomain(unit));
+        .body(RechtsprechungSchemaMapper.fromDomain(unit, jsonldContextPath));
   }
 
   /**
