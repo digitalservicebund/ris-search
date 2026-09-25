@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-model href="Grammatiken/Norms/legalDocML.de.sch" schematypens="http://purl.oclc.org/dsdl/schematron"?>
-<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.8.2/"
-                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.8.2/ Grammatiken/Norms/legalDocML.de-metadaten-ris.xsd http://MetadatenRegelungstext.LegalDocML.de/1.8.2/ Grammatiken/Norms/legalDocML.de-metadaten-regelungstext.xsd http://MetadatenRechtsetzungsdokument.LegalDocML.de/1.8.2/ Grammatiken/Norms/legalDocML.de-metadaten-rechtsetzungsdokument.xsd http://Inhaltsdaten.LegalDocML.de/1.8.2/ Grammatiken/Norms/legalDocML.de-regelungstextverkuendungsfassung.xsd">
-    <akn:act name="/akn/ontology/de/concept/documenttype/bund/regelungstext-verkuendung">
+<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.9/"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.9/ Grammatiken/Norms/legalDocML.de-metadaten-ris.xsd http://MetadatenRegelungstext.LegalDocML.de/1.9/ Grammatiken/legalDocML.de-metadaten-regelungstext.xsd http://MetadatenRechtsetzungsdokument.LegalDocML.de/1.9/ Grammatiken/legalDocML.de-metadaten-rechtsetzungsdokument.xsd http://Inhaltsdaten.LegalDocML.de/1.9/ Grammatiken/legalDocML.de-regelungstext.xsd">
+    <akn:act name="/akn/ontology/de/concept/documenttype/bund/regelungstext">
         <akn:meta GUID="a1111111-1111-1111-1111-111111111111" eId="meta-n1">
             <akn:identification GUID="a2222222-2222-2222-2222-222222222222" eId="meta-n1_ident-n1" source="attributsemantik-noch-undefiniert">
                 <akn:FRBRWork GUID="a3333333-3333-3333-3333-333333333333" eId="meta-n1_ident-n1_frbrwork-n1">
@@ -11,7 +12,7 @@
                     <akn:FRBRuri GUID="a5555555-5555-5555-5555-555555555555" eId="meta-n1_ident-n1_frbrwork-n1_frbruri-n1" value="eli/bund/bgbl-1/2000/s1016"/>
                     <akn:FRBRalias GUID="a6666666-6666-6666-6666-666666666666" eId="meta-n1_ident-n1_frbrwork-n1_frbralias-n1" name="übergreifende-id" value="145a78a3-7240-49dd-ab0f-3195e1832905"/>
                     <!-- Datum in FRBRdate wurde so angepasst, dass auch hier die Jahreszahl 2000 übernommen wird -->
-                    <akn:FRBRdate GUID="a7777777-7777-7777-7777-777777777777" date="2000-05-27" eId="meta-n1_ident-n1_frbrwork-n1_frbrdate-n1" name="verkuendungsfassung-verkuendungsdatum"/>
+                    <akn:FRBRdate GUID="a7777777-7777-7777-7777-777777777777" date="2000-05-27" eId="meta-n1_ident-n1_frbrwork-n1_frbrdate-n1" name="verkuendungsdatum"/>
                     <akn:FRBRauthor GUID="a8888888-8888-8888-8888-888888888888" eId="meta-n1_ident-n1_frbrwork-n1_frbrauthor-n1" href="recht.bund.de/institution/bundesregierung"/>
                     <akn:FRBRcountry GUID="a9999999-9999-9999-9999-999999999999" eId="meta-n1_ident-n1_frbrwork-n1_frbrcountry-n1" value="de"/>
                     <akn:FRBRnumber GUID="aa111111-1111-1111-1111-111111111111" eId="meta-n1_ident-n1_frbrwork-n1_frbrnumber-n1" value="s1016"/>
@@ -135,7 +136,9 @@
                 <akn:note GUID="e9999999-9999-9999-9999-999999999999" eId="meta-n1_editfnote-n6" marker="#" placementBase="#schluss-n1_formel-n1" refersTo="aenderungsfussnote"><akn:p GUID="7d8583f6-ae27-5308-9fe7-d1c4d6afa5c5" eId="meta-n1_editfnote-n6_text-n1">Schlussformel: Diese Fußnote an der Schlussformel wurde im End-to-end-Datenbestand ergänzt</akn:p></akn:note>
             </akn:notes>
             <akn:proprietary GUID="bb777777-7777-7777-7777-777777777777" eId="meta-n1_proprietary-n1" source="attributsemantik-noch-undefiniert">
-                <ris:legalDocML.de_metadaten xmlns:ris="http://MetadatenRIS.LegalDocML.de/1.8.2/" xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.8.2/ Grammatiken/legalDocML.de-metadaten-ris.xsd">
+                <ris:legalDocML.de_metadaten xmlns:ris="http://MetadatenRIS.LegalDocML.de/1.9/"
+                                             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                                             xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.9/ Grammatiken/Norms/legalDocML.de-metadaten-ris.xsd">
                     <ris:abkuerzung refersTo="interne-abkuerzung">RisFrSaftErfrischV</ris:abkuerzung>
                     <ris:inkraft date="2023-04-29"/>
                     <ris:vollzitat>Fiktive Fruchtsaft- und Erfrischungsgetränkeverordnung vom 27. Mai 2000 (BGBl. I S. 1016), zuletzt modifiziert im Testverfahren</ris:vollzitat>
@@ -171,41 +174,41 @@
                 <akn:date GUID="d8a00001-0000-0000-0000-000000000002" date="2000-05-27" eId="einleitung-n1_block-n1_datum-n1" refersTo="ausfertigung-datum"/>
             </akn:block>
         </akn:preface>
-        <akn:preamble GUID="d8888888-8888-8888-8888-888888888888" eId="präambel-n1">
-            <akn:formula GUID="d9999999-9999-9999-9999-999999999999" eId="präambel-n1_formel-n1" name="attributsemantik-noch-undefiniert" refersTo="eingangsformel">
-                <akn:p GUID="da111111-1111-1111-1111-111111111111" eId="präambel-n1_formel-n1_text-n1">
+        <akn:preamble GUID="d8888888-8888-8888-8888-888888888888" eId="praeambel-n1">
+            <akn:formula GUID="d9999999-9999-9999-9999-999999999999" eId="praeambel-n1_formel-n1" name="attributsemantik-noch-undefiniert" refersTo="eingangsformel">
+                <akn:p GUID="da111111-1111-1111-1111-111111111111" eId="praeambel-n1_formel-n1_text-n1">
                     Auf Grundlage des fiktiven Lebensmittel- und Bedarfsgegenständegesetzes in der Fassung vom 27. Mai 2000 und unter Einbeziehung aktueller Testdaten wird diese Verordnung erlassen:
                 </akn:p>
-                <akn:blockList GUID="da222222-2222-2222-2222-222222222222" eId="präambel-n1_formel-n1_liste-n1">
-                    <akn:item GUID="da333333-3333-3333-3333-333333333333" eId="präambel-n1_formel-n1_liste-n1_listenelem-n1">
-                        <akn:num GUID="da444444-4444-4444-4444-444444444444" eId="präambel-n1_formel-n1_liste-n1_listenelem-n1_bezeichnung-n1">-</akn:num>
-                        <akn:p GUID="da555555-5555-5555-5555-555555555555" eId="präambel-n1_formel-n1_liste-n1_listenelem-n1_text-n1">
+                <akn:blockList GUID="da222222-2222-2222-2222-222222222222" eId="praeambel-n1_formel-n1_liste-n1">
+                    <akn:item GUID="da333333-3333-3333-3333-333333333333" eId="praeambel-n1_formel-n1_liste-n1_listenelem-n1">
+                        <akn:num GUID="da444444-4444-4444-4444-444444444444" eId="praeambel-n1_formel-n1_liste-n1_listenelem-n1_bezeichnung-n1">-</akn:num>
+                        <akn:p GUID="da555555-5555-5555-5555-555555555555" eId="praeambel-n1_formel-n1_liste-n1_listenelem-n1_text-n1">
                             auf Grund des § 12 Abs. 1 Nr. 1 und Abs. 2 Nr. 2a und 3 in Verbindung mit Abs. 3 des fiktiven Lebensmittelgesetzes
                         </akn:p>
                     </akn:item>
-                    <akn:item GUID="da666666-6666-6666-6666-666666666666" eId="präambel-n1_formel-n1_liste-n1_listenelem-n2">
-                        <akn:num GUID="da777777-7777-7777-7777-777777777777" eId="präambel-n1_formel-n1_liste-n1_listenelem-n2_bezeichnung-n1">-</akn:num>
-                        <akn:p GUID="da888888-8888-8888-8888-888888888888" eId="präambel-n1_formel-n1_liste-n1_listenelem-n2_text-n1">
+                    <akn:item GUID="da666666-6666-6666-6666-666666666666" eId="praeambel-n1_formel-n1_liste-n1_listenelem-n2">
+                        <akn:num GUID="da777777-7777-7777-7777-777777777777" eId="praeambel-n1_formel-n1_liste-n1_listenelem-n2_bezeichnung-n1">-</akn:num>
+                        <akn:p GUID="da888888-8888-8888-8888-888888888888" eId="praeambel-n1_formel-n1_liste-n1_listenelem-n2_text-n1">
                             unter Einvernehmen mit den zuständigen Ministerien
                         </akn:p>
                     </akn:item>
                 </akn:blockList>
-                <akn:p GUID="da999999-9999-9999-9999-999999999999" eId="präambel-n1_formel-n1_text-n2">
+                <akn:p GUID="da999999-9999-9999-9999-999999999999" eId="praeambel-n1_formel-n1_text-n2">
                     (Letzte Änderung durch fiktive Testanpassungen)
                 </akn:p>
             </akn:formula>
-            <akn:blockContainer GUID="91cfd9c4-a40b-4faf-84ac-df5894d750d5" eId="präambel-n1_blockcontainer-n1"
+            <akn:blockContainer GUID="91cfd9c4-a40b-4faf-84ac-df5894d750d5" eId="praeambel-n1_blockcontainer-n1"
                                 refersTo="inhaltsuebersicht">
-                <akn:heading GUID="0056676a-a751-42c1-a3ac-62605d761db9" eId="präambel-n1_blockcontainer-n1_überschrift-n1">
+                <akn:heading GUID="0056676a-a751-42c1-a3ac-62605d761db9" eId="praeambel-n1_blockcontainer-n1_ueberschrift-n1">
                     Inhaltsübersicht
                 </akn:heading>
-                <akn:toc GUID="15463867-68fc-4ece-8518-ef4099c04a91" eId="präambel-n1_blockcontainer-n1_inhuebs-n1">
+                <akn:toc GUID="15463867-68fc-4ece-8518-ef4099c04a91" eId="praeambel-n1_blockcontainer-n1_inhuebs-n1">
                     <akn:tocItem GUID="e58bbb95-b7a5-4058-be1c-7cbad708f883"
-                                 eId="präambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n1" href="" level="1">
+                                 eId="praeambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n1" href="" level="1">
                         <akn:span GUID="c8f0014c-9e28-4907-aade-f148d7602b21"
-                                  eId="präambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n1_span-n1">
+                                  eId="praeambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n1_span-n1">
                             <akn:b GUID="cd778cb3-0141-4fec-b236-989fec2ec4a4"
-                                   eId="präambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n1_span-n1_fettschrift-n1">1. Abschnitt
+                                   eId="praeambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n1_span-n1_fettschrift-n1">1. Abschnitt
                             </akn:b>
                         </akn:span>
                     </akn:tocItem>
@@ -217,14 +220,14 @@
                 <akn:num GUID="db333333-3333-3333-3333-333333333333" eId="hauptteil-n1_abschnitt-n1_bezeichnung-n1">
                     Abschnitt 1
                 </akn:num>
-                <akn:heading GUID="db444444-4444-4444-4444-444444444444" eId="hauptteil-n1_abschnitt-n1_überschrift-n1">
+                <akn:heading GUID="db444444-4444-4444-4444-444444444444" eId="hauptteil-n1_abschnitt-n1_ueberschrift-n1">
                     Anwendungsbereich
                 </akn:heading>
                 <akn:article GUID="db555555-5555-5555-5555-555555555555" eId="art-z1" period="#meta-n1_geltzeiten-n1_geltungszeitgr-n26" refersTo="stammform">
                     <akn:num GUID="db666666-6666-6666-6666-666666666666" eId="art-z1_bezeichnung-n1">
                         § 1
                     </akn:num>
-                    <akn:heading GUID="db777777-7777-7777-7777-777777777777" eId="art-z1_überschrift-n1">
+                    <akn:heading GUID="db777777-7777-7777-7777-777777777777" eId="art-z1_ueberschrift-n1">
                         Anwendungsbereich
                     </akn:heading>
                     <akn:paragraph GUID="db888888-8888-8888-8888-888888888888" eId="art-z1_abs-z1">
@@ -251,14 +254,14 @@
                 <akn:num GUID="dd222222-2222-2222-2222-222222222222" eId="hauptteil-n1_abschnitt-n2_bezeichnung-n1">
                     Abschnitt 2
                 </akn:num>
-                <akn:heading GUID="dd333333-3333-3333-3333-333333333333" eId="hauptteil-n1_abschnitt-n2_überschrift-n1">
+                <akn:heading GUID="dd333333-3333-3333-3333-333333333333" eId="hauptteil-n1_abschnitt-n2_ueberschrift-n1">
                     Fruchtsaft, einige ähnliche Erzeugnisse und Fruchtnektar
                 </akn:heading>
                 <akn:article GUID="dd444444-4444-4444-4444-444444444444" eId="art-z2" period="#meta-n1_geltzeiten-n1_geltungszeitgr-n26" refersTo="stammform">
                     <akn:num GUID="dd555555-5555-5555-5555-555555555555" eId="art-z2_bezeichnung-n1">
                         § 2
                     </akn:num>
-                    <akn:heading GUID="dd666666-6666-6666-6666-666666666666" eId="art-z2_überschrift-n1">
+                    <akn:heading GUID="dd666666-6666-6666-6666-666666666666" eId="art-z2_ueberschrift-n1">
                         Zutaten, Herstellungsanforderungen
                     </akn:heading>
                     <akn:paragraph GUID="dd777777-7777-7777-7777-777777777777" eId="art-z2_abs-z1">
@@ -360,7 +363,7 @@
                     <akn:num GUID="ec333333-3333-3333-3333-333333333333" eId="art-z3_bezeichnung-n1">
                         § 3
                     </akn:num>
-                    <akn:heading GUID="ec444444-4444-4444-4444-444444444444" eId="art-z3_überschrift-n1">
+                    <akn:heading GUID="ec444444-4444-4444-4444-444444444444" eId="art-z3_ueberschrift-n1">
                         Kennzeichnung
                     </akn:heading>
                     <akn:paragraph GUID="dccccccc-cccc-cccc-cccc-cccccccccccc" eId="art-z3_abs-z1">

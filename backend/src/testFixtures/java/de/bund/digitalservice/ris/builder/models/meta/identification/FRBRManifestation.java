@@ -6,7 +6,7 @@ import de.bund.digitalservice.ris.builder.models.meta.identification.FRBRLeafs.D
 import de.bund.digitalservice.ris.builder.models.meta.identification.FRBRLeafs.FormatLeaf;
 import de.bund.digitalservice.ris.builder.models.meta.identification.FRBRLeafs.HrefLeaf;
 import de.bund.digitalservice.ris.builder.models.meta.identification.FRBRLeafs.ValueLeaf;
-import de.bund.digitalservice.ris.search.utils.eli.ManifestationEli;
+import de.bund.digitalservice.ris.search.utils.eli.ManifestationEliPath;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import java.time.LocalDate;
@@ -39,7 +39,7 @@ public class FRBRManifestation extends BaseElement {
   public FRBRManifestation() {
     // eli/bund/bgbl-1/2025/341/2025-12-22/1/deu/2025-12-22/regelungstext-verkuendung-1.xml
     this(
-        new ManifestationEli(
+        new ManifestationEliPath(
             "bund",
             "bgbl-1",
             "2025",
@@ -57,7 +57,7 @@ public class FRBRManifestation extends BaseElement {
    *
    * @param eli the manifestation eli for the FRBRManifestation
    */
-  public FRBRManifestation(ManifestationEli eli) {
+  public FRBRManifestation(ManifestationEliPath eli) {
 
     this.eId = "meta-n1_ident-n1_frbrmanifestation-n1";
 

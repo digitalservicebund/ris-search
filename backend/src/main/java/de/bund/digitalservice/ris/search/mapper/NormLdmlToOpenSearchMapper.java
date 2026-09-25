@@ -12,6 +12,8 @@ import de.bund.digitalservice.ris.search.utils.LdmlTemporalData;
 import de.bund.digitalservice.ris.search.utils.XmlDocument;
 import jakarta.xml.bind.ValidationException;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -159,13 +161,18 @@ public class NormLdmlToOpenSearchMapper {
     requireNotBedingtInkraftAndNotGegenstandslos(xmlDocument);
 
     String workEli = xmlDocument.getNonEmptyElementOrThrow(X_PATH_WORK_URI, "Work-Eli must exist");
+    String workEliPath = parseURIPathOrThrow(workEli, "Work eli must be a valid uri.");
 
     String expressionEli =
         xmlDocument.getNonEmptyElementOrThrow(X_PATH_EXPRESSION_URI, "Expression-Eli must exist");
+    String expressionEliPath =
+        parseURIPathOrThrow(expressionEli, "Expression eli must be a valid uri.");
 
     String manifestationEli =
         xmlDocument.getNonEmptyElementOrThrow(
             X_PATH_MANIFESTATION_THIS, "Manifestation-Eli must exist");
+    String manifestationEliPath =
+        parseURIPathOrThrow(manifestationEli, "Manifestation eli must be a valid uri.");
 
     String risAbbreviation =
         xmlDocument.getNonEmptyElementOrThrow(
@@ -185,7 +192,12 @@ public class NormLdmlToOpenSearchMapper {
 
     NormContext normContext =
         new NormContext(
-            abbreviation, workEli, expressionEli, indexedAt, eIdToDocnrMap, manifestationEli);
+            abbreviation,
+            workEliPath,
+            expressionEliPath,
+            indexedAt,
+            eIdToDocnrMap,
+            manifestationEliPath);
 
     List<Article> articles = getArticlesByXmlDocument(xmlDocument, attachments, normContext);
     List<String> articleNames = articles.stream().map(Article::getName).toList();
@@ -199,7 +211,7 @@ public class NormLdmlToOpenSearchMapper {
             .map(e -> e.replaceAll("\\s+", " "))
             .orElse(null);
     final List<TableOfContentsItem> tableOfContents =
-        getTableOfContents(expressionEli, xmlDocument, attachments);
+        getTableOfContents(expressionEliPath, xmlDocument, attachments);
 
     // For differentiation of legislationDate and datePublished, see comments on Norm::normsDate
     // and Norm::datePublished
@@ -210,11 +222,11 @@ public class NormLdmlToOpenSearchMapper {
     LocalDate normsSortDate = isPrototype ? legislationDate : entryIntoForceDate;
 
     return Norm.builder()
-        .id(expressionEli)
+        .id(expressionEliPath)
         .tableOfContents(tableOfContents)
-        .workEli(workEli)
-        .expressionEli(expressionEli)
-        .manifestationEliExample(manifestationEli)
+        .workEli(workEliPath)
+        .expressionEli(expressionEliPath)
+        .manifestationEliExample(manifestationEliPath)
         .officialTitle(getOfficialTitleByXmlDocument(xmlDocument))
         .officialShortTitle(getOfficialShortTitleByXmlDocument(xmlDocument))
         .abbreviation(abbreviation)
@@ -607,5 +619,14 @@ public class NormLdmlToOpenSearchMapper {
                 Element::getTextContent,
                 (existing, replacement) -> existing // handles duplicate keys if any
                 ));
+  }
+
+  private static String parseURIPathOrThrow(String uri, String errorMessage) {
+    try {
+      String path = new URI(uri).getPath();
+      return org.springframework.util.StringUtils.trimLeadingCharacter(path, '/');
+    } catch (URISyntaxException e) {
+      throw new IllegalArgumentException(errorMessage);
+    }
   }
 }

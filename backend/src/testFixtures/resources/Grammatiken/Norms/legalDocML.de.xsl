@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:transform xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.8.1/"
-               xmlns:brat="http://MetadatenBundesrat.LegalDocML.de/1.8.1/"
-               xmlns:breg="http://MetadatenBundesregierung.LegalDocML.de/1.8.1/"
-               xmlns:btag="http://MetadatenBundestag.LegalDocML.de/1.8.1/"
+<xsl:transform xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.9/"
+               xmlns:brat="http://MetadatenBundesrat.LegalDocML.de/1.9/"
+               xmlns:breg="http://MetadatenBundesregierung.LegalDocML.de/1.9/"
+               xmlns:btag="http://MetadatenBundestag.LegalDocML.de/1.9/"
                xmlns:error="https://doi.org/10.5281/zenodo.1495494#error"
-               xmlns:fhilf="http://MetadatenFormulierungshilfe.LegalDocML.de/1.8.1/"
+               xmlns:fhilf="http://MetadatenFormulierungshilfe.LegalDocML.de/1.9/"
                xmlns:fkt="lokale-funktionen"
-               xmlns:nkr="http://MetadatenNormenkontrollrat.LegalDocML.de/1.8.1/"
+               xmlns:nkr="http://MetadatenNormenkontrollrat.LegalDocML.de/1.9/"
                xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-               xmlns:redok="http://MetadatenRechtsetzungsdokument.LegalDocML.de/1.8.1/"
-               xmlns:regtxt="http://MetadatenRegelungstext.LegalDocML.de/1.8.1/"
+               xmlns:redok="http://MetadatenRechtsetzungsdokument.LegalDocML.de/1.9/"
+               xmlns:regtxt="http://MetadatenRegelungstext.LegalDocML.de/1.9/"
                xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                xmlns:schxslt="https://doi.org/10.5281/zenodo.1495494"
                xmlns:schxslt-api="https://doi.org/10.5281/zenodo.1495494#api"
+               xmlns:sonst="http://MetadatenSonstigerVeroeffentlichungstext.LegalDocML.de/1.9/"
                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                version="2.0">
@@ -21,11 +22,11 @@
                     xmlns:skos="http://www.w3.org/2004/02/skos/core#">
       <dct:creator>
          <dct:Agent>
-            <skos:prefLabel>SchXslt/1.10.1 SAXON/HE 12.6</skos:prefLabel>
+            <skos:prefLabel>SchXslt/1.10.1 SAXON/HE 12.9</skos:prefLabel>
             <schxslt.compile.typed-variables xmlns="https://doi.org/10.5281/zenodo.1495494#">true</schxslt.compile.typed-variables>
          </dct:Agent>
       </dct:creator>
-      <dct:created>2025-06-10T21:50:15.389979799Z</dct:created>
+      <dct:created>2026-09-01T13:38:38.295685946Z</dct:created>
    </rdf:Description>
    <xsl:output indent="yes"/>
    <xsl:key name="nodes-by-GUID" match="*[@GUID]" use="@GUID"/>
@@ -36,16 +37,17 @@
    <xsl:param name="form-mantelform" select="'mantelform'"/>
    <xsl:param name="form-eingebundene-stammform" select="'eingebundene-stammform'"/>
    <xsl:param name="form-nicht-vorhanden" select="'nicht-vorhanden'"/>
-   <xsl:param name="fassung"
-              select="/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRWork/akn:FRBRdate/@name"/>
-   <xsl:param name="fassung-entwurfsfassung" select="'erstellungsdatum'"/>
-   <xsl:param name="fassung-verkündungsfassung"
-              select="('verkuendungsfassung-verkuendungsdatum', 'verkuendungsfassung-ausfertigungsdatum')"/>
-   <xsl:param name="fassung-neufassung"
-              select="('neufassung-verkuendungsdatum', 'neufassung-ausfertigungsdatum')"/>
-   <xsl:param name="ist-entwurfsfassung" select="$fassung = 'erstellungsdatum'"/>
+   <xsl:param name="authority-egesetzgebung"
+              select="'https://www.egesetzgebung.bund.de'"/>
+   <xsl:param name="authority-everkündung" select="'https://www.recht.bund.de'"/>
+   <xsl:param name="authority-rechtsinformationssystem"
+              select="'https://www.ris.bund.de'"/>
+   <xsl:param name="ist-entwurfsfassung"
+              select="starts-with(/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRWork/akn:FRBRuri/@value, $authority-egesetzgebung)"/>
    <xsl:param name="ist-verkündungsfassung"
-              select="$fassung = ($fassung-verkündungsfassung, $fassung-neufassung)"/>
+              select="starts-with(/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRWork/akn:FRBRuri/@value, $authority-everkündung)"/>
+   <xsl:param name="ist-konsolidierte-fassung"
+              select="starts-with(/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRWork/akn:FRBRuri/@value, $authority-rechtsinformationssystem)"/>
    <xsl:param name="typ"
               select="/akn:akomaNtoso/*/akn:meta/akn:proprietary/regtxt:legalDocML.de_metadaten/regtxt:typ"/>
    <xsl:param name="typ-gesetz" select="'gesetz'"/>
@@ -61,7 +63,7 @@
    <xsl:param name="art-begründung-uri"
               select="( '/akn/ontology/de/concept/documenttype/bund/begruendung-aenderungsantrag', '/akn/ontology/de/concept/documenttype/bund/begruendung-entschliessungsantrag', '/akn/ontology/de/concept/documenttype/bund/begruendung-regelungstext' )"/>
    <xsl:param name="art-regelungstext-uri"
-              select="( '/akn/ontology/de/concept/documenttype/bund/regelungstext-entwurf', '/akn/ontology/de/concept/documenttype/bund/regelungstext-neufassung', '/akn/ontology/de/concept/documenttype/bund/regelungstext-verkuendung' )"/>
+              select="( '/akn/ontology/de/concept/documenttype/bund/regelungstext-entwurf', '/akn/ontology/de/concept/documenttype/bund/regelungstext' )"/>
    <xsl:param name="art-vereinbarung-uri"
               select="( '/akn/ontology/de/concept/documenttype/bund/vereinbarung-entwurf', '/akn/ontology/de/concept/documenttype/bund/vereinbarung-verkuendung' )"/>
    <xsl:param name="art-vorblatt-uri"
@@ -75,11 +77,7 @@
    <xsl:param name="art-bericht-uri"
               select="'/akn/ontology/de/concept/documenttype/bund/bericht'"/>
    <xsl:param name="art-bekanntmachungstext-uri"
-              select="( '/akn/ontology/de/concept/documenttype/bund/bekanntmachungstext', '/akn/ontology/de/concept/documenttype/bund/bekanntmachungstext-berichtigung', '/akn/ontology/de/concept/documenttype/bund/bekanntmachungstext-entscheidung-des-bundesverfassungsgerichts' )"/>
-   <xsl:param name="initiant"
-              select="/akn:akomaNtoso/*/akn:meta/akn:proprietary/redok:legalDocML.de_metadaten/redok:initiant"/>
-   <xsl:param name="bearbeitende-institution"
-              select="/akn:akomaNtoso/*/akn:meta/akn:proprietary/redok:legalDocML.de_metadaten/redok:bearbeitendeInstitution"/>
+              select="( '/akn/ontology/de/concept/documenttype/bund/sonstiger-veroeffentlichungstext' )"/>
    <xsl:param name="bearbeitende-institution-frbrauthor"
               select="/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRExpression/akn:FRBRauthor/@href"/>
    <xsl:param name="refersto-literal-geltungszeitregel" select="'geltungszeitregel'"/>
@@ -101,8 +99,12 @@
    <xsl:param name="type-literal-ereignisreferenz-generation" select="'generation'"/>
    <xsl:param name="type-literal-ereignisreferenz-repeal" select="'repeal'"/>
    <xsl:param name="type-literal-ereignisreferenz-amendment" select="'amendment'"/>
+   <xsl:param name="refersto-literal-ereignisreferenz-verkuendung"
+              select="'verkuendung'"/>
    <xsl:param name="refersto-literal-ereignisreferenz-entwurfsfassung-ausfertigung-mit-unbekanntem-datum"
               select="'ausfertigung-mit-noch-unbekanntem-datum'"/>
+   <xsl:param name="refersto-literal-ereignisreferenz-entwurfsfassung-verkuendung-mit-unbekanntem-datum"
+              select="'verkuendung-mit-noch-unbekanntem-datum'"/>
    <xsl:param name="refersto-literal-ereignisreferenz-entwurfsfassung-inkrafttreten"
               select="'inkrafttreten'"/>
    <xsl:param name="refersto-literal-ereignisreferenz-entwurfsfassung-inkrafttreten-mit-unbekanntem-datum"
@@ -137,14 +139,18 @@
    <xsl:param name="präfix-eid-zitierbar" select="'z'"/>
    <xsl:param name="zitierbare-elementtypen" select="('article', 'paragraph')"/>
    <xsl:param name="platzhalter-datum-unbekannt" select="'0001-01-01'"/>
-   <xsl:param name="eli-präfix-entwurfsfassung" select="'eli/dl'"/>
-   <xsl:param name="eli-präfix-verkündungsfassung" select="'eli/bund'"/>
+   <xsl:param name="eli-präfix-entwurfsfassung"
+              select="'https://www.egesetzgebung.bund.de/eli/dl'"/>
+   <xsl:param name="eli-präfix-verkündungsfassung"
+              select="'https://www.recht.bund.de/eli/bund'"/>
+   <xsl:param name="eli-präfix-konsolidierte-fassung"
+              select="'https://www.ris.bund.de/eli/bund'"/>
    <xsl:param name="eli-agent-entwurf"
               select="tokenize(/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRWork/akn:FRBRauthor/@href, '/')[last()]"/>
-   <xsl:param name="eli-agent-verkündung"
+   <xsl:param name="eli-agent-verkündung-oder-konsolidierung"
               select="/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRWork/akn:FRBRname/@value"/>
    <xsl:param name="eli-year"
-              select="(: -- Nimmt als Wert die in der folgenden Reihenfolge gesuchte letzte (!) gefundene Jahresangabe an -- :) ( (: das erste Entwurfsfassung-FRBRdate; es darf nur eins geben! :) substring(/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRWork/akn:FRBRdate[@name = 'erstellungsdatum'][1]/@date, 1, 4), (: Jahr der Ausfertigung der Neufassung :) if (not(empty(/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRWork/akn:FRBRdate[@name = 'neufassung-ausfertigungsdatum']/@date))) then (substring(/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRWork/akn:FRBRdate[@name = 'neufassung-ausfertigungsdatum']/@date, 1, 4)) else (), (: Jahr der Ausfertigung der Verkündungsfassung :) if (not(empty(/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRWork/akn:FRBRdate[@name = 'verkuendungsfassung-ausfertigungsdatum']/@date))) then substring(/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRWork/akn:FRBRdate[@name = 'verkuendungsfassung-ausfertigungsdatum']/@date, 1, 4) else (), (: Jahr der Neufassung :) if (not(empty(/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRWork/akn:FRBRdate[@name = 'neufassung-verkuendungsdatum']/@date))) then substring(/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRWork/akn:FRBRdate[@name = 'neufassung-verkuendungsdatum']/@date, 1, 4) else (), (: Jahr der Verkündung :) if (not(empty(/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRWork/akn:FRBRdate[@name = 'verkuendungsfassung-verkuendungsdatum']/@date))) then (substring(/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRWork/akn:FRBRdate[@name = 'verkuendungsfassung-verkuendungsdatum']/@date, 1, 4)) else () )[last()]"/>
+              select="(: -- Nimmt als Wert die in der folgenden Reihenfolge gesuchte letzte (!) gefundene Jahresangabe an -- :) ( (: das erste Entwurfsfassung-FRBRdate; es darf nur eins geben! :) substring(/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRWork/akn:FRBRdate[@name = 'erstellungsdatum'][1]/@date, 1, 4), (: Jahr der Ausfertigung :) if (not(empty(/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRWork/akn:FRBRdate[@name = 'ausfertigungsdatum']/@date))) then (substring(/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRWork/akn:FRBRdate[@name = 'ausfertigungsdatum']/@date, 1, 4)) else (), (: Jahr der Verkündung :) if (not(empty(/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRWork/akn:FRBRdate[@name = 'verkuendungsdatum']/@date))) then substring(/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRWork/akn:FRBRdate[@name = 'verkuendungsdatum']/@date, 1, 4) else () )[last()]"/>
    <xsl:param name="eli-natural-identifier"
               select="/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRWork/akn:FRBRnumber/@value"/>
    <xsl:param name="eli-process-identifier" select="$eli-natural-identifier"/>
@@ -169,19 +175,37 @@
    <xsl:param name="FRBRthis-verkündungsfassung-work-aufbau"
               select="concat($eli-präfix-verkündungsfassung, '/{agent}/{year}/{natural identifier}/{subtype}')"/>
    <xsl:param name="FRBRthis-verkündungsfassung-work-inhalt"
-              select="string-join(($eli-präfix-verkündungsfassung, $eli-agent-verkündung, $eli-year, $eli-natural-identifier, $eli-subtype), '/')"/>
+              select="string-join(($eli-präfix-verkündungsfassung, $eli-agent-verkündung-oder-konsolidierung, $eli-year, $eli-natural-identifier, $eli-subtype), '/')"/>
    <xsl:param name="FRBRthis-verkündungsfassung-expression-beschreibung"
               select="'Der eindeutige Bezeichner für Teildokumente in der Verkündungsfassung auf der Expression-Ebene'"/>
    <xsl:param name="FRBRthis-verkündungsfassung-expression-aufbau"
-              select="concat($eli-präfix-verkündungsfassung, '/{agent}/{year}/{natural identifier}/{point in time}/{version}/{language}/{subtype}')"/>
+              select="concat($eli-präfix-verkündungsfassung, '/{agent}/{year}/{natural identifier}/{language}/{subtype}')"/>
    <xsl:param name="FRBRthis-verkündungsfassung-expression-inhalt"
-              select="string-join(($eli-präfix-verkündungsfassung, $eli-agent-verkündung, $eli-year, $eli-natural-identifier, $eli-point-in-time, $eli-version, $eli-language, $eli-subtype), '/')"/>
+              select="string-join(($eli-präfix-verkündungsfassung, $eli-agent-verkündung-oder-konsolidierung, $eli-year, $eli-natural-identifier, $eli-language, $eli-subtype), '/')"/>
    <xsl:param name="FRBRthis-verkündungsfassung-manifestation-beschreibung"
               select="'Der eindeutige Bezeichner für Teildokumente in der Verkündungsfassung auf der Manifestation-Ebene'"/>
    <xsl:param name="FRBRthis-verkündungsfassung-manifestation-aufbau"
-              select="concat($eli-präfix-verkündungsfassung, '/{agent}/{year}/{natural identifier}/{point in time}/{version}/{language}/{point in time manifestation}/{subtype}.{format}')"/>
+              select="concat($eli-präfix-verkündungsfassung, '/{agent}/{year}/{natural identifier}/{language}/{point in time manifestation}/{subtype}.{format}')"/>
    <xsl:param name="FRBRthis-verkündungsfassung-manifestation-inhalt"
-              select="string-join(($eli-präfix-verkündungsfassung, $eli-agent-verkündung, $eli-year, $eli-natural-identifier, $eli-point-in-time, $eli-version, $eli-language, $eli-point-in-time-manifestation, concat($eli-subtype, '.', $eli-format)), '/')"/>
+              select="string-join(($eli-präfix-verkündungsfassung, $eli-agent-verkündung-oder-konsolidierung, $eli-year, $eli-natural-identifier, $eli-language, concat($eli-subtype, '.', $eli-format)), '/')"/>
+   <xsl:param name="FRBRthis-konsolidierte-fassung-work-beschreibung"
+              select="'Der eindeutige Bezeichner für Teildokumente in einer konsolidierten Fassung auf der Work-Ebene'"/>
+   <xsl:param name="FRBRthis-konsolidierte-fassung-work-aufbau"
+              select="concat($eli-präfix-konsolidierte-fassung, '/{agent}/{year}/{natural identifier}/{subtype}')"/>
+   <xsl:param name="FRBRthis-konsolidierte-fassung-work-inhalt"
+              select="string-join(($eli-präfix-konsolidierte-fassung, $eli-agent-verkündung-oder-konsolidierung, $eli-year, $eli-natural-identifier, $eli-subtype), '/')"/>
+   <xsl:param name="FRBRthis-konsolidierte-fassung-expression-beschreibung"
+              select="'Der eindeutige Bezeichner für Teildokumente in einer konsolidierten Fassung auf der Expression-Ebene'"/>
+   <xsl:param name="FRBRthis-konsolidierte-fassung-expression-aufbau"
+              select="concat($eli-präfix-konsolidierte-fassung, '/{agent}/{year}/{natural identifier}/{point in time}/{version}/{language}/{subtype}')"/>
+   <xsl:param name="FRBRthis-konsolidierte-fassung-expression-inhalt"
+              select="string-join(($eli-präfix-konsolidierte-fassung, $eli-agent-verkündung-oder-konsolidierung, $eli-year, $eli-natural-identifier, $eli-point-in-time, $eli-version, $eli-language, $eli-subtype), '/')"/>
+   <xsl:param name="FRBRthis-konsolidierte-fassung-manifestation-beschreibung"
+              select="'Der eindeutige Bezeichner für Teildokumente in einer konsolidierten Fassung auf der Manifestation-Ebene'"/>
+   <xsl:param name="FRBRthis-konsolidierte-fassung-manifestation-aufbau"
+              select="concat($eli-präfix-konsolidierte-fassung, '/{agent}/{year}/{natural identifier}/{point in time}/{version}/{language}/{point in time manifestation}/{subtype}.{format}')"/>
+   <xsl:param name="FRBRthis-konsolidierte-fassung-manifestation-inhalt"
+              select="string-join(($eli-präfix-konsolidierte-fassung, $eli-agent-verkündung-oder-konsolidierung, $eli-year, $eli-natural-identifier, $eli-point-in-time, $eli-version, $eli-language, $eli-point-in-time-manifestation, concat($eli-subtype, '.', $eli-format)), '/')"/>
    <xsl:param name="FRBRthis-entwurfsfassung-work-beschreibung"
               select="'Der eindeutige Bezeichner für Teildokumente in der Entwurfsfassung auf der Work-Ebene'"/>
    <xsl:param name="FRBRthis-entwurfsfassung-work-aufbau"
@@ -205,19 +229,37 @@
    <xsl:param name="FRBRuri-verkündungsfassung-work-aufbau"
               select="concat($eli-präfix-verkündungsfassung, '/{agent}/{year}/{natural identifier}')"/>
    <xsl:param name="FRBRuri-verkündungsfassung-work-inhalt"
-              select="string-join(($eli-präfix-verkündungsfassung, $eli-agent-verkündung, $eli-year, $eli-natural-identifier), '/')"/>
+              select="string-join(($eli-präfix-verkündungsfassung, $eli-agent-verkündung-oder-konsolidierung, $eli-year, $eli-natural-identifier), '/')"/>
    <xsl:param name="FRBRuri-verkündungsfassung-expression-beschreibung"
               select="'Der eindeutige Bezeichner für die Expression-Ebene in der Verkündungsfassung'"/>
    <xsl:param name="FRBRuri-verkündungsfassung-expression-aufbau"
-              select="concat($eli-präfix-verkündungsfassung, '{agent}/{year}/{natural identifier}/{point in time}/{version}/{language}')"/>
+              select="concat($eli-präfix-verkündungsfassung, '{agent}/{year}/{natural identifier}/{language}')"/>
    <xsl:param name="FRBRuri-verkündungsfassung-expression-inhalt"
-              select="string-join(($eli-präfix-verkündungsfassung, $eli-agent-verkündung, $eli-year, $eli-natural-identifier, $eli-point-in-time, $eli-version, $eli-language), '/')"/>
+              select="string-join(($eli-präfix-verkündungsfassung, $eli-agent-verkündung-oder-konsolidierung, $eli-year, $eli-natural-identifier, $eli-language), '/')"/>
    <xsl:param name="FRBRuri-verkündungsfassung-manifestation-beschreibung"
               select="'Der eindeutige Bezeichner für die Manifestation-Ebene in der Verkündungsfassung'"/>
    <xsl:param name="FRBRuri-verkündungsfassung-manifestation-aufbau"
               select="$FRBRthis-verkündungsfassung-manifestation-aufbau"/>
    <xsl:param name="FRBRuri-verkündungsfassung-manifestation-inhalt"
               select="$FRBRthis-verkündungsfassung-manifestation-inhalt"/>
+   <xsl:param name="FRBRuri-konsolidierte-fassung-work-beschreibung"
+              select="'Der eindeutige Bezeichner für die Work-Ebene der konsolidierten Fassung'"/>
+   <xsl:param name="FRBRuri-konsolidierte-fassung-work-aufbau"
+              select="concat($eli-präfix-konsolidierte-fassung, '/{agent}/{year}/{natural identifier}')"/>
+   <xsl:param name="FRBRuri-konsolidierte-fassung-work-inhalt"
+              select="string-join(($eli-präfix-konsolidierte-fassung, $eli-agent-verkündung-oder-konsolidierung, $eli-year, $eli-natural-identifier), '/')"/>
+   <xsl:param name="FRBRuri-konsolidierte-fassung-expression-beschreibung"
+              select="'Der eindeutige Bezeichner für die Expression-Ebene in der konsolidierten Fassung'"/>
+   <xsl:param name="FRBRuri-konsolidierte-fassung-expression-aufbau"
+              select="concat($eli-präfix-konsolidierte-fassung, '{agent}/{year}/{natural identifier}/{point in time}/{version}/{language}')"/>
+   <xsl:param name="FRBRuri-konsolidierte-fassung-expression-inhalt"
+              select="string-join(($eli-präfix-konsolidierte-fassung, $eli-agent-verkündung-oder-konsolidierung, $eli-year, $eli-natural-identifier, $eli-point-in-time, $eli-version, $eli-language), '/')"/>
+   <xsl:param name="FRBRuri-konsolidierte-fassung-manifestation-beschreibung"
+              select="'Der eindeutige Bezeichner für die Manifestation-Ebene in der konsolidierten Fassung'"/>
+   <xsl:param name="FRBRuri-konsolidierte-fassung-manifestation-aufbau"
+              select="$FRBRthis-konsolidierte-fassung-manifestation-aufbau"/>
+   <xsl:param name="FRBRuri-konsolidierte-fassung-manifestation-inhalt"
+              select="$FRBRthis-konsolidierte-fassung-manifestation-inhalt"/>
    <xsl:param name="FRBRuri-entwurfsfassung-work-beschreibung"
               select="'Der eindeutige Bezeichner für die Work-Ebene in der Entwurfsfassung'"/>
    <xsl:param name="FRBRuri-entwurfsfassung-work-aufbau"
@@ -236,6 +278,7 @@
               select="concat($eli-präfix-entwurfsfassung, '/{year}/{agent}/{process identifier}/{type of legislative process document}/{subagent}/{point in time}/{version}/{language}/{subtype}.{format}')"/>
    <xsl:param name="FRBRuri-entwurfsfassung-manifestation-inhalt"
               select="string-join(($eli-präfix-entwurfsfassung, $eli-year, $eli-agent-entwurf, $eli-process-identifier, $eli-type-of-legislative-process-document, $eli-subagent, $eli-point-in-time, $eli-version, $eli-language, concat($eli-subtype, '.', $eli-format)), '/')"/>
+   <xsl:variable name="fassung-entwurfsfassung" select="'false()'"/>
    <xsl:variable name="zulässige-literale-in-kombination-mit-repeal"
                  select="($refersto-literal-ereignisreferenz-verkündungsfassung-ausserkrafttreten, $refersto-literal-ereignisreferenz-entwurfsfassung-ausserkrafttreten, $refersto-literal-ereignisreferenz-entwurfsfassung-ausserkrafttreten-mit-unbekanntem-datum, $refersto-literal-ereignisreferenz-verkündungssfassung-ausserkrafttreten-mit-unbekanntem-datum)"/>
    <xsl:param name="schxslt.validate.initial-document-uri" as="xs:string?"/>
@@ -274,18 +317,18 @@
                      <rdf:Description xmlns:dc="http://purl.org/dc/elements/1.1/">
                         <dct:creator>
                            <dct:Agent>
-                              <skos:prefLabel>SchXslt/1.10.1 SAXON/HE 12.6</skos:prefLabel>
+                              <skos:prefLabel>SchXslt/1.10.1 SAXON/HE 12.9</skos:prefLabel>
                               <schxslt.compile.typed-variables xmlns="https://doi.org/10.5281/zenodo.1495494#">true</schxslt.compile.typed-variables>
                            </dct:Agent>
                         </dct:creator>
-                        <dct:created>2025-06-10T21:50:15.389979799Z</dct:created>
+                        <dct:created>2026-09-01T13:38:38.295685946Z</dct:created>
                      </rdf:Description>
                   </dct:source>
                </svrl:metadata>
             </xsl:variable>
             <xsl:variable name="report" as="element(schxslt:report)">
                <schxslt:report>
-                  <xsl:call-template name="d14e204"/>
+                  <xsl:call-template name="d15e206"/>
                </schxslt:report>
             </xsl:variable>
             <xsl:variable name="schxslt:report" as="node()*">
@@ -298,21 +341,20 @@
                </xsl:for-each>
             </xsl:variable>
             <svrl:schematron-output xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                    schemaVersion="LegalDocML.de 1.8.1 (10.06.2025)"
-                                    title="Regelungstext Entwurfsfassung Regelungstext Verkündungsfassung/Neufassung Regelungstext Allgemein Klasse Inhaltsverzeichnis Klasse: Hauptteil Aufzählungen Gliederungsebenen Schlussteil Vorblatt (Regelungstext) Vorblatt (Beschlussempfehlung) Begründung Prüfkriterien Prüfkriterien Allgemeiner Teil Regelungsfolgen Anschreiben Ausschussüberweisung/Legislaturperiode/Drucksachennummer Vereinbarung Änderungsbefehle Struktureller Aufbau von eId-Textknoten Dereferenzierbarkeit lokaler Verweise von akn:destinations innerhalb einer akn:passiveModification Struktureller Aufbau der ELI-Uris (Metadaten) Verwendung von Markern  Regeln zu Listen in Regelungstexten  Ontologie Regeln zu Beschlussempfehlungen Regeln zu Regelungstext-Anlagen Regeln zu Berichten Zulässigkeit von Literalen / Mustern je Attribut an FRBR-Typen, abhängig von der Fassung (Entwurf vs. Verkündung)">
-               <svrl:ns-prefix-in-attribute-values prefix="akn" uri="http://Inhaltsdaten.LegalDocML.de/1.8.1/"/>
-               <svrl:ns-prefix-in-attribute-values prefix="regtxt"
-                                                   uri="http://MetadatenRegelungstext.LegalDocML.de/1.8.1/"/>
+                                    schemaVersion="LegalDocML.de 1.9 (03.11.2025)"
+                                    title="Regelungstext Entwurfsfassung Regelungstext Regelungstext Allgemein Klasse Inhaltsverzeichnis Klasse: Hauptteil Aufzählungen Gliederungsebenen Schlussteil Vorblatt (Regelungstext) Vorblatt (Beschlussempfehlung) Begründung Prüfkriterien Prüfkriterien Allgemeiner Teil Regelungsfolgen Anschreiben Ausschussüberweisung/Legislaturperiode/Drucksachennummer Vereinbarung Änderungsbefehle Struktureller Aufbau von eId-Textknoten Dereferenzierbarkeit lokaler Verweise von akn:destinations innerhalb einer akn:passiveModification Struktureller Aufbau der ELI-Uris (Metadaten) Verweise auf TLC-Klassen Verwendung von Markern  Regeln zu Listen in Regelungstexten  Ontologie Regeln zu Beschlussempfehlungen Regeln zu Regelungstext-Anlagen Regeln zu Berichten Regeln zu einzelnen Metadaten Regeln zu URI-Verweisen Zulässigkeit von Literalen / Mustern je Attribut an FRBR-Typen, abhängig von der Fassung (Entwurf vs. Verkündung)">
+               <svrl:ns-prefix-in-attribute-values prefix="akn" uri="http://Inhaltsdaten.LegalDocML.de/1.9/"/>
+               <svrl:ns-prefix-in-attribute-values prefix="regtxt" uri="http://MetadatenRegelungstext.LegalDocML.de/1.9/"/>
                <svrl:ns-prefix-in-attribute-values prefix="redok"
-                                                   uri="http://MetadatenRechtsetzungsdokument.LegalDocML.de/1.8.1/"/>
-               <svrl:ns-prefix-in-attribute-values prefix="btag" uri="http://MetadatenBundestag.LegalDocML.de/1.8.1/"/>
-               <svrl:ns-prefix-in-attribute-values prefix="brat" uri="http://MetadatenBundesrat.LegalDocML.de/1.8.1/"/>
-               <svrl:ns-prefix-in-attribute-values prefix="breg"
-                                                   uri="http://MetadatenBundesregierung.LegalDocML.de/1.8.1/"/>
+                                                   uri="http://MetadatenRechtsetzungsdokument.LegalDocML.de/1.9/"/>
+               <svrl:ns-prefix-in-attribute-values prefix="btag" uri="http://MetadatenBundestag.LegalDocML.de/1.9/"/>
+               <svrl:ns-prefix-in-attribute-values prefix="brat" uri="http://MetadatenBundesrat.LegalDocML.de/1.9/"/>
+               <svrl:ns-prefix-in-attribute-values prefix="breg" uri="http://MetadatenBundesregierung.LegalDocML.de/1.9/"/>
                <svrl:ns-prefix-in-attribute-values prefix="fhilf"
-                                                   uri="http://MetadatenFormulierungshilfe.LegalDocML.de/1.8.1/"/>
-               <svrl:ns-prefix-in-attribute-values prefix="nkr"
-                                                   uri="http://MetadatenNormenkontrollrat.LegalDocML.de/1.8.1/"/>
+                                                   uri="http://MetadatenFormulierungshilfe.LegalDocML.de/1.9/"/>
+               <svrl:ns-prefix-in-attribute-values prefix="nkr" uri="http://MetadatenNormenkontrollrat.LegalDocML.de/1.9/"/>
+               <svrl:ns-prefix-in-attribute-values prefix="sonst"
+                                                   uri="http://MetadatenSonstigerVeroeffentlichungstext.LegalDocML.de/1.9/"/>
                <svrl:ns-prefix-in-attribute-values prefix="fkt" uri="lokale-funktionen"/>
                <xsl:sequence select="$schxslt:report"/>
             </svrl:schematron-output>
@@ -327,9 +369,9 @@
       <xsl:apply-templates mode="#current" select="@*"/>
       <xsl:apply-templates mode="#current" select="node()"/>
    </xsl:template>
-   <xsl:template name="d14e204">
+   <xsl:template name="d15e206">
       <schxslt:document>
-         <schxslt:pattern id="d14e204">
+         <schxslt:pattern id="d15e206">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -339,7 +381,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e249">
+         <schxslt:pattern id="d15e251">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -349,7 +391,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e295">
+         <schxslt:pattern id="d15e285">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -359,7 +401,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e306">
+         <schxslt:pattern id="d15e297">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -369,7 +411,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e312">
+         <schxslt:pattern id="d15e305">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -379,7 +421,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e324">
+         <schxslt:pattern id="d15e317">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -389,7 +431,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e339">
+         <schxslt:pattern id="d15e332">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -399,7 +441,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e348">
+         <schxslt:pattern id="d15e341">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -409,7 +451,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e357">
+         <schxslt:pattern id="d15e350">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -419,7 +461,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e367">
+         <schxslt:pattern id="d15e360">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -429,7 +471,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e376">
+         <schxslt:pattern id="d15e369">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -439,7 +481,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e388">
+         <schxslt:pattern id="d15e381">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -449,7 +491,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e403">
+         <schxslt:pattern id="d15e396">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -459,7 +501,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e413">
+         <schxslt:pattern id="d15e406">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -469,7 +511,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e430">
+         <schxslt:pattern id="d15e421">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -479,7 +521,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e439">
+         <schxslt:pattern id="d15e435">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -489,7 +531,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e451">
+         <schxslt:pattern id="d15e444">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -499,7 +541,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e460">
+         <schxslt:pattern id="d15e457">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -509,7 +551,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e473">
+         <schxslt:pattern id="d15e509">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -519,7 +561,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e525">
+         <schxslt:pattern id="d15e533">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -529,7 +571,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e549">
+         <schxslt:pattern id="d15e545">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -539,7 +581,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e561">
+         <schxslt:pattern id="d15e573">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -549,7 +591,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e589">
+         <schxslt:pattern id="d15e629">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -559,7 +601,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e645">
+         <schxslt:pattern id="d15e650">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -569,7 +611,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e666">
+         <schxslt:pattern id="d15e685">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -579,7 +621,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e701">
+         <schxslt:pattern id="d15e709">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -589,7 +631,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e725">
+         <schxslt:pattern id="d15e740">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -599,7 +641,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e756">
+         <schxslt:pattern id="d15e753">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -609,7 +651,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e769">
+         <schxslt:pattern id="d15e768">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -619,7 +661,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e784">
+         <schxslt:pattern id="d15e783">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -629,7 +671,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e799">
+         <schxslt:pattern id="d15e793">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -639,7 +681,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e809">
+         <schxslt:pattern id="d15e800">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -649,7 +691,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e818">
+         <schxslt:pattern id="d15e815">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -659,7 +701,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e833">
+         <schxslt:pattern id="d15e831">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -669,7 +711,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e849">
+         <schxslt:pattern id="d15e840">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -679,7 +721,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e858">
+         <schxslt:pattern id="d15e849">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -689,7 +731,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e867">
+         <schxslt:pattern id="d15e929">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -699,7 +741,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e947">
+         <schxslt:pattern id="d15e952">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -709,7 +751,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e970">
+         <schxslt:pattern id="d15e1026">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -719,7 +761,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e1029">
+         <schxslt:pattern id="d15e1049">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -729,7 +771,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e1052">
+         <schxslt:pattern id="d15e1076">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -739,7 +781,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e1082">
+         <schxslt:pattern id="d15e1088">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -749,7 +791,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e1094">
+         <schxslt:pattern id="d15e1109">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -759,7 +801,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e1112">
+         <schxslt:pattern id="d15e1133">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -769,7 +811,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e1132">
+         <schxslt:pattern id="d15e1148">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -779,7 +821,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e1269">
+         <schxslt:pattern id="d15e1167">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -789,7 +831,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e1342">
+         <schxslt:pattern id="d15e1346">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -799,7 +841,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e1448">
+         <schxslt:pattern id="d15e1446">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -809,7 +851,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e1502">
+         <schxslt:pattern id="d15e1565">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -819,7 +861,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e1548">
+         <schxslt:pattern id="d15e1625">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -829,7 +871,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e1622">
+         <schxslt:pattern id="d15e1676">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -839,7 +881,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e1646">
+         <schxslt:pattern id="d15e1750">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -849,7 +891,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e1668">
+         <schxslt:pattern id="d15e1774">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -859,7 +901,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e1709">
+         <schxslt:pattern id="d15e1796">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -869,7 +911,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e1777">
+         <schxslt:pattern id="d15e1850">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -879,7 +921,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e1786">
+         <schxslt:pattern id="d15e1910">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -889,7 +931,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e1823">
+         <schxslt:pattern id="d15e1919">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -899,7 +941,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e1835">
+         <schxslt:pattern id="d15e1930">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -909,7 +951,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e1847">
+         <schxslt:pattern id="d15e1939">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -919,7 +961,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e1867">
+         <schxslt:pattern id="d15e1951">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -929,7 +971,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e1882">
+         <schxslt:pattern id="d15e1965">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -939,7 +981,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e1898">
+         <schxslt:pattern id="d15e2023">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -949,7 +991,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e1931">
+         <schxslt:pattern id="d15e2044">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -959,7 +1001,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e1956">
+         <schxslt:pattern id="d15e2058">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -969,7 +1011,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e1975">
+         <schxslt:pattern id="d15e2075">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -979,7 +1021,7 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <schxslt:pattern id="d14e2076">
+         <schxslt:pattern id="d15e2108">
             <xsl:if test="exists(base-uri(root()))">
                <xsl:attribute name="documents" select="base-uri(root())"/>
             </xsl:if>
@@ -989,16 +1031,108 @@
                </svrl:active-pattern>
             </xsl:for-each>
          </schxslt:pattern>
-         <xsl:apply-templates mode="d14e204" select="root()"/>
+         <schxslt:pattern id="d15e2132">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d15e2151">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d15e2163">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d15e2178">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d15e2191">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                    name="expression.FRBRdate in Entwurfs- und konsolidierter Fassung">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d15e2206">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                    name="Kein expression.FRBRdate in der Verkündungsfassung">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d15e2222">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d15e2323">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d15e2424">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <xsl:apply-templates mode="d15e206" select="root()"/>
       </schxslt:document>
    </xsl:template>
    <xsl:template match="/akn:akomaNtoso/akn:bill[@name = $art-regelungstext-uri and $form = $form-eingebundene-stammform]"
-                 priority="125"
-                 mode="d14e204">
+                 priority="144"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e204']">
-            <schxslt:rule pattern="d14e204">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e206']">
+            <schxslt:rule pattern="d15e206">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00019 for context "/akn:akomaNtoso/akn:bill[@name = $art-regelungstext-uri and $form = $form-eingebundene-stammform]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00019">
                   <xsl:attribute name="context">/akn:akomaNtoso/akn:bill[@name = $art-regelungstext-uri and $form = $form-eingebundene-stammform]</xsl:attribute>
@@ -1015,7 +1149,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e204">
+            <schxslt:rule pattern="d15e206">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00019">
                   <xsl:attribute name="context">/akn:akomaNtoso/akn:bill[@name = $art-regelungstext-uri and $form = $form-eingebundene-stammform]</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -1054,18 +1188,18 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e204')"/>
+                               select="($schxslt:patterns-matched, 'd15e206')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="/akn:akomaNtoso/akn:bill[@name = $art-regelungstext-uri and $typ = ($typ-gesetz, $typ-vertragsgesetz)]"
-                 priority="124"
-                 mode="d14e204">
+                 priority="143"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e204']">
-            <schxslt:rule pattern="d14e204">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e206']">
+            <schxslt:rule pattern="d15e206">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00020 for context "/akn:akomaNtoso/akn:bill[@name = $art-regelungstext-uri and $typ = ($typ-gesetz, $typ-vertragsgesetz)]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00020">
                   <xsl:attribute name="context">/akn:akomaNtoso/akn:bill[@name = $art-regelungstext-uri and $typ = ($typ-gesetz, $typ-vertragsgesetz)]</xsl:attribute>
@@ -1082,7 +1216,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e204">
+            <schxslt:rule pattern="d15e206">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00020">
                   <xsl:attribute name="context">/akn:akomaNtoso/akn:bill[@name = $art-regelungstext-uri and $typ = ($typ-gesetz, $typ-vertragsgesetz)]</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -1112,18 +1246,18 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e204')"/>
+                               select="($schxslt:patterns-matched, 'd15e206')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="/akn:akomaNtoso/akn:bill[@name = $art-regelungstext-uri and $typ = ($typ-verordnung, $typ-vertragsverordnung)]"
-                 priority="123"
-                 mode="d14e204">
+                 priority="142"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e204']">
-            <schxslt:rule pattern="d14e204">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e206']">
+            <schxslt:rule pattern="d15e206">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00030 for context "/akn:akomaNtoso/akn:bill[@name = $art-regelungstext-uri and $typ = ($typ-verordnung, $typ-vertragsverordnung)]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00030">
                   <xsl:attribute name="context">/akn:akomaNtoso/akn:bill[@name = $art-regelungstext-uri and $typ = ($typ-verordnung, $typ-vertragsverordnung)]</xsl:attribute>
@@ -1140,7 +1274,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e204">
+            <schxslt:rule pattern="d15e206">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00030">
                   <xsl:attribute name="context">/akn:akomaNtoso/akn:bill[@name = $art-regelungstext-uri and $typ = ($typ-verordnung, $typ-vertragsverordnung)]</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -1170,18 +1304,18 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e204')"/>
+                               select="($schxslt:patterns-matched, 'd15e206')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="/akn:akomaNtoso/akn:bill[@name = $art-regelungstext-uri and $typ = $typ-verwaltungsvorschrift]"
-                 priority="122"
-                 mode="d14e204">
+                 priority="141"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e204']">
-            <schxslt:rule pattern="d14e204">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e206']">
+            <schxslt:rule pattern="d15e206">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00040 for context "/akn:akomaNtoso/akn:bill[@name = $art-regelungstext-uri and $typ = $typ-verwaltungsvorschrift]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00040">
                   <xsl:attribute name="context">/akn:akomaNtoso/akn:bill[@name = $art-regelungstext-uri and $typ = $typ-verwaltungsvorschrift]</xsl:attribute>
@@ -1198,7 +1332,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e204">
+            <schxslt:rule pattern="d15e206">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00040">
                   <xsl:attribute name="context">/akn:akomaNtoso/akn:bill[@name = $art-regelungstext-uri and $typ = $typ-verwaltungsvorschrift]</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -1228,21 +1362,21 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e204')"/>
+                               select="($schxslt:patterns-matched, 'd15e206')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
-   <xsl:template match="/akn:akomaNtoso/akn:act[$fassung = $fassung-entwurfsfassung and @name = $art-regelungstext-uri and $form = $form-eingebundene-stammform]"
-                 priority="121"
-                 mode="d14e204">
+   <xsl:template match="/akn:akomaNtoso/akn:act[$ist-verkündungsfassung and @name = $art-regelungstext-uri and $form = $form-eingebundene-stammform]"
+                 priority="140"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e249']">
-            <schxslt:rule pattern="d14e249">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00048 for context "/akn:akomaNtoso/akn:act[$fassung = $fassung-entwurfsfassung and @name = $art-regelungstext-uri and $form = $form-eingebundene-stammform]" shadowed by preceding rule</xsl:comment>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e251']">
+            <schxslt:rule pattern="d15e251">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00048 for context "/akn:akomaNtoso/akn:act[$ist-verkündungsfassung and @name = $art-regelungstext-uri and $form = $form-eingebundene-stammform]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00048">
-                  <xsl:attribute name="context">/akn:akomaNtoso/akn:act[$fassung = $fassung-entwurfsfassung and @name = $art-regelungstext-uri and $form = $form-eingebundene-stammform]</xsl:attribute>
+                  <xsl:attribute name="context">/akn:akomaNtoso/akn:act[$ist-verkündungsfassung and @name = $art-regelungstext-uri and $form = $form-eingebundene-stammform]</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
                   <xsl:if test="exists($documentUri)">
                      <xsl:attribute name="document" select="$documentUri"/>
@@ -1256,9 +1390,9 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e249">
+            <schxslt:rule pattern="d15e251">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00048">
-                  <xsl:attribute name="context">/akn:akomaNtoso/akn:act[$fassung = $fassung-entwurfsfassung and @name = $art-regelungstext-uri and $form = $form-eingebundene-stammform]</xsl:attribute>
+                  <xsl:attribute name="context">/akn:akomaNtoso/akn:act[$ist-verkündungsfassung and @name = $art-regelungstext-uri and $form = $form-eingebundene-stammform]</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
                   <xsl:if test="exists($documentUri)">
                      <xsl:attribute name="document" select="$documentUri"/>
@@ -1295,128 +1429,21 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e249')"/>
+                               select="($schxslt:patterns-matched, 'd15e251')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
-   <xsl:template match="/akn:akomaNtoso/akn:act[@name = $art-regelungstext-uri and $fassung = $fassung-neufassung]"
-                 priority="120"
-                 mode="d14e204">
+   <xsl:template match="/akn:akomaNtoso/akn:act[$ist-verkündungsfassung and @name = $art-regelungstext-uri and $typ = ($typ-verordnung, $typ-vertragsverordnung)]"
+                 priority="139"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e249']">
-            <schxslt:rule pattern="d14e249">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00049 for context "/akn:akomaNtoso/akn:act[@name = $art-regelungstext-uri and $fassung = $fassung-neufassung]" shadowed by preceding rule</xsl:comment>
-               <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00049">
-                  <xsl:attribute name="context">/akn:akomaNtoso/akn:act[@name = $art-regelungstext-uri and $fassung = $fassung-neufassung]</xsl:attribute>
-                  <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
-                  <xsl:if test="exists($documentUri)">
-                     <xsl:attribute name="document" select="$documentUri"/>
-                  </xsl:if>
-               </svrl:suppressed-rule>
-            </schxslt:rule>
-            <xsl:next-match>
-               <xsl:with-param name="schxslt:patterns-matched"
-                               as="xs:string*"
-                               select="$schxslt:patterns-matched"/>
-            </xsl:next-match>
-         </xsl:when>
-         <xsl:otherwise>
-            <schxslt:rule pattern="d14e249">
-               <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00049">
-                  <xsl:attribute name="context">/akn:akomaNtoso/akn:act[@name = $art-regelungstext-uri and $fassung = $fassung-neufassung]</xsl:attribute>
-                  <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
-                  <xsl:if test="exists($documentUri)">
-                     <xsl:attribute name="document" select="$documentUri"/>
-                  </xsl:if>
-               </svrl:fired-rule>
-               <xsl:if test="not($form = $form-stammform)">
-                  <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                      location="{schxslt:location(.)}"
-                                      role="error"
-                                      id="SCH-00049-015">
-                     <xsl:attribute name="test">$form = $form-stammform</xsl:attribute>
-                     <svrl:text>Ein Regelungstext als Neufassung darf nur in einer Stammform vorkommen.</svrl:text>
-                  </svrl:failed-assert>
-               </xsl:if>
-               <xsl:if test="not(not(./akn:preface/akn:block))">
-                  <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                      location="{schxslt:location(.)}"
-                                      role="error"
-                                      id="SCH-00049-020">
-                     <xsl:attribute name="test">not(./akn:preface/akn:block)</xsl:attribute>
-                     <svrl:text>Für einen Regelungstext in der Neufassung darf kein Datums-Container innerhalb des Dokumentenkopfes verwendet werden.</svrl:text>
-                  </svrl:failed-assert>
-               </xsl:if>
-            </schxslt:rule>
-            <xsl:next-match>
-               <xsl:with-param name="schxslt:patterns-matched"
-                               as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e249')"/>
-            </xsl:next-match>
-         </xsl:otherwise>
-      </xsl:choose>
-   </xsl:template>
-   <xsl:template match="/akn:akomaNtoso/akn:act[$fassung = $fassung-entwurfsfassung and @name = $art-regelungstext-uri and $typ = ($typ-gesetz, $typ-vertragsgesetz)]"
-                 priority="119"
-                 mode="d14e204">
-      <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e249']">
-            <schxslt:rule pattern="d14e249">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00050 for context "/akn:akomaNtoso/akn:act[$fassung = $fassung-entwurfsfassung and @name = $art-regelungstext-uri and $typ = ($typ-gesetz, $typ-vertragsgesetz)]" shadowed by preceding rule</xsl:comment>
-               <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00050">
-                  <xsl:attribute name="context">/akn:akomaNtoso/akn:act[$fassung = $fassung-entwurfsfassung and @name = $art-regelungstext-uri and $typ = ($typ-gesetz, $typ-vertragsgesetz)]</xsl:attribute>
-                  <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
-                  <xsl:if test="exists($documentUri)">
-                     <xsl:attribute name="document" select="$documentUri"/>
-                  </xsl:if>
-               </svrl:suppressed-rule>
-            </schxslt:rule>
-            <xsl:next-match>
-               <xsl:with-param name="schxslt:patterns-matched"
-                               as="xs:string*"
-                               select="$schxslt:patterns-matched"/>
-            </xsl:next-match>
-         </xsl:when>
-         <xsl:otherwise>
-            <schxslt:rule pattern="d14e249">
-               <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00050">
-                  <xsl:attribute name="context">/akn:akomaNtoso/akn:act[$fassung = $fassung-entwurfsfassung and @name = $art-regelungstext-uri and $typ = ($typ-gesetz, $typ-vertragsgesetz)]</xsl:attribute>
-                  <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
-                  <xsl:if test="exists($documentUri)">
-                     <xsl:attribute name="document" select="$documentUri"/>
-                  </xsl:if>
-               </svrl:fired-rule>
-               <xsl:if test="not(./akn:preamble/akn:formula)">
-                  <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                      location="{schxslt:location(.)}"
-                                      role="error"
-                                      id="SCH-00050-005">
-                     <xsl:attribute name="test">./akn:preamble/akn:formula</xsl:attribute>
-                     <svrl:text>Für ein Gesetz muss eine Eingangsformel verwendet werden.</svrl:text>
-                  </svrl:failed-assert>
-               </xsl:if>
-            </schxslt:rule>
-            <xsl:next-match>
-               <xsl:with-param name="schxslt:patterns-matched"
-                               as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e249')"/>
-            </xsl:next-match>
-         </xsl:otherwise>
-      </xsl:choose>
-   </xsl:template>
-   <xsl:template match="/akn:akomaNtoso/akn:act[$fassung = $fassung-entwurfsfassung and @name = $art-regelungstext-uri and $typ = ($typ-verordnung, $typ-vertragsverordnung)]"
-                 priority="118"
-                 mode="d14e204">
-      <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e249']">
-            <schxslt:rule pattern="d14e249">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00060 for context "/akn:akomaNtoso/akn:act[$fassung = $fassung-entwurfsfassung and @name = $art-regelungstext-uri and $typ = ($typ-verordnung, $typ-vertragsverordnung)]" shadowed by preceding rule</xsl:comment>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e251']">
+            <schxslt:rule pattern="d15e251">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00060 for context "/akn:akomaNtoso/akn:act[$ist-verkündungsfassung and @name = $art-regelungstext-uri and $typ = ($typ-verordnung, $typ-vertragsverordnung)]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00060">
-                  <xsl:attribute name="context">/akn:akomaNtoso/akn:act[$fassung = $fassung-entwurfsfassung and @name = $art-regelungstext-uri and $typ = ($typ-verordnung, $typ-vertragsverordnung)]</xsl:attribute>
+                  <xsl:attribute name="context">/akn:akomaNtoso/akn:act[$ist-verkündungsfassung and @name = $art-regelungstext-uri and $typ = ($typ-verordnung, $typ-vertragsverordnung)]</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
                   <xsl:if test="exists($documentUri)">
                      <xsl:attribute name="document" select="$documentUri"/>
@@ -1430,9 +1457,9 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e249">
+            <schxslt:rule pattern="d15e251">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00060">
-                  <xsl:attribute name="context">/akn:akomaNtoso/akn:act[$fassung = $fassung-entwurfsfassung and @name = $art-regelungstext-uri and $typ = ($typ-verordnung, $typ-vertragsverordnung)]</xsl:attribute>
+                  <xsl:attribute name="context">/akn:akomaNtoso/akn:act[$ist-verkündungsfassung and @name = $art-regelungstext-uri and $typ = ($typ-verordnung, $typ-vertragsverordnung)]</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
                   <xsl:if test="exists($documentUri)">
                      <xsl:attribute name="document" select="$documentUri"/>
@@ -1451,21 +1478,21 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e249')"/>
+                               select="($schxslt:patterns-matched, 'd15e251')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
-   <xsl:template match="/akn:akomaNtoso/akn:act[$fassung = $fassung-entwurfsfassung and @name = $art-regelungstext-uri and $typ = $typ-verwaltungsvorschrift]"
-                 priority="117"
-                 mode="d14e204">
+   <xsl:template match="/akn:akomaNtoso/akn:act[$ist-verkündungsfassung and @name = $art-regelungstext-uri and $typ = $typ-verwaltungsvorschrift]"
+                 priority="138"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e249']">
-            <schxslt:rule pattern="d14e249">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00070 for context "/akn:akomaNtoso/akn:act[$fassung = $fassung-entwurfsfassung and @name = $art-regelungstext-uri and $typ = $typ-verwaltungsvorschrift]" shadowed by preceding rule</xsl:comment>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e251']">
+            <schxslt:rule pattern="d15e251">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00070 for context "/akn:akomaNtoso/akn:act[$ist-verkündungsfassung and @name = $art-regelungstext-uri and $typ = $typ-verwaltungsvorschrift]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00070">
-                  <xsl:attribute name="context">/akn:akomaNtoso/akn:act[$fassung = $fassung-entwurfsfassung and @name = $art-regelungstext-uri and $typ = $typ-verwaltungsvorschrift]</xsl:attribute>
+                  <xsl:attribute name="context">/akn:akomaNtoso/akn:act[$ist-verkündungsfassung and @name = $art-regelungstext-uri and $typ = $typ-verwaltungsvorschrift]</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
                   <xsl:if test="exists($documentUri)">
                      <xsl:attribute name="document" select="$documentUri"/>
@@ -1479,9 +1506,9 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e249">
+            <schxslt:rule pattern="d15e251">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00070">
-                  <xsl:attribute name="context">/akn:akomaNtoso/akn:act[$fassung = $fassung-entwurfsfassung and @name = $art-regelungstext-uri and $typ = $typ-verwaltungsvorschrift]</xsl:attribute>
+                  <xsl:attribute name="context">/akn:akomaNtoso/akn:act[$ist-verkündungsfassung and @name = $art-regelungstext-uri and $typ = $typ-verwaltungsvorschrift]</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
                   <xsl:if test="exists($documentUri)">
                      <xsl:attribute name="document" select="$documentUri"/>
@@ -1500,21 +1527,21 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e249')"/>
+                               select="($schxslt:patterns-matched, 'd15e251')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
-   <xsl:template match="/akn:akomaNtoso/akn:act[@name = $art-regelungstext-uri and $fassung = $fassung-verkündungsfassung and not($form = $form-eingebundene-stammform)]"
-                 priority="116"
-                 mode="d14e204">
+   <xsl:template match="/akn:akomaNtoso/akn:act[@name = $art-regelungstext-uri and $ist-verkündungsfassung and not($form = $form-eingebundene-stammform)]"
+                 priority="137"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e295']">
-            <schxslt:rule pattern="d14e295">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00071 for context "/akn:akomaNtoso/akn:act[@name = $art-regelungstext-uri and $fassung = $fassung-verkündungsfassung and not($form = $form-eingebundene-stammform)]" shadowed by preceding rule</xsl:comment>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e285']">
+            <schxslt:rule pattern="d15e285">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00071 for context "/akn:akomaNtoso/akn:act[@name = $art-regelungstext-uri and $ist-verkündungsfassung and not($form = $form-eingebundene-stammform)]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00071">
-                  <xsl:attribute name="context">/akn:akomaNtoso/akn:act[@name = $art-regelungstext-uri and $fassung = $fassung-verkündungsfassung and not($form = $form-eingebundene-stammform)]</xsl:attribute>
+                  <xsl:attribute name="context">/akn:akomaNtoso/akn:act[@name = $art-regelungstext-uri and $ist-verkündungsfassung and not($form = $form-eingebundene-stammform)]</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
                   <xsl:if test="exists($documentUri)">
                      <xsl:attribute name="document" select="$documentUri"/>
@@ -1528,9 +1555,9 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e295">
+            <schxslt:rule pattern="d15e285">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00071">
-                  <xsl:attribute name="context">/akn:akomaNtoso/akn:act[@name = $art-regelungstext-uri and $fassung = $fassung-verkündungsfassung and not($form = $form-eingebundene-stammform)]</xsl:attribute>
+                  <xsl:attribute name="context">/akn:akomaNtoso/akn:act[@name = $art-regelungstext-uri and $ist-verkündungsfassung and not($form = $form-eingebundene-stammform)]</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
                   <xsl:if test="exists($documentUri)">
                      <xsl:attribute name="document" select="$documentUri"/>
@@ -1545,22 +1572,31 @@
                      <svrl:text>Für einen Regelungstext in der Verkündungsfassung muss ein Datums-Container innerhalb des Dokumentenkopfes verwendet werden. </svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
+               <xsl:if test="not(./akn:conclusions/akn:blockContainer)">
+                  <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                      location="{schxslt:location(.)}"
+                                      role="error"
+                                      id="SCH-00071-010">
+                     <xsl:attribute name="test">./akn:conclusions/akn:blockContainer</xsl:attribute>
+                     <svrl:text>Für einen Regelungstext in der Verkündungsfassung muss ein Signaturblock verwendet werden.</svrl:text>
+                  </svrl:failed-assert>
+               </xsl:if>
             </schxslt:rule>
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e295')"/>
+                               select="($schxslt:patterns-matched, 'd15e285')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="akn:act/akn:conclusions/akn:formula"
-                 priority="115"
-                 mode="d14e204">
+                 priority="136"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e312']">
-            <schxslt:rule pattern="d14e312">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e305']">
+            <schxslt:rule pattern="d15e305">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00073 for context "akn:act/akn:conclusions/akn:formula" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00073">
                   <xsl:attribute name="context">akn:act/akn:conclusions/akn:formula</xsl:attribute>
@@ -1577,7 +1613,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e312">
+            <schxslt:rule pattern="d15e305">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00073">
                   <xsl:attribute name="context">akn:act/akn:conclusions/akn:formula</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -1597,18 +1633,18 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e312')"/>
+                               select="($schxslt:patterns-matched, 'd15e305')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="/akn:akomaNtoso/*[@name = $art-regelungstext-uri and $typ = ($typ-gesetz, $typ-vertragsgesetz)]/akn:preamble"
-                 priority="114"
-                 mode="d14e204">
+                 priority="135"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e324']">
-            <schxslt:rule pattern="d14e324">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e317']">
+            <schxslt:rule pattern="d15e317">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00100 for context "/akn:akomaNtoso/*[@name = $art-regelungstext-uri and $typ = ($typ-gesetz, $typ-vertragsgesetz)]/akn:preamble" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00100">
                   <xsl:attribute name="context">/akn:akomaNtoso/*[@name = $art-regelungstext-uri and $typ = ($typ-gesetz, $typ-vertragsgesetz)]/akn:preamble</xsl:attribute>
@@ -1625,7 +1661,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e324">
+            <schxslt:rule pattern="d15e317">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00100">
                   <xsl:attribute name="context">/akn:akomaNtoso/*[@name = $art-regelungstext-uri and $typ = ($typ-gesetz, $typ-vertragsgesetz)]/akn:preamble</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -1646,21 +1682,21 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e324')"/>
+                               select="($schxslt:patterns-matched, 'd15e317')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
-   <xsl:template match="/akn:akomaNtoso/*[@name = $art-regelungstext-uri and $typ = ($typ-verordnung, $typ-vertragsverordnung) and not($fassung = $fassung-neufassung)]/akn:preamble"
-                 priority="113"
-                 mode="d14e204">
+   <xsl:template match="/akn:akomaNtoso/* [ @name = $art-regelungstext-uri and $typ = ($typ-verordnung, $typ-vertragsverordnung) and $form = ($form-stammform, $form-mantelform) and ($ist-entwurfsfassung or $ist-verkündungsfassung) ]/akn:preamble"
+                 priority="134"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e324']">
-            <schxslt:rule pattern="d14e324">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00110 for context "/akn:akomaNtoso/*[@name = $art-regelungstext-uri and $typ = ($typ-verordnung, $typ-vertragsverordnung) and not($fassung = $fassung-neufassung)]/akn:preamble" shadowed by preceding rule</xsl:comment>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e317']">
+            <schxslt:rule pattern="d15e317">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00110 for context "/akn:akomaNtoso/* [ @name = $art-regelungstext-uri and $typ = ($typ-verordnung, $typ-vertragsverordnung) and $form = ($form-stammform, $form-mantelform) and ($ist-entwurfsfassung or $ist-verkündungsfassung) ]/akn:preamble" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00110">
-                  <xsl:attribute name="context">/akn:akomaNtoso/*[@name = $art-regelungstext-uri and $typ = ($typ-verordnung, $typ-vertragsverordnung) and not($fassung = $fassung-neufassung)]/akn:preamble</xsl:attribute>
+                  <xsl:attribute name="context">/akn:akomaNtoso/* [ @name = $art-regelungstext-uri and $typ = ($typ-verordnung, $typ-vertragsverordnung) and $form = ($form-stammform, $form-mantelform) and ($ist-entwurfsfassung or $ist-verkündungsfassung) ]/akn:preamble</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
                   <xsl:if test="exists($documentUri)">
                      <xsl:attribute name="document" select="$documentUri"/>
@@ -1674,9 +1710,9 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e324">
+            <schxslt:rule pattern="d15e317">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00110">
-                  <xsl:attribute name="context">/akn:akomaNtoso/*[@name = $art-regelungstext-uri and $typ = ($typ-verordnung, $typ-vertragsverordnung) and not($fassung = $fassung-neufassung)]/akn:preamble</xsl:attribute>
+                  <xsl:attribute name="context">/akn:akomaNtoso/* [ @name = $art-regelungstext-uri and $typ = ($typ-verordnung, $typ-vertragsverordnung) and $form = ($form-stammform, $form-mantelform) and ($ist-entwurfsfassung or $ist-verkündungsfassung) ]/akn:preamble</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
                   <xsl:if test="exists($documentUri)">
                      <xsl:attribute name="document" select="$documentUri"/>
@@ -1695,21 +1731,21 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e324')"/>
+                               select="($schxslt:patterns-matched, 'd15e317')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
-   <xsl:template match="akn:quotedStructure//akn:article [ $form = $form-mantelform and $typ = ($typ-gesetz, $typ-verordnung, $typ-satzung, $typ-verwaltungsvorschrift, $typ-vertragsgesetz, $typ-vertragsverordnung) and $fassung = ($fassung-entwurfsfassung, $fassung-verkündungsfassung) ]"
-                 priority="112"
-                 mode="d14e204">
+   <xsl:template match="akn:quotedStructure//akn:article [ $form = $form-mantelform and $typ = ($typ-gesetz, $typ-verordnung, $typ-satzung, $typ-verwaltungsvorschrift, $typ-vertragsgesetz, $typ-vertragsverordnung) ]"
+                 priority="133"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e339']">
-            <schxslt:rule pattern="d14e339">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00120 for context "akn:quotedStructure//akn:article [ $form = $form-mantelform and $typ = ($typ-gesetz, $typ-verordnung, $typ-satzung, $typ-verwaltungsvorschrift, $typ-vertragsgesetz, $typ-vertragsverordnung) and $fassung = ($fassung-entwurfsfassung, $fassung-verkündungsfassung) ]" shadowed by preceding rule</xsl:comment>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e332']">
+            <schxslt:rule pattern="d15e332">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00120 for context "akn:quotedStructure//akn:article [ $form = $form-mantelform and $typ = ($typ-gesetz, $typ-verordnung, $typ-satzung, $typ-verwaltungsvorschrift, $typ-vertragsgesetz, $typ-vertragsverordnung) ]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00120">
-                  <xsl:attribute name="context">akn:quotedStructure//akn:article [ $form = $form-mantelform and $typ = ($typ-gesetz, $typ-verordnung, $typ-satzung, $typ-verwaltungsvorschrift, $typ-vertragsgesetz, $typ-vertragsverordnung) and $fassung = ($fassung-entwurfsfassung, $fassung-verkündungsfassung) ]</xsl:attribute>
+                  <xsl:attribute name="context">akn:quotedStructure//akn:article [ $form = $form-mantelform and $typ = ($typ-gesetz, $typ-verordnung, $typ-satzung, $typ-verwaltungsvorschrift, $typ-vertragsgesetz, $typ-vertragsverordnung) ]</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
                   <xsl:if test="exists($documentUri)">
                      <xsl:attribute name="document" select="$documentUri"/>
@@ -1723,9 +1759,9 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e339">
+            <schxslt:rule pattern="d15e332">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00120">
-                  <xsl:attribute name="context">akn:quotedStructure//akn:article [ $form = $form-mantelform and $typ = ($typ-gesetz, $typ-verordnung, $typ-satzung, $typ-verwaltungsvorschrift, $typ-vertragsgesetz, $typ-vertragsverordnung) and $fassung = ($fassung-entwurfsfassung, $fassung-verkündungsfassung) ]</xsl:attribute>
+                  <xsl:attribute name="context">akn:quotedStructure//akn:article [ $form = $form-mantelform and $typ = ($typ-gesetz, $typ-verordnung, $typ-satzung, $typ-verwaltungsvorschrift, $typ-vertragsgesetz, $typ-vertragsverordnung) ]</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
                   <xsl:if test="exists($documentUri)">
                      <xsl:attribute name="document" select="$documentUri"/>
@@ -1743,21 +1779,21 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e339')"/>
+                               select="($schxslt:patterns-matched, 'd15e332')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
-   <xsl:template match="akn:article[not(ancestor::akn:quotedStructure)]/@refersTo [ $form = $form-mantelform and $typ = ($typ-gesetz, $typ-verordnung, $typ-satzung, $typ-verwaltungsvorschrift, $typ-vertragsgesetz, $typ-vertragsverordnung) and $fassung = ($fassung-entwurfsfassung, $fassung-verkündungsfassung) ]"
-                 priority="111"
-                 mode="d14e204">
+   <xsl:template match="akn:article[not(ancestor::akn:quotedStructure)]/@refersTo [ $form = $form-mantelform and $typ = ($typ-gesetz, $typ-verordnung, $typ-satzung, $typ-verwaltungsvorschrift, $typ-vertragsgesetz, $typ-vertragsverordnung) and ($ist-entwurfsfassung or $ist-verkündungsfassung) ]"
+                 priority="132"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e348']">
-            <schxslt:rule pattern="d14e348">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00121 for context "akn:article[not(ancestor::akn:quotedStructure)]/@refersTo [ $form = $form-mantelform and $typ = ($typ-gesetz, $typ-verordnung, $typ-satzung, $typ-verwaltungsvorschrift, $typ-vertragsgesetz, $typ-vertragsverordnung) and $fassung = ($fassung-entwurfsfassung, $fassung-verkündungsfassung) ]" shadowed by preceding rule</xsl:comment>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e341']">
+            <schxslt:rule pattern="d15e341">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00121 for context "akn:article[not(ancestor::akn:quotedStructure)]/@refersTo [ $form = $form-mantelform and $typ = ($typ-gesetz, $typ-verordnung, $typ-satzung, $typ-verwaltungsvorschrift, $typ-vertragsgesetz, $typ-vertragsverordnung) and ($ist-entwurfsfassung or $ist-verkündungsfassung) ]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00121">
-                  <xsl:attribute name="context">akn:article[not(ancestor::akn:quotedStructure)]/@refersTo [ $form = $form-mantelform and $typ = ($typ-gesetz, $typ-verordnung, $typ-satzung, $typ-verwaltungsvorschrift, $typ-vertragsgesetz, $typ-vertragsverordnung) and $fassung = ($fassung-entwurfsfassung, $fassung-verkündungsfassung) ]</xsl:attribute>
+                  <xsl:attribute name="context">akn:article[not(ancestor::akn:quotedStructure)]/@refersTo [ $form = $form-mantelform and $typ = ($typ-gesetz, $typ-verordnung, $typ-satzung, $typ-verwaltungsvorschrift, $typ-vertragsgesetz, $typ-vertragsverordnung) and ($ist-entwurfsfassung or $ist-verkündungsfassung) ]</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
                   <xsl:if test="exists($documentUri)">
                      <xsl:attribute name="document" select="$documentUri"/>
@@ -1771,9 +1807,9 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e348">
+            <schxslt:rule pattern="d15e341">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00121">
-                  <xsl:attribute name="context">akn:article[not(ancestor::akn:quotedStructure)]/@refersTo [ $form = $form-mantelform and $typ = ($typ-gesetz, $typ-verordnung, $typ-satzung, $typ-verwaltungsvorschrift, $typ-vertragsgesetz, $typ-vertragsverordnung) and $fassung = ($fassung-entwurfsfassung, $fassung-verkündungsfassung) ]</xsl:attribute>
+                  <xsl:attribute name="context">akn:article[not(ancestor::akn:quotedStructure)]/@refersTo [ $form = $form-mantelform and $typ = ($typ-gesetz, $typ-verordnung, $typ-satzung, $typ-verwaltungsvorschrift, $typ-vertragsgesetz, $typ-vertragsverordnung) and ($ist-entwurfsfassung or $ist-verkündungsfassung) ]</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
                   <xsl:if test="exists($documentUri)">
                      <xsl:attribute name="document" select="$documentUri"/>
@@ -1791,21 +1827,21 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e348')"/>
+                               select="($schxslt:patterns-matched, 'd15e341')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
-   <xsl:template match="akn:article/@refersTo [ $form = $form-stammform and $typ = ($typ-gesetz, $typ-verordnung, $typ-satzung, $typ-verwaltungsvorschrift, $typ-vertragsgesetz, $typ-vertragsverordnung) and $fassung = ($fassung-entwurfsfassung, $fassung-verkündungsfassung, $fassung-neufassung) ]"
-                 priority="110"
-                 mode="d14e204">
+   <xsl:template match="akn:article/@refersTo [ $form = $form-stammform and $typ = ($typ-gesetz, $typ-verordnung, $typ-satzung, $typ-verwaltungsvorschrift, $typ-vertragsgesetz, $typ-vertragsverordnung) and ($ist-entwurfsfassung or $ist-verkündungsfassung) ]"
+                 priority="131"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e357']">
-            <schxslt:rule pattern="d14e357">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00122 for context "akn:article/@refersTo [ $form = $form-stammform and $typ = ($typ-gesetz, $typ-verordnung, $typ-satzung, $typ-verwaltungsvorschrift, $typ-vertragsgesetz, $typ-vertragsverordnung) and $fassung = ($fassung-entwurfsfassung, $fassung-verkündungsfassung, $fassung-neufassung) ]" shadowed by preceding rule</xsl:comment>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e350']">
+            <schxslt:rule pattern="d15e350">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00122 for context "akn:article/@refersTo [ $form = $form-stammform and $typ = ($typ-gesetz, $typ-verordnung, $typ-satzung, $typ-verwaltungsvorschrift, $typ-vertragsgesetz, $typ-vertragsverordnung) and ($ist-entwurfsfassung or $ist-verkündungsfassung) ]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00122">
-                  <xsl:attribute name="context">akn:article/@refersTo [ $form = $form-stammform and $typ = ($typ-gesetz, $typ-verordnung, $typ-satzung, $typ-verwaltungsvorschrift, $typ-vertragsgesetz, $typ-vertragsverordnung) and $fassung = ($fassung-entwurfsfassung, $fassung-verkündungsfassung, $fassung-neufassung) ]</xsl:attribute>
+                  <xsl:attribute name="context">akn:article/@refersTo [ $form = $form-stammform and $typ = ($typ-gesetz, $typ-verordnung, $typ-satzung, $typ-verwaltungsvorschrift, $typ-vertragsgesetz, $typ-vertragsverordnung) and ($ist-entwurfsfassung or $ist-verkündungsfassung) ]</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
                   <xsl:if test="exists($documentUri)">
                      <xsl:attribute name="document" select="$documentUri"/>
@@ -1819,9 +1855,9 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e357">
+            <schxslt:rule pattern="d15e350">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00122">
-                  <xsl:attribute name="context">akn:article/@refersTo [ $form = $form-stammform and $typ = ($typ-gesetz, $typ-verordnung, $typ-satzung, $typ-verwaltungsvorschrift, $typ-vertragsgesetz, $typ-vertragsverordnung) and $fassung = ($fassung-entwurfsfassung, $fassung-verkündungsfassung, $fassung-neufassung) ]</xsl:attribute>
+                  <xsl:attribute name="context">akn:article/@refersTo [ $form = $form-stammform and $typ = ($typ-gesetz, $typ-verordnung, $typ-satzung, $typ-verwaltungsvorschrift, $typ-vertragsgesetz, $typ-vertragsverordnung) and ($ist-entwurfsfassung or $ist-verkündungsfassung) ]</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
                   <xsl:if test="exists($documentUri)">
                      <xsl:attribute name="document" select="$documentUri"/>
@@ -1839,21 +1875,21 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e357')"/>
+                               select="($schxslt:patterns-matched, 'd15e350')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
-   <xsl:template match="akn:article[descendant::akn:mod and not(ancestor::akn:quotedStructure)] [ $form = $form-mantelform and $typ = ($typ-gesetz, $typ-verordnung, $typ-satzung, $typ-verwaltungsvorschrift, $typ-vertragsgesetz, $typ-vertragsverordnung) and $fassung = ($fassung-entwurfsfassung, $fassung-verkündungsfassung) ]"
-                 priority="109"
-                 mode="d14e204">
+   <xsl:template match="akn:article[descendant::akn:mod and not(ancestor::akn:quotedStructure)] [ $form = $form-mantelform and $typ = ($typ-gesetz, $typ-verordnung, $typ-satzung, $typ-verwaltungsvorschrift, $typ-vertragsgesetz, $typ-vertragsverordnung) ]"
+                 priority="130"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e367']">
-            <schxslt:rule pattern="d14e367">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00123 for context "akn:article[descendant::akn:mod and not(ancestor::akn:quotedStructure)] [ $form = $form-mantelform and $typ = ($typ-gesetz, $typ-verordnung, $typ-satzung, $typ-verwaltungsvorschrift, $typ-vertragsgesetz, $typ-vertragsverordnung) and $fassung = ($fassung-entwurfsfassung, $fassung-verkündungsfassung) ]" shadowed by preceding rule</xsl:comment>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e360']">
+            <schxslt:rule pattern="d15e360">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00123 for context "akn:article[descendant::akn:mod and not(ancestor::akn:quotedStructure)] [ $form = $form-mantelform and $typ = ($typ-gesetz, $typ-verordnung, $typ-satzung, $typ-verwaltungsvorschrift, $typ-vertragsgesetz, $typ-vertragsverordnung) ]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00123">
-                  <xsl:attribute name="context">akn:article[descendant::akn:mod and not(ancestor::akn:quotedStructure)] [ $form = $form-mantelform and $typ = ($typ-gesetz, $typ-verordnung, $typ-satzung, $typ-verwaltungsvorschrift, $typ-vertragsgesetz, $typ-vertragsverordnung) and $fassung = ($fassung-entwurfsfassung, $fassung-verkündungsfassung) ]</xsl:attribute>
+                  <xsl:attribute name="context">akn:article[descendant::akn:mod and not(ancestor::akn:quotedStructure)] [ $form = $form-mantelform and $typ = ($typ-gesetz, $typ-verordnung, $typ-satzung, $typ-verwaltungsvorschrift, $typ-vertragsgesetz, $typ-vertragsverordnung) ]</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
                   <xsl:if test="exists($documentUri)">
                      <xsl:attribute name="document" select="$documentUri"/>
@@ -1867,9 +1903,9 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e367">
+            <schxslt:rule pattern="d15e360">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00123">
-                  <xsl:attribute name="context">akn:article[descendant::akn:mod and not(ancestor::akn:quotedStructure)] [ $form = $form-mantelform and $typ = ($typ-gesetz, $typ-verordnung, $typ-satzung, $typ-verwaltungsvorschrift, $typ-vertragsgesetz, $typ-vertragsverordnung) and $fassung = ($fassung-entwurfsfassung, $fassung-verkündungsfassung) ]</xsl:attribute>
+                  <xsl:attribute name="context">akn:article[descendant::akn:mod and not(ancestor::akn:quotedStructure)] [ $form = $form-mantelform and $typ = ($typ-gesetz, $typ-verordnung, $typ-satzung, $typ-verwaltungsvorschrift, $typ-vertragsgesetz, $typ-vertragsverordnung) ]</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
                   <xsl:if test="exists($documentUri)">
                      <xsl:attribute name="document" select="$documentUri"/>
@@ -1887,21 +1923,21 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e367')"/>
+                               select="($schxslt:patterns-matched, 'd15e360')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
-   <xsl:template match="/akn:akomaNtoso/akn:bill/akn:meta/akn:identification/akn:FRBRWork[$fassung = $fassung-entwurfsfassung]"
-                 priority="108"
-                 mode="d14e204">
+   <xsl:template match="/akn:akomaNtoso/akn:bill/akn:meta/akn:identification/akn:FRBRWork"
+                 priority="129"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e376']">
-            <schxslt:rule pattern="d14e376">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00125 for context "/akn:akomaNtoso/akn:bill/akn:meta/akn:identification/akn:FRBRWork[$fassung = $fassung-entwurfsfassung]" shadowed by preceding rule</xsl:comment>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e369']">
+            <schxslt:rule pattern="d15e369">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00125 for context "/akn:akomaNtoso/akn:bill/akn:meta/akn:identification/akn:FRBRWork" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00125">
-                  <xsl:attribute name="context">/akn:akomaNtoso/akn:bill/akn:meta/akn:identification/akn:FRBRWork[$fassung = $fassung-entwurfsfassung]</xsl:attribute>
+                  <xsl:attribute name="context">/akn:akomaNtoso/akn:bill/akn:meta/akn:identification/akn:FRBRWork</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
                   <xsl:if test="exists($documentUri)">
                      <xsl:attribute name="document" select="$documentUri"/>
@@ -1915,9 +1951,9 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e376">
+            <schxslt:rule pattern="d15e369">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00125">
-                  <xsl:attribute name="context">/akn:akomaNtoso/akn:bill/akn:meta/akn:identification/akn:FRBRWork[$fassung = $fassung-entwurfsfassung]</xsl:attribute>
+                  <xsl:attribute name="context">/akn:akomaNtoso/akn:bill/akn:meta/akn:identification/akn:FRBRWork</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
                   <xsl:if test="exists($documentUri)">
                      <xsl:attribute name="document" select="$documentUri"/>
@@ -1935,18 +1971,18 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e376')"/>
+                               select="($schxslt:patterns-matched, 'd15e369')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="/akn:akomaNtoso/akn:bill[@name = $art-regelungstext-uri]/akn:preamble"
-                 priority="107"
-                 mode="d14e204">
+                 priority="128"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e388']">
-            <schxslt:rule pattern="d14e388">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e381']">
+            <schxslt:rule pattern="d15e381">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00130 for context "/akn:akomaNtoso/akn:bill[@name = $art-regelungstext-uri]/akn:preamble" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00130">
                   <xsl:attribute name="context">/akn:akomaNtoso/akn:bill[@name = $art-regelungstext-uri]/akn:preamble</xsl:attribute>
@@ -1963,7 +1999,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e388">
+            <schxslt:rule pattern="d15e381">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00130">
                   <xsl:attribute name="context">/akn:akomaNtoso/akn:bill[@name = $art-regelungstext-uri]/akn:preamble</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -1993,21 +2029,21 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e388')"/>
+                               select="($schxslt:patterns-matched, 'd15e381')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
-   <xsl:template match="/akn:akomaNtoso/*/akn:body[$form = $form-mantelform]"
-                 priority="106"
-                 mode="d14e204">
+   <xsl:template match="/akn:akomaNtoso/*/akn:body[$form = $form-mantelform and ($ist-entwurfsfassung or $ist-verkündungsfassung)]"
+                 priority="127"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e403']">
-            <schxslt:rule pattern="d14e403">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00150 for context "/akn:akomaNtoso/*/akn:body[$form = $form-mantelform]" shadowed by preceding rule</xsl:comment>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e396']">
+            <schxslt:rule pattern="d15e396">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00150 for context "/akn:akomaNtoso/*/akn:body[$form = $form-mantelform and ($ist-entwurfsfassung or $ist-verkündungsfassung)]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00150">
-                  <xsl:attribute name="context">/akn:akomaNtoso/*/akn:body[$form = $form-mantelform]</xsl:attribute>
+                  <xsl:attribute name="context">/akn:akomaNtoso/*/akn:body[$form = $form-mantelform and ($ist-entwurfsfassung or $ist-verkündungsfassung)]</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
                   <xsl:if test="exists($documentUri)">
                      <xsl:attribute name="document" select="$documentUri"/>
@@ -2021,9 +2057,9 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e403">
+            <schxslt:rule pattern="d15e396">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00150">
-                  <xsl:attribute name="context">/akn:akomaNtoso/*/akn:body[$form = $form-mantelform]</xsl:attribute>
+                  <xsl:attribute name="context">/akn:akomaNtoso/*/akn:body[$form = $form-mantelform and ($ist-entwurfsfassung or $ist-verkündungsfassung)]</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
                   <xsl:if test="exists($documentUri)">
                      <xsl:attribute name="document" select="$documentUri"/>
@@ -2042,21 +2078,21 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e403')"/>
+                               select="($schxslt:patterns-matched, 'd15e396')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
-   <xsl:template match="/akn:akomaNtoso/*/akn:body[ $form = ($form-mantelform, $form-stammform) and $typ = ($typ-gesetz, $typ-verordnung, $typ-satzung, $typ-vertragsgesetz, $typ-vertragsverordnung) and $fassung = $fassung-entwurfsfassung ]"
-                 priority="105"
-                 mode="d14e204">
+   <xsl:template match="/akn:akomaNtoso/*/akn:body[ $form = ($form-mantelform, $form-stammform) and $typ = ($typ-gesetz, $typ-verordnung, $typ-satzung, $typ-vertragsgesetz, $typ-vertragsverordnung) and ($ist-entwurfsfassung or $ist-verkündungsfassung) ]"
+                 priority="126"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e413']">
-            <schxslt:rule pattern="d14e413">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00160 for context "/akn:akomaNtoso/*/akn:body[ $form = ($form-mantelform, $form-stammform) and $typ = ($typ-gesetz, $typ-verordnung, $typ-satzung, $typ-vertragsgesetz, $typ-vertragsverordnung) and $fassung = $fassung-entwurfsfassung ]" shadowed by preceding rule</xsl:comment>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e406']">
+            <schxslt:rule pattern="d15e406">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00160 for context "/akn:akomaNtoso/*/akn:body[ $form = ($form-mantelform, $form-stammform) and $typ = ($typ-gesetz, $typ-verordnung, $typ-satzung, $typ-vertragsgesetz, $typ-vertragsverordnung) and ($ist-entwurfsfassung or $ist-verkündungsfassung) ]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00160">
-                  <xsl:attribute name="context">/akn:akomaNtoso/*/akn:body[ $form = ($form-mantelform, $form-stammform) and $typ = ($typ-gesetz, $typ-verordnung, $typ-satzung, $typ-vertragsgesetz, $typ-vertragsverordnung) and $fassung = $fassung-entwurfsfassung ]</xsl:attribute>
+                  <xsl:attribute name="context">/akn:akomaNtoso/*/akn:body[ $form = ($form-mantelform, $form-stammform) and $typ = ($typ-gesetz, $typ-verordnung, $typ-satzung, $typ-vertragsgesetz, $typ-vertragsverordnung) and ($ist-entwurfsfassung or $ist-verkündungsfassung) ]</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
                   <xsl:if test="exists($documentUri)">
                      <xsl:attribute name="document" select="$documentUri"/>
@@ -2070,9 +2106,9 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e413">
+            <schxslt:rule pattern="d15e406">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00160">
-                  <xsl:attribute name="context">/akn:akomaNtoso/*/akn:body[ $form = ($form-mantelform, $form-stammform) and $typ = ($typ-gesetz, $typ-verordnung, $typ-satzung, $typ-vertragsgesetz, $typ-vertragsverordnung) and $fassung = $fassung-entwurfsfassung ]</xsl:attribute>
+                  <xsl:attribute name="context">/akn:akomaNtoso/*/akn:body[ $form = ($form-mantelform, $form-stammform) and $typ = ($typ-gesetz, $typ-verordnung, $typ-satzung, $typ-vertragsgesetz, $typ-vertragsverordnung) and ($ist-entwurfsfassung or $ist-verkündungsfassung) ]</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
                   <xsl:if test="exists($documentUri)">
                      <xsl:attribute name="document" select="$documentUri"/>
@@ -2084,25 +2120,25 @@
                                       role="error"
                                       id="SCH-00160-010">
                      <xsl:attribute name="test">(count(//akn:article[@refersTo = $refersto-literal-geltungszeitregel]) = 1 and empty(//akn:article[@refersTo = ($refersto-literal-geltungszeitregel-inkrafttreten, $refersto-literal-geltungszeitregel-ausserkrafttreten)])) or (count(//akn:article[@refersTo = $refersto-literal-geltungszeitregel-inkrafttreten]) = 1 and count(//akn:article[@refersTo = $refersto-literal-geltungszeitregel-ausserkrafttreten]) le 1 and empty(//akn:article[@refersTo = $refersto-literal-geltungszeitregel]))</xsl:attribute>
-                     <svrl:text>Innerhalb eines Regelungstextes in der Entwurfsfassung <!--(sowohl in der Entwurfs- als auch der Verkündungsfassung)-->, der in Stamm- oder Mantelform vorliegt, muss es entweder genau eine Einzelvorschrift bzgl. der Geltungszeit (refersTo="geltungszeitregel") ODER eine Einzelvorschrift bzgl. des Inkrafttretens (refersTo="geltungszeitregel-inkrafttreten") und optional eine Geltungszeitregel bzgl. des Außerkrafttretens (refersTo="geltungszeitregel-ausserkrafttreten") geben.</svrl:text>
+                     <svrl:text>Innerhalb eines Regelungstextes in der Entwurfsfassung oder Verkündungsfassung, der in Stamm- oder Mantelform vorliegt, muss es entweder genau eine Einzelvorschrift bzgl. der Geltungszeit (refersTo="geltungszeitregel") ODER eine Einzelvorschrift bzgl. des Inkrafttretens (refersTo="geltungszeitregel-inkrafttreten") und optional eine Geltungszeitregel bzgl. des Außerkrafttretens (refersTo="geltungszeitregel-ausserkrafttreten") geben.</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
             </schxslt:rule>
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e413')"/>
+                               select="($schxslt:patterns-matched, 'd15e406')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="/akn:akomaNtoso/*/akn:body[$form = $form-eingebundene-stammform]"
-                 priority="104"
-                 mode="d14e204">
+                 priority="125"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e413']">
-            <schxslt:rule pattern="d14e413">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e406']">
+            <schxslt:rule pattern="d15e406">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00170 for context "/akn:akomaNtoso/*/akn:body[$form = $form-eingebundene-stammform]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00170">
                   <xsl:attribute name="context">/akn:akomaNtoso/*/akn:body[$form = $form-eingebundene-stammform]</xsl:attribute>
@@ -2119,7 +2155,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e413">
+            <schxslt:rule pattern="d15e406">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00170">
                   <xsl:attribute name="context">/akn:akomaNtoso/*/akn:body[$form = $form-eingebundene-stammform]</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -2139,18 +2175,18 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e413')"/>
+                               select="($schxslt:patterns-matched, 'd15e406')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="akn:article[@refersTo = $refersto-literal-geltungszeitregel]"
-                 priority="103"
-                 mode="d14e204">
+                 priority="124"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e430']">
-            <schxslt:rule pattern="d14e430">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e421']">
+            <schxslt:rule pattern="d15e421">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00180 for context "akn:article[@refersTo = $refersto-literal-geltungszeitregel]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00180">
                   <xsl:attribute name="context">akn:article[@refersTo = $refersto-literal-geltungszeitregel]</xsl:attribute>
@@ -2167,7 +2203,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e430">
+            <schxslt:rule pattern="d15e421">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00180">
                   <xsl:attribute name="context">akn:article[@refersTo = $refersto-literal-geltungszeitregel]</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -2175,12 +2211,12 @@
                      <xsl:attribute name="document" select="$documentUri"/>
                   </xsl:if>
                </svrl:fired-rule>
-               <xsl:if test="$fassung = $fassung-entwurfsfassung">
+               <xsl:if test="$ist-entwurfsfassung">
                   <svrl:successful-report xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                                           location="{schxslt:location(.)}"
                                           role="warn"
                                           id="SCH-00180-000">
-                     <xsl:attribute name="test">$fassung = $fassung-entwurfsfassung</xsl:attribute>
+                     <xsl:attribute name="test">$ist-entwurfsfassung</xsl:attribute>
                      <svrl:text>Gemäß HdR 4 sollen Inkrafttreten und Außerkrafttreten in getrennten Einzelvorschriften gefasst werden, die entsprechend mit den refersTo-Literalen geltungszeitregel-inkrafttreten und geltungszeitregel-ausserkrafttreten auszuzeichnen sind. Das refersTo-Literal "geltungszeitregel" soll in Entwurfsfassungen nicht mehr verwendet werden.</svrl:text>
                   </svrl:successful-report>
                </xsl:if>
@@ -2188,66 +2224,18 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e430')"/>
-            </xsl:next-match>
-         </xsl:otherwise>
-      </xsl:choose>
-   </xsl:template>
-   <xsl:template match="akn:article[empty(ancestor::akn:quotedStructure) and @refersTo = $refersto-literal-geltungszeitregel-ausserkrafttreten]"
-                 priority="102"
-                 mode="d14e204">
-      <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e439']">
-            <schxslt:rule pattern="d14e439">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00185 for context "akn:article[empty(ancestor::akn:quotedStructure) and @refersTo = $refersto-literal-geltungszeitregel-ausserkrafttreten]" shadowed by preceding rule</xsl:comment>
-               <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00185">
-                  <xsl:attribute name="context">akn:article[empty(ancestor::akn:quotedStructure) and @refersTo = $refersto-literal-geltungszeitregel-ausserkrafttreten]</xsl:attribute>
-                  <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
-                  <xsl:if test="exists($documentUri)">
-                     <xsl:attribute name="document" select="$documentUri"/>
-                  </xsl:if>
-               </svrl:suppressed-rule>
-            </schxslt:rule>
-            <xsl:next-match>
-               <xsl:with-param name="schxslt:patterns-matched"
-                               as="xs:string*"
-                               select="$schxslt:patterns-matched"/>
-            </xsl:next-match>
-         </xsl:when>
-         <xsl:otherwise>
-            <schxslt:rule pattern="d14e439">
-               <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00185">
-                  <xsl:attribute name="context">akn:article[empty(ancestor::akn:quotedStructure) and @refersTo = $refersto-literal-geltungszeitregel-ausserkrafttreten]</xsl:attribute>
-                  <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
-                  <xsl:if test="exists($documentUri)">
-                     <xsl:attribute name="document" select="$documentUri"/>
-                  </xsl:if>
-               </svrl:fired-rule>
-               <xsl:if test="$form = ($form-eingebundene-stammform, $form-mantelform)">
-                  <svrl:successful-report xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                          location="{schxslt:location(.)}"
-                                          id="SCH-00185-000">
-                     <xsl:attribute name="test">$form = ($form-eingebundene-stammform, $form-mantelform)</xsl:attribute>
-                     <svrl:text>Eine Einzelvorschrift zum Außerkrafttreten darf es nur in einer Stammform bzw. eingebundenen Stammform geben.</svrl:text>
-                  </svrl:successful-report>
-               </xsl:if>
-            </schxslt:rule>
-            <xsl:next-match>
-               <xsl:with-param name="schxslt:patterns-matched"
-                               as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e439')"/>
+                               select="($schxslt:patterns-matched, 'd15e421')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="//akn:article/akn:paragraph//akn:list[$ist-entwurfsfassung]"
-                 priority="101"
-                 mode="d14e204">
+                 priority="123"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e451']">
-            <schxslt:rule pattern="d14e451">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e435']">
+            <schxslt:rule pattern="d15e435">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00200 for context "//akn:article/akn:paragraph//akn:list[$ist-entwurfsfassung]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00200">
                   <xsl:attribute name="context">//akn:article/akn:paragraph//akn:list[$ist-entwurfsfassung]</xsl:attribute>
@@ -2264,7 +2252,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e451">
+            <schxslt:rule pattern="d15e435">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00200">
                   <xsl:attribute name="context">//akn:article/akn:paragraph//akn:list[$ist-entwurfsfassung]</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -2285,18 +2273,18 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e451')"/>
+                               select="($schxslt:patterns-matched, 'd15e435')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="//akn:article[$ist-entwurfsfassung]"
-                 priority="100"
-                 mode="d14e204">
+                 priority="122"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e460']">
-            <schxslt:rule pattern="d14e460">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e444']">
+            <schxslt:rule pattern="d15e444">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00210 for context "//akn:article[$ist-entwurfsfassung]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00210">
                   <xsl:attribute name="context">//akn:article[$ist-entwurfsfassung]</xsl:attribute>
@@ -2313,7 +2301,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e460">
+            <schxslt:rule pattern="d15e444">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00210">
                   <xsl:attribute name="context">//akn:article[$ist-entwurfsfassung]</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -2334,16 +2322,16 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e460')"/>
+                               select="($schxslt:patterns-matched, 'd15e444')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
-   <xsl:template match="akn:book" priority="99" mode="d14e204">
+   <xsl:template match="akn:book" priority="121" mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e473']">
-            <schxslt:rule pattern="d14e473">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e457']">
+            <schxslt:rule pattern="d15e457">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00230 for context "akn:book" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00230">
                   <xsl:attribute name="context">akn:book</xsl:attribute>
@@ -2360,7 +2348,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e473">
+            <schxslt:rule pattern="d15e457">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00230">
                   <xsl:attribute name="context">akn:book</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -2381,16 +2369,16 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e473')"/>
+                               select="($schxslt:patterns-matched, 'd15e457')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
-   <xsl:template match="akn:part" priority="98" mode="d14e204">
+   <xsl:template match="akn:part" priority="120" mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e473']">
-            <schxslt:rule pattern="d14e473">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e457']">
+            <schxslt:rule pattern="d15e457">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00240 for context "akn:part" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00240">
                   <xsl:attribute name="context">akn:part</xsl:attribute>
@@ -2407,7 +2395,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e473">
+            <schxslt:rule pattern="d15e457">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00240">
                   <xsl:attribute name="context">akn:part</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -2428,16 +2416,16 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e473')"/>
+                               select="($schxslt:patterns-matched, 'd15e457')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
-   <xsl:template match="akn:chapter" priority="97" mode="d14e204">
+   <xsl:template match="akn:chapter" priority="119" mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e473']">
-            <schxslt:rule pattern="d14e473">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e457']">
+            <schxslt:rule pattern="d15e457">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00250 for context "akn:chapter" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00250">
                   <xsl:attribute name="context">akn:chapter</xsl:attribute>
@@ -2454,7 +2442,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e473">
+            <schxslt:rule pattern="d15e457">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00250">
                   <xsl:attribute name="context">akn:chapter</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -2475,16 +2463,16 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e473')"/>
+                               select="($schxslt:patterns-matched, 'd15e457')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
-   <xsl:template match="akn:subchapter" priority="96" mode="d14e204">
+   <xsl:template match="akn:subchapter" priority="118" mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e473']">
-            <schxslt:rule pattern="d14e473">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e457']">
+            <schxslt:rule pattern="d15e457">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00260 for context "akn:subchapter" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00260">
                   <xsl:attribute name="context">akn:subchapter</xsl:attribute>
@@ -2501,7 +2489,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e473">
+            <schxslt:rule pattern="d15e457">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00260">
                   <xsl:attribute name="context">akn:subchapter</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -2522,16 +2510,16 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e473')"/>
+                               select="($schxslt:patterns-matched, 'd15e457')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
-   <xsl:template match="akn:section" priority="95" mode="d14e204">
+   <xsl:template match="akn:section" priority="117" mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e473']">
-            <schxslt:rule pattern="d14e473">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e457']">
+            <schxslt:rule pattern="d15e457">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00270 for context "akn:section" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00270">
                   <xsl:attribute name="context">akn:section</xsl:attribute>
@@ -2548,7 +2536,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e473">
+            <schxslt:rule pattern="d15e457">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00270">
                   <xsl:attribute name="context">akn:section</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -2569,16 +2557,16 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e473')"/>
+                               select="($schxslt:patterns-matched, 'd15e457')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
-   <xsl:template match="akn:subsection" priority="94" mode="d14e204">
+   <xsl:template match="akn:subsection" priority="116" mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e473']">
-            <schxslt:rule pattern="d14e473">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e457']">
+            <schxslt:rule pattern="d15e457">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00280 for context "akn:subsection" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00280">
                   <xsl:attribute name="context">akn:subsection</xsl:attribute>
@@ -2595,7 +2583,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e473">
+            <schxslt:rule pattern="d15e457">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00280">
                   <xsl:attribute name="context">akn:subsection</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -2616,16 +2604,16 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e473')"/>
+                               select="($schxslt:patterns-matched, 'd15e457')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
-   <xsl:template match="akn:title" priority="93" mode="d14e204">
+   <xsl:template match="akn:title" priority="115" mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e473']">
-            <schxslt:rule pattern="d14e473">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e457']">
+            <schxslt:rule pattern="d15e457">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00290 for context "akn:title" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00290">
                   <xsl:attribute name="context">akn:title</xsl:attribute>
@@ -2642,7 +2630,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e473">
+            <schxslt:rule pattern="d15e457">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00290">
                   <xsl:attribute name="context">akn:title</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -2663,16 +2651,16 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e473')"/>
+                               select="($schxslt:patterns-matched, 'd15e457')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
-   <xsl:template match="akn:subtitle" priority="92" mode="d14e204">
+   <xsl:template match="akn:subtitle" priority="114" mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e473']">
-            <schxslt:rule pattern="d14e473">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e457']">
+            <schxslt:rule pattern="d15e457">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00300 for context "akn:subtitle" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00300">
                   <xsl:attribute name="context">akn:subtitle</xsl:attribute>
@@ -2689,7 +2677,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e473">
+            <schxslt:rule pattern="d15e457">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00300">
                   <xsl:attribute name="context">akn:subtitle</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -2710,18 +2698,18 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e473')"/>
+                               select="($schxslt:patterns-matched, 'd15e457')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="regtxt:vomHdrAbweichendeGliederung"
-                 priority="91"
-                 mode="d14e204">
+                 priority="113"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e525']">
-            <schxslt:rule pattern="d14e525">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e509']">
+            <schxslt:rule pattern="d15e509">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00305 for context "regtxt:vomHdrAbweichendeGliederung" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00305">
                   <xsl:attribute name="context">regtxt:vomHdrAbweichendeGliederung</xsl:attribute>
@@ -2738,7 +2726,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e525">
+            <schxslt:rule pattern="d15e509">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00305">
                   <xsl:attribute name="context">regtxt:vomHdrAbweichendeGliederung</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -2759,18 +2747,18 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e525')"/>
+                               select="($schxslt:patterns-matched, 'd15e509')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="(akn:book | akn:part | akn:chapter | akn:subchapter | akn:section | akn:subsection | akn:title | akn:subtitle)[@refersTo = 'vom-hdr-abweichende-gliederungsebene']"
-                 priority="90"
-                 mode="d14e204">
+                 priority="112"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e525']">
-            <schxslt:rule pattern="d14e525">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e509']">
+            <schxslt:rule pattern="d15e509">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00306 for context "(akn:book | akn:part | akn:chapter | akn:subchapter | akn:section | akn:subsection | akn:title | akn:subtitle)[@refersTo = 'vom-hdr-abweichende-gliederungsebene']" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00306">
                   <xsl:attribute name="context">(akn:book | akn:part | akn:chapter | akn:subchapter | akn:section | akn:subsection | akn:title | akn:subtitle)[@refersTo = 'vom-hdr-abweichende-gliederungsebene']</xsl:attribute>
@@ -2787,7 +2775,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e525">
+            <schxslt:rule pattern="d15e509">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00306">
                   <xsl:attribute name="context">(akn:book | akn:part | akn:chapter | akn:subchapter | akn:section | akn:subsection | akn:title | akn:subtitle)[@refersTo = 'vom-hdr-abweichende-gliederungsebene']</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -2808,18 +2796,18 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e525')"/>
+                               select="($schxslt:patterns-matched, 'd15e509')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="/akn:akomaNtoso/akn:bill[@name = $art-regelungstext-uri]/akn:conclusions"
-                 priority="89"
-                 mode="d14e204">
+                 priority="111"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e549']">
-            <schxslt:rule pattern="d14e549">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e533']">
+            <schxslt:rule pattern="d15e533">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00310 for context "/akn:akomaNtoso/akn:bill[@name = $art-regelungstext-uri]/akn:conclusions" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00310">
                   <xsl:attribute name="context">/akn:akomaNtoso/akn:bill[@name = $art-regelungstext-uri]/akn:conclusions</xsl:attribute>
@@ -2836,7 +2824,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e549">
+            <schxslt:rule pattern="d15e533">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00310">
                   <xsl:attribute name="context">/akn:akomaNtoso/akn:bill[@name = $art-regelungstext-uri]/akn:conclusions</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -2866,18 +2854,18 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e549')"/>
+                               select="($schxslt:patterns-matched, 'd15e533')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="akn:act/akn:conclusions/akn:blockContainer"
-                 priority="88"
-                 mode="d14e204">
+                 priority="110"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e561']">
-            <schxslt:rule pattern="d14e561">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e545']">
+            <schxslt:rule pattern="d15e545">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00320 for context "akn:act/akn:conclusions/akn:blockContainer" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00320">
                   <xsl:attribute name="context">akn:act/akn:conclusions/akn:blockContainer</xsl:attribute>
@@ -2894,7 +2882,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e561">
+            <schxslt:rule pattern="d15e545">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00320">
                   <xsl:attribute name="context">akn:act/akn:conclusions/akn:blockContainer</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -2915,18 +2903,18 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e561')"/>
+                               select="($schxslt:patterns-matched, 'd15e545')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="(akn:act | akn:bill)/akn:conclusions/akn:blockContainer/akn:p[1]"
-                 priority="87"
-                 mode="d14e204">
+                 priority="109"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e561']">
-            <schxslt:rule pattern="d14e561">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e545']">
+            <schxslt:rule pattern="d15e545">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00321 for context "(akn:act | akn:bill)/akn:conclusions/akn:blockContainer/akn:p[1]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00321">
                   <xsl:attribute name="context">(akn:act | akn:bill)/akn:conclusions/akn:blockContainer/akn:p[1]</xsl:attribute>
@@ -2943,7 +2931,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e561">
+            <schxslt:rule pattern="d15e545">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00321">
                   <xsl:attribute name="context">(akn:act | akn:bill)/akn:conclusions/akn:blockContainer/akn:p[1]</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -2973,18 +2961,18 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e561')"/>
+                               select="($schxslt:patterns-matched, 'd15e545')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="(akn:act | akn:bill)/akn:conclusions/akn:blockContainer/akn:p[position() ge 2]"
-                 priority="86"
-                 mode="d14e204">
+                 priority="108"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e561']">
-            <schxslt:rule pattern="d14e561">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e545']">
+            <schxslt:rule pattern="d15e545">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00322 for context "(akn:act | akn:bill)/akn:conclusions/akn:blockContainer/akn:p[position() ge 2]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00322">
                   <xsl:attribute name="context">(akn:act | akn:bill)/akn:conclusions/akn:blockContainer/akn:p[position() ge 2]</xsl:attribute>
@@ -3001,7 +2989,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e561">
+            <schxslt:rule pattern="d15e545">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00322">
                   <xsl:attribute name="context">(akn:act | akn:bill)/akn:conclusions/akn:blockContainer/akn:p[position() ge 2]</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -3022,18 +3010,18 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e561')"/>
+                               select="($schxslt:patterns-matched, 'd15e545')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="//akn:doc[@name = $art-vorblatt-regelungstext-uri]/akn:mainBody"
-                 priority="85"
-                 mode="d14e204">
+                 priority="107"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e589']">
-            <schxslt:rule pattern="d14e589">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e573']">
+            <schxslt:rule pattern="d15e573">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00330 for context "//akn:doc[@name = $art-vorblatt-regelungstext-uri]/akn:mainBody" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00330">
                   <xsl:attribute name="context">//akn:doc[@name = $art-vorblatt-regelungstext-uri]/akn:mainBody</xsl:attribute>
@@ -3050,7 +3038,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e589">
+            <schxslt:rule pattern="d15e573">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00330">
                   <xsl:attribute name="context">//akn:doc[@name = $art-vorblatt-regelungstext-uri]/akn:mainBody</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -3152,22 +3140,22 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e589')"/>
+                               select="($schxslt:patterns-matched, 'd15e573')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="//akn:doc[@name = $art-vorblatt-uri]/akn:mainBody/akn:hcontainer[@refersTo = $refersto-literal-vorblattabschnitt-erfüllungsaufwand]//akn:tblock"
-                 priority="84"
-                 mode="d14e204">
+                 priority="106"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:variable name="zulässige-literale-zum-erfüllungsaufwand"
                     select="( 'erfuellungsaufwand-fuer-buergerinnen-und-buerger', 'erfuellungsaufwand-fuer-die-wirtschaft', 'davon-buerokratiekosten-aus-informationspflichten', 'erfuellungsaufwand-der-verwaltung' )"/>
       <xsl:variable name="mehr-als-ein-literal"
                     select="count($zulässige-literale-zum-erfüllungsaufwand) gt 1"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e589']">
-            <schxslt:rule pattern="d14e589">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e573']">
+            <schxslt:rule pattern="d15e573">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00335 for context "//akn:doc[@name = $art-vorblatt-uri]/akn:mainBody/akn:hcontainer[@refersTo = $refersto-literal-vorblattabschnitt-erfüllungsaufwand]//akn:tblock" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00335">
                   <xsl:attribute name="context">//akn:doc[@name = $art-vorblatt-uri]/akn:mainBody/akn:hcontainer[@refersTo = $refersto-literal-vorblattabschnitt-erfüllungsaufwand]//akn:tblock</xsl:attribute>
@@ -3184,7 +3172,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e589">
+            <schxslt:rule pattern="d15e573">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00335">
                   <xsl:attribute name="context">//akn:doc[@name = $art-vorblatt-uri]/akn:mainBody/akn:hcontainer[@refersTo = $refersto-literal-vorblattabschnitt-erfüllungsaufwand]//akn:tblock</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -3205,18 +3193,18 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e589')"/>
+                               select="($schxslt:patterns-matched, 'd15e573')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="//akn:doc[@name = $art-vorblatt-beschlussempfehlung-uri]/akn:mainBody"
-                 priority="83"
-                 mode="d14e204">
+                 priority="105"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e645']">
-            <schxslt:rule pattern="d14e645">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e629']">
+            <schxslt:rule pattern="d15e629">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00336 for context "//akn:doc[@name = $art-vorblatt-beschlussempfehlung-uri]/akn:mainBody" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00336">
                   <xsl:attribute name="context">//akn:doc[@name = $art-vorblatt-beschlussempfehlung-uri]/akn:mainBody</xsl:attribute>
@@ -3233,7 +3221,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e645">
+            <schxslt:rule pattern="d15e629">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00336">
                   <xsl:attribute name="context">//akn:doc[@name = $art-vorblatt-beschlussempfehlung-uri]/akn:mainBody</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -3281,18 +3269,18 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e645')"/>
+                               select="($schxslt:patterns-matched, 'd15e629')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="/akn:akomaNtoso/akn:doc[@name = $art-begründung-uri and $typ = ($typ-gesetz, $typ-verordnung, $typ-verwaltungsvorschrift)]"
-                 priority="82"
-                 mode="d14e204">
+                 priority="104"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e666']">
-            <schxslt:rule pattern="d14e666">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e650']">
+            <schxslt:rule pattern="d15e650">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00340 for context "/akn:akomaNtoso/akn:doc[@name = $art-begründung-uri and $typ = ($typ-gesetz, $typ-verordnung, $typ-verwaltungsvorschrift)]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00340">
                   <xsl:attribute name="context">/akn:akomaNtoso/akn:doc[@name = $art-begründung-uri and $typ = ($typ-gesetz, $typ-verordnung, $typ-verwaltungsvorschrift)]</xsl:attribute>
@@ -3309,7 +3297,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e666">
+            <schxslt:rule pattern="d15e650">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00340">
                   <xsl:attribute name="context">/akn:akomaNtoso/akn:doc[@name = $art-begründung-uri and $typ = ($typ-gesetz, $typ-verordnung, $typ-verwaltungsvorschrift)]</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -3348,22 +3336,22 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e666')"/>
+                               select="($schxslt:patterns-matched, 'd15e650')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="//akn:doc[@name = $art-begründung-uri]/akn:mainBody//akn:hcontainer[@refersTo = 'begruendungsabschnitt-regelungsfolgen']//akn:tblock"
-                 priority="81"
-                 mode="d14e204">
+                 priority="103"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:variable name="zulässige-literale-zu-regelungsfolgen"
                     select="( 'begruendung-erfuellungsaufwand-fuer-buergerinnen-und-buerger', 'begruendung-erfuellungsaufwand-fuer-die-wirtschaft', 'begruendung-erfuellungsaufwand-der-verwaltung', 'regelungsfolgen-abschnitt-rechts-und-verwaltungsvereinfachung', 'regelungsfolgen-abschnitt-nachhaltigkeitsaspekte', 'regelungsfolgen-abschnitt-erfuellungsaufwand', 'regelungsfolgen-abschnitt-weitere-kosten', 'regelungsfolgen-abschnitt-gleichstellungspolitische-relevanzpruefung', 'regelungsfolgen-abschnitt-haushaltsausgaben-ohne-erfuellungsaufwand', 'regelungsfolgen-abschnitt-weitere-regelungsfolgen' )"/>
       <xsl:variable name="mehr-als-ein-literal"
                     select="count($zulässige-literale-zu-regelungsfolgen) gt 1"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e666']">
-            <schxslt:rule pattern="d14e666">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e650']">
+            <schxslt:rule pattern="d15e650">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00345 for context "//akn:doc[@name = $art-begründung-uri]/akn:mainBody//akn:hcontainer[@refersTo = 'begruendungsabschnitt-regelungsfolgen']//akn:tblock" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00345">
                   <xsl:attribute name="context">//akn:doc[@name = $art-begründung-uri]/akn:mainBody//akn:hcontainer[@refersTo = 'begruendungsabschnitt-regelungsfolgen']//akn:tblock</xsl:attribute>
@@ -3380,7 +3368,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e666">
+            <schxslt:rule pattern="d15e650">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00345">
                   <xsl:attribute name="context">//akn:doc[@name = $art-begründung-uri]/akn:mainBody//akn:hcontainer[@refersTo = 'begruendungsabschnitt-regelungsfolgen']//akn:tblock</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -3401,18 +3389,18 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e666')"/>
+                               select="($schxslt:patterns-matched, 'd15e650')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="//akn:doc[@name = $art-begründung-uri]/akn:mainBody/akn:hcontainer[@refersTo = 'begruendung-allgemeiner-teil']"
-                 priority="80"
-                 mode="d14e204">
+                 priority="102"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e701']">
-            <schxslt:rule pattern="d14e701">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e685']">
+            <schxslt:rule pattern="d15e685">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00350 for context "//akn:doc[@name = $art-begründung-uri]/akn:mainBody/akn:hcontainer[@refersTo = 'begruendung-allgemeiner-teil']" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00350">
                   <xsl:attribute name="context">//akn:doc[@name = $art-begründung-uri]/akn:mainBody/akn:hcontainer[@refersTo = 'begruendung-allgemeiner-teil']</xsl:attribute>
@@ -3429,7 +3417,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e701">
+            <schxslt:rule pattern="d15e685">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00350">
                   <xsl:attribute name="context">//akn:doc[@name = $art-begründung-uri]/akn:mainBody/akn:hcontainer[@refersTo = 'begruendung-allgemeiner-teil']</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -3486,18 +3474,18 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e701')"/>
+                               select="($schxslt:patterns-matched, 'd15e685')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="//akn:doc[@name = $art-begründung-uri]/akn:mainBody/akn:hcontainer[@refersTo = 'begruendung-allgemeiner-teil']/akn:hcontainer[@refersTo = 'begruendungsabschnitt-regelungsfolgen']/akn:content"
-                 priority="79"
-                 mode="d14e204">
+                 priority="101"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e725']">
-            <schxslt:rule pattern="d14e725">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e709']">
+            <schxslt:rule pattern="d15e709">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00360 for context "//akn:doc[@name = $art-begründung-uri]/akn:mainBody/akn:hcontainer[@refersTo = 'begruendung-allgemeiner-teil']/akn:hcontainer[@refersTo = 'begruendungsabschnitt-regelungsfolgen']/akn:content" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00360">
                   <xsl:attribute name="context">//akn:doc[@name = $art-begründung-uri]/akn:mainBody/akn:hcontainer[@refersTo = 'begruendung-allgemeiner-teil']/akn:hcontainer[@refersTo = 'begruendungsabschnitt-regelungsfolgen']/akn:content</xsl:attribute>
@@ -3514,7 +3502,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e725">
+            <schxslt:rule pattern="d15e709">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00360">
                   <xsl:attribute name="context">//akn:doc[@name = $art-begründung-uri]/akn:mainBody/akn:hcontainer[@refersTo = 'begruendung-allgemeiner-teil']/akn:hcontainer[@refersTo = 'begruendungsabschnitt-regelungsfolgen']/akn:content</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -3589,18 +3577,18 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e725')"/>
+                               select="($schxslt:patterns-matched, 'd15e709')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="/akn:akomaNtoso/akn:doc[@name = $art-anschreiben-uri]"
-                 priority="78"
-                 mode="d14e204">
+                 priority="100"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e756']">
-            <schxslt:rule pattern="d14e756">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e740']">
+            <schxslt:rule pattern="d15e740">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00380 for context "/akn:akomaNtoso/akn:doc[@name = $art-anschreiben-uri]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00380">
                   <xsl:attribute name="context">/akn:akomaNtoso/akn:doc[@name = $art-anschreiben-uri]</xsl:attribute>
@@ -3617,7 +3605,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e756">
+            <schxslt:rule pattern="d15e740">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00380">
                   <xsl:attribute name="context">/akn:akomaNtoso/akn:doc[@name = $art-anschreiben-uri]</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -3638,18 +3626,18 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e756')"/>
+                               select="($schxslt:patterns-matched, 'd15e740')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="/akn:akomaNtoso/akn:doc[@name = ($art-anschreiben-uri, $art-vorblatt-uri)]/akn:preface/akn:longTitle/akn:p"
-                 priority="77"
-                 mode="d14e204">
+                 priority="99"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e769']">
-            <schxslt:rule pattern="d14e769">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e753']">
+            <schxslt:rule pattern="d15e753">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00390 for context "/akn:akomaNtoso/akn:doc[@name = ($art-anschreiben-uri, $art-vorblatt-uri)]/akn:preface/akn:longTitle/akn:p" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00390">
                   <xsl:attribute name="context">/akn:akomaNtoso/akn:doc[@name = ($art-anschreiben-uri, $art-vorblatt-uri)]/akn:preface/akn:longTitle/akn:p</xsl:attribute>
@@ -3666,7 +3654,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e769">
+            <schxslt:rule pattern="d15e753">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00390">
                   <xsl:attribute name="context">/akn:akomaNtoso/akn:doc[@name = ($art-anschreiben-uri, $art-vorblatt-uri)]/akn:preface/akn:longTitle/akn:p</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -3674,12 +3662,12 @@
                      <xsl:attribute name="document" select="$documentUri"/>
                   </xsl:if>
                </svrl:fired-rule>
-               <xsl:if test="./akn:inline [@refersTo = $refersto-literal-ausschussueberweisung] and $bearbeitende-institution-frbrauthor = ( 'recht.bund.de/institution/bundesregierung', 'recht.bund.de/institution/bundestag', 'recht.bund.de/institution/bundeskanzler', 'recht.bund.de/institution/bundespraesident' )">
+               <xsl:if test="./akn:inline[@refersTo = $refersto-literal-ausschussueberweisung] and $bearbeitende-institution-frbrauthor = ( 'recht.bund.de/institution/bundesregierung', 'recht.bund.de/institution/bundestag', 'recht.bund.de/institution/bundeskanzler', 'recht.bund.de/institution/bundespraesident' )">
                   <svrl:successful-report xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                                           location="{schxslt:location(.)}"
                                           role="error"
                                           id="SCH-00390-005">
-                     <xsl:attribute name="test">./akn:inline [@refersTo = $refersto-literal-ausschussueberweisung] and $bearbeitende-institution-frbrauthor = ( 'recht.bund.de/institution/bundesregierung', 'recht.bund.de/institution/bundestag', 'recht.bund.de/institution/bundeskanzler', 'recht.bund.de/institution/bundespraesident' )</xsl:attribute>
+                     <xsl:attribute name="test">./akn:inline[@refersTo = $refersto-literal-ausschussueberweisung] and $bearbeitende-institution-frbrauthor = ( 'recht.bund.de/institution/bundesregierung', 'recht.bund.de/institution/bundestag', 'recht.bund.de/institution/bundeskanzler', 'recht.bund.de/institution/bundespraesident' )</xsl:attribute>
                      <svrl:text> Eine Ausschussüberweisung steht nur dem Bundesrat optional zur Verfügung.</svrl:text>
                   </svrl:successful-report>
                </xsl:if>
@@ -3696,18 +3684,18 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e769')"/>
+                               select="($schxslt:patterns-matched, 'd15e753')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="/akn:akomaNtoso/akn:act[@name = $art-vereinbarung-uri]/akn:body"
-                 priority="76"
-                 mode="d14e204">
+                 priority="98"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e784']">
-            <schxslt:rule pattern="d14e784">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e768']">
+            <schxslt:rule pattern="d15e768">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00400 for context "/akn:akomaNtoso/akn:act[@name = $art-vereinbarung-uri]/akn:body" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00400">
                   <xsl:attribute name="context">/akn:akomaNtoso/akn:act[@name = $art-vereinbarung-uri]/akn:body</xsl:attribute>
@@ -3724,7 +3712,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e784">
+            <schxslt:rule pattern="d15e768">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00400">
                   <xsl:attribute name="context">/akn:akomaNtoso/akn:act[@name = $art-vereinbarung-uri]/akn:body</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -3754,18 +3742,18 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e784')"/>
+                               select="($schxslt:patterns-matched, 'd15e768')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="//akn:textualMod[@type = 'insertion']"
-                 priority="75"
-                 mode="d14e204">
+                 priority="97"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e799']">
-            <schxslt:rule pattern="d14e799">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e783']">
+            <schxslt:rule pattern="d15e783">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00420 for context "//akn:textualMod[@type = 'insertion']" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00420">
                   <xsl:attribute name="context">//akn:textualMod[@type = 'insertion']</xsl:attribute>
@@ -3782,7 +3770,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e799">
+            <schxslt:rule pattern="d15e783">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00420">
                   <xsl:attribute name="context">//akn:textualMod[@type = 'insertion']</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -3803,69 +3791,21 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e799')"/>
-            </xsl:next-match>
-         </xsl:otherwise>
-      </xsl:choose>
-   </xsl:template>
-   <xsl:template match="akn:article [ $form = ($form-stammform, $form-eingebundene-stammform) or $fassung = $fassung-neufassung or $typ = $typ-sonstige-bekanntmachung ]"
-                 priority="74"
-                 mode="d14e204">
-      <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e809']">
-            <schxslt:rule pattern="d14e809">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00421 for context "akn:article [ $form = ($form-stammform, $form-eingebundene-stammform) or $fassung = $fassung-neufassung or $typ = $typ-sonstige-bekanntmachung ]" shadowed by preceding rule</xsl:comment>
-               <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00421">
-                  <xsl:attribute name="context">akn:article [ $form = ($form-stammform, $form-eingebundene-stammform) or $fassung = $fassung-neufassung or $typ = $typ-sonstige-bekanntmachung ]</xsl:attribute>
-                  <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
-                  <xsl:if test="exists($documentUri)">
-                     <xsl:attribute name="document" select="$documentUri"/>
-                  </xsl:if>
-               </svrl:suppressed-rule>
-            </schxslt:rule>
-            <xsl:next-match>
-               <xsl:with-param name="schxslt:patterns-matched"
-                               as="xs:string*"
-                               select="$schxslt:patterns-matched"/>
-            </xsl:next-match>
-         </xsl:when>
-         <xsl:otherwise>
-            <schxslt:rule pattern="d14e809">
-               <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00421">
-                  <xsl:attribute name="context">akn:article [ $form = ($form-stammform, $form-eingebundene-stammform) or $fassung = $fassung-neufassung or $typ = $typ-sonstige-bekanntmachung ]</xsl:attribute>
-                  <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
-                  <xsl:if test="exists($documentUri)">
-                     <xsl:attribute name="document" select="$documentUri"/>
-                  </xsl:if>
-               </svrl:fired-rule>
-               <xsl:if test="not(not(exists(descendant::akn:mod)))">
-                  <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                      location="{schxslt:location(.)}"
-                                      id="SCH-00421-000">
-                     <xsl:attribute name="test">not(exists(descendant::akn:mod))</xsl:attribute>
-                     <svrl:text>Änderungsbefehle dürfen nur im Rahmen einer Mantelform vorkommen.</svrl:text>
-                  </svrl:failed-assert>
-               </xsl:if>
-            </schxslt:rule>
-            <xsl:next-match>
-               <xsl:with-param name="schxslt:patterns-matched"
-                               as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e809')"/>
+                               select="($schxslt:patterns-matched, 'd15e783')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="//akn:mod[not(ancestor::akn:mod)]"
-                 priority="73"
-                 mode="d14e204">
+                 priority="96"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:variable name="alle-textänderungen"
                     select="/akn:akomaNtoso/*/akn:meta/akn:analysis/akn:activeModifications/(akn:textualMod, akn:forceMod)/akn:source"/>
       <xsl:variable name="gesuchte-änderungsbefehl-id" select="concat('#', @eId)"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e818']">
-            <schxslt:rule pattern="d14e818">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e800']">
+            <schxslt:rule pattern="d15e800">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00422 for context "//akn:mod[not(ancestor::akn:mod)]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00422">
                   <xsl:attribute name="context">//akn:mod[not(ancestor::akn:mod)]</xsl:attribute>
@@ -3882,7 +3822,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e818">
+            <schxslt:rule pattern="d15e800">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00422">
                   <xsl:attribute name="context">//akn:mod[not(ancestor::akn:mod)]</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -3902,20 +3842,20 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e818')"/>
+                               select="($schxslt:patterns-matched, 'd15e800')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="/akn:akomaNtoso/*/akn:meta/akn:analysis/akn:activeModifications/akn:textualMod/akn:source | /akn:akomaNtoso/*/akn:meta/akn:analysis/akn:activeModifications/akn:forceMod/akn:source"
-                 priority="72"
-                 mode="d14e204">
+                 priority="95"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:variable name="referenzierte-änderungsbefehl-id"
                     select="substring(@href, string-length('#') + 1)"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e833']">
-            <schxslt:rule pattern="d14e833">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e815']">
+            <schxslt:rule pattern="d15e815">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00423 for context "/akn:akomaNtoso/*/akn:meta/akn:analysis/akn:activeModifications/akn:textualMod/akn:source | /akn:akomaNtoso/*/akn:meta/akn:analysis/akn:activeModifications/akn:forceMod/akn:source" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00423">
                   <xsl:attribute name="context">/akn:akomaNtoso/*/akn:meta/akn:analysis/akn:activeModifications/akn:textualMod/akn:source | /akn:akomaNtoso/*/akn:meta/akn:analysis/akn:activeModifications/akn:forceMod/akn:source</xsl:attribute>
@@ -3932,7 +3872,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e833">
+            <schxslt:rule pattern="d15e815">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00423">
                   <xsl:attribute name="context">/akn:akomaNtoso/*/akn:meta/akn:analysis/akn:activeModifications/akn:textualMod/akn:source | /akn:akomaNtoso/*/akn:meta/akn:analysis/akn:activeModifications/akn:forceMod/akn:source</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -3960,18 +3900,18 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e833')"/>
+                               select="($schxslt:patterns-matched, 'd15e815')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="akn:mod[@refersTo = 'aenderungsbefehl-umnummerierung']"
-                 priority="71"
-                 mode="d14e204">
+                 priority="94"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e849']">
-            <schxslt:rule pattern="d14e849">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e831']">
+            <schxslt:rule pattern="d15e831">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00424 for context "akn:mod[@refersTo = 'aenderungsbefehl-umnummerierung']" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00424">
                   <xsl:attribute name="context">akn:mod[@refersTo = 'aenderungsbefehl-umnummerierung']</xsl:attribute>
@@ -3988,7 +3928,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e849">
+            <schxslt:rule pattern="d15e831">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00424">
                   <xsl:attribute name="context">akn:mod[@refersTo = 'aenderungsbefehl-umnummerierung']</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -4008,18 +3948,18 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e849')"/>
+                               select="($schxslt:patterns-matched, 'd15e831')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="akn:span[@refersTo = 'neue-verweisangabe']"
-                 priority="70"
-                 mode="d14e204">
+                 priority="93"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e858']">
-            <schxslt:rule pattern="d14e858">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e840']">
+            <schxslt:rule pattern="d15e840">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00425 for context "akn:span[@refersTo = 'neue-verweisangabe']" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00425">
                   <xsl:attribute name="context">akn:span[@refersTo = 'neue-verweisangabe']</xsl:attribute>
@@ -4036,7 +3976,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e858">
+            <schxslt:rule pattern="d15e840">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00425">
                   <xsl:attribute name="context">akn:span[@refersTo = 'neue-verweisangabe']</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -4056,22 +3996,22 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e858')"/>
+                               select="($schxslt:patterns-matched, 'd15e840')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="akn:mod[@refersTo and not(ancestor::akn:mod)]"
-                 priority="69"
-                 mode="d14e204">
+                 priority="92"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:variable name="textualmod-type-insertion" select="'insertion'"/>
       <xsl:variable name="textualmod-type-substitution" select="'substitution'"/>
       <xsl:variable name="textualmod-type-repeal" select="'repeal'"/>
       <xsl:variable name="textualmod-type-renumbering" select="'renumbering'"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e867']">
-            <schxslt:rule pattern="d14e867">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e849']">
+            <schxslt:rule pattern="d15e849">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00426 for context "akn:mod[@refersTo and not(ancestor::akn:mod)]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00426">
                   <xsl:attribute name="context">akn:mod[@refersTo and not(ancestor::akn:mod)]</xsl:attribute>
@@ -4088,7 +4028,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e867">
+            <schxslt:rule pattern="d15e849">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00426">
                   <xsl:attribute name="context">akn:mod[@refersTo and not(ancestor::akn:mod)]</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -4162,14 +4102,14 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e867')"/>
+                               select="($schxslt:patterns-matched, 'd15e849')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
-   <xsl:template match="/akn:akomaNtoso/(akn:act | akn:bill | akn:doc | akn:statement | akn:documentCollection)//*[@eId and not(local-name() = ('article', 'quotedStructure')) and exists(parent::*[@eId])]"
-                 priority="68"
-                 mode="d14e204">
+   <xsl:template match="/akn:akomaNtoso/(akn:act | akn:bill | akn:doc | akn:statement | akn:documentCollection)//* [(@eId and exists(parent::*[@eId])) and not(local-name() = 'article' and not(ancestor::akn:quotedStructure))]"
+                 priority="91"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:variable name="trennzeichen-zwischen-eids" select="'_'"/>
       <xsl:variable name="geprüfte-eid" select="@eId"/>
@@ -4177,11 +4117,11 @@
                     select="tokenize(@eId, $trennzeichen-zwischen-eids)[last()]"/>
       <xsl:variable name="vorgänger-eid" select="ancestor::*[1]/@eId"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e947']">
-            <schxslt:rule pattern="d14e947">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00430 for context "/akn:akomaNtoso/(akn:act | akn:bill | akn:doc | akn:statement | akn:documentCollection)//*[@eId and not(local-name() = ('article', 'quotedStructure')) and exists(parent::*[@eId])]" shadowed by preceding rule</xsl:comment>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e929']">
+            <schxslt:rule pattern="d15e929">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00430 for context "/akn:akomaNtoso/(akn:act | akn:bill | akn:doc | akn:statement | akn:documentCollection)//* [(@eId and exists(parent::*[@eId])) and not(local-name() = 'article' and not(ancestor::akn:quotedStructure))]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00430">
-                  <xsl:attribute name="context">/akn:akomaNtoso/(akn:act | akn:bill | akn:doc | akn:statement | akn:documentCollection)//*[@eId and not(local-name() = ('article', 'quotedStructure')) and exists(parent::*[@eId])]</xsl:attribute>
+                  <xsl:attribute name="context">/akn:akomaNtoso/(akn:act | akn:bill | akn:doc | akn:statement | akn:documentCollection)//* [(@eId and exists(parent::*[@eId])) and not(local-name() = 'article' and not(ancestor::akn:quotedStructure))]</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
                   <xsl:if test="exists($documentUri)">
                      <xsl:attribute name="document" select="$documentUri"/>
@@ -4195,9 +4135,9 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e947">
+            <schxslt:rule pattern="d15e929">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00430">
-                  <xsl:attribute name="context">/akn:akomaNtoso/(akn:act | akn:bill | akn:doc | akn:statement | akn:documentCollection)//*[@eId and not(local-name() = ('article', 'quotedStructure')) and exists(parent::*[@eId])]</xsl:attribute>
+                  <xsl:attribute name="context">/akn:akomaNtoso/(akn:act | akn:bill | akn:doc | akn:statement | akn:documentCollection)//* [(@eId and exists(parent::*[@eId])) and not(local-name() = 'article' and not(ancestor::akn:quotedStructure))]</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
                   <xsl:if test="exists($documentUri)">
                      <xsl:attribute name="document" select="$documentUri"/>
@@ -4216,31 +4156,37 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e947')"/>
+                               select="($schxslt:patterns-matched, 'd15e929')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="@eId[starts-with(tokenize(., '-')[last()], $präfix-eid-zitierbar) and parent::*/akn:num != '']"
-                 priority="67"
-                 mode="d14e204">
+                 priority="90"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:variable name="positionsangabe-ist" select="tokenize(., '-')[last()]"/>
       <xsl:variable name="eingabe-textknoten" select="parent::*/akn:num/text()"/>
+      <xsl:variable name="doppelparagraph" select="'§§ '"/>
+      <xsl:variable name="platzhalter" select="'µµ '"/>
       <xsl:variable name="weißraumnormalisiert"
                     select="normalize-space(lower-case($eingabe-textknoten))"/>
+      <xsl:variable name="mit-platzhaltern"
+                    select="replace($weißraumnormalisiert, $doppelparagraph, $platzhalter)"/>
       <xsl:variable name="ohne-sonderzeichen"
-                    select="replace($weißraumnormalisiert, '(§ )|(art\. )|(art )|(artikel )', '')"/>
+                    select="replace($mit-platzhaltern, '(§ )|(art\. )|(art )|(artikel )', '')"/>
       <xsl:variable name="ohne-klammern"
                     select="replace($ohne-sonderzeichen, '(\()(\d+[a-z]*)(\))', '$2')"/>
       <xsl:variable name="maskiert" select="translate($ohne-klammern, '-_.', '~~~')"/>
+      <xsl:variable name="ggf-mit-doppelten-paragraphenzeichen"
+                    select="replace($maskiert, $platzhalter, $doppelparagraph)"/>
       <xsl:variable name="normalisierte-positionsangabe-eid"
-                    select="encode-for-uri($maskiert)"/>
+                    select="encode-for-uri($ggf-mit-doppelten-paragraphenzeichen)"/>
       <xsl:variable name="positionsangabe-soll"
                     select="lower-case(concat($präfix-eid-zitierbar, $normalisierte-positionsangabe-eid))"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e970']">
-            <schxslt:rule pattern="d14e970">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e952']">
+            <schxslt:rule pattern="d15e952">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-000431 for context "@eId[starts-with(tokenize(., '-')[last()], $präfix-eid-zitierbar) and parent::*/akn:num != '']" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-000431">
                   <xsl:attribute name="context">@eId[starts-with(tokenize(., '-')[last()], $präfix-eid-zitierbar) and parent::*/akn:num != '']</xsl:attribute>
@@ -4257,7 +4203,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e970">
+            <schxslt:rule pattern="d15e952">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-000431">
                   <xsl:attribute name="context">@eId[starts-with(tokenize(., '-')[last()], $präfix-eid-zitierbar) and parent::*/akn:num != '']</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -4277,18 +4223,18 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e970')"/>
+                               select="($schxslt:patterns-matched, 'd15e952')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="@eId[starts-with(tokenize(., '-')[last()], $präfix-eid-zitierbar)]"
-                 priority="66"
-                 mode="d14e204">
+                 priority="89"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e970']">
-            <schxslt:rule pattern="d14e970">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e952']">
+            <schxslt:rule pattern="d15e952">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00432 for context "@eId[starts-with(tokenize(., '-')[last()], $präfix-eid-zitierbar)]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00432">
                   <xsl:attribute name="context">@eId[starts-with(tokenize(., '-')[last()], $präfix-eid-zitierbar)]</xsl:attribute>
@@ -4305,7 +4251,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e970">
+            <schxslt:rule pattern="d15e952">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00432">
                   <xsl:attribute name="context">@eId[starts-with(tokenize(., '-')[last()], $präfix-eid-zitierbar)]</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -4325,18 +4271,18 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e970')"/>
+                               select="($schxslt:patterns-matched, 'd15e952')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="akn:num[@refersTo = $literal-deklaration-ausnahme-eid-zählweise]"
-                 priority="65"
-                 mode="d14e204">
+                 priority="88"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e1029']">
-            <schxslt:rule pattern="d14e1029">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e1026']">
+            <schxslt:rule pattern="d15e1026">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00433 for context "akn:num[@refersTo = $literal-deklaration-ausnahme-eid-zählweise]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00433">
                   <xsl:attribute name="context">akn:num[@refersTo = $literal-deklaration-ausnahme-eid-zählweise]</xsl:attribute>
@@ -4353,7 +4299,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e1029">
+            <schxslt:rule pattern="d15e1026">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00433">
                   <xsl:attribute name="context">akn:num[@refersTo = $literal-deklaration-ausnahme-eid-zählweise]</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -4366,7 +4312,7 @@
                                       location="{schxslt:location(parent::*)}"
                                       id="SCH-00433-000">
                      <xsl:attribute name="test">local-name(parent::*) = $zitierbare-elementtypen</xsl:attribute>
-                     <svrl:text>Die Deklaration der ausnahmsweisen ordinalen Zählung eines Elementes, obwohl für es eine Art- und Zählbezeichnung vorhanden ist, darf nur für Einzelvorschriften (akn:article), juristische Absätze (akn:paragraph) oder Listenuntergliederungselemente (akn:point) vorgenommen werden.</svrl:text>
+                     <svrl:text>Die Deklaration der ausnahmsweisen ordinalen Zählung eines Elementes, obwohl für es eine Art- und Zählbezeichnung vorhanden ist, darf nur für Einzelvorschriften (akn:article), juristische Absätze (akn:paragraph) oder Listenuntergliederungselemente (aksn:point) vorgenommen werden.</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
                <xsl:if test="not(starts-with(tokenize(parent::*/@eId, '-')[last()], $präfix-eid-nummerierbar))">
@@ -4381,28 +4327,27 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e1029')"/>
+                               select="($schxslt:patterns-matched, 'd15e1026')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
-   <xsl:template match="*[@eId[starts-with(tokenize(., '-')[last()], $präfix-eid-nummerierbar)]]"
-                 priority="64"
-                 mode="d14e204">
+   <xsl:template match="*[@eId[starts-with(tokenize(., '-')[last()], $präfix-eid-nummerierbar)] and not(local-name() = 'article')]"
+                 priority="87"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:variable name="elementtyp-bezeichner" select="local-name(.)"/>
-      <xsl:variable name="einzelvorschrift" select="'article'"/>
       <xsl:variable name="elementrang-soll"
-                    select="if ($elementtyp-bezeichner = $einzelvorschrift and not(ancestor::akn:quotedStructure)) then (1 + count(preceding::*[local-name() eq $einzelvorschrift])) else (1 + count(preceding-sibling::*[local-name() eq $elementtyp-bezeichner]))"/>
+                    select="1 + count(preceding-sibling::*[local-name() eq $elementtyp-bezeichner])"/>
       <xsl:variable name="lokaler-eId-teil" select="tokenize(@eId, '_')[last()]"/>
       <xsl:variable name="elementrang-ist"
                     select="xs:integer(tokenize($lokaler-eId-teil, concat('-', $präfix-eid-nummerierbar))[last()])"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e1052']">
-            <schxslt:rule pattern="d14e1052">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00434 for context "*[@eId[starts-with(tokenize(., '-')[last()], $präfix-eid-nummerierbar)]]" shadowed by preceding rule</xsl:comment>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e1049']">
+            <schxslt:rule pattern="d15e1049">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00434 for context "*[@eId[starts-with(tokenize(., '-')[last()], $präfix-eid-nummerierbar)] and not(local-name() = 'article')]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00434">
-                  <xsl:attribute name="context">*[@eId[starts-with(tokenize(., '-')[last()], $präfix-eid-nummerierbar)]]</xsl:attribute>
+                  <xsl:attribute name="context">*[@eId[starts-with(tokenize(., '-')[last()], $präfix-eid-nummerierbar)] and not(local-name() = 'article')]</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
                   <xsl:if test="exists($documentUri)">
                      <xsl:attribute name="document" select="$documentUri"/>
@@ -4416,9 +4361,9 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e1052">
+            <schxslt:rule pattern="d15e1049">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00434">
-                  <xsl:attribute name="context">*[@eId[starts-with(tokenize(., '-')[last()], $präfix-eid-nummerierbar)]]</xsl:attribute>
+                  <xsl:attribute name="context">*[@eId[starts-with(tokenize(., '-')[last()], $präfix-eid-nummerierbar)] and not(local-name() = 'article')]</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
                   <xsl:if test="exists($documentUri)">
                      <xsl:attribute name="document" select="$documentUri"/>
@@ -4429,25 +4374,25 @@
                                       location="{schxslt:location(.)}"
                                       id="SCH-00434-000">
                      <xsl:attribute name="test">$elementrang-ist = $elementrang-soll</xsl:attribute>
-                     <svrl:text>Elemente, deren @eId im lokalen Teil (hier: "<xsl:value-of select="$lokaler-eId-teil"/>) das Präfix "<xsl:value-of select="$präfix-eid-nummerierbar"/>" enthalten, müssen ihre Positionsangabe mittels ordinaler Zählung bilden. Konkret würde hier als Postion [<xsl:value-of select="$elementrang-soll"/>] erwartet, nicht [<xsl:value-of select="$elementrang-ist"/>].</svrl:text>
+                     <svrl:text>Elemente, deren @eId im lokalen Teil (hier: "<xsl:value-of select="$lokaler-eId-teil"/>) das Präfix "<xsl:value-of select="$präfix-eid-nummerierbar"/>" enthalten, müssen ihre Positionsangabe mittels ordinaler Zählung bilden. Konkret würde hier als Position [<xsl:value-of select="$elementrang-soll"/>] erwartet, nicht [<xsl:value-of select="$elementrang-ist"/>].</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
             </schxslt:rule>
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e1052')"/>
+                               select="($schxslt:patterns-matched, 'd15e1049')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="*[local-name() = $zitierbare-elementtypen and @eId[starts-with(tokenize(., '-')[last()], $präfix-eid-nummerierbar)] and exists(akn:num)]"
-                 priority="63"
-                 mode="d14e204">
+                 priority="86"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e1082']">
-            <schxslt:rule pattern="d14e1082">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e1076']">
+            <schxslt:rule pattern="d15e1076">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00435 for context "*[local-name() = $zitierbare-elementtypen and @eId[starts-with(tokenize(., '-')[last()], $präfix-eid-nummerierbar)] and exists(akn:num)]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00435">
                   <xsl:attribute name="context">*[local-name() = $zitierbare-elementtypen and @eId[starts-with(tokenize(., '-')[last()], $präfix-eid-nummerierbar)] and exists(akn:num)]</xsl:attribute>
@@ -4464,7 +4409,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e1082">
+            <schxslt:rule pattern="d15e1076">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00435">
                   <xsl:attribute name="context">*[local-name() = $zitierbare-elementtypen and @eId[starts-with(tokenize(., '-')[last()], $präfix-eid-nummerierbar)] and exists(akn:num)]</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -4484,22 +4429,22 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e1082')"/>
+                               select="($schxslt:patterns-matched, 'd15e1076')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="akn:passiveModifications/akn:textualMod/akn:destination/@href"
-                 priority="62"
-                 mode="d14e204">
+                 priority="85"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:variable name="lokaler-verweis"
                     select="substring(., 2) (: das Rautesymbol des lokalen Verweises überspringen :)"/>
       <xsl:variable name="lokaler-verweis-ohne-zeichenbereich"
                     select="replace($lokaler-verweis, '(/\d+-\d+)$', '')"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e1094']">
-            <schxslt:rule pattern="d14e1094">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e1088']">
+            <schxslt:rule pattern="d15e1088">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00436 for context "akn:passiveModifications/akn:textualMod/akn:destination/@href" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00436">
                   <xsl:attribute name="context">akn:passiveModifications/akn:textualMod/akn:destination/@href</xsl:attribute>
@@ -4516,7 +4461,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e1094">
+            <schxslt:rule pattern="d15e1088">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00436">
                   <xsl:attribute name="context">akn:passiveModifications/akn:textualMod/akn:destination/@href</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -4544,17 +4489,169 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e1094')"/>
+                               select="($schxslt:patterns-matched, 'd15e1088')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
-   <xsl:template match="@eId" priority="61" mode="d14e204">
+   <xsl:template match="akn:article[@eId[starts-with(tokenize(., '-')[last()], $präfix-eid-nummerierbar)]]"
+                 priority="84"
+                 mode="d15e206">
+      <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
+      <xsl:variable name="elementtyp-bezeichner" select="local-name(.)"/>
+      <xsl:variable name="id-des-übergeordneten-änderungsbefehls"
+                    select="ancestor::akn:mod/generate-id()"/>
+      <xsl:variable name="elementrang-soll"
+                    select="if (ancestor::akn:mod) then (1 + count(preceding::akn:article[ancestor::akn:mod/generate-id() eq $id-des-übergeordneten-änderungsbefehls])) else (1 + count(preceding::akn:article[not(ancestor::akn:mod)]))"/>
+      <xsl:variable name="lokaler-eId-teil" select="tokenize(@eId, '_')[last()]"/>
+      <xsl:variable name="elementrang-ist"
+                    select="xs:integer(tokenize($lokaler-eId-teil, concat('-', $präfix-eid-nummerierbar))[last()])"/>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e1109']">
+            <schxslt:rule pattern="d15e1109">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00437 for context "akn:article[@eId[starts-with(tokenize(., '-')[last()], $präfix-eid-nummerierbar)]]" shadowed by preceding rule</xsl:comment>
+               <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00437">
+                  <xsl:attribute name="context">akn:article[@eId[starts-with(tokenize(., '-')[last()], $präfix-eid-nummerierbar)]]</xsl:attribute>
+                  <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
+                  <xsl:if test="exists($documentUri)">
+                     <xsl:attribute name="document" select="$documentUri"/>
+                  </xsl:if>
+               </svrl:suppressed-rule>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched"
+                               as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d15e1109">
+               <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00437">
+                  <xsl:attribute name="context">akn:article[@eId[starts-with(tokenize(., '-')[last()], $präfix-eid-nummerierbar)]]</xsl:attribute>
+                  <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
+                  <xsl:if test="exists($documentUri)">
+                     <xsl:attribute name="document" select="$documentUri"/>
+                  </xsl:if>
+               </svrl:fired-rule>
+               <xsl:if test="not($elementrang-ist = $elementrang-soll)">
+                  <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                      location="{schxslt:location(.)}"
+                                      id="SCH-00437-000">
+                     <xsl:attribute name="test">$elementrang-ist = $elementrang-soll</xsl:attribute>
+                     <svrl:text>Bei Einzelvorschriften, für die eine ordinale Zählung deklariert wurde, muss die Positionsangabe zu ihrem Rang passen; dabei ist innerhalb von Änderungsbefehlen lokal zu zählen (d. h. nur auf der Menge der Geschwisterknoten), während außerhalb im Gegensatz dazu global zu zählen ist, wobei jedoch Einzelvorschriften innerhalb etwaiger Änderungsbefehle nicht mitgezählt werden. Konkret würde für die vorliegende Einzelvorschrift als Position [<xsl:value-of select="$elementrang-soll"/>] erwartet, nicht [<xsl:value-of select="$elementrang-ist"/>].</svrl:text>
+                  </svrl:failed-assert>
+               </xsl:if>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched"
+                               as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd15e1109')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
+   </xsl:template>
+   <xsl:template match="/akn:akomaNtoso/(akn:act | akn:bill | akn:doc | akn:statement | akn:documentCollection)//akn:article[not(ancestor::akn:quotedStructure)]/@eId"
+                 priority="83"
+                 mode="d15e206">
+      <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e1133']">
+            <schxslt:rule pattern="d15e1133">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00438 for context "/akn:akomaNtoso/(akn:act | akn:bill | akn:doc | akn:statement | akn:documentCollection)//akn:article[not(ancestor::akn:quotedStructure)]/@eId" shadowed by preceding rule</xsl:comment>
+               <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00438">
+                  <xsl:attribute name="context">/akn:akomaNtoso/(akn:act | akn:bill | akn:doc | akn:statement | akn:documentCollection)//akn:article[not(ancestor::akn:quotedStructure)]/@eId</xsl:attribute>
+                  <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
+                  <xsl:if test="exists($documentUri)">
+                     <xsl:attribute name="document" select="$documentUri"/>
+                  </xsl:if>
+               </svrl:suppressed-rule>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched"
+                               as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d15e1133">
+               <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00438">
+                  <xsl:attribute name="context">/akn:akomaNtoso/(akn:act | akn:bill | akn:doc | akn:statement | akn:documentCollection)//akn:article[not(ancestor::akn:quotedStructure)]/@eId</xsl:attribute>
+                  <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
+                  <xsl:if test="exists($documentUri)">
+                     <xsl:attribute name="document" select="$documentUri"/>
+                  </xsl:if>
+               </svrl:fired-rule>
+               <xsl:if test="not(starts-with(., 'art-'))">
+                  <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                      location="{schxslt:location(.)}"
+                                      id="SCH-00438-000">
+                     <xsl:attribute name="test">starts-with(., 'art-')</xsl:attribute>
+                     <svrl:text>Die @eId einer Einzelvorschrift außerhalb einer akn:quotedStructure muss mit "art-" beginnen; anders als andere Elemente 'erbt' sie nicht die @eId ihres Elternelements als Präfix!</svrl:text>
+                  </svrl:failed-assert>
+               </xsl:if>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched"
+                               as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd15e1133')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
+   </xsl:template>
+   <xsl:template match="/akn:akomaNtoso/(akn:act | akn:bill | akn:doc | akn:statement | akn:documentCollection)//akn:article[ancestor::akn:quotedStructure]/@eId"
+                 priority="82"
+                 mode="d15e206">
+      <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e1133']">
+            <schxslt:rule pattern="d15e1133">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00439 for context "/akn:akomaNtoso/(akn:act | akn:bill | akn:doc | akn:statement | akn:documentCollection)//akn:article[ancestor::akn:quotedStructure]/@eId" shadowed by preceding rule</xsl:comment>
+               <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00439">
+                  <xsl:attribute name="context">/akn:akomaNtoso/(akn:act | akn:bill | akn:doc | akn:statement | akn:documentCollection)//akn:article[ancestor::akn:quotedStructure]/@eId</xsl:attribute>
+                  <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
+                  <xsl:if test="exists($documentUri)">
+                     <xsl:attribute name="document" select="$documentUri"/>
+                  </xsl:if>
+               </svrl:suppressed-rule>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched"
+                               as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d15e1133">
+               <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00439">
+                  <xsl:attribute name="context">/akn:akomaNtoso/(akn:act | akn:bill | akn:doc | akn:statement | akn:documentCollection)//akn:article[ancestor::akn:quotedStructure]/@eId</xsl:attribute>
+                  <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
+                  <xsl:if test="exists($documentUri)">
+                     <xsl:attribute name="document" select="$documentUri"/>
+                  </xsl:if>
+               </svrl:fired-rule>
+               <xsl:if test="not(matches(., '([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)+art-(z|n)\d*[0-9a-zäöüß~%]*$'))">
+                  <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                      location="{schxslt:location(.)}"
+                                      id="SCH-00439-000">
+                     <xsl:attribute name="test">matches(., '([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)+art-(z|n)\d*[0-9a-zäöüß~%]*$')</xsl:attribute>
+                     <svrl:text>Die @eId einer Einzelvorschrift innerhalb einer akn:quotedStructure darf nicht lediglich aus ihrem eigenen Kurzbezeichner, "art-", sowie einer Positionsangabe bestehen; anders als bei Einzelvorschriften außerhalb der quotedStructure wird innerhalb ebendieser die eId nicht "abgeschnitten", sondern "erbt" zwingend die @eId ihres Elternknotens als Präfix.</svrl:text>
+                  </svrl:failed-assert>
+               </xsl:if>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched"
+                               as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd15e1133')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
+   </xsl:template>
+   <xsl:template match="@eId" priority="81" mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:variable name="kontext-eId-inhalt" select="."/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e1112']">
-            <schxslt:rule pattern="d14e1112">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e1148']">
+            <schxslt:rule pattern="d15e1148">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00450 for context "@eId" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00450">
                   <xsl:attribute name="context">@eId</xsl:attribute>
@@ -4571,7 +4668,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e1112">
+            <schxslt:rule pattern="d15e1148">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00450">
                   <xsl:attribute name="context">@eId</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -4592,19 +4689,19 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e1112')"/>
+                               select="($schxslt:patterns-matched, 'd15e1148')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
-   <xsl:template match="@GUID" priority="60" mode="d14e204">
+   <xsl:template match="@GUID" priority="80" mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:variable name="kontext-guid-inhalt" select="."/>
       <xsl:variable name="häufigkeit-der-aktuellen-guid"
                     select="count(key('nodes-by-GUID', $kontext-guid-inhalt))"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e1132']">
-            <schxslt:rule pattern="d14e1132">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e1167']">
+            <schxslt:rule pattern="d15e1167">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00460 for context "@GUID" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00460">
                   <xsl:attribute name="context">@GUID</xsl:attribute>
@@ -4621,7 +4718,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e1132">
+            <schxslt:rule pattern="d15e1167">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00460">
                   <xsl:attribute name="context">@GUID</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -4642,18 +4739,18 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e1132')"/>
+                               select="($schxslt:patterns-matched, 'd15e1167')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRWork/akn:FRBRthis"
-                 priority="59"
-                 mode="d14e204">
+                 priority="79"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e1269']">
-            <schxslt:rule pattern="d14e1269">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e1346']">
+            <schxslt:rule pattern="d15e1346">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00500 for context "/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRWork/akn:FRBRthis" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00500">
                   <xsl:attribute name="context">/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRWork/akn:FRBRthis</xsl:attribute>
@@ -4670,7 +4767,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e1269">
+            <schxslt:rule pattern="d15e1346">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00500">
                   <xsl:attribute name="context">/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRWork/akn:FRBRthis</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -4698,22 +4795,32 @@
                         <xsl:value-of select="$FRBRthis-verkündungsfassung-work-beschreibung"/> muss sich aus den Inhalten der jeweiligen Metadaten zusammensetzen in der Form "<xsl:value-of select="$FRBRthis-verkündungsfassung-work-aufbau"/>". Erwartet würde hier konkret: "<xsl:value-of select="$FRBRthis-verkündungsfassung-work-inhalt"/>".</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
+               <xsl:if test="not(if ($ist-konsolidierte-fassung) then (@value = $FRBRthis-konsolidierte-fassung-work-inhalt) else true())">
+                  <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                      location="{schxslt:location(.)}"
+                                      role="error"
+                                      id="SCH-00500-015">
+                     <xsl:attribute name="test">if ($ist-konsolidierte-fassung) then (@value = $FRBRthis-konsolidierte-fassung-work-inhalt) else true()</xsl:attribute>
+                     <svrl:text>
+                        <xsl:value-of select="$FRBRthis-konsolidierte-fassung-work-beschreibung"/> muss sich aus den Inhalten der jeweiligen Metadaten zusammensetzen in der Form "<xsl:value-of select="$FRBRthis-konsolidierte-fassung-work-aufbau"/>". Erwartet würde hier konkret: "<xsl:value-of select="$FRBRthis-konsolidierte-fassung-work-inhalt"/>".</svrl:text>
+                  </svrl:failed-assert>
+               </xsl:if>
             </schxslt:rule>
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e1269')"/>
+                               select="($schxslt:patterns-matched, 'd15e1346')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRExpression/akn:FRBRthis"
-                 priority="58"
-                 mode="d14e204">
+                 priority="78"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e1269']">
-            <schxslt:rule pattern="d14e1269">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e1346']">
+            <schxslt:rule pattern="d15e1346">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00510 for context "/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRExpression/akn:FRBRthis" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00510">
                   <xsl:attribute name="context">/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRExpression/akn:FRBRthis</xsl:attribute>
@@ -4730,7 +4837,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e1269">
+            <schxslt:rule pattern="d15e1346">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00510">
                   <xsl:attribute name="context">/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRExpression/akn:FRBRthis</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -4758,22 +4865,32 @@
                         <xsl:value-of select="$FRBRthis-verkündungsfassung-expression-beschreibung"/> muss sich aus den Inhalten der jeweiligen Metadaten zusammensetzen in der Form "<xsl:value-of select="$FRBRthis-verkündungsfassung-expression-aufbau"/>". Erwartet würde hier konkret: "<xsl:value-of select="$FRBRthis-verkündungsfassung-expression-inhalt"/>".</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
+               <xsl:if test="not(if ($ist-konsolidierte-fassung) then (@value = $FRBRthis-konsolidierte-fassung-expression-inhalt) else true())">
+                  <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                      location="{schxslt:location(.)}"
+                                      role="error"
+                                      id="SCH-00510-015">
+                     <xsl:attribute name="test">if ($ist-konsolidierte-fassung) then (@value = $FRBRthis-konsolidierte-fassung-expression-inhalt) else true()</xsl:attribute>
+                     <svrl:text>
+                        <xsl:value-of select="$FRBRthis-konsolidierte-fassung-expression-beschreibung"/> muss sich aus den Inhalten der jeweiligen Metadaten zusammensetzen in der Form "<xsl:value-of select="$FRBRthis-konsolidierte-fassung-expression-aufbau"/>". Erwartet würde hier konkret: "<xsl:value-of select="$FRBRthis-konsolidierte-fassung-expression-inhalt"/>".</svrl:text>
+                  </svrl:failed-assert>
+               </xsl:if>
             </schxslt:rule>
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e1269')"/>
+                               select="($schxslt:patterns-matched, 'd15e1346')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRManifestation/akn:FRBRthis"
-                 priority="57"
-                 mode="d14e204">
+                 priority="77"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e1269']">
-            <schxslt:rule pattern="d14e1269">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e1346']">
+            <schxslt:rule pattern="d15e1346">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00520 for context "/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRManifestation/akn:FRBRthis" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00520">
                   <xsl:attribute name="context">/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRManifestation/akn:FRBRthis</xsl:attribute>
@@ -4790,7 +4907,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e1269">
+            <schxslt:rule pattern="d15e1346">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00520">
                   <xsl:attribute name="context">/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRManifestation/akn:FRBRthis</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -4818,22 +4935,32 @@
                         <xsl:value-of select="$FRBRthis-verkündungsfassung-manifestation-beschreibung"/> muss sich aus den Inhalten der jeweiligen Metadaten zusammensetzen in der Form "<xsl:value-of select="$FRBRthis-verkündungsfassung-manifestation-aufbau"/>". Erwartet würde hier konkret: "<xsl:value-of select="$FRBRthis-verkündungsfassung-manifestation-inhalt"/>".</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
+               <xsl:if test="not(if ($ist-konsolidierte-fassung) then (@value = $FRBRthis-konsolidierte-fassung-manifestation-inhalt) else true())">
+                  <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                      location="{schxslt:location(.)}"
+                                      role="error"
+                                      id="SCH-00520-015">
+                     <xsl:attribute name="test">if ($ist-konsolidierte-fassung) then (@value = $FRBRthis-konsolidierte-fassung-manifestation-inhalt) else true()</xsl:attribute>
+                     <svrl:text>
+                        <xsl:value-of select="$FRBRthis-konsolidierte-fassung-manifestation-beschreibung"/> muss sich aus den Inhalten der jeweiligen Metadaten zusammensetzen in der Form "<xsl:value-of select="$FRBRthis-konsolidierte-fassung-manifestation-aufbau"/>". Erwartet würde hier konkret: "<xsl:value-of select="$FRBRthis-konsolidierte-fassung-manifestation-inhalt"/>".</svrl:text>
+                  </svrl:failed-assert>
+               </xsl:if>
             </schxslt:rule>
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e1269')"/>
+                               select="($schxslt:patterns-matched, 'd15e1346')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRWork/akn:FRBRuri"
-                 priority="56"
-                 mode="d14e204">
+                 priority="76"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e1342']">
-            <schxslt:rule pattern="d14e1342">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e1446']">
+            <schxslt:rule pattern="d15e1446">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00530 for context "/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRWork/akn:FRBRuri" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00530">
                   <xsl:attribute name="context">/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRWork/akn:FRBRuri</xsl:attribute>
@@ -4850,7 +4977,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e1342">
+            <schxslt:rule pattern="d15e1446">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00530">
                   <xsl:attribute name="context">/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRWork/akn:FRBRuri</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -4878,22 +5005,32 @@
                         <xsl:value-of select="$FRBRuri-verkündungsfassung-work-beschreibung"/> muss sich aus den Inhalten der jeweiligen Metadaten zusammensetzen in der Form "<xsl:value-of select="$FRBRuri-verkündungsfassung-work-aufbau"/>". Erwartet würde hier konkret: "<xsl:value-of select="$FRBRuri-verkündungsfassung-work-inhalt"/>".</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
+               <xsl:if test="not(if ($ist-konsolidierte-fassung) then (@value = $FRBRuri-konsolidierte-fassung-work-inhalt) else true())">
+                  <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                      location="{schxslt:location(.)}"
+                                      role="error"
+                                      id="SCH-00530-015">
+                     <xsl:attribute name="test">if ($ist-konsolidierte-fassung) then (@value = $FRBRuri-konsolidierte-fassung-work-inhalt) else true()</xsl:attribute>
+                     <svrl:text>
+                        <xsl:value-of select="$FRBRuri-konsolidierte-fassung-work-beschreibung"/> muss sich aus den Inhalten der jeweiligen Metadaten zusammensetzen in der Form "<xsl:value-of select="$FRBRuri-verkündungsfassung-work-aufbau"/>". Erwartet würde hier konkret: "<xsl:value-of select="$FRBRuri-konsolidierte-fassung-work-inhalt"/>".</svrl:text>
+                  </svrl:failed-assert>
+               </xsl:if>
             </schxslt:rule>
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e1342')"/>
+                               select="($schxslt:patterns-matched, 'd15e1446')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRExpression/akn:FRBRuri"
-                 priority="55"
-                 mode="d14e204">
+                 priority="75"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e1342']">
-            <schxslt:rule pattern="d14e1342">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e1446']">
+            <schxslt:rule pattern="d15e1446">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00540 for context "/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRExpression/akn:FRBRuri" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00540">
                   <xsl:attribute name="context">/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRExpression/akn:FRBRuri</xsl:attribute>
@@ -4910,7 +5047,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e1342">
+            <schxslt:rule pattern="d15e1446">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00540">
                   <xsl:attribute name="context">/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRExpression/akn:FRBRuri</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -4938,84 +5075,32 @@
                         <xsl:value-of select="$FRBRuri-verkündungsfassung-expression-beschreibung"/> muss sich aus den Inhalten der jeweiligen Metadaten zusammensetzen in der Form "<xsl:value-of select="$FRBRuri-verkündungsfassung-expression-aufbau"/>". Erwartet würde hier konkret: "<xsl:value-of select="$FRBRuri-verkündungsfassung-expression-inhalt"/>".</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </schxslt:rule>
-            <xsl:next-match>
-               <xsl:with-param name="schxslt:patterns-matched"
-                               as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e1342')"/>
-            </xsl:next-match>
-         </xsl:otherwise>
-      </xsl:choose>
-   </xsl:template>
-   <xsl:template match="/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRExpression/akn:FRBRdate"
-                 priority="54"
-                 mode="d14e204">
-      <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <xsl:variable name="unbekanntes-inkrafttretensdatum-aenderung-literal"
-                    select="'aenderung-unbestimmtes-inkrafttreten'"/>
-      <xsl:variable name="unbekanntes-inkrafttretensdatum-verkuendung-literal"
-                    select="'verkuendung-unbestimmtes-inkrafttreten'"/>
-      <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e1342']">
-            <schxslt:rule pattern="d14e1342">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00541 for context "/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRExpression/akn:FRBRdate" shadowed by preceding rule</xsl:comment>
-               <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00541">
-                  <xsl:attribute name="context">/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRExpression/akn:FRBRdate</xsl:attribute>
-                  <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
-                  <xsl:if test="exists($documentUri)">
-                     <xsl:attribute name="document" select="$documentUri"/>
-                  </xsl:if>
-               </svrl:suppressed-rule>
-            </schxslt:rule>
-            <xsl:next-match>
-               <xsl:with-param name="schxslt:patterns-matched"
-                               as="xs:string*"
-                               select="$schxslt:patterns-matched"/>
-            </xsl:next-match>
-         </xsl:when>
-         <xsl:otherwise>
-            <schxslt:rule pattern="d14e1342">
-               <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00541">
-                  <xsl:attribute name="context">/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRExpression/akn:FRBRdate</xsl:attribute>
-                  <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
-                  <xsl:if test="exists($documentUri)">
-                     <xsl:attribute name="document" select="$documentUri"/>
-                  </xsl:if>
-               </svrl:fired-rule>
-               <xsl:if test="not(if (@name = ($unbekanntes-inkrafttretensdatum-aenderung-literal, $unbekanntes-inkrafttretensdatum-verkuendung-literal)) then (@date = $platzhalter-datum-unbekannt) else true())">
+               <xsl:if test="not(if ($ist-konsolidierte-fassung) then (@value = $FRBRuri-konsolidierte-fassung-expression-inhalt) else true())">
                   <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                                       location="{schxslt:location(.)}"
                                       role="error"
-                                      id="SCH-00541-000">
-                     <xsl:attribute name="test">if (@name = ($unbekanntes-inkrafttretensdatum-aenderung-literal, $unbekanntes-inkrafttretensdatum-verkuendung-literal)) then (@date = $platzhalter-datum-unbekannt) else true()</xsl:attribute>
-                     <svrl:text>Ist bei einer Verkündungsfassung das Inkrafttretensdatum unbekannt, muss als Wert für @date der Platzhalter '<xsl:value-of select="$platzhalter-datum-unbekannt"/>' angegeben werden.</svrl:text>
-                  </svrl:failed-assert>
-               </xsl:if>
-               <xsl:if test="not(if (@date = $platzhalter-datum-unbekannt) then (@name = ($unbekanntes-inkrafttretensdatum-aenderung-literal, $unbekanntes-inkrafttretensdatum-verkuendung-literal)) else true())">
-                  <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                      location="{schxslt:location(.)}"
-                                      role="error"
-                                      id="SCH-00541-005">
-                     <xsl:attribute name="test">if (@date = $platzhalter-datum-unbekannt) then (@name = ($unbekanntes-inkrafttretensdatum-aenderung-literal, $unbekanntes-inkrafttretensdatum-verkuendung-literal)) else true()</xsl:attribute>
-                     <svrl:text>Der Platzhalter '<xsl:value-of select="$platzhalter-datum-unbekannt"/>' darf in @date nur angegeben werden, wenn das Datum mittels @name='<xsl:value-of select="$unbekanntes-inkrafttretensdatum-aenderung-literal"/>' oder '<xsl:value-of select="$unbekanntes-inkrafttretensdatum-verkuendung-literal"/>' als unbekanntes Inkrafttretensdatum deklariert ist.</svrl:text>
+                                      id="SCH-00540-015">
+                     <xsl:attribute name="test">if ($ist-konsolidierte-fassung) then (@value = $FRBRuri-konsolidierte-fassung-expression-inhalt) else true()</xsl:attribute>
+                     <svrl:text>
+                        <xsl:value-of select="$FRBRuri-konsolidierte-fassung-expression-beschreibung"/> muss sich aus den Inhalten der jeweiligen Metadaten zusammensetzen in der Form "<xsl:value-of select="$FRBRuri-konsolidierte-fassung-expression-aufbau"/>". Erwartet würde hier konkret: "<xsl:value-of select="$FRBRuri-konsolidierte-fassung-expression-inhalt"/>".</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
             </schxslt:rule>
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e1342')"/>
+                               select="($schxslt:patterns-matched, 'd15e1446')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRManifestation/akn:FRBRuri"
-                 priority="53"
-                 mode="d14e204">
+                 priority="74"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e1342']">
-            <schxslt:rule pattern="d14e1342">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e1446']">
+            <schxslt:rule pattern="d15e1446">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00550 for context "/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRManifestation/akn:FRBRuri" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00550">
                   <xsl:attribute name="context">/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRManifestation/akn:FRBRuri</xsl:attribute>
@@ -5032,7 +5117,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e1342">
+            <schxslt:rule pattern="d15e1446">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00550">
                   <xsl:attribute name="context">/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRManifestation/akn:FRBRuri</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -5060,20 +5145,39 @@
                         <xsl:value-of select="$FRBRuri-verkündungsfassung-manifestation-beschreibung"/> muss sich aus den Inhalten der jeweiligen Metadaten zusammensetzen in der Form "<xsl:value-of select="$FRBRuri-verkündungsfassung-manifestation-aufbau"/>". Erwartet würde hier konkret: "<xsl:value-of select="$FRBRuri-verkündungsfassung-manifestation-inhalt"/>".</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
+               <xsl:if test="not(if ($ist-konsolidierte-fassung) then (@value = $FRBRuri-konsolidierte-fassung-manifestation-inhalt) else true())">
+                  <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                      location="{schxslt:location(.)}"
+                                      role="error"
+                                      id="SCH-00550-015">
+                     <xsl:attribute name="test">if ($ist-konsolidierte-fassung) then (@value = $FRBRuri-konsolidierte-fassung-manifestation-inhalt) else true()</xsl:attribute>
+                     <svrl:text>
+                        <xsl:value-of select="$FRBRuri-konsolidierte-fassung-manifestation-beschreibung"/> muss sich aus den Inhalten der jeweiligen Metadaten zusammensetzen in der Form "<xsl:value-of select="$FRBRuri-konsolidierte-fassung-manifestation-aufbau"/>". Erwartet würde hier konkret: "<xsl:value-of select="$FRBRuri-konsolidierte-fassung-manifestation-inhalt"/>".</svrl:text>
+                  </svrl:failed-assert>
+               </xsl:if>
+               <xsl:if test="not(starts-with(@value, $authority-egesetzgebung) or starts-with(@value, $authority-everkündung) or starts-with(@value, $authority-rechtsinformationssystem))">
+                  <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                      location="{schxslt:location(.)}"
+                                      role="error"
+                                      id="SCH-00550-020">
+                     <xsl:attribute name="test">starts-with(@value, $authority-egesetzgebung) or starts-with(@value, $authority-everkündung) or starts-with(@value, $authority-rechtsinformationssystem)</xsl:attribute>
+                     <svrl:text>Der Manifestation-ELI muss zwingend mit einer der drei zulässigen authorities beginnen: "<xsl:value-of select="$authority-egesetzgebung"/>", "<xsl:value-of select="$authority-everkündung"/>" oder "<xsl:value-of select="$authority-rechtsinformationssystem"/>".</svrl:text>
+                  </svrl:failed-assert>
+               </xsl:if>
             </schxslt:rule>
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e1342')"/>
+                               select="($schxslt:patterns-matched, 'd15e1446')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
-   <xsl:template match="/akn:akomaNtoso/akn:act/@name" priority="52" mode="d14e204">
+   <xsl:template match="/akn:akomaNtoso/akn:act/@name" priority="73" mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e1342']">
-            <schxslt:rule pattern="d14e1342">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e1446']">
+            <schxslt:rule pattern="d15e1446">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00560 for context "/akn:akomaNtoso/akn:act/@name" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00560" role="error">
                   <xsl:attribute name="context">/akn:akomaNtoso/akn:act/@name</xsl:attribute>
@@ -5090,7 +5194,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e1342">
+            <schxslt:rule pattern="d15e1446">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00560" role="error">
                   <xsl:attribute name="context">/akn:akomaNtoso/akn:act/@name</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -5098,11 +5202,11 @@
                      <xsl:attribute name="document" select="$documentUri"/>
                   </xsl:if>
                </svrl:fired-rule>
-               <xsl:if test="not(if (. = 'regelungstext') then $ist-verkündungsfassung else true())">
+               <xsl:if test="not(if (. = 'regelungstext') then $ist-verkündungsfassung or $ist-konsolidierte-fassung else true())">
                   <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                                       location="{schxslt:location(.)}"
                                       id="SCH-00560-005">
-                     <xsl:attribute name="test">if (. = 'regelungstext') then $ist-verkündungsfassung else true()</xsl:attribute>
+                     <xsl:attribute name="test">if (. = 'regelungstext') then $ist-verkündungsfassung or $ist-konsolidierte-fassung else true()</xsl:attribute>
                      <svrl:text> Ein Regelungstext in der Verkündungsfassung darf nicht als Entwurfsfassung gekennzeichnet sein, wie es jedoch aktuell anhand von akn:FRBRWork/akn:FRBRdate/@name deklariert ist.</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
@@ -5110,18 +5214,18 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e1342')"/>
+                               select="($schxslt:patterns-matched, 'd15e1446')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="akn:meta/akn:proprietary/redok:legalDocML.de_metadaten"
-                 priority="51"
-                 mode="d14e204">
+                 priority="72"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e1448']">
-            <schxslt:rule pattern="d14e1448">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e1565']">
+            <schxslt:rule pattern="d15e1565">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00590 for context "akn:meta/akn:proprietary/redok:legalDocML.de_metadaten" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00590">
                   <xsl:attribute name="context">akn:meta/akn:proprietary/redok:legalDocML.de_metadaten</xsl:attribute>
@@ -5138,7 +5242,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e1448">
+            <schxslt:rule pattern="d15e1565">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00590">
                   <xsl:attribute name="context">akn:meta/akn:proprietary/redok:legalDocML.de_metadaten</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -5146,11 +5250,11 @@
                      <xsl:attribute name="document" select="$documentUri"/>
                   </xsl:if>
                </svrl:fired-rule>
-               <xsl:if test="not(if ($fassung = $fassung-entwurfsfassung) then (redok:fna = 'nicht-vorhanden' (: das Literal ist im Metadatenmodell als @default des einfachen Typs xs:token umgesetzt, daher hier als Literal anstatt einer dynamischen Referenzierung :)) else true())">
+               <xsl:if test="not(if ($ist-entwurfsfassung) then (redok:fna = 'nicht-vorhanden' (: das Literal ist im Metadatenmodell als @default des einfachen Typs xs:token umgesetzt, daher hier als Literal anstatt einer dynamischen Referenzierung :)) else true())">
                   <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                                       location="{schxslt:location(redok:fna)}"
                                       id="SCH-00590-000">
-                     <xsl:attribute name="test">if ($fassung = $fassung-entwurfsfassung) then (redok:fna = 'nicht-vorhanden' (: das Literal ist im Metadatenmodell als @default des einfachen Typs xs:token umgesetzt, daher hier als Literal anstatt einer dynamischen Referenzierung :)) else true()</xsl:attribute>
+                     <xsl:attribute name="test">if ($ist-entwurfsfassung) then (redok:fna = 'nicht-vorhanden' (: das Literal ist im Metadatenmodell als @default des einfachen Typs xs:token umgesetzt, daher hier als Literal anstatt einer dynamischen Referenzierung :)) else true()</xsl:attribute>
                      <svrl:text>In der Entwurfsfassung muss als Wert für den Fundstellennachweis das Literal "nicht-vorhanden" angegeben werden.</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
@@ -5158,20 +5262,18 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e1448')"/>
+                               select="($schxslt:patterns-matched, 'd15e1565')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="akn:meta[$teildokument-uri = '/akn/ontology/de/concept/documenttype/bund/rechtsetzungsdokument']"
-                 priority="50"
-                 mode="d14e204">
+                 priority="71"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <xsl:variable name="bearbeitende-institution"
-                    select="akn:proprietary/redok:legalDocML.de_metadaten/redok:bearbeitendeInstitution"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e1448']">
-            <schxslt:rule pattern="d14e1448">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e1565']">
+            <schxslt:rule pattern="d15e1565">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00591 for context "akn:meta[$teildokument-uri = '/akn/ontology/de/concept/documenttype/bund/rechtsetzungsdokument']" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00591">
                   <xsl:attribute name="context">akn:meta[$teildokument-uri = '/akn/ontology/de/concept/documenttype/bund/rechtsetzungsdokument']</xsl:attribute>
@@ -5188,7 +5290,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e1448">
+            <schxslt:rule pattern="d15e1565">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00591">
                   <xsl:attribute name="context">akn:meta[$teildokument-uri = '/akn/ontology/de/concept/documenttype/bund/rechtsetzungsdokument']</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -5205,30 +5307,30 @@
                      <svrl:text>Ein Rechtsetzungsdokument muss genau einen Block mit "Metadaten Rechtsetzungsdokument" besitzen.</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-               <xsl:if test="not(if ($bearbeitende-institution = 'bundestag') then (count(akn:proprietary/btag:legalDocML.de_metadaten) eq 1) else true())">
+               <xsl:if test="not(if ($ist-entwurfsfassung and $bearbeitende-institution-frbrauthor = 'recht.bund.de/institution/bundestag') then (count(akn:proprietary/btag:legalDocML.de_metadaten) eq 1) else true())">
                   <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                                       location="{schxslt:location(.)}"
                                       role="error"
                                       id="SCH-00591-005">
-                     <xsl:attribute name="test">if ($bearbeitende-institution = 'bundestag') then (count(akn:proprietary/btag:legalDocML.de_metadaten) eq 1) else true()</xsl:attribute>
+                     <xsl:attribute name="test">if ($ist-entwurfsfassung and $bearbeitende-institution-frbrauthor = 'recht.bund.de/institution/bundestag') then (count(akn:proprietary/btag:legalDocML.de_metadaten) eq 1) else true()</xsl:attribute>
                      <svrl:text>Wenn der Bundestag bearbeitende Institution ist, müssen dessen Metadaten genau einmal angegeben werden.</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-               <xsl:if test="not(if ($bearbeitende-institution = 'bundesrat') then (count(akn:proprietary/brat:legalDocML.de_metadaten) eq 1) else true())">
+               <xsl:if test="not(if ($ist-entwurfsfassung and $bearbeitende-institution-frbrauthor = 'recht.bund.de/institution/bundesrat') then (count(akn:proprietary/brat:legalDocML.de_metadaten) eq 1) else true())">
                   <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                                       location="{schxslt:location(.)}"
                                       role="error"
                                       id="SCH-00591-010">
-                     <xsl:attribute name="test">if ($bearbeitende-institution = 'bundesrat') then (count(akn:proprietary/brat:legalDocML.de_metadaten) eq 1) else true()</xsl:attribute>
+                     <xsl:attribute name="test">if ($ist-entwurfsfassung and $bearbeitende-institution-frbrauthor = 'recht.bund.de/institution/bundesrat') then (count(akn:proprietary/brat:legalDocML.de_metadaten) eq 1) else true()</xsl:attribute>
                      <svrl:text>Wenn der Bundesrat bearbeitende Institution ist, müssen dessen Metadaten genau einmal angegeben werden.</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-               <xsl:if test="not(if ($bearbeitende-institution = 'bundesregierung') then (count(akn:proprietary/breg:legalDocML.de_metadaten) eq 1) else true())">
+               <xsl:if test="not(if ($ist-entwurfsfassung and $bearbeitende-institution-frbrauthor = 'recht.bund.de/institution/bundesregierung') then (count(akn:proprietary/breg:legalDocML.de_metadaten) eq 1) else true())">
                   <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                                       location="{schxslt:location(.)}"
                                       role="error"
                                       id="SCH-00591-015">
-                     <xsl:attribute name="test">if ($bearbeitende-institution = 'bundesregierung') then (count(akn:proprietary/breg:legalDocML.de_metadaten) eq 1) else true()</xsl:attribute>
+                     <xsl:attribute name="test">if ($ist-entwurfsfassung and $bearbeitende-institution-frbrauthor = 'recht.bund.de/institution/bundesregierung') then (count(akn:proprietary/breg:legalDocML.de_metadaten) eq 1) else true()</xsl:attribute>
                      <svrl:text>Wenn die Bundesregierung bearbeitende Institution ist, müssen deren Metadaten genau einmal angegeben werden.</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
@@ -5236,21 +5338,21 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e1448')"/>
+                               select="($schxslt:patterns-matched, 'd15e1565')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
-   <xsl:template match="akn:meta[$teildokument-uri = ('/akn/ontology/de/concept/documenttype/bund/regelungstext-entwurf', '/akn/ontology/de/concept/documenttype/bund/regelungstext-verkuendung', '/akn/ontology/de/concept/documenttype/bund/regelungstext-neufassung')]"
-                 priority="49"
-                 mode="d14e204">
+   <xsl:template match="akn:meta[$teildokument-uri = ('/akn/ontology/de/concept/documenttype/bund/regelungstext-entwurf', '/akn/ontology/de/concept/documenttype/bund/regelungstext')]"
+                 priority="70"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e1448']">
-            <schxslt:rule pattern="d14e1448">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00592 for context "akn:meta[$teildokument-uri = ('/akn/ontology/de/concept/documenttype/bund/regelungstext-entwurf', '/akn/ontology/de/concept/documenttype/bund/regelungstext-verkuendung', '/akn/ontology/de/concept/documenttype/bund/regelungstext-neufassung')]" shadowed by preceding rule</xsl:comment>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e1565']">
+            <schxslt:rule pattern="d15e1565">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00592 for context "akn:meta[$teildokument-uri = ('/akn/ontology/de/concept/documenttype/bund/regelungstext-entwurf', '/akn/ontology/de/concept/documenttype/bund/regelungstext')]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00592">
-                  <xsl:attribute name="context">akn:meta[$teildokument-uri = ('/akn/ontology/de/concept/documenttype/bund/regelungstext-entwurf', '/akn/ontology/de/concept/documenttype/bund/regelungstext-verkuendung', '/akn/ontology/de/concept/documenttype/bund/regelungstext-neufassung')]</xsl:attribute>
+                  <xsl:attribute name="context">akn:meta[$teildokument-uri = ('/akn/ontology/de/concept/documenttype/bund/regelungstext-entwurf', '/akn/ontology/de/concept/documenttype/bund/regelungstext')]</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
                   <xsl:if test="exists($documentUri)">
                      <xsl:attribute name="document" select="$documentUri"/>
@@ -5264,9 +5366,9 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e1448">
+            <schxslt:rule pattern="d15e1565">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00592">
-                  <xsl:attribute name="context">akn:meta[$teildokument-uri = ('/akn/ontology/de/concept/documenttype/bund/regelungstext-entwurf', '/akn/ontology/de/concept/documenttype/bund/regelungstext-verkuendung', '/akn/ontology/de/concept/documenttype/bund/regelungstext-neufassung')]</xsl:attribute>
+                  <xsl:attribute name="context">akn:meta[$teildokument-uri = ('/akn/ontology/de/concept/documenttype/bund/regelungstext-entwurf', '/akn/ontology/de/concept/documenttype/bund/regelungstext')]</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
                   <xsl:if test="exists($documentUri)">
                      <xsl:attribute name="document" select="$documentUri"/>
@@ -5284,18 +5386,18 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e1448')"/>
+                               select="($schxslt:patterns-matched, 'd15e1565')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="akn:meta[$teildokument-uri = '/akn/ontology/de/concept/documenttype/bund/nkr-stellungnahme']"
-                 priority="48"
-                 mode="d14e204">
+                 priority="69"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e1448']">
-            <schxslt:rule pattern="d14e1448">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e1565']">
+            <schxslt:rule pattern="d15e1565">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00593 for context "akn:meta[$teildokument-uri = '/akn/ontology/de/concept/documenttype/bund/nkr-stellungnahme']" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00593">
                   <xsl:attribute name="context">akn:meta[$teildokument-uri = '/akn/ontology/de/concept/documenttype/bund/nkr-stellungnahme']</xsl:attribute>
@@ -5312,7 +5414,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e1448">
+            <schxslt:rule pattern="d15e1565">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00593">
                   <xsl:attribute name="context">akn:meta[$teildokument-uri = '/akn/ontology/de/concept/documenttype/bund/nkr-stellungnahme']</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -5332,16 +5434,64 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e1448')"/>
+                               select="($schxslt:patterns-matched, 'd15e1565')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
-   <xsl:template match="akn:meta" priority="47" mode="d14e204">
+   <xsl:template match="akn:meta[$teildokument-uri = '/akn/ontology/de/concept/documenttype/bund/sonstiger-veroeffentlichungstext']"
+                 priority="68"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e1502']">
-            <schxslt:rule pattern="d14e1502">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e1565']">
+            <schxslt:rule pattern="d15e1565">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00595 for context "akn:meta[$teildokument-uri = '/akn/ontology/de/concept/documenttype/bund/sonstiger-veroeffentlichungstext']" shadowed by preceding rule</xsl:comment>
+               <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00595">
+                  <xsl:attribute name="context">akn:meta[$teildokument-uri = '/akn/ontology/de/concept/documenttype/bund/sonstiger-veroeffentlichungstext']</xsl:attribute>
+                  <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
+                  <xsl:if test="exists($documentUri)">
+                     <xsl:attribute name="document" select="$documentUri"/>
+                  </xsl:if>
+               </svrl:suppressed-rule>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched"
+                               as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d15e1565">
+               <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00595">
+                  <xsl:attribute name="context">akn:meta[$teildokument-uri = '/akn/ontology/de/concept/documenttype/bund/sonstiger-veroeffentlichungstext']</xsl:attribute>
+                  <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
+                  <xsl:if test="exists($documentUri)">
+                     <xsl:attribute name="document" select="$documentUri"/>
+                  </xsl:if>
+               </svrl:fired-rule>
+               <xsl:if test="not(count(akn:proprietary/sonst:legalDocML.de_metadaten) eq 1)">
+                  <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                      location="{schxslt:location(.)}"
+                                      id="SCH-00595-000">
+                     <xsl:attribute name="test">count(akn:proprietary/sonst:legalDocML.de_metadaten) eq 1</xsl:attribute>
+                     <svrl:text>Der Sonstige Veröffentlichungstext muss genau einen Metadatenblock Sonstiger Veröffentlichungstext enthalten.</svrl:text>
+                  </svrl:failed-assert>
+               </xsl:if>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched"
+                               as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd15e1565')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
+   </xsl:template>
+   <xsl:template match="akn:meta" priority="67" mode="d15e206">
+      <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e1625']">
+            <schxslt:rule pattern="d15e1625">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00594 for context "akn:meta" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00594">
                   <xsl:attribute name="context">akn:meta</xsl:attribute>
@@ -5358,7 +5508,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e1502">
+            <schxslt:rule pattern="d15e1625">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00594">
                   <xsl:attribute name="context">akn:meta</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -5417,24 +5567,32 @@
                      <svrl:text>Das Metadatenschema Formulierungshilfe darf nur in einer Begründung zu einem Regelungstext, in einem Regelungstext (Entwurf) oder dem Vorblatt zu einem Regelungstext eingebunden werden.</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-               <xsl:if test="not(if (akn:proprietary/regtxt:legalDocML.de_metadaten) then ($teildokument-uri = ('/akn/ontology/de/concept/documenttype/bund/regelungstext-entwurf', '/akn/ontology/de/concept/documenttype/bund/regelungstext-verkuendung', '/akn/ontology/de/concept/documenttype/bund/regelungstext-neufassung')) else true())">
+               <xsl:if test="not(if (akn:proprietary/regtxt:legalDocML.de_metadaten) then ($teildokument-uri = ('/akn/ontology/de/concept/documenttype/bund/regelungstext-entwurf', '/akn/ontology/de/concept/documenttype/bund/regelungstext')) else true())">
                   <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                                       location="{schxslt:location(.)}"
                                       id="SCH-00594-030">
-                     <xsl:attribute name="test">if (akn:proprietary/regtxt:legalDocML.de_metadaten) then ($teildokument-uri = ('/akn/ontology/de/concept/documenttype/bund/regelungstext-entwurf', '/akn/ontology/de/concept/documenttype/bund/regelungstext-verkuendung', '/akn/ontology/de/concept/documenttype/bund/regelungstext-neufassung')) else true()</xsl:attribute>
-                     <svrl:text>Das Metadatenschema Regelungstext darf nur in einem Regelungstext (Entwurf), einem Regelungstext (Verkündung) oder Regelungstext (Neufassung) eingebunden werden.</svrl:text>
+                     <xsl:attribute name="test">if (akn:proprietary/regtxt:legalDocML.de_metadaten) then ($teildokument-uri = ('/akn/ontology/de/concept/documenttype/bund/regelungstext-entwurf', '/akn/ontology/de/concept/documenttype/bund/regelungstext')) else true()</xsl:attribute>
+                     <svrl:text>Das Metadatenschema Regelungstext darf nur in einem Regelungstext (Entwurf) oder einem Regelungstext eingebunden werden.</svrl:text>
+                  </svrl:failed-assert>
+               </xsl:if>
+               <xsl:if test="not(if (akn:proprietary/sonst:legalDocML.de_metadaten) then ($teildokument-uri = '/akn/ontology/de/concept/documenttype/bund/sonstiger-veroeffentlichungstext') else true())">
+                  <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                      location="{schxslt:location(.)}"
+                                      id="SCH-00594-035">
+                     <xsl:attribute name="test">if (akn:proprietary/sonst:legalDocML.de_metadaten) then ($teildokument-uri = '/akn/ontology/de/concept/documenttype/bund/sonstiger-veroeffentlichungstext') else true()</xsl:attribute>
+                     <svrl:text>Das Metadatenschema Sonstiger-Veröffentlichungstext darf nur in einem Sonstigen Veröffentlichungstext eingebunden werden.</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
             </schxslt:rule>
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e1502')"/>
+                               select="($schxslt:patterns-matched, 'd15e1625')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
-   <xsl:template match="akn:timeInterval" priority="46" mode="d14e204">
+   <xsl:template match="akn:timeInterval" priority="66" mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:variable name="beginn-geltungszeitintervall-uri" select="@start"/>
       <xsl:variable name="ende-geltungszeitintervall-uri" select="@end"/>
@@ -5443,8 +5601,8 @@
       <xsl:variable name="ende-geltungszeitintervall"
                     select="ancestor::akn:meta/akn:lifecycle/akn:eventRef[@eId = substring($ende-geltungszeitintervall-uri, 2)]/@date"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e1548']">
-            <schxslt:rule pattern="d14e1548">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e1676']">
+            <schxslt:rule pattern="d15e1676">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00600 for context "akn:timeInterval" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00600">
                   <xsl:attribute name="context">akn:timeInterval</xsl:attribute>
@@ -5461,7 +5619,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e1548">
+            <schxslt:rule pattern="d15e1676">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00600">
                   <xsl:attribute name="context">akn:timeInterval</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -5505,21 +5663,21 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e1548')"/>
+                               select="($schxslt:patterns-matched, 'd15e1676')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="(akn:activeModifications | akn:passiveModifications)/akn:textualMod/akn:force | akn:article[@period] | akn:paragraph[@period] | akn:list[@period]"
-                 priority="45"
-                 mode="d14e204">
+                 priority="65"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:variable name="verweis-auf-geltungszeitgruppe" select="substring(@period, 2)"/>
       <xsl:variable name="geltungszeitgruppen-im-dokument"
                     select="/akn:akomaNtoso/*/akn:meta/akn:temporalData/akn:temporalGroup/@eId"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e1548']">
-            <schxslt:rule pattern="d14e1548">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e1676']">
+            <schxslt:rule pattern="d15e1676">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00610 for context "(akn:activeModifications | akn:passiveModifications)/akn:textualMod/akn:force | akn:article[@period] | akn:paragraph[@period] | akn:list[@period]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00610">
                   <xsl:attribute name="context">(akn:activeModifications | akn:passiveModifications)/akn:textualMod/akn:force | akn:article[@period] | akn:paragraph[@period] | akn:list[@period]</xsl:attribute>
@@ -5536,7 +5694,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e1548">
+            <schxslt:rule pattern="d15e1676">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00610">
                   <xsl:attribute name="context">(akn:activeModifications | akn:passiveModifications)/akn:textualMod/akn:force | akn:article[@period] | akn:paragraph[@period] | akn:list[@period]</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -5557,20 +5715,20 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e1548')"/>
+                               select="($schxslt:patterns-matched, 'd15e1676')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
-   <xsl:template match="akn:eventRef" priority="44" mode="d14e204">
+   <xsl:template match="akn:eventRef" priority="64" mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:variable name="ereignisart" select="@refersTo"/>
       <xsl:variable name="ereignisdatum" select="@date"/>
       <xsl:variable name="literalsuffix-für-unbekanntes-datum"
                     select="'-mit-noch-unbekanntem-datum'"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e1548']">
-            <schxslt:rule pattern="d14e1548">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e1676']">
+            <schxslt:rule pattern="d15e1676">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00620 for context "akn:eventRef" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00620">
                   <xsl:attribute name="context">akn:eventRef</xsl:attribute>
@@ -5587,7 +5745,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e1548">
+            <schxslt:rule pattern="d15e1676">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00620">
                   <xsl:attribute name="context">akn:eventRef</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -5615,19 +5773,19 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e1548')"/>
+                               select="($schxslt:patterns-matched, 'd15e1676')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
-   <xsl:template match="akn:FRBRExpression" priority="43" mode="d14e204">
+   <xsl:template match="akn:FRBRExpression" priority="63" mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:variable name="guid-vorherige-version" select="'vorherige-version-id'"/>
       <xsl:variable name="guid-aktuelle-version" select="'aktuelle-version-id'"/>
       <xsl:variable name="guid-nächste-version" select="'nachfolgende-version-id'"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e1622']">
-            <schxslt:rule pattern="d14e1622">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e1750']">
+            <schxslt:rule pattern="d15e1750">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00630 for context "akn:FRBRExpression" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00630">
                   <xsl:attribute name="context">akn:FRBRExpression</xsl:attribute>
@@ -5644,7 +5802,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e1622">
+            <schxslt:rule pattern="d15e1750">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00630">
                   <xsl:attribute name="context">akn:FRBRExpression</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -5680,21 +5838,19 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e1622')"/>
+                               select="($schxslt:patterns-matched, 'd15e1750')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
-   <xsl:template match="akn:meta/akn:lifecycle (: Entwurfs- und Verkündungsfassung sowie Neufassung :)"
-                 priority="42"
-                 mode="d14e204">
+   <xsl:template match="akn:meta/akn:lifecycle" priority="62" mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e1646']">
-            <schxslt:rule pattern="d14e1646">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00640 for context "akn:meta/akn:lifecycle (: Entwurfs- und Verkündungsfassung sowie Neufassung :)" shadowed by preceding rule</xsl:comment>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e1774']">
+            <schxslt:rule pattern="d15e1774">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00640 for context "akn:meta/akn:lifecycle" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00640">
-                  <xsl:attribute name="context">akn:meta/akn:lifecycle (: Entwurfs- und Verkündungsfassung sowie Neufassung :)</xsl:attribute>
+                  <xsl:attribute name="context">akn:meta/akn:lifecycle</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
                   <xsl:if test="exists($documentUri)">
                      <xsl:attribute name="document" select="$documentUri"/>
@@ -5708,9 +5864,9 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e1646">
+            <schxslt:rule pattern="d15e1774">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00640">
-                  <xsl:attribute name="context">akn:meta/akn:lifecycle (: Entwurfs- und Verkündungsfassung sowie Neufassung :)</xsl:attribute>
+                  <xsl:attribute name="context">akn:meta/akn:lifecycle</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
                   <xsl:if test="exists($documentUri)">
                      <xsl:attribute name="document" select="$documentUri"/>
@@ -5737,21 +5893,21 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e1646')"/>
+                               select="($schxslt:patterns-matched, 'd15e1774')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
-   <xsl:template match="akn:meta/akn:lifecycle[$fassung = $fassung-entwurfsfassung]"
-                 priority="41"
-                 mode="d14e204">
+   <xsl:template match="akn:meta/akn:lifecycle[$ist-entwurfsfassung]"
+                 priority="61"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e1668']">
-            <schxslt:rule pattern="d14e1668">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00650 for context "akn:meta/akn:lifecycle[$fassung = $fassung-entwurfsfassung]" shadowed by preceding rule</xsl:comment>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e1796']">
+            <schxslt:rule pattern="d15e1796">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00650 for context "akn:meta/akn:lifecycle[$ist-entwurfsfassung]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00650">
-                  <xsl:attribute name="context">akn:meta/akn:lifecycle[$fassung = $fassung-entwurfsfassung]</xsl:attribute>
+                  <xsl:attribute name="context">akn:meta/akn:lifecycle[$ist-entwurfsfassung]</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
                   <xsl:if test="exists($documentUri)">
                      <xsl:attribute name="document" select="$documentUri"/>
@@ -5765,28 +5921,28 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e1668">
+            <schxslt:rule pattern="d15e1796">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00650">
-                  <xsl:attribute name="context">akn:meta/akn:lifecycle[$fassung = $fassung-entwurfsfassung]</xsl:attribute>
+                  <xsl:attribute name="context">akn:meta/akn:lifecycle[$ist-entwurfsfassung]</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
                   <xsl:if test="exists($documentUri)">
                      <xsl:attribute name="document" select="$documentUri"/>
                   </xsl:if>
                </svrl:fired-rule>
-               <xsl:if test="not(if ($teildokument-uri = ($art-regelungstext-uri, $art-vereinbarung-uri, $art-bekanntmachungstext-uri)) then (akn:eventRef[@type = $type-literal-ereignisreferenz-generation and @refersTo = $refersto-literal-ereignisreferenz-entwurfsfassung-ausfertigung-mit-unbekanntem-datum] and (akn:eventRef[@type = $type-literal-ereignisreferenz-generation and @refersTo = $refersto-literal-ereignisreferenz-entwurfsfassung-inkrafttreten-mit-unbekanntem-datum] or akn:eventRef[@type = $type-literal-ereignisreferenz-generation and @refersTo = $refersto-literal-ereignisreferenz-entwurfsfassung-inkrafttreten])) else true())">
+               <xsl:if test="not(if ($teildokument-uri = ($art-regelungstext-uri, $art-vereinbarung-uri, $art-bekanntmachungstext-uri)) then (akn:eventRef[@type = $type-literal-ereignisreferenz-generation and @refersTo = $refersto-literal-ereignisreferenz-entwurfsfassung-ausfertigung-mit-unbekanntem-datum] and akn:eventRef[@type = $type-literal-ereignisreferenz-generation and @refersTo = $refersto-literal-ereignisreferenz-entwurfsfassung-verkuendung-mit-unbekanntem-datum] and (akn:eventRef[@type = $type-literal-ereignisreferenz-generation and @refersTo = $refersto-literal-ereignisreferenz-entwurfsfassung-inkrafttreten-mit-unbekanntem-datum] or akn:eventRef[@type = $type-literal-ereignisreferenz-generation and @refersTo = $refersto-literal-ereignisreferenz-entwurfsfassung-inkrafttreten])) else true())">
                   <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                                       location="{schxslt:location(.)}"
                                       id="SCH-00650-000">
-                     <xsl:attribute name="test">if ($teildokument-uri = ($art-regelungstext-uri, $art-vereinbarung-uri, $art-bekanntmachungstext-uri)) then (akn:eventRef[@type = $type-literal-ereignisreferenz-generation and @refersTo = $refersto-literal-ereignisreferenz-entwurfsfassung-ausfertigung-mit-unbekanntem-datum] and (akn:eventRef[@type = $type-literal-ereignisreferenz-generation and @refersTo = $refersto-literal-ereignisreferenz-entwurfsfassung-inkrafttreten-mit-unbekanntem-datum] or akn:eventRef[@type = $type-literal-ereignisreferenz-generation and @refersTo = $refersto-literal-ereignisreferenz-entwurfsfassung-inkrafttreten])) else true()</xsl:attribute>
+                     <xsl:attribute name="test">if ($teildokument-uri = ($art-regelungstext-uri, $art-vereinbarung-uri, $art-bekanntmachungstext-uri)) then (akn:eventRef[@type = $type-literal-ereignisreferenz-generation and @refersTo = $refersto-literal-ereignisreferenz-entwurfsfassung-ausfertigung-mit-unbekanntem-datum] and akn:eventRef[@type = $type-literal-ereignisreferenz-generation and @refersTo = $refersto-literal-ereignisreferenz-entwurfsfassung-verkuendung-mit-unbekanntem-datum] and (akn:eventRef[@type = $type-literal-ereignisreferenz-generation and @refersTo = $refersto-literal-ereignisreferenz-entwurfsfassung-inkrafttreten-mit-unbekanntem-datum] or akn:eventRef[@type = $type-literal-ereignisreferenz-generation and @refersTo = $refersto-literal-ereignisreferenz-entwurfsfassung-inkrafttreten])) else true()</xsl:attribute>
                      <svrl:text>
-                        <xsl:value-of select="$dokumentarten-mit-lebenszyklus-angaben-formulierung-satzanfang-nominativ"/> in der Entwurfsfassung muss immer mindestens zwei Ereignisse auszeichnen: Erstens einen Platzhalter für das Ausfertigungsdatum; dieser wird angegeben mittels &lt;eventRef&gt; mit @type='<xsl:value-of select="$type-literal-ereignisreferenz-generation"/>' und @refersTo='<xsl:value-of select="$refersto-literal-ereignisreferenz-entwurfsfassung-ausfertigung-mit-unbekanntem-datum"/>'. Und zweitens eine Angabe zum Inkrafttreten mittels &lt;eventRef&gt; mit @type='<xsl:value-of select="$type-literal-ereignisreferenz-generation"/> und @refersTo='<xsl:value-of select="$refersto-literal-ereignisreferenz-entwurfsfassung-inkrafttreten-mit-unbekanntem-datum"/>' bzw., sofern das Datum bereits bekannt ist, @refersTo='<xsl:value-of select="$refersto-literal-ereignisreferenz-entwurfsfassung-inkrafttreten"/>'.</svrl:text>
+                        <xsl:value-of select="$dokumentarten-mit-lebenszyklus-angaben-formulierung-satzanfang-nominativ"/> in der Entwurfsfassung muss immer mindestens drei Ereignisse auszeichnen: Erstens einen Platzhalter für das Ausfertigungsdatum; dieser wird angegeben mittels &lt;eventRef&gt; mit @type='<xsl:value-of select="$type-literal-ereignisreferenz-generation"/>' und @refersTo='<xsl:value-of select="$refersto-literal-ereignisreferenz-entwurfsfassung-ausfertigung-mit-unbekanntem-datum"/>'. Zweitens einen Platzhalter für das Verkündungsdatum; dieser wird angegeben mittels &lt;eventRef&gt; mit @type='<xsl:value-of select="$type-literal-ereignisreferenz-generation"/>' und @refersTo='<xsl:value-of select="$refersto-literal-ereignisreferenz-entwurfsfassung-verkuendung-mit-unbekanntem-datum"/>'. Und drittens eine Angabe zum Inkrafttreten mittels &lt;eventRef&gt; mit @type='<xsl:value-of select="$type-literal-ereignisreferenz-generation"/> und @refersTo='<xsl:value-of select="$refersto-literal-ereignisreferenz-entwurfsfassung-inkrafttreten-mit-unbekanntem-datum"/>' bzw., sofern das Datum bereits bekannt ist, @refersTo='<xsl:value-of select="$refersto-literal-ereignisreferenz-entwurfsfassung-inkrafttreten"/>'.</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-               <xsl:if test="not(if ($fassung = $fassung-entwurfsfassung) then (akn:eventRef[@type = ($type-literal-ereignisreferenz-generation, $type-literal-ereignisreferenz-repeal)]) else ())">
+               <xsl:if test="not(if ($ist-entwurfsfassung) then (akn:eventRef[@type = ($type-literal-ereignisreferenz-generation, $type-literal-ereignisreferenz-repeal)]) else ())">
                   <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                                       location="{schxslt:location(.)}"
                                       id="SCH-00650-005">
-                     <xsl:attribute name="test">if ($fassung = $fassung-entwurfsfassung) then (akn:eventRef[@type = ($type-literal-ereignisreferenz-generation, $type-literal-ereignisreferenz-repeal)]) else ()</xsl:attribute>
+                     <xsl:attribute name="test">if ($ist-entwurfsfassung) then (akn:eventRef[@type = ($type-literal-ereignisreferenz-generation, $type-literal-ereignisreferenz-repeal)]) else ()</xsl:attribute>
                      <svrl:text>
                         <xsl:value-of select="$dokumentarten-mit-lebenszyklus-angaben-formulierung-satzanfang-nominativ"/> in der Entwurfsfassung kann nur initiale Ereignisse (Inkrafttreten, Ausfertigung, teilweises Außerkrafttreten, d.h. @type = '<xsl:value-of select="$type-literal-ereignisreferenz-generation"/>') oder ein finales Außerkrafttreten (d.h. @type = '<xsl:value-of select="$type-literal-ereignisreferenz-repeal"/>') aufweisen.</svrl:text>
                   </svrl:failed-assert>
@@ -5800,18 +5956,27 @@
                         <xsl:value-of select="$dokumentarten-mit-lebenszyklus-angaben-formulierung-satzanfang-nominativ"/> in der Entwurfsfassung muss genau einen Platzhalter für das noch unbekannte Datum der Ausfertigung enthalten (&lt;eventRef&gt; mit @type = '<xsl:value-of select="$type-literal-ereignisreferenz-generation"/>' und @refersTo = '<xsl:value-of select="$refersto-literal-ereignisreferenz-entwurfsfassung-ausfertigung-mit-unbekanntem-datum"/>').</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
+               <xsl:if test="not(if ($teildokument-uri = ($art-regelungstext-uri)) then (count(akn:eventRef[@type = $type-literal-ereignisreferenz-generation and @refersTo = $refersto-literal-ereignisreferenz-entwurfsfassung-verkuendung-mit-unbekanntem-datum]) = 1) else true())">
+                  <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                      location="{schxslt:location(.)}"
+                                      id="SCH-00650-015">
+                     <xsl:attribute name="test">if ($teildokument-uri = ($art-regelungstext-uri)) then (count(akn:eventRef[@type = $type-literal-ereignisreferenz-generation and @refersTo = $refersto-literal-ereignisreferenz-entwurfsfassung-verkuendung-mit-unbekanntem-datum]) = 1) else true()</xsl:attribute>
+                     <svrl:text>
+                        <xsl:value-of select="$dokumentarten-mit-lebenszyklus-angaben-formulierung-satzanfang-nominativ"/> in der Entwurfsfassung muss genau einen Platzhalter für das noch unbekannte Datum der Verkündung enthalten (&lt;eventRef&gt; mit @type = '<xsl:value-of select="$type-literal-ereignisreferenz-generation"/>' und @refersTo = '<xsl:value-of select="$refersto-literal-ereignisreferenz-entwurfsfassung-verkuendung-mit-unbekanntem-datum"/>').</svrl:text>
+                  </svrl:failed-assert>
+               </xsl:if>
             </schxslt:rule>
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e1668')"/>
+                               select="($schxslt:patterns-matched, 'd15e1796')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
-   <xsl:template match="akn:meta/akn:lifecycle[$fassung = ($fassung-verkündungsfassung, $fassung-neufassung)] (: Verkündungfassung oder Neufassung :)"
-                 priority="40"
-                 mode="d14e204">
+   <xsl:template match="akn:meta/akn:lifecycle[$ist-verkündungsfassung or $ist-konsolidierte-fassung]"
+                 priority="60"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:variable name="datum-ausfertigung"
                     select="(akn:eventRef[@type = $type-literal-ereignisreferenz-generation and @refersTo = $refersto-literal-ereignisreferenz-verkündungsfassung-ausfertigung]) (: immer den ersten Wert nehmen, falls es unerwartet mehrere gibt, damit hier diejenige SCH-Regel zum Tragen kommt, die prüft, dass es nur genau ein initiales Ausfertigungsdatum gibt, und nicht ein Fehler auf Ebene des SCH-Prozessors die weitere Verarbeitung blockiert. :)[1]/@date"/>
@@ -5821,18 +5986,18 @@
                     select="if (not(empty($frühestes-datum-inkrafttreten-als-reine-ziffern))) then (xs:date(concat( substring($frühestes-datum-inkrafttreten-als-reine-ziffern, 1, 4), '-', substring($frühestes-datum-inkrafttreten-als-reine-ziffern, 5, 2), '-', substring($frühestes-datum-inkrafttreten-als-reine-ziffern, 7, 2)))) else '0001-01-01'"/>
       <xsl:variable name="datum-ausserkafttreten"
                     select="akn:eventRef[@type = $type-literal-ereignisreferenz-repeal and @refersTo = $refersto-literal-ereignisreferenz-verkündungsfassung-ausserkrafttreten]/@date"/>
-      <xsl:variable name="frühestes-datum-amendment-als-reine-ziffern"
-                    select="min(for $n in akn:eventRef[@type = $type-literal-ereignisreferenz-amendment (: inkl. aller möglichen @refersTo :)]/@date return format-date($n, '[Y,4][M,2][D,2]'))"/>
-      <xsl:variable name="frühestes-datum-amendment"
-                    select="if (not(empty($frühestes-datum-amendment-als-reine-ziffern))) then (xs:date(concat( substring($frühestes-datum-amendment-als-reine-ziffern, 1, 4), '-', substring($frühestes-datum-amendment-als-reine-ziffern, 5, 2), '-', substring($frühestes-datum-amendment-als-reine-ziffern, 7, 2)))) else '0001-01-01'"/>
-      <xsl:variable name="ausfertigungsdatum"
+      <xsl:variable name="frühestes-datum-amendment-ausfertigung-als-reine-ziffern"
+                    select="min(for $n in akn:eventRef[@type = $type-literal-ereignisreferenz-amendment and @refersTo = $refersto-literal-ereignisreferenz-verkündungsfassung-ausfertigung]/@date return format-date($n, '[Y,4][M,2][D,2]'))"/>
+      <xsl:variable name="frühestes-datum-amendment-ausfertigung"
+                    select="if (not(empty($frühestes-datum-amendment-ausfertigung-als-reine-ziffern))) then (xs:date(concat( substring($frühestes-datum-amendment-ausfertigung-als-reine-ziffern, 1, 4), '-', substring($frühestes-datum-amendment-ausfertigung-als-reine-ziffern, 5, 2), '-', substring($frühestes-datum-amendment-ausfertigung-als-reine-ziffern, 7, 2)))) else '0001-01-01'"/>
+      <xsl:variable name="ausfertigungsdatum-stammform"
                     select="(akn:eventRef[@type = $type-literal-ereignisreferenz-generation and @refersTo = $refersto-literal-ereignisreferenz-verkündungsfassung-ausfertigung]/@date)[1]"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e1709']">
-            <schxslt:rule pattern="d14e1709">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00660 for context "akn:meta/akn:lifecycle[$fassung = ($fassung-verkündungsfassung, $fassung-neufassung)] (: Verkündungfassung oder Neufassung :)" shadowed by preceding rule</xsl:comment>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e1850']">
+            <schxslt:rule pattern="d15e1850">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00660 for context "akn:meta/akn:lifecycle[$ist-verkündungsfassung or $ist-konsolidierte-fassung]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00660">
-                  <xsl:attribute name="context">akn:meta/akn:lifecycle[$fassung = ($fassung-verkündungsfassung, $fassung-neufassung)] (: Verkündungfassung oder Neufassung :)</xsl:attribute>
+                  <xsl:attribute name="context">akn:meta/akn:lifecycle[$ist-verkündungsfassung or $ist-konsolidierte-fassung]</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
                   <xsl:if test="exists($documentUri)">
                      <xsl:attribute name="document" select="$documentUri"/>
@@ -5846,9 +6011,9 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e1709">
+            <schxslt:rule pattern="d15e1850">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00660">
-                  <xsl:attribute name="context">akn:meta/akn:lifecycle[$fassung = ($fassung-verkündungsfassung, $fassung-neufassung)] (: Verkündungfassung oder Neufassung :)</xsl:attribute>
+                  <xsl:attribute name="context">akn:meta/akn:lifecycle[$ist-verkündungsfassung or $ist-konsolidierte-fassung]</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
                   <xsl:if test="exists($documentUri)">
                      <xsl:attribute name="document" select="$documentUri"/>
@@ -5880,34 +6045,33 @@
                      <svrl:text>Das Datum des Außerkrafttretens muss nach der Ausfertigung liegen; angegeben wurden jedoch für das Außerkrafttreten '<xsl:value-of select="$datum-ausserkafttreten"/>' und für die Ausfertigung '<xsl:value-of select="$datum-ausfertigung"/>'.</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-               <xsl:if test="not(if (not(xs:date($frühestes-datum-amendment) = xs:date('0001-01-01'))) then (xs:date($frühestes-datum-amendment) gt xs:date($ausfertigungsdatum)) else true())">
+               <xsl:if test="not(if (not(xs:date($frühestes-datum-amendment-ausfertigung) = xs:date('0001-01-01'))) then (xs:date($frühestes-datum-amendment-ausfertigung) ge xs:date($ausfertigungsdatum-stammform)) else true())">
                   <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                                       location="{schxslt:location(.)}"
                                       id="SCH-00660-020">
-                     <xsl:attribute name="test">if (not(xs:date($frühestes-datum-amendment) = xs:date('0001-01-01'))) then (xs:date($frühestes-datum-amendment) gt xs:date($ausfertigungsdatum)) else true()</xsl:attribute>
-                     <svrl:text>
-                        <xsl:value-of select="$dokumentarten-mit-lebenszyklus-angaben-formulierung-satzanfang-nominativ"/> können erst geändert werden, nachdem er/sie initial ausgefertigt wurde (d. h. die früheste Änderung - akn:eventRef[@type = '<xsl:value-of select="$type-literal-ereignisreferenz-amendment"/>']/@date - muss nach der initialen Ausfertigung - &lt;eventRef&gt; mit @type = '<xsl:value-of select="$type-literal-ereignisreferenz-generation"/>' und @refersTo = '<xsl:value-of select="$refersto-literal-ereignisreferenz-verkündungsfassung-ausfertigung"/>' - erfolgen).</svrl:text>
+                     <xsl:attribute name="test">if (not(xs:date($frühestes-datum-amendment-ausfertigung) = xs:date('0001-01-01'))) then (xs:date($frühestes-datum-amendment-ausfertigung) ge xs:date($ausfertigungsdatum-stammform)) else true()</xsl:attribute>
+                     <svrl:text>Das initiale Ausfertigungsdatum der Stammform kann nicht hinter dem Ausfertigungsdatum des Änderungsgesetzes liegen.</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
             </schxslt:rule>
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e1709')"/>
+                               select="($schxslt:patterns-matched, 'd15e1850')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
-   <xsl:template match="akn:meta/akn:lifecycle/akn:eventRef [$fassung = ($fassung-verkündungsfassung, $fassung-neufassung) and @type = $type-literal-ereignisreferenz-generation ]"
-                 priority="39"
-                 mode="d14e204">
+   <xsl:template match="akn:meta/akn:lifecycle/akn:eventRef [($ist-verkündungsfassung or $ist-konsolidierte-fassung) and @type = $type-literal-ereignisreferenz-generation ]"
+                 priority="59"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e1777']">
-            <schxslt:rule pattern="d14e1777">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00665 for context "akn:meta/akn:lifecycle/akn:eventRef [$fassung = ($fassung-verkündungsfassung, $fassung-neufassung) and @type = $type-literal-ereignisreferenz-generation ]" shadowed by preceding rule</xsl:comment>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e1910']">
+            <schxslt:rule pattern="d15e1910">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00665 for context "akn:meta/akn:lifecycle/akn:eventRef [($ist-verkündungsfassung or $ist-konsolidierte-fassung) and @type = $type-literal-ereignisreferenz-generation ]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00665">
-                  <xsl:attribute name="context">akn:meta/akn:lifecycle/akn:eventRef [$fassung = ($fassung-verkündungsfassung, $fassung-neufassung) and @type = $type-literal-ereignisreferenz-generation ]</xsl:attribute>
+                  <xsl:attribute name="context">akn:meta/akn:lifecycle/akn:eventRef [($ist-verkündungsfassung or $ist-konsolidierte-fassung) and @type = $type-literal-ereignisreferenz-generation ]</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
                   <xsl:if test="exists($documentUri)">
                      <xsl:attribute name="document" select="$documentUri"/>
@@ -5921,9 +6085,9 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e1777">
+            <schxslt:rule pattern="d15e1910">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00665">
-                  <xsl:attribute name="context">akn:meta/akn:lifecycle/akn:eventRef [$fassung = ($fassung-verkündungsfassung, $fassung-neufassung) and @type = $type-literal-ereignisreferenz-generation ]</xsl:attribute>
+                  <xsl:attribute name="context">akn:meta/akn:lifecycle/akn:eventRef [($ist-verkündungsfassung or $ist-konsolidierte-fassung) and @type = $type-literal-ereignisreferenz-generation ]</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
                   <xsl:if test="exists($documentUri)">
                      <xsl:attribute name="document" select="$documentUri"/>
@@ -5941,27 +6105,21 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e1777')"/>
+                               select="($schxslt:patterns-matched, 'd15e1910')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
-   <xsl:template match="akn:meta/akn:lifecycle[$fassung = $fassung-neufassung and $teildokument-uri = $art-regelungstext-uri] (: nur Neufassung :)"
-                 priority="38"
-                 mode="d14e204">
+   <xsl:template match="akn:meta/akn:lifecycle[$ist-verkündungsfassung and $teildokument-uri = $art-regelungstext-uri]"
+                 priority="58"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <xsl:variable name="frühestes-datum-neufassung-als-reine-ziffern"
-                    select="min(for $n in akn:eventRef[@type = $type-literal-ereignisreferenz-generation and @refersTo = 'neufassung']/@date return format-date($n, '[Y,4][M,2][D,2]'))"/>
-      <xsl:variable name="früheste-neufassung"
-                    select="if (not(empty($frühestes-datum-neufassung-als-reine-ziffern))) then (xs:date(concat( substring($frühestes-datum-neufassung-als-reine-ziffern, 1, 4), '-', substring($frühestes-datum-neufassung-als-reine-ziffern, 5, 2), '-', substring($frühestes-datum-neufassung-als-reine-ziffern, 7, 2)))) else '0001-01-01'"/>
-      <xsl:variable name="ausfertigung"
-                    select="akn:eventRef[@type = $type-literal-ereignisreferenz-generation and @refersTo = $refersto-literal-ereignisreferenz-verkündungsfassung-ausfertigung]/@date"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e1786']">
-            <schxslt:rule pattern="d14e1786">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00670 for context "akn:meta/akn:lifecycle[$fassung = $fassung-neufassung and $teildokument-uri = $art-regelungstext-uri] (: nur Neufassung :)" shadowed by preceding rule</xsl:comment>
-               <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00670">
-                  <xsl:attribute name="context">akn:meta/akn:lifecycle[$fassung = $fassung-neufassung and $teildokument-uri = $art-regelungstext-uri] (: nur Neufassung :)</xsl:attribute>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e1919']">
+            <schxslt:rule pattern="d15e1919">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00667 for context "akn:meta/akn:lifecycle[$ist-verkündungsfassung and $teildokument-uri = $art-regelungstext-uri]" shadowed by preceding rule</xsl:comment>
+               <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00667">
+                  <xsl:attribute name="context">akn:meta/akn:lifecycle[$ist-verkündungsfassung and $teildokument-uri = $art-regelungstext-uri]</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
                   <xsl:if test="exists($documentUri)">
                      <xsl:attribute name="document" select="$documentUri"/>
@@ -5975,46 +6133,39 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e1786">
-               <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00670">
-                  <xsl:attribute name="context">akn:meta/akn:lifecycle[$fassung = $fassung-neufassung and $teildokument-uri = $art-regelungstext-uri] (: nur Neufassung :)</xsl:attribute>
+            <schxslt:rule pattern="d15e1919">
+               <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00667">
+                  <xsl:attribute name="context">akn:meta/akn:lifecycle[$ist-verkündungsfassung and $teildokument-uri = $art-regelungstext-uri]</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
                   <xsl:if test="exists($documentUri)">
                      <xsl:attribute name="document" select="$documentUri"/>
                   </xsl:if>
                </svrl:fired-rule>
-               <xsl:if test="not(count(akn:eventRef[@type = $type-literal-ereignisreferenz-generation and @refersTo = $refersto-literal-ereignisreferenz-neufassung]) ge 1)">
+               <xsl:if test="not(count(akn:eventRef[@refersTo = $refersto-literal-ereignisreferenz-verkuendung]) = 1)">
                   <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                                       location="{schxslt:location(.)}"
-                                      id="SCH-00670-000">
-                     <xsl:attribute name="test">count(akn:eventRef[@type = $type-literal-ereignisreferenz-generation and @refersTo = $refersto-literal-ereignisreferenz-neufassung]) ge 1</xsl:attribute>
-                     <svrl:text>Ein Regelungstext als Neufassung muss mindestens ein Neufassungsereignis enthalten (&lt;eventRef&gt; mit @type = '<xsl:value-of select="$type-literal-ereignisreferenz-generation"/>' und @refersTo = '<xsl:value-of select="$refersto-literal-ereignisreferenz-neufassung"/>'.).</svrl:text>
-                  </svrl:failed-assert>
-               </xsl:if>
-               <xsl:if test="not(xs:date($früheste-neufassung) gt xs:date($ausfertigung))">
-                  <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                      location="{schxslt:location(.)}"
-                                      id="SCH-00670-005">
-                     <xsl:attribute name="test">xs:date($früheste-neufassung) gt xs:date($ausfertigung)</xsl:attribute>
-                     <svrl:text>Das Datum der frühesten Neufassung (&lt;eventRef&gt; mit @type='<xsl:value-of select="$type-literal-ereignisreferenz-generation"/>' und @rfersTo='<xsl:value-of select="$refersto-literal-ereignisreferenz-neufassung"/>') muss nach dem initialen Ausfertigungsdatum (&lt;eventRef&gt; mit @type='<xsl:value-of select="$type-literal-ereignisreferenz-generation"/>' und @refersTo='<xsl:value-of select="$refersto-literal-ereignisreferenz-verkündungsfassung-ausfertigung"/>') liegen; angegeben wurden jedoch als Ausfertigungsdatum '<xsl:value-of select="$ausfertigung"/>' und als Datum der Neufassung '<xsl:value-of select="$früheste-neufassung"/>'.</svrl:text>
+                                      role="error"
+                                      id="SCH-00667-000">
+                     <xsl:attribute name="test">count(akn:eventRef[@refersTo = $refersto-literal-ereignisreferenz-verkuendung]) = 1</xsl:attribute>
+                     <svrl:text>In der Verkündungsfassung eines Regelungstextes muss genau ein &lt;eventRef&gt; mit @refersTo="<xsl:value-of select="$refersto-literal-ereignisreferenz-verkuendung"/>" vorhanden sein. </svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
             </schxslt:rule>
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e1786')"/>
+                               select="($schxslt:patterns-matched, 'd15e1919')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="akn:p[parent::akn:longTitle and $teildokument-uri = $art-regelungstext-uri]"
-                 priority="37"
-                 mode="d14e204">
+                 priority="57"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e1823']">
-            <schxslt:rule pattern="d14e1823">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e1939']">
+            <schxslt:rule pattern="d15e1939">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00680 for context "akn:p[parent::akn:longTitle and $teildokument-uri = $art-regelungstext-uri]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00680">
                   <xsl:attribute name="context">akn:p[parent::akn:longTitle and $teildokument-uri = $art-regelungstext-uri]</xsl:attribute>
@@ -6031,7 +6182,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e1823">
+            <schxslt:rule pattern="d15e1939">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00680">
                   <xsl:attribute name="context">akn:p[parent::akn:longTitle and $teildokument-uri = $art-regelungstext-uri]</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -6051,16 +6202,16 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e1823')"/>
+                               select="($schxslt:patterns-matched, 'd15e1939')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
-   <xsl:template match="akn:session" priority="36" mode="d14e204">
+   <xsl:template match="akn:session" priority="56" mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e1835']">
-            <schxslt:rule pattern="d14e1835">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e1951']">
+            <schxslt:rule pattern="d15e1951">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00730 for context "akn:session" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00730">
                   <xsl:attribute name="context">akn:session</xsl:attribute>
@@ -6077,7 +6228,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e1835">
+            <schxslt:rule pattern="d15e1951">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00730">
                   <xsl:attribute name="context">akn:session</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -6097,18 +6248,241 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e1835')"/>
+                               select="($schxslt:patterns-matched, 'd15e1951')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
+   </xsl:template>
+   <xsl:template match="akn:person" priority="55" mode="d15e206">
+      <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
+      <xsl:variable name="referenzierte-eId" select="substring-after(@refersTo, '#')"/>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e1965']">
+            <schxslt:rule pattern="d15e1965">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00740 for context "akn:person" shadowed by preceding rule</xsl:comment>
+               <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00740">
+                  <xsl:attribute name="context">akn:person</xsl:attribute>
+                  <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
+                  <xsl:if test="exists($documentUri)">
+                     <xsl:attribute name="document" select="$documentUri"/>
+                  </xsl:if>
+               </svrl:suppressed-rule>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched"
+                               as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d15e1965">
+               <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00740">
+                  <xsl:attribute name="context">akn:person</xsl:attribute>
+                  <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
+                  <xsl:if test="exists($documentUri)">
+                     <xsl:attribute name="document" select="$documentUri"/>
+                  </xsl:if>
+               </svrl:fired-rule>
+               <xsl:if test="not(if (@refersTo) then (count(ancestor::akn:akomaNtoso/*/akn:meta/akn:references/akn:TLCPerson[@eId = $referenzierte-eId]) = 1) else true())">
+                  <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                      location="{schxslt:location(@refersTo)}"
+                                      id="SCH-00740-000">
+                     <xsl:attribute name="test">if (@refersTo) then (count(ancestor::akn:akomaNtoso/*/akn:meta/akn:references/akn:TLCPerson[@eId = $referenzierte-eId]) = 1) else true()</xsl:attribute>
+                     <svrl:text>In den Metadaten existiert kein korrespondierender Personenverweis mit der @eId="<xsl:value-of select="$referenzierte-eId"/>".</svrl:text>
+                  </svrl:failed-assert>
+               </xsl:if>
+               <xsl:if test="not(@refersTo) and ($ist-entwurfsfassung or $ist-verkündungsfassung)">
+                  <svrl:successful-report xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                          location="{schxslt:location(.)}"
+                                          role="warn"
+                                          id="SCH-00740-005">
+                     <xsl:attribute name="test">not(@refersTo) and ($ist-entwurfsfassung or $ist-verkündungsfassung)</xsl:attribute>
+                     <svrl:text>Aus Kompatibilitätsgründen ist es zulässig, eine Person ohne Referenz auf eine TLCPerson anzugeben; dies sollte jedoch nur in begründeten Ausnahmefällen geschehen.</svrl:text>
+                  </svrl:successful-report>
+               </xsl:if>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched"
+                               as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd15e1965')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
+   </xsl:template>
+   <xsl:template match="akn:role" priority="54" mode="d15e206">
+      <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
+      <xsl:variable name="referenzierte-eId" select="substring-after(@refersTo, '#')"/>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e1965']">
+            <schxslt:rule pattern="d15e1965">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00750 for context "akn:role" shadowed by preceding rule</xsl:comment>
+               <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00750">
+                  <xsl:attribute name="context">akn:role</xsl:attribute>
+                  <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
+                  <xsl:if test="exists($documentUri)">
+                     <xsl:attribute name="document" select="$documentUri"/>
+                  </xsl:if>
+               </svrl:suppressed-rule>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched"
+                               as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d15e1965">
+               <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00750">
+                  <xsl:attribute name="context">akn:role</xsl:attribute>
+                  <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
+                  <xsl:if test="exists($documentUri)">
+                     <xsl:attribute name="document" select="$documentUri"/>
+                  </xsl:if>
+               </svrl:fired-rule>
+               <xsl:if test="not(if (@refersTo) then (count(ancestor::akn:akomaNtoso/*/akn:meta/akn:references/akn:TLCRole[@eId = $referenzierte-eId]) = 1) else true())">
+                  <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                      location="{schxslt:location(@refersTo)}"
+                                      id="SCH-00750-000">
+                     <xsl:attribute name="test">if (@refersTo) then (count(ancestor::akn:akomaNtoso/*/akn:meta/akn:references/akn:TLCRole[@eId = $referenzierte-eId]) = 1) else true()</xsl:attribute>
+                     <svrl:text>In den Metadaten existiert kein korrespondierender Funktionsbezeichnungsverweis mit der @eId="<xsl:value-of select="$referenzierte-eId"/>".</svrl:text>
+                  </svrl:failed-assert>
+               </xsl:if>
+               <xsl:if test="not(@refersTo) and ($ist-entwurfsfassung or $ist-verkündungsfassung)">
+                  <svrl:successful-report xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                          location="{schxslt:location(.)}"
+                                          role="warn"
+                                          id="SCH-00750-005">
+                     <xsl:attribute name="test">not(@refersTo) and ($ist-entwurfsfassung or $ist-verkündungsfassung)</xsl:attribute>
+                     <svrl:text>Aus Kompatibilitätsgründen ist es zulässig, eine Funktionsbezeichnung ohne Referenz auf eine TLCRole anzugeben; dies sollte jedoch nur in begründeten Ausnahmefällen geschehen.</svrl:text>
+                  </svrl:successful-report>
+               </xsl:if>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched"
+                               as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd15e1965')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
+   </xsl:template>
+   <xsl:template match="akn:organization" priority="53" mode="d15e206">
+      <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
+      <xsl:variable name="referenzierte-eId" select="substring-after(@refersTo, '#')"/>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e1965']">
+            <schxslt:rule pattern="d15e1965">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00760 for context "akn:organization" shadowed by preceding rule</xsl:comment>
+               <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00760">
+                  <xsl:attribute name="context">akn:organization</xsl:attribute>
+                  <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
+                  <xsl:if test="exists($documentUri)">
+                     <xsl:attribute name="document" select="$documentUri"/>
+                  </xsl:if>
+               </svrl:suppressed-rule>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched"
+                               as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d15e1965">
+               <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00760">
+                  <xsl:attribute name="context">akn:organization</xsl:attribute>
+                  <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
+                  <xsl:if test="exists($documentUri)">
+                     <xsl:attribute name="document" select="$documentUri"/>
+                  </xsl:if>
+               </svrl:fired-rule>
+               <xsl:if test="not(if (@refersTo) then (count(ancestor::akn:akomaNtoso/*/akn:meta/akn:references/akn:TLCOrganization[@eId = $referenzierte-eId]) = 1) else true())">
+                  <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                      location="{schxslt:location(@refersTo)}"
+                                      id="SCH-00760-000">
+                     <xsl:attribute name="test">if (@refersTo) then (count(ancestor::akn:akomaNtoso/*/akn:meta/akn:references/akn:TLCOrganization[@eId = $referenzierte-eId]) = 1) else true()</xsl:attribute>
+                     <svrl:text>In den Metadaten existiert kein korrespondierender Organisationsverweis mit der @eId="<xsl:value-of select="$referenzierte-eId"/>".</svrl:text>
+                  </svrl:failed-assert>
+               </xsl:if>
+               <xsl:if test="not(@refersTo) and ($ist-entwurfsfassung or $ist-verkündungsfassung)">
+                  <svrl:successful-report xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                          location="{schxslt:location(.)}"
+                                          role="warn"
+                                          id="SCH-00760-005">
+                     <xsl:attribute name="test">not(@refersTo) and ($ist-entwurfsfassung or $ist-verkündungsfassung)</xsl:attribute>
+                     <svrl:text>Aus Kompatibilitätsgründen ist es zulässig, eine Organisation ohne Referenz auf eine TLCPerson anzugeben; dies sollte jedoch nur in begründeten Ausnahmefällen geschehen.</svrl:text>
+                  </svrl:successful-report>
+               </xsl:if>
+               <xsl:if test="not(if (not(@refersTo)) then (@title) else if (not(@title)) then (@refersTo) else true())">
+                  <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                      location="{schxslt:location(.)}"
+                                      id="SCH-00760-010">
+                     <xsl:attribute name="test">if (not(@refersTo)) then (@title) else if (not(@title)) then (@refersTo) else true()</xsl:attribute>
+                     <svrl:text>Eine akn:organization muss mindestens entweder eine Angabe @refersTo oder einen @title besitzen (oder beides).</svrl:text>
+                  </svrl:failed-assert>
+               </xsl:if>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched"
+                               as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd15e1965')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
+   </xsl:template>
+   <xsl:template match="akn:references" priority="52" mode="d15e206">
+      <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
+      <xsl:variable name="referenzierte-eId" select="substring-after(@source, '#')"/>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e1965']">
+            <schxslt:rule pattern="d15e1965">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00770 for context "akn:references" shadowed by preceding rule</xsl:comment>
+               <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00770">
+                  <xsl:attribute name="context">akn:references</xsl:attribute>
+                  <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
+                  <xsl:if test="exists($documentUri)">
+                     <xsl:attribute name="document" select="$documentUri"/>
+                  </xsl:if>
+               </svrl:suppressed-rule>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched"
+                               as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d15e1965">
+               <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00770">
+                  <xsl:attribute name="context">akn:references</xsl:attribute>
+                  <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
+                  <xsl:if test="exists($documentUri)">
+                     <xsl:attribute name="document" select="$documentUri"/>
+                  </xsl:if>
+               </svrl:fired-rule>
+               <xsl:if test="not(count(ancestor::akn:akomaNtoso/*/akn:meta/akn:references/(akn:TLCOrganization, akn:TLCPerson)[@eId = $referenzierte-eId]) = 1)">
+                  <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                      location="{schxslt:location(.)}"
+                                      id="SCH-00770-000">
+                     <xsl:attribute name="test">count(ancestor::akn:akomaNtoso/*/akn:meta/akn:references/(akn:TLCOrganization, akn:TLCPerson)[@eId = $referenzierte-eId]) = 1</xsl:attribute>
+                     <svrl:text>In den Metadaten existiert kein korrespondierender Akteur (Person, Organisation) mit der @eId="<xsl:value-of select="$referenzierte-eId"/>".</svrl:text>
+                  </svrl:failed-assert>
+               </xsl:if>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched"
+                               as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd15e1965')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="akn:marker[@refersTo = 'satzende']"
-                 priority="35"
-                 mode="d14e204">
+                 priority="51"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e1847']">
-            <schxslt:rule pattern="d14e1847">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e2023']">
+            <schxslt:rule pattern="d15e2023">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00802 for context "akn:marker[@refersTo = 'satzende']" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00802">
                   <xsl:attribute name="context">akn:marker[@refersTo = 'satzende']</xsl:attribute>
@@ -6125,7 +6499,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e1847">
+            <schxslt:rule pattern="d15e2023">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00802">
                   <xsl:attribute name="context">akn:marker[@refersTo = 'satzende']</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -6145,16 +6519,16 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e1847')"/>
+                               select="($schxslt:patterns-matched, 'd15e2023')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
-   <xsl:template match="akn:inline/@name" priority="34" mode="d14e204">
+   <xsl:template match="akn:inline/@name" priority="50" mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e1847']">
-            <schxslt:rule pattern="d14e1847">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e2023']">
+            <schxslt:rule pattern="d15e2023">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00803 for context "akn:inline/@name" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00803">
                   <xsl:attribute name="context">akn:inline/@name</xsl:attribute>
@@ -6171,7 +6545,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e1847">
+            <schxslt:rule pattern="d15e2023">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00803">
                   <xsl:attribute name="context">akn:inline/@name</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -6191,18 +6565,18 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e1847')"/>
+                               select="($schxslt:patterns-matched, 'd15e2023')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="(akn:act | akn:bill)[akn:meta/akn:proprietary/regtxt:legalDocML.de_metadaten/regtxt:form = ($form-stammform, $form-eingebundene-stammform)]//akn:list"
-                 priority="33"
-                 mode="d14e204">
+                 priority="49"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e1867']">
-            <schxslt:rule pattern="d14e1867">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e2044']">
+            <schxslt:rule pattern="d15e2044">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00810 for context "(akn:act | akn:bill)[akn:meta/akn:proprietary/regtxt:legalDocML.de_metadaten/regtxt:form = ($form-stammform, $form-eingebundene-stammform)]//akn:list" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00810">
                   <xsl:attribute name="context">(akn:act | akn:bill)[akn:meta/akn:proprietary/regtxt:legalDocML.de_metadaten/regtxt:form = ($form-stammform, $form-eingebundene-stammform)]//akn:list</xsl:attribute>
@@ -6219,7 +6593,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e1867">
+            <schxslt:rule pattern="d15e2044">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00810">
                   <xsl:attribute name="context">(akn:act | akn:bill)[akn:meta/akn:proprietary/regtxt:legalDocML.de_metadaten/regtxt:form = ($form-stammform, $form-eingebundene-stammform)]//akn:list</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -6239,20 +6613,20 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e1867')"/>
+                               select="($schxslt:patterns-matched, 'd15e2044')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="/akn:akomaNtoso/akn:*/akn:meta/akn:identification/akn:FRBRWork/akn:FRBRsubtype"
-                 priority="32"
-                 mode="d14e204">
+                 priority="48"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:variable name="teildokument-id"
                     select="tokenize(/akn:akomaNtoso/akn:*/@name, '/')[last()]"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e1882']">
-            <schxslt:rule pattern="d14e1882">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e2058']">
+            <schxslt:rule pattern="d15e2058">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00820 for context "/akn:akomaNtoso/akn:*/akn:meta/akn:identification/akn:FRBRWork/akn:FRBRsubtype" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00820">
                   <xsl:attribute name="context">/akn:akomaNtoso/akn:*/akn:meta/akn:identification/akn:FRBRWork/akn:FRBRsubtype</xsl:attribute>
@@ -6269,7 +6643,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e1882">
+            <schxslt:rule pattern="d15e2058">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00820">
                   <xsl:attribute name="context">/akn:akomaNtoso/akn:*/akn:meta/akn:identification/akn:FRBRWork/akn:FRBRsubtype</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -6282,25 +6656,25 @@
                                       location="{schxslt:location(.)}"
                                       id="SCH-00820-000">
                      <xsl:attribute name="test">matches(@value, concat($teildokument-id, '-\d+'))</xsl:attribute>
-                     <svrl:text>Die Teildokumentbezeichnung muss der ontologischen Teildokument-ID entsprechen; erwwartet wird hier konkret "<xsl:value-of select="concat($teildokument-id, '-', tokenize(@value, '-')[last()])"/>".</svrl:text>
+                     <svrl:text>Die Teildokumentbezeichnung muss der ontologischen Teildokument-ID entsprechen; erwartet wird hier konkret "<xsl:value-of select="concat($teildokument-id, '-', tokenize(@value, '-')[last()])"/>".</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
             </schxslt:rule>
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e1882')"/>
+                               select="($schxslt:patterns-matched, 'd15e2058')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="akn:statement/akn:conclusions/akn:blockContainer"
-                 priority="31"
-                 mode="d14e204">
+                 priority="47"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e1898']">
-            <schxslt:rule pattern="d14e1898">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e2075']">
+            <schxslt:rule pattern="d15e2075">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00900 for context "akn:statement/akn:conclusions/akn:blockContainer" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00900">
                   <xsl:attribute name="context">akn:statement/akn:conclusions/akn:blockContainer</xsl:attribute>
@@ -6317,7 +6691,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e1898">
+            <schxslt:rule pattern="d15e2075">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00900">
                   <xsl:attribute name="context">akn:statement/akn:conclusions/akn:blockContainer</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -6338,18 +6712,18 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e1898')"/>
+                               select="($schxslt:patterns-matched, 'd15e2075')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="akn:statement/akn:conclusions/akn:blockContainer/akn:p[1]"
-                 priority="30"
-                 mode="d14e204">
+                 priority="46"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e1898']">
-            <schxslt:rule pattern="d14e1898">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e2075']">
+            <schxslt:rule pattern="d15e2075">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00901 for context "akn:statement/akn:conclusions/akn:blockContainer/akn:p[1]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00901">
                   <xsl:attribute name="context">akn:statement/akn:conclusions/akn:blockContainer/akn:p[1]</xsl:attribute>
@@ -6366,7 +6740,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e1898">
+            <schxslt:rule pattern="d15e2075">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00901">
                   <xsl:attribute name="context">akn:statement/akn:conclusions/akn:blockContainer/akn:p[1]</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -6396,18 +6770,18 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e1898')"/>
+                               select="($schxslt:patterns-matched, 'd15e2075')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="akn:statement/akn:conclusions/akn:blockContainer/akn:p[2]"
-                 priority="29"
-                 mode="d14e204">
+                 priority="45"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e1898']">
-            <schxslt:rule pattern="d14e1898">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e2075']">
+            <schxslt:rule pattern="d15e2075">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00902 for context "akn:statement/akn:conclusions/akn:blockContainer/akn:p[2]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00902">
                   <xsl:attribute name="context">akn:statement/akn:conclusions/akn:blockContainer/akn:p[2]</xsl:attribute>
@@ -6424,7 +6798,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e1898">
+            <schxslt:rule pattern="d15e2075">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00902">
                   <xsl:attribute name="context">akn:statement/akn:conclusions/akn:blockContainer/akn:p[2]</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -6445,18 +6819,18 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e1898')"/>
+                               select="($schxslt:patterns-matched, 'd15e2075')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="akn:statement/akn:conclusions/akn:blockContainer/akn:p[position() ge 3]"
-                 priority="28"
-                 mode="d14e204">
+                 priority="44"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e1898']">
-            <schxslt:rule pattern="d14e1898">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e2075']">
+            <schxslt:rule pattern="d15e2075">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00903 for context "akn:statement/akn:conclusions/akn:blockContainer/akn:p[position() ge 3]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00903">
                   <xsl:attribute name="context">akn:statement/akn:conclusions/akn:blockContainer/akn:p[position() ge 3]</xsl:attribute>
@@ -6473,7 +6847,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e1898">
+            <schxslt:rule pattern="d15e2075">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00903">
                   <xsl:attribute name="context">akn:statement/akn:conclusions/akn:blockContainer/akn:p[position() ge 3]</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -6494,18 +6868,18 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e1898')"/>
+                               select="($schxslt:patterns-matched, 'd15e2075')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="akn:doc[$teildokument-uri = $art-anlage-regelungstext-uri]"
-                 priority="27"
-                 mode="d14e204">
+                 priority="43"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e1931']">
-            <schxslt:rule pattern="d14e1931">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e2108']">
+            <schxslt:rule pattern="d15e2108">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00920 for context "akn:doc[$teildokument-uri = $art-anlage-regelungstext-uri]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00920">
                   <xsl:attribute name="context">akn:doc[$teildokument-uri = $art-anlage-regelungstext-uri]</xsl:attribute>
@@ -6522,7 +6896,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e1931">
+            <schxslt:rule pattern="d15e2108">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00920">
                   <xsl:attribute name="context">akn:doc[$teildokument-uri = $art-anlage-regelungstext-uri]</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -6543,16 +6917,16 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e1931')"/>
+                               select="($schxslt:patterns-matched, 'd15e2108')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
-   <xsl:template match="akn:inline/@refersTo" priority="26" mode="d14e204">
+   <xsl:template match="akn:inline/@refersTo" priority="42" mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e1931']">
-            <schxslt:rule pattern="d14e1931">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e2108']">
+            <schxslt:rule pattern="d15e2108">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00921 for context "akn:inline/@refersTo" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00921">
                   <xsl:attribute name="context">akn:inline/@refersTo</xsl:attribute>
@@ -6569,7 +6943,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e1931">
+            <schxslt:rule pattern="d15e2108">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00921">
                   <xsl:attribute name="context">akn:inline/@refersTo</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -6590,18 +6964,18 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e1931')"/>
+                               select="($schxslt:patterns-matched, 'd15e2108')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="akn:doc[$teildokument-uri = $art-bericht-uri]/akn:conclusions/akn:blockContainer"
-                 priority="25"
-                 mode="d14e204">
+                 priority="41"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e1956']">
-            <schxslt:rule pattern="d14e1956">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e2132']">
+            <schxslt:rule pattern="d15e2132">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00930 for context "akn:doc[$teildokument-uri = $art-bericht-uri]/akn:conclusions/akn:blockContainer" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00930">
                   <xsl:attribute name="context">akn:doc[$teildokument-uri = $art-bericht-uri]/akn:conclusions/akn:blockContainer</xsl:attribute>
@@ -6618,7 +6992,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e1956">
+            <schxslt:rule pattern="d15e2132">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00930">
                   <xsl:attribute name="context">akn:doc[$teildokument-uri = $art-bericht-uri]/akn:conclusions/akn:blockContainer</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -6639,18 +7013,18 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e1956')"/>
+                               select="($schxslt:patterns-matched, 'd15e2132')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="akn:doc[$teildokument-uri = $art-bericht-uri]/akn:conclusions/akn:blockContainer/akn:p[position() ge 2 and empty(akn:organization)]"
-                 priority="24"
-                 mode="d14e204">
+                 priority="40"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e1956']">
-            <schxslt:rule pattern="d14e1956">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e2132']">
+            <schxslt:rule pattern="d15e2132">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00933 for context "akn:doc[$teildokument-uri = $art-bericht-uri]/akn:conclusions/akn:blockContainer/akn:p[position() ge 2 and empty(akn:organization)]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00933">
                   <xsl:attribute name="context">akn:doc[$teildokument-uri = $art-bericht-uri]/akn:conclusions/akn:blockContainer/akn:p[position() ge 2 and empty(akn:organization)]</xsl:attribute>
@@ -6667,7 +7041,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e1956">
+            <schxslt:rule pattern="d15e2132">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00933">
                   <xsl:attribute name="context">akn:doc[$teildokument-uri = $art-bericht-uri]/akn:conclusions/akn:blockContainer/akn:p[position() ge 2 and empty(akn:organization)]</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -6688,18 +7062,284 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e1956')"/>
+                               select="($schxslt:patterns-matched, 'd15e2132')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
+   </xsl:template>
+   <xsl:template match="/akn:akomaNtoso/*/akn:meta/akn:proprietary/sonst:legalDocML.de_metadaten"
+                 priority="39"
+                 mode="d15e206">
+      <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e2151']">
+            <schxslt:rule pattern="d15e2151">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00940 for context "/akn:akomaNtoso/*/akn:meta/akn:proprietary/sonst:legalDocML.de_metadaten" shadowed by preceding rule</xsl:comment>
+               <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00940">
+                  <xsl:attribute name="context">/akn:akomaNtoso/*/akn:meta/akn:proprietary/sonst:legalDocML.de_metadaten</xsl:attribute>
+                  <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
+                  <xsl:if test="exists($documentUri)">
+                     <xsl:attribute name="document" select="$documentUri"/>
+                  </xsl:if>
+               </svrl:suppressed-rule>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched"
+                               as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d15e2151">
+               <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00940">
+                  <xsl:attribute name="context">/akn:akomaNtoso/*/akn:meta/akn:proprietary/sonst:legalDocML.de_metadaten</xsl:attribute>
+                  <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
+                  <xsl:if test="exists($documentUri)">
+                     <xsl:attribute name="document" select="$documentUri"/>
+                  </xsl:if>
+               </svrl:fired-rule>
+               <xsl:if test="not(if (sonst:typ = 'berichtigung') then (exists(sonst:bezugstyp)) else true())">
+                  <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                      location="{schxslt:location(sonst:typ)}"
+                                      role="error"
+                                      id="SCH-00940-000">
+                     <xsl:attribute name="test">if (sonst:typ = 'berichtigung') then (exists(sonst:bezugstyp)) else true()</xsl:attribute>
+                     <svrl:text>Wenn im Metadatenschema "Sonstiger Veröffentlichungstext" der Typ "Berichtigung" angegeben wird, muss zwingend auch ein Bezugstyp genannt werden.</svrl:text>
+                  </svrl:failed-assert>
+               </xsl:if>
+               <xsl:if test="not(if (not(sonst:typ = 'berichtigung')) then (not(exists(sonst:bezugstyp))) else true())">
+                  <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                      location="{schxslt:location(sonst:bezugstyp)}"
+                                      role="error"
+                                      id="SCH-00940-005">
+                     <xsl:attribute name="test">if (not(sonst:typ = 'berichtigung')) then (not(exists(sonst:bezugstyp))) else true()</xsl:attribute>
+                     <svrl:text>Ein Bezugstyp zu einem Typ darf nur angegeben werden, wenn jener Typ "Berichtigung" lautet.</svrl:text>
+                  </svrl:failed-assert>
+               </xsl:if>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched"
+                               as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd15e2151')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
+   </xsl:template>
+   <xsl:template match="/akn:akomaNtoso/*/akn:meta/akn:proprietary/regtxt:legalDocML.de_metadaten"
+                 priority="38"
+                 mode="d15e206">
+      <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e2163']">
+            <schxslt:rule pattern="d15e2163">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-00941 for context "/akn:akomaNtoso/*/akn:meta/akn:proprietary/regtxt:legalDocML.de_metadaten" shadowed by preceding rule</xsl:comment>
+               <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00941">
+                  <xsl:attribute name="context">/akn:akomaNtoso/*/akn:meta/akn:proprietary/regtxt:legalDocML.de_metadaten</xsl:attribute>
+                  <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
+                  <xsl:if test="exists($documentUri)">
+                     <xsl:attribute name="document" select="$documentUri"/>
+                  </xsl:if>
+               </svrl:suppressed-rule>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched"
+                               as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d15e2163">
+               <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-00941">
+                  <xsl:attribute name="context">/akn:akomaNtoso/*/akn:meta/akn:proprietary/regtxt:legalDocML.de_metadaten</xsl:attribute>
+                  <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
+                  <xsl:if test="exists($documentUri)">
+                     <xsl:attribute name="document" select="$documentUri"/>
+                  </xsl:if>
+               </svrl:fired-rule>
+               <xsl:if test="not(if (regtxt:typ = 'berichtigung') then (exists(regtxt:bezugstyp)) else true())">
+                  <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                      location="{schxslt:location(regtxt:typ)}"
+                                      role="error"
+                                      id="SCH-00941-000">
+                     <xsl:attribute name="test">if (regtxt:typ = 'berichtigung') then (exists(regtxt:bezugstyp)) else true()</xsl:attribute>
+                     <svrl:text>Wenn im Metadatenschema "Regelungstext" der Typ "Berichtigung" angegeben wird, muss zwingend auch ein Bezugstyp genannt werden.</svrl:text>
+                  </svrl:failed-assert>
+               </xsl:if>
+               <xsl:if test="not(if (not(regtxt:typ = 'berichtigung')) then (not(exists(regtxt:bezugstyp))) else true())">
+                  <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                      location="{schxslt:location(regtxt:bezugstyp)}"
+                                      role="error"
+                                      id="SCH-00941-005">
+                     <xsl:attribute name="test">if (not(regtxt:typ = 'berichtigung')) then (not(exists(regtxt:bezugstyp))) else true()</xsl:attribute>
+                     <svrl:text>Ein Bezugstyp zu einem Typ darf nur angegeben werden, wenn jener Typ "Berichtigung" lautet.</svrl:text>
+                  </svrl:failed-assert>
+               </xsl:if>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched"
+                               as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd15e2163')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
+   </xsl:template>
+   <xsl:template match="@href | @src | @from | @upTo" priority="37" mode="d15e206">
+      <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
+      <xsl:variable name="teil-ohne-fragment"
+                    select="if (contains(., '#')) then tokenize(., '#')[1] else ."/>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e2178']">
+            <schxslt:rule pattern="d15e2178">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-01010 for context "@href | @src | @from | @upTo" shadowed by preceding rule</xsl:comment>
+               <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-01010">
+                  <xsl:attribute name="context">@href | @src | @from | @upTo</xsl:attribute>
+                  <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
+                  <xsl:if test="exists($documentUri)">
+                     <xsl:attribute name="document" select="$documentUri"/>
+                  </xsl:if>
+               </svrl:suppressed-rule>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched"
+                               as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d15e2178">
+               <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-01010">
+                  <xsl:attribute name="context">@href | @src | @from | @upTo</xsl:attribute>
+                  <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
+                  <xsl:if test="exists($documentUri)">
+                     <xsl:attribute name="document" select="$documentUri"/>
+                  </xsl:if>
+               </svrl:fired-rule>
+               <xsl:if test="not(parent::akn:FRBRauthor or $teil-ohne-fragment = '' or matches($teil-ohne-fragment, '^([a-zöäüßA-ZÄÖÜẞ]+-)+\d+\.[a-zA-Z]+$') or starts-with($teil-ohne-fragment, 'http://') or starts-with($teil-ohne-fragment, 'https://') or starts-with($teil-ohne-fragment, '/eli'))">
+                  <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                      location="{schxslt:location(.)}"
+                                      id="SCH-01010-005">
+                     <xsl:attribute name="test">parent::akn:FRBRauthor or $teil-ohne-fragment = '' or matches($teil-ohne-fragment, '^([a-zöäüßA-ZÄÖÜẞ]+-)+\d+\.[a-zA-Z]+$') or starts-with($teil-ohne-fragment, 'http://') or starts-with($teil-ohne-fragment, 'https://') or starts-with($teil-ohne-fragment, '/eli')</xsl:attribute>
+                     <svrl:text>URI-Verweise müssen eine der drei folgenden Formen haben: 1) vollständige http/https-URI, 2) nur absoluter Pfad-Teil (beginnend mit '/eli', d. h. innerhalb derselben Authority wie das aktuelle Dokument) oder 3) nur Dateiname und ggf. Fragment (d. h. innerhalb der selben Expression).</svrl:text>
+                  </svrl:failed-assert>
+               </xsl:if>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched"
+                               as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd15e2178')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
+   </xsl:template>
+   <xsl:template match="/akn:akomaNtoso/*/akn:meta/akn:identification[$ist-entwurfsfassung or $ist-konsolidierte-fassung]"
+                 priority="36"
+                 mode="d15e206">
+      <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e2191']">
+            <schxslt:rule pattern="d15e2191">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-01015 for context "/akn:akomaNtoso/*/akn:meta/akn:identification[$ist-entwurfsfassung or $ist-konsolidierte-fassung]" shadowed by preceding rule</xsl:comment>
+               <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-01015">
+                  <xsl:attribute name="context">/akn:akomaNtoso/*/akn:meta/akn:identification[$ist-entwurfsfassung or $ist-konsolidierte-fassung]</xsl:attribute>
+                  <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
+                  <xsl:if test="exists($documentUri)">
+                     <xsl:attribute name="document" select="$documentUri"/>
+                  </xsl:if>
+               </svrl:suppressed-rule>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched"
+                               as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d15e2191">
+               <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-01015">
+                  <xsl:attribute name="context">/akn:akomaNtoso/*/akn:meta/akn:identification[$ist-entwurfsfassung or $ist-konsolidierte-fassung]</xsl:attribute>
+                  <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
+                  <xsl:if test="exists($documentUri)">
+                     <xsl:attribute name="document" select="$documentUri"/>
+                  </xsl:if>
+               </svrl:fired-rule>
+               <xsl:if test="not(exists(akn:FRBRExpression/akn:FRBRdate))">
+                  <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                      location="{schxslt:location(.)}"
+                                      role="error"
+                                      id="SCH-01015-000">
+                     <xsl:attribute name="test">exists(akn:FRBRExpression/akn:FRBRdate)</xsl:attribute>
+                     <svrl:text>
+            In Entwurfs- und konsolidierten Fassungen MUSS innerhalb von &lt;FRBRExpression&gt; ein &lt;FRBRdate&gt; vorhanden sein.
+         </svrl:text>
+                  </svrl:failed-assert>
+               </xsl:if>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched"
+                               as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd15e2191')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
+   </xsl:template>
+   <xsl:template match="/akn:akomaNtoso/*/akn:meta/akn:identification[$ist-verkündungsfassung]"
+                 priority="35"
+                 mode="d15e206">
+      <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e2206']">
+            <schxslt:rule pattern="d15e2206">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule SCH-01016 for context "/akn:akomaNtoso/*/akn:meta/akn:identification[$ist-verkündungsfassung]" shadowed by preceding rule</xsl:comment>
+               <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-01016">
+                  <xsl:attribute name="context">/akn:akomaNtoso/*/akn:meta/akn:identification[$ist-verkündungsfassung]</xsl:attribute>
+                  <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
+                  <xsl:if test="exists($documentUri)">
+                     <xsl:attribute name="document" select="$documentUri"/>
+                  </xsl:if>
+               </svrl:suppressed-rule>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched"
+                               as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d15e2206">
+               <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="SCH-01016">
+                  <xsl:attribute name="context">/akn:akomaNtoso/*/akn:meta/akn:identification[$ist-verkündungsfassung]</xsl:attribute>
+                  <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
+                  <xsl:if test="exists($documentUri)">
+                     <xsl:attribute name="document" select="$documentUri"/>
+                  </xsl:if>
+               </svrl:fired-rule>
+               <xsl:if test="not(not(akn:FRBRExpression/akn:FRBRdate))">
+                  <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                      location="{schxslt:location(.)}"
+                                      role="error"
+                                      id="SCH-01016-000">
+                     <xsl:attribute name="test">not(akn:FRBRExpression/akn:FRBRdate)</xsl:attribute>
+                     <svrl:text>
+            In der Verkündungsfassung darf innerhalb von &lt;FRBRExpression&gt; KEIN &lt;FRBRdate&gt; vorkommen.
+         </svrl:text>
+                  </svrl:failed-assert>
+               </xsl:if>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched"
+                               as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd15e2206')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="akn:identification/akn:FRBRExpression/akn:FRBRauthor/@href"
-                 priority="23"
-                 mode="d14e204">
+                 priority="34"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e1975']">
-            <schxslt:rule pattern="d14e1975">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e2222']">
+            <schxslt:rule pattern="d15e2222">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "akn:identification/akn:FRBRExpression/akn:FRBRauthor/@href" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
                   <xsl:attribute name="context">akn:identification/akn:FRBRExpression/akn:FRBRauthor/@href</xsl:attribute>
@@ -6716,7 +7356,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e1975">
+            <schxslt:rule pattern="d15e2222">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
                   <xsl:attribute name="context">akn:identification/akn:FRBRExpression/akn:FRBRauthor/@href</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -6737,18 +7377,18 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e1975')"/>
+                               select="($schxslt:patterns-matched, 'd15e2222')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="akn:identification/akn:FRBRWork/akn:FRBRauthor/@href"
-                 priority="22"
-                 mode="d14e204">
+                 priority="33"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e1975']">
-            <schxslt:rule pattern="d14e1975">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e2222']">
+            <schxslt:rule pattern="d15e2222">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "akn:identification/akn:FRBRWork/akn:FRBRauthor/@href" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
                   <xsl:attribute name="context">akn:identification/akn:FRBRWork/akn:FRBRauthor/@href</xsl:attribute>
@@ -6765,7 +7405,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e1975">
+            <schxslt:rule pattern="d15e2222">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
                   <xsl:attribute name="context">akn:identification/akn:FRBRWork/akn:FRBRauthor/@href</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -6786,18 +7426,18 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e1975')"/>
+                               select="($schxslt:patterns-matched, 'd15e2222')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="akn:identification/akn:FRBRExpression/akn:FRBRdate/@name"
-                 priority="21"
-                 mode="d14e204">
+                 priority="32"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e1975']">
-            <schxslt:rule pattern="d14e1975">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e2222']">
+            <schxslt:rule pattern="d15e2222">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "akn:identification/akn:FRBRExpression/akn:FRBRdate/@name" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
                   <xsl:attribute name="context">akn:identification/akn:FRBRExpression/akn:FRBRdate/@name</xsl:attribute>
@@ -6814,7 +7454,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e1975">
+            <schxslt:rule pattern="d15e2222">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
                   <xsl:attribute name="context">akn:identification/akn:FRBRExpression/akn:FRBRdate/@name</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -6835,18 +7475,18 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e1975')"/>
+                               select="($schxslt:patterns-matched, 'd15e2222')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="akn:identification/akn:FRBRExpression/akn:FRBRthis/@value"
-                 priority="20"
-                 mode="d14e204">
+                 priority="31"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e1975']">
-            <schxslt:rule pattern="d14e1975">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e2222']">
+            <schxslt:rule pattern="d15e2222">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "akn:identification/akn:FRBRExpression/akn:FRBRthis/@value" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
                   <xsl:attribute name="context">akn:identification/akn:FRBRExpression/akn:FRBRthis/@value</xsl:attribute>
@@ -6863,7 +7503,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e1975">
+            <schxslt:rule pattern="d15e2222">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
                   <xsl:attribute name="context">akn:identification/akn:FRBRExpression/akn:FRBRthis/@value</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -6871,31 +7511,31 @@
                      <xsl:attribute name="document" select="$documentUri"/>
                   </xsl:if>
                </svrl:fired-rule>
-               <xsl:if test="not(if ($ist-entwurfsfassung) then (matches(., '^eli/dl/\d{4}/[a-zäöüß-]+/[0-9]+/[a-zäöüß-]+/[a-zäöüß-]+/\d{4}-\d{2}-\d{2}/[0-9]+/[a-z]{3}/[a-zöäüß\-]+-\d+$')) else true())">
+               <xsl:if test="not(if ($ist-entwurfsfassung) then (matches(., '^https://www.egesetzgebung.bund.de/eli/dl/\d{4}/[a-zäöüß-]+/[0-9]+/[a-zäöüß-]+/[a-zäöüß-]+/\d{4}-\d{2}-\d{2}/[0-9]+/[a-z]{3}/[a-zöäüß\-]+-\d+$')) else true())">
                   <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                                       location="{schxslt:location(.)}"
                                       id="SCH-ENTWF-valueLiterals.expression.FRBRthis">
-                     <xsl:attribute name="test">if ($ist-entwurfsfassung) then (matches(., '^eli/dl/\d{4}/[a-zäöüß-]+/[0-9]+/[a-zäöüß-]+/[a-zäöüß-]+/\d{4}-\d{2}-\d{2}/[0-9]+/[a-z]{3}/[a-zöäüß\-]+-\d+$')) else true()</xsl:attribute>
+                     <xsl:attribute name="test">if ($ist-entwurfsfassung) then (matches(., '^https://www.egesetzgebung.bund.de/eli/dl/\d{4}/[a-zäöüß-]+/[0-9]+/[a-zäöüß-]+/[a-zäöüß-]+/\d{4}-\d{2}-\d{2}/[0-9]+/[a-z]{3}/[a-zöäüß\-]+-\d+$')) else true()</xsl:attribute>
                      <svrl:text>In der Entwurfsfassung ist das Literal "<xsl:value-of select="."/>" an dieser Stelle nicht
-                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "eli/dl/\d{4}/[a-zäöüß-]+/[0-9]+/[a-zäöüß-]+/[a-zäöüß-]+/\d{4}-\d{2}-\d{2}/[0-9]+/[a-z]{3}/[a-zöäüß\-]+-\d+" entsprechen.</svrl:text>
+                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "https://www.egesetzgebung.bund.de/eli/dl/\d{4}/[a-zäöüß-]+/[0-9]+/[a-zäöüß-]+/[a-zäöüß-]+/\d{4}-\d{2}-\d{2}/[0-9]+/[a-z]{3}/[a-zöäüß\-]+-\d+" entsprechen.</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
             </schxslt:rule>
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e1975')"/>
+                               select="($schxslt:patterns-matched, 'd15e2222')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="akn:identification/akn:FRBRExpression/akn:FRBRuri/@value"
-                 priority="19"
-                 mode="d14e204">
+                 priority="30"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e1975']">
-            <schxslt:rule pattern="d14e1975">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e2222']">
+            <schxslt:rule pattern="d15e2222">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "akn:identification/akn:FRBRExpression/akn:FRBRuri/@value" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
                   <xsl:attribute name="context">akn:identification/akn:FRBRExpression/akn:FRBRuri/@value</xsl:attribute>
@@ -6912,7 +7552,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e1975">
+            <schxslt:rule pattern="d15e2222">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
                   <xsl:attribute name="context">akn:identification/akn:FRBRExpression/akn:FRBRuri/@value</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -6920,31 +7560,31 @@
                      <xsl:attribute name="document" select="$documentUri"/>
                   </xsl:if>
                </svrl:fired-rule>
-               <xsl:if test="not(if ($ist-entwurfsfassung) then (matches(., '^eli/dl/\d{4}/[a-zäöüß-]+/[0-9]+/[a-zäöüß-]+/[a-zäöüß-]+/\d{4}-\d{2}-\d{2}/[0-9]+/[a-z]{3}$')) else true())">
+               <xsl:if test="not(if ($ist-entwurfsfassung) then (matches(., '^https://[a-z]+(\.[a-z]+)+/eli/dl/\d{4}/[a-zäöüß-]+/[0-9]+/[a-zäöüß-]+/[a-zäöüß-]+/\d{4}-\d{2}-\d{2}/[0-9]+/[a-z]{3}$')) else true())">
                   <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                                       location="{schxslt:location(.)}"
                                       id="SCH-ENTWF-valueLiterals.expression.FRBRuri">
-                     <xsl:attribute name="test">if ($ist-entwurfsfassung) then (matches(., '^eli/dl/\d{4}/[a-zäöüß-]+/[0-9]+/[a-zäöüß-]+/[a-zäöüß-]+/\d{4}-\d{2}-\d{2}/[0-9]+/[a-z]{3}$')) else true()</xsl:attribute>
+                     <xsl:attribute name="test">if ($ist-entwurfsfassung) then (matches(., '^https://[a-z]+(\.[a-z]+)+/eli/dl/\d{4}/[a-zäöüß-]+/[0-9]+/[a-zäöüß-]+/[a-zäöüß-]+/\d{4}-\d{2}-\d{2}/[0-9]+/[a-z]{3}$')) else true()</xsl:attribute>
                      <svrl:text>In der Entwurfsfassung ist das Literal "<xsl:value-of select="."/>" an dieser Stelle nicht
-                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "eli/dl/\d{4}/[a-zäöüß-]+/[0-9]+/[a-zäöüß-]+/[a-zäöüß-]+/\d{4}-\d{2}-\d{2}/[0-9]+/[a-z]{3}" entsprechen.</svrl:text>
+                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "https://[a-z]+(\.[a-z]+)+/eli/dl/\d{4}/[a-zäöüß-]+/[0-9]+/[a-zäöüß-]+/[a-zäöüß-]+/\d{4}-\d{2}-\d{2}/[0-9]+/[a-z]{3}" entsprechen.</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
             </schxslt:rule>
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e1975')"/>
+                               select="($schxslt:patterns-matched, 'd15e2222')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="akn:identification/akn:FRBRManifestation/akn:FRBRthis/@value"
-                 priority="18"
-                 mode="d14e204">
+                 priority="29"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e1975']">
-            <schxslt:rule pattern="d14e1975">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e2222']">
+            <schxslt:rule pattern="d15e2222">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "akn:identification/akn:FRBRManifestation/akn:FRBRthis/@value" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
                   <xsl:attribute name="context">akn:identification/akn:FRBRManifestation/akn:FRBRthis/@value</xsl:attribute>
@@ -6961,7 +7601,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e1975">
+            <schxslt:rule pattern="d15e2222">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
                   <xsl:attribute name="context">akn:identification/akn:FRBRManifestation/akn:FRBRthis/@value</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -6969,31 +7609,31 @@
                      <xsl:attribute name="document" select="$documentUri"/>
                   </xsl:if>
                </svrl:fired-rule>
-               <xsl:if test="not(if ($ist-entwurfsfassung) then (matches(., '^eli/dl/\d{4}/[a-zäöüß-]+/[0-9]+/[a-zäöüß-]+/[a-zäöüß-]+/\d{4}-\d{2}-\d{2}/[0-9]+/[a-z]{3}/[a-zöäüß\-]+-\d+\.[a-zöäüß]+$')) else true())">
+               <xsl:if test="not(if ($ist-entwurfsfassung) then (matches(., '^https://[a-z]+(\.[a-z]+)+/eli/dl/\d{4}/[a-zäöüß-]+/[0-9]+/[a-zäöüß-]+/[a-zäöüß-]+/\d{4}-\d{2}-\d{2}/[0-9]+/[a-z]{3}/[a-zöäüß\-]+-\d+\.[a-zöäüß]+$')) else true())">
                   <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                                       location="{schxslt:location(.)}"
                                       id="SCH-ENTWF-valueLiterals.manifestation.FRBRthis">
-                     <xsl:attribute name="test">if ($ist-entwurfsfassung) then (matches(., '^eli/dl/\d{4}/[a-zäöüß-]+/[0-9]+/[a-zäöüß-]+/[a-zäöüß-]+/\d{4}-\d{2}-\d{2}/[0-9]+/[a-z]{3}/[a-zöäüß\-]+-\d+\.[a-zöäüß]+$')) else true()</xsl:attribute>
+                     <xsl:attribute name="test">if ($ist-entwurfsfassung) then (matches(., '^https://[a-z]+(\.[a-z]+)+/eli/dl/\d{4}/[a-zäöüß-]+/[0-9]+/[a-zäöüß-]+/[a-zäöüß-]+/\d{4}-\d{2}-\d{2}/[0-9]+/[a-z]{3}/[a-zöäüß\-]+-\d+\.[a-zöäüß]+$')) else true()</xsl:attribute>
                      <svrl:text>In der Entwurfsfassung ist das Literal "<xsl:value-of select="."/>" an dieser Stelle nicht
-                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "eli/dl/\d{4}/[a-zäöüß-]+/[0-9]+/[a-zäöüß-]+/[a-zäöüß-]+/\d{4}-\d{2}-\d{2}/[0-9]+/[a-z]{3}/[a-zöäüß\-]+-\d+\.[a-zöäüß]+" entsprechen.</svrl:text>
+                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "https://[a-z]+(\.[a-z]+)+/eli/dl/\d{4}/[a-zäöüß-]+/[0-9]+/[a-zäöüß-]+/[a-zäöüß-]+/\d{4}-\d{2}-\d{2}/[0-9]+/[a-z]{3}/[a-zöäüß\-]+-\d+\.[a-zöäüß]+" entsprechen.</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
             </schxslt:rule>
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e1975')"/>
+                               select="($schxslt:patterns-matched, 'd15e2222')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="akn:identification/akn:FRBRManifestation/akn:FRBRuri/@value"
-                 priority="17"
-                 mode="d14e204">
+                 priority="28"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e1975']">
-            <schxslt:rule pattern="d14e1975">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e2222']">
+            <schxslt:rule pattern="d15e2222">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "akn:identification/akn:FRBRManifestation/akn:FRBRuri/@value" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
                   <xsl:attribute name="context">akn:identification/akn:FRBRManifestation/akn:FRBRuri/@value</xsl:attribute>
@@ -7010,7 +7650,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e1975">
+            <schxslt:rule pattern="d15e2222">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
                   <xsl:attribute name="context">akn:identification/akn:FRBRManifestation/akn:FRBRuri/@value</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -7018,31 +7658,31 @@
                      <xsl:attribute name="document" select="$documentUri"/>
                   </xsl:if>
                </svrl:fired-rule>
-               <xsl:if test="not(if ($ist-entwurfsfassung) then (matches(., '^eli/dl/\d{4}/[a-zäöüß-]+/[0-9]+/[a-zäöüß-]+/[a-zäöüß-]+/\d{4}-\d{2}-\d{2}/[0-9]+/[a-z]{3}/[a-zöäüß\-]+-\d+\.[a-zöäüß]+$')) else true())">
+               <xsl:if test="not(if ($ist-entwurfsfassung) then (matches(., '^https://[a-z]+(\.[a-z]+)+/eli/dl/\d{4}/[a-zäöüß-]+/[0-9]+/[a-zäöüß-]+/[a-zäöüß-]+/\d{4}-\d{2}-\d{2}/[0-9]+/[a-z]{3}/[a-zöäüß\-]+-\d+\.[a-zöäüß]+$')) else true())">
                   <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                                       location="{schxslt:location(.)}"
                                       id="SCH-ENTWF-valueLiterals.manifestation.FRBRuri">
-                     <xsl:attribute name="test">if ($ist-entwurfsfassung) then (matches(., '^eli/dl/\d{4}/[a-zäöüß-]+/[0-9]+/[a-zäöüß-]+/[a-zäöüß-]+/\d{4}-\d{2}-\d{2}/[0-9]+/[a-z]{3}/[a-zöäüß\-]+-\d+\.[a-zöäüß]+$')) else true()</xsl:attribute>
+                     <xsl:attribute name="test">if ($ist-entwurfsfassung) then (matches(., '^https://[a-z]+(\.[a-z]+)+/eli/dl/\d{4}/[a-zäöüß-]+/[0-9]+/[a-zäöüß-]+/[a-zäöüß-]+/\d{4}-\d{2}-\d{2}/[0-9]+/[a-z]{3}/[a-zöäüß\-]+-\d+\.[a-zöäüß]+$')) else true()</xsl:attribute>
                      <svrl:text>In der Entwurfsfassung ist das Literal "<xsl:value-of select="."/>" an dieser Stelle nicht
-                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "eli/dl/\d{4}/[a-zäöüß-]+/[0-9]+/[a-zäöüß-]+/[a-zäöüß-]+/\d{4}-\d{2}-\d{2}/[0-9]+/[a-z]{3}/[a-zöäüß\-]+-\d+\.[a-zöäüß]+" entsprechen.</svrl:text>
+                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "https://[a-z]+(\.[a-z]+)+/eli/dl/\d{4}/[a-zäöüß-]+/[0-9]+/[a-zäöüß-]+/[a-zäöüß-]+/\d{4}-\d{2}-\d{2}/[0-9]+/[a-z]{3}/[a-zöäüß\-]+-\d+\.[a-zöäüß]+" entsprechen.</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
             </schxslt:rule>
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e1975')"/>
+                               select="($schxslt:patterns-matched, 'd15e2222')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="akn:identification/akn:FRBRWork/akn:FRBRname/@value"
-                 priority="16"
-                 mode="d14e204">
+                 priority="27"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e1975']">
-            <schxslt:rule pattern="d14e1975">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e2222']">
+            <schxslt:rule pattern="d15e2222">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "akn:identification/akn:FRBRWork/akn:FRBRname/@value" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
                   <xsl:attribute name="context">akn:identification/akn:FRBRWork/akn:FRBRname/@value</xsl:attribute>
@@ -7059,7 +7699,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e1975">
+            <schxslt:rule pattern="d15e2222">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
                   <xsl:attribute name="context">akn:identification/akn:FRBRWork/akn:FRBRname/@value</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -7080,18 +7720,18 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e1975')"/>
+                               select="($schxslt:patterns-matched, 'd15e2222')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="akn:identification/akn:FRBRWork/akn:FRBRnumber/@value"
-                 priority="15"
-                 mode="d14e204">
+                 priority="26"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e1975']">
-            <schxslt:rule pattern="d14e1975">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e2222']">
+            <schxslt:rule pattern="d15e2222">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "akn:identification/akn:FRBRWork/akn:FRBRnumber/@value" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
                   <xsl:attribute name="context">akn:identification/akn:FRBRWork/akn:FRBRnumber/@value</xsl:attribute>
@@ -7108,7 +7748,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e1975">
+            <schxslt:rule pattern="d15e2222">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
                   <xsl:attribute name="context">akn:identification/akn:FRBRWork/akn:FRBRnumber/@value</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -7129,18 +7769,18 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e1975')"/>
+                               select="($schxslt:patterns-matched, 'd15e2222')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="akn:identification/akn:FRBRWork/akn:FRBRsubtype/@value"
-                 priority="14"
-                 mode="d14e204">
+                 priority="25"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e1975']">
-            <schxslt:rule pattern="d14e1975">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e2222']">
+            <schxslt:rule pattern="d15e2222">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "akn:identification/akn:FRBRWork/akn:FRBRsubtype/@value" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
                   <xsl:attribute name="context">akn:identification/akn:FRBRWork/akn:FRBRsubtype/@value</xsl:attribute>
@@ -7157,7 +7797,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e1975">
+            <schxslt:rule pattern="d15e2222">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
                   <xsl:attribute name="context">akn:identification/akn:FRBRWork/akn:FRBRsubtype/@value</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -7165,31 +7805,31 @@
                      <xsl:attribute name="document" select="$documentUri"/>
                   </xsl:if>
                </svrl:fired-rule>
-               <xsl:if test="not(if ($ist-entwurfsfassung) then (matches(., '^(rechtsetzungsdokument|aenderungsantrag|anlage-regelungstext|anschreiben|anschreiben-einigungsvorschlag-des-vermittlungsausschusses|anschreiben-vorschlag-an-bundesrat|antrag|austauschseite|begruendung-aenderungsantrag|begruendung-entschliessungsantrag|begruendung-regelungstext|bekanntmachungstext|bekanntmachungstext-berichtigung|bekanntmachungstext-entscheidung-des-bundesverfassungsgerichts|bericht|berichtigung|beschluss-des-bundesrates|beschlussempfehlung|beschlussvorschlag-der-bundesregierung|denkschrift|entschliessungsantrag|gegenaeusserung-der-bundesregierung|gesetze-beschluss-des-bundestages|gutachtliche-stellungnahme|mitteilung-an-bundesrat|nkr-stellungnahme|regelungstext-entwurf|sonstiges-dokument|sprechzettel-für-regierungssprecher|stellungnahme-bundesrat|synopse|unterrichtung|vereinbarung-entwurf|vorblatt-beschlussempfehlung|vorblatt-regelungstext|vorlage-an-bundesrat|vorschlag-an-bundesrat|wahlvorschlag|gesetzesbeschluss-des-bundestages)(-[0-9]+)$')) else true())">
+               <xsl:if test="not(if ($ist-entwurfsfassung) then (matches(., '^(rechtsetzungsdokument|aenderungsantrag|anlage-regelungstext|anschreiben|anschreiben-einigungsvorschlag-des-vermittlungsausschusses|anschreiben-vorschlag-an-bundesrat|antrag|austauschseite|begruendung-aenderungsantrag|begruendung-entschliessungsantrag|begruendung-regelungstext|bericht-technikfolgenabschaetzung|sonstiger-veroeffentlichungstext|bericht|berichtigung|beschluss-des-bundesrates|beschlussempfehlung|beschlussvorschlag-der-bundesregierung|denkschrift|entschliessungsantrag|gegenaeusserung-der-bundesregierung|gesetze-beschluss-des-bundestages|gutachtliche-stellungnahme|mitteilung-an-bundesrat|nkr-stellungnahme|regelungstext-entwurf|sonstiges-teildokument|sprechzettel-fuer-regierungssprecher|stellungnahme-bundesrat|synopse|unterrichtung|vereinbarung-entwurf|vorblatt-beschlussempfehlung|einspruch-bundesrat|vorblatt-regelungstext|vorlage-an-bundesrat|vorschlag-an-bundesrat|wahlvorschlag|gesetzesbeschluss-des-bundestages|sammeldrucksache-fragestunde|sammeldrucksache-schriftliche-fragen|antworten-der-bundesregierung|anfragen-an-bundesregierung)(-[0-9]+)$')) else true())">
                   <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                                       location="{schxslt:location(.)}"
                                       id="SCH-ENTWF-valueLiterals.work.FRBRsubtype">
-                     <xsl:attribute name="test">if ($ist-entwurfsfassung) then (matches(., '^(rechtsetzungsdokument|aenderungsantrag|anlage-regelungstext|anschreiben|anschreiben-einigungsvorschlag-des-vermittlungsausschusses|anschreiben-vorschlag-an-bundesrat|antrag|austauschseite|begruendung-aenderungsantrag|begruendung-entschliessungsantrag|begruendung-regelungstext|bekanntmachungstext|bekanntmachungstext-berichtigung|bekanntmachungstext-entscheidung-des-bundesverfassungsgerichts|bericht|berichtigung|beschluss-des-bundesrates|beschlussempfehlung|beschlussvorschlag-der-bundesregierung|denkschrift|entschliessungsantrag|gegenaeusserung-der-bundesregierung|gesetze-beschluss-des-bundestages|gutachtliche-stellungnahme|mitteilung-an-bundesrat|nkr-stellungnahme|regelungstext-entwurf|sonstiges-dokument|sprechzettel-für-regierungssprecher|stellungnahme-bundesrat|synopse|unterrichtung|vereinbarung-entwurf|vorblatt-beschlussempfehlung|vorblatt-regelungstext|vorlage-an-bundesrat|vorschlag-an-bundesrat|wahlvorschlag|gesetzesbeschluss-des-bundestages)(-[0-9]+)$')) else true()</xsl:attribute>
+                     <xsl:attribute name="test">if ($ist-entwurfsfassung) then (matches(., '^(rechtsetzungsdokument|aenderungsantrag|anlage-regelungstext|anschreiben|anschreiben-einigungsvorschlag-des-vermittlungsausschusses|anschreiben-vorschlag-an-bundesrat|antrag|austauschseite|begruendung-aenderungsantrag|begruendung-entschliessungsantrag|begruendung-regelungstext|bericht-technikfolgenabschaetzung|sonstiger-veroeffentlichungstext|bericht|berichtigung|beschluss-des-bundesrates|beschlussempfehlung|beschlussvorschlag-der-bundesregierung|denkschrift|entschliessungsantrag|gegenaeusserung-der-bundesregierung|gesetze-beschluss-des-bundestages|gutachtliche-stellungnahme|mitteilung-an-bundesrat|nkr-stellungnahme|regelungstext-entwurf|sonstiges-teildokument|sprechzettel-fuer-regierungssprecher|stellungnahme-bundesrat|synopse|unterrichtung|vereinbarung-entwurf|vorblatt-beschlussempfehlung|einspruch-bundesrat|vorblatt-regelungstext|vorlage-an-bundesrat|vorschlag-an-bundesrat|wahlvorschlag|gesetzesbeschluss-des-bundestages|sammeldrucksache-fragestunde|sammeldrucksache-schriftliche-fragen|antworten-der-bundesregierung|anfragen-an-bundesregierung)(-[0-9]+)$')) else true()</xsl:attribute>
                      <svrl:text>In der Entwurfsfassung ist das Literal "<xsl:value-of select="."/>" an dieser Stelle nicht
-                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "(rechtsetzungsdokument|aenderungsantrag|anlage-regelungstext|anschreiben|anschreiben-einigungsvorschlag-des-vermittlungsausschusses|anschreiben-vorschlag-an-bundesrat|antrag|austauschseite|begruendung-aenderungsantrag|begruendung-entschliessungsantrag|begruendung-regelungstext|bekanntmachungstext|bekanntmachungstext-berichtigung|bekanntmachungstext-entscheidung-des-bundesverfassungsgerichts|bericht|berichtigung|beschluss-des-bundesrates|beschlussempfehlung|beschlussvorschlag-der-bundesregierung|denkschrift|entschliessungsantrag|gegenaeusserung-der-bundesregierung|gesetze-beschluss-des-bundestages|gutachtliche-stellungnahme|mitteilung-an-bundesrat|nkr-stellungnahme|regelungstext-entwurf|sonstiges-dokument|sprechzettel-für-regierungssprecher|stellungnahme-bundesrat|synopse|unterrichtung|vereinbarung-entwurf|vorblatt-beschlussempfehlung|vorblatt-regelungstext|vorlage-an-bundesrat|vorschlag-an-bundesrat|wahlvorschlag|gesetzesbeschluss-des-bundestages)(-[0-9]+)" entsprechen.</svrl:text>
+                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "(rechtsetzungsdokument|aenderungsantrag|anlage-regelungstext|anschreiben|anschreiben-einigungsvorschlag-des-vermittlungsausschusses|anschreiben-vorschlag-an-bundesrat|antrag|austauschseite|begruendung-aenderungsantrag|begruendung-entschliessungsantrag|begruendung-regelungstext|bericht-technikfolgenabschaetzung|sonstiger-veroeffentlichungstext|bericht|berichtigung|beschluss-des-bundesrates|beschlussempfehlung|beschlussvorschlag-der-bundesregierung|denkschrift|entschliessungsantrag|gegenaeusserung-der-bundesregierung|gesetze-beschluss-des-bundestages|gutachtliche-stellungnahme|mitteilung-an-bundesrat|nkr-stellungnahme|regelungstext-entwurf|sonstiges-teildokument|sprechzettel-fuer-regierungssprecher|stellungnahme-bundesrat|synopse|unterrichtung|vereinbarung-entwurf|vorblatt-beschlussempfehlung|einspruch-bundesrat|vorblatt-regelungstext|vorlage-an-bundesrat|vorschlag-an-bundesrat|wahlvorschlag|gesetzesbeschluss-des-bundestages|sammeldrucksache-fragestunde|sammeldrucksache-schriftliche-fragen|antworten-der-bundesregierung|anfragen-an-bundesregierung)(-[0-9]+)" entsprechen.</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
             </schxslt:rule>
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e1975')"/>
+                               select="($schxslt:patterns-matched, 'd15e2222')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="akn:identification/akn:FRBRWork/akn:FRBRthis/@value"
-                 priority="13"
-                 mode="d14e204">
+                 priority="24"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e1975']">
-            <schxslt:rule pattern="d14e1975">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e2222']">
+            <schxslt:rule pattern="d15e2222">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "akn:identification/akn:FRBRWork/akn:FRBRthis/@value" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
                   <xsl:attribute name="context">akn:identification/akn:FRBRWork/akn:FRBRthis/@value</xsl:attribute>
@@ -7206,7 +7846,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e1975">
+            <schxslt:rule pattern="d15e2222">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
                   <xsl:attribute name="context">akn:identification/akn:FRBRWork/akn:FRBRthis/@value</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -7214,31 +7854,31 @@
                      <xsl:attribute name="document" select="$documentUri"/>
                   </xsl:if>
                </svrl:fired-rule>
-               <xsl:if test="not(if ($ist-entwurfsfassung) then (matches(., '^eli/dl/\d{4}/[a-zäöüß-]+/[0-9]+/[a-zäöüß-]+/[a-zäöüß\-]+-\d+$')) else true())">
+               <xsl:if test="not(if ($ist-entwurfsfassung) then (matches(., '^https://www.egesetzgebung.bund.de/eli/dl/\d{4}/[a-zäöüß-]+/[0-9]+/[a-zäöüß-]+/[a-zäöüß\-]+-\d+$')) else true())">
                   <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                                       location="{schxslt:location(.)}"
                                       id="SCH-ENTWF-valueLiterals.work.FRBRthis">
-                     <xsl:attribute name="test">if ($ist-entwurfsfassung) then (matches(., '^eli/dl/\d{4}/[a-zäöüß-]+/[0-9]+/[a-zäöüß-]+/[a-zäöüß\-]+-\d+$')) else true()</xsl:attribute>
+                     <xsl:attribute name="test">if ($ist-entwurfsfassung) then (matches(., '^https://www.egesetzgebung.bund.de/eli/dl/\d{4}/[a-zäöüß-]+/[0-9]+/[a-zäöüß-]+/[a-zäöüß\-]+-\d+$')) else true()</xsl:attribute>
                      <svrl:text>In der Entwurfsfassung ist das Literal "<xsl:value-of select="."/>" an dieser Stelle nicht
-                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "eli/dl/\d{4}/[a-zäöüß-]+/[0-9]+/[a-zäöüß-]+/[a-zäöüß\-]+-\d+" entsprechen.</svrl:text>
+                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "https://www.egesetzgebung.bund.de/eli/dl/\d{4}/[a-zäöüß-]+/[0-9]+/[a-zäöüß-]+/[a-zäöüß\-]+-\d+" entsprechen.</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
             </schxslt:rule>
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e1975')"/>
+                               select="($schxslt:patterns-matched, 'd15e2222')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="akn:identification/akn:FRBRWork/akn:FRBRuri/@value"
-                 priority="12"
-                 mode="d14e204">
+                 priority="23"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e1975']">
-            <schxslt:rule pattern="d14e1975">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e2222']">
+            <schxslt:rule pattern="d15e2222">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "akn:identification/akn:FRBRWork/akn:FRBRuri/@value" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
                   <xsl:attribute name="context">akn:identification/akn:FRBRWork/akn:FRBRuri/@value</xsl:attribute>
@@ -7255,7 +7895,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e1975">
+            <schxslt:rule pattern="d15e2222">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
                   <xsl:attribute name="context">akn:identification/akn:FRBRWork/akn:FRBRuri/@value</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -7263,31 +7903,31 @@
                      <xsl:attribute name="document" select="$documentUri"/>
                   </xsl:if>
                </svrl:fired-rule>
-               <xsl:if test="not(if ($ist-entwurfsfassung) then (matches(., '^eli/dl/\d{4}/[a-zäöüß-]+/[0-9]+/[a-zäöüß-]+$')) else true())">
+               <xsl:if test="not(if ($ist-entwurfsfassung) then (matches(., '^https://www.egesetzgebung.bund.de/eli/dl/\d{4}/[a-zäöüß-]+/[0-9]+/[a-zäöüß-]+$')) else true())">
                   <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                                       location="{schxslt:location(.)}"
                                       id="SCH-ENTWF-valueLiterals.work.FRBRuri">
-                     <xsl:attribute name="test">if ($ist-entwurfsfassung) then (matches(., '^eli/dl/\d{4}/[a-zäöüß-]+/[0-9]+/[a-zäöüß-]+$')) else true()</xsl:attribute>
+                     <xsl:attribute name="test">if ($ist-entwurfsfassung) then (matches(., '^https://www.egesetzgebung.bund.de/eli/dl/\d{4}/[a-zäöüß-]+/[0-9]+/[a-zäöüß-]+$')) else true()</xsl:attribute>
                      <svrl:text>In der Entwurfsfassung ist das Literal "<xsl:value-of select="."/>" an dieser Stelle nicht
-                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "eli/dl/\d{4}/[a-zäöüß-]+/[0-9]+/[a-zäöüß-]+" entsprechen.</svrl:text>
+                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "https://www.egesetzgebung.bund.de/eli/dl/\d{4}/[a-zäöüß-]+/[0-9]+/[a-zäöüß-]+" entsprechen.</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
             </schxslt:rule>
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e1975')"/>
+                               select="($schxslt:patterns-matched, 'd15e2222')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="akn:identification/akn:FRBRExpression/akn:FRBRauthor/@href"
-                 priority="11"
-                 mode="d14e204">
+                 priority="22"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e2076']">
-            <schxslt:rule pattern="d14e2076">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e2323']">
+            <schxslt:rule pattern="d15e2323">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "akn:identification/akn:FRBRExpression/akn:FRBRauthor/@href" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
                   <xsl:attribute name="context">akn:identification/akn:FRBRExpression/akn:FRBRauthor/@href</xsl:attribute>
@@ -7304,7 +7944,595 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e2076">
+            <schxslt:rule pattern="d15e2323">
+               <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
+                  <xsl:attribute name="context">akn:identification/akn:FRBRExpression/akn:FRBRauthor/@href</xsl:attribute>
+                  <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
+                  <xsl:if test="exists($documentUri)">
+                     <xsl:attribute name="document" select="$documentUri"/>
+                  </xsl:if>
+               </svrl:fired-rule>
+               <xsl:if test="not(if ($ist-konsolidierte-fassung) then (. = ('recht.bund.de/institution/bundesregierung', 'recht.bund.de/institution/bundeskanzler', 'recht.bund.de/institution/bundespraesident')) else true())">
+                  <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                      location="{schxslt:location(.)}"
+                                      id="SCH-KONSF-hrefLiterals.expression.FRBRauthor">
+                     <xsl:attribute name="test">if ($ist-konsolidierte-fassung) then (. = ('recht.bund.de/institution/bundesregierung', 'recht.bund.de/institution/bundeskanzler', 'recht.bund.de/institution/bundespraesident')) else true()</xsl:attribute>
+                     <svrl:text>In der konsolidierten Fassung ist das Literal "<xsl:value-of select="."/>" an dieser Stelle nicht
+                                    zulässig. Erlaubt sind ausschließlich "recht.bund.de/institution/bundesregierung", "recht.bund.de/institution/bundeskanzler" sowie "recht.bund.de/institution/bundespraesident".</svrl:text>
+                  </svrl:failed-assert>
+               </xsl:if>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched"
+                               as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd15e2323')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
+   </xsl:template>
+   <xsl:template match="akn:identification/akn:FRBRWork/akn:FRBRauthor/@href"
+                 priority="21"
+                 mode="d15e206">
+      <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e2323']">
+            <schxslt:rule pattern="d15e2323">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "akn:identification/akn:FRBRWork/akn:FRBRauthor/@href" shadowed by preceding rule</xsl:comment>
+               <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
+                  <xsl:attribute name="context">akn:identification/akn:FRBRWork/akn:FRBRauthor/@href</xsl:attribute>
+                  <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
+                  <xsl:if test="exists($documentUri)">
+                     <xsl:attribute name="document" select="$documentUri"/>
+                  </xsl:if>
+               </svrl:suppressed-rule>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched"
+                               as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d15e2323">
+               <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
+                  <xsl:attribute name="context">akn:identification/akn:FRBRWork/akn:FRBRauthor/@href</xsl:attribute>
+                  <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
+                  <xsl:if test="exists($documentUri)">
+                     <xsl:attribute name="document" select="$documentUri"/>
+                  </xsl:if>
+               </svrl:fired-rule>
+               <xsl:if test="not(if ($ist-konsolidierte-fassung) then (. = ('recht.bund.de/institution/bundesregierung', 'recht.bund.de/institution/bundeskanzler', 'recht.bund.de/institution/bundespraesident')) else true())">
+                  <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                      location="{schxslt:location(.)}"
+                                      id="SCH-KONSF-hrefLiterals.work.FRBRauthor">
+                     <xsl:attribute name="test">if ($ist-konsolidierte-fassung) then (. = ('recht.bund.de/institution/bundesregierung', 'recht.bund.de/institution/bundeskanzler', 'recht.bund.de/institution/bundespraesident')) else true()</xsl:attribute>
+                     <svrl:text>In der konsolidierten Fassung ist das Literal "<xsl:value-of select="."/>" an dieser Stelle nicht
+                                    zulässig. Erlaubt sind ausschließlich "recht.bund.de/institution/bundesregierung", "recht.bund.de/institution/bundeskanzler" sowie "recht.bund.de/institution/bundespraesident".</svrl:text>
+                  </svrl:failed-assert>
+               </xsl:if>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched"
+                               as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd15e2323')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
+   </xsl:template>
+   <xsl:template match="akn:identification/akn:FRBRExpression/akn:FRBRdate/@name"
+                 priority="20"
+                 mode="d15e206">
+      <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e2323']">
+            <schxslt:rule pattern="d15e2323">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "akn:identification/akn:FRBRExpression/akn:FRBRdate/@name" shadowed by preceding rule</xsl:comment>
+               <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
+                  <xsl:attribute name="context">akn:identification/akn:FRBRExpression/akn:FRBRdate/@name</xsl:attribute>
+                  <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
+                  <xsl:if test="exists($documentUri)">
+                     <xsl:attribute name="document" select="$documentUri"/>
+                  </xsl:if>
+               </svrl:suppressed-rule>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched"
+                               as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d15e2323">
+               <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
+                  <xsl:attribute name="context">akn:identification/akn:FRBRExpression/akn:FRBRdate/@name</xsl:attribute>
+                  <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
+                  <xsl:if test="exists($documentUri)">
+                     <xsl:attribute name="document" select="$documentUri"/>
+                  </xsl:if>
+               </svrl:fired-rule>
+               <xsl:if test="not(if ($ist-konsolidierte-fassung) then (. = ('ausfertigung', 'ausfertigung-aenderung')) else true())">
+                  <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                      location="{schxslt:location(.)}"
+                                      id="SCH-KONSF-nameLiterals.expression.FRBRdate">
+                     <xsl:attribute name="test">if ($ist-konsolidierte-fassung) then (. = ('ausfertigung', 'ausfertigung-aenderung')) else true()</xsl:attribute>
+                     <svrl:text>In der konsolidierten Fassung ist das Literal "<xsl:value-of select="."/>" an dieser Stelle nicht
+                                    zulässig. Erlaubt sind ausschließlich "ausfertigung" und "ausfertigung-aenderung".</svrl:text>
+                  </svrl:failed-assert>
+               </xsl:if>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched"
+                               as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd15e2323')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
+   </xsl:template>
+   <xsl:template match="akn:identification/akn:FRBRExpression/akn:FRBRthis/@value"
+                 priority="19"
+                 mode="d15e206">
+      <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e2323']">
+            <schxslt:rule pattern="d15e2323">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "akn:identification/akn:FRBRExpression/akn:FRBRthis/@value" shadowed by preceding rule</xsl:comment>
+               <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
+                  <xsl:attribute name="context">akn:identification/akn:FRBRExpression/akn:FRBRthis/@value</xsl:attribute>
+                  <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
+                  <xsl:if test="exists($documentUri)">
+                     <xsl:attribute name="document" select="$documentUri"/>
+                  </xsl:if>
+               </svrl:suppressed-rule>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched"
+                               as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d15e2323">
+               <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
+                  <xsl:attribute name="context">akn:identification/akn:FRBRExpression/akn:FRBRthis/@value</xsl:attribute>
+                  <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
+                  <xsl:if test="exists($documentUri)">
+                     <xsl:attribute name="document" select="$documentUri"/>
+                  </xsl:if>
+               </svrl:fired-rule>
+               <xsl:if test="not(if ($ist-konsolidierte-fassung) then (matches(., '^https://www.ris.bund.de/eli/bund/[-a-z0-9]+/\d{4}/[-a-z0-9äöüß]+/\d{4}-\d{2}-\d{2}/\d+/[a-z]{3}/[a-zöäüß\-]+-\d+$')) else true())">
+                  <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                      location="{schxslt:location(.)}"
+                                      id="SCH-KONS-valueLiterals.expression.FRBRthis">
+                     <xsl:attribute name="test">if ($ist-konsolidierte-fassung) then (matches(., '^https://www.ris.bund.de/eli/bund/[-a-z0-9]+/\d{4}/[-a-z0-9äöüß]+/\d{4}-\d{2}-\d{2}/\d+/[a-z]{3}/[a-zöäüß\-]+-\d+$')) else true()</xsl:attribute>
+                     <svrl:text>In der konsolidierten Fassung ist das Literal "<xsl:value-of select="."/>" an dieser Stelle nicht
+                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "https://www.ris.bund.de/eli/bund/[-a-z0-9]+/\d{4}/[-a-z0-9äöüß]+/\d{4}-\d{2}-\d{2}/\d+/[a-z]{3}/[a-zöäüß\-]+-\d+" entsprechen.</svrl:text>
+                  </svrl:failed-assert>
+               </xsl:if>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched"
+                               as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd15e2323')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
+   </xsl:template>
+   <xsl:template match="akn:identification/akn:FRBRExpression/akn:FRBRuri/@value"
+                 priority="18"
+                 mode="d15e206">
+      <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e2323']">
+            <schxslt:rule pattern="d15e2323">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "akn:identification/akn:FRBRExpression/akn:FRBRuri/@value" shadowed by preceding rule</xsl:comment>
+               <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
+                  <xsl:attribute name="context">akn:identification/akn:FRBRExpression/akn:FRBRuri/@value</xsl:attribute>
+                  <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
+                  <xsl:if test="exists($documentUri)">
+                     <xsl:attribute name="document" select="$documentUri"/>
+                  </xsl:if>
+               </svrl:suppressed-rule>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched"
+                               as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d15e2323">
+               <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
+                  <xsl:attribute name="context">akn:identification/akn:FRBRExpression/akn:FRBRuri/@value</xsl:attribute>
+                  <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
+                  <xsl:if test="exists($documentUri)">
+                     <xsl:attribute name="document" select="$documentUri"/>
+                  </xsl:if>
+               </svrl:fired-rule>
+               <xsl:if test="not(if ($ist-konsolidierte-fassung) then (matches(., '^https://www.ris.bund.de/eli/bund/[-a-z0-9]+/\d{4}/[-a-z0-9äöüß]+/\d{4}-\d{2}-\d{2}/\d+/[a-z]{3}$')) else true())">
+                  <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                      location="{schxslt:location(.)}"
+                                      id="SCH-KONS-valueLiterals.expression.FRBRuri">
+                     <xsl:attribute name="test">if ($ist-konsolidierte-fassung) then (matches(., '^https://www.ris.bund.de/eli/bund/[-a-z0-9]+/\d{4}/[-a-z0-9äöüß]+/\d{4}-\d{2}-\d{2}/\d+/[a-z]{3}$')) else true()</xsl:attribute>
+                     <svrl:text>In der konsolidierten Fassung ist das Literal "<xsl:value-of select="."/>" an dieser Stelle nicht
+                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "https://www.ris.bund.de/eli/bund/[-a-z0-9]+/\d{4}/[-a-z0-9äöüß]+/\d{4}-\d{2}-\d{2}/\d+/[a-z]{3}" entsprechen.</svrl:text>
+                  </svrl:failed-assert>
+               </xsl:if>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched"
+                               as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd15e2323')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
+   </xsl:template>
+   <xsl:template match="akn:identification/akn:FRBRManifestation/akn:FRBRthis/@value"
+                 priority="17"
+                 mode="d15e206">
+      <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e2323']">
+            <schxslt:rule pattern="d15e2323">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "akn:identification/akn:FRBRManifestation/akn:FRBRthis/@value" shadowed by preceding rule</xsl:comment>
+               <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
+                  <xsl:attribute name="context">akn:identification/akn:FRBRManifestation/akn:FRBRthis/@value</xsl:attribute>
+                  <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
+                  <xsl:if test="exists($documentUri)">
+                     <xsl:attribute name="document" select="$documentUri"/>
+                  </xsl:if>
+               </svrl:suppressed-rule>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched"
+                               as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d15e2323">
+               <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
+                  <xsl:attribute name="context">akn:identification/akn:FRBRManifestation/akn:FRBRthis/@value</xsl:attribute>
+                  <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
+                  <xsl:if test="exists($documentUri)">
+                     <xsl:attribute name="document" select="$documentUri"/>
+                  </xsl:if>
+               </svrl:fired-rule>
+               <xsl:if test="not(if ($ist-konsolidierte-fassung) then (matches(., '^https://www.ris.bund.de/eli/bund/[-a-z0-9]+/\d{4}/[-a-z0-9äöüß]+/\d{4}-\d{2}-\d{2}/\d+/[a-z]{3}/\d{4}-\d{2}-\d{2}/[a-zöäüß\-]+-\d+\.[a-zöäüß]+$')) else true())">
+                  <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                      location="{schxslt:location(.)}"
+                                      id="SCH-KONS-valueLiterals.manifestation.FRBRthis">
+                     <xsl:attribute name="test">if ($ist-konsolidierte-fassung) then (matches(., '^https://www.ris.bund.de/eli/bund/[-a-z0-9]+/\d{4}/[-a-z0-9äöüß]+/\d{4}-\d{2}-\d{2}/\d+/[a-z]{3}/\d{4}-\d{2}-\d{2}/[a-zöäüß\-]+-\d+\.[a-zöäüß]+$')) else true()</xsl:attribute>
+                     <svrl:text>In der konsolidierten Fassung ist das Literal "<xsl:value-of select="."/>" an dieser Stelle nicht
+                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "https://www.ris.bund.de/eli/bund/[-a-z0-9]+/\d{4}/[-a-z0-9äöüß]+/\d{4}-\d{2}-\d{2}/\d+/[a-z]{3}/\d{4}-\d{2}-\d{2}/[a-zöäüß\-]+-\d+\.[a-zöäüß]+" entsprechen.</svrl:text>
+                  </svrl:failed-assert>
+               </xsl:if>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched"
+                               as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd15e2323')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
+   </xsl:template>
+   <xsl:template match="akn:identification/akn:FRBRManifestation/akn:FRBRuri/@value"
+                 priority="16"
+                 mode="d15e206">
+      <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e2323']">
+            <schxslt:rule pattern="d15e2323">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "akn:identification/akn:FRBRManifestation/akn:FRBRuri/@value" shadowed by preceding rule</xsl:comment>
+               <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
+                  <xsl:attribute name="context">akn:identification/akn:FRBRManifestation/akn:FRBRuri/@value</xsl:attribute>
+                  <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
+                  <xsl:if test="exists($documentUri)">
+                     <xsl:attribute name="document" select="$documentUri"/>
+                  </xsl:if>
+               </svrl:suppressed-rule>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched"
+                               as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d15e2323">
+               <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
+                  <xsl:attribute name="context">akn:identification/akn:FRBRManifestation/akn:FRBRuri/@value</xsl:attribute>
+                  <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
+                  <xsl:if test="exists($documentUri)">
+                     <xsl:attribute name="document" select="$documentUri"/>
+                  </xsl:if>
+               </svrl:fired-rule>
+               <xsl:if test="not(if ($ist-konsolidierte-fassung) then (matches(., '^https://www.ris.bund.de/eli/bund/[-a-z0-9]+/\d{4}/[-a-z0-9äöüß]+/\d{4}-\d{2}-\d{2}/\d+/[a-z]{3}/\d{4}-\d{2}-\d{2}/[a-zöäüß\-]+-\d+\.[a-zöäüß]+$')) else true())">
+                  <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                      location="{schxslt:location(.)}"
+                                      id="SCH-KONS-valueLiterals.manifestation.FRBRuri">
+                     <xsl:attribute name="test">if ($ist-konsolidierte-fassung) then (matches(., '^https://www.ris.bund.de/eli/bund/[-a-z0-9]+/\d{4}/[-a-z0-9äöüß]+/\d{4}-\d{2}-\d{2}/\d+/[a-z]{3}/\d{4}-\d{2}-\d{2}/[a-zöäüß\-]+-\d+\.[a-zöäüß]+$')) else true()</xsl:attribute>
+                     <svrl:text>In der konsolidierten Fassung ist das Literal "<xsl:value-of select="."/>" an dieser Stelle nicht
+                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "https://www.ris.bund.de/eli/bund/[-a-z0-9]+/\d{4}/[-a-z0-9äöüß]+/\d{4}-\d{2}-\d{2}/\d+/[a-z]{3}/\d{4}-\d{2}-\d{2}/[a-zöäüß\-]+-\d+\.[a-zöäüß]+" entsprechen.</svrl:text>
+                  </svrl:failed-assert>
+               </xsl:if>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched"
+                               as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd15e2323')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
+   </xsl:template>
+   <xsl:template match="akn:identification/akn:FRBRWork/akn:FRBRname/@value"
+                 priority="15"
+                 mode="d15e206">
+      <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e2323']">
+            <schxslt:rule pattern="d15e2323">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "akn:identification/akn:FRBRWork/akn:FRBRname/@value" shadowed by preceding rule</xsl:comment>
+               <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
+                  <xsl:attribute name="context">akn:identification/akn:FRBRWork/akn:FRBRname/@value</xsl:attribute>
+                  <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
+                  <xsl:if test="exists($documentUri)">
+                     <xsl:attribute name="document" select="$documentUri"/>
+                  </xsl:if>
+               </svrl:suppressed-rule>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched"
+                               as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d15e2323">
+               <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
+                  <xsl:attribute name="context">akn:identification/akn:FRBRWork/akn:FRBRname/@value</xsl:attribute>
+                  <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
+                  <xsl:if test="exists($documentUri)">
+                     <xsl:attribute name="document" select="$documentUri"/>
+                  </xsl:if>
+               </svrl:fired-rule>
+               <xsl:if test="not(if ($ist-konsolidierte-fassung) then (. = ('bgbl', 'bgbl-1', 'bgbl-2', 'banz-at', 'banz', 'ebanz', 'vkbl', 'hist')) else true())">
+                  <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                      location="{schxslt:location(.)}"
+                                      id="SCH-KONSF-valueLiterals.work.FRBRname">
+                     <xsl:attribute name="test">if ($ist-konsolidierte-fassung) then (. = ('bgbl', 'bgbl-1', 'bgbl-2', 'banz-at', 'banz', 'ebanz', 'vkbl', 'hist')) else true()</xsl:attribute>
+                     <svrl:text>In der konsolidierten Fassung ist das Literal "<xsl:value-of select="."/>" an dieser Stelle nicht
+                                    zulässig. Erlaubt sind ausschließlich "bgbl", "bgbl-1", "bgbl-2", "banz-at", "banz", "ebanz", "vkbl" sowie "hist".</svrl:text>
+                  </svrl:failed-assert>
+               </xsl:if>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched"
+                               as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd15e2323')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
+   </xsl:template>
+   <xsl:template match="akn:identification/akn:FRBRWork/akn:FRBRnumber/@value"
+                 priority="14"
+                 mode="d15e206">
+      <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e2323']">
+            <schxslt:rule pattern="d15e2323">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "akn:identification/akn:FRBRWork/akn:FRBRnumber/@value" shadowed by preceding rule</xsl:comment>
+               <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
+                  <xsl:attribute name="context">akn:identification/akn:FRBRWork/akn:FRBRnumber/@value</xsl:attribute>
+                  <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
+                  <xsl:if test="exists($documentUri)">
+                     <xsl:attribute name="document" select="$documentUri"/>
+                  </xsl:if>
+               </svrl:suppressed-rule>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched"
+                               as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d15e2323">
+               <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
+                  <xsl:attribute name="context">akn:identification/akn:FRBRWork/akn:FRBRnumber/@value</xsl:attribute>
+                  <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
+                  <xsl:if test="exists($documentUri)">
+                     <xsl:attribute name="document" select="$documentUri"/>
+                  </xsl:if>
+               </svrl:fired-rule>
+               <xsl:if test="not(if ($ist-konsolidierte-fassung) then (matches(., '^[-a-zäöüß0-9]+$')) else true())">
+                  <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                      location="{schxslt:location(.)}"
+                                      id="SCH-KONS-valueLiterals.work.FRBRnumber">
+                     <xsl:attribute name="test">if ($ist-konsolidierte-fassung) then (matches(., '^[-a-zäöüß0-9]+$')) else true()</xsl:attribute>
+                     <svrl:text>In der konsolidierten Fassung ist das Literal "<xsl:value-of select="."/>" an dieser Stelle nicht
+                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "[-a-zäöüß0-9]+" entsprechen.</svrl:text>
+                  </svrl:failed-assert>
+               </xsl:if>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched"
+                               as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd15e2323')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
+   </xsl:template>
+   <xsl:template match="akn:identification/akn:FRBRWork/akn:FRBRsubtype/@value"
+                 priority="13"
+                 mode="d15e206">
+      <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e2323']">
+            <schxslt:rule pattern="d15e2323">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "akn:identification/akn:FRBRWork/akn:FRBRsubtype/@value" shadowed by preceding rule</xsl:comment>
+               <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
+                  <xsl:attribute name="context">akn:identification/akn:FRBRWork/akn:FRBRsubtype/@value</xsl:attribute>
+                  <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
+                  <xsl:if test="exists($documentUri)">
+                     <xsl:attribute name="document" select="$documentUri"/>
+                  </xsl:if>
+               </svrl:suppressed-rule>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched"
+                               as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d15e2323">
+               <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
+                  <xsl:attribute name="context">akn:identification/akn:FRBRWork/akn:FRBRsubtype/@value</xsl:attribute>
+                  <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
+                  <xsl:if test="exists($documentUri)">
+                     <xsl:attribute name="document" select="$documentUri"/>
+                  </xsl:if>
+               </svrl:fired-rule>
+               <xsl:if test="not(if ($ist-konsolidierte-fassung) then (matches(., '^(anlage-regelungstext|rechtsetzungsdokument|regelungstext|vereinbarung-verkuendung|sonstiger-veroeffentlichungstext|sonstiges-teildokument)(-[0-9]+)$')) else true())">
+                  <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                      location="{schxslt:location(.)}"
+                                      id="SCH-KONS-valueLiterals.work.FRBRsubtype">
+                     <xsl:attribute name="test">if ($ist-konsolidierte-fassung) then (matches(., '^(anlage-regelungstext|rechtsetzungsdokument|regelungstext|vereinbarung-verkuendung|sonstiger-veroeffentlichungstext|sonstiges-teildokument)(-[0-9]+)$')) else true()</xsl:attribute>
+                     <svrl:text>In der konsolidierten Fassung ist das Literal "<xsl:value-of select="."/>" an dieser Stelle nicht
+                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "(anlage-regelungstext|rechtsetzungsdokument|regelungstext|vereinbarung-verkuendung|sonstiger-veroeffentlichungstext|sonstiges-teildokument)(-[0-9]+)" entsprechen.</svrl:text>
+                  </svrl:failed-assert>
+               </xsl:if>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched"
+                               as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd15e2323')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
+   </xsl:template>
+   <xsl:template match="akn:identification/akn:FRBRWork/akn:FRBRthis/@value"
+                 priority="12"
+                 mode="d15e206">
+      <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e2323']">
+            <schxslt:rule pattern="d15e2323">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "akn:identification/akn:FRBRWork/akn:FRBRthis/@value" shadowed by preceding rule</xsl:comment>
+               <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
+                  <xsl:attribute name="context">akn:identification/akn:FRBRWork/akn:FRBRthis/@value</xsl:attribute>
+                  <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
+                  <xsl:if test="exists($documentUri)">
+                     <xsl:attribute name="document" select="$documentUri"/>
+                  </xsl:if>
+               </svrl:suppressed-rule>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched"
+                               as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d15e2323">
+               <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
+                  <xsl:attribute name="context">akn:identification/akn:FRBRWork/akn:FRBRthis/@value</xsl:attribute>
+                  <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
+                  <xsl:if test="exists($documentUri)">
+                     <xsl:attribute name="document" select="$documentUri"/>
+                  </xsl:if>
+               </svrl:fired-rule>
+               <xsl:if test="not(if ($ist-konsolidierte-fassung) then (matches(., '^https://www.ris.bund.de/eli/bund/[-a-z0-9]+/\d{4}/[-a-z0-9äöüß]+/[a-zöäüß\-]+-\d+$')) else true())">
+                  <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                      location="{schxslt:location(.)}"
+                                      id="SCH-KONS-valueLiterals.work.FRBRthis">
+                     <xsl:attribute name="test">if ($ist-konsolidierte-fassung) then (matches(., '^https://www.ris.bund.de/eli/bund/[-a-z0-9]+/\d{4}/[-a-z0-9äöüß]+/[a-zöäüß\-]+-\d+$')) else true()</xsl:attribute>
+                     <svrl:text>In der konsolidierten Fassung ist das Literal "<xsl:value-of select="."/>" an dieser Stelle nicht
+                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "https://www.ris.bund.de/eli/bund/[-a-z0-9]+/\d{4}/[-a-z0-9äöüß]+/[a-zöäüß\-]+-\d+" entsprechen.</svrl:text>
+                  </svrl:failed-assert>
+               </xsl:if>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched"
+                               as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd15e2323')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
+   </xsl:template>
+   <xsl:template match="akn:identification/akn:FRBRWork/akn:FRBRuri/@value"
+                 priority="11"
+                 mode="d15e206">
+      <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e2323']">
+            <schxslt:rule pattern="d15e2323">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "akn:identification/akn:FRBRWork/akn:FRBRuri/@value" shadowed by preceding rule</xsl:comment>
+               <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
+                  <xsl:attribute name="context">akn:identification/akn:FRBRWork/akn:FRBRuri/@value</xsl:attribute>
+                  <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
+                  <xsl:if test="exists($documentUri)">
+                     <xsl:attribute name="document" select="$documentUri"/>
+                  </xsl:if>
+               </svrl:suppressed-rule>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched"
+                               as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d15e2323">
+               <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
+                  <xsl:attribute name="context">akn:identification/akn:FRBRWork/akn:FRBRuri/@value</xsl:attribute>
+                  <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
+                  <xsl:if test="exists($documentUri)">
+                     <xsl:attribute name="document" select="$documentUri"/>
+                  </xsl:if>
+               </svrl:fired-rule>
+               <xsl:if test="not(if ($ist-konsolidierte-fassung) then (matches(., '^https://www.ris.bund.de/eli/bund/[-a-z0-9]+/\d{4}/[-a-z0-9äöüß]+$')) else true())">
+                  <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                      location="{schxslt:location(.)}"
+                                      id="SCH-KONS-valueLiterals.work.FRBRuri">
+                     <xsl:attribute name="test">if ($ist-konsolidierte-fassung) then (matches(., '^https://www.ris.bund.de/eli/bund/[-a-z0-9]+/\d{4}/[-a-z0-9äöüß]+$')) else true()</xsl:attribute>
+                     <svrl:text>In der konsolidierten Fassung ist das Literal "<xsl:value-of select="."/>" an dieser Stelle nicht
+                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "https://www.ris.bund.de/eli/bund/[-a-z0-9]+/\d{4}/[-a-z0-9äöüß]+" entsprechen.</svrl:text>
+                  </svrl:failed-assert>
+               </xsl:if>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched"
+                               as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd15e2323')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
+   </xsl:template>
+   <xsl:template match="akn:identification/akn:FRBRExpression/akn:FRBRauthor/@href"
+                 priority="10"
+                 mode="d15e206">
+      <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e2424']">
+            <schxslt:rule pattern="d15e2424">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "akn:identification/akn:FRBRExpression/akn:FRBRauthor/@href" shadowed by preceding rule</xsl:comment>
+               <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
+                  <xsl:attribute name="context">akn:identification/akn:FRBRExpression/akn:FRBRauthor/@href</xsl:attribute>
+                  <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
+                  <xsl:if test="exists($documentUri)">
+                     <xsl:attribute name="document" select="$documentUri"/>
+                  </xsl:if>
+               </svrl:suppressed-rule>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched"
+                               as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d15e2424">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
                   <xsl:attribute name="context">akn:identification/akn:FRBRExpression/akn:FRBRauthor/@href</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -7325,18 +8553,18 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e2076')"/>
+                               select="($schxslt:patterns-matched, 'd15e2424')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="akn:identification/akn:FRBRWork/akn:FRBRauthor/@href"
-                 priority="10"
-                 mode="d14e204">
+                 priority="9"
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e2076']">
-            <schxslt:rule pattern="d14e2076">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e2424']">
+            <schxslt:rule pattern="d15e2424">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "akn:identification/akn:FRBRWork/akn:FRBRauthor/@href" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
                   <xsl:attribute name="context">akn:identification/akn:FRBRWork/akn:FRBRauthor/@href</xsl:attribute>
@@ -7353,7 +8581,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e2076">
+            <schxslt:rule pattern="d15e2424">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
                   <xsl:attribute name="context">akn:identification/akn:FRBRWork/akn:FRBRauthor/@href</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -7374,67 +8602,18 @@
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e2076')"/>
-            </xsl:next-match>
-         </xsl:otherwise>
-      </xsl:choose>
-   </xsl:template>
-   <xsl:template match="akn:identification/akn:FRBRExpression/akn:FRBRdate/@name"
-                 priority="9"
-                 mode="d14e204">
-      <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e2076']">
-            <schxslt:rule pattern="d14e2076">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "akn:identification/akn:FRBRExpression/akn:FRBRdate/@name" shadowed by preceding rule</xsl:comment>
-               <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
-                  <xsl:attribute name="context">akn:identification/akn:FRBRExpression/akn:FRBRdate/@name</xsl:attribute>
-                  <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
-                  <xsl:if test="exists($documentUri)">
-                     <xsl:attribute name="document" select="$documentUri"/>
-                  </xsl:if>
-               </svrl:suppressed-rule>
-            </schxslt:rule>
-            <xsl:next-match>
-               <xsl:with-param name="schxslt:patterns-matched"
-                               as="xs:string*"
-                               select="$schxslt:patterns-matched"/>
-            </xsl:next-match>
-         </xsl:when>
-         <xsl:otherwise>
-            <schxslt:rule pattern="d14e2076">
-               <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
-                  <xsl:attribute name="context">akn:identification/akn:FRBRExpression/akn:FRBRdate/@name</xsl:attribute>
-                  <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
-                  <xsl:if test="exists($documentUri)">
-                     <xsl:attribute name="document" select="$documentUri"/>
-                  </xsl:if>
-               </svrl:fired-rule>
-               <xsl:if test="not(if ($ist-verkündungsfassung) then (. = ('verkuendung', 'verkuendung-unbestimmtes-inkrafttreten', 'aenderung', 'aenderung-unbestimmtes-inkrafttreten', 'berichtigung')) else true())">
-                  <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                      location="{schxslt:location(.)}"
-                                      id="SCH-VERKF-nameLiterals.expression.FRBRdate">
-                     <xsl:attribute name="test">if ($ist-verkündungsfassung) then (. = ('verkuendung', 'verkuendung-unbestimmtes-inkrafttreten', 'aenderung', 'aenderung-unbestimmtes-inkrafttreten', 'berichtigung')) else true()</xsl:attribute>
-                     <svrl:text>In der Verkündungsfassung ist das Literal "<xsl:value-of select="."/>" an dieser Stelle nicht
-                                    zulässig. Erlaubt sind ausschließlich "verkuendung", "verkuendung-unbestimmtes-inkrafttreten", "aenderung", "aenderung-unbestimmtes-inkrafttreten" sowie "berichtigung".</svrl:text>
-                  </svrl:failed-assert>
-               </xsl:if>
-            </schxslt:rule>
-            <xsl:next-match>
-               <xsl:with-param name="schxslt:patterns-matched"
-                               as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e2076')"/>
+                               select="($schxslt:patterns-matched, 'd15e2424')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="akn:identification/akn:FRBRExpression/akn:FRBRthis/@value"
                  priority="8"
-                 mode="d14e204">
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e2076']">
-            <schxslt:rule pattern="d14e2076">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e2424']">
+            <schxslt:rule pattern="d15e2424">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "akn:identification/akn:FRBRExpression/akn:FRBRthis/@value" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
                   <xsl:attribute name="context">akn:identification/akn:FRBRExpression/akn:FRBRthis/@value</xsl:attribute>
@@ -7451,7 +8630,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e2076">
+            <schxslt:rule pattern="d15e2424">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
                   <xsl:attribute name="context">akn:identification/akn:FRBRExpression/akn:FRBRthis/@value</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -7459,31 +8638,31 @@
                      <xsl:attribute name="document" select="$documentUri"/>
                   </xsl:if>
                </svrl:fired-rule>
-               <xsl:if test="not(if ($ist-verkündungsfassung) then (matches(., '^eli/bund/[-a-z0-9]+/\d{4}/(s[0-9]+[a-zäöüß]*|[0-9]+(-\d+)?)/\d{4}-\d{2}-\d{2}/\d+/[a-z]{3}/[a-zöäüß\-]+-\d+$')) else true())">
+               <xsl:if test="not(if ($ist-verkündungsfassung) then (matches(., '^https://www.recht.bund.de/eli/bund/[-a-z0-9]+/\d{4}/((s[0-9]+[a-zäöüß]*)|([0-9]+[a-zäöüß]*))/[a-z]{3}/[a-zöäüß\-]+-\d+$')) else true())">
                   <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                                       location="{schxslt:location(.)}"
                                       id="SCH-VERK-valueLiterals.expression.FRBRthis">
-                     <xsl:attribute name="test">if ($ist-verkündungsfassung) then (matches(., '^eli/bund/[-a-z0-9]+/\d{4}/(s[0-9]+[a-zäöüß]*|[0-9]+(-\d+)?)/\d{4}-\d{2}-\d{2}/\d+/[a-z]{3}/[a-zöäüß\-]+-\d+$')) else true()</xsl:attribute>
+                     <xsl:attribute name="test">if ($ist-verkündungsfassung) then (matches(., '^https://www.recht.bund.de/eli/bund/[-a-z0-9]+/\d{4}/((s[0-9]+[a-zäöüß]*)|([0-9]+[a-zäöüß]*))/[a-z]{3}/[a-zöäüß\-]+-\d+$')) else true()</xsl:attribute>
                      <svrl:text>In der Verkündungsfassung ist das Literal "<xsl:value-of select="."/>" an dieser Stelle nicht
-                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "eli/bund/[-a-z0-9]+/\d{4}/(s[0-9]+[a-zäöüß]*|[0-9]+(-\d+)?)/\d{4}-\d{2}-\d{2}/\d+/[a-z]{3}/[a-zöäüß\-]+-\d+" entsprechen.</svrl:text>
+                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "https://www.recht.bund.de/eli/bund/[-a-z0-9]+/\d{4}/((s[0-9]+[a-zäöüß]*)|([0-9]+[a-zäöüß]*))/[a-z]{3}/[a-zöäüß\-]+-\d+" entsprechen.</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
             </schxslt:rule>
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e2076')"/>
+                               select="($schxslt:patterns-matched, 'd15e2424')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="akn:identification/akn:FRBRExpression/akn:FRBRuri/@value"
                  priority="7"
-                 mode="d14e204">
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e2076']">
-            <schxslt:rule pattern="d14e2076">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e2424']">
+            <schxslt:rule pattern="d15e2424">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "akn:identification/akn:FRBRExpression/akn:FRBRuri/@value" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
                   <xsl:attribute name="context">akn:identification/akn:FRBRExpression/akn:FRBRuri/@value</xsl:attribute>
@@ -7500,7 +8679,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e2076">
+            <schxslt:rule pattern="d15e2424">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
                   <xsl:attribute name="context">akn:identification/akn:FRBRExpression/akn:FRBRuri/@value</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -7508,31 +8687,31 @@
                      <xsl:attribute name="document" select="$documentUri"/>
                   </xsl:if>
                </svrl:fired-rule>
-               <xsl:if test="not(if ($ist-verkündungsfassung) then (matches(., '^eli/bund/[-a-z0-9]+/\d{4}/(s[0-9]+[a-zäöüß]*|[0-9]+(-\d+)?)/\d{4}-\d{2}-\d{2}/\d+/[a-z]{3}$')) else true())">
+               <xsl:if test="not(if ($ist-verkündungsfassung) then (matches(., '^https://www.recht.bund.de/eli/bund/[-a-z0-9]+/\d{4}/((s[0-9]+[a-zäöüß]*)|([0-9]+[a-zäöüß]*?))/[a-z]{3}$')) else true())">
                   <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                                       location="{schxslt:location(.)}"
                                       id="SCH-VERK-valueLiterals.expression.FRBRuri">
-                     <xsl:attribute name="test">if ($ist-verkündungsfassung) then (matches(., '^eli/bund/[-a-z0-9]+/\d{4}/(s[0-9]+[a-zäöüß]*|[0-9]+(-\d+)?)/\d{4}-\d{2}-\d{2}/\d+/[a-z]{3}$')) else true()</xsl:attribute>
+                     <xsl:attribute name="test">if ($ist-verkündungsfassung) then (matches(., '^https://www.recht.bund.de/eli/bund/[-a-z0-9]+/\d{4}/((s[0-9]+[a-zäöüß]*)|([0-9]+[a-zäöüß]*?))/[a-z]{3}$')) else true()</xsl:attribute>
                      <svrl:text>In der Verkündungsfassung ist das Literal "<xsl:value-of select="."/>" an dieser Stelle nicht
-                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "eli/bund/[-a-z0-9]+/\d{4}/(s[0-9]+[a-zäöüß]*|[0-9]+(-\d+)?)/\d{4}-\d{2}-\d{2}/\d+/[a-z]{3}" entsprechen.</svrl:text>
+                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "https://www.recht.bund.de/eli/bund/[-a-z0-9]+/\d{4}/((s[0-9]+[a-zäöüß]*)|([0-9]+[a-zäöüß]*?))/[a-z]{3}" entsprechen.</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
             </schxslt:rule>
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e2076')"/>
+                               select="($schxslt:patterns-matched, 'd15e2424')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="akn:identification/akn:FRBRManifestation/akn:FRBRthis/@value"
                  priority="6"
-                 mode="d14e204">
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e2076']">
-            <schxslt:rule pattern="d14e2076">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e2424']">
+            <schxslt:rule pattern="d15e2424">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "akn:identification/akn:FRBRManifestation/akn:FRBRthis/@value" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
                   <xsl:attribute name="context">akn:identification/akn:FRBRManifestation/akn:FRBRthis/@value</xsl:attribute>
@@ -7549,7 +8728,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e2076">
+            <schxslt:rule pattern="d15e2424">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
                   <xsl:attribute name="context">akn:identification/akn:FRBRManifestation/akn:FRBRthis/@value</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -7557,31 +8736,31 @@
                      <xsl:attribute name="document" select="$documentUri"/>
                   </xsl:if>
                </svrl:fired-rule>
-               <xsl:if test="not(if ($ist-verkündungsfassung) then (matches(., '^eli/bund/[-a-z0-9]+/\d{4}/(s[0-9]+[a-zäöüß]*|[0-9]+(-\d+)?)/\d{4}-\d{2}-\d{2}/\d+/[a-z]{3}/\d{4}-\d{2}-\d{2}/[a-zöäüß\-]+-\d+\.[a-zöäüß]+$')) else true())">
+               <xsl:if test="not(if ($ist-verkündungsfassung) then (matches(., '^https://www.recht.bund.de/eli/bund/[-a-z0-9]+/\d{4}/((s[0-9]+[a-zäöüß]*)|([0-9]+[a-zäöüß]*))/[a-z]{3}/[a-zöäüß\-]+-\d+\.[a-zöäüß]+$')) else true())">
                   <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                                       location="{schxslt:location(.)}"
                                       id="SCH-VERK-valueLiterals.manifestation.FRBRthis">
-                     <xsl:attribute name="test">if ($ist-verkündungsfassung) then (matches(., '^eli/bund/[-a-z0-9]+/\d{4}/(s[0-9]+[a-zäöüß]*|[0-9]+(-\d+)?)/\d{4}-\d{2}-\d{2}/\d+/[a-z]{3}/\d{4}-\d{2}-\d{2}/[a-zöäüß\-]+-\d+\.[a-zöäüß]+$')) else true()</xsl:attribute>
+                     <xsl:attribute name="test">if ($ist-verkündungsfassung) then (matches(., '^https://www.recht.bund.de/eli/bund/[-a-z0-9]+/\d{4}/((s[0-9]+[a-zäöüß]*)|([0-9]+[a-zäöüß]*))/[a-z]{3}/[a-zöäüß\-]+-\d+\.[a-zöäüß]+$')) else true()</xsl:attribute>
                      <svrl:text>In der Verkündungsfassung ist das Literal "<xsl:value-of select="."/>" an dieser Stelle nicht
-                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "eli/bund/[-a-z0-9]+/\d{4}/(s[0-9]+[a-zäöüß]*|[0-9]+(-\d+)?)/\d{4}-\d{2}-\d{2}/\d+/[a-z]{3}/\d{4}-\d{2}-\d{2}/[a-zöäüß\-]+-\d+\.[a-zöäüß]+" entsprechen.</svrl:text>
+                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "https://www.recht.bund.de/eli/bund/[-a-z0-9]+/\d{4}/((s[0-9]+[a-zäöüß]*)|([0-9]+[a-zäöüß]*))/[a-z]{3}/[a-zöäüß\-]+-\d+\.[a-zöäüß]+" entsprechen.</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
             </schxslt:rule>
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e2076')"/>
+                               select="($schxslt:patterns-matched, 'd15e2424')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="akn:identification/akn:FRBRManifestation/akn:FRBRuri/@value"
                  priority="5"
-                 mode="d14e204">
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e2076']">
-            <schxslt:rule pattern="d14e2076">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e2424']">
+            <schxslt:rule pattern="d15e2424">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "akn:identification/akn:FRBRManifestation/akn:FRBRuri/@value" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
                   <xsl:attribute name="context">akn:identification/akn:FRBRManifestation/akn:FRBRuri/@value</xsl:attribute>
@@ -7598,7 +8777,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e2076">
+            <schxslt:rule pattern="d15e2424">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
                   <xsl:attribute name="context">akn:identification/akn:FRBRManifestation/akn:FRBRuri/@value</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -7606,31 +8785,31 @@
                      <xsl:attribute name="document" select="$documentUri"/>
                   </xsl:if>
                </svrl:fired-rule>
-               <xsl:if test="not(if ($ist-verkündungsfassung) then (matches(., '^eli/bund/[-a-z0-9]+/\d{4}/(s[0-9]+[a-zäöüß]*|[0-9]+(-\d+)?)/\d{4}-\d{2}-\d{2}/\d+/[a-z]{3}/\d{4}-\d{2}-\d{2}/[a-zöäüß\-]+-\d+\.[a-zöäüß]+$')) else true())">
+               <xsl:if test="not(if ($ist-verkündungsfassung) then (matches(., '^https://www.recht.bund.de/eli/bund/[-a-z0-9]+/\d{4}/((s[0-9]+[a-zäöüß]*)|([0-9]+[a-zäöüß]*))/[a-z]{3}/[a-zöäüß\-]+-\d+\.[a-zöäüß]+$')) else true())">
                   <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                                       location="{schxslt:location(.)}"
                                       id="SCH-VERK-valueLiterals.manifestation.FRBRuri">
-                     <xsl:attribute name="test">if ($ist-verkündungsfassung) then (matches(., '^eli/bund/[-a-z0-9]+/\d{4}/(s[0-9]+[a-zäöüß]*|[0-9]+(-\d+)?)/\d{4}-\d{2}-\d{2}/\d+/[a-z]{3}/\d{4}-\d{2}-\d{2}/[a-zöäüß\-]+-\d+\.[a-zöäüß]+$')) else true()</xsl:attribute>
+                     <xsl:attribute name="test">if ($ist-verkündungsfassung) then (matches(., '^https://www.recht.bund.de/eli/bund/[-a-z0-9]+/\d{4}/((s[0-9]+[a-zäöüß]*)|([0-9]+[a-zäöüß]*))/[a-z]{3}/[a-zöäüß\-]+-\d+\.[a-zöäüß]+$')) else true()</xsl:attribute>
                      <svrl:text>In der Verkündungsfassung ist das Literal "<xsl:value-of select="."/>" an dieser Stelle nicht
-                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "eli/bund/[-a-z0-9]+/\d{4}/(s[0-9]+[a-zäöüß]*|[0-9]+(-\d+)?)/\d{4}-\d{2}-\d{2}/\d+/[a-z]{3}/\d{4}-\d{2}-\d{2}/[a-zöäüß\-]+-\d+\.[a-zöäüß]+" entsprechen.</svrl:text>
+                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "https://www.recht.bund.de/eli/bund/[-a-z0-9]+/\d{4}/((s[0-9]+[a-zäöüß]*)|([0-9]+[a-zäöüß]*))/[a-z]{3}/[a-zöäüß\-]+-\d+\.[a-zöäüß]+" entsprechen.</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
             </schxslt:rule>
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e2076')"/>
+                               select="($schxslt:patterns-matched, 'd15e2424')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="akn:identification/akn:FRBRWork/akn:FRBRname/@value"
                  priority="4"
-                 mode="d14e204">
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e2076']">
-            <schxslt:rule pattern="d14e2076">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e2424']">
+            <schxslt:rule pattern="d15e2424">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "akn:identification/akn:FRBRWork/akn:FRBRname/@value" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
                   <xsl:attribute name="context">akn:identification/akn:FRBRWork/akn:FRBRname/@value</xsl:attribute>
@@ -7647,7 +8826,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e2076">
+            <schxslt:rule pattern="d15e2424">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
                   <xsl:attribute name="context">akn:identification/akn:FRBRWork/akn:FRBRname/@value</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -7655,31 +8834,31 @@
                      <xsl:attribute name="document" select="$documentUri"/>
                   </xsl:if>
                </svrl:fired-rule>
-               <xsl:if test="not(if ($ist-verkündungsfassung) then (. = ('bgbl', 'bgbl-1', 'bgbl-2', 'banz-at')) else true())">
+               <xsl:if test="not(if ($ist-verkündungsfassung) then (. = ('bgbl-1', 'bgbl-2', 'banz-at')) else true())">
                   <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                                       location="{schxslt:location(.)}"
                                       id="SCH-VERKF-valueLiterals.work.FRBRname">
-                     <xsl:attribute name="test">if ($ist-verkündungsfassung) then (. = ('bgbl', 'bgbl-1', 'bgbl-2', 'banz-at')) else true()</xsl:attribute>
+                     <xsl:attribute name="test">if ($ist-verkündungsfassung) then (. = ('bgbl-1', 'bgbl-2', 'banz-at')) else true()</xsl:attribute>
                      <svrl:text>In der Verkündungsfassung ist das Literal "<xsl:value-of select="."/>" an dieser Stelle nicht
-                                    zulässig. Erlaubt sind ausschließlich "bgbl", "bgbl-1", "bgbl-2" sowie "banz-at".</svrl:text>
+                                    zulässig. Erlaubt sind ausschließlich "bgbl-1", "bgbl-2" sowie "banz-at".</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
             </schxslt:rule>
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e2076')"/>
+                               select="($schxslt:patterns-matched, 'd15e2424')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="akn:identification/akn:FRBRWork/akn:FRBRnumber/@value"
                  priority="3"
-                 mode="d14e204">
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e2076']">
-            <schxslt:rule pattern="d14e2076">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e2424']">
+            <schxslt:rule pattern="d15e2424">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "akn:identification/akn:FRBRWork/akn:FRBRnumber/@value" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
                   <xsl:attribute name="context">akn:identification/akn:FRBRWork/akn:FRBRnumber/@value</xsl:attribute>
@@ -7696,7 +8875,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e2076">
+            <schxslt:rule pattern="d15e2424">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
                   <xsl:attribute name="context">akn:identification/akn:FRBRWork/akn:FRBRnumber/@value</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -7704,31 +8883,31 @@
                      <xsl:attribute name="document" select="$documentUri"/>
                   </xsl:if>
                </svrl:fired-rule>
-               <xsl:if test="not(if ($ist-verkündungsfassung) then (matches(., '^((s[0-9]+[a-zäöüß]*)|([0-9]+(-\d+)?))$')) else true())">
+               <xsl:if test="not(if ($ist-verkündungsfassung) then (matches(., '^((s[0-9]+[a-zäöüß]*)|([0-9]+)[a-zäöüß]*)$')) else true())">
                   <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                                       location="{schxslt:location(.)}"
                                       id="SCH-VERK-valueLiterals.work.FRBRnumber">
-                     <xsl:attribute name="test">if ($ist-verkündungsfassung) then (matches(., '^((s[0-9]+[a-zäöüß]*)|([0-9]+(-\d+)?))$')) else true()</xsl:attribute>
+                     <xsl:attribute name="test">if ($ist-verkündungsfassung) then (matches(., '^((s[0-9]+[a-zäöüß]*)|([0-9]+)[a-zäöüß]*)$')) else true()</xsl:attribute>
                      <svrl:text>In der Verkündungsfassung ist das Literal "<xsl:value-of select="."/>" an dieser Stelle nicht
-                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "((s[0-9]+[a-zäöüß]*)|([0-9]+(-\d+)?))" entsprechen.</svrl:text>
+                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "((s[0-9]+[a-zäöüß]*)|([0-9]+)[a-zäöüß]*)" entsprechen.</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
             </schxslt:rule>
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e2076')"/>
+                               select="($schxslt:patterns-matched, 'd15e2424')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="akn:identification/akn:FRBRWork/akn:FRBRsubtype/@value"
                  priority="2"
-                 mode="d14e204">
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e2076']">
-            <schxslt:rule pattern="d14e2076">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e2424']">
+            <schxslt:rule pattern="d15e2424">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "akn:identification/akn:FRBRWork/akn:FRBRsubtype/@value" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
                   <xsl:attribute name="context">akn:identification/akn:FRBRWork/akn:FRBRsubtype/@value</xsl:attribute>
@@ -7745,7 +8924,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e2076">
+            <schxslt:rule pattern="d15e2424">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
                   <xsl:attribute name="context">akn:identification/akn:FRBRWork/akn:FRBRsubtype/@value</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -7753,31 +8932,31 @@
                      <xsl:attribute name="document" select="$documentUri"/>
                   </xsl:if>
                </svrl:fired-rule>
-               <xsl:if test="not(if ($ist-verkündungsfassung) then (matches(., '^(anlage-regelungstext|rechtsetzungsdokument|regelungstext-neufassung|regelungstext-verkuendung|vereinbarung-verkuendung|bekanntmachungstext|bekanntmachungstext-berichtigung|bekanntmachungstext-entscheidung-des-bundesverfassungsgerichts|sonstiges-dokument)(-[0-9]+)$')) else true())">
+               <xsl:if test="not(if ($ist-verkündungsfassung) then (matches(., '^(anlage-regelungstext|rechtsetzungsdokument|regelungstext|vereinbarung-verkuendung|sonstiger-veroeffentlichungstext|sonstiges-teildokument)(-[0-9]+)$')) else true())">
                   <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                                       location="{schxslt:location(.)}"
                                       id="SCH-VERK-valueLiterals.work.FRBRsubtype">
-                     <xsl:attribute name="test">if ($ist-verkündungsfassung) then (matches(., '^(anlage-regelungstext|rechtsetzungsdokument|regelungstext-neufassung|regelungstext-verkuendung|vereinbarung-verkuendung|bekanntmachungstext|bekanntmachungstext-berichtigung|bekanntmachungstext-entscheidung-des-bundesverfassungsgerichts|sonstiges-dokument)(-[0-9]+)$')) else true()</xsl:attribute>
+                     <xsl:attribute name="test">if ($ist-verkündungsfassung) then (matches(., '^(anlage-regelungstext|rechtsetzungsdokument|regelungstext|vereinbarung-verkuendung|sonstiger-veroeffentlichungstext|sonstiges-teildokument)(-[0-9]+)$')) else true()</xsl:attribute>
                      <svrl:text>In der Verkündungsfassung ist das Literal "<xsl:value-of select="."/>" an dieser Stelle nicht
-                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "(anlage-regelungstext|rechtsetzungsdokument|regelungstext-neufassung|regelungstext-verkuendung|vereinbarung-verkuendung|bekanntmachungstext|bekanntmachungstext-berichtigung|bekanntmachungstext-entscheidung-des-bundesverfassungsgerichts|sonstiges-dokument)(-[0-9]+)" entsprechen.</svrl:text>
+                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "(anlage-regelungstext|rechtsetzungsdokument|regelungstext|vereinbarung-verkuendung|sonstiger-veroeffentlichungstext|sonstiges-teildokument)(-[0-9]+)" entsprechen.</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
             </schxslt:rule>
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e2076')"/>
+                               select="($schxslt:patterns-matched, 'd15e2424')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="akn:identification/akn:FRBRWork/akn:FRBRthis/@value"
                  priority="1"
-                 mode="d14e204">
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e2076']">
-            <schxslt:rule pattern="d14e2076">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e2424']">
+            <schxslt:rule pattern="d15e2424">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "akn:identification/akn:FRBRWork/akn:FRBRthis/@value" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
                   <xsl:attribute name="context">akn:identification/akn:FRBRWork/akn:FRBRthis/@value</xsl:attribute>
@@ -7794,7 +8973,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e2076">
+            <schxslt:rule pattern="d15e2424">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
                   <xsl:attribute name="context">akn:identification/akn:FRBRWork/akn:FRBRthis/@value</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -7802,31 +8981,31 @@
                      <xsl:attribute name="document" select="$documentUri"/>
                   </xsl:if>
                </svrl:fired-rule>
-               <xsl:if test="not(if ($ist-verkündungsfassung) then (matches(., '^eli/bund/[-a-z0-9]+/\d{4}/(s[0-9]+[a-zäöüß]*|[0-9]+(\-\d+)?)/[a-zöäüß\-]+-\d+$')) else true())">
+               <xsl:if test="not(if ($ist-verkündungsfassung) then (matches(., '^https://www.recht.bund.de/eli/bund/[-a-z0-9]+/\d{4}/((s[0-9]+[a-zäöüß]*)|([0-9]+[a-zäöüß]*))/[a-zöäüß\-]+-\d+$')) else true())">
                   <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                                       location="{schxslt:location(.)}"
                                       id="SCH-VERK-valueLiterals.work.FRBRthis">
-                     <xsl:attribute name="test">if ($ist-verkündungsfassung) then (matches(., '^eli/bund/[-a-z0-9]+/\d{4}/(s[0-9]+[a-zäöüß]*|[0-9]+(\-\d+)?)/[a-zöäüß\-]+-\d+$')) else true()</xsl:attribute>
+                     <xsl:attribute name="test">if ($ist-verkündungsfassung) then (matches(., '^https://www.recht.bund.de/eli/bund/[-a-z0-9]+/\d{4}/((s[0-9]+[a-zäöüß]*)|([0-9]+[a-zäöüß]*))/[a-zöäüß\-]+-\d+$')) else true()</xsl:attribute>
                      <svrl:text>In der Verkündungsfassung ist das Literal "<xsl:value-of select="."/>" an dieser Stelle nicht
-                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "eli/bund/[-a-z0-9]+/\d{4}/(s[0-9]+[a-zäöüß]*|[0-9]+(\-\d+)?)/[a-zöäüß\-]+-\d+" entsprechen.</svrl:text>
+                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "https://www.recht.bund.de/eli/bund/[-a-z0-9]+/\d{4}/((s[0-9]+[a-zäöüß]*)|([0-9]+[a-zäöüß]*))/[a-zöäüß\-]+-\d+" entsprechen.</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
             </schxslt:rule>
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e2076')"/>
+                               select="($schxslt:patterns-matched, 'd15e2424')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <xsl:template match="akn:identification/akn:FRBRWork/akn:FRBRuri/@value"
                  priority="0"
-                 mode="d14e204">
+                 mode="d15e206">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:choose>
-         <xsl:when test="$schxslt:patterns-matched[. = 'd14e2076']">
-            <schxslt:rule pattern="d14e2076">
+         <xsl:when test="$schxslt:patterns-matched[. = 'd15e2424']">
+            <schxslt:rule pattern="d15e2424">
                <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "akn:identification/akn:FRBRWork/akn:FRBRuri/@value" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
                   <xsl:attribute name="context">akn:identification/akn:FRBRWork/akn:FRBRuri/@value</xsl:attribute>
@@ -7843,7 +9022,7 @@
             </xsl:next-match>
          </xsl:when>
          <xsl:otherwise>
-            <schxslt:rule pattern="d14e2076">
+            <schxslt:rule pattern="d15e2424">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" role="error">
                   <xsl:attribute name="context">akn:identification/akn:FRBRWork/akn:FRBRuri/@value</xsl:attribute>
                   <xsl:variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
@@ -7851,20 +9030,20 @@
                      <xsl:attribute name="document" select="$documentUri"/>
                   </xsl:if>
                </svrl:fired-rule>
-               <xsl:if test="not(if ($ist-verkündungsfassung) then (matches(., '^eli/bund/[-a-z0-9]+/\d{4}/(s[0-9]+[a-zäöüß]*|[0-9]+(\-\d+)?)$')) else true())">
+               <xsl:if test="not(if ($ist-verkündungsfassung) then (matches(., '^https://www.recht.bund.de/eli/bund/[-a-z0-9]+/\d{4}/((s[0-9]+[a-zäöüß]*)|([0-9]+[a-zäöüß]*))$')) else true())">
                   <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                                       location="{schxslt:location(.)}"
                                       id="SCH-VERK-valueLiterals.work.FRBRuri">
-                     <xsl:attribute name="test">if ($ist-verkündungsfassung) then (matches(., '^eli/bund/[-a-z0-9]+/\d{4}/(s[0-9]+[a-zäöüß]*|[0-9]+(\-\d+)?)$')) else true()</xsl:attribute>
+                     <xsl:attribute name="test">if ($ist-verkündungsfassung) then (matches(., '^https://www.recht.bund.de/eli/bund/[-a-z0-9]+/\d{4}/((s[0-9]+[a-zäöüß]*)|([0-9]+[a-zäöüß]*))$')) else true()</xsl:attribute>
                      <svrl:text>In der Verkündungsfassung ist das Literal "<xsl:value-of select="."/>" an dieser Stelle nicht
-                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "eli/bund/[-a-z0-9]+/\d{4}/(s[0-9]+[a-zäöüß]*|[0-9]+(\-\d+)?)" entsprechen.</svrl:text>
+                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "https://www.recht.bund.de/eli/bund/[-a-z0-9]+/\d{4}/((s[0-9]+[a-zäöüß]*)|([0-9]+[a-zäöüß]*))" entsprechen.</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
             </schxslt:rule>
             <xsl:next-match>
                <xsl:with-param name="schxslt:patterns-matched"
                                as="xs:string*"
-                               select="($schxslt:patterns-matched, 'd14e2076')"/>
+                               select="($schxslt:patterns-matched, 'd15e2424')"/>
             </xsl:next-match>
          </xsl:otherwise>
       </xsl:choose>

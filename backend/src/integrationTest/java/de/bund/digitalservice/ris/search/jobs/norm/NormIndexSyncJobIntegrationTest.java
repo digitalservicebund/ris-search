@@ -121,14 +121,14 @@ class NormIndexSyncJobIntegrationTest extends ContainersIntegrationBase {
     List<Norm> initialState = new ArrayList<>();
     initialState.add(
         Norm.builder()
-            .id(toDelete.getExpressionEli().toString())
-            .workEli(toDelete.getWorkEli().toString())
+            .id(toDelete.getExpressionEliPath().toString())
+            .workEli(toDelete.getWorkEliPath().toString())
             .indexedAt(lastSuccess.toString())
             .build());
     initialState.add(
         Norm.builder()
-            .id(toKeep.getExpressionEli().toString())
-            .workEli(toKeep.getWorkEli().toString())
+            .id(toKeep.getExpressionEliPath().toString())
+            .workEli(toKeep.getWorkEliPath().toString())
             .indexedAt(lastSuccess.toString())
             .build());
     normsRepository.saveAll(initialState);
@@ -149,7 +149,7 @@ class NormIndexSyncJobIntegrationTest extends ContainersIntegrationBase {
         indexStatusService.loadStatus(NormIndexSyncJob.NORM_STATUS_FILENAME);
     assertThat(indexingState.lastProcessedChangelogFile()).isEqualTo(changelogFileName);
     assertThat(normsRepository.count()).isEqualTo(1);
-    assertThat(normsRepository.findById(toKeep.getExpressionEli().toString())).isPresent();
+    assertThat(normsRepository.findById(toKeep.getExpressionEliPath().toString())).isPresent();
   }
 
   private IndexingState getMockState() {

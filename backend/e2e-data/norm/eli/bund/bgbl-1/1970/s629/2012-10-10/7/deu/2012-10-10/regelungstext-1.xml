@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-model href="Grammatiken/Norms/legalDocML.de.sch" schematypens="http://purl.oclc.org/dsdl/schematron"?>
-<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.8.2/"
-                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.8.2/ Grammatiken/Norms/legalDocML.de-metadaten-ris.xsd http://MetadatenRegelungstext.LegalDocML.de/1.8.2/ Grammatiken/Norms/legalDocML.de-metadaten-regelungstext.xsd http://MetadatenRechtsetzungsdokument.LegalDocML.de/1.8.2/ Grammatiken/Norms/legalDocML.de-metadaten-rechtsetzungsdokument.xsd http://Inhaltsdaten.LegalDocML.de/1.8.2/ Grammatiken/Norms/legalDocML.de-regelungstextverkuendungsfassung.xsd">
-    <akn:act name="/akn/ontology/de/concept/documenttype/bund/regelungstext-verkuendung">
+<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.9/"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.9/ Grammatiken/Norms/legalDocML.de-metadaten-ris.xsd http://MetadatenRegelungstext.LegalDocML.de/1.9/ Grammatiken/legalDocML.de-metadaten-regelungstext.xsd http://MetadatenRechtsetzungsdokument.LegalDocML.de/1.9/ Grammatiken/legalDocML.de-metadaten-rechtsetzungsdokument.xsd http://Inhaltsdaten.LegalDocML.de/1.9/ Grammatiken/legalDocML.de-regelungstext.xsd">
+    <akn:act name="/akn/ontology/de/concept/documenttype/bund/regelungstext">
         <akn:meta GUID="aaaaaaaa-aaaa-4aaa-aaaa-aaaaaaaaaaaa" eId="meta-n1">
             <akn:identification GUID="bbbbbbbb-bbbb-4bbb-bbbb-bbbbbbbbbbbb" eId="meta-n1_ident-n1" source="attributsemantik-noch-undefiniert">
                 <akn:FRBRWork GUID="cccccccc-cccc-4ccc-cccc-cccccccccccc" eId="meta-n1_ident-n1_frbrwork-n1">
@@ -13,7 +14,7 @@
                     <akn:FRBRalias GUID="ffffffff-ffff-4fff-ffff-ffffffffffff" eId="meta-n1_ident-n1_frbrwork-n1_frbralias-n1"
                                    name="übergreifende-id" value="11223344-5566-7788-99aa-bbccddeeff00"/>
                     <akn:FRBRdate GUID="11111111-2222-3333-4444-555555555555" date="1970-04-20" eId="meta-n1_ident-n1_frbrwork-n1_frbrdate-n1"
-                                  name="verkuendungsfassung-verkuendungsdatum"/>
+                                  name="verkuendungsdatum"/>
                     <akn:FRBRauthor GUID="66666666-7777-8888-9999-aaaaaaaaaaaa" eId="meta-n1_ident-n1_frbrwork-n1_frbrauthor-n1"
                                     href="recht.bund.de/institution/bundesregierung"/>
                     <akn:FRBRcountry GUID="77777777-8888-9999-aaaa-bbbbbbbbbbbb" eId="meta-n1_ident-n1_frbrwork-n1_frbrcountry-n1"
@@ -118,7 +119,9 @@
             </akn:temporalData>
             <akn:proprietary GUID="44444444-5555-6666-7777-999999999999" eId="meta-n1_proprietary-n1"
                              source="attributsemantik-noch-undefiniert">
-                <ris:legalDocML.de_metadaten xmlns:ris="http://MetadatenRIS.LegalDocML.de/1.8.2/" xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.8.2/ ../schema/legalDocML.de-metadaten-ris.xsd">
+                <ris:legalDocML.de_metadaten xmlns:ris="http://MetadatenRIS.LegalDocML.de/1.9/"
+                                             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                                             xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.9/ Grammatiken/Norms/legalDocML.de-metadaten-ris.xsd">
                     <ris:abkuerzung refersTo="interne-abkuerzung">RisBWahlGV</ris:abkuerzung>
                     <ris:inkraft date="2012-10-17"/>
                     <ris:ausserkraft date="2023-10-18"/>
@@ -139,10 +142,10 @@
                 </akn:p>
             </akn:longTitle>
         </akn:preface>
-        <akn:preamble GUID="cccccccc-dddd-eeee-ffff-111111111111" eId="präambel-n1">
-            <akn:formula GUID="dddddddd-eeee-ffff-0000-222222222222" eId="präambel-n1_formel-n1" name="attributsemantik-noch-undefiniert"
+        <akn:preamble GUID="cccccccc-dddd-eeee-ffff-111111111111" eId="praeambel-n1">
+            <akn:formula GUID="dddddddd-eeee-ffff-0000-222222222222" eId="praeambel-n1_formel-n1" name="attributsemantik-noch-undefiniert"
                          refersTo="eingangsformel">
-                <akn:p GUID="eeeeeeee-ffff-0000-1111-333333333333" eId="präambel-n1_formel-n1_text-n1">
+                <akn:p GUID="eeeeeeee-ffff-0000-1111-333333333333" eId="praeambel-n1_formel-n1_text-n1">
                     Im Rahmen der gesetzlichen Bestimmungen wird diese Testverordnung zur Erprobung des Einsatzes von Wahlgeräten bekannt gemacht.
                 </akn:p>
             </akn:formula>
@@ -150,7 +153,7 @@
         <akn:body GUID="ffffffff-0000-1111-2222-444444444444" eId="hauptteil-n1">
             <akn:article GUID="11111111-2222-3333-4444-555555555555" eId="art-z1" period="#meta-n1_geltzeiten-n1_geltungszeitgr-n2" refersTo="stammform">
                 <akn:num GUID="22222222-3333-4444-5555-666666666666" eId="art-z1_bezeichnung-n1">§ 1</akn:num>
-                <akn:heading GUID="33333333-4444-5555-6666-777777777777" eId="art-z1_überschrift-n1">
+                <akn:heading GUID="33333333-4444-5555-6666-777777777777" eId="art-z1_ueberschrift-n1">
                     Zulassungspflicht für Wahlgeräte
                 </akn:heading>
                 <akn:paragraph GUID="44444444-5555-6666-7777-888888888888" eId="art-z1_abs-z1">
@@ -186,7 +189,7 @@
             </akn:article>
             <akn:article GUID="44444444-5555-6666-7777-aaaaaaaaaaaa" eId="art-z2" period="#meta-n1_geltzeiten-n1_geltungszeitgr-n4" refersTo="stammform">
                 <akn:num GUID="55555555-6666-7777-8888-bbbbbbbbbbbb" eId="art-z2_bezeichnung-n1">§ 2</akn:num>
-                <akn:heading GUID="66666666-7777-8888-9999-cccccccccccc" eId="art-z2_überschrift-n1">
+                <akn:heading GUID="66666666-7777-8888-9999-cccccccccccc" eId="art-z2_ueberschrift-n1">
                     Geräteüberwachung
                 </akn:heading>
                 <akn:paragraph GUID="77777777-8888-9999-aaaa-dddddddddddd" eId="art-z2_abs-z1">

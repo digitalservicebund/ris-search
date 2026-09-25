@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns="http://MetadatenRechtsetzungsdokument.LegalDocML.de/1.8.2/"
+<xs:schema xmlns="http://MetadatenRechtsetzungsdokument.LegalDocML.de/1.9/"
            xmlns:xs="http://www.w3.org/2001/XMLSchema"
            elementFormDefault="qualified"
-           targetNamespace="http://MetadatenRechtsetzungsdokument.LegalDocML.de/1.8.2/"
-           version="LegalDocML.de 1.8.2 (07.08.2025)">
+           targetNamespace="http://MetadatenRechtsetzungsdokument.LegalDocML.de/1.9/"
+           version="LegalDocML.de 1.9 (03.11.2025)">
 <!-- ********************************* Hinweis zur Lizensierung ********************************* -->
    <xs:annotation>
       <xs:appinfo>
@@ -21,16 +21,6 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
    <xs:element name="legalDocML.de_metadaten">
       <xs:complexType>
          <xs:sequence>
-            <xs:element name="initiant" type="institution">
-               <xs:annotation>
-                  <xs:documentation>Institution, welche die erste Fassung des Rechtsetzungsdokuments und seiner Teildokumente erstellt hat (z. B. Bundesregierung, Bundestag usw.). Dieses Metadatum ist nur in der Entwurfsfassung relevant; in der Verkündungsfassung ist das Literal "nicht-vorhanden" zu nutzen.</xs:documentation>
-               </xs:annotation>
-            </xs:element>
-            <xs:element name="bearbeitendeInstitution" type="institution">
-               <xs:annotation>
-                  <xs:documentation>Institution, welche die vorliegende Fassung des Rechtsetzungsdokuments und seiner Teildokumente bearbeitet (z. B. Bundesregierung, Bundestag usw.). Dieses Metadatum ist nur in der Entwurfsfassung relevant; in der Verkündungsfassung ist das Literal "nicht-vorhanden" zu nutzen.</xs:documentation>
-               </xs:annotation>
-            </xs:element>
             <xs:element name="fna" type="xs:token" default="nicht-vorhanden">
                <xs:annotation>
                   <xs:documentation>Der Fundstellennachweis A (FNA) weist die Fundstellen der im Bundesgesetzblatt oder Bundesanzeiger veröffentlichten geltenden Gesetze und Rechtsverordnungen der Bundesrepublik Deutschland nach. In der Entwurfsfassung ist das Literal "nicht-vorhanden" zu verwenden.</xs:documentation>
@@ -49,30 +39,6 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
                      </xs:annotation>
                   </xs:attribute>
                </xs:complexType>
-            </xs:element>
-            <xs:element name="migrationsstatusNeuRIS" minOccurs="0">
-               <xs:annotation>
-                  <xs:documentation>Dieses Element wird übergangsweise von NeuRIS gesetzt, um den Status der Normenmigration für dieses Dokument anzugeben.</xs:documentation>
-               </xs:annotation>
-               <xs:simpleType>
-                  <xs:restriction base="xs:string">
-                     <xs:enumeration value="text-vollstaendig-formatierung-vollstaendig">
-                        <xs:annotation>
-                           <xs:documentation>Das Dokument wurde textlich vollständig migriert, die Formatierung konnte ohne Nutzung von class und akn:inline mit refersTo='neuris' migriert werden.</xs:documentation>
-                        </xs:annotation>
-                     </xs:enumeration>
-                     <xs:enumeration value="text-vollstaendig-formatierung-unvollstaendig">
-                        <xs:annotation>
-                           <xs:documentation>Das Dokument wurde textlich vollständig migriert, für einen Teil der Formatierungen wurde allerdings 'class' und/oder akn:inline mit refersTo='neuris' verwendet.</xs:documentation>
-                        </xs:annotation>
-                     </xs:enumeration>
-                     <xs:enumeration value="text-unvollstaendig">
-                        <xs:annotation>
-                           <xs:documentation>Das Dokument wurde textlich noch nicht vollständig bzw. nicht in ein standardkonformes LegalDocML.de-Dokument migriert.</xs:documentation>
-                        </xs:annotation>
-                     </xs:enumeration>
-                  </xs:restriction>
-               </xs:simpleType>
             </xs:element>
          </xs:sequence>
       </xs:complexType>

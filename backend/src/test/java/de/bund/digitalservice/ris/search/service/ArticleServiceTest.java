@@ -8,7 +8,7 @@ import static org.mockito.Mockito.when;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.LegislationPartType;
 import de.bund.digitalservice.ris.search.repository.opensearch.ArticlesRepository;
-import de.bund.digitalservice.ris.search.utils.eli.ExpressionEli;
+import de.bund.digitalservice.ris.search.utils.eli.ExpressionEliPath;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.Optional;
@@ -37,8 +37,8 @@ class ArticleServiceTest {
 
   @Test
   void getAllArticleVersionsQueriesRepositoryUsingDocumentNumberPrefixInDescendingOrder() {
-    ExpressionEli eli =
-        new ExpressionEli(
+    ExpressionEliPath eli =
+        new ExpressionEliPath(
             "bund", "bgbl-1", "2020", "s1126", LocalDate.of(2025, Month.MAY, 5), 1, "deu");
 
     String eId = "art-z1";
@@ -66,8 +66,8 @@ class ArticleServiceTest {
 
   @Test
   void getAllArticleVersionReturnsEmptyOnNotFoundExpressionEliAndEid() {
-    ExpressionEli eli =
-        new ExpressionEli(
+    ExpressionEliPath eli =
+        new ExpressionEliPath(
             "bund", "bgbl-1", "2020", "s1126", LocalDate.of(2025, Month.MAY, 5), 1, "deu");
 
     String eId = "art-z1";

@@ -3,6 +3,7 @@ package de.bund.digitalservice.ris.search.service.xslt;
 import de.bund.digitalservice.ris.search.exception.NoSuchKeyException;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import de.bund.digitalservice.ris.search.utils.eli.EliFile;
+import de.bund.digitalservice.ris.search.utils.eli.ManifestationEliPath;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -85,11 +86,9 @@ public class NormXsltTransformerService extends XsltTransformer {
    * Transforms a LegalDocML norm document.
    *
    * @param source the xml file that will be transformed
-   * @param language This is the language from {@link
-   *     de.bund.digitalservice.ris.search.utils.eli.ManifestationEli#language()}.
+   * @param language This is the language from {@link ManifestationEliPath#language()}.
    * @param resourcesBasePath the base path of the resources. For example /v1/legislation/
-   * @param subtype This is the subtype from {@link
-   *     de.bund.digitalservice.ris.search.utils.eli.ManifestationEli#subtype()}.
+   * @param subtype This is the subtype from {@link ManifestationEliPath#subtype()}.
    * @return the transformed norm as HTML string
    */
   public String transformNorm(

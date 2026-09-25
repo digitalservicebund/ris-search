@@ -57,21 +57,21 @@ import org.jspecify.annotations.Nullable;
  */
 public class NormTestDataBuilder {
 
-  public static final String AKN_NS = "http://Inhaltsdaten.LegalDocML.de/1.8.2/";
-  public static final String RIS_NS = "http://MetadatenRIS.LegalDocML.de/1.8.2/";
+  public static final String AKN_NS = "http://Inhaltsdaten.LegalDocML.de/1.9/";
+  public static final String RIS_NS = "http://MetadatenRIS.LegalDocML.de/1.9/";
 
   private static final String COMMON_SCHEMA_LOCATIONS =
-      "http://MetadatenRIS.LegalDocML.de/1.8.2/ ../ris-norms-ldml-schema-extensions/1.8.2/legalDocML.de-metadaten-ris.xsd"
-          + "http://MetadatenRegelungstext.LegalDocML.de/1.8.2/ Grammatiken/legalDocML.de-metadaten-regelungstext.xsd"
-          + "http://MetadatenRechtsetzungsdokument.LegalDocML.de/1.8.2/ Grammatiken/legalDocML.de-metadaten-rechtsetzungsdokument.xsd";
+      "http://MetadatenRIS.LegalDocML.de/1.9/ Grammatiken/legalDocML.de-metadaten-ris.xsd"
+          + "http://MetadatenRegelungstext.LegalDocML.de/1.9/ Grammatiken/legalDocML.de-metadaten-regelungstext.xsd"
+          + "http://MetadatenRechtsetzungsdokument.LegalDocML.de/1.9/ Grammatiken/legalDocML.de-metadaten-rechtsetzungsdokument.xsd";
 
   private static final String OFFENE_STRUKTUR_SCHEMA_LOCATIONS =
       COMMON_SCHEMA_LOCATIONS
-          + "http://Inhaltsdaten.LegalDocML.de/1.8.2/ Grammatiken/legalDocML.de-offenestruktur.xsd";
+          + "http://Inhaltsdaten.LegalDocML.de/1.9/ Grammatiken/legalDocML.de-offenestruktur.xsd";
 
   private static final String REGELUNGSTEXT_SCHEMA_LOCATION =
       COMMON_SCHEMA_LOCATIONS
-          + "http://Inhaltsdaten.LegalDocML.de/1.8.2/ Grammatiken/legalDocML.de-regelungstextverkuendungsfassung.xsd";
+          + "http://Inhaltsdaten.LegalDocML.de/1.9/ Grammatiken/legalDocML.de-regelungstextverkuendungsfassung.xsd";
 
   private final AkomaNtoso document = new AkomaNtoso();
   private final Map<String, AkomaNtoso> attachmentsDocs = new HashMap<>();

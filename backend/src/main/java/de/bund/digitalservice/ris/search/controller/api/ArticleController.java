@@ -16,7 +16,7 @@ import de.bund.digitalservice.ris.search.models.opensearch.ArticleWithExpression
 import de.bund.digitalservice.ris.search.schema.ArticleVersionSchema;
 import de.bund.digitalservice.ris.search.schema.CollectionSchema;
 import de.bund.digitalservice.ris.search.service.ArticleService;
-import de.bund.digitalservice.ris.search.utils.eli.ExpressionEli;
+import de.bund.digitalservice.ris.search.utils.eli.ExpressionEliPath;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
@@ -72,8 +72,8 @@ public class ArticleController {
       @Parameter(example = "deu") @PathVariable String language,
       @Parameter(example = "art-z1") @PathVariable String eId) {
 
-    ExpressionEli eli =
-        new ExpressionEli(
+    ExpressionEliPath eli =
+        new ExpressionEliPath(
             jurisdiction, agent, year, naturalIdentifier, pointInTime, version, language);
 
     Page<ArticleWithExpressions> articles = articleService.getAllArticleVersions(eli, eId);

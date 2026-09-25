@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-Diese Datei ist Bestandteil der Schematronregeln des Standards LegalDocML.de 1.8.2 (07.08.2025).
+Diese Datei ist Bestandteil der Schematronregeln des Standards LegalDocML.de 1.9 (03.11.2025).
 Sie wird inkludiert von der Schematron-Hauptdatei.
 
                 
@@ -36,26 +36,26 @@ Sie wird inkludiert von der Schematron-Hauptdatei.
    <sch:rule role="error"
              context="akn:identification/akn:FRBRExpression/akn:FRBRthis/@value">
       <sch:assert id="SCH-ENTWF-valueLiterals.expression.FRBRthis"
-                  test="if ($ist-entwurfsfassung) then (matches(., '^eli/dl/\d{4}/[a-zäöüß-]+/[0-9]+/[a-zäöüß-]+/[a-zäöüß-]+/\d{4}-\d{2}-\d{2}/[0-9]+/[a-z]{3}/[a-zöäüß\-]+-\d+$')) else true()">In der Entwurfsfassung ist das Literal "<sch:value-of select="."/>" an dieser Stelle nicht
-                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "eli/dl/\d{4}/[a-zäöüß-]+/[0-9]+/[a-zäöüß-]+/[a-zäöüß-]+/\d{4}-\d{2}-\d{2}/[0-9]+/[a-z]{3}/[a-zöäüß\-]+-\d+" entsprechen.</sch:assert>
+                  test="if ($ist-entwurfsfassung) then (matches(., '^https://www.egesetzgebung.bund.de/eli/dl/\d{4}/[a-zäöüß-]+/[0-9]+/[a-zäöüß-]+/[a-zäöüß-]+/\d{4}-\d{2}-\d{2}/[0-9]+/[a-z]{3}/[a-zöäüß\-]+-\d+$')) else true()">In der Entwurfsfassung ist das Literal "<sch:value-of select="."/>" an dieser Stelle nicht
+                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "https://www.egesetzgebung.bund.de/eli/dl/\d{4}/[a-zäöüß-]+/[0-9]+/[a-zäöüß-]+/[a-zäöüß-]+/\d{4}-\d{2}-\d{2}/[0-9]+/[a-z]{3}/[a-zöäüß\-]+-\d+" entsprechen.</sch:assert>
    </sch:rule>
    <sch:rule role="error"
              context="akn:identification/akn:FRBRExpression/akn:FRBRuri/@value">
       <sch:assert id="SCH-ENTWF-valueLiterals.expression.FRBRuri"
-                  test="if ($ist-entwurfsfassung) then (matches(., '^eli/dl/\d{4}/[a-zäöüß-]+/[0-9]+/[a-zäöüß-]+/[a-zäöüß-]+/\d{4}-\d{2}-\d{2}/[0-9]+/[a-z]{3}$')) else true()">In der Entwurfsfassung ist das Literal "<sch:value-of select="."/>" an dieser Stelle nicht
-                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "eli/dl/\d{4}/[a-zäöüß-]+/[0-9]+/[a-zäöüß-]+/[a-zäöüß-]+/\d{4}-\d{2}-\d{2}/[0-9]+/[a-z]{3}" entsprechen.</sch:assert>
+                  test="if ($ist-entwurfsfassung) then (matches(., '^https://[a-z]+(\.[a-z]+)+/eli/dl/\d{4}/[a-zäöüß-]+/[0-9]+/[a-zäöüß-]+/[a-zäöüß-]+/\d{4}-\d{2}-\d{2}/[0-9]+/[a-z]{3}$')) else true()">In der Entwurfsfassung ist das Literal "<sch:value-of select="."/>" an dieser Stelle nicht
+                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "https://[a-z]+(\.[a-z]+)+/eli/dl/\d{4}/[a-zäöüß-]+/[0-9]+/[a-zäöüß-]+/[a-zäöüß-]+/\d{4}-\d{2}-\d{2}/[0-9]+/[a-z]{3}" entsprechen.</sch:assert>
    </sch:rule>
    <sch:rule role="error"
              context="akn:identification/akn:FRBRManifestation/akn:FRBRthis/@value">
       <sch:assert id="SCH-ENTWF-valueLiterals.manifestation.FRBRthis"
-                  test="if ($ist-entwurfsfassung) then (matches(., '^eli/dl/\d{4}/[a-zäöüß-]+/[0-9]+/[a-zäöüß-]+/[a-zäöüß-]+/\d{4}-\d{2}-\d{2}/[0-9]+/[a-z]{3}/[a-zöäüß\-]+-\d+\.[a-zöäüß]+$')) else true()">In der Entwurfsfassung ist das Literal "<sch:value-of select="."/>" an dieser Stelle nicht
-                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "eli/dl/\d{4}/[a-zäöüß-]+/[0-9]+/[a-zäöüß-]+/[a-zäöüß-]+/\d{4}-\d{2}-\d{2}/[0-9]+/[a-z]{3}/[a-zöäüß\-]+-\d+\.[a-zöäüß]+" entsprechen.</sch:assert>
+                  test="if ($ist-entwurfsfassung) then (matches(., '^https://[a-z]+(\.[a-z]+)+/eli/dl/\d{4}/[a-zäöüß-]+/[0-9]+/[a-zäöüß-]+/[a-zäöüß-]+/\d{4}-\d{2}-\d{2}/[0-9]+/[a-z]{3}/[a-zöäüß\-]+-\d+\.[a-zöäüß]+$')) else true()">In der Entwurfsfassung ist das Literal "<sch:value-of select="."/>" an dieser Stelle nicht
+                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "https://[a-z]+(\.[a-z]+)+/eli/dl/\d{4}/[a-zäöüß-]+/[0-9]+/[a-zäöüß-]+/[a-zäöüß-]+/\d{4}-\d{2}-\d{2}/[0-9]+/[a-z]{3}/[a-zöäüß\-]+-\d+\.[a-zöäüß]+" entsprechen.</sch:assert>
    </sch:rule>
    <sch:rule role="error"
              context="akn:identification/akn:FRBRManifestation/akn:FRBRuri/@value">
       <sch:assert id="SCH-ENTWF-valueLiterals.manifestation.FRBRuri"
-                  test="if ($ist-entwurfsfassung) then (matches(., '^eli/dl/\d{4}/[a-zäöüß-]+/[0-9]+/[a-zäöüß-]+/[a-zäöüß-]+/\d{4}-\d{2}-\d{2}/[0-9]+/[a-z]{3}/[a-zöäüß\-]+-\d+\.[a-zöäüß]+$')) else true()">In der Entwurfsfassung ist das Literal "<sch:value-of select="."/>" an dieser Stelle nicht
-                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "eli/dl/\d{4}/[a-zäöüß-]+/[0-9]+/[a-zäöüß-]+/[a-zäöüß-]+/\d{4}-\d{2}-\d{2}/[0-9]+/[a-z]{3}/[a-zöäüß\-]+-\d+\.[a-zöäüß]+" entsprechen.</sch:assert>
+                  test="if ($ist-entwurfsfassung) then (matches(., '^https://[a-z]+(\.[a-z]+)+/eli/dl/\d{4}/[a-zäöüß-]+/[0-9]+/[a-zäöüß-]+/[a-zäöüß-]+/\d{4}-\d{2}-\d{2}/[0-9]+/[a-z]{3}/[a-zöäüß\-]+-\d+\.[a-zöäüß]+$')) else true()">In der Entwurfsfassung ist das Literal "<sch:value-of select="."/>" an dieser Stelle nicht
+                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "https://[a-z]+(\.[a-z]+)+/eli/dl/\d{4}/[a-zäöüß-]+/[0-9]+/[a-zäöüß-]+/[a-zäöüß-]+/\d{4}-\d{2}-\d{2}/[0-9]+/[a-z]{3}/[a-zöäüß\-]+-\d+\.[a-zöäüß]+" entsprechen.</sch:assert>
    </sch:rule>
    <sch:rule role="error"
              context="akn:identification/akn:FRBRWork/akn:FRBRname/@value">
@@ -72,19 +72,19 @@ Sie wird inkludiert von der Schematron-Hauptdatei.
    <sch:rule role="error"
              context="akn:identification/akn:FRBRWork/akn:FRBRsubtype/@value">
       <sch:assert id="SCH-ENTWF-valueLiterals.work.FRBRsubtype"
-                  test="if ($ist-entwurfsfassung) then (matches(., '^(rechtsetzungsdokument|aenderungsantrag|anlage-regelungstext|anschreiben|anschreiben-einigungsvorschlag-des-vermittlungsausschusses|anschreiben-vorschlag-an-bundesrat|antrag|austauschseite|begruendung-aenderungsantrag|begruendung-entschliessungsantrag|begruendung-regelungstext|bekanntmachungstext|bekanntmachungstext-berichtigung|bekanntmachungstext-entscheidung-des-bundesverfassungsgerichts|bericht|berichtigung|beschluss-des-bundesrates|beschlussempfehlung|beschlussvorschlag-der-bundesregierung|denkschrift|entschliessungsantrag|gegenaeusserung-der-bundesregierung|gesetze-beschluss-des-bundestages|gutachtliche-stellungnahme|mitteilung-an-bundesrat|nkr-stellungnahme|regelungstext-entwurf|sonstiges-dokument|sprechzettel-für-regierungssprecher|stellungnahme-bundesrat|synopse|unterrichtung|vereinbarung-entwurf|vorblatt-beschlussempfehlung|vorblatt-regelungstext|vorlage-an-bundesrat|vorschlag-an-bundesrat|wahlvorschlag|gesetzesbeschluss-des-bundestages)(-[0-9]+)$')) else true()">In der Entwurfsfassung ist das Literal "<sch:value-of select="."/>" an dieser Stelle nicht
-                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "(rechtsetzungsdokument|aenderungsantrag|anlage-regelungstext|anschreiben|anschreiben-einigungsvorschlag-des-vermittlungsausschusses|anschreiben-vorschlag-an-bundesrat|antrag|austauschseite|begruendung-aenderungsantrag|begruendung-entschliessungsantrag|begruendung-regelungstext|bekanntmachungstext|bekanntmachungstext-berichtigung|bekanntmachungstext-entscheidung-des-bundesverfassungsgerichts|bericht|berichtigung|beschluss-des-bundesrates|beschlussempfehlung|beschlussvorschlag-der-bundesregierung|denkschrift|entschliessungsantrag|gegenaeusserung-der-bundesregierung|gesetze-beschluss-des-bundestages|gutachtliche-stellungnahme|mitteilung-an-bundesrat|nkr-stellungnahme|regelungstext-entwurf|sonstiges-dokument|sprechzettel-für-regierungssprecher|stellungnahme-bundesrat|synopse|unterrichtung|vereinbarung-entwurf|vorblatt-beschlussempfehlung|vorblatt-regelungstext|vorlage-an-bundesrat|vorschlag-an-bundesrat|wahlvorschlag|gesetzesbeschluss-des-bundestages)(-[0-9]+)" entsprechen.</sch:assert>
+                  test="if ($ist-entwurfsfassung) then (matches(., '^(rechtsetzungsdokument|aenderungsantrag|anlage-regelungstext|anschreiben|anschreiben-einigungsvorschlag-des-vermittlungsausschusses|anschreiben-vorschlag-an-bundesrat|antrag|austauschseite|begruendung-aenderungsantrag|begruendung-entschliessungsantrag|begruendung-regelungstext|bericht-technikfolgenabschaetzung|sonstiger-veroeffentlichungstext|bericht|berichtigung|beschluss-des-bundesrates|beschlussempfehlung|beschlussvorschlag-der-bundesregierung|denkschrift|entschliessungsantrag|gegenaeusserung-der-bundesregierung|gesetze-beschluss-des-bundestages|gutachtliche-stellungnahme|mitteilung-an-bundesrat|nkr-stellungnahme|regelungstext-entwurf|sonstiges-teildokument|sprechzettel-fuer-regierungssprecher|stellungnahme-bundesrat|synopse|unterrichtung|vereinbarung-entwurf|vorblatt-beschlussempfehlung|einspruch-bundesrat|vorblatt-regelungstext|vorlage-an-bundesrat|vorschlag-an-bundesrat|wahlvorschlag|gesetzesbeschluss-des-bundestages|sammeldrucksache-fragestunde|sammeldrucksache-schriftliche-fragen|antworten-der-bundesregierung|anfragen-an-bundesregierung)(-[0-9]+)$')) else true()">In der Entwurfsfassung ist das Literal "<sch:value-of select="."/>" an dieser Stelle nicht
+                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "(rechtsetzungsdokument|aenderungsantrag|anlage-regelungstext|anschreiben|anschreiben-einigungsvorschlag-des-vermittlungsausschusses|anschreiben-vorschlag-an-bundesrat|antrag|austauschseite|begruendung-aenderungsantrag|begruendung-entschliessungsantrag|begruendung-regelungstext|bericht-technikfolgenabschaetzung|sonstiger-veroeffentlichungstext|bericht|berichtigung|beschluss-des-bundesrates|beschlussempfehlung|beschlussvorschlag-der-bundesregierung|denkschrift|entschliessungsantrag|gegenaeusserung-der-bundesregierung|gesetze-beschluss-des-bundestages|gutachtliche-stellungnahme|mitteilung-an-bundesrat|nkr-stellungnahme|regelungstext-entwurf|sonstiges-teildokument|sprechzettel-fuer-regierungssprecher|stellungnahme-bundesrat|synopse|unterrichtung|vereinbarung-entwurf|vorblatt-beschlussempfehlung|einspruch-bundesrat|vorblatt-regelungstext|vorlage-an-bundesrat|vorschlag-an-bundesrat|wahlvorschlag|gesetzesbeschluss-des-bundestages|sammeldrucksache-fragestunde|sammeldrucksache-schriftliche-fragen|antworten-der-bundesregierung|anfragen-an-bundesregierung)(-[0-9]+)" entsprechen.</sch:assert>
    </sch:rule>
    <sch:rule role="error"
              context="akn:identification/akn:FRBRWork/akn:FRBRthis/@value">
       <sch:assert id="SCH-ENTWF-valueLiterals.work.FRBRthis"
-                  test="if ($ist-entwurfsfassung) then (matches(., '^eli/dl/\d{4}/[a-zäöüß-]+/[0-9]+/[a-zäöüß-]+/[a-zäöüß\-]+-\d+$')) else true()">In der Entwurfsfassung ist das Literal "<sch:value-of select="."/>" an dieser Stelle nicht
-                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "eli/dl/\d{4}/[a-zäöüß-]+/[0-9]+/[a-zäöüß-]+/[a-zäöüß\-]+-\d+" entsprechen.</sch:assert>
+                  test="if ($ist-entwurfsfassung) then (matches(., '^https://www.egesetzgebung.bund.de/eli/dl/\d{4}/[a-zäöüß-]+/[0-9]+/[a-zäöüß-]+/[a-zäöüß\-]+-\d+$')) else true()">In der Entwurfsfassung ist das Literal "<sch:value-of select="."/>" an dieser Stelle nicht
+                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "https://www.egesetzgebung.bund.de/eli/dl/\d{4}/[a-zäöüß-]+/[0-9]+/[a-zäöüß-]+/[a-zäöüß\-]+-\d+" entsprechen.</sch:assert>
    </sch:rule>
    <sch:rule role="error"
              context="akn:identification/akn:FRBRWork/akn:FRBRuri/@value">
       <sch:assert id="SCH-ENTWF-valueLiterals.work.FRBRuri"
-                  test="if ($ist-entwurfsfassung) then (matches(., '^eli/dl/\d{4}/[a-zäöüß-]+/[0-9]+/[a-zäöüß-]+$')) else true()">In der Entwurfsfassung ist das Literal "<sch:value-of select="."/>" an dieser Stelle nicht
-                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "eli/dl/\d{4}/[a-zäöüß-]+/[0-9]+/[a-zäöüß-]+" entsprechen.</sch:assert>
+                  test="if ($ist-entwurfsfassung) then (matches(., '^https://www.egesetzgebung.bund.de/eli/dl/\d{4}/[a-zäöüß-]+/[0-9]+/[a-zäöüß-]+$')) else true()">In der Entwurfsfassung ist das Literal "<sch:value-of select="."/>" an dieser Stelle nicht
+                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "https://www.egesetzgebung.bund.de/eli/dl/\d{4}/[a-zäöüß-]+/[0-9]+/[a-zäöüß-]+" entsprechen.</sch:assert>
    </sch:rule>
 </sch:pattern>

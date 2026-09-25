@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-model href="../../../Grammatiken/Norms/legalDocML.de.sch" schematypens="http://purl.oclc.org/dsdl/schematron"?>
-<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.8.2/"
+<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.9/"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.8.2/ ../../../../../../../../../../../../Grammatiken/legalDocML.de-metadaten-ris.xsd
-                        http://MetadatenRegelungstext.LegalDocML.de/1.8.2/ ../../../../../../../../../../../../Grammatiken/legalDocML.de-metadaten-regelungstext.xsd
-                        http://MetadatenRechtsetzungsdokument.LegalDocML.de/1.8.2/ ../../../../../../../../../../../../Grammatiken/legalDocML.de-metadaten-rechtsetzungsdokument.xsd
-                        http://Inhaltsdaten.LegalDocML.de/1.8.2/ ../../../../../../../../../../../../Grammatiken/legalDocML.de-regelungstextverkuendungsfassung.xsd">
-  <akn:act name="/akn/ontology/de/concept/documenttype/bund/regelungstext-verkuendung">
+                xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.9/
+                ../../../../../../../../../../../../Grammatiken/Norms/legalDocML.de-metadaten-ris.xsd
+                http://MetadatenRegelungstext.LegalDocML.de/1.9/
+                ../../../../../../../../../../../../Grammatiken/Norms/legalDocML.de-metadaten-regelungstext.xsd
+                http://MetadatenRechtsetzungsdokument.LegalDocML.de/1.9/
+                ../../../../../../../../../../../../Grammatiken/Norms/legalDocML.de-metadaten-rechtsetzungsdokument.xsd
+                http://Inhaltsdaten.LegalDocML.de/1.9/
+                ../../../../../../../../../../../../Grammatiken/Norms/legalDocML.de-regelungstext.xsd">
+  <akn:act name="/akn/ontology/de/concept/documenttype/bund/regelungstext">
     <akn:meta eId="meta-n1" GUID="40a13276-39ac-4fc9-aafd-3fbfea0df2b0">
       <akn:identification eId="meta-n1_ident-n1" GUID="6098a736-d359-4caf-a45e-dfa3792f2bc4" source="attributsemantik-noch-undefiniert">
         <akn:FRBRWork eId="meta-n1_ident-n1_frbrwork-n1" GUID="cc4476ce-6342-4bb9-a777-030a21e4b0fc">
           <akn:FRBRthis eId="meta-n1_ident-n1_frbrwork-n1_frbrthis-n1" GUID="d2bd3a22-c547-479d-85c3-ef374778c74b" value="eli/bund/bgbl-1/1991/s101/regelungstext-1"></akn:FRBRthis>
           <akn:FRBRuri eId="meta-n1_ident-n1_frbrwork-n1_frbruri-n1" GUID="0d015c4c-be37-453a-917f-7975287b2fcf" value="eli/bund/bgbl-1/1991/s101"></akn:FRBRuri>
           <akn:FRBRalias eId="meta-n1_ident-n1_frbrwork-n1_frbralias-n1" GUID="e2acf308-f9e4-4781-ba3a-5339a999f69f" name="übergreifende-id" value="f96cfae4-4fce-4c72-9186-0d84778dc11c"></akn:FRBRalias>
-          <akn:FRBRdate eId="meta-n1_ident-n1_frbrwork-n1_frbrdate-n1" GUID="63e8780d-4225-4987-aec1-794510b4d7f6" date="1991-01-01" name="verkuendungsfassung-verkuendungsdatum"></akn:FRBRdate>
+          <akn:FRBRdate eId="meta-n1_ident-n1_frbrwork-n1_frbrdate-n1" GUID="63e8780d-4225-4987-aec1-794510b4d7f6" date="1991-01-01" name="verkuendungsdatum"></akn:FRBRdate>
           <akn:FRBRauthor eId="meta-n1_ident-n1_frbrwork-n1_frbrauthor-n1" GUID="b6deb229-93c7-43f4-886a-b9693587ca8a" href="recht.bund.de/institution/bundesregierung"></akn:FRBRauthor>
           <akn:FRBRcountry eId="meta-n1_ident-n1_frbrwork-n1_frbrcountry-n1" GUID="1fd2ebf9-a423-443c-a7e5-665b86a0d9d9" value="de"></akn:FRBRcountry>
           <akn:FRBRnumber eId="meta-n1_ident-n1_frbrwork-n1_frbrnumber-n1" GUID="e7405de2-48df-4049-9621-a0ffa2d8e317" value="1"></akn:FRBRnumber>
@@ -49,7 +53,10 @@
         </akn:temporalGroup>
       </akn:temporalData>
       <akn:proprietary GUID="2983c8d3-2f94-41ba-907c-b9aee90a04eb" eId="meta-n1_proprietary-n1" source="attributsemantik-noch-undefiniert">
-        <ris:legalDocML.de_metadaten xmlns:ris="http://MetadatenRIS.LegalDocML.de/1.8.2/" xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.8.2/ ../ris-norms-ldml-schema-extensions/1.8.2/legalDocML.de-metadaten-ris.xsd">
+          <ris:legalDocML.de_metadaten xmlns:ris="http://MetadatenRIS.LegalDocML.de/1.9/"
+                                       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                                       xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.9/
+                                             ../../../../../../../../../../../../Grammatiken/Norms/legalDocML.de-metadaten-ris.xsd">
           <ris:abkuerzung refersTo="interne-abkuerzung">RisAbbrev</ris:abkuerzung>
         </ris:legalDocML.de_metadaten>
       </akn:proprietary>
@@ -66,23 +73,23 @@
         <akn:date eId="einleitung-n1_block-n1_datum-n1" GUID="34a9b790-c90f-4177-8023-425062e13f07" refersTo="ausfertigung-datum" date="0001-01-01">0001-01-01</akn:date>
       </akn:block>
     </akn:preface>
-    <akn:preamble GUID="42bacc22-ce03-4c72-bf45-01f1507b444a" eId="präambel-n1">
-      <akn:blockContainer GUID="3c20d3b2-6a26-484b-bd4f-08fa4c36b4fa" eId="präambel-n1_blockcontainer-n1" refersTo="inhaltsuebersicht">
-      <akn:heading GUID="d3a4a9a7-0e0a-4d7d-9375-77acedbbd7a9" eId="präambel-n1_blockcontainer-n1_überschrift-n1">Inhaltsübersicht</akn:heading>
-      <akn:toc GUID="43fb93c0-2d01-4508-b504-eafa682bb39a" eId="präambel-n1_blockcontainer-n1_inhuebs-n1">
-        <akn:tocItem GUID="6075a9ac-09d8-40ee-8354-ebd9877043ab" eId="präambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n1" href="" level="1">
-          <akn:span GUID="d0b5ab0e-2da7-4c1e-9c42-9f23db231485" eId="präambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n1_span-n1">Abschnitt 1</akn:span>
+    <akn:preamble GUID="42bacc22-ce03-4c72-bf45-01f1507b444a" eId="praeambel-n1">
+      <akn:blockContainer GUID="3c20d3b2-6a26-484b-bd4f-08fa4c36b4fa" eId="praeambel-n1_blockcontainer-n1" refersTo="inhaltsuebersicht">
+      <akn:heading GUID="d3a4a9a7-0e0a-4d7d-9375-77acedbbd7a9" eId="praeambel-n1_blockcontainer-n1_ueberschrift-n1">Inhaltsübersicht</akn:heading>
+      <akn:toc GUID="43fb93c0-2d01-4508-b504-eafa682bb39a" eId="praeambel-n1_blockcontainer-n1_inhuebs-n1">
+        <akn:tocItem GUID="6075a9ac-09d8-40ee-8354-ebd9877043ab" eId="praeambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n1" href="" level="1">
+          <akn:span GUID="d0b5ab0e-2da7-4c1e-9c42-9f23db231485" eId="praeambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n1_span-n1">Abschnitt 1</akn:span>
         </akn:tocItem>
-        <akn:tocItem GUID="dfa73504-a8ec-4636-b8d8-ebe7a2250d62" eId="präambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n2" href="" level="2">
-          <akn:span GUID="d9633445-102a-4432-8c64-f7dfd642b280" eId="präambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n2_span-n1">Allgemeine Bestimmungen</akn:span>
+        <akn:tocItem GUID="dfa73504-a8ec-4636-b8d8-ebe7a2250d62" eId="praeambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n2" href="" level="2">
+          <akn:span GUID="d9633445-102a-4432-8c64-f7dfd642b280" eId="praeambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n2_span-n1">Allgemeine Bestimmungen</akn:span>
         </akn:tocItem>
-        <akn:tocItem GUID="dfa73504-a8ec-4636-b8d8-ebe7a2250d62" eId="präambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n3" href="" level="5">
-          <akn:span GUID="d9633445-102a-4432-8c64-f7dfd642b280" eId="präambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n3_span-n1">Art 1</akn:span>
-          <akn:span GUID="d9633445-102a-4432-8c64-f7dfd642b280" eId="präambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n3_span-n2">Test Title</akn:span>
+        <akn:tocItem GUID="dfa73504-a8ec-4636-b8d8-ebe7a2250d62" eId="praeambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n3" href="" level="5">
+          <akn:span GUID="d9633445-102a-4432-8c64-f7dfd642b280" eId="praeambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n3_span-n1">Art 1</akn:span>
+          <akn:span GUID="d9633445-102a-4432-8c64-f7dfd642b280" eId="praeambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n3_span-n2">Test Title</akn:span>
         </akn:tocItem>
-        <akn:tocItem GUID="dfa73504-a8ec-4636-b8d8-ebe7a2250d62" eId="präambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n4" href="" level="1">
-          <akn:span GUID="d9633445-102a-4432-8c64-f7dfd642b280" eId="präambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n4_span-n1">Art 2</akn:span>
-          <akn:span GUID="d9633445-102a-4432-8c64-f7dfd642b280" eId="präambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n4_span-n2">Another Test Title</akn:span>
+        <akn:tocItem GUID="dfa73504-a8ec-4636-b8d8-ebe7a2250d62" eId="praeambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n4" href="" level="1">
+          <akn:span GUID="d9633445-102a-4432-8c64-f7dfd642b280" eId="praeambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n4_span-n1">Art 2</akn:span>
+          <akn:span GUID="d9633445-102a-4432-8c64-f7dfd642b280" eId="praeambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n4_span-n2">Another Test Title</akn:span>
         </akn:tocItem>
       </akn:toc>
     </akn:blockContainer>
@@ -91,7 +98,7 @@
       <!-- Basic HTML elements -->
       <akn:article eId="art-z1" GUID="87cd6b3a-d198-49c3-a02f-6adfd12940cb" period="#meta-n1_geltzeiten-n1_geltungszeitgr-n1">
         <akn:num eId="art-z1_bezeichnung-n1" GUID="0a0885f1-5bf1-476e-b12b-ce8243a47ddb">§ 1</akn:num>
-        <akn:heading eId="art-z1_überschrift-n1" GUID="519116f1-968a-4eaa-a89e-71258285844f"> Basic HTML Elements </akn:heading>
+        <akn:heading eId="art-z1_ueberschrift-n1" GUID="519116f1-968a-4eaa-a89e-71258285844f"> Basic HTML Elements </akn:heading>
 
         <akn:paragraph eId="art-z1_abs-z1" GUID="5eb21b69-8e10-4b24-8d69-14e6688a7886">
           <akn:num eId="art-z1_abs-z1_bezeichnung-n1" GUID="da0afc22-6f9b-4fe6-8e25-a1b97c8fc382">(1)</akn:num>
@@ -108,7 +115,7 @@
 
       <akn:article eId="art-z2" GUID="ee1dc8ec-3811-4f7e-9836-144e98dd9e99" period="#meta-n1_geltzeiten-n1_geltungszeitgr-n1">
         <akn:num eId="art-z2_bezeichnung-n1" GUID="9828d548-409e-40f2-be0b-8a1add5286e4">§ 2</akn:num>
-        <akn:heading eId="art-z2_überschrift-n1" GUID="22237c8d-544f-48ba-9013-6c7e81a5893c"> Lists </akn:heading>
+        <akn:heading eId="art-z2_ueberschrift-n1" GUID="22237c8d-544f-48ba-9013-6c7e81a5893c"> Lists </akn:heading>
 
         <akn:paragraph eId="art-z2_abs-z1" GUID="86a1a985-8066-4e42-b66f-cae47cf1b5a2">
           <akn:num eId="art-z2_abs-z1_bezeichnung-n1" GUID="3ee5b076-a2c0-4e03-b17d-f9b793e449f1">(1)</akn:num>
@@ -170,7 +177,7 @@
 
       <akn:article eId="art-z3" GUID="a783fdb3-0751-4389-a42b-8ad622389c6b" period="#meta-n1_geltzeiten-n1_geltungszeitgr-n1">
         <akn:num eId="art-z3_bezeichnung-n1" GUID="cc26cb33-5156-45c0-bc1c-3df83a438915">§ 3</akn:num>
-        <akn:heading eId="art-z3_überschrift-n1" GUID="eb2d8e15-0394-4ea4-b867-a41d14693f08"> Tables </akn:heading>
+        <akn:heading eId="art-z3_ueberschrift-n1" GUID="eb2d8e15-0394-4ea4-b867-a41d14693f08"> Tables </akn:heading>
 
         <akn:paragraph eId="art-z3_abs-z1" GUID="fbeb735c-d405-4a31-bd4f-0b25ba541884">
           <akn:num eId="art-z3_abs-z1_bezeichnung-n1" GUID="0ba1b79f-e9a5-4c24-869e-563346052025">(1)</akn:num>
@@ -222,7 +229,7 @@
 
       <akn:article eId="art-z4" GUID="a59598fa-b139-41cc-ae08-12fc4aebf11a" period="#meta-n1_geltzeiten-n1_geltungszeitgr-n1">
         <akn:num eId="art-z4_bezeichnung-n1" GUID="5af34ff6-0a79-4665-a227-e765c04028e9">§ 4</akn:num>
-        <akn:heading eId="art-z4_überschrift-n1" GUID="d065ecca-2eab-4e12-92e4-64e7050e7912"> Modifications </akn:heading>
+        <akn:heading eId="art-z4_ueberschrift-n1" GUID="d065ecca-2eab-4e12-92e4-64e7050e7912"> Modifications </akn:heading>
 
         <akn:paragraph eId="art-z4_abs-z1" GUID="4de4dacd-eb20-4a38-927a-ab71fd9ee85f">
           <akn:num eId="art-z4_abs-z1_bezeichnung-n1" GUID="fd3fdf1c-ef3b-4a0c-97e5-73ca5d87304e">(1)</akn:num>
@@ -235,11 +242,11 @@
         <akn:paragraph eId="art-z4_abs-z2" GUID="97c76694-8af5-4d5b-89f7-69f285c9e61c">
           <akn:num eId="art-z4_abs-z2_bezeichnung-n1" GUID="080ade57-ff89-42e9-a89c-4bdddac16734">(2)</akn:num>
           <akn:content eId="art-z4_abs-z2_inhalt-n1" GUID="1c30035e-d0ea-43e5-b96e-c99d0f2bb5e1">
-            <akn:p eId="art-z4_abs-z2_inhalt-n1_text-n1" GUID="40e80b86-12be-42f6-abaf-92375f2492bf"> This paragraph contains a "aenderungsbefehl-neufassung" mod that indicates that <akn:mod eId="art-z4_abs-z2_inhalt-n1_text-n1_ändbefehl-n1"
+            <akn:p eId="art-z4_abs-z2_inhalt-n1_text-n1" GUID="40e80b86-12be-42f6-abaf-92375f2492bf"> This paragraph contains a "aenderungsbefehl-neufassung" mod that indicates that <akn:mod eId="art-z4_abs-z2_inhalt-n1_text-n1_aendbefehl-n1"
                 GUID="801b95f9-6cd3-475a-b559-f3d0ba329931" refersTo="aenderungsbefehl-neufassung">
-                <akn:ref eId="art-z4_abs-z2_inhalt-n1_text-n1_ändbefehl-n1_ref-n1" GUID="d8c3ba89-6782-4383-9032-1b8690a02da0" href="#">article 2</akn:ref> will be rewritten: <akn:quotedStructure eId="art-z4_abs-z2_inhalt-n1_text-n1_ändbefehl-n1_quotstruct-n1"
+                <akn:ref eId="art-z4_abs-z2_inhalt-n1_text-n1_aendbefehl-n1_ref-n1" GUID="d8c3ba89-6782-4383-9032-1b8690a02da0" href="#">article 2</akn:ref> will be rewritten: <akn:quotedStructure eId="art-z4_abs-z2_inhalt-n1_text-n1_aendbefehl-n1_quotstruct-n1"
                   GUID="c5a1a231-7be0-46b4-b03a-bb7b71a05aea" startQuote="„" endQuote="“">
-                  <akn:p eId="art-z4_abs-z2_inhalt-n1_text-n1_ändbefehl-n1_quotstruct-n1_text-n1" GUID="fabc9cca-cea8-4448-ac2a-9b6e06e2349c"> The new structure of the article. </akn:p>
+                  <akn:p eId="art-z4_abs-z2_inhalt-n1_text-n1_aendbefehl-n1_quotstruct-n1_text-n1" GUID="fabc9cca-cea8-4448-ac2a-9b6e06e2349c"> The new structure of the article. </akn:p>
                 </akn:quotedStructure>
               </akn:mod>
             </akn:p>
@@ -249,9 +256,9 @@
         <akn:paragraph eId="art-z4_abs-z3" GUID="2ea51aa9-6482-4b74-bf65-ec956d4c58f4">
           <akn:num eId="art-z4_abs-z3_bezeichnung-n1" GUID="c569f7ea-1483-4c4f-8886-ffdc42cc2d38">(3)</akn:num>
           <akn:content eId="art-z4_abs-z3_inhalt-n1" GUID="27355ba9-71a0-4f11-8a9c-eb7a06ffc93a">
-            <akn:p eId="art-z4_abs-z3_inhalt-n1_text-n1" GUID="5fc2705c-46aa-410b-8ec8-c089801646fa"> This paragraph contains a "aenderungsbefehl-ersetzen" mod that indicates that <akn:mod eId="art-z4_abs-z3_inhalt-n1_text-n1_ändbefehl-n1" GUID="90f01003-82a0-4e94-982d-5a1ab000e805"
-                refersTo="aenderungsbefehl-ersetzen">in <akn:ref eId="art-z4_abs-z3_inhalt-n1_text-n1_ändbefehl-n1_ref-n1" GUID="af5c0b37-f54f-4766-94db-26ffec8ad5d4" href="#">article 1</akn:ref> the word <akn:quotedText eId="art-z4_abs-z3_inhalt-n1_text-n1_ändbefehl-n1_quottext-n1"
-                  GUID="7abb0fbe-723e-4dae-9487-61f3cdb131cb" startQuote="„" endQuote="“">foo</akn:quotedText> will be replaced by <akn:quotedText eId="art-z4_abs-z3_inhalt-n1_text-n1_ändbefehl-n1_quottext-n2" GUID="fe5b72c6-d4b9-4761-a410-1ac06571e2bb" startQuote="„" endQuote="“">bar</akn:quotedText>
+            <akn:p eId="art-z4_abs-z3_inhalt-n1_text-n1" GUID="5fc2705c-46aa-410b-8ec8-c089801646fa"> This paragraph contains a "aenderungsbefehl-ersetzen" mod that indicates that <akn:mod eId="art-z4_abs-z3_inhalt-n1_text-n1_aendbefehl-n1" GUID="90f01003-82a0-4e94-982d-5a1ab000e805"
+                refersTo="aenderungsbefehl-ersetzen">in <akn:ref eId="art-z4_abs-z3_inhalt-n1_text-n1_aendbefehl-n1_ref-n1" GUID="af5c0b37-f54f-4766-94db-26ffec8ad5d4" href="#">article 1</akn:ref> the word <akn:quotedText eId="art-z4_abs-z3_inhalt-n1_text-n1_aendbefehl-n1_quottext-n1"
+                  GUID="7abb0fbe-723e-4dae-9487-61f3cdb131cb" startQuote="„" endQuote="“">foo</akn:quotedText> will be replaced by <akn:quotedText eId="art-z4_abs-z3_inhalt-n1_text-n1_aendbefehl-n1_quottext-n2" GUID="fe5b72c6-d4b9-4761-a410-1ac06571e2bb" startQuote="„" endQuote="“">bar</akn:quotedText>
               .</akn:mod>
             </akn:p>
           </akn:content>
@@ -260,15 +267,15 @@
         <akn:paragraph eId="art-z4_abs-z4" GUID="3a2f8d6d-a76b-4a5d-9816-57e1caec36e4">
           <akn:num eId="art-z4_abs-z4_bezeichnung-n1" GUID="e29022c3-79f8-4cd7-b6d6-93d1cc8ea570">(4)</akn:num>
           <akn:content eId="art-z4_abs-z4_inhalt-n1" GUID="a8ba233d-0618-4fb9-a876-5d16b9f86ee6">
-            <akn:p eId="art-z4_abs-z4_inhalt-n1_text-n1" GUID="d9e5c9f7-3db0-4f6f-adb2-1008105aa0bf"> This paragraph contains a "aenderungsbefehl-streichen" mod that indicates that <akn:mod eId="art-z4_abs-z4_inhalt-n1_text-n1_ändbefehl-n1" refersTo="aenderungsbefehl-streichen"
-                GUID="c18ccb16-ac0e-4c47-adfa-6de2971f6bbc">the articles <akn:ref eId="art-z4_abs-z4_inhalt-n1_text-n1_ändbefehl-n1_ref-n1" href="#" GUID="e542fd1f-fae3-4da9-b624-b579897bace7">1 to 5</akn:ref> will be repealed.</akn:mod>
+            <akn:p eId="art-z4_abs-z4_inhalt-n1_text-n1" GUID="d9e5c9f7-3db0-4f6f-adb2-1008105aa0bf"> This paragraph contains a "aenderungsbefehl-streichen" mod that indicates that <akn:mod eId="art-z4_abs-z4_inhalt-n1_text-n1_aendbefehl-n1" refersTo="aenderungsbefehl-streichen"
+                GUID="c18ccb16-ac0e-4c47-adfa-6de2971f6bbc">the articles <akn:ref eId="art-z4_abs-z4_inhalt-n1_text-n1_aendbefehl-n1_ref-n1" href="#" GUID="e542fd1f-fae3-4da9-b624-b579897bace7">1 to 5</akn:ref> will be repealed.</akn:mod>
             </akn:p>
           </akn:content>
         </akn:paragraph>
       </akn:article>
       <akn:article eId="art-z5" GUID="a59598fa-b139-41cc-ae08-12fc4aebf11b" period="#meta-n1_geltzeiten-n1_geltungszeitgr-n1">
         <akn:num eId="art-z5_bezeichnung-n1" GUID="5af34ff6-0a79-4665-a227-e765c04028f0">§ 5</akn:num>
-        <akn:heading eId="art-z4_überschrift-n1" GUID="d065ecca-2eab-4e12-92e4-64e7050e7912">Images
+        <akn:heading eId="art-z4_ueberschrift-n1" GUID="d065ecca-2eab-4e12-92e4-64e7050e7912">Images
         </akn:heading>
 
         <akn:paragraph eId="art-z5_abs-z1" GUID="4de4dacd-eb20-4a38-927a-ab71fd9ee85f">
@@ -287,7 +294,7 @@
       </akn:article>
       <akn:article eId="art-z%c2%a7%c2%a7%204%20bis%2014" GUID="a59598fa-b139-41cc-ae08-12fc4aebf11b" period="#meta-n1_geltzeiten-n1_geltungszeitgr-n1">
         <akn:num eId="art-z%c2%a7%c2%a7%204%20bis%2014_bezeichnung-n1" GUID="5af34ff6-0a79-4665-a227-e765c04028f0">§§ 4 bis 14</akn:num>
-        <akn:heading eId="art-z4_überschrift-n1" GUID="d065ecca-2eab-4e12-92e4-64e7050e7912">Images
+        <akn:heading eId="art-z4_ueberschrift-n1" GUID="d065ecca-2eab-4e12-92e4-64e7050e7912">Images
         </akn:heading>
 
         <akn:paragraph eId="art-z%c2%a7%c2%a7%204%20bis%2014_abs-z1" GUID="4de4dacd-eb20-4a38-927a-ab71fd9ee85f">
@@ -315,8 +322,8 @@
         </akn:p>
         <akn:p eId="schluss-n1_blockcontainer-n1_text-n2" GUID="6b442a53-e3d6-4794-be74-e1be0ea32d39">
            <akn:signature eId="schluss-n1_blockcontainer-n1_text-n2_signatur-n1" GUID="653850d4-5db4-4a61-80df-054c21722ed0">
-               <akn:role eId="schluss-n1_blockcontainer-n1_text-n2_signatur-n1_fktbez-n1" GUID="730eba4a-6b8a-4e3c-810b-34e9eb5b57e1" refersTo="attributsemantik-noch-undefiniert">Der Bundespräsident</akn:role>
-               <akn:person eId="schluss-n1_blockcontainer-n1_text-n2_signatur-n1_person-n1" GUID="8c8542b9-8f41-4c66-9e3a-5953b087cc60" refersTo="attributsemantik-noch-undefiniert">Name</akn:person>
+               <akn:role eId="schluss-n1_blockcontainer-n1_text-n2_signatur-n1_fktbez-n1" GUID="730eba4a-6b8a-4e3c-810b-34e9eb5b57e1" refersTo="#meta-n1_verwfktbez-n1">Der Bundespräsident</akn:role>
+               <akn:person eId="schluss-n1_blockcontainer-n1_text-n2_signatur-n1_person-n1" GUID="8c8542b9-8f41-4c66-9e3a-5953b087cc60" refersTo="#meta-n1_verwpers-n1">Name</akn:person>
            </akn:signature>
         </akn:p>
       </akn:blockContainer>

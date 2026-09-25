@@ -167,7 +167,7 @@ class NormXsltTransformerServiceTest {
     var normView =
         Jsoup.parse(service.transformNorm(bytes, "deu", RESOURCES_BASE_PATH, "regelungstext-1"));
     var articleView =
-        Jsoup.parse(service.transformArticle(bytes, "präambel-n1_formel-n1", RESOURCES_BASE_PATH));
+        Jsoup.parse(service.transformArticle(bytes, "praeambel-n1_formel-n1", RESOURCES_BASE_PATH));
 
     for (Document view : List.of(normView, articleView)) {
       assertThat(view.select("ul.nichtamtliche-fussnoten > li.fussnote").text())
@@ -177,8 +177,8 @@ class NormXsltTransformerServiceTest {
     }
 
     // both lists belong to the Eingangsformel, not to the enclosing preamble
-    assertThat(normView.select("#präambel-n1_formel-n1 > ul.nichtamtliche-fussnoten")).hasSize(1);
-    assertThat(normView.select("#präambel-n1_formel-n1 > ol.fussnoten")).hasSize(1);
+    assertThat(normView.select("#praeambel-n1_formel-n1 > ul.nichtamtliche-fussnoten")).hasSize(1);
+    assertThat(normView.select("#praeambel-n1_formel-n1 > ol.fussnoten")).hasSize(1);
   }
 
   @Test
@@ -202,22 +202,6 @@ class NormXsltTransformerServiceTest {
   }
 
   @Test
-  @DisplayName("In can parse umlaute in article ids")
-  void testUmlautInArticleEId() throws IOException {
-    byte[] bytes = Files.readAllBytes(Path.of(resourcesPath, "preambleFormulaWithUmlaut.xml"));
-    var result = service.transformArticle(bytes, "präambel-1_formel-1", RESOURCES_BASE_PATH);
-
-    var actualHtml = Jsoup.parse(result).body().html();
-
-    var expectedHtml =
-        Jsoup.parse(Files.readString(Path.of(resourcesPath, "preambleFormulaWithUmlaut.html")))
-            .body()
-            .html();
-
-    assertThat(actualHtml).isEqualTo(expectedHtml);
-  }
-
-  @Test
   void testTransformsNormTocCorrectly() throws IOException {
     var xml =
         Files.readAllBytes(
@@ -227,16 +211,16 @@ class NormXsltTransformerServiceTest {
     var expectedToc =
         """
         <div class="level-1">
-         <span class="akn-span" id="präambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n1_span-n1">Abschnitt 1</span>
+         <span class="akn-span" id="praeambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n1_span-n1">Abschnitt 1</span>
         </div>
         <div class="level-2">
-         <span class="akn-span" id="präambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n2_span-n1">Allgemeine Bestimmungen</span>
+         <span class="akn-span" id="praeambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n2_span-n1">Allgemeine Bestimmungen</span>
         </div>
         <div class="level-5">
-         <span class="akn-span" id="präambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n3_span-n1">Art 1</span> <span class="akn-span" id="präambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n3_span-n2">Test Title</span>
+         <span class="akn-span" id="praeambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n3_span-n1">Art 1</span> <span class="akn-span" id="praeambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n3_span-n2">Test Title</span>
         </div>
         <div class="level-1">
-         <span class="akn-span" id="präambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n4_span-n1">Art 2</span> <span class="akn-span" id="präambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n4_span-n2">Another Test Title</span>
+         <span class="akn-span" id="praeambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n4_span-n1">Art 2</span> <span class="akn-span" id="praeambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n4_span-n2">Another Test Title</span>
         </div>""";
     final Document parsed = Jsoup.parse(html);
 
@@ -258,7 +242,7 @@ class NormXsltTransformerServiceTest {
          <div id="art-z1" data-period="#meta-n1_geltzeiten-n1_geltungszeitgr-n1">
             <h2 class="einzelvorschrift">
               <span class="akn-num" id="art-z1_bezeichnung-n1">§ 1</span>
-              <span class="akn-heading" id="art-z1_überschrift-n1">
+              <span class="akn-heading" id="art-z1_ueberschrift-n1">
                 Basic HTML Elements
               </span>
             </h2>
