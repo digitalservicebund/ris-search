@@ -1,6 +1,6 @@
 import { parseDocument } from "~/utils/htmlParser.ts";
 
-export interface HtmlCacheEntry {
+interface HtmlCacheEntry {
   html?: string;
   error: boolean;
 }

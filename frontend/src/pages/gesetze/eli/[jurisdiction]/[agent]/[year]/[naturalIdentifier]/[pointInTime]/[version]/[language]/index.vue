@@ -223,8 +223,10 @@ const views = computed<OneOrMore<TabView>>(() => {
   return data.value.hasEmptyBody ? baseViews : [textTab, ...baseViews];
 });
 
-const { dateFilterValue: fassungenDateFilterValue, filteredNormVersions } =
-  useNormVersionFilter(normVersions);
+const {
+  dateFilterValue: fassungenDateFilterValue,
+  filteredVersions: filteredNormVersions,
+} = useVersionDateFilter(normVersions);
 
 const textTabPanelTitleId = useId();
 const detailsTabPanelTitleId = useId();
@@ -317,7 +319,7 @@ const fassungenDateFilterInputId = useId();
                 >
                 <UiDateInput
                   v-model="fassungenDateFilterValue"
-                  class="mb-16 max-w-240 md:mb-24"
+                  class="max-w-240"
                   :id="fassungenDateFilterInputId"
                 />
               </div>

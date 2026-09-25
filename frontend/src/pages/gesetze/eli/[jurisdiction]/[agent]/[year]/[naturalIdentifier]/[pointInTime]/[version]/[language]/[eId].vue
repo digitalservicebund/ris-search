@@ -278,8 +278,14 @@ const metadataItems = computed<MetadataItem[]>(() => {
   ];
 });
 
+const {
+  dateFilterValue: geltungszeitenDateFilterValue,
+  filteredVersions: filteredArticleVersions,
+} = useVersionDateFilter(articleVersions);
+
 const textTabPanelTitleId = useId();
 const geltungszeitenTabPanelTitleId = useId();
+const geltungszeitenDateFilterInputId = useId();
 </script>
 
 <template>
@@ -383,13 +389,27 @@ const geltungszeitenTabPanelTitleId = useId();
             >
               <h2
                 :id="geltungszeitenTabPanelTitleId"
-                class="typo-headline3-bold pb-16"
+                class="typo-headline3-bold"
               >
                 Weitere Geltungszeiträume dieser Einzelnorm
               </h2>
+
+              <div class="my-16 md:my-24">
+                <label
+                  :for="geltungszeitenDateFilterInputId"
+                  class="typo-label2-regular"
+                  >Gültig am</label
+                >
+                <UiDateInput
+                  v-model="geltungszeitenDateFilterValue"
+                  class="max-w-240"
+                  :id="geltungszeitenDateFilterInputId"
+                />
+              </div>
+
               <DocumentsNormsArticleVersionList
                 :currentExpressionId
-                :versions="articleVersions"
+                :versions="filteredArticleVersions"
               />
             </div>
 

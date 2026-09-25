@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import IcChevronRightIcon from "~icons/ic/outline-chevron-right";
-import type { DataTableColumn } from "~/components/ui/DataTable.vue";
 import type { ArticleVersion } from "~/types/api.ts";
 
 const { currentExpressionId, versions } = defineProps<{
@@ -17,7 +16,12 @@ type VersionRow = {
   disabled: boolean;
 };
 
-const columns: DataTableColumn<VersionRow>[] = [
+type VersionColumn = {
+  key: Extract<keyof VersionRow, string>;
+  label: string;
+};
+
+const columns: VersionColumn[] = [
   { key: "fromDate", label: "Gültig ab" },
   { key: "toDate", label: "Gültig bis" },
 ];
