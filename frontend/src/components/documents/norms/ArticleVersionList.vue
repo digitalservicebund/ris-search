@@ -63,8 +63,15 @@ function expandRow(row?: VersionRow) {
   if (row) void updateRowsHtml(row.key, row.contentUrl);
 }
 
-function onRowClick(row: VersionRow) {
-  expandRow(expandedRowKey.value === row.key ? undefined : row);
+async function onRowClick(row: VersionRow, event: MouseEvent) {
+  const summary = event.currentTarget as HTMLElement;
+  const isExpanding = expandedRowKey.value !== row.key;
+  expandRow(isExpanding ? row : undefined);
+  if (!isExpanding) return;
+
+  // Closing a longer row above this one shifts it out of the viewport
+  await nextTick();
+  summary.scrollIntoView({ block: "nearest" });
 }
 
 // A filter narrowing the list down to one row opens it, any other change
@@ -167,8 +174,8 @@ const currentRowId = useId();
           class="group contents details-content:col-span-full"
         >
           <summary
-            @click.prevent="onRowClick(row)"
-            class="col-span-full grid cursor-pointer list-none grid-cols-subgrid items-start gap-8 p-16 hover:bg-gray-100 focus-visible:outline-4 focus-visible:-outline-offset-4 focus-visible:outline-blue-800 md:items-center md:gap-0 md:p-0 [&::-webkit-details-marker]:hidden"
+            @click.prevent="onRowClick(row, $event)"
+            class="col-span-full grid cursor-pointer scroll-mt-16 list-none grid-cols-subgrid items-start gap-8 p-16 hover:bg-gray-100 focus-visible:outline-4 focus-visible:-outline-offset-4 focus-visible:outline-blue-800 md:items-center md:gap-0 md:p-0 [&::-webkit-details-marker]:hidden"
           >
             <span
               class="col-span-2 grid grid-cols-[max-content_minmax(0,1fr)] gap-8 md:grid-cols-subgrid md:gap-0"

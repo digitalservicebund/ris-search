@@ -1,7 +1,7 @@
 import { userEvent } from "@testing-library/user-event";
 import { render, screen, within } from "@testing-library/vue";
 import type { FetchHook } from "ofetch";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { ArticleVersion } from "~/types/api.ts";
 import ArticleVersionList from "./ArticleVersionList.vue";
 
@@ -68,6 +68,13 @@ function props(
 describe("ArticleVersionList", () => {
   beforeEach(() => {
     mockFetch.mockReset();
+    // jsdom doesn't implement scrolling
+    Element.prototype.scrollIntoView = vi.fn();
+  });
+
+  afterEach(() => {
+    // @ts-expect-error restore jsdom's state, which has no implementation
+    delete Element.prototype.scrollIntoView;
   });
 
   it("lists versions, sorted by date, newest first", () => {
