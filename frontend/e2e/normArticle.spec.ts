@@ -539,6 +539,58 @@ test.describe("geltungszeiträume tab", { tag: ["@RISDEV-11132"] }, () => {
     await expect(page.getByText("Zweite Version des § 1.")).not.toBeVisible();
   });
 
+  test("can expand and collapse a row with the keyboard", async ({
+    page,
+    privateFeaturesEnabled,
+  }) => {
+    test.skip(!privateFeaturesEnabled);
+
+    await navigate(
+      page,
+      "gesetze/eli/bund/bgbl-1/2020/s1234/2020-01-01/1/deu/art-z1?view=geltungszeiten",
+    );
+
+    // <summary> has no ARIA role, so it can't be located with getByRole
+    await page
+      .locator("summary")
+      .filter({ hasText: "Gültig ab: 01.01.2022 Gültig bis: –" })
+      .focus();
+
+    await page.keyboard.press("Enter");
+    await expect(page.getByText("Dritte Version des § 1.")).toBeVisible();
+
+    await page.keyboard.press("Space");
+    await expect(page.getByText("Dritte Version des § 1.")).not.toBeVisible();
+  });
+
+  test("keeps an expanded row in view when a row above it collapses", async ({
+    page,
+    privateFeaturesEnabled,
+  }) => {
+    test.skip(!privateFeaturesEnabled);
+
+    await navigate(
+      page,
+      "gesetze/eli/bund/bgbl-1/2020/s1234/2020-01-01/1/deu/art-z1?view=geltungszeiten",
+    );
+
+    await page.getByText("Gültig ab: 01.01.2022 Gültig bis: –").click();
+    await expect(page.getByText("Dritte Version des § 1.")).toBeVisible();
+
+    // With the lower row's header at the very top of the viewport, the
+    // collapsing row above pushes it out of view unless it is scrolled back
+    const lowerRow = page
+      .locator("summary")
+      .filter({ hasText: "Gültig ab: 01.01.2021 Gültig bis: 31.12.2021" });
+    await lowerRow.evaluate((element) =>
+      element.scrollIntoView({ block: "start" }),
+    );
+    await lowerRow.click();
+
+    await expect(page.getByText("Zweite Version des § 1.")).toBeVisible();
+    await expect(lowerRow).toBeInViewport();
+  });
+
   test("can't expand the row of the current article", async ({
     page,
     privateFeaturesEnabled,
