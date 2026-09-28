@@ -260,7 +260,7 @@ test.describe("view norm article page", () => {
   }) => {
     await navigate(
       page,
-      "/gesetze/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/pr%C3%A4ambel-n1_formel-n1",
+      "/gesetze/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/praeambel-n1_formel-n1",
     );
 
     await page
