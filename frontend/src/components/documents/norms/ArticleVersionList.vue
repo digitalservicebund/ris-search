@@ -55,22 +55,24 @@ const rows = computed<VersionRow[]>(() => {
 const expandedRowKey = ref<string | undefined>();
 const { rowsHtml, updateRowsHtml } = useSingleNormVersionsHtml();
 
-// <details name="..."> makes the rows a mutually exclusive accordion natively,
-// even without JS. This handler only keeps the ref in sync with that
-// native state; it never drives the expand/collapse behavior itself.
-async function onToggle(row: VersionRow, event: Event) {
-  const details = event.currentTarget as HTMLDetailsElement;
-  // When one row is open and another row is clicked it will send two events.
-  // First one with open == true for the row that was clicked
-  // and then one with open == false for the other row that implicitly
-  // gets closed.
-  if (details.open) {
-    expandedRowKey.value = row.key;
-    await updateRowsHtml(row.key, row.contentUrl);
-  } else if (expandedRowKey.value === row.key) {
-    expandedRowKey.value = undefined;
-  }
+// The open state is controlled by expandedRowKey. Clicks on <summary> are
+// intercepted so the native toggle can't get out of sync with it; `name` on
+// <details> only keeps the rows an accordion when JS isn't available.
+function expandRow(row?: VersionRow) {
+  expandedRowKey.value = row?.key;
+  if (row) void updateRowsHtml(row.key, row.contentUrl);
 }
+
+function onRowClick(row: VersionRow) {
+  expandRow(expandedRowKey.value === row.key ? undefined : row);
+}
+
+// A filter narrowing the list down to one row opens it, any other change
+// resets the list to collapsed. The current version can't be expanded.
+watch(rows, (newRows) => {
+  const onlyRow = newRows.length === 1 ? newRows[0] : undefined;
+  expandRow(onlyRow?.disabled ? undefined : onlyRow);
+});
 
 // Filtering swaps the rows out in place, which assistive technology does not
 // announce. Report the new count instead. Opening the Geltungszeiten tab mounts this
@@ -160,11 +162,12 @@ const currentRowId = useId();
 
         <details
           v-else
+          :open="expandedRowKey === row.key"
           name="single-norm-versions"
           class="group contents details-content:col-span-full"
-          @toggle="onToggle(row, $event)"
         >
           <summary
+            @click.prevent="onRowClick(row)"
             class="col-span-full grid cursor-pointer list-none grid-cols-subgrid items-start gap-8 p-16 hover:bg-gray-100 focus-visible:outline-4 focus-visible:-outline-offset-4 focus-visible:outline-blue-800 md:items-center md:gap-0 md:p-0 [&::-webkit-details-marker]:hidden"
           >
             <span

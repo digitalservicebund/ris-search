@@ -5,15 +5,6 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { ArticleVersion } from "~/types/api.ts";
 import ArticleVersionList from "./ArticleVersionList.vue";
 
-/**
- * The native `toggle` event for `<details>` is queued as a task rather than
- * fired synchronously, so awaiting the click alone isn't enough to observe its
- * effects (see https://html.spec.whatwg.org/#dom-details-open).
- */
-function flushToggleEvent() {
-  return new Promise((resolve) => setTimeout(resolve, 0));
-}
-
 const { mockFetch } = vi.hoisted(() => {
   return {
     mockFetch: vi.fn(),
@@ -121,7 +112,6 @@ describe("ArticleVersionList", () => {
     const currentRow = screen.getByRole("group", { current: true });
 
     await user.click(currentRow);
-    await flushToggleEvent();
 
     expect(within(currentRow).queryByRole("status")).not.toBeInTheDocument();
   });
@@ -148,7 +138,6 @@ describe("ArticleVersionList", () => {
     const futureVersionRow = screen.getAllByRole("listitem")[0]!;
 
     await user.click(within(futureVersionRow).getByText("01.01.2031"));
-    await flushToggleEvent();
 
     expect(within(futureVersionRow).getByLabelText("Ladestatus")).toBeVisible();
   });
@@ -162,7 +151,6 @@ describe("ArticleVersionList", () => {
     const futureVersionRow = screen.getAllByRole("listitem")[0]!;
 
     await user.click(within(futureVersionRow).getByText("01.01.2031"));
-    await flushToggleEvent();
 
     expect(within(futureVersionRow).getByText("Norm content")).toBeVisible();
   });
@@ -174,7 +162,6 @@ describe("ArticleVersionList", () => {
     const futureVersionRow = screen.getAllByRole("listitem")[0]!;
 
     await user.click(within(futureVersionRow).getByText("01.01.2031"));
-    await flushToggleEvent();
 
     const errorMessage = within(futureVersionRow).getByRole("alert");
     expect(errorMessage).toHaveTextContent("Es ist ein Fehler aufgetreten.");
@@ -188,11 +175,9 @@ describe("ArticleVersionList", () => {
     const toggle = within(futureVersionRow).getByText("01.01.2031");
 
     await user.click(toggle);
-    await flushToggleEvent();
     expect(within(futureVersionRow).getByLabelText("Ladestatus")).toBeVisible();
 
     await user.click(toggle);
-    await flushToggleEvent();
 
     expect(
       within(futureVersionRow).queryByLabelText("Ladestatus"),
@@ -223,16 +208,70 @@ describe("ArticleVersionList", () => {
   });
 
   it("announces how many versions there are once there are some again", async () => {
+    mockFetch.mockResolvedValueOnce("<html><body>Content</body></html>");
     const { rerender } = render(ArticleVersionList, {
       props: props([]),
     });
 
     await rerender(props([pastVersion]));
+    // The single row auto-expands, and its loading spinner is a status too
+    await nextTick();
 
     expect(screen.getByRole("status")).toHaveTextContent("1 Ergebnis");
 
     await rerender(props());
 
     expect(screen.getByRole("status")).toHaveTextContent("3 Ergebnisse");
+  });
+
+  it("closes the previously expanded row when another one is expanded", async () => {
+    mockFetch.mockResolvedValueOnce("<html><body>Future content</body></html>");
+    mockFetch.mockResolvedValueOnce("<html><body>Past content</body></html>");
+    const user = userEvent.setup();
+    render(ArticleVersionList, { props: props() });
+
+    await user.click(screen.getByText("01.01.2031"));
+    await user.click(screen.getByText("05.01.2000"));
+
+    expect(screen.queryByText("Future content")).not.toBeInTheDocument();
+    expect(screen.getByText("Past content")).toBeVisible();
+  });
+
+  it("keeps the row expanded when clicking inside its content", async () => {
+    mockFetch.mockResolvedValueOnce(
+      "<html><body><p>Norm content</p></body></html>",
+    );
+    const user = userEvent.setup();
+    render(ArticleVersionList, { props: props() });
+
+    await user.click(screen.getByText("01.01.2031"));
+    await user.click(screen.getByText("Norm content"));
+
+    expect(screen.getByText("Norm content")).toBeVisible();
+  });
+
+  it("expands the only remaining row when filtering and collapses it again when the filter is cleared", async () => {
+    mockFetch.mockResolvedValueOnce(
+      "<html><body><p>Norm content</p></body></html>",
+    );
+    const { rerender } = render(ArticleVersionList, { props: props() });
+
+    await rerender(props([pastVersion]));
+    await nextTick();
+
+    expect(screen.getByText("Norm content")).toBeVisible();
+
+    await rerender(props());
+
+    expect(screen.queryByText("Norm content")).not.toBeInTheDocument();
+  });
+
+  it("does not load the current version when it is the only remaining row", async () => {
+    const { rerender } = render(ArticleVersionList, { props: props() });
+
+    await rerender(props([currentVersion]));
+
+    expect(mockFetch).not.toHaveBeenCalled();
+    expect(screen.queryByLabelText("Ladestatus")).not.toBeInTheDocument();
   });
 });

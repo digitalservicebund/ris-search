@@ -539,6 +539,30 @@ test.describe("geltungszeiträume tab", { tag: ["@RISDEV-11132"] }, () => {
     await expect(page.getByText("Zweite Version des § 1.")).not.toBeVisible();
   });
 
+  test("can expand and collapse a row with the keyboard", async ({
+    page,
+    privateFeaturesEnabled,
+  }) => {
+    test.skip(!privateFeaturesEnabled);
+
+    await navigate(
+      page,
+      "gesetze/eli/bund/bgbl-1/2020/s1234/2020-01-01/1/deu/art-z1?view=geltungszeiten",
+    );
+
+    // <summary> has no ARIA role, so it can't be located with getByRole
+    await page
+      .locator("summary")
+      .filter({ hasText: "Gültig ab: 01.01.2022 Gültig bis: –" })
+      .focus();
+
+    await page.keyboard.press("Enter");
+    await expect(page.getByText("Dritte Version des § 1.")).toBeVisible();
+
+    await page.keyboard.press("Space");
+    await expect(page.getByText("Dritte Version des § 1.")).not.toBeVisible();
+  });
+
   test("can't expand the row of the current article", async ({
     page,
     privateFeaturesEnabled,
