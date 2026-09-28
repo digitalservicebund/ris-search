@@ -221,7 +221,6 @@ describe("ArticleVersionList", () => {
     });
 
     await rerender(props([pastVersion]));
-    // The single row auto-expands, and its loading spinner is a status too
     await nextTick();
 
     expect(screen.getByRole("status")).toHaveTextContent("1 Ergebnis");
