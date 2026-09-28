@@ -35,7 +35,6 @@ class XSDDescriptionParserTest {
         .put(
             "caselaw",
             new String[] {"schema/caselaw-decision.xsd", "schema/caselaw-pending-proceeding.xsd"});
-    properties.setSchemaPrefix("schema/");
 
     when(context.getResource(anyString()))
         .thenAnswer(
@@ -45,14 +44,62 @@ class XSDDescriptionParserTest {
 
     var parser = new XSDDescriptionParser(properties, context);
 
-    assertThat(parser.getDescriptions(DocumentKind.CASE_LAW)).hasSize(85);
+    assertThat(parser.getDescriptions(DocumentKind.CASE_LAW)).hasSize(182);
+  }
+
+  @Test
+  void testCaselawDoesNotResolveLocalAknElementRefAnnotations() {
+    XSDDescriptionProperties properties = new XSDDescriptionProperties();
+    properties
+        .getXsdLocations()
+        .put(
+            "caselaw",
+            new String[] {"schema/caselaw-decision.xsd", "schema/caselaw-pending-proceeding.xsd"});
+
+    when(context.getResource(anyString()))
+        .thenAnswer(
+            invocation ->
+                new ClassPathResource(
+                    invocation.getArgument(0), XSDDescriptionParser.class.getClassLoader()));
+
+    var parser = new XSDDescriptionParser(properties, context);
+
+    softAssertions.assertThat(parser.findDescription("akn:motivation", "de")).isEmpty();
+    softAssertions.assertThat(parser.findDescription("akn:introduction", "de")).isEmpty();
+    softAssertions.assertThat(parser.findDescription("akn:background", "de")).isEmpty();
+    softAssertions.assertThat(parser.findDescription("akn:decision", "de")).isEmpty();
+  }
+
+  @Test
+  void testCaselawResolvesTypesOnlySelectableViaXsiType() {
+    XSDDescriptionProperties properties = new XSDDescriptionProperties();
+    properties
+        .getXsdLocations()
+        .put(
+            "caselaw",
+            new String[] {"schema/caselaw-decision.xsd", "schema/caselaw-pending-proceeding.xsd"});
+
+    when(context.getResource(anyString()))
+        .thenAnswer(
+            invocation ->
+                new ClassPathResource(
+                    invocation.getArgument(0), XSDDescriptionParser.class.getClassLoader()));
+
+    var parser = new XSDDescriptionParser(properties, context);
+
+    softAssertions
+        .assertThat(parser.findDescription("ris:rechtsfrageGesamt", "de"))
+        .as("ris:rechtsfrageGesamt has no xs:element binding, only xsi:type usages")
+        .contains("Rechtsfrage (gesamt)<br>");
+    softAssertions
+        .assertThat(parser.findDescription("ris:rechtsfrage", "de"))
+        .contains("Rechtsfrage<br>");
   }
 
   @Test
   void testAdm() {
     XSDDescriptionProperties properties = new XSDDescriptionProperties();
     properties.getXsdLocations().put("adm", new String[] {"schema/adm.xsd"});
-    properties.setSchemaPrefix("schema/");
 
     when(context.getResource(anyString()))
         .thenAnswer(
@@ -62,7 +109,7 @@ class XSDDescriptionParserTest {
 
     var parser = new XSDDescriptionParser(properties, context);
 
-    assertThat(parser.getDescriptions(DocumentKind.ADMINISTRATIVE_DIRECTIVE)).hasSize(85);
+    assertThat(parser.getDescriptions(DocumentKind.ADMINISTRATIVE_DIRECTIVE)).hasSize(182);
   }
 
   @Test
@@ -71,7 +118,6 @@ class XSDDescriptionParserTest {
     properties
         .getXsdLocations()
         .put("literature", new String[] {"schema/literature-sli.xsd", "schema/literature-uli.xsd"});
-    properties.setSchemaPrefix("schema/");
 
     when(context.getResource(anyString()))
         .thenAnswer(
@@ -81,7 +127,7 @@ class XSDDescriptionParserTest {
 
     var parser = new XSDDescriptionParser(properties, context);
 
-    assertThat(parser.getDescriptions(DocumentKind.LITERATURE)).hasSize(88);
+    assertThat(parser.getDescriptions(DocumentKind.LITERATURE)).hasSize(182);
   }
 
   @Test
@@ -96,7 +142,6 @@ class XSDDescriptionParserTest {
     properties
         .getXsdLocations()
         .put("literature", new String[] {"schema/literature-sli.xsd", "schema/literature-uli.xsd"});
-    properties.setSchemaPrefix("schema/");
 
     when(context.getResource(anyString()))
         .thenAnswer(
