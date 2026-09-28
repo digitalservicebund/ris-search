@@ -55,9 +55,6 @@ const rows = computed<VersionRow[]>(() => {
 const expandedRowKey = ref<string | undefined>();
 const { rowsHtml, updateRowsHtml } = useSingleNormVersionsHtml();
 
-// The open state is controlled by expandedRowKey. Clicks on <summary> are
-// intercepted so the native toggle can't get out of sync with it; `name` on
-// <details> only keeps the rows an accordion when JS isn't available.
 function expandRow(row?: VersionRow) {
   expandedRowKey.value = row?.key;
   if (row) void updateRowsHtml(row.key, row.contentUrl);
@@ -74,8 +71,6 @@ async function onRowClick(row: VersionRow, event: MouseEvent) {
   summary.scrollIntoView({ block: "nearest" });
 }
 
-// A filter narrowing the list down to one row opens it, any other change
-// resets the list to collapsed. The current version can't be expanded.
 watch(rows, (newRows) => {
   const onlyRow = newRows.length === 1 ? newRows[0] : undefined;
   expandRow(onlyRow?.disabled ? undefined : onlyRow);
