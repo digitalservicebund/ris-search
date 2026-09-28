@@ -268,7 +268,7 @@ public class IndexNormsService implements IndexService {
 
     if (newestFileName.isEmpty()) {
       logger.error(
-          "Expression '{}' either doesn't exist or is missing a regelungstext-verkuendungsfassung.xml.",
+          "Expression '{}' either doesn't exist or is missing a regelungstext.xml.",
           expressionEliPath);
       return Optional.empty();
     }

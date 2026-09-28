@@ -46,7 +46,7 @@ public class FRBRWork extends BaseElement {
 
   /** FRBRWork empty constructor. Calls another constructor with default values. */
   public FRBRWork() {
-    // eli/bund/bgbl-1/2025/341/regelungstext-verkuendung-1
+    // eli/bund/bgbl-1/2025/341/regelungstext-1
     this(new WorkEliPath("bund", "bgbl-1", "2025", "341"));
   }
 
@@ -61,8 +61,7 @@ public class FRBRWork extends BaseElement {
 
     this.frbrThis =
         new ValueLeaf(
-            "meta-n1_ident-n1_frbrwork-n1_frbrthis-n1",
-            eli.toString() + "/regelungstext-verkuendung-1");
+            "meta-n1_ident-n1_frbrwork-n1_frbrthis-n1", eli.toString() + "/regelungstext-1");
 
     this.frbrUri = new ValueLeaf("meta-n1_ident-n1_frbrwork-n1_frbruri-n1", eli.toString());
 
@@ -88,7 +87,7 @@ public class FRBRWork extends BaseElement {
     this.frbrName = new ValueLeaf("meta-n1_ident-n1_frbrwork-n1_frbrname-n1", eli.agent());
 
     this.frbrSubtype =
-        new ValueLeaf("meta-n1_ident-n1_frbrwork-n1_frbrsubtype-n1", "regelungstext-verkuendung-1");
+        new ValueLeaf("meta-n1_ident-n1_frbrwork-n1_frbrsubtype-n1", "regelungstext-1");
   }
 
   /**

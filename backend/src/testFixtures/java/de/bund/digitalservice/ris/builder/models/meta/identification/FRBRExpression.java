@@ -42,19 +42,18 @@ public class FRBRExpression extends BaseElement {
 
   /** FRBRExpression empty constructor. Calls another constructor with default values. */
   public FRBRExpression() {
-    // eli/bund/bgbl-1/2025/341/2025-12-22/1/deu/regelungstext-verkuendung-1
+    // eli/bund/bgbl-1/2025/341/2025-12-22/1/deu/regelungstext-1
     this(
         new ExpressionEliPath(
             "bund", "bgbl-1", "2025", "341", LocalDate.of(2025, Month.DECEMBER, 22), 1, "deu"),
-        "regelungstext-verkuendung-1");
+        "regelungstext-1");
   }
 
   /**
    * FRBRExpression constructor. Builds a FRBRExpression from an ExpressionEli and a file name.
    *
    * @param eli the expression eli for the FRBRExpression
-   * @param fileName the file name component (subtype identifier, e.g.
-   *     "regelungstext-verkuendung-1")
+   * @param fileName the file name component (subtype identifier, e.g. "regelungstext-1")
    */
   public FRBRExpression(ExpressionEliPath eli, String fileName) {
 

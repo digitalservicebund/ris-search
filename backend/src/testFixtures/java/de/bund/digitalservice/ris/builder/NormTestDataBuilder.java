@@ -141,7 +141,7 @@ public class NormTestDataBuilder {
    * Sets the FRBRManifestation's FRBRUri field
    *
    * @param manifestationEli the manifestation ELI, e.g.
-   *     "eli/bund/bgbl-1/1991/s102/2025-11-18/1/deu/2025-11-26/regelungstext-verkuendung-1.xml"
+   *     "eli/bund/bgbl-1/1991/s102/2025-11-18/1/deu/2025-11-26/regelungstext-1.xml"
    * @return this builder for chaining
    */
   public NormTestDataBuilder manifestationEli(String manifestationEli) {
@@ -424,9 +424,8 @@ public class NormTestDataBuilder {
         endDate,
         eId,
         dokNr,
-        article -> {
-          article.addHeading("Heading", null).addParagraph("Some paragraph content", "(1)");
-        });
+        article ->
+            article.addHeading("Heading", null).addParagraph("Some paragraph content", "(1)"));
     return this;
   }
 

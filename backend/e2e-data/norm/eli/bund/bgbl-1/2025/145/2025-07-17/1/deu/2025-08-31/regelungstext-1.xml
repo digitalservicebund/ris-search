@@ -10,7 +10,7 @@
                 <akn:FRBRWork GUID="1428a5d6-2767-426c-b974-72ff3c3cd55c" eId="meta-n1_ident-n1_frbrwork-n1">
                     <akn:FRBRthis GUID="d45090dc-59ab-400c-9804-55741c306b5c"
                                   eId="meta-n1_ident-n1_frbrwork-n1_frbrthis-n1"
-                                  value="eli/bund/bgbl-1/2025/145/regelungstext-verkuendung-1"/>
+                                  value="eli/bund/bgbl-1/2025/145/regelungstext-1"/>
                     <akn:FRBRuri GUID="4d0ab21c-105e-4d5d-9692-4d5be7cefc79"
                                  eId="meta-n1_ident-n1_frbrwork-n1_frbruri-n1" value="eli/bund/bgbl-1/2025/145"/>
                     <akn:FRBRalias GUID="9e3abab6-e5bf-4806-9f58-dfe5b6523147"
@@ -30,13 +30,13 @@
                                   eId="meta-n1_ident-n1_frbrwork-n1_frbrname-n1" value="bgbl-1"/>
                     <akn:FRBRsubtype GUID="1c67ed8b-b156-4f3f-8b70-cbdff7d408a1"
                                      eId="meta-n1_ident-n1_frbrwork-n1_frbrsubtype-n1"
-                                     value="regelungstext-verkuendung-1"/>
+                                     value="regelungstext-1"/>
                 </akn:FRBRWork>
                 <akn:FRBRExpression GUID="a2e3641e-10a2-4012-bdab-e497772ff098"
                                     eId="meta-n1_ident-n1_frbrexpression-n1">
                     <akn:FRBRthis GUID="607a1317-2a89-4e9f-a7ca-030b06074525"
                                   eId="meta-n1_ident-n1_frbrexpression-n1_frbrthis-n1"
-                                  value="eli/bund/bgbl-1/2025/145/2025-07-17/1/deu/regelungstext-verkuendung-1"/>
+                                  value="eli/bund/bgbl-1/2025/145/2025-07-17/1/deu/regelungstext-1"/>
                     <akn:FRBRuri GUID="ecd5a230-9106-4209-aa45-925784d4bbab"
                                  eId="meta-n1_ident-n1_frbrexpression-n1_frbruri-n1"
                                  value="eli/bund/bgbl-1/2025/145/2025-07-17/1/deu"/>
@@ -60,10 +60,10 @@
                                        eId="meta-n1_ident-n1_frbrmanifestation-n1">
                     <akn:FRBRthis GUID="d7f2133a-e98e-4a05-9ce1-b40cec51dfc5"
                                   eId="meta-n1_ident-n1_frbrmanifestation-n1_frbrthis-n1"
-                                  value="eli/bund/bgbl-1/2025/145/2025-07-17/1/deu/2025-08-31/regelungstext-verkuendung-1.xml"/>
+                                  value="eli/bund/bgbl-1/2025/145/2025-07-17/1/deu/2025-08-31/regelungstext-1.xml"/>
                     <akn:FRBRuri GUID="1291d5a1-de14-49ef-a4e7-e6694deb57dd"
                                  eId="meta-n1_ident-n1_frbrmanifestation-n1_frbruri-n1"
-                                 value="eli/bund/bgbl-1/2025/145/2025-07-17/1/deu/2025-08-31/regelungstext-verkuendung-1.xml"/>
+                                 value="eli/bund/bgbl-1/2025/145/2025-07-17/1/deu/2025-08-31/regelungstext-1.xml"/>
                     <akn:FRBRdate GUID="981721a6-5aef-44a7-90af-98af6a2a7486" date="2025-08-31"
                                   eId="meta-n1_ident-n1_frbrmanifestation-n1_frbrdate-n1" name="generierung"/>
                     <akn:FRBRauthor GUID="3c0b863a-8c0f-44ed-bca0-fb663a14fa59"

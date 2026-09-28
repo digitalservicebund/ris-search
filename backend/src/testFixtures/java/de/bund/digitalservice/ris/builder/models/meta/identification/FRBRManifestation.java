@@ -37,7 +37,7 @@ public class FRBRManifestation extends BaseElement {
 
   /** FRBRManifestation empty constructor. Calls another constructor with default values. */
   public FRBRManifestation() {
-    // eli/bund/bgbl-1/2025/341/2025-12-22/1/deu/2025-12-22/regelungstext-verkuendung-1.xml
+    // eli/bund/bgbl-1/2025/341/2025-12-22/1/deu/2025-12-22/regelungstext-1.xml
     this(
         new ManifestationEliPath(
             "bund",
@@ -48,7 +48,7 @@ public class FRBRManifestation extends BaseElement {
             1,
             "deu",
             LocalDate.of(2025, Month.DECEMBER, 22),
-            "regelungstext-verkuendung-1",
+            "regelungstext-1",
             "xml"));
   }
 

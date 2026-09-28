@@ -206,16 +206,16 @@ describe("useFetchNormContent", () => {
   });
 
   const preambleWithTocHtml = `
-    <section class="eingangsformel" id="präambel-n1">
-      <section class="eingangsformel" id="präambel-n1_formel-n1">
-        <p id="präambel-n1_formel-n1_text-n1">Der Bundestag hat …</p>
+    <section class="eingangsformel" id="praeambel-n1">
+      <section class="eingangsformel" id="praeambel-n1_formel-n1">
+        <p id="praeambel-n1_formel-n1_text-n1">Der Bundestag hat …</p>
         <ul class="nichtamtliche-fussnoten">
           <li class="fussnote">
             <p id="meta-n1_editfnote-n1_text-n1">Eingangsformel: Eingangsformel Fußnote</p>
           </li>
         </ul>
       </section>
-      <div class="inhaltsuebersicht" id="präambel-n1_blockcontainer-n1">
+      <div class="inhaltsuebersicht" id="praeambel-n1_blockcontainer-n1">
         <span class="akn-heading">Inhaltsübersicht</span>
         <div class="official-toc">
           <div class="level-1"><span class="akn-span">Abschnitt 1</span></div>

@@ -6,7 +6,7 @@
         <akn:meta GUID="4e2b63f4-c929-43ca-baab-1c377fd4b6b6" eId="meta-n1">
             <akn:identification GUID="760ee04f-499e-498e-95e4-6453b823f9ae" eId="meta-n1_ident-n1" source="attributsemantik-noch-undefiniert">
                 <akn:FRBRWork GUID="9df1a264-dc45-4e39-ae61-ea8a55128611" eId="meta-n1_ident-n1_frbrwork-n1">
-                    <akn:FRBRthis GUID="c00c849c-2e7d-4929-9ed9-13d10d446b4a" eId="meta-n1_ident-n1_frbrwork-n1_frbrthis-n1" value="eli/bund/bgbl-1/2020/s1234/regelungstext-verkuendung-1"/>
+                    <akn:FRBRthis GUID="c00c849c-2e7d-4929-9ed9-13d10d446b4a" eId="meta-n1_ident-n1_frbrwork-n1_frbrthis-n1" value="eli/bund/bgbl-1/2020/s1234/regelungstext-1"/>
                     <akn:FRBRuri GUID="a32fb4e0-b828-45b7-9d58-35de3c31cf81" eId="meta-n1_ident-n1_frbrwork-n1_frbruri-n1" value="eli/bund/bgbl-1/2020/s1234"/>
                     <akn:FRBRalias GUID="559e7ae9-3876-481d-a42b-d74a4c09705c" eId="meta-n1_ident-n1_frbrwork-n1_frbralias-n1" name="übergreifende-id" value="b29e7271-d0eb-5ae1-9513-27af3a7e69dd"/>
                     <akn:FRBRdate GUID="5b58edcf-04b9-4d27-a5cf-f45563cea4b1" eId="meta-n1_ident-n1_frbrwork-n1_frbrdate-n1" date="2025-12-22" name="verkuendungsdatum"/>
@@ -14,10 +14,10 @@
                     <akn:FRBRcountry GUID="ca138381-646e-48ad-9844-2a5b74b85016" eId="meta-n1_ident-n1_frbrwork-n1_frbrcountry-n1" value="de"/>
                     <akn:FRBRnumber GUID="7ad52e61-2275-4c58-9add-20d11d52908e" eId="meta-n1_ident-n1_frbrwork-n1_frbrnumber-n1" value="s1234"/>
                     <akn:FRBRname GUID="6a7b79a2-e1b4-486e-9abb-b00eb2c22d0c" eId="meta-n1_ident-n1_frbrwork-n1_frbrname-n1" value="bgbl-1"/>
-                    <akn:FRBRsubtype GUID="c3e50a4b-78af-43d4-816c-31c4459b51ca" eId="meta-n1_ident-n1_frbrwork-n1_frbrsubtype-n1" value="regelungstext-verkuendung-1"/>
+                    <akn:FRBRsubtype GUID="c3e50a4b-78af-43d4-816c-31c4459b51ca" eId="meta-n1_ident-n1_frbrwork-n1_frbrsubtype-n1" value="regelungstext-1"/>
                 </akn:FRBRWork>
                 <akn:FRBRExpression GUID="ad0a18b0-aedf-4989-a4a5-d87d03145a89" eId="meta-n1_ident-n1_frbrexpression-n1">
-                    <akn:FRBRthis GUID="9c786249-1245-44ae-ab3b-f7924d990883" eId="meta-n1_ident-n1_frbrexpression-n1_frbrthis-n1" value="eli/bund/bgbl-1/2020/s1234/2020-01-01/1/deu/regelungstext-verkuendung-1"/>
+                    <akn:FRBRthis GUID="9c786249-1245-44ae-ab3b-f7924d990883" eId="meta-n1_ident-n1_frbrexpression-n1_frbrthis-n1" value="eli/bund/bgbl-1/2020/s1234/2020-01-01/1/deu/regelungstext-1"/>
                     <akn:FRBRuri GUID="004eb6f8-520e-46c5-b115-d3e93edc12bf" eId="meta-n1_ident-n1_frbrexpression-n1_frbruri-n1" value="eli/bund/bgbl-1/2020/s1234/2020-01-01/1/deu"/>
                     <akn:FRBRalias GUID="553634f3-cdc3-47f1-b1de-d9136b64cc06" eId="meta-n1_ident-n1_frbrexpression-n1_frbralias-n1" name="aktuelle-version-id" value="27204f61-13d2-5943-ad65-83411724b996"/>
                     <akn:FRBRauthor GUID="b958afdb-6b03-4773-9a80-b2aa4eae7dae" eId="meta-n1_ident-n1_frbrexpression-n1_frbrauthor-n1" href="recht.bund.de/institution/bundesregierung"/>
@@ -26,7 +26,7 @@
                     <akn:FRBRversionNumber GUID="8ba9b0a2-e9f3-4a82-9231-7de8f6a35a0c" eId="meta-n1_ident-n1_frbrexpression-n1_frbrversionnumber-n1" value="1"/>
                 </akn:FRBRExpression>
                 <akn:FRBRManifestation GUID="9aa2e31a-76f9-40b2-8f67-730f524e3bc7" eId="meta-n1_ident-n1_frbrmanifestation-n1">
-                    <akn:FRBRthis GUID="82552a85-452c-4e16-b2fc-9e38fc06fb17" eId="meta-n1_ident-n1_frbrmanifestation-n1_frbrthis-n1" value="eli/bund/bgbl-1/2020/s1234/2020-01-01/1/deu/2026-07-01/regelungstext-verkuendung-1.xml"/>
+                    <akn:FRBRthis GUID="82552a85-452c-4e16-b2fc-9e38fc06fb17" eId="meta-n1_ident-n1_frbrmanifestation-n1_frbrthis-n1" value="eli/bund/bgbl-1/2020/s1234/2020-01-01/1/deu/2026-07-01/regelungstext-1.xml"/>
                     <akn:FRBRuri GUID="0395f177-6960-4278-bb23-5476ff774257" eId="meta-n1_ident-n1_frbrmanifestation-n1_frbruri-n1" value="eli/bund/bgbl-1/2020/s1234/2020-01-01/1/deu/2026-07-01"/>
                     <akn:FRBRdate GUID="26195175-9b90-4852-b5a2-d572a97e3bc3" eId="meta-n1_ident-n1_frbrmanifestation-n1_frbrdate-n1" date="2026-07-01" name="generierung"/>
                     <akn:FRBRauthor GUID="9d76d552-2c1b-485e-b1cd-57247c3e5e85" eId="meta-n1_ident-n1_frbrmanifestation-n1_frbrauthor-n1" href="recht.bund.de"/>
