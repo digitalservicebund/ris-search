@@ -137,11 +137,11 @@ const currentRowId = useId();
           :aria-labelledby="currentRowId"
           aria-current="true"
           role="group"
-          class="col-span-full grid grid-cols-subgrid items-start gap-8 p-16 md:items-center md:gap-0 md:p-0"
+          class="col-span-full grid grid-cols-subgrid items-start p-16 md:items-center md:p-0"
         >
           <span
             aria-hidden="true"
-            class="col-span-2 grid grid-cols-[max-content_minmax(0,1fr)] gap-8 md:grid-cols-subgrid md:gap-0"
+            class="col-span-2 grid grid-cols-[max-content_minmax(0,1fr)] gap-x-16 gap-y-4 md:grid-cols-subgrid md:gap-0"
             :id="currentRowId"
           >
             <template v-for="column in columns" :key="column.key">
@@ -170,10 +170,10 @@ const currentRowId = useId();
         >
           <summary
             @click.prevent="onRowClick(row, $event)"
-            class="col-span-full grid cursor-pointer scroll-mt-16 list-none grid-cols-subgrid items-start gap-8 p-16 hover:bg-gray-100 focus-visible:outline-4 focus-visible:-outline-offset-4 focus-visible:outline-blue-800 md:items-center md:gap-0 md:p-0 [&::-webkit-details-marker]:hidden"
+            class="col-span-full grid cursor-pointer scroll-mt-16 list-none grid-cols-subgrid items-start p-16 hover:bg-gray-100 focus-visible:outline-4 focus-visible:-outline-offset-4 focus-visible:outline-blue-800 md:items-center md:p-0 [&::-webkit-details-marker]:hidden"
           >
             <span
-              class="col-span-2 grid grid-cols-[max-content_minmax(0,1fr)] gap-8 md:grid-cols-subgrid md:gap-0"
+              class="col-span-2 grid grid-cols-[max-content_minmax(0,1fr)] gap-x-16 gap-y-4 md:grid-cols-subgrid md:gap-0"
             >
               <template v-for="column in columns" :key="column.key">
                 <span
