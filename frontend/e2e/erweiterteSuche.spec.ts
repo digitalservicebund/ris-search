@@ -313,7 +313,7 @@ test.describe("general advanced search page features", () => {
 
     const searchResults = getSearchResults(page);
 
-    await expect(searchResults).toHaveText(/KL 1234\/56/);
+    await expect(searchResults).toHaveText([/KL 1234\/56/]);
 
     await page.getByRole("link", { name: "Datenschutzerklärung" }).click();
 
@@ -328,7 +328,7 @@ test.describe("general advanced search page features", () => {
 
     await expect(page.getByRole("searchbox")).toHaveValue('AZ:"KL 1234/56"');
 
-    await expect(searchResults).toHaveText(/KL 1234\/56/);
+    await expect(searchResults).toHaveText([/KL 1234\/56/]);
   });
 });
 
