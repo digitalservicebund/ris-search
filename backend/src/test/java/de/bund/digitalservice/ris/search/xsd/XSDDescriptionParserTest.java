@@ -45,7 +45,7 @@ class XSDDescriptionParserTest {
 
     var parser = new XSDDescriptionParser(properties, context);
 
-    assertThat(parser.getDescriptions(DocumentKind.CASE_LAW)).hasSize(85);
+    assertThat(parser.getDescriptions(DocumentKind.CASE_LAW)).hasSize(87);
   }
 
   @Test
@@ -62,7 +62,7 @@ class XSDDescriptionParserTest {
 
     var parser = new XSDDescriptionParser(properties, context);
 
-    assertThat(parser.getDescriptions(DocumentKind.ADMINISTRATIVE_DIRECTIVE)).hasSize(85);
+    assertThat(parser.getDescriptions(DocumentKind.ADMINISTRATIVE_DIRECTIVE)).hasSize(87);
   }
 
   @Test
@@ -81,7 +81,7 @@ class XSDDescriptionParserTest {
 
     var parser = new XSDDescriptionParser(properties, context);
 
-    assertThat(parser.getDescriptions(DocumentKind.LITERATURE)).hasSize(88);
+    assertThat(parser.getDescriptions(DocumentKind.LITERATURE)).hasSize(90);
   }
 
   @Test

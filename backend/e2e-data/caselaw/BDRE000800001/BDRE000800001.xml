@@ -136,6 +136,107 @@
                          </ris:einzelnorm>
                      </ris:referenzNorm>
                  </akn:implicitReference>
+                 <!-- referenzRechtsprechung: aktive -->
+                 <akn:implicitReference ris:domainTerm="Referenz Rechtsprechung">
+                     <ris:referenzRechtsprechung domainTerm="Referenz Rechtsprechung">
+                         <ris:richtung domainTerm="Richtung der Referenzierung">aktiv</ris:richtung>
+                         <ris:referenzArt domainTerm="Art der Referenz">caselaw</ris:referenzArt>
+                         <ris:gericht domainTerm="Gericht">
+                             <ris:gerichtstyp domainTerm="Gerichtstyp">BVerfG</ris:gerichtstyp>
+                         </ris:gericht>
+                         <ris:entscheidungsdatum domainTerm="Entscheidungsdatum">2020-11-11</ris:entscheidungsdatum>
+                         <ris:dokumenttyp domainTerm="Dokumenttyp">Beschluss</ris:dokumenttyp>
+                         <ris:aktenzeichen domainTerm="Aktenzeichen">1 BvR 1/20</ris:aktenzeichen>
+                     </ris:referenzRechtsprechung>
+                 </akn:implicitReference>
+                 <!-- referenzRechtsprechung: passiv -->
+                 <akn:implicitReference ris:domainTerm="Referenz Rechtsprechung">
+                     <ris:referenzRechtsprechung domainTerm="Referenz Rechtsprechung">
+                         <ris:richtung domainTerm="Richtung der Referenzierung">passiv</ris:richtung>
+                         <ris:referenzArt domainTerm="Art der Referenz">caselaw</ris:referenzArt>
+                         <ris:gericht domainTerm="Gericht">
+                             <ris:gerichtstyp domainTerm="Gerichtstyp">LG</ris:gerichtstyp>
+                             <ris:gerichtsort domainTerm="Gerichtsort">München</ris:gerichtsort>
+                         </ris:gericht>
+                         <ris:entscheidungsdatum domainTerm="Entscheidungsdatum">2015-06-06</ris:entscheidungsdatum>
+                         <ris:dokumenttyp domainTerm="Dokumenttyp">Urteil</ris:dokumenttyp>
+                         <ris:aktenzeichen domainTerm="Aktenzeichen">3 O 4/15</ris:aktenzeichen>
+                     </ris:referenzRechtsprechung>
+                 </akn:implicitReference>
+                 <!-- referenzVerwaltungsvorschrift: passiv -->
+                 <akn:implicitReference ris:domainTerm="Referenz Verwaltungsvorschrift">
+                     <ris:referenzVerwaltungsvorschrift domainTerm="Referenz Verwaltungsvorschrift">
+                         <ris:richtung domainTerm="Richtung der Referenzierung">aktiv</ris:richtung>
+                         <ris:referenzArt domainTerm="Art der Referenz">adm</ris:referenzArt>
+                         <ris:jurisAbkuerzung domainTerm="juris-Abkürzung">VV DEU BMF 2010-01-01 1</ris:jurisAbkuerzung>
+                         <ris:fundstelle domainTerm="Fundstelle">
+                             <ris:periodikum domainTerm="Periodikum">
+                                 <ris:abkuerzung domainTerm="Abkürzung">BStBl I</ris:abkuerzung>
+                                 <ris:titel domainTerm="Titel">Bundessteuerblatt Teil I</ris:titel>
+                             </ris:periodikum>
+                             <ris:zitatstelle domainTerm="Zitatstelle">2010, 1</ris:zitatstelle>
+                         </ris:fundstelle>
+                     </ris:referenzVerwaltungsvorschrift>
+                     </akn:implicitReference>
+                 <!-- referenzVerwaltungsvorschrift: passiv -->
+                 <akn:implicitReference ris:domainTerm="Referenz Verwaltungsvorschrift">
+                     <ris:referenzVerwaltungsvorschrift domainTerm="Referenz Verwaltungsvorschrift">
+                         <ris:richtung domainTerm="Richtung der Referenzierung">passiv</ris:richtung>
+                         <ris:referenzArt domainTerm="Art der Referenz">adm</ris:referenzArt>
+                         <ris:jurisAbkuerzung domainTerm="juris-Abkürzung">VV DEU BMF 2011-02-02 2</ris:jurisAbkuerzung>
+                     </ris:referenzVerwaltungsvorschrift>
+                 </akn:implicitReference>
+                 <!-- referenzUnselbststaendigeLiteratur: aktiv -->
+                 <akn:implicitReference ris:domainTerm="Referenz Unselbständige Literatur">
+                     <ris:referenzUnselbststaendigeLiteratur domainTerm="Referenz Unselbständige Literatur">
+                         <ris:richtung domainTerm="Richtung der Referenzierung">aktiv</ris:richtung>
+                         <ris:referenzArt domainTerm="Art der Referenz">uli</ris:referenzArt>
+                         <ris:referenzURI domainTerm="URI der Referenz">ris:/literatur/XXLU000000001</ris:referenzURI>
+                         <ris:dokumentnummer domainTerm="Dokumentnummer">XXLU000000001</ris:dokumentnummer>
+                         <ris:autor domainTerm="Autor(en)">Müller</ris:autor>
+                         <ris:dokumenttyp domainTerm="Dokumenttyp">Zeitschrift</ris:dokumenttyp>
+                         <ris:fundstelle domainTerm="Fundstelle">
+                             <ris:periodikum domainTerm="Periodikum">
+                                 <ris:abkuerzung domainTerm="Abkürzung">ETD-U</ris:abkuerzung>
+                                 <ris:titel domainTerm="Titel">Erstes Test-Dokument ULI</ris:titel>
+                             </ris:periodikum>
+                             <ris:zitatstelle domainTerm="Zitatstelle">SelbstFund, 1982, 123-123</ris:zitatstelle>
+                         </ris:fundstelle>
+                     </ris:referenzUnselbststaendigeLiteratur>
+                </akn:implicitReference>
+                 <!-- referenzUnselbststaendigeLiteratur: passiv -->
+                 <akn:implicitReference ris:domainTerm="Referenz Unselbständige Literatur">
+                     <ris:referenzUnselbststaendigeLiteratur domainTerm="Referenz Unselbständige Literatur">
+                         <ris:richtung domainTerm="Richtung der Referenzierung">passiv</ris:richtung>
+                         <ris:referenzArt domainTerm="Art der Referenz">uli</ris:referenzArt>
+                         <ris:fundstelle domainTerm="Fundstelle">
+                             <ris:periodikum domainTerm="Periodikum">
+                                 <ris:abkuerzung domainTerm="Abkürzung">NVwZ</ris:abkuerzung>
+                             </ris:periodikum>
+                             <ris:zitatstelle domainTerm="Zitatstelle">2020, 7</ris:zitatstelle>
+                         </ris:fundstelle>
+                     </ris:referenzUnselbststaendigeLiteratur>
+                 </akn:implicitReference>
+                 <!-- referenzSelbststaendigeLiteratur: aktiv -->
+                 <akn:implicitReference ris:domainTerm="Referenz Selbständige Literatur">
+                     <ris:referenzSelbststaendigeLiteratur domainTerm="Referenz Selbständige Literatur">
+                         <ris:richtung domainTerm="Richtung der Referenzierung">aktiv</ris:richtung>
+                         <ris:referenzArt domainTerm="Art der Referenz">sli</ris:referenzArt>
+                         <ris:autor domainTerm="Autor(en)">Weber</ris:autor>
+                     </ris:referenzSelbststaendigeLiteratur>
+                 </akn:implicitReference>
+                 <!-- referenzSelbststaendigeLiteratur: passiv -->
+                <akn:implicitReference ris:domainTerm="Referenz Selbständige Literatur">
+                    <ris:referenzSelbststaendigeLiteratur domainTerm="Referenz Selbständige Literatur">
+                         <ris:richtung domainTerm="Richtung der Referenzierung">passiv</ris:richtung>
+                         <ris:referenzArt domainTerm="Art der Referenz">sli</ris:referenzArt>
+                         <ris:referenzURI domainTerm="URI der Referenz">ris:/literatur/XXLS000000001</ris:referenzURI>
+                         <ris:dokumentnummer domainTerm="Dokumentnummer">XXLS000000001</ris:dokumentnummer>
+                         <ris:autor domainTerm="Autor(en)">Schmidt, Peter</ris:autor>
+                         <ris:titel domainTerm="Titel">Test-Dokument SLI</ris:titel>
+                         <ris:veroeffentlichungsjahr domainTerm="Veröffentlichungsjahr">2024</ris:veroeffentlichungsjahr>
+                     </ris:referenzSelbststaendigeLiteratur>
+                </akn:implicitReference>
              </akn:otherReferences>
              <akn:otherAnalysis source="#ris">
                  <ris:dokumentarischeKurztexte domainTerm="Dokumentarische Kurztexte">

@@ -1,16 +1,17 @@
 | Key | Language | Description |
 | --- | --- | --- |
 | akn:background | de | Tatbestand<br> |
-| akn:decision | de | Erledigungsvermerk<br> |
-| akn:introduction | de | Rechtsmittelführer oder Rechtsmittelzulassung<br> |
-| akn:motivation | de | Rechtsfrage<br> |
+| akn:decision | de | Tenor<br> |
+| akn:introduction | de | Platzhalter bei fehlendem Entscheidungstext<br> |
+| akn:motivation | de | Rechtsfrage (gesamt)<br> |
 | akn:ref | de | Stelle im Text (Randnummer) der Definition<br> |
 | ris:abkuerzung | de | abgekürzte Bezeichnung der Norm<br> |
 | ris:abweichendeDaten | de | Abweichende Daten<br> |
 | ris:abweichendeDokumentnummer | de | Abweichende Dokumentnummer<br> |
 | ris:abweichendeDokumentnummern | de | Abweichende Dokumentnummern<br><br>Weitere Dokumentnummern die für dieses Dokument verwendet werden<br> |
 | ris:abweichendesDatum | de | Abweichendes Datum<br> |
-| ris:aktenzeichen | de | Aktenzeichen der Entscheidung, hier kann es zu Dopplungen mit anderen Entscheidungen kommen, auch in Kombination mit Entscheidungsdatum und Gericht.<br> |
+| ris:aktenzeichen | de | Aktenzeichen der Entscheidung, hier kann es zu Dopplungen mit anderen Entscheidungen kommen, auch in Kombination mit Entscheidungsdatum und Gericht. Bei Gemeinsamen Ländererlassen (GLE) innerhalb der Dokumentart Verwaltungsvorschriften wird über das Attribut 'normgeber' der jeweilige ausgebende Normgeber des Bundeslandes angegeben. Das optionale Attribut 'normgeberRegion' gibt die zugehörige Region des Normgebers an.<br> |
+| ris:aktenzeichen | en | File number of the decision; may appear multiple times in combination with decision date and court. For joint state decrees (GLE) in administrative directives, the optional 'normgeber' attribute specifies the issuing body. The optional 'normgeberRegion' attribute specifies the associated region of the issuing body.<br> |
 | ris:aktenzeichenListe | de | Aktenzeichen des Dokuments<br><br>Der erste Eintrag ist das primäre Aktenzeichen.<br>Weitere Einträge sind abweichende Aktenzeichen, die auch für dieses<br>Dokument verwendet werden.<br> |
 | ris:artDerZitierung | de | Art der Zitierung<br> |
 | ris:autor | de | Autor(en)<br> |
@@ -61,15 +62,16 @@
 | ris:personen | de | Liste an Personen. Auf diese wird z.B. aus akn:FRBRauthor oder akn:opinion verweisen.<br> |
 | ris:problemkreis | de | Problemkreis<br> |
 | ris:referenzArt | de | Art der Referenz<br> |
-| ris:referenzNormen | de | Ein Verweis auf eine Norm<br> |
+| ris:referenzNorm | de | Ein Verweis auf eine Norm<br> |
 | ris:referenzRechtsprechung | de | Referenz auf ein Rechtsprechungsdokument<br> |
-| ris:referenzSelbstaendigeLiteratur | de | Referenz auf ein selbstständiges Literaturdokument<br> |
-| ris:referenzUnselbstaendigeLiteratur | de | Referenz auf ein unselbstständiges Literaturdokument<br> |
+| ris:referenzSelbststaendigeLiteratur | de | Referenz auf ein selbstständiges Literaturdokument<br> |
+| ris:referenzURI | de | Die URI die auf die referenzierte Dokeinheit verweist.<br> |
+| ris:referenzUnselbststaendigeLiteratur | de | Referenz auf ein unselbstständiges Literaturdokument<br> |
 | ris:referenzVerwaltungsvorschrift | de | Referenz auf eine Verwaltungsvorschrift<br> |
-| ris:region | de | Abkürzung der Region.<br><br>Für Bundesländer:<br>Grundsätzlich: Die 2 Buchstaben Abkürzung nach ISO 3166-2<br>Niedersachsen abweichend ND<br>Hamburg HA<br>Bremen BR<br>Für Länder: ISO 3166-1 alpha-3<br><br>Es werden weitere Codes für andere und ehemalige Gebiete verwendet.<br>Zum Beispiel NL für Neue Länder, AL für Alte Länder oder PR für<br>Preußen<br> |
+| ris:region | de | Bezeichnung oder Abkürzung der Region bzw. des Sitzes der Behörde.<br><br>Im BZSt-Kontext ("Sitz der Behörde"):<br>Gibt den Dienstsitz der Behörde im Klartext an.<br>Der Wert ist optional (kann fehlen/null sein).<br>Vorkommende Werte: "Bonn", "Berlin".<br><br>Allgemein / Für Bundesländer und Länder (sofern Codes verwendet werden):<br>- Für Bundesländer: Grundsätzlich die 2-Buchstaben-Abkürzung nach ISO 3166-2<br>(Abweichend: Niedersachsen = ND, Hamburg = HA, Bremen = BR)<br>- Für Länder: ISO 3166-1 alpha-3<br>- Weitere Codes für andere und ehemalige Gebiete (z. B. NL für Neue Länder, AL für Alte Länder, PR für Preußen)<br> |
 | ris:regionen | de | Regionen in denen dieses Dokument eine Bedeutung hat<br> |
-| ris:relativerPfad | de | Der Pfad um die referenzierte Dokeinheit aufzurufen.<br> |
 | ris:richtung | de | Ist die Referenz eine Aktivzitierung oder eine Passivzitierung?<br> |
+| ris:risAbkuerzung | de | RIS-Abkürzung<br> |
 | ris:sachgebiet | de | Sachgebiet<br> |
 | ris:sachgebiete | de | Sachgebiete<br> |
 | ris:sitzDerAussenstelle | de | Sitz der Außenstelle<br> |

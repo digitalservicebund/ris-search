@@ -85,19 +85,19 @@ const VERWEISE_CATEGORIES: { id: string; label: string }[] = [
     label: "Verweisende Verwaltungsvorschriften",
   },
   {
-    id: "referenzUnselbstaendigeLiteraturAktiv",
+    id: "referenzUnselbststaendigeLiteraturAktiv",
     label: "Zitierte unselbständige Literatur",
   },
   {
-    id: "referenzUnselbstaendigeLiteraturPassiv",
+    id: "referenzUnselbststaendigeLiteraturPassiv",
     label: "Verweisende unselbständige Literatur",
   },
   {
-    id: "referenzSelbstaendigeLiteraturAktiv",
+    id: "referenzSelbststaendigeLiteraturAktiv",
     label: "Zitierte selbständige Literatur",
   },
   {
-    id: "referenzSelbstaendigeLiteraturPassiv",
+    id: "referenzSelbststaendigeLiteraturPassiv",
     label: "Verweisende selbständige Literatur",
   },
   { id: "vorgehendeEntscheidung", label: "Vorgehende Entscheidungen" },
