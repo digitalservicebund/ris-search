@@ -109,6 +109,10 @@ dependencies {
     // CVE-2026-65182
     implementation(libs.tomcat.embed.core)
 
+    // CVE-2026-68497
+    implementation(libs.fasterxml.jackson.databind)
+    implementation(libs.tools.jackson.databind)
+
     implementation(libs.ris.html.transformation)
 
     implementation(libs.ris.xml.schema)
