@@ -59,6 +59,6 @@ public class NormParagraphToTextMapper {
       return cleanText(paragraphTextContent);
     }
 
-    return String.format("%s %s", paragraphNumber, cleanText(paragraphTextContent));
+    return paragraphNumber + " " + cleanText(paragraphTextContent);
   }
 }
