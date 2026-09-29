@@ -12,7 +12,7 @@
                     <akn:FRBRuri value="KORE600500001"/>
                     <akn:FRBRalias name="Übergreifende ID" value="fake-uuid-00011"/>
                     <akn:FRBRalias name="Dokumentnummer" value="KORE600500001" />
-                    <akn:FRBRdate eId="Entscheidungsdatum" date="2024-06-15" name="Entscheidungsdatum"/>
+                    <akn:FRBRdate date="2024-06-15" name="datumDerZustellungAnVerkuendungsStatt" showAs="Datum der Zustellung an Verkündungs statt"/>
                     <akn:FRBRauthor href="#organisation-gericht-courttype-courtlocation"/>
                     <akn:FRBRcountry value="de"/>
                 </akn:FRBRWork>

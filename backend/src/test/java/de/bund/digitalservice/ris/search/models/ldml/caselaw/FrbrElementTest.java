@@ -111,6 +111,35 @@ class FrbrElementTest {
   }
 
   @Test
+  void getEntscheidungsdatumNameReturnsTheNameOfTheFirstDate() {
+    FrbrElement frbrElement =
+        FrbrElement.builder()
+            .frbrDates(
+                List.of(
+                    date("datumDerZustellungAnVerkuendungsStatt", "2008-03-17"),
+                    date("mitteilungsdatum", "2008-03-20")))
+            .build();
+
+    assertThat(frbrElement.getEntscheidungsdatumName())
+        .isEqualTo("datumDerZustellungAnVerkuendungsStatt");
+  }
+
+  @Test
+  void getEntscheidungsdatumNameReturnsNullWhenNoDatesArePresent() {
+    FrbrElement frbrElement = FrbrElement.builder().build();
+
+    assertThat(frbrElement.getEntscheidungsdatumName()).isNull();
+  }
+
+  @Test
+  void getEntscheidungsdatumNameReturnsNullForThePlaceholderDate() {
+    FrbrElement frbrElement =
+        FrbrElement.builder().frbrDates(List.of(date("nicht-vorhanden", "0001-01-01"))).build();
+
+    assertThat(frbrElement.getEntscheidungsdatumName()).isNull();
+  }
+
+  @Test
   void getDateByNameLooksUpADateValueCaseInsensitively() {
     FrbrElement frbrElement =
         FrbrElement.builder()

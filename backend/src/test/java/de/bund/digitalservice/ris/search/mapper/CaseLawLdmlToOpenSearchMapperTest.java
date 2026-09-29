@@ -2,6 +2,7 @@ package de.bund.digitalservice.ris.search.mapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import de.bund.digitalservice.ris.search.models.DatumsTyp;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.utils.CaseLawLdmlTemplateUtils;
 import de.bund.digitalservice.ris.utils.CaseLawXmlValidator;
@@ -12,6 +13,8 @@ import java.time.Month;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 class CaseLawLdmlToOpenSearchMapperTest {
 
@@ -69,7 +72,6 @@ class CaseLawLdmlToOpenSearchMapperTest {
     assertThat(caseLaw.letzteVeroeffentlichung()).isEqualTo(LocalDate.of(2026, Month.MARCH, 20));
     assertThat(caseLaw.legalEffect()).isEqualTo("Ja");
     assertThat(caseLaw.erstveroeffentlichung()).isEqualTo(LocalDate.of(2026, Month.MARCH, 18));
-    assertThat(caseLaw.mitteilungsdatum()).isEqualTo(LocalDate.of(2020, Month.JANUARY, 1));
   }
 
   @Test
@@ -85,6 +87,9 @@ class CaseLawLdmlToOpenSearchMapperTest {
     assertThat(caseLaw.erledigungsvermerk()).isEqualTo("Erledigungsvermerk");
     assertThat(caseLaw.rechtsfrageGesamt()).isEqualTo("Rechtsfrage (gesamt)");
     assertThat(caseLaw.rechtsfrage()).isEqualTo("Rechtsfrage");
+    assertThat(caseLaw.mitteilungsdatum()).isEqualTo(LocalDate.of(2020, Month.JANUARY, 1));
+    assertThat(caseLaw.decisionDate()).isEqualTo(LocalDate.of(2020, Month.JANUARY, 1));
+    assertThat(caseLaw.datumsTyp()).isEqualTo(DatumsTyp.MITTEILUNGSDATUM);
   }
 
   @Test
@@ -173,11 +178,13 @@ class CaseLawLdmlToOpenSearchMapperTest {
   @Test
   void decisionDateIsReadFromTheSingleFrbrDateRegardlessOfItsName() throws IOException {
     String xml =
-        caseLawLdmlTemplateUtils
-            .getXmlFromTemplateWithValidation(
-                Map.of("decisionDate", "2021-07-07"), CaseLawXmlValidator.Type.DECISION)
-            .replaceFirst(
-                "name=\"Entscheidungsdatum\"", "name=\"datumDerZustellungAnVerkuendungsStatt\"");
+        caseLawLdmlTemplateUtils.getXmlFromTemplateWithValidation(
+            Map.of(
+                "decisionDate",
+                "2021-07-07",
+                "decisionDateName",
+                "datumDerZustellungAnVerkuendungsStatt"),
+            CaseLawXmlValidator.Type.DECISION);
 
     CaseLawDocumentationUnit caseLaw = mapper.fromString(xml);
 
@@ -188,5 +195,30 @@ class CaseLawLdmlToOpenSearchMapperTest {
   void decisionDateIsNullWhenNoFrbrDateIsPresentAtAll() {
     CaseLawDocumentationUnit caseLaw = mapper.fromString(testCaseLawLdmlWithMissingDate);
     assertThat(caseLaw.decisionDate()).isNull();
+  }
+
+  @ParameterizedTest
+  @CsvSource({
+    "entscheidungsdatum, ENTSCHEIDUNGSDATUM",
+    "Entscheidungsdatum, ENTSCHEIDUNGSDATUM",
+    "mitteilungsdatum, MITTEILUNGSDATUM",
+    "datumDerZustellungAnVerkuendungsStatt, DATUM_DER_ZUSTELLUNG_AN_VERKUENDUNGS_STATT",
+    "unbekannt, ENTSCHEIDUNGSDATUM"
+  })
+  void datumsTypIsReadFromTheNameOfTheDecisionDate(String name, DatumsTyp expected)
+      throws IOException {
+    String xml =
+        caseLawLdmlTemplateUtils.getXmlFromTemplateWithValidation(
+            Map.of("decisionDateName", name), CaseLawXmlValidator.Type.DECISION);
+
+    CaseLawDocumentationUnit caseLaw = mapper.fromString(xml);
+
+    assertThat(caseLaw.datumsTyp()).isEqualTo(expected);
+  }
+
+  @Test
+  void datumsTypIsNullWhenNoDecisionDateIsPresent() {
+    CaseLawDocumentationUnit caseLaw = mapper.fromString(testCaseLawLdmlWithMissingDate);
+    assertThat(caseLaw.datumsTyp()).isNull();
   }
 }

@@ -98,6 +98,7 @@ class RechtsprechungControllerIntegrationTest extends ContainersIntegrationBase 
             jsonPath("$.gerichtsbarkeit", Matchers.is("Test jurisdiction type")),
             jsonPath("$.dokumenttyp", Matchers.is("Urteil")),
             jsonPath("$.datum", Matchers.is("2023-01-02")),
+            jsonPath("$.datumsTyp", Matchers.is("Entscheidungsdatum")),
             jsonPath("$.leitsatz", Matchers.is("Das ist der Leitsatz")),
             jsonPath("$.sonstigerLangtext", Matchers.is("Sonstiger Langtext")),
             jsonPath("$.rechtskraft", Matchers.is("Ja")),
@@ -167,7 +168,6 @@ class RechtsprechungControllerIntegrationTest extends ContainersIntegrationBase 
             jsonPath("$.revision").value("Ja"),
             jsonPath("$.letzteVeroeffentlichung").value("2026-03-20"),
             jsonPath("$.erstveroeffentlichung").value("2026-03-18"),
-            jsonPath("$.mitteilungsdatum").value("2020-01-01"),
             jsonPath("$.abweichendeMeinung")
                 .value(
                     "dissenting test, Dr. Phil. Max Mustermann: referenced opinions test 1, Maxima Mustermann: referenced opinions test 2"),
@@ -212,7 +212,9 @@ class RechtsprechungControllerIntegrationTest extends ContainersIntegrationBase 
             jsonPath("$.rechtsfrageGesamt", Matchers.is("Rechtsfrage (gesamt)")),
             jsonPath("$.rechtsfrage", Matchers.is("Rechtsfrage")),
             jsonPath("$.rechtsmittelfuehrer").value("Rechtsmittelführer"),
-            jsonPath("$.rechtsmittelzulassung").value("Rechtsmittelzulassung"));
+            jsonPath("$.rechtsmittelzulassung").value("Rechtsmittelzulassung"),
+            jsonPath("$.mitteilungsdatum").value("2020-01-01"),
+            jsonPath("$.datumsTyp").value("Mitteilungsdatum"));
   }
 
   @Test
