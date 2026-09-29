@@ -2,6 +2,7 @@ package de.bund.digitalservice.ris.search.mapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import de.bund.digitalservice.ris.search.models.DatumsTyp;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.utils.CaseLawLdmlTemplateUtils;
 import de.bund.digitalservice.ris.utils.CaseLawXmlValidator;
@@ -12,6 +13,8 @@ import java.time.Month;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 class CaseLawLdmlToOpenSearchMapperTest {
 
@@ -188,5 +191,31 @@ class CaseLawLdmlToOpenSearchMapperTest {
   void decisionDateIsNullWhenNoFrbrDateIsPresentAtAll() {
     CaseLawDocumentationUnit caseLaw = mapper.fromString(testCaseLawLdmlWithMissingDate);
     assertThat(caseLaw.decisionDate()).isNull();
+  }
+
+  @ParameterizedTest
+  @CsvSource({
+    "entscheidungsdatum, ENTSCHEIDUNGSDATUM",
+    "Entscheidungsdatum, ENTSCHEIDUNGSDATUM",
+    "mitteilungsdatum, MITTEILUNGSDATUM",
+    "datumDerZustellungAnVerkuendungsStatt, DATUM_DER_ZUSTELLUNG_AN_VERKUENDUNGS_STATT",
+    "unbekannt, ENTSCHEIDUNGSDATUM"
+  })
+  void datumsTypIsReadFromTheNameOfTheDecisionDate(String name, DatumsTyp expected)
+      throws IOException {
+    String xml =
+        caseLawLdmlTemplateUtils
+            .getXmlFromTemplateWithValidation(null, CaseLawXmlValidator.Type.DECISION)
+            .replaceFirst("name=\"Entscheidungsdatum\"", "name=\"" + name + "\"");
+
+    CaseLawDocumentationUnit caseLaw = mapper.fromString(xml);
+
+    assertThat(caseLaw.datumsTyp()).isEqualTo(expected);
+  }
+
+  @Test
+  void datumsTypIsNullWhenNoDecisionDateIsPresent() {
+    CaseLawDocumentationUnit caseLaw = mapper.fromString(testCaseLawLdmlWithMissingDate);
+    assertThat(caseLaw.datumsTyp()).isNull();
   }
 }
