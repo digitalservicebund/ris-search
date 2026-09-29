@@ -45,7 +45,7 @@ describe("SortOptionsRadioGroup", () => {
 
     expect(
       screen.getByRole("radio", {
-        name: "Entscheidungsdatum: Älteste zuerst",
+        name: "Datum: Älteste zuerst",
       }),
     ).toBeChecked();
     expect(screen.getByRole("radio", { name: "Relevanz" })).not.toBeChecked();
