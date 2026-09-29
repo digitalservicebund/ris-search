@@ -41,6 +41,7 @@ public class RechtsprechungSchemaMapper {
         .rechtsfrage(doc.rechtsfrage())
         .tenor(doc.tenor())
         .datum(doc.decisionDate())
+        .datumsTyp(doc.datumsTyp())
         .aktenzeichen(doc.fileNumber())
         .aktenzeichenListe(doc.fileNumbers())
         .abweichendeAktenzeichen(doc.abweichendeAktenzeichen())
