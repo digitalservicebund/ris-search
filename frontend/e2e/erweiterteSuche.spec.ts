@@ -627,24 +627,28 @@ test.describe("searching caselaw", () => {
     await expect(results).toHaveText(/15.06.2024/);
   });
 
-  test("filters to show date range", async ({ page, isMobileTest }) => {
-    test.skip(isMobileTest);
-    await navigate(page, "/erweiterte-suche");
+  test(
+    "filters to show date range",
+    { tag: ["@RISDEV-11766"] },
+    async ({ page, isMobileTest }) => {
+      test.skip(isMobileTest);
+      await navigate(page, "/erweiterte-suche");
 
-    await searchFor(page, {
-      documentKind: "Gerichtsentscheidungen",
-      q: "urteil",
-      dateFilter: "Innerhalb eines Zeitraums",
-      dateFilterFrom: "01.01.2020",
-      dateFilterTo: "31.12.2024",
-    });
+      await searchFor(page, {
+        documentKind: "Gerichtsentscheidungen",
+        q: "urteil",
+        dateFilter: "Innerhalb eines Zeitraums",
+        dateFilterFrom: "01.01.2020",
+        dateFilterTo: "31.12.2024",
+      });
 
-    await sortBy(page, "Entscheidungsdatum: Älteste zuerst");
+      await sortBy(page, "Datum: Älteste zuerst");
 
-    const results = getSearchResults(page);
+      const results = getSearchResults(page);
 
-    await expect(results).toHaveText([/22.11.2023/, /15.06.2024/]);
-  });
+      await expect(results).toHaveText([/22.11.2023/, /15.06.2024/]);
+    },
+  );
 
   test("sorts by court in ascending order", async ({ page, isMobileTest }) => {
     test.skip(isMobileTest);

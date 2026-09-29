@@ -191,23 +191,67 @@ test.describe("actions menu", () => {
   });
 });
 
-test("can view metadata", { tag: ["@RISDEV-10568"] }, async ({ page }) => {
-  await navigate(page, "/gerichtsentscheidungen/KORE600500000");
-  const metadataList = page.getByTestId("metadata-list");
-  const defs = metadataList.getByRole("definition");
+test(
+  "can view metadata",
+  { tag: ["@RISDEV-10568", "@RISDEV-11766"] },
+  async ({ page }) => {
+    await navigate(page, "/gerichtsentscheidungen/KORE600500000");
+    const metadataList = page.getByTestId("metadata-list");
+    const defs = metadataList.getByRole("definition");
 
-  await expect(metadataList.getByRole("term")).toHaveText([
-    "Gericht",
-    "Dokumenttyp",
-    "Entscheidungsdatum",
-    "Aktenzeichen",
-  ]);
+    await expect(metadataList.getByRole("term")).toHaveText([
+      "Dokumenttyp",
+      "Gericht",
+      "Aktenzeichen",
+      "Entscheidungsdatum",
+    ]);
 
-  await expect(defs.nth(0)).toHaveText("LG Test6 Label");
-  await expect(defs.nth(1)).toHaveText("Urteil");
-  await expect(defs.nth(2)).toHaveText("09.04.2025");
-  // Aktenzeichen are rendered as badges (spans)
-  await expect(defs.nth(3).locator("span")).toHaveText(["TS 123456"]);
+    await expect(defs.nth(0)).toHaveText("Urteil");
+    await expect(defs.nth(1)).toHaveText("LG Test6 Label");
+    // Aktenzeichen are rendered as badges (spans)
+    await expect(defs.nth(2).locator("span")).toHaveText(["TS 123456"]);
+    await expect(defs.nth(3)).toHaveText("09.04.2025");
+  },
+);
+
+test.describe("date label", { tag: ["@RISDEV-11766"] }, () => {
+  test("shows Entscheidungsdatum", async ({ page }) => {
+    await navigate(page, "/gerichtsentscheidungen/KORE600500000");
+    const metadataList = page.getByTestId("metadata-list");
+
+    await expect(metadataList.getByRole("term").nth(3)).toHaveText(
+      "Entscheidungsdatum",
+    );
+    await expect(metadataList.getByRole("definition").nth(3)).toHaveText(
+      "09.04.2025",
+    );
+  });
+
+  test("shows Mitteilungsdatum", async ({ page }) => {
+    await navigate(page, "/gerichtsentscheidungen/KORE600500002");
+    const metadataList = page.getByTestId("metadata-list");
+
+    await expect(metadataList.getByRole("term").nth(3)).toHaveText(
+      "Mitteilungsdatum",
+    );
+    await expect(metadataList.getByRole("definition").nth(3)).toHaveText(
+      "22.11.2023",
+    );
+  });
+
+  test("shows Datum der Zustellung an Verkündungs statt as Entscheidungsdatum", async ({
+    page,
+  }) => {
+    await navigate(page, "/gerichtsentscheidungen/KORE600500001");
+    const metadataList = page.getByTestId("metadata-list");
+
+    await expect(metadataList.getByRole("term").nth(3)).toHaveText(
+      "Entscheidungsdatum",
+    );
+    await expect(metadataList.getByRole("definition").nth(3)).toHaveText(
+      "15.06.2024",
+    );
+  });
 });
 
 test("can view details", { tag: ["@RISDEV-12108"] }, async ({ page }) => {
