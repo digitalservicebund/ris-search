@@ -88,6 +88,10 @@ reflections = { module = "org.reflections:reflections", version.ref = "reflectio
 # CVE-2026-65182
 tomcat-embed-core = { module = "org.apache.tomcat.embed:tomcat-embed-core" , version = "11.0.26" }
 
+# CVE-2026-68497
+fasterxml-jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version = "2.21.6" }
+tools-jackson-databind = { module = "tools.jackson.core:jackson-databind", version = "3.1.6" }
+
 [plugins]
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
 spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "spring-dependency-management" }
