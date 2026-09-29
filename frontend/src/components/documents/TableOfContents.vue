@@ -55,8 +55,8 @@ const drawerId = useId();
     >
       <div class="flex flex-col gap-4">
         <div class="line-clamp-1">
-          <span class="typo-headline3-bold">Inhalte</span>{{ " " }}
-          <span class="typo-headline3-regular">{{ subheading }}</span>
+          <span class="typo-label1-bold">Inhalte</span>{{ " " }}
+          <span class="typo-label1-regular">{{ subheading }}</span>
         </div>
         <span
           v-if="subheading && subheadingAddition"
@@ -76,10 +76,10 @@ const drawerId = useId();
     :id="drawerId"
   >
     <template #header>
-      <div class="flex flex-col gap-4">
+      <div class="flex flex-col gap-4 py-8">
         <div class="line-clamp-1">
-          <span class="typo-headline3-bold">Inhalte</span>{{ " " }}
-          <span class="typo-headline3-regular">{{ subheading }}</span>
+          <span class="typo-label1-bold">Inhalte</span>{{ " " }}
+          <span class="typo-label1-regular">{{ subheading }}</span>
         </div>
         <span
           v-if="subheading && subheadingAddition"
