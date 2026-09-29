@@ -72,7 +72,6 @@ class CaseLawLdmlToOpenSearchMapperTest {
     assertThat(caseLaw.letzteVeroeffentlichung()).isEqualTo(LocalDate.of(2026, Month.MARCH, 20));
     assertThat(caseLaw.legalEffect()).isEqualTo("Ja");
     assertThat(caseLaw.erstveroeffentlichung()).isEqualTo(LocalDate.of(2026, Month.MARCH, 18));
-    assertThat(caseLaw.mitteilungsdatum()).isEqualTo(LocalDate.of(2020, Month.JANUARY, 1));
   }
 
   @Test
@@ -88,6 +87,9 @@ class CaseLawLdmlToOpenSearchMapperTest {
     assertThat(caseLaw.erledigungsvermerk()).isEqualTo("Erledigungsvermerk");
     assertThat(caseLaw.rechtsfrageGesamt()).isEqualTo("Rechtsfrage (gesamt)");
     assertThat(caseLaw.rechtsfrage()).isEqualTo("Rechtsfrage");
+    assertThat(caseLaw.mitteilungsdatum()).isEqualTo(LocalDate.of(2020, Month.JANUARY, 1));
+    assertThat(caseLaw.decisionDate()).isEqualTo(LocalDate.of(2020, Month.JANUARY, 1));
+    assertThat(caseLaw.datumsTyp()).isEqualTo(DatumsTyp.MITTEILUNGSDATUM);
   }
 
   @Test
@@ -176,11 +178,13 @@ class CaseLawLdmlToOpenSearchMapperTest {
   @Test
   void decisionDateIsReadFromTheSingleFrbrDateRegardlessOfItsName() throws IOException {
     String xml =
-        caseLawLdmlTemplateUtils
-            .getXmlFromTemplateWithValidation(
-                Map.of("decisionDate", "2021-07-07"), CaseLawXmlValidator.Type.DECISION)
-            .replaceFirst(
-                "name=\"Entscheidungsdatum\"", "name=\"datumDerZustellungAnVerkuendungsStatt\"");
+        caseLawLdmlTemplateUtils.getXmlFromTemplateWithValidation(
+            Map.of(
+                "decisionDate",
+                "2021-07-07",
+                "decisionDateName",
+                "datumDerZustellungAnVerkuendungsStatt"),
+            CaseLawXmlValidator.Type.DECISION);
 
     CaseLawDocumentationUnit caseLaw = mapper.fromString(xml);
 
@@ -204,9 +208,8 @@ class CaseLawLdmlToOpenSearchMapperTest {
   void datumsTypIsReadFromTheNameOfTheDecisionDate(String name, DatumsTyp expected)
       throws IOException {
     String xml =
-        caseLawLdmlTemplateUtils
-            .getXmlFromTemplateWithValidation(null, CaseLawXmlValidator.Type.DECISION)
-            .replaceFirst("name=\"Entscheidungsdatum\"", "name=\"" + name + "\"");
+        caseLawLdmlTemplateUtils.getXmlFromTemplateWithValidation(
+            Map.of("decisionDateName", name), CaseLawXmlValidator.Type.DECISION);
 
     CaseLawDocumentationUnit caseLaw = mapper.fromString(xml);
 
