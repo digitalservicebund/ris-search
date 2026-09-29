@@ -299,7 +299,7 @@ test.describe("can view verweise", { tag: ["@RISDEV-12560"] }, () => {
     ).toBeVisible();
     await expect(
       tabPanel.getByRole("link", {
-        name: "Müller, Erstes Test-Dokument ULI SelbstFund, 1982, 123-123",
+        name: "Müller, ETD-U SelbstFund, 1982, 123-123",
       }),
     ).toBeVisible();
 
