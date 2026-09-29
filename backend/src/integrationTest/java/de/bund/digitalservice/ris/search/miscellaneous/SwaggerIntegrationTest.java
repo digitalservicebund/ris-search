@@ -68,7 +68,7 @@ class SwaggerIntegrationTest extends ContainersIntegrationBase {
                 Matchers.containsInAnyOrder(
                     "All documents",
                     "Legislation",
-                    "Case Law",
+                    "Rechtsprechung",
                     "Statistics",
                     "Document bulk download links")));
   }

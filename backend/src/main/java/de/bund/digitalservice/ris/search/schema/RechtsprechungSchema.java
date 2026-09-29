@@ -1,6 +1,7 @@
 package de.bund.digitalservice.ris.search.schema;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import de.bund.digitalservice.ris.search.xsd.RISSchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
 import java.util.List;
@@ -9,7 +10,11 @@ import lombok.Builder;
 /** API schema representing a Rechtsprechung (case law) resource in JSON-LD format. */
 @Builder
 public record RechtsprechungSchema(
-    @Schema(example = "KARE000000000", requiredMode = Schema.RequiredMode.REQUIRED)
+    @JsonProperty("@context") @Schema(requiredMode = Schema.RequiredMode.REQUIRED) String context,
+    @RISSchema(
+            name = "ris:dokumentnummer",
+            example = "KARE000000000",
+            requiredMode = Schema.RequiredMode.REQUIRED)
         String dokumentNummer,
     @Schema(
             example = "ECLI:DE:FGRLP:1969:0905.IV85.68.0A",
@@ -17,40 +22,41 @@ public record RechtsprechungSchema(
             requiredMode = Schema.RequiredMode.REQUIRED)
         String ecli,
     @Schema(description = "CELEX-Nummer") String celex,
-    @Schema(description = "Tatbestand") String tatbestand,
+    @RISSchema(name = "akn:background") String tatbestand,
     @Schema(description = "Entscheidungsgründe") String entscheidungsgruende,
     @Schema(description = "Abweichende Meinung") String abweichendeMeinung,
     @Schema(description = "Gründe") String gruende,
     @Schema(description = "Leitsatz") String leitsatz,
     @Schema(description = "Kurztitel") String kurztitel, // corresponds to headline
-    @Schema(description = "Titelzeile") String titelzeile,
+    @RISSchema(name = "ris:titelzeile") String titelzeile,
     @Schema(description = "Orientierungssatz") String orientierungssatz,
     @Schema(description = "Sonstiger Orientierungssatz") String sonstigerOrientierungssatz,
     @Schema(description = "Sonstiger Langtext") String sonstigerLangtext,
-    @Schema(description = "Rechtsfrage (gesamt)") String rechtsfrageGesamt,
+    @RISSchema(name = "akn:motivation") String rechtsfrageGesamt,
     @Schema(description = "Rechtsfrage") String rechtsfrage,
-    @Schema(description = "Tenor") String tenor,
-    @Schema(description = "Datum", requiredMode = Schema.RequiredMode.REQUIRED) LocalDate datum,
-    @Schema(description = "Abweichende Daten") List<LocalDate> abweichendeDaten,
-    @Schema(description = "Gliederung") String gliederung,
-    @Schema(description = "Aktenzeichen") String aktenzeichen,
-    @Schema(
+    @RISSchema(name = "akn:decision") String tenor,
+    @RISSchema(name = "ris:entscheidungsdatum", requiredMode = Schema.RequiredMode.REQUIRED)
+        LocalDate datum,
+    @RISSchema(name = "ris:abweichendeDaten") List<LocalDate> abweichendeDaten,
+    @RISSchema(name = "ris:gliederung") String gliederung,
+    @RISSchema(name = "ris:aktenzeichen") String aktenzeichen,
+    @RISSchema(
+            name = "ris:aktenzeichenListe",
             example = "BGH 123/23",
-            description = "Aktenzeichenliste",
             requiredMode = Schema.RequiredMode.REQUIRED)
         List<String> aktenzeichenListe,
     @Schema(example = "1 BvR 839, 899/96", description = "Abweichende Aktenzeichen")
         List<String> abweichendeAktenzeichen,
     @Schema(description = "Abweichende ECLIs") List<String> abweichendeEclis,
-    @Schema(description = "Berufsbilder") List<String> berufsbilder,
+    @RISSchema(name = "ris:berufsbilder") List<String> berufsbilder,
     @Schema(description = "Kündigungsarten") List<String> kuendigungsarten,
     @Schema(description = "Herkunftsländer") List<String> herkunftslaender,
-    @Schema(description = "Regionen") List<String> regionen,
+    @RISSchema(name = "ris:regionen") List<String> regionen,
     @Schema(description = "Tarifverträge") List<String> tarifvertraege,
     @Schema(description = "Kündigungsgründe") List<String> kuendigungsgruende,
     @Schema(description = "Mitwirkende Richter") List<String> mitwirkendeRichter,
-    @Schema(description = "Vorgehende Entscheidungen") List<String> vorgehendeEntscheidungen,
-    @Schema(description = "Nachgehende Entscheidungen") List<String> nachgehendeEntscheidungen,
+    @RISSchema(name = "ris:vorgehendeEntscheidung") List<String> vorgehendeEntscheidungen,
+    @RISSchema(name = "ris:nachgehendeEntscheidung") List<String> nachgehendeEntscheidungen,
     @Schema(description = "Aktivzitierung Literatur Unselbstständig")
         List<String> aktivzitierungLiteraturUnselbstaendig,
     @Schema(description = "Passivzitierung Literatur Unselbstständig")
@@ -71,15 +77,15 @@ public record RechtsprechungSchema(
         List<String> amtlicheFundstellen,
     @Schema(example = "DStR 2023, 1430-1435", description = "Nichtamtliche Fundstellen")
         List<String> nichtamtlicheFundstellen,
-    @Schema(example = "vereinbar mit höherrangigem Recht (Bremen)", description = "Gesetzeskraft")
+    @RISSchema(name = "ris:gesetzeskraft", example = "vereinbar mit höherrangigem Recht (Bremen)")
         List<String> gesetzeskraft,
     @Schema(example = "BGB § 823", description = "Normenkette") List<String> normenkette,
-    @Schema(description = "Sachgebiete") List<String> sachgebiete,
+    @RISSchema(name = "ris:sachgebiete") List<String> sachgebiete,
     @Schema(description = "Streitjahre") List<String> streitjahre,
-    @Schema(description = "Fehlerhafte Gerichte") List<String> fehlerhafteGerichte,
+    @RISSchema(name = "ris:fehlerhafteGerichte") List<String> fehlerhafteGerichte,
     @Schema(description = "Daten der mündlichen Verhandlung")
         List<LocalDate> datenDerMuendlichenVerhandlung,
-    @Schema(description = "Definitionen") List<String> definitionen,
+    @RISSchema(name = "ris:definitionen") List<String> definitionen,
     @Schema(example = "Ja", description = "Erledigung") String erledigung,
     @Schema(example = "Ja", description = "Rechtskraft") String rechtskraft,
     @Schema(example = "Ja", description = "Gesetzgebungsauftrag") String gesetzgebungsauftrag,
@@ -90,11 +96,11 @@ public record RechtsprechungSchema(
     @Schema(description = "Letzte Veröffentlichung") LocalDate letzteVeroeffentlichung,
     @Schema(description = "Erledigungsvermerk") String erledigungsvermerk,
     @Schema(description = "Erstveröffentlichung") LocalDate erstveroeffentlichung,
-    @Schema(description = "Mitteilungsdatum") LocalDate mitteilungsdatum,
-    @Schema(example = "FG Berlin", description = "Gericht") String gericht,
-    @Schema(description = "Gerichtsbarkeit") String gerichtsbarkeit,
-    @Schema(example = "Urteil") String dokumenttyp,
-    @Schema(example = "Gericht", description = "Spruchkörper") String spruchkoerper,
+    @RISSchema(name = "ris:mitteilungsdatum") LocalDate mitteilungsdatum,
+    @RISSchema(name = "ris:gericht", example = "FG Berlin") String gericht,
+    @RISSchema(name = "ris:gerichtsbarkeit") String gerichtsbarkeit,
+    @RISSchema(name = "ris:dokumenttyp", example = "Urteil") String dokumenttyp,
+    @RISSchema(name = "ris:spruchkoerper", example = "Gericht") String spruchkoerper,
     @Schema(
             example = "3. Kammer",
             description = "Schlagworte",
@@ -106,13 +112,13 @@ public record RechtsprechungSchema(
             description = "Entscheidungsnamen",
             requiredMode = Schema.RequiredMode.REQUIRED)
         List<String> entscheidungsnamen,
-    @Schema(
+    @RISSchema(
+            name = "ris:abweichendeDokumentnummern",
             example = "DEV-123",
-            description = "Abweichende Dokumentnummer",
             requiredMode = Schema.RequiredMode.REQUIRED)
         List<String> abweichendeDokumentnummern,
     @Schema(
-            example = "/v1/case-law/ECLI:DE:FGRLP:1969:0905.IV85.68.0A",
+            example = "/v1/rechtsprechung/ECLI:DE:FGRLP:1969:0905.IV85.68.0A",
             requiredMode = Schema.RequiredMode.REQUIRED)
         @JsonProperty("@id")
         String id,

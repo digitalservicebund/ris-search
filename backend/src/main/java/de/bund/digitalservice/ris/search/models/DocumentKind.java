@@ -8,7 +8,7 @@ import lombok.Getter;
 /** Enum for the different kinds of documents that can be searched for. */
 @Getter
 public enum DocumentKind {
-  CASE_LAW("case-law", "case-law"),
+  CASE_LAW("case-law", "rechtsprechung"),
   LEGISLATION("norms", "legislation"),
   LITERATURE("literature", "literature"),
   ADMINISTRATIVE_DIRECTIVE("administrative-directives", "administrative-directives"),

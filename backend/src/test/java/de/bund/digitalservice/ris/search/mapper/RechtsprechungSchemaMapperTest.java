@@ -7,7 +7,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import de.bund.digitalservice.ris.SharedTestConstants;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
-import de.bund.digitalservice.ris.search.schema.CaseLawSchema;
 import de.bund.digitalservice.ris.search.schema.DocumentEncodingSchema;
 import de.bund.digitalservice.ris.search.schema.RechtsprechungSchema;
 import java.time.LocalDate;
@@ -16,7 +15,7 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-class CaseLawSchemaMapperTest {
+class RechtsprechungSchemaMapperTest {
 
   private CaseLawDocumentationUnit buildDocumentationUnit() {
     return CaseLawDocumentationUnit.builder()
@@ -92,60 +91,10 @@ class CaseLawSchemaMapperTest {
   }
 
   @Test
-  @DisplayName("Correctly maps scalar CaseLawSchema attributes")
-  void fromDomainSingleCaseLawSchemaScalarAttributes() {
-    CaseLawSchema caseLawSchema =
-        CaseLawSchemaMapper.fromDomain(buildDocumentationUnit(), "jsonLdContext");
-
-    assertThat(caseLawSchema.id()).isEqualTo("/v1/case-law/BFRE000087655");
-    assertThat(caseLawSchema.documentNumber()).isEqualTo("BFRE000087655");
-    assertThat(caseLawSchema.ecli()).isEqualTo("ECLI:DE:FGNI:1975:0526.IXL180.73.0A");
-    assertThat(caseLawSchema.courtType()).isEqualTo("KG");
-    assertThat(caseLawSchema.location()).isEqualTo("Berlin");
-    assertThat(caseLawSchema.documentType()).isEqualTo("Urteil");
-    assertThat(caseLawSchema.decisionDate()).isEqualTo(SharedTestConstants.DATE_2024_01_02);
-    assertThat(caseLawSchema.dissentingOpinion()).isEqualTo("eine abweichende Meinung");
-    assertThat(caseLawSchema.decisionGrounds()).isEqualTo("diese Entscheidungsgründe");
-    assertThat(caseLawSchema.headnote()).isEqualTo("Orientierungssatz");
-    assertThat(caseLawSchema.headline()).isEqualTo("Test");
-    assertThat(caseLawSchema.titleLine()).isEqualTo("Title line");
-    assertThat(caseLawSchema.otherHeadnote()).isEqualTo("Sonstiger Orientierungssatz");
-    assertThat(caseLawSchema.otherLongText()).isEqualTo("Long text");
-    assertThat(caseLawSchema.caseFacts()).isEqualTo("Tatbestand");
-    assertThat(caseLawSchema.outline()).isEqualTo("outlineTest");
-    assertThat(caseLawSchema.judicialBody()).isEqualTo("judicial body");
-    assertThat(caseLawSchema.courtName()).isEqualTo("KG Berlin");
-    assertThat(caseLawSchema.grounds()).isEqualTo("grounds");
-    assertThat(caseLawSchema.guidingPrinciple()).isEqualTo("guidingPrinciple");
-    assertThat(caseLawSchema.tenor()).isEqualTo("tenor");
-    assertThat(caseLawSchema.inLanguage()).isEqualTo("de");
-    assertThat(caseLawSchema.context()).isEqualTo("jsonLdContext");
-  }
-
-  @Test
-  @DisplayName("Correctly maps collection CaseLawSchema attributes")
-  void fromDomainSingleCaseLawSchemaCollectionAttributes() {
-    CaseLawSchema caseLawSchema =
-        CaseLawSchemaMapper.fromDomain(buildDocumentationUnit(), "jsonLdContext");
-
-    assertThat(caseLawSchema.fileNumbers()).containsExactly("FileNumberTest");
-    assertThat(caseLawSchema.keywords()).containsExactly("one", "two");
-    assertThat(caseLawSchema.decisionName()).containsExactly("decisionName");
-    assertThat(caseLawSchema.deviatingDocumentNumber()).containsExactly("deviatingDocumentNumber");
-    assertThat(caseLawSchema.previousDecisions())
-        .containsExactly("previous decision file number, previous decision court type");
-    assertThat(caseLawSchema.ensuingDecisions())
-        .containsExactly("ensuing decision file number, ensuing decision court type");
-    assertThat(caseLawSchema.gesetzeskraft())
-        .containsExactly("vereinbar mit höherrangigem Recht, Bremen");
-    assertThat(caseLawSchema.streitjahre()).containsExactly("2024");
-  }
-
-  @Test
   @DisplayName("Correctly maps scalar RechtsprechungSchema attributes")
   void fromDomainSingleRechtsprechungSchemaScalarAttributes() {
     RechtsprechungSchema rechtsprechungSchema =
-        RechtsprechungSchemaMapper.fromDomain(buildDocumentationUnit());
+        RechtsprechungSchemaMapper.fromDomain(buildDocumentationUnit(), "jsonLdContext");
 
     assertThat(rechtsprechungSchema.id()).isEqualTo("/v1/rechtsprechung/BFRE000087655");
     assertThat(rechtsprechungSchema.dokumentNummer()).isEqualTo("BFRE000087655");
@@ -169,13 +118,14 @@ class CaseLawSchemaMapperTest {
     assertThat(rechtsprechungSchema.leitsatz()).isEqualTo("guidingPrinciple");
     assertThat(rechtsprechungSchema.tenor()).isEqualTo("tenor");
     assertThat(rechtsprechungSchema.inLanguage()).isEqualTo("de");
+    assertThat(rechtsprechungSchema.context()).isEqualTo("jsonLdContext");
   }
 
   @Test
   @DisplayName("Correctly maps additional scalar RechtsprechungSchema attributes")
   void fromDomainSingleRechtsprechungSchemaAdditionalScalarAttributes() {
     RechtsprechungSchema rechtsprechungSchema =
-        RechtsprechungSchemaMapper.fromDomain(buildDocumentationUnit());
+        RechtsprechungSchemaMapper.fromDomain(buildDocumentationUnit(), "jsonLdContext");
 
     assertThat(rechtsprechungSchema.celex()).isEqualTo("62013CA0192");
     assertThat(rechtsprechungSchema.gerichtsbarkeit()).isEqualTo("Ordentliche Gerichtsbarkeit");
@@ -201,7 +151,7 @@ class CaseLawSchemaMapperTest {
   @DisplayName("Correctly maps collection RechtsprechungSchema attributes")
   void fromDomainSingleRechtsprechungSchemaCollectionAttributes() {
     RechtsprechungSchema rechtsprechungSchema =
-        RechtsprechungSchemaMapper.fromDomain(buildDocumentationUnit());
+        RechtsprechungSchemaMapper.fromDomain(buildDocumentationUnit(), "jsonLdContext");
 
     assertThat(rechtsprechungSchema.aktenzeichenListe()).containsExactly("FileNumberTest");
     assertThat(rechtsprechungSchema.abweichendeAktenzeichen()).containsExactly("1 BvR 839, 899/96");
@@ -234,7 +184,7 @@ class CaseLawSchemaMapperTest {
   @DisplayName("Correctly maps reference collection RechtsprechungSchema attributes")
   void fromDomainSingleRechtsprechungSchemaReferenceCollectionAttributes() {
     RechtsprechungSchema rechtsprechungSchema =
-        RechtsprechungSchemaMapper.fromDomain(buildDocumentationUnit());
+        RechtsprechungSchemaMapper.fromDomain(buildDocumentationUnit(), "jsonLdContext");
 
     assertThat(rechtsprechungSchema.vorgehendeEntscheidungen())
         .containsExactly("previous decision file number, previous decision court type");
@@ -270,26 +220,26 @@ class CaseLawSchemaMapperTest {
     var documentationUnit =
         CaseLawDocumentationUnit.builder().documentNumber("BFRE000087655").build();
 
-    CaseLawSchema caseLawSchema =
-        CaseLawSchemaMapper.fromDomain(documentationUnit, "jsonLdContext");
+    RechtsprechungSchema rechtsprechungSchema =
+        RechtsprechungSchemaMapper.fromDomain(documentationUnit, "jsonLdContext");
 
-    assertThat(caseLawSchema.encoding())
+    assertThat(rechtsprechungSchema.encoding())
         .containsExactly(
             DocumentEncodingSchema.builder()
-                .id("/v1/case-law/BFRE000087655/html")
-                .contentUrl("/v1/case-law/BFRE000087655.html")
+                .id("/v1/rechtsprechung/BFRE000087655/html")
+                .contentUrl("/v1/rechtsprechung/BFRE000087655.html")
                 .encodingFormat("text/html")
                 .inLanguage("de")
                 .build(),
             DocumentEncodingSchema.builder()
-                .id("/v1/case-law/BFRE000087655/xml")
-                .contentUrl("/v1/case-law/BFRE000087655.xml")
+                .id("/v1/rechtsprechung/BFRE000087655/xml")
+                .contentUrl("/v1/rechtsprechung/BFRE000087655.xml")
                 .encodingFormat("application/xml")
                 .inLanguage("de")
                 .build(),
             DocumentEncodingSchema.builder()
-                .id("/v1/case-law/BFRE000087655/zip")
-                .contentUrl("/v1/case-law/BFRE000087655.zip")
+                .id("/v1/rechtsprechung/BFRE000087655/zip")
+                .contentUrl("/v1/rechtsprechung/BFRE000087655.zip")
                 .encodingFormat("application/zip")
                 .inLanguage("de")
                 .build());

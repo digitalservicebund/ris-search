@@ -1,6 +1,7 @@
 package de.bund.digitalservice.ris.search.xsd;
 
 import de.bund.digitalservice.ris.search.models.DocumentKind;
+import de.bund.digitalservice.ris.search.utils.StringUtils;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -279,7 +280,8 @@ public class XSDDescriptionParser {
             descriptionKey ->
                 descriptionKey.key().equals(key) && descriptionKey.lang().equals(language))
         .findFirst()
-        .map(DescriptionKey::description);
+        .map(DescriptionKey::description)
+        .map(StringUtils::stripHtml);
   }
 
   /**
