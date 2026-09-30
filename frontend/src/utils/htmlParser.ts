@@ -8,7 +8,7 @@ type Section = {
 
 let jsdom: typeof JSDOM;
 if (import.meta.server) {
-  import("jsdom").then((module) => {
+  void import("jsdom").then((module) => {
     jsdom = module.JSDOM;
   });
 }
