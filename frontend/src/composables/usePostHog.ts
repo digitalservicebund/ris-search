@@ -127,11 +127,12 @@ export function usePostHog() {
     const store = getCookieStore();
     if (!store) return;
 
-    for (const { name } of await store.getAll()) {
-      if (name?.startsWith("ph_")) {
-        await store.delete({ name, path: "/" });
-      }
-    }
+    const postHogCookieNames = (await store.getAll())
+      .map(({ name }) => name)
+      .filter((name): name is string => !!name?.startsWith("ph_"));
+    await Promise.all(
+      postHogCookieNames.map((name) => store.delete({ name, path: "/" })),
+    );
   }
 
   /** Retrieves the user's PostHog distinct ID from cookies. */
