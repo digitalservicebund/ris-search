@@ -32,6 +32,7 @@ public class ArticleVersionSchemaMapper {
     return new ArticleVersionSchema(
         ApiConfig.Paths.LEGISLATION + "/" + article.getExpressionEli() + "#" + article.getEId(),
         article.getEId(),
+        article.getDocumentNumber(),
         article.getName(),
         DateUtils.toDateIntervalString(article.getEntryIntoForceDate(), article.getExpiryDate()),
         getEncoding(article),
