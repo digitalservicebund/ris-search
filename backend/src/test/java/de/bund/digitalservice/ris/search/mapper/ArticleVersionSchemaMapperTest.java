@@ -29,6 +29,7 @@ class ArticleVersionSchemaMapperTest {
             .expiryDate(null)
             .manifestationEli("eli/bund/bgbl-1/1975/s1000/1975-01-01/1/deu/regelungstext-1.xml")
             .documentType(LegislationPartType.ARTICLE)
+            .documentNumber("DOKNR000000000000001000000")
             .build();
     ArticleWithExpressions articleWithExpressions =
         new ArticleWithExpressions(article, List.of(article.getExpressionEli()));
@@ -44,6 +45,7 @@ class ArticleVersionSchemaMapperTest {
         ArticleVersionSchema.builder()
             .id("/v1/legislation/eli/bund/bgbl-1/1975/s1000/1975-01-01/1/deu#art-z1")
             .eId("art-z1")
+            .revision("DOKNR000000000000001000000")
             .name("§ 1")
             .temporalCoverage("1975-01-01/..")
             .encoding(
