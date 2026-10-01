@@ -4,6 +4,7 @@ import de.bund.digitalservice.ris.search.models.Attachment;
 import de.bund.digitalservice.ris.search.utils.XmlDocument;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -45,67 +46,79 @@ public class NormAttachmentMapper {
   public static List<Attachment> parseAttachments(
       XmlDocument mainDocument, Map<String, String> attachmentFiles) {
 
-    List<Node> references = getAttachmentReferences(mainDocument);
+    List<Node> attachmentReferences = getAttachmentReferences(mainDocument);
 
-    return references.stream()
-        .map(
-            reference -> {
-              final String eId = reference.getAttributes().getNamedItem("eId").getTextContent();
-              Node attachmentRef =
-                  ((Element) reference).getElementsByTagName("akn:documentRef").item(0);
-              try {
-                var href = attachmentRef.getAttributes().getNamedItem("href").getNodeValue();
-                var attachmentFileString = attachmentFiles.get(href);
-                if (attachmentFileString == null) {
-                  return Optional.<Attachment>empty();
-                }
-                XmlDocument attachmentDocument =
-                    new XmlDocument(attachmentFileString.getBytes(StandardCharsets.UTF_8));
-                Node docTitleNode =
-                    attachmentDocument
-                        .getFirstMatchedNodeByXpath(
-                            "/akn:akomaNtoso/akn:doc/akn:preface/akn:block/akn:docTitle")
-                        .orElseThrow(
-                            () ->
-                                new XPathExpressionException(
-                                    "Norm xml missing madatory field akn:docTitle"));
+    List<Attachment> result = new ArrayList<>();
+    for (Node attachmentReference : attachmentReferences) {
 
-                Optional<Node> numNode =
-                    attachmentDocument.getFirstMatchedNodeByXpath(
-                        "./akn:inline[@refersTo='anlageregelungstext-num']", docTitleNode);
-                Optional<Node> referenceNode =
-                    attachmentDocument.getFirstMatchedNodeByXpath(
-                        "./akn:inline[@refersTo='anlageregelungstext-bezug']", docTitleNode);
+      final String eId = attachmentReference.getAttributes().getNamedItem("eId").getTextContent();
+      String href =
+          ((Element) attachmentReference)
+              .getElementsByTagName("akn:documentRef")
+              .item(0)
+              .getAttributes()
+              .getNamedItem("href")
+              .getNodeValue();
+      String hrefPath =
+          NormLdmlToOpenSearchMapper.parseURIPathOrThrow(
+              href, "Invalid href path while attempting to parse attachment: " + href);
+      var attachmentFileString = attachmentFiles.get(hrefPath);
 
-                String text =
-                    attachmentDocument.extractCleanedText(
-                        "/akn:akomaNtoso/akn:doc/akn:mainBody//text()");
+      Optional<Attachment> attachment = getAttachment(attachmentFileString, eId, hrefPath);
+      attachment.ifPresent(result::add);
+    }
+    return result;
+  }
 
-                String officialFootNotes =
-                    attachmentDocument.extractCleanedText(
-                        NormLdmlToOpenSearchMapper.X_PATH_OFFICIAL_FOOTNOTES);
+  private static Optional<Attachment> getAttachment(
+      String attachmentFileString, String eId, String hrefPath) {
+    try {
+      if (attachmentFileString == null) {
+        return Optional.empty();
+      }
+      XmlDocument attachmentDocument =
+          new XmlDocument(attachmentFileString.getBytes(StandardCharsets.UTF_8));
+      Node docTitleNode =
+          attachmentDocument
+              .getFirstMatchedNodeByXpath(
+                  "/akn:akomaNtoso/akn:doc/akn:preface/akn:block/akn:docTitle")
+              .orElseThrow(
+                  () ->
+                      new XPathExpressionException(
+                          "Norm xml missing mandatory field akn:docTitle"));
 
-                var attachment =
-                    Attachment.builder()
-                        .marker(numNode.map(Node::getTextContent).orElse(null))
-                        .docTitle(referenceNode.map(Node::getTextContent).orElse(null))
-                        .eId(eId)
-                        .textContent(text)
-                        .manifestationEli(href)
-                        .officialFootNotes(officialFootNotes)
-                        .build();
-                return Optional.of(attachment);
-              } catch (ParserConfigurationException
-                  | SAXException
-                  | IOException
-                  | RuntimeException
-                  | XPathExpressionException e) {
-                logger.error("Error parsing attachments", e);
-                return Optional.<Attachment>empty();
-              }
-            })
-        .flatMap(Optional::stream)
-        .toList();
+      Optional<Node> numNode =
+          attachmentDocument.getFirstMatchedNodeByXpath(
+              "./akn:inline[@refersTo='anlageregelungstext-num']", docTitleNode);
+      Optional<Node> referenceNode =
+          attachmentDocument.getFirstMatchedNodeByXpath(
+              "./akn:inline[@refersTo='anlageregelungstext-bezug']", docTitleNode);
+
+      String text =
+          attachmentDocument.extractCleanedText("/akn:akomaNtoso/akn:doc/akn:mainBody//text()");
+
+      String officialFootNotes =
+          attachmentDocument.extractCleanedText(
+              NormLdmlToOpenSearchMapper.X_PATH_OFFICIAL_FOOTNOTES);
+
+      var attachment =
+          Attachment.builder()
+              .marker(numNode.map(Node::getTextContent).orElse(null))
+              .docTitle(referenceNode.map(Node::getTextContent).orElse(null))
+              .eId(eId)
+              .textContent(text)
+              .manifestationEli(hrefPath)
+              .officialFootNotes(officialFootNotes)
+              .build();
+      return Optional.of(attachment);
+    } catch (ParserConfigurationException
+        | SAXException
+        | IOException
+        | RuntimeException
+        | XPathExpressionException e) {
+      logger.error("Error parsing attachments", e);
+      return Optional.empty();
+    }
   }
 
   private static List<Node> getAttachmentReferences(XmlDocument mainDocument) {

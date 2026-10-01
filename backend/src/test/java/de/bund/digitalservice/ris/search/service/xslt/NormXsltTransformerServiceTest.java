@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import de.bund.digitalservice.ris.search.exception.FileTransformationException;
+import de.bund.digitalservice.ris.html.exception.FileTransformationException;
 import de.bund.digitalservice.ris.search.exception.NoSuchKeyException;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import java.io.ByteArrayInputStream;
@@ -31,7 +31,7 @@ class NormXsltTransformerServiceTest {
 
   private final NormsBucket normsBucketMock = mock(NormsBucket.class);
   private final NormXsltTransformerService service =
-      new NormXsltTransformerService(normsBucketMock);
+      new NormXsltTransformerService(new NormUriResolver(normsBucketMock));
 
   private final String resourcesPath =
       getClass().getResource("/data/XsltTransformerServiceTest/").getPath();

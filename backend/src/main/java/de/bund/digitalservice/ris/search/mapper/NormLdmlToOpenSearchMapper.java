@@ -621,7 +621,14 @@ public class NormLdmlToOpenSearchMapper {
                 ));
   }
 
-  private static String parseURIPathOrThrow(String uri, String errorMessage) {
+  /**
+   * Extracts the path from a uri or throws an exception when the uri is not valid
+   *
+   * @param uri The uri to parse the path out of
+   * @param errorMessage The message to put in the thrown error when the uri is not valid
+   * @return the path of the uri
+   */
+  public static String parseURIPathOrThrow(String uri, String errorMessage) {
     try {
       String path = new URI(uri).getPath();
       return org.springframework.util.StringUtils.trimLeadingCharacter(path, '/');

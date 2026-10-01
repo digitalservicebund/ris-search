@@ -235,7 +235,7 @@
           <akn:num eId="art-z4_abs-z1_bezeichnung-n1" GUID="fd3fdf1c-ef3b-4a0c-97e5-73ca5d87304e">(1)</akn:num>
           <akn:content eId="art-z4_abs-z1_inhalt-n1" GUID="0db68311-33d5-43d0-92ba-ed5dcf167eb5">
             <akn:p eId="art-z4_abs-z1_inhalt-n1_text-n1" GUID="9276537f-3eb7-48f8-abd1-f764129734b8"> This paragraph references an <akn:affectedDocument eId="art-z4_abs-z1_inhalt-n1_text-n1_bezugsdoc-n1" GUID="a795e4dc-39fb-462e-82ec-b09ca0d8aafe"
-                href="eli/bund/bgbl-n1/1964/s593/1964-n08-n05/1/deu/regelungstext-n1.xml">affected document</akn:affectedDocument>.</akn:p>
+                href="https://www.ris.bund.de/eli/bund/bgbl-n1/1964/s593/1964-n08-n05/1/deu/regelungstext-n1.xml">affected document</akn:affectedDocument>.</akn:p>
           </akn:content>
         </akn:paragraph>
 
@@ -284,10 +284,10 @@
               <akn:p eId="art-z5_abs-z1_inhalt-n1_text-n1" GUID="d9e5c9f7-3db0-4f6f-adb2-1008105aa0bf">
                   <akn:img GUID="7f4172f8-2184-4b13-98b3-d387b6b25a72" class="type-tif units-72"
                            eId="art-z5_abs-z1_inhalt-n1_text-n1_bild-n1" height="54"
-                           src="eli/bund/bgbl-1/1991/s101/1991-01-01/1/deu/1991-01-01/bild_1.jpg" width="60"/>
+                           src="https://www.ris.bund.de/eli/bund/bgbl-1/1991/s101/1991-01-01/1/deu/1991-01-01/bild_1.jpg" width="60"/>
               </akn:p>
               <akn:p eId="art-z5_abs-z1_inhalt-n1_text-n2" GUID="b0c5d6f7-8e9a-4c0f-bb2d-8e3d5f6c7a1b">
-                  <akn:a eId="art-z5_abs-z1_inhalt-n1_text-n2_a-n1" href="eli/bund/bgbl-1/1991/s101/1991-01-01/1/deu/1991-01-01/dokument.pdf" GUID="c5b6f8d9-0a2b-4c3d-bf4e-5f6a7b8c9d0e" />
+                  <akn:a eId="art-z5_abs-z1_inhalt-n1_text-n2_a-n1" href="https://www.ris.bund.de/eli/bund/bgbl-1/1991/s101/1991-01-01/1/deu/1991-01-01/dokument.pdf" GUID="c5b6f8d9-0a2b-4c3d-bf4e-5f6a7b8c9d0e" />
               </akn:p>
           </akn:content>
         </akn:paragraph>
@@ -304,7 +304,7 @@
                   An article that contains special characters in its eId
               </akn:p>
               <akn:p eId="art-z%c2%a7%c2%a7%204%20bis%2014_abs-z1_inhalt-n1_text-n2" GUID="b0c5d6f7-8e9a-4c0f-bb2d-8e3d5f6c7a1b">
-                  <akn:a eId="art-z%c2%a7%c2%a7%204%20bis%2014_abs-z1_inhalt-n1_text-n2_a-n1" href="eli/bund/bgbl-1/1991/s101/1991-01-01/1/deu/1991-01-01/dokument.pdf" GUID="c5b6f8d9-0a2b-4c3d-bf4e-5f6a7b8c9d0e" />
+                  <akn:a eId="art-z%c2%a7%c2%a7%204%20bis%2014_abs-z1_inhalt-n1_text-n2_a-n1" href="https://www.ris.bund.de/eli/bund/bgbl-1/1991/s101/1991-01-01/1/deu/1991-01-01/dokument.pdf" GUID="c5b6f8d9-0a2b-4c3d-bf4e-5f6a7b8c9d0e" />
               </akn:p>
           </akn:content>
         </akn:paragraph>

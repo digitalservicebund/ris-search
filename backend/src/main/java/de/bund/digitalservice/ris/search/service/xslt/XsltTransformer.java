@@ -1,11 +1,13 @@
 package de.bund.digitalservice.ris.search.service.xslt;
 
-import de.bund.digitalservice.ris.search.exception.FileTransformationException;
-import de.bund.digitalservice.ris.search.service.exception.XMLElementNotFoundException;
+import de.bund.digitalservice.ris.html.exception.FileTransformationException;
+import de.bund.digitalservice.ris.html.exception.XMLElementNotFoundException;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
@@ -20,24 +22,44 @@ import net.sf.saxon.jaxp.TransformerImpl;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.core.io.ClassPathResource;
 
-/** Abstract base class for XSLT transformers for LegalDocML documents. */
+/**
+ * Abstract base class for XSLT transformers for LegalDocML documents. This is a copy of
+ * XsltTransformer in ris-html-transformation. There are small changes until norm html generation is
+ * also migrated to ris-html-transformation. Until then, we will try to keep the classes mostly
+ * aligned.
+ */
 public abstract class XsltTransformer {
   static final String RESOURCE_PATH_KEY = "ressourcenpfad";
 
-  final Logger logger = LogManager.getLogger(XsltTransformer.class);
-  final TransformerFactory transformerFactory = TransformerFactory.newInstance();
+  private final Logger logger = LogManager.getLogger(XsltTransformer.class);
+  protected final TransformerFactory transformerFactory = TransformerFactory.newInstance();
 
-  abstract String getXsltBasePath();
+  private final String xsltBasePath;
+  private final String xsltFilename;
 
-  abstract String getXsltFilename();
+  /**
+   * Used by child classes to construct instances of children XsltTransformer.
+   *
+   * @param xsltBasePath base path for the xslt files.
+   * @param xsltFilename the root xslt file to be applied.
+   */
+  public XsltTransformer(String xsltBasePath, String xsltFilename) {
+    this.xsltBasePath = xsltBasePath;
+    this.xsltFilename = xsltFilename;
+  }
 
   String transformLegalDocMlFromBytes(byte[] source, Map<String, String> parameters) {
 
     AtomicReference<String> terminationMessage = new AtomicReference<>();
     try {
-      String url = new ClassPathResource(getXsltBasePath()).getURL().toString();
+      // PURE JAVA ALTERNATIVE FOR BASE PATH URL:
+      URL basePathUrl = getClass().getClassLoader().getResource(xsltBasePath);
+      if (basePathUrl == null) {
+        throw new FileTransformationException("XSLT Base path not found: " + xsltBasePath);
+      }
+      String url = basePathUrl.toString();
+
       Source xsltSource = new StreamSource(new StringReader(getXslt()), url);
 
       Transformer transformer = transformerFactory.newTransformer(xsltSource);
@@ -61,24 +83,30 @@ public abstract class XsltTransformer {
         return output.toString();
       }
     } catch (TransformerException | IOException e) {
-
       logger.error("XSLT transformation error.", e);
-      String termination = terminationMessage.get();
 
-      if (termination != null && termination.startsWith("EID_NOT_FOUND: ")) {
-        throw new XMLElementNotFoundException(termination, e);
-      } else if (termination != null) {
-        throw new FileTransformationException(termination, e);
-      } else {
-        throw new FileTransformationException(e.getMessage(), e);
+      if (terminationMessage.get() != null) {
+        var split = terminationMessage.get().split(": ");
+        if (split.length == 2 && split[0].equals("EID_NOT_FOUND")) {
+          throw new XMLElementNotFoundException(terminationMessage.get(), e);
+        }
+        if (split.length > 0 && split[0].equals("DOCUMENT_REF_NOT_FOUND")) {
+          throw new FileTransformationException(terminationMessage.get(), e);
+        }
       }
+
+      throw new FileTransformationException(e.getMessage(), e);
     }
   }
 
   String getXslt() {
-    try {
-      ClassPathResource xsltResource = new ClassPathResource(getXsltBasePath() + getXsltFilename());
-      return IOUtils.toString(xsltResource.getInputStream(), StandardCharsets.UTF_8);
+    // PURE JAVA ALTERNATIVE FOR READING STREAM:
+    String fullPath = xsltBasePath + xsltFilename;
+    try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(fullPath)) {
+      if (inputStream == null) {
+        throw new FileTransformationException("XSLT file not found: " + fullPath);
+      }
+      return IOUtils.toString(inputStream, StandardCharsets.UTF_8);
     } catch (IOException e) {
       logger.error("XSLT transformation error.", e);
       throw new FileTransformationException(e.getMessage(), e);

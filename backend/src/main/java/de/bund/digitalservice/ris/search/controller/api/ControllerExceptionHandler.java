@@ -1,7 +1,7 @@
 package de.bund.digitalservice.ris.search.controller.api;
 
+import de.bund.digitalservice.ris.html.exception.FileTransformationException;
 import de.bund.digitalservice.ris.search.exception.CustomValidationException;
-import de.bund.digitalservice.ris.search.exception.FileTransformationException;
 import de.bund.digitalservice.ris.search.exception.OpenSearchFetchException;
 import de.bund.digitalservice.ris.search.exception.OpenSearchTermLimitExceeded;
 import de.bund.digitalservice.ris.search.models.errors.CustomError;

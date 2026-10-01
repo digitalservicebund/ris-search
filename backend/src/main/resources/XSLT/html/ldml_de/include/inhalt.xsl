@@ -622,7 +622,7 @@
         ######
     -->
     <xsl:template match="akn:img">
-        <img src="{concat($ressourcenpfad, @src)}">
+        <img src="{concat($ressourcenpfad, substring-after(substring-after(@src, '//'), '/'))}">
               <xsl:apply-templates select="@*[local-name() != 'src']" />
         </img>
     </xsl:template>
@@ -632,8 +632,15 @@
         ######
     -->
     <xsl:template match="akn:a[ends-with(@href, '.pdf')]">
-        <a class="norm-pdf-link" href="{concat($ressourcenpfad, @href)}" target="_blank" rel="noopener noreferrer">
+        <a class="norm-pdf-link" href="{concat($ressourcenpfad, substring-after(substring-after(@href, '//'), '/'))}" target="_blank" rel="noopener noreferrer">
             <xsl:apply-templates select="@*[local-name() != 'href']" />
+            PDF öffnen
+        </a>
+    </xsl:template>
+
+    <xsl:template match="akn:componentRef[ends-with(@src, '.pdf')]">
+        <a class="norm-pdf-link" href="{concat($ressourcenpfad, substring-after(substring-after(@src, '//'), '/'))}" target="_blank" rel="noopener noreferrer">
+            <xsl:apply-templates select="@*[local-name() != 'src']" />
             PDF öffnen
         </a>
     </xsl:template>

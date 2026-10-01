@@ -263,7 +263,7 @@
 
     <!-- Handle document references -->
     <xsl:template match="akn:documentRef">
-        <div class="included-document" data-source="{@href}">
+        <div class="included-document" data-source="{substring-after(substring-after(@href, '//'), '/')}">
             <xsl:try>
                 <!-- Include referenced document -->
                 <xsl:apply-templates select="document(@href)/akn:akomaNtoso/*">
