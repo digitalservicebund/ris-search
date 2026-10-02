@@ -113,6 +113,10 @@ dependencies {
     implementation(libs.fasterxml.jackson.databind)
     implementation(libs.tools.jackson.databind)
 
+    // CVE-2026-89407
+    implementation(libs.fasterxml.jackson.core)
+    implementation(libs.tools.jackson.core)
+
     implementation(libs.ris.html.transformation)
 
     implementation(libs.ris.xml.schema)
