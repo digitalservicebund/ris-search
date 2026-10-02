@@ -157,7 +157,7 @@ onBeforeUnmount(() => {
 
     <template v-if="showContent">
       <div
-        class="drawer-header sticky top-0 z-10 flex min-h-64 items-center justify-between gap-8 bg-white px-16 py-8"
+        class="drawer-header sticky top-0 z-10 flex min-h-64 items-center justify-between gap-8 bg-white p-16"
       >
         <span class="typo-headline3-bold">
           <slot name="header">{{ header }}</slot>
@@ -165,7 +165,7 @@ onBeforeUnmount(() => {
 
         <button
           type="button"
-          class="typo-label2-regular flex cursor-pointer items-center gap-6 py-12 text-blue-800 outline-offset-4 outline-blue-800 focus-visible:outline-4"
+          class="typo-label2-regular flex cursor-pointer items-center gap-6 text-blue-800 outline-offset-4 outline-blue-800 focus-visible:outline-4"
           @click="close"
         >
           Schließen
