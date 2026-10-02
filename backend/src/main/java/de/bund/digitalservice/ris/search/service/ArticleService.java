@@ -169,9 +169,11 @@ public class ArticleService {
     return getActualEid(expressionEliString, eidGiven)
         .flatMap(
             actualEid ->
-                articlesRepository.findDocumentNumberById(
-                    Article.buildId(expressionEliString, actualEid)))
-        .map(docNr -> this.getAllArticleVersionsByDocumentNumber(docNr, expressionEliString))
+                articlesRepository.findById(Article.buildId(expressionEliString, actualEid)))
+        .map(
+            article ->
+                this.getAllArticleVersionsByDocumentNumber(
+                    article.getDocumentNumber(), expressionEliString))
         .orElseGet(Page::empty);
   }
 
@@ -182,10 +184,6 @@ public class ArticleService {
    * @return List of version of that article across the whole work
    */
   public Page<ArticleWithExpressions> getAllArticleVersions(String revision) {
-
-    Sort sort = Sort.by(Sort.Direction.DESC, "entryIntoForceDate");
-    Pageable sortedPageable = Pageable.unpaged(sort);
-
     return this.getAllArticleVersionsByDocumentNumber(revision, null);
   }
 
