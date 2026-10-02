@@ -3,7 +3,6 @@ package de.bund.digitalservice.ris.search.repository.opensearch;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.ArticleWithExpressions;
 import de.bund.digitalservice.ris.search.models.opensearch.LegislationPartType;
-import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -31,13 +30,4 @@ public interface ArticlesRepositoryCustom {
       LegislationPartType type,
       String preferredExpressionEli,
       Pageable pageable);
-
-  /**
-   * Retrieves only the document number of the article with the given id, without loading the rest
-   * of the article source.
-   *
-   * @param id the id of the article
-   * @return the document number, or empty if the article does not exist or has no document number
-   */
-  Optional<String> findDocumentNumberById(String id);
 }
