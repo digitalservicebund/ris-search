@@ -901,6 +901,32 @@
         "description" : "Returns metadata of a legislation item.",
         "operationId" : "getLegislation",
         "parameters" : [ {
+          "name" : "pointInTime",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "date"
+          },
+          "example" : "2020-06-19"
+        }, {
+          "name" : "version",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "example" : 2
+        }, {
+          "name" : "language",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "example" : "deu"
+        }, {
           "name" : "jurisdiction",
           "in" : "path",
           "description" : "Country or regional code for the jurisdiction",
@@ -936,32 +962,6 @@
             "type" : "string"
           },
           "example" : "s1325"
-        }, {
-          "name" : "pointInTime",
-          "in" : "path",
-          "required" : true,
-          "schema" : {
-            "type" : "string",
-            "format" : "date"
-          },
-          "example" : "2020-06-19"
-        }, {
-          "name" : "version",
-          "in" : "path",
-          "required" : true,
-          "schema" : {
-            "type" : "integer",
-            "format" : "int32"
-          },
-          "example" : 2
-        }, {
-          "name" : "language",
-          "in" : "path",
-          "required" : true,
-          "schema" : {
-            "type" : "string"
-          },
-          "example" : "deu"
         } ],
         "responses" : {
           "200" : {
