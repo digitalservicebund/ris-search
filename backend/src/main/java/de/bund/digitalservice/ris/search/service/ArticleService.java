@@ -184,10 +184,6 @@ public class ArticleService {
    * @return List of version of that article across the whole work
    */
   public Page<ArticleWithExpressions> getAllArticleVersions(String revision) {
-
-    Sort sort = Sort.by(Sort.Direction.DESC, "entryIntoForceDate");
-    Pageable sortedPageable = Pageable.unpaged(sort);
-
     return this.getAllArticleVersionsByDocumentNumber(revision, null);
   }
 
