@@ -1900,6 +1900,8 @@ export interface components {
              * @example hauptteitel-para-1
              */
             eId: string;
+            /** @description the specific revision of that legislation part independent from its parent object */
+            revision?: string;
             /**
              * @description Numerical identifier of a specific legislation part
              * @example § 1
