@@ -14,6 +14,8 @@ public interface ArticlesRepository
     extends ElasticsearchRepository<Article, String>, ArticlesRepositoryCustom {
   List<Article> findAllByExpressionEli(String expressionEli);
 
+  List<Article> findAllByDocumentNumber(String documentNumber);
+
   /**
    * Delete articles for the given workEli that were indexed before the provided timestamp.
    *
