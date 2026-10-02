@@ -2,9 +2,8 @@ package de.bund.digitalservice.ris.search.controller.api;
 
 import static de.bund.digitalservice.ris.ZipTestUtils.readZipStream;
 import static de.bund.digitalservice.ris.utils.JsonldResultMatchers.isJsonLdCompliant;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.startsWithIgnoringCase;
 import static org.mockito.Mockito.when;
@@ -36,17 +35,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import org.assertj.core.api.Assertions;
 import org.hamcrest.Matchers;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.Mockito;
-import org.opensearch.core.common.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
@@ -304,9 +299,8 @@ class RechtsprechungControllerIntegrationTest extends ContainersIntegrationBase 
             .getResponse()
             .getContentAsString();
 
-    assertThat(responseContent, containsString("Das ist der Leitsatz"));
-    assertThat(responseContent, containsString("Sonstiger Orientierungssatz"));
-    assertThat(responseContent, containsString("Tatbestand"));
+    assertThat(responseContent)
+        .contains("Das ist der Leitsatz", "Sonstiger Orientierungssatz", "Tatbestand");
   }
 
   @Test
@@ -330,7 +324,7 @@ class RechtsprechungControllerIntegrationTest extends ContainersIntegrationBase 
     ByteArrayInputStream byteInputStream = new ByteArrayInputStream(zipBytes);
     final Map<String, byte[]> files = readZipStream(byteInputStream);
 
-    Assertions.assertThat(files)
+    assertThat(files)
         .containsOnly(
             Map.entry(
                 this.documentNumber + "/" + this.documentNumber + ".xml",
@@ -360,17 +354,11 @@ class RechtsprechungControllerIntegrationTest extends ContainersIntegrationBase 
         .andExpect(status().isNotFound());
   }
 
-  @ParameterizedTest
-  @CsvSource({",/v1/rechtsprechung/"})
+  @Test
   @DisplayName("Html endpoint should adapt img src paths")
-  void shouldReturnHtmlWithAdaptedImgSrcAttributes(String header, String expectedPrefix)
-      throws Exception {
+  void shouldReturnHtmlWithAdaptedImgSrcAttributes() throws Exception {
     final MockHttpServletRequestBuilder requestBuilder =
         get(getResourcePath("html")).contentType(MediaType.TEXT_HTML);
-
-    if (!Strings.isEmpty(header)) {
-      requestBuilder.header("get-resources-via", header);
-    }
 
     var response =
         mockMvc
@@ -383,8 +371,8 @@ class RechtsprechungControllerIntegrationTest extends ContainersIntegrationBase 
     Element image = Objects.requireNonNull(document.body().getElementsByTag("img").first());
 
     final String srcInLDML = this.documentNumber + "/Attachment.png";
-    String expectedSrc = expectedPrefix + srcInLDML;
-    Assertions.assertThat(image.attr("src")).isEqualTo(expectedSrc);
+    String expectedSrc = "/v1/rechtsprechung/" + srcInLDML;
+    assertThat(image.attr("src")).isEqualTo(expectedSrc);
   }
 
   @Test
@@ -436,6 +424,7 @@ class RechtsprechungControllerIntegrationTest extends ContainersIntegrationBase 
   }
 
   @Test
+  @DisplayName("Should return changed and deleted rechtsprechung files between timestamps")
   void itReturnsFileChangesBetweenTimestamps() throws Exception {
     Changelog changelog =
         new Changelog(
