@@ -7,15 +7,19 @@ import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-/** Service for cross-concern queries spanning norms and the articles they consist of. */
+/**
+ * Service for cross-concern queries spanning norms and the articles they consist of. Kept separate
+ * from {@link NormsService} and {@link ArticleService} to avoid a circular dependency between them.
+ */
 @Service
 public class NormsQueryService {
 
-  NormsRepository normsRepository;
+  private final NormsRepository normsRepository;
 
-  ArticlesRepository articlesRepository;
+  private final ArticlesRepository articlesRepository;
 
   /**
    * Constructor for NormsQueryService.
@@ -32,17 +36,19 @@ public class NormsQueryService {
    * Retrieve all norm expressions that contain the article revision with the given document number.
    *
    * @param documentNumber document number of the article revision
-   * @return An unpaged {@link Page} of all {@link Norm} expressions containing the article, or an
-   *     empty page if no article with the given document number exists.
+   * @return An unpaged {@link Page} of all {@link Norm} expressions containing the article, sorted
+   *     by entryIntoForceDate descending, or an empty page if no article with the given document
+   *     number exists.
    */
   public Page<Norm> getAllNormsContainingArticle(String documentNumber) {
     List<String> expressionElis =
-        articlesRepository.findAllByDocumentNumber(documentNumber).stream()
+        articlesRepository.findExpressionElisByDocumentNumber(documentNumber).stream()
             .map(Article::getExpressionEli)
             .toList();
     if (expressionElis.isEmpty()) {
       return Page.empty();
     }
-    return normsRepository.findAllByIdIn(expressionElis, Pageable.unpaged());
+    return normsRepository.findAllByIdIn(
+        expressionElis, Pageable.unpaged(Sort.by(Sort.Direction.DESC, "entryIntoForceDate")));
   }
 }

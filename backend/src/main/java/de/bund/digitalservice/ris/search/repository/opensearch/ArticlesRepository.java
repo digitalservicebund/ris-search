@@ -3,6 +3,7 @@ package de.bund.digitalservice.ris.search.repository.opensearch;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import java.util.List;
 import org.jspecify.annotations.NonNull;
+import org.springframework.data.elasticsearch.annotations.SourceFilters;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 
 /**
@@ -14,7 +15,15 @@ public interface ArticlesRepository
     extends ElasticsearchRepository<Article, String>, ArticlesRepositoryCustom {
   List<Article> findAllByExpressionEli(String expressionEli);
 
-  List<Article> findAllByDocumentNumber(String documentNumber);
+  /**
+   * Returns all {@link Article} revisions with the given document number. Only the expressionEli is
+   * loaded from the source; all other fields are left empty.
+   *
+   * @param documentNumber the document number of the article revision
+   * @return List of {@link Article} with only the expressionEli populated
+   */
+  @SourceFilters(includes = {"expressionEli"})
+  List<Article> findExpressionElisByDocumentNumber(String documentNumber);
 
   /**
    * Delete articles for the given workEli that were indexed before the provided timestamp.

@@ -17,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 @ExtendWith(MockitoExtension.class)
 class NormsQueryServiceTest {
@@ -38,7 +39,7 @@ class NormsQueryServiceTest {
 
   @Test
   void getAllNormsContainingArticleQueriesNormsByTheExpressionElisOfTheArticle() {
-    when(articlesRepository.findAllByDocumentNumber(DOCUMENT_NUMBER))
+    when(articlesRepository.findExpressionElisByDocumentNumber(DOCUMENT_NUMBER))
         .thenReturn(
             List.of(
                 Article.builder().documentNumber(DOCUMENT_NUMBER).expressionEli(ELI_1).build(),
@@ -48,7 +49,9 @@ class NormsQueryServiceTest {
             List.of(
                 Norm.builder().id(ELI_1).expressionEli(ELI_1).build(),
                 Norm.builder().id(ELI_2).expressionEli(ELI_2).build()));
-    when(normsRepository.findAllByIdIn(List.of(ELI_1, ELI_2), Pageable.unpaged()))
+    when(normsRepository.findAllByIdIn(
+            List.of(ELI_1, ELI_2),
+            Pageable.unpaged(Sort.by(Sort.Direction.DESC, "entryIntoForceDate"))))
         .thenReturn(expected);
 
     Page<Norm> actual = service.getAllNormsContainingArticle(DOCUMENT_NUMBER);
@@ -58,7 +61,8 @@ class NormsQueryServiceTest {
 
   @Test
   void getAllNormsContainingArticleReturnsEmptyPageWithoutQueryingNormsIfNoArticleMatches() {
-    when(articlesRepository.findAllByDocumentNumber(DOCUMENT_NUMBER)).thenReturn(List.of());
+    when(articlesRepository.findExpressionElisByDocumentNumber(DOCUMENT_NUMBER))
+        .thenReturn(List.of());
 
     Page<Norm> actual = service.getAllNormsContainingArticle(DOCUMENT_NUMBER);
 
