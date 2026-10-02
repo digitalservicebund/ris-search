@@ -5,6 +5,7 @@ import de.bund.digitalservice.ris.search.models.opensearch.ArticleWithExpression
 import de.bund.digitalservice.ris.search.models.opensearch.LegislationPartType;
 import de.bund.digitalservice.ris.search.utils.PageUtils;
 import java.util.List;
+import org.jspecify.annotations.NonNull;
 import org.opensearch.data.client.orhlc.NativeSearchQuery;
 import org.opensearch.data.client.orhlc.NativeSearchQueryBuilder;
 import org.opensearch.data.client.orhlc.OpenSearchAggregations;
@@ -58,7 +59,7 @@ public class ArticlesRepositoryCustomImpl implements ArticlesRepositoryCustom {
    */
   @Override
   public Page<ArticleWithExpressions> findAllVersionsByDocumentNumber(
-      String documentNumber,
+      @NonNull String documentNumber,
       LegislationPartType type,
       String preferredExpressionEli,
       Pageable pageable) {
