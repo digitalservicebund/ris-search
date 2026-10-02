@@ -11,7 +11,9 @@ import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.LegislationPartType;
+import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.repository.opensearch.ArticlesRepository;
+import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
 import java.time.LocalDate;
 import java.time.Month;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,9 +32,65 @@ class ArticleControllerIntegrationTest extends ContainersIntegrationBase {
 
   @Autowired private ArticlesRepository repository;
 
+  @Autowired private NormsRepository normsRepository;
+
   @BeforeEach
   void setup() {
     repository.deleteAll();
+  }
+
+  @Test
+  void itServesAllLegislationExpressionsThatAnArticleRevisionIsPartOf() throws Exception {
+    repository.save(
+        Article.builder()
+            .id("eli/bund/bgbl-1/1975/s1000/1975-01-01/1/deu/art-z1")
+            .eId("art-z1")
+            .expressionEli("eli/bund/bgbl-1/1975/s1000/1975-01-01/1/deu")
+            .workEli("eli/bund/bgbl-1/1975/s1000/1975-01-01/1/deu/1975-01-01")
+            .name("§ 1")
+            .entryIntoForceDate(LocalDate.of(1975, Month.JANUARY, 1))
+            .expiryDate(null)
+            .manifestationEli("eli/bund/bgbl-1/1975/s1000/1975-01-01/1/deu/regelungstext-1.xml")
+            .documentType(LegislationPartType.ARTICLE)
+            .documentNumber("DKNR0E80B0026DKNE000100010")
+            .build());
+    normsRepository.save(
+        Norm.builder()
+            .id("eli/bund/bgbl-1/1975/s1000/1975-01-01/1/deu")
+            .expressionEli("eli/bund/bgbl-1/1975/s1000/1975-01-01/1/deu")
+            .build());
+
+    repository.save(
+        Article.builder()
+            .id("eli/bund/bgbl-1/1975/s1000/1980-01-01/1/deu/art-z1")
+            .eId("art-z1")
+            .expressionEli("eli/bund/bgbl-1/1975/s1000/1980-01-01/1/deu")
+            .workEli("eli/bund/bgbl-1/1975/s1000/1975-01-01/1/deu/1980-01-01")
+            .name("§ 1")
+            .entryIntoForceDate(LocalDate.of(1975, Month.JANUARY, 1))
+            .expiryDate(null)
+            .manifestationEli("eli/bund/bgbl-1/1975/s1000/1980-01-01/1/deu/regelungstext-1.xml")
+            .documentType(LegislationPartType.ARTICLE)
+            .documentNumber("DKNR0E80B0026DKNE000100010")
+            .build());
+
+    normsRepository.save(
+        Norm.builder()
+            .id("eli/bund/bgbl-1/1975/s1000/1980-01-01/1/deu")
+            .expressionEli("eli/bund/bgbl-1/1975/s1000/1980-01-01/1/deu")
+            .build());
+
+    mockMvc
+        .perform(
+            get(ApiConfig.Paths.ARTICLE + "/DKNR0E80B0026DKNE000100010/legislations")
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpectAll(
+            status().isOk(),
+            isJsonLdCompliant(),
+            jsonPath(
+                "$.@id",
+                is("/v1/article/DKNR0E80B0026DKNE000100010/legislations?pageIndex=0&size=2")),
+            jsonPath("$.member", hasSize(2)));
   }
 
   @Test
