@@ -21,7 +21,7 @@ class NormsRepositoryIntegrationTest extends ContainersIntegrationBase {
   @BeforeEach
   void setUp() {
     normsRepository.deleteAll();
-    normsRepository.saveAll(List.of(mockNorm(ELI_1), mockNorm(ELI_2), mockNorm(ELI_3)));
+    normsRepository.saveAll(List.of(getNorm(ELI_1), getNorm(ELI_2), getNorm(ELI_3)));
   }
 
   @Test
@@ -50,7 +50,7 @@ class NormsRepositoryIntegrationTest extends ContainersIntegrationBase {
     assertThat(actual).isEmpty();
   }
 
-  private static Norm mockNorm(String expressionEli) {
+  private static Norm getNorm(String expressionEli) {
     return Norm.builder().id(expressionEli).expressionEli(expressionEli).build();
   }
 }
