@@ -91,6 +91,7 @@
           "rechtsfrage": "ris:rechtsfrage",
           "tenor": "ris:tenor",
           "datum": "ris:datum",
+          "datumsTyp": "ris:datumsTyp",
           "abweichendeDaten": "ris:abweichendeDaten",
           "gliederung": "ris:gliederung",
           "aktenzeichen": "ris:aktenzeichen",
