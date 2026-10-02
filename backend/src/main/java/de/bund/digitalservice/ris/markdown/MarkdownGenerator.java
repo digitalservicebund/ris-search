@@ -55,14 +55,14 @@ public class MarkdownGenerator implements CommandLineRunner {
     stringBuilder.append("| Key | Language | Description |").append(System.lineSeparator());
     stringBuilder.append("| --- | --- | --- |").append(System.lineSeparator());
     descriptions.forEach(
-        description ->
+        descriptionKey ->
             stringBuilder
                 .append("| ")
-                .append(description.key())
+                .append(descriptionKey.key())
                 .append(" | ")
-                .append(description.lang())
+                .append(descriptionKey.lang())
                 .append(" | ")
-                .append(description.description())
+                .append(toTableCellHtml(descriptionKey.description()))
                 .append(" |")
                 .append(System.lineSeparator()));
 
@@ -75,5 +75,39 @@ public class MarkdownGenerator implements CommandLineRunner {
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
+  }
+
+  /**
+   * Converts the raw, multi-line XSD documentation text (plain lines, with {@code *}-prefixed lines
+   * forming a bullet list) into HTML that renders correctly inside a single Markdown table cell: a
+   * Markdown table row can't contain a literal line break, so each line is terminated with {@code
+   * <br>} instead, and consecutive {@code *}-prefixed lines are wrapped in a {@code <ul>}.
+   *
+   * @param description the raw XSD documentation text
+   * @return the description as one line of HTML, safe to embed in a table cell
+   */
+  static String toTableCellHtml(String description) {
+    StringBuilder stringBuilder = new StringBuilder();
+    var lines = description.split("\n");
+    var listOpen = false;
+    for (String line : lines) {
+      if (line.trim().startsWith("*")) {
+        if (!listOpen) {
+          stringBuilder.append("<ul>");
+          listOpen = true;
+        }
+        stringBuilder.append("<li>").append(line.trim().substring(1).trim()).append("</li>");
+      } else {
+        if (listOpen) {
+          stringBuilder.append("</ul>");
+          listOpen = false;
+        }
+        stringBuilder.append(line.trim()).append("<br>");
+      }
+    }
+    if (listOpen) {
+      stringBuilder.append("</ul>");
+    }
+    return stringBuilder.toString();
   }
 }

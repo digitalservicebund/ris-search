@@ -1,9 +1,9 @@
 | Key | Language | Description |
 | --- | --- | --- |
 | akn:background | de | Tatbestand<br> |
-| akn:decision | de | Erledigungsvermerk<br> |
-| akn:introduction | de | Rechtsmittelführer oder Rechtsmittelzulassung<br> |
-| akn:motivation | de | Rechtsfrage<br> |
+| akn:decision | de | Tenor<br> |
+| akn:introduction | de | Platzhalter bei fehlendem Entscheidungstext<br> |
+| akn:motivation | de | Rechtsfrage (gesamt)<br> |
 | akn:ref | de | Stelle im Text (Randnummer) der Definition<br> |
 | ris:abkuerzung | de | abgekürzte Bezeichnung der Norm<br> |
 | ris:abweichendeDaten | de | Abweichende Daten<br> |
@@ -23,7 +23,7 @@
 | ris:dokumentarischeKurztexte | de | Dokumentarische Kurztexte<br> |
 | ris:dokumentationsstelle | de | Dokumentationsstelle die dieses Dokument eingepflegt hat<br> |
 | ris:dokumentnummer | de | Dokumentnummer<br> |
-| ris:dokumenttyp | de | Innerhalb der Dokumentart „Rechtsprechung“ werden folgende Dokumenttypen unterschieden:<br><br><ul><li>Äuß: Äußerung</li><li>Ant: EuGH-Vorlage</li><li>AnU: Anerkenntnisurteil</li><li>Bes: Beschluss</li><li>Buß: Bußgeldbescheid</li><li>DrB: Dreierausschussbeschluss</li><li>EiA: Einstweilige Anordnung</li><li>Ent: Entscheidung</li><li>EVg: Einstellungsverfügung der Staatsanwaltschaft</li><li>GeB: Gerichtsbescheid</li><li>Gut: Gutachten</li><li>GWF: Gegenstandswertfestsetzung im verfassungsgerichtlichen Verfahren</li><li>KaB: Kammerbeschluss</li><li>KbN: Nichtannahmebeschluss</li><li>KbS: Stattgebender Kammerbeschluss</li><li>KoB: Kammerbeschluss ohne Begründung</li><li>PkH: Prozesskostenhilfebeschluss</li><li>ReM: Rechtsentscheid in Mietsachen</li><li>Sch: Schiedsgerichtsentscheidung</li><li>Ste: Stellungnahme</li><li>Str: Streitwertbeschluss</li><li>TeB: Teilbeschluss</li><li>TeU: Teilurteil</li><li>Urt: Urteil</li><li>Vgl: Vergleich</li><li>Vor: Vorlagebeschluss</li><li>VsU: Versäumnisurteil</li><li>VzU: Verzichtsurteil</li><li>ZwB: Zwischenbeschluss</li><li>ZwU: Zwischenurteil</li><li>TVU: Teilversäumnisurteil</li><li>Vfg: Verfügung</li><li>Vorab: Ersuchen um Vorabentscheidung</li><li>Anh: Anhängiges Verfahren</li><li>End: Endurteil</li><li>KfB: Kostenfestsetzungsbeschluss</li> |
+| ris:dokumenttyp | de | Innerhalb der Dokumentart „Rechtsprechung“ werden folgende Dokumenttypen unterschieden:<br><br><ul><li>Äuß: Äußerung</li><li>Ant: EuGH-Vorlage</li><li>AnU: Anerkenntnisurteil</li><li>Bes: Beschluss</li><li>Buß: Bußgeldbescheid</li><li>DrB: Dreierausschussbeschluss</li><li>EiA: Einstweilige Anordnung</li><li>Ent: Entscheidung</li><li>EVg: Einstellungsverfügung der Staatsanwaltschaft</li><li>GeB: Gerichtsbescheid</li><li>Gut: Gutachten</li><li>GWF: Gegenstandswertfestsetzung im verfassungsgerichtlichen Verfahren</li><li>KaB: Kammerbeschluss</li><li>KbN: Nichtannahmebeschluss</li><li>KbS: Stattgebender Kammerbeschluss</li><li>KoB: Kammerbeschluss ohne Begründung</li><li>PkH: Prozesskostenhilfebeschluss</li><li>ReM: Rechtsentscheid in Mietsachen</li><li>Sch: Schiedsgerichtsentscheidung</li><li>Ste: Stellungnahme</li><li>Str: Streitwertbeschluss</li><li>TeB: Teilbeschluss</li><li>TeU: Teilurteil</li><li>Urt: Urteil</li><li>Vgl: Vergleich</li><li>Vor: Vorlagebeschluss</li><li>VsU: Versäumnisurteil</li><li>VzU: Verzichtsurteil</li><li>ZwB: Zwischenbeschluss</li><li>ZwU: Zwischenurteil</li><li>TVU: Teilversäumnisurteil</li><li>Vfg: Verfügung</li><li>Vorab: Ersuchen um Vorabentscheidung</li><li>Anh: Anhängiges Verfahren</li><li>End: Endurteil</li><li>KfB: Kostenfestsetzungsbeschluss</li></ul> |
 | ris:dokumenttyp | en | In the context of "Case Law" documents, different document types are distinguished, e.g. Statement, ECJ Referral, Acknowledgment Judgment, Order, Fine Notice, Three-Member Committee Order, Injunction, Decision, Dismissal Order, etc.<br> |
 | ris:dokumenttypen | de | Dokumenttypen<br> |
 | ris:einzelnorm | de | Ein Teil einer Norm. Zum Beispiel ein spezifischer Paragraph.<br> |
@@ -61,14 +61,14 @@
 | ris:personen | de | Liste an Personen. Auf diese wird z.B. aus akn:FRBRauthor oder akn:opinion verweisen.<br> |
 | ris:problemkreis | de | Problemkreis<br> |
 | ris:referenzArt | de | Art der Referenz<br> |
-| ris:referenzNormen | de | Ein Verweis auf eine Norm<br> |
+| ris:referenzNorm | de | Ein Verweis auf eine Norm<br> |
 | ris:referenzRechtsprechung | de | Referenz auf ein Rechtsprechungsdokument<br> |
 | ris:referenzSelbstaendigeLiteratur | de | Referenz auf ein selbstständiges Literaturdokument<br> |
+| ris:referenzURI | de | Die URI die auf die referenzierte Dokeinheit verweist.<br> |
 | ris:referenzUnselbstaendigeLiteratur | de | Referenz auf ein unselbstständiges Literaturdokument<br> |
 | ris:referenzVerwaltungsvorschrift | de | Referenz auf eine Verwaltungsvorschrift<br> |
 | ris:region | de | Abkürzung der Region.<br><br>Für Bundesländer:<br>Grundsätzlich: Die 2 Buchstaben Abkürzung nach ISO 3166-2<br>Niedersachsen abweichend ND<br>Hamburg HA<br>Bremen BR<br>Für Länder: ISO 3166-1 alpha-3<br><br>Es werden weitere Codes für andere und ehemalige Gebiete verwendet.<br>Zum Beispiel NL für Neue Länder, AL für Alte Länder oder PR für<br>Preußen<br> |
 | ris:regionen | de | Regionen in denen dieses Dokument eine Bedeutung hat<br> |
-| ris:relativerPfad | de | Der Pfad um die referenzierte Dokeinheit aufzurufen.<br> |
 | ris:richtung | de | Ist die Referenz eine Aktivzitierung oder eine Passivzitierung?<br> |
 | ris:sachgebiet | de | Sachgebiet<br> |
 | ris:sachgebiete | de | Sachgebiete<br> |
