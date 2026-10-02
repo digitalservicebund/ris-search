@@ -5,7 +5,7 @@ interface HtmlCacheEntry {
   error: boolean;
 }
 
-export function useSingleNormVersionsHtml() {
+export function useArtikelFassungenHtml() {
   const { $risBackend } = useNuxtApp();
   const rowsHtml = ref(new Map<string, HtmlCacheEntry>());
 

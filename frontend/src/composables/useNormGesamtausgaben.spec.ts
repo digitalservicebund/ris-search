@@ -2,7 +2,7 @@ import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ref } from "vue";
 import type { LegislationWork, SearchResult } from "~/types/api";
-import { useNormVersions } from "./useNormVersions";
+import { useNormGesamtausgaben } from "./useNormGesamtausgaben";
 
 const dummyData = {
   member: [
@@ -31,17 +31,17 @@ beforeEach(() => {
   vi.mocked(useRisBackendMock).mockReset();
 });
 
-describe("useNormVersions", () => {
+describe("useNormGesamtausgaben", () => {
   it("returns a sorted list when there is no error", async () => {
-    const { sortedVersions } = await useNormVersions("dummy-eli");
+    const { sortedGesamtausgaben } = await useNormGesamtausgaben("dummy-eli");
     expect(useRisBackendMock).toHaveBeenCalledWith(
       "/v1/legislation/work-example/dummy-eli",
     );
-    expect(sortedVersions.value).toHaveLength(2);
-    expect(sortedVersions.value[0]?.temporalCoverage).toBe(
+    expect(sortedGesamtausgaben.value).toHaveLength(2);
+    expect(sortedGesamtausgaben.value[0]?.temporalCoverage).toBe(
       "2023-12-01/2300-10-01",
     );
-    expect(sortedVersions.value[1]?.temporalCoverage).toBe(
+    expect(sortedGesamtausgaben.value[1]?.temporalCoverage).toBe(
       "2021-12-01/2023-11-30",
     );
   });
@@ -52,8 +52,9 @@ describe("useNormVersions", () => {
       data: computed(() => undefined),
       error: ref("Error occurred"),
     } as unknown as ReturnType<typeof useRisBackendMock>);
-    const { error, sortedVersions } = await useNormVersions("dummy-eli");
+    const { error, sortedGesamtausgaben } =
+      await useNormGesamtausgaben("dummy-eli");
     expect(error.value).toBe("Error occurred");
-    expect(sortedVersions.value).toEqual([]);
+    expect(sortedGesamtausgaben.value).toEqual([]);
   });
 });

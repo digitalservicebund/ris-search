@@ -6,7 +6,7 @@ import {
 import { screen } from "@testing-library/vue";
 import { vi } from "vitest";
 import type { JSONLDList, LegislationExpression } from "~/types/api";
-import VersionList from "./VersionList.vue";
+import GesamtausgabenList from "./GesamtausgabenList.vue";
 
 function createLegislationExpression(
   expressionEli: string,
@@ -77,11 +77,11 @@ const { useRouteMock } = vi.hoisted(() => ({
 }));
 mockNuxtImport("useRoute", () => useRouteMock);
 
-/** Props for the list, with the second version being the displayed one. */
-function props(versions = data.member!) {
+/** Props for the list, with the second gesamtausgabe being the displayed one. */
+function props(gesamtausgaben = data.member!) {
   return {
     currentLegislationIdentifier: data.member![1]?.legislationIdentifier ?? "",
-    versions,
+    gesamtausgaben,
   };
 }
 
@@ -89,7 +89,7 @@ function hrefs() {
   return screen.getAllByRole("link").map((link) => link.getAttribute("href"));
 }
 
-describe("VersionList", () => {
+describe("GesamtausgabenList", () => {
   beforeEach(() => {
     vi.useFakeTimers();
     vi.setSystemTime(new Date("2025-01-01T12:00:00"));
@@ -101,33 +101,33 @@ describe("VersionList", () => {
     vi.useRealTimers();
   });
 
-  it("lists versions, sorted by date", async () => {
-    await renderSuspended(VersionList, { props: props() });
+  it("lists gesamtausgaben, sorted by date", async () => {
+    await renderSuspended(GesamtausgabenList, { props: props() });
 
-    const versions = screen.getAllByRole("listitem");
-    expect(versions).toHaveLength(3);
+    const gesamtausgaben = screen.getAllByRole("listitem");
+    expect(gesamtausgaben).toHaveLength(3);
 
-    expect(versions[0]).toHaveTextContent(
+    expect(gesamtausgaben[0]).toHaveTextContent(
       "Gültig ab: 01.01.2031 Gültig bis: – Status: Zukünftig in Kraft",
     );
-    expect(versions[1]).toHaveTextContent(
+    expect(gesamtausgaben[1]).toHaveTextContent(
       "Gültig ab: 01.01.2020 Gültig bis: – Status: Aktuell gültig",
     );
-    expect(versions[2]).toHaveTextContent(
+    expect(gesamtausgaben[2]).toHaveTextContent(
       "Gültig ab: 05.01.2000 Gültig bis: 31.12.2019 Status: Außer Kraft",
     );
   });
 
   it("renders the column labels as a header", async () => {
-    await renderSuspended(VersionList, { props: props() });
+    await renderSuspended(GesamtausgabenList, { props: props() });
 
     for (const label of ["Gültig ab", "Gültig bis", "Status"]) {
       expect(screen.getByText(label)).toBeInTheDocument();
     }
   });
 
-  it("links every version, so it can be opened in a new tab", async () => {
-    await renderSuspended(VersionList, { props: props() });
+  it("links every gesamtausgabe, so it can be opened in a new tab", async () => {
+    await renderSuspended(GesamtausgabenList, { props: props() });
 
     expect(hrefs()).toEqual([
       "/gesetze/eli/bund/bgbl-1/2000/s001/2030-01-01/1/deu/regelungstext-1",
@@ -136,8 +136,8 @@ describe("VersionList", () => {
     ]);
   });
 
-  it("marks the version currently displayed as the current page", async () => {
-    await renderSuspended(VersionList, { props: props() });
+  it("marks the gesamtausgabe currently displayed as the current page", async () => {
+    await renderSuspended(GesamtausgabenList, { props: props() });
 
     const links = screen.getAllByRole("link");
     expect(links[0]).not.toHaveAttribute("aria-current");
@@ -145,10 +145,10 @@ describe("VersionList", () => {
     expect(links[2]).not.toHaveAttribute("aria-current");
   });
 
-  it("keeps the from query parameter in the version links", async () => {
+  it("keeps the from query parameter in the gesamtausgaben links", async () => {
     useRouteMock.mockReturnValue({ query: { from: "/suche?q=test" } });
 
-    await renderSuspended(VersionList, { props: props() });
+    await renderSuspended(GesamtausgabenList, { props: props() });
 
     for (const href of hrefs()) {
       const url = new URL(href!, "http://localhost");
@@ -164,7 +164,7 @@ describe("VersionList", () => {
       "NotInForce",
     );
 
-    await renderSuspended(VersionList, {
+    await renderSuspended(GesamtausgabenList, {
       props: props([withoutCoverage]),
     });
 
@@ -173,21 +173,21 @@ describe("VersionList", () => {
     );
   });
 
-  it("shows a placeholder when there are no versions", async () => {
-    await renderSuspended(VersionList, { props: props([]) });
+  it("shows a placeholder when there are no gesamtausgaben", async () => {
+    await renderSuspended(GesamtausgabenList, { props: props([]) });
 
     expect(screen.getByText("Keine Ergebnisse gefunden")).toBeInTheDocument();
     expect(screen.queryAllByRole("link")).toHaveLength(0);
   });
 
-  it("does not announce anything before the versions change", async () => {
-    await renderSuspended(VersionList, { props: props() });
+  it("does not announce anything before the gesamtausgaben change", async () => {
+    await renderSuspended(GesamtausgabenList, { props: props() });
 
     expect(screen.getByRole("status")).toHaveTextContent("");
   });
 
-  it("announces when the versions change to none", async () => {
-    const { rerender } = await renderSuspended(VersionList, {
+  it("announces when the gesamtausgaben change to none", async () => {
+    const { rerender } = await renderSuspended(GesamtausgabenList, {
       props: props(),
     });
 
@@ -198,17 +198,17 @@ describe("VersionList", () => {
     );
   });
 
-  it("announces how many versions there are once there are some again", async () => {
-    const { rerender } = await renderSuspended(VersionList, {
+  it("announces how many gesamtausgaben there are once there are some again", async () => {
+    const { rerender } = await renderSuspended(GesamtausgabenList, {
       props: props([]),
     });
 
     await rerender(props([data.member![0]!]));
 
-    expect(screen.getByRole("status")).toHaveTextContent("1 Fassung");
+    expect(screen.getByRole("status")).toHaveTextContent("1 Gesamtausgabe");
 
     await rerender(props());
 
-    expect(screen.getByRole("status")).toHaveTextContent("3 Fassungen");
+    expect(screen.getByRole("status")).toHaveTextContent("3 Gesamtausgaben");
   });
 });

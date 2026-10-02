@@ -8,13 +8,13 @@ import type {
 } from "~/types/api";
 import { getCurrentDateInGermanyFormatted } from "~/utils/dateFormatting";
 
-export async function useNormVersions(eli: string) {
+export async function useNormGesamtausgaben(eli: string) {
   const { data, error } = await useRisBackend<
     JSONLDList<LegislationExpression>
   >(`/v1/legislation/work-example/${eli}`);
 
-  const sortedVersions = computed(() => data.value?.member ?? []);
-  return { error, sortedVersions };
+  const sortedGesamtausgaben = computed(() => data.value?.member ?? []);
+  return { error, sortedGesamtausgaben };
 }
 
 export async function useValidNormVersions(eli: string) {

@@ -9,10 +9,10 @@ import type { LegislationExpression } from "~/types/api";
 
 const props = defineProps<{
   currentLegislationIdentifier: string;
-  versions: LegislationExpression[];
+  gesamtausgaben: LegislationExpression[];
 }>();
 
-type VersionRow = DataTableRow & {
+type GesamtausgabeRow = DataTableRow & {
   fromDate: string;
   toDate: string;
   status: { label: string; color: BadgeColor };
@@ -20,38 +20,39 @@ type VersionRow = DataTableRow & {
 
 const route = useRoute();
 
-const columns: DataTableColumn<VersionRow>[] = [
+const columns: DataTableColumn<GesamtausgabeRow>[] = [
   { key: "fromDate", label: "Gültig ab" },
   { key: "toDate", label: "Gültig bis" },
   { key: "status", label: "Status" },
 ];
 
-const rows = computed<VersionRow[]>(() => {
-  // Newest Fassung first
-  const versionsSorted = props.versions.toSorted((a, b) =>
+const rows = computed<GesamtausgabeRow[]>(() => {
+  // newest Gesamtausgabe first
+  const gesamtausgabenSorted = props.gesamtausgaben.toSorted((a, b) =>
     b.temporalCoverage.localeCompare(a.temporalCoverage),
   );
 
-  return versionsSorted.map((version) => {
+  return gesamtausgabenSorted.map((gesamtausgabe) => {
     const validityInterval = temporalCoverageToValidityInterval(
-      version.temporalCoverage,
+      gesamtausgabe.temporalCoverage,
     );
 
     const current =
-      version.legislationIdentifier === props.currentLegislationIdentifier;
+      gesamtausgabe.legislationIdentifier ===
+      props.currentLegislationIdentifier;
 
     const to = {
-      path: `/gesetze/${version.legislationIdentifier}`,
+      path: `/gesetze/${gesamtausgabe.legislationIdentifier}`,
       query: { from: route.query.from },
     };
 
-    const status = formatNormValidity(version.temporalCoverage) ?? {
+    const status = formatNormValidity(gesamtausgabe.temporalCoverage) ?? {
       label: "Unbekannt",
       color: "blue",
     };
 
     return {
-      key: version.legislationIdentifier ?? "",
+      key: gesamtausgabe.legislationIdentifier ?? "",
       attrs: { to },
       current,
       fromDate: dateFormattedDDMMYYYY(validityInterval?.from) ?? "–",
@@ -62,7 +63,7 @@ const rows = computed<VersionRow[]>(() => {
 });
 
 // Filtering swaps the rows out in place, which assistive technology does not
-// announce. Report the new count instead. Opening the Fassungen tab mounts this
+// announce. Report the new count instead. Opening the Gesamtausgaben tab mounts this
 // list, so the watcher skips the initial value and stays quiet.
 const announcement = ref("");
 
@@ -72,9 +73,9 @@ watch(
     if (count === 0) {
       announcement.value = "Keine Ergebnisse gefunden";
     } else if (count === 1) {
-      announcement.value = "1 Fassung";
+      announcement.value = "1 Gesamtausgabe";
     } else {
-      announcement.value = `${count} Fassungen`;
+      announcement.value = `${count} Gesamtausgaben`;
     }
   },
 );
@@ -89,7 +90,7 @@ watch(
     :columns="columns"
     :row-as="NuxtLink"
     :rows="rows"
-    aria-label="Fassungen"
+    aria-label="Gesamtausgaben"
     class="-mx-16 md:mx-0"
   >
     <template #cell-status="{ row }">

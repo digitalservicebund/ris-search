@@ -8,19 +8,23 @@ test.beforeAll(async ({ privateFeaturesEnabled }) => {
 });
 
 test.describe(
-  "fassungen tab",
+  "gesamtausgaben tab",
   { tag: ["@RISDEV-10909", "@RISDEV-12189"] },
   async () => {
-    test("displays Fassungen in the Fassungen tab", async ({ page }) => {
+    test("displays Gesamtausgaben in the Gesamtausgaben tab", async ({
+      page,
+    }) => {
       await navigate(
         page,
         "/gesetze/eli/bund/bgbl-1/2020/s1126/2020-08-04/1/deu",
       );
 
-      await page.getByRole("tab", { name: "Fassungen" }).click();
+      await page.getByRole("tab", { name: "Gesamtausgaben" }).click();
 
       await expect(
-        page.getByRole("list", { name: "Fassungen" }).getByRole("listitem"),
+        page
+          .getByRole("list", { name: "Gesamtausgaben" })
+          .getByRole("listitem"),
       ).toHaveText([
         "Gültig ab: 04.08.2919 Gültig bis: – Status: Zukünftig in Kraft",
         "Gültig ab: 04.08.2022 Gültig bis: 01.01.2030 Status: Aktuell gültig",
@@ -28,12 +32,12 @@ test.describe(
       ]);
     });
 
-    test("marks the Fassung currently displayed as the current page", async ({
+    test("marks the Gesamtausgabe currently displayed as the current page", async ({
       page,
     }) => {
       await navigate(
         page,
-        "/gesetze/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu?view=versions",
+        "/gesetze/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu?view=gesamtausgaben",
       );
 
       await expect(
@@ -41,10 +45,12 @@ test.describe(
       ).toHaveAttribute("aria-current", "page");
     });
 
-    test("can navigate to a Fassung by clicking its link", async ({ page }) => {
+    test("can navigate to a Gesamtausgabe by clicking its link", async ({
+      page,
+    }) => {
       await navigate(
         page,
-        "/gesetze/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu?view=versions",
+        "/gesetze/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu?view=gesamtausgaben",
       );
 
       await expect(
@@ -62,50 +68,50 @@ test.describe(
       ).toBeVisible();
     });
 
-    test("can filter Fassungen by date", async ({ page }) => {
+    test("can filter Gesamtausgaben by date", async ({ page }) => {
       await navigate(
         page,
-        "/gesetze/eli/bund/bgbl-1/2020/s1126/2020-08-04/1/deu?view=versions",
+        "/gesetze/eli/bund/bgbl-1/2020/s1126/2020-08-04/1/deu?view=gesamtausgaben",
       );
 
-      const versions = page
-        .getByRole("list", { name: "Fassungen" })
+      const gesamtausgaben = page
+        .getByRole("list", { name: "Gesamtausgaben" })
         .getByRole("listitem");
 
-      await expect(versions).toHaveCount(3);
+      await expect(gesamtausgaben).toHaveCount(3);
 
       await page.getByRole("textbox", { name: "Gültig am" }).fill("04.08.2020");
 
-      await expect(versions).toHaveText([
+      await expect(gesamtausgaben).toHaveText([
         "Gültig ab: 04.08.2020 Gültig bis: 03.08.2022 Status: Außer Kraft",
       ]);
     });
 
-    test("shows no results placeholder when no Fassung found", async ({
+    test("shows no results placeholder when no Gesamtausgabe found", async ({
       page,
     }) => {
       await navigate(
         page,
-        "/gesetze/eli/bund/bgbl-1/2020/s1126/2020-08-04/1/deu?view=versions",
+        "/gesetze/eli/bund/bgbl-1/2020/s1126/2020-08-04/1/deu?view=gesamtausgaben",
       );
 
-      const versions = page
-        .getByRole("list", { name: "Fassungen" })
+      const gesamtausgaben = page
+        .getByRole("list", { name: "Gesamtausgaben" })
         .getByRole("listitem");
 
-      await expect(versions).toHaveCount(3);
+      await expect(gesamtausgaben).toHaveCount(3);
 
       await page.getByRole("textbox", { name: "Gültig am" }).fill("04.08.1536");
 
-      await expect(versions).toHaveText(["Keine Ergebnisse gefunden"]);
+      await expect(gesamtausgaben).toHaveText(["Keine Ergebnisse gefunden"]);
     });
 
-    test("announces the number of Fassungen after filtering", async ({
+    test("announces the number of Gesamtausgaben after filtering", async ({
       page,
     }) => {
       await navigate(
         page,
-        "/gesetze/eli/bund/bgbl-1/2020/s1126/2020-08-04/1/deu?view=versions",
+        "/gesetze/eli/bund/bgbl-1/2020/s1126/2020-08-04/1/deu?view=gesamtausgaben",
       );
 
       // The tab holds a second status region, so match the element rather
@@ -122,17 +128,17 @@ test.describe(
 
       await dateFilter.fill("04.08.2020");
 
-      await expect(announcement).toHaveText("1 Fassung");
+      await expect(announcement).toHaveText("1 Gesamtausgabe");
 
       await dateFilter.fill("");
 
-      await expect(announcement).toHaveText("3 Fassungen");
+      await expect(announcement).toHaveText("3 Gesamtausgaben");
     });
   },
 );
 
 test.describe(
-  "fassungen tab on a small screen",
+  "gesamtausgaben tab on a small screen",
   { tag: ["@RISDEV-10909", "@RISDEV-12189"] },
   () => {
     test.beforeEach(({ isMobileTest }) => {
@@ -144,17 +150,17 @@ test.describe(
     }) => {
       await navigate(
         page,
-        "/gesetze/eli/bund/bgbl-1/2020/s1126/2020-08-04/1/deu?view=versions",
+        "/gesetze/eli/bund/bgbl-1/2020/s1126/2020-08-04/1/deu?view=gesamtausgaben",
       );
 
-      const firstVersion = page
-        .getByRole("list", { name: "Fassungen" })
+      const firstGesamtausgabe = page
+        .getByRole("list", { name: "Gesamtausgaben" })
         .getByRole("listitem")
         .first();
 
-      await expect(firstVersion.getByText("Gültig ab:")).toBeVisible();
-      await expect(firstVersion.getByText("Gültig bis:")).toBeVisible();
-      await expect(firstVersion.getByText("Status:")).toBeVisible();
+      await expect(firstGesamtausgabe.getByText("Gültig ab:")).toBeVisible();
+      await expect(firstGesamtausgabe.getByText("Gültig bis:")).toBeVisible();
+      await expect(firstGesamtausgabe.getByText("Status:")).toBeVisible();
     });
   },
 );
