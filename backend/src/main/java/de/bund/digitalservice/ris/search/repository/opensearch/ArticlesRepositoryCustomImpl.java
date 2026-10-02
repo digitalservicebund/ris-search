@@ -59,7 +59,7 @@ public class ArticlesRepositoryCustomImpl implements ArticlesRepositoryCustom {
    */
   @Override
   public Page<ArticleWithExpressions> findAllVersionsByDocumentNumber(
-      String documentNumber,
+      @NonNull String documentNumber,
       LegislationPartType type,
       String preferredExpressionEli,
       Pageable pageable) {
