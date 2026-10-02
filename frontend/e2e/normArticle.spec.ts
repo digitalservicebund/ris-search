@@ -425,8 +425,8 @@ test.describe("view norm article page", () => {
   });
 });
 
-test.describe("geltungszeiträume tab", { tag: ["@RISDEV-11132"] }, () => {
-  test("displays geltungszeiträume when private features enabled and einzelnorm is an article", async ({
+test.describe("fassungen tab", { tag: ["@RISDEV-11132"] }, () => {
+  test("displays fassungen when private features enabled and einzelnorm is an article", async ({
     page,
     privateFeaturesEnabled,
   }) => {
@@ -437,21 +437,21 @@ test.describe("geltungszeiträume tab", { tag: ["@RISDEV-11132"] }, () => {
       "gesetze/eli/bund/bgbl-1/2020/s1234/2020-01-01/1/deu/art-z1",
     );
 
-    await page.getByRole("tab", { name: "Geltungszeiträume" }).click();
+    await page.getByRole("tab", { name: "Fassungen" }).click();
 
     await expect(
       page.getByRole("heading", {
-        name: "Weitere Geltungszeiträume dieser Einzelnorm",
+        name: "Weitere Fassungen dieser Einzelnorm",
         level: 2,
       }),
     ).toBeVisible();
 
-    const geltungszeitenList = page.getByRole("list", {
-      name: "Geltungszeiträume",
+    const fassungenList = page.getByRole("list", {
+      name: "Fassungen",
     });
-    await expect(geltungszeitenList).toBeVisible();
+    await expect(fassungenList).toBeVisible();
 
-    const listItems = geltungszeitenList.getByRole("listitem");
+    const listItems = fassungenList.getByRole("listitem");
     await expect(listItems).toHaveText([
       "Gültig ab: 01.01.2022 Gültig bis: –",
       "Gültig ab: 01.01.2021 Gültig bis: 31.12.2021",
@@ -459,7 +459,7 @@ test.describe("geltungszeiträume tab", { tag: ["@RISDEV-11132"] }, () => {
     ]);
   });
 
-  test("can filter geltungszeiträume by date", async ({
+  test("can filter fassungen by date", async ({
     page,
     privateFeaturesEnabled,
   }) => {
@@ -467,11 +467,11 @@ test.describe("geltungszeiträume tab", { tag: ["@RISDEV-11132"] }, () => {
 
     await navigate(
       page,
-      "gesetze/eli/bund/bgbl-1/2020/s1234/2020-01-01/1/deu/art-z1?view=geltungszeiten",
+      "gesetze/eli/bund/bgbl-1/2020/s1234/2020-01-01/1/deu/art-z1?view=fassungen",
     );
 
     const listItems = page
-      .getByRole("list", { name: "Geltungszeiträume" })
+      .getByRole("list", { name: "Fassungen" })
       .getByRole("listitem");
 
     await expect(listItems).toHaveCount(3);
@@ -483,7 +483,7 @@ test.describe("geltungszeiträume tab", { tag: ["@RISDEV-11132"] }, () => {
     ]);
   });
 
-  test("shows no results placeholder when no geltungszeitraum found", async ({
+  test("shows no results placeholder when no fassung found", async ({
     page,
     privateFeaturesEnabled,
   }) => {
@@ -491,11 +491,11 @@ test.describe("geltungszeiträume tab", { tag: ["@RISDEV-11132"] }, () => {
 
     await navigate(
       page,
-      "gesetze/eli/bund/bgbl-1/2020/s1234/2020-01-01/1/deu/art-z1?view=geltungszeiten",
+      "gesetze/eli/bund/bgbl-1/2020/s1234/2020-01-01/1/deu/art-z1?view=fassungen",
     );
 
     const listItems = page
-      .getByRole("list", { name: "Geltungszeiträume" })
+      .getByRole("list", { name: "Fassungen" })
       .getByRole("listitem");
 
     await expect(listItems).toHaveCount(3);
@@ -513,7 +513,7 @@ test.describe("geltungszeiträume tab", { tag: ["@RISDEV-11132"] }, () => {
 
     await navigate(
       page,
-      "gesetze/eli/bund/bgbl-1/2020/s1234/2020-01-01/1/deu/art-z1?view=geltungszeiten",
+      "gesetze/eli/bund/bgbl-1/2020/s1234/2020-01-01/1/deu/art-z1?view=fassungen",
     );
 
     // no row is expanded
@@ -547,7 +547,7 @@ test.describe("geltungszeiträume tab", { tag: ["@RISDEV-11132"] }, () => {
 
     await navigate(
       page,
-      "gesetze/eli/bund/bgbl-1/2020/s1234/2020-01-01/1/deu/art-z1?view=geltungszeiten",
+      "gesetze/eli/bund/bgbl-1/2020/s1234/2020-01-01/1/deu/art-z1?view=fassungen",
     );
 
     // <summary> has no ARIA role, so it can't be located with getByRole
@@ -571,7 +571,7 @@ test.describe("geltungszeiträume tab", { tag: ["@RISDEV-11132"] }, () => {
 
     await navigate(
       page,
-      "gesetze/eli/bund/bgbl-1/2020/s1234/2020-01-01/1/deu/art-z1?view=geltungszeiten",
+      "gesetze/eli/bund/bgbl-1/2020/s1234/2020-01-01/1/deu/art-z1?view=fassungen",
     );
 
     await page.getByText("Gültig ab: 01.01.2022 Gültig bis: –").click();
@@ -599,7 +599,7 @@ test.describe("geltungszeiträume tab", { tag: ["@RISDEV-11132"] }, () => {
 
     await navigate(
       page,
-      "gesetze/eli/bund/bgbl-1/2020/s1234/2020-01-01/1/deu/art-z1?view=geltungszeiten",
+      "gesetze/eli/bund/bgbl-1/2020/s1234/2020-01-01/1/deu/art-z1?view=fassungen",
     );
 
     // try to expand the disabled row
@@ -610,7 +610,7 @@ test.describe("geltungszeiträume tab", { tag: ["@RISDEV-11132"] }, () => {
     await expect(page.getByText("Erste Version des § 1.")).not.toBeVisible();
   });
 
-  test("hides geltungszeiträume tab when private features enabled and einzelnorm not an article", async ({
+  test("hides fassungen tab when private features enabled and einzelnorm not an article", async ({
     page,
     privateFeaturesEnabled,
   }) => {
@@ -637,11 +637,11 @@ test.describe("geltungszeiträume tab", { tag: ["@RISDEV-11132"] }, () => {
       "gesetze/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/hauptteil-n1_abschnitt-n1_art-z1",
     );
 
-    await page.getByRole("tab", { name: "Geltungszeiträume" }).click();
+    await page.getByRole("tab", { name: "Fassungen" }).click();
 
     await expect(
       page.getByRole("heading", {
-        name: "Geltungszeiträume sind noch nicht verfügbar",
+        name: "Fassungen sind noch nicht verfügbar",
         level: 2,
       }),
     ).toBeVisible();
@@ -973,11 +973,11 @@ noJsTest(
       ).toBeVisible();
     });
 
-    await test.step("geltungszeiträume", async () => {
-      await page.getByRole("tab", { name: "Geltungszeiträume" }).click();
+    await test.step("fassungen", async () => {
+      await page.getByRole("tab", { name: "Fassungen" }).click();
 
       await expect(
-        page.getByRole("tab", { name: "Geltungszeiträume", selected: true }),
+        page.getByRole("tab", { name: "Fassungen", selected: true }),
       ).toBeVisible();
     });
   },
