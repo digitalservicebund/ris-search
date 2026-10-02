@@ -5,7 +5,6 @@ import de.bund.digitalservice.ris.search.models.opensearch.ArticleWithExpression
 import de.bund.digitalservice.ris.search.models.opensearch.LegislationPartType;
 import de.bund.digitalservice.ris.search.utils.PageUtils;
 import java.util.List;
-import java.util.Optional;
 import org.opensearch.data.client.orhlc.NativeSearchQuery;
 import org.opensearch.data.client.orhlc.NativeSearchQueryBuilder;
 import org.opensearch.data.client.orhlc.OpenSearchAggregations;
@@ -21,7 +20,6 @@ import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.SearchPage;
-import org.springframework.data.elasticsearch.core.query.FetchSourceFilter;
 
 /** Repository with custom Article operations */
 public class ArticlesRepositoryCustomImpl implements ArticlesRepositoryCustom {
@@ -100,21 +98,6 @@ public class ArticlesRepositoryCustomImpl implements ArticlesRepositoryCustom {
             .map(hit -> toArticleWithExpressions(hit, preferredExpressionEli, documentNumber))
             .toList();
     return new PageImpl<>(content, pageable, getDistinctDocumentNumberCount(hits));
-  }
-
-  @Override
-  public Optional<String> findDocumentNumberById(String id) {
-    NativeSearchQuery query =
-        new NativeSearchQueryBuilder()
-            .withQuery(QueryBuilders.idsQuery().addIds(id))
-            .withSourceFilter(
-                new FetchSourceFilter(true, new String[] {Article.Fields.DOCUMENT_NUMBER}, null))
-            .withMaxResults(1)
-            .build();
-
-    return Optional.ofNullable(operations.searchOne(query, Article.class))
-        .map(SearchHit::getContent)
-        .map(Article::getDocumentNumber);
   }
 
   /**
