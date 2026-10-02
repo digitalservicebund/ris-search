@@ -1,5 +1,8 @@
 packages: []
 
+overrides:
+  devalue: "5.9.3"
+
 allowBuilds:
   "@parcel/watcher": true
   "@sentry/cli": false
