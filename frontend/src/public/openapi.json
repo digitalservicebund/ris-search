@@ -4661,6 +4661,10 @@
             "description" : "Expression-level identifier, uniquely identifying this element in an FRBR expression",
             "example" : "hauptteitel-para-1"
           },
+          "revision" : {
+            "type" : "string",
+            "description" : "the specific revision of that legislation part independent from its parent object"
+          },
           "name" : {
             "type" : "string",
             "description" : "Numerical identifier of a specific legislation part",

@@ -10,6 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import org.apache.logging.log4j.LogManager;
@@ -203,6 +204,9 @@ public class ArticleService {
   private Page<ArticleWithExpressions> getAllArticleVersionsByDocumentNumber(
       String documentNumber, String preferredExpressionEli) {
 
+    if (Objects.isNull(documentNumber)) {
+      return Page.empty();
+    }
     Sort sort = Sort.by(Sort.Direction.DESC, "entryIntoForceDate");
     Pageable sortedPageable = Pageable.unpaged(sort);
 
