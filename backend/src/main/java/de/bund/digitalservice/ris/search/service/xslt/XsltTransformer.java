@@ -44,7 +44,7 @@ public abstract class XsltTransformer {
    * @param xsltBasePath base path for the xslt files.
    * @param xsltFilename the root xslt file to be applied.
    */
-  public XsltTransformer(String xsltBasePath, String xsltFilename) {
+  protected XsltTransformer(String xsltBasePath, String xsltFilename) {
     this.xsltBasePath = xsltBasePath;
     this.xsltFilename = xsltFilename;
   }

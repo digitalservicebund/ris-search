@@ -8,6 +8,7 @@ import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.URIResolver;
 import javax.xml.transform.stream.StreamSource;
+import org.apache.commons.lang3.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -29,7 +30,7 @@ public class NormUriResolver implements URIResolver {
     if ("include/inhalt.xsl".equals(uriPath) || "include/hilfsfunktionen.xsl".equals(uriPath)) {
       // let the default resolver handle requests for included XSL templates
       return null;
-    } else if (uriPath.startsWith("eli/")) {
+    } else if (Strings.CS.startsWith(uriPath, "eli/")) {
       return resolveEliResource(uriPath);
     } else {
       // Throw an exception on unexpected uris. This prevents arbitrary uri loading.
