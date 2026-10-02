@@ -20,10 +20,6 @@ const {
 
 const route = useRoute();
 
-const warningMessageType = computed(() =>
-  currentVersionValidityStatus === "InForce" ? "info" : "warn",
-);
-
 const showWarningMessage = computed(
   () =>
     (currentVersionValidityStatus === "InForce" && futureVersion) ||
@@ -65,15 +61,9 @@ const versionLink = computed<
 
 <template>
   <div v-if="showWarningMessage" class="w-fit">
-    <UiMessage :severity="warningMessageType" class="typo-label2-regular">
+    <UiMessage>
       <template #icon>
-        <IcBaselineUpdate
-          v-if="currentVersionValidityStatus === 'InForce'"
-          class="text-blue-800"
-        />
-        <IcBaselineHistory
-          v-else-if="currentVersionValidityStatus === 'Expired'"
-        />
+        <IcBaselineHistory v-if="currentVersionValidityStatus === 'Expired'" />
         <IcBaselineUpdate v-else />
       </template>
 

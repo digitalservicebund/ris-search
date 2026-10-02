@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import IcOutlineInfo from "~icons/ic/outline-info";
 import type { DetailsListItem } from "~/components/documents/DetailsList.vue";
 import type { MetadataItem } from "~/components/documents/Metadata.vue";
 import type { TabView } from "~/components/documents/TabsLayout.vue";
@@ -218,12 +217,8 @@ const verweiseSectionId = useId();
     <template #message>
       <UiMessage
         v-if="rechtsprechung?.vorabdokument"
-        severity="info"
-        class="typo-body-regular my-24 bg-white sm:my-32 md:my-40"
+        class="my-24 sm:my-32 md:my-40"
       >
-        <template #icon>
-          <IcOutlineInfo class="text-blue-800" />
-        </template>
         <p>
           Die Metadaten dieser Gerichtsentscheidung wurden bereits
           veröffentlicht. Der Entscheidungstext ist derzeit noch nicht
