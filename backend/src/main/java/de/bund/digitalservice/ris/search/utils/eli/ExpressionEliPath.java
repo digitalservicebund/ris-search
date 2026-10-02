@@ -25,7 +25,7 @@ import java.time.format.DateTimeFormatter;
  * <p>Overrides: - toString(): Formats the instance as a standardized ELI string representation to
  * accurately describe the legislative expression.
  */
-public record ExpressionEli(
+public record ExpressionEliPath(
     String jurisdiction,
     String agent,
     String year,

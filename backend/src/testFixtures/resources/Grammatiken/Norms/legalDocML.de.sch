@@ -2,7 +2,7 @@
 <sch:schema xmlns:fkt="lokale-funktionen"
             xmlns:sch="http://purl.oclc.org/dsdl/schematron"
             queryBinding="xslt2"
-            schemaVersion="LegalDocML.de 1.8.2 (07.08.2025)">
+            schemaVersion="LegalDocML.de 1.9 (03.11.2025)">
 <!--
 
 ********************************* Hinweis zur Lizensierung ***********************************
@@ -14,19 +14,18 @@
 **********************************************************************************************
 
 -->
-   <sch:ns uri="http://Inhaltsdaten.LegalDocML.de/1.8.2/" prefix="akn"/>
-   <sch:ns uri="http://MetadatenRegelungstext.LegalDocML.de/1.8.2/"
-           prefix="regtxt"/>
-   <sch:ns uri="http://MetadatenRechtsetzungsdokument.LegalDocML.de/1.8.2/"
+   <sch:ns uri="http://Inhaltsdaten.LegalDocML.de/1.9/" prefix="akn"/>
+   <sch:ns uri="http://MetadatenRegelungstext.LegalDocML.de/1.9/" prefix="regtxt"/>
+   <sch:ns uri="http://MetadatenRechtsetzungsdokument.LegalDocML.de/1.9/"
            prefix="redok"/>
-   <sch:ns uri="http://MetadatenBundestag.LegalDocML.de/1.8.2/" prefix="btag"/>
-   <sch:ns uri="http://MetadatenBundesrat.LegalDocML.de/1.8.2/" prefix="brat"/>
-   <sch:ns uri="http://MetadatenBundesregierung.LegalDocML.de/1.8.2/"
-           prefix="breg"/>
-   <sch:ns uri="http://MetadatenFormulierungshilfe.LegalDocML.de/1.8.2/"
+   <sch:ns uri="http://MetadatenBundestag.LegalDocML.de/1.9/" prefix="btag"/>
+   <sch:ns uri="http://MetadatenBundesrat.LegalDocML.de/1.9/" prefix="brat"/>
+   <sch:ns uri="http://MetadatenBundesregierung.LegalDocML.de/1.9/" prefix="breg"/>
+   <sch:ns uri="http://MetadatenFormulierungshilfe.LegalDocML.de/1.9/"
            prefix="fhilf"/>
-   <sch:ns uri="http://MetadatenNormenkontrollrat.LegalDocML.de/1.8.2/"
-           prefix="nkr"/>
+   <sch:ns uri="http://MetadatenNormenkontrollrat.LegalDocML.de/1.9/" prefix="nkr"/>
+   <sch:ns uri="http://MetadatenSonstigerVeroeffentlichungstext.LegalDocML.de/1.9/"
+           prefix="sonst"/>
    <sch:ns uri="lokale-funktionen" prefix="fkt"/>
    <!-- Dokumenteigenschaften: Form -->
    <sch:let xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -44,25 +43,26 @@
    <sch:let xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
             name="form-nicht-vorhanden"
             value="'nicht-vorhanden'"/>
+   <!-- Authorities -->
+   <sch:let xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+            name="authority-egesetzgebung"
+            value="'https://www.egesetzgebung.bund.de'"/>
+   <sch:let xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+            name="authority-everkündung"
+            value="'https://www.recht.bund.de'"/>
+   <sch:let xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+            name="authority-rechtsinformationssystem"
+            value="'https://www.ris.bund.de'"/>
    <!-- Dokumenteigenschaften: Fassung -->
    <sch:let xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-            name="fassung"
-            value="/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRWork/akn:FRBRdate/@name"/>
-   <sch:let xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-            name="fassung-entwurfsfassung"
-            value="'erstellungsdatum'"/>
-   <sch:let xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-            name="fassung-verkündungsfassung"
-            value="('verkuendungsfassung-verkuendungsdatum', 'verkuendungsfassung-ausfertigungsdatum')"/>
-   <sch:let xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-            name="fassung-neufassung"
-            value="('neufassung-verkuendungsdatum', 'neufassung-ausfertigungsdatum')"/>
-   <sch:let xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
             name="ist-entwurfsfassung"
-            value="$fassung = 'erstellungsdatum'"/>
+            value="starts-with(/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRWork/akn:FRBRuri/@value, $authority-egesetzgebung)"/>
    <sch:let xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
             name="ist-verkündungsfassung"
-            value="$fassung = ($fassung-verkündungsfassung, $fassung-neufassung)"/>
+            value="starts-with(/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRWork/akn:FRBRuri/@value, $authority-everkündung)"/>
+   <sch:let xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+            name="ist-konsolidierte-fassung"
+            value="starts-with(/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRWork/akn:FRBRuri/@value, $authority-rechtsinformationssystem)"/>
    <!-- Dokumenteigenschaften: Typ -->
    <sch:let xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
             name="typ"
@@ -100,7 +100,7 @@
             value="( '/akn/ontology/de/concept/documenttype/bund/begruendung-aenderungsantrag', '/akn/ontology/de/concept/documenttype/bund/begruendung-entschliessungsantrag', '/akn/ontology/de/concept/documenttype/bund/begruendung-regelungstext' )"/>
    <sch:let xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
             name="art-regelungstext-uri"
-            value="( '/akn/ontology/de/concept/documenttype/bund/regelungstext-entwurf', '/akn/ontology/de/concept/documenttype/bund/regelungstext-neufassung', '/akn/ontology/de/concept/documenttype/bund/regelungstext-verkuendung' )"/>
+            value="( '/akn/ontology/de/concept/documenttype/bund/regelungstext-entwurf', '/akn/ontology/de/concept/documenttype/bund/regelungstext' )"/>
    <sch:let xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
             name="art-vereinbarung-uri"
             value="( '/akn/ontology/de/concept/documenttype/bund/vereinbarung-entwurf', '/akn/ontology/de/concept/documenttype/bund/vereinbarung-verkuendung' )"/>
@@ -121,15 +121,8 @@
             value="'/akn/ontology/de/concept/documenttype/bund/bericht'"/>
    <sch:let xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
             name="art-bekanntmachungstext-uri"
-            value="( '/akn/ontology/de/concept/documenttype/bund/bekanntmachungstext', '/akn/ontology/de/concept/documenttype/bund/bekanntmachungstext-berichtigung', '/akn/ontology/de/concept/documenttype/bund/bekanntmachungstext-entscheidung-des-bundesverfassungsgerichts' )"/>
-   <!-- Determinanten für Dokumentvarianten: initiant -->
-   <sch:let xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-            name="initiant"
-            value="/akn:akomaNtoso/*/akn:meta/akn:proprietary/redok:legalDocML.de_metadaten/redok:initiant"/>
+            value="( '/akn/ontology/de/concept/documenttype/bund/sonstiger-veroeffentlichungstext' )"/>
    <!-- Determinanten für Dokumentvarianten: bearbeitende-institution -->
-   <sch:let xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-            name="bearbeitende-institution"
-            value="/akn:akomaNtoso/*/akn:meta/akn:proprietary/redok:legalDocML.de_metadaten/redok:bearbeitendeInstitution"/>
    <sch:let xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
             name="bearbeitende-institution-frbrauthor"
             value="/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRExpression/akn:FRBRauthor/@href"/>
@@ -178,8 +171,14 @@
             name="type-literal-ereignisreferenz-amendment"
             value="'amendment'"/>
    <sch:let xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+            name="refersto-literal-ereignisreferenz-verkuendung"
+            value="'verkuendung'"/>
+   <sch:let xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
             name="refersto-literal-ereignisreferenz-entwurfsfassung-ausfertigung-mit-unbekanntem-datum"
             value="'ausfertigung-mit-noch-unbekanntem-datum'"/>
+   <sch:let xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+            name="refersto-literal-ereignisreferenz-entwurfsfassung-verkuendung-mit-unbekanntem-datum"
+            value="'verkuendung-mit-noch-unbekanntem-datum'"/>
    <sch:let xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
             name="refersto-literal-ereignisreferenz-entwurfsfassung-inkrafttreten"
             value="'inkrafttreten'"/>
@@ -286,35 +285,35 @@
                      test="not(./akn:conclusions/akn:formula)">Für eine Verwaltungsvorschrift in der Entwurfsfassung wird in der Regel keine Schlussformel benutzt.</sch:assert>
       </sch:rule>
    </sch:pattern>
-   <sch:title xmlns:xsl="http://www.w3.org/1999/XSL/Transform">Regelungstext Verkündungsfassung/Neufassung</sch:title>
+   <sch:title xmlns:xsl="http://www.w3.org/1999/XSL/Transform">Regelungstext</sch:title>
    <sch:pattern xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+      <sch:let name="fassung-entwurfsfassung" value="'false()'"/>
       <sch:rule id="SCH-00048"
-                context="/akn:akomaNtoso/akn:act[$fassung = $fassung-entwurfsfassung and @name = $art-regelungstext-uri and $form = $form-eingebundene-stammform]">
+                context="/akn:akomaNtoso/akn:act[$ist-verkündungsfassung and @name = $art-regelungstext-uri and $form = $form-eingebundene-stammform]">
          <sch:assert id="SCH-00048-000" role="error" test="not(./akn:preface/akn:block)">Ein Regelungstext in Stammform in einer Mantelform darf keinen Datums-Container innerhalb des Dokumentenkopfes enthalten.</sch:assert>
          <sch:assert id="SCH-00048-005"
                      role="error"
                      test="not(./akn:preamble/akn:formula)">Ein Regelungstext in Stammform in einer Mantelform darf keine Eingangsformel enthalten.</sch:assert>
          <sch:assert id="SCH-00048-010" role="error" test="not(./akn:conclusions)">Ein Regelungstext in Stammform in einer Mantelform darf keinen Schlussteil enthalten.</sch:assert>
       </sch:rule>
-      <sch:rule id="SCH-00049"
-                context="/akn:akomaNtoso/akn:act[@name = $art-regelungstext-uri and $fassung = $fassung-neufassung]">
-         <!--<sch:assert id="SCH-00049-005" role="error" test="not(./akn:preamble/akn:formula)">Ein Regelungstext in der Neufassung darf keine Eingangsformel enthalten.</sch:assert>-->
-         <!--<sch:assert id="SCH-00049-010" role="error" test="not(./akn:conclusions)">Ein Regelungstext in der Neufassung darf keine Schlussformel enthalten.</sch:assert>-->
+      <!-- TODO: Klären, wie es mit Neufassungen weitergehen soll. -->
+      <!--<sch:rule id="SCH-00049" context="/akn:akomaNtoso/akn:act[@name = $art-regelungstext-uri and $fassung = $fassung-neufassung]">
+         <!-\-<sch:assert id="SCH-00049-005" role="error" test="not(./akn:preamble/akn:formula)">Ein Regelungstext in der Neufassung darf keine Eingangsformel enthalten.</sch:assert>-\->
+         <!-\-<sch:assert id="SCH-00049-010" role="error" test="not(./akn:conclusions)">Ein Regelungstext in der Neufassung darf keine Schlussformel enthalten.</sch:assert>-\->
          <sch:assert id="SCH-00049-015" role="error" test="$form = $form-stammform">Ein Regelungstext als Neufassung darf nur in einer Stammform vorkommen.</sch:assert>
          <sch:assert id="SCH-00049-020" role="error" test="not(./akn:preface/akn:block)">Für einen Regelungstext in der Neufassung darf kein Datums-Container innerhalb des Dokumentenkopfes verwendet werden.</sch:assert>
       </sch:rule>
-      <sch:rule id="SCH-00050"
-                context="/akn:akomaNtoso/akn:act[$fassung = $fassung-entwurfsfassung and @name = $art-regelungstext-uri and $typ = ($typ-gesetz, $typ-vertragsgesetz)]">
+      <sch:rule id="SCH-00050" context="/akn:akomaNtoso/akn:act[$ist-verkündungsfassung and @name = $art-regelungstext-uri and $typ = ($typ-gesetz, $typ-vertragsgesetz)]">
          <sch:assert id="SCH-00050-005" role="error" test="./akn:preamble/akn:formula">Für ein Gesetz muss eine Eingangsformel verwendet werden.</sch:assert>
-      </sch:rule>
+      </sch:rule>-->
       <sch:rule id="SCH-00060"
-                context="/akn:akomaNtoso/akn:act[$fassung = $fassung-entwurfsfassung and @name = $art-regelungstext-uri and $typ = ($typ-verordnung, $typ-vertragsverordnung)]">
+                context="/akn:akomaNtoso/akn:act[$ist-verkündungsfassung and @name = $art-regelungstext-uri and $typ = ($typ-verordnung, $typ-vertragsverordnung)]">
          <sch:assert id="SCH-00060-005"
                      role="error"
                      test="not(./akn:preamble/akn:formula)">Eine Verordnung darf keine Eingangsformel enthalten.</sch:assert>
       </sch:rule>
       <sch:rule id="SCH-00070"
-                context="/akn:akomaNtoso/akn:act[$fassung = $fassung-entwurfsfassung and @name = $art-regelungstext-uri and $typ = $typ-verwaltungsvorschrift]">
+                context="/akn:akomaNtoso/akn:act[$ist-verkündungsfassung and @name = $art-regelungstext-uri and $typ = $typ-verwaltungsvorschrift]">
          <sch:assert id="SCH-00070-005"
                      role="error"
                      test="not(./akn:preamble/akn:formula)">Eine Verwaltungsvorschrift darf keine Eingangsformel enthalten.</sch:assert>
@@ -322,16 +321,19 @@
    </sch:pattern>
    <sch:pattern xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
       <sch:rule id="SCH-00071"
-                context="/akn:akomaNtoso/akn:act[@name = $art-regelungstext-uri and $fassung = $fassung-verkündungsfassung and not($form = $form-eingebundene-stammform)]">
-         <!-- HINWEIS: Regel SCH-00071-005 wurde gemäß https://projekte.kosit.org/ldml_de/tickets/-/issues/277 in 1.8.2 vollständig deaktiviert. -->
-         <!--<sch:assert id="SCH-00071-005" role="error" test="./akn:preface/akn:block">Für einen Regelungstext in der Verkündungsfassung muss ein Datums-Container innerhalb des Dokumentenkopfes verwendet werden. </sch:assert>-->
-         <!--<sch:assert id="SCH-00071-010" role="error" test="./akn:conclusions/akn:blockContainer">Für einen Regelungstext in der Verkündungsfassung muss ein Signaturblock verwendet werden.</sch:assert>-->
+                context="/akn:akomaNtoso/akn:act[@name = $art-regelungstext-uri and $ist-verkündungsfassung and not($form = $form-eingebundene-stammform)]">
+         <sch:assert id="SCH-00071-005" role="error" test="./akn:preface/akn:block">Für einen Regelungstext in der Verkündungsfassung muss ein Datums-Container innerhalb des Dokumentenkopfes verwendet werden. </sch:assert>
+         <sch:assert id="SCH-00071-010"
+                     role="error"
+                     test="./akn:conclusions/akn:blockContainer">Für einen Regelungstext in der Verkündungsfassung muss ein Signaturblock verwendet werden.</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-      <!--<sch:rule id="SCH-00072" context="/akn:akomaNtoso/akn:act[@name = $art-regelungstext-uri and $typ = ($typ-gesetz) and not($fassung = $fassung-neufassung or $form = $form-eingebundene-stammform)]">
+      <!-- TODO: War beschränkt auf Nicht-Neufassungen -->
+      <!--      <sch:rule id="SCH-00072" context="/akn:akomaNtoso/akn:act[$ist-verkündungsfassung and @name = $art-regelungstext-uri and $typ = $typ-gesetz and not($form = $form-eingebundene-stammform)]">
          <sch:assert id="SCH-00072-005" role="error" test="exists(./akn:conclusions/akn:formula)">Für einen Regelungstext in der Verkündungsfassung muss eine Schlussformel verwendet werden.</sch:assert>
-      </sch:rule>-->
+      </sch:rule>
+-->
    </sch:pattern>
    <sch:pattern xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
       <sch:rule id="SCH-00073" context="akn:act/akn:conclusions/akn:formula">
@@ -344,48 +346,42 @@
                 context="/akn:akomaNtoso/*[@name = $art-regelungstext-uri and $typ = ($typ-gesetz, $typ-vertragsgesetz)]/akn:preamble">
          <sch:assert id="SCH-00100-005" role="error" test="not(./akn:citations)">Ein Gesetz darf keine Ermächtigungsnorm enthalten.</sch:assert>
       </sch:rule>
-      <!-- HINWEIS: Regel SCH-00110-005 wurde gemäß https://projekte.kosit.org/ldml_de/tickets/-/issues/277 in 1.8.2 beschränkt auf Stammformen und Mantelformen 
-              und zudem deaktiviert für Verkündungsfassungen. -->
       <sch:rule id="SCH-00110"
-                context="/akn:akomaNtoso/* [ @name = $art-regelungstext-uri and $typ = ($typ-verordnung, $typ-vertragsverordnung) and $form = ($form-stammform, $form-mantelform) and not($fassung = ($fassung-neufassung, $fassung-verkündungsfassung)) ]/akn:preamble">
+                context="/akn:akomaNtoso/* [ @name = $art-regelungstext-uri and $typ = ($typ-verordnung, $typ-vertragsverordnung) and $form = ($form-stammform, $form-mantelform) and ($ist-entwurfsfassung or $ist-verkündungsfassung) ]/akn:preamble">
          <sch:assert id="SCH-00110-005" role="error" test="./akn:citations">Eine Verordnung muss Ermächtigungsnormen bereitstellen.</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
       <sch:rule id="SCH-00120"
-                context="akn:quotedStructure//akn:article [ $form = $form-mantelform and $typ = ($typ-gesetz, $typ-verordnung, $typ-satzung, $typ-verwaltungsvorschrift, $typ-vertragsgesetz, $typ-vertragsverordnung) and $fassung = ($fassung-entwurfsfassung, $fassung-verkündungsfassung) ]">
+                context="akn:quotedStructure//akn:article [ $form = $form-mantelform and $typ = ($typ-gesetz, $typ-verordnung, $typ-satzung, $typ-verwaltungsvorschrift, $typ-vertragsgesetz, $typ-vertragsverordnung) ]">
          <sch:assert id="SCH-00120-000"
                      test="(@refersTo = ($refersto-literal-mantelform, $refersto-literal-stammform, $refersto-literal-geltungszeitregel, $refersto-literal-geltungszeitregel-inkrafttreten, $refersto-literal-geltungszeitregel-ausserkrafttreten, $refersto-literal-vertragsgesetz, $refersto-literal-vertragsverordnung))">Wird innerhalb eines Änderungsbefehls eine Einzelvorschrift in Gänze geändert, neugefasst, hinzugefügt oder gelöscht, so muss diese näher - als Mantelform oder Stammform, als Geltungszeitregel oder als Vertragsgesetz bzw. Vertragsverordnung - bestimmt werden.</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-      <!-- HINWEIS: Die Gültigkeit von SCH-00121-000 wurde im Zuge von https://projekte.kosit.org/ldml_de/tickets/-/issues/270 
-           in 1.8.2 auf Entwurfsfassungen eingeschränkt. -->
       <sch:rule id="SCH-00121"
-                context="akn:article[not(ancestor::akn:quotedStructure)]/@refersTo [ $form = $form-mantelform and $typ = ($typ-gesetz, $typ-verordnung, $typ-satzung, $typ-verwaltungsvorschrift, $typ-vertragsgesetz, $typ-vertragsverordnung) and $fassung = ($fassung-entwurfsfassung) ]">
+                context="akn:article[not(ancestor::akn:quotedStructure)]/@refersTo [ $form = $form-mantelform and $typ = ($typ-gesetz, $typ-verordnung, $typ-satzung, $typ-verwaltungsvorschrift, $typ-vertragsgesetz, $typ-vertragsverordnung) and ($ist-entwurfsfassung or $ist-verkündungsfassung) ]">
          <sch:assert id="SCH-00121-000"
                      test=". = ($refersto-literal-hauptaenderung, $refersto-literal-folgeaenderung, $refersto-literal-eingebundene-stammform, $refersto-literal-geltungszeitregel, $refersto-literal-geltungszeitregel-inkrafttreten, $refersto-literal-geltungszeitregel-ausserkrafttreten)">Liegt ein Regelungstext in Mantelform vor und seine Einzelvorschriften sind mittels @refersTo näher bestimmt, so dürfen lediglich folgende Literale verwendet werden: "hauptaenderung", "folgeaenderung", "eingebundene-stammform", "geltungszeitregel", "geltungszeitregel-inkrafttreten", "geltungszeitregel-ausserkrafttreten".</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-      <!-- HINWEIS: Die Gültigkeit von SCH-00122-000 wurde im Zuge von https://projekte.kosit.org/ldml_de/tickets/-/issues/270 
-           in 1.8.2 auf Entwurfsfassungen eingeschränkt. -->
       <sch:rule id="SCH-00122"
-                context="akn:article/@refersTo [ $form = $form-stammform and $typ = ($typ-gesetz, $typ-verordnung, $typ-satzung, $typ-verwaltungsvorschrift, $typ-vertragsgesetz, $typ-vertragsverordnung) and $fassung = ($fassung-entwurfsfassung) ]">
+                context="akn:article/@refersTo [ $form = $form-stammform and $typ = ($typ-gesetz, $typ-verordnung, $typ-satzung, $typ-verwaltungsvorschrift, $typ-vertragsgesetz, $typ-vertragsverordnung) and ($ist-entwurfsfassung or $ist-verkündungsfassung) ]">
          <sch:assert id="SCH-00122-000"
                      test="(. = $refersto-literal-geltungszeitregel and count(//akn:article/@refersTo) = 1) or (. = $refersto-literal-geltungszeitregel-inkrafttreten and (every $r in //akn:article/@refersTo satisfies $r = $refersto-literal-geltungszeitregel-inkrafttreten or $r = $refersto-literal-geltungszeitregel-ausserkrafttreten))">In einem Regelungstext in Stammform darf entweder genau eine mit refersTo="geltungszeitregel" ausgezeichnete Einzelvorschrift und keine weiteren mit refersTo ausgezeichneten Einzelvorschriften haben oder genau eine mit refersTo="geltungszeitregel-inkrafttreten" ausgezeichnete Einzelvorschrift haben und optional eine mit refersTo="geltungszeitregel-ausserkrafttreten" ausgezeichnete Einzelvorschrift.</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
       <sch:rule id="SCH-00123"
-                context="akn:article[descendant::akn:mod and not(ancestor::akn:quotedStructure)] [ $form = $form-mantelform and $typ = ($typ-gesetz, $typ-verordnung, $typ-satzung, $typ-verwaltungsvorschrift, $typ-vertragsgesetz, $typ-vertragsverordnung) and $fassung = ($fassung-entwurfsfassung, $fassung-verkündungsfassung) ]">
+                context="akn:article[descendant::akn:mod and not(ancestor::akn:quotedStructure)] [ $form = $form-mantelform and $typ = ($typ-gesetz, $typ-verordnung, $typ-satzung, $typ-verwaltungsvorschrift, $typ-vertragsgesetz, $typ-vertragsverordnung) ]">
          <sch:assert id="SCH-00123-000"
                      test="@refersTo = ($refersto-literal-hauptaenderung, $refersto-literal-folgeaenderung, $refersto-literal-geltungszeitregel, $refersto-literal-geltungszeitregel-inkrafttreten, $refersto-literal-geltungszeitregel-ausserkrafttreten)">Eine Einzelvorschrift, die einen Änderungsbefehl beinhaltet, muss entweder als Hauptänderung, Folgeänderung oder als Geltungszeit ausgezeichnet werden.</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
       <sch:rule id="SCH-00125"
-                context="/akn:akomaNtoso/akn:bill/akn:meta/akn:identification/akn:FRBRWork[$fassung = $fassung-entwurfsfassung]"
+                context="/akn:akomaNtoso/akn:bill/akn:meta/akn:identification/akn:FRBRWork"
                 subject="akn:FRBRdate[last()]">
          <sch:assert id="SCH-00125-000" test="count(akn:FRBRdate) eq 1"> In einer Entwurfsfassung darf das Datum auf Work-Ebene nur genau einmal vorkommen. </sch:assert>
       </sch:rule>
@@ -404,9 +400,8 @@
    </sch:pattern>
    <sch:title xmlns:xsl="http://www.w3.org/1999/XSL/Transform">Klasse: Hauptteil</sch:title>
    <sch:pattern xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-      <!-- HINWEIS: Regel SCH-00150-005 wurde gemäß https://projekte.kosit.org/ldml_de/tickets/-/issues/277 in 1.8.2 auf Entwurfsfassungen beschränkt. -->
       <sch:rule id="SCH-00150"
-                context="/akn:akomaNtoso/*/akn:body[$form = $form-mantelform and $fassung = $fassung-entwurfsfassung]">
+                context="/akn:akomaNtoso/*/akn:body[$form = $form-mantelform and ($ist-entwurfsfassung or $ist-verkündungsfassung)]">
          <sch:report id="SCH-00150-005"
                      role="error"
                      test="./akn:book or ./akn:part or ./akn:chapter or ./akn:subchapter or ./akn:section or ./akn:subsection or ./akn:title or ./akn:subtitle">Der Hauptteil einer Mantelform wird nicht in weitere Gliederungsabschnitte untergliedert.</sch:report>
@@ -414,10 +409,10 @@
    </sch:pattern>
    <sch:pattern xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
       <sch:rule id="SCH-00160"
-                context="/akn:akomaNtoso/*/akn:body[ $form = ($form-mantelform, $form-stammform) and $typ = ($typ-gesetz, $typ-verordnung, $typ-satzung, $typ-vertragsgesetz, $typ-vertragsverordnung) and $fassung = $fassung-entwurfsfassung ]">
+                context="/akn:akomaNtoso/*/akn:body[ $form = ($form-mantelform, $form-stammform) and $typ = ($typ-gesetz, $typ-verordnung, $typ-satzung, $typ-vertragsgesetz, $typ-vertragsverordnung) and ($ist-entwurfsfassung or $ist-verkündungsfassung) ]">
          <sch:assert id="SCH-00160-010"
                      role="error"
-                     test="(count(//akn:article[@refersTo = $refersto-literal-geltungszeitregel]) = 1 and empty(//akn:article[@refersTo = ($refersto-literal-geltungszeitregel-inkrafttreten, $refersto-literal-geltungszeitregel-ausserkrafttreten)])) or (count(//akn:article[@refersTo = $refersto-literal-geltungszeitregel-inkrafttreten]) = 1 and count(//akn:article[@refersTo = $refersto-literal-geltungszeitregel-ausserkrafttreten]) le 1 and empty(//akn:article[@refersTo = $refersto-literal-geltungszeitregel]))">Innerhalb eines Regelungstextes in der Entwurfsfassung <!--(sowohl in der Entwurfs- als auch der Verkündungsfassung)-->, der in Stamm- oder Mantelform vorliegt, muss es entweder genau eine Einzelvorschrift bzgl. der Geltungszeit (refersTo="geltungszeitregel") ODER eine Einzelvorschrift bzgl. des Inkrafttretens (refersTo="geltungszeitregel-inkrafttreten") und optional eine Geltungszeitregel bzgl. des Außerkrafttretens (refersTo="geltungszeitregel-ausserkrafttreten") geben.</sch:assert>
+                     test="(count(//akn:article[@refersTo = $refersto-literal-geltungszeitregel]) = 1 and empty(//akn:article[@refersTo = ($refersto-literal-geltungszeitregel-inkrafttreten, $refersto-literal-geltungszeitregel-ausserkrafttreten)])) or (count(//akn:article[@refersTo = $refersto-literal-geltungszeitregel-inkrafttreten]) = 1 and count(//akn:article[@refersTo = $refersto-literal-geltungszeitregel-ausserkrafttreten]) le 1 and empty(//akn:article[@refersTo = $refersto-literal-geltungszeitregel]))">Innerhalb eines Regelungstextes in der Entwurfsfassung oder Verkündungsfassung, der in Stamm- oder Mantelform vorliegt, muss es entweder genau eine Einzelvorschrift bzgl. der Geltungszeit (refersTo="geltungszeitregel") ODER eine Einzelvorschrift bzgl. des Inkrafttretens (refersTo="geltungszeitregel-inkrafttreten") und optional eine Geltungszeitregel bzgl. des Außerkrafttretens (refersTo="geltungszeitregel-ausserkrafttreten") geben.</sch:assert>
       </sch:rule>
       <sch:rule id="SCH-00170"
                 context="/akn:akomaNtoso/*/akn:body[$form = $form-eingebundene-stammform]">
@@ -428,9 +423,7 @@
    <sch:pattern xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
       <sch:rule id="SCH-00180"
                 context="akn:article[@refersTo = $refersto-literal-geltungszeitregel]">
-         <sch:report id="SCH-00180-000"
-                     test="$fassung = $fassung-entwurfsfassung"
-                     role="warn">Gemäß HdR 4 sollen Inkrafttreten und Außerkrafttreten in getrennten Einzelvorschriften gefasst werden, die entsprechend mit den refersTo-Literalen geltungszeitregel-inkrafttreten und geltungszeitregel-ausserkrafttreten auszuzeichnen sind. Das refersTo-Literal "geltungszeitregel" soll in Entwurfsfassungen nicht mehr verwendet werden.</sch:report>
+         <sch:report id="SCH-00180-000" test="$ist-entwurfsfassung" role="warn">Gemäß HdR 4 sollen Inkrafttreten und Außerkrafttreten in getrennten Einzelvorschriften gefasst werden, die entsprechend mit den refersTo-Literalen geltungszeitregel-inkrafttreten und geltungszeitregel-ausserkrafttreten auszuzeichnen sind. Das refersTo-Literal "geltungszeitregel" soll in Entwurfsfassungen nicht mehr verwendet werden.</sch:report>
       </sch:rule>
    </sch:pattern>
    <!-- HINWEIS: SCH-00185-000 wurde im Zuge von https://projekte.kosit.org/ldml_de/tickets/-/issues/278 in 1.8.2 entfernt. -->
@@ -711,10 +704,17 @@
       </sch:rule>
    </sch:pattern>
    <sch:pattern xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-      <sch:rule id="SCH-00421"
-                context="akn:article [ $form = ($form-stammform, $form-eingebundene-stammform) or $fassung = $fassung-neufassung or $typ = $typ-sonstige-bekanntmachung ]">
+      <!-- TODO: Klären, wie es mit Neufassungen weitergehen soll. -->
+      <!--      <sch:rule id="SCH-00421" context="
+            akn:article
+            [
+            $form = ($form-stammform, $form-eingebundene-stammform) or
+            $fassung = $fassung-neufassung or
+            $typ = $typ-sonstige-bekanntmachung
+            ]">
          <sch:assert id="SCH-00421-000" test="not(exists(descendant::akn:mod))">Änderungsbefehle dürfen nur im Rahmen einer Mantelform vorkommen.</sch:assert>
       </sch:rule>
+-->
    </sch:pattern>
    <sch:pattern xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
       <sch:rule id="SCH-00422" context="//akn:mod[not(ancestor::akn:mod)]">
@@ -779,7 +779,7 @@
    <sch:title xmlns:xsl="http://www.w3.org/1999/XSL/Transform">Struktureller Aufbau von eId-Textknoten</sch:title>
    <sch:pattern xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
       <sch:rule id="SCH-00430"
-                context="/akn:akomaNtoso/(akn:act | akn:bill | akn:doc | akn:statement | akn:documentCollection)//*[@eId and not(local-name() = ('article', 'quotedStructure')) and exists(parent::*[@eId])]">
+                context="/akn:akomaNtoso/(akn:act | akn:bill | akn:doc | akn:statement | akn:documentCollection)//* [(@eId and exists(parent::*[@eId])) and not(local-name() = 'article' and not(ancestor::akn:quotedStructure))]">
          <sch:let name="trennzeichen-zwischen-eids" value="'_'"/>
          <sch:let name="geprüfte-eid" value="@eId"/>
          <sch:let name="geprüfte-eid-lokaler-teil"
@@ -890,6 +890,17 @@
       </sch:rule>
    </sch:pattern>
    <sch:pattern xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+      <sch:rule id="SCH-00438"
+                context="/akn:akomaNtoso/(akn:act | akn:bill | akn:doc | akn:statement | akn:documentCollection)//akn:article[not(ancestor::akn:quotedStructure)]/@eId">
+         <sch:assert id="SCH-00438-000" test="starts-with(., 'art-')">Die @eId einer Einzelvorschrift außerhalb einer akn:quotedStructure muss mit "art-" beginnen; anders als andere Elemente 'erbt' sie nicht die @eId ihres Elternelements als Präfix!</sch:assert>
+      </sch:rule>
+      <sch:rule id="SCH-00439"
+                context="/akn:akomaNtoso/(akn:act | akn:bill | akn:doc | akn:statement | akn:documentCollection)//akn:article[ancestor::akn:quotedStructure]/@eId">
+         <sch:assert id="SCH-00439-000"
+                     test="matches(., '([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)+art-(z|n)\d*[0-9a-zäöüß~%]*$')">Die @eId einer Einzelvorschrift innerhalb einer akn:quotedStructure darf nicht lediglich aus ihrem eigenen Kurzbezeichner, "art-", sowie einer Positionsangabe bestehen; anders als bei Einzelvorschriften außerhalb der quotedStructure wird innerhalb ebendieser die eId nicht "abgeschnitten", sondern "erbt" zwingend die @eId ihres Elternknotens als Präfix.</sch:assert>
+      </sch:rule>
+   </sch:pattern>
+   <sch:pattern xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
       <!-- dokumentweite eId-uniqueness -->
       <sch:rule id="SCH-00450" context="@eId">
          <sch:let name="kontext-eId-inhalt" value="."/>
@@ -912,19 +923,22 @@
    <sch:title xmlns:xsl="http://www.w3.org/1999/XSL/Transform">Struktureller Aufbau der ELI-Uris (Metadaten)</sch:title>
    <sch:let xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
             name="eli-präfix-entwurfsfassung"
-            value="'eli/dl'"/>
+            value="'https://www.egesetzgebung.bund.de/eli/dl'"/>
    <sch:let xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
             name="eli-präfix-verkündungsfassung"
-            value="'eli/bund'"/>
+            value="'https://www.recht.bund.de/eli/bund'"/>
+   <sch:let xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+            name="eli-präfix-konsolidierte-fassung"
+            value="'https://www.ris.bund.de/eli/bund'"/>
    <sch:let xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
             name="eli-agent-entwurf"
             value="tokenize(/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRWork/akn:FRBRauthor/@href, '/')[last()]"/>
    <sch:let xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-            name="eli-agent-verkündung"
+            name="eli-agent-verkündung-oder-konsolidierung"
             value="/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRWork/akn:FRBRname/@value"/>
    <sch:let xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
             name="eli-year"
-            value="(: -- Nimmt als Wert die in der folgenden Reihenfolge gesuchte letzte (!) gefundene Jahresangabe an -- :) ( (: das erste Entwurfsfassung-FRBRdate; es darf nur eins geben! :) substring(/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRWork/akn:FRBRdate[@name = 'erstellungsdatum'][1]/@date, 1, 4), (: Jahr der Ausfertigung der Neufassung :) if (not(empty(/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRWork/akn:FRBRdate[@name = 'neufassung-ausfertigungsdatum']/@date))) then (substring(/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRWork/akn:FRBRdate[@name = 'neufassung-ausfertigungsdatum']/@date, 1, 4)) else (), (: Jahr der Ausfertigung der Verkündungsfassung :) if (not(empty(/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRWork/akn:FRBRdate[@name = 'verkuendungsfassung-ausfertigungsdatum']/@date))) then substring(/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRWork/akn:FRBRdate[@name = 'verkuendungsfassung-ausfertigungsdatum']/@date, 1, 4) else (), (: Jahr der Neufassung :) if (not(empty(/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRWork/akn:FRBRdate[@name = 'neufassung-verkuendungsdatum']/@date))) then substring(/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRWork/akn:FRBRdate[@name = 'neufassung-verkuendungsdatum']/@date, 1, 4) else (), (: Jahr der Verkündung :) if (not(empty(/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRWork/akn:FRBRdate[@name = 'verkuendungsfassung-verkuendungsdatum']/@date))) then (substring(/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRWork/akn:FRBRdate[@name = 'verkuendungsfassung-verkuendungsdatum']/@date, 1, 4)) else () )[last()]"/>
+            value="(: -- Nimmt als Wert die in der folgenden Reihenfolge gesuchte letzte (!) gefundene Jahresangabe an -- :) ( (: das erste Entwurfsfassung-FRBRdate; es darf nur eins geben! :) substring(/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRWork/akn:FRBRdate[@name = 'erstellungsdatum'][1]/@date, 1, 4), (: Jahr der Ausfertigung :) if (not(empty(/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRWork/akn:FRBRdate[@name = 'ausfertigungsdatum']/@date))) then (substring(/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRWork/akn:FRBRdate[@name = 'ausfertigungsdatum']/@date, 1, 4)) else (), (: Jahr der Verkündung :) if (not(empty(/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRWork/akn:FRBRdate[@name = 'verkuendungsdatum']/@date))) then substring(/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRWork/akn:FRBRdate[@name = 'verkuendungsdatum']/@date, 1, 4) else () )[last()]"/>
    <sch:let xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
             name="eli-natural-identifier"
             value="/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRWork/akn:FRBRnumber/@value"/>
@@ -964,25 +978,52 @@
             value="concat($eli-präfix-verkündungsfassung, '/{agent}/{year}/{natural identifier}/{subtype}')"/>
    <sch:let xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
             name="FRBRthis-verkündungsfassung-work-inhalt"
-            value="string-join(($eli-präfix-verkündungsfassung, $eli-agent-verkündung, $eli-year, $eli-natural-identifier, $eli-subtype), '/')"/>
+            value="string-join(($eli-präfix-verkündungsfassung, $eli-agent-verkündung-oder-konsolidierung, $eli-year, $eli-natural-identifier, $eli-subtype), '/')"/>
    <sch:let xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
             name="FRBRthis-verkündungsfassung-expression-beschreibung"
             value="'Der eindeutige Bezeichner für Teildokumente in der Verkündungsfassung auf der Expression-Ebene'"/>
    <sch:let xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
             name="FRBRthis-verkündungsfassung-expression-aufbau"
-            value="concat($eli-präfix-verkündungsfassung, '/{agent}/{year}/{natural identifier}/{point in time}/{version}/{language}/{subtype}')"/>
+            value="concat($eli-präfix-verkündungsfassung, '/{agent}/{year}/{natural identifier}/{language}/{subtype}')"/>
    <sch:let xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
             name="FRBRthis-verkündungsfassung-expression-inhalt"
-            value="string-join(($eli-präfix-verkündungsfassung, $eli-agent-verkündung, $eli-year, $eli-natural-identifier, $eli-point-in-time, $eli-version, $eli-language, $eli-subtype), '/')"/>
+            value="string-join(($eli-präfix-verkündungsfassung, $eli-agent-verkündung-oder-konsolidierung, $eli-year, $eli-natural-identifier, $eli-language, $eli-subtype), '/')"/>
    <sch:let xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
             name="FRBRthis-verkündungsfassung-manifestation-beschreibung"
             value="'Der eindeutige Bezeichner für Teildokumente in der Verkündungsfassung auf der Manifestation-Ebene'"/>
    <sch:let xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
             name="FRBRthis-verkündungsfassung-manifestation-aufbau"
-            value="concat($eli-präfix-verkündungsfassung, '/{agent}/{year}/{natural identifier}/{point in time}/{version}/{language}/{point in time manifestation}/{subtype}.{format}')"/>
+            value="concat($eli-präfix-verkündungsfassung, '/{agent}/{year}/{natural identifier}/{language}/{point in time manifestation}/{subtype}.{format}')"/>
    <sch:let xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
             name="FRBRthis-verkündungsfassung-manifestation-inhalt"
-            value="string-join(($eli-präfix-verkündungsfassung, $eli-agent-verkündung, $eli-year, $eli-natural-identifier, $eli-point-in-time, $eli-version, $eli-language, $eli-point-in-time-manifestation, concat($eli-subtype, '.', $eli-format)), '/')"/>
+            value="string-join(($eli-präfix-verkündungsfassung, $eli-agent-verkündung-oder-konsolidierung, $eli-year, $eli-natural-identifier, $eli-language, concat($eli-subtype, '.', $eli-format)), '/')"/>
+   <sch:let xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+            name="FRBRthis-konsolidierte-fassung-work-beschreibung"
+            value="'Der eindeutige Bezeichner für Teildokumente in einer konsolidierten Fassung auf der Work-Ebene'"/>
+   <sch:let xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+            name="FRBRthis-konsolidierte-fassung-work-aufbau"
+            value="concat($eli-präfix-konsolidierte-fassung, '/{agent}/{year}/{natural identifier}/{subtype}')"/>
+   <sch:let xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+            name="FRBRthis-konsolidierte-fassung-work-inhalt"
+            value="string-join(($eli-präfix-konsolidierte-fassung, $eli-agent-verkündung-oder-konsolidierung, $eli-year, $eli-natural-identifier, $eli-subtype), '/')"/>
+   <sch:let xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+            name="FRBRthis-konsolidierte-fassung-expression-beschreibung"
+            value="'Der eindeutige Bezeichner für Teildokumente in einer konsolidierten Fassung auf der Expression-Ebene'"/>
+   <sch:let xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+            name="FRBRthis-konsolidierte-fassung-expression-aufbau"
+            value="concat($eli-präfix-konsolidierte-fassung, '/{agent}/{year}/{natural identifier}/{point in time}/{version}/{language}/{subtype}')"/>
+   <sch:let xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+            name="FRBRthis-konsolidierte-fassung-expression-inhalt"
+            value="string-join(($eli-präfix-konsolidierte-fassung, $eli-agent-verkündung-oder-konsolidierung, $eli-year, $eli-natural-identifier, $eli-point-in-time, $eli-version, $eli-language, $eli-subtype), '/')"/>
+   <sch:let xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+            name="FRBRthis-konsolidierte-fassung-manifestation-beschreibung"
+            value="'Der eindeutige Bezeichner für Teildokumente in einer konsolidierten Fassung auf der Manifestation-Ebene'"/>
+   <sch:let xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+            name="FRBRthis-konsolidierte-fassung-manifestation-aufbau"
+            value="concat($eli-präfix-konsolidierte-fassung, '/{agent}/{year}/{natural identifier}/{point in time}/{version}/{language}/{point in time manifestation}/{subtype}.{format}')"/>
+   <sch:let xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+            name="FRBRthis-konsolidierte-fassung-manifestation-inhalt"
+            value="string-join(($eli-präfix-konsolidierte-fassung, $eli-agent-verkündung-oder-konsolidierung, $eli-year, $eli-natural-identifier, $eli-point-in-time, $eli-version, $eli-language, $eli-point-in-time-manifestation, concat($eli-subtype, '.', $eli-format)), '/')"/>
    <sch:let xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
             name="FRBRthis-entwurfsfassung-work-beschreibung"
             value="'Der eindeutige Bezeichner für Teildokumente in der Entwurfsfassung auf der Work-Ebene'"/>
@@ -1019,16 +1060,16 @@
             value="concat($eli-präfix-verkündungsfassung, '/{agent}/{year}/{natural identifier}')"/>
    <sch:let xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
             name="FRBRuri-verkündungsfassung-work-inhalt"
-            value="string-join(($eli-präfix-verkündungsfassung, $eli-agent-verkündung, $eli-year, $eli-natural-identifier), '/')"/>
+            value="string-join(($eli-präfix-verkündungsfassung, $eli-agent-verkündung-oder-konsolidierung, $eli-year, $eli-natural-identifier), '/')"/>
    <sch:let xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
             name="FRBRuri-verkündungsfassung-expression-beschreibung"
             value="'Der eindeutige Bezeichner für die Expression-Ebene in der Verkündungsfassung'"/>
    <sch:let xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
             name="FRBRuri-verkündungsfassung-expression-aufbau"
-            value="concat($eli-präfix-verkündungsfassung, '{agent}/{year}/{natural identifier}/{point in time}/{version}/{language}')"/>
+            value="concat($eli-präfix-verkündungsfassung, '{agent}/{year}/{natural identifier}/{language}')"/>
    <sch:let xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
             name="FRBRuri-verkündungsfassung-expression-inhalt"
-            value="string-join(($eli-präfix-verkündungsfassung, $eli-agent-verkündung, $eli-year, $eli-natural-identifier, $eli-point-in-time, $eli-version, $eli-language), '/')"/>
+            value="string-join(($eli-präfix-verkündungsfassung, $eli-agent-verkündung-oder-konsolidierung, $eli-year, $eli-natural-identifier, $eli-language), '/')"/>
    <sch:let xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
             name="FRBRuri-verkündungsfassung-manifestation-beschreibung"
             value="'Der eindeutige Bezeichner für die Manifestation-Ebene in der Verkündungsfassung'"/>
@@ -1038,6 +1079,33 @@
    <sch:let xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
             name="FRBRuri-verkündungsfassung-manifestation-inhalt"
             value="$FRBRthis-verkündungsfassung-manifestation-inhalt"/>
+   <sch:let xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+            name="FRBRuri-konsolidierte-fassung-work-beschreibung"
+            value="'Der eindeutige Bezeichner für die Work-Ebene der konsolidierten Fassung'"/>
+   <sch:let xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+            name="FRBRuri-konsolidierte-fassung-work-aufbau"
+            value="concat($eli-präfix-konsolidierte-fassung, '/{agent}/{year}/{natural identifier}')"/>
+   <sch:let xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+            name="FRBRuri-konsolidierte-fassung-work-inhalt"
+            value="string-join(($eli-präfix-konsolidierte-fassung, $eli-agent-verkündung-oder-konsolidierung, $eli-year, $eli-natural-identifier), '/')"/>
+   <sch:let xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+            name="FRBRuri-konsolidierte-fassung-expression-beschreibung"
+            value="'Der eindeutige Bezeichner für die Expression-Ebene in der konsolidierten Fassung'"/>
+   <sch:let xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+            name="FRBRuri-konsolidierte-fassung-expression-aufbau"
+            value="concat($eli-präfix-konsolidierte-fassung, '{agent}/{year}/{natural identifier}/{point in time}/{version}/{language}')"/>
+   <sch:let xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+            name="FRBRuri-konsolidierte-fassung-expression-inhalt"
+            value="string-join(($eli-präfix-konsolidierte-fassung, $eli-agent-verkündung-oder-konsolidierung, $eli-year, $eli-natural-identifier, $eli-point-in-time, $eli-version, $eli-language), '/')"/>
+   <sch:let xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+            name="FRBRuri-konsolidierte-fassung-manifestation-beschreibung"
+            value="'Der eindeutige Bezeichner für die Manifestation-Ebene in der konsolidierten Fassung'"/>
+   <sch:let xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+            name="FRBRuri-konsolidierte-fassung-manifestation-aufbau"
+            value="$FRBRthis-konsolidierte-fassung-manifestation-aufbau"/>
+   <sch:let xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+            name="FRBRuri-konsolidierte-fassung-manifestation-inhalt"
+            value="$FRBRthis-konsolidierte-fassung-manifestation-inhalt"/>
    <sch:let xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
             name="FRBRuri-entwurfsfassung-work-beschreibung"
             value="'Der eindeutige Bezeichner für die Work-Ebene in der Entwurfsfassung'"/>
@@ -1077,7 +1145,11 @@
          <sch:assert id="SCH-00500-010"
                      role="error"
                      test="if ($ist-verkündungsfassung) then (@value = $FRBRthis-verkündungsfassung-work-inhalt) else true()">
-            <sch:value-of select="$FRBRthis-verkündungsfassung-work-beschreibung"/> muss sich aus den Inhalten der jeweiligen Metadaten zusammensetzen in der Form "<sch:value-of select="$FRBRthis-verkündungsfassung-work-aufbau"/>". Erwartest würde hier konkret: "<sch:value-of select="$FRBRthis-verkündungsfassung-work-inhalt"/>".</sch:assert>
+            <sch:value-of select="$FRBRthis-verkündungsfassung-work-beschreibung"/> muss sich aus den Inhalten der jeweiligen Metadaten zusammensetzen in der Form "<sch:value-of select="$FRBRthis-verkündungsfassung-work-aufbau"/>". Erwartet würde hier konkret: "<sch:value-of select="$FRBRthis-verkündungsfassung-work-inhalt"/>".</sch:assert>
+         <sch:assert id="SCH-00500-015"
+                     role="error"
+                     test="if ($ist-konsolidierte-fassung) then (@value = $FRBRthis-konsolidierte-fassung-work-inhalt) else true()">
+            <sch:value-of select="$FRBRthis-konsolidierte-fassung-work-beschreibung"/> muss sich aus den Inhalten der jeweiligen Metadaten zusammensetzen in der Form "<sch:value-of select="$FRBRthis-konsolidierte-fassung-work-aufbau"/>". Erwartet würde hier konkret: "<sch:value-of select="$FRBRthis-konsolidierte-fassung-work-inhalt"/>".</sch:assert>
       </sch:rule>
       <!-- FRBRthis: Expression-Ebene -->
       <sch:rule id="SCH-00510"
@@ -1090,6 +1162,10 @@
                      role="error"
                      test="if ($ist-verkündungsfassung) then (@value = $FRBRthis-verkündungsfassung-expression-inhalt) else true()">
             <sch:value-of select="$FRBRthis-verkündungsfassung-expression-beschreibung"/> muss sich aus den Inhalten der jeweiligen Metadaten zusammensetzen in der Form "<sch:value-of select="$FRBRthis-verkündungsfassung-expression-aufbau"/>". Erwartet würde hier konkret: "<sch:value-of select="$FRBRthis-verkündungsfassung-expression-inhalt"/>".</sch:assert>
+         <sch:assert id="SCH-00510-015"
+                     role="error"
+                     test="if ($ist-konsolidierte-fassung) then (@value = $FRBRthis-konsolidierte-fassung-expression-inhalt) else true()">
+            <sch:value-of select="$FRBRthis-konsolidierte-fassung-expression-beschreibung"/> muss sich aus den Inhalten der jeweiligen Metadaten zusammensetzen in der Form "<sch:value-of select="$FRBRthis-konsolidierte-fassung-expression-aufbau"/>". Erwartet würde hier konkret: "<sch:value-of select="$FRBRthis-konsolidierte-fassung-expression-inhalt"/>".</sch:assert>
       </sch:rule>
       <!-- FRBRthis: Manifestation-Ebene -->
       <sch:rule id="SCH-00520"
@@ -1102,6 +1178,10 @@
                      role="error"
                      test="if ($ist-verkündungsfassung) then (@value = $FRBRthis-verkündungsfassung-manifestation-inhalt) else true()">
             <sch:value-of select="$FRBRthis-verkündungsfassung-manifestation-beschreibung"/> muss sich aus den Inhalten der jeweiligen Metadaten zusammensetzen in der Form "<sch:value-of select="$FRBRthis-verkündungsfassung-manifestation-aufbau"/>". Erwartet würde hier konkret: "<sch:value-of select="$FRBRthis-verkündungsfassung-manifestation-inhalt"/>".</sch:assert>
+         <sch:assert id="SCH-00520-015"
+                     role="error"
+                     test="if ($ist-konsolidierte-fassung) then (@value = $FRBRthis-konsolidierte-fassung-manifestation-inhalt) else true()">
+            <sch:value-of select="$FRBRthis-konsolidierte-fassung-manifestation-beschreibung"/> muss sich aus den Inhalten der jeweiligen Metadaten zusammensetzen in der Form "<sch:value-of select="$FRBRthis-konsolidierte-fassung-manifestation-aufbau"/>". Erwartet würde hier konkret: "<sch:value-of select="$FRBRthis-konsolidierte-fassung-manifestation-inhalt"/>".</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -1116,6 +1196,10 @@
                      role="error"
                      test="if ($ist-verkündungsfassung) then (@value = $FRBRuri-verkündungsfassung-work-inhalt) else true()">
             <sch:value-of select="$FRBRuri-verkündungsfassung-work-beschreibung"/> muss sich aus den Inhalten der jeweiligen Metadaten zusammensetzen in der Form "<sch:value-of select="$FRBRuri-verkündungsfassung-work-aufbau"/>". Erwartet würde hier konkret: "<sch:value-of select="$FRBRuri-verkündungsfassung-work-inhalt"/>".</sch:assert>
+         <sch:assert id="SCH-00530-015"
+                     role="error"
+                     test="if ($ist-konsolidierte-fassung) then (@value = $FRBRuri-konsolidierte-fassung-work-inhalt) else true()">
+            <sch:value-of select="$FRBRuri-konsolidierte-fassung-work-beschreibung"/> muss sich aus den Inhalten der jeweiligen Metadaten zusammensetzen in der Form "<sch:value-of select="$FRBRuri-verkündungsfassung-work-aufbau"/>". Erwartet würde hier konkret: "<sch:value-of select="$FRBRuri-konsolidierte-fassung-work-inhalt"/>".</sch:assert>
       </sch:rule>
       <!-- FRBRuri: Expression-Ebene -->
       <sch:rule id="SCH-00540"
@@ -1128,20 +1212,10 @@
                      role="error"
                      test="if ($ist-verkündungsfassung) then (@value = $FRBRuri-verkündungsfassung-expression-inhalt) else true()">
             <sch:value-of select="$FRBRuri-verkündungsfassung-expression-beschreibung"/> muss sich aus den Inhalten der jeweiligen Metadaten zusammensetzen in der Form "<sch:value-of select="$FRBRuri-verkündungsfassung-expression-aufbau"/>". Erwartet würde hier konkret: "<sch:value-of select="$FRBRuri-verkündungsfassung-expression-inhalt"/>".</sch:assert>
-      </sch:rule>
-      <!-- FRBRdate: Expression-Ebene: Unbekanntes Inkrafttreten -->
-      <sch:rule id="SCH-00541"
-                context="/akn:akomaNtoso/*/akn:meta/akn:identification/akn:FRBRExpression/akn:FRBRdate">
-         <sch:let name="unbekanntes-inkrafttretensdatum-aenderung-literal"
-                  value="'aenderung-unbestimmtes-inkrafttreten'"/>
-         <sch:let name="unbekanntes-inkrafttretensdatum-verkuendung-literal"
-                  value="'verkuendung-unbestimmtes-inkrafttreten'"/>
-         <sch:assert id="SCH-00541-000"
-                     test="if (@name = ($unbekanntes-inkrafttretensdatum-aenderung-literal, $unbekanntes-inkrafttretensdatum-verkuendung-literal)) then (@date = $platzhalter-datum-unbekannt) else true()"
-                     role="error">Ist bei einer Verkündungsfassung das Inkrafttretensdatum unbekannt, muss als Wert für @date der Platzhalter '<sch:value-of select="$platzhalter-datum-unbekannt"/>' angegeben werden.</sch:assert>
-         <sch:assert id="SCH-00541-005"
-                     test="if (@date = $platzhalter-datum-unbekannt) then (@name = ($unbekanntes-inkrafttretensdatum-aenderung-literal, $unbekanntes-inkrafttretensdatum-verkuendung-literal)) else true()"
-                     role="error">Der Platzhalter '<sch:value-of select="$platzhalter-datum-unbekannt"/>' darf in @date nur angegeben werden, wenn das Datum mittels @name='<sch:value-of select="$unbekanntes-inkrafttretensdatum-aenderung-literal"/>' oder '<sch:value-of select="$unbekanntes-inkrafttretensdatum-verkuendung-literal"/>' als unbekanntes Inkrafttretensdatum deklariert ist.</sch:assert>
+         <sch:assert id="SCH-00540-015"
+                     role="error"
+                     test="if ($ist-konsolidierte-fassung) then (@value = $FRBRuri-konsolidierte-fassung-expression-inhalt) else true()">
+            <sch:value-of select="$FRBRuri-konsolidierte-fassung-expression-beschreibung"/> muss sich aus den Inhalten der jeweiligen Metadaten zusammensetzen in der Form "<sch:value-of select="$FRBRuri-konsolidierte-fassung-expression-aufbau"/>". Erwartet würde hier konkret: "<sch:value-of select="$FRBRuri-konsolidierte-fassung-expression-inhalt"/>".</sch:assert>
       </sch:rule>
       <!-- FRBRuri: Manifestation-Ebene -->
       <sch:rule id="SCH-00550"
@@ -1154,11 +1228,18 @@
                      role="error"
                      test="if ($ist-verkündungsfassung) then (@value = $FRBRuri-verkündungsfassung-manifestation-inhalt) else true()">
             <sch:value-of select="$FRBRuri-verkündungsfassung-manifestation-beschreibung"/> muss sich aus den Inhalten der jeweiligen Metadaten zusammensetzen in der Form "<sch:value-of select="$FRBRuri-verkündungsfassung-manifestation-aufbau"/>". Erwartet würde hier konkret: "<sch:value-of select="$FRBRuri-verkündungsfassung-manifestation-inhalt"/>".</sch:assert>
+         <sch:assert id="SCH-00550-015"
+                     role="error"
+                     test="if ($ist-konsolidierte-fassung) then (@value = $FRBRuri-konsolidierte-fassung-manifestation-inhalt) else true()">
+            <sch:value-of select="$FRBRuri-konsolidierte-fassung-manifestation-beschreibung"/> muss sich aus den Inhalten der jeweiligen Metadaten zusammensetzen in der Form "<sch:value-of select="$FRBRuri-konsolidierte-fassung-manifestation-aufbau"/>". Erwartet würde hier konkret: "<sch:value-of select="$FRBRuri-konsolidierte-fassung-manifestation-inhalt"/>".</sch:assert>
+         <sch:assert id="SCH-00550-020"
+                     role="error"
+                     test="starts-with(@value, $authority-egesetzgebung) or starts-with(@value, $authority-everkündung) or starts-with(@value, $authority-rechtsinformationssystem)">Der Manifestation-ELI muss zwingend mit einer der drei zulässigen authorities beginnen: "<sch:value-of select="$authority-egesetzgebung"/>", "<sch:value-of select="$authority-everkündung"/>" oder "<sch:value-of select="$authority-rechtsinformationssystem"/>".</sch:assert>
       </sch:rule>
       <!-- akn:FRBRdate/@name auf Work-Ebene ist abhängig von Verkündungs- vs. Entwurfsfassung -->
       <sch:rule id="SCH-00560" context="/akn:akomaNtoso/akn:act/@name" role="error">
          <sch:assert id="SCH-00560-005"
-                     test="if (. = 'regelungstext') then $ist-verkündungsfassung else true()"> Ein Regelungstext in der Verkündungsfassung darf nicht als Entwurfsfassung gekennzeichnet sein, wie es jedoch aktuell anhand von akn:FRBRWork/akn:FRBRdate/@name deklariert ist.</sch:assert>
+                     test="if (. = 'regelungstext') then $ist-verkündungsfassung or $ist-konsolidierte-fassung else true()"> Ein Regelungstext in der Verkündungsfassung darf nicht als Entwurfsfassung gekennzeichnet sein, wie es jedoch aktuell anhand von akn:FRBRWork/akn:FRBRdate/@name deklariert ist.</sch:assert>
       </sch:rule>
    </sch:pattern>
    <!-- Metadaten: proprietary -->
@@ -1167,7 +1248,7 @@
                 context="akn:meta/akn:proprietary/redok:legalDocML.de_metadaten">
          <sch:assert id="SCH-00590-000"
                      subject="redok:fna"
-                     test="if ($fassung = $fassung-entwurfsfassung) then (redok:fna = 'nicht-vorhanden' (: das Literal ist im Metadatenmodell als @default des einfachen Typs xs:token umgesetzt, daher hier als Literal anstatt einer dynamischen Referenzierung :)) else true()">In der Entwurfsfassung muss als Wert für den Fundstellennachweis das Literal "nicht-vorhanden" angegeben werden.</sch:assert>
+                     test="if ($ist-entwurfsfassung) then (redok:fna = 'nicht-vorhanden' (: das Literal ist im Metadatenmodell als @default des einfachen Typs xs:token umgesetzt, daher hier als Literal anstatt einer dynamischen Referenzierung :)) else true()">In der Entwurfsfassung muss als Wert für den Fundstellennachweis das Literal "nicht-vorhanden" angegeben werden.</sch:assert>
       </sch:rule>
       <!-- Das Rechtsetzungsdokument muss abhängig davon, wer bearbeitende Institution ist, über bestimmte Metadaten-Schemata-Einbindungen verfügen -->
       <sch:rule id="SCH-00591"
@@ -1177,24 +1258,22 @@
          <sch:assert id="SCH-00591-000"
                      role="error"
                      test="count(akn:proprietary/redok:legalDocML.de_metadaten) eq 1">Ein Rechtsetzungsdokument muss genau einen Block mit "Metadaten Rechtsetzungsdokument" besitzen.</sch:assert>
-         <sch:let name="bearbeitende-institution"
-                  value="akn:proprietary/redok:legalDocML.de_metadaten/redok:bearbeitendeInstitution"/>
          <!-- Metadaten Bundestag -->
          <sch:assert id="SCH-00591-005"
                      role="error"
-                     test="if ($bearbeitende-institution = 'bundestag') then (count(akn:proprietary/btag:legalDocML.de_metadaten) eq 1) else true()">Wenn der Bundestag bearbeitende Institution ist, müssen dessen Metadaten genau einmal angegeben werden.</sch:assert>
+                     test="if ($ist-entwurfsfassung and $bearbeitende-institution-frbrauthor = 'recht.bund.de/institution/bundestag') then (count(akn:proprietary/btag:legalDocML.de_metadaten) eq 1) else true()">Wenn der Bundestag bearbeitende Institution ist, müssen dessen Metadaten genau einmal angegeben werden.</sch:assert>
          <!-- Metadaten Bundesrat -->
          <sch:assert id="SCH-00591-010"
                      role="error"
-                     test="if ($bearbeitende-institution = 'bundesrat') then (count(akn:proprietary/brat:legalDocML.de_metadaten) eq 1) else true()">Wenn der Bundesrat bearbeitende Institution ist, müssen dessen Metadaten genau einmal angegeben werden.</sch:assert>
+                     test="if ($ist-entwurfsfassung and $bearbeitende-institution-frbrauthor = 'recht.bund.de/institution/bundesrat') then (count(akn:proprietary/brat:legalDocML.de_metadaten) eq 1) else true()">Wenn der Bundesrat bearbeitende Institution ist, müssen dessen Metadaten genau einmal angegeben werden.</sch:assert>
          <!-- Metadaten Bundesregierung -->
          <sch:assert id="SCH-00591-015"
                      role="error"
-                     test="if ($bearbeitende-institution = 'bundesregierung') then (count(akn:proprietary/breg:legalDocML.de_metadaten) eq 1) else true()">Wenn die Bundesregierung bearbeitende Institution ist, müssen deren Metadaten genau einmal angegeben werden.</sch:assert>
+                     test="if ($ist-entwurfsfassung and $bearbeitende-institution-frbrauthor = 'recht.bund.de/institution/bundesregierung') then (count(akn:proprietary/breg:legalDocML.de_metadaten) eq 1) else true()">Wenn die Bundesregierung bearbeitende Institution ist, müssen deren Metadaten genau einmal angegeben werden.</sch:assert>
       </sch:rule>
       <!-- Ein Regelungstext muss über einen Metadatenblock Regelungstext verfügen -->
       <sch:rule id="SCH-00592"
-                context="akn:meta[$teildokument-uri = ('/akn/ontology/de/concept/documenttype/bund/regelungstext-entwurf', '/akn/ontology/de/concept/documenttype/bund/regelungstext-verkuendung', '/akn/ontology/de/concept/documenttype/bund/regelungstext-neufassung')]">
+                context="akn:meta[$teildokument-uri = ('/akn/ontology/de/concept/documenttype/bund/regelungstext-entwurf', '/akn/ontology/de/concept/documenttype/bund/regelungstext')]">
          <sch:assert id="SCH-00592-000"
                      test="count(akn:proprietary/regtxt:legalDocML.de_metadaten) eq 1">Ein Regelungstext muss über genau einen Metadatenblock Regelungstext verfügen.</sch:assert>
       </sch:rule>
@@ -1203,6 +1282,12 @@
                 context="akn:meta[$teildokument-uri = '/akn/ontology/de/concept/documenttype/bund/nkr-stellungnahme']">
          <sch:assert id="SCH-00593-000"
                      test="count(akn:proprietary/nkr:legalDocML.de_metadaten) eq 1">Die NKR-Stellungnahme muss genau einen Metadatenblock Normenkontrollrat enthalten.</sch:assert>
+      </sch:rule>
+      <!-- Die NKR-Stellungnahme muss den Metadatenblock Normenkontrollrat enthalten  -->
+      <sch:rule id="SCH-00595"
+                context="akn:meta[$teildokument-uri = '/akn/ontology/de/concept/documenttype/bund/sonstiger-veroeffentlichungstext']">
+         <sch:assert id="SCH-00595-000"
+                     test="count(akn:proprietary/sonst:legalDocML.de_metadaten) eq 1">Der Sonstige Veröffentlichungstext muss genau einen Metadatenblock Sonstiger Veröffentlichungstext enthalten.</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -1228,9 +1313,12 @@
          <!-- Metadaten Formulierungshilfe: Nur in begruendung-regelungstext, regelungstext-entwurf oder vorblatt-regelungstext -->
          <sch:assert id="SCH-00594-025"
                      test="if (akn:proprietary/fhilf:legalDocML.de_metadaten) then ($teildokument-uri = ('/akn/ontology/de/concept/documenttype/bund/begruendung-regelungstext', '/akn/ontology/de/concept/documenttype/bund/regelungstext-entwurf', '/akn/ontology/de/concept/documenttype/bund/vorblatt-regelungstext')) else true()">Das Metadatenschema Formulierungshilfe darf nur in einer Begründung zu einem Regelungstext, in einem Regelungstext (Entwurf) oder dem Vorblatt zu einem Regelungstext eingebunden werden.</sch:assert>
-         <!-- Metadaten Regelungstext: Nur in regelungstext-entwurf, regelungstext-verkuendung oder regelungstext-neufassung -->
+         <!-- Metadaten Regelungstext: Nur in regelungstext-entwurf oder regelungstext -->
          <sch:assert id="SCH-00594-030"
-                     test="if (akn:proprietary/regtxt:legalDocML.de_metadaten) then ($teildokument-uri = ('/akn/ontology/de/concept/documenttype/bund/regelungstext-entwurf', '/akn/ontology/de/concept/documenttype/bund/regelungstext-verkuendung', '/akn/ontology/de/concept/documenttype/bund/regelungstext-neufassung')) else true()">Das Metadatenschema Regelungstext darf nur in einem Regelungstext (Entwurf), einem Regelungstext (Verkündung) oder Regelungstext (Neufassung) eingebunden werden.</sch:assert>
+                     test="if (akn:proprietary/regtxt:legalDocML.de_metadaten) then ($teildokument-uri = ('/akn/ontology/de/concept/documenttype/bund/regelungstext-entwurf', '/akn/ontology/de/concept/documenttype/bund/regelungstext')) else true()">Das Metadatenschema Regelungstext darf nur in einem Regelungstext (Entwurf) oder einem Regelungstext eingebunden werden.</sch:assert>
+         <!-- Metadaten Sonstiger-Veröffentlichungstext: Nur in Sonstiger-Veröffentlichungstext-->
+         <sch:assert id="SCH-00594-035"
+                     test="if (akn:proprietary/sonst:legalDocML.de_metadaten) then ($teildokument-uri = '/akn/ontology/de/concept/documenttype/bund/sonstiger-veroeffentlichungstext') else true()">Das Metadatenschema Sonstiger-Veröffentlichungstext darf nur in einem Sonstigen Veröffentlichungstext eingebunden werden.</sch:assert>
       </sch:rule>
    </sch:pattern>
    <!-- Regeln zur Geltungszeit -->
@@ -1291,8 +1379,7 @@
    <sch:pattern xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
       <sch:let name="zulässige-literale-in-kombination-mit-repeal"
                value="($refersto-literal-ereignisreferenz-verkündungsfassung-ausserkrafttreten, $refersto-literal-ereignisreferenz-entwurfsfassung-ausserkrafttreten, $refersto-literal-ereignisreferenz-entwurfsfassung-ausserkrafttreten-mit-unbekanntem-datum, $refersto-literal-ereignisreferenz-verkündungssfassung-ausserkrafttreten-mit-unbekanntem-datum)"/>
-      <sch:rule id="SCH-00640"
-                context="akn:meta/akn:lifecycle (: Entwurfs- und Verkündungsfassung sowie Neufassung :)">
+      <sch:rule id="SCH-00640" context="akn:meta/akn:lifecycle">
          <sch:assert id="SCH-00640-010"
                      test="count(akn:eventRef[@type = $type-literal-ereignisreferenz-repeal and @refersTo = $zulässige-literale-in-kombination-mit-repeal]) le 1">
             <sch:value-of select="$dokumentarten-mit-lebenszyklus-angaben-formulierung-satzanfang-nominativ"/> kann nicht mehr als ein Außerkraftsetzen (&lt;eventRef;&gt; mit @type='<sch:value-of select="$type-literal-ereignisreferenz-repeal"/>') enthalten, da das Rechtsetzungsartefakt dadurch in Gänze aufgehoben wird.</sch:assert>
@@ -1301,22 +1388,24 @@
       </sch:rule>
    </sch:pattern>
    <sch:pattern xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-      <sch:rule id="SCH-00650"
-                context="akn:meta/akn:lifecycle[$fassung = $fassung-entwurfsfassung]">
+      <sch:rule id="SCH-00650" context="akn:meta/akn:lifecycle[$ist-entwurfsfassung]">
          <sch:assert id="SCH-00650-000"
-                     test="if ($teildokument-uri = ($art-regelungstext-uri, $art-vereinbarung-uri, $art-bekanntmachungstext-uri)) then (akn:eventRef[@type = $type-literal-ereignisreferenz-generation and @refersTo = $refersto-literal-ereignisreferenz-entwurfsfassung-ausfertigung-mit-unbekanntem-datum] and (akn:eventRef[@type = $type-literal-ereignisreferenz-generation and @refersTo = $refersto-literal-ereignisreferenz-entwurfsfassung-inkrafttreten-mit-unbekanntem-datum] or akn:eventRef[@type = $type-literal-ereignisreferenz-generation and @refersTo = $refersto-literal-ereignisreferenz-entwurfsfassung-inkrafttreten])) else true()">
-            <sch:value-of select="$dokumentarten-mit-lebenszyklus-angaben-formulierung-satzanfang-nominativ"/> in der Entwurfsfassung muss immer mindestens zwei Ereignisse auszeichnen: Erstens einen Platzhalter für das Ausfertigungsdatum; dieser wird angegeben mittels &lt;eventRef&gt; mit @type='<sch:value-of select="$type-literal-ereignisreferenz-generation"/>' und @refersTo='<sch:value-of select="$refersto-literal-ereignisreferenz-entwurfsfassung-ausfertigung-mit-unbekanntem-datum"/>'. Und zweitens eine Angabe zum Inkrafttreten mittels &lt;eventRef&gt; mit @type='<sch:value-of select="$type-literal-ereignisreferenz-generation"/> und @refersTo='<sch:value-of select="$refersto-literal-ereignisreferenz-entwurfsfassung-inkrafttreten-mit-unbekanntem-datum"/>' bzw., sofern das Datum bereits bekannt ist, @refersTo='<sch:value-of select="$refersto-literal-ereignisreferenz-entwurfsfassung-inkrafttreten"/>'.</sch:assert>
+                     test="if ($teildokument-uri = ($art-regelungstext-uri, $art-vereinbarung-uri, $art-bekanntmachungstext-uri)) then (akn:eventRef[@type = $type-literal-ereignisreferenz-generation and @refersTo = $refersto-literal-ereignisreferenz-entwurfsfassung-ausfertigung-mit-unbekanntem-datum] and akn:eventRef[@type = $type-literal-ereignisreferenz-generation and @refersTo = $refersto-literal-ereignisreferenz-entwurfsfassung-verkuendung-mit-unbekanntem-datum] and (akn:eventRef[@type = $type-literal-ereignisreferenz-generation and @refersTo = $refersto-literal-ereignisreferenz-entwurfsfassung-inkrafttreten-mit-unbekanntem-datum] or akn:eventRef[@type = $type-literal-ereignisreferenz-generation and @refersTo = $refersto-literal-ereignisreferenz-entwurfsfassung-inkrafttreten])) else true()">
+            <sch:value-of select="$dokumentarten-mit-lebenszyklus-angaben-formulierung-satzanfang-nominativ"/> in der Entwurfsfassung muss immer mindestens drei Ereignisse auszeichnen: Erstens einen Platzhalter für das Ausfertigungsdatum; dieser wird angegeben mittels &lt;eventRef&gt; mit @type='<sch:value-of select="$type-literal-ereignisreferenz-generation"/>' und @refersTo='<sch:value-of select="$refersto-literal-ereignisreferenz-entwurfsfassung-ausfertigung-mit-unbekanntem-datum"/>'. Zweitens einen Platzhalter für das Verkündungsdatum; dieser wird angegeben mittels &lt;eventRef&gt; mit @type='<sch:value-of select="$type-literal-ereignisreferenz-generation"/>' und @refersTo='<sch:value-of select="$refersto-literal-ereignisreferenz-entwurfsfassung-verkuendung-mit-unbekanntem-datum"/>'. Und drittens eine Angabe zum Inkrafttreten mittels &lt;eventRef&gt; mit @type='<sch:value-of select="$type-literal-ereignisreferenz-generation"/> und @refersTo='<sch:value-of select="$refersto-literal-ereignisreferenz-entwurfsfassung-inkrafttreten-mit-unbekanntem-datum"/>' bzw., sofern das Datum bereits bekannt ist, @refersTo='<sch:value-of select="$refersto-literal-ereignisreferenz-entwurfsfassung-inkrafttreten"/>'.</sch:assert>
          <sch:assert id="SCH-00650-005"
-                     test="if ($fassung = $fassung-entwurfsfassung) then (akn:eventRef[@type = ($type-literal-ereignisreferenz-generation, $type-literal-ereignisreferenz-repeal)]) else ()">
+                     test="if ($ist-entwurfsfassung) then (akn:eventRef[@type = ($type-literal-ereignisreferenz-generation, $type-literal-ereignisreferenz-repeal)]) else ()">
             <sch:value-of select="$dokumentarten-mit-lebenszyklus-angaben-formulierung-satzanfang-nominativ"/> in der Entwurfsfassung kann nur initiale Ereignisse (Inkrafttreten, Ausfertigung, teilweises Außerkrafttreten, d.h. @type = '<sch:value-of select="$type-literal-ereignisreferenz-generation"/>') oder ein finales Außerkrafttreten (d.h. @type = '<sch:value-of select="$type-literal-ereignisreferenz-repeal"/>') aufweisen.</sch:assert>
          <sch:assert id="SCH-00650-010"
                      test="if ($teildokument-uri = ($art-regelungstext-uri, $art-vereinbarung-uri, $art-bekanntmachungstext-uri)) then (count(akn:eventRef[@type = $type-literal-ereignisreferenz-generation and @refersTo = $refersto-literal-ereignisreferenz-entwurfsfassung-ausfertigung-mit-unbekanntem-datum]) = 1) else true()">
             <sch:value-of select="$dokumentarten-mit-lebenszyklus-angaben-formulierung-satzanfang-nominativ"/> in der Entwurfsfassung muss genau einen Platzhalter für das noch unbekannte Datum der Ausfertigung enthalten (&lt;eventRef&gt; mit @type = '<sch:value-of select="$type-literal-ereignisreferenz-generation"/>' und @refersTo = '<sch:value-of select="$refersto-literal-ereignisreferenz-entwurfsfassung-ausfertigung-mit-unbekanntem-datum"/>').</sch:assert>
+         <sch:assert id="SCH-00650-015"
+                     test="if ($teildokument-uri = ($art-regelungstext-uri)) then (count(akn:eventRef[@type = $type-literal-ereignisreferenz-generation and @refersTo = $refersto-literal-ereignisreferenz-entwurfsfassung-verkuendung-mit-unbekanntem-datum]) = 1) else true()">
+            <sch:value-of select="$dokumentarten-mit-lebenszyklus-angaben-formulierung-satzanfang-nominativ"/> in der Entwurfsfassung muss genau einen Platzhalter für das noch unbekannte Datum der Verkündung enthalten (&lt;eventRef&gt; mit @type = '<sch:value-of select="$type-literal-ereignisreferenz-generation"/>' und @refersTo = '<sch:value-of select="$refersto-literal-ereignisreferenz-entwurfsfassung-verkuendung-mit-unbekanntem-datum"/>').</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
       <sch:rule id="SCH-00660"
-                context="akn:meta/akn:lifecycle[$fassung = ($fassung-verkündungsfassung, $fassung-neufassung)] (: Verkündungfassung oder Neufassung :)">
+                context="akn:meta/akn:lifecycle[$ist-verkündungsfassung or $ist-konsolidierte-fassung]">
          <sch:assert id="SCH-00660-000"
                      test="akn:eventRef[@type = $type-literal-ereignisreferenz-generation and @refersTo = $refersto-literal-ereignisreferenz-verkündungsfassung-ausfertigung] and ( akn:eventRef[@type = $type-literal-ereignisreferenz-generation and @refersTo = $refersto-literal-ereignisreferenz-verkündungsfassung-inkrafttreten] or akn:eventRef[@type = $type-literal-ereignisreferenz-generation and @refersTo = $refersto-literal-ereignisreferenz-verkündungsfassung-inkrafttreten-grundsaetzlich] or akn:eventRef[@type = $type-literal-ereignisreferenz-generation and @refersTo = $refersto-literal-ereignisreferenz-verkündungsfassung-inkrafttreten-abweichend] or akn:eventRef[@type = $type-literal-ereignisreferenz-generation and @refersTo = $refersto-literal-ereignisreferenz-verkündungsfassung-inkrafttreten-mit-unbekanntem-datum] )">
             <sch:value-of select="$dokumentarten-mit-lebenszyklus-angaben-formulierung-satzanfang-nominativ"/> in der Verkündungsfassung muss immer mindestens zwei Ereignisse auszeichnen: Erstens das Ausfertigungsdatum; dieses wird angegeben mittels &lt;eventRef&gt; mit @type='<sch:value-of select="$type-literal-ereignisreferenz-generation"/>' und @refersTo='<sch:value-of select="$refersto-literal-ereignisreferenz-verkündungsfassung-ausfertigung"/>'. Und zweitens eine Angabe zum Inkrafttreten mittels &lt;eventRef&gt; mit @type='<sch:value-of select="$type-literal-ereignisreferenz-generation"/> und @refersTo='<sch:value-of select="$refersto-literal-ereignisreferenz-verkündungsfassung-inkrafttreten"/>' bzw. bei grundsätzlichem oder abweichendem Inkrafttreten @refersTo='<sch:value-of select="$refersto-literal-ereignisreferenz-verkündungsfassung-inkrafttreten-grundsaetzlich"/>' oder @refersTo='<sch:value-of select="$refersto-literal-ereignisreferenz-verkündungsfassung-inkrafttreten-abweichend"/>'. Oder sofern das Datum noch unbekannt ist, @refersTo='<sch:value-of select="$refersto-literal-ereignisreferenz-verkündungsfassung-inkrafttreten-mit-unbekanntem-datum"/>'.</sch:assert>
@@ -1345,25 +1434,41 @@
    </sch:pattern>
    <sch:pattern xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
       <sch:rule id="SCH-00665"
-                context="akn:meta/akn:lifecycle/akn:eventRef [$fassung = ($fassung-verkündungsfassung, $fassung-neufassung) and @type = $type-literal-ereignisreferenz-generation ]">
+                context="akn:meta/akn:lifecycle/akn:eventRef [($ist-verkündungsfassung or $ist-konsolidierte-fassung) and @type = $type-literal-ereignisreferenz-generation ]">
          <sch:assert id="SCH-00665-025"
                      test="if (@refersTo = $refersto-literal-ereignisreferenz-verkündungsfassung-inkrafttreten-grundsaetzlich) then not( preceding-sibling::akn:eventRef[@type = $type-literal-ereignisreferenz-generation and @refersTo = $refersto-literal-ereignisreferenz-verkündungsfassung-inkrafttreten-abweichend]/@date eq current()/@date or following-sibling::akn:eventRef[@type = $type-literal-ereignisreferenz-generation and @refersTo = $refersto-literal-ereignisreferenz-verkündungsfassung-inkrafttreten-abweichend]/@date eq current()/@date ) else if (@refersTo = $refersto-literal-ereignisreferenz-verkündungsfassung-inkrafttreten-abweichend) then not( preceding-sibling::akn:eventRef[@type = $type-literal-ereignisreferenz-generation and @refersTo = $refersto-literal-ereignisreferenz-verkündungsfassung-inkrafttreten-grundsaetzlich]/@date eq current()/@date or following-sibling::akn:eventRef[@type = $type-literal-ereignisreferenz-generation and @refersTo = $refersto-literal-ereignisreferenz-verkündungsfassung-inkrafttreten-grundsaetzlich]/@date eq current()/@date ) else true()">Das grundsätzliche und das abweichende Inkrafttretensdatum dürfen nicht identisch sein.</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-      <sch:rule id="SCH-00670"
-                context="akn:meta/akn:lifecycle[$fassung = $fassung-neufassung and $teildokument-uri = $art-regelungstext-uri] (: nur Neufassung :)">
-         <sch:assert id="SCH-00670-000"
-                     test="count(akn:eventRef[@type = $type-literal-ereignisreferenz-generation and @refersTo = $refersto-literal-ereignisreferenz-neufassung]) ge 1">Ein Regelungstext als Neufassung muss mindestens ein Neufassungsereignis enthalten (&lt;eventRef&gt; mit @type = '<sch:value-of select="$type-literal-ereignisreferenz-generation"/>' und @refersTo = '<sch:value-of select="$refersto-literal-ereignisreferenz-neufassung"/>'.).</sch:assert>
-         <sch:let name="frühestes-datum-neufassung-als-reine-ziffern"
-                  value="min(for $n in akn:eventRef[@type = $type-literal-ereignisreferenz-generation and @refersTo = 'neufassung']/@date return format-date($n, '[Y,4][M,2][D,2]'))"/>
-         <sch:let name="früheste-neufassung"
-                  value="if (not(empty($frühestes-datum-neufassung-als-reine-ziffern))) then (xs:date(concat( substring($frühestes-datum-neufassung-als-reine-ziffern, 1, 4), '-', substring($frühestes-datum-neufassung-als-reine-ziffern, 5, 2), '-', substring($frühestes-datum-neufassung-als-reine-ziffern, 7, 2)))) else '0001-01-01'"/>
-         <sch:let name="ausfertigung"
-                  value="akn:eventRef[@type = $type-literal-ereignisreferenz-generation and @refersTo = $refersto-literal-ereignisreferenz-verkündungsfassung-ausfertigung]/@date"/>
-         <sch:assert id="SCH-00670-005"
-                     test="xs:date($früheste-neufassung) gt xs:date($ausfertigung)">Das Datum der frühesten Neufassung (&lt;eventRef&gt; mit @type='<sch:value-of select="$type-literal-ereignisreferenz-generation"/>' und @refersTo='<sch:value-of select="$refersto-literal-ereignisreferenz-neufassung"/>') muss nach dem initialen Ausfertigungsdatum (&lt;eventRef&gt; mit @type='<sch:value-of select="$type-literal-ereignisreferenz-generation"/>' und @refersTo='<sch:value-of select="$refersto-literal-ereignisreferenz-verkündungsfassung-ausfertigung"/>') liegen; angegeben wurden jedoch als Ausfertigungsdatum '<sch:value-of select="$ausfertigung"/>' und als Datum der Neufassung '<sch:value-of select="$früheste-neufassung"/>'.</sch:assert>
+      <sch:rule id="SCH-00667"
+                context="akn:meta/akn:lifecycle[$ist-verkündungsfassung and $teildokument-uri = $art-regelungstext-uri]">
+         <sch:assert id="SCH-00667-000"
+                     role="error"
+                     test="count(akn:eventRef[@refersTo = $refersto-literal-ereignisreferenz-verkuendung]) = 1">In der Verkündungsfassung eines Regelungstextes muss genau ein &lt;eventRef&gt; mit @refersTo="<sch:value-of select="$refersto-literal-ereignisreferenz-verkuendung"/>" vorhanden sein. </sch:assert>
       </sch:rule>
+   </sch:pattern>
+   <sch:pattern xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+      <!-- TODO: Klären, wie es mit Neufassungen weitergehen soll. -->
+      <!--      <sch:rule id="SCH-00670" context="akn:meta/akn:lifecycle[$fassung = $fassung-neufassung and $teildokument-uri = $art-regelungstext-uri] (: nur Neufassung :)">
+         <sch:assert id="SCH-00670-000" test="count(akn:eventRef[@type = $type-literal-ereignisreferenz-generation and @refersTo = $refersto-literal-ereignisreferenz-neufassung]) ge 1">Ein Regelungstext als Neufassung muss mindestens ein Neufassungsereignis enthalten (&lt;eventRef&gt; mit @type = '<sch:value-of select="$type-literal-ereignisreferenz-generation"/>' und @refersTo = '<sch:value-of select="$refersto-literal-ereignisreferenz-neufassung"/>'.).</sch:assert>
+
+         <sch:let name="frühestes-datum-neufassung-als-reine-ziffern" value="
+               min(for $n in akn:eventRef[@type = $type-literal-ereignisreferenz-generation and @refersTo = '{ldml.de:refersToLiterals.ereignisReferenz => neufassung}']/@date
+               return
+                  format-date($n, '[Y,4][M,2][D,2]'))"/>
+         <sch:let name="früheste-neufassung" value="
+               if (not(empty($frühestes-datum-neufassung-als-reine-ziffern))) then
+                  (xs:date(concat(
+                  substring($frühestes-datum-neufassung-als-reine-ziffern, 1, 4), '-',
+                  substring($frühestes-datum-neufassung-als-reine-ziffern, 5, 2), '-',
+                  substring($frühestes-datum-neufassung-als-reine-ziffern, 7, 2))))
+               else
+                  '0001-01-01'"/>
+
+         <sch:let name="ausfertigung" value="akn:eventRef[@type = $type-literal-ereignisreferenz-generation and @refersTo = $refersto-literal-ereignisreferenz-verkündungsfassung-ausfertigung]/@date"/>
+         <sch:assert id="SCH-00670-005" test="xs:date($früheste-neufassung) gt xs:date($ausfertigung)">Das Datum der frühesten Neufassung (&lt;eventRef&gt; mit @type='<sch:value-of select="$type-literal-ereignisreferenz-generation"/>' und @refersTo='<sch:value-of select="$refersto-literal-ereignisreferenz-neufassung"/>') muss nach dem initialen Ausfertigungsdatum (&lt;eventRef&gt; mit @type='<sch:value-of select="$type-literal-ereignisreferenz-generation"/>' und @refersTo='<sch:value-of select="$refersto-literal-ereignisreferenz-verkündungsfassung-ausfertigung"/>') liegen; angegeben wurden jedoch als Ausfertigungsdatum '<sch:value-of select="$ausfertigung"/>' und als Datum der Neufassung '<sch:value-of select="$früheste-neufassung"/>'.</sch:assert>
+      </sch:rule>
+-->
    </sch:pattern>
    <!-- Regeln zu Kardinalitäten von Inline-Elementen -->
    <sch:pattern xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -1379,6 +1484,44 @@
       <sch:rule id="SCH-00730" context="akn:session" subject="@refersTo">
          <sch:assert id="SCH-00730-000"
                      test="starts-with(@refersTo, '#') and substring(@refersTo, 2) = //akn:organization/@eId">Es muss einen lokalen Verweis auf eine Organisation geben, deren Sitzung ausgezeichnet wird. Dieser besteht aus einer Raute (#), gefolgt von der @eId der betreffenden akn:organization.</sch:assert>
+      </sch:rule>
+   </sch:pattern>
+   <!-- TLC-Verweise-->
+   <sch:title xmlns:xsl="http://www.w3.org/1999/XSL/Transform">Verweise auf TLC-Klassen</sch:title>
+   <sch:pattern xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+      <sch:rule id="SCH-00740" context="akn:person">
+         <sch:let name="referenzierte-eId" value="substring-after(@refersTo, '#')"/>
+         <sch:assert id="SCH-00740-000"
+                     test="if (@refersTo) then (count(ancestor::akn:akomaNtoso/*/akn:meta/akn:references/akn:TLCPerson[@eId = $referenzierte-eId]) = 1) else true()"
+                     subject="@refersTo">In den Metadaten existiert kein korrespondierender Personenverweis mit der @eId="<sch:value-of select="$referenzierte-eId"/>".</sch:assert>
+         <sch:report id="SCH-00740-005"
+                     test="not(@refersTo) and ($ist-entwurfsfassung or $ist-verkündungsfassung)"
+                     role="warn">Aus Kompatibilitätsgründen ist es zulässig, eine Person ohne Referenz auf eine TLCPerson anzugeben; dies sollte jedoch nur in begründeten Ausnahmefällen geschehen.</sch:report>
+      </sch:rule>
+      <sch:rule id="SCH-00750" context="akn:role">
+         <sch:let name="referenzierte-eId" value="substring-after(@refersTo, '#')"/>
+         <sch:assert id="SCH-00750-000"
+                     test="if (@refersTo) then (count(ancestor::akn:akomaNtoso/*/akn:meta/akn:references/akn:TLCRole[@eId = $referenzierte-eId]) = 1) else true()"
+                     subject="@refersTo">In den Metadaten existiert kein korrespondierender Funktionsbezeichnungsverweis mit der @eId="<sch:value-of select="$referenzierte-eId"/>".</sch:assert>
+         <sch:report id="SCH-00750-005"
+                     test="not(@refersTo) and ($ist-entwurfsfassung or $ist-verkündungsfassung)"
+                     role="warn">Aus Kompatibilitätsgründen ist es zulässig, eine Funktionsbezeichnung ohne Referenz auf eine TLCRole anzugeben; dies sollte jedoch nur in begründeten Ausnahmefällen geschehen.</sch:report>
+      </sch:rule>
+      <sch:rule id="SCH-00760" context="akn:organization">
+         <sch:let name="referenzierte-eId" value="substring-after(@refersTo, '#')"/>
+         <sch:assert id="SCH-00760-000"
+                     test="if (@refersTo) then (count(ancestor::akn:akomaNtoso/*/akn:meta/akn:references/akn:TLCOrganization[@eId = $referenzierte-eId]) = 1) else true()"
+                     subject="@refersTo">In den Metadaten existiert kein korrespondierender Organisationsverweis mit der @eId="<sch:value-of select="$referenzierte-eId"/>".</sch:assert>
+         <sch:report id="SCH-00760-005"
+                     test="not(@refersTo) and ($ist-entwurfsfassung or $ist-verkündungsfassung)"
+                     role="warn">Aus Kompatibilitätsgründen ist es zulässig, eine Organisation ohne Referenz auf eine TLCPerson anzugeben; dies sollte jedoch nur in begründeten Ausnahmefällen geschehen.</sch:report>
+         <sch:assert id="SCH-00760-010"
+                     test="if (not(@refersTo)) then (@title) else if (not(@title)) then (@refersTo) else true()">Eine akn:organization muss mindestens entweder eine Angabe @refersTo oder einen @title besitzen (oder beides).</sch:assert>
+      </sch:rule>
+      <sch:rule id="SCH-00770" context="akn:references">
+         <sch:let name="referenzierte-eId" value="substring-after(@source, '#')"/>
+         <sch:assert id="SCH-00770-000"
+                     test="count(ancestor::akn:akomaNtoso/*/akn:meta/akn:references/(akn:TLCOrganization, akn:TLCPerson)[@eId = $referenzierte-eId]) = 1">In den Metadaten existiert kein korrespondierender Akteur (Person, Organisation) mit der @eId="<sch:value-of select="$referenzierte-eId"/>".</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:title xmlns:xsl="http://www.w3.org/1999/XSL/Transform">Verwendung von Markern</sch:title>
@@ -1407,7 +1550,7 @@
          <sch:let name="teildokument-id"
                   value="tokenize(/akn:akomaNtoso/akn:*/@name, '/')[last()]"/>
          <sch:assert id="SCH-00820-000"
-                     test="matches(@value, concat($teildokument-id, '-\d+'))">Die Teildokumentbezeichnung muss der ontologischen Teildokument-ID entsprechen; erwwartet wird hier konkret "<sch:value-of select="concat($teildokument-id, '-', tokenize(@value, '-')[last()])"/>".</sch:assert>
+                     test="matches(@value, concat($teildokument-id, '-\d+'))">Die Teildokumentbezeichnung muss der ontologischen Teildokument-ID entsprechen; erwartet wird hier konkret "<sch:value-of select="concat($teildokument-id, '-', tokenize(@value, '-')[last()])"/>".</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:title xmlns:xsl="http://www.w3.org/1999/XSL/Transform">Regeln zu Beschlussempfehlungen</sch:title>
@@ -1457,8 +1600,69 @@
          <sch:assert role="warn" id="SCH-00933-000" test="exists(akn:signature)">Im Schlussteil soll nach den akn:p mit Ort und Datum und ggf. akn:p mit der Organisation eine Signatur(akn:signature) angegeben werden.</sch:assert>
       </sch:rule>
    </sch:pattern>
+   <sch:title xmlns:xsl="http://www.w3.org/1999/XSL/Transform">Regeln zu einzelnen Metadaten</sch:title>
+   <sch:pattern xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+      <sch:rule id="SCH-00940"
+                context="/akn:akomaNtoso/*/akn:meta/akn:proprietary/sonst:legalDocML.de_metadaten">
+         <sch:assert id="SCH-00940-000"
+                     test="if (sonst:typ = 'berichtigung') then (exists(sonst:bezugstyp)) else true()"
+                     role="error"
+                     subject="sonst:typ">Wenn im Metadatenschema "Sonstiger Veröffentlichungstext" der Typ "Berichtigung" angegeben wird, muss zwingend auch ein Bezugstyp genannt werden.</sch:assert>
+         <sch:assert id="SCH-00940-005"
+                     test="if (not(sonst:typ = 'berichtigung')) then (not(exists(sonst:bezugstyp))) else true()"
+                     role="error"
+                     subject="sonst:bezugstyp">Ein Bezugstyp zu einem Typ darf nur angegeben werden, wenn jener Typ "Berichtigung" lautet.</sch:assert>
+      </sch:rule>
+   </sch:pattern>
+   <sch:pattern xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+      <sch:rule id="SCH-00941"
+                context="/akn:akomaNtoso/*/akn:meta/akn:proprietary/regtxt:legalDocML.de_metadaten">
+         <sch:assert id="SCH-00941-000"
+                     test="if (regtxt:typ = 'berichtigung') then (exists(regtxt:bezugstyp)) else true()"
+                     role="error"
+                     subject="regtxt:typ">Wenn im Metadatenschema "Regelungstext" der Typ "Berichtigung" angegeben wird, muss zwingend auch ein Bezugstyp genannt werden.</sch:assert>
+         <sch:assert id="SCH-00941-005"
+                     test="if (not(regtxt:typ = 'berichtigung')) then (not(exists(regtxt:bezugstyp))) else true()"
+                     role="error"
+                     subject="regtxt:bezugstyp">Ein Bezugstyp zu einem Typ darf nur angegeben werden, wenn jener Typ "Berichtigung" lautet.</sch:assert>
+      </sch:rule>
+   </sch:pattern>
+   <sch:title xmlns:xsl="http://www.w3.org/1999/XSL/Transform">Regeln zu URI-Verweisen</sch:title>
+   <sch:pattern xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+      <sch:rule id="SCH-01010" context="@href | @src | @from | @upTo">
+         <sch:let name="teil-ohne-fragment"
+                  value="if (contains(., '#')) then tokenize(., '#')[1] else ."/>
+         <sch:assert id="SCH-01010-005"
+                     test="parent::akn:FRBRauthor or $teil-ohne-fragment = '' or matches($teil-ohne-fragment, '^([a-zöäüßA-ZÄÖÜẞ]+-)+\d+\.[a-zA-Z]+$') or starts-with($teil-ohne-fragment, 'http://') or starts-with($teil-ohne-fragment, 'https://') or starts-with($teil-ohne-fragment, '/eli')">URI-Verweise müssen eine der drei folgenden Formen haben: 1) vollständige http/https-URI, 2) nur absoluter Pfad-Teil (beginnend mit '/eli', d. h. innerhalb derselben Authority wie das aktuelle Dokument) oder 3) nur Dateiname und ggf. Fragment (d. h. innerhalb der selben Expression).</sch:assert>
+      </sch:rule>
+   </sch:pattern>
+   <!-- Pflicht: expression.FRBRdate in Entwurfs- und konsolidierter Fassung -->
+   <sch:pattern xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+      <sch:title>expression.FRBRdate in Entwurfs- und konsolidierter Fassung</sch:title>
+      <sch:rule id="SCH-01015"
+                context="/akn:akomaNtoso/*/akn:meta/akn:identification[$ist-entwurfsfassung or $ist-konsolidierte-fassung]">
+         <sch:assert id="SCH-01015-000"
+                     role="error"
+                     test="exists(akn:FRBRExpression/akn:FRBRdate)">
+            In Entwurfs- und konsolidierten Fassungen MUSS innerhalb von &lt;FRBRExpression&gt; ein &lt;FRBRdate&gt; vorhanden sein.
+         </sch:assert>
+      </sch:rule>
+   </sch:pattern>
+   <!-- Verbot: expression.FRBRdate in Verkündungsfassung -->
+   <sch:pattern xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+      <sch:title>Kein expression.FRBRdate in der Verkündungsfassung</sch:title>
+      <sch:rule id="SCH-01016"
+                context="/akn:akomaNtoso/*/akn:meta/akn:identification[$ist-verkündungsfassung]">
+         <sch:assert id="SCH-01016-000"
+                     role="error"
+                     test="not(akn:FRBRExpression/akn:FRBRdate)">
+            In der Verkündungsfassung darf innerhalb von &lt;FRBRExpression&gt; KEIN &lt;FRBRdate&gt; vorkommen.
+         </sch:assert>
+      </sch:rule>
+   </sch:pattern>
    <!-- Einschränkungen für Attributtypen, deren Facetten nur in Verkündungsfassungen bzw. Entwurfsfassungen Gültigkeit besitzen -->
    <sch:title>Zulässigkeit von Literalen / Mustern je Attribut an FRBR-Typen, abhängig von der Fassung (Entwurf vs. Verkündung)</sch:title>
    <sch:include href="legalDocML.de-frbr-metadaten-facetten-entwurfsfassung.sch"/>
+   <sch:include href="legalDocML.de-frbr-metadaten-facetten-konsolidierte-fassung.sch"/>
    <sch:include href="legalDocML.de-frbr-metadaten-facetten-verkündungsfassung.sch"/>
 </sch:schema>

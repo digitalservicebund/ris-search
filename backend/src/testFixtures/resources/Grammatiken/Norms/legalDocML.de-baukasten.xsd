@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns="http://Inhaltsdaten.LegalDocML.de/1.8.2/"
+<xs:schema xmlns="http://Inhaltsdaten.LegalDocML.de/1.9/"
            xmlns:xs="http://www.w3.org/2001/XMLSchema"
-           targetNamespace="http://Inhaltsdaten.LegalDocML.de/1.8.2/"
+           targetNamespace="http://Inhaltsdaten.LegalDocML.de/1.9/"
            elementFormDefault="qualified"
-           version="LegalDocML.de 1.8.2 (07.08.2025)">
+           version="LegalDocML.de 1.9 (03.11.2025)">
 <!-- ********************************* Hinweis zur Lizensierung ********************************* -->
    <xs:annotation>
       <xs:appinfo>
@@ -374,7 +374,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "EUVerweise" (AKN-Typ "tblock") lautet in LegalDocML.de "inhaltabschnitt".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(inhaltabschnitt)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(inhaltabschnitt)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.a">
@@ -382,7 +382,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "a" (AKN-Typ "a") lautet in LegalDocML.de "a".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(a)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(a)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.abbr">
@@ -390,7 +390,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "abbr" (AKN-Typ "abbr") lautet in LegalDocML.de "abbr".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(abbr)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(abbr)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.aenderungNeu">
@@ -398,7 +398,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "aenderungNeu" (AKN-Typ "new") lautet in LegalDocML.de "new".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(new)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(new)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.aenderungUrsprung">
@@ -406,7 +406,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "aenderungUrsprung" (AKN-Typ "source") lautet in LegalDocML.de "source".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(source)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(source)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.aenderungZielelement">
@@ -414,7 +414,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "aenderungZielelement" (AKN-Typ "destination") lautet in LegalDocML.de "destination".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(destination)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(destination)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.aenderungZitatStruktur">
@@ -422,7 +422,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "aenderungZitatStruktur" (AKN-Typ "quotedStructure") lautet in LegalDocML.de "quotstruct".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(quotstruct)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(quotstruct)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.aenderungZitatText">
@@ -430,7 +430,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "aenderungZitatText" (AKN-Typ "quotedText") lautet in LegalDocML.de "quottext".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(quottext)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(quottext)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.aenderungenAktiv">
@@ -438,7 +438,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "aenderungenAktiv" (AKN-Typ "activeModifications") lautet in LegalDocML.de "activemod".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(activemod)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(activemod)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.aenderungenPassiv">
@@ -446,7 +446,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "aenderungenPassiv" (AKN-Typ "passiveModifications") lautet in LegalDocML.de "pasmod".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(pasmod)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(pasmod)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.aenderungsantragDokumentenkopf">
@@ -454,7 +454,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "aenderungsantragDokumentenkopf" (AKN-Typ "preface") lautet in LegalDocML.de "einleitung".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(einleitung)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(einleitung)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.aenderungsantragDokumentenkopfTitel">
@@ -462,15 +462,15 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "aenderungsantragDokumentenkopfTitel" (AKN-Typ "longTitle") lautet in LegalDocML.de "doktitel".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(doktitel)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(doktitel)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.aenderungsantragEingangsformel">
       <xs:annotation>
-         <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "aenderungsantragEingangsformel" (AKN-Typ "preamble") lautet in LegalDocML.de "präambel".</xs:documentation>
+         <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "aenderungsantragEingangsformel" (AKN-Typ "preamble") lautet in LegalDocML.de "praeambel".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(präambel)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(praeambel)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.aenderungsantragHauptteil">
@@ -478,7 +478,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "aenderungsantragHauptteil" (AKN-Typ "mainBody") lautet in LegalDocML.de "hauptteil".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(hauptteil)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(hauptteil)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.aenderungsantragSchluss">
@@ -486,15 +486,15 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "aenderungsantragSchluss" (AKN-Typ "conclusions") lautet in LegalDocML.de "schluss".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(schluss)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(schluss)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.aenderungsbefehl">
       <xs:annotation>
-         <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "aenderungsbefehl" (AKN-Typ "mod") lautet in LegalDocML.de "ändbefehl".</xs:documentation>
+         <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "aenderungsbefehl" (AKN-Typ "mod") lautet in LegalDocML.de "aendbefehl".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(ändbefehl)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(aendbefehl)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.amtlicheFussnote">
@@ -502,7 +502,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "amtlicheFussnote" (AKN-Typ "authorialNote") lautet in LegalDocML.de "amtlfnote".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(amtlfnote)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(amtlfnote)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.anlagencontainer">
@@ -510,7 +510,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "anlagencontainer" (AKN-Typ "attachments") lautet in LegalDocML.de "anlagen".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(anlagen)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(anlagen)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.anlagenelement">
@@ -518,7 +518,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "anlagenelement" (AKN-Typ "attachment") lautet in LegalDocML.de "anlage".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(anlage)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(anlage)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.anlagenverweis">
@@ -526,7 +526,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "anlagenverweis" (AKN-Typ "documentRef") lautet in LegalDocML.de "verweis".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(verweis)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(verweis)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.anschreibenDokumentenkopf">
@@ -534,7 +534,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "anschreibenDokumentenkopf" (AKN-Typ "preface") lautet in LegalDocML.de "einleitung".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(einleitung)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(einleitung)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.anschreibenHauptteil">
@@ -542,15 +542,15 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "anschreibenHauptteil" (AKN-Typ "mainBody") lautet in LegalDocML.de "hauptteil".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(hauptteil)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(hauptteil)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.antragEingangsformel">
       <xs:annotation>
-         <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "antragEingangsformel" (AKN-Typ "preamble") lautet in LegalDocML.de "präambel".</xs:documentation>
+         <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "antragEingangsformel" (AKN-Typ "preamble") lautet in LegalDocML.de "praeambel".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(präambel)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(praeambel)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.antragHauptteil">
@@ -558,7 +558,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "antragHauptteil" (AKN-Typ "mainBody") lautet in LegalDocML.de "hauptteil".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(hauptteil)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(hauptteil)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.antragSchluss">
@@ -566,7 +566,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "antragSchluss" (AKN-Typ "conclusions") lautet in LegalDocML.de "schluss".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(schluss)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(schluss)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.artUndZaehlbezeichnung">
@@ -574,7 +574,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "artUndZaehlbezeichnung" (AKN-Typ "num") lautet in LegalDocML.de "bezeichnung".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(bezeichnung)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(bezeichnung)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.b">
@@ -582,7 +582,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "b" (AKN-Typ "b") lautet in LegalDocML.de "fettschrift".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(fettschrift)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(fettschrift)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.begruendungAntragAbschnitt">
@@ -590,7 +590,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "begruendungAntragAbschnitt" (AKN-Typ "hcontainer") lautet in LegalDocML.de "container".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(container)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(container)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.begruendungAntragHauptteil">
@@ -598,7 +598,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "begruendungAntragHauptteil" (AKN-Typ "mainBody") lautet in LegalDocML.de "hauptteil".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(hauptteil)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(hauptteil)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.begruendungHauptteil">
@@ -606,7 +606,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "begruendungHauptteil" (AKN-Typ "mainBody") lautet in LegalDocML.de "hauptteil".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(hauptteil)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(hauptteil)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.begruendungVertRASchlussbemerkung">
@@ -614,7 +614,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "begruendungVertRASchlussbemerkung" (AKN-Typ "conclusions") lautet in LegalDocML.de "schluss".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(schluss)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(schluss)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.begruendungsteil">
@@ -622,7 +622,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "begruendungsteil" (AKN-Typ "hcontainer") lautet in LegalDocML.de "container".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(container)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(container)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.begruendungsteilAbschnitt">
@@ -630,39 +630,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "begruendungsteilAbschnitt" (AKN-Typ "hcontainer") lautet in LegalDocML.de "container".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(container)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
-      </xs:restriction>
-   </xs:simpleType>
-   <xs:simpleType name="eIdLiterals.bekanntmachungDokumentenkopf">
-      <xs:annotation>
-         <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "bekanntmachungDokumentenkopf" (AKN-Typ "preface") lautet in LegalDocML.de "einleitung".</xs:documentation>
-      </xs:annotation>
-      <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(einleitung)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
-      </xs:restriction>
-   </xs:simpleType>
-   <xs:simpleType name="eIdLiterals.bekanntmachungDokumentenkopfContainer">
-      <xs:annotation>
-         <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "bekanntmachungDokumentenkopfContainer" (AKN-Typ "block") lautet in LegalDocML.de "block".</xs:documentation>
-      </xs:annotation>
-      <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(block)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
-      </xs:restriction>
-   </xs:simpleType>
-   <xs:simpleType name="eIdLiterals.bekanntmachungHauptteil">
-      <xs:annotation>
-         <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "bekanntmachungHauptteil" (AKN-Typ "mainBody") lautet in LegalDocML.de "hauptteil".</xs:documentation>
-      </xs:annotation>
-      <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(hauptteil)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
-      </xs:restriction>
-   </xs:simpleType>
-   <xs:simpleType name="eIdLiterals.bekanntmachungSchluss">
-      <xs:annotation>
-         <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "bekanntmachungSchluss" (AKN-Typ "conclusions") lautet in LegalDocML.de "schluss".</xs:documentation>
-      </xs:annotation>
-      <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(schluss)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(container)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.bereichsreferenz">
@@ -670,7 +638,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "bereichsreferenz" (AKN-Typ "rref") lautet in LegalDocML.de "bref".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(bref)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(bref)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.berichtAbschnitt">
@@ -678,7 +646,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "berichtAbschnitt" (AKN-Typ "hcontainer") lautet in LegalDocML.de "container".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(container)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(container)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.berichtHauptteil">
@@ -686,7 +654,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "berichtHauptteil" (AKN-Typ "mainBody") lautet in LegalDocML.de "hauptteil".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(hauptteil)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(hauptteil)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.berichtSchluss">
@@ -694,15 +662,15 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "berichtSchluss" (AKN-Typ "conclusions") lautet in LegalDocML.de "schluss".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(schluss)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(schluss)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.beschlussempfehlungEingangsformel">
       <xs:annotation>
-         <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "beschlussempfehlungEingangsformel" (AKN-Typ "preamble") lautet in LegalDocML.de "präambel".</xs:documentation>
+         <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "beschlussempfehlungEingangsformel" (AKN-Typ "preamble") lautet in LegalDocML.de "praeambel".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(präambel)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(praeambel)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.beschlussempfehlungHauptteil">
@@ -710,7 +678,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "beschlussempfehlungHauptteil" (AKN-Typ "mainBody") lautet in LegalDocML.de "hauptteil".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(hauptteil)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(hauptteil)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.beschlussempfehlungSchlussteil">
@@ -718,7 +686,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "beschlussempfehlungSchlussteil" (AKN-Typ "conclusions") lautet in LegalDocML.de "schluss".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(schluss)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(schluss)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.betroffenesDokument">
@@ -726,7 +694,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "betroffenesDokument" (AKN-Typ "affectedDocument") lautet in LegalDocML.de "bezugsdoc".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(bezugsdoc)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(bezugsdoc)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.bezugsdokument">
@@ -734,7 +702,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "bezugsdokument" (AKN-Typ "relatedDocument") lautet in LegalDocML.de "bezugsdok".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(bezugsdok)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(bezugsdok)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.block">
@@ -742,7 +710,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "block" (AKN-Typ "block") lautet in LegalDocML.de "block".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(block)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(block)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.br">
@@ -750,7 +718,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "br" (AKN-Typ "br") lautet in LegalDocML.de "br".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(br)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(br)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.caption">
@@ -758,7 +726,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "caption" (AKN-Typ "caption") lautet in LegalDocML.de "tblue".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(tblue)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(tblue)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.datum">
@@ -766,7 +734,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "datum" (AKN-Typ "date") lautet in LegalDocML.de "datum".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(datum)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(datum)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.datumContainer">
@@ -774,7 +742,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "datumContainer" (AKN-Typ "block") lautet in LegalDocML.de "block".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(block)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(block)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.denkschriftAbschnitt">
@@ -782,7 +750,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "denkschriftAbschnitt" (AKN-Typ "hcontainer") lautet in LegalDocML.de "container".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(container)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(container)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.denkschriftHauptteil">
@@ -790,7 +758,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "denkschriftHauptteil" (AKN-Typ "mainBody") lautet in LegalDocML.de "hauptteil".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(hauptteil)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(hauptteil)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.denkschriftTeil">
@@ -798,7 +766,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "denkschriftTeil" (AKN-Typ "hcontainer") lautet in LegalDocML.de "container".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(container)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(container)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.dokumentauswertung">
@@ -806,7 +774,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "dokumentauswertung" (AKN-Typ "analysis") lautet in LegalDocML.de "analysis".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(analysis)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(analysis)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.dokumentenStatus">
@@ -814,7 +782,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "dokumentenStatus" (AKN-Typ "docStage") lautet in LegalDocML.de "docstadium".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(docstadium)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(docstadium)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.dokumentenTyp">
@@ -822,7 +790,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "dokumentenTyp" (AKN-Typ "docType") lautet in LegalDocML.de "doctype".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(doctype)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(doctype)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.dokumentenkopf">
@@ -830,7 +798,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "dokumentenkopf" (AKN-Typ "preface") lautet in LegalDocML.de "einleitung".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(einleitung)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(einleitung)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.dokumentenkopfAnschreibenAdresse">
@@ -838,7 +806,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "dokumentenkopfAnschreibenAdresse" (AKN-Typ "tblock") lautet in LegalDocML.de "inhaltabschnitt".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(inhaltabschnitt)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(inhaltabschnitt)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.dokumentenkopfTitel">
@@ -846,7 +814,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "dokumentenkopfTitel" (AKN-Typ "longTitle") lautet in LegalDocML.de "doktitel".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(doktitel)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(doktitel)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.dokumententitel">
@@ -854,7 +822,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "dokumententitel" (AKN-Typ "docTitle") lautet in LegalDocML.de "doctitel".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(doctitel)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(doctitel)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.drucksachennummer">
@@ -862,7 +830,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "drucksachennummer" (AKN-Typ "docNumber") lautet in LegalDocML.de "drucksachennr".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(drucksachennr)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(drucksachennr)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.eingangsformel">
@@ -870,15 +838,15 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "eingangsformel" (AKN-Typ "formula") lautet in LegalDocML.de "formel".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(formel)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(formel)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.eingangsformelUndVerzeichnis">
       <xs:annotation>
-         <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "eingangsformelUndVerzeichnis" (AKN-Typ "preamble") lautet in LegalDocML.de "präambel".</xs:documentation>
+         <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "eingangsformelUndVerzeichnis" (AKN-Typ "preamble") lautet in LegalDocML.de "praeambel".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(präambel)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(praeambel)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.einzelvorschrift">
@@ -886,7 +854,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "einzelvorschrift" (AKN-Typ "article") lautet in LegalDocML.de "art".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(art)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(art)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.elementUntergliederung">
@@ -894,7 +862,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "elementUntergliederung" (AKN-Typ "point") lautet in LegalDocML.de "listenelem".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(listenelem)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(listenelem)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.endeSeite">
@@ -902,7 +870,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "endeSeite" (AKN-Typ "eop") lautet in LegalDocML.de "eop".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(eop)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(eop)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.endeZeile">
@@ -910,15 +878,15 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "endeZeile" (AKN-Typ "eol") lautet in LegalDocML.de "eol".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(eol)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(eol)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.entschließungsantragEingangsformel">
       <xs:annotation>
-         <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "entschließungsantragEingangsformel" (AKN-Typ "preamble") lautet in LegalDocML.de "präambel".</xs:documentation>
+         <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "entschließungsantragEingangsformel" (AKN-Typ "preamble") lautet in LegalDocML.de "praeambel".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(präambel)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(praeambel)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.entschließungsantragHauptteil">
@@ -926,7 +894,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "entschließungsantragHauptteil" (AKN-Typ "mainBody") lautet in LegalDocML.de "hauptteil".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(hauptteil)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(hauptteil)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.entschließungsantragSchluss">
@@ -934,7 +902,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "entschließungsantragSchluss" (AKN-Typ "conclusions") lautet in LegalDocML.de "schluss".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(schluss)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(schluss)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.ereignisReferenz">
@@ -942,7 +910,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "ereignisReferenz" (AKN-Typ "eventRef") lautet in LegalDocML.de "ereignis".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(ereignis)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(ereignis)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.ermaechtigungsnorm">
@@ -950,7 +918,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "ermaechtigungsnorm" (AKN-Typ "citation") lautet in LegalDocML.de "ernorm".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(ernorm)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(ernorm)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.ermaechtigungsnormEingangssatz">
@@ -958,7 +926,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "ermaechtigungsnormEingangssatz" (AKN-Typ "intro") lautet in LegalDocML.de "intro".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(intro)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(intro)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.ermaechtigungsnormSchlusssatz">
@@ -966,7 +934,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "ermaechtigungsnormSchlusssatz" (AKN-Typ "wrapUp") lautet in LegalDocML.de "schlusstext".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(schlusstext)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(schlusstext)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.ermaechtigungsnormen">
@@ -974,7 +942,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "ermaechtigungsnormen" (AKN-Typ "citations") lautet in LegalDocML.de "ernormen".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(ernormen)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(ernormen)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.expression.FRBRalias">
@@ -982,7 +950,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "expression.FRBRalias" (AKN-Typ "FRBRalias") lautet in LegalDocML.de "frbralias".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(frbralias)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(frbralias)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.expression.FRBRauthor">
@@ -990,7 +958,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "expression.FRBRauthor" (AKN-Typ "FRBRauthor") lautet in LegalDocML.de "frbrauthor".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(frbrauthor)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(frbrauthor)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.expression.FRBRdate">
@@ -998,7 +966,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "expression.FRBRdate" (AKN-Typ "FRBRdate") lautet in LegalDocML.de "frbrdate".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(frbrdate)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(frbrdate)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.expression.FRBRlanguage">
@@ -1006,7 +974,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "expression.FRBRlanguage" (AKN-Typ "FRBRlanguage") lautet in LegalDocML.de "frbrlanguage".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(frbrlanguage)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(frbrlanguage)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.expression.FRBRthis">
@@ -1014,7 +982,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "expression.FRBRthis" (AKN-Typ "FRBRthis") lautet in LegalDocML.de "frbrthis".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(frbrthis)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(frbrthis)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.expression.FRBRuri">
@@ -1022,7 +990,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "expression.FRBRuri" (AKN-Typ "FRBRuri") lautet in LegalDocML.de "frbruri".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(frbruri)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(frbruri)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.expression.FRBRversionNumber">
@@ -1030,7 +998,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "expression.FRBRversionNumber" (AKN-Typ "FRBRversionNumber") lautet in LegalDocML.de "frbrversionnumber".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(frbrversionnumber)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(frbrversionnumber)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.expression.identifikation">
@@ -1038,7 +1006,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "expression.identifikation" (AKN-Typ "FRBRExpression") lautet in LegalDocML.de "frbrexpression".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(frbrexpression)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(frbrexpression)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.externesMarkup">
@@ -1046,7 +1014,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "externesMarkup" (AKN-Typ "foreign") lautet in LegalDocML.de "exmarkup".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(exmarkup)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(exmarkup)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.funktionsbezeichnung">
@@ -1054,7 +1022,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "funktionsbezeichnung" (AKN-Typ "role") lautet in LegalDocML.de "fktbez".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(fktbez)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(fktbez)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.geltungszeitGruppe">
@@ -1062,7 +1030,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "geltungszeitGruppe" (AKN-Typ "temporalGroup") lautet in LegalDocML.de "geltungszeitgr".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(geltungszeitgr)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(geltungszeitgr)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.geltungszeitIntervall">
@@ -1070,7 +1038,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "geltungszeitIntervall" (AKN-Typ "timeInterval") lautet in LegalDocML.de "gelzeitintervall".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(gelzeitintervall)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(gelzeitintervall)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.geltungszeitaenderung">
@@ -1078,7 +1046,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "geltungszeitaenderung" (AKN-Typ "forceMod") lautet in LegalDocML.de "gelzeitaend".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(gelzeitaend)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(gelzeitaend)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.geltungszeiten">
@@ -1086,7 +1054,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "geltungszeiten" (AKN-Typ "temporalData") lautet in LegalDocML.de "geltzeiten".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(geltzeiten)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(geltzeiten)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.geltungszeitverweis">
@@ -1094,7 +1062,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "geltungszeitverweis" (AKN-Typ "force") lautet in LegalDocML.de "gelzeitnachw".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(gelzeitnachw)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(gelzeitnachw)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.gliederungAbschnitt">
@@ -1102,7 +1070,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "gliederungAbschnitt" (AKN-Typ "section") lautet in LegalDocML.de "abschnitt".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(abschnitt)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(abschnitt)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.gliederungBuch">
@@ -1110,7 +1078,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "gliederungBuch" (AKN-Typ "book") lautet in LegalDocML.de "buch".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(buch)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(buch)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.gliederungKapitel">
@@ -1118,7 +1086,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "gliederungKapitel" (AKN-Typ "chapter") lautet in LegalDocML.de "kapitel".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(kapitel)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(kapitel)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.gliederungTeil">
@@ -1126,7 +1094,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "gliederungTeil" (AKN-Typ "part") lautet in LegalDocML.de "teil".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(teil)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(teil)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.gliederungTitel">
@@ -1134,7 +1102,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "gliederungTitel" (AKN-Typ "title") lautet in LegalDocML.de "titel".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(titel)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(titel)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.gliederungUnterabschnitt">
@@ -1142,7 +1110,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "gliederungUnterabschnitt" (AKN-Typ "subsection") lautet in LegalDocML.de "uabschnitt".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(uabschnitt)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(uabschnitt)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.gliederungUnterkapitel">
@@ -1150,7 +1118,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "gliederungUnterkapitel" (AKN-Typ "subchapter") lautet in LegalDocML.de "ukapitel".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(ukapitel)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(ukapitel)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.gliederungUntertitel">
@@ -1158,7 +1126,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "gliederungUntertitel" (AKN-Typ "subtitle") lautet in LegalDocML.de "utitel".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(utitel)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(utitel)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.i">
@@ -1166,7 +1134,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "i" (AKN-Typ "i") lautet in LegalDocML.de "kursiv".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(kursiv)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(kursiv)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.identifikation">
@@ -1174,7 +1142,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "identifikation" (AKN-Typ "identification") lautet in LegalDocML.de "ident".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(ident)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(ident)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.img">
@@ -1182,7 +1150,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "img" (AKN-Typ "img") lautet in LegalDocML.de "bild".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(bild)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(bild)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.inhalt">
@@ -1190,7 +1158,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "inhalt" (AKN-Typ "content") lautet in LegalDocML.de "inhalt".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(inhalt)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(inhalt)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.inhaltsabschnitt">
@@ -1198,7 +1166,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "inhaltsabschnitt" (AKN-Typ "tblock") lautet in LegalDocML.de "inhaltabschnitt".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(inhaltabschnitt)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(inhaltabschnitt)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.inhaltsuebersicht">
@@ -1206,7 +1174,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "inhaltsuebersicht" (AKN-Typ "toc") lautet in LegalDocML.de "inhuebs".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(inhuebs)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(inhuebs)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.inhaltsuebersichtEintrag">
@@ -1214,7 +1182,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "inhaltsuebersichtEintrag" (AKN-Typ "tocItem") lautet in LegalDocML.de "eintrag".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(eintrag)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(eintrag)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.initiant">
@@ -1222,7 +1190,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "initiant" (AKN-Typ "docProponent") lautet in LegalDocML.de "docproponent".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(docproponent)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(docproponent)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.inline">
@@ -1230,7 +1198,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "inline" (AKN-Typ "inline") lautet in LegalDocML.de "inline".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(inline)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(inline)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.juristischerAbsatz">
@@ -1238,7 +1206,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "juristischerAbsatz" (AKN-Typ "paragraph") lautet in LegalDocML.de "abs".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(abs)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(abs)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.juristischerAbsatzUntergliederungMantelform">
@@ -1246,15 +1214,15 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "juristischerAbsatzUntergliederungMantelform" (AKN-Typ "list") lautet in LegalDocML.de "untergl".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(untergl)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(untergl)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.kombinierterAenderungsbefehl">
       <xs:annotation>
-         <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "kombinierterAenderungsbefehl" (AKN-Typ "mmod") lautet in LegalDocML.de "kombändbefehl".</xs:documentation>
+         <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "kombinierterAenderungsbefehl" (AKN-Typ "mmod") lautet in LegalDocML.de "kombaendbefehl".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(kombändbefehl)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(kombaendbefehl)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.kurztitel">
@@ -1262,7 +1230,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "kurztitel" (AKN-Typ "shortTitle") lautet in LegalDocML.de "kurztitel".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(kurztitel)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(kurztitel)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.lebenszyklus">
@@ -1270,15 +1238,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "lebenszyklus" (AKN-Typ "lifecycle") lautet in LegalDocML.de "lebzykl".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(lebzykl)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
-      </xs:restriction>
-   </xs:simpleType>
-   <xs:simpleType name="eIdLiterals.li">
-      <xs:annotation>
-         <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "li" (AKN-Typ "li") lautet in LegalDocML.de "listenelem".</xs:documentation>
-      </xs:annotation>
-      <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(listenelem)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(lebzykl)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.liste">
@@ -1286,7 +1246,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "liste" (AKN-Typ "blockList") lautet in LegalDocML.de "liste".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(liste)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(liste)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.listeEingangssatz">
@@ -1294,7 +1254,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "listeEingangssatz" (AKN-Typ "listIntroduction") lautet in LegalDocML.de "listeneing".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(listeneing)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(listeneing)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.listeListenelement">
@@ -1302,7 +1262,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "listeListenelement" (AKN-Typ "item") lautet in LegalDocML.de "listenelem".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(listenelem)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(listenelem)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.listeSchlusssatz">
@@ -1310,7 +1270,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "listeSchlusssatz" (AKN-Typ "listWrapUp") lautet in LegalDocML.de "listenschl".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(listenschl)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(listenschl)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.manifestation.FRBRauthor">
@@ -1318,7 +1278,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "manifestation.FRBRauthor" (AKN-Typ "FRBRauthor") lautet in LegalDocML.de "frbrauthor".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(frbrauthor)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(frbrauthor)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.manifestation.FRBRdate">
@@ -1326,7 +1286,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "manifestation.FRBRdate" (AKN-Typ "FRBRdate") lautet in LegalDocML.de "frbrdate".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(frbrdate)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(frbrdate)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.manifestation.FRBRformat">
@@ -1334,7 +1294,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "manifestation.FRBRformat" (AKN-Typ "FRBRformat") lautet in LegalDocML.de "frbrformat".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(frbrformat)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(frbrformat)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.manifestation.FRBRthis">
@@ -1342,7 +1302,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "manifestation.FRBRthis" (AKN-Typ "FRBRthis") lautet in LegalDocML.de "frbrthis".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(frbrthis)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(frbrthis)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.manifestation.FRBRuri">
@@ -1350,7 +1310,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "manifestation.FRBRuri" (AKN-Typ "FRBRuri") lautet in LegalDocML.de "frbruri".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(frbruri)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(frbruri)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.manifestation.identifikation">
@@ -1358,7 +1318,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "manifestation.identifikation" (AKN-Typ "FRBRManifestation") lautet in LegalDocML.de "frbrmanifestation".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(frbrmanifestation)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(frbrmanifestation)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.marker">
@@ -1366,7 +1326,15 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "marker" (AKN-Typ "marker") lautet in LegalDocML.de "marker".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(marker)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(marker)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="eIdLiterals.mehrfachreferenz">
+      <xs:annotation>
+         <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "mehrfachreferenz" (AKN-Typ "mref") lautet in LegalDocML.de "mref".</xs:documentation>
+      </xs:annotation>
+      <xs:restriction base="xs:string">
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(mref)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.metadatenMinimal">
@@ -1374,7 +1342,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "metadatenMinimal" (AKN-Typ "meta") lautet in LegalDocML.de "meta".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(meta)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(meta)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.metadatenOptionalErweitert">
@@ -1382,7 +1350,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "metadatenOptionalErweitert" (AKN-Typ "meta") lautet in LegalDocML.de "meta".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(meta)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(meta)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.metadatenVollstaendig">
@@ -1390,7 +1358,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "metadatenVollstaendig" (AKN-Typ "meta") lautet in LegalDocML.de "meta".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(meta)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(meta)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.nichtamtlicheFussnote">
@@ -1398,15 +1366,15 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "nichtamtlicheFussnote" (AKN-Typ "note") lautet in LegalDocML.de "editfnote".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(editfnote)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(editfnote)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.offeneStrukturBestandteilVerweis">
       <xs:annotation>
-         <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "offeneStrukturBestandteilVerweis" (AKN-Typ "componentRef") lautet in LegalDocML.de "stfmverweis".</xs:documentation>
+         <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "offeneStrukturBestandteilVerweis" (AKN-Typ "componentRef") lautet in LegalDocML.de "teildokverweis".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(stfmverweis)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(teildokverweis)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.offeneStrukturDokumentenkopf">
@@ -1414,7 +1382,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "offeneStrukturDokumentenkopf" (AKN-Typ "preface") lautet in LegalDocML.de "einleitung".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(einleitung)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(einleitung)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.offeneStrukturHauptteil">
@@ -1422,15 +1390,15 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "offeneStrukturHauptteil" (AKN-Typ "mainBody") lautet in LegalDocML.de "hauptteil".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(hauptteil)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(hauptteil)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.offeneStrukturPräambel">
       <xs:annotation>
-         <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "offeneStrukturPräambel" (AKN-Typ "preamble") lautet in LegalDocML.de "präambel".</xs:documentation>
+         <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "offeneStrukturPräambel" (AKN-Typ "preamble") lautet in LegalDocML.de "praeambel".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(präambel)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(praeambel)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.offeneStrukturSchluss">
@@ -1438,15 +1406,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "offeneStrukturSchluss" (AKN-Typ "conclusions") lautet in LegalDocML.de "schluss".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(schluss)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
-      </xs:restriction>
-   </xs:simpleType>
-   <xs:simpleType name="eIdLiterals.ol">
-      <xs:annotation>
-         <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "ol" (AKN-Typ "ol") lautet in LegalDocML.de "listegeor".</xs:documentation>
-      </xs:annotation>
-      <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(listegeor)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(schluss)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.organisation">
@@ -1454,7 +1414,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "organisation" (AKN-Typ "organization") lautet in LegalDocML.de "org".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(org)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(org)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.ort">
@@ -1462,7 +1422,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "ort" (AKN-Typ "location") lautet in LegalDocML.de "ort".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(ort)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(ort)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.p">
@@ -1470,7 +1430,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "p" (AKN-Typ "p") lautet in LegalDocML.de "text".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(text)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(text)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.personenname">
@@ -1478,23 +1438,23 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "personenname" (AKN-Typ "person") lautet in LegalDocML.de "person".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(person)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(person)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.praeambel">
       <xs:annotation>
-         <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "praeambel" (AKN-Typ "recitals") lautet in LegalDocML.de "präambeln".</xs:documentation>
+         <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "praeambel" (AKN-Typ "recitals") lautet in LegalDocML.de "praeambeln".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(präambeln)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(praeambeln)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.praeambelInhalt">
       <xs:annotation>
-         <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "praeambelInhalt" (AKN-Typ "recital") lautet in LegalDocML.de "präambelinh".</xs:documentation>
+         <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "praeambelInhalt" (AKN-Typ "recital") lautet in LegalDocML.de "praeambelinh".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(präambelinh)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(praeambelinh)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.rechtsetzungsdokumentHauptteil">
@@ -1502,7 +1462,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "rechtsetzungsdokumentHauptteil" (AKN-Typ "collectionBody") lautet in LegalDocML.de "rdokhauptteil".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(rdokhauptteil)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(rdokhauptteil)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.referenz">
@@ -1510,7 +1470,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "referenz" (AKN-Typ "ref") lautet in LegalDocML.de "ref".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(ref)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(ref)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.regelungstextDokumentenkopf">
@@ -1518,7 +1478,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "regelungstextDokumentenkopf" (AKN-Typ "preface") lautet in LegalDocML.de "einleitung".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(einleitung)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(einleitung)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.regelungstextDokumentenkopfContainer">
@@ -1526,7 +1486,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "regelungstextDokumentenkopfContainer" (AKN-Typ "container") lautet in LegalDocML.de "dokcontainer".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(dokcontainer)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(dokcontainer)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.regelungstextHauptteil">
@@ -1534,7 +1494,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "regelungstextHauptteil" (AKN-Typ "body") lautet in LegalDocML.de "hauptteil".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(hauptteil)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(hauptteil)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.regelungstextSchluss">
@@ -1542,7 +1502,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "regelungstextSchluss" (AKN-Typ "conclusions") lautet in LegalDocML.de "schluss".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(schluss)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(schluss)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.schlussUnterzeichnung">
@@ -1550,7 +1510,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "schlussUnterzeichnung" (AKN-Typ "wrapUp") lautet in LegalDocML.de "schlusstext".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(schlusstext)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(schlusstext)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.schlussformel">
@@ -1558,7 +1518,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "schlussformel" (AKN-Typ "formula") lautet in LegalDocML.de "formel".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(formel)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(formel)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.signatur">
@@ -1566,7 +1526,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "signatur" (AKN-Typ "signature") lautet in LegalDocML.de "signatur".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(signatur)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(signatur)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.signaturblock">
@@ -1574,7 +1534,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "signaturblock" (AKN-Typ "blockContainer") lautet in LegalDocML.de "blockcontainer".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(blockcontainer)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(blockcontainer)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.sitzung">
@@ -1582,7 +1542,39 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "sitzung" (AKN-Typ "session") lautet in LegalDocML.de "sitzung".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(sitzung)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(sitzung)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="eIdLiterals.sonstigerVeroeffentlichungstextDokumentenkopf">
+      <xs:annotation>
+         <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "sonstigerVeroeffentlichungstextDokumentenkopf" (AKN-Typ "preface") lautet in LegalDocML.de "einleitung".</xs:documentation>
+      </xs:annotation>
+      <xs:restriction base="xs:string">
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(einleitung)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="eIdLiterals.sonstigerVeroeffentlichungstextDokumentenkopfContainer">
+      <xs:annotation>
+         <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "sonstigerVeroeffentlichungstextDokumentenkopfContainer" (AKN-Typ "block") lautet in LegalDocML.de "block".</xs:documentation>
+      </xs:annotation>
+      <xs:restriction base="xs:string">
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(block)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="eIdLiterals.sonstigerVeroeffentlichungstextHauptteil">
+      <xs:annotation>
+         <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "sonstigerVeroeffentlichungstextHauptteil" (AKN-Typ "mainBody") lautet in LegalDocML.de "hauptteil".</xs:documentation>
+      </xs:annotation>
+      <xs:restriction base="xs:string">
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(hauptteil)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="eIdLiterals.sonstigerVeroeffentlichungstextSchluss">
+      <xs:annotation>
+         <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "sonstigerVeroeffentlichungstextSchluss" (AKN-Typ "conclusions") lautet in LegalDocML.de "schluss".</xs:documentation>
+      </xs:annotation>
+      <xs:restriction base="xs:string">
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(schluss)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.span">
@@ -1590,7 +1582,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "span" (AKN-Typ "span") lautet in LegalDocML.de "span".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(span)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(span)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.sprachfassungPraeambelInhaltsuebersicht">
@@ -1598,15 +1590,15 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "sprachfassungPraeambelInhaltsuebersicht" (AKN-Typ "hcontainer") lautet in LegalDocML.de "container".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(container)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(container)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.stammformVerweis">
       <xs:annotation>
-         <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "stammformVerweis" (AKN-Typ "componentRef") lautet in LegalDocML.de "stfmverweis".</xs:documentation>
+         <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "stammformVerweis" (AKN-Typ "componentRef") lautet in LegalDocML.de "teildokverweis".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(stfmverweis)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(teildokverweis)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.sub">
@@ -1614,7 +1606,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "sub" (AKN-Typ "sub") lautet in LegalDocML.de "sub".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(sub)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(sub)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.sup">
@@ -1622,7 +1614,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "sup" (AKN-Typ "sup") lautet in LegalDocML.de "sup".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(sup)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(sup)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.table">
@@ -1630,7 +1622,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "table" (AKN-Typ "table") lautet in LegalDocML.de "tabelle".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(tabelle)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(tabelle)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.td">
@@ -1638,7 +1630,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "td" (AKN-Typ "td") lautet in LegalDocML.de "tabelleinh".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(tabelleinh)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(tabelleinh)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.teildokument">
@@ -1646,7 +1638,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "teildokument" (AKN-Typ "component") lautet in LegalDocML.de "tldokverweis".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(tldokverweis)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(tldokverweis)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.teildokumentVerweis">
@@ -1654,7 +1646,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "teildokumentVerweis" (AKN-Typ "documentRef") lautet in LegalDocML.de "verweis".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(verweis)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(verweis)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.teildokumente">
@@ -1662,7 +1654,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "teildokumente" (AKN-Typ "components") lautet in LegalDocML.de "tldokverweise".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(tldokverweise)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(tldokverweise)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.textNachUntergliederung">
@@ -1670,7 +1662,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "textNachUntergliederung" (AKN-Typ "wrapUp") lautet in LegalDocML.de "schlusstext".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(schlusstext)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(schlusstext)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.textVorUntergliederung">
@@ -1678,7 +1670,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "textVorUntergliederung" (AKN-Typ "intro") lautet in LegalDocML.de "intro".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(intro)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(intro)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.textaenderung">
@@ -1686,7 +1678,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "textaenderung" (AKN-Typ "textualMod") lautet in LegalDocML.de "textualmod".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(textualmod)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(textualmod)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.th">
@@ -1694,7 +1686,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "th" (AKN-Typ "th") lautet in LegalDocML.de "tabellekopf".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(tabellekopf)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(tabellekopf)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.tr">
@@ -1702,7 +1694,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "tr" (AKN-Typ "tr") lautet in LegalDocML.de "tabellereihe".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(tabellereihe)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(tabellereihe)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.u">
@@ -1710,23 +1702,15 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "u" (AKN-Typ "u") lautet in LegalDocML.de "u".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(u)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(u)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.ueberschrift">
       <xs:annotation>
-         <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "ueberschrift" (AKN-Typ "heading") lautet in LegalDocML.de "überschrift".</xs:documentation>
+         <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "ueberschrift" (AKN-Typ "heading") lautet in LegalDocML.de "ueberschrift".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(überschrift)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
-      </xs:restriction>
-   </xs:simpleType>
-   <xs:simpleType name="eIdLiterals.ul">
-      <xs:annotation>
-         <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "ul" (AKN-Typ "ul") lautet in LegalDocML.de "listeunge".</xs:documentation>
-      </xs:annotation>
-      <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(listeunge)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(ueberschrift)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.unterrichtungDokumentenkopf">
@@ -1734,7 +1718,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "unterrichtungDokumentenkopf" (AKN-Typ "preface") lautet in LegalDocML.de "einleitung".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(einleitung)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(einleitung)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.unterrichtungDokumentenkopfTitel">
@@ -1742,7 +1726,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "unterrichtungDokumentenkopfTitel" (AKN-Typ "longTitle") lautet in LegalDocML.de "doktitel".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(doktitel)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(doktitel)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.unterrichtungHauptteil">
@@ -1750,7 +1734,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "unterrichtungHauptteil" (AKN-Typ "mainBody") lautet in LegalDocML.de "hauptteil".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(hauptteil)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(hauptteil)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.unterrichtungSchluss">
@@ -1758,15 +1742,15 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "unterrichtungSchluss" (AKN-Typ "conclusions") lautet in LegalDocML.de "schluss".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(schluss)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(schluss)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.unterrichtungsbestandteilVerweis">
       <xs:annotation>
-         <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "unterrichtungsbestandteilVerweis" (AKN-Typ "componentRef") lautet in LegalDocML.de "stfmverweis".</xs:documentation>
+         <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "unterrichtungsbestandteilVerweis" (AKN-Typ "componentRef") lautet in LegalDocML.de "teildokverweis".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(stfmverweis)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(teildokverweis)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.vereinbarungVertRADokumentenkopf">
@@ -1774,7 +1758,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "vereinbarungVertRADokumentenkopf" (AKN-Typ "preface") lautet in LegalDocML.de "einleitung".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(einleitung)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(einleitung)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.vereinbarungVertRAHauptteil">
@@ -1782,7 +1766,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "vereinbarungVertRAHauptteil" (AKN-Typ "body") lautet in LegalDocML.de "hauptteil".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(hauptteil)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(hauptteil)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.vereinbarungVertRASprachfassung">
@@ -1790,7 +1774,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "vereinbarungVertRASprachfassung" (AKN-Typ "hcontainer") lautet in LegalDocML.de "container".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(container)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(container)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.verweisAufNichtamtlicheFussnote">
@@ -1798,7 +1782,31 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "verweisAufNichtamtlicheFussnote" (AKN-Typ "noteRef") lautet in LegalDocML.de "editfnoteref".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(editfnoteref)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(editfnoteref)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="eIdLiterals.verweisFunktionsbezeichnung">
+      <xs:annotation>
+         <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "verweisFunktionsbezeichnung" (AKN-Typ "TLCRole") lautet in LegalDocML.de "verwfktbez".</xs:documentation>
+      </xs:annotation>
+      <xs:restriction base="xs:string">
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(verwfktbez)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="eIdLiterals.verweisOrganisation">
+      <xs:annotation>
+         <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "verweisOrganisation" (AKN-Typ "TLCOrganization") lautet in LegalDocML.de "verworg".</xs:documentation>
+      </xs:annotation>
+      <xs:restriction base="xs:string">
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(verworg)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="eIdLiterals.verweisPerson">
+      <xs:annotation>
+         <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "verweisPerson" (AKN-Typ "TLCPerson") lautet in LegalDocML.de "verwpers".</xs:documentation>
+      </xs:annotation>
+      <xs:restriction base="xs:string">
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(verwpers)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.verzeichniscontainer">
@@ -1806,7 +1814,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "verzeichniscontainer" (AKN-Typ "blockContainer") lautet in LegalDocML.de "blockcontainer".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(blockcontainer)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(blockcontainer)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.vorblattBeschlussempfehlungAbschnitt">
@@ -1814,7 +1822,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "vorblattBeschlussempfehlungAbschnitt" (AKN-Typ "hcontainer") lautet in LegalDocML.de "container".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(container)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(container)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.vorblattBeschlussempfehlungDokumentenkopf">
@@ -1822,7 +1830,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "vorblattBeschlussempfehlungDokumentenkopf" (AKN-Typ "preface") lautet in LegalDocML.de "einleitung".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(einleitung)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(einleitung)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.vorblattBeschlussempfehlungDokumentenkopfTitel">
@@ -1830,7 +1838,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "vorblattBeschlussempfehlungDokumentenkopfTitel" (AKN-Typ "longTitle") lautet in LegalDocML.de "doktitel".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(doktitel)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(doktitel)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.vorblattBeschlussempfehlungHauptteil">
@@ -1838,7 +1846,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "vorblattBeschlussempfehlungHauptteil" (AKN-Typ "mainBody") lautet in LegalDocML.de "hauptteil".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(hauptteil)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(hauptteil)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.vorblattRegelungstextAbschnitt">
@@ -1846,7 +1854,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "vorblattRegelungstextAbschnitt" (AKN-Typ "hcontainer") lautet in LegalDocML.de "container".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(container)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(container)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.vorblattRegelungstextDokumentenkopf">
@@ -1854,7 +1862,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "vorblattRegelungstextDokumentenkopf" (AKN-Typ "preface") lautet in LegalDocML.de "einleitung".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(einleitung)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(einleitung)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.vorblattRegelungstextHauptteil">
@@ -1862,7 +1870,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "vorblattRegelungstextHauptteil" (AKN-Typ "mainBody") lautet in LegalDocML.de "hauptteil".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(hauptteil)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(hauptteil)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.weitereMetadaten">
@@ -1870,7 +1878,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "weitereMetadaten" (AKN-Typ "proprietary") lautet in LegalDocML.de "proprietary".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(proprietary)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(proprietary)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.work.FRBRalias">
@@ -1878,7 +1886,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "work.FRBRalias" (AKN-Typ "FRBRalias") lautet in LegalDocML.de "frbralias".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(frbralias)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(frbralias)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.work.FRBRauthor">
@@ -1886,7 +1894,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "work.FRBRauthor" (AKN-Typ "FRBRauthor") lautet in LegalDocML.de "frbrauthor".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(frbrauthor)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(frbrauthor)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.work.FRBRcountry">
@@ -1894,7 +1902,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "work.FRBRcountry" (AKN-Typ "FRBRcountry") lautet in LegalDocML.de "frbrcountry".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(frbrcountry)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(frbrcountry)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.work.FRBRdate">
@@ -1902,7 +1910,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "work.FRBRdate" (AKN-Typ "FRBRdate") lautet in LegalDocML.de "frbrdate".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(frbrdate)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(frbrdate)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.work.FRBRname">
@@ -1910,7 +1918,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "work.FRBRname" (AKN-Typ "FRBRname") lautet in LegalDocML.de "frbrname".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(frbrname)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(frbrname)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.work.FRBRnumber">
@@ -1918,7 +1926,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "work.FRBRnumber" (AKN-Typ "FRBRnumber") lautet in LegalDocML.de "frbrnumber".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(frbrnumber)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(frbrnumber)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.work.FRBRsubtype">
@@ -1926,7 +1934,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "work.FRBRsubtype" (AKN-Typ "FRBRsubtype") lautet in LegalDocML.de "frbrsubtype".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(frbrsubtype)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(frbrsubtype)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.work.FRBRthis">
@@ -1934,7 +1942,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "work.FRBRthis" (AKN-Typ "FRBRthis") lautet in LegalDocML.de "frbrthis".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(frbrthis)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(frbrthis)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.work.FRBRuri">
@@ -1942,7 +1950,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "work.FRBRuri" (AKN-Typ "FRBRuri") lautet in LegalDocML.de "frbruri".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(frbruri)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(frbruri)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="eIdLiterals.work.identifikation">
@@ -1950,7 +1958,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die ELI-Kurzbezeichnung für den fachlichen Typ "work.identifikation" (AKN-Typ "FRBRWork") lautet in LegalDocML.de "frbrwork".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="xs:string">
-         <xs:pattern value="([a-zäöüß0-9]+-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)_)*(frbrwork)-(n[1-9]{1}[0-9]*|z[0-9a-zäöüß~%]*)"/>
+         <xs:pattern value="([a-z0-9]+-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)_)*(frbrwork)-(n([1-9]+[0-9]*)|z[0-9a-z~%]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="endLiterals">
@@ -2019,6 +2027,24 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
       <xs:restriction base="hrefLiterals">
          <xs:enumeration value="recht.bund.de"/>
       </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="hrefLiterals.verweisFunktionsbezeichnung">
+      <xs:annotation>
+         <xs:documentation>Das Attribut href wird verwendet, um ein internes oder externes Ziel für einen Verweis, eine Zitierung, den Zugriff auf die Ontologie oder einen Hypertext-Link auf eine Funktionsbezeichnung  anzugeben.</xs:documentation>
+      </xs:annotation>
+      <xs:restriction base="hrefLiterals"/>
+   </xs:simpleType>
+   <xs:simpleType name="hrefLiterals.verweisOrganisation">
+      <xs:annotation>
+         <xs:documentation>Das Attribut href wird verwendet, um ein internes oder externes Ziel für einen Verweis, eine Zitierung, den Zugriff auf die Ontologie oder einen Hypertext-Link auf eine Organisation anzugeben.</xs:documentation>
+      </xs:annotation>
+      <xs:restriction base="hrefLiterals"/>
+   </xs:simpleType>
+   <xs:simpleType name="hrefLiterals.verweisPerson">
+      <xs:annotation>
+         <xs:documentation>Das Attribut href wird verwendet, um ein internes oder externes Ziel für einen Verweis, eine Zitierung, den Zugriff auf die Ontologie oder einen Hypertext-Link auf eine Person anzugeben.</xs:documentation>
+      </xs:annotation>
+      <xs:restriction base="hrefLiterals"/>
    </xs:simpleType>
    <xs:simpleType name="hrefLiterals.work.FRBRauthor">
       <xs:annotation>
@@ -2291,21 +2317,6 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:enumeration value="attributsemantik-noch-undefiniert"/>
       </xs:restriction>
    </xs:simpleType>
-   <xs:simpleType name="nameLiterals.bekanntmachung">
-      <xs:restriction base="nameLiterals">
-         <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/bekanntmachungstext"/>
-         <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/bekanntmachungstext-berichtigung"/>
-         <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/bekanntmachungstext-entscheidung-des-bundesverfassungsgerichts"/>
-      </xs:restriction>
-   </xs:simpleType>
-   <xs:simpleType name="nameLiterals.bekanntmachungDokumentenkopfContainer">
-      <xs:annotation>
-         <xs:documentation>Dieses Attribut ist gemäß AkomaNtoso hier mandatorisch; derzeit gibt es in LegalDocML.de hierfür jedoch keine fachliche Verwendung. Es ist daher mit dem definierten tentativen "Platzhaltertext" zu befüllen.</xs:documentation>
-      </xs:annotation>
-      <xs:restriction base="nameLiterals">
-         <xs:enumeration value="attributsemantik-noch-undefiniert"/>
-      </xs:restriction>
-   </xs:simpleType>
    <xs:simpleType name="nameLiterals.bericht">
       <xs:annotation>
          <xs:documentation>Spezifische Bezeichnung des Elternelements.</xs:documentation>
@@ -2385,7 +2396,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
    </xs:simpleType>
    <xs:simpleType name="nameLiterals.expression.FRBRdate">
       <xs:annotation>
-         <xs:documentation>Hinweis: Die Klasse "nameLiterals.expression.FRBRdate" besitzt Eigenschaften, die jeweils nur im Kontext einer Entwurfsfassung bzw. Verkündungsfassung gültig sind. Diese sind auf Schematron-Ebene mittels "SCH-ENTWF-nameLiterals.expression.FRBRdate" (Entwurfsfassung) und "SCH-VERKF-nameLiterals.expression.FRBRdate" (Verkündungsfassung) geregelt.</xs:documentation>
+         <xs:documentation>Hinweis: Die Klasse "nameLiterals.expression.FRBRdate" besitzt Eigenschaften, die nur im Kontext einer Entwurfsfassung gültig sind. Diese sind auf Schematron-Ebene geregelt mittels "SCH-ENTWF-nameLiterals.expression.FRBRdate".</xs:documentation>
       </xs:annotation>
       <xs:restriction base="nameLiterals"/>
    </xs:simpleType>
@@ -2411,18 +2422,24 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
    </xs:simpleType>
    <xs:simpleType name="nameLiterals.offeneStruktur">
       <xs:restriction base="nameLiterals">
+         <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/anfragen-an-bundesregierung"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/anlage-regelungstext"/>
+         <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/antworten-der-bundesregierung"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/austauschseite"/>
+         <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/bericht-technikfolgenabschaetzung"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/berichtigung"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/beschluss-des-bundesrates"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/beschlussvorschlag-der-bundesregierung"/>
+         <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/einspruch-bundesrat"/>
+         <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/sammeldrucksache-schriftliche-fragen"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/gegenaeusserung-der-bundesregierung"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/gesetzesbeschluss-des-bundestages"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/gutachtliche-stellungnahme"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/mitteilung-an-bundesrat"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/nkr-stellungnahme"/>
-         <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/sonstiges-dokument"/>
-         <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/sprechzettel-für-regierungssprecher"/>
+         <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/sammeldrucksache-fragestunde"/>
+         <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/sonstiges-teildokument"/>
+         <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/sprechzettel-fuer-regierungssprecher"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/stellungnahme-bundesrat"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/synopse"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/vorschlag-an-bundesrat"/>
@@ -2434,18 +2451,30 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/rechtsetzungsdokument"/>
       </xs:restriction>
    </xs:simpleType>
+   <xs:simpleType name="nameLiterals.regelungstext">
+      <xs:restriction base="nameLiterals">
+         <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/regelungstext"/>
+      </xs:restriction>
+   </xs:simpleType>
    <xs:simpleType name="nameLiterals.regelungstextEntwurfsfassung">
       <xs:restriction base="nameLiterals">
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/regelungstext-entwurf"/>
       </xs:restriction>
    </xs:simpleType>
-   <xs:simpleType name="nameLiterals.regelungstextVerkuendungsfassung">
+   <xs:simpleType name="nameLiterals.schlussformel">
+      <xs:annotation>
+         <xs:documentation>Dieses Attribut ist gemäß AkomaNtoso hier mandatorisch; derzeit gibt es in LegalDocML.de hierfür jedoch keine fachliche Verwendung. Es ist daher mit dem definierten tentativen "Platzhaltertext" zu befüllen.</xs:documentation>
+      </xs:annotation>
       <xs:restriction base="nameLiterals">
-         <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/regelungstext-neufassung"/>
-         <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/regelungstext-verkuendung"/>
+         <xs:enumeration value="attributsemantik-noch-undefiniert"/>
       </xs:restriction>
    </xs:simpleType>
-   <xs:simpleType name="nameLiterals.schlussformel">
+   <xs:simpleType name="nameLiterals.sonstigerVeroeffentlichungstext">
+      <xs:restriction base="nameLiterals">
+         <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/sonstiger-veroeffentlichungstext"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="nameLiterals.sonstigerVeroeffentlichungstextDokumentenkopfContainer">
       <xs:annotation>
          <xs:documentation>Dieses Attribut ist gemäß AkomaNtoso hier mandatorisch; derzeit gibt es in LegalDocML.de hierfür jedoch keine fachliche Verwendung. Es ist daher mit dem definierten tentativen "Platzhaltertext" zu befüllen.</xs:documentation>
       </xs:annotation>
@@ -2509,10 +2538,8 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
       </xs:annotation>
       <xs:restriction base="nameLiterals">
          <xs:enumeration value="erstellungsdatum"/>
-         <xs:enumeration value="verkuendungsfassung-ausfertigungsdatum"/>
-         <xs:enumeration value="verkuendungsfassung-verkuendungsdatum"/>
-         <xs:enumeration value="neufassung-ausfertigungsdatum"/>
-         <xs:enumeration value="neufassung-verkuendungsdatum"/>
+         <xs:enumeration value="ausfertigungsdatum"/>
+         <xs:enumeration value="verkuendungsdatum"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="numberLiterals">
@@ -2693,6 +2720,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:enumeration value="beschlussempfehlung-datum"/>
          <xs:enumeration value="aenderungsantrag-datum"/>
          <xs:enumeration value="unterrichtung-datum"/>
+         <xs:enumeration value="fragestunde-datum"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="refersToLiterals.denkschriftAbschnitt">
@@ -2711,7 +2739,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Dient der Angabe einer ELI-DL-Uri der Drucksachennummer auf Manifestation-Ebene.</xs:documentation>
       </xs:annotation>
       <xs:restriction base="refersToLiterals">
-         <xs:pattern value="eli/dl/\d{4}/[a-zäöüß-]+/[0-9]+/[a-zäöüß-]+/[a-zäöüß-]+/\d{4}-\d{2}-\d{2}/[0-9]+/[a-z]{3}/[a-zöäüß\-]+-\d+\.[a-zöäüß]+"/>
+         <xs:pattern value="https://[a-z]+(\.[a-z]+)+/eli/dl/\d{4}/[a-zäöüß-]+/[0-9]+/[a-zäöüß-]+/[a-zäöüß-]+/\d{4}-\d{2}-\d{2}/[0-9]+/[a-z]{3}/[a-zöäüß\-]+-\d+\.[a-zöäüß]+"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="refersToLiterals.eingangsformel">
@@ -2739,9 +2767,12 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
       </xs:annotation>
       <xs:restriction base="refersToLiterals">
          <xs:enumeration value="ausfertigung"/>
+         <xs:enumeration value="verkuendung"/>
+         <xs:enumeration value="verkuendung-mit-noch-unbekanntem-datum"/>
          <xs:enumeration value="neufassung"/>
          <xs:enumeration value="inkrafttreten"/>
          <xs:enumeration value="inkrafttreten-weggefallen"/>
+         <xs:enumeration value="inkrafttreten-weggefallen-mit-noch-unbekanntem-datum"/>
          <xs:enumeration value="inkrafttreten-grundsaetzlich"/>
          <xs:enumeration value="inkrafttreten-abweichend"/>
          <xs:enumeration value="ausserkrafttreten"/>
@@ -2758,7 +2789,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
    </xs:simpleType>
    <xs:simpleType name="refersToLiterals.funktionsbezeichnung">
       <xs:restriction base="refersToLiterals">
-         <xs:enumeration value="attributsemantik-noch-undefiniert"/>
+         <xs:pattern value="#meta-n([1-9]+[0-9]*)_verwfktbez-n([1-9]+[0-9]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="refersToLiterals.geltungszeitIntervall">
@@ -2875,7 +2906,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Dieses Attribut ist gemäß Akoma Ntoso verpflichtend. Seine Semantik in LegalDocML.de ist bislang jedoch noch nicht definiert.</xs:documentation>
       </xs:annotation>
       <xs:restriction base="refersToLiterals">
-         <xs:enumeration value="attributsemantik-noch-undefiniert"/>
+         <xs:pattern value="#meta-n([1-9]+[0-9]*)_verworg-n([1-9]+[0-9]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="refersToLiterals.ort">
@@ -2884,8 +2915,11 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="refersToLiterals.personenname">
+      <xs:annotation>
+         <xs:documentation>TODO - Verweis (mit führendem Rautezeichen) auf die @eId einer im Metadatenblock deklarierten Person</xs:documentation>
+      </xs:annotation>
       <xs:restriction base="refersToLiterals">
-         <xs:enumeration value="attributsemantik-noch-undefiniert"/>
+         <xs:pattern value="#meta-n([1-9]+[0-9]*)_verwpers-n([1-9]+[0-9]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="refersToLiterals.referenz">
@@ -2901,7 +2935,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
    </xs:simpleType>
    <xs:simpleType name="refersToLiterals.sitzung">
       <xs:annotation>
-         <xs:documentation>Referenz auf die @eId derjenigen &amp;lt;&amp;lt;akn:organization/gt;&amp;gt; organisation (z. B. des Ausschusses), um deren Sitzung es sich handelt. Da es sich um einen internen Verweis (lokale Referenz) handelt, beginnt dieser mit einer Raute (#).</xs:documentation>
+         <xs:documentation>Referenz auf die @eId derjenigen akn:organization (z. B. des Ausschusses), um deren Sitzung es sich handelt. Da es sich um einen internen Verweis (lokale Referenz) handelt, beginnt dieser mit einer Raute (#). Diese Umsetzung ist eine Zwischenlösung und aktuell nicht AKN-konform. In nächsten Release wird es entsprechend angepasst, um eine AKN-Konformität zu gewährleisten. </xs:documentation>
       </xs:annotation>
       <xs:restriction base="refersToLiterals">
          <xs:pattern value="#(([a-zäöüß0-9]+-[a-zäöüß0-9]+(\.[a-zäöüß0-9]+)*)_)*(org)-[a-zäöüß0-9]+(\.[a-zäöüß0-9]+)*"/>
@@ -2975,6 +3009,27 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
       </xs:annotation>
       <xs:restriction base="xs:integer"/>
    </xs:simpleType>
+   <xs:simpleType name="shortFormLiterals">
+      <xs:restriction base="xs:string"/>
+   </xs:simpleType>
+   <xs:simpleType name="shortFormLiterals.verweisFunktionsbezeichnung">
+      <xs:annotation>
+         <xs:documentation>Das Attribut shortForm wird verwendet, um die abgekürzte Form des Anzeigenamens der Funktionsbezeichnung anzugeben.</xs:documentation>
+      </xs:annotation>
+      <xs:restriction base="shortFormLiterals"/>
+   </xs:simpleType>
+   <xs:simpleType name="shortFormLiterals.verweisOrganisation">
+      <xs:annotation>
+         <xs:documentation>Das Attribut shortForm wird verwendet, um die abgekürzte Form des Anzeigenamens der Organisation anzugeben.</xs:documentation>
+      </xs:annotation>
+      <xs:restriction base="shortFormLiterals"/>
+   </xs:simpleType>
+   <xs:simpleType name="shortFormLiterals.verweisPerson">
+      <xs:annotation>
+         <xs:documentation>Das Attribut shortForm wird verwendet, um die abgekürzte Form des Anzeigenamens der Person anzugeben.</xs:documentation>
+      </xs:annotation>
+      <xs:restriction base="shortFormLiterals"/>
+   </xs:simpleType>
    <xs:simpleType name="showAsLiterals">
       <xs:annotation>
          <xs:documentation>Zusätzliche fachliche Bezeichnung für ein Dokument.</xs:documentation>
@@ -2984,36 +3039,40 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
    <xs:simpleType name="showAsLiterals.anlagenverweis">
       <xs:restriction base="showAsLiterals">
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/aenderungsantrag"/>
+         <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/anfragen-an-bundesregierung"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/anlage-regelungstext"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/anschreiben"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/anschreiben-einigungsvorschlag-des-vermittlungsausschusses"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/anschreiben-vorschlag-an-bundesrat"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/antrag"/>
+         <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/antworten-der-bundesregierung"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/austauschseite"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/begruendung-aenderungsantrag"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/begruendung-entschliessungsantrag"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/begruendung-regelungstext"/>
-         <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/bekanntmachungstext"/>
-         <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/bekanntmachungstext-berichtigung"/>
-         <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/bekanntmachungstext-entscheidung-des-bundesverfassungsgerichts"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/bericht"/>
+         <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/bericht-technikfolgenabschaetzung"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/berichtigung"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/beschluss-des-bundesrates"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/beschlussempfehlung"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/beschlussvorschlag-der-bundesregierung"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/denkschrift"/>
+         <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/einspruch-bundesrat"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/entschliessungsantrag"/>
+         <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/externe-ressource"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/gegenaeusserung-der-bundesregierung"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/gesetzesbeschluss-des-bundestages"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/gutachtliche-stellungnahme"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/mitteilung-an-bundesrat"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/nkr-stellungnahme"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/rechtsetzungsdokument"/>
+         <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/regelungstext"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/regelungstext-entwurf"/>
-         <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/regelungstext-neufassung"/>
-         <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/regelungstext-verkuendung"/>
-         <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/sonstiges-dokument"/>
-         <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/sprechzettel-für-regierungssprecher"/>
+         <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/sammeldrucksache-fragestunde"/>
+         <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/sammeldrucksache-schriftliche-fragen"/>
+         <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/sonstiger-veroeffentlichungstext"/>
+         <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/sonstiges-teildokument"/>
+         <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/sprechzettel-fuer-regierungssprecher"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/stellungnahme-bundesrat"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/synopse"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/unterrichtung"/>
@@ -3034,36 +3093,40 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
    <xs:simpleType name="showAsLiterals.teildokumentVerweis">
       <xs:restriction base="showAsLiterals">
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/aenderungsantrag"/>
+         <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/anfragen-an-bundesregierung"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/anlage-regelungstext"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/anschreiben"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/anschreiben-einigungsvorschlag-des-vermittlungsausschusses"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/anschreiben-vorschlag-an-bundesrat"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/antrag"/>
+         <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/antworten-der-bundesregierung"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/austauschseite"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/begruendung-aenderungsantrag"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/begruendung-entschliessungsantrag"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/begruendung-regelungstext"/>
-         <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/bekanntmachungstext"/>
-         <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/bekanntmachungstext-berichtigung"/>
-         <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/bekanntmachungstext-entscheidung-des-bundesverfassungsgerichts"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/bericht"/>
+         <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/bericht-technikfolgenabschaetzung"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/berichtigung"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/beschluss-des-bundesrates"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/beschlussempfehlung"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/beschlussvorschlag-der-bundesregierung"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/denkschrift"/>
+         <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/einspruch-bundesrat"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/entschliessungsantrag"/>
+         <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/externe-ressource"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/gegenaeusserung-der-bundesregierung"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/gesetzesbeschluss-des-bundestages"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/gutachtliche-stellungnahme"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/mitteilung-an-bundesrat"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/nkr-stellungnahme"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/rechtsetzungsdokument"/>
+         <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/regelungstext"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/regelungstext-entwurf"/>
-         <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/regelungstext-neufassung"/>
-         <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/regelungstext-verkuendung"/>
-         <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/sonstiges-dokument"/>
-         <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/sprechzettel-für-regierungssprecher"/>
+         <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/sammeldrucksache-fragestunde"/>
+         <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/sammeldrucksache-schriftliche-fragen"/>
+         <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/sonstiger-veroeffentlichungstext"/>
+         <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/sonstiges-teildokument"/>
+         <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/sprechzettel-fuer-regierungssprecher"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/stellungnahme-bundesrat"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/synopse"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/unterrichtung"/>
@@ -3075,6 +3138,24 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/vorschlag-an-bundesrat"/>
          <xs:enumeration value="/akn/ontology/de/concept/documenttype/bund/wahlvorschlag"/>
       </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="showAsLiterals.verweisFunktionsbezeichnung">
+      <xs:annotation>
+         <xs:documentation>Das Attribut showAs wird verwendet, um den Anzeigenamens einer Funktionsbezeichnung anzugeben.</xs:documentation>
+      </xs:annotation>
+      <xs:restriction base="showAsLiterals"/>
+   </xs:simpleType>
+   <xs:simpleType name="showAsLiterals.verweisOrganisation">
+      <xs:annotation>
+         <xs:documentation>Das Attribut showAs wird verwendet, um den Anzeigenamens einer Organisation anzugeben.</xs:documentation>
+      </xs:annotation>
+      <xs:restriction base="showAsLiterals"/>
+   </xs:simpleType>
+   <xs:simpleType name="showAsLiterals.verweisPerson">
+      <xs:annotation>
+         <xs:documentation>Das Attribut showAs wird verwendet, um den Anzeigenamens einer Person anzugeben.</xs:documentation>
+      </xs:annotation>
+      <xs:restriction base="showAsLiterals"/>
    </xs:simpleType>
    <xs:simpleType name="sourceLiterals">
       <xs:annotation>
@@ -3128,6 +3209,14 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
       </xs:annotation>
       <xs:restriction base="sourceLiterals">
          <xs:enumeration value="attributsemantik-noch-undefiniert"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="sourceLiterals.referenzen">
+      <xs:annotation>
+         <xs:documentation>Das Attribut @source verweist auf die @eId des Akteurs (Person, Organisation), der die spezifische Annotation oder Markierung bereitstellt.</xs:documentation>
+      </xs:annotation>
+      <xs:restriction base="sourceLiterals">
+         <xs:pattern value="#meta-n([1-9]+[0-9]*)_(verworg|verwpers)-n([1-9]+[0-9]*)"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="sourceLiterals.weitereMetadaten">
@@ -3297,12 +3386,6 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
       <xs:restriction base="valueStringLiterals">
          <xs:pattern value="[0-9]+"/>
       </xs:restriction>
-   </xs:simpleType>
-   <xs:simpleType name="valueLiterals.li">
-      <xs:annotation>
-         <xs:documentation>Dient der Angabe eines Aufzählungssymbols für das Listenelement.</xs:documentation>
-      </xs:annotation>
-      <xs:restriction base="valueStringLiterals"/>
    </xs:simpleType>
    <xs:simpleType name="valueLiterals.manifestation.FRBRformat">
       <xs:annotation>
@@ -3504,12 +3587,18 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die Klasse "caption" wird benutzt, um eine Beschriftung zu einer Tabelle einzufügen.</xs:documentation>
       </xs:annotation>
       <xs:sequence>
-         <xs:element name="br" type="br" minOccurs="0" maxOccurs="unbounded"/>
+         <xs:group ref="captionInhalt" minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>
       <xs:attribute name="eId" use="required" type="eIdLiterals.caption"/>
       <xs:attribute name="GUID" use="required" type="GUIDLiterals"/>
       <xs:attribute ref="xml:id" use="optional"/>
    </xs:complexType>
+   <xs:group name="captionInhalt">
+      <xs:choice>
+         <xs:element name="br" type="br"/>
+         <xs:group ref="formatierteInlineelemente"/>
+      </xs:choice>
+   </xs:group>
    <xs:complexType name="table" mixed="false">
       <xs:annotation>
          <xs:documentation>Die Klasse "table" wird verwendet, um eine Tabelle einzufügen.</xs:documentation>
@@ -3573,44 +3662,6 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
       <xs:attribute name="style" use="optional" type="styleLiterals"/>
       <xs:attribute ref="xml:id" use="optional"/>
    </xs:complexType>
-   <xs:complexType name="li" mixed="true">
-      <xs:annotation>
-         <xs:documentation>Die Klasse "li" wird verwendet, um einen Eintrag in eine Liste einzufügen.</xs:documentation>
-      </xs:annotation>
-      <xs:sequence>
-         <xs:group ref="HTMLblock" maxOccurs="unbounded"/>
-      </xs:sequence>
-      <xs:attribute name="class" use="optional" type="classLiterals"/>
-      <xs:attribute name="eId" use="required" type="eIdLiterals.li"/>
-      <xs:attribute name="GUID" use="required" type="GUIDLiterals"/>
-      <xs:attribute name="value" use="required" type="valueLiterals.li"/>
-      <xs:attribute ref="xml:id" use="optional"/>
-   </xs:complexType>
-   <xs:complexType name="ol" mixed="false">
-      <xs:annotation>
-         <xs:documentation>Die Klasse "ol" wird verwendet, um eine Liste mit nummerierten Listenelementen einzufügen.</xs:documentation>
-      </xs:annotation>
-      <xs:sequence>
-         <xs:element name="li" type="li" maxOccurs="unbounded"/>
-      </xs:sequence>
-      <xs:attribute name="class" use="optional" type="classLiterals"/>
-      <xs:attribute name="eId" use="required" type="eIdLiterals.ol"/>
-      <xs:attribute name="GUID" use="required" type="GUIDLiterals"/>
-      <xs:attribute name="style" use="optional" type="styleLiterals"/>
-      <xs:attribute ref="xml:id" use="optional"/>
-   </xs:complexType>
-   <xs:complexType name="ul" mixed="false">
-      <xs:annotation>
-         <xs:documentation>Die Klasse "ul" wird verwendet, um eine Liste mit unnummerierten Listenelementen einzufügen.</xs:documentation>
-      </xs:annotation>
-      <xs:sequence>
-         <xs:element name="li" type="li" maxOccurs="unbounded"/>
-      </xs:sequence>
-      <xs:attribute name="class" use="optional" type="classLiterals"/>
-      <xs:attribute name="eId" use="required" type="eIdLiterals.ul"/>
-      <xs:attribute name="GUID" use="required" type="GUIDLiterals"/>
-      <xs:attribute ref="xml:id" use="optional"/>
-   </xs:complexType>
    <xs:complexType name="p" mixed="true">
       <xs:annotation>
          <xs:documentation>Die Klasse "p" wird verwendet, um einen Textabsatz einzufügen. Dieser kann aus verschiedenen Inlineelementen bestehen und unterliegt im Gegensatz zu einem juristischen Absatz keinen strukturellen Vorgaben.</xs:documentation>
@@ -3626,8 +3677,6 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
    </xs:complexType>
    <xs:group name="HTMLblock">
       <xs:choice>
-         <xs:element name="ol" type="ol"/>
-         <xs:element name="ul" type="ul"/>
          <xs:element name="table" type="table"/>
          <xs:element name="p" type="p"/>
       </xs:choice>
@@ -3803,6 +3852,8 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
       <xs:sequence>
          <xs:group ref="mehrfachreferenzinhalt" maxOccurs="unbounded"/>
       </xs:sequence>
+      <xs:attribute name="GUID" use="required" type="GUIDLiterals"/>
+      <xs:attribute name="eId" use="required" type="eIdLiterals.mehrfachreferenz"/>
    </xs:complexType>
    <xs:group name="mehrfachreferenzinhalt">
       <xs:choice>
@@ -3947,7 +3998,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
       <xs:attribute name="eId" use="required" type="eIdLiterals.funktionsbezeichnung"/>
       <xs:attribute name="GUID" use="required" type="GUIDLiterals"/>
       <xs:attribute name="refersTo"
-                    use="required"
+                    use="optional"
                     type="refersToLiterals.funktionsbezeichnung"/>
       <xs:attribute name="style" use="optional" type="styleLiterals"/>
       <xs:attribute ref="xml:id" use="optional"/>
@@ -3969,9 +4020,9 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
       <xs:sequence/>
       <xs:attribute name="eId" use="required" type="eIdLiterals.organisation"/>
       <xs:attribute name="GUID" use="required" type="GUIDLiterals"/>
-      <xs:attribute name="refersTo" use="required" type="refersToLiterals.organisation"/>
+      <xs:attribute name="refersTo" use="optional" type="refersToLiterals.organisation"/>
       <xs:attribute name="style" use="optional" type="styleLiterals"/>
-      <xs:attribute name="title" use="required" type="titleLiterals.organisation"/>
+      <xs:attribute name="title" use="optional" type="titleLiterals.organisation"/>
       <xs:attribute ref="xml:id" use="optional"/>
    </xs:complexType>
    <xs:complexType name="ort" mixed="true">
@@ -3991,7 +4042,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
       <xs:sequence/>
       <xs:attribute name="eId" use="required" type="eIdLiterals.personenname"/>
       <xs:attribute name="GUID" use="required" type="GUIDLiterals"/>
-      <xs:attribute name="refersTo" use="required" type="refersToLiterals.personenname"/>
+      <xs:attribute name="refersTo" use="optional" type="refersToLiterals.personenname"/>
       <xs:attribute ref="xml:id" use="optional"/>
    </xs:complexType>
    <xs:complexType name="signatur" mixed="true">
@@ -4465,7 +4516,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:element name="FRBRuri" type="expression.FRBRuri"/>
          <xs:element name="FRBRalias" type="expression.FRBRalias" maxOccurs="unbounded"/>
          <xs:element name="FRBRauthor" type="expression.FRBRauthor"/>
-         <xs:element name="FRBRdate" type="expression.FRBRdate"/>
+         <xs:element name="FRBRdate" type="expression.FRBRdate" minOccurs="0"/>
          <xs:element name="FRBRlanguage" type="expression.FRBRlanguage"/>
          <xs:element name="FRBRversionNumber" type="expression.FRBRversionNumber"/>
       </xs:sequence>
@@ -4686,11 +4737,11 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
             <xs:any processContents="strict"
                     minOccurs="0"
                     maxOccurs="unbounded"
-                    namespace="http://MetadatenRechtsetzungsdokument.LegalDocML.de/1.8.2/ http://MetadatenRegelungstext.LegalDocML.de/1.8.2/ http://MetadatenFormulierungshilfe.LegalDocML.de/1.8.2/ http://MetadatenBundestag.LegalDocML.de/1.8.2/ http://MetadatenBundesrat.LegalDocML.de/1.8.2/ http://MetadatenBundesregierung.LegalDocML.de/1.8.2/ http://MetadatenNormenkontrollrat.LegalDocML.de/1.8.2/"/>
+                    namespace="http://MetadatenRechtsetzungsdokument.LegalDocML.de/1.9/ http://MetadatenRegelungstext.LegalDocML.de/1.9/ http://MetadatenFormulierungshilfe.LegalDocML.de/1.9/ http://MetadatenBundestag.LegalDocML.de/1.9/ http://MetadatenBundesrat.LegalDocML.de/1.9/ http://MetadatenBundesregierung.LegalDocML.de/1.9/ http://MetadatenNormenkontrollrat.LegalDocML.de/1.9/ http://MetadatenSonstigerVeroeffentlichungstext.LegalDocML.de/1.9/"/>
             <xs:any processContents="lax"
                     minOccurs="0"
                     maxOccurs="unbounded"
-                    namespace="http://MetadatenRIS.LegalDocML.de/1.8.2/"/>
+                    namespace="http://MetadatenRIS.LegalDocML.de/1.9/"/>
          </xs:choice>
       </xs:sequence>
       <xs:attribute name="eId" use="required" type="eIdLiterals.weitereMetadaten"/>
@@ -4787,6 +4838,78 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
       <xs:attribute ref="xml:id" use="optional"/>
       <xs:attribute name="eId" use="required" type="eIdLiterals.nichtamtlicheFussnote"/>
    </xs:complexType>
+   <xs:complexType name="referenzen" mixed="false">
+      <xs:annotation>
+         <xs:documentation>Die Klasse "referenzen" dient als Metadaten-Container für alle Verweise im Dokument auf externe Entitäten. Dazu gehören Verweise auf Personen, Organisationen und Rollen.</xs:documentation>
+      </xs:annotation>
+      <xs:choice>
+         <xs:group ref="verweiseAufExterneEntitaeten" maxOccurs="unbounded"/>
+      </xs:choice>
+      <xs:attribute name="source" use="required" type="sourceLiterals.referenzen"/>
+   </xs:complexType>
+   <xs:group name="verweiseAufExterneEntitaeten">
+      <xs:choice>
+         <xs:element name="TLCPerson"
+                     type="verweisPerson"
+                     minOccurs="0"
+                     maxOccurs="unbounded"/>
+         <xs:element name="TLCRole"
+                     type="verweisFunktionsbezeichnung"
+                     minOccurs="0"
+                     maxOccurs="unbounded"/>
+         <xs:element name="TLCOrganization"
+                     type="verweisOrganisation"
+                     minOccurs="0"
+                     maxOccurs="unbounded"/>
+      </xs:choice>
+   </xs:group>
+   <xs:complexType name="verweisPerson" mixed="false">
+      <xs:annotation>
+         <xs:documentation>Die Klasse "verweisPerson" dient dem Metadatenverweis auf eine in einer externen Ressource deklarierten Person.</xs:documentation>
+      </xs:annotation>
+      <xs:sequence/>
+      <xs:attribute name="eId" use="required" type="eIdLiterals.verweisPerson"/>
+      <xs:attribute name="href" use="required" type="hrefLiterals.verweisPerson"/>
+      <xs:attribute name="GUID" use="required" type="GUIDLiterals"/>
+      <xs:attribute name="showAs" use="required" type="showAsLiterals.verweisPerson"/>
+      <xs:attribute name="shortForm"
+                    use="optional"
+                    type="shortFormLiterals.verweisPerson"/>
+   </xs:complexType>
+   <xs:complexType name="verweisOrganisation" mixed="false">
+      <xs:annotation>
+         <xs:documentation>Die Klasse "verweisOrganisation" dient dem Metadatenverweis auf eine in einer externen Ressource deklarierten Organisation.</xs:documentation>
+      </xs:annotation>
+      <xs:sequence/>
+      <xs:attribute name="eId" use="required" type="eIdLiterals.verweisOrganisation"/>
+      <xs:attribute name="href" use="required" type="hrefLiterals.verweisOrganisation"/>
+      <xs:attribute name="GUID" use="required" type="GUIDLiterals"/>
+      <xs:attribute name="showAs"
+                    use="required"
+                    type="showAsLiterals.verweisOrganisation"/>
+      <xs:attribute name="shortForm"
+                    use="optional"
+                    type="shortFormLiterals.verweisOrganisation"/>
+   </xs:complexType>
+   <xs:complexType name="verweisFunktionsbezeichnung" mixed="false">
+      <xs:annotation>
+         <xs:documentation>Die Klasse "verweisFunktionsbezeichnung" dient dem Metadatenverweis auf eine in einer externen Ressource deklarierten Rollebzw. Position eine Person.</xs:documentation>
+      </xs:annotation>
+      <xs:sequence/>
+      <xs:attribute name="eId"
+                    use="required"
+                    type="eIdLiterals.verweisFunktionsbezeichnung"/>
+      <xs:attribute name="href"
+                    use="required"
+                    type="hrefLiterals.verweisFunktionsbezeichnung"/>
+      <xs:attribute name="GUID" use="required" type="GUIDLiterals"/>
+      <xs:attribute name="showAs"
+                    use="required"
+                    type="showAsLiterals.verweisFunktionsbezeichnung"/>
+      <xs:attribute name="shortForm"
+                    use="optional"
+                    type="shortFormLiterals.verweisFunktionsbezeichnung"/>
+   </xs:complexType>
    <xs:complexType name="metadatenMinimal" mixed="false">
       <xs:annotation>
          <xs:documentation>Die Klasse "metadatenMinimal" wird benutzt, um fachliche und technische Metadaten zu einem Rechtsetzungsdokument oder einem der darin referenzierten Dokumente nachzuhalten. Angaben zu Lebenszyklus und Geltungszeiten sind hierbei jedoch explizit nicht möglich.</xs:documentation>
@@ -4805,6 +4928,10 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
                      type="geltungszeiten"
                      minOccurs="0"
                      maxOccurs="0"/>
+         <xs:element name="references"
+                     type="referenzen"
+                     minOccurs="0"
+                     maxOccurs="unbounded"/>
          <xs:element name="notes"
                      type="nichtamtlicheFussnoten"
                      minOccurs="0"
@@ -4829,6 +4956,10 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
                      minOccurs="0"
                      maxOccurs="unbounded"/>
          <xs:element name="temporalData" type="geltungszeiten" minOccurs="0"/>
+         <xs:element name="references"
+                     type="referenzen"
+                     minOccurs="0"
+                     maxOccurs="unbounded"/>
          <xs:element name="notes"
                      type="nichtamtlicheFussnoten"
                      minOccurs="0"
@@ -4855,6 +4986,10 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
                      minOccurs="0"
                      maxOccurs="unbounded"/>
          <xs:element name="temporalData" type="geltungszeiten"/>
+         <xs:element name="references"
+                     type="referenzen"
+                     minOccurs="0"
+                     maxOccurs="unbounded"/>
          <xs:element name="notes"
                      type="nichtamtlicheFussnoten"
                      minOccurs="0"
@@ -5017,7 +5152,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
       <xs:sequence>
          <xs:element name="num" type="artUndZaehlbezeichnung"/>
          <xs:element name="heading" type="ueberschrift"/>
-         <xs:group ref="regelungstextGliederung" minOccurs="0" maxOccurs="unbounded"/>
+         <xs:group ref="regelungstextGliederung" minOccurs="0"/>
       </xs:sequence>
       <xs:attribute name="eId" use="required" type="eIdLiterals.gliederungAbschnitt"/>
       <xs:attribute name="GUID" use="required" type="GUIDLiterals"/>
@@ -5033,7 +5168,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
       <xs:sequence>
          <xs:element name="num" type="artUndZaehlbezeichnung"/>
          <xs:element name="heading" type="ueberschrift"/>
-         <xs:group ref="regelungstextGliederung" minOccurs="0" maxOccurs="unbounded"/>
+         <xs:group ref="regelungstextGliederung" minOccurs="0"/>
       </xs:sequence>
       <xs:attribute name="eId" use="required" type="eIdLiterals.gliederungBuch"/>
       <xs:attribute name="GUID" use="required" type="GUIDLiterals"/>
@@ -5049,7 +5184,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
       <xs:sequence>
          <xs:element name="num" type="artUndZaehlbezeichnung"/>
          <xs:element name="heading" type="ueberschrift"/>
-         <xs:group ref="regelungstextGliederung" minOccurs="0" maxOccurs="unbounded"/>
+         <xs:group ref="regelungstextGliederung" minOccurs="0"/>
       </xs:sequence>
       <xs:attribute name="eId" use="required" type="eIdLiterals.gliederungKapitel"/>
       <xs:attribute name="GUID" use="required" type="GUIDLiterals"/>
@@ -5065,7 +5200,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
       <xs:sequence>
          <xs:element name="num" type="artUndZaehlbezeichnung"/>
          <xs:element name="heading" type="ueberschrift"/>
-         <xs:group ref="regelungstextGliederung" minOccurs="0" maxOccurs="unbounded"/>
+         <xs:group ref="regelungstextGliederung" minOccurs="0"/>
       </xs:sequence>
       <xs:attribute name="eId" use="required" type="eIdLiterals.gliederungTeil"/>
       <xs:attribute name="GUID" use="required" type="GUIDLiterals"/>
@@ -5081,7 +5216,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
       <xs:sequence>
          <xs:element name="num" type="artUndZaehlbezeichnung"/>
          <xs:element name="heading" type="ueberschrift"/>
-         <xs:group ref="regelungstextGliederung" minOccurs="0" maxOccurs="unbounded"/>
+         <xs:group ref="regelungstextGliederung" minOccurs="0"/>
       </xs:sequence>
       <xs:attribute name="eId" use="required" type="eIdLiterals.gliederungTitel"/>
       <xs:attribute name="GUID" use="required" type="GUIDLiterals"/>
@@ -5097,7 +5232,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
       <xs:sequence>
          <xs:element name="num" type="artUndZaehlbezeichnung"/>
          <xs:element name="heading" type="ueberschrift"/>
-         <xs:group ref="regelungstextGliederung" minOccurs="0" maxOccurs="unbounded"/>
+         <xs:group ref="regelungstextGliederung" minOccurs="0"/>
       </xs:sequence>
       <xs:attribute name="eId"
                     use="required"
@@ -5115,7 +5250,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
       <xs:sequence>
          <xs:element name="num" type="artUndZaehlbezeichnung"/>
          <xs:element name="heading" type="ueberschrift"/>
-         <xs:group ref="regelungstextGliederung" minOccurs="0" maxOccurs="unbounded"/>
+         <xs:group ref="regelungstextGliederung" minOccurs="0"/>
       </xs:sequence>
       <xs:attribute name="eId" use="required" type="eIdLiterals.gliederungUnterkapitel"/>
       <xs:attribute name="GUID" use="required" type="GUIDLiterals"/>
@@ -5131,7 +5266,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
       <xs:sequence>
          <xs:element name="num" type="artUndZaehlbezeichnung"/>
          <xs:element name="heading" type="ueberschrift"/>
-         <xs:group ref="regelungstextGliederung" minOccurs="0" maxOccurs="unbounded"/>
+         <xs:group ref="regelungstextGliederung" minOccurs="0"/>
       </xs:sequence>
       <xs:attribute name="eId" use="required" type="eIdLiterals.gliederungUntertitel"/>
       <xs:attribute name="GUID" use="required" type="GUIDLiterals"/>
@@ -5141,43 +5276,28 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
       <xs:attribute ref="xml:id" use="optional"/>
    </xs:complexType>
    <xs:group name="regelungstextGliederung">
-      <xs:choice>
-         <xs:element name="book"
-                     type="gliederungBuch"
-                     minOccurs="0"
-                     maxOccurs="unbounded"/>
-         <xs:element name="part"
-                     type="gliederungTeil"
-                     minOccurs="0"
-                     maxOccurs="unbounded"/>
-         <xs:element name="chapter"
-                     type="gliederungKapitel"
-                     minOccurs="0"
-                     maxOccurs="unbounded"/>
-         <xs:element name="subchapter"
-                     type="gliederungUnterkapitel"
-                     minOccurs="0"
-                     maxOccurs="unbounded"/>
-         <xs:element name="section"
-                     type="gliederungAbschnitt"
-                     minOccurs="0"
-                     maxOccurs="unbounded"/>
+      <xs:sequence>
          <xs:element name="article"
                      type="einzelvorschrift"
                      minOccurs="0"
                      maxOccurs="unbounded"/>
+         <xs:group ref="regelungstextUntergliederung" minOccurs="0"/>
+      </xs:sequence>
+   </xs:group>
+   <xs:group name="regelungstextUntergliederung">
+      <xs:choice>
+         <xs:element name="book" type="gliederungBuch" maxOccurs="unbounded"/>
+         <xs:element name="part" type="gliederungTeil" maxOccurs="unbounded"/>
+         <xs:element name="chapter" type="gliederungKapitel" maxOccurs="unbounded"/>
+         <xs:element name="subchapter"
+                     type="gliederungUnterkapitel"
+                     maxOccurs="unbounded"/>
+         <xs:element name="section" type="gliederungAbschnitt" maxOccurs="unbounded"/>
          <xs:element name="subsection"
                      type="gliederungUnterabschnitt"
-                     minOccurs="0"
                      maxOccurs="unbounded"/>
-         <xs:element name="title"
-                     type="gliederungTitel"
-                     minOccurs="0"
-                     maxOccurs="unbounded"/>
-         <xs:element name="subtitle"
-                     type="gliederungUntertitel"
-                     minOccurs="0"
-                     maxOccurs="unbounded"/>
+         <xs:element name="title" type="gliederungTitel" maxOccurs="unbounded"/>
+         <xs:element name="subtitle" type="gliederungUntertitel" maxOccurs="unbounded"/>
       </xs:choice>
    </xs:group>
    <xs:complexType name="regelungstextHauptteil" mixed="false">
@@ -5316,7 +5436,7 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:documentation>Die Klasse "ermaechtigungsnormEingangssatz" wird benutzt, um innerhalb von Ermächtigungsnormen einen Eingangssatz einzufügen, welcher für jede einzelne Ermächtigungsnorm gilt.</xs:documentation>
       </xs:annotation>
       <xs:sequence>
-         <xs:element name="p" type="p"/>
+         <xs:element name="p" type="p" maxOccurs="unbounded"/>
       </xs:sequence>
       <xs:attribute name="eId"
                     use="required"

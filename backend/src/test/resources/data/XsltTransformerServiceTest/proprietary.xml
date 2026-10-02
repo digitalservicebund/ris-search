@@ -1,11 +1,13 @@
-<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.8.2/"
+<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.9/"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xsi:schemaLocation="http://Inhaltsdaten.LegalDocML.de/1.8.2/ Grammatiken/Norms/legalDocML.de-regelungstextverkuendungsfassung.xsd">
-    <akn:act>
-        <akn:meta>
-            <akn:proprietary eId="meta-1_proprietary-1">
-                <ris:legalDocML.de_metadaten xmlns:ris="http://MetadatenRIS.LegalDocML.de/1.8.2/"
-                                             xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.8.2/ Grammatiken/Norms/legalDocML.de-metadaten-ris.xsd">
+                xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.9/ Grammatiken/Norms/legalDocML.de-metadaten-ris.xsd http://MetadatenRegelungstext.LegalDocML.de/1.9/ Grammatiken/legalDocML.de-metadaten-regelungstext.xsd http://MetadatenRechtsetzungsdokument.LegalDocML.de/1.9/ Grammatiken/legalDocML.de-metadaten-rechtsetzungsdokument.xsd http://Inhaltsdaten.LegalDocML.de/1.9/ Grammatiken/legalDocML.de-regelungstext.xsd">
+    <akn:act name="/akn/ontology/de/concept/documenttype/bund/regelungstext">
+        <akn:meta GUID="acf37551-89f7-4eeb-9229-ef0759f7d039" eId="meta-n1">
+            <akn:proprietary GUID="e044b111-434e-462c-81be-cf59d137c13a" eId="meta-n1_proprietary-n1"
+                             source="attributsemantik-noch-undefiniert">
+                <ris:legalDocML.de_metadaten xmlns:ris="http://MetadatenRIS.LegalDocML.de/1.9/"
+                                             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                                             xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.9/ Grammatiken/Norms/legalDocML.de-metadaten-ris.xsd">
                     <ris:vollzitat>
                         Verordnung über A in der Fassung der Bekanntmachung vom 01. Januar 2000 (BGBl. I S. 123), die
                         zuletzt durch Artikel 1337 des Gesetzes vom 07. März 2025 (BGBl. 2025 I Nr. 1) geändert worden
@@ -18,10 +20,11 @@
                 </ris:legalDocML.de_metadaten>
             </akn:proprietary>
         </akn:meta>
-        <akn:preface eId="einleitung-1">
-            <akn:longTitle eId="einleitung-1_doktitel-1">
-                <akn:p eId="einleitung-1_doktitel-1_text-1">
-                    <akn:docTitle eId="einleitung-1_doktitel-1_text-1_doctitel-1">docTitle
+        <akn:preface GUID="0fa2c6e8-5607-48ad-9bf4-f51fa5f29ba1" eId="einleitung-n1">
+            <akn:longTitle GUID="4eafb252-b5b6-47c6-9c82-e3d846a6a8d6" eId="einleitung-n1_doktitel-n1">
+                <akn:p GUID="cbff680a-1356-4217-ac93-d8e82d85f670" eId="einleitung-n1_doktitel-n1_text-n1">
+                    <akn:docTitle GUID="0cc3e9e6-dc66-41ce-bfb0-0e2eccab07c1"
+                                  eId="einleitung-n1_doktitel-n1_text-n1_doctitel-n1">docTitle
                     </akn:docTitle>
                 </akn:p>
             </akn:longTitle>

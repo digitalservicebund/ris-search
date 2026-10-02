@@ -6,7 +6,7 @@ import de.bund.digitalservice.ris.builder.models.meta.identification.FRBRLeafs.D
 import de.bund.digitalservice.ris.builder.models.meta.identification.FRBRLeafs.HrefLeaf;
 import de.bund.digitalservice.ris.builder.models.meta.identification.FRBRLeafs.NamedLeaf;
 import de.bund.digitalservice.ris.builder.models.meta.identification.FRBRLeafs.ValueLeaf;
-import de.bund.digitalservice.ris.search.utils.eli.WorkEli;
+import de.bund.digitalservice.ris.search.utils.eli.WorkEliPath;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import lombok.Getter;
@@ -46,8 +46,8 @@ public class FRBRWork extends BaseElement {
 
   /** FRBRWork empty constructor. Calls another constructor with default values. */
   public FRBRWork() {
-    // eli/bund/bgbl-1/2025/341/regelungstext-verkuendung-1
-    this(new WorkEli("bund", "bgbl-1", "2025", "341"));
+    // eli/bund/bgbl-1/2025/341/regelungstext-1
+    this(new WorkEliPath("bund", "bgbl-1", "2025", "341"));
   }
 
   /**
@@ -55,14 +55,13 @@ public class FRBRWork extends BaseElement {
    *
    * @param eli the work eli for the FRBRWork
    */
-  public FRBRWork(WorkEli eli) {
+  public FRBRWork(WorkEliPath eli) {
 
     this.eId = "meta-n1_ident-n1_frbrwork-n1";
 
     this.frbrThis =
         new ValueLeaf(
-            "meta-n1_ident-n1_frbrwork-n1_frbrthis-n1",
-            eli.toString() + "/regelungstext-verkuendung-1");
+            "meta-n1_ident-n1_frbrwork-n1_frbrthis-n1", eli.toString() + "/regelungstext-1");
 
     this.frbrUri = new ValueLeaf("meta-n1_ident-n1_frbrwork-n1_frbruri-n1", eli.toString());
 
@@ -73,10 +72,7 @@ public class FRBRWork extends BaseElement {
             "b29e7271-d0eb-5ae1-9513-27af3a7e69dd");
 
     this.frbrDate =
-        new DateLeaf(
-            "meta-n1_ident-n1_frbrwork-n1_frbrdate-n1",
-            "2025-12-22",
-            "verkuendungsfassung-verkuendungsdatum");
+        new DateLeaf("meta-n1_ident-n1_frbrwork-n1_frbrdate-n1", "2025-12-22", "verkuendungsdatum");
 
     this.frbrAuthor =
         new HrefLeaf(
@@ -91,7 +87,7 @@ public class FRBRWork extends BaseElement {
     this.frbrName = new ValueLeaf("meta-n1_ident-n1_frbrwork-n1_frbrname-n1", eli.agent());
 
     this.frbrSubtype =
-        new ValueLeaf("meta-n1_ident-n1_frbrwork-n1_frbrsubtype-n1", "regelungstext-verkuendung-1");
+        new ValueLeaf("meta-n1_ident-n1_frbrwork-n1_frbrsubtype-n1", "regelungstext-1");
   }
 
   /**
@@ -124,10 +120,7 @@ public class FRBRWork extends BaseElement {
    */
   public FRBRWork setDatePublished(String date) {
     this.frbrDate =
-        new DateLeaf(
-            "meta-n1_ident-n1_frbrwork-n1_frbrdate-n1",
-            date,
-            "verkuendungsfassung-verkuendungsdatum");
+        new DateLeaf("meta-n1_ident-n1_frbrwork-n1_frbrdate-n1", date, "verkuendungsdatum");
     return this;
   }
 }

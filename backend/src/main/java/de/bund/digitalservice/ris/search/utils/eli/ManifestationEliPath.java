@@ -14,7 +14,7 @@ import java.time.format.DateTimeFormatter;
  * Identifies the agent responsible for the legislation or its dissemination. - year: Specifies the
  * year associated with the legislative document's creation or publication.
  */
-public record ManifestationEli(
+public record ManifestationEliPath(
     String jurisdiction,
     String agent,
     String year,

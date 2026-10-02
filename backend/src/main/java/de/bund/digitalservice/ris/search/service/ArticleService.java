@@ -5,7 +5,7 @@ import de.bund.digitalservice.ris.search.models.opensearch.ArticleWithExpression
 import de.bund.digitalservice.ris.search.models.opensearch.LegislationPartType;
 import de.bund.digitalservice.ris.search.repository.opensearch.ArticlesRepository;
 import de.bund.digitalservice.ris.search.utils.RisHighlightBuilder;
-import de.bund.digitalservice.ris.search.utils.eli.ExpressionEli;
+import de.bund.digitalservice.ris.search.utils.eli.ExpressionEliPath;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.List;
@@ -158,13 +158,13 @@ public class ArticleService {
    * combination of expressionEli and eId is is used to retrieve the dokNr from the ris metadata.
    * The eId is not guaranteed to be a stable identifier across all expressions.
    *
-   * @param expressionEli expressionEli of the norm
+   * @param expressionEliPath expressionEli of the norm
    * @param eidGiven the possible eid
    * @return List of version of that article across the whole work
    */
   public Page<ArticleWithExpressions> getAllArticleVersions(
-      ExpressionEli expressionEli, String eidGiven) {
-    String expressionEliString = expressionEli.toString();
+      ExpressionEliPath expressionEliPath, String eidGiven) {
+    String expressionEliString = expressionEliPath.toString();
 
     Sort sort = Sort.by(Sort.Direction.DESC, "entryIntoForceDate");
     Pageable sortedPageable = Pageable.unpaged(sort);

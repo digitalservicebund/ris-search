@@ -12,13 +12,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class BlockContainer extends BaseElement {
 
-  @XmlAttribute private String eId = "präambel-n1_blockcontainer-n1";
+  @XmlAttribute private String eId = "praeambel-n1_blockcontainer-n1";
 
   @XmlAttribute private String refersTo = "inhaltsuebersicht";
 
   @XmlElement(namespace = NormTestDataBuilder.AKN_NS)
   private Heading heading =
-      new Heading("präambel-n1_blockcontainer-n1_überschrift-n1", List.of("Inhaltsverzeichnis"));
+      new Heading("praeambel-n1_blockcontainer-n1_ueberschrift-n1", List.of("Inhaltsverzeichnis"));
 
   @XmlElement(namespace = NormTestDataBuilder.AKN_NS)
   private Toc toc = new Toc();

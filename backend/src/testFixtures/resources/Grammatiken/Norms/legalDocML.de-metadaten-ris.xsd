@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns="http://MetadatenRIS.LegalDocML.de/1.8.2/"
+<xs:schema xmlns="http://MetadatenRIS.LegalDocML.de/1.9/"
            xmlns:xs="http://www.w3.org/2001/XMLSchema"
            elementFormDefault="qualified"
-           targetNamespace="http://MetadatenRIS.LegalDocML.de/1.8.2/"
-           version="LegalDocML.de 1.8.2">
+           targetNamespace="http://MetadatenRIS.LegalDocML.de/1.9/"
+           version="LegalDocML.de 1.9">
     <!-- ********************************* Hinweis zur Lizensierung ********************************* -->
     <xs:annotation>
         <xs:appinfo>
@@ -19,19 +19,6 @@
     <xs:element name="legalDocML.de_metadaten">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="fna" type="SimpleMetadataType" minOccurs="0" maxOccurs="unbounded"/>
-                <xs:element name="art" type="SimpleMetadataType" minOccurs="0" maxOccurs="unbounded"/>
-                <xs:element name="typ" type="SimpleMetadataType" minOccurs="0" maxOccurs="unbounded"/>
-                <xs:element name="subtyp" type="SimpleMetadataType" minOccurs="0" maxOccurs="unbounded"/>
-                <xs:element name="bezeichnungInVorlage" type="SimpleMetadataType" minOccurs="0"
-                            maxOccurs="unbounded"/>
-                <xs:element name="normgeber" type="SimpleMetadataType" minOccurs="0" maxOccurs="unbounded"/>
-                <xs:element name="beschliessendesOrgan" type="BeschliessendesOrganType" minOccurs="0"
-                            maxOccurs="unbounded"/>
-                <xs:element name="organisationsEinheit" type="SimpleMetadataType" minOccurs="0"
-                            maxOccurs="unbounded"/>
-                <xs:element name="artDerNorm" type="ArtDerNormFrameType" minOccurs="0" maxOccurs="unbounded"/>
-                <xs:element name="einzelelement" type="EinzelelementType" minOccurs="0" maxOccurs="unbounded"/>
                 <xs:element name="abkuerzung" type="AbkuerzungType" minOccurs="0" maxOccurs="1"/>
                 <xs:element name="inkraft" type="InkraftType" minOccurs="0" maxOccurs="1"/>
                 <xs:element name="ausserkraft" type="AusserkraftType" minOccurs="0" maxOccurs="1"/>
@@ -43,97 +30,10 @@
                 <xs:element name="doknr" type="DoknrRef" minOccurs="0" maxOccurs="unbounded" />
                 <xs:element name="textnachweis-geltung-ab" type="TextnachweisType" minOccurs="0" maxOccurs="1"/>
                 <xs:element name="gegenstandslos" type="EmptyType" minOccurs="0" maxOccurs="1"/>
-                <xs:any minOccurs="0" namespace="http://MetadatenMods.LegalDocML.de/1.8.2/"/>
+                <xs:any minOccurs="0" namespace="http://MetadatenMods.LegalDocML.de/1.9/"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
-
-    <xs:complexType name="EinzelelementType">
-        <xs:all>
-            <xs:element name="artDerNorm" type="ArtDerNormSingleElementType" minOccurs="0"/>
-        </xs:all>
-        <xs:attribute name="href" type="eId-verweis"/>
-    </xs:complexType>
-
-    <xs:complexType name="SimpleMetadataType">
-        <xs:simpleContent>
-            <xs:extension base="xs:string">
-                <xs:attribute name="start" type="xs:date"/>
-                <xs:attribute name="end">
-                    <xs:simpleType>
-                        <xs:union memberTypes="xs:date">
-                            <xs:simpleType>
-                                <xs:restriction base="xs:string">
-                                    <xs:enumeration value="unbestimmt"/>
-                                </xs:restriction>
-                            </xs:simpleType>
-                        </xs:union>
-                    </xs:simpleType>
-                </xs:attribute>
-            </xs:extension>
-        </xs:simpleContent>
-    </xs:complexType>
-
-    <xs:complexType name="BeschliessendesOrganType">
-        <xs:simpleContent>
-            <xs:extension base="SimpleMetadataType">
-                <xs:attribute name="qualifizierteMehrheit" type="xs:boolean" use="required"/>
-            </xs:extension>
-        </xs:simpleContent>
-    </xs:complexType>
-
-    <xs:simpleType name="ArtDerNormFrameContentType">
-        <xs:restriction base="xs:string">
-            <xs:pattern
-                    value="(SN|ÄN|ÜN|SN,ÄN|SN,ÜN|ÄN,SN|ÄN,ÜN|ÜN,SN|ÜN,ÄN|ÄN,SN,ÜN|ÄN,ÜN,SN|SN,ÄN,ÜN|SN,ÜN,ÄN|ÜN,SN,ÄN|ÜN,ÄN,SN)"/>
-        </xs:restriction>
-    </xs:simpleType>
-
-    <xs:complexType name="ArtDerNormFrameType">
-        <xs:simpleContent>
-            <xs:extension base="ArtDerNormFrameContentType">
-                <xs:attribute name="start" type="xs:date"/>
-                <xs:attribute name="end">
-                    <xs:simpleType>
-                        <xs:union memberTypes="xs:date">
-                            <xs:simpleType>
-                                <xs:restriction base="xs:string">
-                                    <xs:enumeration value="unbestimmt"/>
-                                </xs:restriction>
-                            </xs:simpleType>
-                        </xs:union>
-                    </xs:simpleType>
-                </xs:attribute>
-            </xs:extension>
-        </xs:simpleContent>
-    </xs:complexType>
-
-    <xs:simpleType name="ArtDerNormSingleContentType">
-        <xs:restriction base="xs:string">
-            <xs:enumeration value="SN"/>
-            <xs:enumeration value="ÄN"/>
-            <xs:enumeration value="ÜN"/>
-        </xs:restriction>
-    </xs:simpleType>
-
-    <xs:complexType name="ArtDerNormSingleElementType">
-        <xs:simpleContent>
-            <xs:extension base="ArtDerNormSingleContentType">
-                <xs:attribute name="start" type="xs:date"/>
-                <xs:attribute name="end">
-                    <xs:simpleType>
-                        <xs:union memberTypes="xs:date">
-                            <xs:simpleType>
-                                <xs:restriction base="xs:string">
-                                    <xs:enumeration value="unbestimmt"/>
-                                </xs:restriction>
-                            </xs:simpleType>
-                        </xs:union>
-                    </xs:simpleType>
-                </xs:attribute>
-            </xs:extension>
-        </xs:simpleContent>
-    </xs:complexType>
 
     <xs:complexType name="AbkuerzungType">
         <xs:simpleContent>

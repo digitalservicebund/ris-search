@@ -19,7 +19,8 @@ package de.bund.digitalservice.ris.search.utils.eli;
  * <p>Overrides: - toString(): Formats the WorkEli as a standardized ELI string of the format
  * "eli/{jurisdiction}/{agent}/{year}/{naturalIdentifier}".
  */
-public record WorkEli(String jurisdiction, String agent, String year, String naturalIdentifier) {
+public record WorkEliPath(
+    String jurisdiction, String agent, String year, String naturalIdentifier) {
 
   @Override
   public String toString() {

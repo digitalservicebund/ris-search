@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns="http://MetadatenRegelungstext.LegalDocML.de/1.8.2/"
+<xs:schema xmlns="http://MetadatenRegelungstext.LegalDocML.de/1.9/"
            xmlns:xs="http://www.w3.org/2001/XMLSchema"
            elementFormDefault="qualified"
-           targetNamespace="http://MetadatenRegelungstext.LegalDocML.de/1.8.2/"
-           version="LegalDocML.de 1.8.2 (07.08.2025)">
+           targetNamespace="http://MetadatenRegelungstext.LegalDocML.de/1.9/"
+           version="LegalDocML.de 1.9 (03.11.2025)">
 <!-- ********************************* Hinweis zur Lizensierung ********************************* -->
    <xs:annotation>
       <xs:appinfo>
@@ -31,6 +31,11 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
                   <xs:documentation>Form eines Rechtsetzungsdokuments (z. B. Stammform, Mantelform etc.) und der darin referenzierten Teildokumente</xs:documentation>
                </xs:annotation>
             </xs:element>
+            <xs:element name="bezugstyp" type="bezugstypen" minOccurs="0">
+               <xs:annotation>
+                  <xs:documentation>Der Bezugstyp einer Berichtigung</xs:documentation>
+               </xs:annotation>
+            </xs:element>
             <xs:element name="vomHdrAbweichendeGliederung" minOccurs="0">
                <xs:complexType>
                   <xs:annotation>
@@ -50,6 +55,18 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:enumeration value="vertragsgesetz"/>
          <xs:enumeration value="vertragsverordnung"/>
          <xs:enumeration value="sonstige-bekanntmachung"/>
+         <xs:enumeration value="geschäftsordnung"/>
+         <xs:enumeration value="satzung"/>
+         <xs:enumeration value="tarifvertrag"/>
+         <xs:enumeration value="urteil-des-bundesverfassungsgerichts"/>
+         <xs:enumeration value="beschluss-des-bundesverfassungsgerichts"/>
+         <xs:enumeration value="anordnung-des-bundespräsidenten"/>
+         <xs:enumeration value="verwaltungsvereinbarung"/>
+         <xs:enumeration value="ohne-qualifikation"/>
+         <xs:enumeration value="sonstige-anordnungen"/>
+         <xs:enumeration value="völkerrechtsliche-vereinbarung"/>
+         <xs:enumeration value="berichtigung"/>
+         <xs:enumeration value="bekanntmachung-vor-einer-neufassung"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="formen" final="restriction">
@@ -58,6 +75,29 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
          <xs:enumeration value="stammform"/>
          <xs:enumeration value="eingebundene-stammform"/>
          <xs:enumeration value="nicht-vorhanden"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="bezugstypen" final="restriction">
+      <xs:restriction base="xs:string">
+         <xs:enumeration value="gesetz"/>
+         <xs:enumeration value="verordnung"/>
+         <xs:enumeration value="satzung"/>
+         <xs:enumeration value="verwaltungsvorschrift"/>
+         <xs:enumeration value="vertragsgesetz"/>
+         <xs:enumeration value="vertragsverordnung"/>
+         <xs:enumeration value="sonstige-bekanntmachung"/>
+         <xs:enumeration value="geschäftsordnung"/>
+         <xs:enumeration value="satzung"/>
+         <xs:enumeration value="tarifvertrag"/>
+         <xs:enumeration value="urteil-des-bundesverfassungsgerichts"/>
+         <xs:enumeration value="beschluss-des-bundesverfassungsgerichts"/>
+         <xs:enumeration value="anordnung-des-bundespräsidenten"/>
+         <xs:enumeration value="verwaltungsvereinbarung"/>
+         <xs:enumeration value="ohne-qualifikation"/>
+         <xs:enumeration value="sonstige-anordnungen"/>
+         <xs:enumeration value="völkerrechtsliche-vereinbarung"/>
+         <xs:enumeration value="berichtigung"/>
+         <xs:enumeration value="bekanntmachung-vor-einer-neufassung"/>
       </xs:restriction>
    </xs:simpleType>
 </xs:schema>

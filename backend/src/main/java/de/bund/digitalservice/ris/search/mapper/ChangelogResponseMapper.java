@@ -73,7 +73,8 @@ public class ChangelogResponseMapper {
                 .map(
                     eli ->
                         toChangedDocument(
-                            getLegislationBaseUrl(eli.getManifestationEli().getManifestationRoot()),
+                            getLegislationBaseUrl(
+                                eli.getManifestationEliPath().getManifestationRoot()),
                             JsonldTypes.LEGISLATION_OBJECT)),
         id ->
             EliFile.fromString(id).stream()
@@ -81,7 +82,7 @@ public class ChangelogResponseMapper {
                 .map(
                     eli ->
                         new ChangelogDeletedDocument(
-                            getLegislationBaseUrl(eli.getExpressionEli().toString()),
+                            getLegislationBaseUrl(eli.getExpressionEliPath().toString()),
                             JsonldTypes.LEGISLATION)),
         remoteContext);
   }

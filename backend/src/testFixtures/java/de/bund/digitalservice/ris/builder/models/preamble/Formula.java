@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Formula extends BaseElement {
 
-  @XmlAttribute private String eId = "präambel-n1_formel-n1";
+  @XmlAttribute private String eId = "praeambel-n1_formel-n1";
 
   @XmlAttribute private String refersTo = "eingangsformel";
 
@@ -40,6 +40,6 @@ public class Formula extends BaseElement {
    */
   public Formula(String text) {
     this();
-    this.paragraph = new AknP("präambel-n1_formel-n1", text);
+    this.paragraph = new AknP("praeambel-n1_formel-n1", text);
   }
 }

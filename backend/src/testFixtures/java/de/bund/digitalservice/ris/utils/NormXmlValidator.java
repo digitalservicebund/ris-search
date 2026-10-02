@@ -10,7 +10,7 @@ public class NormXmlValidator {
 
   /** The kind of norm document being validated, determining which schema to apply. */
   public enum Type {
-    REGELUNGSTEXT("Grammatiken/Norms/legalDocML.de-regelungstextverkuendungsfassung.xsd"),
+    REGELUNGSTEXT("Grammatiken/Norms/legalDocML.de-regelungstext.xsd"),
     ANLAGE("Grammatiken/Norms/legalDocML.de-offenestruktur.xsd"),
     RECHTSETZUNGSDOKUMENT("Grammatiken/Norms/legalDocML.de-rechtsetzungsdokument.xsd");
 

@@ -55,9 +55,7 @@ class SitemapsUpdateJobTest {
       caseLawKeys.add("case-law/KORE12354" + i + ".xml");
       literatureKeys.add("literature/XXLU00000" + i + ".akn.xml");
       normsKeys.add(
-          "eli/bund/bgbl-1/1992/s101-"
-              + i
-              + "/1992-01-01/1/deu/1992-01-02/regelungstext-verkuendung-1.xml");
+          "eli/bund/bgbl-1/1992/s101-" + i + "/1992-01-01/1/deu/1992-01-02/regelungstext-1.xml");
     }
 
     when(administrativeDirectiveBucket.getAllKeys()).thenReturn(administrativeDirective);
@@ -122,7 +120,7 @@ class SitemapsUpdateJobTest {
   void createSitemapsForNorms_filtersToOnlyNormFileContent() {
     List<String> normsKeys =
         List.of(
-            "eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu/1992-01-02/regelungstext-verkuendung-1.xml",
+            "eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu/1992-01-02/regelungstext-1.xml",
             "eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu/1992-01-02/regelungstext-2.xml",
             "eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu/1992-01-02/anlage-regelungstext-1.xml");
 
@@ -140,8 +138,8 @@ class SitemapsUpdateJobTest {
   void createSitemapsForNorms_deduplicatesSameExpressionFromMultipleManifestations() {
     List<String> normsKeys =
         List.of(
-            "eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu/1992-01-02/regelungstext-verkuendung-1.xml",
-            "eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu/1992-03-10/regelungstext-verkuendung-1.xml");
+            "eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu/1992-01-02/regelungstext-1.xml",
+            "eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu/1992-03-10/regelungstext-1.xml");
 
     when(normsBucket.getAllKeys()).thenReturn(normsKeys);
 

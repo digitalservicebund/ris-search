@@ -89,17 +89,17 @@ public record EliFile(
     }
   }
 
-  public WorkEli getWorkEli() {
-    return new WorkEli(jurisdiction(), agent(), year(), naturalIdentifier());
+  public WorkEliPath getWorkEliPath() {
+    return new WorkEliPath(jurisdiction(), agent(), year(), naturalIdentifier());
   }
 
-  public ExpressionEli getExpressionEli() {
-    return new ExpressionEli(
+  public ExpressionEliPath getExpressionEliPath() {
+    return new ExpressionEliPath(
         jurisdiction(), agent(), year(), naturalIdentifier(), pointInTime(), version(), language());
   }
 
-  public ManifestationEli getManifestationEli() {
-    return new ManifestationEli(
+  public ManifestationEliPath getManifestationEliPath() {
+    return new ManifestationEliPath(
         jurisdiction(),
         agent(),
         year(),
@@ -114,6 +114,6 @@ public record EliFile(
 
   @Override
   public String toString() {
-    return getManifestationEli().toString();
+    return getManifestationEliPath().toString();
   }
 }

@@ -626,10 +626,10 @@ class NormsControllerApiIntegrationTest extends ContainersIntegrationBase {
         new Changelog(
             new HashSet<>(
                 List.of(
-                    "eli/bund/bgbl-1/1999/identifier/2026-01-01/1/deu/2026-01-01/regelungstext-verkuendung-1.xml")),
+                    "eli/bund/bgbl-1/1999/identifier/2026-01-01/1/deu/2026-01-01/regelungstext-1.xml")),
             new HashSet<>(
                 List.of(
-                    "eli/bund/bgbl-1/2000/identifier/2026-01-01/1/deu/2026-01-01/regelungstext-verkuendung-1.xml")),
+                    "eli/bund/bgbl-1/2000/identifier/2026-01-01/1/deu/2026-01-01/regelungstext-1.xml")),
             false);
     String changelogContent = new ObjectMapper().writeValueAsString(changelog);
     normsBucket.save(

@@ -1,6 +1,6 @@
 package de.bund.digitalservice.ris.search.config.obs;
 
-import de.bund.digitalservice.ris.search.exception.FileTransformationException;
+import de.bund.digitalservice.ris.html.exception.FileTransformationException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;

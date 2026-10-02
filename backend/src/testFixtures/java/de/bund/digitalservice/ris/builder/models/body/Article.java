@@ -58,7 +58,7 @@ public class Article extends BaseElement implements BodyElement {
       headingElements.add(new AuthorialNote(authorialNote));
     }
 
-    this.heading = new Heading(eId + "_überschrift-n1", headingElements);
+    this.heading = new Heading(eId + "_ueberschrift-n1", headingElements);
     return this;
   }
 
