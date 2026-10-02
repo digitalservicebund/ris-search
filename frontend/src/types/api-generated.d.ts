@@ -1077,6 +1077,12 @@ export interface components {
              * @description Datum
              */
             datum: string;
+            /**
+             * @description Art des Datums
+             * @example Entscheidungsdatum
+             * @enum {string}
+             */
+            datumsTyp?: "Entscheidungsdatum" | "Mitteilungsdatum" | "Datum der Zustellung an Verkündungs statt";
             /** @description Abweichende Daten */
             abweichendeDaten?: string[];
             /** @description Gliederung */

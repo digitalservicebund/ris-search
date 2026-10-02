@@ -14,7 +14,7 @@ describe("DateFilter", () => {
       });
 
       expect(
-        screen.getByRole("form", { name: "Filter nach Entscheidungsdatum" }),
+        screen.getByRole("form", { name: "Filter nach Datum" }),
       ).toBeInTheDocument();
 
       expect(
@@ -639,7 +639,7 @@ describe("DateFilter", () => {
       });
 
       const form = screen.getByRole("form", {
-        name: "Filter nach Entscheidungsdatum",
+        name: "Filter nach Datum",
       });
 
       // Pressing enter in one of the date inputs triggers implicit submission

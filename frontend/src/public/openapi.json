@@ -3083,6 +3083,12 @@
             "format" : "date",
             "description" : "Datum"
           },
+          "datumsTyp" : {
+            "type" : "string",
+            "description" : "Art des Datums",
+            "enum" : [ "Entscheidungsdatum", "Mitteilungsdatum", "Datum der Zustellung an Verkündungs statt" ],
+            "example" : "Entscheidungsdatum"
+          },
           "abweichendeDaten" : {
             "type" : "array",
             "description" : "Abweichende Daten",

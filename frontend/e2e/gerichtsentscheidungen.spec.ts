@@ -191,23 +191,67 @@ test.describe("actions menu", () => {
   });
 });
 
-test("can view metadata", { tag: ["@RISDEV-10568"] }, async ({ page }) => {
-  await navigate(page, "/gerichtsentscheidungen/KORE600500000");
-  const metadataList = page.getByTestId("metadata-list");
-  const defs = metadataList.getByRole("definition");
+test(
+  "can view metadata",
+  { tag: ["@RISDEV-10568", "@RISDEV-11766"] },
+  async ({ page }) => {
+    await navigate(page, "/gerichtsentscheidungen/KORE600500000");
+    const metadataList = page.getByTestId("metadata-list");
+    const defs = metadataList.getByRole("definition");
 
-  await expect(metadataList.getByRole("term")).toHaveText([
-    "Gericht",
-    "Dokumenttyp",
-    "Entscheidungsdatum",
-    "Aktenzeichen",
-  ]);
+    await expect(metadataList.getByRole("term")).toHaveText([
+      "Dokumenttyp",
+      "Gericht",
+      "Aktenzeichen",
+      "Entscheidungsdatum",
+    ]);
 
-  await expect(defs.nth(0)).toHaveText("LG Test6 Label");
-  await expect(defs.nth(1)).toHaveText("Urteil");
-  await expect(defs.nth(2)).toHaveText("09.04.2025");
-  // Aktenzeichen are rendered as badges (spans)
-  await expect(defs.nth(3).locator("span")).toHaveText(["TS 123456"]);
+    await expect(defs.nth(0)).toHaveText("Urteil");
+    await expect(defs.nth(1)).toHaveText("LG Test6 Label");
+    // Aktenzeichen are rendered as badges (spans)
+    await expect(defs.nth(2).locator("span")).toHaveText(["TS 123456"]);
+    await expect(defs.nth(3)).toHaveText("09.04.2025");
+  },
+);
+
+test.describe("date label", { tag: ["@RISDEV-11766"] }, () => {
+  test("shows Entscheidungsdatum", async ({ page }) => {
+    await navigate(page, "/gerichtsentscheidungen/KORE600500000");
+    const metadataList = page.getByTestId("metadata-list");
+
+    await expect(metadataList.getByRole("term").nth(3)).toHaveText(
+      "Entscheidungsdatum",
+    );
+    await expect(metadataList.getByRole("definition").nth(3)).toHaveText(
+      "09.04.2025",
+    );
+  });
+
+  test("shows Mitteilungsdatum", async ({ page }) => {
+    await navigate(page, "/gerichtsentscheidungen/KORE600500002");
+    const metadataList = page.getByTestId("metadata-list");
+
+    await expect(metadataList.getByRole("term").nth(3)).toHaveText(
+      "Mitteilungsdatum",
+    );
+    await expect(metadataList.getByRole("definition").nth(3)).toHaveText(
+      "22.11.2023",
+    );
+  });
+
+  test("shows Datum der Zustellung an Verkündungs statt as Entscheidungsdatum", async ({
+    page,
+  }) => {
+    await navigate(page, "/gerichtsentscheidungen/KORE600500001");
+    const metadataList = page.getByTestId("metadata-list");
+
+    await expect(metadataList.getByRole("term").nth(3)).toHaveText(
+      "Entscheidungsdatum",
+    );
+    await expect(metadataList.getByRole("definition").nth(3)).toHaveText(
+      "15.06.2024",
+    );
+  });
 });
 
 test("can view details", { tag: ["@RISDEV-12108"] }, async ({ page }) => {
@@ -244,10 +288,127 @@ test.describe("can view verweise", { tag: ["@RISDEV-12560"] }, () => {
       "Verweise",
     );
 
-    await expect(tabPanel.getByText("Normen")).toBeVisible();
+    await expect(
+      tabPanel.getByRole("heading", { level: 3, name: "Normen" }),
+    ).toBeVisible();
     await expect(
       tabPanel.getByText("BDG § 34, vereinbar mit höherrangigem Recht Hessen"),
     ).toBeVisible();
+
+    await expect(
+      tabPanel.getByRole("heading", {
+        level: 3,
+        name: "Zitierte Rechtsprechung",
+      }),
+    ).toBeVisible();
+    await expect(
+      tabPanel.getByText(
+        "BVerfG, Beschluss vom 11. November 2020 - 1 BvR 1/20",
+      ),
+    ).toBeVisible();
+
+    await expect(
+      tabPanel.getByRole("heading", {
+        level: 3,
+        name: "Verweisende Rechtsprechung",
+      }),
+    ).toBeVisible();
+    await expect(
+      tabPanel.getByText("LG München, Urteil vom 6. Juni 2015 - 3 O 4/15"),
+    ).toBeVisible();
+
+    await expect(
+      tabPanel.getByRole("heading", {
+        level: 3,
+        name: "Zitierte Verwaltungsvorschriften",
+      }),
+    ).toBeVisible();
+    await expect(
+      tabPanel.getByText("VV DEU BMF 2010-01-01 1, BStBl I 2010, 1"),
+    ).toBeVisible();
+
+    await expect(
+      tabPanel.getByRole("heading", {
+        level: 3,
+        name: "Verweisende Verwaltungsvorschriften",
+      }),
+    ).toBeVisible();
+    await expect(tabPanel.getByText("VV DEU BMF 2011-02-02 2")).toBeVisible();
+
+    await expect(
+      tabPanel.getByRole("heading", {
+        level: 3,
+        name: "Zitierte unselbständige Literatur",
+      }),
+    ).toBeVisible();
+    await expect(
+      tabPanel.getByRole("link", {
+        name: "Müller, ETD-U SelbstFund, 1982, 123-123",
+      }),
+    ).toBeVisible();
+
+    await expect(
+      tabPanel.getByRole("heading", {
+        level: 3,
+        name: "Verweisende unselbständige Literatur",
+      }),
+    ).toBeVisible();
+    await expect(tabPanel.getByText("NVwZ 2020, 7")).toBeVisible();
+
+    await expect(
+      tabPanel.getByRole("heading", {
+        level: 3,
+        name: "Zitierte selbständige Literatur",
+      }),
+    ).toBeVisible();
+    await expect(tabPanel.getByText("Weber")).toBeVisible();
+
+    await expect(
+      tabPanel.getByRole("heading", {
+        level: 3,
+        name: "Verweisende selbständige Literatur",
+      }),
+    ).toBeVisible();
+    await expect(
+      tabPanel.getByRole("link", {
+        name: "Schmidt, Peter, Test-Dokument SLI, 2024",
+      }),
+    ).toBeVisible();
+
+    await expect(
+      tabPanel.getByRole("heading", {
+        level: 3,
+        name: "Vorgehende Entscheidungen",
+      }),
+    ).toBeVisible();
+    await expect(
+      tabPanel.getByRole("link", {
+        name: "VG Frankfurt, Beschluss vom 4. September 2026 - Foo Bar 2361/26.F",
+      }),
+    ).toBeVisible();
+
+    await expect(
+      tabPanel.getByRole("heading", {
+        level: 3,
+        name: "Nachgehende Entscheidungen",
+      }),
+    ).toBeVisible();
+    await expect(
+      tabPanel.getByText(
+        "OVG Münster, Beschluss vom 1. Juni 2025 - XVI VL 34/99 (anhängig)",
+      ),
+    ).toBeVisible();
+  });
+
+  test("can follow a verweis link", async ({
+    page,
+    privateFeaturesEnabled,
+  }) => {
+    test.skip(!privateFeaturesEnabled);
+    await navigate(page, "/gerichtsentscheidungen/BDRE000800001");
+    await page.getByRole("tab", { name: "Verweise" }).click();
+
+    const tabPanel = page.getByRole("tabpanel", { name: "Verweise" });
 
     const linkedVerweis = tabPanel.getByRole("link", {
       name: "VG Frankfurt, Beschluss vom 4. September 2026 - Foo Bar 2361/26.F",

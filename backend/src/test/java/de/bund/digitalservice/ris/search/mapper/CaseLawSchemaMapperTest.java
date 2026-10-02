@@ -6,6 +6,7 @@ import static de.bund.digitalservice.ris.SharedTestConstants.DATE_2024_01_03;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import de.bund.digitalservice.ris.SharedTestConstants;
+import de.bund.digitalservice.ris.search.models.DatumsTyp;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.schema.CaseLawSchema;
 import de.bund.digitalservice.ris.search.schema.DocumentEncodingSchema;
@@ -29,6 +30,7 @@ class CaseLawSchemaMapperTest {
         .gerichtsbarkeit("Ordentliche Gerichtsbarkeit")
         .documentType("Urteil")
         .decisionDate(SharedTestConstants.DATE_2024_01_02)
+        .datumsTyp(DatumsTyp.MITTEILUNGSDATUM)
         .fileNumbers(List.of("FileNumberTest"))
         .abweichendeAktenzeichen(List.of("1 BvR 839, 899/96"))
         .dissentingOpinion("eine abweichende Meinung")
@@ -153,6 +155,7 @@ class CaseLawSchemaMapperTest {
     assertThat(rechtsprechungSchema.gericht()).isEqualTo("KG Berlin");
     assertThat(rechtsprechungSchema.dokumenttyp()).isEqualTo("Urteil");
     assertThat(rechtsprechungSchema.datum()).isEqualTo(SharedTestConstants.DATE_2024_01_02);
+    assertThat(rechtsprechungSchema.datumsTyp()).isEqualTo(DatumsTyp.MITTEILUNGSDATUM);
     assertThat(rechtsprechungSchema.abweichendeMeinung()).isEqualTo("eine abweichende Meinung");
     assertThat(rechtsprechungSchema.entscheidungsgruende()).isEqualTo("diese Entscheidungsgründe");
     assertThat(rechtsprechungSchema.orientierungssatz()).isEqualTo("Orientierungssatz");

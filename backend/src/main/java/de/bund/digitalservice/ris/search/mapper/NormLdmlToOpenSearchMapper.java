@@ -599,7 +599,7 @@ public class NormLdmlToOpenSearchMapper {
 
   private static String buildArticleHeader(String articleMarker, String articleHeading) {
     if (!articleMarker.isEmpty() && !articleHeading.isEmpty()) {
-      return String.format("%s %s", articleMarker, articleHeading);
+      return articleMarker + " " + articleHeading;
     } else if (!articleMarker.isEmpty()) {
       return articleMarker;
     } else return Objects.requireNonNullElse(articleHeading, "");

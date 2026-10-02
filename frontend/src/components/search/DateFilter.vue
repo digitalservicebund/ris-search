@@ -28,8 +28,6 @@ const periodToYearInputId = useId();
 
 const filterLabel = computed(() => {
   switch (documentKind) {
-    case DocumentKind.CaseLaw:
-      return "Entscheidungsdatum";
     case DocumentKind.Norm:
       return "Gültigkeit";
     case DocumentKind.Literature:

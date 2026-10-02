@@ -116,22 +116,25 @@ const tocEntries = computed<TreeItem[]>(() => {
 });
 
 const headerMetadata = computed<MetadataItem[]>(() => [
-  { type: "text", label: "Gericht", value: rechtsprechung.value?.gericht },
   {
     type: "text",
     label: "Dokumenttyp",
     value: rechtsprechung.value?.dokumenttyp,
   },
-  {
-    type: "text",
-    label: "Entscheidungsdatum",
-    value: dateFormattedDDMMYYYY(rechtsprechung.value?.datum),
-  },
+  { type: "text", label: "Gericht", value: rechtsprechung.value?.gericht },
   {
     type: "badge",
     label: "Aktenzeichen",
     values: rechtsprechung.value?.aktenzeichenListe ?? [],
     color: "gray",
+  },
+  {
+    type: "text",
+    label:
+      rechtsprechung.value?.datumsTyp === "Mitteilungsdatum"
+        ? "Mitteilungsdatum"
+        : "Entscheidungsdatum",
+    value: dateFormattedDDMMYYYY(rechtsprechung.value?.datum),
   },
 ]);
 

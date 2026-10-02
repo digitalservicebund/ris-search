@@ -15,10 +15,10 @@ test-containers = "1.21.4"
 spring-cloud-k8s = "5.0.3"
 springdoc-openapi = "3.1.1"
 prometheus = "1.17.1"
-sentry = "8.57.0"
+sentry = "8.58.0"
 commons-text = "1.15.0"
 junit5 = "1.5.0"
-mockito = "5.23.0"
+mockito = "5.24.0"
 spring-security = "6.5.2"
 spring-security-test = "7.1.1"
 spring-data-opensearch = "3.1.4"
@@ -34,8 +34,8 @@ posthog = "1.2.0"
 pebble = "4.1.2"
 rest-assured = "6.0.1"
 commons-io = "2.22.0"
-ris-html-transformation="0.0.10"
-ris-xml-schema="0.3.6"
+ris-html-transformation="0.0.11"
+ris-xml-schema="0.3.11"
 titanium-json="1.7.0"
 jakarta-json="2.0.1"
 reflections = "0.10.2"
@@ -87,6 +87,10 @@ reflections = { module = "org.reflections:reflections", version.ref = "reflectio
 
 # CVE-2026-65182
 tomcat-embed-core = { module = "org.apache.tomcat.embed:tomcat-embed-core" , version = "11.0.26" }
+
+# CVE-2026-68497
+fasterxml-jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version = "2.21.7" }
+tools-jackson-databind = { module = "tools.jackson.core:jackson-databind", version = "3.1.7" }
 
 [plugins]
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }

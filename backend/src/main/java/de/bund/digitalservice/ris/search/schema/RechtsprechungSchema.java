@@ -1,6 +1,7 @@
 package de.bund.digitalservice.ris.search.schema;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import de.bund.digitalservice.ris.search.models.DatumsTyp;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
 import java.util.List;
@@ -31,6 +32,7 @@ public record RechtsprechungSchema(
     @Schema(description = "Rechtsfrage") String rechtsfrage,
     @Schema(description = "Tenor") String tenor,
     @Schema(description = "Datum", requiredMode = Schema.RequiredMode.REQUIRED) LocalDate datum,
+    @Schema(example = "Entscheidungsdatum", description = "Art des Datums") DatumsTyp datumsTyp,
     @Schema(description = "Abweichende Daten") List<LocalDate> abweichendeDaten,
     @Schema(description = "Gliederung") String gliederung,
     @Schema(description = "Aktenzeichen") String aktenzeichen,
