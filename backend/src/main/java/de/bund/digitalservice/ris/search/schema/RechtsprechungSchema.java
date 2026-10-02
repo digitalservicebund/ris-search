@@ -38,6 +38,7 @@ public record RechtsprechungSchema(
     @RISSchema(name = "akn:decision") String tenor,
     @RISSchema(name = "ris:entscheidungsdatum", requiredMode = Schema.RequiredMode.REQUIRED)
         LocalDate datum,
+    @Schema(example = "Entscheidungsdatum", description = "Art des Datums") DatumsTyp datumsTyp,
     @RISSchema(name = "ris:abweichendeDaten") List<LocalDate> abweichendeDaten,
     @RISSchema(name = "ris:gliederung") String gliederung,
     @RISSchema(name = "ris:aktenzeichen") String aktenzeichen,
