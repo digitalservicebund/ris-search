@@ -71,6 +71,13 @@ public class ArticleController {
                 jsonldContextPath));
   }
 
+  /**
+   * Retrieve all LegislationExpressions that a given article revision is part of
+   *
+   * @param revision The identifier of the article revision
+   * @return a paginated collection {@link CollectionSchema} of expression level metadata {@link
+   *     LegislationExpressionSearchSchema}
+   */
   @GetMapping(path = ApiConfig.Paths.ARTICLE + "/{revision}/legislations")
   public ResponseEntity<CollectionSchema<LegislationExpressionSearchSchema>>
       getLegislationExpressionsByArticleRevision(@Parameter() @PathVariable String revision) {
