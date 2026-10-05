@@ -32,6 +32,10 @@ defineSlots<{
 </script>
 
 <template>
+  <!-- Renders a label and a value per column as direct grid items, so the
+       parent must be the grid: two columns (label, value) on narrow viewports,
+       and on wide ones a subgrid with one track per column, as the labels are
+       then visually hidden. -->
   <template v-for="column in columns" :key="column.key">
     <span class="typo-label1-bold flex min-h-32 items-center md:sr-only"
       >{{ column.label }}:</span
