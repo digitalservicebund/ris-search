@@ -111,7 +111,7 @@ export function isStrictDateFilterValue(
 }
 
 function validAtPointInTime(pointInTime: string): string {
-  return `entry_into_force_date:<${pointInTime} AND ((expiry_date:>${pointInTime}) OR (NOT _exists_:expiry_date))`;
+  return `entry_into_force_date:<=${pointInTime} AND ((expiry_date:>=${pointInTime}) OR (NOT _exists_:expiry_date))`;
 }
 
 /**
