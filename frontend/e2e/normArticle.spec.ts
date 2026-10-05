@@ -524,6 +524,11 @@ test.describe("fassungen tab", { tag: ["@RISDEV-11132"] }, () => {
     // expand the first row
     await page.getByText("Gültig ab: 01.01.2022 Gültig bis: –").click();
     await expect(page.getByText("Dritte Version des § 1.")).toBeVisible();
+    await expect(
+      page
+        .getByRole("list", { name: "Fassungen" })
+        .getByRole("heading", { name: "§ 1 Erster Artikel", level: 2 }),
+    ).toBeVisible();
 
     // clicking a different row closes the previous and expands the new one
     await page

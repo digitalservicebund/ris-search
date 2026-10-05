@@ -205,7 +205,6 @@ const currentRowId = useId();
             <template v-if="expandedRowKey === row.key">
               <DocumentsNormsLegislationContent
                 v-if="rowsHtml.get(expandedRowKey)?.html"
-                single-article
               >
                 <div
                   class="akn-act -mt-16 px-16"
@@ -238,3 +237,11 @@ const currentRowId = useId();
     </template>
   </ul>
 </template>
+
+<style scoped>
+@reference "~/assets/main.css";
+
+:deep(h2.einzelvorschrift) {
+  @apply typo-body-bold mt-0 mb-16;
+}
+</style>
