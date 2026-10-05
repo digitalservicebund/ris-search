@@ -4,6 +4,7 @@ import de.bund.digitalservice.ris.search.models.opensearch.EcliCrawlerDocument;
 import java.util.List;
 import java.util.stream.Stream;
 import org.apache.commons.collections4.ListUtils;
+import org.springframework.data.elasticsearch.annotations.Query;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 
 /**
@@ -19,11 +20,13 @@ public interface EcliCrawlerDocumentRepository
   int FIND_BY_FILENAME_BATCH_SIZE = 1000;
 
   /**
-   * Find crawler documents matching any of the given filenames in a single query.
+   * Find crawler documents matching any of the given filenames in a single terms query on the
+   * {@code filename.keyword} subfield.
    *
    * @param filenames the filenames to search for
    * @return stream of matching documents
    */
+  @Query("{\"terms\": {\"filename.keyword\": ?0}}")
   Stream<EcliCrawlerDocument> findByFilenameIn(List<String> filenames);
 
   /**
