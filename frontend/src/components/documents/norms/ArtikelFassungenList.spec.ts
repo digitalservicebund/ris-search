@@ -84,13 +84,21 @@ describe("ArtikelFassungenList", () => {
     expect(rows).toHaveLength(3);
 
     expect(within(rows[0]!).getByText("01.01.2031")).toBeInTheDocument();
-    expect(within(rows[0]!).getByText("–")).toBeInTheDocument();
+    expect(within(rows[0]!).getByText("—")).toBeInTheDocument();
 
     expect(within(rows[1]!).getByText("01.01.2020")).toBeInTheDocument();
     expect(within(rows[1]!).getByText("31.12.2030")).toBeInTheDocument();
 
     expect(within(rows[2]!).getByText("05.01.2000")).toBeInTheDocument();
     expect(within(rows[2]!).getByText("31.12.2019")).toBeInTheDocument();
+  });
+
+  it("joins the dates with a dash", () => {
+    render(ArtikelFassungenList, { props: props() });
+
+    for (const row of screen.getAllByRole("listitem")) {
+      expect(within(row).getByText("–")).toHaveAttribute("aria-hidden", "true");
+    }
   });
 
   it("shows the column labels as a header, but keeps it from SR", () => {
@@ -108,7 +116,7 @@ describe("ArtikelFassungenList", () => {
 
     const currentRow = screen.getByRole("group", { current: true });
     expect(currentRow).toHaveTextContent(
-      "Gültig ab: 01.01.2020 Gültig bis: 31.12.2030",
+      "Gültig ab: 01.01.2020– Gültig bis: 31.12.2030",
     );
   });
 

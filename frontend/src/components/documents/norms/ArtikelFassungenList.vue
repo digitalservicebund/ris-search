@@ -17,8 +17,14 @@ type FassungRow = {
   disabled: boolean;
 };
 
+const missingDate = "—";
+
 const columns: DataTableColumn<FassungRow>[] = [
-  { key: "fromDate", label: "Gültig ab" },
+  {
+    key: "fromDate",
+    label: "Gültig ab",
+    separatorAfter: "–",
+  },
   { key: "toDate", label: "Gültig bis" },
 ];
 
@@ -40,8 +46,8 @@ const rows = computed<FassungRow[]>(() => {
 
     return {
       key: fassung["@id"],
-      fromDate: dateFormattedDDMMYYYY(validityInterval?.from) ?? "–",
-      toDate: dateFormattedDDMMYYYY(validityInterval?.to) ?? "–",
+      fromDate: dateFormattedDDMMYYYY(validityInterval?.from) ?? missingDate,
+      toDate: dateFormattedDDMMYYYY(validityInterval?.to) ?? missingDate,
       contentUrl: encodingUrl,
       disabled,
     };

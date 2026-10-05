@@ -20,8 +20,14 @@ type GesamtausgabeRow = DataTableRow & {
 
 const route = useRoute();
 
+const missingDate = "—";
+
 const columns: DataTableColumn<GesamtausgabeRow>[] = [
-  { key: "fromDate", label: "Gültig ab" },
+  {
+    key: "fromDate",
+    label: "Gültig ab",
+    separatorAfter: "–",
+  },
   { key: "toDate", label: "Gültig bis" },
   { key: "status", label: "Status" },
 ];
@@ -55,8 +61,8 @@ const rows = computed<GesamtausgabeRow[]>(() => {
       key: gesamtausgabe.legislationIdentifier ?? "",
       attrs: { to },
       current,
-      fromDate: dateFormattedDDMMYYYY(validityInterval?.from) ?? "–",
-      toDate: dateFormattedDDMMYYYY(validityInterval?.to) ?? "–",
+      fromDate: dateFormattedDDMMYYYY(validityInterval?.from) ?? missingDate,
+      toDate: dateFormattedDDMMYYYY(validityInterval?.to) ?? missingDate,
       status,
     };
   });

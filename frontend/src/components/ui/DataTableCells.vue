@@ -10,6 +10,11 @@ export type DataTableColumn<T> = {
    * narrow ones.
    */
   label: string;
+  /**
+   * Text shown between this column and the next one on wide viewports, e.g. a
+   * dash to join two dates into a range.
+   */
+  separatorAfter?: string;
 };
 
 const { columns, row } = defineProps<{
@@ -42,11 +47,20 @@ defineSlots<{
     >
     {{ " " }}
     <span
-      class="typo-label1-regular flex min-h-32 items-center md:min-h-48 md:px-16 md:py-10"
+      class="typo-label1-regular flex min-h-32 items-center md:relative md:min-h-48 md:px-16 md:py-10"
     >
       <slot :name="`cell-${column.key}`" :row="row" :column="column">
         {{ row[column.key] }}
       </slot>
+      <!-- Centered on the boundary to the next column. Screen readers already
+           get the labels, so the separator would only add noise. -->
+      <span
+        v-if="column.separatorAfter"
+        aria-hidden="true"
+        class="absolute right-0 hidden translate-x-1/2 md:block"
+      >
+        {{ column.separatorAfter }}
+      </span>
     </span>
     {{ " " }}
   </template>

@@ -19,8 +19,16 @@ const row: Row = { fromDate: "27.10.2026", status: "Zukünftig in Kraft" };
  * `render` can't infer the component's type parameter and falls back to its
  * constraint, so the strongly typed props need a cast to get through.
  */
-function renderCells(slots?: Record<string, unknown>) {
-  return render(DataTableCells, { props: { columns, row }, slots } as never);
+function renderCells(
+  options: {
+    columns?: DataTableColumn<Row>[];
+    slots?: Record<string, unknown>;
+  } = {},
+) {
+  return render(DataTableCells, {
+    props: { columns: options.columns ?? columns, row },
+    slots: options.slots,
+  } as never);
 }
 
 describe("DataTableCells", () => {
@@ -43,8 +51,10 @@ describe("DataTableCells", () => {
 
   it("renders the cell slot and passes row and column as scope", () => {
     renderCells({
-      "cell-status": (scope: { row: Row; column: DataTableColumn<Row> }) =>
-        h("strong", `${scope.column.key}=${scope.row.status}`),
+      slots: {
+        "cell-status": (scope: { row: Row; column: DataTableColumn<Row> }) =>
+          h("strong", `${scope.column.key}=${scope.row.status}`),
+      },
     });
 
     expect(screen.getByText("status=Zukünftig in Kraft")).toBeInTheDocument();
@@ -52,8 +62,16 @@ describe("DataTableCells", () => {
   });
 
   it("keeps the plain value for columns without a cell slot", () => {
-    renderCells({ "cell-status": () => "Custom" });
+    renderCells({ slots: { "cell-status": () => "Custom" } });
 
     expect(screen.getByText("27.10.2026")).toBeInTheDocument();
+  });
+
+  it("renders a separator after a column, hidden from assistive technology", () => {
+    renderCells({
+      columns: [{ ...columns[0]!, separatorAfter: "–" }, columns[1]!],
+    });
+
+    expect(screen.getByText("–")).toHaveAttribute("aria-hidden", "true");
   });
 });
