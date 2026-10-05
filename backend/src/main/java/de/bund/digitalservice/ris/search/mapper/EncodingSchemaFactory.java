@@ -1,7 +1,7 @@
 package de.bund.digitalservice.ris.search.mapper;
 
-import de.bund.digitalservice.ris.search.schema.DocumentEncodingSchema;
-import de.bund.digitalservice.ris.search.schema.LegislationObjectSchema;
+import de.bund.digitalservice.ris.search.api.schema.response.DocumentEncodingSchema;
+import de.bund.digitalservice.ris.search.api.schema.response.LegislationObjectSchema;
 import java.util.Arrays;
 import java.util.List;
 import org.springframework.http.MediaType;

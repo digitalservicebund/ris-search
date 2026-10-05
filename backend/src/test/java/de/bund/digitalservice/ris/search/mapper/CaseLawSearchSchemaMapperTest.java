@@ -4,12 +4,12 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import de.bund.digitalservice.ris.search.api.schema.response.CaseLawSearchSchema;
+import de.bund.digitalservice.ris.search.api.schema.response.CollectionSchema;
+import de.bund.digitalservice.ris.search.api.schema.response.SearchMemberSchema;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.models.opensearch.AbstractSearchEntity;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
-import de.bund.digitalservice.ris.search.schema.CaseLawSearchSchema;
-import de.bund.digitalservice.ris.search.schema.CollectionSchema;
-import de.bund.digitalservice.ris.search.schema.SearchMemberSchema;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.Month;

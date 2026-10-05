@@ -2,14 +2,14 @@ package de.bund.digitalservice.ris.search.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import de.bund.digitalservice.ris.search.api.schema.parameters.UniversalSearchParams;
+import de.bund.digitalservice.ris.search.api.testData.CaseLawTestData;
+import de.bund.digitalservice.ris.search.api.testData.LiteratureTestData;
+import de.bund.digitalservice.ris.search.api.testData.NormsTestData;
+import de.bund.digitalservice.ris.search.api.testData.TestDataGenerator;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.config.ContainersIntegrationBase;
-import de.bund.digitalservice.ris.search.controller.api.testData.CaseLawTestData;
-import de.bund.digitalservice.ris.search.controller.api.testData.LiteratureTestData;
-import de.bund.digitalservice.ris.search.controller.api.testData.NormsTestData;
-import de.bund.digitalservice.ris.search.controller.api.testData.TestDataGenerator;
 import de.bund.digitalservice.ris.search.mapper.DocumentResponseMapper;
-import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.AbstractSearchEntity;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;

@@ -4,8 +4,8 @@ import static de.bund.digitalservice.ris.search.service.SimpleSearchQueryBuilder
 import static org.opensearch.index.query.QueryBuilders.matchQuery;
 import static org.opensearch.index.query.QueryBuilders.multiMatchQuery;
 
-import de.bund.digitalservice.ris.search.models.api.parameters.CaseLawDocumentTypeGroup;
-import de.bund.digitalservice.ris.search.models.api.parameters.CaseLawSearchParams;
+import de.bund.digitalservice.ris.search.api.schema.parameters.CaseLawDocumentTypeGroup;
+import de.bund.digitalservice.ris.search.api.schema.parameters.CaseLawSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import java.util.Arrays;
 import java.util.List;

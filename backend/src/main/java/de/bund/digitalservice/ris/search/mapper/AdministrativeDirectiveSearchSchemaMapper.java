@@ -1,12 +1,12 @@
 package de.bund.digitalservice.ris.search.mapper;
 
+import de.bund.digitalservice.ris.search.api.schema.response.AdministrativeDirectiveSearchSchema;
+import de.bund.digitalservice.ris.search.api.schema.response.CollectionSchema;
+import de.bund.digitalservice.ris.search.api.schema.response.PartialCollectionViewSchema;
+import de.bund.digitalservice.ris.search.api.schema.response.SearchMemberSchema;
+import de.bund.digitalservice.ris.search.api.schema.response.TextMatchSchema;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
-import de.bund.digitalservice.ris.search.schema.AdministrativeDirectiveSearchSchema;
-import de.bund.digitalservice.ris.search.schema.CollectionSchema;
-import de.bund.digitalservice.ris.search.schema.PartialCollectionViewSchema;
-import de.bund.digitalservice.ris.search.schema.SearchMemberSchema;
-import de.bund.digitalservice.ris.search.schema.TextMatchSchema;
 import de.bund.digitalservice.ris.search.utils.PageUtils;
 import java.util.List;
 import java.util.Map;

@@ -1,12 +1,12 @@
 package de.bund.digitalservice.ris.search.service;
 
+import de.bund.digitalservice.ris.search.api.schema.parameters.CaseLawSearchParams;
+import de.bund.digitalservice.ris.search.api.schema.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.config.opensearch.Configurations;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.exception.OpenSearchMapperException;
 import de.bund.digitalservice.ris.search.mapper.CaseLawLdmlToOpenSearchMapper;
 import de.bund.digitalservice.ris.search.models.CourtSearchResult;
-import de.bund.digitalservice.ris.search.models.api.parameters.CaseLawSearchParams;
-import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.StorageObject;

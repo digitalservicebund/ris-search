@@ -1,12 +1,12 @@
 package de.bund.digitalservice.ris.search.mapper;
 
+import de.bund.digitalservice.ris.search.api.schema.response.ChangelogChangedDocument;
+import de.bund.digitalservice.ris.search.api.schema.response.ChangelogDeletedDocument;
+import de.bund.digitalservice.ris.search.api.schema.response.ChangelogResponse;
+import de.bund.digitalservice.ris.search.api.schema.response.JsonldTypes;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.models.DocumentKind;
-import de.bund.digitalservice.ris.search.schema.ChangelogChangedDocument;
-import de.bund.digitalservice.ris.search.schema.ChangelogDeletedDocument;
-import de.bund.digitalservice.ris.search.schema.ChangelogResponse;
-import de.bund.digitalservice.ris.search.schema.JsonldTypes;
 import de.bund.digitalservice.ris.search.utils.eli.EliFile;
 import java.util.Set;
 import java.util.function.Function;

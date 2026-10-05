@@ -1,8 +1,8 @@
 package de.bund.digitalservice.ris.search.mapper;
 
+import de.bund.digitalservice.ris.search.api.schema.response.LiteratureSchema;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
-import de.bund.digitalservice.ris.search.schema.LiteratureSchema;
 
 /**
  * Provides mapping functionality between the domain entity {@link Literature} and the data transfer

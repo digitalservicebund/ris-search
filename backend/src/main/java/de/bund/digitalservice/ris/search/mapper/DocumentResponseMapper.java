@@ -1,14 +1,14 @@
 package de.bund.digitalservice.ris.search.mapper;
 
+import de.bund.digitalservice.ris.search.api.schema.response.AbstractDocumentSchema;
+import de.bund.digitalservice.ris.search.api.schema.response.CollectionSchema;
+import de.bund.digitalservice.ris.search.api.schema.response.PartialCollectionViewSchema;
+import de.bund.digitalservice.ris.search.api.schema.response.SearchMemberSchema;
+import de.bund.digitalservice.ris.search.api.schema.response.TextMatchSchema;
 import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
-import de.bund.digitalservice.ris.search.schema.AbstractDocumentSchema;
-import de.bund.digitalservice.ris.search.schema.CollectionSchema;
-import de.bund.digitalservice.ris.search.schema.PartialCollectionViewSchema;
-import de.bund.digitalservice.ris.search.schema.SearchMemberSchema;
-import de.bund.digitalservice.ris.search.schema.TextMatchSchema;
 import java.util.List;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchPage;

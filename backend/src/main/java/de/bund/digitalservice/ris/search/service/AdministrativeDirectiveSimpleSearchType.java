@@ -2,7 +2,7 @@ package de.bund.digitalservice.ris.search.service;
 
 import static org.opensearch.index.query.QueryBuilders.matchQuery;
 
-import de.bund.digitalservice.ris.search.models.api.parameters.AdministrativeDirectiveSearchParams;
+import de.bund.digitalservice.ris.search.api.schema.parameters.AdministrativeDirectiveSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
 import java.util.List;
 import java.util.Map;

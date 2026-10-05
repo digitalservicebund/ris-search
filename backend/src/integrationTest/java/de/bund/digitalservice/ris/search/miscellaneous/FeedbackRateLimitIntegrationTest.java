@@ -5,10 +5,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.bund.digitalservice.ris.search.api.controller.FeedbackController.FeedbackRequest;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.config.ratelimiting.FeedbackRateLimitInterceptor;
-import de.bund.digitalservice.ris.search.controller.api.FeedbackController.FeedbackRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

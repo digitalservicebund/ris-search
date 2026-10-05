@@ -2,8 +2,8 @@ package de.bund.digitalservice.ris.search.mapper;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
+import de.bund.digitalservice.ris.search.api.schema.response.AdministrativeDirectiveSearchSchema;
 import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
-import de.bund.digitalservice.ris.search.schema.AdministrativeDirectiveSearchSchema;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;

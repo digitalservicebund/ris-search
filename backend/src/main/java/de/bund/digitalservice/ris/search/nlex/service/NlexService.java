@@ -2,7 +2,7 @@ package de.bund.digitalservice.ris.search.nlex.service;
 
 import static de.bund.digitalservice.ris.search.nlex.schema.result.Error.PAGE_SMALLER_THAN_ONE;
 
-import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
+import de.bund.digitalservice.ris.search.api.schema.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.nlex.mapper.RisToNlexMapper;
 import de.bund.digitalservice.ris.search.nlex.schema.query.BooleanAnd;

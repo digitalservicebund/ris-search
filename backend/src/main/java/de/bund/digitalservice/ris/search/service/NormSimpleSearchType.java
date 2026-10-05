@@ -4,7 +4,7 @@ import static de.bund.digitalservice.ris.search.service.SimpleSearchQueryBuilder
 import static org.opensearch.index.query.QueryBuilders.matchQuery;
 import static org.opensearch.index.query.QueryBuilders.termQuery;
 
-import de.bund.digitalservice.ris.search.models.api.parameters.NormsSearchParams;
+import de.bund.digitalservice.ris.search.api.schema.parameters.NormsSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.utils.DateUtils;
 import java.util.List;

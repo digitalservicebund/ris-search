@@ -2,8 +2,8 @@ package de.bund.digitalservice.ris.search.miscellaneous;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import de.bund.digitalservice.ris.search.api.schema.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.config.ContainersIntegrationBase;
-import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.AbstractSearchEntity;
 import io.micrometer.common.util.StringUtils;
 import java.util.List;

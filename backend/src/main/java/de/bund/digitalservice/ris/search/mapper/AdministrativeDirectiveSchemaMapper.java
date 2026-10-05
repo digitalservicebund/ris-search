@@ -1,8 +1,8 @@
 package de.bund.digitalservice.ris.search.mapper;
 
+import de.bund.digitalservice.ris.search.api.schema.response.AdministrativeDirectiveSchema;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
-import de.bund.digitalservice.ris.search.schema.AdministrativeDirectiveSchema;
 
 /**
  * Utility class for mapping {@code AdministrativeDirective} domain entities to {@code

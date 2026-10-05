@@ -1,8 +1,8 @@
 package de.bund.digitalservice.ris.search.service;
 
+import de.bund.digitalservice.ris.search.api.schema.parameters.NormsSearchParams;
+import de.bund.digitalservice.ris.search.api.schema.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.config.opensearch.Configurations;
-import de.bund.digitalservice.ris.search.models.api.parameters.NormsSearchParams;
-import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.AbstractSearchEntity;
 import de.bund.digitalservice.ris.search.utils.PageUtils;
 import java.time.LocalDate;

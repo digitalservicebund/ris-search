@@ -5,8 +5,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import de.bund.digitalservice.ris.SharedTestConstants;
+import de.bund.digitalservice.ris.search.api.testData.CaseLawTestData;
 import de.bund.digitalservice.ris.search.config.ContainersIntegrationBase;
-import de.bund.digitalservice.ris.search.controller.api.testData.CaseLawTestData;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;

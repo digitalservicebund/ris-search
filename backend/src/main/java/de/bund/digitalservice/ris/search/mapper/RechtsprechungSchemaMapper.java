@@ -1,8 +1,8 @@
 package de.bund.digitalservice.ris.search.mapper;
 
+import de.bund.digitalservice.ris.search.api.schema.response.RechtsprechungSchema;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
-import de.bund.digitalservice.ris.search.schema.RechtsprechungSchema;
 
 /** Maps Rechtsprechung (case law document) objects to API schema models. */
 public class RechtsprechungSchemaMapper {
