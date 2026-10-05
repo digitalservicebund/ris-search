@@ -14,7 +14,7 @@ import { useArticleSeo } from "~/composables/useArticleSeo";
 import { useSearchBackLink } from "~/composables/useSearchBackLink";
 import {
   type Article,
-  type ArticleVersion,
+  type ArtikelFassung,
   DocumentKind,
   type JSONLDList,
   type LegislationExpressionPartSchema,
@@ -72,16 +72,16 @@ const article: Ref<Article | undefined> = computed(() =>
 
 const isArticle = computed(() => article.value?.partType === "article");
 
-const articleVersions = ref<ArticleVersion[]>([]);
+const fassungen = ref<ArtikelFassung[]>([]);
 
 if (isArticle.value) {
   const fetchUrl = `/v1/article/work-example/eli/${expressionEli}/${eId.value}`;
-  const { data: versionsCollection, error: versionsError } =
-    await useRisBackend<JSONLDList<ArticleVersion>>(fetchUrl);
+  const { data: fassungenCollection, error: fassungenError } =
+    await useRisBackend<JSONLDList<ArtikelFassung>>(fetchUrl);
 
-  if (versionsError.value) throw createError(versionsError.value);
+  if (fassungenError.value) throw createError(fassungenError.value);
 
-  articleVersions.value = versionsCollection.value?.member ?? [];
+  fassungen.value = fassungenCollection.value?.member ?? [];
 }
 
 const normAbbreviation = computed(() => norm.value.abbreviation);
@@ -251,8 +251,8 @@ const views = computed<OneOrMore<TabView>>(() => {
 
   if (isArticle.value) {
     tabViews.push({
-      path: "geltungszeiten",
-      label: "Geltungszeiträume",
+      path: "fassungen",
+      label: "Fassungen",
       analyticsId: "article-versions-tab",
     });
   }
@@ -279,13 +279,13 @@ const metadataItems = computed<MetadataItem[]>(() => {
 });
 
 const {
-  dateFilterValue: geltungszeitenDateFilterValue,
-  filteredVersions: filteredArticleVersions,
-} = useVersionDateFilter(articleVersions);
+  dateFilterValue: fassungenDateFilterValue,
+  filteredVersions: filteredFassungen,
+} = useVersionDateFilter(fassungen);
 
 const textTabPanelTitleId = useId();
-const geltungszeitenTabPanelTitleId = useId();
-const geltungszeitenDateFilterInputId = useId();
+const fassungenTabPanelTitleId = useId();
+const fassungenDateFilterInputId = useId();
 </script>
 
 <template>
@@ -377,48 +377,42 @@ const geltungszeitenDateFilterInputId = useId();
         </section>
       </template>
 
-      <template #geltungszeiten>
-        <section
-          role="tabpanel"
-          :aria-labelledby="geltungszeitenTabPanelTitleId"
-        >
+      <template #fassungen>
+        <section role="tabpanel" :aria-labelledby="fassungenTabPanelTitleId">
           <div class="content-grid pt-32 pb-32 md:pb-56">
             <div
               class="col-span-12 md:col-span-8 xl:col-span-7"
               v-if="privateFeaturesEnabled"
             >
-              <h2
-                :id="geltungszeitenTabPanelTitleId"
-                class="typo-headline3-bold"
-              >
-                Weitere Geltungszeiträume dieser Einzelnorm
+              <h2 :id="fassungenTabPanelTitleId" class="typo-headline3-bold">
+                Weitere Fassungen dieser Einzelnorm
               </h2>
 
               <div class="my-16 md:my-24">
                 <label
-                  :for="geltungszeitenDateFilterInputId"
+                  :for="fassungenDateFilterInputId"
                   class="typo-label2-regular"
                   >Gültig am</label
                 >
                 <UiDateInput
-                  v-model="geltungszeitenDateFilterValue"
+                  v-model="fassungenDateFilterValue"
                   class="max-w-240"
-                  :id="geltungszeitenDateFilterInputId"
+                  :id="fassungenDateFilterInputId"
                 />
               </div>
 
-              <DocumentsNormsArticleVersionList
+              <DocumentsNormsArtikelFassungenList
                 :currentExpressionId
-                :versions="filteredArticleVersions"
+                :fassungen="filteredFassungen"
               />
             </div>
 
             <div class="content-grid-textblock" v-else>
               <h2
-                :id="geltungszeitenTabPanelTitleId"
+                :id="fassungenTabPanelTitleId"
                 class="typo-headline3-bold mb-24"
               >
-                Geltungszeiträume sind noch nicht verfügbar
+                Fassungen sind noch nicht verfügbar
               </h2>
               <p>
                 Mit dem Livegang des neuen Rechtsinformationsportals werden auch

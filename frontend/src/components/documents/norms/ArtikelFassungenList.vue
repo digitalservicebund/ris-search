@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import IcChevronRightIcon from "~icons/ic/outline-chevron-right";
-import type { ArticleVersion } from "~/types/api.ts";
+import type { ArtikelFassung } from "~/types/api.ts";
 
-const { currentExpressionId, versions } = defineProps<{
+const { currentExpressionId, fassungen } = defineProps<{
   currentExpressionId: string;
-  versions: ArticleVersion[];
+  fassungen: ArtikelFassung[];
 }>();
 
-type VersionRow = {
+type FassungRow = {
   key: string;
   fromDate: string;
   toDate: string;
@@ -16,34 +16,34 @@ type VersionRow = {
   disabled: boolean;
 };
 
-type VersionColumn = {
-  key: Extract<keyof VersionRow, string>;
+type FassungColumn = {
+  key: Extract<keyof FassungRow, string>;
   label: string;
 };
 
-const columns: VersionColumn[] = [
+const columns: FassungColumn[] = [
   { key: "fromDate", label: "Gültig ab" },
   { key: "toDate", label: "Gültig bis" },
 ];
 
-const rows = computed<VersionRow[]>(() => {
+const rows = computed<FassungRow[]>(() => {
   // newest single norm first
-  const versionsSorted = versions.toSorted((a, b) =>
+  const fassungenSorted = fassungen.toSorted((a, b) =>
     b.temporalCoverage.localeCompare(a.temporalCoverage),
   );
 
-  return versionsSorted.map((version) => {
+  return fassungenSorted.map((fassung) => {
     const validityInterval = temporalCoverageToValidityInterval(
-      version.temporalCoverage,
+      fassung.temporalCoverage,
     );
 
-    const disabled = (version.isPartOf ?? [])
+    const disabled = (fassung.isPartOf ?? [])
       .map((expression) => expression["@id"])
       .includes(currentExpressionId);
-    const encodingUrl = getEncodingURL(version.encoding, "text/html");
+    const encodingUrl = getEncodingURL(fassung.encoding, "text/html");
 
     return {
-      key: version["@id"],
+      key: fassung["@id"],
       fromDate: dateFormattedDDMMYYYY(validityInterval?.from) ?? "–",
       toDate: dateFormattedDDMMYYYY(validityInterval?.to) ?? "–",
       contentUrl: encodingUrl,
@@ -53,14 +53,14 @@ const rows = computed<VersionRow[]>(() => {
 });
 
 const expandedRowKey = ref<string | undefined>();
-const { rowsHtml, updateRowsHtml } = useSingleNormVersionsHtml();
+const { rowsHtml, updateRowsHtml } = useArtikelFassungenHtml();
 
-function expandRow(row?: VersionRow) {
+function expandRow(row?: FassungRow) {
   expandedRowKey.value = row?.key;
   if (row) void updateRowsHtml(row.key, row.contentUrl);
 }
 
-async function onRowClick(row: VersionRow, event: MouseEvent) {
+async function onRowClick(row: FassungRow, event: MouseEvent) {
   const summary = event.currentTarget as HTMLElement;
   const isExpanding = expandedRowKey.value !== row.key;
   expandRow(isExpanding ? row : undefined);
@@ -77,7 +77,7 @@ watch(rows, (newRows) => {
 });
 
 // Filtering swaps the rows out in place, which assistive technology does not
-// announce. Report the new count instead. Opening the Geltungszeiten tab mounts this
+// announce. Report the new count instead. Opening the Fassungen tab mounts this
 // list, so the watcher skips the initial value and stays quiet.
 const announcement = ref("");
 
@@ -87,9 +87,9 @@ watch(
     if (count === 0) {
       announcement.value = "Keine Ergebnisse gefunden";
     } else if (count === 1) {
-      announcement.value = "1 Ergebnis";
+      announcement.value = "1 Fassung";
     } else {
-      announcement.value = `${count} Ergebnisse`;
+      announcement.value = `${count} Fassungen`;
     }
   },
 );
@@ -103,7 +103,7 @@ const currentRowId = useId();
   </output>
 
   <ul
-    aria-label="Geltungszeiträume"
+    aria-label="Fassungen"
     class="-mx-16 grid grid-cols-[auto_minmax(0,1fr)_max-content] border-t border-gray-400 md:mx-0 md:border-t-0"
   >
     <!-- Decorative: every row repeats the column labels for assistive
@@ -129,7 +129,7 @@ const currentRowId = useId();
         :class="{ 'bg-gray-100': row.disabled }"
         class="col-span-full grid grid-cols-subgrid border-b border-gray-400"
       >
-        <!-- The current version is already the one being displayed on this
+        <!-- The current fassung is already the one being displayed on this
              page, so it isn't made expandable, and can't use <details>, which
              has no way to disable toggling. -->
         <div
@@ -165,7 +165,7 @@ const currentRowId = useId();
         <details
           v-else
           :open="expandedRowKey === row.key"
-          name="single-norm-versions"
+          name="fassungen"
           class="group contents details-content:col-span-full"
         >
           <summary

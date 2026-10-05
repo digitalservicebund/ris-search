@@ -44,11 +44,11 @@ test.describe("view norm page", async () => {
       ).toBeVisible();
     });
 
-    await test.step("versions", async () => {
-      await page.getByRole("tab", { name: "Fassungen" }).click();
+    await test.step("gesamtausgaben", async () => {
+      await page.getByRole("tab", { name: "Gesamtausgaben" }).click();
 
       await expect(
-        page.getByRole("tab", { name: "Fassungen", selected: true }),
+        page.getByRole("tab", { name: "Gesamtausgaben", selected: true }),
       ).toBeVisible();
     });
   });
