@@ -72,17 +72,42 @@ const article: Ref<Article | undefined> = computed(() =>
 
 const isArticle = computed(() => article.value?.partType === "article");
 
-const fassungen = ref<ArtikelFassung[]>([]);
+const isNormInForce = norm.value?.legislationLegalForce === "InForce";
 
-if (isArticle.value) {
-  const fetchUrl = `/v1/article/work-example/eli/${expressionEli}/${eId.value}`;
-  const { data: fassungenCollection, error: fassungenError } =
-    await useRisBackend<JSONLDList<ArtikelFassung>>(fetchUrl);
-
-  if (fassungenError.value) throw createError(fassungenError.value);
-
-  fassungen.value = fassungenCollection.value?.member ?? [];
+function fetchFassungen() {
+  if (!isArticle.value) return undefined;
+  const url = `/v1/article/work-example/eli/${expressionEli}/${eId.value}`;
+  return useRisBackend<JSONLDList<ArtikelFassung>>(url);
 }
+
+function fetchValidNormVersions() {
+  if (isNormInForce) return undefined;
+  const workEli = norm.value?.exampleOfWork.legislationIdentifier;
+  return useValidNormVersions(workEli);
+}
+
+const [fassungenResult, validVersions] = await Promise.all([
+  fetchFassungen(),
+  fetchValidNormVersions(),
+]);
+
+if (fassungenResult?.error.value) {
+  throw createError(fassungenResult.error.value);
+}
+
+if (validVersions?.error.value) {
+  throw createError(validVersions.error.value);
+}
+
+const fassungen = ref<ArtikelFassung[]>(
+  fassungenResult?.data.value?.member ?? [],
+);
+
+const inForceExpressionEli = computed(() => {
+  if (isNormInForce) return `eli/${expressionEli}`;
+  const validVersion = validVersions?.data.value?.member?.[0];
+  return validVersion?.item.legislationIdentifier;
+});
 
 const normAbbreviation = computed(() => norm.value.abbreviation);
 
@@ -223,23 +248,6 @@ const breadcrumbItems: Ref<BreadcrumbItem[]> = computed(() => {
 
 const htmlTitle = computed(() => data.value.articleHeading);
 
-const validVersions =
-  norm.value?.legislationLegalForce === "InForce"
-    ? undefined
-    : await useValidNormVersions(
-        norm.value?.exampleOfWork.legislationIdentifier,
-      );
-
-if (validVersions?.error.value) {
-  throw createError(validVersions.error.value);
-}
-
-const inForceNormLink = computed(() => {
-  const validVersion = validVersions?.data.value?.member?.[0];
-  if (!validVersion) return undefined;
-  return `/gesetze/${validVersion.item.legislationIdentifier}`;
-});
-
 const views = computed<OneOrMore<TabView>>(() => {
   const tabViews: OneOrMore<TabView> = [
     {
@@ -313,9 +321,10 @@ const fassungenDateFilterInputId = useId();
       />
 
       <DocumentsNormsArticleVersionWarning
-        v-if="inForceNormLink && article"
-        :in-force-version-link="inForceNormLink"
+        v-if="article"
         :current-article="article"
+        :fassungen
+        :in-force-expression-eli="inForceExpressionEli"
       />
 
       <DocumentsMetadata v-if="privateFeaturesEnabled" :items="metadataItems" />
