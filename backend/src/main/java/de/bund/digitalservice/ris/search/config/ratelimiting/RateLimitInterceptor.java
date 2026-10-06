@@ -3,6 +3,7 @@ package de.bund.digitalservice.ris.search.config.ratelimiting;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.Expiry;
+import jakarta.servlet.DispatcherType;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -74,6 +75,12 @@ public abstract class RateLimitInterceptor implements HandlerInterceptor {
   public boolean preHandle(
       HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull Object handler)
       throws IOException {
+
+    // Only count the initial request. Async (e.g. StreamingResponseBody) and error re-dispatches
+    // pass through the interceptor again, at which point the response may already be committed.
+    if (request.getDispatcherType() != DispatcherType.REQUEST) {
+      return true;
+    }
 
     String clientIpAddress = request.getRemoteAddr();
     Integer requestCount = requestCountPerIpAddress.getIfPresent(clientIpAddress);
