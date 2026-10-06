@@ -10,6 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import org.apache.logging.log4j.LogManager;
@@ -166,19 +167,25 @@ public class ArticleService {
       ExpressionEli expressionEli, String eidGiven) {
     String expressionEliString = expressionEli.toString();
 
-    Sort sort = Sort.by(Sort.Direction.DESC, "entryIntoForceDate");
-    Pageable sortedPageable = Pageable.unpaged(sort);
-
     return getActualEid(expressionEliString, eidGiven)
         .flatMap(
             actualEid ->
                 articlesRepository.findById(Article.buildId(expressionEliString, actualEid)))
-        .map(Article::getDocumentNumber)
         .map(
-            docNr ->
-                this.getAllArticleVersionsByDocumentNumberPrefix(
-                    docNr, expressionEliString, sortedPageable))
+            article ->
+                this.getAllArticleVersionsByDocumentNumber(
+                    article.getDocumentNumber(), expressionEliString))
         .orElseGet(Page::empty);
+  }
+
+  /**
+   * Retrieves a List of all versions of an Article across the whole work it belongs to.
+   *
+   * @param revision article revision to retrieve all other workExamples from
+   * @return List of version of that article across the whole work
+   */
+  public Page<ArticleWithExpressions> getAllArticleVersions(String revision) {
+    return this.getAllArticleVersionsByDocumentNumber(revision, null);
   }
 
   /**
@@ -194,12 +201,18 @@ public class ArticleService {
    * @return List of Article objects of the same article across all its expressions, with their
    *     expressionElis
    */
-  private Page<ArticleWithExpressions> getAllArticleVersionsByDocumentNumberPrefix(
-      String documentNumber, String preferredExpressionEli, Pageable page) {
+  private Page<ArticleWithExpressions> getAllArticleVersionsByDocumentNumber(
+      String documentNumber, String preferredExpressionEli) {
+
+    if (Objects.isNull(documentNumber)) {
+      return Page.empty();
+    }
+    Sort sort = Sort.by(Sort.Direction.DESC, "entryIntoForceDate");
+    Pageable sortedPageable = Pageable.unpaged(sort);
 
     try {
       return articlesRepository.findAllVersionsByDocumentNumber(
-          documentNumber, LegislationPartType.ARTICLE, preferredExpressionEli, page);
+          documentNumber, LegislationPartType.ARTICLE, preferredExpressionEli, sortedPageable);
     } catch (IllegalArgumentException _) {
       return Page.empty();
     }

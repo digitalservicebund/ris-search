@@ -58,6 +58,11 @@ public record LegislationExpressionPartSchema(
                         Specifies the type of the part of a Legislation Expression.
                     """)
         LegislationExpressionPartType partType,
+    @Schema(
+            description =
+                "the specific revision of that legislation part independent from its parent object")
+        @Nullable
+        String revision,
     @Nullable @Schema(description = "The source data for this part, if available on its own")
         List<LegislationObjectSchema> encoding,
     @ArraySchema(schema = @Schema(implementation = LegislationExpressionPartSchema.class))
