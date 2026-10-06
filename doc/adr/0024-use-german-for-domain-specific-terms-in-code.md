@@ -15,7 +15,7 @@ legally misleading (e.g. "case law" for _Rechtsprechung_). It also forces
 developers to translate back and forth.
 
 DigitalService has addressed this company-wide with the sensible default
-[DR-0004: Language in Code](https://digitalservicebund.atlassian.net/wiki/spaces/DIGITALSER/pages/1509425158/Language+in+Code+using+German+or+English+words).
+[DR-0004: Language in Code](https://digitalservicebund.atlassian.net/wiki/spaces/DIGITALSER/pages/2062319701/DR-0004+Adopt+Sensible+Default+Language+in+Code).
 
 ## Decision
 
