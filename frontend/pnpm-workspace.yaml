@@ -2,6 +2,7 @@ packages: []
 
 overrides:
   devalue: "5.9.3"
+  source-map-js: "1.2.2"
 
 allowBuilds:
   "@parcel/watcher": true
