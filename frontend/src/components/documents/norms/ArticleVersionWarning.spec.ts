@@ -16,7 +16,7 @@ const partOf = (...pointsInTime: string[]) =>
     "@id": `/v1/legislation/${expression(pointInTime)}`,
   }));
 
-const historicVersion = {
+const historicFassung = {
   "@id": "historic",
   eId: "art-z1",
   name: "§ 1",
@@ -24,7 +24,7 @@ const historicVersion = {
   isPartOf: partOf("2020-01-01"),
 } as ArtikelFassung;
 
-const inForceVersion = {
+const inForceFassung = {
   "@id": "in-force",
   eId: "art-z1",
   name: "§ 1",
@@ -32,7 +32,7 @@ const inForceVersion = {
   isPartOf: partOf("2021-01-01", "2022-01-01", "2023-01-01"),
 } as ArtikelFassung;
 
-const futureVersion = {
+const futureFassung = {
   "@id": "future",
   eId: "art-z1",
   name: "§ 1",
@@ -40,7 +40,7 @@ const futureVersion = {
   isPartOf: partOf("2030-01-01", "2031-01-01"),
 } as ArtikelFassung;
 
-const laterFutureVersion = {
+const laterFutureFassung = {
   "@id": "later-future",
   eId: "art-z1",
   name: "§ 1",
@@ -48,15 +48,15 @@ const laterFutureVersion = {
   isPartOf: partOf("2035-01-01"),
 } as ArtikelFassung;
 
-const allVersions = [
-  laterFutureVersion,
-  futureVersion,
-  inForceVersion,
-  historicVersion,
+const allFassungen = [
+  laterFutureFassung,
+  futureFassung,
+  inForceFassung,
+  historicFassung,
 ];
 
-const articleFor = (version: ArtikelFassung) =>
-  ({ temporalCoverage: version.temporalCoverage }) as Article;
+const articleFor = (fassung: ArtikelFassung) =>
+  ({ temporalCoverage: fassung.temporalCoverage }) as Article;
 
 const linkStub = {
   NuxtLink: {
@@ -79,8 +79,8 @@ describe("ArticleVersionWarning", () => {
   it("links a historic Fassung to the valid Fassung in the in force expression", async () => {
     await renderSuspended(ArticleVersionWarning, {
       props: {
-        currentArticle: articleFor(historicVersion),
-        versions: allVersions,
+        currentArticle: articleFor(historicFassung),
+        fassungen: allFassungen,
         inForceExpressionEli: expression("2022-01-01"),
       },
       global: { stubs: linkStub },
@@ -99,8 +99,8 @@ describe("ArticleVersionWarning", () => {
   it("falls back to the newest expression of the valid Fassung", async () => {
     await renderSuspended(ArticleVersionWarning, {
       props: {
-        currentArticle: articleFor(historicVersion),
-        versions: allVersions,
+        currentArticle: articleFor(historicFassung),
+        fassungen: allFassungen,
       },
       global: { stubs: linkStub },
     });
@@ -113,8 +113,8 @@ describe("ArticleVersionWarning", () => {
   it("shows a historic Fassung without link if there is no valid Fassung", async () => {
     await renderSuspended(ArticleVersionWarning, {
       props: {
-        currentArticle: articleFor(historicVersion),
-        versions: [historicVersion, futureVersion],
+        currentArticle: articleFor(historicFassung),
+        fassungen: [historicFassung, futureFassung],
         inForceExpressionEli: expression("2022-01-01"),
       },
     });
@@ -128,8 +128,8 @@ describe("ArticleVersionWarning", () => {
   it("links a valid Fassung to the next future Fassung in its newest expression", async () => {
     await renderSuspended(ArticleVersionWarning, {
       props: {
-        currentArticle: articleFor(inForceVersion),
-        versions: allVersions,
+        currentArticle: articleFor(inForceFassung),
+        fassungen: allFassungen,
         inForceExpressionEli: expression("2022-01-01"),
       },
       global: { stubs: linkStub },
@@ -148,8 +148,8 @@ describe("ArticleVersionWarning", () => {
   it("shows no message for a valid Fassung without future Fassung", async () => {
     await renderSuspended(ArticleVersionWarning, {
       props: {
-        currentArticle: articleFor(inForceVersion),
-        versions: [historicVersion, inForceVersion],
+        currentArticle: articleFor(inForceFassung),
+        fassungen: [historicFassung, inForceFassung],
         inForceExpressionEli: expression("2022-01-01"),
       },
     });
@@ -160,8 +160,8 @@ describe("ArticleVersionWarning", () => {
   it("links a future Fassung to the valid Fassung", async () => {
     await renderSuspended(ArticleVersionWarning, {
       props: {
-        currentArticle: articleFor(futureVersion),
-        versions: allVersions,
+        currentArticle: articleFor(futureFassung),
+        fassungen: allFassungen,
         inForceExpressionEli: expression("2022-01-01"),
       },
       global: { stubs: linkStub },
@@ -180,8 +180,8 @@ describe("ArticleVersionWarning", () => {
   it("shows a future Fassung without link if there is no valid Fassung", async () => {
     await renderSuspended(ArticleVersionWarning, {
       props: {
-        currentArticle: articleFor(futureVersion),
-        versions: [futureVersion, laterFutureVersion],
+        currentArticle: articleFor(futureFassung),
+        fassungen: [futureFassung, laterFutureFassung],
       },
     });
 
@@ -196,8 +196,8 @@ describe("ArticleVersionWarning", () => {
 
     await renderSuspended(ArticleVersionWarning, {
       props: {
-        currentArticle: articleFor(historicVersion),
-        versions: allVersions,
+        currentArticle: articleFor(historicFassung),
+        fassungen: allFassungen,
         inForceExpressionEli: expression("2022-01-01"),
       },
       global: { stubs: linkStub },

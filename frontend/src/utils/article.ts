@@ -20,11 +20,11 @@ export function tocHeadlineAdditionLabel(temporalCoverage: string | undefined) {
 const LEGISLATION_ID_PREFIX = "/v1/legislation/";
 
 /**
- * Returns the ELIs of all expressions an article version is part of, without
- * the API prefix, e.g. `eli/bund/bgbl-1/2020/s1234/2022-01-01/1/deu`.
+ * Returns the ELIs of all Gesamtausgaben a Fassung is part of, without the API
+ * prefix, e.g. `eli/bund/bgbl-1/2020/s1234/2022-01-01/1/deu`.
  */
-export function getExpressionElis(articleVersion: ArtikelFassung): string[] {
-  const ids = (articleVersion.isPartOf ?? []).map((ref) => ref["@id"]);
+export function getExpressionElis(fassung: ArtikelFassung): string[] {
+  const ids = (fassung.isPartOf ?? []).map((ref) => ref["@id"]);
   return ids.map((id) => id.replace(LEGISLATION_ID_PREFIX, ""));
 }
 

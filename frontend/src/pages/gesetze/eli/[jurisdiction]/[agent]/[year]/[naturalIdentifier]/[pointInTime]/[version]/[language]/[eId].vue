@@ -323,7 +323,7 @@ const fassungenDateFilterInputId = useId();
       <DocumentsNormsArticleVersionWarning
         v-if="article"
         :current-article="article"
-        :versions="fassungen"
+        :fassungen
         :in-force-expression-eli="inForceExpressionEli"
       />
 
