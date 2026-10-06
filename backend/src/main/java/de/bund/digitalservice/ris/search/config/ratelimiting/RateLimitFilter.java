@@ -3,23 +3,27 @@ package de.bund.digitalservice.ris.search.config.ratelimiting;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.Expiry;
-import jakarta.servlet.DispatcherType;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 /**
- * The RateLimitInterceptor is an abstract class that provides a base implementation for
- * intercepting and rate-limiting incoming HTTP requests based on the client IP address.
+ * The RateLimitFilter is an abstract class that provides a base implementation for rate-limiting
+ * incoming HTTP requests based on the client IP address.
  *
  * <p>It leverages a caching mechanism to count and manage the number of requests from each client
  * IP within a specified time window. If the number of requests from a client exceeds the configured
- * maximum, the interceptor denies the request and responds with an HTTP 429 (Too Many Requests)
- * status code.
+ * maximum, the filter denies the request and responds with an HTTP 429 (Too Many Requests) status
+ * code.
+ *
+ * <p>Only the initial request dispatch is counted. Async (e.g. StreamingResponseBody) and error
+ * re-dispatches are skipped by {@link OncePerRequestFilter}.
  *
  * <p>Subclasses must provide implementation by specifying the maximum number of allowed requests
  * and the duration of the time window via the constructor.
@@ -31,12 +35,12 @@ import org.springframework.web.servlet.HandlerInterceptor;
  * <p>Designed to be extended for cases where specific rate-limiting configurations are required for
  * different endpoints or use cases.
  */
-public abstract class RateLimitInterceptor implements HandlerInterceptor {
+public abstract class RateLimitFilter extends OncePerRequestFilter {
   private final Cache<String, Integer> requestCountPerIpAddress;
 
   private final int maxRequests;
 
-  protected RateLimitInterceptor(int maxRequests, int timeInSeconds) {
+  protected RateLimitFilter(int maxRequests, int timeInSeconds) {
 
     this.maxRequests = maxRequests;
 
@@ -72,26 +76,24 @@ public abstract class RateLimitInterceptor implements HandlerInterceptor {
   }
 
   @Override
-  public boolean preHandle(
-      HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull Object handler)
-      throws IOException {
-
-    // Only count the initial request. Async (e.g. StreamingResponseBody) and error re-dispatches
-    // pass through the interceptor again, at which point the response may already be committed.
-    if (request.getDispatcherType() != DispatcherType.REQUEST) {
-      return true;
-    }
+  protected void doFilterInternal(
+      @NotNull HttpServletRequest request,
+      @NotNull HttpServletResponse response,
+      @NotNull FilterChain filterChain)
+      throws ServletException, IOException {
 
     String clientIpAddress = request.getRemoteAddr();
     Integer requestCount = requestCountPerIpAddress.getIfPresent(clientIpAddress);
     if (Objects.isNull(requestCount)) {
-      requestCount = 1;
+      requestCount = 0;
     }
-    if (requestCount > maxRequests) {
+
+    if (requestCount >= maxRequests) {
       response.sendError(429);
-      return false;
+      return;
     }
-    requestCountPerIpAddress.put(clientIpAddress, ++requestCount);
-    return true;
+
+    requestCountPerIpAddress.put(clientIpAddress, requestCount + 1);
+    filterChain.doFilter(request, response);
   }
 }

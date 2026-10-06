@@ -1,45 +1,48 @@
 package de.bund.digitalservice.ris.search.config;
 
-import de.bund.digitalservice.ris.search.config.ratelimiting.DefaultRateLimitInterceptor;
-import de.bund.digitalservice.ris.search.config.ratelimiting.FeedbackRateLimitInterceptor;
+import de.bund.digitalservice.ris.search.config.ratelimiting.DefaultRateLimitFilter;
+import de.bund.digitalservice.ris.search.config.ratelimiting.FeedbackRateLimitFilter;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.filter.UrlHandlerFilter;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
- * Web MVC configuration that registers application-specific interceptors.
+ * Web MVC configuration that registers application-specific filters.
  *
- * <p>Registers rate limiting interceptors for feedback endpoints and a default rate limiter for all
+ * <p>Registers a rate limiting filter for the feedback endpoint and a default rate limiter for all
  * requests.
  */
 @Configuration
-public class WebMvcConfig implements WebMvcConfigurer {
-
-  private final FeedbackRateLimitInterceptor feedbackInterceptor;
-
-  private final DefaultRateLimitInterceptor defaultRateLimitInterceptor;
+public class WebMvcConfig {
 
   /**
-   * Construct a WebMvcConfig with required interceptors.
+   * Restricts the {@link FeedbackRateLimitFilter} to the feedback endpoint. Without an explicit
+   * registration, Spring Boot would register the filter bean for all requests.
    *
-   * @param interceptor interceptor handling feedback-related rate limits
-   * @param defaultRateLimitInterceptor interceptor applying default rate limits to requests
+   * @param filter filter handling feedback-related rate limits
+   * @return the registration of the feedback rate limit filter
    */
-  public WebMvcConfig(
-      FeedbackRateLimitInterceptor interceptor,
-      DefaultRateLimitInterceptor defaultRateLimitInterceptor) {
-
-    this.feedbackInterceptor = interceptor;
-    this.defaultRateLimitInterceptor = defaultRateLimitInterceptor;
+  @Bean
+  public FilterRegistrationBean<FeedbackRateLimitFilter> feedbackRateLimitFilterRegistration(
+      FeedbackRateLimitFilter filter) {
+    FilterRegistrationBean<FeedbackRateLimitFilter> registration =
+        new FilterRegistrationBean<>(filter);
+    registration.addUrlPatterns(ApiConfig.Paths.FEEDBACK);
+    return registration;
   }
 
-  @Override
-  public void addInterceptors(InterceptorRegistry registry) {
-    registry.addInterceptor(feedbackInterceptor).addPathPatterns(ApiConfig.Paths.FEEDBACK);
-    registry.addInterceptor(defaultRateLimitInterceptor);
+  /**
+   * Registers the {@link DefaultRateLimitFilter} for all requests.
+   *
+   * @param filter filter applying default rate limits to requests
+   * @return the registration of the default rate limit filter
+   */
+  @Bean
+  public FilterRegistrationBean<DefaultRateLimitFilter> defaultRateLimitFilterRegistration(
+      DefaultRateLimitFilter filter) {
+    return new FilterRegistrationBean<>(filter);
   }
 
   /**

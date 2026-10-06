@@ -6,7 +6,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.config.ContainersIntegrationBase;
-import de.bund.digitalservice.ris.search.config.ratelimiting.DefaultRateLimitInterceptor;
+import de.bund.digitalservice.ris.search.config.ratelimiting.DefaultRateLimitFilter;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,10 +21,10 @@ class DefaultRateLimitIntegrationTest extends ContainersIntegrationBase {
 
   @Autowired private MockMvc mockMvc;
 
-  @TestBean private DefaultRateLimitInterceptor testInterceptor;
+  @TestBean private DefaultRateLimitFilter testFilter;
 
-  static DefaultRateLimitInterceptor testInterceptor() {
-    return new DefaultRateLimitInterceptor(2, 10);
+  static DefaultRateLimitFilter testFilter() {
+    return new DefaultRateLimitFilter(2, 10);
   }
 
   @Test

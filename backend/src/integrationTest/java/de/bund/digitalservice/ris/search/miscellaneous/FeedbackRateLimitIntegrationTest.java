@@ -1,13 +1,14 @@
 package de.bund.digitalservice.ris.search.miscellaneous;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.config.ContainersIntegrationBase;
-import de.bund.digitalservice.ris.search.config.ratelimiting.FeedbackRateLimitInterceptor;
+import de.bund.digitalservice.ris.search.config.ratelimiting.FeedbackRateLimitFilter;
 import de.bund.digitalservice.ris.search.controller.api.FeedbackController.FeedbackRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +25,10 @@ class FeedbackRateLimitIntegrationTest extends ContainersIntegrationBase {
   @Autowired private MockMvc mockMvc;
   @Autowired private ObjectMapper objectMapper;
 
-  @TestBean private FeedbackRateLimitInterceptor testInterceptor;
+  @TestBean private FeedbackRateLimitFilter testFilter;
 
-  static FeedbackRateLimitInterceptor testInterceptor() {
-    return new FeedbackRateLimitInterceptor(2, 10);
+  static FeedbackRateLimitFilter testFilter() {
+    return new FeedbackRateLimitFilter(2, 10);
   }
 
   @Test
@@ -53,5 +54,11 @@ class FeedbackRateLimitIntegrationTest extends ContainersIntegrationBase {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody))
         .andExpect(status().isTooManyRequests());
+
+    // other endpoints are not affected by the feedback rate limit
+    mockMvc
+        .perform(
+            get(ApiConfig.Paths.LEGISLATION).with(csrf()).contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk());
   }
 }
