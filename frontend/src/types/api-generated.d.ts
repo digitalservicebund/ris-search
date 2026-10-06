@@ -618,6 +618,48 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/case-law": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Removed: use the rechtsprechung endpoint instead
+         * @deprecated
+         * @description All case-law endpoints have been removed. Please use the equivalent /v1/rechtsprechung endpoint instead.
+         */
+        get: operations["handleRemovedEndpoint"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/case-law/**": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Removed: use the rechtsprechung endpoint instead
+         * @deprecated
+         * @description All case-law endpoints have been removed. Please use the equivalent /v1/rechtsprechung endpoint instead.
+         */
+        get: operations["handleRemovedEndpoint_1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/bulk-zip-links": {
         parameters: {
             query?: never;
@@ -894,8 +936,11 @@ export interface components {
             /** @example Rechtsprechung */
             "@type"?: string;
             "@context": string;
-            /** @example KARE000000000 */
-            dokumentNummer: string;
+            /**
+             * @description Dokumentnummer
+             * @example KARE000000000
+             */
+            dokumentNummer?: string;
             /**
              * @description European Case Law Identifier
              * @example ECLI:DE:FGRLP:1969:0905.IV85.68.0A
@@ -915,7 +960,7 @@ export interface components {
             leitsatz?: string;
             /** @description Kurztitel */
             kurztitel?: string;
-            /** @description Titelzeile */
+            /** @description Vom Dokumentar gebildete Kurzzusammenfassung, bezogen auf die gesamten Kurztexte. */
             titelzeile?: string;
             /** @description Orientierungssatz */
             orientierungssatz?: string;
@@ -931,9 +976,9 @@ export interface components {
             tenor?: string;
             /**
              * Format: date
-             * @description Datum
+             * @description Datum der Entscheidung, hier kann es zu Dopplungen mit anderen Entscheidungen kommen, auch in Kombination mit Aktenzeichen und Gericht.
              */
-            datum: string;
+            datum?: string;
             /**
              * @description Art des Datums
              * @example Entscheidungsdatum
@@ -944,13 +989,17 @@ export interface components {
             abweichendeDaten?: string[];
             /** @description Gliederung */
             gliederung?: string;
-            /** @description Aktenzeichen */
+            /** @description Aktenzeichen der Entscheidung, hier kann es zu Dopplungen mit anderen Entscheidungen kommen, auch in Kombination mit Entscheidungsdatum und Gericht. Bei Gemeinsamen Ländererlassen (GLE) innerhalb der Dokumentart Verwaltungsvorschriften wird über das Attribut 'normgeber' der jeweilige ausgebende Normgeber des Bundeslandes angegeben. Das optionale Attribut 'normgeberRegion' gibt die zugehörige Region des Normgebers an. */
             aktenzeichen?: string;
             /**
-             * @description Aktenzeichenliste
+             * @description Aktenzeichen des Dokuments
+             *
+             *     Der erste Eintrag ist das primäre Aktenzeichen.
+             *     Weitere Einträge sind abweichende Aktenzeichen, die auch für dieses
+             *     Dokument verwendet werden.
              * @example BGH 123/23
              */
-            aktenzeichenListe: string[];
+            aktenzeichenListe?: string[];
             /**
              * @description Abweichende Aktenzeichen
              * @example 1
@@ -964,7 +1013,7 @@ export interface components {
             kuendigungsarten?: string[];
             /** @description Herkunftsländer */
             herkunftslaender?: string[];
-            /** @description Regionen */
+            /** @description Regionen in denen dieses Dokument eine Bedeutung hat */
             regionen?: string[];
             /** @description Tarifverträge */
             tarifvertraege?: string[];
@@ -972,9 +1021,9 @@ export interface components {
             kuendigungsgruende?: string[];
             /** @description Mitwirkende Richter */
             mitwirkendeRichter?: string[];
-            /** @description Vorgehende Entscheidungen */
+            /** @description Nachgewiesen werden gerichtliche Entscheidungen, die im Rahmen eines Verfahrens (einschl. Nebenverfahren) der zu dokumentierenden Entscheidung vorausgehen. */
             vorgehendeEntscheidungen?: string[];
-            /** @description Nachgehende Entscheidungen */
+            /** @description Nachgewiesen werden die gerichtlichen Entscheidungen, die ihrerseits in der Rubrik „vorgehende Entscheidung“ die vorliegende Entscheidung nennen. */
             nachgehendeEntscheidungen?: string[];
             /** @description Aktivzitierung Literatur Unselbstständig */
             aktivzitierungLiteraturUnselbstaendig?: string[];
@@ -1003,7 +1052,7 @@ export interface components {
              */
             nichtamtlicheFundstellen?: string[];
             /**
-             * @description Gesetzeskraft
+             * @description Information über die Gesetzeskraft der Einzelnorm
              * @example vereinbar mit höherrangigem Recht (Bremen)
              */
             gesetzeskraft?: string[];
@@ -1016,11 +1065,11 @@ export interface components {
             sachgebiete?: string[];
             /** @description Streitjahre */
             streitjahre?: string[];
-            /** @description Fehlerhafte Gerichte */
+            /** @description Fehlerhafte Angaben zu Gerichten */
             fehlerhafteGerichte?: string[];
             /** @description Daten der mündlichen Verhandlung */
             datenDerMuendlichenVerhandlung?: string[];
-            /** @description Definitionen */
+            /** @description Definitionen von Begriffen */
             definitionen?: string[];
             /**
              * @description Erledigung
@@ -1075,10 +1124,50 @@ export interface components {
             gericht?: string;
             /** @description Gerichtsbarkeit */
             gerichtsbarkeit?: string;
-            /** @example Urteil */
+            /**
+             * @description Innerhalb der Dokumentart „Rechtsprechung“ werden folgende Dokumenttypen unterschieden:
+             *
+             *     * Äuß: Äußerung
+             *     * Ant: EuGH-Vorlage
+             *     * AnU: Anerkenntnisurteil
+             *     * Bes: Beschluss
+             *     * Buß: Bußgeldbescheid
+             *     * DrB: Dreierausschussbeschluss
+             *     * EiA: Einstweilige Anordnung
+             *     * Ent: Entscheidung
+             *     * EVg: Einstellungsverfügung der Staatsanwaltschaft
+             *     * GeB: Gerichtsbescheid
+             *     * Gut: Gutachten
+             *     * GWF: Gegenstandswertfestsetzung im verfassungsgerichtlichen Verfahren
+             *     * KaB: Kammerbeschluss
+             *     * KbN: Nichtannahmebeschluss
+             *     * KbS: Stattgebender Kammerbeschluss
+             *     * KoB: Kammerbeschluss ohne Begründung
+             *     * PkH: Prozesskostenhilfebeschluss
+             *     * ReM: Rechtsentscheid in Mietsachen
+             *     * Sch: Schiedsgerichtsentscheidung
+             *     * Ste: Stellungnahme
+             *     * Str: Streitwertbeschluss
+             *     * TeB: Teilbeschluss
+             *     * TeU: Teilurteil
+             *     * Urt: Urteil
+             *     * Vgl: Vergleich
+             *     * Vor: Vorlagebeschluss
+             *     * VsU: Versäumnisurteil
+             *     * VzU: Verzichtsurteil
+             *     * ZwB: Zwischenbeschluss
+             *     * ZwU: Zwischenurteil
+             *     * TVU: Teilversäumnisurteil
+             *     * Vfg: Verfügung
+             *     * Vorab: Ersuchen um Vorabentscheidung
+             *     * Anh: Anhängiges Verfahren
+             *     * End: Endurteil
+             *     * KfB: Kostenfestsetzungsbeschluss
+             * @example Urteil
+             */
             dokumenttyp?: string;
             /**
-             * @description Spruchkörper
+             * @description Inhalt ist die Angabe des Spruchkörpers, von dem das Dokument stammt (z.B. 1. Zivilsenat, 3. Strafkammer, Großer Senat).
              * @example Gericht
              */
             spruchkoerper?: string;
@@ -1095,10 +1184,12 @@ export interface components {
              */
             entscheidungsnamen: string[];
             /**
-             * @description Abweichende Dokumentnummer
+             * @description Abweichende Dokumentnummern
+             *
+             *     Weitere Dokumentnummern die für dieses Dokument verwendet werden
              * @example DEV-123
              */
-            abweichendeDokumentnummern: string[];
+            abweichendeDokumentnummern?: string[];
             /** @example /v1/rechtsprechung/ECLI:DE:FGRLP:1969:0905.IV85.68.0A */
             "@id": string;
             /** @example de */
@@ -1591,6 +1682,14 @@ export interface components {
             "@type"?: string;
             item: components["schemas"]["AdministrativeDirectiveSearchSchema"];
             textMatches: components["schemas"]["TextMatchSchema"][];
+        };
+        CustomError: {
+            code?: string;
+            message?: string;
+            parameter?: string;
+        };
+        CustomErrorResponse: {
+            errors?: components["schemas"]["CustomError"][];
         };
         /** @description Represents a <a href="https://schema.org/DataCatalog">schema.org/DataCatalog</a>. */
         ZipDataCatalogSchema: {
@@ -2914,6 +3013,46 @@ export interface operations {
                 };
                 content: {
                     "application/ld+json": string;
+                };
+            };
+        };
+    };
+    handleRemovedEndpoint: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Gone - this endpoint has been removed */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CustomErrorResponse"];
+                };
+            };
+        };
+    };
+    handleRemovedEndpoint_1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Gone - this endpoint has been removed */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CustomErrorResponse"];
                 };
             };
         };
