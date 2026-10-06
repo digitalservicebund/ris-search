@@ -1,35 +1,210 @@
 import { mockNuxtImport, renderSuspended } from "@nuxt/test-utils/runtime";
 import { screen } from "@testing-library/vue";
-import type { Article } from "~/types/api";
-import type { ValidityInterval } from "~/utils/norm";
+import type { Article, ArtikelFassung } from "~/types/api";
 import ArticleVersionWarning from "./ArticleVersionWarning.vue";
 
-mockNuxtImport("getValidityStatus", () => {
-  return vi.fn((interval?: ValidityInterval) => {
-    if (interval?.from?.year() === 1990) return "Expired";
-    if (interval?.from?.year() === 2100) return "FutureInForce";
-    return "InForce";
-  });
-});
+const { useRouteMock } = vi.hoisted(() => ({
+  useRouteMock: vi.fn(() => ({ query: {} as Record<string, string> })),
+}));
 
-const articles = [
-  { temporalCoverage: "1990-01-01/2000-01-01" },
-  { temporalCoverage: "2100-01-01/.." },
-] as unknown as Article[];
+mockNuxtImport("useRoute", () => useRouteMock);
+
+const workEli = "eli/bund/bgbl-1/2020/s1234";
+const expression = (pointInTime: string) => `${workEli}/${pointInTime}/1/deu`;
+const partOf = (...pointsInTime: string[]) =>
+  pointsInTime.map((pointInTime) => ({
+    "@id": `/v1/legislation/${expression(pointInTime)}`,
+  }));
+
+const historicVersion = {
+  "@id": "historic",
+  eId: "art-z1",
+  name: "§ 1",
+  temporalCoverage: "2020-01-01/2020-12-31",
+  isPartOf: partOf("2020-01-01"),
+} as ArtikelFassung;
+
+const inForceVersion = {
+  "@id": "in-force",
+  eId: "art-z1",
+  name: "§ 1",
+  temporalCoverage: "2021-01-01/2029-12-31",
+  isPartOf: partOf("2021-01-01", "2022-01-01", "2023-01-01"),
+} as ArtikelFassung;
+
+const futureVersion = {
+  "@id": "future",
+  eId: "art-z1",
+  name: "§ 1",
+  temporalCoverage: "2030-01-01/2034-12-31",
+  isPartOf: partOf("2030-01-01", "2031-01-01"),
+} as ArtikelFassung;
+
+const laterFutureVersion = {
+  "@id": "later-future",
+  eId: "art-z1",
+  name: "§ 1",
+  temporalCoverage: "2035-01-01/..",
+  isPartOf: partOf("2035-01-01"),
+} as ArtikelFassung;
+
+const allVersions = [
+  laterFutureVersion,
+  futureVersion,
+  inForceVersion,
+  historicVersion,
+];
+
+const articleFor = (version: ArtikelFassung) =>
+  ({ temporalCoverage: version.temporalCoverage }) as Article;
+
+const linkStub = {
+  NuxtLink: {
+    template: '<a :href="to.path" :data-from="to.query?.from"><slot /></a>',
+    props: ["to"],
+  },
+};
 
 describe("ArticleVersionWarning", () => {
-  const inForceVersionLink =
-    "/gesetze/eli/bund/bgbl-1/2000/s100/2000-01-01/1/deu";
+  beforeEach(() => {
+    vi.useFakeTimers({ toFake: ["Date"] });
+    vi.setSystemTime(new Date("2025-06-01T12:00:00Z"));
+    useRouteMock.mockReturnValue({ query: {} });
+  });
 
-  it.each(articles)("shows warning for article %s", async (currentArticle) => {
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it("links a historic Fassung to the valid Fassung in the in force expression", async () => {
     await renderSuspended(ArticleVersionWarning, {
-      props: { inForceVersionLink, currentArticle },
+      props: {
+        currentArticle: articleFor(historicVersion),
+        versions: allVersions,
+        inForceExpressionEli: expression("2022-01-01"),
+      },
+      global: { stubs: linkStub },
+    });
+
+    const link = screen.getByRole("link", {
+      name: "Zur aktuell gültigen Fassung",
+      description: "Sie lesen eine historische Fassung.",
+    });
+    expect(link).toHaveAttribute(
+      "href",
+      `/gesetze/${expression("2022-01-01")}/art-z1`,
+    );
+  });
+
+  it("falls back to the newest expression of the valid Fassung", async () => {
+    await renderSuspended(ArticleVersionWarning, {
+      props: {
+        currentArticle: articleFor(historicVersion),
+        versions: allVersions,
+      },
+      global: { stubs: linkStub },
     });
 
     expect(
-      screen.getByText(
-        /Sie lesen einen Paragrafen einer (historischen|zukünftigen) Fassung\./,
-      ),
+      screen.getByRole("link", { name: "Zur aktuell gültigen Fassung" }),
+    ).toHaveAttribute("href", `/gesetze/${expression("2023-01-01")}/art-z1`);
+  });
+
+  it("shows a historic Fassung without link if there is no valid Fassung", async () => {
+    await renderSuspended(ArticleVersionWarning, {
+      props: {
+        currentArticle: articleFor(historicVersion),
+        versions: [historicVersion, futureVersion],
+        inForceExpressionEli: expression("2022-01-01"),
+      },
+    });
+
+    expect(
+      screen.getByText("Sie lesen eine historische Fassung."),
     ).toBeInTheDocument();
+    expect(screen.queryByRole("link")).not.toBeInTheDocument();
+  });
+
+  it("links a valid Fassung to the next future Fassung in its newest expression", async () => {
+    await renderSuspended(ArticleVersionWarning, {
+      props: {
+        currentArticle: articleFor(inForceVersion),
+        versions: allVersions,
+        inForceExpressionEli: expression("2022-01-01"),
+      },
+      global: { stubs: linkStub },
+    });
+
+    const link = screen.getByRole("link", {
+      name: "Zur zukünftigen Fassung",
+      description: "Ab 01.01.2030 gilt eine neue Fassung.",
+    });
+    expect(link).toHaveAttribute(
+      "href",
+      `/gesetze/${expression("2031-01-01")}/art-z1`,
+    );
+  });
+
+  it("shows no message for a valid Fassung without future Fassung", async () => {
+    await renderSuspended(ArticleVersionWarning, {
+      props: {
+        currentArticle: articleFor(inForceVersion),
+        versions: [historicVersion, inForceVersion],
+        inForceExpressionEli: expression("2022-01-01"),
+      },
+    });
+
+    expect(screen.queryByText(/Fassung/)).not.toBeInTheDocument();
+  });
+
+  it("links a future Fassung to the valid Fassung", async () => {
+    await renderSuspended(ArticleVersionWarning, {
+      props: {
+        currentArticle: articleFor(futureVersion),
+        versions: allVersions,
+        inForceExpressionEli: expression("2022-01-01"),
+      },
+      global: { stubs: linkStub },
+    });
+
+    const link = screen.getByRole("link", {
+      name: "Zur aktuell gültigen Fassung",
+      description: "Sie lesen eine zukünftige Fassung.",
+    });
+    expect(link).toHaveAttribute(
+      "href",
+      `/gesetze/${expression("2022-01-01")}/art-z1`,
+    );
+  });
+
+  it("shows a future Fassung without link if there is no valid Fassung", async () => {
+    await renderSuspended(ArticleVersionWarning, {
+      props: {
+        currentArticle: articleFor(futureVersion),
+        versions: [futureVersion, laterFutureVersion],
+      },
+    });
+
+    expect(
+      screen.getByText("Sie lesen eine zukünftige Fassung."),
+    ).toBeInTheDocument();
+    expect(screen.queryByRole("link")).not.toBeInTheDocument();
+  });
+
+  it("keeps the from query parameter in links", async () => {
+    useRouteMock.mockReturnValue({ query: { from: "/suche?q=test" } });
+
+    await renderSuspended(ArticleVersionWarning, {
+      props: {
+        currentArticle: articleFor(historicVersion),
+        versions: allVersions,
+        inForceExpressionEli: expression("2022-01-01"),
+      },
+      global: { stubs: linkStub },
+    });
+
+    expect(
+      screen.getByRole("link", { name: "Zur aktuell gültigen Fassung" }),
+    ).toHaveAttribute("data-from", "/suche?q=test");
   });
 });

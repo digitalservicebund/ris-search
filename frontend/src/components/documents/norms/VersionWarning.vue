@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import dayjs from "dayjs";
 import type { RouteLocationRaw } from "#vue-router";
 import type { LegislationExpression } from "~/types/api";
+import type { FutureVersionTarget } from "./VersionWarningMessage.vue";
 
 const props = defineProps<{
   versions: LegislationExpression[];
@@ -10,44 +10,36 @@ const props = defineProps<{
 
 const route = useRoute();
 
-const inForceVersion = computed(() =>
-  props.versions.find((version) => version.legislationLegalForce === "InForce"),
-);
+function getVersionRoute(version: LegislationExpression): RouteLocationRaw {
+  return {
+    path: `/gesetze/${version.legislationIdentifier}`,
+    query: { from: route.query.from },
+  };
+}
 
-const inForceVersionLink = computed<RouteLocationRaw | undefined>(() =>
-  inForceVersion.value
-    ? {
-        path: `/gesetze/${inForceVersion.value?.legislationIdentifier}`,
-        query: { from: route.query.from },
-      }
-    : undefined,
-);
-
-const currentVersionValidityStatus = computed(() => {
-  const validityInterval = temporalCoverageToValidityInterval(
-    props.currentVersion.temporalCoverage,
+const inForceVersionLink = computed<RouteLocationRaw | undefined>(() => {
+  const inForceVersion = props.versions.find(
+    (version) => version.legislationLegalForce === "InForce",
   );
-  return getValidityStatus(validityInterval);
+  if (!inForceVersion) return undefined;
+
+  return getVersionRoute(inForceVersion);
 });
 
-const firstFutureVersion = computed(() => {
+const currentVersionValidityStatus = computed(() =>
+  getVersionValidityStatus(props.currentVersion),
+);
+
+const futureVersion = computed<FutureVersionTarget | undefined>(() => {
   if (currentVersionValidityStatus.value !== "InForce") return undefined;
 
-  const sorted = props.versions.toSorted((v1, v2) => {
-    const from1 = temporalCoverageToValidityInterval(v1.temporalCoverage)?.from;
-    const from2 = temporalCoverageToValidityInterval(v2.temporalCoverage)?.from;
-    return dayjs(from1).diff(from2, "day");
-  });
+  const nextFutureVersion = findNextFutureVersion(props.versions);
+  if (!nextFutureVersion) return undefined;
 
-  const firstFutureInForce = sorted.find((v) => {
-    return (
-      getValidityStatus(
-        temporalCoverageToValidityInterval(v.temporalCoverage),
-      ) === "FutureInForce"
-    );
-  });
-
-  return firstFutureInForce;
+  return {
+    to: getVersionRoute(nextFutureVersion),
+    validFrom: getVersionValidFrom(nextFutureVersion),
+  };
 });
 </script>
 
@@ -55,8 +47,7 @@ const firstFutureVersion = computed(() => {
   <DocumentsNormsVersionWarningMessage
     :current-version-validity-status="currentVersionValidityStatus"
     :in-force-version-link="inForceVersionLink"
-    :future-version="firstFutureVersion"
-    historical-warning-message="Sie lesen eine historische Fassung."
-    future-warning-message="Sie lesen eine zukünftige Fassung."
+    :future-version="futureVersion"
+    document-term="Gesamtausgabe"
   />
 </template>

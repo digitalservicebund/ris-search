@@ -69,6 +69,31 @@ export function getValidityStatus(
   return undefined;
 }
 
+type WithTemporalCoverage = { temporalCoverage?: string };
+
+export function getVersionValidFrom(version: WithTemporalCoverage) {
+  const interval = temporalCoverageToValidityInterval(version.temporalCoverage);
+  return interval?.from;
+}
+
+export function getVersionValidityStatus(version: WithTemporalCoverage) {
+  const interval = temporalCoverageToValidityInterval(version.temporalCoverage);
+  return getValidityStatus(interval);
+}
+
+/** Returns the future version that comes into force next, if any. */
+export function findNextFutureVersion<T extends WithTemporalCoverage>(
+  versions: T[],
+): T | undefined {
+  const futureVersions = versions.filter(
+    (version) => getVersionValidityStatus(version) === "FutureInForce",
+  );
+  const [nextFutureVersion] = sortBy(futureVersions, (version) =>
+    getVersionValidFrom(version)?.valueOf(),
+  );
+  return nextFutureVersion;
+}
+
 export function getManifestationUrl(
   metadata: LegislationExpression | undefined,
   format: string,

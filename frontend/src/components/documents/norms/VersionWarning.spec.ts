@@ -41,9 +41,9 @@ describe("VersionWarning", () => {
         legislationIdentifier: testVersions[1]!.legislationIdentifier,
         legislationLegalForce: testVersions[1]!.legislationLegalForce,
       },
-      messageText: "Ab 01.01.2824 gilt eine neue Fassung.",
+      messageText: "Ab 01.01.2824 gilt eine neue Gesamtausgabe.",
       link: `/gesetze/${testVersions[2]!.legislationIdentifier}`,
-      linkText: "Zur zukünftigen Fassung",
+      linkText: "Zur zukünftigen Gesamtausgabe",
     },
     {
       label: "historic version points to inForce Fassung",
@@ -52,9 +52,9 @@ describe("VersionWarning", () => {
         legislationIdentifier: testVersions[0]!.legislationIdentifier,
         legislationLegalForce: testVersions[0]!.legislationLegalForce,
       },
-      messageText: "Sie lesen eine historische Fassung.",
+      messageText: "Sie lesen eine historische Gesamtausgabe.",
       link: `/gesetze/${testVersions[1]!.legislationIdentifier}`,
-      linkText: "Zur aktuell gültigen Fassung",
+      linkText: "Zur aktuell gültigen Gesamtausgabe",
     },
     {
       label: "futureInForce points to inForce Fassung",
@@ -63,9 +63,9 @@ describe("VersionWarning", () => {
         legislationIdentifier: testVersions[2]!.legislationIdentifier,
         legislationLegalForce: testVersions[2]!.legislationLegalForce,
       },
-      messageText: "Sie lesen eine zukünftige Fassung.",
+      messageText: "Sie lesen eine zukünftige Gesamtausgabe.",
       link: `/gesetze/${testVersions[1]!.legislationIdentifier}`,
-      linkText: "Zur aktuell gültigen Fassung",
+      linkText: "Zur aktuell gültigen Gesamtausgabe",
     },
   ];
 
@@ -145,7 +145,7 @@ describe("VersionWarning", () => {
     });
 
     expect(
-      screen.getByText("Sie lesen eine historische Fassung."),
+      screen.getByText("Sie lesen eine historische Gesamtausgabe."),
     ).toBeInTheDocument();
     expect(screen.queryByRole("link")).toBeNull();
     expect(container).not.toBeEmptyDOMElement();
@@ -171,7 +171,7 @@ describe("VersionWarning", () => {
     });
 
     const link = await screen.findByRole("link", {
-      name: "Zur aktuell gültigen Fassung",
+      name: "Zur aktuell gültigen Gesamtausgabe",
     });
     expect(link).toHaveAttribute("data-from", "/suche?q=test");
   });
