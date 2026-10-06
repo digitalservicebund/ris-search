@@ -26,9 +26,9 @@ test.describe(
           .getByRole("list", { name: "Gesamtausgaben" })
           .getByRole("listitem"),
       ).toHaveText([
-        "Gültig ab: 04.08.2919 Gültig bis: – Status: Zukünftig in Kraft",
-        "Gültig ab: 04.08.2022 Gültig bis: 01.01.2030 Status: Aktuell gültig",
-        "Gültig ab: 04.08.2020 Gültig bis: 03.08.2022 Status: Außer Kraft",
+        "Gültig ab: 04.08.2919– Gültig bis: — Status: Zukünftig in Kraft",
+        "Gültig ab: 04.08.2022– Gültig bis: 01.01.2030 Status: Aktuell gültig",
+        "Gültig ab: 04.08.2020– Gültig bis: 03.08.2022 Status: Außer Kraft",
       ]);
     });
 
@@ -83,7 +83,7 @@ test.describe(
       await page.getByRole("textbox", { name: "Gültig am" }).fill("04.08.2020");
 
       await expect(gesamtausgaben).toHaveText([
-        "Gültig ab: 04.08.2020 Gültig bis: 03.08.2022 Status: Außer Kraft",
+        "Gültig ab: 04.08.2020– Gültig bis: 03.08.2022 Status: Außer Kraft",
       ]);
     });
 
@@ -161,6 +161,26 @@ test.describe(
       await expect(firstGesamtausgabe.getByText("Gültig ab:")).toBeVisible();
       await expect(firstGesamtausgabe.getByText("Gültig bis:")).toBeVisible();
       await expect(firstGesamtausgabe.getByText("Status:")).toBeVisible();
+    });
+
+    test("doesn't join the dates with a dash", async ({ page }) => {
+      await navigate(
+        page,
+        "/gesetze/eli/bund/bgbl-1/2020/s1126/2020-08-04/1/deu?view=gesamtausgaben",
+      );
+
+      await expect(
+        page
+          .getByRole("list", { name: "Gesamtausgaben" })
+          .getByRole("listitem"),
+      ).toHaveText(
+        [
+          "Gültig ab: 04.08.2919 Gültig bis: — Status: Zukünftig in Kraft",
+          "Gültig ab: 04.08.2022 Gültig bis: 01.01.2030 Status: Aktuell gültig",
+          "Gültig ab: 04.08.2020 Gültig bis: 03.08.2022 Status: Außer Kraft",
+        ],
+        { useInnerText: true },
+      );
     });
   },
 );

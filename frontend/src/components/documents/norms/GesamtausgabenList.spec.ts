@@ -3,7 +3,7 @@ import {
   registerEndpoint,
   mockNuxtImport,
 } from "@nuxt/test-utils/runtime";
-import { screen } from "@testing-library/vue";
+import { screen, within } from "@testing-library/vue";
 import { vi } from "vitest";
 import type { JSONLDList, LegislationExpression } from "~/types/api";
 import GesamtausgabenList from "./GesamtausgabenList.vue";
@@ -108,14 +108,22 @@ describe("GesamtausgabenList", () => {
     expect(gesamtausgaben).toHaveLength(3);
 
     expect(gesamtausgaben[0]).toHaveTextContent(
-      "Gültig ab: 01.01.2031 Gültig bis: – Status: Zukünftig in Kraft",
+      "Gültig ab: 01.01.2031– Gültig bis: — Status: Zukünftig in Kraft",
     );
     expect(gesamtausgaben[1]).toHaveTextContent(
-      "Gültig ab: 01.01.2020 Gültig bis: – Status: Aktuell gültig",
+      "Gültig ab: 01.01.2020– Gültig bis: — Status: Aktuell gültig",
     );
     expect(gesamtausgaben[2]).toHaveTextContent(
-      "Gültig ab: 05.01.2000 Gültig bis: 31.12.2019 Status: Außer Kraft",
+      "Gültig ab: 05.01.2000– Gültig bis: 31.12.2019 Status: Außer Kraft",
     );
+  });
+
+  it("joins the dates with a dash", async () => {
+    await renderSuspended(GesamtausgabenList, { props: props() });
+
+    for (const row of screen.getAllByRole("listitem")) {
+      expect(within(row).getByText("–")).toHaveAttribute("aria-hidden", "true");
+    }
   });
 
   it("renders the column labels as a header", async () => {
@@ -169,7 +177,7 @@ describe("GesamtausgabenList", () => {
     });
 
     expect(screen.getByRole("listitem")).toHaveTextContent(
-      "Gültig ab: – Gültig bis: – Status: Unbekannt",
+      "Gültig ab: —– Gültig bis: — Status: Unbekannt",
     );
   });
 

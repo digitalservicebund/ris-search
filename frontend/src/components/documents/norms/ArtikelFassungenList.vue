@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import IcChevronRightIcon from "~icons/ic/outline-chevron-right";
+import type { DataTableColumn } from "~/components/ui/DataTableCells.vue";
 import type { ArtikelFassung } from "~/types/api.ts";
 
 const { currentExpressionId, fassungen } = defineProps<{
@@ -16,13 +17,14 @@ type FassungRow = {
   disabled: boolean;
 };
 
-type FassungColumn = {
-  key: Extract<keyof FassungRow, string>;
-  label: string;
-};
+const missingDate = "—";
 
-const columns: FassungColumn[] = [
-  { key: "fromDate", label: "Gültig ab" },
+const columns: DataTableColumn<FassungRow>[] = [
+  {
+    key: "fromDate",
+    label: "Gültig ab",
+    separatorAfter: "–",
+  },
   { key: "toDate", label: "Gültig bis" },
 ];
 
@@ -44,8 +46,8 @@ const rows = computed<FassungRow[]>(() => {
 
     return {
       key: fassung["@id"],
-      fromDate: dateFormattedDDMMYYYY(validityInterval?.from) ?? "–",
-      toDate: dateFormattedDDMMYYYY(validityInterval?.to) ?? "–",
+      fromDate: dateFormattedDDMMYYYY(validityInterval?.from) ?? missingDate,
+      toDate: dateFormattedDDMMYYYY(validityInterval?.to) ?? missingDate,
       contentUrl: encodingUrl,
       disabled,
     };
@@ -144,21 +146,7 @@ const currentRowId = useId();
             class="col-span-2 grid grid-cols-[max-content_minmax(0,1fr)] gap-x-16 gap-y-4 md:grid-cols-subgrid md:gap-0"
             :id="currentRowId"
           >
-            <template v-for="column in columns" :key="column.key">
-              <span
-                class="typo-label1-bold flex min-h-32 items-center md:sr-only"
-                >{{ column.label }}:</span
-              >
-              {{ " " }}
-              <span
-                class="typo-label1-regular flex min-h-32 items-center md:min-h-48 md:px-16 md:py-10"
-              >
-                <slot :name="`cell-${column.key}`" :row="row" :column="column">
-                  {{ row[column.key] }}
-                </slot>
-              </span>
-              {{ " " }}
-            </template>
+            <UiDataTableCells :columns="columns" :row="row" />
           </span>
         </div>
 
@@ -175,25 +163,7 @@ const currentRowId = useId();
             <span
               class="col-span-2 grid grid-cols-[max-content_minmax(0,1fr)] gap-x-16 gap-y-4 md:grid-cols-subgrid md:gap-0"
             >
-              <template v-for="column in columns" :key="column.key">
-                <span
-                  class="typo-label1-bold flex min-h-32 items-center md:sr-only"
-                  >{{ column.label }}:</span
-                >
-                {{ " " }}
-                <span
-                  class="typo-label1-regular flex min-h-32 items-center md:min-h-48 md:px-16 md:py-10"
-                >
-                  <slot
-                    :name="`cell-${column.key}`"
-                    :row="row"
-                    :column="column"
-                  >
-                    {{ row[column.key] }}
-                  </slot>
-                </span>
-                {{ " " }}
-              </template>
+              <UiDataTableCells :columns="columns" :row="row" />
             </span>
             <IcChevronRightIcon
               aria-hidden="true"
@@ -205,7 +175,6 @@ const currentRowId = useId();
             <template v-if="expandedRowKey === row.key">
               <DocumentsNormsLegislationContent
                 v-if="rowsHtml.get(expandedRowKey)?.html"
-                single-article
               >
                 <div
                   class="akn-act -mt-16 px-16"
@@ -238,3 +207,11 @@ const currentRowId = useId();
     </template>
   </ul>
 </template>
+
+<style scoped>
+@reference "~/assets/main.css";
+
+:deep(h2.einzelvorschrift) {
+  @apply typo-body-bold mt-0 mb-16;
+}
+</style>
