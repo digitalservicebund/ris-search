@@ -3,12 +3,13 @@ package de.bund.digitalservice.ris.search.config;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 import de.bund.digitalservice.ris.TestJsonUtils;
+import de.bund.digitalservice.ris.search.api.schema.parameters.UniversalSearchParams;
+import de.bund.digitalservice.ris.search.api.schema.response.TextMatchSchema;
+import de.bund.digitalservice.ris.search.api.testData.AdministrativeDirectiveTestData;
+import de.bund.digitalservice.ris.search.api.testData.CaseLawTestData;
+import de.bund.digitalservice.ris.search.api.testData.LiteratureTestData;
+import de.bund.digitalservice.ris.search.api.testData.NormsTestData;
 import de.bund.digitalservice.ris.search.config.obs.TestMockS3Client;
-import de.bund.digitalservice.ris.search.controller.api.testData.AdministrativeDirectiveTestData;
-import de.bund.digitalservice.ris.search.controller.api.testData.CaseLawTestData;
-import de.bund.digitalservice.ris.search.controller.api.testData.LiteratureTestData;
-import de.bund.digitalservice.ris.search.controller.api.testData.NormsTestData;
-import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
@@ -23,7 +24,6 @@ import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository
 import de.bund.digitalservice.ris.search.repository.opensearch.DocumentRepository;
 import de.bund.digitalservice.ris.search.repository.opensearch.LiteratureRepository;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
-import de.bund.digitalservice.ris.search.schema.TextMatchSchema;
 import de.bund.digitalservice.ris.search.service.AdministrativeDirectiveService;
 import de.bund.digitalservice.ris.search.service.AllDocumentsService;
 import de.bund.digitalservice.ris.search.service.CaseLawService;

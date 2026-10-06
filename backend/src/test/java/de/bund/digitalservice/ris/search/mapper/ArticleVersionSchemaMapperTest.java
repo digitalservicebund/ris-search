@@ -2,13 +2,13 @@ package de.bund.digitalservice.ris.search.mapper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import de.bund.digitalservice.ris.search.api.schema.response.ArticleVersionSchema;
+import de.bund.digitalservice.ris.search.api.schema.response.CollectionSchema;
+import de.bund.digitalservice.ris.search.api.schema.response.LegislationObjectSchema;
+import de.bund.digitalservice.ris.search.api.schema.response.PartialCollectionViewSchema;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.ArticleWithExpressions;
 import de.bund.digitalservice.ris.search.models.opensearch.LegislationPartType;
-import de.bund.digitalservice.ris.search.schema.ArticleVersionSchema;
-import de.bund.digitalservice.ris.search.schema.CollectionSchema;
-import de.bund.digitalservice.ris.search.schema.LegislationObjectSchema;
-import de.bund.digitalservice.ris.search.schema.PartialCollectionViewSchema;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;

@@ -2,7 +2,7 @@ package de.bund.digitalservice.ris.search.service;
 
 import static org.opensearch.index.query.QueryBuilders.matchQuery;
 
-import de.bund.digitalservice.ris.search.models.api.parameters.LiteratureSearchParams;
+import de.bund.digitalservice.ris.search.api.schema.parameters.LiteratureSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import java.util.Arrays;
 import java.util.List;

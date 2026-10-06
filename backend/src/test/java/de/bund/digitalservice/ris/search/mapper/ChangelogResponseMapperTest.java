@@ -3,9 +3,9 @@ package de.bund.digitalservice.ris.search.mapper;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.InstanceOfAssertFactories.SET;
 
+import de.bund.digitalservice.ris.search.api.schema.response.ChangelogResponse;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.models.DocumentKind;
-import de.bund.digitalservice.ris.search.schema.ChangelogResponse;
 import java.util.HashSet;
 import java.util.List;
 import org.junit.jupiter.api.Test;

@@ -6,11 +6,11 @@ import static de.bund.digitalservice.ris.SharedTestConstants.DATE_2024_01_03;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import de.bund.digitalservice.ris.SharedTestConstants;
+import de.bund.digitalservice.ris.search.api.schema.response.CaseLawSchema;
+import de.bund.digitalservice.ris.search.api.schema.response.DocumentEncodingSchema;
+import de.bund.digitalservice.ris.search.api.schema.response.RechtsprechungSchema;
 import de.bund.digitalservice.ris.search.models.DatumsTyp;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
-import de.bund.digitalservice.ris.search.schema.CaseLawSchema;
-import de.bund.digitalservice.ris.search.schema.DocumentEncodingSchema;
-import de.bund.digitalservice.ris.search.schema.RechtsprechungSchema;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;

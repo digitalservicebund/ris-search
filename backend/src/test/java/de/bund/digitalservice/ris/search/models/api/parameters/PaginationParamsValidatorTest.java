@@ -1,5 +1,6 @@
 package de.bund.digitalservice.ris.search.models.api.parameters;
 
+import de.bund.digitalservice.ris.search.api.schema.parameters.PaginationParams;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;

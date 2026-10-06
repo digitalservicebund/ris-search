@@ -1,0 +1,70 @@
+package de.bund.digitalservice.ris.search.api.schema.response;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import java.time.LocalDate;
+import java.util.List;
+import lombok.Builder;
+import org.jspecify.annotations.Nullable;
+
+/**
+ * A data transfer object representing an administrative directive, designed according to schema.org
+ * conventions and annotated for JSON-LD compatibility.
+ *
+ * <p>This class encapsulates metadata and attributes describing an administrative directive. It
+ * includes fields such as document number, headline, document type, and references to related
+ * legislation or norms. Additional information about the directive's applicability, such as valid
+ * dates or issuing authorities, is also contained here.
+ *
+ * <p>The use of JSON-LD annotations ensures compatibility with linked data structures.
+ */
+@Builder
+public record AdministrativeDirectiveSchema(
+    @JsonProperty("@context") @Schema(requiredMode = Schema.RequiredMode.REQUIRED) String context,
+    @Schema(example = "KALU000000000", requiredMode = Schema.RequiredMode.REQUIRED)
+        @JsonProperty("@id")
+        String id,
+    @Schema(
+            description = "Dokumentnummer",
+            example = "KALU000000000",
+            requiredMode = Schema.RequiredMode.REQUIRED)
+        String documentNumber,
+    @Nullable @Schema(description = "Haupttitel") String headline,
+    @Nullable @Schema(description = "Kurzreferat") String shortReport,
+    @Schema(
+            description = "Dokumenttyp",
+            example = "VV",
+            requiredMode = Schema.RequiredMode.REQUIRED)
+        String documentType,
+    @Nullable @Schema(description = "Art der Verwaltungsvorschrift", example = "Bekanntmachung")
+        String documentTypeDetail,
+    @Schema(
+            description = "Aktenzeichen",
+            example = "['ZZ', 'YY']",
+            requiredMode = Schema.RequiredMode.REQUIRED)
+        List<String> referenceNumbers,
+    @Nullable @Schema(description = "Gültig ab Datum", example = "2003-12-15")
+        LocalDate entryIntoForceDate,
+    @Nullable @Schema(description = "Gültig bis Datum", example = "2005-12-01")
+        LocalDate expiryDate,
+    @Nullable @Schema(description = "Normgeber") String legislationAuthority,
+    @Schema(description = "Fundstelle", requiredMode = Schema.RequiredMode.REQUIRED)
+        List<String> references,
+    @Schema(description = "Zitierdaten", example = "", requiredMode = Schema.RequiredMode.REQUIRED)
+        List<LocalDate> citationDates,
+    @Schema(
+            description = "Normkette",
+            example = "['§ 1 Abs1 SGB']",
+            requiredMode = Schema.RequiredMode.REQUIRED)
+        List<String> normReferences,
+    @Schema(description = "Gliederung", requiredMode = Schema.RequiredMode.REQUIRED)
+        List<String> outline,
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED) List<DocumentEncodingSchema> encoding)
+    implements JsonldResource {
+
+  @Override
+  @Schema(example = JsonldTypes.ADMINISTRATIVE_DIRECTIVE)
+  public String getType() {
+    return JsonldTypes.ADMINISTRATIVE_DIRECTIVE;
+  }
+}

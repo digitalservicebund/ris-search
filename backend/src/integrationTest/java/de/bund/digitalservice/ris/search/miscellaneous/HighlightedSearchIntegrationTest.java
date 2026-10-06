@@ -2,10 +2,10 @@ package de.bund.digitalservice.ris.search.miscellaneous;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import de.bund.digitalservice.ris.search.api.schema.response.TextMatchSchema;
+import de.bund.digitalservice.ris.search.api.testData.CaseLawTestData;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.config.ContainersIntegrationBase;
-import de.bund.digitalservice.ris.search.controller.api.testData.CaseLawTestData;
-import de.bund.digitalservice.ris.search.schema.TextMatchSchema;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

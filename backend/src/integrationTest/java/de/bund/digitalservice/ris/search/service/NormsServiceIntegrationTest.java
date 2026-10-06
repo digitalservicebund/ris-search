@@ -2,10 +2,10 @@ package de.bund.digitalservice.ris.search.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import de.bund.digitalservice.ris.search.api.schema.parameters.NormsSearchParams;
+import de.bund.digitalservice.ris.search.api.schema.parameters.UniversalSearchParams;
+import de.bund.digitalservice.ris.search.api.testData.NormsTestData;
 import de.bund.digitalservice.ris.search.config.ContainersIntegrationBase;
-import de.bund.digitalservice.ris.search.controller.api.testData.NormsTestData;
-import de.bund.digitalservice.ris.search.models.api.parameters.NormsSearchParams;
-import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;

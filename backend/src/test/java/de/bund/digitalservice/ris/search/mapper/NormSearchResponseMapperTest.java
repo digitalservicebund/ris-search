@@ -4,14 +4,14 @@ import static de.bund.digitalservice.ris.search.mapper.NormSearchResponseMapper.
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import de.bund.digitalservice.ris.search.api.schema.response.LegalForceStatus;
+import de.bund.digitalservice.ris.search.api.schema.response.LegislationExpressionSearchSchema;
+import de.bund.digitalservice.ris.search.api.schema.response.LegislationObjectSchema;
+import de.bund.digitalservice.ris.search.api.schema.response.LegislationWorkSchema;
+import de.bund.digitalservice.ris.search.api.schema.response.TextMatchSchema;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.LegislationPartType;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
-import de.bund.digitalservice.ris.search.schema.LegalForceStatus;
-import de.bund.digitalservice.ris.search.schema.LegislationExpressionSearchSchema;
-import de.bund.digitalservice.ris.search.schema.LegislationObjectSchema;
-import de.bund.digitalservice.ris.search.schema.LegislationWorkSchema;
-import de.bund.digitalservice.ris.search.schema.TextMatchSchema;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;
