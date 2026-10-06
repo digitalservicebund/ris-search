@@ -2,6 +2,9 @@ packages: []
 
 overrides:
   devalue: "5.9.3"
+  source-map-js: "1.2.2"
+  "@simple-git/argv-parser": "2.0.1"
+  simple-git: "3.36.0"
 
 allowBuilds:
   "@parcel/watcher": true
