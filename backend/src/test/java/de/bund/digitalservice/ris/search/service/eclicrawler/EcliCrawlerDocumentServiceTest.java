@@ -21,7 +21,6 @@ import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationU
 import de.bund.digitalservice.ris.search.models.opensearch.EcliCrawlerDocument;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.EcliCrawlerDocumentRepository;
-import de.bund.digitalservice.ris.search.service.CaseLawIndexSyncJob;
 import de.bund.digitalservice.ris.search.service.CaseLawService;
 import jakarta.xml.bind.JAXBException;
 import java.time.LocalDate;
@@ -42,7 +41,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class EcliCrawlerDocumentServiceTest {
 
   @Mock EcliCrawlerDocumentRepository repository;
-  @Mock CaseLawIndexSyncJob syncJob;
   @Mock CaseLawBucket caseLawBucket;
   @Mock CaseLawService caselawService;
   @Mock EcliSitemapWriter sitemapWriter;
@@ -185,5 +183,20 @@ class EcliCrawlerDocumentServiceTest {
                             List.of(expectedCretedDocument, expectedDeletedDocument))
                         .matches(IteratorUtils.toList(docs.iterator()))));
     verify(sitemapWriter).updateRobotsTxt("apiUrl", expectedSitemapIndex);
+  }
+
+  @Test
+  void itIgnoresNonXmlFilesFromAChangelog() {
+    LocalDate day = LocalDate.of(2025, Month.JANUARY, 1);
+    Changelog changelog = new Changelog();
+    changelog.setChanged(
+        new HashSet<>(List.of("createdDoc/createdDoc.xml", "createdDoc/attachment.pdf")));
+    changelog.setDeleted(
+        new HashSet<>(List.of("deletedDoc/deletedDoc.xml", "deletedDoc/attachment.pdf")));
+
+    documentService.writeFromChangelog("apiUrl", day, changelog);
+
+    verify(caselawService).getFromBucket(List.of("createdDoc/createdDoc.xml"));
+    verify(repository).findByFilename(List.of("deletedDoc/deletedDoc.xml"));
   }
 }
