@@ -4,9 +4,8 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
-import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
-import de.bund.digitalservice.ris.search.repository.opensearch.ArticlesRepository;
+import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,9 +17,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 
 @ExtendWith(MockitoExtension.class)
-class NormsQueryServiceTest {
+class NormsServiceTest {
 
   private static final String DOCUMENT_NUMBER = "DKNR0E80B0026DKNE000100010";
   private static final String ELI_1 = "eli/bund/bgbl-1/2020/s1126/2025-05-05/1/deu";
@@ -28,22 +28,32 @@ class NormsQueryServiceTest {
 
   @Mock NormsRepository normsRepository;
 
-  @Mock ArticlesRepository articlesRepository;
+  @Mock NormsBucket normsBucket;
 
-  NormsQueryService service;
+  @Mock ElasticsearchOperations operations;
+
+  @Mock SimpleSearchQueryBuilder simpleSearchQueryBuilder;
+
+  @Mock ArticleService articleService;
+
+  NormsService service;
 
   @BeforeEach
   void setup() {
-    service = new NormsQueryService(normsRepository, articlesRepository);
+    service =
+        new NormsService(
+            normsRepository,
+            normsBucket,
+            operations,
+            simpleSearchQueryBuilder,
+            articleService,
+            "norms");
   }
 
   @Test
   void getAllNormsContainingArticleQueriesNormsByTheExpressionElisOfTheArticle() {
-    when(articlesRepository.findExpressionElisByDocumentNumber(DOCUMENT_NUMBER))
-        .thenReturn(
-            List.of(
-                Article.builder().documentNumber(DOCUMENT_NUMBER).expressionEli(ELI_1).build(),
-                Article.builder().documentNumber(DOCUMENT_NUMBER).expressionEli(ELI_2).build()));
+    when(articleService.findExpressionElisByDocumentNumber(DOCUMENT_NUMBER))
+        .thenReturn(List.of(ELI_1, ELI_2));
     Page<Norm> expected =
         new PageImpl<>(
             List.of(
@@ -61,8 +71,7 @@ class NormsQueryServiceTest {
 
   @Test
   void getAllNormsContainingArticleReturnsEmptyPageWithoutQueryingNormsIfNoArticleMatches() {
-    when(articlesRepository.findExpressionElisByDocumentNumber(DOCUMENT_NUMBER))
-        .thenReturn(List.of());
+    when(articleService.findExpressionElisByDocumentNumber(DOCUMENT_NUMBER)).thenReturn(List.of());
 
     Page<Norm> actual = service.getAllNormsContainingArticle(DOCUMENT_NUMBER);
 

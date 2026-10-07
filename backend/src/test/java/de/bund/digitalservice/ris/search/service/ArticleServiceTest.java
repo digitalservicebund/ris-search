@@ -11,6 +11,7 @@ import de.bund.digitalservice.ris.search.repository.opensearch.ArticlesRepositor
 import de.bund.digitalservice.ris.search.utils.eli.ExpressionEli;
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -92,5 +93,20 @@ class ArticleServiceTest {
         .thenThrow(new IllegalArgumentException("document number is too short"));
 
     assertThat(service.getAllArticleVersions(eli, eId)).isEmpty();
+  }
+
+  @Test
+  void findExpressionElisByDocumentNumberMapsArticlesToTheirExpressionElis() {
+    String documentNumber = "DKNR0E80B0026DKNE000100010";
+    String eli1 = "eli/bund/bgbl-1/2020/s1126/2025-05-05/1/deu";
+    String eli2 = "eli/bund/bgbl-1/2020/s1126/2026-05-05/1/deu";
+    when(articlesRepository.findExpressionElisByDocumentNumber(documentNumber))
+        .thenReturn(
+            List.of(
+                Article.builder().documentNumber(documentNumber).expressionEli(eli1).build(),
+                Article.builder().documentNumber(documentNumber).expressionEli(eli2).build()));
+
+    assertThat(service.findExpressionElisByDocumentNumber(documentNumber))
+        .containsExactly(eli1, eli2);
   }
 }

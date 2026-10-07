@@ -131,6 +131,19 @@ public class ArticleService {
   }
 
   /**
+   * Retrieves the expressionElis of all norm expressions containing the article revision with the
+   * given document number
+   *
+   * @param documentNumber document number of the article revision
+   * @return List of expressionElis of the norms containing the article revision
+   */
+  public List<String> findExpressionElisByDocumentNumber(String documentNumber) {
+    return articlesRepository.findExpressionElisByDocumentNumber(documentNumber).stream()
+        .map(Article::getExpressionEli)
+        .toList();
+  }
+
+  /**
    * This method takes a possible eid and returns the best matching eid if one exists. An eid can
    * contain % and therefore can't be directly used as a path variable. When it does contain %, all
    * known cases are the result of a uri encoding, but not all eids are uri encoded. For example an

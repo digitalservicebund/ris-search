@@ -19,7 +19,7 @@ import de.bund.digitalservice.ris.search.schema.ArticleVersionSchema;
 import de.bund.digitalservice.ris.search.schema.CollectionSchema;
 import de.bund.digitalservice.ris.search.schema.LegislationExpressionSearchSchema;
 import de.bund.digitalservice.ris.search.service.ArticleService;
-import de.bund.digitalservice.ris.search.service.NormsQueryService;
+import de.bund.digitalservice.ris.search.service.NormsService;
 import de.bund.digitalservice.ris.search.utils.eli.ExpressionEli;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -37,16 +37,14 @@ public class ArticleController {
 
   private final ArticleService articleService;
 
-  private final NormsQueryService normsQueryService;
+  private final NormsService normsService;
 
   private final String jsonldContextPath;
 
   ArticleController(
-      ArticleService articleService,
-      NormsQueryService normsQueryService,
-      ServerConfig serverConfig) {
+      ArticleService articleService, NormsService normsService, ServerConfig serverConfig) {
     this.articleService = articleService;
-    this.normsQueryService = normsQueryService;
+    this.normsService = normsService;
     this.jsonldContextPath = serverConfig.getBackEndUrl() + ApiConfig.Paths.JSONLD_CONTEXT;
   }
 
@@ -82,7 +80,7 @@ public class ArticleController {
   public ResponseEntity<CollectionSchema<LegislationExpressionSearchSchema>>
       getLegislationExpressionsByArticleRevision(@Parameter() @PathVariable String revision) {
 
-    Page<Norm> norms = normsQueryService.getAllNormsContainingArticle(revision);
+    Page<Norm> norms = normsService.getAllNormsContainingArticle(revision);
 
     return ResponseEntity.ok()
         .contentType(MediaType.APPLICATION_JSON)
