@@ -23,11 +23,7 @@ const route = useRoute();
 const missingDate = "—";
 
 const columns: DataTableColumn<GesamtausgabeRow>[] = [
-  {
-    key: "fromDate",
-    label: "Gültig ab",
-    separatorAfter: "–",
-  },
+  { key: "fromDate", label: "Gültig ab" },
   { key: "toDate", label: "Gültig bis" },
   { key: "status", label: "Status" },
 ];
@@ -99,6 +95,20 @@ watch(
     aria-label="Gesamtausgaben"
     class="-mx-16 md:mx-0"
   >
+    <template #cell-fromDate="{ row }">
+      <!-- Grows to the cell's padding, so the dash can be centered on the
+           boundary to the next column. Screen readers already get the labels,
+           so the dash would only add noise. -->
+      <span class="relative grow">
+        {{ row.fromDate
+        }}<span
+          aria-hidden="true"
+          class="absolute top-1/2 -right-16 hidden translate-x-1/2 -translate-y-1/2 md:block"
+          >–</span
+        >
+      </span>
+    </template>
+
     <template #cell-status="{ row }">
       <UiBadge
         :color="row.status.color"
