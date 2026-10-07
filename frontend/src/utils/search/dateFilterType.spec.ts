@@ -167,7 +167,7 @@ describe("filterType", () => {
           DocumentKind.Norm,
         );
         expect(result).toMatch(
-          /^entry_into_force_date:<\d{4}-\d{2}-\d{2} AND \(\(expiry_date:>\d{4}-\d{2}-\d{2}\) OR \(NOT _exists_:expiry_date\)\)$/,
+          /^entry_into_force_date:<=\d{4}-\d{2}-\d{2} AND \(\(expiry_date:>=\d{4}-\d{2}-\d{2}\) OR \(NOT _exists_:expiry_date\)\)$/,
         );
       });
 
@@ -178,7 +178,7 @@ describe("filterType", () => {
             DocumentKind.Norm,
           ),
         ).toBe(
-          "entry_into_force_date:<2024-06-15 AND ((expiry_date:>2024-06-15) OR (NOT _exists_:expiry_date))",
+          "entry_into_force_date:<=2024-06-15 AND ((expiry_date:>=2024-06-15) OR (NOT _exists_:expiry_date))",
         );
       });
 
