@@ -51,18 +51,12 @@ springBoot {
 
 jacoco { toolVersion = libs.versions.jacoco.get() }
 
-// Align the whole Jackson family (annotations, datatype and dataformat modules) with the
-// databind/core versions pinned for CVE-2026-68497 and CVE-2026-89407. Pinning only databind/core
-// leaves the other modules on Spring Boot's managed versions, which breaks at runtime when the
-// pinned databind needs a newer jackson-annotations (e.g. NoClassDefFoundError: JsonApplyView).
-extra["jackson-bom.version"] =
-    libs.tools.jackson.databind
-        .get()
-        .version
-extra["jackson-2-bom.version"] =
-    libs.fasterxml.jackson.databind
-        .get()
-        .version
+// Override Spring Boot's managed Jackson versions so the whole Jackson family (annotations,
+// datatype and dataformat modules) stays aligned on versions fixing CVE-2026-68497 and
+// CVE-2026-89407.
+// Using extra[] to override Spring Boot managed bom
+extra["jackson-bom.version"] = libs.versions.jackson3.get()
+extra["jackson-2-bom.version"] = libs.versions.jackson2.get()
 
 testlogger {
     theme = ThemeType.MOCHA
@@ -121,14 +115,6 @@ dependencies {
 
     // CVE-2026-65182
     implementation(libs.tomcat.embed.core)
-
-    // CVE-2026-68497
-    implementation(libs.fasterxml.jackson.databind)
-    implementation(libs.tools.jackson.databind)
-
-    // CVE-2026-89407
-    implementation(libs.fasterxml.jackson.core)
-    implementation(libs.tools.jackson.core)
 
     implementation(libs.ris.html.transformation)
 
