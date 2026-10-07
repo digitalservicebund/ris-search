@@ -36,7 +36,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class ArticleController {
 
   private final ArticleService articleService;
-
   private final NormsService normsService;
 
   private final String jsonldContextPath;
@@ -66,28 +65,6 @@ public class ArticleController {
             ArticleVersionSchemaMapper.fromArticlePage(
                 articles,
                 ApiConfig.Paths.ARTICLE_WORK_EXAMPLE + "/" + revision,
-                jsonldContextPath));
-  }
-
-  /**
-   * Retrieve all LegislationExpressions that a given article revision is part of
-   *
-   * @param revision The identifier of the article revision
-   * @return a paginated collection {@link CollectionSchema} of expression level metadata {@link
-   *     LegislationExpressionSearchSchema}
-   */
-  @GetMapping(path = ApiConfig.Paths.ARTICLE + "/{revision}/legislations")
-  public ResponseEntity<CollectionSchema<LegislationExpressionSearchSchema>>
-      getLegislationExpressionsByArticleRevision(@Parameter() @PathVariable String revision) {
-
-    Page<Norm> norms = normsService.getAllNormsContainingArticle(revision);
-
-    return ResponseEntity.ok()
-        .contentType(MediaType.APPLICATION_JSON)
-        .body(
-            NormSearchResponseMapper.fromNormsPage(
-                norms,
-                ApiConfig.Paths.ARTICLE + "/" + revision + "/legislations",
                 jsonldContextPath));
   }
 
@@ -135,6 +112,28 @@ public class ArticleController {
             ArticleVersionSchemaMapper.fromArticlePage(
                 articles,
                 ApiConfig.Paths.ARTICLE_WORK_EXAMPLE + "/" + eli + "/" + eId,
+                jsonldContextPath));
+  }
+
+  /**
+   * Retrieve all LegislationExpressions that a given article revision is part of
+   *
+   * @param revision The identifier of the article revision
+   * @return a paginated collection {@link CollectionSchema} of expression level metadata {@link
+   *     LegislationExpressionSearchSchema}
+   */
+  @GetMapping(path = ApiConfig.Paths.ARTICLE + "/{revision}/legislations")
+  public ResponseEntity<CollectionSchema<LegislationExpressionSearchSchema>>
+      getLegislationExpressionsByArticleRevision(@Parameter() @PathVariable String revision) {
+
+    Page<Norm> norms = normsService.getAllNormsContainingArticle(revision);
+
+    return ResponseEntity.ok()
+        .contentType(MediaType.APPLICATION_JSON)
+        .body(
+            NormSearchResponseMapper.fromNormsPage(
+                norms,
+                ApiConfig.Paths.ARTICLE + "/" + revision + "/legislations",
                 jsonldContextPath));
   }
 }
