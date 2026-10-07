@@ -17,6 +17,14 @@ import org.springframework.web.filter.UrlHandlerFilter;
 @Configuration
 public class WebMvcConfig {
 
+  /** Actuator endpoints (health checks, metrics scraping) are excluded from rate limiting. */
+  private final String actuatorBasePath;
+
+  public WebMvcConfig(
+      @Value("${management.endpoints.web.base-path:/actuator}") String actuatorBasePath) {
+    this.actuatorBasePath = actuatorBasePath;
+  }
+
   /**
    * Applies a {@link RateLimitFilter} to the feedback endpoint.
    *
@@ -32,7 +40,7 @@ public class WebMvcConfig {
       @Value("${rate-limit.feedback.requests}") int maxRequests,
       @Value("${rate-limit.feedback.seconds}") int seconds) {
     FilterRegistrationBean<RateLimitFilter> registration =
-        new FilterRegistrationBean<>(new RateLimitFilter(maxRequests, seconds));
+        new FilterRegistrationBean<>(new RateLimitFilter(maxRequests, seconds, actuatorBasePath));
     registration.setName("feedbackRateLimitFilter");
     registration.addUrlPatterns(ApiConfig.Paths.FEEDBACK);
     return registration;
@@ -50,7 +58,7 @@ public class WebMvcConfig {
       @Value("${rate-limit.default.requests}") int maxRequests,
       @Value("${rate-limit.default.seconds}") int seconds) {
     FilterRegistrationBean<RateLimitFilter> registration =
-        new FilterRegistrationBean<>(new RateLimitFilter(maxRequests, seconds));
+        new FilterRegistrationBean<>(new RateLimitFilter(maxRequests, seconds, actuatorBasePath));
     registration.setName("defaultRateLimitFilter");
     return registration;
   }

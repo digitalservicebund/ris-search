@@ -22,16 +22,16 @@ import org.springframework.web.filter.OncePerRequestFilter;
  * code.
  *
  * <p>Only the initial request dispatch is counted. Async (e.g. StreamingResponseBody) and error
- * re-dispatches are skipped by {@link OncePerRequestFilter}. Actuator endpoints (health checks,
- * metrics scraping) are never limited.
+ * re-dispatches are skipped by {@link OncePerRequestFilter}. Requests below the excluded path (e.g.
+ * actuator health checks and metrics scraping) are never limited.
  *
- * <p>The maximum number of requests and the time window are passed via the constructor. Separate
- * instances with their own limits and request counters can be registered for different URL
- * patterns, see {@code WebMvcConfig}.
+ * <p>The maximum number of requests, the time window and the excluded path are passed via the
+ * constructor. Separate instances with their own limits and request counters can be registered for
+ * different URL patterns, see {@code WebMvcConfig}.
  */
 public class RateLimitFilter extends OncePerRequestFilter {
   private final Cache<String, Integer> requestCountPerIpAddress;
-  private static final String ACTUATOR_PATH_PREFIX = "/actuator/";
+  private final String excludedPathPrefix;
   private final int maxRequests;
 
   /**
@@ -39,10 +39,12 @@ public class RateLimitFilter extends OncePerRequestFilter {
    *
    * @param maxRequests maximum number of requests allowed per client IP within the time window
    * @param timeInSeconds duration of the time window in seconds
+   * @param excludedPath base path whose sub paths are not rate limited, e.g. the actuator base path
    */
-  public RateLimitFilter(int maxRequests, int timeInSeconds) {
+  public RateLimitFilter(int maxRequests, int timeInSeconds, String excludedPath) {
 
     this.maxRequests = maxRequests;
+    this.excludedPathPrefix = excludedPath + "/";
 
     requestCountPerIpAddress =
         Caffeine.newBuilder()
@@ -99,7 +101,7 @@ public class RateLimitFilter extends OncePerRequestFilter {
 
   @Override
   protected boolean shouldNotFilter(@NotNull HttpServletRequest request) {
-    return request.getRequestURI().startsWith(ACTUATOR_PATH_PREFIX);
+    return request.getRequestURI().startsWith(excludedPathPrefix);
   }
 
   /** Resets cache state to empty. */
