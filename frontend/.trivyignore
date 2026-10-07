@@ -1,3 +1,17 @@
 # Ignoring vulnerabilities here should be a last resort to solve trivy
 # complaints from vulnerable dependencies in the base image that are not
 # actually used in the production application.
+
+# braces
+CVE-2026-93687
+
+# node-forge
+CVE-2026-85393
+
+# simple-git no fix for major version 3.x
+CVE-2026-102826
+CVE-2026-102827
+CVE-2026-102828
+
+# http-cache-semantics newer verson is too recent
+CVE-2026-93748

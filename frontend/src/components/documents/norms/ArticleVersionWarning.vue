@@ -1,19 +1,62 @@
 <script setup lang="ts">
-import type { Article } from "~/types/api";
+import type { RouteLocationRaw } from "#vue-router";
+import type { Article, ArtikelFassung } from "~/types/api";
+import type { FutureVersionTarget } from "./VersionWarningMessage.vue";
 
-const props = defineProps<{
-  inForceVersionLink: string;
+const { currentArticle, fassungen, inForceExpressionEli } = defineProps<{
   currentArticle: Article;
+  /** All Fassungen of the current Einzelnorm across all Gesamtausgaben */
+  fassungen: ArtikelFassung[];
+  /** ELI of the currently valid Gesamtausgabe, if one exists */
+  inForceExpressionEli?: string;
 }>();
 
-const currentArticleStatus = computed(() => {
-  const interval = temporalCoverageToValidityInterval(
-    props.currentArticle.temporalCoverage,
+const route = useRoute();
+
+function getArticleRoute(
+  expressionEli: string | undefined,
+  fassung: ArtikelFassung,
+): RouteLocationRaw | undefined {
+  if (!expressionEli) return undefined;
+  return {
+    path: `/gesetze/${expressionEli}/${fassung.eId}`,
+    query: { from: route.query.from },
+  };
+}
+
+const currentArticleStatus = computed(() =>
+  getVersionValidityStatus(currentArticle),
+);
+
+const inForceVersionLink = computed(() => {
+  const inForceFassung = fassungen.find(
+    (fassung) => getVersionValidityStatus(fassung) === "InForce",
   );
-  return getValidityStatus({
-    from: interval?.from,
-    to: interval?.to,
-  });
+  if (!inForceFassung) return undefined;
+
+  // Prefer the currently valid expression, so the user lands on the article
+  // within the currently valid Gesamtausgabe if it is part of it
+  const expressionElis = getExpressionElis(inForceFassung);
+  if (inForceExpressionEli && expressionElis.includes(inForceExpressionEli)) {
+    return getArticleRoute(inForceExpressionEli, inForceFassung);
+  }
+
+  const newestExpressionEli = getNewestExpressionEli(expressionElis);
+  return getArticleRoute(newestExpressionEli, inForceFassung);
+});
+
+const futureVersion = computed<FutureVersionTarget | undefined>(() => {
+  if (currentArticleStatus.value !== "InForce") return undefined;
+
+  const nextFutureFassung = findNextFutureVersion(fassungen);
+  if (!nextFutureFassung) return undefined;
+
+  const expressionElis = getExpressionElis(nextFutureFassung);
+  const newestExpressionEli = getNewestExpressionEli(expressionElis);
+  const to = getArticleRoute(newestExpressionEli, nextFutureFassung);
+  if (!to) return undefined;
+
+  return { to, validFrom: getVersionValidFrom(nextFutureFassung) };
 });
 </script>
 
@@ -21,7 +64,7 @@ const currentArticleStatus = computed(() => {
   <DocumentsNormsVersionWarningMessage
     :current-version-validity-status="currentArticleStatus"
     :in-force-version-link="inForceVersionLink"
-    historical-warning-message="Sie lesen einen Paragrafen einer historischen Fassung."
-    future-warning-message="Sie lesen einen Paragrafen einer zukünftigen Fassung."
+    :future-version="futureVersion"
+    document-term="Fassung"
   />
 </template>

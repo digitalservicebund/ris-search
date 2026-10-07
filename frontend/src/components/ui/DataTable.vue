@@ -1,18 +1,10 @@
 <script setup lang="ts" generic="T extends DataTableRow">
 import { computed, type Component } from "vue";
+import type { DataTableColumn } from "~/components/ui/DataTableCells.vue";
 
-export type DataTableColumn<T> = {
-  /**
-   * Property of the row rendered in this column. Doubles as the suffix of the
-   * `cell-<key>` slot name.
-   */
-  key: Extract<keyof T, string>;
-  /**
-   * Column header on wide viewports, and the label in front of the value on
-   * narrow ones.
-   */
-  label: string;
-};
+// Re-exported so users of DataTable can import all its types from here, without
+// knowing about DataTableCells.
+export type { DataTableColumn };
 
 export type DataTableRow = {
   /** Stable identity of the row. */
@@ -46,7 +38,7 @@ const {
   rows: T[];
 }>();
 
-defineSlots<
+const slots = defineSlots<
   {
     /** Shown in place of the rows when there are none. */
     empty?: () => unknown;
@@ -61,6 +53,12 @@ defineSlots<
     }) => unknown;
   }
 >();
+
+function cellSlotNames() {
+  return Object.keys(slots).filter((name): name is `cell-${string}` =>
+    name.startsWith("cell-"),
+  );
+}
 
 const gridTemplateColumns = computed(() =>
   // Columns are sized to their content, except for the last one which takes up
@@ -105,20 +103,15 @@ const gridTemplateColumns = computed(() =>
           class="grid grid-cols-[max-content_minmax(0,1fr)] items-center gap-x-16 gap-y-4 p-16 focus-visible:outline-4 focus-visible:-outline-offset-4 focus-visible:outline-blue-800 md:col-span-full md:grid-cols-subgrid md:gap-0 md:p-0"
           v-bind="row.attrs"
         >
-          <template v-for="column in columns" :key="column.key">
-            <span class="typo-label1-bold flex min-h-32 items-center md:sr-only"
-              >{{ column.label }}:</span
+          <UiDataTableCells :columns="columns" :row="row">
+            <template
+              v-for="name in cellSlotNames()"
+              :key="name"
+              #[name]="slotProps"
             >
-            {{ " " }}
-            <span
-              class="typo-label1-regular flex min-h-32 items-center md:min-h-48 md:px-16 md:py-10"
-            >
-              <slot :name="`cell-${column.key}`" :row="row" :column="column">
-                {{ row[column.key] }}
-              </slot>
-            </span>
-            {{ " " }}
-          </template>
+              <slot :name="name" v-bind="slotProps" />
+            </template>
+          </UiDataTableCells>
         </component>
       </li>
     </template>

@@ -44,17 +44,10 @@ class ArticleServiceTest {
     String eId = "art-z1";
     String id = Article.buildId(eli.toString(), eId);
 
+    Article article = Article.builder().id(id).documentNumber("DKNR0E80B0026DKNE000100010").build();
+
     when(articlesRepository.existsById(id)).thenReturn(true);
-    when(articlesRepository.findById(id))
-        .thenReturn(
-            Optional.of(
-                Article.builder()
-                    .id(id)
-                    .eId(eId)
-                    .expressionEli(eli.toString())
-                    .documentNumber("DKNR0E80B0026DKNE000100010")
-                    .documentType(LegislationPartType.ARTICLE)
-                    .build()));
+    when(articlesRepository.findById(id)).thenReturn(Optional.of(article));
     service.getAllArticleVersions(eli, eId);
 
     verify(articlesRepository, times(1))
@@ -87,18 +80,10 @@ class ArticleServiceTest {
     String eId = "art-z1";
     String id = Article.buildId(eli.toString(), eId);
     String documentNumber = "DKNR0E80B0026DKNE0";
+    Article article = Article.builder().id(id).documentNumber(documentNumber).build();
 
     when(articlesRepository.existsById(id)).thenReturn(true);
-    when(articlesRepository.findById(id))
-        .thenReturn(
-            Optional.of(
-                Article.builder()
-                    .id(id)
-                    .eId(eId)
-                    .expressionEli(eli.toString())
-                    .documentNumber(documentNumber)
-                    .documentType(LegislationPartType.ARTICLE)
-                    .build()));
+    when(articlesRepository.findById(id)).thenReturn(Optional.of(article));
     when(articlesRepository.findAllVersionsByDocumentNumber(
             documentNumber,
             LegislationPartType.ARTICLE,

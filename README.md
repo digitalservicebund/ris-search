@@ -18,14 +18,38 @@ If you're already familiar with our stack and the project, here is a list of the
 
 ### Running backend + frontend separately
 
+Shared runtime dependencies:
 ```sh
 # Run Docker containers (working dir: project root)
 docker compose up -d
+```
 
+Backend:
+
+Before you can build and/or run the backend you will need to add a github personal access token.
+* Make a new public read only PAT (don't use a PAT you might already have with more privilege)
+  * Go to [this github page](https://github.com/settings/personal-access-tokens)
+  * Click Generate new token
+  * Give it a name and set expiration to 90 days (if you pick more than 90 it will be rejected later)
+  * Use Public repositories (should already be selected)
+  * Click Generate token
+  * Don't close the tab, you will need this value later
+* Setup 2 global gradle properties
+  * In shell touch ~/.gradle/gradle.properties
+  * Append global_gh_packages_user=YOUR_GITHUB_USERNAME to the file
+  * Append global_gh_packages_token=THE_PAT_FROM_EARLIER to the file
+* Set a reminder in your calendar for 89 days so you don't get something unexpectedly breaking
+
+The personal access token **doesn't need any permissions**. It could in fact be a token from any github account. Github just requires some logged in user to download public modules.
+
+```sh
 # Run backend (working dir: ./backend)
 # Include `e2e` profile if you want test data for E2E tests
 ./gradlew bootRun --args='--spring.profiles.active=default,e2e'
+```
 
+Frontend:
+```sh
 # Install frontend dependencies and run frontend (working dir: ./frontend)
 pnpm install
 pnpm dev

@@ -1,6 +1,6 @@
 import type { FetchHook } from "ofetch";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { useSingleNormVersionsHtml } from "./useSingleNormVersionsHtml";
+import { useArtikelFassungenHtml } from "./useArtikelFassungenHtml";
 
 const { mockFetch } = vi.hoisted(() => {
   return {
@@ -13,7 +13,7 @@ vi.mock("~/plugins/risBackend", () => ({
   extendOnRequest: (...cbs: FetchHook[]) => cbs,
 }));
 
-describe("useSingleNormVersionsHtml", () => {
+describe("useArtikelFassungenHtml", () => {
   beforeEach(() => {
     mockFetch.mockReset();
   });
@@ -25,7 +25,7 @@ describe("useSingleNormVersionsHtml", () => {
       "<html><body><div>Content</div></body></html>",
     );
 
-    const { rowsHtml, updateRowsHtml } = useSingleNormVersionsHtml();
+    const { rowsHtml, updateRowsHtml } = useArtikelFassungenHtml();
     await updateRowsHtml("row-1", rowContentUrl);
 
     expect(mockFetch).toHaveBeenCalledWith(rowContentUrl, {
@@ -42,7 +42,7 @@ describe("useSingleNormVersionsHtml", () => {
   it("does not fetch again once the row's HTML is cached", async () => {
     mockFetch.mockResolvedValueOnce("<html><body>Content</body></html>");
 
-    const { updateRowsHtml } = useSingleNormVersionsHtml();
+    const { updateRowsHtml } = useArtikelFassungenHtml();
     await updateRowsHtml("row-1", rowContentUrl);
     await updateRowsHtml("row-1", rowContentUrl);
 
@@ -50,7 +50,7 @@ describe("useSingleNormVersionsHtml", () => {
   });
 
   it("stores an error entry when there is no content URL", async () => {
-    const { rowsHtml, updateRowsHtml } = useSingleNormVersionsHtml();
+    const { rowsHtml, updateRowsHtml } = useArtikelFassungenHtml();
     await updateRowsHtml("row-1", undefined);
 
     expect(mockFetch).not.toHaveBeenCalled();
@@ -60,7 +60,7 @@ describe("useSingleNormVersionsHtml", () => {
   it("stores an error entry when the request fails", async () => {
     mockFetch.mockRejectedValueOnce(new Error("request failed"));
 
-    const { rowsHtml, updateRowsHtml } = useSingleNormVersionsHtml();
+    const { rowsHtml, updateRowsHtml } = useArtikelFassungenHtml();
     await updateRowsHtml("row-1", rowContentUrl);
 
     expect(rowsHtml.value.get("row-1")).toEqual({ error: true });
@@ -70,7 +70,7 @@ describe("useSingleNormVersionsHtml", () => {
     mockFetch.mockRejectedValueOnce(new Error("request failed"));
     mockFetch.mockResolvedValueOnce("<html><body>Content</body></html>");
 
-    const { rowsHtml, updateRowsHtml } = useSingleNormVersionsHtml();
+    const { rowsHtml, updateRowsHtml } = useArtikelFassungenHtml();
     await updateRowsHtml("row-1", rowContentUrl);
     await updateRowsHtml("row-1", rowContentUrl);
 
@@ -85,7 +85,7 @@ describe("useSingleNormVersionsHtml", () => {
     mockFetch.mockResolvedValueOnce("<html><body>Row 1</body></html>");
     mockFetch.mockResolvedValueOnce("<html><body>Row 2</body></html>");
 
-    const { rowsHtml, updateRowsHtml } = useSingleNormVersionsHtml();
+    const { rowsHtml, updateRowsHtml } = useArtikelFassungenHtml();
     await updateRowsHtml("row-1", "/v1/row-1.html");
     await updateRowsHtml("row-2", "/v1/row-2.html");
 

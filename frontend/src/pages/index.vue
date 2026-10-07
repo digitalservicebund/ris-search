@@ -68,8 +68,8 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
         @empty-search="() => redirectToSearch()"
       />
 
-      <UiMessage severity="warn" class="ris-body2-regular" role="status">
-        <p class="ris-body2-bold mt-2">
+      <UiMessage severity="warn" role="status">
+        <p class="typo-label2-bold">
           Dieser Service befindet sich in der Testphase.
         </p>
         <p>

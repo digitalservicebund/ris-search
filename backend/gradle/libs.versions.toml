@@ -92,6 +92,10 @@ tomcat-embed-core = { module = "org.apache.tomcat.embed:tomcat-embed-core" , ver
 fasterxml-jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version = "2.21.7" }
 tools-jackson-databind = { module = "tools.jackson.core:jackson-databind", version = "3.1.7" }
 
+# CVE-2026-89407
+fasterxml-jackson-core = { module = "com.fasterxml.jackson.core:jackson-core", version = "2.21.7" }
+tools-jackson-core = { module = "tools.jackson.core:jackson-core", version = "3.1.7" }
+
 [plugins]
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
 spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "spring-dependency-management" }

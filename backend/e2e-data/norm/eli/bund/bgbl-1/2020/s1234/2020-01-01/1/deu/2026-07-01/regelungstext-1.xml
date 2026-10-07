@@ -48,7 +48,7 @@
                     <akn:timeInterval GUID="0bb940b4-cde5-4fc9-8766-1760dbfc49e1" eId="meta-n1_geltzeiten-n1_geltungszeitgr-n2_gelzeitintervall-n1" refersTo="geltungszeit" start="#meta-n1_lebzykl-n1_ereignis-n3" end="#meta-n1_lebzykl-n1_ereignis-n4"/>
                 </akn:temporalGroup>
                 <akn:temporalGroup GUID="e4047668-8ce6-43be-b5ce-e1ee337625d8" eId="meta-n1_geltzeiten-n1_geltungszeitgr-n3">
-                    <akn:timeInterval GUID="9a9c7c1a-81d1-4fe6-94d8-00adb4bf3092" eId="meta-n1_geltzeiten-n1_geltungszeitgr-n3_gelzeitintervall-n1" refersTo="geltungszeit" start="#meta-n1_lebzykl-n1_ereignis-n5"/>
+                    <akn:timeInterval GUID="9a9c7c1a-81d1-4fe6-94d8-00adb4bf3092" eId="meta-n1_geltzeiten-n1_geltungszeitgr-n3_gelzeitintervall-n1" refersTo="geltungszeit" start="#meta-n1_lebzykl-n1_ereignis-n5" end="#meta-n1_lebzykl-n1_ereignis-n4"/>
                 </akn:temporalGroup>
             </akn:temporalData>
             <akn:proprietary GUID="04ee737c-de1a-4ef6-8641-253835584deb" eId="meta-n1_proprietary-n1" source="attributsemantik-noch-undefiniert">
@@ -92,7 +92,7 @@
                 <akn:paragraph GUID="2072772b-caf5-433f-9032-8a7fde07475e" eId="art-z2_abs-z1">
                     <akn:num GUID="6b595b98-5f19-4379-bad6-2f8c5c94c76a" eId="art-z2_abs-z1_bezeichnung-n1">(1)</akn:num>
                     <akn:content GUID="43e738a8-b98e-4714-b3de-96b5f6205498" eId="art-z2_abs-z1_inhalt-n1">
-                        <akn:p GUID="3fd2155e-848a-4aaa-bd00-19f306ab2b29" eId="art-z2_abs-z1_inhalt-n1_text-n1">Hat nur eine Version.</akn:p>
+                        <akn:p GUID="3fd2155e-848a-4aaa-bd00-19f306ab2b29" eId="art-z2_abs-z1_inhalt-n1_text-n1">Erste Version des § 2.</akn:p>
                     </akn:content>
                 </akn:paragraph>
             </akn:article>

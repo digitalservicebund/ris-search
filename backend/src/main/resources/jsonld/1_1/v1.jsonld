@@ -48,6 +48,7 @@
           "temporalCoverage": "schema:temporalCoverage",
           "hasPart": "schema:hasPart",
           "partType": "ris:legislationPartType",
+          "revision": "ris:revision",
           "headline": "schema:headline"
         }
       },

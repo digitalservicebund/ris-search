@@ -1,32 +1,24 @@
 <script setup lang="ts">
-import IcBaselineHistory from "~icons/ic/baseline-history";
-import IcBaselineUpdate from "~icons/ic/baseline-update";
-import type { RouteLocationRaw } from "#vue-router";
-import type { LegislationExpression } from "~/types/api";
-
 const {
   currentVersionValidityStatus,
+  documentTerm,
   futureVersion,
-  futureWarningMessage,
-  historicalWarningMessage,
   inForceVersionLink,
 } = defineProps<{
   currentVersionValidityStatus?: ValidityStatus;
-  futureVersion?: LegislationExpression;
-  futureWarningMessage: string;
-  historicalWarningMessage: string;
+  /** Noun used in the message, e.g. "Fassung" or "Gesamtausgabe" */
+  documentTerm: string;
+  futureVersion?: FutureVersionTarget;
   inForceVersionLink?: RouteLocationRaw;
 }>();
 
-const route = useRoute();
-
-const warningMessageType = computed(() =>
-  currentVersionValidityStatus === "InForce" ? "info" : "warn",
+const hasFutureVersion = computed(
+  () => currentVersionValidityStatus === "InForce" && !!futureVersion,
 );
 
 const showWarningMessage = computed(
   () =>
-    (currentVersionValidityStatus === "InForce" && futureVersion) ||
+    hasFutureVersion.value ||
     currentVersionValidityStatus === "Expired" ||
     currentVersionValidityStatus === "FutureInForce",
 );
@@ -34,53 +26,51 @@ const showWarningMessage = computed(
 const versionTextId = useId();
 
 const versionText = computed(() => {
-  if (currentVersionValidityStatus === "InForce" && futureVersion) {
-    const formattedFutureDate = dateFormattedDDMMYYYY(
-      temporalCoverageToValidityInterval(futureVersion.temporalCoverage)?.from,
-    );
-    return `Ab ${formattedFutureDate} gilt eine neue Fassung.`;
-  } else {
-    return currentVersionValidityStatus === "Expired"
-      ? historicalWarningMessage
-      : futureWarningMessage;
+  if (hasFutureVersion.value) {
+    const formattedFutureDate = dateFormattedDDMMYYYY(futureVersion?.validFrom);
+    return `Ab ${formattedFutureDate} gilt eine neue ${documentTerm}.`;
   }
+
+  if (currentVersionValidityStatus === "Expired") {
+    return `Sie lesen eine historische ${documentTerm}.`;
+  }
+
+  return `Sie lesen eine zukünftige ${documentTerm}.`;
 });
 
 const versionLink = computed<
   { to: RouteLocationRaw; label: string } | undefined
 >(() => {
-  if (currentVersionValidityStatus === "InForce" && futureVersion) {
+  if (futureVersion && hasFutureVersion.value) {
+    return { to: futureVersion.to, label: `Zur zukünftigen ${documentTerm}` };
+  }
+
+  if (inForceVersionLink) {
     return {
-      to: {
-        path: `/gesetze/${futureVersion.legislationIdentifier}`,
-        query: { from: route.query.from },
-      },
-      label: "Zur zukünftigen Fassung",
+      to: inForceVersionLink,
+      label: `Zur aktuell gültigen ${documentTerm}`,
     };
-  } else if (inForceVersionLink) {
-    return { to: inForceVersionLink, label: "Zur aktuell gültigen Fassung" };
-  } else return undefined;
+  }
+
+  return undefined;
 });
+</script>
+
+<script lang="ts">
+import type { Dayjs } from "dayjs";
+import type { RouteLocationRaw } from "#vue-router";
+
+export type FutureVersionTarget = {
+  to: RouteLocationRaw;
+  validFrom?: Dayjs;
+};
 </script>
 
 <template>
   <div v-if="showWarningMessage" class="w-fit">
-    <UiMessage :severity="warningMessageType" class="typo-label2-regular">
-      <template #icon>
-        <IcBaselineUpdate
-          v-if="currentVersionValidityStatus === 'InForce'"
-          class="text-blue-800"
-        />
-        <IcBaselineHistory
-          v-else-if="currentVersionValidityStatus === 'Expired'"
-        />
-        <IcBaselineUpdate v-else />
-      </template>
-
+    <UiMessage hide-icon>
       <p>
-        <span :id="versionTextId" class="typo-label2-bold">{{
-          versionText
-        }}</span
+        <span :id="versionTextId">{{ versionText }}</span
         >{{ " " }}
 
         <NuxtLink
