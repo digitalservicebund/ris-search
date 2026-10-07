@@ -626,10 +626,11 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * List and search decisions
-         * @description The endpoint returns a list of decisions from our database. The list is paginated and can be filtered and sorted.
+         * Removed: use the rechtsprechung endpoint instead
+         * @deprecated
+         * @description All case-law endpoints have been removed. Please use the equivalent /v1/rechtsprechung endpoint instead.
          */
-        get: operations["searchCaseLaw"];
+        get: operations["handleRemovedEndpoint"];
         put?: never;
         post?: never;
         delete?: never;
@@ -638,7 +639,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/case-law/{documentNumber}": {
+    "/v1/case-law/**": {
         parameters: {
             query?: never;
             header?: never;
@@ -646,130 +647,11 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Decision metadata
-         * @description The endpoint returns a single decision from our database.
+         * Removed: use the rechtsprechung endpoint instead
+         * @deprecated
+         * @description All case-law endpoints have been removed. Please use the equivalent /v1/rechtsprechung endpoint instead.
          */
-        get: operations["getCaseLaw_1"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/case-law/{documentNumber}/{name}.{extension}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Caselaw resource
-         * @description Returns a specific resource of a particular caselaw.
-         */
-        get: operations["getImage_1"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/case-law/{documentNumber}.zip": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Decision ZIP (XML and attachments)
-         * @description Returns a case law decision, including attachments, as a ZIP archive.
-         */
-        get: operations["getCaseLawDocumentationUnitAsZip_1"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/case-law/{documentNumber}.xml": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Decision XML
-         * @description Returns a case law decision as XML. This content is used as a source for the HTML endpoint.
-         */
-        get: operations["getCaseLawDocumentationUnitAsXml_1"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/case-law/{documentNumber}.html": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Decision HTML
-         * @description Renders and returns a case law decision as HTML.
-         */
-        get: operations["getCaseLawDocumentationUnitAsHtml_1"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/case-law/courts": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * List courts
-         * @description Lists courts with long and short name and number of associated decisions. The prefix parameter may be used to filter this list. Only includes courts whose decisions have been published in this database.
-         */
-        get: operations["getCaseLawCourts"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/case-law/changelog": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Caselaw changelog
-         * @description Returns references of document changes that occurred in between two points in time.
-         */
-        get: operations["getChangelogs_3"];
+        get: operations["handleRemovedEndpoint_1"];
         put?: never;
         post?: never;
         delete?: never;
@@ -937,7 +819,7 @@ export interface paths {
          * Administrative Directive changelog
          * @description Returns references of document changes that occurred in between two points in time.
          */
-        get: operations["getChangelogs_4"];
+        get: operations["getChangelogs_3"];
         put?: never;
         post?: never;
         delete?: never;
@@ -994,7 +876,7 @@ export interface components {
             /** @example DEV-123 */
             deviatingDocumentNumber: string[];
             encoding: components["schemas"]["DocumentEncodingSchema"][];
-            /** @example /v1/case-law/ECLI:DE:FGRLP:1969:0905.IV85.68.0A */
+            /** @example /v1/rechtsprechung/ECLI:DE:FGRLP:1969:0905.IV85.68.0A */
             "@id": string;
             /** @example de */
             inLanguage: string;
@@ -1053,8 +935,12 @@ export interface components {
         RechtsprechungSchema: {
             /** @example Rechtsprechung */
             "@type"?: string;
-            /** @example KARE000000000 */
-            dokumentNummer: string;
+            "@context": string;
+            /**
+             * @description Dokumentnummer
+             * @example KARE000000000
+             */
+            dokumentNummer?: string;
             /**
              * @description European Case Law Identifier
              * @example ECLI:DE:FGRLP:1969:0905.IV85.68.0A
@@ -1074,7 +960,7 @@ export interface components {
             leitsatz?: string;
             /** @description Kurztitel */
             kurztitel?: string;
-            /** @description Titelzeile */
+            /** @description Vom Dokumentar gebildete Kurzzusammenfassung, bezogen auf die gesamten Kurztexte. */
             titelzeile?: string;
             /** @description Orientierungssatz */
             orientierungssatz?: string;
@@ -1090,9 +976,9 @@ export interface components {
             tenor?: string;
             /**
              * Format: date
-             * @description Datum
+             * @description Datum der Entscheidung, hier kann es zu Dopplungen mit anderen Entscheidungen kommen, auch in Kombination mit Aktenzeichen und Gericht.
              */
-            datum: string;
+            datum?: string;
             /**
              * @description Art des Datums
              * @example Entscheidungsdatum
@@ -1103,13 +989,17 @@ export interface components {
             abweichendeDaten?: string[];
             /** @description Gliederung */
             gliederung?: string;
-            /** @description Aktenzeichen */
+            /** @description Aktenzeichen der Entscheidung, hier kann es zu Dopplungen mit anderen Entscheidungen kommen, auch in Kombination mit Entscheidungsdatum und Gericht. Bei Gemeinsamen Ländererlassen (GLE) innerhalb der Dokumentart Verwaltungsvorschriften wird über das Attribut 'normgeber' der jeweilige ausgebende Normgeber des Bundeslandes angegeben. Das optionale Attribut 'normgeberRegion' gibt die zugehörige Region des Normgebers an. */
             aktenzeichen?: string;
             /**
-             * @description Aktenzeichenliste
+             * @description Aktenzeichen des Dokuments
+             *
+             *     Der erste Eintrag ist das primäre Aktenzeichen.
+             *     Weitere Einträge sind abweichende Aktenzeichen, die auch für dieses
+             *     Dokument verwendet werden.
              * @example BGH 123/23
              */
-            aktenzeichenListe: string[];
+            aktenzeichenListe?: string[];
             /**
              * @description Abweichende Aktenzeichen
              * @example 1
@@ -1123,7 +1013,7 @@ export interface components {
             kuendigungsarten?: string[];
             /** @description Herkunftsländer */
             herkunftslaender?: string[];
-            /** @description Regionen */
+            /** @description Regionen in denen dieses Dokument eine Bedeutung hat */
             regionen?: string[];
             /** @description Tarifverträge */
             tarifvertraege?: string[];
@@ -1131,9 +1021,9 @@ export interface components {
             kuendigungsgruende?: string[];
             /** @description Mitwirkende Richter */
             mitwirkendeRichter?: string[];
-            /** @description Vorgehende Entscheidungen */
+            /** @description Nachgewiesen werden gerichtliche Entscheidungen, die im Rahmen eines Verfahrens (einschl. Nebenverfahren) der zu dokumentierenden Entscheidung vorausgehen. */
             vorgehendeEntscheidungen?: string[];
-            /** @description Nachgehende Entscheidungen */
+            /** @description Nachgewiesen werden die gerichtlichen Entscheidungen, die ihrerseits in der Rubrik „vorgehende Entscheidung“ die vorliegende Entscheidung nennen. */
             nachgehendeEntscheidungen?: string[];
             /** @description Aktivzitierung Literatur Unselbstständig */
             aktivzitierungLiteraturUnselbstaendig?: string[];
@@ -1162,7 +1052,7 @@ export interface components {
              */
             nichtamtlicheFundstellen?: string[];
             /**
-             * @description Gesetzeskraft
+             * @description Information über die Gesetzeskraft der Einzelnorm
              * @example vereinbar mit höherrangigem Recht (Bremen)
              */
             gesetzeskraft?: string[];
@@ -1175,11 +1065,11 @@ export interface components {
             sachgebiete?: string[];
             /** @description Streitjahre */
             streitjahre?: string[];
-            /** @description Fehlerhafte Gerichte */
+            /** @description Fehlerhafte Angaben zu Gerichten */
             fehlerhafteGerichte?: string[];
             /** @description Daten der mündlichen Verhandlung */
             datenDerMuendlichenVerhandlung?: string[];
-            /** @description Definitionen */
+            /** @description Definitionen von Begriffen */
             definitionen?: string[];
             /**
              * @description Erledigung
@@ -1234,10 +1124,50 @@ export interface components {
             gericht?: string;
             /** @description Gerichtsbarkeit */
             gerichtsbarkeit?: string;
-            /** @example Urteil */
+            /**
+             * @description Innerhalb der Dokumentart „Rechtsprechung“ werden folgende Dokumenttypen unterschieden:
+             *
+             *     * Äuß: Äußerung
+             *     * Ant: EuGH-Vorlage
+             *     * AnU: Anerkenntnisurteil
+             *     * Bes: Beschluss
+             *     * Buß: Bußgeldbescheid
+             *     * DrB: Dreierausschussbeschluss
+             *     * EiA: Einstweilige Anordnung
+             *     * Ent: Entscheidung
+             *     * EVg: Einstellungsverfügung der Staatsanwaltschaft
+             *     * GeB: Gerichtsbescheid
+             *     * Gut: Gutachten
+             *     * GWF: Gegenstandswertfestsetzung im verfassungsgerichtlichen Verfahren
+             *     * KaB: Kammerbeschluss
+             *     * KbN: Nichtannahmebeschluss
+             *     * KbS: Stattgebender Kammerbeschluss
+             *     * KoB: Kammerbeschluss ohne Begründung
+             *     * PkH: Prozesskostenhilfebeschluss
+             *     * ReM: Rechtsentscheid in Mietsachen
+             *     * Sch: Schiedsgerichtsentscheidung
+             *     * Ste: Stellungnahme
+             *     * Str: Streitwertbeschluss
+             *     * TeB: Teilbeschluss
+             *     * TeU: Teilurteil
+             *     * Urt: Urteil
+             *     * Vgl: Vergleich
+             *     * Vor: Vorlagebeschluss
+             *     * VsU: Versäumnisurteil
+             *     * VzU: Verzichtsurteil
+             *     * ZwB: Zwischenbeschluss
+             *     * ZwU: Zwischenurteil
+             *     * TVU: Teilversäumnisurteil
+             *     * Vfg: Verfügung
+             *     * Vorab: Ersuchen um Vorabentscheidung
+             *     * Anh: Anhängiges Verfahren
+             *     * End: Endurteil
+             *     * KfB: Kostenfestsetzungsbeschluss
+             * @example Urteil
+             */
             dokumenttyp?: string;
             /**
-             * @description Spruchkörper
+             * @description Inhalt ist die Angabe des Spruchkörpers, von dem das Dokument stammt (z.B. 1. Zivilsenat, 3. Strafkammer, Großer Senat).
              * @example Gericht
              */
             spruchkoerper?: string;
@@ -1254,11 +1184,13 @@ export interface components {
              */
             entscheidungsnamen: string[];
             /**
-             * @description Abweichende Dokumentnummer
+             * @description Abweichende Dokumentnummern
+             *
+             *     Weitere Dokumentnummern die für dieses Dokument verwendet werden
              * @example DEV-123
              */
-            abweichendeDokumentnummern: string[];
-            /** @example /v1/case-law/ECLI:DE:FGRLP:1969:0905.IV85.68.0A */
+            abweichendeDokumentnummern?: string[];
+            /** @example /v1/rechtsprechung/ECLI:DE:FGRLP:1969:0905.IV85.68.0A */
             "@id": string;
             /** @example de */
             inLanguage: string;
@@ -1751,112 +1683,13 @@ export interface components {
             item: components["schemas"]["AdministrativeDirectiveSearchSchema"];
             textMatches: components["schemas"]["TextMatchSchema"][];
         };
-        CaseLawSchema: {
-            /** @example Decision */
-            "@type"?: string;
-            "@context": string;
-            /**
-             * @description Dokumentnummer<br>
-             * @example KARE000000000
-             */
-            documentNumber: string;
-            /**
-             * @description European Case Law Identifier
-             * @example ECLI:DE:FGRLP:1969:0905.IV85.68.0A
-             */
-            ecli: string;
-            /** @description Tatbestand */
-            caseFacts?: string;
-            /** @description Entscheidungsgründe */
-            decisionGrounds?: string;
-            /** @description Abweichende Meinung */
-            dissentingOpinion?: string;
-            /** @description Gründe */
-            grounds?: string;
-            /** @description Leitsatz */
-            guidingPrinciple?: string;
-            /** @description Überschrift */
-            headline?: string;
-            /** @description Titelzeile */
-            titleLine?: string;
-            /** @description Orientierungssatz */
-            headnote?: string;
-            /** @description Sonstiger Orientierungssatz */
-            otherHeadnote?: string;
-            /** @description Sonstiger Langtext */
-            otherLongText?: string;
-            /** @description Tenor */
-            tenor?: string;
-            /**
-             * Format: date
-             * @description Datum der Entscheidung, hier kann es zu Dopplungen mit anderen Entscheidungen kommen, auch in Kombination mit Aktenzeichen und Gericht.<br>
-             */
-            decisionDate: string;
-            /**
-             * @description Aktenzeichen des Dokuments<br><br>Der erste Eintrag ist das primäre Aktenzeichen.<br>Weitere Einträge sind abweichende Aktenzeichen, die auch für dieses<br>Dokument verwendet werden.<br>
-             * @example BGH 123/23
-             */
-            fileNumbers: string[];
-            /**
-             * @description Inhalt ist die Angabe des Typs des Gerichtes, das das Dokument verfasst hat.<br>
-             * @example FG
-             */
-            courtType?: string;
-            /**
-             * @description Ort des Gerichtssitzes.<br>
-             * @example Berlin
-             */
-            location?: string;
-            /**
-             * @description Innerhalb der Dokumentart „Rechtsprechung“ werden folgende Dokumenttypen unterschieden:<br><br><ul><li>Äuß: Äußerung</li><li>Ant: EuGH-Vorlage</li><li>AnU: Anerkenntnisurteil</li><li>Bes: Beschluss</li><li>Buß: Bußgeldbescheid</li><li>DrB: Dreierausschussbeschluss</li><li>EiA: Einstweilige Anordnung</li><li>Ent: Entscheidung</li><li>EVg: Einstellungsverfügung der Staatsanwaltschaft</li><li>GeB: Gerichtsbescheid</li><li>Gut: Gutachten</li><li>GWF: Gegenstandswertfestsetzung im verfassungsgerichtlichen Verfahren</li><li>KaB: Kammerbeschluss</li><li>KbN: Nichtannahmebeschluss</li><li>KbS: Stattgebender Kammerbeschluss</li><li>KoB: Kammerbeschluss ohne Begründung</li><li>PkH: Prozesskostenhilfebeschluss</li><li>ReM: Rechtsentscheid in Mietsachen</li><li>Sch: Schiedsgerichtsentscheidung</li><li>Ste: Stellungnahme</li><li>Str: Streitwertbeschluss</li><li>TeB: Teilbeschluss</li><li>TeU: Teilurteil</li><li>Urt: Urteil</li><li>Vgl: Vergleich</li><li>Vor: Vorlagebeschluss</li><li>VsU: Versäumnisurteil</li><li>VzU: Verzichtsurteil</li><li>ZwB: Zwischenbeschluss</li><li>ZwU: Zwischenurteil</li><li>TVU: Teilversäumnisurteil</li><li>Vfg: Verfügung</li><li>Vorab: Ersuchen um Vorabentscheidung</li><li>Anh: Anhängiges Verfahren</li><li>End: Endurteil</li><li>KfB: Kostenfestsetzungsbeschluss</li>
-             * @example Urteil
-             */
-            documentType?: string;
-            /** @description Leitsatz */
-            outline?: string;
-            /**
-             * @description Inhalt ist die Angabe des Spruchkörpers, von dem das Dokument stammt (z.B. 1. Zivilsenat, 3. Strafkammer, Großer Senat).<br>
-             * @example 1. Senat
-             */
-            judicialBody?: string;
-            /**
-             * @description Schlagworte
-             * @example Kündigung
-             */
-            keywords: string[];
-            /**
-             * @description Gericht<br>
-             * @example LArbG Hamm
-             */
-            courtName?: string;
-            /**
-             * @description Entscheidungsname
-             * @example Beispielentscheidung
-             */
-            decisionName: string[];
-            /**
-             * @description Abweichende Dokumentnummer<br>
-             * @example DEV-123
-             */
-            deviatingDocumentNumber: string[];
-            /** @description Vorgehende Entscheidungen */
-            previousDecisions?: string[];
-            /** @description Nachgehende Entscheidungen */
-            ensuingDecisions?: string[];
-            /**
-             * @description Gesetzeskraft
-             * @example vereinbar mit höherrangigem Recht (Bremen)
-             */
-            gesetzeskraft?: string[];
-            /** @description Streitjahre */
-            streitjahre?: string[];
-            /** @example /v1/case-law/ECLI:DE:FGRLP:1969:0905.IV85.68.0A */
-            "@id": string;
-            /** @example de */
-            inLanguage: string;
-            encoding: components["schemas"]["DocumentEncodingSchema"][];
-            /** @description Whether or not the document is a Vorabdokument */
-            vorabdokument: boolean;
+        CustomError: {
+            code?: string;
+            message?: string;
+            parameter?: string;
+        };
+        CustomErrorResponse: {
+            errors?: components["schemas"]["CustomError"][];
         };
         /** @description Represents a <a href="https://schema.org/DataCatalog">schema.org/DataCatalog</a>. */
         ZipDataCatalogSchema: {
@@ -3184,257 +3017,42 @@ export interface operations {
             };
         };
     };
-    searchCaseLaw: {
+    handleRemovedEndpoint: {
         parameters: {
-            query?: {
-                fileNumber?: string;
-                ecli?: string;
-                /** @description Filter by court name (Finanzgericht Münster, FG Münster, ArbG Köln) or court type (Finanzgericht, FG, ArbG). Supports both long and short names. */
-                court?: string;
-                /** @description Corresponds to “Rechtskraft”, meaning that the decision referred to is legally binding. */
-                legalEffect?: "JA" | "NEIN" | "KEINE_ANGABE" | "FALSCHE_ANGABE";
-                /** @description Filter by document type (Urteil, Versäumnisurteil, Entscheidung etc.). Multiple values may be specified as a comma-separated list or by repeating the parameter. */
-                type?: string[];
-                /** @description Extended filter by type group. Multiple values may be specified as a comma-separated list or by repeating the parameter. */
-                typeGroup?: "Urteil" | "Beschluss" | "other";
-                /** @description Searches for the given tokens in searchTerm. If searchTerm contains more than one token, all tokens must be in the document for the document to match. */
-                searchTerm?: string;
-                /** @description The from (greater than or equal) parameter returns all entities where date is later than, or equal to, the given date. */
-                dateFrom?: string;
-                /** @description The to (less than or equal) parameter returns all entities where date is earlier than, or equal to, the given date. */
-                dateTo?: string;
-                /**
-                 * @description The number of entities per page
-                 * @example 100
-                 */
-                size?: number;
-                /**
-                 * @description The number of the page to request. The page starts with the value 0
-                 * @example 0
-                 */
-                pageIndex?: number;
-                /** @description The field to sort the results by. Default is the relevance score calculated by OpenSearch. Valid usage of the sort field are : date, courtName, documentNumber and not setting the sort field (sort by relevance descending).Add a leading - to set the order to descending (-date) */
-                sort?: string;
-            };
+            query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
         requestBody?: never;
         responses: {
-            /** @description Success */
-            200: {
+            /** @description Gone - this endpoint has been removed */
+            410: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CollectionSchemaSearchMemberSchemaCaseLawSearchSchema"];
+                    "*/*": components["schemas"]["CustomErrorResponse"];
                 };
-            };
-            /** @description Internal Server Error */
-            500: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
             };
         };
     };
-    getCaseLaw_1: {
+    handleRemovedEndpoint_1: {
         parameters: {
             query?: never;
-            header?: never;
-            path: {
-                /** @example STRE201770751 */
-                documentNumber: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CaseLawSchema"];
-                };
-            };
-            /** @description Not Found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    getImage_1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @example BDRE000800001 */
-                documentNumber: string;
-                /** @example image */
-                name: string;
-                /** @example jpg */
-                extension: "png" | "jpg" | "jpeg" | "gif" | "wmf" | "emf" | "bitmap";
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": string;
-                };
-            };
-            /** @description Not Found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    getCaseLawDocumentationUnitAsZip_1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @example STRE201770751 */
-                documentNumber: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/zip": components["schemas"]["StreamingResponseBody"];
-                };
-            };
-            /** @description Not Found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    getCaseLawDocumentationUnitAsXml_1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @example STRE201770751 */
-                documentNumber: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/xml": string;
-                };
-            };
-            /** @description Not Found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    getCaseLawDocumentationUnitAsHtml_1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @example STRE201770751 */
-                documentNumber: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "text/html": string;
-                };
-            };
-            /** @description Not Found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    getCaseLawCourts: {
-        parameters: {
-            query?: {
-                prefix?: string;
-            };
             header?: never;
             path?: never;
             cookie?: never;
         };
         requestBody?: never;
         responses: {
-            /** @description OK */
-            200: {
+            /** @description Gone - this endpoint has been removed */
+            410: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CourtSearchResult"][];
-                };
-            };
-        };
-    };
-    getChangelogs_3: {
-        parameters: {
-            query: {
-                from: string;
-                to: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["ChangelogResponse"];
+                    "*/*": components["schemas"]["CustomErrorResponse"];
                 };
             };
         };
@@ -3694,7 +3312,7 @@ export interface operations {
             };
         };
     };
-    getChangelogs_4: {
+    getChangelogs_3: {
         parameters: {
             query: {
                 from: string;
