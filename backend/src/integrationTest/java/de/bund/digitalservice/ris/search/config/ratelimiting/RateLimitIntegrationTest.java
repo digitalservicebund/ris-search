@@ -85,7 +85,7 @@ class RateLimitIntegrationTest extends ContainersIntegrationBase {
     exhaustDefaultLimit();
 
     assertThat(getStatus(ApiConfig.Paths.LEGISLATION)).isEqualTo(429);
-    assertThat(getStatus(ApiConfig.Paths.CASELAW)).isEqualTo(429);
+    assertThat(getStatus(ApiConfig.Paths.RECHTSPRECHUNG)).isEqualTo(429);
   }
 
   @Test
@@ -106,7 +106,7 @@ class RateLimitIntegrationTest extends ContainersIntegrationBase {
     // streamed via StreamingResponseBody, which triggers an async re-dispatch
     byte[] zip =
         request()
-            .get(ApiConfig.Paths.CASELAW + "/" + DOCUMENT_NUMBER + ".zip")
+            .get(ApiConfig.Paths.RECHTSPRECHUNG + "/" + DOCUMENT_NUMBER + ".zip")
             .then()
             .statusCode(200)
             .extract()
@@ -117,9 +117,9 @@ class RateLimitIntegrationTest extends ContainersIntegrationBase {
 
     // the async re-dispatch was not counted, so the remaining requests still go through
     for (int i = 1; i < DEFAULT_LIMIT; i++) {
-      assertThat(getStatus(ApiConfig.Paths.CASELAW)).isEqualTo(200);
+      assertThat(getStatus(ApiConfig.Paths.RECHTSPRECHUNG)).isEqualTo(200);
     }
-    assertThat(getStatus(ApiConfig.Paths.CASELAW)).isEqualTo(429);
+    assertThat(getStatus(ApiConfig.Paths.RECHTSPRECHUNG)).isEqualTo(429);
   }
 
   @Test
