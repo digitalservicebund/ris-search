@@ -10,9 +10,9 @@ const props = defineProps<{
 
 const route = useRoute();
 
-function getVersionRoute(version: LegislationExpression): RouteLocationRaw {
+function getVersionRoute(expressionEli: string): RouteLocationRaw {
   return {
-    path: `/gesetze/${version.legislationIdentifier}`,
+    path: `/gesetze/${expressionEli}`,
     query: { from: route.query.from },
   };
 }
@@ -23,7 +23,7 @@ const inForceVersionLink = computed<RouteLocationRaw | undefined>(() => {
   );
   if (!inForceVersion) return undefined;
 
-  return getVersionRoute(inForceVersion);
+  return getVersionRoute(inForceVersion.legislationIdentifier);
 });
 
 const currentVersionValidityStatus = computed(() =>
@@ -37,7 +37,7 @@ const futureVersion = computed<FutureVersionTarget | undefined>(() => {
   if (!nextFutureVersion) return undefined;
 
   return {
-    to: getVersionRoute(nextFutureVersion),
+    to: getVersionRoute(nextFutureVersion.legislationIdentifier),
     validFrom: getVersionValidFrom(nextFutureVersion),
   };
 });

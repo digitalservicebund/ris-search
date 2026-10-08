@@ -80,7 +80,7 @@ function fetchFassungen() {
   return useRisBackend<JSONLDList<ArtikelFassung>>(url);
 }
 
-function fetchValidNormVersions() {
+function fetchValidGesamtausgaben() {
   if (isNormInForce) return undefined;
   const workEli = norm.value?.exampleOfWork.legislationIdentifier;
   return useValidNormVersions(workEli);
@@ -88,7 +88,7 @@ function fetchValidNormVersions() {
 
 const [fassungenResult, validVersions] = await Promise.all([
   fetchFassungen(),
-  fetchValidNormVersions(),
+  fetchValidGesamtausgaben(),
 ]);
 
 if (fassungenResult?.error.value) {
