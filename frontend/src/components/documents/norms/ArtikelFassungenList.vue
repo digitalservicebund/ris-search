@@ -19,7 +19,7 @@ type FassungRow = {
   toDate: string;
   contentUrl?: string;
   revision?: string;
-  disabled: boolean;
+  current: boolean;
 };
 
 type FassungColumn = {
@@ -56,16 +56,13 @@ const rows = computed<FassungRow[]>(() => {
       fassung.temporalCoverage,
     );
 
-    const disabled = fassung.revision === currentFassungId;
-    const encodingUrl = getEncodingURL(fassung.encoding, "text/html");
-
     return {
       key: fassung["@id"],
       fromDate: dateFormattedDDMMYYYY(validityInterval?.from) ?? missingDate,
       toDate: dateFormattedDDMMYYYY(validityInterval?.to) ?? missingDate,
-      contentUrl: encodingUrl,
+      contentUrl: getEncodingURL(fassung.encoding, "text/html"),
       revision: fassung.revision,
-      disabled,
+      current: fassung.revision === currentFassungId,
     };
   });
 });
@@ -141,7 +138,7 @@ function formatTemporalCoverage(temporalCoverage?: string) {
 
 watch(rows, (newRows) => {
   const onlyRow = newRows.length === 1 ? newRows[0] : undefined;
-  expandRow(onlyRow?.disabled ? undefined : onlyRow);
+  expandRow(onlyRow);
 });
 
 // Filtering swaps the rows out in place, which assistive technology does not
@@ -161,8 +158,6 @@ watch(
     }
   },
 );
-
-const currentRowId = useId();
 </script>
 
 <template>
@@ -194,50 +189,11 @@ const currentRowId = useId();
       <li
         v-for="row in rows"
         :key="row.key"
-        :class="{ 'bg-gray-100': row.disabled }"
+        :aria-current="row.current || undefined"
+        :class="{ 'bg-gray-100': row.current }"
         class="col-span-full grid grid-cols-subgrid border-b border-gray-400"
       >
-        <!-- The current fassung is already the one being displayed on this
-             page, so it isn't made expandable, and can't use <details>, which
-             has no way to disable toggling. -->
-        <div
-          v-if="row.disabled"
-          :aria-labelledby="currentRowId"
-          aria-current="true"
-          role="group"
-          class="col-span-full grid grid-cols-subgrid items-start p-16 md:items-center md:p-0"
-        >
-          <span
-            aria-hidden="true"
-            class="col-span-2 grid grid-cols-[max-content_minmax(0,1fr)] gap-x-16 gap-y-4 md:grid-cols-subgrid md:gap-0"
-            :id="currentRowId"
-          >
-            <template v-for="column in columns" :key="column.key">
-              <span
-                class="typo-label1-bold flex min-h-32 items-center md:sr-only"
-                >{{ column.label }}:</span
-              >
-              {{ " " }}
-              <span
-                class="typo-label1-regular flex min-h-32 items-center md:relative md:min-h-48 md:px-16 md:py-10"
-              >
-                <span
-                  :class="{ 'md:hidden': row[column.key] === missingDate }"
-                  >{{ row[column.key] }}</span
-                ><span
-                  v-if="column.key === 'fromDate' && hasBothDates(row)"
-                  aria-hidden="true"
-                  class="absolute right-0 hidden translate-x-1/2 md:block"
-                  >–</span
-                >
-              </span>
-              {{ " " }}
-            </template>
-          </span>
-        </div>
-
         <details
-          v-else
           :open="expandedRowKey === row.key"
           name="fassungen"
           class="group contents details-content:col-span-full"
@@ -280,7 +236,10 @@ const currentRowId = useId();
           <section class="col-span-full">
             <template v-if="expandedRowKey === row.key">
               <template v-if="expandedRowContent?.error === false">
-                <div class="mx-16 mt-8 border border-blue-400 p-16">
+                <div
+                  class="mx-16 mt-8 border border-blue-400 bg-white p-16"
+                  :class="{ 'mb-10': row.current }"
+                >
                   <NuxtLink
                     v-if="expandedRowContent.gesamtausgabeLink"
                     class="typo-link1-bold link-hover"
@@ -291,6 +250,7 @@ const currentRowId = useId();
                     v-else
                     header-collapsed="Gesamtausgabe auswählen"
                     header-expanded="Gesamtausgabe auswählen"
+                    :model-value="row.current"
                   >
                     <GesamtausgabenList
                       :current-legislation-identifier="
@@ -300,7 +260,7 @@ const currentRowId = useId();
                     />
                   </UiAccordion>
                 </div>
-                <DocumentsNormsLegislationContent>
+                <DocumentsNormsLegislationContent v-if="!row.current">
                   <div class="akn-act px-16" v-html="expandedRowContent.html" />
                 </DocumentsNormsLegislationContent>
               </template>

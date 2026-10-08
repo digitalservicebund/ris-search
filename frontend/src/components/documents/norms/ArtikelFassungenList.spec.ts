@@ -159,31 +159,53 @@ describe("ArtikelFassungenList", () => {
   it("marks the current fassung as the current entry", async () => {
     await renderSuspended(ArtikelFassungenList, { props: props() });
 
-    const currentRow = screen.getByRole("group", { current: true });
-    expect(currentRow).toHaveTextContent(
-      "Gültig ab: 01.01.2020– Gültig bis: 31.12.2030",
-    );
+    const currentRow = screen.getByRole("listitem", { current: true });
+    expect(currentRow).toHaveTextContent("01.01.2020");
+    expect(currentRow).toHaveTextContent("31.12.2030");
   });
 
-  it("marks no fassung as current when none has the current revision", async () => {
+  it("shows only the Gesamtausgaben, not the content, of the current fassung", async () => {
+    mockBackend();
+    const user = userEvent.setup();
+    await renderSuspended(ArtikelFassungenList, { props: props() });
+
+    await user.click(screen.getByText("01.01.2020"));
+
+    expect(
+      await screen.findByRole("link", { name: /^Gesamtausgabe/ }),
+    ).toBeVisible();
+    expect(screen.queryByText("Norm content")).not.toBeInTheDocument();
+  });
+
+  it("opens the Gesamtausgaben selection of the current fassung right away", async () => {
+    mockBackend({
+      gesamtausgaben: [
+        gesamtausgabe,
+        createGesamtausgabe(currentLegislationIdentifier, "2020-01-01/.."),
+      ],
+    });
+    const user = userEvent.setup();
+    await renderSuspended(ArtikelFassungenList, { props: props() });
+
+    await user.click(screen.getByText("01.01.2020"));
+
+    expect(screen.getByRole("list", { name: "Gesamtausgaben" })).toBeVisible();
+  });
+
+  it("treats no fassung as current when none has the current revision", async () => {
+    mockBackend();
+    const user = userEvent.setup();
     await renderSuspended(ArtikelFassungenList, {
       props: { ...props(), currentFassungId: "eli/bund/other#art-1" },
     });
 
     expect(
-      screen.queryByRole("group", { current: true }),
+      screen.queryByRole("listitem", { current: true }),
     ).not.toBeInTheDocument();
-  });
 
-  it("current fassung is not expandable", async () => {
-    const user = userEvent.setup();
-    await renderSuspended(ArtikelFassungenList, { props: props() });
+    await user.click(screen.getByText("01.01.2020"));
 
-    const currentRow = screen.getByRole("group", { current: true });
-
-    await user.click(currentRow);
-
-    expect(within(currentRow).queryByRole("status")).not.toBeInTheDocument();
+    expect(await screen.findByText("Norm content")).toBeVisible();
   });
 
   it("renders the other fassungen as a closed accordion by default", async () => {
@@ -448,14 +470,16 @@ describe("ArtikelFassungenList", () => {
     expect(screen.queryByText("Norm content")).not.toBeInTheDocument();
   });
 
-  it("does not load the current fassung when it is the only remaining row", async () => {
+  it("expands the current fassung when it is the only remaining row", async () => {
+    mockBackend();
     const { rerender } = await renderSuspended(ArtikelFassungenList, {
       props: props(),
     });
 
     await rerender(props([currentFassung]));
 
-    expect(mockFetch).not.toHaveBeenCalled();
-    expect(screen.queryByLabelText("Ladestatus")).not.toBeInTheDocument();
+    expect(
+      await screen.findByRole("link", { name: /^Gesamtausgabe/ }),
+    ).toBeVisible();
   });
 });
