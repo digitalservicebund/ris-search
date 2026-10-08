@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.9/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:ris="http://MetadatenRIS.LegalDocML.de/1.9/" exclude-result-prefixes="xs xsi akn xhtml ris" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:akn="http://rechtsinformationen.bund.de/schema/norm/0.1"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xhtml="http://www.w3.org/1999/xhtml"
+                xmlns:ris="http://rechtsinformationen.bund.de/schema/norm-metadata/0.1"
+                exclude-result-prefixes="xs xsi akn xhtml ris" version="2.0">
     <!-- *******************************************************************************************************
          NeuRIS / Carl Gödecken / 2025-01-15 - 1.8.2
          ******************************************************************************************************* -->

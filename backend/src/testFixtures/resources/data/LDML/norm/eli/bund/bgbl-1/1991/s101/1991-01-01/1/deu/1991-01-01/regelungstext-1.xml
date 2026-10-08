@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-model href="../../../Grammatiken/Norms/legalDocML.de.sch" schematypens="http://purl.oclc.org/dsdl/schematron"?>
-<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.9/"
+<akn:akomaNtoso xmlns:akn="http://rechtsinformationen.bund.de/schema/norm/0.1"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.9/
-                ../../../../../../../../../../../../Grammatiken/Norms/legalDocML.de-metadaten-ris.xsd
-                http://MetadatenRegelungstext.LegalDocML.de/1.9/
-                ../../../../../../../../../../../../Grammatiken/Norms/legalDocML.de-metadaten-regelungstext.xsd
-                http://MetadatenRechtsetzungsdokument.LegalDocML.de/1.9/
-                ../../../../../../../../../../../../Grammatiken/Norms/legalDocML.de-metadaten-rechtsetzungsdokument.xsd
-                http://Inhaltsdaten.LegalDocML.de/1.9/
-                ../../../../../../../../../../../../Grammatiken/Norms/legalDocML.de-regelungstext.xsd">
+                xsi:schemaLocation="http://rechtsinformationen.bund.de/schema/norm-metadata/0.1
+                ../../../../../../../../../../../../Grammatiken/Norms/norm-metadata.xsd
+                 http://MetadatenRegelungstext.LegalDocML.de/1.9/
+                 ../../../../../../../../../../../../Grammatiken/Norms/legalDocML.de-metadaten-regelungstext.xsd
+                 http://MetadatenRechtsetzungsdokument.LegalDocML.de/1.9/
+                 ../../../../../../../../../../../../Grammatiken/Norms/legalDocML.de-metadaten-rechtsetzungsdokument.xsd
+                 http://rechtsinformationen.bund.de/schema/norm/0.1
+                 ../../../../../../../../../../../../Grammatiken/Norms/norm-regelungstext.xsd">
   <akn:act name="/akn/ontology/de/concept/documenttype/bund/regelungstext">
     <akn:meta eId="meta-n1" GUID="40a13276-39ac-4fc9-aafd-3fbfea0df2b0">
       <akn:identification eId="meta-n1_ident-n1" GUID="6098a736-d359-4caf-a45e-dfa3792f2bc4" source="attributsemantik-noch-undefiniert">
@@ -46,17 +46,16 @@
       <akn:lifecycle source="attributsemantik-noch-undefiniert" GUID="f67462bc-7787-4ba9-9041-8e4fc8852ae3" eId="meta-n1_lebzykl-n1">
         <akn:eventRef date="1991-01-01" source="attributsemantik-noch-undefiniert" refersTo="ausfertigung" type="generation" eId="meta-n1_lebzykl-n1_ereignis-n1" GUID="1b8c849d-ee5c-4568-a119-be9dbbc27e2e"></akn:eventRef>
       </akn:lifecycle>
-      <akn:analysis source="attributsemantik-noch-undefiniert" eId="meta-n1_analysis-n1" GUID="04f6a82d-20b3-4bf9-88bb-e442f58247b5"></akn:analysis>
       <akn:temporalData source="attributsemantik-noch-undefiniert" GUID="c3f9ce52-8e0c-428c-abdd-37e56ed66551" eId="meta-n1_geltzeiten-n1">
         <akn:temporalGroup eId="meta-n1_geltzeiten-n1_geltungszeitgr-n1" GUID="5a8e0a7b-97ca-433b-9d26-0c1501d34e7b">
           <akn:timeInterval start="#meta-n1_lebzykl-n1_ereignis-n1" refersTo="geltungszeit" eId="meta-n1_geltzeiten-n1_geltungszeitgr-n1_gelzeitintervall-n1" GUID="90afcb18-ec43-468b-b914-d37d4c60bf76"></akn:timeInterval>
         </akn:temporalGroup>
       </akn:temporalData>
       <akn:proprietary GUID="2983c8d3-2f94-41ba-907c-b9aee90a04eb" eId="meta-n1_proprietary-n1" source="attributsemantik-noch-undefiniert">
-          <ris:legalDocML.de_metadaten xmlns:ris="http://MetadatenRIS.LegalDocML.de/1.9/"
+          <ris:legalDocML.de_metadaten xmlns:ris="http://rechtsinformationen.bund.de/schema/norm-metadata/0.1"
                                        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                                       xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.9/
-                                             ../../../../../../../../../../../../Grammatiken/Norms/legalDocML.de-metadaten-ris.xsd">
+                                       xsi:schemaLocation="http://rechtsinformationen.bund.de/schema/norm-metadata/0.1
+                                             ../../../../../../../../../../../../Grammatiken/Norms/norm-metadata.xsd">
           <ris:abkuerzung refersTo="interne-abkuerzung">RisAbbrev</ris:abkuerzung>
         </ris:legalDocML.de_metadaten>
       </akn:proprietary>
@@ -234,42 +233,28 @@
         <akn:paragraph eId="art-z4_abs-z1" GUID="4de4dacd-eb20-4a38-927a-ab71fd9ee85f">
           <akn:num eId="art-z4_abs-z1_bezeichnung-n1" GUID="fd3fdf1c-ef3b-4a0c-97e5-73ca5d87304e">(1)</akn:num>
           <akn:content eId="art-z4_abs-z1_inhalt-n1" GUID="0db68311-33d5-43d0-92ba-ed5dcf167eb5">
-            <akn:p eId="art-z4_abs-z1_inhalt-n1_text-n1" GUID="9276537f-3eb7-48f8-abd1-f764129734b8"> This paragraph references an <akn:affectedDocument eId="art-z4_abs-z1_inhalt-n1_text-n1_bezugsdoc-n1" GUID="a795e4dc-39fb-462e-82ec-b09ca0d8aafe"
-                href="https://www.ris.bund.de/eli/bund/bgbl-n1/1964/s593/1964-n08-n05/1/deu/regelungstext-n1.xml">affected document</akn:affectedDocument>.</akn:p>
+            <akn:p eId="art-z4_abs-z1_inhalt-n1_text-n1" GUID="9276537f-3eb7-48f8-abd1-f764129734b8">Generic paragraph.</akn:p>
           </akn:content>
         </akn:paragraph>
 
         <akn:paragraph eId="art-z4_abs-z2" GUID="97c76694-8af5-4d5b-89f7-69f285c9e61c">
           <akn:num eId="art-z4_abs-z2_bezeichnung-n1" GUID="080ade57-ff89-42e9-a89c-4bdddac16734">(2)</akn:num>
           <akn:content eId="art-z4_abs-z2_inhalt-n1" GUID="1c30035e-d0ea-43e5-b96e-c99d0f2bb5e1">
-            <akn:p eId="art-z4_abs-z2_inhalt-n1_text-n1" GUID="40e80b86-12be-42f6-abaf-92375f2492bf"> This paragraph contains a "aenderungsbefehl-neufassung" mod that indicates that <akn:mod eId="art-z4_abs-z2_inhalt-n1_text-n1_aendbefehl-n1"
-                GUID="801b95f9-6cd3-475a-b559-f3d0ba329931" refersTo="aenderungsbefehl-neufassung">
-                <akn:ref eId="art-z4_abs-z2_inhalt-n1_text-n1_aendbefehl-n1_ref-n1" GUID="d8c3ba89-6782-4383-9032-1b8690a02da0" href="#">article 2</akn:ref> will be rewritten: <akn:quotedStructure eId="art-z4_abs-z2_inhalt-n1_text-n1_aendbefehl-n1_quotstruct-n1"
-                  GUID="c5a1a231-7be0-46b4-b03a-bb7b71a05aea" startQuote="„" endQuote="“">
-                  <akn:p eId="art-z4_abs-z2_inhalt-n1_text-n1_aendbefehl-n1_quotstruct-n1_text-n1" GUID="fabc9cca-cea8-4448-ac2a-9b6e06e2349c"> The new structure of the article. </akn:p>
-                </akn:quotedStructure>
-              </akn:mod>
-            </akn:p>
+            <akn:p eId="art-z4_abs-z2_inhalt-n1_text-n1" GUID="40e80b86-12be-42f6-abaf-92375f2492bf">Another generic paragraph.</akn:p>
           </akn:content>
         </akn:paragraph>
 
         <akn:paragraph eId="art-z4_abs-z3" GUID="2ea51aa9-6482-4b74-bf65-ec956d4c58f4">
           <akn:num eId="art-z4_abs-z3_bezeichnung-n1" GUID="c569f7ea-1483-4c4f-8886-ffdc42cc2d38">(3)</akn:num>
           <akn:content eId="art-z4_abs-z3_inhalt-n1" GUID="27355ba9-71a0-4f11-8a9c-eb7a06ffc93a">
-            <akn:p eId="art-z4_abs-z3_inhalt-n1_text-n1" GUID="5fc2705c-46aa-410b-8ec8-c089801646fa"> This paragraph contains a "aenderungsbefehl-ersetzen" mod that indicates that <akn:mod eId="art-z4_abs-z3_inhalt-n1_text-n1_aendbefehl-n1" GUID="90f01003-82a0-4e94-982d-5a1ab000e805"
-                refersTo="aenderungsbefehl-ersetzen">in <akn:ref eId="art-z4_abs-z3_inhalt-n1_text-n1_aendbefehl-n1_ref-n1" GUID="af5c0b37-f54f-4766-94db-26ffec8ad5d4" href="#">article 1</akn:ref> the word <akn:quotedText eId="art-z4_abs-z3_inhalt-n1_text-n1_aendbefehl-n1_quottext-n1"
-                  GUID="7abb0fbe-723e-4dae-9487-61f3cdb131cb" startQuote="„" endQuote="“">foo</akn:quotedText> will be replaced by <akn:quotedText eId="art-z4_abs-z3_inhalt-n1_text-n1_aendbefehl-n1_quottext-n2" GUID="fe5b72c6-d4b9-4761-a410-1ac06571e2bb" startQuote="„" endQuote="“">bar</akn:quotedText>
-              .</akn:mod>
-            </akn:p>
+            <akn:p eId="art-z4_abs-z3_inhalt-n1_text-n1" GUID="5fc2705c-46aa-410b-8ec8-c089801646fa">Yet another generic paragraph</akn:p>
           </akn:content>
         </akn:paragraph>
 
         <akn:paragraph eId="art-z4_abs-z4" GUID="3a2f8d6d-a76b-4a5d-9816-57e1caec36e4">
           <akn:num eId="art-z4_abs-z4_bezeichnung-n1" GUID="e29022c3-79f8-4cd7-b6d6-93d1cc8ea570">(4)</akn:num>
           <akn:content eId="art-z4_abs-z4_inhalt-n1" GUID="a8ba233d-0618-4fb9-a876-5d16b9f86ee6">
-            <akn:p eId="art-z4_abs-z4_inhalt-n1_text-n1" GUID="d9e5c9f7-3db0-4f6f-adb2-1008105aa0bf"> This paragraph contains a "aenderungsbefehl-streichen" mod that indicates that <akn:mod eId="art-z4_abs-z4_inhalt-n1_text-n1_aendbefehl-n1" refersTo="aenderungsbefehl-streichen"
-                GUID="c18ccb16-ac0e-4c47-adfa-6de2971f6bbc">the articles <akn:ref eId="art-z4_abs-z4_inhalt-n1_text-n1_aendbefehl-n1_ref-n1" href="#" GUID="e542fd1f-fae3-4da9-b624-b579897bace7">1 to 5</akn:ref> will be repealed.</akn:mod>
-            </akn:p>
+            <akn:p eId="art-z4_abs-z4_inhalt-n1_text-n1" GUID="d9e5c9f7-3db0-4f6f-adb2-1008105aa0bf">Generic paragraph number 4.</akn:p>
           </akn:content>
         </akn:paragraph>
       </akn:article>
@@ -316,15 +301,8 @@
         <akn:p eId="schluss-n1_formel-n1_text-n1" GUID="5fe1168a-7559-46f8-9b90-2fc3425ccc5c">Das vorstehende Gesetz wird hiermit ausgefertigt und wird im Bundesgesetzblatt verkündet.</akn:p>
       </akn:formula>
       <akn:blockContainer eId="schluss-n1_blockcontainer-n1" GUID="6cdd7071-9fa3-4e8e-b747-2c65735fdfc8">
-        <akn:p eId="schluss-n1_blockcontainer-n1_text-n1" GUID="6b442a53-e3d6-4794-be74-e1be0ea32d39">
-          <akn:location eId="schluss-n1_blockcontainer-n1_text-n1_ort-n1" GUID="034ea8c8-f8e2-4a88-8f80-f540f92a0c7e" refersTo="attributsemantik-noch-undefiniert">Ort</akn:location>, den <akn:date eId="schluss-n1_blockcontainer-n1_text-n1_datum-n1" GUID="a7c2d843-e325-4df3-82db-d951c0fbbc1c"
+        <akn:p eId="schluss-n1_blockcontainer-n1_text-n1" GUID="6b442a53-e3d6-4794-be74-e1be0ea32d39">Ort, den <akn:date eId="schluss-n1_blockcontainer-n1_text-n1_datum-n1" GUID="a7c2d843-e325-4df3-82db-d951c0fbbc1c"
             refersTo="ausfertigung-datum" date="1900-01-01">01. Januar 2024</akn:date>
-        </akn:p>
-        <akn:p eId="schluss-n1_blockcontainer-n1_text-n2" GUID="6b442a53-e3d6-4794-be74-e1be0ea32d39">
-           <akn:signature eId="schluss-n1_blockcontainer-n1_text-n2_signatur-n1" GUID="653850d4-5db4-4a61-80df-054c21722ed0">
-               <akn:role eId="schluss-n1_blockcontainer-n1_text-n2_signatur-n1_fktbez-n1" GUID="730eba4a-6b8a-4e3c-810b-34e9eb5b57e1" refersTo="#meta-n1_verwfktbez-n1">Der Bundespräsident</akn:role>
-               <akn:person eId="schluss-n1_blockcontainer-n1_text-n2_signatur-n1_person-n1" GUID="8c8542b9-8f41-4c66-9e3a-5953b087cc60" refersTo="#meta-n1_verwpers-n1">Name</akn:person>
-           </akn:signature>
         </akn:p>
       </akn:blockContainer>
     </akn:conclusions>

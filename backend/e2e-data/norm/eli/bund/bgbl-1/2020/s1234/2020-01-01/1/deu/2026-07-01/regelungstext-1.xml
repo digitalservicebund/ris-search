@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.9/"
+<akn:akomaNtoso xmlns:akn="http://rechtsinformationen.bund.de/schema/norm/0.1"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.9/ Grammatiken/Norms/legalDocML.de-metadaten-ris.xsd http://MetadatenRegelungstext.LegalDocML.de/1.9/ Grammatiken/legalDocML.de-metadaten-regelungstext.xsd http://MetadatenRechtsetzungsdokument.LegalDocML.de/1.9/ Grammatiken/legalDocML.de-metadaten-rechtsetzungsdokument.xsd http://Inhaltsdaten.LegalDocML.de/1.9/ Grammatiken/legalDocML.de-regelungstext.xsd">
+                xsi:schemaLocation="http://rechtsinformationen.bund.de/schema/norm-metadata/0.1 Grammatiken/Norms/norm-metadata.xsd
+                 http://MetadatenRegelungstext.LegalDocML.de/1.9/ Grammatiken/Norms/legalDocML.de-metadaten-regelungstext.xsd
+                 http://MetadatenRechtsetzungsdokument.LegalDocML.de/1.9/ Grammatiken/Norms/legalDocML.de-metadaten-rechtsetzungsdokument.xsd
+                 http://rechtsinformationen.bund.de/schema/norm/0.1 Grammatiken/Norms/norm-regelungstext.xsd">
     <akn:act name="/akn/ontology/de/concept/documenttype/bund/regelungstext">
         <akn:meta GUID="4e2b63f4-c929-43ca-baab-1c377fd4b6b6" eId="meta-n1">
             <akn:identification GUID="760ee04f-499e-498e-95e4-6453b823f9ae" eId="meta-n1_ident-n1" source="attributsemantik-noch-undefiniert">
@@ -52,9 +55,9 @@
                 </akn:temporalGroup>
             </akn:temporalData>
             <akn:proprietary GUID="04ee737c-de1a-4ef6-8641-253835584deb" eId="meta-n1_proprietary-n1" source="attributsemantik-noch-undefiniert">
-                <ris:legalDocML.de_metadaten xmlns:ris="http://MetadatenRIS.LegalDocML.de/1.9/"
+                <ris:legalDocML.de_metadaten xmlns:ris="http://rechtsinformationen.bund.de/schema/norm-metadata/0.1"
                                              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                                             xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.9/ Grammatiken/Norms/legalDocML.de-metadaten-ris.xsd">
+                                             xsi:schemaLocation="http://rechtsinformationen.bund.de/schema/norm-metadata/0.1 schema/norm-metadata.xsd">
                     <ris:abkuerzung refersTo="interne-abkuerzung">RisAbk</ris:abkuerzung>
                     <ris:inkraft date="2020-01-01"/>
                     <ris:ausserkraft date="2020-12-31"/>
@@ -66,7 +69,6 @@
         <akn:preface GUID="b15681da-cad4-4b2f-8dd7-43f3930062b3" eId="einleitung-n1">
             <akn:longTitle GUID="05bd2f81-1e30-4cf1-940f-e421c980feb3" eId="einleitung-n1_doktitel-n1">
                 <akn:p GUID="eb79ef32-10a0-4dae-befd-fd902edbdff1" eId="einleitung-n1_doktitel-n1_text-n1">
-                    <akn:docStage GUID="74d11618-8e07-4d54-97b3-b7834bd92f37" eId="einleitung-n1_doktitel-n1_text-n1_docstadium-n1"/>
                     <akn:docTitle GUID="6a945fa7-165f-4a73-b90c-af4c5f2fd577" eId="einleitung-n1_doktitel-n1_text-n1_doctitel-n1">Gesetz zum Testen von Artikel Geltungszeiten</akn:docTitle>
                     <akn:shortTitle GUID="a3620e37-dbf7-472d-814a-80e7aa7d2aa4" eId="einleitung-n1_doktitel-n1_text-n1_kurztitel-n1">Kurztitel Geltungszeiten</akn:shortTitle>
                 </akn:p>

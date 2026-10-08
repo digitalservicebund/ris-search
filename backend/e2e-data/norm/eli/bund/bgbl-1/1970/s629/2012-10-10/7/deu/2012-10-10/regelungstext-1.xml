@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-model href="Grammatiken/Norms/legalDocML.de.sch" schematypens="http://purl.oclc.org/dsdl/schematron"?>
-<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.9/"
+<akn:akomaNtoso xmlns:akn="http://rechtsinformationen.bund.de/schema/norm/0.1"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.9/ Grammatiken/Norms/legalDocML.de-metadaten-ris.xsd http://MetadatenRegelungstext.LegalDocML.de/1.9/ Grammatiken/legalDocML.de-metadaten-regelungstext.xsd http://MetadatenRechtsetzungsdokument.LegalDocML.de/1.9/ Grammatiken/legalDocML.de-metadaten-rechtsetzungsdokument.xsd http://Inhaltsdaten.LegalDocML.de/1.9/ Grammatiken/legalDocML.de-regelungstext.xsd">
+                xsi:schemaLocation="http://rechtsinformationen.bund.de/schema/norm-metadata/0.1 Grammatiken/Norms/norm-metadata.xsd
+                 http://MetadatenRegelungstext.LegalDocML.de/1.9/ Grammatiken/Norms/legalDocML.de-metadaten-regelungstext.xsd
+                 http://MetadatenRechtsetzungsdokument.LegalDocML.de/1.9/ Grammatiken/Norms/legalDocML.de-metadaten-rechtsetzungsdokument.xsd
+                 http://rechtsinformationen.bund.de/schema/norm/0.1 Grammatiken/Norms/norm-regelungstext.xsd">
     <akn:act name="/akn/ontology/de/concept/documenttype/bund/regelungstext">
         <akn:meta GUID="aaaaaaaa-aaaa-4aaa-aaaa-aaaaaaaaaaaa" eId="meta-n1">
             <akn:identification GUID="bbbbbbbb-bbbb-4bbb-bbbb-bbbbbbbbbbbb" eId="meta-n1_ident-n1" source="attributsemantik-noch-undefiniert">
@@ -119,9 +122,9 @@
             </akn:temporalData>
             <akn:proprietary GUID="44444444-5555-6666-7777-999999999999" eId="meta-n1_proprietary-n1"
                              source="attributsemantik-noch-undefiniert">
-                <ris:legalDocML.de_metadaten xmlns:ris="http://MetadatenRIS.LegalDocML.de/1.9/"
+                <ris:legalDocML.de_metadaten xmlns:ris="http://rechtsinformationen.bund.de/schema/norm-metadata/0.1"
                                              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                                             xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.9/ Grammatiken/Norms/legalDocML.de-metadaten-ris.xsd">
+                                             xsi:schemaLocation="http://rechtsinformationen.bund.de/schema/norm-metadata/0.1 schema/norm-metadata.xsd">
                     <ris:abkuerzung refersTo="interne-abkuerzung">RisBWahlGV</ris:abkuerzung>
                     <ris:inkraft date="2012-10-17"/>
                     <ris:ausserkraft date="2023-10-18"/>
@@ -131,7 +134,6 @@
         <akn:preface GUID="55555555-6666-7777-8888-aaaaaaaaaaaa" eId="einleitung-n1">
             <akn:longTitle GUID="66666666-7777-8888-9999-bbbbbbbbbbbb" eId="einleitung-n1_doktitel-n1">
                 <akn:p GUID="77777777-8888-9999-aaaa-cccccccccccc" eId="einleitung-n1_doktitel-n1_text-n1">
-                    <akn:docStage GUID="88888888-9999-aaaa-bbbb-dddddddddddd" eId="einleitung-n1_doktitel-n1_text-n1_docstadium-n1"/>
                     <akn:docTitle GUID="99999999-aaaa-bbbb-cccc-eeeeeeeeeeee" eId="einleitung-n1_doktitel-n1_text-n1_doctitel-n1">
                         Musterverordnung zur Testregelung im Bereich der Wahlen mit Wahlgeräten
                     </akn:docTitle>

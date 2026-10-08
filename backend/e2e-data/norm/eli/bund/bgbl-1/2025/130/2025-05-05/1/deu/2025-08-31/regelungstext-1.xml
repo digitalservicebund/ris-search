@@ -1,7 +1,10 @@
 <?xml-model href="Grammatiken/legalDocML.de.sch" schematypens="http://purl.oclc.org/dsdl/schematron"?>
-<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.9/"
+<akn:akomaNtoso xmlns:akn="http://rechtsinformationen.bund.de/schema/norm/0.1"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.9/ Grammatiken/Norms/legalDocML.de-metadaten-ris.xsd http://MetadatenRegelungstext.LegalDocML.de/1.9/ Grammatiken/legalDocML.de-metadaten-regelungstext.xsd http://MetadatenRechtsetzungsdokument.LegalDocML.de/1.9/ Grammatiken/legalDocML.de-metadaten-rechtsetzungsdokument.xsd http://Inhaltsdaten.LegalDocML.de/1.9/ Grammatiken/legalDocML.de-regelungstext.xsd">
+                xsi:schemaLocation="http://rechtsinformationen.bund.de/schema/norm-metadata/0.1 Grammatiken/Norms/norm-metadata.xsd
+                 http://MetadatenRegelungstext.LegalDocML.de/1.9/ Grammatiken/Norms/legalDocML.de-metadaten-regelungstext.xsd
+                 http://MetadatenRechtsetzungsdokument.LegalDocML.de/1.9/ Grammatiken/Norms/legalDocML.de-metadaten-rechtsetzungsdokument.xsd
+                 http://rechtsinformationen.bund.de/schema/norm/0.1 Grammatiken/Norms/norm-regelungstext.xsd">
     <akn:act name="/akn/ontology/de/concept/documenttype/bund/regelungstext">
         <akn:meta GUID="8d7113d1-e517-4fa7-8b1f-28a1f8b506a4" eId="meta-n1">
             <akn:identification GUID="1173c7e4-2d7e-435a-888f-1e70d59cd090" eId="meta-n1_ident-n1" source="attributsemantik-noch-undefiniert">
@@ -60,9 +63,9 @@
                     <regtxt:typ>verordnung</regtxt:typ>
                     <regtxt:form>stammform</regtxt:form>
                 </regtxt:legalDocML.de_metadaten>
-                <ris:legalDocML.de_metadaten xmlns:ris="http://MetadatenRIS.LegalDocML.de/1.9/"
+                <ris:legalDocML.de_metadaten xmlns:ris="http://rechtsinformationen.bund.de/schema/norm-metadata/0.1"
                                              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                                             xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.9/ Grammatiken/Norms/legalDocML.de-metadaten-ris.xsd">
+                                             xsi:schemaLocation="http://rechtsinformationen.bund.de/schema/norm-metadata/0.1 schema/norm-metadata.xsd">
                     <ris:abkuerzung refersTo="interne-abkuerzung">GeGuGe 2025</ris:abkuerzung>
                     <ris:inkraft date="2025-05-06"/>
                     <ris:ausserkraft date="2037-03-31"/>
@@ -74,7 +77,6 @@
         <akn:preface GUID="bff66c49-6cf8-4ae5-a1a3-a589e1ef4ef9" eId="einleitung-n1">
             <akn:longTitle GUID="8e6cb547-e797-4411-812b-3c9a3f086ecd" eId="einleitung-n1_doktitel-n1">
                 <akn:p GUID="7b44727a-aeda-4b1e-95df-2ded3f6ccde7" eId="einleitung-n1_doktitel-n1_text-n1">
-                    <akn:docStage GUID="b750346b-d871-4730-8494-1b3b5f210647" eId="einleitung-n1_doktitel-n1_text-n1_docstadium-n1"/>
                     <akn:docTitle GUID="9238d9ad-d86a-48d4-94fd-ee2c7987ea42" eId="einleitung-n1_doktitel-n1_text-n1_doctitel-n1">Gerade gültiges Gesetz</akn:docTitle>
                     <akn:shortTitle GUID="249cb043-7fb5-4730-8952-ae6f90290b58" eId="einleitung-n1_doktitel-n1_text-n1_kurztitel-n1">
                         (Geradegültiggesetz -

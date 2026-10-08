@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xs:schema
-  xmlns="http://MetadatenRegelungstext.LegalDocML.de/1.9/"
+  xmlns="http://MetadatenSonstigerVeroeffentlichungstext.LegalDocML.de/1.9/"
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
   elementFormDefault="qualified"
-  targetNamespace="http://MetadatenRegelungstext.LegalDocML.de/1.9/"
-  version="LegalDocML.de 1.9 (03.11.2025)"
+  targetNamespace="http://MetadatenSonstigerVeroeffentlichungstext.LegalDocML.de/1.9/"
+  version="LegalDocML.de 1.9 (03.11.2025)}"
 >
   <!-- ********************************* Hinweis zur Lizensierung ********************************* -->
   <xs:annotation>
@@ -32,12 +32,6 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
           <xs:annotation>
             <xs:documentation
             >Typ eines Rechtsetzungsdokuments (z. B. Gesetz, Verordnung etc.) und der darin referenzierten Teildokumente</xs:documentation>
-          </xs:annotation>
-        </xs:element>
-        <xs:element name="form" type="formen">
-          <xs:annotation>
-            <xs:documentation
-            >Form eines Rechtsetzungsdokuments (z. B. Stammform, Mantelform etc.) und der darin referenzierten Teildokumente</xs:documentation>
           </xs:annotation>
         </xs:element>
         <xs:element name="bezugstyp" type="bezugstypen" minOccurs="0">
@@ -78,14 +72,6 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
       <xs:enumeration value="völkerrechtsliche-vereinbarung" />
       <xs:enumeration value="berichtigung" />
       <xs:enumeration value="bekanntmachung-vor-einer-neufassung" />
-    </xs:restriction>
-  </xs:simpleType>
-  <xs:simpleType name="formen" final="restriction">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="mantelform" />
-      <xs:enumeration value="stammform" />
-      <xs:enumeration value="eingebundene-stammform" />
-      <xs:enumeration value="nicht-vorhanden" />
     </xs:restriction>
   </xs:simpleType>
   <xs:simpleType name="bezugstypen" final="restriction">

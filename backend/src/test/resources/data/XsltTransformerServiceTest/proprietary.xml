@@ -1,13 +1,21 @@
-<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.9/"
+<akn:akomaNtoso xmlns:akn="http://rechtsinformationen.bund.de/schema/norm/0.1"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.9/ Grammatiken/Norms/legalDocML.de-metadaten-ris.xsd http://MetadatenRegelungstext.LegalDocML.de/1.9/ Grammatiken/legalDocML.de-metadaten-regelungstext.xsd http://MetadatenRechtsetzungsdokument.LegalDocML.de/1.9/ Grammatiken/legalDocML.de-metadaten-rechtsetzungsdokument.xsd http://Inhaltsdaten.LegalDocML.de/1.9/ Grammatiken/legalDocML.de-regelungstext.xsd">
-    <akn:act name="/akn/ontology/de/concept/documenttype/bund/regelungstext">
+                xsi:schemaLocation="http://rechtsinformationen.bund.de/schema/norm-metadata/0.1
+                ../../../../../../../../../../../../Grammatiken/Norms/norm-metadata.xsd
+                 http://MetadatenRegelungstext.LegalDocML.de/1.9/
+                 ../../../../../../../../../../../../Grammatiken/Norms/legalDocML.de-metadaten-regelungstext.xsd
+                 http://MetadatenRechtsetzungsdokument.LegalDocML.de/1.9/
+                 ../../../../../../../../../../../../Grammatiken/Norms/legalDocML.de-metadaten-rechtsetzungsdokument.xsd
+                 http://rechtsinformationen.bund.de/schema/norm/0.1
+                 ../../../../../../../../../../../../Grammatiken/Norms/norm-regelungstext.xsd">
+<akn:act name="/akn/ontology/de/concept/documenttype/bund/regelungstext">
         <akn:meta GUID="acf37551-89f7-4eeb-9229-ef0759f7d039" eId="meta-n1">
             <akn:proprietary GUID="e044b111-434e-462c-81be-cf59d137c13a" eId="meta-n1_proprietary-n1"
                              source="attributsemantik-noch-undefiniert">
-                <ris:legalDocML.de_metadaten xmlns:ris="http://MetadatenRIS.LegalDocML.de/1.9/"
+                <ris:legalDocML.de_metadaten xmlns:ris="http://rechtsinformationen.bund.de/schema/norm-metadata/0.1"
                                              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                                             xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.9/ Grammatiken/Norms/legalDocML.de-metadaten-ris.xsd">
+                                             xsi:schemaLocation="http://rechtsinformationen.bund.de/schema/norm-metadata/0.1
+                                             ../../../../../../../../../../../../Grammatiken/Norms/norm-metadata.xsd">
                     <ris:vollzitat>
                         Verordnung über A in der Fassung der Bekanntmachung vom 01. Januar 2000 (BGBl. I S. 123), die
                         zuletzt durch Artikel 1337 des Gesetzes vom 07. März 2025 (BGBl. 2025 I Nr. 1) geändert worden

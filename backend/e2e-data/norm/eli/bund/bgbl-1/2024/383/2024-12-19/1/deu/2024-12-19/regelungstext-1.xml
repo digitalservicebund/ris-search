@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-model href="Grammatiken/Norms/legalDocML.de.sch" schematypens="http://purl.oclc.org/dsdl/schematron"?>
-<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.9/"
+<akn:akomaNtoso xmlns:akn="http://rechtsinformationen.bund.de/schema/norm/0.1"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.9/ Grammatiken/Norms/legalDocML.de-metadaten-ris.xsd http://MetadatenRegelungstext.LegalDocML.de/1.9/ Grammatiken/legalDocML.de-metadaten-regelungstext.xsd http://MetadatenRechtsetzungsdokument.LegalDocML.de/1.9/ Grammatiken/legalDocML.de-metadaten-rechtsetzungsdokument.xsd http://Inhaltsdaten.LegalDocML.de/1.9/ Grammatiken/legalDocML.de-regelungstext.xsd">
+                xsi:schemaLocation="http://rechtsinformationen.bund.de/schema/norm-metadata/0.1 Grammatiken/Norms/norm-metadata.xsd
+                 http://MetadatenRegelungstext.LegalDocML.de/1.9/ Grammatiken/Norms/legalDocML.de-metadaten-regelungstext.xsd
+                 http://MetadatenRechtsetzungsdokument.LegalDocML.de/1.9/ Grammatiken/Norms/legalDocML.de-metadaten-rechtsetzungsdokument.xsd
+                 http://rechtsinformationen.bund.de/schema/norm/0.1 Grammatiken/Norms/norm-regelungstext.xsd">
     <akn:act name="/akn/ontology/de/concept/documenttype/bund/regelungstext">
         <akn:meta GUID="a3e9cfae-8d79-4f05-b8a0-1a2f3c8b9d71" eId="meta-n1">
             <akn:identification GUID="b1d6f2ae-3123-4d8f-8c42-7a9b0f2a3d4e" eId="meta-n1_ident-n1" source="attributsemantik-noch-undefiniert">
@@ -45,9 +48,9 @@
                 </akn:temporalGroup>
             </akn:temporalData>
             <akn:proprietary GUID="66778899-aabb-ccdd-eeff-001122334455" eId="meta-n1_proprietary-n1" source="attributsemantik-noch-undefiniert">
-                <ris:legalDocML.de_metadaten xmlns:ris="http://MetadatenRIS.LegalDocML.de/1.9/"
+                <ris:legalDocML.de_metadaten xmlns:ris="http://rechtsinformationen.bund.de/schema/norm-metadata/0.1"
                                              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                                             xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.9/ Grammatiken/Norms/legalDocML.de-metadaten-ris.xsd">
+                                             xsi:schemaLocation="http://rechtsinformationen.bund.de/schema/norm-metadata/0.1 schema/norm-metadata.xsd">
                     <ris:abkuerzung refersTo="interne-abkuerzung">RisMFG</ris:abkuerzung>
                     <ris:inkraft date="2024-12-23"/>
                 </ris:legalDocML.de_metadaten>
@@ -56,7 +59,6 @@
         <akn:preface GUID="778899aa-bbcc-ddee-ff00-112233445566" eId="einleitung-n1">
             <akn:longTitle GUID="8899aabb-ccdd-eeff-0011-223344556677" eId="einleitung-n1_doktitel-n1">
                 <akn:p GUID="99aabbcc-ddee-0011-2233-445566778899" eId="einleitung-n1_doktitel-n1_text-n1">
-                    <akn:docStage GUID="aabbccdd-eeff-0011-2233-445566778899" eId="einleitung-n1_doktitel-n1_text-n1_docstadium-n1"/>
                     <akn:docTitle GUID="a1b2c3d4-e5f6-4789-abcd-0123456789ab" eId="einleitung-n1_doktitel-n1_text-n1_doctitel-n1">Fiktives Gesetz zur Musterfinanzierung politischer Einrichtungen</akn:docTitle>
                     <akn:shortTitle GUID="b1c2d3e4-f5a6-4789-abcd-1234567890ab" eId="einleitung-n1_doktitel-n1_text-n1_kurztitel-n1">(MusterfinanzG - <akn:inline GUID="c1d2e3f4-a5b6-4789-abcd-0123456789ab" eId="einleitung-n1_doktitel-n1_text-n1_kurztitel-n1_inline-n1" name="attributsemantik-noch-undefiniert" refersTo="amtliche-abkuerzung">MFG</akn:inline>)</akn:shortTitle>
                 </akn:p>
