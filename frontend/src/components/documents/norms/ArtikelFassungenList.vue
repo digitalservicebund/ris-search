@@ -6,12 +6,17 @@ import { useArtikelFassungen } from "~/composables/useArtikelFassungen.ts";
 import type { ArtikelFassung, LegislationExpression } from "~/types/api.ts";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting.ts";
 
-const { currentLegislationIdentifier, currentFassungId, fassungen } =
-  defineProps<{
-    currentLegislationIdentifier: string;
-    currentFassungId: string;
-    fassungen: ArtikelFassung[];
-  }>();
+const {
+  currentLegislationIdentifier,
+  currentFassungId,
+  fassungen,
+  dateFilter,
+} = defineProps<{
+  currentLegislationIdentifier: string;
+  currentFassungId: string;
+  fassungen: ArtikelFassung[];
+  dateFilter?: string;
+}>();
 
 type FassungRow = {
   key: string;
@@ -96,9 +101,12 @@ const expandedRowContent = computed<RowContent | undefined>(() => {
   const cachedData = fassungenCache.value.get(expandedRowKey.value);
   if (!cachedData) return undefined;
 
-  const gesamtausgaben = cachedData?.gesamtausgaben;
+  const gesamtausgaben = versionDateFilter(
+    cachedData.gesamtausgaben,
+    dateFilter,
+  );
 
-  if (gesamtausgaben?.length === 1) {
+  if (gesamtausgaben.length === 1) {
     const gesamtausgabe = gesamtausgaben[0]!;
     const formattedTemporalCoverage = formatTemporalCoverage(
       gesamtausgabe.temporalCoverage,

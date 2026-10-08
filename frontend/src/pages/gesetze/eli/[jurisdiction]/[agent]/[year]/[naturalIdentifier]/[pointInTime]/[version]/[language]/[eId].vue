@@ -410,6 +410,7 @@ const fassungenDateFilterInputId = useId();
                 :current-legislation-identifier="norm.legislationIdentifier"
                 :current-fassung-id="article.revision"
                 :fassungen="filteredFassungen"
+                :date-filter="fassungenDateFilterValue"
               />
             </div>
 

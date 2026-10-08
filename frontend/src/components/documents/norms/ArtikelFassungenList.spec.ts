@@ -345,6 +345,54 @@ describe("ArtikelFassungenList", () => {
     expect(currentLink).toHaveAttribute("aria-current", "page");
   });
 
+  describe("with a date filter", () => {
+    const earlierIdentifier = "eli/bund/bgbl-1/2000/s001/2031-01-01/1/deu";
+    const laterIdentifier = "eli/bund/bgbl-1/2000/s001/2032-01-01/1/deu";
+
+    beforeEach(() => {
+      mockBackend({
+        gesamtausgaben: [
+          createGesamtausgabe(earlierIdentifier, "2031-01-01/2031-12-31"),
+          createGesamtausgabe(laterIdentifier, "2032-01-01/.."),
+        ],
+      });
+    });
+
+    it("links only the Gesamtausgabe valid on the filter date", async () => {
+      const { rerender } = await renderSuspended(ArtikelFassungenList, {
+        props: props(),
+      });
+
+      // The page filters the fassungen by the same date, leaving one row
+      await rerender({ ...props([futureFassung]), dateFilter: "2031-06-01" });
+
+      expect(
+        await screen.findByRole("link", {
+          name: "Gesamtausgabe 01.01.2031 - 31.12.2031 öffnen",
+        }),
+      ).toHaveAttribute("href", `/gesetze/${earlierIdentifier}`);
+      expect(
+        screen.queryByRole("button", { name: "Gesamtausgabe auswählen" }),
+      ).not.toBeInTheDocument();
+    });
+
+    it("updates the linked Gesamtausgabe when the filter date changes", async () => {
+      const { rerender } = await renderSuspended(ArtikelFassungenList, {
+        props: props(),
+      });
+      await rerender({ ...props([futureFassung]), dateFilter: "2031-06-01" });
+      await screen.findByRole("link", { name: /^Gesamtausgabe/ });
+
+      await rerender({ ...props([futureFassung]), dateFilter: "2032-06-01" });
+
+      expect(
+        screen.getByRole("link", {
+          name: "Gesamtausgabe gültig ab 01.01.2032 öffnen",
+        }),
+      ).toHaveAttribute("href", `/gesetze/${laterIdentifier}`);
+    });
+  });
+
   it("shows the fetched HTML once it becomes available", async () => {
     mockBackend();
     const user = userEvent.setup();
