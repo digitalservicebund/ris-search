@@ -6,10 +6,12 @@ import { useArtikelFassungen } from "~/composables/useArtikelFassungen.ts";
 import type { ArtikelFassung, LegislationExpression } from "~/types/api.ts";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting.ts";
 
-const { currentExpressionId, fassungen } = defineProps<{
-  currentExpressionId: string;
-  fassungen: ArtikelFassung[];
-}>();
+const { currentLegislationIdentifier, currentFassungId, fassungen } =
+  defineProps<{
+    currentLegislationIdentifier: string;
+    currentFassungId: string;
+    fassungen: ArtikelFassung[];
+  }>();
 
 type FassungRow = {
   key: string;
@@ -54,9 +56,7 @@ const rows = computed<FassungRow[]>(() => {
       fassung.temporalCoverage,
     );
 
-    const disabled = (fassung.isPartOf ?? [])
-      .map((expression) => expression["@id"])
-      .includes(currentExpressionId);
+    const disabled = fassung.revision === currentFassungId;
     const encodingUrl = getEncodingURL(fassung.encoding, "text/html");
 
     return {
@@ -293,7 +293,9 @@ const currentRowId = useId();
                     header-expanded="Gesamtausgabe auswählen"
                   >
                     <GesamtausgabenList
-                      :current-legislation-identifier="currentExpressionId"
+                      :current-legislation-identifier="
+                        currentLegislationIdentifier
+                      "
                       :gesamtausgaben="expandedRowContent.gesamtausgaben"
                     />
                   </UiAccordion>

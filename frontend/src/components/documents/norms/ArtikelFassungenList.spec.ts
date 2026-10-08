@@ -20,7 +20,6 @@ vi.mock("~/plugins/risBackend", () => ({
 function createFassung(
   identifier: string,
   temporalCoverage: string,
-  isPartOf: string[] = [],
 ): ArtikelFassung {
   return {
     "@id": identifier,
@@ -28,7 +27,6 @@ function createFassung(
     name: "§ 1",
     temporalCoverage,
     revision: identifier,
-    isPartOf: isPartOf.map((id) => ({ "@id": id })),
     encoding: [
       {
         "@id": "",
@@ -40,8 +38,8 @@ function createFassung(
   };
 }
 
-const currentExpressionId =
-  "/v1/legislation/eli/bund/bgbl-1/2000/s001/2020-01-01/1/deu";
+const currentLegislationIdentifier =
+  "eli/bund/bgbl-1/2000/s001/2020-01-01/1/deu/regelungstext-1";
 
 const futureFassung = createFassung(
   "eli/bund/bgbl-1/2000/s001/2031-01-01/1/deu#art-1",
@@ -50,7 +48,6 @@ const futureFassung = createFassung(
 const currentFassung = createFassung(
   "eli/bund/bgbl-1/2000/s001/2020-01-01/1/deu#art-1",
   "2020-01-01/2030-12-31",
-  [currentExpressionId],
 );
 const pastFassung = createFassung(
   "eli/bund/bgbl-1/2000/s001/2000-01-01/1/deu#art-1",
@@ -90,7 +87,8 @@ function props(
   fassungen: ArtikelFassung[] = [pastFassung, currentFassung, futureFassung],
 ) {
   return {
-    currentExpressionId: currentExpressionId,
+    currentLegislationIdentifier,
+    currentFassungId: currentFassung.revision!,
     fassungen,
   };
 }
@@ -165,6 +163,16 @@ describe("ArtikelFassungenList", () => {
     expect(currentRow).toHaveTextContent(
       "Gültig ab: 01.01.2020– Gültig bis: 31.12.2030",
     );
+  });
+
+  it("marks no fassung as current when none has the current revision", async () => {
+    await renderSuspended(ArtikelFassungenList, {
+      props: { ...props(), currentFassungId: "eli/bund/other#art-1" },
+    });
+
+    expect(
+      screen.queryByRole("group", { current: true }),
+    ).not.toBeInTheDocument();
   });
 
   it("current fassung is not expandable", async () => {
@@ -297,7 +305,7 @@ describe("ArtikelFassungenList", () => {
 
   it("marks the Gesamtausgabe currently displayed as the current page", async () => {
     const currentGesamtausgabe = createGesamtausgabe(
-      currentExpressionId.replace("/v1/legislation/", ""),
+      currentLegislationIdentifier,
       "2020-01-01/2030-12-31",
     );
     mockBackend({ gesamtausgaben: [gesamtausgabe, currentGesamtausgabe] });
