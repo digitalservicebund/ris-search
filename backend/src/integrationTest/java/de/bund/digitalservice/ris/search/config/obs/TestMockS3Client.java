@@ -1,6 +1,7 @@
 package de.bund.digitalservice.ris.search.config.obs;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -49,6 +50,8 @@ public class TestMockS3Client extends MockS3Client implements S3Client {
   private Path localStorageDirectory;
 
   private final Map<String, byte[]> fileMap = new HashMap<>();
+
+  private final Map<String, ByteArrayOutputStream> multipartUploads = new HashMap<>();
 
   /**
    * Constructs a TestMockS3Client with the specified bucket name and local storage directory.
@@ -157,19 +160,28 @@ public class TestMockS3Client extends MockS3Client implements S3Client {
   @Override
   public CreateMultipartUploadResponse createMultipartUpload(CreateMultipartUploadRequest request) {
     String uploadId = java.util.UUID.randomUUID().toString();
+    multipartUploads.put(uploadId, new ByteArrayOutputStream());
     return CreateMultipartUploadResponse.builder().uploadId(uploadId).build();
   }
 
   @Override
   public UploadPartResponse uploadPart(
       UploadPartRequest uploadPartRequest, RequestBody requestBody) {
+    // parts are uploaded sequentially, so appending keeps them in order
+    try (InputStream inputStream = requestBody.contentStreamProvider().newStream()) {
+      inputStream.transferTo(multipartUploads.get(uploadPartRequest.uploadId()));
+    } catch (IOException e) {
+      throw SdkClientException.create("Couldn't store uploaded part", e);
+    }
     return UploadPartResponse.builder().eTag("mockEtag").build();
   }
 
   @Override
   public CompleteMultipartUploadResponse completeMultipartUpload(
       CompleteMultipartUploadRequest completeMultipartUploadRequest) {
-    putFile(completeMultipartUploadRequest.key(), "mock file content");
+    fileMap.put(
+        completeMultipartUploadRequest.key(),
+        multipartUploads.remove(completeMultipartUploadRequest.uploadId()).toByteArray());
     return CompleteMultipartUploadResponse.builder().build();
   }
 

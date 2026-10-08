@@ -77,6 +77,22 @@ class BulkExportServiceTest {
   }
 
   @Test
+  void updateLatestZip_onlyIncludesKeysMatchingTheFilter() {
+    ObjectStorage sourceBucket = mock(ObjectStorage.class);
+    ObjectStorage destinationBucket = mock(ObjectStorage.class);
+
+    when(sourceBucket.getAllKeys()).thenReturn(List.of("file1.xml", "file1.pdf", "file1.html"));
+
+    BulkExportService bulkExportService =
+        new BulkExportService(
+            sourceBucket, destinationBucket, "test-export", key -> key.endsWith(".xml"));
+
+    bulkExportService.updateLatestZip(Instant.now());
+    verify(sourceBucket).get("file1.xml");
+    verify(sourceBucket, times(1)).get(anyString());
+  }
+
+  @Test
   void updateLatestZip_withObsoleteFiles_shouldDeleteThem() throws IOException {
     ObjectStorage sourceBucket = mock(ObjectStorage.class);
     ObjectStorage destinationBucket = mock(ObjectStorage.class);
