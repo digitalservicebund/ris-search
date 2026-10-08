@@ -124,6 +124,7 @@ class ArticleControllerIntegrationTest extends ContainersIntegrationBase {
 
   @Test
   void itServesAllLegislationExpressionsThatAnArticleRevisionIsPartOf() throws Exception {
+
     repository.save(
         Article.builder()
             .id("eli/bund/bgbl-1/1975/s1000/1975-01-01/1/deu/art-z1")
@@ -156,11 +157,17 @@ class ArticleControllerIntegrationTest extends ContainersIntegrationBase {
             .documentType(LegislationPartType.ARTICLE)
             .documentNumber("DKNR0E80B0026DKNE000100010")
             .build());
-
     normsRepository.save(
         Norm.builder()
             .id("eli/bund/bgbl-1/1975/s1000/1980-01-01/1/deu")
             .expressionEli("eli/bund/bgbl-1/1975/s1000/1980-01-01/1/deu")
+            .build());
+
+    // doesn't include the queried article revision
+    normsRepository.save(
+        Norm.builder()
+            .id("eli/bund/bgbl-1/1975/s2000/1980-01-01/1/deu")
+            .expressionEli("eli/bund/bgbl-1/1975/s2000/1980-01-01/1/deu")
             .build());
 
     mockMvc
