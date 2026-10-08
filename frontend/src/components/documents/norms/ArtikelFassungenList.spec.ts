@@ -84,7 +84,6 @@ describe("ArtikelFassungenList", () => {
     expect(rows).toHaveLength(3);
 
     expect(within(rows[0]!).getByText("01.01.2031")).toBeInTheDocument();
-    expect(within(rows[0]!).getByText("—")).toBeInTheDocument();
 
     expect(within(rows[1]!).getByText("01.01.2020")).toBeInTheDocument();
     expect(within(rows[1]!).getByText("31.12.2030")).toBeInTheDocument();
@@ -93,13 +92,31 @@ describe("ArtikelFassungenList", () => {
     expect(within(rows[2]!).getByText("31.12.2019")).toBeInTheDocument();
   });
 
-  it("joins the dates with a dash", () => {
-    render(ArtikelFassungenList, { props: props() });
+  it("joins the dates with a dash when both exist", () => {
+    render(ArtikelFassungenList, {
+      props: props([pastFassung, currentFassung]),
+    });
 
     for (const row of screen.getAllByRole("listitem")) {
       expect(within(row).getByText("–")).toHaveAttribute("aria-hidden", "true");
     }
   });
+
+  it.each([
+    ["from", "../2019-12-31"],
+    ["to", "2031-01-01/.."],
+  ])(
+    "shows no placeholder and no dash for a missing %s date on desktop",
+    (_, temporalCoverage) => {
+      render(ArtikelFassungenList, {
+        props: props([createFassung("eli/bund/test#art-1", temporalCoverage)]),
+      });
+
+      const row = screen.getByRole("listitem");
+      expect(within(row).getByText("—")).toHaveClass("md:hidden");
+      expect(within(row).queryByText("–")).not.toBeInTheDocument();
+    },
+  );
 
   it("shows the column labels as a header, but keeps it from SR", () => {
     render(ArtikelFassungenList, { props: props() });
