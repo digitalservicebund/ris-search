@@ -58,6 +58,7 @@
                     <ris:abkuerzung refersTo="interne-abkuerzung">RisFassTest</ris:abkuerzung>
                     <ris:inkraft date="2920-08-04"/>
                     <ris:doknr source="#einleitung-n1">DKNR0E80B0026</ris:doknr>
+                    <ris:doknr source="#hauptteil-n1_abschnitt-n1_art-z1">DKNR0E80B0026DKNE000300000</ris:doknr>
                     <ris:doknr source="#hauptteil-n1_abschnitt-n2_art-z1">DKNR0E80B0026DKNE000100002</ris:doknr>
                     <ris:doknr source="#hauptteil-n1_abschnitt-n2_art-z2">DKNR0E80B0026DKNE000200000</ris:doknr>
                 </ris:legalDocML.de_metadaten>
