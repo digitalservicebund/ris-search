@@ -1,45 +1,66 @@
 package de.bund.digitalservice.ris.search.config;
 
-import de.bund.digitalservice.ris.search.config.ratelimiting.DefaultRateLimitInterceptor;
-import de.bund.digitalservice.ris.search.config.ratelimiting.FeedbackRateLimitInterceptor;
+import de.bund.digitalservice.ris.search.config.ratelimiting.RateLimitFilter;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.filter.UrlHandlerFilter;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
- * Web MVC configuration that registers application-specific interceptors.
+ * Web MVC configuration that registers application-specific filters.
  *
- * <p>Registers rate limiting interceptors for feedback endpoints and a default rate limiter for all
+ * <p>Registers a rate limiting filter for the feedback endpoint and a default rate limiter for all
  * requests.
  */
 @Configuration
-public class WebMvcConfig implements WebMvcConfigurer {
+public class WebMvcConfig {
 
-  private final FeedbackRateLimitInterceptor feedbackInterceptor;
+  /** Actuator endpoints (health checks, metrics scraping) are excluded from rate limiting. */
+  private final String actuatorBasePath;
 
-  private final DefaultRateLimitInterceptor defaultRateLimitInterceptor;
-
-  /**
-   * Construct a WebMvcConfig with required interceptors.
-   *
-   * @param interceptor interceptor handling feedback-related rate limits
-   * @param defaultRateLimitInterceptor interceptor applying default rate limits to requests
-   */
   public WebMvcConfig(
-      FeedbackRateLimitInterceptor interceptor,
-      DefaultRateLimitInterceptor defaultRateLimitInterceptor) {
-
-    this.feedbackInterceptor = interceptor;
-    this.defaultRateLimitInterceptor = defaultRateLimitInterceptor;
+      @Value("${management.endpoints.web.base-path:/actuator}") String actuatorBasePath) {
+    this.actuatorBasePath = actuatorBasePath;
   }
 
-  @Override
-  public void addInterceptors(InterceptorRegistry registry) {
-    registry.addInterceptor(feedbackInterceptor).addPathPatterns(ApiConfig.Paths.FEEDBACK);
-    registry.addInterceptor(defaultRateLimitInterceptor);
+  /**
+   * Applies a {@link RateLimitFilter} to the feedback endpoint.
+   *
+   * <p>Both rate limit registrations use the same filter class, so each needs a distinct name.
+   * Otherwise the servlet container would only register one of them.
+   *
+   * @param maxRequests maximum number of requests per client IP within the time window
+   * @param seconds duration of the time window in seconds
+   * @return the registration of the feedback rate limit filter
+   */
+  @Bean
+  public FilterRegistrationBean<RateLimitFilter> feedbackRateLimitFilterRegistration(
+      @Value("${rate-limit.feedback.requests}") int maxRequests,
+      @Value("${rate-limit.feedback.seconds}") int seconds) {
+    FilterRegistrationBean<RateLimitFilter> registration =
+        new FilterRegistrationBean<>(new RateLimitFilter(maxRequests, seconds, actuatorBasePath));
+    registration.setName("feedbackRateLimitFilter");
+    registration.addUrlPatterns(ApiConfig.Paths.FEEDBACK);
+    return registration;
+  }
+
+  /**
+   * Applies a {@link RateLimitFilter} to all requests.
+   *
+   * @param maxRequests maximum number of requests per client IP within the time window
+   * @param seconds duration of the time window in seconds
+   * @return the registration of the default rate limit filter
+   */
+  @Bean
+  public FilterRegistrationBean<RateLimitFilter> defaultRateLimitFilterRegistration(
+      @Value("${rate-limit.default.requests}") int maxRequests,
+      @Value("${rate-limit.default.seconds}") int seconds) {
+    FilterRegistrationBean<RateLimitFilter> registration =
+        new FilterRegistrationBean<>(new RateLimitFilter(maxRequests, seconds, actuatorBasePath));
+    registration.setName("defaultRateLimitFilter");
+    return registration;
   }
 
   /**
