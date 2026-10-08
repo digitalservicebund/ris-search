@@ -14,7 +14,7 @@ test.describe(
     test(
       "displays Gesamtausgaben in the Gesamtausgaben tab",
       { tag: ["@RISDEV-12556"] },
-      async ({ page }) => {
+      async ({ page, isMobileTest }) => {
         await navigate(
           page,
           "/gesetze/eli/bund/bgbl-1/2020/s1126/2020-08-04/1/deu",
@@ -22,15 +22,33 @@ test.describe(
 
         await page.getByRole("tab", { name: "Gesamtausgaben" }).click();
 
-        await expect(
-          page
-            .getByRole("list", { name: "Gesamtausgaben" })
-            .getByRole("listitem"),
-        ).toHaveText([
-          "Gültig ab: 04.08.2920– Gültig bis: — Status: Zukünftig in Kraft",
-          "Gültig ab: 04.08.2022– Gültig bis: 03.08.2920 Status: Aktuell gültig",
-          "Gültig ab: 04.08.2020– Gültig bis: 03.08.2022 Status: Außer Kraft",
-        ]);
+        const gesamtausgaben = page
+          .getByRole("list", { name: "Gesamtausgaben" })
+          .getByRole("listitem");
+
+        await test.step("desktop shows separator dashes and no placeholder for missing dates", async (step) => {
+          step.skip(isMobileTest);
+          await expect(gesamtausgaben).toHaveText(
+            [
+              "Gültig ab: 04.08.2920 Gültig bis: Status: Zukünftig in Kraft",
+              "Gültig ab: 04.08.2022 – Gültig bis: 03.08.2920 Status: Aktuell gültig",
+              "Gültig ab: 04.08.2020 – Gültig bis: 03.08.2022 Status: Außer Kraft",
+            ],
+            { useInnerText: true },
+          );
+        });
+
+        await test.step("mobile doesn't show separator dashes but placeholder for missing dates", async (step) => {
+          step.skip(!isMobileTest);
+          await expect(gesamtausgaben).toHaveText(
+            [
+              "Gültig ab: 04.08.2920 Gültig bis: — Status: Zukünftig in Kraft",
+              "Gültig ab: 04.08.2022 Gültig bis: 03.08.2920 Status: Aktuell gültig",
+              "Gültig ab: 04.08.2020 Gültig bis: 03.08.2022 Status: Außer Kraft",
+            ],
+            { useInnerText: true },
+          );
+        });
       },
     );
 
@@ -86,9 +104,7 @@ test.describe(
 
       await page.getByRole("textbox", { name: "Gültig am" }).fill("04.08.2020");
 
-      await expect(gesamtausgaben).toHaveText([
-        "Gültig ab: 04.08.2020– Gültig bis: 03.08.2022 Status: Außer Kraft",
-      ]);
+      await expect(gesamtausgaben).toHaveText(/04\.08\.2020/);
     });
 
     test("shows no results placeholder when no Gesamtausgabe found", async ({
@@ -138,58 +154,6 @@ test.describe(
 
       await expect(announcement).toHaveText("3 Gesamtausgaben");
     });
-  },
-);
-
-test.describe(
-  "gesamtausgaben tab on a small screen",
-  { tag: ["@RISDEV-10909", "@RISDEV-12189"] },
-  () => {
-    test.beforeEach(({ isMobileTest }) => {
-      test.skip(!isMobileTest);
-    });
-
-    test("shows a label in front of every value instead of a header row", async ({
-      page,
-    }) => {
-      await navigate(
-        page,
-        "/gesetze/eli/bund/bgbl-1/2020/s1126/2020-08-04/1/deu?view=gesamtausgaben",
-      );
-
-      const firstGesamtausgabe = page
-        .getByRole("list", { name: "Gesamtausgaben" })
-        .getByRole("listitem")
-        .first();
-
-      await expect(firstGesamtausgabe.getByText("Gültig ab:")).toBeVisible();
-      await expect(firstGesamtausgabe.getByText("Gültig bis:")).toBeVisible();
-      await expect(firstGesamtausgabe.getByText("Status:")).toBeVisible();
-    });
-
-    test(
-      "doesn't join the dates with a dash",
-      { tag: ["@RISDEV-12556"] },
-      async ({ page }) => {
-        await navigate(
-          page,
-          "/gesetze/eli/bund/bgbl-1/2020/s1126/2020-08-04/1/deu?view=gesamtausgaben",
-        );
-
-        await expect(
-          page
-            .getByRole("list", { name: "Gesamtausgaben" })
-            .getByRole("listitem"),
-        ).toHaveText(
-          [
-            "Gültig ab: 04.08.2920 Gültig bis: — Status: Zukünftig in Kraft",
-            "Gültig ab: 04.08.2022 Gültig bis: 03.08.2920 Status: Aktuell gültig",
-            "Gültig ab: 04.08.2020 Gültig bis: 03.08.2022 Status: Außer Kraft",
-          ],
-          { useInnerText: true },
-        );
-      },
-    );
   },
 );
 

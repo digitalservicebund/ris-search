@@ -28,6 +28,10 @@ const columns: DataTableColumn<GesamtausgabeRow>[] = [
   { key: "status", label: "Status" },
 ];
 
+function hasBothDates(row: GesamtausgabeRow) {
+  return row.fromDate !== missingDate && row.toDate !== missingDate;
+}
+
 const rows = computed<GesamtausgabeRow[]>(() => {
   // newest Gesamtausgabe first
   const gesamtausgabenSorted = props.gesamtausgaben.toSorted((a, b) =>
@@ -100,12 +104,21 @@ watch(
            boundary to the next column. Screen readers already get the labels,
            so the dash would only add noise. -->
       <span class="relative grow">
-        {{ row.fromDate
-        }}<span
+        <span :class="{ 'md:hidden': row.fromDate === missingDate }">{{
+          row.fromDate
+        }}</span
+        ><span
+          v-if="hasBothDates(row)"
           aria-hidden="true"
           class="absolute top-1/2 -right-16 hidden translate-x-1/2 -translate-y-1/2 md:block"
           >–</span
         >
+      </span>
+    </template>
+
+    <template #cell-toDate="{ row }">
+      <span :class="{ 'md:hidden': row.toDate === missingDate }">
+        {{ row.toDate }}
       </span>
     </template>
 

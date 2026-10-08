@@ -28,6 +28,10 @@ const columns: FassungColumn[] = [
   { key: "toDate", label: "Gültig bis" },
 ];
 
+function hasBothDates(row: FassungRow) {
+  return row.fromDate !== missingDate && row.toDate !== missingDate;
+}
+
 const rows = computed<FassungRow[]>(() => {
   // newest single norm first
   const fassungenSorted = fassungen.toSorted((a, b) =>
@@ -155,9 +159,11 @@ const currentRowId = useId();
               <span
                 class="typo-label1-regular flex min-h-32 items-center md:relative md:min-h-48 md:px-16 md:py-10"
               >
-                {{ row[column.key]
-                }}<span
-                  v-if="column.key === 'fromDate'"
+                <span
+                  :class="{ 'md:hidden': row[column.key] === missingDate }"
+                  >{{ row[column.key] }}</span
+                ><span
+                  v-if="column.key === 'fromDate' && hasBothDates(row)"
                   aria-hidden="true"
                   class="absolute right-0 hidden translate-x-1/2 md:block"
                   >–</span
@@ -190,9 +196,11 @@ const currentRowId = useId();
                 <span
                   class="typo-label1-regular flex min-h-32 items-center md:relative md:min-h-48 md:px-16 md:py-10"
                 >
-                  {{ row[column.key]
-                  }}<span
-                    v-if="column.key === 'fromDate'"
+                  <span
+                    :class="{ 'md:hidden': row[column.key] === missingDate }"
+                    >{{ row[column.key] }}</span
+                  ><span
+                    v-if="column.key === 'fromDate' && hasBothDates(row)"
                     aria-hidden="true"
                     class="absolute right-0 hidden translate-x-1/2 md:block"
                     >–</span
