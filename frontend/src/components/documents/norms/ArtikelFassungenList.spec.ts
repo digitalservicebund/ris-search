@@ -1,8 +1,9 @@
+import { renderSuspended } from "@nuxt/test-utils/runtime";
 import { userEvent } from "@testing-library/user-event";
-import { render, screen, within } from "@testing-library/vue";
+import { screen, within } from "@testing-library/vue";
 import type { FetchHook } from "ofetch";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { ArtikelFassung } from "~/types/api.ts";
+import type { ArtikelFassung, LegislationExpression } from "~/types/api.ts";
 import ArtikelFassungenList from "./ArtikelFassungenList.vue";
 
 const { mockFetch } = vi.hoisted(() => {
@@ -26,6 +27,7 @@ function createFassung(
     eId: "art-1",
     name: "§ 1",
     temporalCoverage,
+    revision: identifier,
     isPartOf: isPartOf.map((id) => ({ "@id": id })),
     encoding: [
       {
@@ -55,6 +57,34 @@ const pastFassung = createFassung(
   "2000-01-05/2019-12-31",
 );
 
+function createGesamtausgabe(
+  legislationIdentifier: string,
+  temporalCoverage: string,
+) {
+  return {
+    "@id": `/v1/legislation/${legislationIdentifier}`,
+    legislationIdentifier,
+    temporalCoverage,
+  } as LegislationExpression;
+}
+
+const gesamtausgabe = createGesamtausgabe(
+  "eli/bund/bgbl-1/2000/s001/2031-01-01/1/deu/regelungstext-1",
+  "2031-01-01/..",
+);
+
+/** Answers the HTML and Gesamtausgaben requests the way the backend would. */
+function mockBackend({
+  html = "<p>Norm content</p>",
+  gesamtausgaben = [gesamtausgabe],
+}: { html?: string; gesamtausgaben?: LegislationExpression[] } = {}) {
+  mockFetch.mockImplementation(async (url: string) =>
+    url.endsWith("/legislations")
+      ? { member: gesamtausgaben }
+      : `<html><body>${html}</body></html>`,
+  );
+}
+
 /** Props for the list, with the middle fassung being the displayed one. */
 function props(
   fassungen: ArtikelFassung[] = [pastFassung, currentFassung, futureFassung],
@@ -77,8 +107,8 @@ describe("ArtikelFassungenList", () => {
     delete Element.prototype.scrollIntoView;
   });
 
-  it("lists fassungen, sorted by date, newest first", () => {
-    render(ArtikelFassungenList, { props: props() });
+  it("lists fassungen, sorted by date, newest first", async () => {
+    await renderSuspended(ArtikelFassungenList, { props: props() });
 
     const rows = screen.getAllByRole("listitem");
     expect(rows).toHaveLength(3);
@@ -92,8 +122,8 @@ describe("ArtikelFassungenList", () => {
     expect(within(rows[2]!).getByText("31.12.2019")).toBeInTheDocument();
   });
 
-  it("joins the dates with a dash when both exist", () => {
-    render(ArtikelFassungenList, {
+  it("joins the dates with a dash when both exist", async () => {
+    await renderSuspended(ArtikelFassungenList, {
       props: props([pastFassung, currentFassung]),
     });
 
@@ -107,8 +137,8 @@ describe("ArtikelFassungenList", () => {
     ["to", "2031-01-01/.."],
   ])(
     "shows no placeholder and no dash for a missing %s date on desktop",
-    (_, temporalCoverage) => {
-      render(ArtikelFassungenList, {
+    async (_, temporalCoverage) => {
+      await renderSuspended(ArtikelFassungenList, {
         props: props([createFassung("eli/bund/test#art-1", temporalCoverage)]),
       });
 
@@ -118,8 +148,8 @@ describe("ArtikelFassungenList", () => {
     },
   );
 
-  it("shows the column labels as a header, but keeps it from SR", () => {
-    render(ArtikelFassungenList, { props: props() });
+  it("shows the column labels as a header, but keeps it from SR", async () => {
+    await renderSuspended(ArtikelFassungenList, { props: props() });
 
     expect(screen.getByText("Gültig ab")).toBeInTheDocument();
     expect(screen.getByText("Gültig bis")).toBeInTheDocument();
@@ -128,8 +158,8 @@ describe("ArtikelFassungenList", () => {
     expect(screen.getAllByRole("listitem")).toHaveLength(3);
   });
 
-  it("marks the current fassung as the current entry", () => {
-    render(ArtikelFassungenList, { props: props() });
+  it("marks the current fassung as the current entry", async () => {
+    await renderSuspended(ArtikelFassungenList, { props: props() });
 
     const currentRow = screen.getByRole("group", { current: true });
     expect(currentRow).toHaveTextContent(
@@ -139,7 +169,7 @@ describe("ArtikelFassungenList", () => {
 
   it("current fassung is not expandable", async () => {
     const user = userEvent.setup();
-    render(ArtikelFassungenList, { props: props() });
+    await renderSuspended(ArtikelFassungenList, { props: props() });
 
     const currentRow = screen.getByRole("group", { current: true });
 
@@ -148,8 +178,8 @@ describe("ArtikelFassungenList", () => {
     expect(within(currentRow).queryByRole("status")).not.toBeInTheDocument();
   });
 
-  it("renders the other fassungen as a closed accordion by default", () => {
-    render(ArtikelFassungenList, { props: props() });
+  it("renders the other fassungen as a closed accordion by default", async () => {
+    await renderSuspended(ArtikelFassungenList, { props: props() });
 
     const rows = screen.getAllByRole("listitem");
     const futureFassungRow = rows[0]!;
@@ -163,10 +193,10 @@ describe("ArtikelFassungenList", () => {
     ).not.toBeInTheDocument();
   });
 
-  it("shows a loading spinner while the HTML is being fetched", async () => {
+  it("shows a loading spinner while the content is being fetched", async () => {
     mockFetch.mockReturnValue(new Promise(() => {}));
     const user = userEvent.setup();
-    render(ArtikelFassungenList, { props: props() });
+    await renderSuspended(ArtikelFassungenList, { props: props() });
     const futureFassungRow = screen.getAllByRole("listitem")[0]!;
 
     await user.click(within(futureFassungRow).getByText("01.01.2031"));
@@ -174,12 +204,121 @@ describe("ArtikelFassungenList", () => {
     expect(within(futureFassungRow).getByLabelText("Ladestatus")).toBeVisible();
   });
 
-  it("shows the fetched HTML once it becomes available", async () => {
-    mockFetch.mockResolvedValueOnce(
-      "<html><body><p>Norm content</p></body></html>",
-    );
+  it("loads the HTML and Gesamtausgaben of the expanded fassung", async () => {
+    mockBackend();
     const user = userEvent.setup();
-    render(ArtikelFassungenList, { props: props() });
+    await renderSuspended(ArtikelFassungenList, { props: props() });
+
+    await user.click(screen.getByText("01.01.2031"));
+
+    expect(mockFetch).toHaveBeenCalledWith(
+      "/v1/legislation/eli/bund/bgbl-1/2000/s001/2031-01-01/1/deu#art-1.html",
+      { headers: { Accept: "text/html" } },
+    );
+    expect(mockFetch).toHaveBeenCalledWith(
+      "/v1/article/eli/bund/bgbl-1/2000/s001/2031-01-01/1/deu#art-1/legislations",
+    );
+  });
+
+  it.each([
+    ["both dates", "2020-01-01/2030-12-31", "01.01.2020 - 31.12.2030"],
+    ["only a from date", "2020-01-01/..", "gültig ab 01.01.2020"],
+    ["only a to date", "../2030-12-31", "gültig bis 31.12.2030"],
+  ])(
+    "links the only Gesamtausgabe with %s",
+    async (_, temporalCoverage, validity) => {
+      const identifier =
+        "eli/bund/bgbl-1/2000/s001/2020-01-01/1/deu/regelungstext-1";
+      mockBackend({
+        gesamtausgaben: [createGesamtausgabe(identifier, temporalCoverage)],
+      });
+      const user = userEvent.setup();
+      await renderSuspended(ArtikelFassungenList, { props: props() });
+
+      await user.click(screen.getByText("01.01.2031"));
+
+      const link = screen.getByRole("link", {
+        name: `Gesamtausgabe ${validity} öffnen`,
+      });
+      expect(link).toHaveAttribute("href", `/gesetze/${identifier}`);
+      expect(
+        screen.queryByRole("button", { name: "Gesamtausgabe auswählen" }),
+      ).not.toBeInTheDocument();
+    },
+  );
+
+  it("links the only Gesamtausgabe without dates when it has no validity", async () => {
+    mockBackend({
+      gesamtausgaben: [createGesamtausgabe("eli/bund/test", "../..")],
+    });
+    const user = userEvent.setup();
+    await renderSuspended(ArtikelFassungenList, { props: props() });
+
+    await user.click(screen.getByText("01.01.2031"));
+
+    expect(
+      screen.getByRole("link", { name: "Gesamtausgabe öffnen" }),
+    ).toHaveAttribute("href", "/gesetze/eli/bund/test");
+  });
+
+  it("lets the user pick from a table when there are multiple Gesamtausgaben", async () => {
+    const identifiers = [
+      "eli/bund/bgbl-1/2000/s001/2031-01-01/1/deu/regelungstext-1",
+      "eli/bund/bgbl-1/2000/s001/2020-01-01/1/deu/regelungstext-1",
+    ];
+    mockBackend({
+      gesamtausgaben: [
+        createGesamtausgabe(identifiers[0]!, "2031-01-01/.."),
+        createGesamtausgabe(identifiers[1]!, "2020-01-01/2030-12-31"),
+      ],
+    });
+    const user = userEvent.setup();
+    await renderSuspended(ArtikelFassungenList, { props: props() });
+
+    await user.click(screen.getByText("01.01.2031"));
+
+    expect(
+      screen.queryByRole("link", { name: /öffnen$/ }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("list", { name: "Gesamtausgaben" }),
+    ).not.toBeInTheDocument();
+
+    await user.click(
+      screen.getByRole("button", { name: "Gesamtausgabe auswählen" }),
+    );
+
+    const table = screen.getByRole("list", { name: "Gesamtausgaben" });
+    const hrefs = within(table)
+      .getAllByRole("link")
+      .map((link) => link.getAttribute("href"));
+    expect(hrefs).toEqual(identifiers.map((id) => `/gesetze/${id}`));
+  });
+
+  it("marks the Gesamtausgabe currently displayed as the current page", async () => {
+    const currentGesamtausgabe = createGesamtausgabe(
+      currentExpressionId.replace("/v1/legislation/", ""),
+      "2020-01-01/2030-12-31",
+    );
+    mockBackend({ gesamtausgaben: [gesamtausgabe, currentGesamtausgabe] });
+    const user = userEvent.setup();
+    await renderSuspended(ArtikelFassungenList, { props: props() });
+
+    await user.click(screen.getByText("01.01.2031"));
+    await user.click(
+      screen.getByRole("button", { name: "Gesamtausgabe auswählen" }),
+    );
+
+    const table = screen.getByRole("list", { name: "Gesamtausgaben" });
+    const [otherLink, currentLink] = within(table).getAllByRole("link");
+    expect(otherLink).not.toHaveAttribute("aria-current");
+    expect(currentLink).toHaveAttribute("aria-current", "page");
+  });
+
+  it("shows the fetched HTML once it becomes available", async () => {
+    mockBackend();
+    const user = userEvent.setup();
+    await renderSuspended(ArtikelFassungenList, { props: props() });
     const futureFassungRow = screen.getAllByRole("listitem")[0]!;
 
     await user.click(within(futureFassungRow).getByText("01.01.2031"));
@@ -187,10 +326,10 @@ describe("ArtikelFassungenList", () => {
     expect(within(futureFassungRow).getByText("Norm content")).toBeVisible();
   });
 
-  it("shows an error message when fetching the HTML fails", async () => {
-    mockFetch.mockRejectedValueOnce(new Error("request failed"));
+  it("shows an error message when fetching the content fails", async () => {
+    mockFetch.mockRejectedValue(new Error("request failed"));
     const user = userEvent.setup();
-    render(ArtikelFassungenList, { props: props() });
+    await renderSuspended(ArtikelFassungenList, { props: props() });
     const futureFassungRow = screen.getAllByRole("listitem")[0]!;
 
     await user.click(within(futureFassungRow).getByText("01.01.2031"));
@@ -202,7 +341,7 @@ describe("ArtikelFassungenList", () => {
   it("hides the content again when the accordion is collapsed", async () => {
     mockFetch.mockReturnValue(new Promise(() => {}));
     const user = userEvent.setup();
-    render(ArtikelFassungenList, { props: props() });
+    await renderSuspended(ArtikelFassungenList, { props: props() });
     const futureFassungRow = screen.getAllByRole("listitem")[0]!;
     const toggle = within(futureFassungRow).getByText("01.01.2031");
 
@@ -216,21 +355,23 @@ describe("ArtikelFassungenList", () => {
     ).not.toBeInTheDocument();
   });
 
-  it("shows a placeholder when there are no fassungen", () => {
-    render(ArtikelFassungenList, { props: props([]) });
+  it("shows a placeholder when there are no fassungen", async () => {
+    await renderSuspended(ArtikelFassungenList, { props: props([]) });
 
     expect(screen.getByText("Keine Ergebnisse gefunden")).toBeInTheDocument();
     expect(screen.queryAllByRole("group")).toHaveLength(0);
   });
 
-  it("does not announce anything before the fassungen change", () => {
-    render(ArtikelFassungenList, { props: props() });
+  it("does not announce anything before the fassungen change", async () => {
+    await renderSuspended(ArtikelFassungenList, { props: props() });
 
     expect(screen.getByRole("status")).toHaveTextContent("");
   });
 
   it("announces when the fassungen change to none", async () => {
-    const { rerender } = render(ArtikelFassungenList, { props: props() });
+    const { rerender } = await renderSuspended(ArtikelFassungenList, {
+      props: props(),
+    });
 
     await rerender(props([]));
 
@@ -240,13 +381,14 @@ describe("ArtikelFassungenList", () => {
   });
 
   it("announces how many fassungen there are once there are some again", async () => {
-    mockFetch.mockResolvedValueOnce("<html><body>Content</body></html>");
-    const { rerender } = render(ArtikelFassungenList, {
+    mockBackend();
+    const { rerender } = await renderSuspended(ArtikelFassungenList, {
       props: props([]),
     });
 
     await rerender(props([pastFassung]));
-    await nextTick();
+    // the only row expands, so wait for its loading spinner to go away
+    await screen.findByText("Norm content");
 
     expect(screen.getByRole("status")).toHaveTextContent("1 Fassung");
 
@@ -256,10 +398,14 @@ describe("ArtikelFassungenList", () => {
   });
 
   it("closes the previously expanded row when another one is expanded", async () => {
-    mockFetch.mockResolvedValueOnce("<html><body>Future content</body></html>");
-    mockFetch.mockResolvedValueOnce("<html><body>Past content</body></html>");
+    mockFetch.mockImplementation(async (url: string) => {
+      if (url.endsWith("/legislations")) return { member: [gesamtausgabe] };
+      return url.includes("2031")
+        ? "<html><body>Future content</body></html>"
+        : "<html><body>Past content</body></html>";
+    });
     const user = userEvent.setup();
-    render(ArtikelFassungenList, { props: props() });
+    await renderSuspended(ArtikelFassungenList, { props: props() });
 
     await user.click(screen.getByText("01.01.2031"));
     await user.click(screen.getByText("05.01.2000"));
@@ -269,11 +415,9 @@ describe("ArtikelFassungenList", () => {
   });
 
   it("keeps the row expanded when clicking inside its content", async () => {
-    mockFetch.mockResolvedValueOnce(
-      "<html><body><p>Norm content</p></body></html>",
-    );
+    mockBackend();
     const user = userEvent.setup();
-    render(ArtikelFassungenList, { props: props() });
+    await renderSuspended(ArtikelFassungenList, { props: props() });
 
     await user.click(screen.getByText("01.01.2031"));
     await user.click(screen.getByText("Norm content"));
@@ -282,15 +426,14 @@ describe("ArtikelFassungenList", () => {
   });
 
   it("expands the only remaining row when filtering and collapses it again when the filter is cleared", async () => {
-    mockFetch.mockResolvedValueOnce(
-      "<html><body><p>Norm content</p></body></html>",
-    );
-    const { rerender } = render(ArtikelFassungenList, { props: props() });
+    mockBackend();
+    const { rerender } = await renderSuspended(ArtikelFassungenList, {
+      props: props(),
+    });
 
     await rerender(props([pastFassung]));
-    await nextTick();
 
-    expect(screen.getByText("Norm content")).toBeVisible();
+    expect(await screen.findByText("Norm content")).toBeVisible();
 
     await rerender(props());
 
@@ -298,7 +441,9 @@ describe("ArtikelFassungenList", () => {
   });
 
   it("does not load the current fassung when it is the only remaining row", async () => {
-    const { rerender } = render(ArtikelFassungenList, { props: props() });
+    const { rerender } = await renderSuspended(ArtikelFassungenList, {
+      props: props(),
+    });
 
     await rerender(props([currentFassung]));
 

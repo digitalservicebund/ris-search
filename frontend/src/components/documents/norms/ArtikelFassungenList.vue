@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import IcChevronRightIcon from "~icons/ic/outline-chevron-right";
-import type { ArtikelFassung } from "~/types/api.ts";
+import GesamtausgabenList from "~/components/documents/norms/GesamtausgabenList.vue";
+import { useArtikelFassungen } from "~/composables/useArtikelFassungen.ts";
+import type { ArtikelFassung, LegislationExpression } from "~/types/api.ts";
+import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting.ts";
 
 const { currentExpressionId, fassungen } = defineProps<{
   currentExpressionId: string;
@@ -13,12 +16,20 @@ type FassungRow = {
   fromDate: string;
   toDate: string;
   contentUrl?: string;
+  revision?: string;
   disabled: boolean;
 };
 
 type FassungColumn = {
   key: Extract<keyof FassungRow, string>;
   label: string;
+};
+
+type RowContent = {
+  gesamtausgabeLink?: { label: string; to: string };
+  gesamtausgaben: LegislationExpression[];
+  html?: string;
+  error: boolean;
 };
 
 const missingDate = "—";
@@ -53,17 +64,23 @@ const rows = computed<FassungRow[]>(() => {
       fromDate: dateFormattedDDMMYYYY(validityInterval?.from) ?? missingDate,
       toDate: dateFormattedDDMMYYYY(validityInterval?.to) ?? missingDate,
       contentUrl: encodingUrl,
+      revision: fassung.revision,
       disabled,
     };
   });
 });
 
 const expandedRowKey = ref<string | undefined>();
-const { rowsHtml, updateRowsHtml } = useArtikelFassungenHtml();
+const { fassungenCache, updateCache } = useArtikelFassungen();
 
 function expandRow(row?: FassungRow) {
   expandedRowKey.value = row?.key;
-  if (row) void updateRowsHtml(row.key, row.contentUrl);
+  if (row)
+    void updateCache({
+      key: row.key,
+      contentUrl: row.contentUrl,
+      revision: row.revision,
+    });
 }
 
 async function onRowClick(row: FassungRow, event: MouseEvent) {
@@ -75,6 +92,51 @@ async function onRowClick(row: FassungRow, event: MouseEvent) {
   // Closing a longer row above this one shifts it out of the viewport
   await nextTick();
   summary.scrollIntoView({ block: "nearest" });
+}
+
+const expandedRowContent = computed<RowContent | undefined>(() => {
+  if (!expandedRowKey.value) return undefined;
+  const cachedData = fassungenCache.value.get(expandedRowKey.value);
+  if (!cachedData) return undefined;
+
+  const gesamtausgaben = cachedData?.gesamtausgaben;
+
+  if (gesamtausgaben?.length === 1) {
+    const gesamtausgabe = gesamtausgaben[0]!;
+    const formattedTemporalCoverage = formatTemporalCoverage(
+      gesamtausgabe.temporalCoverage,
+    );
+    const label = `Gesamtausgabe ${formattedTemporalCoverage}öffnen`;
+    const to = `/gesetze/${gesamtausgabe.legislationIdentifier}`;
+
+    return {
+      ...cachedData,
+      gesamtausgabeLink: {
+        label,
+        to,
+      },
+    };
+  }
+
+  return {
+    ...cachedData,
+  };
+});
+
+function formatTemporalCoverage(temporalCoverage?: string) {
+  const coverage = temporalCoverageToValidityInterval(temporalCoverage);
+  const from = dateFormattedDDMMYYYY(coverage?.from);
+  const to = dateFormattedDDMMYYYY(coverage?.to);
+
+  if (from && to) {
+    return `${from} - ${to} `;
+  } else if (from) {
+    return `gültig ab ${from} `;
+  } else if (to) {
+    return `gültig bis ${to} `;
+  } else {
+    return "";
+  }
 }
 
 watch(rows, (newRows) => {
@@ -217,16 +279,31 @@ const currentRowId = useId();
 
           <section class="col-span-full">
             <template v-if="expandedRowKey === row.key">
-              <DocumentsNormsLegislationContent
-                v-if="rowsHtml.get(expandedRowKey)?.html"
-              >
-                <div
-                  class="akn-act -mt-16 px-16"
-                  v-html="rowsHtml.get(expandedRowKey)?.html"
-                />
-              </DocumentsNormsLegislationContent>
+              <template v-if="expandedRowContent?.error === false">
+                <div class="mx-16 mt-8 border border-blue-400 p-16">
+                  <NuxtLink
+                    v-if="expandedRowContent.gesamtausgabeLink"
+                    class="typo-link1-bold link-hover"
+                    :to="expandedRowContent.gesamtausgabeLink.to"
+                    >{{ expandedRowContent.gesamtausgabeLink?.label }}</NuxtLink
+                  >
+                  <UiAccordion
+                    v-else
+                    header-collapsed="Gesamtausgabe auswählen"
+                    header-expanded="Gesamtausgabe auswählen"
+                  >
+                    <GesamtausgabenList
+                      :current-legislation-identifier="currentExpressionId"
+                      :gesamtausgaben="expandedRowContent.gesamtausgaben"
+                    />
+                  </UiAccordion>
+                </div>
+                <DocumentsNormsLegislationContent>
+                  <div class="akn-act px-16" v-html="expandedRowContent.html" />
+                </DocumentsNormsLegislationContent>
+              </template>
               <UiMessage
-                v-else-if="rowsHtml.get(expandedRowKey)?.error"
+                v-else-if="expandedRowContent?.error"
                 severity="error"
                 class="m-16"
                 role="alert"
