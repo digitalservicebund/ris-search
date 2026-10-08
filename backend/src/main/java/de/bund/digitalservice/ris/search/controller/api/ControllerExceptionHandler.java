@@ -28,6 +28,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.context.request.async.AsyncRequestNotUsableException;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
@@ -415,6 +416,18 @@ public class ControllerExceptionHandler {
    */
   @ExceptionHandler({ClientAbortException.class})
   public void handleClientAbortException(ClientAbortException exception) {
+    logger.warn("connection closed by client: {}", exception.getMessage());
+  }
+
+  /**
+   * Logs AsyncRequestNotUsableExceptions with log level warn. Spring throws these when the client
+   * closed the connection before the response was written. Does not return a ResponseEntity since
+   * the connection is lost already.
+   *
+   * @param exception AsyncRequestNotUsableException
+   */
+  @ExceptionHandler({AsyncRequestNotUsableException.class})
+  public void handleAsyncRequestNotUsableException(AsyncRequestNotUsableException exception) {
     logger.warn("connection closed by client: {}", exception.getMessage());
   }
 
