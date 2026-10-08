@@ -676,6 +676,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/article/{revision}/legislations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["getLegislationExpressionsByArticleRevision"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/article/work-example/{revision}": {
         parameters: {
             query?: never;
@@ -1547,7 +1563,10 @@ export interface components {
              * @enum {string}
              */
             partType?: "preamble" | "article" | "conclusion" | "attachment";
-            /** @description the specific revision of that legislation part independent from its parent object */
+            /**
+             * @description The specific revision of this legislation part, independent of its parent object
+             * @example DKNR0E80B0026DKNE000100010
+             */
             revision?: string;
             /** @description The source data for this part, if available on its own */
             encoding?: components["schemas"]["LegislationObjectSchema"][];
@@ -1722,6 +1741,20 @@ export interface components {
             /** @description The downloadable form of this dataset. */
             distribution?: components["schemas"]["ZipDataDownloadSchema"];
         };
+        CollectionSchemaLegislationExpressionSearchSchema: {
+            /** @example hydra:Collection */
+            "@type"?: string;
+            "@context": string;
+            /** @example /v1/document?pageIndex=0&size=5 */
+            "@id": string;
+            /**
+             * Format: int64
+             * @example 1
+             */
+            totalItems: number;
+            member: components["schemas"]["LegislationExpressionSearchSchema"][];
+            view: components["schemas"]["PartialCollectionViewSchema"];
+        };
         /** @description A specific part of a legislation expression */
         ArticleVersionSchema: {
             /** @example Legislation */
@@ -1733,7 +1766,10 @@ export interface components {
              * @example hauptteitel-para-1
              */
             eId: string;
-            /** @description the specific revision of that legislation part independent from its parent object */
+            /**
+             * @description The specific revision of this legislation part, independent of its parent object
+             * @example DKNR0E80B0026DKNE000100010
+             */
             revision?: string;
             /**
              * @description Numerical identifier of a specific legislation part
@@ -3073,6 +3109,28 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ZipDataCatalogSchema"];
+                };
+            };
+        };
+    };
+    getLegislationExpressionsByArticleRevision: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                revision: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CollectionSchemaLegislationExpressionSearchSchema"];
                 };
             };
         };

@@ -12,10 +12,14 @@ import static de.bund.digitalservice.ris.search.controller.api.NormsController.Y
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.config.ServerConfig;
 import de.bund.digitalservice.ris.search.mapper.ArticleVersionSchemaMapper;
+import de.bund.digitalservice.ris.search.mapper.NormSearchResponseMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.ArticleWithExpressions;
+import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.schema.ArticleVersionSchema;
 import de.bund.digitalservice.ris.search.schema.CollectionSchema;
+import de.bund.digitalservice.ris.search.schema.LegislationExpressionSearchSchema;
 import de.bund.digitalservice.ris.search.service.ArticleService;
+import de.bund.digitalservice.ris.search.service.NormsService;
 import de.bund.digitalservice.ris.search.utils.eli.ExpressionEli;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -32,11 +36,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class ArticleController {
 
   private final ArticleService articleService;
+  private final NormsService normsService;
 
   private final String jsonldContextPath;
 
-  ArticleController(ArticleService articleService, ServerConfig serverConfig) {
+  ArticleController(
+      ArticleService articleService, NormsService normsService, ServerConfig serverConfig) {
     this.articleService = articleService;
+    this.normsService = normsService;
     this.jsonldContextPath = serverConfig.getBackEndUrl() + ApiConfig.Paths.JSONLD_CONTEXT;
   }
 
@@ -105,6 +112,28 @@ public class ArticleController {
             ArticleVersionSchemaMapper.fromArticlePage(
                 articles,
                 ApiConfig.Paths.ARTICLE_WORK_EXAMPLE + "/" + eli + "/" + eId,
+                jsonldContextPath));
+  }
+
+  /**
+   * Retrieve all LegislationExpressions that a given article revision is part of
+   *
+   * @param revision The identifier of the article revision
+   * @return a paginated collection {@link CollectionSchema} of expression level metadata {@link
+   *     LegislationExpressionSearchSchema}
+   */
+  @GetMapping(path = ApiConfig.Paths.ARTICLE + "/{revision}/legislations")
+  public ResponseEntity<CollectionSchema<LegislationExpressionSearchSchema>>
+      getLegislationExpressionsByArticleRevision(@Parameter() @PathVariable String revision) {
+
+    Page<Norm> norms = normsService.getAllNormsContainingArticle(revision);
+
+    return ResponseEntity.ok()
+        .contentType(MediaType.APPLICATION_JSON)
+        .body(
+            NormSearchResponseMapper.fromNormsPage(
+                norms,
+                ApiConfig.Paths.ARTICLE + "/" + revision + "/legislations",
                 jsonldContextPath));
   }
 }

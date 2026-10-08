@@ -2060,6 +2060,32 @@
         }
       }
     },
+    "/v1/article/{revision}/legislations" : {
+      "get" : {
+        "tags" : [ "article-controller" ],
+        "operationId" : "getLegislationExpressionsByArticleRevision",
+        "parameters" : [ {
+          "name" : "revision",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CollectionSchemaLegislationExpressionSearchSchema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/article/work-example/{revision}" : {
       "get" : {
         "tags" : [ "article-controller" ],
@@ -3775,7 +3801,8 @@
           },
           "revision" : {
             "type" : "string",
-            "description" : "the specific revision of that legislation part independent from its parent object"
+            "description" : "The specific revision of this legislation part, independent of its parent object",
+            "example" : "DKNR0E80B0026DKNE000100010"
           },
           "encoding" : {
             "type" : "array",
@@ -4147,6 +4174,37 @@
         },
         "required" : [ "description", "name" ]
       },
+      "CollectionSchemaLegislationExpressionSearchSchema" : {
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "example" : "hydra:Collection"
+          },
+          "@context" : {
+            "type" : "string"
+          },
+          "@id" : {
+            "type" : "string",
+            "example" : "/v1/document?pageIndex=0&size=5"
+          },
+          "totalItems" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 1
+          },
+          "member" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/LegislationExpressionSearchSchema"
+            }
+          },
+          "view" : {
+            "$ref" : "#/components/schemas/PartialCollectionViewSchema"
+          }
+        },
+        "required" : [ "@context", "@id", "member", "totalItems", "view" ]
+      },
       "ArticleVersionSchema" : {
         "type" : "object",
         "description" : "A specific part of a legislation expression",
@@ -4166,7 +4224,8 @@
           },
           "revision" : {
             "type" : "string",
-            "description" : "the specific revision of that legislation part independent from its parent object"
+            "description" : "The specific revision of this legislation part, independent of its parent object",
+            "example" : "DKNR0E80B0026DKNE000100010"
           },
           "name" : {
             "type" : "string",
