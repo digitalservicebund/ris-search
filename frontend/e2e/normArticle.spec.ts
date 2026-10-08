@@ -549,6 +549,9 @@ test.describe("fassungen tab", { tag: ["@RISDEV-11132"] }, () => {
 
       await expect(page.getByText("Dritte Version des § 1.")).toBeVisible();
       await expect(
+        page.getByRole("link", { name: /^Gesamtausgabe .*öffnen$/ }),
+      ).toHaveAttribute("href", /\/s1234\/2022-01-01\/1\/deu/);
+      await expect(
         page
           .getByRole("list", { name: "Fassungen" })
           .getByRole("heading", { name: "§ 1 Erster Artikel", level: 2 }),
@@ -619,22 +622,69 @@ test.describe("fassungen tab", { tag: ["@RISDEV-11132"] }, () => {
     },
   );
 
-  test("can't expand the row of the current article", async ({
-    page,
-    privateFeaturesEnabled,
-  }) => {
-    test.skip(!privateFeaturesEnabled);
+  test(
+    "lets the user pick from all Gesamtausgaben containing a fassung",
+    { tag: ["@RISDEV-12788"] },
+    async ({ page, privateFeaturesEnabled }) => {
+      test.skip(!privateFeaturesEnabled);
 
-    await navigate(
-      page,
-      "gesetze/eli/bund/bgbl-1/2020/s1234/2020-01-01/1/deu/art-z1?view=fassungen",
-    );
+      // The second version of § 2 is part of three Gesamtausgaben
+      await navigate(
+        page,
+        "gesetze/eli/bund/bgbl-1/2020/s1234/2020-01-01/1/deu/art-z2?view=fassungen",
+      );
 
-    // try to expand the disabled row
-    await page.getByText(/Gültig ab:\s+01\.01\.2020/).click();
-    // content is not displayed
-    await expect(page.getByText("Erste Version des § 1.")).not.toBeVisible();
-  });
+      await page.getByText(/Gültig ab:\s+01\.01\.2021/).click();
+      await expect(page.getByText("Zweite Version des § 2.")).toBeVisible();
+
+      await page
+        .getByRole("button", { name: "Gesamtausgabe auswählen" })
+        .click();
+
+      const links = page
+        .getByRole("list", { name: "Gesamtausgaben" })
+        .getByRole("link");
+      await expect(links).toHaveCount(3);
+      await expect(links.nth(0)).toHaveAttribute(
+        "href",
+        /\/s1234\/2920-01-01\//,
+      );
+      await expect(links.nth(1)).toHaveAttribute(
+        "href",
+        /\/s1234\/2022-01-01\//,
+      );
+      await expect(links.nth(2)).toHaveAttribute(
+        "href",
+        /\/s1234\/2021-01-01\//,
+      );
+    },
+  );
+
+  test(
+    "shows only the Gesamtausgabe, not the content, of the current fassung",
+    { tag: ["@RISDEV-12788"] },
+    async ({ page, privateFeaturesEnabled }) => {
+      test.skip(!privateFeaturesEnabled);
+
+      await navigate(
+        page,
+        "gesetze/eli/bund/bgbl-1/2020/s1234/2020-01-01/1/deu/art-z1?view=fassungen",
+      );
+
+      const currentRow = page
+        .getByRole("list", { name: "Fassungen" })
+        .getByRole("listitem")
+        .filter({ hasText: /Gültig ab:\s+01\.01\.2020/ });
+      await expect(currentRow).toHaveAttribute("aria-current", "true");
+
+      await currentRow.getByText(/Gültig ab:\s+01\.01\.2020/).click();
+
+      await expect(
+        currentRow.getByRole("link", { name: /^Gesamtausgabe .*öffnen$/ }),
+      ).toHaveAttribute("href", /\/s1234\/2020-01-01\/1\/deu/);
+      await expect(page.getByText("Erste Version des § 1.")).not.toBeVisible();
+    },
+  );
 
   test("hides fassungen tab when private features enabled and einzelnorm not an article", async ({
     page,
