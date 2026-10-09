@@ -136,6 +136,33 @@ describe("ArticleVersionWarning", () => {
     ).toHaveAttribute("href", `/gesetze/${expression("2023-01-01")}/art-z1`);
   });
 
+  it("picks the newest expression by validity period, not by the point in time of its ELI", async () => {
+    mockFetch.mockResolvedValue({
+      member: [
+        {
+          legislationIdentifier: expression("2022-01-01"),
+          temporalCoverage: "2024-01-01/..",
+        },
+        {
+          legislationIdentifier: expression("2023-01-01"),
+          temporalCoverage: "2023-06-01/2023-12-31",
+        },
+      ],
+    });
+
+    await renderSuspended(ArticleVersionWarning, {
+      props: {
+        currentArticle: articleFor(historicFassung),
+        fassungen: allFassungen,
+      },
+      global: { stubs: linkStub },
+    });
+
+    expect(
+      screen.getByRole("link", { name: "Zur aktuell gültigen Fassung" }),
+    ).toHaveAttribute("href", `/gesetze/${expression("2022-01-01")}/art-z1`);
+  });
+
   it("shows a historic Fassung without link if there is no valid Fassung", async () => {
     await renderSuspended(ArticleVersionWarning, {
       props: {
