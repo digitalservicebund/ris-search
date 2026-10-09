@@ -246,7 +246,7 @@ test.describe("view norm article page", () => {
 
     await navigate(
       page,
-      "/gesetze/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/präambel-n1_formel-n1",
+      "/gesetze/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/praeambel-n1_formel-n1",
     );
 
     await expect(
@@ -259,7 +259,7 @@ test.describe("view norm article page", () => {
   }) => {
     await navigate(
       page,
-      "/gesetze/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/pr%C3%A4ambel-n1_formel-n1",
+      "/gesetze/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/praeambel-n1_formel-n1",
     );
 
     await page
@@ -644,7 +644,7 @@ test.describe("fassungen tab", { tag: ["@RISDEV-11132"] }, () => {
 
     await navigate(
       page,
-      "gesetze/eli/bund/bgbl-1/2025/130/2025-05-05/1/deu/präambel-n1_formel-n1",
+      "gesetze/eli/bund/bgbl-1/2025/130/2025-05-05/1/deu/praeambel-n1_formel-n1",
     );
 
     await expect(
@@ -763,7 +763,7 @@ test("shows correct breadcrumbs for an Eingangsformel", async ({
 
   await navigate(
     page,
-    "/gesetze/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu/präambel-n1_formel-n1?from=/suche?query=example",
+    "/gesetze/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu/praeambel-n1_formel-n1?from=/suche?query=example",
   );
 
   const breadcrumb = page.getByRole("navigation", { name: "Pfadnavigation" });

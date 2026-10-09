@@ -28,9 +28,9 @@ import de.bund.digitalservice.ris.search.service.ChangelogService;
 import de.bund.digitalservice.ris.search.service.NormsService;
 import de.bund.digitalservice.ris.search.service.xslt.NormXsltTransformerService;
 import de.bund.digitalservice.ris.search.utils.LuceneQueryTools;
-import de.bund.digitalservice.ris.search.utils.eli.ExpressionEli;
-import de.bund.digitalservice.ris.search.utils.eli.ManifestationEli;
-import de.bund.digitalservice.ris.search.utils.eli.WorkEli;
+import de.bund.digitalservice.ris.search.utils.eli.ExpressionEliPath;
+import de.bund.digitalservice.ris.search.utils.eli.ManifestationEliPath;
+import de.bund.digitalservice.ris.search.utils.eli.WorkEliPath;
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -219,7 +219,7 @@ public class NormsController {
       @Parameter(example = "deu") @PathVariable String language) {
 
     var eli =
-        new ExpressionEli(
+        new ExpressionEliPath(
             jurisdiction, agent, year, naturalIdentifier, pointInTime, version, language);
     Optional<Norm> result = normsService.getByExpressionEli(eli);
 
@@ -261,7 +261,7 @@ public class NormsController {
           @PathVariable
           String naturalIdentifier,
       @ParameterObject @Valid PaginationParams pagination) {
-    WorkEli eli = new WorkEli(jurisdiction, agent, year, naturalIdentifier);
+    WorkEliPath eli = new WorkEliPath(jurisdiction, agent, year, naturalIdentifier);
     Page<Norm> expressions =
         normsService.getWorkExpressions(
             eli, PageRequest.of(pagination.getPageIndex(), pagination.getSize()));
@@ -331,7 +331,7 @@ public class NormsController {
       throws ObjectStoreServiceException {
     final String resourceBasePath = getResourceBasePath();
     var eli =
-        new ManifestationEli(
+        new ManifestationEliPath(
             jurisdiction,
             agent,
             year,
@@ -411,7 +411,7 @@ public class NormsController {
       @Parameter(example = "regelungstext-1") @PathVariable String subtype)
       throws ObjectStoreServiceException {
     var eli =
-        new ManifestationEli(
+        new ManifestationEliPath(
             jurisdiction,
             agent,
             year,
@@ -566,14 +566,14 @@ public class NormsController {
       throws ObjectStoreServiceException {
     String resourceBasePath = getResourceBasePath();
     var expressionEli =
-        new ExpressionEli(
+        new ExpressionEliPath(
             jurisdiction, agent, year, naturalIdentifier, pointInTime, version, language);
     Optional<String> actualEid = articleService.getActualEid(expressionEli.toString(), articleEid);
 
     if (actualEid.isPresent()) {
 
       var manifestationEli =
-          new ManifestationEli(
+          new ManifestationEliPath(
               jurisdiction,
               agent,
               year,
@@ -656,8 +656,8 @@ public class NormsController {
       return ResponseEntity.notFound().build();
     }
 
-    final ManifestationEli eli =
-        new ManifestationEli(
+    final ManifestationEliPath eli =
+        new ManifestationEliPath(
             jurisdiction,
             agent,
             year,

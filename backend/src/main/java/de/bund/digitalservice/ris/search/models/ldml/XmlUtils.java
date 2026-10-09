@@ -1,6 +1,6 @@
 package de.bund.digitalservice.ris.search.models.ldml;
 
-import de.bund.digitalservice.ris.search.exception.FileTransformationException;
+import de.bund.digitalservice.ris.html.exception.FileTransformationException;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;

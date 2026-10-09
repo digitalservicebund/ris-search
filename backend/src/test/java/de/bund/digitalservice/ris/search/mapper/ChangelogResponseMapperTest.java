@@ -62,7 +62,7 @@ class ChangelogResponseMapperTest {
         new Changelog(
             new HashSet<>(
                 List.of(
-                    "eli/bund/bgbl-1/1999/identifier/2026-01-01/1/deu/2026-01-01/regelungstext-verkuendung-1.xml")),
+                    "eli/bund/bgbl-1/1999/identifier/2026-01-01/1/deu/2026-01-01/regelungstext-1.xml")),
             new HashSet<>(
                 List.of(
                     "eli/bund/bgbl-1/1999/identifier/2026-01-01/1/deu/2026-01-01/anlage-1.xml")),
@@ -90,7 +90,7 @@ class ChangelogResponseMapperTest {
             new HashSet<>(List.of()),
             new HashSet<>(
                 List.of(
-                    "eli/bund/bgbl-1/1999/identifier/2026-01-01/1/deu/2026-01-01/regelungstext-verkuendung-1.xml")),
+                    "eli/bund/bgbl-1/1999/identifier/2026-01-01/1/deu/2026-01-01/regelungstext-1.xml")),
             false);
 
     ChangelogResponse actual =

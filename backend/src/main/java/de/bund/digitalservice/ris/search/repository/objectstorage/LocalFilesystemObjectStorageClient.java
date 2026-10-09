@@ -1,6 +1,6 @@
 package de.bund.digitalservice.ris.search.repository.objectstorage;
 
-import de.bund.digitalservice.ris.search.exception.FileTransformationException;
+import de.bund.digitalservice.ris.html.exception.FileTransformationException;
 import de.bund.digitalservice.ris.search.exception.NoSuchKeyException;
 import java.io.DataInputStream;
 import java.io.File;

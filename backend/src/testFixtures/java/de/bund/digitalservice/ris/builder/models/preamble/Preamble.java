@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Preamble extends BaseElement {
 
-  @XmlAttribute private String eId = "präambel-n1";
+  @XmlAttribute private String eId = "praeambel-n1";
 
   // This holds the ToC
   @XmlElement(namespace = NormTestDataBuilder.AKN_NS)

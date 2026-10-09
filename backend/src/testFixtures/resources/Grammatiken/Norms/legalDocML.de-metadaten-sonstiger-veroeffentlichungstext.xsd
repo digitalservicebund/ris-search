@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xs:schema
+  xmlns="http://MetadatenSonstigerVeroeffentlichungstext.LegalDocML.de/1.9/"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  elementFormDefault="qualified"
+  targetNamespace="http://MetadatenSonstigerVeroeffentlichungstext.LegalDocML.de/1.9/"
+  version="LegalDocML.de 1.9 (03.11.2025)}"
+>
+  <!-- ********************************* Hinweis zur Lizensierung ********************************* -->
+  <xs:annotation>
+    <xs:appinfo>
+      <copyright-hinweis
+      >2025 Copyright © 2021–2025 Bundesministerium des Innern und für Heimat, 
+Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Verwaltungsarbeit</copyright-hinweis>
+      <lizenz
+        url="https://creativecommons.org/licenses/by/3.0/legalcode.de"
+        kurzbezeichnung="CC-BY-3.0"
+        langbezeichnung="Creative Commons Namensnennung 3.0"
+      />
+      <autor
+        organisation="Bundesministerium des Innern und für Heimat"
+        referat="DG II 6"
+        organisatorischer-rahmen="Maßnahmen Enterprise Resource Management und Elektronische Verwaltungsarbeit"
+      />
+    </xs:appinfo>
+  </xs:annotation>
+  <!-- ******************************************************************************************** -->
+  <xs:element name="legalDocML.de_metadaten">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="typ" type="typen">
+          <xs:annotation>
+            <xs:documentation
+            >Typ eines Rechtsetzungsdokuments (z. B. Gesetz, Verordnung etc.) und der darin referenzierten Teildokumente</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="bezugstyp" type="bezugstypen" minOccurs="0">
+          <xs:annotation>
+            <xs:documentation
+            >Der Bezugstyp einer Berichtigung</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="vomHdrAbweichendeGliederung" minOccurs="0">
+          <xs:complexType>
+            <xs:annotation>
+              <xs:documentation
+              >Kennzeichnung, dass das vorliegende Dokument eine vom HdR abweichende Gliederung aufweist und nicht zum aktuellen HdR konform ist.</xs:documentation>
+            </xs:annotation>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:simpleType name="typen" final="restriction">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="gesetz" />
+      <xs:enumeration value="verordnung" />
+      <xs:enumeration value="satzung" />
+      <xs:enumeration value="verwaltungsvorschrift" />
+      <xs:enumeration value="vertragsgesetz" />
+      <xs:enumeration value="vertragsverordnung" />
+      <xs:enumeration value="sonstige-bekanntmachung" />
+      <xs:enumeration value="geschäftsordnung" />
+      <xs:enumeration value="satzung" />
+      <xs:enumeration value="tarifvertrag" />
+      <xs:enumeration value="urteil-des-bundesverfassungsgerichts" />
+      <xs:enumeration value="beschluss-des-bundesverfassungsgerichts" />
+      <xs:enumeration value="anordnung-des-bundespräsidenten" />
+      <xs:enumeration value="verwaltungsvereinbarung" />
+      <xs:enumeration value="ohne-qualifikation" />
+      <xs:enumeration value="sonstige-anordnungen" />
+      <xs:enumeration value="völkerrechtsliche-vereinbarung" />
+      <xs:enumeration value="berichtigung" />
+      <xs:enumeration value="bekanntmachung-vor-einer-neufassung" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="bezugstypen" final="restriction">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="gesetz" />
+      <xs:enumeration value="verordnung" />
+      <xs:enumeration value="satzung" />
+      <xs:enumeration value="verwaltungsvorschrift" />
+      <xs:enumeration value="vertragsgesetz" />
+      <xs:enumeration value="vertragsverordnung" />
+      <xs:enumeration value="sonstige-bekanntmachung" />
+      <xs:enumeration value="geschäftsordnung" />
+      <xs:enumeration value="satzung" />
+      <xs:enumeration value="tarifvertrag" />
+      <xs:enumeration value="urteil-des-bundesverfassungsgerichts" />
+      <xs:enumeration value="beschluss-des-bundesverfassungsgerichts" />
+      <xs:enumeration value="anordnung-des-bundespräsidenten" />
+      <xs:enumeration value="verwaltungsvereinbarung" />
+      <xs:enumeration value="ohne-qualifikation" />
+      <xs:enumeration value="sonstige-anordnungen" />
+      <xs:enumeration value="völkerrechtsliche-vereinbarung" />
+      <xs:enumeration value="berichtigung" />
+      <xs:enumeration value="bekanntmachung-vor-einer-neufassung" />
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>

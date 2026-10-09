@@ -7,7 +7,7 @@ import de.bund.digitalservice.ris.builder.models.meta.identification.FRBRLeafs.H
 import de.bund.digitalservice.ris.builder.models.meta.identification.FRBRLeafs.LanguageLeaf;
 import de.bund.digitalservice.ris.builder.models.meta.identification.FRBRLeafs.NamedLeaf;
 import de.bund.digitalservice.ris.builder.models.meta.identification.FRBRLeafs.ValueLeaf;
-import de.bund.digitalservice.ris.search.utils.eli.ExpressionEli;
+import de.bund.digitalservice.ris.search.utils.eli.ExpressionEliPath;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import java.time.LocalDate;
@@ -42,21 +42,20 @@ public class FRBRExpression extends BaseElement {
 
   /** FRBRExpression empty constructor. Calls another constructor with default values. */
   public FRBRExpression() {
-    // eli/bund/bgbl-1/2025/341/2025-12-22/1/deu/regelungstext-verkuendung-1
+    // eli/bund/bgbl-1/2025/341/2025-12-22/1/deu/regelungstext-1
     this(
-        new ExpressionEli(
+        new ExpressionEliPath(
             "bund", "bgbl-1", "2025", "341", LocalDate.of(2025, Month.DECEMBER, 22), 1, "deu"),
-        "regelungstext-verkuendung-1");
+        "regelungstext-1");
   }
 
   /**
    * FRBRExpression constructor. Builds a FRBRExpression from an ExpressionEli and a file name.
    *
    * @param eli the expression eli for the FRBRExpression
-   * @param fileName the file name component (subtype identifier, e.g.
-   *     "regelungstext-verkuendung-1")
+   * @param fileName the file name component (subtype identifier, e.g. "regelungstext-1")
    */
-  public FRBRExpression(ExpressionEli eli, String fileName) {
+  public FRBRExpression(ExpressionEliPath eli, String fileName) {
 
     this.eId = "meta-n1_ident-n1_frbrexpression-n1";
 

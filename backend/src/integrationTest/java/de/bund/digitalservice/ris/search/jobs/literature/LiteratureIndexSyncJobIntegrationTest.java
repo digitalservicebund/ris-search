@@ -12,7 +12,6 @@ import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.LiteratureRepository;
 import de.bund.digitalservice.ris.search.service.LiteratureIndexSyncJob;
 import java.util.concurrent.TimeUnit;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,13 +23,6 @@ class LiteratureIndexSyncJobIntegrationTest extends ContainersIntegrationBase {
   @Autowired PortalBucket portalBucket;
   @Autowired LiteratureIndexSyncJob syncJob;
   @Autowired LiteratureRepository repository;
-
-  @BeforeEach
-  void setup() {
-    bucket.getAllKeys().forEach(bucket::delete);
-    portalBucket.getAllKeys().forEach(portalBucket::delete);
-    literatureRepository.deleteAll();
-  }
 
   @Test
   void itIndexesAdministrativeDirectivesOnFullReindex() throws ObjectStoreServiceException {

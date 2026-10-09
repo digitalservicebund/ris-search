@@ -2,7 +2,6 @@ package de.bund.digitalservice.ris.builder.models.common;
 
 import de.bund.digitalservice.ris.builder.NormTestDataBuilder;
 import de.bund.digitalservice.ris.builder.models.body.BodyElement;
-import de.bund.digitalservice.ris.builder.models.preface.DocStage;
 import de.bund.digitalservice.ris.builder.models.preface.DocTitle;
 import de.bund.digitalservice.ris.builder.models.preface.ShortTitle;
 import jakarta.xml.bind.annotation.XmlAnyElement;
@@ -17,7 +16,7 @@ import lombok.NoArgsConstructor;
  * Represents an {@code akn:p} paragraph element, a generic text container used throughout the norm.
  */
 @NoArgsConstructor
-@XmlSeeAlso({DocStage.class, DocTitle.class, ShortTitle.class, AuthorialNote.class})
+@XmlSeeAlso({DocTitle.class, ShortTitle.class, AuthorialNote.class})
 @XmlRootElement(name = "p", namespace = NormTestDataBuilder.AKN_NS)
 public class AknP extends BaseElement implements BodyElement {
 

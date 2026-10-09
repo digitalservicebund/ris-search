@@ -89,8 +89,8 @@ class NormsControllerHtmlApiIntegrationTest extends ContainersIntegrationBase {
         Objects.requireNonNull(
             document.body().getElementById("art-z5_abs-z1_inhalt-n1_text-n1_bild-n1"));
 
-    final String srcInLDML = "eli/bund/bgbl-1/1991/s101/1991-01-01/1/deu/1991-01-01/bild_1.jpg";
-    String expectedSrc = "/v1/legislation/" + srcInLDML;
+    final String eliPath = "eli/bund/bgbl-1/1991/s101/1991-01-01/1/deu/1991-01-01/bild_1.jpg";
+    String expectedSrc = "/v1/legislation/" + eliPath;
     assertThat(image.attr("src")).isEqualTo(expectedSrc);
   }
 

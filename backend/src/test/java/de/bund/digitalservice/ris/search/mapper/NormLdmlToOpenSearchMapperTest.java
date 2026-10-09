@@ -471,7 +471,7 @@ class NormLdmlToOpenSearchMapperTest {
         .hasSize(4)
         .isEqualTo(
             List.of(
-                new TableOfContentsItem("präambel-n1_formel-n1", "", "Eingangsformel", List.of()),
+                new TableOfContentsItem("praeambel-n1_formel-n1", "", "Eingangsformel", List.of()),
                 new TableOfContentsItem("art-z1", "§ 1", "Article number one", List.of()),
                 new TableOfContentsItem("schluss-n1_formel-n1", "", "Schlussformel", List.of()),
                 new TableOfContentsItem(
@@ -573,7 +573,7 @@ class NormLdmlToOpenSearchMapperTest {
     Norm norm = maybeNorm.get();
     var eIds =
         List.of(
-            "präambel-n1_formel-n1",
+            "praeambel-n1_formel-n1",
             "art-z1",
             "art-z%c2%a7%c2%a7%204%20bis%2014",
             "schluss-n1_formel-n1");

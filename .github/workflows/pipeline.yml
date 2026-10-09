@@ -100,45 +100,45 @@ jobs:
       STAGING_BASIC_AUTH_PASSWORD: ${{ secrets.STAGING_BASIC_AUTH_PASSWORD }}
       STAGING_BASIC_AUTH_USERNAME: ${{ secrets.STAGING_BASIC_AUTH_USERNAME }}
 
-  deploy-uat:
-    needs:
-      - smoke-tests
-    uses: ./.github/workflows/deploy.yml
-    secrets:
-      ARGOCD_AUTH_TOKEN: ${{ secrets.ARGOCD_AUTH_TOKEN }}
-      ARGOCD_SERVER_STACKIT: ${{ secrets.ARGOCD_SERVER_STACKIT }}
-      GITOPS_NEURIS_APP_ID: ${{ secrets.GITOPS_NEURIS_APP_ID }}
-      GITOPS_NEURIS_APP_PRIVATE_KEY: ${{ secrets.GITOPS_NEURIS_APP_PRIVATE_KEY }}
-      SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-    with:
-      image-tag: ${{ github.sha }}
-      deployment-environment: uat
-
-  deploy-prototype:
-    needs:
-      - deploy-uat
-    uses: ./.github/workflows/deploy.yml
-    secrets:
-      ARGOCD_AUTH_TOKEN: ${{ secrets.ARGOCD_AUTH_TOKEN }}
-      ARGOCD_SERVER_STACKIT: ${{ secrets.ARGOCD_SERVER_STACKIT }}
-      GITOPS_NEURIS_APP_ID: ${{ secrets.GITOPS_NEURIS_APP_ID }}
-      GITOPS_NEURIS_APP_PRIVATE_KEY: ${{ secrets.GITOPS_NEURIS_APP_PRIVATE_KEY }}
-      SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-    with:
-      image-tag: ${{ github.sha }}
-      deployment-environment: prototype
-
-  deploy-production:
-    needs:
-      - deploy-prototype
-    uses: ./.github/workflows/deploy.yml
-    secrets:
-      ARGOCD_AUTH_TOKEN: ${{ secrets.ARGOCD_AUTH_TOKEN }}
-      ARGOCD_SERVER_STACKIT: ${{ secrets.ARGOCD_SERVER_STACKIT }}
-      GITOPS_NEURIS_APP_ID: ${{ secrets.GITOPS_NEURIS_APP_ID }}
-      GITOPS_NEURIS_APP_PRIVATE_KEY: ${{ secrets.GITOPS_NEURIS_APP_PRIVATE_KEY }}
-      SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-    with:
-      image-tag: ${{ github.sha }}
-      deployment-environment: prod
-      argocd-app-name: ris-search-production
+#  deploy-uat:
+#    needs:
+#      - smoke-tests
+#    uses: ./.github/workflows/deploy.yml
+#    secrets:
+#      ARGOCD_AUTH_TOKEN: ${{ secrets.ARGOCD_AUTH_TOKEN }}
+#      ARGOCD_SERVER_STACKIT: ${{ secrets.ARGOCD_SERVER_STACKIT }}
+#      GITOPS_NEURIS_APP_ID: ${{ secrets.GITOPS_NEURIS_APP_ID }}
+#      GITOPS_NEURIS_APP_PRIVATE_KEY: ${{ secrets.GITOPS_NEURIS_APP_PRIVATE_KEY }}
+#      SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+#    with:
+#      image-tag: ${{ github.sha }}
+#      deployment-environment: uat
+#
+#  deploy-prototype:
+#    needs:
+#      - deploy-uat
+#    uses: ./.github/workflows/deploy.yml
+#    secrets:
+#      ARGOCD_AUTH_TOKEN: ${{ secrets.ARGOCD_AUTH_TOKEN }}
+#      ARGOCD_SERVER_STACKIT: ${{ secrets.ARGOCD_SERVER_STACKIT }}
+#      GITOPS_NEURIS_APP_ID: ${{ secrets.GITOPS_NEURIS_APP_ID }}
+#      GITOPS_NEURIS_APP_PRIVATE_KEY: ${{ secrets.GITOPS_NEURIS_APP_PRIVATE_KEY }}
+#      SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+#    with:
+#      image-tag: ${{ github.sha }}
+#      deployment-environment: prototype
+#
+#  deploy-production:
+#    needs:
+#      - deploy-prototype
+#    uses: ./.github/workflows/deploy.yml
+#    secrets:
+#      ARGOCD_AUTH_TOKEN: ${{ secrets.ARGOCD_AUTH_TOKEN }}
+#      ARGOCD_SERVER_STACKIT: ${{ secrets.ARGOCD_SERVER_STACKIT }}
+#      GITOPS_NEURIS_APP_ID: ${{ secrets.GITOPS_NEURIS_APP_ID }}
+#      GITOPS_NEURIS_APP_PRIVATE_KEY: ${{ secrets.GITOPS_NEURIS_APP_PRIVATE_KEY }}
+#      SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+#    with:
+#      image-tag: ${{ github.sha }}
+#      deployment-environment: prod
+#      argocd-app-name: ris-search-production
