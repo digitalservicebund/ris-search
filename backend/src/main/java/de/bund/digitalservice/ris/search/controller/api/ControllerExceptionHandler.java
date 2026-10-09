@@ -23,6 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.validation.FieldError;
+import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -469,8 +470,8 @@ public class ControllerExceptionHandler {
   /**
    * handles HttpRequestMethodNotSupportedException
    *
-   * @param ex HttpRequestMethodNotSupportedException ResponseEntity containing a
-   * @return a {@link CustomErrorResponse} object with error details and an HTTP status of 405
+   * @param ex HttpRequestMethodNotSupportedException
+   * @return a {@link CustomErrorResponse} object with error details
    */
   @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
   public ResponseEntity<CustomErrorResponse> handleMethodNotSupported(
@@ -478,6 +479,21 @@ public class ControllerExceptionHandler {
     CustomError error =
         CustomError.builder().code("method_not_allowed").message(ex.getMessage()).build();
     return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED)
+        .body(new CustomErrorResponse(List.of(error)));
+  }
+
+  /**
+   * handles HttpRequestMethodNotSupportedException
+   *
+   * @param ex HttpMediaTypeNotAcceptableException
+   * @return a {@link CustomErrorResponse} object with error details
+   */
+  @ExceptionHandler(HttpMediaTypeNotAcceptableException.class)
+  public ResponseEntity<CustomErrorResponse> handleMediaTypeNotExcepted(
+      HttpRequestMethodNotSupportedException ex) {
+    CustomError error =
+        CustomError.builder().code("unsupported_media_type").message(ex.getMessage()).build();
+    return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
         .body(new CustomErrorResponse(List.of(error)));
   }
 }

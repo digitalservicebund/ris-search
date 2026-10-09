@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -25,6 +26,19 @@ class CaseLawGoneControllerIntegrationTest extends ContainersIntegrationBase {
   void shouldReturnGoneForBasePath() throws Exception {
     mockMvc
         .perform(get("/v1/case-law"))
+        .andExpect(status().isGone())
+        .andExpect(jsonPath("$.errors[0].code", Matchers.is("gone")))
+        .andExpect(jsonPath("$.errors[0].parameter", Matchers.is(ApiConfig.Paths.RECHTSPRECHUNG)))
+        .andExpect(
+            jsonPath(
+                "$.errors[0].message", Matchers.containsString(ApiConfig.Paths.RECHTSPRECHUNG)));
+  }
+
+  @Test
+  @DisplayName("Should return 410 with incorrect accept header ")
+  void shouldReturn410DisregardingAcceptHeader() throws Exception {
+    mockMvc
+        .perform(get("/v1/case-law").accept(MediaType.TEXT_HTML))
         .andExpect(status().isGone())
         .andExpect(jsonPath("$.errors[0].code", Matchers.is("gone")))
         .andExpect(jsonPath("$.errors[0].parameter", Matchers.is(ApiConfig.Paths.RECHTSPRECHUNG)))

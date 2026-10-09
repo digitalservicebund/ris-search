@@ -10,6 +10,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -45,7 +47,7 @@ public class CaseLawGoneController {
       description =
           "All case-law endpoints have been removed. Please use the equivalent /v1/rechtsprechung endpoint instead.")
   @ApiResponse(responseCode = "410", description = "Gone - this endpoint has been removed")
-  public CustomErrorResponse handleRemovedEndpoint(HttpServletRequest request) {
+  public ResponseEntity<CustomErrorResponse> handleRemovedEndpoint(HttpServletRequest request) {
     String suffix = request.getRequestURI().substring(OLD_BASE.length());
     String newPath =
         UriComponentsBuilder.fromPath(ApiConfig.Paths.RECHTSPRECHUNG + suffix)
@@ -59,6 +61,10 @@ public class CaseLawGoneController {
             "This endpoint has been removed. Use " + newPath + " instead.",
             newPath);
 
-    return CustomErrorResponse.builder().errors(List.of(error)).build();
+    // Old clients may still send Accept: text/html. Presetting the content type skips content
+    // negotiation, which would otherwise fail with a 406 instead of returning the 410.
+    return ResponseEntity.status(HttpStatus.GONE)
+        .contentType(MediaType.APPLICATION_JSON)
+        .body(CustomErrorResponse.builder().errors(List.of(error)).build());
   }
 }
