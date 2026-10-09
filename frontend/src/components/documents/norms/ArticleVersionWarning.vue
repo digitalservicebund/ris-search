@@ -28,35 +28,56 @@ const currentArticleStatus = computed(() =>
   getVersionValidityStatus(currentArticle),
 );
 
+const inForceFassung = computed(() =>
+  currentArticleStatus.value === "InForce"
+    ? undefined
+    : fassungen.find(
+        (fassung) => getVersionValidityStatus(fassung) === "InForce",
+      ),
+);
+
+const nextFutureFassung = computed(() =>
+  currentArticleStatus.value === "InForce"
+    ? findNextFutureVersion(fassungen)
+    : undefined,
+);
+
+const [{ data: inForceExpressions }, { data: futureExpressions }] =
+  await Promise.all([
+    useFassungsGesamtausgaben(() => inForceFassung.value?.revision),
+    useFassungsGesamtausgaben(() => nextFutureFassung.value?.revision),
+  ]);
+
 const inForceVersionLink = computed(() => {
-  const inForceFassung = fassungen.find(
-    (fassung) => getVersionValidityStatus(fassung) === "InForce",
-  );
-  if (!inForceFassung) return undefined;
+  if (!inForceFassung.value) return undefined;
 
   // Prefer the currently valid expression, so the user lands on the article
   // within the currently valid Gesamtausgabe if it is part of it
-  const expressionElis = getExpressionElis(inForceFassung);
+  const expressionElis = inForceExpressions.value.map(
+    (expression) => expression.legislationIdentifier,
+  );
   if (inForceExpressionEli && expressionElis.includes(inForceExpressionEli)) {
-    return getArticleRoute(inForceExpressionEli, inForceFassung.eId);
+    return getArticleRoute(inForceExpressionEli, inForceFassung.value.eId);
   }
 
-  const newestExpressionEli = getNewestExpressionEli(expressionElis);
-  return getArticleRoute(newestExpressionEli, inForceFassung.eId);
+  const newestExpression = getNewestExpression(inForceExpressions.value);
+  return getArticleRoute(
+    newestExpression?.legislationIdentifier,
+    inForceFassung.value.eId,
+  );
 });
 
 const futureVersion = computed<FutureVersionTarget | undefined>(() => {
-  if (currentArticleStatus.value !== "InForce") return undefined;
+  if (!nextFutureFassung.value) return undefined;
 
-  const nextFutureFassung = findNextFutureVersion(fassungen);
-  if (!nextFutureFassung) return undefined;
-
-  const expressionElis = getExpressionElis(nextFutureFassung);
-  const newestExpressionEli = getNewestExpressionEli(expressionElis);
-  const to = getArticleRoute(newestExpressionEli, nextFutureFassung.eId);
+  const newestExpression = getNewestExpression(futureExpressions.value);
+  const to = getArticleRoute(
+    newestExpression?.legislationIdentifier,
+    nextFutureFassung.value.eId,
+  );
   if (!to) return undefined;
 
-  return { to, validFrom: getVersionValidFrom(nextFutureFassung) };
+  return { to, validFrom: getVersionValidFrom(nextFutureFassung.value) };
 });
 </script>
 

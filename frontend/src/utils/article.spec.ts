@@ -1,9 +1,6 @@
 import { describe, expect, it } from "vitest";
-import {
-  getExpressionElis,
-  getNewestExpressionEli,
-  tocHeadlineAdditionLabel,
-} from "~/utils/article";
+import type { LegislationExpression } from "~/types/api";
+import { getNewestExpression, tocHeadlineAdditionLabel } from "~/utils/article";
 
 describe("tocHeadlineAdditionLabel", () => {
   it("returns an empty string if temporal coverage is undefined", () => {
@@ -29,65 +26,31 @@ describe("tocHeadlineAdditionLabel", () => {
   });
 });
 
-describe("getExpressionElis", () => {
-  it("returns the ELIs of all expressions without the API prefix", () => {
-    const articleVersion = {
-      "@id":
-        "/v1/legislation/eli/bund/bgbl-1/2020/s1234/2022-01-01/1/deu/art-z1",
-      eId: "art-z1",
-      name: "Art 1",
-      temporalCoverage: "2022-01-01/..",
-      isPartOf: [
-        {
-          "@id": "/v1/legislation/eli/bund/bgbl-1/2020/s1234/2022-01-01/1/deu",
-        },
-        {
-          "@id": "/v1/legislation/eli/bund/bgbl-1/2020/s1234/2023-01-01/1/deu",
-        },
-      ],
-    };
+function expression(temporalCoverage: string): LegislationExpression {
+  return { temporalCoverage } as LegislationExpression;
+}
 
-    expect(getExpressionElis(articleVersion)).toEqual([
-      "eli/bund/bgbl-1/2020/s1234/2022-01-01/1/deu",
-      "eli/bund/bgbl-1/2020/s1234/2023-01-01/1/deu",
-    ]);
-  });
-
-  it("returns an empty list if the version is not part of any expression", () => {
-    const articleVersion = {
-      "@id":
-        "/v1/legislation/eli/bund/bgbl-1/2020/s1234/2022-01-01/1/deu/art-z1",
-      eId: "art-z1",
-      name: "Art 1",
-      temporalCoverage: "2022-01-01/..",
-    };
-
-    expect(getExpressionElis(articleVersion)).toEqual([]);
-  });
-});
-
-describe("getNewestExpressionEli", () => {
+describe("getNewestExpression", () => {
   it("returns undefined for an empty list", () => {
-    expect(getNewestExpressionEli([])).toBeUndefined();
+    expect(getNewestExpression([])).toBeUndefined();
   });
 
-  it("returns the expression with the latest point in time", () => {
+  it("returns the expression whose validity period starts last", () => {
+    const newest = expression("2022-01-01/..");
     expect(
-      getNewestExpressionEli([
-        "eli/bund/bgbl-1/2020/s1234/2021-01-01/1/deu",
-        "eli/bund/bgbl-1/2020/s1234/2022-01-01/1/deu",
-        "eli/bund/bgbl-1/2020/s1234/2020-01-01/1/deu",
+      getNewestExpression([
+        expression("2021-01-01/2021-12-31"),
+        newest,
+        expression("2020-01-01/2020-12-31"),
       ]),
-    ).toBe("eli/bund/bgbl-1/2020/s1234/2022-01-01/1/deu");
+    ).toBe(newest);
   });
 
-  it("uses the version as a tie breaker for the same point in time", () => {
-    expect(
-      getNewestExpressionEli([
-        "eli/bund/bgbl-1/2020/s1234/2022-01-01/2/deu",
-        "eli/bund/bgbl-1/2020/s1234/2022-01-01/10/deu",
-        "eli/bund/bgbl-1/2020/s1234/2022-01-01/1/deu",
-      ]),
-    ).toBe("eli/bund/bgbl-1/2020/s1234/2022-01-01/10/deu");
+  it("prefers expressions with a start date over those without", () => {
+    const withStart = expression("2020-01-01/..");
+
+    expect(getNewestExpression([expression("../2030-01-01"), withStart])).toBe(
+      withStart,
+    );
   });
 });
