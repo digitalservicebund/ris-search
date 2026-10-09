@@ -70,7 +70,6 @@ const gesamtausgabe = createGesamtausgabe(
   "2031-01-01/..",
 );
 
-/** Answers the HTML and Gesamtausgaben requests the way the backend would. */
 function mockBackend({
   html = "<p>Norm content</p>",
   gesamtausgaben = [gesamtausgabe],
@@ -82,7 +81,6 @@ function mockBackend({
   );
 }
 
-/** Props for the list, with the middle fassung being the displayed one. */
 function props(
   fassungen: ArtikelFassung[] = [pastFassung, currentFassung, futureFassung],
 ) {

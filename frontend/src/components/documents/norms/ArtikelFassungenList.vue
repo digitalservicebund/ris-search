@@ -252,7 +252,7 @@ watch(
                     v-if="expandedRowContent.gesamtausgabeLink"
                     class="typo-link1-bold link-hover"
                     :to="expandedRowContent.gesamtausgabeLink.to"
-                    >{{ expandedRowContent.gesamtausgabeLink?.label }}</NuxtLink
+                    >{{ expandedRowContent.gesamtausgabeLink.label }}</NuxtLink
                   >
                   <UiAccordion
                     v-else
