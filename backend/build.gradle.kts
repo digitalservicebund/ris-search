@@ -51,6 +51,13 @@ springBoot {
 
 jacoco { toolVersion = libs.versions.jacoco.get() }
 
+// Override Spring Boot's managed Jackson versions so the whole Jackson family (annotations,
+// datatype and dataformat modules) stays aligned on versions fixing CVE-2026-68497 and
+// CVE-2026-89407.
+// Using extra[] to override Spring Boot managed bom
+extra["jackson-bom.version"] = libs.versions.jackson3.get()
+extra["jackson-2-bom.version"] = libs.versions.jackson2.get()
+
 testlogger {
     theme = ThemeType.MOCHA
 }
@@ -63,15 +70,6 @@ sonar {
         property(
             "sonar.coverage.exclusions",
             "**/config/**, **/e2e/**, **/CustomErrorController.java, **/RestClientConfigStackit.java",
-        )
-        // RechtsprechungController intentionally duplicates CaseLawController's and
-        // CaseLawSearchController's endpoint bodies (see class Javadoc) so both
-        // /v1/case-law/** and /v1/rechtsprechung/** work in parallel while the frontend
-        // migrates. Remove this exclusion once /v1/case-law/** is deleted and the duplication with
-        // it.
-        property(
-            "sonar.cpd.exclusions",
-            "**/controller/api/RechtsprechungController.java",
         )
     }
 }
@@ -108,14 +106,6 @@ dependencies {
 
     // CVE-2026-65182
     implementation(libs.tomcat.embed.core)
-
-    // CVE-2026-68497
-    implementation(libs.fasterxml.jackson.databind)
-    implementation(libs.tools.jackson.databind)
-
-    // CVE-2026-89407
-    implementation(libs.fasterxml.jackson.core)
-    implementation(libs.tools.jackson.core)
 
     implementation(libs.ris.html.transformation)
 

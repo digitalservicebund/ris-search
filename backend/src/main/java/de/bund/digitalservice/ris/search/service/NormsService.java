@@ -23,7 +23,6 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-import org.opensearch.client.RestHighLevelClient;
 import org.opensearch.data.client.orhlc.NativeSearchQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -63,7 +62,6 @@ public class NormsService {
       NormsRepository normsRepository,
       NormsBucket normsBucket,
       ElasticsearchOperations operations,
-      RestHighLevelClient openSearchRestClient,
       SimpleSearchQueryBuilder simpleSearchQueryBuilder,
       ArticleService articleService,
       @Value("${opensearch.norms-index-name}") String normsIndexName) {
@@ -143,6 +141,23 @@ public class NormsService {
             Sort.by(Sort.Direction.DESC, "entryIntoForceDate"));
 
     return normsRepository.getByWorkEliKeyword(workEli.toString(), sortedPageable);
+  }
+
+  /**
+   * Retrieve all norm expressions that contain the article revision with the given document number.
+   *
+   * @param documentNumber document number of the article revision
+   * @return An unpaged {@link Page} of all {@link Norm} expressions containing the article, sorted
+   *     by entryIntoForceDate descending, or an empty page if no article with the given document
+   *     number exists.
+   */
+  public Page<Norm> getAllNormsContainingArticle(String documentNumber) {
+    List<String> expressionElis = articleService.findExpressionElisByDocumentNumber(documentNumber);
+    if (expressionElis.isEmpty()) {
+      return Page.empty();
+    }
+    return normsRepository.findAllByIdIn(
+        expressionElis, Pageable.unpaged(Sort.by(Sort.Direction.DESC, "entryIntoForceDate")));
   }
 
   /**

@@ -40,7 +40,7 @@ describe("luceneSearch", () => {
 
     it("returns only the date filter when the user query is blank", () => {
       expect(buildLuceneQuery("", currentlyInForce, DocumentKind.Norm)).toMatch(
-        /^\(entry_into_force_date:<\d{4}-\d{2}-\d{2} AND \(\(expiry_date:>\d{4}-\d{2}-\d{2}\) OR \(NOT _exists_:expiry_date\)\)\)$/,
+        /^\(entry_into_force_date:<=\d{4}-\d{2}-\d{2} AND \(\(expiry_date:>=\d{4}-\d{2}-\d{2}\) OR \(NOT _exists_:expiry_date\)\)\)$/,
       );
     });
 

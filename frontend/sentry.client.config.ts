@@ -24,6 +24,13 @@ if (config.public.sentryDSN) {
       /Failed to fetch dynamically imported module/, // Chrome
       /error loading dynamically imported module/, // Firefox
       /Importing a module script failed/, // Safari
+
+      // Network failures while Nuxt fetches its app manifest in the background
+      // (`/_nuxt/builds/meta/<id>.json`, `/_nuxt/builds/latest.json`). Nuxt
+      // doesn't handle the rejection, but retries on the next use, so the user
+      // is not affected. Matches only these URLs, so failed fetches to our own
+      // API are still reported.
+      /\/_nuxt\/builds\/.*Failed to fetch/,
     ],
   });
 }

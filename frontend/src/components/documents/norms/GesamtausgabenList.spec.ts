@@ -4,7 +4,7 @@ import {
   mockNuxtImport,
 } from "@nuxt/test-utils/runtime";
 import { screen, within } from "@testing-library/vue";
-import { vi } from "vitest";
+import { expect, vi } from "vitest";
 import type { JSONLDList, LegislationExpression } from "~/types/api";
 import GesamtausgabenList from "./GesamtausgabenList.vue";
 
@@ -107,24 +107,57 @@ describe("GesamtausgabenList", () => {
     const gesamtausgaben = screen.getAllByRole("listitem");
     expect(gesamtausgaben).toHaveLength(3);
 
-    expect(gesamtausgaben[0]).toHaveTextContent(
-      "Gültig ab: 01.01.2031– Gültig bis: — Status: Zukünftig in Kraft",
-    );
-    expect(gesamtausgaben[1]).toHaveTextContent(
-      "Gültig ab: 01.01.2020– Gültig bis: — Status: Aktuell gültig",
-    );
-    expect(gesamtausgaben[2]).toHaveTextContent(
-      "Gültig ab: 05.01.2000– Gültig bis: 31.12.2019 Status: Außer Kraft",
+    expect(
+      within(gesamtausgaben[0]!).getByText("01.01.2031"),
+    ).toBeInTheDocument();
+    expect(gesamtausgaben[0]).toHaveTextContent("Status: Zukünftig in Kraft");
+
+    expect(
+      within(gesamtausgaben[1]!).getByText("01.01.2020"),
+    ).toBeInTheDocument();
+    expect(gesamtausgaben[1]).toHaveTextContent("Status: Aktuell gültig");
+
+    expect(
+      within(gesamtausgaben[2]!).getByText("05.01.2000"),
+    ).toBeInTheDocument();
+    expect(
+      within(gesamtausgaben[2]!).getByText("31.12.2019"),
+    ).toBeInTheDocument();
+    expect(gesamtausgaben[2]).toHaveTextContent("Status: Außer Kraft");
+  });
+
+  it("joins the dates with a dash when both exist", async () => {
+    await renderSuspended(GesamtausgabenList, {
+      props: props([data.member![0]!]),
+    });
+
+    expect(within(screen.getByRole("listitem")).getByText("–")).toHaveAttribute(
+      "aria-hidden",
+      "true",
     );
   });
 
-  it("joins the dates with a dash", async () => {
-    await renderSuspended(GesamtausgabenList, { props: props() });
+  it.each([
+    ["from", "../2019-12-31"],
+    ["to", "2031-01-01/.."],
+  ])(
+    "shows no placeholder and no dash for a missing %s date on desktop",
+    async (_, temporalCoverage) => {
+      await renderSuspended(GesamtausgabenList, {
+        props: props([
+          createLegislationExpression(
+            "eli/bund/bgbl-1/2000/s001/2040-01-01/1/deu/regelungstext-1",
+            temporalCoverage,
+            "NotInForce",
+          ),
+        ]),
+      });
 
-    for (const row of screen.getAllByRole("listitem")) {
-      expect(within(row).getByText("–")).toHaveAttribute("aria-hidden", "true");
-    }
-  });
+      const row = screen.getByRole("listitem");
+      expect(within(row).getByText("—")).toHaveClass("md:hidden");
+      expect(within(row).queryByText("–")).not.toBeInTheDocument();
+    },
+  );
 
   it("renders the column labels as a header", async () => {
     await renderSuspended(GesamtausgabenList, { props: props() });
@@ -176,9 +209,7 @@ describe("GesamtausgabenList", () => {
       props: props([withoutCoverage]),
     });
 
-    expect(screen.getByRole("listitem")).toHaveTextContent(
-      "Gültig ab: —– Gültig bis: — Status: Unbekannt",
-    );
+    expect(screen.getByRole("listitem")).toHaveTextContent("Status: Unbekannt");
   });
 
   it("shows a placeholder when there are no gesamtausgaben", async () => {

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import IcChevronRightIcon from "~icons/ic/outline-chevron-right";
-import type { DataTableColumn } from "~/components/ui/DataTableCells.vue";
 import type { ArtikelFassung } from "~/types/api.ts";
 
 const { currentExpressionId, fassungen } = defineProps<{
@@ -17,16 +16,21 @@ type FassungRow = {
   disabled: boolean;
 };
 
+type FassungColumn = {
+  key: Extract<keyof FassungRow, string>;
+  label: string;
+};
+
 const missingDate = "—";
 
-const columns: DataTableColumn<FassungRow>[] = [
-  {
-    key: "fromDate",
-    label: "Gültig ab",
-    separatorAfter: "–",
-  },
+const columns: FassungColumn[] = [
+  { key: "fromDate", label: "Gültig ab" },
   { key: "toDate", label: "Gültig bis" },
 ];
+
+function hasBothDates(row: FassungRow) {
+  return row.fromDate !== missingDate && row.toDate !== missingDate;
+}
 
 const rows = computed<FassungRow[]>(() => {
   // newest single norm first
@@ -146,7 +150,27 @@ const currentRowId = useId();
             class="col-span-2 grid grid-cols-[max-content_minmax(0,1fr)] gap-x-16 gap-y-4 md:grid-cols-subgrid md:gap-0"
             :id="currentRowId"
           >
-            <UiDataTableCells :columns="columns" :row="row" />
+            <template v-for="column in columns" :key="column.key">
+              <span
+                class="typo-label1-bold flex min-h-32 items-center md:sr-only"
+                >{{ column.label }}:</span
+              >
+              {{ " " }}
+              <span
+                class="typo-label1-regular flex min-h-32 items-center md:relative md:min-h-48 md:px-16 md:py-10"
+              >
+                <span
+                  :class="{ 'md:hidden': row[column.key] === missingDate }"
+                  >{{ row[column.key] }}</span
+                ><span
+                  v-if="column.key === 'fromDate' && hasBothDates(row)"
+                  aria-hidden="true"
+                  class="absolute right-0 hidden translate-x-1/2 md:block"
+                  >–</span
+                >
+              </span>
+              {{ " " }}
+            </template>
           </span>
         </div>
 
@@ -163,7 +187,27 @@ const currentRowId = useId();
             <span
               class="col-span-2 grid grid-cols-[max-content_minmax(0,1fr)] gap-x-16 gap-y-4 md:grid-cols-subgrid md:gap-0"
             >
-              <UiDataTableCells :columns="columns" :row="row" />
+              <template v-for="column in columns" :key="column.key">
+                <span
+                  class="typo-label1-bold flex min-h-32 items-center md:sr-only"
+                  >{{ column.label }}:</span
+                >
+                {{ " " }}
+                <span
+                  class="typo-label1-regular flex min-h-32 items-center md:relative md:min-h-48 md:px-16 md:py-10"
+                >
+                  <span
+                    :class="{ 'md:hidden': row[column.key] === missingDate }"
+                    >{{ row[column.key] }}</span
+                  ><span
+                    v-if="column.key === 'fromDate' && hasBothDates(row)"
+                    aria-hidden="true"
+                    class="absolute right-0 hidden translate-x-1/2 md:block"
+                    >–</span
+                  >
+                </span>
+                {{ " " }}
+              </template>
             </span>
             <IcChevronRightIcon
               aria-hidden="true"

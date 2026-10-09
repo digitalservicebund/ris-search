@@ -15,11 +15,11 @@ const route = useRoute();
 
 function getArticleRoute(
   expressionEli: string | undefined,
-  fassung: ArtikelFassung,
+  eId: string,
 ): RouteLocationRaw | undefined {
   if (!expressionEli) return undefined;
   return {
-    path: `/gesetze/${expressionEli}/${fassung.eId}`,
+    path: `/gesetze/${expressionEli}/${eId}`,
     query: { from: route.query.from },
   };
 }
@@ -38,11 +38,11 @@ const inForceVersionLink = computed(() => {
   // within the currently valid Gesamtausgabe if it is part of it
   const expressionElis = getExpressionElis(inForceFassung);
   if (inForceExpressionEli && expressionElis.includes(inForceExpressionEli)) {
-    return getArticleRoute(inForceExpressionEli, inForceFassung);
+    return getArticleRoute(inForceExpressionEli, inForceFassung.eId);
   }
 
   const newestExpressionEli = getNewestExpressionEli(expressionElis);
-  return getArticleRoute(newestExpressionEli, inForceFassung);
+  return getArticleRoute(newestExpressionEli, inForceFassung.eId);
 });
 
 const futureVersion = computed<FutureVersionTarget | undefined>(() => {
@@ -53,7 +53,7 @@ const futureVersion = computed<FutureVersionTarget | undefined>(() => {
 
   const expressionElis = getExpressionElis(nextFutureFassung);
   const newestExpressionEli = getNewestExpressionEli(expressionElis);
-  const to = getArticleRoute(newestExpressionEli, nextFutureFassung);
+  const to = getArticleRoute(newestExpressionEli, nextFutureFassung.eId);
   if (!to) return undefined;
 
   return { to, validFrom: getVersionValidFrom(nextFutureFassung) };

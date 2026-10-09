@@ -6,8 +6,8 @@ const {
   inForceVersionLink,
 } = defineProps<{
   currentVersionValidityStatus?: ValidityStatus;
-  /** Noun used in the message, e.g. "Fassung" or "Gesamtausgabe" */
-  documentTerm: string;
+  /** Noun used in the message */
+  documentTerm: "Fassung" | "Gesamtausgabe";
   futureVersion?: FutureVersionTarget;
   inForceVersionLink?: RouteLocationRaw;
 }>();

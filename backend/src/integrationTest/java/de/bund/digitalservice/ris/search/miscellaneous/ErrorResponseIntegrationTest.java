@@ -127,7 +127,8 @@ class ErrorResponseIntegrationTest extends ContainersIntegrationBase {
         IntStream.range(0, 20).mapToObj(i -> "token_" + i).collect(Collectors.joining("+"));
 
     mockMvc
-        .perform(get("/v1/case-law?searchTerm=" + searchTerm).contentType(MediaType.TEXT_HTML))
+        .perform(
+            get("/v1/rechtsprechung?searchTerm=" + searchTerm).contentType(MediaType.TEXT_HTML))
         .andExpect(status().isOk());
   }
 
@@ -138,7 +139,8 @@ class ErrorResponseIntegrationTest extends ContainersIntegrationBase {
         IntStream.range(0, 50).mapToObj(i -> "token_" + i).collect(Collectors.joining("+"));
 
     mockMvc
-        .perform(get("/v1/case-law?searchTerm=" + searchTerm).contentType(MediaType.TEXT_HTML))
+        .perform(
+            get("/v1/rechtsprechung?searchTerm=" + searchTerm).contentType(MediaType.TEXT_HTML))
         .andExpect(status().is4xxClientError())
         .andExpect(jsonPath("$.errors[0].message", Matchers.is("search query limit exceeded")))
         .andExpect(jsonPath("$.errors[0].code", Matchers.is("invalid_parameter")));

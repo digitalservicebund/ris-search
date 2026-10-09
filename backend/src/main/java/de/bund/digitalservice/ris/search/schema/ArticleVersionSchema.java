@@ -28,8 +28,8 @@ public record ArticleVersionSchema(
             requiredMode = Schema.RequiredMode.REQUIRED)
         String eId,
     @Schema(
-            description =
-                "the specific revision of that legislation part independent from its parent object")
+            description = LegislationExpressionPartSchema.REVISION_DESCRIPTION,
+            example = LegislationExpressionPartSchema.REVISION_EXAMPLE)
         String revision,
     @Schema(
             description = "Numerical identifier of a specific legislation part",

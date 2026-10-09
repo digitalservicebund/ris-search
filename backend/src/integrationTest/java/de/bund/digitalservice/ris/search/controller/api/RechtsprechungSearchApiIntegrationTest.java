@@ -43,7 +43,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
-class CaseLawSearchControllerApiIntegrationTest extends ContainersIntegrationBase {
+class RechtsprechungSearchApiIntegrationTest extends ContainersIntegrationBase {
 
   @BeforeAll
   public void loadDefaults() {
@@ -61,7 +61,7 @@ class CaseLawSearchControllerApiIntegrationTest extends ContainersIntegrationBas
 
     mockMvc
         .perform(
-            get(ApiConfig.Paths.CASELAW
+            get(ApiConfig.Paths.RECHTSPRECHUNG
                     + String.format("?searchTerm=%s&ecli=%s", matchMultipleTerm, ecli))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$.member", hasSize(1)))
@@ -77,7 +77,7 @@ class CaseLawSearchControllerApiIntegrationTest extends ContainersIntegrationBas
   void shouldFilterByLegalEffect() throws Exception {
     mockMvc
         .perform(
-            get(ApiConfig.Paths.CASELAW
+            get(ApiConfig.Paths.RECHTSPRECHUNG
                     + String.format("?searchTerm=%s&legalEffect=true", matchMultipleTerm))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$.member", hasSize(2)))
@@ -89,7 +89,8 @@ class CaseLawSearchControllerApiIntegrationTest extends ContainersIntegrationBas
   void shouldReturnDocumentationUnitsWhenSearchingForSpecificCourt() throws Exception {
     String query = String.format("?searchTerm=%s&court=FG Berlin", matchMultipleTerm);
     mockMvc
-        .perform(get(ApiConfig.Paths.CASELAW + query).contentType(MediaType.APPLICATION_JSON))
+        .perform(
+            get(ApiConfig.Paths.RECHTSPRECHUNG + query).contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$.member", hasSize(1)))
         .andExpect(jsonPath("$.member[0].item.courtName", is("FG Berlin")))
         .andExpect(status().isOk());
@@ -100,7 +101,8 @@ class CaseLawSearchControllerApiIntegrationTest extends ContainersIntegrationBas
   void shouldReturnDocumentationUnitsWhenSearchingForCourtType() throws Exception {
     String query = String.format("?searchTerm=%s&court=FG", matchMultipleTerm);
     mockMvc
-        .perform(get(ApiConfig.Paths.CASELAW + query).contentType(MediaType.APPLICATION_JSON))
+        .perform(
+            get(ApiConfig.Paths.RECHTSPRECHUNG + query).contentType(MediaType.APPLICATION_JSON))
         .andExpectAll(
             status().isOk(),
             jsonPath("$.member", hasSize(4)),
@@ -114,7 +116,8 @@ class CaseLawSearchControllerApiIntegrationTest extends ContainersIntegrationBas
     String query =
         String.format("?searchTerm=%s&fileNumber=%s", matchMultipleTerm, fileNumberFormat);
     mockMvc
-        .perform(get(ApiConfig.Paths.CASELAW + query).contentType(MediaType.APPLICATION_JSON))
+        .perform(
+            get(ApiConfig.Paths.RECHTSPRECHUNG + query).contentType(MediaType.APPLICATION_JSON))
         .andExpectAll(
             status().isOk(),
             jsonPath("$.member", hasSize(1)),
@@ -133,7 +136,8 @@ class CaseLawSearchControllerApiIntegrationTest extends ContainersIntegrationBas
   void testFileNumberSearchTerm(String fileNumberFormat) throws Exception {
     String query = String.format("?searchTerm=%s", fileNumberFormat);
     mockMvc
-        .perform(get(ApiConfig.Paths.CASELAW + query).contentType(MediaType.APPLICATION_JSON))
+        .perform(
+            get(ApiConfig.Paths.RECHTSPRECHUNG + query).contentType(MediaType.APPLICATION_JSON))
         .andExpectAll(
             status().isOk(),
             jsonPath("$.member", hasSize(greaterThan(0))),
@@ -154,7 +158,8 @@ class CaseLawSearchControllerApiIntegrationTest extends ContainersIntegrationBas
   void testPartialFileNumberSearch(String fileNumberFormat) throws Exception {
     String query = String.format("?searchTerm=%s", fileNumberFormat);
     mockMvc
-        .perform(get(ApiConfig.Paths.CASELAW + query).contentType(MediaType.APPLICATION_JSON))
+        .perform(
+            get(ApiConfig.Paths.RECHTSPRECHUNG + query).contentType(MediaType.APPLICATION_JSON))
         .andExpectAll(
             status().isOk(),
             jsonPath("$.member", hasSize(3)),
@@ -188,7 +193,8 @@ class CaseLawSearchControllerApiIntegrationTest extends ContainersIntegrationBas
   void shouldFilterByDocumentType(String queryStringPart, int expectedCount) throws Exception {
     String query = "?searchTerm=%s&%s".formatted(matchMultipleTerm, queryStringPart);
     mockMvc
-        .perform(get(ApiConfig.Paths.CASELAW + query).contentType(MediaType.APPLICATION_JSON))
+        .perform(
+            get(ApiConfig.Paths.RECHTSPRECHUNG + query).contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$.member", hasSize(expectedCount)));
   }
 
@@ -238,7 +244,7 @@ class CaseLawSearchControllerApiIntegrationTest extends ContainersIntegrationBas
 
     mockMvc
         .perform(
-            get(ApiConfig.Paths.CASELAW + "/courts" + query)
+            get(ApiConfig.Paths.RECHTSPRECHUNG + "/courts" + query)
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.*.id", containsInAnyOrder(expectedIds)))
@@ -251,7 +257,7 @@ class CaseLawSearchControllerApiIntegrationTest extends ContainersIntegrationBas
     mockMvc
         .perform(
             MockMvcRequestBuilders.get(
-                    ApiConfig.Paths.CASELAW + "?query=document_number:BFRE000047655")
+                    ApiConfig.Paths.RECHTSPRECHUNG + "?query=document_number:BFRE000047655")
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk());
   }
@@ -262,7 +268,7 @@ class CaseLawSearchControllerApiIntegrationTest extends ContainersIntegrationBas
     String searchTerm = "test";
     mockMvc
         .perform(
-            get(ApiConfig.Paths.CASELAW + String.format("?searchTerm=%s", searchTerm))
+            get(ApiConfig.Paths.RECHTSPRECHUNG + String.format("?searchTerm=%s", searchTerm))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.member[*].textMatches").exists())
@@ -340,7 +346,7 @@ class CaseLawSearchControllerApiIntegrationTest extends ContainersIntegrationBas
     var perform =
         mockMvc
             .perform(
-                get(ApiConfig.Paths.CASELAW + String.format("?sort=%s", sortParam))
+                get(ApiConfig.Paths.RECHTSPRECHUNG + String.format("?sort=%s", sortParam))
                     .contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.member", hasSize(CaseLawTestData.allDocuments.size())));
 

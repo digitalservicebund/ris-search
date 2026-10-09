@@ -35,7 +35,10 @@ public class ChangelogResponseMapper {
       case LEGISLATION -> mapLegislation(changelog, remoteJsonContext);
       case CASE_LAW ->
           mapStandardDocument(
-              changelog, ApiConfig.Paths.CASELAW, JsonldTypes.DECISION, remoteJsonContext);
+              changelog,
+              ApiConfig.Paths.RECHTSPRECHUNG,
+              JsonldTypes.RECHTSPRECHUNG,
+              remoteJsonContext);
       case LITERATURE ->
           mapStandardDocument(
               changelog, ApiConfig.Paths.LITERATURE, JsonldTypes.LITERATURE, remoteJsonContext);
