@@ -35,7 +35,35 @@ public class BulkExportConfig {
   @Bean
   public BulkExportService caseLawBulkExportService(
       CaseLawBucket source, PublicFilesBucket target) {
-    return new BulkExportService(source, target, DocumentKind.CASE_LAW.getBulkZipPath());
+    return new BulkExportService(
+        source,
+        target,
+        DocumentKind.CASE_LAW.getBulkZipPath(),
+        BulkExportConfig::excludeCaseLawRenderings);
+  }
+
+  /**
+   * Rejects generated renderings of a case law document, i.e. non-xml files named after their
+   * directory like {@code ABC/ABC.pdf} or {@code ABC/ABC.html}. The xml manifestation {@code
+   * ABC/ABC.xml} and attachments like {@code ABC/image.png} are accepted.
+   *
+   * @param key object key of the file
+   * @return false if the file is a generated rendering, true otherwise
+   */
+  static boolean excludeCaseLawRenderings(String key) {
+    int lastSlash = key.lastIndexOf('/');
+    String fileName = key.substring(lastSlash + 1);
+    int lastDot = fileName.lastIndexOf('.');
+    if (lastSlash < 0 || lastDot < 0) {
+      return true;
+    }
+
+    String directory = key.substring(0, lastSlash);
+    String directoryName = directory.substring(directory.lastIndexOf('/') + 1);
+    String fileNameWithoutSuffix = fileName.substring(0, lastDot);
+    String suffix = fileName.substring(lastDot + 1);
+
+    return !directoryName.equals(fileNameWithoutSuffix) || suffix.equals("xml");
   }
 
   /**
