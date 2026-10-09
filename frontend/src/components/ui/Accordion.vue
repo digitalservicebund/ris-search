@@ -19,7 +19,7 @@ const headerId = useId();
     <!-- `list-none` and the marker rules remove the native disclosure triangle -->
     <summary
       :aria-expanded="open"
-      class="typo-label2-bold mb-6 flex cursor-pointer list-none flex-row items-center gap-8 text-blue-800 outline-offset-4 outline-blue-800 focus-visible:outline-4 [&::-webkit-details-marker]:hidden [&::marker]:hidden"
+      class="typo-label2-bold flex cursor-pointer list-none flex-row items-center gap-8 text-blue-800 outline-offset-4 outline-blue-800 focus-visible:outline-4 [&::-webkit-details-marker]:hidden [&::marker]:hidden"
       role="button"
       @click.prevent="open = !open"
     >
@@ -29,7 +29,7 @@ const headerId = useId();
       </div>
     </summary>
 
-    <section v-show="open" :aria-labelledby="headerId">
+    <section class="mt-6" v-show="open" :aria-labelledby="headerId">
       <slot />
     </section>
   </details>

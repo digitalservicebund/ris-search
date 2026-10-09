@@ -113,10 +113,6 @@ const normAbbreviation = computed(() => norm.value.abbreviation);
 
 const articleHtml = computed(() => data.value.htmlBody);
 
-const currentExpressionId = computed(
-  () => `/v1/legislation/eli/${expressionEli}`,
-);
-
 const normExpressionPath = `/gesetze/eli/${expressionEli}`;
 
 const normExpressionRoute = computed<RouteLocationRaw>(() => ({
@@ -257,7 +253,7 @@ const views = computed<OneOrMore<TabView>>(() => {
     },
   ];
 
-  if (isArticle.value) {
+  if (isArticle.value && article.value?.revision) {
     tabViews.push({
       path: "fassungen",
       label: "Fassungen",
@@ -386,7 +382,7 @@ const fassungenDateFilterInputId = useId();
         </section>
       </template>
 
-      <template #fassungen>
+      <template v-if="article?.revision" #fassungen>
         <section role="tabpanel" :aria-labelledby="fassungenTabPanelTitleId">
           <div class="content-grid pt-32 pb-32 md:pb-56">
             <div
@@ -411,8 +407,10 @@ const fassungenDateFilterInputId = useId();
               </div>
 
               <DocumentsNormsArtikelFassungenList
-                :currentExpressionId
+                :current-legislation-identifier="norm.legislationIdentifier"
+                :current-fassung-id="article.revision"
                 :fassungen="filteredFassungen"
+                :date-filter="fassungenDateFilterValue"
               />
             </div>
 
