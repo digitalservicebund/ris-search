@@ -20,7 +20,6 @@ import de.bund.digitalservice.ris.search.schema.CollectionSchema;
 import de.bund.digitalservice.ris.search.schema.LegislationExpressionSearchSchema;
 import de.bund.digitalservice.ris.search.service.ArticleService;
 import de.bund.digitalservice.ris.search.service.NormsService;
-import de.bund.digitalservice.ris.search.utils.eli.ExpressionEli;
 import de.bund.digitalservice.ris.search.utils.eli.ExpressionEliPath;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
