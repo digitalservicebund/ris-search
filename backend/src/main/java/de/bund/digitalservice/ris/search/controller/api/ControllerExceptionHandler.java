@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.NestedExceptionUtils;
 import org.springframework.data.elasticsearch.UncategorizedElasticsearchException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.validation.FieldError;
@@ -483,17 +484,20 @@ public class ControllerExceptionHandler {
   }
 
   /**
-   * handles HttpRequestMethodNotSupportedException
+   * handles HttpMediaTypeNotAcceptableException
    *
    * @param ex HttpMediaTypeNotAcceptableException
    * @return a {@link CustomErrorResponse} object with error details
    */
   @ExceptionHandler(HttpMediaTypeNotAcceptableException.class)
-  public ResponseEntity<CustomErrorResponse> handleMediaTypeNotExcepted(
-      HttpRequestMethodNotSupportedException ex) {
+  public ResponseEntity<CustomErrorResponse> handleMediaTypeNotAcceptable(
+      HttpMediaTypeNotAcceptableException ex) {
     CustomError error =
-        CustomError.builder().code("unsupported_media_type").message(ex.getMessage()).build();
-    return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
+        CustomError.builder().code("not_acceptable").message(ex.getMessage()).build();
+    // The client's Accept header can't be satisfied, so content negotiation would fail again
+    // for the error body. Force JSON so the error can still be written.
+    return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE)
+        .contentType(MediaType.APPLICATION_JSON)
         .body(new CustomErrorResponse(List.of(error)));
   }
 }

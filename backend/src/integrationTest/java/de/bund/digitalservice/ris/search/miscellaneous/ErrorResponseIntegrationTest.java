@@ -2,6 +2,7 @@ package de.bund.digitalservice.ris.search.miscellaneous;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -153,5 +154,15 @@ class ErrorResponseIntegrationTest extends ContainersIntegrationBase {
         .perform(get("/v1/feedback"))
         .andExpect(status().is(405))
         .andExpect(jsonPath("$.errors[0].code", Matchers.is("method_not_allowed")));
+  }
+
+  @Test
+  @DisplayName("Should return 406 with JSON error body on unacceptable media type")
+  void shouldReturnJsonErrorOnUnacceptableMediaType() throws Exception {
+    mockMvc
+        .perform(get("/v1/rechtsprechung").accept(MediaType.TEXT_XML))
+        .andExpect(status().is(406))
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("$.errors[0].code", Matchers.is("not_acceptable")));
   }
 }
