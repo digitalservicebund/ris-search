@@ -11,11 +11,11 @@
     "typecheck": "vue-tsc --noEmit"
   },
   "devDependencies": {
-    "oxfmt": "0.71.0",
-    "oxlint": "1.86.0",
+    "oxfmt": "0.72.0",
+    "oxlint": "1.87.0",
     "vitepress": "2.0.0-alpha.20",
     "vue": "3.5.43",
-    "vue-tsc": "3.3.11"
+    "vue-tsc": "3.3.12"
   },
   "devEngines": {
     "packageManager": {
