@@ -136,7 +136,7 @@ jobs:
           TZ: Europe/Berlin
 
       - name: Upload test reports
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         if: ${{ !failure() }}
         with:
           name: playwright-e2e-tests-report-${{ matrix.configuration_label }}-${{ matrix.browser }}
@@ -144,7 +144,7 @@ jobs:
           retention-days: 5
 
       - name: Upload traces of failed tests
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         if: ${{ failure() }}
         with:
           name: failed-e2e-tests-${{ matrix.configuration_label }}-${{ matrix.browser }}
@@ -152,14 +152,14 @@ jobs:
           retention-days: 5
 
       - name: Upload backend log
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         if: ${{ failure() }}
         with:
           name: backend-log-${{ matrix.configuration_label }}-${{ matrix.browser }}
           path: backend/backend.log
 
       - name: Upload frontend log
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         if: ${{ failure() }}
         with:
           name: frontend-log-${{ matrix.configuration_label }}-${{ matrix.browser }}
