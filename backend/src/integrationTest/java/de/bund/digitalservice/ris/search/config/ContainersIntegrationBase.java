@@ -128,12 +128,8 @@ public class ContainersIntegrationBase {
   }
 
   protected void loadDefaultData() {
-    loadDefaultFiles();
     loadDefaultEntites();
   }
-
-  /** Resets all S3 buckets with the test data. */
-  public void loadDefaultFiles() {}
 
   /** Clears all data from the buckets. */
   public void clearBuckets() {

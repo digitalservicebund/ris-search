@@ -4,6 +4,7 @@ import static de.bund.digitalservice.ris.SharedTestConstants.DATE_2023_01_02;
 import static de.bund.digitalservice.ris.SharedTestConstants.DATE_2024_01_01;
 import static de.bund.digitalservice.ris.SharedTestConstants.DATE_2024_01_02;
 
+import de.bund.digitalservice.ris.LoadXmlUtils;
 import de.bund.digitalservice.ris.builder.NormTestDataBuilder;
 import de.bund.digitalservice.ris.builder.models.common.AknP;
 import de.bund.digitalservice.ris.builder.models.common.AuthorialNote;
@@ -19,17 +20,41 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /** Test data for norms used in integration tests. */
 public class NormsTestData {
 
+  public static final String S_101_WORK_ELI = "eli/bund/bgbl-1/1991/s101";
   public static final String S_102_WORK_ELI = "eli/bund/bgbl-1/1991/s102";
 
   public static Map<String, String> s102WorkExpressions = createS102Work();
-  public static Map<String, String> allNormXml = new HashMap<>(s102WorkExpressions);
   public static List<TableOfContentsItem> nestedToC = setupNestedToC();
   public static List<Norm> allNorms = setupCommonNormEntities();
   public static List<Article> allArticles = setupCommonArticleEntities();
+
+  /**
+   * Loads the files of the S101 expression (regelungstext, attachment and binary files) from the
+   * test resources.
+   *
+   * @return map of eli file names to their content
+   */
+  public static Map<String, String> loadS101ExpressionFiles() {
+    String manifestationPrefix = S_101_WORK_ELI + "/1991-01-01/1/deu/1991-01-01/";
+    return Stream.of(
+            "regelungstext-1.xml",
+            "anlage-regelungstext-1.xml",
+            "dokument.pdf",
+            "bild_1.jpg",
+            "bild_1.png")
+        .map(fileName -> manifestationPrefix + fileName)
+        .collect(
+            Collectors.toMap(
+                Function.identity(),
+                fileName -> LoadXmlUtils.loadXmlAsString(Norm.class, fileName)));
+  }
 
   /**
    * Creates the S102 work with its expressions and attachments for testing purposes.

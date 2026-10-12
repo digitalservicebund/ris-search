@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.config.ContainersIntegrationBase;
+import de.bund.digitalservice.ris.search.controller.api.testData.NormsTestData;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.LegislationPartType;
 import de.bund.digitalservice.ris.search.service.IndexNormsService;
@@ -53,6 +54,7 @@ class NormsControllerHtmlApiIntegrationTest extends ContainersIntegrationBase {
   @Test
   @DisplayName("Html endpoint should return HTML when requesting a single norm")
   void shouldReturnHtmlWhenRequestingNormAsHtml() throws Exception {
+    addNormXmlFiles(NormsTestData.loadS101ExpressionFiles());
     var response =
         mockMvc
             .perform(get(MANIFESTATION_URL_HTML).contentType(MediaType.TEXT_HTML))
@@ -74,6 +76,7 @@ class NormsControllerHtmlApiIntegrationTest extends ContainersIntegrationBase {
   @Test
   @DisplayName("Html endpoint should adapt img src paths")
   void shouldReturnHtmlWithAdaptedImgSrcAttributes() throws Exception {
+    addNormXmlFiles(NormsTestData.loadS101ExpressionFiles());
     final MockHttpServletRequestBuilder requestBuilder =
         get(MANIFESTATION_URL_HTML).contentType(MediaType.TEXT_HTML);
 
@@ -97,6 +100,7 @@ class NormsControllerHtmlApiIntegrationTest extends ContainersIntegrationBase {
   @Test
   @DisplayName("Html Endpoint Should return html when requesting a single norm article")
   void shouldReturnHtmlWhenRequestingNormArticleAsHtml() throws Exception {
+    addNormXmlFiles(NormsTestData.loadS101ExpressionFiles());
     articlesRepository.save(
         Article.builder()
             .id("eli/bund/bgbl-1/1991/s101/1991-01-01/1/deu/art-z1")
@@ -119,6 +123,7 @@ class NormsControllerHtmlApiIntegrationTest extends ContainersIntegrationBase {
   @Test
   @DisplayName("The article html endpoint should work with a special character eid")
   void articleHtmlEndpointWorksWithSpecialCharacterEid() throws Exception {
+    addNormXmlFiles(NormsTestData.loadS101ExpressionFiles());
     articlesRepository.save(
         Article.builder()
             .id("eli/bund/bgbl-1/1991/s101/1991-01-01/1/deu/art-z%c2%a7%c2%a7%204%20bis%2014")
@@ -172,6 +177,7 @@ class NormsControllerHtmlApiIntegrationTest extends ContainersIntegrationBase {
       "Html Endpoint should resolve article html with different encodings and UTF-8 variants of eId")
   void shouldResolveArticleWithVariousEidFormats(String articleEid, boolean isEncoded)
       throws Exception {
+    addNormXmlFiles(NormsTestData.loadS101ExpressionFiles());
     String expressionEli = "eli/bund/bgbl-1/1991/s101/1991-01-01/1/deu";
     String eid = "art-z%c2%a7%c2%a7%204%20bis%2014";
     articlesRepository.save(

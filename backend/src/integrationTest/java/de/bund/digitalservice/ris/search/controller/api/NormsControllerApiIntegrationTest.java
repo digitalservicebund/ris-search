@@ -128,12 +128,14 @@ class NormsControllerApiIntegrationTest extends ContainersIntegrationBase {
   @DisplayName("File endpoint should {0}")
   void shouldReturnFilesWhenRequestedAndIfExtensionIsSupported(
       String ignoredTestDescription, int status, String path) throws Exception {
+    addNormXmlFiles(NormsTestData.loadS101ExpressionFiles());
     mockMvc.perform(get(path)).andExpect(status().is(status));
   }
 
   @Test
   @DisplayName("Serves images via the API with correct contentType")
   void shouldReturnReferencedImageWithContentType() throws Exception {
+    addNormXmlFiles(NormsTestData.loadS101ExpressionFiles());
     String url =
         ApiConfig.Paths.LEGISLATION_SINGLE
             + "/bund/bgbl-1/1991/s101/1991-01-01/1/deu/1991-01-01/bild_1.jpg";
@@ -145,6 +147,7 @@ class NormsControllerApiIntegrationTest extends ContainersIntegrationBase {
   @Test
   @DisplayName("XML Endpoint Should return XML when requesting a single norm")
   void textLegislationXMLEndpoint() throws Exception {
+    addNormXmlFiles(NormsTestData.loadS101ExpressionFiles());
     mockMvc
         .perform(get(MANIFESTATION_URL_XML).contentType(MediaType.APPLICATION_XML))
         .andExpectAll(
@@ -156,6 +159,7 @@ class NormsControllerApiIntegrationTest extends ContainersIntegrationBase {
   @Test
   @DisplayName("ZIP endpoint should return a ZIP all relevant files")
   void zipEndpointWithRelevantFiles() throws Exception {
+    addNormXmlFiles(NormsTestData.loadS101ExpressionFiles());
     MvcResult asyncResult =
         mockMvc
             .perform(get(MANIFESTATION_PREFIX_URL_ZIP).contentType("application/zip"))
