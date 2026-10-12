@@ -17,7 +17,7 @@ public class CustomS3MockContainer extends GenericContainer<CustomS3MockContaine
     addEnv(
         "COM_ADOBE_TESTING_S3MOCK_STORE_INITIAL_BUCKETS",
         "caselaw,literature,administrative-directive,norm,portal,public");
-    waitingFor(Wait.forHttp("/").forPort(HTTP_PORT).forStatusCode(200));
+    setWaitStrategy(Wait.forHttp("/").forPort(HTTP_PORT).forStatusCode(200));
   }
 
   public String getHttpEndpoint() {
