@@ -44,6 +44,9 @@ const {
   rowAs?: string | Component;
   /** Rows to render, in order. */
   rows: T[];
+
+  /** If true the header row is hidden */
+  hideHeader?: boolean;
 }>();
 
 defineSlots<
@@ -79,7 +82,7 @@ const gridTemplateColumns = computed(() =>
     <!-- Decorative: every row repeats the column labels for assistive
          technology, so exposing them here as well would only add noise. -->
     <li
-      v-if="columns.length"
+      v-if="columns.length && !hideHeader"
       class="hidden border-b border-gray-400 md:col-span-full md:grid md:grid-cols-subgrid"
       aria-hidden="true"
     >
