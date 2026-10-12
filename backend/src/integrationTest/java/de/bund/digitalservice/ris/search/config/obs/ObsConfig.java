@@ -2,98 +2,97 @@ package de.bund.digitalservice.ris.search.config.obs;
 
 import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorageClient;
 import de.bund.digitalservice.ris.search.repository.objectstorage.S3ObjectStorageClient;
+import java.net.URI;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
+import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.s3.S3Client;
 
-/** Configuration for mock S3 clients used in testing. */
+/** Configuration for S3 clients backed by the S3Mock container used in testing. */
 @Configuration
+@Profile({"test"})
 public class ObsConfig {
 
+  private final URI endpoint;
+
+  public ObsConfig(@Value("${s3mock.endpoint}") String endpoint) {
+    this.endpoint = URI.create(endpoint);
+  }
+
   /**
-   * Mock S3 client for case law documents
+   * S3 client for case law documents
    *
-   * @param relativeLocalStorageDirectory
    * @return ObjectStorageClient
    */
   @Bean(name = "caseLawS3Client")
-  @Profile({"test"})
-  public ObjectStorageClient mockCaseLawTestS3Client(
-      @Value("${local.file-storage}") String relativeLocalStorageDirectory) {
-    return new S3ObjectStorageClient(
-        new TestMockS3Client("caselaw", relativeLocalStorageDirectory), "caselaw");
+  public ObjectStorageClient caseLawTestS3Client() {
+    return createClient("caselaw");
   }
 
   /**
-   * Mock S3 client for literature documents
+   * S3 client for literature documents
    *
-   * @param relativeLocalStorageDirectory
    * @return ObjectStorageClient
    */
   @Bean(name = "literatureS3Client")
-  @Profile({"test"})
-  public ObjectStorageClient mockLiteratureTestS3Client(
-      @Value("${local.file-storage}") String relativeLocalStorageDirectory) {
-    var bucketName = "literature";
-    return new S3ObjectStorageClient(
-        new TestMockS3Client(bucketName, relativeLocalStorageDirectory), bucketName);
+  public ObjectStorageClient literatureTestS3Client() {
+    return createClient("literature");
   }
 
   /**
-   * Mock S3 client for administrative directive documents
+   * S3 client for administrative directive documents
    *
-   * @param relativeLocalStorageDirectory
    * @return ObjectStorageClient
    */
   @Bean(name = "administrativeDirectiveS3Client")
-  @Profile({"test"})
-  public ObjectStorageClient mockAdministrativeDirectiveTestS3Client(
-      @Value("${local.file-storage}") String relativeLocalStorageDirectory) {
-    var bucketName = "administrative-directive";
-    return new S3ObjectStorageClient(
-        new TestMockS3Client(bucketName, relativeLocalStorageDirectory), bucketName);
+  public ObjectStorageClient administrativeDirectiveTestS3Client() {
+    return createClient("administrative-directive");
   }
 
   /**
-   * Mock S3 client for norm documents
+   * S3 client for norm documents
    *
-   * @param relativeLocalStorageDirectory
    * @return ObjectStorageClient
    */
   @Bean(name = "normS3Client")
-  @Profile({"test"})
-  public ObjectStorageClient mockNormTestS3Client(
-      @Value("${local.file-storage}") String relativeLocalStorageDirectory) {
-    return new S3ObjectStorageClient(
-        new TestMockS3Client("norm", relativeLocalStorageDirectory), "norm");
+  public ObjectStorageClient normTestS3Client() {
+    return createClient("norm");
   }
 
   /**
-   * Mock S3 client for portal documents
+   * S3 client for portal documents
    *
-   * @param relativeLocalStorageDirectory
    * @return ObjectStorageClient
    */
   @Bean(name = "portalS3Client")
-  @Profile({"test"})
-  public ObjectStorageClient mockPortalTestS3Client(
-      @Value("${local.file-storage}") String relativeLocalStorageDirectory) {
-    return new S3ObjectStorageClient(
-        new TestMockS3Client("portal", relativeLocalStorageDirectory), "portal");
+  public ObjectStorageClient portalTestS3Client() {
+    return createClient("portal");
   }
 
   /**
-   * Mock S3 client for public documents
+   * S3 client for public documents
    *
-   * @param relativeLocalStorageDirectory
    * @return ObjectStorageClient
    */
   @Bean(name = "publicFilesS3Client")
-  @Profile({"test"})
-  public ObjectStorageClient mockPublicFilesTestS3Client(
-      @Value("${local.file-storage}") String relativeLocalStorageDirectory) {
+  public ObjectStorageClient publicFilesTestS3Client() {
+    return createClient("public");
+  }
+
+  private ObjectStorageClient createClient(String bucketName) {
     return new S3ObjectStorageClient(
-        new TestMockS3Client("public", relativeLocalStorageDirectory), "public");
+        S3Client.builder()
+            .credentialsProvider(
+                StaticCredentialsProvider.create(
+                    AwsBasicCredentials.create("local-s3-mock-key", "local-s3-mock-secret")))
+            .forcePathStyle(true)
+            .region(Region.of("eu-de"))
+            .endpointOverride(endpoint)
+            .build(),
+        bucketName);
   }
 }

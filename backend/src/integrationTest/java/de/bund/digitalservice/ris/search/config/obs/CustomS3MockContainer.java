@@ -14,6 +14,9 @@ public class CustomS3MockContainer extends GenericContainer<CustomS3MockContaine
   public CustomS3MockContainer() {
     super(DockerImageName.parse(DOCKER_IMAGE_S3_MOCK));
     addExposedPort(HTTP_PORT);
+    addEnv(
+        "COM_ADOBE_TESTING_S3MOCK_STORE_INITIAL_BUCKETS",
+        "caselaw,literature,administrative-directive,norm,portal,public");
     waitingFor(Wait.forHttp("/").forPort(HTTP_PORT).forStatusCode(200));
   }
 

@@ -3,7 +3,7 @@ package de.bund.digitalservice.ris.search.config;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 import de.bund.digitalservice.ris.TestJsonUtils;
-import de.bund.digitalservice.ris.search.config.obs.TestMockS3Client;
+import de.bund.digitalservice.ris.search.config.obs.CustomS3MockContainer;
 import de.bund.digitalservice.ris.search.controller.api.testData.AdministrativeDirectiveTestData;
 import de.bund.digitalservice.ris.search.controller.api.testData.CaseLawTestData;
 import de.bund.digitalservice.ris.search.controller.api.testData.LiteratureTestData;
@@ -15,8 +15,8 @@ import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
+import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorageClient;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PublicFilesBucket;
-import de.bund.digitalservice.ris.search.repository.objectstorage.S3ObjectStorageClient;
 import de.bund.digitalservice.ris.search.repository.opensearch.AdministrativeDirectiveRepository;
 import de.bund.digitalservice.ris.search.repository.opensearch.ArticlesRepository;
 import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository;
@@ -29,7 +29,6 @@ import de.bund.digitalservice.ris.search.service.AllDocumentsService;
 import de.bund.digitalservice.ris.search.service.CaseLawService;
 import de.bund.digitalservice.ris.search.service.LiteratureService;
 import de.bund.digitalservice.ris.search.service.NormsService;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -71,23 +70,27 @@ public class ContainersIntegrationBase {
 
   @Autowired
   @Qualifier("caseLawS3Client")
-  private S3ObjectStorageClient caseLawS3Client;
+  private ObjectStorageClient caseLawS3Client;
 
   @Autowired
   @Qualifier("literatureS3Client")
-  private S3ObjectStorageClient literatureS3Client;
+  private ObjectStorageClient literatureS3Client;
 
   @Autowired
   @Qualifier("administrativeDirectiveS3Client")
-  protected S3ObjectStorageClient administrativeDirectiveS3Client;
+  protected ObjectStorageClient administrativeDirectiveS3Client;
 
   @Autowired
   @Qualifier("normS3Client")
-  private S3ObjectStorageClient normS3Client;
+  private ObjectStorageClient normS3Client;
 
   @Autowired
   @Qualifier("portalS3Client")
-  private S3ObjectStorageClient portalS3Client;
+  private ObjectStorageClient portalS3Client;
+
+  @Autowired
+  @Qualifier("publicFilesS3Client")
+  private ObjectStorageClient publicFilesS3Client;
 
   // Autowire Service layer
   @Autowired protected AllDocumentsService allDocumentsService;
@@ -100,16 +103,20 @@ public class ContainersIntegrationBase {
   public static final CustomOpensearchContainer openSearchContainer =
       new CustomOpensearchContainer();
 
+  public static final CustomS3MockContainer s3Container = new CustomS3MockContainer();
+
   static {
     TestcontainersConfiguration.getInstance()
         .updateUserConfig("testcontainers.reuse.enable", "true");
     openSearchContainer.withReuse(true);
     openSearchContainer.start();
+    s3Container.start();
   }
 
   @DynamicPropertySource
   static void registerDynamicProperties(DynamicPropertyRegistry registry) {
     registry.add("opensearch.port", openSearchContainer::getFirstMappedPort);
+    registry.add("s3mock.endpoint", s3Container::getHttpEndpoint);
   }
 
   // Shared cleanup
@@ -126,32 +133,19 @@ public class ContainersIntegrationBase {
   }
 
   /** Resets all S3 buckets with the test data. */
-  public void loadDefaultFiles() {
-    try {
-      ((TestMockS3Client) caseLawS3Client.getS3Client()).loadDefaultFiles();
-      ((TestMockS3Client) literatureS3Client.getS3Client()).loadDefaultFiles();
-      ((TestMockS3Client) normS3Client.getS3Client()).loadDefaultFiles();
-      ((TestMockS3Client) administrativeDirectiveS3Client.getS3Client()).loadDefaultFiles();
-      for (var normFile : NormsTestData.allNormXml.entrySet()) {
-        ((TestMockS3Client) normS3Client.getS3Client())
-            .putFile(normFile.getKey(), normFile.getValue());
-      }
-      ((TestMockS3Client) portalS3Client.getS3Client()).loadDefaultFiles();
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
-  }
+  public void loadDefaultFiles() {}
 
   /** Clears all data from the buckets. */
   public void clearBuckets() {
-    try {
-      ((TestMockS3Client) caseLawS3Client.getS3Client()).emptyBucket();
-      ((TestMockS3Client) literatureS3Client.getS3Client()).emptyBucket();
-      ((TestMockS3Client) normS3Client.getS3Client()).emptyBucket();
-      ((TestMockS3Client) administrativeDirectiveS3Client.getS3Client()).emptyBucket();
-      ((TestMockS3Client) portalS3Client.getS3Client()).emptyBucket();
-    } catch (IOException e) {
-      throw new RuntimeException(e);
+    for (ObjectStorageClient client :
+        List.of(
+            caseLawS3Client,
+            literatureS3Client,
+            administrativeDirectiveS3Client,
+            normS3Client,
+            portalS3Client,
+            publicFilesS3Client)) {
+      client.listKeysByPrefix("").forEach(client::delete);
     }
   }
 
