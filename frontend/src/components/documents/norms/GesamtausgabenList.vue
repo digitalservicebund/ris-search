@@ -10,6 +10,8 @@ import type { LegislationExpression } from "~/types/api";
 const props = defineProps<{
   currentLegislationIdentifier: string;
   gesamtausgaben: LegislationExpression[];
+  hideHeader?: boolean;
+  initialItemsLimit?: number;
 }>();
 
 type GesamtausgabeRow = DataTableRow & {
@@ -21,6 +23,8 @@ type GesamtausgabeRow = DataTableRow & {
 const route = useRoute();
 
 const missingDate = "—";
+
+const itemsLimit = ref(props.initialItemsLimit);
 
 const columns: DataTableColumn<GesamtausgabeRow>[] = [
   { key: "fromDate", label: "Gültig ab" },
@@ -34,9 +38,9 @@ function hasBothDates(row: GesamtausgabeRow) {
 
 const rows = computed<GesamtausgabeRow[]>(() => {
   // newest Gesamtausgabe first
-  const gesamtausgabenSorted = props.gesamtausgaben.toSorted((a, b) =>
-    b.temporalCoverage.localeCompare(a.temporalCoverage),
-  );
+  const gesamtausgabenSorted = props.gesamtausgaben
+    .toSorted((a, b) => b.temporalCoverage.localeCompare(a.temporalCoverage))
+    .slice(0, itemsLimit.value);
 
   return gesamtausgabenSorted.map((gesamtausgabe) => {
     const validityInterval = temporalCoverageToValidityInterval(
@@ -88,49 +92,60 @@ watch(
 </script>
 
 <template>
-  <output aria-atomic="true" aria-live="polite" class="sr-only">
-    {{ announcement }}
-  </output>
+  <div>
+    <output aria-atomic="true" aria-live="polite" class="sr-only">
+      {{ announcement }}
+    </output>
 
-  <UiDataTable
-    :columns="columns"
-    :row-as="NuxtLink"
-    :rows="rows"
-    aria-label="Gesamtausgaben"
-    class="-mx-16 md:mx-0"
-  >
-    <template #cell-fromDate="{ row }">
-      <!-- Grows to the cell's padding, so the dash can be centered on the
+    <UiDataTable
+      :columns="columns"
+      :row-as="NuxtLink"
+      :rows="rows"
+      :hide-header
+      aria-label="Gesamtausgaben"
+      class="-mx-16 md:mx-0"
+    >
+      <template #cell-fromDate="{ row }">
+        <!-- Grows to the cell's padding, so the dash can be centered on the
            boundary to the next column. Screen readers already get the labels,
            so the dash would only add noise. -->
-      <span class="relative grow">
-        <span :class="{ 'md:hidden': row.fromDate === missingDate }">{{
-          row.fromDate
-        }}</span
-        ><span
-          v-if="hasBothDates(row)"
-          aria-hidden="true"
-          class="absolute top-1/2 -right-16 hidden translate-x-1/2 -translate-y-1/2 md:block"
-          >–</span
-        >
-      </span>
-    </template>
+        <span class="relative grow">
+          <span :class="{ 'md:hidden': row.fromDate === missingDate }">{{
+            row.fromDate
+          }}</span
+          ><span
+            v-if="hasBothDates(row)"
+            aria-hidden="true"
+            class="absolute top-1/2 -right-16 hidden translate-x-1/2 -translate-y-1/2 md:block"
+            >–</span
+          >
+        </span>
+      </template>
 
-    <template #cell-toDate="{ row }">
-      <span :class="{ 'md:hidden': row.toDate === missingDate }">
-        {{ row.toDate }}
-      </span>
-    </template>
+      <template #cell-toDate="{ row }">
+        <span :class="{ 'md:hidden': row.toDate === missingDate }">
+          {{ row.toDate }}
+        </span>
+      </template>
 
-    <template #cell-status="{ row }">
-      <UiBadge
-        :color="row.status.color"
-        :label="row.status.label"
-        class="font-bold!"
-        variant="small"
-      />
-    </template>
+      <template #cell-status="{ row }">
+        <UiBadge
+          :color="row.status.color"
+          :label="row.status.label"
+          class="font-bold!"
+          variant="small"
+        />
+      </template>
 
-    <template #empty>Keine Ergebnisse gefunden</template>
-  </UiDataTable>
+      <template #empty>Keine Ergebnisse gefunden</template>
+    </UiDataTable>
+    <UiButton
+      v-if="rows.length < gesamtausgaben.length"
+      severity="info"
+      size="small"
+      class="mt-8"
+      @click="itemsLimit = undefined"
+      >Alles anzeigen
+    </UiButton>
+  </div>
 </template>
