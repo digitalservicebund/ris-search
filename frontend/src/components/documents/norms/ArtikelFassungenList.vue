@@ -265,6 +265,9 @@ watch(
                         currentLegislationIdentifier
                       "
                       :gesamtausgaben="expandedRowContent.gesamtausgaben"
+                      hideHeader
+                      :initial-items-limit="5"
+                      class="mt-16 border-t border-gray-400"
                     />
                   </UiAccordion>
                 </div>

@@ -25,6 +25,7 @@ type Props = {
   columns: DataTableColumn<Row>[];
   rowAs?: string;
   rows: Row[];
+  hideHeader?: boolean;
 };
 
 /**
@@ -72,6 +73,13 @@ describe("DataTable", () => {
 
     // The per-row labels, which carry the information for screen readers and
     // are shown next to the value on narrow viewports
+    expect(screen.getAllByText("Gültig ab:")).toHaveLength(2);
+  });
+
+  it("omits the header row but keeps the per-row labels when hideHeader is set", () => {
+    renderTable({ columns, rows, hideHeader: true });
+
+    expect(screen.queryByText("Gültig ab")).not.toBeInTheDocument();
     expect(screen.getAllByText("Gültig ab:")).toHaveLength(2);
   });
 
