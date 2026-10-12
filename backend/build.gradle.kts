@@ -101,6 +101,8 @@ dependencies {
     implementation(libs.pebble)
     implementation(libs.streamex)
 
+    implementation(libs.posthog.server)
+
     // CVE-2026-5588
     implementation(platform(libs.bouncycastle.bom))
 

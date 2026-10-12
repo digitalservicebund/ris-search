@@ -42,6 +42,7 @@ reflections = "0.10.2"
 # CVE-2026-68497, CVE-2026-89407: overrides Spring Boot's managed Jackson BOM versions
 jackson2 = "2.22.3"
 jackson3 = "3.2.3"
+posthog-server = "2.21.1"
 
 [libraries]
 spring-actuator = { module="org.springframework.boot:spring-boot-starter-actuator", version.ref="spring-boot-starter" }
@@ -82,6 +83,7 @@ restassured = { module = 'io.rest-assured:rest-assured', version.ref = "rest-ass
 apicatalog-titanium-json = { module="com.apicatalog:titanium-json-ld", version.ref = "titanium-json"}
 glassfish-jakarta-json = { module = "org.glassfish:jakarta.json", version.ref = "jakarta-json"}
 commons-io = { module = "commons-io:commons-io", version.ref = "commons-io" }
+posthog-server = { module = "com.posthog:posthog-server", version.ref = "posthog-server"}
 
 # CVE-2026-5588
 bouncycastle-bom = { module = "org.bouncycastle:bc-jdk18on-bom", version = "1.86.1" }
