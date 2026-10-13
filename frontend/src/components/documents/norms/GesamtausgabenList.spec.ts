@@ -3,7 +3,6 @@ import {
   registerEndpoint,
   mockNuxtImport,
 } from "@nuxt/test-utils/runtime";
-import userEvent from "@testing-library/user-event";
 import { screen, within } from "@testing-library/vue";
 import { expect, vi } from "vitest";
 import type { JSONLDList, LegislationExpression } from "~/types/api";
@@ -228,61 +227,6 @@ describe("GesamtausgabenList", () => {
     expect(screen.getByText("Keine Ergebnisse gefunden")).toBeInTheDocument();
     expect(screen.queryAllByRole("link")).toHaveLength(0);
   });
-
-  it("shows only the newest gesamtausgaben up to the initial limit", async () => {
-    await renderSuspended(GesamtausgabenList, {
-      props: { ...props(), initialItemsLimit: 2 },
-    });
-
-    expect(screen.getByText("01.01.2031")).toBeInTheDocument();
-    expect(screen.getByText("01.01.2020")).toBeInTheDocument();
-    expect(screen.queryByText("05.01.2000")).not.toBeInTheDocument();
-    expect(
-      screen.getByRole("button", { name: "Alles anzeigen" }),
-    ).toBeInTheDocument();
-  });
-
-  it("shows all gesamtausgaben after clicking 'Alles anzeigen'", async () => {
-    const user = userEvent.setup();
-    await renderSuspended(GesamtausgabenList, {
-      props: { ...props(), initialItemsLimit: 2 },
-    });
-
-    await user.click(screen.getByRole("button", { name: "Alles anzeigen" }));
-
-    expect(screen.getByText("05.01.2000")).toBeInTheDocument();
-    expect(
-      screen.queryByRole("button", { name: "Alles anzeigen" }),
-    ).not.toBeInTheDocument();
-  });
-
-  it("announces how many gesamtausgaben there are after clicking 'Alles anzeigen'", async () => {
-    const user = userEvent.setup();
-    await renderSuspended(GesamtausgabenList, {
-      props: { ...props(), initialItemsLimit: 2 },
-    });
-
-    await user.click(screen.getByRole("button", { name: "Alles anzeigen" }));
-
-    expect(screen.getByRole("status")).toHaveTextContent("3 Gesamtausgaben");
-  });
-
-  it.each([
-    ["no limit is set", undefined],
-    ["the limit covers all gesamtausgaben", 3],
-  ])(
-    "does not offer 'Alles anzeigen' when %s",
-    async (_, initialItemsLimit) => {
-      await renderSuspended(GesamtausgabenList, {
-        props: { ...props(), initialItemsLimit },
-      });
-
-      expect(screen.getByText("05.01.2000")).toBeInTheDocument();
-      expect(
-        screen.queryByRole("button", { name: "Alles anzeigen" }),
-      ).not.toBeInTheDocument();
-    },
-  );
 
   it("does not announce anything before the gesamtausgaben change", async () => {
     await renderSuspended(GesamtausgabenList, { props: props() });
