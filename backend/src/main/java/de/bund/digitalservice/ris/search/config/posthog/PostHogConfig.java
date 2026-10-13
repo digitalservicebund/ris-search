@@ -26,7 +26,7 @@ public class PostHogConfig {
    * @return the configured {@link com.posthog.server.PostHogInterface}
    */
   @Bean(destroyMethod = "close")
-  @Profile({"test", "prototype"})
+  @Profile({"prototype"})
   public PostHogInterface postHogInterface(PosthogProperties properties) {
     var builder =
         com.posthog.server.PostHogConfig.builder(properties.getApiKey())
@@ -48,7 +48,7 @@ public class PostHogConfig {
    * @return a {@link PostHogServerClient}
    */
   @Bean
-  @Profile({"test", "prototype"})
+  @Profile({"prototype"})
   public PostHogClient postHogClient(PostHogInterface postHog) {
     return new PostHogServerClient(postHog);
   }
@@ -59,7 +59,7 @@ public class PostHogConfig {
    * @return a {@link NoOpPostHogClient}
    */
   @Bean
-  @Profile({"!test & !prototype"})
+  @Profile({"!prototype"})
   public PostHogClient noOpPostHogClient() {
     return new NoOpPostHogClient();
   }

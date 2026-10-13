@@ -2,6 +2,7 @@ package de.bund.digitalservice.ris.search.client;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.verify;
 
 import com.posthog.server.PostHogCaptureOptions;
@@ -34,5 +35,17 @@ class PostHogServerClientTest {
     verify(postHog).capture(eq(userId), eq("survey sent"), options.capture());
     assertThat(options.getValue().getProperties())
         .isEqualTo(Map.of("$survey_id", surveyId, "$survey_response", text, "$current_url", url));
+  }
+
+  @Test
+  void submitsApiEventWithoutDistinctId() {
+    var postHogClient = new PostHogServerClient(postHog);
+
+    postHogClient.submitApiEvent("/v1/legislation", "GET", "test-agent");
+
+    var options = ArgumentCaptor.forClass(PostHogCaptureOptions.class);
+    verify(postHog).capture(isNull(), eq("api_call_performed"), options.capture());
+    assertThat(options.getValue().getProperties())
+        .isEqualTo(Map.of("path", "/v1/legislation", "method", "GET", "user_agent", "test-agent"));
   }
 }
