@@ -4,7 +4,6 @@ import IcChevronRightIcon from "~icons/ic/outline-chevron-right";
 import FassungDetails from "~/components/documents/norms/FassungDetails.vue";
 import { useArtikelFassungen } from "~/composables/useArtikelFassungen.ts";
 import type { ArtikelFassung } from "~/types/api.ts";
-import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting.ts";
 
 const {
   currentLegislationIdentifier,
@@ -94,7 +93,7 @@ watch(rows, (newRows) => {
   expandRow(onlyRow);
 });
 
-const currentRowData = computed(() => {
+const expandedRowData = computed(() => {
   if (!expandedRowKey.value) return undefined;
 
   const data = fassungenCache.value.get(expandedRowKey.value);
@@ -202,7 +201,7 @@ watch(
             <FassungDetails
               :current-legislation-identifier="currentLegislationIdentifier"
               :current="row.current"
-              :details-content="currentRowData"
+              :details-content="expandedRowData"
             />
           </section>
         </details>

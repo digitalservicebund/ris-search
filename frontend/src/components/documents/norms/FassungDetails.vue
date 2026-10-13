@@ -4,7 +4,7 @@ import GesamtausgabenList from "~/components/documents/norms/GesamtausgabenList.
 import { useShowMore } from "~/composables/useShowMore.ts";
 import type { LegislationExpression } from "~/types/api.ts";
 
-export type FassungDetailsContent = {
+type FassungDetailsContent = {
   gesamtausgaben: LegislationExpression[];
   html?: string;
   error: boolean;
