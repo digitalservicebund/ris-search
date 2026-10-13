@@ -248,47 +248,6 @@ describe("ArtikelFassungenList", () => {
     );
   });
 
-  it.each([
-    ["both dates", "2020-01-01/2030-12-31", "01.01.2020 - 31.12.2030"],
-    ["only a from date", "2020-01-01/..", "gültig ab 01.01.2020"],
-    ["only a to date", "../2030-12-31", "gültig bis 31.12.2030"],
-  ])(
-    "links the only Gesamtausgabe with %s",
-    async (_, temporalCoverage, validity) => {
-      const identifier =
-        "eli/bund/bgbl-1/2000/s001/2020-01-01/1/deu/regelungstext-1";
-      mockBackend({
-        gesamtausgaben: [createGesamtausgabe(identifier, temporalCoverage)],
-      });
-      const user = userEvent.setup();
-      await renderSuspended(ArtikelFassungenList, { props: props() });
-
-      await user.click(screen.getByText("01.01.2031"));
-
-      const link = screen.getByRole("link", {
-        name: `Gesamtausgabe ${validity} öffnen`,
-      });
-      expect(link).toHaveAttribute("href", `/gesetze/${identifier}`);
-      expect(
-        screen.queryByRole("button", { name: "Gesamtausgabe auswählen" }),
-      ).not.toBeInTheDocument();
-    },
-  );
-
-  it("links the only Gesamtausgabe without dates when it has no validity", async () => {
-    mockBackend({
-      gesamtausgaben: [createGesamtausgabe("eli/bund/test", "../..")],
-    });
-    const user = userEvent.setup();
-    await renderSuspended(ArtikelFassungenList, { props: props() });
-
-    await user.click(screen.getByText("01.01.2031"));
-
-    expect(
-      screen.getByRole("link", { name: "Gesamtausgabe öffnen" }),
-    ).toHaveAttribute("href", "/gesetze/eli/bund/test");
-  });
-
   it("lets the user pick from a table when there are multiple Gesamtausgaben", async () => {
     const identifiers = [
       "eli/bund/bgbl-1/2000/s001/2031-01-01/1/deu/regelungstext-1",
@@ -312,9 +271,11 @@ describe("ArtikelFassungenList", () => {
       screen.queryByRole("list", { name: "Gesamtausgaben" }),
     ).not.toBeInTheDocument();
 
-    await user.click(
-      screen.getByRole("button", { name: "Gesamtausgabe auswählen" }),
-    );
+    // The mobile drawer trigger has the same name but opens a dialog
+    const accordionButton = screen
+      .getAllByRole("button", { name: "Gesamtausgabe auswählen" })
+      .find((button) => !button.hasAttribute("aria-haspopup"))!;
+    await user.click(accordionButton);
 
     const table = screen.getByRole("list", { name: "Gesamtausgaben" });
     // header row is hidden
@@ -335,39 +296,16 @@ describe("ArtikelFassungenList", () => {
     await renderSuspended(ArtikelFassungenList, { props: props() });
 
     await user.click(screen.getByText("01.01.2031"));
-    await user.click(
-      screen.getByRole("button", { name: "Gesamtausgabe auswählen" }),
-    );
+    // The mobile drawer trigger has the same name but opens a dialog
+    const accordionButton = screen
+      .getAllByRole("button", { name: "Gesamtausgabe auswählen" })
+      .find((button) => !button.hasAttribute("aria-haspopup"))!;
+    await user.click(accordionButton);
 
     const table = screen.getByRole("list", { name: "Gesamtausgaben" });
     const [otherLink, currentLink] = within(table).getAllByRole("link");
     expect(otherLink).not.toHaveAttribute("aria-current");
     expect(currentLink).toHaveAttribute("aria-current", "page");
-  });
-
-  it("shows the 5 newest Gesamtausgaben until the user asks for all", async () => {
-    const years = [2031, 2030, 2029, 2028, 2027, 2026];
-    mockBackend({
-      gesamtausgaben: years.map((year) =>
-        createGesamtausgabe(`eli/bund/${year}`, `${year}-01-01/..`),
-      ),
-    });
-    const user = userEvent.setup();
-    await renderSuspended(ArtikelFassungenList, { props: props() });
-
-    await user.click(screen.getByText("01.01.2031"));
-    await user.click(
-      screen.getByRole("button", { name: "Gesamtausgabe auswählen" }),
-    );
-
-    const table = screen.getByRole("list", { name: "Gesamtausgaben" });
-    expect(within(table).getAllByRole("link")).toHaveLength(5);
-    expect(within(table).queryByText("01.01.2026")).not.toBeInTheDocument();
-
-    await user.click(screen.getByRole("button", { name: "Alles anzeigen" }));
-
-    expect(within(table).getAllByRole("link")).toHaveLength(6);
-    expect(within(table).getByText("01.01.2026")).toBeVisible();
   });
 
   describe("with a date filter", () => {

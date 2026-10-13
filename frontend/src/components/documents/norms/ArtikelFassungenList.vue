@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import IcChevronRightIcon from "~icons/ic/outline-chevron-right";
-import GesamtausgabenList from "~/components/documents/norms/GesamtausgabenList.vue";
+import FassungDetails from "~/components/documents/norms/FassungDetails.vue";
 import { useArtikelFassungen } from "~/composables/useArtikelFassungen.ts";
-import type { ArtikelFassung, LegislationExpression } from "~/types/api.ts";
+import type { ArtikelFassung } from "~/types/api.ts";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting.ts";
 
 const {
@@ -30,13 +30,6 @@ type FassungRow = {
 type FassungColumn = {
   key: Extract<keyof FassungRow, string>;
   label: string;
-};
-
-type RowContent = {
-  gesamtausgabeLink?: { label: string; to: string };
-  gesamtausgaben: LegislationExpression[];
-  html?: string;
-  error: boolean;
 };
 
 const missingDate = "—";
@@ -96,57 +89,22 @@ async function onRowClick(row: FassungRow, event: MouseEvent) {
   summary.scrollIntoView({ block: "nearest" });
 }
 
-const expandedRowContent = computed<RowContent | undefined>(() => {
-  if (!expandedRowKey.value) return undefined;
-  const cachedData = fassungenCache.value.get(expandedRowKey.value);
-  if (!cachedData) return undefined;
-
-  const gesamtausgaben = versionDateFilter(
-    cachedData.gesamtausgaben,
-    dateFilter,
-  );
-
-  if (gesamtausgaben.length === 1) {
-    const gesamtausgabe = gesamtausgaben[0]!;
-    const formattedTemporalCoverage = formatTemporalCoverage(
-      gesamtausgabe.temporalCoverage,
-    );
-    const label = `Gesamtausgabe ${formattedTemporalCoverage}öffnen`;
-    const to = `/gesetze/${gesamtausgabe.legislationIdentifier}`;
-
-    return {
-      ...cachedData,
-      gesamtausgabeLink: {
-        label,
-        to,
-      },
-    };
-  }
-
-  return {
-    ...cachedData,
-  };
-});
-
-function formatTemporalCoverage(temporalCoverage?: string) {
-  const coverage = temporalCoverageToValidityInterval(temporalCoverage);
-  const from = dateFormattedDDMMYYYY(coverage?.from);
-  const to = dateFormattedDDMMYYYY(coverage?.to);
-
-  if (from && to) {
-    return `${from} - ${to} `;
-  } else if (from) {
-    return `gültig ab ${from} `;
-  } else if (to) {
-    return `gültig bis ${to} `;
-  } else {
-    return "";
-  }
-}
-
 watch(rows, (newRows) => {
   const onlyRow = newRows.length === 1 ? newRows[0] : undefined;
   expandRow(onlyRow);
+});
+
+const currentRowData = computed(() => {
+  if (!expandedRowKey.value) return undefined;
+
+  const data = fassungenCache.value.get(expandedRowKey.value);
+
+  if (!data) return undefined;
+
+  return {
+    ...data,
+    gesamtausgaben: versionDateFilter(data.gesamtausgaben, dateFilter),
+  };
 });
 
 // Filtering swaps the rows out in place, which assistive technology does not
@@ -240,53 +198,12 @@ watch(
               class="mx-16 size-24 rotate-90 self-center text-blue-800 group-open:-rotate-90"
             />
           </summary>
-
-          <section class="col-span-full">
-            <template v-if="expandedRowKey === row.key">
-              <template v-if="expandedRowContent?.error === false">
-                <div
-                  class="mx-16 mt-8 border border-blue-400 bg-white p-16"
-                  :class="{ 'mb-10': row.current }"
-                >
-                  <NuxtLink
-                    v-if="expandedRowContent.gesamtausgabeLink"
-                    class="typo-link1-bold link-hover"
-                    :to="expandedRowContent.gesamtausgabeLink.to"
-                    >{{ expandedRowContent.gesamtausgabeLink.label }}</NuxtLink
-                  >
-                  <UiAccordion
-                    v-else
-                    header-collapsed="Gesamtausgabe auswählen"
-                    header-expanded="Gesamtausgabe auswählen"
-                    :model-value="row.current"
-                  >
-                    <GesamtausgabenList
-                      :current-legislation-identifier="
-                        currentLegislationIdentifier
-                      "
-                      :gesamtausgaben="expandedRowContent.gesamtausgaben"
-                      hideHeader
-                      :initial-items-limit="5"
-                      class="mt-16 border-t border-gray-400"
-                    />
-                  </UiAccordion>
-                </div>
-                <DocumentsNormsLegislationContent v-if="!row.current">
-                  <div class="akn-act px-16" v-html="expandedRowContent.html" />
-                </DocumentsNormsLegislationContent>
-              </template>
-              <UiMessage
-                v-else-if="expandedRowContent?.error"
-                severity="error"
-                class="m-16"
-                role="alert"
-              >
-                Es ist ein Fehler aufgetreten.
-              </UiMessage>
-              <div v-else class="flex justify-center p-16">
-                <UiProgressSpinner />
-              </div>
-            </template>
+          <section v-if="expandedRowKey === row.key" class="col-span-full">
+            <FassungDetails
+              :current-legislation-identifier="currentLegislationIdentifier"
+              :current="row.current"
+              :details-content="currentRowData"
+            />
           </section>
         </details>
       </li>
@@ -301,11 +218,3 @@ watch(
     </template>
   </ul>
 </template>
-
-<style scoped>
-@reference "~/assets/main.css";
-
-:deep(h2.einzelvorschrift) {
-  @apply typo-body-bold mt-0 mb-16;
-}
-</style>

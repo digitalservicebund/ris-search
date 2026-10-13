@@ -11,7 +11,6 @@ const props = defineProps<{
   currentLegislationIdentifier: string;
   gesamtausgaben: LegislationExpression[];
   hideHeader?: boolean;
-  initialItemsLimit?: number;
 }>();
 
 type GesamtausgabeRow = DataTableRow & {
@@ -23,8 +22,6 @@ type GesamtausgabeRow = DataTableRow & {
 const route = useRoute();
 
 const missingDate = "—";
-
-const itemsLimit = ref(props.initialItemsLimit);
 
 const columns: DataTableColumn<GesamtausgabeRow>[] = [
   { key: "fromDate", label: "Gültig ab" },
@@ -38,9 +35,9 @@ function hasBothDates(row: GesamtausgabeRow) {
 
 const rows = computed<GesamtausgabeRow[]>(() => {
   // newest Gesamtausgabe first
-  const gesamtausgabenSorted = props.gesamtausgaben
-    .toSorted((a, b) => b.temporalCoverage.localeCompare(a.temporalCoverage))
-    .slice(0, itemsLimit.value);
+  const gesamtausgabenSorted = props.gesamtausgaben.toSorted((a, b) =>
+    b.temporalCoverage.localeCompare(a.temporalCoverage),
+  );
 
   return gesamtausgabenSorted.map((gesamtausgabe) => {
     const validityInterval = temporalCoverageToValidityInterval(
@@ -139,13 +136,5 @@ watch(
 
       <template #empty>Keine Ergebnisse gefunden</template>
     </UiDataTable>
-    <UiButton
-      v-if="rows.length < gesamtausgaben.length"
-      severity="info"
-      size="small"
-      class="mt-8"
-      @click="itemsLimit = undefined"
-      >Alles anzeigen
-    </UiButton>
   </div>
 </template>
