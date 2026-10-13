@@ -1,20 +1,23 @@
 package de.bund.digitalservice.ris.search.client;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 
-import com.posthog.java.PostHog;
+import com.posthog.server.PostHogCaptureOptions;
+import com.posthog.server.PostHogInterface;
 import de.bund.digitalservice.ris.search.client.posthog.PostHogClient;
-import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 class PostHogClientTest {
 
-  @Mock private PostHog postHog;
+  @Mock private PostHogInterface postHog;
 
   @Test
   void callsPostHogWithValidParameters() {
@@ -27,19 +30,9 @@ class PostHogClientTest {
 
     postHogClient.submitFeedback(userId, url, text, surveyId);
 
-    Map<String, Object> expectedData = new HashMap<>();
-    expectedData.put("$survey_id", surveyId);
-    expectedData.put("$survey_response", text);
-    expectedData.put("$current_url", url);
-
-    verify(postHog).capture(userId, "survey sent", expectedData);
-  }
-
-  @Test
-  void shutdownCallPosthogShutdown() {
-    var postHogClient = new PostHogClient(postHog);
-
-    postHogClient.shutdown();
-    verify(postHog).shutdown();
+    var options = ArgumentCaptor.forClass(PostHogCaptureOptions.class);
+    verify(postHog).capture(eq(userId), eq("survey sent"), options.capture());
+    assertThat(options.getValue().getProperties())
+        .isEqualTo(Map.of("$survey_id", surveyId, "$survey_response", text, "$current_url", url));
   }
 }
