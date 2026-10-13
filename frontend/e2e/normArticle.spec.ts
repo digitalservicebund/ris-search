@@ -625,8 +625,8 @@ test.describe("fassungen tab", { tag: ["@RISDEV-11132"] }, () => {
   test(
     "lets the user pick from all Gesamtausgaben containing a fassung",
     { tag: ["@RISDEV-12788"] },
-    async ({ page, privateFeaturesEnabled }) => {
-      test.skip(!privateFeaturesEnabled);
+    async ({ page, privateFeaturesEnabled, isMobileTest }) => {
+      test.skip(!privateFeaturesEnabled || isMobileTest);
 
       // The second version of § 2 is part of three Gesamtausgaben
       await navigate(
@@ -657,6 +657,53 @@ test.describe("fassungen tab", { tag: ["@RISDEV-11132"] }, () => {
         "href",
         /\/s1234\/2021-01-01\//,
       );
+    },
+  );
+
+  test(
+    "lets the user pick from all Gesamtausgaben containing a fassung in a drawer on mobile",
+    { tag: ["@RISDEV-12788"] },
+    async ({ page, privateFeaturesEnabled, isMobileTest }) => {
+      test.skip(!privateFeaturesEnabled || !isMobileTest);
+
+      // The second version of § 2 is part of three Gesamtausgaben
+      await navigate(
+        page,
+        "gesetze/eli/bund/bgbl-1/2020/s1234/2020-01-01/1/deu/art-z2?view=fassungen",
+      );
+
+      await page.getByText(/Gültig ab:\s+01\.01\.2021/).click();
+      await expect(page.getByText("Zweite Version des § 2.")).toBeVisible();
+
+      const drawerButton = page.getByRole("button", {
+        name: "Gesamtausgabe auswählen",
+      });
+      await drawerButton.click();
+
+      const drawer = page.getByRole("dialog", { name: "Gesamtausgaben" });
+      await expect(drawer).toBeVisible();
+
+      const links = drawer
+        .getByRole("list", { name: "Gesamtausgaben" })
+        .getByRole("link");
+      await expect(links).toHaveCount(3);
+      await expect(links.nth(0)).toHaveAttribute(
+        "href",
+        /\/s1234\/2920-01-01\//,
+      );
+      await expect(links.nth(1)).toHaveAttribute(
+        "href",
+        /\/s1234\/2022-01-01\//,
+      );
+      await expect(links.nth(2)).toHaveAttribute(
+        "href",
+        /\/s1234\/2021-01-01\//,
+      );
+
+      await drawer.getByRole("button", { name: "Schließen" }).click();
+
+      await expect(drawer).not.toBeVisible();
+      await expect(drawerButton).toBeFocused();
     },
   );
 
