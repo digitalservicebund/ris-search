@@ -6,7 +6,7 @@ import static org.mockito.Mockito.verify;
 
 import com.posthog.server.PostHogCaptureOptions;
 import com.posthog.server.PostHogInterface;
-import de.bund.digitalservice.ris.search.client.posthog.PostHogClient;
+import de.bund.digitalservice.ris.search.client.posthog.PostHogServerClient;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,13 +15,13 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class PostHogClientTest {
+class PostHogServerClientTest {
 
   @Mock private PostHogInterface postHog;
 
   @Test
   void callsPostHogWithValidParameters() {
-    var postHogClient = new PostHogClient(postHog);
+    var postHogClient = new PostHogServerClient(postHog);
 
     String text = "Test feedback";
     String url = "http://user-url.test";
