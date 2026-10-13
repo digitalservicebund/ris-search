@@ -4,13 +4,22 @@ import com.posthog.server.PostHogCaptureOptions;
 import com.posthog.server.PostHogInterface;
 import java.util.HashMap;
 import java.util.Map;
+import org.springframework.stereotype.Component;
 
-/**
- * Client for interacting with PostHog analytics service.
- *
- * @param postHog the PostHog instance used for sending events
- */
-public record PostHogClient(PostHogInterface postHog) {
+/** Client for interacting with PostHog analytics service. */
+@Component
+public class PostHogClient {
+
+  PostHogInterface postHog;
+
+  /**
+   * Client for interacting with PostHog analytics service.
+   *
+   * @param postHog the PostHog instance used for sending events
+   */
+  public PostHogClient(PostHogInterface postHog) {
+    this.postHog = postHog;
+  }
 
   /**
    * Submits user feedback to PostHog.

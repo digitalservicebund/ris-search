@@ -6,8 +6,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -41,11 +39,6 @@ public class ApiMetricsFilter extends OncePerRequestFilter {
     try {
       filterChain.doFilter(request, response);
     } finally {
-      Map<String, Object> properties = new HashMap<>();
-      properties.put("path", request.getRequestURI());
-      properties.put("method", request.getMethod());
-      properties.put("user_agent", request.getHeader("User-Agent"));
-
       postHogClient.submitApiEvent(
           request.getRequestURI(), request.getMethod(), request.getHeader("User-Agent"));
     }

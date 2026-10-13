@@ -9,10 +9,3 @@ swagger:
 
 local:
   file-storage: backend/.local-storage
-
-posthog:
-  debug: true
-  flush-at: 100
-  flush-interval-seconds: 60
-  host: "http://localhost:1"
-  api-key: "key"
