@@ -52,7 +52,7 @@ const handleDrawerItemClick = async (item: ActionMenuItem) => {
       aria-label="Aktionen"
       header="Aktionen"
     >
-      <ul class="-mt-8">
+      <ul>
         <li v-for="item in actions">
           <button
             v-if="item.disabled"

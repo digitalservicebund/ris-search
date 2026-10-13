@@ -95,7 +95,7 @@ const drawerId = useId();
         class="typo-label1-compact-regular text-blue-800"
       >
         <div
-          class="subheading-to-border -mx-16 -mt-8 flex items-center justify-between border-b border-b-gray-400 p-16"
+          class="subheading-to-border -mx-16 flex items-center justify-between border-b border-b-gray-400 p-16"
         >
           <span>Zur Gesamtausgabe</span>
           <IcBaselineArrowForward class="size-24" />
@@ -107,7 +107,7 @@ const drawerId = useId();
         :expand-to-key="selectedKey"
         :selection-enabled="!!selectedKey"
         label="Inhalte"
-        class="-mx-16 h-full"
+        :class="['-mx-16 h-full', { 'pt-8': !subheadingTo }]"
         @click="mobileTocVisible = false"
       />
     </div>

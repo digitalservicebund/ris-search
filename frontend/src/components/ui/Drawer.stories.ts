@@ -27,7 +27,7 @@ export const Default: Story = {
       <UiButton label="Show" @click="visible = true" />
       <UiDrawer v-model:visible="visible" v-bind="args">
         <div
-          class="h-384 content-center border border-dashed border-blue-800 bg-blue-200 text-center"
+          class="mt-8 h-384 content-center border border-dashed border-blue-800 bg-blue-200 text-center"
         >
           <p>Content area</p>
         </div>
@@ -50,7 +50,7 @@ export const ScrollingContent: Story = {
       <UiButton label="Show" @click="visible = true" />
       <UiDrawer v-model:visible="visible" v-bind="args">
         <div
-          class="h-[50rem] content-center border border-dashed border-blue-800 bg-blue-200 text-center"
+          class="mt-8 h-[50rem] content-center border border-dashed border-blue-800 bg-blue-200 text-center"
         >
           <p>Content area</p>
         </div>
@@ -73,7 +73,7 @@ export const NoFooter: Story = {
       <UiButton label="Show" @click="visible = true" />
       <UiDrawer v-model:visible="visible" v-bind="args">
         <div
-          class="h-384 content-center border border-dashed border-blue-800 bg-blue-200 text-center"
+          class="mt-8 h-384 content-center border border-dashed border-blue-800 bg-blue-200 text-center"
         >
           <p>Content area</p>
         </div>

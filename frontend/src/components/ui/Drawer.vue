@@ -173,7 +173,7 @@ onBeforeUnmount(() => {
         </button>
       </div>
 
-      <div class="px-16 py-8">
+      <div class="px-16 pb-8">
         <slot :append-target="appendTargetRef" />
       </div>
 
