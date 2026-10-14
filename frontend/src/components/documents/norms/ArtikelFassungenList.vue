@@ -213,7 +213,7 @@ watch(
 
     <template v-else>
       <li
-        class="border-b border-gray-400 px-16 py-12 text-left text-gray-900 md:col-span-full"
+        class="col-span-full border-b border-gray-400 px-16 py-12 text-left text-gray-900"
       >
         Keine Ergebnisse gefunden
       </li>
