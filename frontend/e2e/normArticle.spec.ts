@@ -550,7 +550,7 @@ test.describe("fassungen tab", { tag: ["@RISDEV-11132"] }, () => {
       await expect(page.getByText("Dritte Version des § 1.")).toBeVisible();
       await expect(
         page.getByRole("link", { name: /^Gesamtausgabe .*öffnen$/ }),
-      ).toHaveAttribute("href", /\/s1234\/2022-01-01\/1\/deu/);
+      ).toHaveAttribute("href", /\/s1234\/2022-01-01\/1\/deu\/art-z1$/);
       await expect(
         page
           .getByRole("list", { name: "Fassungen" })
@@ -647,15 +647,15 @@ test.describe("fassungen tab", { tag: ["@RISDEV-11132"] }, () => {
       await expect(links).toHaveCount(3);
       await expect(links.nth(0)).toHaveAttribute(
         "href",
-        /\/s1234\/2920-01-01\//,
+        /\/s1234\/2920-01-01\/1\/deu\/art-z2$/,
       );
       await expect(links.nth(1)).toHaveAttribute(
         "href",
-        /\/s1234\/2022-01-01\//,
+        /\/s1234\/2022-01-01\/1\/deu\/art-z2$/,
       );
       await expect(links.nth(2)).toHaveAttribute(
         "href",
-        /\/s1234\/2021-01-01\//,
+        /\/s1234\/2021-01-01\/1\/deu\/art-z2$/,
       );
     },
   );
@@ -689,15 +689,15 @@ test.describe("fassungen tab", { tag: ["@RISDEV-11132"] }, () => {
       await expect(links).toHaveCount(3);
       await expect(links.nth(0)).toHaveAttribute(
         "href",
-        /\/s1234\/2920-01-01\//,
+        /\/s1234\/2920-01-01\/1\/deu\/art-z2$/,
       );
       await expect(links.nth(1)).toHaveAttribute(
         "href",
-        /\/s1234\/2022-01-01\//,
+        /\/s1234\/2022-01-01\/1\/deu\/art-z2$/,
       );
       await expect(links.nth(2)).toHaveAttribute(
         "href",
-        /\/s1234\/2021-01-01\//,
+        /\/s1234\/2021-01-01\/1\/deu\/art-z2$/,
       );
 
       await drawer.getByRole("button", { name: "Schließen" }).click();
@@ -728,7 +728,7 @@ test.describe("fassungen tab", { tag: ["@RISDEV-11132"] }, () => {
 
       await expect(
         currentRow.getByRole("link", { name: /^Gesamtausgabe .*öffnen$/ }),
-      ).toHaveAttribute("href", /\/s1234\/2020-01-01\/1\/deu/);
+      ).toHaveAttribute("href", /\/s1234\/2020-01-01\/1\/deu\/art-z1$/);
       await expect(page.getByText("Erste Version des § 1.")).not.toBeVisible();
     },
   );

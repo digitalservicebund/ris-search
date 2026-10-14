@@ -45,17 +45,17 @@ export const data: JSONLDList<LegislationExpression> = {
   totalItems: 3,
   member: [
     createLegislationExpression(
-      "eli/bund/bgbl-1/2000/s001/2000-01-01/1/deu/regelungstext-1",
+      "eli/bund/bgbl-1/2000/s001/2000-01-01/1/deu",
       "2000-01-05/2019-12-31",
       "NotInForce",
     ),
     createLegislationExpression(
-      "eli/bund/bgbl-1/2000/s001/2020-01-01/1/deu/regelungstext-1",
+      "eli/bund/bgbl-1/2000/s001/2020-01-01/1/deu",
       "2020-01-01/..",
       "InForce",
     ),
     createLegislationExpression(
-      "eli/bund/bgbl-1/2000/s001/2030-01-01/1/deu/regelungstext-1",
+      "eli/bund/bgbl-1/2000/s001/2030-01-01/1/deu",
       "2031-01-01/..",
       "NotInForce",
     ),
@@ -146,7 +146,7 @@ describe("GesamtausgabenList", () => {
       await renderSuspended(GesamtausgabenList, {
         props: props([
           createLegislationExpression(
-            "eli/bund/bgbl-1/2000/s001/2040-01-01/1/deu/regelungstext-1",
+            "eli/bund/bgbl-1/2000/s001/2040-01-01/1/deu",
             temporalCoverage,
             "NotInForce",
           ),
@@ -180,11 +180,29 @@ describe("GesamtausgabenList", () => {
     await renderSuspended(GesamtausgabenList, { props: props() });
 
     expect(hrefs()).toEqual([
-      "/gesetze/eli/bund/bgbl-1/2000/s001/2030-01-01/1/deu/regelungstext-1",
-      "/gesetze/eli/bund/bgbl-1/2000/s001/2020-01-01/1/deu/regelungstext-1",
-      "/gesetze/eli/bund/bgbl-1/2000/s001/2000-01-01/1/deu/regelungstext-1",
+      "/gesetze/eli/bund/bgbl-1/2000/s001/2030-01-01/1/deu",
+      "/gesetze/eli/bund/bgbl-1/2000/s001/2020-01-01/1/deu",
+      "/gesetze/eli/bund/bgbl-1/2000/s001/2000-01-01/1/deu",
     ]);
   });
+
+  it.each([
+    ["an unencoded", "art-z§§ 1 bis 3"],
+    ["an already encoded", "art-z%C2%A7%C2%A7%201%20bis%203"],
+  ])(
+    "links every gesamtausgabe to the article with %s eId",
+    async (_, articleEId) => {
+      await renderSuspended(GesamtausgabenList, {
+        props: { ...props(), articleEId },
+      });
+
+      expect(hrefs()).toEqual([
+        "/gesetze/eli/bund/bgbl-1/2000/s001/2030-01-01/1/deu/art-z§§ 1 bis 3",
+        "/gesetze/eli/bund/bgbl-1/2000/s001/2020-01-01/1/deu/art-z§§ 1 bis 3",
+        "/gesetze/eli/bund/bgbl-1/2000/s001/2000-01-01/1/deu/art-z§§ 1 bis 3",
+      ]);
+    },
+  );
 
   it("marks the gesamtausgabe currently displayed as the current page", async () => {
     await renderSuspended(GesamtausgabenList, { props: props() });
@@ -209,7 +227,7 @@ describe("GesamtausgabenList", () => {
 
   it("labels the status as unknown when it can't be determined", async () => {
     const withoutCoverage = createLegislationExpression(
-      "eli/bund/bgbl-1/2000/s001/2040-01-01/1/deu/regelungstext-1",
+      "eli/bund/bgbl-1/2000/s001/2040-01-01/1/deu",
       "",
       "NotInForce",
     );
