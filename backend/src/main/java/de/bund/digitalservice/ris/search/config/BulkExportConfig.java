@@ -39,18 +39,18 @@ public class BulkExportConfig {
         source,
         target,
         DocumentKind.CASE_LAW.getBulkZipPath(),
-        BulkExportConfig::excludeCaseLawRenderings);
+        BulkExportConfig::excludeAdditionalDocumentRenderings);
   }
 
   /**
-   * Rejects generated renderings of a case law document, i.e. non-xml files named after their
-   * directory like {@code ABC/ABC.pdf} or {@code ABC/ABC.html}. The xml manifestation {@code
-   * ABC/ABC.xml} and attachments like {@code ABC/image.png} are accepted.
+   * Rejects generated renderings of a document, i.e. non-xml files named after their directory like
+   * {@code ABC/ABC.pdf} or {@code ABC/ABC.html}. The xml manifestation {@code ABC/ABC.xml} and
+   * attachments like {@code ABC/image.png} are accepted.
    *
    * @param key object key of the file
    * @return false if the file is a generated rendering, true otherwise
    */
-  static boolean excludeCaseLawRenderings(String key) {
+  static boolean excludeAdditionalDocumentRenderings(String key) {
     int lastSlash = key.lastIndexOf('/');
     String fileName = key.substring(lastSlash + 1);
     int lastDot = fileName.lastIndexOf('.');
