@@ -36,19 +36,14 @@ public class NormsTestData {
   public static List<Article> allArticles = setupCommonArticleEntities();
 
   /**
-   * Loads the files of the S101 expression (regelungstext, attachment and binary files) from the
-   * test resources.
+   * Loads the XML files of the S101 expression (regelungstext and attachment) from the test
+   * resources.
    *
    * @return map of eli file names to their content
    */
   public static Map<String, String> loadS101ExpressionFiles() {
     String manifestationPrefix = S_101_WORK_ELI + "/1991-01-01/1/deu/1991-01-01/";
-    return Stream.of(
-            "regelungstext-1.xml",
-            "anlage-regelungstext-1.xml",
-            "dokument.pdf",
-            "bild_1.jpg",
-            "bild_1.png")
+    return Stream.of("regelungstext-1.xml", "anlage-regelungstext-1.xml")
         .map(fileName -> manifestationPrefix + fileName)
         .collect(
             Collectors.toMap(

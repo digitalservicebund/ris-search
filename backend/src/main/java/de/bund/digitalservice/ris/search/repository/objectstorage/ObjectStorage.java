@@ -169,6 +169,10 @@ public class ObjectStorage {
     client.save(versionPrefix + fileName, fileContent);
   }
 
+  public void save(String fileName, byte[] fileContent) {
+    client.save(versionPrefix + fileName, fileContent);
+  }
+
   public void close() {
     client.close();
   }

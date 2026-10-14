@@ -100,6 +100,13 @@ public class S3ObjectStorageClient implements ObjectStorageClient {
   }
 
   @Override
+  public void save(String fileName, byte[] fileContent) {
+    PutObjectRequest putObjectRequest =
+        PutObjectRequest.builder().bucket(bucketName).key(fileName).build();
+    s3Client.putObject(putObjectRequest, RequestBody.fromBytes(fileContent));
+  }
+
+  @Override
   public void close() {
     s3Client.close();
   }

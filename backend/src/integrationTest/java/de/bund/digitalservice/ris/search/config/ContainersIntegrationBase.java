@@ -15,6 +15,7 @@ import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
+import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
 import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorageClient;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PublicFilesBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.AdministrativeDirectiveRepository;
@@ -29,9 +30,12 @@ import de.bund.digitalservice.ris.search.service.AllDocumentsService;
 import de.bund.digitalservice.ris.search.service.CaseLawService;
 import de.bund.digitalservice.ris.search.service.LiteratureService;
 import de.bund.digitalservice.ris.search.service.NormsService;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Predicate;
 import org.apache.commons.collections4.IteratorUtils;
 import org.junit.jupiter.api.AfterAll;
@@ -173,6 +177,22 @@ public class ContainersIntegrationBase {
   public void addNormXmlFiles(Map<String, String> files) {
     for (var normFile : files.entrySet()) {
       normsBucket.save(normFile.getKey(), normFile.getValue());
+    }
+  }
+
+  /**
+   * Uploads a classpath resource to the given bucket.
+   *
+   * @param resourcePath absolute classpath location of the test file
+   * @param objectKey key under which the file is stored in the bucket
+   * @param storage the bucket to store the file in
+   */
+  public void addTestFileToBucket(String resourcePath, String objectKey, ObjectStorage storage)
+      throws IOException {
+    try (InputStream in = ContainersIntegrationBase.class.getResourceAsStream(resourcePath)) {
+      byte[] content =
+          Objects.requireNonNull(in, "Test resource not found: " + resourcePath).readAllBytes();
+      storage.save(objectKey, content);
     }
   }
 

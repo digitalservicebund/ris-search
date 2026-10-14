@@ -3,7 +3,7 @@ package de.bund.digitalservice.ris.search.service.eclicrawler;
 import static de.bund.digitalservice.ris.search.service.eclicrawler.EcliSitemapWriter.MAX_SITEMAP_URLS;
 import static de.bund.digitalservice.ris.search.service.eclicrawler.EcliSitemapWriter.PATH_PREFIX;
 import static de.bund.digitalservice.ris.search.service.eclicrawler.EcliSitemapWriter.ROBOTS_TXT_PATH;
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -163,7 +163,7 @@ class EcliSitemapWriterTest {
     LocalDate day = LocalDate.of(2025, Month.JANUARY, 1);
 
     ArgumentCaptor<String> argument = ArgumentCaptor.forClass(String.class);
-    Mockito.doNothing().when(bucket).save(argument.capture(), any());
+    Mockito.doNothing().when(bucket).save(argument.capture(), nullable(String.class));
 
     List<Sitemapindex> indicesList = service.writeSitemapsIndices("url", day, sitemaps);
 
