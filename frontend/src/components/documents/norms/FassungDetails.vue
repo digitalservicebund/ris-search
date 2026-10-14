@@ -140,23 +140,28 @@ const drawerId = useId();
           header-expanded="Gesamtausgabe auswählen"
           :model-value="current"
         >
-          <GesamtausgabenList
-            :current-legislation-identifier="currentLegislationIdentifier"
-            :gesamtausgaben="showMoreDesktop.itemsToDisplay"
-            :article-e-id="fassungEId"
-            hideHeader
-            class="mt-16 border-t border-gray-400"
-          />
-          <UiButton
-            v-if="showMoreDesktop.hasMore"
-            severity="info"
-            size="small"
-            :label="
-              showMoreDesktop.showingAll ? 'Weniger anzeigen' : 'Alles anzeigen'
-            "
-            class="mt-8"
-            @click="showMoreDesktop.toggle"
-          />
+          <div class="ml-32">
+            <GesamtausgabenList
+              :current-legislation-identifier="currentLegislationIdentifier"
+              :gesamtausgaben="showMoreDesktop.itemsToDisplay"
+              :article-e-id="fassungEId"
+              hideHeader
+              flushLeft
+              class="mt-16 border-t border-gray-400"
+            />
+            <UiButton
+              v-if="showMoreDesktop.hasMore"
+              severity="info"
+              size="small"
+              :label="
+                showMoreDesktop.showingAll
+                  ? 'Weniger anzeigen'
+                  : 'Alles anzeigen'
+              "
+              class="mt-8"
+              @click="showMoreDesktop.toggle"
+            />
+          </div>
         </UiAccordion>
       </template>
     </div>
