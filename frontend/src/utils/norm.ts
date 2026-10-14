@@ -118,6 +118,30 @@ export function getEinzelnormEIdFromHref(href: string): string | null {
   return match?.[1] ?? null;
 }
 
+/**
+ * Some eIds are already encoded in the XML data (e.g. "art-z§§ 1 bis 3"), but
+ * the router decodes route params and encodes them again when building links.
+ * Decoding the eId first makes it comparable to route params and prevents
+ * double encoding, which would lead to 404s.
+ */
+export function decodeEId(eId: string): string {
+  try {
+    return decodeURIComponent(eId);
+  } catch {
+    // not a valid encoding (e.g. a lone "%"), so it can't be encoded already
+    return eId;
+  }
+}
+
+export function legislationArticlePath(
+  identifier: string,
+  eId?: string,
+): string {
+  return eId
+    ? `/gesetze/${identifier}/${decodeEId(eId)}`
+    : `/gesetze/${identifier}`;
+}
+
 export function getNormTitle(norm: LegislationExpression): string {
   return norm.name || norm.alternateName || norm.abbreviation;
 }

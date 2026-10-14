@@ -10,12 +10,16 @@ type FassungDetailsContent = {
   error: boolean;
 };
 
-const { currentLegislationIdentifier, current, detailsContent } = defineProps<{
-  currentLegislationIdentifier: string;
-  current: boolean;
-  /** Undefined while the content is loading */
-  detailsContent?: FassungDetailsContent;
-}>();
+const { currentLegislationIdentifier, current, fassungEId, detailsContent } =
+  defineProps<{
+    currentLegislationIdentifier: string;
+    current: boolean;
+    fassungEId: string;
+    /** Undefined while the content is loading */
+    detailsContent?: FassungDetailsContent;
+  }>();
+
+const route = useRoute();
 
 const gesamtausgabenSorted = computed(() =>
   (detailsContent?.gesamtausgaben ?? []).toSorted((a, b) =>
@@ -31,7 +35,13 @@ const gesamtausgabeLink = computed(() => {
     gesamtausgabe.temporalCoverage,
   );
   const label = `Gesamtausgabe ${formattedTemporalCoverage}öffnen`;
-  const to = `/gesetze/${gesamtausgabe.legislationIdentifier}`;
+  const to = {
+    path: legislationArticlePath(
+      gesamtausgabe.legislationIdentifier,
+      fassungEId,
+    ),
+    query: { from: route.query.from },
+  };
 
   return {
     label,
@@ -104,6 +114,7 @@ const drawerId = useId();
           <GesamtausgabenList
             :current-legislation-identifier="currentLegislationIdentifier"
             :gesamtausgaben="showMoreMobile.itemsToDisplay"
+            :article-e-id="fassungEId"
             hideHeader
             class="-mb-8"
           />
@@ -132,6 +143,7 @@ const drawerId = useId();
           <GesamtausgabenList
             :current-legislation-identifier="currentLegislationIdentifier"
             :gesamtausgaben="showMoreDesktop.itemsToDisplay"
+            :article-e-id="fassungEId"
             hideHeader
             class="mt-16 border-t border-gray-400"
           />

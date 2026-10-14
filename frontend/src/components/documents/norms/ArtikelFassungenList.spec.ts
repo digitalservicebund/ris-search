@@ -39,7 +39,7 @@ function createFassung(
 }
 
 const currentLegislationIdentifier =
-  "eli/bund/bgbl-1/2000/s001/2020-01-01/1/deu/regelungstext-1";
+  "eli/bund/bgbl-1/2000/s001/2020-01-01/1/deu";
 
 const futureFassung = createFassung(
   "eli/bund/bgbl-1/2000/s001/2031-01-01/1/deu#art-1",
@@ -66,7 +66,7 @@ function createGesamtausgabe(
 }
 
 const gesamtausgabe = createGesamtausgabe(
-  "eli/bund/bgbl-1/2000/s001/2031-01-01/1/deu/regelungstext-1",
+  "eli/bund/bgbl-1/2000/s001/2031-01-01/1/deu",
   "2031-01-01/..",
 );
 
@@ -250,8 +250,8 @@ describe("ArtikelFassungenList", () => {
 
   it("lets the user pick from a table when there are multiple Gesamtausgaben", async () => {
     const identifiers = [
-      "eli/bund/bgbl-1/2000/s001/2031-01-01/1/deu/regelungstext-1",
-      "eli/bund/bgbl-1/2000/s001/2020-01-01/1/deu/regelungstext-1",
+      "eli/bund/bgbl-1/2000/s001/2031-01-01/1/deu",
+      "eli/bund/bgbl-1/2000/s001/2020-01-01/1/deu",
     ];
     mockBackend({
       gesamtausgaben: [
@@ -283,7 +283,7 @@ describe("ArtikelFassungenList", () => {
     const hrefs = within(table)
       .getAllByRole("link")
       .map((link) => link.getAttribute("href"));
-    expect(hrefs).toEqual(identifiers.map((id) => `/gesetze/${id}`));
+    expect(hrefs).toEqual(identifiers.map((id) => `/gesetze/${id}/art-1`));
   });
 
   it("marks the Gesamtausgabe currently displayed as the current page", async () => {
@@ -333,7 +333,7 @@ describe("ArtikelFassungenList", () => {
         await screen.findByRole("link", {
           name: "Gesamtausgabe 01.01.2031 - 31.12.2031 öffnen",
         }),
-      ).toHaveAttribute("href", `/gesetze/${earlierIdentifier}`);
+      ).toHaveAttribute("href", `/gesetze/${earlierIdentifier}/art-1`);
       expect(
         screen.queryByRole("button", { name: "Gesamtausgabe auswählen" }),
       ).not.toBeInTheDocument();
@@ -352,7 +352,7 @@ describe("ArtikelFassungenList", () => {
         screen.getByRole("link", {
           name: "Gesamtausgabe gültig ab 01.01.2032 öffnen",
         }),
-      ).toHaveAttribute("href", `/gesetze/${laterIdentifier}`);
+      ).toHaveAttribute("href", `/gesetze/${laterIdentifier}/art-1`);
     });
   });
 

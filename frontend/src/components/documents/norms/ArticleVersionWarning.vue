@@ -19,7 +19,7 @@ function getArticleRoute(
 ): RouteLocationRaw | undefined {
   if (!expressionEli) return undefined;
   return {
-    path: `/gesetze/${expressionEli}/${eId}`,
+    path: legislationArticlePath(expressionEli, eId),
     query: { from: route.query.from },
   };
 }

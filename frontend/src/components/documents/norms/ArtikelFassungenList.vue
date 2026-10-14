@@ -21,6 +21,7 @@ type FassungRow = {
   key: string;
   fromDate: string;
   toDate: string;
+  eId: string;
   contentUrl?: string;
   revision?: string;
   current: boolean;
@@ -57,6 +58,7 @@ const rows = computed<FassungRow[]>(() => {
       key: fassung["@id"],
       fromDate: dateFormattedDDMMYYYY(validityInterval?.from) ?? missingDate,
       toDate: dateFormattedDDMMYYYY(validityInterval?.to) ?? missingDate,
+      eId: fassung.eId,
       contentUrl: getEncodingURL(fassung.encoding, "text/html"),
       revision: fassung.revision,
       current: fassung.revision === currentFassungId,
@@ -202,6 +204,7 @@ watch(
               :current-legislation-identifier="currentLegislationIdentifier"
               :current="row.current"
               :details-content="expandedRowData"
+              :fassung-e-id="row.eId"
             />
           </section>
         </details>

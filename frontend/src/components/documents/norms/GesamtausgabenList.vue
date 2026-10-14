@@ -10,6 +10,11 @@ import type { LegislationExpression } from "~/types/api";
 const props = defineProps<{
   currentLegislationIdentifier: string;
   gesamtausgaben: LegislationExpression[];
+  /**
+   * Links to this article in each gesamtausgabe instead of the whole
+   * gesamtausgabe
+   */
+  articleEId?: string;
   hideHeader?: boolean;
 }>();
 
@@ -49,7 +54,10 @@ const rows = computed<GesamtausgabeRow[]>(() => {
       props.currentLegislationIdentifier;
 
     const to = {
-      path: `/gesetze/${gesamtausgabe.legislationIdentifier}`,
+      path: legislationArticlePath(
+        gesamtausgabe.legislationIdentifier,
+        props.articleEId,
+      ),
       query: { from: route.query.from },
     };
 

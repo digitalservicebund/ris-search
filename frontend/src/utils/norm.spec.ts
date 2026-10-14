@@ -5,6 +5,7 @@ import { without } from "lodash-es";
 import { describe, expect, vi } from "vitest";
 import type { LegislationExpression } from "~/types/api";
 import {
+  decodeEId,
   findNextFutureVersion,
   getEinzelnormEIdFromHref,
   getManifestationUrl,
@@ -14,6 +15,7 @@ import {
   getVersionValidFrom,
   getVersionValidityStatus,
   isNormBodyEmpty,
+  legislationArticlePath,
   temporalCoverageToValidityInterval,
   type ValidityInterval,
 } from "~/utils/norm";
@@ -484,5 +486,38 @@ describe("getEinzelnormEIdFromHref", () => {
     expect(
       getEinzelnormEIdFromHref("regelungstext-1/art-z1.html#frag"),
     ).toBeNull();
+  });
+});
+
+describe("decodeEId", () => {
+  it("keeps an unencoded eId as it is", () => {
+    expect(decodeEId("art-z§§ 1 bis 3")).toBe("art-z§§ 1 bis 3");
+  });
+
+  it("decodes an already encoded eId", () => {
+    expect(decodeEId("art-z%C2%A7%C2%A7%201%20bis%203")).toBe(
+      "art-z§§ 1 bis 3",
+    );
+  });
+
+  it("keeps an eId that is not validly encoded as it is", () => {
+    expect(decodeEId("art-z50%")).toBe("art-z50%");
+  });
+});
+
+describe("legislationArticlePath", () => {
+  it("returns the legislation path without an eId", () => {
+    expect(legislationArticlePath("eli/bund/2020")).toBe(
+      "/gesetze/eli/bund/2020",
+    );
+  });
+
+  it("appends the decoded eId, so the router doesn't encode it twice", () => {
+    expect(
+      legislationArticlePath(
+        "eli/bund/2020",
+        "art-z%C2%A7%C2%A7%201%20bis%203",
+      ),
+    ).toBe("/gesetze/eli/bund/2020/art-z§§ 1 bis 3");
   });
 });

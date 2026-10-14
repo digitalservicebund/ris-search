@@ -60,14 +60,7 @@ const singleViewParts = computed(() =>
 );
 
 const article: Ref<Article | undefined> = computed(() =>
-  // The eId is taken from the router, which always automatically decodes URIs.
-  // However, some eIds are pre-encoded in the XML data (e.g. "art-z§§ 1 bis 3"
-  // is encoded in the XML but will automatically be decoded by the router).
-  // For this reason, we need to also decode the eId in the data to make them
-  // comparable.
-  singleViewParts.value?.find(
-    (part) => decodeURIComponent(part.eId) == eId.value,
-  ),
+  singleViewParts.value?.find((part) => decodeEId(part.eId) === eId.value),
 );
 
 const isArticle = computed(() => article.value?.partType === "article");
@@ -186,11 +179,7 @@ function getRouteForSiblingArticle(
   return {
     name: route.name ?? undefined,
     query: route.query,
-    // The router will automatically encode things, but some eId might already
-    // be encoded in the XML data (e.g. "art-z§§ 1 bis 3"). Decode first and
-    // let the router encode it again to prevent double encoding, which will
-    // lead to 404s.
-    params: { ...route.params, eId: decodeURIComponent(hasPart[newIndex].eId) },
+    params: { ...route.params, eId: decodeEId(hasPart[newIndex].eId) },
   };
 }
 
