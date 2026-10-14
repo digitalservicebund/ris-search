@@ -13,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.bund.digitalservice.ris.LoadXmlUtils;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
@@ -47,6 +48,11 @@ class AdministrativeDirectiveControllerApiIntegrationTest extends ContainersInte
     loadDefaultData();
   }
 
+  private void addDocumentToBucket() {
+    String fileName = documentNumberPresentInBucket + ".akn.xml";
+    bucket.save(fileName, LoadXmlUtils.loadXmlAsString(AdministrativeDirective.class, fileName));
+  }
+
   @Autowired private MockMvc mockMvc;
 
   @Autowired private AdministrativeDirectiveBucket bucket;
@@ -77,6 +83,7 @@ class AdministrativeDirectiveControllerApiIntegrationTest extends ContainersInte
   @Test
   @DisplayName("Should return XML version of an administrative directive item")
   void administrativeDirectiveXMLEndpoint() throws Exception {
+    addDocumentToBucket();
     mockMvc
         .perform(
             get(ApiConfig.Paths.ADMINISTRATIVE_DIRECTIVE
@@ -158,7 +165,7 @@ class AdministrativeDirectiveControllerApiIntegrationTest extends ContainersInte
   @Test
   @DisplayName("Should return HTML version of administrative directive item")
   void shouldReturnAdministrativeDirectiveHtml() throws Exception {
-
+    addDocumentToBucket();
     String responseContent =
         mockMvc
             .perform(
@@ -204,6 +211,7 @@ class AdministrativeDirectiveControllerApiIntegrationTest extends ContainersInte
   @Test
   @DisplayName("Should return all files belonging to a document in a zip archive")
   void shouldReturnZip() throws Exception {
+    addDocumentToBucket();
     String filename = documentNumberPresentInBucket + ".akn.xml";
 
     MvcResult mvcResult =

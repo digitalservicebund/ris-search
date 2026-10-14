@@ -35,6 +35,11 @@ public class ObjectStorageClientDummy implements ObjectStorageClient {
   }
 
   @Override
+  public void save(String fileName, byte[] fileContent) {
+    throw unsupported();
+  }
+
+  @Override
   public void close() {
     /* no resource is actually opened */
   }

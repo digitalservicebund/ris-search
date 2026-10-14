@@ -3,7 +3,7 @@ package de.bund.digitalservice.ris.search.repository;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
-import de.bund.digitalservice.ris.search.config.obs.ObsConfig;
+import de.bund.digitalservice.ris.search.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.exception.NoSuchKeyException;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.repository.objectstorage.LiteratureBucket;
@@ -14,8 +14,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest(classes = {LiteratureBucket.class, ObsConfig.class})
-class LiteratureBucketIntegrationTest {
+@SpringBootTest
+class LiteratureBucketIntegrationTest extends ContainersIntegrationBase {
 
   @Autowired LiteratureBucket bucket;
 

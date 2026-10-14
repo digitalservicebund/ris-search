@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import de.bund.digitalservice.ris.SharedTestConstants;
 import de.bund.digitalservice.ris.builder.NormTestDataBuilder;
 import de.bund.digitalservice.ris.search.config.ContainersIntegrationBase;
+import de.bund.digitalservice.ris.search.controller.api.testData.NormsTestData;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import java.time.LocalDate;
 import java.time.Month;
@@ -25,7 +26,7 @@ class IndexNormsServiceIntegrationTest extends ContainersIntegrationBase {
   @BeforeEach
   void setUpSearchControllerApiTest() {
     clearBuckets();
-    loadDefaultFiles();
+    addNormXmlFiles(NormsTestData.s102WorkExpressions);
   }
 
   @Test
