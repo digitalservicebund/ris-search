@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.Instant;
 import java.util.List;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -25,13 +24,9 @@ class CaseLawBulkExportIntegrationTest extends ContainersIntegrationBase {
   @Autowired
   BulkExportService caseLawBulkExportService;
 
-  @BeforeEach
-  void setUp() {
-    clearBuckets();
-  }
-
   @Test
-  void updateLatestZip_excludesGeneratedRenderings() throws IOException, NoSuchKeyException {
+  void updateLatestZip_includesOnlyXmlDocumentsAndAttachments()
+      throws IOException, NoSuchKeyException {
     caseLawBucket.save("KORE1/KORE1.xml", "<xml/>");
     caseLawBucket.save("KORE1/KORE1.pdf", "pdf");
     caseLawBucket.save("KORE1/KORE1.html", "html");

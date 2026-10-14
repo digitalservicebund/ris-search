@@ -39,31 +39,28 @@ public class BulkExportConfig {
         source,
         target,
         DocumentKind.CASE_LAW.getBulkZipPath(),
-        BulkExportConfig::excludeAdditionalDocumentRenderings);
+        BulkExportConfig::includeXmlDocumentsAndAttachments);
   }
 
   /**
-   * Rejects generated renderings of a document, i.e. non-xml files named after their directory like
-   * {@code ABC/ABC.pdf} or {@code ABC/ABC.html}. The xml manifestation {@code ABC/ABC.xml} and
-   * attachments like {@code ABC/image.png} are accepted.
+   * Accepts xml documents like {@code ABC/ABC.xml} and their attachments like {@code
+   * ABC/image.png}. Rejects generated pdf and html renderings named after their document directory
+   * like {@code ABC/ABC.pdf} or {@code ABC/ABC.html}.
    *
    * @param key object key of the file
-   * @return false if the file is a generated rendering, true otherwise
+   * @return false if the file is a generated pdf or html rendering, true otherwise
    */
-  static boolean excludeAdditionalDocumentRenderings(String key) {
-    int lastSlash = key.lastIndexOf('/');
-    String fileName = key.substring(lastSlash + 1);
-    int lastDot = fileName.lastIndexOf('.');
-    if (lastSlash < 0 || lastDot < 0) {
+  static boolean includeXmlDocumentsAndAttachments(String key) {
+    if (!key.endsWith(".pdf") && !key.endsWith(".html")) {
       return true;
     }
 
-    String directory = key.substring(0, lastSlash);
-    String directoryName = directory.substring(directory.lastIndexOf('/') + 1);
-    String fileNameWithoutSuffix = fileName.substring(0, lastDot);
-    String suffix = fileName.substring(lastDot + 1);
+    String[] parts = key.substring(0, key.lastIndexOf('.')).split("/");
 
-    return !directoryName.equals(fileNameWithoutSuffix) || suffix.equals("xml");
+    if (parts.length >= 2) {
+      return !parts[parts.length - 2].equals(parts[parts.length - 1]);
+    }
+    return false;
   }
 
   /**
