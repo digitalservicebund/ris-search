@@ -1,100 +1,32 @@
-import {
-  renderSuspended,
-  registerEndpoint,
-  mockNuxtImport,
-} from "@nuxt/test-utils/runtime";
+import { renderSuspended } from "@nuxt/test-utils/runtime";
 import { screen, within } from "@testing-library/vue";
 import { expect, vi } from "vitest";
-import type { JSONLDList, LegislationExpression } from "~/types/api";
+import type { LegislationExpression } from "~/types/api";
 import GesamtausgabenList from "./GesamtausgabenList.vue";
 
-function createLegislationExpression(
-  expressionEli: string,
-  temporalCoverage: string,
-  legalForce: "InForce" | "NotInForce",
-): LegislationExpression {
-  const workIdentifier = expressionEli.split("/").slice(0, 5).join("/");
-  return {
-    "@context": "http://localhost:8080/v1/context.jsonld",
-    "@type": "Legislation",
-    "@id": `/v1/legislation/${expressionEli}`,
-    legislationIdentifier: expressionEli,
-    temporalCoverage: temporalCoverage,
-    legislationLegalForce: legalForce,
-    exampleOfWork: {
-      "@id": `/v1/legislation/${workIdentifier}`,
-      "@type": "Legislation",
-      legislationIdentifier: workIdentifier,
-      legislationDate: "2025-01-01",
-      datePublished: "2025-01-01",
-      isPartOf: {
-        name: "",
-      },
-    },
-    name: "",
-    alternateName: "",
-    abbreviation: "",
-    risAbbreviation: "",
-    encoding: [],
-    hasPart: [],
-  };
-}
+const currentLegislationIdentifier =
+  "eli/bund/bgbl-1/2000/s001/2020-01-01/1/deu";
 
-export const data: JSONLDList<LegislationExpression> = {
-  "@type": "hydra:Collection",
-  totalItems: 3,
-  member: [
-    createLegislationExpression(
-      "eli/bund/bgbl-1/2000/s001/2000-01-01/1/deu",
-      "2000-01-05/2019-12-31",
-      "NotInForce",
-    ),
-    createLegislationExpression(
-      "eli/bund/bgbl-1/2000/s001/2020-01-01/1/deu",
-      "2020-01-01/..",
-      "InForce",
-    ),
-    createLegislationExpression(
-      "eli/bund/bgbl-1/2000/s001/2030-01-01/1/deu",
-      "2031-01-01/..",
-      "NotInForce",
-    ),
-  ],
-  view: {
-    first: "",
-    previous: undefined,
-    next: undefined,
-    last: "",
+// deliberately unsorted, so the tests can check that the newest come first
+const gesamtausgaben = [
+  {
+    legislationIdentifier: "eli/bund/bgbl-1/2000/s001/2000-01-01/1/deu",
+    temporalCoverage: "2000-01-05/2019-12-31",
   },
-};
-
-registerEndpoint(`/v1/legislation`, () => {
-  return data;
-});
-
-const { useRouteMock } = vi.hoisted(() => ({
-  useRouteMock: vi.fn(() => ({ query: {} })),
-}));
-mockNuxtImport("useRoute", () => useRouteMock);
-
-/** Props for the list, with the second gesamtausgabe being the displayed one. */
-function props(gesamtausgaben = data.member!) {
-  return {
-    currentLegislationIdentifier: data.member![1]?.legislationIdentifier ?? "",
-    gesamtausgaben,
-  };
-}
-
-function hrefs() {
-  return screen.getAllByRole("link").map((link) => link.getAttribute("href"));
-}
+  {
+    legislationIdentifier: currentLegislationIdentifier,
+    temporalCoverage: "2020-01-01/..",
+  },
+  {
+    legislationIdentifier: "eli/bund/bgbl-1/2000/s001/2031-01-01/1/deu",
+    temporalCoverage: "2031-01-01/..",
+  },
+] as LegislationExpression[];
 
 describe("GesamtausgabenList", () => {
   beforeEach(() => {
     vi.useFakeTimers({ toFake: ["Date"] });
     vi.setSystemTime(new Date("2025-01-01T12:00:00"));
-
-    useRouteMock.mockReturnValue({ query: {} });
   });
 
   afterEach(() => {
@@ -102,33 +34,30 @@ describe("GesamtausgabenList", () => {
   });
 
   it("lists gesamtausgaben, sorted by date", async () => {
-    await renderSuspended(GesamtausgabenList, { props: props() });
+    await renderSuspended(GesamtausgabenList, {
+      props: { currentLegislationIdentifier, gesamtausgaben },
+    });
 
-    const gesamtausgaben = screen.getAllByRole("listitem");
-    expect(gesamtausgaben).toHaveLength(3);
+    const rows = screen.getAllByRole("listitem");
+    expect(rows).toHaveLength(3);
 
-    expect(
-      within(gesamtausgaben[0]!).getByText("01.01.2031"),
-    ).toBeInTheDocument();
-    expect(gesamtausgaben[0]).toHaveTextContent("Status: Zukünftig in Kraft");
+    expect(within(rows[0]!).getByText("01.01.2031")).toBeInTheDocument();
+    expect(rows[0]).toHaveTextContent("Status: Zukünftig in Kraft");
 
-    expect(
-      within(gesamtausgaben[1]!).getByText("01.01.2020"),
-    ).toBeInTheDocument();
-    expect(gesamtausgaben[1]).toHaveTextContent("Status: Aktuell gültig");
+    expect(within(rows[1]!).getByText("01.01.2020")).toBeInTheDocument();
+    expect(rows[1]).toHaveTextContent("Status: Aktuell gültig");
 
-    expect(
-      within(gesamtausgaben[2]!).getByText("05.01.2000"),
-    ).toBeInTheDocument();
-    expect(
-      within(gesamtausgaben[2]!).getByText("31.12.2019"),
-    ).toBeInTheDocument();
-    expect(gesamtausgaben[2]).toHaveTextContent("Status: Außer Kraft");
+    expect(within(rows[2]!).getByText("05.01.2000")).toBeInTheDocument();
+    expect(within(rows[2]!).getByText("31.12.2019")).toBeInTheDocument();
+    expect(rows[2]).toHaveTextContent("Status: Außer Kraft");
   });
 
   it("joins the dates with a dash when both exist", async () => {
     await renderSuspended(GesamtausgabenList, {
-      props: props([data.member![0]!]),
+      props: {
+        currentLegislationIdentifier,
+        gesamtausgaben: [gesamtausgaben[0]!],
+      },
     });
 
     expect(within(screen.getByRole("listitem")).getByText("–")).toHaveAttribute(
@@ -144,13 +73,16 @@ describe("GesamtausgabenList", () => {
     "shows no placeholder and no dash for a missing %s date on desktop",
     async (_, temporalCoverage) => {
       await renderSuspended(GesamtausgabenList, {
-        props: props([
-          createLegislationExpression(
-            "eli/bund/bgbl-1/2000/s001/2040-01-01/1/deu",
-            temporalCoverage,
-            "NotInForce",
-          ),
-        ]),
+        props: {
+          currentLegislationIdentifier,
+          gesamtausgaben: [
+            {
+              legislationIdentifier:
+                "eli/bund/bgbl-1/2000/s001/2040-01-01/1/deu",
+              temporalCoverage,
+            } as LegislationExpression,
+          ],
+        },
       });
 
       const row = screen.getByRole("listitem");
@@ -160,7 +92,9 @@ describe("GesamtausgabenList", () => {
   );
 
   it("renders the column labels as a header", async () => {
-    await renderSuspended(GesamtausgabenList, { props: props() });
+    await renderSuspended(GesamtausgabenList, {
+      props: { currentLegislationIdentifier, gesamtausgaben },
+    });
 
     for (const label of ["Gültig ab", "Gültig bis", "Status"]) {
       expect(screen.getByText(label)).toBeInTheDocument();
@@ -169,7 +103,7 @@ describe("GesamtausgabenList", () => {
 
   it("hides the header but keeps the labels per row when hideHeader is set", async () => {
     await renderSuspended(GesamtausgabenList, {
-      props: { ...props(), hideHeader: true },
+      props: { currentLegislationIdentifier, gesamtausgaben, hideHeader: true },
     });
 
     expect(screen.queryByText("Gültig ab")).not.toBeInTheDocument();
@@ -177,10 +111,15 @@ describe("GesamtausgabenList", () => {
   });
 
   it("links every gesamtausgabe, so it can be opened in a new tab", async () => {
-    await renderSuspended(GesamtausgabenList, { props: props() });
+    await renderSuspended(GesamtausgabenList, {
+      props: { currentLegislationIdentifier, gesamtausgaben },
+    });
 
-    expect(hrefs()).toEqual([
-      "/gesetze/eli/bund/bgbl-1/2000/s001/2030-01-01/1/deu",
+    const hrefs = screen
+      .getAllByRole("link")
+      .map((link) => link.getAttribute("href"));
+    expect(hrefs).toEqual([
+      "/gesetze/eli/bund/bgbl-1/2000/s001/2031-01-01/1/deu",
       "/gesetze/eli/bund/bgbl-1/2000/s001/2020-01-01/1/deu",
       "/gesetze/eli/bund/bgbl-1/2000/s001/2000-01-01/1/deu",
     ]);
@@ -193,19 +132,39 @@ describe("GesamtausgabenList", () => {
     "links every gesamtausgabe to the article with %s eId",
     async (_, articleEId) => {
       await renderSuspended(GesamtausgabenList, {
-        props: { ...props(), articleEId },
+        props: { currentLegislationIdentifier, gesamtausgaben, articleEId },
       });
 
-      expect(hrefs()).toEqual([
-        "/gesetze/eli/bund/bgbl-1/2000/s001/2030-01-01/1/deu/art-z§§ 1 bis 3",
+      const hrefs = screen
+        .getAllByRole("link")
+        .map((link) => link.getAttribute("href"));
+      expect(hrefs).toEqual([
+        "/gesetze/eli/bund/bgbl-1/2000/s001/2031-01-01/1/deu/art-z§§ 1 bis 3",
         "/gesetze/eli/bund/bgbl-1/2000/s001/2020-01-01/1/deu/art-z§§ 1 bis 3",
         "/gesetze/eli/bund/bgbl-1/2000/s001/2000-01-01/1/deu/art-z§§ 1 bis 3",
       ]);
     },
   );
 
+  it("keeps the from query parameter in the gesamtausgaben links", async () => {
+    await renderSuspended(GesamtausgabenList, {
+      route: "/?from=%2Fsuche%3Fq%3Dtest",
+      props: {
+        currentLegislationIdentifier,
+        gesamtausgaben: [gesamtausgaben[0]!],
+      },
+    });
+
+    expect(screen.getByRole("link")).toHaveAttribute(
+      "href",
+      "/gesetze/eli/bund/bgbl-1/2000/s001/2000-01-01/1/deu?from=/suche?q=test",
+    );
+  });
+
   it("marks the gesamtausgabe currently displayed as the current page", async () => {
-    await renderSuspended(GesamtausgabenList, { props: props() });
+    await renderSuspended(GesamtausgabenList, {
+      props: { currentLegislationIdentifier, gesamtausgaben },
+    });
 
     const links = screen.getAllByRole("link");
     expect(links[0]).not.toHaveAttribute("aria-current");
@@ -213,51 +172,45 @@ describe("GesamtausgabenList", () => {
     expect(links[2]).not.toHaveAttribute("aria-current");
   });
 
-  it("keeps the from query parameter in the gesamtausgaben links", async () => {
-    useRouteMock.mockReturnValue({ query: { from: "/suche?q=test" } });
-
-    await renderSuspended(GesamtausgabenList, { props: props() });
-
-    for (const href of hrefs()) {
-      const url = new URL(href!, "http://localhost");
-      expect(url.pathname).toMatch(/^\/gesetze\/eli\/bund\/bgbl-1\/2000\//);
-      expect(url.searchParams.get("from")).toBe("/suche?q=test");
-    }
-  });
-
   it("labels the status as unknown when it can't be determined", async () => {
-    const withoutCoverage = createLegislationExpression(
-      "eli/bund/bgbl-1/2000/s001/2040-01-01/1/deu",
-      "",
-      "NotInForce",
-    );
-
     await renderSuspended(GesamtausgabenList, {
-      props: props([withoutCoverage]),
+      props: {
+        currentLegislationIdentifier,
+        gesamtausgaben: [
+          {
+            legislationIdentifier: "eli/bund/bgbl-1/2000/s001/2040-01-01/1/deu",
+            temporalCoverage: "",
+          } as LegislationExpression,
+        ],
+      },
     });
 
     expect(screen.getByRole("listitem")).toHaveTextContent("Status: Unbekannt");
   });
 
   it("shows a placeholder when there are no gesamtausgaben", async () => {
-    await renderSuspended(GesamtausgabenList, { props: props([]) });
+    await renderSuspended(GesamtausgabenList, {
+      props: { currentLegislationIdentifier, gesamtausgaben: [] },
+    });
 
     expect(screen.getByText("Keine Ergebnisse gefunden")).toBeInTheDocument();
     expect(screen.queryAllByRole("link")).toHaveLength(0);
   });
 
   it("does not announce anything before the gesamtausgaben change", async () => {
-    await renderSuspended(GesamtausgabenList, { props: props() });
+    await renderSuspended(GesamtausgabenList, {
+      props: { currentLegislationIdentifier, gesamtausgaben },
+    });
 
     expect(screen.getByRole("status")).toHaveTextContent("");
   });
 
   it("announces when the gesamtausgaben change to none", async () => {
     const { rerender } = await renderSuspended(GesamtausgabenList, {
-      props: props(),
+      props: { currentLegislationIdentifier, gesamtausgaben },
     });
 
-    await rerender(props([]));
+    await rerender({ gesamtausgaben: [] });
 
     expect(screen.getByRole("status")).toHaveTextContent(
       "Keine Ergebnisse gefunden",
@@ -266,14 +219,14 @@ describe("GesamtausgabenList", () => {
 
   it("announces how many gesamtausgaben there are once there are some again", async () => {
     const { rerender } = await renderSuspended(GesamtausgabenList, {
-      props: props([]),
+      props: { currentLegislationIdentifier, gesamtausgaben: [] },
     });
 
-    await rerender(props([data.member![0]!]));
+    await rerender({ gesamtausgaben: [gesamtausgaben[0]!] });
 
     expect(screen.getByRole("status")).toHaveTextContent("1 Gesamtausgabe");
 
-    await rerender(props());
+    await rerender({ gesamtausgaben });
 
     expect(screen.getByRole("status")).toHaveTextContent("3 Gesamtausgaben");
   });
