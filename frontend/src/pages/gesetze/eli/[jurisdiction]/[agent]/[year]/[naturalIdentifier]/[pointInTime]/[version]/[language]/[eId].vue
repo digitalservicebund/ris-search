@@ -68,8 +68,8 @@ const isArticle = computed(() => article.value?.partType === "article");
 const isNormInForce = norm.value?.legislationLegalForce === "InForce";
 
 function fetchFassungen() {
-  if (!isArticle.value) return undefined;
-  const url = `/v1/article/work-example/eli/${expressionEli}/${eId.value}`;
+  if (!isArticle.value || !article.value?.revision) return undefined;
+  const url = `/v1/article/work-example/${article.value?.revision}`;
   return useRisBackend<JSONLDList<ArtikelFassung>>(url);
 }
 
