@@ -1,8 +1,8 @@
 import { expect, navigate, noJsTest, test } from "./utils/fixtures";
 test.describe("view norm article page", () => {
   test(
-    "displays text tab by default",
-    { tag: ["@RISDEV-11132"] },
+    "displays text tab by default and long title if no short title exists",
+    { tag: ["@RISDEV-11132", "@RISDEV-12900"] },
     async ({ page }) => {
       await navigate(
         page,
@@ -11,6 +11,12 @@ test.describe("view norm article page", () => {
 
       await expect(
         page.getByRole("tab", { name: "Text", selected: true }),
+      ).toBeVisible();
+
+      await expect(
+        page
+          .getByRole("paragraph")
+          .filter({ hasText: "Zum Testen von Fassungen - Aktuelle Fassung" }),
       ).toBeVisible();
 
       await expect(
@@ -36,7 +42,9 @@ test.describe("view norm article page", () => {
       });
       await expect
         .soft(
-          page.getByRole("paragraph").filter({ hasText: "FrSaftErfrischV" }),
+          page.getByRole("paragraph").filter({
+            hasText: "Fruchtsaft- und Erfrischungsgetränkeverordnung",
+          }),
         )
         .toBeVisible();
       const heading = page.getByRole("heading", {
