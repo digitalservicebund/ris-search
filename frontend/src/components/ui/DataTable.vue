@@ -47,6 +47,12 @@ const {
 
   /** If true the header row is hidden */
   hideHeader?: boolean;
+
+  /**
+   * If true the first column has no left padding on wide viewports, so its
+   * content is flush with the table's left edge
+   */
+  flushLeft?: boolean;
 }>();
 
 defineSlots<
@@ -87,8 +93,9 @@ const gridTemplateColumns = computed(() =>
       aria-hidden="true"
     >
       <span
-        v-for="column in columns"
+        v-for="(column, index) in columns"
         :key="column.key"
+        :class="{ 'pl-0': flushLeft && index === 0 }"
         class="typo-label1-bold flex min-h-48 items-center px-16 py-10"
       >
         {{ column.label }}
@@ -108,12 +115,13 @@ const gridTemplateColumns = computed(() =>
           class="grid grid-cols-[max-content_minmax(0,1fr)] items-center gap-x-16 gap-y-4 p-16 focus-visible:outline-4 focus-visible:-outline-offset-4 focus-visible:outline-blue-800 md:col-span-full md:grid-cols-subgrid md:gap-0 md:p-0"
           v-bind="row.attrs"
         >
-          <template v-for="column in columns" :key="column.key">
+          <template v-for="(column, index) in columns" :key="column.key">
             <span class="typo-label1-bold flex min-h-32 items-center md:sr-only"
               >{{ column.label }}:</span
             >
             {{ " " }}
             <span
+              :class="{ 'md:pl-0': flushLeft && index === 0 }"
               class="typo-label1-regular flex min-h-32 items-center md:min-h-48 md:px-16 md:py-10"
             >
               <slot :name="`cell-${column.key}`" :row="row" :column="column">

@@ -88,12 +88,13 @@ const drawerId = useId();
   </UiMessage>
   <template v-else-if="detailsContent">
     <div class="mx-16 mt-8 flex flex-col" :class="{ 'mb-8': current }">
-      <NuxtLink
+      <UiButton
         v-if="gesamtausgabeLink"
-        class="typo-link1-bold link-hover border border-blue-500 bg-white p-16"
+        severity="info"
         :to="gesamtausgabeLink.to"
-        >{{ gesamtausgabeLink.label }}</NuxtLink
-      >
+        :as="NuxtLink"
+        :label="gesamtausgabeLink.label"
+      />
       <template v-else>
         <UiButton
           ref="drawerTriggerRef"
@@ -102,7 +103,7 @@ const drawerId = useId();
           aria-haspopup="dialog"
           @click="drawerVisible = true"
           severity="info"
-          class="typo-label1-bold! mb-8 md:hidden"
+          class="mb-8 md:hidden"
           >Gesamtausgabe auswählen</UiButton
         >
         <UiDrawer
@@ -121,8 +122,7 @@ const drawerId = useId();
           <template v-if="showMoreMobile.hasMore" #footer>
             <div class="flex">
               <UiButton
-                severity="secondary"
-                size="normal"
+                severity="info"
                 :label="
                   showMoreMobile.showingAll
                     ? 'Weniger anzeigen'
@@ -140,23 +140,28 @@ const drawerId = useId();
           header-expanded="Gesamtausgabe auswählen"
           :model-value="current"
         >
-          <GesamtausgabenList
-            :current-legislation-identifier="currentLegislationIdentifier"
-            :gesamtausgaben="showMoreDesktop.itemsToDisplay"
-            :article-e-id="fassungEId"
-            hideHeader
-            class="mt-16 border-t border-gray-400"
-          />
-          <UiButton
-            v-if="showMoreDesktop.hasMore"
-            severity="info"
-            size="small"
-            :label="
-              showMoreDesktop.showingAll ? 'Weniger anzeigen' : 'Alles anzeigen'
-            "
-            class="mt-8"
-            @click="showMoreDesktop.toggle"
-          />
+          <div class="ml-32">
+            <GesamtausgabenList
+              :current-legislation-identifier="currentLegislationIdentifier"
+              :gesamtausgaben="showMoreDesktop.itemsToDisplay"
+              :article-e-id="fassungEId"
+              hideHeader
+              flushLeft
+              class="mt-16 border-t border-gray-400"
+            />
+            <UiButton
+              v-if="showMoreDesktop.hasMore"
+              severity="info"
+              size="small"
+              :label="
+                showMoreDesktop.showingAll
+                  ? 'Weniger anzeigen'
+                  : 'Alles anzeigen'
+              "
+              class="mt-8"
+              @click="showMoreDesktop.toggle"
+            />
+          </div>
         </UiAccordion>
       </template>
     </div>
