@@ -91,6 +91,7 @@ dependencies {
     implementation(libs.micrometer.registry.prometheus)
     implementation(libs.sentry.spring.boot.starter.jakarta)
     implementation(libs.sentry.logback)
+    implementation(libs.logstash.logback.encoder)
     implementation(libs.posthog)
     implementation(libs.commons.text)
 

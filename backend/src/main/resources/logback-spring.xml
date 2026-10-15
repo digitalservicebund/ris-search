@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- Include spring defaults -->
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <!-- Let spring define CONSOLE with the default -->
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+
+
+    <springProfile name="!dev">
+        <!-- Override CONSOLE to use json encoding -->
+        <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+                <!-- Hide fields we don't need to prevent log bloat -->
+                <includeTags>false</includeTags>
+                <fieldNames>
+                    <version>[ignore]</version>
+                    <thread>[ignore]</thread>
+                    <levelValue>[ignore]</levelValue>
+                </fieldNames>
+            </encoder>
+        </appender>
+    </springProfile>
+
+    <!-- Load the logging level set in our application.yml files. Use INFO if not defined. -->
+    <springProperty scope="context" name="ROOT_LEVEL" source="logging.level.root" defaultValue="INFO"/>
+    <!-- Apply the logging level to the log appender -->
+    <root level="${ROOT_LEVEL}">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+</configuration>

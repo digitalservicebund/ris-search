@@ -2,6 +2,8 @@
 # everywhere it is set here with the empty string. Kubernetes import is the only exception to this.
 
 spring:
+  main:
+    banner-mode: "off"
   profiles:
     # Set the default spring profile to dev. dev is used for local development. All other
     # environments explicitly set a profile and therefore don't use the default.
