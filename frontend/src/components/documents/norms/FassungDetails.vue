@@ -87,13 +87,15 @@ const drawerId = useId();
     Es ist ein Fehler aufgetreten.
   </UiMessage>
   <template v-else-if="detailsContent">
-    <div class="mx-16 mt-8 flex flex-col" :class="{ 'mb-8': current }">
+    <div class="mx-16 mt-8" :class="{ 'mb-8': current }">
       <UiButton
         v-if="gesamtausgabeLink"
         severity="info"
         :to="gesamtausgabeLink.to"
         :as="NuxtLink"
+        size="small"
         :label="gesamtausgabeLink.label"
+        class="w-full md:w-auto"
       />
       <template v-else>
         <UiButton
@@ -103,7 +105,8 @@ const drawerId = useId();
           aria-haspopup="dialog"
           @click="drawerVisible = true"
           severity="info"
-          class="mb-8 md:hidden"
+          size="small"
+          class="mb-8 w-full md:hidden"
           >Gesamtausgabe auswählen</UiButton
         >
         <UiDrawer
