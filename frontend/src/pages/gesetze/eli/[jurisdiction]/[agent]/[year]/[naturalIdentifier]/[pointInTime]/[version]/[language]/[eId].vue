@@ -92,9 +92,7 @@ if (validVersions?.error.value) {
   throw createError(validVersions.error.value);
 }
 
-const fassungen = ref<ArtikelFassung[]>(
-  fassungenResult?.data.value?.member ?? [],
-);
+const fassungen = computed(() => fassungenResult?.data.value?.member ?? []);
 
 const inForceExpressionEli = computed(() => {
   if (isNormInForce) return `eli/${expressionEli}`;
@@ -271,10 +269,7 @@ const metadataItems = computed<MetadataItem[]>(() => {
   ];
 });
 
-const {
-  dateFilterValue: fassungenDateFilterValue,
-  filteredVersions: filteredFassungen,
-} = useVersionDateFilter(fassungen);
+const fassungenDateFilterValue = ref<string>();
 
 const textTabPanelTitleId = useId();
 const fassungenTabPanelTitleId = useId();
@@ -398,7 +393,7 @@ const fassungenDateFilterInputId = useId();
               <DocumentsNormsArtikelFassungenList
                 :current-legislation-identifier="norm.legislationIdentifier"
                 :current-fassung-id="article.revision"
-                :fassungen="filteredFassungen"
+                :fassungen
                 :date-filter="fassungenDateFilterValue"
               />
             </div>

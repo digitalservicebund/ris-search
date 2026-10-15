@@ -44,12 +44,11 @@ function hasBothDates(row: FassungRow) {
 }
 
 const rows = computed<FassungRow[]>(() => {
-  // newest single norm first
-  const fassungenSorted = fassungen.toSorted((a, b) =>
-    b.temporalCoverage.localeCompare(a.temporalCoverage),
+  const visibleFassungen = versionDateFilter(fassungen, dateFilter).toSorted(
+    (a, b) => b.temporalCoverage.localeCompare(a.temporalCoverage),
   );
 
-  return fassungenSorted.map((fassung) => {
+  return visibleFassungen.map((fassung) => {
     const validityInterval = temporalCoverageToValidityInterval(
       fassung.temporalCoverage,
     );
