@@ -9,3 +9,8 @@ swagger:
 
 local:
   file-storage: backend/.local-storage
+
+logging:
+  structured:
+    format:
+      console: ""
