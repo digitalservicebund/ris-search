@@ -231,6 +231,10 @@ const breadcrumbItems: Ref<BreadcrumbItem[]> = computed(() => {
 
 const htmlTitle = computed(() => data.value.articleHeading);
 
+const shortOrLongTitle = computed(
+  () => data.value.legislation.alternateName ?? data.value.legislation.name,
+);
+
 const views = computed<OneOrMore<TabView>>(() => {
   const tabViews: OneOrMore<TabView> = [
     {
@@ -292,8 +296,11 @@ const fassungenDateFilterInputId = useId();
     <div
       class="content-wrapper mb-24 space-y-24 sm:mb-32 sm:space-y-32 md:mb-40 md:space-y-40"
     >
-      <p class="typo-headline3-regular mb-8">
-        {{ normAbbreviation }}
+      <p
+        v-if="shortOrLongTitle"
+        class="typo-headline3-regular mb-8 wrap-break-word hyphens-auto"
+      >
+        {{ shortOrLongTitle }}
       </p>
       <h1
         class="typo-headline1-bold wrap-break-word hyphens-auto"
