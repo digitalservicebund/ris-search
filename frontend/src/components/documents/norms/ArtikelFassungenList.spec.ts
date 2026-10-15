@@ -321,13 +321,22 @@ describe("ArtikelFassungenList", () => {
       });
     });
 
+    it("lists only the fassung valid on the filter date", async () => {
+      await renderSuspended(ArtikelFassungenList, {
+        props: { ...props(), dateFilter: "2010-06-01" },
+      });
+
+      const row = screen.getByRole("listitem");
+      expect(within(row).getByText("05.01.2000")).toBeInTheDocument();
+      expect(within(row).getByText("31.12.2019")).toBeInTheDocument();
+    });
+
     it("links only the Gesamtausgabe valid on the filter date", async () => {
       const { rerender } = await renderSuspended(ArtikelFassungenList, {
         props: props(),
       });
 
-      // The page filters the fassungen by the same date, leaving one row
-      await rerender({ ...props([futureFassung]), dateFilter: "2031-06-01" });
+      await rerender({ ...props(), dateFilter: "2031-06-01" });
 
       expect(
         await screen.findByRole("link", {
@@ -343,10 +352,10 @@ describe("ArtikelFassungenList", () => {
       const { rerender } = await renderSuspended(ArtikelFassungenList, {
         props: props(),
       });
-      await rerender({ ...props([futureFassung]), dateFilter: "2031-06-01" });
+      await rerender({ ...props(), dateFilter: "2031-06-01" });
       await screen.findByRole("link", { name: /^Gesamtausgabe/ });
 
-      await rerender({ ...props([futureFassung]), dateFilter: "2032-06-01" });
+      await rerender({ ...props(), dateFilter: "2032-06-01" });
 
       expect(
         screen.getByRole("link", {
@@ -472,22 +481,26 @@ describe("ArtikelFassungenList", () => {
       props: props(),
     });
 
-    await rerender(props([pastFassung]));
+    await rerender({ ...props(), dateFilter: "2010-06-01" });
 
     expect(await screen.findByText("Norm content")).toBeVisible();
 
-    await rerender(props());
+    await rerender({ ...props(), dateFilter: undefined });
 
     expect(screen.queryByText("Norm content")).not.toBeInTheDocument();
   });
 
   it("expands the current fassung when it is the only remaining row", async () => {
-    mockBackend();
+    mockBackend({
+      gesamtausgaben: [
+        createGesamtausgabe(currentLegislationIdentifier, "2020-01-01/.."),
+      ],
+    });
     const { rerender } = await renderSuspended(ArtikelFassungenList, {
       props: props(),
     });
 
-    await rerender(props([currentFassung]));
+    await rerender({ ...props(), dateFilter: "2025-06-01" });
 
     expect(
       await screen.findByRole("link", { name: /^Gesamtausgabe/ }),
