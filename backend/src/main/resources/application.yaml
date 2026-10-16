@@ -114,3 +114,12 @@ logging:
     de.bund.digitalservice.ris.search.config.httplogs: TRACE
     springframework.ws.server.MessageTracing.sent: DEBUG
     springframework.ws.server.MessageTracing.received: TRACE
+  structured:
+    format:
+      console: ecs
+    json:
+      exclude:
+        - process
+        - service
+        - tags
+        - ecs
