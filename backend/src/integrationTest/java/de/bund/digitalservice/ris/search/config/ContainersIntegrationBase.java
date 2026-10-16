@@ -30,6 +30,7 @@ import de.bund.digitalservice.ris.search.service.AllDocumentsService;
 import de.bund.digitalservice.ris.search.service.CaseLawService;
 import de.bund.digitalservice.ris.search.service.LiteratureService;
 import de.bund.digitalservice.ris.search.service.NormsService;
+import de.bund.digitalservice.ris.testmocks.PostHogTestConfig;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -42,6 +43,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.SearchHit;
@@ -59,6 +61,7 @@ import org.testcontainers.utility.TestcontainersConfiguration;
  * test run.
  */
 @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
+@Import(PostHogTestConfig.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class ContainersIntegrationBase {
 
