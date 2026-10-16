@@ -65,8 +65,14 @@ function formatTemporalCoverage(temporalCoverage?: string) {
   }
 }
 
-const showMoreDesktop = reactive(useShowMore(gesamtausgabenSorted, 5));
-const showMoreMobile = reactive(useShowMore(gesamtausgabenSorted, 3));
+const { toggle: toggleShowMoreDesktop, state: showMoreDesktop } = useShowMore(
+  gesamtausgabenSorted,
+  5,
+);
+const { toggle: toggleShowMoreMobile, state: showMoreMobile } = useShowMore(
+  gesamtausgabenSorted,
+  3,
+);
 
 const {
   visible: drawerVisible,
@@ -132,7 +138,7 @@ const drawerId = useId();
                     : 'Alles anzeigen'
                 "
                 class="flex-1"
-                @click="showMoreMobile.toggle"
+                @click="toggleShowMoreMobile"
               />
             </div>
           </template>
@@ -162,7 +168,7 @@ const drawerId = useId();
                   : 'Alles anzeigen'
               "
               class="mt-8"
-              @click="showMoreDesktop.toggle"
+              @click="toggleShowMoreDesktop"
             />
           </div>
         </UiAccordion>

@@ -3,11 +3,19 @@ export function useShowMore<T>(
   displayLimit: number,
 ) {
   const showingAll = ref(false);
-  const hasMore = computed(() => toValue(items).length > displayLimit);
-  const itemsToDisplay = computed(() =>
-    showingAll.value ? toValue(items) : toValue(items).slice(0, displayLimit),
-  );
+
   const toggle = () => (showingAll.value = !showingAll.value);
 
-  return { hasMore, showingAll, itemsToDisplay, toggle };
+  const state = computed(() => {
+    const allValues = toValue(items);
+    return {
+      hasMore: allValues.length > displayLimit,
+      itemsToDisplay: showingAll.value
+        ? allValues
+        : toValue(items).slice(0, displayLimit),
+      showingAll: showingAll.value,
+    };
+  });
+
+  return { toggle, state };
 }
