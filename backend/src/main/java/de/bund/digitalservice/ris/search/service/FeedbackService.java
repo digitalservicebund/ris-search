@@ -2,13 +2,11 @@ package de.bund.digitalservice.ris.search.service;
 
 import de.bund.digitalservice.ris.search.client.posthog.PostHogClient;
 import de.bund.digitalservice.ris.search.config.posthog.PosthogProperties;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 /** Service class for sending feedback to PostHog. */
-@Profile({"test", "prototype"})
 @Service
-public class PostHogService {
+public class FeedbackService {
 
   private final PostHogClient postHogClient;
   private final PosthogProperties posthogProperties;
@@ -19,7 +17,7 @@ public class PostHogService {
    * @param postHogClient The PostHog client used to send feedback.
    * @param posthogProperties The PostHog configuration properties.
    */
-  public PostHogService(PostHogClient postHogClient, PosthogProperties posthogProperties) {
+  public FeedbackService(PostHogClient postHogClient, PosthogProperties posthogProperties) {
     this.postHogClient = postHogClient;
     this.posthogProperties = posthogProperties;
   }

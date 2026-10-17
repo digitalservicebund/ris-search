@@ -30,7 +30,6 @@ amazon-aws-sdk-s3 = "2.47.5"
 saxon-he = "13.0"
 streamex = "0.9.0"
 jaxb-moxy = "5.0.2"
-posthog = "1.2.0"
 pebble = "4.1.2"
 rest-assured = "6.0.1"
 commons-io = "2.22.0"
@@ -42,6 +41,7 @@ reflections = "0.10.2"
 # CVE-2026-68497, CVE-2026-89407: overrides Spring Boot's managed Jackson BOM versions
 jackson2 = "2.22.3"
 jackson3 = "3.2.3"
+posthog-server = "2.21.1"
 
 [libraries]
 spring-actuator = { module="org.springframework.boot:spring-boot-starter-actuator", version.ref="spring-boot-starter" }
@@ -59,7 +59,6 @@ amazon-aws-sdk-s3 = { module = "software.amazon.awssdk:s3", version.ref = "amazo
 micrometer-registry-prometheus = { module = "io.micrometer:micrometer-registry-prometheus", version.ref = "prometheus" }
 sentry-spring-boot-starter-jakarta = { module = "io.sentry:sentry-spring-boot-4", version.ref = "sentry" }
 sentry-logback = { module = "io.sentry:sentry-logback", version.ref = "sentry" }
-posthog = { module = "com.posthog.java:posthog", version.ref = "posthog" }
 commons-text = { module = "org.apache.commons:commons-text", version.ref = "commons-text" }
 commons-csv = { module = "org.apache.commons:commons-csv", version.ref = "commons-csv" }
 saxon-he = { module = "net.sf.saxon:Saxon-HE", version.ref = "saxon-he" }
@@ -82,6 +81,7 @@ restassured = { module = 'io.rest-assured:rest-assured', version.ref = "rest-ass
 apicatalog-titanium-json = { module="com.apicatalog:titanium-json-ld", version.ref = "titanium-json"}
 glassfish-jakarta-json = { module = "org.glassfish:jakarta.json", version.ref = "jakarta-json"}
 commons-io = { module = "commons-io:commons-io", version.ref = "commons-io" }
+posthog-server = { module = "com.posthog:posthog-server", version.ref = "posthog-server"}
 
 # CVE-2026-5588
 bouncycastle-bom = { module = "org.bouncycastle:bc-jdk18on-bom", version = "1.86.1" }

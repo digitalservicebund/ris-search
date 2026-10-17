@@ -91,7 +91,6 @@ dependencies {
     implementation(libs.micrometer.registry.prometheus)
     implementation(libs.sentry.spring.boot.starter.jakarta)
     implementation(libs.sentry.logback)
-    implementation(libs.posthog)
     implementation(libs.commons.text)
 
     implementation(libs.commons.csv)
@@ -100,6 +99,8 @@ dependencies {
     implementation(libs.jaxb.moxy)
     implementation(libs.pebble)
     implementation(libs.streamex)
+
+    implementation(libs.posthog.server)
 
     // CVE-2026-5588
     implementation(platform(libs.bouncycastle.bom))

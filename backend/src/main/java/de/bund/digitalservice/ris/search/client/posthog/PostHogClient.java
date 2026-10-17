@@ -1,16 +1,7 @@
 package de.bund.digitalservice.ris.search.client.posthog;
 
-import com.posthog.java.PostHog;
-import jakarta.annotation.PreDestroy;
-import java.util.HashMap;
-import java.util.Map;
-
-/**
- * Client for interacting with PostHog analytics service.
- *
- * @param postHog the PostHog instance used for sending events
- */
-public record PostHogClient(PostHog postHog) {
+/** Client for interacting with PostHog analytics service. */
+public interface PostHogClient {
 
   /**
    * Submits user feedback to PostHog.
@@ -20,16 +11,14 @@ public record PostHogClient(PostHog postHog) {
    * @param text the feedback text provided by the user
    * @param surveyId the ID of the survey associated with the feedback
    */
-  public void submitFeedback(String userId, String url, String text, String surveyId) {
-    Map<String, Object> surveyFeedback = new HashMap<>();
-    surveyFeedback.put("$survey_id", surveyId);
-    surveyFeedback.put("$survey_response", text);
-    surveyFeedback.put("$current_url", url);
-    postHog.capture(userId, "survey sent", surveyFeedback);
-  }
+  void submitFeedback(String userId, String url, String text, String surveyId);
 
-  @PreDestroy
-  public void shutdown() {
-    postHog.shutdown();
-  }
+  /**
+   * Submits an api event to PostHog.
+   *
+   * @param uri path of the api call made
+   * @param method Http Method made
+   * @param userAgent userAgent
+   */
+  void submitApiEvent(String uri, String method, String userAgent);
 }

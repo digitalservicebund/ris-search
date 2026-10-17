@@ -2,7 +2,7 @@ package de.bund.digitalservice.ris.search.controller.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
-import de.bund.digitalservice.ris.search.service.PostHogService;
+import de.bund.digitalservice.ris.search.service.FeedbackService;
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -38,15 +38,16 @@ public class FeedbackController {
       // Honeypot field: if non-empty the submission is silently dropped to block bots.
       String name) {}
 
-  private final PostHogService postHogService;
+  private final FeedbackService feedbackService;
 
   /**
    * Constructor for the FeedbackController class.
    *
-   * @param postHogService The {@link PostHogService} to be used
+   * @param feedbackService The {@link de.bund.digitalservice.ris.search.service.FeedbackService} to
+   *     be used
    */
-  public FeedbackController(PostHogService postHogService) {
-    this.postHogService = postHogService;
+  public FeedbackController(FeedbackService feedbackService) {
+    this.feedbackService = feedbackService;
   }
 
   /**
@@ -67,7 +68,7 @@ public class FeedbackController {
   public ResponseEntity<Map<String, String>> sendFeedback(
       @Valid @RequestBody FeedbackRequest body) {
     if (body.name() == null || body.name().isEmpty()) {
-      postHogService.sendFeedback(body.userId(), body.url(), body.text());
+      feedbackService.sendFeedback(body.userId(), body.url(), body.text());
     }
 
     return ResponseEntity.ok()

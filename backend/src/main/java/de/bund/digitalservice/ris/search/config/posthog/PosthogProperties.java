@@ -28,4 +28,11 @@ public class PosthogProperties {
   private String apiKey;
   private String host;
   private String feedbackSurveyId;
+  private boolean debug;
+
+  /** Number of queued events that triggers a flush. Uses the SDK default if unset. */
+  private Integer flushAt;
+
+  /** Interval in seconds after which queued events are flushed. Uses the SDK default if unset. */
+  private Integer flushIntervalSeconds;
 }

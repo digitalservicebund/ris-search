@@ -14,7 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.controller.api.FeedbackController.FeedbackRequest;
-import de.bund.digitalservice.ris.search.service.PostHogService;
+import de.bund.digitalservice.ris.search.service.FeedbackService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,7 +29,7 @@ class FeedbackControllerIntegrationTest extends ContainersIntegrationBase {
   @Autowired private MockMvc mockMvc;
   @Autowired private ObjectMapper objectMapper;
 
-  @MockitoSpyBean PostHogService postHogService;
+  @MockitoSpyBean FeedbackService feedbackService;
 
   private static final String TEXT = "test feedback";
   private static final String URL = "http://example.com";
@@ -86,7 +86,7 @@ class FeedbackControllerIntegrationTest extends ContainersIntegrationBase {
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.message").value("Feedback sent successfully"));
 
-    verify(postHogService, never()).sendFeedback(anyString(), anyString(), anyString());
+    verify(feedbackService, never()).sendFeedback(anyString(), anyString(), anyString());
   }
 
   @Test
@@ -101,6 +101,6 @@ class FeedbackControllerIntegrationTest extends ContainersIntegrationBase {
                 .content(objectMapper.writeValueAsString(body)))
         .andExpect(status().isOk());
 
-    verify(postHogService, times(1)).sendFeedback(USER_ID, URL, TEXT);
+    verify(feedbackService, times(1)).sendFeedback(USER_ID, URL, TEXT);
   }
 }
