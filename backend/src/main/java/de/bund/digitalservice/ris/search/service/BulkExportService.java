@@ -14,6 +14,7 @@ import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -32,10 +33,11 @@ public class BulkExportService {
   public static final String JOB_STATE_STORAGE_PREFIX = "snapshot-job-state/";
 
   private final String archivePrefix;
+  private final Predicate<String> keyFilter;
 
   /**
-   * Service to include potentially all files from a source bucket in a zip file and store it in a
-   * destination bucket.
+   * Service to include all files from a source bucket in a zip file and store it in a destination
+   * bucket.
    *
    * @param sourceBucket the ObjectStorage bucket to read files from
    * @param destinationBucket the ObjectStorage bucket to upload the ZIP archive to
@@ -43,9 +45,27 @@ public class BulkExportService {
    */
   public BulkExportService(
       ObjectStorage sourceBucket, ObjectStorage destinationBucket, String outputName) {
+    this(sourceBucket, destinationBucket, outputName, _ -> true);
+  }
+
+  /**
+   * Service to include the files from a source bucket that match the given filter in a zip file and
+   * store it in a destination bucket.
+   *
+   * @param sourceBucket the ObjectStorage bucket to read files from
+   * @param destinationBucket the ObjectStorage bucket to upload the ZIP archive to
+   * @param outputName the base name for the output ZIP file
+   * @param keyFilter decides which keys of the source bucket are included in the archive
+   */
+  public BulkExportService(
+      ObjectStorage sourceBucket,
+      ObjectStorage destinationBucket,
+      String outputName,
+      Predicate<String> keyFilter) {
     this.sourceBucket = sourceBucket;
     this.destinationBucket = destinationBucket;
     this.archivePrefix = BULK_ZIP_PREFIX + outputName;
+    this.keyFilter = keyFilter;
   }
 
   /**
@@ -64,6 +84,7 @@ public class BulkExportService {
     List<String> keysToZip =
         sourceBucket.getAllKeys().stream()
             .filter(key -> !key.startsWith(ChangelogService.CHANGELOGS_PREFIX))
+            .filter(keyFilter)
             .toList();
 
     if (keysToZip.isEmpty()) {
