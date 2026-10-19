@@ -116,7 +116,7 @@ jobs:
 
       - name: Clean existing signatures and attestations
         if: ${{ github.event.pull_request.user.login != 'dependabot[bot]' }}
-        run: cosign clean --yes ${INPUTS_IMAGE_REFERENCE}
+        run: cosign clean --force "${INPUTS_IMAGE_REFERENCE}"
         env:
           INPUTS_IMAGE_REFERENCE: ${{ inputs.image-reference }}
 
