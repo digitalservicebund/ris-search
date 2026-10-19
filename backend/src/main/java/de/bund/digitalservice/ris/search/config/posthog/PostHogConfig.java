@@ -25,7 +25,7 @@ public class PostHogConfig {
    * @return a configured PostH
    */
   @Bean
-  @Profile({"test", "prototype"})
+  @Profile("prototype")
   public PostHogClient postHog(PosthogProperties properties) {
     var postHog = new PostHog.Builder(properties.getApiKey()).host(properties.getHost()).build();
     return new PostHogClient(postHog);
