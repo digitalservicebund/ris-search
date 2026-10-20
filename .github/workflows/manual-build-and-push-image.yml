@@ -7,7 +7,11 @@ on:
         description: 'Target Git commit SHA on main (e.g., 4567ec31e3ad23437c3b8a56e3e9114b810b252f)'
         required: true
         type: string
-      app:
+    tag-name:
+      description: 'New unique image tag to push (e.g., manual-resign-v1 or 4567ec3-v2)'
+      required: true
+      type: string
+    app:
         description: 'App for which the scan and attestation is run'
         required: true
         type: string
@@ -60,7 +64,7 @@ jobs:
         with:
           file: backend/Dockerfile.prod
           context: backend
-          tags: ghcr.io/${{ github.repository }}:${{ inputs.commit-sha }}
+          tags: ghcr.io/${{ github.repository }}:${{ inputs.tag-name }}
           push: true
           secrets: |
             GH_PACKAGES_REPOSITORY_USER=${{ github.actor }}
