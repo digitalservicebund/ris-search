@@ -46,12 +46,12 @@ useCaselawSeo({
   document: document.value,
 });
 
-const verweiseGroups = computed(() =>
-  document.value ? getVerweiseGroups(document.value) : [],
+const zitierungenGroups = computed(() =>
+  document.value ? getZitierungenGroups(document.value) : [],
 );
 
-const shouldRenderVerweise = computed(() => {
-  return usePrivateFeaturesFlag() && verweiseGroups.value.length;
+const shouldRenderZitierungen = computed(() => {
+  return usePrivateFeaturesFlag() && zitierungenGroups.value.length;
 });
 
 // Page contents ------------------------------------------
@@ -69,10 +69,10 @@ const views = computed<TabView[]>(() => {
     analyticsId: "caselaw-metadata-tab",
   });
 
-  if (shouldRenderVerweise.value) {
+  if (shouldRenderZitierungen.value) {
     tabViews.push({
-      path: "verweise",
-      label: "Verweise",
+      path: "zitierungen",
+      label: "Zitierungen",
     });
   }
 
@@ -198,7 +198,7 @@ const detailItems = computed<DetailsListItem[]>(() => [
 
 const textSectionId = useId();
 const detailsSectionId = useId();
-const verweiseSectionId = useId();
+const zitierungenSectionId = useId();
 </script>
 
 <template>
@@ -259,16 +259,18 @@ const verweiseSectionId = useId();
       </SidebarLayout>
     </template>
 
-    <template #verweise>
+    <template #zitierungen>
       <section
-        v-if="shouldRenderVerweise"
+        v-if="shouldRenderZitierungen"
         role="tabpanel"
-        :aria-labelledby="verweiseSectionId"
+        :aria-labelledby="zitierungenSectionId"
         class="pt-32 pb-32 md:pb-56"
       >
-        <h2 :id="verweiseSectionId" class="typo-headline3-bold">Verweise</h2>
-        <div class="verweise">
-          <div v-for="group in verweiseGroups" :key="group.id">
+        <h2 :id="zitierungenSectionId" class="typo-headline3-bold">
+          Zitierungen
+        </h2>
+        <div class="zitierungen">
+          <div v-for="group in zitierungenGroups" :key="group.id">
             <h3 class="typo-body-bold pt-16 pb-8">
               {{ group.label }}
             </h3>
@@ -283,7 +285,7 @@ const verweiseSectionId = useId();
 <style scoped>
 @reference "~/assets/main.css";
 
-:deep(.verweise) {
+:deep(.zitierungen) {
   a {
     @apply typo-link1-regular;
   }

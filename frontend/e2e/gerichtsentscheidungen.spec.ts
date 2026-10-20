@@ -273,19 +273,19 @@ test("can view details", { tag: ["@RISDEV-12108"] }, async ({ page }) => {
   ]);
 });
 
-test.describe("can view verweise", { tag: ["@RISDEV-12560"] }, () => {
-  test("can view verweise if private features enabled and verweise exist", async ({
+test.describe("can view zitierungen", { tag: ["@RISDEV-12560"] }, () => {
+  test("can view zitierungen if private features enabled and zitierungen exist", async ({
     page,
     privateFeaturesEnabled,
   }) => {
     test.skip(!privateFeaturesEnabled);
     await navigate(page, "/gerichtsentscheidungen/BDRE000800001");
-    await page.getByRole("tab", { name: "Verweise" }).click();
+    await page.getByRole("tab", { name: "Zitierungen" }).click();
 
-    const tabPanel = page.getByRole("tabpanel", { name: "Verweise" });
+    const tabPanel = page.getByRole("tabpanel", { name: "Zitierungen" });
 
     await expect(tabPanel.getByRole("heading", { level: 2 })).toHaveText(
-      "Verweise",
+      "Zitierungen",
     );
 
     await expect(
@@ -400,43 +400,47 @@ test.describe("can view verweise", { tag: ["@RISDEV-12560"] }, () => {
     ).toBeVisible();
   });
 
-  test("can follow a verweis link", async ({
+  test("can follow a zitierung link", async ({
     page,
     privateFeaturesEnabled,
   }) => {
     test.skip(!privateFeaturesEnabled);
     await navigate(page, "/gerichtsentscheidungen/BDRE000800001");
-    await page.getByRole("tab", { name: "Verweise" }).click();
+    await page.getByRole("tab", { name: "Zitierungen" }).click();
 
-    const tabPanel = page.getByRole("tabpanel", { name: "Verweise" });
+    const tabPanel = page.getByRole("tabpanel", { name: "Zitierungen" });
 
-    const linkedVerweis = tabPanel.getByRole("link", {
+    const linkedZitierung = tabPanel.getByRole("link", {
       name: "VG Frankfurt, Beschluss vom 4. September 2026 - Foo Bar 2361/26.F",
     });
-    await expect(linkedVerweis).toBeVisible();
-    await linkedVerweis.click();
+    await expect(linkedZitierung).toBeVisible();
+    await linkedZitierung.click();
 
     await expect(page.getByRole("heading", { level: 1 })).toHaveText(
       "Testheader für Urteil 8.",
     );
   });
 
-  test("does not show verweise if private features enabled but no verweise exist", async ({
+  test("does not show zitierungen if private features enabled but no zitierungen exist", async ({
     page,
     privateFeaturesEnabled,
   }) => {
     test.skip(!privateFeaturesEnabled);
     await navigate(page, "/gerichtsentscheidungen/BORE040030050");
-    await expect(page.getByRole("tab", { name: "Verweise" })).not.toBeVisible();
+    await expect(
+      page.getByRole("tab", { name: "Zitierungen" }),
+    ).not.toBeVisible();
   });
 
-  test("does not show verweise if private features disabled", async ({
+  test("does not show zitierungen if private features disabled", async ({
     page,
     privateFeaturesEnabled,
   }) => {
     test.skip(privateFeaturesEnabled);
     await navigate(page, "/gerichtsentscheidungen/BDRE000800001");
-    await expect(page.getByRole("tab", { name: "Verweise" })).not.toBeVisible();
+    await expect(
+      page.getByRole("tab", { name: "Zitierungen" }),
+    ).not.toBeVisible();
   });
 });
 

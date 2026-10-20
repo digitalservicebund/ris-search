@@ -1,6 +1,6 @@
 import { afterEach } from "vitest";
 import {
-  getVerweiseGroups,
+  getZitierungenGroups,
   getTextFromElements,
   parseDocument,
 } from "./htmlParser";
@@ -61,7 +61,7 @@ describe("parseDocument", () => {
   });
 });
 
-describe("getVerweiseGroups", () => {
+describe("getZitierungenGroups", () => {
   const parser = new DOMParser();
 
   it("returns only the categories present in the document, in display order", () => {
@@ -73,7 +73,7 @@ describe("getVerweiseGroups", () => {
       "text/html",
     );
 
-    const result = getVerweiseGroups(doc);
+    const result = getZitierungenGroups(doc);
 
     expect(result).toEqual([
       { id: "referenzNorm", label: "Normen", html: "<ul><li>A</li></ul>" },
@@ -85,13 +85,13 @@ describe("getVerweiseGroups", () => {
     ]);
   });
 
-  it("returns an empty array when no verweise templates are present", () => {
+  it("returns an empty array when no zitierungen templates are present", () => {
     const doc = parser.parseFromString(
       "<!DOCTYPE HTML><html><head></head><body></body></html>",
       "text/html",
     );
 
-    expect(getVerweiseGroups(doc)).toEqual([]);
+    expect(getZitierungenGroups(doc)).toEqual([]);
   });
 
   it("sanitizes the list markup down to ul, li and a", () => {
@@ -100,7 +100,7 @@ describe("getVerweiseGroups", () => {
       "text/html",
     );
 
-    const [group] = getVerweiseGroups(doc);
+    const [group] = getZitierungenGroups(doc);
 
     expect(group?.html).toBe(
       '<ul><li><a href="/x">GG Art. 1</a></li><li>BGB</li></ul>',

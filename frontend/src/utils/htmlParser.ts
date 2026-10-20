@@ -60,19 +60,19 @@ export function getTextFromElements(elements?: NodeListOf<Element>): string[] {
   return textElements.filter(Boolean) as string[];
 }
 
-export type VerweiseGroup = {
+export type ZitierungenGroup = {
   id: string;
   label: string;
   html: string;
 };
 
 /**
- * Verweise categories in display order, matching the `<template id="...">`
+ * Zitierungen categories in display order, matching the `<template id="...">`
  * elements the case-law HTML transformation places in `<head>` (one per
  * category, e.g. `referenzNorm`, `vorgehendeEntscheidung`), each containing a
  * `<ul>` of `<li>` entries.
  */
-const VERWEISE_CATEGORIES: { id: string; label: string }[] = [
+const ZITIERUNGEN_CATEGORIES: { id: string; label: string }[] = [
   { id: "referenzNorm", label: "Normen" },
   { id: "referenzRechtsprechungAktiv", label: "Zitierte Rechtsprechung" },
   { id: "referenzRechtsprechungPassiv", label: "Verweisende Rechtsprechung" },
@@ -105,13 +105,13 @@ const VERWEISE_CATEGORIES: { id: string; label: string }[] = [
 ];
 
 /**
- * Extracts the verweise categories present in the document's `<head>`, paired
- * with a display label. Categories without a matching template (or with no
- * content) are omitted. The list markup is sanitized down to `<ul>`, `<li>` and
- * `<a>` elements only.
+ * Extracts the zitierungen categories present in the document's `<head>`,
+ * paired with a display label. Categories without a matching template (or with
+ * no content) are omitted. The list markup is sanitized down to `<ul>`, `<li>`
+ * and `<a>` elements only.
  */
-export function getVerweiseGroups(document: Document): VerweiseGroup[] {
-  return VERWEISE_CATEGORIES.flatMap(({ id, label }) => {
+export function getZitierungenGroups(document: Document): ZitierungenGroup[] {
+  return ZITIERUNGEN_CATEGORIES.flatMap(({ id, label }) => {
     const rawHtml = document.head.querySelector<HTMLTemplateElement>(
       `template#${id}`,
     )?.innerHTML;
