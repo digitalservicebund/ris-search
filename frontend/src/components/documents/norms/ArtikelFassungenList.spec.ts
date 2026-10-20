@@ -503,7 +503,7 @@ describe("ArtikelFassungenList", () => {
     await rerender({ ...props(), dateFilter: "2025-06-01" });
 
     expect(
-      await screen.findByRole("link", { name: /^Gesamtausgabe/ }),
+      await screen.findByRole("link", { name: /^Zum Text-Tab/ }),
     ).toBeVisible();
   });
 });

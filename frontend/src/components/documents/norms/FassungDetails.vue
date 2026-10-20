@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { NuxtLink } from "#components";
 import GesamtausgabenList from "~/components/documents/norms/GesamtausgabenList.vue";
 import { useShowMore } from "~/composables/useShowMore.ts";
 import type { LegislationExpression } from "~/types/api.ts";
@@ -46,6 +45,9 @@ const gesamtausgabeLink = computed(() => {
   return {
     label,
     to,
+    alreadyOpen:
+      current &&
+      gesamtausgabe.legislationIdentifier === currentLegislationIdentifier,
   };
 });
 
@@ -94,13 +96,19 @@ const drawerId = useId();
   </UiMessage>
   <template v-else-if="detailsContent">
     <div class="mx-16 mt-16" :class="{ 'mb-16': current }">
-      <NuxtLink
-        v-if="gesamtausgabeLink"
-        :to="gesamtausgabeLink.to"
-        class="typo-link1-regular"
-      >
-        {{ gesamtausgabeLink.label }}
-      </NuxtLink>
+      <template v-if="gesamtausgabeLink">
+        <span v-if="gesamtausgabeLink.alreadyOpen" class="typo-label1-regular"
+          >Fassung bereits geöffnet.
+          <NuxtLink
+            :to="{ query: { ...route.query, view: 'text' } }"
+            class="typo-link1-regular"
+            >Zum Text-Tab</NuxtLink
+          ></span
+        >
+        <NuxtLink v-else :to="gesamtausgabeLink.to" class="typo-link1-regular">
+          {{ gesamtausgabeLink.label }}
+        </NuxtLink>
+      </template>
       <template v-else>
         <UiButton
           ref="drawerTriggerRef"
