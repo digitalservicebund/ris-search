@@ -49,10 +49,10 @@ const {
   hideHeader?: boolean;
 
   /**
-   * If true the first column has no left padding on wide viewports, so its
-   * content is flush with the table's left edge
+   * If true the first column has reduced left padding on wide viewports, so its
+   * content sits closer to the table's left edge
    */
-  flushLeft?: boolean;
+  reducedFirstColumnPadding?: boolean;
 }>();
 
 defineSlots<
@@ -95,7 +95,7 @@ const gridTemplateColumns = computed(() =>
       <span
         v-for="(column, index) in columns"
         :key="column.key"
-        :class="{ 'pl-0': flushLeft && index === 0 }"
+        :class="{ 'md:pl-8': reducedFirstColumnPadding && index === 0 }"
         class="typo-label1-bold flex min-h-48 items-center px-16 py-10"
       >
         {{ column.label }}
@@ -121,7 +121,7 @@ const gridTemplateColumns = computed(() =>
             >
             {{ " " }}
             <span
-              :class="{ 'md:pl-0': flushLeft && index === 0 }"
+              :class="{ 'md:pl-8': reducedFirstColumnPadding && index === 0 }"
               class="typo-label1-regular flex min-h-32 items-center md:min-h-48 md:px-16 md:py-10"
             >
               <slot :name="`cell-${column.key}`" :row="row" :column="column">
