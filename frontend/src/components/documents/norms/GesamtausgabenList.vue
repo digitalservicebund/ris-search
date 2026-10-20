@@ -16,7 +16,7 @@ const props = defineProps<{
    */
   articleEId?: string;
   hideHeader?: boolean;
-  flushLeft?: boolean;
+  reducedFirstColumnPadding?: boolean;
 }>();
 
 type GesamtausgabeRow = DataTableRow & {
@@ -108,7 +108,7 @@ watch(
       :row-as="NuxtLink"
       :rows="rows"
       :hide-header
-      :flush-left
+      :reduced-first-column-padding
       aria-label="Gesamtausgaben"
       class="-mx-16 md:mx-0"
     >

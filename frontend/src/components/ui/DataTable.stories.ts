@@ -51,7 +51,7 @@ type DataTableArgs = {
   rowAs?: string;
   rows: VersionRow[];
   hideHeader?: boolean;
-  flushLeft?: boolean;
+  reducedFirstColumnPadding?: boolean;
 };
 
 const meta: Meta<DataTableArgs> = {
@@ -63,7 +63,7 @@ const meta: Meta<DataTableArgs> = {
     rowAs: undefined,
     rows,
     hideHeader: false,
-    flushLeft: false,
+    reducedFirstColumnPadding: false,
   },
 };
 
@@ -123,8 +123,8 @@ export const HiddenHeader: Story = {
   }),
 };
 
-export const FlushLeft: Story = {
-  args: { flushLeft: true },
+export const ReducedFirstColumnPadding: Story = {
+  args: { reducedFirstColumnPadding: true },
   render: (args) => ({
     components: { UiDataTable },
     setup() {
