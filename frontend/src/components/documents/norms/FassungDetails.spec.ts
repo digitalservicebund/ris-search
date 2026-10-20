@@ -159,7 +159,7 @@ describe("FassungDetails", () => {
 
   it("links to the text tab when the only Gesamtausgabe is already open", async () => {
     await renderSuspended(FassungDetails, {
-      route: "/gesetze/eli/bund/2020/art-z1?from=%2Fsuche%3Fq%3Dtest",
+      route: "/?from=%2Fsuche%3Fq%3Dtest",
       props: {
         currentLegislationIdentifier: "eli/bund/2020",
         current: true,
@@ -179,10 +179,7 @@ describe("FassungDetails", () => {
     expect(screen.getByText(/Fassung bereits geöffnet\./)).toBeVisible();
     const link = screen.getByRole("link", { name: "Zum Text-Tab" });
     expect(link).toBeVisible();
-    expect(link).toHaveAttribute(
-      "href",
-      "/gesetze/eli/bund/2020/art-z1?from=/suche?q=test&view=text",
-    );
+    expect(link).toHaveAttribute("href", "/?from=/suche?q=test&view=text");
   });
 
   it.each([
