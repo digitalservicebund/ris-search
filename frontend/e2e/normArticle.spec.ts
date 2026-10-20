@@ -735,8 +735,13 @@ test.describe("fassungen tab", { tag: ["@RISDEV-11132"] }, () => {
       await currentRow.getByText(/Gültig ab:\s+01\.01\.2020/).click();
 
       await expect(
-        currentRow.getByRole("link", { name: /^Gesamtausgabe .*öffnen$/ }),
-      ).toHaveAttribute("href", /\/s1234\/2020-01-01\/1\/deu\/art-z1$/);
+        currentRow.getByRole("link", {
+          name: "Zum Text-Tab",
+        }),
+      ).toHaveAttribute(
+        "href",
+        /\/s1234\/2020-01-01\/1\/deu\/art-z1\?view=text$/,
+      );
       await expect(page.getByText("Erste Version des § 1.")).not.toBeVisible();
     },
   );

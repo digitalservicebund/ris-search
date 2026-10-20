@@ -157,11 +157,36 @@ describe("FassungDetails", () => {
     ).toBeVisible();
   });
 
+  it("links to the text tab when the only Gesamtausgabe is already open", async () => {
+    await renderSuspended(FassungDetails, {
+      route: "/?from=%2Fsuche%3Fq%3Dtest",
+      props: {
+        currentLegislationIdentifier: "eli/bund/2020",
+        current: true,
+        fassungEId: "art-1",
+        detailsContent: {
+          gesamtausgaben: [
+            {
+              legislationIdentifier: "eli/bund/2020",
+              temporalCoverage: "2020-01-01/..",
+            } as LegislationExpression,
+          ],
+          error: false,
+        },
+      },
+    });
+
+    expect(screen.getByText(/Fassung bereits geöffnet\./)).toBeVisible();
+    const link = screen.getByRole("link", { name: "Zum Text-Tab" });
+    expect(link).toBeVisible();
+    expect(link).toHaveAttribute("href", "/?from=/suche?q=test&view=text");
+  });
+
   it.each([
     ["an unencoded", "art-z§§ 1 bis 3"],
     ["an already encoded", "art-z%C2%A7%C2%A7%201%20bis%203"],
   ])(
-    "links the only Gesamtausgabe to the article with %s eId",
+    "links the only Gesamtausgabe to the article with %s eId and keeps query parameters",
     async (_, fassungEId) => {
       await renderSuspended(FassungDetails, {
         route: "/?from=%2Fsuche%3Fq%3Dtest",

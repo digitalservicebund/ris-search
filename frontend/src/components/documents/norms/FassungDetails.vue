@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { NuxtLink } from "#components";
 import GesamtausgabenList from "~/components/documents/norms/GesamtausgabenList.vue";
 import { useShowMore } from "~/composables/useShowMore.ts";
 import type { LegislationExpression } from "~/types/api.ts";
@@ -46,6 +45,9 @@ const gesamtausgabeLink = computed(() => {
   return {
     label,
     to,
+    alreadyOpen:
+      current &&
+      gesamtausgabe.legislationIdentifier === currentLegislationIdentifier,
   };
 });
 
@@ -93,16 +95,20 @@ const drawerId = useId();
     Es ist ein Fehler aufgetreten.
   </UiMessage>
   <template v-else-if="detailsContent">
-    <div class="mx-16 mt-8" :class="{ 'mb-8': current }">
-      <UiButton
-        v-if="gesamtausgabeLink"
-        severity="info"
-        :to="gesamtausgabeLink.to"
-        :as="NuxtLink"
-        size="small"
-        :label="gesamtausgabeLink.label"
-        class="w-full md:w-auto"
-      />
+    <div class="mx-16 mt-16" :class="{ 'mb-16': current }">
+      <template v-if="gesamtausgabeLink">
+        <span v-if="gesamtausgabeLink.alreadyOpen" class="typo-label1-regular"
+          >Fassung bereits geöffnet.
+          <NuxtLink
+            :to="{ query: { ...route.query, view: 'text' } }"
+            class="typo-link1-regular"
+            >Zum Text-Tab</NuxtLink
+          ></span
+        >
+        <NuxtLink v-else :to="gesamtausgabeLink.to" class="typo-link1-regular">
+          {{ gesamtausgabeLink.label }}
+        </NuxtLink>
+      </template>
       <template v-else>
         <UiButton
           ref="drawerTriggerRef"
@@ -144,7 +150,7 @@ const drawerId = useId();
           </template>
         </UiDrawer>
         <UiAccordion
-          class="hidden border border-blue-500 bg-white p-16 md:block"
+          class="hidden border border-blue-500 bg-white p-12 md:block"
           header-collapsed="Gesamtausgabe auswählen"
           header-expanded="Gesamtausgabe auswählen"
           :model-value="current"
@@ -156,7 +162,7 @@ const drawerId = useId();
               :article-e-id="fassungEId"
               hideHeader
               flushLeft
-              class="mt-16 border-t border-gray-400"
+              class="mt-16"
             />
             <UiButton
               v-if="showMoreDesktop.hasMore"
@@ -167,7 +173,7 @@ const drawerId = useId();
                   ? 'Weniger anzeigen'
                   : 'Alles anzeigen'
               "
-              class="mt-8"
+              class="mt-8 mb-4"
               @click="toggleShowMoreDesktop"
             />
           </div>

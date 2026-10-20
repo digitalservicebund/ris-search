@@ -157,7 +157,7 @@ watch(
         :key="row.key"
         :aria-current="row.current || undefined"
         :class="{ 'bg-gray-100': row.current }"
-        class="col-span-full grid grid-cols-subgrid border-b border-gray-400"
+        class="col-span-full grid grid-cols-subgrid border-b border-gray-400 last:border-b-0"
       >
         <details
           :open="expandedRowKey === row.key"
@@ -211,9 +211,7 @@ watch(
     </template>
 
     <template v-else>
-      <li
-        class="col-span-full border-b border-gray-400 px-16 py-12 text-left text-gray-900"
-      >
+      <li class="col-span-full px-16 py-12 text-left text-gray-900">
         Keine Ergebnisse gefunden
       </li>
     </template>
