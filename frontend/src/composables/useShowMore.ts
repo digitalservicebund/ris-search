@@ -1,10 +1,19 @@
+type FocusTarget = { focusRow: (index: number) => void };
+
 export function useShowMore<T>(
   items: MaybeRefOrGetter<T[]>,
   displayLimit: number,
+  focusTarget?: MaybeRefOrGetter<FocusTarget | null | undefined>,
 ) {
   const showingAll = ref(false);
 
-  const toggle = () => (showingAll.value = !showingAll.value);
+  async function toggle() {
+    showingAll.value = !showingAll.value;
+    if (!showingAll.value) return;
+
+    await nextTick();
+    toValue(focusTarget)?.focusRow(displayLimit);
+  }
 
   const state = computed(() => {
     const allValues = toValue(items);

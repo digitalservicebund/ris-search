@@ -305,6 +305,23 @@ describe("FassungDetails", () => {
       expect(within(list).queryByText("01.01.2026")).not.toBeInTheDocument();
     });
 
+    it("moves focus to the first newly shown Gesamtausgabe", async () => {
+      const user = userEvent.setup();
+      await renderSuspended(FassungDetails, {
+        props: {
+          currentLegislationIdentifier: "eli/bund/2031",
+          current: true,
+          fassungEId: "art-1",
+          detailsContent: { gesamtausgaben, error: false },
+        },
+      });
+
+      await user.click(screen.getByRole("button", { name: "Alles anzeigen" }));
+
+      const list = screen.getByRole("list", { name: "Gesamtausgaben" });
+      expect(within(list).getAllByRole("link")[5]).toHaveFocus();
+    });
+
     it("does not offer 'Alles anzeigen' when all Gesamtausgaben fit", async () => {
       await renderSuspended(FassungDetails, {
         props: {
@@ -353,6 +370,30 @@ describe("FassungDetails", () => {
       );
 
       expect(within(drawer).getAllByRole("link")).toHaveLength(6);
+    });
+
+    it("moves focus to the first newly shown Gesamtausgabe", async () => {
+      const user = userEvent.setup();
+      await renderSuspended(FassungDetails, {
+        props: {
+          currentLegislationIdentifier: "eli/bund/2031",
+          current: false,
+          fassungEId: "art-1",
+          detailsContent: { gesamtausgaben, error: false },
+        },
+      });
+
+      const drawerButton = screen
+        .getAllByRole("button", { name: "Gesamtausgabe auswählen" })
+        .find((button) => button.getAttribute("aria-haspopup") === "dialog")!;
+      await user.click(drawerButton);
+
+      const drawer = screen.getByRole("dialog", { name: "Gesamtausgaben" });
+      await user.click(
+        within(drawer).getByRole("button", { name: "Alles anzeigen" }),
+      );
+
+      expect(within(drawer).getAllByRole("link")[3]).toHaveFocus();
     });
 
     it("does not offer 'Alles anzeigen' when all Gesamtausgaben fit", async () => {

@@ -1,6 +1,7 @@
+import { userEvent } from "@testing-library/user-event";
 import { render, screen } from "@testing-library/vue";
 import { describe, it, expect } from "vitest";
-import { h } from "vue";
+import { defineComponent, h, ref } from "vue";
 import DataTable, { type DataTableColumn } from "./DataTable.vue";
 
 type Row = {
@@ -154,5 +155,26 @@ describe("DataTable", () => {
     renderTable({ columns, rows }, { attrs: { "aria-label": "Fassungen" } });
 
     expect(screen.getByRole("list", { name: "Fassungen" })).toBeInTheDocument();
+  });
+
+  it("moves focus to the row at the given index, not counting the header", async () => {
+    const user = userEvent.setup();
+    const Host = defineComponent(() => {
+      const table = ref<{ focusRow: (index: number) => void }>();
+      return () => [
+        h(DataTable, {
+          ref: table,
+          columns,
+          rowAs: "a",
+          rows: linkedRows,
+        } as never),
+        h("button", { onClick: () => table.value?.focusRow(1) }, "Fokus"),
+      ];
+    });
+    render(Host);
+
+    await user.click(screen.getByRole("button", { name: "Fokus" }));
+
+    expect(screen.getByRole("link", { name: /Aktuell gültig/ })).toHaveFocus();
   });
 });
