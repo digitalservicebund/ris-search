@@ -161,7 +161,7 @@ const drawerId = useId();
               :gesamtausgaben="showMoreDesktop.itemsToDisplay"
               :article-e-id="fassungEId"
               hideHeader
-              flushLeft
+              reducedFirstColumnPadding
               class="mt-16"
             />
             <UiButton
