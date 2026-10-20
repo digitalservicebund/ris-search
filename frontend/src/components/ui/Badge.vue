@@ -34,8 +34,8 @@ const standard = tw`typo-label2-bold flex-none`;
 // for badges in the Metadata section of the document pages
 const extraSmall = tw`ris-label3-regular sm:ris-label2-regular 2xl:ris-label1-regular`;
 
-// for badges in the norm version list (gesamtausgaben tab)
-const small = tw`typo-label1-compact-regular`;
+// for badges in the GesamtausgabenList component
+const small = tw`ris-label2-regular`;
 
 // for badges in the search result header
 const medium = tw`typo-label2-regular`;
