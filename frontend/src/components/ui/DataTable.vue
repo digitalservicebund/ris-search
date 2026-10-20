@@ -107,7 +107,7 @@ const gridTemplateColumns = computed(() =>
         v-for="row in rows"
         :key="row.key"
         :class="{ 'bg-gray-100': row.current }"
-        class="border-b border-gray-400 hover:bg-gray-100 md:col-span-full md:grid md:grid-cols-subgrid"
+        class="border-b border-gray-400 last:border-b-0 hover:bg-gray-100 md:col-span-full md:grid md:grid-cols-subgrid"
       >
         <component
           :is="rowAs"
@@ -135,9 +135,7 @@ const gridTemplateColumns = computed(() =>
     </template>
 
     <template v-else>
-      <li
-        class="border-b border-b-gray-400 px-16 py-12 text-left text-gray-900 md:col-span-full"
-      >
+      <li class="px-16 py-12 text-left text-gray-900 md:col-span-full">
         <slot name="empty" />
       </li>
     </template>

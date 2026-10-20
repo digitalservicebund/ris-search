@@ -154,7 +154,7 @@ const drawerId = useId();
               :article-e-id="fassungEId"
               hideHeader
               flushLeft
-              class="mt-16 border-t border-gray-400"
+              class="mt-16"
             />
             <UiButton
               v-if="showMoreDesktop.hasMore"
