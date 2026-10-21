@@ -7,12 +7,13 @@ export function useShowMore<T>(
 ) {
   const showingAll = ref(false);
 
-  async function toggle() {
+  async function toggle(event?: Event) {
+    const trigger = event?.currentTarget as HTMLElement | null | undefined;
     showingAll.value = !showingAll.value;
-    if (!showingAll.value) return;
-
     await nextTick();
-    toValue(focusTarget)?.focusRow(displayLimit);
+
+    if (showingAll.value) toValue(focusTarget)?.focusRow(displayLimit);
+    else trigger?.scrollIntoView({ block: "nearest" });
   }
 
   const state = computed(() => {

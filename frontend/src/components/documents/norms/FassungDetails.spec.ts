@@ -1,7 +1,7 @@
 import { renderSuspended } from "@nuxt/test-utils/runtime";
 import { userEvent } from "@testing-library/user-event";
 import { screen, within } from "@testing-library/vue";
-import { describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { LegislationExpression } from "~/types/api";
 import FassungDetails from "./FassungDetails.vue";
 
@@ -239,6 +239,15 @@ describe("FassungDetails", () => {
   });
 
   describe("desktop accordion", () => {
+    beforeEach(() => {
+      Element.prototype.scrollIntoView = vi.fn();
+    });
+
+    afterEach(() => {
+      // @ts-expect-error restore jsdom's state, which has no implementation
+      delete Element.prototype.scrollIntoView;
+    });
+
     it("is collapsed for a non-current Fassung", async () => {
       await renderSuspended(FassungDetails, {
         props: {

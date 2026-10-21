@@ -67,8 +67,6 @@ function formatTemporalCoverage(temporalCoverage?: string) {
   }
 }
 
-// Explicitly typed, as inferring from the template would be circular: the
-// lists' props depend on useShowMore, which depends on these refs
 type GesamtausgabenListInstance = InstanceType<typeof GesamtausgabenList>;
 const desktopList = useTemplateRef<GesamtausgabenListInstance>("desktopList");
 const mobileList = useTemplateRef<GesamtausgabenListInstance>("mobileList");
@@ -183,7 +181,7 @@ const drawerId = useId();
                   ? 'Weniger anzeigen'
                   : 'Alles anzeigen'
               "
-              class="mt-8 mb-4"
+              class="mt-8 mb-4 scroll-my-16"
               @click="toggleShowMoreDesktop"
             />
           </div>
