@@ -16,19 +16,19 @@ Personenbezogene Daten sind Angaben zu einer Person oder Informationen, die sich
 
 **1. Verantwortliche Organisation:**
 
-Bundesministerium der Justiz und für Verbraucherschutz
+Bundesministerium der Justiz und für Verbraucherschutz\
 Anton-Wilhelm-Amo-Straße 37, 10117 Berlin
-Telefon: +49 (0)30 18 580 – 0
 
+Telefon: +49 (0)30 18 580 – 0\
 E-Mail: [poststelle@bmj.bund.de](mailto:poststelle@bmj.bund.de)
 
 **2. Die behördliche Datenschutzbeauftragte des BMJV:**
 
-Bundesministerium der Justiz und für Verbraucherschutz
-Behördliche Datenschutzbeauftragte
+Bundesministerium der Justiz und für Verbraucherschutz\
+Behördliche Datenschutzbeauftragte\
 Anton-Wilhelm-Amo-Straße 37, 10117 Berlin
-Telefon: +49 (0)30 18 580 – 0
 
+Telefon: +49 (0)30 18 580 – 0\
 E-Mail: [datenschutz@bmj.bund.de](mailto:datenschutz@bmj.bund.de)
 
 **3. Ansprechpartner für Angelegenheiten des Datenschutzes bei der Auftragsverarbeiterin**
@@ -127,6 +127,6 @@ Das Recht auf Widerspruch beinhaltet die Möglichkeit für den Betroffenen oder 
 
 Der oder die Betroffene hat die Möglichkeit, sich mit einer Beschwerde gegen die Datenverarbeitung des BMJV an die Bundesbeauftragte für den Datenschutz und die Informationsfreiheit zu wenden, die die datenschutzrechtliche Aufsicht über die Bundesbehörden hat. Sie ist wie folgt erreichbar:
 
-<u>Bundesbeauftragte für Datenschutz und Informationsfreiheit</u>  
-Graurheindorfer Str. 153 - 53117 Bonn  
+Die bzw. der Bundesbeauftragte für den Datenschutz und die Informationsfreiheit\
+Graurheindorfer Str. 153, 53117 Bonn,\
 E-Mail: [poststelle@bfdi.bund.de](mailto:poststelle@bfdi.bund.de)
