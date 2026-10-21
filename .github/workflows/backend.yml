@@ -6,6 +6,10 @@ name: Backend
 on:
   workflow_call:
     inputs:
+      commit-sha:
+        description: 'The commit SHA of the repository to be run'
+        required: false
+        type: string
       image-reference:
         description: 'The full image reference (registry/repo:tag) for the backend image'
         required: true
@@ -49,6 +53,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          ref: ${{ inputs.commit-sha|| github.sha }}
           persist-credentials: false
 
       - name: Validate gradle wrapper
@@ -69,6 +74,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          ref: ${{ inputs.commit-sha|| github.sha }}
           persist-credentials: false
 
       - name: Set up JDK
@@ -105,6 +111,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          ref: ${{ inputs.commit-sha|| github.sha }}
           persist-credentials: false
 
       - name: Set up JDK
@@ -139,6 +146,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
+          ref: ${{ inputs.commit-sha|| github.sha }}
           persist-credentials: false
 
       - name: Set up JDK
@@ -207,6 +215,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          ref: ${{ inputs.commit-sha|| github.sha }}
           persist-credentials: false
 
       - name: Set up JDK
@@ -275,6 +284,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          ref: ${{ inputs.commit-sha|| github.sha }}
           persist-credentials: false
 
       - name: Set up JDK
@@ -318,6 +328,8 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           path: ris-search
+          ref: ${{ inputs.commit-sha|| github.sha }}
+          persist-credentials: false
       # Copy ADRs into tmp folder
       - name: Copy ADRs
         run: |
