@@ -3,6 +3,10 @@ name: Frontend
 on:
   workflow_call:
     inputs:
+      commit-sha:
+        description: 'The commit SHA of the repository to be run'
+        required: false
+        type: string
       image-reference:
         description: "The full image reference (registry/repo:tag) for the frontend image"
         required: true
@@ -41,6 +45,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          ref: ${{ inputs.commit-sha|| github.sha }}
           persist-credentials: false
 
       - name: Setup pnpm and Node
@@ -109,6 +114,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          ref: ${{ inputs.commit-sha|| github.sha }}
           persist-credentials: false
 
       - name: Setup pnpm and Node
@@ -153,6 +159,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          ref: ${{ inputs.commit-sha|| github.sha }}
           persist-credentials: false
 
       - name: Setup pnpm and Node
@@ -198,6 +205,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          ref: ${{ inputs.commit-sha|| github.sha }}
           persist-credentials: false
 
       - name: Run Trivy vulnerability file scanner
@@ -252,13 +260,14 @@ jobs:
       packages: write
       contents: read
     env:
-      SENTRY_RELEASE: ${{ github.sha }}
+      SENTRY_RELEASE: ${{ inputs.commit-sha|| github.sha }}
     outputs:
       image-digest: ${{ steps.docker-build-push.outputs.digest }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
+          ref: ${{ inputs.commit-sha|| github.sha }}
           persist-credentials: false
 
       - name: Install Sentry CLI using official script
