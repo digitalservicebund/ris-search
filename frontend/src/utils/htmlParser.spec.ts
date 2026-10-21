@@ -121,6 +121,22 @@ describe("isDocumentEmpty", () => {
     expect(isDocumentEmpty(doc)).toBeTruthy();
   });
 
+  it("returns true if html body is empty in an indented document", () => {
+    const docString = `
+      <!DOCTYPE HTML>
+      <html>
+        <head>
+          <title></title>
+        </head>
+        <body></body>
+      </html>
+    `;
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(docString, "text/html");
+
+    expect(isDocumentEmpty(doc)).toBeTruthy();
+  });
+
   it("returns true if html body contains only single h1", () => {
     const docString =
       "<!DOCTYPE HTML><html><body><h1>Still Empty</h1></body></html>";
