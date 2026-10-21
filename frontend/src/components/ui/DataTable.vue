@@ -123,7 +123,7 @@ defineExpose({ focusRow });
           :is="rowAs"
           :aria-current="row.current ? 'page' : undefined"
           data-row
-          class="grid grid-cols-[max-content_minmax(0,1fr)] items-center gap-x-16 gap-y-4 p-16 focus-visible:outline-4 focus-visible:-outline-offset-4 focus-visible:outline-blue-800 md:col-span-full md:grid-cols-subgrid md:gap-0 md:p-0"
+          class="grid scroll-my-16 grid-cols-[max-content_minmax(0,1fr)] items-center gap-x-16 gap-y-4 p-16 focus-visible:outline-4 focus-visible:-outline-offset-4 focus-visible:outline-blue-800 md:col-span-full md:grid-cols-subgrid md:gap-0 md:p-0"
           v-bind="row.attrs"
         >
           <template v-for="(column, index) in columns" :key="column.key">
