@@ -95,6 +95,7 @@ posthog:
   api-key: ""
   host: ""
   feedback-survey-id: ""
+  debug: false
 
 app:
   security:

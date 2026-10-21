@@ -1,16 +1,19 @@
 package de.bund.digitalservice.ris.search.client.posthog;
 
-import com.posthog.java.PostHog;
+import com.posthog.server.PostHogCaptureOptions;
+import com.posthog.server.PostHogInterface;
 import jakarta.annotation.PreDestroy;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import org.springframework.web.util.UriUtils;
 
 /**
  * Client for interacting with PostHog analytics service.
  *
  * @param postHog the PostHog instance used for sending events
  */
-public record PostHogClient(PostHog postHog) {
+public record PostHogClient(PostHogInterface postHog) {
 
   /**
    * Submits user feedback to PostHog.
@@ -25,11 +28,38 @@ public record PostHogClient(PostHog postHog) {
     surveyFeedback.put("$survey_id", surveyId);
     surveyFeedback.put("$survey_response", text);
     surveyFeedback.put("$current_url", url);
-    postHog.capture(userId, "survey sent", surveyFeedback);
+    postHog.capture(
+        userId, "survey sent", PostHogCaptureOptions.builder().properties(surveyFeedback).build());
+  }
+
+  /**
+   * Submits an api event to PostHog.
+   *
+   * @param uri path of the api call made
+   * @param userAgent userAgent
+   */
+  public void submitApiEvent(String uri, String userAgent) {
+    Map<String, Object> properties = new HashMap<>();
+    properties.put("$current_url", decodePath(uri));
+    properties.put("user_agent", userAgent);
+    // do not create a person profile in posthog for api calls
+    properties.put("$process_person_profile", false);
+
+    // a personless UUID is generated on null distinctId
+    postHog.capture(
+        null, "api_call_performed", PostHogCaptureOptions.builder().properties(properties).build());
+  }
+
+  private static String decodePath(String uri) {
+    try {
+      return UriUtils.decode(uri, StandardCharsets.UTF_8);
+    } catch (IllegalArgumentException _) {
+      return uri;
+    }
   }
 
   @PreDestroy
   public void shutdown() {
-    postHog.shutdown();
+    postHog.close();
   }
 }
