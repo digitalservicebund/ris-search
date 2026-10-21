@@ -95,6 +95,10 @@ watch(
     }
   },
 );
+
+const table = useTemplateRef("table");
+
+defineExpose({ focusRow: (index: number) => table.value?.focusRow(index) });
 </script>
 
 <template>
@@ -104,6 +108,7 @@ watch(
     </output>
 
     <UiDataTable
+      ref="table"
       :columns="columns"
       :row-as="NuxtLink"
       :rows="rows"

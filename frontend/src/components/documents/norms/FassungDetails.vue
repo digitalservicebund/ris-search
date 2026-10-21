@@ -67,13 +67,19 @@ function formatTemporalCoverage(temporalCoverage?: string) {
   }
 }
 
+type GesamtausgabenListInstance = InstanceType<typeof GesamtausgabenList>;
+const desktopList = useTemplateRef<GesamtausgabenListInstance>("desktopList");
+const mobileList = useTemplateRef<GesamtausgabenListInstance>("mobileList");
+
 const { toggle: toggleShowMoreDesktop, state: showMoreDesktop } = useShowMore(
   gesamtausgabenSorted,
   5,
+  desktopList,
 );
 const { toggle: toggleShowMoreMobile, state: showMoreMobile } = useShowMore(
   gesamtausgabenSorted,
   3,
+  mobileList,
 );
 
 const {
@@ -128,6 +134,7 @@ const drawerId = useId();
           :id="drawerId"
         >
           <GesamtausgabenList
+            ref="mobileList"
             :current-legislation-identifier="currentLegislationIdentifier"
             :gesamtausgaben="showMoreMobile.itemsToDisplay"
             :article-e-id="fassungEId"
@@ -157,6 +164,7 @@ const drawerId = useId();
         >
           <div class="ml-32">
             <GesamtausgabenList
+              ref="desktopList"
               :current-legislation-identifier="currentLegislationIdentifier"
               :gesamtausgaben="showMoreDesktop.itemsToDisplay"
               :article-e-id="fassungEId"
@@ -173,7 +181,7 @@ const drawerId = useId();
                   ? 'Weniger anzeigen'
                   : 'Alles anzeigen'
               "
-              class="mt-8 mb-4"
+              class="mt-8 mb-4 scroll-my-16"
               @click="toggleShowMoreDesktop"
             />
           </div>

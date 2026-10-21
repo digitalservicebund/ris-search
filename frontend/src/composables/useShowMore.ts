@@ -1,10 +1,20 @@
+type FocusTarget = { focusRow: (index: number) => void };
+
 export function useShowMore<T>(
   items: MaybeRefOrGetter<T[]>,
   displayLimit: number,
+  focusTarget?: MaybeRefOrGetter<FocusTarget | null | undefined>,
 ) {
   const showingAll = ref(false);
 
-  const toggle = () => (showingAll.value = !showingAll.value);
+  async function toggle(event?: Event) {
+    const trigger = event?.currentTarget as HTMLElement | null | undefined;
+    showingAll.value = !showingAll.value;
+    await nextTick();
+
+    if (showingAll.value) toValue(focusTarget)?.focusRow(displayLimit);
+    else trigger?.scrollIntoView({ block: "nearest" });
+  }
 
   const state = computed(() => {
     const allValues = toValue(items);
