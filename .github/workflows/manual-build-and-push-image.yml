@@ -11,11 +11,6 @@ on:
         description: 'The new tag for the new container'
         required: true
         type: string
-      app:
-          description: 'App for which the scan and attestation is run'
-          required: true
-          type: string
-          default: 'backend'
 
 jobs:
   backend-jobs:
