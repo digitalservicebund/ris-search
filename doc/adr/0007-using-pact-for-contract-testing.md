@@ -4,7 +4,7 @@ Date: 2024-09-25
 
 ## Status
 
-Accepted
+Superseded by [ADR 19](./0019-remove-pact-contract-testing.md).
 
 ## Context
 
