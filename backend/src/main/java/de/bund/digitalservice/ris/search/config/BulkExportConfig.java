@@ -35,7 +35,32 @@ public class BulkExportConfig {
   @Bean
   public BulkExportService caseLawBulkExportService(
       CaseLawBucket source, PublicFilesBucket target) {
-    return new BulkExportService(source, target, DocumentKind.CASE_LAW.getBulkZipPath());
+    return new BulkExportService(
+        source,
+        target,
+        DocumentKind.CASE_LAW.getBulkZipPath(),
+        BulkExportConfig::includeXmlDocumentsAndAttachments);
+  }
+
+  /**
+   * Accepts xml documents like {@code ABC/ABC.xml} and their attachments like {@code
+   * ABC/image.png}. Rejects generated pdf and html renderings named after their document directory
+   * like {@code ABC/ABC.pdf} or {@code ABC/ABC.html}.
+   *
+   * @param key object key of the file
+   * @return false if the file is a generated pdf or html rendering, true otherwise
+   */
+  static boolean includeXmlDocumentsAndAttachments(String key) {
+    if (!key.endsWith(".pdf") && !key.endsWith(".html")) {
+      return true;
+    }
+
+    String[] parts = key.substring(0, key.lastIndexOf('.')).split("/");
+
+    if (parts.length >= 2) {
+      return !parts[parts.length - 2].equals(parts[parts.length - 1]);
+    }
+    return false;
   }
 
   /**
