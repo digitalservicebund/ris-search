@@ -8,18 +8,21 @@ Accepted
 
 ## Context
 
-We have two S3 buckets containing XML files that serve as the data foundation for our OpenSearch cluster. Source systems
+We have four S3 buckets containing XML files that serve as the data foundation for our OpenSearch cluster. Source systems
 write new data to those S3 buckets when changes occur, and delete stale items from them. The buckets are structured as
 follows:
 
 - Case Law Bucket: Stores legal case data.
 - Legislation (Norms) Bucket: Stores legislative data.
+- Literature Bucket: Stores literature references.
+- Administrative Directive Bucket: Stores administrative directive (Verwaltungsvorschriften) data.
 
 Each bucket also contains changelog files in JSON format, which provide information about modifications to the data.
 These files are structured as follows:
 
-- Filename format: `<timestamp in UTC timezone>-<documentkind>.json` (where timestamp is
-  in [ISO 8601 format](https://en.wikipedia.org/wiki/ISO_8601), and documentkind is `norms` or `caselaw`)
+- Filename format: `<timestamp in UTC timezone>[-<suffix>].json`, where the timestamp is
+  in [ISO 8601 format](https://en.wikipedia.org/wiki/ISO_8601). A suffix (e.g. a document kind like `caselaw` or
+  `literature`) can be added, but is not required.
 
 - Content structure:
     - If only some files have changed:
