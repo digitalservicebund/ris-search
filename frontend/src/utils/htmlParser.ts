@@ -136,7 +136,7 @@ export function isDocumentEmpty(document?: Document): boolean {
   const bodyElements = Array.from(document.body.children);
 
   const isEmptyBody =
-    bodyElements.length === 0 && document.body.childNodes.length == 0;
+    bodyElements.length === 0 && !document.body.textContent?.trim();
   const hasSingleH1 =
     bodyElements.length === 1 && bodyElements[0]?.tagName === "H1";
   return isEmptyBody || hasSingleH1;
