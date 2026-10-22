@@ -4,7 +4,7 @@ jacoco = "0.8.15"
 spring-boot = "4.1.1"
 spring-boot-starter = "4.1.1"
 spring-dependency-management = "1.1.7"
-spotless = "8.10.3"
+spotless = "8.10.4"
 sonarqube = "7.5.0.8588"
 license-report = "3.1.4"
 test-logger = "4.0.0"
@@ -15,7 +15,7 @@ test-containers = "1.21.4"
 spring-cloud-k8s = "5.0.3"
 springdoc-openapi = "3.1.1"
 prometheus = "1.17.1"
-sentry = "8.58.0"
+sentry = "8.61.0"
 commons-text = "1.15.0"
 junit5 = "1.5.1"
 mockito = "5.24.0"
@@ -32,9 +32,9 @@ streamex = "0.9.0"
 jaxb-moxy = "5.0.2"
 posthog = "1.2.0"
 pebble = "4.1.2"
-rest-assured = "6.0.1"
+rest-assured = "6.1.0"
 commons-io = "2.22.0"
-ris-html-transformation="0.0.11"
+ris-html-transformation="0.0.14"
 ris-xml-schema="0.3.13"
 titanium-json="1.7.0"
 jakarta-json="2.0.1"
@@ -84,12 +84,12 @@ glassfish-jakarta-json = { module = "org.glassfish:jakarta.json", version.ref = 
 commons-io = { module = "commons-io:commons-io", version.ref = "commons-io" }
 
 # CVE-2026-5588
-bouncycastle-bom = { module = "org.bouncycastle:bc-jdk18on-bom", version = "1.86.1" }
+bouncycastle-bom = { module = "org.bouncycastle:bc-jdk18on-bom", version = "1.86.2" }
 
 reflections = { module = "org.reflections:reflections", version.ref = "reflections" }
 
 # CVE-2026-65182
-tomcat-embed-core = { module = "org.apache.tomcat.embed:tomcat-embed-core" , version = "11.0.26" }
+tomcat-embed-core = { module = "org.apache.tomcat.embed:tomcat-embed-core" , version = "11.0.27" }
 
 [plugins]
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
