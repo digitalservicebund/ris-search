@@ -283,7 +283,10 @@ describe("ArtikelFassungenList", () => {
     const hrefs = within(table)
       .getAllByRole("link")
       .map((link) => link.getAttribute("href"));
-    expect(hrefs).toEqual(identifiers.map((id) => `/gesetze/${id}/art-1`));
+    expect(hrefs).toEqual([
+      `/gesetze/${identifiers[0]}/art-1`,
+      `/gesetze/${identifiers[1]}/art-1#top`,
+    ]);
   });
 
   it("marks the Gesamtausgabe currently displayed as the current page", async () => {
@@ -340,7 +343,7 @@ describe("ArtikelFassungenList", () => {
 
       expect(
         await screen.findByRole("link", {
-          name: "Gesamtausgabe 01.01.2031 - 31.12.2031 öffnen",
+          name: "Gesamtausgabe vom 01.01.2031 - 31.12.2031 öffnen",
         }),
       ).toHaveAttribute("href", `/gesetze/${earlierIdentifier}/art-1`);
       expect(
@@ -359,7 +362,7 @@ describe("ArtikelFassungenList", () => {
 
       expect(
         screen.getByRole("link", {
-          name: "Gesamtausgabe gültig ab 01.01.2032 öffnen",
+          name: "Gesamtausgabe vom 01.01.2032 öffnen",
         }),
       ).toHaveAttribute("href", `/gesetze/${laterIdentifier}/art-1`);
     });

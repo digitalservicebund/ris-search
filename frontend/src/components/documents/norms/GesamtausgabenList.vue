@@ -60,6 +60,7 @@ const rows = computed<GesamtausgabeRow[]>(() => {
         props.articleEId,
       ),
       query: { from: route.query.from },
+      hash: current ? "#top" : undefined,
     };
 
     const status = formatNormValidity(gesamtausgabe.temporalCoverage) ?? {
