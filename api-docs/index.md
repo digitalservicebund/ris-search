@@ -7,6 +7,7 @@ Our API offers you simple and efficient access to an extensive collection of leg
 ::: tip **Incomplete dataset**
 The dataset is not yet complete. We will also provide more functions in the future.
 :::
+
 <SwaggerButton />
 
 ## What you can do with this API
