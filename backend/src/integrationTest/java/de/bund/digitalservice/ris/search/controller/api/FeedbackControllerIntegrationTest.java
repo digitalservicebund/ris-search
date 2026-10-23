@@ -33,11 +33,10 @@ class FeedbackControllerIntegrationTest extends ContainersIntegrationBase {
 
   private static final String TEXT = "test feedback";
   private static final String URL = "http://example.com";
-  private static final String USER_ID = "test-distinct-id";
 
   @Test
   void feedbackCanBeSentSuccessfullyToPostHog() throws Exception {
-    var body = new FeedbackRequest(TEXT, URL, USER_ID, null);
+    var body = new FeedbackRequest(TEXT, URL, null);
 
     mockMvc
         .perform(
@@ -58,7 +57,7 @@ class FeedbackControllerIntegrationTest extends ContainersIntegrationBase {
 
   @Test
   void throwsValidationErrorIfAParameterIsMissing() throws Exception {
-    var body = new FeedbackRequest(TEXT, URL, null, null);
+    var body = new FeedbackRequest(null, URL, null);
 
     mockMvc
         .perform(
@@ -69,13 +68,13 @@ class FeedbackControllerIntegrationTest extends ContainersIntegrationBase {
         .andExpect(status().isUnprocessableContent())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$.errors.*.code").value("invalid_parameter_value"))
-        .andExpect(jsonPath("$.errors.*.parameter").value("userId"))
+        .andExpect(jsonPath("$.errors.*.parameter").value("text"))
         .andExpect(jsonPath("$.errors.*.message").value("must not be null"));
   }
 
   @Test
   void feedbackIsIgnoredWhenHoneypotIsFilled() throws Exception {
-    var body = new FeedbackRequest(TEXT, URL, USER_ID, "I am a bot");
+    var body = new FeedbackRequest(TEXT, URL, "I am a bot");
 
     mockMvc
         .perform(
@@ -86,12 +85,12 @@ class FeedbackControllerIntegrationTest extends ContainersIntegrationBase {
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.message").value("Feedback sent successfully"));
 
-    verify(feedbackService, never()).sendFeedback(anyString(), anyString(), anyString());
+    verify(feedbackService, never()).sendFeedback(anyString(), anyString());
   }
 
   @Test
   void feedbackIsProcessedWhenHoneypotIsEmpty() throws Exception {
-    var body = new FeedbackRequest(TEXT, URL, USER_ID, "");
+    var body = new FeedbackRequest(TEXT, URL, "");
 
     mockMvc
         .perform(
@@ -101,6 +100,27 @@ class FeedbackControllerIntegrationTest extends ContainersIntegrationBase {
                 .content(objectMapper.writeValueAsString(body)))
         .andExpect(status().isOk());
 
-    verify(feedbackService, times(1)).sendFeedback(USER_ID, URL, TEXT);
+    verify(feedbackService, times(1)).sendFeedback(URL, TEXT);
+  }
+
+  @Test
+  void feedbackWithUserIdFromOlderFrontendsIsAccepted() throws Exception {
+    mockMvc
+        .perform(
+            post(ApiConfig.Paths.FEEDBACK)
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(
+                    """
+                    {
+                      "text": "test feedback",
+                      "url": "http://example.com",
+                      "user_id": "test-distinct-id",
+                      "name": ""
+                    }
+                    """))
+        .andExpect(status().isOk());
+
+    verify(feedbackService, times(1)).sendFeedback(URL, TEXT);
   }
 }

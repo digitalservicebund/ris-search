@@ -4,22 +4,18 @@ import { screen } from "@testing-library/vue";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import ConsentStatus from "./ConsentStatus.global.vue";
 
-const mockUserConsent = ref<boolean | undefined>(undefined);
-const mockSetTracking = vi.fn();
-const mockInitialize = vi.fn();
+const mockIsConsentGiven = ref(false);
+const mockSetConsent = vi.fn();
 
-vi.mock("~/composables/usePostHog", () => ({
-  CONSENT_COOKIE_NAME: "consent_given",
-  usePostHog: () => ({
-    userConsent: mockUserConsent,
-    setTracking: mockSetTracking,
-    initialize: mockInitialize,
-    postHog: ref(undefined),
+vi.mock("~/composables/useConsent", () => ({
+  useConsent: () => ({
+    isConsentGiven: mockIsConsentGiven,
+    setConsent: mockSetConsent,
   }),
 }));
 
-const factory = async (userConsent: boolean | undefined) => {
-  mockUserConsent.value = userConsent;
+const factory = async (isConsentGiven: boolean) => {
+  mockIsConsentGiven.value = isConsentGiven;
   return renderSuspended(ConsentStatus, {
     global: {
       stubs: {
@@ -35,12 +31,12 @@ describe("ConsentStatus", () => {
   const declineButtonTestId = "settings-decline-cookie";
 
   beforeEach(() => {
-    mockUserConsent.value = undefined;
+    mockIsConsentGiven.value = false;
     vi.clearAllMocks();
   });
 
   it("renders without error", async () => {
-    await factory(undefined);
+    await factory(false);
     expect(screen.getByTestId("consent-status-wrapper")).toBeInTheDocument();
   });
 
@@ -70,17 +66,17 @@ describe("ConsentStatus", () => {
     );
   });
 
-  it("calls setTracking(true) when clicking accept button", async () => {
+  it("calls setConsent(true) when clicking accept button", async () => {
     const user = userEvent.setup();
     await factory(false);
     await user.click(screen.getByTestId(acceptButtonTestId));
-    expect(mockSetTracking).toHaveBeenCalledWith(true);
+    expect(mockSetConsent).toHaveBeenCalledWith(true);
   });
 
-  it("calls setTracking(false) when clicking decline button", async () => {
+  it("calls setConsent(false) when clicking decline button", async () => {
     const user = userEvent.setup();
     await factory(true);
     await user.click(screen.getByTestId(declineButtonTestId));
-    expect(mockSetTracking).toHaveBeenCalledWith(false);
+    expect(mockSetConsent).toHaveBeenCalledWith(false);
   });
 });

@@ -17,7 +17,6 @@ describe("SearchResult", () => {
         searchResult: {
           item: { "@type": "Decision" },
         } as SearchResult<CaseLawSearchSchema>,
-        order: 0,
       },
       global: {
         stubs: {
@@ -37,7 +36,6 @@ describe("SearchResult", () => {
         searchResult: {
           item: { "@type": "Legislation" },
         } as SearchResult<LegislationExpression>,
-        order: 0,
       },
       global: {
         stubs: {
@@ -57,7 +55,6 @@ describe("SearchResult", () => {
         searchResult: {
           item: { "@type": "Literature" },
         } as SearchResult<Literature>,
-        order: 0,
       },
       global: {
         stubs: {
@@ -77,7 +74,6 @@ describe("SearchResult", () => {
         searchResult: {
           item: { "@type": "AdministrativeDirective" },
         } as SearchResult<AdministrativeDirective>,
-        order: 0,
       },
       global: {
         stubs: {
@@ -99,7 +95,6 @@ describe("SearchResult", () => {
         searchResult: {
           item: { "@type": "OtherType" },
         } as unknown as SearchResult<AnyDocument>,
-        order: 0,
       },
     });
 
@@ -112,7 +107,6 @@ describe("SearchResult", () => {
         searchResult: {
           item: { "@type": "Decision" },
         } as SearchResult<CaseLawSearchSchema>,
-        order: 0,
         headingLevel: "3" as const,
       },
       global: {
@@ -133,7 +127,6 @@ describe("SearchResult", () => {
         searchResult: {
           item: { "@type": "Decision" },
         } as SearchResult<CaseLawSearchSchema>,
-        order: 0,
       },
       global: {
         stubs: {

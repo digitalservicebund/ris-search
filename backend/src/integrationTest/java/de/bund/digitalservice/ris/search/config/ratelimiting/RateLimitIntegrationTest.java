@@ -66,7 +66,7 @@ class RateLimitIntegrationTest extends ContainersIntegrationBase {
   }
 
   private int postFeedbackStatus() throws Exception {
-    var body = new FeedbackRequest("test feedback", "http://example.com", "test-distinct-id", null);
+    var body = new FeedbackRequest("test feedback", "http://example.com", null);
     return request()
         .contentType(ContentType.JSON)
         .body(objectMapper.writeValueAsString(body))

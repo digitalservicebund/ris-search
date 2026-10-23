@@ -7,52 +7,33 @@ import {
   type SimpleSearchEndpointParams,
 } from "./useSimpleSearch";
 
-type OnRequestHook = (ctx: { options: { query: unknown } }) => void;
-
 type BackendOptions = {
   query: ComputedRef<SimpleSearchEndpointParams>;
-  onRequest?: OnRequestHook | OnRequestHook[];
-  onResponse?: (ctx: { response: { _data?: { totalItems?: number } } }) => void;
 };
 
-const mockPostHog = {
-  searchPerformed: vi.fn(),
-  noSearchResults: vi.fn(),
-  initialize: vi.fn(),
-  postHog: ref(undefined),
-};
+const { useRisBackendMock, executeMock, getCurrentDateMock } = vi.hoisted(
+  () => {
+    const executeMockFn = vi.fn();
 
-const {
-  useRisBackendMock,
-  executeMock,
-  getCurrentDateMock,
-  usePostHogMock,
-  capturedOptions,
-} = vi.hoisted(() => {
-  const executeMockFn = vi.fn();
-  const options: { current?: BackendOptions } = {};
-
-  return {
-    useRisBackendMock: vi.fn<
-      (url: Ref<string>, opts: BackendOptions) => unknown
-    >((_, opts) => {
-      options.current = opts;
-      return {
-        status: ref("success"),
-        data: computed(() => ref({ content: [], totalItems: 0 })),
-        error: ref(null),
-        pending: ref(false),
-        execute: executeMockFn,
-        refresh: vi.fn(),
-        clear: vi.fn(),
-      };
-    }),
-    executeMock: executeMockFn,
-    getCurrentDateMock: vi.fn(() => "2024-01-15"),
-    usePostHogMock: () => mockPostHog,
-    capturedOptions: options,
-  };
-});
+    return {
+      useRisBackendMock: vi.fn<
+        (url: Ref<string>, opts: BackendOptions) => unknown
+      >(() => {
+        return {
+          status: ref("success"),
+          data: computed(() => ref({ content: [], totalItems: 0 })),
+          error: ref(null),
+          pending: ref(false),
+          execute: executeMockFn,
+          refresh: vi.fn(),
+          clear: vi.fn(),
+        };
+      }),
+      executeMock: executeMockFn,
+      getCurrentDateMock: vi.fn(() => "2024-01-15"),
+    };
+  },
+);
 
 mockNuxtImport("useRisBackend", () => {
   return useRisBackendMock;
@@ -62,42 +43,14 @@ vi.mock("~/utils/dateFormatting", () => ({
   getCurrentDateInGermanyFormatted: getCurrentDateMock,
 }));
 
-vi.mock("~/composables/usePostHog", () => ({
-  usePostHog: usePostHogMock,
-}));
-
-vi.mock("~/plugins/risBackend", () => ({
-  default: vi.fn(),
-  extendOnRequest: (...cbs: OnRequestHook[]) => cbs,
-}));
-
 /** Helper to get the query parameter value from the mock call */
 function getQueryValue(): SimpleSearchEndpointParams {
   return useRisBackendMock.mock.calls[0]![1].query.value;
 }
 
-/** Helper to simulate the onRequest callback being triggered */
-function simulateOnRequest(query: unknown) {
-  const onRequest = capturedOptions.current?.onRequest;
-  if (Array.isArray(onRequest)) {
-    onRequest.forEach((hook) => hook({ options: { query } }));
-  } else {
-    onRequest?.({ options: { query } });
-  }
-}
-
-/** Helper to simulate the onResponse callback being triggered */
-function simulateOnResponse(totalItems?: number) {
-  capturedOptions.current?.onResponse?.({
-    response: { _data: { totalItems } },
-  });
-}
-
 describe("useSimpleSearch", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    mockPostHog.searchPerformed.mockClear();
-    mockPostHog.noSearchResults.mockClear();
   });
 
   describe("endpoint URLs", () => {
@@ -409,102 +362,6 @@ describe("useSimpleSearch", () => {
       );
 
       expect(totalItemCount.value).toBe(0);
-    });
-  });
-
-  describe("PostHog integration", () => {
-    it("calls searchPerformed on request with undefined previous query for initial search", async () => {
-      await useSimpleSearch(
-        "example",
-        { documentKind: DocumentKind.CaseLaw },
-        undefined,
-        undefined,
-        {},
-      );
-
-      const query = getQueryValue();
-      simulateOnRequest(query);
-
-      expect(mockPostHog.searchPerformed).toHaveBeenCalledWith(
-        "simple",
-        { ...query, documentKind: DocumentKind.CaseLaw },
-        undefined,
-      );
-    });
-
-    it("calls searchPerformed with previous query when query changes", async () => {
-      await useSimpleSearch(
-        "example",
-        { documentKind: DocumentKind.CaseLaw },
-        undefined,
-        undefined,
-        {},
-      );
-
-      const firstQuery = { ...getQueryValue() };
-
-      // Simulate first request
-      simulateOnRequest(firstQuery);
-      mockPostHog.searchPerformed.mockClear();
-
-      // Simulate second request with different query
-      const secondQuery = { ...firstQuery, searchTerm: "different" };
-      simulateOnRequest(secondQuery);
-
-      expect(mockPostHog.searchPerformed).toHaveBeenCalledWith(
-        "simple",
-        { ...secondQuery, documentKind: DocumentKind.CaseLaw },
-        { ...firstQuery, documentKind: DocumentKind.CaseLaw },
-      );
-    });
-
-    it("does not call searchPerformed again when same query is submitted twice", async () => {
-      await useSimpleSearch(
-        "example",
-        { documentKind: DocumentKind.CaseLaw },
-        undefined,
-        undefined,
-        {},
-      );
-
-      const query = { ...getQueryValue() };
-
-      // Simulate first request
-      simulateOnRequest(query);
-      mockPostHog.searchPerformed.mockClear();
-
-      // Simulate second request with identical query — should be de-duplicated
-      simulateOnRequest(query);
-
-      expect(mockPostHog.searchPerformed).not.toHaveBeenCalled();
-    });
-
-    it("calls noSearchResults when response has no totalItems", async () => {
-      await useSimpleSearch(
-        "example",
-        { documentKind: DocumentKind.CaseLaw },
-        undefined,
-        undefined,
-        {},
-      );
-
-      simulateOnResponse(0);
-
-      expect(mockPostHog.noSearchResults).toHaveBeenCalled();
-    });
-
-    it("does not call noSearchResults when response has results", async () => {
-      await useSimpleSearch(
-        "example",
-        { documentKind: DocumentKind.CaseLaw },
-        undefined,
-        undefined,
-        {},
-      );
-
-      simulateOnResponse(10);
-
-      expect(mockPostHog.noSearchResults).not.toHaveBeenCalled();
     });
   });
 });

@@ -13,21 +13,25 @@ import java.util.Map;
  */
 public record PostHogClient(PostHogInterface postHog) {
 
+  /** Distinct ID for all feedback. Feedback is never linked to a user. */
+  public static final String ANONYMOUS_FEEDBACK_USER = "anonymous_feedback_user";
+
   /**
    * Submits user feedback to PostHog.
    *
-   * @param userId the ID of the user submitting the feedback
    * @param url the current URL where the feedback was submitted
    * @param text the feedback text provided by the user
    * @param surveyId the ID of the survey associated with the feedback
    */
-  public void submitFeedback(String userId, String url, String text, String surveyId) {
+  public void submitFeedback(String url, String text, String surveyId) {
     Map<String, Object> surveyFeedback = new HashMap<>();
     surveyFeedback.put("$survey_id", surveyId);
     surveyFeedback.put("$survey_response", text);
     surveyFeedback.put("$current_url", url);
     postHog.capture(
-        userId, "survey sent", PostHogCaptureOptions.builder().properties(surveyFeedback).build());
+        ANONYMOUS_FEEDBACK_USER,
+        "survey sent",
+        PostHogCaptureOptions.builder().properties(surveyFeedback).build());
   }
 
   /**

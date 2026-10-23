@@ -62,12 +62,10 @@ const views: OneOrMore<TabView> = [
   {
     path: "text",
     label: "Text",
-    analyticsId: "translation-text-tab",
   },
   {
     path: "details",
     label: "Details",
-    analyticsId: "translation-metadata-tab",
   },
 ] as const;
 

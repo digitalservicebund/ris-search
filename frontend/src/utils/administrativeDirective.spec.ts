@@ -92,7 +92,6 @@ describe("getAdministrativeDirectiveDetailItems", () => {
       ],
     });
     expect(result[5]).toEqual({
-      dataAttr: "xml-zip-view",
       label: "Download:",
       text: "Diese Verwaltungsregelung als ZIP herunterladen",
       type: "link",

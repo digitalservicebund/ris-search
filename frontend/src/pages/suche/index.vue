@@ -428,11 +428,11 @@ watch(searchStatus, async (newStatus, oldStatus) => {
 
             <ul v-if="searchResults" aria-label="Suchergebnisse">
               <li
-                v-for="(searchResult, index) in searchResults.member"
+                v-for="searchResult in searchResults.member"
                 :key="getIdentifier(searchResult.item)"
                 class="my-40"
               >
-                <SearchResult :search-result :order="index" />
+                <SearchResult :search-result />
               </li>
             </ul>
           </Pagination>
