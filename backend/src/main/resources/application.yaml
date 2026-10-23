@@ -96,6 +96,7 @@ posthog:
   host: ""
   feedback-survey-id: ""
   debug: false
+  track-api-calls: false
 
 app:
   security:
