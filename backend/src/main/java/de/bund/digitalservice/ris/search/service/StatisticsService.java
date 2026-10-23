@@ -69,7 +69,7 @@ public class StatisticsService {
       }
       return counts;
     } catch (IOException e) {
-      logger.info(String.format("Failed to fetch Elasticsearch counts: %s", e.getMessage()));
+      logger.info("Failed to fetch Elasticsearch counts: {}", e.getMessage());
       throw new OpenSearchFetchException("Failed to fetch aliases from Opensearch", e);
     }
   }

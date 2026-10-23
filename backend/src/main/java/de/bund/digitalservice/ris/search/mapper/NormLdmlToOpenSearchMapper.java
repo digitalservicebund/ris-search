@@ -343,7 +343,7 @@ public class NormLdmlToOpenSearchMapper {
     try {
       return LocalDate.parse(date.trim());
     } catch (DateTimeParseException exception) {
-      logger.warn(String.format("Error parsing date: %s", date), exception);
+      logger.warn("Error parsing date: {}", date, exception);
       return null;
     }
   }
