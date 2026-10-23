@@ -10,7 +10,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class PostHogServiceTest {
+class FeedbackServiceTest {
 
   @Mock private PostHogClient postHogClient;
 
@@ -23,7 +23,7 @@ class PostHogServiceTest {
     String url = "http://user-url.test";
     String userId = "test_id";
 
-    PostHogService service = new PostHogService(postHogClient, posthogConfig);
+    FeedbackService service = new FeedbackService(postHogClient, posthogConfig);
     service.sendFeedback(userId, url, text);
 
     verify(postHogClient).submitFeedback(userId, url, text, posthogConfig.getFeedbackSurveyId());

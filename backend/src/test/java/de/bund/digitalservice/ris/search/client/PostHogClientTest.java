@@ -1,8 +1,11 @@
 package de.bund.digitalservice.ris.search.client;
 
+import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.verify;
 
-import com.posthog.java.PostHog;
+import com.posthog.server.PostHog;
 import de.bund.digitalservice.ris.search.client.posthog.PostHogClient;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,7 +35,29 @@ class PostHogClientTest {
     expectedData.put("$survey_response", text);
     expectedData.put("$current_url", url);
 
-    verify(postHog).capture(userId, "survey sent", expectedData);
+    verify(postHog)
+        .capture(
+            eq(userId),
+            eq("survey sent"),
+            argThat(options -> expectedData.equals(options.getProperties())));
+  }
+
+  @Test
+  void submitApiEventPassesPathUnchanged() {
+    var postHogClient = new PostHogClient(postHog);
+
+    postHogClient.submitApiEvent("/v1/legislation/§ BGB%41", "test-agent");
+
+    Map<String, Object> expectedData = new HashMap<>();
+    expectedData.put("$current_url", "/v1/legislation/§ BGB%41");
+    expectedData.put("user_agent", "test-agent");
+    expectedData.put("$process_person_profile", false);
+
+    verify(postHog)
+        .capture(
+            isNull(),
+            eq("api_call_performed"),
+            argThat(options -> expectedData.equals(options.getProperties())));
   }
 
   @Test
@@ -40,6 +65,6 @@ class PostHogClientTest {
     var postHogClient = new PostHogClient(postHog);
 
     postHogClient.shutdown();
-    verify(postHog).shutdown();
+    verify(postHog).close();
   }
 }

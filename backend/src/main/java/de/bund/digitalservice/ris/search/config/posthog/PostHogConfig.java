@@ -1,6 +1,7 @@
 package de.bund.digitalservice.ris.search.config.posthog;
 
-import com.posthog.java.PostHog;
+import com.posthog.server.PostHog;
+import com.posthog.server.PostHogInterface;
 import de.bund.digitalservice.ris.search.client.posthog.PostHogClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,7 +28,12 @@ public class PostHogConfig {
   @Bean
   @Profile("prototype")
   public PostHogClient postHog(PosthogProperties properties) {
-    var postHog = new PostHog.Builder(properties.getApiKey()).host(properties.getHost()).build();
-    return new PostHogClient(postHog);
+    var config =
+        com.posthog.server.PostHogConfig.builder(properties.getApiKey())
+            .host(properties.getHost())
+            .debug(properties.isDebug())
+            .build();
+    PostHogInterface posthogInterface = PostHog.with(config);
+    return new PostHogClient(posthogInterface);
   }
 }
