@@ -12,13 +12,8 @@ import {
   getSearchResultHeadline,
 } from "~/utils/search/searchResults";
 
-const {
-  searchResult,
-  order,
-  headingLevel = "2",
-} = defineProps<{
+const { searchResult, headingLevel = "2" } = defineProps<{
   searchResult: SearchResult<CaseLawSearchSchema>;
-  order: number;
 
   /** Heading level of the result title. */
   headingLevel?: SearchResultHeadingLevel;
@@ -26,9 +21,6 @@ const {
 
 const headlineStyle = computed(() => getSearchResultHeadline(headingLevel));
 
-const { searchResultClicked } = usePostHog();
-
-const router = useRouter();
 const route = useRoute();
 
 const fields = new Map([
@@ -136,11 +128,6 @@ const previewSections = useSearchResultSections(
   fields,
   4,
 );
-
-function trackResultClick() {
-  const url = router.resolve(detailPageRoute.value).href;
-  searchResultClicked(url, order);
-}
 </script>
 
 <template>
@@ -154,7 +141,6 @@ function trackResultClick() {
       :to="detailPageRoute"
       :aria-describedby="resultTypeId"
       :class="headlineStyle.class"
-      @click="trackResultClick()"
     >
       <component :is="headlineStyle.tag"><span v-html="headline" /></component>
     </NuxtLink>
@@ -165,7 +151,6 @@ function trackResultClick() {
           :to="{ ...detailPageRoute, hash: `#${section?.id}` }"
           class="typo-link1-bold link-hover"
           external
-          @click="trackResultClick()"
           >{{ section?.title }}:</NuxtLink
         >{{ " " }}
         <span

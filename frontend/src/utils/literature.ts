@@ -189,6 +189,5 @@ function getDownloadDetailItem(
     label: "Download:",
     url: getEncodingURL(literature?.encoding, "application/zip"),
     text: "Diesen Literaturnachweis als ZIP herunterladen",
-    dataAttr: "xml-zip-view",
   };
 }

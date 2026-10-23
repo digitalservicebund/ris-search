@@ -9,7 +9,7 @@ export type ExtendedTextMatch = TextMatch & FieldDisplayProperties;
 
 /**
  * Composable that computes the ordered, sanitised preview sections for a search
- * result card and provides the shared `trackResultClick` analytics handler.
+ * result card.
  *
  * @param textMatches - The raw text matches returned by the API for this result
  * @param fields - Ordered map from API field name to display properties (id,

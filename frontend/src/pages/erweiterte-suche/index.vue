@@ -397,10 +397,10 @@ watch(searchStatus, async (newStatus, oldStatus) => {
               class="space-y-40"
             >
               <li
-                v-for="(searchResult, order) in searchResults.member"
+                v-for="searchResult in searchResults.member"
                 :key="getIdentifier(searchResult.item)"
               >
-                <SearchResult :search-result :order />
+                <SearchResult :search-result />
               </li>
             </ul>
           </Pagination>

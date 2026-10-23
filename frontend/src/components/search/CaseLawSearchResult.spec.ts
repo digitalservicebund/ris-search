@@ -43,7 +43,7 @@ function renderComponent({
   const result: SearchResult<CaseLawSearchSchema> = { item, textMatches };
 
   return render(CaselawRecord, {
-    props: { searchResult: result, order: 0, headingLevel },
+    props: { searchResult: result, headingLevel },
     global: {
       stubs: {
         NuxtLink: {
