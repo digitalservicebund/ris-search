@@ -120,7 +120,7 @@ describe("GesamtausgabenList", () => {
       .map((link) => link.getAttribute("href"));
     expect(hrefs).toEqual([
       "/gesetze/eli/bund/bgbl-1/2000/s001/2031-01-01/1/deu",
-      "/gesetze/eli/bund/bgbl-1/2000/s001/2020-01-01/1/deu",
+      "/gesetze/eli/bund/bgbl-1/2000/s001/2020-01-01/1/deu#top",
       "/gesetze/eli/bund/bgbl-1/2000/s001/2000-01-01/1/deu",
     ]);
   });
@@ -140,7 +140,7 @@ describe("GesamtausgabenList", () => {
         .map((link) => link.getAttribute("href"));
       expect(hrefs).toEqual([
         "/gesetze/eli/bund/bgbl-1/2000/s001/2031-01-01/1/deu/art-z§§ 1 bis 3",
-        "/gesetze/eli/bund/bgbl-1/2000/s001/2020-01-01/1/deu/art-z§§ 1 bis 3",
+        "/gesetze/eli/bund/bgbl-1/2000/s001/2020-01-01/1/deu/art-z§§ 1 bis 3#top",
         "/gesetze/eli/bund/bgbl-1/2000/s001/2000-01-01/1/deu/art-z§§ 1 bis 3",
       ]);
     },

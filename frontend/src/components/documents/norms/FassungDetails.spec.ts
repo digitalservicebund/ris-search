@@ -100,9 +100,9 @@ describe("FassungDetails", () => {
   });
 
   it.each([
-    ["both dates", "2020-01-01/2030-12-31", "01.01.2020 - 31.12.2030"],
-    ["only a from date", "2020-01-01/..", "gültig ab 01.01.2020"],
-    ["only a to date", "../2030-12-31", "gültig bis 31.12.2030"],
+    ["both dates", "2020-01-01/2030-12-31", "vom 01.01.2020 - 31.12.2030"],
+    ["only a from date", "2020-01-01/..", "vom 01.01.2020"],
+    ["only a to date", "../2030-12-31", "vom 31.12.2030"],
   ])(
     "links the only Gesamtausgabe with %s",
     async (_, temporalCoverage, validity) => {
@@ -179,7 +179,7 @@ describe("FassungDetails", () => {
     expect(screen.getByText(/Fassung bereits geöffnet\./)).toBeVisible();
     const link = screen.getByRole("link", { name: "Zum Text-Tab" });
     expect(link).toBeVisible();
-    expect(link).toHaveAttribute("href", "/?from=/suche?q=test&view=text");
+    expect(link).toHaveAttribute("href", "/?from=/suche?q=test&view=text#top");
   });
 
   it.each([
@@ -233,7 +233,7 @@ describe("FassungDetails", () => {
       .getAllByRole("link")
       .map((link) => link.getAttribute("href"));
     expect(hrefs).toEqual([
-      "/gesetze/eli/bund/2031/art-1",
+      "/gesetze/eli/bund/2031/art-1#top",
       "/gesetze/eli/bund/2026/art-1",
     ]);
   });

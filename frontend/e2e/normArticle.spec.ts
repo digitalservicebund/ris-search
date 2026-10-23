@@ -740,7 +740,7 @@ test.describe("fassungen tab", { tag: ["@RISDEV-11132"] }, () => {
         }),
       ).toHaveAttribute(
         "href",
-        /\/s1234\/2020-01-01\/1\/deu\/art-z1\?view=text$/,
+        /\/s1234\/2020-01-01\/1\/deu\/art-z1\?view=text#top$/,
       );
       await expect(page.getByText("Erste Version des § 1.")).not.toBeVisible();
     },

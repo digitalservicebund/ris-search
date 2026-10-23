@@ -55,16 +55,9 @@ function formatTemporalCoverage(temporalCoverage?: string) {
   const coverage = temporalCoverageToValidityInterval(temporalCoverage);
   const from = dateFormattedDDMMYYYY(coverage?.from);
   const to = dateFormattedDDMMYYYY(coverage?.to);
+  const range = [from, to].filter(Boolean).join(" - ");
 
-  if (from && to) {
-    return `${from} - ${to} `;
-  } else if (from) {
-    return `gültig ab ${from} `;
-  } else if (to) {
-    return `gültig bis ${to} `;
-  } else {
-    return "";
-  }
+  return range ? `vom ${range} ` : "";
 }
 
 type GesamtausgabenListInstance = InstanceType<typeof GesamtausgabenList>;
@@ -101,12 +94,12 @@ const drawerId = useId();
     Es ist ein Fehler aufgetreten.
   </UiMessage>
   <template v-else-if="detailsContent">
-    <div class="mx-16 mt-16" :class="{ 'mb-16': current }">
+    <div class="mx-16 md:mt-16" :class="{ 'mb-16': current }">
       <template v-if="gesamtausgabeLink">
         <span v-if="gesamtausgabeLink.alreadyOpen" class="typo-label1-regular"
           >Fassung bereits geöffnet.
           <NuxtLink
-            :to="{ query: { ...route.query, view: 'text' } }"
+            :to="{ query: { ...route.query, view: 'text' }, hash: '#top' }"
             class="typo-link1-regular"
             >Zum Text-Tab</NuxtLink
           ></span
@@ -123,7 +116,6 @@ const drawerId = useId();
           aria-haspopup="dialog"
           @click="drawerVisible = true"
           severity="info"
-          size="small"
           class="mb-8 w-full md:hidden"
           >Gesamtausgabe auswählen</UiButton
         >
