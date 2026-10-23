@@ -273,106 +273,110 @@ test("can view details", { tag: ["@RISDEV-12108"] }, async ({ page }) => {
   ]);
 });
 
-test.describe("can view zitierungen", { tag: ["@RISDEV-12560"] }, () => {
-  test("can view zitierungen if private features enabled and zitierungen exist", async ({
-    page,
-    privateFeaturesEnabled,
-  }) => {
-    test.skip(!privateFeaturesEnabled);
-    await navigate(page, "/gerichtsentscheidungen/BDRE000800001");
-    await page.getByRole("tab", { name: "Zitierungen" }).click();
+test.describe(
+  "can view zitierungen",
+  { tag: ["@RISDEV-12560", "@RISDEV-12821"] },
+  () => {
+    test("can view zitierungen if private features enabled and zitierungen exist", async ({
+      page,
+      privateFeaturesEnabled,
+    }) => {
+      test.skip(!privateFeaturesEnabled);
+      await navigate(page, "/gerichtsentscheidungen/BDRE000800001");
+      await page.getByRole("tab", { name: "Zitierungen" }).click();
 
-    const tabPanel = page.getByRole("tabpanel", { name: "Zitierungen" });
+      const tabPanel = page.getByRole("tabpanel", { name: "Zitierungen" });
 
-    await expect(tabPanel.getByRole("heading", { level: 2 })).toHaveText(
-      "Zitierungen",
-    );
+      await expect(tabPanel.getByRole("heading", { level: 2 })).toHaveText(
+        "Zitierungen",
+      );
 
-    await expect(
-      tabPanel.getByRole("heading", {
-        level: 3,
-        name: "Diese Entscheidung wird zitiert in",
-      }),
-    ).toBeVisible();
-    await expect(
-      tabPanel.getByRole("heading", { level: 4, name: "Literaturnachweise" }),
-    ).toBeVisible();
-    await expect(
-      tabPanel.getByText("LG München, Urteil vom 6. Juni 2015 - 3 O 4/15"),
-    ).toBeVisible();
-    await expect(tabPanel.getByText("NVwZ 2020, 7")).toBeVisible();
-    await expect(
-      tabPanel.getByRole("link", {
-        name: "Schmidt, Peter, Test-Dokument SLI, 2024",
-      }),
-    ).toBeVisible();
+      await expect(
+        tabPanel.getByRole("heading", {
+          level: 3,
+          name: "Diese Entscheidung wird zitiert in",
+        }),
+      ).toBeVisible();
+      await expect(
+        tabPanel.getByRole("heading", { level: 4, name: "Literaturnachweise" }),
+      ).toBeVisible();
+      await expect(
+        tabPanel.getByText("LG München, Urteil vom 6. Juni 2015 - 3 O 4/15"),
+      ).toBeVisible();
+      await expect(tabPanel.getByText("NVwZ 2020, 7")).toBeVisible();
+      await expect(
+        tabPanel.getByRole("link", {
+          name: "Schmidt, Peter, Test-Dokument SLI, 2024",
+        }),
+      ).toBeVisible();
 
-    await expect(
-      tabPanel.getByRole("heading", {
-        level: 3,
-        name: "Diese Entscheidung zitiert",
-      }),
-    ).toBeVisible();
-    await expect(
-      tabPanel.getByText(
-        "BVerfG, Beschluss vom 11. November 2020 - 1 BvR 1/20",
-      ),
-    ).toBeVisible();
+      await expect(
+        tabPanel.getByRole("heading", {
+          level: 3,
+          name: "Diese Entscheidung zitiert",
+        }),
+      ).toBeVisible();
+      await expect(
+        tabPanel.getByText(
+          "BVerfG, Beschluss vom 11. November 2020 - 1 BvR 1/20",
+        ),
+      ).toBeVisible();
 
-    await expect(
-      tabPanel.getByRole("heading", {
-        level: 4,
-        name: "Gerichtsentscheidungen",
-      }),
-    ).toHaveCount(2);
-  });
-
-  test("can follow a zitierung link", async ({
-    page,
-    privateFeaturesEnabled,
-  }) => {
-    test.skip(!privateFeaturesEnabled);
-    await navigate(page, "/gerichtsentscheidungen/BDRE000800001");
-    await page.getByRole("tab", { name: "Zitierungen" }).click();
-
-    const tabPanel = page.getByRole("tabpanel", { name: "Zitierungen" });
-
-    const linkedZitierung = tabPanel.getByRole("link", {
-      name: "Schmidt, Peter, Test-Dokument SLI, 2024",
+      await expect(
+        tabPanel.getByRole("heading", {
+          level: 4,
+          name: "Gerichtsentscheidungen",
+        }),
+      ).toHaveCount(2);
     });
-    await expect(linkedZitierung).toBeVisible();
-    await linkedZitierung.click();
 
-    await expect(
-      page
-        .getByRole("main")
-        .getByRole("heading", { level: 1, name: "Test-Dokument SLI" })
-        .first(),
-    ).toBeVisible();
-  });
+    test("can follow a zitierung link", async ({
+      page,
+      privateFeaturesEnabled,
+    }) => {
+      test.skip(!privateFeaturesEnabled);
+      await navigate(page, "/gerichtsentscheidungen/BDRE000800001");
+      await page.getByRole("tab", { name: "Zitierungen" }).click();
 
-  test("does not show zitierungen if private features enabled but no zitierungen exist", async ({
-    page,
-    privateFeaturesEnabled,
-  }) => {
-    test.skip(!privateFeaturesEnabled);
-    await navigate(page, "/gerichtsentscheidungen/BORE040030050");
-    await expect(
-      page.getByRole("tab", { name: "Zitierungen" }),
-    ).not.toBeVisible();
-  });
+      const tabPanel = page.getByRole("tabpanel", { name: "Zitierungen" });
 
-  test("does not show zitierungen if private features disabled", async ({
-    page,
-    privateFeaturesEnabled,
-  }) => {
-    test.skip(privateFeaturesEnabled);
-    await navigate(page, "/gerichtsentscheidungen/BDRE000800001");
-    await expect(
-      page.getByRole("tab", { name: "Zitierungen" }),
-    ).not.toBeVisible();
-  });
-});
+      const linkedZitierung = tabPanel.getByRole("link", {
+        name: "Schmidt, Peter, Test-Dokument SLI, 2024",
+      });
+      await expect(linkedZitierung).toBeVisible();
+      await linkedZitierung.click();
+
+      await expect(
+        page
+          .getByRole("main")
+          .getByRole("heading", { level: 1, name: "Test-Dokument SLI" })
+          .first(),
+      ).toBeVisible();
+    });
+
+    test("does not show zitierungen if private features enabled but no zitierungen exist", async ({
+      page,
+      privateFeaturesEnabled,
+    }) => {
+      test.skip(!privateFeaturesEnabled);
+      await navigate(page, "/gerichtsentscheidungen/BORE040030050");
+      await expect(
+        page.getByRole("tab", { name: "Zitierungen" }),
+      ).not.toBeVisible();
+    });
+
+    test("does not show zitierungen if private features disabled", async ({
+      page,
+      privateFeaturesEnabled,
+    }) => {
+      test.skip(privateFeaturesEnabled);
+      await navigate(page, "/gerichtsentscheidungen/BDRE000800001");
+      await expect(
+        page.getByRole("tab", { name: "Zitierungen" }),
+      ).not.toBeVisible();
+    });
+  },
+);
 
 test(
   "can view Gesetzeskraft, Streitjahre and linked decisions",
