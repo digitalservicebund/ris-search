@@ -46,13 +46,13 @@ useCaselawSeo({
   document: document.value,
 });
 
-const verweiseGroups = computed(() =>
-  document.value ? getVerweiseGroups(document.value) : [],
+const zitierungen = computed(
+  () => document.value && getZitierungen(document.value),
 );
 
-const shouldRenderVerweise = computed(() => {
-  return usePrivateFeaturesFlag() && verweiseGroups.value.length;
-});
+const shouldRenderZitierungen = computed(
+  () => usePrivateFeaturesFlag() && zitierungen.value,
+);
 
 // Page contents ------------------------------------------
 
@@ -69,10 +69,10 @@ const views = computed<TabView[]>(() => {
     analyticsId: "caselaw-metadata-tab",
   });
 
-  if (shouldRenderVerweise.value) {
+  if (shouldRenderZitierungen.value) {
     tabViews.push({
-      path: "verweise",
-      label: "Verweise",
+      path: "zitierungen",
+      label: "Zitierungen",
     });
   }
 
@@ -198,7 +198,7 @@ const detailItems = computed<DetailsListItem[]>(() => [
 
 const textSectionId = useId();
 const detailsSectionId = useId();
-const verweiseSectionId = useId();
+const zitierungenSectionId = useId();
 </script>
 
 <template>
@@ -259,22 +259,17 @@ const verweiseSectionId = useId();
       </SidebarLayout>
     </template>
 
-    <template #verweise>
+    <template #zitierungen>
       <section
-        v-if="shouldRenderVerweise"
+        v-if="shouldRenderZitierungen"
         role="tabpanel"
-        :aria-labelledby="verweiseSectionId"
+        :aria-labelledby="zitierungenSectionId"
         class="pt-32 pb-32 md:pb-56"
       >
-        <h2 :id="verweiseSectionId" class="typo-headline3-bold">Verweise</h2>
-        <div class="verweise">
-          <div v-for="group in verweiseGroups" :key="group.id">
-            <h3 class="typo-body-bold pt-16 pb-8">
-              {{ group.label }}
-            </h3>
-            <div v-html="group.html" />
-          </div>
-        </div>
+        <h2 :id="zitierungenSectionId" class="typo-headline2-bold pb-24">
+          Zitierungen
+        </h2>
+        <DocumentsZitierungen v-if="zitierungen" :zitierungen />
       </section>
     </template>
   </NuxtLayout>
@@ -282,20 +277,6 @@ const verweiseSectionId = useId();
 
 <style scoped>
 @reference "~/assets/main.css";
-
-:deep(.verweise) {
-  a {
-    @apply typo-link1-regular;
-  }
-
-  ul {
-    @apply mb-16;
-  }
-
-  li {
-    @apply typo-label1-regular;
-  }
-}
 
 .case-law {
   --border-number-min-width: 3rem;
