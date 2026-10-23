@@ -25,10 +25,9 @@ class PostHogClientTest {
 
     String text = "Test feedback";
     String url = "http://user-url.test";
-    String userId = "test_id";
     String surveyId = "test_survey_id";
 
-    postHogClient.submitFeedback(userId, url, text, surveyId);
+    postHogClient.submitFeedback(url, text, surveyId);
 
     Map<String, Object> expectedData = new HashMap<>();
     expectedData.put("$survey_id", surveyId);
@@ -37,7 +36,7 @@ class PostHogClientTest {
 
     verify(postHog)
         .capture(
-            eq(userId),
+            eq("anonymous_feedback_user"),
             eq("survey sent"),
             argThat(options -> expectedData.equals(options.getProperties())));
   }
