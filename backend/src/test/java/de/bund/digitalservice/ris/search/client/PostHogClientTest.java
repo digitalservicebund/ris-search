@@ -43,32 +43,14 @@ class PostHogClientTest {
   }
 
   @Test
-  void submitApiEventDecodesPath() {
+  void submitApiEventPassesPathUnchanged() {
     var postHogClient = new PostHogClient(postHog);
 
-    postHogClient.submitApiEvent("/v1/legislation/%C2%A7%20BGB+1", "test-agent");
+    postHogClient.submitApiEvent("/v1/legislation/§ BGB%41", "test-agent");
 
     Map<String, Object> expectedData = new HashMap<>();
-    expectedData.put("$current_url", "/v1/legislation/§ BGB+1");
+    expectedData.put("$current_url", "/v1/legislation/§ BGB%41");
     expectedData.put("user_agent", "test-agent");
-    expectedData.put("$process_person_profile", false);
-
-    verify(postHog)
-        .capture(
-            isNull(),
-            eq("api_call_performed"),
-            argThat(options -> expectedData.equals(options.getProperties())));
-  }
-
-  @Test
-  void submitApiEventKeepsMalformedPath() {
-    var postHogClient = new PostHogClient(postHog);
-
-    postHogClient.submitApiEvent("/v1/%E2%8", null);
-
-    Map<String, Object> expectedData = new HashMap<>();
-    expectedData.put("$current_url", "/v1/%E2%8");
-    expectedData.put("user_agent", null);
     expectedData.put("$process_person_profile", false);
 
     verify(postHog)

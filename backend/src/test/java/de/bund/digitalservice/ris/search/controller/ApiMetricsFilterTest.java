@@ -33,7 +33,7 @@ class ApiMetricsFilterTest {
 
   @Test
   void capturesApiCall() throws Exception {
-    var request = new MockHttpServletRequest("GET", "/v1/case-law/KORE123");
+    var request = request("GET", "/v1/case-law/KORE123");
     request.addHeader("User-Agent", "test-agent");
 
     filter.doFilter(request, new MockHttpServletResponse(), new MockFilterChain());
@@ -43,7 +43,7 @@ class ApiMetricsFilterTest {
 
   @Test
   void skipsActuatorCalls() throws Exception {
-    var request = new MockHttpServletRequest("GET", "/actuator/health");
+    var request = request("GET", "/actuator/health");
 
     filter.doFilter(request, new MockHttpServletResponse(), new MockFilterChain());
 
@@ -52,7 +52,7 @@ class ApiMetricsFilterTest {
 
   @Test
   void skipsNonApiCalls() throws Exception {
-    var request = new MockHttpServletRequest("GET", "/robots.txt");
+    var request = request("GET", "/robots.txt");
 
     filter.doFilter(request, new MockHttpServletResponse(), new MockFilterChain());
 
@@ -61,7 +61,7 @@ class ApiMetricsFilterTest {
 
   @Test
   void capturesApiCallWhenFilterChainThrows() throws Exception {
-    var request = new MockHttpServletRequest("POST", "/v1/feedback");
+    var request = request("POST", "/v1/feedback");
     var response = new MockHttpServletResponse();
     var filterChain = mock(FilterChain.class);
     doThrow(new ServletException("boom")).when(filterChain).doFilter(any(), any());
@@ -69,5 +69,12 @@ class ApiMetricsFilterTest {
     assertThrows(ServletException.class, () -> filter.doFilter(request, response, filterChain));
 
     verify(postHogClient).submitApiEvent("/v1/feedback", null);
+  }
+
+  private static MockHttpServletRequest request(String method, String path) {
+    var request = new MockHttpServletRequest(method, path);
+    // DispatcherServlet is mapped to "/", so the servlet path is the full path within the app
+    request.setServletPath(path);
+    return request;
   }
 }

@@ -32,16 +32,14 @@ public class ApiMetricsFilter extends OncePerRequestFilter {
       @NonNull HttpServletResponse response,
       FilterChain filterChain)
       throws ServletException, IOException {
-    try {
-      filterChain.doFilter(request, response);
-    } finally {
-      postHogClient.submitApiEvent(request.getRequestURI(), request.getHeader("User-Agent"));
-    }
+
+    postHogClient.submitApiEvent(request.getServletPath(), request.getHeader("User-Agent"));
+    filterChain.doFilter(request, response);
   }
 
   @Override
   protected boolean shouldNotFilter(HttpServletRequest request) {
-    String uri = request.getRequestURI();
-    return !uri.startsWith(ApiConfig.Paths.BASE);
+    String path = request.getServletPath();
+    return !path.startsWith(ApiConfig.Paths.BASE);
   }
 }

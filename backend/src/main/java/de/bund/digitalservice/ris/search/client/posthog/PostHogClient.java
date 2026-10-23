@@ -3,10 +3,8 @@ package de.bund.digitalservice.ris.search.client.posthog;
 import com.posthog.server.PostHogCaptureOptions;
 import com.posthog.server.PostHogInterface;
 import jakarta.annotation.PreDestroy;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
-import org.springframework.web.util.UriUtils;
 
 /**
  * Client for interacting with PostHog analytics service.
@@ -35,12 +33,12 @@ public record PostHogClient(PostHogInterface postHog) {
   /**
    * Submits an api event to PostHog.
    *
-   * @param uri path of the api call made
+   * @param path decoded path of the api call made
    * @param userAgent userAgent
    */
-  public void submitApiEvent(String uri, String userAgent) {
+  public void submitApiEvent(String path, String userAgent) {
     Map<String, Object> properties = new HashMap<>();
-    properties.put("$current_url", decodePath(uri));
+    properties.put("$current_url", path);
     properties.put("user_agent", userAgent);
     // do not create a person profile in posthog for api calls
     properties.put("$process_person_profile", false);
@@ -48,14 +46,6 @@ public record PostHogClient(PostHogInterface postHog) {
     // a personless UUID is generated on null distinctId
     postHog.capture(
         null, "api_call_performed", PostHogCaptureOptions.builder().properties(properties).build());
-  }
-
-  private static String decodePath(String uri) {
-    try {
-      return UriUtils.decode(uri, StandardCharsets.UTF_8);
-    } catch (IllegalArgumentException _) {
-      return uri;
-    }
   }
 
   @PreDestroy
