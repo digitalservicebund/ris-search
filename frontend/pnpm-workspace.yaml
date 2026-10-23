@@ -5,6 +5,7 @@ overrides:
 
 allowBuilds:
   "@parcel/watcher": true
+  "@posthog/cli": false
   "@sentry/cli": false
   core-js: false
   esbuild: true
