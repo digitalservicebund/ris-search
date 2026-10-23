@@ -23,9 +23,5 @@ export const runtimeConfig: NuxtConfig["runtimeConfig"] = {
     privateFeaturesEnabled: false,
     sentryDSN: "",
     sentryEnvironment: "",
-    analytics: {
-      posthogKey: "",
-      posthogHost: "",
-    },
   },
 };
