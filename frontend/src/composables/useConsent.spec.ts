@@ -110,8 +110,7 @@ describe("useConsent", () => {
 
   it("doesn't call PostHog if it is disabled", () => {
     postHogConfig.host = "";
-    const { setConsent, consentStatus, isPostHogEnabled } = useConsent();
-    expect(isPostHogEnabled).toBe(false);
+    const { setConsent, consentStatus } = useConsent();
     setConsent(true);
     expect(postHogMock.opt_in_capturing).not.toHaveBeenCalled();
     expect(consentStatus.value).toBe("granted");

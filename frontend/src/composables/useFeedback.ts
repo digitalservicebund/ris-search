@@ -1,22 +1,9 @@
-const ANONYMOUS_FEEDBACK_USER = "anonymous_feedback_user";
-
 /** Composable for sending user feedback. */
 export function useFeedback() {
   const router = useRouter();
-  const posthog = usePostHog();
-  const { isConsentGiven, isPostHogEnabled } = useConsent();
-
-  /** Returns the user's PostHog ID if they consented to tracking. */
-  function getUserId() {
-    if (!isPostHogEnabled || !isConsentGiven.value) {
-      return ANONYMOUS_FEEDBACK_USER;
-    }
-
-    return posthog?.get_distinct_id() ?? ANONYMOUS_FEEDBACK_USER;
-  }
 
   /**
-   * Sends user feedback to the backend.
+   * Sends user feedback to the backend. Feedback is always anonymous.
    *
    * @param text - The feedback text from the user
    * @param honeypot - A field used for reducing spam sent to posthog
@@ -28,7 +15,6 @@ export function useFeedback() {
       body: {
         text: text,
         url: router.currentRoute.value.fullPath,
-        user_id: getUserId(),
         name: honeypot,
       },
     });

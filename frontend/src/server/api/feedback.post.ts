@@ -39,7 +39,6 @@ function buildRedirectPath(
 interface FeedbackBody {
   text?: string;
   url?: string;
-  user_id?: string;
   name?: string;
 }
 
@@ -67,7 +66,6 @@ export default defineEventHandler(async (event) => {
       body: {
         text: body?.text,
         url: body?.url || currentUrl,
-        user_id: body?.user_id || "anonymous_feedback_user",
         name: body?.name || "",
       },
     });
@@ -84,7 +82,6 @@ export default defineEventHandler(async (event) => {
       body: {
         text: body?.text,
         url: body?.url,
-        user_id: body?.user_id,
         name: body?.name,
       },
     });

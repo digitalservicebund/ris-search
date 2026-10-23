@@ -41,7 +41,6 @@ export function useConsent() {
     consentStatus,
     isConsentGiven,
     isBannerVisible,
-    isPostHogEnabled,
     setConsent,
   };
 }
