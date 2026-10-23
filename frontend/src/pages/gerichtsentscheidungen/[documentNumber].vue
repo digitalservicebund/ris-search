@@ -66,7 +66,6 @@ const views = computed<TabView[]>(() => {
   tabViews.push({
     path: "details",
     label: "Details",
-    analyticsId: "caselaw-metadata-tab",
   });
 
   if (shouldRenderZitierungen.value) {
@@ -192,7 +191,6 @@ const detailItems = computed<DetailsListItem[]>(() => [
     label: "Download:",
     url: getEncodingURL(rechtsprechung.value?.encoding, "application/zip"),
     text: "Diese Gerichtsentscheidung als ZIP herunterladen",
-    dataAttr: "xml-zip-view",
   },
 ]);
 

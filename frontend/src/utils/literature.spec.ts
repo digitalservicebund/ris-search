@@ -16,7 +16,6 @@ const getTitleDataTestData = [
 ];
 
 const zipDownloadLink = {
-  dataAttr: "xml-zip-view",
   label: "Download:",
   text: "Diesen Literaturnachweis als ZIP herunterladen",
   type: "link",

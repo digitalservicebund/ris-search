@@ -52,7 +52,6 @@ const views = computed<TabView[]>(() => {
   tabViews.push({
     path: "details",
     label: "Details",
-    analyticsId: "literature-metadata-tab",
   });
 
   return tabViews;

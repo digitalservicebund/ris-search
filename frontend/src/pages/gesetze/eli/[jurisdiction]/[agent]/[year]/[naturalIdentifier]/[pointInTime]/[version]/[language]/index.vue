@@ -125,7 +125,6 @@ const detailItems = computed<DetailsListItem[]>(() => [
     label: "Download:",
     url: zipUrl.value,
     text: `${metadata.value.abbreviation} als ZIP herunterladen`,
-    dataAttr: "xml-zip-view",
   },
 ]);
 
@@ -205,19 +204,16 @@ const views = computed<OneOrMore<TabView>>(() => {
     {
       path: "details",
       label: "Details",
-      analyticsId: "norm-metadata-tab",
     },
     {
       path: "gesamtausgaben",
       label: "Gesamtausgaben",
-      analyticsId: "norm-versions-tab",
     },
   ] as const;
 
   const textTab = {
     path: "text",
     label: "Text",
-    analyticsId: "norm-text-tab",
   } as const;
 
   return data.value.hasEmptyBody ? baseViews : [textTab, ...baseViews];

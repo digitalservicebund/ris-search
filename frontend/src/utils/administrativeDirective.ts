@@ -80,7 +80,6 @@ export function getAdministrativeDirectiveDetailItems(
       label: "Download:",
       url: getEncodingURL(administrativeDirective?.encoding, "application/zip"),
       text: "Diese Verwaltungsregelung als ZIP herunterladen",
-      dataAttr: "xml-zip-view",
     },
   ];
 }
