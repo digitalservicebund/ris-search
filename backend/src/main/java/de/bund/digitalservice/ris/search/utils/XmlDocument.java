@@ -176,7 +176,7 @@ public class XmlDocument {
     try {
       return getSimpleElementByXpath(xpath);
     } catch (XPathExpressionException exception) {
-      logger.warn(String.format("Error finding element by xpath: %s", xpath), exception);
+      logger.warn("Error finding element by xpath: {}", xpath, exception);
       return null;
     }
   }
@@ -267,7 +267,7 @@ public class XmlDocument {
         node.getParentNode().removeChild(node);
       }
     } catch (XPathExpressionException exception) {
-      logger.warn(String.format("Error removing nodes by xpath: %s", xPath), exception);
+      logger.warn("Error removing nodes by xpath: {}", xPath, exception);
     }
   }
 
@@ -290,7 +290,7 @@ public class XmlDocument {
         node.getParentNode().replaceChild(document.createTextNode(replacement), node);
       }
     } catch (XPathExpressionException exception) {
-      logger.warn(String.format("Error removing nodes by xpath: %s", xPath), exception);
+      logger.warn("Error removing nodes by xpath: {}", xPath, exception);
     }
   }
 }

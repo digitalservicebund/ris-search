@@ -28,12 +28,11 @@ public class SecurityConfig {
   private static final String ACTUATOR_PATH = "/actuator/**";
   private static final String NLEX_PATH = "/nlex";
 
-  final String[] internalPaths = new String[] {ACTUATOR_PATH, NLEX_PATH};
+  final String[] internalPaths = {ACTUATOR_PATH, NLEX_PATH};
 
   // The feedback endpoint is a public, stateless API called from external clients (e.g. api-docs)
   // without a session. CSRF protection is session-cookie-based and provides no value here.
-  final String[] csrfExemptPaths =
-      new String[] {ACTUATOR_PATH, NLEX_PATH, ApiConfig.Paths.FEEDBACK};
+  final String[] csrfExemptPaths = {ACTUATOR_PATH, NLEX_PATH, ApiConfig.Paths.FEEDBACK};
 
   @Value("${app.security.csp-header}")
   private String cspHeader;
