@@ -8,13 +8,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import org.jspecify.annotations.NonNull;
-import org.springframework.context.annotation.Profile;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 /** OncePerRequestFilter to monitor every api call below {@link ApiConfig.Paths#BASE} */
 @Component
-@Profile({"prototype", "test"})
+@ConditionalOnProperty(name = "posthog.track-api-calls", havingValue = "true")
 public class ApiMetricsFilter extends OncePerRequestFilter {
 
   private final PostHogClient postHogClient;
