@@ -1,5 +1,4 @@
 import type { JSDOM } from "jsdom";
-import sanitizeHtml from "sanitize-html";
 
 type Section = {
   id: string;
@@ -58,67 +57,6 @@ export function getTextFromElements(elements?: NodeListOf<Element>): string[] {
     (element) => element.textContent,
   );
   return textElements.filter(Boolean) as string[];
-}
-
-export type ZitierungenGroup = {
-  id: string;
-  label: string;
-  html: string;
-};
-
-/**
- * Zitierungen categories in display order, matching the `<template id="...">`
- * elements the case-law HTML transformation places in `<head>` (one per
- * category, e.g. `referenzNorm`, `vorgehendeEntscheidung`), each containing a
- * `<ul>` of `<li>` entries.
- */
-const ZITIERUNGEN_CATEGORIES: { id: string; label: string }[] = [
-  { id: "referenzNorm", label: "Normen" },
-  { id: "referenzRechtsprechungAktiv", label: "Zitierte Rechtsprechung" },
-  { id: "referenzRechtsprechungPassiv", label: "Verweisende Rechtsprechung" },
-  {
-    id: "referenzVerwaltungsvorschriftAktiv",
-    label: "Zitierte Verwaltungsvorschriften",
-  },
-  {
-    id: "referenzVerwaltungsvorschriftPassiv",
-    label: "Verweisende Verwaltungsvorschriften",
-  },
-  {
-    id: "referenzUnselbststaendigeLiteraturAktiv",
-    label: "Zitierte unselbständige Literatur",
-  },
-  {
-    id: "referenzUnselbststaendigeLiteraturPassiv",
-    label: "Verweisende unselbständige Literatur",
-  },
-  {
-    id: "referenzSelbststaendigeLiteraturAktiv",
-    label: "Zitierte selbständige Literatur",
-  },
-  {
-    id: "referenzSelbststaendigeLiteraturPassiv",
-    label: "Verweisende selbständige Literatur",
-  },
-  { id: "vorgehendeEntscheidung", label: "Vorgehende Entscheidungen" },
-  { id: "nachgehendeEntscheidung", label: "Nachgehende Entscheidungen" },
-];
-
-/**
- * Extracts the zitierungen categories present in the document's `<head>`,
- * paired with a display label. Categories without a matching template (or with
- * no content) are omitted. The list markup is sanitized down to `<ul>`, `<li>`
- * and `<a>` elements only.
- */
-export function getZitierungenGroups(document: Document): ZitierungenGroup[] {
-  return ZITIERUNGEN_CATEGORIES.flatMap(({ id, label }) => {
-    const rawHtml = document.head.querySelector<HTMLTemplateElement>(
-      `template#${id}`,
-    )?.innerHTML;
-    const html =
-      rawHtml && sanitizeHtml(rawHtml, { allowedTags: ["ul", "li", "a"] });
-    return html ? [{ id, label, html }] : [];
-  });
 }
 
 /**

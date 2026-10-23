@@ -46,13 +46,13 @@ useCaselawSeo({
   document: document.value,
 });
 
-const zitierungenGroups = computed(() =>
-  document.value ? getZitierungenGroups(document.value) : [],
+const zitierungen = computed(
+  () => document.value && getZitierungen(document.value),
 );
 
-const shouldRenderZitierungen = computed(() => {
-  return usePrivateFeaturesFlag() && zitierungenGroups.value.length;
-});
+const shouldRenderZitierungen = computed(
+  () => usePrivateFeaturesFlag() && zitierungen.value,
+);
 
 // Page contents ------------------------------------------
 
@@ -266,17 +266,10 @@ const zitierungenSectionId = useId();
         :aria-labelledby="zitierungenSectionId"
         class="pt-32 pb-32 md:pb-56"
       >
-        <h2 :id="zitierungenSectionId" class="typo-headline3-bold">
+        <h2 :id="zitierungenSectionId" class="typo-headline2-bold pb-24">
           Zitierungen
         </h2>
-        <div class="zitierungen">
-          <div v-for="group in zitierungenGroups" :key="group.id">
-            <h3 class="typo-body-bold pt-16 pb-8">
-              {{ group.label }}
-            </h3>
-            <div v-html="group.html" />
-          </div>
-        </div>
+        <DocumentsZitierungen v-if="zitierungen" :zitierungen />
       </section>
     </template>
   </NuxtLayout>
@@ -284,20 +277,6 @@ const zitierungenSectionId = useId();
 
 <style scoped>
 @reference "~/assets/main.css";
-
-:deep(.zitierungen) {
-  a {
-    @apply typo-link1-regular;
-  }
-
-  ul {
-    @apply mb-16;
-  }
-
-  li {
-    @apply typo-label1-regular;
-  }
-}
 
 .case-law {
   --border-number-min-width: 3rem;

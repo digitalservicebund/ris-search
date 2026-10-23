@@ -289,16 +289,28 @@ test.describe("can view zitierungen", { tag: ["@RISDEV-12560"] }, () => {
     );
 
     await expect(
-      tabPanel.getByRole("heading", { level: 3, name: "Normen" }),
+      tabPanel.getByRole("heading", {
+        level: 3,
+        name: "Diese Entscheidung wird zitiert in",
+      }),
     ).toBeVisible();
     await expect(
-      tabPanel.getByText("BDG § 34, vereinbar mit höherrangigem Recht Hessen"),
+      tabPanel.getByRole("heading", { level: 4, name: "Literaturnachweise" }),
+    ).toBeVisible();
+    await expect(
+      tabPanel.getByText("LG München, Urteil vom 6. Juni 2015 - 3 O 4/15"),
+    ).toBeVisible();
+    await expect(tabPanel.getByText("NVwZ 2020, 7")).toBeVisible();
+    await expect(
+      tabPanel.getByRole("link", {
+        name: "Schmidt, Peter, Test-Dokument SLI, 2024",
+      }),
     ).toBeVisible();
 
     await expect(
       tabPanel.getByRole("heading", {
         level: 3,
-        name: "Zitierte Rechtsprechung",
+        name: "Diese Entscheidung zitiert",
       }),
     ).toBeVisible();
     await expect(
@@ -309,95 +321,10 @@ test.describe("can view zitierungen", { tag: ["@RISDEV-12560"] }, () => {
 
     await expect(
       tabPanel.getByRole("heading", {
-        level: 3,
-        name: "Verweisende Rechtsprechung",
+        level: 4,
+        name: "Gerichtsentscheidungen",
       }),
-    ).toBeVisible();
-    await expect(
-      tabPanel.getByText("LG München, Urteil vom 6. Juni 2015 - 3 O 4/15"),
-    ).toBeVisible();
-
-    await expect(
-      tabPanel.getByRole("heading", {
-        level: 3,
-        name: "Zitierte Verwaltungsvorschriften",
-      }),
-    ).toBeVisible();
-    await expect(
-      tabPanel.getByText("VV DEU BMF 2010-01-01 1, BStBl I 2010, 1"),
-    ).toBeVisible();
-
-    await expect(
-      tabPanel.getByRole("heading", {
-        level: 3,
-        name: "Verweisende Verwaltungsvorschriften",
-      }),
-    ).toBeVisible();
-    await expect(tabPanel.getByText("VV DEU BMF 2011-02-02 2")).toBeVisible();
-
-    await expect(
-      tabPanel.getByRole("heading", {
-        level: 3,
-        name: "Zitierte unselbständige Literatur",
-      }),
-    ).toBeVisible();
-    await expect(
-      tabPanel.getByRole("link", {
-        name: "Müller, ETD-U SelbstFund, 1982, 123-123",
-      }),
-    ).toBeVisible();
-
-    await expect(
-      tabPanel.getByRole("heading", {
-        level: 3,
-        name: "Verweisende unselbständige Literatur",
-      }),
-    ).toBeVisible();
-    await expect(tabPanel.getByText("NVwZ 2020, 7")).toBeVisible();
-
-    await expect(
-      tabPanel.getByRole("heading", {
-        level: 3,
-        name: "Zitierte selbständige Literatur",
-      }),
-    ).toBeVisible();
-    await expect(tabPanel.getByText("Weber")).toBeVisible();
-
-    await expect(
-      tabPanel.getByRole("heading", {
-        level: 3,
-        name: "Verweisende selbständige Literatur",
-      }),
-    ).toBeVisible();
-    await expect(
-      tabPanel.getByRole("link", {
-        name: "Schmidt, Peter, Test-Dokument SLI, 2024",
-      }),
-    ).toBeVisible();
-
-    await expect(
-      tabPanel.getByRole("heading", {
-        level: 3,
-        name: "Vorgehende Entscheidungen",
-      }),
-    ).toBeVisible();
-    await expect(
-      tabPanel.getByRole("link", {
-        name: "VG Frankfurt, Beschluss vom 4. September 2026 - Foo Bar 2361/26.F",
-      }),
-    ).toBeVisible();
-
-    await expect(
-      tabPanel.getByRole("heading", {
-        level: 3,
-        name: "Nachgehende Entscheidungen",
-      }),
-    ).toBeVisible();
-    await expect(
-      tabPanel.getByText(
-        "OVG Münster, Beschluss vom 1. Juni 2025 - XVI VL 34/99 (anhängig)",
-      ),
-    ).toBeVisible();
+    ).toHaveCount(2);
   });
 
   test("can follow a zitierung link", async ({
@@ -411,14 +338,17 @@ test.describe("can view zitierungen", { tag: ["@RISDEV-12560"] }, () => {
     const tabPanel = page.getByRole("tabpanel", { name: "Zitierungen" });
 
     const linkedZitierung = tabPanel.getByRole("link", {
-      name: "VG Frankfurt, Beschluss vom 4. September 2026 - Foo Bar 2361/26.F",
+      name: "Schmidt, Peter, Test-Dokument SLI, 2024",
     });
     await expect(linkedZitierung).toBeVisible();
     await linkedZitierung.click();
 
-    await expect(page.getByRole("heading", { level: 1 })).toHaveText(
-      "Testheader für Urteil 8.",
-    );
+    await expect(
+      page
+        .getByRole("main")
+        .getByRole("heading", { level: 1, name: "Test-Dokument SLI" })
+        .first(),
+    ).toBeVisible();
   });
 
   test("does not show zitierungen if private features enabled but no zitierungen exist", async ({
