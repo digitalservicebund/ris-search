@@ -4,11 +4,11 @@
  * consent state is known before the app is hydrated.
  */
 export function useConsent() {
-  const { publicKey, host } = useRuntimeConfig().public.posthog;
+  const { publicKey } = useRuntimeConfig().public.posthog;
   const consentCookie = useCookie(CONSENT_COOKIE_NAME, { readonly: true });
   const posthog = usePostHog();
 
-  const isPostHogEnabled = !!publicKey && !!host;
+  const isPostHogEnabled = !!publicKey;
 
   const consentStatus = useState<ConsentStatus>("consentStatus", () =>
     parseConsentCookie(consentCookie.value),

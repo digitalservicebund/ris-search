@@ -1,9 +1,8 @@
-import type { NuxtConfig, NuxtModule } from "nuxt/schema";
+import type { NuxtConfig } from "nuxt/schema";
 import { CONSENT_COOKIE_NAME } from "../src/utils/postHog";
 
 export const posthogConfig: NuxtConfig["posthogConfig"] = {
   publicKey: "",
-  host: "",
 
   clientConfig: {
     // Consent
@@ -30,13 +29,4 @@ export const posthogConfig: NuxtConfig["posthogConfig"] = {
     disable_product_tours: true,
     advanced_disable_flags: true,
   },
-};
-
-/**
- * The PostHog module replaces an empty host with PostHog's US cloud at build
- * time. Reset it, so PostHog stays disabled unless a host is configured at
- * runtime (see `plugins/postHogGuard.client.ts`).
- */
-export const resetPostHogHostDefault: NuxtModule = (_, nuxt) => {
-  nuxt.options.runtimeConfig.public.posthog.host = "";
 };

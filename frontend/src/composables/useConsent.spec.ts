@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { useConsent } from "./useConsent";
 
 const { postHogConfig, postHogMock } = vi.hoisted(() => ({
-  postHogConfig: { publicKey: "key", host: "host" },
+  postHogConfig: { publicKey: "key" },
   postHogMock: {
     opt_in_capturing: vi.fn(),
     opt_out_capturing: vi.fn(),
@@ -37,7 +37,6 @@ describe("useConsent", () => {
     clearConsentCookie();
     clearNuxtState("consentStatus");
     postHogConfig.publicKey = "key";
-    postHogConfig.host = "host";
     vi.clearAllMocks();
   });
 
@@ -77,12 +76,6 @@ describe("useConsent", () => {
     expect(isBannerVisible.value).toBe(false);
   });
 
-  it("hides the banner if no host is configured", () => {
-    postHogConfig.host = "";
-    const { isBannerVisible } = useConsent();
-    expect(isBannerVisible.value).toBe(false);
-  });
-
   it("opts in to tracking without capturing an opt-in event", () => {
     const { setConsent, consentStatus, isBannerVisible } = useConsent();
     setConsent(true);
@@ -109,7 +102,7 @@ describe("useConsent", () => {
   });
 
   it("doesn't call PostHog if it is disabled", () => {
-    postHogConfig.host = "";
+    postHogConfig.publicKey = "";
     const { setConsent, consentStatus } = useConsent();
     setConsent(true);
     expect(postHogMock.opt_in_capturing).not.toHaveBeenCalled();
