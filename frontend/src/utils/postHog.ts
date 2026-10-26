@@ -6,8 +6,8 @@ export const CONSENT_COOKIE_NAME = "consent_given";
 
 export type ConsentStatus = "granted" | "denied" | "pending";
 
-const grantedValues: unknown[] = [true, 1, "true", "1", "yes"];
-const deniedValues: unknown[] = [false, 0, "false", "0", "no"];
+const grantedValues = new Set<unknown>([true, 1, "true", "1", "yes"]);
+const deniedValues = new Set<unknown>([false, 0, "false", "0", "no"]);
 
 /**
  * Reads the consent status from the value of the consent cookie. Accepts the
@@ -18,7 +18,7 @@ const deniedValues: unknown[] = [false, 0, "false", "0", "no"];
  * @returns The consent status
  */
 export function parseConsentCookie(value: unknown): ConsentStatus {
-  if (grantedValues.includes(value)) return "granted";
-  if (deniedValues.includes(value)) return "denied";
+  if (grantedValues.has(value)) return "granted";
+  if (deniedValues.has(value)) return "denied";
   return "pending";
 }
