@@ -36,6 +36,7 @@ describe("useNormGesamtausgaben", () => {
     const { sortedGesamtausgaben } = await useNormGesamtausgaben("dummy-eli");
     expect(useRisBackendMock).toHaveBeenCalledWith(
       "/v1/legislation/work-example/dummy-eli",
+      expect.any(String),
     );
     expect(sortedGesamtausgaben.value).toHaveLength(2);
     expect(sortedGesamtausgaben.value[0]?.temporalCoverage).toBe(
