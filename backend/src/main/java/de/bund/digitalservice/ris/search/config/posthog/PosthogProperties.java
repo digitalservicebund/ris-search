@@ -28,4 +28,5 @@ public class PosthogProperties {
   private String apiKey;
   private String host;
   private String feedbackSurveyId;
+  private boolean debug;
 }

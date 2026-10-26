@@ -35,7 +35,10 @@ public class ChangelogResponseMapper {
       case LEGISLATION -> mapLegislation(changelog, remoteJsonContext);
       case CASE_LAW ->
           mapStandardDocument(
-              changelog, ApiConfig.Paths.CASELAW, JsonldTypes.DECISION, remoteJsonContext);
+              changelog,
+              ApiConfig.Paths.RECHTSPRECHUNG,
+              JsonldTypes.RECHTSPRECHUNG,
+              remoteJsonContext);
       case LITERATURE ->
           mapStandardDocument(
               changelog, ApiConfig.Paths.LITERATURE, JsonldTypes.LITERATURE, remoteJsonContext);
@@ -73,7 +76,8 @@ public class ChangelogResponseMapper {
                 .map(
                     eli ->
                         toChangedDocument(
-                            getLegislationBaseUrl(eli.getManifestationEli().getManifestationRoot()),
+                            getLegislationBaseUrl(
+                                eli.getManifestationEliPath().getManifestationRoot()),
                             JsonldTypes.LEGISLATION_OBJECT)),
         id ->
             EliFile.fromString(id).stream()
@@ -81,7 +85,7 @@ public class ChangelogResponseMapper {
                 .map(
                     eli ->
                         new ChangelogDeletedDocument(
-                            getLegislationBaseUrl(eli.getExpressionEli().toString()),
+                            getLegislationBaseUrl(eli.getExpressionEliPath().toString()),
                             JsonldTypes.LEGISLATION)),
         remoteContext);
   }

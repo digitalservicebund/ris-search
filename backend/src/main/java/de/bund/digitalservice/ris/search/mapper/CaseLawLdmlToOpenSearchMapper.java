@@ -4,6 +4,7 @@ import static de.bund.digitalservice.ris.search.utils.MappingUtils.validate;
 import static de.bund.digitalservice.ris.search.utils.MappingUtils.validateNotNull;
 
 import de.bund.digitalservice.ris.search.exception.OpenSearchMapperException;
+import de.bund.digitalservice.ris.search.models.DatumsTyp;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.AknKeyword;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.Analysis;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.CaseLawLdml;
@@ -77,6 +78,7 @@ public class CaseLawLdmlToOpenSearchMapper {
         .ecli(work.getEcliAliasValue())
         .celex(work.getCelexAliasValue())
         .decisionDate(DateUtils.nullSafeParseyyyyMMdd(work.getEntscheidungsdatumValue()))
+        .datumsTyp(DatumsTyp.fromLdmlName(work.getEntscheidungsdatumName()))
         .fileNumber(work.getAktenzeichenAliasValue())
         .fileNumbers(risMeta.getAktenzeichen())
         .abweichendeAktenzeichen(risMeta.getAbweichendeAktenzeichen())

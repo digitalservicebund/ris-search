@@ -1,6 +1,6 @@
 package de.bund.digitalservice.ris.search.repository.objectstorage;
 
-import de.bund.digitalservice.ris.search.exception.FileTransformationException;
+import de.bund.digitalservice.ris.html.exception.FileTransformationException;
 import de.bund.digitalservice.ris.search.exception.NoSuchKeyException;
 import java.io.DataInputStream;
 import java.io.File;
@@ -101,11 +101,16 @@ public class LocalFilesystemObjectStorageClient implements ObjectStorageClient {
 
   @Override
   public void save(String fileName, String fileContent) {
+    save(fileName, fileContent.getBytes());
+  }
+
+  @Override
+  public void save(String fileName, byte[] fileContent) {
 
     File file = localStorageDirectory.resolve(bucket).resolve(fileName).toFile();
 
     try {
-      FileUtils.writeByteArrayToFile(file, fileContent.getBytes());
+      FileUtils.writeByteArrayToFile(file, fileContent);
     } catch (IOException e) {
       LOGGER.error(e.toString());
     }

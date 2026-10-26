@@ -1,9 +1,5 @@
 import { afterEach } from "vitest";
-import {
-  getVerweiseGroups,
-  getTextFromElements,
-  parseDocument,
-} from "./htmlParser";
+import { getTextFromElements, parseDocument } from "./htmlParser";
 
 describe("getTextFromElements", () => {
   afterEach(() => {
@@ -61,53 +57,6 @@ describe("parseDocument", () => {
   });
 });
 
-describe("getVerweiseGroups", () => {
-  const parser = new DOMParser();
-
-  it("returns only the categories present in the document, in display order", () => {
-    const doc = parser.parseFromString(
-      `<!DOCTYPE HTML><html><head>
-        <template id="nachgehendeEntscheidung"><ul><li>B</li></ul></template>
-        <template id="referenzNorm"><ul><li>A</li></ul></template>
-      </head><body></body></html>`,
-      "text/html",
-    );
-
-    const result = getVerweiseGroups(doc);
-
-    expect(result).toEqual([
-      { id: "referenzNorm", label: "Normen", html: "<ul><li>A</li></ul>" },
-      {
-        id: "nachgehendeEntscheidung",
-        label: "Nachgehende Entscheidungen",
-        html: "<ul><li>B</li></ul>",
-      },
-    ]);
-  });
-
-  it("returns an empty array when no verweise templates are present", () => {
-    const doc = parser.parseFromString(
-      "<!DOCTYPE HTML><html><head></head><body></body></html>",
-      "text/html",
-    );
-
-    expect(getVerweiseGroups(doc)).toEqual([]);
-  });
-
-  it("sanitizes the list markup down to ul, li and a", () => {
-    const doc = parser.parseFromString(
-      `<!DOCTYPE HTML><html><head><template id="referenzNorm"><ul><li onclick="evil()"><a href="/x" class="foo">GG Art. 1</a></li><li><script>alert(1)</script>BGB</li></ul></template></head><body></body></html>`,
-      "text/html",
-    );
-
-    const [group] = getVerweiseGroups(doc);
-
-    expect(group?.html).toBe(
-      '<ul><li><a href="/x">GG Art. 1</a></li><li>BGB</li></ul>',
-    );
-  });
-});
-
 describe("isDocumentEmpty", () => {
   it("returns true if document is undefined", () => {
     expect(isDocumentEmpty()).toBeTruthy();
@@ -115,6 +64,22 @@ describe("isDocumentEmpty", () => {
 
   it("returns true if html body is empty", () => {
     const docString = "<!DOCTYPE HTML><html><body></body></html>";
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(docString, "text/html");
+
+    expect(isDocumentEmpty(doc)).toBeTruthy();
+  });
+
+  it("returns true if html body is empty in an indented document", () => {
+    const docString = `
+      <!DOCTYPE HTML>
+      <html>
+        <head>
+          <title></title>
+        </head>
+        <body></body>
+      </html>
+    `;
     const parser = new DOMParser();
     const doc = parser.parseFromString(docString, "text/html");
 

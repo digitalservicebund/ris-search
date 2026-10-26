@@ -4,7 +4,8 @@ Date: 2024-12-05
 
 ## Status
 
-Accepted
+Superseded by [ADR 16](./0016-use-feature-flags-instead-of-profiles.md) regarding the `NUXT_PUBLIC_PROFILE`
+variable and its helpers; the single-folder frontend structure itself remains in place.
 
 ## Context
 

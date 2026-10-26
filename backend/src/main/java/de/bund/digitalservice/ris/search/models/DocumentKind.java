@@ -1,14 +1,14 @@
 package de.bund.digitalservice.ris.search.models;
 
 import de.bund.digitalservice.ris.search.utils.eli.EliFile;
-import de.bund.digitalservice.ris.search.utils.eli.ExpressionEli;
+import de.bund.digitalservice.ris.search.utils.eli.ExpressionEliPath;
 import java.util.Optional;
 import lombok.Getter;
 
 /** Enum for the different kinds of documents that can be searched for. */
 @Getter
 public enum DocumentKind {
-  CASE_LAW("case-law", "case-law"),
+  CASE_LAW("case-law", "rechtsprechung"),
   LEGISLATION("norms", "legislation"),
   LITERATURE("literature", "literature"),
   ADMINISTRATIVE_DIRECTIVE("administrative-directives", "administrative-directives"),
@@ -40,7 +40,9 @@ public enum DocumentKind {
               .filter(e -> e.endsWith(".xml"))
               .map(path -> path.substring(path.lastIndexOf("/") + 1, path.length() - 4));
       case DocumentKind.LEGISLATION ->
-          EliFile.fromString(fileName).map(EliFile::getExpressionEli).map(ExpressionEli::toString);
+          EliFile.fromString(fileName)
+              .map(EliFile::getExpressionEliPath)
+              .map(ExpressionEliPath::toString);
       case null -> Optional.empty();
     };
   }

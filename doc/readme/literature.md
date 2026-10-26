@@ -1,7 +1,6 @@
 | Key | Description DE | Description EN |
 | --- | --- | --- |
 | ris:abkuerzung | abgekürzte Bezeichnung der Norm<br> |  |
-| ris:ablaufdatum | Datum des Inkrafttretens<br> |  |
 | ris:abweichendeDaten | Abweichende Daten<br> |  |
 | ris:abweichendeDokumentnummer | Abweichende Dokumentnummer<br> |  |
 | ris:abweichendeDokumentnummern | Abweichende Dokumentnummern<br><br>Weitere Dokumentnummern die für dieses Dokument verwendet werden<br> |  |
@@ -9,10 +8,12 @@
 | ris:abweichendeMeinung | Als Abweichende Meinung wird der Teil einer Entscheidung erfasst, der abweichende Meinungen oder Sondervoten<br>eines oder mehrerer an der Entscheidung mitwirkenden Richter enthält.<br> | Contains dissenting opinions or separate votes of individual participating judges.<br> |
 | ris:abweichenderEcli | Abweichender ECLI<br><br>ECLI = European Case Law Identifier, genutzt zur eindeutigen Identifikation von Entscheidungen.<br>https://e-justice.europa.eu/topics/legislation-and-case-law/european-case-law-identifier-ecli_de<br> |  |
 | ris:abweichendesDatum | Abweichendes Datum<br> |  |
-| ris:aktenzeichen | Aktenzeichen der Entscheidung, hier kann es zu Dopplungen mit anderen Entscheidungen kommen, auch in Kombination mit Entscheidungsdatum und Gericht.<br> |  |
+| ris:aktenzeichen | Aktenzeichen der Entscheidung, hier kann es zu Dopplungen mit anderen Entscheidungen kommen, auch in Kombination mit Entscheidungsdatum und Gericht. Bei Gemeinsamen Ländererlassen (GLE) innerhalb der Dokumentart Verwaltungsvorschriften wird über das Attribut 'normgeber' der jeweilige ausgebende Normgeber des Bundeslandes angegeben. Das optionale Attribut 'normgeberRegion' gibt die zugehörige Region des Normgebers an.<br> | File number of the decision; may appear multiple times in combination with decision date and court. For joint state decrees (GLE) in administrative directives, the optional 'normgeber' attribute specifies the issuing body. The optional 'normgeberRegion' attribute specifies the associated region of the issuing body.<br> |
 | ris:aktenzeichenListe | Aktenzeichen des Dokuments<br><br>Der erste Eintrag ist das primäre Aktenzeichen.<br>Weitere Einträge sind abweichende Aktenzeichen, die auch für dieses<br>Dokument verwendet werden.<br> |  |
+| ris:anwendungszeitraum | Anwendungszeitraum<br> |  |
 | ris:artDerZitierung | Art der Zitierung<br> |  |
 | ris:ausgabe | Ausgabe<br> |  |
+| ris:ausserkrafttretedatum | Datum des Außerkrafttretens<br> |  |
 | ris:autor | Autor(en)<br> |  |
 | ris:bandbezeichnung | Bezeichnung des Bandes<br> |  |
 | ris:berufsbild | Berufsbild<br> |  |
@@ -30,7 +31,7 @@
 | ris:dokumentarischeKurztexte | Dokumentarische Kurztexte<br> |  |
 | ris:dokumentationsstelle | Dokumentationsstelle die dieses Dokument eingepflegt hat<br> |  |
 | ris:dokumentnummer | Dokumentnummer<br> |  |
-| ris:dokumenttyp | Innerhalb der Dokumentart „Rechtsprechung“ werden folgende Dokumenttypen unterschieden:<br><br><ul><li>Äuß: Äußerung</li><li>Ant: EuGH-Vorlage</li><li>AnU: Anerkenntnisurteil</li><li>Bes: Beschluss</li><li>Buß: Bußgeldbescheid</li><li>DrB: Dreierausschussbeschluss</li><li>EiA: Einstweilige Anordnung</li><li>Ent: Entscheidung</li><li>EVg: Einstellungsverfügung der Staatsanwaltschaft</li><li>GeB: Gerichtsbescheid</li><li>Gut: Gutachten</li><li>GWF: Gegenstandswertfestsetzung im verfassungsgerichtlichen Verfahren</li><li>KaB: Kammerbeschluss</li><li>KbN: Nichtannahmebeschluss</li><li>KbS: Stattgebender Kammerbeschluss</li><li>KoB: Kammerbeschluss ohne Begründung</li><li>PkH: Prozesskostenhilfebeschluss</li><li>ReM: Rechtsentscheid in Mietsachen</li><li>Sch: Schiedsgerichtsentscheidung</li><li>Ste: Stellungnahme</li><li>Str: Streitwertbeschluss</li><li>TeB: Teilbeschluss</li><li>TeU: Teilurteil</li><li>Urt: Urteil</li><li>Vgl: Vergleich</li><li>Vor: Vorlagebeschluss</li><li>VsU: Versäumnisurteil</li><li>VzU: Verzichtsurteil</li><li>ZwB: Zwischenbeschluss</li><li>ZwU: Zwischenurteil</li><li>TVU: Teilversäumnisurteil</li><li>Vfg: Verfügung</li><li>Vorab: Ersuchen um Vorabentscheidung</li><li>Anh: Anhängiges Verfahren</li><li>End: Endurteil</li><li>KfB: Kostenfestsetzungsbeschluss</li> | In the context of "Case Law" documents, different document types are distinguished, e.g. Statement, ECJ Referral, Acknowledgment Judgment, Order, Fine Notice, Three-Member Committee Order, Injunction, Decision, Dismissal Order, etc.<br> |
+| ris:dokumenttyp | Innerhalb der Dokumentart „Rechtsprechung“ werden folgende Dokumenttypen unterschieden:<br><br><ul><li>Äuß: Äußerung</li><li>Ant: EuGH-Vorlage</li><li>AnU: Anerkenntnisurteil</li><li>Bes: Beschluss</li><li>Buß: Bußgeldbescheid</li><li>DrB: Dreierausschussbeschluss</li><li>EiA: Einstweilige Anordnung</li><li>Ent: Entscheidung</li><li>EVg: Einstellungsverfügung der Staatsanwaltschaft</li><li>GeB: Gerichtsbescheid</li><li>Gut: Gutachten</li><li>GWF: Gegenstandswertfestsetzung im verfassungsgerichtlichen Verfahren</li><li>KaB: Kammerbeschluss</li><li>KbN: Nichtannahmebeschluss</li><li>KbS: Stattgebender Kammerbeschluss</li><li>KoB: Kammerbeschluss ohne Begründung</li><li>PkH: Prozesskostenhilfebeschluss</li><li>ReM: Rechtsentscheid in Mietsachen</li><li>Sch: Schiedsgerichtsentscheidung</li><li>Ste: Stellungnahme</li><li>Str: Streitwertbeschluss</li><li>TeB: Teilbeschluss</li><li>TeU: Teilurteil</li><li>Urt: Urteil</li><li>Vgl: Vergleich</li><li>Vor: Vorlagebeschluss</li><li>VsU: Versäumnisurteil</li><li>VzU: Verzichtsurteil</li><li>ZwB: Zwischenbeschluss</li><li>ZwU: Zwischenurteil</li><li>TVU: Teilversäumnisurteil</li><li>Vfg: Verfügung</li><li>Vorab: Ersuchen um Vorabentscheidung</li><li>Anh: Anhängiges Verfahren</li><li>End: Endurteil</li><li>KfB: Kostenfestsetzungsbeschluss</li></ul> | In the context of "Case Law" documents, different document types are distinguished, e.g. Statement, ECJ Referral, Acknowledgment Judgment, Order, Fine Notice, Three-Member Committee Order, Injunction, Decision, Dismissal Order, etc.<br> |
 | ris:dokumenttypen | Dokumenttypen<br> |  |
 | ris:domainTerm | Inhaltliche Beschreibung des XML Elements<br> |  |
 | ris:dubletteToleriert | ignorierte Dublettenprüfung<br> |  |
@@ -65,7 +66,7 @@
 | ris:gruende | Die Gründe beinhalten sowohl die Teile, in denen die feststehenden Tatsachen und die getroffenen Feststellungen dargestellt werden, als auch die Teile, in denen die rechtliche Würdigung dieser Tatsachen und Feststellungen vorgenommen wird.<br> | Includes both the factual findings and their legal evaluation.<br> |
 | ris:herkunftslaender | Herkunftsländer<br> |  |
 | ris:herkunftsland | Herkunftsland<br> |  |
-| ris:inkrafttreten | Datum des Inkrafttretens<br> |  |
+| ris:inkrafttretedatum | Datum des Inkrafttretens<br> |  |
 | ris:institution | Institution<br> |  |
 | ris:jahr | Jahr einer Organisation<br> |  |
 | ris:jurisAbkuerzung | juris-Abkürzung<br> |  |
@@ -116,15 +117,16 @@
 | ris:referenzRechtsprechung | Referenz auf ein Rechtsprechungsdokument<br> |  |
 | ris:referenzRichtung | Ist die Referenz eine Aktivzitierung oder eine Passivzitierung?<br> |  |
 | ris:referenzRichtungValue | Im in der Referenz angegebenen Dokument wird dieses Dokument zitiert.<br> |  |
-| ris:referenzSelbstaendigeLiteratur | Referenz auf ein selbstständiges Literaturdokument<br> |  |
-| ris:referenzSelbstaendigeLiteraturTitel | Titel<br> |  |
+| ris:referenzSelbststaendigeLiteratur | Referenz auf ein selbstständiges Literaturdokument<br> |  |
+| ris:referenzSelbststaendigeLiteraturTitel | Titel<br> |  |
 | ris:referenzURI | Die URI die auf die referenzierte Dokeinheit verweist.<br> |  |
-| ris:referenzUnselbstaendigeLiteratur | Referenz auf ein unselbstständiges Literaturdokument<br> |  |
+| ris:referenzUnselbststaendigeLiteratur | Referenz auf ein unselbstständiges Literaturdokument<br> |  |
 | ris:referenzVerwaltungsvorschrift | Referenz auf eine Verwaltungsvorschrift<br> |  |
-| ris:region | Abkürzung der Region.<br><br>Für Bundesländer:<br>Grundsätzlich: Die 2 Buchstaben Abkürzung nach ISO 3166-2<br>Niedersachsen abweichend ND<br>Hamburg HA<br>Bremen BR<br>Für Länder: ISO 3166-1 alpha-3<br><br>Es werden weitere Codes für andere und ehemalige Gebiete verwendet.<br>Zum Beispiel NL für Neue Länder, AL für Alte Länder oder PR für<br>Preußen<br> |  |
+| ris:region | Bezeichnung oder Abkürzung der Region bzw. des Sitzes der Behörde.<br><br>Im BZSt-Kontext ("Sitz der Behörde"):<br>Gibt den Dienstsitz der Behörde im Klartext an.<br>Der Wert ist optional (kann fehlen/null sein).<br>Vorkommende Werte: "Bonn", "Berlin".<br><br>Allgemein / Für Bundesländer und Länder (sofern Codes verwendet werden):<br>- Für Bundesländer: Grundsätzlich die 2-Buchstaben-Abkürzung nach ISO 3166-2<br>(Abweichend: Niedersachsen = ND, Hamburg = HA, Bremen = BR)<br>- Für Länder: ISO 3166-1 alpha-3<br>- Weitere Codes für andere und ehemalige Gebiete (z. B. NL für Neue Länder, AL für Alte Länder, PR für Preußen)<br> |  |
 | ris:regionen | Regionen in denen dieses Dokument eine Bedeutung hat<br> |  |
 | ris:revision | Revision<br> |  |
 | ris:richtung | Ist die Referenz eine Aktivzitierung oder eine Passivzitierung?<br> |  |
+| ris:risAbkuerzung | RIS-Abkürzung<br> |  |
 | ris:risURI | URI für einen Verweis auf ein Dokument im Rechtsinformationssystem.<br> |  |
 | ris:sachgebiet | Sachgebiet<br> |  |
 | ris:sachgebietId | Identifier des Sachgebiets<br> |  |
@@ -156,6 +158,9 @@
 | ris:veroeffentlichungsJahr | Jahr der Veröffentlichung<br> |  |
 | ris:veroeffentlichungsJahre | Jahre der Veröffentlichung<br> |  |
 | ris:veroeffentlichungsjahr | Veröffentlichungsjahr<br> |  |
+| ris:verweisEinzelnorm | Ein Teil einer Norm oder Verwaltungsvorschrift, auf den verwiesen wird<br> |  |
+| ris:verweisNorm | Verweis auf eine Norm<br> |  |
+| ris:verweisVerwaltungsvorschrift | Verweis auf eine Verwaltungsvorschrift<br> |  |
 | ris:verweisnotation | Verweisnotation<br> |  |
 | ris:verweisnotationen | Verweisnotationen<br> |  |
 | ris:vorabdokument | Vorab-Dokument<br> |  |
@@ -163,5 +168,5 @@
 | ris:vorauflagen | Vorauflagen<br> |  |
 | ris:vorgehendeEntscheidung | Nachgewiesen werden gerichtliche Entscheidungen, die im Rahmen eines Verfahrens (einschl. Nebenverfahren) der zu dokumentierenden Entscheidung vorausgehen.<br> | Prior decisions in the same (or related) proceedings.<br> |
 | ris:zitatstelle | Zitatstelle innerhalb des Periodikums in dem die Fundstelle gefunden werden kann<br> |  |
+| ris:zitierdaten | Liste von Zitierdaten<br> |  |
 | ris:zitierdatum | Zitierdatum<br> |  |
-| ris:zitierdatumListe | Liste von Zitierdatums<br> |  |

@@ -46,8 +46,8 @@ describe("SortSelect", () => {
     expect(options[0]).toHaveTextContent("Relevanz");
     expect(options[1]).toHaveTextContent("Gericht: Von A nach Z");
     expect(options[2]).toHaveTextContent("Gericht: Von Z nach A");
-    expect(options[3]).toHaveTextContent("Entscheidungsdatum: Älteste zuerst");
-    expect(options[4]).toHaveTextContent("Entscheidungsdatum: Neueste zuerst");
+    expect(options[3]).toHaveTextContent("Datum: Älteste zuerst");
+    expect(options[4]).toHaveTextContent("Datum: Neueste zuerst");
   });
 
   it("updates sort options when the document kind changes", async () => {
@@ -64,8 +64,8 @@ describe("SortSelect", () => {
     expect(options[0]).toHaveTextContent("Relevanz");
     expect(options[1]).toHaveTextContent("Gericht: Von A nach Z");
     expect(options[2]).toHaveTextContent("Gericht: Von Z nach A");
-    expect(options[3]).toHaveTextContent("Entscheidungsdatum: Älteste zuerst");
-    expect(options[4]).toHaveTextContent("Entscheidungsdatum: Neueste zuerst");
+    expect(options[3]).toHaveTextContent("Datum: Älteste zuerst");
+    expect(options[4]).toHaveTextContent("Datum: Neueste zuerst");
   });
 
   it("is labelled for assistive technology", () => {

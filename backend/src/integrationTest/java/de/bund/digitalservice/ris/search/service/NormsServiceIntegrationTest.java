@@ -9,7 +9,7 @@ import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchPa
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
-import de.bund.digitalservice.ris.search.utils.eli.WorkEli;
+import de.bund.digitalservice.ris.search.utils.eli.WorkEliPath;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;
@@ -75,7 +75,7 @@ class NormsServiceIntegrationTest extends ContainersIntegrationBase {
 
     var test =
         normsService.getWorkExpressions(
-            new WorkEli("bund", "bgbl-1", "2020", "s1126"), Pageable.ofSize(100).withPage(0));
+            new WorkEliPath("bund", "bgbl-1", "2020", "s1126"), Pageable.ofSize(100).withPage(0));
 
     assertThat(test.getTotalElements()).isEqualTo(2);
     assertThat(test.getTotalPages()).isEqualTo(1);
@@ -107,7 +107,7 @@ class NormsServiceIntegrationTest extends ContainersIntegrationBase {
 
     var test =
         normsService.getWorkExpressions(
-            new WorkEli("bund", "bgbl-1", "2020", "s1126"), Pageable.ofSize(1).withPage(0));
+            new WorkEliPath("bund", "bgbl-1", "2020", "s1126"), Pageable.ofSize(1).withPage(0));
 
     assertThat(test.getNumber()).isZero();
     assertThat(test.getTotalElements()).isEqualTo(2);

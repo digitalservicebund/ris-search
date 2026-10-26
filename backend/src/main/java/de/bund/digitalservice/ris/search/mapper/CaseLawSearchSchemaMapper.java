@@ -99,7 +99,7 @@ public class CaseLawSearchSchemaMapper {
    * @return a {@link CaseLawSearchSchema} instance populated with the mapped fields
    */
   public static CaseLawSearchSchema fromDomain(CaseLawDocumentationUnit doc) {
-    String entityURI = ApiConfig.Paths.CASELAW + "/" + doc.documentNumber();
+    String entityURI = ApiConfig.Paths.RECHTSPRECHUNG + "/" + doc.documentNumber();
     return CaseLawSearchSchema.builder()
         // JSON-LD-specific fields
         .id(entityURI)
@@ -141,7 +141,7 @@ public class CaseLawSearchSchemaMapper {
    */
   public static <T> CollectionSchema<SearchMemberSchema<CaseLawSearchSchema>> fromSearchPage(
       final SearchPage<T> page, String remoteJsonContext) {
-    String collectionBasePath = ApiConfig.Paths.CASELAW;
+    String collectionBasePath = ApiConfig.Paths.RECHTSPRECHUNG;
     PartialCollectionViewSchema view =
         PartialCollectionViewMapper.fromPage(collectionBasePath, page);
 

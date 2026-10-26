@@ -54,7 +54,7 @@ function handleApply() {
       v-model:visible="visible"
     >
       <template #default="{ appendTarget }">
-        <div class="mobile-action-drawer-content space-y-24">
+        <div class="mobile-action-drawer-content space-y-24 pt-8">
           <slot :append-target="appendTarget" />
         </div>
       </template>

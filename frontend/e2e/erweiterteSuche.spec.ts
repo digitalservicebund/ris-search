@@ -313,7 +313,7 @@ test.describe("general advanced search page features", () => {
 
     const searchResults = getSearchResults(page);
 
-    await expect(searchResults).toHaveText(/KL 1234\/56/);
+    await expect(searchResults).toHaveText([/KL 1234\/56/]);
 
     await page.getByRole("link", { name: "Datenschutzerklärung" }).click();
 
@@ -328,7 +328,7 @@ test.describe("general advanced search page features", () => {
 
     await expect(page.getByRole("searchbox")).toHaveValue('AZ:"KL 1234/56"');
 
-    await expect(searchResults).toHaveText(/KL 1234\/56/);
+    await expect(searchResults).toHaveText([/KL 1234\/56/]);
   });
 });
 
@@ -482,6 +482,54 @@ test.describe("searching legislation", () => {
     await expect(resultCounter).toHaveText(nonZeroResultCount);
   });
 
+  for (const { date, expected } of [
+    { date: "04.08.2022", expected: /Aktuelle Fassung/ }, // entry into force date
+    { date: "01.01.2030", expected: /Aktuelle Fassung/ }, // expiry date
+  ]) {
+    test(
+      `specific date includes norms entering into force or expiring on ${date}`,
+      { tag: ["@RISDEV-11707"] },
+      async ({ page, isMobileTest }) => {
+        test.skip(isMobileTest);
+        await navigate(page, "/erweiterte-suche");
+
+        await searchFor(page, {
+          documentKind: "Gesetze & Verordnungen",
+          q: 'LU:"Zum Testen von Fassungen"',
+          dateFilter: "Bestimmtes Datum",
+          dateFilterSpecificDate: date,
+        });
+
+        await expect(getSearchResults(page)).toHaveText([expected]);
+      },
+    );
+  }
+
+  for (const { date, expectedToNotAppear } of [
+    { date: "03.08.2022", expectedToNotAppear: /Aktuelle Fassung/ }, // one day before entry into force date
+    { date: "02.01.2030", expectedToNotAppear: /Aktuelle Fassung/ }, // first day after expiry date reached
+  ]) {
+    test(
+      `specific date excludes norms before entering into force or one day after expiring on ${date}`,
+      { tag: ["@RISDEV-11707"] },
+      async ({ page, isMobileTest }) => {
+        test.skip(isMobileTest);
+        await navigate(page, "/erweiterte-suche");
+
+        await searchFor(page, {
+          documentKind: "Gesetze & Verordnungen",
+          q: 'LU:"Zum Testen von Fassungen"',
+          dateFilter: "Bestimmtes Datum",
+          dateFilterSpecificDate: date,
+        });
+
+        await expect(getSearchResults(page)).not.toHaveText([
+          expectedToNotAppear,
+        ]);
+      },
+    );
+  }
+
   test("filters to show date range", async ({ page, isMobileTest }) => {
     test.skip(isMobileTest);
     await navigate(page, "/erweiterte-suche");
@@ -627,24 +675,28 @@ test.describe("searching caselaw", () => {
     await expect(results).toHaveText(/15.06.2024/);
   });
 
-  test("filters to show date range", async ({ page, isMobileTest }) => {
-    test.skip(isMobileTest);
-    await navigate(page, "/erweiterte-suche");
+  test(
+    "filters to show date range",
+    { tag: ["@RISDEV-11766"] },
+    async ({ page, isMobileTest }) => {
+      test.skip(isMobileTest);
+      await navigate(page, "/erweiterte-suche");
 
-    await searchFor(page, {
-      documentKind: "Gerichtsentscheidungen",
-      q: "urteil",
-      dateFilter: "Innerhalb eines Zeitraums",
-      dateFilterFrom: "01.01.2020",
-      dateFilterTo: "31.12.2024",
-    });
+      await searchFor(page, {
+        documentKind: "Gerichtsentscheidungen",
+        q: "urteil",
+        dateFilter: "Innerhalb eines Zeitraums",
+        dateFilterFrom: "01.01.2020",
+        dateFilterTo: "31.12.2024",
+      });
 
-    await sortBy(page, "Entscheidungsdatum: Älteste zuerst");
+      await sortBy(page, "Datum: Älteste zuerst");
 
-    const results = getSearchResults(page);
+      const results = getSearchResults(page);
 
-    await expect(results).toHaveText([/22.11.2023/, /15.06.2024/]);
-  });
+      await expect(results).toHaveText([/22.11.2023/, /15.06.2024/]);
+    },
+  );
 
   test("sorts by court in ascending order", async ({ page, isMobileTest }) => {
     test.skip(isMobileTest);

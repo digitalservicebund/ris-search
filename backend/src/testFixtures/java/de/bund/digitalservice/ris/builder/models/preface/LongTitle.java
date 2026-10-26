@@ -33,8 +33,7 @@ public class LongTitle extends BaseElement {
   @Builder.Default
   @XmlElement(name = "p", namespace = NormTestDataBuilder.AKN_NS)
   private AknP paragraph =
-      new AknP(
-          "einleitung-n1_doktitel-n1", List.of(new DocStage(), new DocTitle(), new ShortTitle()));
+      new AknP("einleitung-n1_doktitel-n1", List.of(new DocTitle(), new ShortTitle()));
 
   /**
    * Sets the official title and rebuilds the paragraph.
@@ -73,7 +72,6 @@ public class LongTitle extends BaseElement {
 
   private void setTitlesAndAbbreviation() {
     List<Object> childElements = new ArrayList<>();
-    childElements.add(new DocStage());
 
     if (this.officialTitle != null) {
       childElements.add(this.officialTitle);

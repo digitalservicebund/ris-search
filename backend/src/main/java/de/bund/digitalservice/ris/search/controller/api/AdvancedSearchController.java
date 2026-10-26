@@ -56,7 +56,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class AdvancedSearchController {
   private final AdvancedSearchService advancedSearchService;
-  private String jsonldContextPath;
+  private final String jsonldContextPath;
 
   /**
    * Constructs an instance of AdvancedSearchController with the provided services.

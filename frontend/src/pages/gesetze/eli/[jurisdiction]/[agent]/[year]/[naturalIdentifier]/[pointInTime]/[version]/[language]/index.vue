@@ -70,16 +70,16 @@ async function fetchTranslationUrl() {
   return translations.value?.length ? `/translations/${abbreviation}` : "";
 }
 
-const [
-  translationUrl,
-  { sortedVersions: normVersions, error: normVersionsError },
-] = await Promise.all([
-  fetchTranslationUrl(),
-  useNormVersions(data.value.legislation.exampleOfWork.legislationIdentifier),
-]);
+const [translationUrl, { sortedGesamtausgaben, error: gesamtausgabenError }] =
+  await Promise.all([
+    fetchTranslationUrl(),
+    useNormGesamtausgaben(
+      data.value.legislation.exampleOfWork.legislationIdentifier,
+    ),
+  ]);
 
-if (normVersionsError.value) {
-  throw createError(normVersionsError.value);
+if (gesamtausgabenError.value) {
+  throw createError(gesamtausgabenError.value);
 }
 
 const htmlParts = computed(() => data.value.htmlParts);
@@ -208,8 +208,8 @@ const views = computed<OneOrMore<TabView>>(() => {
       analyticsId: "norm-metadata-tab",
     },
     {
-      path: "versions",
-      label: "Fassungen",
+      path: "gesamtausgaben",
+      label: "Gesamtausgaben",
       analyticsId: "norm-versions-tab",
     },
   ] as const;
@@ -224,14 +224,14 @@ const views = computed<OneOrMore<TabView>>(() => {
 });
 
 const {
-  dateFilterValue: fassungenDateFilterValue,
-  filteredVersions: filteredNormVersions,
-} = useVersionDateFilter(normVersions);
+  dateFilterValue: gesamtausgabenDateFilterValue,
+  filteredVersions: filteredGesamtausgaben,
+} = useVersionDateFilter(sortedGesamtausgaben);
 
 const textTabPanelTitleId = useId();
 const detailsTabPanelTitleId = useId();
-const fassungenTabPanelTitleId = useId();
-const fassungenDateFilterInputId = useId();
+const gesamtausgabenTabPanelTitleId = useId();
+const gesamtausgabenDateFilterInputId = useId();
 </script>
 
 <template>
@@ -256,7 +256,7 @@ const fassungenDateFilterInputId = useId();
       />
 
       <DocumentsNormsVersionWarning
-        :versions="normVersions"
+        :versions="sortedGesamtausgaben"
         :current-version="metadata"
       />
 
@@ -301,46 +301,53 @@ const fassungenDateFilterInputId = useId();
         </section>
       </template>
 
-      <template #versions>
-        <section role="tabpanel" :aria-labelledby="fassungenTabPanelTitleId">
+      <template #gesamtausgaben>
+        <section
+          role="tabpanel"
+          :aria-labelledby="gesamtausgabenTabPanelTitleId"
+        >
           <div class="pt-32 pb-32 md:pb-56">
             <template v-if="privateFeaturesEnabled">
-              <h2 :id="fassungenTabPanelTitleId" class="typo-headline3-bold">
-                Fassungen
+              <h2
+                :id="gesamtausgabenTabPanelTitleId"
+                class="typo-headline3-bold"
+              >
+                Gesamtausgaben
               </h2>
 
               <DocumentsIncompleteDataMessage class="my-24" />
 
               <div class="my-16 md:my-24">
                 <label
-                  :for="fassungenDateFilterInputId"
+                  :for="gesamtausgabenDateFilterInputId"
                   class="typo-label2-regular"
                   >Gültig am</label
                 >
                 <UiDateInput
-                  v-model="fassungenDateFilterValue"
+                  v-model="gesamtausgabenDateFilterValue"
                   class="max-w-240"
-                  :id="fassungenDateFilterInputId"
+                  :id="gesamtausgabenDateFilterInputId"
                 />
               </div>
-              <DocumentsNormsVersionList
+              <DocumentsNormsGesamtausgabenList
                 :current-legislation-identifier="metadata.legislationIdentifier"
-                :versions="filteredNormVersions"
+                :gesamtausgaben="filteredGesamtausgaben"
               />
             </template>
 
             <div class="content-grid" v-else>
               <div class="content-grid-textblock">
                 <h2
-                  :id="fassungenTabPanelTitleId"
+                  :id="gesamtausgabenTabPanelTitleId"
                   class="typo-headline3-bold mb-24"
                 >
-                  Fassungen sind noch nicht verfügbar
+                  Gesamtausgaben sind noch nicht verfügbar
                 </h2>
                 <p>
                   Mit dem Livegang des neuen Rechtsinformationsportals werden
                   auch außer Kraft getretene und zukünftig in Kraft tretende
-                  Fassungen der Gesetze und Verordnungen zur Verfügung gestellt.
+                  Gesamtausgaben der Gesetze und Verordnungen zur Verfügung
+                  gestellt.
                 </p>
 
                 <h3 class="typo-headline3-bold mt-48 mb-24">

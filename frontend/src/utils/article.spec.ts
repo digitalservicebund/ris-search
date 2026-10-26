@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { tocHeadlineAdditionLabel } from "~/utils/article";
+import type { LegislationExpression } from "~/types/api";
+import { getNewestExpression, tocHeadlineAdditionLabel } from "~/utils/article";
 
 describe("tocHeadlineAdditionLabel", () => {
   it("returns an empty string if temporal coverage is undefined", () => {
@@ -22,5 +23,34 @@ describe("tocHeadlineAdditionLabel", () => {
 
   it("returns only the to date for an open start temporal coverage string", () => {
     expect(tocHeadlineAdditionLabel("../2025-12-01")).toBe("(bis 01.12.2025)");
+  });
+});
+
+function expression(temporalCoverage: string): LegislationExpression {
+  return { temporalCoverage } as LegislationExpression;
+}
+
+describe("getNewestExpression", () => {
+  it("returns undefined for an empty list", () => {
+    expect(getNewestExpression([])).toBeUndefined();
+  });
+
+  it("returns the expression whose validity period starts last", () => {
+    const newest = expression("2022-01-01/..");
+    expect(
+      getNewestExpression([
+        expression("2021-01-01/2021-12-31"),
+        newest,
+        expression("2020-01-01/2020-12-31"),
+      ]),
+    ).toBe(newest);
+  });
+
+  it("prefers expressions with a start date over those without", () => {
+    const withStart = expression("2020-01-01/..");
+
+    expect(getNewestExpression([expression("../2030-01-01"), withStart])).toBe(
+      withStart,
+    );
   });
 });

@@ -54,7 +54,10 @@ describe("fetchTranslationList", () => {
     dataRef.value = mockTranslationResponse;
     const { translations } = await fetchTranslationList();
 
-    expect(useRisBackendMock).toHaveBeenCalledWith("/v1/translatedLegislation");
+    expect(useRisBackendMock).toHaveBeenCalledWith(
+      "/v1/translatedLegislation",
+      expect.any(String),
+    );
     expect(translations.value).toEqual(mockTranslationResponse);
   });
 });
@@ -68,6 +71,7 @@ describe("fetchTranslationListWithIdFilter", () => {
 
     expect(useRisBackendMock).toHaveBeenCalledWith(
       "/v1/translatedLegislation?id=Cde",
+      expect.any(String),
     );
   });
 });
@@ -176,6 +180,7 @@ describe("getGermanOriginal", () => {
     expect(await getGermanOriginal("test-id")).toEqual(mockResult);
     expect(useRisBackendMock).toHaveBeenCalledWith(
       "/v1/legislation?searchTerm=test-id&temporalCoverageFrom=2025-10-13&temporalCoverageTo=2025-10-13&size=100&pageIndex=0",
+      expect.any(String),
     );
   });
 

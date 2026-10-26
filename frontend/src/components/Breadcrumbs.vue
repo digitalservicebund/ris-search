@@ -127,7 +127,7 @@ const drawerId = useId();
     header="Navigiere zu"
     :id="drawerId"
   >
-    <ul class="-mt-8">
+    <ul>
       <li v-for="i in itemsWithHome" :key="i.label">
         <NuxtLink
           v-if="i.route && i !== itemsWithHome.at(-1)"

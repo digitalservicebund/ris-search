@@ -75,7 +75,7 @@ public class SitemapService {
    * @return sitemap file path
    */
   public String getBatchSitemapS3Path(int batchNumber, DocumentKind type) {
-    return PORTAL_BUCKET_SITEMAP_PREFIX + String.format("%s/%d.xml", getS3Path(type), batchNumber);
+    return PORTAL_BUCKET_SITEMAP_PREFIX + getS3Path(type) + "/" + batchNumber + ".xml";
   }
 
   /**
@@ -99,7 +99,7 @@ public class SitemapService {
    * @return sitemap index file path
    */
   public String getIndexSitemapPath(DocumentKind type) {
-    return PORTAL_BUCKET_SITEMAP_PREFIX + String.format("%s/index.xml", getS3Path(type));
+    return PORTAL_BUCKET_SITEMAP_PREFIX + getS3Path(type) + "/index.xml";
   }
 
   /**
@@ -134,7 +134,7 @@ public class SitemapService {
   public String generateSitemap(List<String> documentationUnitIds, DocumentKind documentKind) {
     List<Url> urls =
         documentationUnitIds.stream()
-            .map(e -> new Url(String.format("%s/%s/%s", baseUrl, getFrontendPath(documentKind), e)))
+            .map(e -> new Url(baseUrl + "/" + getFrontendPath(documentKind) + "/" + e))
             .toList();
     return marshal(new SitemapFile(urls));
   }
@@ -152,7 +152,7 @@ public class SitemapService {
             .mapToObj(
                 batch ->
                     new Url(
-                        String.format("%s%s/%s.xml", baseUrl, getControllerPath(type), batch),
+                        baseUrl + getControllerPath(type) + "/" + batch + ".xml",
                         LocalDate.now(ZoneOffset.UTC)))
             .toList();
     return marshal(new SitemapIndex(urls));

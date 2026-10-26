@@ -25,6 +25,12 @@ const nuxtLinkStub = {
   props: ["to"],
 };
 
+const renderDrawer = (drawerActions: ActionMenuItem[]) =>
+  renderSuspended(ActionMenu, {
+    props: { actions: drawerActions },
+    global: { stubs: { NuxtLink: nuxtLinkStub } },
+  });
+
 describe("ActionMenu (desktop)", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -147,12 +153,6 @@ describe("ActionMenu (desktop)", () => {
 });
 
 describe("ActionMenu (mobile)", () => {
-  const renderDrawer = (drawerActions: ActionMenuItem[]) =>
-    renderSuspended(ActionMenu, {
-      props: { actions: drawerActions },
-      global: { stubs: { NuxtLink: nuxtLinkStub } },
-    });
-
   beforeEach(() => {
     vi.clearAllMocks();
   });

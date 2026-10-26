@@ -25,7 +25,9 @@ class CSPHeadersIntegrationTest extends ContainersIntegrationBase {
     mockMvc
         .perform(get("/v1/legislation"))
         .andExpect(header().string(cspHeaderName, cspHeaderValue));
-    mockMvc.perform(get("/v1/case-law")).andExpect(header().string(cspHeaderName, cspHeaderValue));
+    mockMvc
+        .perform(get("/v1/rechtsprechung"))
+        .andExpect(header().string(cspHeaderName, cspHeaderValue));
     mockMvc
         .perform(get("/v1/literature"))
         .andExpect(header().string(cspHeaderName, cspHeaderValue));

@@ -62,7 +62,7 @@ class CaseLawSearchSchemaMapperTest {
     assertEquals(element.documentNumber(), expectedItem.documentNumber());
     assertEquals(1, destination.totalItems());
     assertEquals(destination.member().size(), destination.totalItems());
-    assertTrue(destination.id().startsWith(ApiConfig.Paths.CASELAW));
+    assertTrue(destination.id().startsWith(ApiConfig.Paths.RECHTSPRECHUNG));
     assertThat(destination.context()).isEqualTo("jsonldContext");
   }
 
@@ -107,7 +107,7 @@ class CaseLawSearchSchemaMapperTest {
     CollectionSchema<SearchMemberSchema<CaseLawSearchSchema>> lastPage =
         CaseLawSearchSchemaMapper.fromSearchPage(lastPageImpl, "jsonldContext");
 
-    String prefix = ApiConfig.Paths.CASELAW + "/doc-";
+    String prefix = ApiConfig.Paths.RECHTSPRECHUNG + "/doc-";
 
     assertEquals(prefix + "0", getItemId(firstPage, 0));
     assertEquals(prefix + "4", getItemId(firstPage, firstPage.member().size() - 1));
@@ -127,9 +127,9 @@ class CaseLawSearchSchemaMapperTest {
     assertEquals(total, lastPage.totalItems());
 
     // all IDs should point to case law resources
-    assertTrue(firstPage.id().startsWith(ApiConfig.Paths.CASELAW));
-    assertTrue(middlePage.id().startsWith(ApiConfig.Paths.CASELAW));
-    assertTrue(lastPage.id().startsWith(ApiConfig.Paths.CASELAW));
+    assertTrue(firstPage.id().startsWith(ApiConfig.Paths.RECHTSPRECHUNG));
+    assertTrue(middlePage.id().startsWith(ApiConfig.Paths.RECHTSPRECHUNG));
+    assertTrue(lastPage.id().startsWith(ApiConfig.Paths.RECHTSPRECHUNG));
   }
 
   @Test
@@ -155,7 +155,7 @@ class CaseLawSearchSchemaMapperTest {
             .courtKeyword("courtKeyword")
             .build();
 
-    String expectedPath = ApiConfig.Paths.CASELAW + "/" + "docNumber";
+    String expectedPath = ApiConfig.Paths.RECHTSPRECHUNG + "/" + "docNumber";
     CaseLawSearchSchema expected =
         CaseLawSearchSchema.builder()
             .id(expectedPath)

@@ -73,15 +73,29 @@ public class FrbrElement {
    *     placeholder date ({@code date="0001-01-01" name="nicht-vorhanden"})
    */
   public String getEntscheidungsdatumValue() {
+    return findEntscheidungsdatum().map(FrbrDate::getDate).orElse(null);
+  }
+
+  /**
+   * Returns the {@code name} attribute of the FRBRdate returned by {@link
+   * #getEntscheidungsdatumValue()}, which tells which kind of date it is.
+   *
+   * @return the date's name, or {@code null} if there is no decision date
+   */
+  public String getEntscheidungsdatumName() {
+    return findEntscheidungsdatum().map(FrbrDate::getName).orElse(null);
+  }
+
+  private Optional<FrbrDate> findEntscheidungsdatum() {
     if (frbrDates == null || frbrDates.isEmpty()) {
-      return null;
+      return Optional.empty();
     }
     FrbrDate frbrDate = frbrDates.get(0);
     if (PLACEHOLDER_DATE.equals(frbrDate.getDate())
         && PLACEHOLDER_DATE_NAME.equalsIgnoreCase(frbrDate.getName())) {
-      return null;
+      return Optional.empty();
     }
-    return frbrDate.getDate();
+    return Optional.of(frbrDate);
   }
 
   private Optional<FrbrDate> findDateByName(String name) {

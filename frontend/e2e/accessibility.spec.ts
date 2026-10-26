@@ -75,8 +75,8 @@ const testPages = [
     tabs: [
       { name: "Details" },
       {
-        name: "Fassungen",
-        heading: /^Fassungen( sind noch nicht verfügbar)?$/,
+        name: "Gesamtausgaben",
+        heading: /^Gesamtausgaben( sind noch nicht verfügbar)?$/,
       },
     ],
   },
@@ -85,9 +85,9 @@ const testPages = [
     url: "/gesetze/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/hauptteil-n1_abschnitt-n2_art-z1",
     tabs: [
       {
-        name: "Geltungszeiträume",
+        name: "Fassungen",
         heading:
-          /^(Weitere Geltungszeiträume dieser Einzelnorm|Geltungszeiträume sind noch nicht verfügbar)$/,
+          /^(Weitere Fassungen dieser Einzelnorm|Fassungen sind noch nicht verfügbar)$/,
       },
     ],
   },

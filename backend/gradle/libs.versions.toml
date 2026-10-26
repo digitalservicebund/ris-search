@@ -4,7 +4,7 @@ jacoco = "0.8.15"
 spring-boot = "4.1.1"
 spring-boot-starter = "4.1.1"
 spring-dependency-management = "1.1.7"
-spotless = "8.10.2"
+spotless = "8.10.4"
 sonarqube = "7.5.0.8588"
 license-report = "3.1.4"
 test-logger = "4.0.0"
@@ -15,10 +15,10 @@ test-containers = "1.21.4"
 spring-cloud-k8s = "5.0.3"
 springdoc-openapi = "3.1.1"
 prometheus = "1.17.1"
-sentry = "8.57.0"
+sentry = "8.61.0"
 commons-text = "1.15.0"
-junit5 = "1.5.0"
-mockito = "5.23.0"
+junit5 = "1.5.1"
+mockito = "5.24.0"
 spring-security = "6.5.2"
 spring-security-test = "7.1.1"
 spring-data-opensearch = "3.1.4"
@@ -27,18 +27,21 @@ opensearch-test-containers = "4.1.0"
 jsoup = "1.23.2"
 commons-csv = "1.14.1"
 amazon-aws-sdk-s3 = "2.47.5"
-saxon-he = "13.0"
+saxon-he = "13.1"
 streamex = "0.9.0"
-jaxb-moxy = "5.0.1"
-posthog = "1.2.0"
+jaxb-moxy = "5.0.2"
+posthog = "2.21.4"
 pebble = "4.1.2"
-rest-assured = "6.0.1"
+rest-assured = "6.2.0"
 commons-io = "2.22.0"
-ris-html-transformation="0.0.10"
-ris-xml-schema="0.3.6"
+ris-html-transformation="0.0.14"
+ris-xml-schema="0.3.13"
 titanium-json="1.7.0"
 jakarta-json="2.0.1"
 reflections = "0.10.2"
+# CVE-2026-68497, CVE-2026-89407: overrides Spring Boot's managed Jackson BOM versions
+jackson2 = "2.22.3"
+jackson3 = "3.2.3"
 
 [libraries]
 spring-actuator = { module="org.springframework.boot:spring-boot-starter-actuator", version.ref="spring-boot-starter" }
@@ -56,7 +59,7 @@ amazon-aws-sdk-s3 = { module = "software.amazon.awssdk:s3", version.ref = "amazo
 micrometer-registry-prometheus = { module = "io.micrometer:micrometer-registry-prometheus", version.ref = "prometheus" }
 sentry-spring-boot-starter-jakarta = { module = "io.sentry:sentry-spring-boot-4", version.ref = "sentry" }
 sentry-logback = { module = "io.sentry:sentry-logback", version.ref = "sentry" }
-posthog = { module = "com.posthog.java:posthog", version.ref = "posthog" }
+posthog = { module = "com.posthog:posthog-server", version.ref = "posthog" }
 commons-text = { module = "org.apache.commons:commons-text", version.ref = "commons-text" }
 commons-csv = { module = "org.apache.commons:commons-csv", version.ref = "commons-csv" }
 saxon-he = { module = "net.sf.saxon:Saxon-HE", version.ref = "saxon-he" }
@@ -81,12 +84,12 @@ glassfish-jakarta-json = { module = "org.glassfish:jakarta.json", version.ref = 
 commons-io = { module = "commons-io:commons-io", version.ref = "commons-io" }
 
 # CVE-2026-5588
-bouncycastle-bom = { module = "org.bouncycastle:bc-jdk18on-bom", version = "1.86.1" }
+bouncycastle-bom = { module = "org.bouncycastle:bc-jdk18on-bom", version = "1.86.2" }
 
 reflections = { module = "org.reflections:reflections", version.ref = "reflections" }
 
 # CVE-2026-65182
-tomcat-embed-core = { module = "org.apache.tomcat.embed:tomcat-embed-core" , version = "11.0.26" }
+tomcat-embed-core = { module = "org.apache.tomcat.embed:tomcat-embed-core" , version = "11.0.27" }
 
 [plugins]
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }

@@ -164,6 +164,7 @@ class NormSchemaMapperTest {
                     Article.builder()
                         .eId("preambleEid")
                         .name("preambleName")
+                        .documentNumber("DKNR000000")
                         .documentType(LegislationPartType.PREAMBLE)
                         .build(),
                     Article.builder()
@@ -171,6 +172,7 @@ class NormSchemaMapperTest {
                         .name("articleName1")
                         .entryIntoForceDate(LocalDate.of(2024, Month.JANUARY, 1))
                         .expiryDate(LocalDate.of(2025, Month.JANUARY, 1))
+                        .documentNumber("DKNR000001")
                         .documentType(LegislationPartType.ARTICLE)
                         .build(),
                     Article.builder()
@@ -178,6 +180,7 @@ class NormSchemaMapperTest {
                         .name("articleName2")
                         .entryIntoForceDate(LocalDate.of(2024, Month.JANUARY, 1))
                         .expiryDate(LocalDate.of(2025, Month.JANUARY, 1))
+                        .documentNumber("DKNR000002")
                         .documentType(LegislationPartType.ARTICLE)
                         .build(),
                     Article.builder()
@@ -192,6 +195,7 @@ class NormSchemaMapperTest {
                         .eId("conclusionEid")
                         .name("conclusionName")
                         .documentType(LegislationPartType.CONCLUSION)
+                        .documentNumber("DKNR000003")
                         .build()))
             .manifestationEliExample("manifestationEli/regelungstext-1.xml")
             .workEli("workEli")
@@ -204,6 +208,7 @@ class NormSchemaMapperTest {
                 .partType(LegislationExpressionPartType.PREAMBLE)
                 .eId("preambleEid")
                 .encoding(List.of())
+                .revision("DKNR000000")
                 .hasPart(List.of())
                 .build(),
             LegislationExpressionPartSchema.builder()
@@ -232,6 +237,7 @@ class NormSchemaMapperTest {
                                         .temporalCoverage("2024-01-01/2025-01-01")
                                         .encoding(List.of())
                                         .hasPart(List.of())
+                                        .revision("DKNR000001")
                                         .partType(LegislationExpressionPartType.ARTICLE)
                                         .build(),
                                     LegislationExpressionPartSchema.builder()
@@ -242,6 +248,7 @@ class NormSchemaMapperTest {
                                         .temporalCoverage("2024-01-01/2025-01-01")
                                         .encoding(List.of())
                                         .hasPart(List.of())
+                                        .revision("DKNR000002")
                                         .partType(LegislationExpressionPartType.ARTICLE)
                                         .build()))
                             .build(),
@@ -278,6 +285,7 @@ class NormSchemaMapperTest {
                 .id("/v1/legislation/expressionEli#conclusionEid")
                 .partType(LegislationExpressionPartType.CONCLUSION)
                 .eId("conclusionEid")
+                .revision("DKNR000003")
                 .encoding(List.of())
                 .hasPart(List.of())
                 .build());

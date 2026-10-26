@@ -15,7 +15,7 @@ public class Toc extends BaseElement {
 
   @XmlTransient private int tocEntriesCounter = 0;
 
-  @XmlAttribute private String eId = "präambel-n1_blockcontainer-n1_inhuebs-n1";
+  @XmlAttribute private String eId = "praeambel-n1_blockcontainer-n1_inhuebs-n1";
 
   @XmlElement(name = "tocItem", namespace = NormTestDataBuilder.AKN_NS)
   private List<TocItem> tocItems = new ArrayList<>();
@@ -31,7 +31,9 @@ public class Toc extends BaseElement {
     this.tocEntriesCounter++;
     tocItems.add(
         new TocItem(
-            text, level, "präambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n" + tocEntriesCounter));
+            text,
+            level,
+            "praeambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n" + tocEntriesCounter));
 
     return this;
   }

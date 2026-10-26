@@ -1,9 +1,8 @@
 import { expect, navigate, noJsTest, test } from "./utils/fixtures";
-
 test.describe("view norm article page", () => {
   test(
-    "displays text tab by default",
-    { tag: ["@RISDEV-11132"] },
+    "displays text tab by default and long title if no short title exists",
+    { tag: ["@RISDEV-11132", "@RISDEV-12900"] },
     async ({ page }) => {
       await navigate(
         page,
@@ -12,6 +11,12 @@ test.describe("view norm article page", () => {
 
       await expect(
         page.getByRole("tab", { name: "Text", selected: true }),
+      ).toBeVisible();
+
+      await expect(
+        page
+          .getByRole("paragraph")
+          .filter({ hasText: "Zum Testen von Fassungen - Aktuelle Fassung" }),
       ).toBeVisible();
 
       await expect(
@@ -37,7 +42,9 @@ test.describe("view norm article page", () => {
       });
       await expect
         .soft(
-          page.getByRole("paragraph").filter({ hasText: "FrSaftErfrischV" }),
+          page.getByRole("paragraph").filter({
+            hasText: "Fruchtsaft- und Erfrischungsgetränkeverordnung",
+          }),
         )
         .toBeVisible();
       const heading = page.getByRole("heading", {
@@ -247,7 +254,7 @@ test.describe("view norm article page", () => {
 
     await navigate(
       page,
-      "/gesetze/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/präambel-n1_formel-n1",
+      "/gesetze/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/praeambel-n1_formel-n1",
     );
 
     await expect(
@@ -260,7 +267,7 @@ test.describe("view norm article page", () => {
   }) => {
     await navigate(
       page,
-      "/gesetze/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/pr%C3%A4ambel-n1_formel-n1",
+      "/gesetze/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/praeambel-n1_formel-n1",
     );
 
     await page
@@ -425,8 +432,321 @@ test.describe("view norm article page", () => {
   });
 });
 
-test.describe("geltungszeiträume tab", { tag: ["@RISDEV-11132"] }, () => {
-  test("displays geltungszeiträume when private features enabled and einzelnorm is an article", async ({
+test.describe("fassungen tab", { tag: ["@RISDEV-11132"] }, () => {
+  test(
+    "displays fassungen when private features enabled and einzelnorm is an article",
+    { tag: ["@RISDEV-12556"] },
+    async ({ page, privateFeaturesEnabled, isMobileTest }) => {
+      test.skip(!privateFeaturesEnabled);
+
+      await navigate(
+        page,
+        "gesetze/eli/bund/bgbl-1/2020/s1234/2020-01-01/1/deu/art-z1",
+      );
+
+      await page.getByRole("tab", { name: "Fassungen" }).click();
+
+      await expect(
+        page.getByRole("heading", {
+          name: "Weitere Fassungen dieser Einzelnorm",
+          level: 2,
+        }),
+      ).toBeVisible();
+
+      const fassungenList = page.getByRole("list", {
+        name: "Fassungen",
+      });
+      await expect(fassungenList).toBeVisible();
+
+      const listItems = fassungenList.getByRole("listitem");
+      await expect(listItems).toHaveCount(4);
+
+      await test.step("desktop shows separator dashes and no placeholder for missing dates", async (step) => {
+        step.skip(isMobileTest);
+        await expect(listItems).toHaveText(
+          [
+            "Gültig ab: 01.01.2920 Gültig bis:",
+            "Gültig ab: 01.01.2022 – Gültig bis: 31.12.2919",
+            "Gültig ab: 01.01.2021 – Gültig bis: 31.12.2021",
+            "Gültig ab: 01.01.2020 – Gültig bis: 31.12.2020",
+          ],
+          { useInnerText: true },
+        );
+      });
+
+      await test.step("mobile doesn't show separator dashes but placeholder for missing dates", async (step) => {
+        step.skip(!isMobileTest);
+        await expect(listItems).toHaveText(
+          [
+            "Gültig ab: 01.01.2920 Gültig bis: —",
+            "Gültig ab: 01.01.2022 Gültig bis: 31.12.2919",
+            "Gültig ab: 01.01.2021 Gültig bis: 31.12.2021",
+            "Gültig ab: 01.01.2020 Gültig bis: 31.12.2020",
+          ],
+          { useInnerText: true },
+        );
+      });
+    },
+  );
+
+  test(
+    "can filter fassungen by date",
+    { tag: ["@RISDEV-12556"] },
+    async ({ page, privateFeaturesEnabled }) => {
+      test.skip(!privateFeaturesEnabled);
+
+      await navigate(
+        page,
+        "gesetze/eli/bund/bgbl-1/2020/s1234/2020-01-01/1/deu/art-z1?view=fassungen",
+      );
+
+      const listItems = page
+        .getByRole("list", { name: "Fassungen" })
+        .getByRole("listitem");
+
+      await expect(listItems).toHaveCount(4);
+
+      await page.getByRole("textbox", { name: "Gültig am" }).fill("01.07.2021");
+
+      await expect(listItems).toHaveCount(1);
+      await expect(listItems).toHaveText(/01\.01\.2021/);
+    },
+  );
+
+  test(
+    "shows no results placeholder when no fassung found",
+    { tag: ["@RISDEV-12556"] },
+    async ({ page, privateFeaturesEnabled }) => {
+      test.skip(!privateFeaturesEnabled);
+
+      await navigate(
+        page,
+        "gesetze/eli/bund/bgbl-1/2020/s1234/2020-01-01/1/deu/art-z1?view=fassungen",
+      );
+
+      const listItems = page
+        .getByRole("list", { name: "Fassungen" })
+        .getByRole("listitem");
+
+      await expect(listItems).toHaveCount(4);
+
+      await page.getByRole("textbox", { name: "Gültig am" }).fill("01.07.1536");
+
+      await expect(listItems).toHaveText(["Keine Ergebnisse gefunden"]);
+    },
+  );
+
+  test(
+    "can view the content of different article version",
+    { tag: ["@RISDEV-12556"] },
+    async ({ page, privateFeaturesEnabled }) => {
+      test.skip(!privateFeaturesEnabled);
+
+      await navigate(
+        page,
+        "gesetze/eli/bund/bgbl-1/2020/s1234/2020-01-01/1/deu/art-z1?view=fassungen",
+      );
+
+      // no row is expanded
+      await expect(page.getByText("Erste Version des § 1.")).not.toBeVisible();
+      await expect(page.getByText("Zweite Version des § 1.")).not.toBeVisible();
+      await expect(page.getByText("Dritte Version des § 1.")).not.toBeVisible();
+
+      // expand the first row
+      await page.getByText(/Gültig ab:\s+01\.01\.2022/).click();
+
+      await expect(page.getByText("Dritte Version des § 1.")).toBeVisible();
+      await expect(
+        page.getByRole("link", { name: /^Gesamtausgabe .*öffnen$/ }),
+      ).toHaveAttribute("href", /\/s1234\/2022-01-01\/1\/deu\/art-z1$/);
+      await expect(
+        page
+          .getByRole("list", { name: "Fassungen" })
+          .getByRole("heading", { name: "§ 1 Erster Artikel", level: 2 }),
+      ).toBeVisible();
+
+      // clicking a different row closes the previous and expands the new one
+      await page.getByText(/Gültig ab:\s+01\.01\.2021/).click();
+      await expect(page.getByText("Dritte Version des § 1.")).not.toBeVisible();
+      await expect(page.getByText("Zweite Version des § 1.")).toBeVisible();
+
+      // clicking an expanded row again closes it
+      await page.getByText(/Gültig ab:\s+01\.01\.2021/).click();
+      await expect(page.getByText("Zweite Version des § 1.")).not.toBeVisible();
+    },
+  );
+
+  test(
+    "can expand and collapse a row with the keyboard",
+    { tag: ["@RISDEV-12556"] },
+    async ({ page, privateFeaturesEnabled }) => {
+      test.skip(!privateFeaturesEnabled);
+
+      await navigate(
+        page,
+        "gesetze/eli/bund/bgbl-1/2020/s1234/2020-01-01/1/deu/art-z1?view=fassungen",
+      );
+
+      // <summary> has no ARIA role, so it can't be located with getByRole
+      await page
+        .locator("summary")
+        .filter({ hasText: /Gültig bis:\s+31\.12\.2919/ })
+        .focus();
+
+      await page.keyboard.press("Enter");
+      await expect(page.getByText("Dritte Version des § 1.")).toBeVisible();
+
+      await page.keyboard.press("Space");
+      await expect(page.getByText("Dritte Version des § 1.")).not.toBeVisible();
+    },
+  );
+
+  test(
+    "keeps an expanded row in view when a row above it collapses",
+    { tag: ["@RISDEV-12556"] },
+    async ({ page, privateFeaturesEnabled }) => {
+      test.skip(!privateFeaturesEnabled);
+
+      await navigate(
+        page,
+        "gesetze/eli/bund/bgbl-1/2020/s1234/2020-01-01/1/deu/art-z1?view=fassungen",
+      );
+
+      await page.getByText(/Gültig bis:\s+31\.12\.2919/).click();
+      await expect(page.getByText("Dritte Version des § 1.")).toBeVisible();
+
+      // With the lower row's header at the very top of the viewport, the
+      // collapsing row above pushes it out of view unless it is scrolled back
+      const lowerRow = page
+        .locator("summary")
+        .filter({ hasText: /Gültig ab:\s+01\.01\.2021/ });
+      await lowerRow.evaluate((element) =>
+        element.scrollIntoView({ block: "start" }),
+      );
+      await lowerRow.click();
+
+      await expect(page.getByText("Zweite Version des § 1.")).toBeVisible();
+      await expect(lowerRow).toBeInViewport();
+    },
+  );
+
+  test(
+    "lets the user pick from all Gesamtausgaben containing a fassung",
+    { tag: ["@RISDEV-12788"] },
+    async ({ page, privateFeaturesEnabled, isMobileTest }) => {
+      test.skip(!privateFeaturesEnabled || isMobileTest);
+
+      // The second version of § 2 is part of three Gesamtausgaben
+      await navigate(
+        page,
+        "gesetze/eli/bund/bgbl-1/2020/s1234/2020-01-01/1/deu/art-z2?view=fassungen",
+      );
+
+      await page.getByText(/Gültig ab:\s+01\.01\.2021/).click();
+      await expect(page.getByText("Zweite Version des § 2.")).toBeVisible();
+
+      await page
+        .getByRole("button", { name: "Gesamtausgabe auswählen" })
+        .click();
+
+      const links = page
+        .getByRole("list", { name: "Gesamtausgaben" })
+        .getByRole("link");
+      await expect(links).toHaveCount(3);
+      await expect(links.nth(0)).toHaveAttribute(
+        "href",
+        /\/s1234\/2920-01-01\/1\/deu\/art-z2$/,
+      );
+      await expect(links.nth(1)).toHaveAttribute(
+        "href",
+        /\/s1234\/2022-01-01\/1\/deu\/art-z2$/,
+      );
+      await expect(links.nth(2)).toHaveAttribute(
+        "href",
+        /\/s1234\/2021-01-01\/1\/deu\/art-z2$/,
+      );
+    },
+  );
+
+  test(
+    "lets the user pick from all Gesamtausgaben containing a fassung in a drawer on mobile",
+    { tag: ["@RISDEV-12788"] },
+    async ({ page, privateFeaturesEnabled, isMobileTest }) => {
+      test.skip(!privateFeaturesEnabled || !isMobileTest);
+
+      // The second version of § 2 is part of three Gesamtausgaben
+      await navigate(
+        page,
+        "gesetze/eli/bund/bgbl-1/2020/s1234/2020-01-01/1/deu/art-z2?view=fassungen",
+      );
+
+      await page.getByText(/Gültig ab:\s+01\.01\.2021/).click();
+      await expect(page.getByText("Zweite Version des § 2.")).toBeVisible();
+
+      const drawerButton = page.getByRole("button", {
+        name: "Gesamtausgabe auswählen",
+      });
+      await drawerButton.click();
+
+      const drawer = page.getByRole("dialog", { name: "Gesamtausgaben" });
+      await expect(drawer).toBeVisible();
+
+      const links = drawer
+        .getByRole("list", { name: "Gesamtausgaben" })
+        .getByRole("link");
+      await expect(links).toHaveCount(3);
+      await expect(links.nth(0)).toHaveAttribute(
+        "href",
+        /\/s1234\/2920-01-01\/1\/deu\/art-z2$/,
+      );
+      await expect(links.nth(1)).toHaveAttribute(
+        "href",
+        /\/s1234\/2022-01-01\/1\/deu\/art-z2$/,
+      );
+      await expect(links.nth(2)).toHaveAttribute(
+        "href",
+        /\/s1234\/2021-01-01\/1\/deu\/art-z2$/,
+      );
+
+      await drawer.getByRole("button", { name: "Schließen" }).click();
+
+      await expect(drawer).not.toBeVisible();
+      await expect(drawerButton).toBeFocused();
+    },
+  );
+
+  test(
+    "shows only the Gesamtausgabe, not the content, of the current fassung",
+    { tag: ["@RISDEV-12788"] },
+    async ({ page, privateFeaturesEnabled }) => {
+      test.skip(!privateFeaturesEnabled);
+
+      await navigate(
+        page,
+        "gesetze/eli/bund/bgbl-1/2020/s1234/2020-01-01/1/deu/art-z1?view=fassungen",
+      );
+
+      const currentRow = page
+        .getByRole("list", { name: "Fassungen" })
+        .getByRole("listitem")
+        .filter({ hasText: /Gültig ab:\s+01\.01\.2020/ });
+      await expect(currentRow).toHaveAttribute("aria-current", "true");
+
+      await currentRow.getByText(/Gültig ab:\s+01\.01\.2020/).click();
+
+      await expect(
+        currentRow.getByRole("link", {
+          name: "Zum Text-Tab",
+        }),
+      ).toHaveAttribute(
+        "href",
+        /\/s1234\/2020-01-01\/1\/deu\/art-z1\?view=text#top$/,
+      );
+      await expect(page.getByText("Erste Version des § 1.")).not.toBeVisible();
+    },
+  );
+
+  test("hides fassungen tab when private features enabled and einzelnorm not an article", async ({
     page,
     privateFeaturesEnabled,
   }) => {
@@ -434,139 +754,7 @@ test.describe("geltungszeiträume tab", { tag: ["@RISDEV-11132"] }, () => {
 
     await navigate(
       page,
-      "gesetze/eli/bund/bgbl-1/2020/s1234/2020-01-01/1/deu/art-z1",
-    );
-
-    await page.getByRole("tab", { name: "Geltungszeiträume" }).click();
-
-    await expect(
-      page.getByRole("heading", {
-        name: "Weitere Geltungszeiträume dieser Einzelnorm",
-        level: 2,
-      }),
-    ).toBeVisible();
-
-    const geltungszeitenList = page.getByRole("list", {
-      name: "Geltungszeiträume",
-    });
-    await expect(geltungszeitenList).toBeVisible();
-
-    const listItems = geltungszeitenList.getByRole("listitem");
-    await expect(listItems).toHaveText([
-      "Gültig ab: 01.01.2022 Gültig bis: –",
-      "Gültig ab: 01.01.2021 Gültig bis: 31.12.2021",
-      "Gültig ab: 01.01.2020 Gültig bis: 31.12.2020",
-    ]);
-  });
-
-  test("can filter geltungszeiträume by date", async ({
-    page,
-    privateFeaturesEnabled,
-  }) => {
-    test.skip(!privateFeaturesEnabled);
-
-    await navigate(
-      page,
-      "gesetze/eli/bund/bgbl-1/2020/s1234/2020-01-01/1/deu/art-z1?view=geltungszeiten",
-    );
-
-    const listItems = page
-      .getByRole("list", { name: "Geltungszeiträume" })
-      .getByRole("listitem");
-
-    await expect(listItems).toHaveCount(3);
-
-    await page.getByRole("textbox", { name: "Gültig am" }).fill("01.07.2021");
-
-    await expect(listItems).toHaveText([
-      "Gültig ab: 01.01.2021 Gültig bis: 31.12.2021",
-    ]);
-  });
-
-  test("shows no results placeholder when no geltungszeitraum found", async ({
-    page,
-    privateFeaturesEnabled,
-  }) => {
-    test.skip(!privateFeaturesEnabled);
-
-    await navigate(
-      page,
-      "gesetze/eli/bund/bgbl-1/2020/s1234/2020-01-01/1/deu/art-z1?view=geltungszeiten",
-    );
-
-    const listItems = page
-      .getByRole("list", { name: "Geltungszeiträume" })
-      .getByRole("listitem");
-
-    await expect(listItems).toHaveCount(3);
-
-    await page.getByRole("textbox", { name: "Gültig am" }).fill("01.07.1536");
-
-    await expect(listItems).toHaveText(["Keine Ergebnisse gefunden"]);
-  });
-
-  test("can view the content of different article version", async ({
-    page,
-    privateFeaturesEnabled,
-  }) => {
-    test.skip(!privateFeaturesEnabled);
-
-    await navigate(
-      page,
-      "gesetze/eli/bund/bgbl-1/2020/s1234/2020-01-01/1/deu/art-z1?view=geltungszeiten",
-    );
-
-    // no row is expanded
-    await expect(page.getByText("Erste Version des § 1.")).not.toBeVisible();
-    await expect(page.getByText("Zweite Version des § 1.")).not.toBeVisible();
-    await expect(page.getByText("Dritte Version des § 1.")).not.toBeVisible();
-
-    // expand the first row
-    await page.getByText("Gültig ab: 01.01.2022 Gültig bis: –").click();
-    await expect(page.getByText("Dritte Version des § 1.")).toBeVisible();
-
-    // clicking a different row closes the previous and expands the new one
-    await page
-      .getByText("Gültig ab: 01.01.2021 Gültig bis: 31.12.2021")
-      .click();
-    await expect(page.getByText("Dritte Version des § 1.")).not.toBeVisible();
-    await expect(page.getByText("Zweite Version des § 1.")).toBeVisible();
-
-    // clicking an expanded row again closes it
-    await page
-      .getByText("Gültig ab: 01.01.2021 Gültig bis: 31.12.2021")
-      .click();
-    await expect(page.getByText("Zweite Version des § 1.")).not.toBeVisible();
-  });
-
-  test("can't expand the row of the current article", async ({
-    page,
-    privateFeaturesEnabled,
-  }) => {
-    test.skip(!privateFeaturesEnabled);
-
-    await navigate(
-      page,
-      "gesetze/eli/bund/bgbl-1/2020/s1234/2020-01-01/1/deu/art-z1?view=geltungszeiten",
-    );
-
-    // try to expand the disabled row
-    await page
-      .getByText("Gültig ab: 01.01.2020 Gültig bis: 31.12.2020")
-      .click();
-    // content is not displayed
-    await expect(page.getByText("Erste Version des § 1.")).not.toBeVisible();
-  });
-
-  test("hides geltungszeiträume tab when private features enabled and einzelnorm not an article", async ({
-    page,
-    privateFeaturesEnabled,
-  }) => {
-    test.skip(!privateFeaturesEnabled);
-
-    await navigate(
-      page,
-      "gesetze/eli/bund/bgbl-1/2025/130/2025-05-05/1/deu/präambel-n1_formel-n1",
+      "gesetze/eli/bund/bgbl-1/2025/130/2025-05-05/1/deu/praeambel-n1_formel-n1",
     );
 
     await expect(
@@ -585,11 +773,11 @@ test.describe("geltungszeiträume tab", { tag: ["@RISDEV-11132"] }, () => {
       "gesetze/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/hauptteil-n1_abschnitt-n1_art-z1",
     );
 
-    await page.getByRole("tab", { name: "Geltungszeiträume" }).click();
+    await page.getByRole("tab", { name: "Fassungen" }).click();
 
     await expect(
       page.getByRole("heading", {
-        name: "Geltungszeiträume sind noch nicht verfügbar",
+        name: "Fassungen sind noch nicht verfügbar",
         level: 2,
       }),
     ).toBeVisible();
@@ -685,7 +873,7 @@ test("shows correct breadcrumbs for an Eingangsformel", async ({
 
   await navigate(
     page,
-    "/gesetze/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu/präambel-n1_formel-n1?from=/suche?query=example",
+    "/gesetze/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu/praeambel-n1_formel-n1?from=/suche?query=example",
   );
 
   const breadcrumb = page.getByRole("navigation", { name: "Pfadnavigation" });
@@ -921,11 +1109,11 @@ noJsTest(
       ).toBeVisible();
     });
 
-    await test.step("geltungszeiträume", async () => {
-      await page.getByRole("tab", { name: "Geltungszeiträume" }).click();
+    await test.step("fassungen", async () => {
+      await page.getByRole("tab", { name: "Fassungen" }).click();
 
       await expect(
-        page.getByRole("tab", { name: "Geltungszeiträume", selected: true }),
+        page.getByRole("tab", { name: "Fassungen", selected: true }),
       ).toBeVisible();
     });
   },

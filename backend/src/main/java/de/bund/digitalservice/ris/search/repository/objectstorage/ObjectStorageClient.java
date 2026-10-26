@@ -21,6 +21,8 @@ public interface ObjectStorageClient {
 
   public void save(String fileName, String fileContent);
 
+  public void save(String fileName, byte[] fileContent);
+
   public void close();
 
   public void delete(String fileName);

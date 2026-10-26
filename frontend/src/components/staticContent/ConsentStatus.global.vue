@@ -20,31 +20,27 @@ async function handleSetTracking(value: boolean) {
 
 <template>
   <div class="w-fit" data-testid="consent-status-wrapper">
-    <UiMessage
-      role="status"
-      severity="info"
-      class="typo-body-regular mb-24 bg-white"
-    >
+    <UiMessage role="status" class="mb-24">
       <template #icon>
-        <IconCheck v-if="userConsent" class="text-blue-800" />
-        <IconClose v-else class="text-blue-800" />
+        <IconCheck v-if="userConsent" />
+        <IconClose v-else />
       </template>
       <client-only>
-        <div v-if="userConsent">
-          <p class="typo-body-bold">
+        <div v-if="userConsent" class="space-y-4">
+          <p class="typo-label2-bold">
             Ich bin mit der Nutzung von Analyse-Cookies einverstanden.
           </p>
           <p>Damit helfen Sie uns, das Portal weiter zu verbessern.</p>
         </div>
-        <div v-else>
-          <p class="typo-body-bold">
+        <div v-else class="space-y-4">
+          <p class="typo-label2-bold">
             Ich bin mit der Nutzung von Analyse-Cookies nicht einverstanden.
           </p>
           <p>Ihre Nutzung des Portals wird nicht zu Analysezwecken erfasst.</p>
         </div>
         <template #fallback>
-          <div v-if="userConsent">
-            <p class="typo-body-bold">
+          <div v-if="userConsent" class="space-y-4">
+            <p class="typo-label2-bold">
               Ich bin mit der Nutzung von System-Cookies einverstanden.
             </p>
             <p>
@@ -52,8 +48,8 @@ async function handleSetTracking(value: boolean) {
               ausgeschaltet ist.
             </p>
           </div>
-          <div v-else>
-            <p class="typo-body-bold">
+          <div v-else class="space-y-4">
+            <p class="typo-label2-bold">
               Ich bin mit der Nutzung von Analyse-Cookies nicht einverstanden.
             </p>
             <p>

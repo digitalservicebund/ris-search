@@ -11,6 +11,7 @@ const meta: Meta<typeof UiMessage> = {
 
   args: {
     severity: undefined,
+    hideIcon: false,
   },
 
   argTypes: {
@@ -78,6 +79,34 @@ export const WithError: Story = {
   }),
 };
 
+export const WithoutIcon: Story = {
+  args: { hideIcon: true },
+  render: (args) => ({
+    components: { UiMessage },
+    setup() {
+      return { args };
+    },
+    template: html`<UiMessage v-bind="args">Message content</UiMessage>`,
+  }),
+};
+
+export const WithLink: Story = {
+  render: (args) => ({
+    components: { UiMessage },
+    setup() {
+      return { args };
+    },
+    template: html`
+      <UiMessage v-bind="args">
+        Sie lesen einen historischen Paragraphen.
+        <a href="#" class="typo-link2-regular"
+          >Zum aktuell gültigen Paragraphen</a
+        >
+      </UiMessage>
+    `,
+  }),
+};
+
 export const WithHeadingAndContent: Story = {
   render: (args) => ({
     components: { UiMessage },
@@ -86,7 +115,7 @@ export const WithHeadingAndContent: Story = {
     },
     template: html`
       <UiMessage v-bind="args">
-        <p>Heading</p>
+        <p class="typo-label2-bold">Heading</p>
         <p>Message content</p>
       </UiMessage>
     `,
@@ -95,7 +124,8 @@ export const WithHeadingAndContent: Story = {
 
 /**
  * Each severity comes with a default icon. Use the `icon` slot to replace it,
- * for example when the message reflects a state rather than a severity.
+ * for example when the message reflects a state rather than a severity. The
+ * custom icon is sized and colored to match the severity automatically.
  */
 export const WithCustomIcon: Story = {
   render: (args) => ({
@@ -106,7 +136,7 @@ export const WithCustomIcon: Story = {
     template: html`
       <UiMessage v-bind="args">
         <template #icon>
-          <IcBaselineHistory class="text-blue-800" />
+          <IcBaselineHistory />
         </template>
         Message content
       </UiMessage>

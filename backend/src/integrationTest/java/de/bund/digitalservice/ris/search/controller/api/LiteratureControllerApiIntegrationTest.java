@@ -14,6 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.bund.digitalservice.ris.LoadXmlUtils;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
@@ -44,6 +45,11 @@ class LiteratureControllerApiIntegrationTest extends ContainersIntegrationBase {
   @BeforeAll
   public void loadDefaults() {
     loadDefaultData();
+  }
+
+  private void addDocumentToBucket() {
+    String fileName = documentNumberPresentInBucket + ".akn.xml";
+    bucket.save(fileName, LoadXmlUtils.loadXmlAsString(Literature.class, fileName));
   }
 
   @Autowired private MockMvc mockMvc;
@@ -123,6 +129,7 @@ class LiteratureControllerApiIntegrationTest extends ContainersIntegrationBase {
   @Test
   @DisplayName("Should return XML version of a literature item")
   void literatureXMLEndpoint() throws Exception {
+    addDocumentToBucket();
     mockMvc
         .perform(
             get(ApiConfig.Paths.LITERATURE + "/" + this.documentNumberPresentInBucket + ".xml")
@@ -149,7 +156,7 @@ class LiteratureControllerApiIntegrationTest extends ContainersIntegrationBase {
   @Test
   @DisplayName("Should return HTML version of literature item")
   void shouldReturnSingleLiteratureHtml() throws Exception {
-
+    addDocumentToBucket();
     String responseContent =
         mockMvc
             .perform(
@@ -436,6 +443,7 @@ class LiteratureControllerApiIntegrationTest extends ContainersIntegrationBase {
   @Test
   @DisplayName("Should return all files belonging to a document in a zip archive")
   void shouldReturnZip() throws Exception {
+    addDocumentToBucket();
 
     String filename = documentNumberPresentInBucket + ".akn.xml";
 

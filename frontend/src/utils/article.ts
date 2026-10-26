@@ -1,3 +1,4 @@
+import type { LegislationExpression } from "~/types/api";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
 
 export function tocHeadlineAdditionLabel(temporalCoverage: string | undefined) {
@@ -14,4 +15,16 @@ export function tocHeadlineAdditionLabel(temporalCoverage: string | undefined) {
   } else {
     return "";
   }
+}
+
+function validFrom(expression: LegislationExpression) {
+  return getVersionValidFrom(expression)?.valueOf() ?? -Infinity;
+}
+
+/** Picks the expression whose validity period starts last. */
+export function getNewestExpression(
+  expressions: LegislationExpression[],
+): LegislationExpression | undefined {
+  const [newest] = expressions.toSorted((a, b) => validFrom(b) - validFrom(a));
+  return newest;
 }

@@ -76,6 +76,14 @@ class NormsControllerApiIntegrationTest extends ContainersIntegrationBase {
     loadDefaultData();
   }
 
+  private void addS101BinaryFiles() throws IOException {
+    String manifestationEli = NormsTestData.S_101_WORK_ELI + "/1991-01-01/1/deu/1991-01-01/";
+    for (String fileName : List.of("dokument.pdf", "bild_1.jpg", "bild_1.png")) {
+      String objectKey = manifestationEli + fileName;
+      addTestFileToBucket("/data/LDML/norm/" + objectKey, objectKey, normsBucket);
+    }
+  }
+
   private byte[] readResourceBytes(String resourcePath) throws IOException {
     try (InputStream in = getClass().getResourceAsStream(resourcePath)) {
       return Objects.requireNonNull(in, "resource not found: " + resourcePath).readAllBytes();
@@ -128,12 +136,16 @@ class NormsControllerApiIntegrationTest extends ContainersIntegrationBase {
   @DisplayName("File endpoint should {0}")
   void shouldReturnFilesWhenRequestedAndIfExtensionIsSupported(
       String ignoredTestDescription, int status, String path) throws Exception {
+    addNormXmlFiles(NormsTestData.loadS101ExpressionFiles());
+    addS101BinaryFiles();
     mockMvc.perform(get(path)).andExpect(status().is(status));
   }
 
   @Test
   @DisplayName("Serves images via the API with correct contentType")
   void shouldReturnReferencedImageWithContentType() throws Exception {
+    addNormXmlFiles(NormsTestData.loadS101ExpressionFiles());
+    addS101BinaryFiles();
     String url =
         ApiConfig.Paths.LEGISLATION_SINGLE
             + "/bund/bgbl-1/1991/s101/1991-01-01/1/deu/1991-01-01/bild_1.jpg";
@@ -145,6 +157,7 @@ class NormsControllerApiIntegrationTest extends ContainersIntegrationBase {
   @Test
   @DisplayName("XML Endpoint Should return XML when requesting a single norm")
   void textLegislationXMLEndpoint() throws Exception {
+    addNormXmlFiles(NormsTestData.loadS101ExpressionFiles());
     mockMvc
         .perform(get(MANIFESTATION_URL_XML).contentType(MediaType.APPLICATION_XML))
         .andExpectAll(
@@ -156,6 +169,8 @@ class NormsControllerApiIntegrationTest extends ContainersIntegrationBase {
   @Test
   @DisplayName("ZIP endpoint should return a ZIP all relevant files")
   void zipEndpointWithRelevantFiles() throws Exception {
+    addNormXmlFiles(NormsTestData.loadS101ExpressionFiles());
+    addS101BinaryFiles();
     MvcResult asyncResult =
         mockMvc
             .perform(get(MANIFESTATION_PREFIX_URL_ZIP).contentType("application/zip"))
@@ -626,10 +641,10 @@ class NormsControllerApiIntegrationTest extends ContainersIntegrationBase {
         new Changelog(
             new HashSet<>(
                 List.of(
-                    "eli/bund/bgbl-1/1999/identifier/2026-01-01/1/deu/2026-01-01/regelungstext-verkuendung-1.xml")),
+                    "eli/bund/bgbl-1/1999/identifier/2026-01-01/1/deu/2026-01-01/regelungstext-1.xml")),
             new HashSet<>(
                 List.of(
-                    "eli/bund/bgbl-1/2000/identifier/2026-01-01/1/deu/2026-01-01/regelungstext-verkuendung-1.xml")),
+                    "eli/bund/bgbl-1/2000/identifier/2026-01-01/1/deu/2026-01-01/regelungstext-1.xml")),
             false);
     String changelogContent = new ObjectMapper().writeValueAsString(changelog);
     normsBucket.save(

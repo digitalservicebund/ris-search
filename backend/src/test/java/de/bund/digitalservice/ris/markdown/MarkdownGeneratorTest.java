@@ -31,7 +31,7 @@ class MarkdownGeneratorTest {
         List.of(new DescriptionKey("ris:tatbestand", "Tatbestand", "de", DocumentKind.CASE_LAW));
 
     assertThat(MarkdownGenerator.buildMarkdownTable(descriptions))
-        .contains("| ris:tatbestand | Tatbestand |  |" + System.lineSeparator());
+        .contains("| ris:tatbestand | Tatbestand<br> |  |" + System.lineSeparator());
   }
 
   @Test
@@ -44,8 +44,22 @@ class MarkdownGeneratorTest {
     var table = MarkdownGenerator.buildMarkdownTable(descriptions);
 
     assertThat(table)
-        .contains("| ris:gericht | Gericht | Court |" + System.lineSeparator())
+        .contains("| ris:gericht | Gericht<br> | Court<br> |" + System.lineSeparator())
         .containsOnlyOnce("ris:gericht");
+  }
+
+  @Test
+  void buildMarkdownTableKeepsMultiLineDescriptionsOnOneRow() {
+    var descriptions =
+        List.of(
+            new DescriptionKey(
+                "ris:aktenzeichen", "Zeile 1\nZeile 2", "de", DocumentKind.CASE_LAW));
+
+    var table = MarkdownGenerator.buildMarkdownTable(descriptions);
+
+    assertThat(table)
+        .contains("| ris:aktenzeichen | Zeile 1<br>Zeile 2<br> |  |" + System.lineSeparator())
+        .doesNotContain("Zeile 1\n");
   }
 
   @Test
@@ -58,8 +72,8 @@ class MarkdownGeneratorTest {
     var table = MarkdownGenerator.buildMarkdownTable(descriptions);
 
     assertThat(table)
-        .contains("| ris:aktenzeichen | Aktenzeichen |  |" + System.lineSeparator())
-        .contains("| ris:gericht | Gericht |  |" + System.lineSeparator());
+        .contains("| ris:aktenzeichen | Aktenzeichen<br> |  |" + System.lineSeparator())
+        .contains("| ris:gericht | Gericht<br> |  |" + System.lineSeparator());
   }
 
   @Test

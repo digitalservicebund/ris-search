@@ -13,14 +13,17 @@ public class RechtsprechungSchemaMapper {
    * Creates a {@link RechtsprechungSchema} from a case law document.
    *
    * @param doc source domain object
+   * @param remoteJsonContext remoteJsonContext url to retrieve jsonld context
    * @return mapped schema representation for API responses
    */
-  public static RechtsprechungSchema fromDomain(CaseLawDocumentationUnit doc) {
+  public static RechtsprechungSchema fromDomain(
+      CaseLawDocumentationUnit doc, String remoteJsonContext) {
     String entityURI = ApiConfig.Paths.RECHTSPRECHUNG + "/" + doc.documentNumber();
     var encodings = EncodingSchemaFactory.documentEncodingSchemas(entityURI);
 
     return RechtsprechungSchema.builder()
         .id(entityURI)
+        .context(remoteJsonContext)
         .inLanguage("de")
         .encoding(encodings)
         .dokumentNummer(doc.documentNumber())
@@ -41,6 +44,7 @@ public class RechtsprechungSchemaMapper {
         .rechtsfrage(doc.rechtsfrage())
         .tenor(doc.tenor())
         .datum(doc.decisionDate())
+        .datumsTyp(doc.datumsTyp())
         .aktenzeichen(doc.fileNumber())
         .aktenzeichenListe(doc.fileNumbers())
         .abweichendeAktenzeichen(doc.abweichendeAktenzeichen())

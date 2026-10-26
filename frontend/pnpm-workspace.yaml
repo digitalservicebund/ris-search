@@ -1,5 +1,8 @@
 packages: []
 
+overrides:
+  "undici": "8.12.2"
+
 allowBuilds:
   "@parcel/watcher": true
   "@sentry/cli": false

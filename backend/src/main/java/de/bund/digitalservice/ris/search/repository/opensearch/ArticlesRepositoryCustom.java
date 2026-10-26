@@ -3,6 +3,7 @@ package de.bund.digitalservice.ris.search.repository.opensearch;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.ArticleWithExpressions;
 import de.bund.digitalservice.ris.search.models.opensearch.LegislationPartType;
+import org.jspecify.annotations.NonNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -26,7 +27,7 @@ public interface ArticlesRepositoryCustom {
    * @return a page of articles, one per distinct document number, with their expressionElis
    */
   Page<ArticleWithExpressions> findAllVersionsByDocumentNumber(
-      String documentNumber,
+      @NonNull String documentNumber,
       LegislationPartType type,
       String preferredExpressionEli,
       Pageable pageable);

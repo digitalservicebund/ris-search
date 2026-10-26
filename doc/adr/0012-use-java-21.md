@@ -4,7 +4,7 @@ Date: 2025-01-29
 
 ## Status
 
-Accepted
+Superseded by [ADR 25](./0025-use-java-25.md).
 
 ## Context
 

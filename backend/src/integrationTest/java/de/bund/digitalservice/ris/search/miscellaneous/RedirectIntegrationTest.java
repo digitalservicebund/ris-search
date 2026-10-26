@@ -24,9 +24,9 @@ class RedirectIntegrationTest extends ContainersIntegrationBase {
   @DisplayName("In case the API path has trailing slash, it should redirect without traling slash")
   void shouldRedirectedWithTrailingSlash() throws Exception {
     mockMvc
-        .perform(get(ApiConfig.Paths.CASELAW + SLASH))
+        .perform(get(ApiConfig.Paths.RECHTSPRECHUNG + SLASH))
         .andExpect(status().is3xxRedirection())
-        .andExpect(redirectedUrl(ApiConfig.Paths.CASELAW));
+        .andExpect(redirectedUrl(ApiConfig.Paths.RECHTSPRECHUNG));
   }
 
   @Test
@@ -35,8 +35,8 @@ class RedirectIntegrationTest extends ContainersIntegrationBase {
   void shouldRedirectedWithTrailingSlashAndQueryParameters() throws Exception {
     String queryParametersMock = "?q=test&test=anotherTest";
     mockMvc
-        .perform(get(ApiConfig.Paths.CASELAW + SLASH + queryParametersMock))
+        .perform(get(ApiConfig.Paths.RECHTSPRECHUNG + SLASH + queryParametersMock))
         .andExpect(status().is3xxRedirection())
-        .andExpect(redirectedUrl(ApiConfig.Paths.CASELAW + queryParametersMock));
+        .andExpect(redirectedUrl(ApiConfig.Paths.RECHTSPRECHUNG + queryParametersMock));
   }
 }

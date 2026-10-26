@@ -1,6 +1,6 @@
 package de.bund.digitalservice.ris;
 
-import de.bund.digitalservice.ris.search.exception.FileTransformationException;
+import de.bund.digitalservice.ris.html.exception.FileTransformationException;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.SchemaOutputResolver;
 import java.io.BufferedReader;

@@ -167,7 +167,7 @@ public class CaseLawService {
    */
   public Optional<byte[]> getFileByDocumentNumber(String documentNumber)
       throws ObjectStoreServiceException {
-    return caseLawBucket.get(String.format("%s/%s.xml", documentNumber, documentNumber));
+    return caseLawBucket.get(documentNumber + "/" + documentNumber + ".xml");
   }
 
   public Optional<byte[]> getFileByPath(String path) throws ObjectStoreServiceException {

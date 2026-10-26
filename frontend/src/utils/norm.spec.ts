@@ -5,12 +5,17 @@ import { without } from "lodash-es";
 import { describe, expect, vi } from "vitest";
 import type { LegislationExpression } from "~/types/api";
 import {
+  decodeEId,
+  findNextFutureVersion,
   getEinzelnormEIdFromHref,
   getManifestationUrl,
   getMostRelevantExpression,
   getNormTitle,
   getValidityStatus,
+  getVersionValidFrom,
+  getVersionValidityStatus,
   isNormBodyEmpty,
+  legislationArticlePath,
   temporalCoverageToValidityInterval,
   type ValidityInterval,
 } from "~/utils/norm";
@@ -106,6 +111,64 @@ describe("getValidityStatus", () => {
   it("returns undefined if start and end date are undefined", () => {
     const result = getValidityStatus();
     expect(result).toBeUndefined();
+  });
+});
+
+describe("getVersionValidFrom", () => {
+  it("returns the start of the temporal coverage", () => {
+    const validFrom = getVersionValidFrom({
+      temporalCoverage: "2020-01-01/2021-01-01",
+    });
+    expect(validFrom?.format("YYYY-MM-DD")).toBe("2020-01-01");
+  });
+
+  it("returns undefined without temporal coverage", () => {
+    expect(getVersionValidFrom({})).toBeUndefined();
+  });
+});
+
+describe("getVersionValidityStatus", () => {
+  beforeAll(() => {
+    vi.useFakeTimers();
+    vi.setSystemTime("2000-01-01");
+  });
+
+  afterAll(() => vi.useRealTimers());
+
+  it.each([
+    { temporalCoverage: "1990-01-01/1995-01-01", expected: "Expired" },
+    { temporalCoverage: "1990-01-01/..", expected: "InForce" },
+    { temporalCoverage: "2010-01-01/..", expected: "FutureInForce" },
+    { temporalCoverage: undefined, expected: undefined },
+  ])(
+    "returns $expected for $temporalCoverage",
+    ({ temporalCoverage, expected }) => {
+      expect(getVersionValidityStatus({ temporalCoverage })).toBe(expected);
+    },
+  );
+});
+
+describe("findNextFutureVersion", () => {
+  beforeAll(() => {
+    vi.useFakeTimers();
+    vi.setSystemTime("2000-01-01");
+  });
+
+  afterAll(() => vi.useRealTimers());
+
+  it("returns the future version that comes into force first", () => {
+    const versions = [
+      { id: "current", temporalCoverage: "1990-01-01/.." },
+      { id: "farFuture", temporalCoverage: "2020-01-01/.." },
+      { id: "nextFuture", temporalCoverage: "2010-01-01/2019-12-31" },
+      { id: "expired", temporalCoverage: "1980-01-01/1989-12-31" },
+    ];
+    expect(findNextFutureVersion(versions)?.id).toBe("nextFuture");
+  });
+
+  it("returns undefined if there is no future version", () => {
+    const versions = [{ temporalCoverage: "1990-01-01/.." }];
+    expect(findNextFutureVersion(versions)).toBeUndefined();
   });
 });
 
@@ -423,5 +486,38 @@ describe("getEinzelnormEIdFromHref", () => {
     expect(
       getEinzelnormEIdFromHref("regelungstext-1/art-z1.html#frag"),
     ).toBeNull();
+  });
+});
+
+describe("decodeEId", () => {
+  it("keeps an unencoded eId as it is", () => {
+    expect(decodeEId("art-z§§ 1 bis 3")).toBe("art-z§§ 1 bis 3");
+  });
+
+  it("decodes an already encoded eId", () => {
+    expect(decodeEId("art-z%C2%A7%C2%A7%201%20bis%203")).toBe(
+      "art-z§§ 1 bis 3",
+    );
+  });
+
+  it("keeps an eId that is not validly encoded as it is", () => {
+    expect(decodeEId("art-z50%")).toBe("art-z50%");
+  });
+});
+
+describe("legislationArticlePath", () => {
+  it("returns the legislation path without an eId", () => {
+    expect(legislationArticlePath("eli/bund/2020")).toBe(
+      "/gesetze/eli/bund/2020",
+    );
+  });
+
+  it("appends the decoded eId, so the router doesn't encode it twice", () => {
+    expect(
+      legislationArticlePath(
+        "eli/bund/2020",
+        "art-z%C2%A7%C2%A7%201%20bis%203",
+      ),
+    ).toBe("/gesetze/eli/bund/2020/art-z§§ 1 bis 3");
   });
 });

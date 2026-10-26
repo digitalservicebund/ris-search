@@ -1,6 +1,7 @@
 package de.bund.digitalservice.ris.search.models.opensearch;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import de.bund.digitalservice.ris.search.models.DatumsTyp;
 import jakarta.persistence.ElementCollection;
 import java.time.LocalDate;
 import java.util.List;
@@ -47,6 +48,7 @@ public record CaseLawDocumentationUnit(
             type = FieldType.Date,
             format = DateFormat.date)
         List<LocalDate> datenDerMuendlichenVerhandlung,
+    @Field(name = Fields.DATUMS_TYP, type = FieldType.Keyword) DatumsTyp datumsTyp,
     @Field(name = Fields.DECISION_DATE, type = FieldType.Date, format = DateFormat.date)
         LocalDate decisionDate,
     @Field(name = Fields.DECISION_GROUNDS) String decisionGrounds,
@@ -155,6 +157,7 @@ public record CaseLawDocumentationUnit(
     public static final String COURT_TYPE = "court_type";
     public static final String DATEN_DER_MUENDLICHEN_VERHANDLUNG =
         "daten_der_muendlichen_verhandlung";
+    public static final String DATUMS_TYP = "datums_typ";
     public static final String DECISION_DATE = "decision_date";
     public static final String DECISION_GROUNDS = "decision_grounds";
     public static final String DECISION_NAME = "decision_name";

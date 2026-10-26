@@ -1,6 +1,7 @@
 package de.bund.digitalservice.ris.search.repository.opensearch;
 
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
+import java.util.List;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -39,6 +40,15 @@ public interface NormsRepository extends ElasticsearchRepository<Norm, String> {
    */
   @NotNull
   Page<Norm> findAll(@NotNull Pageable pageable);
+
+  /**
+   * Returns all {@link Norm} whose id is contained in the given list.
+   *
+   * @param ids The ids (expression-level ELIs) to match.
+   * @param pageable The pagination parameters.
+   * @return A page of {@link Norm} entities.
+   */
+  Page<Norm> findAllByIdIn(List<String> ids, Pageable pageable);
 
   /**
    * Delete all norms that were indexed before the provided timestamp.

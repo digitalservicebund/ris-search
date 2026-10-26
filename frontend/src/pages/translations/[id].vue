@@ -117,12 +117,9 @@ const detailsTabPanelTitleId = useId();
         </h1>
       </hgroup>
 
-      <UiMessage
-        v-if="germanOriginal"
-        class="my-24 space-y-24 sm:my-32 md:my-40"
-      >
-        <p class="typo-label2-bold mt-2">Version Information</p>
-        <p class="typo-label2-regular mt-2">
+      <UiMessage v-if="germanOriginal" class="my-24 sm:my-32 md:my-40">
+        <p class="typo-label2-bold">Version Information</p>
+        <p>
           Translations may not be updated at the same time as the German legal
           provision.
           <NuxtLink

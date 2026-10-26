@@ -1,7 +1,6 @@
 package de.bund.digitalservice.ris.search.jobs.administrative_directive;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.testcontainers.shaded.org.awaitility.Awaitility.await;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,7 +16,6 @@ import de.bund.digitalservice.ris.search.service.AdministrativeDirectiveIndexSyn
 import de.bund.digitalservice.ris.search.service.IndexingState;
 import java.util.HashSet;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,9 +42,6 @@ class AdministrativeDirectiveIndexSyncJobIntegrationTest extends ContainersInteg
 
     bucket.save("KSNR000000000.akn.xml", content);
     syncJob.runJob();
-    await()
-        .atMost(500, TimeUnit.MILLISECONDS)
-        .until(() -> administrativeDirectiveRepository.findAll().iterator().hasNext());
     AdministrativeDirective expected = repository.findAll().iterator().next();
     assertThat(expected.documentNumber()).isEqualTo("KSNR000000000");
     assertThat(portalBucket.getFileAsString(AdministrativeDirectiveIndexSyncJob.STATUS_FILENAME))
@@ -75,9 +70,6 @@ class AdministrativeDirectiveIndexSyncJobIntegrationTest extends ContainersInteg
     assertThat(repository.findAll().iterator().hasNext()).isFalse();
 
     syncJob.runJob();
-    await()
-        .atMost(500, TimeUnit.MILLISECONDS)
-        .until(() -> administrativeDirectiveRepository.findAll().iterator().hasNext());
 
     AdministrativeDirective expected = repository.findAll().iterator().next();
     assertThat(expected.documentNumber()).isEqualTo("KSNR000000000");

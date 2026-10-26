@@ -1,0 +1,158 @@
+<xs:schema
+  xmlns="http://rechtsinformationen.bund.de/schema/norm/0.1"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xmlns:ldmlde="http://Inhaltsdaten.LegalDocML.de/1.9/"
+  targetNamespace="http://rechtsinformationen.bund.de/schema/norm/0.1"
+  version="1.0"
+  elementFormDefault="qualified"
+>
+  <!-- ********************************* Hinweis zur Lizensierung ********************************* 
+
+Dieses Dokument ist eine Bearbeitung (Fork) des Originalwerks und die Änderungen stehen unter derselben Lizenz (CC-BY-3.0), sofern nicht anders angegeben.
+
+-->
+  <xs:annotation>
+    <xs:appinfo>
+      <copyright-hinweis
+        xmlns="http://Inhaltsdaten.LegalDocML.de/1.9/"
+      >2025 Copyright © 2021–2025 Bundesministerium des Innern und für Heimat, 
+Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Verwaltungsarbeit</copyright-hinweis>
+      <lizenz
+        xmlns="http://Inhaltsdaten.LegalDocML.de/1.9/"
+        url="https://creativecommons.org/licenses/by/3.0/legalcode.de"
+        kurzbezeichnung="CC-BY-3.0"
+        langbezeichnung="Creative Commons Namensnennung 3.0"
+      />
+      <autor
+        xmlns="http://Inhaltsdaten.LegalDocML.de/1.9/"
+        organisation="Bundesministerium des Innern und für Heimat"
+        referat="DG II 6"
+        organisatorischer-rahmen="Maßnahmen Enterprise Resource Management und Elektronische Verwaltungsarbeit"
+      />
+      <hinweis
+        xmlns=""
+      >Dieses Dokument ist eine Bearbeitung (Fork) des Originalwerks und die Änderungen stehen unter derselben Lizenz (CC-BY-3.0), sofern nicht anders angegeben.</hinweis>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:import
+    namespace="http://www.w3.org/XML/1998/namespace"
+    schemaLocation="./akn/xml.xsd"
+  />
+  <xs:include schemaLocation="norm-baukasten.xsd" />
+  <xs:element name="akomaNtoso">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="doc" type="sonstigerVeroeffentlichungstext" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="sonstigerVeroeffentlichungstext" mixed="false">
+    <xs:annotation>
+      <xs:documentation
+      >Die Klasse "sonstigerVeroeffentlichungstext" bildet ein eigenständiges Teildokument eines Rechtsetzungsdokuments in Form eines separaten XML-Dokuments, das durch die Klasse 'rechtsetzungsdokument' referenziert und in dieser eingebunden wird.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="meta" type="metadatenVollstaendig" />
+      <xs:element
+        name="preface"
+        type="sonstigerVeroeffentlichungstextDokumentenkopf"
+        minOccurs="0"
+      />
+      <xs:element
+        name="mainBody"
+        type="sonstigerVeroeffentlichungstextHauptteil"
+      />
+      <xs:element
+        name="conclusions"
+        type="sonstigerVeroeffentlichungstextSchluss"
+        minOccurs="0"
+      />
+      <xs:element name="attachments" type="anlagencontainer" minOccurs="0" />
+    </xs:sequence>
+    <xs:attribute
+      name="name"
+      use="required"
+      type="nameLiterals.sonstigerVeroeffentlichungstext"
+    />
+  </xs:complexType>
+  <xs:complexType
+    name="sonstigerVeroeffentlichungstextDokumentenkopf"
+    mixed="false"
+  >
+    <xs:annotation>
+      <xs:documentation
+      >Die Klasse "sonstigerVeroeffentlichungstextDokumentenkopf" wird benutzt, um dem sonstigen Veroeffentlichungstext einen Dokumentenkopf hinzuzufügen.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element
+        name="block"
+        type="sonstigerVeroeffentlichungstextDokumentenkopfContainer"
+      />
+    </xs:sequence>
+    <xs:attribute
+      name="eId"
+      use="required"
+      type="eIdLiterals.sonstigerVeroeffentlichungstextDokumentenkopf"
+    />
+    <xs:attribute name="GUID" use="required" type="GUIDLiterals" />
+    <xs:attribute ref="xml:id" use="optional" />
+  </xs:complexType>
+  <xs:complexType
+    name="sonstigerVeroeffentlichungstextDokumentenkopfContainer"
+    mixed="true"
+  >
+    <xs:annotation>
+      <xs:documentation
+      >Die Klasse "sonstigerVeroeffentlichungstextDokumentenkopfContainer" wird genutzt, um einen Dokumententitel und ein Datum hinzuzufügen.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="docTitle" type="dokumententitel" />
+      <xs:element name="date" type="datum" minOccurs="0" />
+    </xs:sequence>
+    <xs:attribute
+      name="eId"
+      use="required"
+      type="eIdLiterals.sonstigerVeroeffentlichungstextDokumentenkopfContainer"
+    />
+    <xs:attribute name="GUID" use="required" type="GUIDLiterals" />
+    <xs:attribute
+      name="name"
+      use="required"
+      type="nameLiterals.sonstigerVeroeffentlichungstextDokumentenkopfContainer"
+    />
+    <xs:attribute ref="xml:id" use="optional" />
+  </xs:complexType>
+  <xs:complexType name="sonstigerVeroeffentlichungstextHauptteil" mixed="false">
+    <xs:annotation>
+      <xs:documentation
+      >Die Klasse "sonstigerVeroeffentlichungstextHauptteil" wird benutzt, um innerhalb des sonstigen Veroeffentlichungstexts einen Hauptteil einzufügen.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:group ref="inhaltselement" maxOccurs="unbounded" />
+    </xs:sequence>
+    <xs:attribute
+      name="eId"
+      use="required"
+      type="eIdLiterals.sonstigerVeroeffentlichungstextHauptteil"
+    />
+    <xs:attribute name="GUID" use="required" type="GUIDLiterals" />
+    <xs:attribute ref="xml:id" use="optional" />
+  </xs:complexType>
+  <xs:complexType name="sonstigerVeroeffentlichungstextSchluss" mixed="false">
+    <xs:annotation>
+      <xs:documentation
+      >Die Klasse "sonstigerVeroeffentlichungstextSchluss" wird benutzt, um eines sonstigen Veroeffentlichungstexts einen Schlussteil hinzuzufügen.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="blockContainer" type="signaturblock" />
+      <xs:element name="tblock" type="EUVerweise" minOccurs="0" />
+    </xs:sequence>
+    <xs:attribute
+      name="eId"
+      use="required"
+      type="eIdLiterals.sonstigerVeroeffentlichungstextSchluss"
+    />
+    <xs:attribute name="GUID" use="required" type="GUIDLiterals" />
+    <xs:attribute ref="xml:id" use="optional" />
+  </xs:complexType>
+</xs:schema>

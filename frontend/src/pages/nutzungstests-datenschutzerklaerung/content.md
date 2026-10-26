@@ -104,6 +104,6 @@ Soweit die Verarbeitung von personenbezogenen Daten auf Grundlage einer Einwilli
 
 Der oder die Betroffene hat die Möglichkeit, sich mit einer Beschwerde gegen die Datenverarbeitung des BMJV an die Bundesbeauftragte für den Datenschutz und die Informationsfreiheit zu wenden, die die datenschutzrechtliche Aufsicht über die Bundesbehörden hat. Sie ist wie folgt erreichbar:
 
-<u>Bundesbeauftragte für Datenschutz und Informationsfreiheit</u>  
-Graurheindorfer Str. 153 - 53117 Bonn  
+Die bzw. der Bundesbeauftragte für den Datenschutz und die Informationsfreiheit\
+Graurheindorfer Str. 153, 53117 Bonn,\
 E-Mail: [poststelle@bfdi.bund.de](mailto:poststelle@bfdi.bund.de)

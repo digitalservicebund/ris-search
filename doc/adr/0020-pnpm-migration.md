@@ -18,7 +18,7 @@ Other projects at DigitalService are moving to PNPM, and it is likely to become 
 
 - **Supply Chain Security:** PNPM offers `minimumReleaseAge` setting that blocks installation of packages published within a configurable time window (we use 3 days, equal to our Dependebot configuration), giving time for malicious packages to be detected and removed.
 - **Exact Version Pinning:** Enforcing exact versions in `package.json` prevents unintentional upgrades that could introduce vulnerabilities.
-- **Organizational Alignment:** PNPM is being adopted across DigitalService projects, including other projects in NeuRIS.
+- **Organizational Alignment:** PNPM is being adopted across DigitalService projects, including other projects in RI Portal.
 - **Better Security Defaults:** PNPM has [better security defaults](https://pnpm.io/supply-chain-security) compared to Yarn and NPM.
 
 ## Decision

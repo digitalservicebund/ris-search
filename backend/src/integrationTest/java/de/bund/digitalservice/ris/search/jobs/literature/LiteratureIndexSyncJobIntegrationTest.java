@@ -1,7 +1,6 @@
 package de.bund.digitalservice.ris.search.jobs.literature;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.testcontainers.shaded.org.awaitility.Awaitility.await;
 
 import de.bund.digitalservice.ris.LoadXmlUtils;
 import de.bund.digitalservice.ris.search.config.ContainersIntegrationBase;
@@ -11,8 +10,6 @@ import de.bund.digitalservice.ris.search.repository.objectstorage.LiteratureBuck
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.LiteratureRepository;
 import de.bund.digitalservice.ris.search.service.LiteratureIndexSyncJob;
-import java.util.concurrent.TimeUnit;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,13 +22,6 @@ class LiteratureIndexSyncJobIntegrationTest extends ContainersIntegrationBase {
   @Autowired LiteratureIndexSyncJob syncJob;
   @Autowired LiteratureRepository repository;
 
-  @BeforeEach
-  void setup() {
-    bucket.getAllKeys().forEach(bucket::delete);
-    portalBucket.getAllKeys().forEach(portalBucket::delete);
-    literatureRepository.deleteAll();
-  }
-
   @Test
   void itIndexesAdministrativeDirectivesOnFullReindex() throws ObjectStoreServiceException {
     String dependent = LoadXmlUtils.loadXmlAsString(Literature.class, "XXLS000000001.akn.xml");
@@ -41,9 +31,6 @@ class LiteratureIndexSyncJobIntegrationTest extends ContainersIntegrationBase {
     bucket.save("XXLU000000001.akn.xml", independent);
 
     syncJob.runJob();
-    await()
-        .atMost(500, TimeUnit.MILLISECONDS)
-        .until(() -> literatureRepository.findAll().iterator().hasNext());
     assertThat(repository.findById("XXLU000000001")).isNotEmpty();
     assertThat(repository.findById("XXLS000000001")).isNotEmpty();
 

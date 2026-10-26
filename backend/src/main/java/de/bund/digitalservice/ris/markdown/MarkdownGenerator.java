@@ -89,7 +89,7 @@ public class MarkdownGenerator implements CommandLineRunner {
         description ->
             descriptionsByKey
                 .computeIfAbsent(description.key(), _ -> new LinkedHashMap<>())
-                .put(description.lang(), description.description()));
+                .put(description.lang(), toTableCellHtml(description.description())));
 
     StringBuilder stringBuilder = new StringBuilder();
     stringBuilder
@@ -108,6 +108,40 @@ public class MarkdownGenerator implements CommandLineRunner {
                 .append(" |")
                 .append(System.lineSeparator()));
 
+    return stringBuilder.toString();
+  }
+
+  /**
+   * Converts the raw, multi-line XSD documentation text (plain lines, with {@code *}-prefixed lines
+   * forming a bullet list) into HTML that renders correctly inside a single Markdown table cell: a
+   * Markdown table row can't contain a literal line break, so each line is terminated with {@code
+   * <br>} instead, and consecutive {@code *}-prefixed lines are wrapped in a {@code <ul>}.
+   *
+   * @param description the raw XSD documentation text
+   * @return the description as one line of HTML, safe to embed in a table cell
+   */
+  static String toTableCellHtml(String description) {
+    StringBuilder stringBuilder = new StringBuilder();
+    var lines = description.split("\n");
+    var listOpen = false;
+    for (String line : lines) {
+      if (line.trim().startsWith("*")) {
+        if (!listOpen) {
+          stringBuilder.append("<ul>");
+          listOpen = true;
+        }
+        stringBuilder.append("<li>").append(line.trim().substring(1).trim()).append("</li>");
+      } else {
+        if (listOpen) {
+          stringBuilder.append("</ul>");
+          listOpen = false;
+        }
+        stringBuilder.append(line.trim()).append("<br>");
+      }
+    }
+    if (listOpen) {
+      stringBuilder.append("</ul>");
+    }
     return stringBuilder.toString();
   }
 }

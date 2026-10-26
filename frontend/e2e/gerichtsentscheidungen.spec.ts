@@ -191,23 +191,67 @@ test.describe("actions menu", () => {
   });
 });
 
-test("can view metadata", { tag: ["@RISDEV-10568"] }, async ({ page }) => {
-  await navigate(page, "/gerichtsentscheidungen/KORE600500000");
-  const metadataList = page.getByTestId("metadata-list");
-  const defs = metadataList.getByRole("definition");
+test(
+  "can view metadata",
+  { tag: ["@RISDEV-10568", "@RISDEV-11766"] },
+  async ({ page }) => {
+    await navigate(page, "/gerichtsentscheidungen/KORE600500000");
+    const metadataList = page.getByTestId("metadata-list");
+    const defs = metadataList.getByRole("definition");
 
-  await expect(metadataList.getByRole("term")).toHaveText([
-    "Gericht",
-    "Dokumenttyp",
-    "Entscheidungsdatum",
-    "Aktenzeichen",
-  ]);
+    await expect(metadataList.getByRole("term")).toHaveText([
+      "Dokumenttyp",
+      "Gericht",
+      "Aktenzeichen",
+      "Entscheidungsdatum",
+    ]);
 
-  await expect(defs.nth(0)).toHaveText("LG Test6 Label");
-  await expect(defs.nth(1)).toHaveText("Urteil");
-  await expect(defs.nth(2)).toHaveText("09.04.2025");
-  // Aktenzeichen are rendered as badges (spans)
-  await expect(defs.nth(3).locator("span")).toHaveText(["TS 123456"]);
+    await expect(defs.nth(0)).toHaveText("Urteil");
+    await expect(defs.nth(1)).toHaveText("LG Test6 Label");
+    // Aktenzeichen are rendered as badges (spans)
+    await expect(defs.nth(2).locator("span")).toHaveText(["TS 123456"]);
+    await expect(defs.nth(3)).toHaveText("09.04.2025");
+  },
+);
+
+test.describe("date label", { tag: ["@RISDEV-11766"] }, () => {
+  test("shows Entscheidungsdatum", async ({ page }) => {
+    await navigate(page, "/gerichtsentscheidungen/KORE600500000");
+    const metadataList = page.getByTestId("metadata-list");
+
+    await expect(metadataList.getByRole("term").nth(3)).toHaveText(
+      "Entscheidungsdatum",
+    );
+    await expect(metadataList.getByRole("definition").nth(3)).toHaveText(
+      "09.04.2025",
+    );
+  });
+
+  test("shows Mitteilungsdatum", async ({ page }) => {
+    await navigate(page, "/gerichtsentscheidungen/KORE600500002");
+    const metadataList = page.getByTestId("metadata-list");
+
+    await expect(metadataList.getByRole("term").nth(3)).toHaveText(
+      "Mitteilungsdatum",
+    );
+    await expect(metadataList.getByRole("definition").nth(3)).toHaveText(
+      "22.11.2023",
+    );
+  });
+
+  test("shows Datum der Zustellung an Verkündungs statt as Entscheidungsdatum", async ({
+    page,
+  }) => {
+    await navigate(page, "/gerichtsentscheidungen/KORE600500001");
+    const metadataList = page.getByTestId("metadata-list");
+
+    await expect(metadataList.getByRole("term").nth(3)).toHaveText(
+      "Entscheidungsdatum",
+    );
+    await expect(metadataList.getByRole("definition").nth(3)).toHaveText(
+      "15.06.2024",
+    );
+  });
 });
 
 test("can view details", { tag: ["@RISDEV-12108"] }, async ({ page }) => {
@@ -229,55 +273,110 @@ test("can view details", { tag: ["@RISDEV-12108"] }, async ({ page }) => {
   ]);
 });
 
-test.describe("can view verweise", { tag: ["@RISDEV-12560"] }, () => {
-  test("can view verweise if private features enabled and verweise exist", async ({
-    page,
-    privateFeaturesEnabled,
-  }) => {
-    test.skip(!privateFeaturesEnabled);
-    await navigate(page, "/gerichtsentscheidungen/BDRE000800001");
-    await page.getByRole("tab", { name: "Verweise" }).click();
+test.describe(
+  "can view zitierungen",
+  { tag: ["@RISDEV-12560", "@RISDEV-12821"] },
+  () => {
+    test("can view zitierungen if private features enabled and zitierungen exist", async ({
+      page,
+      privateFeaturesEnabled,
+    }) => {
+      test.skip(!privateFeaturesEnabled);
+      await navigate(page, "/gerichtsentscheidungen/BDRE000800001");
+      await page.getByRole("tab", { name: "Zitierungen" }).click();
 
-    const tabPanel = page.getByRole("tabpanel", { name: "Verweise" });
+      const tabPanel = page.getByRole("tabpanel", { name: "Zitierungen" });
 
-    await expect(tabPanel.getByRole("heading", { level: 2 })).toHaveText(
-      "Verweise",
-    );
+      await expect(tabPanel.getByRole("heading", { level: 2 })).toHaveText(
+        "Zitierungen",
+      );
 
-    await expect(tabPanel.getByText("Normen")).toBeVisible();
-    await expect(
-      tabPanel.getByText("BDG § 34, vereinbar mit höherrangigem Recht Hessen"),
-    ).toBeVisible();
+      await expect(
+        tabPanel.getByRole("heading", {
+          level: 3,
+          name: "Diese Entscheidung wird zitiert in",
+        }),
+      ).toBeVisible();
+      await expect(
+        tabPanel.getByRole("heading", { level: 4, name: "Literaturnachweise" }),
+      ).toBeVisible();
+      await expect(
+        tabPanel.getByText("LG München, Urteil vom 6. Juni 2015 - 3 O 4/15"),
+      ).toBeVisible();
+      await expect(tabPanel.getByText("NVwZ 2020, 7")).toBeVisible();
+      await expect(
+        tabPanel.getByRole("link", {
+          name: "Schmidt, Peter, Test-Dokument SLI, 2024",
+        }),
+      ).toBeVisible();
 
-    const linkedVerweis = tabPanel.getByRole("link", {
-      name: "VG Frankfurt, Beschluss vom 4. September 2026 - Foo Bar 2361/26.F",
+      await expect(
+        tabPanel.getByRole("heading", {
+          level: 3,
+          name: "Diese Entscheidung zitiert",
+        }),
+      ).toBeVisible();
+      await expect(
+        tabPanel.getByText(
+          "BVerfG, Beschluss vom 11. November 2020 - 1 BvR 1/20",
+        ),
+      ).toBeVisible();
+
+      await expect(
+        tabPanel.getByRole("heading", {
+          level: 4,
+          name: "Gerichtsentscheidungen",
+        }),
+      ).toHaveCount(2);
     });
-    await expect(linkedVerweis).toBeVisible();
-    await linkedVerweis.click();
 
-    await expect(page.getByRole("heading", { level: 1 })).toHaveText(
-      "Testheader für Urteil 8.",
-    );
-  });
+    test("can follow a zitierung link", async ({
+      page,
+      privateFeaturesEnabled,
+    }) => {
+      test.skip(!privateFeaturesEnabled);
+      await navigate(page, "/gerichtsentscheidungen/BDRE000800001");
+      await page.getByRole("tab", { name: "Zitierungen" }).click();
 
-  test("does not show verweise if private features enabled but no verweise exist", async ({
-    page,
-    privateFeaturesEnabled,
-  }) => {
-    test.skip(!privateFeaturesEnabled);
-    await navigate(page, "/gerichtsentscheidungen/BORE040030050");
-    await expect(page.getByRole("tab", { name: "Verweise" })).not.toBeVisible();
-  });
+      const tabPanel = page.getByRole("tabpanel", { name: "Zitierungen" });
 
-  test("does not show verweise if private features disabled", async ({
-    page,
-    privateFeaturesEnabled,
-  }) => {
-    test.skip(privateFeaturesEnabled);
-    await navigate(page, "/gerichtsentscheidungen/BDRE000800001");
-    await expect(page.getByRole("tab", { name: "Verweise" })).not.toBeVisible();
-  });
-});
+      const linkedZitierung = tabPanel.getByRole("link", {
+        name: "Schmidt, Peter, Test-Dokument SLI, 2024",
+      });
+      await expect(linkedZitierung).toBeVisible();
+      await linkedZitierung.click();
+
+      await expect(
+        page
+          .getByRole("main")
+          .getByRole("heading", { level: 1, name: "Test-Dokument SLI" })
+          .first(),
+      ).toBeVisible();
+    });
+
+    test("does not show zitierungen if private features enabled but no zitierungen exist", async ({
+      page,
+      privateFeaturesEnabled,
+    }) => {
+      test.skip(!privateFeaturesEnabled);
+      await navigate(page, "/gerichtsentscheidungen/BORE040030050");
+      await expect(
+        page.getByRole("tab", { name: "Zitierungen" }),
+      ).not.toBeVisible();
+    });
+
+    test("does not show zitierungen if private features disabled", async ({
+      page,
+      privateFeaturesEnabled,
+    }) => {
+      test.skip(privateFeaturesEnabled);
+      await navigate(page, "/gerichtsentscheidungen/BDRE000800001");
+      await expect(
+        page.getByRole("tab", { name: "Zitierungen" }),
+      ).not.toBeVisible();
+    });
+  },
+);
 
 test(
   "can view Gesetzeskraft, Streitjahre and linked decisions",

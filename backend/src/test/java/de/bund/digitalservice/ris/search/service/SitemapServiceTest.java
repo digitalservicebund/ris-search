@@ -101,7 +101,7 @@ class SitemapServiceTest {
   void testGenerateNormsSitemap() {
     Optional<EliFile> file = EliFile.fromString(TEST_ELI_FILE);
     assertTrue(file.isPresent());
-    String id = file.get().getExpressionEli().toString();
+    String id = file.get().getExpressionEliPath().toString();
     String normSitemap = sitemapService.generateSitemap(List.of(id), DocumentKind.LEGISLATION);
     assertTrue(normSitemap.contains("<loc>https://test.local/gesetze/" + id + "</loc>"));
   }

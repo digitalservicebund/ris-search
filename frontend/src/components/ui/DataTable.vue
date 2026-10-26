@@ -39,11 +39,21 @@ const {
   columns: DataTableColumn<T>[];
   /**
    * Element or component used for each row. Pass a link component to make whole
-   * rows navigable; use `row.attrs` to apply props to the component.
+   * rows navigable; use `row.attrs` to apply props to the component. Rows must
+   * be focusable for the exposed `focusRow` to have an effect.
    */
   rowAs?: string | Component;
   /** Rows to render, in order. */
   rows: T[];
+
+  /** If true the header row is hidden */
+  hideHeader?: boolean;
+
+  /**
+   * If true the first column has reduced left padding on wide viewports, so its
+   * content sits closer to the table's left edge
+   */
+  reducedFirstColumnPadding?: boolean;
 }>();
 
 defineSlots<
@@ -69,23 +79,33 @@ const gridTemplateColumns = computed(() =>
     ? `repeat(${columns.length - 1}, auto) minmax(0, 1fr)`
     : "minmax(0, 1fr)",
 );
+
+const list = useTemplateRef("list");
+
+function focusRow(index: number) {
+  list.value?.querySelectorAll<HTMLElement>("[data-row]")[index]?.focus();
+}
+
+defineExpose({ focusRow });
 </script>
 
 <template>
   <ul
+    ref="list"
     class="border-t border-gray-400 md:grid md:grid-cols-(--data-table-columns) md:border-t-0"
     :style="{ '--data-table-columns': gridTemplateColumns }"
   >
     <!-- Decorative: every row repeats the column labels for assistive
          technology, so exposing them here as well would only add noise. -->
     <li
-      v-if="columns.length"
+      v-if="columns.length && !hideHeader"
       class="hidden border-b border-gray-400 md:col-span-full md:grid md:grid-cols-subgrid"
       aria-hidden="true"
     >
       <span
-        v-for="column in columns"
+        v-for="(column, index) in columns"
         :key="column.key"
+        :class="{ 'md:pl-8': reducedFirstColumnPadding && index === 0 }"
         class="typo-label1-bold flex min-h-48 items-center px-16 py-10"
       >
         {{ column.label }}
@@ -97,20 +117,22 @@ const gridTemplateColumns = computed(() =>
         v-for="row in rows"
         :key="row.key"
         :class="{ 'bg-gray-100': row.current }"
-        class="border-b border-gray-400 hover:bg-gray-100 md:col-span-full md:grid md:grid-cols-subgrid"
+        class="border-b border-gray-400 last:border-b-0 hover:bg-gray-100 md:col-span-full md:grid md:grid-cols-subgrid"
       >
         <component
           :is="rowAs"
           :aria-current="row.current ? 'page' : undefined"
-          class="grid grid-cols-[max-content_minmax(0,1fr)] items-center gap-x-16 gap-y-4 p-16 focus-visible:outline-4 focus-visible:-outline-offset-4 focus-visible:outline-blue-800 md:col-span-full md:grid-cols-subgrid md:gap-0 md:p-0"
+          data-row
+          class="grid scroll-my-16 grid-cols-[max-content_minmax(0,1fr)] items-center gap-x-16 gap-y-4 p-16 focus-visible:outline-4 focus-visible:-outline-offset-4 focus-visible:outline-blue-800 md:col-span-full md:grid-cols-subgrid md:gap-0 md:p-0"
           v-bind="row.attrs"
         >
-          <template v-for="column in columns" :key="column.key">
+          <template v-for="(column, index) in columns" :key="column.key">
             <span class="typo-label1-bold flex min-h-32 items-center md:sr-only"
               >{{ column.label }}:</span
             >
             {{ " " }}
             <span
+              :class="{ 'md:pl-8': reducedFirstColumnPadding && index === 0 }"
               class="typo-label1-regular flex min-h-32 items-center md:min-h-48 md:px-16 md:py-10"
             >
               <slot :name="`cell-${column.key}`" :row="row" :column="column">
@@ -124,9 +146,7 @@ const gridTemplateColumns = computed(() =>
     </template>
 
     <template v-else>
-      <li
-        class="border-b border-b-gray-400 px-16 py-12 text-left text-gray-900 md:col-span-full"
-      >
+      <li class="px-16 py-12 text-left text-gray-900 md:col-span-full">
         <slot name="empty" />
       </li>
     </template>

@@ -95,6 +95,10 @@
       "moduleName": "posthog-js"
     },
     {
+      "moduleLicense": "Apache*",
+      "moduleName": "sentry"
+    },
+    {
       "moduleLicense": "UNKNOWN",
       "moduleName": "vaul-vue"
     }

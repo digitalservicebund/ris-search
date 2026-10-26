@@ -15,6 +15,7 @@ import de.bund.digitalservice.ris.search.service.ChangelogService;
 import jakarta.xml.bind.JAXBException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -110,11 +111,17 @@ public class EcliCrawlerDocumentService {
         new ChangedEcliCrawlerDocumentsIterator(
             this::getFromBucket,
             this::getPublishedDocument,
-            new ArrayList<>(changelog.getChanged()),
-            new ArrayList<>(changelog.getDeleted()),
+            new ArrayList<>(getXmlFiles(changelog.getChanged())),
+            new ArrayList<>(getXmlFiles(changelog.getDeleted())),
             MAX_SITEMAP_URLS);
 
     writeFilesFromIterator(apiUrl, day, iterator);
+  }
+
+  private Set<String> getXmlFiles(HashSet<String> filenames) {
+    return filenames.stream()
+        .filter(filename -> filename.endsWith(".xml"))
+        .collect(Collectors.toSet());
   }
 
   /**

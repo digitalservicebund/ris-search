@@ -12,3 +12,5 @@ s3:
   file-storage:
     case-law:
       versionPrefix: "V1/"
+    norm:
+      versionPrefix: "V1/"

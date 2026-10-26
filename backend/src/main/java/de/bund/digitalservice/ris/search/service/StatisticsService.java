@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.bund.digitalservice.ris.search.exception.OpenSearchFetchException;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -70,7 +69,7 @@ public class StatisticsService {
       }
       return counts;
     } catch (IOException e) {
-      logger.info(String.format("Failed to fetch Elasticsearch counts: %s", e.getMessage()));
+      logger.info("Failed to fetch Elasticsearch counts: {}", e.getMessage());
       throw new OpenSearchFetchException("Failed to fetch aliases from Opensearch", e);
     }
   }
@@ -80,11 +79,7 @@ public class StatisticsService {
     Response aliasResponse = client.getLowLevelClient().performRequest(aliasRequest);
     JsonNode root = objectMapper.readTree(aliasResponse.getEntity().getContent());
 
-    List<String> aliases = new ArrayList<>();
-    for (JsonNode aliasNode : root) {
-      aliases.add(aliasNode.get("alias").asText());
-    }
-    return aliases;
+    return root.valueStream().map(aliasNode -> aliasNode.get("alias").asText()).toList();
   }
 
   private long fetchCountWithLogging(String alias) throws OpenSearchFetchException {

@@ -6,7 +6,7 @@ export default defineNuxtPlugin(async () => {
   await initialize();
   if (postHog.value) {
     useRouter().afterEach((to) => {
-      nextTick(() => {
+      void nextTick(() => {
         postHog.value?.capture("$pageview", {
           current_url: to.fullPath,
           ...getAccessibilityRelatedMetrics(),

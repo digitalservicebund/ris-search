@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xs:schema
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  targetNamespace="http://rechtsinformationen.bund.de/schema/norm-work-metadata/0.1"
+  xmlns="http://rechtsinformationen.bund.de/schema/norm-work-metadata/0.1"
+  elementFormDefault="qualified"
+>
+  <xs:element name="workMetadata">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="vollzitat" type="xs:string" minOccurs="0" />
+      </xs:sequence>
+      <xs:attribute name="eli" type="xs:string" use="optional" />
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

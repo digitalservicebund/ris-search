@@ -14,7 +14,7 @@ import { useArticleSeo } from "~/composables/useArticleSeo";
 import { useSearchBackLink } from "~/composables/useSearchBackLink";
 import {
   type Article,
-  type ArticleVersion,
+  type ArtikelFassung,
   DocumentKind,
   type JSONLDList,
   type LegislationExpressionPartSchema,
@@ -60,37 +60,49 @@ const singleViewParts = computed(() =>
 );
 
 const article: Ref<Article | undefined> = computed(() =>
-  // The eId is taken from the router, which always automatically decodes URIs.
-  // However, some eIds are pre-encoded in the XML data (e.g. "art-z§§ 1 bis 3"
-  // is encoded in the XML but will automatically be decoded by the router).
-  // For this reason, we need to also decode the eId in the data to make them
-  // comparable.
-  singleViewParts.value?.find(
-    (part) => decodeURIComponent(part.eId) == eId.value,
-  ),
+  singleViewParts.value?.find((part) => decodeEId(part.eId) === eId.value),
 );
 
 const isArticle = computed(() => article.value?.partType === "article");
 
-const articleVersions = ref<ArticleVersion[]>([]);
+const isNormInForce = norm.value?.legislationLegalForce === "InForce";
 
-if (isArticle.value) {
-  const fetchUrl = `/v1/article/work-example/eli/${expressionEli}/${eId.value}`;
-  const { data: versionsCollection, error: versionsError } =
-    await useRisBackend<JSONLDList<ArticleVersion>>(fetchUrl);
-
-  if (versionsError.value) throw createError(versionsError.value);
-
-  articleVersions.value = versionsCollection.value?.member ?? [];
+function fetchFassungen() {
+  if (!isArticle.value || !article.value?.revision) return undefined;
+  const url = `/v1/article/work-example/${article.value?.revision}`;
+  return useRisBackend<JSONLDList<ArtikelFassung>>(url);
 }
+
+function fetchValidGesamtausgaben() {
+  if (isNormInForce) return undefined;
+  const workEli = norm.value?.exampleOfWork.legislationIdentifier;
+  return useValidNormVersions(workEli);
+}
+
+const [fassungenResult, validVersions] = await Promise.all([
+  fetchFassungen(),
+  fetchValidGesamtausgaben(),
+]);
+
+if (fassungenResult?.error.value) {
+  throw createError(fassungenResult.error.value);
+}
+
+if (validVersions?.error.value) {
+  throw createError(validVersions.error.value);
+}
+
+const fassungen = computed(() => fassungenResult?.data.value?.member ?? []);
+
+const inForceExpressionEli = computed(() => {
+  if (isNormInForce) return `eli/${expressionEli}`;
+  const validVersion = validVersions?.data.value?.member?.[0];
+  return validVersion?.item.legislationIdentifier;
+});
 
 const normAbbreviation = computed(() => norm.value.abbreviation);
 
 const articleHtml = computed(() => data.value.htmlBody);
-
-const currentExpressionId = computed(
-  () => `/v1/legislation/eli/${expressionEli}`,
-);
 
 const normExpressionPath = `/gesetze/eli/${expressionEli}`;
 
@@ -165,11 +177,7 @@ function getRouteForSiblingArticle(
   return {
     name: route.name ?? undefined,
     query: route.query,
-    // The router will automatically encode things, but some eId might already
-    // be encoded in the XML data (e.g. "art-z§§ 1 bis 3"). Decode first and
-    // let the router encode it again to prevent double encoding, which will
-    // lead to 404s.
-    params: { ...route.params, eId: decodeURIComponent(hasPart[newIndex].eId) },
+    params: { ...route.params, eId: decodeEId(hasPart[newIndex].eId) },
   };
 }
 
@@ -223,22 +231,9 @@ const breadcrumbItems: Ref<BreadcrumbItem[]> = computed(() => {
 
 const htmlTitle = computed(() => data.value.articleHeading);
 
-const validVersions =
-  norm.value?.legislationLegalForce === "InForce"
-    ? undefined
-    : await useValidNormVersions(
-        norm.value?.exampleOfWork.legislationIdentifier,
-      );
-
-if (validVersions?.error.value) {
-  throw createError(validVersions.error.value);
-}
-
-const inForceNormLink = computed(() => {
-  const validVersion = validVersions?.data.value?.member?.[0];
-  if (!validVersion) return undefined;
-  return `/gesetze/${validVersion.item.legislationIdentifier}`;
-});
+const shortOrLongTitle = computed(
+  () => data.value.legislation.alternateName ?? data.value.legislation.name,
+);
 
 const views = computed<OneOrMore<TabView>>(() => {
   const tabViews: OneOrMore<TabView> = [
@@ -249,10 +244,10 @@ const views = computed<OneOrMore<TabView>>(() => {
     },
   ];
 
-  if (isArticle.value) {
+  if (isArticle.value && article.value?.revision) {
     tabViews.push({
-      path: "geltungszeiten",
-      label: "Geltungszeiträume",
+      path: "fassungen",
+      label: "Fassungen",
       analyticsId: "article-versions-tab",
     });
   }
@@ -278,14 +273,11 @@ const metadataItems = computed<MetadataItem[]>(() => {
   ];
 });
 
-const {
-  dateFilterValue: geltungszeitenDateFilterValue,
-  filteredVersions: filteredArticleVersions,
-} = useVersionDateFilter(articleVersions);
+const fassungenDateFilterValue = ref<string>();
 
 const textTabPanelTitleId = useId();
-const geltungszeitenTabPanelTitleId = useId();
-const geltungszeitenDateFilterInputId = useId();
+const fassungenTabPanelTitleId = useId();
+const fassungenDateFilterInputId = useId();
 </script>
 
 <template>
@@ -304,8 +296,11 @@ const geltungszeitenDateFilterInputId = useId();
     <div
       class="content-wrapper mb-24 space-y-24 sm:mb-32 sm:space-y-32 md:mb-40 md:space-y-40"
     >
-      <p class="typo-headline3-regular mb-8">
-        {{ normAbbreviation }}
+      <p
+        v-if="shortOrLongTitle"
+        class="typo-headline3-regular mb-8 wrap-break-word hyphens-auto"
+      >
+        {{ shortOrLongTitle }}
       </p>
       <h1
         class="typo-headline1-bold wrap-break-word hyphens-auto"
@@ -313,9 +308,10 @@ const geltungszeitenDateFilterInputId = useId();
       />
 
       <DocumentsNormsArticleVersionWarning
-        v-if="inForceNormLink && article"
-        :in-force-version-link="inForceNormLink"
+        v-if="article"
         :current-article="article"
+        :fassungen
+        :in-force-expression-eli="inForceExpressionEli"
       />
 
       <DocumentsMetadata v-if="privateFeaturesEnabled" :items="metadataItems" />
@@ -377,48 +373,44 @@ const geltungszeitenDateFilterInputId = useId();
         </section>
       </template>
 
-      <template #geltungszeiten>
-        <section
-          role="tabpanel"
-          :aria-labelledby="geltungszeitenTabPanelTitleId"
-        >
+      <template v-if="article?.revision" #fassungen>
+        <section role="tabpanel" :aria-labelledby="fassungenTabPanelTitleId">
           <div class="content-grid pt-32 pb-32 md:pb-56">
             <div
               class="col-span-12 md:col-span-8 xl:col-span-7"
               v-if="privateFeaturesEnabled"
             >
-              <h2
-                :id="geltungszeitenTabPanelTitleId"
-                class="typo-headline3-bold"
-              >
-                Weitere Geltungszeiträume dieser Einzelnorm
+              <h2 :id="fassungenTabPanelTitleId" class="typo-headline3-bold">
+                Weitere Fassungen dieser Einzelnorm
               </h2>
 
               <div class="my-16 md:my-24">
                 <label
-                  :for="geltungszeitenDateFilterInputId"
+                  :for="fassungenDateFilterInputId"
                   class="typo-label2-regular"
                   >Gültig am</label
                 >
                 <UiDateInput
-                  v-model="geltungszeitenDateFilterValue"
+                  v-model="fassungenDateFilterValue"
                   class="max-w-240"
-                  :id="geltungszeitenDateFilterInputId"
+                  :id="fassungenDateFilterInputId"
                 />
               </div>
 
-              <DocumentsNormsArticleVersionList
-                :currentExpressionId
-                :versions="filteredArticleVersions"
+              <DocumentsNormsArtikelFassungenList
+                :current-legislation-identifier="norm.legislationIdentifier"
+                :current-fassung-id="article.revision"
+                :fassungen
+                :date-filter="fassungenDateFilterValue"
               />
             </div>
 
             <div class="content-grid-textblock" v-else>
               <h2
-                :id="geltungszeitenTabPanelTitleId"
+                :id="fassungenTabPanelTitleId"
                 class="typo-headline3-bold mb-24"
               >
-                Geltungszeiträume sind noch nicht verfügbar
+                Fassungen sind noch nicht verfügbar
               </h2>
               <p>
                 Mit dem Livegang des neuen Rechtsinformationsportals werden auch

@@ -8,9 +8,10 @@ import static org.mockito.Mockito.when;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.LegislationPartType;
 import de.bund.digitalservice.ris.search.repository.opensearch.ArticlesRepository;
-import de.bund.digitalservice.ris.search.utils.eli.ExpressionEli;
+import de.bund.digitalservice.ris.search.utils.eli.ExpressionEliPath;
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,24 +38,17 @@ class ArticleServiceTest {
 
   @Test
   void getAllArticleVersionsQueriesRepositoryUsingDocumentNumberPrefixInDescendingOrder() {
-    ExpressionEli eli =
-        new ExpressionEli(
+    ExpressionEliPath eli =
+        new ExpressionEliPath(
             "bund", "bgbl-1", "2020", "s1126", LocalDate.of(2025, Month.MAY, 5), 1, "deu");
 
     String eId = "art-z1";
     String id = Article.buildId(eli.toString(), eId);
 
+    Article article = Article.builder().id(id).documentNumber("DKNR0E80B0026DKNE000100010").build();
+
     when(articlesRepository.existsById(id)).thenReturn(true);
-    when(articlesRepository.findById(id))
-        .thenReturn(
-            Optional.of(
-                Article.builder()
-                    .id(id)
-                    .eId(eId)
-                    .expressionEli(eli.toString())
-                    .documentNumber("DKNR0E80B0026DKNE000100010")
-                    .documentType(LegislationPartType.ARTICLE)
-                    .build()));
+    when(articlesRepository.findById(id)).thenReturn(Optional.of(article));
     service.getAllArticleVersions(eli, eId);
 
     verify(articlesRepository, times(1))
@@ -67,8 +61,8 @@ class ArticleServiceTest {
 
   @Test
   void getAllArticleVersionReturnsEmptyOnNotFoundExpressionEliAndEid() {
-    ExpressionEli eli =
-        new ExpressionEli(
+    ExpressionEliPath eli =
+        new ExpressionEliPath(
             "bund", "bgbl-1", "2020", "s1126", LocalDate.of(2025, Month.MAY, 5), 1, "deu");
 
     String eId = "art-z1";
@@ -80,25 +74,17 @@ class ArticleServiceTest {
 
   @Test
   void getAllArticleVersionsReturnsEmptyWhenRepositoryThrowsIllegalArgumentException() {
-    ExpressionEli eli =
-        new ExpressionEli(
+    ExpressionEliPath eli =
+        new ExpressionEliPath(
             "bund", "bgbl-1", "2020", "s1126", LocalDate.of(2025, Month.MAY, 5), 1, "deu");
 
     String eId = "art-z1";
     String id = Article.buildId(eli.toString(), eId);
     String documentNumber = "DKNR0E80B0026DKNE0";
+    Article article = Article.builder().id(id).documentNumber(documentNumber).build();
 
     when(articlesRepository.existsById(id)).thenReturn(true);
-    when(articlesRepository.findById(id))
-        .thenReturn(
-            Optional.of(
-                Article.builder()
-                    .id(id)
-                    .eId(eId)
-                    .expressionEli(eli.toString())
-                    .documentNumber(documentNumber)
-                    .documentType(LegislationPartType.ARTICLE)
-                    .build()));
+    when(articlesRepository.findById(id)).thenReturn(Optional.of(article));
     when(articlesRepository.findAllVersionsByDocumentNumber(
             documentNumber,
             LegislationPartType.ARTICLE,
@@ -107,5 +93,20 @@ class ArticleServiceTest {
         .thenThrow(new IllegalArgumentException("document number is too short"));
 
     assertThat(service.getAllArticleVersions(eli, eId)).isEmpty();
+  }
+
+  @Test
+  void findExpressionElisByDocumentNumberMapsArticlesToTheirExpressionElis() {
+    String documentNumber = "DKNR0E80B0026DKNE000100010";
+    String eli1 = "eli/bund/bgbl-1/2020/s1126/2025-05-05/1/deu";
+    String eli2 = "eli/bund/bgbl-1/2020/s1126/2026-05-05/1/deu";
+    when(articlesRepository.findExpressionElisByDocumentNumber(documentNumber))
+        .thenReturn(
+            List.of(
+                Article.builder().documentNumber(documentNumber).expressionEli(eli1).build(),
+                Article.builder().documentNumber(documentNumber).expressionEli(eli2).build()));
+
+    assertThat(service.findExpressionElisByDocumentNumber(documentNumber))
+        .containsExactly(eli1, eli2);
   }
 }

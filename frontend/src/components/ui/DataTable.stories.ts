@@ -50,6 +50,8 @@ type DataTableArgs = {
   columns: DataTableColumn<VersionRow>[];
   rowAs?: string;
   rows: VersionRow[];
+  hideHeader?: boolean;
+  reducedFirstColumnPadding?: boolean;
 };
 
 const meta: Meta<DataTableArgs> = {
@@ -60,6 +62,8 @@ const meta: Meta<DataTableArgs> = {
     columns,
     rowAs: undefined,
     rows,
+    hideHeader: false,
+    reducedFirstColumnPadding: false,
   },
 };
 
@@ -99,6 +103,28 @@ export const CurrentRow: Story = {
       current: row.key === "current",
     })),
   },
+  render: (args) => ({
+    components: { UiDataTable },
+    setup() {
+      return { args };
+    },
+    template: html`<UiDataTable v-bind="args" aria-label="Fassungen" />`,
+  }),
+};
+
+export const HiddenHeader: Story = {
+  args: { hideHeader: true },
+  render: (args) => ({
+    components: { UiDataTable },
+    setup() {
+      return { args };
+    },
+    template: html`<UiDataTable v-bind="args" aria-label="Fassungen" />`,
+  }),
+};
+
+export const ReducedFirstColumnPadding: Story = {
+  args: { reducedFirstColumnPadding: true },
   render: (args) => ({
     components: { UiDataTable },
     setup() {

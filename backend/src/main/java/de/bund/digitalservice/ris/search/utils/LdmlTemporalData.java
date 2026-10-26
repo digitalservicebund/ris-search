@@ -81,7 +81,7 @@ public class LdmlTemporalData {
         continue;
       }
 
-      String temporalGroupId = String.format("#%s", getAttributeValue(temporalGroup, "eId"));
+      String temporalGroupId = "#" + getAttributeValue(temporalGroup, "eId");
       Node timeIntervalNode = getTimeIntervalNode((Element) temporalGroup);
 
       if (timeIntervalNode instanceof Element timeInterval) {

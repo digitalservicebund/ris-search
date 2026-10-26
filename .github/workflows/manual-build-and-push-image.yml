@@ -1,0 +1,49 @@
+name: Manual Build and Push Image
+
+on:
+  workflow_dispatch:
+    inputs:
+      commit-sha:
+        description: 'The commit SHA of the repository to be run'
+        required: true
+        type: string
+      tag-name:
+        description: 'The new tag for the new container'
+        required: true
+        type: string
+
+jobs:
+  backend-jobs:
+    uses: ./.github/workflows/backend.yml
+    permissions:
+      contents: read
+      pull-requests: read
+      packages: write
+      id-token: write
+      security-events: write
+    secrets:
+      SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      REPORTS_BUCKET_ACCESS_KEY_ID: ${{ secrets.REPORTS_BUCKET_ACCESS_KEY_ID }}
+      REPORTS_BUCKET_SECRET_ACCESS_KEY: ${{ secrets.REPORTS_BUCKET_SECRET_ACCESS_KEY }}
+    with:
+      container-registry: ghcr.io
+      commit-sha: ${{ inputs.commit-sha }}
+      image-reference: ghcr.io/${{ github.repository }}:${{ inputs.tag-name }}
+  frontend-jobs:
+    uses: ./.github/workflows/frontend.yml
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+      security-events: write
+    secrets:
+      SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+      REPORTS_BUCKET_ACCESS_KEY_ID: ${{ secrets.REPORTS_BUCKET_ACCESS_KEY_ID }}
+      REPORTS_BUCKET_SECRET_ACCESS_KEY: ${{ secrets.REPORTS_BUCKET_SECRET_ACCESS_KEY }}
+    with:
+      container-registry: ghcr.io
+      commit-sha: ${{ inputs.commit-sha }}
+      image-reference: ghcr.io/${{ github.repository }}/frontend:${{ inputs.tag-name }}

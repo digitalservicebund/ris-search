@@ -44,11 +44,11 @@ test.describe("view norm page", async () => {
       ).toBeVisible();
     });
 
-    await test.step("versions", async () => {
-      await page.getByRole("tab", { name: "Fassungen" }).click();
+    await test.step("gesamtausgaben", async () => {
+      await page.getByRole("tab", { name: "Gesamtausgaben" }).click();
 
       await expect(
-        page.getByRole("tab", { name: "Fassungen", selected: true }),
+        page.getByRole("tab", { name: "Gesamtausgaben", selected: true }),
       ).toBeVisible();
     });
   });
@@ -274,7 +274,7 @@ test.describe("view norm page", async () => {
     await sidebar.getByRole("link", { name: "Eingangsformel" }).click();
 
     await expect(page).toHaveURL(
-      "/gesetze/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu#präambel-n1_formel-n1",
+      "/gesetze/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu#praeambel-n1_formel-n1",
     );
 
     const heading = page.getByRole("heading", { name: "Eingangsformel" });

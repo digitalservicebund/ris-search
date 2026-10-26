@@ -47,7 +47,7 @@ public class RestClientConfigDev extends AbstractOpenSearchConfiguration {
   public RestHighLevelClient opensearchClient() {
     ClientConfiguration config =
         ClientConfiguration.builder()
-            .connectedTo(String.format("%s:%s", configurations.getHost(), configurations.getPort()))
+            .connectedTo(configurations.getHost() + ":" + configurations.getPort())
             .build();
     RestHighLevelClient restHighLevelClient =
         RestClients.create( // NOSONAR java:S2095 closed by spring @Bean(destroyMethod = "close")

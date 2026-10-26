@@ -2,13 +2,16 @@ package de.bund.digitalservice.ris.search.miscellaneous;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import de.bund.digitalservice.ris.LoadXmlUtils;
 import de.bund.digitalservice.ris.search.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
+import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.repository.objectstorage.LiteratureBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
 import de.bund.digitalservice.ris.search.service.IndexStatusService;
 import de.bund.digitalservice.ris.search.service.IndexingState;
 import de.bund.digitalservice.ris.search.service.LiteratureIndexSyncJob;
+import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,6 +47,9 @@ class LiteratureImportStatusIntegrationTest extends ContainersIntegrationBase {
 
   @Test
   void createsLastSuccessFileProperly() throws ObjectStoreServiceException {
+    for (String fileName : List.of("XXLS000000001.akn.xml", "XXLU000000001.akn.xml")) {
+      literatureBucket.save(fileName, LoadXmlUtils.loadXmlAsString(Literature.class, fileName));
+    }
     assertThat(literatureBucket.getAllKeys()).hasSize(2);
     literatureIndexSyncJob.runJob();
     assertThat(literatureBucket.getAllKeys()).hasSize(2);

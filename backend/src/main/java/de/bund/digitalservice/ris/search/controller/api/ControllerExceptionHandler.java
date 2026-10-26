@@ -1,7 +1,7 @@
 package de.bund.digitalservice.ris.search.controller.api;
 
+import de.bund.digitalservice.ris.html.exception.FileTransformationException;
 import de.bund.digitalservice.ris.search.exception.CustomValidationException;
-import de.bund.digitalservice.ris.search.exception.FileTransformationException;
 import de.bund.digitalservice.ris.search.exception.OpenSearchFetchException;
 import de.bund.digitalservice.ris.search.exception.OpenSearchTermLimitExceeded;
 import de.bund.digitalservice.ris.search.models.errors.CustomError;
@@ -20,14 +20,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.NestedExceptionUtils;
 import org.springframework.data.elasticsearch.UncategorizedElasticsearchException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.validation.FieldError;
+import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.context.request.async.AsyncRequestNotUsableException;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
@@ -419,6 +422,18 @@ public class ControllerExceptionHandler {
   }
 
   /**
+   * Logs AsyncRequestNotUsableExceptions with log level warn. Spring throws these when the client
+   * closed the connection before the response was written. Does not return a ResponseEntity since
+   * the connection is lost already.
+   *
+   * @param exception AsyncRequestNotUsableException
+   */
+  @ExceptionHandler({AsyncRequestNotUsableException.class})
+  public void handleAsyncRequestNotUsableException(AsyncRequestNotUsableException exception) {
+    logger.warn("connection closed by client: {}", exception.getMessage());
+  }
+
+  /**
    * Handles exceptions of type {@link InvalidParameterException} and returns a standardized error
    * response with HTTP status 400 (Bad Request).
    *
@@ -456,8 +471,8 @@ public class ControllerExceptionHandler {
   /**
    * handles HttpRequestMethodNotSupportedException
    *
-   * @param ex HttpRequestMethodNotSupportedException ResponseEntity containing a
-   * @return a {@link CustomErrorResponse} object with error details and an HTTP status of 405
+   * @param ex HttpRequestMethodNotSupportedException
+   * @return a {@link CustomErrorResponse} object with error details
    */
   @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
   public ResponseEntity<CustomErrorResponse> handleMethodNotSupported(
@@ -465,6 +480,24 @@ public class ControllerExceptionHandler {
     CustomError error =
         CustomError.builder().code("method_not_allowed").message(ex.getMessage()).build();
     return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED)
+        .body(new CustomErrorResponse(List.of(error)));
+  }
+
+  /**
+   * handles HttpMediaTypeNotAcceptableException
+   *
+   * @param ex HttpMediaTypeNotAcceptableException
+   * @return a {@link CustomErrorResponse} object with error details
+   */
+  @ExceptionHandler(HttpMediaTypeNotAcceptableException.class)
+  public ResponseEntity<CustomErrorResponse> handleMediaTypeNotAcceptable(
+      HttpMediaTypeNotAcceptableException ex) {
+    CustomError error =
+        CustomError.builder().code("not_acceptable").message(ex.getMessage()).build();
+    // The client's Accept header can't be satisfied, so content negotiation would fail again
+    // for the error body. Force JSON so the error can still be written.
+    return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE)
+        .contentType(MediaType.APPLICATION_JSON)
         .body(new CustomErrorResponse(List.of(error)));
   }
 }

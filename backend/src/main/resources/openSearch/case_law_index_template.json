@@ -858,6 +858,9 @@
         "decision_date": {
           "type": "date"
         },
+        "datums_typ": {
+          "type": "keyword"
+        },
         "decision_grounds": {
           "type": "text",
           "analyzer": "custom_german_analyzer",

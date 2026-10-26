@@ -69,6 +69,31 @@ export function getValidityStatus(
   return undefined;
 }
 
+type WithTemporalCoverage = { temporalCoverage?: string };
+
+export function getVersionValidFrom(version: WithTemporalCoverage) {
+  const interval = temporalCoverageToValidityInterval(version.temporalCoverage);
+  return interval?.from;
+}
+
+export function getVersionValidityStatus(version: WithTemporalCoverage) {
+  const interval = temporalCoverageToValidityInterval(version.temporalCoverage);
+  return getValidityStatus(interval);
+}
+
+/** Returns the future version that comes into force next, if any. */
+export function findNextFutureVersion<T extends WithTemporalCoverage>(
+  versions: T[],
+): T | undefined {
+  const futureVersions = versions.filter(
+    (version) => getVersionValidityStatus(version) === "FutureInForce",
+  );
+  const [nextFutureVersion] = sortBy(futureVersions, (version) =>
+    getVersionValidFrom(version)?.valueOf(),
+  );
+  return nextFutureVersion;
+}
+
 export function getManifestationUrl(
   metadata: LegislationExpression | undefined,
   format: string,
@@ -91,6 +116,30 @@ export function getManifestationUrl(
 export function getEinzelnormEIdFromHref(href: string): string | null {
   const match = /^[^/#?:]+\/([^/#?]+)\.html$/.exec(href);
   return match?.[1] ?? null;
+}
+
+/**
+ * Some eIds are already encoded in the XML data (e.g. "art-z§§ 1 bis 3"), but
+ * the router decodes route params and encodes them again when building links.
+ * Decoding the eId first makes it comparable to route params and prevents
+ * double encoding, which would lead to 404s.
+ */
+export function decodeEId(eId: string): string {
+  try {
+    return decodeURIComponent(eId);
+  } catch {
+    // not a valid encoding (e.g. a lone "%"), so it can't be encoded already
+    return eId;
+  }
+}
+
+export function legislationArticlePath(
+  identifier: string,
+  eId?: string,
+): string {
+  return eId
+    ? `/gesetze/${identifier}/${decodeEId(eId)}`
+    : `/gesetze/${identifier}`;
 }
 
 export function getNormTitle(norm: LegislationExpression): string {

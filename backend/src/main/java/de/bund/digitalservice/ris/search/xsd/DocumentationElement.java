@@ -23,7 +23,7 @@ public class DocumentationElement {
    */
   public DocumentationElement(Element element, String targetNamespaceURI) {
     this.parent = getParent(element, targetNamespaceURI);
-    this.documentation = preprocessContent(element.getTextContent().trim());
+    this.documentation = normalizeLines(element.getTextContent());
     var languageAttribute = element.getAttribute("xml:lang");
     if (languageAttribute.isBlank()) {
       languageAttribute = "de";
@@ -31,26 +31,12 @@ public class DocumentationElement {
     this.language = languageAttribute;
   }
 
-  private String preprocessContent(String description) {
-    StringBuilder stringBuilder = new StringBuilder();
-    var lines = description.split("\n");
-    var listOpen = false;
-    for (String line : lines) {
-      if (line.trim().startsWith("*")) {
-        if (!listOpen) {
-          stringBuilder.append("<ul>");
-          listOpen = true;
-        }
-        stringBuilder.append("<li>").append(line.trim().substring(1).trim()).append("</li>");
-      } else {
-        if (listOpen) {
-          stringBuilder.append("</ul>");
-        }
-        listOpen = false;
-        stringBuilder.append(line.trim()).append("<br>");
-      }
-    }
-    return stringBuilder.toString();
+  /**
+   * Trims each line of the raw XSD documentation text, removing the source file's indentation
+   * without altering the line breaks or {@code *}-bullet markers themselves.
+   */
+  private static String normalizeLines(String text) {
+    return text.trim().lines().map(String::trim).reduce((a, b) -> a + "\n" + b).orElse("");
   }
 
   private XSDElement getParent(Element element, String targetNamespaceURI) {

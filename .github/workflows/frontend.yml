@@ -3,6 +3,10 @@ name: Frontend
 on:
   workflow_call:
     inputs:
+      commit-sha:
+        description: 'The commit SHA of the repository to be run'
+        required: false
+        type: string
       image-reference:
         description: "The full image reference (registry/repo:tag) for the frontend image"
         required: true
@@ -41,10 +45,11 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          ref: ${{ inputs.commit-sha|| github.sha }}
           persist-credentials: false
 
       - name: Setup pnpm and Node
-        uses: pnpm/setup@fbda4c85fc2e1e08721cd8763afea8f48d60f024 # v3.0.0
+        uses: pnpm/setup@a0881977cd8ea73b1ed212236c99ca10dcc80cf4 # v3.1.1
         with:
           package-json-file: ./frontend/package.json
           cache: true
@@ -73,7 +78,7 @@ jobs:
         if: ${{ github.event.pull_request.user.login != 'dependabot[bot]' }}
         # Third-party action, pin to commit SHA!
         # See https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions
-        uses: sonarsource/sonarqube-scan-action@ba9859eae8dd6bd29e412f25ddbbef3d032000f4 # v7
+        uses: sonarsource/sonarqube-scan-action@d209202bc7d53ff1cc128f7f907dac145c9d6ae9 # v7
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
@@ -109,10 +114,11 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          ref: ${{ inputs.commit-sha|| github.sha }}
           persist-credentials: false
 
       - name: Setup pnpm and Node
-        uses: pnpm/setup@fbda4c85fc2e1e08721cd8763afea8f48d60f024 # v3.0.0
+        uses: pnpm/setup@a0881977cd8ea73b1ed212236c99ca10dcc80cf4 # v3.1.1
         with:
           package-json-file: ./frontend/package.json
           cache: true
@@ -130,7 +136,7 @@ jobs:
         working-directory: ./frontend
 
       - name: Upload licence report
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
           name: licence-reports-frontend
           retention-days: 3
@@ -153,10 +159,11 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          ref: ${{ inputs.commit-sha|| github.sha }}
           persist-credentials: false
 
       - name: Setup pnpm and Node
-        uses: pnpm/setup@703c52620218391530e48b9e8870d5c0082e1b9b # v2.1.0
+        uses: pnpm/setup@a0881977cd8ea73b1ed212236c99ca10dcc80cf4 # v3.1.1
         with:
           package-json-file: ./frontend/package.json
           cache: true
@@ -198,6 +205,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          ref: ${{ inputs.commit-sha|| github.sha }}
           persist-credentials: false
 
       - name: Run Trivy vulnerability file scanner
@@ -228,7 +236,7 @@ jobs:
           fi
 
       - name: Upload Trivy vulnerability file scanner results
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         if: ${{ failure() }}
         with:
           name: "trivy-frontend-file-results.sarif"
@@ -252,13 +260,14 @@ jobs:
       packages: write
       contents: read
     env:
-      SENTRY_RELEASE: ${{ github.sha }}
+      SENTRY_RELEASE: ${{ inputs.commit-sha|| github.sha }}
     outputs:
       image-digest: ${{ steps.docker-build-push.outputs.digest }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
+          ref: ${{ inputs.commit-sha|| github.sha }}
           persist-credentials: false
 
       - name: Install Sentry CLI using official script

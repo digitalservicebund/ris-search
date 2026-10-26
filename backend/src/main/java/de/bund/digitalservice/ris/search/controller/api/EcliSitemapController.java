@@ -64,8 +64,7 @@ public class EcliSitemapController {
       @PathVariable() @Pattern(regexp = "\\d{2}") String day,
       @PathVariable() String filename) {
 
-    var file =
-        sitemapService.getSitemapFile(String.format("%s/%s/%s/%s", year, month, day, filename));
+    var file = sitemapService.getSitemapFile(year + "/" + month + "/" + day + "/" + filename);
 
     return file.map(
             body ->
