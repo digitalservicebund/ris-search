@@ -1,7 +1,7 @@
 packages: []
 
 overrides:
-  "@simple-git/argv-parser": "2.0.1"
+  "undici": "8.12.2"
 
 allowBuilds:
   "@parcel/watcher": true
