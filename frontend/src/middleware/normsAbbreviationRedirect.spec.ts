@@ -38,9 +38,11 @@ describe("normsAbbreviationRedirect middleware", () => {
       normRisAbbreviationRedirect(makeRoute("BGB"), emptyRoute),
     ).catch(() => {});
 
-    expect(useRisBackendMock).toHaveBeenCalledWith("/v1/legislation", {
-      query: { risAbbreviation: "BGB", mostRelevantOn: "2024-01-01" },
-    });
+    expect(useRisBackendMock).toHaveBeenCalledWith(
+      "/v1/legislation",
+      { query: { risAbbreviation: "BGB", mostRelevantOn: "2024-01-01" } },
+      expect.any(String),
+    );
   });
 
   it("returns redirect url if exactly one expression was found for the ris-abbreviation", async () => {
