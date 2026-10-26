@@ -4,7 +4,14 @@ import { expect, test } from "@playwright/test";
 import { createHtmlReport } from "axe-html-reporter";
 import { navigate } from "./utils/fixtures";
 
-const testPages = [
+type TestPage = {
+  name: string;
+  url: string;
+  tabs?: { name: string; heading?: RegExp }[];
+  disabledRules?: string[];
+};
+
+const testPages: TestPage[] = [
   {
     name: "not found",
     url: "/404",
@@ -72,6 +79,9 @@ const testPages = [
   {
     name: "norm view",
     url: "/gesetze/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu",
+    // false positive: axe compares the tree item labels with the text of the
+    // whole subtree, including nested child items
+    disabledRules: ["label-content-name-mismatch"],
     tabs: [
       { name: "Details" },
       {
@@ -83,6 +93,9 @@ const testPages = [
   {
     name: "norm view - single article",
     url: "/gesetze/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/hauptteil-n1_abschnitt-n2_art-z1",
+    // false positive: axe compares the tree item labels with the text of the
+    // whole subtree, including nested child items
+    disabledRules: ["label-content-name-mismatch"],
     tabs: [
       {
         name: "Fassungen",
@@ -116,14 +129,17 @@ const testPages = [
   },
 ];
 
-testPages.forEach(({ name, url, tabs }) => {
+testPages.forEach(({ name, url, tabs, disabledRules = [] }) => {
   test(`"${name}" page should not have accessibility issues`, async ({
     page,
   }) => {
     await navigate(page, url);
     const tabsAnalysisResults = [];
     tabsAnalysisResults.push(
-      await new AxeBuilder({ page }).exclude("nuxt-devtools-frame").analyze(),
+      await new AxeBuilder({ page })
+        .exclude("nuxt-devtools-frame")
+        .disableRules(disabledRules)
+        .analyze(),
     );
     if (tabs) {
       for (const tab of tabs) {
@@ -137,6 +153,7 @@ testPages.forEach(({ name, url, tabs }) => {
         tabsAnalysisResults.push(
           await new AxeBuilder({ page })
             .exclude("nuxt-devtools-frame")
+            .disableRules(disabledRules)
             .analyze(),
         );
       }
