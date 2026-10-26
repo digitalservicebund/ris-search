@@ -33,10 +33,11 @@ class PostHogClientTest {
     expectedData.put("$survey_id", surveyId);
     expectedData.put("$survey_response", text);
     expectedData.put("$current_url", url);
+    expectedData.put("$process_person_profile", false);
 
     verify(postHog)
         .capture(
-            eq("anonymous_feedback_user"),
+            isNull(),
             eq("survey sent"),
             argThat(options -> expectedData.equals(options.getProperties())));
   }
