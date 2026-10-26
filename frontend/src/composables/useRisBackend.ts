@@ -1,4 +1,8 @@
-export const useRisBackend = createUseFetch((callerOptions) => ({
-  $fetch: useNuxtApp().$risBackend as typeof $fetch,
-  ...callerOptions,
-}));
+import type { UseFetchOptions } from "nuxt/app";
+
+export function useRisBackend<T>(
+  url: ComputedRef<string> | string | (() => string),
+  options?: UseFetchOptions<T>,
+) {
+  return useFetch(url, { ...options, $fetch: useNuxtApp().$risBackend });
+}
