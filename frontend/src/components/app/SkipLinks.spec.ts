@@ -5,8 +5,6 @@ import AppSkipLinks from "./SkipLinks.vue";
 
 describe("SkipLinks", () => {
   it("renders provided skip links", async () => {
-    useRouter().addRoute({ path: "/example", component: {} });
-
     await renderSuspended(AppSkipLinks, {
       props: {
         links: [
@@ -22,9 +20,6 @@ describe("SkipLinks", () => {
   });
 
   it("merges links from props with links from route meta", async () => {
-    const router = useRouter();
-    router.addRoute({ path: "/example", component: {} });
-
     await renderSuspended(AppSkipLinks, {
       props: {
         links: [{ label: "Target 1", to: "#target1" }],
@@ -32,6 +27,7 @@ describe("SkipLinks", () => {
       route: "/example",
     });
 
+    const router = useRouter();
     router.addRoute({
       path: "/with-meta",
       meta: { skipLinks: [{ label: "Target 2", to: "#target2" }] },
@@ -44,8 +40,6 @@ describe("SkipLinks", () => {
   });
 
   it("renders nothing when no links are provided and no route meta is set", async () => {
-    useRouter().addRoute({ path: "/example", component: {} });
-
     await renderSuspended(AppSkipLinks, { route: "/example" });
 
     expect(
