@@ -264,7 +264,10 @@ const zitierungenSectionId = useId();
         :aria-labelledby="zitierungenSectionId"
         class="pt-32 pb-32 md:pb-56"
       >
-        <h2 :id="zitierungenSectionId" class="typo-headline2-bold pb-24">
+        <h2
+          :id="zitierungenSectionId"
+          class="typo-headline2-bold pb-24 2xl:pb-40"
+        >
           Zitierungen
         </h2>
         <DocumentsZitierungen v-if="zitierungen" :zitierungen />
