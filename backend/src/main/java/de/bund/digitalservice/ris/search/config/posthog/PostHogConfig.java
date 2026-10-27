@@ -34,6 +34,6 @@ public class PostHogConfig {
             .debug(properties.isDebug())
             .build();
     PostHogInterface posthogInterface = PostHog.with(config);
-    return new PostHogClient(posthogInterface);
+    return new PostHogClient(posthogInterface, properties.getApiCallsSampleRate());
   }
 }
