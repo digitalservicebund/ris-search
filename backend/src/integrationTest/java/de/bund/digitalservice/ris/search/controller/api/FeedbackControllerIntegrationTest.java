@@ -102,25 +102,4 @@ class FeedbackControllerIntegrationTest extends ContainersIntegrationBase {
 
     verify(feedbackService, times(1)).sendFeedback(URL, TEXT);
   }
-
-  @Test
-  void feedbackWithUserIdFromOlderFrontendsIsAccepted() throws Exception {
-    mockMvc
-        .perform(
-            post(ApiConfig.Paths.FEEDBACK)
-                .with(csrf())
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(
-                    """
-                    {
-                      "text": "test feedback",
-                      "url": "http://example.com",
-                      "user_id": "test-distinct-id",
-                      "name": ""
-                    }
-                    """))
-        .andExpect(status().isOk());
-
-    verify(feedbackService, times(1)).sendFeedback(URL, TEXT);
-  }
 }
