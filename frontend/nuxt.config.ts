@@ -2,6 +2,7 @@ import tailwindcss from "@tailwindcss/vite";
 import { defineNuxtConfig } from "nuxt/config";
 import { appHead } from "./config/appHead";
 import { icons } from "./config/icons";
+import { posthogConfig } from "./config/posthog";
 import { runtimeConfig } from "./config/runtimeConfig";
 import { security } from "./config/security";
 import { sentry } from "./config/sentry";
@@ -18,6 +19,7 @@ export default defineNuxtConfig({
     "nuxt-security",
     "@nuxtjs/sitemap",
     "@nuxtjs/mdc",
+    "@posthog/nuxt",
   ],
   experimental: {
     renderJsonPayloads: true,
@@ -77,6 +79,7 @@ export default defineNuxtConfig({
       anchorLinks: false,
     },
   },
+  posthogConfig,
   security,
   sentry,
   sitemap,

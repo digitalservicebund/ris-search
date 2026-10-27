@@ -59,17 +59,15 @@ describe("feedback.post", () => {
       body: {
         text: "Great app!",
         url: "/suche?query=test",
-        user_id: "anonymous_feedback_user",
         name: "",
       },
     });
   });
 
-  it("uses provided url, user_id and honeypot value from form body", async () => {
+  it("uses provided url and honeypot value from form body", async () => {
     mockReadBody.mockResolvedValue({
       text: "Feedback text",
       url: "/custom-page",
-      user_id: "user123",
       name: "honeypot-value",
     });
     mockGetHeader.mockReturnValue(undefined);
@@ -82,7 +80,6 @@ describe("feedback.post", () => {
       body: {
         text: "Feedback text",
         url: "/custom-page",
-        user_id: "user123",
         name: "honeypot-value",
       },
     });
@@ -129,7 +126,6 @@ describe("feedback.post", () => {
       body: {
         text: "Feedback",
         url: "/page?param=value",
-        user_id: "anonymous_feedback_user",
         name: "",
       },
     });

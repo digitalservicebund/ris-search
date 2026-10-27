@@ -25,19 +25,19 @@ class PostHogClientTest {
 
     String text = "Test feedback";
     String url = "http://user-url.test";
-    String userId = "test_id";
     String surveyId = "test_survey_id";
 
-    postHogClient.submitFeedback(userId, url, text, surveyId);
+    postHogClient.submitFeedback(url, text, surveyId);
 
     Map<String, Object> expectedData = new HashMap<>();
     expectedData.put("$survey_id", surveyId);
     expectedData.put("$survey_response", text);
     expectedData.put("$current_url", url);
+    expectedData.put("$process_person_profile", false);
 
     verify(postHog)
         .capture(
-            eq(userId),
+            isNull(),
             eq("survey sent"),
             argThat(options -> expectedData.equals(options.getProperties())));
   }

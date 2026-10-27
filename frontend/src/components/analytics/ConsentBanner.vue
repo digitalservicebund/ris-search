@@ -1,14 +1,5 @@
 <script setup lang="ts">
-const { userConsent, isBannerVisible, setTracking } = usePostHog();
-
-if (import.meta.server) {
-  const cookie = useCookie<boolean>(CONSENT_COOKIE_NAME);
-  userConsent.value = cookie.value ?? undefined;
-}
-
-const handleSetTracking = async (value: boolean) => {
-  await setTracking(value);
-};
+const { isBannerVisible, setConsent } = useConsent();
 
 const headingId = useId();
 </script>
@@ -35,24 +26,8 @@ const headingId = useId();
       </div>
 
       <div class="flex flex-wrap items-center gap-x-24 gap-y-8 pt-16 lg:pt-24">
-        <form
-          action="/api/cookie-consent"
-          method="POST"
-          class="inline"
-          @submit.prevent="handleSetTracking(true)"
-        >
-          <input type="hidden" name="consent" value="true" />
-          <UiButton label="Akzeptieren" type="submit" />
-        </form>
-        <form
-          action="/api/cookie-consent"
-          method="POST"
-          class="inline"
-          @submit.prevent="handleSetTracking(false)"
-        >
-          <input type="hidden" name="consent" value="false" />
-          <UiButton label="Ablehnen" type="submit" />
-        </form>
+        <UiButton label="Akzeptieren" @click="setConsent(true)" />
+        <UiButton label="Ablehnen" @click="setConsent(false)" />
         <NuxtLink
           :to="{ name: 'datenschutzerklaerung' }"
           class="typo-link1-regular"

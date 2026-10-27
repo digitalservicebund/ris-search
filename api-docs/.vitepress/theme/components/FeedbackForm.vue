@@ -23,7 +23,6 @@ const submitFeedback = async () => {
         body: JSON.stringify({
           text: feedback.value,
           url: globalThis.location.href,
-          user_id: "anonymous_api_documentation_user",
         }),
       },
     );

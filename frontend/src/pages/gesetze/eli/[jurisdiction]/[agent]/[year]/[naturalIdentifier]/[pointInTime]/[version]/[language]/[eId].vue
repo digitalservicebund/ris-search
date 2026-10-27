@@ -240,7 +240,6 @@ const views = computed<OneOrMore<TabView>>(() => {
     {
       path: "text",
       label: "Text",
-      analyticsId: "article-text-tab",
     },
   ];
 
@@ -248,7 +247,6 @@ const views = computed<OneOrMore<TabView>>(() => {
     tabViews.push({
       path: "fassungen",
       label: "Fassungen",
-      analyticsId: "article-versions-tab",
     });
   }
 
