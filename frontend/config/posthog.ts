@@ -14,7 +14,7 @@ export const posthogConfig: NuxtConfig["posthogConfig"] = {
 
     // Page views
     capture_pageview: "history_change",
-    capture_pageleave: false,
+    capture_pageleave: true,
 
     // Everything else
     autocapture: false,
