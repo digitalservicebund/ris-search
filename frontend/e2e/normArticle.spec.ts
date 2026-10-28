@@ -203,7 +203,7 @@ test.describe("view norm article page", () => {
 
     await page.getByRole("link", { name: "FrSaftErfrischV" }).first().click();
     await page.waitForURL(
-      "/gesetze/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu/art-z2",
+      "/gesetze/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu",
       { waitUntil: "commit" },
     );
   });
