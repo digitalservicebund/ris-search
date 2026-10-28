@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { NuxtError } from "#app";
 import SimpleSearchInput from "~/components/search/SimpleSearchInput.vue";
+import { DocumentKind } from "~/types/api";
 
 useHead({
   titleTemplate: (pageTitle) =>
@@ -9,7 +10,10 @@ useHead({
       : "Rechtsinformationen des Bundes",
 });
 
+const { trackSearch } = useSearchTracking();
+
 function redirectToSearch(searchStr?: string) {
+  trackSearch({ query: searchStr ?? "", documentKind: DocumentKind.All });
   navigateTo({ name: "suche", query: searchStr ? { query: searchStr } : {} });
 }
 

@@ -3,7 +3,10 @@ import IcBaselineArrowForward from "~icons/ic/baseline-arrow-forward";
 import { ExternalLink, NuxtLink } from "#components";
 import { DocumentKind } from "~/types/api";
 
+const { trackSearch } = useSearchTracking();
+
 function redirectToSearch(searchStr?: string) {
+  trackSearch({ query: searchStr ?? "", documentKind: DocumentKind.All });
   navigateTo({ name: "suche", query: searchStr ? { query: searchStr } : {} });
 }
 
