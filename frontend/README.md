@@ -59,7 +59,7 @@ The frontend can be configured through environment variables at different points
   - `NUXT_BASIC_AUTH`: When basic auth is enabled on the infrastructure level, this needs to be set to the basic auth credentials so the Nuxt server can talk to the Portal API.
   - `NUXT_PUBLIC_PRIVATE_FEATURES_ENABLED`: If set to `true`, private features are enabled. Make sure to also set this when running E2E tests, so the test suite is in sync with the running application. By default, private features are disabled.
   - `NUXT_PUBLIC_SENTRY_DSN`: Sentry Data Source. Setting this will enable Sentry.
-  - `NUXT_PUBLIC_POSTHOG_PUBLIC_KEY` and `NUXT_PUBLIC_POSTHOG_HOST`: Project key and host for PostHog. Setting the key enables PostHog. Always set the host too. Without it, PostHog falls back to its US cloud, which the CSP blocks, so nothing gets tracked. Tracking only starts once the user consents in the cookie banner.
+  - `NUXT_PUBLIC_POSTHOG_PUBLIC_KEY`: Project key for PostHog. Setting the key enables PostHog. The host is hardcoded to the PostHog EU cloud. Tracking only starts once the user consents in the cookie banner.
   - `PORT`: Port to run the application on
 
 - **Buildtime:** when the application is built, either in the Docker container or manually. This configuration will be baked into the application, shared in all environments, and the variables don't need to exist at runtime.

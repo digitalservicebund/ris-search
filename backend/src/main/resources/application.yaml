@@ -93,7 +93,6 @@ sentry:
 
 posthog:
   api-key: ""
-  host: ""
   feedback-survey-id: ""
   debug: false
   track-api-calls: false
