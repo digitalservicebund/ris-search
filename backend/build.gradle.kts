@@ -107,6 +107,9 @@ dependencies {
     // CVE-2026-65182
     implementation(libs.tomcat.embed.core)
 
+    // CVE-2026-102554
+    implementation(libs.google.guava)
+
     implementation(libs.ris.html.transformation)
 
     implementation(libs.ris.xml.schema)
