@@ -762,6 +762,24 @@ test.describe("fassungen tab", { tag: ["@RISDEV-11132"] }, () => {
     ).not.toBeVisible();
   });
 
+  test(
+    "hides fassungen tab when article has only one fassung in one gesamtausgabe",
+    { tag: ["@RISDEV-12983"] },
+    async ({ page }) => {
+      await navigate(
+        page,
+        "/gesetze/eli/bund/bgbl-1/2025/130/2025-05-05/1/deu/art-z1",
+      );
+
+      await expect(
+        page.getByRole("heading", { name: "§ 1 Gültiger Paragraph" }),
+      ).toBeVisible();
+      await expect(
+        page.getByRole("tab", { name: "Fassungen" }),
+      ).not.toBeVisible();
+    },
+  );
+
   test("displays placeholder message when private features disabled", async ({
     page,
     privateFeaturesEnabled,

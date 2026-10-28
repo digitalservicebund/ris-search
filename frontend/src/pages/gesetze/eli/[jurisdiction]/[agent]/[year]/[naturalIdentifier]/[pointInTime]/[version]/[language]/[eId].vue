@@ -11,6 +11,7 @@ import type { BreadcrumbItem } from "~/components/Breadcrumbs.vue";
 import type { MetadataItem } from "~/components/documents/Metadata.vue";
 import type { TabView } from "~/components/documents/TabsLayout.vue";
 import { useArticleSeo } from "~/composables/useArticleSeo";
+import { useFassungsGesamtausgaben } from "~/composables/useFassungsGesamtausgaben";
 import { useSearchBackLink } from "~/composables/useSearchBackLink";
 import {
   type Article,
@@ -79,10 +80,14 @@ function fetchValidGesamtausgaben() {
   return useValidNormVersions(workEli);
 }
 
-const [fassungenResult, validVersions] = await Promise.all([
-  fetchFassungen(),
-  fetchValidGesamtausgaben(),
-]);
+const [fassungenResult, validVersions, { data: fassungGesamtausgaben }] =
+  await Promise.all([
+    fetchFassungen(),
+    fetchValidGesamtausgaben(),
+    useFassungsGesamtausgaben(() =>
+      isArticle.value ? article.value?.revision : undefined,
+    ),
+  ]);
 
 if (fassungenResult?.error.value) {
   throw createError(fassungenResult.error.value);
@@ -93,6 +98,13 @@ if (validVersions?.error.value) {
 }
 
 const fassungen = computed(() => fassungenResult?.data.value?.member ?? []);
+
+const displayFassungenTab = computed(
+  () =>
+    isArticle.value &&
+    !!article.value?.revision &&
+    (fassungen.value.length > 1 || fassungGesamtausgaben.value.length > 1),
+);
 
 const inForceExpressionEli = computed(() => {
   if (isNormInForce) return `eli/${expressionEli}`;
@@ -243,7 +255,7 @@ const views = computed<OneOrMore<TabView>>(() => {
     },
   ];
 
-  if (isArticle.value && article.value?.revision) {
+  if (displayFassungenTab.value) {
     tabViews.push({
       path: "fassungen",
       label: "Fassungen",
@@ -371,7 +383,7 @@ const fassungenDateFilterInputId = useId();
         </section>
       </template>
 
-      <template v-if="article?.revision" #fassungen>
+      <template v-if="displayFassungenTab && article?.revision" #fassungen>
         <section role="tabpanel" :aria-labelledby="fassungenTabPanelTitleId">
           <div class="content-grid pt-32 pb-32 md:pb-56">
             <div
