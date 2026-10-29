@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import de.bund.digitalservice.ris.TestXmlUtils;
 import de.bund.digitalservice.ris.html.exception.FileTransformationException;
 import de.bund.digitalservice.ris.search.exception.NoSuchKeyException;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
@@ -21,8 +22,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.Mockito;
-import org.xmlunit.builder.DiffBuilder;
-import org.xmlunit.diff.Diff;
 import software.amazon.awssdk.core.ResponseInputStream;
 import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 
@@ -87,29 +86,11 @@ class NormXsltTransformerServiceTest {
             ? service.transformArticle(bytes, "anlagen-n1_anlage-n1", RESOURCES_BASE_PATH)
             : service.transformNorm(bytes, "deu", RESOURCES_BASE_PATH, "regelungstext-1");
 
-    var outputSettings =
-        new Document.OutputSettings()
-            // Needed so not closing tags in html like <br> are transformed to self-closing tags
-            // e.g. </br>
-            .syntax(Document.OutputSettings.Syntax.xml)
-            .prettyPrint(true);
+    String expectedHtml =
+        TestXmlUtils.normalizedHtml(Files.readString(Path.of(resourcesPath, expectedFileName)));
+    String actualHtml = TestXmlUtils.normalizedHtml(result);
 
-    var expectedHtml =
-        Jsoup.parse(Files.readString(Path.of(resourcesPath, expectedFileName)))
-            .outputSettings(outputSettings)
-            .body()
-            .html();
-    var actualHtml = Jsoup.parse(result).outputSettings(outputSettings).body().html();
-
-    // Use xml Diffbuilder to be able to do a structural comparison not affected by whitespaces
-    // around nodes
-    Diff diff =
-        DiffBuilder.compare(expectedHtml)
-            .withTest(actualHtml)
-            .ignoreWhitespace()
-            .checkForIdentical()
-            .build();
-    assertThat(diff.hasDifferences()).describedAs(diff::toString).isFalse();
+    assertThat(actualHtml).isEqualTo(expectedHtml);
   }
 
   @Test

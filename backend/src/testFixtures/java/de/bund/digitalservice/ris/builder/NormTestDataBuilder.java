@@ -10,6 +10,7 @@ import de.bund.digitalservice.ris.builder.models.body.Body;
 import de.bund.digitalservice.ris.builder.models.body.BodyElement;
 import de.bund.digitalservice.ris.builder.models.body.Chapter;
 import de.bund.digitalservice.ris.builder.models.body.Section;
+import de.bund.digitalservice.ris.builder.models.common.AuthorialNote;
 import de.bund.digitalservice.ris.builder.models.common.Block;
 import de.bund.digitalservice.ris.builder.models.common.Inline;
 import de.bund.digitalservice.ris.builder.models.meta.Meta;
@@ -22,7 +23,6 @@ import de.bund.digitalservice.ris.builder.models.preamble.Toc;
 import de.bund.digitalservice.ris.builder.models.preface.DocTitle;
 import de.bund.digitalservice.ris.builder.models.preface.LongTitle;
 import de.bund.digitalservice.ris.builder.models.preface.Preface;
-import de.bund.digitalservice.ris.builder.models.preface.ShortTitle;
 import de.bund.digitalservice.ris.search.utils.LegalDocMLDeContext;
 import de.bund.digitalservice.ris.utils.NormXmlValidator;
 import jakarta.xml.bind.JAXBContext;
@@ -168,67 +168,36 @@ public class NormTestDataBuilder {
   }
 
   /**
-   * Sets the norm's official title (Langtitel) shown in the preface.
+   * Sets the norm's long title shown in the preface.
    *
    * @param officialTitle the official title text
+   * @param shortTitle the short title text
+   * @param officialAbbreviation the official abbreviation text
    * @return this builder for chaining
    */
-  public NormTestDataBuilder officialTitle(String officialTitle) {
-    this.officialTitle(officialTitle, null);
-
+  public NormTestDataBuilder longTitle(
+      String officialTitle, String shortTitle, String officialAbbreviation) {
+    this.document
+        .getAct()
+        .getPreface()
+        .setLongTitle(new LongTitle(officialTitle, shortTitle, officialAbbreviation));
     return this;
   }
 
   /**
-   * Sets the norm's official title (Langtitel) shown in the preface and provides the title for
-   * further actions.
+   * Sets a footnote in the official title
    *
-   * @param officialTitle the official title text
-   * @param longTitleConsumer callback which provided the LongTitle object for fruther actions
+   * @param footnote the footnote to add to the official title
    * @return this builder for chaining
    */
-  public NormTestDataBuilder officialTitle(
-      String officialTitle, Consumer<LongTitle> longTitleConsumer) {
-    LongTitle longTitle = this.document.getAct().getPreface().getLongTitle();
-
-    longTitle.setOfficialTitle(officialTitle);
-    if (longTitleConsumer != null) longTitleConsumer.accept(longTitle);
-
-    return this;
-  }
-
-  /**
-   * Sets the norm's short title (Kurztitel) in the preface.
-   *
-   * @param title the short title text
-   * @param suffix optional suffix appended after the title, or {@code null} for none
-   * @return this builder for chaining
-   */
-  public NormTestDataBuilder shortTitle(String title, String suffix) {
-    ShortTitle shortTitle = this.document.getAct().getPreface().getLongTitle().getShortTitle();
+  public NormTestDataBuilder addOfficialTitleFootnote(String footnote) {
     this.document
         .getAct()
         .getPreface()
         .getLongTitle()
-        .setShortTitle(shortTitle.withTitle(title, suffix));
-
-    return this;
-  }
-
-  /**
-   * Sets the norm's official abbreviation (amtliche Abkürzung) in the preface.
-   *
-   * @param abbreviation the official abbreviation text
-   * @return this builder for chaining
-   */
-  public NormTestDataBuilder officialAbbreviation(String abbreviation) {
-    ShortTitle shortTitle = this.document.getAct().getPreface().getLongTitle().getShortTitle();
-    this.document
-        .getAct()
-        .getPreface()
-        .getLongTitle()
-        .setShortTitle(shortTitle.withOfficialAbbreviation(abbreviation));
-
+        .getOfficialTitle()
+        .getChildren()
+        .add(new AuthorialNote(footnote));
     return this;
   }
 

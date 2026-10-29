@@ -66,8 +66,7 @@ public class NormLdmlToOpenSearchMapper {
 
   private static final Logger logger = LogManager.getLogger(NormLdmlToOpenSearchMapper.class);
 
-  private static final String X_PATH_SHORT_TITLE_ALTERNATE_NAME =
-      "//*[local-name()='shortTitle']/text()";
+  private static final String X_PATH_SHORT_TITLE = "//*[local-name()='shortTitle']/text()";
   private static final String X_PATH_DOC_TITLE_NAME = "//*[local-name()='docTitle']/text()";
   private static final String X_PATH_WORK_URI =
       "//*[local-name()='FRBRWork']/*[local-name()='FRBRuri']/@value";
@@ -75,8 +74,8 @@ public class NormLdmlToOpenSearchMapper {
       "//*[local-name()='FRBRExpression']/*[local-name()='FRBRuri']/@value";
   private static final String X_PATH_MANIFESTATION_THIS =
       "//*[local-name()='FRBRManifestation']/*[local-name()='FRBRthis']/@value";
-  private static final String X_PATH_SHORT_TITLE_ABBREVIATION =
-      "//*[local-name()='shortTitle']/*[local-name()='inline' and @refersTo='amtliche-abkuerzung']/text()";
+  private static final String X_PATH_OFFICIAL_ABBREVIATION =
+      "//*[local-name()='longTitle']/akn:p/*[local-name()='inline' and @refersTo='amtliche-abkuerzung']/text()";
   private static final String X_PATH_WORK_DATE =
       "//*[local-name()='FRBRWork']/*[local-name()='FRBRdate']/@date";
   private static final String X_PATH_DATE_AUSFERTIGUNG =
@@ -174,14 +173,15 @@ public class NormLdmlToOpenSearchMapper {
     String manifestationEliPath =
         parseURIPathOrThrow(manifestationEli, "Manifestation eli must be a valid uri.");
 
+    String officialTitle =
+        getFieldWithoutNewlines(xmlDocument.getElementByXpath(X_PATH_DOC_TITLE_NAME));
+    String shortTitle = getFieldWithoutNewlines(xmlDocument.getElementByXpath(X_PATH_SHORT_TITLE));
     String risAbbreviation =
         xmlDocument.getNonEmptyElementOrThrow(
             X_PATH_RIS_ABKUERZUNG, "Norm must have ris-abbreviation");
 
     String abbreviation =
-        xmlDocument
-            .getNonEmptyElementByXpath(X_PATH_SHORT_TITLE_ABBREVIATION)
-            .orElse(risAbbreviation);
+        xmlDocument.getNonEmptyElementByXpath(X_PATH_OFFICIAL_ABBREVIATION).orElse(risAbbreviation);
 
     List<Attachment> attachments =
         NormAttachmentMapper.parseAttachments(xmlDocument, attachmentFileContents);
@@ -227,8 +227,8 @@ public class NormLdmlToOpenSearchMapper {
         .workEli(workEliPath)
         .expressionEli(expressionEliPath)
         .manifestationEliExample(manifestationEliPath)
-        .officialTitle(getOfficialTitleByXmlDocument(xmlDocument))
-        .officialShortTitle(getOfficialShortTitleByXmlDocument(xmlDocument))
+        .officialTitle(officialTitle)
+        .officialShortTitle(shortTitle)
         .abbreviation(abbreviation)
         .risAbbreviation(risAbbreviation)
         .normsDate(legislationDate)
@@ -295,40 +295,22 @@ public class NormLdmlToOpenSearchMapper {
     return StringUtils.isNotEmpty(publishedIn) ? publishedIn.trim() : StringUtils.EMPTY;
   }
 
-  private static String getOfficialTitleByXmlDocument(XmlDocument xmlDocument) {
-    String xmlDocumentOfficialTitle = xmlDocument.getElementByXpath(X_PATH_DOC_TITLE_NAME);
-
-    return StringUtils.isNotEmpty(xmlDocumentOfficialTitle)
-        ? StringUtils.trimToEmpty(
-                xmlDocumentOfficialTitle.replace(")", "").replace("(", "").replace("\n", " "))
-            .replaceAll("\\s{2,}", " ")
-        : StringUtils.EMPTY;
-  }
-
-  private static @Nullable String getOfficialShortTitleByXmlDocument(XmlDocument xmlDocument) {
-    String xmlDocumentAlternateName =
-        xmlDocument.getElementByXpath(X_PATH_SHORT_TITLE_ALTERNATE_NAME);
-
-    return StringUtils.trimToNull(parseShortTitle(xmlDocumentAlternateName));
-  }
-
   /**
-   * Removes Trailing dash punctuation and Parenthesis from a given String
-   *
-   * @param original String to be processed
-   * @return cleared String
+   * We want to alter the content as little as possible. Therefore, we only replace newlines and
+   * trim leading and trailing whitespace. To replace the newlines, we use a single space unless the
+   * newline was already adjacent to an existing whitespace.
    */
-  public static String parseShortTitle(String original) {
-    if (original == null || original.isEmpty()) {
-      return original;
+  private static String getFieldWithoutNewlines(String field) {
+    if (field == null) {
+      return null;
     }
-
-    return original
-        .strip()
-        .replaceAll("\\p{Pd}\\Z", "") // remove trailing dash punctuation
-        .replaceAll("[()]", " ")
-        .replaceAll("\\s{2,}", " ") // collapse multiple whitespaces
-        .trim();
+    return StringUtils.trimToNull(
+        field
+            .replaceAll("(\\s)\\R", "$1") // remove newlines with whitespace on the left
+            .replaceAll(
+                "(\\p{Pd})\\R", "$1") // remove newlines with dash (or equivalent) on the left
+            .replaceAll("\\R(\\s)", "$1") // remove newlines with whitespace on the right
+            .replaceAll("\\R", " ")); // replace remaining newlines with a single space
   }
 
   private static LocalDate getDateByXpath(XmlDocument xmlDocument, String xpath) {

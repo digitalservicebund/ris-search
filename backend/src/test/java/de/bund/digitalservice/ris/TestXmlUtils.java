@@ -22,6 +22,7 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
+import org.jsoup.Jsoup;
 import org.springframework.xml.transform.StringSource;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
@@ -115,5 +116,22 @@ public class TestXmlUtils {
       sb.append(line.trim());
     }
     return sb.toString();
+  }
+
+  /**
+   * Normalize whitespace in html. This method doesn't produce equivalent html in some corner cases
+   * and is therefore only suitable for test comparisons.
+   *
+   * @param rawHtml not normalized html
+   * @return A nicely formatted string in a normalized format
+   * @throws IOException If an I/O error occurs
+   */
+  public static String normalizedHtml(String rawHtml) {
+    String stripped = rawHtml.replaceAll(">\\s+<", "><").trim();
+    var outputSettings =
+        new org.jsoup.nodes.Document.OutputSettings()
+            .syntax(org.jsoup.nodes.Document.OutputSettings.Syntax.xml)
+            .prettyPrint(true);
+    return Jsoup.parse(stripped).outputSettings(outputSettings).body().html();
   }
 }

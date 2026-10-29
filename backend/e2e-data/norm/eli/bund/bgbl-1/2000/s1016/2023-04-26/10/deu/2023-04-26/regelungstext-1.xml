@@ -167,9 +167,7 @@
                             </akn:p>
                         </akn:authorialNote>
                     </akn:docTitle>
-                    <akn:shortTitle GUID="d6666666-6666-6666-6666-666666666666" eId="einleitung-n1_doktitel-n1_text-n1_kurztitel-n1">
-                        (Fruchtsaft- und Erfrischungsgetränkeverordnung – <akn:inline GUID="d7777777-7777-7777-7777-777777777777" eId="einleitung-n1_doktitel-n1_text-n1_kurztitel-n1_inline-n1" name="attributsemantik-noch-undefiniert" refersTo="amtliche-abkuerzung">FrSaftErfrischV</akn:inline>)
-                    </akn:shortTitle>
+                    (<akn:shortTitle GUID="d6666666-6666-6666-6666-666666666666" eId="einleitung-n1_doktitel-n1_text-n1_kurztitel-n1">Fruchtsaft- und Erfrischungsgetränkeverordnung</akn:shortTitle> – <akn:inline GUID="d7777777-7777-7777-7777-777777777777" eId="einleitung-n1_doktitel-n1_text-n1_kurztitel-n1_inline-n1" name="attributsemantik-noch-undefiniert" refersTo="amtliche-abkuerzung">FrSaftErfrischV</akn:inline>)
                 </akn:p>
             </akn:longTitle>
             <akn:block GUID="d8a00001-0000-0000-0000-000000000001" eId="einleitung-n1_block-n1" name="attributsemantik-noch-undefiniert">

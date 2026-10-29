@@ -58,7 +58,7 @@
     <!-- Kurztitel des Dokuments ("(SchlJG)"); gibt den Kurzbezeichner, von Klammern umschlossen, zurück, oder einen leeren String -->
     <xsl:function name="akn:kurztitel" as="xs:string?">
         <xsl:sequence>
-            <xsl:variable name="kurztitel" as="xs:string?" select="$dokument/akn:act/akn:preface/akn:longTitle/akn:p/akn:shortTitle/akn:inline"/>
+            <xsl:variable name="kurztitel" as="xs:string?" select="$dokument/akn:act/akn:preface/akn:longTitle/akn:p/akn:inline"/>
             <xsl:choose>
                 <xsl:when test="$kurztitel">
                     <xsl:sequence select="concat('(', $kurztitel, ')')"/>
