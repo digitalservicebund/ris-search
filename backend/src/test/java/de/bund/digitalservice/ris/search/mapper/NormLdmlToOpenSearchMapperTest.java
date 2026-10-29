@@ -72,7 +72,7 @@ class NormLdmlToOpenSearchMapperTest {
         Arguments.of(" Title Title", "Title Title"),
         Arguments.of("\nTitle\n", "Title"),
         Arguments.of("        Title     ", "Title"),
-        Arguments.of(" \n ( Title  \n   ) ()", "( Title     ) ()"),
+        Arguments.of(" \n ( Title  \n   ) ()", "( Title  \n   ) ()"),
         Arguments.of("", null),
         Arguments.of(null, null),
         Arguments.of("   () \n", "()"));
@@ -597,7 +597,7 @@ class NormLdmlToOpenSearchMapperTest {
         Arguments.of(
             "Fruchtsaft- und Erfrischungsgetränkeverordnung",
             "Fruchtsaft- und Erfrischungsgetränkeverordnung"),
-        Arguments.of("Kurz-\ntitel\n", "Kurz-titel"));
+        Arguments.of("Kurz-\ntitel\n", "Kurz-\ntitel"));
   }
 
   @ParameterizedTest

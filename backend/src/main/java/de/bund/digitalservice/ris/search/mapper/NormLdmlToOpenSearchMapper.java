@@ -174,8 +174,8 @@ public class NormLdmlToOpenSearchMapper {
         parseURIPathOrThrow(manifestationEli, "Manifestation eli must be a valid uri.");
 
     String officialTitle =
-        getFieldWithoutNewlines(xmlDocument.getElementByXpath(X_PATH_DOC_TITLE_NAME));
-    String shortTitle = getFieldWithoutNewlines(xmlDocument.getElementByXpath(X_PATH_SHORT_TITLE));
+        StringUtils.trimToNull(xmlDocument.getElementByXpath(X_PATH_DOC_TITLE_NAME));
+    String shortTitle = StringUtils.trimToNull(xmlDocument.getElementByXpath(X_PATH_SHORT_TITLE));
     String risAbbreviation =
         xmlDocument.getNonEmptyElementOrThrow(
             X_PATH_RIS_ABKUERZUNG, "Norm must have ris-abbreviation");
@@ -293,24 +293,6 @@ public class NormLdmlToOpenSearchMapper {
     }
 
     return StringUtils.isNotEmpty(publishedIn) ? publishedIn.trim() : StringUtils.EMPTY;
-  }
-
-  /**
-   * We want to alter the content as little as possible. Therefore, we only replace newlines and
-   * trim leading and trailing whitespace. To replace the newlines, we use a single space unless the
-   * newline was already adjacent to an existing whitespace.
-   */
-  private static String getFieldWithoutNewlines(String field) {
-    if (field == null) {
-      return null;
-    }
-    return StringUtils.trimToNull(
-        field
-            .replaceAll("(\\s)\\R", "$1") // remove newlines with whitespace on the left
-            .replaceAll(
-                "(\\p{Pd})\\R", "$1") // remove newlines with dash (or equivalent) on the left
-            .replaceAll("\\R(\\s)", "$1") // remove newlines with whitespace on the right
-            .replaceAll("\\R", " ")); // replace remaining newlines with a single space
   }
 
   private static LocalDate getDateByXpath(XmlDocument xmlDocument, String xpath) {
