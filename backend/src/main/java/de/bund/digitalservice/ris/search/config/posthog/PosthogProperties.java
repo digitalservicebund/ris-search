@@ -27,4 +27,5 @@ public class PosthogProperties {
   private String apiKey;
   private String feedbackSurveyId;
   private boolean debug;
+  private double apiCallsSampleRate = 1.0;
 }
