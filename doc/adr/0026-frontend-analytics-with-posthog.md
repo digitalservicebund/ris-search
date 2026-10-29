@@ -1,4 +1,4 @@
-# 26. Product analytics with PostHog
+# 26. Frontend analytics with PostHog
 
 Date: 2026-10-29
 
