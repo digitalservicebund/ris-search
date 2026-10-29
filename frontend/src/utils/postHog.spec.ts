@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { parseConsentCookie } from "./postHog";
+import { formatConsentCookie, parseConsentCookie } from "./postHog";
 
 describe("postHog", () => {
   describe("parseConsentCookie", () => {
@@ -23,5 +23,19 @@ describe("postHog", () => {
         expect(parseConsentCookie(value)).toBe("pending");
       },
     );
+  });
+
+  describe("formatConsentCookie", () => {
+    it.each([
+      [true, "1"],
+      [false, "0"],
+    ])("returns %j for %s", (isGranted, value) => {
+      expect(formatConsentCookie(isGranted)).toBe(value);
+    });
+
+    it.each([true, false])("round-trips %s", (isGranted) => {
+      const expected = isGranted ? "granted" : "denied";
+      expect(parseConsentCookie(formatConsentCookie(isGranted))).toBe(expected);
+    });
   });
 });
