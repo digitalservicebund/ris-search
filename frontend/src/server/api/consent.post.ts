@@ -7,6 +7,7 @@ import {
   sendRedirect,
   setCookie,
 } from "h3";
+import { getSameOriginUrl } from "~/server/utils/sameOriginUrl";
 import {
   CONSENT_COOKIE_MAX_AGE,
   CONSENT_COOKIE_NAME,
@@ -27,14 +28,9 @@ function getSafeRedirectPath(redirect: unknown, origin: string) {
   if (typeof redirect !== "string") return "/";
   if (!redirect.startsWith("/")) return "/";
 
-  try {
-    const url = new URL(redirect, origin);
-    if (url.origin !== origin) return "/";
-    if (url.pathname.startsWith("//")) return "/";
-    return `${url.pathname}${url.search}${url.hash}`;
-  } catch {
-    return "/";
-  }
+  const url = getSameOriginUrl(redirect, origin);
+  if (!url) return "/";
+  return `${url.pathname}${url.search}${url.hash}`;
 }
 
 /**
