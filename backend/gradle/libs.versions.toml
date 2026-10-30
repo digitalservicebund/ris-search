@@ -89,7 +89,10 @@ bouncycastle-bom = { module = "org.bouncycastle:bc-jdk18on-bom", version = "1.86
 reflections = { module = "org.reflections:reflections", version.ref = "reflections" }
 
 # CVE-2026-65182
-tomcat-embed-core = { module = "org.apache.tomcat.embed:tomcat-embed-core" , version = "11.0.27" }
+tomcat-embed-core = { module = "org.apache.tomcat.embed:tomcat-embed-core", version = "11.0.27" }
+
+# CVE-2026-102554
+google-guava = { module = "com.google.guava:guava", version = "33.7.2-jre" }
 
 [plugins]
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }

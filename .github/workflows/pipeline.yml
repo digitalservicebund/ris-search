@@ -116,7 +116,7 @@ jobs:
 
   deploy-prototype:
     needs:
-      - smoke-tests
+      - deploy-uat
     uses: ./.github/workflows/deploy.yml
     secrets:
       ARGOCD_AUTH_TOKEN: ${{ secrets.ARGOCD_AUTH_TOKEN }}

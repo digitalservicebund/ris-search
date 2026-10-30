@@ -1,8 +1,5 @@
 packages: []
 
-overrides:
-  "undici": "8.12.2"
-
 allowBuilds:
   "@parcel/watcher": true
   "@posthog/cli": false

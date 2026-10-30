@@ -13,8 +13,7 @@ import org.springframework.stereotype.Component;
  * application.properties, using the prefix "posthog".
  *
  * <p>Properties included: - apiKey: The API key used to authenticate with the PostHog service. -
- * host: The hostname or base URL of the PostHog service. - feedbackSurveyId: The identifier for the
- * feedback survey configured in PostHog.
+ * feedbackSurveyId: The identifier for the feedback survey configured in PostHog.
  *
  * <p>These properties are utilized by various components, such as `PostHogConfig` and
  * `PostHogService`, to initialize PostHog clients and submit analytics data or user feedback to the
@@ -26,7 +25,6 @@ import org.springframework.stereotype.Component;
 @Setter
 public class PosthogProperties {
   private String apiKey;
-  private String host;
   private String feedbackSurveyId;
   private boolean debug;
 }

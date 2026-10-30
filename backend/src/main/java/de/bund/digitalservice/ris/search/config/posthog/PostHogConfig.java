@@ -17,12 +17,15 @@ import org.springframework.context.annotation.Profile;
 @Configuration
 public class PostHogConfig {
 
+  /** PostHog EU cloud. Hardcoded so it can't be forgotten or misconfigured. */
+  private static final String POSTHOG_HOST = "https://eu.i.posthog.com";
+
   /**
    * Creates and configures a PostHogClient bean for use in specified environments. Initializes a
    * PostHog instance using the provided PosthogProperties.
    *
-   * @param properties the configuration properties containing the API key and host information
-   *     required to set up the PostHog instance
+   * @param properties the configuration properties containing the API key required to set up the
+   *     PostHog instance
    * @return a configured PostH
    */
   @Bean
@@ -30,7 +33,7 @@ public class PostHogConfig {
   public PostHogClient postHog(PosthogProperties properties) {
     var config =
         com.posthog.server.PostHogConfig.builder(properties.getApiKey())
-            .host(properties.getHost())
+            .host(POSTHOG_HOST)
             .debug(properties.isDebug())
             .build();
     PostHogInterface posthogInterface = PostHog.with(config);

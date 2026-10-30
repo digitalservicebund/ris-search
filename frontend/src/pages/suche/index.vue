@@ -41,6 +41,8 @@ useSearchSeo({
 
 const privateFeaturesEnabled = usePrivateFeaturesFlag();
 
+const { trackSearch } = useSearchTracking({ query, documentKind });
+
 // Date filter ---------------------------------------------
 
 const localDateFilter = ref(dateFilter.value);
@@ -69,6 +71,7 @@ function updateCategoryFilter(value: string) {
   let kind = DocumentKind.All;
   if (maybeKind && isDocumentKind(maybeKind)) kind = maybeKind;
 
+  trackSearch({ query: query.value, documentKind: kind });
   navigateToSearch({ documentKind: kind, typeGroup: group, pageIndex: 0 });
 }
 
@@ -214,8 +217,9 @@ const { isSearching } = useSearchLoadingIndicator(searchStatus);
 
 // User action handlers ------------------------------------
 
-function updateQuery(value: string | undefined) {
-  navigateToSearch({ query: value ?? "", pageIndex: 0 });
+function updateQuery(value = "") {
+  trackSearch({ query: value, documentKind: documentKind.value });
+  navigateToSearch({ query: value, pageIndex: 0 });
 }
 
 function handleEmptySearch() {

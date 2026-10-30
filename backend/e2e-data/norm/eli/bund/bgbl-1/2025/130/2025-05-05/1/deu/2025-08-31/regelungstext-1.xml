@@ -71,6 +71,9 @@
                     <ris:ausserkraft date="2037-03-31"/>
                     <ris:vollzitat>Gerade Gültig Gesetz vom 3. April 2025 (BGBl. 2025 I Nr. 240)</ris:vollzitat>
                     <ris:standangabe type="aufh">V aufgeh. durch § 2 dieser V mit Ablauf d. 31.3.2027</ris:standangabe>
+                    <ris:doknr source="#art-z1">DKNR202500130BJNE00010000</ris:doknr>
+                    <ris:doknr source="#art-z2">DKNR202500130BJNE00020000</ris:doknr>
+                    <ris:doknr source="#art-z3">DKNR202500130BJNE00030000</ris:doknr>
                 </ris:legalDocML.de_metadaten>
             </akn:proprietary>
         </akn:meta>
