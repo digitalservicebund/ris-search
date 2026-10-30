@@ -37,6 +37,7 @@ public class LongTitle extends BaseElement {
     this(new DocTitle(), new ShortTitle(), null);
   }
 
+  /** Creates a LongTitle with the given title parts as string. */
   public LongTitle(String officialTitle, String shortTitle, String officialAbbreviation) {
     this(
         officialTitle == null ? null : new DocTitle(officialTitle),
@@ -49,6 +50,7 @@ public class LongTitle extends BaseElement {
                 officialAbbreviation));
   }
 
+  /** Creates a LongTitle with the given title components. */
   public LongTitle(DocTitle officialTitle, ShortTitle shortTitle, Inline officialAbbreviation) {
     eId = "einleitung-n1_doktitel-n1";
     List<Object> children = new ArrayList<>();
