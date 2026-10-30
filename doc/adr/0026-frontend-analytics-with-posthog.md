@@ -10,7 +10,7 @@ Accepted
 
 The frontend uses PostHog to learn how people use the portal. Our requirements for analytics have changed, and the new requirements are narrower and more specific than the old ones. We built the previous integration for the old requirements, so it did more than we now need.
 
-It also did a lot by hand. It set up the PostHog library, managed the consent cookie, and had a server endpoint for consent without JavaScript. One central module held consent, feedback and all events. As a result, adding a new metric meant touching unrelated code.
+It also did a lot by hand. It set up the PostHog library and managed the consent cookie in the browser. One central module held consent, feedback and all events. As a result, adding a new metric meant touching unrelated code.
 
 We rebuilt the integration in [RISDEV-12927](https://digitalservicebund.atlassian.net/browse/RISDEV-12927) and added the first metrics back in [RISDEV-12930](https://digitalservicebund.atlassian.net/browse/RISDEV-12930) and [RISDEV-12931](https://digitalservicebund.atlassian.net/browse/RISDEV-12931). This ADR records the decisions behind that rebuild.
 
@@ -26,9 +26,9 @@ Feedback from the feedback form is always anonymous. The backend sends it to Pos
 
 ### PostHog handles consent
 
-PostHog stores the user's decision in its own cookie. We do not write or manage that cookie ourselves. During server-side rendering, we read the cookie to decide whether to show the banner, so the page renders correctly before hydration.
+PostHog stores the user's decision in its own cookie. In the browser, we leave that cookie to PostHog. During server-side rendering, we read the cookie to decide whether to show the banner, so the page renders correctly before hydration.
 
-There is no consent or tracking without JavaScript. PostHog only runs in the browser, so opting in or out without JavaScript would have no effect.
+Tracking always needs JavaScript, but giving or refusing consent does not. Without JavaScript, the consent buttons submit a form to the server, which writes the same cookie in the same format as PostHog. Users can close the banner and change their decision either way. PostHog follows that decision once JavaScript is available.
 
 ### Keep the integration small
 
@@ -50,8 +50,6 @@ The frontend and the backend both hardcode the PostHog EU cloud as the host. The
 
 - Visitor data stays in the EU. Moving to a different PostHog region or to a proxy needs a code change.
 
-- We depend on PostHog's consent handling and cookie format. We read the cookie the same way PostHog does, so a change to its format could break the banner.
-
-- Visitors without JavaScript cannot give or refuse consent. This does not matter, because nothing is tracked for them anyway.
+- We depend on PostHog's consent handling and cookie format. We read and write the cookie the same way PostHog does, so a change to its format could break the banner and consent without JavaScript.
 
 - We cannot link feedback to a user's other activity.
