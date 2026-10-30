@@ -81,11 +81,7 @@
             <akn:longTitle GUID="8e6cb547-e797-4411-812b-3c9a3f086ecd" eId="einleitung-n1_doktitel-n1">
                 <akn:p GUID="7b44727a-aeda-4b1e-95df-2ded3f6ccde7" eId="einleitung-n1_doktitel-n1_text-n1">
                     <akn:docTitle GUID="9238d9ad-d86a-48d4-94fd-ee2c7987ea42" eId="einleitung-n1_doktitel-n1_text-n1_doctitel-n1">Gerade gültiges Gesetz</akn:docTitle>
-                    <akn:shortTitle GUID="249cb043-7fb5-4730-8952-ae6f90290b58" eId="einleitung-n1_doktitel-n1_text-n1_kurztitel-n1">
-                        (Geradegültiggesetz -
-                        <akn:inline GUID="b55ca73c-329a-48ad-b91e-e1643d283af6" eId="einleitung-n1_doktitel-n1_text-n1_kurztitel-n1_inline-n1" name="attributsemantik-noch-undefiniert" refersTo="amtliche-abkuerzung">GeGuGe 2025</akn:inline>
-                        )
-                    </akn:shortTitle>
+                    (<akn:shortTitle GUID="249cb043-7fb5-4730-8952-ae6f90290b58" eId="einleitung-n1_doktitel-n1_text-n1_kurztitel-n1">Geradegültiggesetz</akn:shortTitle> - <akn:inline GUID="b55ca73c-329a-48ad-b91e-e1643d283af6" eId="einleitung-n1_doktitel-n1_text-n1_kurztitel-n1_inline-n1" name="attributsemantik-noch-undefiniert" refersTo="amtliche-abkuerzung">GeGuGe 2025</akn:inline>)
                 </akn:p>
             </akn:longTitle>
             <akn:block GUID="27e218f4-be91-4fc9-bbfb-503c624de8d0" eId="einleitung-n1_block-n1" name="attributsemantik-noch-undefiniert">

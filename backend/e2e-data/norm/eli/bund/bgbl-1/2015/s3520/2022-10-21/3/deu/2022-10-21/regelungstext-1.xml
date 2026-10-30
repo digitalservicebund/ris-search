@@ -80,7 +80,7 @@
             <akn:longTitle GUID="f1e2d3c4-0034-0001-0001-000000000034" eId="einleitung-n1_doktitel-n1">
                 <akn:p GUID="f1e2d3c4-0035-0001-0001-000000000035" eId="einleitung-n1_doktitel-n1_text-n1">
                     <akn:docTitle GUID="f1e2d3c4-0037-0001-0001-000000000037" eId="einleitung-n1_doktitel-n1_text-n1_doctitel-n1">Fiktive Verordnung zur Kontrolle unionsrechtlicher Anforderungen für neuartige Lebensmittel</akn:docTitle>
-                    <akn:shortTitle GUID="f1e2d3c4-0038-0001-0001-000000000038" eId="einleitung-n1_doktitel-n1_text-n1_kurztitel-n1">(Fiktive NLV-Verordnung – <akn:inline GUID="f1e2d3c4-0039-0001-0001-000000000039" eId="einleitung-n1_doktitel-n1_text-n1_kurztitel-n1_inline-n1" name="attributsemantik-noch-undefiniert" refersTo="amtliche-abkuerzung">NLV</akn:inline>)</akn:shortTitle>
+                    (<akn:shortTitle GUID="f1e2d3c4-0038-0001-0001-000000000038" eId="einleitung-n1_doktitel-n1_text-n1_kurztitel-n1">Fiktive NLV-Verordnung</akn:shortTitle> – <akn:inline GUID="f1e2d3c4-0039-0001-0001-000000000039" eId="einleitung-n1_doktitel-n1_text-n1_kurztitel-n1_inline-n1" name="attributsemantik-noch-undefiniert" refersTo="amtliche-abkuerzung">NLV</akn:inline>)
                 </akn:p>
             </akn:longTitle>
         </akn:preface>

@@ -31,10 +31,10 @@ class NormLdmlToOpenSearchMapperTest {
     NormTestDataBuilder builder =
         NormTestDataBuilder.builder()
             .eli("eli/bund/bgbl-1/1962/s514/2010-04-27/1/deu/2010-04-27/regelungstext-1.xml")
-            .officialTitle(
-                "Verordnung zur Durchführung des § 88 Abs. 2 Nr. 8 des Bundessozialhilfegesetzes")
-            .shortTitle("Kurztitel (", ")")
-            .officialAbbreviation("ABK")
+            .longTitle(
+                "Verordnung zur Durchführung des § 88 Abs. 2 Nr. 8 des Bundessozialhilfegesetzes",
+                "Kurztitel",
+                "ABK")
             .inForceDate("2000-01-01")
             .outOfForceDate("2000-01-07")
             .legislationDate("1962-07-15")
@@ -68,14 +68,14 @@ class NormLdmlToOpenSearchMapperTest {
 
   private static Stream<Arguments> officialTitleTestData() {
     return Stream.of(
-        Arguments.of("(Title)", "Title"),
+        Arguments.of("(Title)", "(Title)"),
         Arguments.of(" Title Title", "Title Title"),
         Arguments.of("\nTitle\n", "Title"),
         Arguments.of("        Title     ", "Title"),
-        Arguments.of(" \n ( Title  \n   ) ()", "Title"),
-        Arguments.of("", ""),
-        Arguments.of(null, ""),
-        Arguments.of("   () \n", ""));
+        Arguments.of(" \n ( Title  \n   ) ()", "( Title  \n   ) ()"),
+        Arguments.of("", null),
+        Arguments.of(null, null),
+        Arguments.of("   () \n", "()"));
   }
 
   @ParameterizedTest
@@ -83,7 +83,7 @@ class NormLdmlToOpenSearchMapperTest {
   @DisplayName("Extracts and cleans official title")
   void extractsAndCleansOfficialTitle(String title, String expected) {
 
-    NormTestDataBuilder builder = NormTestDataBuilder.builder().officialTitle(title);
+    NormTestDataBuilder builder = NormTestDataBuilder.builder().longTitle(title, null, null);
 
     String xmlContent = builder.buildNormXml();
     Optional<Norm> maybeNorm =
@@ -144,7 +144,7 @@ class NormLdmlToOpenSearchMapperTest {
   @DisplayName("Sets abbreviation to official abbreviation if both abbreviations exist")
   void prefersOfficialAbbreviationOverRisAbbreviation() {
     NormTestDataBuilder builder =
-        NormTestDataBuilder.builder().officialAbbreviation("OffAbb").risAbbreviation("RisAbb");
+        NormTestDataBuilder.builder().longTitle(null, null, "OffAbb").risAbbreviation("RisAbb");
 
     String xmlContent = builder.buildNormXml();
     Optional<Norm> maybeNorm =
@@ -158,7 +158,7 @@ class NormLdmlToOpenSearchMapperTest {
   @DisplayName("Sets abbreviation to ris-abbreviation as fallback")
   void usesRisAbbreviationAsFallback() {
     NormTestDataBuilder builder =
-        NormTestDataBuilder.builder().officialAbbreviation(null).risAbbreviation("RisAbb");
+        NormTestDataBuilder.builder().longTitle(null, null, null).risAbbreviation("RisAbb");
 
     String xmlContent = builder.buildNormXml();
     Optional<Norm> maybeNorm =
@@ -172,7 +172,7 @@ class NormLdmlToOpenSearchMapperTest {
   @DisplayName("Does not map norm if no abbreviation exists")
   void returnsEmptyOptionalWhenAbbreviationsAreMissing() {
     NormTestDataBuilder builder =
-        NormTestDataBuilder.builder().officialAbbreviation(null).risAbbreviation(null);
+        NormTestDataBuilder.builder().longTitle(null, null, null).risAbbreviation(null);
 
     String xmlContent = builder.buildNormXml();
     Optional<Norm> maybeNorm =
@@ -590,10 +590,10 @@ class NormLdmlToOpenSearchMapperTest {
 
   private static Stream<Arguments> provideShortTitlePermutations() {
     return Stream.of(
-        Arguments.of("(", ""),
-        Arguments.of(" ( Kurztitel -", "Kurztitel"),
-        Arguments.of("( Kurztitel -\n", "Kurztitel"),
-        Arguments.of("( Kurztitel - ", "Kurztitel"),
+        Arguments.of("(", "("),
+        Arguments.of(" ( Kurztitel -", "( Kurztitel -"),
+        Arguments.of("( Kurztitel -\n", "( Kurztitel -"),
+        Arguments.of("( Kurztitel - ", "( Kurztitel -"),
         Arguments.of(
             "Fruchtsaft- und Erfrischungsgetränkeverordnung",
             "Fruchtsaft- und Erfrischungsgetränkeverordnung"),
@@ -602,9 +602,17 @@ class NormLdmlToOpenSearchMapperTest {
 
   @ParameterizedTest
   @MethodSource("provideShortTitlePermutations")
-  @DisplayName("It removes parenthesis and trailing dashes from short titles")
+  @DisplayName("It removes or replaces newlines and removes leading and trailing space")
   void itParsesTheShortTitle(String input, String expected) {
-    assertThat(NormLdmlToOpenSearchMapper.parseShortTitle(input)).isEqualTo(expected);
+    NormTestDataBuilder builder = NormTestDataBuilder.builder().longTitle(null, input, null);
+
+    String xmlContent = builder.buildNormXml();
+    Optional<Norm> maybeNorm =
+        NormLdmlToOpenSearchMapper.parseNorm("", xmlContent, Map.of(), false);
+
+    assertThat(maybeNorm).isNotEmpty();
+
+    assertThat(maybeNorm.get().getOfficialShortTitle()).isEqualTo(expected);
   }
 
   @Test

@@ -136,9 +136,7 @@
                     <akn:docTitle GUID="66666666-7777-8888-9999-bbbbbbbbbbbb" eId="einleitung-n1_doktitel-n1_text-n1_doctitel-n1">
                         Musterverordnung über den Einsatz von Wahlgeräten im Rahmen der Bundestagswahl
                     </akn:docTitle>
-                    <akn:shortTitle GUID="77777777-8888-9999-aaaa-cccccccccccc" eId="einleitung-n1_doktitel-n1_text-n1_kurztitel-n1">
-                        (Bundeswahlgeräteverordnung - <akn:inline GUID="88888888-9999-aaaa-bbbb-dddddddddddd" eId="einleitung-n1_doktitel-n1_text-n1_kurztitel-n1_inline-n1" name="attributsemantik-noch-undefiniert" refersTo="amtliche-abkuerzung">BWahlGV</akn:inline>)
-                    </akn:shortTitle>
+                    (<akn:shortTitle GUID="77777777-8888-9999-aaaa-cccccccccccc" eId="einleitung-n1_doktitel-n1_text-n1_kurztitel-n1">Bundeswahlgeräteverordnung</akn:shortTitle> - <akn:inline GUID="88888888-9999-aaaa-bbbb-dddddddddddd" eId="einleitung-n1_doktitel-n1_text-n1_kurztitel-n1_inline-n1" name="attributsemantik-noch-undefiniert" refersTo="amtliche-abkuerzung">BWahlGV</akn:inline>)
                 </akn:p>
             </akn:longTitle>
         </akn:preface>
