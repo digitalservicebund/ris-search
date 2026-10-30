@@ -114,6 +114,19 @@ describe("feedback.post", () => {
     expect(mockSendRedirect).toHaveBeenCalledWith(mockEvent, "/?feedback=sent");
   });
 
+  it("prevents open redirect via a protocol-relative referer path", async () => {
+    mockReadBody.mockResolvedValue({ text: "Feedback" });
+    mockGetHeader.mockReturnValue("https://example.com//evil.com");
+    mockGetRequestURL.mockReturnValue(
+      new URL("https://example.com/api/feedback"),
+    );
+    mockFetch.mockResolvedValue({});
+
+    await feedbackHandler(mockEvent);
+
+    expect(mockSendRedirect).toHaveBeenCalledWith(mockEvent, "/?feedback=sent");
+  });
+
   it("extracts url from referer when no url in body", async () => {
     mockReadBody.mockResolvedValue({ text: "Feedback" });
     mockGetHeader.mockReturnValue("https://example.com/page?param=value");

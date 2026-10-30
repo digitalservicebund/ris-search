@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { isBannerVisible, setConsent } = useConsent();
+const { isBannerVisible } = useConsent();
 
 const headingId = useId();
 </script>
@@ -26,8 +26,8 @@ const headingId = useId();
       </div>
 
       <div class="flex flex-wrap items-center gap-x-24 gap-y-8 pt-16 lg:pt-24">
-        <UiButton label="Akzeptieren" @click="setConsent(true)" />
-        <UiButton label="Ablehnen" @click="setConsent(false)" />
+        <AnalyticsConsentForm is-granted label="Akzeptieren" />
+        <AnalyticsConsentForm :is-granted="false" label="Ablehnen" />
         <NuxtLink
           :to="{ name: 'datenschutzerklaerung' }"
           class="typo-link1-regular"

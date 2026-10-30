@@ -6,34 +6,19 @@ import {
   getRequestURL,
 } from "h3";
 import useBackendUrl from "~/composables/useBackendUrl";
+import { getSameOriginUrl } from "~/server/utils/sameOriginUrl";
 
 function buildRedirectPath(
   referer: string | undefined,
   requestUrl: URL,
   feedbackStatus: "sent" | "error",
 ): string {
-  let redirectPath = `/?feedback=${feedbackStatus}`;
+  const url = getSameOriginUrl(referer, requestUrl.origin);
+  if (!url) return `/?feedback=${feedbackStatus}`;
 
-  if (referer) {
-    try {
-      const refererUrl = new URL(referer);
-
-      if (refererUrl.origin === requestUrl.origin) {
-        const url = new URL(refererUrl);
-        url.searchParams.delete("feedback");
-        url.searchParams.set("feedback", feedbackStatus);
-        redirectPath = `${url.pathname}${url.search}`;
-      }
-    } catch (error) {
-      // Invalid URL, fall back to default redirect path
-      console.error("Failed to parse referer URL:", {
-        referer,
-        error: error instanceof Error ? error.message : String(error),
-      });
-    }
-  }
-
-  return redirectPath;
+  url.searchParams.delete("feedback");
+  url.searchParams.set("feedback", feedbackStatus);
+  return `${url.pathname}${url.search}`;
 }
 
 interface FeedbackBody {

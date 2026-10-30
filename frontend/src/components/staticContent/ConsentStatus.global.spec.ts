@@ -20,7 +20,6 @@ const factory = async (isConsentGiven: boolean) => {
     global: {
       stubs: {
         NuxtLink: { template: "<a><slot /></a>" },
-        ClientOnly: { template: "<slot />" },
       },
     },
   });
