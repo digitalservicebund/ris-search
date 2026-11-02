@@ -2087,7 +2087,7 @@ export interface operations {
     getRechtsprechungCourts: {
         parameters: {
             query?: {
-                prefix?: string;
+                prefix?: string | null;
             };
             header?: never;
             path?: never;
@@ -2811,7 +2811,7 @@ export interface operations {
         parameters: {
             query?: {
                 /** @description The query filter based on Lucene query */
-                query?: string;
+                query?: string | null;
                 /**
                  * @description The number of entities per page
                  * @example 100
@@ -2853,7 +2853,7 @@ export interface operations {
         parameters: {
             query?: {
                 /** @description The query filter based on Lucene query syntax */
-                query?: string;
+                query?: string | null;
                 /**
                  * @description The number of entities per page
                  * @example 100
@@ -2895,7 +2895,7 @@ export interface operations {
         parameters: {
             query?: {
                 /** @description The query filter based on Lucene query */
-                query?: string;
+                query?: string | null;
                 /**
                  * @description The number of entities per page
                  * @example 100
@@ -2937,7 +2937,7 @@ export interface operations {
         parameters: {
             query?: {
                 /** @description The query filter based on Lucene query syntax */
-                query?: string;
+                query?: string | null;
                 /**
                  * @description The number of entities per page
                  * @example 100
@@ -2979,7 +2979,7 @@ export interface operations {
         parameters: {
             query?: {
                 /** @description The query filter based on Lucene query syntax */
-                query?: string;
+                query?: string | null;
                 /**
                  * @description The number of entities per page
                  * @example 100
