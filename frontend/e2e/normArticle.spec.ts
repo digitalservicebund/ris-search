@@ -1112,6 +1112,36 @@ test.describe("mobile breadcrumbs", () => {
   });
 });
 
+test.describe("page title", { tag: ["@RISDEV-13062"] }, () => {
+  test("includes validity when private features enabled", async ({
+    page,
+    privateFeaturesEnabled,
+  }) => {
+    test.skip(!privateFeaturesEnabled);
+    await navigate(
+      page,
+      "gesetze/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/hauptteil-n1_abschnitt-n1_art-z1",
+    );
+    await expect(page).toHaveTitle(
+      "RisFassTest, § 1, vom 04.08.2020 — Rechtsinformationen des Bundes",
+    );
+  });
+
+  test("omits validity when private features disabled", async ({
+    page,
+    privateFeaturesEnabled,
+  }) => {
+    test.skip(privateFeaturesEnabled);
+    await navigate(
+      page,
+      "gesetze/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/hauptteil-n1_abschnitt-n1_art-z1",
+    );
+    await expect(page).toHaveTitle(
+      "RisFassTest, § 1 — Rechtsinformationen des Bundes",
+    );
+  });
+});
+
 noJsTest(
   "tabs work without JavaScript",
   { tag: ["@RISDEV-11132"] },

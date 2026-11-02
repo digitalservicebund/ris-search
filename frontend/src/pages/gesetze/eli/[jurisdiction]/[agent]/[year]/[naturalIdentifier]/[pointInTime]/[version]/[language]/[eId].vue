@@ -145,7 +145,10 @@ const tableOfContents = computed(() => {
 
 useArticleSeo({
   abbreviation: normAbbreviation.value,
-  article: article.value,
+  name: article.value?.name,
+  temporalCoverage: privateFeaturesEnabled
+    ? article.value?.temporalCoverage
+    : undefined,
   articleHeadlineHtml: data.value.articleHeading,
   articleHtml: data.value.htmlBody,
 });
