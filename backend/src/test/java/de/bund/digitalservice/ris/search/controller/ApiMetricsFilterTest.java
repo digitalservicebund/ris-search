@@ -63,27 +63,10 @@ class ApiMetricsFilterTest {
     verify(postHogClient).submitApiEvent("/v1/case-law/KORE123", null, false);
   }
 
-  @Test
-  void skipsCorsPreflightCalls() throws Exception {
-    var request = request("OPTIONS", "/v1/case-law/KORE123");
-
-    filter.doFilter(request, new MockHttpServletResponse(), new MockFilterChain());
-
-    verifyNoInteractions(postHogClient);
-  }
-
-  @Test
-  void skipsActuatorCalls() throws Exception {
-    var request = request("GET", "/actuator/health");
-
-    filter.doFilter(request, new MockHttpServletResponse(), new MockFilterChain());
-
-    verifyNoInteractions(postHogClient);
-  }
-
-  @Test
-  void skipsNonApiCalls() throws Exception {
-    var request = request("GET", "/robots.txt");
+  @ParameterizedTest
+  @CsvSource({"OPTIONS, /v1/case-law/KORE123", "GET,/actuator/health", "GET, /robots.txt"})
+  void skipsUntrackedCalls(String method, String path) throws Exception {
+    var request = request(method, path);
 
     filter.doFilter(request, new MockHttpServletResponse(), new MockFilterChain());
 
