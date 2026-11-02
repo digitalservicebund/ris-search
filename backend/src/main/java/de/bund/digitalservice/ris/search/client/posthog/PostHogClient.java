@@ -52,8 +52,9 @@ public record PostHogClient(PostHogInterface postHog, double apiCallsSampleRate)
    *
    * @param path decoded path of the api call made
    * @param userAgent userAgent
+   * @param isPortalRequest whether the call was made by the portal frontend
    */
-  public void submitApiEvent(String path, String userAgent) {
+  public void submitApiEvent(String path, String userAgent, boolean isPortalRequest) {
     if (ThreadLocalRandom.current().nextDouble() >= apiCallsSampleRate) {
       return;
     }
@@ -61,6 +62,7 @@ public record PostHogClient(PostHogInterface postHog, double apiCallsSampleRate)
     Map<String, Object> properties = new HashMap<>();
     properties.put("$current_url", path);
     properties.put("user_agent", userAgent);
+    properties.put("portal_request", isPortalRequest);
     properties.put("sample_rate", apiCallsSampleRate);
     // do not create a person profile in posthog for api calls
     properties.put("$process_person_profile", false);
