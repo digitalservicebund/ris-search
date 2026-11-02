@@ -1,6 +1,5 @@
 import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { Article } from "~/types/api";
 import { useArticleSeo } from "./useArticleSeo";
 
 const { useSeo } = vi.hoisted(() => ({
@@ -34,7 +33,7 @@ describe("useArticleSeo", () => {
     it("appends paragraph number", () => {
       useArticleSeo({
         abbreviation: "BGB",
-        article: { name: "§ 1" } as Article,
+        name: "§ 1",
       });
 
       expect(useSeo).toHaveBeenCalledWith(
@@ -51,7 +50,7 @@ describe("useArticleSeo", () => {
       (temporalCoverage, expected) => {
         useArticleSeo({
           abbreviation: "BGB",
-          article: { temporalCoverage } as Article,
+          temporalCoverage,
         });
 
         expect(useSeo).toHaveBeenCalledWith(
@@ -63,10 +62,8 @@ describe("useArticleSeo", () => {
     it("combines abbreviation, article name and validity interval", () => {
       useArticleSeo({
         abbreviation: "BGB",
-        article: {
-          name: "§ 1",
-          temporalCoverage: "2025-01-01/2026-01-01",
-        } as Article,
+        name: "§ 1",
+        temporalCoverage: "2025-01-01/2026-01-01",
       });
 
       expect(useSeo).toHaveBeenCalledWith(

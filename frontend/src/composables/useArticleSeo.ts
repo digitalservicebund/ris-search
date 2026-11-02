@@ -1,32 +1,37 @@
 import { buildValidityTitleLabel } from "~/composables/useNormSeo";
-import type { Article } from "~/types/api";
 import { temporalCoverageToValidityInterval } from "~/utils/norm";
 import { normalizeSpaces } from "~/utils/textFormatting";
 
 export type UseArticleSeoInput = {
   abbreviation?: string;
-  article?: Article;
+  name?: string;
+  temporalCoverage?: string;
   articleHeadlineHtml?: string;
   articleHtml?: string;
 };
 
 export function useArticleSeo({
   abbreviation,
-  article,
+  name,
+  temporalCoverage,
   articleHeadlineHtml,
   articleHtml,
 }: UseArticleSeoInput) {
   useSeo({
-    title: buildTitle(abbreviation, article),
+    title: buildTitle(abbreviation, name, temporalCoverage),
     description: buildDescription(articleHtml),
     ogTitle: buildOgTitle(abbreviation, articleHeadlineHtml),
   });
 }
 
-function buildTitle(abbreviation?: string, article?: Article) {
-  const paragraphNumber = article?.name ? `, ${article.name}` : "";
+function buildTitle(
+  abbreviation?: string,
+  name?: string,
+  temporalCoverage?: string,
+) {
+  const paragraphNumber = name ? `, ${name}` : "";
   const validityIntervalLabel = buildValidityTitleLabel(
-    temporalCoverageToValidityInterval(article?.temporalCoverage),
+    temporalCoverageToValidityInterval(temporalCoverage),
   );
   return `${abbreviation || "Gesetz"}${paragraphNumber}${validityIntervalLabel}`;
 }
