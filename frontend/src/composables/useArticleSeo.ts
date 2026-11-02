@@ -24,10 +24,13 @@ export function useArticleSeo({
 }
 
 function buildTitle(abbreviation?: string, article?: Article) {
+  const privateFeaturesEnabled = usePrivateFeaturesFlag();
   const paragraphNumber = article?.name ? `, ${article.name}` : "";
-  const validityIntervalLabel = buildValidityTitleLabel(
-    temporalCoverageToValidityInterval(article?.temporalCoverage),
-  );
+  const validityIntervalLabel = privateFeaturesEnabled
+    ? buildValidityTitleLabel(
+        temporalCoverageToValidityInterval(article?.temporalCoverage),
+      )
+    : "";
   return `${abbreviation || "Gesetz"}${paragraphNumber}${validityIntervalLabel}`;
 }
 

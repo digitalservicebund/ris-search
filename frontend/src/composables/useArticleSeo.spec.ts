@@ -3,6 +3,11 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { Article } from "~/types/api";
 import { useArticleSeo } from "./useArticleSeo";
 
+const mockPrivateFeaturesEnabled = vi.fn(() => true);
+vi.mock("~/composables/usePrivateFeaturesFlag", () => ({
+  usePrivateFeaturesFlag: () => mockPrivateFeaturesEnabled(),
+}));
+
 const { useSeo } = vi.hoisted(() => ({
   useSeo: vi.fn(),
 }));
@@ -11,7 +16,7 @@ mockNuxtImport("useSeo", () => useSeo);
 
 describe("useArticleSeo", () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.resetAllMocks();
   });
 
   describe("buildTitle", () => {
@@ -59,6 +64,21 @@ describe("useArticleSeo", () => {
         );
       },
     );
+
+    it("omits validity interval when private features are disabled", () => {
+      mockPrivateFeaturesEnabled.mockReturnValue(false);
+      useArticleSeo({
+        abbreviation: "BGB",
+        article: {
+          name: "§ 1",
+          temporalCoverage: "01-01-1000/01-01-1000",
+        } as Article,
+      });
+
+      expect(useSeo).toHaveBeenCalledWith(
+        expect.objectContaining({ title: "BGB, § 1" }),
+      );
+    });
 
     it("combines abbreviation, article name and validity interval", () => {
       useArticleSeo({
