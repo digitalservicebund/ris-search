@@ -61,6 +61,7 @@ public record PostHogClient(PostHogInterface postHog, double apiCallsSampleRate)
     Map<String, Object> properties = new HashMap<>();
     properties.put("$current_url", path);
     properties.put("user_agent", userAgent);
+    properties.put("sample_rate", apiCallsSampleRate);
     // do not create a person profile in posthog for api calls
     properties.put("$process_person_profile", false);
 

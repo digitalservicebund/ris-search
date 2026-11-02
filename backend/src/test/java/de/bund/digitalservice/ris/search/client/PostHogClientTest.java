@@ -56,6 +56,7 @@ class PostHogClientTest {
     expectedData.put("$current_url", "/v1/legislation/§ BGB%41");
     expectedData.put("user_agent", "test-agent");
     expectedData.put("$process_person_profile", false);
+    expectedData.put("sample_rate", 1.0);
 
     verify(postHog)
         .capture(
