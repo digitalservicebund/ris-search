@@ -50,19 +50,13 @@ public class ArticlesRepositoryCustomImpl implements ArticlesRepositoryCustom {
    *
    * @param documentNumber the document number prefix
    * @param type the legislation part type to filter on
-   * @param preferredExpressionEli if this expressionEli occurs in a collapse group, that group's
-   *     Article is returned as the representative instead of whichever one OpenSearch's collapsing
-   *     would otherwise pick; may be {@code null} to leave the default selection untouched
    * @param pageable the pagination parameters defining page size and index
    * @return Page of ArticleWithExpressions
    * @throws java.lang.IllegalArgumentException on invalid document numbers
    */
   @Override
   public Page<ArticleWithExpressions> findAllVersionsByDocumentNumber(
-      @NonNull String documentNumber,
-      LegislationPartType type,
-      String preferredExpressionEli,
-      Pageable pageable) {
+      @NonNull String documentNumber, LegislationPartType type, Pageable pageable) {
 
     if (documentNumber.length() <= DOC_NUMBER_PREFIX_LENGTH) {
       throw new IllegalArgumentException("document number is too short");
@@ -95,9 +89,7 @@ public class ArticlesRepositoryCustomImpl implements ArticlesRepositoryCustom {
     SearchHits<Article> hits = operations.search(query, Article.class);
     SearchPage<Article> searchPage = PageUtils.unwrapSearchHits(hits, pageable);
     List<ArticleWithExpressions> content =
-        searchPage.stream()
-            .map(hit -> toArticleWithExpressions(hit, preferredExpressionEli, documentNumber))
-            .toList();
+        searchPage.stream().map(this::toArticleWithExpressions).toList();
     return new PageImpl<>(content, pageable, getDistinctDocumentNumberCount(hits));
   }
 
@@ -122,37 +114,21 @@ public class ArticlesRepositoryCustomImpl implements ArticlesRepositoryCustom {
   }
 
   /**
-   * Maps a version query Article SearchHit to an Article With all expressions it is part of. In
-   * case the same article is found across multiple expressionElis the article matching the
-   * preferredExpressionEli takes precedence as the result. The expressions list itself is not
-   * affected.
+   * Maps a version query Article SearchHit to an Article With all expressions it is part of.
    *
    * @param hit SearchHit the versions query
-   * @param preferredExpressionEli to display article of a specific expression in the result if
-   *     multiple are valid
-   * @param documentNumber used to only check preferredExpressionEli on matching documentNumbers
    * @return ArticleWithExpressions
    */
-  private ArticleWithExpressions toArticleWithExpressions(
-      SearchHit<Article> hit, String preferredExpressionEli, String documentNumber) {
+  private ArticleWithExpressions toArticleWithExpressions(SearchHit<Article> hit) {
     SearchHits<?> innerHits = hit.getInnerHits().get(EXPRESSIONS_INNER_HIT_NAME);
     List<Article> versions =
         innerHits == null
             ? List.of(hit.getContent())
             : innerHits.stream().map(innerHit -> (Article) innerHit.getContent()).toList();
 
-    Article representative = hit.getContent();
-    if (representative.getDocumentNumber().equals(documentNumber)) {
-      representative =
-          versions.stream()
-              .filter(article -> article.getExpressionEli().equals(preferredExpressionEli))
-              .findFirst()
-              .orElse(representative);
-    }
-
     List<String> expressionElis =
         versions.stream().map(Article::getExpressionEli).distinct().toList();
 
-    return new ArticleWithExpressions(representative, expressionElis);
+    return new ArticleWithExpressions(hit.getContent(), expressionElis);
   }
 }

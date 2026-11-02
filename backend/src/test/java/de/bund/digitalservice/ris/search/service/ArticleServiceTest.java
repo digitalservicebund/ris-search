@@ -8,11 +8,7 @@ import static org.mockito.Mockito.when;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.LegislationPartType;
 import de.bund.digitalservice.ris.search.repository.opensearch.ArticlesRepository;
-import de.bund.digitalservice.ris.search.utils.eli.ExpressionEliPath;
-import java.time.LocalDate;
-import java.time.Month;
 import java.util.List;
-import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -38,61 +34,25 @@ class ArticleServiceTest {
 
   @Test
   void getAllArticleVersionsQueriesRepositoryUsingDocumentNumberPrefixInDescendingOrder() {
-    ExpressionEliPath eli =
-        new ExpressionEliPath(
-            "bund", "bgbl-1", "2020", "s1126", LocalDate.of(2025, Month.MAY, 5), 1, "deu");
-
-    String eId = "art-z1";
-    String id = Article.buildId(eli.toString(), eId);
-
-    Article article = Article.builder().id(id).documentNumber("DKNR0E80B0026DKNE000100010").build();
-
-    when(articlesRepository.existsById(id)).thenReturn(true);
-    when(articlesRepository.findById(id)).thenReturn(Optional.of(article));
-    service.getAllArticleVersions(eli, eId);
+    service.getAllArticleVersions("DKNR0E80B0026DKNE000100010");
 
     verify(articlesRepository, times(1))
         .findAllVersionsByDocumentNumber(
             "DKNR0E80B0026DKNE000100010",
             LegislationPartType.ARTICLE,
-            eli.toString(),
             Pageable.unpaged(Sort.by(Sort.Direction.DESC, "entryIntoForceDate")));
   }
 
   @Test
-  void getAllArticleVersionReturnsEmptyOnNotFoundExpressionEliAndEid() {
-    ExpressionEliPath eli =
-        new ExpressionEliPath(
-            "bund", "bgbl-1", "2020", "s1126", LocalDate.of(2025, Month.MAY, 5), 1, "deu");
-
-    String eId = "art-z1";
-    String id = Article.buildId(eli.toString(), eId);
-    when(articlesRepository.existsById(id)).thenReturn(false);
-
-    assertThat(service.getAllArticleVersions(eli, eId)).isEmpty();
-  }
-
-  @Test
   void getAllArticleVersionsReturnsEmptyWhenRepositoryThrowsIllegalArgumentException() {
-    ExpressionEliPath eli =
-        new ExpressionEliPath(
-            "bund", "bgbl-1", "2020", "s1126", LocalDate.of(2025, Month.MAY, 5), 1, "deu");
-
-    String eId = "art-z1";
-    String id = Article.buildId(eli.toString(), eId);
     String documentNumber = "DKNR0E80B0026DKNE0";
-    Article article = Article.builder().id(id).documentNumber(documentNumber).build();
-
-    when(articlesRepository.existsById(id)).thenReturn(true);
-    when(articlesRepository.findById(id)).thenReturn(Optional.of(article));
     when(articlesRepository.findAllVersionsByDocumentNumber(
             documentNumber,
             LegislationPartType.ARTICLE,
-            eli.toString(),
             Pageable.unpaged(Sort.by(Sort.Direction.DESC, "entryIntoForceDate"))))
         .thenThrow(new IllegalArgumentException("document number is too short"));
 
-    assertThat(service.getAllArticleVersions(eli, eId)).isEmpty();
+    assertThat(service.getAllArticleVersions(documentNumber)).isEmpty();
   }
 
   @Test
