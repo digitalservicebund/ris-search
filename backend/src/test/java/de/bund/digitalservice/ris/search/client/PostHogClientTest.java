@@ -50,11 +50,12 @@ class PostHogClientTest {
   void submitApiEventPassesPathUnchanged() {
     var postHogClient = new PostHogClient(postHog, 1.0);
 
-    postHogClient.submitApiEvent("/v1/legislation/§ BGB%41", "test-agent");
+    postHogClient.submitApiEvent("/v1/legislation/§ BGB%41", "test-agent", true);
 
     Map<String, Object> expectedData = new HashMap<>();
     expectedData.put("$current_url", "/v1/legislation/§ BGB%41");
     expectedData.put("user_agent", "test-agent");
+    expectedData.put("portal_request", true);
     expectedData.put("$process_person_profile", false);
     expectedData.put("sample_rate", 1.0);
 
@@ -69,7 +70,7 @@ class PostHogClientTest {
   void submitApiEventSkipsEventWithSampleRateZero() {
     var postHogClient = new PostHogClient(postHog, 0.0);
 
-    postHogClient.submitApiEvent("/v1/case-law/KORE123", "test-agent");
+    postHogClient.submitApiEvent("/v1/case-law/KORE123", "test-agent", false);
 
     verifyNoInteractions(postHog);
   }
