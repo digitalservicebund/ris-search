@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@nuxtjs/mdc": "0.23.2",
-    "@nuxtjs/sitemap": "8.6.1",
+    "@nuxtjs/sitemap": "9.1.0",
     "@posthog/nuxt": "1.7.91",
     "@sentry/nuxt": "11.8.0",
     "dayjs": "1.11.23",
