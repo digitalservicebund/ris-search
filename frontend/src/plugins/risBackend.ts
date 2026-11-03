@@ -1,5 +1,12 @@
 import type { FetchHook } from "ofetch";
 
+/** Marks requests as originating from the portal */
+export const PORTAL_HEADER = "X-RIS-PORTAL";
+
+const addPortalHeader: FetchHook = ({ options }) => {
+  options.headers.set(PORTAL_HEADER, "true");
+};
+
 function addServerAuthentication(basicAuth: string): FetchHook {
   return ({ options }) => {
     if (import.meta.server && basicAuth) {
@@ -31,7 +38,7 @@ function addServerAuthentication(basicAuth: string): FetchHook {
  */
 export function extendOnRequest(...cb: FetchHook[]) {
   const config = useRuntimeConfig();
-  return [addServerAuthentication(config.basicAuth), ...cb];
+  return [addServerAuthentication(config.basicAuth), addPortalHeader, ...cb];
 }
 
 export default defineNuxtPlugin(() => {
