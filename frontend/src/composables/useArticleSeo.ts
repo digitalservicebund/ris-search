@@ -17,8 +17,13 @@ export function useArticleSeo({
   articleHeadlineHtml,
   articleHtml,
 }: UseArticleSeoInput) {
+  const privateFeaturesEnabled = usePrivateFeaturesFlag();
   useSeo({
-    title: buildTitle(abbreviation, name, temporalCoverage),
+    title: buildTitle(
+      abbreviation,
+      name,
+      privateFeaturesEnabled ? temporalCoverage : undefined,
+    ),
     description: buildDescription(articleHtml),
     ogTitle: buildOgTitle(abbreviation, articleHeadlineHtml),
   });
