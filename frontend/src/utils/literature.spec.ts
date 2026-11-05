@@ -179,25 +179,6 @@ describe("getLiteratureDetailsItems", () => {
   );
 
   it.each([
-    [undefined, undefined, "Sprache:"],
-    [[], undefined, "Sprache:"],
-    [["deu"], "deu", "Sprache:"],
-    [["deu", "eng"], "deu, eng", "Sprachen:"],
-  ])(
-    "given languages '%s' creates item with value '%s' labeled '%s'",
-    (languages, expectedValue, expectedLabel) => {
-      const result = getLiteratureDetailItems({
-        languages: languages,
-      });
-      expect(result[3]).toEqual({
-        type: "text",
-        label: expectedLabel,
-        value: expectedValue,
-      });
-    },
-  );
-
-  it.each([
     [undefined, undefined, "Kongress:"],
     [[], undefined, "Kongress:"],
     [["Note 1"], "Note 1", "Kongress:"],
@@ -208,7 +189,7 @@ describe("getLiteratureDetailsItems", () => {
       const result = getLiteratureDetailItems({
         conferenceNotes: conferenceNotes,
       });
-      expect(result[4]).toEqual({
+      expect(result[3]).toEqual({
         type: "text",
         label: expectedLabel,
         value: expectedValue,
@@ -266,7 +247,6 @@ describe("getLiteratureDetailsItems", () => {
         { type: "text", label: "Ausgabe:", value: "first edition" },
         { type: "text", label: "Bestellnummer:", value: "ISBN-XXXX" },
         { type: "list", label: "Teilband:", values: ["Teilband 1"] },
-        { type: "text", label: "Sprache:", value: "deu" },
         {
           type: "text",
           label: "Kongress:",
@@ -332,7 +312,6 @@ describe("getLiteratureDetailsItems", () => {
           label: "Teilband:",
           values: ["Teilband 1", "Teilband 2"],
         },
-        { type: "text", label: "Sprachen:", value: "deu, eng" },
         {
           type: "text",
           label: "Kongresse:",
@@ -365,7 +344,6 @@ describe("getLiteratureDetailsItems", () => {
         { type: "text", label: "Ausgabe:", value: undefined },
         { type: "text", label: "Bestellnummer:", value: undefined },
         { type: "list", label: "Teilband:", values: [] },
-        { type: "text", label: "Sprache:", value: undefined },
         { type: "text", label: "Kongress:", value: undefined },
         { type: "text", label: "Hochschule:", value: undefined },
         zipDownloadLink,

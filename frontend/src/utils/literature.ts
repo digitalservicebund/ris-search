@@ -55,7 +55,6 @@ export function getUliLiteratureDetailItems(
   literature?: Partial<Literature>,
 ): DetailsListItem[] {
   const normReferences = literature?.normReferences ?? [];
-  const languages = literature?.languages ?? [];
   const conferenceNotes = literature?.conferenceNotes ?? [];
   return [
     {
@@ -75,11 +74,6 @@ export function getUliLiteratureDetailItems(
     },
     {
       type: "text",
-      label: getSingularOrPlural("Sprache:", "Sprachen:", languages.length),
-      value: formatArray(languages),
-    },
-    {
-      type: "text",
       label: getSingularOrPlural(
         "Kongress:",
         "Kongresse:",
@@ -95,7 +89,6 @@ export function getSliLiteratureDetailItems(
   literature?: Partial<Literature>,
 ): DetailsListItem[] {
   const normReferences = literature?.normReferences ?? [];
-  const languages = literature?.languages ?? [];
   const conferenceNotes = literature?.conferenceNotes ?? [];
   const universityNotes = literature?.universityNotes ?? [];
 
@@ -153,11 +146,6 @@ export function getSliLiteratureDetailItems(
       type: "list",
       label: "Teilband:",
       values: literature?.volumes ?? [],
-    },
-    {
-      type: "text",
-      label: getSingularOrPlural("Sprache:", "Sprachen:", languages.length),
-      value: formatArray(languages),
     },
     {
       type: "text",

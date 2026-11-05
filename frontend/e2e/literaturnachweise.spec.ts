@@ -355,7 +355,6 @@ test(
       "Normen:",
       "Mitarbeiter:",
       "Urheber:",
-      "Sprache:",
       "Kongress:",
       "Download:",
     ]);
@@ -366,8 +365,7 @@ test(
     ]);
     await expect(defs.nth(1)).toHaveText("Peter Foo");
     await expect(defs.nth(2)).toHaveText("DGB");
-    await expect(defs.nth(3)).toHaveText("deu");
-    await expect(defs.nth(4)).toHaveText(
+    await expect(defs.nth(3)).toHaveText(
       "Internationaler Kongreß für das Recht, 1991, Athen, GRC",
     );
   },
@@ -404,7 +402,6 @@ test(
       "Ausgabe:",
       "Bestellnummer:",
       "Teilband:",
-      "Sprache:",
       "Kongress:",
       "Hochschule:",
       "Download:",
@@ -426,11 +423,10 @@ test(
     await expect(defs.nth(8)).toHaveText("ISBN 3-XXXXX-XX-X");
     await expect(defs.nth(9)).toHaveText("Teilband 1");
     await expect(defs.nth(10)).toHaveText("Teilband 2");
-    await expect(defs.nth(11)).toHaveText("deu");
-    await expect(defs.nth(12)).toHaveText(
+    await expect(defs.nth(11)).toHaveText(
       "Internationaler Kongreß für das Recht, 1991, Athen, GRC",
     );
-    await expect(defs.nth(13)).toHaveText("Universität Foo");
+    await expect(defs.nth(12)).toHaveText("Universität Foo");
   },
 );
 
@@ -447,10 +443,8 @@ test(
       .getByRole("term")
       .or(detailsList.getByRole("definition"));
 
-    await expect(detailsEntries).toHaveCount(4);
+    await expect(detailsEntries).toHaveCount(2);
     await expect(detailsEntries).toHaveText([
-      "Sprache:",
-      "deu",
       "Download:",
       " Diesen Literaturnachweis als ZIP herunterladen",
     ]);
@@ -469,18 +463,12 @@ test(
     const terms = detailsList.getByRole("term");
     const defs = detailsList.getByRole("definition");
 
-    await expect(terms).toHaveText([
-      "Norm:",
-      "Mitarbeiter:",
-      "Sprache:",
-      "Download:",
-    ]);
+    await expect(terms).toHaveText(["Norm:", "Mitarbeiter:", "Download:"]);
     // Norm is rendered as a badge (span)
     await expect(defs.nth(0).locator("span")).toHaveText([
       "GG, Art 3 Abs 1, 1949-05-23",
     ]);
     await expect(defs.nth(1)).toHaveText("Max Mustermann");
-    await expect(defs.nth(2)).toHaveText("deu");
   },
 );
 
@@ -533,8 +521,6 @@ test(
     await expect(
       detailsList.getByRole("term").or(detailsList.getByRole("definition")),
     ).toHaveText([
-      "Sprache:",
-      "deu",
       "Download:",
       " Diesen Literaturnachweis als ZIP herunterladen",
     ]);
