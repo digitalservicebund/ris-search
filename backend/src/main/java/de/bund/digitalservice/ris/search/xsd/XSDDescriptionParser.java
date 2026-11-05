@@ -141,10 +141,10 @@ public class XSDDescriptionParser {
               return;
             }
 
-            var typeName = name;
-            if (!typeName.contains(":")) {
-              typeName = namespacePrefixes.get(namespaceUri) + ":" + typeName;
-            }
+            var typeName =
+                name.contains(":")
+                    ? name
+                    : String.join(":", namespacePrefixes.get(namespaceUri), name);
 
             // Some named types (e.g. ris:rechtsfrageGesamt) are only ever selected on an
             // instance via xsi:type and have no xs:element statically bound to them, so the
@@ -231,11 +231,12 @@ public class XSDDescriptionParser {
                   .evaluate(document, XPathConstants.NODESET);
       for (int i = 0; i < elements.getLength(); i++) {
         var element = (Element) elements.item(i);
-        var name = element.getAttribute("name");
+        var localName = element.getAttribute("name");
         var type = element.getAttribute("type");
-        if (!name.contains(":") && type.contains(":")) {
-          name = type.substring(0, type.indexOf(":")) + ":" + name;
-        }
+        var name =
+            !localName.contains(":") && type.contains(":")
+                ? String.join(":", type.substring(0, type.indexOf(":")), localName)
+                : localName;
         if (!elementsByType.containsKey(type)) {
           elementsByType.put(type, new ArrayList<>());
         }
