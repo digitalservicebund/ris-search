@@ -1,8 +1,28 @@
+import { mockNuxtImport } from "@nuxt/test-utils/runtime";
+import { userEvent } from "@testing-library/user-event";
 import { render, screen } from "@testing-library/vue";
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import LegislationContent from "./LegislationContent.vue";
 
+const { mockNavigateTo } = vi.hoisted(() => ({ mockNavigateTo: vi.fn() }));
+mockNuxtImport("navigateTo", () => mockNavigateTo);
+
 describe("LegislationContent", () => {
+  it("navigates with the router for links in the content", async () => {
+    const normPath = "/gesetze/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu";
+    render(LegislationContent, {
+      slots: {
+        default: `<a href="${normPath}/art-z1">§ 1</a>`,
+      },
+    });
+
+    await userEvent.click(screen.getByRole("link", { name: "§ 1" }));
+
+    expect(mockNavigateTo).toHaveBeenCalledExactlyOnceWith(
+      `${normPath}/art-z1`,
+    );
+  });
+
   it("renders slot content", () => {
     render(LegislationContent, {
       slots: {
