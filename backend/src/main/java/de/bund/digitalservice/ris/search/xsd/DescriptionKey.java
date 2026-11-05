@@ -1,13 +1,12 @@
 package de.bund.digitalservice.ris.search.xsd;
 
-import de.bund.digitalservice.ris.search.models.DocumentKind;
 import org.jspecify.annotations.NonNull;
 
 /**
- * A single XSD-derived description entry: the element/type {@code key} it documents, the {@code
- * description} text, its {@code lang}, and which {@link DocumentKind} it belongs to.
+ * A single, unambiguous XSD-derived description entry: the element/type {@code key} it documents,
+ * the {@code description} text, and its {@code lang}.
  */
-public record DescriptionKey(String key, String description, String lang, DocumentKind documentKind)
+public record DescriptionKey(String key, String description, String lang)
     implements Comparable<DescriptionKey> {
 
   @Override
@@ -17,21 +16,13 @@ public record DescriptionKey(String key, String description, String lang, Docume
       return compareValue;
     }
 
-    compareValue = lang.compareTo(other.lang);
-    if (compareValue != 0) {
-      return compareValue;
-    }
-
-    compareValue = documentKind.compareTo(other.documentKind);
-    return compareValue;
+    return lang.compareTo(other.lang);
   }
 
   @Override
   public boolean equals(Object o) {
     if (o instanceof DescriptionKey other) {
-      return key.equals(other.key)
-          && lang.equals(other.lang)
-          && documentKind.equals(other.documentKind);
+      return key.equals(other.key) && lang.equals(other.lang);
     }
 
     return false;
@@ -39,6 +30,6 @@ public record DescriptionKey(String key, String description, String lang, Docume
 
   @Override
   public int hashCode() {
-    return key.hashCode() * lang.hashCode() * documentKind.hashCode();
+    return key.hashCode() * lang.hashCode();
   }
 }

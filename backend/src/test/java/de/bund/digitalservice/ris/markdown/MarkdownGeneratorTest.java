@@ -2,8 +2,7 @@ package de.bund.digitalservice.ris.markdown;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import de.bund.digitalservice.ris.search.models.DocumentKind;
-import de.bund.digitalservice.ris.search.xsd.DescriptionKey;
+import de.bund.digitalservice.ris.search.xsd.GlossaryEntry;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -16,8 +15,8 @@ class MarkdownGeneratorTest {
   @TempDir private Path tempDir;
 
   @Test
-  void buildMarkdownTableWritesHeaderForEmptyDescriptions() {
-    assertThat(MarkdownGenerator.buildMarkdownTable(List.of()))
+  void buildGlossaryTableWritesHeaderForEmptyEntries() {
+    assertThat(MarkdownGenerator.buildGlossaryTable(List.of()))
         .isEqualTo(
             "| Key | Description DE | Description EN |"
                 + System.lineSeparator()
@@ -26,54 +25,45 @@ class MarkdownGeneratorTest {
   }
 
   @Test
-  void buildMarkdownTableFillsOnlyTheAvailableLanguageColumn() {
-    var descriptions =
-        List.of(new DescriptionKey("ris:tatbestand", "Tatbestand", "de", DocumentKind.CASE_LAW));
+  void buildGlossaryTableRendersGermanAndEnglishAsSeparateColumnsInOneRow() {
+    var entries = List.of(new GlossaryEntry("ris:tatbestand", "Tatbestand", "Facts"));
 
-    assertThat(MarkdownGenerator.buildMarkdownTable(descriptions))
+    assertThat(MarkdownGenerator.buildGlossaryTable(entries))
+        .contains("| ris:tatbestand | Tatbestand<br> | Facts<br> |" + System.lineSeparator());
+  }
+
+  @Test
+  void buildGlossaryTableLeavesAMissingLanguageBlankRatherThanInsertingABr() {
+    var entries = List.of(new GlossaryEntry("ris:tatbestand", "Tatbestand", ""));
+
+    assertThat(MarkdownGenerator.buildGlossaryTable(entries))
         .contains("| ris:tatbestand | Tatbestand<br> |  |" + System.lineSeparator());
   }
 
   @Test
-  void buildMarkdownTableMergesLanguagesIntoOneRow() {
-    var descriptions =
+  void buildGlossaryTableRendersOneRowPerEntryInTheGivenOrder() {
+    var entries =
         List.of(
-            new DescriptionKey("ris:gericht", "Gericht", "de", DocumentKind.CASE_LAW),
-            new DescriptionKey("ris:gericht", "Court", "en", DocumentKind.CASE_LAW));
+            new GlossaryEntry("ris:aktenzeichen", "Aktenzeichen", ""),
+            new GlossaryEntry("ris:titel", "Titel", ""));
 
-    var table = MarkdownGenerator.buildMarkdownTable(descriptions);
-
-    assertThat(table)
-        .contains("| ris:gericht | Gericht<br> | Court<br> |" + System.lineSeparator())
-        .containsOnlyOnce("ris:gericht");
+    assertThat(MarkdownGenerator.buildGlossaryTable(entries))
+        .endsWith(
+            "| ris:aktenzeichen | Aktenzeichen<br> |  |"
+                + System.lineSeparator()
+                + "| ris:titel | Titel<br> |  |"
+                + System.lineSeparator());
   }
 
   @Test
-  void buildMarkdownTableKeepsMultiLineDescriptionsOnOneRow() {
-    var descriptions =
-        List.of(
-            new DescriptionKey(
-                "ris:aktenzeichen", "Zeile 1\nZeile 2", "de", DocumentKind.CASE_LAW));
+  void buildGlossaryTableKeepsMultiLineDescriptionsOnOneRow() {
+    var entries = List.of(new GlossaryEntry("ris:aktenzeichen", "Zeile 1\nZeile 2", ""));
 
-    var table = MarkdownGenerator.buildMarkdownTable(descriptions);
+    var table = MarkdownGenerator.buildGlossaryTable(entries);
 
     assertThat(table)
         .contains("| ris:aktenzeichen | Zeile 1<br>Zeile 2<br> |  |" + System.lineSeparator())
         .doesNotContain("Zeile 1\n");
-  }
-
-  @Test
-  void buildMarkdownTableKeepsOneRowPerDistinctKey() {
-    var descriptions =
-        List.of(
-            new DescriptionKey("ris:aktenzeichen", "Aktenzeichen", "de", DocumentKind.CASE_LAW),
-            new DescriptionKey("ris:gericht", "Gericht", "de", DocumentKind.CASE_LAW));
-
-    var table = MarkdownGenerator.buildMarkdownTable(descriptions);
-
-    assertThat(table)
-        .contains("| ris:aktenzeichen | Aktenzeichen<br> |  |" + System.lineSeparator())
-        .contains("| ris:gericht | Gericht<br> |  |" + System.lineSeparator());
   }
 
   @Test

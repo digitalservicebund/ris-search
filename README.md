@@ -172,6 +172,7 @@ Additional guides:
 - [Vulnerability scanning](./doc/readme/vulnerability-scan.md)
 - [OpenSearch index swap](./doc/readme/opensearch-index-swap.md)
 - [API keys](./doc/readme/api-keys.md)
+- [Glossary of `ris` schema fields](./doc/readme/glossary.md)
 
 ## License checking
 

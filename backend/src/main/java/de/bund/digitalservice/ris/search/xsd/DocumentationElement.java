@@ -62,6 +62,12 @@ public class DocumentationElement {
           name = parentElement.getAttribute("ref");
         }
         return new ElementElement(parentElement.getNamespaceURI(), name);
+      } else if (parentElement.getTagName().equals("xs:attribute")
+          || parentElement.getTagName().equals("xs:attributeGroup")) {
+        // Documentation nested under an attribute (or attribute group) describes that attribute,
+        // not the type that happens to declare it; it must not be mistaken for the enclosing
+        // type's own documentation by continuing to recurse upward.
+        return null;
       } else {
         return getParent(parentElement, targetNamespaceURI);
       }

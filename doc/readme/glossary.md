@@ -1,6 +1,5 @@
 | Key | Description DE | Description EN |
 | --- | --- | --- |
-| ris:abkuerzung | abgekürzte Bezeichnung der Norm<br> |  |
 | ris:abweichendeDaten | Abweichende Daten<br> |  |
 | ris:abweichendeDokumentnummer | Abweichende Dokumentnummer<br> |  |
 | ris:abweichendeDokumentnummern | Abweichende Dokumentnummern<br><br>Weitere Dokumentnummern die für dieses Dokument verwendet werden<br> |  |
@@ -68,7 +67,6 @@
 | ris:herkunftsland | Herkunftsland<br> |  |
 | ris:inkrafttretedatum | Datum des Inkrafttretens<br> |  |
 | ris:institution | Institution<br> |  |
-| ris:jahr | Jahr einer Organisation<br> |  |
 | ris:jurisAbkuerzung | juris-Abkürzung<br> |  |
 | ris:kollation | Kollation<br> |  |
 | ris:kuendigungsart | Kündigungsart<br> |  |
@@ -82,8 +80,7 @@
 | ris:mitwirkendeRichter | An der Entscheidung mitwirkende Richter<br> | Participating judges of the decision<br> |
 | ris:mitwirkenderRichter | Mitwirkender Richter<br> | Participating judge<br> |
 | ris:nachgehendeEntscheidung | Nachgewiesen werden die gerichtlichen Entscheidungen, die ihrerseits in der Rubrik „vorgehende Entscheidung“ die vorliegende Entscheidung nennen.<br> | Judicial decisions that refer to the present decision.<br> |
-| ris:nachgehendeEntscheidungArt | Die nachgehende Entscheidung ist abgeschlossen.<br> |  |
-| ris:name | Name einer Person<br> |  |
+| ris:nachgehendeEntscheidungArt | Die nachgehende Entscheidung ist ein anhängiges Verfahren.<br> |  |
 | ris:normgeber | Normgeber<br> |  |
 | ris:normgeberListe | Liste der Normgeber<br> |  |
 | ris:organisation | Organisation<br> |  |
@@ -116,7 +113,7 @@
 | ris:referenzNormTitel | Amtliche Langüberschrift<br> |  |
 | ris:referenzRechtsprechung | Referenz auf ein Rechtsprechungsdokument<br> |  |
 | ris:referenzRichtung | Ist die Referenz eine Aktivzitierung oder eine Passivzitierung?<br> |  |
-| ris:referenzRichtungValue | Im in der Referenz angegebenen Dokument wird dieses Dokument zitiert.<br> |  |
+| ris:referenzRichtungValue | Dieses Dokument zitiert das in der Referenz angegebene Dokument.<br> |  |
 | ris:referenzSelbststaendigeLiteratur | Referenz auf ein selbstständiges Literaturdokument<br> |  |
 | ris:referenzSelbststaendigeLiteraturTitel | Titel<br> |  |
 | ris:referenzURI | Die URI die auf die referenzierte Dokeinheit verweist.<br> |  |
@@ -128,7 +125,7 @@
 | ris:richtung | Ist die Referenz eine Aktivzitierung oder eine Passivzitierung?<br> |  |
 | ris:risAbkuerzung | RIS-Abkürzung<br> |  |
 | ris:risURI | URI für einen Verweis auf ein Dokument im Rechtsinformationssystem.<br> |  |
-| ris:sachgebiet | Sachgebiet<br> |  |
+| ris:sachgebiet | Menschenlesbarer Name des Sachgebiets<br> |  |
 | ris:sachgebietId | Identifier des Sachgebiets<br> |  |
 | ris:sachgebiete | Sachgebiete<br> |  |
 | ris:signatur | Signatur<br> |  |
@@ -146,7 +143,7 @@
 | ris:teilbaende | Teilbände<br> |  |
 | ris:teilband | Teilband<br> |  |
 | ris:tenor | Rechtlich bindender Ausspruch des Gerichts<br> | Legally binding ruling of the court<br> |
-| ris:titel | Titel des Gesamttitels<br> |  |
+| ris:titel | Titel<br> |  |
 | ris:titelAspekt | Titelaspekt<br> |  |
 | ris:titelAspekte | Titelaspekte<br> |  |
 | ris:titelkurzform | Kurzform des Titels<br> |  |

@@ -1,10 +1,10 @@
 package de.bund.digitalservice.ris.search.xsd;
 
-import de.bund.digitalservice.ris.search.models.DocumentKind;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -26,9 +26,11 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 /**
- * Parses the configured XSD schema files (and any {@code import}/{@code include}/{@code redefine}
- * they reference) into {@link DescriptionKey} entries, so that field descriptions can be sourced
- * from the XSD's {@code xs:documentation} elements instead of being duplicated in Java code.
+ * Parses the {@code ris} namespace's XSD schema (and any {@code import}/{@code include}/{@code
+ * redefine} it references) into {@link DescriptionKey} entries, so that field descriptions can be
+ * sourced from the XSD's {@code xs:documentation} elements instead of being duplicated in Java
+ * code, and into {@link GlossaryEntry} entries for a human-readable glossary of the whole
+ * namespace.
  */
 @Slf4j
 public class XSDDescriptionParser {
@@ -37,11 +39,9 @@ public class XSDDescriptionParser {
   private final Map<String, String> namespacePrefixes = new HashMap<>();
 
   @Getter private final Set<DescriptionKey> descriptions = new TreeSet<>();
+  @Getter private final List<GlossaryEntry> glossaryEntries = new ArrayList<>();
 
-  /**
-   * Parses every XSD location configured for the {@code caselaw}, {@code adm}, and {@code
-   * literature} document kinds, populating {@link #descriptions}.
-   */
+  /** Parses the configured {@code ris} namespace location, populating {@link #descriptions}. */
   public XSDDescriptionParser(XSDDescriptionProperties properties, ResourceLoader resourceLoader) {
     factory.setNamespaceAware(true);
     try {
@@ -52,46 +52,34 @@ public class XSDDescriptionParser {
       // these features are always supported by the default DocumentBuilderFactory implementation
     }
 
-    if (properties.getXsdLocations().containsKey("caselaw")) {
-      var mainSchemaLocations = properties.getXsdLocations().get("caselaw");
-      parseXSDAndCreateDescriptions(mainSchemaLocations, resourceLoader, DocumentKind.CASE_LAW);
+    // A missing or broken schema must not prevent the application from starting: field
+    // descriptions are then simply not available, and @RISSchema falls back to its own text.
+    var mainLocation = properties.getRisNamespaceLocation();
+    if (mainLocation == null || mainLocation.isBlank()) {
+      log.error("xsd.ris-namespace-location is not set; no XSD descriptions will be available");
+      return;
+    }
+    var resource = resourceLoader.getResource(mainLocation);
+    var mainDocument = getDocumentForLocation(resource);
+    if (mainDocument == null) {
+      log.error(
+          "could not load XSD schema {}; no XSD descriptions will be available", mainLocation);
+      return;
     }
 
-    if (properties.getXsdLocations().containsKey("adm")) {
-      var mainSchemaLocations = properties.getXsdLocations().get("adm");
-      parseXSDAndCreateDescriptions(
-          mainSchemaLocations, resourceLoader, DocumentKind.ADMINISTRATIVE_DIRECTIVE);
-    }
-
-    if (properties.getXsdLocations().containsKey("literature")) {
-      var mainSchemaLocations = properties.getXsdLocations().get("literature");
-      parseXSDAndCreateDescriptions(mainSchemaLocations, resourceLoader, DocumentKind.LITERATURE);
-    }
-  }
-
-  private void parseXSDAndCreateDescriptions(
-      String[] mainSchemaLocations, ResourceLoader resourceLoader, DocumentKind documentKind) {
-    Map<String, Document> documents = new HashMap<>();
-    for (String mainSchemaLocation : mainSchemaLocations) {
-      var resource = resourceLoader.getResource(mainSchemaLocation);
-      var mainDocument = getDocumentForLocation(resource);
-
-      documents.put(mainSchemaLocation, mainDocument);
-
-      getRelatedXSD(mainDocument, resource, documents);
-    }
+    // Insertion-ordered, so that schema files are always processed in the same (include/import
+    // traversal) order. Keyed by the resource description, like included files, so that a file
+    // that includes the root schema again is recognized as already parsed.
+    Map<String, Document> documents = new LinkedHashMap<>();
+    documents.put(resource.getDescription(), mainDocument);
+    getRelatedXSD(mainDocument, resource, documents);
 
     Map<String, List<String>> elementsByType = new HashMap<>();
     for (Document document : documents.values()) {
       findAllElementsForType(document, elementsByType);
     }
 
-    List<DocumentationElement> documentationElements = new ArrayList<>();
-    for (Document document : documents.values()) {
-      documentationElements.addAll(getDocumentationElements(document));
-    }
-
-    createDescriptions(documentationElements, elementsByType, documentKind);
+    createDescriptions(documents, elementsByType);
   }
 
   private Document getDocumentForLocation(Resource resource) {
@@ -109,14 +97,50 @@ public class XSDDescriptionParser {
     }
   }
 
+  /**
+   * One documented definition found for a key: its description texts by language (e.g. {@code
+   * "de"}, {@code "en"}), and whether it comes from the type's own name (authoritative) or from an
+   * element bound to that type (an alias).
+   */
+  private record Candidate(Map<String, String> byLang, boolean authoritative) {}
+
   private void createDescriptions(
-      List<DocumentationElement> documentationElements,
-      Map<String, List<String>> elementsByType,
-      DocumentKind documentKind) {
-    documentationElements.forEach(
-        documentationElement -> {
-          if (documentationElement.getParent()
-              instanceof TypeElement(String namespaceUri, String name)) {
+      Map<String, Document> documents, Map<String, List<String>> elementsByType) {
+    // key -> every candidate found for it. Several distinct types can share the same bare element
+    // name (e.g. a "titel" element may be bound to ris:personTitel in one place and
+    // ris:gesamttitelTitel in another), so all candidates are collected first and each key is
+    // then resolved once, independently of the order in which its candidates were found. Both the
+    // `descriptions` lookup used by @RISSchema and the glossary are built from that one result.
+    Map<String, List<Candidate>> candidatesByKey = new LinkedHashMap<>();
+
+    for (Document document : documents.values()) {
+      if (document == null) {
+        continue;
+      }
+
+      // Group documentation elements by their shared parent, so that sibling xml:lang="de"/"en"
+      // annotations on the same type or element are paired up into a single occurrence instead
+      // of being processed as independent, language-only entries.
+      Map<XSDElement, Map<String, String>> byLangPerParent = new LinkedHashMap<>();
+      for (DocumentationElement documentationElement : getDocumentationElements(document)) {
+        var parent = documentationElement.getParent();
+        if (parent == null) {
+          continue;
+        }
+        byLangPerParent
+            .computeIfAbsent(parent, _ -> new LinkedHashMap<>())
+            .put(documentationElement.getLanguage(), documentationElement.getDocumentation());
+      }
+
+      byLangPerParent.forEach(
+          (parent, byLang) -> {
+            if (!(parent instanceof TypeElement(String namespaceUri, String name))) {
+              // Local annotations on generic element refs (e.g. akn:motivation) are intentionally
+              // not registered here: only descriptions for named ris:<typeName> types are
+              // supported.
+              return;
+            }
+
             var typeName = name;
             if (!typeName.contains(":")) {
               typeName = namespacePrefixes.get(namespaceUri) + ":" + typeName;
@@ -124,30 +148,78 @@ public class XSDDescriptionParser {
 
             // Some named types (e.g. ris:rechtsfrageGesamt) are only ever selected on an
             // instance via xsi:type and have no xs:element statically bound to them, so the
-            // type's own name must also be registered as a lookup key in its own right.
-            descriptions.add(
-                new DescriptionKey(
-                    typeName,
-                    documentationElement.getDocumentation(),
-                    documentationElement.getLanguage(),
-                    documentKind));
+            // type's own name must also be registered as a lookup key in its own right. Since
+            // this key is literally the type's own name, it unambiguously describes that type.
+            addCandidate(candidatesByKey, typeName, byLang, true);
+            elementsByType
+                .getOrDefault(typeName, List.of())
+                .forEach(elementName -> addCandidate(candidatesByKey, elementName, byLang, false));
+          });
+    }
 
-            if (elementsByType.containsKey(typeName)) {
-              elementsByType
-                  .get(typeName)
-                  .forEach(
-                      elementName ->
-                          descriptions.add(
-                              new DescriptionKey(
-                                  elementName,
-                                  documentationElement.getDocumentation(),
-                                  documentationElement.getLanguage(),
-                                  documentKind)));
-            }
-          }
-          // Local annotations on generic element refs (e.g. akn:motivation) are intentionally
-          // not registered here: only descriptions for named ris:<typeName> types are supported.
-        });
+    candidatesByKey.forEach(
+        (key, candidates) ->
+            resolve(key, candidates)
+                .ifPresent(
+                    byLang -> {
+                      byLang.forEach(
+                          (lang, description) ->
+                              descriptions.add(new DescriptionKey(key, description, lang)));
+                      glossaryEntries.add(
+                          new GlossaryEntry(
+                              key, byLang.getOrDefault("de", ""), byLang.getOrDefault("en", "")));
+                    }));
+    glossaryEntries.sort(GlossaryEntry::compareTo);
+  }
+
+  private static void addCandidate(
+      Map<String, List<Candidate>> candidatesByKey,
+      String key,
+      Map<String, String> byLang,
+      boolean authoritative) {
+    candidatesByKey
+        .computeIfAbsent(key, _ -> new ArrayList<>())
+        .add(new Candidate(byLang, authoritative));
+  }
+
+  /**
+   * Resolves all candidates found for one key to its description texts by language, or to none if
+   * the key is ambiguous:
+   *
+   * <ul>
+   *   <li>if the key is the name of a documented type, only that type's own definitions are
+   *       considered and element aliases are ignored, since the key unambiguously refers to that
+   *       exact type;
+   *   <li>otherwise, all element aliases are considered;
+   *   <li>if all considered candidates have the same texts (in every language), those are used; if
+   *       they differ, distinct types happen to share this key, so nothing is emitted for it rather
+   *       than silently keeping one of several possibly wrong descriptions.
+   * </ul>
+   *
+   * <p>German and English texts are compared together, so a key never combines the German text of
+   * one type with the English text of another. The result only depends on which candidates exist,
+   * not on the order in which they were found.
+   */
+  private static Optional<Map<String, String>> resolve(String key, List<Candidate> candidates) {
+    var authoritative = candidates.stream().anyMatch(Candidate::authoritative);
+    var distinctTexts =
+        candidates.stream()
+            .filter(candidate -> candidate.authoritative() == authoritative)
+            .map(Candidate::byLang)
+            .distinct()
+            .toList();
+
+    if (distinctTexts.size() == 1) {
+      return Optional.of(distinctTexts.getFirst());
+    }
+
+    log.warn(
+        "ambiguous XSD description for key {}: {} differently documented {} share this key;"
+            + " omitting it from the generated descriptions and the glossary",
+        key,
+        distinctTexts.size(),
+        authoritative ? "type definitions" : "element aliases");
+    return Optional.empty();
   }
 
   private void findAllElementsForType(Document document, Map<String, List<String>> elementsByType) {
@@ -296,17 +368,5 @@ public class XSDDescriptionParser {
                 descriptionKey.key().equals(key) && descriptionKey.lang().equals(language))
         .findFirst()
         .map(DescriptionKey::description);
-  }
-
-  /**
-   * Returns all parsed descriptions belonging to the given document kind.
-   *
-   * @param documentKind the document kind to filter descriptions by
-   * @return all descriptions parsed for that document kind
-   */
-  public List<DescriptionKey> getDescriptions(DocumentKind documentKind) {
-    return descriptions.stream()
-        .filter(descriptionKey -> descriptionKey.documentKind() == documentKind)
-        .toList();
   }
 }

@@ -2729,23 +2729,23 @@
           },
           "tatbestand" : {
             "type" : "string",
-            "description" : "Tatbestand"
+            "description" : "Teil einer Entscheidung, der die Tatsachen und Feststellungen beschreibt, von denen das Gericht ausdrücklich ausgeht. Der Tatbestand wird nur gesondert erfasst, wenn er in der Entscheidung als solcher erkennbar ist."
           },
           "entscheidungsgruende" : {
             "type" : "string",
-            "description" : "Entscheidungsgründe"
+            "description" : "Teil einer Entscheidung, der sich ausschließlich mit der rechtlichen Würdigung der im Tatbestand getroffenen Feststellungen befasst.\nDie Entscheidungsgründe werden nur dann gesondert erfasst, wenn sie als solche erkennbar sind."
           },
           "abweichendeMeinung" : {
             "type" : "string",
-            "description" : "Abweichende Meinung"
+            "description" : "Als Abweichende Meinung wird der Teil einer Entscheidung erfasst, der abweichende Meinungen oder Sondervoten\neines oder mehrerer an der Entscheidung mitwirkenden Richter enthält."
           },
           "gruende" : {
             "type" : "string",
-            "description" : "Gründe"
+            "description" : "Die Gründe beinhalten sowohl die Teile, in denen die feststehenden Tatsachen und die getroffenen Feststellungen dargestellt werden, als auch die Teile, in denen die rechtliche Würdigung dieser Tatsachen und Feststellungen vorgenommen wird."
           },
           "leitsatz" : {
             "type" : "string",
-            "description" : "Leitsatz"
+            "description" : "Vom Spruchkörper verfasste oder mit seiner Zustimmung gebildete Leitsätze."
           },
           "kurztitel" : {
             "type" : "string",
@@ -2765,7 +2765,7 @@
           },
           "sonstigerLangtext" : {
             "type" : "string",
-            "description" : "Sonstiger Langtext"
+            "description" : "In Sonstiger Langtext werden entsprechende Hinweise aufgenommen, wenn eine Entscheidung ohne Tatbestand und Entscheidungsgründe (nach ZPO § 313a) ergeht. In dieser Rubrik können auch (Hinweise auf) Berichtigungsbeschlüsse u. Ä. aufgenommen werden."
           },
           "rechtsfrageGesamt" : {
             "type" : "string",
@@ -2777,7 +2777,7 @@
           },
           "tenor" : {
             "type" : "string",
-            "description" : "Tenor"
+            "description" : "Rechtlich bindender Ausspruch des Gerichts"
           },
           "datum" : {
             "type" : "string",

@@ -38,7 +38,7 @@ jobs:
         run: |
           git pull origin main
           npx --yes prettier --write doc/readme
-          git add doc/readme/adm.md doc/readme/caselaw.md doc/readme/literature.md
+          git add doc/readme/glossary.md
           git diff-index --cached --quiet HEAD ||
             git commit -m "Update documentation for xsd schema" -m "[skip ci]" &&
             git push origin main
