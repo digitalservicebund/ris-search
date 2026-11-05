@@ -6,6 +6,7 @@ import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.junit.jupiter.api.Test;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 class DocumentationElementTest {
@@ -23,12 +24,13 @@ class DocumentationElementTest {
         """
             .formatted(documentationInnerXml);
 
-    var document =
-        DocumentBuilderFactory.newInstance()
-            .newDocumentBuilder()
-            .parse(new ByteArrayInputStream(xml.getBytes(StandardCharsets.UTF_8)));
+    return (Element) parseSchema(xml).getElementsByTagName("xs:documentation").item(0);
+  }
 
-    return (Element) document.getElementsByTagName("xs:documentation").item(0);
+  private Document parseSchema(String xml) throws Exception {
+    return DocumentBuilderFactory.newInstance()
+        .newDocumentBuilder()
+        .parse(new ByteArrayInputStream(xml.getBytes(StandardCharsets.UTF_8)));
   }
 
   @Test
@@ -46,5 +48,36 @@ class DocumentationElementTest {
     var documentationElement = new DocumentationElement(element, "");
 
     assertThat(documentationElement.getDocumentation()).isEqualTo("Intro text\n\n* Eins\n* Zwei");
+  }
+
+  @Test
+  void documentationNestedInAnAttributeIsNotAttributedToTheEnclosingType() throws Exception {
+    // Reproduces a real XSD shape: an xs:attribute's own documentation sits inside the same
+    // complexType as the type's own top-level documentation. Only the latter should resolve to
+    // a TypeElement; the former describes the attribute, not the type.
+    var document =
+        parseSchema(
+            """
+            <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+              <xs:complexType name="aktenzeichen">
+                <xs:annotation>
+                  <xs:documentation>Aktenzeichen der Entscheidung</xs:documentation>
+                </xs:annotation>
+                <xs:attribute name="refersTo">
+                  <xs:annotation>
+                    <xs:documentation>Das primäre Aktenzeichen ist hierdurch gekennzeichnet.</xs:documentation>
+                  </xs:annotation>
+                </xs:attribute>
+              </xs:complexType>
+            </xs:schema>
+            """);
+
+    var documentationElements = document.getElementsByTagName("xs:documentation");
+    var typeLevelDocumentation = (Element) documentationElements.item(0);
+    var attributeLevelDocumentation = (Element) documentationElements.item(1);
+
+    assertThat(new DocumentationElement(typeLevelDocumentation, "").getParent())
+        .isEqualTo(new TypeElement("", "aktenzeichen"));
+    assertThat(new DocumentationElement(attributeLevelDocumentation, "").getParent()).isNull();
   }
 }

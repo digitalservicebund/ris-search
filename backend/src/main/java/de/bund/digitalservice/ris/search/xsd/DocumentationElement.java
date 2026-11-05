@@ -1,5 +1,6 @@
 package de.bund.digitalservice.ris.search.xsd;
 
+import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.w3c.dom.Element;
@@ -36,7 +37,7 @@ public class DocumentationElement {
    * without altering the line breaks or {@code *}-bullet markers themselves.
    */
   private static String normalizeLines(String text) {
-    return text.trim().lines().map(String::trim).reduce((a, b) -> a + "\n" + b).orElse("");
+    return text.trim().lines().map(String::trim).collect(Collectors.joining("\n"));
   }
 
   private XSDElement getParent(Element element, String targetNamespaceURI) {
@@ -62,6 +63,12 @@ public class DocumentationElement {
           name = parentElement.getAttribute("ref");
         }
         return new ElementElement(parentElement.getNamespaceURI(), name);
+      } else if (parentElement.getTagName().equals("xs:attribute")
+          || parentElement.getTagName().equals("xs:attributeGroup")) {
+        // Documentation nested under an attribute (or attribute group) describes that attribute,
+        // not the type that happens to declare it; it must not be mistaken for the enclosing
+        // type's own documentation by continuing to recurse upward.
+        return null;
       } else {
         return getParent(parentElement, targetNamespaceURI);
       }

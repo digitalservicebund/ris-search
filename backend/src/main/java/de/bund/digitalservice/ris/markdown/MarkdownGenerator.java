@@ -1,12 +1,12 @@
 package de.bund.digitalservice.ris.markdown;
 
-import de.bund.digitalservice.ris.search.models.DocumentKind;
-import de.bund.digitalservice.ris.search.xsd.DescriptionKey;
+import de.bund.digitalservice.ris.search.xsd.GlossaryEntry;
 import de.bund.digitalservice.ris.search.xsd.XSDDescriptionConfiguration;
 import de.bund.digitalservice.ris.search.xsd.XSDDescriptionParser;
 import de.bund.digitalservice.ris.search.xsd.XSDDescriptionProperties;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import org.springframework.boot.CommandLineRunner;
@@ -18,8 +18,9 @@ import org.springframework.boot.webmvc.autoconfigure.WebMvcAutoConfiguration;
 import org.springframework.context.annotation.Import;
 
 /**
- * Standalone CLI application that parses the XSD schema documentation and writes the resulting
- * field descriptions to Markdown tables under {@code doc/readme}, one file per document kind.
+ * Standalone CLI application that parses the {@code ris} namespace's XSD schema documentation and
+ * writes a combined glossary of its field descriptions to a Markdown table under {@code
+ * doc/readme}.
  */
 @SpringBootApplication(exclude = {WebMvcAutoConfiguration.class})
 @Import(XSDDescriptionConfiguration.class)
@@ -38,36 +39,63 @@ public class MarkdownGenerator implements CommandLineRunner {
 
   @Override
   public void run(String... args) throws Exception {
-    generateMarkdown(parser.getDescriptions(DocumentKind.CASE_LAW), "caselaw.md");
-    generateMarkdown(parser.getDescriptions(DocumentKind.ADMINISTRATIVE_DIRECTIVE), "adm.md");
-    generateMarkdown(parser.getDescriptions(DocumentKind.LITERATURE), "literature.md");
+    var path = Paths.get(System.getProperty("user.dir") + "/../doc/readme", "glossary.md");
+    writeMarkdownFile(buildGlossaryTable(parser.getGlossaryEntries()), path);
   }
 
-  private void generateMarkdown(List<DescriptionKey> descriptions, String filename) {
-    StringBuilder stringBuilder = new StringBuilder();
-    stringBuilder.append("| Key | Language | Description |").append(System.lineSeparator());
-    stringBuilder.append("| --- | --- | --- |").append(System.lineSeparator());
-    descriptions.forEach(
-        descriptionKey ->
-            stringBuilder
-                .append("| ")
-                .append(descriptionKey.key())
-                .append(" | ")
-                .append(descriptionKey.lang())
-                .append(" | ")
-                .append(toTableCellHtml(descriptionKey.description()))
-                .append(" |")
-                .append(System.lineSeparator()));
-
+  /**
+   * Writes the given Markdown content to {@code path}, creating the file first if it doesn't
+   * already exist.
+   *
+   * @param markdown the file content to write
+   * @param path the file to write it to
+   */
+  static void writeMarkdownFile(String markdown, Path path) {
     try {
-      var path = Paths.get(System.getProperty("user.dir") + "/../doc/readme", filename);
       if (Files.notExists(path)) {
         Files.createFile(path);
       }
-      Files.writeString(path, stringBuilder.toString());
+      Files.writeString(path, markdown);
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
+  }
+
+  /**
+   * Builds a Markdown table with one row per glossary entry, in the given order. The parser emits
+   * at most one entry per key: a key with conflicting descriptions is left out of the glossary (see
+   * {@link XSDDescriptionParser}), so every key appears in at most one row.
+   *
+   * @param entries the glossary entries to render
+   * @return the Markdown table as a string
+   */
+  static String buildGlossaryTable(List<GlossaryEntry> entries) {
+    StringBuilder stringBuilder = new StringBuilder();
+    stringBuilder
+        .append("| Key | Description DE | Description EN |")
+        .append(System.lineSeparator());
+    stringBuilder.append("| --- | --- | --- |").append(System.lineSeparator());
+    entries.forEach(
+        entry ->
+            stringBuilder
+                .append("| ")
+                .append(entry.key())
+                .append(" | ")
+                .append(toTableCellHtmlOrBlank(entry.descriptionDe()))
+                .append(" | ")
+                .append(toTableCellHtmlOrBlank(entry.descriptionEn()))
+                .append(" |")
+                .append(System.lineSeparator()));
+
+    return stringBuilder.toString();
+  }
+
+  /**
+   * Same as {@link #toTableCellHtml(String)}, but returns a blank cell for a blank description
+   * instead of turning it into a stray {@code <br>}.
+   */
+  private static String toTableCellHtmlOrBlank(String description) {
+    return description.isEmpty() ? "" : toTableCellHtml(description);
   }
 
   /**
