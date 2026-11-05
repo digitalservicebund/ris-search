@@ -1,7 +1,6 @@
 package de.bund.digitalservice.ris.search.models.opensearch;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.ElementCollection;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.Builder;
@@ -20,38 +19,34 @@ public record Literature(
     @Getter @Id @Field(name = Fields.ID) String id,
     @Field(name = Fields.DOCUMENT_NUMBER) String documentNumber,
     @Field(name = Fields.DOCUMENT_NUMBER_KEYWORD) String documentNumberKeyword,
-    @ElementCollection @Field(name = Fields.YEARS_OF_PUBLICATION) List<String> yearsOfPublication,
+    @Field(name = Fields.YEARS_OF_PUBLICATION) List<String> yearsOfPublication,
     @Field(name = Fields.FIRST_PUBLICATION_DATE, type = FieldType.Date, format = DateFormat.date)
         LocalDate firstPublicationDate,
-    @ElementCollection @Field(name = Fields.DOCUMENT_TYPES) List<String> documentTypes,
-    @ElementCollection @Field(name = Fields.DEPENDENT_REFERENCES) List<String> dependentReferences,
-    @ElementCollection @Field(name = Fields.INDEPENDENT_REFERENCES)
-        List<String> independentReferences,
-    @ElementCollection @Field(name = Fields.NORM_REFERENCES) List<String> normReferences,
+    @Field(name = Fields.DOCUMENT_TYPES) List<String> documentTypes,
+    @Field(name = Fields.DEPENDENT_REFERENCES) List<String> dependentReferences,
+    @Field(name = Fields.INDEPENDENT_REFERENCES) List<String> independentReferences,
+    @Field(name = Fields.NORM_REFERENCES) List<String> normReferences,
     @Nullable @Field(name = Fields.MAIN_TITLE) String mainTitle,
     @Nullable @Field(name = Fields.DOCUMENTARY_TITLE) String documentaryTitle,
     @Nullable @Field(name = Fields.MAIN_TITLE_ADDITIONS) String mainTitleAdditions,
     @Nullable @Field(name = Fields.EDITION) String edition,
-    @ElementCollection @Field(name = Fields.AUTHORS) List<String> authors,
-    @ElementCollection @Field(name = Fields.COLLABORATORS) List<String> collaborators,
-    @ElementCollection @Field(name = Fields.LANGUAGE) List<String> languages,
-    @ElementCollection @Field(name = Fields.ORIGINATOR) List<String> originators,
-    @ElementCollection @Field(name = Fields.CONFERENCE_NOTE) List<String> conferenceNotes,
-    @ElementCollection @Field(name = Fields.UNIVERSITY_NOTES) List<String> universityNotes,
-    @ElementCollection @Field(name = Fields.EDITOR) List<String> editors,
-    @ElementCollection @Field(name = Fields.FOUNDER) List<String> founder,
-    @ElementCollection @Field(name = Fields.PUBLISHER_ORGANIZATIONS)
-        List<String> publisherOrganizations,
-    @ElementCollection @Field(name = Fields.PUBLISHER_PERSONS) List<String> publisherPersons,
-    @ElementCollection @Field(name = Fields.SHORT_TITLES) List<String> shortTitles,
-    @ElementCollection @Field(name = Fields.ADDITIONAL_TITLES) List<String> additionalTitles,
-    @ElementCollection @Field(name = Fields.FULL_TITLE_ADDITIONS) List<String> fullTitleAdditions,
-    @ElementCollection @Field(name = Fields.FOOTNOTES) List<String> footnotes,
-    @ElementCollection @Field(name = Fields.PUBLISHER_INFORMATION)
-        List<String> publisherInformation,
-    @ElementCollection @Field(name = Fields.INTERNATIONAL_IDENTIFIERS)
-        List<String> internationalIdentifiers,
-    @ElementCollection @Field(name = Fields.VOLUMES) List<String> volumes,
+    @Field(name = Fields.AUTHORS) List<String> authors,
+    @Field(name = Fields.COLLABORATORS) List<String> collaborators,
+    @Field(name = Fields.LANGUAGE) List<String> languages,
+    @Field(name = Fields.ORIGINATOR) List<String> originators,
+    @Field(name = Fields.CONFERENCE_NOTE) List<String> conferenceNotes,
+    @Field(name = Fields.UNIVERSITY_NOTES) List<String> universityNotes,
+    @Field(name = Fields.EDITOR) List<String> editors,
+    @Field(name = Fields.FOUNDER) List<String> founder,
+    @Field(name = Fields.PUBLISHER_ORGANIZATIONS) List<String> publisherOrganizations,
+    @Field(name = Fields.PUBLISHER_PERSONS) List<String> publisherPersons,
+    @Field(name = Fields.SHORT_TITLES) List<String> shortTitles,
+    @Field(name = Fields.ADDITIONAL_TITLES) List<String> additionalTitles,
+    @Field(name = Fields.FULL_TITLE_ADDITIONS) List<String> fullTitleAdditions,
+    @Field(name = Fields.FOOTNOTES) List<String> footnotes,
+    @Field(name = Fields.PUBLISHER_INFORMATION) List<String> publisherInformation,
+    @Field(name = Fields.INTERNATIONAL_IDENTIFIERS) List<String> internationalIdentifiers,
+    @Field(name = Fields.VOLUMES) List<String> volumes,
     @Nullable @Field(name = Fields.SHORT_REPORT) String shortReport,
     @Nullable @Field(name = Fields.OUTLINE) String outline,
     @JsonIgnore @Field(name = Fields.INDEXED_AT) String indexedAt)

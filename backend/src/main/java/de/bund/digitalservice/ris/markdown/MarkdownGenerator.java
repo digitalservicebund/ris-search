@@ -14,8 +14,6 @@ import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.boot.hibernate.autoconfigure.HibernateJpaAutoConfiguration;
-import org.springframework.boot.jdbc.autoconfigure.DataSourceAutoConfiguration;
 import org.springframework.boot.webmvc.autoconfigure.WebMvcAutoConfiguration;
 import org.springframework.context.annotation.Import;
 
@@ -23,12 +21,7 @@ import org.springframework.context.annotation.Import;
  * Standalone CLI application that parses the XSD schema documentation and writes the resulting
  * field descriptions to Markdown tables under {@code doc/readme}, one file per document kind.
  */
-@SpringBootApplication(
-    exclude = {
-      DataSourceAutoConfiguration.class,
-      HibernateJpaAutoConfiguration.class,
-      WebMvcAutoConfiguration.class
-    })
+@SpringBootApplication(exclude = {WebMvcAutoConfiguration.class})
 @Import(XSDDescriptionConfiguration.class)
 @EnableConfigurationProperties({XSDDescriptionProperties.class})
 public class MarkdownGenerator implements CommandLineRunner {

@@ -79,7 +79,6 @@ dependencies {
     implementation(libs.spring.validation)
     implementation(libs.spring.web)
     implementation(libs.spring.security)
-    implementation(libs.spring.data.jpa)
     implementation(libs.jts.core)
     implementation(libs.spring.boot.starter.webservices)
     implementation(libs.spring.kubernetes.client)
@@ -171,7 +170,6 @@ testing {
             dependencies {
                 implementation(libs.testcontainers.junit.jupiter)
                 implementation(libs.opensearch.testcontainers)
-                implementation(libs.testcontainers.postgresql)
                 implementation(libs.restassured)
                 implementation(libs.apicatalog.titanium.json)
                 implementation(libs.glassfish.jakarta.json)
