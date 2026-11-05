@@ -14,12 +14,12 @@ export function useClientSideLinks(
   const router = useRouter();
 
   // Browsers also emit this when pressing enter on a focused link.
-  function onClick(event: MouseEvent) {
+  async function onClick(event: MouseEvent) {
     const path = getClientSidePath(event, router);
     if (!path) return;
 
     event.preventDefault();
-    void navigateTo(path);
+    await navigateTo(path);
   }
 
   watch(
