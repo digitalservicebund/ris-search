@@ -3,6 +3,7 @@ package de.bund.digitalservice.ris.search.xsd;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -169,7 +170,7 @@ public class XSDDescriptionParser {
                           new GlossaryEntry(
                               key, byLang.getOrDefault("de", ""), byLang.getOrDefault("en", "")));
                     }));
-    glossaryEntries.sort(GlossaryEntry::compareTo);
+    glossaryEntries.sort(Comparator.comparing(GlossaryEntry::key));
   }
 
   private static void addCandidate(
