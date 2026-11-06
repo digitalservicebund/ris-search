@@ -15,12 +15,12 @@ import lombok.Getter;
  * Java objects.
  *
  * <p>Fields: - gliederungEntry: A list of entries representing individual elements within the
- * hierarchical structure. These entries are serialized under the "gliederungEntry" XML tag and are
- * scoped within the "RIS_UNSELBSTSTAENDIG_NS" namespace.
+ * hierarchical structure. These entries are serialized under the "gliederungseintrag" XML tag and
+ * are scoped within the "RIS_SELBSTSTAENDIG_NS" namespace.
  */
 @Getter
 public class Gliederung {
 
-  @XmlElement(name = "gliederungEntry", namespace = LiteratureNamespaces.RIS_SELBSTSTAENDIG_NS)
+  @XmlElement(name = "gliederungseintrag", namespace = LiteratureNamespaces.RIS_SELBSTSTAENDIG_NS)
   private List<String> gliederungEntry;
 }

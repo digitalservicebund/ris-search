@@ -13,7 +13,7 @@ class LiteratureLdmlToOpenSearchMapperIntegrationTest {
   @Test
   void mapLiteratureLdmlToOpensearchIndex() {
     String literatureContent =
-        LoadXmlUtils.loadXmlAsString(Literature.class, "XXLU000000001.akn.xml");
+        LoadXmlUtils.loadXmlAsString(Literature.class, "XXLU000000001/XXLU000000001.akn.xml");
 
     Literature literature = LiteratureLdmlToOpenSearchMapper.mapLdml(literatureContent);
 

@@ -47,7 +47,8 @@ class LiteratureImportStatusIntegrationTest extends ContainersIntegrationBase {
 
   @Test
   void createsLastSuccessFileProperly() throws ObjectStoreServiceException {
-    for (String fileName : List.of("XXLS000000001.akn.xml", "XXLU000000001.akn.xml")) {
+    for (String fileName :
+        List.of("XXLS000000001/XXLS000000001.akn.xml", "XXLU000000001/XXLU000000001.akn.xml")) {
       literatureBucket.save(fileName, LoadXmlUtils.loadXmlAsString(Literature.class, fileName));
     }
     assertThat(literatureBucket.getAllKeys()).hasSize(2);

@@ -11,15 +11,13 @@ import de.bund.digitalservice.ris.search.models.ldml.literature.uli.Doc;
 import de.bund.digitalservice.ris.search.models.ldml.literature.uli.Gliederung;
 import de.bund.digitalservice.ris.search.models.ldml.literature.uli.Identification;
 import de.bund.digitalservice.ris.search.models.ldml.literature.uli.ImplicitReference;
-import de.bund.digitalservice.ris.search.models.ldml.literature.uli.Keyword;
 import de.bund.digitalservice.ris.search.models.ldml.literature.uli.LiteratureLdml;
 import de.bund.digitalservice.ris.search.models.ldml.literature.uli.Meta;
 import de.bund.digitalservice.ris.search.models.ldml.literature.uli.Proprietary;
-import de.bund.digitalservice.ris.search.models.ldml.literature.uli.References;
+import de.bund.digitalservice.ris.search.models.ldml.literature.uli.RisKongress;
 import de.bund.digitalservice.ris.search.models.ldml.literature.uli.RisMeta;
-import de.bund.digitalservice.ris.search.models.ldml.literature.uli.TlcEvent;
-import de.bund.digitalservice.ris.search.models.ldml.literature.uli.TlcOrganization;
-import de.bund.digitalservice.ris.search.models.ldml.literature.uli.TlcPerson;
+import de.bund.digitalservice.ris.search.models.ldml.literature.uli.RisOrganisation;
+import de.bund.digitalservice.ris.search.models.ldml.literature.uli.RisPerson;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import jakarta.xml.bind.DataBindingException;
 import jakarta.xml.bind.JAXB;
@@ -115,7 +113,7 @@ public class LiteratureLdmlToOpenSearchMapper {
             .map(FrbrWork::getFrbrAliasList)
             .orElse(Collections.emptyList())
             .stream()
-            .filter(alias -> Objects.equals(alias.getName(), "Dokumentnummer"))
+            .filter(alias -> Objects.equals(alias.getName(), "dokumentnummer"))
             .findFirst()
             .map(FrbrNameValueElement::getValue)
             .orElse(null);
@@ -151,13 +149,10 @@ public class LiteratureLdmlToOpenSearchMapper {
         Optional.ofNullable(literatureLdml)
             .map(LiteratureLdml::getDoc)
             .map(Doc::getMeta)
-            .map(Meta::getClassifications)
-            .orElse(Collections.emptyList())
-            .stream()
-            .filter(classification -> "doktyp".equals(classification.getSource()))
-            .flatMap(classification -> classification.getKeywords().stream())
-            .map(Keyword::getValue)
-            .toList();
+            .map(Meta::getProprietary)
+            .map(Proprietary::getMeta)
+            .map(RisMeta::getDocumentTypes)
+            .orElse(Collections.emptyList());
 
     if (documentTypes.isEmpty()) {
       throw new ValidationException("No document types found in LDML metadata.");
@@ -192,7 +187,7 @@ public class LiteratureLdmlToOpenSearchMapper {
   }
 
   private static String extractMainTitleAdditions(LiteratureLdml literatureLdml) {
-    return extractFrbrAlias(literatureLdml, "haupttitelZusatz");
+    return extractFrbrAlias(literatureLdml, "haupttitelzusatz");
   }
 
   private static String extractDocumentaryTitle(LiteratureLdml literatureLdml) {
@@ -210,30 +205,26 @@ public class LiteratureLdmlToOpenSearchMapper {
   private static List<String> extractOriginators(LiteratureLdml literatureLdml) {
     var originatorEids = getFrbrAuthorReferenceLinks(literatureLdml, "#urheber");
 
-    return Optional.ofNullable(literatureLdml)
-        .map(LiteratureLdml::getDoc)
-        .map(Doc::getMeta)
-        .map(Meta::getReferences)
-        .map(References::getTlcOrganizations)
+    return extractRisMeta(literatureLdml)
+        .map(RisMeta::getOrganisationen)
         .orElse(Collections.emptyList())
         .stream()
         .filter(orga -> originatorEids.contains(orga.getEId()))
-        .map(TlcOrganization::getName)
+        .map(RisOrganisation::getName)
+        .filter(Objects::nonNull)
         .toList();
   }
 
   private static List<String> extractConferenceNotes(LiteratureLdml literatureLdml) {
     var conferenceEids = getFrbrAuthorReferenceLinks(literatureLdml, "#kongress");
 
-    return Optional.ofNullable(literatureLdml)
-        .map(LiteratureLdml::getDoc)
-        .map(Doc::getMeta)
-        .map(Meta::getReferences)
-        .map(References::getTlcEvents)
+    return extractRisMeta(literatureLdml)
+        .map(RisMeta::getKongresse)
         .orElse(Collections.emptyList())
         .stream()
-        .filter(event -> conferenceEids.contains(event.getEId()))
-        .map(TlcEvent::getShowAs)
+        .filter(kongress -> conferenceEids.contains(kongress.getEId()))
+        .map(RisKongress::getShowAs)
+        .filter(Objects::nonNull)
         .toList();
   }
 
@@ -311,16 +302,22 @@ public class LiteratureLdmlToOpenSearchMapper {
   private static List<String> extractPerson(LiteratureLdml literatureLdml, String authorType) {
     var personEids = getFrbrAuthorReferenceLinks(literatureLdml, authorType);
 
-    return Optional.ofNullable(literatureLdml)
-        .map(LiteratureLdml::getDoc)
-        .map(Doc::getMeta)
-        .map(Meta::getReferences)
-        .map(References::getTlcPersons)
+    return extractRisMeta(literatureLdml)
+        .map(RisMeta::getPersonen)
         .orElse(Collections.emptyList())
         .stream()
         .filter(person -> personEids.contains(person.getEId()))
-        .map(TlcPerson::getName)
+        .map(RisPerson::getName)
+        .filter(Objects::nonNull)
         .toList();
+  }
+
+  private static Optional<RisMeta> extractRisMeta(LiteratureLdml literatureLdml) {
+    return Optional.ofNullable(literatureLdml)
+        .map(LiteratureLdml::getDoc)
+        .map(Doc::getMeta)
+        .map(Meta::getProprietary)
+        .map(Proprietary::getMeta);
   }
 
   private static String extractFrbrAlias(LiteratureLdml literatureLdml, String aliasType) {
