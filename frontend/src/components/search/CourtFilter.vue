@@ -98,7 +98,7 @@ watch(open, (isOpen) => {
   if (searchTerm.value && searchTerm.value !== lastSelectedLabel.value) {
     searchDebounced(searchTerm.value);
   } else if (modelValue.value) {
-    search(modelValue.value);
+    void search(modelValue.value);
   } else {
     searchResults.value = [...courtFilterDefaultSuggestions];
   }

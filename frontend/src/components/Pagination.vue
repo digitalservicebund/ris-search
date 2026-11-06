@@ -67,13 +67,13 @@ const nextPageRoute = computed<RouteLocationRaw | undefined>(() => {
   };
 });
 
-async function nextPage() {
+function nextPage() {
   if (nextPageNumber.value !== undefined) {
     emit("updatePage", nextPageNumber.value);
   }
 }
 
-async function previousPage() {
+function previousPage() {
   if (previousPageNumber.value !== undefined) {
     emit("updatePage", previousPageNumber.value);
   }

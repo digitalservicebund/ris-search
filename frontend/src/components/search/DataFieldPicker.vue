@@ -74,7 +74,7 @@ function insertInQuery({ pattern }: DataField) {
   newQuery += pattern;
   query.value = newQuery;
 
-  nextTick().then(() => {
+  void nextTick().then(() => {
     const focusableInput = queryInputEl.value?.input;
     if (!(focusableInput instanceof HTMLInputElement)) return;
 

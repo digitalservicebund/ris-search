@@ -89,7 +89,7 @@ watch(query, (val) => {
 // Document kind -------------------------------------------
 
 const setDocumentKind = (value: string) => {
-  navigateToSearch({
+  void navigateToSearch({
     documentKind: value as DocumentKind,
     pageIndex: 0,
   });
@@ -130,7 +130,7 @@ function applyFilterDrawer() {
     ? dateFilterDraft.draft.value
     : undefined;
 
-  navigateToSearch({
+  void navigateToSearch({
     ...(strictDraftDateFilter ? { dateFilter: strictDraftDateFilter } : {}),
     pageIndex: 0,
   });
@@ -144,7 +144,7 @@ function resetFilterDrawer() {
 }
 
 function applySortDrawer() {
-  navigateToSearch({
+  void navigateToSearch({
     sort: sortDraft.draft.value ?? ADVANCED_SEARCH_DEFAULTS.sort,
     itemsPerPage:
       itemsPerPageDraft.draft.value ?? ADVANCED_SEARCH_DEFAULTS.itemsPerPage,
@@ -217,23 +217,23 @@ const { isSearching } = useSearchLoadingIndicator(searchStatus);
 // User action handlers ------------------------------------
 
 function submit() {
-  navigateToSearch({ query: localQuery.value, pageIndex: 0 });
+  void navigateToSearch({ query: localQuery.value, pageIndex: 0 });
 }
 
 function handlePageUpdate(page: number) {
   scrollToResultsOnLoad.value = true;
-  navigateToSearch({ pageIndex: page });
+  void navigateToSearch({ pageIndex: page });
 }
 
 function updateSort(value: string | undefined) {
-  navigateToSearch({
+  void navigateToSearch({
     sort: value ?? ADVANCED_SEARCH_DEFAULTS.sort,
     pageIndex: 0,
   });
 }
 
 function updateItemsPerPage(value: string | undefined) {
-  navigateToSearch({
+  void navigateToSearch({
     itemsPerPage: value ?? ADVANCED_SEARCH_DEFAULTS.itemsPerPage,
     pageIndex: 0,
   });
@@ -242,7 +242,7 @@ function updateItemsPerPage(value: string | undefined) {
 function updateDateFilter(value: typeof dateFilter.value) {
   localDateFilter.value = value;
   if (!isStrictDateFilterValue(value)) return;
-  navigateToSearch({ dateFilter: value, pageIndex: 0 });
+  void navigateToSearch({ dateFilter: value, pageIndex: 0 });
 }
 
 watch(searchStatus, async (newStatus, oldStatus) => {

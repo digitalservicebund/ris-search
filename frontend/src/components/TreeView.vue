@@ -182,7 +182,7 @@ function moveFocusTo(item?: TreeItem) {
   if (!item) return;
 
   focusedKey.value = item.key;
-  focusCurrent();
+  void focusCurrent();
 }
 
 function expandItem(item: TreeItem) {
@@ -218,7 +218,7 @@ function activateItem(item: TreeItem) {
 
   emit("click", item as T);
 
-  if (item.to) navigateTo(item.to);
+  if (item.to) void navigateTo(item.to);
 }
 
 function onKeydown(event: KeyboardEvent) {

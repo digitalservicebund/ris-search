@@ -72,7 +72,7 @@ function updateCategoryFilter(value: string) {
   if (maybeKind && isDocumentKind(maybeKind)) kind = maybeKind;
 
   trackSearch({ query: query.value, documentKind: kind });
-  navigateToSearch({ documentKind: kind, typeGroup: group, pageIndex: 0 });
+  void navigateToSearch({ documentKind: kind, typeGroup: group, pageIndex: 0 });
 }
 
 const documentKindAndGroup = computed(() => ({
@@ -123,7 +123,7 @@ function applyFilterDrawer() {
     ? dateFilterDraft.draft.value
     : undefined;
 
-  navigateToSearch({
+  void navigateToSearch({
     court: courtDraft.draft.value,
     ...(strictDraftDateFilter ? { dateFilter: strictDraftDateFilter } : {}),
     pageIndex: 0,
@@ -137,7 +137,7 @@ function resetSortDrawer() {
 }
 
 function applySortDrawer() {
-  navigateToSearch({
+  void navigateToSearch({
     sort: sortDraft.draft.value ?? SIMPLE_SEARCH_DEFAULTS.sort,
     itemsPerPage:
       itemsPerPageDraft.draft.value ?? SIMPLE_SEARCH_DEFAULTS.itemsPerPage,
@@ -219,40 +219,40 @@ const { isSearching } = useSearchLoadingIndicator(searchStatus);
 
 function updateQuery(value = "") {
   trackSearch({ query: value, documentKind: documentKind.value });
-  navigateToSearch({ query: value, pageIndex: 0 });
+  void navigateToSearch({ query: value, pageIndex: 0 });
 }
 
 function handleEmptySearch() {
-  navigateToSearch({ query: "", pageIndex: 0 });
+  void navigateToSearch({ query: "", pageIndex: 0 });
 }
 
-async function updatePage(page: number) {
+function updatePage(page: number) {
   scrollToResultsOnLoad.value = true;
-  navigateToSearch({ pageIndex: page });
+  void navigateToSearch({ pageIndex: page });
 }
 
 function updateSort(value: string | undefined) {
-  navigateToSearch({
+  void navigateToSearch({
     sort: value ?? SIMPLE_SEARCH_DEFAULTS.sort,
     pageIndex: 0,
   });
 }
 
 function updateItemsPerPage(value: string | undefined) {
-  navigateToSearch({
+  void navigateToSearch({
     itemsPerPage: value ?? SIMPLE_SEARCH_DEFAULTS.itemsPerPage,
     pageIndex: 0,
   });
 }
 
 function updateCourt(value: string | undefined) {
-  navigateToSearch({ court: value, pageIndex: 0 });
+  void navigateToSearch({ court: value, pageIndex: 0 });
 }
 
 function updateDateFilter(value: typeof dateFilter.value) {
   localDateFilter.value = value;
   if (!isStrictDateFilterValue(value)) return;
-  navigateToSearch({ dateFilter: value, pageIndex: 0 });
+  void navigateToSearch({ dateFilter: value, pageIndex: 0 });
 }
 
 watch(searchStatus, async (newStatus, oldStatus) => {
