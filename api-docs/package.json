@@ -1,6 +1,7 @@
 {
   "type": "module",
   "scripts": {
+    "audit:licences": "bash -c 'license-checker-rseidelsohn --production --excludePrivatePackages --onlyAllow \"$(./parse-allowed-licences.sh)\" --csv --out ./api-docs-licence-report.csv'",
     "build": "vitepress build",
     "dev": "vitepress dev",
     "fmt": "oxfmt --no-error-on-unmatched-pattern",
@@ -10,11 +11,14 @@
     "style:fix": "pnpm fmt && pnpm lint",
     "typecheck": "vue-tsc --noEmit"
   },
+  "dependencies": {
+    "vitepress": "2.0.0-alpha.20",
+    "vue": "3.5.44"
+  },
   "devDependencies": {
+    "license-checker-rseidelsohn": "5.0.1",
     "oxfmt": "0.75.0",
     "oxlint": "1.90.0",
-    "vitepress": "2.0.0-alpha.20",
-    "vue": "3.5.44",
     "vue-tsc": "3.3.13"
   },
   "devEngines": {
