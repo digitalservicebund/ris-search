@@ -45,16 +45,9 @@ jobs:
       - name: Setup pnpm and Node
         uses: pnpm/setup@fa36a5ef7dcdefc3a7cb25655c122e00cf6e636e # v3.1.2
         with:
-          package-json-file: ${{ env.API_DOCS_ROOT }}/package.json
+          working-directory: ${{ env.API_DOCS_ROOT }}
           cache: true
-          cache-dependency-path: ${{ env.API_DOCS_ROOT }}/pnpm-lock.yaml
-          # The action would install in the repository root, which has no
-          # package.json. We run `pnpm ci` in ./api-docs instead.
-          install: false
-
-      - name: Install Node modules
-        run: pnpm ci
-        working-directory: ${{ env.API_DOCS_ROOT }}
+          require-lockfile: true
 
       - name: Check style
         run: pnpm run style:check
@@ -78,16 +71,9 @@ jobs:
       - name: Setup pnpm and Node
         uses: pnpm/setup@fa36a5ef7dcdefc3a7cb25655c122e00cf6e636e # v3.1.2
         with:
-          package-json-file: ${{ env.API_DOCS_ROOT }}/package.json
+          working-directory: ${{ env.API_DOCS_ROOT }}
           cache: true
-          cache-dependency-path: ${{ env.API_DOCS_ROOT }}/pnpm-lock.yaml
-          # The action would install in the repository root, which has no
-          # package.json. We run `pnpm ci` in ./api-docs instead.
-          install: false
-
-      - name: Install Node modules
-        run: pnpm ci
-        working-directory: ${{ env.API_DOCS_ROOT }}
+          require-lockfile: true
 
       - name: Build
         run: pnpm build
@@ -112,16 +98,9 @@ jobs:
       - name: Setup pnpm and Node
         uses: pnpm/setup@fa36a5ef7dcdefc3a7cb25655c122e00cf6e636e # v3.1.2
         with:
-          package-json-file: ${{ env.API_DOCS_ROOT }}/package.json
+          working-directory: ${{ env.API_DOCS_ROOT }}
           cache: true
-          cache-dependency-path: ${{ env.API_DOCS_ROOT }}/pnpm-lock.yaml
-          # The action would install in the repository root, which has no
-          # package.json. We run `pnpm ci` in ./api-docs instead.
-          install: false
-
-      - name: Install Node modules
-        run: pnpm ci
-        working-directory: ${{ env.API_DOCS_ROOT }}
+          require-lockfile: true
 
       - name: Run licence scanner
         run: pnpm audit:licences

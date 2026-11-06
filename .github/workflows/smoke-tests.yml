@@ -34,16 +34,9 @@ jobs:
       - name: Setup pnpm and Node
         uses: pnpm/setup@fa36a5ef7dcdefc3a7cb25655c122e00cf6e636e # v3.1.2
         with:
-          package-json-file: ./frontend/package.json
+          working-directory: ./frontend
           cache: true
-          cache-dependency-path: ./frontend/pnpm-lock.yaml
-          # The action would install in the repository root, which has no
-          # package.json. We run `pnpm ci` in ./frontend instead.
-          install: false
-
-      - name: Install Node modules
-        run: pnpm ci
-        working-directory: ./frontend
+          require-lockfile: true
 
       - name: Run Playwright tests
         run: pnpm exec playwright test --project=smoke-tests
