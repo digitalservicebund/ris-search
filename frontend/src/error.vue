@@ -12,9 +12,9 @@ useHead({
 
 const { trackSearch } = useSearchTracking();
 
-function redirectToSearch(searchStr?: string) {
+async function redirectToSearch(searchStr?: string) {
   trackSearch({ query: searchStr ?? "", documentKind: DocumentKind.All });
-  void navigateTo({
+  await navigateTo({
     name: "suche",
     query: searchStr ? { query: searchStr } : {},
   });

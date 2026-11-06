@@ -65,14 +65,18 @@ const categoryFilterValue = computed(() => {
   return val;
 });
 
-function updateCategoryFilter(value: string) {
+async function updateCategoryFilter(value: string) {
   const [maybeKind, group] = value.split(".");
 
   let kind = DocumentKind.All;
   if (maybeKind && isDocumentKind(maybeKind)) kind = maybeKind;
 
   trackSearch({ query: query.value, documentKind: kind });
-  void navigateToSearch({ documentKind: kind, typeGroup: group, pageIndex: 0 });
+  await navigateToSearch({
+    documentKind: kind,
+    typeGroup: group,
+    pageIndex: 0,
+  });
 }
 
 const documentKindAndGroup = computed(() => ({
@@ -110,34 +114,34 @@ const itemsPerPageDraft = useDraftValue(
   SIMPLE_SEARCH_DEFAULTS.itemsPerPage,
 );
 
-function resetFilterDrawer() {
+async function resetFilterDrawer() {
   courtDraft.reset();
   dateFilterDraft.reset();
-  applyFilterDrawer();
+  await applyFilterDrawer();
 }
 
-function applyFilterDrawer() {
+async function applyFilterDrawer() {
   const strictDraftDateFilter = isStrictDateFilterValue(
     dateFilterDraft.draft.value,
   )
     ? dateFilterDraft.draft.value
     : undefined;
 
-  void navigateToSearch({
+  await navigateToSearch({
     court: courtDraft.draft.value,
     ...(strictDraftDateFilter ? { dateFilter: strictDraftDateFilter } : {}),
     pageIndex: 0,
   });
 }
 
-function resetSortDrawer() {
+async function resetSortDrawer() {
   sortDraft.reset();
   itemsPerPageDraft.reset();
-  applySortDrawer();
+  await applySortDrawer();
 }
 
-function applySortDrawer() {
-  void navigateToSearch({
+async function applySortDrawer() {
+  await navigateToSearch({
     sort: sortDraft.draft.value ?? SIMPLE_SEARCH_DEFAULTS.sort,
     itemsPerPage:
       itemsPerPageDraft.draft.value ?? SIMPLE_SEARCH_DEFAULTS.itemsPerPage,
@@ -217,42 +221,42 @@ const { isSearching } = useSearchLoadingIndicator(searchStatus);
 
 // User action handlers ------------------------------------
 
-function updateQuery(value = "") {
+async function updateQuery(value = "") {
   trackSearch({ query: value, documentKind: documentKind.value });
-  void navigateToSearch({ query: value, pageIndex: 0 });
+  await navigateToSearch({ query: value, pageIndex: 0 });
 }
 
-function handleEmptySearch() {
-  void navigateToSearch({ query: "", pageIndex: 0 });
+async function handleEmptySearch() {
+  await navigateToSearch({ query: "", pageIndex: 0 });
 }
 
-function updatePage(page: number) {
+async function updatePage(page: number) {
   scrollToResultsOnLoad.value = true;
-  void navigateToSearch({ pageIndex: page });
+  await navigateToSearch({ pageIndex: page });
 }
 
-function updateSort(value: string | undefined) {
-  void navigateToSearch({
+async function updateSort(value: string | undefined) {
+  await navigateToSearch({
     sort: value ?? SIMPLE_SEARCH_DEFAULTS.sort,
     pageIndex: 0,
   });
 }
 
-function updateItemsPerPage(value: string | undefined) {
-  void navigateToSearch({
+async function updateItemsPerPage(value: string | undefined) {
+  await navigateToSearch({
     itemsPerPage: value ?? SIMPLE_SEARCH_DEFAULTS.itemsPerPage,
     pageIndex: 0,
   });
 }
 
-function updateCourt(value: string | undefined) {
-  void navigateToSearch({ court: value, pageIndex: 0 });
+async function updateCourt(value: string | undefined) {
+  await navigateToSearch({ court: value, pageIndex: 0 });
 }
 
-function updateDateFilter(value: typeof dateFilter.value) {
+async function updateDateFilter(value: typeof dateFilter.value) {
   localDateFilter.value = value;
   if (!isStrictDateFilterValue(value)) return;
-  void navigateToSearch({ dateFilter: value, pageIndex: 0 });
+  await navigateToSearch({ dateFilter: value, pageIndex: 0 });
 }
 
 watch(searchStatus, async (newStatus, oldStatus) => {
