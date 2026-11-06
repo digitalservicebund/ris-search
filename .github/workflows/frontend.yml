@@ -217,11 +217,11 @@ jobs:
         run: |
           if grep -qE 'HIGH|CRITICAL' trivy-results.sarif; then
             echo "Vulnerabilities found"
-            echo "### Found vulnerabilities in trivy results" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### Found vulnerabilities in trivy results" >> "$GITHUB_STEP_SUMMARY"
+            echo "" >> "$GITHUB_STEP_SUMMARY"
             RESULT=$(cat trivy-results.sarif | jq -r '[.runs[].results[].message.text] | join("\\n\\n")')
-            echo -e $RESULT >> $GITHUB_STEP_SUMMARY
-            echo -e $RESULT
+            echo -e "$RESULT" >> "$GITHUB_STEP_SUMMARY"
+            echo -e "$RESULT"
             exit 1
           else
             echo "No significant vulnerabilities found"
@@ -274,8 +274,8 @@ jobs:
         # NOTE: only create releases on main!
         if: ${{ github.ref == 'refs/heads/main' }}
         run: |
-          sentry-cli releases new $SENTRY_RELEASE
-          sentry-cli releases set-commits --auto $SENTRY_RELEASE
+          sentry-cli releases new "$SENTRY_RELEASE"
+          sentry-cli releases set-commits --auto "$SENTRY_RELEASE"
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
@@ -309,7 +309,7 @@ jobs:
       - name: Finalize Sentry release
         # NOTE: only on main!
         if: ${{ github.ref == 'refs/heads/main' }}
-        run: sentry-cli releases finalize $SENTRY_RELEASE
+        run: sentry-cli releases finalize "$SENTRY_RELEASE"
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
