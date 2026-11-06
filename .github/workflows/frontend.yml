@@ -23,10 +23,6 @@ on:
         required: true
       SENTRY_AUTH_TOKEN:
         required: true
-      REPORTS_BUCKET_ACCESS_KEY_ID:
-        required: true
-      REPORTS_BUCKET_SECRET_ACCESS_KEY:
-        required: true
 
 permissions:
   contents: read
@@ -142,15 +138,6 @@ jobs:
           retention-days: 3
           path: frontend/frontend-licence-report.csv
 
-      - name: Upload licence report to ris-reports
-        if: ${{ github.ref == 'refs/heads/main' }}
-        uses: digitalservicebund/add-ris-report@31a248ea368f94bfa3a012da3c202bcc6be2debe
-        with:
-          filePath: frontend/frontend-licence-report.csv
-          destinationDir: licence-reports/frontend/ris-search
-          BUCKET_ACCESS_KEY_ID: ${{ secrets.REPORTS_BUCKET_ACCESS_KEY_ID }}
-          BUCKET_SECRET_ACCESS_KEY: ${{ secrets.REPORTS_BUCKET_SECRET_ACCESS_KEY }}
-
       - name: Send status to Slack
         uses: digitalservicebund/notify-on-failure-gha@671832f192aee0a068fd92b2f6deb975df794a84 # v1.6.1
         if: ${{ failure() && github.ref == 'refs/heads/main' }}
@@ -189,16 +176,13 @@ jobs:
         run: pnpm run build:storybook
         working-directory: ./frontend
 
-      - name: Upload Storybook to ris-reports
+      - name: Upload Storybook
         if: ${{ github.ref == 'refs/heads/main' }}
-        uses: digitalservicebund/add-ris-report@31a248ea368f94bfa3a012da3c202bcc6be2debe
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
-          filePath: frontend/storybook-static
-          destinationDir: style-guide/ris-search
-          reportIsDirectory: true
-          keepAllVersions: false
-          BUCKET_ACCESS_KEY_ID: ${{ secrets.REPORTS_BUCKET_ACCESS_KEY_ID }}
-          BUCKET_SECRET_ACCESS_KEY: ${{ secrets.REPORTS_BUCKET_SECRET_ACCESS_KEY }}
+          name: storybook-static
+          retention-days: 3
+          path: frontend/storybook-static
 
       - name: Send status to Slack
         uses: digitalservicebund/notify-on-failure-gha@671832f192aee0a068fd92b2f6deb975df794a84 # v1.6.1

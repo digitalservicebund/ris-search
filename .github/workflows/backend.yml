@@ -20,10 +20,6 @@ on:
         type: string
         default: ghcr.io
     secrets:
-      REPORTS_BUCKET_ACCESS_KEY_ID:
-        required: true
-      REPORTS_BUCKET_SECRET_ACCESS_KEY:
-        required: true
       SLACK_BOT_TOKEN:
         required: true
       SONAR_TOKEN:
@@ -129,14 +125,12 @@ jobs:
         working-directory: ./backend
         run: ./gradlew checkLicense
 
-      - name: Upload licence report to ris-reports
-        if: ${{ github.ref == 'refs/heads/main' }}
-        uses: digitalservicebund/add-ris-report@31a248ea368f94bfa3a012da3c202bcc6be2debe
+      - name: Upload licence report
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
-          filePath: backend/build/reports/dependency-license/backend-licence-report.html
-          destinationDir: licence-reports/backend/ris-search
-          BUCKET_ACCESS_KEY_ID: ${{ secrets.REPORTS_BUCKET_ACCESS_KEY_ID }}
-          BUCKET_SECRET_ACCESS_KEY: ${{ secrets.REPORTS_BUCKET_SECRET_ACCESS_KEY }}
+          name: licence-reports-backend
+          retention-days: 3
+          path: backend/build/reports/dependency-license/backend-licence-report.html
 
       - name: Send status to Slack
         uses: digitalservicebund/notify-on-failure-gha@671832f192aee0a068fd92b2f6deb975df794a84 # v1.6.1
@@ -317,59 +311,6 @@ jobs:
           name: backend-code-documentation
           retention-days: 3
           path: backend/build/docs/javadoc/
-
-      - name: Send status to Slack
-        uses: digitalservicebund/notify-on-failure-gha@671832f192aee0a068fd92b2f6deb975df794a84 # v1.6.1
-        if: ${{ failure() && github.ref == 'refs/heads/main' }}
-        with:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-          SLACK_CHANNEL_ID: ${{ vars.NEURIS_PORTAL_ALERTS_SLACK_CHANNEL_ID }}
-
-  push-reports:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    needs:
-      - generate-backend-code-documentation
-    if: ${{ github.ref == 'refs/heads/main' }}
-    steps:
-      - name: Checkout ris-search repository
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-        with:
-          path: ris-search
-          ref: ${{ inputs.commit-sha|| github.sha }}
-          persist-credentials: false
-      # Copy ADRs into tmp folder
-      - name: Copy ADRs
-        run: |
-          mkdir -p tmp/adr-source
-          find ris-search/doc/adr/ -type f -exec cp {} tmp/adr-source/ \;
-          ls -l tmp/adr-source
-
-      - name: Backend Code Documentation - Download
-        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
-        with:
-          name: backend-code-documentation
-          path: tmp/backend-code-documentation/
-
-      - name: Upload code documentation to ris-reports
-        uses: digitalservicebund/add-ris-report@31a248ea368f94bfa3a012da3c202bcc6be2debe
-        with:
-          filePath: tmp/backend-code-documentation
-          destinationDir: search-code-documentation/java
-          reportIsDirectory: true
-          BUCKET_ACCESS_KEY_ID: ${{ secrets.REPORTS_BUCKET_ACCESS_KEY_ID }}
-          BUCKET_SECRET_ACCESS_KEY: ${{ secrets.REPORTS_BUCKET_SECRET_ACCESS_KEY }}
-
-      - name: add ADRs to report
-        uses: digitalservicebund/add-ris-report@31a248ea368f94bfa3a012da3c202bcc6be2debe
-        with:
-          filePath: tmp/adr-source
-          destinationDir: adr/ris-search
-          reportIsDirectory: true
-          keepAllVersions: false
-          BUCKET_ACCESS_KEY_ID: ${{ secrets.REPORTS_BUCKET_ACCESS_KEY_ID }}
-          BUCKET_SECRET_ACCESS_KEY: ${{ secrets.REPORTS_BUCKET_SECRET_ACCESS_KEY }}
 
       - name: Send status to Slack
         uses: digitalservicebund/notify-on-failure-gha@671832f192aee0a068fd92b2f6deb975df794a84 # v1.6.1
