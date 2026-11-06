@@ -88,7 +88,7 @@ watch(modelValue, (selectedId) => {
   searchResults.value = [];
 });
 
-watch(open, (isOpen) => {
+watch(open, async (isOpen) => {
   if (!isOpen) {
     searchResults.value = [];
     return;
@@ -98,7 +98,7 @@ watch(open, (isOpen) => {
   if (searchTerm.value && searchTerm.value !== lastSelectedLabel.value) {
     searchDebounced(searchTerm.value);
   } else if (modelValue.value) {
-    search(modelValue.value);
+    await search(modelValue.value);
   } else {
     searchResults.value = [...courtFilterDefaultSuggestions];
   }

@@ -58,7 +58,7 @@ const dataFieldsForDocumentKind = computed(
   () => (dataFields as Record<DocumentKind, DataField[]>)?.[documentKind] ?? [],
 );
 
-function insertInQuery({ pattern }: DataField) {
+async function insertInQuery({ pattern }: DataField) {
   let newQuery = query.value.trimEnd();
   if (newQuery.length) newQuery += " ";
 
@@ -74,13 +74,13 @@ function insertInQuery({ pattern }: DataField) {
   newQuery += pattern;
   query.value = newQuery;
 
-  nextTick().then(() => {
-    const focusableInput = queryInputEl.value?.input;
-    if (!(focusableInput instanceof HTMLInputElement)) return;
+  await nextTick();
 
-    focusableInput.focus();
-    focusableInput.setSelectionRange(nextCursorPosition, nextCursorPosition);
-  });
+  const focusableInput = queryInputEl.value?.input;
+  if (!(focusableInput instanceof HTMLInputElement)) return;
+
+  focusableInput.focus();
+  focusableInput.setSelectionRange(nextCursorPosition, nextCursorPosition);
 }
 
 function submitUnlessLoading() {

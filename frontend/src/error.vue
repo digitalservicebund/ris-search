@@ -12,9 +12,12 @@ useHead({
 
 const { trackSearch } = useSearchTracking();
 
-function redirectToSearch(searchStr?: string) {
+async function redirectToSearch(searchStr?: string) {
   trackSearch({ query: searchStr ?? "", documentKind: DocumentKind.All });
-  navigateTo({ name: "suche", query: searchStr ? { query: searchStr } : {} });
+  await navigateTo({
+    name: "suche",
+    query: searchStr ? { query: searchStr } : {},
+  });
 }
 
 const props = defineProps({
