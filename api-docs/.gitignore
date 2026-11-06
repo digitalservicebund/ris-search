@@ -1,4 +1,5 @@
 .cache
 .vitepress/cache
+api-docs-licence-report.csv
 dist
 node_modules

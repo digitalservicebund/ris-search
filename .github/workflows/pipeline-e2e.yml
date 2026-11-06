@@ -3,10 +3,6 @@ name: End-to-end tests
 on:
   workflow_call:
     secrets:
-      REPORTS_BUCKET_ACCESS_KEY_ID:
-        required: true
-      REPORTS_BUCKET_SECRET_ACCESS_KEY:
-        required: true
       SLACK_BOT_TOKEN:
         required: true
   workflow_dispatch:
@@ -164,36 +160,6 @@ jobs:
         with:
           name: frontend-log-${{ matrix.configuration_label }}-${{ matrix.browser }}
           path: frontend/frontend.log
-
-      - name: Send status to Slack
-        uses: digitalservicebund/notify-on-failure-gha@671832f192aee0a068fd92b2f6deb975df794a84 # v1.6.1
-        if: ${{ failure() && github.ref == 'refs/heads/main' }}
-        with:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-          SLACK_CHANNEL_ID: ${{ vars.NEURIS_PORTAL_ALERTS_SLACK_CHANNEL_ID }}
-
-  push-reports:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    needs:
-      - e2e-tests
-    if: ${{ github.ref == 'refs/heads/main' }}
-    steps:
-      - name: E2E test reports - Download
-        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
-        with:
-          path: tmp/playwright-report/
-          pattern: playwright-e2e-tests-report-*
-
-      - name: Upload test reports to ris-reports
-        uses: digitalservicebund/add-ris-report@31a248ea368f94bfa3a012da3c202bcc6be2debe
-        with:
-          filePath: tmp/playwright-report/
-          destinationDir: test-reports/ris-search
-          reportIsDirectory: true
-          BUCKET_ACCESS_KEY_ID: ${{ secrets.REPORTS_BUCKET_ACCESS_KEY_ID }}
-          BUCKET_SECRET_ACCESS_KEY: ${{ secrets.REPORTS_BUCKET_SECRET_ACCESS_KEY }}
 
       - name: Send status to Slack
         uses: digitalservicebund/notify-on-failure-gha@671832f192aee0a068fd92b2f6deb975df794a84 # v1.6.1
