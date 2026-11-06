@@ -32,7 +32,7 @@ env:
 
 jobs:
   e2e-tests:
-    uses: $/.github/workflows/pipeline-e2e.yml
+    uses: $/.github/workflows/e2e.yml
     permissions:
       packages: read
       contents: read
