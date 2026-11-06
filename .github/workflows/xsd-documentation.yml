@@ -1,4 +1,4 @@
-name: "Generate documentation for XSD Schema documentation keys"
+name: Generate XSD documentation
 
 on:
 #  push:
