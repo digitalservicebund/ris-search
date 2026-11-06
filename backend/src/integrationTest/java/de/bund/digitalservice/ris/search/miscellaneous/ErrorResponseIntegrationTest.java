@@ -17,6 +17,8 @@ import java.util.stream.IntStream;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
@@ -89,18 +91,26 @@ class ErrorResponseIntegrationTest extends ContainersIntegrationBase {
         .andExpect(jsonPath("$.errors[0].parameter", Matchers.is("")));
   }
 
-  @Test
-  void shouldGracefullyHandleClientAbortExceptions() throws Exception {
-    mockMvc
-        .perform(get("/clientAbort").contentType(MediaType.TEXT_HTML))
-        .andExpect(status().isOk());
+  @ParameterizedTest(name = "{0}")
+  @ValueSource(
+      strings = {
+        "/clientAbort",
+        "/clientAbortDuringJsonFlush",
+        "/clientAbortUnwrapped",
+        "/asyncRequestNotUsable"
+      })
+  @DisplayName("Should not return an error when the client closed the connection")
+  void shouldGracefullyHandleClientDisconnects(String path) throws Exception {
+    mockMvc.perform(get(path).contentType(MediaType.TEXT_HTML)).andExpect(status().isOk());
   }
 
   @Test
-  void shouldRethrowHttpMessageNotWritableExceptionThatAreNotFromClientAbort() throws Exception {
+  @DisplayName("Should return 500 when the message is not writable for other reasons")
+  void shouldReturn500OnHttpMessageNotWritableExceptionThatIsNotFromClientAbort() throws Exception {
     mockMvc
         .perform(get("/throwHttpMessageNotWritableException").contentType(MediaType.TEXT_HTML))
-        .andExpect(status().is5xxServerError());
+        .andExpect(status().is5xxServerError())
+        .andExpect(jsonPath("$.errors[0].code", Matchers.is("internal_error")));
   }
 
   @Test
