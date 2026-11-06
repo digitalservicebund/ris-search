@@ -22,11 +22,10 @@ public class XmlValidator {
     return schemaFilePaths.stream()
         .map(schema -> {
           URL schemaUrl = classLoader.getResource(schema);
-          if (schemaUrl != null) {
-            return new StreamSource(schemaUrl.toExternalForm());
-          } else {
-            return null;
+          if (schemaUrl == null) {
+            throw new IllegalStateException("Schema file not found on classpath: " + schema);
           }
+          return new StreamSource(schemaUrl.toExternalForm());
         })
         .toList();
   }
@@ -57,8 +56,8 @@ public class XmlValidator {
   }
 
   private static void validate(Source ldmlFileStream, List<String> schemaFilePaths) {
+    List<StreamSource> schemaSources = loadSchemaFiles(schemaFilePaths);
     try {
-      List<StreamSource> schemaSources = loadSchemaFiles(schemaFilePaths);
       SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
       Schema schema = factory.newSchema(schemaSources.toArray(new StreamSource[0]));
       Validator validator = schema.newValidator();

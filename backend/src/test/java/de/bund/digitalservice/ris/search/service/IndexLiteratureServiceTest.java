@@ -35,8 +35,8 @@ class IndexLiteratureServiceTest {
 
   @Test
   void reindexAllIgnoresInvalidFiles() throws ObjectStoreServiceException {
-    var filenameA = "XXLU000000001.akn.xml";
-    var filenameB = "XXLU000000002.akn.xml";
+    var filenameA = "XXLU000000001/XXLU000000001.akn.xml";
+    var filenameB = "XXLU000000002/XXLU000000002.akn.xml";
     final byte[] xml =
         LoadXmlUtils.loadXmlAsString(Literature.class, filenameA).getBytes(StandardCharsets.UTF_8);
 
@@ -65,8 +65,9 @@ class IndexLiteratureServiceTest {
   @Test
   void reindexAllIgnoresFilesNotIdentifiedAsDependentLiterature()
       throws ObjectStoreServiceException {
-    var filenameA = "XXLU000000001.akn.xml"; // Only file identified as dependent literature
-    var filenameB = "XXLS000000002.akn.xml";
+    var filenameA =
+        "XXLU000000001/XXLU000000001.akn.xml"; // Only file identified as dependent literature
+    var filenameB = "XXLS000000002/XXLS000000002.akn.xml";
     var filenameC = "XLU0000000002.akn.xml";
     var filenameD = "XXXLU000000002.akn.xml";
     final byte[] xml =
@@ -95,7 +96,7 @@ class IndexLiteratureServiceTest {
 
   @Test
   void itCanReindexFromOneSpecificChangelog() throws ObjectStoreServiceException {
-    final String xmlFileName = "XXLU000000001.akn.xml";
+    final String xmlFileName = "XXLU000000001/XXLU000000001.akn.xml";
     final byte[] xml =
         LoadXmlUtils.loadXmlAsString(Literature.class, xmlFileName)
             .getBytes(StandardCharsets.UTF_8);
@@ -117,16 +118,19 @@ class IndexLiteratureServiceTest {
 
   @Test
   void ignoresReferencesThatAreNotInBucketFilesInChangelog() throws ObjectStoreServiceException {
-    final String xmlFileName = "XXLU000000001.akn.xml";
+    final String xmlFileName = "XXLU000000001/XXLU000000001.akn.xml";
     final byte[] xml =
         LoadXmlUtils.loadXmlAsString(Literature.class, xmlFileName)
             .getBytes(StandardCharsets.UTF_8);
 
-    when(this.bucket.getObjects(List.of(xmlFileName, "XXLU000000002.akn.xml")))
+    final String missingFileName = "XXLU000000002/XXLU000000002.akn.xml";
+    // the changelog is a set, so the order of the requested keys is not deterministic
+    when(this.bucket.getObjects(
+            argThat(keys -> Set.copyOf(keys).equals(Set.of(xmlFileName, missingFileName)))))
         .thenReturn(List.of(new StorageObject(xmlFileName, Optional.of(xml))));
 
     Changelog changelog = new Changelog();
-    changelog.setChanged(Sets.newHashSet(List.of(xmlFileName, "XXLU000000002.akn.xml")));
+    changelog.setChanged(Sets.newHashSet(List.of(xmlFileName, missingFileName)));
     service.indexChangelog(changelog);
 
     verify(repo, times(1))
@@ -140,7 +144,7 @@ class IndexLiteratureServiceTest {
   @Test
   void itCanDeleteFromOneSpecificChangelog() throws ObjectStoreServiceException {
     Changelog changelog = new Changelog();
-    changelog.setDeleted(Sets.newHashSet(Set.of("XXLU000000001.akn.xml")));
+    changelog.setDeleted(Sets.newHashSet(Set.of("XXLU000000001/XXLU000000001.akn.xml")));
     service.indexChangelog(changelog);
 
     verify(repo, times(1)).deleteAllById(Set.of("XXLU000000001"));
@@ -151,8 +155,8 @@ class IndexLiteratureServiceTest {
     when(this.bucket.getAllKeys())
         .thenReturn(
             List.of(
-                "XXLU000000001.akn.xml",
-                "XXLU000000002.akn.xml",
+                "XXLU000000001/XXLU000000001.akn.xml",
+                "XXLU000000002/XXLU000000002.akn.xml",
                 "changelogs/2025-03-26T14:13:34.096304815Z-literature.json"));
     assertThat(service.getNumberOfIndexableDocumentsInBucket()).isEqualTo(2);
   }
