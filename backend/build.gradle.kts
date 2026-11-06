@@ -2,6 +2,8 @@ import com.adarshr.gradle.testlogger.theme.ThemeType
 import com.diffplug.spotless.FormatterFunc
 import com.github.jk1.license.filter.DependencyFilter
 import com.github.jk1.license.filter.LicenseBundleNormalizer
+import com.github.jk1.license.render.ReportRenderer
+import com.github.jk1.license.render.SimpleHtmlReportRenderer
 import java.io.Serializable
 
 buildscript { repositories { mavenCentral() } }
@@ -235,6 +237,7 @@ licenseReport {
 // the license(s) will be listed in build/reports/dependency-license/dependencies-without-allowed-license.json
     allowedLicensesFile = File("$projectDir/../allowed-licenses.json")
     filters = arrayOf<DependencyFilter>(LicenseBundleNormalizer())
+    renderers = arrayOf<ReportRenderer>(SimpleHtmlReportRenderer("backend-licence-report.html"))
 }
 
 project.tasks.sonar {

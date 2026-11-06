@@ -129,6 +129,15 @@ jobs:
         working-directory: ./backend
         run: ./gradlew checkLicense
 
+      - name: Upload licence report to ris-reports
+        if: ${{ github.ref == 'refs/heads/main' }}
+        uses: digitalservicebund/add-ris-report@31a248ea368f94bfa3a012da3c202bcc6be2debe
+        with:
+          filePath: backend/build/reports/dependency-license/backend-licence-report.html
+          destinationDir: licence-reports/backend/ris-search
+          BUCKET_ACCESS_KEY_ID: ${{ secrets.REPORTS_BUCKET_ACCESS_KEY_ID }}
+          BUCKET_SECRET_ACCESS_KEY: ${{ secrets.REPORTS_BUCKET_SECRET_ACCESS_KEY }}
+
       - name: Send status to Slack
         uses: digitalservicebund/notify-on-failure-gha@671832f192aee0a068fd92b2f6deb975df794a84 # v1.6.1
         if: ${{ failure() && github.ref == 'refs/heads/main' }}
