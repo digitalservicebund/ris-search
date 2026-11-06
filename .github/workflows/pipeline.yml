@@ -1,4 +1,4 @@
-name: CI-CD-Pipeline
+name: CI/CD pipeline
 
 on:
   push:
@@ -32,7 +32,7 @@ env:
 
 jobs:
   e2e-tests:
-    uses: ./.github/workflows/pipeline-e2e.yml
+    uses: $/.github/workflows/e2e.yml
     permissions:
       packages: read
       contents: read
@@ -40,7 +40,7 @@ jobs:
       SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
 
   backend-jobs:
-    uses: ./.github/workflows/backend.yml
+    uses: $/.github/workflows/backend.yml
     permissions:
       contents: read
       pull-requests: read
@@ -55,7 +55,7 @@ jobs:
       image-reference: ghcr.io/${{ github.repository }}:${{ github.sha }}
 
   frontend-jobs:
-    uses: ./.github/workflows/frontend.yml
+    uses: $/.github/workflows/frontend.yml
     permissions:
       contents: read
       packages: write
@@ -70,135 +70,27 @@ jobs:
       image-reference: ghcr.io/${{ github.repository }}/frontend:${{ github.sha }}
 
   push-reports:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
     needs:
       - e2e-tests
       - backend-jobs
       - frontend-jobs
     if: ${{ !cancelled() && github.ref == 'refs/heads/main' }}
-    steps:
-      - name: Checkout ADRs
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          sparse-checkout: doc/adr
-          persist-credentials: false
-
-      - name: Copy ADRs
-        run: |
-          mkdir -p tmp/adr-source
-          find doc/adr/ -type f -exec cp {} tmp/adr-source/ \;
-          ls -l tmp/adr-source
-
-      - name: Download backend code documentation
-        if: ${{ !cancelled() }}
-        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
-        with:
-          pattern: backend-code-documentation
-          path: tmp/backend-code-documentation/
-
-      - name: Download backend licence report
-        if: ${{ !cancelled() }}
-        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
-        with:
-          pattern: licence-reports-backend
-          path: tmp/licence-reports-backend/
-
-      - name: Download frontend licence report
-        if: ${{ !cancelled() }}
-        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
-        with:
-          pattern: licence-reports-frontend
-          path: tmp/licence-reports-frontend/
-
-      - name: Download Storybook
-        if: ${{ !cancelled() }}
-        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
-        with:
-          pattern: storybook-static
-          path: tmp/storybook-static/
-
-      - name: Download E2E test reports
-        if: ${{ !cancelled() && needs.e2e-tests.result == 'success' }}
-        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
-        with:
-          pattern: playwright-e2e-tests-report-*
-          path: tmp/playwright-report/
-
-      - name: Upload ADRs to ris-reports
-        if: ${{ !cancelled() && hashFiles('tmp/adr-source/**') != '' }}
-        uses: digitalservicebund/add-ris-report@31a248ea368f94bfa3a012da3c202bcc6be2debe
-        with:
-          filePath: tmp/adr-source
-          destinationDir: adr/ris-search
-          reportIsDirectory: true
-          keepAllVersions: false
-          BUCKET_ACCESS_KEY_ID: ${{ secrets.REPORTS_BUCKET_ACCESS_KEY_ID }}
-          BUCKET_SECRET_ACCESS_KEY: ${{ secrets.REPORTS_BUCKET_SECRET_ACCESS_KEY }}
-
-      - name: Upload backend code documentation to ris-reports
-        if: ${{ !cancelled() && hashFiles('tmp/backend-code-documentation/**') != '' }}
-        uses: digitalservicebund/add-ris-report@31a248ea368f94bfa3a012da3c202bcc6be2debe
-        with:
-          filePath: tmp/backend-code-documentation
-          destinationDir: search-code-documentation/java
-          reportIsDirectory: true
-          BUCKET_ACCESS_KEY_ID: ${{ secrets.REPORTS_BUCKET_ACCESS_KEY_ID }}
-          BUCKET_SECRET_ACCESS_KEY: ${{ secrets.REPORTS_BUCKET_SECRET_ACCESS_KEY }}
-
-      - name: Upload backend licence report to ris-reports
-        if: ${{ !cancelled() && hashFiles('tmp/licence-reports-backend/**') != '' }}
-        uses: digitalservicebund/add-ris-report@31a248ea368f94bfa3a012da3c202bcc6be2debe
-        with:
-          filePath: tmp/licence-reports-backend/backend-licence-report.html
-          destinationDir: licence-reports/backend/ris-search
-          BUCKET_ACCESS_KEY_ID: ${{ secrets.REPORTS_BUCKET_ACCESS_KEY_ID }}
-          BUCKET_SECRET_ACCESS_KEY: ${{ secrets.REPORTS_BUCKET_SECRET_ACCESS_KEY }}
-
-      - name: Upload frontend licence report to ris-reports
-        if: ${{ !cancelled() && hashFiles('tmp/licence-reports-frontend/**') != '' }}
-        uses: digitalservicebund/add-ris-report@31a248ea368f94bfa3a012da3c202bcc6be2debe
-        with:
-          filePath: tmp/licence-reports-frontend/frontend-licence-report.csv
-          destinationDir: licence-reports/frontend/ris-search
-          BUCKET_ACCESS_KEY_ID: ${{ secrets.REPORTS_BUCKET_ACCESS_KEY_ID }}
-          BUCKET_SECRET_ACCESS_KEY: ${{ secrets.REPORTS_BUCKET_SECRET_ACCESS_KEY }}
-
-      - name: Upload Storybook to ris-reports
-        if: ${{ !cancelled() && hashFiles('tmp/storybook-static/**') != '' }}
-        uses: digitalservicebund/add-ris-report@31a248ea368f94bfa3a012da3c202bcc6be2debe
-        with:
-          filePath: tmp/storybook-static
-          destinationDir: style-guide/ris-search
-          reportIsDirectory: true
-          keepAllVersions: false
-          BUCKET_ACCESS_KEY_ID: ${{ secrets.REPORTS_BUCKET_ACCESS_KEY_ID }}
-          BUCKET_SECRET_ACCESS_KEY: ${{ secrets.REPORTS_BUCKET_SECRET_ACCESS_KEY }}
-
-      - name: Upload E2E test reports to ris-reports
-        if: ${{ !cancelled() && hashFiles('tmp/playwright-report/**') != '' }}
-        uses: digitalservicebund/add-ris-report@31a248ea368f94bfa3a012da3c202bcc6be2debe
-        with:
-          filePath: tmp/playwright-report/
-          destinationDir: test-reports/ris-search
-          reportIsDirectory: true
-          BUCKET_ACCESS_KEY_ID: ${{ secrets.REPORTS_BUCKET_ACCESS_KEY_ID }}
-          BUCKET_SECRET_ACCESS_KEY: ${{ secrets.REPORTS_BUCKET_SECRET_ACCESS_KEY }}
-
-      - name: Send status to Slack
-        uses: digitalservicebund/notify-on-failure-gha@671832f192aee0a068fd92b2f6deb975df794a84 # v1.6.1
-        if: ${{ failure() }}
-        with:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-          SLACK_CHANNEL_ID: ${{ vars.NEURIS_PORTAL_ALERTS_SLACK_CHANNEL_ID }}
+    uses: $/.github/workflows/push-reports.yml
+    permissions:
+      contents: read
+    secrets:
+      REPORTS_BUCKET_ACCESS_KEY_ID: ${{ secrets.REPORTS_BUCKET_ACCESS_KEY_ID }}
+      REPORTS_BUCKET_SECRET_ACCESS_KEY: ${{ secrets.REPORTS_BUCKET_SECRET_ACCESS_KEY }}
+      SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+    with:
+      e2e-tests-succeeded: ${{ needs.e2e-tests.result == 'success' }}
 
   deploy-staging:
     needs:
       - backend-jobs
       - frontend-jobs
       - e2e-tests
-    uses: ./.github/workflows/deploy.yml
+    uses: $/.github/workflows/deploy.yml
     secrets:
       ARGOCD_AUTH_TOKEN: ${{ secrets.ARGOCD_AUTH_TOKEN }}
       ARGOCD_SERVER_STACKIT: ${{ secrets.ARGOCD_SERVER_STACKIT }}
@@ -212,7 +104,7 @@ jobs:
   smoke-tests:
     needs:
       - deploy-staging
-    uses: ./.github/workflows/smoke-tests.yml
+    uses: $/.github/workflows/smoke-tests.yml
     secrets:
       SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
       STAGING_BASIC_AUTH_PASSWORD: ${{ secrets.STAGING_BASIC_AUTH_PASSWORD }}
@@ -221,7 +113,7 @@ jobs:
   deploy-uat:
     needs:
       - smoke-tests
-    uses: ./.github/workflows/deploy.yml
+    uses: $/.github/workflows/deploy.yml
     secrets:
       ARGOCD_AUTH_TOKEN: ${{ secrets.ARGOCD_AUTH_TOKEN }}
       ARGOCD_SERVER_STACKIT: ${{ secrets.ARGOCD_SERVER_STACKIT }}
@@ -235,7 +127,7 @@ jobs:
   deploy-prototype:
     needs:
       - deploy-uat
-    uses: ./.github/workflows/deploy.yml
+    uses: $/.github/workflows/deploy.yml
     secrets:
       ARGOCD_AUTH_TOKEN: ${{ secrets.ARGOCD_AUTH_TOKEN }}
       ARGOCD_SERVER_STACKIT: ${{ secrets.ARGOCD_SERVER_STACKIT }}
@@ -249,7 +141,7 @@ jobs:
   deploy-production:
     needs:
       - deploy-prototype
-    uses: ./.github/workflows/deploy.yml
+    uses: $/.github/workflows/deploy.yml
     secrets:
       ARGOCD_AUTH_TOKEN: ${{ secrets.ARGOCD_AUTH_TOKEN }}
       ARGOCD_SERVER_STACKIT: ${{ secrets.ARGOCD_SERVER_STACKIT }}

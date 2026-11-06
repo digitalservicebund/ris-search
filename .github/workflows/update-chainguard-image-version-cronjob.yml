@@ -1,4 +1,4 @@
-name: Update-Chainguard-Image-Version-Cronjob
+name: Update Chainguard image version
 on:
   # Allow manual workflow trigger
   workflow_dispatch:

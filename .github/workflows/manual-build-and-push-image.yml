@@ -1,4 +1,4 @@
-name: Manual Build and Push Image
+name: Manual build and push image
 
 on:
   workflow_dispatch:
@@ -14,7 +14,7 @@ on:
 
 jobs:
   backend-jobs:
-    uses: ./.github/workflows/backend.yml
+    uses: $/.github/workflows/backend.yml
     permissions:
       contents: read
       pull-requests: read
@@ -29,7 +29,7 @@ jobs:
       commit-sha: ${{ inputs.commit-sha }}
       image-reference: ghcr.io/${{ github.repository }}:${{ inputs.tag-name }}
   frontend-jobs:
-    uses: ./.github/workflows/frontend.yml
+    uses: $/.github/workflows/frontend.yml
     permissions:
       contents: read
       packages: write
