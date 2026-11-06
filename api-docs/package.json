@@ -19,6 +19,7 @@
     "license-checker-rseidelsohn": "5.0.1",
     "oxfmt": "0.75.0",
     "oxlint": "1.90.0",
+    "typescript": "6.0.3",
     "vue-tsc": "3.3.13"
   },
   "devEngines": {
