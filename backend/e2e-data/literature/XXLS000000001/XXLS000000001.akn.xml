@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"
+                xmlns:ris="http://rechtsinformationen.bund.de/schema/ris/0.1">
+    <akn:doc name="/akn/ontology/de/concept/documenttype/bund/literatur/selbststaendig">
+        <akn:meta>
+            <akn:identification source="attributsemantik-noch-undefiniert">
+                <akn:FRBRWork>
+                    <akn:FRBRthis value="regelungstext-1"/>
+                    <akn:FRBRuri value="TODO"/>
+                    <akn:FRBRalias name="dokumentnummer" value="XXLS000000001"/>
+                    <akn:FRBRalias name="haupttitel" value="Test-Dokument SLI"/>
+                    <akn:FRBRalias name="dokumentarischerTitel" value="Dokumentarischer Titel"/>
+                    <akn:FRBRalias name="haupttitelzusatz" value="Zusatz zum Haupttitel"/>
+                    <akn:FRBRdate date="2024-01-01" name="verkuendungsfassung"/>
+                    <akn:FRBRauthor href="recht.bund.de/institution/foobar"/>
+                    <akn:FRBRauthor as="#verfasser" href="#musterfrau-sabine-verfasser-1"/>
+                    <akn:FRBRauthor as="#mitarbeiter" href="#foo-peter-mitarbeiter-1"/>
+                    <akn:FRBRauthor as="#urheber" href="#dgb-urheber-1"/>
+                    <akn:FRBRauthor as="#kongress" href="#foo-kongress-1"/>
+                    <akn:FRBRauthor as="#hochschule" href="#universitaet-1"/>
+                    <akn:FRBRauthor as="#bearbeiter" href="#foo-bearbeiter-1"/>
+                    <akn:FRBRauthor as="#begruender" href="#foo-begruender-1"/>
+                    <akn:FRBRauthor as="#herausgeber-person" href="#herausgeber-person-1"/>
+                    <akn:FRBRauthor as="#herausgeber-institution" href="#foo-herausgeber-1"/>
+                    <akn:FRBRauthor as="#verlag" href="#verlag-1"/>
+                    <akn:FRBRcountry value="de"/>
+                    <akn:FRBRsubtype value="LU"/>
+                    <akn:FRBRnumber value="ISBN 3-XXXXX-XX-X"/>
+                    <akn:FRBRname value="TODO"/>
+                </akn:FRBRWork>
+                <akn:FRBRExpression>
+                    <akn:FRBRthis value="regelungstext-1"/>
+                    <akn:FRBRuri value="regelungstext-1"/>
+                    <akn:FRBRdate date="2024-01-01" name="verkuendung"/>
+                    <akn:FRBRauthor href="recht.bund.de/institution/foobar"/>
+                    <akn:FRBRlanguage language="deu"/>
+                </akn:FRBRExpression>
+                <akn:FRBRManifestation>
+                    <akn:FRBRthis value="TODO"/>
+                    <akn:FRBRuri value="TODO"/>
+                    <akn:FRBRdate date="2024-01-01" name="generierung"/>
+                    <akn:FRBRauthor href="recht.bund.de"/>
+                    <akn:FRBRformat value="xml"/>
+                </akn:FRBRManifestation>
+            </akn:identification>
+            <akn:classification source="schlagwort">
+                <akn:keyword dictionary="attributsemantik-noch-undefiniert" showAs="Anerkennung" value="Anerkennung"/>
+                <akn:keyword dictionary="attributsemantik-noch-undefiniert" showAs="Anerkennungsbescheid"
+                             value="Anerkennungsbescheid"/>
+            </akn:classification>
+            <akn:analysis source="attributsemantik-noch-undefiniert">
+                <akn:otherReferences source="attributsemantik-noch-undefiniert">
+                    <akn:implicitReference showAs="Baz, 1900, 124-125">
+                        <ris:fundstelleUnselbstaendig periodikum="Baz" zitatstelle="1900, 124-125"/>
+                    </akn:implicitReference>
+                    <akn:implicitReference showAs="FooBar, 1982, 123-123">
+                        <ris:fundstelleUnselbstaendig periodikum="FooBar" zitatstelle="1982, 123-123"/>
+                    </akn:implicitReference>
+                    <akn:implicitReference showAs="SelbstFund, 1982, 123-123">
+                        <ris:fundstelleSelbstaendig titel="SelbstFund" zitatstelle="2024, 456-456"/>
+                    </akn:implicitReference>
+                    <akn:implicitReference showAs="BMV-Ä">
+                        <ris:normReference abbreviation="BMV-Ä"/>
+                    </akn:implicitReference>
+                    <akn:implicitReference showAs="GG, Art 6 Abs 2 S 1, 1949-05-23">
+                        <ris:normReference abbreviation="GG" dateOfVersion="1949-05-23" singleNorm="Art 6 Abs 2 S 1"/>
+                    </akn:implicitReference>
+                </akn:otherReferences>
+            </akn:analysis>
+            <akn:references source="attributsemantik-noch-undefiniert">
+                <akn:TLCRole eId="kongress" href="akn/ontology/roles/de/kongress" showAs="Kongress"/>
+                <akn:TLCRole eId="urheber" href="akn/ontology/roles/de/urheber" showAs="Urheber"/>
+                <akn:TLCRole eId="mitarbeiter" href="akn/ontology/roles/de/mitarbeiter" showAs="Mitarbeiter"/>
+                <akn:TLCRole eId="verfasser" href="akn/ontology/roles/de/verfasser" showAs="Verfasser"/>
+            </akn:references>
+            <akn:notes source="gesamtfussnoten">
+                <akn:note>
+                    <akn:block name="gesamtfussnote">Eine Fußnote.</akn:block>
+                </akn:note>
+                <akn:note>
+                    <akn:block name="gesamtfussnote">Dies ist eine andere längere Fußnote.</akn:block>
+                </akn:note>
+            </akn:notes>
+            <akn:proprietary source="attributsemantik-noch-undefiniert">
+                <ris:meta>
+                    <ris:ausgabe domainTerm="Ausgabe">1. Auflage</ris:ausgabe>
+                    <ris:dokumenttypen domainTerm="Dokumenttypen">
+                        <ris:dokumenttyp domainTerm="Dokumenttyp">Auf</ris:dokumenttyp>
+                    </ris:dokumenttypen>
+                    <ris:gesamttitelangaben domainTerm="Gesamttitelangaben">
+                        <ris:gesamttitel domainTerm="Gesamttitel">
+                            <ris:titel domainTerm="Titel">Gesamttitel</ris:titel>
+                            <ris:bandbezeichnung domainTerm="Bandbezeichnung">Bandbezeichnung</ris:bandbezeichnung>
+                        </ris:gesamttitel>
+                        <ris:gesamttitel domainTerm="Gesamttitel">
+                            <ris:titel domainTerm="Titel">Gesamttitel 2</ris:titel>
+                            <ris:bandbezeichnung domainTerm="Bandbezeichnung">Bandbezeichnung 2</ris:bandbezeichnung>
+                        </ris:gesamttitel>
+                    </ris:gesamttitelangaben>
+                    <ris:gliederung domainTerm="Gliederung">
+                        <ris:gliederungseintrag domainTerm="Gliederungseintrag">I. Problemstellung.</ris:gliederungseintrag>
+                        <ris:gliederungseintrag domainTerm="Gliederungseintrag">II. Lösung.</ris:gliederungseintrag>
+                        <ris:gliederungseintrag domainTerm="Gliederungseintrag">III. Zusammenfassung.</ris:gliederungseintrag>
+                    </ris:gliederung>
+                    <ris:kongresse domainTerm="Kongresse">
+                        <ris:kongress domainTerm="Kongress"
+                                      eId="foo-kongress-1"
+                                      showAs="Internationaler Kongreß für das Recht, 1991, Athen, GRC">
+                            <ris:name domainTerm="Name">Internationaler Kongreß für das Recht</ris:name>
+                            <ris:jahr domainTerm="Jahr">1991</ris:jahr>
+                            <ris:ort domainTerm="Ort">Athen</ris:ort>
+                            <ris:land domainTerm="Land">GRC</ris:land>
+                        </ris:kongress>
+                    </ris:kongresse>
+                    <ris:organisationen domainTerm="Organisationen">
+                        <ris:organisation domainTerm="Organisation" eId="dgb-urheber-1" showAs="DGB, Bundesauschuß">
+                            <ris:name domainTerm="Name">DGB</ris:name>
+                            <ris:zusatz domainTerm="Zusatz">Bundesausschuß</ris:zusatz>
+                        </ris:organisation>
+                        <ris:organisation domainTerm="Organisation" eId="verlag-1" showAs="verlag, Berlin">
+                            <ris:name domainTerm="Name">verlag</ris:name>
+                            <ris:ort domainTerm="Ort">Berlin</ris:ort>
+                        </ris:organisation>
+                        <ris:organisation domainTerm="Organisation" eId="universitaet-1" showAs="Universität Foo">
+                            <ris:name domainTerm="Name">Universität Foo</ris:name>
+                            <ris:jahr domainTerm="Jahr">1984</ris:jahr>
+                        </ris:organisation>
+                        <ris:organisation domainTerm="Organisation" eId="foo-herausgeber-1" showAs="herausgeber institution showAs">
+                            <ris:name domainTerm="Name">herausgeber institution</ris:name>
+                        </ris:organisation>
+                    </ris:organisationen>
+                    <ris:personen domainTerm="Personen">
+                        <ris:person domainTerm="Person" eId="musterfrau-sabine-verfasser-1" showAs="Musterfrau, Sabine, Prof">
+                            <ris:name domainTerm="Person">Musterfrau, Sabine</ris:name>
+                            <ris:titel domainTerm="Titel">Prof</ris:titel>
+                        </ris:person>
+                        <ris:person domainTerm="Person" eId="foo-peter-mitarbeiter-1" showAs="Foo, Peter, Dr">
+                            <ris:name domainTerm="Person">Foo, Peter</ris:name>
+                            <ris:titel domainTerm="Titel">Dr</ris:titel>
+                        </ris:person>
+                        <ris:person domainTerm="Person" eId="foo-bearbeiter-1" showAs="Titel,  Bearbeiter, Foo">
+                            <ris:name domainTerm="Person">Bearbeiter, Foo</ris:name>
+                        </ris:person>
+                        <ris:person domainTerm="Person" eId="foo-begruender-1" showAs="Titel,  Begruender, Foo">
+                            <ris:name domainTerm="Person">Begruender, Foo</ris:name>
+                        </ris:person>
+                        <ris:person domainTerm="Person" eId="herausgeber-person-1" showAs="Mitarbeiter Eins">
+                            <ris:name domainTerm="Person">Mitarbeiter Eins</ris:name>
+                            <ris:titel domainTerm="Titel">Mitarbeiter Herausgeber</ris:titel>
+                        </ris:person>
+                    </ris:personen>
+                    <ris:sonstigerSachtitelListe domainTerm="Liste der sonstigen Sachtitel">
+                        <ris:sonstigerSachtitel domainTerm="Sonstiger Sachtitel">sonstiger Titel</ris:sonstigerSachtitel>
+                    </ris:sonstigerSachtitelListe>
+                    <ris:teilbaende domainTerm="Teilbände">
+                        <ris:teilband domainTerm="Teilband">Teilband 1</ris:teilband>
+                        <ris:teilband domainTerm="Teilband">Teilband 2</ris:teilband>
+                    </ris:teilbaende>
+                    <ris:titelkurzformen domainTerm="Titelkurzformen">
+                        <ris:titelkurzform domainTerm="Titelkurzform">Titel Kurzform</ris:titelkurzform>
+                    </ris:titelkurzformen>
+                    <ris:veroeffentlichungsJahre domainTerm="Veröffentlichungsjahre">
+                        <ris:veroeffentlichungsJahr domainTerm="Veröffentlichungsjahr">2024</ris:veroeffentlichungsJahr>
+                    </ris:veroeffentlichungsJahre>
+                </ris:meta>
+            </akn:proprietary>
+        </akn:meta>
+        <akn:preface>
+            <akn:longTitle>
+                <akn:block name="longTitle">Test-Dokument SLI</akn:block>
+            </akn:longTitle>
+        </akn:preface>
+        <akn:mainBody>
+            <akn:div>
+                <akn:p>Dieses Dokument hat alle Titel.</akn:p>
+                <akn:p>In sem neque, sagittis sed nunc eget, rutrum tempor dolor. Nulla arcu dui, tempor sed lorem sed,
+                    facilisis ornare sem. Duis ut rutrum orci. Sed pretium, nisl ut feugiat volutpat, mauris justo
+                    tempor eros, sit amet dapibus libero ligula non urna. Phasellus vitae rhoncus mauris, ac bibendum
+                    sapien. Suspendisse sagittis libero nec congue volutpat. Integer a ante quis augue ornare pharetra
+                    sit amet non orci.
+                </akn:p>
+            </akn:div>
+        </akn:mainBody>
+    </akn:doc>
+</akn:akomaNtoso>

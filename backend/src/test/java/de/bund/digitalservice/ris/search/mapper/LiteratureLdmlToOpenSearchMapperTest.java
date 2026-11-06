@@ -17,7 +17,7 @@ import org.mockito.Mockito;
 class LiteratureLdmlToOpenSearchMapperTest {
 
   private static final String VALID_XML =
-      LoadXmlUtils.loadXmlAsString(Literature.class, "XXLU000000001.akn.xml");
+      LoadXmlUtils.loadXmlAsString(Literature.class, "XXLU000000001/XXLU000000001.akn.xml");
 
   @Test
   @DisplayName("Correctly maps all available fields from valid literature LDML XML")
@@ -90,19 +90,19 @@ class LiteratureLdmlToOpenSearchMapperTest {
   void doesNotSetValuesForMissingOptionalDatapoints() {
     final String minimalValidLdml =
         """
-        <akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" xmlns:ris="http://ldml.neuris.de/literature/unselbstaendig/meta/">
+        <akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" xmlns:ris="http://rechtsinformationen.bund.de/schema/ris/0.1">
           <akn:doc name="offene-struktur">
             <akn:meta>
               <akn:identification>
                 <akn:FRBRWork>
-                  <akn:FRBRalias name="Dokumentnummer" value="BJLU002758328" />
+                  <akn:FRBRalias name="dokumentnummer" value="BJLU002758328" />
                 </akn:FRBRWork>
               </akn:identification>
-                          <akn:classification source="doktyp">
-                              <akn:keyword dictionary="attributsemantik-noch-undefiniert" showAs="Auf" value="Auf"/>
-                          </akn:classification>
                <akn:proprietary source="attributsemantik-noch-undefiniert">
                                   <ris:meta>
+                                      <ris:dokumenttypen>
+                                          <ris:dokumenttyp>Auf</ris:dokumenttyp>
+                                      </ris:dokumenttypen>
                                       <ris:veroeffentlichungsJahre>
                                           <ris:veroeffentlichungsJahr>2025</ris:veroeffentlichungsJahr>
                                       </ris:veroeffentlichungsJahre>
