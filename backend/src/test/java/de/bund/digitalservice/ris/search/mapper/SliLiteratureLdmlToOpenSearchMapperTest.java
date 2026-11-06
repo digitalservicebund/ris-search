@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 class SliLiteratureLdmlToOpenSearchMapperTest {
 
   private static final String VALID_XML =
-      LoadXmlUtils.loadXmlAsString(Literature.class, "XXLS000000001.akn.xml");
+      LoadXmlUtils.loadXmlAsString(Literature.class, "XXLS000000001/XXLS000000001.akn.xml");
 
   @Test
   @DisplayName("Correctly maps all available fields from valid literature LDML XML")

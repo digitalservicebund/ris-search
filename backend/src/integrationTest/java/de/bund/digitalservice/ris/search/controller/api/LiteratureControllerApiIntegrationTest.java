@@ -48,7 +48,8 @@ class LiteratureControllerApiIntegrationTest extends ContainersIntegrationBase {
   }
 
   private void addDocumentToBucket() {
-    String fileName = documentNumberPresentInBucket + ".akn.xml";
+    String fileName =
+        documentNumberPresentInBucket + "/" + documentNumberPresentInBucket + ".akn.xml";
     bucket.save(fileName, LoadXmlUtils.loadXmlAsString(Literature.class, fileName));
   }
 
@@ -445,7 +446,8 @@ class LiteratureControllerApiIntegrationTest extends ContainersIntegrationBase {
   void shouldReturnZip() throws Exception {
     addDocumentToBucket();
 
-    String filename = documentNumberPresentInBucket + ".akn.xml";
+    String filename =
+        documentNumberPresentInBucket + "/" + documentNumberPresentInBucket + ".akn.xml";
 
     MvcResult asyncResult =
         mockMvc

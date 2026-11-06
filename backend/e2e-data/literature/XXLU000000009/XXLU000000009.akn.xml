@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" xmlns:ris="http://ldml.neuris.de/literature/unselbstaendig/meta/">
+<akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" xmlns:ris="http://rechtsinformationen.bund.de/schema/ris/0.1">
     <akn:doc name="offene-struktur">
         <akn:meta>
             <akn:identification source="attributsemantik-noch-undefiniert">
                 <akn:FRBRWork>
                     <akn:FRBRthis value="regelungstext-1"/>
                     <akn:FRBRuri value="TODO"/>
-                    <akn:FRBRalias name="Dokumentnummer" value="XXLU000000004"/>
-                    <akn:FRBRalias name="dokumentarischerTitel" value="Dokumentarischer Titel"/>
-                    <akn:FRBRdate date="2022-01-01" name="verkuendungsfassung"/>
+                    <akn:FRBRalias name="dokumentnummer" value="XXLU000000009"/>
+                    <akn:FRBRalias name="haupttitel" value="Lit Ausschließlich Verweise"/>
+                    <akn:FRBRdate date="2005-01-08" name="verkuendungsfassung"/>
                     <akn:FRBRauthor href="recht.bund.de/institution/foobar"/>
                     <akn:FRBRauthor as="#verfasser" href="#mustermann-max-verfasser-1"/>
                     <akn:FRBRauthor as="#verfasser" href="#pan-peter-verfasser-2"/>
@@ -20,23 +20,18 @@
                 <akn:FRBRExpression>
                     <akn:FRBRthis value="regelungstext-1"/>
                     <akn:FRBRuri value="regelungstext-1"/>
-                    <akn:FRBRdate date="2022-01-01" name="verkuendung"/>
+                    <akn:FRBRdate date="2005-01-08" name="verkuendung"/>
                     <akn:FRBRauthor href="recht.bund.de/institution/foobar"/>
                     <akn:FRBRlanguage language="deu"/>
                 </akn:FRBRExpression>
                 <akn:FRBRManifestation>
                     <akn:FRBRthis value="TODO"/>
                     <akn:FRBRuri value="TODO"/>
-                    <akn:FRBRdate date="2022-01-01" name="generierung"/>
+                    <akn:FRBRdate date="2005-01-08" name="generierung"/>
                     <akn:FRBRauthor href="recht.bund.de"/>
                     <akn:FRBRformat value="xml"/>
                 </akn:FRBRManifestation>
             </akn:identification>
-            <akn:classification source="doktyp">
-                <akn:keyword dictionary="attributsemantik-noch-undefiniert" showAs="Auf" value="Auf"/>
-                <akn:keyword dictionary="attributsemantik-noch-undefiniert" showAs="Auf" value="Foo"/>
-                <akn:keyword dictionary="attributsemantik-noch-undefiniert" showAs="Auf" value="Bar"/>
-            </akn:classification>
             <akn:classification source="schlagwort">
                 <akn:keyword dictionary="attributsemantik-noch-undefiniert" showAs="Anerkennung" value="Anerkennung"/>
                 <akn:keyword dictionary="attributsemantik-noch-undefiniert" showAs="Anerkennungsbescheid" value="Anerkennungsbescheid"/>
@@ -50,30 +45,44 @@
                         <ris:fundstelleUnselbstaendig periodikum="Baz" zitatstelle="1999, 123-123"/>
                     </akn:implicitReference>
                 </akn:otherReferences>
+                <akn:otherReferences source="active">
+                    <akn:implicitReference showAs="Vergleiche aktiv FooBar 1. Kammer, 3. April 2008">
+                        <ris:caselawReference />
+                    </akn:implicitReference>
+                </akn:otherReferences>
+                <akn:otherReferences source="passive">
+                    <akn:implicitReference showAs="Vergleiche passiv NaNu 1. Kammer, 2009, Az: XY">
+                        <ris:verwaltungsvorschriftReference />
+                    </akn:implicitReference>
+                </akn:otherReferences>
             </akn:analysis>
             <akn:references source="attributsemantik-noch-undefiniert">
-                <akn:TLCPerson eId="mustermann-max-verfasser-1" href="akn/ontology/persons/de/mustermann-max" ris:name="Mustermann, Max" ris:titel="Dr" showAs="Mustermann, Max, Dr"/>
-                <akn:TLCPerson eId="pan-peter-verfasser-1" href="akn/ontology/persons/de/pan-peter" ris:name="Pan, Peter" showAs="Pan, Max"/>
                 <akn:TLCRole eId="verfasser" href="akn/ontology/roles/de/verfasser" showAs="Verfasser"/>
             </akn:references>
             <akn:proprietary source="attributsemantik-noch-undefiniert">
                 <ris:meta>
-                    <ris:veroeffentlichungsJahre>
-                        <ris:veroeffentlichungsJahr>2013</ris:veroeffentlichungsJahr>
-                        <ris:veroeffentlichungsJahr>2024</ris:veroeffentlichungsJahr>
+                    <ris:personen domainTerm="Personen">
+                        <ris:person domainTerm="Person" eId="mustermann-max-verfasser-1" showAs="Mustermann, Max, Dr">
+                            <ris:name domainTerm="Person">Mustermann, Max</ris:name>
+                            <ris:titel domainTerm="Titel">Dr</ris:titel>
+                        </ris:person>
+                        <ris:person domainTerm="Person" eId="pan-peter-verfasser-1" showAs="Pan, Max">
+                            <ris:name domainTerm="Person">Pan, Peter</ris:name>
+                        </ris:person>
+                    </ris:personen>
+                    <ris:dokumenttypen domainTerm="Dokumenttypen">
+                        <ris:dokumenttyp domainTerm="Dokumenttyp">Auf</ris:dokumenttyp>
+                        <ris:dokumenttyp domainTerm="Dokumenttyp">Foo</ris:dokumenttyp>
+                        <ris:dokumenttyp domainTerm="Dokumenttyp">Bar</ris:dokumenttyp>
+                    </ris:dokumenttypen>
+                    <ris:veroeffentlichungsJahre domainTerm="Veröffentlichungsjahre">
+                        <ris:veroeffentlichungsJahr domainTerm="Veröffentlichungsjahr">2005</ris:veroeffentlichungsJahr>
                     </ris:veroeffentlichungsJahre>
-                    <ris:gliederung>
-                        <ris:gliederungEntry>A. Foo.</ris:gliederungEntry>
-                        <ris:gliederungEntry>B. Bar.</ris:gliederungEntry>
-                        <ris:gliederungEntry>C. Baz.</ris:gliederungEntry>
-                    </ris:gliederung>
                 </ris:meta>
             </akn:proprietary>
         </akn:meta>
         <akn:mainBody>
-            <akn:div>
-                <akn:p>Sed at nibh est. Aliquam risus orci, lacinia nec ipsum et, mattis iaculis massa. In id enim sit amet diam rutrum pulvinar. Mauris sit amet sapien egestas, feugiat tortor non, egestas mauris. Sed pretium pellentesque faucibus. Nullam porta enim in risus imperdiet, luctus sollicitudin odio placerat. In eu sapien erat. Donec nec venenatis orci, quis tincidunt ante. Aliquam sem velit, blandit ac gravida at, condimentum ac enim. Suspendisse ut eleifend est.</akn:p>
-            </akn:div>
+            <akn:hcontainer name="crossheading"/>
         </akn:mainBody>
     </akn:doc>
 </akn:akomaNtoso>

@@ -2,8 +2,8 @@ package de.bund.digitalservice.ris.search.controller.api;
 
 import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
 
-import de.bund.digitalservice.ris.html.service.xslt.LiteratureXsltTransformer;
-import de.bund.digitalservice.ris.html.service.xslt.SliLiteratureXsltTransformer;
+import de.bund.digitalservice.ris.html.service.xslt.SliLiteratureV1XsltTransformer;
+import de.bund.digitalservice.ris.html.service.xslt.UliLiteratureV1XsltTransformer;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.config.ServerConfig;
 import de.bund.digitalservice.ris.search.exception.CustomValidationException;
@@ -59,8 +59,8 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
 public class LiteratureController {
 
   private final LiteratureService literatureService;
-  private final LiteratureXsltTransformer xsltTransformer;
-  private final SliLiteratureXsltTransformer sliXsltTransformer;
+  private final UliLiteratureV1XsltTransformer xsltTransformer;
+  private final SliLiteratureV1XsltTransformer sliXsltTransformer;
   private final ChangelogService<LiteratureBucket> changelogService;
   private final String jsonldContextPath;
 
@@ -74,8 +74,8 @@ public class LiteratureController {
   @Autowired
   public LiteratureController(
       LiteratureService literatureService,
-      LiteratureXsltTransformer literatureXsltTransformer,
-      SliLiteratureXsltTransformer sliLiteratureXsltTransformer,
+      UliLiteratureV1XsltTransformer literatureXsltTransformer,
+      SliLiteratureV1XsltTransformer sliLiteratureXsltTransformer,
       ChangelogService<LiteratureBucket> changelogService,
       ServerConfig serverConfig) {
     this.literatureService = literatureService;

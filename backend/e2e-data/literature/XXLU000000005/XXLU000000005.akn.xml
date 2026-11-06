@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" xmlns:ris="http://ldml.neuris.de/literature/unselbstaendig/meta/">
+<akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" xmlns:ris="http://rechtsinformationen.bund.de/schema/ris/0.1">
     <akn:doc name="offene-struktur">
         <akn:meta>
             <akn:identification source="attributsemantik-noch-undefiniert">
                 <akn:FRBRWork>
                     <akn:FRBRthis value="regelungstext-1"/>
                     <akn:FRBRuri value="TODO"/>
-                    <akn:FRBRalias name="Dokumentnummer" value="XXLU000000005"/>
+                    <akn:FRBRalias name="dokumentnummer" value="XXLU000000005"/>
                     <akn:FRBRalias name="dokumentarischerTitel" value="Leeres Dokument"/>
                     <akn:FRBRdate date="2022-01-01" name="verkuendungsfassung"/>
                     <akn:FRBRauthor href="recht.bund.de/institution/foobar"/>
@@ -32,11 +32,6 @@
                     <akn:FRBRformat value="xml"/>
                 </akn:FRBRManifestation>
             </akn:identification>
-            <akn:classification source="doktyp">
-                <akn:keyword dictionary="attributsemantik-noch-undefiniert" showAs="Auf" value="Auf"/>
-                <akn:keyword dictionary="attributsemantik-noch-undefiniert" showAs="Auf" value="Foo"/>
-                <akn:keyword dictionary="attributsemantik-noch-undefiniert" showAs="Auf" value="Bar"/>
-            </akn:classification>
             <akn:classification source="schlagwort">
                 <akn:keyword dictionary="attributsemantik-noch-undefiniert" showAs="Anerkennung" value="Anerkennung"/>
                 <akn:keyword dictionary="attributsemantik-noch-undefiniert" showAs="Anerkennungsbescheid" value="Anerkennungsbescheid"/>
@@ -52,15 +47,27 @@
                 </akn:otherReferences>
             </akn:analysis>
             <akn:references source="attributsemantik-noch-undefiniert">
-                <akn:TLCPerson eId="mustermann-max-verfasser-1" href="akn/ontology/persons/de/mustermann-max" ris:name="Mustermann, Max" ris:titel="Dr" showAs="Mustermann, Max, Dr"/>
-                <akn:TLCPerson eId="pan-peter-verfasser-1" href="akn/ontology/persons/de/pan-peter" ris:name="Pan, Peter" showAs="Pan, Max"/>
                 <akn:TLCRole eId="verfasser" href="akn/ontology/roles/de/verfasser" showAs="Verfasser"/>
             </akn:references>
             <akn:proprietary source="attributsemantik-noch-undefiniert">
                 <ris:meta>
-                    <ris:veroeffentlichungsJahre>
-                        <ris:veroeffentlichungsJahr>2013</ris:veroeffentlichungsJahr>
-                        <ris:veroeffentlichungsJahr>2024</ris:veroeffentlichungsJahr>
+                    <ris:personen domainTerm="Personen">
+                        <ris:person domainTerm="Person" eId="mustermann-max-verfasser-1" showAs="Mustermann, Max, Dr">
+                            <ris:name domainTerm="Person">Mustermann, Max</ris:name>
+                            <ris:titel domainTerm="Titel">Dr</ris:titel>
+                        </ris:person>
+                        <ris:person domainTerm="Person" eId="pan-peter-verfasser-1" showAs="Pan, Max">
+                            <ris:name domainTerm="Person">Pan, Peter</ris:name>
+                        </ris:person>
+                    </ris:personen>
+                    <ris:dokumenttypen domainTerm="Dokumenttypen">
+                        <ris:dokumenttyp domainTerm="Dokumenttyp">Auf</ris:dokumenttyp>
+                        <ris:dokumenttyp domainTerm="Dokumenttyp">Foo</ris:dokumenttyp>
+                        <ris:dokumenttyp domainTerm="Dokumenttyp">Bar</ris:dokumenttyp>
+                    </ris:dokumenttypen>
+                    <ris:veroeffentlichungsJahre domainTerm="Veröffentlichungsjahre">
+                        <ris:veroeffentlichungsJahr domainTerm="Veröffentlichungsjahr">2013</ris:veroeffentlichungsJahr>
+                        <ris:veroeffentlichungsJahr domainTerm="Veröffentlichungsjahr">2024</ris:veroeffentlichungsJahr>
                     </ris:veroeffentlichungsJahre>
                 </ris:meta>
             </akn:proprietary>
