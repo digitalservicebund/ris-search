@@ -133,43 +133,37 @@ public class XSDDescriptionParser {
             .put(documentationElement.getLanguage(), documentationElement.getDocumentation());
       }
 
-      byLangPerParent.forEach(
-          (parent, byLang) -> {
-            if (!(parent instanceof TypeElement(String namespaceUri, String name))) {
-              // Local annotations on generic element refs (e.g. akn:motivation) are intentionally
-              // not registered here: only descriptions for named ris:<typeName> types are
-              // supported.
-              return;
-            }
+      byLangPerParent.forEach((parent, byLang) -> {
+        if (!(parent instanceof TypeElement(String namespaceUri, String name))) {
+          // Local annotations on generic element refs (e.g. akn:motivation) are intentionally
+          // not registered here: only descriptions for named ris:<typeName> types are
+          // supported.
+          return;
+        }
 
-            var typeName =
-                name.contains(":")
-                    ? name
-                    : String.join(":", namespacePrefixes.get(namespaceUri), name);
+        var typeName =
+            name.contains(":") ? name : String.join(":", namespacePrefixes.get(namespaceUri), name);
 
-            // Some named types (e.g. ris:rechtsfrageGesamt) are only ever selected on an
-            // instance via xsi:type and have no xs:element statically bound to them, so the
-            // type's own name must also be registered as a lookup key in its own right. Since
-            // this key is literally the type's own name, it unambiguously describes that type.
-            addCandidate(candidatesByKey, typeName, byLang, true);
-            elementsByType
-                .getOrDefault(typeName, List.of())
-                .forEach(elementName -> addCandidate(candidatesByKey, elementName, byLang, false));
-          });
+        // Some named types (e.g. ris:rechtsfrageGesamt) are only ever selected on an
+        // instance via xsi:type and have no xs:element statically bound to them, so the
+        // type's own name must also be registered as a lookup key in its own right. Since
+        // this key is literally the type's own name, it unambiguously describes that type.
+        addCandidate(candidatesByKey, typeName, byLang, true);
+        elementsByType
+            .getOrDefault(typeName, List.of())
+            .forEach(elementName -> addCandidate(candidatesByKey, elementName, byLang, false));
+      });
     }
 
-    candidatesByKey.forEach(
-        (key, candidates) ->
-            resolve(key, candidates)
-                .ifPresent(
-                    byLang -> {
-                      byLang.forEach(
-                          (lang, description) ->
-                              descriptions.add(new DescriptionKey(key, description, lang)));
-                      glossaryEntries.add(
-                          new GlossaryEntry(
-                              key, byLang.getOrDefault("de", ""), byLang.getOrDefault("en", "")));
-                    }));
+    candidatesByKey.forEach((key, candidates) ->
+        resolve(key, candidates)
+            .ifPresent(byLang -> {
+              byLang.forEach((lang, description) ->
+                  descriptions.add(new DescriptionKey(key, description, lang)));
+              glossaryEntries.add(
+                  new GlossaryEntry(
+                      key, byLang.getOrDefault("de", ""), byLang.getOrDefault("en", "")));
+            }));
     glossaryEntries.sort(Comparator.comparing(GlossaryEntry::key));
   }
 
@@ -365,9 +359,8 @@ public class XSDDescriptionParser {
    */
   public Optional<String> findDescription(String key, String language) {
     return descriptions.stream()
-        .filter(
-            descriptionKey ->
-                descriptionKey.key().equals(key) && descriptionKey.lang().equals(language))
+        .filter(descriptionKey ->
+            descriptionKey.key().equals(key) && descriptionKey.lang().equals(language))
         .findFirst()
         .map(DescriptionKey::description);
   }
