@@ -132,6 +132,30 @@ test.describe("view norm article page", () => {
     });
   });
 
+  test("navigates from the norm text to a single article without a full page load", async ({
+    page,
+  }) => {
+    const mainExpressionEliUrl =
+      "/gesetze/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu";
+    await navigate(page, mainExpressionEliUrl);
+
+    // A full page load would discard this marker
+    await page.evaluate(() => {
+      Object.assign(globalThis, { clientSideNavigationMarker: true });
+    });
+
+    await page.getByRole("link", { name: "§ 1 Anwendungsbereich" }).click();
+    await page.waitForURL(`${mainExpressionEliUrl}/art-z1`);
+    await expect(
+      page.getByRole("heading", { level: 1, name: "§ 1 Anwendungsbereich" }),
+    ).toBeVisible();
+
+    const hasMarker = await page.evaluate(
+      () => "clientSideNavigationMarker" in globalThis,
+    );
+    expect(hasMarker).toBe(true);
+  });
+
   test("keeps search state when navigating to a single norm", async ({
     page,
     isMobileTest,
@@ -203,7 +227,7 @@ test.describe("view norm article page", () => {
 
     await page.getByRole("link", { name: "FrSaftErfrischV" }).first().click();
     await page.waitForURL(
-      "/gesetze/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu/art-z2",
+      "/gesetze/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu",
       { waitUntil: "commit" },
     );
   });
@@ -761,6 +785,24 @@ test.describe("fassungen tab", { tag: ["@RISDEV-11132"] }, () => {
       page.getByRole("navigation", { name: "Tab" }),
     ).not.toBeVisible();
   });
+
+  test(
+    "hides fassungen tab when article has only one fassung in one gesamtausgabe",
+    { tag: ["@RISDEV-12983"] },
+    async ({ page }) => {
+      await navigate(
+        page,
+        "/gesetze/eli/bund/bgbl-1/2025/130/2025-05-05/1/deu/art-z1",
+      );
+
+      await expect(
+        page.getByRole("heading", { name: "§ 1 Gültiger Paragraph" }),
+      ).toBeVisible();
+      await expect(
+        page.getByRole("tab", { name: "Fassungen" }),
+      ).not.toBeVisible();
+    },
+  );
 
   test("displays placeholder message when private features disabled", async ({
     page,

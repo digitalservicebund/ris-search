@@ -58,7 +58,7 @@
             <akn:longTitle GUID="a1000000-0000-0000-0000-000000000034" eId="einleitung-n1_doktitel-n1">
                 <akn:p GUID="a1000000-0000-0000-0000-000000000035" eId="einleitung-n1_doktitel-n1_text-n1">
                     <akn:docTitle GUID="a1000000-0000-0000-0000-000000000036" eId="einleitung-n1_doktitel-n1_text-n1_doctitel-n1">Gesetz mit leerem Gesetzestext</akn:docTitle>
-                    <akn:shortTitle GUID="a1000000-0000-0000-0000-000000000037" eId="einleitung-n1_doktitel-n1_text-n1_kurztitel-n1">(EmptyBodyTestG)</akn:shortTitle>
+                    (<akn:shortTitle GUID="a1000000-0000-0000-0000-000000000037" eId="einleitung-n1_doktitel-n1_text-n1_kurztitel-n1">(double parenthesis test)</akn:shortTitle>)
                 </akn:p>
             </akn:longTitle>
         </akn:preface>

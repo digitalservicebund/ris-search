@@ -1,4 +1,4 @@
-name: Update-Chainguard-Image-Version-Cronjob
+name: Update Chainguard image version
 on:
   # Allow manual workflow trigger
   workflow_dispatch:
@@ -16,7 +16,7 @@ jobs:
       pull-requests: write
       id-token: write
     steps:
-        - uses: chainguard-dev/actions/setup-gitsign@e94104128fff55b3c5e1831a8bbbf198603156f9 #v1.7.1
+        - uses: chainguard-dev/actions/setup-gitsign@794a2c44abbbd7b3a186db97b359270e4105448f #v1.8.0
 
         - name: Bump chainguard/jre image
           uses: digitalservicebund/bump-chainguard-digest@5c3a058b9cd21471ce9ca34b02734511f2ff0720 # v1.1.3

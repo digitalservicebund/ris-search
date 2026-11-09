@@ -73,40 +73,40 @@ class NlexWebServiceEndpointTest {
   void onRequestItReturnsTheExpectedResult() throws JAXBException {
     String exampleRequest =
         """
-                        <request output_lang="de-DE">
-                            <navigation>
-                                <page number="1" />
-                            </navigation>
-                            <criteria encoding="utf8">
-                               <and>
-                                    <words idx-name="nlex:fulltext">
-                                        <contains>Sample expression</contains>
-                                    </words>
-                               </and>
-                            </criteria>
-                        </request>
-                    """;
+            <request output_lang="de-DE">
+                <navigation>
+                    <page number="1" />
+                </navigation>
+                <criteria encoding="utf8">
+                   <and>
+                        <words idx-name="nlex:fulltext">
+                            <contains>Sample expression</contains>
+                        </words>
+                   </and>
+                </criteria>
+            </request>
+        """;
     Request request = new Request();
     request.setQuery(exampleRequest);
 
     String exampleResultString =
         """
-                        <result status="OK">
-                            <navigation>
-                                <request-id>123-456</request-id>
-                                <page number="1" size="10" />
-                            </navigation>
-                            <result-list>
-                            <documents>
-                              <document>
-                                <references>
-                                  <extern-url format="text/html" display="HTML extern" href="http://example.html" />
-                                </references>
-                              </document>
-                            </documents>
-                            </result-list>
-                        </result>
-                    """;
+            <result status="OK">
+                <navigation>
+                    <request-id>123-456</request-id>
+                    <page number="1" size="10" />
+                </navigation>
+                <result-list>
+                <documents>
+                  <document>
+                    <references>
+                      <extern-url format="text/html" display="HTML extern" href="http://example.html" />
+                    </references>
+                  </document>
+                </documents>
+                </result-list>
+            </result>
+        """;
 
     RequestResult exampleResult =
         JAXB.unmarshal(new StringReader(exampleResultString), RequestResult.class);

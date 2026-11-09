@@ -66,8 +66,7 @@ public class NormLdmlToOpenSearchMapper {
 
   private static final Logger logger = LogManager.getLogger(NormLdmlToOpenSearchMapper.class);
 
-  private static final String X_PATH_SHORT_TITLE_ALTERNATE_NAME =
-      "//*[local-name()='shortTitle']/text()";
+  private static final String X_PATH_SHORT_TITLE = "//*[local-name()='shortTitle']/text()";
   private static final String X_PATH_DOC_TITLE_NAME = "//*[local-name()='docTitle']/text()";
   private static final String X_PATH_WORK_URI =
       "//*[local-name()='FRBRWork']/*[local-name()='FRBRuri']/@value";
@@ -75,8 +74,8 @@ public class NormLdmlToOpenSearchMapper {
       "//*[local-name()='FRBRExpression']/*[local-name()='FRBRuri']/@value";
   private static final String X_PATH_MANIFESTATION_THIS =
       "//*[local-name()='FRBRManifestation']/*[local-name()='FRBRthis']/@value";
-  private static final String X_PATH_SHORT_TITLE_ABBREVIATION =
-      "//*[local-name()='shortTitle']/*[local-name()='inline' and @refersTo='amtliche-abkuerzung']/text()";
+  private static final String X_PATH_OFFICIAL_ABBREVIATION =
+      "//*[local-name()='longTitle']/akn:p/*[local-name()='inline' and @refersTo='amtliche-abkuerzung']/text()";
   private static final String X_PATH_WORK_DATE =
       "//*[local-name()='FRBRWork']/*[local-name()='FRBRdate']/@date";
   private static final String X_PATH_DATE_AUSFERTIGUNG =
@@ -174,14 +173,15 @@ public class NormLdmlToOpenSearchMapper {
     String manifestationEliPath =
         parseURIPathOrThrow(manifestationEli, "Manifestation eli must be a valid uri.");
 
+    String officialTitle =
+        StringUtils.trimToNull(xmlDocument.getElementByXpath(X_PATH_DOC_TITLE_NAME));
+    String shortTitle = StringUtils.trimToNull(xmlDocument.getElementByXpath(X_PATH_SHORT_TITLE));
     String risAbbreviation =
         xmlDocument.getNonEmptyElementOrThrow(
             X_PATH_RIS_ABKUERZUNG, "Norm must have ris-abbreviation");
 
     String abbreviation =
-        xmlDocument
-            .getNonEmptyElementByXpath(X_PATH_SHORT_TITLE_ABBREVIATION)
-            .orElse(risAbbreviation);
+        xmlDocument.getNonEmptyElementByXpath(X_PATH_OFFICIAL_ABBREVIATION).orElse(risAbbreviation);
 
     List<Attachment> attachments =
         NormAttachmentMapper.parseAttachments(xmlDocument, attachmentFileContents);
@@ -227,8 +227,8 @@ public class NormLdmlToOpenSearchMapper {
         .workEli(workEliPath)
         .expressionEli(expressionEliPath)
         .manifestationEliExample(manifestationEliPath)
-        .officialTitle(getOfficialTitleByXmlDocument(xmlDocument))
-        .officialShortTitle(getOfficialShortTitleByXmlDocument(xmlDocument))
+        .officialTitle(officialTitle)
+        .officialShortTitle(shortTitle)
         .abbreviation(abbreviation)
         .risAbbreviation(risAbbreviation)
         .normsDate(legislationDate)
@@ -295,42 +295,6 @@ public class NormLdmlToOpenSearchMapper {
     return StringUtils.isNotEmpty(publishedIn) ? publishedIn.trim() : StringUtils.EMPTY;
   }
 
-  private static String getOfficialTitleByXmlDocument(XmlDocument xmlDocument) {
-    String xmlDocumentOfficialTitle = xmlDocument.getElementByXpath(X_PATH_DOC_TITLE_NAME);
-
-    return StringUtils.isNotEmpty(xmlDocumentOfficialTitle)
-        ? StringUtils.trimToEmpty(
-                xmlDocumentOfficialTitle.replace(")", "").replace("(", "").replace("\n", " "))
-            .replaceAll("\\s{2,}", " ")
-        : StringUtils.EMPTY;
-  }
-
-  private static @Nullable String getOfficialShortTitleByXmlDocument(XmlDocument xmlDocument) {
-    String xmlDocumentAlternateName =
-        xmlDocument.getElementByXpath(X_PATH_SHORT_TITLE_ALTERNATE_NAME);
-
-    return StringUtils.trimToNull(parseShortTitle(xmlDocumentAlternateName));
-  }
-
-  /**
-   * Removes Trailing dash punctuation and Parenthesis from a given String
-   *
-   * @param original String to be processed
-   * @return cleared String
-   */
-  public static String parseShortTitle(String original) {
-    if (original == null || original.isEmpty()) {
-      return original;
-    }
-
-    return original
-        .strip()
-        .replaceAll("\\p{Pd}\\Z", "") // remove trailing dash punctuation
-        .replaceAll("[()]", " ")
-        .replaceAll("\\s{2,}", " ") // collapse multiple whitespaces
-        .trim();
-  }
-
   private static LocalDate getDateByXpath(XmlDocument xmlDocument, String xpath) {
     return toLocalDate(xmlDocument.getElementByXpath(xpath));
   }
@@ -354,11 +318,10 @@ public class NormLdmlToOpenSearchMapper {
         xmlDocument
             .getFirstMatchedNodeByXpath(X_PATH_BODY)
             .map(NormLdmlToOpenSearchMapper::getChildren)
-            .orElseGet(
-                () -> {
-                  logger.warn("Error finding body of Norm {}", workEli);
-                  return List.of();
-                });
+            .orElseGet(() -> {
+              logger.warn("Error finding body of Norm {}", workEli);
+              return List.of();
+            });
 
     List<TableOfContentsItem> preambleFormulaToc =
         getStaticTableOfContentsItem(xmlDocument, X_PATH_PREAMBLE_FORMULA, EINGANGSFORMEL);
@@ -380,14 +343,10 @@ public class NormLdmlToOpenSearchMapper {
       XmlDocument xmlDocument, String path, String heading) {
     return xmlDocument
         .getFirstMatchedNodeByXpath(path)
-        .map(
-            n ->
-                List.of(
-                    new TableOfContentsItem(
-                        n.getAttributes().getNamedItem("eId").getNodeValue(),
-                        "",
-                        heading,
-                        List.of())))
+        .map(n ->
+            List.of(
+                new TableOfContentsItem(
+                    n.getAttributes().getNamedItem("eId").getNodeValue(), "", heading, List.of())))
         .orElse(List.of());
   }
 
@@ -475,25 +434,24 @@ public class NormLdmlToOpenSearchMapper {
 
     var attachmentsAsArticles =
         attachments.stream()
-            .map(
-                a -> {
-                  String name =
-                      Stream.of(a.marker(), a.docTitle())
-                          .filter(StringUtils::isNotBlank)
-                          .collect(Collectors.joining(" "));
-                  return Article.builder()
-                      .id(Article.buildId(context.expressionEli, a.eId()))
-                      .eId(a.eId())
-                      .expressionEli(context.expressionEli)
-                      .workEli(context.workEli)
-                      .text(a.textContent())
-                      .name(name)
-                      .articleFingerprint(getArticleFingerprint(name, context.normAbbreviation))
-                      .indexedAt(context.indexedAt)
-                      .manifestationEli(a.manifestationEli())
-                      .documentType(LegislationPartType.ATTACHMENT)
-                      .build();
-                })
+            .map(a -> {
+              String name =
+                  Stream.of(a.marker(), a.docTitle())
+                      .filter(StringUtils::isNotBlank)
+                      .collect(Collectors.joining(" "));
+              return Article.builder()
+                  .id(Article.buildId(context.expressionEli, a.eId()))
+                  .eId(a.eId())
+                  .expressionEli(context.expressionEli)
+                  .workEli(context.workEli)
+                  .text(a.textContent())
+                  .name(name)
+                  .articleFingerprint(getArticleFingerprint(name, context.normAbbreviation))
+                  .indexedAt(context.indexedAt)
+                  .manifestationEli(a.manifestationEli())
+                  .documentType(LegislationPartType.ATTACHMENT)
+                  .build();
+            })
             .toList();
     articles.addAll(attachmentsAsArticles);
 

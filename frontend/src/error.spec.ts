@@ -2,12 +2,17 @@ import { mockNuxtImport, renderSuspended } from "@nuxt/test-utils/runtime";
 import { userEvent } from "@testing-library/user-event";
 import { screen } from "@testing-library/vue";
 import { describe, vi } from "vitest";
+import { DocumentKind } from "~/types/api";
 import ErrorPage from "./error.vue";
 
-const { mockNavigateTo } = vi.hoisted(() => ({
+const { mockNavigateTo, mockTrackSearch } = vi.hoisted(() => ({
   mockNavigateTo: vi.fn(),
+  mockTrackSearch: vi.fn(),
 }));
 mockNuxtImport("navigateTo", () => mockNavigateTo);
+mockNuxtImport("useSearchTracking", () => () => ({
+  trackSearch: mockTrackSearch,
+}));
 
 const mountComponent = async (statusCode: number) =>
   await renderSuspended(ErrorPage, {
@@ -42,6 +47,10 @@ describe("Error", () => {
     expect(mockNavigateTo).toHaveBeenCalledWith({
       name: "suche",
       query: { query: "foobar" },
+    });
+    expect(mockTrackSearch).toHaveBeenCalledWith({
+      query: "foobar",
+      documentKind: DocumentKind.All,
     });
   });
 

@@ -73,17 +73,16 @@ public class SecurityConfig {
   @Bean
   @Profile({"prototype", "staging", "uat"})
   public SecurityFilterChain prototypeSecurityFilterChain(HttpSecurity http) {
-    http.authorizeHttpRequests(
-        requests ->
-            requests
-                .requestMatchers(internalPaths)
-                .permitAll()
-                .requestMatchers("/v1/**")
-                .permitAll()
-                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**")
-                .permitAll()
-                .anyRequest()
-                .authenticated());
+    http.authorizeHttpRequests(requests ->
+        requests
+            .requestMatchers(internalPaths)
+            .permitAll()
+            .requestMatchers("/v1/**")
+            .permitAll()
+            .requestMatchers("/swagger-ui/**", "/v3/api-docs/**")
+            .permitAll()
+            .anyRequest()
+            .authenticated());
     applyCommonConfiguration(http);
     return http.build();
   }
@@ -100,16 +99,15 @@ public class SecurityConfig {
   @Profile({"production"})
   public SecurityFilterChain productionSecurityFilterChain(
       HttpSecurity http, ApiKeyRequestMatcher apiKeyRequestMatcher) {
-    http.authorizeHttpRequests(
-        requests ->
-            requests
-                .requestMatchers(
-                    ACTUATOR_PATH, "/.well-known/**", "/swagger-ui/**", "/v3/**", "/api/**")
-                .permitAll()
-                .requestMatchers(apiKeyRequestMatcher)
-                .permitAll()
-                .anyRequest()
-                .authenticated());
+    http.authorizeHttpRequests(requests ->
+        requests
+            .requestMatchers(
+                ACTUATOR_PATH, "/.well-known/**", "/swagger-ui/**", "/v3/**", "/api/**")
+            .permitAll()
+            .requestMatchers(apiKeyRequestMatcher)
+            .permitAll()
+            .anyRequest()
+            .authenticated());
     return http.build();
   }
 

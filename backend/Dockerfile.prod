@@ -1,4 +1,4 @@
-FROM gradle:9.8.2-jdk25@sha256:ca424744a6a45a575f333edea680696d980999c461be38b1574a4c70d5455f24 AS backend-builder
+FROM gradle:9.8.2-jdk25@sha256:e46e15353757ef9c9be0197a243653e88d25ebcd4c3c841057cf839c11fcf898 AS backend-builder
 WORKDIR /app
 COPY . /app
 
@@ -8,7 +8,7 @@ RUN --mount=type=secret,id=GH_PACKAGES_REPOSITORY_USER \
     export GH_PACKAGES_REPOSITORY_TOKEN=$(cat /run/secrets/GH_PACKAGES_REPOSITORY_TOKEN) && \
     ./gradlew build -x integrationTest -x test -x spotlessCheck
 
-FROM cgr.dev/chainguard/jre@sha256:c50aa266436f6bb259d595ede19794151ab92372bade20db2fd66d092822fc8b
+FROM cgr.dev/chainguard/jre@sha256:f8299837345833b2a166c0f80482c2660139d4ecb17ce428c62bcc5462bb72bb
 ARG SENTRY_RELEASE
 COPY --from=backend-builder /app/build/libs/ris-search-*.jar /app/app.jar
 EXPOSE 8080

@@ -12,13 +12,8 @@ import {
   getTitleWithFallback,
 } from "~/utils/search/searchResults";
 
-const {
-  searchResult,
-  order,
-  headingLevel = "2",
-} = defineProps<{
+const { searchResult, headingLevel = "2" } = defineProps<{
   searchResult: SearchResult<LegislationExpression>;
-  order: number;
 
   /** Heading level of the result title. */
   headingLevel?: SearchResultHeadingLevel;
@@ -26,7 +21,6 @@ const {
 
 const headlineStyle = computed(() => getSearchResultHeadline(headingLevel));
 
-const { searchResultClicked } = usePostHog();
 const privateFeaturesEnabled = usePrivateFeaturesFlag();
 const route = useRoute();
 
@@ -136,7 +130,6 @@ const relevantHighlights = computed(() =>
       :to="detailPageRoute"
       :aria-describedby="resultTypeId"
       :class="headlineStyle.class"
-      @click="searchResultClicked(detailPageRoute.path, order)"
     >
       <component :is="headlineStyle.tag" v-html="headline" />
     </NuxtLink>
@@ -151,11 +144,7 @@ const relevantHighlights = computed(() =>
         :key="highlight.name + index"
         class="flex flex-col"
       >
-        <NuxtLink
-          class="typo-link1-bold link-hover"
-          :to="highlight.route"
-          @click="searchResultClicked(highlight.route.path, order)"
-        >
+        <NuxtLink class="typo-link1-bold link-hover" :to="highlight.route">
           <span v-html="highlight.name" />
         </NuxtLink>
         <div

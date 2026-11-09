@@ -4,21 +4,18 @@ import { screen } from "@testing-library/vue";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import ConsentBanner from "./ConsentBanner.vue";
 
-const mockUserConsent = ref<boolean | undefined>(undefined);
-const mockSetTracking = vi.fn();
+const mockIsBannerVisible = ref(true);
+const mockSetConsent = vi.fn();
 
-vi.mock("~/composables/usePostHog", () => ({
-  usePostHog: () => ({
-    userConsent: mockUserConsent,
-    isBannerVisible: computed(() => mockUserConsent.value === undefined),
-    setTracking: mockSetTracking,
-    initialize: vi.fn(),
-    postHog: ref(undefined),
+vi.mock("~/composables/useConsent", () => ({
+  useConsent: () => ({
+    isBannerVisible: mockIsBannerVisible,
+    setConsent: mockSetConsent,
   }),
 }));
 
-const factory = async (userConsent: boolean | undefined) => {
-  mockUserConsent.value = userConsent;
+const factory = async (isBannerVisible: boolean) => {
+  mockIsBannerVisible.value = isBannerVisible;
   return renderSuspended(ConsentBanner, {
     global: {
       stubs: {
@@ -30,12 +27,12 @@ const factory = async (userConsent: boolean | undefined) => {
 
 describe("ConsentBanner", () => {
   beforeEach(() => {
-    mockUserConsent.value = undefined;
+    mockIsBannerVisible.value = true;
     vi.clearAllMocks();
   });
 
-  it("shows the banner when user has not given consent yet", async () => {
-    await factory(undefined);
+  it("shows the banner when user has not decided on consent yet", async () => {
+    await factory(true);
     expect(
       screen.getByRole("region", {
         name: "Cookie-Einstellungen akzeptieren oder ablehnen",
@@ -43,8 +40,8 @@ describe("ConsentBanner", () => {
     ).toBeInTheDocument();
   });
 
-  it("hides the banner when user has already given consent", async () => {
-    await factory(true);
+  it("hides the banner when user has already decided on consent", async () => {
+    await factory(false);
     expect(
       screen.queryByRole("region", {
         name: "Cookie-Einstellungen akzeptieren oder ablehnen",
@@ -52,10 +49,17 @@ describe("ConsentBanner", () => {
     ).not.toBeInTheDocument();
   });
 
-  it("sets tracking when clicking the Decline button", async () => {
+  it("grants consent when clicking the Accept button", async () => {
     const user = userEvent.setup();
-    await factory(undefined);
+    await factory(true);
+    await user.click(screen.getByRole("button", { name: "Akzeptieren" }));
+    expect(mockSetConsent).toHaveBeenCalledWith(true);
+  });
+
+  it("denies consent when clicking the Decline button", async () => {
+    const user = userEvent.setup();
+    await factory(true);
     await user.click(screen.getByRole("button", { name: "Ablehnen" }));
-    expect(mockSetTracking).toHaveBeenCalledWith(false);
+    expect(mockSetConsent).toHaveBeenCalledWith(false);
   });
 });

@@ -1,4 +1,4 @@
-name: "Generate documentation for XSD Schema documentation keys"
+name: Generate XSD documentation
 
 on:
 #  push:
@@ -15,9 +15,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v6
+        with:
+          persist-credentials: false
 
       - name: Set up JDK
-        uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v5
+        uses: actions/setup-java@77dd5b2ce225ea11469928ac317850245a74ae78 # v5
         with:
           java-version: "21.0"
           distribution: "temurin"
@@ -31,7 +33,7 @@ jobs:
         working-directory: ./backend
         run: ./gradlew xsdDocumentation
 
-      - uses: chainguard-dev/actions/setup-gitsign@e94104128fff55b3c5e1831a8bbbf198603156f9
+      - uses: chainguard-dev/actions/setup-gitsign@794a2c44abbbd7b3a186db97b359270e4105448f
 
       - name: Commit and push changes
         if: ${{ github.ref == 'refs/heads/main' }}

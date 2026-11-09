@@ -68,17 +68,15 @@ public class NormsTestData {
             .eli(version1ManifestationEli)
             .inForceDate("1991-01-01")
             .outOfForceDate("1995-01-01")
-            .officialTitle(
-                "Formatting Test Document",
-                longTitle -> longTitle.addAuthorialNote("Authorial note in the norm title."))
+            .longTitle("Formatting Test Document", null, null)
+            .addOfficialTitleFootnote("Authorial note in the norm title.")
             .fullCitation("Verordnung zu der Vereinbarung")
-            .toc(
-                toc -> {
-                  toc.addEntry("Abschnitt 1", "1")
-                      .addEntry("Allgemeine Bestimmungen ", "2")
-                      .addEntry("Eintrag 2", "1")
-                      .addEntry("Art 1", "5");
-                })
+            .toc(toc -> {
+              toc.addEntry("Abschnitt 1", "1")
+                  .addEntry("Allgemeine Bestimmungen ", "2")
+                  .addEntry("Eintrag 2", "1")
+                  .addEntry("Art 1", "5");
+            })
             .article(
                 "§ 1",
                 "1991-01-01",

@@ -3,8 +3,14 @@ import IcBaselineArrowForward from "~icons/ic/baseline-arrow-forward";
 import { ExternalLink, NuxtLink } from "#components";
 import { DocumentKind } from "~/types/api";
 
-function redirectToSearch(searchStr?: string) {
-  navigateTo({ name: "suche", query: searchStr ? { query: searchStr } : {} });
+const { trackSearch } = useSearchTracking();
+
+async function redirectToSearch(searchStr?: string) {
+  trackSearch({ query: searchStr ?? "", documentKind: DocumentKind.All });
+  await navigateTo({
+    name: "suche",
+    query: searchStr ? { query: searchStr } : {},
+  });
 }
 
 definePageMeta({

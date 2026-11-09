@@ -174,12 +174,11 @@ public class LocalFilesystemObjectStorageClient implements ObjectStorageClient {
     try (Stream<Path> stream = Files.walk(basePath)) {
       return stream
           .filter(Files::isRegularFile)
-          .filter(
-              f -> {
-                // Normalize relative key to forward slashes for cross-platform matching
-                String relativeKey = bucketDir.relativize(f).toString().replace('\\', '/');
-                return relativeKey.startsWith(prefix);
-              })
+          .filter(f -> {
+            // Normalize relative key to forward slashes for cross-platform matching
+            String relativeKey = bucketDir.relativize(f).toString().replace('\\', '/');
+            return relativeKey.startsWith(prefix);
+          })
           .map(mappingFunction)
           .toList();
     } catch (IOException e) {

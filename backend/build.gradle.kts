@@ -2,6 +2,8 @@ import com.adarshr.gradle.testlogger.theme.ThemeType
 import com.diffplug.spotless.FormatterFunc
 import com.github.jk1.license.filter.DependencyFilter
 import com.github.jk1.license.filter.LicenseBundleNormalizer
+import com.github.jk1.license.render.ReportRenderer
+import com.github.jk1.license.render.SimpleHtmlReportRenderer
 import java.io.Serializable
 
 buildscript { repositories { mavenCentral() } }
@@ -79,7 +81,6 @@ dependencies {
     implementation(libs.spring.validation)
     implementation(libs.spring.web)
     implementation(libs.spring.security)
-    implementation(libs.spring.data.jpa)
     implementation(libs.jts.core)
     implementation(libs.spring.boot.starter.webservices)
     implementation(libs.spring.kubernetes.client)
@@ -106,6 +107,9 @@ dependencies {
 
     // CVE-2026-65182
     implementation(libs.tomcat.embed.core)
+
+    // CVE-2026-102554
+    implementation(libs.google.guava)
 
     implementation(libs.ris.html.transformation)
 
@@ -168,7 +172,6 @@ testing {
             dependencies {
                 implementation(libs.testcontainers.junit.jupiter)
                 implementation(libs.opensearch.testcontainers)
-                implementation(libs.testcontainers.postgresql)
                 implementation(libs.restassured)
                 implementation(libs.apicatalog.titanium.json)
                 implementation(libs.glassfish.jakarta.json)
@@ -234,6 +237,7 @@ licenseReport {
 // the license(s) will be listed in build/reports/dependency-license/dependencies-without-allowed-license.json
     allowedLicensesFile = File("$projectDir/../allowed-licenses.json")
     filters = arrayOf<DependencyFilter>(LicenseBundleNormalizer())
+    renderers = arrayOf<ReportRenderer>(SimpleHtmlReportRenderer("backend-licence-report.html"))
 }
 
 project.tasks.sonar {

@@ -65,7 +65,7 @@
       <akn:longTitle eId="einleitung-n1_doktitel-n1" GUID="16586e8f-68e1-4191-a4a2-8473f6bdf4e5">
         <akn:p eId="einleitung-n1_doktitel-n1_text-n1" GUID="f312be90-0938-4ab8-a18d-e5b97e9be686">
           <akn:docTitle GUID="f312be90-0938-4ab8-a18d-e5b97e9be123" eId="einleitung-n1_doktitel-n1_text-n1_doctitel-n1">Formatting Test Document</akn:docTitle>
-          <akn:shortTitle GUID="f312be90-0938-4ab8-a18d-e5b97e9be345" eId="einleitung-n1_doktitel-n1_text-n1_kurztitel-n1">(Formatting Test - <akn:inline GUID="f312be90-0938-4ab8-a18d-e5b97e9be456" refersTo="amtliche-abkuerzung" name="attributsemantik-noch-undefiniert" eId="einleitung-n1_doktitel-n1_text-n1_kurztitel-n1_inline-n1">MFT</akn:inline>)</akn:shortTitle>
+          (<akn:shortTitle GUID="f312be90-0938-4ab8-a18d-e5b97e9be345" eId="einleitung-n1_doktitel-n1_text-n1_kurztitel-n1">Formatting Test</akn:shortTitle> - <akn:inline GUID="f312be90-0938-4ab8-a18d-e5b97e9be456" refersTo="amtliche-abkuerzung" name="attributsemantik-noch-undefiniert" eId="einleitung-n1_doktitel-n1_text-n1_kurztitel-n1_inline-n1">MFT</akn:inline>)
         </akn:p>
       </akn:longTitle>
       <akn:block eId="einleitung-n1_block-n1" GUID="50b373c9-d7a9-4ea1-a6c9-bee1fa5617c6" name="attributsemantik-noch-undefiniert">

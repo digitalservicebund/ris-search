@@ -9,6 +9,7 @@ import de.bund.digitalservice.ris.search.models.errors.CustomErrorResponse;
 import de.bund.digitalservice.ris.search.service.exception.XMLElementNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Path;
+import java.io.IOException;
 import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.Objects;
@@ -34,6 +35,7 @@ import org.springframework.web.context.request.async.AsyncRequestNotUsableExcept
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
+import org.springframework.web.util.DisconnectedClientHelper;
 
 /**
  * Global exception handler for REST controllers. This class uses {@link ControllerAdvice} to
@@ -64,13 +66,12 @@ public class ControllerExceptionHandler {
       MethodArgumentNotValidException ex) {
     List<CustomError> errors =
         ex.getBindingResult().getAllErrors().stream()
-            .map(
-                error -> {
-                  if (error instanceof FieldError e) {
-                    return getInvalidParameterError(e.getDefaultMessage(), e.getField());
-                  }
-                  return new CustomError("unknown", "Unknown error", "");
-                })
+            .map(error -> {
+              if (error instanceof FieldError e) {
+                return getInvalidParameterError(e.getDefaultMessage(), e.getField());
+              }
+              return new CustomError("unknown", "Unknown error", "");
+            })
             .toList();
     CustomErrorResponse errorResponse = CustomErrorResponse.builder().errors(errors).build();
     return ResponseEntity.status(HttpStatus.UNPROCESSABLE_CONTENT).body(errorResponse);
@@ -92,18 +93,16 @@ public class ControllerExceptionHandler {
       HandlerMethodValidationException ex) {
     List<CustomError> errors =
         ex.getParameterValidationResults().stream()
-            .flatMap(
-                result -> {
-                  String paramName = result.getMethodParameter().getParameterName();
-                  return result.getResolvableErrors().stream()
-                      .map(
-                          error -> {
-                            if (error instanceof FieldError e) {
-                              return getInvalidParameterError(e.getDefaultMessage(), e.getField());
-                            }
-                            return getInvalidParameterError(error.getDefaultMessage(), paramName);
-                          });
-                })
+            .flatMap(result -> {
+              String paramName = result.getMethodParameter().getParameterName();
+              return result.getResolvableErrors().stream()
+                  .map(error -> {
+                    if (error instanceof FieldError e) {
+                      return getInvalidParameterError(e.getDefaultMessage(), e.getField());
+                    }
+                    return getInvalidParameterError(error.getDefaultMessage(), paramName);
+                  });
+            })
             .toList();
 
     CustomErrorResponse errorResponse = CustomErrorResponse.builder().errors(errors).build();
@@ -125,19 +124,18 @@ public class ControllerExceptionHandler {
 
     List<CustomError> violations =
         ex.getConstraintViolations().stream()
-            .map(
-                violation -> {
-                  var iterator = violation.getPropertyPath().iterator();
-                  Path.Node lastNode = null;
-                  while (iterator.hasNext()) {
-                    lastNode = iterator.next();
-                  }
-                  String propertyName = "";
-                  if (!Objects.isNull(lastNode)) {
-                    propertyName = lastNode.getName();
-                  }
-                  return new CustomError("invalid parameter", violation.getMessage(), propertyName);
-                })
+            .map(violation -> {
+              var iterator = violation.getPropertyPath().iterator();
+              Path.Node lastNode = null;
+              while (iterator.hasNext()) {
+                lastNode = iterator.next();
+              }
+              String propertyName = "";
+              if (!Objects.isNull(lastNode)) {
+                propertyName = lastNode.getName();
+              }
+              return new CustomError("invalid parameter", violation.getMessage(), propertyName);
+            })
             .toList();
 
     CustomErrorResponse errorResponse = CustomErrorResponse.builder().errors(violations).build();
@@ -390,19 +388,17 @@ public class ControllerExceptionHandler {
   }
 
   /**
-   * Checks if a HttpMessageNotWritableException is wrapping a ClientAbortException and delegates to
-   * that handler. This might happen if a client aborts a request during json serialization.
+   * Checks if a HttpMessageNotWritableException was caused by the client disconnecting, e.g. when a
+   * client aborts a request during json serialization.
    *
    * @param exception HttpMessageNotWritableException
-   * @return standard 500 ResponseEntity or null in case of a clientAbortException
+   * @return standard 500 ResponseEntity or null in case the client disconnected
    */
   @ExceptionHandler({HttpMessageNotWritableException.class})
   public ResponseEntity<CustomErrorResponse> handleHttpMessageNotWritableException(
       HttpMessageNotWritableException exception) {
-    Throwable rootCause = NestedExceptionUtils.getMostSpecificCause(exception);
-
-    if (rootCause instanceof ClientAbortException clientabortexception) {
-      handleClientAbortException(clientabortexception);
+    if (DisconnectedClientHelper.isClientDisconnectedException(exception)) {
+      logger.warn("connection closed by client: {}", exception.getMessage());
       // return null since the connection is already lost
       return null;
     }
@@ -411,25 +407,15 @@ public class ControllerExceptionHandler {
   }
 
   /**
-   * Logs ClientAbortExceptions with log level warn. Does not return a ResponseEntity since the
-   * connection is lost already.
+   * Logs {@link ClientAbortException}s and {@link AsyncRequestNotUsableException}s with log level
+   * warn. Both are thrown when the client closed the connection before the response was written,
+   * e.g. for byte[], Resource or StreamingResponseBody responses that are not serialized by
+   * Jackson. Does not return a ResponseEntity since the connection is lost already.
    *
-   * @param exception ClientAbortException
+   * @param exception ClientAbortException or AsyncRequestNotUsableException
    */
-  @ExceptionHandler({ClientAbortException.class})
-  public void handleClientAbortException(ClientAbortException exception) {
-    logger.warn("connection closed by client: {}", exception.getMessage());
-  }
-
-  /**
-   * Logs AsyncRequestNotUsableExceptions with log level warn. Spring throws these when the client
-   * closed the connection before the response was written. Does not return a ResponseEntity since
-   * the connection is lost already.
-   *
-   * @param exception AsyncRequestNotUsableException
-   */
-  @ExceptionHandler({AsyncRequestNotUsableException.class})
-  public void handleAsyncRequestNotUsableException(AsyncRequestNotUsableException exception) {
+  @ExceptionHandler({ClientAbortException.class, AsyncRequestNotUsableException.class})
+  public void handleClientDisconnect(IOException exception) {
     logger.warn("connection closed by client: {}", exception.getMessage());
   }
 

@@ -9,19 +9,21 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 /** Represents the {@code akn:docTitle} element, the norm's official title (Langtitel). */
 @AllArgsConstructor
-@NoArgsConstructor
 @XmlRootElement(namespace = NormTestDataBuilder.AKN_NS)
 public class DocTitle extends BaseElement {
 
   @XmlAttribute private String eId = "einleitung-n1_doktitel-n1_text-n1_doctitel-n1";
 
-  @XmlAnyElement @Getter private List<Object> children = new ArrayList<>(List.of("Test Gesetz"));
+  @XmlAnyElement @Getter private List<Object> children;
 
-  public DocTitle(List<Object> children) {
-    this.children = new ArrayList<>(children);
+  public DocTitle() {
+    this("Test Gesetz");
+  }
+
+  public DocTitle(String docTitle) {
+    this.children = new ArrayList<>(List.of(docTitle));
   }
 }

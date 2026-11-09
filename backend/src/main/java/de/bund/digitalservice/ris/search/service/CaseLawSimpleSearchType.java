@@ -195,10 +195,9 @@ public class CaseLawSimpleSearchType implements SimpleSearchType {
     // use the document_type.keyword field to match the query exactly
     var boolQuery = QueryBuilders.boolQuery().minimumShouldMatch(1);
     Arrays.stream(types)
-        .map(
-            documentType ->
-                QueryBuilders.termQuery(
-                    CaseLawDocumentationUnit.Fields.DOCUMENT_TYPE + ".keyword", documentType))
+        .map(documentType ->
+            QueryBuilders.termQuery(
+                CaseLawDocumentationUnit.Fields.DOCUMENT_TYPE + ".keyword", documentType))
         .forEach(boolQuery::should);
     query.must(boolQuery);
   }

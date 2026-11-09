@@ -44,7 +44,7 @@ async function renderComponent({
   };
 
   return await renderSuspended(AdministrativeDirectiveSearchResult, {
-    props: { searchResult: result, order: 0, headingLevel },
+    props: { searchResult: result, headingLevel },
     global: {
       stubs: {
         NuxtLink: {

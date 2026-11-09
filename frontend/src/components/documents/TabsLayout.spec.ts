@@ -12,7 +12,7 @@ mockNuxtImport("useRoute", () => useRouteMock);
 
 const views: OneOrMore<TabView> = [
   { label: "Tab A", path: "view-a" },
-  { label: "Tab B", path: "view-b", analyticsId: "tab-b" },
+  { label: "Tab B", path: "view-b" },
 ];
 
 describe("TabsLayout", () => {
@@ -149,17 +149,6 @@ describe("TabsLayout", () => {
       expect.stringContaining("view=view-b"),
     );
     expect(tabB).toHaveAttribute("href", expect.stringContaining("from="));
-  });
-
-  it("forwards analyticsId as data-attr on the tab", async () => {
-    useRouteMock.mockReturnValue({ query: {} });
-
-    await renderSuspended(TabsLayout, { props: { views } });
-
-    expect(screen.getByRole("tab", { name: /Tab B/i })).toHaveAttribute(
-      "data-attr",
-      "tab-b",
-    );
   });
 
   it("updates active tab and displayed slot when route query changes", async () => {

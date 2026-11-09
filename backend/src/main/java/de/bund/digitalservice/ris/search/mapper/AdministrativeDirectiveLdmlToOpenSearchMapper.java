@@ -217,10 +217,9 @@ public class AdministrativeDirectiveLdmlToOpenSearchMapper {
         .map(OtherReferences::getImplicitReferences)
         .orElse(Collections.emptyList())
         .stream()
-        .filter(
-            implicitReference ->
-                implicitReference.getNormReference() == null
-                    && implicitReference.getCaselawReference() == null)
+        .filter(implicitReference ->
+            implicitReference.getNormReference() == null
+                && implicitReference.getCaselawReference() == null)
         .map(ImplicitReference::getShowAs)
         .toList();
   }
@@ -244,10 +243,8 @@ public class AdministrativeDirectiveLdmlToOpenSearchMapper {
   private static List<String> getActiveNormReferences(AdministrativeDirectiveLdml ldml) {
     return getRisMeta(ldml).map(RisMeta::getActiveReferences).orElse(List.of()).stream()
         .filter(ref -> ref.getParagraph() != null)
-        .map(
-            ref ->
-                String.format(
-                    "%s %s %s", ref.getReference(), ref.getParagraph(), ref.getPosition()))
+        .map(ref ->
+            String.format("%s %s %s", ref.getReference(), ref.getParagraph(), ref.getPosition()))
         .toList();
   }
 

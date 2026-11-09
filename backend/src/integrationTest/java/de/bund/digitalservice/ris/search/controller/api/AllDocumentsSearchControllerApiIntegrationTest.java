@@ -211,16 +211,16 @@ class AllDocumentsSearchControllerApiIntegrationTest extends ContainersIntegrati
             content()
                 .json(
                     """
-                                                        {
-                                                          "errors": [
-                                                            {
-                                                              "code": "invalid_parameter_value",
-                                                              "message":"must match \\"^-?(|default|date|DATUM|courtName|documentNumber|temporalCoverageFrom|legislationIdentifier)$\\"",
-                                                              "parameter": "sort"
-                                                            }
-                                                          ]
-                                                        }
-                                                    """));
+                        {
+                          "errors": [
+                            {
+                              "code": "invalid_parameter_value",
+                              "message":"must match \\"^-?(|default|date|DATUM|courtName|documentNumber|temporalCoverageFrom|legislationIdentifier)$\\"",
+                              "parameter": "sort"
+                            }
+                          ]
+                        }
+                    """));
   }
 
   private static Stream<Arguments> specialCharactersArguments() {

@@ -115,14 +115,12 @@
                     <akn:docTitle GUID="b2816cb8-1de9-43cf-8660-1526964a1be8"
                                   eId="einleitung-n1_doktitel-n1_text-n1_doctitel-n1">Zukunftsgesetz
                     </akn:docTitle>
-                    <akn:shortTitle GUID="29325428-ba7f-4eb8-9fb3-172abf44a0d1"
-                                    eId="einleitung-n1_doktitel-n1_text-n1_kurztitel-n1">(Gesetz der Zukunft
-                        - <akn:inline
+                    (<akn:shortTitle GUID="29325428-ba7f-4eb8-9fb3-172abf44a0d1"
+                                    eId="einleitung-n1_doktitel-n1_text-n1_kurztitel-n1">Gesetz der Zukunft</akn:shortTitle> - <akn:inline
                                 GUID="5a7571af-5f64-46df-a5b5-45184966606c"
                                 eId="einleitung-n1_doktitel-n1_text-n1_kurztitel-n1_inline-n1"
                                 name="attributsemantik-noch-undefiniert" refersTo="amtliche-abkuerzung">
                             ZuKuGe</akn:inline>)
-                    </akn:shortTitle>
                 </akn:p>
             </akn:longTitle>
             <akn:block GUID="4518394b-5a2e-47b9-a0e8-ebf70d40fa59" eId="einleitung-n1_block-n1"

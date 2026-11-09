@@ -79,11 +79,10 @@ const mockSearchResult: SearchResult<LegislationExpression> = {
 
 function renderComponent(
   searchResult: SearchResult<LegislationExpression> = mockSearchResult,
-  order: number = 0,
   headingLevel?: SearchResultHeadingLevel,
 ) {
   return render(NormSearchResult, {
-    props: { searchResult, order, headingLevel },
+    props: { searchResult, headingLevel },
     global: {
       stubs: {
         NuxtLink: {
@@ -426,7 +425,7 @@ describe("NormSearchResult", () => {
     });
 
     it("renders the title as an h3 with the compact style at level 3", () => {
-      renderComponent(mockSearchResult, 0, "3");
+      renderComponent(mockSearchResult, "3");
 
       expect(screen.getByRole("heading", { level: 3 })).toBeInTheDocument();
       expect(

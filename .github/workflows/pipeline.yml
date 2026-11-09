@@ -1,4 +1,4 @@
-name: CI-CD-Pipeline
+name: CI/CD pipeline
 
 on:
   push:
@@ -32,17 +32,15 @@ env:
 
 jobs:
   e2e-tests:
-    uses: ./.github/workflows/pipeline-e2e.yml
+    uses: $/.github/workflows/e2e.yml
     permissions:
       packages: read
       contents: read
     secrets:
       SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-      REPORTS_BUCKET_ACCESS_KEY_ID: ${{ secrets.REPORTS_BUCKET_ACCESS_KEY_ID }}
-      REPORTS_BUCKET_SECRET_ACCESS_KEY: ${{ secrets.REPORTS_BUCKET_SECRET_ACCESS_KEY }}
 
   backend-jobs:
-    uses: ./.github/workflows/backend.yml
+    uses: $/.github/workflows/backend.yml
     permissions:
       contents: read
       pull-requests: read
@@ -52,14 +50,12 @@ jobs:
     secrets:
       SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      REPORTS_BUCKET_ACCESS_KEY_ID: ${{ secrets.REPORTS_BUCKET_ACCESS_KEY_ID }}
-      REPORTS_BUCKET_SECRET_ACCESS_KEY: ${{ secrets.REPORTS_BUCKET_SECRET_ACCESS_KEY }}
     with:
       container-registry: ghcr.io
       image-reference: ghcr.io/${{ github.repository }}:${{ github.sha }}
 
   frontend-jobs:
-    uses: ./.github/workflows/frontend.yml
+    uses: $/.github/workflows/frontend.yml
     permissions:
       contents: read
       packages: write
@@ -69,18 +65,32 @@ jobs:
       SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-      REPORTS_BUCKET_ACCESS_KEY_ID: ${{ secrets.REPORTS_BUCKET_ACCESS_KEY_ID }}
-      REPORTS_BUCKET_SECRET_ACCESS_KEY: ${{ secrets.REPORTS_BUCKET_SECRET_ACCESS_KEY }}
     with:
       container-registry: ghcr.io
       image-reference: ghcr.io/${{ github.repository }}/frontend:${{ github.sha }}
+
+  push-reports:
+    needs:
+      - e2e-tests
+      - backend-jobs
+      - frontend-jobs
+    if: ${{ !cancelled() && github.ref == 'refs/heads/main' }}
+    uses: $/.github/workflows/push-reports.yml
+    permissions:
+      contents: read
+    secrets:
+      REPORTS_BUCKET_ACCESS_KEY_ID: ${{ secrets.REPORTS_BUCKET_ACCESS_KEY_ID }}
+      REPORTS_BUCKET_SECRET_ACCESS_KEY: ${{ secrets.REPORTS_BUCKET_SECRET_ACCESS_KEY }}
+      SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+    with:
+      e2e-tests-succeeded: ${{ needs.e2e-tests.result == 'success' }}
 
   deploy-staging:
     needs:
       - backend-jobs
       - frontend-jobs
       - e2e-tests
-    uses: ./.github/workflows/deploy.yml
+    uses: $/.github/workflows/deploy.yml
     secrets:
       ARGOCD_AUTH_TOKEN: ${{ secrets.ARGOCD_AUTH_TOKEN }}
       ARGOCD_SERVER_STACKIT: ${{ secrets.ARGOCD_SERVER_STACKIT }}
@@ -94,7 +104,7 @@ jobs:
   smoke-tests:
     needs:
       - deploy-staging
-    uses: ./.github/workflows/smoke-tests.yml
+    uses: $/.github/workflows/smoke-tests.yml
     secrets:
       SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
       STAGING_BASIC_AUTH_PASSWORD: ${{ secrets.STAGING_BASIC_AUTH_PASSWORD }}
@@ -103,7 +113,7 @@ jobs:
   deploy-uat:
     needs:
       - smoke-tests
-    uses: ./.github/workflows/deploy.yml
+    uses: $/.github/workflows/deploy.yml
     secrets:
       ARGOCD_AUTH_TOKEN: ${{ secrets.ARGOCD_AUTH_TOKEN }}
       ARGOCD_SERVER_STACKIT: ${{ secrets.ARGOCD_SERVER_STACKIT }}
@@ -116,8 +126,8 @@ jobs:
 
   deploy-prototype:
     needs:
-      - smoke-tests
-    uses: ./.github/workflows/deploy.yml
+      - deploy-uat
+    uses: $/.github/workflows/deploy.yml
     secrets:
       ARGOCD_AUTH_TOKEN: ${{ secrets.ARGOCD_AUTH_TOKEN }}
       ARGOCD_SERVER_STACKIT: ${{ secrets.ARGOCD_SERVER_STACKIT }}
@@ -131,7 +141,7 @@ jobs:
   deploy-production:
     needs:
       - deploy-prototype
-    uses: ./.github/workflows/deploy.yml
+    uses: $/.github/workflows/deploy.yml
     secrets:
       ARGOCD_AUTH_TOKEN: ${{ secrets.ARGOCD_AUTH_TOKEN }}
       ARGOCD_SERVER_STACKIT: ${{ secrets.ARGOCD_SERVER_STACKIT }}

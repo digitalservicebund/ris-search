@@ -1,6 +1,5 @@
 package de.bund.digitalservice.ris.search.controller.api;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.service.FeedbackService;
 import io.swagger.v3.oas.annotations.Hidden;
@@ -33,8 +32,6 @@ public class FeedbackController {
   public record FeedbackRequest(
       @NotNull String text,
       @NotNull String url,
-      // The PostHog distinct ID of the user, or "anonymous_feedback_user" if not tracked.
-      @NotNull @JsonProperty("user_id") String userId,
       // Honeypot field: if non-empty the submission is silently dropped to block bots.
       String name) {}
 
@@ -53,7 +50,7 @@ public class FeedbackController {
   /**
    * Sends the user feedback to PostHog.
    *
-   * @param body The feedback request body containing text, url, userId and an optional honeypot
+   * @param body The feedback request body containing text, url and an optional honeypot
    * @return ResponseEntity with message indicating success or failure even if a bot is used so that
    *     smart bots would not keep on trying or improving their tactics
    */
@@ -68,7 +65,7 @@ public class FeedbackController {
   public ResponseEntity<Map<String, String>> sendFeedback(
       @Valid @RequestBody FeedbackRequest body) {
     if (body.name() == null || body.name().isEmpty()) {
-      feedbackService.sendFeedback(body.userId(), body.url(), body.text());
+      feedbackService.sendFeedback(body.url(), body.text());
     }
 
     return ResponseEntity.ok()

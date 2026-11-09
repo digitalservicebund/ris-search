@@ -1,6 +1,4 @@
-import { isEqual } from "lodash-es";
 import type { Page } from "~/components/Pagination.vue";
-import { extendOnRequest } from "~/plugins/risBackend";
 import { DocumentKind, type DocumentSearchParams } from "~/types/api";
 import {
   dateFilterToSimpleSearchParams,
@@ -114,14 +112,6 @@ export async function useSimpleSearch(
     return result;
   });
 
-  const { searchPerformed, noSearchResults } = usePostHog();
-
-  function toPostHogParams(q: SimpleSearchEndpointParams): PostHogSearchParams {
-    return { ...q, documentKind: toValue(documentKindAndGroup).documentKind };
-  }
-
-  let previousQuery: PostHogSearchParams | undefined = undefined;
-
   const { data, error, status, execute } = await useRisBackend<Page>(
     searchEndpointUrl,
     {
@@ -134,27 +124,6 @@ export async function useSimpleSearch(
       immediate: false,
 
       dedupe: "defer",
-
-      // PostHog integration
-      onRequest: extendOnRequest(({ options }) => {
-        const newQuery = toPostHogParams(
-          options.query as SimpleSearchEndpointParams,
-        );
-
-        // De-duplicate reporting of identical queries
-        if (previousQuery && isEqual(newQuery, previousQuery)) return;
-
-        searchPerformed("simple", newQuery, previousQuery);
-        previousQuery = newQuery;
-      }),
-
-      onResponse({ response }) {
-        // _data is a standard nuxt/ofetch FetchResponse property, not a custom private field
-        // oxlint-disable-next-line no-underscore-dangle
-        if (!response._data?.totalItems) {
-          noSearchResults(toPostHogParams(combinedQuery.value));
-        }
-      },
     },
   );
 

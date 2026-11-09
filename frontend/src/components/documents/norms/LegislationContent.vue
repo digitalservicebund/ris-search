@@ -8,6 +8,10 @@ defineProps<{
   singleArticle?: boolean;
   officialToc?: string;
 }>();
+
+const contentElement = useTemplateRef("contentElement");
+
+useClientSideLinks(contentElement);
 </script>
 
 <template>
@@ -19,7 +23,10 @@ defineProps<{
   >
     <div v-html="officialToc" />
   </UiAccordion>
-  <div :class="['legislation', { 'single-article': singleArticle }]">
+  <div
+    ref="contentElement"
+    :class="['legislation', { 'single-article': singleArticle }]"
+  >
     <slot />
   </div>
 </template>

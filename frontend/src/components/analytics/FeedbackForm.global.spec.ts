@@ -22,12 +22,12 @@ function getErrorMessage() {
     .textContent?.trim();
 }
 
-function mockSendFeedbackToPostHog(
+function mockSendFeedback(
   mockedSend: (text: string, honeypot: string) => Promise<void>,
 ) {
-  vi.doMock("~/composables/usePostHog", () => ({
-    usePostHog: () => ({
-      sendFeedbackToPostHog: mockedSend,
+  vi.doMock("~/composables/useFeedback", () => ({
+    useFeedback: () => ({
+      sendFeedback: mockedSend,
     }),
   }));
 }
@@ -68,9 +68,9 @@ describe("FeedbackForm", () => {
     ).not.toBeInTheDocument();
   });
 
-  it("shows an error when sending feedback using posthog store fails", async () => {
+  it("shows an error when sending feedback fails", async () => {
     const user = userEvent.setup();
-    mockSendFeedbackToPostHog(async () => {
+    mockSendFeedback(async () => {
       throw new Error(`Error sending feedback`);
     });
     await factory();
@@ -86,7 +86,7 @@ describe("FeedbackForm", () => {
 
   it("shows a confirmation message when feedback is sent successfully", async () => {
     const user = userEvent.setup();
-    mockSendFeedbackToPostHog(async () => {});
+    mockSendFeedback(async () => {});
 
     await factory();
     await fillFeedbackForm(user);
@@ -156,10 +156,10 @@ describe("FeedbackForm", () => {
     expect(honeypotContainer.classList).toContain("name-field");
   });
 
-  it("passes the honeypot value to the sendFeedbackToPostHog function", async () => {
+  it("passes the honeypot value to the sendFeedback function", async () => {
     const user = userEvent.setup();
     const mockedSend = vi.fn().mockResolvedValue(undefined);
-    mockSendFeedbackToPostHog(mockedSend);
+    mockSendFeedback(mockedSend);
 
     await factory();
 

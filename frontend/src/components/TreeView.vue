@@ -178,11 +178,11 @@ watch(
   { immediate: true },
 );
 
-function moveFocusTo(item?: TreeItem) {
+async function moveFocusTo(item?: TreeItem) {
   if (!item) return;
 
   focusedKey.value = item.key;
-  focusCurrent();
+  await focusCurrent();
 }
 
 function expandItem(item: TreeItem) {
@@ -193,7 +193,7 @@ function collapseItem(item: TreeItem) {
   expandedKeys.value = expandedKeys.value.filter((key) => key !== item.key);
 }
 
-function expandIfParent(item: TreeItem) {
+async function expandIfParent(item: TreeItem) {
   if (!item.children?.length) return;
 
   if (!expandedKeys.value.includes(item.key)) {
@@ -201,59 +201,74 @@ function expandIfParent(item: TreeItem) {
     return;
   }
 
-  moveFocusTo(item.children[0]);
+  await moveFocusTo(item.children[0]);
 }
 
-function collapseIfParent(item: TreeItem) {
+async function collapseIfParent(item: TreeItem) {
   if (item.children?.length && expandedKeys.value.includes(item.key)) {
     collapseItem(item);
     return;
   }
 
-  moveFocusTo(parentByKey.value.get(item.key));
+  await moveFocusTo(parentByKey.value.get(item.key));
 }
 
-function activateItem(item: TreeItem) {
+async function activateItem(item: TreeItem) {
   if (selectionEnabled) selected.value = item.key;
 
   emit("click", item as T);
 
-  if (item.to) navigateTo(item.to);
+  if (item.to) await navigateTo(item.to);
 }
 
-function onKeydown(event: KeyboardEvent) {
+const HANDLED_KEYS = new Set([
+  "ArrowDown",
+  "ArrowUp",
+  "ArrowRight",
+  "ArrowLeft",
+  "Home",
+  "End",
+  "Enter",
+  "*",
+]);
+
+async function onKeydown(event: KeyboardEvent) {
   const visible = visibleItems.value;
   const index = visible.findIndex((i) => i.key === focusedKey.value);
   const item = visible[index];
   if (!item) return;
+  if (!HANDLED_KEYS.has(event.key)) return;
+
+  // Must happen synchronously, before the first await
+  event.preventDefault();
 
   switch (event.key) {
     case "ArrowDown":
-      moveFocusTo(visible[index + 1]);
+      await moveFocusTo(visible[index + 1]);
       break;
 
     case "ArrowUp":
-      moveFocusTo(visible[index - 1]);
+      await moveFocusTo(visible[index - 1]);
       break;
 
     case "ArrowRight":
-      expandIfParent(item);
+      await expandIfParent(item);
       break;
 
     case "ArrowLeft":
-      collapseIfParent(item);
+      await collapseIfParent(item);
       break;
 
     case "Home":
-      moveFocusTo(visible[0]);
+      await moveFocusTo(visible[0]);
       break;
 
     case "End":
-      moveFocusTo(visible.at(-1));
+      await moveFocusTo(visible.at(-1));
       break;
 
     case "Enter":
-      activateItem(item);
+      await activateItem(item);
       break;
 
     case "*":
@@ -261,12 +276,7 @@ function onKeydown(event: KeyboardEvent) {
         expandedKeys.value = toggleDeep(item, expandedKeys.value);
       }
       break;
-
-    default:
-      return;
   }
-
-  event.preventDefault();
 }
 </script>
 

@@ -27,11 +27,10 @@ public class FeedbackService {
   /**
    * Sends the feedback to PostHog survey endpoint.
    *
-   * @param userId The user identifier for PostHog.
    * @param url The URL associated with the feedback.
    * @param text The text of the feedback to be sent.
    */
-  public void sendFeedback(String userId, String url, String text) {
-    postHogClient.submitFeedback(userId, url, text, posthogProperties.getFeedbackSurveyId());
+  public void sendFeedback(String url, String text) {
+    postHogClient.submitFeedback(url, text, posthogProperties.getFeedbackSurveyId());
   }
 }

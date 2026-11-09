@@ -1,7 +1,6 @@
 package de.bund.digitalservice.ris.search.models.opensearch;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.ElementCollection;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.Builder;
@@ -49,20 +48,18 @@ public record AdministrativeDirective(
         LocalDate entryIntoEffectDate,
     @Nullable @Field(name = Fields.EXPIRY_DATE, type = FieldType.Date, format = DateFormat.date)
         LocalDate expiryDate,
-    @ElementCollection @Field(name = Fields.NORM_REFERENCES) List<String> normReferences,
-    @ElementCollection @Field(name = Fields.CASELAW_REFERENCES) List<String> caselawReferences,
-    @ElementCollection @Field(name = Fields.REFERENCES) List<String> references,
-    @ElementCollection
-        @Field(name = Fields.CITATION_DATES, type = FieldType.Date, format = DateFormat.date)
+    @Field(name = Fields.NORM_REFERENCES) List<String> normReferences,
+    @Field(name = Fields.CASELAW_REFERENCES) List<String> caselawReferences,
+    @Field(name = Fields.REFERENCES) List<String> references,
+    @Field(name = Fields.CITATION_DATES, type = FieldType.Date, format = DateFormat.date)
         List<LocalDate> citationDates,
-    @ElementCollection @Field(name = Fields.REFERENCE_NUMBERS) List<String> referenceNumbers,
-    @ElementCollection @Field(name = Fields.ACTIVE_ADMINISTRATIVE_REFERENCES)
+    @Field(name = Fields.REFERENCE_NUMBERS) List<String> referenceNumbers,
+    @Field(name = Fields.ACTIVE_ADMINISTRATIVE_REFERENCES)
         List<String> activeAdministrativeReferences,
-    @ElementCollection @Field(name = Fields.ACTIVE_NORM_REFERENCES)
-        List<String> activeNormReferences,
-    @ElementCollection @Field(name = Fields.KEYWORDS) List<String> keywords,
-    @ElementCollection @Field(name = Fields.FIELDS_OF_LAW) List<String> fieldsOfLaw,
-    @ElementCollection @Field(name = Fields.OUTLINE) List<String> tableOfContentsEntries,
+    @Field(name = Fields.ACTIVE_NORM_REFERENCES) List<String> activeNormReferences,
+    @Field(name = Fields.KEYWORDS) List<String> keywords,
+    @Field(name = Fields.FIELDS_OF_LAW) List<String> fieldsOfLaw,
+    @Field(name = Fields.OUTLINE) List<String> tableOfContentsEntries,
     @JsonIgnore @Field(name = AdministrativeDirective.Fields.INDEXED_AT) String indexedAt)
     implements AbstractSearchEntity {
 

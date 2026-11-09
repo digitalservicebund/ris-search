@@ -4,7 +4,7 @@ const { href } = defineProps<{
   target?: string;
 }>();
 
-const isExternal = computed(() => href.match(/^https?:\/\//));
+const isExternal = computed(() => /^https?:\/\//.exec(href));
 </script>
 
 <template>

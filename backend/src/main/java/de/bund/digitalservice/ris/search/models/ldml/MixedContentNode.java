@@ -33,13 +33,12 @@ public class MixedContentNode {
   public String getNormalizedTextContent() {
     return normalize(
         nodes.stream()
-            .map(
-                obj ->
-                    switch (obj) {
-                      case String text -> text;
-                      case Node node -> node.getTextContent();
-                      default -> StringUtils.EMPTY;
-                    })
+            .map(obj ->
+                switch (obj) {
+                  case String text -> text;
+                  case Node node -> node.getTextContent();
+                  default -> StringUtils.EMPTY;
+                })
             .collect(Collectors.joining(StringUtils.EMPTY)));
   }
 

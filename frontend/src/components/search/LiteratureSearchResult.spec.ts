@@ -56,7 +56,7 @@ function renderComponent({
   };
 
   return render(LiteratureSearchResult, {
-    props: { searchResult: result, order: 0, headingLevel },
+    props: { searchResult: result, headingLevel },
     global: {
       stubs: {
         NuxtLink: {

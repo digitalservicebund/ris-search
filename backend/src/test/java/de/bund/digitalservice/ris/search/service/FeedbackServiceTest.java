@@ -21,11 +21,10 @@ class FeedbackServiceTest {
 
     String text = "Test feedback";
     String url = "http://user-url.test";
-    String userId = "test_id";
 
     FeedbackService service = new FeedbackService(postHogClient, posthogConfig);
-    service.sendFeedback(userId, url, text);
+    service.sendFeedback(url, text);
 
-    verify(postHogClient).submitFeedback(userId, url, text, posthogConfig.getFeedbackSurveyId());
+    verify(postHogClient).submitFeedback(url, text, posthogConfig.getFeedbackSurveyId());
   }
 }

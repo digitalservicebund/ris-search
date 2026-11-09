@@ -4,7 +4,6 @@ import { NuxtLink } from "#components";
 export type TabView = {
   label: string;
   path: string;
-  analyticsId?: string;
 };
 
 const { views } = defineProps<{
@@ -38,7 +37,6 @@ const currentView = computed(() => {
             :active="view.path === currentView"
             :as="NuxtLink"
             :to="{ query: { ...route.query, view: view.path } }"
-            :data-attr="view.analyticsId"
           >
             {{ view.label }}
           </UiTab>

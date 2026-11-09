@@ -35,12 +35,11 @@ class LuceneQueryToolsTest {
 
     assertThatExceptionOfType(CustomValidationException.class)
         .isThrownBy(() -> checkForInvalidQuery(outerException))
-        .satisfies(
-            e -> {
-              assertThat(e.getErrors().getFirst().parameter()).isEqualTo("sort");
-              assertThat(e.getErrors().getFirst().message())
-                  .isEqualTo("Sorting is not supported for param_field");
-            });
+        .satisfies(e -> {
+          assertThat(e.getErrors().getFirst().parameter()).isEqualTo("sort");
+          assertThat(e.getErrors().getFirst().message())
+              .isEqualTo("Sorting is not supported for param_field");
+        });
   }
 
   @Test
@@ -54,13 +53,11 @@ class LuceneQueryToolsTest {
 
     assertThatExceptionOfType(CustomValidationException.class)
         .isThrownBy(() -> checkForInvalidQuery(outerException))
-        .satisfies(
-            e -> {
-              assertThat(e.getErrors().getFirst().code()).isEqualTo("invalid_lucene_query");
-              assertThat(e.getErrors().getFirst().parameter()).isEqualTo("query");
-              assertThat(e.getErrors().getFirst().message())
-                  .isEqualTo("The query could not be parsed");
-            });
+        .satisfies(e -> {
+          assertThat(e.getErrors().getFirst().code()).isEqualTo("invalid_lucene_query");
+          assertThat(e.getErrors().getFirst().parameter()).isEqualTo("query");
+          assertThat(e.getErrors().getFirst().message()).isEqualTo("The query could not be parsed");
+        });
   }
 
   @Test

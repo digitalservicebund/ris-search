@@ -1,37 +1,41 @@
-type AccessibilityRelatedMetrics = {
-  zoomLevel: number;
-  defaultTextSize: string;
-  themePreference: string;
-};
+/**
+ * Name of the cookie in which PostHog persists the user's tracking consent.
+ * PostHog writes it when calling `opt_in_capturing` or `opt_out_capturing`.
+ */
+export const CONSENT_COOKIE_NAME = "consent_given";
+
+export type ConsentStatus = "granted" | "denied" | "pending";
+
+const grantedValues = new Set<unknown>([true, 1, "true", "1", "yes"]);
+const deniedValues = new Set<unknown>([false, 0, "false", "0", "no"]);
 
 /**
- * Retrieves default information about the user browsing preferences, which
- * helps with measuring the accessibility of the portal. This function creates a
- * temporary DOM element to measure the default text size, checks the current
- * zoom level, and determines the user's theme preference (light or dark mode).
- * The collected information is used by PostHog to send along the $pageview
- * event.
+ * Reads the consent status from the value of the consent cookie. Accepts the
+ * same values as PostHog does, so the result matches PostHog's own reading of
+ * the cookie.
  *
- * @returns {Object} An object containing the following properties:
- *
- *   - `zoomLevel` {number}: The current zoom level of the browser window.
- *   - `defaultTextSize` {string}: The default text size of the webpage in px.
- *   - `themePreference` {string}: The user's theme preference, either "dark" or
- *     "light".
+ * @param value - Value of the consent cookie
+ * @returns The consent status
  */
-export function getAccessibilityRelatedMetrics(): AccessibilityRelatedMetrics {
-  const tempElement = document.createElement("div");
-  tempElement.style = "display: block; visibility: hidden; font-size: medium;";
-  tempElement.innerText = "M";
-  document.body.appendChild(tempElement);
-  const defaultTextSize = globalThis?.getComputedStyle(tempElement).fontSize;
-  tempElement.remove();
-  const zoomLevel = Math.round(globalThis?.devicePixelRatio * 100);
-  const isDark = globalThis?.matchMedia("(prefers-color-scheme: dark)").matches;
-  const themePreference = isDark ? "dark" : "light";
-  return {
-    zoomLevel: zoomLevel,
-    defaultTextSize: defaultTextSize,
-    themePreference: themePreference,
-  };
+export function parseConsentCookie(value: unknown): ConsentStatus {
+  if (grantedValues.has(value)) return "granted";
+  if (deniedValues.has(value)) return "denied";
+  return "pending";
+}
+
+/**
+ * How long the consent cookie is kept, in seconds. Matches PostHog's default
+ * `cookie_expiration` of 365 days.
+ */
+export const CONSENT_COOKIE_MAX_AGE = 365 * 24 * 60 * 60;
+
+/**
+ * Returns the value PostHog writes to the consent cookie, so a cookie written
+ * by the server is read the same way as one written by PostHog.
+ *
+ * @param isGranted - Whether the user accepted tracking
+ * @returns The cookie value
+ */
+export function formatConsentCookie(isGranted: boolean): string {
+  return isGranted ? "1" : "0";
 }

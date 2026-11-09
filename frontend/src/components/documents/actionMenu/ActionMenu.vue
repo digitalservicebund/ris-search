@@ -8,7 +8,6 @@ export type ActionMenuItem = {
   url?: string;
   command?: () => void | Promise<void>;
   iconComponent: Component;
-  analyticsId?: string;
   keepDrawerOpen?: boolean;
 };
 
@@ -68,7 +67,6 @@ const handleDrawerItemClick = async (item: ActionMenuItem) => {
             v-else-if="item.url"
             class="typo-body-regular flex items-center gap-8 py-12 no-underline"
             external
-            :data-attr="(item as ActionMenuItem).analyticsId"
             :to="item.url"
             @click="drawerVisible = false"
           >
@@ -80,7 +78,6 @@ const handleDrawerItemClick = async (item: ActionMenuItem) => {
             v-else
             type="button"
             class="typo-body-regular flex w-full items-center gap-8 py-12 text-left"
-            :data-attr="(item as ActionMenuItem).analyticsId"
             @click="handleDrawerItemClick(item)"
           >
             <component :is="item.iconComponent" class="shrink-0" />
@@ -101,7 +98,6 @@ const handleDrawerItemClick = async (item: ActionMenuItem) => {
           :aria-label="item.label"
           :to="item.url"
           :as="item.url ? NuxtLink : undefined"
-          :data-attr="(item as ActionMenuItem).analyticsId"
           external
           @click="item.command"
         >

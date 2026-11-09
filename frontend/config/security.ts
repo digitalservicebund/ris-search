@@ -1,9 +1,7 @@
 import type { ModuleOptions } from "nuxt-security";
 import { isDevelopment, isProduction } from "./shared";
 
-const allowedExternalSrc = isDevelopment
-  ? []
-  : ["https://*.posthog.com", "https://*.sentry.io/"];
+const allowedExternalSrc = ["https://*.posthog.com", "https://*.sentry.io/"];
 
 /** Configuration for the security section of Nuxt config. */
 export const security: Partial<ModuleOptions> = {
@@ -21,7 +19,7 @@ export const security: Partial<ModuleOptions> = {
         ...allowedExternalSrc,
       ],
       "connect-src": isDevelopment
-        ? ["'self'", "http:"]
+        ? ["'self'", "http:", ...allowedExternalSrc]
         : ["'self'", ...allowedExternalSrc],
       "worker-src": ["'self'", "blob:", "data:"],
     },

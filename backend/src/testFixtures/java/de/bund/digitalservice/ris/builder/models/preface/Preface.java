@@ -11,6 +11,7 @@ import jakarta.xml.bind.annotation.XmlElement;
 import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /** Represents the {@code akn:preface} element, holding the norm's title and legislation date. */
 @NoArgsConstructor
@@ -21,6 +22,7 @@ public class Preface extends BaseElement {
 
   @XmlElement(namespace = NormTestDataBuilder.AKN_NS)
   @Getter
+  @Setter
   private LongTitle longTitle = new LongTitle();
 
   @XmlElement(namespace = NormTestDataBuilder.AKN_NS)

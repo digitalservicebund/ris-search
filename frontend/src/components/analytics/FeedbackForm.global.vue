@@ -6,7 +6,7 @@ defineProps<{ hideIntro?: boolean }>();
 
 const route = useRoute();
 
-const { sendFeedbackToPostHog } = usePostHog();
+const { sendFeedback } = useFeedback();
 const errorMessage: Ref<string | undefined> = ref();
 const isSent = ref(false);
 const sendingError =
@@ -27,7 +27,7 @@ async function submitFeedback() {
   }
 
   try {
-    await sendFeedbackToPostHog(feedback.value, honeypot.value);
+    await sendFeedback(feedback.value, honeypot.value);
     isSent.value = true;
   } catch {
     errorMessage.value = sendingError;

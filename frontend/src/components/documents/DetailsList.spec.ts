@@ -150,21 +150,6 @@ describe("DetailsList", () => {
       const link = screen.getByRole("link", { name: /Herunterladen/ });
       expect(link).toHaveAttribute("href", "/file.zip");
     });
-
-    it("sets data-attr when provided", () => {
-      renderComponent([
-        {
-          type: "link",
-          label: "Download:",
-          url: "/file.zip",
-          text: "Herunterladen",
-          dataAttr: "xml-zip-view",
-        },
-      ]);
-      expect(
-        screen.getByRole("link", { name: /Herunterladen/ }),
-      ).toHaveAttribute("data-attr", "xml-zip-view");
-    });
   });
 
   describe("filtering", () => {

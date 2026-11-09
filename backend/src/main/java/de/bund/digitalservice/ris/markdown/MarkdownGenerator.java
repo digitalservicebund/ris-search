@@ -14,8 +14,6 @@ import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.boot.hibernate.autoconfigure.HibernateJpaAutoConfiguration;
-import org.springframework.boot.jdbc.autoconfigure.DataSourceAutoConfiguration;
 import org.springframework.boot.webmvc.autoconfigure.WebMvcAutoConfiguration;
 import org.springframework.context.annotation.Import;
 
@@ -24,12 +22,7 @@ import org.springframework.context.annotation.Import;
  * writes a combined glossary of its field descriptions to a Markdown table under {@code
  * doc/readme}.
  */
-@SpringBootApplication(
-    exclude = {
-      DataSourceAutoConfiguration.class,
-      HibernateJpaAutoConfiguration.class,
-      WebMvcAutoConfiguration.class
-    })
+@SpringBootApplication(exclude = {WebMvcAutoConfiguration.class})
 @Import(XSDDescriptionConfiguration.class)
 @EnableConfigurationProperties({XSDDescriptionProperties.class})
 public class MarkdownGenerator implements CommandLineRunner {
@@ -82,17 +75,16 @@ public class MarkdownGenerator implements CommandLineRunner {
         .append("| Key | Description DE | Description EN |")
         .append(System.lineSeparator());
     stringBuilder.append("| --- | --- | --- |").append(System.lineSeparator());
-    entries.forEach(
-        entry ->
-            stringBuilder
-                .append("| ")
-                .append(entry.key())
-                .append(" | ")
-                .append(toTableCellHtmlOrBlank(entry.descriptionDe()))
-                .append(" | ")
-                .append(toTableCellHtmlOrBlank(entry.descriptionEn()))
-                .append(" |")
-                .append(System.lineSeparator()));
+    entries.forEach(entry ->
+        stringBuilder
+            .append("| ")
+            .append(entry.key())
+            .append(" | ")
+            .append(toTableCellHtmlOrBlank(entry.descriptionDe()))
+            .append(" | ")
+            .append(toTableCellHtmlOrBlank(entry.descriptionEn()))
+            .append(" |")
+            .append(System.lineSeparator()));
 
     return stringBuilder.toString();
   }

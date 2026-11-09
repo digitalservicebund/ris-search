@@ -1,6 +1,5 @@
 import "@testing-library/jest-dom";
 import { vi } from "vitest";
-import "~/tests/cookieStoreMock";
 
 vi.mock("~/middleware/checkLogin.global.ts", () => ({ default: vi.fn() }));
 

@@ -23,12 +23,6 @@ export function getStringOrDefault(
   return isStringEmpty(string) ? defaultValue : (string as string);
 }
 
-export function getStringOrUndefined(
-  string: string | undefined | null,
-): string | undefined {
-  return isStringEmpty(string) ? undefined : (string as string);
-}
-
 export function addEllipsis(text: string) {
   if (!text.length) return text;
 
@@ -43,19 +37,6 @@ export function addEllipsis(text: string) {
     return text;
   }
   return text + " …";
-}
-
-export function stringToBoolean(
-  string: string | undefined,
-): boolean | undefined {
-  switch (string) {
-    case "true":
-      return true;
-    case "false":
-      return false;
-    default:
-      return undefined;
-  }
 }
 
 export function normalizeSpaces(text: string): string {

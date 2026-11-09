@@ -5,7 +5,6 @@ import de.bund.digitalservice.ris.search.models.opensearch.ArticleWithExpression
 import de.bund.digitalservice.ris.search.models.opensearch.LegislationPartType;
 import de.bund.digitalservice.ris.search.repository.opensearch.ArticlesRepository;
 import de.bund.digitalservice.ris.search.utils.RisHighlightBuilder;
-import de.bund.digitalservice.ris.search.utils.eli.ExpressionEliPath;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.List;
@@ -168,56 +167,16 @@ public class ArticleService {
   }
 
   /**
-   * Retrieves a List of all versions of an Article across the whole work it belongs to. A
-   * combination of expressionEli and eId is is used to retrieve the dokNr from the ris metadata.
-   * The eId is not guaranteed to be a stable identifier across all expressions.
-   *
-   * @param expressionEliPath expressionEli of the norm
-   * @param eidGiven the possible eid
-   * @return List of version of that article across the whole work
-   */
-  public Page<ArticleWithExpressions> getAllArticleVersions(
-      ExpressionEliPath expressionEliPath, String eidGiven) {
-    String expressionEliString = expressionEliPath.toString();
-
-    return getActualEid(expressionEliString, eidGiven)
-        .flatMap(
-            actualEid ->
-                articlesRepository.findById(Article.buildId(expressionEliString, actualEid)))
-        .map(
-            article ->
-                this.getAllArticleVersionsByDocumentNumber(
-                    article.getDocumentNumber(), expressionEliString))
-        .orElseGet(Page::empty);
-  }
-
-  /**
-   * Retrieves a List of all versions of an Article across the whole work it belongs to.
+   * Retrieves a List of all versions of an Article across the whole work it belongs to, together
+   * with the expressionElis every version occurs in. The revision (documentNumber) is used as the
+   * article identifier. Restricts prefix lookup to minimum-length document numbers to avoid
+   * unintended matches.
    *
    * @param revision article revision to retrieve all other workExamples from
    * @return List of version of that article across the whole work
    */
   public Page<ArticleWithExpressions> getAllArticleVersions(String revision) {
-    return this.getAllArticleVersionsByDocumentNumber(revision, null);
-  }
-
-  /**
-   * Retrieves a List of all versions of an Article across the whole work it belongs to, together
-   * with the expressionElis every version occurs in. The documentNumber is used as the article
-   * identifier. Restricts prefix lookup to minimum-length document numbers to avoid unintended
-   * matches.
-   *
-   * @param documentNumber of a given article
-   * @param preferredExpressionEli the expressionEli that was originally queried; if it occurs among
-   *     a version group's expressions, that group's returned Article is forced to be the one
-   *     belonging to this expressionEli, instead of an arbitrary one
-   * @return List of Article objects of the same article across all its expressions, with their
-   *     expressionElis
-   */
-  private Page<ArticleWithExpressions> getAllArticleVersionsByDocumentNumber(
-      String documentNumber, String preferredExpressionEli) {
-
-    if (Objects.isNull(documentNumber)) {
+    if (Objects.isNull(revision)) {
       return Page.empty();
     }
     Sort sort = Sort.by(Sort.Direction.DESC, "entryIntoForceDate");
@@ -225,7 +184,7 @@ public class ArticleService {
 
     try {
       return articlesRepository.findAllVersionsByDocumentNumber(
-          documentNumber, LegislationPartType.ARTICLE, preferredExpressionEli, sortedPageable);
+          revision, LegislationPartType.ARTICLE, sortedPageable);
     } catch (IllegalArgumentException _) {
       return Page.empty();
     }

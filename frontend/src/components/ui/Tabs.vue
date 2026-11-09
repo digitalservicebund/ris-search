@@ -33,7 +33,7 @@ const onKeydown = (event: KeyboardEvent) => {
       focusTab(all[0]);
       break;
     case "End":
-      focusTab(all[all.length - 1]);
+      focusTab(all.at(-1));
       break;
     default:
       return;

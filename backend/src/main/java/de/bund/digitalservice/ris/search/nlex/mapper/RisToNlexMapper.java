@@ -52,32 +52,28 @@ public abstract class RisToNlexMapper {
 
     List<Document> documents =
         searchPage.getSearchHits().stream()
-            .map(
-                hit -> {
-                  Norm norm = hit.getContent();
-                  List<TextMatchSchema> matches = NormSearchResponseMapper.getTextMatches(hit);
-                  List<Para> zoomParagraphs =
-                      matches.stream()
-                          .map(
-                              match ->
-                                  new Para().setValue(match.text()).setRoles(ParagraphRoles.ZOOM))
-                          .toList();
+            .map(hit -> {
+              Norm norm = hit.getContent();
+              List<TextMatchSchema> matches = NormSearchResponseMapper.getTextMatches(hit);
+              List<Para> zoomParagraphs =
+                  matches.stream()
+                      .map(match -> new Para().setValue(match.text()).setRoles(ParagraphRoles.ZOOM))
+                      .toList();
 
-                  Document doc =
-                      new Document()
-                          .setReferences(
-                              new References()
-                                  .setExternUrl(
-                                      new ExternUrl()
-                                          .setHref(frontendUrl + norm.getExpressionEli())));
-                  doc.setContent(
-                      new Content()
-                          .setTitle(norm.getOfficialTitle())
-                          .setLang(Content.LANG_DE_DE)
-                          .setParaList(zoomParagraphs));
+              Document doc =
+                  new Document()
+                      .setReferences(
+                          new References()
+                              .setExternUrl(
+                                  new ExternUrl().setHref(frontendUrl + norm.getExpressionEli())));
+              doc.setContent(
+                  new Content()
+                      .setTitle(norm.getOfficialTitle())
+                      .setLang(Content.LANG_DE_DE)
+                      .setParaList(zoomParagraphs));
 
-                  return doc;
-                })
+              return doc;
+            })
             .toList();
 
     RequestResult result = new RequestResult().setStatus(ResultStatus.OK);

@@ -141,14 +141,6 @@
         </li>
     </xsl:template>
 
-    <!-- Das akn:longtitle/akn:p nicht in die Zielstruktur übernehmen
-         (weil in HTML p nicht mehr geschachtelt werden darf) -->
-    <xsl:template match="akn:p[parent::akn:longTitle]">
-        <!-- hier kein <p> -->
-        <xsl:apply-templates select="node() | @*"/>
-        <!-- hier kein </p> -->
-    </xsl:template>
-
     <!--
         Attribute
         ###################
@@ -224,6 +216,24 @@
         </div>
     </xsl:template>
 
+    <!-- Dokumentenkopf :: Paragraph inside longTitle -->
+    <xsl:template match="akn:longTitle/akn:p">
+        <!-- Render docTitle in its own h1 -->
+        <xsl:apply-templates select="akn:docTitle"/>
+
+        <!-- Collect everything else (shortTitle, inline, parentheses, dashes) -->
+        <xsl:variable name="remaining-content" select="node() except akn:docTitle"/>
+
+        <!-- Check that there is actual text/content, ignoring whitespace-only indentation nodes -->
+        <xsl:if test="normalize-space(string-join($remaining-content/descendant-or-self::text(), '')) != ''">
+            <xsl:sequence select="akn:gliederungskommentar('Kurztitel (akn:shortTitle)')"/>
+            <h1 class="{$kurztitel}">
+                <xsl:apply-templates select="akn:shortTitle/@*"/>
+                <xsl:apply-templates select="$remaining-content"/>
+            </h1>
+        </xsl:if>
+    </xsl:template>
+
     <!-- Dokumentenkopf :: Titel -->
     <xsl:template match="akn:docTitle[ancestor::akn:longTitle]">
         <xsl:sequence select="akn:gliederungskommentar('Titel (akn:title)')"/>
@@ -234,14 +244,11 @@
 
     <!-- Dokumentenkopf :: Kurztitel -->
     <xsl:template match="akn:shortTitle[ancestor::akn:longTitle]">
-        <xsl:sequence select="akn:gliederungskommentar('Kurztitel (akn:shortTitle)')"/>
-        <h1 class="{$kurztitel}">
-            <xsl:apply-templates select="node() | @*"/>
-        </h1>
+        <xsl:apply-templates select="node()"/>
     </xsl:template>
 
     <!-- Dokumentenkopf :: Kurztitel -->
-    <xsl:template match="akn:inline">
+    <xsl:template match="akn:inline[ancestor::akn:longTitle]">
         <span>
             <xsl:apply-templates select="node() | @*"/>
         </span>

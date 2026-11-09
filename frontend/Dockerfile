@@ -1,4 +1,4 @@
-FROM node:26.12.1-alpine3.24@sha256:40cd011b55415bc894e45b02fdd5a5dfde056921b7d23a64c74f80497af48797 AS build
+FROM node:26.13.0-alpine3.24@sha256:8996bb5821d62a8fd9bb27c1cb07462f3fdce6e47d640c6a881ead0b064ce216 AS build
 ARG SENTRY_RELEASE
 ARG SENTRY_UPLOAD_SOURCEMAPS=false
 RUN npm install -g corepack
@@ -17,7 +17,7 @@ RUN --mount=type=secret,id=SENTRY_AUTH_TOKEN,required=false \
   SENTRY_UPLOAD_SOURCEMAPS=${SENTRY_UPLOAD_SOURCEMAPS} \
   pnpm run prepare && NODE_OPTIONS="--max-old-space-size=4096" pnpm build
 
-FROM cgr.dev/chainguard/node@sha256:939413e9b81609d6d7188037f76faf627566de86fa786f9a25baf6764a51b618
+FROM cgr.dev/chainguard/node@sha256:6a066f8decea77c67ef2772a78fad81df7a78a346d0b22a05fc9dac14537f2b0
 ARG SENTRY_RELEASE
 USER node
 WORKDIR /app

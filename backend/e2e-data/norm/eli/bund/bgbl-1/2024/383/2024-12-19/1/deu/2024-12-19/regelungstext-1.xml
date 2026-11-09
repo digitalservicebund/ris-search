@@ -60,7 +60,7 @@
             <akn:longTitle GUID="8899aabb-ccdd-eeff-0011-223344556677" eId="einleitung-n1_doktitel-n1">
                 <akn:p GUID="99aabbcc-ddee-0011-2233-445566778899" eId="einleitung-n1_doktitel-n1_text-n1">
                     <akn:docTitle GUID="a1b2c3d4-e5f6-4789-abcd-0123456789ab" eId="einleitung-n1_doktitel-n1_text-n1_doctitel-n1">Fiktives Gesetz zur Musterfinanzierung politischer Einrichtungen</akn:docTitle>
-                    <akn:shortTitle GUID="b1c2d3e4-f5a6-4789-abcd-1234567890ab" eId="einleitung-n1_doktitel-n1_text-n1_kurztitel-n1">(MusterfinanzG - <akn:inline GUID="c1d2e3f4-a5b6-4789-abcd-0123456789ab" eId="einleitung-n1_doktitel-n1_text-n1_kurztitel-n1_inline-n1" name="attributsemantik-noch-undefiniert" refersTo="amtliche-abkuerzung">MFG</akn:inline>)</akn:shortTitle>
+                    (<akn:shortTitle GUID="b1c2d3e4-f5a6-4789-abcd-1234567890ab" eId="einleitung-n1_doktitel-n1_text-n1_kurztitel-n1">MusterfinanzG</akn:shortTitle> - <akn:inline GUID="c1d2e3f4-a5b6-4789-abcd-0123456789ab" eId="einleitung-n1_doktitel-n1_text-n1_kurztitel-n1_inline-n1" name="attributsemantik-noch-undefiniert" refersTo="amtliche-abkuerzung">MFG</akn:inline>)
                 </akn:p>
             </akn:longTitle>
         </akn:preface>

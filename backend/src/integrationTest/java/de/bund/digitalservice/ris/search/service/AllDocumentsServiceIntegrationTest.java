@@ -127,7 +127,7 @@ class AllDocumentsServiceIntegrationTest extends ContainersIntegrationBase {
             List.of("blah", "blah", "§ paragraph paragraf article artikel art abs"));
     Norm norm2 =
         NormsTestData.buildTestNorm(
-            "StVO AusnV 3",
+            "StVO AusnV 3 3",
             List.of("Eingangsformel", "§ 1", "§ 2"),
             List.of("blah", "blah", "§ paragraph paragraf article artikel art abs"));
     normsRepository.saveAll(List.of(norm1, norm2));

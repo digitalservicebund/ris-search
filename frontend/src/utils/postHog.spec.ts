@@ -1,53 +1,41 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { getAccessibilityRelatedMetrics } from "~/utils/postHog";
+import { describe, expect, it } from "vitest";
+import { formatConsentCookie, parseConsentCookie } from "./postHog";
 
-describe("getAccessibilityRelatedMetrics", () => {
-  beforeEach(() => {
-    Object.defineProperty(globalThis, "devicePixelRatio", {
-      value: 1.25,
-      configurable: true,
-    });
-    vi.spyOn(globalThis, "getComputedStyle").mockImplementation(() => {
-      return { fontSize: "1rem" } as CSSStyleDeclaration;
-    });
+describe("postHog", () => {
+  describe("parseConsentCookie", () => {
+    it.each([true, 1, "true", "1", "yes"])(
+      "returns granted for %j",
+      (value) => {
+        expect(parseConsentCookie(value)).toBe("granted");
+      },
+    );
+
+    it.each([false, 0, "false", "0", "no"])(
+      "returns denied for %j",
+      (value) => {
+        expect(parseConsentCookie(value)).toBe("denied");
+      },
+    );
+
+    it.each([undefined, null, "", "maybe"])(
+      "returns pending for %j",
+      (value) => {
+        expect(parseConsentCookie(value)).toBe("pending");
+      },
+    );
   });
 
-  afterEach(() => {
-    vi.restoreAllMocks();
-    document.body.innerHTML = "";
-  });
-
-  it("returns correct page info for dark theme", () => {
-    vi.spyOn(globalThis, "matchMedia").mockImplementation(() => {
-      return {
-        matches: true,
-        addListener: vi.fn(),
-        removeListener: vi.fn(),
-        addEventListener: vi.fn(),
-        removeEventListener: vi.fn(),
-      } as unknown as MediaQueryList;
+  describe("formatConsentCookie", () => {
+    it.each([
+      [true, "1"],
+      [false, "0"],
+    ])("returns %j for %s", (isGranted, value) => {
+      expect(formatConsentCookie(isGranted)).toBe(value);
     });
 
-    const info = getAccessibilityRelatedMetrics();
-
-    expect(info.zoomLevel).toBe(125);
-    expect(info.defaultTextSize).toBe("1rem");
-    expect(info.themePreference).toBe("dark");
-  });
-
-  it("returns correct page info for light theme", () => {
-    vi.spyOn(globalThis, "matchMedia").mockImplementation(() => {
-      return {
-        matches: false,
-        addListener: vi.fn(),
-        removeListener: vi.fn(),
-        addEventListener: vi.fn(),
-        removeEventListener: vi.fn(),
-      } as unknown as MediaQueryList;
+    it.each([true, false])("round-trips %s", (isGranted) => {
+      const expected = isGranted ? "granted" : "denied";
+      expect(parseConsentCookie(formatConsentCookie(isGranted))).toBe(expected);
     });
-
-    const info = getAccessibilityRelatedMetrics();
-
-    expect(info.themePreference).toBe("light");
   });
 });

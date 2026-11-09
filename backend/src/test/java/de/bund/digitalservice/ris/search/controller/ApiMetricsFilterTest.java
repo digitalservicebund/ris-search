@@ -13,6 +13,8 @@ import jakarta.servlet.ServletException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockFilterChain;
@@ -38,21 +40,33 @@ class ApiMetricsFilterTest {
 
     filter.doFilter(request, new MockHttpServletResponse(), new MockFilterChain());
 
-    verify(postHogClient).submitApiEvent("/v1/case-law/KORE123", "test-agent");
+    verify(postHogClient).submitApiEvent("/v1/case-law/KORE123", "test-agent", false);
   }
 
-  @Test
-  void skipsActuatorCalls() throws Exception {
-    var request = request("GET", "/actuator/health");
+  @ParameterizedTest
+  @CsvSource({"true, true", "TRUE, true", "false, false", "yes, false", "'', false"})
+  void marksPortalCallsByHeader(String headerValue, boolean expectedIsPortalUser) throws Exception {
+    var request = request("GET", "/v1/case-law/KORE123");
+    request.addHeader(ApiMetricsFilter.PORTAL_HEADER, headerValue);
 
     filter.doFilter(request, new MockHttpServletResponse(), new MockFilterChain());
 
-    verifyNoInteractions(postHogClient);
+    verify(postHogClient).submitApiEvent("/v1/case-law/KORE123", null, expectedIsPortalUser);
   }
 
   @Test
-  void skipsNonApiCalls() throws Exception {
-    var request = request("GET", "/robots.txt");
+  void marksPortalCallsAsFalseOnMissingHeader() throws Exception {
+    var request = request("GET", "/v1/case-law/KORE123");
+
+    filter.doFilter(request, new MockHttpServletResponse(), new MockFilterChain());
+
+    verify(postHogClient).submitApiEvent("/v1/case-law/KORE123", null, false);
+  }
+
+  @ParameterizedTest
+  @CsvSource({"OPTIONS, /v1/case-law/KORE123", "GET,/actuator/health", "GET, /robots.txt"})
+  void skipsUntrackedCalls(String method, String path) throws Exception {
+    var request = request(method, path);
 
     filter.doFilter(request, new MockHttpServletResponse(), new MockFilterChain());
 
@@ -68,7 +82,7 @@ class ApiMetricsFilterTest {
 
     assertThrows(ServletException.class, () -> filter.doFilter(request, response, filterChain));
 
-    verify(postHogClient).submitApiEvent("/v1/feedback", null);
+    verify(postHogClient).submitApiEvent("/v1/feedback", null, false);
   }
 
   private static MockHttpServletRequest request(String method, String path) {

@@ -137,10 +137,8 @@
                     <akn:docTitle GUID="99999999-aaaa-bbbb-cccc-eeeeeeeeeeee" eId="einleitung-n1_doktitel-n1_text-n1_doctitel-n1">
                         Musterverordnung zur Testregelung im Bereich der Wahlen mit Wahlgeräten
                     </akn:docTitle>
-                    <akn:shortTitle GUID="aaaaaaaa-bbbb-cccc-dddd-ffffffffffff" eId="einleitung-n1_doktitel-n1_text-n1_kurztitel-n1">
-                        (Bundeswahlgeräteverordnung - <akn:inline GUID="bbbbbbbb-cccc-dddd-eeee-111111111111" eId="einleitung-n1_doktitel-n1_text-n1_kurztitel-n1_inline-n1"
-                                                                  name="attributsemantik-noch-undefiniert" refersTo="amtliche-abkuerzung">BWahlGV</akn:inline>)
-                    </akn:shortTitle>
+                    (<akn:shortTitle GUID="aaaaaaaa-bbbb-cccc-dddd-ffffffffffff" eId="einleitung-n1_doktitel-n1_text-n1_kurztitel-n1">Bundeswahlgeräteverordnung</akn:shortTitle> - <akn:inline GUID="bbbbbbbb-cccc-dddd-eeee-111111111111" eId="einleitung-n1_doktitel-n1_text-n1_kurztitel-n1_inline-n1"
+                        name="attributsemantik-noch-undefiniert" refersTo="amtliche-abkuerzung">BWahlGV</akn:inline>)
                 </akn:p>
             </akn:longTitle>
         </akn:preface>

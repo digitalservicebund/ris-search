@@ -38,22 +38,21 @@ class SwaggerIntegrationTest extends ContainersIntegrationBase {
     mockMvc
         .perform(get("/v3/api-docs"))
         .andExpect(status().isOk())
-        .andDo(
-            item -> {
-              byte[] content = item.getResponse().getContentAsByteArray();
-              Path outDir = Paths.get("./../frontend/src/public");
+        .andDo(item -> {
+          byte[] content = item.getResponse().getContentAsByteArray();
+          Path outDir = Paths.get("./../frontend/src/public");
 
-              try {
-                Files.createDirectories(outDir);
-                File outputFile = new File(outDir.toFile(), "openapi.json");
-                // format the file before writing
-                ObjectMapper mapper = new ObjectMapper();
-                Object jsonObject = mapper.readValue(content, Object.class);
-                mapper.writerWithDefaultPrettyPrinter().writeValue(outputFile, jsonObject);
-              } catch (IOException exception) {
-                throw new RuntimeException(exception);
-              }
-            })
+          try {
+            Files.createDirectories(outDir);
+            File outputFile = new File(outDir.toFile(), "openapi.json");
+            // format the file before writing
+            ObjectMapper mapper = new ObjectMapper();
+            Object jsonObject = mapper.readValue(content, Object.class);
+            mapper.writerWithDefaultPrettyPrinter().writeValue(outputFile, jsonObject);
+          } catch (IOException exception) {
+            throw new RuntimeException(exception);
+          }
+        })
         .andExpect(
             jsonPath(
                 "$.components.schemas.LegislationExpressionSchema.properties['@type'].example",

@@ -15,7 +15,7 @@ public enum LegislationExpressionPartType {
     this.val = val;
   }
 
-  @JsonValue()
+  @JsonValue
   public String getVal() {
     return val;
   }
