@@ -10,7 +10,7 @@ public record GerichtSchema(
     @Schema(example = "Karlsruhe") String gerichtsort,
     @Schema(example = "Ordentliche Gerichtsbarkeit") String gerichtsbarkeit,
     @Schema(example = "1. Senat") String spruchkoerper,
-    @Schema(description = "Sitz der Außenstelle") String sitzDerAussenstelle)
+    @Schema(example = "Nürnberg") String sitzDerAussenstelle)
     implements JsonldResource {
 
   @Override

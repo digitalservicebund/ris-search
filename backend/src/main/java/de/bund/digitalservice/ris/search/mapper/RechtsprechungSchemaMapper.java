@@ -1,6 +1,6 @@
 package de.bund.digitalservice.ris.search.mapper;
 
-import static de.bund.digitalservice.ris.search.mapper.ZitierungenSchemaMapper.mapList;
+import static de.bund.digitalservice.ris.search.utils.MappingUtils.mapList;
 
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;

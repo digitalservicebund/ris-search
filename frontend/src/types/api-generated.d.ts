@@ -956,7 +956,7 @@ export interface components {
             gerichtsbarkeit?: string;
             /** @example 1. Senat */
             spruchkoerper?: string;
-            /** @description Sitz der Außenstelle */
+            /** @example Nürnberg */
             sitzDerAussenstelle?: string;
         };
         RechtsprechungSchema: {
@@ -1262,7 +1262,10 @@ export interface components {
             /** @example Vergleiche */
             artDerZitierung?: string;
             gericht?: components["schemas"]["GerichtSchema"];
-            /** Format: date */
+            /**
+             * Format: date
+             * @example 1983-12-02
+             */
             entscheidungsdatum?: string;
             /** @example Beschluss */
             dokumenttyp?: string;

@@ -56,6 +56,10 @@ public class MappingUtils {
     return call.apply(input);
   }
 
+  public static <S, T> List<T> mapList(List<S> source, Function<? super S, T> mapper) {
+    return source == null ? null : source.stream().map(mapper).toList();
+  }
+
   public static void validateNotNull(Object o, String message) throws ValidationException {
     validate(o != null, message);
   }

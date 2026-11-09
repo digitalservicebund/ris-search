@@ -227,9 +227,18 @@ class CaseLawLdmlToOpenSearchMapperTest {
                         .gerichtstyp("VerfGH")
                         .gerichtsort("München")
                         .gerichtsbarkeit("Verfassungsgerichtsbarkeit")
+                        .spruchkoerper("1. Senat")
+                        .sitzDerAussenstelle("Nürnberg")
                         .build())
                 .entscheidungsdatum(LocalDate.of(1983, Month.DECEMBER, 2))
+                .dokumenttyp("Beschluss")
                 .aktenzeichen("Vf. 94-VI-81")
+                .fundstelle(
+                    Fundstelle.builder()
+                        .periodikum("BayVBl")
+                        .zitatstelle("1984, 15")
+                        .fundstellenTyp("amtlich")
+                        .build())
                 .build());
     assertThat(zitierungen.passivzitierungRechtsprechung())
         .containsExactly(

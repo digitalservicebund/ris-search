@@ -2661,7 +2661,7 @@
           },
           "sitzDerAussenstelle" : {
             "type" : "string",
-            "description" : "Sitz der Außenstelle"
+            "example" : "Nürnberg"
           }
         }
       },
@@ -3193,7 +3193,8 @@
           },
           "entscheidungsdatum" : {
             "type" : "string",
-            "format" : "date"
+            "format" : "date",
+            "example" : "1983-12-02"
           },
           "dokumenttyp" : {
             "type" : "string",

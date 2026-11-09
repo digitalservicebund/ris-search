@@ -11,7 +11,7 @@ public record ZitierungRechtsprechungSchema(
     @Schema(example = "BVRE100338409") String dokumentnummer,
     @Schema(example = "Vergleiche") String artDerZitierung,
     GerichtSchema gericht,
-    LocalDate entscheidungsdatum,
+    @Schema(example = "1983-12-02") LocalDate entscheidungsdatum,
     @Schema(example = "Beschluss") String dokumenttyp,
     @Schema(example = "Vf. 94-VI-81") String aktenzeichen,
     FundstelleSchema fundstelle)

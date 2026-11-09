@@ -12,17 +12,11 @@ import de.bund.digitalservice.ris.search.schema.ZitierungLiteraturSelbststaendig
 import de.bund.digitalservice.ris.search.schema.ZitierungLiteraturUnselbststaendigSchema;
 import de.bund.digitalservice.ris.search.schema.ZitierungRechtsprechungSchema;
 import de.bund.digitalservice.ris.search.schema.ZitierungVerwaltungsvorschriftSchema;
-import java.util.List;
-import java.util.function.Function;
 
 /** Maps the stored case law citations (Zitierungen) to their API schema representation. */
 final class ZitierungenSchemaMapper {
 
   private ZitierungenSchemaMapper() {}
-
-  static <S, T> List<T> mapList(List<S> source, Function<S, T> mapper) {
-    return source == null ? null : source.stream().map(mapper).toList();
-  }
 
   static ZitierungRechtsprechungSchema fromDomain(ReferenzRechtsprechung ref) {
     return ZitierungRechtsprechungSchema.builder()

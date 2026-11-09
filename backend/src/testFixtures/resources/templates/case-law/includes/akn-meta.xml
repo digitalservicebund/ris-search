@@ -183,9 +183,20 @@
                     <ris:gerichtstyp domainTerm="Gerichtstyp">VerfGH</ris:gerichtstyp>
                     <ris:gerichtsort domainTerm="Gerichtsort">München</ris:gerichtsort>
                     <ris:gerichtsbarkeit domainTerm="Gerichtsbarkeit">Verfassungsgerichtsbarkeit</ris:gerichtsbarkeit>
+                    <ris:spruchkoerper domainTerm="Spruchkörper">1. Senat</ris:spruchkoerper>
+                    <ris:sitzDerAussenstelle domainTerm="Sitz der Außenstelle">Nürnberg</ris:sitzDerAussenstelle>
                 </ris:gericht>
                 <ris:entscheidungsdatum domainTerm="Entscheidungsdatum">1983-12-02</ris:entscheidungsdatum>
+                <ris:dokumenttyp domainTerm="Dokumenttyp">Beschluss</ris:dokumenttyp>
                 <ris:aktenzeichen domainTerm="Aktenzeichen">Vf. 94-VI-81</ris:aktenzeichen>
+                <ris:fundstelle domainTerm="Fundstelle">
+                    <ris:periodikum domainTerm="Periodikum">
+                        <ris:abkuerzung domainTerm="Abkürzung">BayVBl</ris:abkuerzung>
+                        <ris:titel domainTerm="Titel">Bayerische Verwaltungsblätter</ris:titel>
+                    </ris:periodikum>
+                    <ris:zitatstelle domainTerm="Zitatstelle">1984, 15</ris:zitatstelle>
+                    <ris:fundstellenTyp domainTerm="Art der Fundstelle">amtlich</ris:fundstellenTyp>
+                </ris:fundstelle>
             </ris:referenzRechtsprechung>
         </akn:implicitReference>
         <akn:implicitReference ris:domainTerm="Referenz Rechtsprechung">

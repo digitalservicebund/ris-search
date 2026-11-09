@@ -157,6 +157,7 @@ final class CaseLawZitierungenMapper {
         .gerichtsort(gericht.getGerichtsort())
         .gerichtsbarkeit(gericht.getGerichtsbarkeit())
         .spruchkoerper(gericht.getSpruchkoerperValue())
+        .sitzDerAussenstelle(gericht.getSitzDerAussenstelle())
         .build();
   }
 
