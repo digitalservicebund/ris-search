@@ -214,11 +214,10 @@ public class ContainersIntegrationBase {
     result.addAll(allNorms.stream().map(e -> e.getEntryIntoForceDate().toString()).toList());
     result.addAll(
         directives.stream()
-            .map(
-                e -> {
-                  assert e.entryIntoEffectDate() != null;
-                  return e.entryIntoEffectDate().toString();
-                })
+            .map(e -> {
+              assert e.entryIntoEffectDate() != null;
+              return e.entryIntoEffectDate().toString();
+            })
             .toList());
     return result;
   }

@@ -27,7 +27,7 @@ class ArticleServiceTest {
 
   ArticleService service;
 
-  @BeforeEach()
+  @BeforeEach
   void setup() {
     service = new ArticleService(operations, articlesRepository);
   }

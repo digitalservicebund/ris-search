@@ -65,14 +65,13 @@ public abstract class XsltTransformer {
       Transformer transformer = transformerFactory.newTransformer(xsltSource);
       ((TransformerImpl) transformer)
           .getUnderlyingXsltTransformer()
-          .setMessageHandler(
-              message -> {
-                if (message.isTerminate()) {
-                  terminationMessage.set(message.toString());
-                } else {
-                  logger.debug(message.getStringValue());
-                }
-              });
+          .setMessageHandler(message -> {
+            if (message.isTerminate()) {
+              terminationMessage.set(message.toString());
+            } else {
+              logger.debug(message.getStringValue());
+            }
+          });
       transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
       parameters.forEach(transformer::setParameter);
       transformer.setParameter("outputMode", "HTML_ALL");

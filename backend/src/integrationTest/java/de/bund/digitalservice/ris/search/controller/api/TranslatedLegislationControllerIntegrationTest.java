@@ -31,57 +31,57 @@ class TranslatedLegislationControllerIntegrationTest extends ContainersIntegrati
 
     String translationsJson =
         """
-                    [{
-                             "abbreviation": "Abcd",
-                             "name": "Alphabet Act",
-                             "filename": "englisch_abcd.html",
-                             "german_name": "Alphabet Gesetz",
-                             "translator": "Translation provided by someone and someone.",
-                             "version": "Version information: The translation includes the amendment(s) to the Act by Article 4 of the Act of 7 October 2003 (Federal Law Gazette I, p. 46)"
-                         },
-                         {
-                             "abbreviation": "efg",
-                             "name": "Another Act",
-                             "filename": "englisch_efg.html",
-                             "german_name": "Anderes Gesetz",
-                             "translator": "Translation provided by someone",
-                             "version": "Version information: Another Act as published on 13 August 1921 (Federal Law Gazette I, p. 2010)"
-                         }]
-                    """;
+        [{
+                 "abbreviation": "Abcd",
+                 "name": "Alphabet Act",
+                 "filename": "englisch_abcd.html",
+                 "german_name": "Alphabet Gesetz",
+                 "translator": "Translation provided by someone and someone.",
+                 "version": "Version information: The translation includes the amendment(s) to the Act by Article 4 of the Act of 7 October 2003 (Federal Law Gazette I, p. 46)"
+             },
+             {
+                 "abbreviation": "efg",
+                 "name": "Another Act",
+                 "filename": "englisch_efg.html",
+                 "german_name": "Anderes Gesetz",
+                 "translator": "Translation provided by someone",
+                 "version": "Version information: Another Act as published on 13 August 1921 (Federal Law Gazette I, p. 2010)"
+             }]
+        """;
 
     String htmlOne =
         """
-                    <!DOCTYPE html>
-                    <html lang="en">
-                    <head>
-                      <meta charset="UTF-8" />
-                      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-                      <title>Alphabet Act</title>
-                    </head>
-                    <body>
-                      <p style="text-align: center; font-weight: bold">Alphabet Act</p>
-                      <p style="text-align: center; font-weight: bold">(Alphabet Gesetz – ABCD)</p>
-                    </body>
-                    </html>
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+          <meta charset="UTF-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+          <title>Alphabet Act</title>
+        </head>
+        <body>
+          <p style="text-align: center; font-weight: bold">Alphabet Act</p>
+          <p style="text-align: center; font-weight: bold">(Alphabet Gesetz – ABCD)</p>
+        </body>
+        </html>
 
-                    """;
+        """;
 
     String htmlTwo =
         """
-                    <!DOCTYPE html>
-                    <html lang="en">
-                    <head>
-                      <meta charset="UTF-8" />
-                      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-                      <title>Another Act</title>
-                    </head>
-                    <body>
-                      <p style="text-align: center; font-weight: bold">Another Act</p>
-                      <p style="text-align: center; font-weight: bold">(Anderes Gesetz – EFG)</p>
-                    </body>
-                    </html>
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+          <meta charset="UTF-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+          <title>Another Act</title>
+        </head>
+        <body>
+          <p style="text-align: center; font-weight: bold">Another Act</p>
+          <p style="text-align: center; font-weight: bold">(Anderes Gesetz – EFG)</p>
+        </body>
+        </html>
 
-                    """;
+        """;
 
     portalBucket.save("translations/data.json", translationsJson);
     portalBucket.save("translations/englisch_abcd.html", htmlOne);

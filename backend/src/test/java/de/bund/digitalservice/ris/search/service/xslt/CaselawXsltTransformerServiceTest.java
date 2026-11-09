@@ -40,23 +40,23 @@ class CaselawXsltTransformerServiceTest {
     var actualHtml = transformer.transform(actualXml.getBytes(StandardCharsets.UTF_8), "api/v1/");
     var expectedBorderNumber =
         """
-            <dl class="border-number">
-              <dt class="number" id="randnummer-1">1</dt>
-              <dd class="content"><p>Example Tatbestand/CaseFacts. More background</p></dd>
-            </dl>
-            """;
+        <dl class="border-number">
+          <dt class="number" id="randnummer-1">1</dt>
+          <dd class="content"><p>Example Tatbestand/CaseFacts. More background</p></dd>
+        </dl>
+        """;
     String actual = deleteWhitespace(actualHtml);
     assertThat(actual).contains(deleteWhitespace(expectedBorderNumber));
 
     var otherBorderNumber =
         """
-            <dl class="border-number">
-               <dt class="number" id="randnummer-2">2</dt>
-               <dd class="content">
-                  <p>even more background</p>
-               </dd>
-            </dl>
-            """;
+        <dl class="border-number">
+           <dt class="number" id="randnummer-2">2</dt>
+           <dd class="content">
+              <p>even more background</p>
+           </dd>
+        </dl>
+        """;
     assertThat(actual).contains(deleteWhitespace(otherBorderNumber));
   }
 
@@ -66,38 +66,38 @@ class CaselawXsltTransformerServiceTest {
     var actualHtml = transformer.transform(actualXml.getBytes(StandardCharsets.UTF_8), "api/v1/");
     var expectedTable =
         """
-            <table cellpadding="2" cellspacing="0">
-              <tbody>
-                <tr>
-                  <td colspan="2" rowspan="1">
-                    <p style="text-align:center">
-                      <strong>Spalte 1</strong>
-                    </p>
-                  </td>
-                  <td colspan="1" rowspan="1">
-                    <p style="text-align:center">
-                      <strong>Spalte 2</strong>
-                    </p>
-                  </td>
-                    <td colspan="1" rowspan="1">
-                      <p style="text-align:center">
-                       <strong>Spalte 3</strong>
-                      </p>
-                  </td>
-                    <td colspan="1" rowspan="1">
-                      <p style="text-align:center">
-                        <strong>Spalte 4</strong>
-                      </p>
-                    </td>
-                    <td colspan="1" rowspan="1">
-                      <p style="text-align:center">
-                        <strong>Spalte <br>5- <br>text</strong>
-                      </p>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            """;
+        <table cellpadding="2" cellspacing="0">
+          <tbody>
+            <tr>
+              <td colspan="2" rowspan="1">
+                <p style="text-align:center">
+                  <strong>Spalte 1</strong>
+                </p>
+              </td>
+              <td colspan="1" rowspan="1">
+                <p style="text-align:center">
+                  <strong>Spalte 2</strong>
+                </p>
+              </td>
+                <td colspan="1" rowspan="1">
+                  <p style="text-align:center">
+                   <strong>Spalte 3</strong>
+                  </p>
+              </td>
+                <td colspan="1" rowspan="1">
+                  <p style="text-align:center">
+                    <strong>Spalte 4</strong>
+                  </p>
+                </td>
+                <td colspan="1" rowspan="1">
+                  <p style="text-align:center">
+                    <strong>Spalte <br>5- <br>text</strong>
+                  </p>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        """;
     assertThat(deleteWhitespace(actualHtml)).contains(deleteWhitespace(expectedTable));
   }
 
@@ -118,8 +118,8 @@ class CaselawXsltTransformerServiceTest {
   void testReturnsSourceInImageTagWhenPresent() throws IOException {
     String image =
         """
-            <akn:img src="bild1.jpg" alt="Abbildung" title="bild1.jpg"/>
-            """;
+        <akn:img src="bild1.jpg" alt="Abbildung" title="bild1.jpg"/>
+        """;
     Map<String, Object> context = new HashMap<>();
     context.put("outline", image);
 
@@ -127,8 +127,8 @@ class CaselawXsltTransformerServiceTest {
     var actualHtml = transformer.transform(actualXml.getBytes(StandardCharsets.UTF_8), "api/v1/");
     var expectedImage =
         """
-            <img src="api/v1/bild1.jpg" alt="Abbildung" title="bild1.jpg">
-            """;
+        <img src="api/v1/bild1.jpg" alt="Abbildung" title="bild1.jpg">
+        """;
     assertTrue(deleteWhitespace(actualHtml).contains(deleteWhitespace(expectedImage)));
   }
 
@@ -138,19 +138,19 @@ class CaselawXsltTransformerServiceTest {
     var actualHtml = transformer.transform(actualXml.getBytes(StandardCharsets.UTF_8), "api/v1/");
     var expectedDissentingOpinionSection =
         """
-                    <section id="abweichendeMeinung">
-                                  <h2>Abweichende Meinung</h2>
+                <section id="abweichendeMeinung">
+                              <h2>Abweichende Meinung</h2>
 
-                                  <p>dissenting test</p>
+                              <p>dissenting test</p>
 
-                                  <p><strong>Mitwirkende Richter:</strong></p>
+                              <p><strong>Mitwirkende Richter:</strong></p>
 
-                                  <p class="opinion-entry"><strong>Dr. Phil. Max Mustermann</strong>: referenced opinions test 1</p>
+                              <p class="opinion-entry"><strong>Dr. Phil. Max Mustermann</strong>: referenced opinions test 1</p>
 
-                                  <p class="opinion-entry"><strong>Maxima Mustermann</strong>: referenced opinions test 2</p>
+                              <p class="opinion-entry"><strong>Maxima Mustermann</strong>: referenced opinions test 2</p>
 
-                                  </section>
-            """;
+                              </section>
+        """;
     assertTrue(
         deleteWhitespace(actualHtml).contains(deleteWhitespace(expectedDissentingOpinionSection)));
   }

@@ -12,7 +12,7 @@ class EncodingSchemaFactoryTest {
   private final List<String> expectedXmlValues =
       List.of("baseUrl/xml", "baseUrl.xml", "application/xml", "de");
 
-  @Test()
+  @Test
   void generatesDocumentEncodingSchemas() {
     var expectedZipValues = List.of("baseUrl/zip", "baseUrl.zip", "application/zip", "de");
     var result = EncodingSchemaFactory.documentEncodingSchemas("baseUrl");

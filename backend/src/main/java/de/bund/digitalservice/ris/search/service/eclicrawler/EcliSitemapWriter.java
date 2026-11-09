@@ -129,10 +129,10 @@ public class EcliSitemapWriter {
 
     String header =
         """
-            User-agent: *
-            Disallow: /
-            User-agent: DG_JUSTICE_CRAWLER
-            """;
+        User-agent: *
+        Disallow: /
+        User-agent: DG_JUSTICE_CRAWLER
+        """;
 
     portalBucket.save(ROBOTS_TXT_PATH, header);
   }

@@ -32,20 +32,18 @@ public class OpensearchRetryConfiguration {
             .maxRetries(2) // Total 3 attempts
             .delay(Duration.ofSeconds(1)) // Wait 1 second on the first retry
             .multiplier(2.0) // Wait twice as long with each retry
-            .predicate(
-                throwable -> {
-                  if (isClientError(throwable)) {
-                    logger.warn(
-                        "OpenSearch rejected the request as a client error. Error: {}. Not"
-                            + " retrying.",
-                        throwable.getMessage());
-                    return false;
-                  }
-                  logger.warn(
-                      "OpenSearch failure. Error: {}. Will attempt retry...",
-                      throwable.getMessage());
-                  return true;
-                })
+            .predicate(throwable -> {
+              if (isClientError(throwable)) {
+                logger.warn(
+                    "OpenSearch rejected the request as a client error. Error: {}. Not"
+                        + " retrying.",
+                    throwable.getMessage());
+                return false;
+              }
+              logger.warn(
+                  "OpenSearch failure. Error: {}. Will attempt retry...", throwable.getMessage());
+              return true;
+            })
             .build();
 
     return new RetryTemplate(retryPolicy);

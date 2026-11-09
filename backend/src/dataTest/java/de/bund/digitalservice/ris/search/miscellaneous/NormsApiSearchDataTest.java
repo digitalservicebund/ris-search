@@ -49,9 +49,8 @@ class NormsApiSearchDataTest extends BaseApiSearchDataTest {
             response -> {
               List<Map<String, Object>> members = response.path("member");
               return members.stream()
-                  .map(
-                      member ->
-                          (String) ((Map<String, Object>) member.get("item")).get("abbreviation"))
+                  .map(member ->
+                      (String) ((Map<String, Object>) member.get("item")).get("abbreviation"))
                   .filter(abbreviation -> abbreviation != null && !abbreviation.isEmpty())
                   .toList();
             });
@@ -107,36 +106,33 @@ class NormsApiSearchDataTest extends BaseApiSearchDataTest {
     List<Map<String, Object>> members = response.path("member");
     final Stream<Map<String, Object>> itemsWithAbbreviation =
         members.stream()
-            .filter(
-                member -> {
-                  String abbreviation =
-                      (String) ((Map<String, Object>) member.get("item")).get("abbreviation");
-                  return StringUtils.isNotBlank(abbreviation);
-                });
-
-    return itemsWithAbbreviation
-        .flatMap(
-            member -> {
+            .filter(member -> {
               String abbreviation =
                   (String) ((Map<String, Object>) member.get("item")).get("abbreviation");
-              String detailUrl = ((Map<String, Object>) member.get("item")).get("@id").toString();
+              return StringUtils.isNotBlank(abbreviation);
+            });
 
-              Response detailResponse = NormsApiSearchDataTest.this.fetchPageResponse(detailUrl);
-              var articleNames = (List<String>) detailResponse.path("hasPart.name");
-              Pattern pattern = Pattern.compile("§ \\d+");
-              return articleNames.stream()
-                  .map(
-                      name -> {
-                        Matcher matcher = pattern.matcher(name);
-                        if (matcher.find()) {
-                          return new ArticleNumberAndAbbreviation(abbreviation, matcher.group());
-                        } else {
-                          return null;
-                        }
-                      })
-                  .filter(Objects::nonNull)
-                  .limit(10);
-            })
+    return itemsWithAbbreviation
+        .flatMap(member -> {
+          String abbreviation =
+              (String) ((Map<String, Object>) member.get("item")).get("abbreviation");
+          String detailUrl = ((Map<String, Object>) member.get("item")).get("@id").toString();
+
+          Response detailResponse = NormsApiSearchDataTest.this.fetchPageResponse(detailUrl);
+          var articleNames = (List<String>) detailResponse.path("hasPart.name");
+          Pattern pattern = Pattern.compile("§ \\d+");
+          return articleNames.stream()
+              .map(name -> {
+                Matcher matcher = pattern.matcher(name);
+                if (matcher.find()) {
+                  return new ArticleNumberAndAbbreviation(abbreviation, matcher.group());
+                } else {
+                  return null;
+                }
+              })
+              .filter(Objects::nonNull)
+              .limit(10);
+        })
         .toList();
   }
 

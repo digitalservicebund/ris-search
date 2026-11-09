@@ -318,11 +318,10 @@ public class NormLdmlToOpenSearchMapper {
         xmlDocument
             .getFirstMatchedNodeByXpath(X_PATH_BODY)
             .map(NormLdmlToOpenSearchMapper::getChildren)
-            .orElseGet(
-                () -> {
-                  logger.warn("Error finding body of Norm {}", workEli);
-                  return List.of();
-                });
+            .orElseGet(() -> {
+              logger.warn("Error finding body of Norm {}", workEli);
+              return List.of();
+            });
 
     List<TableOfContentsItem> preambleFormulaToc =
         getStaticTableOfContentsItem(xmlDocument, X_PATH_PREAMBLE_FORMULA, EINGANGSFORMEL);
@@ -344,14 +343,10 @@ public class NormLdmlToOpenSearchMapper {
       XmlDocument xmlDocument, String path, String heading) {
     return xmlDocument
         .getFirstMatchedNodeByXpath(path)
-        .map(
-            n ->
-                List.of(
-                    new TableOfContentsItem(
-                        n.getAttributes().getNamedItem("eId").getNodeValue(),
-                        "",
-                        heading,
-                        List.of())))
+        .map(n ->
+            List.of(
+                new TableOfContentsItem(
+                    n.getAttributes().getNamedItem("eId").getNodeValue(), "", heading, List.of())))
         .orElse(List.of());
   }
 
@@ -439,25 +434,24 @@ public class NormLdmlToOpenSearchMapper {
 
     var attachmentsAsArticles =
         attachments.stream()
-            .map(
-                a -> {
-                  String name =
-                      Stream.of(a.marker(), a.docTitle())
-                          .filter(StringUtils::isNotBlank)
-                          .collect(Collectors.joining(" "));
-                  return Article.builder()
-                      .id(Article.buildId(context.expressionEli, a.eId()))
-                      .eId(a.eId())
-                      .expressionEli(context.expressionEli)
-                      .workEli(context.workEli)
-                      .text(a.textContent())
-                      .name(name)
-                      .articleFingerprint(getArticleFingerprint(name, context.normAbbreviation))
-                      .indexedAt(context.indexedAt)
-                      .manifestationEli(a.manifestationEli())
-                      .documentType(LegislationPartType.ATTACHMENT)
-                      .build();
-                })
+            .map(a -> {
+              String name =
+                  Stream.of(a.marker(), a.docTitle())
+                      .filter(StringUtils::isNotBlank)
+                      .collect(Collectors.joining(" "));
+              return Article.builder()
+                  .id(Article.buildId(context.expressionEli, a.eId()))
+                  .eId(a.eId())
+                  .expressionEli(context.expressionEli)
+                  .workEli(context.workEli)
+                  .text(a.textContent())
+                  .name(name)
+                  .articleFingerprint(getArticleFingerprint(name, context.normAbbreviation))
+                  .indexedAt(context.indexedAt)
+                  .manifestationEli(a.manifestationEli())
+                  .documentType(LegislationPartType.ATTACHMENT)
+                  .build();
+            })
             .toList();
     articles.addAll(attachmentsAsArticles);
 

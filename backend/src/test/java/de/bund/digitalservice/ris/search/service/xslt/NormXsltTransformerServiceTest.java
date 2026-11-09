@@ -137,7 +137,8 @@ class NormXsltTransformerServiceTest {
     assertThat(heading)
         .isEqualTo(
             """
-            <span class="akn-num" id="c_num-1">§ 1</span> <span class="akn-heading" id="c_heading-1">Article title <a href="#c_heading-1_amtlfnote-1"><sup>1</sup></a></span>""");
+            <span class="akn-num" id="c_num-1">§ 1</span> <span class="akn-heading" id="c_heading-1">Article title <a href="#c_heading-1_amtlfnote-1"><sup>1</sup></a></span>\
+            """);
   }
 
   @Test
@@ -202,7 +203,8 @@ class NormXsltTransformerServiceTest {
         </div>
         <div class="level-1">
          <span class="akn-span" id="praeambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n4_span-n1">Art 2</span> <span class="akn-span" id="praeambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n4_span-n2">Another Test Title</span>
-        </div>""";
+        </div>\
+        """;
     final Document parsed = Jsoup.parse(html);
 
     String actualToc = parsed.selectXpath("//div[@class='official-toc']").html();

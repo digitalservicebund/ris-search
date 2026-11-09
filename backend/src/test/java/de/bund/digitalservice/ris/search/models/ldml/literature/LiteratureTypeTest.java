@@ -16,7 +16,7 @@ class LiteratureTypeTest {
         Arguments.of("ABCD0000", LiteratureType.UNKNOWN));
   }
 
-  @ParameterizedTest()
+  @ParameterizedTest
   @MethodSource("possibleLiteratureTypes")
   void itReturnsTheCorrectTypeBasedOnDocumentNumber(
       String documentNumber, LiteratureType expectedType) {

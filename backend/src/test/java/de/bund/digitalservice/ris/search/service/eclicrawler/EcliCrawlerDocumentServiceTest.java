@@ -87,11 +87,10 @@ class EcliCrawlerDocumentServiceTest {
 
     // Dynamically map any incoming list of keys to mock units
     when(caselawService.getFromBucket(anyList()))
-        .thenAnswer(
-            invocation -> {
-              List<String> keys = invocation.getArgument(0);
-              return keys.stream().map(_ -> getTestDocUnit("docNumber")).toList();
-            });
+        .thenAnswer(invocation -> {
+          List<String> keys = invocation.getArgument(0);
+          return keys.stream().map(_ -> getTestDocUnit("docNumber")).toList();
+        });
 
     when(sitemapWriter.writeUrlsToSitemap(eq(day), any(), eq(1)))
         .thenReturn(new Sitemap().setName("1"));
@@ -110,10 +109,9 @@ class EcliCrawlerDocumentServiceTest {
         .writeSitemapsIndices(
             eq("apiUrl"),
             eq(day),
-            argThat(
-                sitemaps ->
-                    sitemaps.getFirst().getName().equals("1")
-                        && sitemaps.get(1).getName().equals("2")));
+            argThat(sitemaps ->
+                sitemaps.getFirst().getName().equals("1")
+                    && sitemaps.get(1).getName().equals("2")));
 
     verify(repository, times(2)).saveAll(any());
     verify(sitemapWriter)
@@ -159,10 +157,8 @@ class EcliCrawlerDocumentServiceTest {
 
     when(sitemapWriter.writeUrlsToSitemap(
             eq(day),
-            argThat(
-                left ->
-                    new UrlListMatcher(List.of(expectedCreatedUrl, expectedDeletedUrl))
-                        .matches(left)),
+            argThat(left ->
+                new UrlListMatcher(List.of(expectedCreatedUrl, expectedDeletedUrl)).matches(left)),
             eq(1)))
         .thenReturn(new Sitemap().setName("sitemap_name"));
 
@@ -177,11 +173,10 @@ class EcliCrawlerDocumentServiceTest {
 
     verify(repository)
         .saveAll(
-            argThat(
-                docs ->
-                    new EcliCrawlerDocumentsMatcher(
-                            List.of(expectedCretedDocument, expectedDeletedDocument))
-                        .matches(IteratorUtils.toList(docs.iterator()))));
+            argThat(docs ->
+                new EcliCrawlerDocumentsMatcher(
+                        List.of(expectedCretedDocument, expectedDeletedDocument))
+                    .matches(IteratorUtils.toList(docs.iterator()))));
     verify(sitemapWriter).updateRobotsTxt("apiUrl", expectedSitemapIndex);
   }
 

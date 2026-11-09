@@ -117,40 +117,38 @@ public class XSDDescriptionParser {
       List<DocumentationElement> documentationElements,
       Map<String, List<String>> elementsByType,
       DocumentKind documentKind) {
-    documentationElements.forEach(
-        documentationElement -> {
-          if (documentationElement.getParent()
-              instanceof TypeElement(String namespaceUri, String name)) {
-            var typeName = name;
-            if (!typeName.contains(":")) {
-              typeName = namespacePrefixes.get(namespaceUri) + ":" + typeName;
-            }
+    documentationElements.forEach(documentationElement -> {
+      if (documentationElement.getParent()
+          instanceof TypeElement(String namespaceUri, String name)) {
+        var typeName = name;
+        if (!typeName.contains(":")) {
+          typeName = namespacePrefixes.get(namespaceUri) + ":" + typeName;
+        }
 
-            if (!elementsByType.containsKey(typeName)) {
-              return;
-            }
+        if (!elementsByType.containsKey(typeName)) {
+          return;
+        }
 
-            elementsByType
-                .get(typeName)
-                .forEach(
-                    elementName ->
-                        descriptions.add(
-                            new DescriptionKey(
-                                elementName,
-                                documentationElement.getDocumentation(),
-                                documentationElement.getLanguage(),
-                                documentKind)));
-          } else {
-            if (documentationElement.getParent() != null) {
-              descriptions.add(
-                  new DescriptionKey(
-                      ((ElementElement) documentationElement.getParent()).name(),
-                      documentationElement.getDocumentation(),
-                      documentationElement.getLanguage(),
-                      documentKind));
-            }
-          }
-        });
+        elementsByType
+            .get(typeName)
+            .forEach(elementName ->
+                descriptions.add(
+                    new DescriptionKey(
+                        elementName,
+                        documentationElement.getDocumentation(),
+                        documentationElement.getLanguage(),
+                        documentKind)));
+      } else {
+        if (documentationElement.getParent() != null) {
+          descriptions.add(
+              new DescriptionKey(
+                  ((ElementElement) documentationElement.getParent()).name(),
+                  documentationElement.getDocumentation(),
+                  documentationElement.getLanguage(),
+                  documentKind));
+        }
+      }
+    });
   }
 
   private void findAllElementsForType(Document document, Map<String, List<String>> elementsByType) {
@@ -275,9 +273,8 @@ public class XSDDescriptionParser {
    */
   public Optional<String> findDescription(String key, String language) {
     return descriptions.stream()
-        .filter(
-            descriptionKey ->
-                descriptionKey.key().equals(key) && descriptionKey.lang().equals(language))
+        .filter(descriptionKey ->
+            descriptionKey.key().equals(key) && descriptionKey.lang().equals(language))
         .findFirst()
         .map(DescriptionKey::description);
   }

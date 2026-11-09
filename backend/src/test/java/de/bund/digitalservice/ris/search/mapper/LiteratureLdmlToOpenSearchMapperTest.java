@@ -60,11 +60,11 @@ class LiteratureLdmlToOpenSearchMapperTest {
   void returnsEmptyOptionalIfDocumentNumberIsMissing() {
     String literatureLdml =
         """
-                <akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
-                  <akn:doc name="offene-struktur">
-                  </akn:doc>
-                </akn:akomaNtoso>
-                """
+        <akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
+          <akn:doc name="offene-struktur">
+          </akn:doc>
+        </akn:akomaNtoso>
+        """
             .stripIndent();
 
     assertThatThrownBy(() -> LiteratureLdmlToOpenSearchMapper.mapLdml(literatureLdml))
@@ -90,28 +90,28 @@ class LiteratureLdmlToOpenSearchMapperTest {
   void doesNotSetValuesForMissingOptionalDatapoints() {
     final String minimalValidLdml =
         """
-                <akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" xmlns:ris="http://ldml.neuris.de/literature/unselbstaendig/meta/">
-                  <akn:doc name="offene-struktur">
-                    <akn:meta>
-                      <akn:identification>
-                        <akn:FRBRWork>
-                          <akn:FRBRalias name="Dokumentnummer" value="BJLU002758328" />
-                        </akn:FRBRWork>
-                      </akn:identification>
-                                  <akn:classification source="doktyp">
-                                      <akn:keyword dictionary="attributsemantik-noch-undefiniert" showAs="Auf" value="Auf"/>
-                                  </akn:classification>
-                       <akn:proprietary source="attributsemantik-noch-undefiniert">
-                                          <ris:meta>
-                                              <ris:veroeffentlichungsJahre>
-                                                  <ris:veroeffentlichungsJahr>2025</ris:veroeffentlichungsJahr>
-                                              </ris:veroeffentlichungsJahre>
-                                          </ris:meta>
-                                      </akn:proprietary>
-                    </akn:meta>
-                  </akn:doc>
-                </akn:akomaNtoso>
-                """
+        <akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" xmlns:ris="http://ldml.neuris.de/literature/unselbstaendig/meta/">
+          <akn:doc name="offene-struktur">
+            <akn:meta>
+              <akn:identification>
+                <akn:FRBRWork>
+                  <akn:FRBRalias name="Dokumentnummer" value="BJLU002758328" />
+                </akn:FRBRWork>
+              </akn:identification>
+                          <akn:classification source="doktyp">
+                              <akn:keyword dictionary="attributsemantik-noch-undefiniert" showAs="Auf" value="Auf"/>
+                          </akn:classification>
+               <akn:proprietary source="attributsemantik-noch-undefiniert">
+                                  <ris:meta>
+                                      <ris:veroeffentlichungsJahre>
+                                          <ris:veroeffentlichungsJahr>2025</ris:veroeffentlichungsJahr>
+                                      </ris:veroeffentlichungsJahre>
+                                  </ris:meta>
+                              </akn:proprietary>
+            </akn:meta>
+          </akn:doc>
+        </akn:akomaNtoso>
+        """
             .stripIndent();
 
     Literature literature = LiteratureLdmlToOpenSearchMapper.mapLdml(minimalValidLdml);

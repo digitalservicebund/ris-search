@@ -288,10 +288,9 @@ class NormLdmlToOpenSearchMapperTest {
     NormTestDataBuilder builder =
         NormTestDataBuilder.builder()
             .disableValidation()
-            .frbrWork(
-                frbrWork -> {
-                  frbrWork.setDatePublished(datePublished).setName(name).setNumber(number);
-                });
+            .frbrWork(frbrWork -> {
+              frbrWork.setDatePublished(datePublished).setName(name).setNumber(number);
+            });
 
     String xmlContent = builder.buildNormXml();
     Optional<Norm> maybeNorm =
@@ -417,12 +416,10 @@ class NormLdmlToOpenSearchMapperTest {
     String eid = "anlagen-n1_anlage-n1";
 
     Stream.of(firstArticle, secondArticle, thirdArticle)
-        .forEach(
-            article -> {
-              assertThat(article.getDocumentType()).isEqualTo(LegislationPartType.ARTICLE);
-              assertThat(article.getManifestationEli())
-                  .isEqualTo(norm.getManifestationEliExample());
-            });
+        .forEach(article -> {
+          assertThat(article.getDocumentType()).isEqualTo(LegislationPartType.ARTICLE);
+          assertThat(article.getManifestationEli()).isEqualTo(norm.getManifestationEliExample());
+        });
 
     assertThat(attachment)
         .isEqualTo(

@@ -100,10 +100,9 @@ public class NormSearchResponseMapper {
 
     List<TextMatchSchema> normHits =
         searchHit.getHighlightFields().entrySet().stream()
-            .map(
-                entrySet ->
-                    new TextMatchSchema(
-                        getTextMatchName(entrySet.getKey()), entrySet.getValue().getFirst(), null))
+            .map(entrySet ->
+                new TextMatchSchema(
+                    getTextMatchName(entrySet.getKey()), entrySet.getValue().getFirst(), null))
             .toList();
     return ListUtils.union(articleHits, normHits);
   }
