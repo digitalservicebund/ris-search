@@ -17,10 +17,10 @@
   },
   "devDependencies": {
     "@lizenz/checker": "0.0.2",
-    "oxfmt": "0.75.0",
-    "oxlint": "1.90.0",
+    "oxfmt": "0.76.0",
+    "oxlint": "1.91.0",
     "typescript": "6.0.3",
-    "vue-tsc": "3.3.13"
+    "vue-tsc": "3.3.14"
   },
   "devEngines": {
     "packageManager": {
