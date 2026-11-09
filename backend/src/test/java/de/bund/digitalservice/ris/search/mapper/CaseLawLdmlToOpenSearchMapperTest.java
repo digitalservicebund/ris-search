@@ -4,6 +4,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import de.bund.digitalservice.ris.search.models.DatumsTyp;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
+import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Fundstelle;
+import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Gericht;
+import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ReferenzRechtsprechung;
+import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ReferenzSelbststaendigeLiteratur;
+import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ReferenzUnselbststaendigeLiteratur;
+import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ReferenzVerwaltungsvorschrift;
+import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Zitierungen;
 import de.bund.digitalservice.ris.search.utils.CaseLawLdmlTemplateUtils;
 import de.bund.digitalservice.ris.utils.CaseLawXmlValidator;
 import java.io.IOException;
@@ -151,6 +158,126 @@ class CaseLawLdmlToOpenSearchMapperTest {
             "normReference test singleNorm test",
             "normReference test singleNorm 2 test",
             "normReference without SingleNorms");
+  }
+
+  @Test
+  void shouldMapZitierungenLiteraturSelbststaendig() {
+    Zitierungen zitierungen = mapper.fromString(testCaseLawLdml).zitierungen();
+
+    assertThat(zitierungen.aktivzitierungLiteraturSelbstaendig())
+        .containsExactly(
+            ReferenzSelbststaendigeLiteratur.builder()
+                .referenzUri("ris:/literatur/KSLS071671727")
+                .dokumentnummer("KSLS071671727")
+                .autor("Arnauld, Andreas von")
+                .titel("Die Freiheitsrechte und ihre Schranken")
+                .veroeffentlichungsjahr("1999")
+                .build());
+    assertThat(zitierungen.passivzitierungLiteraturSelbstaendig())
+        .containsExactly(
+            ReferenzSelbststaendigeLiteratur.builder()
+                .referenzUri("ris:/literatur/KSLS071671728")
+                .dokumentnummer("KSLS071671728")
+                .autor("Mustermann, Max")
+                .titel("Die Grenzen der Freiheit")
+                .veroeffentlichungsjahr("2001")
+                .build());
+  }
+
+  @Test
+  void shouldMapZitierungenLiteraturUnselbststaendig() {
+    Zitierungen zitierungen = mapper.fromString(testCaseLawLdml).zitierungen();
+
+    assertThat(zitierungen.aktivzitierungLiteraturUnselbstaendig())
+        .containsExactly(
+            ReferenzUnselbststaendigeLiteratur.builder()
+                .referenzUri("ris:/literatur/STLU991393280")
+                .dokumentnummer("STLU991393280")
+                .autor("Schmidt-Liebig")
+                .fundstelle(
+                    Fundstelle.builder()
+                        .periodikum("Information StW")
+                        .zitatstelle("1999, 641")
+                        .build())
+                .build());
+    assertThat(zitierungen.passivzitierungLiteraturUnselbstaendig())
+        .containsExactly(
+            ReferenzUnselbststaendigeLiteratur.builder()
+                .referenzUri("ris:/literatur/SBLU000539216")
+                .dokumentnummer("SBLU000539216")
+                .autor("Knopp, Lothar")
+                .dokumenttyp("Aufsatz")
+                .fundstelle(
+                    Fundstelle.builder().periodikum("NVwZ").zitatstelle("2016, 1139-1141").build())
+                .build());
+  }
+
+  @Test
+  void shouldMapZitierungenRechtsprechung() {
+    Zitierungen zitierungen = mapper.fromString(testCaseLawLdml).zitierungen();
+
+    assertThat(zitierungen.aktivzitierungRechtsprechung())
+        .containsExactly(
+            ReferenzRechtsprechung.builder()
+                .referenzUri("ris:/rechtsprechung/BVRE100338409")
+                .dokumentnummer("BVRE100338409")
+                .artDerZitierung("Vergleiche")
+                .gericht(
+                    Gericht.builder()
+                        .gerichtstyp("VerfGH")
+                        .gerichtsort("München")
+                        .gerichtsbarkeit("Verfassungsgerichtsbarkeit")
+                        .build())
+                .entscheidungsdatum(LocalDate.of(1983, Month.DECEMBER, 2))
+                .aktenzeichen("Vf. 94-VI-81")
+                .build());
+    assertThat(zitierungen.passivzitierungRechtsprechung())
+        .containsExactly(
+            ReferenzRechtsprechung.builder()
+                .referenzUri("ris:/rechtsprechung/JURE100074208")
+                .dokumentnummer("JURE100074208")
+                .artDerZitierung("Vergleiche")
+                .gericht(
+                    Gericht.builder()
+                        .gerichtstyp("LArbG")
+                        .gerichtsort("Kiel")
+                        .gerichtsbarkeit("Arbeitsgerichtsbarkeit")
+                        .build())
+                .entscheidungsdatum(LocalDate.of(2010, Month.OCTOBER, 26))
+                .aktenzeichen("3 Sa 315/10")
+                .build());
+  }
+
+  @Test
+  void shouldMapZitierungenVerwaltungsvorschriften() {
+    Zitierungen zitierungen = mapper.fromString(testCaseLawLdml).zitierungen();
+
+    assertThat(zitierungen.aktivzitierungVerwaltungsvorschriften())
+        .containsExactly(
+            ReferenzVerwaltungsvorschrift.builder()
+                .referenzUri("ris:/verwaltungsvorschrift/KSNR008561615")
+                .dokumentnummer("KSNR008561615")
+                .artDerZitierung("Vergleiche")
+                .jurisAbkuerzung("VR VDR 1997-12-04 5883")
+                .fundstelle(
+                    Fundstelle.builder()
+                        .periodikum("MittLVA Oberfr")
+                        .zitatstelle("1997, 538-539")
+                        .build())
+                .build());
+    assertThat(zitierungen.passivzitierungVerwaltungsvorschriften())
+        .containsExactly(
+            ReferenzVerwaltungsvorschrift.builder()
+                .referenzUri("ris:/verwaltungsvorschrift/KSNR006800006")
+                .dokumentnummer("KSNR006800006")
+                .artDerZitierung("Anwendung")
+                .jurisAbkuerzung("VR BA 1986-01-16 16/86")
+                .fundstelle(
+                    Fundstelle.builder()
+                        .periodikum("Dienstbl BA RdErl")
+                        .zitatstelle("1986, Nr 16, 1-8")
+                        .build())
+                .build());
   }
 
   @Test
