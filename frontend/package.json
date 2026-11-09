@@ -62,7 +62,7 @@
     "typescript": "6.0.3",
     "unplugin-icons": "24.0.0",
     "vitest": "4.1.11",
-    "vue-tsc": "3.3.14"
+    "vue-tsc": "3.3.13"
   },
   "devEngines": {
     "packageManager": {

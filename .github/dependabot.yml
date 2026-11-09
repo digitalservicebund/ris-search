@@ -28,6 +28,12 @@ updates:
       day: "sunday"
     cooldown:
       default-days: 3
+    ignore:
+      # vue-tsc 3.3.14 breaks templates with "//" in an attribute value, which
+      # fails typecheck: https://github.com/vuejs/language-tools/issues/6322
+      # Remove this once a fixed version is out.
+      - dependency-name: "vue-tsc"
+        versions: ["3.3.14"]
     groups:
       all-frontend-non-major-dependencies:
         update-types:
