@@ -2614,6 +2614,57 @@
         },
         "required" : [ "name", "text" ]
       },
+      "FundstelleSchema" : {
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "example" : "Fundstelle"
+          },
+          "periodikum" : {
+            "type" : "string",
+            "description" : "Abkürzung des Periodikums",
+            "example" : "NVwZ"
+          },
+          "zitatstelle" : {
+            "type" : "string",
+            "example" : "2016, 1139-1141"
+          },
+          "fundstellenTyp" : {
+            "type" : "string",
+            "example" : "amtlich"
+          }
+        }
+      },
+      "GerichtSchema" : {
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "example" : "Gericht"
+          },
+          "gerichtstyp" : {
+            "type" : "string",
+            "example" : "BGH"
+          },
+          "gerichtsort" : {
+            "type" : "string",
+            "example" : "Karlsruhe"
+          },
+          "gerichtsbarkeit" : {
+            "type" : "string",
+            "example" : "Ordentliche Gerichtsbarkeit"
+          },
+          "spruchkoerper" : {
+            "type" : "string",
+            "example" : "1. Senat"
+          },
+          "sitzDerAussenstelle" : {
+            "type" : "string",
+            "description" : "Sitz der Außenstelle"
+          }
+        }
+      },
       "RechtsprechungSchema" : {
         "type" : "object",
         "properties" : {
@@ -2814,56 +2865,56 @@
             "type" : "array",
             "description" : "Aktivzitierung Literatur Unselbstständig",
             "items" : {
-              "type" : "string"
+              "$ref" : "#/components/schemas/ZitierungLiteraturUnselbststaendigSchema"
             }
           },
           "passivzitierungLiteraturUnselbstaendig" : {
             "type" : "array",
             "description" : "Passivzitierung Literatur Unselbstständig",
             "items" : {
-              "type" : "string"
+              "$ref" : "#/components/schemas/ZitierungLiteraturUnselbststaendigSchema"
             }
           },
           "aktivzitierungLiteraturSelbstaendig" : {
             "type" : "array",
             "description" : "Aktivzitierung Literatur Selbstständig",
             "items" : {
-              "type" : "string"
+              "$ref" : "#/components/schemas/ZitierungLiteraturSelbststaendigSchema"
             }
           },
           "passivzitierungLiteraturSelbstaendig" : {
             "type" : "array",
             "description" : "Passivzitierung Literatur Selbstständig",
             "items" : {
-              "type" : "string"
+              "$ref" : "#/components/schemas/ZitierungLiteraturSelbststaendigSchema"
             }
           },
           "aktivzitierungRechtsprechung" : {
             "type" : "array",
             "description" : "Aktivzitierung Rechtsprechung",
             "items" : {
-              "type" : "string"
+              "$ref" : "#/components/schemas/ZitierungRechtsprechungSchema"
             }
           },
           "passivzitierungRechtsprechung" : {
             "type" : "array",
             "description" : "Passivzitierung Rechtsprechung",
             "items" : {
-              "type" : "string"
+              "$ref" : "#/components/schemas/ZitierungRechtsprechungSchema"
             }
           },
           "aktivzitierungVerwaltungsvorschriften" : {
             "type" : "array",
             "description" : "Aktivzitierung Verwaltungsvorschriften",
             "items" : {
-              "type" : "string"
+              "$ref" : "#/components/schemas/ZitierungVerwaltungsvorschriftSchema"
             }
           },
           "passivzitierungVerwaltungsvorschriften" : {
             "type" : "array",
             "description" : "Passivzitierung Verwaltungsvorschriften",
             "items" : {
-              "type" : "string"
+              "$ref" : "#/components/schemas/ZitierungVerwaltungsvorschriftSchema"
             }
           },
           "amtlicheFundstellen" : {
@@ -3060,6 +3111,130 @@
           }
         },
         "required" : [ "@context", "@id", "ecli", "encoding", "entscheidungsnamen", "inLanguage", "schlagwoerter", "vorabdokument" ]
+      },
+      "ZitierungLiteraturSelbststaendigSchema" : {
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "example" : "ZitierungLiteraturSelbststaendig"
+          },
+          "referenzUri" : {
+            "type" : "string",
+            "example" : "ris:/literatur/KSLS071671727"
+          },
+          "dokumentnummer" : {
+            "type" : "string",
+            "example" : "KSLS071671727"
+          },
+          "autor" : {
+            "type" : "string",
+            "example" : "Arnauld, Andreas von"
+          },
+          "titel" : {
+            "type" : "string",
+            "example" : "Die Freiheitsrechte und ihre Schranken"
+          },
+          "veroeffentlichungsjahr" : {
+            "type" : "string",
+            "example" : "1999"
+          }
+        }
+      },
+      "ZitierungLiteraturUnselbststaendigSchema" : {
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "example" : "ZitierungLiteraturUnselbststaendig"
+          },
+          "referenzUri" : {
+            "type" : "string",
+            "example" : "ris:/literatur/SBLU000539216"
+          },
+          "dokumentnummer" : {
+            "type" : "string",
+            "example" : "SBLU000539216"
+          },
+          "autor" : {
+            "type" : "string",
+            "example" : "Knopp, Lothar"
+          },
+          "dokumenttyp" : {
+            "type" : "string",
+            "example" : "Aufsatz"
+          },
+          "fundstelle" : {
+            "$ref" : "#/components/schemas/FundstelleSchema"
+          }
+        }
+      },
+      "ZitierungRechtsprechungSchema" : {
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "example" : "ZitierungRechtsprechung"
+          },
+          "referenzUri" : {
+            "type" : "string",
+            "example" : "ris:/rechtsprechung/BVRE100338409"
+          },
+          "dokumentnummer" : {
+            "type" : "string",
+            "example" : "BVRE100338409"
+          },
+          "artDerZitierung" : {
+            "type" : "string",
+            "example" : "Vergleiche"
+          },
+          "gericht" : {
+            "$ref" : "#/components/schemas/GerichtSchema"
+          },
+          "entscheidungsdatum" : {
+            "type" : "string",
+            "format" : "date"
+          },
+          "dokumenttyp" : {
+            "type" : "string",
+            "example" : "Beschluss"
+          },
+          "aktenzeichen" : {
+            "type" : "string",
+            "example" : "Vf. 94-VI-81"
+          },
+          "fundstelle" : {
+            "$ref" : "#/components/schemas/FundstelleSchema"
+          }
+        }
+      },
+      "ZitierungVerwaltungsvorschriftSchema" : {
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "example" : "ZitierungVerwaltungsvorschrift"
+          },
+          "referenzUri" : {
+            "type" : "string",
+            "example" : "ris:/verwaltungsvorschrift/KSNR008561615"
+          },
+          "dokumentnummer" : {
+            "type" : "string",
+            "example" : "KSNR008561615"
+          },
+          "artDerZitierung" : {
+            "type" : "string",
+            "example" : "Vergleiche"
+          },
+          "jurisAbkuerzung" : {
+            "type" : "string",
+            "example" : "VR VDR 1997-12-04 5883"
+          },
+          "fundstelle" : {
+            "$ref" : "#/components/schemas/FundstelleSchema"
+          }
+        }
       },
       "StreamingResponseBody" : { },
       "CourtSearchResult" : {

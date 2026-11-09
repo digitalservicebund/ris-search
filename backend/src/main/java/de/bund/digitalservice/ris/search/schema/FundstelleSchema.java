@@ -1,4 +1,4 @@
-package de.bund.digitalservice.ris.search.schema.zitierungen;
+package de.bund.digitalservice.ris.search.schema;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
@@ -8,4 +8,12 @@ import lombok.Builder;
 public record FundstelleSchema(
     @Schema(example = "NVwZ", description = "Abkürzung des Periodikums") String periodikum,
     @Schema(example = "2016, 1139-1141") String zitatstelle,
-    @Schema(example = "amtlich") String fundstellenTyp) {}
+    @Schema(example = "amtlich") String fundstellenTyp)
+    implements JsonldResource {
+
+  @Override
+  @Schema(example = JsonldTypes.FUNDSTELLE)
+  public String getType() {
+    return JsonldTypes.FUNDSTELLE;
+  }
+}

@@ -1,4 +1,4 @@
-package de.bund.digitalservice.ris.search.schema.zitierungen;
+package de.bund.digitalservice.ris.search.schema;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
@@ -10,4 +10,12 @@ public record ZitierungLiteraturUnselbststaendigSchema(
     @Schema(example = "SBLU000539216") String dokumentnummer,
     @Schema(example = "Knopp, Lothar") String autor,
     @Schema(example = "Aufsatz") String dokumenttyp,
-    FundstelleSchema fundstelle) {}
+    FundstelleSchema fundstelle)
+    implements JsonldResource {
+
+  @Override
+  @Schema(example = JsonldTypes.ZITIERUNG_LITERATUR_UNSELBSTSTAENDIG)
+  public String getType() {
+    return JsonldTypes.ZITIERUNG_LITERATUR_UNSELBSTSTAENDIG;
+  }
+}

@@ -32,6 +32,8 @@
       "PublicationIssue": "schema:PublicationIssue",
       "MediaObject": "schema:MediaObject",
       "documentNumber": "schema:identifier",
+      "referenzUri": "ris:referenzUri",
+      "dokumentnummer": "schema:identifier",
       "Legislation": {
         "@id": "schema:Legislation",
         "@context": {
@@ -198,6 +200,59 @@
         "@context": {
           "item": "ris:item",
           "textMatches": "ris:SearchResultMatch"
+        }
+      },
+      "ZitierungRechtsprechung": {
+        "@id": "ris:ZitierungRechtsprechung",
+        "@context": {
+          "artDerZitierung": "ris:artDerZitierung",
+          "gericht": "ris:gericht",
+          "entscheidungsdatum": "ris:entscheidungsdatum",
+          "dokumenttyp": "ris:dokumenttyp",
+          "aktenzeichen": "ris:aktenzeichen",
+          "fundstelle": "ris:fundstelle"
+        }
+      },
+      "ZitierungLiteraturSelbststaendig": {
+        "@id": "ris:ZitierungLiteraturSelbststaendig",
+        "@context": {
+          "autor": "schema:author",
+          "titel": "schema:name",
+          "veroeffentlichungsjahr": "ris:veroeffentlichungsjahr"
+        }
+      },
+      "ZitierungLiteraturUnselbststaendig": {
+        "@id": "ris:ZitierungLiteraturUnselbststaendig",
+        "@context": {
+          "autor": "schema:author",
+          "dokumenttyp": "ris:dokumenttyp",
+          "fundstelle": "ris:fundstelle"
+        }
+      },
+      "ZitierungVerwaltungsvorschrift": {
+        "@id": "ris:ZitierungVerwaltungsvorschrift",
+        "@context": {
+          "artDerZitierung": "ris:artDerZitierung",
+          "jurisAbkuerzung": "ris:jurisAbkuerzung",
+          "fundstelle": "ris:fundstelle"
+        }
+      },
+      "Gericht": {
+        "@id": "ris:Gericht",
+        "@context": {
+          "gerichtstyp": "ris:gerichtstyp",
+          "gerichtsort": "ris:gerichtsort",
+          "gerichtsbarkeit": "ris:gerichtsbarkeit",
+          "spruchkoerper": "ris:spruchkoerper",
+          "sitzDerAussenstelle": "ris:sitzDerAussenstelle"
+        }
+      },
+      "Fundstelle": {
+        "@id": "ris:Fundstelle",
+        "@context": {
+          "periodikum": "ris:periodikum",
+          "zitatstelle": "ris:zitatstelle",
+          "fundstellenTyp": "ris:fundstellenTyp"
         }
       },
       "SearchResultMatch": {

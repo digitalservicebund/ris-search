@@ -1,4 +1,4 @@
-package de.bund.digitalservice.ris.search.schema.zitierungen;
+package de.bund.digitalservice.ris.search.schema;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
@@ -14,4 +14,12 @@ public record ZitierungRechtsprechungSchema(
     LocalDate entscheidungsdatum,
     @Schema(example = "Beschluss") String dokumenttyp,
     @Schema(example = "Vf. 94-VI-81") String aktenzeichen,
-    FundstelleSchema fundstelle) {}
+    FundstelleSchema fundstelle)
+    implements JsonldResource {
+
+  @Override
+  @Schema(example = JsonldTypes.ZITIERUNG_RECHTSPRECHUNG)
+  public String getType() {
+    return JsonldTypes.ZITIERUNG_RECHTSPRECHUNG;
+  }
+}

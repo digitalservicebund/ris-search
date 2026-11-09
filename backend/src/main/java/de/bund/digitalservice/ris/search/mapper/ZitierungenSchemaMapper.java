@@ -6,12 +6,12 @@ import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ReferenzR
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ReferenzSelbststaendigeLiteratur;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ReferenzUnselbststaendigeLiteratur;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ReferenzVerwaltungsvorschrift;
-import de.bund.digitalservice.ris.search.schema.zitierungen.FundstelleSchema;
-import de.bund.digitalservice.ris.search.schema.zitierungen.GerichtSchema;
-import de.bund.digitalservice.ris.search.schema.zitierungen.ZitierungLiteraturSelbststaendigSchema;
-import de.bund.digitalservice.ris.search.schema.zitierungen.ZitierungLiteraturUnselbststaendigSchema;
-import de.bund.digitalservice.ris.search.schema.zitierungen.ZitierungRechtsprechungSchema;
-import de.bund.digitalservice.ris.search.schema.zitierungen.ZitierungVerwaltungsvorschriftSchema;
+import de.bund.digitalservice.ris.search.schema.FundstelleSchema;
+import de.bund.digitalservice.ris.search.schema.GerichtSchema;
+import de.bund.digitalservice.ris.search.schema.ZitierungLiteraturSelbststaendigSchema;
+import de.bund.digitalservice.ris.search.schema.ZitierungLiteraturUnselbststaendigSchema;
+import de.bund.digitalservice.ris.search.schema.ZitierungRechtsprechungSchema;
+import de.bund.digitalservice.ris.search.schema.ZitierungVerwaltungsvorschriftSchema;
 import java.util.List;
 import java.util.function.Function;
 

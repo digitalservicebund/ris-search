@@ -2,10 +2,6 @@ package de.bund.digitalservice.ris.search.schema;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import de.bund.digitalservice.ris.search.models.DatumsTyp;
-import de.bund.digitalservice.ris.search.schema.zitierungen.ZitierungLiteraturSelbststaendigSchema;
-import de.bund.digitalservice.ris.search.schema.zitierungen.ZitierungLiteraturUnselbststaendigSchema;
-import de.bund.digitalservice.ris.search.schema.zitierungen.ZitierungRechtsprechungSchema;
-import de.bund.digitalservice.ris.search.schema.zitierungen.ZitierungVerwaltungsvorschriftSchema;
 import de.bund.digitalservice.ris.search.xsd.RISSchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;

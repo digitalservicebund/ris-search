@@ -20,4 +20,12 @@ public class JsonldTypes {
   public static final String DATASET = "Dataset";
   public static final String DATA_DOWNLOAD = "DataDownload";
   public static final String CHANGELOG = "Changelog";
+  public static final String ZITIERUNG_RECHTSPRECHUNG = "ZitierungRechtsprechung";
+  public static final String ZITIERUNG_LITERATUR_SELBSTSTAENDIG =
+      "ZitierungLiteraturSelbststaendig";
+  public static final String ZITIERUNG_LITERATUR_UNSELBSTSTAENDIG =
+      "ZitierungLiteraturUnselbststaendig";
+  public static final String ZITIERUNG_VERWALTUNGSVORSCHRIFT = "ZitierungVerwaltungsvorschrift";
+  public static final String GERICHT = "Gericht";
+  public static final String FUNDSTELLE = "Fundstelle";
 }
