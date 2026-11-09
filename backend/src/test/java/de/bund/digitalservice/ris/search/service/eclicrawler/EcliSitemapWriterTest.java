@@ -75,10 +75,10 @@ class EcliSitemapWriterTest {
   void itWritesARobotsTxt() {
     String expectedContent =
         """
-                User-agent: *
-                Disallow: /
-                User-agent: DG_JUSTICE_CRAWLER
-                """;
+        User-agent: *
+        Disallow: /
+        User-agent: DG_JUSTICE_CRAWLER
+        """;
     service.writeRobotsTxt();
 
     verify(bucket).save(ROBOTS_TXT_PATH, expectedContent);
@@ -88,15 +88,17 @@ class EcliSitemapWriterTest {
   void itUpdatesAnExistingRobotsTxt() throws FileNotFoundException, ObjectStoreServiceException {
     String existingContent =
         """
-                User-agent: DG_JUSTICE_CRAWLER
-                Allow: /
-                Sitemap:sitemapPath1""";
+        User-agent: DG_JUSTICE_CRAWLER
+        Allow: /
+        Sitemap:sitemapPath1\
+        """;
     String expectedContent =
         """
-                User-agent: DG_JUSTICE_CRAWLER
-                Allow: /
-                Sitemap:sitemapPath1
-                Sitemap:baseUrl/2025/01/01/sitemap_index_1.xml""";
+        User-agent: DG_JUSTICE_CRAWLER
+        Allow: /
+        Sitemap:sitemapPath1
+        Sitemap:baseUrl/2025/01/01/sitemap_index_1.xml\
+        """;
 
     when(bucket.getFileAsString(ROBOTS_TXT_PATH)).thenReturn(Optional.of(existingContent));
 

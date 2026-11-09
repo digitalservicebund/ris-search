@@ -357,9 +357,8 @@ public class SliLiteratureLdmlToOpenSearchMapper {
         .map(Analysis::getOtherReferences)
         .orElse(Collections.emptyList())
         .stream()
-        .filter(
-            otherReferences ->
-                otherReferences.getSource().equals("attributsemantik-noch-undefiniert"))
+        .filter(otherReferences ->
+            otherReferences.getSource().equals("attributsemantik-noch-undefiniert"))
         .flatMap(otherReferences -> otherReferences.getImplicitReferences().stream());
   }
 
@@ -375,11 +374,10 @@ public class SliLiteratureLdmlToOpenSearchMapper {
         .orElse(Collections.emptyList())
         .stream()
         .filter(author -> Objects.equals(author.getAs(), type))
-        .map(
-            author ->
-                Optional.ofNullable(author.getHref())
-                    .map(href -> href.replaceFirst("#", ""))
-                    .orElse(null))
+        .map(author ->
+            Optional.ofNullable(author.getHref())
+                .map(href -> href.replaceFirst("#", ""))
+                .orElse(null))
         .filter(Objects::nonNull)
         .toList();
   }
@@ -420,11 +418,10 @@ public class SliLiteratureLdmlToOpenSearchMapper {
 
   private static List<String> extractFullTitleAdditions(LiteratureLdml ldml) {
     return extractRisMeta(ldml).map(RisMeta::getGesamttitelangaben).orElse(List.of()).stream()
-        .map(
-            titel ->
-                Stream.of(titel.getTitel(), titel.getBandbezeichnung())
-                    .filter(s -> !Objects.isNull(s))
-                    .collect(Collectors.joining(", ")))
+        .map(titel ->
+            Stream.of(titel.getTitel(), titel.getBandbezeichnung())
+                .filter(s -> !Objects.isNull(s))
+                .collect(Collectors.joining(", ")))
         .toList();
   }
 

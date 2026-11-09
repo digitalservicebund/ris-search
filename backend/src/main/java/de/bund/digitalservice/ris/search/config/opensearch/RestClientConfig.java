@@ -69,10 +69,9 @@ public class RestClientConfig extends AbstractOpenSearchConfiguration {
   private ClientConfiguration buildClientConfiguration(
       ClientConfiguration.MaybeSecureClientConfigurationBuilder builder) {
     final var customConfigurationCallback =
-        RestClients.RestClientConfigurationCallback.from(
-            clientConfigurer ->
-                clientConfigurer.setIOReactorConfig(
-                    IOReactorConfig.custom().setSoKeepAlive(true).build()));
+        RestClients.RestClientConfigurationCallback.from(clientConfigurer ->
+            clientConfigurer.setIOReactorConfig(
+                IOReactorConfig.custom().setSoKeepAlive(true).build()));
 
     if ("enabled".equals(authentication)) {
       return builder

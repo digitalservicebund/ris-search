@@ -73,20 +73,17 @@ public class ChangelogResponseMapper {
         changelog,
         id ->
             EliFile.fromString(id).stream()
-                .map(
-                    eli ->
-                        toChangedDocument(
-                            getLegislationBaseUrl(
-                                eli.getManifestationEliPath().getManifestationRoot()),
-                            JsonldTypes.LEGISLATION_OBJECT)),
+                .map(eli ->
+                    toChangedDocument(
+                        getLegislationBaseUrl(eli.getManifestationEliPath().getManifestationRoot()),
+                        JsonldTypes.LEGISLATION_OBJECT)),
         id ->
             EliFile.fromString(id).stream()
                 .filter(eliFile -> eliFile.fileName().startsWith("regelungstext-"))
-                .map(
-                    eli ->
-                        new ChangelogDeletedDocument(
-                            getLegislationBaseUrl(eli.getExpressionEliPath().toString()),
-                            JsonldTypes.LEGISLATION)),
+                .map(eli ->
+                    new ChangelogDeletedDocument(
+                        getLegislationBaseUrl(eli.getExpressionEliPath().toString()),
+                        JsonldTypes.LEGISLATION)),
         remoteContext);
   }
 

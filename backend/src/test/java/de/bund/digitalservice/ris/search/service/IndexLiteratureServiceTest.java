@@ -55,11 +55,10 @@ class IndexLiteratureServiceTest {
 
     verify(repo, times(1))
         .saveAll(
-            argThat(
-                arg -> {
-                  assertThat(arg.iterator().next().id()).isEqualTo("XXLU000000001");
-                  return true;
-                }));
+            argThat(arg -> {
+              assertThat(arg.iterator().next().id()).isEqualTo("XXLU000000001");
+              return true;
+            }));
     verify(repo, times(1)).deleteByIndexedAtBefore(startingTimestamp);
   }
 
@@ -87,11 +86,10 @@ class IndexLiteratureServiceTest {
 
     verify(repo, times(1))
         .saveAll(
-            argThat(
-                arg -> {
-                  assertThat(arg.iterator().next().id()).isEqualTo("XXLU000000001");
-                  return true;
-                }));
+            argThat(arg -> {
+              assertThat(arg.iterator().next().id()).isEqualTo("XXLU000000001");
+              return true;
+            }));
     verify(repo, times(1)).deleteByIndexedAtBefore(startingTimestamp);
   }
 
@@ -111,11 +109,10 @@ class IndexLiteratureServiceTest {
 
     verify(repo, times(1))
         .saveAll(
-            argThat(
-                arg -> {
-                  assertThat(arg.iterator().next().id()).isEqualTo("XXLU000000001");
-                  return true;
-                }));
+            argThat(arg -> {
+              assertThat(arg.iterator().next().id()).isEqualTo("XXLU000000001");
+              return true;
+            }));
   }
 
   @Test
@@ -134,11 +131,10 @@ class IndexLiteratureServiceTest {
 
     verify(repo, times(1))
         .saveAll(
-            argThat(
-                arg -> {
-                  assertThat(arg.iterator().next().id()).isEqualTo("XXLU000000001");
-                  return true;
-                }));
+            argThat(arg -> {
+              assertThat(arg.iterator().next().id()).isEqualTo("XXLU000000001");
+              return true;
+            }));
   }
 
   @Test

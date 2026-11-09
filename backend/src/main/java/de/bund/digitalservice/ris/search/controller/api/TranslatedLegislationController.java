@@ -52,17 +52,16 @@ public class TranslatedLegislationController {
       @Parameter @RequestParam(required = false) String id)
       throws IOException, ObjectStoreServiceException {
     return readDataFromJson(id).stream()
-        .map(
-            item ->
-                LegislationTranslationSchema.builder()
-                    .id(item.abbreviation())
-                    .name(item.name())
-                    .inLanguage("en")
-                    .translator(item.translator())
-                    .translationOfWork(item.germanName())
-                    .about(item.version())
-                    .filename(item.filename())
-                    .build())
+        .map(item ->
+            LegislationTranslationSchema.builder()
+                .id(item.abbreviation())
+                .name(item.name())
+                .inLanguage("en")
+                .translator(item.translator())
+                .translationOfWork(item.germanName())
+                .about(item.version())
+                .filename(item.filename())
+                .build())
         .toList();
   }
 

@@ -120,12 +120,11 @@ public class ChangelogService<T extends ObjectStorage> {
     var changelogs =
         bucket.getAllKeysByPrefix(CHANGELOGS_PREFIX).stream()
             .filter(key -> !CHANGELOGS_PREFIX.equals(key))
-            .filter(
-                key -> {
-                  Instant changelogTime = parseInstantFromKey(key);
-                  // get all changelogs between timestamps inclusive
-                  return !changelogTime.isBefore(from) && !changelogTime.isAfter(to);
-                })
+            .filter(key -> {
+              Instant changelogTime = parseInstantFromKey(key);
+              // get all changelogs between timestamps inclusive
+              return !changelogTime.isBefore(from) && !changelogTime.isAfter(to);
+            })
             .sorted()
             .map(this::parseOneChangelog)
             .flatMap(Optional::stream)
@@ -201,14 +200,13 @@ public class ChangelogService<T extends ObjectStorage> {
       log.getChanged().forEach(filename -> mergedChanges.put(filename, Action.CHANGED));
       log.getDeleted().forEach(filename -> mergedChanges.put(filename, Action.DELETED));
     }
-    mergedChanges.forEach(
-        (id, type) -> {
-          if (Action.CHANGED.equals(type)) {
-            result.getChanged().add(id);
-          } else {
-            result.getDeleted().add(id);
-          }
-        });
+    mergedChanges.forEach((id, type) -> {
+      if (Action.CHANGED.equals(type)) {
+        result.getChanged().add(id);
+      } else {
+        result.getDeleted().add(id);
+      }
+    });
 
     return result;
   }

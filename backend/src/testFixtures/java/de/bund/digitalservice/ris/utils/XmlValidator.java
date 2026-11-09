@@ -20,15 +20,14 @@ public class XmlValidator {
     ClassLoader classLoader = NormXmlValidator.class.getClassLoader();
 
     return schemaFilePaths.stream()
-        .map(
-            schema -> {
-              URL schemaUrl = classLoader.getResource(schema);
-              if (schemaUrl != null) {
-                return new StreamSource(schemaUrl.toExternalForm());
-              } else {
-                return null;
-              }
-            })
+        .map(schema -> {
+          URL schemaUrl = classLoader.getResource(schema);
+          if (schemaUrl != null) {
+            return new StreamSource(schemaUrl.toExternalForm());
+          } else {
+            return null;
+          }
+        })
         .toList();
   }
 

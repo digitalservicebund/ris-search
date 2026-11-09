@@ -82,10 +82,8 @@ public class NormAttachmentMapper {
           attachmentDocument
               .getFirstMatchedNodeByXpath(
                   "/akn:akomaNtoso/akn:doc/akn:preface/akn:block/akn:docTitle")
-              .orElseThrow(
-                  () ->
-                      new XPathExpressionException(
-                          "Norm xml missing mandatory field akn:docTitle"));
+              .orElseThrow(() ->
+                  new XPathExpressionException("Norm xml missing mandatory field akn:docTitle"));
 
       Optional<Node> numNode =
           attachmentDocument.getFirstMatchedNodeByXpath(

@@ -61,11 +61,10 @@ class ObjectStorageTest {
     Thread mainThread = Thread.currentThread();
 
     when(client.getStream("key1"))
-        .thenAnswer(
-            invocation -> {
-              mainThread.interrupt();
-              return new DataInputStream(new ByteArrayInputStream(new byte[0]));
-            });
+        .thenAnswer(invocation -> {
+          mainThread.interrupt();
+          return new DataInputStream(new ByteArrayInputStream(new byte[0]));
+        });
 
     storage.getObjects(List.of("key1"));
     assertThat(Thread.currentThread().isInterrupted()).isTrue();

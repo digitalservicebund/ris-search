@@ -53,14 +53,13 @@ class OpensearchRetryConfigurationTest {
     AtomicInteger attempts = new AtomicInteger();
 
     assertThatExceptionOfType(UncategorizedElasticsearchException.class)
-        .isThrownBy(
-            () ->
-                OpensearchRetryConfiguration.executeWithRetries(
-                    retryTemplate,
-                    () -> {
-                      attempts.incrementAndGet();
-                      throw new UncategorizedElasticsearchException("all shards failed");
-                    }));
+        .isThrownBy(() ->
+            OpensearchRetryConfiguration.executeWithRetries(
+                retryTemplate,
+                () -> {
+                  attempts.incrementAndGet();
+                  throw new UncategorizedElasticsearchException("all shards failed");
+                }));
 
     assertThat(attempts).hasValue(3);
   }
@@ -70,13 +69,12 @@ class OpensearchRetryConfigurationTest {
     var failure = new UncategorizedElasticsearchException("all shards failed");
 
     assertThatExceptionOfType(UncategorizedElasticsearchException.class)
-        .isThrownBy(
-            () ->
-                OpensearchRetryConfiguration.executeWithRetries(
-                    retryTemplate,
-                    () -> {
-                      throw failure;
-                    }))
+        .isThrownBy(() ->
+            OpensearchRetryConfiguration.executeWithRetries(
+                retryTemplate,
+                () -> {
+                  throw failure;
+                }))
         .isSameAs(failure);
   }
 
@@ -88,14 +86,13 @@ class OpensearchRetryConfigurationTest {
         new UncategorizedElasticsearchException("all shards failed", 400, "response body", null);
 
     assertThatExceptionOfType(UncategorizedElasticsearchException.class)
-        .isThrownBy(
-            () ->
-                OpensearchRetryConfiguration.executeWithRetries(
-                    configuredRetryTemplate,
-                    () -> {
-                      attempts.incrementAndGet();
-                      throw clientFailure;
-                    }))
+        .isThrownBy(() ->
+            OpensearchRetryConfiguration.executeWithRetries(
+                configuredRetryTemplate,
+                () -> {
+                  attempts.incrementAndGet();
+                  throw clientFailure;
+                }))
         .isSameAs(clientFailure);
 
     assertThat(attempts).hasValue(1);

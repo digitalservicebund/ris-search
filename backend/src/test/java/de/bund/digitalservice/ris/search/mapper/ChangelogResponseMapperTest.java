@@ -77,10 +77,8 @@ class ChangelogResponseMapperTest {
         .asInstanceOf(SET)
         .hasSize(1)
         .extracting("id")
-        .anySatisfy(
-            id ->
-                assertThat(id.toString())
-                    .contains("eli/bund/bgbl-1/1999/identifier/2026-01-01/1/deu"));
+        .anySatisfy(id ->
+            assertThat(id.toString()).contains("eli/bund/bgbl-1/1999/identifier/2026-01-01/1/deu"));
   }
 
   @Test
@@ -102,9 +100,7 @@ class ChangelogResponseMapperTest {
         .asInstanceOf(SET)
         .hasSize(1)
         .extracting("id")
-        .anySatisfy(
-            id ->
-                assertThat(id.toString())
-                    .contains("eli/bund/bgbl-1/1999/identifier/2026-01-01/1/deu"));
+        .anySatisfy(id ->
+            assertThat(id.toString()).contains("eli/bund/bgbl-1/1999/identifier/2026-01-01/1/deu"));
   }
 }

@@ -38,10 +38,8 @@ class RechtsprechungApiSearchDataTest extends BaseApiSearchDataTest {
             response -> {
               List<Map<String, Object>> members = response.path("member");
               return members.stream()
-                  .map(
-                      member ->
-                          (List<String>)
-                              ((Map<String, Object>) member.get("item")).get("fileNumbers"))
+                  .map(member ->
+                      (List<String>) ((Map<String, Object>) member.get("item")).get("fileNumbers"))
                   .flatMap(List::stream)
                   .toList();
             });

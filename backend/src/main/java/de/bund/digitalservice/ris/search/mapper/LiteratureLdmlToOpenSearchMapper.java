@@ -283,9 +283,8 @@ public class LiteratureLdmlToOpenSearchMapper {
         .map(Analysis::getOtherReferences)
         .orElse(Collections.emptyList())
         .stream()
-        .filter(
-            otherReferences ->
-                otherReferences.getSource().equals("attributsemantik-noch-undefiniert"))
+        .filter(otherReferences ->
+            otherReferences.getSource().equals("attributsemantik-noch-undefiniert"))
         .flatMap(otherReferences -> otherReferences.getImplicitReferences().stream());
   }
 
@@ -301,11 +300,10 @@ public class LiteratureLdmlToOpenSearchMapper {
         .orElse(Collections.emptyList())
         .stream()
         .filter(author -> Objects.equals(author.getAs(), type))
-        .map(
-            author ->
-                Optional.ofNullable(author.getHref())
-                    .map(href -> href.replaceFirst("#", ""))
-                    .orElse(null))
+        .map(author ->
+            Optional.ofNullable(author.getHref())
+                .map(href -> href.replaceFirst("#", ""))
+                .orElse(null))
         .filter(Objects::nonNull)
         .toList();
   }

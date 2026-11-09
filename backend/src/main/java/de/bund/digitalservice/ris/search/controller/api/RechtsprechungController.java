@@ -115,9 +115,9 @@ public class RechtsprechungController {
   @ApiResponse(responseCode = "200", description = "Success")
   @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content)
   public ResponseEntity<CollectionSchema<SearchMemberSchema<CaseLawSearchSchema>>> searchAndFilter(
-      @ParameterObject() CaseLawSearchParams caseLawSearchParams,
+      @ParameterObject CaseLawSearchParams caseLawSearchParams,
       @ParameterObject UniversalSearchParams universalSearchParams,
-      @ParameterObject() @Valid PaginationParams paginationParams,
+      @ParameterObject @Valid PaginationParams paginationParams,
       @ParameterObject @Valid CaseLawSortParam sortParams)
       throws CustomValidationException {
 
@@ -237,7 +237,7 @@ public class RechtsprechungController {
       description =
           "Returns a case law decision as XML. This content is used as a source for the HTML endpoint.")
   @ApiResponse(responseCode = "200")
-  @ApiResponse(responseCode = "404", content = @Content(schema = @Schema()))
+  @ApiResponse(responseCode = "404", content = @Content(schema = @Schema))
   public ResponseEntity<byte[]> getCaseLawDocumentationUnitAsXml(
       @Parameter(example = "STRE201770751") @PathVariable String documentNumber)
       throws ObjectStoreServiceException {
@@ -261,7 +261,7 @@ public class RechtsprechungController {
       summary = "Decision ZIP (XML and attachments)",
       description = "Returns a case law decision, including attachments, as a ZIP archive.")
   @ApiResponse(responseCode = "200")
-  @ApiResponse(responseCode = "404", content = @Content(schema = @Schema()))
+  @ApiResponse(responseCode = "404", content = @Content(schema = @Schema))
   public ResponseEntity<StreamingResponseBody> getCaseLawDocumentationUnitAsZip(
       @Pattern(regexp = "^[a-zA-Z]{4}\\d{9}$", message = "Invalid document number format")
           @Parameter(example = "STRE201770751")
@@ -301,7 +301,7 @@ public class RechtsprechungController {
       summary = "Caselaw resource",
       description = "Returns a specific resource of a particular caselaw.")
   @ApiResponse(responseCode = "200")
-  @ApiResponse(responseCode = "404", content = @Content())
+  @ApiResponse(responseCode = "404", content = @Content)
   public ResponseEntity<byte[]> getImage(
       @Parameter(example = "BDRE000800001") @PathVariable String documentNumber,
       @Parameter(example = "image") @PathVariable String name,
@@ -320,14 +320,13 @@ public class RechtsprechungController {
     byte[] resource =
         caseLawService
             .getFileByPath(documentNumber + "/" + name + "." + extension)
-            .orElseGet(
-                () -> {
-                  try {
-                    return new ClassPathResource("placeholder.png").getInputStream().readAllBytes();
-                  } catch (IOException exception) {
-                    throw new FileNotFoundException(exception.getMessage());
-                  }
-                });
+            .orElseGet(() -> {
+              try {
+                return new ClassPathResource("placeholder.png").getInputStream().readAllBytes();
+              } catch (IOException exception) {
+                throw new FileNotFoundException(exception.getMessage());
+              }
+            });
 
     final String mimeType = URLConnection.guessContentTypeFromName(name + "." + extension);
 

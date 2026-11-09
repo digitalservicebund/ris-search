@@ -134,13 +134,12 @@ public class CaseLawService {
 
     var buckets = getBuckets(searchHits, aggregationName);
     return buckets.stream()
-        .map(
-            item -> {
-              String key = item.getKeyAsString();
-              long count = item.getDocCount();
-              String label = CourtNameAbbreviationExpander.getLabelExpandingSynonyms(key);
-              return new CourtSearchResult(key, count, label);
-            })
+        .map(item -> {
+          String key = item.getKeyAsString();
+          long count = item.getDocCount();
+          String label = CourtNameAbbreviationExpander.getLabelExpandingSynonyms(key);
+          return new CourtSearchResult(key, count, label);
+        })
         .toList();
   }
 
@@ -214,13 +213,12 @@ public class CaseLawService {
   private Optional<CaseLawDocumentationUnit> tryUnmarshal(StorageObject object) {
     return object
         .bytes()
-        .flatMap(
-            bytes -> {
-              try {
-                return Optional.ofNullable(marshaller.fromByteArray(bytes));
-              } catch (OpenSearchMapperException _) {
-                return Optional.empty();
-              }
-            });
+        .flatMap(bytes -> {
+          try {
+            return Optional.ofNullable(marshaller.fromByteArray(bytes));
+          } catch (OpenSearchMapperException _) {
+            return Optional.empty();
+          }
+        });
   }
 }

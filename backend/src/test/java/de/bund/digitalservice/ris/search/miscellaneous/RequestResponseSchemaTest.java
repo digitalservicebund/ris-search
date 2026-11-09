@@ -31,13 +31,13 @@ class RequestResponseSchemaTest {
   void theSchemaIsCorrectInErrorCases() throws IOException {
     String expected =
         """
-             <?xml version="1.0" encoding="UTF-8"?>
-                <result status="error" site="site" connector="connector">
-                  <errors>
-                    <error cause="1"/>
-                  </errors>
-                </result>
-            """;
+         <?xml version="1.0" encoding="UTF-8"?>
+            <result status="error" site="site" connector="connector">
+              <errors>
+                <error cause="1"/>
+              </errors>
+            </result>
+        """;
 
     RequestResult result =
         new RequestResult()
@@ -54,29 +54,29 @@ class RequestResponseSchemaTest {
   void theSchemaCreatesTheDesiredXml() throws JAXBException, IOException {
     String exampleXml =
         """
-                <?xml version="1.0" encoding="UTF-8"?>
-                <result status="OK" site="https://testphase.rechtsinformationen.bund.de/" connector="https://testphase.rechtsinformationen.bund.de/nlex">
-                    <result-list>
-                        <navigation>
-                            <request-id>uuid-1111-1111</request-id>
-                            <page number="1" size="10"/>
-                            <hits>1</hits>
-                        </navigation>
-                        <documents>
-                            <document>
-                                <references>
-                                    <extern-url format="text/html" display="HTML extern" href="link/to/legislation.html"/>
-                                </references>
-                                <content lang="de-DE">
-                                  <title>docTitle</title>
-                                  <para roles="zoom">textMatch1</para>
-                                  <para roles="zoom">textMatch2</para>
-                                </content>
-                            </document>
-                        </documents>
-                    </result-list>
-                </result>
-                """;
+        <?xml version="1.0" encoding="UTF-8"?>
+        <result status="OK" site="https://testphase.rechtsinformationen.bund.de/" connector="https://testphase.rechtsinformationen.bund.de/nlex">
+            <result-list>
+                <navigation>
+                    <request-id>uuid-1111-1111</request-id>
+                    <page number="1" size="10"/>
+                    <hits>1</hits>
+                </navigation>
+                <documents>
+                    <document>
+                        <references>
+                            <extern-url format="text/html" display="HTML extern" href="link/to/legislation.html"/>
+                        </references>
+                        <content lang="de-DE">
+                          <title>docTitle</title>
+                          <para roles="zoom">textMatch1</para>
+                          <para roles="zoom">textMatch2</para>
+                        </content>
+                    </document>
+                </documents>
+            </result-list>
+        </result>
+        """;
 
     String expectedXml = TestXmlUtils.trim(exampleXml);
     JAXBContext ctx = JAXBContext.newInstance(RequestResult.class);

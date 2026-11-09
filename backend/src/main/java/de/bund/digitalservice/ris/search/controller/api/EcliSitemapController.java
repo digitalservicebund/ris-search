@@ -33,11 +33,10 @@ public class EcliSitemapController {
 
     return sitemapService
         .getRobots()
-        .map(
-            body ->
-                ResponseEntity.status(HttpStatus.OK)
-                    .header("Content-Type", MediaType.TEXT_PLAIN_VALUE)
-                    .body(body))
+        .map(body ->
+            ResponseEntity.status(HttpStatus.OK)
+                .header("Content-Type", MediaType.TEXT_PLAIN_VALUE)
+                .body(body))
         .orElseGet(() -> ResponseEntity.notFound().build());
   }
 
@@ -59,18 +58,17 @@ public class EcliSitemapController {
   @ApiResponse(responseCode = "200")
   @ApiResponse(responseCode = "404")
   public ResponseEntity<byte[]> getEcliSitemapfiles(
-      @PathVariable() @Pattern(regexp = "\\d{4}") String year,
-      @PathVariable() @Pattern(regexp = "\\d{2}") String month,
-      @PathVariable() @Pattern(regexp = "\\d{2}") String day,
-      @PathVariable() String filename) {
+      @PathVariable @Pattern(regexp = "\\d{4}") String year,
+      @PathVariable @Pattern(regexp = "\\d{2}") String month,
+      @PathVariable @Pattern(regexp = "\\d{2}") String day,
+      @PathVariable String filename) {
 
     var file = sitemapService.getSitemapFile(year + "/" + month + "/" + day + "/" + filename);
 
-    return file.map(
-            body ->
-                ResponseEntity.status(HttpStatus.OK)
-                    .header("Content-Type", MediaType.APPLICATION_XML_VALUE)
-                    .body(body))
+    return file.map(body ->
+            ResponseEntity.status(HttpStatus.OK)
+                .header("Content-Type", MediaType.APPLICATION_XML_VALUE)
+                .body(body))
         .orElseGet(() -> ResponseEntity.notFound().build());
   }
 }
