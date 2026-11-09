@@ -932,6 +932,33 @@ export interface components {
             text: string;
             location?: string | null;
         };
+        FundstelleSchema: {
+            /** @example Fundstelle */
+            "@type"?: string;
+            /**
+             * @description Abkürzung des Periodikums
+             * @example NVwZ
+             */
+            periodikum?: string;
+            /** @example 2016, 1139-1141 */
+            zitatstelle?: string;
+            /** @example amtlich */
+            fundstellenTyp?: string;
+        };
+        GerichtSchema: {
+            /** @example Gericht */
+            "@type"?: string;
+            /** @example BGH */
+            gerichtstyp?: string;
+            /** @example Karlsruhe */
+            gerichtsort?: string;
+            /** @example Ordentliche Gerichtsbarkeit */
+            gerichtsbarkeit?: string;
+            /** @example 1. Senat */
+            spruchkoerper?: string;
+            /** @description Sitz der Außenstelle */
+            sitzDerAussenstelle?: string;
+        };
         RechtsprechungSchema: {
             /** @example Rechtsprechung */
             "@type"?: string;
@@ -1026,21 +1053,21 @@ export interface components {
             /** @description Nachgewiesen werden die gerichtlichen Entscheidungen, die ihrerseits in der Rubrik „vorgehende Entscheidung“ die vorliegende Entscheidung nennen. */
             nachgehendeEntscheidungen?: string[];
             /** @description Aktivzitierung Literatur Unselbstständig */
-            aktivzitierungLiteraturUnselbstaendig?: string[];
+            aktivzitierungLiteraturUnselbstaendig?: components["schemas"]["ZitierungLiteraturUnselbststaendigSchema"][];
             /** @description Passivzitierung Literatur Unselbstständig */
-            passivzitierungLiteraturUnselbstaendig?: string[];
+            passivzitierungLiteraturUnselbstaendig?: components["schemas"]["ZitierungLiteraturUnselbststaendigSchema"][];
             /** @description Aktivzitierung Literatur Selbstständig */
-            aktivzitierungLiteraturSelbstaendig?: string[];
+            aktivzitierungLiteraturSelbstaendig?: components["schemas"]["ZitierungLiteraturSelbststaendigSchema"][];
             /** @description Passivzitierung Literatur Selbstständig */
-            passivzitierungLiteraturSelbstaendig?: string[];
+            passivzitierungLiteraturSelbstaendig?: components["schemas"]["ZitierungLiteraturSelbststaendigSchema"][];
             /** @description Aktivzitierung Rechtsprechung */
-            aktivzitierungRechtsprechung?: string[];
+            aktivzitierungRechtsprechung?: components["schemas"]["ZitierungRechtsprechungSchema"][];
             /** @description Passivzitierung Rechtsprechung */
-            passivzitierungRechtsprechung?: string[];
+            passivzitierungRechtsprechung?: components["schemas"]["ZitierungRechtsprechungSchema"][];
             /** @description Aktivzitierung Verwaltungsvorschriften */
-            aktivzitierungVerwaltungsvorschriften?: string[];
+            aktivzitierungVerwaltungsvorschriften?: components["schemas"]["ZitierungVerwaltungsvorschriftSchema"][];
             /** @description Passivzitierung Verwaltungsvorschriften */
-            passivzitierungVerwaltungsvorschriften?: string[];
+            passivzitierungVerwaltungsvorschriften?: components["schemas"]["ZitierungVerwaltungsvorschriftSchema"][];
             /**
              * @description Amtliche Fundstellen
              * @example BGHSt 67, 273-284
@@ -1197,6 +1224,64 @@ export interface components {
             encoding: components["schemas"]["DocumentEncodingSchema"][];
             /** @description Whether or not the document is a Vorabdokument */
             vorabdokument: boolean;
+        };
+        ZitierungLiteraturSelbststaendigSchema: {
+            /** @example ZitierungLiteraturSelbststaendig */
+            "@type"?: string;
+            /** @example ris:/literatur/KSLS071671727 */
+            referenzUri?: string;
+            /** @example KSLS071671727 */
+            dokumentnummer?: string;
+            /** @example Arnauld, Andreas von */
+            autor?: string;
+            /** @example Die Freiheitsrechte und ihre Schranken */
+            titel?: string;
+            /** @example 1999 */
+            veroeffentlichungsjahr?: string;
+        };
+        ZitierungLiteraturUnselbststaendigSchema: {
+            /** @example ZitierungLiteraturUnselbststaendig */
+            "@type"?: string;
+            /** @example ris:/literatur/SBLU000539216 */
+            referenzUri?: string;
+            /** @example SBLU000539216 */
+            dokumentnummer?: string;
+            /** @example Knopp, Lothar */
+            autor?: string;
+            /** @example Aufsatz */
+            dokumenttyp?: string;
+            fundstelle?: components["schemas"]["FundstelleSchema"];
+        };
+        ZitierungRechtsprechungSchema: {
+            /** @example ZitierungRechtsprechung */
+            "@type"?: string;
+            /** @example ris:/rechtsprechung/BVRE100338409 */
+            referenzUri?: string;
+            /** @example BVRE100338409 */
+            dokumentnummer?: string;
+            /** @example Vergleiche */
+            artDerZitierung?: string;
+            gericht?: components["schemas"]["GerichtSchema"];
+            /** Format: date */
+            entscheidungsdatum?: string;
+            /** @example Beschluss */
+            dokumenttyp?: string;
+            /** @example Vf. 94-VI-81 */
+            aktenzeichen?: string;
+            fundstelle?: components["schemas"]["FundstelleSchema"];
+        };
+        ZitierungVerwaltungsvorschriftSchema: {
+            /** @example ZitierungVerwaltungsvorschrift */
+            "@type"?: string;
+            /** @example ris:/verwaltungsvorschrift/KSNR008561615 */
+            referenzUri?: string;
+            /** @example KSNR008561615 */
+            dokumentnummer?: string;
+            /** @example Vergleiche */
+            artDerZitierung?: string;
+            /** @example VR VDR 1997-12-04 5883 */
+            jurisAbkuerzung?: string;
+            fundstelle?: components["schemas"]["FundstelleSchema"];
         };
         StreamingResponseBody: unknown;
         CourtSearchResult: {
