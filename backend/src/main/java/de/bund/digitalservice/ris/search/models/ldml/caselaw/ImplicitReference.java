@@ -14,8 +14,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ImplicitReference {
-  private static final String RICHTUNG_AKTIV = "aktiv";
-  private static final String RICHTUNG_PASSIV = "passiv";
   private static final String FUNDSTELLENTYP_AMTLICH = "amtlich";
   private static final String FUNDSTELLENTYP_NICHTAMTLICH = "nichtamtlich";
 
@@ -54,7 +52,7 @@ public class ImplicitReference {
    */
   public String getAktivzitierteUnselbststaendigeLiteraturDokumentnummer() {
     if (referenzUnselbststaendigeLiteratur == null
-        || !RICHTUNG_AKTIV.equalsIgnoreCase(referenzUnselbststaendigeLiteratur.getRichtung())) {
+        || !referenzUnselbststaendigeLiteratur.isAktiv()) {
       return null;
     }
     return referenzUnselbststaendigeLiteratur.getDokumentnummer();
@@ -68,7 +66,7 @@ public class ImplicitReference {
    */
   public String getPassivzitierteUnselbststaendigeLiteraturDokumentnummer() {
     if (referenzUnselbststaendigeLiteratur == null
-        || !RICHTUNG_PASSIV.equalsIgnoreCase(referenzUnselbststaendigeLiteratur.getRichtung())) {
+        || !referenzUnselbststaendigeLiteratur.isPassiv()) {
       return null;
     }
     return referenzUnselbststaendigeLiteratur.getDokumentnummer();
@@ -81,8 +79,7 @@ public class ImplicitReference {
    * @return the document number, or {@code null} if absent or not an active citation
    */
   public String getAktivzitierteSelbststaendigeLiteraturDokumentnummer() {
-    if (referenzSelbststaendigeLiteratur == null
-        || !RICHTUNG_AKTIV.equalsIgnoreCase(referenzSelbststaendigeLiteratur.getRichtung())) {
+    if (referenzSelbststaendigeLiteratur == null || !referenzSelbststaendigeLiteratur.isAktiv()) {
       return null;
     }
     return referenzSelbststaendigeLiteratur.getDokumentnummer();
@@ -95,8 +92,7 @@ public class ImplicitReference {
    * @return the document number, or {@code null} if absent or not a passive citation
    */
   public String getPassivzitierteSelbststaendigeLiteraturDokumentnummer() {
-    if (referenzSelbststaendigeLiteratur == null
-        || !RICHTUNG_PASSIV.equalsIgnoreCase(referenzSelbststaendigeLiteratur.getRichtung())) {
+    if (referenzSelbststaendigeLiteratur == null || !referenzSelbststaendigeLiteratur.isPassiv()) {
       return null;
     }
     return referenzSelbststaendigeLiteratur.getDokumentnummer();
@@ -109,8 +105,7 @@ public class ImplicitReference {
    * @return the document number, or {@code null} if absent or not an active citation
    */
   public String getAktivzitierteRechtsprechungDokumentnummer() {
-    if (referenzRechtsprechung == null
-        || !RICHTUNG_AKTIV.equalsIgnoreCase(referenzRechtsprechung.getRichtung())) {
+    if (referenzRechtsprechung == null || !referenzRechtsprechung.isAktiv()) {
       return null;
     }
     return referenzRechtsprechung.getDokumentnummer();
@@ -123,8 +118,7 @@ public class ImplicitReference {
    * @return the document number, or {@code null} if absent or not a passive citation
    */
   public String getPassivzitierteRechtsprechungDokumentnummer() {
-    if (referenzRechtsprechung == null
-        || !RICHTUNG_PASSIV.equalsIgnoreCase(referenzRechtsprechung.getRichtung())) {
+    if (referenzRechtsprechung == null || !referenzRechtsprechung.isPassiv()) {
       return null;
     }
     return referenzRechtsprechung.getDokumentnummer();
@@ -137,8 +131,7 @@ public class ImplicitReference {
    * @return the document number, or {@code null} if absent or not an active citation
    */
   public String getAktivzitierteVerwaltungsvorschriftDokumentnummer() {
-    if (referenzVerwaltungsvorschrift == null
-        || !RICHTUNG_AKTIV.equalsIgnoreCase(referenzVerwaltungsvorschrift.getRichtung())) {
+    if (referenzVerwaltungsvorschrift == null || !referenzVerwaltungsvorschrift.isAktiv()) {
       return null;
     }
     return referenzVerwaltungsvorschrift.getDokumentnummer();
@@ -151,8 +144,7 @@ public class ImplicitReference {
    * @return the document number, or {@code null} if absent or not a passive citation
    */
   public String getPassivzitierteVerwaltungsvorschriftDokumentnummer() {
-    if (referenzVerwaltungsvorschrift == null
-        || !RICHTUNG_PASSIV.equalsIgnoreCase(referenzVerwaltungsvorschrift.getRichtung())) {
+    if (referenzVerwaltungsvorschrift == null || !referenzVerwaltungsvorschrift.isPassiv()) {
       return null;
     }
     return referenzVerwaltungsvorschrift.getDokumentnummer();

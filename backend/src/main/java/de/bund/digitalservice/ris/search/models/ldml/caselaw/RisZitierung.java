@@ -4,4 +4,12 @@ package de.bund.digitalservice.ris.search.models.ldml.caselaw;
 public interface RisZitierung {
 
   String getRichtung();
+
+  default boolean isAktiv() {
+    return "aktiv".equalsIgnoreCase(getRichtung());
+  }
+
+  default boolean isPassiv() {
+    return "passiv".equalsIgnoreCase(getRichtung());
+  }
 }

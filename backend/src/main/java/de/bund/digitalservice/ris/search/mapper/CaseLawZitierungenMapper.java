@@ -18,12 +18,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 /** Maps the aktiv- and passivzitierungen of a case law LDML document to {@link Zitierungen}. */
 final class CaseLawZitierungenMapper {
-
-  private static final String AKTIV = "aktiv";
-  private static final String PASSIV = "passiv";
 
   private CaseLawZitierungenMapper() {}
 
@@ -39,49 +37,49 @@ final class CaseLawZitierungenMapper {
             extract(
                 refs,
                 ImplicitReference::getReferenzSelbststaendigeLiteratur,
-                AKTIV,
+                RisZitierung::isAktiv,
                 CaseLawZitierungenMapper::mapSelbststaendigeLiteratur))
         .passivzitierungLiteraturSelbstaendig(
             extract(
                 refs,
                 ImplicitReference::getReferenzSelbststaendigeLiteratur,
-                PASSIV,
+                RisZitierung::isPassiv,
                 CaseLawZitierungenMapper::mapSelbststaendigeLiteratur))
         .aktivzitierungLiteraturUnselbstaendig(
             extract(
                 refs,
                 ImplicitReference::getReferenzUnselbststaendigeLiteratur,
-                AKTIV,
+                RisZitierung::isAktiv,
                 CaseLawZitierungenMapper::mapUnselbststaendigeLiteratur))
         .passivzitierungLiteraturUnselbstaendig(
             extract(
                 refs,
                 ImplicitReference::getReferenzUnselbststaendigeLiteratur,
-                PASSIV,
+                RisZitierung::isPassiv,
                 CaseLawZitierungenMapper::mapUnselbststaendigeLiteratur))
         .aktivzitierungRechtsprechung(
             extract(
                 refs,
                 ImplicitReference::getReferenzRechtsprechung,
-                AKTIV,
+                RisZitierung::isAktiv,
                 CaseLawZitierungenMapper::mapRechtsprechung))
         .passivzitierungRechtsprechung(
             extract(
                 refs,
                 ImplicitReference::getReferenzRechtsprechung,
-                PASSIV,
+                RisZitierung::isPassiv,
                 CaseLawZitierungenMapper::mapRechtsprechung))
         .aktivzitierungVerwaltungsvorschriften(
             extract(
                 refs,
                 ImplicitReference::getReferenzVerwaltungsvorschrift,
-                AKTIV,
+                RisZitierung::isAktiv,
                 CaseLawZitierungenMapper::mapVerwaltungsvorschrift))
         .passivzitierungVerwaltungsvorschriften(
             extract(
                 refs,
                 ImplicitReference::getReferenzVerwaltungsvorschrift,
-                PASSIV,
+                RisZitierung::isPassiv,
                 CaseLawZitierungenMapper::mapVerwaltungsvorschrift))
         .build();
   }
@@ -89,13 +87,13 @@ final class CaseLawZitierungenMapper {
   private static <R extends RisZitierung, T> List<T> extract(
       List<ImplicitReference> refs,
       Function<ImplicitReference, R> extractor,
-      String richtung,
+      Predicate<R> richtungFilter,
       Function<R, T> mapper) {
     return refs.stream()
         .filter(Objects::nonNull)
         .map(extractor)
         .filter(Objects::nonNull)
-        .filter(ref -> richtung.equalsIgnoreCase(ref.getRichtung()))
+        .filter(richtungFilter)
         .map(mapper)
         .toList();
   }
