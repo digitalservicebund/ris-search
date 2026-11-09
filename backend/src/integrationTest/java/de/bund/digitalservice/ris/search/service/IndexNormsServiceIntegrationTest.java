@@ -82,6 +82,22 @@ class IndexNormsServiceIntegrationTest extends ContainersIntegrationBase {
   }
 
   @Test
+  @DisplayName("Full citation from work-level metadaten.xml is denormalized onto every expression")
+  void fullCitationIsDenormalizedOntoEveryExpression() {
+    indexNormsService.reindexAll(SharedTestConstants.TIMESTAMP_2024_01_01_AS_STRING);
+    List<Norm> expressions =
+        normsRepository
+            .getByWorkEliKeyword("eli/bund/bgbl-1/1991/s102", Pageable.unpaged(Sort.by("id")))
+            .getContent();
+    assertThat(expressions).hasSize(3);
+    assertThat(expressions)
+        .allSatisfy(
+            expression ->
+                assertThat(expression.getFullCitation())
+                    .isEqualTo("Verordnung zu der Vereinbarung"));
+  }
+
+  @Test
   @DisplayName("Official Toc indexes properly")
   void officialTocIndexesProperly() {
     indexNormsService.reindexAll(SharedTestConstants.TIMESTAMP_2024_01_01_AS_STRING);
