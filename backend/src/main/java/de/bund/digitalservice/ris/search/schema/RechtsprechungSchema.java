@@ -2,6 +2,10 @@ package de.bund.digitalservice.ris.search.schema;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import de.bund.digitalservice.ris.search.models.DatumsTyp;
+import de.bund.digitalservice.ris.search.schema.zitierungen.ZitierungLiteraturSelbststaendigSchema;
+import de.bund.digitalservice.ris.search.schema.zitierungen.ZitierungLiteraturUnselbststaendigSchema;
+import de.bund.digitalservice.ris.search.schema.zitierungen.ZitierungRechtsprechungSchema;
+import de.bund.digitalservice.ris.search.schema.zitierungen.ZitierungVerwaltungsvorschriftSchema;
 import de.bund.digitalservice.ris.search.xsd.RISSchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
@@ -60,21 +64,21 @@ public record RechtsprechungSchema(
     @RISSchema(name = "ris:vorgehendeEntscheidung") List<String> vorgehendeEntscheidungen,
     @RISSchema(name = "ris:nachgehendeEntscheidung") List<String> nachgehendeEntscheidungen,
     @Schema(description = "Aktivzitierung Literatur Unselbstständig")
-        List<String> aktivzitierungLiteraturUnselbstaendig,
+        List<ZitierungLiteraturUnselbststaendigSchema> aktivzitierungLiteraturUnselbstaendig,
     @Schema(description = "Passivzitierung Literatur Unselbstständig")
-        List<String> passivzitierungLiteraturUnselbstaendig,
+        List<ZitierungLiteraturUnselbststaendigSchema> passivzitierungLiteraturUnselbstaendig,
     @Schema(description = "Aktivzitierung Literatur Selbstständig")
-        List<String> aktivzitierungLiteraturSelbstaendig,
+        List<ZitierungLiteraturSelbststaendigSchema> aktivzitierungLiteraturSelbstaendig,
     @Schema(description = "Passivzitierung Literatur Selbstständig")
-        List<String> passivzitierungLiteraturSelbstaendig,
+        List<ZitierungLiteraturSelbststaendigSchema> passivzitierungLiteraturSelbstaendig,
     @Schema(description = "Aktivzitierung Rechtsprechung")
-        List<String> aktivzitierungRechtsprechung,
+        List<ZitierungRechtsprechungSchema> aktivzitierungRechtsprechung,
     @Schema(description = "Passivzitierung Rechtsprechung")
-        List<String> passivzitierungRechtsprechung,
+        List<ZitierungRechtsprechungSchema> passivzitierungRechtsprechung,
     @Schema(description = "Aktivzitierung Verwaltungsvorschriften")
-        List<String> aktivzitierungVerwaltungsvorschriften,
+        List<ZitierungVerwaltungsvorschriftSchema> aktivzitierungVerwaltungsvorschriften,
     @Schema(description = "Passivzitierung Verwaltungsvorschriften")
-        List<String> passivzitierungVerwaltungsvorschriften,
+        List<ZitierungVerwaltungsvorschriftSchema> passivzitierungVerwaltungsvorschriften,
     @Schema(example = "BGHSt 67, 273-284", description = "Amtliche Fundstellen")
         List<String> amtlicheFundstellen,
     @Schema(example = "DStR 2023, 1430-1435", description = "Nichtamtliche Fundstellen")

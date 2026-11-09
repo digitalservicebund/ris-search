@@ -1,7 +1,10 @@
 package de.bund.digitalservice.ris.search.mapper;
 
+import static de.bund.digitalservice.ris.search.mapper.ZitierungenSchemaMapper.mapList;
+
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
+import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Zitierungen;
 import de.bund.digitalservice.ris.search.schema.RechtsprechungSchema;
 
 /** Maps Rechtsprechung (case law document) objects to API schema models. */
@@ -20,6 +23,8 @@ public class RechtsprechungSchemaMapper {
       CaseLawDocumentationUnit doc, String remoteJsonContext) {
     String entityURI = ApiConfig.Paths.RECHTSPRECHUNG + "/" + doc.documentNumber();
     var encodings = EncodingSchemaFactory.documentEncodingSchemas(entityURI);
+    Zitierungen zitierungen =
+        doc.zitierungen() != null ? doc.zitierungen() : Zitierungen.builder().build();
 
     return RechtsprechungSchema.builder()
         .id(entityURI)
@@ -66,14 +71,36 @@ public class RechtsprechungSchemaMapper {
         .mitwirkendeRichter(doc.mitwirkendeRichter())
         .vorgehendeEntscheidungen(doc.previousDecisions())
         .nachgehendeEntscheidungen(doc.ensuingDecisions())
-        .aktivzitierungLiteraturUnselbstaendig(doc.aktivzitierungLiteraturUnselbstaendig())
-        .passivzitierungLiteraturUnselbstaendig(doc.passivzitierungLiteraturUnselbstaendig())
-        .aktivzitierungLiteraturSelbstaendig(doc.aktivzitierungLiteraturSelbstaendig())
-        .passivzitierungLiteraturSelbstaendig(doc.passivzitierungLiteraturSelbstaendig())
-        .aktivzitierungRechtsprechung(doc.aktivzitierungRechtsprechung())
-        .passivzitierungRechtsprechung(doc.passivzitierungRechtsprechung())
-        .aktivzitierungVerwaltungsvorschriften(doc.aktivzitierungVerwaltungsvorschriften())
-        .passivzitierungVerwaltungsvorschriften(doc.passivzitierungVerwaltungsvorschriften())
+        .aktivzitierungLiteraturUnselbstaendig(
+            mapList(
+                zitierungen.aktivzitierungLiteraturUnselbstaendig(),
+                ZitierungenSchemaMapper::fromDomain))
+        .passivzitierungLiteraturUnselbstaendig(
+            mapList(
+                zitierungen.passivzitierungLiteraturUnselbstaendig(),
+                ZitierungenSchemaMapper::fromDomain))
+        .aktivzitierungLiteraturSelbstaendig(
+            mapList(
+                zitierungen.aktivzitierungLiteraturSelbstaendig(),
+                ZitierungenSchemaMapper::fromDomain))
+        .passivzitierungLiteraturSelbstaendig(
+            mapList(
+                zitierungen.passivzitierungLiteraturSelbstaendig(),
+                ZitierungenSchemaMapper::fromDomain))
+        .aktivzitierungRechtsprechung(
+            mapList(
+                zitierungen.aktivzitierungRechtsprechung(), ZitierungenSchemaMapper::fromDomain))
+        .passivzitierungRechtsprechung(
+            mapList(
+                zitierungen.passivzitierungRechtsprechung(), ZitierungenSchemaMapper::fromDomain))
+        .aktivzitierungVerwaltungsvorschriften(
+            mapList(
+                zitierungen.aktivzitierungVerwaltungsvorschriften(),
+                ZitierungenSchemaMapper::fromDomain))
+        .passivzitierungVerwaltungsvorschriften(
+            mapList(
+                zitierungen.passivzitierungVerwaltungsvorschriften(),
+                ZitierungenSchemaMapper::fromDomain))
         .amtlicheFundstellen(doc.amtlicheFundstellen())
         .nichtamtlicheFundstellen(doc.nichtamtlicheFundstellen())
         .gesetzeskraft(doc.gesetzeskraft())

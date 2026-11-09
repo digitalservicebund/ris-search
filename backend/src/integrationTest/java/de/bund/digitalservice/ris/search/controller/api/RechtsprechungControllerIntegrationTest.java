@@ -173,14 +173,20 @@ class RechtsprechungControllerIntegrationTest extends ContainersIntegrationBase 
                 .value(
                     "ensuing decision court type, ensuing decision document type vom 1. Oktober"
                         + " 2022 - ensuing decision file number (anhängig)"),
-            jsonPath("$.aktivzitierungLiteraturUnselbstaendig[0]").value("STLU991393280"),
-            jsonPath("$.passivzitierungLiteraturUnselbstaendig[0]").value("SBLU000539216"),
-            jsonPath("$.aktivzitierungLiteraturSelbstaendig[0]").value("KSLS071671727"),
-            jsonPath("$.passivzitierungLiteraturSelbstaendig[0]").value("KSLS071671728"),
-            jsonPath("$.aktivzitierungRechtsprechung[0]").value("BVRE100338409"),
-            jsonPath("$.passivzitierungRechtsprechung[0]").value("JURE100074208"),
-            jsonPath("$.aktivzitierungVerwaltungsvorschriften[0]").value("KSNR008561615"),
-            jsonPath("$.passivzitierungVerwaltungsvorschriften[0]").value("KSNR006800006"),
+            jsonPath("$.aktivzitierungLiteraturUnselbstaendig[0].dokumentnummer")
+                .value("STLU991393280"),
+            jsonPath("$.passivzitierungLiteraturUnselbstaendig[0].dokumentnummer")
+                .value("SBLU000539216"),
+            jsonPath("$.aktivzitierungLiteraturSelbstaendig[0].dokumentnummer")
+                .value("KSLS071671727"),
+            jsonPath("$.passivzitierungLiteraturSelbstaendig[0].dokumentnummer")
+                .value("KSLS071671728"),
+            jsonPath("$.aktivzitierungRechtsprechung[0].dokumentnummer").value("BVRE100338409"),
+            jsonPath("$.passivzitierungRechtsprechung[0].dokumentnummer").value("JURE100074208"),
+            jsonPath("$.aktivzitierungVerwaltungsvorschriften[0].dokumentnummer")
+                .value("KSNR008561615"),
+            jsonPath("$.passivzitierungVerwaltungsvorschriften[0].dokumentnummer")
+                .value("KSNR006800006"),
             jsonPath("$.amtlicheFundstellen[0]").value("BGHSt 67, 273-284"),
             jsonPath("$.nichtamtlicheFundstellen[0]").value("DStR 2023, 1430-1435"),
             jsonPath("$.gesetzeskraft[0]").value("vereinbar mit höherrangigem Recht, Bremen"),
@@ -214,6 +220,47 @@ class RechtsprechungControllerIntegrationTest extends ContainersIntegrationBase 
                     "/v1/rechtsprechung/" + this.documentNumber + ".html",
                     "/v1/rechtsprechung/" + this.documentNumber + ".xml",
                     "/v1/rechtsprechung/" + this.documentNumber + ".zip")));
+  }
+
+  @Test
+  @DisplayName("Should return Zitierungen as objects with all their fields")
+  void shouldReturnZitierungenAsObjects() throws Exception {
+    indexCaselawService.reindexAll(SharedTestConstants.TIMESTAMP_2024_01_01_AS_STRING);
+
+    mockMvc
+        .perform(
+            get(ApiConfig.Paths.RECHTSPRECHUNG + "/" + this.documentNumber)
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(isJsonLdCompliant())
+        .andExpectAll(
+            status().isOk(),
+            jsonPath("$.aktivzitierungRechtsprechung[0].referenzUri")
+                .value("ris:/rechtsprechung/BVRE100338409"),
+            jsonPath("$.aktivzitierungRechtsprechung[0].artDerZitierung").value("Vergleiche"),
+            jsonPath("$.aktivzitierungRechtsprechung[0].gericht.gerichtstyp").value("VerfGH"),
+            jsonPath("$.aktivzitierungRechtsprechung[0].gericht.gerichtsort").value("München"),
+            jsonPath("$.aktivzitierungRechtsprechung[0].gericht.gerichtsbarkeit")
+                .value("Verfassungsgerichtsbarkeit"),
+            jsonPath("$.aktivzitierungRechtsprechung[0].entscheidungsdatum").value("1983-12-02"),
+            jsonPath("$.aktivzitierungRechtsprechung[0].aktenzeichen").value("Vf. 94-VI-81"),
+            jsonPath("$.passivzitierungLiteraturUnselbstaendig[0].autor").value("Knopp, Lothar"),
+            jsonPath("$.passivzitierungLiteraturUnselbstaendig[0].dokumenttyp").value("Aufsatz"),
+            jsonPath("$.passivzitierungLiteraturUnselbstaendig[0].fundstelle.periodikum")
+                .value("NVwZ"),
+            jsonPath("$.passivzitierungLiteraturUnselbstaendig[0].fundstelle.zitatstelle")
+                .value("2016, 1139-1141"),
+            jsonPath("$.aktivzitierungLiteraturSelbstaendig[0].autor")
+                .value("Arnauld, Andreas von"),
+            jsonPath("$.aktivzitierungLiteraturSelbstaendig[0].titel")
+                .value("Die Freiheitsrechte und ihre Schranken"),
+            jsonPath("$.aktivzitierungLiteraturSelbstaendig[0].veroeffentlichungsjahr")
+                .value("1999"),
+            jsonPath("$.passivzitierungVerwaltungsvorschriften[0].artDerZitierung")
+                .value("Anwendung"),
+            jsonPath("$.passivzitierungVerwaltungsvorschriften[0].jurisAbkuerzung")
+                .value("VR BA 1986-01-16 16/86"),
+            jsonPath("$.passivzitierungVerwaltungsvorschriften[0].fundstelle.periodikum")
+                .value("Dienstbl BA RdErl"));
   }
 
   @Test
