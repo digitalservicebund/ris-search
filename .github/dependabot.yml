@@ -28,6 +28,12 @@ updates:
       day: "sunday"
     cooldown:
       default-days: 3
+    ignore:
+      # vue-tsc 3.3.14 breaks templates with "//" in an attribute value, which
+      # fails typecheck: https://github.com/vuejs/language-tools/issues/6322
+      # Remove this once a fixed version is out.
+      - dependency-name: "vue-tsc"
+        versions: ["3.3.14"]
     groups:
       all-frontend-non-major-dependencies:
         update-types:
@@ -48,6 +54,9 @@ updates:
       # VitePress is pinned to a 2.0 prerelease. Every alpha so far has shipped
       # breaking changes, so bump it by hand. Remove this once 2.0 is stable.
       - dependency-name: "vitepress"
+      # The api-docs tooling doesn't support TypeScript 7 yet, so stay on 6.x.
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
     groups:
       all-api-docs-non-major-dependencies:
         update-types:
