@@ -7,7 +7,7 @@ import lombok.Setter;
 /** Represents a reference to another case law (Rechtsprechung) document. */
 @Getter
 @Setter
-public class ReferenzRechtsprechung implements RisReferenz {
+public class ReferenzRechtsprechung implements RisZitierung {
 
   @XmlElement(name = "richtung", namespace = CaseLawLdmlNamespaces.RIS_NS)
   private String richtung;

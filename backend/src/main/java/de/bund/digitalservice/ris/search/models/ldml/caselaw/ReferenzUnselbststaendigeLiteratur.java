@@ -7,7 +7,7 @@ import lombok.Setter;
 /** Represents a reference to a piece of unselbstständige (dependent) literature. */
 @Getter
 @Setter
-public class ReferenzUnselbststaendigeLiteratur implements RisReferenz {
+public class ReferenzUnselbststaendigeLiteratur implements RisZitierung {
 
   @XmlElement(name = "richtung", namespace = CaseLawLdmlNamespaces.RIS_NS)
   private String richtung;

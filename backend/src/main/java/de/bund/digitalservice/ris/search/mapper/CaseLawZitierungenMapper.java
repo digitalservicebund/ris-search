@@ -5,7 +5,7 @@ import de.bund.digitalservice.ris.search.models.ldml.caselaw.ImplicitReference;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.Meta;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.OtherReferences;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.RisGericht;
-import de.bund.digitalservice.ris.search.models.ldml.caselaw.RisReferenz;
+import de.bund.digitalservice.ris.search.models.ldml.caselaw.RisZitierung;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Fundstelle;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Gericht;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ReferenzRechtsprechung;
@@ -86,7 +86,7 @@ final class CaseLawZitierungenMapper {
         .build();
   }
 
-  private static <R extends RisReferenz, T> List<T> extract(
+  private static <R extends RisZitierung, T> List<T> extract(
       List<ImplicitReference> refs,
       Function<ImplicitReference, R> extractor,
       String richtung,

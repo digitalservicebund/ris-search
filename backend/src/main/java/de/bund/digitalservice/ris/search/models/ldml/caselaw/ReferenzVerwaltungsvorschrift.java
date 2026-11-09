@@ -7,7 +7,7 @@ import lombok.Setter;
 /** Represents a reference to an administrative directive (Verwaltungsvorschrift). */
 @Getter
 @Setter
-public class ReferenzVerwaltungsvorschrift implements RisReferenz {
+public class ReferenzVerwaltungsvorschrift implements RisZitierung {
 
   @XmlElement(name = "richtung", namespace = CaseLawLdmlNamespaces.RIS_NS)
   private String richtung;
