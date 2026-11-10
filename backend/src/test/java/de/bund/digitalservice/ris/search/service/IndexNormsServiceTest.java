@@ -3,12 +3,14 @@ package de.bund.digitalservice.ris.search.service;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import de.bund.digitalservice.ris.builder.NormTestDataBuilder;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
+import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.ArticlesRepository;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
@@ -52,6 +54,50 @@ class IndexNormsServiceTest {
     verify(repo, times(1)).deleteByIndexedAtBefore(startingTimestamp);
   }
 
+  private static final String XML_ELI =
+      "eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu/1992-01-02/regelungstext-1.xml";
+  private static final String HTML_ELI =
+      "eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu/1992-01-02/regelungstext-1.html";
+
+  @Test
+  void reindexAllIgnoresNonXmlRegelungstext() {
+    when(this.bucket.getAllKeysByPrefix("eli/")).thenReturn(List.of(XML_ELI, HTML_ELI));
+    when(this.bucket.getFileAsString(XML_ELI))
+        .thenReturn(Optional.of(NormTestDataBuilder.builder().eli(XML_ELI).buildNormXml()));
+
+    this.service.reindexAll("2024-01-01T12:00:00Z");
+
+    verify(bucket, never()).getFileAsString(HTML_ELI);
+    verify(repo, times(1))
+        .saveAll(
+            argThat(arg ->
+                arg.iterator()
+                    .next()
+                    .getId()
+                    .equals("eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu")));
+  }
+
+  @Test
+  void indexChangelogIgnoresNonXmlRegelungstext() {
+    when(this.bucket.getAllKeysByPrefix("eli/bund/bgbl-1/1992/s101/"))
+        .thenReturn(List.of(XML_ELI, HTML_ELI));
+    when(this.bucket.getFileAsString(XML_ELI))
+        .thenReturn(Optional.of(NormTestDataBuilder.builder().eli(XML_ELI).buildNormXml()));
+
+    Changelog changelog = new Changelog();
+    changelog.getChanged().add(HTML_ELI);
+    this.service.indexChangelog(changelog);
+
+    verify(bucket, never()).getFileAsString(HTML_ELI);
+    verify(repo, times(1))
+        .saveAll(
+            argThat(arg ->
+                arg.iterator()
+                    .next()
+                    .getId()
+                    .equals("eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu")));
+  }
+
   @Test
   void itReturnsRightNumberOfFiles() {
     when(this.bucket.getAllKeysByPrefix("eli/"))
@@ -59,6 +105,7 @@ class IndexNormsServiceTest {
             List.of(
                 "eli/bund/bgbl-1/2013/s323/2018-07-02/2/deu/2025-03-08/regelungstext-1.xml",
                 "eli/bund/bgbl-1/2013/s4098/2022-03-15/2/deu/2025-03-08/regelungstext-1.xml",
+                "eli/bund/bgbl-1/2013/s4098/2022-03-15/2/deu/2025-03-08/regelungstext-1.html",
                 "eli/bund/bgbl-1/2013/s1925/2015-10-12/2/deu/2025-03-08/offenestruktur-1.xml"));
     assertThat(service.getNumberOfIndexableDocumentsInBucket()).isEqualTo(2);
   }
