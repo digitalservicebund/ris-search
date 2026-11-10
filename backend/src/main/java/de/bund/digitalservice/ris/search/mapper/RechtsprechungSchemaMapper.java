@@ -71,13 +71,13 @@ public class RechtsprechungSchemaMapper {
         .mitwirkendeRichter(doc.mitwirkendeRichter())
         .vorgehendeEntscheidungen(doc.previousDecisions())
         .nachgehendeEntscheidungen(doc.ensuingDecisions())
-        .zitierungenLiteraturSelbstaendig(
+        .zitierungenLiteraturSelbststaendig(
             mapList(
-                zitierungen.zitierungenLiteraturSelbstaendig(),
+                zitierungen.zitierungenLiteraturSelbststaendig(),
                 ZitierungenSchemaMapper::fromDomain))
-        .zitierungenLiteraturUnselbstaendig(
+        .zitierungenLiteraturUnselbststaendig(
             mapList(
-                zitierungen.zitierungenLiteraturUnselbstaendig(),
+                zitierungen.zitierungenLiteraturUnselbststaendig(),
                 ZitierungenSchemaMapper::fromDomain))
         .zitierungenRechtsprechung(
             mapList(zitierungen.zitierungenRechtsprechung(), ZitierungenSchemaMapper::fromDomain))

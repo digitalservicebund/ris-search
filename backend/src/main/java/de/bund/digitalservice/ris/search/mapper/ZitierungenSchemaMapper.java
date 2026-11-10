@@ -2,10 +2,10 @@ package de.bund.digitalservice.ris.search.mapper;
 
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Fundstelle;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Gericht;
-import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ReferenzRechtsprechung;
-import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ReferenzSelbststaendigeLiteratur;
-import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ReferenzUnselbststaendigeLiteratur;
-import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ReferenzVerwaltungsvorschrift;
+import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ZitierungLiteraturSelbststaendig;
+import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ZitierungLiteraturUnselbststaendig;
+import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ZitierungRechtsprechung;
+import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ZitierungVerwaltungsvorschrift;
 import de.bund.digitalservice.ris.search.schema.FundstelleSchema;
 import de.bund.digitalservice.ris.search.schema.GerichtSchema;
 import de.bund.digitalservice.ris.search.schema.ZitierungLiteraturSelbststaendigSchema;
@@ -18,7 +18,7 @@ final class ZitierungenSchemaMapper {
 
   private ZitierungenSchemaMapper() {}
 
-  static ZitierungRechtsprechungSchema fromDomain(ReferenzRechtsprechung ref) {
+  static ZitierungRechtsprechungSchema fromDomain(ZitierungRechtsprechung ref) {
     return ZitierungRechtsprechungSchema.builder()
         .richtung(ref.richtung())
         .referenzUri(ref.referenzUri())
@@ -32,7 +32,7 @@ final class ZitierungenSchemaMapper {
         .build();
   }
 
-  static ZitierungLiteraturSelbststaendigSchema fromDomain(ReferenzSelbststaendigeLiteratur ref) {
+  static ZitierungLiteraturSelbststaendigSchema fromDomain(ZitierungLiteraturSelbststaendig ref) {
     return ZitierungLiteraturSelbststaendigSchema.builder()
         .richtung(ref.richtung())
         .referenzUri(ref.referenzUri())
@@ -44,7 +44,7 @@ final class ZitierungenSchemaMapper {
   }
 
   static ZitierungLiteraturUnselbststaendigSchema fromDomain(
-      ReferenzUnselbststaendigeLiteratur ref) {
+      ZitierungLiteraturUnselbststaendig ref) {
     return ZitierungLiteraturUnselbststaendigSchema.builder()
         .richtung(ref.richtung())
         .referenzUri(ref.referenzUri())
@@ -55,7 +55,7 @@ final class ZitierungenSchemaMapper {
         .build();
   }
 
-  static ZitierungVerwaltungsvorschriftSchema fromDomain(ReferenzVerwaltungsvorschrift ref) {
+  static ZitierungVerwaltungsvorschriftSchema fromDomain(ZitierungVerwaltungsvorschrift ref) {
     return ZitierungVerwaltungsvorschriftSchema.builder()
         .richtung(ref.richtung())
         .referenzUri(ref.referenzUri())

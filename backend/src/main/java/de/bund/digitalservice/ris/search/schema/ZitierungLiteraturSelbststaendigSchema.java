@@ -8,7 +8,7 @@ import lombok.Builder;
 /** API schema for a citation of selbstständige (independent) literature. */
 @Builder
 public record ZitierungLiteraturSelbststaendigSchema(
-    @RISSchema(name = "ris:referenzRichtung") Richtung richtung,
+    @RISSchema(name = "ris:richtung") Richtung richtung,
     @RISSchema(name = "ris:referenzURI") String referenzUri,
     @RISSchema(name = "ris:dokumentnummer") String dokumentnummer,
     @RISSchema(name = "ris:autor") String autor,

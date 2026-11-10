@@ -9,10 +9,10 @@ import lombok.Builder;
 /** API schema for a citation of a case law document. */
 @Builder
 public record ZitierungRechtsprechungSchema(
-    @RISSchema(name = "ris:referenzRichtung") Richtung richtung,
+    @RISSchema(name = "ris:richtung") Richtung richtung,
     @RISSchema(name = "ris:referenzURI") String referenzUri,
     @RISSchema(name = "ris:dokumentnummer") String dokumentnummer,
-    @RISSchema(name = "ris:referenzArtDerZitierung") String artDerZitierung,
+    @RISSchema(name = "ris:artDerZitierung") String artDerZitierung,
     @RISSchema(name = "ris:gericht") GerichtSchema gericht,
     @RISSchema(name = "ris:entscheidungsdatum") LocalDate entscheidungsdatum,
     @RISSchema(name = "ris:dokumenttyp") String dokumenttyp,

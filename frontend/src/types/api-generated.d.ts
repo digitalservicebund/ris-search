@@ -1050,9 +1050,9 @@ export interface components {
             /** @description Nachgewiesen werden die gerichtlichen Entscheidungen, die ihrerseits in der Rubrik „vorgehende Entscheidung“ die vorliegende Entscheidung nennen. */
             nachgehendeEntscheidungen?: string[];
             /** @description Referenz auf ein selbstständiges Literaturdokument */
-            zitierungenLiteraturSelbstaendig?: components["schemas"]["ZitierungLiteraturSelbststaendigSchema"][];
+            zitierungenLiteraturSelbststaendig?: components["schemas"]["ZitierungLiteraturSelbststaendigSchema"][];
             /** @description Referenz auf ein unselbstständiges Literaturdokument */
-            zitierungenLiteraturUnselbstaendig?: components["schemas"]["ZitierungLiteraturUnselbststaendigSchema"][];
+            zitierungenLiteraturUnselbststaendig?: components["schemas"]["ZitierungLiteraturUnselbststaendigSchema"][];
             /** @description Referenz auf ein Rechtsprechungsdokument */
             zitierungenRechtsprechung?: components["schemas"]["ZitierungRechtsprechungSchema"][];
             /** @description Referenz auf eine Verwaltungsvorschrift */
@@ -1217,7 +1217,10 @@ export interface components {
         ZitierungLiteraturSelbststaendigSchema: {
             /** @example ZitierungLiteraturSelbststaendig */
             "@type"?: string;
-            /** @enum {string} */
+            /**
+             * @description Ist die Referenz eine Aktivzitierung oder eine Passivzitierung?
+             * @enum {string}
+             */
             richtung?: "aktiv" | "passiv";
             /** @description Die URI die auf die referenzierte Dokeinheit verweist. */
             referenzUri?: string;
@@ -1232,7 +1235,10 @@ export interface components {
         ZitierungLiteraturUnselbststaendigSchema: {
             /** @example ZitierungLiteraturUnselbststaendig */
             "@type"?: string;
-            /** @enum {string} */
+            /**
+             * @description Ist die Referenz eine Aktivzitierung oder eine Passivzitierung?
+             * @enum {string}
+             */
             richtung?: "aktiv" | "passiv";
             /** @description Die URI die auf die referenzierte Dokeinheit verweist. */
             referenzUri?: string;
@@ -1287,12 +1293,16 @@ export interface components {
         ZitierungRechtsprechungSchema: {
             /** @example ZitierungRechtsprechung */
             "@type"?: string;
-            /** @enum {string} */
+            /**
+             * @description Ist die Referenz eine Aktivzitierung oder eine Passivzitierung?
+             * @enum {string}
+             */
             richtung?: "aktiv" | "passiv";
             /** @description Die URI die auf die referenzierte Dokeinheit verweist. */
             referenzUri?: string;
             /** @description Dokumentnummer */
             dokumentnummer?: string;
+            /** @description Art der Zitierung */
             artDerZitierung?: string;
             /** @description Gericht */
             gericht?: components["schemas"]["GerichtSchema"];
@@ -1350,12 +1360,16 @@ export interface components {
         ZitierungVerwaltungsvorschriftSchema: {
             /** @example ZitierungVerwaltungsvorschrift */
             "@type"?: string;
-            /** @enum {string} */
+            /**
+             * @description Ist die Referenz eine Aktivzitierung oder eine Passivzitierung?
+             * @enum {string}
+             */
             richtung?: "aktiv" | "passiv";
             /** @description Die URI die auf die referenzierte Dokeinheit verweist. */
             referenzUri?: string;
             /** @description Dokumentnummer */
             dokumentnummer?: string;
+            /** @description Art der Zitierung */
             artDerZitierung?: string;
             /** @description juris-Abkürzung */
             jurisAbkuerzung?: string;

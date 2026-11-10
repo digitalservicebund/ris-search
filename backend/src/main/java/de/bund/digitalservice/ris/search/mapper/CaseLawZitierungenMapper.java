@@ -5,14 +5,18 @@ import de.bund.digitalservice.ris.search.models.ldml.caselaw.Analysis;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.ImplicitReference;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.Meta;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.OtherReferences;
+import de.bund.digitalservice.ris.search.models.ldml.caselaw.ReferenzRechtsprechung;
+import de.bund.digitalservice.ris.search.models.ldml.caselaw.ReferenzSelbststaendigeLiteratur;
+import de.bund.digitalservice.ris.search.models.ldml.caselaw.ReferenzUnselbststaendigeLiteratur;
+import de.bund.digitalservice.ris.search.models.ldml.caselaw.ReferenzVerwaltungsvorschrift;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.RisGericht;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.RisZitierung;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Fundstelle;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Gericht;
-import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ReferenzRechtsprechung;
-import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ReferenzSelbststaendigeLiteratur;
-import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ReferenzUnselbststaendigeLiteratur;
-import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ReferenzVerwaltungsvorschrift;
+import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ZitierungLiteraturSelbststaendig;
+import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ZitierungLiteraturUnselbststaendig;
+import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ZitierungRechtsprechung;
+import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ZitierungVerwaltungsvorschrift;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Zitierungen;
 import de.bund.digitalservice.ris.search.utils.DateUtils;
 import java.util.List;
@@ -33,12 +37,12 @@ final class CaseLawZitierungenMapper {
             .orElse(List.of());
 
     return Zitierungen.builder()
-        .zitierungenLiteraturSelbstaendig(
+        .zitierungenLiteraturSelbststaendig(
             extract(
                 refs,
                 ImplicitReference::getReferenzSelbststaendigeLiteratur,
                 CaseLawZitierungenMapper::mapSelbststaendigeLiteratur))
-        .zitierungenLiteraturUnselbstaendig(
+        .zitierungenLiteraturUnselbststaendig(
             extract(
                 refs,
                 ImplicitReference::getReferenzUnselbststaendigeLiteratur,
@@ -64,13 +68,14 @@ final class CaseLawZitierungenMapper {
         .filter(Objects::nonNull)
         .map(extractor)
         .filter(Objects::nonNull)
+        .filter(ref -> ref.isAktiv() || ref.isPassiv())
         .map(mapper)
         .toList();
   }
 
-  private static ReferenzSelbststaendigeLiteratur mapSelbststaendigeLiteratur(
-      de.bund.digitalservice.ris.search.models.ldml.caselaw.ReferenzSelbststaendigeLiteratur ref) {
-    return ReferenzSelbststaendigeLiteratur.builder()
+  private static ZitierungLiteraturSelbststaendig mapSelbststaendigeLiteratur(
+      ReferenzSelbststaendigeLiteratur ref) {
+    return ZitierungLiteraturSelbststaendig.builder()
         .richtung(Richtung.fromLdml(ref.getRichtung()))
         .referenzUri(ref.getReferenzUri())
         .dokumentnummer(ref.getDokumentnummer())
@@ -80,10 +85,9 @@ final class CaseLawZitierungenMapper {
         .build();
   }
 
-  private static ReferenzUnselbststaendigeLiteratur mapUnselbststaendigeLiteratur(
-      de.bund.digitalservice.ris.search.models.ldml.caselaw.ReferenzUnselbststaendigeLiteratur
-          ref) {
-    return ReferenzUnselbststaendigeLiteratur.builder()
+  private static ZitierungLiteraturUnselbststaendig mapUnselbststaendigeLiteratur(
+      ReferenzUnselbststaendigeLiteratur ref) {
+    return ZitierungLiteraturUnselbststaendig.builder()
         .richtung(Richtung.fromLdml(ref.getRichtung()))
         .referenzUri(ref.getReferenzUri())
         .dokumentnummer(ref.getDokumentnummer())
@@ -93,9 +97,8 @@ final class CaseLawZitierungenMapper {
         .build();
   }
 
-  private static ReferenzRechtsprechung mapRechtsprechung(
-      de.bund.digitalservice.ris.search.models.ldml.caselaw.ReferenzRechtsprechung ref) {
-    return ReferenzRechtsprechung.builder()
+  private static ZitierungRechtsprechung mapRechtsprechung(ReferenzRechtsprechung ref) {
+    return ZitierungRechtsprechung.builder()
         .richtung(Richtung.fromLdml(ref.getRichtung()))
         .referenzUri(ref.getReferenzUri())
         .dokumentnummer(ref.getDokumentnummer())
@@ -108,9 +111,9 @@ final class CaseLawZitierungenMapper {
         .build();
   }
 
-  private static ReferenzVerwaltungsvorschrift mapVerwaltungsvorschrift(
-      de.bund.digitalservice.ris.search.models.ldml.caselaw.ReferenzVerwaltungsvorschrift ref) {
-    return ReferenzVerwaltungsvorschrift.builder()
+  private static ZitierungVerwaltungsvorschrift mapVerwaltungsvorschrift(
+      ReferenzVerwaltungsvorschrift ref) {
+    return ZitierungVerwaltungsvorschrift.builder()
         .richtung(Richtung.fromLdml(ref.getRichtung()))
         .referenzUri(ref.getReferenzUri())
         .dokumentnummer(ref.getDokumentnummer())

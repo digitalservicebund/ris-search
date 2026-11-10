@@ -8,9 +8,11 @@ import de.bund.digitalservice.ris.search.models.ldml.caselaw.ImplicitReference;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.Meta;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.OtherReferences;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.ReferenzNorm;
+import de.bund.digitalservice.ris.search.models.ldml.caselaw.ReferenzRechtsprechung;
+import de.bund.digitalservice.ris.search.models.ldml.caselaw.ReferenzUnselbststaendigeLiteratur;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Fundstelle;
-import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ReferenzRechtsprechung;
-import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ReferenzUnselbststaendigeLiteratur;
+import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ZitierungLiteraturUnselbststaendig;
+import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ZitierungRechtsprechung;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Zitierungen;
 import java.util.Arrays;
 import java.util.List;
@@ -25,8 +27,8 @@ class CaseLawZitierungenMapperTest {
     Zitierungen zitierungen = CaseLawZitierungenMapper.map(Meta.builder().build());
 
     assertThat(zitierungen.zitierungenRechtsprechung()).isEmpty();
-    assertThat(zitierungen.zitierungenLiteraturSelbstaendig()).isEmpty();
-    assertThat(zitierungen.zitierungenLiteraturUnselbstaendig()).isEmpty();
+    assertThat(zitierungen.zitierungenLiteraturSelbststaendig()).isEmpty();
+    assertThat(zitierungen.zitierungenLiteraturUnselbststaendig()).isEmpty();
     assertThat(zitierungen.zitierungenVerwaltungsvorschriften()).isEmpty();
   }
 
@@ -49,8 +51,7 @@ class CaseLawZitierungenMapperTest {
   @Test
   @DisplayName("Maps a Rechtsprechung citation without court, date and Fundstelle")
   void mapsRechtsprechungWithMissingOptionalFields() {
-    var referenz =
-        new de.bund.digitalservice.ris.search.models.ldml.caselaw.ReferenzRechtsprechung();
+    var referenz = new ReferenzRechtsprechung();
     referenz.setRichtung("passiv");
     referenz.setDokumentnummer("JURE100074208");
     ImplicitReference implicitReference = new ImplicitReference();
@@ -65,7 +66,7 @@ class CaseLawZitierungenMapperTest {
 
     assertThat(zitierungen.zitierungenRechtsprechung())
         .containsExactly(
-            ReferenzRechtsprechung.builder()
+            ZitierungRechtsprechung.builder()
                 .richtung(Richtung.PASSIV)
                 .dokumentnummer("JURE100074208")
                 .build());
@@ -74,12 +75,12 @@ class CaseLawZitierungenMapperTest {
   @Test
   @DisplayName("Keeps aktiv and passiv citations in one list with their Richtung and skips nulls")
   void mapsAllRichtungenIntoOneList() {
-    var aktiv = new de.bund.digitalservice.ris.search.models.ldml.caselaw.ReferenzRechtsprechung();
+    var aktiv = new ReferenzRechtsprechung();
     aktiv.setRichtung("aktiv");
     aktiv.setDokumentnummer("BVRE100338409");
     ImplicitReference aktivReference = new ImplicitReference();
     aktivReference.setReferenzRechtsprechung(aktiv);
-    var passiv = new de.bund.digitalservice.ris.search.models.ldml.caselaw.ReferenzRechtsprechung();
+    var passiv = new ReferenzRechtsprechung();
     passiv.setRichtung("passiv");
     passiv.setDokumentnummer("JURE100074208");
     ImplicitReference passivReference = new ImplicitReference();
@@ -94,12 +95,46 @@ class CaseLawZitierungenMapperTest {
 
     assertThat(zitierungen.zitierungenRechtsprechung())
         .containsExactly(
-            ReferenzRechtsprechung.builder()
+            ZitierungRechtsprechung.builder()
                 .richtung(Richtung.AKTIV)
                 .dokumentnummer("BVRE100338409")
                 .build(),
-            ReferenzRechtsprechung.builder()
+            ZitierungRechtsprechung.builder()
                 .richtung(Richtung.PASSIV)
+                .dokumentnummer("JURE100074208")
+                .build());
+  }
+
+  @Test
+  @DisplayName("Drops citations with a missing or unknown Richtung")
+  void dropsCitationsWithInvalidRichtung() {
+    var unknown = new ReferenzRechtsprechung();
+    unknown.setRichtung("unbekannt");
+    unknown.setDokumentnummer("BVRE100338409");
+    ImplicitReference unknownReference = new ImplicitReference();
+    unknownReference.setReferenzRechtsprechung(unknown);
+    var missing = new ReferenzRechtsprechung();
+    missing.setDokumentnummer("KORE300002025");
+    ImplicitReference missingReference = new ImplicitReference();
+    missingReference.setReferenzRechtsprechung(missing);
+    var valid = new ReferenzRechtsprechung();
+    valid.setRichtung("aktiv");
+    valid.setDokumentnummer("JURE100074208");
+    ImplicitReference validReference = new ImplicitReference();
+    validReference.setReferenzRechtsprechung(valid);
+    OtherReferences otherReferences = new OtherReferences();
+    otherReferences.setImplicitReferences(
+        List.of(unknownReference, missingReference, validReference));
+    Analysis analysis = new Analysis();
+    analysis.setOtherReferences(otherReferences);
+
+    Zitierungen zitierungen =
+        CaseLawZitierungenMapper.map(Meta.builder().analysis(analysis).build());
+
+    assertThat(zitierungen.zitierungenRechtsprechung())
+        .containsExactly(
+            ZitierungRechtsprechung.builder()
+                .richtung(Richtung.AKTIV)
                 .dokumentnummer("JURE100074208")
                 .build());
   }
@@ -109,9 +144,7 @@ class CaseLawZitierungenMapperTest {
   void mapsFundstelleWithoutPeriodikum() {
     var fundstelle = new de.bund.digitalservice.ris.search.models.ldml.caselaw.Fundstelle();
     fundstelle.setZitatstelle("1999, 641");
-    var referenz =
-        new de.bund.digitalservice.ris.search.models.ldml.caselaw
-            .ReferenzUnselbststaendigeLiteratur();
+    var referenz = new ReferenzUnselbststaendigeLiteratur();
     referenz.setRichtung("passiv");
     referenz.setDokumentnummer("STLU991393280");
     referenz.setFundstelle(fundstelle);
@@ -125,9 +158,9 @@ class CaseLawZitierungenMapperTest {
     Zitierungen zitierungen =
         CaseLawZitierungenMapper.map(Meta.builder().analysis(analysis).build());
 
-    assertThat(zitierungen.zitierungenLiteraturUnselbstaendig())
+    assertThat(zitierungen.zitierungenLiteraturUnselbststaendig())
         .containsExactly(
-            ReferenzUnselbststaendigeLiteratur.builder()
+            ZitierungLiteraturUnselbststaendig.builder()
                 .richtung(Richtung.PASSIV)
                 .dokumentnummer("STLU991393280")
                 .fundstelle(Fundstelle.builder().zitatstelle("1999, 641").build())

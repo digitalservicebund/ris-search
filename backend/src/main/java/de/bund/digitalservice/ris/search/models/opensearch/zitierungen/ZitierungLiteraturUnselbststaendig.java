@@ -4,12 +4,12 @@ import de.bund.digitalservice.ris.search.models.Richtung;
 import lombok.Builder;
 import org.springframework.data.elasticsearch.annotations.Field;
 
-/** A reference to an administrative directive (ris:referenzVerwaltungsvorschrift). */
+/** A reference to a dependent literature document (ris:referenzUnselbststaendigeLiteratur). */
 @Builder
-public record ReferenzVerwaltungsvorschrift(
+public record ZitierungLiteraturUnselbststaendig(
     @Field(name = "richtung") Richtung richtung,
     @Field(name = "referenz_uri") String referenzUri,
     @Field(name = "dokumentnummer") String dokumentnummer,
-    @Field(name = "art_der_zitierung") String artDerZitierung,
-    @Field(name = "juris_abkuerzung") String jurisAbkuerzung,
+    @Field(name = "autor") String autor,
+    @Field(name = "dokumenttyp") String dokumenttyp,
     @Field(name = "fundstelle") Fundstelle fundstelle) {}

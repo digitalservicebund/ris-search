@@ -175,14 +175,16 @@ class RechtsprechungControllerIntegrationTest extends ContainersIntegrationBase 
                     "ensuing decision court type, ensuing decision document type vom 1. Oktober"
                         + " 2022 - ensuing decision file number (anhängig)"),
             jsonPath(
-                    "$.zitierungenLiteraturUnselbstaendig[?(@.richtung == 'aktiv')].dokumentnummer")
+                    "$.zitierungenLiteraturUnselbststaendig[?(@.richtung == 'aktiv')].dokumentnummer")
                 .value(contains("STLU991393280")),
             jsonPath(
-                    "$.zitierungenLiteraturUnselbstaendig[?(@.richtung == 'passiv')].dokumentnummer")
+                    "$.zitierungenLiteraturUnselbststaendig[?(@.richtung == 'passiv')].dokumentnummer")
                 .value(contains("SBLU000539216")),
-            jsonPath("$.zitierungenLiteraturSelbstaendig[?(@.richtung == 'aktiv')].dokumentnummer")
+            jsonPath(
+                    "$.zitierungenLiteraturSelbststaendig[?(@.richtung == 'aktiv')].dokumentnummer")
                 .value(contains("KSLS071671727")),
-            jsonPath("$.zitierungenLiteraturSelbstaendig[?(@.richtung == 'passiv')].dokumentnummer")
+            jsonPath(
+                    "$.zitierungenLiteraturSelbststaendig[?(@.richtung == 'passiv')].dokumentnummer")
                 .value(contains("KSLS071671728")),
             jsonPath("$.zitierungenRechtsprechung[?(@.richtung == 'aktiv')].dokumentnummer")
                 .value(contains("BVRE100338409")),
@@ -250,15 +252,17 @@ class RechtsprechungControllerIntegrationTest extends ContainersIntegrationBase 
                 .value("Verfassungsgerichtsbarkeit"),
             jsonPath("$.zitierungenRechtsprechung[0].entscheidungsdatum").value("1983-12-02"),
             jsonPath("$.zitierungenRechtsprechung[0].aktenzeichen").value("Vf. 94-VI-81"),
-            jsonPath("$.zitierungenLiteraturUnselbstaendig[1].autor").value("Knopp, Lothar"),
-            jsonPath("$.zitierungenLiteraturUnselbstaendig[1].dokumenttyp").value("Aufsatz"),
-            jsonPath("$.zitierungenLiteraturUnselbstaendig[1].fundstelle.periodikum").value("NVwZ"),
-            jsonPath("$.zitierungenLiteraturUnselbstaendig[1].fundstelle.zitatstelle")
+            jsonPath("$.zitierungenLiteraturUnselbststaendig[1].autor").value("Knopp, Lothar"),
+            jsonPath("$.zitierungenLiteraturUnselbststaendig[1].dokumenttyp").value("Aufsatz"),
+            jsonPath("$.zitierungenLiteraturUnselbststaendig[1].fundstelle.periodikum")
+                .value("NVwZ"),
+            jsonPath("$.zitierungenLiteraturUnselbststaendig[1].fundstelle.zitatstelle")
                 .value("2016, 1139-1141"),
-            jsonPath("$.zitierungenLiteraturSelbstaendig[0].autor").value("Arnauld, Andreas von"),
-            jsonPath("$.zitierungenLiteraturSelbstaendig[0].titel")
+            jsonPath("$.zitierungenLiteraturSelbststaendig[0].autor").value("Arnauld, Andreas von"),
+            jsonPath("$.zitierungenLiteraturSelbststaendig[0].titel")
                 .value("Die Freiheitsrechte und ihre Schranken"),
-            jsonPath("$.zitierungenLiteraturSelbstaendig[0].veroeffentlichungsjahr").value("1999"),
+            jsonPath("$.zitierungenLiteraturSelbststaendig[0].veroeffentlichungsjahr")
+                .value("1999"),
             jsonPath("$.zitierungenVerwaltungsvorschriften[1].artDerZitierung").value("Anwendung"),
             jsonPath("$.zitierungenVerwaltungsvorschriften[1].jurisAbkuerzung")
                 .value("VR BA 1986-01-16 16/86"),

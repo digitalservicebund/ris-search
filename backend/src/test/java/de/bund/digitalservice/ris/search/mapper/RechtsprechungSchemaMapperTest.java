@@ -11,10 +11,10 @@ import de.bund.digitalservice.ris.search.models.Richtung;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Fundstelle;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Gericht;
-import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ReferenzRechtsprechung;
-import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ReferenzSelbststaendigeLiteratur;
-import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ReferenzUnselbststaendigeLiteratur;
-import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ReferenzVerwaltungsvorschrift;
+import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ZitierungLiteraturSelbststaendig;
+import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ZitierungLiteraturUnselbststaendig;
+import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ZitierungRechtsprechung;
+import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ZitierungVerwaltungsvorschrift;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Zitierungen;
 import de.bund.digitalservice.ris.search.schema.DocumentEncodingSchema;
 import de.bund.digitalservice.ris.search.schema.FundstelleSchema;
@@ -78,9 +78,9 @@ class RechtsprechungSchemaMapperTest {
         .ensuingDecisions(List.of("ensuing decision file number, ensuing decision court type"))
         .zitierungen(
             Zitierungen.builder()
-                .zitierungenLiteraturUnselbstaendig(
+                .zitierungenLiteraturUnselbststaendig(
                     List.of(
-                        ReferenzUnselbststaendigeLiteratur.builder()
+                        ZitierungLiteraturUnselbststaendig.builder()
                             .richtung(Richtung.AKTIV)
                             .referenzUri("ris:/literatur/STLU991393280")
                             .dokumentnummer("STLU991393280")
@@ -93,13 +93,13 @@ class RechtsprechungSchemaMapperTest {
                                     .fundstellenTyp("nichtamtlich")
                                     .build())
                             .build(),
-                        ReferenzUnselbststaendigeLiteratur.builder()
+                        ZitierungLiteraturUnselbststaendig.builder()
                             .richtung(Richtung.PASSIV)
                             .dokumentnummer("SBLU000539216")
                             .build()))
-                .zitierungenLiteraturSelbstaendig(
+                .zitierungenLiteraturSelbststaendig(
                     List.of(
-                        ReferenzSelbststaendigeLiteratur.builder()
+                        ZitierungLiteraturSelbststaendig.builder()
                             .richtung(Richtung.AKTIV)
                             .referenzUri("ris:/literatur/KSLS071671727")
                             .dokumentnummer("KSLS071671727")
@@ -107,13 +107,13 @@ class RechtsprechungSchemaMapperTest {
                             .titel("Die Freiheitsrechte und ihre Schranken")
                             .veroeffentlichungsjahr("1999")
                             .build(),
-                        ReferenzSelbststaendigeLiteratur.builder()
+                        ZitierungLiteraturSelbststaendig.builder()
                             .richtung(Richtung.PASSIV)
                             .dokumentnummer("KSLS071671728")
                             .build()))
                 .zitierungenRechtsprechung(
                     List.of(
-                        ReferenzRechtsprechung.builder()
+                        ZitierungRechtsprechung.builder()
                             .richtung(Richtung.AKTIV)
                             .referenzUri("ris:/rechtsprechung/BVRE100338409")
                             .dokumentnummer("BVRE100338409")
@@ -135,13 +135,13 @@ class RechtsprechungSchemaMapperTest {
                                     .zitatstelle("1984, 15")
                                     .build())
                             .build(),
-                        ReferenzRechtsprechung.builder()
+                        ZitierungRechtsprechung.builder()
                             .richtung(Richtung.PASSIV)
                             .dokumentnummer("JURE100074208")
                             .build()))
                 .zitierungenVerwaltungsvorschriften(
                     List.of(
-                        ReferenzVerwaltungsvorschrift.builder()
+                        ZitierungVerwaltungsvorschrift.builder()
                             .richtung(Richtung.AKTIV)
                             .referenzUri("ris:/verwaltungsvorschrift/KSNR008561615")
                             .dokumentnummer("KSNR008561615")
@@ -153,7 +153,7 @@ class RechtsprechungSchemaMapperTest {
                                     .zitatstelle("1997, 538-539")
                                     .build())
                             .build(),
-                        ReferenzVerwaltungsvorschrift.builder()
+                        ZitierungVerwaltungsvorschrift.builder()
                             .richtung(Richtung.PASSIV)
                             .dokumentnummer("KSNR006800006")
                             .build()))
@@ -295,7 +295,7 @@ class RechtsprechungSchemaMapperTest {
     RechtsprechungSchema rechtsprechungSchema =
         RechtsprechungSchemaMapper.fromDomain(buildDocumentationUnit(), "jsonLdContext");
 
-    assertThat(rechtsprechungSchema.zitierungenLiteraturUnselbstaendig())
+    assertThat(rechtsprechungSchema.zitierungenLiteraturUnselbststaendig())
         .containsExactly(
             ZitierungLiteraturUnselbststaendigSchema.builder()
                 .richtung(Richtung.AKTIV)
@@ -314,7 +314,7 @@ class RechtsprechungSchemaMapperTest {
                 .richtung(Richtung.PASSIV)
                 .dokumentnummer("SBLU000539216")
                 .build());
-    assertThat(rechtsprechungSchema.zitierungenLiteraturSelbstaendig())
+    assertThat(rechtsprechungSchema.zitierungenLiteraturSelbststaendig())
         .containsExactly(
             ZitierungLiteraturSelbststaendigSchema.builder()
                 .richtung(Richtung.AKTIV)
@@ -390,8 +390,8 @@ class RechtsprechungSchemaMapperTest {
     RechtsprechungSchema rechtsprechungSchema =
         RechtsprechungSchemaMapper.fromDomain(documentationUnit, "jsonLdContext");
 
-    assertThat(rechtsprechungSchema.zitierungenLiteraturSelbstaendig()).isNull();
-    assertThat(rechtsprechungSchema.zitierungenLiteraturUnselbstaendig()).isNull();
+    assertThat(rechtsprechungSchema.zitierungenLiteraturSelbststaendig()).isNull();
+    assertThat(rechtsprechungSchema.zitierungenLiteraturUnselbststaendig()).isNull();
     assertThat(rechtsprechungSchema.zitierungenRechtsprechung()).isNull();
     assertThat(rechtsprechungSchema.zitierungenVerwaltungsvorschriften()).isNull();
   }

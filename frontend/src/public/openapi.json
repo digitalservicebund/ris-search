@@ -2860,14 +2860,14 @@
               "description" : "Nachgewiesen werden die gerichtlichen Entscheidungen, die ihrerseits in der Rubrik „vorgehende Entscheidung“ die vorliegende Entscheidung nennen."
             }
           },
-          "zitierungenLiteraturSelbstaendig" : {
+          "zitierungenLiteraturSelbststaendig" : {
             "type" : "array",
             "description" : "Referenz auf ein selbstständiges Literaturdokument",
             "items" : {
               "$ref" : "#/components/schemas/ZitierungLiteraturSelbststaendigSchema"
             }
           },
-          "zitierungenLiteraturUnselbstaendig" : {
+          "zitierungenLiteraturUnselbststaendig" : {
             "type" : "array",
             "description" : "Referenz auf ein unselbstständiges Literaturdokument",
             "items" : {
@@ -3092,6 +3092,7 @@
           },
           "richtung" : {
             "type" : "string",
+            "description" : "Ist die Referenz eine Aktivzitierung oder eine Passivzitierung?",
             "enum" : [ "aktiv", "passiv" ]
           },
           "referenzUri" : {
@@ -3124,6 +3125,7 @@
           },
           "richtung" : {
             "type" : "string",
+            "description" : "Ist die Referenz eine Aktivzitierung oder eine Passivzitierung?",
             "enum" : [ "aktiv", "passiv" ]
           },
           "referenzUri" : {
@@ -3157,6 +3159,7 @@
           },
           "richtung" : {
             "type" : "string",
+            "description" : "Ist die Referenz eine Aktivzitierung oder eine Passivzitierung?",
             "enum" : [ "aktiv", "passiv" ]
           },
           "referenzUri" : {
@@ -3168,7 +3171,8 @@
             "description" : "Dokumentnummer"
           },
           "artDerZitierung" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "Art der Zitierung"
           },
           "gericht" : {
             "$ref" : "#/components/schemas/GerichtSchema",
@@ -3202,6 +3206,7 @@
           },
           "richtung" : {
             "type" : "string",
+            "description" : "Ist die Referenz eine Aktivzitierung oder eine Passivzitierung?",
             "enum" : [ "aktiv", "passiv" ]
           },
           "referenzUri" : {
@@ -3213,7 +3218,8 @@
             "description" : "Dokumentnummer"
           },
           "artDerZitierung" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "Art der Zitierung"
           },
           "jurisAbkuerzung" : {
             "type" : "string",

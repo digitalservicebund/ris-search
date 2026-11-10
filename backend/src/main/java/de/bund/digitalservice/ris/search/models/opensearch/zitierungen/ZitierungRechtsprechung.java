@@ -9,7 +9,7 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 
 /** A reference to a case law document (ris:referenzRechtsprechung). */
 @Builder
-public record ReferenzRechtsprechung(
+public record ZitierungRechtsprechung(
     @Field(name = "richtung") Richtung richtung,
     @Field(name = "referenz_uri") String referenzUri,
     @Field(name = "dokumentnummer") String dokumentnummer,

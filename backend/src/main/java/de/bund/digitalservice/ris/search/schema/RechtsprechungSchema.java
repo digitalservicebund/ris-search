@@ -60,9 +60,9 @@ public record RechtsprechungSchema(
     @RISSchema(name = "ris:vorgehendeEntscheidung") List<String> vorgehendeEntscheidungen,
     @RISSchema(name = "ris:nachgehendeEntscheidung") List<String> nachgehendeEntscheidungen,
     @RISSchema(name = "ris:referenzSelbststaendigeLiteratur")
-        List<ZitierungLiteraturSelbststaendigSchema> zitierungenLiteraturSelbstaendig,
+        List<ZitierungLiteraturSelbststaendigSchema> zitierungenLiteraturSelbststaendig,
     @RISSchema(name = "ris:referenzUnselbststaendigeLiteratur")
-        List<ZitierungLiteraturUnselbststaendigSchema> zitierungenLiteraturUnselbstaendig,
+        List<ZitierungLiteraturUnselbststaendigSchema> zitierungenLiteraturUnselbststaendig,
     @RISSchema(name = "ris:referenzRechtsprechung")
         List<ZitierungRechtsprechungSchema> zitierungenRechtsprechung,
     @RISSchema(name = "ris:referenzVerwaltungsvorschrift")
