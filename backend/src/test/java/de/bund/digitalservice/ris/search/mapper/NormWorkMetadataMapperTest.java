@@ -9,14 +9,11 @@ import org.junit.jupiter.api.Test;
 
 class NormWorkMetadataMapperTest {
 
-  private static final String WORK_ELI = "https://www.ris.bund.de/eli/bund/banz/1949/4";
-
   @Test
   @DisplayName("Extracts vollzitat from metadaten.xml")
   void extractsVollzitat() {
     String xml =
-        NormWorkMetadataTestDataBuilder.buildMetadatenXml(
-            WORK_ELI, "Verordnung zu der Vereinbarung");
+        NormWorkMetadataTestDataBuilder.buildMetadatenXml("Verordnung zu der Vereinbarung");
 
     assertThat(NormWorkMetadataMapper.parseVollzitat(xml))
         .isEqualTo(Optional.of("Verordnung zu der Vereinbarung"));
@@ -25,7 +22,7 @@ class NormWorkMetadataMapperTest {
   @Test
   @DisplayName("Returns empty when vollzitat element is missing")
   void returnsEmptyWhenVollzitatMissing() {
-    String xml = NormWorkMetadataTestDataBuilder.buildMetadatenXml(WORK_ELI, null);
+    String xml = NormWorkMetadataTestDataBuilder.buildMetadatenXml(null);
 
     assertThat(NormWorkMetadataMapper.parseVollzitat(xml)).isEmpty();
   }
@@ -33,7 +30,7 @@ class NormWorkMetadataMapperTest {
   @Test
   @DisplayName("Returns empty when vollzitat is blank")
   void returnsEmptyWhenVollzitatBlank() {
-    String xml = NormWorkMetadataTestDataBuilder.buildMetadatenXml(WORK_ELI, "   ");
+    String xml = NormWorkMetadataTestDataBuilder.buildMetadatenXml("   ");
 
     assertThat(NormWorkMetadataMapper.parseVollzitat(xml)).isEmpty();
   }

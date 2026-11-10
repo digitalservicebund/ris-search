@@ -63,8 +63,7 @@ class IndexNormsServiceTest {
         .thenReturn(Optional.of(NormTestDataBuilder.builder().eli(validEli).buildNormXml()));
     when(this.bucket.getFileAsString(workEli + "/metadaten.xml"))
         .thenReturn(
-            Optional.of(
-                NormWorkMetadataTestDataBuilder.buildMetadatenXml(workEli, "Verordnung Test")));
+            Optional.of(NormWorkMetadataTestDataBuilder.buildMetadatenXml("Verordnung Test")));
 
     this.service.reindexAll("2024-01-01T12:00:00Z");
 

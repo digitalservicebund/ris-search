@@ -124,8 +124,7 @@ public class NormsTestData {
     // ------------- add work-level metadaten.xml -------------------
     result.put(
         S_102_WORK_ELI + "/metadaten.xml",
-        NormWorkMetadataTestDataBuilder.buildMetadatenXml(
-            S_102_WORK_ELI, "Verordnung zu der Vereinbarung"));
+        NormWorkMetadataTestDataBuilder.buildMetadatenXml("Verordnung zu der Vereinbarung"));
 
     return result;
   }
