@@ -2,366 +2,274 @@ package de.bund.digitalservice.ris.search.xsd;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.TreeMap;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpression;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
-import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 
 /**
- * Parses the {@code ris} namespace's XSD schema (and any {@code import}/{@code include}/{@code
- * redefine} it references) into {@link DescriptionKey} entries, so that field descriptions can be
- * sourced from the XSD's {@code xs:documentation} elements instead of being duplicated in Java
- * code, and into {@link GlossaryEntry} entries for a human-readable glossary of the whole
- * namespace.
+ * Reads the {@code xs:documentation} of the types in the {@code ris} namespace from the XSD schema,
+ * so that field descriptions don't have to be duplicated in Java code.
+ *
+ * <p>All work is done once, in the constructor:
+ *
+ * <ol>
+ *   <li>Load {@code ris.xsd} and every schema file it imports, includes or redefines.
+ *   <li>Find the {@code xs:documentation} texts that belong to named types of the {@code ris}
+ *       namespace. Documentation of elements, attributes and types of other namespaces (e.g. Akoma
+ *       Ntoso) is ignored.
+ *   <li>Group these texts into one {@link TypeDocumentation} per type, with its German and English
+ *       text.
+ * </ol>
+ *
+ * <p>Afterwards, {@link #findDescription} looks up the description of a type, e.g. for the OpenAPI
+ * descriptions of {@link RISSchema} fields, and {@link #getTypeDocumentation} returns the
+ * documentation of all types, e.g. for the glossary.
  */
-@Slf4j
 public class XSDDescriptionParser {
-  private final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-  private final XPath xPath = XPathFactory.newDefaultInstance().newXPath();
-  private final Map<String, String> namespacePrefixes = new HashMap<>();
+  private record SchemaFile(String fileName, Document document) {}
 
-  @Getter private final Set<DescriptionKey> descriptions = new TreeSet<>();
-  @Getter private final List<GlossaryEntry> glossaryEntries = new ArrayList<>();
+  private record DocumentationText(
+      String typeName, String language, String text, String schemaFile) {}
 
-  /** Parses the configured {@code ris} namespace location, populating {@link #descriptions}. */
+  private static final Logger logger = LogManager.getLogger(XSDDescriptionParser.class);
+  private static final String DEFAULT_RIS_PREFIX = "ris";
+
+  private final DocumentBuilderFactory factory = createDocumentBuilderFactory();
+
+  private final Map<String, TypeDocumentation> documentationPerType = new TreeMap<>();
+
+  /**
+   * Reads the schema at {@code xsd.ris-namespace-location} in three steps:
+   *
+   * <ol>
+   *   <li>{@link #loadSchemaFiles}: load {@code ris.xsd} and every schema file it imports, includes
+   *       or redefines.
+   *   <li>{@link #findRisTypeDocumentation}: find the {@code xs:documentation} texts that belong to
+   *       types of the {@code ris} namespace.
+   *   <li>{@link #groupByType}: group these texts into one {@link TypeDocumentation} per type.
+   * </ol>
+   *
+   * <p>If the location is not set or the schema can't be loaded, no descriptions are available.
+   */
   public XSDDescriptionParser(XSDDescriptionProperties properties, ResourceLoader resourceLoader) {
+    var location = properties.getRisNamespaceLocation();
+    if (location == null || location.isBlank()) {
+      logger.error("xsd.ris-namespace-location is not set; no XSD descriptions will be available");
+      return;
+    }
+
+    // Step 1: load ris.xsd and every schema file it imports, includes or redefines
+    var schemaFiles = loadSchemaFiles(resourceLoader.getResource(location));
+    if (schemaFiles.isEmpty()) {
+      logger.error("could not load XSD schema {}; no XSD descriptions will be available", location);
+      return;
+    }
+
+    // Step 2: find xs:documentation texts of the ris types
+    var risTypeDocumentation = findRisTypeDocumentation(schemaFiles);
+
+    // Step 3: group these texts into one TypeDocumentation per type
+    documentationPerType.putAll(groupByType(risTypeDocumentation));
+  }
+
+  /**
+   * Looks up the parsed XSD description for the given type name and language.
+   *
+   * @param key the XSD type name (e.g. "ris:dokumentnummer") to look up
+   * @param language the language of the documentation text to match (e.g. "de")
+   * @return the description text, if one was parsed from the XSD for that key and language
+   */
+  public Optional<String> findDescription(String key, String language) {
+    return Optional.ofNullable(documentationPerType.get(key))
+        .map(documentation -> documentation.documentationIn(language))
+        .filter(text -> !text.isEmpty());
+  }
+
+  /**
+   * Returns the documentation of all types of the {@code ris} namespace.
+   *
+   * @return one entry per type, sorted by type name
+   */
+  public List<TypeDocumentation> getTypeDocumentation() {
+    return List.copyOf(documentationPerType.values());
+  }
+
+  /**
+   * Step 1: loads the given root schema and, transitively, every schema file it references via
+   * {@code xs:import}, {@code xs:include} or {@code xs:redefine}. Each file is loaded only once;
+   * referenced files that don't exist are skipped.
+   *
+   * @return the loaded files, the root schema first; empty if the root schema could not be loaded
+   */
+  private List<SchemaFile> loadSchemaFiles(Resource rootSchema) {
+    // Keyed by the resource description, so that a file referenced more than once is only loaded
+    // once. Insertion-ordered, so that the root schema stays first.
+    Map<String, SchemaFile> loaded = new LinkedHashMap<>();
+    Deque<Resource> toLoad = new ArrayDeque<>(List.of(rootSchema));
+
+    while (!toLoad.isEmpty()) {
+      var resource = toLoad.pop();
+      if (loaded.containsKey(resource.getDescription())) {
+        continue;
+      }
+      parse(resource)
+          .ifPresent(document -> {
+            loaded.put(resource.getDescription(), new SchemaFile(resource.getFilename(), document));
+            toLoad.addAll(findReferencedSchemas(document, resource));
+          });
+    }
+
+    return List.copyOf(loaded.values());
+  }
+
+  private Optional<Document> parse(Resource resource) {
+    if (!resource.exists()) {
+      return Optional.empty();
+    }
+    try (InputStream inputStream = resource.getInputStream()) {
+      return Optional.of(factory.newDocumentBuilder().parse(inputStream));
+    } catch (Exception e) {
+      logger.error("could not parse XSD schema {}", resource, e);
+      return Optional.empty();
+    }
+  }
+
+  /**
+   * Finds the schema files referenced by {@code xs:import}, {@code xs:include} and {@code
+   * xs:redefine}. Each {@code schemaLocation} is resolved relative to the file that references it:
+   * in {@code ris/ris.xsd}, {@code caselaw-decision.xsd} becomes {@code ris/caselaw-decision.xsd}
+   * and {@code ../akn/akomantoso30.xsd} becomes {@code akn/akomantoso30.xsd}.
+   */
+  private static List<Resource> findReferencedSchemas(Document document, Resource resource) {
+    return Stream.of("import", "include", "redefine")
+        .flatMap(localName -> findSchemaElements(document, localName).stream())
+        .map(reference -> reference.getAttribute("schemaLocation"))
+        .filter(schemaLocation -> !schemaLocation.isBlank())
+        .flatMap(schemaLocation -> resolveRelative(resource, schemaLocation).stream())
+        .toList();
+  }
+
+  private static Optional<Resource> resolveRelative(Resource resource, String schemaLocation) {
+    try {
+      return Optional.of(resource.createRelative(schemaLocation));
+    } catch (IOException e) {
+      logger.error("could not resolve schema location {} in {}", schemaLocation, resource, e);
+      return Optional.empty();
+    }
+  }
+
+  /**
+   * Step 2: finds the {@code xs:documentation} texts that belong to a named type of the {@code ris}
+   * namespace, i.e. the target namespace of the root schema. Schema files of other namespaces (e.g.
+   * Akoma Ntoso) are skipped, as is documentation of elements, attributes and anonymous types.
+   *
+   * @return one entry per documentation text, with the name of its type (e.g. {@code
+   *     ris:tatbestand}), its language and the schema file it is in
+   */
+  private static List<DocumentationText> findRisTypeDocumentation(List<SchemaFile> schemaFiles) {
+    var rootSchema = schemaFiles.getFirst().document().getDocumentElement();
+    var risNamespaceUri = rootSchema.getAttribute("targetNamespace");
+    var risPrefix =
+        Objects.requireNonNullElse(rootSchema.lookupPrefix(risNamespaceUri), DEFAULT_RIS_PREFIX);
+
+    return schemaFiles.stream()
+        .filter(schemaFile -> risNamespaceUri.equals(targetNamespaceOf(schemaFile)))
+        .flatMap(schemaFile -> findTypeDocumentation(schemaFile, risPrefix))
+        .toList();
+  }
+
+  /**
+   * Finds the {@code xs:documentation} texts in one schema file that belong to a named type.
+   * Documentation of elements, attributes and anonymous types (without a {@code name}) is skipped.
+   */
+  private static Stream<DocumentationText> findTypeDocumentation(
+      SchemaFile schemaFile, String prefix) {
+    return findSchemaElements(schemaFile.document(), "documentation").stream()
+        .map(DocumentationElement::new)
+        .filter(documentation -> documentation.getTypeName() != null)
+        .map(documentation ->
+            new DocumentationText(
+                prefix + ":" + documentation.getTypeName(),
+                documentation.getLanguage(),
+                documentation.getDocumentation(),
+                schemaFile.fileName()));
+  }
+
+  /**
+   * Step 3: groups the documentation texts by type name into one {@link TypeDocumentation} per
+   * type, with its German and English text and the schema file it is defined in.
+   *
+   * @return the documentation per type name, sorted by type name
+   */
+  private static Map<String, TypeDocumentation> groupByType(List<DocumentationText> texts) {
+    return texts.stream()
+        .collect(
+            Collectors.groupingBy(
+                DocumentationText::typeName,
+                TreeMap::new,
+                Collectors.collectingAndThen(
+                    Collectors.toList(), XSDDescriptionParser::toTypeDocumentation)));
+  }
+
+  /** Combines the documentation texts of one type into its {@link TypeDocumentation}. */
+  private static TypeDocumentation toTypeDocumentation(List<DocumentationText> textsOfOneType) {
+    var first = textsOfOneType.getFirst();
+    return new TypeDocumentation(
+        first.typeName(),
+        textIn(textsOfOneType, "de"),
+        textIn(textsOfOneType, "en"),
+        first.schemaFile());
+  }
+
+  /** Returns the text in the given language, the last one if there are several, or blank. */
+  private static String textIn(List<DocumentationText> texts, String language) {
+    return texts.stream()
+        .filter(text -> text.language().equals(language))
+        .map(DocumentationText::text)
+        .reduce((first, second) -> second)
+        .orElse("");
+  }
+
+  private static String targetNamespaceOf(SchemaFile schemaFile) {
+    return schemaFile.document().getDocumentElement().getAttribute("targetNamespace");
+  }
+
+  /**
+   * Finds all XML Schema elements with the given local name (e.g. {@code documentation}),
+   * regardless of the prefix the file uses for the XML Schema namespace ({@code xs:} or {@code
+   * xsd:}).
+   */
+  private static List<Element> findSchemaElements(Document document, String localName) {
+    var nodes = document.getElementsByTagNameNS(XMLConstants.W3C_XML_SCHEMA_NS_URI, localName);
+    return IntStream.range(0, nodes.getLength()).mapToObj(i -> (Element) nodes.item(i)).toList();
+  }
+
+  private static DocumentBuilderFactory createDocumentBuilderFactory() {
+    var factory = DocumentBuilderFactory.newInstance();
     factory.setNamespaceAware(true);
     try {
       factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
       factory.setFeature("http://xml.org/sax/features/external-general-entities", false);
       factory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
     } catch (ParserConfigurationException _) {
-      // these features are always supported by the default DocumentBuilderFactory implementation
     }
-
-    // A missing or broken schema must not prevent the application from starting: field
-    // descriptions are then simply not available, and @RISSchema falls back to its own text.
-    var mainLocation = properties.getRisNamespaceLocation();
-    if (mainLocation == null || mainLocation.isBlank()) {
-      log.error("xsd.ris-namespace-location is not set; no XSD descriptions will be available");
-      return;
-    }
-    var resource = resourceLoader.getResource(mainLocation);
-    var mainDocument = getDocumentForLocation(resource);
-    if (mainDocument == null) {
-      log.error(
-          "could not load XSD schema {}; no XSD descriptions will be available", mainLocation);
-      return;
-    }
-
-    // Insertion-ordered, so that schema files are always processed in the same (include/import
-    // traversal) order. Keyed by the resource description, like included files, so that a file
-    // that includes the root schema again is recognized as already parsed.
-    Map<String, Document> documents = new LinkedHashMap<>();
-    documents.put(resource.getDescription(), mainDocument);
-    getRelatedXSD(mainDocument, resource, documents);
-
-    Map<String, List<String>> elementsByType = new HashMap<>();
-    for (Document document : documents.values()) {
-      findAllElementsForType(document, elementsByType);
-    }
-
-    createDescriptions(documents, elementsByType);
-  }
-
-  private Document getDocumentForLocation(Resource resource) {
-    try {
-      if (!resource.exists()) {
-        return null;
-      }
-
-      try (InputStream inputStream = resource.getInputStream()) {
-        return factory.newDocumentBuilder().parse(inputStream);
-      }
-    } catch (Exception ex) {
-      log.error("error by getting document for resource: {}", resource, ex);
-      return null;
-    }
-  }
-
-  /**
-   * One documented definition found for a key: its description texts by language (e.g. {@code
-   * "de"}, {@code "en"}), and whether it comes from the type's own name (authoritative) or from an
-   * element bound to that type (an alias).
-   */
-  private record Candidate(Map<String, String> byLang, boolean authoritative) {}
-
-  private void createDescriptions(
-      Map<String, Document> documents, Map<String, List<String>> elementsByType) {
-    // key -> every candidate found for it. Several distinct types can share the same bare element
-    // name (e.g. a "titel" element may be bound to ris:personTitel in one place and
-    // ris:gesamttitelTitel in another), so all candidates are collected first and each key is
-    // then resolved once, independently of the order in which its candidates were found. Both the
-    // `descriptions` lookup used by @RISSchema and the glossary are built from that one result.
-    Map<String, List<Candidate>> candidatesByKey = new LinkedHashMap<>();
-
-    for (Document document : documents.values()) {
-      if (document == null) {
-        continue;
-      }
-
-      // Group documentation elements by their shared parent, so that sibling xml:lang="de"/"en"
-      // annotations on the same type or element are paired up into a single occurrence instead
-      // of being processed as independent, language-only entries.
-      Map<XSDElement, Map<String, String>> byLangPerParent = new LinkedHashMap<>();
-      for (DocumentationElement documentationElement : getDocumentationElements(document)) {
-        var parent = documentationElement.getParent();
-        if (parent == null) {
-          continue;
-        }
-        byLangPerParent
-            .computeIfAbsent(parent, _ -> new LinkedHashMap<>())
-            .put(documentationElement.getLanguage(), documentationElement.getDocumentation());
-      }
-
-      byLangPerParent.forEach((parent, byLang) -> {
-        if (!(parent instanceof TypeElement(String namespaceUri, String name))) {
-          // Local annotations on generic element refs (e.g. akn:motivation) are intentionally
-          // not registered here: only descriptions for named ris:<typeName> types are
-          // supported.
-          return;
-        }
-
-        var typeName =
-            name.contains(":") ? name : String.join(":", namespacePrefixes.get(namespaceUri), name);
-
-        // Some named types (e.g. ris:rechtsfrageGesamt) are only ever selected on an
-        // instance via xsi:type and have no xs:element statically bound to them, so the
-        // type's own name must also be registered as a lookup key in its own right. Since
-        // this key is literally the type's own name, it unambiguously describes that type.
-        addCandidate(candidatesByKey, typeName, byLang, true);
-        elementsByType
-            .getOrDefault(typeName, List.of())
-            .forEach(elementName -> addCandidate(candidatesByKey, elementName, byLang, false));
-      });
-    }
-
-    candidatesByKey.forEach((key, candidates) ->
-        resolve(key, candidates)
-            .ifPresent(byLang -> {
-              byLang.forEach((lang, description) ->
-                  descriptions.add(new DescriptionKey(key, description, lang)));
-              glossaryEntries.add(
-                  new GlossaryEntry(
-                      key, byLang.getOrDefault("de", ""), byLang.getOrDefault("en", "")));
-            }));
-    glossaryEntries.sort(Comparator.comparing(GlossaryEntry::key));
-  }
-
-  private static void addCandidate(
-      Map<String, List<Candidate>> candidatesByKey,
-      String key,
-      Map<String, String> byLang,
-      boolean authoritative) {
-    candidatesByKey
-        .computeIfAbsent(key, _ -> new ArrayList<>())
-        .add(new Candidate(byLang, authoritative));
-  }
-
-  /**
-   * Resolves all candidates found for one key to its description texts by language, or to none if
-   * the key is ambiguous:
-   *
-   * <ul>
-   *   <li>if the key is the name of a documented type, only that type's own definitions are
-   *       considered and element aliases are ignored, since the key unambiguously refers to that
-   *       exact type;
-   *   <li>otherwise, all element aliases are considered;
-   *   <li>if all considered candidates have the same texts (in every language), those are used; if
-   *       they differ, distinct types happen to share this key, so nothing is emitted for it rather
-   *       than silently keeping one of several possibly wrong descriptions.
-   * </ul>
-   *
-   * <p>German and English texts are compared together, so a key never combines the German text of
-   * one type with the English text of another. The result only depends on which candidates exist,
-   * not on the order in which they were found.
-   */
-  private static Optional<Map<String, String>> resolve(String key, List<Candidate> candidates) {
-    var authoritative = candidates.stream().anyMatch(Candidate::authoritative);
-    var distinctTexts =
-        candidates.stream()
-            .filter(candidate -> candidate.authoritative() == authoritative)
-            .map(Candidate::byLang)
-            .distinct()
-            .toList();
-
-    if (distinctTexts.size() == 1) {
-      return Optional.of(distinctTexts.getFirst());
-    }
-
-    log.warn(
-        "ambiguous XSD description for key {}: {} differently documented {} share this key;"
-            + " omitting it from the generated descriptions and the glossary",
-        key,
-        distinctTexts.size(),
-        authoritative ? "type definitions" : "element aliases");
-    return Optional.empty();
-  }
-
-  private void findAllElementsForType(Document document, Map<String, List<String>> elementsByType) {
-    try {
-      var elements =
-          (NodeList)
-              xPath
-                  .compile("//*[local-name()='element']")
-                  .evaluate(document, XPathConstants.NODESET);
-      for (int i = 0; i < elements.getLength(); i++) {
-        var element = (Element) elements.item(i);
-        var localName = element.getAttribute("name");
-        var type = element.getAttribute("type");
-        var name =
-            !localName.contains(":") && type.contains(":")
-                ? String.join(":", type.substring(0, type.indexOf(":")), localName)
-                : localName;
-        if (!elementsByType.containsKey(type)) {
-          elementsByType.put(type, new ArrayList<>());
-        }
-        elementsByType.get(type).add(name);
-      }
-    } catch (XPathExpressionException e) {
-      log.error("error by getting elements for type", e);
-    }
-  }
-
-  private void getRelatedXSD(
-      Document document, Resource currentResource, Map<String, Document> documents) {
-    extractNamespacePrefixes(document);
-
-    try {
-      var expression = xPath.compile("//*[local-name()='import']");
-      var imports = (NodeList) expression.evaluate(document, XPathConstants.NODESET);
-      getXSDInChildren(imports, currentResource, documents);
-
-      expression = xPath.compile("//*[local-name()='include']");
-      var includes = (NodeList) expression.evaluate(document, XPathConstants.NODESET);
-      getXSDInChildren(includes, currentResource, documents);
-
-      expression = xPath.compile("//*[local-name()='redefine']");
-      var redefines = (NodeList) expression.evaluate(document, XPathConstants.NODESET);
-      getXSDInChildren(redefines, currentResource, documents);
-    } catch (XPathExpressionException e) {
-      log.error("error by getting related xsd", e);
-    }
-  }
-
-  /**
-   * Resolves each {@code schemaLocation} relative to the resource that references it (not to a
-   * single fixed prefix), so that files inside a subdirectory (e.g. {@code schema/ris/ris.xsd})
-   * correctly resolve their own relative/bare {@code schemaLocation} siblings within that same
-   * subdirectory instead of accidentally falling back to the top-level schema directory.
-   */
-  private void getXSDInChildren(
-      NodeList nodeList, Resource currentResource, Map<String, Document> documents) {
-    for (int i = 0; i < nodeList.getLength(); i++) {
-      resolveAndParseSchemaLocation((Element) nodeList.item(i), currentResource, documents);
-    }
-  }
-
-  private void resolveAndParseSchemaLocation(
-      Element importElement, Resource currentResource, Map<String, Document> documents) {
-    var schemaLocationAttr = importElement.getAttribute("schemaLocation");
-    if (schemaLocationAttr.isBlank()) {
-      return;
-    }
-
-    Resource resource;
-    try {
-      resource = currentResource.createRelative(schemaLocationAttr);
-    } catch (IOException e) {
-      log.error("error resolving relative schema location: {}", schemaLocationAttr, e);
-      return;
-    }
-
-    var key = resource.getDescription();
-    if (documents.containsKey(key)) {
-      return;
-    }
-
-    var document = getDocumentForLocation(resource);
-    if (document == null) {
-      return;
-    }
-
-    documents.put(key, document);
-    getRelatedXSD(document, resource, documents);
-  }
-
-  private void extractNamespacePrefixes(Document document) {
-    var schema = (Element) document.getElementsByTagName("xs:schema").item(0);
-    if (schema == null) {
-      return;
-    }
-
-    var attributes = schema.getAttributes();
-    for (int i = 0; i < attributes.getLength(); i++) {
-      var attribute = attributes.item(i);
-      if (attribute.getNodeName().startsWith("xmlns:")) {
-        var prefix = attribute.getNodeName().substring(6);
-        var namespaceURI = attribute.getNodeValue();
-        namespacePrefixes.put(namespaceURI, prefix);
-      }
-    }
-  }
-
-  private List<DocumentationElement> getDocumentationElements(Document document) {
-    List<DocumentationElement> documentationElements = new ArrayList<>();
-    String targetNamespaceURI = findTargetNamespaceURI(document);
-
-    try {
-      XPathExpression expr = xPath.compile("//*[local-name()='documentation']");
-      NodeList nodeList = (NodeList) expr.evaluate(document, XPathConstants.NODESET);
-
-      for (int i = 0; i < nodeList.getLength(); i++) {
-        Element element = (Element) nodeList.item(i);
-        documentationElements.add(new DocumentationElement(element, targetNamespaceURI));
-      }
-    } catch (XPathExpressionException e) {
-      log.error("error by getting documentation elements", e);
-    }
-
-    return documentationElements;
-  }
-
-  private String findTargetNamespaceURI(Document document) {
-    var schema = (Element) document.getElementsByTagName("xs:schema").item(0);
-    if (schema == null) {
-      return "";
-    }
-
-    return schema.getAttribute("targetNamespace");
-  }
-
-  /**
-   * Looks up the parsed XSD description for the given element/type key and language.
-   *
-   * @param key the XSD element/type key (e.g. "ris:dokumentnummer") to look up
-   * @param language the language of the documentation text to match (e.g. "de")
-   * @return the description text, if one was parsed from the XSD for that key and language
-   */
-  public Optional<String> findDescription(String key, String language) {
-    return descriptions.stream()
-        .filter(descriptionKey ->
-            descriptionKey.key().equals(key) && descriptionKey.lang().equals(language))
-        .findFirst()
-        .map(DescriptionKey::description);
+    return factory;
   }
 }

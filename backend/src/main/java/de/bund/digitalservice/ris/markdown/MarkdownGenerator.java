@@ -1,6 +1,6 @@
 package de.bund.digitalservice.ris.markdown;
 
-import de.bund.digitalservice.ris.search.xsd.GlossaryEntry;
+import de.bund.digitalservice.ris.search.xsd.TypeDocumentation;
 import de.bund.digitalservice.ris.search.xsd.XSDDescriptionConfiguration;
 import de.bund.digitalservice.ris.search.xsd.XSDDescriptionParser;
 import de.bund.digitalservice.ris.search.xsd.XSDDescriptionProperties;
@@ -18,9 +18,8 @@ import org.springframework.boot.webmvc.autoconfigure.WebMvcAutoConfiguration;
 import org.springframework.context.annotation.Import;
 
 /**
- * Standalone CLI application that parses the {@code ris} namespace's XSD schema documentation and
- * writes a combined glossary of its field descriptions to a Markdown table under {@code
- * doc/readme}.
+ * Standalone CLI application that reads the documentation of the {@code ris} namespace's types from
+ * the XSD schema and writes it as a glossary to a Markdown table under {@code doc/readme}.
  */
 @SpringBootApplication(exclude = {WebMvcAutoConfiguration.class})
 @Import(XSDDescriptionConfiguration.class)
@@ -40,7 +39,7 @@ public class MarkdownGenerator implements CommandLineRunner {
   @Override
   public void run(String... args) throws Exception {
     var path = Paths.get(System.getProperty("user.dir") + "/../doc/readme", "glossary.md");
-    writeMarkdownFile(buildGlossaryTable(parser.getGlossaryEntries()), path);
+    writeMarkdownFile(buildGlossaryTable(parser.getTypeDocumentation()), path);
   }
 
   /**
@@ -62,27 +61,28 @@ public class MarkdownGenerator implements CommandLineRunner {
   }
 
   /**
-   * Builds a Markdown table with one row per glossary entry, in the given order. The parser emits
-   * at most one entry per key: a key with conflicting descriptions is left out of the glossary (see
-   * {@link XSDDescriptionParser}), so every key appears in at most one row.
+   * Builds a Markdown table with one row per type, in the given order: the type name, its German
+   * and English documentation and the schema file it is defined in.
    *
-   * @param entries the glossary entries to render
+   * @param entries the documentation of the types to render
    * @return the Markdown table as a string
    */
-  static String buildGlossaryTable(List<GlossaryEntry> entries) {
+  static String buildGlossaryTable(List<TypeDocumentation> entries) {
     StringBuilder stringBuilder = new StringBuilder();
     stringBuilder
-        .append("| Key | Description DE | Description EN |")
+        .append("| Key | Description DE | Description EN | Schema file |")
         .append(System.lineSeparator());
-    stringBuilder.append("| --- | --- | --- |").append(System.lineSeparator());
+    stringBuilder.append("| --- | --- | --- | --- |").append(System.lineSeparator());
     entries.forEach(entry ->
         stringBuilder
             .append("| ")
-            .append(entry.key())
+            .append(entry.typeName())
             .append(" | ")
-            .append(toTableCellHtmlOrBlank(entry.descriptionDe()))
+            .append(toTableCellHtmlOrBlank(entry.documentationDe()))
             .append(" | ")
-            .append(toTableCellHtmlOrBlank(entry.descriptionEn()))
+            .append(toTableCellHtmlOrBlank(entry.documentationEn()))
+            .append(" | ")
+            .append(entry.schemaFile())
             .append(" |")
             .append(System.lineSeparator()));
 

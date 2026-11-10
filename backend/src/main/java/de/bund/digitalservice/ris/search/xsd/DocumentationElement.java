@@ -1,29 +1,31 @@
 package de.bund.digitalservice.ris.search.xsd;
 
 import java.util.stream.Collectors;
+import javax.xml.XMLConstants;
 import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 
 /**
  * A parsed {@code xs:documentation} element: the description text and language it carries, plus the
- * {@link XSDElement} (type or element) it documents.
+ * name of the type it documents, if any.
  */
-@Slf4j
 public class DocumentationElement {
-  @Getter private final XSDElement parent;
+  /**
+   * The name of the named type this documentation belongs to (e.g. {@code tatbestand}), or {@code
+   * null} if it documents something else, such as an element, an attribute or an anonymous type.
+   */
+  @Getter private final String typeName;
 
   @Getter private final String documentation;
 
   @Getter private final String language;
 
   /**
-   * Parses the given {@code xs:documentation} DOM element, resolving its documented parent (type or
-   * element) and normalizing its language to {@code de} when unset.
+   * Parses the given {@code xs:documentation} DOM element, resolving the type it documents and
+   * normalizing its language to {@code de} when unset.
    */
-  public DocumentationElement(Element element, String targetNamespaceURI) {
-    this.parent = getParent(element, targetNamespaceURI);
+  public DocumentationElement(Element element) {
+    this.typeName = findTypeName(element);
     this.documentation = normalizeLines(element.getTextContent());
     var languageAttribute = element.getAttribute("xml:lang");
     if (languageAttribute.isBlank()) {
@@ -40,40 +42,35 @@ public class DocumentationElement {
     return text.trim().lines().map(String::trim).collect(Collectors.joining("\n"));
   }
 
-  private XSDElement getParent(Element element, String targetNamespaceURI) {
-    Node parentNode = element.getParentNode();
-
-    if (parentNode == null) {
+  /**
+   * Walks up from the {@code xs:documentation} element to the nearest type, element or attribute
+   * declaration. Only a named type yields a name. An element or attribute stops the search, so that
+   * their documentation is not mistaken for the documentation of the type that contains them.
+   */
+  private static String findTypeName(Element element) {
+    if (!(element.getParentNode() instanceof Element parent)) {
       return null;
     }
 
-    if (parentNode instanceof Element parentElement) {
-      if (parentElement.getTagName().equals("xs:simpleType")
-          || parentElement.getTagName().equals("xs:complexType")) {
-        var name = parentElement.getAttribute("name");
-        var namespaceURI = parentElement.getNamespaceURI();
-        if (!name.contains(":")) {
-          namespaceURI = targetNamespaceURI;
-        }
-
-        return new TypeElement(namespaceURI, name);
-      } else if (parentElement.getTagName().equals("xs:element")) {
-        var name = parentElement.getAttribute("name");
-        if (name.isBlank()) {
-          name = parentElement.getAttribute("ref");
-        }
-        return new ElementElement(parentElement.getNamespaceURI(), name);
-      } else if (parentElement.getTagName().equals("xs:attribute")
-          || parentElement.getTagName().equals("xs:attributeGroup")) {
-        // Documentation nested under an attribute (or attribute group) describes that attribute,
-        // not the type that happens to declare it; it must not be mistaken for the enclosing
-        // type's own documentation by continuing to recurse upward.
-        return null;
-      } else {
-        return getParent(parentElement, targetNamespaceURI);
-      }
+    if (isSchemaElement(parent, "simpleType") || isSchemaElement(parent, "complexType")) {
+      var name = parent.getAttribute("name");
+      return name.isBlank() ? null : name;
     }
+    if (isSchemaElement(parent, "element")
+        || isSchemaElement(parent, "attribute")
+        || isSchemaElement(parent, "attributeGroup")) {
+      return null;
+    }
+    return findTypeName(parent);
+  }
 
-    return null;
+  /**
+   * Whether the given DOM element is the XML Schema element with the given local name, regardless
+   * of the prefix the schema file uses for the XML Schema namespace (e.g. {@code xs:} or {@code
+   * xsd:}).
+   */
+  private static boolean isSchemaElement(Element element, String localName) {
+    return XMLConstants.W3C_XML_SCHEMA_NS_URI.equals(element.getNamespaceURI())
+        && localName.equals(element.getLocalName());
   }
 }

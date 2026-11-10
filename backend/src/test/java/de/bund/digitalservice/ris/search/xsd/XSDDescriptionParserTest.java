@@ -52,60 +52,12 @@ class XSDDescriptionParserTest {
 
     assertThat(parser.findDescription("ris:tenor", "de")).hasValue("Tenor");
     assertThat(parser.findDescription("ris:tenor", "en")).hasValue("Ruling");
-    assertThat(parser.getGlossaryEntries())
-        .containsExactly(new GlossaryEntry("ris:tenor", "Tenor", "Ruling"));
+    assertThat(parser.getTypeDocumentation())
+        .containsExactly(new TypeDocumentation("ris:tenor", "Tenor", "Ruling", "ris.xsd"));
   }
 
   @Test
-  void anElementGetsTheDescriptionOfItsType() throws IOException {
-    var schema =
-        writeSchema(
-            "ris.xsd",
-            """
-            <xs:complexType name="aktenzeichenType">
-              <xs:annotation>
-                <xs:documentation xml:lang="de">Aktenzeichen</xs:documentation>
-              </xs:annotation>
-            </xs:complexType>
-            <xs:element name="aktenzeichen" type="ris:aktenzeichenType" />
-            """);
-
-    var parser = parse(schema);
-
-    assertThat(parser.findDescription("ris:aktenzeichen", "de")).hasValue("Aktenzeichen");
-  }
-
-  @Test
-  void aTypesOwnDescriptionWinsOverAnElementOfTheSameName() throws IOException {
-    var schema =
-        writeSchema(
-            "ris.xsd",
-            """
-            <xs:complexType name="titel">
-              <xs:annotation>
-                <xs:documentation xml:lang="de">Titel</xs:documentation>
-              </xs:annotation>
-            </xs:complexType>
-            <xs:complexType name="personTitel">
-              <xs:annotation>
-                <xs:documentation xml:lang="de">Titel einer Person</xs:documentation>
-              </xs:annotation>
-            </xs:complexType>
-            <xs:complexType name="person">
-              <xs:sequence>
-                <xs:element name="titel" type="ris:personTitel" />
-              </xs:sequence>
-            </xs:complexType>
-            """);
-
-    var parser = parse(schema);
-
-    assertThat(parser.findDescription("ris:titel", "de")).hasValue("Titel");
-    assertThat(parser.findDescription("ris:personTitel", "de")).hasValue("Titel einer Person");
-  }
-
-  @Test
-  void anElementNameBoundToTypesWithDifferentDescriptionsIsLeftOut() throws IOException {
+  void anElementNameDoesNotGetTheDescriptionOfItsType() throws IOException {
     var schema =
         writeSchema(
             "ris.xsd",
@@ -115,29 +67,41 @@ class XSDDescriptionParserTest {
                 <xs:documentation xml:lang="de">Jahr einer Organisation</xs:documentation>
               </xs:annotation>
             </xs:complexType>
-            <xs:complexType name="einzelnormJahr">
-              <xs:annotation>
-                <xs:documentation xml:lang="de">Jahr</xs:documentation>
-              </xs:annotation>
-            </xs:complexType>
             <xs:complexType name="organisation">
               <xs:sequence>
                 <xs:element name="jahr" type="ris:organisationJahr" />
-              </xs:sequence>
-            </xs:complexType>
-            <xs:complexType name="einzelnorm">
-              <xs:sequence>
-                <xs:element name="jahr" type="ris:einzelnormJahr" />
               </xs:sequence>
             </xs:complexType>
             """);
 
     var parser = parse(schema);
 
+    assertThat(parser.findDescription("ris:organisationJahr", "de"))
+        .hasValue("Jahr einer Organisation");
     assertThat(parser.findDescription("ris:jahr", "de")).isEmpty();
-    assertThat(parser.getGlossaryEntries())
-        .extracting(GlossaryEntry::key)
-        .containsExactly("ris:einzelnormJahr", "ris:organisationJahr");
+    assertThat(parser.getTypeDocumentation())
+        .extracting(TypeDocumentation::typeName)
+        .containsExactly("ris:organisationJahr");
+  }
+
+  @Test
+  void documentationOfAnAnonymousTypeIsIgnored() throws IOException {
+    var schema =
+        writeSchema(
+            "ris.xsd",
+            """
+            <xs:element name="tenor">
+              <xs:complexType>
+                <xs:annotation>
+                  <xs:documentation xml:lang="de">Anonymer Typ</xs:documentation>
+                </xs:annotation>
+              </xs:complexType>
+            </xs:element>
+            """);
+
+    var parser = parse(schema);
+
+    assertThat(parser.getTypeDocumentation()).isEmpty();
   }
 
   @Test
@@ -166,14 +130,55 @@ class XSDDescriptionParserTest {
     var parser = parse(schema);
 
     assertThat(parser.findDescription("ris:tatbestand", "de")).hasValue("Tatbestand");
+    assertThat(parser.getTypeDocumentation())
+        .extracting(TypeDocumentation::schemaFile)
+        .containsExactly("caselaw.xsd");
+  }
+
+  @Test
+  void typesOfOtherNamespacesAreIgnored() throws IOException {
+    var schema =
+        writeSchema(
+            "schema/ris/ris.xsd",
+            """
+            <xs:import namespace="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"
+                       schemaLocation="../akn/akomantoso30.xsd" />
+            <xs:complexType name="tatbestand">
+              <xs:annotation>
+                <xs:documentation xml:lang="de">Tatbestand</xs:documentation>
+              </xs:annotation>
+            </xs:complexType>
+            """);
+    // Like the real Akoma Ntoso schema, this one uses the xsd: prefix instead of xs:.
+    var akn = tempDir.resolve("schema/akn/akomantoso30.xsd");
+    Files.createDirectories(akn.getParent());
+    Files.writeString(
+        akn,
+        """
+        <?xml version="1.0" encoding="UTF-8"?>
+        <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                    xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"
+                    targetNamespace="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
+          <xsd:complexType name="maincontent">
+            <xsd:annotation>
+              <xsd:documentation>Main content</xsd:documentation>
+            </xsd:annotation>
+          </xsd:complexType>
+        </xsd:schema>
+        """);
+
+    var parser = parse(schema);
+
+    assertThat(parser.getTypeDocumentation())
+        .extracting(TypeDocumentation::typeName)
+        .containsExactly("ris:tatbestand");
   }
 
   @Test
   void aMissingSchemaLeavesTheDescriptionsEmpty() {
     var parser = parse(tempDir.resolve("does-not-exist.xsd"));
 
-    assertThat(parser.getDescriptions()).isEmpty();
-    assertThat(parser.getGlossaryEntries()).isEmpty();
+    assertThat(parser.getTypeDocumentation()).isEmpty();
   }
 
   @Test
@@ -181,7 +186,6 @@ class XSDDescriptionParserTest {
     var parser =
         new XSDDescriptionParser(new XSDDescriptionProperties(), new DefaultResourceLoader());
 
-    assertThat(parser.getDescriptions()).isEmpty();
-    assertThat(parser.getGlossaryEntries()).isEmpty();
+    assertThat(parser.getTypeDocumentation()).isEmpty();
   }
 }

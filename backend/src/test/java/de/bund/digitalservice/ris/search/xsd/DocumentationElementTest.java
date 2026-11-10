@@ -28,7 +28,10 @@ class DocumentationElementTest {
   }
 
   private Document parseSchema(String xml) throws Exception {
-    return DocumentBuilderFactory.newInstance()
+    // Namespace-aware, like the factory in XSDDescriptionParser.
+    var factory = DocumentBuilderFactory.newInstance();
+    factory.setNamespaceAware(true);
+    return factory
         .newDocumentBuilder()
         .parse(new ByteArrayInputStream(xml.getBytes(StandardCharsets.UTF_8)));
   }
@@ -45,7 +48,7 @@ class DocumentationElementTest {
                 * Zwei
             """);
 
-    var documentationElement = new DocumentationElement(element, "");
+    var documentationElement = new DocumentationElement(element);
 
     assertThat(documentationElement.getDocumentation()).isEqualTo("Intro text\n\n* Eins\n* Zwei");
   }
@@ -54,7 +57,7 @@ class DocumentationElementTest {
   void documentationNestedInAnAttributeIsNotAttributedToTheEnclosingType() throws Exception {
     // Reproduces a real XSD shape: an xs:attribute's own documentation sits inside the same
     // complexType as the type's own top-level documentation. Only the latter should resolve to
-    // a TypeElement; the former describes the attribute, not the type.
+    // the type's name; the former describes the attribute, not the type.
     var document =
         parseSchema(
             """
@@ -76,8 +79,8 @@ class DocumentationElementTest {
     var typeLevelDocumentation = (Element) documentationElements.item(0);
     var attributeLevelDocumentation = (Element) documentationElements.item(1);
 
-    assertThat(new DocumentationElement(typeLevelDocumentation, "").getParent())
-        .isEqualTo(new TypeElement("", "aktenzeichen"));
-    assertThat(new DocumentationElement(attributeLevelDocumentation, "").getParent()).isNull();
+    assertThat(new DocumentationElement(typeLevelDocumentation).getTypeName())
+        .isEqualTo("aktenzeichen");
+    assertThat(new DocumentationElement(attributeLevelDocumentation).getTypeName()).isNull();
   }
 }
