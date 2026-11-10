@@ -1,6 +1,5 @@
 package de.bund.digitalservice.ris.search.mapper;
 
-import de.bund.digitalservice.ris.search.models.Richtung;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.Analysis;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.ImplicitReference;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.Meta;
@@ -13,6 +12,7 @@ import de.bund.digitalservice.ris.search.models.ldml.caselaw.RisGericht;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.RisZitierung;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Fundstelle;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Gericht;
+import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Richtung;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ZitierungLiteraturSelbststaendig;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ZitierungLiteraturUnselbststaendig;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ZitierungRechtsprechung;
@@ -76,7 +76,7 @@ final class CaseLawZitierungenMapper {
   private static ZitierungLiteraturSelbststaendig mapSelbststaendigeLiteratur(
       ReferenzSelbststaendigeLiteratur ref) {
     return ZitierungLiteraturSelbststaendig.builder()
-        .richtung(Richtung.fromLdml(ref.getRichtung()))
+        .richtung(mapRichtung(ref))
         .referenzUri(ref.getReferenzUri())
         .dokumentnummer(ref.getDokumentnummer())
         .autor(ref.getAutor())
@@ -88,7 +88,7 @@ final class CaseLawZitierungenMapper {
   private static ZitierungLiteraturUnselbststaendig mapUnselbststaendigeLiteratur(
       ReferenzUnselbststaendigeLiteratur ref) {
     return ZitierungLiteraturUnselbststaendig.builder()
-        .richtung(Richtung.fromLdml(ref.getRichtung()))
+        .richtung(mapRichtung(ref))
         .referenzUri(ref.getReferenzUri())
         .dokumentnummer(ref.getDokumentnummer())
         .autor(ref.getAutor())
@@ -99,7 +99,7 @@ final class CaseLawZitierungenMapper {
 
   private static ZitierungRechtsprechung mapRechtsprechung(ReferenzRechtsprechung ref) {
     return ZitierungRechtsprechung.builder()
-        .richtung(Richtung.fromLdml(ref.getRichtung()))
+        .richtung(mapRichtung(ref))
         .referenzUri(ref.getReferenzUri())
         .dokumentnummer(ref.getDokumentnummer())
         .artDerZitierung(ref.getArtDerZitierung())
@@ -114,13 +114,23 @@ final class CaseLawZitierungenMapper {
   private static ZitierungVerwaltungsvorschrift mapVerwaltungsvorschrift(
       ReferenzVerwaltungsvorschrift ref) {
     return ZitierungVerwaltungsvorschrift.builder()
-        .richtung(Richtung.fromLdml(ref.getRichtung()))
+        .richtung(mapRichtung(ref))
         .referenzUri(ref.getReferenzUri())
         .dokumentnummer(ref.getDokumentnummer())
         .artDerZitierung(ref.getArtDerZitierung())
         .jurisAbkuerzung(ref.getJurisAbkuerzung())
         .fundstelle(mapFundstelle(ref.getFundstelle()))
         .build();
+  }
+
+  private static Richtung mapRichtung(RisZitierung ref) {
+    if (ref.isAktiv()) {
+      return Richtung.AKTIV;
+    }
+    if (ref.isPassiv()) {
+      return Richtung.PASSIV;
+    }
+    return null;
   }
 
   private static Gericht mapGericht(RisGericht gericht) {

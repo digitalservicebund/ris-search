@@ -2,7 +2,6 @@ package de.bund.digitalservice.ris.search.mapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import de.bund.digitalservice.ris.search.models.Richtung;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.Analysis;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.ImplicitReference;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.Meta;
@@ -11,6 +10,7 @@ import de.bund.digitalservice.ris.search.models.ldml.caselaw.ReferenzNorm;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.ReferenzRechtsprechung;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.ReferenzUnselbststaendigeLiteratur;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Fundstelle;
+import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Richtung;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ZitierungLiteraturUnselbststaendig;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ZitierungRechtsprechung;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Zitierungen;

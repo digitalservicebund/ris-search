@@ -1,6 +1,5 @@
 package de.bund.digitalservice.ris.search.models.opensearch.zitierungen;
 
-import de.bund.digitalservice.ris.search.models.Richtung;
 import lombok.Builder;
 import org.springframework.data.elasticsearch.annotations.Field;
 

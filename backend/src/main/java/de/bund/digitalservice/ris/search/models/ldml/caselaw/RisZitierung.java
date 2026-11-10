@@ -1,17 +1,18 @@
 package de.bund.digitalservice.ris.search.models.ldml.caselaw;
 
-import de.bund.digitalservice.ris.search.models.Richtung;
-
 /** A reference to another document that is either cited by ("aktiv") or citing ("passiv") it. */
 public interface RisZitierung {
+
+  String RICHTUNG_AKTIV = "aktiv";
+  String RICHTUNG_PASSIV = "passiv";
 
   String getRichtung();
 
   default boolean isAktiv() {
-    return Richtung.fromLdml(getRichtung()) == Richtung.AKTIV;
+    return RICHTUNG_AKTIV.equalsIgnoreCase(getRichtung());
   }
 
   default boolean isPassiv() {
-    return Richtung.fromLdml(getRichtung()) == Richtung.PASSIV;
+    return RICHTUNG_PASSIV.equalsIgnoreCase(getRichtung());
   }
 }
