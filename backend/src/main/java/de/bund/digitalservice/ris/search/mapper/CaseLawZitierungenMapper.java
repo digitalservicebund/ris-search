@@ -1,5 +1,6 @@
 package de.bund.digitalservice.ris.search.mapper;
 
+import de.bund.digitalservice.ris.search.models.Richtung;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.Analysis;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.ImplicitReference;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.Meta;
@@ -70,7 +71,7 @@ final class CaseLawZitierungenMapper {
   private static ReferenzSelbststaendigeLiteratur mapSelbststaendigeLiteratur(
       de.bund.digitalservice.ris.search.models.ldml.caselaw.ReferenzSelbststaendigeLiteratur ref) {
     return ReferenzSelbststaendigeLiteratur.builder()
-        .richtung(ref.getRichtung())
+        .richtung(Richtung.fromLdml(ref.getRichtung()))
         .referenzUri(ref.getReferenzUri())
         .dokumentnummer(ref.getDokumentnummer())
         .autor(ref.getAutor())
@@ -83,7 +84,7 @@ final class CaseLawZitierungenMapper {
       de.bund.digitalservice.ris.search.models.ldml.caselaw.ReferenzUnselbststaendigeLiteratur
           ref) {
     return ReferenzUnselbststaendigeLiteratur.builder()
-        .richtung(ref.getRichtung())
+        .richtung(Richtung.fromLdml(ref.getRichtung()))
         .referenzUri(ref.getReferenzUri())
         .dokumentnummer(ref.getDokumentnummer())
         .autor(ref.getAutor())
@@ -95,7 +96,7 @@ final class CaseLawZitierungenMapper {
   private static ReferenzRechtsprechung mapRechtsprechung(
       de.bund.digitalservice.ris.search.models.ldml.caselaw.ReferenzRechtsprechung ref) {
     return ReferenzRechtsprechung.builder()
-        .richtung(ref.getRichtung())
+        .richtung(Richtung.fromLdml(ref.getRichtung()))
         .referenzUri(ref.getReferenzUri())
         .dokumentnummer(ref.getDokumentnummer())
         .artDerZitierung(ref.getArtDerZitierung())
@@ -110,7 +111,7 @@ final class CaseLawZitierungenMapper {
   private static ReferenzVerwaltungsvorschrift mapVerwaltungsvorschrift(
       de.bund.digitalservice.ris.search.models.ldml.caselaw.ReferenzVerwaltungsvorschrift ref) {
     return ReferenzVerwaltungsvorschrift.builder()
-        .richtung(ref.getRichtung())
+        .richtung(Richtung.fromLdml(ref.getRichtung()))
         .referenzUri(ref.getReferenzUri())
         .dokumentnummer(ref.getDokumentnummer())
         .artDerZitierung(ref.getArtDerZitierung())

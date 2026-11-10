@@ -3091,7 +3091,8 @@
             "example" : "ZitierungLiteraturSelbststaendig"
           },
           "richtung" : {
-            "type" : "string"
+            "type" : "string",
+            "enum" : [ "aktiv", "passiv" ]
           },
           "referenzUri" : {
             "type" : "string",
@@ -3122,7 +3123,8 @@
             "example" : "ZitierungLiteraturUnselbststaendig"
           },
           "richtung" : {
-            "type" : "string"
+            "type" : "string",
+            "enum" : [ "aktiv", "passiv" ]
           },
           "referenzUri" : {
             "type" : "string",
@@ -3154,7 +3156,8 @@
             "example" : "ZitierungRechtsprechung"
           },
           "richtung" : {
-            "type" : "string"
+            "type" : "string",
+            "enum" : [ "aktiv", "passiv" ]
           },
           "referenzUri" : {
             "type" : "string",
@@ -3198,7 +3201,8 @@
             "example" : "ZitierungVerwaltungsvorschrift"
           },
           "richtung" : {
-            "type" : "string"
+            "type" : "string",
+            "enum" : [ "aktiv", "passiv" ]
           },
           "referenzUri" : {
             "type" : "string",

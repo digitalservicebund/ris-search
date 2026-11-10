@@ -2,6 +2,7 @@ package de.bund.digitalservice.ris.search.mapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import de.bund.digitalservice.ris.search.models.Richtung;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.Analysis;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.ImplicitReference;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.Meta;
@@ -65,7 +66,7 @@ class CaseLawZitierungenMapperTest {
     assertThat(zitierungen.zitierungenRechtsprechung())
         .containsExactly(
             ReferenzRechtsprechung.builder()
-                .richtung("passiv")
+                .richtung(Richtung.PASSIV)
                 .dokumentnummer("JURE100074208")
                 .build());
   }
@@ -94,11 +95,11 @@ class CaseLawZitierungenMapperTest {
     assertThat(zitierungen.zitierungenRechtsprechung())
         .containsExactly(
             ReferenzRechtsprechung.builder()
-                .richtung("aktiv")
+                .richtung(Richtung.AKTIV)
                 .dokumentnummer("BVRE100338409")
                 .build(),
             ReferenzRechtsprechung.builder()
-                .richtung("passiv")
+                .richtung(Richtung.PASSIV)
                 .dokumentnummer("JURE100074208")
                 .build());
   }
@@ -127,7 +128,7 @@ class CaseLawZitierungenMapperTest {
     assertThat(zitierungen.zitierungenLiteraturUnselbstaendig())
         .containsExactly(
             ReferenzUnselbststaendigeLiteratur.builder()
-                .richtung("passiv")
+                .richtung(Richtung.PASSIV)
                 .dokumentnummer("STLU991393280")
                 .fundstelle(Fundstelle.builder().zitatstelle("1999, 641").build())
                 .build());

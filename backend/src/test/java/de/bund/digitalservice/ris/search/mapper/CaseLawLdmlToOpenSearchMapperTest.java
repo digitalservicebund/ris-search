@@ -3,6 +3,7 @@ package de.bund.digitalservice.ris.search.mapper;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import de.bund.digitalservice.ris.search.models.DatumsTyp;
+import de.bund.digitalservice.ris.search.models.Richtung;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Fundstelle;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Gericht;
@@ -167,7 +168,7 @@ class CaseLawLdmlToOpenSearchMapperTest {
     assertThat(zitierungen.zitierungenLiteraturSelbstaendig())
         .containsExactly(
             ReferenzSelbststaendigeLiteratur.builder()
-                .richtung("aktiv")
+                .richtung(Richtung.AKTIV)
                 .referenzUri("ris:/literatur/KSLS071671727")
                 .dokumentnummer("KSLS071671727")
                 .autor("Arnauld, Andreas von")
@@ -175,7 +176,7 @@ class CaseLawLdmlToOpenSearchMapperTest {
                 .veroeffentlichungsjahr("1999")
                 .build(),
             ReferenzSelbststaendigeLiteratur.builder()
-                .richtung("passiv")
+                .richtung(Richtung.PASSIV)
                 .referenzUri("ris:/literatur/KSLS071671728")
                 .dokumentnummer("KSLS071671728")
                 .autor("Mustermann, Max")
@@ -191,7 +192,7 @@ class CaseLawLdmlToOpenSearchMapperTest {
     assertThat(zitierungen.zitierungenLiteraturUnselbstaendig())
         .containsExactly(
             ReferenzUnselbststaendigeLiteratur.builder()
-                .richtung("aktiv")
+                .richtung(Richtung.AKTIV)
                 .referenzUri("ris:/literatur/STLU991393280")
                 .dokumentnummer("STLU991393280")
                 .autor("Schmidt-Liebig")
@@ -202,7 +203,7 @@ class CaseLawLdmlToOpenSearchMapperTest {
                         .build())
                 .build(),
             ReferenzUnselbststaendigeLiteratur.builder()
-                .richtung("passiv")
+                .richtung(Richtung.PASSIV)
                 .referenzUri("ris:/literatur/SBLU000539216")
                 .dokumentnummer("SBLU000539216")
                 .autor("Knopp, Lothar")
@@ -219,7 +220,7 @@ class CaseLawLdmlToOpenSearchMapperTest {
     assertThat(zitierungen.zitierungenRechtsprechung())
         .containsExactly(
             ReferenzRechtsprechung.builder()
-                .richtung("aktiv")
+                .richtung(Richtung.AKTIV)
                 .referenzUri("ris:/rechtsprechung/BVRE100338409")
                 .dokumentnummer("BVRE100338409")
                 .artDerZitierung("Vergleiche")
@@ -242,7 +243,7 @@ class CaseLawLdmlToOpenSearchMapperTest {
                         .build())
                 .build(),
             ReferenzRechtsprechung.builder()
-                .richtung("passiv")
+                .richtung(Richtung.PASSIV)
                 .referenzUri("ris:/rechtsprechung/JURE100074208")
                 .dokumentnummer("JURE100074208")
                 .artDerZitierung("Vergleiche")
@@ -264,7 +265,7 @@ class CaseLawLdmlToOpenSearchMapperTest {
     assertThat(zitierungen.zitierungenVerwaltungsvorschriften())
         .containsExactly(
             ReferenzVerwaltungsvorschrift.builder()
-                .richtung("aktiv")
+                .richtung(Richtung.AKTIV)
                 .referenzUri("ris:/verwaltungsvorschrift/KSNR008561615")
                 .dokumentnummer("KSNR008561615")
                 .artDerZitierung("Vergleiche")
@@ -276,7 +277,7 @@ class CaseLawLdmlToOpenSearchMapperTest {
                         .build())
                 .build(),
             ReferenzVerwaltungsvorschrift.builder()
-                .richtung("passiv")
+                .richtung(Richtung.PASSIV)
                 .referenzUri("ris:/verwaltungsvorschrift/KSNR006800006")
                 .dokumentnummer("KSNR006800006")
                 .artDerZitierung("Anwendung")
