@@ -91,10 +91,8 @@ class IndexNormsServiceIntegrationTest extends ContainersIntegrationBase {
             .getContent();
     assertThat(expressions).hasSize(3);
     assertThat(expressions)
-        .allSatisfy(
-            expression ->
-                assertThat(expression.getFullCitation())
-                    .isEqualTo("Verordnung zu der Vereinbarung"));
+        .allSatisfy(expression ->
+            assertThat(expression.getFullCitation()).isEqualTo("Verordnung zu der Vereinbarung"));
   }
 
   @Test
