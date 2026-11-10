@@ -51,7 +51,7 @@
     "@types/node": "26.6.6",
     "@types/sanitize-html": "2.16.2",
     "@vitejs/plugin-vue": "6.0.10",
-    "@vitest/coverage-v8": "4.1.11",
+    "@vitest/coverage-v8": "4.1.12",
     "@vue/test-utils": "2.5.1",
     "axe-html-reporter": "2.2.11",
     "openapi-typescript": "7.13.0",
@@ -61,7 +61,7 @@
     "tailwindcss": "4.3.4",
     "typescript": "6.0.3",
     "unplugin-icons": "24.0.0",
-    "vitest": "4.1.11",
+    "vitest": "4.1.12",
     "vue-tsc": "3.3.13"
   },
   "devEngines": {
