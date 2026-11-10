@@ -1,16 +1,17 @@
 package de.bund.digitalservice.ris.search.schema;
 
+import de.bund.digitalservice.ris.search.xsd.RISSchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
 /** API schema for the court of a cited decision. */
 @Builder
 public record GerichtSchema(
-    @Schema(example = "BGH") String gerichtstyp,
-    @Schema(example = "Karlsruhe") String gerichtsort,
-    @Schema(example = "Ordentliche Gerichtsbarkeit") String gerichtsbarkeit,
-    @Schema(example = "1. Senat") String spruchkoerper,
-    @Schema(example = "Nürnberg") String sitzDerAussenstelle)
+    @RISSchema(name = "ris:gerichtstyp") String gerichtstyp,
+    @RISSchema(name = "ris:gerichtsort") String gerichtsort,
+    @RISSchema(name = "ris:gerichtsbarkeit") String gerichtsbarkeit,
+    @RISSchema(name = "ris:spruchkoerper") String spruchkoerper,
+    @RISSchema(name = "ris:sitzDerAussenstelle") String sitzDerAussenstelle)
     implements JsonldResource {
 
   @Override

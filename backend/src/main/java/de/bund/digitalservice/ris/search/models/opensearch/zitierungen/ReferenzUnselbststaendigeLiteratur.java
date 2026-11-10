@@ -6,6 +6,7 @@ import org.springframework.data.elasticsearch.annotations.Field;
 /** A reference to a dependent literature document (ris:referenzUnselbststaendigeLiteratur). */
 @Builder
 public record ReferenzUnselbststaendigeLiteratur(
+    @Field(name = "richtung") String richtung,
     @Field(name = "referenz_uri") String referenzUri,
     @Field(name = "dokumentnummer") String dokumentnummer,
     @Field(name = "autor") String autor,

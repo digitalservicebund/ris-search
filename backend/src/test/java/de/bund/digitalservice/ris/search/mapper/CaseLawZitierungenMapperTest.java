@@ -23,14 +23,10 @@ class CaseLawZitierungenMapperTest {
   void returnsEmptyListsWithoutAnalysis() {
     Zitierungen zitierungen = CaseLawZitierungenMapper.map(Meta.builder().build());
 
-    assertThat(zitierungen.aktivzitierungRechtsprechung()).isEmpty();
-    assertThat(zitierungen.passivzitierungRechtsprechung()).isEmpty();
-    assertThat(zitierungen.aktivzitierungLiteraturSelbstaendig()).isEmpty();
-    assertThat(zitierungen.passivzitierungLiteraturSelbstaendig()).isEmpty();
-    assertThat(zitierungen.aktivzitierungLiteraturUnselbstaendig()).isEmpty();
-    assertThat(zitierungen.passivzitierungLiteraturUnselbstaendig()).isEmpty();
-    assertThat(zitierungen.aktivzitierungVerwaltungsvorschriften()).isEmpty();
-    assertThat(zitierungen.passivzitierungVerwaltungsvorschriften()).isEmpty();
+    assertThat(zitierungen.zitierungenRechtsprechung()).isEmpty();
+    assertThat(zitierungen.zitierungenLiteraturSelbstaendig()).isEmpty();
+    assertThat(zitierungen.zitierungenLiteraturUnselbstaendig()).isEmpty();
+    assertThat(zitierungen.zitierungenVerwaltungsvorschriften()).isEmpty();
   }
 
   @Test
@@ -46,13 +42,12 @@ class CaseLawZitierungenMapperTest {
     Zitierungen zitierungen =
         CaseLawZitierungenMapper.map(Meta.builder().analysis(analysis).build());
 
-    assertThat(zitierungen.aktivzitierungRechtsprechung()).isEmpty();
-    assertThat(zitierungen.passivzitierungRechtsprechung()).isEmpty();
+    assertThat(zitierungen.zitierungenRechtsprechung()).isEmpty();
   }
 
   @Test
   @DisplayName("Maps a Rechtsprechung citation without court, date and Fundstelle")
-  void mapsPassivzitierungRechtsprechungWithMissingOptionalFields() {
+  void mapsRechtsprechungWithMissingOptionalFields() {
     var referenz =
         new de.bund.digitalservice.ris.search.models.ldml.caselaw.ReferenzRechtsprechung();
     referenz.setRichtung("passiv");
@@ -67,43 +62,45 @@ class CaseLawZitierungenMapperTest {
     Zitierungen zitierungen =
         CaseLawZitierungenMapper.map(Meta.builder().analysis(analysis).build());
 
-    assertThat(zitierungen.passivzitierungRechtsprechung())
-        .containsExactly(ReferenzRechtsprechung.builder().dokumentnummer("JURE100074208").build());
-    assertThat(zitierungen.aktivzitierungRechtsprechung()).isEmpty();
+    assertThat(zitierungen.zitierungenRechtsprechung())
+        .containsExactly(
+            ReferenzRechtsprechung.builder()
+                .richtung("passiv")
+                .dokumentnummer("JURE100074208")
+                .build());
   }
 
   @Test
-  @DisplayName("Matches the Richtung case-insensitively and skips unknown Richtungen and nulls")
-  void filtersByRichtung() {
-    var upperCase =
-        new de.bund.digitalservice.ris.search.models.ldml.caselaw.ReferenzRechtsprechung();
-    upperCase.setRichtung("AKTIV");
-    upperCase.setDokumentnummer("BVRE100338409");
-    ImplicitReference upperCaseReference = new ImplicitReference();
-    upperCaseReference.setReferenzRechtsprechung(upperCase);
-    var unknown =
-        new de.bund.digitalservice.ris.search.models.ldml.caselaw.ReferenzRechtsprechung();
-    unknown.setRichtung("unbekannt");
-    unknown.setDokumentnummer("UNKNOWN000001");
-    ImplicitReference unknownReference = new ImplicitReference();
-    unknownReference.setReferenzRechtsprechung(unknown);
-    var withoutRichtung =
-        new de.bund.digitalservice.ris.search.models.ldml.caselaw.ReferenzRechtsprechung();
-    withoutRichtung.setDokumentnummer("UNKNOWN000002");
-    ImplicitReference withoutRichtungReference = new ImplicitReference();
-    withoutRichtungReference.setReferenzRechtsprechung(withoutRichtung);
+  @DisplayName("Keeps aktiv and passiv citations in one list with their Richtung and skips nulls")
+  void mapsAllRichtungenIntoOneList() {
+    var aktiv = new de.bund.digitalservice.ris.search.models.ldml.caselaw.ReferenzRechtsprechung();
+    aktiv.setRichtung("aktiv");
+    aktiv.setDokumentnummer("BVRE100338409");
+    ImplicitReference aktivReference = new ImplicitReference();
+    aktivReference.setReferenzRechtsprechung(aktiv);
+    var passiv = new de.bund.digitalservice.ris.search.models.ldml.caselaw.ReferenzRechtsprechung();
+    passiv.setRichtung("passiv");
+    passiv.setDokumentnummer("JURE100074208");
+    ImplicitReference passivReference = new ImplicitReference();
+    passivReference.setReferenzRechtsprechung(passiv);
     OtherReferences otherReferences = new OtherReferences();
-    otherReferences.setImplicitReferences(
-        Arrays.asList(null, upperCaseReference, unknownReference, withoutRichtungReference));
+    otherReferences.setImplicitReferences(Arrays.asList(null, aktivReference, passivReference));
     Analysis analysis = new Analysis();
     analysis.setOtherReferences(otherReferences);
 
     Zitierungen zitierungen =
         CaseLawZitierungenMapper.map(Meta.builder().analysis(analysis).build());
 
-    assertThat(zitierungen.aktivzitierungRechtsprechung())
-        .containsExactly(ReferenzRechtsprechung.builder().dokumentnummer("BVRE100338409").build());
-    assertThat(zitierungen.passivzitierungRechtsprechung()).isEmpty();
+    assertThat(zitierungen.zitierungenRechtsprechung())
+        .containsExactly(
+            ReferenzRechtsprechung.builder()
+                .richtung("aktiv")
+                .dokumentnummer("BVRE100338409")
+                .build(),
+            ReferenzRechtsprechung.builder()
+                .richtung("passiv")
+                .dokumentnummer("JURE100074208")
+                .build());
   }
 
   @Test
@@ -127,9 +124,10 @@ class CaseLawZitierungenMapperTest {
     Zitierungen zitierungen =
         CaseLawZitierungenMapper.map(Meta.builder().analysis(analysis).build());
 
-    assertThat(zitierungen.passivzitierungLiteraturUnselbstaendig())
+    assertThat(zitierungen.zitierungenLiteraturUnselbstaendig())
         .containsExactly(
             ReferenzUnselbststaendigeLiteratur.builder()
+                .richtung("passiv")
                 .dokumentnummer("STLU991393280")
                 .fundstelle(Fundstelle.builder().zitatstelle("1999, 641").build())
                 .build());

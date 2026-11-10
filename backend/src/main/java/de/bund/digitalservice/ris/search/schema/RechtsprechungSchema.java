@@ -59,22 +59,14 @@ public record RechtsprechungSchema(
     @Schema(description = "Mitwirkende Richter") List<String> mitwirkendeRichter,
     @RISSchema(name = "ris:vorgehendeEntscheidung") List<String> vorgehendeEntscheidungen,
     @RISSchema(name = "ris:nachgehendeEntscheidung") List<String> nachgehendeEntscheidungen,
-    @Schema(description = "Aktivzitierung Literatur Unselbstständig")
-        List<ZitierungLiteraturUnselbststaendigSchema> aktivzitierungLiteraturUnselbstaendig,
-    @Schema(description = "Passivzitierung Literatur Unselbstständig")
-        List<ZitierungLiteraturUnselbststaendigSchema> passivzitierungLiteraturUnselbstaendig,
-    @Schema(description = "Aktivzitierung Literatur Selbstständig")
-        List<ZitierungLiteraturSelbststaendigSchema> aktivzitierungLiteraturSelbstaendig,
-    @Schema(description = "Passivzitierung Literatur Selbstständig")
-        List<ZitierungLiteraturSelbststaendigSchema> passivzitierungLiteraturSelbstaendig,
-    @Schema(description = "Aktivzitierung Rechtsprechung")
-        List<ZitierungRechtsprechungSchema> aktivzitierungRechtsprechung,
-    @Schema(description = "Passivzitierung Rechtsprechung")
-        List<ZitierungRechtsprechungSchema> passivzitierungRechtsprechung,
-    @Schema(description = "Aktivzitierung Verwaltungsvorschriften")
-        List<ZitierungVerwaltungsvorschriftSchema> aktivzitierungVerwaltungsvorschriften,
-    @Schema(description = "Passivzitierung Verwaltungsvorschriften")
-        List<ZitierungVerwaltungsvorschriftSchema> passivzitierungVerwaltungsvorschriften,
+    @RISSchema(name = "ris:referenzSelbststaendigeLiteratur")
+        List<ZitierungLiteraturSelbststaendigSchema> zitierungenLiteraturSelbstaendig,
+    @RISSchema(name = "ris:referenzUnselbststaendigeLiteratur")
+        List<ZitierungLiteraturUnselbststaendigSchema> zitierungenLiteraturUnselbstaendig,
+    @RISSchema(name = "ris:referenzRechtsprechung")
+        List<ZitierungRechtsprechungSchema> zitierungenRechtsprechung,
+    @RISSchema(name = "ris:referenzVerwaltungsvorschrift")
+        List<ZitierungVerwaltungsvorschriftSchema> zitierungenVerwaltungsvorschriften,
     @Schema(example = "BGHSt 67, 273-284", description = "Amtliche Fundstellen")
         List<String> amtlicheFundstellen,
     @Schema(example = "DStR 2023, 1430-1435", description = "Nichtamtliche Fundstellen")

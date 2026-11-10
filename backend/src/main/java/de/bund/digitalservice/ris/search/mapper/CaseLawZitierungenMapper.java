@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.function.Predicate;
 
 /** Maps the aktiv- and passivzitierungen of a case law LDML document to {@link Zitierungen}. */
 final class CaseLawZitierungenMapper {
@@ -33,53 +32,25 @@ final class CaseLawZitierungenMapper {
             .orElse(List.of());
 
     return Zitierungen.builder()
-        .aktivzitierungLiteraturSelbstaendig(
+        .zitierungenLiteraturSelbstaendig(
             extract(
                 refs,
                 ImplicitReference::getReferenzSelbststaendigeLiteratur,
-                RisZitierung::isAktiv,
                 CaseLawZitierungenMapper::mapSelbststaendigeLiteratur))
-        .passivzitierungLiteraturSelbstaendig(
-            extract(
-                refs,
-                ImplicitReference::getReferenzSelbststaendigeLiteratur,
-                RisZitierung::isPassiv,
-                CaseLawZitierungenMapper::mapSelbststaendigeLiteratur))
-        .aktivzitierungLiteraturUnselbstaendig(
+        .zitierungenLiteraturUnselbstaendig(
             extract(
                 refs,
                 ImplicitReference::getReferenzUnselbststaendigeLiteratur,
-                RisZitierung::isAktiv,
                 CaseLawZitierungenMapper::mapUnselbststaendigeLiteratur))
-        .passivzitierungLiteraturUnselbstaendig(
-            extract(
-                refs,
-                ImplicitReference::getReferenzUnselbststaendigeLiteratur,
-                RisZitierung::isPassiv,
-                CaseLawZitierungenMapper::mapUnselbststaendigeLiteratur))
-        .aktivzitierungRechtsprechung(
+        .zitierungenRechtsprechung(
             extract(
                 refs,
                 ImplicitReference::getReferenzRechtsprechung,
-                RisZitierung::isAktiv,
                 CaseLawZitierungenMapper::mapRechtsprechung))
-        .passivzitierungRechtsprechung(
-            extract(
-                refs,
-                ImplicitReference::getReferenzRechtsprechung,
-                RisZitierung::isPassiv,
-                CaseLawZitierungenMapper::mapRechtsprechung))
-        .aktivzitierungVerwaltungsvorschriften(
+        .zitierungenVerwaltungsvorschriften(
             extract(
                 refs,
                 ImplicitReference::getReferenzVerwaltungsvorschrift,
-                RisZitierung::isAktiv,
-                CaseLawZitierungenMapper::mapVerwaltungsvorschrift))
-        .passivzitierungVerwaltungsvorschriften(
-            extract(
-                refs,
-                ImplicitReference::getReferenzVerwaltungsvorschrift,
-                RisZitierung::isPassiv,
                 CaseLawZitierungenMapper::mapVerwaltungsvorschrift))
         .build();
   }
@@ -87,13 +58,11 @@ final class CaseLawZitierungenMapper {
   private static <R extends RisZitierung, T> List<T> extract(
       List<ImplicitReference> refs,
       Function<ImplicitReference, R> extractor,
-      Predicate<R> richtungFilter,
       Function<R, T> mapper) {
     return refs.stream()
         .filter(Objects::nonNull)
         .map(extractor)
         .filter(Objects::nonNull)
-        .filter(richtungFilter)
         .map(mapper)
         .toList();
   }
@@ -101,6 +70,7 @@ final class CaseLawZitierungenMapper {
   private static ReferenzSelbststaendigeLiteratur mapSelbststaendigeLiteratur(
       de.bund.digitalservice.ris.search.models.ldml.caselaw.ReferenzSelbststaendigeLiteratur ref) {
     return ReferenzSelbststaendigeLiteratur.builder()
+        .richtung(ref.getRichtung())
         .referenzUri(ref.getReferenzUri())
         .dokumentnummer(ref.getDokumentnummer())
         .autor(ref.getAutor())
@@ -113,6 +83,7 @@ final class CaseLawZitierungenMapper {
       de.bund.digitalservice.ris.search.models.ldml.caselaw.ReferenzUnselbststaendigeLiteratur
           ref) {
     return ReferenzUnselbststaendigeLiteratur.builder()
+        .richtung(ref.getRichtung())
         .referenzUri(ref.getReferenzUri())
         .dokumentnummer(ref.getDokumentnummer())
         .autor(ref.getAutor())
@@ -124,6 +95,7 @@ final class CaseLawZitierungenMapper {
   private static ReferenzRechtsprechung mapRechtsprechung(
       de.bund.digitalservice.ris.search.models.ldml.caselaw.ReferenzRechtsprechung ref) {
     return ReferenzRechtsprechung.builder()
+        .richtung(ref.getRichtung())
         .referenzUri(ref.getReferenzUri())
         .dokumentnummer(ref.getDokumentnummer())
         .artDerZitierung(ref.getArtDerZitierung())
@@ -138,6 +110,7 @@ final class CaseLawZitierungenMapper {
   private static ReferenzVerwaltungsvorschrift mapVerwaltungsvorschrift(
       de.bund.digitalservice.ris.search.models.ldml.caselaw.ReferenzVerwaltungsvorschrift ref) {
     return ReferenzVerwaltungsvorschrift.builder()
+        .richtung(ref.getRichtung())
         .referenzUri(ref.getReferenzUri())
         .dokumentnummer(ref.getDokumentnummer())
         .artDerZitierung(ref.getArtDerZitierung())

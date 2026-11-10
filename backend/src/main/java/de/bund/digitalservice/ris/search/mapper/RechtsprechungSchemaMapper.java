@@ -71,35 +71,19 @@ public class RechtsprechungSchemaMapper {
         .mitwirkendeRichter(doc.mitwirkendeRichter())
         .vorgehendeEntscheidungen(doc.previousDecisions())
         .nachgehendeEntscheidungen(doc.ensuingDecisions())
-        .aktivzitierungLiteraturUnselbstaendig(
+        .zitierungenLiteraturSelbstaendig(
             mapList(
-                zitierungen.aktivzitierungLiteraturUnselbstaendig(),
+                zitierungen.zitierungenLiteraturSelbstaendig(),
                 ZitierungenSchemaMapper::fromDomain))
-        .passivzitierungLiteraturUnselbstaendig(
+        .zitierungenLiteraturUnselbstaendig(
             mapList(
-                zitierungen.passivzitierungLiteraturUnselbstaendig(),
+                zitierungen.zitierungenLiteraturUnselbstaendig(),
                 ZitierungenSchemaMapper::fromDomain))
-        .aktivzitierungLiteraturSelbstaendig(
+        .zitierungenRechtsprechung(
+            mapList(zitierungen.zitierungenRechtsprechung(), ZitierungenSchemaMapper::fromDomain))
+        .zitierungenVerwaltungsvorschriften(
             mapList(
-                zitierungen.aktivzitierungLiteraturSelbstaendig(),
-                ZitierungenSchemaMapper::fromDomain))
-        .passivzitierungLiteraturSelbstaendig(
-            mapList(
-                zitierungen.passivzitierungLiteraturSelbstaendig(),
-                ZitierungenSchemaMapper::fromDomain))
-        .aktivzitierungRechtsprechung(
-            mapList(
-                zitierungen.aktivzitierungRechtsprechung(), ZitierungenSchemaMapper::fromDomain))
-        .passivzitierungRechtsprechung(
-            mapList(
-                zitierungen.passivzitierungRechtsprechung(), ZitierungenSchemaMapper::fromDomain))
-        .aktivzitierungVerwaltungsvorschriften(
-            mapList(
-                zitierungen.aktivzitierungVerwaltungsvorschriften(),
-                ZitierungenSchemaMapper::fromDomain))
-        .passivzitierungVerwaltungsvorschriften(
-            mapList(
-                zitierungen.passivzitierungVerwaltungsvorschriften(),
+                zitierungen.zitierungenVerwaltungsvorschriften(),
                 ZitierungenSchemaMapper::fromDomain))
         .amtlicheFundstellen(doc.amtlicheFundstellen())
         .nichtamtlicheFundstellen(doc.nichtamtlicheFundstellen())

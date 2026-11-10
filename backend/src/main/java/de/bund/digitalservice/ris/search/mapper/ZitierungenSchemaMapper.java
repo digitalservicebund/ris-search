@@ -20,6 +20,7 @@ final class ZitierungenSchemaMapper {
 
   static ZitierungRechtsprechungSchema fromDomain(ReferenzRechtsprechung ref) {
     return ZitierungRechtsprechungSchema.builder()
+        .richtung(ref.richtung())
         .referenzUri(ref.referenzUri())
         .dokumentnummer(ref.dokumentnummer())
         .artDerZitierung(ref.artDerZitierung())
@@ -33,6 +34,7 @@ final class ZitierungenSchemaMapper {
 
   static ZitierungLiteraturSelbststaendigSchema fromDomain(ReferenzSelbststaendigeLiteratur ref) {
     return ZitierungLiteraturSelbststaendigSchema.builder()
+        .richtung(ref.richtung())
         .referenzUri(ref.referenzUri())
         .dokumentnummer(ref.dokumentnummer())
         .autor(ref.autor())
@@ -44,6 +46,7 @@ final class ZitierungenSchemaMapper {
   static ZitierungLiteraturUnselbststaendigSchema fromDomain(
       ReferenzUnselbststaendigeLiteratur ref) {
     return ZitierungLiteraturUnselbststaendigSchema.builder()
+        .richtung(ref.richtung())
         .referenzUri(ref.referenzUri())
         .dokumentnummer(ref.dokumentnummer())
         .autor(ref.autor())
@@ -54,6 +57,7 @@ final class ZitierungenSchemaMapper {
 
   static ZitierungVerwaltungsvorschriftSchema fromDomain(ReferenzVerwaltungsvorschrift ref) {
     return ZitierungVerwaltungsvorschriftSchema.builder()
+        .richtung(ref.richtung())
         .referenzUri(ref.referenzUri())
         .dokumentnummer(ref.dokumentnummer())
         .artDerZitierung(ref.artDerZitierung())

@@ -164,18 +164,18 @@ class CaseLawLdmlToOpenSearchMapperTest {
   void shouldMapZitierungenLiteraturSelbststaendig() {
     Zitierungen zitierungen = mapper.fromString(testCaseLawLdml).zitierungen();
 
-    assertThat(zitierungen.aktivzitierungLiteraturSelbstaendig())
+    assertThat(zitierungen.zitierungenLiteraturSelbstaendig())
         .containsExactly(
             ReferenzSelbststaendigeLiteratur.builder()
+                .richtung("aktiv")
                 .referenzUri("ris:/literatur/KSLS071671727")
                 .dokumentnummer("KSLS071671727")
                 .autor("Arnauld, Andreas von")
                 .titel("Die Freiheitsrechte und ihre Schranken")
                 .veroeffentlichungsjahr("1999")
-                .build());
-    assertThat(zitierungen.passivzitierungLiteraturSelbstaendig())
-        .containsExactly(
+                .build(),
             ReferenzSelbststaendigeLiteratur.builder()
+                .richtung("passiv")
                 .referenzUri("ris:/literatur/KSLS071671728")
                 .dokumentnummer("KSLS071671728")
                 .autor("Mustermann, Max")
@@ -188,9 +188,10 @@ class CaseLawLdmlToOpenSearchMapperTest {
   void shouldMapZitierungenLiteraturUnselbststaendig() {
     Zitierungen zitierungen = mapper.fromString(testCaseLawLdml).zitierungen();
 
-    assertThat(zitierungen.aktivzitierungLiteraturUnselbstaendig())
+    assertThat(zitierungen.zitierungenLiteraturUnselbstaendig())
         .containsExactly(
             ReferenzUnselbststaendigeLiteratur.builder()
+                .richtung("aktiv")
                 .referenzUri("ris:/literatur/STLU991393280")
                 .dokumentnummer("STLU991393280")
                 .autor("Schmidt-Liebig")
@@ -199,10 +200,9 @@ class CaseLawLdmlToOpenSearchMapperTest {
                         .periodikum("Information StW")
                         .zitatstelle("1999, 641")
                         .build())
-                .build());
-    assertThat(zitierungen.passivzitierungLiteraturUnselbstaendig())
-        .containsExactly(
+                .build(),
             ReferenzUnselbststaendigeLiteratur.builder()
+                .richtung("passiv")
                 .referenzUri("ris:/literatur/SBLU000539216")
                 .dokumentnummer("SBLU000539216")
                 .autor("Knopp, Lothar")
@@ -216,9 +216,10 @@ class CaseLawLdmlToOpenSearchMapperTest {
   void shouldMapZitierungenRechtsprechung() {
     Zitierungen zitierungen = mapper.fromString(testCaseLawLdml).zitierungen();
 
-    assertThat(zitierungen.aktivzitierungRechtsprechung())
+    assertThat(zitierungen.zitierungenRechtsprechung())
         .containsExactly(
             ReferenzRechtsprechung.builder()
+                .richtung("aktiv")
                 .referenzUri("ris:/rechtsprechung/BVRE100338409")
                 .dokumentnummer("BVRE100338409")
                 .artDerZitierung("Vergleiche")
@@ -239,10 +240,9 @@ class CaseLawLdmlToOpenSearchMapperTest {
                         .zitatstelle("1984, 15")
                         .fundstellenTyp("amtlich")
                         .build())
-                .build());
-    assertThat(zitierungen.passivzitierungRechtsprechung())
-        .containsExactly(
+                .build(),
             ReferenzRechtsprechung.builder()
+                .richtung("passiv")
                 .referenzUri("ris:/rechtsprechung/JURE100074208")
                 .dokumentnummer("JURE100074208")
                 .artDerZitierung("Vergleiche")
@@ -261,9 +261,10 @@ class CaseLawLdmlToOpenSearchMapperTest {
   void shouldMapZitierungenVerwaltungsvorschriften() {
     Zitierungen zitierungen = mapper.fromString(testCaseLawLdml).zitierungen();
 
-    assertThat(zitierungen.aktivzitierungVerwaltungsvorschriften())
+    assertThat(zitierungen.zitierungenVerwaltungsvorschriften())
         .containsExactly(
             ReferenzVerwaltungsvorschrift.builder()
+                .richtung("aktiv")
                 .referenzUri("ris:/verwaltungsvorschrift/KSNR008561615")
                 .dokumentnummer("KSNR008561615")
                 .artDerZitierung("Vergleiche")
@@ -273,10 +274,9 @@ class CaseLawLdmlToOpenSearchMapperTest {
                         .periodikum("MittLVA Oberfr")
                         .zitatstelle("1997, 538-539")
                         .build())
-                .build());
-    assertThat(zitierungen.passivzitierungVerwaltungsvorschriften())
-        .containsExactly(
+                .build(),
             ReferenzVerwaltungsvorschrift.builder()
+                .richtung("passiv")
                 .referenzUri("ris:/verwaltungsvorschrift/KSNR006800006")
                 .dokumentnummer("KSNR006800006")
                 .artDerZitierung("Anwendung")

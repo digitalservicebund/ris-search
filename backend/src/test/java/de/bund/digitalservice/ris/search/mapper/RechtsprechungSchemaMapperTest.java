@@ -77,9 +77,10 @@ class RechtsprechungSchemaMapperTest {
         .ensuingDecisions(List.of("ensuing decision file number, ensuing decision court type"))
         .zitierungen(
             Zitierungen.builder()
-                .aktivzitierungLiteraturUnselbstaendig(
+                .zitierungenLiteraturUnselbstaendig(
                     List.of(
                         ReferenzUnselbststaendigeLiteratur.builder()
+                            .richtung("aktiv")
                             .referenzUri("ris:/literatur/STLU991393280")
                             .dokumentnummer("STLU991393280")
                             .autor("Schmidt-Liebig")
@@ -90,29 +91,29 @@ class RechtsprechungSchemaMapperTest {
                                     .zitatstelle("1999, 641")
                                     .fundstellenTyp("nichtamtlich")
                                     .build())
-                            .build()))
-                .passivzitierungLiteraturUnselbstaendig(
-                    List.of(
+                            .build(),
                         ReferenzUnselbststaendigeLiteratur.builder()
+                            .richtung("passiv")
                             .dokumentnummer("SBLU000539216")
                             .build()))
-                .aktivzitierungLiteraturSelbstaendig(
+                .zitierungenLiteraturSelbstaendig(
                     List.of(
                         ReferenzSelbststaendigeLiteratur.builder()
+                            .richtung("aktiv")
                             .referenzUri("ris:/literatur/KSLS071671727")
                             .dokumentnummer("KSLS071671727")
                             .autor("Arnauld, Andreas von")
                             .titel("Die Freiheitsrechte und ihre Schranken")
                             .veroeffentlichungsjahr("1999")
-                            .build()))
-                .passivzitierungLiteraturSelbstaendig(
-                    List.of(
+                            .build(),
                         ReferenzSelbststaendigeLiteratur.builder()
+                            .richtung("passiv")
                             .dokumentnummer("KSLS071671728")
                             .build()))
-                .aktivzitierungRechtsprechung(
+                .zitierungenRechtsprechung(
                     List.of(
                         ReferenzRechtsprechung.builder()
+                            .richtung("aktiv")
                             .referenzUri("ris:/rechtsprechung/BVRE100338409")
                             .dokumentnummer("BVRE100338409")
                             .artDerZitierung("Vergleiche")
@@ -132,13 +133,15 @@ class RechtsprechungSchemaMapperTest {
                                     .periodikum("BayVBl")
                                     .zitatstelle("1984, 15")
                                     .build())
+                            .build(),
+                        ReferenzRechtsprechung.builder()
+                            .richtung("passiv")
+                            .dokumentnummer("JURE100074208")
                             .build()))
-                .passivzitierungRechtsprechung(
-                    List.of(
-                        ReferenzRechtsprechung.builder().dokumentnummer("JURE100074208").build()))
-                .aktivzitierungVerwaltungsvorschriften(
+                .zitierungenVerwaltungsvorschriften(
                     List.of(
                         ReferenzVerwaltungsvorschrift.builder()
+                            .richtung("aktiv")
                             .referenzUri("ris:/verwaltungsvorschrift/KSNR008561615")
                             .dokumentnummer("KSNR008561615")
                             .artDerZitierung("Vergleiche")
@@ -148,10 +151,9 @@ class RechtsprechungSchemaMapperTest {
                                     .periodikum("MittLVA Oberfr")
                                     .zitatstelle("1997, 538-539")
                                     .build())
-                            .build()))
-                .passivzitierungVerwaltungsvorschriften(
-                    List.of(
+                            .build(),
                         ReferenzVerwaltungsvorschrift.builder()
+                            .richtung("passiv")
                             .dokumentnummer("KSNR006800006")
                             .build()))
                 .build())
@@ -292,9 +294,10 @@ class RechtsprechungSchemaMapperTest {
     RechtsprechungSchema rechtsprechungSchema =
         RechtsprechungSchemaMapper.fromDomain(buildDocumentationUnit(), "jsonLdContext");
 
-    assertThat(rechtsprechungSchema.aktivzitierungLiteraturUnselbstaendig())
+    assertThat(rechtsprechungSchema.zitierungenLiteraturUnselbstaendig())
         .containsExactly(
             ZitierungLiteraturUnselbststaendigSchema.builder()
+                .richtung("aktiv")
                 .referenzUri("ris:/literatur/STLU991393280")
                 .dokumentnummer("STLU991393280")
                 .autor("Schmidt-Liebig")
@@ -305,24 +308,23 @@ class RechtsprechungSchemaMapperTest {
                         .zitatstelle("1999, 641")
                         .fundstellenTyp("nichtamtlich")
                         .build())
-                .build());
-    assertThat(rechtsprechungSchema.passivzitierungLiteraturUnselbstaendig())
-        .containsExactly(
+                .build(),
             ZitierungLiteraturUnselbststaendigSchema.builder()
+                .richtung("passiv")
                 .dokumentnummer("SBLU000539216")
                 .build());
-    assertThat(rechtsprechungSchema.aktivzitierungLiteraturSelbstaendig())
+    assertThat(rechtsprechungSchema.zitierungenLiteraturSelbstaendig())
         .containsExactly(
             ZitierungLiteraturSelbststaendigSchema.builder()
+                .richtung("aktiv")
                 .referenzUri("ris:/literatur/KSLS071671727")
                 .dokumentnummer("KSLS071671727")
                 .autor("Arnauld, Andreas von")
                 .titel("Die Freiheitsrechte und ihre Schranken")
                 .veroeffentlichungsjahr("1999")
-                .build());
-    assertThat(rechtsprechungSchema.passivzitierungLiteraturSelbstaendig())
-        .containsExactly(
+                .build(),
             ZitierungLiteraturSelbststaendigSchema.builder()
+                .richtung("passiv")
                 .dokumentnummer("KSLS071671728")
                 .build());
   }
@@ -333,9 +335,10 @@ class RechtsprechungSchemaMapperTest {
     RechtsprechungSchema rechtsprechungSchema =
         RechtsprechungSchemaMapper.fromDomain(buildDocumentationUnit(), "jsonLdContext");
 
-    assertThat(rechtsprechungSchema.aktivzitierungRechtsprechung())
+    assertThat(rechtsprechungSchema.zitierungenRechtsprechung())
         .containsExactly(
             ZitierungRechtsprechungSchema.builder()
+                .richtung("aktiv")
                 .referenzUri("ris:/rechtsprechung/BVRE100338409")
                 .dokumentnummer("BVRE100338409")
                 .artDerZitierung("Vergleiche")
@@ -352,13 +355,15 @@ class RechtsprechungSchemaMapperTest {
                 .aktenzeichen("Vf. 94-VI-81")
                 .fundstelle(
                     FundstelleSchema.builder().periodikum("BayVBl").zitatstelle("1984, 15").build())
+                .build(),
+            ZitierungRechtsprechungSchema.builder()
+                .richtung("passiv")
+                .dokumentnummer("JURE100074208")
                 .build());
-    assertThat(rechtsprechungSchema.passivzitierungRechtsprechung())
-        .containsExactly(
-            ZitierungRechtsprechungSchema.builder().dokumentnummer("JURE100074208").build());
-    assertThat(rechtsprechungSchema.aktivzitierungVerwaltungsvorschriften())
+    assertThat(rechtsprechungSchema.zitierungenVerwaltungsvorschriften())
         .containsExactly(
             ZitierungVerwaltungsvorschriftSchema.builder()
+                .richtung("aktiv")
                 .referenzUri("ris:/verwaltungsvorschrift/KSNR008561615")
                 .dokumentnummer("KSNR008561615")
                 .artDerZitierung("Vergleiche")
@@ -368,10 +373,11 @@ class RechtsprechungSchemaMapperTest {
                         .periodikum("MittLVA Oberfr")
                         .zitatstelle("1997, 538-539")
                         .build())
+                .build(),
+            ZitierungVerwaltungsvorschriftSchema.builder()
+                .richtung("passiv")
+                .dokumentnummer("KSNR006800006")
                 .build());
-    assertThat(rechtsprechungSchema.passivzitierungVerwaltungsvorschriften())
-        .containsExactly(
-            ZitierungVerwaltungsvorschriftSchema.builder().dokumentnummer("KSNR006800006").build());
   }
 
   @Test
@@ -383,8 +389,10 @@ class RechtsprechungSchemaMapperTest {
     RechtsprechungSchema rechtsprechungSchema =
         RechtsprechungSchemaMapper.fromDomain(documentationUnit, "jsonLdContext");
 
-    assertThat(rechtsprechungSchema.aktivzitierungRechtsprechung()).isNull();
-    assertThat(rechtsprechungSchema.passivzitierungLiteraturSelbstaendig()).isNull();
+    assertThat(rechtsprechungSchema.zitierungenLiteraturSelbstaendig()).isNull();
+    assertThat(rechtsprechungSchema.zitierungenLiteraturUnselbstaendig()).isNull();
+    assertThat(rechtsprechungSchema.zitierungenRechtsprechung()).isNull();
+    assertThat(rechtsprechungSchema.zitierungenVerwaltungsvorschriften()).isNull();
   }
 
   @Test

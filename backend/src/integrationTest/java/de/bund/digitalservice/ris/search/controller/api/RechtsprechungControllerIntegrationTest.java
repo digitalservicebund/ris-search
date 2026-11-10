@@ -3,6 +3,7 @@ package de.bund.digitalservice.ris.search.controller.api;
 import static de.bund.digitalservice.ris.ZipTestUtils.readZipStream;
 import static de.bund.digitalservice.ris.utils.JsonldResultMatchers.isJsonLdCompliant;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.startsWithIgnoringCase;
@@ -173,20 +174,26 @@ class RechtsprechungControllerIntegrationTest extends ContainersIntegrationBase 
                 .value(
                     "ensuing decision court type, ensuing decision document type vom 1. Oktober"
                         + " 2022 - ensuing decision file number (anhängig)"),
-            jsonPath("$.aktivzitierungLiteraturUnselbstaendig[0].dokumentnummer")
-                .value("STLU991393280"),
-            jsonPath("$.passivzitierungLiteraturUnselbstaendig[0].dokumentnummer")
-                .value("SBLU000539216"),
-            jsonPath("$.aktivzitierungLiteraturSelbstaendig[0].dokumentnummer")
-                .value("KSLS071671727"),
-            jsonPath("$.passivzitierungLiteraturSelbstaendig[0].dokumentnummer")
-                .value("KSLS071671728"),
-            jsonPath("$.aktivzitierungRechtsprechung[0].dokumentnummer").value("BVRE100338409"),
-            jsonPath("$.passivzitierungRechtsprechung[0].dokumentnummer").value("JURE100074208"),
-            jsonPath("$.aktivzitierungVerwaltungsvorschriften[0].dokumentnummer")
-                .value("KSNR008561615"),
-            jsonPath("$.passivzitierungVerwaltungsvorschriften[0].dokumentnummer")
-                .value("KSNR006800006"),
+            jsonPath(
+                    "$.zitierungenLiteraturUnselbstaendig[?(@.richtung == 'aktiv')].dokumentnummer")
+                .value(contains("STLU991393280")),
+            jsonPath(
+                    "$.zitierungenLiteraturUnselbstaendig[?(@.richtung == 'passiv')].dokumentnummer")
+                .value(contains("SBLU000539216")),
+            jsonPath("$.zitierungenLiteraturSelbstaendig[?(@.richtung == 'aktiv')].dokumentnummer")
+                .value(contains("KSLS071671727")),
+            jsonPath("$.zitierungenLiteraturSelbstaendig[?(@.richtung == 'passiv')].dokumentnummer")
+                .value(contains("KSLS071671728")),
+            jsonPath("$.zitierungenRechtsprechung[?(@.richtung == 'aktiv')].dokumentnummer")
+                .value(contains("BVRE100338409")),
+            jsonPath("$.zitierungenRechtsprechung[?(@.richtung == 'passiv')].dokumentnummer")
+                .value(contains("JURE100074208")),
+            jsonPath(
+                    "$.zitierungenVerwaltungsvorschriften[?(@.richtung == 'aktiv')].dokumentnummer")
+                .value(contains("KSNR008561615")),
+            jsonPath(
+                    "$.zitierungenVerwaltungsvorschriften[?(@.richtung == 'passiv')].dokumentnummer")
+                .value(contains("KSNR006800006")),
             jsonPath("$.amtlicheFundstellen[0]").value("BGHSt 67, 273-284"),
             jsonPath("$.nichtamtlicheFundstellen[0]").value("DStR 2023, 1430-1435"),
             jsonPath("$.gesetzeskraft[0]").value("vereinbar mit höherrangigem Recht, Bremen"),
@@ -234,32 +241,28 @@ class RechtsprechungControllerIntegrationTest extends ContainersIntegrationBase 
         .andExpect(isJsonLdCompliant())
         .andExpectAll(
             status().isOk(),
-            jsonPath("$.aktivzitierungRechtsprechung[0].referenzUri")
+            jsonPath("$.zitierungenRechtsprechung[0].referenzUri")
                 .value("ris:/rechtsprechung/BVRE100338409"),
-            jsonPath("$.aktivzitierungRechtsprechung[0].artDerZitierung").value("Vergleiche"),
-            jsonPath("$.aktivzitierungRechtsprechung[0].gericht.gerichtstyp").value("VerfGH"),
-            jsonPath("$.aktivzitierungRechtsprechung[0].gericht.gerichtsort").value("München"),
-            jsonPath("$.aktivzitierungRechtsprechung[0].gericht.gerichtsbarkeit")
+            jsonPath("$.zitierungenRechtsprechung[0].artDerZitierung").value("Vergleiche"),
+            jsonPath("$.zitierungenRechtsprechung[0].gericht.gerichtstyp").value("VerfGH"),
+            jsonPath("$.zitierungenRechtsprechung[0].gericht.gerichtsort").value("München"),
+            jsonPath("$.zitierungenRechtsprechung[0].gericht.gerichtsbarkeit")
                 .value("Verfassungsgerichtsbarkeit"),
-            jsonPath("$.aktivzitierungRechtsprechung[0].entscheidungsdatum").value("1983-12-02"),
-            jsonPath("$.aktivzitierungRechtsprechung[0].aktenzeichen").value("Vf. 94-VI-81"),
-            jsonPath("$.passivzitierungLiteraturUnselbstaendig[0].autor").value("Knopp, Lothar"),
-            jsonPath("$.passivzitierungLiteraturUnselbstaendig[0].dokumenttyp").value("Aufsatz"),
-            jsonPath("$.passivzitierungLiteraturUnselbstaendig[0].fundstelle.periodikum")
-                .value("NVwZ"),
-            jsonPath("$.passivzitierungLiteraturUnselbstaendig[0].fundstelle.zitatstelle")
+            jsonPath("$.zitierungenRechtsprechung[0].entscheidungsdatum").value("1983-12-02"),
+            jsonPath("$.zitierungenRechtsprechung[0].aktenzeichen").value("Vf. 94-VI-81"),
+            jsonPath("$.zitierungenLiteraturUnselbstaendig[1].autor").value("Knopp, Lothar"),
+            jsonPath("$.zitierungenLiteraturUnselbstaendig[1].dokumenttyp").value("Aufsatz"),
+            jsonPath("$.zitierungenLiteraturUnselbstaendig[1].fundstelle.periodikum").value("NVwZ"),
+            jsonPath("$.zitierungenLiteraturUnselbstaendig[1].fundstelle.zitatstelle")
                 .value("2016, 1139-1141"),
-            jsonPath("$.aktivzitierungLiteraturSelbstaendig[0].autor")
-                .value("Arnauld, Andreas von"),
-            jsonPath("$.aktivzitierungLiteraturSelbstaendig[0].titel")
+            jsonPath("$.zitierungenLiteraturSelbstaendig[0].autor").value("Arnauld, Andreas von"),
+            jsonPath("$.zitierungenLiteraturSelbstaendig[0].titel")
                 .value("Die Freiheitsrechte und ihre Schranken"),
-            jsonPath("$.aktivzitierungLiteraturSelbstaendig[0].veroeffentlichungsjahr")
-                .value("1999"),
-            jsonPath("$.passivzitierungVerwaltungsvorschriften[0].artDerZitierung")
-                .value("Anwendung"),
-            jsonPath("$.passivzitierungVerwaltungsvorschriften[0].jurisAbkuerzung")
+            jsonPath("$.zitierungenLiteraturSelbstaendig[0].veroeffentlichungsjahr").value("1999"),
+            jsonPath("$.zitierungenVerwaltungsvorschriften[1].artDerZitierung").value("Anwendung"),
+            jsonPath("$.zitierungenVerwaltungsvorschriften[1].jurisAbkuerzung")
                 .value("VR BA 1986-01-16 16/86"),
-            jsonPath("$.passivzitierungVerwaltungsvorschriften[0].fundstelle.periodikum")
+            jsonPath("$.zitierungenVerwaltungsvorschriften[1].fundstelle.periodikum")
                 .value("Dienstbl BA RdErl"));
   }
 
