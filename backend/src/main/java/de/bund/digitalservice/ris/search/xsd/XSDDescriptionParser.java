@@ -261,6 +261,12 @@ public class XSDDescriptionParser {
     return IntStream.range(0, nodes.getLength()).mapToObj(i -> (Element) nodes.item(i)).toList();
   }
 
+  /**
+   * Creates a namespace-aware {@link DocumentBuilderFactory} that is protected against XML external
+   * entity (XXE) attacks: the schema files must not load DTDs or external entities.
+   *
+   * @throws IllegalStateException if the XML parser does not support this protection
+   */
   private static DocumentBuilderFactory createDocumentBuilderFactory() {
     var factory = DocumentBuilderFactory.newInstance();
     factory.setNamespaceAware(true);
@@ -268,7 +274,8 @@ public class XSDDescriptionParser {
       factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
       factory.setFeature("http://xml.org/sax/features/external-general-entities", false);
       factory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
-    } catch (ParserConfigurationException _) {
+    } catch (ParserConfigurationException e) {
+      throw new IllegalStateException("XML parser does not support XXE protection", e);
     }
     return factory;
   }
