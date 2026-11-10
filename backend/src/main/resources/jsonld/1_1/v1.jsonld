@@ -32,7 +32,7 @@
       "PublicationIssue": "schema:PublicationIssue",
       "MediaObject": "schema:MediaObject",
       "documentNumber": "schema:identifier",
-      "referenzUri": "ris:referenzUri",
+      "referenzUri": "ris:referenzURI",
       "richtung": "ris:richtung",
       "dokumentnummer": "schema:identifier",
       "Legislation": {
