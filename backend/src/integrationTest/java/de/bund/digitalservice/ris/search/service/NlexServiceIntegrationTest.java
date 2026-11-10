@@ -33,7 +33,7 @@ class NlexServiceIntegrationTest extends ContainersIntegrationBase {
     loadDefaultData();
   }
 
-  @Autowired() NormsService service;
+  @Autowired NormsService service;
   NlexService nlexService;
   private static final String FRONTEND_URL = "http://testurl.de/";
 

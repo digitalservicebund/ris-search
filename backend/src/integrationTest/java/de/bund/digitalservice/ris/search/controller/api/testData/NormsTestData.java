@@ -71,13 +71,12 @@ public class NormsTestData {
             .outOfForceDate("1995-01-01")
             .longTitle("Formatting Test Document", null, null)
             .addOfficialTitleFootnote("Authorial note in the norm title.")
-            .toc(
-                toc -> {
-                  toc.addEntry("Abschnitt 1", "1")
-                      .addEntry("Allgemeine Bestimmungen ", "2")
-                      .addEntry("Eintrag 2", "1")
-                      .addEntry("Art 1", "5");
-                })
+            .toc(toc -> {
+              toc.addEntry("Abschnitt 1", "1")
+                  .addEntry("Allgemeine Bestimmungen ", "2")
+                  .addEntry("Eintrag 2", "1")
+                  .addEntry("Art 1", "5");
+            })
             .article(
                 "§ 1",
                 "1991-01-01",

@@ -169,7 +169,7 @@ jobs:
         uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4
 
       - name: Log into container registry
-        uses: docker/login-action@81c6f93d4bc991e510b342a00b419b3bb4efc5c6 # v4
+        uses: docker/login-action@8aa5831fb8d48d8f76594c7ddde61ae58019f550 # v4
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -195,7 +195,7 @@ jobs:
 
   scan-attest-and-sign-image:
     needs: build-and-push-image
-    uses: $/.github/workflows/scan-attest-sign-image.yml
+    uses: ./.github/workflows/scan-attest-sign-image.yml
     permissions:
       contents: read
       packages: write
@@ -211,7 +211,7 @@ jobs:
   deploy:
     needs:
       - scan-attest-and-sign-image
-    uses: $/.github/workflows/deploy.yml
+    uses: ./.github/workflows/deploy.yml
     secrets:
       ARGOCD_AUTH_TOKEN: ${{ secrets.ARGOCD_AUTH_TOKEN }}
       ARGOCD_SERVER_STACKIT: ${{ secrets.ARGOCD_SERVER_STACKIT }}

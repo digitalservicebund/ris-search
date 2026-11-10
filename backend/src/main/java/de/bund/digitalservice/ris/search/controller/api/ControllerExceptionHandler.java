@@ -66,13 +66,12 @@ public class ControllerExceptionHandler {
       MethodArgumentNotValidException ex) {
     List<CustomError> errors =
         ex.getBindingResult().getAllErrors().stream()
-            .map(
-                error -> {
-                  if (error instanceof FieldError e) {
-                    return getInvalidParameterError(e.getDefaultMessage(), e.getField());
-                  }
-                  return new CustomError("unknown", "Unknown error", "");
-                })
+            .map(error -> {
+              if (error instanceof FieldError e) {
+                return getInvalidParameterError(e.getDefaultMessage(), e.getField());
+              }
+              return new CustomError("unknown", "Unknown error", "");
+            })
             .toList();
     CustomErrorResponse errorResponse = CustomErrorResponse.builder().errors(errors).build();
     return ResponseEntity.status(HttpStatus.UNPROCESSABLE_CONTENT).body(errorResponse);
@@ -94,18 +93,16 @@ public class ControllerExceptionHandler {
       HandlerMethodValidationException ex) {
     List<CustomError> errors =
         ex.getParameterValidationResults().stream()
-            .flatMap(
-                result -> {
-                  String paramName = result.getMethodParameter().getParameterName();
-                  return result.getResolvableErrors().stream()
-                      .map(
-                          error -> {
-                            if (error instanceof FieldError e) {
-                              return getInvalidParameterError(e.getDefaultMessage(), e.getField());
-                            }
-                            return getInvalidParameterError(error.getDefaultMessage(), paramName);
-                          });
-                })
+            .flatMap(result -> {
+              String paramName = result.getMethodParameter().getParameterName();
+              return result.getResolvableErrors().stream()
+                  .map(error -> {
+                    if (error instanceof FieldError e) {
+                      return getInvalidParameterError(e.getDefaultMessage(), e.getField());
+                    }
+                    return getInvalidParameterError(error.getDefaultMessage(), paramName);
+                  });
+            })
             .toList();
 
     CustomErrorResponse errorResponse = CustomErrorResponse.builder().errors(errors).build();
@@ -127,19 +124,18 @@ public class ControllerExceptionHandler {
 
     List<CustomError> violations =
         ex.getConstraintViolations().stream()
-            .map(
-                violation -> {
-                  var iterator = violation.getPropertyPath().iterator();
-                  Path.Node lastNode = null;
-                  while (iterator.hasNext()) {
-                    lastNode = iterator.next();
-                  }
-                  String propertyName = "";
-                  if (!Objects.isNull(lastNode)) {
-                    propertyName = lastNode.getName();
-                  }
-                  return new CustomError("invalid parameter", violation.getMessage(), propertyName);
-                })
+            .map(violation -> {
+              var iterator = violation.getPropertyPath().iterator();
+              Path.Node lastNode = null;
+              while (iterator.hasNext()) {
+                lastNode = iterator.next();
+              }
+              String propertyName = "";
+              if (!Objects.isNull(lastNode)) {
+                propertyName = lastNode.getName();
+              }
+              return new CustomError("invalid parameter", violation.getMessage(), propertyName);
+            })
             .toList();
 
     CustomErrorResponse errorResponse = CustomErrorResponse.builder().errors(violations).build();

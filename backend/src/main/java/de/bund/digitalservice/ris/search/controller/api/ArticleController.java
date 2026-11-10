@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 /** Controller class for handling REST API requests for articles. */
-@RestController()
+@RestController
 public class ArticleController {
 
   private final ArticleService articleService;
@@ -43,7 +43,7 @@ public class ArticleController {
    */
   @GetMapping(path = ApiConfig.Paths.ARTICLE_WORK_EXAMPLE + "/{revision}")
   public ResponseEntity<CollectionSchema<ArticleVersionSchema>> getArticleVersionsByRevision(
-      @Parameter() @PathVariable String revision) {
+      @Parameter @PathVariable String revision) {
 
     Page<ArticleWithExpressions> articles = articleService.getAllArticleVersions(revision);
 
@@ -65,7 +65,7 @@ public class ArticleController {
    */
   @GetMapping(path = ApiConfig.Paths.ARTICLE + "/{revision}/legislations")
   public ResponseEntity<CollectionSchema<LegislationExpressionSearchSchema>>
-      getLegislationExpressionsByArticleRevision(@Parameter() @PathVariable String revision) {
+      getLegislationExpressionsByArticleRevision(@Parameter @PathVariable String revision) {
 
     Page<Norm> norms = normsService.getAllNormsContainingArticle(revision);
 

@@ -299,80 +299,72 @@ public class CaseLawLdmlToOpenSearchMapper {
   private static List<String> extractAktivzitierungLiteraturUnselbstaendig(Meta meta) {
     return Optional.ofNullable(meta.getAnalysis())
         .map(Analysis::getOtherReferences)
-        .map(
-            refs ->
-                refs.getReferencesByType(
-                    ImplicitReference::getAktivzitierteUnselbststaendigeLiteraturDokumentnummer))
+        .map(refs ->
+            refs.getReferencesByType(
+                ImplicitReference::getAktivzitierteUnselbststaendigeLiteraturDokumentnummer))
         .orElse(List.of());
   }
 
   private static List<String> extractAktivzitierungLiteraturSelbstaendig(Meta meta) {
     return Optional.ofNullable(meta.getAnalysis())
         .map(Analysis::getOtherReferences)
-        .map(
-            refs ->
-                refs.getReferencesByType(
-                    ImplicitReference::getAktivzitierteSelbststaendigeLiteraturDokumentnummer))
+        .map(refs ->
+            refs.getReferencesByType(
+                ImplicitReference::getAktivzitierteSelbststaendigeLiteraturDokumentnummer))
         .orElse(List.of());
   }
 
   private static List<String> extractPassivzitierungLiteraturSelbstaendig(Meta meta) {
     return Optional.ofNullable(meta.getAnalysis())
         .map(Analysis::getOtherReferences)
-        .map(
-            refs ->
-                refs.getReferencesByType(
-                    ImplicitReference::getPassivzitierteSelbststaendigeLiteraturDokumentnummer))
+        .map(refs ->
+            refs.getReferencesByType(
+                ImplicitReference::getPassivzitierteSelbststaendigeLiteraturDokumentnummer))
         .orElse(List.of());
   }
 
   private static List<String> extractPassivzitierungLiteraturUnselbstaendig(Meta meta) {
     return Optional.ofNullable(meta.getAnalysis())
         .map(Analysis::getOtherReferences)
-        .map(
-            refs ->
-                refs.getReferencesByType(
-                    ImplicitReference::getPassivzitierteUnselbststaendigeLiteraturDokumentnummer))
+        .map(refs ->
+            refs.getReferencesByType(
+                ImplicitReference::getPassivzitierteUnselbststaendigeLiteraturDokumentnummer))
         .orElse(List.of());
   }
 
   private static List<String> extractAktivzitierungRechtsprechung(Meta meta) {
     return Optional.ofNullable(meta.getAnalysis())
         .map(Analysis::getOtherReferences)
-        .map(
-            refs ->
-                refs.getReferencesByType(
-                    ImplicitReference::getAktivzitierteRechtsprechungDokumentnummer))
+        .map(refs ->
+            refs.getReferencesByType(
+                ImplicitReference::getAktivzitierteRechtsprechungDokumentnummer))
         .orElse(List.of());
   }
 
   private static List<String> extractPassivzitierungRechtsprechung(Meta meta) {
     return Optional.ofNullable(meta.getAnalysis())
         .map(Analysis::getOtherReferences)
-        .map(
-            refs ->
-                refs.getReferencesByType(
-                    ImplicitReference::getPassivzitierteRechtsprechungDokumentnummer))
+        .map(refs ->
+            refs.getReferencesByType(
+                ImplicitReference::getPassivzitierteRechtsprechungDokumentnummer))
         .orElse(List.of());
   }
 
   private static List<String> extractAktivzitierungVerwaltungsvorschriften(Meta meta) {
     return Optional.ofNullable(meta.getAnalysis())
         .map(Analysis::getOtherReferences)
-        .map(
-            refs ->
-                refs.getReferencesByType(
-                    ImplicitReference::getAktivzitierteVerwaltungsvorschriftDokumentnummer))
+        .map(refs ->
+            refs.getReferencesByType(
+                ImplicitReference::getAktivzitierteVerwaltungsvorschriftDokumentnummer))
         .orElse(List.of());
   }
 
   private static List<String> extractPassivzitierungVerwaltungsvorschriften(Meta meta) {
     return Optional.ofNullable(meta.getAnalysis())
         .map(Analysis::getOtherReferences)
-        .map(
-            refs ->
-                refs.getReferencesByType(
-                    ImplicitReference::getPassivzitierteVerwaltungsvorschriftDokumentnummer))
+        .map(refs ->
+            refs.getReferencesByType(
+                ImplicitReference::getPassivzitierteVerwaltungsvorschriftDokumentnummer))
         .orElse(List.of());
   }
 
@@ -386,9 +378,8 @@ public class CaseLawLdmlToOpenSearchMapper {
   private static List<String> extractNichtamtlicheFundstellen(Meta meta) {
     return Optional.ofNullable(meta.getAnalysis())
         .map(Analysis::getOtherReferences)
-        .map(
-            refs ->
-                refs.getReferencesByType(ImplicitReference::getNichtamtlicheFundstelleFormatted))
+        .map(refs ->
+            refs.getReferencesByType(ImplicitReference::getNichtamtlicheFundstelleFormatted))
         .orElse(List.of());
   }
 

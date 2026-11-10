@@ -45,12 +45,11 @@ class IndexNormsServiceTest {
     verify(repo, times(1)).saveAll(any());
     verify(repo, times(1))
         .saveAll(
-            argThat(
-                arg ->
-                    arg.iterator()
-                        .next()
-                        .getId()
-                        .equals("eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu")));
+            argThat(arg ->
+                arg.iterator()
+                    .next()
+                    .getId()
+                    .equals("eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu")));
     verify(repo, times(1)).deleteByIndexedAtBefore(startingTimestamp);
   }
 

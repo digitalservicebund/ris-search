@@ -337,7 +337,7 @@ class AdvancedSearchControllerApiIntegrationTest extends ContainersIntegrationBa
     return arguments.stream();
   }
 
-  @ParameterizedTest()
+  @ParameterizedTest
   @MethodSource("caseLawAdvancedSearchParams")
   void shouldFindCorrectCount(String key, String value, int expectedCount) throws Exception {
     String urlWithSpecificIndex =
@@ -647,16 +647,16 @@ class AdvancedSearchControllerApiIntegrationTest extends ContainersIntegrationBa
             content()
                 .json(
                     """
-                                                    {
-                                                      "errors": [
-                                                        {
-                                                          "code": "invalid_parameter_value",
-                                                          "message": "%s",
-                                                          "parameter": "sort"
-                                                        }
-                                                      ]
-                                                    }
-                                                    """
+                    {
+                      "errors": [
+                        {
+                          "code": "invalid_parameter_value",
+                          "message": "%s",
+                          "parameter": "sort"
+                        }
+                      ]
+                    }
+                    """
                         .formatted(expectedError)));
   }
 

@@ -136,9 +136,9 @@ public class AdministrativeDirectiveController {
   @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content)
   public ResponseEntity<CollectionSchema<SearchMemberSchema<AdministrativeDirectiveSearchSchema>>>
       searchAndFilter(
-          @ParameterObject() AdministrativeDirectiveSearchParams searchParams,
+          @ParameterObject AdministrativeDirectiveSearchParams searchParams,
           @ParameterObject UniversalSearchParams universalSearchParams,
-          @ParameterObject() @Valid PaginationParams paginationParams,
+          @ParameterObject @Valid PaginationParams paginationParams,
           @ParameterObject @Valid AdministrativeDirectiveSortParam sortParams)
           throws CustomValidationException {
 
@@ -177,7 +177,7 @@ public class AdministrativeDirectiveController {
       description =
           "Returns an administrative directive item as XML. This content is used as a source for the HTML endpoint.")
   @ApiResponse(responseCode = "200")
-  @ApiResponse(responseCode = "404", content = @Content(schema = @Schema()))
+  @ApiResponse(responseCode = "404", content = @Content(schema = @Schema))
   public ResponseEntity<byte[]> getAdministrativeDirectiveAsXml(
       @Parameter(example = "KSNR00000") @PathVariable String documentNumber) {
 
@@ -251,7 +251,7 @@ public class AdministrativeDirectiveController {
       summary = "Decision ZIP (XML and attachments)",
       description = "Returns all administrative directive files as a ZIP archive.")
   @ApiResponse(responseCode = "200")
-  @ApiResponse(responseCode = "404", content = @Content(schema = @Schema()))
+  @ApiResponse(responseCode = "404", content = @Content(schema = @Schema))
   public ResponseEntity<StreamingResponseBody> getAdministrativeDirectiveAsZip(
       @Pattern(regexp = "^[a-zA-Z]{4}\\d{9}$", message = "Invalid document number format")
           @Parameter(example = "XXLS201770751")

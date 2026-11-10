@@ -105,13 +105,12 @@ public class NlexService {
           Optional.ofNullable(query.getCriteria())
               .map(Criteria::getWords)
               .map(Words::getContains)
-              .orElseGet(
-                  () ->
-                      Optional.ofNullable(query.getCriteria())
-                          .map(Criteria::getAnd)
-                          .map(BooleanAnd::getWords)
-                          .map(Words::getContains)
-                          .orElse(""));
+              .orElseGet(() ->
+                  Optional.ofNullable(query.getCriteria())
+                      .map(Criteria::getAnd)
+                      .map(BooleanAnd::getWords)
+                      .map(Words::getContains)
+                      .orElse(""));
 
       if (contains.isEmpty()) {
         return Optional.empty();

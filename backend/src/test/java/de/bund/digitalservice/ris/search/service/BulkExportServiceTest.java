@@ -46,14 +46,13 @@ class BulkExportServiceTest {
 
     AtomicReference<Map<String, byte[]>> files = new AtomicReference<>();
     when(destinationBucket.putStream(anyString(), any(InputStream.class)))
-        .thenAnswer(
-            i -> {
-              // process the inputStream as it comes in, it will be closed after invocation the
-              // method under test
-              InputStream stream = i.getArgument(1);
-              files.set(ZipTestUtils.readZipStream(stream));
-              return -1L;
-            });
+        .thenAnswer(i -> {
+          // process the inputStream as it comes in, it will be closed after invocation the
+          // method under test
+          InputStream stream = i.getArgument(1);
+          files.set(ZipTestUtils.readZipStream(stream));
+          return -1L;
+        });
 
     BulkExportService bulkExportService =
         new BulkExportService(sourceBucket, destinationBucket, outputName);

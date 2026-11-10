@@ -26,7 +26,7 @@ class LiteratureLdmlMappingUtilsTest {
         Arguments.of("2003, 127-133 (Schriften des Vereins für Socialpolitik", null));
   }
 
-  @ParameterizedTest()
+  @ParameterizedTest
   @MethodSource("provideYearsOfPublication")
   void firstPublicationDateIsNullOnInvalidDate(String yearValue, LocalDate expectedDate) {
 

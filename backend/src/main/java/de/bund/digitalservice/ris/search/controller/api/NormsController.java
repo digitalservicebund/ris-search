@@ -128,32 +128,32 @@ public class NormsController {
       summary = "List and search legislation",
       description =
           """
-                      List all legislation in our database with support for filtering and pagination.
+          List all legislation in our database with support for filtering and pagination.
 
-                      ## Example 1
+          ## Example 1
 
-                      Get all legislation containing the tokens :` Gesetz`, `über`,`das`, `Verfahren`, `bei`, `sonstigen` and `Änderungen`.
-                      ```http request
-                      GET /v1/legislation?searchTerm=Gesetz%20über%20das%20Verfahren%20bei%20sonstigen%20Änderungen
-                      ```
-                      The API will return only the legislation that contains all these terms. Please note that in practice very common tokens such as `das` are ignored
-                      (please see <a href="https://en.wikipedia.org/wiki/Stop_word">https://en.wikipedia.org/wiki/Stop_word</a> for more details).
+          Get all legislation containing the tokens :` Gesetz`, `über`,`das`, `Verfahren`, `bei`, `sonstigen` and `Änderungen`.
+          ```http request
+          GET /v1/legislation?searchTerm=Gesetz%20über%20das%20Verfahren%20bei%20sonstigen%20Änderungen
+          ```
+          The API will return only the legislation that contains all these terms. Please note that in practice very common tokens such as `das` are ignored
+          (please see <a href="https://en.wikipedia.org/wiki/Stop_word">https://en.wikipedia.org/wiki/Stop_word</a> for more details).
 
-                      ## Example 2
+          ## Example 2
 
-                      Get all legislation containing the tokens :` Gesetz` and `über` and were valid on 2020-01-01
-                      ```http request
-                      GET /v1/legislation?temporalCoverageFrom=2020-01-01&temporalCoverageTo=2020-01-01&searchTerm=Gesetz%20über
-                      ```
-                      This example can be used to only return currently valid legislation by replacing 2020-01-01 with today's date.
+          Get all legislation containing the tokens :` Gesetz` and `über` and were valid on 2020-01-01
+          ```http request
+          GET /v1/legislation?temporalCoverageFrom=2020-01-01&temporalCoverageTo=2020-01-01&searchTerm=Gesetz%20über
+          ```
+          This example can be used to only return currently valid legislation by replacing 2020-01-01 with today's date.
 
-                      ## Example 3
+          ## Example 3
 
-                      Get all of the legislation that belong to the work eli `eli/bund/bgbl-1/1979/s1325`
-                      ```http request
-                      GET /v1/legislation?eli=eli/bund/bgbl-1/1979/s1325
-                      ```
-                      """)
+          Get all of the legislation that belong to the work eli `eli/bund/bgbl-1/1979/s1325`
+          ```http request
+          GET /v1/legislation?eli=eli/bund/bgbl-1/1979/s1325
+          ```
+          """)
   @ApiResponse(responseCode = "200")
   @ApiResponse(responseCode = "422")
   public CollectionSchema<SearchMemberSchema<LegislationExpressionSearchSchema>> searchAndFilter(
@@ -299,8 +299,8 @@ public class NormsController {
       summary = "Manifestation HTML",
       description =
           """
-              Returns a particular manifestation of a piece of legislation, converted to HTML.
-              """)
+          Returns a particular manifestation of a piece of legislation, converted to HTML.
+          """)
   @ApiResponse(
       responseCode = "200",
       content = @Content(mediaType = MediaType.TEXT_HTML_VALUE, schema = @Schema(type = "string")))
@@ -379,18 +379,18 @@ public class NormsController {
       summary = "Manifestation XML",
       description =
           """
-              Returns a particular manifestation of a piece of legislation in XML format.
+          Returns a particular manifestation of a piece of legislation in XML format.
 
-              ## Example
+          ## Example
 
-              Download the LegalDocML format for the piece of legislation with a manifestation eli of `eli/bund/bgbl-1/1979/s1325/2020-06-19/2/deu/2020-06-19/regelungstext-1.xml`
+          Download the LegalDocML format for the piece of legislation with a manifestation eli of `eli/bund/bgbl-1/1979/s1325/2020-06-19/2/deu/2020-06-19/regelungstext-1.xml`
 
-              ```http request
-              GET /v1/eli/bund/bgbl-1/1979/s1325/2020-06-19/2/deu/2020-06-19/regelungstext-1.xml
-              ```
-              """)
+          ```http request
+          GET /v1/eli/bund/bgbl-1/1979/s1325/2020-06-19/2/deu/2020-06-19/regelungstext-1.xml
+          ```
+          """)
   @ApiResponse(responseCode = "200")
-  @ApiResponse(responseCode = "404", content = @Content(schema = @Schema()))
+  @ApiResponse(responseCode = "404", content = @Content(schema = @Schema))
   public ResponseEntity<byte[]> getLegislationSubtypeAsXml(
       @Parameter(
               description = BUND_DESCRIPTION,
@@ -453,11 +453,11 @@ public class NormsController {
       summary = "Manifestation ZIP (XML and attachments)",
       description =
           """
-            Returns a particular manifestation of a piece of legislation, including attachments, as a ZIP archive.
-            Note the omission of the subtype path parameter.
-            """)
+          Returns a particular manifestation of a piece of legislation, including attachments, as a ZIP archive.
+          Note the omission of the subtype path parameter.
+          """)
   @ApiResponse(responseCode = "200")
-  @ApiResponse(responseCode = "404", content = @Content(schema = @Schema()))
+  @ApiResponse(responseCode = "404", content = @Content(schema = @Schema))
   public ResponseEntity<StreamingResponseBody> getLegislationSubtypeAsZip(
       @Parameter(
               description = BUND_DESCRIPTION,
@@ -529,8 +529,8 @@ public class NormsController {
       summary = "Manifestation article (§) HTML",
       description =
           """
-              Returns a specific article (§) of particular manifestation of a piece of legislation, converted to HTML.
-              """)
+          Returns a specific article (§) of particular manifestation of a piece of legislation, converted to HTML.
+          """)
   @ApiResponse(
       responseCode = "200",
       content = @Content(mediaType = MediaType.TEXT_HTML_VALUE, schema = @Schema(type = "string")))
@@ -624,10 +624,10 @@ public class NormsController {
       summary = "Manifestation resource",
       description =
           """
-                            Returns a specific resource of a particular manifestation of a piece of legislation.
-                            """)
+          Returns a specific resource of a particular manifestation of a piece of legislation.
+          """)
   @ApiResponse(responseCode = "200")
-  @ApiResponse(responseCode = "404", content = @Content())
+  @ApiResponse(responseCode = "404", content = @Content)
   public ResponseEntity<byte[]> getFile(
       @Parameter(
               description = BUND_DESCRIPTION,
@@ -672,9 +672,8 @@ public class NormsController {
 
     final String mimeType = URLConnection.guessContentTypeFromName(name + "." + extension);
 
-    return file.map(
-            body ->
-                ResponseEntity.status(HttpStatus.OK).header("Content-Type", mimeType).body(body))
+    return file.map(body ->
+            ResponseEntity.status(HttpStatus.OK).header("Content-Type", mimeType).body(body))
         .orElseGet(() -> ResponseEntity.notFound().build());
   }
 

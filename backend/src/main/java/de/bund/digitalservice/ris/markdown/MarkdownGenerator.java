@@ -47,17 +47,16 @@ public class MarkdownGenerator implements CommandLineRunner {
     StringBuilder stringBuilder = new StringBuilder();
     stringBuilder.append("| Key | Language | Description |").append(System.lineSeparator());
     stringBuilder.append("| --- | --- | --- |").append(System.lineSeparator());
-    descriptions.forEach(
-        descriptionKey ->
-            stringBuilder
-                .append("| ")
-                .append(descriptionKey.key())
-                .append(" | ")
-                .append(descriptionKey.lang())
-                .append(" | ")
-                .append(toTableCellHtml(descriptionKey.description()))
-                .append(" |")
-                .append(System.lineSeparator()));
+    descriptions.forEach(descriptionKey ->
+        stringBuilder
+            .append("| ")
+            .append(descriptionKey.key())
+            .append(" | ")
+            .append(descriptionKey.lang())
+            .append(" | ")
+            .append(toTableCellHtml(descriptionKey.description()))
+            .append(" |")
+            .append(System.lineSeparator()));
 
     try {
       var path = Paths.get(System.getProperty("user.dir") + "/../doc/readme", filename);

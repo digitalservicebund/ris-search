@@ -22,17 +22,17 @@ class RequestSchemaTest {
 
     String exampleRequest =
         """
-                    <request output_lang="de-DE">
-                        <navigation>
-                            <page number="1" />
-                        </navigation>
-                        <criteria encoding="utf8">
-                                <words idx-name="nlex:fulltext">
-                                    <contains>Sample expression</contains>
-                                </words>
-                        </criteria>
-                    </request>
-                """;
+            <request output_lang="de-DE">
+                <navigation>
+                    <page number="1" />
+                </navigation>
+                <criteria encoding="utf8">
+                        <words idx-name="nlex:fulltext">
+                            <contains>Sample expression</contains>
+                        </words>
+                </criteria>
+            </request>
+        """;
 
     Unmarshaller um = ctx.createUnmarshaller();
 
@@ -47,19 +47,19 @@ class RequestSchemaTest {
 
     String exampleRequest =
         """
-                    <request output_lang="de-DE">
-                        <navigation>
-                            <page number="1" />
-                        </navigation>
-                        <criteria encoding="utf8">
-                           <and>
-                                <words idx-name="nlex:fulltext">
-                                    <contains>Sample expression</contains>
-                                </words>
-                           </and>
-                        </criteria>
-                    </request>
-                """;
+            <request output_lang="de-DE">
+                <navigation>
+                    <page number="1" />
+                </navigation>
+                <criteria encoding="utf8">
+                   <and>
+                        <words idx-name="nlex:fulltext">
+                            <contains>Sample expression</contains>
+                        </words>
+                   </and>
+                </criteria>
+            </request>
+        """;
 
     Unmarshaller um = ctx.createUnmarshaller();
     Query request = (Query) um.unmarshal(new StringReader(exampleRequest));

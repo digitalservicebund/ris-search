@@ -149,11 +149,10 @@ public class SitemapService {
   public String generateIndexXml(int size, DocumentKind type) {
     List<Url> urls =
         IntStream.rangeClosed(1, size)
-            .mapToObj(
-                batch ->
-                    new Url(
-                        baseUrl + getControllerPath(type) + "/" + batch + ".xml",
-                        LocalDate.now(ZoneOffset.UTC)))
+            .mapToObj(batch ->
+                new Url(
+                    baseUrl + getControllerPath(type) + "/" + batch + ".xml",
+                    LocalDate.now(ZoneOffset.UTC)))
             .toList();
     return marshal(new SitemapIndex(urls));
   }

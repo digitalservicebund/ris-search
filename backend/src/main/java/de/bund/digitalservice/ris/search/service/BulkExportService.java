@@ -110,13 +110,12 @@ public class BulkExportService {
 
       return switch (zipResult.status) {
         case ZipStatus.FINISHED -> {
-          logger.info(
-              () ->
-                  "Added %s items to %s, compressed size: %s"
-                      .formatted(
-                          zipResult.processedFiles,
-                          resultObjectKey,
-                          FileUtils.byteCountToDisplaySize(byteCount)));
+          logger.info(() ->
+              "Added %s items to %s, compressed size: %s"
+                  .formatted(
+                      zipResult.processedFiles,
+                      resultObjectKey,
+                      FileUtils.byteCountToDisplaySize(byteCount)));
           deleteArchives(obsoleteObjectKeys);
           yield true;
         }

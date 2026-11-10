@@ -31,14 +31,13 @@ class LdmlTestDataSchemaConformanceTest {
   private static Stream<Arguments> testDataPathForDirectory(String directory) throws IOException {
     Path directoryPath = Paths.get(System.getProperty("user.dir")).resolve(directory);
     return Files.walk(directoryPath)
-        .map(
-            path -> {
-              if (!path.toFile().isDirectory() && path.toString().endsWith(".xml")) {
-                return Arguments.of(path);
-              }
+        .map(path -> {
+          if (!path.toFile().isDirectory() && path.toString().endsWith(".xml")) {
+            return Arguments.of(path);
+          }
 
-              return null;
-            })
+          return null;
+        })
         .filter(Objects::nonNull);
   }
 

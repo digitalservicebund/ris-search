@@ -58,18 +58,18 @@ public class SitemapController {
       summary = "Get administrative directive sitemap files",
       description =
           """
-                                              Get the index sitemap for administrative directives.
-                                              ## Example 1
-                                              Get the sitemap file listing all the administrative directives sitemap files:
-                                              ```http request
-                                              GET /v1/sitemaps/administrative-directives/index.xml```
+          Get the index sitemap for administrative directives.
+          ## Example 1
+          Get the sitemap file listing all the administrative directives sitemap files:
+          ```http request
+          GET /v1/sitemaps/administrative-directives/index.xml```
 
-                                              ## Example 2
-                                              Get the content of one sitemap file
-                                              ```http request
-                                              GET /v1/sitemaps/administrative-directives/1.xml
-                                              ```
-                                              """)
+          ## Example 2
+          Get the content of one sitemap file
+          ```http request
+          GET /v1/sitemaps/administrative-directives/1.xml
+          ```
+          """)
   @ApiResponse(responseCode = "200")
   @ApiResponse(responseCode = "404")
   public ResponseEntity<byte[]> getAdministrativeDirectiveSitemapXml(
@@ -97,18 +97,18 @@ public class SitemapController {
       summary = "Get case law sitemap files",
       description =
           """
-                                          Get the index sitemap for case law.
-                                          ## Example 1
-                                          Get the sitemap file listing all the case law sitemap files:
-                                          ```http request
-                                          GET /v1/sitemaps/case-law/index.xml```
+          Get the index sitemap for case law.
+          ## Example 1
+          Get the sitemap file listing all the case law sitemap files:
+          ```http request
+          GET /v1/sitemaps/case-law/index.xml```
 
-                                          ## Example 2
-                                          Get the content of one sitemap file
-                                          ```http request
-                                          GET /v1/sitemaps/case-law/1.xml
-                                          ```
-                                          """)
+          ## Example 2
+          Get the content of one sitemap file
+          ```http request
+          GET /v1/sitemaps/case-law/1.xml
+          ```
+          """)
   @ApiResponse(responseCode = "200")
   @ApiResponse(responseCode = "404")
   public ResponseEntity<byte[]> getCaseLawSitemapXml(
@@ -136,18 +136,18 @@ public class SitemapController {
       summary = "Get literature sitemap files",
       description =
           """
-                                          Get the index sitemap for literature.
-                                          ## Example 1
-                                          Get the sitemap file listing all the literature sitemap files:
-                                          ```http request
-                                          GET /v1/sitemaps/literature/index.xml```
+          Get the index sitemap for literature.
+          ## Example 1
+          Get the sitemap file listing all the literature sitemap files:
+          ```http request
+          GET /v1/sitemaps/literature/index.xml```
 
-                                          ## Example 2
-                                          Get the content of one sitemap file
-                                          ```http request
-                                          GET /v1/sitemaps/literature/1.xml
-                                          ```
-                                          """)
+          ## Example 2
+          Get the content of one sitemap file
+          ```http request
+          GET /v1/sitemaps/literature/1.xml
+          ```
+          """)
   @ApiResponse(responseCode = "200")
   @ApiResponse(responseCode = "404")
   public ResponseEntity<byte[]> getLiteratureSitemapXml(
@@ -175,18 +175,18 @@ public class SitemapController {
       summary = "Get norm sitemap files",
       description =
           """
-                                              Get the index sitemap for norms.
-                                              ## Example 1
-                                              Get the sitemap file listing all the norms sitemap files:
-                                              ```http request
-                                              GET /v1/sitemaps/norms/index.xml```
+          Get the index sitemap for norms.
+          ## Example 1
+          Get the sitemap file listing all the norms sitemap files:
+          ```http request
+          GET /v1/sitemaps/norms/index.xml```
 
-                                              ## Example 2
-                                              Get the content of one sitemap file
-                                              ```http request
-                                              GET /v1/sitemaps/norms/1.xml
-                                              ```
-                                              """)
+          ## Example 2
+          Get the content of one sitemap file
+          ```http request
+          GET /v1/sitemaps/norms/1.xml
+          ```
+          """)
   @ApiResponse(responseCode = "200")
   @ApiResponse(responseCode = "404")
   public ResponseEntity<byte[]> getNormSitemapXml(
@@ -213,11 +213,10 @@ public class SitemapController {
       }
     }
 
-    return file.map(
-            body ->
-                ResponseEntity.status(HttpStatus.OK)
-                    .header("Content-Type", MediaType.APPLICATION_XML_VALUE)
-                    .body(body))
+    return file.map(body ->
+            ResponseEntity.status(HttpStatus.OK)
+                .header("Content-Type", MediaType.APPLICATION_XML_VALUE)
+                .body(body))
         .orElseGet(() -> ResponseEntity.notFound().build());
   }
 }

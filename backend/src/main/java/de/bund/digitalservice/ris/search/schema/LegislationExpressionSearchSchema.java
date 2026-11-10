@@ -35,8 +35,8 @@ public record LegislationExpressionSearchSchema(
     @Schema(
             description =
                 """
-                                Textual string indicating a time period in [ISO 8601 time interval format](https://en.wikipedia.org/wiki/ISO_8601#Time_intervals)
-                                """,
+                Textual string indicating a time period in [ISO 8601 time interval format](https://en.wikipedia.org/wiki/ISO_8601#Time_intervals)
+                """,
             example = "1998-02-06/..",
             requiredMode = Schema.RequiredMode.REQUIRED)
         String temporalCoverage,

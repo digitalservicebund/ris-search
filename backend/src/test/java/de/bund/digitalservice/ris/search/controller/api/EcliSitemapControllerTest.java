@@ -26,13 +26,13 @@ class EcliSitemapControllerTest {
     String expectedPath = "2025/01/01/sitemap_1.xml";
     byte[] expectedContent =
         """
-                <?xml version="1.0" encoding="UTF-8"?>
-                <urlset>
-                   <url>
-                      <loc>http://baseUrl/case-law/file</loc>
-                   </url>
-                </urlset>
-                """
+        <?xml version="1.0" encoding="UTF-8"?>
+        <urlset>
+           <url>
+              <loc>http://baseUrl/case-law/file</loc>
+           </url>
+        </urlset>
+        """
             .getBytes();
 
     when(service.getSitemapFile(expectedPath)).thenReturn(Optional.of(expectedContent));

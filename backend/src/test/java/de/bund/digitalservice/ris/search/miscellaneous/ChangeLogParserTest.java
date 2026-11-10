@@ -14,11 +14,11 @@ class ChangeLogParserTest {
   void parseNormsChangeLog() throws IOException {
     String file =
         """
-                {
-                    "changed": ["eli/bund/bgbl/1950/s513/1977-12-22/5/deu/1977-12-22/regelungstext-1.xml"],
-                    "deleted": ["eli/bund/bgbl/1950/s513/1986-05-15/18/deu/1986-05-15/regelungstext-1.xml"]
-                }
-                """;
+        {
+            "changed": ["eli/bund/bgbl/1950/s513/1977-12-22/5/deu/1977-12-22/regelungstext-1.xml"],
+            "deleted": ["eli/bund/bgbl/1950/s513/1986-05-15/18/deu/1986-05-15/regelungstext-1.xml"]
+        }
+        """;
 
     ObjectMapper mapper = new ObjectMapper();
     Changelog actual = mapper.readValue(file, Changelog.class);

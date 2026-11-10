@@ -127,10 +127,9 @@ class S3ObjectStorageClientTest {
                 .bucket(BUCKET_NAME)
                 .key(OBJECT_KEY)
                 .uploadId(UPLOAD_ID)
-                .multipartUpload(
-                    builder ->
-                        builder.parts(
-                            CompletedPart.builder().eTag("etag-part-1").partNumber(1).build()))
+                .multipartUpload(builder ->
+                    builder.parts(
+                        CompletedPart.builder().eTag("etag-part-1").partNumber(1).build()))
                 .build());
 
     verify(s3Client, never()).abortMultipartUpload(any(AbortMultipartUploadRequest.class));
@@ -147,12 +146,11 @@ class S3ObjectStorageClientTest {
         .thenReturn(CreateMultipartUploadResponse.builder().uploadId(UPLOAD_ID).build());
 
     when(s3Client.uploadPart(any(UploadPartRequest.class), any(RequestBody.class)))
-        .thenAnswer(
-            s -> {
-              UploadPartRequest part = s.getArgument(0);
-              String etag = "etag-part-" + part.partNumber();
-              return UploadPartResponse.builder().eTag(etag).build();
-            });
+        .thenAnswer(s -> {
+          UploadPartRequest part = s.getArgument(0);
+          String etag = "etag-part-" + part.partNumber();
+          return UploadPartResponse.builder().eTag(etag).build();
+        });
 
     when(s3Client.completeMultipartUpload(any(CompleteMultipartUploadRequest.class)))
         .thenReturn(CompleteMultipartUploadResponse.builder().build());

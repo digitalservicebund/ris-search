@@ -188,14 +188,13 @@ public class EcliCrawlerDocumentService {
   private List<EcliCrawlerDocument> getFromBucket(List<String> ids) {
     logger.info("retrieve {} documents", ids.size());
     return caselawService.getFromBucket(ids).stream()
-        .map(
-            unit -> {
-              if (isValidEcliDocument(unit)) {
-                return EcliCrawlerDocumentMapper.fromCaseLawDocumentationUnit(
-                    documentUrl, inferFilename(unit.documentNumber()), unit);
-              }
-              return null;
-            })
+        .map(unit -> {
+          if (isValidEcliDocument(unit)) {
+            return EcliCrawlerDocumentMapper.fromCaseLawDocumentationUnit(
+                documentUrl, inferFilename(unit.documentNumber()), unit);
+          }
+          return null;
+        })
         .filter(Objects::nonNull)
         .toList();
   }

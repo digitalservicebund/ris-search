@@ -60,15 +60,13 @@ public class LiteratureSearchSchemaMapper {
    */
   public static <T> List<TextMatchSchema> getTextMatches(SearchHit<T> searchHit) {
     return searchHit.getHighlightFields().entrySet().stream()
-        .flatMap(
-            textMatch ->
-                textMatch.getValue().stream()
-                    .map(
-                        valueMatch ->
-                            TextMatchSchema.builder()
-                                .name(getTextMatchKey(textMatch))
-                                .text(valueMatch)
-                                .build()))
+        .flatMap(textMatch ->
+            textMatch.getValue().stream()
+                .map(valueMatch ->
+                    TextMatchSchema.builder()
+                        .name(getTextMatchKey(textMatch))
+                        .text(valueMatch)
+                        .build()))
         .toList();
   }
 

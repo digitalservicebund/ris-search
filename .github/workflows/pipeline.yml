@@ -32,7 +32,7 @@ env:
 
 jobs:
   e2e-tests:
-    uses: $/.github/workflows/e2e.yml
+    uses: ./.github/workflows/e2e.yml
     permissions:
       packages: read
       contents: read
@@ -40,7 +40,7 @@ jobs:
       SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
 
   backend-jobs:
-    uses: $/.github/workflows/backend.yml
+    uses: ./.github/workflows/backend.yml
     permissions:
       contents: read
       pull-requests: read
@@ -55,7 +55,7 @@ jobs:
       image-reference: ghcr.io/${{ github.repository }}:${{ github.sha }}
 
   frontend-jobs:
-    uses: $/.github/workflows/frontend.yml
+    uses: ./.github/workflows/frontend.yml
     permissions:
       contents: read
       packages: write
@@ -75,7 +75,7 @@ jobs:
       - backend-jobs
       - frontend-jobs
     if: ${{ !cancelled() && github.ref == 'refs/heads/main' }}
-    uses: $/.github/workflows/push-reports.yml
+    uses: ./.github/workflows/push-reports.yml
     permissions:
       contents: read
     secrets:
@@ -90,7 +90,7 @@ jobs:
       - backend-jobs
       - frontend-jobs
       - e2e-tests
-    uses: $/.github/workflows/deploy.yml
+    uses: ./.github/workflows/deploy.yml
     secrets:
       ARGOCD_AUTH_TOKEN: ${{ secrets.ARGOCD_AUTH_TOKEN }}
       ARGOCD_SERVER_STACKIT: ${{ secrets.ARGOCD_SERVER_STACKIT }}
@@ -104,7 +104,7 @@ jobs:
   smoke-tests:
     needs:
       - deploy-staging
-    uses: $/.github/workflows/smoke-tests.yml
+    uses: ./.github/workflows/smoke-tests.yml
     secrets:
       SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
       STAGING_BASIC_AUTH_PASSWORD: ${{ secrets.STAGING_BASIC_AUTH_PASSWORD }}
@@ -113,7 +113,7 @@ jobs:
   deploy-uat:
     needs:
       - smoke-tests
-    uses: $/.github/workflows/deploy.yml
+    uses: ./.github/workflows/deploy.yml
     secrets:
       ARGOCD_AUTH_TOKEN: ${{ secrets.ARGOCD_AUTH_TOKEN }}
       ARGOCD_SERVER_STACKIT: ${{ secrets.ARGOCD_SERVER_STACKIT }}
@@ -127,7 +127,7 @@ jobs:
   deploy-prototype:
     needs:
       - deploy-uat
-    uses: $/.github/workflows/deploy.yml
+    uses: ./.github/workflows/deploy.yml
     secrets:
       ARGOCD_AUTH_TOKEN: ${{ secrets.ARGOCD_AUTH_TOKEN }}
       ARGOCD_SERVER_STACKIT: ${{ secrets.ARGOCD_SERVER_STACKIT }}
@@ -141,7 +141,7 @@ jobs:
   deploy-production:
     needs:
       - deploy-prototype
-    uses: $/.github/workflows/deploy.yml
+    uses: ./.github/workflows/deploy.yml
     secrets:
       ARGOCD_AUTH_TOKEN: ${{ secrets.ARGOCD_AUTH_TOKEN }}
       ARGOCD_SERVER_STACKIT: ${{ secrets.ARGOCD_SERVER_STACKIT }}

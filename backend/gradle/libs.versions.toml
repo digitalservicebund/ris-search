@@ -4,9 +4,9 @@ jacoco = "0.8.15"
 spring-boot = "4.1.2"
 spring-boot-starter = "4.1.2"
 spring-dependency-management = "1.1.7"
-spotless = "8.10.4"
+spotless = "8.11.0"
 sonarqube = "7.5.0.8588"
-license-report = "3.1.4"
+license-report = "3.1.5"
 test-logger = "4.0.0"
 node-gradle = "7.1.0"
 # libraries
@@ -15,7 +15,7 @@ test-containers = "1.21.4"
 spring-cloud-k8s = "5.0.4"
 springdoc-openapi = "3.2.0"
 prometheus = "1.17.2"
-sentry = "8.62.0"
+sentry = "8.63.0"
 commons-text = "1.15.0"
 junit5 = "1.5.1"
 mockito = "5.24.0"
@@ -24,13 +24,13 @@ spring-security-test = "7.1.2"
 spring-data-opensearch = "3.1.4"
 opensearch-test-autoconfigure = "2.0.3"
 opensearch-test-containers = "4.1.0"
-jsoup = "1.23.2"
+jsoup = "1.24.1"
 commons-csv = "1.14.1"
 amazon-aws-sdk-s3 = "2.47.5"
 saxon-he = "13.1"
 streamex = "0.9.0"
 jaxb-moxy = "5.0.2"
-posthog = "2.23.1"
+posthog = "2.24.0"
 pebble = "4.1.2"
 rest-assured = "6.3.0"
 commons-io = "2.22.0"
@@ -90,7 +90,7 @@ reflections = { module = "org.reflections:reflections", version.ref = "reflectio
 tomcat-embed-core = { module = "org.apache.tomcat.embed:tomcat-embed-core", version = "11.0.27" }
 
 # CVE-2026-102554
-google-guava = { module = "com.google.guava:guava", version = "33.7.2-jre" }
+google-guava = { module = "com.google.guava:guava", version = "33.8.0-jre" }
 
 [plugins]
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
