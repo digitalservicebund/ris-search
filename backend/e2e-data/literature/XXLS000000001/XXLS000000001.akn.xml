@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"
                 xmlns:ris="http://rechtsinformationen.bund.de/schema/ris/0.1">
-    <akn:doc name="offene-struktur">
+    <akn:doc name="/akn/ontology/de/concept/documenttype/bund/literatur/selbststaendig">
         <akn:meta>
             <akn:identification source="attributsemantik-noch-undefiniert">
                 <akn:FRBRWork>
@@ -83,6 +83,25 @@
             </akn:notes>
             <akn:proprietary source="attributsemantik-noch-undefiniert">
                 <ris:meta>
+                    <ris:ausgabe domainTerm="Ausgabe">1. Auflage</ris:ausgabe>
+                    <ris:dokumenttypen domainTerm="Dokumenttypen">
+                        <ris:dokumenttyp domainTerm="Dokumenttyp">Auf</ris:dokumenttyp>
+                    </ris:dokumenttypen>
+                    <ris:gesamttitelangaben domainTerm="Gesamttitelangaben">
+                        <ris:gesamttitel domainTerm="Gesamttitel">
+                            <ris:titel domainTerm="Titel">Gesamttitel</ris:titel>
+                            <ris:bandbezeichnung domainTerm="Bandbezeichnung">Bandbezeichnung</ris:bandbezeichnung>
+                        </ris:gesamttitel>
+                        <ris:gesamttitel domainTerm="Gesamttitel">
+                            <ris:titel domainTerm="Titel">Gesamttitel 2</ris:titel>
+                            <ris:bandbezeichnung domainTerm="Bandbezeichnung">Bandbezeichnung 2</ris:bandbezeichnung>
+                        </ris:gesamttitel>
+                    </ris:gesamttitelangaben>
+                    <ris:gliederung domainTerm="Gliederung">
+                        <ris:gliederungseintrag domainTerm="Gliederungseintrag">I. Problemstellung.</ris:gliederungseintrag>
+                        <ris:gliederungseintrag domainTerm="Gliederungseintrag">II. Lösung.</ris:gliederungseintrag>
+                        <ris:gliederungseintrag domainTerm="Gliederungseintrag">III. Zusammenfassung.</ris:gliederungseintrag>
+                    </ris:gliederung>
                     <ris:kongresse domainTerm="Kongresse">
                         <ris:kongress domainTerm="Kongress"
                                       eId="foo-kongress-1"
@@ -106,7 +125,7 @@
                             <ris:name domainTerm="Name">Universität Foo</ris:name>
                             <ris:jahr domainTerm="Jahr">1984</ris:jahr>
                         </ris:organisation>
-                        <ris:organisation domainTerm="Organisation" eId="foo-herausgeber-1" showAs="herausgeber institution showAs" href="akn/ontology/organizations/de/foo-herausgeber-1">
+                        <ris:organisation domainTerm="Organisation" eId="foo-herausgeber-1" showAs="herausgeber institution showAs">
                             <ris:name domainTerm="Name">herausgeber institution</ris:name>
                         </ris:organisation>
                     </ris:organisationen>
@@ -126,44 +145,31 @@
                             <ris:name domainTerm="Person">Begruender, Foo</ris:name>
                         </ris:person>
                         <ris:person domainTerm="Person" eId="herausgeber-person-1" showAs="Mitarbeiter Eins">
+                            <ris:name domainTerm="Person">Mitarbeiter Eins</ris:name>
                             <ris:titel domainTerm="Titel">Mitarbeiter Herausgeber</ris:titel>
                         </ris:person>
                     </ris:personen>
-                    <ris:dokumenttypen domainTerm="Dokumenttypen">
-                        <ris:dokumenttyp domainTerm="Dokumenttyp">Auf</ris:dokumenttyp>
-                    </ris:dokumenttypen>
-                    <ris:veroeffentlichungsJahre domainTerm="Veröffentlichungsjahre">
-                        <ris:veroeffentlichungsJahr domainTerm="Veröffentlichungsjahr">2024</ris:veroeffentlichungsJahr>
-                    </ris:veroeffentlichungsJahre>
-                    <ris:gliederung domainTerm="Gliederung">
-                        <ris:gliederungEntry domainTerm="Gliederungseintrag">I. Problemstellung.</ris:gliederungEntry>
-                        <ris:gliederungEntry domainTerm="Gliederungseintrag">II. Lösung.</ris:gliederungEntry>
-                        <ris:gliederungEntry domainTerm="Gliederungseintrag">III. Zusammenfassung.</ris:gliederungEntry>
-                    </ris:gliederung>
-                    <ris:gesamttitelangaben domainTerm="Gesamttitelangaben">
-                        <ris:gesamttitel domainTerm="Gesamttitel">
-                            <ris:titel domainTerm="Titel">Gesamttitel</ris:titel>
-                            <ris:bandbezeichnung domainTerm="Bandbezeichnung">Bandbezeichnung</ris:bandbezeichnung>
-                        </ris:gesamttitel>
-                        <ris:gesamttitel domainTerm="Gesamttitel">
-                            <ris:titel domainTerm="Titel">Gesamttitel 2</ris:titel>
-                            <ris:bandbezeichnung domainTerm="Bandbezeichnung">Bandbezeichnung 2</ris:bandbezeichnung>
-                        </ris:gesamttitel>
-                    </ris:gesamttitelangaben>
+                    <ris:sonstigerSachtitelListe domainTerm="Liste der sonstigen Sachtitel">
+                        <ris:sonstigerSachtitel domainTerm="Sonstiger Sachtitel">sonstiger Titel</ris:sonstigerSachtitel>
+                    </ris:sonstigerSachtitelListe>
                     <ris:teilbaende domainTerm="Teilbände">
                         <ris:teilband domainTerm="Teilband">Teilband 1</ris:teilband>
                         <ris:teilband domainTerm="Teilband">Teilband 2</ris:teilband>
                     </ris:teilbaende>
-                    <ris:ausgabe domainTerm="Ausgabe">1. Auflage</ris:ausgabe>
                     <ris:titelkurzformen domainTerm="Titelkurzformen">
                         <ris:titelkurzform domainTerm="Titelkurzform">Titel Kurzform</ris:titelkurzform>
                     </ris:titelkurzformen>
-                    <ris:sonstigerSachtitelListe domainTerm="Liste der sonstigen Sachtitel">
-                        <ris:sonstigerSachtitel domainTerm="Sonstiger Sachtitel">sonstiger Titel</ris:sonstigerSachtitel>
-                    </ris:sonstigerSachtitelListe>
+                    <ris:veroeffentlichungsJahre domainTerm="Veröffentlichungsjahre">
+                        <ris:veroeffentlichungsJahr domainTerm="Veröffentlichungsjahr">2024</ris:veroeffentlichungsJahr>
+                    </ris:veroeffentlichungsJahre>
                 </ris:meta>
             </akn:proprietary>
         </akn:meta>
+        <akn:preface>
+            <akn:longTitle>
+                <akn:block name="longTitle">Test-Dokument SLI</akn:block>
+            </akn:longTitle>
+        </akn:preface>
         <akn:mainBody>
             <akn:div>
                 <akn:p>Dieses Dokument hat alle Titel.</akn:p>

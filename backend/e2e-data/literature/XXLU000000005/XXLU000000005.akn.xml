@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" xmlns:ris="http://rechtsinformationen.bund.de/schema/ris/0.1">
-    <akn:doc name="offene-struktur">
+    <akn:doc name="/akn/ontology/de/concept/documenttype/bund/literatur/unselbststaendig">
         <akn:meta>
             <akn:identification source="attributsemantik-noch-undefiniert">
                 <akn:FRBRWork>
@@ -51,6 +51,11 @@
             </akn:references>
             <akn:proprietary source="attributsemantik-noch-undefiniert">
                 <ris:meta>
+                    <ris:dokumenttypen domainTerm="Dokumenttypen">
+                        <ris:dokumenttyp domainTerm="Dokumenttyp">Auf</ris:dokumenttyp>
+                        <ris:dokumenttyp domainTerm="Dokumenttyp">Foo</ris:dokumenttyp>
+                        <ris:dokumenttyp domainTerm="Dokumenttyp">Bar</ris:dokumenttyp>
+                    </ris:dokumenttypen>
                     <ris:personen domainTerm="Personen">
                         <ris:person domainTerm="Person" eId="mustermann-max-verfasser-1" showAs="Mustermann, Max, Dr">
                             <ris:name domainTerm="Person">Mustermann, Max</ris:name>
@@ -60,11 +65,6 @@
                             <ris:name domainTerm="Person">Pan, Peter</ris:name>
                         </ris:person>
                     </ris:personen>
-                    <ris:dokumenttypen domainTerm="Dokumenttypen">
-                        <ris:dokumenttyp domainTerm="Dokumenttyp">Auf</ris:dokumenttyp>
-                        <ris:dokumenttyp domainTerm="Dokumenttyp">Foo</ris:dokumenttyp>
-                        <ris:dokumenttyp domainTerm="Dokumenttyp">Bar</ris:dokumenttyp>
-                    </ris:dokumenttypen>
                     <ris:veroeffentlichungsJahre domainTerm="Veröffentlichungsjahre">
                         <ris:veroeffentlichungsJahr domainTerm="Veröffentlichungsjahr">2013</ris:veroeffentlichungsJahr>
                         <ris:veroeffentlichungsJahr domainTerm="Veröffentlichungsjahr">2024</ris:veroeffentlichungsJahr>
@@ -72,6 +72,11 @@
                 </ris:meta>
             </akn:proprietary>
         </akn:meta>
+        <akn:preface>
+            <akn:longTitle>
+                <akn:block name="longTitle">Leeres Dokument</akn:block>
+            </akn:longTitle>
+        </akn:preface>
         <akn:mainBody>
             <akn:hcontainer name="crossheading"/>
         </akn:mainBody>

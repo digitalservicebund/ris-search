@@ -17,7 +17,7 @@ import org.mockito.Mockito;
 class LiteratureLdmlToOpenSearchMapperTest {
 
   private static final String VALID_XML =
-      LoadXmlUtils.loadXmlAsString(Literature.class, "XXLU000000001.akn.xml");
+      LoadXmlUtils.loadXmlAsString(Literature.class, "XXLU000000001/XXLU000000001.akn.xml");
 
   @Test
   @DisplayName("Correctly maps all available fields from valid literature LDML XML")
