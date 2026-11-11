@@ -8,6 +8,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import de.bund.digitalservice.ris.SharedTestConstants;
 import de.bund.digitalservice.ris.search.models.DatumsTyp;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
+import de.bund.digitalservice.ris.search.models.opensearch.CaseLawUnindexed;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Fundstelle;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Gericht;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Richtung;
@@ -15,7 +16,6 @@ import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Zitierung
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ZitierungLiteraturUnselbststaendig;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ZitierungRechtsprechung;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ZitierungVerwaltungsvorschrift;
-import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Zitierungen;
 import de.bund.digitalservice.ris.search.schema.DocumentEncodingSchema;
 import de.bund.digitalservice.ris.search.schema.FundstelleSchema;
 import de.bund.digitalservice.ris.search.schema.GerichtSchema;
@@ -77,8 +77,8 @@ class RechtsprechungSchemaMapperTest {
         .mitwirkendeRichter(List.of("Meier", "Müller"))
         .previousDecisions(List.of("previous decision file number, previous decision court type"))
         .ensuingDecisions(List.of("ensuing decision file number, ensuing decision court type"))
-        .zitierungen(
-            Zitierungen.builder()
+        .unindexed(
+            CaseLawUnindexed.builder()
                 .zitierungenLiteraturUnselbststaendig(
                     List.of(
                         ZitierungLiteraturUnselbststaendig.builder()
