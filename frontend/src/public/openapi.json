@@ -2614,6 +2614,56 @@
         },
         "required" : [ "name", "text" ]
       },
+      "FundstelleSchema" : {
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "example" : "Fundstelle"
+          },
+          "periodikum" : {
+            "type" : "string",
+            "description" : "Periodikum in dem die Fundstelle gefunden werden kann"
+          },
+          "zitatstelle" : {
+            "type" : "string",
+            "description" : "Zitatstelle innerhalb des Periodikums in dem die Fundstelle gefunden werden kann"
+          },
+          "fundstellenTyp" : {
+            "type" : "string",
+            "description" : "Art der Fundstelle"
+          }
+        }
+      },
+      "GerichtSchema" : {
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "example" : "Gericht"
+          },
+          "gerichtstyp" : {
+            "type" : "string",
+            "description" : "Inhalt ist die Angabe des Typs des Gerichtes, das das Dokument verfasst hat."
+          },
+          "gerichtsort" : {
+            "type" : "string",
+            "description" : "Ort des Gerichtssitzes."
+          },
+          "gerichtsbarkeit" : {
+            "type" : "string",
+            "description" : "Gerichtsbarkeit"
+          },
+          "spruchkoerper" : {
+            "type" : "string",
+            "description" : "Inhalt ist die Angabe des Spruchkörpers, von dem das Dokument stammt (z.B. 1. Zivilsenat, 3. Strafkammer, Großer Senat)."
+          },
+          "sitzDerAussenstelle" : {
+            "type" : "string",
+            "description" : "Sitz der Außenstelle"
+          }
+        }
+      },
       "RechtsprechungSchema" : {
         "type" : "object",
         "properties" : {
@@ -2810,60 +2860,32 @@
               "description" : "Nachgewiesen werden die gerichtlichen Entscheidungen, die ihrerseits in der Rubrik „vorgehende Entscheidung“ die vorliegende Entscheidung nennen."
             }
           },
-          "aktivzitierungLiteraturUnselbstaendig" : {
+          "zitierungenLiteraturSelbststaendig" : {
             "type" : "array",
-            "description" : "Aktivzitierung Literatur Unselbstständig",
+            "description" : "Referenz auf ein selbstständiges Literaturdokument",
             "items" : {
-              "type" : "string"
+              "$ref" : "#/components/schemas/ZitierungLiteraturSelbststaendigSchema"
             }
           },
-          "passivzitierungLiteraturUnselbstaendig" : {
+          "zitierungenLiteraturUnselbststaendig" : {
             "type" : "array",
-            "description" : "Passivzitierung Literatur Unselbstständig",
+            "description" : "Referenz auf ein unselbstständiges Literaturdokument",
             "items" : {
-              "type" : "string"
+              "$ref" : "#/components/schemas/ZitierungLiteraturUnselbststaendigSchema"
             }
           },
-          "aktivzitierungLiteraturSelbstaendig" : {
+          "zitierungenRechtsprechung" : {
             "type" : "array",
-            "description" : "Aktivzitierung Literatur Selbstständig",
+            "description" : "Referenz auf ein Rechtsprechungsdokument",
             "items" : {
-              "type" : "string"
+              "$ref" : "#/components/schemas/ZitierungRechtsprechungSchema"
             }
           },
-          "passivzitierungLiteraturSelbstaendig" : {
+          "zitierungenVerwaltungsvorschriften" : {
             "type" : "array",
-            "description" : "Passivzitierung Literatur Selbstständig",
+            "description" : "Referenz auf eine Verwaltungsvorschrift",
             "items" : {
-              "type" : "string"
-            }
-          },
-          "aktivzitierungRechtsprechung" : {
-            "type" : "array",
-            "description" : "Aktivzitierung Rechtsprechung",
-            "items" : {
-              "type" : "string"
-            }
-          },
-          "passivzitierungRechtsprechung" : {
-            "type" : "array",
-            "description" : "Passivzitierung Rechtsprechung",
-            "items" : {
-              "type" : "string"
-            }
-          },
-          "aktivzitierungVerwaltungsvorschriften" : {
-            "type" : "array",
-            "description" : "Aktivzitierung Verwaltungsvorschriften",
-            "items" : {
-              "type" : "string"
-            }
-          },
-          "passivzitierungVerwaltungsvorschriften" : {
-            "type" : "array",
-            "description" : "Passivzitierung Verwaltungsvorschriften",
-            "items" : {
-              "type" : "string"
+              "$ref" : "#/components/schemas/ZitierungVerwaltungsvorschriftSchema"
             }
           },
           "amtlicheFundstellen" : {
@@ -3060,6 +3082,154 @@
           }
         },
         "required" : [ "@context", "@id", "ecli", "encoding", "entscheidungsnamen", "inLanguage", "schlagwoerter", "vorabdokument" ]
+      },
+      "ZitierungLiteraturSelbststaendigSchema" : {
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "example" : "ZitierungLiteraturSelbststaendig"
+          },
+          "richtung" : {
+            "type" : "string",
+            "description" : "Ist die Referenz eine Aktivzitierung oder eine Passivzitierung?",
+            "enum" : [ "aktiv", "passiv" ]
+          },
+          "referenzUri" : {
+            "type" : "string",
+            "description" : "Die URI die auf die referenzierte Dokeinheit verweist."
+          },
+          "dokumentnummer" : {
+            "type" : "string",
+            "description" : "Dokumentnummer"
+          },
+          "autor" : {
+            "type" : "string",
+            "description" : "Autor(en)"
+          },
+          "titel" : {
+            "type" : "string"
+          },
+          "veroeffentlichungsjahr" : {
+            "type" : "string",
+            "description" : "Veröffentlichungsjahr"
+          }
+        }
+      },
+      "ZitierungLiteraturUnselbststaendigSchema" : {
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "example" : "ZitierungLiteraturUnselbststaendig"
+          },
+          "richtung" : {
+            "type" : "string",
+            "description" : "Ist die Referenz eine Aktivzitierung oder eine Passivzitierung?",
+            "enum" : [ "aktiv", "passiv" ]
+          },
+          "referenzUri" : {
+            "type" : "string",
+            "description" : "Die URI die auf die referenzierte Dokeinheit verweist."
+          },
+          "dokumentnummer" : {
+            "type" : "string",
+            "description" : "Dokumentnummer"
+          },
+          "autor" : {
+            "type" : "string",
+            "description" : "Autor(en)"
+          },
+          "dokumenttyp" : {
+            "type" : "string",
+            "description" : "Innerhalb der Dokumentart „Rechtsprechung“ werden folgende Dokumenttypen unterschieden:\n\n* Äuß: Äußerung\n* Ant: EuGH-Vorlage\n* AnU: Anerkenntnisurteil\n* Bes: Beschluss\n* Buß: Bußgeldbescheid\n* DrB: Dreierausschussbeschluss\n* EiA: Einstweilige Anordnung\n* Ent: Entscheidung\n* EVg: Einstellungsverfügung der Staatsanwaltschaft\n* GeB: Gerichtsbescheid\n* Gut: Gutachten\n* GWF: Gegenstandswertfestsetzung im verfassungsgerichtlichen Verfahren\n* KaB: Kammerbeschluss\n* KbN: Nichtannahmebeschluss\n* KbS: Stattgebender Kammerbeschluss\n* KoB: Kammerbeschluss ohne Begründung\n* PkH: Prozesskostenhilfebeschluss\n* ReM: Rechtsentscheid in Mietsachen\n* Sch: Schiedsgerichtsentscheidung\n* Ste: Stellungnahme\n* Str: Streitwertbeschluss\n* TeB: Teilbeschluss\n* TeU: Teilurteil\n* Urt: Urteil\n* Vgl: Vergleich\n* Vor: Vorlagebeschluss\n* VsU: Versäumnisurteil\n* VzU: Verzichtsurteil\n* ZwB: Zwischenbeschluss\n* ZwU: Zwischenurteil\n* TVU: Teilversäumnisurteil\n* Vfg: Verfügung\n* Vorab: Ersuchen um Vorabentscheidung\n* Anh: Anhängiges Verfahren\n* End: Endurteil\n* KfB: Kostenfestsetzungsbeschluss"
+          },
+          "fundstelle" : {
+            "$ref" : "#/components/schemas/FundstelleSchema",
+            "description" : "Fundstelle"
+          }
+        }
+      },
+      "ZitierungRechtsprechungSchema" : {
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "example" : "ZitierungRechtsprechung"
+          },
+          "richtung" : {
+            "type" : "string",
+            "description" : "Ist die Referenz eine Aktivzitierung oder eine Passivzitierung?",
+            "enum" : [ "aktiv", "passiv" ]
+          },
+          "referenzUri" : {
+            "type" : "string",
+            "description" : "Die URI die auf die referenzierte Dokeinheit verweist."
+          },
+          "dokumentnummer" : {
+            "type" : "string",
+            "description" : "Dokumentnummer"
+          },
+          "artDerZitierung" : {
+            "type" : "string",
+            "description" : "Art der Zitierung"
+          },
+          "gericht" : {
+            "$ref" : "#/components/schemas/GerichtSchema",
+            "description" : "Gericht"
+          },
+          "entscheidungsdatum" : {
+            "type" : "string",
+            "format" : "date",
+            "description" : "Datum der Entscheidung, hier kann es zu Dopplungen mit anderen Entscheidungen kommen, auch in Kombination mit Aktenzeichen und Gericht."
+          },
+          "dokumenttyp" : {
+            "type" : "string",
+            "description" : "Innerhalb der Dokumentart „Rechtsprechung“ werden folgende Dokumenttypen unterschieden:\n\n* Äuß: Äußerung\n* Ant: EuGH-Vorlage\n* AnU: Anerkenntnisurteil\n* Bes: Beschluss\n* Buß: Bußgeldbescheid\n* DrB: Dreierausschussbeschluss\n* EiA: Einstweilige Anordnung\n* Ent: Entscheidung\n* EVg: Einstellungsverfügung der Staatsanwaltschaft\n* GeB: Gerichtsbescheid\n* Gut: Gutachten\n* GWF: Gegenstandswertfestsetzung im verfassungsgerichtlichen Verfahren\n* KaB: Kammerbeschluss\n* KbN: Nichtannahmebeschluss\n* KbS: Stattgebender Kammerbeschluss\n* KoB: Kammerbeschluss ohne Begründung\n* PkH: Prozesskostenhilfebeschluss\n* ReM: Rechtsentscheid in Mietsachen\n* Sch: Schiedsgerichtsentscheidung\n* Ste: Stellungnahme\n* Str: Streitwertbeschluss\n* TeB: Teilbeschluss\n* TeU: Teilurteil\n* Urt: Urteil\n* Vgl: Vergleich\n* Vor: Vorlagebeschluss\n* VsU: Versäumnisurteil\n* VzU: Verzichtsurteil\n* ZwB: Zwischenbeschluss\n* ZwU: Zwischenurteil\n* TVU: Teilversäumnisurteil\n* Vfg: Verfügung\n* Vorab: Ersuchen um Vorabentscheidung\n* Anh: Anhängiges Verfahren\n* End: Endurteil\n* KfB: Kostenfestsetzungsbeschluss"
+          },
+          "aktenzeichen" : {
+            "type" : "string",
+            "description" : "Aktenzeichen der Entscheidung, hier kann es zu Dopplungen mit anderen Entscheidungen kommen, auch in Kombination mit Entscheidungsdatum und Gericht. Bei Gemeinsamen Ländererlassen (GLE) innerhalb der Dokumentart Verwaltungsvorschriften wird über das Attribut 'normgeber' der jeweilige ausgebende Normgeber des Bundeslandes angegeben. Das optionale Attribut 'normgeberRegion' gibt die zugehörige Region des Normgebers an."
+          },
+          "fundstelle" : {
+            "$ref" : "#/components/schemas/FundstelleSchema",
+            "description" : "Fundstelle"
+          }
+        }
+      },
+      "ZitierungVerwaltungsvorschriftSchema" : {
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "example" : "ZitierungVerwaltungsvorschrift"
+          },
+          "richtung" : {
+            "type" : "string",
+            "description" : "Ist die Referenz eine Aktivzitierung oder eine Passivzitierung?",
+            "enum" : [ "aktiv", "passiv" ]
+          },
+          "referenzUri" : {
+            "type" : "string",
+            "description" : "Die URI die auf die referenzierte Dokeinheit verweist."
+          },
+          "dokumentnummer" : {
+            "type" : "string",
+            "description" : "Dokumentnummer"
+          },
+          "artDerZitierung" : {
+            "type" : "string",
+            "description" : "Art der Zitierung"
+          },
+          "jurisAbkuerzung" : {
+            "type" : "string",
+            "description" : "juris-Abkürzung"
+          },
+          "fundstelle" : {
+            "$ref" : "#/components/schemas/FundstelleSchema",
+            "description" : "Fundstelle"
+          }
+        }
       },
       "StreamingResponseBody" : { },
       "CourtSearchResult" : {

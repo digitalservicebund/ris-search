@@ -59,22 +59,14 @@ public record RechtsprechungSchema(
     @Schema(description = "Mitwirkende Richter") List<String> mitwirkendeRichter,
     @RISSchema(name = "ris:vorgehendeEntscheidung") List<String> vorgehendeEntscheidungen,
     @RISSchema(name = "ris:nachgehendeEntscheidung") List<String> nachgehendeEntscheidungen,
-    @Schema(description = "Aktivzitierung Literatur Unselbstständig")
-        List<String> aktivzitierungLiteraturUnselbstaendig,
-    @Schema(description = "Passivzitierung Literatur Unselbstständig")
-        List<String> passivzitierungLiteraturUnselbstaendig,
-    @Schema(description = "Aktivzitierung Literatur Selbstständig")
-        List<String> aktivzitierungLiteraturSelbstaendig,
-    @Schema(description = "Passivzitierung Literatur Selbstständig")
-        List<String> passivzitierungLiteraturSelbstaendig,
-    @Schema(description = "Aktivzitierung Rechtsprechung")
-        List<String> aktivzitierungRechtsprechung,
-    @Schema(description = "Passivzitierung Rechtsprechung")
-        List<String> passivzitierungRechtsprechung,
-    @Schema(description = "Aktivzitierung Verwaltungsvorschriften")
-        List<String> aktivzitierungVerwaltungsvorschriften,
-    @Schema(description = "Passivzitierung Verwaltungsvorschriften")
-        List<String> passivzitierungVerwaltungsvorschriften,
+    @RISSchema(name = "ris:referenzSelbststaendigeLiteratur")
+        List<ZitierungLiteraturSelbststaendigSchema> zitierungenLiteraturSelbststaendig,
+    @RISSchema(name = "ris:referenzUnselbststaendigeLiteratur")
+        List<ZitierungLiteraturUnselbststaendigSchema> zitierungenLiteraturUnselbststaendig,
+    @RISSchema(name = "ris:referenzRechtsprechung")
+        List<ZitierungRechtsprechungSchema> zitierungenRechtsprechung,
+    @RISSchema(name = "ris:referenzVerwaltungsvorschrift")
+        List<ZitierungVerwaltungsvorschriftSchema> zitierungenVerwaltungsvorschriften,
     @Schema(example = "BGHSt 67, 273-284", description = "Amtliche Fundstellen")
         List<String> amtlicheFundstellen,
     @Schema(example = "DStR 2023, 1430-1435", description = "Nichtamtliche Fundstellen")

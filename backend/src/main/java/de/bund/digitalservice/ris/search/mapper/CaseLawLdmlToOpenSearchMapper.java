@@ -154,6 +154,7 @@ public class CaseLawLdmlToOpenSearchMapper {
         .nichtamtlicheFundstellen(extractNichtamtlicheFundstellen(meta))
         .gesetzeskraft(extractGesetzeskraft(meta))
         .normenkette(extractNormenkette(meta))
+        .zitierungen(CaseLawZitierungenMapper.map(meta))
         // Internal (portal team) fields
         .indexedAt(Instant.now().toString())
         .vorabdokument(isVorabdokument(judgmentBody))

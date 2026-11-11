@@ -932,6 +932,30 @@ export interface components {
             text: string;
             location?: string | null;
         };
+        FundstelleSchema: {
+            /** @example Fundstelle */
+            "@type"?: string;
+            /** @description Periodikum in dem die Fundstelle gefunden werden kann */
+            periodikum?: string;
+            /** @description Zitatstelle innerhalb des Periodikums in dem die Fundstelle gefunden werden kann */
+            zitatstelle?: string;
+            /** @description Art der Fundstelle */
+            fundstellenTyp?: string;
+        };
+        GerichtSchema: {
+            /** @example Gericht */
+            "@type"?: string;
+            /** @description Inhalt ist die Angabe des Typs des Gerichtes, das das Dokument verfasst hat. */
+            gerichtstyp?: string;
+            /** @description Ort des Gerichtssitzes. */
+            gerichtsort?: string;
+            /** @description Gerichtsbarkeit */
+            gerichtsbarkeit?: string;
+            /** @description Inhalt ist die Angabe des Spruchkörpers, von dem das Dokument stammt (z.B. 1. Zivilsenat, 3. Strafkammer, Großer Senat). */
+            spruchkoerper?: string;
+            /** @description Sitz der Außenstelle */
+            sitzDerAussenstelle?: string;
+        };
         RechtsprechungSchema: {
             /** @example Rechtsprechung */
             "@type"?: string;
@@ -1025,22 +1049,14 @@ export interface components {
             vorgehendeEntscheidungen?: string[];
             /** @description Nachgewiesen werden die gerichtlichen Entscheidungen, die ihrerseits in der Rubrik „vorgehende Entscheidung“ die vorliegende Entscheidung nennen. */
             nachgehendeEntscheidungen?: string[];
-            /** @description Aktivzitierung Literatur Unselbstständig */
-            aktivzitierungLiteraturUnselbstaendig?: string[];
-            /** @description Passivzitierung Literatur Unselbstständig */
-            passivzitierungLiteraturUnselbstaendig?: string[];
-            /** @description Aktivzitierung Literatur Selbstständig */
-            aktivzitierungLiteraturSelbstaendig?: string[];
-            /** @description Passivzitierung Literatur Selbstständig */
-            passivzitierungLiteraturSelbstaendig?: string[];
-            /** @description Aktivzitierung Rechtsprechung */
-            aktivzitierungRechtsprechung?: string[];
-            /** @description Passivzitierung Rechtsprechung */
-            passivzitierungRechtsprechung?: string[];
-            /** @description Aktivzitierung Verwaltungsvorschriften */
-            aktivzitierungVerwaltungsvorschriften?: string[];
-            /** @description Passivzitierung Verwaltungsvorschriften */
-            passivzitierungVerwaltungsvorschriften?: string[];
+            /** @description Referenz auf ein selbstständiges Literaturdokument */
+            zitierungenLiteraturSelbststaendig?: components["schemas"]["ZitierungLiteraturSelbststaendigSchema"][];
+            /** @description Referenz auf ein unselbstständiges Literaturdokument */
+            zitierungenLiteraturUnselbststaendig?: components["schemas"]["ZitierungLiteraturUnselbststaendigSchema"][];
+            /** @description Referenz auf ein Rechtsprechungsdokument */
+            zitierungenRechtsprechung?: components["schemas"]["ZitierungRechtsprechungSchema"][];
+            /** @description Referenz auf eine Verwaltungsvorschrift */
+            zitierungenVerwaltungsvorschriften?: components["schemas"]["ZitierungVerwaltungsvorschriftSchema"][];
             /**
              * @description Amtliche Fundstellen
              * @example BGHSt 67, 273-284
@@ -1197,6 +1213,168 @@ export interface components {
             encoding: components["schemas"]["DocumentEncodingSchema"][];
             /** @description Whether or not the document is a Vorabdokument */
             vorabdokument: boolean;
+        };
+        ZitierungLiteraturSelbststaendigSchema: {
+            /** @example ZitierungLiteraturSelbststaendig */
+            "@type"?: string;
+            /**
+             * @description Ist die Referenz eine Aktivzitierung oder eine Passivzitierung?
+             * @enum {string}
+             */
+            richtung?: "aktiv" | "passiv";
+            /** @description Die URI die auf die referenzierte Dokeinheit verweist. */
+            referenzUri?: string;
+            /** @description Dokumentnummer */
+            dokumentnummer?: string;
+            /** @description Autor(en) */
+            autor?: string;
+            titel?: string;
+            /** @description Veröffentlichungsjahr */
+            veroeffentlichungsjahr?: string;
+        };
+        ZitierungLiteraturUnselbststaendigSchema: {
+            /** @example ZitierungLiteraturUnselbststaendig */
+            "@type"?: string;
+            /**
+             * @description Ist die Referenz eine Aktivzitierung oder eine Passivzitierung?
+             * @enum {string}
+             */
+            richtung?: "aktiv" | "passiv";
+            /** @description Die URI die auf die referenzierte Dokeinheit verweist. */
+            referenzUri?: string;
+            /** @description Dokumentnummer */
+            dokumentnummer?: string;
+            /** @description Autor(en) */
+            autor?: string;
+            /**
+             * @description Innerhalb der Dokumentart „Rechtsprechung“ werden folgende Dokumenttypen unterschieden:
+             *
+             *     * Äuß: Äußerung
+             *     * Ant: EuGH-Vorlage
+             *     * AnU: Anerkenntnisurteil
+             *     * Bes: Beschluss
+             *     * Buß: Bußgeldbescheid
+             *     * DrB: Dreierausschussbeschluss
+             *     * EiA: Einstweilige Anordnung
+             *     * Ent: Entscheidung
+             *     * EVg: Einstellungsverfügung der Staatsanwaltschaft
+             *     * GeB: Gerichtsbescheid
+             *     * Gut: Gutachten
+             *     * GWF: Gegenstandswertfestsetzung im verfassungsgerichtlichen Verfahren
+             *     * KaB: Kammerbeschluss
+             *     * KbN: Nichtannahmebeschluss
+             *     * KbS: Stattgebender Kammerbeschluss
+             *     * KoB: Kammerbeschluss ohne Begründung
+             *     * PkH: Prozesskostenhilfebeschluss
+             *     * ReM: Rechtsentscheid in Mietsachen
+             *     * Sch: Schiedsgerichtsentscheidung
+             *     * Ste: Stellungnahme
+             *     * Str: Streitwertbeschluss
+             *     * TeB: Teilbeschluss
+             *     * TeU: Teilurteil
+             *     * Urt: Urteil
+             *     * Vgl: Vergleich
+             *     * Vor: Vorlagebeschluss
+             *     * VsU: Versäumnisurteil
+             *     * VzU: Verzichtsurteil
+             *     * ZwB: Zwischenbeschluss
+             *     * ZwU: Zwischenurteil
+             *     * TVU: Teilversäumnisurteil
+             *     * Vfg: Verfügung
+             *     * Vorab: Ersuchen um Vorabentscheidung
+             *     * Anh: Anhängiges Verfahren
+             *     * End: Endurteil
+             *     * KfB: Kostenfestsetzungsbeschluss
+             */
+            dokumenttyp?: string;
+            /** @description Fundstelle */
+            fundstelle?: components["schemas"]["FundstelleSchema"];
+        };
+        ZitierungRechtsprechungSchema: {
+            /** @example ZitierungRechtsprechung */
+            "@type"?: string;
+            /**
+             * @description Ist die Referenz eine Aktivzitierung oder eine Passivzitierung?
+             * @enum {string}
+             */
+            richtung?: "aktiv" | "passiv";
+            /** @description Die URI die auf die referenzierte Dokeinheit verweist. */
+            referenzUri?: string;
+            /** @description Dokumentnummer */
+            dokumentnummer?: string;
+            /** @description Art der Zitierung */
+            artDerZitierung?: string;
+            /** @description Gericht */
+            gericht?: components["schemas"]["GerichtSchema"];
+            /**
+             * Format: date
+             * @description Datum der Entscheidung, hier kann es zu Dopplungen mit anderen Entscheidungen kommen, auch in Kombination mit Aktenzeichen und Gericht.
+             */
+            entscheidungsdatum?: string;
+            /**
+             * @description Innerhalb der Dokumentart „Rechtsprechung“ werden folgende Dokumenttypen unterschieden:
+             *
+             *     * Äuß: Äußerung
+             *     * Ant: EuGH-Vorlage
+             *     * AnU: Anerkenntnisurteil
+             *     * Bes: Beschluss
+             *     * Buß: Bußgeldbescheid
+             *     * DrB: Dreierausschussbeschluss
+             *     * EiA: Einstweilige Anordnung
+             *     * Ent: Entscheidung
+             *     * EVg: Einstellungsverfügung der Staatsanwaltschaft
+             *     * GeB: Gerichtsbescheid
+             *     * Gut: Gutachten
+             *     * GWF: Gegenstandswertfestsetzung im verfassungsgerichtlichen Verfahren
+             *     * KaB: Kammerbeschluss
+             *     * KbN: Nichtannahmebeschluss
+             *     * KbS: Stattgebender Kammerbeschluss
+             *     * KoB: Kammerbeschluss ohne Begründung
+             *     * PkH: Prozesskostenhilfebeschluss
+             *     * ReM: Rechtsentscheid in Mietsachen
+             *     * Sch: Schiedsgerichtsentscheidung
+             *     * Ste: Stellungnahme
+             *     * Str: Streitwertbeschluss
+             *     * TeB: Teilbeschluss
+             *     * TeU: Teilurteil
+             *     * Urt: Urteil
+             *     * Vgl: Vergleich
+             *     * Vor: Vorlagebeschluss
+             *     * VsU: Versäumnisurteil
+             *     * VzU: Verzichtsurteil
+             *     * ZwB: Zwischenbeschluss
+             *     * ZwU: Zwischenurteil
+             *     * TVU: Teilversäumnisurteil
+             *     * Vfg: Verfügung
+             *     * Vorab: Ersuchen um Vorabentscheidung
+             *     * Anh: Anhängiges Verfahren
+             *     * End: Endurteil
+             *     * KfB: Kostenfestsetzungsbeschluss
+             */
+            dokumenttyp?: string;
+            /** @description Aktenzeichen der Entscheidung, hier kann es zu Dopplungen mit anderen Entscheidungen kommen, auch in Kombination mit Entscheidungsdatum und Gericht. Bei Gemeinsamen Ländererlassen (GLE) innerhalb der Dokumentart Verwaltungsvorschriften wird über das Attribut 'normgeber' der jeweilige ausgebende Normgeber des Bundeslandes angegeben. Das optionale Attribut 'normgeberRegion' gibt die zugehörige Region des Normgebers an. */
+            aktenzeichen?: string;
+            /** @description Fundstelle */
+            fundstelle?: components["schemas"]["FundstelleSchema"];
+        };
+        ZitierungVerwaltungsvorschriftSchema: {
+            /** @example ZitierungVerwaltungsvorschrift */
+            "@type"?: string;
+            /**
+             * @description Ist die Referenz eine Aktivzitierung oder eine Passivzitierung?
+             * @enum {string}
+             */
+            richtung?: "aktiv" | "passiv";
+            /** @description Die URI die auf die referenzierte Dokeinheit verweist. */
+            referenzUri?: string;
+            /** @description Dokumentnummer */
+            dokumentnummer?: string;
+            /** @description Art der Zitierung */
+            artDerZitierung?: string;
+            /** @description juris-Abkürzung */
+            jurisAbkuerzung?: string;
+            /** @description Fundstelle */
+            fundstelle?: components["schemas"]["FundstelleSchema"];
         };
         StreamingResponseBody: unknown;
         CourtSearchResult: {

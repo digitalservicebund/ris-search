@@ -32,6 +32,9 @@
       "PublicationIssue": "schema:PublicationIssue",
       "MediaObject": "schema:MediaObject",
       "documentNumber": "schema:identifier",
+      "referenzUri": "ris:referenzURI",
+      "richtung": "ris:richtung",
+      "dokumentnummer": "schema:identifier",
       "Legislation": {
         "@id": "schema:Legislation",
         "@context": {
@@ -107,14 +110,10 @@
           "mitwirkendeRichter": "ris:mitwirkendeRichter",
           "vorgehendeEntscheidungen": "ris:vorgehendeEntscheidungen",
           "nachgehendeEntscheidungen": "ris:nachgehendeEntscheidungen",
-          "aktivzitierungLiteraturUnselbstaendig": "ris:aktivzitierungLiteraturUnselbstaendig",
-          "passivzitierungLiteraturUnselbstaendig": "ris:passivzitierungLiteraturUnselbstaendig",
-          "aktivzitierungLiteraturSelbstaendig": "ris:aktivzitierungLiteraturSelbstaendig",
-          "passivzitierungLiteraturSelbstaendig": "ris:passivzitierungLiteraturSelbstaendig",
-          "aktivzitierungRechtsprechung": "ris:aktivzitierungRechtsprechung",
-          "passivzitierungRechtsprechung": "ris:passivzitierungRechtsprechung",
-          "aktivzitierungVerwaltungsvorschriften": "ris:aktivzitierungVerwaltungsvorschriften",
-          "passivzitierungVerwaltungsvorschriften": "ris:passivzitierungVerwaltungsvorschriften",
+          "zitierungenLiteraturUnselbststaendig": "ris:zitierungenLiteraturUnselbststaendig",
+          "zitierungenLiteraturSelbststaendig": "ris:zitierungenLiteraturSelbststaendig",
+          "zitierungenRechtsprechung": "ris:zitierungenRechtsprechung",
+          "zitierungenVerwaltungsvorschriften": "ris:zitierungenVerwaltungsvorschriften",
           "amtlicheFundstellen": "ris:amtlicheFundstellen",
           "nichtamtlicheFundstellen": "ris:nichtamtlicheFundstellen",
           "gesetzeskraft": "ris:gesetzeskraft",
@@ -198,6 +197,59 @@
         "@context": {
           "item": "ris:item",
           "textMatches": "ris:SearchResultMatch"
+        }
+      },
+      "ZitierungRechtsprechung": {
+        "@id": "ris:ZitierungRechtsprechung",
+        "@context": {
+          "artDerZitierung": "ris:artDerZitierung",
+          "gericht": "ris:gericht",
+          "entscheidungsdatum": "ris:entscheidungsdatum",
+          "dokumenttyp": "ris:dokumenttyp",
+          "aktenzeichen": "ris:aktenzeichen",
+          "fundstelle": "ris:fundstelle"
+        }
+      },
+      "ZitierungLiteraturSelbststaendig": {
+        "@id": "ris:ZitierungLiteraturSelbststaendig",
+        "@context": {
+          "autor": "schema:author",
+          "titel": "schema:name",
+          "veroeffentlichungsjahr": "ris:veroeffentlichungsjahr"
+        }
+      },
+      "ZitierungLiteraturUnselbststaendig": {
+        "@id": "ris:ZitierungLiteraturUnselbststaendig",
+        "@context": {
+          "autor": "schema:author",
+          "dokumenttyp": "ris:dokumenttyp",
+          "fundstelle": "ris:fundstelle"
+        }
+      },
+      "ZitierungVerwaltungsvorschrift": {
+        "@id": "ris:ZitierungVerwaltungsvorschrift",
+        "@context": {
+          "artDerZitierung": "ris:artDerZitierung",
+          "jurisAbkuerzung": "ris:jurisAbkuerzung",
+          "fundstelle": "ris:fundstelle"
+        }
+      },
+      "Gericht": {
+        "@id": "ris:Gericht",
+        "@context": {
+          "gerichtstyp": "ris:gerichtstyp",
+          "gerichtsort": "ris:gerichtsort",
+          "gerichtsbarkeit": "ris:gerichtsbarkeit",
+          "spruchkoerper": "ris:spruchkoerper",
+          "sitzDerAussenstelle": "ris:sitzDerAussenstelle"
+        }
+      },
+      "Fundstelle": {
+        "@id": "ris:Fundstelle",
+        "@context": {
+          "periodikum": "ris:periodikum",
+          "zitatstelle": "ris:zitatstelle",
+          "fundstellenTyp": "ris:fundstellenTyp"
         }
       },
       "SearchResultMatch": {
