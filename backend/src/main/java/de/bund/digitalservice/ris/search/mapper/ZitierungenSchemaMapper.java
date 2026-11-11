@@ -1,6 +1,6 @@
 package de.bund.digitalservice.ris.search.mapper;
 
-import de.bund.digitalservice.ris.search.models.opensearch.Gericht;
+import de.bund.digitalservice.ris.search.models.opensearch.common.Gericht;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Fundstelle;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Richtung;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ZitierungLiteraturSelbststaendig;

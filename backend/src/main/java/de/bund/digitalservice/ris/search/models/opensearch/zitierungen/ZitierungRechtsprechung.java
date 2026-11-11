@@ -1,6 +1,6 @@
 package de.bund.digitalservice.ris.search.models.opensearch.zitierungen;
 
-import de.bund.digitalservice.ris.search.models.opensearch.Gericht;
+import de.bund.digitalservice.ris.search.models.opensearch.common.Gericht;
 import java.time.LocalDate;
 import lombok.Builder;
 import org.springframework.data.elasticsearch.annotations.DateFormat;

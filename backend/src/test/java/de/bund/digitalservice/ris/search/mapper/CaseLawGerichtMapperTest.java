@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.RisGericht;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.Spruchkoerper;
-import de.bund.digitalservice.ris.search.models.opensearch.Gericht;
+import de.bund.digitalservice.ris.search.models.opensearch.common.Gericht;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
