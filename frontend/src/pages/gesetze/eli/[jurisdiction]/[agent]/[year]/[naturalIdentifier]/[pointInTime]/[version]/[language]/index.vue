@@ -23,7 +23,7 @@ const url = useRequestURL();
 const expressionEli = Object.values(route.params).join("/");
 const privateFeaturesEnabled = usePrivateFeaturesFlag();
 
-const { data, error } = await useFetchNormContent(expressionEli, {
+const { data, error, status } = await useFetchNormContent(expressionEli, {
   rewriteLink: (link) => {
     if (!link) return null;
     if (link.startsWith("#")) return link;
@@ -49,6 +49,16 @@ const { data, error } = await useFetchNormContent(expressionEli, {
     return newLink.pathname + newLink.search + newLink.hash;
   },
 });
+
+// Leaving the page while the norm is still loading cancels the request. Nuxt
+// then resolves with neither data nor error and sets the status to "idle".
+// Nobody sees this page anymore, so stop here with an abort error, which
+// is not sent to Sentry.
+if (status.value === "idle") {
+  throw createError({
+    cause: new DOMException("Left the page while it was loading", "AbortError"),
+  });
+}
 
 if (error.value || !data.value) {
   throw createError({ status: error.value?.status ?? 500 });

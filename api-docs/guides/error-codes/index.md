@@ -24,7 +24,7 @@ Content-Type: application/json
 ### 403 error - Response
 
 ```
-curl -X POST "https://testphase.rechtsinformationen.bund.de/v1/case-law"
+curl -X POST "https://testphase.rechtsinformationen.bund.de/v1/rechtsprechung"
 ```
 
 ```http
@@ -66,7 +66,7 @@ Content-Type: application/json
 ### 422 Unprocessable Content
 
 ```
-curl "https://testphase.rechtsinformationen.bund.de/v1/case-law?dateFrom=a&dateTo=a"
+curl "https://testphase.rechtsinformationen.bund.de/v1/rechtsprechung?dateFrom=a&dateTo=a"
 ```
 
 ```http

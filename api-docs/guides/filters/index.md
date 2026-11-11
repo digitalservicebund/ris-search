@@ -40,7 +40,7 @@ List endpoints support filtering results using the `searchTerm` query parameter.
   ::: code-group
 
   ```bash [cURL]
-  curl -G https://testphase.rechtsinformationen.bund.de/v1/case-law?searchTerm=urlaub+arbeitnehmer
+  curl -G https://testphase.rechtsinformationen.bund.de/v1/rechtsprechung?searchTerm=urlaub+arbeitnehmer
   ```
 
   :::
@@ -50,7 +50,7 @@ List endpoints support filtering results using the `searchTerm` query parameter.
   ::: code-group
 
   ```bash [cURL]
-  curl -G 'https://testphase.rechtsinformationen.bund.de/v1/case-law?searchTerm="urlaub arbeitnehmer"'
+  curl -G https://testphase.rechtsinformationen.bund.de/v1/rechtsprechung --data-urlencode 'searchTerm="urlaub arbeitnehmer"'
   ```
 
   :::
@@ -70,8 +70,8 @@ All date fields implement similar query parameters for filtering.
 ::: code-group
 
 ```bash [cURL]
-curl -G https://testphase.rechtsinformationen.bund.de/v1/case-law?dateFrom=2023-12-30
-curl -G https://testphase.rechtsinformationen.bund.de/v1/case-law?dateTo=2021-12-30
+curl -G https://testphase.rechtsinformationen.bund.de/v1/rechtsprechung?dateFrom=2023-12-30
+curl -G https://testphase.rechtsinformationen.bund.de/v1/rechtsprechung?dateTo=2021-12-30
 ```
 
 :::

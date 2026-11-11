@@ -77,6 +77,17 @@ describe("sentry", () => {
       expect(shouldSuppressSentryEvent(fetchError)).toBe(true);
     });
 
+    it("suppresses Nuxt errors caused by an aborted request", () => {
+      const error = createError({
+        cause: new DOMException(
+          "Left the page while it was loading",
+          "AbortError",
+        ),
+      });
+
+      expect(shouldSuppressSentryEvent(error)).toBe(true);
+    });
+
     it("reports errors with a circular cause chain and no abort error", () => {
       const error: Error & { cause?: unknown } = new Error("Something failed");
       error.cause = error;
