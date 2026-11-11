@@ -78,7 +78,7 @@
 | ris:mitwirkendeRichter | An der Entscheidung mitwirkende Richter<br> | Participating judges of the decision<br> | caselaw-decision.xsd |
 | ris:mitwirkenderRichter | Mitwirkender Richter<br> | Participating judge<br> | caselaw-decision.xsd |
 | ris:nachgehendeEntscheidung | Nachgewiesen werden die gerichtlichen Entscheidungen, die ihrerseits in der Rubrik „vorgehende Entscheidung“ die vorliegende Entscheidung nennen.<br> | Judicial decisions that refer to the present decision.<br> | ris.xsd |
-| ris:nachgehendeEntscheidungArt | Die nachgehende Entscheidung ist ein anhängiges Verfahren.<br> |  | ris.xsd |
+| ris:nachgehendeEntscheidungArt | <ul><li>nachgehend: Die nachgehende Entscheidung ist abgeschlossen.</li><li>anhängig: Die nachgehende Entscheidung ist ein anhängiges Verfahren.</li></ul> |  | ris.xsd |
 | ris:normgeber | Normgeber<br> |  | adm.xsd |
 | ris:normgeberListe | Liste der Normgeber<br> |  | adm.xsd |
 | ris:organisation | Organisation<br> |  | ris.xsd |
@@ -110,7 +110,7 @@
 | ris:referenzNormTitel | Amtliche Langüberschrift<br> |  | ris.xsd |
 | ris:referenzRechtsprechung | Referenz auf ein Rechtsprechungsdokument<br> |  | ris.xsd |
 | ris:referenzRichtung | Ist die Referenz eine Aktivzitierung oder eine Passivzitierung?<br> |  | ris.xsd |
-| ris:referenzRichtungValue | Dieses Dokument zitiert das in der Referenz angegebene Dokument.<br> |  | ris.xsd |
+| ris:referenzRichtungValue | <ul><li>passiv: Im in der Referenz angegebenen Dokument wird dieses Dokument zitiert.</li><li>aktiv: Dieses Dokument zitiert das in der Referenz angegebene Dokument.</li></ul> |  | ris.xsd |
 | ris:referenzSelbststaendigeLiteratur | Referenz auf ein selbstständiges Literaturdokument<br> |  | ris.xsd |
 | ris:referenzSelbststaendigeLiteraturTitel | Titel<br> |  | ris.xsd |
 | ris:referenzURI | Die URI die auf die referenzierte Dokeinheit verweist.<br> |  | ris.xsd |
@@ -121,7 +121,7 @@
 | ris:revision | Revision<br> |  | caselaw-decision.xsd |
 | ris:risAbkuerzung | RIS-Abkürzung<br> |  | ris.xsd |
 | ris:risURI | URI für einen Verweis auf ein Dokument im Rechtsinformationssystem.<br> |  | ris.xsd |
-| ris:sachgebiet | Menschenlesbarer Name des Sachgebiets<br> |  | ris.xsd |
+| ris:sachgebiet | Sachgebiet<br> |  | ris.xsd |
 | ris:sachgebietId | Identifier des Sachgebiets<br> |  | ris.xsd |
 | ris:sachgebiete | Sachgebiete<br> |  | ris.xsd |
 | ris:signatur | Signatur<br> |  | sli.xsd |

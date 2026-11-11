@@ -50,7 +50,7 @@ public class XSDDescriptionParser {
   private record SchemaFile(String fileName, Document document) {}
 
   private record DocumentationText(
-      String typeName, String language, String text, String schemaFile) {}
+      String typeName, String enumerationValue, String language, String text, String schemaFile) {}
 
   private static final Logger logger = LogManager.getLogger(XSDDescriptionParser.class);
   private static final String DEFAULT_RIS_PREFIX = "ris";
@@ -216,6 +216,7 @@ public class XSDDescriptionParser {
         .map(documentation ->
             new DocumentationText(
                 prefix + ":" + documentation.getTypeName(),
+                documentation.getEnumerationValue(),
                 documentation.getLanguage(),
                 documentation.getDocumentation(),
                 schemaFile.fileName()));
@@ -247,13 +248,29 @@ public class XSDDescriptionParser {
         first.schemaFile());
   }
 
-  /** Returns the text in the given language, or blank if there is none. */
+  /**
+   * Returns the text of the type in the given language, followed by one {@code * value: text} line
+   * per documented enumeration value, or blank if there is none. For example:
+   *
+   * <pre>
+   * * passiv: Im in der Referenz angegebenen Dokument wird dieses Dokument zitiert.
+   * * aktiv: Dieses Dokument zitiert das in der Referenz angegebene Dokument.
+   * </pre>
+   */
   private static String textIn(List<DocumentationText> texts, String language) {
-    return texts.stream()
-        .filter(text -> text.language().equals(language))
-        .map(DocumentationText::text)
-        .findFirst()
-        .orElse("");
+    var textsInLanguage = texts.stream().filter(text -> text.language().equals(language)).toList();
+
+    var typeText =
+        textsInLanguage.stream()
+            .filter(text -> text.enumerationValue() == null)
+            .map(DocumentationText::text)
+            .findFirst();
+    var valueLines =
+        textsInLanguage.stream()
+            .filter(text -> text.enumerationValue() != null)
+            .map(text -> "* " + text.enumerationValue() + ": " + text.text().replace("\n", " "));
+
+    return Stream.concat(typeText.stream(), valueLines).collect(Collectors.joining("\n"));
   }
 
   private static String targetNamespaceOf(SchemaFile schemaFile) {

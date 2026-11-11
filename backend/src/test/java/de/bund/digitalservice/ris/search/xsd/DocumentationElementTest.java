@@ -83,4 +83,35 @@ class DocumentationElementTest {
         .isEqualTo("aktenzeichen");
     assertThat(new DocumentationElement(attributeLevelDocumentation).getTypeName()).isNull();
   }
+
+  @Test
+  void documentationOfAnEnumerationValueKnowsItsValueAndType() throws Exception {
+    var document =
+        parseSchema(
+            """
+            <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+              <xs:simpleType name="referenzRichtungValue">
+                <xs:annotation>
+                  <xs:documentation>Richtung der Referenz</xs:documentation>
+                </xs:annotation>
+                <xs:restriction base="xs:string">
+                  <xs:enumeration value="aktiv">
+                    <xs:annotation>
+                      <xs:documentation>Dieses Dokument zitiert.</xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:schema>
+            """);
+
+    var documentationElements = document.getElementsByTagName("xs:documentation");
+    var typeDocumentation = new DocumentationElement((Element) documentationElements.item(0));
+    var valueDocumentation = new DocumentationElement((Element) documentationElements.item(1));
+
+    assertThat(typeDocumentation.getTypeName()).isEqualTo("referenzRichtungValue");
+    assertThat(typeDocumentation.getEnumerationValue()).isNull();
+    assertThat(valueDocumentation.getTypeName()).isEqualTo("referenzRichtungValue");
+    assertThat(valueDocumentation.getEnumerationValue()).isEqualTo("aktiv");
+  }
 }

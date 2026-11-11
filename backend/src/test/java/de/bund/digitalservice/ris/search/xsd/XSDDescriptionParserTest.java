@@ -85,6 +85,45 @@ class XSDDescriptionParserTest {
   }
 
   @Test
+  void documentedEnumerationValuesAreListedAfterTheTypeText() throws IOException {
+    var schema =
+        writeSchema(
+            "ris.xsd",
+            """
+            <xs:simpleType name="referenzRichtungValue">
+              <xs:annotation>
+                <xs:documentation xml:lang="de">Richtung der Referenz</xs:documentation>
+              </xs:annotation>
+              <xs:restriction base="xs:string">
+                <xs:enumeration value="passiv">
+                  <xs:annotation>
+                    <xs:documentation>
+                      Im in der Referenz angegebenen Dokument
+                      wird dieses Dokument zitiert.
+                    </xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+                <xs:enumeration value="aktiv">
+                  <xs:annotation>
+                    <xs:documentation>Dieses Dokument zitiert.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            """);
+
+    var parser = parse(schema);
+
+    assertThat(parser.findDescription("ris:referenzRichtungValue", "de"))
+        .hasValue(
+            """
+            Richtung der Referenz
+            * passiv: Im in der Referenz angegebenen Dokument wird dieses Dokument zitiert.
+            * aktiv: Dieses Dokument zitiert.\
+            """);
+  }
+
+  @Test
   void documentationOfAnAnonymousTypeIsIgnored() throws IOException {
     var schema =
         writeSchema(

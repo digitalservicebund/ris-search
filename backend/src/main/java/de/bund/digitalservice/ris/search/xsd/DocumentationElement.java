@@ -7,7 +7,7 @@ import org.w3c.dom.Element;
 
 /**
  * A parsed {@code xs:documentation} element: the description text and language it carries, plus the
- * name of the type it documents, if any.
+ * name of the type it documents, if any, and the enumeration value it describes, if any.
  */
 public class DocumentationElement {
   /**
@@ -15,6 +15,12 @@ public class DocumentationElement {
    * null} if it documents something else, such as an element, an attribute or an anonymous type.
    */
   @Getter private final String typeName;
+
+  /**
+   * The value this documentation describes if it belongs to an {@code xs:enumeration} of the type
+   * (e.g. {@code aktiv}), or {@code null} if it describes the type itself.
+   */
+  @Getter private final String enumerationValue;
 
   @Getter private final String documentation;
 
@@ -26,6 +32,7 @@ public class DocumentationElement {
    */
   public DocumentationElement(Element element) {
     this.typeName = findTypeName(element);
+    this.enumerationValue = findEnumerationValue(element);
     this.documentation = normalizeLines(element.getTextContent());
     var languageAttribute = element.getAttribute("xml:lang");
     if (languageAttribute.isBlank()) {
@@ -62,6 +69,20 @@ public class DocumentationElement {
       return null;
     }
     return findTypeName(parent);
+  }
+
+  /**
+   * Returns the {@code value} of the {@code xs:enumeration} this documentation belongs to, or
+   * {@code null} if it doesn't belong to one. Documentation always sits in an {@code xs:annotation}
+   * directly inside the component it documents, so the enumeration is the parent of the annotation.
+   */
+  private static String findEnumerationValue(Element element) {
+    if (element.getParentNode() instanceof Element annotation
+        && annotation.getParentNode() instanceof Element owner
+        && isSchemaElement(owner, "enumeration")) {
+      return owner.getAttribute("value");
+    }
+    return null;
   }
 
   /**
