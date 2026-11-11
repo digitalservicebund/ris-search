@@ -2,13 +2,13 @@ package de.bund.digitalservice.ris.search.xsd;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.LinkedHashMap;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -22,6 +22,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.xml.sax.SAXException;
 
 /**
  * Reads the {@code xs:documentation} of the types in the {@code ris} namespace from the XSD schema,
@@ -41,6 +42,9 @@ import org.w3c.dom.Element;
  * <p>Afterwards, {@link #findDescription} looks up the description of a type, e.g. for the OpenAPI
  * descriptions of {@link RISSchema} fields, and {@link #getTypeDocumentation} returns the
  * documentation of all types, e.g. for the glossary.
+ *
+ * <p>The parser runs at backend startup as well as in the glossary generator. Problems with the
+ * schema files are therefore logged instead of thrown, so that the backend can still start.
  */
 public class XSDDescriptionParser {
   private record SchemaFile(String fileName, Document document) {}
@@ -53,7 +57,8 @@ public class XSDDescriptionParser {
 
   private final DocumentBuilderFactory factory = createDocumentBuilderFactory();
 
-  private final Map<String, TypeDocumentation> documentationPerType = new TreeMap<>();
+  /** The documentation per type name, sorted by type name; empty if the schema can't be read. */
+  private Map<String, TypeDocumentation> documentationPerType = Map.of();
 
   /**
    * Reads the schema at {@code xsd.ris-namespace-location} in three steps:
@@ -76,17 +81,19 @@ public class XSDDescriptionParser {
     }
 
     // Step 1: load ris.xsd and every schema file it imports, includes or redefines
-    var schemaFiles = loadSchemaFiles(resourceLoader.getResource(location));
-    if (schemaFiles.isEmpty()) {
+    var rootResource = resourceLoader.getResource(location);
+    var rootSchema = parse(rootResource);
+    if (rootSchema.isEmpty()) {
       logger.error("could not load XSD schema {}; no XSD descriptions will be available", location);
       return;
     }
+    var schemaFiles = loadSchemaFiles(rootResource, rootSchema.get());
 
     // Step 2: find xs:documentation texts of the ris types
-    var risTypeDocumentation = findRisTypeDocumentation(schemaFiles);
+    var risTypeDocumentation = findRisTypeDocumentation(rootSchema.get(), schemaFiles);
 
     // Step 3: group these texts into one TypeDocumentation per type
-    documentationPerType.putAll(groupByType(risTypeDocumentation));
+    documentationPerType = groupByType(risTypeDocumentation);
   }
 
   /**
@@ -112,31 +119,32 @@ public class XSDDescriptionParser {
   }
 
   /**
-   * Step 1: loads the given root schema and, transitively, every schema file it references via
-   * {@code xs:import}, {@code xs:include} or {@code xs:redefine}. Each file is loaded only once;
-   * referenced files that don't exist are skipped.
+   * Step 1: loads, transitively, every schema file the already parsed root schema references via
+   * {@code xs:import}, {@code xs:include} or {@code xs:redefine}. Each file is loaded only once.
+   * Referenced files that don't exist are skipped; files that can't be resolved or parsed are
+   * skipped with a logged error.
    *
-   * @return the loaded files, the root schema first; empty if the root schema could not be loaded
+   * @return the root schema and all loaded files, in no particular order
    */
-  private List<SchemaFile> loadSchemaFiles(Resource rootSchema) {
-    // Keyed by the resource description, so that a file referenced more than once is only loaded
-    // once. Insertion-ordered, so that the root schema stays first.
-    Map<String, SchemaFile> loaded = new LinkedHashMap<>();
-    Deque<Resource> toLoad = new ArrayDeque<>(List.of(rootSchema));
+  private List<SchemaFile> loadSchemaFiles(Resource rootResource, Document rootSchema) {
+    List<SchemaFile> result = new ArrayList<>();
+    result.add(new SchemaFile(rootResource.getFilename(), rootSchema));
+    Set<String> processed = new HashSet<>(Set.of(rootResource.getDescription()));
+    List<Resource> toProcess = new ArrayList<>(findReferencedSchemas(rootSchema, rootResource));
 
-    while (!toLoad.isEmpty()) {
-      var resource = toLoad.pop();
-      if (loaded.containsKey(resource.getDescription())) {
+    while (!toProcess.isEmpty()) {
+      var resource = toProcess.removeLast();
+      if (!processed.add(resource.getDescription())) {
         continue;
       }
       parse(resource)
           .ifPresent(document -> {
-            loaded.put(resource.getDescription(), new SchemaFile(resource.getFilename(), document));
-            toLoad.addAll(findReferencedSchemas(document, resource));
+            result.add(new SchemaFile(resource.getFilename(), document));
+            toProcess.addAll(findReferencedSchemas(document, resource));
           });
     }
 
-    return List.copyOf(loaded.values());
+    return result;
   }
 
   private Optional<Document> parse(Resource resource) {
@@ -145,7 +153,7 @@ public class XSDDescriptionParser {
     }
     try (InputStream inputStream = resource.getInputStream()) {
       return Optional.of(factory.newDocumentBuilder().parse(inputStream));
-    } catch (Exception e) {
+    } catch (IOException | SAXException | ParserConfigurationException e) {
       logger.error("could not parse XSD schema {}", resource, e);
       return Optional.empty();
     }
@@ -183,11 +191,12 @@ public class XSDDescriptionParser {
    * @return one entry per documentation text, with the name of its type (e.g. {@code
    *     ris:tatbestand}), its language and the schema file it is in
    */
-  private static List<DocumentationText> findRisTypeDocumentation(List<SchemaFile> schemaFiles) {
-    var rootSchema = schemaFiles.getFirst().document().getDocumentElement();
-    var risNamespaceUri = rootSchema.getAttribute("targetNamespace");
+  private static List<DocumentationText> findRisTypeDocumentation(
+      Document rootSchema, List<SchemaFile> schemaFiles) {
+    var rootElement = rootSchema.getDocumentElement();
+    var risNamespaceUri = rootElement.getAttribute("targetNamespace");
     var risPrefix =
-        Objects.requireNonNullElse(rootSchema.lookupPrefix(risNamespaceUri), DEFAULT_RIS_PREFIX);
+        Objects.requireNonNullElse(rootElement.lookupPrefix(risNamespaceUri), DEFAULT_RIS_PREFIX);
 
     return schemaFiles.stream()
         .filter(schemaFile -> risNamespaceUri.equals(targetNamespaceOf(schemaFile)))
@@ -238,12 +247,12 @@ public class XSDDescriptionParser {
         first.schemaFile());
   }
 
-  /** Returns the text in the given language, the last one if there are several, or blank. */
+  /** Returns the text in the given language, or blank if there is none. */
   private static String textIn(List<DocumentationText> texts, String language) {
     return texts.stream()
         .filter(text -> text.language().equals(language))
         .map(DocumentationText::text)
-        .reduce((first, second) -> second)
+        .findFirst()
         .orElse("");
   }
 
