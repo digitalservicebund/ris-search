@@ -1,4 +1,4 @@
-package de.bund.digitalservice.ris.search.models.opensearch.zitierungen;
+package de.bund.digitalservice.ris.search.models.opensearch;
 
 import lombok.Builder;
 import org.springframework.data.elasticsearch.annotations.Field;

@@ -21,10 +21,10 @@ public class ImplicitReference {
   private String domainTerm;
 
   @XmlElement(name = "vorgehendeEntscheidung", namespace = CaseLawLdmlNamespaces.RIS_NS)
-  private LinkedJudgement precedingJudgement;
+  private VorgehendeEntscheidung vorgehendeEntscheidung;
 
   @XmlElement(name = "nachgehendeEntscheidung", namespace = CaseLawLdmlNamespaces.RIS_NS)
-  private LinkedJudgement ensuingJudgement;
+  private NachgehendeEntscheidung nachgehendeEntscheidung;
 
   @XmlElement(name = "referenzUnselbststaendigeLiteratur", namespace = CaseLawLdmlNamespaces.RIS_NS)
   private ReferenzUnselbststaendigeLiteratur referenzUnselbststaendigeLiteratur;

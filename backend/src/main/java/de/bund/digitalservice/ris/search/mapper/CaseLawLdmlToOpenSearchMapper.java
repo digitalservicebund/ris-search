@@ -15,12 +15,12 @@ import de.bund.digitalservice.ris.search.models.ldml.caselaw.ImplicitReference;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.JaxbHtml;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.Judgment;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.JudgmentBody;
-import de.bund.digitalservice.ris.search.models.ldml.caselaw.LinkedJudgement;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.Meta;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.OtherAnalysis;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.OtherReferences;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.RisGericht;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.RisMeta;
+import de.bund.digitalservice.ris.search.models.ldml.caselaw.VerknuepfteEntscheidung;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.utils.DateUtils;
 import de.bund.digitalservice.ris.search.utils.MappingUtils;
@@ -138,10 +138,12 @@ public class CaseLawLdmlToOpenSearchMapper {
         .mitteilungsdatum(DateUtils.nullSafeParseyyyyMMdd(work.getMitteilungsdatumValue()))
         .previousDecisions(
             getLinkedJudgements(
-                meta, refs -> refs.getReferencesByType(ImplicitReference::getPrecedingJudgement)))
+                meta,
+                refs -> refs.getReferencesByType(ImplicitReference::getVorgehendeEntscheidung)))
         .ensuingDecisions(
             getLinkedJudgements(
-                meta, refs -> refs.getReferencesByType(ImplicitReference::getEnsuingJudgement)))
+                meta,
+                refs -> refs.getReferencesByType(ImplicitReference::getNachgehendeEntscheidung)))
         .aktivzitierungLiteraturUnselbstaendig(extractAktivzitierungLiteraturUnselbstaendig(meta))
         .passivzitierungLiteraturUnselbstaendig(extractPassivzitierungLiteraturUnselbstaendig(meta))
         .aktivzitierungLiteraturSelbstaendig(extractAktivzitierungLiteraturSelbstaendig(meta))
@@ -286,14 +288,14 @@ public class CaseLawLdmlToOpenSearchMapper {
   }
 
   private static List<String> getLinkedJudgements(
-      Meta meta, Function<OtherReferences, List<LinkedJudgement>> extractor) {
+      Meta meta, Function<OtherReferences, List<? extends VerknuepfteEntscheidung>> extractor) {
     return Optional.ofNullable(meta.getAnalysis())
         .map(Analysis::getOtherReferences)
         .map(extractor)
         .stream()
         .flatMap(Collection::stream)
         .filter(Objects::nonNull)
-        .map(LinkedJudgement::getFormatted)
+        .map(VerknuepfteEntscheidung::getFormatted)
         .toList();
   }
 

@@ -22,4 +22,8 @@ public record CaseLawUnindexed(
     @Field(name = "zitierungen_rechtsprechung")
         List<ZitierungRechtsprechung> zitierungenRechtsprechung,
     @Field(name = "zitierungen_verwaltungsvorschriften")
-        List<ZitierungVerwaltungsvorschrift> zitierungenVerwaltungsvorschriften) {}
+        List<ZitierungVerwaltungsvorschrift> zitierungenVerwaltungsvorschriften,
+    @Field(name = "vorgehende_entscheidungen")
+        List<VorgehendeEntscheidung> vorgehendeEntscheidungen,
+    @Field(name = "nachgehende_entscheidungen")
+        List<NachgehendeEntscheidung> nachgehendeEntscheidungen) {}

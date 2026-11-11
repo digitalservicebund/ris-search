@@ -8,10 +8,8 @@ import de.bund.digitalservice.ris.search.models.ldml.caselaw.ReferenzRechtsprech
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.ReferenzSelbststaendigeLiteratur;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.ReferenzUnselbststaendigeLiteratur;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.ReferenzVerwaltungsvorschrift;
-import de.bund.digitalservice.ris.search.models.ldml.caselaw.RisGericht;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.RisZitierung;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Fundstelle;
-import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Gericht;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Richtung;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ZitierungLiteraturSelbststaendig;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ZitierungLiteraturUnselbststaendig;
@@ -101,7 +99,7 @@ final class CaseLawZitierungenMapper {
         .referenzUri(ref.getReferenzUri())
         .dokumentnummer(ref.getDokumentnummer())
         .artDerZitierung(ref.getArtDerZitierung())
-        .gericht(mapGericht(ref.getGericht()))
+        .gericht(CaseLawGerichtMapper.map(ref.getGericht()))
         .entscheidungsdatum(DateUtils.nullSafeParseyyyyMMdd(ref.getEntscheidungsdatum()))
         .dokumenttyp(ref.getDokumenttyp())
         .aktenzeichen(ref.getAktenzeichen())
@@ -129,19 +127,6 @@ final class CaseLawZitierungenMapper {
       return Richtung.PASSIV;
     }
     return null;
-  }
-
-  private static Gericht mapGericht(RisGericht gericht) {
-    if (gericht == null) {
-      return null;
-    }
-    return Gericht.builder()
-        .gerichtstyp(gericht.getGerichtstyp())
-        .gerichtsort(gericht.getGerichtsort())
-        .gerichtsbarkeit(gericht.getGerichtsbarkeit())
-        .spruchkoerper(gericht.getSpruchkoerperValue())
-        .sitzDerAussenstelle(gericht.getSitzDerAussenstelle())
-        .build();
   }
 
   private static Fundstelle mapFundstelle(
