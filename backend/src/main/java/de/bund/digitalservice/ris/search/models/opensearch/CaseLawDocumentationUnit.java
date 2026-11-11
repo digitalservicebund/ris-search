@@ -2,7 +2,6 @@ package de.bund.digitalservice.ris.search.models.opensearch;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.bund.digitalservice.ris.search.models.DatumsTyp;
-import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Zitierungen;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.Builder;
@@ -113,7 +112,8 @@ public record CaseLawDocumentationUnit(
     @Field(name = Fields.TENOR, type = FieldType.Text) String tenor,
     @Field(name = Fields.TITLE_LINE) String titleLine,
     @Field(name = Fields.VORABDOKUMENT) boolean vorabdokument,
-    @Field(name = Fields.ZITIERUNGEN, index = false) Zitierungen zitierungen)
+    @Field(name = Fields.UNINDEXED, type = FieldType.Object, enabled = false)
+        CaseLawUnindexed unindexed)
     implements AbstractSearchEntity {
 
   /**
@@ -216,6 +216,6 @@ public record CaseLawDocumentationUnit(
     public static final String TENOR = "tenor";
     public static final String TITLE_LINE = "title_line";
     public static final String VORABDOKUMENT = "vorabdokument";
-    public static final String ZITIERUNGEN = "zitierungen";
+    public static final String UNINDEXED = "unindexed";
   }
 }

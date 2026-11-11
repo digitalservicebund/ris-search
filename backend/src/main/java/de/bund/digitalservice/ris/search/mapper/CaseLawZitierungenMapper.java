@@ -17,54 +17,52 @@ import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Zitierung
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ZitierungLiteraturUnselbststaendig;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ZitierungRechtsprechung;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ZitierungVerwaltungsvorschrift;
-import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Zitierungen;
 import de.bund.digitalservice.ris.search.utils.DateUtils;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 
-/** Maps the aktiv- and passivzitierungen of a case law LDML document to {@link Zitierungen}. */
+/** Maps the aktiv- and passivzitierungen of a case law LDML document. */
 final class CaseLawZitierungenMapper {
 
   private CaseLawZitierungenMapper() {}
 
-  static Zitierungen map(Meta meta) {
-    List<ImplicitReference> refs =
-        Optional.ofNullable(meta.getAnalysis())
-            .map(Analysis::getOtherReferences)
-            .map(OtherReferences::getImplicitReferences)
-            .orElse(List.of());
+  static List<ZitierungLiteraturSelbststaendig> mapLiteraturSelbststaendig(Meta meta) {
+    return extract(
+        meta,
+        ImplicitReference::getReferenzSelbststaendigeLiteratur,
+        CaseLawZitierungenMapper::mapSelbststaendigeLiteratur);
+  }
 
-    return Zitierungen.builder()
-        .zitierungenLiteraturSelbststaendig(
-            extract(
-                refs,
-                ImplicitReference::getReferenzSelbststaendigeLiteratur,
-                CaseLawZitierungenMapper::mapSelbststaendigeLiteratur))
-        .zitierungenLiteraturUnselbststaendig(
-            extract(
-                refs,
-                ImplicitReference::getReferenzUnselbststaendigeLiteratur,
-                CaseLawZitierungenMapper::mapUnselbststaendigeLiteratur))
-        .zitierungenRechtsprechung(
-            extract(
-                refs,
-                ImplicitReference::getReferenzRechtsprechung,
-                CaseLawZitierungenMapper::mapRechtsprechung))
-        .zitierungenVerwaltungsvorschriften(
-            extract(
-                refs,
-                ImplicitReference::getReferenzVerwaltungsvorschrift,
-                CaseLawZitierungenMapper::mapVerwaltungsvorschrift))
-        .build();
+  static List<ZitierungLiteraturUnselbststaendig> mapLiteraturUnselbststaendig(Meta meta) {
+    return extract(
+        meta,
+        ImplicitReference::getReferenzUnselbststaendigeLiteratur,
+        CaseLawZitierungenMapper::mapUnselbststaendigeLiteratur);
+  }
+
+  static List<ZitierungRechtsprechung> mapRechtsprechung(Meta meta) {
+    return extract(
+        meta,
+        ImplicitReference::getReferenzRechtsprechung,
+        CaseLawZitierungenMapper::mapRechtsprechung);
+  }
+
+  static List<ZitierungVerwaltungsvorschrift> mapVerwaltungsvorschriften(Meta meta) {
+    return extract(
+        meta,
+        ImplicitReference::getReferenzVerwaltungsvorschrift,
+        CaseLawZitierungenMapper::mapVerwaltungsvorschrift);
   }
 
   private static <R extends RisZitierung, T> List<T> extract(
-      List<ImplicitReference> refs,
-      Function<ImplicitReference, R> extractor,
-      Function<R, T> mapper) {
-    return refs.stream()
+      Meta meta, Function<ImplicitReference, R> extractor, Function<R, T> mapper) {
+    return Optional.ofNullable(meta.getAnalysis())
+        .map(Analysis::getOtherReferences)
+        .map(OtherReferences::getImplicitReferences)
+        .orElse(List.of())
+        .stream()
         .filter(Objects::nonNull)
         .map(extractor)
         .filter(Objects::nonNull)

@@ -1189,7 +1189,7 @@
           "type": "text",
           "analyzer": "custom_german_analyzer"
         },
-        "zitierungen": {
+        "unindexed": {
           "type": "object",
           "enabled": false
         }

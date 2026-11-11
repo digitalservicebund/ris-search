@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import de.bund.digitalservice.ris.search.models.DatumsTyp;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
+import de.bund.digitalservice.ris.search.models.opensearch.CaseLawUnindexed;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Fundstelle;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Gericht;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Richtung;
@@ -11,7 +12,6 @@ import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Zitierung
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ZitierungLiteraturUnselbststaendig;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ZitierungRechtsprechung;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ZitierungVerwaltungsvorschrift;
-import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Zitierungen;
 import de.bund.digitalservice.ris.search.utils.CaseLawLdmlTemplateUtils;
 import de.bund.digitalservice.ris.utils.CaseLawXmlValidator;
 import java.io.IOException;
@@ -163,9 +163,9 @@ class CaseLawLdmlToOpenSearchMapperTest {
 
   @Test
   void shouldMapZitierungenLiteraturSelbststaendig() {
-    Zitierungen zitierungen = mapper.fromString(testCaseLawLdml).zitierungen();
+    CaseLawUnindexed unindexed = mapper.fromString(testCaseLawLdml).unindexed();
 
-    assertThat(zitierungen.zitierungenLiteraturSelbststaendig())
+    assertThat(unindexed.zitierungenLiteraturSelbststaendig())
         .containsExactly(
             ZitierungLiteraturSelbststaendig.builder()
                 .richtung(Richtung.AKTIV)
@@ -187,9 +187,9 @@ class CaseLawLdmlToOpenSearchMapperTest {
 
   @Test
   void shouldMapZitierungenLiteraturUnselbststaendig() {
-    Zitierungen zitierungen = mapper.fromString(testCaseLawLdml).zitierungen();
+    CaseLawUnindexed unindexed = mapper.fromString(testCaseLawLdml).unindexed();
 
-    assertThat(zitierungen.zitierungenLiteraturUnselbststaendig())
+    assertThat(unindexed.zitierungenLiteraturUnselbststaendig())
         .containsExactly(
             ZitierungLiteraturUnselbststaendig.builder()
                 .richtung(Richtung.AKTIV)
@@ -215,9 +215,9 @@ class CaseLawLdmlToOpenSearchMapperTest {
 
   @Test
   void shouldMapZitierungenRechtsprechung() {
-    Zitierungen zitierungen = mapper.fromString(testCaseLawLdml).zitierungen();
+    CaseLawUnindexed unindexed = mapper.fromString(testCaseLawLdml).unindexed();
 
-    assertThat(zitierungen.zitierungenRechtsprechung())
+    assertThat(unindexed.zitierungenRechtsprechung())
         .containsExactly(
             ZitierungRechtsprechung.builder()
                 .richtung(Richtung.AKTIV)
@@ -260,9 +260,9 @@ class CaseLawLdmlToOpenSearchMapperTest {
 
   @Test
   void shouldMapZitierungenVerwaltungsvorschriften() {
-    Zitierungen zitierungen = mapper.fromString(testCaseLawLdml).zitierungen();
+    CaseLawUnindexed unindexed = mapper.fromString(testCaseLawLdml).unindexed();
 
-    assertThat(zitierungen.zitierungenVerwaltungsvorschriften())
+    assertThat(unindexed.zitierungenVerwaltungsvorschriften())
         .containsExactly(
             ZitierungVerwaltungsvorschrift.builder()
                 .richtung(Richtung.AKTIV)

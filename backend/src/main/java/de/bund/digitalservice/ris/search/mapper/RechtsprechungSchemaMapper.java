@@ -4,7 +4,7 @@ import static de.bund.digitalservice.ris.search.utils.MappingUtils.mapList;
 
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
-import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Zitierungen;
+import de.bund.digitalservice.ris.search.models.opensearch.CaseLawUnindexed;
 import de.bund.digitalservice.ris.search.schema.RechtsprechungSchema;
 
 /** Maps Rechtsprechung (case law document) objects to API schema models. */
@@ -23,8 +23,8 @@ public class RechtsprechungSchemaMapper {
       CaseLawDocumentationUnit doc, String remoteJsonContext) {
     String entityURI = ApiConfig.Paths.RECHTSPRECHUNG + "/" + doc.documentNumber();
     var encodings = EncodingSchemaFactory.documentEncodingSchemas(entityURI);
-    Zitierungen zitierungen =
-        doc.zitierungen() != null ? doc.zitierungen() : Zitierungen.builder().build();
+    CaseLawUnindexed unindexed =
+        doc.unindexed() != null ? doc.unindexed() : CaseLawUnindexed.builder().build();
 
     return RechtsprechungSchema.builder()
         .id(entityURI)
@@ -73,17 +73,17 @@ public class RechtsprechungSchemaMapper {
         .nachgehendeEntscheidungen(doc.ensuingDecisions())
         .zitierungenLiteraturSelbststaendig(
             mapList(
-                zitierungen.zitierungenLiteraturSelbststaendig(),
+                unindexed.zitierungenLiteraturSelbststaendig(),
                 ZitierungenSchemaMapper::fromDomain))
         .zitierungenLiteraturUnselbststaendig(
             mapList(
-                zitierungen.zitierungenLiteraturUnselbststaendig(),
+                unindexed.zitierungenLiteraturUnselbststaendig(),
                 ZitierungenSchemaMapper::fromDomain))
         .zitierungenRechtsprechung(
-            mapList(zitierungen.zitierungenRechtsprechung(), ZitierungenSchemaMapper::fromDomain))
+            mapList(unindexed.zitierungenRechtsprechung(), ZitierungenSchemaMapper::fromDomain))
         .zitierungenVerwaltungsvorschriften(
             mapList(
-                zitierungen.zitierungenVerwaltungsvorschriften(),
+                unindexed.zitierungenVerwaltungsvorschriften(),
                 ZitierungenSchemaMapper::fromDomain))
         .amtlicheFundstellen(doc.amtlicheFundstellen())
         .nichtamtlicheFundstellen(doc.nichtamtlicheFundstellen())

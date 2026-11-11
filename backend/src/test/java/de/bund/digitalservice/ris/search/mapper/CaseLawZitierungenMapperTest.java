@@ -13,7 +13,6 @@ import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Fundstell
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Richtung;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ZitierungLiteraturUnselbststaendig;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ZitierungRechtsprechung;
-import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Zitierungen;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -24,12 +23,12 @@ class CaseLawZitierungenMapperTest {
   @Test
   @DisplayName("Returns empty lists when the document has no analysis")
   void returnsEmptyListsWithoutAnalysis() {
-    Zitierungen zitierungen = CaseLawZitierungenMapper.map(Meta.builder().build());
+    Meta meta = Meta.builder().build();
 
-    assertThat(zitierungen.zitierungenRechtsprechung()).isEmpty();
-    assertThat(zitierungen.zitierungenLiteraturSelbststaendig()).isEmpty();
-    assertThat(zitierungen.zitierungenLiteraturUnselbststaendig()).isEmpty();
-    assertThat(zitierungen.zitierungenVerwaltungsvorschriften()).isEmpty();
+    assertThat(CaseLawZitierungenMapper.mapRechtsprechung(meta)).isEmpty();
+    assertThat(CaseLawZitierungenMapper.mapLiteraturSelbststaendig(meta)).isEmpty();
+    assertThat(CaseLawZitierungenMapper.mapLiteraturUnselbststaendig(meta)).isEmpty();
+    assertThat(CaseLawZitierungenMapper.mapVerwaltungsvorschriften(meta)).isEmpty();
   }
 
   @Test
@@ -42,10 +41,10 @@ class CaseLawZitierungenMapperTest {
     Analysis analysis = new Analysis();
     analysis.setOtherReferences(otherReferences);
 
-    Zitierungen zitierungen =
-        CaseLawZitierungenMapper.map(Meta.builder().analysis(analysis).build());
+    List<ZitierungRechtsprechung> zitierungen =
+        CaseLawZitierungenMapper.mapRechtsprechung(Meta.builder().analysis(analysis).build());
 
-    assertThat(zitierungen.zitierungenRechtsprechung()).isEmpty();
+    assertThat(zitierungen).isEmpty();
   }
 
   @Test
@@ -61,10 +60,10 @@ class CaseLawZitierungenMapperTest {
     Analysis analysis = new Analysis();
     analysis.setOtherReferences(otherReferences);
 
-    Zitierungen zitierungen =
-        CaseLawZitierungenMapper.map(Meta.builder().analysis(analysis).build());
+    List<ZitierungRechtsprechung> zitierungen =
+        CaseLawZitierungenMapper.mapRechtsprechung(Meta.builder().analysis(analysis).build());
 
-    assertThat(zitierungen.zitierungenRechtsprechung())
+    assertThat(zitierungen)
         .containsExactly(
             ZitierungRechtsprechung.builder()
                 .richtung(Richtung.PASSIV)
@@ -90,10 +89,10 @@ class CaseLawZitierungenMapperTest {
     Analysis analysis = new Analysis();
     analysis.setOtherReferences(otherReferences);
 
-    Zitierungen zitierungen =
-        CaseLawZitierungenMapper.map(Meta.builder().analysis(analysis).build());
+    List<ZitierungRechtsprechung> zitierungen =
+        CaseLawZitierungenMapper.mapRechtsprechung(Meta.builder().analysis(analysis).build());
 
-    assertThat(zitierungen.zitierungenRechtsprechung())
+    assertThat(zitierungen)
         .containsExactly(
             ZitierungRechtsprechung.builder()
                 .richtung(Richtung.AKTIV)
@@ -128,10 +127,10 @@ class CaseLawZitierungenMapperTest {
     Analysis analysis = new Analysis();
     analysis.setOtherReferences(otherReferences);
 
-    Zitierungen zitierungen =
-        CaseLawZitierungenMapper.map(Meta.builder().analysis(analysis).build());
+    List<ZitierungRechtsprechung> zitierungen =
+        CaseLawZitierungenMapper.mapRechtsprechung(Meta.builder().analysis(analysis).build());
 
-    assertThat(zitierungen.zitierungenRechtsprechung())
+    assertThat(zitierungen)
         .containsExactly(
             ZitierungRechtsprechung.builder()
                 .richtung(Richtung.AKTIV)
@@ -155,10 +154,11 @@ class CaseLawZitierungenMapperTest {
     Analysis analysis = new Analysis();
     analysis.setOtherReferences(otherReferences);
 
-    Zitierungen zitierungen =
-        CaseLawZitierungenMapper.map(Meta.builder().analysis(analysis).build());
+    List<ZitierungLiteraturUnselbststaendig> zitierungen =
+        CaseLawZitierungenMapper.mapLiteraturUnselbststaendig(
+            Meta.builder().analysis(analysis).build());
 
-    assertThat(zitierungen.zitierungenLiteraturUnselbststaendig())
+    assertThat(zitierungen)
         .containsExactly(
             ZitierungLiteraturUnselbststaendig.builder()
                 .richtung(Richtung.PASSIV)
