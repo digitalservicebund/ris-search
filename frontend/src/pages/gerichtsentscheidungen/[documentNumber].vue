@@ -174,7 +174,9 @@ const detailItems = computed<DetailsListItem[]>(() => [
       "Vorgehende Entscheidungen:",
       rechtsprechung.value?.vorgehendeEntscheidungen?.length,
     ),
-    values: rechtsprechung.value?.vorgehendeEntscheidungen ?? [],
+    values: (rechtsprechung.value?.vorgehendeEntscheidungen ?? []).flatMap(
+      (entscheidung) => formatVerknuepfteEntscheidung(entscheidung) ?? [],
+    ),
   },
   {
     type: "list",
@@ -183,7 +185,9 @@ const detailItems = computed<DetailsListItem[]>(() => [
       "Nachgehende Entscheidungen:",
       rechtsprechung.value?.nachgehendeEntscheidungen?.length,
     ),
-    values: rechtsprechung.value?.nachgehendeEntscheidungen ?? [],
+    values: (rechtsprechung.value?.nachgehendeEntscheidungen ?? []).flatMap(
+      (entscheidung) => formatVerknuepfteEntscheidung(entscheidung) ?? [],
+    ),
   },
 
   {
