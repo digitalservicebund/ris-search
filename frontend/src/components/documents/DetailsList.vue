@@ -8,10 +8,14 @@ export type TextEntry = {
   valueClass?: string;
 };
 
+type LinkableText = { text: string; to?: string };
+
+export type ListValue = string | LinkableText;
+
 export type ListEntry = {
   type: "list";
   label: string;
-  values: string[];
+  values: ListValue[];
 };
 
 export type BadgeEntry = {
@@ -41,28 +45,43 @@ export type DetailsListItem =
   | HtmlEntry
   | LinkEntry;
 
+type DisplayItem =
+  | Exclude<DetailsListItem, ListEntry>
+  | (Omit<ListEntry, "values"> & { values: LinkableText[] });
+
 const props = defineProps<{
   items: DetailsListItem[];
 }>();
 
-const visibleItems = computed(() =>
-  props.items.filter((item): boolean => {
-    switch (item.type) {
-      case "text":
-        return !isStringEmpty(item.value);
-      case "list":
-        return item.values.length > 0;
-      case "badge":
-        return item.values.length > 0;
-      case "html":
-        return !isStringEmpty(item.html);
-      case "link":
-        return !isStringEmpty(item.url);
-    }
-  }),
+const visibleItems = computed<DisplayItem[]>(() =>
+  props.items
+    .filter((item): boolean => {
+      switch (item.type) {
+        case "text":
+          return !isStringEmpty(item.value);
+        case "list":
+          return item.values.length > 0;
+        case "badge":
+          return item.values.length > 0;
+        case "html":
+          return !isStringEmpty(item.html);
+        case "link":
+          return !isStringEmpty(item.url);
+      }
+    })
+    .map((item) =>
+      item.type === "list"
+        ? {
+            ...item,
+            values: item.values.map((value) =>
+              typeof value === "string" ? { text: value } : value,
+            ),
+          }
+        : item,
+    ),
 );
 
-function labelRowSpan(item: DetailsListItem): number {
+function labelRowSpan(item: DisplayItem): number {
   return item.type === "list" ? Math.max(item.values.length, 1) : 1;
 }
 </script>
@@ -92,10 +111,17 @@ function labelRowSpan(item: DetailsListItem): number {
       <template v-else-if="item.type === 'list'">
         <dd
           v-for="value in item.values"
-          :key="value"
+          :key="value.text"
           class="typo-label1-regular col-span-12 md:col-span-9 md:col-start-4 lg:col-span-6 lg:col-start-4"
         >
-          {{ value }}
+          <NuxtLink
+            v-if="value.to"
+            class="typo-link1-regular link-hover"
+            :to="value.to"
+          >
+            {{ value.text }}
+          </NuxtLink>
+          <template v-else>{{ value.text }}</template>
         </dd>
       </template>
 

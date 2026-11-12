@@ -1,3 +1,4 @@
+import type { ListValue } from "~/components/documents/DetailsList.vue";
 import type {
   NachgehendeEntscheidung,
   VorgehendeEntscheidung,
@@ -26,11 +27,6 @@ function isPresent<T>(value: T | null | undefined): value is T {
   return value !== null && value !== undefined;
 }
 
-/**
- * Formats a linked decision as "Gerichtstyp Gerichtsort, Dokumenttyp vom Datum
- *
- * - Aktenzeichen", appending " (anhängig)" for pending proceedings.
- */
 export function formatVerknuepfteEntscheidung(
   entscheidung: VorgehendeEntscheidung | NachgehendeEntscheidung,
 ): string | undefined {
@@ -59,4 +55,16 @@ export function formatVerknuepfteEntscheidung(
   const isAnhaengig =
     "art" in entscheidung && entscheidung.art?.toLowerCase() === "anhängig";
   return isAnhaengig ? `${result} (anhängig)` : result;
+}
+
+export function toVerknuepfteEntscheidungListValue(
+  entscheidung: VorgehendeEntscheidung | NachgehendeEntscheidung,
+): ListValue | undefined {
+  const text = formatVerknuepfteEntscheidung(entscheidung);
+  if (!text) return undefined;
+
+  const { dokumentnummer } = entscheidung;
+  return dokumentnummer
+    ? { text, to: `/gerichtsentscheidungen/${dokumentnummer}` }
+    : text;
 }

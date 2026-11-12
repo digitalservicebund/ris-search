@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   formatVerknuepfteEntscheidung,
   getCaselawSecondaryTitle,
+  toVerknuepfteEntscheidungListValue,
 } from "~/utils/caseLaw";
 import { truncateAtWord } from "~/utils/textFormatting";
 
@@ -134,6 +135,32 @@ describe("caselaw", () => {
     it("returns undefined when no parts are present", () => {
       expect(
         formatVerknuepfteEntscheidung({ art: "anhängig" }),
+      ).toBeUndefined();
+    });
+  });
+
+  describe("toVerknuepfteEntscheidungListValue", () => {
+    it("links to the decision when it has a Dokumentnummer", () => {
+      expect(
+        toVerknuepfteEntscheidungListValue({
+          dokumentnummer: "KORE300002025",
+          aktenzeichen: "1 K 23/19",
+        }),
+      ).toEqual({
+        text: "1 K 23/19",
+        to: "/gerichtsentscheidungen/KORE300002025",
+      });
+    });
+
+    it("returns plain text without a Dokumentnummer", () => {
+      expect(
+        toVerknuepfteEntscheidungListValue({ aktenzeichen: "1 K 23/19" }),
+      ).toBe("1 K 23/19");
+    });
+
+    it("returns undefined when the decision cannot be formatted", () => {
+      expect(
+        toVerknuepfteEntscheidungListValue({ dokumentnummer: "KORE300002025" }),
       ).toBeUndefined();
     });
   });
