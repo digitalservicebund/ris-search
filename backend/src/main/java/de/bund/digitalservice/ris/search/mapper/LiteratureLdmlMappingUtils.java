@@ -7,7 +7,7 @@ import java.time.format.DateTimeParseException;
 import java.util.List;
 import org.jspecify.annotations.Nullable;
 
-/** Shared mapping functions between uli/sli literature */
+/** Mapping helper functions for literature LDML */
 public class LiteratureLdmlMappingUtils {
   private LiteratureLdmlMappingUtils() {}
 

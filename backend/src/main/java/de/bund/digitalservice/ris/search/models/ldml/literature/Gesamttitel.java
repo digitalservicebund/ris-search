@@ -1,6 +1,5 @@
-package de.bund.digitalservice.ris.search.models.ldml.literature.sli;
+package de.bund.digitalservice.ris.search.models.ldml.literature;
 
-import de.bund.digitalservice.ris.search.models.ldml.literature.LiteratureNamespaces;
 import jakarta.xml.bind.annotation.XmlElement;
 import lombok.Getter;
 import org.jspecify.annotations.Nullable;
@@ -12,10 +11,10 @@ import org.jspecify.annotations.Nullable;
  */
 @Getter
 public class Gesamttitel {
-  @XmlElement(name = "titel", namespace = LiteratureNamespaces.RIS_SELBSTSTAENDIG_NS)
+  @XmlElement(name = "titel", namespace = LiteratureNamespaces.RIS_NS)
   private String titel;
 
   @Nullable
-  @XmlElement(name = "bandbezeichnung", namespace = LiteratureNamespaces.RIS_SELBSTSTAENDIG_NS)
+  @XmlElement(name = "bandbezeichnung", namespace = LiteratureNamespaces.RIS_NS)
   private String bandbezeichnung;
 }

@@ -1,6 +1,5 @@
-package de.bund.digitalservice.ris.search.models.ldml.literature.uli;
+package de.bund.digitalservice.ris.search.models.ldml.literature;
 
-import de.bund.digitalservice.ris.search.models.ldml.literature.LiteratureNamespaces;
 import jakarta.xml.bind.annotation.XmlElement;
 import java.util.List;
 import lombok.Getter;
@@ -13,9 +12,10 @@ import lombok.Getter;
  * metadata hierarchy in serialization and deserialization processes. The analysis contains detailed
  * metadata, primarily focusing on references within the document.
  *
- * <p>Fields: - otherReferences: A list of {@link OtherReferences} objects representing detailed
- * references associated with the document. This is serialized under the "otherReferences" XML tag
- * within the Akoma Ntoso (AKN) namespace.
+ * <p>Fields: - otherReferences: A list of {@link
+ * de.bund.digitalservice.ris.search.models.ldml.literature.OtherReferences} objects representing
+ * detailed references associated with the document. This is serialized under the "otherReferences"
+ * XML tag within the Akoma Ntoso (AKN) namespace.
  */
 @Getter
 public class Analysis {

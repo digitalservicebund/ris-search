@@ -23,6 +23,7 @@ import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.repository.objectstorage.LiteratureBucket;
 import de.bund.digitalservice.ris.search.service.ChangelogService;
 import java.io.ByteArrayInputStream;
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -473,7 +474,8 @@ class LiteratureControllerApiIntegrationTest extends ContainersIntegrationBase {
     byte[] fileContent = files.get(filename);
     assertThat(fileContent).isNotEmpty();
 
-    Literature mapped = LiteratureLdmlToOpenSearchMapper.mapLdml(new String(fileContent));
+    Literature mapped =
+        LiteratureLdmlToOpenSearchMapper.mapLdml(new String(fileContent), Instant.now());
 
     assertThat(mapped).isNotNull();
     assertThat(mapped.documentNumber()).isEqualTo(documentNumberPresentInBucket);

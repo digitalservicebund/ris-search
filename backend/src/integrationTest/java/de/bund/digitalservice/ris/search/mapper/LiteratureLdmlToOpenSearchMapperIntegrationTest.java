@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import de.bund.digitalservice.ris.LoadXmlUtils;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.Month;
 import org.junit.jupiter.api.Test;
@@ -15,7 +16,8 @@ class LiteratureLdmlToOpenSearchMapperIntegrationTest {
     String literatureContent =
         LoadXmlUtils.loadXmlAsString(Literature.class, "XXLU000000001/XXLU000000001.akn.xml");
 
-    Literature literature = LiteratureLdmlToOpenSearchMapper.mapLdml(literatureContent);
+    Literature literature =
+        LiteratureLdmlToOpenSearchMapper.mapLdml(literatureContent, Instant.now());
 
     assertThat(literature.id()).isEqualTo("XXLU000000001");
     assertThat(literature.documentNumber()).isEqualTo("XXLU000000001");

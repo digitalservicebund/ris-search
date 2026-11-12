@@ -1,7 +1,7 @@
-package de.bund.digitalservice.ris.search.models.ldml.literature.uli;
+package de.bund.digitalservice.ris.search.models.ldml.literature;
 
-import de.bund.digitalservice.ris.search.models.ldml.literature.LiteratureNamespaces;
 import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
 import java.util.List;
 import lombok.Getter;
 
@@ -21,7 +21,7 @@ import lombok.Getter;
  * System) documents, particularly for dependent publications. - Classifications: A list of
  * classification elements that categorize the document based on predefined criteria or sources. -
  * Analysis: Contains analytical metadata focusing on the references and citations within the
- * document.
+ * document. - Notes: A list of footnotes associated with the document.
  *
  * <p>All fields are JAXBElement annotated, ensuring proper mapping to the Akoma Ntoso namespace
  * during XML serialization and deserialization processes.
@@ -40,4 +40,8 @@ public class Meta {
 
   @XmlElement(name = "analysis", namespace = LiteratureNamespaces.AKN_NS)
   private Analysis analysis;
+
+  @XmlElementWrapper(namespace = LiteratureNamespaces.AKN_NS)
+  @XmlElement(name = "note", namespace = LiteratureNamespaces.AKN_NS)
+  private List<Note> notes;
 }

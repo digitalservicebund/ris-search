@@ -1,4 +1,4 @@
-package de.bund.digitalservice.ris.search.models.ldml.literature.sli;
+package de.bund.digitalservice.ris.search.models.ldml.literature;
 
 import jakarta.xml.bind.annotation.XmlValue;
 import lombok.Getter;

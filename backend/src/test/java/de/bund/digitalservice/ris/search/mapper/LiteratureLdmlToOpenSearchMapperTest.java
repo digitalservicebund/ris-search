@@ -4,25 +4,30 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import de.bund.digitalservice.ris.LoadXmlUtils;
+import de.bund.digitalservice.ris.SharedTestConstants;
 import de.bund.digitalservice.ris.search.exception.OpenSearchMapperException;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
-import org.mockito.Mockito;
 
 class LiteratureLdmlToOpenSearchMapperTest {
 
-  private static final String VALID_XML =
+  private static final Instant NOW = SharedTestConstants.TIMESTAMP_2024_01_01_AS_INSTANT;
+
+  private static final String VALID_ULI_XML =
       LoadXmlUtils.loadXmlAsString(Literature.class, "XXLU000000001/XXLU000000001.akn.xml");
 
+  private static final String VALID_SLI_XML =
+      LoadXmlUtils.loadXmlAsString(Literature.class, "XXLS000000001/XXLS000000001.akn.xml");
+
   @Test
-  @DisplayName("Correctly maps all available fields from valid literature LDML XML")
-  void correctlyMapsAllAvailableFields() {
-    Literature literature = LiteratureLdmlToOpenSearchMapper.mapLdml(VALID_XML);
+  @DisplayName("Correctly maps all available fields from valid ULI literature LDML XML")
+  void correctlyMapsAllAvailableUliFields() {
+    Literature literature = LiteratureLdmlToOpenSearchMapper.mapLdml(VALID_ULI_XML, NOW);
 
     // Core identifiers
     assertThat(literature.id()).isEqualTo("XXLU000000001");
@@ -56,6 +61,51 @@ class LiteratureLdmlToOpenSearchMapperTest {
   }
 
   @Test
+  @DisplayName("Correctly maps all available fields from valid SLI literature LDML XML")
+  void correctlyMapsAllAvailableSliFields() {
+    Literature literature = LiteratureLdmlToOpenSearchMapper.mapLdml(VALID_SLI_XML, NOW);
+
+    var expected =
+        Literature.builder()
+            .id("XXLS000000001")
+            .documentNumber("XXLS000000001")
+            .yearsOfPublication(List.of("2025"))
+            .firstPublicationDate(LocalDate.of(2025, Month.JANUARY, 1))
+            .documentTypes(List.of("Auf", "Foo"))
+            .mainTitle("Literatur Test Dokument")
+            .mainTitleAdditions("Titelzusatz")
+            .documentaryTitle("Dokumentarischer Titel")
+            .authors(List.of("Mustermann, Max", "Musterfrau, Susanne"))
+            .editors(List.of("Bearbeiter, Foo"))
+            .founder(List.of("Begruender, Foo"))
+            .collaborators(List.of("Foo, Peter"))
+            .originators(List.of("FOO"))
+            .languages(List.of("deu"))
+            .normReferences(List.of("GG, Art 6 Abs 2 S 1, 1949-05-23"))
+            .universityNotes(List.of("Universität Foo"))
+            .publisherInformation(List.of("verlag, Berlin"))
+            .publisherOrganizations(List.of("herausgeber institution showAs"))
+            .publisherPersons(List.of("Titel, foo herausgeber person"))
+            .conferenceNotes(List.of("Internationaler Kongreß für das Recht, 1991, Athen, GRC"))
+            .shortTitles(List.of("titel kurzform"))
+            .additionalTitles(List.of("sonstiger titel"))
+            .fullTitleAdditions(List.of("gesamttitel, bandbezeichnung"))
+            .footnotes(List.of("1. Auflage 19XX"))
+            .shortReport(
+                "1. Dies ist ein literature LDML Dokument für Tests. Es werden sub und sup Elemente unterstützt. Außerdem gib es noch EM, hlj, noindex und strong.")
+            .outline("I. Äpfel. II. Birnen. III. Orangen.")
+            .indexedAt(NOW.toString())
+            .edition("1. Auflage")
+            .internationalIdentifiers(List.of("ISBN 3-XXXXX-XX-X", "ISSN XXXX-XXXX"))
+            .volumes(List.of("Teilband"))
+            .dependentReferences(List.of("BB, 1979, 1298-1300"))
+            .independentReferences(List.of("Titel einer Fundstelle, 1979, 1298-1300"))
+            .build();
+
+    assertThat(literature).isEqualTo(expected);
+  }
+
+  @Test
   @DisplayName("Returns empty optional if document number is missing")
   void returnsEmptyOptionalIfDocumentNumberIsMissing() {
     String literatureLdml =
@@ -67,22 +117,16 @@ class LiteratureLdmlToOpenSearchMapperTest {
         """
             .stripIndent();
 
-    assertThatThrownBy(() -> LiteratureLdmlToOpenSearchMapper.mapLdml(literatureLdml))
+    assertThatThrownBy(() -> LiteratureLdmlToOpenSearchMapper.mapLdml(literatureLdml, NOW))
         .isInstanceOf(OpenSearchMapperException.class)
         .hasMessageContaining("unable to parse file to Literature");
   }
 
   @Test
-  @DisplayName("Sets indexedAt to current time")
-  void setsIndexedAtToCurrentTime() {
-    Instant fixedInstant = Instant.parse("2025-01-01T10:00:00Z");
-
-    try (MockedStatic<Instant> mockedInstant = Mockito.mockStatic(Instant.class)) {
-      mockedInstant.when(Instant::now).thenReturn(fixedInstant);
-
-      Literature literature = LiteratureLdmlToOpenSearchMapper.mapLdml(VALID_XML);
-      assertThat(literature.indexedAt()).isEqualTo(fixedInstant.toString());
-    }
+  @DisplayName("Sets indexedAt to the given time")
+  void setsIndexedAtToGivenTime() {
+    Literature literature = LiteratureLdmlToOpenSearchMapper.mapLdml(VALID_ULI_XML, NOW);
+    assertThat(literature.indexedAt()).isEqualTo(NOW.toString());
   }
 
   @Test
@@ -114,7 +158,7 @@ class LiteratureLdmlToOpenSearchMapperTest {
         """
             .stripIndent();
 
-    Literature literature = LiteratureLdmlToOpenSearchMapper.mapLdml(minimalValidLdml);
+    Literature literature = LiteratureLdmlToOpenSearchMapper.mapLdml(minimalValidLdml, NOW);
 
     assertThat(literature.dependentReferences()).isEmpty();
     assertThat(literature.independentReferences()).isEmpty();
