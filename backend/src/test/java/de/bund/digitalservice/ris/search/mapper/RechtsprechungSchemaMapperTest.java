@@ -9,6 +9,8 @@ import de.bund.digitalservice.ris.SharedTestConstants;
 import de.bund.digitalservice.ris.search.models.DatumsTyp;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawUnindexed;
+import de.bund.digitalservice.ris.search.models.opensearch.NachgehendeEntscheidung;
+import de.bund.digitalservice.ris.search.models.opensearch.VorgehendeEntscheidung;
 import de.bund.digitalservice.ris.search.models.opensearch.common.Gericht;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Fundstelle;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Richtung;
@@ -19,7 +21,9 @@ import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Zitierung
 import de.bund.digitalservice.ris.search.schema.DocumentEncodingSchema;
 import de.bund.digitalservice.ris.search.schema.FundstelleSchema;
 import de.bund.digitalservice.ris.search.schema.GerichtSchema;
+import de.bund.digitalservice.ris.search.schema.NachgehendeEntscheidungSchema;
 import de.bund.digitalservice.ris.search.schema.RechtsprechungSchema;
+import de.bund.digitalservice.ris.search.schema.VorgehendeEntscheidungSchema;
 import de.bund.digitalservice.ris.search.schema.ZitierungLiteraturSelbststaendigSchema;
 import de.bund.digitalservice.ris.search.schema.ZitierungLiteraturUnselbststaendigSchema;
 import de.bund.digitalservice.ris.search.schema.ZitierungRechtsprechungSchema;
@@ -75,10 +79,37 @@ class RechtsprechungSchemaMapperTest {
         .tarifvertraege(List.of("Stehende Bühnen"))
         .kuendigungsgruende(List.of("Straftat"))
         .mitwirkendeRichter(List.of("Meier", "Müller"))
-        .previousDecisions(List.of("previous decision file number, previous decision court type"))
-        .ensuingDecisions(List.of("ensuing decision file number, ensuing decision court type"))
         .unindexed(
             CaseLawUnindexed.builder()
+                .vorgehendeEntscheidungen(
+                    List.of(
+                        VorgehendeEntscheidung.builder()
+                            .referenzUri("ris:/rechtsprechung/KORE300002025")
+                            .dokumenttyp("Urteil")
+                            .entscheidungsdatum(LocalDate.of(2020, Month.JANUARY, 1))
+                            .dokumentnummer("KORE300002025")
+                            .aktenzeichen("1 K 23/19")
+                            .gericht(
+                                Gericht.builder().gerichtstyp("VG").gerichtsort("Berlin").build())
+                            .build(),
+                        VorgehendeEntscheidung.builder().aktenzeichen("2 K 5/18").build()))
+                .nachgehendeEntscheidungen(
+                    List.of(
+                        NachgehendeEntscheidung.builder()
+                            .art("anhängig")
+                            .referenzUri("ris:/rechtsprechung/JURE100074208")
+                            .dokumenttyp("Beschluss")
+                            .entscheidungsdatum(LocalDate.of(2022, Month.OCTOBER, 1))
+                            .mitteilungsdatum(LocalDate.of(2022, Month.NOVEMBER, 15))
+                            .dokumentnummer("JURE100074208")
+                            .aktenzeichen("3 B 12/22")
+                            .gericht(Gericht.builder().gerichtstyp("BVerwG").build())
+                            .vermerk("Revision eingelegt")
+                            .build(),
+                        NachgehendeEntscheidung.builder()
+                            .art("nachgehend")
+                            .aktenzeichen("4 C 1/23")
+                            .build()))
                 .zitierungenLiteraturUnselbststaendig(
                     List.of(
                         ZitierungLiteraturUnselbststaendig.builder()
@@ -278,10 +309,6 @@ class RechtsprechungSchemaMapperTest {
     RechtsprechungSchema rechtsprechungSchema =
         RechtsprechungSchemaMapper.fromDomain(buildDocumentationUnit(), "jsonLdContext");
 
-    assertThat(rechtsprechungSchema.vorgehendeEntscheidungen())
-        .containsExactly("previous decision file number, previous decision court type");
-    assertThat(rechtsprechungSchema.nachgehendeEntscheidungen())
-        .containsExactly("ensuing decision file number, ensuing decision court type");
     assertThat(rechtsprechungSchema.amtlicheFundstellen()).containsExactly("BGHSt 67, 273-284");
     assertThat(rechtsprechungSchema.nichtamtlicheFundstellen())
         .containsExactly("DStR 2023, 1430-1435");
@@ -383,6 +410,42 @@ class RechtsprechungSchemaMapperTest {
   }
 
   @Test
+  @DisplayName("Maps vorgehende and nachgehende Entscheidungen to schema objects")
+  void fromDomainMapsVerknuepfteEntscheidungen() {
+    RechtsprechungSchema rechtsprechungSchema =
+        RechtsprechungSchemaMapper.fromDomain(buildDocumentationUnit(), "jsonLdContext");
+
+    assertThat(rechtsprechungSchema.vorgehendeEntscheidungen())
+        .containsExactly(
+            VorgehendeEntscheidungSchema.builder()
+                .referenzUri("ris:/rechtsprechung/KORE300002025")
+                .dokumenttyp("Urteil")
+                .entscheidungsdatum(LocalDate.of(2020, Month.JANUARY, 1))
+                .dokumentnummer("KORE300002025")
+                .aktenzeichen("1 K 23/19")
+                .gericht(GerichtSchema.builder().gerichtstyp("VG").gerichtsort("Berlin").build())
+                .build(),
+            VorgehendeEntscheidungSchema.builder().aktenzeichen("2 K 5/18").build());
+    assertThat(rechtsprechungSchema.nachgehendeEntscheidungen())
+        .containsExactly(
+            NachgehendeEntscheidungSchema.builder()
+                .art("anhängig")
+                .referenzUri("ris:/rechtsprechung/JURE100074208")
+                .dokumenttyp("Beschluss")
+                .entscheidungsdatum(LocalDate.of(2022, Month.OCTOBER, 1))
+                .mitteilungsdatum(LocalDate.of(2022, Month.NOVEMBER, 15))
+                .dokumentnummer("JURE100074208")
+                .aktenzeichen("3 B 12/22")
+                .gericht(GerichtSchema.builder().gerichtstyp("BVerwG").build())
+                .vermerk("Revision eingelegt")
+                .build(),
+            NachgehendeEntscheidungSchema.builder()
+                .art("nachgehend")
+                .aktenzeichen("4 C 1/23")
+                .build());
+  }
+
+  @Test
   @DisplayName("Returns no Zitierungen when none are stored")
   void fromDomainWithoutZitierungen() {
     var documentationUnit =
@@ -395,6 +458,19 @@ class RechtsprechungSchemaMapperTest {
     assertThat(rechtsprechungSchema.zitierungenLiteraturUnselbststaendig()).isNull();
     assertThat(rechtsprechungSchema.zitierungenRechtsprechung()).isNull();
     assertThat(rechtsprechungSchema.zitierungenVerwaltungsvorschriften()).isNull();
+  }
+
+  @Test
+  @DisplayName("Returns no vorgehende and nachgehende Entscheidungen when none are stored")
+  void fromDomainWithoutVerknuepfteEntscheidungen() {
+    var documentationUnit =
+        CaseLawDocumentationUnit.builder().documentNumber("BFRE000087655").build();
+
+    RechtsprechungSchema rechtsprechungSchema =
+        RechtsprechungSchemaMapper.fromDomain(documentationUnit, "jsonLdContext");
+
+    assertThat(rechtsprechungSchema.vorgehendeEntscheidungen()).isNull();
+    assertThat(rechtsprechungSchema.nachgehendeEntscheidungen()).isNull();
   }
 
   @Test

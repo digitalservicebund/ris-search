@@ -57,8 +57,10 @@ public record RechtsprechungSchema(
     @Schema(description = "Tarifverträge") List<String> tarifvertraege,
     @Schema(description = "Kündigungsgründe") List<String> kuendigungsgruende,
     @Schema(description = "Mitwirkende Richter") List<String> mitwirkendeRichter,
-    @RISSchema(name = "ris:vorgehendeEntscheidung") List<String> vorgehendeEntscheidungen,
-    @RISSchema(name = "ris:nachgehendeEntscheidung") List<String> nachgehendeEntscheidungen,
+    @RISSchema(name = "ris:vorgehendeEntscheidung")
+        List<VorgehendeEntscheidungSchema> vorgehendeEntscheidungen,
+    @RISSchema(name = "ris:nachgehendeEntscheidung")
+        List<NachgehendeEntscheidungSchema> nachgehendeEntscheidungen,
     @RISSchema(name = "ris:referenzSelbststaendigeLiteratur")
         List<ZitierungLiteraturSelbststaendigSchema> zitierungenLiteraturSelbststaendig,
     @RISSchema(name = "ris:referenzUnselbststaendigeLiteratur")

@@ -26,6 +26,8 @@ public class JsonldTypes {
   public static final String ZITIERUNG_LITERATUR_UNSELBSTSTAENDIG =
       "ZitierungLiteraturUnselbststaendig";
   public static final String ZITIERUNG_VERWALTUNGSVORSCHRIFT = "ZitierungVerwaltungsvorschrift";
+  public static final String VORGEHENDE_ENTSCHEIDUNG = "VorgehendeEntscheidung";
+  public static final String NACHGEHENDE_ENTSCHEIDUNG = "NachgehendeEntscheidung";
   public static final String GERICHT = "Gericht";
   public static final String FUNDSTELLE = "Fundstelle";
 }
