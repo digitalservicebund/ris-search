@@ -161,6 +161,9 @@
                     <ris:teilbaende>
                         <ris:teilband>Teilband</ris:teilband>
                     </ris:teilbaende>
+                    <ris:titelAspekte>
+                        <ris:titelAspekt domainTerm="Titelaspekt">Titelaspekt</ris:titelAspekt>
+                    </ris:titelAspekte>
                     <ris:ausgabe>1. Auflage</ris:ausgabe>
                 </ris:meta>
             </akn:proprietary>

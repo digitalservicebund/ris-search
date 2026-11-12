@@ -52,6 +52,7 @@ class LiteratureLdmlToOpenSearchMapperTest {
         .containsExactly("Internationaler Kongreß für das Recht, 1991, Athen, GRC");
     assertThat(literature.languages()).containsExactly("deu");
     assertThat(literature.normReferences()).containsExactly("GG, Art 6 Abs 2 S 1, 1949-05-23");
+    assertThat(literature.titelAspekte()).containsExactly("Titelaspekt");
 
     // Content
     assertThat(literature.shortReport())
@@ -100,6 +101,7 @@ class LiteratureLdmlToOpenSearchMapperTest {
             .volumes(List.of("Teilband"))
             .dependentReferences(List.of("BB, 1979, 1298-1300"))
             .independentReferences(List.of("Titel einer Fundstelle, 1979, 1298-1300"))
+            .titelAspekte(List.of("Titelaspekt"))
             .build();
 
     assertThat(literature).isEqualTo(expected);

@@ -120,6 +120,7 @@ public class LiteratureLdmlToOpenSearchMapper {
         .edition(extractEdition(literatureLdml))
         .internationalIdentifiers(extractInternationalIdentifiers(literatureLdml))
         .volumes(extractVolumes(literatureLdml))
+        .titelAspekte(extractTitelAspekte(literatureLdml))
         .indexedAt(time.toString())
         .build();
   }
@@ -429,6 +430,10 @@ public class LiteratureLdmlToOpenSearchMapper {
 
   private static List<String> extractVolumes(LiteratureLdml ldml) {
     return extractRisMeta(ldml).map(RisMeta::getTeilbaende).orElse(List.of());
+  }
+
+  private static List<String> extractTitelAspekte(LiteratureLdml ldml) {
+    return extractRisMeta(ldml).map(RisMeta::getTitelAspekte).orElse(List.of());
   }
 
   private static List<String> extractInternationalIdentifiers(LiteratureLdml ldml) {

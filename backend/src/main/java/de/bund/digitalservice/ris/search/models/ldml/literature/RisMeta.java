@@ -61,4 +61,8 @@ public class RisMeta {
   @XmlElementWrapper(name = "teilbaende", namespace = LiteratureNamespaces.RIS_NS)
   @XmlElement(name = "teilband", namespace = LiteratureNamespaces.RIS_NS)
   private List<String> teilbaende;
+
+  @XmlElementWrapper(name = "titelAspekte", namespace = LiteratureNamespaces.RIS_NS)
+  @XmlElement(name = "titelAspekt", namespace = LiteratureNamespaces.RIS_NS)
+  private List<String> titelAspekte;
 }

@@ -107,6 +107,10 @@
         "outline": {
           "type": "text",
           "analyzer": "custom_german_analyzer"
+        },
+        "titel_aspekte": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
         }
       }
     }

@@ -47,6 +47,7 @@ public record Literature(
     @Field(name = Fields.PUBLISHER_INFORMATION) List<String> publisherInformation,
     @Field(name = Fields.INTERNATIONAL_IDENTIFIERS) List<String> internationalIdentifiers,
     @Field(name = Fields.VOLUMES) List<String> volumes,
+    @Field(name = Fields.TITEL_ASPEKTE) List<String> titelAspekte,
     @Nullable @Field(name = Fields.SHORT_REPORT) String shortReport,
     @Nullable @Field(name = Fields.OUTLINE) String outline,
     @JsonIgnore @Field(name = Fields.INDEXED_AT) String indexedAt)
@@ -150,5 +151,7 @@ public record Literature(
     public static final String VOLUMES = "volumes";
 
     public static final String YEARS_OF_PUBLICATION = "years_of_publication";
+
+    public static final String TITEL_ASPEKTE = "titel_aspekte";
   }
 }

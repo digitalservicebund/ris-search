@@ -122,6 +122,9 @@
                         <ris:gliederungseintrag>II. Birnen.</ris:gliederungseintrag>
                         <ris:gliederungseintrag>III. Orangen.</ris:gliederungseintrag>
                     </ris:gliederung>
+                    <ris:titelAspekte>
+                        <ris:titelAspekt domainTerm="Titelaspekt">Titelaspekt</ris:titelAspekt>
+                    </ris:titelAspekte>
                 </ris:meta>
             </akn:proprietary>
         </akn:meta>
