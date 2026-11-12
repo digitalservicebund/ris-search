@@ -148,7 +148,25 @@ describe("caselaw", () => {
         }),
       ).toEqual({
         text: "1 K 23/19",
-        to: "/gerichtsentscheidungen/KORE300002025",
+        to: {
+          path: "/gerichtsentscheidungen/KORE300002025",
+          query: { from: undefined },
+        },
+      });
+    });
+
+    it("keeps the search the user came from in the link", () => {
+      expect(
+        toVerknuepfteEntscheidungListValue(
+          { dokumentnummer: "KORE300002025", aktenzeichen: "1 K 23/19" },
+          "/suche?query=Mietrecht",
+        ),
+      ).toEqual({
+        text: "1 K 23/19",
+        to: {
+          path: "/gerichtsentscheidungen/KORE300002025",
+          query: { from: "/suche?query=Mietrecht" },
+        },
       });
     });
 

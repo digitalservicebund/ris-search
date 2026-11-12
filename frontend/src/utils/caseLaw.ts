@@ -59,12 +59,19 @@ export function formatVerknuepfteEntscheidung(
 
 export function toVerknuepfteEntscheidungListValue(
   entscheidung: VorgehendeEntscheidung | NachgehendeEntscheidung,
+  from?: string,
 ): ListValue | undefined {
   const text = formatVerknuepfteEntscheidung(entscheidung);
   if (!text) return undefined;
 
   const { dokumentnummer } = entscheidung;
   return dokumentnummer
-    ? { text, to: `/gerichtsentscheidungen/${dokumentnummer}` }
+    ? {
+        text,
+        to: {
+          path: `/gerichtsentscheidungen/${dokumentnummer}`,
+          query: { from },
+        },
+      }
     : text;
 }

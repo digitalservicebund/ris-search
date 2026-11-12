@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import IcOutlineFileDownload from "~icons/ic/outline-file-download";
+import type { RouteLocationRaw } from "#vue-router";
 
 export type TextEntry = {
   type: "text";
@@ -8,7 +9,7 @@ export type TextEntry = {
   valueClass?: string;
 };
 
-type LinkableText = { text: string; to?: string };
+type LinkableText = { text: string; to?: RouteLocationRaw };
 
 export type ListValue = string | LinkableText;
 
