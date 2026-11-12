@@ -72,6 +72,7 @@
         </akn:implicitReference>
         <akn:implicitReference ris:domainTerm="Rechtszug">
             <ris:vorgehendeEntscheidung domainTerm="Vorgehende Entscheidung">
+                <ris:referenzURI domainTerm="URI der Referenz">ris:/rechtsprechung/KORE300002025</ris:referenzURI>
                 <ris:dokumenttyp domainTerm="Dokumenttyp">previous decision document type</ris:dokumenttyp>
                 <ris:entscheidungsdatum domainTerm="Entscheidungsdatum">2020-01-01</ris:entscheidungsdatum>
                 <ris:dokumentnummer domainTerm="Dokumentnummer">previous decision document number 1</ris:dokumentnummer>
@@ -96,8 +97,10 @@
         </akn:implicitReference>
         <akn:implicitReference ris:domainTerm="Rechtszug">
             <ris:nachgehendeEntscheidung art="anhängig" domainTerm="Nachgehende Entscheidung">
+                <ris:referenzURI domainTerm="URI der Referenz">ris:/rechtsprechung/JURE100074208</ris:referenzURI>
                 <ris:dokumenttyp domainTerm="Dokumenttyp">ensuing decision document type</ris:dokumenttyp>
                 <ris:entscheidungsdatum domainTerm="Entscheidungsdatum">2022-10-01</ris:entscheidungsdatum>
+                <ris:mitteilungsdatum domainTerm="Mitteilungsdatum">2022-11-15</ris:mitteilungsdatum>
                 <ris:dokumentnummer domainTerm="Dokumentnummer">ensuing decision document number 1</ris:dokumentnummer>
                 <ris:aktenzeichen domainTerm="Aktenzeichen">ensuing decision file number</ris:aktenzeichen>
                 <ris:gericht domainTerm="Gericht">

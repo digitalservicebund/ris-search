@@ -5,8 +5,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import de.bund.digitalservice.ris.search.models.DatumsTyp;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawUnindexed;
+import de.bund.digitalservice.ris.search.models.opensearch.NachgehendeEntscheidung;
+import de.bund.digitalservice.ris.search.models.opensearch.VorgehendeEntscheidung;
+import de.bund.digitalservice.ris.search.models.opensearch.common.Gericht;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Fundstelle;
-import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Gericht;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Richtung;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ZitierungLiteraturSelbststaendig;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ZitierungLiteraturUnselbststaendig;
@@ -287,6 +289,64 @@ class CaseLawLdmlToOpenSearchMapperTest {
                         .periodikum("Dienstbl BA RdErl")
                         .zitatstelle("1986, Nr 16, 1-8")
                         .build())
+                .build());
+  }
+
+  @Test
+  void shouldMapVorgehendeEntscheidungen() {
+    CaseLawUnindexed unindexed = mapper.fromString(testCaseLawLdml).unindexed();
+
+    assertThat(unindexed.vorgehendeEntscheidungen())
+        .containsExactly(
+            VorgehendeEntscheidung.builder()
+                .referenzUri("ris:/rechtsprechung/KORE300002025")
+                .dokumenttyp("previous decision document type")
+                .entscheidungsdatum(LocalDate.of(2020, Month.JANUARY, 1))
+                .dokumentnummer("previous decision document number 1")
+                .aktenzeichen("previous decision file number")
+                .gericht(
+                    Gericht.builder()
+                        .gerichtstyp("previous decision court type")
+                        .gerichtsort("previous decision court location")
+                        .build())
+                .build(),
+            VorgehendeEntscheidung.builder()
+                .dokumenttyp("previous decision document type")
+                .entscheidungsdatum(LocalDate.of(2020, Month.JANUARY, 1))
+                .dokumentnummer("previous decision document number 2")
+                .aktenzeichen("previous decision file number")
+                .gericht(
+                    Gericht.builder()
+                        .gerichtstyp("previous decision court type")
+                        .gerichtsort("previous decision court location")
+                        .build())
+                .build());
+  }
+
+  @Test
+  void shouldMapNachgehendeEntscheidungen() {
+    CaseLawUnindexed unindexed = mapper.fromString(testCaseLawLdml).unindexed();
+
+    assertThat(unindexed.nachgehendeEntscheidungen())
+        .containsExactly(
+            NachgehendeEntscheidung.builder()
+                .art("anhängig")
+                .referenzUri("ris:/rechtsprechung/JURE100074208")
+                .dokumenttyp("ensuing decision document type")
+                .entscheidungsdatum(LocalDate.of(2022, Month.OCTOBER, 1))
+                .mitteilungsdatum(LocalDate.of(2022, Month.NOVEMBER, 15))
+                .dokumentnummer("ensuing decision document number 1")
+                .aktenzeichen("ensuing decision file number")
+                .gericht(Gericht.builder().gerichtstyp("ensuing decision court type").build())
+                .build(),
+            NachgehendeEntscheidung.builder()
+                .art("anhängig")
+                .dokumenttyp("ensuing decision document type")
+                .entscheidungsdatum(LocalDate.of(2022, Month.OCTOBER, 1))
+                .dokumentnummer("ensuing decision document number 2")
+                .aktenzeichen("ensuing decision file number")
+                .gericht(Gericht.builder().gerichtstyp("ensuing decision court type").build())
+                .vermerk("ensuing decision note")
                 .build());
   }
 
