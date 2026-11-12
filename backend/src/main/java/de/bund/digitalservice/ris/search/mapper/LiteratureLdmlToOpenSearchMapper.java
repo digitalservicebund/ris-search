@@ -9,10 +9,12 @@ import de.bund.digitalservice.ris.search.models.ldml.FrbrWork;
 import de.bund.digitalservice.ris.search.models.ldml.MainBody;
 import de.bund.digitalservice.ris.search.models.ldml.literature.Analysis;
 import de.bund.digitalservice.ris.search.models.ldml.literature.Block;
+import de.bund.digitalservice.ris.search.models.ldml.literature.Classification;
 import de.bund.digitalservice.ris.search.models.ldml.literature.Doc;
 import de.bund.digitalservice.ris.search.models.ldml.literature.Gliederung;
 import de.bund.digitalservice.ris.search.models.ldml.literature.Identification;
 import de.bund.digitalservice.ris.search.models.ldml.literature.ImplicitReference;
+import de.bund.digitalservice.ris.search.models.ldml.literature.Keyword;
 import de.bund.digitalservice.ris.search.models.ldml.literature.LiteratureLdml;
 import de.bund.digitalservice.ris.search.models.ldml.literature.Meta;
 import de.bund.digitalservice.ris.search.models.ldml.literature.Note;
@@ -121,6 +123,7 @@ public class LiteratureLdmlToOpenSearchMapper {
         .internationalIdentifiers(extractInternationalIdentifiers(literatureLdml))
         .volumes(extractVolumes(literatureLdml))
         .titelAspekte(extractTitelAspekte(literatureLdml))
+        .schlagworte(extractSchlagworte(literatureLdml))
         .indexedAt(time.toString())
         .build();
   }
@@ -434,6 +437,22 @@ public class LiteratureLdmlToOpenSearchMapper {
 
   private static List<String> extractTitelAspekte(LiteratureLdml ldml) {
     return extractRisMeta(ldml).map(RisMeta::getTitelAspekte).orElse(List.of());
+  }
+
+  private static List<String> extractSchlagworte(LiteratureLdml ldml) {
+    return Optional.ofNullable(ldml)
+        .map(LiteratureLdml::getDoc)
+        .map(Doc::getMeta)
+        .map(Meta::getClassifications)
+        .orElse(List.of())
+        .stream()
+        .map(Classification::getKeywords)
+        .filter(Objects::nonNull)
+        .flatMap(List::stream)
+        .filter(keyword -> "Schlagwort".equals(keyword.getDomainTerm()))
+        .map(Keyword::getValue)
+        .filter(StringUtils::isNotBlank)
+        .toList();
   }
 
   private static List<String> extractInternationalIdentifiers(LiteratureLdml ldml) {

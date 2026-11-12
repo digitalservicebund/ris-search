@@ -44,11 +44,9 @@
                     <akn:FRBRformat value="xml"/>
                 </akn:FRBRManifestation>
             </akn:identification>
-            <akn:classification source="schlagwort">
-                <akn:keyword dictionary="attributsemantik-noch-undefiniert" showAs="betriebliche Bildung" value="betriebliche Bildung"/>
-                <akn:keyword dictionary="attributsemantik-noch-undefiniert" showAs="betriebliche Bildungsmaßnahme" value="betriebliche Bildungsmaßnahme"/>
-                <akn:keyword dictionary="attributsemantik-noch-undefiniert" showAs="paritätische Beteiligung" value="paritätische Beteiligung"/>
-                <akn:keyword dictionary="attributsemantik-noch-undefiniert" showAs="paritätische Mitbestimmung" value="paritätische Mitbestimmung"/>
+            <akn:classification source="#ris">
+                <akn:keyword dictionary="" ris:domainTerm="Schlagwort" showAs="keyword1" value="keyword1"/>
+                <akn:keyword dictionary="" ris:domainTerm="Schlagwort" showAs="keyword2" value="keyword2"/>
             </akn:classification>
             <akn:analysis source="attributsemantik-noch-undefiniert">
                 <akn:otherReferences source="attributsemantik-noch-undefiniert">

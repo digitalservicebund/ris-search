@@ -53,6 +53,7 @@ class LiteratureLdmlToOpenSearchMapperTest {
     assertThat(literature.languages()).containsExactly("deu");
     assertThat(literature.normReferences()).containsExactly("GG, Art 6 Abs 2 S 1, 1949-05-23");
     assertThat(literature.titelAspekte()).containsExactly("Titelaspekt");
+    assertThat(literature.schlagworte()).containsExactly("keyword1", "keyword2");
 
     // Content
     assertThat(literature.shortReport())
@@ -102,6 +103,7 @@ class LiteratureLdmlToOpenSearchMapperTest {
             .dependentReferences(List.of("BB, 1979, 1298-1300"))
             .independentReferences(List.of("Titel einer Fundstelle, 1979, 1298-1300"))
             .titelAspekte(List.of("Titelaspekt"))
+            .schlagworte(List.of("keyword1", "keyword2"))
             .build();
 
     assertThat(literature).isEqualTo(expected);

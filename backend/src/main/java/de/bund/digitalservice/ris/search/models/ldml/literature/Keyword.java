@@ -10,10 +10,14 @@ import lombok.Getter;
  * XML structures, leveraging JAXB (Jakarta XML Binding).
  *
  * <p>Attributes: - value: The string value of the keyword, annotated to be serialized as an XML
- * attribute.
+ * attribute. - domainTerm: The RIS domain term ({@code ris:domainTerm}) describing what kind of
+ * keyword this is, e.g. "Schlagwort".
  */
 @Getter
 public class Keyword {
 
   @XmlAttribute private String value;
+
+  @XmlAttribute(name = "domainTerm", namespace = LiteratureNamespaces.RIS_NS)
+  private String domainTerm;
 }

@@ -111,6 +111,10 @@
         "titel_aspekte": {
           "type": "text",
           "analyzer": "custom_german_analyzer"
+        },
+        "schlagworte": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
         }
       }
     }

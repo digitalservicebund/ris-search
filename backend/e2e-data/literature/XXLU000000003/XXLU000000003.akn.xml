@@ -31,8 +31,8 @@
                     <akn:FRBRformat value="xml"/>
                 </akn:FRBRManifestation>
             </akn:identification>
-            <akn:classification source="schlagwort">
-                <akn:keyword dictionary="attributsemantik-noch-undefiniert" showAs="Anerkennung" value="Anerkennung"/>
+            <akn:classification source="#ris">
+                <akn:keyword dictionary="" ris:domainTerm="Schlagwort" showAs="Anerkennung" value="Anerkennung"/>
             </akn:classification>
             <akn:references source="attributsemantik-noch-undefiniert">
                 <akn:TLCRole eId="verfasser" href="akn/ontology/roles/de/verfasser" showAs="Verfasser"/>
