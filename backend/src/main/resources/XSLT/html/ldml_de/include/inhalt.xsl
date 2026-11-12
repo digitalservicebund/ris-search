@@ -615,12 +615,6 @@
         </dl>
     </xsl:template>
 
-    <xsl:template match="ris:legalDocML.de_metadaten/ris:vollzitat">
-        <dt>Vollzitat</dt>
-        <dd class="ris-vollzitat">
-            <xsl:value-of select="."/>
-        </dd>
-    </xsl:template>
     <xsl:template match="ris:standangabe">
         <dd class="ris-standangabe">
             <xsl:apply-templates select="@*" />
