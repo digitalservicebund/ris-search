@@ -203,8 +203,6 @@ class ChangelogServiceTest {
     Instant to = Instant.parse("2027-01-01T12:00:00Z");
 
     Changelog expectedFirst = new Changelog(new HashSet<>(), new HashSet<>(), true);
-    Changelog expectedSecond =
-        new Changelog(new HashSet<>(List.of("file2")), new HashSet<>(), false);
 
     when(bucket.getVersionPrefix()).thenReturn("");
     when(bucket.getAllKeysByPrefix(any()))
