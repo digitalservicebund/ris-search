@@ -85,6 +85,21 @@ class StatisticsServiceTest {
     assertEquals("Failed to fetch count for index norms", ex.getMessage());
   }
 
+  @Test
+  void testGetAllCountsAliasMissing() throws Exception {
+    Response aliasResponse =
+        mockResponse(
+            "[{\"alias\":\"norms\"},{\"alias\":\"literature\"},{\"alias\":\"administrative_directive\"}]");
+    Response countResponse = mockResponse("{\"count\":1}");
+    when(lowLevelClient.performRequest(any(Request.class)))
+        .thenReturn(aliasResponse)
+        .thenReturn(countResponse);
+
+    OpenSearchFetchException ex =
+        assertThrows(OpenSearchFetchException.class, () -> statisticsService.getAllCounts());
+    assertEquals("Missing index aliases in Opensearch: [caselaws]", ex.getMessage());
+  }
+
   private Response mockResponse(String json) {
     Response response = mock(Response.class);
     when(response.getEntity()).thenReturn(new StringEntity(json, ContentType.APPLICATION_JSON));
