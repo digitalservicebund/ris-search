@@ -89,7 +89,8 @@ class LiteratureServiceTest {
   @DisplayName("Should return existing file as bytes from folder")
   void shouldReturnFileAsBytesFromFolder() throws ObjectStoreServiceException {
     Optional<byte[]> expectedResult = Optional.of("file-content".getBytes());
-    when(literatureBucketMock.get("XXLU000000001.akn.xml")).thenReturn(expectedResult);
+    when(literatureBucketMock.get("XXLU000000001/XXLU000000001.akn.xml"))
+        .thenReturn(expectedResult);
 
     var actual = literatureService.getFileByDocumentNumber("XXLU000000001");
     Assertions.assertEquals(expectedResult, actual);

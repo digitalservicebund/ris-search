@@ -21,6 +21,24 @@ import lombok.Getter;
  */
 @Getter
 public class RisMeta {
+  @XmlElementWrapper(name = "kongresse", namespace = LiteratureNamespaces.RIS_SELBSTSTAENDIG_NS)
+  @XmlElement(name = "kongress", namespace = LiteratureNamespaces.RIS_SELBSTSTAENDIG_NS)
+  private List<RisKongress> kongresse;
+
+  @XmlElementWrapper(
+      name = "organisationen",
+      namespace = LiteratureNamespaces.RIS_SELBSTSTAENDIG_NS)
+  @XmlElement(name = "organisation", namespace = LiteratureNamespaces.RIS_SELBSTSTAENDIG_NS)
+  private List<RisOrganisation> organisationen;
+
+  @XmlElementWrapper(name = "personen", namespace = LiteratureNamespaces.RIS_SELBSTSTAENDIG_NS)
+  @XmlElement(name = "person", namespace = LiteratureNamespaces.RIS_SELBSTSTAENDIG_NS)
+  private List<RisPerson> personen;
+
+  @XmlElementWrapper(name = "dokumenttypen", namespace = LiteratureNamespaces.RIS_SELBSTSTAENDIG_NS)
+  @XmlElement(name = "dokumenttyp", namespace = LiteratureNamespaces.RIS_SELBSTSTAENDIG_NS)
+  private List<String> documentTypes;
+
   @XmlElementWrapper(
       name = "veroeffentlichungsJahre",
       namespace = LiteratureNamespaces.RIS_SELBSTSTAENDIG_NS)
@@ -45,7 +63,7 @@ public class RisMeta {
   private List<String> sonstigeSachtitel;
 
   @XmlElementWrapper(
-      name = "gesamttitelAngaben",
+      name = "gesamttitelangaben",
       namespace = LiteratureNamespaces.RIS_SELBSTSTAENDIG_NS)
   @XmlElement(name = "gesamttitel", namespace = LiteratureNamespaces.RIS_SELBSTSTAENDIG_NS)
   private List<Gesamttitel> gesamttitelangaben;

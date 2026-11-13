@@ -6,8 +6,8 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import de.bund.digitalservice.ris.html.service.xslt.LiteratureXsltTransformer;
-import de.bund.digitalservice.ris.html.service.xslt.SliLiteratureXsltTransformer;
+import de.bund.digitalservice.ris.html.service.xslt.SliLiteratureV1XsltTransformer;
+import de.bund.digitalservice.ris.html.service.xslt.UliLiteratureV1XsltTransformer;
 import de.bund.digitalservice.ris.search.config.ServerConfig;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.repository.objectstorage.LiteratureBucket;
@@ -27,9 +27,9 @@ class LiteratureControllerTest {
 
   @Mock LiteratureService literatureService;
 
-  @Mock LiteratureXsltTransformer uliTransformer;
+  @Mock UliLiteratureV1XsltTransformer uliTransformer;
 
-  @Mock SliLiteratureXsltTransformer sliTransformer;
+  @Mock SliLiteratureV1XsltTransformer sliTransformer;
 
   @Mock ChangelogService<LiteratureBucket> changelogService;
 
