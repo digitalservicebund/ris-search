@@ -6,6 +6,7 @@ import static de.bund.digitalservice.ris.SharedTestConstants.DATE_2024_01_02;
 
 import de.bund.digitalservice.ris.LoadXmlUtils;
 import de.bund.digitalservice.ris.builder.NormTestDataBuilder;
+import de.bund.digitalservice.ris.builder.NormWorkMetadataTestDataBuilder;
 import de.bund.digitalservice.ris.builder.models.common.AknP;
 import de.bund.digitalservice.ris.builder.models.common.AuthorialNote;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
@@ -70,7 +71,6 @@ public class NormsTestData {
             .outOfForceDate("1995-01-01")
             .longTitle("Formatting Test Document", null, null)
             .addOfficialTitleFootnote("Authorial note in the norm title.")
-            .fullCitation("Verordnung zu der Vereinbarung")
             .toc(toc -> {
               toc.addEntry("Abschnitt 1", "1")
                   .addEntry("Allgemeine Bestimmungen ", "2")
@@ -119,6 +119,11 @@ public class NormsTestData {
         NormTestDataBuilder.builder().eli(version3ManifestationEli).inForceDate("2050-01-01");
 
     result.put(version3ManifestationEli, version3Builder.buildNormXml());
+
+    // ------------- add work-level metadaten.xml -------------------
+    result.put(
+        S_102_WORK_ELI + "/metadaten.xml",
+        NormWorkMetadataTestDataBuilder.buildMetadatenXml("Verordnung zu der Vereinbarung"));
 
     return result;
   }

@@ -62,8 +62,6 @@ describe("useFetchNormContent", () => {
     </section>
     <section class="akn-proprietary">
       <dl>
-        <dt>Vollzitat</dt>
-          <dd class="ris-vollzitat">Vollzitat</dd>
         <dt>Standangabe</dt>
           <dd class="ris-standangabe" data-type="stand">Stand-Stand</dd>
           <dd class="ris-standangabe" data-type="hinweis">Stand-Hinweis 1;</dd>
@@ -89,7 +87,6 @@ describe("useFetchNormContent", () => {
         prefaceContainer: `<div class="akn-container"><p>Besonderer Hinweis</p></div>`,
         standangaben: ["Stand-Stand"],
         standangabenHinweis: ["Stand-Hinweis 1;", "Stand-Hinweis 2"],
-        vollzitat: "Vollzitat",
         body: expectedHtml,
       },
       hasEmptyBody: false,

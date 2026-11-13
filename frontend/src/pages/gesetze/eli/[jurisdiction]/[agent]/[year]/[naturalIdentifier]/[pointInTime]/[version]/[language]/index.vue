@@ -107,7 +107,7 @@ const detailItems = computed<DetailsListItem[]>(() => [
   {
     type: "text",
     label: "Vollzitat:",
-    value: htmlParts.value.vollzitat,
+    value: metadata.value.fullCitation ?? undefined,
   },
   {
     type: "list",
