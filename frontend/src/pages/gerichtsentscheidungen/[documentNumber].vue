@@ -46,9 +46,11 @@ useCaselawSeo({
   document: document.value,
 });
 
-const zitierungen = computed(
-  () => document.value && getZitierungen(document.value),
-);
+const zitierungen = computed(() => {
+  if (!rechtsprechung.value) return undefined;
+  const fromQueryString = searchParamToString(route.query.from);
+  return getZitierungen(rechtsprechung.value, fromQueryString);
+});
 
 const shouldRenderZitierungen = computed(
   () => usePrivateFeaturesFlag() && zitierungen.value,

@@ -4,6 +4,7 @@ import de.bund.digitalservice.ris.search.models.ldml.caselaw.Analysis;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.ImplicitReference;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.Meta;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.OtherReferences;
+import de.bund.digitalservice.ris.search.models.ldml.caselaw.Periodikum;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.ReferenzRechtsprechung;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.ReferenzSelbststaendigeLiteratur;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.ReferenzUnselbststaendigeLiteratur;
@@ -134,9 +135,10 @@ final class CaseLawZitierungenMapper {
     if (fundstelle == null) {
       return null;
     }
+    Periodikum periodikum = fundstelle.getPeriodikum();
     return Fundstelle.builder()
-        .periodikum(
-            fundstelle.getPeriodikum() != null ? fundstelle.getPeriodikum().getAbkuerzung() : null)
+        .periodikum(periodikum != null ? periodikum.getAbkuerzung() : null)
+        .periodikumTitel(periodikum != null ? periodikum.getTitel() : null)
         .zitatstelle(fundstelle.getZitatstelle())
         .fundstellenTyp(fundstelle.getFundstellenTyp())
         .build();

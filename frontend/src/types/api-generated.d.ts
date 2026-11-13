@@ -936,7 +936,7 @@ export interface components {
             /** @example Fundstelle */
             "@type"?: string;
             /** @description Periodikum in dem die Fundstelle gefunden werden kann */
-            periodikum?: string;
+            periodikum?: components["schemas"]["PeriodikumSchema"];
             /** @description Zitatstelle innerhalb des Periodikums in dem die Fundstelle gefunden werden kann */
             zitatstelle?: string;
             /** @description Art der Fundstelle */
@@ -1026,6 +1026,14 @@ export interface components {
             gericht?: components["schemas"]["GerichtSchema"];
             /** @description Vermerk zu einem anhängigen nachfolgenden Verfahren */
             vermerk?: string;
+        };
+        PeriodikumSchema: {
+            /** @example Periodikum */
+            "@type"?: string;
+            /** @description Abkürzung des Periodikums */
+            abkuerzung?: string;
+            /** @description Titel des Periodikums */
+            titel?: string;
         };
         RechtsprechungSchema: {
             /** @example Rechtsprechung */
