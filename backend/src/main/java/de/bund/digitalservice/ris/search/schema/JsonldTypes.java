@@ -30,4 +30,5 @@ public class JsonldTypes {
   public static final String NACHGEHENDE_ENTSCHEIDUNG = "NachgehendeEntscheidung";
   public static final String GERICHT = "Gericht";
   public static final String FUNDSTELLE = "Fundstelle";
+  public static final String PERIODIKUM = "Periodikum";
 }

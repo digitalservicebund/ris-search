@@ -7,7 +7,7 @@ import lombok.Builder;
 /** API schema for where a cited document was published. */
 @Builder
 public record FundstelleSchema(
-    @RISSchema(name = "ris:periodikum") String periodikum,
+    @RISSchema(name = "ris:periodikum") PeriodikumSchema periodikum,
     @RISSchema(name = "ris:zitatstelle") String zitatstelle,
     @RISSchema(name = "ris:fundstellenTyp") String fundstellenTyp)
     implements JsonldResource {

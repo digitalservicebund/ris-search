@@ -201,6 +201,7 @@ class CaseLawLdmlToOpenSearchMapperTest {
                 .fundstelle(
                     Fundstelle.builder()
                         .periodikum("Information StW")
+                        .periodikumTitel("Die Information über Steuer und Wirtschaft")
                         .zitatstelle("1999, 641")
                         .build())
                 .build(),
@@ -211,7 +212,11 @@ class CaseLawLdmlToOpenSearchMapperTest {
                 .autor("Knopp, Lothar")
                 .dokumenttyp("Aufsatz")
                 .fundstelle(
-                    Fundstelle.builder().periodikum("NVwZ").zitatstelle("2016, 1139-1141").build())
+                    Fundstelle.builder()
+                        .periodikum("NVwZ")
+                        .periodikumTitel("Neue Zeitschrift für Verwaltungsrecht")
+                        .zitatstelle("2016, 1139-1141")
+                        .build())
                 .build());
   }
 
@@ -240,6 +245,7 @@ class CaseLawLdmlToOpenSearchMapperTest {
                 .fundstelle(
                     Fundstelle.builder()
                         .periodikum("BayVBl")
+                        .periodikumTitel("Bayerische Verwaltungsblätter")
                         .zitatstelle("1984, 15")
                         .fundstellenTyp("amtlich")
                         .build())
@@ -275,6 +281,8 @@ class CaseLawLdmlToOpenSearchMapperTest {
                 .fundstelle(
                     Fundstelle.builder()
                         .periodikum("MittLVA Oberfr")
+                        .periodikumTitel(
+                            "Mitteilungen der Landesversicherungsanstalt Oberfranken und Mittelfranken")
                         .zitatstelle("1997, 538-539")
                         .build())
                 .build(),
@@ -287,6 +295,7 @@ class CaseLawLdmlToOpenSearchMapperTest {
                 .fundstelle(
                     Fundstelle.builder()
                         .periodikum("Dienstbl BA RdErl")
+                        .periodikumTitel("Dienstblatt der Bundesanstalt für Arbeit. Runderlasse")
                         .zitatstelle("1986, Nr 16, 1-8")
                         .build())
                 .build());
