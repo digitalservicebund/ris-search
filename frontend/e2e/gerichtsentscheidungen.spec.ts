@@ -275,7 +275,7 @@ test("can view details", { tag: ["@RISDEV-12108"] }, async ({ page }) => {
 
 test.describe(
   "can view zitierungen",
-  { tag: ["@RISDEV-12560", "@RISDEV-12821"] },
+  { tag: ["@RISDEV-12560", "@RISDEV-12821", "@RISDEV-13118"] },
   () => {
     test("can view zitierungen if private features enabled and zitierungen exist", async ({
       page,
@@ -301,12 +301,18 @@ test.describe(
         tabPanel.getByRole("heading", { level: 4, name: "Literaturnachweise" }),
       ).toBeVisible();
       await expect(
-        tabPanel.getByText("LG München, Urteil vom 6. Juni 2015 - 3 O 4/15"),
+        tabPanel.getByRole("link", {
+          name: "Vergleiche LG München, 6. Juni 2015 — 3 O 4/15",
+        }),
       ).toBeVisible();
-      await expect(tabPanel.getByText("NVwZ 2020, 7")).toBeVisible();
+      await expect(
+        tabPanel.getByText(
+          "Becker, Jana; NVwZ (Neue Zeitschrift für Verwaltungsrecht) 2020, 7",
+        ),
+      ).toBeVisible();
       await expect(
         tabPanel.getByRole("link", {
-          name: "Schmidt, Peter, Test-Dokument SLI, 2024",
+          name: "Schmidt, Peter; Test-Dokument SLI 2024",
         }),
       ).toBeVisible();
 
@@ -317,9 +323,7 @@ test.describe(
         }),
       ).toBeVisible();
       await expect(
-        tabPanel.getByText(
-          "BVerfG, Beschluss vom 11. November 2020 - 1 BvR 1/20",
-        ),
+        tabPanel.getByText("BVerfG, 11. November 2020 — 1 BvR 1/20"),
       ).toBeVisible();
 
       await expect(
@@ -330,7 +334,7 @@ test.describe(
       ).toHaveCount(2);
     });
 
-    test("can follow a zitierung link", async ({
+    test("can follow a zitierung link to Literatur", async ({
       page,
       privateFeaturesEnabled,
     }) => {
@@ -341,7 +345,7 @@ test.describe(
       const tabPanel = page.getByRole("tabpanel", { name: "Zitierungen" });
 
       const linkedZitierung = tabPanel.getByRole("link", {
-        name: "Schmidt, Peter, Test-Dokument SLI, 2024",
+        name: "Schmidt, Peter; Test-Dokument SLI 2024",
       });
       await expect(linkedZitierung).toBeVisible();
       await linkedZitierung.click();
@@ -352,6 +356,25 @@ test.describe(
           .getByRole("heading", { level: 1, name: "Test-Dokument SLI" })
           .first(),
       ).toBeVisible();
+    });
+
+    test("can follow a zitierung link to a Gerichtsentscheidung", async ({
+      page,
+      privateFeaturesEnabled,
+    }) => {
+      test.skip(!privateFeaturesEnabled);
+      await navigate(page, "/gerichtsentscheidungen/BDRE000800001");
+      await page.getByRole("tab", { name: "Zitierungen" }).click();
+
+      const tabPanel = page.getByRole("tabpanel", { name: "Zitierungen" });
+
+      await tabPanel
+        .getByRole("link", {
+          name: "Vergleiche LG München, 6. Juni 2015 — 3 O 4/15",
+        })
+        .click();
+
+      await expect(page).toHaveURL(/\/gerichtsentscheidungen\/BORE040030050/);
     });
 
     test("does not show zitierungen if private features enabled but no zitierungen exist", async ({
