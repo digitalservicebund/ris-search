@@ -53,8 +53,9 @@ public class StatisticsService {
   /**
    * Returns a map of index names to their respective count.
    *
-   * @return Map of index names to their respective count.
-   * @throws OpenSearchFetchException
+   * @return Map of index names to their respective count. It contains every configured index.
+   * @throws OpenSearchFetchException if fetching fails, or if the alias of a configured index is
+   *     missing, e.g. while an index is being replaced.
    */
   public Map<String, Long> getAllCounts() throws OpenSearchFetchException {
 
@@ -67,6 +68,14 @@ public class StatisticsService {
           counts.put(alias, fetchCountWithLogging(alias));
         }
       }
+
+      List<String> missingAliases =
+          indexNames.stream().filter(name -> !counts.containsKey(name)).toList();
+      if (!missingAliases.isEmpty()) {
+        throw new OpenSearchFetchException(
+            "Missing index aliases in Opensearch: " + missingAliases);
+      }
+
       return counts;
     } catch (IOException e) {
       logger.info("Failed to fetch Elasticsearch counts: {}", e.getMessage());

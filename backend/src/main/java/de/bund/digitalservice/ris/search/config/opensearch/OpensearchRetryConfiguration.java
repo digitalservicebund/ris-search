@@ -91,14 +91,28 @@ public class OpensearchRetryConfiguration {
       return false;
     }
 
-    Throwable cause = exception.getRootCause();
-    if (cause != null
-        && cause.getMessage() != null
-        && cause.getMessage().contains("too_many_nested_clauses")) {
+    if (isTermLimitExceeded(exception.getRootCause())) {
       throw new OpenSearchTermLimitExceeded();
     }
 
     Integer statusCode = exception.getStatusCode();
     return statusCode != null && HttpStatusCode.valueOf(statusCode).is4xxClientError();
+  }
+
+  /**
+   * Whether Opensearch rejected the query because it has too many clauses. Opensearch reports this
+   * as {@code too_many_nested_clauses} or {@code too_many_clauses}, depending on how the query is
+   * nested.
+   *
+   * @param cause the root cause of the failure
+   * @return whether the query exceeded one of the clause limits
+   */
+  private static boolean isTermLimitExceeded(Throwable cause) {
+    if (cause == null || cause.getMessage() == null) {
+      return false;
+    }
+
+    String message = cause.getMessage();
+    return message.contains("too_many_nested_clauses") || message.contains("too_many_clauses");
   }
 }
