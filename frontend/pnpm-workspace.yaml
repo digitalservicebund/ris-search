@@ -20,3 +20,5 @@ savePrefix: ""
 overrides:
   glob@13: "^14.0.2" # CVE-2026-118773
   minimatch@10: "^11.0.1" # CVE-2026-118764
+  node-forge: "1.4.3"
+  fast-xml-parser: "5.12.0"
