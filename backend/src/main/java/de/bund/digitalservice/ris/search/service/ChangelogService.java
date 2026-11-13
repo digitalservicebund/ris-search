@@ -9,6 +9,7 @@ import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
 import de.bund.digitalservice.ris.search.utils.StringUtils;
 import java.time.Instant;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -117,7 +118,7 @@ public class ChangelogService<T extends ObjectStorage> {
    * @return Changelog object including all changes that were indexed
    */
   public Changelog getChangesBetween(Instant from, Instant to) throws ObjectStoreServiceException {
-    var changelogs =
+    var keys =
         bucket.getAllKeysByPrefix(CHANGELOGS_PREFIX).stream()
             .filter(key -> !CHANGELOGS_PREFIX.equals(key))
             .filter(key -> {
@@ -126,11 +127,9 @@ public class ChangelogService<T extends ObjectStorage> {
               return !changelogTime.isBefore(from) && !changelogTime.isAfter(to);
             })
             .sorted()
-            .map(this::parseOneChangelog)
-            .flatMap(Optional::stream)
             .toList();
 
-    return foldChangelogs(changelogs);
+    return parseAndFoldChangelogs(keys);
   }
 
   private Instant parseInstantFromKey(String key) {
@@ -157,39 +156,44 @@ public class ChangelogService<T extends ObjectStorage> {
    *     occurs while accessing the object storage.
    */
   public Changelog getChangesFromFiles(List<String> filenames) throws ObjectStoreServiceException {
-    return foldChangelogs(
-        filenames.stream()
-            .sorted()
-            .map(this::parseOneChangelog)
-            .flatMap(Optional::stream)
-            .toList());
+    return parseAndFoldChangelogs(filenames.stream().sorted().toList());
   }
 
   /**
-   * Detects if a changeAll flag is set in any changelog in a list of changelogs
+   * Parses the given changelog files in order and folds them into a single changelog. As soon as a
+   * changelog with changeAll is encountered, the method short circuits without parsing the
+   * remaining files and returns a changeAll=true changelog.
    *
-   * @param logs changelogs to be checked for a changeAll flag
-   * @return true if any changelog contains a changeAll flag
+   * @param sortedKeys changelog file keys, sorted in the order they should be applied
+   * @return the merged changelog
    */
-  private boolean containsChangeAll(List<Changelog> logs) {
-    return logs.stream().anyMatch(Changelog::isChangeAll);
+  private Changelog parseAndFoldChangelogs(List<String> sortedKeys) {
+    List<Changelog> changelogs = new ArrayList<>();
+    for (String key : sortedKeys) {
+      Optional<Changelog> changelog = parseOneChangelog(key);
+      if (changelog.isEmpty()) {
+        continue;
+      }
+      if (changelog.get().isChangeAll()) {
+        Changelog changeAll = new Changelog();
+        changeAll.setChangeAll(true);
+        return changeAll;
+      }
+      changelogs.add(changelog.get());
+    }
+    return foldChangelogs(changelogs);
   }
 
   /**
    * Folds multiple changelogs into a single changelog. If a file is marked as changed and deleted
-   * in the same changelog, it will be marked as deleted. When a changelog with changeAll is
-   * encountered the method short circuits and returns a changeAll=true changelog. When no changes
-   * are present the changed and deleted lists are empty.
+   * in the same changelog, it will be marked as deleted. When no changes are present the changed
+   * and deleted lists are empty.
    *
-   * @param changelogs the list of changelogs to merge
+   * @param changelogs the list of changelogs to merge, none of which has changeAll set
    * @return the merged changelog
    */
   private Changelog foldChangelogs(List<Changelog> changelogs) {
     Changelog result = new Changelog();
-    if (containsChangeAll(changelogs)) {
-      result.setChangeAll(true);
-      return result;
-    }
 
     enum Action {
       CHANGED,
