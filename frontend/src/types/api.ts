@@ -31,6 +31,12 @@ export type VorgehendeEntscheidung =
   components["schemas"]["VorgehendeEntscheidungSchema"];
 export type NachgehendeEntscheidung =
   components["schemas"]["NachgehendeEntscheidungSchema"];
+export type ZitierungRechtsprechung =
+  components["schemas"]["ZitierungRechtsprechungSchema"];
+export type ZitierungLiteraturSelbststaendig =
+  components["schemas"]["ZitierungLiteraturSelbststaendigSchema"];
+export type ZitierungLiteraturUnselbststaendig =
+  components["schemas"]["ZitierungLiteraturUnselbststaendigSchema"];
 
 // Legislation
 export type LegislationWork = components["schemas"]["LegislationWorkSchema"];

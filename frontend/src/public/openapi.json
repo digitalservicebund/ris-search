@@ -2622,7 +2622,7 @@
             "example" : "Fundstelle"
           },
           "periodikum" : {
-            "type" : "string",
+            "$ref" : "#/components/schemas/PeriodikumSchema",
             "description" : "Periodikum in dem die Fundstelle gefunden werden kann"
           },
           "zitatstelle" : {
@@ -2709,6 +2709,23 @@
           "vermerk" : {
             "type" : "string",
             "description" : "Vermerk zu einem anhängigen nachfolgenden Verfahren"
+          }
+        }
+      },
+      "PeriodikumSchema" : {
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "example" : "Periodikum"
+          },
+          "abkuerzung" : {
+            "type" : "string",
+            "description" : "Abkürzung des Periodikums"
+          },
+          "titel" : {
+            "type" : "string",
+            "description" : "Titel des Periodikums"
           }
         }
       },
