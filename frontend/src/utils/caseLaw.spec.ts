@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   formatVerknuepfteEntscheidung,
   getCaselawSecondaryTitle,
-  toVerknuepfteEntscheidungListValue,
+  toVerknuepfteEntscheidungLink,
 } from "~/utils/caseLaw";
 import { truncateAtWord } from "~/utils/textFormatting";
 
@@ -153,7 +153,7 @@ describe("caselaw", () => {
   describe("toVerknuepfteEntscheidungListValue", () => {
     it("links to the decision when it has a Dokumentnummer", () => {
       expect(
-        toVerknuepfteEntscheidungListValue({
+        toVerknuepfteEntscheidungLink({
           dokumentnummer: "KORE300002025",
           aktenzeichen: "1 K 23/19",
         }),
@@ -168,7 +168,7 @@ describe("caselaw", () => {
 
     it("keeps the search the user came from in the link", () => {
       expect(
-        toVerknuepfteEntscheidungListValue(
+        toVerknuepfteEntscheidungLink(
           { dokumentnummer: "KORE300002025", aktenzeichen: "1 K 23/19" },
           "/suche?query=Mietrecht",
         ),
@@ -183,13 +183,13 @@ describe("caselaw", () => {
 
     it("returns text without a link when there is no Dokumentnummer", () => {
       expect(
-        toVerknuepfteEntscheidungListValue({ aktenzeichen: "1 K 23/19" }),
+        toVerknuepfteEntscheidungLink({ aktenzeichen: "1 K 23/19" }),
       ).toStrictEqual({ text: "1 K 23/19" });
     });
 
     it("returns undefined when the decision cannot be formatted", () => {
       expect(
-        toVerknuepfteEntscheidungListValue({ dokumentnummer: "KORE300002025" }),
+        toVerknuepfteEntscheidungLink({ dokumentnummer: "KORE300002025" }),
       ).toBeUndefined();
     });
   });

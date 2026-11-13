@@ -64,7 +64,7 @@ export function formatVerknuepfteEntscheidung(
   return isAnhaengig ? `${result} (anhängig)` : result;
 }
 
-export function toVerknuepfteEntscheidungListValue(
+export function toVerknuepfteEntscheidungLink(
   entscheidung: VorgehendeEntscheidung | NachgehendeEntscheidung,
   from?: string,
 ): VerknuepfteEntscheidungLink | undefined {
