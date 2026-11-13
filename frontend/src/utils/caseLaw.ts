@@ -1,10 +1,14 @@
-import type { ListValue } from "~/components/documents/DetailsList.vue";
+import type { RouteLocationRaw } from "#vue-router";
 import type {
   NachgehendeEntscheidung,
   VorgehendeEntscheidung,
 } from "~/types/api";
 import { dateFormattedLongGerman } from "~/utils/dateFormatting";
-import { formatArray, truncateAtWord } from "~/utils/textFormatting";
+import {
+  formatArray,
+  isStringEmpty,
+  truncateAtWord,
+} from "~/utils/textFormatting";
 
 export type SecondaryTitleInput = {
   decisionNames: string[];
@@ -23,8 +27,13 @@ export function getCaselawSecondaryTitle(
   return truncate ? truncateAtWord(title, 90, true) : title;
 }
 
-function isPresent<T>(value: T | null | undefined): value is T {
-  return value !== null && value !== undefined;
+export type VerknuepfteEntscheidungLink = {
+  text: string;
+  to?: RouteLocationRaw;
+};
+
+function isNotBlank(value: string | null | undefined): value is string {
+  return !isStringEmpty(value);
 }
 
 export function formatVerknuepfteEntscheidung(
@@ -34,19 +43,17 @@ export function formatVerknuepfteEntscheidung(
     entscheidung;
 
   const gerichtFormatted = [gericht?.gerichtstyp, gericht?.gerichtsort]
-    .filter(isPresent)
+    .filter(isNotBlank)
     .join(" ");
   const datumFormatted = dateFormattedLongGerman(entscheidungsdatum);
 
-  let result = [gerichtFormatted.trim() ? gerichtFormatted : null, dokumenttyp]
-    .filter(isPresent)
-    .join(", ");
+  let result = [gerichtFormatted, dokumenttyp].filter(isNotBlank).join(", ");
 
-  if (isPresent(datumFormatted)) {
+  if (datumFormatted) {
     result += `${result ? " " : ""}vom ${datumFormatted}`;
   }
 
-  if (isPresent(aktenzeichen)) {
+  if (isNotBlank(aktenzeichen)) {
     result += `${result ? " - " : ""}${aktenzeichen}`;
   }
 
@@ -60,18 +67,18 @@ export function formatVerknuepfteEntscheidung(
 export function toVerknuepfteEntscheidungListValue(
   entscheidung: VorgehendeEntscheidung | NachgehendeEntscheidung,
   from?: string,
-): ListValue | undefined {
+): VerknuepfteEntscheidungLink | undefined {
   const text = formatVerknuepfteEntscheidung(entscheidung);
   if (!text) return undefined;
 
   const { dokumentnummer } = entscheidung;
-  return dokumentnummer
-    ? {
-        text,
-        to: {
-          path: `/gerichtsentscheidungen/${dokumentnummer}`,
-          query: { from },
-        },
-      }
-    : text;
+  if (!dokumentnummer) return { text };
+
+  return {
+    text,
+    to: {
+      path: `/gerichtsentscheidungen/${dokumentnummer}`,
+      query: { from },
+    },
+  };
 }

@@ -11,7 +11,7 @@ export type TextEntry = {
 
 type LinkableText = { text: string; to?: RouteLocationRaw };
 
-export type ListValue = string | LinkableText;
+type ListValue = string | LinkableText;
 
 export type ListEntry = {
   type: "list";

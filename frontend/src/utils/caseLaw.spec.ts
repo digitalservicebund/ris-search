@@ -123,6 +123,17 @@ describe("caselaw", () => {
       ).toBe("1 K 23/19");
     });
 
+    it("ignores blank parts", () => {
+      expect(
+        formatVerknuepfteEntscheidung({
+          gericht: { gerichtstyp: "VG", gerichtsort: " " },
+          dokumenttyp: "",
+          entscheidungsdatum: "2020-01-01",
+          aktenzeichen: " ",
+        }),
+      ).toBe("VG vom 1. Januar 2020");
+    });
+
     it("starts with the date when court and Dokumenttyp are missing", () => {
       expect(
         formatVerknuepfteEntscheidung({
@@ -170,10 +181,10 @@ describe("caselaw", () => {
       });
     });
 
-    it("returns plain text without a Dokumentnummer", () => {
+    it("returns text without a link when there is no Dokumentnummer", () => {
       expect(
         toVerknuepfteEntscheidungListValue({ aktenzeichen: "1 K 23/19" }),
-      ).toBe("1 K 23/19");
+      ).toStrictEqual({ text: "1 K 23/19" });
     });
 
     it("returns undefined when the decision cannot be formatted", () => {
