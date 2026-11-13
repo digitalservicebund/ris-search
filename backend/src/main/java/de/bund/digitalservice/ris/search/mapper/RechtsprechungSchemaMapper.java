@@ -69,8 +69,14 @@ public class RechtsprechungSchemaMapper {
         .tarifvertraege(doc.tarifvertraege())
         .kuendigungsgruende(doc.kuendigungsgruende())
         .mitwirkendeRichter(doc.mitwirkendeRichter())
-        .vorgehendeEntscheidungen(doc.previousDecisions())
-        .nachgehendeEntscheidungen(doc.ensuingDecisions())
+        .vorgehendeEntscheidungen(
+            mapList(
+                unindexed.vorgehendeEntscheidungen(),
+                VerknuepfteEntscheidungenSchemaMapper::fromDomain))
+        .nachgehendeEntscheidungen(
+            mapList(
+                unindexed.nachgehendeEntscheidungen(),
+                VerknuepfteEntscheidungenSchemaMapper::fromDomain))
         .zitierungenLiteraturSelbststaendig(
             mapList(
                 unindexed.zitierungenLiteraturSelbststaendig(),

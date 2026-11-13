@@ -210,6 +210,27 @@
           "fundstelle": "ris:fundstelle"
         }
       },
+      "VorgehendeEntscheidung": {
+        "@id": "ris:VorgehendeEntscheidung",
+        "@context": {
+          "dokumenttyp": "ris:dokumenttyp",
+          "entscheidungsdatum": "ris:entscheidungsdatum",
+          "aktenzeichen": "ris:aktenzeichen",
+          "gericht": "ris:gericht"
+        }
+      },
+      "NachgehendeEntscheidung": {
+        "@id": "ris:NachgehendeEntscheidung",
+        "@context": {
+          "art": "ris:art",
+          "dokumenttyp": "ris:dokumenttyp",
+          "entscheidungsdatum": "ris:entscheidungsdatum",
+          "mitteilungsdatum": "ris:mitteilungsdatum",
+          "aktenzeichen": "ris:aktenzeichen",
+          "gericht": "ris:gericht",
+          "vermerk": "ris:vermerk"
+        }
+      },
       "ZitierungLiteraturSelbststaendig": {
         "@id": "ris:ZitierungLiteraturSelbststaendig",
         "@context": {

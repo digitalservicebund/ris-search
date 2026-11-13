@@ -1,6 +1,5 @@
 package de.bund.digitalservice.ris.search.mapper;
 
-import de.bund.digitalservice.ris.search.models.opensearch.common.Gericht;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Fundstelle;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Richtung;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ZitierungLiteraturSelbststaendig;
@@ -8,7 +7,6 @@ import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Zitierung
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ZitierungRechtsprechung;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ZitierungVerwaltungsvorschrift;
 import de.bund.digitalservice.ris.search.schema.FundstelleSchema;
-import de.bund.digitalservice.ris.search.schema.GerichtSchema;
 import de.bund.digitalservice.ris.search.schema.ZitierungLiteraturSelbststaendigSchema;
 import de.bund.digitalservice.ris.search.schema.ZitierungLiteraturUnselbststaendigSchema;
 import de.bund.digitalservice.ris.search.schema.ZitierungRechtsprechungSchema;
@@ -26,7 +24,7 @@ final class ZitierungenSchemaMapper {
         .referenzUri(ref.referenzUri())
         .dokumentnummer(ref.dokumentnummer())
         .artDerZitierung(ref.artDerZitierung())
-        .gericht(fromDomain(ref.gericht()))
+        .gericht(GerichtSchemaMapper.fromDomain(ref.gericht()))
         .entscheidungsdatum(ref.entscheidungsdatum())
         .dokumenttyp(ref.dokumenttyp())
         .aktenzeichen(ref.aktenzeichen())
@@ -74,19 +72,6 @@ final class ZitierungenSchemaMapper {
       case AKTIV -> ZitierungRichtung.AKTIV;
       case PASSIV -> ZitierungRichtung.PASSIV;
     };
-  }
-
-  private static GerichtSchema fromDomain(Gericht gericht) {
-    if (gericht == null) {
-      return null;
-    }
-    return GerichtSchema.builder()
-        .gerichtstyp(gericht.gerichtstyp())
-        .gerichtsort(gericht.gerichtsort())
-        .gerichtsbarkeit(gericht.gerichtsbarkeit())
-        .spruchkoerper(gericht.spruchkoerper())
-        .sitzDerAussenstelle(gericht.sitzDerAussenstelle())
-        .build();
   }
 
   private static FundstelleSchema fromDomain(Fundstelle fundstelle) {

@@ -136,63 +136,72 @@ const headerMetadata = computed<MetadataItem[]>(() => [
   },
 ]);
 
-const detailItems = computed<DetailsListItem[]>(() => [
-  {
-    type: "text",
-    label: "Spruchkörper:",
-    value: rechtsprechung.value?.spruchkoerper,
-  },
-  {
-    type: "text",
-    label: "ECLI:",
-    value: rechtsprechung.value?.ecli,
-    valueClass: "break-all",
-  },
-  {
-    type: "text",
-    label: "Entscheidungsname:",
-    value: formatArray(rechtsprechung.value?.entscheidungsnamen ?? []),
-  },
-  {
-    type: "list",
-    label: "Gesetzeskraft:",
-    values: rechtsprechung.value?.gesetzeskraft ?? [],
-  },
-  {
-    type: "list",
-    label: getSingularOrPlural(
-      "Streitjahr:",
-      "Streitjahre:",
-      rechtsprechung.value?.streitjahre?.length,
-    ),
-    values: rechtsprechung.value?.streitjahre ?? [],
-  },
-  {
-    type: "list",
-    label: getSingularOrPlural(
-      "Vorgehende Entscheidung:",
-      "Vorgehende Entscheidungen:",
-      rechtsprechung.value?.vorgehendeEntscheidungen?.length,
-    ),
-    values: rechtsprechung.value?.vorgehendeEntscheidungen ?? [],
-  },
-  {
-    type: "list",
-    label: getSingularOrPlural(
-      "Nachgehende Entscheidung:",
-      "Nachgehende Entscheidungen:",
-      rechtsprechung.value?.nachgehendeEntscheidungen?.length,
-    ),
-    values: rechtsprechung.value?.nachgehendeEntscheidungen ?? [],
-  },
+const detailItems = computed<DetailsListItem[]>(() => {
+  const fromQueryString = searchParamToString(route.query.from);
+  return [
+    {
+      type: "text",
+      label: "Spruchkörper:",
+      value: rechtsprechung.value?.spruchkoerper,
+    },
+    {
+      type: "text",
+      label: "ECLI:",
+      value: rechtsprechung.value?.ecli,
+      valueClass: "break-all",
+    },
+    {
+      type: "text",
+      label: "Entscheidungsname:",
+      value: formatArray(rechtsprechung.value?.entscheidungsnamen ?? []),
+    },
+    {
+      type: "list",
+      label: "Gesetzeskraft:",
+      values: rechtsprechung.value?.gesetzeskraft ?? [],
+    },
+    {
+      type: "list",
+      label: getSingularOrPlural(
+        "Streitjahr:",
+        "Streitjahre:",
+        rechtsprechung.value?.streitjahre?.length,
+      ),
+      values: rechtsprechung.value?.streitjahre ?? [],
+    },
+    {
+      type: "list",
+      label: getSingularOrPlural(
+        "Vorgehende Entscheidung:",
+        "Vorgehende Entscheidungen:",
+        rechtsprechung.value?.vorgehendeEntscheidungen?.length,
+      ),
+      values: (rechtsprechung.value?.vorgehendeEntscheidungen ?? []).flatMap(
+        (entscheidung) =>
+          toVerknuepfteEntscheidungLink(entscheidung, fromQueryString) ?? [],
+      ),
+    },
+    {
+      type: "list",
+      label: getSingularOrPlural(
+        "Nachgehende Entscheidung:",
+        "Nachgehende Entscheidungen:",
+        rechtsprechung.value?.nachgehendeEntscheidungen?.length,
+      ),
+      values: (rechtsprechung.value?.nachgehendeEntscheidungen ?? []).flatMap(
+        (entscheidung) =>
+          toVerknuepfteEntscheidungLink(entscheidung, fromQueryString) ?? [],
+      ),
+    },
 
-  {
-    type: "link",
-    label: "Download:",
-    url: getEncodingURL(rechtsprechung.value?.encoding, "application/zip"),
-    text: "Diese Gerichtsentscheidung als ZIP herunterladen",
-  },
-]);
+    {
+      type: "link",
+      label: "Download:",
+      url: getEncodingURL(rechtsprechung.value?.encoding, "application/zip"),
+      text: "Diese Gerichtsentscheidung als ZIP herunterladen",
+    },
+  ];
+});
 
 const textSectionId = useId();
 const detailsSectionId = useId();

@@ -2664,6 +2664,54 @@
           }
         }
       },
+      "NachgehendeEntscheidungSchema" : {
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "example" : "NachgehendeEntscheidung"
+          },
+          "art" : {
+            "type" : "string",
+            "description" : "* nachgehend: Die nachgehende Entscheidung ist abgeschlossen.\n* anhängig: Die nachgehende Entscheidung ist ein anhängiges Verfahren.",
+            "example" : "nachgehend"
+          },
+          "referenzUri" : {
+            "type" : "string",
+            "description" : "Die URI die auf die referenzierte Dokeinheit verweist."
+          },
+          "dokumenttyp" : {
+            "type" : "string",
+            "description" : "Innerhalb der Dokumentart „Rechtsprechung“ werden folgende Dokumenttypen unterschieden:\n\n* Äuß: Äußerung\n* Ant: EuGH-Vorlage\n* AnU: Anerkenntnisurteil\n* Bes: Beschluss\n* Buß: Bußgeldbescheid\n* DrB: Dreierausschussbeschluss\n* EiA: Einstweilige Anordnung\n* Ent: Entscheidung\n* EVg: Einstellungsverfügung der Staatsanwaltschaft\n* GeB: Gerichtsbescheid\n* Gut: Gutachten\n* GWF: Gegenstandswertfestsetzung im verfassungsgerichtlichen Verfahren\n* KaB: Kammerbeschluss\n* KbN: Nichtannahmebeschluss\n* KbS: Stattgebender Kammerbeschluss\n* KoB: Kammerbeschluss ohne Begründung\n* PkH: Prozesskostenhilfebeschluss\n* ReM: Rechtsentscheid in Mietsachen\n* Sch: Schiedsgerichtsentscheidung\n* Ste: Stellungnahme\n* Str: Streitwertbeschluss\n* TeB: Teilbeschluss\n* TeU: Teilurteil\n* Urt: Urteil\n* Vgl: Vergleich\n* Vor: Vorlagebeschluss\n* VsU: Versäumnisurteil\n* VzU: Verzichtsurteil\n* ZwB: Zwischenbeschluss\n* ZwU: Zwischenurteil\n* TVU: Teilversäumnisurteil\n* Vfg: Verfügung\n* Vorab: Ersuchen um Vorabentscheidung\n* Anh: Anhängiges Verfahren\n* End: Endurteil\n* KfB: Kostenfestsetzungsbeschluss"
+          },
+          "entscheidungsdatum" : {
+            "type" : "string",
+            "format" : "date",
+            "description" : "Datum der Entscheidung, hier kann es zu Dopplungen mit anderen Entscheidungen kommen, auch in Kombination mit Aktenzeichen und Gericht."
+          },
+          "mitteilungsdatum" : {
+            "type" : "string",
+            "format" : "date",
+            "description" : "Mitteilungsdatum"
+          },
+          "dokumentnummer" : {
+            "type" : "string",
+            "description" : "Dokumentnummer"
+          },
+          "aktenzeichen" : {
+            "type" : "string",
+            "description" : "Aktenzeichen der Entscheidung, hier kann es zu Dopplungen mit anderen Entscheidungen kommen, auch in Kombination mit Entscheidungsdatum und Gericht. Bei Gemeinsamen Ländererlassen (GLE) innerhalb der Dokumentart Verwaltungsvorschriften wird über das Attribut 'normgeber' der jeweilige ausgebende Normgeber des Bundeslandes angegeben. Das optionale Attribut 'normgeberRegion' gibt die zugehörige Region des Normgebers an."
+          },
+          "gericht" : {
+            "$ref" : "#/components/schemas/GerichtSchema",
+            "description" : "Gericht"
+          },
+          "vermerk" : {
+            "type" : "string",
+            "description" : "Vermerk zu einem anhängigen nachfolgenden Verfahren"
+          }
+        }
+      },
       "RechtsprechungSchema" : {
         "type" : "object",
         "properties" : {
@@ -2848,16 +2896,14 @@
             "type" : "array",
             "description" : "Nachgewiesen werden gerichtliche Entscheidungen, die im Rahmen eines Verfahrens (einschl. Nebenverfahren) der zu dokumentierenden Entscheidung vorausgehen.",
             "items" : {
-              "type" : "string",
-              "description" : "Nachgewiesen werden gerichtliche Entscheidungen, die im Rahmen eines Verfahrens (einschl. Nebenverfahren) der zu dokumentierenden Entscheidung vorausgehen."
+              "$ref" : "#/components/schemas/VorgehendeEntscheidungSchema"
             }
           },
           "nachgehendeEntscheidungen" : {
             "type" : "array",
             "description" : "Nachgewiesen werden die gerichtlichen Entscheidungen, die ihrerseits in der Rubrik „vorgehende Entscheidung“ die vorliegende Entscheidung nennen.",
             "items" : {
-              "type" : "string",
-              "description" : "Nachgewiesen werden die gerichtlichen Entscheidungen, die ihrerseits in der Rubrik „vorgehende Entscheidung“ die vorliegende Entscheidung nennen."
+              "$ref" : "#/components/schemas/NachgehendeEntscheidungSchema"
             }
           },
           "zitierungenLiteraturSelbststaendig" : {
@@ -3083,6 +3129,40 @@
         },
         "required" : [ "@context", "@id", "ecli", "encoding", "entscheidungsnamen", "inLanguage", "schlagwoerter", "vorabdokument" ]
       },
+      "VorgehendeEntscheidungSchema" : {
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "example" : "VorgehendeEntscheidung"
+          },
+          "referenzUri" : {
+            "type" : "string",
+            "description" : "Die URI die auf die referenzierte Dokeinheit verweist."
+          },
+          "dokumenttyp" : {
+            "type" : "string",
+            "description" : "Innerhalb der Dokumentart „Rechtsprechung“ werden folgende Dokumenttypen unterschieden:\n\n* Äuß: Äußerung\n* Ant: EuGH-Vorlage\n* AnU: Anerkenntnisurteil\n* Bes: Beschluss\n* Buß: Bußgeldbescheid\n* DrB: Dreierausschussbeschluss\n* EiA: Einstweilige Anordnung\n* Ent: Entscheidung\n* EVg: Einstellungsverfügung der Staatsanwaltschaft\n* GeB: Gerichtsbescheid\n* Gut: Gutachten\n* GWF: Gegenstandswertfestsetzung im verfassungsgerichtlichen Verfahren\n* KaB: Kammerbeschluss\n* KbN: Nichtannahmebeschluss\n* KbS: Stattgebender Kammerbeschluss\n* KoB: Kammerbeschluss ohne Begründung\n* PkH: Prozesskostenhilfebeschluss\n* ReM: Rechtsentscheid in Mietsachen\n* Sch: Schiedsgerichtsentscheidung\n* Ste: Stellungnahme\n* Str: Streitwertbeschluss\n* TeB: Teilbeschluss\n* TeU: Teilurteil\n* Urt: Urteil\n* Vgl: Vergleich\n* Vor: Vorlagebeschluss\n* VsU: Versäumnisurteil\n* VzU: Verzichtsurteil\n* ZwB: Zwischenbeschluss\n* ZwU: Zwischenurteil\n* TVU: Teilversäumnisurteil\n* Vfg: Verfügung\n* Vorab: Ersuchen um Vorabentscheidung\n* Anh: Anhängiges Verfahren\n* End: Endurteil\n* KfB: Kostenfestsetzungsbeschluss"
+          },
+          "entscheidungsdatum" : {
+            "type" : "string",
+            "format" : "date",
+            "description" : "Datum der Entscheidung, hier kann es zu Dopplungen mit anderen Entscheidungen kommen, auch in Kombination mit Aktenzeichen und Gericht."
+          },
+          "dokumentnummer" : {
+            "type" : "string",
+            "description" : "Dokumentnummer"
+          },
+          "aktenzeichen" : {
+            "type" : "string",
+            "description" : "Aktenzeichen der Entscheidung, hier kann es zu Dopplungen mit anderen Entscheidungen kommen, auch in Kombination mit Entscheidungsdatum und Gericht. Bei Gemeinsamen Ländererlassen (GLE) innerhalb der Dokumentart Verwaltungsvorschriften wird über das Attribut 'normgeber' der jeweilige ausgebende Normgeber des Bundeslandes angegeben. Das optionale Attribut 'normgeberRegion' gibt die zugehörige Region des Normgebers an."
+          },
+          "gericht" : {
+            "$ref" : "#/components/schemas/GerichtSchema",
+            "description" : "Gericht"
+          }
+        }
+      },
       "ZitierungLiteraturSelbststaendigSchema" : {
         "type" : "object",
         "properties" : {
@@ -3092,7 +3172,6 @@
           },
           "richtung" : {
             "type" : "string",
-            "description" : "Ist die Referenz eine Aktivzitierung oder eine Passivzitierung?",
             "enum" : [ "aktiv", "passiv" ]
           },
           "referenzUri" : {
@@ -3108,7 +3187,8 @@
             "description" : "Autor(en)"
           },
           "titel" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "Titel"
           },
           "veroeffentlichungsjahr" : {
             "type" : "string",
@@ -3125,7 +3205,6 @@
           },
           "richtung" : {
             "type" : "string",
-            "description" : "Ist die Referenz eine Aktivzitierung oder eine Passivzitierung?",
             "enum" : [ "aktiv", "passiv" ]
           },
           "referenzUri" : {
@@ -3159,7 +3238,6 @@
           },
           "richtung" : {
             "type" : "string",
-            "description" : "Ist die Referenz eine Aktivzitierung oder eine Passivzitierung?",
             "enum" : [ "aktiv", "passiv" ]
           },
           "referenzUri" : {
@@ -3171,8 +3249,7 @@
             "description" : "Dokumentnummer"
           },
           "artDerZitierung" : {
-            "type" : "string",
-            "description" : "Art der Zitierung"
+            "type" : "string"
           },
           "gericht" : {
             "$ref" : "#/components/schemas/GerichtSchema",
@@ -3206,7 +3283,6 @@
           },
           "richtung" : {
             "type" : "string",
-            "description" : "Ist die Referenz eine Aktivzitierung oder eine Passivzitierung?",
             "enum" : [ "aktiv", "passiv" ]
           },
           "referenzUri" : {
@@ -3218,8 +3294,7 @@
             "description" : "Dokumentnummer"
           },
           "artDerZitierung" : {
-            "type" : "string",
-            "description" : "Art der Zitierung"
+            "type" : "string"
           },
           "jurisAbkuerzung" : {
             "type" : "string",

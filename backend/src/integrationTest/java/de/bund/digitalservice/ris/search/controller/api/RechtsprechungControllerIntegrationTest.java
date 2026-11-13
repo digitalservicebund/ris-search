@@ -156,24 +156,16 @@ class RechtsprechungControllerIntegrationTest extends ContainersIntegrationBase 
             jsonPath("$.kuendigungsgruende[0]").value("Straftat"),
             jsonPath("$.mitwirkendeRichter[0]").value("Meier"),
             jsonPath("$.mitwirkendeRichter[1]").value("Müller"),
-            jsonPath("$.vorgehendeEntscheidungen[0]")
+            jsonPath("$.vorgehendeEntscheidungen[*].dokumentnummer")
                 .value(
-                    "previous decision court type previous decision court location, previous"
-                        + " decision document type vom 1. Januar 2020 - previous decision file"
-                        + " number"),
-            jsonPath("$.vorgehendeEntscheidungen[1]")
+                    contains(
+                        "previous decision document number 1",
+                        "previous decision document number 2")),
+            jsonPath("$.nachgehendeEntscheidungen[*].dokumentnummer")
                 .value(
-                    "previous decision court type previous decision court location, previous"
-                        + " decision document type vom 1. Januar 2020 - previous decision file"
-                        + " number"),
-            jsonPath("$.nachgehendeEntscheidungen[0]")
-                .value(
-                    "ensuing decision court type, ensuing decision document type vom 1. Oktober"
-                        + " 2022 - ensuing decision file number (anhängig)"),
-            jsonPath("$.nachgehendeEntscheidungen[1]")
-                .value(
-                    "ensuing decision court type, ensuing decision document type vom 1. Oktober"
-                        + " 2022 - ensuing decision file number (anhängig)"),
+                    contains(
+                        "ensuing decision document number 1",
+                        "ensuing decision document number 2")),
             jsonPath(
                     "$.zitierungenLiteraturUnselbststaendig[?(@.richtung == 'aktiv')].dokumentnummer")
                 .value(contains("STLU991393280")),
@@ -268,6 +260,45 @@ class RechtsprechungControllerIntegrationTest extends ContainersIntegrationBase 
                 .value("VR BA 1986-01-16 16/86"),
             jsonPath("$.zitierungenVerwaltungsvorschriften[1].fundstelle.periodikum")
                 .value("Dienstbl BA RdErl"));
+  }
+
+  @Test
+  @DisplayName("Should return vorgehende and nachgehende Entscheidungen as objects")
+  void shouldReturnVerknuepfteEntscheidungenAsObjects() throws Exception {
+    indexCaselawService.reindexAll(SharedTestConstants.TIMESTAMP_2024_01_01_AS_STRING);
+
+    mockMvc
+        .perform(
+            get(ApiConfig.Paths.RECHTSPRECHUNG + "/" + this.documentNumber)
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(isJsonLdCompliant())
+        .andExpectAll(
+            status().isOk(),
+            jsonPath("$.vorgehendeEntscheidungen[0]['@type']").value("VorgehendeEntscheidung"),
+            jsonPath("$.vorgehendeEntscheidungen[0].referenzUri")
+                .value("ris:/rechtsprechung/KORE300002025"),
+            jsonPath("$.vorgehendeEntscheidungen[0].dokumenttyp")
+                .value("previous decision document type"),
+            jsonPath("$.vorgehendeEntscheidungen[0].entscheidungsdatum").value("2020-01-01"),
+            jsonPath("$.vorgehendeEntscheidungen[0].aktenzeichen")
+                .value("previous decision file number"),
+            jsonPath("$.vorgehendeEntscheidungen[0].gericht.gerichtstyp")
+                .value("previous decision court type"),
+            jsonPath("$.vorgehendeEntscheidungen[0].gericht.gerichtsort")
+                .value("previous decision court location"),
+            jsonPath("$.nachgehendeEntscheidungen[0]['@type']").value("NachgehendeEntscheidung"),
+            jsonPath("$.nachgehendeEntscheidungen[0].art").value("anhängig"),
+            jsonPath("$.nachgehendeEntscheidungen[0].referenzUri")
+                .value("ris:/rechtsprechung/JURE100074208"),
+            jsonPath("$.nachgehendeEntscheidungen[0].dokumenttyp")
+                .value("ensuing decision document type"),
+            jsonPath("$.nachgehendeEntscheidungen[0].entscheidungsdatum").value("2022-10-01"),
+            jsonPath("$.nachgehendeEntscheidungen[0].mitteilungsdatum").value("2022-11-15"),
+            jsonPath("$.nachgehendeEntscheidungen[0].aktenzeichen")
+                .value("ensuing decision file number"),
+            jsonPath("$.nachgehendeEntscheidungen[0].gericht.gerichtstyp")
+                .value("ensuing decision court type"),
+            jsonPath("$.nachgehendeEntscheidungen[1].vermerk").value("ensuing decision note"));
   }
 
   @Test
