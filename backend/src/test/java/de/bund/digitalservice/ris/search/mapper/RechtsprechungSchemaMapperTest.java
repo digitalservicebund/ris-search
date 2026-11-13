@@ -22,6 +22,7 @@ import de.bund.digitalservice.ris.search.schema.DocumentEncodingSchema;
 import de.bund.digitalservice.ris.search.schema.FundstelleSchema;
 import de.bund.digitalservice.ris.search.schema.GerichtSchema;
 import de.bund.digitalservice.ris.search.schema.NachgehendeEntscheidungSchema;
+import de.bund.digitalservice.ris.search.schema.PeriodikumSchema;
 import de.bund.digitalservice.ris.search.schema.RechtsprechungSchema;
 import de.bund.digitalservice.ris.search.schema.VorgehendeEntscheidungSchema;
 import de.bund.digitalservice.ris.search.schema.ZitierungLiteraturSelbststaendigSchema;
@@ -121,6 +122,7 @@ class RechtsprechungSchemaMapperTest {
                             .fundstelle(
                                 Fundstelle.builder()
                                     .periodikum("Information StW")
+                                    .periodikumTitel("Die Information über Steuer und Wirtschaft")
                                     .zitatstelle("1999, 641")
                                     .fundstellenTyp("nichtamtlich")
                                     .build())
@@ -164,6 +166,7 @@ class RechtsprechungSchemaMapperTest {
                             .fundstelle(
                                 Fundstelle.builder()
                                     .periodikum("BayVBl")
+                                    .periodikumTitel("Bayerische Verwaltungsblätter")
                                     .zitatstelle("1984, 15")
                                     .build())
                             .build(),
@@ -182,6 +185,8 @@ class RechtsprechungSchemaMapperTest {
                             .fundstelle(
                                 Fundstelle.builder()
                                     .periodikum("MittLVA Oberfr")
+                                    .periodikumTitel(
+                                        "Mitteilungen der Landesversicherungsanstalt Oberfranken und Mittelfranken")
                                     .zitatstelle("1997, 538-539")
                                     .build())
                             .build(),
@@ -333,7 +338,11 @@ class RechtsprechungSchemaMapperTest {
                 .dokumenttyp("Aufsatz")
                 .fundstelle(
                     FundstelleSchema.builder()
-                        .periodikum("Information StW")
+                        .periodikum(
+                            PeriodikumSchema.builder()
+                                .abkuerzung("Information StW")
+                                .titel("Die Information über Steuer und Wirtschaft")
+                                .build())
                         .zitatstelle("1999, 641")
                         .fundstellenTyp("nichtamtlich")
                         .build())
@@ -383,7 +392,14 @@ class RechtsprechungSchemaMapperTest {
                 .dokumenttyp("Beschluss")
                 .aktenzeichen("Vf. 94-VI-81")
                 .fundstelle(
-                    FundstelleSchema.builder().periodikum("BayVBl").zitatstelle("1984, 15").build())
+                    FundstelleSchema.builder()
+                        .periodikum(
+                            PeriodikumSchema.builder()
+                                .abkuerzung("BayVBl")
+                                .titel("Bayerische Verwaltungsblätter")
+                                .build())
+                        .zitatstelle("1984, 15")
+                        .build())
                 .build(),
             ZitierungRechtsprechungSchema.builder()
                 .richtung(ZitierungRichtung.PASSIV)
@@ -399,7 +415,12 @@ class RechtsprechungSchemaMapperTest {
                 .jurisAbkuerzung("VR VDR 1997-12-04 5883")
                 .fundstelle(
                     FundstelleSchema.builder()
-                        .periodikum("MittLVA Oberfr")
+                        .periodikum(
+                            PeriodikumSchema.builder()
+                                .abkuerzung("MittLVA Oberfr")
+                                .titel(
+                                    "Mitteilungen der Landesversicherungsanstalt Oberfranken und Mittelfranken")
+                                .build())
                         .zitatstelle("1997, 538-539")
                         .build())
                 .build(),
@@ -443,6 +464,31 @@ class RechtsprechungSchemaMapperTest {
                 .art("nachgehend")
                 .aktenzeichen("4 C 1/23")
                 .build());
+  }
+
+  @Test
+  @DisplayName("Maps a Fundstelle without Periodikum to a schema without Periodikum")
+  void fromDomainMapsFundstelleWithoutPeriodikum() {
+    var documentationUnit =
+        CaseLawDocumentationUnit.builder()
+            .documentNumber("BFRE000087655")
+            .unindexed(
+                CaseLawUnindexed.builder()
+                    .zitierungenLiteraturUnselbststaendig(
+                        List.of(
+                            ZitierungLiteraturUnselbststaendig.builder()
+                                .richtung(Richtung.PASSIV)
+                                .fundstelle(Fundstelle.builder().zitatstelle("1999, 641").build())
+                                .build()))
+                    .build())
+            .build();
+
+    RechtsprechungSchema rechtsprechungSchema =
+        RechtsprechungSchemaMapper.fromDomain(documentationUnit, "jsonLdContext");
+
+    assertThat(rechtsprechungSchema.zitierungenLiteraturUnselbststaendig())
+        .extracting(ZitierungLiteraturUnselbststaendigSchema::fundstelle)
+        .containsExactly(FundstelleSchema.builder().zitatstelle("1999, 641").build());
   }
 
   @Test

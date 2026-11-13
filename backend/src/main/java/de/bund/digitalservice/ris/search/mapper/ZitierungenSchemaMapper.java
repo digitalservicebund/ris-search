@@ -7,6 +7,7 @@ import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Zitierung
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ZitierungRechtsprechung;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ZitierungVerwaltungsvorschrift;
 import de.bund.digitalservice.ris.search.schema.FundstelleSchema;
+import de.bund.digitalservice.ris.search.schema.PeriodikumSchema;
 import de.bund.digitalservice.ris.search.schema.ZitierungLiteraturSelbststaendigSchema;
 import de.bund.digitalservice.ris.search.schema.ZitierungLiteraturUnselbststaendigSchema;
 import de.bund.digitalservice.ris.search.schema.ZitierungRechtsprechungSchema;
@@ -79,9 +80,19 @@ final class ZitierungenSchemaMapper {
       return null;
     }
     return FundstelleSchema.builder()
-        .periodikum(fundstelle.periodikum())
+        .periodikum(toPeriodikumSchema(fundstelle))
         .zitatstelle(fundstelle.zitatstelle())
         .fundstellenTyp(fundstelle.fundstellenTyp())
+        .build();
+  }
+
+  private static PeriodikumSchema toPeriodikumSchema(Fundstelle fundstelle) {
+    if (fundstelle.periodikum() == null && fundstelle.periodikumTitel() == null) {
+      return null;
+    }
+    return PeriodikumSchema.builder()
+        .abkuerzung(fundstelle.periodikum())
+        .titel(fundstelle.periodikumTitel())
         .build();
   }
 }

@@ -274,6 +274,13 @@
           "fundstellenTyp": "ris:fundstellenTyp"
         }
       },
+      "Periodikum": {
+        "@id": "ris:Periodikum",
+        "@context": {
+          "abkuerzung": "ris:periodikumAbkuerzung",
+          "titel": "ris:periodikumTitel"
+        }
+      },
       "SearchResultMatch": {
         "@id": "ris:SearchResultMatch",
         "@context": {
