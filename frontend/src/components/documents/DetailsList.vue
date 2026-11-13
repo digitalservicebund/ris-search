@@ -70,17 +70,17 @@ const visibleItems = computed<DisplayItem[]>(() =>
           return !isStringEmpty(item.url);
       }
     })
-    .map((item) =>
-      item.type === "list"
-        ? {
-            ...item,
-            values: item.values.map((value) =>
-              typeof value === "string" ? { text: value } : value,
-            ),
-          }
-        : item,
-    ),
+    .map((item) => (item.type === "list" ? normalizeListEntry(item) : item)),
 );
+
+function normalizeListEntry(entry: ListEntry) {
+  return {
+    ...entry,
+    values: entry.values.map((value) =>
+      typeof value === "string" ? { text: value } : value,
+    ),
+  };
+}
 
 function labelRowSpan(item: DisplayItem): number {
   return item.type === "list" ? Math.max(item.values.length, 1) : 1;
