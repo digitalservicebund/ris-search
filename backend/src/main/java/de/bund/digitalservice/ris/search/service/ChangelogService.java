@@ -9,11 +9,8 @@ import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
 import de.bund.digitalservice.ris.search.utils.StringUtils;
 import java.time.Instant;
 import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.apache.logging.log4j.LogManager;
@@ -168,7 +165,7 @@ public class ChangelogService<T extends ObjectStorage> {
    * @return the merged changelog
    */
   private Changelog parseAndFoldChangelogs(List<String> sortedKeys) {
-    List<Changelog> changelogs = new ArrayList<>();
+    Changelog result = new Changelog();
     for (String key : sortedKeys) {
       Optional<Changelog> changelog = parseOneChangelog(key);
       if (changelog.isEmpty()) {
@@ -179,39 +176,26 @@ public class ChangelogService<T extends ObjectStorage> {
         changeAll.setChangeAll(true);
         return changeAll;
       }
-      changelogs.add(changelog.get());
+      foldInto(result, changelog.get());
     }
-    return foldChangelogs(changelogs);
+    return result;
   }
 
   /**
-   * Folds multiple changelogs into a single changelog. If a file is marked as changed and deleted
-   * in the same changelog, it will be marked as deleted. When no changes are present the changed
-   * and deleted lists are empty.
+   * Merges a single changelog into the accumulated result. The last action for a file wins. If a
+   * file is marked as changed and deleted in the same changelog, it will be marked as deleted.
    *
-   * @param changelogs the list of changelogs to merge, none of which has changeAll set
-   * @return the merged changelog
+   * @param result the accumulated changelog, modified in place
+   * @param changelog the changelog to merge, which must not have changeAll set
    */
-  private Changelog foldChangelogs(List<Changelog> changelogs) {
-    Changelog result = new Changelog();
-
-    enum Action {
-      CHANGED,
-      DELETED
+  private static void foldInto(Changelog result, Changelog changelog) {
+    for (String filename : changelog.getChanged()) {
+      result.getDeleted().remove(filename);
+      result.getChanged().add(filename);
     }
-    Map<String, Action> mergedChanges = new HashMap<>();
-    for (Changelog log : changelogs) {
-      log.getChanged().forEach(filename -> mergedChanges.put(filename, Action.CHANGED));
-      log.getDeleted().forEach(filename -> mergedChanges.put(filename, Action.DELETED));
+    for (String filename : changelog.getDeleted()) {
+      result.getChanged().remove(filename);
+      result.getDeleted().add(filename);
     }
-    mergedChanges.forEach((id, type) -> {
-      if (Action.CHANGED.equals(type)) {
-        result.getChanged().add(id);
-      } else {
-        result.getDeleted().add(id);
-      }
-    });
-
-    return result;
   }
 }
