@@ -3746,6 +3746,11 @@
             "type" : "string",
             "example" : "/v1/legislation/eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu"
           },
+          "fullCitation" : {
+            "type" : [ "string", "null" ],
+            "description" : "Vollzitat",
+            "example" : "Kakaoerzeugnisse von 1. Dezember 2000 (BGBl. 1111)"
+          },
           "name" : {
             "type" : "string",
             "description" : "Amtliche Langüberschrift",
