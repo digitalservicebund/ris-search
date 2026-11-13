@@ -5,6 +5,8 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.assertj.core.api.InstanceOfAssertFactories.LIST;
 import static org.assertj.core.api.InstanceOfAssertFactories.SET;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -95,11 +97,11 @@ class ChangelogServiceTest {
         .thenReturn(Optional.of(objectMapper.writeValueAsString(log1)));
     when(bucket.getFileAsString("log2"))
         .thenReturn(Optional.of(objectMapper.writeValueAsString(log2)));
-    when(bucket.getFileAsString("log3"))
-        .thenReturn(Optional.of(objectMapper.writeValueAsString(log3)));
 
     Changelog result = changelogService.getChangesFromFiles(List.of("log1", "log2", "log3"));
     assertThat(result.isChangeAll()).isTrue();
+    assertThat(result.getChanged()).asInstanceOf(SET).isEmpty();
+    verify(bucket, never()).getFileAsString("log3");
   }
 
   @Test
@@ -201,8 +203,6 @@ class ChangelogServiceTest {
     Instant to = Instant.parse("2027-01-01T12:00:00Z");
 
     Changelog expectedFirst = new Changelog(new HashSet<>(), new HashSet<>(), true);
-    Changelog expectedSecond =
-        new Changelog(new HashSet<>(List.of("file2")), new HashSet<>(), false);
 
     when(bucket.getVersionPrefix()).thenReturn("");
     when(bucket.getAllKeysByPrefix(any()))
@@ -213,12 +213,12 @@ class ChangelogServiceTest {
 
     when(bucket.getFileAsString("changelogs/2026-07-03T12:00:00.000000Z-norm.json"))
         .thenReturn(Optional.of(objectMapper.writeValueAsString(expectedFirst)));
-    when(bucket.getFileAsString("changelogs/2027-01-01T12:00:00.000000Z-norm.json"))
-        .thenReturn(Optional.of(objectMapper.writeValueAsString(expectedSecond)));
 
     Changelog result = changelogService.getChangesBetween(from, to);
 
     assertThat(result.isChangeAll()).isTrue();
+    assertThat(result.getChanged()).asInstanceOf(SET).isEmpty();
+    verify(bucket, never()).getFileAsString("changelogs/2027-01-01T12:00:00.000000Z-norm.json");
   }
 
   @Test

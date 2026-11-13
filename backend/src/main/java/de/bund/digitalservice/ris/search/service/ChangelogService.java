@@ -9,10 +9,8 @@ import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
 import de.bund.digitalservice.ris.search.utils.StringUtils;
 import java.time.Instant;
 import java.time.format.DateTimeParseException;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.apache.logging.log4j.LogManager;
@@ -117,7 +115,7 @@ public class ChangelogService<T extends ObjectStorage> {
    * @return Changelog object including all changes that were indexed
    */
   public Changelog getChangesBetween(Instant from, Instant to) throws ObjectStoreServiceException {
-    var changelogs =
+    var keys =
         bucket.getAllKeysByPrefix(CHANGELOGS_PREFIX).stream()
             .filter(key -> !CHANGELOGS_PREFIX.equals(key))
             .filter(key -> {
@@ -126,11 +124,9 @@ public class ChangelogService<T extends ObjectStorage> {
               return !changelogTime.isBefore(from) && !changelogTime.isAfter(to);
             })
             .sorted()
-            .map(this::parseOneChangelog)
-            .flatMap(Optional::stream)
             .toList();
 
-    return foldChangelogs(changelogs);
+    return parseAndFoldChangelogs(keys);
   }
 
   private Instant parseInstantFromKey(String key) {
@@ -157,57 +153,49 @@ public class ChangelogService<T extends ObjectStorage> {
    *     occurs while accessing the object storage.
    */
   public Changelog getChangesFromFiles(List<String> filenames) throws ObjectStoreServiceException {
-    return foldChangelogs(
-        filenames.stream()
-            .sorted()
-            .map(this::parseOneChangelog)
-            .flatMap(Optional::stream)
-            .toList());
+    return parseAndFoldChangelogs(filenames.stream().sorted().toList());
   }
 
   /**
-   * Detects if a changeAll flag is set in any changelog in a list of changelogs
+   * Parses the given changelog files in order and folds them into a single changelog. As soon as a
+   * changelog with changeAll is encountered, the method short circuits without parsing the
+   * remaining files and returns a changeAll=true changelog.
    *
-   * @param logs changelogs to be checked for a changeAll flag
-   * @return true if any changelog contains a changeAll flag
-   */
-  private boolean containsChangeAll(List<Changelog> logs) {
-    return logs.stream().anyMatch(Changelog::isChangeAll);
-  }
-
-  /**
-   * Folds multiple changelogs into a single changelog. If a file is marked as changed and deleted
-   * in the same changelog, it will be marked as deleted. When a changelog with changeAll is
-   * encountered the method short circuits and returns a changeAll=true changelog. When no changes
-   * are present the changed and deleted lists are empty.
-   *
-   * @param changelogs the list of changelogs to merge
+   * @param sortedKeys changelog file keys, sorted in the order they should be applied
    * @return the merged changelog
    */
-  private Changelog foldChangelogs(List<Changelog> changelogs) {
+  private Changelog parseAndFoldChangelogs(List<String> sortedKeys) {
     Changelog result = new Changelog();
-    if (containsChangeAll(changelogs)) {
-      result.setChangeAll(true);
-      return result;
-    }
-
-    enum Action {
-      CHANGED,
-      DELETED
-    }
-    Map<String, Action> mergedChanges = new HashMap<>();
-    for (Changelog log : changelogs) {
-      log.getChanged().forEach(filename -> mergedChanges.put(filename, Action.CHANGED));
-      log.getDeleted().forEach(filename -> mergedChanges.put(filename, Action.DELETED));
-    }
-    mergedChanges.forEach((id, type) -> {
-      if (Action.CHANGED.equals(type)) {
-        result.getChanged().add(id);
-      } else {
-        result.getDeleted().add(id);
+    for (String key : sortedKeys) {
+      Optional<Changelog> changelog = parseOneChangelog(key);
+      if (changelog.isEmpty()) {
+        continue;
       }
-    });
-
+      if (changelog.get().isChangeAll()) {
+        Changelog changeAll = new Changelog();
+        changeAll.setChangeAll(true);
+        return changeAll;
+      }
+      foldInto(result, changelog.get());
+    }
     return result;
+  }
+
+  /**
+   * Merges a single changelog into the accumulated result. The last action for a file wins. If a
+   * file is marked as changed and deleted in the same changelog, it will be marked as deleted.
+   *
+   * @param result the accumulated changelog, modified in place
+   * @param changelog the changelog to merge, which must not have changeAll set
+   */
+  private static void foldInto(Changelog result, Changelog changelog) {
+    for (String filename : changelog.getChanged()) {
+      result.getDeleted().remove(filename);
+      result.getChanged().add(filename);
+    }
+    for (String filename : changelog.getDeleted()) {
+      result.getChanged().remove(filename);
+      result.getDeleted().add(filename);
+    }
   }
 }
