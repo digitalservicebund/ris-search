@@ -3,9 +3,12 @@ package de.bund.digitalservice.ris.search.config.opensearch;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
+import de.bund.digitalservice.ris.search.exception.OpenSearchTermLimitExceeded;
 import java.time.Duration;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.core.retry.RetryPolicy;
 import org.springframework.core.retry.RetryTemplate;
 import org.springframework.data.elasticsearch.UncategorizedElasticsearchException;
@@ -30,6 +33,22 @@ class OpensearchRetryConfigurationTest {
         new UncategorizedElasticsearchException("all shards failed", 400, "response body", null);
 
     assertThat(configuredPolicy.shouldRetry(parseFailure)).isFalse();
+  }
+
+  @ParameterizedTest
+  @ValueSource(
+      strings = {
+        "OpenSearch exception [type=too_many_nested_clauses, reason=too_many_nested_clauses]",
+        "OpenSearch exception [type=too_many_clauses, reason=too_many_clauses: maxClauseCount is"
+            + " set to 1024]"
+      })
+  void itReportsQueriesWithTooManyClausesAsTermLimitExceeded(String rootCauseMessage) {
+    var tooManyClauses =
+        new UncategorizedElasticsearchException(
+            "all shards failed", 400, "response body", new RuntimeException(rootCauseMessage));
+
+    assertThatExceptionOfType(OpenSearchTermLimitExceeded.class)
+        .isThrownBy(() -> configuredPolicy.shouldRetry(tooManyClauses));
   }
 
   @Test
