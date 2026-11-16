@@ -75,7 +75,9 @@ class StatisticsServiceTest {
 
   @Test
   void testGetAllCountsFetchCountFails() throws Exception {
-    Response aliasResponse = mockResponse("[{\"alias\":\"norms\"}]");
+    Response aliasResponse =
+        mockResponse(
+            "[{\"alias\":\"norms\"},{\"alias\":\"literature\"},{\"alias\":\"caselaws\"},{\"alias\":\"administrative_directive\"}]");
     when(lowLevelClient.performRequest(any(Request.class)))
         .thenReturn(aliasResponse)
         .thenThrow(new IOException("Count fetch failed"));
@@ -90,10 +92,7 @@ class StatisticsServiceTest {
     Response aliasResponse =
         mockResponse(
             "[{\"alias\":\"norms\"},{\"alias\":\"literature\"},{\"alias\":\"administrative_directive\"}]");
-    Response countResponse = mockResponse("{\"count\":1}");
-    when(lowLevelClient.performRequest(any(Request.class)))
-        .thenReturn(aliasResponse)
-        .thenReturn(countResponse);
+    when(lowLevelClient.performRequest(any(Request.class))).thenReturn(aliasResponse);
 
     OpenSearchFetchException ex =
         assertThrows(OpenSearchFetchException.class, () -> statisticsService.getAllCounts());
