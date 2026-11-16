@@ -3,6 +3,7 @@ package de.bund.digitalservice.ris.search.service;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.mapper.NormLdmlToOpenSearchMapper;
+import de.bund.digitalservice.ris.search.mapper.NormWorkMetadataMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.ArticlesRepository;
@@ -168,6 +169,9 @@ public class IndexNormsService implements IndexService {
       }
     }
 
+    fetchWorkFullCitation(workEliPath)
+        .ifPresent(citation -> normExpressions.forEach(norm -> norm.setFullCitation(citation)));
+
     addTimeRelevanceWindows(workEliPath.toString(), normExpressions);
 
     BatchUtils.processInBatches(normExpressions, BATCH_SIZE, normsRepository::saveAll);
@@ -244,6 +248,25 @@ public class IndexNormsService implements IndexService {
 
   private static boolean norm2StartsBeforeNorm1Ends(Norm norm1, Norm norm2) {
     return !norm2.getEntryIntoForceDate().isAfter(norm1.getExpiryDate());
+  }
+
+  /**
+   * Fetches and parses the work-level {@code metadaten.xml} file for the given work, if present.
+   *
+   * @param workEliPath the work to fetch the metadata file for
+   * @return the full citation (vollzitat), or {@link Optional#empty()} if the file is missing, the
+   *     citation is absent, or the file couldn't be read
+   */
+  private Optional<String> fetchWorkFullCitation(WorkEliPath workEliPath) {
+    String metadatenKey = workEliPath + "/metadaten.xml";
+    try {
+      return normsBucket
+          .getFileAsString(metadatenKey)
+          .flatMap(NormWorkMetadataMapper::parseVollzitat);
+    } catch (ObjectStoreServiceException e) {
+      logger.error("Error while reading work metadata file {}. {}", metadatenKey, e.getMessage());
+      return Optional.empty();
+    }
   }
 
   private Optional<Norm> getNormFromS3(ExpressionEliPath expressionEliPath, List<String> filenames)

@@ -144,7 +144,6 @@
                                              xsi:schemaLocation="http://rechtsinformationen.bund.de/schema/norm-metadata/0.1 schema/norm-metadata.xsd">
                     <ris:abkuerzung refersTo="interne-abkuerzung">RisFrSaftErfrischV</ris:abkuerzung>
                     <ris:inkraft date="2023-04-29"/>
-                    <ris:vollzitat>Fiktive Fruchtsaft- und Erfrischungsgetränkeverordnung vom 27. Mai 2000 (BGBl. I S. 1016), zuletzt modifiziert im Testverfahren</ris:vollzitat>
                     <ris:standangabe type="stand">Zuletzt geändert durch Testanpassungen</ris:standangabe>
                     <ris:standangabe type="neuf">Neugefasst durch Testdaten</ris:standangabe>
                     <ris:standangabe type="hinweis">Hinweis Testdaten</ris:standangabe>

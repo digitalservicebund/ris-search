@@ -21,6 +21,8 @@ class LdmlTestDataSchemaConformanceTest {
       return NormXmlValidator.Type.ANLAGE;
     } else if (ldmlFile.contains("rechtsetzungsdokument")) {
       return NormXmlValidator.Type.RECHTSETZUNGSDOKUMENT;
+    } else if (ldmlFile.endsWith("metadaten.xml")) {
+      return NormXmlValidator.Type.WORK_METADATA;
     } else {
       return NormXmlValidator.Type.REGELUNGSTEXT;
     }

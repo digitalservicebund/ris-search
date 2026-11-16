@@ -5,7 +5,7 @@
   xmlns="http://rechtsinformationen.bund.de/schema/norm-work-metadata/0.1"
   elementFormDefault="qualified"
 >
-  <xs:element name="workMetadata">
+  <xs:element name="metadaten">
     <xs:complexType>
       <xs:sequence>
         <xs:element name="vollzitat" type="xs:string" minOccurs="0" />

@@ -11,7 +11,6 @@ export type NormContent = {
     headingNotes?: string; // nichtamtliche Fußnoten
     officialToc?: string;
     prefaceContainer?: string; // besonderer Hinweis
-    vollzitat?: string;
     standangaben?: string[];
     standangabenHinweis?: string[];
     body: string;
@@ -123,9 +122,6 @@ function extractHtmlParts(
     proprietary?.querySelectorAll(".ris-standangabe[data-type='hinweis']"),
   );
 
-  const vollzitat =
-    proprietary?.querySelector(".ris-vollzitat")?.textContent ?? undefined;
-
   return {
     officialToc,
     heading: heading?.outerHTML,
@@ -137,7 +133,6 @@ function extractHtmlParts(
     prefaceContainer: prefaceContainer?.outerHTML,
     standangaben,
     standangabenHinweis,
-    vollzitat,
     body: body.innerHTML,
   };
 }

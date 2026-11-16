@@ -52,7 +52,8 @@
           "hasPart": "schema:hasPart",
           "partType": "ris:legislationPartType",
           "revision": "ris:revision",
-          "headline": "schema:headline"
+          "headline": "schema:headline",
+          "fullCitation": "ris:fullCitation"
         }
       },
       "Decision": {

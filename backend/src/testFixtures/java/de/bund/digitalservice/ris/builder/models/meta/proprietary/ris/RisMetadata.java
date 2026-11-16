@@ -6,7 +6,6 @@ import jakarta.xml.bind.annotation.XmlElement;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 /**
  * Represents the {@code ris:legalDocML.de_metadaten} element, holding RIS-specific norm metadata.
@@ -55,10 +54,6 @@ public class RisMetadata {
   public void setOutOfForce(String date) {
     this.outOfForceDate = new RisDate(date);
   }
-
-  @Setter
-  @XmlElement(name = "vollzitat", namespace = RIS_NS)
-  private String fullCitation;
 
   @XmlElement(namespace = RIS_NS)
   private EmptyElement bedingtesInkrafttreten;

@@ -96,7 +96,6 @@ public class NormLdmlToOpenSearchMapper {
   private static final String X_PATH_GEGENSTANDSLOS = AKN_RIS_METADATA + "ris:gegenstandslos";
   private static final String X_PATH_BEDINGTES_INKRAFTTRETEN =
       AKN_RIS_METADATA + "ris:bedingtesInkrafttreten";
-  private static final String X_PATH_FULL_CITATION = AKN_RIS_METADATA + "ris:vollzitat";
   private static final String X_PATH_RIS_ABKUERZUNG = AKN_RIS_METADATA + "ris:abkuerzung";
   private static final String X_PATH_OFFICIAL_TOC =
       AKN_ACT + "akn:preamble/akn:blockContainer[@refersTo='inhaltsuebersicht']/akn:toc";
@@ -204,7 +203,6 @@ public class NormLdmlToOpenSearchMapper {
     List<String> articleTexts = articles.stream().map(Article::getText).toList();
     List<String> articleFingerprints =
         articles.stream().map(Article::getArticleFingerprint).toList();
-    String fullCitation = xmlDocument.getElementByXpath(X_PATH_FULL_CITATION);
     String officialToc =
         Optional.ofNullable(xmlDocument.getElementByXpath(X_PATH_OFFICIAL_TOC))
             .map(String::strip)
@@ -237,7 +235,6 @@ public class NormLdmlToOpenSearchMapper {
         .publishedIn(getPublishedInByXmlDocument(xmlDocument, datePublished))
         .entryIntoForceDate(entryIntoForceDate)
         .expiryDate(expiryDate)
-        .fullCitation(fullCitation)
         .officialToc(officialToc)
         .articles(articles)
         .articleNames(articleNames)

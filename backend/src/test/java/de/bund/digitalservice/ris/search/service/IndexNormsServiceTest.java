@@ -9,6 +9,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import de.bund.digitalservice.ris.builder.NormTestDataBuilder;
+import de.bund.digitalservice.ris.builder.NormWorkMetadataTestDataBuilder;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
@@ -96,6 +97,52 @@ class IndexNormsServiceTest {
                     .next()
                     .getId()
                     .equals("eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu")));
+  }
+
+  @Test
+  void appliesFullCitationFromWorkMetadata() throws ObjectStoreServiceException {
+    String workEli = "eli/bund/bgbl-1/1992/s101";
+    String validEli = workEli + "/1992-01-01/1/deu/1992-01-02/regelungstext-1.xml";
+    when(this.bucket.getAllKeysByPrefix("eli/")).thenReturn(List.of(validEli));
+    when(this.bucket.getFileAsString(validEli))
+        .thenReturn(Optional.of(NormTestDataBuilder.builder().eli(validEli).buildNormXml()));
+    when(this.bucket.getFileAsString(workEli + "/metadaten.xml"))
+        .thenReturn(
+            Optional.of(NormWorkMetadataTestDataBuilder.buildMetadatenXml("Verordnung Test")));
+
+    this.service.reindexAll("2024-01-01T12:00:00Z");
+
+    verify(repo)
+        .saveAll(argThat(arg -> arg.iterator().next().getFullCitation().equals("Verordnung Test")));
+  }
+
+  @Test
+  void leavesFullCitationNullWhenWorkMetadataMissing() throws ObjectStoreServiceException {
+    String workEli = "eli/bund/bgbl-1/1992/s101";
+    String validEli = workEli + "/1992-01-01/1/deu/1992-01-02/regelungstext-1.xml";
+    when(this.bucket.getAllKeysByPrefix("eli/")).thenReturn(List.of(validEli));
+    when(this.bucket.getFileAsString(validEli))
+        .thenReturn(Optional.of(NormTestDataBuilder.builder().eli(validEli).buildNormXml()));
+
+    this.service.reindexAll("2024-01-01T12:00:00Z");
+
+    verify(repo).saveAll(argThat(arg -> arg.iterator().next().getFullCitation() == null));
+  }
+
+  @Test
+  void continuesIndexingWhenWorkMetadataFetchFails() throws ObjectStoreServiceException {
+    String workEli = "eli/bund/bgbl-1/1992/s101";
+    String validEli = workEli + "/1992-01-01/1/deu/1992-01-02/regelungstext-1.xml";
+    when(this.bucket.getAllKeysByPrefix("eli/")).thenReturn(List.of(validEli));
+    when(this.bucket.getFileAsString(validEli))
+        .thenReturn(Optional.of(NormTestDataBuilder.builder().eli(validEli).buildNormXml()));
+    when(this.bucket.getFileAsString(workEli + "/metadaten.xml"))
+        .thenThrow(new ObjectStoreServiceException("File not present."));
+
+    this.service.reindexAll("2024-01-01T12:00:00Z");
+
+    verify(repo, times(1)).saveAll(any());
+    verify(repo).saveAll(argThat(arg -> arg.iterator().next().getFullCitation() == null));
   }
 
   @Test

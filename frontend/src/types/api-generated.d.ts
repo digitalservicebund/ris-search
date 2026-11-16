@@ -1864,6 +1864,11 @@ export interface components {
             /** @example /v1/legislation/eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu */
             "@id": string;
             /**
+             * @description Vollzitat
+             * @example Kakaoerzeugnisse von 1. Dezember 2000 (BGBl. 1111)
+             */
+            fullCitation?: string | null;
+            /**
              * @description Amtliche Langüberschrift
              * @example Verordnung über Kakao und Kakaoerzeugnisse
              */

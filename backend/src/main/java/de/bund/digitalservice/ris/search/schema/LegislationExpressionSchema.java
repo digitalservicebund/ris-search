@@ -41,6 +41,12 @@ public record LegislationExpressionSchema(
             example = ApiConfig.Paths.LEGISLATION + "/eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu",
             requiredMode = Schema.RequiredMode.REQUIRED)
         String id,
+    @Nullable
+        @Schema(
+            example = "Kakaoerzeugnisse von 1. Dezember 2000 (BGBl. 1111)",
+            description = "Vollzitat",
+            nullable = true)
+        String fullCitation,
     @Schema(
             example = "Verordnung über Kakao und Kakaoerzeugnisse",
             description = "Amtliche Langüberschrift",

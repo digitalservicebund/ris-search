@@ -267,17 +267,6 @@ public class NormTestDataBuilder {
   }
 
   /**
-   * Sets the norm's full citation ({@code ris:vollzitat}).
-   *
-   * @param citation the full citation text
-   * @return this builder for chaining
-   */
-  public NormTestDataBuilder fullCitation(String citation) {
-    this.document.getAct().getMeta().getProprietary().getRisMetadata().setFullCitation(citation);
-    return this;
-  }
-
-  /**
    * Adds a ris metadata ({@code ris:bedingtesInkrafttreten}) element.
    *
    * @return this builder for chaining
