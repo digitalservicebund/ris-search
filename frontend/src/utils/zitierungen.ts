@@ -1,4 +1,3 @@
-import type { RouteLocationRaw } from "#vue-router";
 import type {
   Rechtsprechung,
   ZitierungLiteraturSelbststaendig,
@@ -6,28 +5,16 @@ import type {
   ZitierungRechtsprechung,
 } from "~/types/api";
 import { dateFormattedLongGerman } from "~/utils/dateFormatting";
-import { isStringEmpty } from "~/utils/textFormatting";
-
-export type ZitierungLink = {
-  text: string;
-  to?: RouteLocationRaw;
-};
+import { type DocumentLink, toDocumentLink } from "~/utils/documentLink";
+import { isNotBlank, joinNonBlank } from "~/utils/textFormatting";
 
 export type Zitierungen = {
-  aktivRechtsprechung: ZitierungLink[];
-  passivRechtsprechung: ZitierungLink[];
-  passivLiteratur: ZitierungLink[];
+  aktivRechtsprechung: DocumentLink[];
+  passivRechtsprechung: DocumentLink[];
+  passivLiteratur: DocumentLink[];
 };
 
-type Zitierung = { richtung?: "aktiv" | "passiv"; dokumentnummer?: string };
-
-function isNotBlank(value: string | null | undefined): value is string {
-  return !isStringEmpty(value);
-}
-
-function joinNonBlank(parts: (string | undefined)[], separator: string) {
-  return parts.filter(isNotBlank).join(separator);
-}
+type Zitierung = Pick<ZitierungRechtsprechung, "richtung" | "dokumentnummer">;
 
 /**
  * Formats a cited court decision, e.g. "Parallelentscheidung BVerwG Leipzig, 27.
@@ -86,50 +73,16 @@ export function formatZitierungLiteraturSelbststaendig(
   return joinNonBlank([autor, werk], "; ") || undefined;
 }
 
-function toZitierungLink(
-  zitierung: Zitierung,
-  text: string | undefined,
+function toLinks<T extends Zitierung>(
+  zitierungen: T[],
+  format: (zitierung: T) => string | undefined,
   basePath: string,
   from?: string,
-): ZitierungLink | undefined {
-  if (!text) return undefined;
-  if (!zitierung.dokumentnummer) return { text };
-
-  return {
-    text,
-    to: { path: `${basePath}/${zitierung.dokumentnummer}`, query: { from } },
-  };
-}
-
-function toRechtsprechungLinks(
-  zitierungen: ZitierungRechtsprechung[],
-  from?: string,
-): ZitierungLink[] {
+): DocumentLink[] {
   return zitierungen.flatMap((zitierung) => {
-    const text = formatZitierungRechtsprechung(zitierung);
-    return (
-      toZitierungLink(zitierung, text, "/gerichtsentscheidungen", from) ?? []
-    );
-  });
-}
-
-function toLiteraturSelbststaendigLinks(
-  zitierungen: ZitierungLiteraturSelbststaendig[],
-  from?: string,
-): ZitierungLink[] {
-  return zitierungen.flatMap((zitierung) => {
-    const text = formatZitierungLiteraturSelbststaendig(zitierung);
-    return toZitierungLink(zitierung, text, "/literaturnachweise", from) ?? [];
-  });
-}
-
-function toLiteraturUnselbststaendigLinks(
-  zitierungen: ZitierungLiteraturUnselbststaendig[],
-  from?: string,
-): ZitierungLink[] {
-  return zitierungen.flatMap((zitierung) => {
-    const text = formatZitierungLiteraturUnselbststaendig(zitierung);
-    return toZitierungLink(zitierung, text, "/literaturnachweise", from) ?? [];
+    const text = format(zitierung);
+    const link = toDocumentLink(text, basePath, zitierung.dokumentnummer, from);
+    return link ?? [];
   });
 }
 
@@ -159,18 +112,29 @@ export function getZitierungen(
     rechtsprechung.zitierungenLiteraturUnselbststaendig ?? [];
 
   const zitierungen: Zitierungen = {
-    aktivRechtsprechung: toRechtsprechungLinks(
+    aktivRechtsprechung: toLinks(
       rechtsprechungen.filter(isAktiv),
+      formatZitierungRechtsprechung,
+      "/gerichtsentscheidungen",
       from,
     ),
-    passivRechtsprechung: toRechtsprechungLinks(
+    passivRechtsprechung: toLinks(
       rechtsprechungen.filter(isPassiv),
+      formatZitierungRechtsprechung,
+      "/gerichtsentscheidungen",
       from,
     ),
     passivLiteratur: [
-      ...toLiteraturSelbststaendigLinks(selbststaendig.filter(isPassiv), from),
-      ...toLiteraturUnselbststaendigLinks(
+      ...toLinks(
+        selbststaendig.filter(isPassiv),
+        formatZitierungLiteraturSelbststaendig,
+        "/literaturnachweise",
+        from,
+      ),
+      ...toLinks(
         unselbststaendig.filter(isPassiv),
+        formatZitierungLiteraturUnselbststaendig,
+        "/literaturnachweise",
         from,
       ),
     ],

@@ -124,3 +124,26 @@ export function getSingularOrPlural(
   if ((count ?? 0) > 1) return plural;
   return singular;
 }
+
+/**
+ * Type guard that is true if the value is a string with at least one
+ * non-whitespace character.
+ *
+ * @param value
+ */
+export function isNotBlank(value: string | undefined | null): value is string {
+  return !isStringEmpty(value);
+}
+
+/**
+ * Joins the parts with the separator and leaves out blank parts.
+ *
+ * @param parts
+ * @param separator
+ */
+export function joinNonBlank(
+  parts: (string | undefined | null)[],
+  separator: string,
+): string {
+  return parts.filter(isNotBlank).join(separator);
+}

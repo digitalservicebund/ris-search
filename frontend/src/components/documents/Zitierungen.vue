@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import type { ZitierungLink, Zitierungen } from "~/utils/zitierungen";
+import type { DocumentLink } from "~/utils/documentLink";
+import type { Zitierungen } from "~/utils/zitierungen";
 
 const { zitierungen } = defineProps<{ zitierungen: Zitierungen }>();
 
-type Group = { heading: string; links: ZitierungLink[] };
+type Group = { heading: string; links: DocumentLink[] };
 type Section = { heading: string; groups: Group[] };
 
 function hasLinks(group: Group): boolean {
@@ -53,7 +54,7 @@ const sections = computed<Section[]>(() => {
           <ul class="flex flex-col gap-8">
             <li
               v-for="(link, index) in group.links"
-              :key="index"
+              :key="`${index}-${link.text}`"
               class="typo-label1-regular wrap-break-word"
             >
               <NuxtLink
