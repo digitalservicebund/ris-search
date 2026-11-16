@@ -246,8 +246,10 @@ class RechtsprechungControllerIntegrationTest extends ContainersIntegrationBase 
             jsonPath("$.zitierungenRechtsprechung[0].aktenzeichen").value("Vf. 94-VI-81"),
             jsonPath("$.zitierungenLiteraturUnselbststaendig[1].autor").value("Knopp, Lothar"),
             jsonPath("$.zitierungenLiteraturUnselbststaendig[1].dokumenttyp").value("Aufsatz"),
-            jsonPath("$.zitierungenLiteraturUnselbststaendig[1].fundstelle.periodikum")
+            jsonPath("$.zitierungenLiteraturUnselbststaendig[1].fundstelle.periodikum.abkuerzung")
                 .value("NVwZ"),
+            jsonPath("$.zitierungenLiteraturUnselbststaendig[1].fundstelle.periodikum.titel")
+                .value("Neue Zeitschrift für Verwaltungsrecht"),
             jsonPath("$.zitierungenLiteraturUnselbststaendig[1].fundstelle.zitatstelle")
                 .value("2016, 1139-1141"),
             jsonPath("$.zitierungenLiteraturSelbststaendig[0].autor").value("Arnauld, Andreas von"),
@@ -258,7 +260,7 @@ class RechtsprechungControllerIntegrationTest extends ContainersIntegrationBase 
             jsonPath("$.zitierungenVerwaltungsvorschriften[1].artDerZitierung").value("Anwendung"),
             jsonPath("$.zitierungenVerwaltungsvorschriften[1].jurisAbkuerzung")
                 .value("VR BA 1986-01-16 16/86"),
-            jsonPath("$.zitierungenVerwaltungsvorschriften[1].fundstelle.periodikum")
+            jsonPath("$.zitierungenVerwaltungsvorschriften[1].fundstelle.periodikum.abkuerzung")
                 .value("Dienstbl BA RdErl"));
   }
 

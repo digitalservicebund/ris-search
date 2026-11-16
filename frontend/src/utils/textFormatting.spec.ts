@@ -8,6 +8,8 @@ import {
   removePrefix,
   formatArray,
   formatNames,
+  isNotBlank,
+  joinNonBlank,
 } from "./textFormatting";
 
 describe("getStringOrDefault", () => {
@@ -220,5 +222,31 @@ describe("getSingularOrPlural", () => {
 
   it.each([2, 10])("returns plural for count '%n' larger 1", (count) => {
     expect(getSingularOrPlural("singular", "plural", count)).toBe("plural");
+  });
+});
+
+describe("isNotBlank", () => {
+  it.each(["a", " a "])("returns true for %j", (value) => {
+    expect(isNotBlank(value)).toBe(true);
+  });
+
+  it.each(["", "  ", undefined, null])("returns false for %j", (value) => {
+    expect(isNotBlank(value)).toBe(false);
+  });
+});
+
+describe("joinNonBlank", () => {
+  it("joins the parts with the separator", () => {
+    expect(joinNonBlank(["a", "b"], ", ")).toBe("a, b");
+  });
+
+  it("leaves out blank parts", () => {
+    expect(joinNonBlank(["a", "", " ", undefined, null, "b"], ", ")).toBe(
+      "a, b",
+    );
+  });
+
+  it("returns an empty string if all parts are blank", () => {
+    expect(joinNonBlank([undefined, ""], ", ")).toBe("");
   });
 });

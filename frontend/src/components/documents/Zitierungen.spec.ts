@@ -1,14 +1,22 @@
-import { render, screen } from "@testing-library/vue";
+import { renderSuspended } from "@nuxt/test-utils/runtime";
+import { screen } from "@testing-library/vue";
+import type { Zitierungen as ZitierungenData } from "~/utils/zitierungen";
 import Zitierungen from "./Zitierungen.vue";
 
+const emptyZitierungen: ZitierungenData = {
+  aktivRechtsprechung: [],
+  passivRechtsprechung: [],
+  passivLiteratur: [],
+};
+
 describe("Zitierungen", () => {
-  it("renders passiv and aktiv zitierungen with their headings", () => {
-    render(Zitierungen, {
+  it("renders passiv and aktiv zitierungen with their headings", async () => {
+    await renderSuspended(Zitierungen, {
       props: {
         zitierungen: {
-          passivRechtsprechung: "<ul><li>BGH, 1 ZR 1/24</li></ul>",
-          passivLiteratur: "<ul><li>Müller, NJW 2024, 1</li></ul>",
-          aktivRechtsprechung: "<ul><li>BVerfG, 1 BvR 1/24</li></ul>",
+          passivRechtsprechung: [{ text: "BGH — 1 ZR 1/24" }],
+          passivLiteratur: [{ text: "Müller; NJW 2024, 1" }],
+          aktivRechtsprechung: [{ text: "BVerfG — 1 BvR 1/24" }],
         },
       },
     });
@@ -35,15 +43,35 @@ describe("Zitierungen", () => {
       screen.getByRole("heading", { level: 4, name: "Literaturnachweise" }),
     ).toBeInTheDocument();
     expect(
-      screen.getAllByRole("listitem").map((item) => item.textContent),
-    ).toEqual(["BGH, 1 ZR 1/24", "Müller, NJW 2024, 1", "BVerfG, 1 BvR 1/24"]);
+      screen.getAllByRole("listitem").map((item) => item.textContent?.trim()),
+    ).toEqual([
+      "BGH — 1 ZR 1/24",
+      "Müller; NJW 2024, 1",
+      "BVerfG — 1 BvR 1/24",
+    ]);
   });
 
-  it("renders only the aktiv section when there are no passiv zitierungen", () => {
-    render(Zitierungen, {
+  it("renders all entries of a list in order", async () => {
+    await renderSuspended(Zitierungen, {
       props: {
         zitierungen: {
-          aktivRechtsprechung: "<ul><li>BVerfG, 1 BvR 1/24</li></ul>",
+          ...emptyZitierungen,
+          passivLiteratur: [{ text: "Erste" }, { text: "Zweite" }],
+        },
+      },
+    });
+
+    expect(
+      screen.getAllByRole("listitem").map((item) => item.textContent?.trim()),
+    ).toEqual(["Erste", "Zweite"]);
+  });
+
+  it("renders only the aktiv section when there are no passiv zitierungen", async () => {
+    await renderSuspended(Zitierungen, {
+      props: {
+        zitierungen: {
+          ...emptyZitierungen,
+          aktivRechtsprechung: [{ text: "BVerfG — 1 BvR 1/24" }],
         },
       },
     });
@@ -60,15 +88,16 @@ describe("Zitierungen", () => {
       }),
     ).not.toBeInTheDocument();
     expect(screen.getByRole("listitem")).toHaveTextContent(
-      "BVerfG, 1 BvR 1/24",
+      "BVerfG — 1 BvR 1/24",
     );
   });
 
-  it("renders only the passiv section when there are no aktiv zitierungen", () => {
-    render(Zitierungen, {
+  it("renders only the passiv section when there are no aktiv zitierungen", async () => {
+    await renderSuspended(Zitierungen, {
       props: {
         zitierungen: {
-          passivRechtsprechung: "<ul><li>BGH, 1 ZR 1/24</li></ul>",
+          ...emptyZitierungen,
+          passivRechtsprechung: [{ text: "BGH — 1 ZR 1/24" }],
         },
       },
     });
@@ -87,11 +116,12 @@ describe("Zitierungen", () => {
     ).not.toBeInTheDocument();
   });
 
-  it("renders passiv Literatur without a Gerichtsentscheidungen subheading", () => {
-    render(Zitierungen, {
+  it("renders passiv Literatur without a Gerichtsentscheidungen subheading", async () => {
+    await renderSuspended(Zitierungen, {
       props: {
         zitierungen: {
-          passivLiteratur: "<ul><li>Müller, NJW 2024, 1</li></ul>",
+          ...emptyZitierungen,
+          passivLiteratur: [{ text: "Müller; NJW 2024, 1" }],
         },
       },
     });
@@ -110,18 +140,26 @@ describe("Zitierungen", () => {
     ).not.toBeInTheDocument();
   });
 
-  it("renders links contained in the zitierungen", () => {
-    render(Zitierungen, {
+  it("renders zitierungen with a target as links and others as text", async () => {
+    await renderSuspended(Zitierungen, {
       props: {
         zitierungen: {
-          aktivRechtsprechung:
-            '<ul><li><a href="/gerichtsentscheidungen/KORE1">BVerfG, 1 BvR 1/24</a></li></ul>',
+          ...emptyZitierungen,
+          aktivRechtsprechung: [
+            {
+              text: "BVerfG — 1 BvR 1/24",
+              to: { path: "/gerichtsentscheidungen/KORE1" },
+            },
+            { text: "BGH — 1 ZR 1/24" },
+          ],
         },
       },
     });
 
     expect(
-      screen.getByRole("link", { name: "BVerfG, 1 BvR 1/24" }),
-    ).toBeInTheDocument();
+      screen.getByRole("link", { name: "BVerfG — 1 BvR 1/24" }),
+    ).toHaveAttribute("href", "/gerichtsentscheidungen/KORE1");
+    expect(screen.getAllByRole("link")).toHaveLength(1);
+    expect(screen.getByText("BGH — 1 ZR 1/24")).toBeInTheDocument();
   });
 });
