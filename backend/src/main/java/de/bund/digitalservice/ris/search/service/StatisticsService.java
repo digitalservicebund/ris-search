@@ -61,19 +61,17 @@ public class StatisticsService {
 
     try {
       List<String> aliases = fetchAliases();
-      Map<String, Long> counts = new HashMap<>();
-
-      for (String alias : aliases) {
-        if (indexNames.contains(alias)) {
-          counts.put(alias, fetchCountWithLogging(alias));
-        }
-      }
 
       List<String> missingAliases =
-          indexNames.stream().filter(name -> !counts.containsKey(name)).toList();
+          indexNames.stream().filter(name -> !aliases.contains(name)).toList();
       if (!missingAliases.isEmpty()) {
         throw new OpenSearchFetchException(
             "Missing index aliases in Opensearch: " + missingAliases);
+      }
+
+      Map<String, Long> counts = new HashMap<>();
+      for (String indexName : indexNames) {
+        counts.put(indexName, fetchCountWithLogging(indexName));
       }
 
       return counts;
