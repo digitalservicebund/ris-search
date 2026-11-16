@@ -71,6 +71,26 @@ describe("DetailsList", () => {
       expect(definitions[0]).toHaveTextContent("BGB § 1");
       expect(definitions[1]).toHaveTextContent("BGB § 2");
     });
+
+    it("renders values with a target as links", () => {
+      renderComponent([
+        {
+          type: "list",
+          label: "Vorgehende Entscheidungen:",
+          values: [
+            { text: "VG Berlin - 1 K 23/19", to: "/gerichtsentscheidungen/1" },
+            { text: "VG Hamburg - 2 K 5/18" },
+            "OVG Bremen - 3 B 12/22",
+          ],
+        },
+      ]);
+      expect(screen.getAllByRole("definition")).toHaveLength(3);
+      expect(screen.getByRole("link")).toHaveTextContent(
+        "VG Berlin - 1 K 23/19",
+      );
+      expect(screen.getByText("VG Hamburg - 2 K 5/18")).toBeInTheDocument();
+      expect(screen.getByText("OVG Bremen - 3 B 12/22")).toBeInTheDocument();
+    });
   });
 
   describe("badge entries", () => {

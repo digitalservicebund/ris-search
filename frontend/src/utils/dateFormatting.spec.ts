@@ -2,6 +2,7 @@ import dayjs from "dayjs";
 import { describe, vi } from "vitest";
 import {
   dateFormattedDDMMYYYY,
+  dateFormattedLongGerman,
   getCurrentDateInGermanyFormatted,
 } from "./dateFormatting";
 
@@ -36,5 +37,25 @@ describe("dateFormattedDDMMYYYY", () => {
 
   it("returns formatted date if input is dayjs object", () => {
     expect(dateFormattedDDMMYYYY(dayjs("2042-04-02"))).toBe("02.04.2042");
+  });
+});
+
+describe("dateFormattedLongGerman", () => {
+  it("returns undefined if input is undefined", () => {
+    expect(dateFormattedLongGerman()).toBeUndefined();
+  });
+
+  it("returns undefined if input not a valid date", () => {
+    expect(dateFormattedLongGerman("foo")).toBeUndefined();
+  });
+
+  it("returns formatted date if input is valid date string", () => {
+    expect(dateFormattedLongGerman("2042-03-02")).toBe("2. März 2042");
+  });
+
+  it("returns formatted date if input is dayjs object", () => {
+    expect(dateFormattedLongGerman(dayjs("2042-12-31"))).toBe(
+      "31. Dezember 2042",
+    );
   });
 });

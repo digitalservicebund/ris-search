@@ -1,7 +1,10 @@
 package de.bund.digitalservice.ris.search.mapper;
 
+import static de.bund.digitalservice.ris.search.utils.MappingUtils.mapList;
+
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
+import de.bund.digitalservice.ris.search.models.opensearch.CaseLawUnindexed;
 import de.bund.digitalservice.ris.search.schema.RechtsprechungSchema;
 
 /** Maps Rechtsprechung (case law document) objects to API schema models. */
@@ -20,6 +23,8 @@ public class RechtsprechungSchemaMapper {
       CaseLawDocumentationUnit doc, String remoteJsonContext) {
     String entityURI = ApiConfig.Paths.RECHTSPRECHUNG + "/" + doc.documentNumber();
     var encodings = EncodingSchemaFactory.documentEncodingSchemas(entityURI);
+    CaseLawUnindexed unindexed =
+        doc.unindexed() != null ? doc.unindexed() : CaseLawUnindexed.builder().build();
 
     return RechtsprechungSchema.builder()
         .id(entityURI)
@@ -64,16 +69,28 @@ public class RechtsprechungSchemaMapper {
         .tarifvertraege(doc.tarifvertraege())
         .kuendigungsgruende(doc.kuendigungsgruende())
         .mitwirkendeRichter(doc.mitwirkendeRichter())
-        .vorgehendeEntscheidungen(doc.previousDecisions())
-        .nachgehendeEntscheidungen(doc.ensuingDecisions())
-        .aktivzitierungLiteraturUnselbstaendig(doc.aktivzitierungLiteraturUnselbstaendig())
-        .passivzitierungLiteraturUnselbstaendig(doc.passivzitierungLiteraturUnselbstaendig())
-        .aktivzitierungLiteraturSelbstaendig(doc.aktivzitierungLiteraturSelbstaendig())
-        .passivzitierungLiteraturSelbstaendig(doc.passivzitierungLiteraturSelbstaendig())
-        .aktivzitierungRechtsprechung(doc.aktivzitierungRechtsprechung())
-        .passivzitierungRechtsprechung(doc.passivzitierungRechtsprechung())
-        .aktivzitierungVerwaltungsvorschriften(doc.aktivzitierungVerwaltungsvorschriften())
-        .passivzitierungVerwaltungsvorschriften(doc.passivzitierungVerwaltungsvorschriften())
+        .vorgehendeEntscheidungen(
+            mapList(
+                unindexed.vorgehendeEntscheidungen(),
+                VerknuepfteEntscheidungenSchemaMapper::fromDomain))
+        .nachgehendeEntscheidungen(
+            mapList(
+                unindexed.nachgehendeEntscheidungen(),
+                VerknuepfteEntscheidungenSchemaMapper::fromDomain))
+        .zitierungenLiteraturSelbststaendig(
+            mapList(
+                unindexed.zitierungenLiteraturSelbststaendig(),
+                ZitierungenSchemaMapper::fromDomain))
+        .zitierungenLiteraturUnselbststaendig(
+            mapList(
+                unindexed.zitierungenLiteraturUnselbststaendig(),
+                ZitierungenSchemaMapper::fromDomain))
+        .zitierungenRechtsprechung(
+            mapList(unindexed.zitierungenRechtsprechung(), ZitierungenSchemaMapper::fromDomain))
+        .zitierungenVerwaltungsvorschriften(
+            mapList(
+                unindexed.zitierungenVerwaltungsvorschriften(),
+                ZitierungenSchemaMapper::fromDomain))
         .amtlicheFundstellen(doc.amtlicheFundstellen())
         .nichtamtlicheFundstellen(doc.nichtamtlicheFundstellen())
         .gesetzeskraft(doc.gesetzeskraft())

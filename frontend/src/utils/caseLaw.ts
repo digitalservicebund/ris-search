@@ -1,4 +1,14 @@
-import { formatArray, truncateAtWord } from "~/utils/textFormatting";
+import type { RouteLocationRaw } from "#vue-router";
+import type {
+  NachgehendeEntscheidung,
+  VorgehendeEntscheidung,
+} from "~/types/api";
+import { dateFormattedLongGerman } from "~/utils/dateFormatting";
+import {
+  formatArray,
+  isStringEmpty,
+  truncateAtWord,
+} from "~/utils/textFormatting";
 
 export type SecondaryTitleInput = {
   decisionNames: string[];
@@ -15,4 +25,60 @@ export function getCaselawSecondaryTitle(
 
   if (!title) return undefined;
   return truncate ? truncateAtWord(title, 90, true) : title;
+}
+
+export type VerknuepfteEntscheidungLink = {
+  text: string;
+  to?: RouteLocationRaw;
+};
+
+function isNotBlank(value: string | null | undefined): value is string {
+  return !isStringEmpty(value);
+}
+
+export function formatVerknuepfteEntscheidung(
+  entscheidung: VorgehendeEntscheidung | NachgehendeEntscheidung,
+): string | undefined {
+  const { gericht, dokumenttyp, entscheidungsdatum, aktenzeichen } =
+    entscheidung;
+
+  const gerichtFormatted = [gericht?.gerichtstyp, gericht?.gerichtsort]
+    .filter(isNotBlank)
+    .join(" ");
+  const datumFormatted = dateFormattedLongGerman(entscheidungsdatum);
+
+  let result = [gerichtFormatted, dokumenttyp].filter(isNotBlank).join(", ");
+
+  if (datumFormatted) {
+    result += `${result ? " " : ""}vom ${datumFormatted}`;
+  }
+
+  if (isNotBlank(aktenzeichen)) {
+    result += `${result ? " - " : ""}${aktenzeichen}`;
+  }
+
+  if (!result) return undefined;
+
+  const isAnhaengig =
+    "art" in entscheidung && entscheidung.art?.toLowerCase() === "anhängig";
+  return isAnhaengig ? `${result} (anhängig)` : result;
+}
+
+export function toVerknuepfteEntscheidungLink(
+  entscheidung: VorgehendeEntscheidung | NachgehendeEntscheidung,
+  from?: string,
+): VerknuepfteEntscheidungLink | undefined {
+  const text = formatVerknuepfteEntscheidung(entscheidung);
+  if (!text) return undefined;
+
+  const { dokumentnummer } = entscheidung;
+  if (!dokumentnummer) return { text };
+
+  return {
+    text,
+    to: {
+      path: `/gerichtsentscheidungen/${dokumentnummer}`,
+      query: { from },
+    },
+  };
 }

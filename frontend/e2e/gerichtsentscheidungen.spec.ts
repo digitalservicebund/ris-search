@@ -380,34 +380,50 @@ test.describe(
 
 test(
   "can view Gesetzeskraft, Streitjahre and linked decisions",
-  { tag: ["@RISDEV-12471"] },
+  { tag: ["@RISDEV-12471", "@RISDEV-13114"] },
   async ({ page }) => {
     await navigate(page, "/gerichtsentscheidungen/BDRE000800001");
     await page.getByRole("tab", { name: "Details" }).click();
     const detailsList = page.getByTestId("details-list");
 
-    await expect(
-      detailsList.getByRole("term").or(detailsList.getByRole("definition")),
-    ).toHaveText([
-      "Spruchkörper:",
-      "16. Kammer",
-      "Gesetzeskraft:",
-      "vereinbar mit höherrangigem Recht, Hessen",
-      "Streitjahre:",
-      "2024",
-      "2025",
-      "Vorgehende Entscheidungen:",
-      "VG Frankfurt, Beschluss vom 12. November 2024 - XVI VL 34/99",
-      "AG Wiesbaden, Urteil vom 20. Mai 2023 - XVI VL 12/97",
-      "VG Frankfurt, Beschluss vom 4. September 2026 - Foo Bar 2361/26.F",
-      "Nachgehende Entscheidungen:",
-      "OVG Münster, Beschluss vom 1. Juni 2025 - XVI VL 34/99 (anhängig)",
-      "BVerwG Leipzig, Urteil vom 15. September 2025 - XVI VL 34/99",
-      "OVG Berlin, Beschluss vom 3. November 2025 - XVI VL 34/99",
-      "BVerwG Leipzig, Revision vom 18. Februar 2026 - XVI VL 34/99 (anhängig)",
-      "Download:",
-      "Diese Gerichtsentscheidung als ZIP herunterladen",
-    ]);
+    await test.step("shows all details", async () => {
+      await expect(
+        detailsList.getByRole("term").or(detailsList.getByRole("definition")),
+      ).toHaveText([
+        "Spruchkörper:",
+        "16. Kammer",
+        "Gesetzeskraft:",
+        "vereinbar mit höherrangigem Recht, Hessen",
+        "Streitjahre:",
+        "2024",
+        "2025",
+        "Vorgehende Entscheidungen:",
+        "VG Frankfurt, Beschluss vom 12. November 2024 - XVI VL 34/99",
+        "AG Wiesbaden, Urteil vom 20. Mai 2023 - XVI VL 12/97",
+        "VG Frankfurt, Beschluss vom 4. September 2026 - Foo Bar 2361/26.F",
+        "Nachgehende Entscheidungen:",
+        "OVG Münster, Beschluss vom 1. Juni 2025 - XVI VL 34/99 (anhängig)",
+        "BVerwG Leipzig, Urteil vom 15. September 2025 - XVI VL 34/99",
+        "OVG Berlin, Beschluss vom 3. November 2025 - XVI VL 34/99",
+        "BVerwG Leipzig, Revision vom 18. Februar 2026 - XVI VL 34/99 (anhängig)",
+        "Download:",
+        "Diese Gerichtsentscheidung als ZIP herunterladen",
+      ]);
+    });
+
+    await test.step("follows the link to a linked decision", async () => {
+      const linkedDecision = detailsList.getByRole("link", {
+        name: "VG Frankfurt, Beschluss vom 4. September 2026 - Foo Bar 2361/26.F",
+      });
+      await expect(linkedDecision).toBeVisible();
+      await linkedDecision.click();
+
+      await expect(
+        page
+          .getByRole("main")
+          .getByRole("heading", { level: 1, name: "Testheader für Urteil 8." }),
+      ).toBeVisible();
+    });
   },
 );
 

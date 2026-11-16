@@ -30,7 +30,7 @@ This guide will help you set up your environment and make your first request. Ou
 The following example shows how to retrieve a single case law document from our API using Curl:
 
 ```bash [cURL]
-curl -G https://testphase.rechtsinformationen.bund.de/v1/case-law/KVRE461542501
+curl -G https://testphase.rechtsinformationen.bund.de/v1/rechtsprechung/KVRE461542501
 ```
 
 You can discover more endpoints with examples in [Swagger](https://docs.rechtsinformationen.bund.de/swagger-ui/index.html).

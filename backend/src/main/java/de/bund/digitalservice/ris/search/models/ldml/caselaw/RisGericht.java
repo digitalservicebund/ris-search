@@ -49,6 +49,9 @@ public class RisGericht {
   @XmlElement(name = "spruchkoerper", namespace = CaseLawLdmlNamespaces.RIS_NS)
   private Spruchkoerper spruchkoerper;
 
+  @XmlElement(name = "sitzDerAussenstelle", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  private String sitzDerAussenstelle;
+
   /**
    * Safely retrieves the value of the Spruchkoerper if it exists.
    *

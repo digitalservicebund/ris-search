@@ -3,6 +3,7 @@ package de.bund.digitalservice.ris.search.controller.api;
 import static de.bund.digitalservice.ris.ZipTestUtils.readZipStream;
 import static de.bund.digitalservice.ris.utils.JsonldResultMatchers.isJsonLdCompliant;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.startsWithIgnoringCase;
@@ -155,32 +156,38 @@ class RechtsprechungControllerIntegrationTest extends ContainersIntegrationBase 
             jsonPath("$.kuendigungsgruende[0]").value("Straftat"),
             jsonPath("$.mitwirkendeRichter[0]").value("Meier"),
             jsonPath("$.mitwirkendeRichter[1]").value("Müller"),
-            jsonPath("$.vorgehendeEntscheidungen[0]")
+            jsonPath("$.vorgehendeEntscheidungen[*].dokumentnummer")
                 .value(
-                    "previous decision court type previous decision court location, previous"
-                        + " decision document type vom 1. Januar 2020 - previous decision file"
-                        + " number"),
-            jsonPath("$.vorgehendeEntscheidungen[1]")
+                    contains(
+                        "previous decision document number 1",
+                        "previous decision document number 2")),
+            jsonPath("$.nachgehendeEntscheidungen[*].dokumentnummer")
                 .value(
-                    "previous decision court type previous decision court location, previous"
-                        + " decision document type vom 1. Januar 2020 - previous decision file"
-                        + " number"),
-            jsonPath("$.nachgehendeEntscheidungen[0]")
-                .value(
-                    "ensuing decision court type, ensuing decision document type vom 1. Oktober"
-                        + " 2022 - ensuing decision file number (anhängig)"),
-            jsonPath("$.nachgehendeEntscheidungen[1]")
-                .value(
-                    "ensuing decision court type, ensuing decision document type vom 1. Oktober"
-                        + " 2022 - ensuing decision file number (anhängig)"),
-            jsonPath("$.aktivzitierungLiteraturUnselbstaendig[0]").value("STLU991393280"),
-            jsonPath("$.passivzitierungLiteraturUnselbstaendig[0]").value("SBLU000539216"),
-            jsonPath("$.aktivzitierungLiteraturSelbstaendig[0]").value("KSLS071671727"),
-            jsonPath("$.passivzitierungLiteraturSelbstaendig[0]").value("KSLS071671728"),
-            jsonPath("$.aktivzitierungRechtsprechung[0]").value("BVRE100338409"),
-            jsonPath("$.passivzitierungRechtsprechung[0]").value("JURE100074208"),
-            jsonPath("$.aktivzitierungVerwaltungsvorschriften[0]").value("KSNR008561615"),
-            jsonPath("$.passivzitierungVerwaltungsvorschriften[0]").value("KSNR006800006"),
+                    contains(
+                        "ensuing decision document number 1",
+                        "ensuing decision document number 2")),
+            jsonPath(
+                    "$.zitierungenLiteraturUnselbststaendig[?(@.richtung == 'aktiv')].dokumentnummer")
+                .value(contains("STLU991393280")),
+            jsonPath(
+                    "$.zitierungenLiteraturUnselbststaendig[?(@.richtung == 'passiv')].dokumentnummer")
+                .value(contains("SBLU000539216")),
+            jsonPath(
+                    "$.zitierungenLiteraturSelbststaendig[?(@.richtung == 'aktiv')].dokumentnummer")
+                .value(contains("KSLS071671727")),
+            jsonPath(
+                    "$.zitierungenLiteraturSelbststaendig[?(@.richtung == 'passiv')].dokumentnummer")
+                .value(contains("KSLS071671728")),
+            jsonPath("$.zitierungenRechtsprechung[?(@.richtung == 'aktiv')].dokumentnummer")
+                .value(contains("BVRE100338409")),
+            jsonPath("$.zitierungenRechtsprechung[?(@.richtung == 'passiv')].dokumentnummer")
+                .value(contains("JURE100074208")),
+            jsonPath(
+                    "$.zitierungenVerwaltungsvorschriften[?(@.richtung == 'aktiv')].dokumentnummer")
+                .value(contains("KSNR008561615")),
+            jsonPath(
+                    "$.zitierungenVerwaltungsvorschriften[?(@.richtung == 'passiv')].dokumentnummer")
+                .value(contains("KSNR006800006")),
             jsonPath("$.amtlicheFundstellen[0]").value("BGHSt 67, 273-284"),
             jsonPath("$.nichtamtlicheFundstellen[0]").value("DStR 2023, 1430-1435"),
             jsonPath("$.gesetzeskraft[0]").value("vereinbar mit höherrangigem Recht, Bremen"),
@@ -214,6 +221,84 @@ class RechtsprechungControllerIntegrationTest extends ContainersIntegrationBase 
                     "/v1/rechtsprechung/" + this.documentNumber + ".html",
                     "/v1/rechtsprechung/" + this.documentNumber + ".xml",
                     "/v1/rechtsprechung/" + this.documentNumber + ".zip")));
+  }
+
+  @Test
+  @DisplayName("Should return Zitierungen as objects with all their fields")
+  void shouldReturnZitierungenAsObjects() throws Exception {
+    indexCaselawService.reindexAll(SharedTestConstants.TIMESTAMP_2024_01_01_AS_STRING);
+
+    mockMvc
+        .perform(
+            get(ApiConfig.Paths.RECHTSPRECHUNG + "/" + this.documentNumber)
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(isJsonLdCompliant())
+        .andExpectAll(
+            status().isOk(),
+            jsonPath("$.zitierungenRechtsprechung[0].referenzUri")
+                .value("ris:/rechtsprechung/BVRE100338409"),
+            jsonPath("$.zitierungenRechtsprechung[0].artDerZitierung").value("Vergleiche"),
+            jsonPath("$.zitierungenRechtsprechung[0].gericht.gerichtstyp").value("VerfGH"),
+            jsonPath("$.zitierungenRechtsprechung[0].gericht.gerichtsort").value("München"),
+            jsonPath("$.zitierungenRechtsprechung[0].gericht.gerichtsbarkeit")
+                .value("Verfassungsgerichtsbarkeit"),
+            jsonPath("$.zitierungenRechtsprechung[0].entscheidungsdatum").value("1983-12-02"),
+            jsonPath("$.zitierungenRechtsprechung[0].aktenzeichen").value("Vf. 94-VI-81"),
+            jsonPath("$.zitierungenLiteraturUnselbststaendig[1].autor").value("Knopp, Lothar"),
+            jsonPath("$.zitierungenLiteraturUnselbststaendig[1].dokumenttyp").value("Aufsatz"),
+            jsonPath("$.zitierungenLiteraturUnselbststaendig[1].fundstelle.periodikum")
+                .value("NVwZ"),
+            jsonPath("$.zitierungenLiteraturUnselbststaendig[1].fundstelle.zitatstelle")
+                .value("2016, 1139-1141"),
+            jsonPath("$.zitierungenLiteraturSelbststaendig[0].autor").value("Arnauld, Andreas von"),
+            jsonPath("$.zitierungenLiteraturSelbststaendig[0].titel")
+                .value("Die Freiheitsrechte und ihre Schranken"),
+            jsonPath("$.zitierungenLiteraturSelbststaendig[0].veroeffentlichungsjahr")
+                .value("1999"),
+            jsonPath("$.zitierungenVerwaltungsvorschriften[1].artDerZitierung").value("Anwendung"),
+            jsonPath("$.zitierungenVerwaltungsvorschriften[1].jurisAbkuerzung")
+                .value("VR BA 1986-01-16 16/86"),
+            jsonPath("$.zitierungenVerwaltungsvorschriften[1].fundstelle.periodikum")
+                .value("Dienstbl BA RdErl"));
+  }
+
+  @Test
+  @DisplayName("Should return vorgehende and nachgehende Entscheidungen as objects")
+  void shouldReturnVerknuepfteEntscheidungenAsObjects() throws Exception {
+    indexCaselawService.reindexAll(SharedTestConstants.TIMESTAMP_2024_01_01_AS_STRING);
+
+    mockMvc
+        .perform(
+            get(ApiConfig.Paths.RECHTSPRECHUNG + "/" + this.documentNumber)
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(isJsonLdCompliant())
+        .andExpectAll(
+            status().isOk(),
+            jsonPath("$.vorgehendeEntscheidungen[0]['@type']").value("VorgehendeEntscheidung"),
+            jsonPath("$.vorgehendeEntscheidungen[0].referenzUri")
+                .value("ris:/rechtsprechung/KORE300002025"),
+            jsonPath("$.vorgehendeEntscheidungen[0].dokumenttyp")
+                .value("previous decision document type"),
+            jsonPath("$.vorgehendeEntscheidungen[0].entscheidungsdatum").value("2020-01-01"),
+            jsonPath("$.vorgehendeEntscheidungen[0].aktenzeichen")
+                .value("previous decision file number"),
+            jsonPath("$.vorgehendeEntscheidungen[0].gericht.gerichtstyp")
+                .value("previous decision court type"),
+            jsonPath("$.vorgehendeEntscheidungen[0].gericht.gerichtsort")
+                .value("previous decision court location"),
+            jsonPath("$.nachgehendeEntscheidungen[0]['@type']").value("NachgehendeEntscheidung"),
+            jsonPath("$.nachgehendeEntscheidungen[0].art").value("anhängig"),
+            jsonPath("$.nachgehendeEntscheidungen[0].referenzUri")
+                .value("ris:/rechtsprechung/JURE100074208"),
+            jsonPath("$.nachgehendeEntscheidungen[0].dokumenttyp")
+                .value("ensuing decision document type"),
+            jsonPath("$.nachgehendeEntscheidungen[0].entscheidungsdatum").value("2022-10-01"),
+            jsonPath("$.nachgehendeEntscheidungen[0].mitteilungsdatum").value("2022-11-15"),
+            jsonPath("$.nachgehendeEntscheidungen[0].aktenzeichen")
+                .value("ensuing decision file number"),
+            jsonPath("$.nachgehendeEntscheidungen[0].gericht.gerichtstyp")
+                .value("ensuing decision court type"),
+            jsonPath("$.nachgehendeEntscheidungen[1].vermerk").value("ensuing decision note"));
   }
 
   @Test

@@ -23,19 +23,19 @@ public record RechtsprechungSchema(
             requiredMode = Schema.RequiredMode.REQUIRED)
         String ecli,
     @Schema(description = "CELEX-Nummer") String celex,
-    @RISSchema(name = "akn:background") String tatbestand,
-    @Schema(description = "Entscheidungsgründe") String entscheidungsgruende,
-    @Schema(description = "Abweichende Meinung") String abweichendeMeinung,
-    @Schema(description = "Gründe") String gruende,
-    @Schema(description = "Leitsatz") String leitsatz,
+    @RISSchema(name = "ris:tatbestand") String tatbestand,
+    @RISSchema(name = "ris:entscheidungsgruende") String entscheidungsgruende,
+    @RISSchema(name = "ris:abweichendeMeinung") String abweichendeMeinung,
+    @RISSchema(name = "ris:gruende") String gruende,
+    @RISSchema(name = "ris:leitsatz") String leitsatz,
     @Schema(description = "Kurztitel") String kurztitel, // corresponds to headline
     @RISSchema(name = "ris:titelzeile") String titelzeile,
-    @Schema(description = "Orientierungssatz") String orientierungssatz,
-    @Schema(description = "Sonstiger Orientierungssatz") String sonstigerOrientierungssatz,
-    @Schema(description = "Sonstiger Langtext") String sonstigerLangtext,
-    @RISSchema(name = "akn:motivation") String rechtsfrageGesamt,
-    @Schema(description = "Rechtsfrage") String rechtsfrage,
-    @RISSchema(name = "akn:decision") String tenor,
+    @RISSchema(name = "ris:orientierungssatz") String orientierungssatz,
+    @RISSchema(name = "ris:sonstigerOrientierungssatz") String sonstigerOrientierungssatz,
+    @RISSchema(name = "ris:sonstigerLangtext") String sonstigerLangtext,
+    @RISSchema(name = "ris:rechtsfrageGesamt") String rechtsfrageGesamt,
+    @RISSchema(name = "ris:rechtsfrage") String rechtsfrage,
+    @RISSchema(name = "ris:tenor") String tenor,
     @RISSchema(name = "ris:entscheidungsdatum", requiredMode = Schema.RequiredMode.REQUIRED)
         LocalDate datum,
     @Schema(example = "Entscheidungsdatum", description = "Art des Datums") DatumsTyp datumsTyp,
@@ -57,24 +57,18 @@ public record RechtsprechungSchema(
     @Schema(description = "Tarifverträge") List<String> tarifvertraege,
     @Schema(description = "Kündigungsgründe") List<String> kuendigungsgruende,
     @Schema(description = "Mitwirkende Richter") List<String> mitwirkendeRichter,
-    @RISSchema(name = "ris:vorgehendeEntscheidung") List<String> vorgehendeEntscheidungen,
-    @RISSchema(name = "ris:nachgehendeEntscheidung") List<String> nachgehendeEntscheidungen,
-    @Schema(description = "Aktivzitierung Literatur Unselbstständig")
-        List<String> aktivzitierungLiteraturUnselbstaendig,
-    @Schema(description = "Passivzitierung Literatur Unselbstständig")
-        List<String> passivzitierungLiteraturUnselbstaendig,
-    @Schema(description = "Aktivzitierung Literatur Selbstständig")
-        List<String> aktivzitierungLiteraturSelbstaendig,
-    @Schema(description = "Passivzitierung Literatur Selbstständig")
-        List<String> passivzitierungLiteraturSelbstaendig,
-    @Schema(description = "Aktivzitierung Rechtsprechung")
-        List<String> aktivzitierungRechtsprechung,
-    @Schema(description = "Passivzitierung Rechtsprechung")
-        List<String> passivzitierungRechtsprechung,
-    @Schema(description = "Aktivzitierung Verwaltungsvorschriften")
-        List<String> aktivzitierungVerwaltungsvorschriften,
-    @Schema(description = "Passivzitierung Verwaltungsvorschriften")
-        List<String> passivzitierungVerwaltungsvorschriften,
+    @RISSchema(name = "ris:vorgehendeEntscheidung")
+        List<VorgehendeEntscheidungSchema> vorgehendeEntscheidungen,
+    @RISSchema(name = "ris:nachgehendeEntscheidung")
+        List<NachgehendeEntscheidungSchema> nachgehendeEntscheidungen,
+    @RISSchema(name = "ris:referenzSelbststaendigeLiteratur")
+        List<ZitierungLiteraturSelbststaendigSchema> zitierungenLiteraturSelbststaendig,
+    @RISSchema(name = "ris:referenzUnselbststaendigeLiteratur")
+        List<ZitierungLiteraturUnselbststaendigSchema> zitierungenLiteraturUnselbststaendig,
+    @RISSchema(name = "ris:referenzRechtsprechung")
+        List<ZitierungRechtsprechungSchema> zitierungenRechtsprechung,
+    @RISSchema(name = "ris:referenzVerwaltungsvorschrift")
+        List<ZitierungVerwaltungsvorschriftSchema> zitierungenVerwaltungsvorschriften,
     @Schema(example = "BGHSt 67, 273-284", description = "Amtliche Fundstellen")
         List<String> amtlicheFundstellen,
     @Schema(example = "DStR 2023, 1430-1435", description = "Nichtamtliche Fundstellen")

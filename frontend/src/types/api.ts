@@ -27,6 +27,10 @@ export type Statistics = components["schemas"]["StatisticsApiSchema"];
 // Case law
 export type Rechtsprechung = components["schemas"]["RechtsprechungSchema"];
 export type CaseLawSearchSchema = components["schemas"]["CaseLawSearchSchema"];
+export type VorgehendeEntscheidung =
+  components["schemas"]["VorgehendeEntscheidungSchema"];
+export type NachgehendeEntscheidung =
+  components["schemas"]["NachgehendeEntscheidungSchema"];
 
 // Legislation
 export type LegislationWork = components["schemas"]["LegislationWorkSchema"];

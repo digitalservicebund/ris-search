@@ -72,6 +72,7 @@
         </akn:implicitReference>
         <akn:implicitReference ris:domainTerm="Rechtszug">
             <ris:vorgehendeEntscheidung domainTerm="Vorgehende Entscheidung">
+                <ris:referenzURI domainTerm="URI der Referenz">ris:/rechtsprechung/KORE300002025</ris:referenzURI>
                 <ris:dokumenttyp domainTerm="Dokumenttyp">previous decision document type</ris:dokumenttyp>
                 <ris:entscheidungsdatum domainTerm="Entscheidungsdatum">2020-01-01</ris:entscheidungsdatum>
                 <ris:dokumentnummer domainTerm="Dokumentnummer">previous decision document number 1</ris:dokumentnummer>
@@ -96,8 +97,10 @@
         </akn:implicitReference>
         <akn:implicitReference ris:domainTerm="Rechtszug">
             <ris:nachgehendeEntscheidung art="anhängig" domainTerm="Nachgehende Entscheidung">
+                <ris:referenzURI domainTerm="URI der Referenz">ris:/rechtsprechung/JURE100074208</ris:referenzURI>
                 <ris:dokumenttyp domainTerm="Dokumenttyp">ensuing decision document type</ris:dokumenttyp>
                 <ris:entscheidungsdatum domainTerm="Entscheidungsdatum">2022-10-01</ris:entscheidungsdatum>
+                <ris:mitteilungsdatum domainTerm="Mitteilungsdatum">2022-11-15</ris:mitteilungsdatum>
                 <ris:dokumentnummer domainTerm="Dokumentnummer">ensuing decision document number 1</ris:dokumentnummer>
                 <ris:aktenzeichen domainTerm="Aktenzeichen">ensuing decision file number</ris:aktenzeichen>
                 <ris:gericht domainTerm="Gericht">
@@ -183,9 +186,20 @@
                     <ris:gerichtstyp domainTerm="Gerichtstyp">VerfGH</ris:gerichtstyp>
                     <ris:gerichtsort domainTerm="Gerichtsort">München</ris:gerichtsort>
                     <ris:gerichtsbarkeit domainTerm="Gerichtsbarkeit">Verfassungsgerichtsbarkeit</ris:gerichtsbarkeit>
+                    <ris:spruchkoerper domainTerm="Spruchkörper">1. Senat</ris:spruchkoerper>
+                    <ris:sitzDerAussenstelle domainTerm="Sitz der Außenstelle">Nürnberg</ris:sitzDerAussenstelle>
                 </ris:gericht>
                 <ris:entscheidungsdatum domainTerm="Entscheidungsdatum">1983-12-02</ris:entscheidungsdatum>
+                <ris:dokumenttyp domainTerm="Dokumenttyp">Beschluss</ris:dokumenttyp>
                 <ris:aktenzeichen domainTerm="Aktenzeichen">Vf. 94-VI-81</ris:aktenzeichen>
+                <ris:fundstelle domainTerm="Fundstelle">
+                    <ris:periodikum domainTerm="Periodikum">
+                        <ris:abkuerzung domainTerm="Abkürzung">BayVBl</ris:abkuerzung>
+                        <ris:titel domainTerm="Titel">Bayerische Verwaltungsblätter</ris:titel>
+                    </ris:periodikum>
+                    <ris:zitatstelle domainTerm="Zitatstelle">1984, 15</ris:zitatstelle>
+                    <ris:fundstellenTyp domainTerm="Art der Fundstelle">amtlich</ris:fundstellenTyp>
+                </ris:fundstelle>
             </ris:referenzRechtsprechung>
         </akn:implicitReference>
         <akn:implicitReference ris:domainTerm="Referenz Rechtsprechung">

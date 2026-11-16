@@ -1188,6 +1188,10 @@
         "normenkette": {
           "type": "text",
           "analyzer": "custom_german_analyzer"
+        },
+        "unindexed": {
+          "type": "object",
+          "enabled": false
         }
       }
     }

@@ -22,23 +22,23 @@ All paginated endpoints share the following parameters:
 ::: code-group
 
 ```bash [cURL]
-curl -G https://testphase.rechtsinformationen.bund.de/v1/case-law
+curl -G https://testphase.rechtsinformationen.bund.de/v1/rechtsprechung
 ```
 
 :::
 
 ```json
 {
-  "@id": "/v1/case-law?pageIndex=0",
+  "@id": "/v1/rechtsprechung?pageIndex=0&size=100",
   "@type": "hydra:Collection",
   "totalItems": 10000,
   "member": ["…a list of entities…"],
   "view": {
     "@type": "hydra:PartialCollectionView",
-    "first": "/v1/case-law?pageIndex=0&size=100",
+    "first": "/v1/rechtsprechung?pageIndex=0&size=100",
     "previous": null,
-    "next": "/v1/case-law?pageIndex=1&size=100",
-    "last": "/v1/case-law?pageIndex=99&size=100"
+    "next": "/v1/rechtsprechung?pageIndex=1&size=100",
+    "last": "/v1/rechtsprechung?pageIndex=99&size=100"
   }
 }
 ```

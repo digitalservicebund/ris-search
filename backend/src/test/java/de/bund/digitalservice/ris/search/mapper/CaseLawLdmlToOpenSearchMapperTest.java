@@ -4,6 +4,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import de.bund.digitalservice.ris.search.models.DatumsTyp;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
+import de.bund.digitalservice.ris.search.models.opensearch.CaseLawUnindexed;
+import de.bund.digitalservice.ris.search.models.opensearch.NachgehendeEntscheidung;
+import de.bund.digitalservice.ris.search.models.opensearch.VorgehendeEntscheidung;
+import de.bund.digitalservice.ris.search.models.opensearch.common.Gericht;
+import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Fundstelle;
+import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Richtung;
+import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ZitierungLiteraturSelbststaendig;
+import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ZitierungLiteraturUnselbststaendig;
+import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ZitierungRechtsprechung;
+import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ZitierungVerwaltungsvorschrift;
 import de.bund.digitalservice.ris.search.utils.CaseLawLdmlTemplateUtils;
 import de.bund.digitalservice.ris.utils.CaseLawXmlValidator;
 import java.io.IOException;
@@ -151,6 +161,193 @@ class CaseLawLdmlToOpenSearchMapperTest {
             "normReference test singleNorm test",
             "normReference test singleNorm 2 test",
             "normReference without SingleNorms");
+  }
+
+  @Test
+  void shouldMapZitierungenLiteraturSelbststaendig() {
+    CaseLawUnindexed unindexed = mapper.fromString(testCaseLawLdml).unindexed();
+
+    assertThat(unindexed.zitierungenLiteraturSelbststaendig())
+        .containsExactly(
+            ZitierungLiteraturSelbststaendig.builder()
+                .richtung(Richtung.AKTIV)
+                .referenzUri("ris:/literatur/KSLS071671727")
+                .dokumentnummer("KSLS071671727")
+                .autor("Arnauld, Andreas von")
+                .titel("Die Freiheitsrechte und ihre Schranken")
+                .veroeffentlichungsjahr("1999")
+                .build(),
+            ZitierungLiteraturSelbststaendig.builder()
+                .richtung(Richtung.PASSIV)
+                .referenzUri("ris:/literatur/KSLS071671728")
+                .dokumentnummer("KSLS071671728")
+                .autor("Mustermann, Max")
+                .titel("Die Grenzen der Freiheit")
+                .veroeffentlichungsjahr("2001")
+                .build());
+  }
+
+  @Test
+  void shouldMapZitierungenLiteraturUnselbststaendig() {
+    CaseLawUnindexed unindexed = mapper.fromString(testCaseLawLdml).unindexed();
+
+    assertThat(unindexed.zitierungenLiteraturUnselbststaendig())
+        .containsExactly(
+            ZitierungLiteraturUnselbststaendig.builder()
+                .richtung(Richtung.AKTIV)
+                .referenzUri("ris:/literatur/STLU991393280")
+                .dokumentnummer("STLU991393280")
+                .autor("Schmidt-Liebig")
+                .fundstelle(
+                    Fundstelle.builder()
+                        .periodikum("Information StW")
+                        .zitatstelle("1999, 641")
+                        .build())
+                .build(),
+            ZitierungLiteraturUnselbststaendig.builder()
+                .richtung(Richtung.PASSIV)
+                .referenzUri("ris:/literatur/SBLU000539216")
+                .dokumentnummer("SBLU000539216")
+                .autor("Knopp, Lothar")
+                .dokumenttyp("Aufsatz")
+                .fundstelle(
+                    Fundstelle.builder().periodikum("NVwZ").zitatstelle("2016, 1139-1141").build())
+                .build());
+  }
+
+  @Test
+  void shouldMapZitierungenRechtsprechung() {
+    CaseLawUnindexed unindexed = mapper.fromString(testCaseLawLdml).unindexed();
+
+    assertThat(unindexed.zitierungenRechtsprechung())
+        .containsExactly(
+            ZitierungRechtsprechung.builder()
+                .richtung(Richtung.AKTIV)
+                .referenzUri("ris:/rechtsprechung/BVRE100338409")
+                .dokumentnummer("BVRE100338409")
+                .artDerZitierung("Vergleiche")
+                .gericht(
+                    Gericht.builder()
+                        .gerichtstyp("VerfGH")
+                        .gerichtsort("München")
+                        .gerichtsbarkeit("Verfassungsgerichtsbarkeit")
+                        .spruchkoerper("1. Senat")
+                        .sitzDerAussenstelle("Nürnberg")
+                        .build())
+                .entscheidungsdatum(LocalDate.of(1983, Month.DECEMBER, 2))
+                .dokumenttyp("Beschluss")
+                .aktenzeichen("Vf. 94-VI-81")
+                .fundstelle(
+                    Fundstelle.builder()
+                        .periodikum("BayVBl")
+                        .zitatstelle("1984, 15")
+                        .fundstellenTyp("amtlich")
+                        .build())
+                .build(),
+            ZitierungRechtsprechung.builder()
+                .richtung(Richtung.PASSIV)
+                .referenzUri("ris:/rechtsprechung/JURE100074208")
+                .dokumentnummer("JURE100074208")
+                .artDerZitierung("Vergleiche")
+                .gericht(
+                    Gericht.builder()
+                        .gerichtstyp("LArbG")
+                        .gerichtsort("Kiel")
+                        .gerichtsbarkeit("Arbeitsgerichtsbarkeit")
+                        .build())
+                .entscheidungsdatum(LocalDate.of(2010, Month.OCTOBER, 26))
+                .aktenzeichen("3 Sa 315/10")
+                .build());
+  }
+
+  @Test
+  void shouldMapZitierungenVerwaltungsvorschriften() {
+    CaseLawUnindexed unindexed = mapper.fromString(testCaseLawLdml).unindexed();
+
+    assertThat(unindexed.zitierungenVerwaltungsvorschriften())
+        .containsExactly(
+            ZitierungVerwaltungsvorschrift.builder()
+                .richtung(Richtung.AKTIV)
+                .referenzUri("ris:/verwaltungsvorschrift/KSNR008561615")
+                .dokumentnummer("KSNR008561615")
+                .artDerZitierung("Vergleiche")
+                .jurisAbkuerzung("VR VDR 1997-12-04 5883")
+                .fundstelle(
+                    Fundstelle.builder()
+                        .periodikum("MittLVA Oberfr")
+                        .zitatstelle("1997, 538-539")
+                        .build())
+                .build(),
+            ZitierungVerwaltungsvorschrift.builder()
+                .richtung(Richtung.PASSIV)
+                .referenzUri("ris:/verwaltungsvorschrift/KSNR006800006")
+                .dokumentnummer("KSNR006800006")
+                .artDerZitierung("Anwendung")
+                .jurisAbkuerzung("VR BA 1986-01-16 16/86")
+                .fundstelle(
+                    Fundstelle.builder()
+                        .periodikum("Dienstbl BA RdErl")
+                        .zitatstelle("1986, Nr 16, 1-8")
+                        .build())
+                .build());
+  }
+
+  @Test
+  void shouldMapVorgehendeEntscheidungen() {
+    CaseLawUnindexed unindexed = mapper.fromString(testCaseLawLdml).unindexed();
+
+    assertThat(unindexed.vorgehendeEntscheidungen())
+        .containsExactly(
+            VorgehendeEntscheidung.builder()
+                .referenzUri("ris:/rechtsprechung/KORE300002025")
+                .dokumenttyp("previous decision document type")
+                .entscheidungsdatum(LocalDate.of(2020, Month.JANUARY, 1))
+                .dokumentnummer("previous decision document number 1")
+                .aktenzeichen("previous decision file number")
+                .gericht(
+                    Gericht.builder()
+                        .gerichtstyp("previous decision court type")
+                        .gerichtsort("previous decision court location")
+                        .build())
+                .build(),
+            VorgehendeEntscheidung.builder()
+                .dokumenttyp("previous decision document type")
+                .entscheidungsdatum(LocalDate.of(2020, Month.JANUARY, 1))
+                .dokumentnummer("previous decision document number 2")
+                .aktenzeichen("previous decision file number")
+                .gericht(
+                    Gericht.builder()
+                        .gerichtstyp("previous decision court type")
+                        .gerichtsort("previous decision court location")
+                        .build())
+                .build());
+  }
+
+  @Test
+  void shouldMapNachgehendeEntscheidungen() {
+    CaseLawUnindexed unindexed = mapper.fromString(testCaseLawLdml).unindexed();
+
+    assertThat(unindexed.nachgehendeEntscheidungen())
+        .containsExactly(
+            NachgehendeEntscheidung.builder()
+                .art("anhängig")
+                .referenzUri("ris:/rechtsprechung/JURE100074208")
+                .dokumenttyp("ensuing decision document type")
+                .entscheidungsdatum(LocalDate.of(2022, Month.OCTOBER, 1))
+                .mitteilungsdatum(LocalDate.of(2022, Month.NOVEMBER, 15))
+                .dokumentnummer("ensuing decision document number 1")
+                .aktenzeichen("ensuing decision file number")
+                .gericht(Gericht.builder().gerichtstyp("ensuing decision court type").build())
+                .build(),
+            NachgehendeEntscheidung.builder()
+                .art("anhängig")
+                .dokumenttyp("ensuing decision document type")
+                .entscheidungsdatum(LocalDate.of(2022, Month.OCTOBER, 1))
+                .dokumentnummer("ensuing decision document number 2")
+                .aktenzeichen("ensuing decision file number")
+                .gericht(Gericht.builder().gerichtstyp("ensuing decision court type").build())
+                .vermerk("ensuing decision note")
+                .build());
   }
 
   @Test

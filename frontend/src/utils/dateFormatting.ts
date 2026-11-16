@@ -2,6 +2,7 @@ import dayjs from "dayjs";
 import type { Dayjs } from "dayjs";
 import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc";
+import "dayjs/locale/de";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -18,6 +19,18 @@ export function dateFormattedDDMMYYYY(
   }
 
   return dayjsDate.format("DD.MM.YYYY");
+}
+
+export function dateFormattedLongGerman(
+  date?: Dayjs | string,
+): string | undefined {
+  const dayjsDate = typeof date === "string" ? dayjs(date) : date;
+
+  if (!dayjsDate?.isValid()) {
+    return undefined;
+  }
+
+  return dayjsDate.locale("de").format("D. MMMM YYYY");
 }
 
 export function parseDateGermanLocalTime(

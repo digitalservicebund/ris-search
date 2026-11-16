@@ -21,7 +21,7 @@ import java.lang.annotation.Target;
 @Schema
 public @interface RISSchema {
 
-  /** The XSD element/type key (e.g. "ris:dokumentnummer") to look up the description for. */
+  /** The XSD type name (e.g. "ris:dokumentnummer") to look up the description for. */
   String name();
 
   /** Fallback-Beschreibung, falls kein XSD-Text gefunden wird (optional). */

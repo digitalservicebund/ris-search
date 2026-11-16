@@ -105,9 +105,6 @@ dependencies {
     // CVE-2026-5588
     implementation(platform(libs.bouncycastle.bom))
 
-    // CVE-2026-65182
-    implementation(libs.tomcat.embed.core)
-
     // CVE-2026-102554
     implementation(libs.google.guava)
 

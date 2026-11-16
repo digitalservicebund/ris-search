@@ -31,6 +31,12 @@ if (config.public.sentryDSN) {
       // is not affected. Matches only these URLs, so failed fetches to our own
       // API are still reported.
       /\/_nuxt\/builds\/.*Failed to fetch/,
+
+      // Microsoft's link scanner (Outlook/Teams Safe Links) opens links from
+      // messages in a headless browser and fails calling back into its own
+      // host. Not caused by our code and no real user is affected. See
+      // https://github.com/getsentry/sentry-javascript/issues/3440#issuecomment-865857552
+      /Object Not Found Matching Id:\d+, MethodName:update/,
     ],
   });
 }

@@ -111,7 +111,9 @@ public record CaseLawDocumentationUnit(
     @Field(name = Fields.TARIFVERTRAEGE) List<String> tarifvertraege,
     @Field(name = Fields.TENOR, type = FieldType.Text) String tenor,
     @Field(name = Fields.TITLE_LINE) String titleLine,
-    @Field(name = Fields.VORABDOKUMENT) boolean vorabdokument)
+    @Field(name = Fields.VORABDOKUMENT) boolean vorabdokument,
+    @Field(name = Fields.UNINDEXED, type = FieldType.Object, enabled = false)
+        CaseLawUnindexed unindexed)
     implements AbstractSearchEntity {
 
   /**
@@ -214,5 +216,6 @@ public record CaseLawDocumentationUnit(
     public static final String TENOR = "tenor";
     public static final String TITLE_LINE = "title_line";
     public static final String VORABDOKUMENT = "vorabdokument";
+    public static final String UNINDEXED = "unindexed";
   }
 }

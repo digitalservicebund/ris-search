@@ -8,8 +8,27 @@ import static org.assertj.core.api.Assertions.assertThat;
 import de.bund.digitalservice.ris.SharedTestConstants;
 import de.bund.digitalservice.ris.search.models.DatumsTyp;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
+import de.bund.digitalservice.ris.search.models.opensearch.CaseLawUnindexed;
+import de.bund.digitalservice.ris.search.models.opensearch.NachgehendeEntscheidung;
+import de.bund.digitalservice.ris.search.models.opensearch.VorgehendeEntscheidung;
+import de.bund.digitalservice.ris.search.models.opensearch.common.Gericht;
+import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Fundstelle;
+import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Richtung;
+import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ZitierungLiteraturSelbststaendig;
+import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ZitierungLiteraturUnselbststaendig;
+import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ZitierungRechtsprechung;
+import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ZitierungVerwaltungsvorschrift;
 import de.bund.digitalservice.ris.search.schema.DocumentEncodingSchema;
+import de.bund.digitalservice.ris.search.schema.FundstelleSchema;
+import de.bund.digitalservice.ris.search.schema.GerichtSchema;
+import de.bund.digitalservice.ris.search.schema.NachgehendeEntscheidungSchema;
 import de.bund.digitalservice.ris.search.schema.RechtsprechungSchema;
+import de.bund.digitalservice.ris.search.schema.VorgehendeEntscheidungSchema;
+import de.bund.digitalservice.ris.search.schema.ZitierungLiteraturSelbststaendigSchema;
+import de.bund.digitalservice.ris.search.schema.ZitierungLiteraturUnselbststaendigSchema;
+import de.bund.digitalservice.ris.search.schema.ZitierungRechtsprechungSchema;
+import de.bund.digitalservice.ris.search.schema.ZitierungRichtung;
+import de.bund.digitalservice.ris.search.schema.ZitierungVerwaltungsvorschriftSchema;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;
@@ -60,16 +79,117 @@ class RechtsprechungSchemaMapperTest {
         .tarifvertraege(List.of("Stehende Bühnen"))
         .kuendigungsgruende(List.of("Straftat"))
         .mitwirkendeRichter(List.of("Meier", "Müller"))
-        .previousDecisions(List.of("previous decision file number, previous decision court type"))
-        .ensuingDecisions(List.of("ensuing decision file number, ensuing decision court type"))
-        .aktivzitierungLiteraturUnselbstaendig(List.of("STLU991393280"))
-        .passivzitierungLiteraturUnselbstaendig(List.of("SBLU000539216"))
-        .aktivzitierungLiteraturSelbstaendig(List.of("KSLS071671727"))
-        .passivzitierungLiteraturSelbstaendig(List.of("KSLS071671728"))
-        .aktivzitierungRechtsprechung(List.of("BVRE100338409"))
-        .passivzitierungRechtsprechung(List.of("JURE100074208"))
-        .aktivzitierungVerwaltungsvorschriften(List.of("KSNR008561615"))
-        .passivzitierungVerwaltungsvorschriften(List.of("KSNR006800006"))
+        .unindexed(
+            CaseLawUnindexed.builder()
+                .vorgehendeEntscheidungen(
+                    List.of(
+                        VorgehendeEntscheidung.builder()
+                            .referenzUri("ris:/rechtsprechung/KORE300002025")
+                            .dokumenttyp("Urteil")
+                            .entscheidungsdatum(LocalDate.of(2020, Month.JANUARY, 1))
+                            .dokumentnummer("KORE300002025")
+                            .aktenzeichen("1 K 23/19")
+                            .gericht(
+                                Gericht.builder().gerichtstyp("VG").gerichtsort("Berlin").build())
+                            .build(),
+                        VorgehendeEntscheidung.builder().aktenzeichen("2 K 5/18").build()))
+                .nachgehendeEntscheidungen(
+                    List.of(
+                        NachgehendeEntscheidung.builder()
+                            .art("anhängig")
+                            .referenzUri("ris:/rechtsprechung/JURE100074208")
+                            .dokumenttyp("Beschluss")
+                            .entscheidungsdatum(LocalDate.of(2022, Month.OCTOBER, 1))
+                            .mitteilungsdatum(LocalDate.of(2022, Month.NOVEMBER, 15))
+                            .dokumentnummer("JURE100074208")
+                            .aktenzeichen("3 B 12/22")
+                            .gericht(Gericht.builder().gerichtstyp("BVerwG").build())
+                            .vermerk("Revision eingelegt")
+                            .build(),
+                        NachgehendeEntscheidung.builder()
+                            .art("nachgehend")
+                            .aktenzeichen("4 C 1/23")
+                            .build()))
+                .zitierungenLiteraturUnselbststaendig(
+                    List.of(
+                        ZitierungLiteraturUnselbststaendig.builder()
+                            .richtung(Richtung.AKTIV)
+                            .referenzUri("ris:/literatur/STLU991393280")
+                            .dokumentnummer("STLU991393280")
+                            .autor("Schmidt-Liebig")
+                            .dokumenttyp("Aufsatz")
+                            .fundstelle(
+                                Fundstelle.builder()
+                                    .periodikum("Information StW")
+                                    .zitatstelle("1999, 641")
+                                    .fundstellenTyp("nichtamtlich")
+                                    .build())
+                            .build(),
+                        ZitierungLiteraturUnselbststaendig.builder()
+                            .richtung(Richtung.PASSIV)
+                            .dokumentnummer("SBLU000539216")
+                            .build()))
+                .zitierungenLiteraturSelbststaendig(
+                    List.of(
+                        ZitierungLiteraturSelbststaendig.builder()
+                            .richtung(Richtung.AKTIV)
+                            .referenzUri("ris:/literatur/KSLS071671727")
+                            .dokumentnummer("KSLS071671727")
+                            .autor("Arnauld, Andreas von")
+                            .titel("Die Freiheitsrechte und ihre Schranken")
+                            .veroeffentlichungsjahr("1999")
+                            .build(),
+                        ZitierungLiteraturSelbststaendig.builder()
+                            .richtung(Richtung.PASSIV)
+                            .dokumentnummer("KSLS071671728")
+                            .build()))
+                .zitierungenRechtsprechung(
+                    List.of(
+                        ZitierungRechtsprechung.builder()
+                            .richtung(Richtung.AKTIV)
+                            .referenzUri("ris:/rechtsprechung/BVRE100338409")
+                            .dokumentnummer("BVRE100338409")
+                            .artDerZitierung("Vergleiche")
+                            .gericht(
+                                Gericht.builder()
+                                    .gerichtstyp("VerfGH")
+                                    .gerichtsort("München")
+                                    .gerichtsbarkeit("Verfassungsgerichtsbarkeit")
+                                    .spruchkoerper("1. Senat")
+                                    .sitzDerAussenstelle("Nürnberg")
+                                    .build())
+                            .entscheidungsdatum(LocalDate.of(1983, Month.DECEMBER, 2))
+                            .dokumenttyp("Beschluss")
+                            .aktenzeichen("Vf. 94-VI-81")
+                            .fundstelle(
+                                Fundstelle.builder()
+                                    .periodikum("BayVBl")
+                                    .zitatstelle("1984, 15")
+                                    .build())
+                            .build(),
+                        ZitierungRechtsprechung.builder()
+                            .richtung(Richtung.PASSIV)
+                            .dokumentnummer("JURE100074208")
+                            .build()))
+                .zitierungenVerwaltungsvorschriften(
+                    List.of(
+                        ZitierungVerwaltungsvorschrift.builder()
+                            .richtung(Richtung.AKTIV)
+                            .referenzUri("ris:/verwaltungsvorschrift/KSNR008561615")
+                            .dokumentnummer("KSNR008561615")
+                            .artDerZitierung("Vergleiche")
+                            .jurisAbkuerzung("VR VDR 1997-12-04 5883")
+                            .fundstelle(
+                                Fundstelle.builder()
+                                    .periodikum("MittLVA Oberfr")
+                                    .zitatstelle("1997, 538-539")
+                                    .build())
+                            .build(),
+                        ZitierungVerwaltungsvorschrift.builder()
+                            .richtung(Richtung.PASSIV)
+                            .dokumentnummer("KSNR006800006")
+                            .build()))
+                .build())
         .amtlicheFundstellen(List.of("BGHSt 67, 273-284"))
         .nichtamtlicheFundstellen(List.of("DStR 2023, 1430-1435"))
         .gesetzeskraft(List.of("vereinbar mit höherrangigem Recht, Bremen"))
@@ -189,32 +309,168 @@ class RechtsprechungSchemaMapperTest {
     RechtsprechungSchema rechtsprechungSchema =
         RechtsprechungSchemaMapper.fromDomain(buildDocumentationUnit(), "jsonLdContext");
 
-    assertThat(rechtsprechungSchema.vorgehendeEntscheidungen())
-        .containsExactly("previous decision file number, previous decision court type");
-    assertThat(rechtsprechungSchema.nachgehendeEntscheidungen())
-        .containsExactly("ensuing decision file number, ensuing decision court type");
-    assertThat(rechtsprechungSchema.aktivzitierungLiteraturUnselbstaendig())
-        .containsExactly("STLU991393280");
-    assertThat(rechtsprechungSchema.passivzitierungLiteraturUnselbstaendig())
-        .containsExactly("SBLU000539216");
-    assertThat(rechtsprechungSchema.aktivzitierungLiteraturSelbstaendig())
-        .containsExactly("KSLS071671727");
-    assertThat(rechtsprechungSchema.passivzitierungLiteraturSelbstaendig())
-        .containsExactly("KSLS071671728");
-    assertThat(rechtsprechungSchema.aktivzitierungRechtsprechung())
-        .containsExactly("BVRE100338409");
-    assertThat(rechtsprechungSchema.passivzitierungRechtsprechung())
-        .containsExactly("JURE100074208");
-    assertThat(rechtsprechungSchema.aktivzitierungVerwaltungsvorschriften())
-        .containsExactly("KSNR008561615");
-    assertThat(rechtsprechungSchema.passivzitierungVerwaltungsvorschriften())
-        .containsExactly("KSNR006800006");
     assertThat(rechtsprechungSchema.amtlicheFundstellen()).containsExactly("BGHSt 67, 273-284");
     assertThat(rechtsprechungSchema.nichtamtlicheFundstellen())
         .containsExactly("DStR 2023, 1430-1435");
     assertThat(rechtsprechungSchema.gesetzeskraft())
         .containsExactly("vereinbar mit höherrangigem Recht, Bremen");
     assertThat(rechtsprechungSchema.normenkette()).containsExactly("BGB § 823");
+  }
+
+  @Test
+  @DisplayName("Maps Zitierungen Literatur to schema objects")
+  void fromDomainMapsZitierungenLiteratur() {
+    RechtsprechungSchema rechtsprechungSchema =
+        RechtsprechungSchemaMapper.fromDomain(buildDocumentationUnit(), "jsonLdContext");
+
+    assertThat(rechtsprechungSchema.zitierungenLiteraturUnselbststaendig())
+        .containsExactly(
+            ZitierungLiteraturUnselbststaendigSchema.builder()
+                .richtung(ZitierungRichtung.AKTIV)
+                .referenzUri("ris:/literatur/STLU991393280")
+                .dokumentnummer("STLU991393280")
+                .autor("Schmidt-Liebig")
+                .dokumenttyp("Aufsatz")
+                .fundstelle(
+                    FundstelleSchema.builder()
+                        .periodikum("Information StW")
+                        .zitatstelle("1999, 641")
+                        .fundstellenTyp("nichtamtlich")
+                        .build())
+                .build(),
+            ZitierungLiteraturUnselbststaendigSchema.builder()
+                .richtung(ZitierungRichtung.PASSIV)
+                .dokumentnummer("SBLU000539216")
+                .build());
+    assertThat(rechtsprechungSchema.zitierungenLiteraturSelbststaendig())
+        .containsExactly(
+            ZitierungLiteraturSelbststaendigSchema.builder()
+                .richtung(ZitierungRichtung.AKTIV)
+                .referenzUri("ris:/literatur/KSLS071671727")
+                .dokumentnummer("KSLS071671727")
+                .autor("Arnauld, Andreas von")
+                .titel("Die Freiheitsrechte und ihre Schranken")
+                .veroeffentlichungsjahr("1999")
+                .build(),
+            ZitierungLiteraturSelbststaendigSchema.builder()
+                .richtung(ZitierungRichtung.PASSIV)
+                .dokumentnummer("KSLS071671728")
+                .build());
+  }
+
+  @Test
+  @DisplayName("Maps Zitierungen Rechtsprechung and Verwaltungsvorschriften to schema objects")
+  void fromDomainMapsZitierungenRechtsprechungAndVerwaltungsvorschriften() {
+    RechtsprechungSchema rechtsprechungSchema =
+        RechtsprechungSchemaMapper.fromDomain(buildDocumentationUnit(), "jsonLdContext");
+
+    assertThat(rechtsprechungSchema.zitierungenRechtsprechung())
+        .containsExactly(
+            ZitierungRechtsprechungSchema.builder()
+                .richtung(ZitierungRichtung.AKTIV)
+                .referenzUri("ris:/rechtsprechung/BVRE100338409")
+                .dokumentnummer("BVRE100338409")
+                .artDerZitierung("Vergleiche")
+                .gericht(
+                    GerichtSchema.builder()
+                        .gerichtstyp("VerfGH")
+                        .gerichtsort("München")
+                        .gerichtsbarkeit("Verfassungsgerichtsbarkeit")
+                        .spruchkoerper("1. Senat")
+                        .sitzDerAussenstelle("Nürnberg")
+                        .build())
+                .entscheidungsdatum(LocalDate.of(1983, Month.DECEMBER, 2))
+                .dokumenttyp("Beschluss")
+                .aktenzeichen("Vf. 94-VI-81")
+                .fundstelle(
+                    FundstelleSchema.builder().periodikum("BayVBl").zitatstelle("1984, 15").build())
+                .build(),
+            ZitierungRechtsprechungSchema.builder()
+                .richtung(ZitierungRichtung.PASSIV)
+                .dokumentnummer("JURE100074208")
+                .build());
+    assertThat(rechtsprechungSchema.zitierungenVerwaltungsvorschriften())
+        .containsExactly(
+            ZitierungVerwaltungsvorschriftSchema.builder()
+                .richtung(ZitierungRichtung.AKTIV)
+                .referenzUri("ris:/verwaltungsvorschrift/KSNR008561615")
+                .dokumentnummer("KSNR008561615")
+                .artDerZitierung("Vergleiche")
+                .jurisAbkuerzung("VR VDR 1997-12-04 5883")
+                .fundstelle(
+                    FundstelleSchema.builder()
+                        .periodikum("MittLVA Oberfr")
+                        .zitatstelle("1997, 538-539")
+                        .build())
+                .build(),
+            ZitierungVerwaltungsvorschriftSchema.builder()
+                .richtung(ZitierungRichtung.PASSIV)
+                .dokumentnummer("KSNR006800006")
+                .build());
+  }
+
+  @Test
+  @DisplayName("Maps vorgehende and nachgehende Entscheidungen to schema objects")
+  void fromDomainMapsVerknuepfteEntscheidungen() {
+    RechtsprechungSchema rechtsprechungSchema =
+        RechtsprechungSchemaMapper.fromDomain(buildDocumentationUnit(), "jsonLdContext");
+
+    assertThat(rechtsprechungSchema.vorgehendeEntscheidungen())
+        .containsExactly(
+            VorgehendeEntscheidungSchema.builder()
+                .referenzUri("ris:/rechtsprechung/KORE300002025")
+                .dokumenttyp("Urteil")
+                .entscheidungsdatum(LocalDate.of(2020, Month.JANUARY, 1))
+                .dokumentnummer("KORE300002025")
+                .aktenzeichen("1 K 23/19")
+                .gericht(GerichtSchema.builder().gerichtstyp("VG").gerichtsort("Berlin").build())
+                .build(),
+            VorgehendeEntscheidungSchema.builder().aktenzeichen("2 K 5/18").build());
+    assertThat(rechtsprechungSchema.nachgehendeEntscheidungen())
+        .containsExactly(
+            NachgehendeEntscheidungSchema.builder()
+                .art("anhängig")
+                .referenzUri("ris:/rechtsprechung/JURE100074208")
+                .dokumenttyp("Beschluss")
+                .entscheidungsdatum(LocalDate.of(2022, Month.OCTOBER, 1))
+                .mitteilungsdatum(LocalDate.of(2022, Month.NOVEMBER, 15))
+                .dokumentnummer("JURE100074208")
+                .aktenzeichen("3 B 12/22")
+                .gericht(GerichtSchema.builder().gerichtstyp("BVerwG").build())
+                .vermerk("Revision eingelegt")
+                .build(),
+            NachgehendeEntscheidungSchema.builder()
+                .art("nachgehend")
+                .aktenzeichen("4 C 1/23")
+                .build());
+  }
+
+  @Test
+  @DisplayName("Returns no Zitierungen when none are stored")
+  void fromDomainWithoutZitierungen() {
+    var documentationUnit =
+        CaseLawDocumentationUnit.builder().documentNumber("BFRE000087655").build();
+
+    RechtsprechungSchema rechtsprechungSchema =
+        RechtsprechungSchemaMapper.fromDomain(documentationUnit, "jsonLdContext");
+
+    assertThat(rechtsprechungSchema.zitierungenLiteraturSelbststaendig()).isNull();
+    assertThat(rechtsprechungSchema.zitierungenLiteraturUnselbststaendig()).isNull();
+    assertThat(rechtsprechungSchema.zitierungenRechtsprechung()).isNull();
+    assertThat(rechtsprechungSchema.zitierungenVerwaltungsvorschriften()).isNull();
+  }
+
+  @Test
+  @DisplayName("Returns no vorgehende and nachgehende Entscheidungen when none are stored")
+  void fromDomainWithoutVerknuepfteEntscheidungen() {
+    var documentationUnit =
+        CaseLawDocumentationUnit.builder().documentNumber("BFRE000087655").build();
+
+    RechtsprechungSchema rechtsprechungSchema =
+        RechtsprechungSchemaMapper.fromDomain(documentationUnit, "jsonLdContext");
+
+    assertThat(rechtsprechungSchema.vorgehendeEntscheidungen()).isNull();
+    assertThat(rechtsprechungSchema.nachgehendeEntscheidungen()).isNull();
   }
 
   @Test
