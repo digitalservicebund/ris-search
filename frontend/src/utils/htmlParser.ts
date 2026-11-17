@@ -1,16 +1,9 @@
-import type { JSDOM } from "jsdom";
+import type { JSDOM as JSDOMType } from "jsdom";
+import { extractSections } from "~/utils/html/extract";
 
-type Section = {
-  id: string;
-  title: string;
-};
-
-let jsdom: typeof JSDOM;
-if (import.meta.server) {
-  void import("jsdom").then((module) => {
-    jsdom = module.JSDOM;
-  });
-}
+const JSDOM: typeof JSDOMType | undefined = import.meta.server
+  ? (await import("jsdom")).JSDOM
+  : undefined;
 
 export function parseDocument(html: string): Document {
   const needsWrapper = !/<html[\s>]/i.test(html) && !/<body[\s>]/i.test(html);
@@ -20,11 +13,13 @@ export function parseDocument(html: string): Document {
     // Client-side: use DOMParser
     const parser = new DOMParser();
     return parser.parseFromString(source, "text/html");
-  } else {
-    /* v8 ignore next 2 */
-    const dom = new jsdom(source);
-    return dom.window.document;
   }
+
+  /* v8 ignore next 4 */
+  if (!JSDOM) {
+    throw new Error("jsdom is not available to parse HTML on the server");
+  }
+  return new JSDOM(source).window.document;
 }
 
 /**
