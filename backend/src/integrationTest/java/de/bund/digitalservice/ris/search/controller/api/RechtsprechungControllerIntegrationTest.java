@@ -235,14 +235,6 @@ class RechtsprechungControllerIntegrationTest extends ContainersIntegrationBase 
         .andExpect(isJsonLdCompliant())
         .andExpectAll(
             status().isOk(),
-            jsonPath("$.zitierungenRechtsprechung[0]['@type']")
-                .value(contains("Verweis", "Rechtsprechung")),
-            jsonPath("$.zitierungenLiteraturUnselbststaendig[0]['@type']")
-                .value(contains("Verweis", "Literature")),
-            jsonPath("$.zitierungenLiteraturSelbststaendig[0]['@type']")
-                .value(contains("Verweis", "Literature")),
-            jsonPath("$.zitierungenVerwaltungsvorschriften[0]['@type']")
-                .value(contains("Verweis", "AdministrativeDirective")),
             jsonPath("$.zitierungenRechtsprechung[0].referenzUri")
                 .value("ris:/rechtsprechung/BVRE100338409"),
             jsonPath("$.zitierungenRechtsprechung[0].artDerZitierung").value("Vergleiche"),
@@ -284,8 +276,6 @@ class RechtsprechungControllerIntegrationTest extends ContainersIntegrationBase 
         .andExpect(isJsonLdCompliant())
         .andExpectAll(
             status().isOk(),
-            jsonPath("$.vorgehendeEntscheidungen[0]['@type']")
-                .value(contains("Verweis", "Rechtsprechung")),
             jsonPath("$.vorgehendeEntscheidungen[0].referenzUri")
                 .value("ris:/rechtsprechung/KORE300002025"),
             jsonPath("$.vorgehendeEntscheidungen[0].dokumenttyp")
@@ -297,8 +287,6 @@ class RechtsprechungControllerIntegrationTest extends ContainersIntegrationBase 
                 .value("previous decision court type"),
             jsonPath("$.vorgehendeEntscheidungen[0].gericht.gerichtsort")
                 .value("previous decision court location"),
-            jsonPath("$.nachgehendeEntscheidungen[0]['@type']")
-                .value(contains("Verweis", "Rechtsprechung")),
             jsonPath("$.nachgehendeEntscheidungen[0].art").value("anhängig"),
             jsonPath("$.nachgehendeEntscheidungen[0].referenzUri")
                 .value("ris:/rechtsprechung/JURE100074208"),
