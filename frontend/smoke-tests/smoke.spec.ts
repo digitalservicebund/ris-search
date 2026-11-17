@@ -34,33 +34,56 @@ test.describe("find and display norms", () => {
     await page.goto("/");
 
     const searchInput = page.getByRole("searchbox");
-    await searchInput.fill("Brennereiordnung");
+    await searchInput.fill("Verordnung");
 
     const searchButton = page.getByRole("button", { name: "Suchen" });
     await searchButton.click();
 
     await page.getByRole("radio", { name: "Gesetze & Verordnungen" }).click();
-    await page
-      .getByRole("link", { name: "Brennereiordnung", exact: true })
-      .click();
+
+    const firstResultHeading = page
+      .getByRole("list", { name: "Suchergebnisse" })
+      .getByRole("listitem")
+      .first()
+      .getByRole("heading", { level: 2 });
+
+    const title = (await firstResultHeading.textContent())?.trim();
+    expect(title).toBeTruthy();
+
+    await firstResultHeading.click();
 
     await expect(
       page.getByRole("heading", {
         level: 1,
-        name: "Brennereiordnung",
+        name: title,
       }),
     ).toBeVisible();
   });
 
   test("open norm directly (server side rendered)", async ({ page }) => {
-    await page.goto(
-      "/gesetze/eli/bund/hist/1922/0912-612-7-1-anlage-1/1922-09-12/1/deu",
-    );
+    await page.goto("/suche?query=Verordnung&court=&documentKind=N");
+
+    const firstResult = page
+      .getByRole("list", { name: "Suchergebnisse" })
+      .getByRole("listitem")
+      .first();
+
+    const title = (
+      await firstResult.getByRole("heading", { level: 2 }).textContent()
+    )?.trim();
+    expect(title).toBeTruthy();
+
+    const href = await firstResult
+      .getByRole("link", { name: title, exact: true })
+      .getAttribute("href");
+    expect(href).toBeTruthy();
+
+    await page.goto(href!);
 
     await expect(
       page.getByRole("heading", {
         level: 1,
-        name: "Brennereiordnung",
+        name: title,
       }),
     ).toBeVisible();
   });
