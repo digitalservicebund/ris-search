@@ -957,8 +957,7 @@ export interface components {
             sitzDerAussenstelle?: string;
         };
         NachgehendeEntscheidungSchema: {
-            /** @example NachgehendeEntscheidung */
-            "@type"?: string;
+            "@type"?: ("Verweis" | "Rechtsprechung")[];
             /**
              * @description * nachgehend: Die nachgehende Entscheidung ist abgeschlossen.
              *     * anhängig: Die nachgehende Entscheidung ist ein anhängiges Verfahren.
@@ -1300,8 +1299,7 @@ export interface components {
             vorabdokument: boolean;
         };
         VorgehendeEntscheidungSchema: {
-            /** @example VorgehendeEntscheidung */
-            "@type"?: string;
+            "@type"?: ("Verweis" | "Rechtsprechung")[];
             /** @description Die URI die auf die referenzierte Dokeinheit verweist. */
             referenzUri?: string;
             /**
@@ -1358,8 +1356,7 @@ export interface components {
             gericht?: components["schemas"]["GerichtSchema"];
         };
         ZitierungLiteraturSelbststaendigSchema: {
-            /** @example ZitierungLiteraturSelbststaendig */
-            "@type"?: string;
+            "@type"?: ("Verweis" | "Literature")[];
             /** @enum {string} */
             richtung?: "aktiv" | "passiv";
             /** @description Die URI die auf die referenzierte Dokeinheit verweist. */
@@ -1374,8 +1371,7 @@ export interface components {
             veroeffentlichungsjahr?: string;
         };
         ZitierungLiteraturUnselbststaendigSchema: {
-            /** @example ZitierungLiteraturUnselbststaendig */
-            "@type"?: string;
+            "@type"?: ("Verweis" | "Literature")[];
             /** @enum {string} */
             richtung?: "aktiv" | "passiv";
             /** @description Die URI die auf die referenzierte Dokeinheit verweist. */
@@ -1429,8 +1425,7 @@ export interface components {
             fundstelle?: components["schemas"]["FundstelleSchema"];
         };
         ZitierungRechtsprechungSchema: {
-            /** @example ZitierungRechtsprechung */
-            "@type"?: string;
+            "@type"?: ("Verweis" | "Rechtsprechung")[];
             /** @enum {string} */
             richtung?: "aktiv" | "passiv";
             /** @description Die URI die auf die referenzierte Dokeinheit verweist. */
@@ -1492,8 +1487,7 @@ export interface components {
             fundstelle?: components["schemas"]["FundstelleSchema"];
         };
         ZitierungVerwaltungsvorschriftSchema: {
-            /** @example ZitierungVerwaltungsvorschrift */
-            "@type"?: string;
+            "@type"?: ("Verweis" | "AdministrativeDirective")[];
             /** @enum {string} */
             richtung?: "aktiv" | "passiv";
             /** @description Die URI die auf die referenzierte Dokeinheit verweist. */

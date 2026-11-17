@@ -1,7 +1,9 @@
 package de.bund.digitalservice.ris.search.schema;
 
 import de.bund.digitalservice.ris.search.xsd.RISSchema;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.List;
 import lombok.Builder;
 
 /** API schema for a citation of an administrative directive (Verwaltungsvorschrift). */
@@ -13,11 +15,13 @@ public record ZitierungVerwaltungsvorschriftSchema(
     @RISSchema(name = "ris:artDerZitierung") String artDerZitierung,
     @RISSchema(name = "ris:jurisAbkuerzung") String jurisAbkuerzung,
     @RISSchema(name = "ris:fundstelle") FundstelleSchema fundstelle)
-    implements JsonldResource {
+    implements MultiTypedJsonldResource {
 
   @Override
-  @Schema(example = JsonldTypes.ZITIERUNG_VERWALTUNGSVORSCHRIFT)
-  public String getType() {
-    return JsonldTypes.ZITIERUNG_VERWALTUNGSVORSCHRIFT;
+  @ArraySchema(
+      schema =
+          @Schema(allowableValues = {JsonldTypes.VERWEIS, JsonldTypes.ADMINISTRATIVE_DIRECTIVE}))
+  public List<String> getType() {
+    return List.of(JsonldTypes.VERWEIS, JsonldTypes.ADMINISTRATIVE_DIRECTIVE);
   }
 }
