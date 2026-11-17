@@ -1,3 +1,4 @@
+import { getAllSectionsFromDocument } from "~/utils/htmlParser";
 import { getSections, takeElements } from "./extract";
 
 function parse(html: string) {
@@ -39,6 +40,50 @@ describe("takeElements", () => {
 
     expect(takeElements(document, ".missing")).toBeUndefined();
     expect(document.body.innerHTML).toBe("<p>One</p>");
+  });
+});
+
+describe("getSections", () => {
+  it("lists the id and the first h2 of each section", () => {
+    const document = parse(
+      '<section id="a"><h2>Tenor</h2><h2>Other</h2></section><section id="b"><h2>Gründe</h2></section>',
+    );
+
+    expect(getSections(document, "section")).toEqual([
+      { id: "a", title: "Tenor" },
+      { id: "b", title: "Gründe" },
+    ]);
+  });
+
+  it("uses an empty title for sections without h2", () => {
+    const document = parse('<section id="a"><p>No heading</p></section>');
+
+    expect(getSections(document, "section")).toEqual([{ id: "a", title: "" }]);
+  });
+
+  it("returns an empty list without sections", () => {
+    expect(getSections(parse("<p>x</p>"), "section")).toEqual([]);
+  });
+});
+
+describe("getSections (compatibility with getAllSectionsFromDocument)", () => {
+  it("does not mutate the document", () => {
+    const document = parse('<section id="a"><h2>Tenor</h2></section>');
+    const before = document.body.innerHTML;
+
+    getSections(document, "section");
+
+    expect(document.body.innerHTML).toBe(before);
+  });
+
+  it("returns the same as getAllSectionsFromDocument", () => {
+    const document = parse(
+      '<section id="a"><h2>Tenor</h2></section><section id="b"><p>x</p></section>',
+    );
+
+    expect(getSections(document, "section")).toEqual(
+      getAllSectionsFromDocument(document, "section"),
+    );
   });
 });
 

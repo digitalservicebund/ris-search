@@ -1,5 +1,5 @@
 import type { JSDOM as JSDOMType } from "jsdom";
-import { extractSections } from "~/utils/html/extract";
+import { getSections } from "~/utils/html/extract";
 
 const JSDOM: typeof JSDOMType | undefined = import.meta.server
   ? (await import("jsdom")).JSDOM
@@ -22,26 +22,12 @@ export function parseDocument(html: string): Document {
   return new JSDOM(source).window.document;
 }
 
-/**
- * Extracts all headings (or specified elements) from HTML Document.
- *
- * @param document - The raw HTML string.
- * @param elementName - The element tag name to search for (e.g., "h2", "h3").
- * @returns An array of headings with `id` and `title`.
- */
+/** @deprecated Use `getSections` from `~/utils/html/extract` instead. */
 export function getAllSectionsFromDocument(
   document: Document,
   elementName: string,
-): Section[] {
-  const elements: NodeListOf<Element> = document.querySelectorAll(elementName);
-
-  return (Array.from(elements) as HTMLElement[]).map((element) => {
-    const heading = element.querySelector("h2");
-    return {
-      id: element.id,
-      title: heading?.textContent ?? "", // Ensure textContent is not null
-    };
-  });
+) {
+  return getSections(document, elementName);
 }
 
 export function getTextFromElements(elements?: NodeListOf<Element>): string[] {

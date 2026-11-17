@@ -27,3 +27,21 @@ export function takeElements(
   return html;
 }
 
+export type Section = { id: string; title: string };
+
+/**
+ * Lists the sections of a document, e.g. for a table of contents. The title of
+ * a section is the text of its first `<h2>`. Does not change the document: the
+ * sections stay in the body.
+ *
+ * @param elementName The tag name of the sections (e.g., "section").
+ */
+export function getSections(
+  document: Document,
+  elementName: string,
+): Section[] {
+  return [...document.querySelectorAll(elementName)].map((element) => ({
+    id: element.id,
+    title: element.querySelector("h2")?.textContent ?? "",
+  }));
+}
