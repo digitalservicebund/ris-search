@@ -276,7 +276,6 @@ class RechtsprechungControllerIntegrationTest extends ContainersIntegrationBase 
         .andExpect(isJsonLdCompliant())
         .andExpectAll(
             status().isOk(),
-            jsonPath("$.vorgehendeEntscheidungen[0]['@type']").value("VorgehendeEntscheidung"),
             jsonPath("$.vorgehendeEntscheidungen[0].referenzUri")
                 .value("ris:/rechtsprechung/KORE300002025"),
             jsonPath("$.vorgehendeEntscheidungen[0].dokumenttyp")
@@ -288,7 +287,6 @@ class RechtsprechungControllerIntegrationTest extends ContainersIntegrationBase 
                 .value("previous decision court type"),
             jsonPath("$.vorgehendeEntscheidungen[0].gericht.gerichtsort")
                 .value("previous decision court location"),
-            jsonPath("$.nachgehendeEntscheidungen[0]['@type']").value("NachgehendeEntscheidung"),
             jsonPath("$.nachgehendeEntscheidungen[0].art").value("anhängig"),
             jsonPath("$.nachgehendeEntscheidungen[0].referenzUri")
                 .value("ris:/rechtsprechung/JURE100074208"),

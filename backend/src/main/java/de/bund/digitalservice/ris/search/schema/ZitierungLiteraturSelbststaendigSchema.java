@@ -1,7 +1,9 @@
 package de.bund.digitalservice.ris.search.schema;
 
 import de.bund.digitalservice.ris.search.xsd.RISSchema;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.List;
 import lombok.Builder;
 
 /** API schema for a citation of selbstständige (independent) literature. */
@@ -13,11 +15,11 @@ public record ZitierungLiteraturSelbststaendigSchema(
     @RISSchema(name = "ris:autor") String autor,
     @RISSchema(name = "ris:referenzSelbststaendigeLiteraturTitel") String titel,
     @RISSchema(name = "ris:veroeffentlichungsjahr") String veroeffentlichungsjahr)
-    implements JsonldResource {
+    implements MultiTypedJsonldResource {
 
   @Override
-  @Schema(example = JsonldTypes.ZITIERUNG_LITERATUR_SELBSTSTAENDIG)
-  public String getType() {
-    return JsonldTypes.ZITIERUNG_LITERATUR_SELBSTSTAENDIG;
+  @ArraySchema(schema = @Schema(allowableValues = {JsonldTypes.VERWEIS, JsonldTypes.LITERATURE}))
+  public List<String> getType() {
+    return List.of(JsonldTypes.VERWEIS, JsonldTypes.LITERATURE);
   }
 }

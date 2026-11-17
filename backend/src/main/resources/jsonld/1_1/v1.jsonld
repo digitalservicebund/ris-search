@@ -32,8 +32,6 @@
       "PublicationIssue": "schema:PublicationIssue",
       "MediaObject": "schema:MediaObject",
       "documentNumber": "schema:identifier",
-      "referenzUri": "ris:referenzURI",
-      "richtung": "ris:richtung",
       "dokumentnummer": "schema:identifier",
       "Legislation": {
         "@id": "schema:Legislation",
@@ -142,6 +140,7 @@
           "schlagwoerter": "ris:schlagwoerter",
           "courtName": "ris:courtName",
           "entscheidungsnamen": "ris:entscheidungsnamen",
+          "entscheidungsdatum": "ris:entscheidungsdatum",
           "abweichendeDokumentnummern": "ris:abweichendeDokumentnummern",
           "vorabdokument": "ris:vorabdokument"
         }
@@ -150,16 +149,20 @@
         "@id": "ris:Literature",
         "@context": {
           "yearsOfPublication": "ris:yearsOfPublication",
+          "veroeffentlichungsjahr": "ris:yearsOfPublication",
           "documentTypes": "ris:documentTypes",
+          "dokumenttyp": "ris:documentTypes",
           "dependentReferences": "ris:dependentReferences",
           "independentReferences": "ris:independentReferences",
           "normReferences": "ris:normReferences",
           "headline": "schema:headline",
+          "titel": "schema:headline",
           "headlineAdditions": "ris:headlineAdditions",
           "alternativeHeadline": "schema:alternativeHeadline",
           "edition": "ris:edition",
           "internationalIdentifiers": "ris:internationalIdentifiers",
           "authors": "schema:author",
+          "autor": "schema:author",
           "collaborators": "schema:contributor",
           "editors": "schema:editor",
           "founder": "ris:founder",
@@ -200,59 +203,15 @@
           "textMatches": "ris:SearchResultMatch"
         }
       },
-      "ZitierungRechtsprechung": {
-        "@id": "ris:ZitierungRechtsprechung",
+      "Verweis": {
+        "@id": "ris:Verweis",
         "@context": {
-          "artDerZitierung": "ris:artDerZitierung",
-          "gericht": "ris:gericht",
-          "entscheidungsdatum": "ris:entscheidungsdatum",
-          "dokumenttyp": "ris:dokumenttyp",
-          "aktenzeichen": "ris:aktenzeichen",
-          "fundstelle": "ris:fundstelle"
-        }
-      },
-      "VorgehendeEntscheidung": {
-        "@id": "ris:VorgehendeEntscheidung",
-        "@context": {
-          "dokumenttyp": "ris:dokumenttyp",
-          "entscheidungsdatum": "ris:entscheidungsdatum",
-          "aktenzeichen": "ris:aktenzeichen",
-          "gericht": "ris:gericht"
-        }
-      },
-      "NachgehendeEntscheidung": {
-        "@id": "ris:NachgehendeEntscheidung",
-        "@context": {
-          "art": "ris:art",
-          "dokumenttyp": "ris:dokumenttyp",
-          "entscheidungsdatum": "ris:entscheidungsdatum",
-          "mitteilungsdatum": "ris:mitteilungsdatum",
-          "aktenzeichen": "ris:aktenzeichen",
-          "gericht": "ris:gericht",
-          "vermerk": "ris:vermerk"
-        }
-      },
-      "ZitierungLiteraturSelbststaendig": {
-        "@id": "ris:ZitierungLiteraturSelbststaendig",
-        "@context": {
-          "autor": "schema:author",
-          "titel": "schema:name",
-          "veroeffentlichungsjahr": "ris:veroeffentlichungsjahr"
-        }
-      },
-      "ZitierungLiteraturUnselbststaendig": {
-        "@id": "ris:ZitierungLiteraturUnselbststaendig",
-        "@context": {
-          "autor": "schema:author",
-          "dokumenttyp": "ris:dokumenttyp",
-          "fundstelle": "ris:fundstelle"
-        }
-      },
-      "ZitierungVerwaltungsvorschrift": {
-        "@id": "ris:ZitierungVerwaltungsvorschrift",
-        "@context": {
-          "artDerZitierung": "ris:artDerZitierung",
+          "referenzUri": "ris:referenzURI",
+          "richtung": "ris:richtung",
           "jurisAbkuerzung": "ris:jurisAbkuerzung",
+          "art": "ris:art",
+          "artDerZitierung": "ris:artDerZitierung",
+          "vermerk": "ris:vermerk",
           "fundstelle": "ris:fundstelle"
         }
       },

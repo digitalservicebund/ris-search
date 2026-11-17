@@ -1,8 +1,10 @@
 package de.bund.digitalservice.ris.search.schema;
 
 import de.bund.digitalservice.ris.search.xsd.RISSchema;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
+import java.util.List;
 import lombok.Builder;
 
 /** API schema for a citation of a case law document. */
@@ -17,11 +19,12 @@ public record ZitierungRechtsprechungSchema(
     @RISSchema(name = "ris:dokumenttyp") String dokumenttyp,
     @RISSchema(name = "ris:aktenzeichen") String aktenzeichen,
     @RISSchema(name = "ris:fundstelle") FundstelleSchema fundstelle)
-    implements JsonldResource {
+    implements MultiTypedJsonldResource {
 
   @Override
-  @Schema(example = JsonldTypes.ZITIERUNG_RECHTSPRECHUNG)
-  public String getType() {
-    return JsonldTypes.ZITIERUNG_RECHTSPRECHUNG;
+  @ArraySchema(
+      schema = @Schema(allowableValues = {JsonldTypes.VERWEIS, JsonldTypes.RECHTSPRECHUNG}))
+  public List<String> getType() {
+    return List.of(JsonldTypes.VERWEIS, JsonldTypes.RECHTSPRECHUNG);
   }
 }

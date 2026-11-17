@@ -1,8 +1,10 @@
 package de.bund.digitalservice.ris.search.schema;
 
 import de.bund.digitalservice.ris.search.xsd.RISSchema;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
+import java.util.List;
 import lombok.Builder;
 
 /** API schema for a subsequent decision of a case law document. */
@@ -17,11 +19,12 @@ public record NachgehendeEntscheidungSchema(
     @RISSchema(name = "ris:aktenzeichen") String aktenzeichen,
     @RISSchema(name = "ris:gericht") GerichtSchema gericht,
     @RISSchema(name = "ris:vermerk") String vermerk)
-    implements JsonldResource {
+    implements MultiTypedJsonldResource {
 
   @Override
-  @Schema(example = JsonldTypes.NACHGEHENDE_ENTSCHEIDUNG)
-  public String getType() {
-    return JsonldTypes.NACHGEHENDE_ENTSCHEIDUNG;
+  @ArraySchema(
+      schema = @Schema(allowableValues = {JsonldTypes.VERWEIS, JsonldTypes.RECHTSPRECHUNG}))
+  public List<String> getType() {
+    return List.of(JsonldTypes.VERWEIS, JsonldTypes.RECHTSPRECHUNG);
   }
 }
