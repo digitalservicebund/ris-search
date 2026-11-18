@@ -12,6 +12,8 @@ import de.bund.digitalservice.ris.builder.NormTestDataBuilder;
 import de.bund.digitalservice.ris.builder.NormWorkMetadataTestDataBuilder;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
+import de.bund.digitalservice.ris.search.models.ldml.norm.StandDerDokumentarischenBearbeitung;
+import de.bund.digitalservice.ris.search.models.ldml.norm.Standangabe;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.ArticlesRepository;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
@@ -117,16 +119,37 @@ class IndexNormsServiceTest {
   }
 
   @Test
-  void leavesFullCitationNullWhenWorkMetadataMissing() throws ObjectStoreServiceException {
+  void appliesStandangabeAndStandDerDokumentarischenBearbeitungFromWorkMetadata()
+      throws ObjectStoreServiceException {
     String workEli = "eli/bund/bgbl-1/1992/s101";
     String validEli = workEli + "/1992-01-01/1/deu/1992-01-02/regelungstext-1.xml";
     when(this.bucket.getAllKeysByPrefix("eli/")).thenReturn(List.of(validEli));
     when(this.bucket.getFileAsString(validEli))
         .thenReturn(Optional.of(NormTestDataBuilder.builder().eli(validEli).buildNormXml()));
+    when(this.bucket.getFileAsString(workEli + "/metadaten.xml"))
+        .thenReturn(
+            Optional.of(
+                NormWorkMetadataTestDataBuilder.buildMetadatenXml(
+                    null,
+                    List.of(new Standangabe("Zuletzt geändert durch Testanpassungen", "stand")),
+                    List.of(new StandDerDokumentarischenBearbeitung("Hinweis Testdaten")))));
 
     this.service.reindexAll("2024-01-01T12:00:00Z");
 
-    verify(repo).saveAll(argThat(arg -> arg.iterator().next().getFullCitation() == null));
+    verify(repo)
+        .saveAll(
+            argThat(arg ->
+                arg.iterator()
+                    .next()
+                    .getStandangabe()
+                    .equals(List.of("Zuletzt geändert durch Testanpassungen"))));
+    verify(repo)
+        .saveAll(
+            argThat(arg ->
+                arg.iterator()
+                    .next()
+                    .getStandDerDokumentarischenBearbeitung()
+                    .equals(List.of("Hinweis Testdaten"))));
   }
 
   @Test
@@ -143,6 +166,10 @@ class IndexNormsServiceTest {
 
     verify(repo, times(1)).saveAll(any());
     verify(repo).saveAll(argThat(arg -> arg.iterator().next().getFullCitation() == null));
+    verify(repo).saveAll(argThat(arg -> arg.iterator().next().getStandangabe() == null));
+    verify(repo)
+        .saveAll(
+            argThat(arg -> arg.iterator().next().getStandDerDokumentarischenBearbeitung() == null));
   }
 
   @Test

@@ -9,6 +9,8 @@ import de.bund.digitalservice.ris.builder.NormTestDataBuilder;
 import de.bund.digitalservice.ris.builder.NormWorkMetadataTestDataBuilder;
 import de.bund.digitalservice.ris.builder.models.common.AknP;
 import de.bund.digitalservice.ris.builder.models.common.AuthorialNote;
+import de.bund.digitalservice.ris.search.models.ldml.norm.StandDerDokumentarischenBearbeitung;
+import de.bund.digitalservice.ris.search.models.ldml.norm.Standangabe;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.LegislationPartType;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
@@ -123,7 +125,10 @@ public class NormsTestData {
     // ------------- add work-level metadaten.xml -------------------
     result.put(
         S_102_WORK_ELI + "/metadaten.xml",
-        NormWorkMetadataTestDataBuilder.buildMetadatenXml("Verordnung zu der Vereinbarung"));
+        NormWorkMetadataTestDataBuilder.buildMetadatenXml(
+            "Verordnung zu der Vereinbarung",
+            List.of(new Standangabe("Zuletzt geändert durch Testanpassungen", "stand")),
+            List.of(new StandDerDokumentarischenBearbeitung("Hinweis Testdaten"))));
 
     return result;
   }

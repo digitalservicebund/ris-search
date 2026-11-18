@@ -1,16 +1,68 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xs:schema
-  xmlns:xs="http://www.w3.org/2001/XMLSchema"
-  targetNamespace="http://rechtsinformationen.bund.de/schema/norm-work-metadata/0.1"
-  xmlns="http://rechtsinformationen.bund.de/schema/norm-work-metadata/0.1"
-  elementFormDefault="qualified"
+        xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://rechtsinformationen.bund.de/schema/norm-work-metadata/0.1"
+        xmlns="http://rechtsinformationen.bund.de/schema/norm-work-metadata/0.1"
+        elementFormDefault="qualified"
 >
-  <xs:element name="metadaten">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element name="vollzitat" type="xs:string" minOccurs="0" />
-      </xs:sequence>
-      <xs:attribute name="eli" type="xs:string" use="optional" />
+    <xs:element name="metadaten">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="vollzitat" type="xs:string" minOccurs="0" />
+                <xs:element
+                        name="standangabe"
+                        type="StandangabeType"
+                        minOccurs="0"
+                        maxOccurs="unbounded"
+                />
+                <xs:element
+                        name="standDerDokumentarischenBearbeitung"
+                        type="StandDerDokumentarischenBearbeitungType"
+                        minOccurs="0"
+                        maxOccurs="unbounded"
+                />
+            </xs:sequence>
+            <xs:attribute name="eli" type="xs:string" use="optional" />
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="StandangabeType">
+        <xs:simpleContent>
+            <xs:extension base="StringNotEmpty">
+                <xs:attribute name="typ" type="standangabeTypLiterals" use="required" />
+            </xs:extension>
+        </xs:simpleContent>
     </xs:complexType>
-  </xs:element>
+
+    <xs:complexType name="StandDerDokumentarischenBearbeitungType">
+        <xs:simpleContent>
+            <xs:extension base="StringNotEmpty">
+                <xs:attribute
+                        name="domainTerm"
+                        type="xs:string"
+                        use="required"
+                        fixed="Stand der dokumentarischen Bearbeitung"
+                />
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:simpleType name="standangabeTypLiterals">
+        <xs:annotation>
+            <xs:documentation>Art einer Standangabe.</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="aufhebung" />
+            <xs:enumeration value="hinweis" />
+            <xs:enumeration value="neufassung" />
+            <xs:enumeration value="sonstiger-hinweis" />
+            <xs:enumeration value="stand" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="StringNotEmpty">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1" />
+        </xs:restriction>
+    </xs:simpleType>
 </xs:schema>

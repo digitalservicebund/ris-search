@@ -4,6 +4,7 @@ import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.mapper.NormLdmlToOpenSearchMapper;
 import de.bund.digitalservice.ris.search.mapper.NormWorkMetadataMapper;
+import de.bund.digitalservice.ris.search.models.ldml.norm.NormWorkMetadata;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.ArticlesRepository;
@@ -29,6 +30,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.Profiles;
@@ -169,8 +171,7 @@ public class IndexNormsService implements IndexService {
       }
     }
 
-    fetchWorkFullCitation(workEliPath)
-        .ifPresent(citation -> normExpressions.forEach(norm -> norm.setFullCitation(citation)));
+    fetchWorkMetadataXml(workEliPath).ifPresent(xml -> applyWorkMetadata(xml, normExpressions));
 
     addTimeRelevanceWindows(workEliPath.toString(), normExpressions);
 
@@ -251,22 +252,49 @@ public class IndexNormsService implements IndexService {
   }
 
   /**
-   * Fetches and parses the work-level {@code metadaten.xml} file for the given work, if present.
+   * Fetches the work-level {@code metadaten.xml} file content for the given work, if present.
    *
    * @param workEliPath the work to fetch the metadata file for
-   * @return the full citation (vollzitat), or {@link Optional#empty()} if the file is missing, the
-   *     citation is absent, or the file couldn't be read
+   * @return the raw XML content, or {@link Optional#empty()} if the file is missing or couldn't be
+   *     read
    */
-  private Optional<String> fetchWorkFullCitation(WorkEliPath workEliPath) {
+  private Optional<String> fetchWorkMetadataXml(WorkEliPath workEliPath) {
     String metadatenKey = workEliPath + "/metadaten.xml";
     try {
-      return normsBucket
-          .getFileAsString(metadatenKey)
-          .flatMap(NormWorkMetadataMapper::parseVollzitat);
+      return normsBucket.getFileAsString(metadatenKey);
     } catch (ObjectStoreServiceException e) {
       logger.error("Error while reading work metadata file {}. {}", metadatenKey, e.getMessage());
       return Optional.empty();
     }
+  }
+
+  /**
+   * Parses the work-level {@code metadaten.xml} content and denormalizes its values onto every
+   * expression of the work.
+   *
+   * @param xml the raw XML content of the metadaten.xml file
+   * @param normExpressions the expressions belonging to the work
+   */
+  private void applyWorkMetadata(String xml, List<Norm> normExpressions) {
+    Optional<NormWorkMetadata> metadata = NormWorkMetadataMapper.parse(xml);
+    metadata.ifPresent(normWorkMetadata -> {
+      String vollzitat = Strings.trimToNull(normWorkMetadata.getVollzitat());
+      List<String> standangabe =
+          normWorkMetadata.getStandangabe().stream()
+              .map(e -> e.getText().strip())
+              .filter(Strings::isNotBlank)
+              .collect(Collectors.toList());
+      List<String> standDerDokumentarischenBearbeitung =
+          normWorkMetadata.getStandDerDokumentarischenBearbeitung().stream()
+              .map(e -> e.getText().strip())
+              .filter(Strings::isNotBlank)
+              .collect(Collectors.toList());
+      normExpressions.forEach(norm -> {
+        norm.setFullCitation(vollzitat);
+        norm.setStandangabe(standangabe);
+        norm.setStandDerDokumentarischenBearbeitung(standDerDokumentarischenBearbeitung);
+      });
+    });
   }
 
   private Optional<Norm> getNormFromS3(ExpressionEliPath expressionEliPath, List<String> filenames)

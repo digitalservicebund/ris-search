@@ -16,10 +16,6 @@
                                              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                                              xsi:schemaLocation="http://rechtsinformationen.bund.de/schema/norm-metadata/0.1
                                              ../../../../../../../../../../../../Grammatiken/Norms/norm-metadata.xsd">
-                    <ris:standangabe type="neuf">Neugefasst durch Bek. v. 01.01.2000 I 123</ris:standangabe>
-                    <ris:standangabe type="stand">
-                        Zuletzt geändert durch Art. 1337 G v. 7.3.2025 I Nr. 1
-                    </ris:standangabe>
                 </ris:legalDocML.de_metadaten>
             </akn:proprietary>
         </akn:meta>

@@ -96,6 +96,26 @@ class IndexNormsServiceIntegrationTest extends ContainersIntegrationBase {
   }
 
   @Test
+  @DisplayName(
+      "Standangabe and standDerDokumentarischenBearbeitung from work-level metadaten.xml are"
+          + " denormalized onto every expression")
+  void standangabeAndStandDerDokumentarischenBearbeitungAreDenormalizedOntoEveryExpression() {
+    indexNormsService.reindexAll(SharedTestConstants.TIMESTAMP_2024_01_01_AS_STRING);
+    List<Norm> expressions =
+        normsRepository
+            .getByWorkEliKeyword("eli/bund/bgbl-1/1991/s102", Pageable.unpaged(Sort.by("id")))
+            .getContent();
+    assertThat(expressions).hasSize(3);
+    assertThat(expressions)
+        .allSatisfy(expression -> {
+          assertThat(expression.getStandangabe())
+              .containsExactly("Zuletzt geändert durch Testanpassungen");
+          assertThat(expression.getStandDerDokumentarischenBearbeitung())
+              .containsExactly("Hinweis Testdaten");
+        });
+  }
+
+  @Test
   @DisplayName("Official Toc indexes properly")
   void officialTocIndexesProperly() {
     indexNormsService.reindexAll(SharedTestConstants.TIMESTAMP_2024_01_01_AS_STRING);

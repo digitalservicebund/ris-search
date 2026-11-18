@@ -3996,6 +3996,22 @@
             "description" : "Vollzitat",
             "example" : "Kakaoerzeugnisse von 1. Dezember 2000 (BGBl. 1111)"
           },
+          "standangabe" : {
+            "type" : [ "array", "null" ],
+            "description" : "Standangabe",
+            "example" : [ "Zuletzt geändert durch Testanpassungen" ],
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "standDerDokumentarischenBearbeitung" : {
+            "type" : [ "array", "null" ],
+            "description" : "Stand der dokumentarischen Bearbeitung",
+            "example" : [ "Hinweis Testdaten" ],
+            "items" : {
+              "type" : "string"
+            }
+          },
           "name" : {
             "type" : "string",
             "description" : "Amtliche Langüberschrift",

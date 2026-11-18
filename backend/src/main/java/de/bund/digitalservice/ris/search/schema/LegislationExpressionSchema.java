@@ -47,6 +47,18 @@ public record LegislationExpressionSchema(
             description = "Vollzitat",
             nullable = true)
         String fullCitation,
+    @Nullable
+        @Schema(
+            example = "[\"Zuletzt geändert durch Testanpassungen\"]",
+            description = "Standangabe",
+            nullable = true)
+        List<String> standangabe,
+    @Nullable
+        @Schema(
+            example = "[\"Hinweis Testdaten\"]",
+            description = "Stand der dokumentarischen Bearbeitung",
+            nullable = true)
+        List<String> standDerDokumentarischenBearbeitung,
     @Schema(
             example = "Verordnung über Kakao und Kakaoerzeugnisse",
             description = "Amtliche Langüberschrift",

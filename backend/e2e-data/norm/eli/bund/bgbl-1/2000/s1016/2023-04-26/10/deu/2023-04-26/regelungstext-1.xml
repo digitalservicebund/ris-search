@@ -144,9 +144,6 @@
                                              xsi:schemaLocation="http://rechtsinformationen.bund.de/schema/norm-metadata/0.1 schema/norm-metadata.xsd">
                     <ris:abkuerzung refersTo="interne-abkuerzung">RisFrSaftErfrischV</ris:abkuerzung>
                     <ris:inkraft date="2023-04-29"/>
-                    <ris:standangabe type="stand">Zuletzt geändert durch Testanpassungen</ris:standangabe>
-                    <ris:standangabe type="neuf">Neugefasst durch Testdaten</ris:standangabe>
-                    <ris:standangabe type="hinweis">Hinweis Testdaten</ris:standangabe>
                 </ris:legalDocML.de_metadaten>
             </akn:proprietary>
         </akn:meta>

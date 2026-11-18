@@ -60,6 +60,8 @@ public class NormSchemaMapper {
     return LegislationExpressionSchema.builder()
         .id(CONTENT_BASE_URL + norm.getExpressionEli())
         .fullCitation(norm.getFullCitation())
+        .standangabe(norm.getStandangabe())
+        .standDerDokumentarischenBearbeitung(norm.getStandDerDokumentarischenBearbeitung())
         .context(remoteJsonContext)
         .abbreviation(norm.getAbbreviation())
         .risAbbreviation(norm.getRisAbbreviation())
