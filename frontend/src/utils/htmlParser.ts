@@ -1,5 +1,4 @@
 import type { JSDOM as JSDOMType } from "jsdom";
-import { getSections } from "~/utils/html/extract";
 
 const JSDOM: typeof JSDOMType | undefined = import.meta.server
   ? (await import("jsdom")).JSDOM
@@ -20,14 +19,6 @@ export function parseDocument(html: string): Document {
     throw new Error("jsdom is not available to parse HTML on the server");
   }
   return new JSDOM(source).window.document;
-}
-
-/** @deprecated Use `getSections` from `~/utils/html/extract` instead. */
-export function getAllSectionsFromDocument(
-  document: Document,
-  elementName: string,
-) {
-  return getSections(document, elementName);
 }
 
 export function getTextFromElements(elements?: NodeListOf<Element>): string[] {

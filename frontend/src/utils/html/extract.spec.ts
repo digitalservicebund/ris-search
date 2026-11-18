@@ -1,4 +1,3 @@
-import { getAllSectionsFromDocument } from "~/utils/htmlParser";
 import { getSections, takeElements } from "./extract";
 
 function parse(html: string) {
@@ -64,9 +63,7 @@ describe("getSections", () => {
   it("returns an empty list without sections", () => {
     expect(getSections(parse("<p>x</p>"), "section")).toEqual([]);
   });
-});
 
-describe("getSections (compatibility with getAllSectionsFromDocument)", () => {
   it("does not mutate the document", () => {
     const document = parse('<section id="a"><h2>Tenor</h2></section>');
     const before = document.body.innerHTML;
@@ -74,16 +71,6 @@ describe("getSections (compatibility with getAllSectionsFromDocument)", () => {
     getSections(document, "section");
 
     expect(document.body.innerHTML).toBe(before);
-  });
-
-  it("returns the same as getAllSectionsFromDocument", () => {
-    const document = parse(
-      '<section id="a"><h2>Tenor</h2></section><section id="b"><p>x</p></section>',
-    );
-
-    expect(getSections(document, "section")).toEqual(
-      getAllSectionsFromDocument(document, "section"),
-    );
   });
 });
 
