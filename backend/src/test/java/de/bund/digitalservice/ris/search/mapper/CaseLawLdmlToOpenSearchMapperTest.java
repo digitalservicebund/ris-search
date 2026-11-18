@@ -144,14 +144,14 @@ class CaseLawLdmlToOpenSearchMapperTest {
                 + " ensuing decision file number (anhängig)",
             "ensuing decision court type, ensuing decision document type vom 1. Oktober 2022 -"
                 + " ensuing decision file number (anhängig)");
-    assertThat(caseLaw.aktivzitierungLiteraturUnselbstaendig()).containsExactly("STLU991393280");
-    assertThat(caseLaw.passivzitierungLiteraturUnselbstaendig()).containsExactly("SBLU000539216");
-    assertThat(caseLaw.aktivzitierungLiteraturSelbstaendig()).containsExactly("KSLS071671727");
-    assertThat(caseLaw.passivzitierungLiteraturSelbstaendig()).containsExactly("KSLS071671728");
-    assertThat(caseLaw.aktivzitierungRechtsprechung()).containsExactly("BVRE100338409");
-    assertThat(caseLaw.passivzitierungRechtsprechung()).containsExactly("JURE100074208");
-    assertThat(caseLaw.aktivzitierungVerwaltungsvorschriften()).containsExactly("KSNR008561615");
-    assertThat(caseLaw.passivzitierungVerwaltungsvorschriften()).containsExactly("KSNR006800006");
+    assertThat(caseLaw.aktivzitierungenLiteraturUnselbstaendig()).containsExactly("STLU991393280");
+    assertThat(caseLaw.passivzitierungenLiteraturUnselbstaendig()).containsExactly("SBLU000539216");
+    assertThat(caseLaw.aktivzitierungenLiteraturSelbstaendig()).containsExactly("KSLS071671727");
+    assertThat(caseLaw.passivzitierungenLiteraturSelbstaendig()).containsExactly("KSLS071671728");
+    assertThat(caseLaw.aktivzitierungenRechtsprechung()).containsExactly("BVRE100338409");
+    assertThat(caseLaw.passivzitierungenRechtsprechung()).containsExactly("JURE100074208");
+    assertThat(caseLaw.aktivzitierungenVerwaltungsvorschriften()).containsExactly("KSNR008561615");
+    assertThat(caseLaw.passivzitierungenVerwaltungsvorschriften()).containsExactly("KSNR006800006");
     assertThat(caseLaw.amtlicheFundstellen()).containsExactly("BGHSt 67, 273-284");
     assertThat(caseLaw.nichtamtlicheFundstellen()).containsExactly("DStR 2023, 1430-1435");
     assertThat(caseLaw.gesetzeskraft())

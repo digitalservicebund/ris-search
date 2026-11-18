@@ -102,19 +102,20 @@ public class CaseLawTestData {
             .rechtsfrageGesamt("rechtsfrageGesamtTest")
             .previousDecisions(List.of("previousDecisionsTest"))
             .ensuingDecisions(List.of("ensuingDecisionsTest"))
-            .aktivzitierungRechtsprechung(List.of("aktivzitierungRechtsprechungTest"))
-            .passivzitierungRechtsprechung(List.of("passivzitierungRechtsprechungTest"))
-            .aktivzitierungVerwaltungsvorschriften(
-                List.of("aktivzitierungVerwaltungsvorschriftenTest"))
-            .passivzitierungVerwaltungsvorschriften(
-                List.of("passivzitierungVerwaltungsvorschriftenTest"))
-            .aktivzitierungLiteraturSelbstaendig(List.of("aktivzitierungLiteraturSelbstaendigTest"))
-            .aktivzitierungLiteraturUnselbstaendig(
-                List.of("aktivzitierungLiteraturUnselbstaendigTest"))
-            .passivzitierungLiteraturSelbstaendig(
-                List.of("passivzitierungLiteraturSelbstaendigTest"))
-            .passivzitierungLiteraturUnselbstaendig(
-                List.of("passivzitierungLiteraturUnselbstaendigTest"))
+            .aktivzitierungenRechtsprechung(List.of("aktivzitierungenRechtsprechungTest"))
+            .passivzitierungenRechtsprechung(List.of("passivzitierungenRechtsprechungTest"))
+            .aktivzitierungenVerwaltungsvorschriften(
+                List.of("aktivzitierungenVerwaltungsvorschriftenTest"))
+            .passivzitierungenVerwaltungsvorschriften(
+                List.of("passivzitierungenVerwaltungsvorschriftenTest"))
+            .aktivzitierungenLiteraturSelbstaendig(
+                List.of("aktivzitierungenLiteraturSelbstaendigTest"))
+            .aktivzitierungenLiteraturUnselbstaendig(
+                List.of("aktivzitierungenLiteraturUnselbstaendigTest"))
+            .passivzitierungenLiteraturSelbstaendig(
+                List.of("passivzitierungenLiteraturSelbstaendigTest"))
+            .passivzitierungenLiteraturUnselbstaendig(
+                List.of("passivzitierungenLiteraturUnselbstaendigTest"))
             .amtlicheFundstellen(List.of("amtlicheFundstellenTest"))
             .nichtamtlicheFundstellen(List.of("nichtamtlicheFundstellenTest"))
             .normenkette(List.of("normenketteTest"))

@@ -144,14 +144,18 @@ public class CaseLawLdmlToOpenSearchMapper {
             getLinkedJudgements(
                 meta,
                 refs -> refs.getReferencesByType(ImplicitReference::getNachgehendeEntscheidung)))
-        .aktivzitierungLiteraturUnselbstaendig(extractAktivzitierungLiteraturUnselbstaendig(meta))
-        .passivzitierungLiteraturUnselbstaendig(extractPassivzitierungLiteraturUnselbstaendig(meta))
-        .aktivzitierungLiteraturSelbstaendig(extractAktivzitierungLiteraturSelbstaendig(meta))
-        .passivzitierungLiteraturSelbstaendig(extractPassivzitierungLiteraturSelbstaendig(meta))
-        .aktivzitierungRechtsprechung(extractAktivzitierungRechtsprechung(meta))
-        .passivzitierungRechtsprechung(extractPassivzitierungRechtsprechung(meta))
-        .aktivzitierungVerwaltungsvorschriften(extractAktivzitierungVerwaltungsvorschriften(meta))
-        .passivzitierungVerwaltungsvorschriften(extractPassivzitierungVerwaltungsvorschriften(meta))
+        .aktivzitierungenLiteraturUnselbstaendig(
+            extractAktivzitierungenLiteraturUnselbstaendig(meta))
+        .passivzitierungenLiteraturUnselbstaendig(
+            extractPassivzitierungenLiteraturUnselbstaendig(meta))
+        .aktivzitierungenLiteraturSelbstaendig(extractAktivzitierungenLiteraturSelbstaendig(meta))
+        .passivzitierungenLiteraturSelbstaendig(extractPassivzitierungenLiteraturSelbstaendig(meta))
+        .aktivzitierungenRechtsprechung(extractAktivzitierungenRechtsprechung(meta))
+        .passivzitierungenRechtsprechung(extractPassivzitierungenRechtsprechung(meta))
+        .aktivzitierungenVerwaltungsvorschriften(
+            extractAktivzitierungenVerwaltungsvorschriften(meta))
+        .passivzitierungenVerwaltungsvorschriften(
+            extractPassivzitierungenVerwaltungsvorschriften(meta))
         .amtlicheFundstellen(extractAmtlicheFundstellen(meta))
         .nichtamtlicheFundstellen(extractNichtamtlicheFundstellen(meta))
         .gesetzeskraft(extractGesetzeskraft(meta))
@@ -299,7 +303,7 @@ public class CaseLawLdmlToOpenSearchMapper {
         .toList();
   }
 
-  private static List<String> extractAktivzitierungLiteraturUnselbstaendig(Meta meta) {
+  private static List<String> extractAktivzitierungenLiteraturUnselbstaendig(Meta meta) {
     return Optional.ofNullable(meta.getAnalysis())
         .map(Analysis::getOtherReferences)
         .map(refs ->
@@ -308,7 +312,7 @@ public class CaseLawLdmlToOpenSearchMapper {
         .orElse(List.of());
   }
 
-  private static List<String> extractAktivzitierungLiteraturSelbstaendig(Meta meta) {
+  private static List<String> extractAktivzitierungenLiteraturSelbstaendig(Meta meta) {
     return Optional.ofNullable(meta.getAnalysis())
         .map(Analysis::getOtherReferences)
         .map(refs ->
@@ -317,7 +321,7 @@ public class CaseLawLdmlToOpenSearchMapper {
         .orElse(List.of());
   }
 
-  private static List<String> extractPassivzitierungLiteraturSelbstaendig(Meta meta) {
+  private static List<String> extractPassivzitierungenLiteraturSelbstaendig(Meta meta) {
     return Optional.ofNullable(meta.getAnalysis())
         .map(Analysis::getOtherReferences)
         .map(refs ->
@@ -326,7 +330,7 @@ public class CaseLawLdmlToOpenSearchMapper {
         .orElse(List.of());
   }
 
-  private static List<String> extractPassivzitierungLiteraturUnselbstaendig(Meta meta) {
+  private static List<String> extractPassivzitierungenLiteraturUnselbstaendig(Meta meta) {
     return Optional.ofNullable(meta.getAnalysis())
         .map(Analysis::getOtherReferences)
         .map(refs ->
@@ -335,7 +339,7 @@ public class CaseLawLdmlToOpenSearchMapper {
         .orElse(List.of());
   }
 
-  private static List<String> extractAktivzitierungRechtsprechung(Meta meta) {
+  private static List<String> extractAktivzitierungenRechtsprechung(Meta meta) {
     return Optional.ofNullable(meta.getAnalysis())
         .map(Analysis::getOtherReferences)
         .map(refs ->
@@ -344,7 +348,7 @@ public class CaseLawLdmlToOpenSearchMapper {
         .orElse(List.of());
   }
 
-  private static List<String> extractPassivzitierungRechtsprechung(Meta meta) {
+  private static List<String> extractPassivzitierungenRechtsprechung(Meta meta) {
     return Optional.ofNullable(meta.getAnalysis())
         .map(Analysis::getOtherReferences)
         .map(refs ->
@@ -353,7 +357,7 @@ public class CaseLawLdmlToOpenSearchMapper {
         .orElse(List.of());
   }
 
-  private static List<String> extractAktivzitierungVerwaltungsvorschriften(Meta meta) {
+  private static List<String> extractAktivzitierungenVerwaltungsvorschriften(Meta meta) {
     return Optional.ofNullable(meta.getAnalysis())
         .map(Analysis::getOtherReferences)
         .map(refs ->
@@ -362,7 +366,7 @@ public class CaseLawLdmlToOpenSearchMapper {
         .orElse(List.of());
   }
 
-  private static List<String> extractPassivzitierungVerwaltungsvorschriften(Meta meta) {
+  private static List<String> extractPassivzitierungenVerwaltungsvorschriften(Meta meta) {
     return Optional.ofNullable(meta.getAnalysis())
         .map(Analysis::getOtherReferences)
         .map(refs ->

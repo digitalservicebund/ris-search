@@ -23,13 +23,14 @@ public record CaseLawDocumentationUnit(
     @Field(name = Fields.ABWEICHENDE_DATEN, type = FieldType.Date, format = DateFormat.date)
         List<LocalDate> abweichendeDaten,
     @Field(name = Fields.ABWEICHENDE_ECLIS) List<String> abweichendeEclis,
-    @Field(name = Fields.AKTIVZITIERUNG_LITERATUR_SELBSTAENDIG)
-        List<String> aktivzitierungLiteraturSelbstaendig,
-    @Field(name = Fields.AKTIVZITIERUNG_LITERATUR_UNSELBSTAENDIG)
-        List<String> aktivzitierungLiteraturUnselbstaendig,
-    @Field(name = Fields.AKTIVZITIERUNG_RECHTSPRECHUNG) List<String> aktivzitierungRechtsprechung,
-    @Field(name = Fields.AKTIVZITIERUNG_VERWALTUNGSVORSCHRIFTEN)
-        List<String> aktivzitierungVerwaltungsvorschriften,
+    @Field(name = Fields.AKTIVZITIERUNGEN_LITERATUR_SELBSTAENDIG)
+        List<String> aktivzitierungenLiteraturSelbstaendig,
+    @Field(name = Fields.AKTIVZITIERUNGEN_LITERATUR_UNSELBSTAENDIG)
+        List<String> aktivzitierungenLiteraturUnselbstaendig,
+    @Field(name = Fields.AKTIVZITIERUNGEN_RECHTSPRECHUNG)
+        List<String> aktivzitierungenRechtsprechung,
+    @Field(name = Fields.AKTIVZITIERUNGEN_VERWALTUNGSVORSCHRIFTEN)
+        List<String> aktivzitierungenVerwaltungsvorschriften,
     @Field(name = Fields.AMTLICHE_FUNDSTELLEN) List<String> amtlicheFundstellen,
     @Field(name = Fields.BERUFSBILDER) List<String> berufsbilder,
     @Field(name = Fields.CASE_FACTS) String caseFacts,
@@ -91,13 +92,14 @@ public record CaseLawDocumentationUnit(
     @Field(name = Fields.OTHER_HEADNOTE) String otherHeadnote,
     @Field(name = Fields.OTHER_LONG_TEXT) String otherLongText,
     @Field(name = Fields.OUTLINE) String outline,
-    @Field(name = Fields.PASSIVZITIERUNG_LITERATUR_SELBSTAENDIG)
-        List<String> passivzitierungLiteraturSelbstaendig,
-    @Field(name = Fields.PASSIVZITIERUNG_LITERATUR_UNSELBSTAENDIG)
-        List<String> passivzitierungLiteraturUnselbstaendig,
-    @Field(name = Fields.PASSIVZITIERUNG_RECHTSPRECHUNG) List<String> passivzitierungRechtsprechung,
-    @Field(name = Fields.PASSIVZITIERUNG_VERWALTUNGSVORSCHRIFTEN)
-        List<String> passivzitierungVerwaltungsvorschriften,
+    @Field(name = Fields.PASSIVZITIERUNGEN_LITERATUR_SELBSTAENDIG)
+        List<String> passivzitierungenLiteraturSelbstaendig,
+    @Field(name = Fields.PASSIVZITIERUNGEN_LITERATUR_UNSELBSTAENDIG)
+        List<String> passivzitierungenLiteraturUnselbstaendig,
+    @Field(name = Fields.PASSIVZITIERUNGEN_RECHTSPRECHUNG)
+        List<String> passivzitierungenRechtsprechung,
+    @Field(name = Fields.PASSIVZITIERUNGEN_VERWALTUNGSVORSCHRIFTEN)
+        List<String> passivzitierungenVerwaltungsvorschriften,
     @JsonIgnore @Field(name = Fields.PENDING_DECISIONS) List<String> pendingDecisions,
     @Field(name = Fields.PREVIOUS_DECISIONS) List<String> previousDecisions,
     @Field(name = Fields.RECHTSFRAGE) String rechtsfrage,
@@ -133,13 +135,13 @@ public record CaseLawDocumentationUnit(
     public static final String ABWEICHENDE_DATEN = "abweichende_daten";
     public static final String ABWEICHENDE_ECLIS = "abweichende_eclis";
     public static final String ABWEICHENDE_ECLIS_KEYWORD = "abweichende_eclis.keyword";
-    public static final String AKTIVZITIERUNG_LITERATUR_SELBSTAENDIG =
-        "aktivzitierung_literatur_selbstaendig";
-    public static final String AKTIVZITIERUNG_LITERATUR_UNSELBSTAENDIG =
-        "aktivzitierung_literatur_unselbstaendig";
-    public static final String AKTIVZITIERUNG_RECHTSPRECHUNG = "aktivzitierung_rechtsprechung";
-    public static final String AKTIVZITIERUNG_VERWALTUNGSVORSCHRIFTEN =
-        "aktivzitierung_verwaltungsvorschriften";
+    public static final String AKTIVZITIERUNGEN_LITERATUR_SELBSTAENDIG =
+        "aktivzitierungen_literatur_selbstaendig";
+    public static final String AKTIVZITIERUNGEN_LITERATUR_UNSELBSTAENDIG =
+        "aktivzitierungen_literatur_unselbstaendig";
+    public static final String AKTIVZITIERUNGEN_RECHTSPRECHUNG = "aktivzitierungen_rechtsprechung";
+    public static final String AKTIVZITIERUNGEN_VERWALTUNGSVORSCHRIFTEN =
+        "aktivzitierungen_verwaltungsvorschriften";
     public static final String AMTLICHE_FUNDSTELLEN = "amtliche_fundstellen";
     public static final String BERUFSBILDER = "berufsbilder";
     public static final String CASE_FACTS = "case_facts";
@@ -195,13 +197,14 @@ public record CaseLawDocumentationUnit(
     public static final String OTHER_HEADNOTE = "other_headnote";
     public static final String OTHER_LONG_TEXT = "other_long_text";
     public static final String OUTLINE = "outline";
-    public static final String PASSIVZITIERUNG_LITERATUR_SELBSTAENDIG =
-        "passivzitierung_literatur_selbstaendig";
-    public static final String PASSIVZITIERUNG_LITERATUR_UNSELBSTAENDIG =
-        "passivzitierung_literatur_unselbstaendig";
-    public static final String PASSIVZITIERUNG_RECHTSPRECHUNG = "passivzitierung_rechtsprechung";
-    public static final String PASSIVZITIERUNG_VERWALTUNGSVORSCHRIFTEN =
-        "passivzitierung_verwaltungsvorschriften";
+    public static final String PASSIVZITIERUNGEN_LITERATUR_SELBSTAENDIG =
+        "passivzitierungen_literatur_selbstaendig";
+    public static final String PASSIVZITIERUNGEN_LITERATUR_UNSELBSTAENDIG =
+        "passivzitierungen_literatur_unselbstaendig";
+    public static final String PASSIVZITIERUNGEN_RECHTSPRECHUNG =
+        "passivzitierungen_rechtsprechung";
+    public static final String PASSIVZITIERUNGEN_VERWALTUNGSVORSCHRIFTEN =
+        "passivzitierungen_verwaltungsvorschriften";
     public static final String PENDING_DECISIONS = "pending_decisions";
     public static final String PREVIOUS_DECISIONS = "previous_decisions";
     public static final String RECHTSFRAGE = "rechtsfrage";
