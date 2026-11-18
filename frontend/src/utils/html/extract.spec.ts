@@ -40,6 +40,61 @@ describe("takeElements", () => {
     expect(takeElements(document, ".missing")).toBeUndefined();
     expect(document.body.innerHTML).toBe("<p>One</p>");
   });
+
+  const officialTocSelector =
+    ".official-toc, .eingangsformel .inhaltsuebersicht .nichtamtliche-fussnoten";
+
+  const preambleWithTocHtml = `
+    <section class="eingangsformel" id="praeambel-n1">
+      <section class="eingangsformel" id="praeambel-n1_formel-n1">
+        <p id="praeambel-n1_formel-n1_text-n1">Der Bundestag hat …</p>
+        <ul class="nichtamtliche-fussnoten">
+          <li class="fussnote">
+            <p id="meta-n1_editfnote-n1_text-n1">Eingangsformel: Eingangsformel Fußnote</p>
+          </li>
+        </ul>
+      </section>
+      <div class="inhaltsuebersicht" id="praeambel-n1_blockcontainer-n1">
+        <span class="akn-heading">Inhaltsübersicht</span>
+        <div class="official-toc">
+          <div class="level-1"><span class="akn-span">Abschnitt 1</span></div>
+        </div>
+        <ul class="nichtamtliche-fussnoten">
+          <li class="fussnote">
+            <p id="meta-n1_editfnote-n2_text-n1">Inhaltsübersicht: präambel Fußnote</p>
+          </li>
+        </ul>
+      </div>
+    </section>`;
+
+  it("adds the footnotes of the table of contents to the table of contents", () => {
+    const document = parse(preambleWithTocHtml);
+
+    const toc = parse(takeElements(document, officialTocSelector)!);
+
+    expect(toc.querySelector(".official-toc")).not.toBeNull();
+    expect(toc.querySelector(".fussnote")).not.toBeNull();
+    expect(
+      toc.querySelector("#meta-n1_editfnote-n2_text-n1")?.textContent,
+    ).toBe("Inhaltsübersicht: präambel Fußnote");
+  });
+
+  it("keeps footnotes of the preamble in the body, out of the table of contents", () => {
+    const document = parse(preambleWithTocHtml);
+
+    const toc = takeElements(document, officialTocSelector);
+
+    expect(toc).not.toContain("Eingangsformel: Eingangsformel Fußnote");
+    expect(document.body.innerHTML).toContain(
+      "Eingangsformel: Eingangsformel Fußnote",
+    );
+  });
+
+  it("returns undefined for a document without a table of contents", () => {
+    const document = parse("<p>No toc</p>");
+
+    expect(takeElements(document, officialTocSelector)).toBeUndefined();
+  });
 });
 
 describe("getText", () => {
@@ -103,64 +158,5 @@ describe("getSections", () => {
     getSections(document, "section");
 
     expect(document.body.innerHTML).toBe(before);
-  });
-});
-
-// Same fixture and expectations as the official toc tests in
-// useFetchNormContent.spec.ts, which used querySelectorAll + outerHTML.
-describe("takeElements (compatibility with the official toc extraction)", () => {
-  const officialTocSelector =
-    ".official-toc, .eingangsformel .inhaltsuebersicht .nichtamtliche-fussnoten";
-
-  const preambleWithTocHtml = `
-    <section class="eingangsformel" id="praeambel-n1">
-      <section class="eingangsformel" id="praeambel-n1_formel-n1">
-        <p id="praeambel-n1_formel-n1_text-n1">Der Bundestag hat …</p>
-        <ul class="nichtamtliche-fussnoten">
-          <li class="fussnote">
-            <p id="meta-n1_editfnote-n1_text-n1">Eingangsformel: Eingangsformel Fußnote</p>
-          </li>
-        </ul>
-      </section>
-      <div class="inhaltsuebersicht" id="praeambel-n1_blockcontainer-n1">
-        <span class="akn-heading">Inhaltsübersicht</span>
-        <div class="official-toc">
-          <div class="level-1"><span class="akn-span">Abschnitt 1</span></div>
-        </div>
-        <ul class="nichtamtliche-fussnoten">
-          <li class="fussnote">
-            <p id="meta-n1_editfnote-n2_text-n1">Inhaltsübersicht: präambel Fußnote</p>
-          </li>
-        </ul>
-      </div>
-    </section>`;
-
-  it("adds the toc footnotes to the official toc", () => {
-    const document = parse(preambleWithTocHtml);
-
-    const toc = parse(takeElements(document, officialTocSelector)!);
-
-    expect(toc.querySelector(".official-toc")).not.toBeNull();
-    expect(toc.querySelector(".fussnote")).not.toBeNull();
-    expect(
-      toc.querySelector("#meta-n1_editfnote-n2_text-n1")?.textContent,
-    ).toBe("Inhaltsübersicht: präambel Fußnote");
-  });
-
-  it("keeps Eingangsformel footnotes out of the official toc and in the body", () => {
-    const document = parse(preambleWithTocHtml);
-
-    const toc = takeElements(document, officialTocSelector);
-
-    expect(toc).not.toContain("Eingangsformel: Eingangsformel Fußnote");
-    expect(document.body.innerHTML).toContain(
-      "Eingangsformel: Eingangsformel Fußnote",
-    );
-  });
-
-  it("returns undefined without a toc, like the old extraction", () => {
-    const document = parse("<p>No toc</p>");
-
-    expect(takeElements(document, officialTocSelector)).toBeUndefined();
   });
 });

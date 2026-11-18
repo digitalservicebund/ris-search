@@ -54,6 +54,20 @@ describe("rewriteLinks", () => {
 
     expect(document.body.innerHTML).toBe('<p href="/a">A</p>');
   });
+
+  it("rewrites links in a whole document", () => {
+    const { body } = processHtml(
+      `<html><body><a href="/original/path">link</a></body></html>`,
+      {
+        allowlist: DANGEROUSLY_SKIP_SANITIZATION,
+        transforms: [
+          rewriteLinks((href) => (href ? `/rewritten${href}` : null)),
+        ],
+      },
+    );
+
+    expect(body).toContain(`href="/rewritten/original/path"`);
+  });
 });
 
 describe("insertLineBreaksBetweenBracketedBlocks", () => {
@@ -101,64 +115,40 @@ describe("insertLineBreaksBetweenBracketedBlocks", () => {
 
     expect(document.body.innerHTML).toBe(html);
   });
-});
 
-// Same fixtures and expectations as the bracket and link tests in
-// useFetchNormContent.spec.ts, run through the pipeline the way the norm page
-// will use it.
-describe("transforms (compatibility with useFetchNormContent)", () => {
-  const headingNotesSelector = ".dokumentenkopf .nichtamtliche-fussnoten";
+  describe("for heading notes", () => {
+    const headingNotesSelector = ".dokumentenkopf .nichtamtliche-fussnoten";
 
-  function headingNotes(html: string) {
-    return processHtml(html, {
-      allowlist: DANGEROUSLY_SKIP_SANITIZATION,
-      transforms: [
-        insertLineBreaksBetweenBracketedBlocks(headingNotesSelector),
-      ],
-      extract: (document) => ({
-        html: { headingNotes: takeElements(document, headingNotesSelector) },
-        text: {},
-      }),
-    });
-  }
-
-  it("inserts line breaks between consecutive bracketed blocks in footnotes", () => {
-    const { parts } = headingNotes(
-      `<section class="dokumentenkopf"><ul class="nichtamtliche-fussnoten"><li class="fussnote"><p>(+++ Textnachweis ab: 1.1.2000 +++) (+++ Zur Anwendung vgl. § 5 +++)</p></li></ul></section>`,
-    );
-
-    // The old string replacement wrote "<br />", the DOM serializes "<br>".
-    // Both are the same element.
-    expect(parts.headingNotes).toContain(
-      "(+++ Textnachweis ab: 1.1.2000 +++)<br>(+++ Zur Anwendung vgl. § 5 +++)",
-    );
-  });
-
-  it("only changes the heading notes, not other footnotes", () => {
-    const html = `<section class="eingangsformel"><ul class="nichtamtliche-fussnoten"><li><p>(+++ a +++) (+++ b +++)</p></li></ul></section>`;
-
-    const { body } = processHtml(html, {
-      allowlist: DANGEROUSLY_SKIP_SANITIZATION,
-      transforms: [
-        insertLineBreaksBetweenBracketedBlocks(headingNotesSelector),
-      ],
-    });
-
-    expect(body).toContain("(+++ a +++) (+++ b +++)");
-    expect(body).not.toContain("<br>");
-  });
-
-  it("rewrites links", () => {
-    const { body } = processHtml(
-      `<html><body><a href="/original/path">link</a></body></html>`,
-      {
+    function process(html: string) {
+      return processHtml(html, {
         allowlist: DANGEROUSLY_SKIP_SANITIZATION,
         transforms: [
-          rewriteLinks((href) => (href ? `/rewritten${href}` : null)),
+          insertLineBreaksBetweenBracketedBlocks(headingNotesSelector),
         ],
-      },
-    );
+        extract: (document) => ({
+          html: { headingNotes: takeElements(document, headingNotesSelector) },
+          text: {},
+        }),
+      });
+    }
 
-    expect(body).toContain(`href="/rewritten/original/path"`);
+    it("inserts line breaks between consecutive bracketed blocks in footnotes", () => {
+      const { parts } = process(
+        `<section class="dokumentenkopf"><ul class="nichtamtliche-fussnoten"><li class="fussnote"><p>(+++ Textnachweis ab: 1.1.2000 +++) (+++ Zur Anwendung vgl. § 5 +++)</p></li></ul></section>`,
+      );
+
+      expect(parts.headingNotes).toContain(
+        "(+++ Textnachweis ab: 1.1.2000 +++)<br>(+++ Zur Anwendung vgl. § 5 +++)",
+      );
+    });
+
+    it("leaves footnotes outside the heading alone", () => {
+      const { body } = process(
+        `<section class="eingangsformel"><ul class="nichtamtliche-fussnoten"><li><p>(+++ a +++) (+++ b +++)</p></li></ul></section>`,
+      );
+
+      expect(body).toContain("(+++ a +++) (+++ b +++)");
+      expect(body).not.toContain("<br>");
+    });
   });
 });
