@@ -26,4 +26,22 @@ class MappingUtilsTest {
   void mapListReturnsNullForNullSource() {
     assertThat(MappingUtils.mapList(null, String::length)).isNull();
   }
+
+  @Test
+  @DisplayName("joinNonBlank joins the parts with a single space")
+  void joinNonBlankJoinsPartsWithSpace() {
+    assertThat(MappingUtils.joinNonBlank("a", "b c", "d")).isEqualTo("a b c d");
+  }
+
+  @Test
+  @DisplayName("joinNonBlank skips null and blank parts")
+  void joinNonBlankSkipsNullAndBlankParts() {
+    assertThat(MappingUtils.joinNonBlank(null, "a", "", " ", "b", null)).isEqualTo("a b");
+  }
+
+  @Test
+  @DisplayName("joinNonBlank returns an empty string when no part has content")
+  void joinNonBlankReturnsEmptyStringWithoutContent() {
+    assertThat(MappingUtils.joinNonBlank(null, " ")).isEmpty();
+  }
 }

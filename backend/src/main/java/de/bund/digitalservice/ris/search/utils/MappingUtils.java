@@ -4,6 +4,8 @@ import jakarta.xml.bind.ValidationException;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -54,6 +56,16 @@ public class MappingUtils {
       return null;
     }
     return call.apply(input);
+  }
+
+  /**
+   * Joins the given parts with a single space, skipping null and blank parts.
+   *
+   * @param parts the parts to join; may contain null
+   * @return the joined string, empty if no part has content
+   */
+  public static String joinNonBlank(String... parts) {
+    return Stream.of(parts).filter(StringUtils::isNotBlank).collect(Collectors.joining(" "));
   }
 
   public static <S, T> List<T> mapList(List<S> source, Function<? super S, T> mapper) {

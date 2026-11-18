@@ -1,6 +1,7 @@
 package de.bund.digitalservice.ris.search.utils;
 
 import static de.bund.digitalservice.ris.search.utils.DateUtils.toDateIntervalString;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
@@ -44,6 +45,17 @@ class DateUtilsTest {
   @Test
   void testToDateStringReturnsNullWhenDateIsNull() {
     assertNull(DateUtils.toDateString(null));
+  }
+
+  @Test
+  void toGermanDateStringFormatsWithZeroPaddedDayAndMonth() {
+    assertThat(DateUtils.toGermanDateString(LocalDate.of(1983, Month.MARCH, 2)))
+        .isEqualTo("02.03.1983");
+  }
+
+  @Test
+  void toGermanDateStringReturnsNullWhenDateIsNull() {
+    assertThat(DateUtils.toGermanDateString(null)).isNull();
   }
 
   @Test

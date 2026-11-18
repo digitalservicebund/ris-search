@@ -144,14 +144,35 @@ class CaseLawLdmlToOpenSearchMapperTest {
                 + " ensuing decision file number (anhängig)",
             "ensuing decision court type, ensuing decision document type vom 1. Oktober 2022 -"
                 + " ensuing decision file number (anhängig)");
-    assertThat(caseLaw.aktivzitierungenLiteraturUnselbstaendig()).containsExactly("STLU991393280");
-    assertThat(caseLaw.passivzitierungenLiteraturUnselbstaendig()).containsExactly("SBLU000539216");
-    assertThat(caseLaw.aktivzitierungenLiteraturSelbstaendig()).containsExactly("KSLS071671727");
-    assertThat(caseLaw.passivzitierungenLiteraturSelbstaendig()).containsExactly("KSLS071671728");
-    assertThat(caseLaw.aktivzitierungenRechtsprechung()).containsExactly("BVRE100338409");
-    assertThat(caseLaw.passivzitierungenRechtsprechung()).containsExactly("JURE100074208");
-    assertThat(caseLaw.aktivzitierungenVerwaltungsvorschriften()).containsExactly("KSNR008561615");
-    assertThat(caseLaw.passivzitierungenVerwaltungsvorschriften()).containsExactly("KSNR006800006");
+    assertThat(caseLaw.aktivzitierungenLiteraturUnselbstaendig())
+        .containsExactly(
+            "STLU991393280 Schmidt-Liebig Information StW Die Information über Steuer und"
+                + " Wirtschaft 1999, 641");
+    assertThat(caseLaw.passivzitierungenLiteraturUnselbstaendig())
+        .containsExactly(
+            "SBLU000539216 Knopp, Lothar Aufsatz NVwZ Neue Zeitschrift für Verwaltungsrecht 2016,"
+                + " 1139-1141");
+    assertThat(caseLaw.aktivzitierungenLiteraturSelbstaendig())
+        .containsExactly(
+            "KSLS071671727 Arnauld, Andreas von Die Freiheitsrechte und ihre Schranken 1999");
+    assertThat(caseLaw.passivzitierungenLiteraturSelbstaendig())
+        .containsExactly("KSLS071671728 Mustermann, Max Die Grenzen der Freiheit 2001");
+    assertThat(caseLaw.aktivzitierungenRechtsprechung())
+        .containsExactly(
+            "BVRE100338409 Vergleiche VerfGH München Verfassungsgerichtsbarkeit 1. Senat Nürnberg"
+                + " 02.12.1983 Beschluss Vf. 94-VI-81 BayVBl Bayerische Verwaltungsblätter 1984,"
+                + " 15 amtlich");
+    assertThat(caseLaw.passivzitierungenRechtsprechung())
+        .containsExactly(
+            "JURE100074208 Vergleiche LArbG Kiel Arbeitsgerichtsbarkeit 26.10.2010 3 Sa 315/10");
+    assertThat(caseLaw.aktivzitierungenVerwaltungsvorschriften())
+        .containsExactly(
+            "KSNR008561615 Vergleiche VR VDR 1997-12-04 5883 MittLVA Oberfr Mitteilungen der"
+                + " Landesversicherungsanstalt Oberfranken und Mittelfranken 1997, 538-539");
+    assertThat(caseLaw.passivzitierungenVerwaltungsvorschriften())
+        .containsExactly(
+            "KSNR006800006 Anwendung VR BA 1986-01-16 16/86 Dienstbl BA RdErl Dienstblatt der"
+                + " Bundesanstalt für Arbeit. Runderlasse 1986, Nr 16, 1-8");
     assertThat(caseLaw.amtlicheFundstellen()).containsExactly("BGHSt 67, 273-284");
     assertThat(caseLaw.nichtamtlicheFundstellen()).containsExactly("DStR 2023, 1430-1435");
     assertThat(caseLaw.gesetzeskraft())

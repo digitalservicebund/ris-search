@@ -1,5 +1,6 @@
 package de.bund.digitalservice.ris.search.models.opensearch.zitierungen;
 
+import de.bund.digitalservice.ris.search.utils.MappingUtils;
 import lombok.Builder;
 import org.springframework.data.elasticsearch.annotations.Field;
 
@@ -13,4 +14,14 @@ public record Fundstelle(
     @Field(name = "periodikum") String periodikum,
     @Field(name = "periodikum_titel") String periodikumTitel,
     @Field(name = "zitatstelle") String zitatstelle,
-    @Field(name = "fundstellen_typ") String fundstellenTyp) {}
+    @Field(name = "fundstellen_typ") String fundstellenTyp) {
+
+  /**
+   * Constructs a string from all relevant properties that can be used for indexing.
+   *
+   * @return a string representing the Fundstelle for searching
+   */
+  public String searchText() {
+    return MappingUtils.joinNonBlank(periodikum, periodikumTitel, zitatstelle, fundstellenTyp);
+  }
+}
