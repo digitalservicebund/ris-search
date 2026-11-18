@@ -17,11 +17,11 @@ export function takeElements(
 ): string | undefined {
   const matches = [...document.querySelectorAll(selector)];
 
-  // A match inside another match is already part of the outer one.
-  const outermost = matches.filter(
-    (element) =>
-      !matches.some((other) => other !== element && other.contains(element)),
-  );
+  // A match inside another match is already part of the outer one
+  const outermost: Element[] = [];
+  for (const element of matches) {
+    if (!outermost.at(-1)?.contains(element)) outermost.push(element);
+  }
   if (outermost.length === 0) return undefined;
 
   const html = outermost.map((element) => element.outerHTML).join("");
