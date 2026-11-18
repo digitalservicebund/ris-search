@@ -113,7 +113,7 @@ describe("fetchTranslationAndHTML", () => {
     expect(error.value).toBeUndefined();
 
     expect(data.value?.content).toEqual(mockTranslationResponse[0]);
-    expect(data.value?.htmlBody).toEqual(expectedBody);
+    expect(data.value?.html.body).toEqual(expectedBody);
   });
 
   it("returns 404 when list is empty", async () => {

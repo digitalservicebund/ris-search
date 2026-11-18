@@ -5,6 +5,11 @@ import type {
   SearchResult,
 } from "~/types/api";
 import { getCurrentDateInGermanyFormatted } from "~/utils/dateFormatting";
+import type { ProcessedHtml } from "~/utils/html/processHtml";
+import {
+  DANGEROUSLY_SKIP_SANITIZATION,
+  processHtml,
+} from "~/utils/html/processHtml";
 
 export interface TranslationContent {
   "@id": string;
@@ -18,7 +23,7 @@ export interface TranslationContent {
 
 export interface TranslationData {
   content: TranslationContent;
-  htmlBody: string;
+  html: ProcessedHtml;
 }
 
 function notFoundError(message: string) {
@@ -86,10 +91,12 @@ export function fetchTranslationAndHTML(
         },
       );
 
-      const document = parseDocument(htmlData);
       return {
         content: firstTranslationsListElement,
-        htmlBody: document.body.innerHTML,
+        // TODO RISDEV-11107: replace with an allowlist
+        html: processHtml(htmlData, {
+          allowlist: DANGEROUSLY_SKIP_SANITIZATION,
+        }),
       };
     },
     { server: true, lazy: false },

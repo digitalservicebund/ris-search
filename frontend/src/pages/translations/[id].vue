@@ -36,7 +36,7 @@ if (error.value) {
 }
 
 const currentTranslation = data.value.content;
-const html = data.value.htmlBody;
+const html = data.value.html;
 
 useTranslationSeo({
   name: currentTranslation.name,
@@ -139,7 +139,7 @@ const detailsTabPanelTitleId = useId();
         >
           <SidebarLayout>
             <h2 :id="textSectionId" class="sr-only">Text</h2>
-            <div v-html="html" />
+            <div v-html="html.body" />
           </SidebarLayout>
         </section>
       </template>

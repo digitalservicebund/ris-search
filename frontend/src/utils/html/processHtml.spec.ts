@@ -98,6 +98,40 @@ describe("processHtml", () => {
 
       expect(result.isEmpty).toBe(true);
     });
+
+    describe("for norms", () => {
+      const options = {
+        allowlist: DANGEROUSLY_SKIP_SANITIZATION,
+        isEmpty: isNormBodyEmpty,
+      } as const;
+
+      it("is false if the norm body has content", () => {
+        const result = processHtml(
+          `<html><body><div class="akn-act"><div class="akn-body">Content</div></div></body></html>`,
+          options,
+        );
+
+        expect(result.isEmpty).toBe(false);
+      });
+
+      it("is true if the norm body is empty", () => {
+        const result = processHtml(
+          `<html><body><div class="akn-act"><div class="akn-body"></div></div></body></html>`,
+          options,
+        );
+
+        expect(result.isEmpty).toBe(true);
+      });
+
+      it("is true if the norm has no body", () => {
+        const result = processHtml(
+          "<html><body><p>Text</p></body></html>",
+          options,
+        );
+
+        expect(result.isEmpty).toBe(true);
+      });
+    });
   });
 
   describe("sanitizing", () => {
@@ -161,40 +195,6 @@ describe("processHtml", () => {
       });
 
       expect(result.text.p).toBe("1 < 2");
-    });
-  });
-
-  describe("isEmpty with isNormBodyEmpty (as used by useFetchNormContent)", () => {
-    const options = {
-      allowlist: DANGEROUSLY_SKIP_SANITIZATION,
-      isEmpty: isNormBodyEmpty,
-    } as const;
-
-    it("is false if akn-body has content", () => {
-      const result = processHtml(
-        `<html><body><div class="akn-act"><div class="akn-body">Content</div></div></body></html>`,
-        options,
-      );
-
-      expect(result.isEmpty).toBe(false);
-    });
-
-    it("is true if akn-body is empty", () => {
-      const result = processHtml(
-        `<html><body><div class="akn-act"><div class="akn-body"></div></div></body></html>`,
-        options,
-      );
-
-      expect(result.isEmpty).toBe(true);
-    });
-
-    it("is true without akn-body", () => {
-      const result = processHtml(
-        "<html><body><p>Text</p></body></html>",
-        options,
-      );
-
-      expect(result.isEmpty).toBe(true);
     });
   });
 
