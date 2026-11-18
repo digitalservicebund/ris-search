@@ -29,6 +29,18 @@ export function takeElements(
   return html;
 }
 
+/**
+ * Reads the text content of all elements matching the selector, in document
+ * order, skipping elements without text.
+ *
+ * @returns One string per matching element, empty if nothing matched.
+ */
+export function getText(document: Document, selector: string): string[] {
+  return [...document.querySelectorAll(selector)]
+    .map((element) => element.textContent)
+    .filter((text): text is string => Boolean(text));
+}
+
 export type Section = { id: string; title: string };
 
 /**

@@ -9,7 +9,11 @@ export const DANGEROUSLY_SKIP_SANITIZATION = Symbol(
 /** HTML fragments extracted from a document */
 export type HtmlParts = Record<string, string | undefined>;
 
-/** Text extracted from a document */
+/**
+ * Plain text extracted from a document, e.g. with `getText`. This is not
+ * sanitized, because it's not meant to be HTML. Use `HtmlParts` for anything
+ * that contains markup.
+ */
 export type TextParts = Record<string, string | string[] | undefined>;
 
 /**

@@ -1,4 +1,4 @@
-import { getSections, takeElements } from "./extract";
+import { getSections, getText, takeElements } from "./extract";
 
 function parse(html: string) {
   return new DOMParser().parseFromString(html, "text/html");
@@ -38,6 +38,38 @@ describe("takeElements", () => {
     const document = parse("<p>One</p>");
 
     expect(takeElements(document, ".missing")).toBeUndefined();
+    expect(document.body.innerHTML).toBe("<p>One</p>");
+  });
+});
+
+describe("getText", () => {
+  it("returns the text of each match in document order", () => {
+    const document = parse("<p>One</p><div><p>Two</p></div>");
+
+    expect(getText(document, "p")).toEqual(["One", "Two"]);
+  });
+
+  it("returns plain text, not markup", () => {
+    const document = parse('<p>A <b>bold</b> &amp; <a href="x">link</a></p>');
+
+    expect(getText(document, "p")).toEqual(["A bold & link"]);
+  });
+
+  it("skips matches without text", () => {
+    const document = parse("<p></p><p>Text</p>");
+
+    expect(getText(document, "p")).toEqual(["Text"]);
+  });
+
+  it("returns an empty list without matches", () => {
+    expect(getText(parse("<p>x</p>"), ".missing")).toEqual([]);
+  });
+
+  it("does not mutate the document", () => {
+    const document = parse("<p>One</p>");
+
+    getText(document, "p");
+
     expect(document.body.innerHTML).toBe("<p>One</p>");
   });
 });
