@@ -1,6 +1,6 @@
-import type { HtmlTransform } from "./processHtml";
+// Convention: transforms mutate the document.
 
-// Convention: transforms mutate the document they are given.
+import type { HtmlTransform } from "./processHtml";
 
 /**
  * Rewrites the `href` of every link in the document.

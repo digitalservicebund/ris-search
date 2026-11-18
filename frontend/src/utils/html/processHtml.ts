@@ -1,26 +1,21 @@
 import sanitizeHtml from "sanitize-html";
 import { isDocumentEmpty, parseDocument } from "~/utils/htmlParser";
 
-/**
- * Pass as `allowlist` to explicitly skip sanitizing. The HTML is then shown as
- * the backend sent it, so a manipulated response could inject scripts.
- */
+/** Pass as `allowlist` to explicitly skip sanitizing. */
 export const DANGEROUSLY_SKIP_SANITIZATION = Symbol(
   "DANGEROUSLY_SKIP_SANITIZATION",
 );
 
-/** HTML fragments extracted from a document, by name. */
+/** HTML fragments extracted from a document */
 export type HtmlParts = Record<string, string | undefined>;
 
-/** Text extracted from a document, by name. */
+/** Text extracted from a document */
 export type TextParts = Record<string, string | string[] | undefined>;
 
 /**
- * Changes the document in place, e.g. by rewriting links. The document belongs
- * to a single `processHtml` call, so transforms may mutate it freely. The
- * context is whatever the caller passes as `context` to `processHtml`, for
- * information the transform needs but can't get from the document, like the
- * current route.
+ * Changes the document in place, e.g. by rewriting links. The context is
+ * whatever the caller passes as `context` to `processHtml`, for information the
+ * transform needs but can't get from the document, like the current route.
  */
 export type HtmlTransform<TContext = undefined> = (
   document: Document,
@@ -44,13 +39,16 @@ export type ProcessHtmlOptions<
   transforms?: HtmlTransform<TContext>[];
 
   /**
-   * Reads the parts and text the caller needs from the document. May mutate the
-   * document: parts that should not be part of the body anymore must be removed
-   * here (see `takeElements`).
+   * Read parts and text from the document, and remove elements that should no
+   * longer be in the document after processing (see `takeElements`).
    */
   extract?: (document: Document) => HtmlExtraction<THtml, TText>;
 
-  /** What the sanitizer allows, for the body and each extracted part. */
+  /**
+   * List of elements that are allowed to remain in the document after
+   * sanitization. You can also opt-out of sanitization here, however this
+   * carries security risks and should be avoided.
+   */
   allowlist: sanitizeHtml.IOptions | typeof DANGEROUSLY_SKIP_SANITIZATION;
 
   /**
@@ -76,7 +74,7 @@ export type ProcessedHtml<
 };
 
 /**
- * Turns HTML from the backend into plain data that is ready to display:
+ * Turns HTML from the backend into plain data that can be safely displayed:
  *
  * 1. Parses the HTML into a DOM tree
  * 2. Applies the transforms
@@ -84,10 +82,6 @@ export type ProcessedHtml<
  * 4. Extracts parts and text, removing the parts from the DOM
  * 5. Serializes what remains as the body
  * 6. Sanitizes the body and the parts (unless told to skip)
- *
- * Transforms and the extraction mutate it in place instead of working on
- * copies. The result can be serialized, so it can be passed through
- * `useAsyncData`.
  */
 export function processHtml<
   THtml extends HtmlParts = Record<never, never>,

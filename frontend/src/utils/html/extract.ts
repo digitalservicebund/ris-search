@@ -1,11 +1,13 @@
-// Convention: helpers that remove content from the document are called
-// `take*` and say that they mutate it. Helpers that only read are called
-// `get*` and never change the document.
+// Convention:
+//
+// - `take...` removes content from the document, mutating it in the process
+// - `get...` only reads content and doesn't change it
 
 /**
- * **Mutates the document:** removes all elements matching the selector and
- * returns their HTML, concatenated in document order. Use this in an extraction
- * to move a part out of the body.
+ * Removes all elements matching the selector and returns their HTML,
+ * concatenated in document order.
+ *
+ * Mutates the input document.
  *
  * @returns The HTML of the removed elements, or undefined if nothing matched.
  */
@@ -31,8 +33,7 @@ export type Section = { id: string; title: string };
 
 /**
  * Lists the sections of a document, e.g. for a table of contents. The title of
- * a section is the text of its first `<h2>`. Does not change the document: the
- * sections stay in the body.
+ * a section is the text of its first `<h2>`.
  *
  * @param elementName The tag name of the sections (e.g., "section").
  */
