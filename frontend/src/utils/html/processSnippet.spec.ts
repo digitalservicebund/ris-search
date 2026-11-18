@@ -68,3 +68,25 @@ describe("processSnippet", () => {
     });
   });
 });
+
+describe("snippetToText", () => {
+  it("removes all tags and keeps the text", () => {
+    expect(snippetToText("<mark>BGH</mark> <b>I</b> ZR 1/20")).toBe(
+      "BGH I ZR 1/20",
+    );
+  });
+
+  it("removes scripts and their content", () => {
+    expect(snippetToText("a<script>alert(1)</script>b")).toBe("ab");
+  });
+
+  it("keeps the text HTML-escaped, as stripAllHtml did", () => {
+    expect(snippetToText("<mark>A &amp; B</mark> &lt; C")).toBe(
+      "A &amp; B &lt; C",
+    );
+  });
+
+  it("returns an empty string for an empty snippet", () => {
+    expect(snippetToText("")).toBe("");
+  });
+});

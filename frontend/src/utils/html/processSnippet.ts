@@ -20,3 +20,8 @@ export function processSnippet(
 ): string {
   return sanitizeHtml(html, allowlist);
 }
+
+/** Removes all tags from a snippet and keeps its text. */
+export function snippetToText(html: string): string {
+  return sanitizeHtml(html, { allowedTags: [], allowedAttributes: {} });
+}
