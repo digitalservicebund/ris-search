@@ -12,7 +12,8 @@ public class NormXmlValidator {
   public enum Type {
     REGELUNGSTEXT("schema/norm-regelungstext.xsd"),
     ANLAGE("schema/norm-offenestruktur.xsd"),
-    RECHTSETZUNGSDOKUMENT("schema/norm-rechtsetzungsdokument.xsd");
+    RECHTSETZUNGSDOKUMENT("schema/norm-rechtsetzungsdokument.xsd"),
+    WORK_METADATA(List.of("schema/norm-work-metadata.xsd"));
 
     @Getter private final List<String> schemaFiles;
 
@@ -23,6 +24,10 @@ public class NormXmlValidator {
               "schema/legalDocML.de/legalDocML.de-metadaten-regelungstext.xsd",
               "schema/legalDocML.de/legalDocML.de-metadaten-rechtsetzungsdokument.xsd",
               path);
+    }
+
+    Type(List<String> schemaFiles) {
+      this.schemaFiles = schemaFiles;
     }
   }
 

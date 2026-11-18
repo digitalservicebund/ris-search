@@ -8,14 +8,12 @@ import de.bund.digitalservice.ris.search.models.ldml.FrbrNameValueElement;
 import de.bund.digitalservice.ris.search.models.ldml.FrbrWork;
 import de.bund.digitalservice.ris.search.models.ldml.MainBody;
 import de.bund.digitalservice.ris.search.models.ldml.literature.sli.Analysis;
-import de.bund.digitalservice.ris.search.models.ldml.literature.sli.Block;
 import de.bund.digitalservice.ris.search.models.ldml.literature.sli.Doc;
 import de.bund.digitalservice.ris.search.models.ldml.literature.sli.Gliederung;
 import de.bund.digitalservice.ris.search.models.ldml.literature.sli.Identification;
 import de.bund.digitalservice.ris.search.models.ldml.literature.sli.ImplicitReference;
 import de.bund.digitalservice.ris.search.models.ldml.literature.sli.LiteratureLdml;
 import de.bund.digitalservice.ris.search.models.ldml.literature.sli.Meta;
-import de.bund.digitalservice.ris.search.models.ldml.literature.sli.Note;
 import de.bund.digitalservice.ris.search.models.ldml.literature.sli.Proprietary;
 import de.bund.digitalservice.ris.search.models.ldml.literature.sli.RisKongress;
 import de.bund.digitalservice.ris.search.models.ldml.literature.sli.RisMeta;
@@ -408,15 +406,8 @@ public class SliLiteratureLdmlToOpenSearchMapper {
   }
 
   private static List<String> extractFootnotes(LiteratureLdml ldml) {
-    return Optional.ofNullable(ldml.getDoc())
-        .map(Doc::getMeta)
-        .map(Meta::getNotes)
-        .orElse(List.of())
-        .stream()
-        .map(Note::getBlock)
-        .filter(Objects::nonNull)
-        .map(Block::getValue)
-        .filter(Objects::nonNull)
+    return extractRisMeta(ldml).map(RisMeta::getGesamtfussnoten).orElse(List.of()).stream()
+        .filter(StringUtils::isNotBlank)
         .toList();
   }
 
