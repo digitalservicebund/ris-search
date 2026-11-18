@@ -1,0 +1,60 @@
+// Convention:
+//
+// - `take...` removes content from the document, mutating it in the process
+// - `get...` only reads content and doesn't change it
+
+/**
+ * Removes all elements matching the selector and returns their HTML,
+ * concatenated in document order.
+ *
+ * Mutates the input document.
+ *
+ * @returns The HTML of the removed elements, or undefined if nothing matched.
+ */
+export function takeElements(
+  document: Document,
+  selector: string,
+): string | undefined {
+  const matches = [...document.querySelectorAll(selector)];
+
+  // A match inside another match is already part of the outer one
+  const outermost: Element[] = [];
+  for (const element of matches) {
+    if (!outermost.at(-1)?.contains(element)) outermost.push(element);
+  }
+  if (outermost.length === 0) return undefined;
+
+  const html = outermost.map((element) => element.outerHTML).join("");
+  for (const element of outermost) element.remove();
+  return html;
+}
+
+/**
+ * Reads the text content of all elements matching the selector, in document
+ * order, skipping elements without text.
+ *
+ * @returns One string per matching element, empty if nothing matched.
+ */
+export function getText(document: Document, selector: string): string[] {
+  return [...document.querySelectorAll(selector)]
+    .map((element) => element.textContent)
+    .filter((text): text is string => Boolean(text));
+}
+
+export type Section = { id: string; title: string };
+
+/**
+ * Lists the sections of a document, e.g. for a table of contents. The title of
+ * a section is the text of its first `<h2>`.
+ *
+ * @param elementName The tag name of the sections (e.g., "section").
+ */
+export function getSections(
+  document: Document,
+  elementName: string,
+): Section[] {
+  return [...document.querySelectorAll(elementName)].map((element) => ({
+    id: element.id,
+    title: element.querySelector("h2")?.textContent ?? "",
+  }));
+}

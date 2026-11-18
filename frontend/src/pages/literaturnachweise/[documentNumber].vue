@@ -3,6 +3,7 @@ import type { TabView } from "~/components/documents/TabsLayout.vue";
 import type { TreeItem } from "~/components/TreeView.vue";
 import { useSearchBackLink } from "~/composables/useSearchBackLink";
 import { DocumentKind, type Literature } from "~/types/api";
+import { getSections } from "~/utils/html/extract";
 
 definePageMeta({
   layout: false,
@@ -68,7 +69,7 @@ const isEmptyDocument = computed(() => isDocumentEmpty(document.value));
 
 const tocEntries = computed<TreeItem[]>(() => {
   if (!document.value) return [];
-  return getAllSectionsFromDocument(document.value, "section").map((entry) => ({
+  return getSections(document.value, "section").map((entry) => ({
     key: entry.id,
     subtitle: entry.title, // Subtitle for more subtle appearance
     to: { hash: `#${entry.id}`, query: { from: route.query.from } },

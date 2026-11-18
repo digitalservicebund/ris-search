@@ -22,6 +22,7 @@ export default defineVitestConfig({
       const suppressedWarnings = [
         "already provides property with key",
         "<Suspense> is an experimental feature",
+        "PostHog was initialized without a token",
       ];
 
       for (const warning of suppressedWarnings) {

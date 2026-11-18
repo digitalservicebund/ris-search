@@ -1,16 +1,8 @@
-import type { JSDOM } from "jsdom";
+import type { JSDOM as JSDOMType } from "jsdom";
 
-type Section = {
-  id: string;
-  title: string;
-};
-
-let jsdom: typeof JSDOM;
-if (import.meta.server) {
-  void import("jsdom").then((module) => {
-    jsdom = module.JSDOM;
-  });
-}
+const JSDOM: typeof JSDOMType | undefined = import.meta.server
+  ? (await import("jsdom")).JSDOM
+  : undefined;
 
 export function parseDocument(html: string): Document {
   const needsWrapper = !/<html[\s>]/i.test(html) && !/<body[\s>]/i.test(html);
@@ -20,33 +12,13 @@ export function parseDocument(html: string): Document {
     // Client-side: use DOMParser
     const parser = new DOMParser();
     return parser.parseFromString(source, "text/html");
-  } else {
-    /* v8 ignore next 2 */
-    const dom = new jsdom(source);
-    return dom.window.document;
   }
-}
 
-/**
- * Extracts all headings (or specified elements) from HTML Document.
- *
- * @param document - The raw HTML string.
- * @param elementName - The element tag name to search for (e.g., "h2", "h3").
- * @returns An array of headings with `id` and `title`.
- */
-export function getAllSectionsFromDocument(
-  document: Document,
-  elementName: string,
-): Section[] {
-  const elements: NodeListOf<Element> = document.querySelectorAll(elementName);
-
-  return (Array.from(elements) as HTMLElement[]).map((element) => {
-    const heading = element.querySelector("h2");
-    return {
-      id: element.id,
-      title: heading?.textContent ?? "", // Ensure textContent is not null
-    };
-  });
+  /* v8 ignore next 4 */
+  if (!JSDOM) {
+    throw new Error("jsdom is not available to parse HTML on the server");
+  }
+  return new JSDOM(source).window.document;
 }
 
 export function getTextFromElements(elements?: NodeListOf<Element>): string[] {
