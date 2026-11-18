@@ -4,6 +4,7 @@ import type {
   TextHeaderItem,
 } from "~/components/search/SearchResultHeader.vue";
 import type { CaseLawSearchSchema, SearchResult } from "~/types/api";
+import { snippetToText } from "~/utils/html/processSnippet";
 import type { SearchResultHeadingLevel } from "~/utils/search/searchResults";
 import {
   getMatch,
@@ -104,7 +105,7 @@ function getFileNumbers(item: CaseLawSearchSchema) {
   if (matches.length) {
     const replaced = [...item.fileNumbers];
     for (const match of matches) {
-      const stripped = stripAllHtml(match);
+      const stripped = snippetToText(match);
       const index = item.fileNumbers.indexOf(stripped);
       if (index !== -1) {
         replaced[index] = match;

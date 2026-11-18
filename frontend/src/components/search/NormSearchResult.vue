@@ -5,6 +5,10 @@ import type {
   TextHeaderItem,
 } from "~/components/search/SearchResultHeader.vue";
 import type { LegislationExpression, SearchResult } from "~/types/api";
+import {
+  processSnippet,
+  SEARCH_SNIPPET_ALLOWLIST,
+} from "~/utils/html/processSnippet";
 import type { SearchResultHeadingLevel } from "~/utils/search/searchResults";
 import {
   getMatch,
@@ -98,7 +102,7 @@ const relevantHighlights = computed(() =>
     .map((hl) => {
       const textHasHighlight = hl.text.includes("<mark>");
       const text = textHasHighlight
-        ? sanitizeSearchResult(addEllipsis(hl.text))
+        ? processSnippet(addEllipsis(hl.text), SEARCH_SNIPPET_ALLOWLIST)
         : "";
 
       const highlightRoute: RouteLocationRaw = {
@@ -108,7 +112,7 @@ const relevantHighlights = computed(() =>
 
       return {
         location: hl.location,
-        name: sanitizeSearchResult(hl.name),
+        name: processSnippet(hl.name, SEARCH_SNIPPET_ALLOWLIST),
         route: highlightRoute,
         text,
       };

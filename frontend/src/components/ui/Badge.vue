@@ -1,6 +1,9 @@
 <script setup lang="ts">
-import sanitizeHtml from "sanitize-html";
 import { computed } from "vue";
+import {
+  HIGHLIGHT_ONLY_ALLOWLIST,
+  processSnippet,
+} from "../../utils/html/processSnippet";
 import { tw } from "../../utils/tags";
 
 export type BadgeColor = "blue" | "green" | "yellow" | "red" | "gray";
@@ -61,7 +64,7 @@ const rootClass = computed(() => {
 });
 
 const sanitizedLabel = computed(() => {
-  return sanitizeHtml(props.label ?? "", { allowedTags: ["mark"] });
+  return processSnippet(props.label ?? "", HIGHLIGHT_ONLY_ALLOWLIST);
 });
 </script>
 

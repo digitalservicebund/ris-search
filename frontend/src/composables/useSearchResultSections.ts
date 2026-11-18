@@ -1,4 +1,8 @@
 import type { TextMatch } from "~/types/api";
+import {
+  processSnippet,
+  SEARCH_SNIPPET_ALLOWLIST,
+} from "~/utils/html/processSnippet";
 
 export interface FieldDisplayProperties {
   id: string;
@@ -32,7 +36,7 @@ export function useSearchResultSections(
       .map<ExtendedTextMatch>((match) => {
         const textHasHighlight = match.text.includes("<mark>");
         const text = textHasHighlight
-          ? sanitizeSearchResult(addEllipsis(match.text))
+          ? processSnippet(addEllipsis(match.text), SEARCH_SNIPPET_ALLOWLIST)
           : "";
 
         // fields for match name are always defined since we filter for that above
