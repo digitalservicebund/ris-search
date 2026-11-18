@@ -40,6 +40,12 @@ public class RisMeta {
   private List<String> documentTypes;
 
   @XmlElementWrapper(
+      name = "gesamtfussnoten",
+      namespace = LiteratureNamespaces.RIS_SELBSTSTAENDIG_NS)
+  @XmlElement(name = "gesamtfussnote", namespace = LiteratureNamespaces.RIS_SELBSTSTAENDIG_NS)
+  private List<String> gesamtfussnoten;
+
+  @XmlElementWrapper(
       name = "veroeffentlichungsJahre",
       namespace = LiteratureNamespaces.RIS_SELBSTSTAENDIG_NS)
   @XmlElement(
