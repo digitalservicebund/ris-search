@@ -30,9 +30,14 @@ We keep JSON-LD in the API responses and make every response valid JSON-LD.
 
 ### German paths and fields
 
-All endpoint paths and response fields use German names. Field names follow
-the type names in the XSD schema (e.g. `tatbestand` for `ris:tatbestand`), so
-that the API, the schema and the glossary use the same terms.
+All endpoint paths and response fields use German names. Where possible, a
+field is named after its element in the LDML (e.g. `entscheidungsdatum` for
+`<ris:entscheidungsdatum>`), so that the API and the documents use the same terms.
+Fields without a matching LDML element get a German name chosen by the team.
+
+The LDML element names are only the starting point. If an element is renamed
+in the LDML later, the API field keeps its name. How we change and version the
+API is decided in a separate ADR.
 
 ### schema.org where possible
 
@@ -45,14 +50,14 @@ We map fields to schema.org where a suitable type or property exists:
 
 Fields without a suitable schema.org property use the `ris:` prefix.
 
-### `ris:` terms are the types of the XSD schema
+### Our own `ris:` vocabulary
 
-Terms with the `ris:` prefix are the types of the XSD schema. Their
-descriptions are the `xs:documentation` of those types, as listed in the
-glossary that we generate from the XSD schema.
+Terms with the `ris:` prefix form our own vocabulary that describes the API
+responses. Where possible, we use the descriptions from the glossary.
 
-Until the API is official, the `ris:` IRIs don't resolve. Publishing the
-definitions at those IRIs is a follow-up.
+How we maintain and publish this vocabulary needs to be decided separately.
+Until then, the `ris:` IRIs don't resolve. Once published, they stay stable:
+renaming one is a breaking change and follows the rules of the versioning ADR.
 
 ### One context for all document kinds
 
@@ -67,11 +72,6 @@ and other collections. Its terms (`member`, `totalItems`, `view`, `next`, …)
 stay English, because they are technical terms of a standard vocabulary, not
 domain terms.
 
-### Search results contain only the metadata we need
-
-A search result only contains metadata that is used in a filter or that the
-frontend already shows. The full metadata stays in the detail response.
-
 ### Approach
 
 1. For each document kind, we check an example response for valid JSON-LD.
@@ -82,18 +82,19 @@ frontend already shows. The full metadata stays in the detail response.
 ## Open questions
 
 - Can the document kinds other than norms use `schema:CreativeWork`?
-- Which IRI does the `ris:` prefix expand to: the namespace of the XSD schema
-  or an address of our own (today `https://rechtsinformationen.bund.de/vocab#`)?
+- Where do the descriptions of the `ris:` terms come from, and who maintains
+  them?
 
 ## Consequences
 
-- The API, the XSD schema and the glossary use the same German terms.
+- The API and the LDML documents mostly use the same German terms, but the
+  `ris:` vocabulary is maintained separately from the glossary.
 
-- Renaming fields and removing fields from search results change the
-  responses. The API is not official yet, so we change the context and the
-  endpoints directly, without versioning.
+- Renaming fields to German changes the responses. How we version these
+  changes is decided in a separate ADR.
 
-- Fewer fields in search results mean fewer fields to map, test and maintain.
+- Which data each endpoint returns, for example which metadata a search
+  result contains, is not part of this ADR and is decided separately.
 
 - Every new field needs an entry in a context. A test that checks all fields
   map to an IRI makes sure we don't forget it.
