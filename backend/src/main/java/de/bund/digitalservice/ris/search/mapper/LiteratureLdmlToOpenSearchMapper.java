@@ -6,6 +6,7 @@ import de.bund.digitalservice.ris.search.models.ldml.FrbrLanguage;
 import de.bund.digitalservice.ris.search.models.ldml.FrbrNameValueElement;
 import de.bund.digitalservice.ris.search.models.ldml.FrbrWork;
 import de.bund.digitalservice.ris.search.models.ldml.MainBody;
+import de.bund.digitalservice.ris.search.models.ldml.literature.RisRoleItem;
 import de.bund.digitalservice.ris.search.models.ldml.literature.uli.Analysis;
 import de.bund.digitalservice.ris.search.models.ldml.literature.uli.Doc;
 import de.bund.digitalservice.ris.search.models.ldml.literature.uli.Gliederung;
@@ -28,6 +29,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Stream;
 import javax.xml.transform.stream.StreamSource;
 import org.apache.commons.lang3.StringUtils;
@@ -195,15 +197,15 @@ public class LiteratureLdmlToOpenSearchMapper {
   }
 
   private static List<String> extractAuthors(LiteratureLdml literatureLdml) {
-    return extractPerson(literatureLdml, "#verfasser");
+    return extractPerson(literatureLdml, RisMeta::getVerfasserListe);
   }
 
   private static List<String> extractCollaborators(LiteratureLdml literatureLdml) {
-    return extractPerson(literatureLdml, "#mitarbeiter");
+    return extractPerson(literatureLdml, RisMeta::getMitarbeiterListe);
   }
 
   private static List<String> extractOriginators(LiteratureLdml literatureLdml) {
-    var originatorEids = getFrbrAuthorReferenceLinks(literatureLdml, "#urheber");
+    var originatorEids = getRoleReferences(literatureLdml, RisMeta::getUrheberListe);
 
     return extractRisMeta(literatureLdml)
         .map(RisMeta::getOrganisationen)
@@ -216,7 +218,7 @@ public class LiteratureLdmlToOpenSearchMapper {
   }
 
   private static List<String> extractConferenceNotes(LiteratureLdml literatureLdml) {
-    var conferenceEids = getFrbrAuthorReferenceLinks(literatureLdml, "#kongress");
+    var conferenceEids = getRoleReferences(literatureLdml, RisMeta::getKongressvermerke);
 
     return extractRisMeta(literatureLdml)
         .map(RisMeta::getKongresse)
@@ -279,28 +281,22 @@ public class LiteratureLdmlToOpenSearchMapper {
         .flatMap(otherReferences -> otherReferences.getImplicitReferences().stream());
   }
 
-  private static List<String> getFrbrAuthorReferenceLinks(
-      LiteratureLdml literatureLdml, String type) {
-
-    return Optional.ofNullable(literatureLdml)
-        .map(LiteratureLdml::getDoc)
-        .map(Doc::getMeta)
-        .map(Meta::getIdentification)
-        .map(Identification::getFrbrWork)
-        .map(FrbrWork::getFrbrAuthors)
-        .orElse(Collections.emptyList())
-        .stream()
-        .filter(author -> Objects.equals(author.getAs(), type))
-        .map(author ->
-            Optional.ofNullable(author.getHref())
-                .map(href -> href.replaceFirst("#", ""))
-                .orElse(null))
+  /**
+   * Returns the eIds the entries of a role list (e.g. ris:verfasserListe) refer to, without the
+   * leading "#".
+   */
+  private static List<String> getRoleReferences(
+      LiteratureLdml literatureLdml, Function<RisMeta, List<RisRoleItem>> roleList) {
+    return extractRisMeta(literatureLdml).map(roleList).orElse(Collections.emptyList()).stream()
+        .map(RisRoleItem::getRefersTo)
         .filter(Objects::nonNull)
+        .map(refersTo -> refersTo.replaceFirst("^#", ""))
         .toList();
   }
 
-  private static List<String> extractPerson(LiteratureLdml literatureLdml, String authorType) {
-    var personEids = getFrbrAuthorReferenceLinks(literatureLdml, authorType);
+  private static List<String> extractPerson(
+      LiteratureLdml literatureLdml, Function<RisMeta, List<RisRoleItem>> roleList) {
+    var personEids = getRoleReferences(literatureLdml, roleList);
 
     return extractRisMeta(literatureLdml)
         .map(RisMeta::getPersonen)

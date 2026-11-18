@@ -13,16 +13,6 @@
                     <akn:FRBRalias name="haupttitelzusatz" value="Zusatz zum Haupttitel"/>
                     <akn:FRBRdate date="2024-01-01" name="verkuendungsfassung"/>
                     <akn:FRBRauthor href="recht.bund.de/institution/foobar"/>
-                    <akn:FRBRauthor as="#verfasser" href="#musterfrau-sabine-verfasser-1"/>
-                    <akn:FRBRauthor as="#mitarbeiter" href="#foo-peter-mitarbeiter-1"/>
-                    <akn:FRBRauthor as="#urheber" href="#dgb-urheber-1"/>
-                    <akn:FRBRauthor as="#kongress" href="#foo-kongress-1"/>
-                    <akn:FRBRauthor as="#hochschule" href="#universitaet-1"/>
-                    <akn:FRBRauthor as="#bearbeiter" href="#foo-bearbeiter-1"/>
-                    <akn:FRBRauthor as="#begruender" href="#foo-begruender-1"/>
-                    <akn:FRBRauthor as="#herausgeber-person" href="#herausgeber-person-1"/>
-                    <akn:FRBRauthor as="#herausgeber-institution" href="#foo-herausgeber-1"/>
-                    <akn:FRBRauthor as="#verlag" href="#verlag-1"/>
                     <akn:FRBRcountry value="de"/>
                     <akn:FRBRsubtype value="LU"/>
                     <akn:FRBRnumber value="ISBN 3-XXXXX-XX-X"/>
@@ -67,15 +57,15 @@
                     </akn:implicitReference>
                 </akn:otherReferences>
             </akn:analysis>
-            <akn:references source="attributsemantik-noch-undefiniert">
-                <akn:TLCRole eId="kongress" href="akn/ontology/roles/de/kongress" showAs="Kongress"/>
-                <akn:TLCRole eId="urheber" href="akn/ontology/roles/de/urheber" showAs="Urheber"/>
-                <akn:TLCRole eId="mitarbeiter" href="akn/ontology/roles/de/mitarbeiter" showAs="Mitarbeiter"/>
-                <akn:TLCRole eId="verfasser" href="akn/ontology/roles/de/verfasser" showAs="Verfasser"/>
-            </akn:references>
             <akn:proprietary source="attributsemantik-noch-undefiniert">
                 <ris:meta>
                     <ris:ausgabe domainTerm="Ausgabe">1. Auflage</ris:ausgabe>
+                    <ris:bearbeiterListe domainTerm="Bearbeiterliste">
+                        <ris:bearbeiter domainTerm="Bearbeiter" refersTo="#foo-bearbeiter-1">Bearbeiter, Foo</ris:bearbeiter>
+                    </ris:bearbeiterListe>
+                    <ris:begruenderListe domainTerm="Begründerliste">
+                        <ris:begruender domainTerm="Begründer" refersTo="#foo-begruender-1">Begruender, Foo</ris:begruender>
+                    </ris:begruenderListe>
                     <ris:dokumenttypen domainTerm="Dokumenttypen">
                         <ris:dokumenttyp domainTerm="Dokumenttyp">Auf</ris:dokumenttyp>
                     </ris:dokumenttypen>
@@ -98,6 +88,15 @@
                         <ris:gliederungseintrag domainTerm="Gliederungseintrag">II. Lösung.</ris:gliederungseintrag>
                         <ris:gliederungseintrag domainTerm="Gliederungseintrag">III. Zusammenfassung.</ris:gliederungseintrag>
                     </ris:gliederung>
+                    <ris:herausgeberInstitutionen domainTerm="Herausgebende Institutionen">
+                        <ris:herausgeberInstitution domainTerm="Herausgebende Institution" refersTo="#foo-herausgeber-1">herausgeber institution</ris:herausgeberInstitution>
+                    </ris:herausgeberInstitutionen>
+                    <ris:herausgeberPersonen domainTerm="Herausgebende Personen">
+                        <ris:herausgeberPerson domainTerm="Herausgebende Person" refersTo="#herausgeber-person-1">Mitarbeiter Eins</ris:herausgeberPerson>
+                    </ris:herausgeberPersonen>
+                    <ris:hochschulschriftenvermerke domainTerm="Hochschulschriftenvermerke">
+                        <ris:hochschulschriftenvermerk domainTerm="Hochschulschriftenvermerk" refersTo="#universitaet-1">Universität Foo</ris:hochschulschriftenvermerk>
+                    </ris:hochschulschriftenvermerke>
                     <ris:kongresse domainTerm="Kongresse">
                         <ris:kongress domainTerm="Kongress"
                                       eId="foo-kongress-1"
@@ -108,6 +107,12 @@
                             <ris:land domainTerm="Land">GRC</ris:land>
                         </ris:kongress>
                     </ris:kongresse>
+                    <ris:kongressvermerke domainTerm="Kongressvermerke">
+                        <ris:kongressvermerk domainTerm="Kongressvermerk" refersTo="#foo-kongress-1">Internationaler Kongreß für das Recht</ris:kongressvermerk>
+                    </ris:kongressvermerke>
+                    <ris:mitarbeiterListe domainTerm="Mitarbeiterliste">
+                        <ris:mitarbeiter domainTerm="Mitarbeiter" refersTo="#foo-peter-mitarbeiter-1">Foo, Peter</ris:mitarbeiter>
+                    </ris:mitarbeiterListe>
                     <ris:organisationen domainTerm="Organisationen">
                         <ris:organisation domainTerm="Organisation" eId="dgb-urheber-1" showAs="DGB, Bundesauschuß">
                             <ris:name domainTerm="Name">DGB</ris:name>
@@ -155,6 +160,15 @@
                     <ris:titelkurzformen domainTerm="Titelkurzformen">
                         <ris:titelkurzform domainTerm="Titelkurzform">Titel Kurzform</ris:titelkurzform>
                     </ris:titelkurzformen>
+                    <ris:urheberListe domainTerm="Urheberliste">
+                        <ris:urheber domainTerm="Urheber" refersTo="#dgb-urheber-1">DGB</ris:urheber>
+                    </ris:urheberListe>
+                    <ris:verfasserListe domainTerm="Verfasserliste">
+                        <ris:verfasser domainTerm="Verfasser" refersTo="#musterfrau-sabine-verfasser-1">Musterfrau, Sabine</ris:verfasser>
+                    </ris:verfasserListe>
+                    <ris:verlagsangaben domainTerm="Verlagsangaben">
+                        <ris:verlagsangabe domainTerm="Verlagsangabe" refersTo="#verlag-1">verlag</ris:verlagsangabe>
+                    </ris:verlagsangaben>
                     <ris:veroeffentlichungsJahre domainTerm="Veröffentlichungsjahre">
                         <ris:veroeffentlichungsJahr domainTerm="Veröffentlichungsjahr">2024</ris:veroeffentlichungsJahr>
                     </ris:veroeffentlichungsJahre>

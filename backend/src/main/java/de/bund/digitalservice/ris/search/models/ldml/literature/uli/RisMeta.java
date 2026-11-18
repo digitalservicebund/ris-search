@@ -1,6 +1,7 @@
 package de.bund.digitalservice.ris.search.models.ldml.literature.uli;
 
 import de.bund.digitalservice.ris.search.models.ldml.literature.LiteratureNamespaces;
+import de.bund.digitalservice.ris.search.models.ldml.literature.RisRoleItem;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlElementWrapper;
 import java.util.List;
@@ -51,4 +52,28 @@ public class RisMeta {
 
   @XmlElement(name = "gliederung", namespace = LiteratureNamespaces.RIS_UNSELBSTSTAENDIG_NS)
   private Gliederung gliederung;
+
+  @XmlElementWrapper(
+      name = "verfasserListe",
+      namespace = LiteratureNamespaces.RIS_UNSELBSTSTAENDIG_NS)
+  @XmlElement(name = "verfasser", namespace = LiteratureNamespaces.RIS_UNSELBSTSTAENDIG_NS)
+  private List<RisRoleItem> verfasserListe;
+
+  @XmlElementWrapper(
+      name = "mitarbeiterListe",
+      namespace = LiteratureNamespaces.RIS_UNSELBSTSTAENDIG_NS)
+  @XmlElement(name = "mitarbeiter", namespace = LiteratureNamespaces.RIS_UNSELBSTSTAENDIG_NS)
+  private List<RisRoleItem> mitarbeiterListe;
+
+  @XmlElementWrapper(
+      name = "urheberListe",
+      namespace = LiteratureNamespaces.RIS_UNSELBSTSTAENDIG_NS)
+  @XmlElement(name = "urheber", namespace = LiteratureNamespaces.RIS_UNSELBSTSTAENDIG_NS)
+  private List<RisRoleItem> urheberListe;
+
+  @XmlElementWrapper(
+      name = "kongressvermerke",
+      namespace = LiteratureNamespaces.RIS_UNSELBSTSTAENDIG_NS)
+  @XmlElement(name = "kongressvermerk", namespace = LiteratureNamespaces.RIS_UNSELBSTSTAENDIG_NS)
+  private List<RisRoleItem> kongressvermerke;
 }

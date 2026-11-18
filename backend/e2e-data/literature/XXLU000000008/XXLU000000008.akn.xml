@@ -9,10 +9,6 @@
                     <akn:FRBRalias name="dokumentnummer" value="XXLU000000008"/>
                     <akn:FRBRdate date="2024-01-01" name="verkuendungsfassung"/>
                     <akn:FRBRauthor href="recht.bund.de/institution/foobar"/>
-                    <akn:FRBRauthor as="#verfasser" href="#musterfrau-sabine-verfasser-1"/>
-                    <akn:FRBRauthor as="#mitarbeiter" href="#foo-peter-mitarbeiter-1"/>
-                    <akn:FRBRauthor as="#urheber" href="#dgb-urheber-1"/>
-                    <akn:FRBRauthor as="#kongress" href="#foo-kongress-1"/>
                     <akn:FRBRcountry value="de"/>
                     <akn:FRBRsubtype value="LU"/>
                     <akn:FRBRnumber value="TODO"/>
@@ -44,12 +40,6 @@
                     </akn:implicitReference>
                 </akn:otherReferences>
             </akn:analysis>
-            <akn:references source="attributsemantik-noch-undefiniert">
-                <akn:TLCRole eId="kongress" href="akn/ontology/roles/de/kongress" showAs="Kongress"/>
-                <akn:TLCRole eId="urheber" href="akn/ontology/roles/de/urheber" showAs="Urheber"/>
-                <akn:TLCRole eId="mitarbeiter" href="akn/ontology/roles/de/mitarbeiter" showAs="Mitarbeiter"/>
-                <akn:TLCRole eId="verfasser" href="akn/ontology/roles/de/verfasser" showAs="Verfasser"/>
-            </akn:references>
             <akn:proprietary source="attributsemantik-noch-undefiniert">
                 <ris:meta>
                     <ris:dokumenttypen domainTerm="Dokumenttypen">
@@ -68,6 +58,12 @@
                             <ris:land domainTerm="Land">GRC</ris:land>
                         </ris:kongress>
                     </ris:kongresse>
+                    <ris:kongressvermerke domainTerm="Kongressvermerke">
+                        <ris:kongressvermerk domainTerm="Kongressvermerk" refersTo="#foo-kongress-1">Internationaler Kongreß für das Recht</ris:kongressvermerk>
+                    </ris:kongressvermerke>
+                    <ris:mitarbeiterListe domainTerm="Mitarbeiterliste">
+                        <ris:mitarbeiter domainTerm="Mitarbeiter" refersTo="#foo-peter-mitarbeiter-1">Foo, Peter</ris:mitarbeiter>
+                    </ris:mitarbeiterListe>
                     <ris:organisationen domainTerm="Organisationen">
                         <ris:organisation domainTerm="Organisation" eId="dgb-urheber-1" showAs="DGB, Bundesauschuß">
                             <ris:name domainTerm="Name">DGB</ris:name>
@@ -84,6 +80,12 @@
                             <ris:titel domainTerm="Titel">Dr</ris:titel>
                         </ris:person>
                     </ris:personen>
+                    <ris:urheberListe domainTerm="Urheberliste">
+                        <ris:urheber domainTerm="Urheber" refersTo="#dgb-urheber-1">DGB</ris:urheber>
+                    </ris:urheberListe>
+                    <ris:verfasserListe domainTerm="Verfasserliste">
+                        <ris:verfasser domainTerm="Verfasser" refersTo="#musterfrau-sabine-verfasser-1">Musterfrau, Sabine</ris:verfasser>
+                    </ris:verfasserListe>
                     <ris:veroeffentlichungsJahre domainTerm="Veröffentlichungsjahre">
                         <ris:veroeffentlichungsJahr domainTerm="Veröffentlichungsjahr">2024</ris:veroeffentlichungsJahr>
                     </ris:veroeffentlichungsJahre>

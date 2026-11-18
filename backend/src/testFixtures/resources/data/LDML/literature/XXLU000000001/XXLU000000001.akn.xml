@@ -12,11 +12,6 @@
                     <akn:FRBRalias name="haupttitelzusatz" value="Titelzusatz"/>
                     <akn:FRBRdate date="2024-01-01" name="verkuendungsfassung"/>
                     <akn:FRBRauthor href="recht.bund.de/institution/bundesregierung"/>
-                    <akn:FRBRauthor as="#verfasser" href="#mustermann-max-verfasser-1"/>
-                    <akn:FRBRauthor as="#verfasser" href="#musterfrau-susanne-verfasser-2"/>
-                    <akn:FRBRauthor as="#mitarbeiter" href="#foo-peter-mitarbeiter-1"/>
-                    <akn:FRBRauthor as="#urheber" href="#foo-urheber-1"/>
-                    <akn:FRBRauthor as="#kongress" href="#foo-kongress-1"/>
                     <akn:FRBRcountry value="de"/>
                     <akn:FRBRsubtype value="LU"/>
                     <akn:FRBRnumber value="TODO"/>
@@ -75,12 +70,6 @@
                     </akn:implicitReference>
                 </akn:otherReferences>
             </akn:analysis>
-            <akn:references source="attributsemantik-noch-undefiniert">
-                <akn:TLCRole eId="kongress" href="akn/ontology/roles/de/kongress" showAs="Kongress"/>
-                <akn:TLCRole eId="urheber" href="akn/ontology/roles/de/urheber" showAs="Urheber"/>
-                <akn:TLCRole eId="mitarbeiter" href="akn/ontology/roles/de/mitarbeiter" showAs="Mitarbeiter"/>
-                <akn:TLCRole eId="verfasser" href="akn/ontology/roles/de/verfasser" showAs="Verfasser"/>
-            </akn:references>
             <akn:proprietary source="attributsemantik-noch-undefiniert">
                 <ris:meta>
                     <ris:kongresse domainTerm="Kongresse">
@@ -91,6 +80,12 @@
                             <ris:land domainTerm="Land">GRC</ris:land>
                         </ris:kongress>
                     </ris:kongresse>
+                    <ris:kongressvermerke domainTerm="Kongressvermerke">
+                        <ris:kongressvermerk domainTerm="Kongressvermerk" refersTo="#foo-kongress-1">Internationaler Kongreß für das Recht</ris:kongressvermerk>
+                    </ris:kongressvermerke>
+                    <ris:mitarbeiterListe domainTerm="Mitarbeiterliste">
+                        <ris:mitarbeiter domainTerm="Mitarbeiter" refersTo="#foo-peter-mitarbeiter-1">Foo, Peter</ris:mitarbeiter>
+                    </ris:mitarbeiterListe>
                     <ris:organisationen domainTerm="Organisationen">
                         <ris:organisation domainTerm="Organisation" eId="foo-urheber-1" showAs="FOO, Foofaafee">
                             <ris:name domainTerm="Name">FOO</ris:name>
@@ -114,6 +109,13 @@
                         <ris:dokumenttyp domainTerm="Dokumenttyp">Auf</ris:dokumenttyp>
                         <ris:dokumenttyp domainTerm="Dokumenttyp">Foo</ris:dokumenttyp>
                     </ris:dokumenttypen>
+                    <ris:urheberListe domainTerm="Urheberliste">
+                        <ris:urheber domainTerm="Urheber" refersTo="#foo-urheber-1">FOO</ris:urheber>
+                    </ris:urheberListe>
+                    <ris:verfasserListe domainTerm="Verfasserliste">
+                        <ris:verfasser domainTerm="Verfasser" refersTo="#mustermann-max-verfasser-1">Mustermann, Max</ris:verfasser>
+                        <ris:verfasser domainTerm="Verfasser" refersTo="#musterfrau-susanne-verfasser-2">Musterfrau, Susanne</ris:verfasser>
+                    </ris:verfasserListe>
                     <ris:veroeffentlichungsJahre>
                         <ris:veroeffentlichungsJahr>2025</ris:veroeffentlichungsJahr>
                     </ris:veroeffentlichungsJahre>
