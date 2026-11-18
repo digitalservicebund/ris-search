@@ -12,6 +12,9 @@ public class RisPerson {
   @XmlAttribute(name = "eId")
   private String eId;
 
+  @XmlAttribute(name = "showAs")
+  private String showAs;
+
   @XmlElement(name = "name", namespace = LiteratureNamespaces.RIS_SELBSTSTAENDIG_NS)
   private String name;
 

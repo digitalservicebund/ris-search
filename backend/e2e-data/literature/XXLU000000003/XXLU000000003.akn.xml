@@ -10,7 +10,6 @@
                     <akn:FRBRalias name="haupttitel" value="Drittes Test-Dokument ULI"/>
                     <akn:FRBRdate date="2013-01-01" name="verkuendungsfassung"/>
                     <akn:FRBRauthor href="recht.bund.de/institution/foobar"/>
-                    <akn:FRBRauthor as="#verfasser" href="#fee-lilly-verfasser-1"/>
                     <akn:FRBRcountry value="de"/>
                     <akn:FRBRsubtype value="LU"/>
                     <akn:FRBRnumber value="TODO"/>
@@ -34,9 +33,6 @@
             <akn:classification source="schlagwort">
                 <akn:keyword dictionary="attributsemantik-noch-undefiniert" showAs="Anerkennung" value="Anerkennung"/>
             </akn:classification>
-            <akn:references source="attributsemantik-noch-undefiniert">
-                <akn:TLCRole eId="verfasser" href="akn/ontology/roles/de/verfasser" showAs="Verfasser"/>
-            </akn:references>
             <akn:proprietary source="attributsemantik-noch-undefiniert">
                 <ris:meta>
                     <ris:dokumenttypen domainTerm="Dokumenttypen">
@@ -48,6 +44,9 @@
                             <ris:titel domainTerm="Titel">Prof Dr</ris:titel>
                         </ris:person>
                     </ris:personen>
+                    <ris:verfasserListe domainTerm="Verfasserliste">
+                        <ris:verfasser domainTerm="Verfasser" refersTo="#fee-lilly-verfasser-1">Fee, Lilly</ris:verfasser>
+                    </ris:verfasserListe>
                     <ris:veroeffentlichungsJahre domainTerm="Veröffentlichungsjahre">
                         <ris:veroeffentlichungsJahr domainTerm="Veröffentlichungsjahr">2015</ris:veroeffentlichungsJahr>
                     </ris:veroeffentlichungsJahre>

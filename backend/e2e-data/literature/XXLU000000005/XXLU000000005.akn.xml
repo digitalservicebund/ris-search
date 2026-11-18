@@ -10,8 +10,6 @@
                     <akn:FRBRalias name="dokumentarischerTitel" value="Leeres Dokument"/>
                     <akn:FRBRdate date="2022-01-01" name="verkuendungsfassung"/>
                     <akn:FRBRauthor href="recht.bund.de/institution/foobar"/>
-                    <akn:FRBRauthor as="#verfasser" href="#mustermann-max-verfasser-1"/>
-                    <akn:FRBRauthor as="#verfasser" href="#pan-peter-verfasser-2"/>
                     <akn:FRBRcountry value="de"/>
                     <akn:FRBRsubtype value="LU"/>
                     <akn:FRBRnumber value="TODO"/>
@@ -46,9 +44,6 @@
                     </akn:implicitReference>
                 </akn:otherReferences>
             </akn:analysis>
-            <akn:references source="attributsemantik-noch-undefiniert">
-                <akn:TLCRole eId="verfasser" href="akn/ontology/roles/de/verfasser" showAs="Verfasser"/>
-            </akn:references>
             <akn:proprietary source="attributsemantik-noch-undefiniert">
                 <ris:meta>
                     <ris:dokumenttypen domainTerm="Dokumenttypen">
@@ -65,6 +60,9 @@
                             <ris:name domainTerm="Person">Pan, Peter</ris:name>
                         </ris:person>
                     </ris:personen>
+                    <ris:verfasserListe domainTerm="Verfasserliste">
+                        <ris:verfasser domainTerm="Verfasser" refersTo="#mustermann-max-verfasser-1">Mustermann, Max</ris:verfasser>
+                    </ris:verfasserListe>
                     <ris:veroeffentlichungsJahre domainTerm="Veröffentlichungsjahre">
                         <ris:veroeffentlichungsJahr domainTerm="Veröffentlichungsjahr">2013</ris:veroeffentlichungsJahr>
                         <ris:veroeffentlichungsJahr domainTerm="Veröffentlichungsjahr">2024</ris:veroeffentlichungsJahr>

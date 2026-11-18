@@ -1,6 +1,7 @@
 package de.bund.digitalservice.ris.search.models.ldml.literature.sli;
 
 import de.bund.digitalservice.ris.search.models.ldml.literature.LiteratureNamespaces;
+import de.bund.digitalservice.ris.search.models.ldml.literature.RisRoleItem;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlElementWrapper;
 import java.util.List;
@@ -80,4 +81,66 @@ public class RisMeta {
   @XmlElementWrapper(name = "teilbaende", namespace = LiteratureNamespaces.RIS_SELBSTSTAENDIG_NS)
   @XmlElement(name = "teilband", namespace = LiteratureNamespaces.RIS_SELBSTSTAENDIG_NS)
   private List<String> teilbaende;
+
+  @XmlElementWrapper(
+      name = "verfasserListe",
+      namespace = LiteratureNamespaces.RIS_SELBSTSTAENDIG_NS)
+  @XmlElement(name = "verfasser", namespace = LiteratureNamespaces.RIS_SELBSTSTAENDIG_NS)
+  private List<RisRoleItem> verfasserListe;
+
+  @XmlElementWrapper(
+      name = "mitarbeiterListe",
+      namespace = LiteratureNamespaces.RIS_SELBSTSTAENDIG_NS)
+  @XmlElement(name = "mitarbeiter", namespace = LiteratureNamespaces.RIS_SELBSTSTAENDIG_NS)
+  private List<RisRoleItem> mitarbeiterListe;
+
+  @XmlElementWrapper(
+      name = "bearbeiterListe",
+      namespace = LiteratureNamespaces.RIS_SELBSTSTAENDIG_NS)
+  @XmlElement(name = "bearbeiter", namespace = LiteratureNamespaces.RIS_SELBSTSTAENDIG_NS)
+  private List<RisRoleItem> bearbeiterListe;
+
+  @XmlElementWrapper(
+      name = "begruenderListe",
+      namespace = LiteratureNamespaces.RIS_SELBSTSTAENDIG_NS)
+  @XmlElement(name = "begruender", namespace = LiteratureNamespaces.RIS_SELBSTSTAENDIG_NS)
+  private List<RisRoleItem> begruenderListe;
+
+  @XmlElementWrapper(
+      name = "herausgeberPersonen",
+      namespace = LiteratureNamespaces.RIS_SELBSTSTAENDIG_NS)
+  @XmlElement(name = "herausgeberPerson", namespace = LiteratureNamespaces.RIS_SELBSTSTAENDIG_NS)
+  private List<RisRoleItem> herausgeberPersonen;
+
+  @XmlElementWrapper(
+      name = "herausgeberInstitutionen",
+      namespace = LiteratureNamespaces.RIS_SELBSTSTAENDIG_NS)
+  @XmlElement(
+      name = "herausgeberInstitution",
+      namespace = LiteratureNamespaces.RIS_SELBSTSTAENDIG_NS)
+  private List<RisRoleItem> herausgeberInstitutionen;
+
+  @XmlElementWrapper(name = "urheberListe", namespace = LiteratureNamespaces.RIS_SELBSTSTAENDIG_NS)
+  @XmlElement(name = "urheber", namespace = LiteratureNamespaces.RIS_SELBSTSTAENDIG_NS)
+  private List<RisRoleItem> urheberListe;
+
+  @XmlElementWrapper(
+      name = "verlagsangaben",
+      namespace = LiteratureNamespaces.RIS_SELBSTSTAENDIG_NS)
+  @XmlElement(name = "verlagsangabe", namespace = LiteratureNamespaces.RIS_SELBSTSTAENDIG_NS)
+  private List<RisRoleItem> verlagsangaben;
+
+  @XmlElementWrapper(
+      name = "hochschulschriftenvermerke",
+      namespace = LiteratureNamespaces.RIS_SELBSTSTAENDIG_NS)
+  @XmlElement(
+      name = "hochschulschriftenvermerk",
+      namespace = LiteratureNamespaces.RIS_SELBSTSTAENDIG_NS)
+  private List<RisRoleItem> hochschulschriftenvermerke;
+
+  @XmlElementWrapper(
+      name = "kongressvermerke",
+      namespace = LiteratureNamespaces.RIS_SELBSTSTAENDIG_NS)
+  @XmlElement(name = "kongressvermerk", namespace = LiteratureNamespaces.RIS_SELBSTSTAENDIG_NS)
+  private List<RisRoleItem> kongressvermerke;
 }
