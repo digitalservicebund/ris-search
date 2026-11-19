@@ -169,59 +169,33 @@ describe("useFetchNormContent", () => {
     });
 
     describe("first paragraph", () => {
-      it("is the text of the first paragraph", async () => {
-        mockArticle("<p>Hello world</p><p>Second</p>");
+      it.each([
+        [
+          "is the text of the first paragraph",
+          "<p>Hello world</p><p>Second</p>",
+          "Hello world",
+        ],
+        ["has no markup", "<p>Hello <b>world</b></p>", "Hello world"],
+        ["skips paragraphs without text", "<p>   </p><p>Second</p>", "Second"],
+        [
+          "is missing if there is no paragraph",
+          "<div>no paragraph here</div>",
+          undefined,
+        ],
+        [
+          "is missing if the only paragraph has just whitespace",
+          "<p>   </p>",
+          undefined,
+        ],
+      ])("%s", async (_, body, expected) => {
+        mockArticle(body);
 
         const { data } = await useFetchNormArticleContent(
           expressionEli,
           articleEId,
         );
 
-        expect(data.value?.html.text.firstParagraph).toBe("Hello world");
-      });
-
-      it("has no markup", async () => {
-        mockArticle("<p>Hello <b>world</b></p>");
-
-        const { data } = await useFetchNormArticleContent(
-          expressionEli,
-          articleEId,
-        );
-
-        expect(data.value?.html.text.firstParagraph).toBe("Hello world");
-      });
-
-      it("is missing if there is no paragraph", async () => {
-        mockArticle("<div>no paragraph here</div>");
-
-        const { data } = await useFetchNormArticleContent(
-          expressionEli,
-          articleEId,
-        );
-
-        expect(data.value?.html.text.firstParagraph).toBeUndefined();
-      });
-
-      it("skips paragraphs without text", async () => {
-        mockArticle("<p>   </p><p>Second</p>");
-
-        const { data } = await useFetchNormArticleContent(
-          expressionEli,
-          articleEId,
-        );
-
-        expect(data.value?.html.text.firstParagraph).toBe("Second");
-      });
-
-      it("is missing if the only paragraph has just whitespace", async () => {
-        mockArticle("<p>   </p>");
-
-        const { data } = await useFetchNormArticleContent(
-          expressionEli,
-          articleEId,
-        );
-
-        expect(data.value?.html.text.firstParagraph).toBeUndefined();
+        expect(data.value?.html.text.firstParagraph).toBe(expected);
       });
     });
   });
