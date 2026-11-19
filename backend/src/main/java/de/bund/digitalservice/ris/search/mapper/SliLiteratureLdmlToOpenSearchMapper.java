@@ -35,6 +35,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.xml.transform.stream.StreamSource;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.eclipse.persistence.exceptions.DescriptorException;
 
 /**
@@ -349,7 +350,7 @@ public class SliLiteratureLdmlToOpenSearchMapper {
     return extractRisMeta(literatureLdml).map(roleList).orElse(Collections.emptyList()).stream()
         .map(RisRoleItem::getRefersTo)
         .filter(Objects::nonNull)
-        .map(refersTo -> refersTo.replaceFirst("^#", ""))
+        .map(refersTo -> Strings.CS.removeStart(refersTo, "#"))
         .toList();
   }
 
