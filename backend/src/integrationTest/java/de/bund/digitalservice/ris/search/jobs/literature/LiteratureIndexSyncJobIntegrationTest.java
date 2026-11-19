@@ -25,12 +25,12 @@ class LiteratureIndexSyncJobIntegrationTest extends ContainersIntegrationBase {
   @Test
   void itIndexesAdministrativeDirectivesOnFullReindex() throws ObjectStoreServiceException {
     String dependent =
-        LoadXmlUtils.loadXmlAsString(Literature.class, "XXLS000000001/XXLS000000001.akn.xml");
-    bucket.save("XXLS000000001/XXLS000000001.akn.xml", dependent);
+        LoadXmlUtils.loadXmlAsString(Literature.class, "XXLS000000001/XXLS000000001.xml");
+    bucket.save("XXLS000000001/XXLS000000001.xml", dependent);
 
     String independent =
-        LoadXmlUtils.loadXmlAsString(Literature.class, "XXLU000000001/XXLU000000001.akn.xml");
-    bucket.save("XXLU000000001/XXLU000000001.akn.xml", independent);
+        LoadXmlUtils.loadXmlAsString(Literature.class, "XXLU000000001/XXLU000000001.xml");
+    bucket.save("XXLU000000001/XXLU000000001.xml", independent);
 
     syncJob.runJob();
     assertThat(repository.findById("XXLU000000001")).isNotEmpty();

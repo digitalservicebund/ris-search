@@ -31,11 +31,11 @@ public enum DocumentKind {
    */
   public static Optional<String> extractIdFromFileName(String fileName, DocumentKind docKind) {
     return switch (docKind) {
-      case DocumentKind.ADMINISTRATIVE_DIRECTIVE, DocumentKind.LITERATURE ->
+      case DocumentKind.ADMINISTRATIVE_DIRECTIVE ->
           Optional.ofNullable(fileName)
               .filter(e -> e.endsWith(".akn.xml"))
               .map(path -> path.substring(path.lastIndexOf("/") + 1, path.length() - 8));
-      case DocumentKind.CASE_LAW ->
+      case DocumentKind.CASE_LAW, DocumentKind.LITERATURE ->
           Optional.ofNullable(fileName)
               .filter(e -> e.endsWith(".xml"))
               .map(path -> path.substring(path.lastIndexOf("/") + 1, path.length() - 4));
