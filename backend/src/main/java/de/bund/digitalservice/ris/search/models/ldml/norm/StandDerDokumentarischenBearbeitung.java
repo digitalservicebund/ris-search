@@ -19,7 +19,8 @@ public class StandDerDokumentarischenBearbeitung {
   @XmlValue private String text;
 
   @XmlAttribute(name = "domainTerm")
-  private static final String domainTerm = "Stand der dokumentarischen Bearbeitung";
+  @SuppressWarnings("java:S1170")
+  private final String domainTerm = "Stand der dokumentarischen Bearbeitung";
 
   public StandDerDokumentarischenBearbeitung(String text) {
     this.text = text;
