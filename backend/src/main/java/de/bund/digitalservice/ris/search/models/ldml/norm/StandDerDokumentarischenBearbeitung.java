@@ -19,6 +19,8 @@ public class StandDerDokumentarischenBearbeitung {
   @XmlValue private String text;
 
   @XmlAttribute(name = "domainTerm")
+  // Suppress Sonarcloud code smell about non-static final String
+  // JAXB (XmlAccessType.FIELD) only binds instance fields
   @SuppressWarnings("java:S1170")
   private final String domainTerm = "Stand der dokumentarischen Bearbeitung";
 
