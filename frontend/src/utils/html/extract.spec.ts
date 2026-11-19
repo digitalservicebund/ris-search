@@ -41,6 +41,45 @@ describe("takeElements", () => {
     expect(document.body.innerHTML).toBe("<p>One</p>");
   });
 
+  describe("with inner HTML", () => {
+    const options = { innerHtml: true };
+
+    it("returns what is inside the element, without the element itself", () => {
+      const document = parse('<h2 class="a">Some <b>title</b></h2><p>Two</p>');
+
+      expect(takeElements(document, ".a", options)).toBe("Some <b>title</b>");
+    });
+
+    it("removes the element from the document", () => {
+      const document = parse('<h2 class="a">Title</h2><p>Two</p>');
+
+      takeElements(document, ".a", options);
+
+      expect(document.body.innerHTML).toBe("<p>Two</p>");
+    });
+
+    it("concatenates multiple matches in document order", () => {
+      const document = parse("<p>One</p><div>x</div><p>Two</p>");
+
+      expect(takeElements(document, "p", options)).toBe("OneTwo");
+      expect(document.body.innerHTML).toBe("<div>x</div>");
+    });
+
+    it("does not repeat matches nested in other matches", () => {
+      const document = parse("<div><div>inner</div></div>");
+
+      expect(takeElements(document, "div", options)).toBe("<div>inner</div>");
+      expect(document.body.innerHTML).toBe("");
+    });
+
+    it("returns undefined and changes nothing without a match", () => {
+      const document = parse("<p>One</p>");
+
+      expect(takeElements(document, ".missing", options)).toBeUndefined();
+      expect(document.body.innerHTML).toBe("<p>One</p>");
+    });
+  });
+
   const officialTocSelector =
     ".official-toc, .eingangsformel .inhaltsuebersicht .nichtamtliche-fussnoten";
 

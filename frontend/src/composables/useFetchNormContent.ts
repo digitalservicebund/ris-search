@@ -1,5 +1,11 @@
 import type { AsyncData, NuxtError } from "#app";
 import type { LegislationExpression } from "~/types/api";
+import { getText, takeElements } from "~/utils/html/extract";
+import type { ProcessedHtml } from "~/utils/html/processHtml";
+import {
+  DANGEROUSLY_SKIP_SANITIZATION,
+  processHtml,
+} from "~/utils/html/processHtml";
 import { parseDocument } from "~/utils/htmlParser";
 
 export type NormContent = {
@@ -132,11 +138,13 @@ function insertLineBreaksBetweenBracketedBlocks(
   return html.replaceAll(/\+\+\+\)\s+\(\+\+\+/g, "+++)<br />(+++");
 }
 
-export interface NormArticleContent {
+export type NormArticleContent = {
   legislation: LegislationExpression;
-  htmlBody: string;
-  articleHeading?: string;
-}
+  html: ProcessedHtml<
+    { heading: string | undefined },
+    { headline: string | undefined; firstParagraph: string | undefined }
+  >;
+};
 
 /**
  * Fetches the metadata and actual content for a single norm article as an async
@@ -154,10 +162,7 @@ export interface NormArticleContent {
 export function useFetchNormArticleContent(
   expressionEli: string,
   articleEId: string,
-): AsyncData<
-  NormArticleContent,
-  NuxtError<NormContent> | NuxtError<null> | undefined
-> {
+) {
   const { $risBackend } = useNuxtApp();
 
   return useAsyncData(
@@ -176,20 +181,31 @@ export function useFetchNormArticleContent(
           Accept: "text/html",
         },
       });
-      const document = parseDocument(html);
-      const body = document.body.innerHTML;
-      const articleHeading = document.querySelector(
-        "h2.einzelvorschrift",
-      )?.innerHTML;
-
-      return {
-        legislation: metadata,
-        htmlBody: body,
-        articleHeading,
-      };
+      return { legislation: metadata, html: processArticleHtml(html) };
     },
     { immediate: !!articleEId, server: true, lazy: false },
   );
+}
+
+function processArticleHtml(html: string): NormArticleContent["html"] {
+  return processHtml(html, {
+    // TODO RISDEV-11107: replace with an allowlist
+    allowlist: DANGEROUSLY_SKIP_SANITIZATION,
+    extract: extractArticleParts,
+  });
+}
+
+function extractArticleParts(document: Document) {
+  const headline = getText(document, "h2.einzelvorschrift")[0];
+  const firstParagraph = getText(document, "p")[0];
+
+  // The page shows the heading inside its own title element, so only the
+  // content of the heading is needed, not the element itself
+  const heading = takeElements(document, "h2.einzelvorschrift", {
+    innerHtml: true,
+  });
+
+  return { html: { heading }, text: { headline, firstParagraph } };
 }
 
 /**
