@@ -45,6 +45,6 @@ function processDocumentHtml(html: string): DocumentHtml {
 
 function extractDocumentParts(document: Document) {
   const sections = getSections(document, "section");
-  const firstParagraph = getText(document, "section p")[0]?.trim() || undefined;
+  const firstParagraph = getText(document, "section p")[0];
   return { html: {}, text: { sections, firstParagraph } };
 }

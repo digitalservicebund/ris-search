@@ -111,9 +111,19 @@ describe("useDocumentHtml", () => {
       expect(data.value.text.firstParagraph).toBe("Second");
     });
 
-    it("is missing if the first paragraph has no text", async () => {
+    it("skips paragraphs that contain only whitespace", async () => {
       mockFetch.mockResolvedValueOnce(
         page("<section><p> </p><p>Second</p></section>"),
+      );
+
+      const { data } = await useDocumentHtml("/v1/rechtsprechung/ABC.html");
+
+      expect(data.value.text.firstParagraph).toBe("Second");
+    });
+
+    it("is missing if no paragraph has any text", async () => {
+      mockFetch.mockResolvedValueOnce(
+        page("<section><p> </p><p></p></section>"),
       );
 
       const { data } = await useDocumentHtml("/v1/rechtsprechung/ABC.html");

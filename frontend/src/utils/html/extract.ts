@@ -31,14 +31,14 @@ export function takeElements(
 
 /**
  * Reads the text content of all elements matching the selector, in document
- * order, skipping elements without text.
+ * order. The text is trimmed, elements without text are skipped.
  *
  * @param root The document, or an element to search in
  * @returns One string per matching element, empty if nothing matched.
  */
 export function getText(root: ParentNode, selector: string): string[] {
   return [...root.querySelectorAll(selector)]
-    .map((element) => element.textContent)
+    .map((element) => element.textContent?.trim())
     .filter((text): text is string => Boolean(text));
 }
 
