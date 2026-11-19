@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import de.bund.digitalservice.ris.search.models.opensearch.common.Gericht;
 import java.time.LocalDate;
+import java.time.Month;
 import org.junit.jupiter.api.Test;
 
 class ZitierungRechtsprechungTest {
@@ -24,7 +25,7 @@ class ZitierungRechtsprechungTest {
                     .spruchkoerper("1. Senat")
                     .sitzDerAussenstelle("Nürnberg")
                     .build())
-            .entscheidungsdatum(LocalDate.of(1983, 12, 2))
+            .entscheidungsdatum(LocalDate.of(1983, Month.DECEMBER, 2))
             .dokumenttyp("Beschluss")
             .aktenzeichen("Vf. 94-VI-81")
             .fundstelle(
