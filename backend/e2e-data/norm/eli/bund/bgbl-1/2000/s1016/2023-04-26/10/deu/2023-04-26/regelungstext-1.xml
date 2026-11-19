@@ -169,7 +169,7 @@
             <akn:block GUID="d8a00001-0000-0000-0000-000000000001" eId="einleitung-n1_block-n1" name="attributsemantik-noch-undefiniert">
                 <akn:date GUID="d8a00001-0000-0000-0000-000000000002" date="2000-05-27" eId="einleitung-n1_block-n1_datum-n1" refersTo="ausfertigung-datum"/>
             </akn:block>
-            <akn:container GUID="dc000001-0000-0000-0000-000000000001" eId="einleitung-n1_dokcontainer-n1" refersTo="einleitung">
+            <akn:container GUID="dc000001-0000-0000-0000-000000000001" eId="einleitung-n1_dokcontainer-n1">
                 <akn:p GUID="dc000001-0000-0000-0000-000000000002" eId="einleitung-n1_dokcontainer-n1_text-n1">
                     Dieser besondere Hinweis wurde im End-to-end-Datenbestand ergänzt.
                 </akn:p>
