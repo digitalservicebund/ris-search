@@ -50,6 +50,12 @@ We map fields to schema.org where a suitable type or property exists:
 
 Fields without a suitable schema.org property use the `ris:` prefix.
 
+The mapping happens in the JSON-LD context, not in the field names. The API
+fields keep their German names, and the context maps them to the English
+schema.org terms, for example:
+
+    "ausfertigungsdatum": "schema:legislationDate"
+
 ### Our own `ris:` vocabulary
 
 Terms with the `ris:` prefix form our own vocabulary that describes the API
