@@ -243,35 +243,35 @@ class AdvancedSearchControllerApiIntegrationTest extends ContainersIntegrationBa
     }
 
     for (var alias : new String[] {"aktivzitierung_rechtsprechung", "ZITRSPR"}) {
-      arguments.add(Arguments.of(alias, "aktivzitierungenRechtsprechungTest", 1));
+      arguments.add(Arguments.of(alias, "aktivzitierungRechtsprechungTest", 1));
     }
 
     for (var alias : new String[] {"passivzitierung_rechtsprechung", "PZITRSPR"}) {
-      arguments.add(Arguments.of(alias, "passivzitierungenRechtsprechungTest", 1));
+      arguments.add(Arguments.of(alias, "passivzitierungRechtsprechungTest", 1));
     }
 
     for (var alias : new String[] {"aktivzitierung_verwaltungsvorschriften", "ZITVWV"}) {
-      arguments.add(Arguments.of(alias, "aktivzitierungenVerwaltungsvorschriftenTest", 1));
+      arguments.add(Arguments.of(alias, "aktivzitierungVerwaltungsvorschriftenTest", 1));
     }
 
     for (var alias : new String[] {"passivzitierung_verwaltungsvorschriften", "PZITVWV"}) {
-      arguments.add(Arguments.of(alias, "passivzitierungenVerwaltungsvorschriftenTest", 1));
+      arguments.add(Arguments.of(alias, "passivzitierungVerwaltungsvorschriftenTest", 1));
     }
 
     for (var alias : new String[] {"aktivzitierung_literatur_selbstaendig", "ZITLITSELBST"}) {
-      arguments.add(Arguments.of(alias, "aktivzitierungenLiteraturSelbstaendigTest", 1));
+      arguments.add(Arguments.of(alias, "aktivzitierungLiteraturSelbstaendigTest", 1));
     }
 
     for (var alias : new String[] {"aktivzitierung_literatur_unselbstaendig", "ZITLITUNSELBST"}) {
-      arguments.add(Arguments.of(alias, "aktivzitierungenLiteraturUnselbstaendigTest", 1));
+      arguments.add(Arguments.of(alias, "aktivzitierungLiteraturUnselbstaendigTest", 1));
     }
 
     for (var alias : new String[] {"passivzitierung_literatur_selbstaendig", "PZITLITSELBST"}) {
-      arguments.add(Arguments.of(alias, "passivzitierungenLiteraturSelbstaendigTest", 1));
+      arguments.add(Arguments.of(alias, "passivzitierungLiteraturSelbstaendigTest", 1));
     }
 
     for (var alias : new String[] {"passivzitierung_literatur_unselbstaendig", "PZITLITUNSELBST"}) {
-      arguments.add(Arguments.of(alias, "passivzitierungenLiteraturUnselbstaendigTest", 1));
+      arguments.add(Arguments.of(alias, "passivzitierungLiteraturUnselbstaendigTest", 1));
     }
 
     for (var alias : new String[] {"amtliche_fundstellen", "FS"}) {

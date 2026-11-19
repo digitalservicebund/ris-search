@@ -2,8 +2,6 @@ package de.bund.digitalservice.ris.search.utils;
 
 import static de.bund.digitalservice.ris.search.utils.DateUtils.toDateIntervalString;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.time.Clock;
 import java.time.Instant;
@@ -23,7 +21,7 @@ class DateUtilsTest {
   @ParameterizedTest(name = "Test valid date from {0} to {1} is {2}")
   @MethodSource("getTestDates")
   void testIsValidDate(LocalDate from, LocalDate to, boolean expected) {
-    assertEquals(expected, DateUtils.isActive(from, to, FIXED_BERLIN_CLOCK));
+    assertThat(DateUtils.isActive(from, to, FIXED_BERLIN_CLOCK)).isEqualTo(expected);
   }
 
   private static List<Arguments> getTestDates() {
@@ -44,7 +42,7 @@ class DateUtilsTest {
 
   @Test
   void testToDateStringReturnsNullWhenDateIsNull() {
-    assertNull(DateUtils.toDateString(null));
+    assertThat(DateUtils.toDateString(null)).isNull();
   }
 
   @Test
@@ -64,15 +62,15 @@ class DateUtilsTest {
     LocalDate end = LocalDate.of(2021, Month.DECEMBER, 31);
 
     // Case: Start Date, End Date
-    assertEquals("2021-01-01/2021-12-31", toDateIntervalString(start, end));
+    assertThat(toDateIntervalString(start, end)).isEqualTo("2021-01-01/2021-12-31");
 
     // Case: Start Date is null, End Date
-    assertEquals("../2021-12-31", toDateIntervalString(null, end));
+    assertThat(toDateIntervalString(null, end)).isEqualTo("../2021-12-31");
 
     // Case: Start Date, End Date is null
-    assertEquals("2021-01-01/..", toDateIntervalString(start, null));
+    assertThat(toDateIntervalString(start, null)).isEqualTo("2021-01-01/..");
 
     // Case: Both Dates are null
-    assertNull(toDateIntervalString(null, null));
+    assertThat(toDateIntervalString(null, null)).isNull();
   }
 }

@@ -40,6 +40,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 import javax.xml.transform.stream.StreamSource;
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.persistence.exceptions.DescriptorException;
 import org.springframework.stereotype.Service;
 
@@ -149,21 +150,21 @@ public class CaseLawLdmlToOpenSearchMapper {
             getLinkedJudgements(
                 meta,
                 refs -> refs.getReferencesByType(ImplicitReference::getNachgehendeEntscheidung)))
-        .aktivzitierungenLiteraturUnselbstaendig(
+        .aktivzitierungLiteraturUnselbstaendig(
             searchTexts(unindexed.zitierungenLiteraturUnselbststaendig(), Richtung.AKTIV))
-        .passivzitierungenLiteraturUnselbstaendig(
+        .passivzitierungLiteraturUnselbstaendig(
             searchTexts(unindexed.zitierungenLiteraturUnselbststaendig(), Richtung.PASSIV))
-        .aktivzitierungenLiteraturSelbstaendig(
+        .aktivzitierungLiteraturSelbstaendig(
             searchTexts(unindexed.zitierungenLiteraturSelbststaendig(), Richtung.AKTIV))
-        .passivzitierungenLiteraturSelbstaendig(
+        .passivzitierungLiteraturSelbstaendig(
             searchTexts(unindexed.zitierungenLiteraturSelbststaendig(), Richtung.PASSIV))
-        .aktivzitierungenRechtsprechung(
+        .aktivzitierungRechtsprechung(
             searchTexts(unindexed.zitierungenRechtsprechung(), Richtung.AKTIV))
-        .passivzitierungenRechtsprechung(
+        .passivzitierungRechtsprechung(
             searchTexts(unindexed.zitierungenRechtsprechung(), Richtung.PASSIV))
-        .aktivzitierungenVerwaltungsvorschriften(
+        .aktivzitierungVerwaltungsvorschriften(
             searchTexts(unindexed.zitierungenVerwaltungsvorschriften(), Richtung.AKTIV))
-        .passivzitierungenVerwaltungsvorschriften(
+        .passivzitierungVerwaltungsvorschriften(
             searchTexts(unindexed.zitierungenVerwaltungsvorschriften(), Richtung.PASSIV))
         .amtlicheFundstellen(extractAmtlicheFundstellen(meta))
         .nichtamtlicheFundstellen(extractNichtamtlicheFundstellen(meta))
@@ -317,6 +318,7 @@ public class CaseLawLdmlToOpenSearchMapper {
     return zitierungen.stream()
         .filter(zitierung -> zitierung.richtung() == richtung)
         .map(Zitierung::searchText)
+        .filter(StringUtils::isNotBlank)
         .toList();
   }
 

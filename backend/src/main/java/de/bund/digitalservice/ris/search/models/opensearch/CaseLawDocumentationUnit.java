@@ -24,12 +24,12 @@ public record CaseLawDocumentationUnit(
         List<LocalDate> abweichendeDaten,
     @Field(name = Fields.ABWEICHENDE_ECLIS) List<String> abweichendeEclis,
     @Field(name = Fields.AKTIVZITIERUNG_LITERATUR_SELBSTAENDIG)
-        List<String> aktivzitierungenLiteraturSelbstaendig,
+        List<String> aktivzitierungLiteraturSelbstaendig,
     @Field(name = Fields.AKTIVZITIERUNG_LITERATUR_UNSELBSTAENDIG)
-        List<String> aktivzitierungenLiteraturUnselbstaendig,
-    @Field(name = Fields.AKTIVZITIERUNG_RECHTSPRECHUNG) List<String> aktivzitierungenRechtsprechung,
+        List<String> aktivzitierungLiteraturUnselbstaendig,
+    @Field(name = Fields.AKTIVZITIERUNG_RECHTSPRECHUNG) List<String> aktivzitierungRechtsprechung,
     @Field(name = Fields.AKTIVZITIERUNG_VERWALTUNGSVORSCHRIFTEN)
-        List<String> aktivzitierungenVerwaltungsvorschriften,
+        List<String> aktivzitierungVerwaltungsvorschriften,
     @Field(name = Fields.AMTLICHE_FUNDSTELLEN) List<String> amtlicheFundstellen,
     @Field(name = Fields.BERUFSBILDER) List<String> berufsbilder,
     @Field(name = Fields.CASE_FACTS) String caseFacts,
@@ -92,13 +92,12 @@ public record CaseLawDocumentationUnit(
     @Field(name = Fields.OTHER_LONG_TEXT) String otherLongText,
     @Field(name = Fields.OUTLINE) String outline,
     @Field(name = Fields.PASSIVZITIERUNG_LITERATUR_SELBSTAENDIG)
-        List<String> passivzitierungenLiteraturSelbstaendig,
+        List<String> passivzitierungLiteraturSelbstaendig,
     @Field(name = Fields.PASSIVZITIERUNG_LITERATUR_UNSELBSTAENDIG)
-        List<String> passivzitierungenLiteraturUnselbstaendig,
-    @Field(name = Fields.PASSIVZITIERUNG_RECHTSPRECHUNG)
-        List<String> passivzitierungenRechtsprechung,
+        List<String> passivzitierungLiteraturUnselbstaendig,
+    @Field(name = Fields.PASSIVZITIERUNG_RECHTSPRECHUNG) List<String> passivzitierungRechtsprechung,
     @Field(name = Fields.PASSIVZITIERUNG_VERWALTUNGSVORSCHRIFTEN)
-        List<String> passivzitierungenVerwaltungsvorschriften,
+        List<String> passivzitierungVerwaltungsvorschriften,
     @JsonIgnore @Field(name = Fields.PENDING_DECISIONS) List<String> pendingDecisions,
     @Field(name = Fields.PREVIOUS_DECISIONS) List<String> previousDecisions,
     @Field(name = Fields.RECHTSFRAGE) String rechtsfrage,
