@@ -133,28 +133,16 @@ describe("useDocumentHtml", () => {
   });
 
   describe("emptiness", () => {
-    it("is not empty with content", async () => {
-      mockFetch.mockResolvedValueOnce(page("<p>Foo Bar</p>"));
+    it.each([
+      ["is not empty with content", "<p>Foo Bar</p>", false],
+      ["is empty without content", "", true],
+      ["is empty with only a heading", "<h1>Still Empty</h1>", true],
+    ])("%s", async (_title, body, isEmpty) => {
+      mockFetch.mockResolvedValueOnce(page(body));
 
       const { data } = await useDocumentHtml("/v1/literature/ABC.html");
 
-      expect(data.value?.isEmpty).toBe(false);
-    });
-
-    it("is empty without content", async () => {
-      mockFetch.mockResolvedValueOnce(page(""));
-
-      const { data } = await useDocumentHtml("/v1/literature/ABC.html");
-
-      expect(data.value?.isEmpty).toBe(true);
-    });
-
-    it("is empty with only a heading", async () => {
-      mockFetch.mockResolvedValueOnce(page("<h1>Still Empty</h1>"));
-
-      const { data } = await useDocumentHtml("/v1/literature/ABC.html");
-
-      expect(data.value?.isEmpty).toBe(true);
+      expect(data.value?.isEmpty).toBe(isEmpty);
     });
 
     it("is empty if the response is empty", async () => {
