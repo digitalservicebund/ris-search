@@ -5,7 +5,6 @@ import type { TabView } from "~/components/documents/TabsLayout.vue";
 import type { TreeItem } from "~/components/TreeView.vue";
 import { useSearchBackLink } from "~/composables/useSearchBackLink";
 import { DocumentKind, type Rechtsprechung } from "~/types/api";
-import { getSections } from "~/utils/html/extract";
 
 definePageMeta({
   layout: false,
@@ -26,25 +25,17 @@ const [
   { data: html, error: contentError },
 ] = await Promise.all([
   useRisBackend<Rechtsprechung>(`/v1/rechtsprechung/${documentNumber}`),
-  useRisBackend<string>(`/v1/rechtsprechung/${documentNumber}.html`, {
-    headers: { Accept: "text/html" },
-  }),
+  useDocumentHtml(`/v1/rechtsprechung/${documentNumber}.html`),
 ]);
 
 if (metadataError?.value) throw createError(metadataError.value);
 if (contentError?.value) throw createError(contentError.value);
 
-const document = computed(() => {
-  if (html.value) {
-    return parseDocument(html.value);
-  }
-});
-
-const isEmptyDocument = computed(() => isDocumentEmpty(document.value));
+const isEmptyDocument = computed(() => html.value.isEmpty);
 
 useCaselawSeo({
   rechtsprechung: rechtsprechung.value,
-  document: document.value,
+  firstParagraph: html.value.text.firstParagraph,
 });
 
 const zitierungen = computed(() => {
@@ -108,8 +99,7 @@ const breadcrumbs = computed(() => [
 ]);
 
 const tocEntries = computed<TreeItem[]>(() => {
-  if (!document.value) return [];
-  return getSections(document.value, "section").map((entry) => ({
+  return html.value.text.sections.map((entry) => ({
     key: entry.id,
     subtitle: entry.title, // Subtitle for more subtle appearance
     to: { hash: `#${entry.id}`, query: { from: route.query.from } },
@@ -254,11 +244,7 @@ const zitierungenSectionId = useId();
         <section role="tabpanel" :aria-labelledby="textSectionId">
           <h2 :id="textSectionId" class="sr-only">Text</h2>
           <DocumentsIncompleteDataMessage class="my-24" />
-          <div
-            v-if="document"
-            class="case-law"
-            v-html="document.body.innerHTML"
-          ></div>
+          <div class="case-law" v-html="html.body"></div>
         </section>
 
         <template #sidebar v-if="tocEntries.length">

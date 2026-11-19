@@ -1,20 +1,27 @@
 import sanitizeHtml from "sanitize-html";
 import { isDocumentEmpty, parseDocument } from "~/utils/htmlParser";
+import type { Section } from "./extract";
 
 /** Pass as `allowlist` to explicitly skip sanitizing. */
 export const DANGEROUSLY_SKIP_SANITIZATION = Symbol(
   "DANGEROUSLY_SKIP_SANITIZATION",
 );
 
+/** A document without any content, e.g. as a fallback for an empty response. */
+export const EMPTY_DOCUMENT_HTML = "<html><body></body></html>";
+
 /** HTML fragments extracted from a document */
 export type HtmlParts = Record<string, string | undefined>;
 
 /**
- * Plain text extracted from a document, e.g. with `getText`. This is not
- * sanitized, because it's not meant to be HTML. Use `HtmlParts` for anything
- * that contains markup.
+ * Plain text and data extracted from a document, e.g. with `getText` or
+ * `getSections`. This is not sanitized, because it's not meant to be HTML. Use
+ * `HtmlParts` for anything that contains markup.
  */
-export type TextParts = Record<string, string | string[] | undefined>;
+export type TextParts = Record<
+  string,
+  string | string[] | Section[] | undefined
+>;
 
 /**
  * Changes the document in place, e.g. by rewriting links. The context is

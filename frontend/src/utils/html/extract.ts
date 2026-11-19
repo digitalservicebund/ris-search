@@ -33,10 +33,11 @@ export function takeElements(
  * Reads the text content of all elements matching the selector, in document
  * order, skipping elements without text.
  *
+ * @param root The document, or an element to search in
  * @returns One string per matching element, empty if nothing matched.
  */
-export function getText(document: Document, selector: string): string[] {
-  return [...document.querySelectorAll(selector)]
+export function getText(root: ParentNode, selector: string): string[] {
+  return [...root.querySelectorAll(selector)]
     .map((element) => element.textContent)
     .filter((text): text is string => Boolean(text));
 }
@@ -45,7 +46,7 @@ export type Section = { id: string; title: string };
 
 /**
  * Lists the sections of a document, e.g. for a table of contents. The title of
- * a section is the text of its first `<h2>`.
+ * a section is the text of its first `<h2>` that has text.
  *
  * @param elementName The tag name of the sections (e.g., "section").
  */
@@ -55,6 +56,6 @@ export function getSections(
 ): Section[] {
   return [...document.querySelectorAll(elementName)].map((element) => ({
     id: element.id,
-    title: element.querySelector("h2")?.textContent ?? "",
+    title: getText(element, "h2")[0] ?? "",
   }));
 }

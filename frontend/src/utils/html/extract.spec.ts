@@ -120,6 +120,14 @@ describe("getText", () => {
     expect(getText(parse("<p>x</p>"), ".missing")).toEqual([]);
   });
 
+  it("only searches inside the given element", () => {
+    const document = parse(
+      '<div id="a"><p>One</p></div><div id="b"><p>Two</p></div>',
+    );
+
+    expect(getText(document.querySelector("#b")!, "p")).toEqual(["Two"]);
+  });
+
   it("does not mutate the document", () => {
     const document = parse("<p>One</p>");
 
@@ -145,6 +153,16 @@ describe("getSections", () => {
     const document = parse('<section id="a"><p>No heading</p></section>');
 
     expect(getSections(document, "section")).toEqual([{ id: "a", title: "" }]);
+  });
+
+  it("uses the first heading that has text as the title", () => {
+    const document = parse(
+      '<section id="a"><h2></h2><h2>Second</h2></section>',
+    );
+
+    expect(getSections(document, "section")).toEqual([
+      { id: "a", title: "Second" },
+    ]);
   });
 
   it("returns an empty list without sections", () => {

@@ -14,7 +14,7 @@ describe("useCaselawSeo", () => {
     vi.clearAllMocks();
   });
 
-  it("falls back to defaults when rechtsprechung and document is undefined", () => {
+  it("falls back to defaults when rechtsprechung and first paragraph are undefined", () => {
     useCaselawSeo({});
 
     expect(useSeo).toHaveBeenCalledWith(
@@ -54,16 +54,12 @@ describe("useCaselawSeo", () => {
 
   describe("buildDescription", () => {
     it("uses leitsatz's first two sentences", () => {
-      const doc = new DOMParser().parseFromString(
-        "<html lang='de'><body><section><p>Not used in this case.</p></section></body></html>",
-        "text/html",
-      );
       useCaselawSeo({
         rechtsprechung: {
           leitsatz:
             "Fist sentence. Second sentence. Third sentence should be cut off.",
         } as Rechtsprechung,
-        document: doc,
+        firstParagraph: "Not used in this case.",
       });
 
       expect(useSeo).toHaveBeenCalledWith(
@@ -74,12 +70,8 @@ describe("useCaselawSeo", () => {
     });
 
     it("falls back to first paragraph from document when leitsatz missing", () => {
-      const doc = new DOMParser().parseFromString(
-        "<html lang='de'><body><section><p>Paragraph text here.</p></section></body></html>",
-        "text/html",
-      );
       useCaselawSeo({
-        document: doc,
+        firstParagraph: "Paragraph text here.",
       });
 
       expect(useSeo).toHaveBeenCalledWith(
@@ -88,13 +80,9 @@ describe("useCaselawSeo", () => {
     });
 
     it("falls back to default when document has no section paragraph", () => {
-      const doc = new DOMParser().parseFromString(
-        "<html lang='de'><body><div>No section paragraph</div></body></html>",
-        "text/html",
-      );
       useCaselawSeo({
         rechtsprechung: {} as Rechtsprechung,
-        document: doc,
+        firstParagraph: undefined,
       });
 
       expect(useSeo).toHaveBeenCalledWith(
