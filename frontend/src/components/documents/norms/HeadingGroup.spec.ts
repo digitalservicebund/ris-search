@@ -47,4 +47,23 @@ describe("HeadingGroup", () => {
       "Test Heading",
     );
   });
+
+  it("shows the title of the norm if there is no heading", () => {
+    const props = createDefaultProps();
+    props.htmlParts.heading = "";
+
+    render(HeadingGroup, { props });
+
+    expect(screen.getByText("Test Law Name")).toBeInTheDocument();
+    expect(screen.queryByText("Test Heading")).not.toBeInTheDocument();
+  });
+
+  it("only shows the alternate name together with the heading", () => {
+    const props = createDefaultProps();
+    props.htmlParts.heading = "";
+
+    render(HeadingGroup, { props });
+
+    expect(screen.queryByText("Test Alternate Name")).not.toBeInTheDocument();
+  });
 });
