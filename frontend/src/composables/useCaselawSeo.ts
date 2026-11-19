@@ -2,16 +2,16 @@ import { type Rechtsprechung } from "~/types/api";
 
 export type UseCaselawSeoInput = {
   rechtsprechung?: Rechtsprechung;
-  document?: Document;
+  firstParagraph?: string;
 };
 
 export function useCaselawSeo({
   rechtsprechung,
-  document,
+  firstParagraph,
 }: UseCaselawSeoInput) {
   useSeo({
     title: buildTitle(rechtsprechung),
-    description: buildDescription(rechtsprechung, document),
+    description: buildDescription(rechtsprechung, firstParagraph),
     ogTitle: buildOgTitle(rechtsprechung),
   });
 }
@@ -22,7 +22,7 @@ function buildTitle(rechtsprechung?: Rechtsprechung) {
 
 function buildDescription(
   rechtsprechung: Rechtsprechung | undefined,
-  document: Document | undefined,
+  firstParagraph: string | undefined,
 ) {
   if (rechtsprechung?.leitsatz) {
     const sentences = rechtsprechung.leitsatz
@@ -32,12 +32,8 @@ function buildDescription(
     return truncateAtWord(sentences.slice(0, 2).join(" "), 150);
   }
 
-  if (document) {
-    const firstParagraph = document.querySelector("section p");
-    const firstParagraphText = firstParagraph?.textContent?.trim();
-    if (firstParagraphText) {
-      return truncateAtWord(firstParagraphText, 150);
-    }
+  if (firstParagraph) {
+    return truncateAtWord(firstParagraph, 150);
   }
 
   return "Gerichtsentscheidung";

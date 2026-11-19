@@ -1,6 +1,10 @@
 import { isNormBodyEmpty } from "~/utils/norm";
 import { takeElements } from "./extract";
-import { DANGEROUSLY_SKIP_SANITIZATION, processHtml } from "./processHtml";
+import {
+  DANGEROUSLY_SKIP_SANITIZATION,
+  EMPTY_DOCUMENT_HTML,
+  processHtml,
+} from "./processHtml";
 
 describe("processHtml", () => {
   it("returns the body, no parts and no text without options", () => {
@@ -63,7 +67,7 @@ describe("processHtml", () => {
   describe("isEmpty", () => {
     it("is true for an empty document", () => {
       expect(
-        processHtml("<html><body></body></html>", {
+        processHtml(EMPTY_DOCUMENT_HTML, {
           allowlist: DANGEROUSLY_SKIP_SANITIZATION,
         }).isEmpty,
       ).toBe(true);

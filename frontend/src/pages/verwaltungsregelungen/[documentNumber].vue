@@ -3,7 +3,6 @@ import type { TabView } from "~/components/documents/TabsLayout.vue";
 import type { TreeItem } from "~/components/TreeView.vue";
 import { useSearchBackLink } from "~/composables/useSearchBackLink";
 import { type AdministrativeDirective, DocumentKind } from "~/types/api";
-import { getSections } from "~/utils/html/extract";
 
 definePageMeta({
   layout: false,
@@ -24,9 +23,7 @@ const documentMetadataUrl = `/v1/administrative-directive/${documentNumber}`;
 const [{ data, error: metadataError }, { data: html, error: contentError }] =
   await Promise.all([
     useRisBackend<AdministrativeDirective>(documentMetadataUrl),
-    useRisBackend<string>(`${documentMetadataUrl}.html`, {
-      headers: { Accept: "text/html" },
-    }),
+    useDocumentHtml(`${documentMetadataUrl}.html`),
   ]);
 
 if (metadataError?.value) throw createError(metadataError.value);
@@ -56,14 +53,10 @@ const detailsSectionId = useId();
 
 const title = computed(() => data.value?.headline);
 
-const document = computed(() =>
-  html.value ? parseDocument(html.value) : undefined,
-);
-const isEmptyDocument = computed(() => isDocumentEmpty(document.value));
+const isEmptyDocument = computed(() => html.value?.isEmpty ?? true);
 
 const tocEntries = computed<TreeItem[]>(() => {
-  if (!document.value) return [];
-  return getSections(document.value, "section").map((entry) => ({
+  return (html.value?.text.sections ?? []).map((entry) => ({
     key: entry.id,
     subtitle: entry.title, // Subtitle for more subtle appearance
     to: { hash: `#${entry.id}`, query: { from: route.query.from } },
@@ -115,11 +108,7 @@ const detailItems = computed(() =>
         <section role="tabpanel" :aria-labelledby="textSectionId">
           <h2 :id="textSectionId" class="sr-only">Text</h2>
           <DocumentsIncompleteDataMessage class="my-24" />
-          <div
-            v-if="document"
-            class="administrative-directive"
-            v-html="document.body.innerHTML"
-          ></div>
+          <div class="administrative-directive" v-html="html?.body"></div>
         </section>
 
         <template #sidebar>
