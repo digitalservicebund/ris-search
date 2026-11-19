@@ -30,9 +30,9 @@ class LiteratureBulkExportIntegrationTest extends ContainersIntegrationBase {
   @Test
   void updateLatestZip_includesOnlyXmlDocumentsAndAttachments()
       throws IOException, NoSuchKeyException {
-    literatureBucket.save("XXLS000000001/XXLS000000001.akn.xml", "<xml/>");
-    literatureBucket.save("XXLS000000002/XXLS000000002.akn.pdf", "pdf");
-    literatureBucket.save("XXLS000000002/XXLS000000002.akn.html", "html");
+    literatureBucket.save("XXLS000000001/XXLS000000001.xml", "<xml/>");
+    literatureBucket.save("XXLS000000002/XXLS000000002.pdf", "pdf");
+    literatureBucket.save("XXLS000000002/XXLS000000002.html", "html");
 
     assertThat(literatureBulkExportService.updateLatestZip(Instant.now())).isTrue();
 
@@ -41,7 +41,7 @@ class LiteratureBulkExportIntegrationTest extends ContainersIntegrationBase {
             BULK_ZIP_PREFIX + DocumentKind.LITERATURE.getBulkZipPath());
     assertThat(archives).hasSize(1);
     try (InputStream zip = publicFilesBucket.getStream(archives.getFirst())) {
-      assertThat(readZipStream(zip)).containsOnlyKeys("XXLS000000001/XXLS000000001.akn.xml");
+      assertThat(readZipStream(zip)).containsOnlyKeys("XXLS000000001/XXLS000000001.xml");
     }
   }
 }
