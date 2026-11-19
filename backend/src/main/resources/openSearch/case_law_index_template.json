@@ -399,35 +399,35 @@
         },
         "zitrspr": {
           "type": "alias",
-          "path": "aktivzitierungen_rechtsprechung"
+          "path": "aktivzitierung_rechtsprechung"
         },
         "ZITRSPR": {
           "type": "alias",
-          "path": "aktivzitierungen_rechtsprechung"
+          "path": "aktivzitierung_rechtsprechung"
         },
         "zitvwv": {
           "type": "alias",
-          "path": "aktivzitierungen_verwaltungsvorschriften"
+          "path": "aktivzitierung_verwaltungsvorschriften"
         },
         "ZITVWV": {
           "type": "alias",
-          "path": "aktivzitierungen_verwaltungsvorschriften"
+          "path": "aktivzitierung_verwaltungsvorschriften"
         },
         "zitlitselbst": {
           "type": "alias",
-          "path": "aktivzitierungen_literatur_selbstaendig"
+          "path": "aktivzitierung_literatur_selbstaendig"
         },
         "ZITLITSELBST": {
           "type": "alias",
-          "path": "aktivzitierungen_literatur_selbstaendig"
+          "path": "aktivzitierung_literatur_selbstaendig"
         },
         "zitlitunselbst": {
           "type": "alias",
-          "path": "aktivzitierungen_literatur_unselbstaendig"
+          "path": "aktivzitierung_literatur_unselbstaendig"
         },
         "ZITLITUNSELBST": {
           "type": "alias",
-          "path": "aktivzitierungen_literatur_unselbstaendig"
+          "path": "aktivzitierung_literatur_unselbstaendig"
         },
         "berb": {
           "type": "alias",
@@ -659,35 +659,35 @@
         },
         "pzitrspr": {
           "type": "alias",
-          "path": "passivzitierungen_rechtsprechung"
+          "path": "passivzitierung_rechtsprechung"
         },
         "PZITRSPR": {
           "type": "alias",
-          "path": "passivzitierungen_rechtsprechung"
+          "path": "passivzitierung_rechtsprechung"
         },
         "pzitvwv": {
           "type": "alias",
-          "path": "passivzitierungen_verwaltungsvorschriften"
+          "path": "passivzitierung_verwaltungsvorschriften"
         },
         "PZITVWV": {
           "type": "alias",
-          "path": "passivzitierungen_verwaltungsvorschriften"
+          "path": "passivzitierung_verwaltungsvorschriften"
         },
         "pzitlitselbst": {
           "type": "alias",
-          "path": "passivzitierungen_literatur_selbstaendig"
+          "path": "passivzitierung_literatur_selbstaendig"
         },
         "PZITLITSELBST": {
           "type": "alias",
-          "path": "passivzitierungen_literatur_selbstaendig"
+          "path": "passivzitierung_literatur_selbstaendig"
         },
         "pzitlitunselbst": {
           "type": "alias",
-          "path": "passivzitierungen_literatur_unselbstaendig"
+          "path": "passivzitierung_literatur_unselbstaendig"
         },
         "PZITLITUNSELBST": {
           "type": "alias",
-          "path": "passivzitierungen_literatur_unselbstaendig"
+          "path": "passivzitierung_literatur_unselbstaendig"
         },
         "txtrechtsfrage": {
           "type": "alias",
@@ -1135,35 +1135,35 @@
           "type": "text",
           "analyzer": "custom_german_analyzer"
         },
-        "aktivzitierungen_literatur_unselbstaendig": {
+        "aktivzitierung_literatur_unselbstaendig": {
           "type": "text",
           "analyzer": "custom_german_analyzer"
         },
-        "passivzitierungen_literatur_unselbstaendig": {
+        "passivzitierung_literatur_unselbstaendig": {
           "type": "text",
           "analyzer": "custom_german_analyzer"
         },
-        "aktivzitierungen_literatur_selbstaendig": {
+        "aktivzitierung_literatur_selbstaendig": {
           "type": "text",
           "analyzer": "custom_german_analyzer"
         },
-        "passivzitierungen_literatur_selbstaendig": {
+        "passivzitierung_literatur_selbstaendig": {
           "type": "text",
           "analyzer": "custom_german_analyzer"
         },
-        "aktivzitierungen_rechtsprechung": {
+        "aktivzitierung_rechtsprechung": {
           "type": "text",
           "analyzer": "custom_german_analyzer"
         },
-        "passivzitierungen_rechtsprechung": {
+        "passivzitierung_rechtsprechung": {
           "type": "text",
           "analyzer": "custom_german_analyzer"
         },
-        "aktivzitierungen_verwaltungsvorschriften": {
+        "aktivzitierung_verwaltungsvorschriften": {
           "type": "text",
           "analyzer": "custom_german_analyzer"
         },
-        "passivzitierungen_verwaltungsvorschriften": {
+        "passivzitierung_verwaltungsvorschriften": {
           "type": "text",
           "analyzer": "custom_german_analyzer"
         },
