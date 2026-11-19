@@ -62,19 +62,6 @@ useClientSideLinks(contentElement);
   @apply mb-16;
 }
 
-/* These values will be displayed separately */
-:deep(.akn-docTitle) {
-  @apply hidden;
-}
-
-:deep(.akn-shortTitle) {
-  @apply hidden;
-}
-
-:deep(.akn-proprietary) {
-  @apply hidden;
-}
-
 :deep(.akn-act a) {
   @apply text-blue-800 outline-offset-4 outline-blue-800 focus-visible:outline-4;
 
@@ -162,16 +149,6 @@ Attributes from the Juris CALS format without a corresponding HTML attribute mig
 /* highlight unimplemented structures */
 :deep(.unimplementiert) {
   @apply bg-yellow-100;
-}
-
-:deep(.akn-act > .dokumentenkopf) {
-  @apply hidden;
-}
-
-/* hide default table of contents, since it will be displayed behind an accordion section.
-   This also covers the footnotes attached to it, which are nested inside its container. */
-:deep(.eingangsformel .inhaltsuebersicht) {
-  @apply hidden;
 }
 
 /*   Regelungstext-Hauptteil

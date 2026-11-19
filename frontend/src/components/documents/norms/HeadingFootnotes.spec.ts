@@ -9,7 +9,7 @@ describe("HeadingFootnotes", () => {
     await renderSuspended(HeadingFootnotes, {
       props: {
         html: "content",
-        textLength: 100,
+        text: "x".repeat(100),
       },
     });
 
@@ -23,7 +23,7 @@ describe("HeadingFootnotes", () => {
     await renderSuspended(HeadingFootnotes, {
       props: {
         html: "longer content",
-        textLength: 500,
+        text: "x".repeat(500),
       },
     });
 
@@ -36,5 +36,22 @@ describe("HeadingFootnotes", () => {
     );
 
     expect(screen.queryAllByText("longer content")[0]).not.toBeVisible();
+  });
+
+  it.each([
+    ["shows footnotes up to three lines in full", 180, false],
+    ["shows a button for footnotes longer than three lines", 181, true],
+  ])("%s", async (_, length, hasButton) => {
+    await renderSuspended(HeadingFootnotes, {
+      props: { html: "content", text: "x".repeat(length) },
+    });
+
+    expect(screen.queryByRole("button") !== null).toBe(hasButton);
+  });
+
+  it("shows footnotes without text in full", async () => {
+    await renderSuspended(HeadingFootnotes, { props: { html: "content" } });
+
+    expect(screen.queryByRole("button")).not.toBeInTheDocument();
   });
 });

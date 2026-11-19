@@ -73,19 +73,21 @@ describe("useFetchNormContent", () => {
     );
 
     const { data } = await useFetchNormContent(expressionEli);
-    expect(data.value).toEqual({
-      legislation: mockMetadata,
-      htmlParts: {
-        officialToc: undefined,
-        heading: `<div class="titel">Title</div>`,
-        headingAuthorialNotes: `<div class="fussnoten">Footnote content</div>`,
-        headingAuthorialNotesLength: 16,
-        headingNotes: `<ul class="nichtamtliche-fussnoten"><li>Notes</li></ul>`,
-        prefaceContainer: `<div class="akn-container"><p>Besonderer Hinweis</p></div>`,
-        body: expectedHtml,
-      },
-      hasEmptyBody: false,
+    expect(data.value.legislation).toEqual(mockMetadata);
+    expect(data.value.html.parts).toEqual({
+      officialToc: undefined,
+      heading: `<div class="titel">Title</div>`,
+      headingAuthorialNotes: `<div class="fussnoten">Footnote content</div>`,
+      headingNotes: `<ul class="nichtamtliche-fussnoten"><li>Notes</li></ul>`,
+      prefaceContainer: `<div class="akn-container"><p>Besonderer Hinweis</p></div>`,
     });
+    expect(data.value.html.text).toEqual({
+      headingAuthorialNotes: "Footnote content",
+    });
+    expect(data.value.html.body.trim()).toBe(
+      `<div class="akn-body">Test HTML content</div>`,
+    );
+    expect(data.value.html.isEmpty).toBe(false);
 
     expect(mockFetch).toHaveBeenCalledTimes(2);
     expect(mockFetch).toHaveBeenCalledWith("/v1/legislation/eli/test-eli");
@@ -101,14 +103,14 @@ describe("useFetchNormContent", () => {
 
     const { data } = await useFetchNormContent(expressionEli);
 
-    expect(data.value.htmlParts).toMatchObject({
+    expect(data.value.html.parts).toEqual({
       heading: undefined,
       headingAuthorialNotes: undefined,
-      headingAuthorialNotesLength: undefined,
       headingNotes: undefined,
       officialToc: undefined,
       prefaceContainer: undefined,
     });
+    expect(data.value.html.text.headingAuthorialNotes).toBeUndefined();
   });
 
   it("gets the preface from the document header", async () => {
@@ -125,7 +127,7 @@ describe("useFetchNormContent", () => {
 
     const { data } = await useFetchNormContent(expressionEli);
 
-    expect(data.value.htmlParts.prefaceContainer).toBe(container);
+    expect(data.value.html.parts.prefaceContainer).toBe(container);
   });
 
   it("only uses footnotes from the document header for the heading", async () => {
@@ -138,9 +140,9 @@ describe("useFetchNormContent", () => {
 
     const { data } = await useFetchNormContent(expressionEli);
 
-    expect(data.value.htmlParts.headingAuthorialNotes).toBeUndefined();
-    expect(data.value.htmlParts.headingAuthorialNotesLength).toBeUndefined();
-    expect(data.value.htmlParts.headingNotes).toBeUndefined();
+    expect(data.value.html.parts.headingAuthorialNotes).toBeUndefined();
+    expect(data.value.html.text.headingAuthorialNotes).toBeUndefined();
+    expect(data.value.html.parts.headingNotes).toBeUndefined();
   });
 
   it("passes every link to the link rewriter", async () => {
@@ -177,7 +179,7 @@ describe("useFetchNormContent", () => {
       rewriteLink: (href) => (href ? `/rewritten${href}` : null),
     });
 
-    expect(data.value.htmlParts.headingNotes).toContain(
+    expect(data.value.html.parts.headingNotes).toContain(
       'href="/rewritten/in/header"',
     );
   });
@@ -189,7 +191,7 @@ describe("useFetchNormContent", () => {
       rewriteLink: () => null,
     });
 
-    expect(data.value.htmlParts.body).toContain("<a>link</a>");
+    expect(data.value.html.body).toContain("<a>link</a>");
   });
 
   describe("article", () => {
@@ -338,7 +340,7 @@ describe("useFetchNormContent", () => {
       );
 
       const { data } = await useFetchNormContent(expressionEli);
-      expect(data.value.htmlParts.headingAuthorialNotesLength).toBe(
+      expect(data.value.html.text.headingAuthorialNotes?.length).toBe(
         expectedLength,
       );
     },
@@ -351,8 +353,8 @@ describe("useFetchNormContent", () => {
     );
 
     const { data } = await useFetchNormContent(expressionEli);
-    expect(data.value.htmlParts.headingNotes).toContain(
-      "(+++ Textnachweis ab: 1.1.2000 +++)<br />(+++ Zur Anwendung vgl. § 5 +++)",
+    expect(data.value.html.parts.headingNotes).toContain(
+      "(+++ Textnachweis ab: 1.1.2000 +++)<br>(+++ Zur Anwendung vgl. § 5 +++)",
     );
   });
 
@@ -366,9 +368,7 @@ describe("useFetchNormContent", () => {
       rewriteLink: (href) => (href ? `/rewritten${href}` : null),
     });
 
-    expect(data.value.htmlParts.body).toContain(
-      `href="/rewritten/original/path"`,
-    );
+    expect(data.value.html.body).toContain(`href="/rewritten/original/path"`);
   });
 
   const preambleWithTocHtml = `
@@ -402,7 +402,7 @@ describe("useFetchNormContent", () => {
 
     const parser = new DOMParser();
     const doc = parser.parseFromString(
-      data.value.htmlParts.officialToc!,
+      data.value.html.parts.officialToc!,
       "text/html",
     );
 
@@ -419,32 +419,98 @@ describe("useFetchNormContent", () => {
 
     const { data } = await useFetchNormContent(expressionEli);
 
-    expect(data.value.htmlParts.officialToc).not.toContain(
+    expect(data.value.html.parts.officialToc).not.toContain(
       "Eingangsformel: Eingangsformel Fußnote",
     );
 
-    expect(data.value.htmlParts.body).toContain(
+    expect(data.value.html.body).toContain(
       "Eingangsformel: Eingangsformel Fußnote",
     );
   });
 
-  it("sets hasEmptyBody to false if akn-body has content", async () => {
+  it("removes the whole document header from the body", async () => {
+    mockHtml(`
+      <div class="akn-act">
+        <section class="dokumentenkopf">
+          <div class="dokumententitel">
+            <h1 class="titel">Title</h1>
+            <h1 class="kurztitel">Short title</h1>
+          </div>
+          <div><span class="ausfertigung-datum">27.05.2000</span></div>
+        </section>
+        <div class="akn-body">Content</div>
+      </div>`);
+
+    const { data } = await useFetchNormContent(expressionEli);
+
+    expect(data.value.html.parts.heading).toBe('<h1 class="titel">Title</h1>');
+    expect(data.value.html.body).not.toContain("dokumentenkopf");
+    expect(data.value.html.body).not.toContain("Short title");
+    expect(data.value.html.body).not.toContain("27.05.2000");
+    expect(data.value.html.body).toContain("Content");
+  });
+
+  it("removes the proprietary metadata from the body", async () => {
+    mockHtml(`
+      ${proprietary('<dd class="ris-standangabe" data-type="stand">Stand</dd>')}
+      <div class="akn-body">Content</div>`);
+
+    const { data } = await useFetchNormContent(expressionEli);
+
+    expect(data.value.html.body).not.toContain("akn-proprietary");
+    expect(data.value.html.body).toContain("Content");
+  });
+
+  it("removes the official table of contents and its heading from the body", async () => {
+    mockHtml(preambleWithTocHtml);
+
+    const { data } = await useFetchNormContent(expressionEli);
+
+    expect(data.value.html.body).not.toContain("inhaltsuebersicht");
+    expect(data.value.html.body).not.toContain("Inhaltsübersicht");
+    expect(data.value.html.body).toContain("Der Bundestag hat …");
+  });
+
+  it("keeps the header of an attachment in the body", async () => {
+    mockHtml(`
+      <div class="akn-act">
+        <section class="dokumentenkopf"><h1 class="titel">Title</h1></section>
+        <div class="akn-body">Content</div>
+        <div class="akn-attachments">
+          <div class="akn-attachment"><div class="akn-doc">
+            <section class="dokumentenkopf">
+              <h2 class="einzelvorschrift">Anlage 1</h2>
+              <ul class="nichtamtliche-fussnoten"><li>(+++ A +++) (+++ B +++)</li></ul>
+            </section>
+          </div></div>
+        </div>
+      </div>`);
+
+    const { data } = await useFetchNormContent(expressionEli);
+
+    expect(data.value.html.parts.heading).toBe('<h1 class="titel">Title</h1>');
+    expect(data.value.html.parts.headingNotes).toBeUndefined();
+    expect(data.value.html.body).toContain("Anlage 1");
+    expect(data.value.html.body).toContain("(+++ A +++) (+++ B +++)");
+  });
+
+  it("is not empty if akn-body has content", async () => {
     mockFetch.mockReturnValueOnce(mockMetadata);
     mockFetch.mockReturnValueOnce(
       `<html><body><div class="akn-act"><div class="akn-body">Content</div></div></body></html>`,
     );
 
     const { data } = await useFetchNormContent(expressionEli);
-    expect(data.value.hasEmptyBody).toBe(false);
+    expect(data.value.html.isEmpty).toBe(false);
   });
 
-  it("sets hasEmptyBody to true if akn-body div is empty", async () => {
+  it("is empty if akn-body div is empty", async () => {
     mockFetch.mockReturnValueOnce(mockMetadata);
     mockFetch.mockReturnValueOnce(
       `<html><body><div class="akn-act"><div class="akn-body"></div></div></body></html>`,
     );
 
     const { data } = await useFetchNormContent(expressionEli);
-    expect(data.value.hasEmptyBody).toBe(true);
+    expect(data.value.html.isEmpty).toBe(true);
   });
 });

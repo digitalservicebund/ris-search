@@ -1,11 +1,13 @@
 <script setup lang="ts">
-const props = defineProps<{ html: string; textLength?: number }>();
+const { html, text } = defineProps<{
+  html: string;
+  /** Text of the footnotes, used to decide whether they are long */
+  text?: string;
+}>();
 
 const threshold = 3 * 60;
 
-const wrapFootnote = computed(
-  () => props.textLength && props.textLength > threshold,
-);
+const wrapFootnote = computed(() => (text?.length ?? 0) > threshold);
 </script>
 
 <template>
@@ -16,13 +18,13 @@ const wrapFootnote = computed(
       header-expanded="Fußnote ausblenden"
       header-collapsed="Fußnote anzeigen"
     >
-      <div v-html="props.html"></div>
+      <div v-html="html"></div>
     </UiAccordion>
 
     <div
       :data-show="!wrapFootnote"
       class="hidden data-[show=true]:block print:block"
-      v-html="props.html"
+      v-html="html"
     ></div>
   </div>
 </template>

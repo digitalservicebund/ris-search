@@ -6,27 +6,45 @@ import {
   DANGEROUSLY_SKIP_SANITIZATION,
   processHtml,
 } from "~/utils/html/processHtml";
-import { parseDocument } from "~/utils/htmlParser";
+import {
+  insertLineBreaksBetweenBracketedBlocks,
+  rewriteLinks,
+} from "~/utils/html/transforms";
+
+export type NormHtml = ProcessedHtml<
+  {
+    heading: string | undefined;
+    /** Amtliche Fußnoten */
+    headingAuthorialNotes: string | undefined;
+    /** Nichtamtliche Fußnoten */
+    headingNotes: string | undefined;
+    officialToc: string | undefined;
+    /** Besonderer Hinweis */
+    prefaceContainer: string | undefined;
+  },
+  {
+    /** Text of the amtliche Fußnoten, with whitespace as users see it */
+    headingAuthorialNotes: string | undefined;
+  }
+>;
 
 export type NormContent = {
   legislation: LegislationExpression;
-  htmlParts: {
-    heading?: string;
-    headingAuthorialNotes?: string; // amtliche Fußnoten
-    headingAuthorialNotesLength?: number;
-    headingNotes?: string; // nichtamtliche Fußnoten
-    officialToc?: string;
-    prefaceContainer?: string; // besonderer Hinweis
-    body: string;
-  };
-  hasEmptyBody: boolean;
+  html: NormHtml;
 };
 
 export type UseFetchNormContentOptions = {
   rewriteLink: (link: string | null) => string | null;
 };
 
-type ExtractHtmlPartsOptions = UseFetchNormContentOptions;
+/**
+ * The header of the norm. Attachments have their own header, which is shown as
+ * part of the text, so it doesn't count.
+ */
+const NORM_HEADER = ".dokumentenkopf:not(.akn-attachments *)";
+
+const OFFICIAL_TOC =
+  ".official-toc, .eingangsformel .inhaltsuebersicht .nichtamtliche-fussnoten";
 
 /**
  * Fetches the metadata of a norm exluding its articles content as an async
@@ -61,81 +79,63 @@ export function useFetchNormContent(
           Accept: "text/html",
         },
       });
-      const document = parseDocument(html);
-      const htmlParts = extractHtmlParts(document, options);
-      return {
-        legislation: metadata,
-        htmlParts,
-        hasEmptyBody: isNormBodyEmpty(document),
-      };
+      return { legislation: metadata, html: processNormHtml(html, options) };
     },
     { server: true, lazy: false },
   );
 }
 
-function extractHtmlParts(
-  document: Document,
-  options?: ExtractHtmlPartsOptions,
-): NormContent["htmlParts"] {
-  const { body } = document;
-  if (options?.rewriteLink) {
-    const links = body.querySelectorAll("a");
-    links.forEach((link) => {
-      const newHref = options.rewriteLink(link.getAttribute("href"));
-      if (newHref !== null) link.setAttribute("href", newHref);
-      else link.removeAttribute("href");
-    });
+function processNormHtml(
+  html: string,
+  options?: UseFetchNormContentOptions,
+): NormHtml {
+  const transforms = [
+    insertLineBreaksBetweenBracketedBlocks(
+      `${NORM_HEADER} .nichtamtliche-fussnoten`,
+    ),
+  ];
+  const rewriteLink = options?.rewriteLink;
+  if (rewriteLink) {
+    // Links first, so the parts taken from the document have them rewritten
+    transforms.unshift(rewriteLinks((href) => rewriteLink(href)));
   }
 
-  const heading = document.querySelector(".dokumentenkopf .titel");
-  const headingAuthorialNotes = document.querySelector(
-    ".dokumentenkopf .fussnoten",
-  );
-  // Normalize consecutive whitespace to match what users actually see
-  const headingAuthorialNotesLength = headingAuthorialNotes?.textContent
-    .trim()
-    .replaceAll(/\s+/g, " ").length;
-
-  const headingNotes = document.querySelector(
-    ".dokumentenkopf .nichtamtliche-fussnoten",
-  );
-
-  const prefaceContainer = document.querySelector(
-    ".dokumentenkopf .akn-container",
-  );
-
-  const officialTocElements = Array.from(
-    document.querySelectorAll(
-      ".official-toc, .eingangsformel .inhaltsuebersicht .nichtamtliche-fussnoten",
-    ),
-  );
-
-  const officialToc = officialTocElements.length
-    ? officialTocElements.map((el) => el.outerHTML).join("")
-    : undefined;
-
-  return {
-    officialToc,
-    heading: heading?.outerHTML,
-    headingAuthorialNotes: headingAuthorialNotes?.outerHTML,
-    headingNotes: insertLineBreaksBetweenBracketedBlocks(
-      headingNotes?.outerHTML,
-    ),
-    headingAuthorialNotesLength,
-    prefaceContainer: prefaceContainer?.outerHTML,
-    body: body.innerHTML,
-  };
+  return processHtml(html, {
+    // TODO RISDEV-11107: replace with an allowlist
+    allowlist: DANGEROUSLY_SKIP_SANITIZATION,
+    transforms,
+    isEmpty: isNormBodyEmpty,
+    extract: extractNormParts,
+  });
 }
 
-/**
- * Inserts <br> between consecutive "(+++ ... +++)" blocks within footnote HTML
- * so each block appears on its own line.
- */
-function insertLineBreaksBetweenBracketedBlocks(
-  html: string | undefined,
-): string | undefined {
-  if (!html) return undefined;
-  return html.replaceAll(/\+\+\+\)\s+\(\+\+\+/g, "+++)<br />(+++");
+function extractNormParts(document: Document) {
+  // Text first, because taking the parts removes the elements it is read from
+  const authorialNotesText = getText(document, `${NORM_HEADER} .fussnoten`);
+  const text = {
+    headingAuthorialNotes: authorialNotesText.length
+      ? normalizeSpaces(authorialNotesText.join(" "))
+      : undefined,
+  };
+
+  const html = {
+    heading: takeElements(document, `${NORM_HEADER} .titel`),
+    headingAuthorialNotes: takeElements(document, `${NORM_HEADER} .fussnoten`),
+    headingNotes: takeElements(
+      document,
+      `${NORM_HEADER} .nichtamtliche-fussnoten`,
+    ),
+    prefaceContainer: takeElements(document, `${NORM_HEADER} .akn-container`),
+    officialToc: takeElements(document, OFFICIAL_TOC),
+  };
+
+  // The rest of these elements is shown elsewhere on the page or not at all,
+  // e.g. the short title or the heading of the official table of contents
+  takeElements(document, NORM_HEADER);
+  takeElements(document, ".akn-proprietary");
+  takeElements(document, ".eingangsformel .inhaltsuebersicht");
+
+  return { html, text };
 }
 
 export type NormArticleContent = {

@@ -23,6 +23,17 @@ export function rewriteLinks<TContext = undefined>(
 const BRACKETED_BLOCK_SEPARATOR = /\+\+\+\)\s+\(\+\+\+/g;
 
 /**
+ * Lists all text nodes inside the node, in document order.
+ *
+ * This doesn't use a TreeWalker, because that needs the `NodeFilter` global,
+ * which doesn't exist on the server, where documents come from jsdom.
+ */
+function getTextNodes(node: Node): Text[] {
+  if (node.nodeType === node.TEXT_NODE) return [node as Text];
+  return [...node.childNodes].flatMap(getTextNodes);
+}
+
+/**
  * Puts consecutive "(+++ ... +++)" blocks on separate lines by inserting a
  * `<br>` between them. Only affects text inside elements matching the
  * selector.
@@ -32,11 +43,7 @@ export function insertLineBreaksBetweenBracketedBlocks<TContext = undefined>(
 ): HtmlTransform<TContext> {
   return (document) => {
     for (const root of document.querySelectorAll(selector)) {
-      const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
-      const textNodes: Text[] = [];
-      while (walker.nextNode()) textNodes.push(walker.currentNode as Text);
-
-      for (const node of textNodes) {
+      for (const node of getTextNodes(root)) {
         const text = node.data;
         BRACKETED_BLOCK_SEPARATOR.lastIndex = 0;
         if (!BRACKETED_BLOCK_SEPARATOR.test(text)) continue;
