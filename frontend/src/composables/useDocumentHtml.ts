@@ -1,4 +1,3 @@
-import type { AsyncData, NuxtError } from "#app";
 import type { Section } from "~/utils/html/extract";
 import { getSections, getText } from "~/utils/html/extract";
 import type { ProcessedHtml } from "~/utils/html/processHtml";
@@ -18,9 +17,7 @@ export type DocumentHtml = ProcessedHtml<
  *
  * @param url The URL of the HTML version of the document
  */
-export function useDocumentHtml(
-  url: string,
-): AsyncData<DocumentHtml, NuxtError<null> | undefined> {
+export function useDocumentHtml(url: string) {
   const { $risBackend } = useNuxtApp();
 
   return useAsyncData(

@@ -49,7 +49,7 @@ describe("useDocumentHtml", () => {
 
     const { data } = await useDocumentHtml("/v1/literature/ABC.html");
 
-    expect(data.value.body).toBe(body);
+    expect(data.value?.body).toBe(body);
   });
 
   it("lists the sections with their id and title", async () => {
@@ -61,7 +61,7 @@ describe("useDocumentHtml", () => {
 
     const { data } = await useDocumentHtml("/v1/literature/ABC.html");
 
-    expect(data.value.text.sections).toEqual([
+    expect(data.value?.text.sections).toEqual([
       { id: "a", title: "Tenor" },
       { id: "b", title: "Gründe" },
       { id: "c", title: "" },
@@ -75,7 +75,7 @@ describe("useDocumentHtml", () => {
 
     const { data } = await useDocumentHtml("/v1/literature/ABC.html");
 
-    expect(data.value.body).toContain('id="a"');
+    expect(data.value?.body).toContain('id="a"');
   });
 
   describe("first paragraph", () => {
@@ -88,7 +88,7 @@ describe("useDocumentHtml", () => {
 
       const { data } = await useDocumentHtml("/v1/rechtsprechung/ABC.html");
 
-      expect(data.value.text.firstParagraph).toBe("Paragraph text here.");
+      expect(data.value?.text.firstParagraph).toBe("Paragraph text here.");
     });
 
     it("ignores paragraphs outside of sections", async () => {
@@ -98,7 +98,7 @@ describe("useDocumentHtml", () => {
 
       const { data } = await useDocumentHtml("/v1/rechtsprechung/ABC.html");
 
-      expect(data.value.text.firstParagraph).toBeUndefined();
+      expect(data.value?.text.firstParagraph).toBeUndefined();
     });
 
     it("skips paragraphs that are completely empty", async () => {
@@ -108,7 +108,7 @@ describe("useDocumentHtml", () => {
 
       const { data } = await useDocumentHtml("/v1/rechtsprechung/ABC.html");
 
-      expect(data.value.text.firstParagraph).toBe("Second");
+      expect(data.value?.text.firstParagraph).toBe("Second");
     });
 
     it("skips paragraphs that contain only whitespace", async () => {
@@ -118,7 +118,7 @@ describe("useDocumentHtml", () => {
 
       const { data } = await useDocumentHtml("/v1/rechtsprechung/ABC.html");
 
-      expect(data.value.text.firstParagraph).toBe("Second");
+      expect(data.value?.text.firstParagraph).toBe("Second");
     });
 
     it("is missing if no paragraph has any text", async () => {
@@ -128,7 +128,7 @@ describe("useDocumentHtml", () => {
 
       const { data } = await useDocumentHtml("/v1/rechtsprechung/ABC.html");
 
-      expect(data.value.text.firstParagraph).toBeUndefined();
+      expect(data.value?.text.firstParagraph).toBeUndefined();
     });
   });
 
@@ -138,7 +138,7 @@ describe("useDocumentHtml", () => {
 
       const { data } = await useDocumentHtml("/v1/literature/ABC.html");
 
-      expect(data.value.isEmpty).toBe(false);
+      expect(data.value?.isEmpty).toBe(false);
     });
 
     it("is empty without content", async () => {
@@ -146,7 +146,7 @@ describe("useDocumentHtml", () => {
 
       const { data } = await useDocumentHtml("/v1/literature/ABC.html");
 
-      expect(data.value.isEmpty).toBe(true);
+      expect(data.value?.isEmpty).toBe(true);
     });
 
     it("is empty with only a heading", async () => {
@@ -154,7 +154,7 @@ describe("useDocumentHtml", () => {
 
       const { data } = await useDocumentHtml("/v1/literature/ABC.html");
 
-      expect(data.value.isEmpty).toBe(true);
+      expect(data.value?.isEmpty).toBe(true);
     });
 
     it("is empty if the response is empty", async () => {
@@ -162,8 +162,8 @@ describe("useDocumentHtml", () => {
 
       const { data } = await useDocumentHtml("/v1/literature/ABC.html");
 
-      expect(data.value.isEmpty).toBe(true);
-      expect(data.value.text.sections).toEqual([]);
+      expect(data.value?.isEmpty).toBe(true);
+      expect(data.value?.text.sections).toEqual([]);
     });
   });
 

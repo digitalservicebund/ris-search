@@ -53,10 +53,10 @@ const detailsSectionId = useId();
 
 const title = computed(() => data.value?.headline);
 
-const isEmptyDocument = computed(() => html.value.isEmpty);
+const isEmptyDocument = computed(() => html.value?.isEmpty ?? true);
 
 const tocEntries = computed<TreeItem[]>(() => {
-  return html.value.text.sections.map((entry) => ({
+  return (html.value?.text.sections ?? []).map((entry) => ({
     key: entry.id,
     subtitle: entry.title, // Subtitle for more subtle appearance
     to: { hash: `#${entry.id}`, query: { from: route.query.from } },
@@ -108,7 +108,7 @@ const detailItems = computed(() =>
         <section role="tabpanel" :aria-labelledby="textSectionId">
           <h2 :id="textSectionId" class="sr-only">Text</h2>
           <DocumentsIncompleteDataMessage class="my-24" />
-          <div class="administrative-directive" v-html="html.body"></div>
+          <div class="administrative-directive" v-html="html?.body"></div>
         </section>
 
         <template #sidebar>
