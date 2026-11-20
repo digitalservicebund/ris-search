@@ -6,7 +6,7 @@ describe("parseDocument", () => {
     expect(doc.querySelector("p")?.textContent).toBe("Hi");
   });
 
-  it("parses fragments by auto-wrapping", () => {
+  it("parses fragments into the body", () => {
     const doc = parseDocument("<p>Hello</p><p>World</p>");
     expect(doc.body?.textContent).toMatch(/Hello\s*World/);
   });

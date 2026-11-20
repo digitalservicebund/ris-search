@@ -5,20 +5,17 @@ const JSDOM: typeof JSDOMType | undefined = import.meta.server
   : undefined;
 
 export function parseDocument(html: string): Document {
-  const needsWrapper = !/<html[\s>]/i.test(html) && !/<body[\s>]/i.test(html);
-  const source = needsWrapper ? `<div>${html}</div>` : html;
-
   if (import.meta.client) {
     // Client-side: use DOMParser
     const parser = new DOMParser();
-    return parser.parseFromString(source, "text/html");
+    return parser.parseFromString(html, "text/html");
   }
 
   /* v8 ignore next 4 */
   if (!JSDOM) {
     throw new Error("jsdom is not available to parse HTML on the server");
   }
-  return new JSDOM(source).window.document;
+  return new JSDOM(html).window.document;
 }
 
 /**

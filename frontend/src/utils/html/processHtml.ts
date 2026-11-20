@@ -7,9 +7,6 @@ export const DANGEROUSLY_SKIP_SANITIZATION = Symbol(
   "DANGEROUSLY_SKIP_SANITIZATION",
 );
 
-/** A document without any content, e.g. as a fallback for an empty response. */
-export const EMPTY_DOCUMENT_HTML = "<html><body></body></html>";
-
 /** HTML fragments extracted from a document */
 export type HtmlParts = Record<string, string | undefined>;
 
