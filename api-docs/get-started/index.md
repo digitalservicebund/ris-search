@@ -8,8 +8,7 @@ Learn how to quickly connect to our legal information API and start building app
 
 ## Introduction
 
-Welcome to the API documentation for accessing legal information and court decisions in Germany.
-This guide will help you set up your environment and make your first request. Our API offers simple and efficient access to a broad collection of legal data.
+Welcome to the API documentation for accessing legal information and court decisions in Germany. This guide will help you set up your environment and make your first request. Our API offers simple and efficient access to a broad collection of legal data.
 
 ## Prerequisites
 
@@ -22,11 +21,9 @@ This guide will help you set up your environment and make your first request. Ou
 
 ## Making your first request
 
-1. **Authentication:**
-   At the moment, the API is open and does not require an API key. However, we recommend you to read more about [rate limiting](/guides/rate-limiting/) to ensure a smooth experience for the API.
+1. **Authentication:** At the moment, the API is open and does not require an API key. However, we recommend you to read more about [rate limiting](/guides/rate-limiting/) to ensure a smooth experience for the API.
 
-2. **Formulating your request:**
-   The following example shows how to retrieve a single case law document from our API using Curl:
+2. **Formulating your request:** The following example shows how to retrieve a single case law document from our API using Curl:
 
 ```bash [cURL]
 curl -G https://testphase.rechtsinformationen.bund.de/v1/rechtsprechung/KVRE461542501
@@ -49,5 +46,4 @@ After your first request, check out the following sections for more detailed inf
 - Use the guides to integrate our API into your applications.
 - Provide feedback to help improve our service.
 
-Enjoy building with our API!
-We would be happy to see what you built with our API: [rechtsinformationen@digitalservice.bund.de](mailto:rechtsinformationen@digitalservice.bund.de)
+Enjoy building with our API! We would be happy to see what you built with our API: [rechtsinformationen@digitalservice.bund.de](mailto:rechtsinformationen@digitalservice.bund.de)

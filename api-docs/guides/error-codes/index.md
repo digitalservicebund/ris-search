@@ -114,5 +114,4 @@ HTTP/2 503
 
 The service might return a 503 status code if it is overloaded or under maintenance.
 
-You might also get this status code after making too many requests in a short time.
-See [Rate limiting](/guides/rate-limiting/) for more information.
+You might also get this status code after making too many requests in a short time. See [Rate limiting](/guides/rate-limiting/) for more information.

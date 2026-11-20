@@ -6,12 +6,12 @@ title: Choose a format
 
 **Goal:** Pick the right format for your application.
 
-| You want to …                                                       | Use  | Why                                                                       |
-| ------------------------------------------------------------------- | ---- | ------------------------------------------------------------------------- |
-| list, filter or link documents                                      | JSON | Structured metadata, JSON-LD, links to all other formats                  |
-| show a document to people                                           | HTML | Ready to render, already structured into headings and paragraphs          |
-| process the full structure (analysis, own rendering, LLM pipelines) | XML  | Complete document in LegalDocML (case law) or LegalDocML.de (legislation) |
-| get the document with all attachments (images, annexes)             | ZIP  | XML plus all related files in one download                                |
+| You want to … | Use | Why |
+| --- | --- | --- |
+| list, filter or link documents | JSON | Structured metadata, JSON-LD, links to all other formats |
+| show a document to people | HTML | Ready to render, already structured into headings and paragraphs |
+| process the full structure (analysis, own rendering, LLM pipelines) | XML | Complete document in LegalDocML (case law) or LegalDocML.de (legislation) |
+| get the document with all attachments (images, annexes) | ZIP | XML plus all related files in one download |
 
 ## Available document formats
 

@@ -48,15 +48,15 @@ curl -sG https://testphase.rechtsinformationen.bund.de/v1/legislation \
   | jq '.member[].item | {name, abbreviation, legislationIdentifier, temporalCoverage, legislationLegalForce}'
 ```
 
-| Field                                 | Meaning                                                                               |
-| ------------------------------------- | ------------------------------------------------------------------------------------- |
-| `name`                                | Official long title (Amtliche Langüberschrift)                                        |
-| `abbreviation`                        | Official abbreviation, or the RIS abbreviation if there is no official one            |
-| `legislationIdentifier`               | ELI of this version (expression), e.g. `eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu` |
-| `exampleOfWork.legislationIdentifier` | ELI of the law independent of its versions (work), e.g. `eli/bund/bgbl-1/1975/s1760`  |
-| `temporalCoverage`                    | Validity period, e.g. `1998-02-06/..` (open end)                                      |
-| `legislationLegalForce`               | Whether this version is currently in force                                            |
-| `encoding[].contentUrl`               | Links to HTML and XML of this version                                                 |
+| Field | Meaning |
+| --- | --- |
+| `name` | Official long title (Amtliche Langüberschrift) |
+| `abbreviation` | Official abbreviation, or the RIS abbreviation if there is no official one |
+| `legislationIdentifier` | ELI of this version (expression), e.g. `eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu` |
+| `exampleOfWork.legislationIdentifier` | ELI of the law independent of its versions (work), e.g. `eli/bund/bgbl-1/1975/s1760` |
+| `temporalCoverage` | Validity period, e.g. `1998-02-06/..` (open end) |
+| `legislationLegalForce` | Whether this version is currently in force |
+| `encoding[].contentUrl` | Links to HTML and XML of this version |
 
 ## Pitfalls
 

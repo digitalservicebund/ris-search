@@ -14,11 +14,11 @@ Only currently valid laws are available on Testphase.
 
 Every law is identified by a [European Legislation Identifier (ELI)](/standards/). The ELI has three levels:
 
-| Level         | Meaning                                                                | Example                                              |
-| ------------- | ---------------------------------------------------------------------- | ---------------------------------------------------- |
-| Work          | The law, independent of its versions                                   | `eli/bund/bgbl-1/1975/s1760`                         |
-| Expression    | One version of the law: date it takes effect, version number, language | `eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu`       |
-| Manifestation | One file of that version, e.g. the main text                           | `…/1998-01-29/10/deu/1998-01-29/regelungstext-1.xml` |
+| Level | Meaning | Example |
+| --- | --- | --- |
+| Work | The law, independent of its versions | `eli/bund/bgbl-1/1975/s1760` |
+| Expression | One version of the law: date it takes effect, version number, language | `eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu` |
+| Manifestation | One file of that version, e.g. the main text | `…/1998-01-29/10/deu/1998-01-29/regelungstext-1.xml` |
 
 ## 1. List all versions of a law
 

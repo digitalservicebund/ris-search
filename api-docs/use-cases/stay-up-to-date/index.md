@@ -41,10 +41,10 @@ curl -G https://testphase.rechtsinformationen.bund.de/v1/rechtsprechung/changelo
 }
 ```
 
-| Field        | Meaning                                                                   |
-| ------------ | ------------------------------------------------------------------------- |
-| `changed`    | Documents that were added or changed. Get them from `contentUrl`.         |
-| `deleted`    | Documents that were removed. Delete them locally.                         |
+| Field | Meaning |
+| --- | --- |
+| `changed` | Documents that were added or changed. Get them from `contentUrl`. |
+| `deleted` | Documents that were removed. Delete them locally. |
 | `allChanged` | `true` if the whole dataset was rebuilt. Download the full dataset again. |
 
 ## Pitfalls
