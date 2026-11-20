@@ -55,8 +55,8 @@ const options = computed<ComboboxOption[]>(() =>
     })),
 );
 
-watch(searchTerm, (term) => {
-  if (term) searchDebounced(term);
+watch(searchTerm, async (term) => {
+  if (term) await searchDebounced(term);
 });
 
 watch(
@@ -96,7 +96,7 @@ watch(open, async (isOpen) => {
 
   // Ignore searchTerm if it's just the selected label, not a real query.
   if (searchTerm.value && searchTerm.value !== lastSelectedLabel.value) {
-    searchDebounced(searchTerm.value);
+    await searchDebounced(searchTerm.value);
   } else if (modelValue.value) {
     await search(modelValue.value);
   } else {
