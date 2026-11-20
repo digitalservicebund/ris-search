@@ -12,10 +12,10 @@ import org.jspecify.annotations.Nullable;
  */
 @Getter
 public class Gesamttitel {
-  @XmlElement(name = "titel", namespace = LiteratureNamespaces.RIS_SELBSTSTAENDIG_NS)
+  @XmlElement(name = "titel", namespace = LiteratureNamespaces.RIS_NS)
   private String titel;
 
   @Nullable
-  @XmlElement(name = "bandbezeichnung", namespace = LiteratureNamespaces.RIS_SELBSTSTAENDIG_NS)
+  @XmlElement(name = "bandbezeichnung", namespace = LiteratureNamespaces.RIS_NS)
   private String bandbezeichnung;
 }

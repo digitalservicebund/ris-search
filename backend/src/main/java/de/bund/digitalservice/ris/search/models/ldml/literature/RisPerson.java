@@ -1,6 +1,5 @@
-package de.bund.digitalservice.ris.search.models.ldml.literature.sli;
+package de.bund.digitalservice.ris.search.models.ldml.literature;
 
-import de.bund.digitalservice.ris.search.models.ldml.literature.LiteratureNamespaces;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import lombok.Getter;
@@ -15,9 +14,9 @@ public class RisPerson {
   @XmlAttribute(name = "showAs")
   private String showAs;
 
-  @XmlElement(name = "name", namespace = LiteratureNamespaces.RIS_SELBSTSTAENDIG_NS)
+  @XmlElement(name = "name", namespace = LiteratureNamespaces.RIS_NS)
   private String name;
 
-  @XmlElement(name = "titel", namespace = LiteratureNamespaces.RIS_SELBSTSTAENDIG_NS)
+  @XmlElement(name = "titel", namespace = LiteratureNamespaces.RIS_NS)
   private String titel;
 }
