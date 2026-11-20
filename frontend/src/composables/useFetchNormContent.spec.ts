@@ -452,7 +452,9 @@ describe("useFetchNormContent", () => {
 
   it("removes the proprietary metadata from the body", async () => {
     mockHtml(`
-      ${proprietary('<dd class="ris-standangabe" data-type="stand">Stand</dd>')}
+      <section class="akn-proprietary">
+        <dl><dt>Standangabe</dt><dd class="ris-standangabe" data-type="stand">Stand</dd></dl>
+      </section>
       <div class="akn-body">Content</div>`);
 
     const { data } = await useFetchNormContent(expressionEli);
