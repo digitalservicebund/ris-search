@@ -2,7 +2,7 @@
 <akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" xmlns:ris="http://rechtsinformationen.bund.de/schema/ris/0.1">
     <akn:doc name="/akn/ontology/de/concept/documenttype/bund/literatur/unselbststaendig">
         <akn:meta>
-            <akn:identification source="attributsemantik-noch-undefiniert">
+            <akn:identification source="#rechtsinformationen-des-bundes">
                 <akn:FRBRWork>
                     <akn:FRBRthis value="regelungstext-1"/>
                     <akn:FRBRuri value="TODO"/>
@@ -35,8 +35,8 @@
                 <akn:keyword dictionary="attributsemantik-noch-undefiniert" showAs="Anerkennung" value="Anerkennung"/>
                 <akn:keyword dictionary="attributsemantik-noch-undefiniert" showAs="Anerkennungsbescheid" value="Anerkennungsbescheid"/>
             </akn:classification>
-            <akn:analysis source="attributsemantik-noch-undefiniert">
-                <akn:otherReferences source="attributsemantik-noch-undefiniert">
+            <akn:analysis source="#rechtsinformationen-des-bundes">
+                <akn:otherReferences source="#rechtsinformationen-des-bundes">
                     <akn:implicitReference showAs="FooBar, 1982, 123-123">
                         <ris:fundstelleUnselbstaendig periodikum="FooBar" zitatstelle="1982, 123-123"/>
                     </akn:implicitReference>
@@ -48,7 +48,7 @@
                     </akn:implicitReference>
                 </akn:otherReferences>
             </akn:analysis>
-            <akn:proprietary source="attributsemantik-noch-undefiniert">
+            <akn:proprietary source="#rechtsinformationen-des-bundes">
                 <ris:meta>
                     <ris:dokumenttypen domainTerm="Dokumenttypen">
                         <ris:dokumenttyp domainTerm="Dokumenttyp">Auf</ris:dokumenttyp>

@@ -277,8 +277,6 @@ public class LiteratureLdmlToOpenSearchMapper {
         .map(Analysis::getOtherReferences)
         .orElse(Collections.emptyList())
         .stream()
-        .filter(otherReferences ->
-            otherReferences.getSource().equals("attributsemantik-noch-undefiniert"))
         .flatMap(otherReferences -> otherReferences.getImplicitReferences().stream());
   }
 
