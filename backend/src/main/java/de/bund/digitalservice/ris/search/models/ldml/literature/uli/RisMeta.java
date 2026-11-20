@@ -40,7 +40,7 @@ public class RisMeta {
       name = "dokumenttypen",
       namespace = LiteratureNamespaces.RIS_UNSELBSTSTAENDIG_NS)
   @XmlElement(name = "dokumenttyp", namespace = LiteratureNamespaces.RIS_UNSELBSTSTAENDIG_NS)
-  private List<String> documentTypes;
+  private List<String> dokumenttypen;
 
   @XmlElementWrapper(
       name = "veroeffentlichungsJahre",
@@ -48,7 +48,7 @@ public class RisMeta {
   @XmlElement(
       name = "veroeffentlichungsJahr",
       namespace = LiteratureNamespaces.RIS_UNSELBSTSTAENDIG_NS)
-  private List<String> yearsOfPublication;
+  private List<String> veroeffentlichungsJahre;
 
   @XmlElement(name = "gliederung", namespace = LiteratureNamespaces.RIS_UNSELBSTSTAENDIG_NS)
   private Gliederung gliederung;
