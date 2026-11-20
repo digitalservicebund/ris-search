@@ -1,8 +1,8 @@
 ---
-title: Error Codes
+title: Error codes
 ---
 
-# Error Codes
+# Error codes
 
 In the event of an unsuccessful API request, standard [HTTP response codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status) are returned to indicate the error in the response header.
 
@@ -13,15 +13,15 @@ HTTP/1.1 400
 Content-Type: application/json
 
 {
-    "errors": [
-        {"code": <code>, "message": <message>, "parameter": <parameter>}
-    ]
+  "errors": [
+    { "code": <code>, "message": <message>, "parameter": <parameter> }
+  ]
 }
 ```
 
 ## Examples
 
-### 403 error - Response
+### 403 Forbidden
 
 ```
 curl -X POST "https://testphase.rechtsinformationen.bund.de/v1/rechtsprechung"
@@ -42,7 +42,7 @@ Content-Type: application/json
 }
 ```
 
-### 404 error - Response
+### 404 Not Found
 
 ```
 curl "https://testphase.rechtsinformationen.bund.de/v1/DOES_NOT_EXIST"
@@ -89,7 +89,7 @@ Content-Type: application/json
 }
 ```
 
-### 500 Internal server error
+### 500 Internal Server Error
 
 ```http
 HTTP/2 500
@@ -114,5 +114,4 @@ HTTP/2 503
 
 The service might return a 503 status code if it is overloaded or under maintenance.
 
-You might also get this status code after making too many requests in a short time.
-See [Rate Limiting](/guides/rate-limiting/) for more information.
+You might also get this status code after making too many requests in a short time. See [Rate limiting](/guides/rate-limiting/) for more information.

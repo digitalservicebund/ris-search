@@ -4,7 +4,7 @@ export default defineConfig({
   outDir: "./dist",
   cleanUrls: true,
   lastUpdated: true,
-  title: "API Documentation of the Federal Legal Data Portal",
+  title: "API documentation of the Federal Legal Data Portal",
   description:
     "Technical documentation and API reference for accessing federal legal data.",
   head: [
@@ -15,7 +15,7 @@ export default defineConfig({
       "meta",
       {
         property: "og:title",
-        content: "API Documentation of the Federal Legal Data Portal",
+        content: "API documentation of the Federal Legal Data Portal",
       },
     ],
     [
@@ -35,12 +35,34 @@ export default defineConfig({
     ],
     sidebar: [
       {
-        text: "Get Started",
+        text: "Get started",
         link: "/get-started/",
       },
       {
         text: "Standards",
         link: "/standards/",
+      },
+      {
+        text: "Use cases",
+        link: "/use-cases/",
+        items: [
+          { text: "Find legislation", link: "/use-cases/find-legislation/" },
+          {
+            text: "Get a specific version",
+            link: "/use-cases/legislation-version/",
+          },
+          {
+            text: "Get a single article (§)",
+            link: "/use-cases/legislation-article/",
+          },
+          {
+            text: "Find a court decision",
+            link: "/use-cases/find-court-decision/",
+          },
+          { text: "Choose a format", link: "/use-cases/formats/" },
+          { text: "Download everything", link: "/use-cases/bulk-download/" },
+          { text: "Stay up to date", link: "/use-cases/stay-up-to-date/" },
+        ],
       },
       {
         text: "Guides",
@@ -49,8 +71,8 @@ export default defineConfig({
           { text: "Formats", link: "/guides/formats/" },
           { text: "Pagination", link: "/guides/pagination/" },
           { text: "Filters", link: "/guides/filters/" },
-          { text: "Rate Limiting", link: "/guides/rate-limiting/" },
-          { text: "Error Codes", link: "/guides/error-codes/" },
+          { text: "Rate limiting", link: "/guides/rate-limiting/" },
+          { text: "Error codes", link: "/guides/error-codes/" },
         ],
       },
       { text: "Feedback", link: "/feedback/" },
