@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 class ZitierungLiteraturUnselbststaendigTest {
 
   @Test
-  void searchTextJoinsAllSearchableProperties() {
+  void toSearchTextJoinsAllSearchableProperties() {
     ZitierungLiteraturUnselbststaendig zitierung =
         ZitierungLiteraturUnselbststaendig.builder()
             .richtung(Richtung.AKTIV)
@@ -24,20 +24,20 @@ class ZitierungLiteraturUnselbststaendigTest {
                     .build())
             .build();
 
-    assertThat(zitierung.searchText())
+    assertThat(zitierung.toSearchText())
         .isEqualTo(
             "SBLU000539216 Knopp, Lothar Aufsatz NVwZ Neue Zeitschrift für Verwaltungsrecht 2016,"
                 + " 1139-1141 nichtamtlich");
   }
 
   @Test
-  void searchTextSkipsMissingFundstelle() {
+  void toSearchTextSkipsMissingFundstelle() {
     ZitierungLiteraturUnselbststaendig zitierung =
         ZitierungLiteraturUnselbststaendig.builder()
             .dokumentnummer("STLU991393280")
             .autor("Schmidt-Liebig")
             .build();
 
-    assertThat(zitierung.searchText()).isEqualTo("STLU991393280 Schmidt-Liebig");
+    assertThat(zitierung.toSearchText()).isEqualTo("STLU991393280 Schmidt-Liebig");
   }
 }

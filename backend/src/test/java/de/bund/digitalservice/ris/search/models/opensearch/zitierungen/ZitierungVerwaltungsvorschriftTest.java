@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 class ZitierungVerwaltungsvorschriftTest {
 
   @Test
-  void searchTextJoinsAllSearchableProperties() {
+  void toSearchTextJoinsAllSearchableProperties() {
     ZitierungVerwaltungsvorschrift zitierung =
         ZitierungVerwaltungsvorschrift.builder()
             .richtung(Richtung.PASSIV)
@@ -24,20 +24,20 @@ class ZitierungVerwaltungsvorschriftTest {
                     .build())
             .build();
 
-    assertThat(zitierung.searchText())
+    assertThat(zitierung.toSearchText())
         .isEqualTo(
             "KSNR006800006 Anwendung VR BA 16/86 Dienstbl BA Dienstblatt der Bundesanstalt für"
                 + " Arbeit 1986, Nr 16, 1-8 amtlich");
   }
 
   @Test
-  void searchTextSkipsMissingFundstelle() {
+  void toSearchTextSkipsMissingFundstelle() {
     ZitierungVerwaltungsvorschrift zitierung =
         ZitierungVerwaltungsvorschrift.builder()
             .dokumentnummer("KSNR008561615")
             .jurisAbkuerzung("VR VDR")
             .build();
 
-    assertThat(zitierung.searchText()).isEqualTo("KSNR008561615 VR VDR");
+    assertThat(zitierung.toSearchText()).isEqualTo("KSNR008561615 VR VDR");
   }
 }

@@ -1,14 +1,9 @@
 package de.bund.digitalservice.ris.search.models.opensearch.zitierungen;
 
+import de.bund.digitalservice.ris.search.models.opensearch.common.SearchTextConvertible;
+
 /** A citation of or by a case law document, in either {@link Richtung}. */
-public interface Zitierung {
+public interface Zitierung extends SearchTextConvertible {
 
   Richtung richtung();
-
-  /**
-   * Concatenates all searchable properties of the citation.
-   *
-   * @return the properties separated by whitespace
-   */
-  String searchText();
 }

@@ -16,7 +16,7 @@ public record ZitierungLiteraturSelbststaendig(
     implements Zitierung {
 
   @Override
-  public String searchText() {
+  public String toSearchText() {
     return MappingUtils.joinNonBlank(dokumentnummer, autor, titel, veroeffentlichungsjahr);
   }
 }

@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 class GerichtTest {
 
   @Test
-  void searchTextJoinsAllProperties() {
+  void toSearchTextJoinsAllProperties() {
     Gericht gericht =
         Gericht.builder()
             .gerichtstyp("LArbG")
@@ -17,7 +17,7 @@ class GerichtTest {
             .sitzDerAussenstelle("Lübeck")
             .build();
 
-    assertThat(gericht.searchText())
+    assertThat(gericht.toSearchText())
         .isEqualTo("LArbG Kiel Arbeitsgerichtsbarkeit 3. Kammer Lübeck");
   }
 }

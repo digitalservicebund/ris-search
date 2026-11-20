@@ -16,11 +16,11 @@ public record ZitierungLiteraturUnselbststaendig(
     implements Zitierung {
 
   @Override
-  public String searchText() {
+  public String toSearchText() {
     return MappingUtils.joinNonBlank(
         dokumentnummer,
         autor,
         dokumenttyp,
-        MappingUtils.nullSafeGet(fundstelle, Fundstelle::searchText));
+        MappingUtils.nullSafeGet(fundstelle, Fundstelle::toSearchText));
   }
 }

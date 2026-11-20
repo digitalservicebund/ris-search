@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 class ZitierungLiteraturSelbststaendigTest {
 
   @Test
-  void searchTextJoinsAllSearchableProperties() {
+  void toSearchTextJoinsAllSearchableProperties() {
     ZitierungLiteraturSelbststaendig zitierung =
         ZitierungLiteraturSelbststaendig.builder()
             .richtung(Richtung.AKTIV)
@@ -18,19 +18,19 @@ class ZitierungLiteraturSelbststaendigTest {
             .veroeffentlichungsjahr("1999")
             .build();
 
-    assertThat(zitierung.searchText())
+    assertThat(zitierung.toSearchText())
         .isEqualTo(
             "KSLS071671727 Arnauld, Andreas von Die Freiheitsrechte und ihre Schranken 1999");
   }
 
   @Test
-  void searchTextSkipsMissingParts() {
+  void toSearchTextSkipsMissingParts() {
     ZitierungLiteraturSelbststaendig zitierung =
         ZitierungLiteraturSelbststaendig.builder()
             .dokumentnummer("KSLS071671727")
             .titel("Die Grenzen der Freiheit")
             .build();
 
-    assertThat(zitierung.searchText()).isEqualTo("KSLS071671727 Die Grenzen der Freiheit");
+    assertThat(zitierung.toSearchText()).isEqualTo("KSLS071671727 Die Grenzen der Freiheit");
   }
 }

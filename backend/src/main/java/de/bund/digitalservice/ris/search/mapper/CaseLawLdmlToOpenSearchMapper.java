@@ -317,7 +317,7 @@ public class CaseLawLdmlToOpenSearchMapper {
       List<? extends Zitierung> zitierungen, Richtung richtung) {
     return zitierungen.stream()
         .filter(zitierung -> zitierung.richtung() == richtung)
-        .map(Zitierung::searchText)
+        .map(Zitierung::toSearchText)
         .filter(StringUtils::isNotBlank)
         .toList();
   }

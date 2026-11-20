@@ -16,11 +16,11 @@ public record ZitierungVerwaltungsvorschrift(
     implements Zitierung {
 
   @Override
-  public String searchText() {
+  public String toSearchText() {
     return MappingUtils.joinNonBlank(
         dokumentnummer,
         artDerZitierung,
         jurisAbkuerzung,
-        MappingUtils.nullSafeGet(fundstelle, Fundstelle::searchText));
+        MappingUtils.nullSafeGet(fundstelle, Fundstelle::toSearchText));
   }
 }

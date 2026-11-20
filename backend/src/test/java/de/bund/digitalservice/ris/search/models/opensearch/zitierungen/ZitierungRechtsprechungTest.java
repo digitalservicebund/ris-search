@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 class ZitierungRechtsprechungTest {
 
   @Test
-  void searchTextJoinsAllPartsWithGermanDate() {
+  void toSearchTextJoinsAllPartsWithGermanDate() {
     ZitierungRechtsprechung zitierung =
         ZitierungRechtsprechung.builder()
             .richtung(Richtung.AKTIV)
@@ -37,7 +37,7 @@ class ZitierungRechtsprechungTest {
                     .build())
             .build();
 
-    assertThat(zitierung.searchText())
+    assertThat(zitierung.toSearchText())
         .isEqualTo(
             "BVRE100338409 Vergleiche VerfGH München Verfassungsgerichtsbarkeit 1. Senat Nürnberg"
                 + " 02.12.1983 Beschluss Vf. 94-VI-81 BayVBl Bayerische Verwaltungsblätter 1984,"
@@ -45,13 +45,13 @@ class ZitierungRechtsprechungTest {
   }
 
   @Test
-  void searchTextSkipsMissingGerichtDateAndFundstelle() {
+  void toSearchTextSkipsMissingGerichtDateAndFundstelle() {
     ZitierungRechtsprechung zitierung =
         ZitierungRechtsprechung.builder()
             .dokumentnummer("JURE100074208")
             .aktenzeichen("3 Sa")
             .build();
 
-    assertThat(zitierung.searchText()).isEqualTo("JURE100074208 3 Sa");
+    assertThat(zitierung.toSearchText()).isEqualTo("JURE100074208 3 Sa");
   }
 }

@@ -25,14 +25,14 @@ public record ZitierungRechtsprechung(
     implements Zitierung {
 
   @Override
-  public String searchText() {
+  public String toSearchText() {
     return MappingUtils.joinNonBlank(
         dokumentnummer,
         artDerZitierung,
-        MappingUtils.nullSafeGet(gericht, Gericht::searchText),
+        MappingUtils.nullSafeGet(gericht, Gericht::toSearchText),
         DateUtils.toGermanDateString(entscheidungsdatum),
         dokumenttyp,
         aktenzeichen,
-        MappingUtils.nullSafeGet(fundstelle, Fundstelle::searchText));
+        MappingUtils.nullSafeGet(fundstelle, Fundstelle::toSearchText));
   }
 }
