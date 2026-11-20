@@ -60,14 +60,6 @@ describe("useFetchNormContent", () => {
       <div class="akn-container"><p>Besonderer Hinweis</p></div>
       <ul class="nichtamtliche-fussnoten"><li>Notes</li></ul>
     </section>
-    <section class="akn-proprietary">
-      <dl>
-        <dt>Standangabe</dt>
-          <dd class="ris-standangabe" data-type="stand">Stand-Stand</dd>
-          <dd class="ris-standangabe" data-type="hinweis">Stand-Hinweis 1;</dd>
-          <dd class="ris-standangabe" data-type="hinweis">Stand-Hinweis 2</dd>
-      </dl>
-   </section>
    <div class="akn-body">Test HTML content</div>`;
 
     mockFetch.mockReturnValueOnce(mockMetadata);
@@ -85,8 +77,6 @@ describe("useFetchNormContent", () => {
         headingAuthorialNotesLength: 16,
         headingNotes: `<ul class="nichtamtliche-fussnoten"><li>Notes</li></ul>`,
         prefaceContainer: `<div class="akn-container"><p>Besonderer Hinweis</p></div>`,
-        standangaben: ["Stand-Stand"],
-        standangabenHinweis: ["Stand-Hinweis 1;", "Stand-Hinweis 2"],
         body: expectedHtml,
       },
       hasEmptyBody: false,

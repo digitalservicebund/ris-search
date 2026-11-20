@@ -1871,6 +1871,20 @@ export interface components {
              */
             fullCitation?: string | null;
             /**
+             * @description Standangabe
+             * @example [
+             *       "Zuletzt geändert durch Testanpassungen"
+             *     ]
+             */
+            standangabe?: string[] | null;
+            /**
+             * @description Stand der dokumentarischen Bearbeitung
+             * @example [
+             *       "Hinweis Testdaten"
+             *     ]
+             */
+            standDerDokumentarischenBearbeitung?: string[] | null;
+            /**
              * @description Amtliche Langüberschrift
              * @example Verordnung über Kakao und Kakaoerzeugnisse
              */

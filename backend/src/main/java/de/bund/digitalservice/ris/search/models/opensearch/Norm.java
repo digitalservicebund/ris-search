@@ -90,6 +90,12 @@ public final class Norm implements AbstractSearchEntity {
   @Field(name = Fields.FULL_CITATION)
   private String fullCitation;
 
+  @Field(name = Fields.STANDANGABE)
+  private List<String> standangabe;
+
+  @Field(name = Fields.STAND_DER_DOKUMENTARISCHEN_BEARBEITUNG)
+  private List<String> standDerDokumentarischenBearbeitung;
+
   @Field(name = Fields.OFFICIAL_TOC)
   private String officialToc;
 
@@ -166,6 +172,9 @@ public final class Norm implements AbstractSearchEntity {
     public static final String PUBLISHED_IN = "published_in";
     public static final String RIS_ABBREVIATION = "ris_abbreviation";
     public static final String RIS_ABBREVIATION_KEYWORD = "ris_abbreviation.keyword";
+    public static final String STANDANGABE = "standangabe";
+    public static final String STAND_DER_DOKUMENTARISCHEN_BEARBEITUNG =
+        "stand_der_dokumentarischen_bearbeitung";
     public static final String TABLE_OF_CONTENTS = "table_of_contents";
     public static final String TIME_RELEVANCE_END_DATE = "time_relevance_end_date";
     public static final String TIME_RELEVANCE_START_DATE = "time_relevance_start_date";

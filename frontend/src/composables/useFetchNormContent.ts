@@ -1,6 +1,6 @@
 import type { AsyncData, NuxtError } from "#app";
 import type { LegislationExpression } from "~/types/api";
-import { getTextFromElements, parseDocument } from "~/utils/htmlParser";
+import { parseDocument } from "~/utils/htmlParser";
 
 export type NormContent = {
   legislation: LegislationExpression;
@@ -11,8 +11,6 @@ export type NormContent = {
     headingNotes?: string; // nichtamtliche Fußnoten
     officialToc?: string;
     prefaceContainer?: string; // besonderer Hinweis
-    standangaben?: string[];
-    standangabenHinweis?: string[];
     body: string;
   };
   hasEmptyBody: boolean;
@@ -110,18 +108,6 @@ function extractHtmlParts(
     ? officialTocElements.map((el) => el.outerHTML).join("")
     : undefined;
 
-  const proprietary = document.querySelector(".akn-proprietary");
-
-  const standangaben = getTextFromElements(
-    proprietary?.querySelectorAll(
-      ".ris-standangabe:not([data-type='hinweis'])",
-    ),
-  );
-
-  const standangabenHinweis = getTextFromElements(
-    proprietary?.querySelectorAll(".ris-standangabe[data-type='hinweis']"),
-  );
-
   return {
     officialToc,
     heading: heading?.outerHTML,
@@ -131,8 +117,6 @@ function extractHtmlParts(
     ),
     headingAuthorialNotesLength,
     prefaceContainer: prefaceContainer?.outerHTML,
-    standangaben,
-    standangabenHinweis,
     body: body.innerHTML,
   };
 }

@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <metadaten xmlns="http://rechtsinformationen.bund.de/schema/norm-work-metadata/0.1">
     <vollzitat>Fiktive Fruchtsaft- und Erfrischungsgetränkeverordnung vom 27. Mai 2000 (BGBl. I S. 1016), zuletzt modifiziert im Testverfahren</vollzitat>
+    <standangabe typ="stand">Zuletzt geändert durch Testanpassungen</standangabe>
+    <standangabe typ="neufassung">Neugefasst durch Testdaten</standangabe>
+    <standDerDokumentarischenBearbeitung domainTerm="Stand der dokumentarischen Bearbeitung">Hinweis Testdaten</standDerDokumentarischenBearbeitung>
 </metadaten>

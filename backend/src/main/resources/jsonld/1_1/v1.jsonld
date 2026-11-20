@@ -51,7 +51,9 @@
           "partType": "ris:legislationPartType",
           "revision": "ris:revision",
           "headline": "schema:headline",
-          "fullCitation": "ris:fullCitation"
+          "fullCitation": "ris:fullCitation",
+          "standangabe": "ris:standangabe",
+          "standDerDokumentarischenBearbeitung": "ris:standDerDokumentarischenBearbeitung"
         }
       },
       "Decision": {

@@ -183,6 +183,14 @@
           "type": "text",
           "analyzer": "custom_german_analyzer"
         },
+        "standangabe": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "stand_der_dokumentarischen_bearbeitung": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
         "official_toc": {
           "type": "text",
           "analyzer": "custom_german_analyzer"

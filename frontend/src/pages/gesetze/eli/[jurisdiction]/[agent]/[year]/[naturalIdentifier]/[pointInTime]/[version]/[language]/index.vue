@@ -112,12 +112,12 @@ const detailItems = computed<DetailsListItem[]>(() => [
   {
     type: "list",
     label: "Stand:",
-    values: htmlParts.value.standangaben ?? [],
+    values: metadata.value.standangabe ?? [],
   },
   {
     type: "list",
     label: "Hinweis zum Stand:",
-    values: htmlParts.value.standangabenHinweis ?? [],
+    values: metadata.value.standDerDokumentarischenBearbeitung ?? [],
   },
   {
     type: "html",

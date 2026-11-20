@@ -3,41 +3,53 @@ package de.bund.digitalservice.ris.search.mapper;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import de.bund.digitalservice.ris.builder.NormWorkMetadataTestDataBuilder;
-import java.util.Optional;
+import de.bund.digitalservice.ris.search.models.ldml.norm.NormWorkMetadata;
+import de.bund.digitalservice.ris.search.models.ldml.norm.StandDerDokumentarischenBearbeitung;
+import de.bund.digitalservice.ris.search.models.ldml.norm.Standangabe;
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 class NormWorkMetadataMapperTest {
 
   @Test
-  @DisplayName("Extracts vollzitat from metadaten.xml")
-  void extractsVollzitat() {
+  @DisplayName(
+      "Parses vollzitat, standangabe and standDerDokumentarischenBearbeitung from metadaten.xml")
+  void parsesCompleteWorkMetadata() {
     String xml =
-        NormWorkMetadataTestDataBuilder.buildMetadatenXml("Verordnung zu der Vereinbarung");
+        NormWorkMetadataTestDataBuilder.buildMetadatenXml(
+            "Verordnung zu der Vereinbarung",
+            List.of(
+                new Standangabe("Zuletzt geändert durch Testanpassungen", "stand"),
+                new Standangabe("Neugefasst durch Testdaten", "neufassung")),
+            List.of(new StandDerDokumentarischenBearbeitung("Hinweis Testdaten")));
 
-    assertThat(NormWorkMetadataMapper.parseVollzitat(xml))
-        .isEqualTo(Optional.of("Verordnung zu der Vereinbarung"));
+    NormWorkMetadata metadata = NormWorkMetadataMapper.parse(xml).orElseThrow();
+
+    assertThat(metadata.getVollzitat()).isEqualTo("Verordnung zu der Vereinbarung");
+    assertThat(metadata.getStandangabe())
+        .extracting(Standangabe::getText)
+        .containsExactly("Zuletzt geändert durch Testanpassungen", "Neugefasst durch Testdaten");
+    assertThat(metadata.getStandDerDokumentarischenBearbeitung())
+        .extracting(StandDerDokumentarischenBearbeitung::getText)
+        .containsExactly("Hinweis Testdaten");
   }
 
   @Test
-  @DisplayName("Returns empty when vollzitat element is missing")
-  void returnsEmptyWhenVollzitatMissing() {
+  @DisplayName("Parses metadaten.xml without any optional elements present")
+  void parsesWorkMetadataWithoutOptionalElements() {
     String xml = NormWorkMetadataTestDataBuilder.buildMetadatenXml(null);
 
-    assertThat(NormWorkMetadataMapper.parseVollzitat(xml)).isEmpty();
-  }
+    NormWorkMetadata metadata = NormWorkMetadataMapper.parse(xml).orElseThrow();
 
-  @Test
-  @DisplayName("Returns empty when vollzitat is blank")
-  void returnsEmptyWhenVollzitatBlank() {
-    String xml = NormWorkMetadataTestDataBuilder.buildMetadatenXml("   ");
-
-    assertThat(NormWorkMetadataMapper.parseVollzitat(xml)).isEmpty();
+    assertThat(metadata.getVollzitat()).isNull();
+    assertThat(metadata.getStandangabe()).isEmpty();
+    assertThat(metadata.getStandDerDokumentarischenBearbeitung()).isEmpty();
   }
 
   @Test
   @DisplayName("Returns empty when content is not valid XML")
   void returnsEmptyWhenContentIsMalformed() {
-    assertThat(NormWorkMetadataMapper.parseVollzitat("not xml")).isEmpty();
+    assertThat(NormWorkMetadataMapper.parse("not xml")).isEmpty();
   }
 }

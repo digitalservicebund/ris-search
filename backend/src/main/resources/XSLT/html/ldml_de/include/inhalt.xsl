@@ -606,20 +606,8 @@
 
     <xsl:template match="ris:legalDocML.de_metadaten">
         <dl>
-            <xsl:apply-templates select="@* | node()[not(self::ris:standangabe)]" />
-            <xsl:if test="./ris:standangabe">
-            <dt>Standangabe</dt>
-            <!-- Process all standangabe elements to create dd elements -->
-            <xsl:apply-templates select="./ris:standangabe"/>
-            </xsl:if>
+            <xsl:apply-templates select="@* | node()" />
         </dl>
-    </xsl:template>
-
-    <xsl:template match="ris:standangabe">
-        <dd class="ris-standangabe">
-            <xsl:apply-templates select="@*" />
-            <xsl:value-of select="."/>
-        </dd>
     </xsl:template>
 
     <!--
