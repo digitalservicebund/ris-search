@@ -136,7 +136,7 @@ public class LiteratureLdmlToOpenSearchMapper {
             .map(Doc::getMeta)
             .map(Meta::getProprietary)
             .map(Proprietary::getMeta)
-            .map(RisMeta::getYearsOfPublication)
+            .map(RisMeta::getVeroeffentlichungsJahre)
             .orElse(Collections.emptyList());
 
     if (yearsOfPublication.isEmpty()) {
@@ -154,7 +154,7 @@ public class LiteratureLdmlToOpenSearchMapper {
             .map(Doc::getMeta)
             .map(Meta::getProprietary)
             .map(Proprietary::getMeta)
-            .map(RisMeta::getDocumentTypes)
+            .map(RisMeta::getDokumenttypen)
             .orElse(Collections.emptyList());
 
     if (documentTypes.isEmpty()) {

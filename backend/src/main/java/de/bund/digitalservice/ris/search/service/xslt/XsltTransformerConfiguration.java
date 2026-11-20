@@ -16,7 +16,7 @@ public class XsltTransformerConfiguration {
   }
 
   @Bean
-  public UliLiteratureV1XsltTransformer literatureXsltTransformer() {
+  public UliLiteratureV1XsltTransformer uliLiteratureXsltTransformer() {
     return new UliLiteratureV1XsltTransformer();
   }
 

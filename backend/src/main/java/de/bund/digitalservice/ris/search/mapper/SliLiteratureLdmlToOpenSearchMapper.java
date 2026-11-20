@@ -181,7 +181,7 @@ public class SliLiteratureLdmlToOpenSearchMapper {
       throws ValidationException {
     List<String> yearsOfPublication =
         extractRisMeta(literatureLdml)
-            .map(RisMeta::getYearsOfPublication)
+            .map(RisMeta::getVeroeffentlichungsJahre)
             .orElse(Collections.emptyList());
 
     if (yearsOfPublication.isEmpty()) {
@@ -195,7 +195,7 @@ public class SliLiteratureLdmlToOpenSearchMapper {
       throws ValidationException {
     final List<String> documentTypes =
         extractRisMeta(literatureLdml)
-            .map(RisMeta::getDocumentTypes)
+            .map(RisMeta::getDokoumenttypen)
             .orElse(Collections.emptyList());
 
     if (documentTypes.isEmpty()) {
@@ -231,7 +231,7 @@ public class SliLiteratureLdmlToOpenSearchMapper {
   private static List<String> extractPublisherPersons(LiteratureLdml literatureLdml) {
     var personEids = getRoleReferences(literatureLdml, RisMeta::getHerausgeberPersonen);
 
-    return extractPersons(literatureLdml).stream()
+    return extractPersonen(literatureLdml).stream()
         .filter(person -> personEids.contains(person.getEId()))
         .map(RisPerson::getShowAs)
         .filter(StringUtils::isNotBlank)
@@ -245,7 +245,7 @@ public class SliLiteratureLdmlToOpenSearchMapper {
   private static List<String> extractOriginators(LiteratureLdml literatureLdml) {
     var originatorEids = getRoleReferences(literatureLdml, RisMeta::getUrheberListe);
 
-    return extractOrganisations(literatureLdml).stream()
+    return extractOrganisationen(literatureLdml).stream()
         .filter(orga -> originatorEids.contains(orga.getEId()))
         .map(RisOrganisation::getName)
         .filter(Objects::nonNull)
@@ -281,14 +281,14 @@ public class SliLiteratureLdmlToOpenSearchMapper {
   private static List<String> extractOrganization(
       LiteratureLdml literatureLdml, Function<RisMeta, List<RisRoleItem>> roleList) {
     var eIds = getRoleReferences(literatureLdml, roleList);
-    return extractOrganisations(literatureLdml).stream()
+    return extractOrganisationen(literatureLdml).stream()
         .filter(orga -> eIds.contains(orga.getEId()))
         .map(RisOrganisation::getShowAs)
         .filter(Objects::nonNull)
         .toList();
   }
 
-  private static List<RisOrganisation> extractOrganisations(LiteratureLdml literatureLdml) {
+  private static List<RisOrganisation> extractOrganisationen(LiteratureLdml literatureLdml) {
     return extractRisMeta(literatureLdml)
         .map(RisMeta::getOrganisationen)
         .orElse(Collections.emptyList());
@@ -358,14 +358,14 @@ public class SliLiteratureLdmlToOpenSearchMapper {
       LiteratureLdml literatureLdml, Function<RisMeta, List<RisRoleItem>> roleList) {
     var personEids = getRoleReferences(literatureLdml, roleList);
 
-    return extractPersons(literatureLdml).stream()
+    return extractPersonen(literatureLdml).stream()
         .filter(person -> personEids.contains(person.getEId()))
         .map(RisPerson::getName)
         .filter(Objects::nonNull)
         .toList();
   }
 
-  private static List<RisPerson> extractPersons(LiteratureLdml literatureLdml) {
+  private static List<RisPerson> extractPersonen(LiteratureLdml literatureLdml) {
     return extractRisMeta(literatureLdml).map(RisMeta::getPersonen).orElse(Collections.emptyList());
   }
 
