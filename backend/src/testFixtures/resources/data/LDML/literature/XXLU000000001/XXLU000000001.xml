@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" xmlns:ris="http://rechtsinformationen.bund.de/schema/ris/0.1">
+    <akn:doc name="offene-struktur">
+        <akn:meta>
+            <akn:identification source="#rechtsinformationen-des-bundes">
+                <akn:FRBRWork>
+                    <akn:FRBRthis value="regelungstext-1"/>
+                    <akn:FRBRuri value="TODO"/>
+                    <akn:FRBRalias name="dokumentnummer" value="XXLU000000001"/>
+                    <akn:FRBRalias name="haupttitel" value="Literatur Test Dokument"/>
+                    <akn:FRBRalias name="dokumentarischerTitel" value="Dokumentarischer Titel"/>
+                    <akn:FRBRalias name="haupttitelzusatz" value="Titelzusatz"/>
+                    <akn:FRBRdate date="2024-01-01" name="verkuendungsfassung"/>
+                    <akn:FRBRauthor href="recht.bund.de/institution/bundesregierung"/>
+                    <akn:FRBRcountry value="de"/>
+                    <akn:FRBRsubtype value="LU"/>
+                    <akn:FRBRnumber value="TODO"/>
+                    <akn:FRBRname value="TODO"/>
+                </akn:FRBRWork>
+                <akn:FRBRExpression>
+                    <akn:FRBRthis value="regelungstext-1"/>
+                    <akn:FRBRuri value="regelungstext-1"/>
+                    <akn:FRBRdate date="2024-01-01" name="verkuendung"/>
+                    <akn:FRBRauthor href="recht.bund.de/institution/bundesregierung"/>
+                    <akn:FRBRlanguage language="deu"/>
+                </akn:FRBRExpression>
+                <akn:FRBRManifestation>
+                    <akn:FRBRthis value="TODO"/>
+                    <akn:FRBRuri value="TODO"/>
+                    <akn:FRBRdate date="2024-01-01" name="generierung"/>
+                    <akn:FRBRauthor href="recht.bund.de"/>
+                    <akn:FRBRformat value="xml"/>
+                </akn:FRBRManifestation>
+            </akn:identification>
+            <akn:classification source="schlagwort">
+                <akn:keyword dictionary="attributsemantik-noch-undefiniert" showAs="betriebliche Bildung" value="betriebliche Bildung"/>
+                <akn:keyword dictionary="attributsemantik-noch-undefiniert" showAs="betriebliche Bildungsmaßnahme" value="betriebliche Bildungsmaßnahme"/>
+                <akn:keyword dictionary="attributsemantik-noch-undefiniert" showAs="paritätische Beteiligung" value="paritätische Beteiligung"/>
+                <akn:keyword dictionary="attributsemantik-noch-undefiniert" showAs="paritätische Mitbestimmung" value="paritätische Mitbestimmung"/>
+            </akn:classification>
+            <akn:analysis source="#rechtsinformationen-des-bundes">
+                <akn:otherReferences source="#rechtsinformationen-des-bundes">
+                    <akn:implicitReference showAs="BB, 1979, 1298-1300">
+                        <ris:fundstelleUnselbstaendig periodikum="BB" zitatstelle="1979, 1298-1300"/>
+                    </akn:implicitReference>
+                    <akn:implicitReference showAs="Titel einer Fundstelle, 1979, 1298-1300">
+                        <ris:fundstelleSelbstaendig titel="Titel einer Fundstelle" zitatstelle="1979, 1298-1300"/>
+                    </akn:implicitReference>
+                    <akn:implicitReference showAs="GG, Art 6 Abs 2 S 1, 1949-05-23">
+                        <ris:normReference abbreviation="GG" dateOfVersion="1949-05-23" singleNorm="Art 6 Abs 2 S 1"/>
+                    </akn:implicitReference>
+                    <akn:implicitReference ris:domainTerm="Referenz Rechtsprechung">
+                        <ris:referenzRechtsprechung domainTerm="Referenz Rechtsprechung">
+                            <ris:richtung domainTerm="Richtung der Referenzierung">aktiv</ris:richtung>
+                            <ris:referenzArt domainTerm="Art der Referenz">caselaw</ris:referenzArt>
+                            <ris:artDerZitierung domainTerm="Art der Zitierung">Vergleiche</ris:artDerZitierung>
+                            <ris:gericht domainTerm="Gericht">
+                                <ris:gerichtstyp domainTerm="Gerichtstyp">FooBar</ris:gerichtstyp>
+                                <ris:spruchkoerper domainTerm="Spruchkörper">1. Kammer</ris:spruchkoerper>
+                            </ris:gericht>
+                            <ris:entscheidungsdatum domainTerm="Entscheidungsdatum">2008-04-03</ris:entscheidungsdatum>
+                        </ris:referenzRechtsprechung>
+                    </akn:implicitReference>
+                    <akn:implicitReference ris:domainTerm="Referenz Selbstständige Literatur">
+                        <ris:referenzSelbststaendigeLiteratur domainTerm="Referenz Selbstständige Literatur">
+                            <ris:richtung domainTerm="Richtung der Referenzierung">aktiv</ris:richtung>
+                            <ris:referenzArt domainTerm="Art der Referenz">sli</ris:referenzArt>
+                            <ris:titel domainTerm="Titel">Selbstständigeliterature</ris:titel>
+                            <ris:veroeffentlichungsjahr domainTerm="Veröffentlichungsjahr">2025</ris:veroeffentlichungsjahr>
+                        </ris:referenzSelbststaendigeLiteratur>
+                    </akn:implicitReference>
+                    <akn:implicitReference ris:domainTerm="Referenz Verwaltungsvorschrift">
+                        <ris:referenzVerwaltungsvorschrift domainTerm="Referenz Verwaltungsvorschrift">
+                            <ris:richtung domainTerm="Richtung der Referenzierung">passiv</ris:richtung>
+                            <ris:referenzArt domainTerm="Art der Referenz">adm</ris:referenzArt>
+                            <ris:artDerZitierung domainTerm="Art der Zitierung">Vergleiche</ris:artDerZitierung>
+                            <ris:jurisAbkuerzung domainTerm="juris-Abkürzung">NaNu</ris:jurisAbkuerzung>
+                        </ris:referenzVerwaltungsvorschrift>
+                    </akn:implicitReference>
+                    <akn:implicitReference ris:domainTerm="Referenz Unselbstständige Literatur">
+                        <ris:referenzUnselbststaendigeLiteratur domainTerm="Referenz Unselbstständige Literatur">
+                            <ris:richtung domainTerm="Richtung der Referenzierung">passiv</ris:richtung>
+                            <ris:referenzArt domainTerm="Art der Referenz">uli</ris:referenzArt>
+                            <ris:fundstelle domainTerm="Fundstelle">
+                                <ris:periodikum domainTerm="Periodikum">
+                                    <ris:abkuerzung domainTerm="Abkürzung">Unselbstständigeliterature</ris:abkuerzung>
+                                </ris:periodikum>
+                                <ris:zitatstelle domainTerm="Zitatstelle">2023</ris:zitatstelle>
+                            </ris:fundstelle>
+                        </ris:referenzUnselbststaendigeLiteratur>
+                    </akn:implicitReference>
+                    <akn:implicitReference ris:domainTerm="Referenz Unselbstständige Literatur">
+                        <ris:referenzUnselbststaendigeLiteratur domainTerm="Referenz Unselbstständige Literatur">
+                            <ris:richtung domainTerm="Richtung der Referenzierung">passiv</ris:richtung>
+                            <ris:referenzArt domainTerm="Art der Referenz">uli</ris:referenzArt>
+                            <ris:fundstelle domainTerm="Fundstelle">
+                                <ris:periodikum domainTerm="Periodikum">
+                                    <ris:abkuerzung domainTerm="Abkürzung">Unselbstständigeliterature</ris:abkuerzung>
+                                </ris:periodikum>
+                                <ris:zitatstelle domainTerm="Zitatstelle">1989</ris:zitatstelle>
+                            </ris:fundstelle>
+                        </ris:referenzUnselbststaendigeLiteratur>
+                    </akn:implicitReference>
+                </akn:otherReferences>
+            </akn:analysis>
+            <akn:proprietary source="#rechtsinformationen-des-bundes">
+                <ris:meta>
+                    <ris:kongresse domainTerm="Kongresse">
+                        <ris:kongress domainTerm="Kongress" eId="foo-kongress-1" showAs="Internationaler Kongreß für das Recht, 1991, Athen, GRC">
+                            <ris:name domainTerm="Name">Internationaler Kongreß für das Recht</ris:name>
+                            <ris:jahr domainTerm="Jahr">1991</ris:jahr>
+                            <ris:ort domainTerm="Ort">Athen</ris:ort>
+                            <ris:land domainTerm="Land">GRC</ris:land>
+                        </ris:kongress>
+                    </ris:kongresse>
+                    <ris:kongressvermerke domainTerm="Kongressvermerke">
+                        <ris:kongressvermerk domainTerm="Kongressvermerk" refersTo="#foo-kongress-1">Internationaler Kongreß für das Recht</ris:kongressvermerk>
+                    </ris:kongressvermerke>
+                    <ris:mitarbeiterListe domainTerm="Mitarbeiterliste">
+                        <ris:mitarbeiter domainTerm="Mitarbeiter" refersTo="#foo-peter-mitarbeiter-1">Foo, Peter</ris:mitarbeiter>
+                    </ris:mitarbeiterListe>
+                    <ris:organisationen domainTerm="Organisationen">
+                        <ris:organisation domainTerm="Organisation" eId="foo-urheber-1" showAs="FOO, Foofaafee">
+                            <ris:name domainTerm="Name">FOO</ris:name>
+                            <ris:zusatz domainTerm="Zusatz">Foofaafee</ris:zusatz>
+                        </ris:organisation>
+                    </ris:organisationen>
+                    <ris:personen domainTerm="Personen">
+                        <ris:person domainTerm="Person" eId="mustermann-max-verfasser-1" showAs="Mustermann, Max">
+                            <ris:name domainTerm="Person">Mustermann, Max</ris:name>
+                        </ris:person>
+                        <ris:person domainTerm="Person" eId="musterfrau-susanne-verfasser-2">
+                            <ris:name domainTerm="Person">Musterfrau, Susanne</ris:name>
+                            <ris:titel domainTerm="Titel">Prof Dr</ris:titel>
+                        </ris:person>
+                        <ris:person domainTerm="Person" eId="foo-peter-mitarbeiter-1">
+                            <ris:name domainTerm="Person">Foo, Peter</ris:name>
+                            <ris:titel domainTerm="Titel">Dr</ris:titel>
+                        </ris:person>
+                    </ris:personen>
+                    <ris:dokumenttypen domainTerm="Dokumenttypen">
+                        <ris:dokumenttyp domainTerm="Dokumenttyp">Auf</ris:dokumenttyp>
+                        <ris:dokumenttyp domainTerm="Dokumenttyp">Foo</ris:dokumenttyp>
+                    </ris:dokumenttypen>
+                    <ris:urheberListe domainTerm="Urheberliste">
+                        <ris:urheber domainTerm="Urheber" refersTo="#foo-urheber-1">FOO</ris:urheber>
+                    </ris:urheberListe>
+                    <ris:verfasserListe domainTerm="Verfasserliste">
+                        <ris:verfasser domainTerm="Verfasser" refersTo="#mustermann-max-verfasser-1">Mustermann, Max</ris:verfasser>
+                        <ris:verfasser domainTerm="Verfasser" refersTo="#musterfrau-susanne-verfasser-2">Musterfrau, Susanne</ris:verfasser>
+                    </ris:verfasserListe>
+                    <ris:veroeffentlichungsJahre>
+                        <ris:veroeffentlichungsJahr>2025</ris:veroeffentlichungsJahr>
+                    </ris:veroeffentlichungsJahre>
+                    <ris:gliederung>
+                        <ris:gliederungseintrag>I. Äpfel.</ris:gliederungseintrag>
+                        <ris:gliederungseintrag>II. Birnen.</ris:gliederungseintrag>
+                        <ris:gliederungseintrag>III. Orangen.</ris:gliederungseintrag>
+                    </ris:gliederung>
+                </ris:meta>
+            </akn:proprietary>
+        </akn:meta>
+        <akn:preface>
+            <akn:longTitle>
+                <akn:block name="longTitle">Literatur Test Dokument</akn:block>
+            </akn:longTitle>
+        </akn:preface>
+        <akn:mainBody>
+            <akn:div>
+                <akn:p>
+                    1. Dies ist ein literature <akn:a href="http://www.foo.de" shape="rect">LDML</akn:a> Dokument für <akn:span>Tests</akn:span>.
+                    <akn:br/>
+                    Es werden <akn:sub>sub</akn:sub> und <akn:sup>sup</akn:sup> Elemente unterstützt.
+                </akn:p>
+                <akn:p>
+                    Außerdem gib es noch <akn:inline name="em">EM</akn:inline>, <akn:inline name="hlj">hlj</akn:inline>, <akn:inline name="noindex">noindex</akn:inline> und <akn:inline name="strong">strong</akn:inline>.
+                </akn:p>
+            </akn:div>
+        </akn:mainBody>
+    </akn:doc>
+</akn:akomaNtoso>

@@ -32,7 +32,7 @@ class CSPHeadersIntegrationTest extends ContainersIntegrationBase {
         .perform(get("/v1/literature"))
         .andExpect(header().string(cspHeaderName, cspHeaderValue));
     mockMvc
-        .perform(get("/v1/literature/XXLU000000001.akn.xml"))
+        .perform(get("/v1/literature/XXLU000000001.xml"))
         .andExpect(header().string(cspHeaderName, cspHeaderValue));
     mockMvc
         .perform(get("/v1/literature/XXLU000000001.html"))

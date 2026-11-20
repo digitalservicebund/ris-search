@@ -23,6 +23,6 @@ import lombok.Getter;
 @Getter
 public class Proprietary {
 
-  @XmlElement(name = "meta", namespace = LiteratureNamespaces.RIS_SELBSTSTAENDIG_NS)
+  @XmlElement(name = "meta", namespace = LiteratureNamespaces.RIS_NS)
   private RisMeta meta;
 }
