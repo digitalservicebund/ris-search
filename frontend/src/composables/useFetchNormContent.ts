@@ -89,16 +89,13 @@ function processNormHtml(
   html: string,
   options?: UseFetchNormContentOptions,
 ): NormHtml {
+  const rewriteLink = options?.rewriteLink;
   const transforms = [
+    ...(rewriteLink ? [rewriteLinks((href) => rewriteLink(href))] : []),
     insertLineBreaksBetweenBracketedBlocks(
       `${NORM_HEADER} .nichtamtliche-fussnoten`,
     ),
   ];
-  const rewriteLink = options?.rewriteLink;
-  if (rewriteLink) {
-    // Links first, so the parts taken from the document have them rewritten
-    transforms.unshift(rewriteLinks((href) => rewriteLink(href)));
-  }
 
   return processHtml(html, {
     // TODO RISDEV-11107: replace with an allowlist
