@@ -82,7 +82,7 @@ describe("useFetchNormContent", () => {
       prefaceContainer: `<div class="akn-container"><p>Besonderer Hinweis</p></div>`,
     });
     expect(data.value.html.text).toEqual({
-      headingAuthorialNotes: "Footnote content",
+      headingAuthorialNotesLength: 16,
     });
     expect(data.value.html.body.trim()).toBe(
       `<div class="akn-body">Test HTML content</div>`,
@@ -110,7 +110,7 @@ describe("useFetchNormContent", () => {
       officialToc: undefined,
       prefaceContainer: undefined,
     });
-    expect(data.value.html.text.headingAuthorialNotes).toBeUndefined();
+    expect(data.value.html.text.headingAuthorialNotesLength).toBe(0);
   });
 
   it("gets the preface from the document header", async () => {
@@ -141,7 +141,7 @@ describe("useFetchNormContent", () => {
     const { data } = await useFetchNormContent(expressionEli);
 
     expect(data.value.html.parts.headingAuthorialNotes).toBeUndefined();
-    expect(data.value.html.text.headingAuthorialNotes).toBeUndefined();
+    expect(data.value.html.text.headingAuthorialNotesLength).toBe(0);
     expect(data.value.html.parts.headingNotes).toBeUndefined();
   });
 
@@ -340,7 +340,7 @@ describe("useFetchNormContent", () => {
       );
 
       const { data } = await useFetchNormContent(expressionEli);
-      expect(data.value.html.text.headingAuthorialNotes?.length).toBe(
+      expect(data.value.html.text.headingAuthorialNotesLength).toBe(
         expectedLength,
       );
     },

@@ -35,7 +35,7 @@ const normTitle = computed(() => getNormTitle(metadata));
         v-if="html?.parts.headingAuthorialNotes"
         class="content-grid-textblock mt-8"
         :html="html.parts.headingAuthorialNotes"
-        :text="html.text.headingAuthorialNotes"
+        :text-length="html.text.headingAuthorialNotesLength"
       />
     </div>
   </div>

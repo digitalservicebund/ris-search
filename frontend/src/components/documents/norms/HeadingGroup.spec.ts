@@ -14,7 +14,7 @@ const createDefaultProps = () => ({
       prefaceContainer: undefined,
     },
     text: {
-      headingAuthorialNotes: "Test Notes",
+      headingAuthorialNotesLength: 10,
     },
     body: "",
     isEmpty: false,

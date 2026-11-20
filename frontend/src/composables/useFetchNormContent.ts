@@ -23,8 +23,8 @@ export type NormHtml = ProcessedHtml<
     prefaceContainer: string | undefined;
   },
   {
-    /** Text of the amtliche Fußnoten, with whitespace as users see it */
-    headingAuthorialNotes: string | undefined;
+    /** Text length of the amtliche Fußnoten, with whitespace as users see it */
+    headingAuthorialNotesLength: number;
   }
 >;
 
@@ -113,9 +113,8 @@ function extractNormParts(document: Document) {
   // Text first, because taking the parts removes the elements it is read from
   const authorialNotesText = getText(document, `${NORM_HEADER} .fussnoten`);
   const text = {
-    headingAuthorialNotes: authorialNotesText.length
-      ? normalizeSpaces(authorialNotesText.join(" "))
-      : undefined,
+    headingAuthorialNotesLength: normalizeSpaces(authorialNotesText.join(" "))
+      .length,
   };
 
   const html = {

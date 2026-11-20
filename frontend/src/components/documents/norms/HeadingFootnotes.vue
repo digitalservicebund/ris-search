@@ -1,13 +1,12 @@
 <script setup lang="ts">
-const { html, text } = defineProps<{
+const { html, textLength = 0 } = defineProps<{
   html: string;
-  /** Text of the footnotes, used to decide whether they are long */
-  text?: string;
+  textLength?: number;
 }>();
 
 const threshold = 3 * 60;
 
-const wrapFootnote = computed(() => (text?.length ?? 0) > threshold);
+const wrapFootnote = computed(() => textLength > threshold);
 </script>
 
 <template>

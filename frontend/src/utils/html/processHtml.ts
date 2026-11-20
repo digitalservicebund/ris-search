@@ -20,7 +20,7 @@ export type HtmlParts = Record<string, string | undefined>;
  */
 export type TextParts = Record<
   string,
-  string | string[] | Section[] | undefined
+  string | string[] | number | Section[] | undefined
 >;
 
 /**
