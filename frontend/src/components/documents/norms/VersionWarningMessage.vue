@@ -70,7 +70,8 @@ export type FutureVersionTarget = {
   <div v-if="showWarningMessage" class="w-fit">
     <UiMessage hide-icon>
       <p>
-        <span :id="versionTextId">{{ versionText }}</span>{{ " " }}
+        <span :id="versionTextId">{{ versionText }}</span
+        >{{ " " }}
 
         <NuxtLink
           v-if="versionLink"
