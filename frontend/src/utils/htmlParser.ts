@@ -21,16 +21,6 @@ export function parseDocument(html: string): Document {
   return new JSDOM(source).window.document;
 }
 
-export function getTextFromElements(elements?: NodeListOf<Element>): string[] {
-  if (!elements) {
-    return [];
-  }
-  const textElements: (string | null)[] = [...elements.values()].map(
-    (element) => element.textContent,
-  );
-  return textElements.filter(Boolean) as string[];
-}
-
 /**
  * Determines if the given html document is empty. A document is considered
  * empty if the html `<body>` is empty or contains only a single headline
