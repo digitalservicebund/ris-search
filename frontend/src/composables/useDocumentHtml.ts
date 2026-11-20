@@ -3,7 +3,6 @@ import { getSections, getText } from "~/utils/html/extract";
 import type { ProcessedHtml } from "~/utils/html/processHtml";
 import {
   DANGEROUSLY_SKIP_SANITIZATION,
-  EMPTY_DOCUMENT_HTML,
   processHtml,
 } from "~/utils/html/processHtml";
 
@@ -33,7 +32,7 @@ export function useDocumentHtml(url: string) {
 }
 
 function processDocumentHtml(html: string): DocumentHtml {
-  return processHtml(html || EMPTY_DOCUMENT_HTML, {
+  return processHtml(html ?? "", {
     // TODO RISDEV-11107: replace with an allowlist
     allowlist: DANGEROUSLY_SKIP_SANITIZATION,
     extract: extractDocumentParts,

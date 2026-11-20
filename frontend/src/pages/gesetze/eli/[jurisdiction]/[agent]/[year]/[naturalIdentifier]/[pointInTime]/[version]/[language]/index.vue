@@ -74,7 +74,7 @@ if (gesamtausgabenError.value) {
   throw createError(gesamtausgabenError.value);
 }
 
-const htmlParts = computed(() => data.value.htmlParts);
+const html = computed(() => data.value.html);
 
 const zipUrl = computed(() =>
   getManifestationUrl(metadata.value, "application/zip"),
@@ -104,12 +104,12 @@ const detailItems = computed<DetailsListItem[]>(() => [
   {
     type: "html",
     label: "Besonderer Hinweis:",
-    html: htmlParts.value.prefaceContainer,
+    html: html.value.parts.prefaceContainer,
   },
   {
     type: "html",
     label: "Fußnoten:",
-    html: htmlParts.value.headingNotes,
+    html: html.value.parts.headingNotes,
     htmlClass: "footnotes",
   },
   {
@@ -208,7 +208,7 @@ const views = computed<OneOrMore<TabView>>(() => {
     label: "Text",
   } as const;
 
-  return data.value.hasEmptyBody ? baseViews : [textTab, ...baseViews];
+  return html.value.isEmpty ? baseViews : [textTab, ...baseViews];
 });
 
 const {
@@ -238,10 +238,7 @@ const gesamtausgabenDateFilterInputId = useId();
     <div
       class="content-wrapper mb-24 space-y-24 sm:mb-32 sm:space-y-32 md:mb-40 md:space-y-40"
     >
-      <DocumentsNormsHeadingGroup
-        :metadata="metadata"
-        :html-parts="htmlParts"
-      />
+      <DocumentsNormsHeadingGroup :metadata="metadata" :html="html" />
 
       <DocumentsNormsVersionWarning
         :versions="sortedGesamtausgaben"
@@ -258,9 +255,9 @@ const gesamtausgabenDateFilterInputId = useId();
             <h2 :id="textTabPanelTitleId" class="sr-only">Text</h2>
             <DocumentsIncompleteDataMessage />
             <DocumentsNormsLegislationContent
-              :official-toc="htmlParts.officialToc"
+              :official-toc="html.parts.officialToc"
             >
-              <div v-html="htmlParts.body" />
+              <div v-html="html.body" />
             </DocumentsNormsLegislationContent>
 
             <template #sidebar v-if="tableOfContents.length">
