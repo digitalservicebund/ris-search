@@ -2,7 +2,7 @@
 <akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" xmlns:ris="http://rechtsinformationen.bund.de/schema/ris/0.1">
     <akn:doc name="offene-struktur">
         <akn:meta>
-            <akn:identification source="attributsemantik-noch-undefiniert">
+            <akn:identification source="#rechtsinformationen-des-bundes">
                 <akn:FRBRWork>
                     <akn:FRBRthis value="regelungstext-1"/>
                     <akn:FRBRuri value="TODO"/>
@@ -39,8 +39,8 @@
                 <akn:keyword dictionary="attributsemantik-noch-undefiniert" showAs="paritätische Beteiligung" value="paritätische Beteiligung"/>
                 <akn:keyword dictionary="attributsemantik-noch-undefiniert" showAs="paritätische Mitbestimmung" value="paritätische Mitbestimmung"/>
             </akn:classification>
-            <akn:analysis source="attributsemantik-noch-undefiniert">
-                <akn:otherReferences source="attributsemantik-noch-undefiniert">
+            <akn:analysis source="#rechtsinformationen-des-bundes">
+                <akn:otherReferences source="#rechtsinformationen-des-bundes">
                     <akn:implicitReference showAs="BB, 1979, 1298-1300">
                         <ris:fundstelleUnselbstaendig periodikum="BB" zitatstelle="1979, 1298-1300"/>
                     </akn:implicitReference>
@@ -50,16 +50,17 @@
                     <akn:implicitReference showAs="GG, Art 6 Abs 2 S 1, 1949-05-23">
                         <ris:normReference abbreviation="GG" dateOfVersion="1949-05-23" singleNorm="Art 6 Abs 2 S 1"/>
                     </akn:implicitReference>
-                </akn:otherReferences>
-                <akn:otherReferences source="active">
-                </akn:otherReferences>
-                <akn:otherReferences source="passive">
-                    <akn:implicitReference showAs="Vergleiche passiv NaNu 1. Kammer, 2009, Az: XY">
-                        <ris:verwaltungsvorschriftReference />
+                    <akn:implicitReference ris:domainTerm="Referenz Verwaltungsvorschrift">
+                        <ris:referenzVerwaltungsvorschrift domainTerm="Referenz Verwaltungsvorschrift">
+                            <ris:richtung domainTerm="Richtung der Referenzierung">passiv</ris:richtung>
+                            <ris:referenzArt domainTerm="Art der Referenz">adm</ris:referenzArt>
+                            <ris:artDerZitierung domainTerm="Art der Zitierung">Vergleiche</ris:artDerZitierung>
+                            <ris:jurisAbkuerzung domainTerm="juris-Abkürzung">NaNu</ris:jurisAbkuerzung>
+                        </ris:referenzVerwaltungsvorschrift>
                     </akn:implicitReference>
                 </akn:otherReferences>
             </akn:analysis>
-            <akn:proprietary source="attributsemantik-noch-undefiniert">
+            <akn:proprietary source="#rechtsinformationen-des-bundes">
                 <ris:meta>
                     <ris:bearbeiterListe domainTerm="Bearbeiterliste">
                         <ris:bearbeiter domainTerm="Bearbeiter" refersTo="#foo-bearbeiter-1">Bearbeiter, Foo</ris:bearbeiter>

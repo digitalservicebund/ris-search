@@ -11,6 +11,7 @@ import de.bund.digitalservice.ris.search.models.ldml.literature.Analysis;
 import de.bund.digitalservice.ris.search.models.ldml.literature.Gliederung;
 import de.bund.digitalservice.ris.search.models.ldml.literature.Identification;
 import de.bund.digitalservice.ris.search.models.ldml.literature.ImplicitReference;
+import de.bund.digitalservice.ris.search.models.ldml.literature.OtherReferences;
 import de.bund.digitalservice.ris.search.models.ldml.literature.RisKongress;
 import de.bund.digitalservice.ris.search.models.ldml.literature.RisOrganisation;
 import de.bund.digitalservice.ris.search.models.ldml.literature.RisPerson;
@@ -334,9 +335,11 @@ public class SliLiteratureLdmlToOpenSearchMapper {
         .map(Doc::getMeta)
         .map(Meta::getAnalysis)
         .map(Analysis::getOtherReferences)
-        .orElse(Collections.emptyList())
         .stream()
-        .flatMap(otherReferences -> otherReferences.getImplicitReferences().stream());
+        .flatMap(List::stream)
+        .map(OtherReferences::getImplicitReferences)
+        .filter(Objects::nonNull)
+        .flatMap(List::stream);
   }
 
   /**

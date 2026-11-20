@@ -23,7 +23,7 @@ class LiteratureIndexSyncJobIntegrationTest extends ContainersIntegrationBase {
   @Autowired LiteratureRepository repository;
 
   @Test
-  void itIndexesAdministrativeDirectivesOnFullReindex() throws ObjectStoreServiceException {
+  void itIndexesLiteratureDocumentsOnFullReindex() throws ObjectStoreServiceException {
     String dependent =
         LoadXmlUtils.loadXmlAsString(Literature.class, "XXLS000000001/XXLS000000001.xml");
     bucket.save("XXLS000000001/XXLS000000001.xml", dependent);
