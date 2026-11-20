@@ -43,6 +43,28 @@ export default defineConfig({
         link: "/standards/",
       },
       {
+        text: "Use Cases",
+        link: "/use-cases/",
+        items: [
+          { text: "Find legislation", link: "/use-cases/find-legislation/" },
+          {
+            text: "Get a specific version",
+            link: "/use-cases/legislation-version/",
+          },
+          {
+            text: "Get a single article (§)",
+            link: "/use-cases/legislation-article/",
+          },
+          {
+            text: "Find a court decision",
+            link: "/use-cases/find-court-decision/",
+          },
+          { text: "Choose a format", link: "/use-cases/formats/" },
+          { text: "Download everything", link: "/use-cases/bulk-download/" },
+          { text: "Stay up to date", link: "/use-cases/stay-up-to-date/" },
+        ],
+      },
+      {
         text: "Guides",
         link: "/guides/",
         items: [
