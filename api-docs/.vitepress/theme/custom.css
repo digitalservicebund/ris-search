@@ -51,6 +51,7 @@
     color 0.25s,
     border-color 0.25s,
     background-color 0.25s;
+  border-radius: 0.5rem;
   padding: 0 calc(1.25rem * var(--ris-font-scale));
   line-height: calc(2.375rem * var(--ris-font-scale));
   font-size: calc(0.875rem * var(--ris-font-scale));
