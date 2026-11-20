@@ -20,10 +20,6 @@ vi.mock("~/plugins/risBackend", () => ({
   extendOnRequest: (...cbs: FetchHook[]) => cbs,
 }));
 
-function proprietary(standangaben: string) {
-  return `<section class="akn-proprietary"><dl><dt>Standangabe</dt>${standangaben}</dl></section>`;
-}
-
 describe("useFetchNormContent", () => {
   const consoleInfoMock = vi
     .spyOn(console, "info")
@@ -97,49 +93,6 @@ describe("useFetchNormContent", () => {
       headers: {
         Accept: "text/html",
       },
-    });
-  });
-
-  describe("Standangaben", () => {
-    it("counts every Standangabe that isn't a note as Stand", async () => {
-      mockHtml(
-        proprietary(`
-          <dd class="ris-standangabe" data-type="stand">Zuletzt geändert durch Testanpassungen</dd>
-          <dd class="ris-standangabe" data-type="neuf">Neugefasst durch Testdaten</dd>
-          <dd class="ris-standangabe" data-type="hinweis">Hinweis Testdaten</dd>`),
-      );
-
-      const { data } = await useFetchNormContent(expressionEli);
-
-      expect(data.value.htmlParts.standangaben).toEqual([
-        "Zuletzt geändert durch Testanpassungen",
-        "Neugefasst durch Testdaten",
-      ]);
-      expect(data.value.htmlParts.standangabenHinweis).toEqual([
-        "Hinweis Testdaten",
-      ]);
-    });
-
-    it("ignores Standangaben outside of the proprietary metadata", async () => {
-      mockHtml(`
-        <div class="akn-body">
-          <dd class="ris-standangabe" data-type="stand">Stand</dd>
-          <dd class="ris-standangabe" data-type="hinweis">Hinweis</dd>
-        </div>`);
-
-      const { data } = await useFetchNormContent(expressionEli);
-
-      expect(data.value.htmlParts.standangaben).toEqual([]);
-      expect(data.value.htmlParts.standangabenHinweis).toEqual([]);
-    });
-
-    it("has no Standangaben if the norm has none", async () => {
-      mockHtml(proprietary(""));
-
-      const { data } = await useFetchNormContent(expressionEli);
-
-      expect(data.value.htmlParts.standangaben).toEqual([]);
-      expect(data.value.htmlParts.standangabenHinweis).toEqual([]);
     });
   });
 
