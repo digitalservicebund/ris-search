@@ -22,6 +22,9 @@ import de.bund.digitalservice.ris.search.models.ldml.caselaw.RisGericht;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.RisMeta;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.VerknuepfteEntscheidung;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
+import de.bund.digitalservice.ris.search.models.opensearch.CaseLawUnindexed;
+import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Richtung;
+import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Zitierung;
 import de.bund.digitalservice.ris.search.utils.DateUtils;
 import de.bund.digitalservice.ris.search.utils.MappingUtils;
 import jakarta.xml.bind.DataBindingException;
@@ -37,6 +40,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 import javax.xml.transform.stream.StreamSource;
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.persistence.exceptions.DescriptorException;
 import org.springframework.stereotype.Service;
 
@@ -71,6 +75,8 @@ public class CaseLawLdmlToOpenSearchMapper {
     String uniqueId = work.getFrbrThis().getValue();
     RisGericht risGericht = risMeta.getRisGericht();
     JudgmentBody judgmentBody = judgment.getJudgmentBody();
+
+    CaseLawUnindexed unindexed = CaseLawUnindexedMapper.map(meta);
 
     return CaseLawDocumentationUnit.builder()
         .id(uniqueId)
@@ -144,19 +150,27 @@ public class CaseLawLdmlToOpenSearchMapper {
             getLinkedJudgements(
                 meta,
                 refs -> refs.getReferencesByType(ImplicitReference::getNachgehendeEntscheidung)))
-        .aktivzitierungLiteraturUnselbstaendig(extractAktivzitierungLiteraturUnselbstaendig(meta))
-        .passivzitierungLiteraturUnselbstaendig(extractPassivzitierungLiteraturUnselbstaendig(meta))
-        .aktivzitierungLiteraturSelbstaendig(extractAktivzitierungLiteraturSelbstaendig(meta))
-        .passivzitierungLiteraturSelbstaendig(extractPassivzitierungLiteraturSelbstaendig(meta))
-        .aktivzitierungRechtsprechung(extractAktivzitierungRechtsprechung(meta))
-        .passivzitierungRechtsprechung(extractPassivzitierungRechtsprechung(meta))
-        .aktivzitierungVerwaltungsvorschriften(extractAktivzitierungVerwaltungsvorschriften(meta))
-        .passivzitierungVerwaltungsvorschriften(extractPassivzitierungVerwaltungsvorschriften(meta))
+        .aktivzitierungLiteraturUnselbstaendig(
+            searchTexts(unindexed.zitierungenLiteraturUnselbststaendig(), Richtung.AKTIV))
+        .passivzitierungLiteraturUnselbstaendig(
+            searchTexts(unindexed.zitierungenLiteraturUnselbststaendig(), Richtung.PASSIV))
+        .aktivzitierungLiteraturSelbstaendig(
+            searchTexts(unindexed.zitierungenLiteraturSelbststaendig(), Richtung.AKTIV))
+        .passivzitierungLiteraturSelbstaendig(
+            searchTexts(unindexed.zitierungenLiteraturSelbststaendig(), Richtung.PASSIV))
+        .aktivzitierungRechtsprechung(
+            searchTexts(unindexed.zitierungenRechtsprechung(), Richtung.AKTIV))
+        .passivzitierungRechtsprechung(
+            searchTexts(unindexed.zitierungenRechtsprechung(), Richtung.PASSIV))
+        .aktivzitierungVerwaltungsvorschriften(
+            searchTexts(unindexed.zitierungenVerwaltungsvorschriften(), Richtung.AKTIV))
+        .passivzitierungVerwaltungsvorschriften(
+            searchTexts(unindexed.zitierungenVerwaltungsvorschriften(), Richtung.PASSIV))
         .amtlicheFundstellen(extractAmtlicheFundstellen(meta))
         .nichtamtlicheFundstellen(extractNichtamtlicheFundstellen(meta))
         .gesetzeskraft(extractGesetzeskraft(meta))
         .normenkette(extractNormenkette(meta))
-        .unindexed(CaseLawUnindexedMapper.map(meta))
+        .unindexed(unindexed)
         // Internal (portal team) fields
         .indexedAt(Instant.now().toString())
         .vorabdokument(isVorabdokument(judgmentBody))
@@ -299,76 +313,13 @@ public class CaseLawLdmlToOpenSearchMapper {
         .toList();
   }
 
-  private static List<String> extractAktivzitierungLiteraturUnselbstaendig(Meta meta) {
-    return Optional.ofNullable(meta.getAnalysis())
-        .map(Analysis::getOtherReferences)
-        .map(refs ->
-            refs.getReferencesByType(
-                ImplicitReference::getAktivzitierteUnselbststaendigeLiteraturDokumentnummer))
-        .orElse(List.of());
-  }
-
-  private static List<String> extractAktivzitierungLiteraturSelbstaendig(Meta meta) {
-    return Optional.ofNullable(meta.getAnalysis())
-        .map(Analysis::getOtherReferences)
-        .map(refs ->
-            refs.getReferencesByType(
-                ImplicitReference::getAktivzitierteSelbststaendigeLiteraturDokumentnummer))
-        .orElse(List.of());
-  }
-
-  private static List<String> extractPassivzitierungLiteraturSelbstaendig(Meta meta) {
-    return Optional.ofNullable(meta.getAnalysis())
-        .map(Analysis::getOtherReferences)
-        .map(refs ->
-            refs.getReferencesByType(
-                ImplicitReference::getPassivzitierteSelbststaendigeLiteraturDokumentnummer))
-        .orElse(List.of());
-  }
-
-  private static List<String> extractPassivzitierungLiteraturUnselbstaendig(Meta meta) {
-    return Optional.ofNullable(meta.getAnalysis())
-        .map(Analysis::getOtherReferences)
-        .map(refs ->
-            refs.getReferencesByType(
-                ImplicitReference::getPassivzitierteUnselbststaendigeLiteraturDokumentnummer))
-        .orElse(List.of());
-  }
-
-  private static List<String> extractAktivzitierungRechtsprechung(Meta meta) {
-    return Optional.ofNullable(meta.getAnalysis())
-        .map(Analysis::getOtherReferences)
-        .map(refs ->
-            refs.getReferencesByType(
-                ImplicitReference::getAktivzitierteRechtsprechungDokumentnummer))
-        .orElse(List.of());
-  }
-
-  private static List<String> extractPassivzitierungRechtsprechung(Meta meta) {
-    return Optional.ofNullable(meta.getAnalysis())
-        .map(Analysis::getOtherReferences)
-        .map(refs ->
-            refs.getReferencesByType(
-                ImplicitReference::getPassivzitierteRechtsprechungDokumentnummer))
-        .orElse(List.of());
-  }
-
-  private static List<String> extractAktivzitierungVerwaltungsvorschriften(Meta meta) {
-    return Optional.ofNullable(meta.getAnalysis())
-        .map(Analysis::getOtherReferences)
-        .map(refs ->
-            refs.getReferencesByType(
-                ImplicitReference::getAktivzitierteVerwaltungsvorschriftDokumentnummer))
-        .orElse(List.of());
-  }
-
-  private static List<String> extractPassivzitierungVerwaltungsvorschriften(Meta meta) {
-    return Optional.ofNullable(meta.getAnalysis())
-        .map(Analysis::getOtherReferences)
-        .map(refs ->
-            refs.getReferencesByType(
-                ImplicitReference::getPassivzitierteVerwaltungsvorschriftDokumentnummer))
-        .orElse(List.of());
+  private static List<String> searchTexts(
+      List<? extends Zitierung> zitierungen, Richtung richtung) {
+    return zitierungen.stream()
+        .filter(zitierung -> zitierung.richtung() == richtung)
+        .map(Zitierung::toSearchText)
+        .filter(StringUtils::isNotBlank)
+        .toList();
   }
 
   private static List<String> extractAmtlicheFundstellen(Meta meta) {

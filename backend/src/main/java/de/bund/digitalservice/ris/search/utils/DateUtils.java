@@ -28,6 +28,8 @@ public class DateUtils {
 
   private static final Logger logger = LogManager.getLogger(DateUtils.class);
   public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+  public static final DateTimeFormatter GERMAN_DATE_FORMATTER =
+      DateTimeFormatter.ofPattern("dd.MM.yyyy");
   public static final DateTimeFormatter GERMAN_LONG_DATE_FORMATTER =
       DateTimeFormatter.ofPattern("d. MMMM yyyy", Locale.GERMANY);
 
@@ -129,6 +131,20 @@ public class DateUtils {
       return null;
     }
     return date.format(DATE_FORMATTER);
+  }
+
+  /**
+   * Converts a {@link LocalDate} object to the German numeric format "dd.MM.yyyy", e.g.
+   * "25.08.2026". If the input date is null, the method returns null.
+   *
+   * @param date the {@link LocalDate} object to format. If null, the output will also be null.
+   * @return the formatted date as a string, or null if the input date is null.
+   */
+  public static String toGermanDateString(LocalDate date) {
+    if (date == null) {
+      return null;
+    }
+    return date.format(GERMAN_DATE_FORMATTER);
   }
 
   /**

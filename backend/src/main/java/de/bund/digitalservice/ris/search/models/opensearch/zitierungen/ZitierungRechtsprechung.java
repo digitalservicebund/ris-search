@@ -1,6 +1,8 @@
 package de.bund.digitalservice.ris.search.models.opensearch.zitierungen;
 
 import de.bund.digitalservice.ris.search.models.opensearch.common.Gericht;
+import de.bund.digitalservice.ris.search.utils.DateUtils;
+import de.bund.digitalservice.ris.search.utils.MappingUtils;
 import java.time.LocalDate;
 import lombok.Builder;
 import org.springframework.data.elasticsearch.annotations.DateFormat;
@@ -19,4 +21,18 @@ public record ZitierungRechtsprechung(
         LocalDate entscheidungsdatum,
     @Field(name = "dokumenttyp") String dokumenttyp,
     @Field(name = "aktenzeichen") String aktenzeichen,
-    @Field(name = "fundstelle") Fundstelle fundstelle) {}
+    @Field(name = "fundstelle") Fundstelle fundstelle)
+    implements Zitierung {
+
+  @Override
+  public String toSearchText() {
+    return MappingUtils.joinNonBlank(
+        dokumentnummer,
+        artDerZitierung,
+        MappingUtils.nullSafeGet(gericht, Gericht::toSearchText),
+        DateUtils.toGermanDateString(entscheidungsdatum),
+        dokumenttyp,
+        aktenzeichen,
+        MappingUtils.nullSafeGet(fundstelle, Fundstelle::toSearchText));
+  }
+}

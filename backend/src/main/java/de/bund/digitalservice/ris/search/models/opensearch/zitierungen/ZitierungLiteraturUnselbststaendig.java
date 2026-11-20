@@ -1,5 +1,6 @@
 package de.bund.digitalservice.ris.search.models.opensearch.zitierungen;
 
+import de.bund.digitalservice.ris.search.utils.MappingUtils;
 import lombok.Builder;
 import org.springframework.data.elasticsearch.annotations.Field;
 
@@ -11,4 +12,15 @@ public record ZitierungLiteraturUnselbststaendig(
     @Field(name = "dokumentnummer") String dokumentnummer,
     @Field(name = "autor") String autor,
     @Field(name = "dokumenttyp") String dokumenttyp,
-    @Field(name = "fundstelle") Fundstelle fundstelle) {}
+    @Field(name = "fundstelle") Fundstelle fundstelle)
+    implements Zitierung {
+
+  @Override
+  public String toSearchText() {
+    return MappingUtils.joinNonBlank(
+        dokumentnummer,
+        autor,
+        dokumenttyp,
+        MappingUtils.nullSafeGet(fundstelle, Fundstelle::toSearchText));
+  }
+}
