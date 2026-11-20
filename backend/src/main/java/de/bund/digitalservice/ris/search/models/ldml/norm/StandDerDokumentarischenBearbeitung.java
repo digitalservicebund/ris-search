@@ -4,6 +4,7 @@ import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlValue;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,17 +15,15 @@ import lombok.NoArgsConstructor;
 @Getter
 @XmlAccessorType(XmlAccessType.FIELD)
 @NoArgsConstructor
+@AllArgsConstructor
 public class StandDerDokumentarischenBearbeitung {
 
   @XmlValue private String text;
 
   @XmlAttribute(name = "domainTerm")
-  // Suppress Sonarcloud code smell about non-static final String
-  // JAXB (XmlAccessType.FIELD) only binds instance fields
-  @SuppressWarnings("java:S1170")
-  private final String domainTerm = "Stand der dokumentarischen Bearbeitung";
+  private String domainTerm;
 
   public StandDerDokumentarischenBearbeitung(String text) {
-    this.text = text;
+    this(text, "Stand der dokumentarischen Bearbeitung");
   }
 }
