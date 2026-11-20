@@ -64,7 +64,7 @@ const submitFeedback = async () => {
             {{ errorMessage }}
           </small>
         </div>
-        <button type="submit" class="ris-button">Send Feedback</button>
+        <button type="submit" class="ris-button">Send feedback</button>
       </form>
     </div>
   </div>

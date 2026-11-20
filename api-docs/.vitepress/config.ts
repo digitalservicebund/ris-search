@@ -4,7 +4,7 @@ export default defineConfig({
   outDir: "./dist",
   cleanUrls: true,
   lastUpdated: true,
-  title: "API Documentation of the Federal Legal Data Portal",
+  title: "API documentation of the Federal Legal Data Portal",
   description:
     "Technical documentation and API reference for accessing federal legal data.",
   head: [
@@ -15,7 +15,7 @@ export default defineConfig({
       "meta",
       {
         property: "og:title",
-        content: "API Documentation of the Federal Legal Data Portal",
+        content: "API documentation of the Federal Legal Data Portal",
       },
     ],
     [
@@ -35,7 +35,7 @@ export default defineConfig({
     ],
     sidebar: [
       {
-        text: "Get Started",
+        text: "Get started",
         link: "/get-started/",
       },
       {
@@ -43,7 +43,7 @@ export default defineConfig({
         link: "/standards/",
       },
       {
-        text: "Use Cases",
+        text: "Use cases",
         link: "/use-cases/",
         items: [
           { text: "Find legislation", link: "/use-cases/find-legislation/" },
@@ -71,8 +71,8 @@ export default defineConfig({
           { text: "Formats", link: "/guides/formats/" },
           { text: "Pagination", link: "/guides/pagination/" },
           { text: "Filters", link: "/guides/filters/" },
-          { text: "Rate Limiting", link: "/guides/rate-limiting/" },
-          { text: "Error Codes", link: "/guides/error-codes/" },
+          { text: "Rate limiting", link: "/guides/rate-limiting/" },
+          { text: "Error codes", link: "/guides/error-codes/" },
         ],
       },
       { text: "Feedback", link: "/feedback/" },

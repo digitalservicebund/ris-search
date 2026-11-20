@@ -30,9 +30,9 @@ documentation to help you get started. In the meantime, you can use the followin
 - [LegalDocML documentation for case law](https://docs.oasis-open.org/legaldocml/akn-core/v1.0/akn-core-v1.0-part1-vocabulary.html)
 - [Learn more about the legislative cycle and the project E-Gesetzgebung](https://www.cio.bund.de/Webs/CIO/DE/digitale-loesungen/it-konsolidierung/dienstekonsolidierung/it-massnahmen/e-gesetzgebung/e-gesetzgebung-node.html)
 
-## European Identifiers ELI and ECLI
+## European identifiers ELI and ECLI
 
-The European Identifiers ELI and ECLI play a crucial role by providing a standardized way to identify legislative
+The European identifiers ELI and ECLI play a crucial role by providing a standardized way to identify legislative
 documents across Europe.
 ELI offers a standardized system for identifying legislation. It's designed to make legislative information more
 accessible and easier to exchange. ELI uses a combination of elements to create a unique identifier for a piece of

@@ -6,19 +6,19 @@ title: Filters
 
 Learn how to filter responses to return a subset of entities.
 
-## Full-Text Search Filtering
+## Full-text search filtering
 
 List endpoints support filtering results using the `searchTerm` query parameter. This parameter enables powerful full-text searches across all relevant text fields of the entities being listed.
 
 ### Functionality
 
-- **All-Term Matching (Default Behavior):**
+- **All-term matching (default behavior):**
   When you enter multiple words without quotation marks, the search will return documents containing all the search terms, though not necessarily in the specified order.
 
   **Example:** `searchTerm=trademarks protection Hannover`
   This will match documents containing any variation of "trademarks," "protection," and "Hannover."
 
-- **Exact Phrase Matching:**
+- **Exact phrase matching:**
   To search for an exact phrase, enclose it in double quotes (`"`). This ensures that only documents containing the exact phrase, in the specified order, are matched.
 
   **Example:** `searchTerm="trademarks protection"`
@@ -55,7 +55,7 @@ List endpoints support filtering results using the `searchTerm` query parameter.
 
   :::
 
-## Date Filters
+## Date filters
 
 All date fields implement similar query parameters for filtering.
 
