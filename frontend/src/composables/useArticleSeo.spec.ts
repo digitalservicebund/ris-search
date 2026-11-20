@@ -92,7 +92,7 @@ describe("useArticleSeo", () => {
   });
 
   describe("buildDescription", () => {
-    it("returns undefined if articleHtml is absent", () => {
+    it("returns undefined without a first paragraph", () => {
       useArticleSeo({});
 
       expect(useSeo).toHaveBeenCalledWith(
@@ -100,32 +100,8 @@ describe("useArticleSeo", () => {
       );
     });
 
-    it("returns undefined if articleHtml has no paragraph", () => {
-      useArticleSeo({ articleHtml: "<div>no paragraph here</div>" });
-
-      expect(useSeo).toHaveBeenCalledWith(
-        expect.objectContaining({ description: undefined }),
-      );
-    });
-
-    it("returns undefined if the first paragraph is empty", () => {
-      useArticleSeo({ articleHtml: "<p>   </p>" });
-
-      expect(useSeo).toHaveBeenCalledWith(
-        expect.objectContaining({ description: undefined }),
-      );
-    });
-
-    it("extracts text from the first paragraph", () => {
-      useArticleSeo({ articleHtml: "<p>Hello world</p><p>Second</p>" });
-
-      expect(useSeo).toHaveBeenCalledWith(
-        expect.objectContaining({ description: "Hello world" }),
-      );
-    });
-
-    it("strips HTML tags from the paragraph", () => {
-      useArticleSeo({ articleHtml: "<p>Hello <b>world</b></p>" });
+    it("uses the first paragraph", () => {
+      useArticleSeo({ firstParagraph: "Hello world" });
 
       expect(useSeo).toHaveBeenCalledWith(
         expect.objectContaining({ description: "Hello world" }),
@@ -136,7 +112,7 @@ describe("useArticleSeo", () => {
       const longText =
         "This is a long text " +
         "LongWordWithoutWhiteSpacesShouldGetTruncated".repeat(3).trim();
-      useArticleSeo({ articleHtml: `<p>${longText}</p>` });
+      useArticleSeo({ firstParagraph: longText });
 
       expect(useSeo).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -164,7 +140,7 @@ describe("useArticleSeo", () => {
     });
 
     it("uses headline when no abbreviation is provided", () => {
-      useArticleSeo({ articleHeadlineHtml: "<p>§ 1 Allgemeines</p>" });
+      useArticleSeo({ headline: "§ 1 Allgemeines" });
 
       expect(useSeo).toHaveBeenCalledWith(
         expect.objectContaining({ ogTitle: "§ 1 Allgemeines" }),
@@ -174,18 +150,7 @@ describe("useArticleSeo", () => {
     it("combines abbreviation and headline with a colon separator", () => {
       useArticleSeo({
         abbreviation: "BGB",
-        articleHeadlineHtml: "<p>§ 1 Allgemeines</p>",
-      });
-
-      expect(useSeo).toHaveBeenCalledWith(
-        expect.objectContaining({ ogTitle: "BGB: § 1 Allgemeines" }),
-      );
-    });
-
-    it("strips HTML tags from the headline", () => {
-      useArticleSeo({
-        abbreviation: "BGB",
-        articleHeadlineHtml: "<p>§ 1 <b>Allgemeines</b></p>",
+        headline: "§ 1 Allgemeines",
       });
 
       expect(useSeo).toHaveBeenCalledWith(
@@ -195,7 +160,7 @@ describe("useArticleSeo", () => {
 
     it("normalizes whitespace in the headline", () => {
       useArticleSeo({
-        articleHeadlineHtml: "<p>§ 1      Allgemeines</p>",
+        headline: "§ 1      Allgemeines",
       });
 
       expect(useSeo).toHaveBeenCalledWith(
@@ -208,7 +173,7 @@ describe("useArticleSeo", () => {
         "A very long paragraph thisReallyLongWordWillGetTruncated";
       useArticleSeo({
         abbreviation: "BGB",
-        articleHeadlineHtml: `<p>${longHeadline}</p>`,
+        headline: longHeadline,
       });
 
       expect(useSeo).toHaveBeenCalledWith(

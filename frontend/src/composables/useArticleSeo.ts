@@ -6,16 +6,18 @@ export type UseArticleSeoInput = {
   abbreviation?: string;
   name?: string;
   temporalCoverage?: string;
-  articleHeadlineHtml?: string;
-  articleHtml?: string;
+  /** Text of the article heading */
+  headline?: string;
+  /** Text of the first paragraph of the article */
+  firstParagraph?: string;
 };
 
 export function useArticleSeo({
   abbreviation,
   name,
   temporalCoverage,
-  articleHeadlineHtml,
-  articleHtml,
+  headline,
+  firstParagraph,
 }: UseArticleSeoInput) {
   const privateFeaturesEnabled = usePrivateFeaturesFlag();
   useSeo({
@@ -24,8 +26,8 @@ export function useArticleSeo({
       name,
       privateFeaturesEnabled ? temporalCoverage : undefined,
     ),
-    description: buildDescription(articleHtml),
-    ogTitle: buildOgTitle(abbreviation, articleHeadlineHtml),
+    description: buildDescription(firstParagraph),
+    ogTitle: buildOgTitle(abbreviation, headline),
   });
 }
 
@@ -41,25 +43,20 @@ function buildTitle(
   return `${abbreviation || "Gesetz"}${paragraphNumber}${validityIntervalLabel}`;
 }
 
-function buildDescription(articleHtml?: string) {
-  if (!articleHtml) return undefined;
-  const doc = parseDocument(articleHtml);
-  const firstParagraph = doc.querySelector("p");
-  const text = firstParagraph?.textContent?.trim();
-  return text ? truncateAtWord(text, 150) : undefined;
+function buildDescription(firstParagraph?: string) {
+  return firstParagraph ? truncateAtWord(firstParagraph, 150) : undefined;
 }
 
-function buildOgTitle(abbreviation?: string, articleHeadlineHtml?: string) {
-  const headline = articleHeadlineHtml
-    ? normalizeSpaces(
-        parseDocument(articleHeadlineHtml).body?.textContent ?? "",
-      )
-    : undefined;
+function buildOgTitle(abbreviation?: string, headline?: string) {
+  const normalizedHeadline = headline ? normalizeSpaces(headline) : undefined;
 
-  const base = abbreviation || headline;
+  const base = abbreviation || normalizedHeadline;
   if (!base) return undefined;
 
-  const full = abbreviation && headline ? `${abbreviation}: ${headline}` : base;
+  const full =
+    abbreviation && normalizedHeadline
+      ? `${abbreviation}: ${normalizedHeadline}`
+      : base;
 
   return truncateAtWord(full, 55) || undefined;
 }

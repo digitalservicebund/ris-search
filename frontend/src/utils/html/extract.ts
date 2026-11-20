@@ -9,11 +9,14 @@
  *
  * Mutates the input document.
  *
+ * @param options.innerHtml Return only what is inside the elements, without the
+ *   elements themselves
  * @returns The HTML of the removed elements, or undefined if nothing matched.
  */
 export function takeElements(
   document: Document,
   selector: string,
+  options: { innerHtml?: boolean } = {},
 ): string | undefined {
   const matches = [...document.querySelectorAll(selector)];
 
@@ -24,7 +27,11 @@ export function takeElements(
   }
   if (outermost.length === 0) return undefined;
 
-  const html = outermost.map((element) => element.outerHTML).join("");
+  const html = outermost
+    .map((element) =>
+      options.innerHtml ? element.innerHTML : element.outerHTML,
+    )
+    .join("");
   for (const element of outermost) element.remove();
   return html;
 }

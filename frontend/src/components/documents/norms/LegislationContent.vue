@@ -153,11 +153,6 @@ Attributes from the Juris CALS format without a corresponding HTML attribute mig
   }
 }
 
-/* Hide headings for single article view */
-.single-article :deep(h2.einzelvorschrift) {
-  @apply hidden;
-}
-
 /* Single article inline heading overrides */
 .single-article :deep(.akn-num.inline),
 .single-article :deep(.akn-heading.inline) {
