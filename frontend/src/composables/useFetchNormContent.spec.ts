@@ -52,6 +52,11 @@ describe("useFetchNormContent", () => {
     hasPart: [],
   } as Partial<LegislationExpression>;
 
+  function mockArticle(body: string) {
+    mockFetch.mockReturnValueOnce(mockMetadata);
+    mockFetch.mockReturnValueOnce("<html><body>" + body + "</body></html>");
+  }
+
   it("should fetch JSON and HTML data", async () => {
     const expectedHtml = `
     <section class="dokumentenkopf">
@@ -91,29 +96,107 @@ describe("useFetchNormContent", () => {
     });
   });
 
-  it("should fetch JSON and HTML data for articles", async () => {
+  describe("article", () => {
     const articleEId = "eid-1";
-    const html = `<h2 class="einzelvorschrift">§ 1 Some article</h2><div>Test HTML content</div>`;
-    mockFetch.mockReturnValueOnce(mockMetadata);
-    mockFetch.mockReturnValueOnce("<html><body>" + html + "</body></html>");
 
-    const { data } = await useFetchNormArticleContent(
-      expressionEli,
-      articleEId,
-    );
-    expect(data.value).toEqual({
-      legislation: mockMetadata,
-      htmlBody: html,
-      articleHeading: "§ 1 Some article",
+    it("should fetch JSON and HTML data for articles", async () => {
+      mockArticle(
+        `<h2 class="einzelvorschrift">§ 1 Some article</h2><div>Test HTML content</div>`,
+      );
+
+      const { data } = await useFetchNormArticleContent(
+        expressionEli,
+        articleEId,
+      );
+      expect(data.value?.legislation).toEqual(mockMetadata);
+      expect(data.value?.html.parts.heading).toBe("§ 1 Some article");
+      expect(data.value?.html.text.headline).toBe("§ 1 Some article");
+      expect(data.value?.html.body).toContain("<div>Test HTML content</div>");
+
+      expect(mockFetch).toHaveBeenCalledTimes(2);
+      expect(mockFetch).toHaveBeenCalledWith("/v1/legislation/eli/test-eli");
+
+      expect(mockFetch).toHaveBeenCalledWith(
+        "/v1/test-content-url/eid-1.html",
+        {
+          headers: {
+            Accept: "text/html",
+          },
+        },
+      );
     });
 
-    expect(mockFetch).toHaveBeenCalledTimes(2);
-    expect(mockFetch).toHaveBeenCalledWith("/v1/legislation/eli/test-eli");
+    it("takes the heading out of the body", async () => {
+      mockArticle(
+        `<h2 class="einzelvorschrift">§ 1 Some article</h2><div>Test HTML content</div>`,
+      );
 
-    expect(mockFetch).toHaveBeenCalledWith("/v1/test-content-url/eid-1.html", {
-      headers: {
-        Accept: "text/html",
-      },
+      const { data } = await useFetchNormArticleContent(
+        expressionEli,
+        articleEId,
+      );
+
+      expect(data.value?.html.body).toBe("<div>Test HTML content</div>");
+    });
+
+    it("keeps the content of the heading, but not the heading element", async () => {
+      mockArticle(
+        `<h2 class="einzelvorschrift"><span class="akn-num">§ 1</span> <b>Some</b> article</h2><div>Text</div>`,
+      );
+
+      const { data } = await useFetchNormArticleContent(
+        expressionEli,
+        articleEId,
+      );
+
+      expect(data.value?.html.parts.heading).toBe(
+        '<span class="akn-num">§ 1</span> <b>Some</b> article',
+      );
+      expect(data.value?.html.text.headline).toBe("§ 1 Some article");
+    });
+
+    it("has no heading if the article doesn't have one", async () => {
+      mockArticle(`<div>Test HTML content</div>`);
+
+      const { data } = await useFetchNormArticleContent(
+        expressionEli,
+        articleEId,
+      );
+
+      expect(data.value?.html.parts.heading).toBeUndefined();
+      expect(data.value?.html.text.headline).toBeUndefined();
+      expect(data.value?.html.body).toBe("<div>Test HTML content</div>");
+    });
+
+    describe("first paragraph", () => {
+      it.each([
+        [
+          "is the text of the first paragraph",
+          "<p>Hello world</p><p>Second</p>",
+          "Hello world",
+        ],
+        ["has no markup", "<p>Hello <b>world</b></p>", "Hello world"],
+        ["skips paragraphs without text", "<p>   </p><p>Second</p>", "Second"],
+        [
+          "is missing if there is no paragraph",
+          "<div>no paragraph here</div>",
+          undefined,
+        ],
+        [
+          "is missing if the only paragraph has just whitespace",
+          "<p>   </p>",
+          undefined,
+        ],
+      ])("%s", async (_, body, expected) => {
+        mockArticle(body);
+
+        const { data } = await useFetchNormArticleContent(
+          expressionEli,
+          articleEId,
+        );
+
+        expect(data.value?.html.text.firstParagraph).toBe(expected);
+      });
     });
   });
 

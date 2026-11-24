@@ -54,7 +54,7 @@ const { data, error } = await useFetchNormArticleContent(
 
 if (error.value) throw createError(error.value);
 
-const norm = computed(() => data.value.legislation);
+const norm = computed(() => data.value?.legislation);
 
 const singleViewParts = computed(() =>
   getPartsLeafNodes(norm.value?.hasPart ?? []),
@@ -75,8 +75,8 @@ function fetchFassungen() {
 }
 
 function fetchValidGesamtausgaben() {
-  if (isNormInForce) return undefined;
   const workEli = norm.value?.exampleOfWork.legislationIdentifier;
+  if (isNormInForce || !workEli) return undefined;
   return useValidNormVersions(workEli);
 }
 
@@ -112,9 +112,9 @@ const inForceExpressionEli = computed(() => {
   return validVersion?.item.legislationIdentifier;
 });
 
-const normAbbreviation = computed(() => norm.value.abbreviation);
+const normAbbreviation = computed(() => norm.value?.abbreviation);
 
-const articleHtml = computed(() => data.value.htmlBody);
+const html = computed(() => data.value?.html);
 
 const normExpressionPath = `/gesetze/eli/${expressionEli}`;
 
@@ -147,8 +147,8 @@ useArticleSeo({
   abbreviation: normAbbreviation.value,
   name: article.value?.name,
   temporalCoverage: article.value?.temporalCoverage,
-  articleHeadlineHtml: data.value.articleHeading,
-  articleHtml: data.value.htmlBody,
+  headline: html.value?.text.headline,
+  firstParagraph: html.value?.text.firstParagraph,
 });
 
 const previousArticleUrl: Ref<RouteLocationRaw | undefined> = computed(() =>
@@ -204,7 +204,7 @@ const breadcrumbItems: Ref<BreadcrumbItem[]> = computed(() => {
     : [];
 
   const title = truncateAtWord(
-    normAbbreviation.value,
+    normAbbreviation.value ?? "",
     NORM_INFO_MAX_LENGTH,
     true,
   );
@@ -242,10 +242,8 @@ const breadcrumbItems: Ref<BreadcrumbItem[]> = computed(() => {
   return list;
 });
 
-const htmlTitle = computed(() => data.value.articleHeading);
-
 const shortOrLongTitle = computed(
-  () => data.value.legislation.alternateName ?? data.value.legislation.name,
+  () => norm.value?.alternateName ?? norm.value?.name,
 );
 
 const views = computed<OneOrMore<TabView>>(() => {
@@ -315,7 +313,7 @@ const fassungenDateFilterInputId = useId();
       </p>
       <h1
         class="typo-headline1-bold wrap-break-word hyphens-auto"
-        v-html="htmlTitle"
+        v-html="html?.parts.heading"
       />
 
       <DocumentsNormsArticleVersionWarning
@@ -332,10 +330,10 @@ const fassungenDateFilterInputId = useId();
       <template #text>
         <section role="tabpanel" :aria-labelledby="textTabPanelTitleId">
           <SidebarLayout>
-            <template v-if="!!articleHtml">
+            <template v-if="!!html?.body">
               <DocumentsIncompleteDataMessage />
               <DocumentsNormsLegislationContent single-article>
-                <div class="akn-act" v-html="articleHtml" />
+                <div class="akn-act" v-html="html?.body" />
               </DocumentsNormsLegislationContent>
 
               <nav
@@ -384,7 +382,10 @@ const fassungenDateFilterInputId = useId();
         </section>
       </template>
 
-      <template v-if="displayFassungenTab && article?.revision" #fassungen>
+      <template
+        v-if="displayFassungenTab && article?.revision && norm"
+        #fassungen
+      >
         <section role="tabpanel" :aria-labelledby="fassungenTabPanelTitleId">
           <div class="content-grid pt-32 pb-32 md:pb-56">
             <div
