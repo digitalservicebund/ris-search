@@ -1,10 +1,6 @@
 import { isNormBodyEmpty } from "~/utils/norm";
 import { takeElements } from "./extract";
-import {
-  DANGEROUSLY_SKIP_SANITIZATION,
-  EMPTY_DOCUMENT_HTML,
-  processHtml,
-} from "./processHtml";
+import { DANGEROUSLY_SKIP_SANITIZATION, processHtml } from "./processHtml";
 
 describe("processHtml", () => {
   it("returns the body, no parts and no text without options", () => {
@@ -12,7 +8,7 @@ describe("processHtml", () => {
       allowlist: DANGEROUSLY_SKIP_SANITIZATION,
     });
 
-    expect(result.body).toBe("<div><p>Hello</p></div>");
+    expect(result.body).toBe("<p>Hello</p>");
     expect(result.parts).toEqual({});
     expect(result.text).toEqual({});
     expect(result.isEmpty).toBe(false);
@@ -65,9 +61,13 @@ describe("processHtml", () => {
   });
 
   describe("isEmpty", () => {
-    it("is true for an empty document", () => {
+    it.each([
+      ["an empty document", "<html><body></body></html>"],
+      ["an empty string", ""],
+      ["only whitespace", "  \n "],
+    ])("is true for %s", (_, html) => {
       expect(
-        processHtml(EMPTY_DOCUMENT_HTML, {
+        processHtml(html, {
           allowlist: DANGEROUSLY_SKIP_SANITIZATION,
         }).isEmpty,
       ).toBe(true);
@@ -164,10 +164,10 @@ describe("processHtml", () => {
 
     it("sanitizes the body", () => {
       const result = processHtml(html, {
-        allowlist: { allowedTags: ["p", "div"], allowedAttributes: {} },
+        allowlist: { allowedTags: ["p"], allowedAttributes: {} },
       });
 
-      expect(result.body).toBe("<div><p>Hello</p></div>");
+      expect(result.body).toBe("<p>Hello</p>");
     });
 
     it("sanitizes the parts and leaves missing parts undefined", () => {

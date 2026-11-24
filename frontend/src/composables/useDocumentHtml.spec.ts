@@ -18,14 +18,6 @@ function page(body: string) {
 }
 
 describe("useDocumentHtml", () => {
-  const consoleErrorMock = vi
-    .spyOn(console, "error")
-    .mockImplementation(() => undefined);
-
-  afterAll(() => {
-    consoleErrorMock.mockReset();
-  });
-
   beforeEach(() => {
     mockFetch.mockReset();
     // Needed because useAsyncData caches its result for the same keys

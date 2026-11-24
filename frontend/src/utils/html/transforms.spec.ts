@@ -85,6 +85,23 @@ describe("insertLineBreaksBetweenBracketedBlocks", () => {
     );
   });
 
+  it("works without the DOM globals of a browser, like on the server", () => {
+    const document = parse(
+      '<div class="notes"><p>(+++ one +++) (+++ two +++)</p></div>',
+    );
+    vi.stubGlobal("NodeFilter", undefined);
+
+    try {
+      transform(document, undefined);
+    } finally {
+      vi.unstubAllGlobals();
+    }
+
+    expect(document.body.innerHTML).toBe(
+      '<div class="notes"><p>(+++ one +++)<br>(+++ two +++)</p></div>',
+    );
+  });
+
   it("handles more than two blocks and any whitespace between them", () => {
     const document = parse(
       '<div class="notes">(+++ a +++)\n  (+++ b +++) (+++ c +++)</div>',

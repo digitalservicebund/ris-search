@@ -1,15 +1,24 @@
 import { render, screen } from "@testing-library/vue";
 import { describe, expect, it, vi } from "vitest";
+import type { NormHtml } from "~/composables/useFetchNormContent";
 import type { LegislationExpression } from "~/types/api";
 import HeadingGroup from "./HeadingGroup.vue";
 
 const createDefaultProps = () => ({
-  htmlParts: {
-    heading: "<h1>Test Heading</h1>",
-    headingAuthorialNotes: "<p>Test Notes</p>",
-    headingAuthorialNotesLength: 180,
+  html: {
+    parts: {
+      heading: "<h1>Test Heading</h1>",
+      headingAuthorialNotes: "<p>Test Notes</p>",
+      headingNotes: undefined,
+      officialToc: undefined,
+      prefaceContainer: undefined,
+    },
+    text: {
+      headingAuthorialNotesLength: 10,
+    },
     body: "",
-  },
+    isEmpty: false,
+  } as NormHtml,
   metadata: {
     name: "Test Law Name",
     alternateName: "Test Alternate Name",
@@ -39,7 +48,7 @@ describe("HeadingGroup", () => {
 
   it("still renders heading when no headingAuthorialNotes are provided", () => {
     const props = createDefaultProps();
-    props.htmlParts.headingAuthorialNotes = "";
+    props.html.parts.headingAuthorialNotes = "";
 
     render(HeadingGroup, { props });
 
@@ -50,7 +59,7 @@ describe("HeadingGroup", () => {
 
   it("shows the title of the norm if there is no heading", () => {
     const props = createDefaultProps();
-    props.htmlParts.heading = "";
+    props.html.parts.heading = "";
 
     render(HeadingGroup, { props });
 
@@ -60,7 +69,7 @@ describe("HeadingGroup", () => {
 
   it("only shows the alternate name together with the heading", () => {
     const props = createDefaultProps();
-    props.htmlParts.heading = "";
+    props.html.parts.heading = "";
 
     render(HeadingGroup, { props });
 
