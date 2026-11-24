@@ -6,7 +6,7 @@ title: Use cases
 
 Find step-by-step guides to help you search, retrieve, and download legislation and court decisions.
 
-[Find legislation](/use-cases/find-legislation/)<Badge type="info" text="LEGISLATION" /><br> Search for legislation using a keyword or abbreviation.
+[Find legislation](/use-cases/find-legislation/) <Badge type="info" text="LEGISLATION" /><br> Search for legislation using a keyword or abbreviation.
 
 ---
 
