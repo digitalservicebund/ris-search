@@ -6,31 +6,31 @@ title: Use cases
 
 Find step-by-step guides to help you search, retrieve, and download legislation and court decisions.
 
-[Find legislation](/use-cases/find-legislation)<Badge type="info" text="LEGISLATION" /><br> Search for legislation using a keyword or abbreviation.
+[Find legislation](/use-cases/find-legislation/)<Badge type="info" text="LEGISLATION" /><br> Search for legislation using a keyword or abbreviation.
 
 ---
 
-[Retrieve legislation as of a specific date](/use-cases/legislation-version) <Badge type="info" text="LEGISLATION" /><br> Find the version of a law that was in force on a particular date.
+[Retrieve legislation as of a specific date](/use-cases/legislation-version/) <Badge type="info" text="LEGISLATION" /><br> Find the version of a law that was in force on a particular date.
 
 ---
 
-[Retrieve a specific article (§)](/use-cases/legislation-article) <Badge type="info" text="LEGISLATION" /><br> Access a single article (§) of a law without retrieving the entire document.
+[Retrieve a specific article (§)](/use-cases/legislation-article/) <Badge type="info" text="LEGISLATION" /><br> Access a single article (§) of a law without retrieving the entire document.
 
 ---
 
-[Find a court decision](/use-cases/find-court-decision) <Badge type="info" text="CASE LAW" /><br> Search for a court decision by case number, ECLI, or court.
+[Find a court decision](/use-cases/find-court-decision/) <Badge type="info" text="CASE LAW" /><br> Search for a court decision by case number, ECLI, or court.
 
 ---
 
-[Choose a file format](/use-cases/formats) <Badge type="info" text="ALL DOCUMENTS" /><br> Choose between JSON, HTML, XML, and ZIP for your use case.
+[Choose a file format](/use-cases/formats/) <Badge type="info" text="ALL DOCUMENTS" /><br> Choose between JSON, HTML, XML, and ZIP for your use case.
 
 ---
 
-[Download documents in bulk](/use-cases/bulk-download) <Badge type="info" text="ALL DOCUMENTS" /><br> Download all available documents of a specific type.
+[Download documents in bulk](/use-cases/bulk-download/) <Badge type="info" text="ALL DOCUMENTS" /><br> Download all available documents of a specific type.
 
 ---
 
-[Keep your local data up to date](/use-cases/stay-up-to-date) <Badge type="info" text="ALL DOCUMENTS" /><br> Learn how to identify changes and update your locally stored documents.
+[Keep your local data up to date](/use-cases/stay-up-to-date/) <Badge type="info" text="ALL DOCUMENTS" /><br> Learn how to identify changes and update your locally stored documents.
 
 ## Before you start
 
