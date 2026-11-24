@@ -1,29 +1,20 @@
-package de.bund.digitalservice.ris.search.models.ldml.literature.sli;
+package de.bund.digitalservice.ris.search.models.ldml.literature;
 
-import de.bund.digitalservice.ris.search.models.ldml.literature.Gliederung;
-import de.bund.digitalservice.ris.search.models.ldml.literature.LiteratureNamespaces;
-import de.bund.digitalservice.ris.search.models.ldml.literature.RisKongress;
-import de.bund.digitalservice.ris.search.models.ldml.literature.RisOrganisation;
-import de.bund.digitalservice.ris.search.models.ldml.literature.RisPerson;
-import de.bund.digitalservice.ris.search.models.ldml.literature.RisRoleItem;
-import de.bund.digitalservice.ris.search.models.ldml.literature.RisSachgebiet;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlElementWrapper;
 import java.util.List;
 import lombok.Getter;
 
 /**
- * Represents the metadata for RIS (Legal Information System) documents, specifically for
- * unselbstständige (dependent) publications.
+ * Represents the RIS metadata ({@code ris:meta}) of literature documents. Used for both
+ * selbstständige (SLI) and unselbstständige (ULI) literature, which share one schema.
  *
- * <p>This class is used to deserialize XML data related to the metadata structure of such
- * publications. It relies on JAXB (Jakarta XML Binding) for mapping XML elements and their
- * attributes to Java object fields.
+ * <p>Not every element is present for every literature type: some elements (e.g. ausgabe,
+ * teilbaende, verlagsangaben, herausgeber*) are only used by selbstständige literature. Absent
+ * elements are deserialized as {@code null}.
  *
- * <p>Fields: - yearsOfPublication: A list of publication years that are part of the RIS metadata.
- * Annotated with JAXB annotations to handle XML element wrapping and namespace mapping. -
- * gliederung: A detailed structure (of type Gliederung) that is part of the metadata, representing
- * a hierarchical breakdown of the document's structure.
+ * <p>This class relies on JAXB (Jakarta XML Binding) for mapping XML elements and their attributes
+ * to Java object fields.
  */
 @Getter
 public class RisMeta {
@@ -41,7 +32,7 @@ public class RisMeta {
 
   @XmlElementWrapper(name = "dokumenttypen", namespace = LiteratureNamespaces.RIS_NS)
   @XmlElement(name = "dokumenttyp", namespace = LiteratureNamespaces.RIS_NS)
-  private List<String> dokoumenttypen;
+  private List<String> dokumenttypen;
 
   @XmlElementWrapper(name = "gesamtfussnoten", namespace = LiteratureNamespaces.RIS_NS)
   @XmlElement(name = "gesamtfussnote", namespace = LiteratureNamespaces.RIS_NS)
