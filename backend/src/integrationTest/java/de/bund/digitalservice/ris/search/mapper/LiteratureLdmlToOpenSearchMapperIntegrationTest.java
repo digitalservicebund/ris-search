@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import de.bund.digitalservice.ris.LoadXmlUtils;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.Month;
 import org.junit.jupiter.api.Test;
@@ -37,5 +38,32 @@ class LiteratureLdmlToOpenSearchMapperIntegrationTest {
         .isEqualTo(
             "1. Dies ist ein literature LDML Dokument für Tests. Es werden sub und sup Elemente unterstützt. Außerdem gib es noch EM, hlj, noindex und strong.");
     assertThat(literature.outline()).isEqualTo("I. Äpfel. II. Birnen. III. Orangen.");
+    assertThat(literature.titelAspekte()).containsExactly("Testdokument");
+    assertThat(literature.schlagworte())
+        .containsExactly(
+            "betriebliche Bildung",
+            "betriebliche Bildungsmaßnahme",
+            "paritätische Beteiligung",
+            "paritätische Mitbestimmung");
+    assertThat(literature.sachgebiete()).containsExactly("ID-01 Sachgebiet1", "ID-02 Sachgebiet2");
+  }
+
+  @Test
+  void mapSliLiteratureLdmlToOpensearchIndex() {
+    String literatureContent =
+        LoadXmlUtils.loadXmlAsString(Literature.class, "XXLS000000001/XXLS000000001.xml");
+
+    Literature literature =
+        SliLiteratureLdmlToOpenSearchMapper.mapLdml(literatureContent, Instant.now());
+
+    assertThat(literature.id()).isEqualTo("XXLS000000001");
+    assertThat(literature.titelAspekte()).containsExactly("Testdokument");
+    assertThat(literature.schlagworte())
+        .containsExactly(
+            "betriebliche Bildung",
+            "betriebliche Bildungsmaßnahme",
+            "paritätische Beteiligung",
+            "paritätische Mitbestimmung");
+    assertThat(literature.sachgebiete()).containsExactly("ID-01 Sachgebiet1", "ID-02 Sachgebiet2");
   }
 }

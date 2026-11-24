@@ -6,6 +6,7 @@ import de.bund.digitalservice.ris.search.models.ldml.literature.RisKongress;
 import de.bund.digitalservice.ris.search.models.ldml.literature.RisOrganisation;
 import de.bund.digitalservice.ris.search.models.ldml.literature.RisPerson;
 import de.bund.digitalservice.ris.search.models.ldml.literature.RisRoleItem;
+import de.bund.digitalservice.ris.search.models.ldml.literature.RisSachgebiet;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlElementWrapper;
 import java.util.List;
@@ -64,4 +65,12 @@ public class RisMeta {
   @XmlElementWrapper(name = "kongressvermerke", namespace = LiteratureNamespaces.RIS_NS)
   @XmlElement(name = "kongressvermerk", namespace = LiteratureNamespaces.RIS_NS)
   private List<RisRoleItem> kongressvermerke;
+
+  @XmlElementWrapper(name = "sachgebiete", namespace = LiteratureNamespaces.RIS_NS)
+  @XmlElement(name = "sachgebiet", namespace = LiteratureNamespaces.RIS_NS)
+  private List<RisSachgebiet> sachgebiete;
+
+  @XmlElementWrapper(name = "titelAspekte", namespace = LiteratureNamespaces.RIS_NS)
+  @XmlElement(name = "titelAspekt", namespace = LiteratureNamespaces.RIS_NS)
+  private List<String> titelAspekte;
 }

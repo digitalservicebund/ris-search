@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" xmlns:ris="http://rechtsinformationen.bund.de/schema/ris/0.1">
-    <akn:doc name="offene-struktur">
+    <akn:doc name="/akn/ontology/de/concept/documenttype/bund/literatur/unselbststaendig">
         <akn:meta>
             <akn:identification source="#rechtsinformationen-des-bundes">
                 <akn:FRBRWork>
@@ -33,10 +33,10 @@
                 </akn:FRBRManifestation>
             </akn:identification>
             <akn:classification source="schlagwort">
-                <akn:keyword dictionary="attributsemantik-noch-undefiniert" showAs="betriebliche Bildung" value="betriebliche Bildung"/>
-                <akn:keyword dictionary="attributsemantik-noch-undefiniert" showAs="betriebliche Bildungsmaßnahme" value="betriebliche Bildungsmaßnahme"/>
-                <akn:keyword dictionary="attributsemantik-noch-undefiniert" showAs="paritätische Beteiligung" value="paritätische Beteiligung"/>
-                <akn:keyword dictionary="attributsemantik-noch-undefiniert" showAs="paritätische Mitbestimmung" value="paritätische Mitbestimmung"/>
+                <akn:keyword dictionary="" ris:domainTerm="Schlagwort" showAs="betriebliche Bildung" value="betriebliche Bildung"/>
+                <akn:keyword dictionary="" ris:domainTerm="Schlagwort" showAs="betriebliche Bildungsmaßnahme" value="betriebliche Bildungsmaßnahme"/>
+                <akn:keyword dictionary="" ris:domainTerm="Schlagwort" showAs="paritätische Beteiligung" value="paritätische Beteiligung"/>
+                <akn:keyword dictionary="" ris:domainTerm="Schlagwort" showAs="paritätische Mitbestimmung" value="paritätische Mitbestimmung"/>
             </akn:classification>
             <akn:analysis source="#rechtsinformationen-des-bundes">
                 <akn:otherReferences source="#rechtsinformationen-des-bundes">
@@ -105,6 +105,15 @@
             </akn:analysis>
             <akn:proprietary source="#rechtsinformationen-des-bundes">
                 <ris:meta>
+                    <ris:dokumenttypen domainTerm="Dokumenttypen">
+                        <ris:dokumenttyp domainTerm="Dokumenttyp">Auf</ris:dokumenttyp>
+                        <ris:dokumenttyp domainTerm="Dokumenttyp">Foo</ris:dokumenttyp>
+                    </ris:dokumenttypen>
+                    <ris:gliederung domainTerm="Gliederung">
+                        <ris:gliederungseintrag domainTerm="Gliederungseintrag">I. Äpfel.</ris:gliederungseintrag>
+                        <ris:gliederungseintrag domainTerm="Gliederungseintrag">II. Birnen.</ris:gliederungseintrag>
+                        <ris:gliederungseintrag domainTerm="Gliederungseintrag">III. Orangen.</ris:gliederungseintrag>
+                    </ris:gliederung>
                     <ris:kongresse domainTerm="Kongresse">
                         <ris:kongress domainTerm="Kongress" eId="foo-kongress-1" showAs="Internationaler Kongreß für das Recht, 1991, Athen, GRC">
                             <ris:name domainTerm="Name">Internationaler Kongreß für das Recht</ris:name>
@@ -138,10 +147,13 @@
                             <ris:titel domainTerm="Titel">Dr</ris:titel>
                         </ris:person>
                     </ris:personen>
-                    <ris:dokumenttypen domainTerm="Dokumenttypen">
-                        <ris:dokumenttyp domainTerm="Dokumenttyp">Auf</ris:dokumenttyp>
-                        <ris:dokumenttyp domainTerm="Dokumenttyp">Foo</ris:dokumenttyp>
-                    </ris:dokumenttypen>
+                    <ris:sachgebiete domainTerm="Sachgebiete">
+                        <ris:sachgebiet domainTerm="Sachgebiet" sachgebiet-id="ID-01">Sachgebiet1</ris:sachgebiet>
+                        <ris:sachgebiet domainTerm="Sachgebiet" sachgebiet-id="ID-02">Sachgebiet2</ris:sachgebiet>
+                    </ris:sachgebiete>
+                    <ris:titelAspekte domainTerm="Titelaspekte">
+                        <ris:titelAspekt domainTerm="Titelaspekt">Testdokument</ris:titelAspekt>
+                    </ris:titelAspekte>
                     <ris:urheberListe domainTerm="Urheberliste">
                         <ris:urheber domainTerm="Urheber" refersTo="#foo-urheber-1">FOO</ris:urheber>
                     </ris:urheberListe>
@@ -149,14 +161,9 @@
                         <ris:verfasser domainTerm="Verfasser" refersTo="#mustermann-max-verfasser-1">Mustermann, Max</ris:verfasser>
                         <ris:verfasser domainTerm="Verfasser" refersTo="#musterfrau-susanne-verfasser-2">Musterfrau, Susanne</ris:verfasser>
                     </ris:verfasserListe>
-                    <ris:veroeffentlichungsJahre>
-                        <ris:veroeffentlichungsJahr>2025</ris:veroeffentlichungsJahr>
+                    <ris:veroeffentlichungsJahre domainTerm="Veröffentlichungsjahre">
+                        <ris:veroeffentlichungsJahr domainTerm="Veröffentlichungsjahr">2025</ris:veroeffentlichungsJahr>
                     </ris:veroeffentlichungsJahre>
-                    <ris:gliederung>
-                        <ris:gliederungseintrag>I. Äpfel.</ris:gliederungseintrag>
-                        <ris:gliederungseintrag>II. Birnen.</ris:gliederungseintrag>
-                        <ris:gliederungseintrag>III. Orangen.</ris:gliederungseintrag>
-                    </ris:gliederung>
                 </ris:meta>
             </akn:proprietary>
         </akn:meta>
@@ -168,7 +175,7 @@
         <akn:mainBody>
             <akn:div>
                 <akn:p>
-                    1. Dies ist ein literature <akn:a href="http://www.foo.de" shape="rect">LDML</akn:a> Dokument für <akn:span>Tests</akn:span>.
+                    1. Dies ist ein literature <akn:a href="http://www.foo.de">LDML</akn:a> Dokument für <akn:span>Tests</akn:span>.
                     <akn:br/>
                     Es werden <akn:sub>sub</akn:sub> und <akn:sup>sup</akn:sup> Elemente unterstützt.
                 </akn:p>

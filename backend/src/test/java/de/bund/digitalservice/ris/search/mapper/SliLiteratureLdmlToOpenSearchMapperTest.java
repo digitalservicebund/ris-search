@@ -58,6 +58,14 @@ class SliLiteratureLdmlToOpenSearchMapperTest {
             .normReferences(List.of("GG, Art 6 Abs 2 S 1, 1949-05-23"))
             .dependentReferences(List.of("BB, 1979, 1298-1300"))
             .independentReferences(List.of("Titel einer Fundstelle, 1979, 1298-1300"))
+            .titelAspekte(List.of("Testdokument"))
+            .schlagworte(
+                List.of(
+                    "betriebliche Bildung",
+                    "betriebliche Bildungsmaßnahme",
+                    "paritätische Beteiligung",
+                    "paritätische Mitbestimmung"))
+            .sachgebiete(List.of("ID-01 Sachgebiet1", "ID-02 Sachgebiet2"))
             .build();
 
     assertThat(literature).isEqualTo(expected);

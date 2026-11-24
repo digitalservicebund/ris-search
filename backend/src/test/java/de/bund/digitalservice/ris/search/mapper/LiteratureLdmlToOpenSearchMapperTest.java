@@ -9,6 +9,7 @@ import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
@@ -24,35 +25,41 @@ class LiteratureLdmlToOpenSearchMapperTest {
   void correctlyMapsAllAvailableFields() {
     Literature literature = LiteratureLdmlToOpenSearchMapper.mapLdml(VALID_XML);
 
-    // Core identifiers
-    assertThat(literature.id()).isEqualTo("XXLU000000001");
-    assertThat(literature.documentNumber()).isEqualTo("XXLU000000001");
+    var expected =
+        Literature.builder()
+            .id("XXLU000000001")
+            .documentNumber("XXLU000000001")
+            .yearsOfPublication(List.of("2025"))
+            .firstPublicationDate(LocalDate.of(2025, Month.JANUARY, 1))
+            .documentTypes(List.of("Auf", "Foo"))
+            .dependentReferences(List.of("BB, 1979, 1298-1300"))
+            .independentReferences(List.of("Titel einer Fundstelle, 1979, 1298-1300"))
+            .normReferences(List.of("GG, Art 6 Abs 2 S 1, 1949-05-23"))
+            .mainTitle("Literatur Test Dokument")
+            .mainTitleAdditions("Titelzusatz")
+            .documentaryTitle("Dokumentarischer Titel")
+            .authors(List.of("Mustermann, Max", "Musterfrau, Susanne"))
+            .collaborators(List.of("Foo, Peter"))
+            .originators(List.of("FOO"))
+            .conferenceNotes(List.of("Internationaler Kongreß für das Recht, 1991, Athen, GRC"))
+            .languages(List.of("deu"))
+            .shortReport(
+                "1. Dies ist ein literature LDML Dokument für Tests. Es werden sub und sup Elemente unterstützt. Außerdem gib es noch EM, hlj, noindex und strong.")
+            .outline("I. Äpfel. II. Birnen. III. Orangen.")
+            .titelAspekte(List.of("Testdokument"))
+            .schlagworte(
+                List.of(
+                    "betriebliche Bildung",
+                    "betriebliche Bildungsmaßnahme",
+                    "paritätische Beteiligung",
+                    "paritätische Mitbestimmung"))
+            .sachgebiete(List.of("ID-01 Sachgebiet1", "ID-02 Sachgebiet2"))
+            .build();
 
-    // Publication info
-    assertThat(literature.yearsOfPublication()).containsExactly("2025");
-    assertThat(literature.firstPublicationDate()).isEqualTo(LocalDate.of(2025, Month.JANUARY, 1));
-
-    // Metadata
-    assertThat(literature.documentTypes()).containsExactly("Auf", "Foo");
-    assertThat(literature.dependentReferences()).containsExactly("BB, 1979, 1298-1300");
-    assertThat(literature.independentReferences())
-        .containsExactly("Titel einer Fundstelle, 1979, 1298-1300");
-    assertThat(literature.mainTitle()).isEqualTo("Literatur Test Dokument");
-    assertThat(literature.mainTitleAdditions()).isEqualTo("Titelzusatz");
-    assertThat(literature.documentaryTitle()).isEqualTo("Dokumentarischer Titel");
-    assertThat(literature.authors()).containsExactly("Mustermann, Max", "Musterfrau, Susanne");
-    assertThat(literature.collaborators()).containsExactly("Foo, Peter");
-    assertThat(literature.originators()).containsExactly("FOO");
-    assertThat(literature.conferenceNotes())
-        .containsExactly("Internationaler Kongreß für das Recht, 1991, Athen, GRC");
-    assertThat(literature.languages()).containsExactly("deu");
-    assertThat(literature.normReferences()).containsExactly("GG, Art 6 Abs 2 S 1, 1949-05-23");
-
-    // Content
-    assertThat(literature.shortReport())
-        .isEqualTo(
-            "1. Dies ist ein literature LDML Dokument für Tests. Es werden sub und sup Elemente unterstützt. Außerdem gib es noch EM, hlj, noindex und strong.");
-    assertThat(literature.outline()).isEqualTo("I. Äpfel. II. Birnen. III. Orangen.");
+    assertThat(literature)
+        .usingRecursiveComparison()
+        .ignoringFields("indexedAt")
+        .isEqualTo(expected);
   }
 
   @Test

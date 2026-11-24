@@ -32,8 +32,9 @@
                 </akn:FRBRManifestation>
             </akn:identification>
             <akn:classification source="schlagwort">
-                <akn:keyword dictionary="attributsemantik-noch-undefiniert" showAs="Anerkennung" value="Anerkennung"/>
-                <akn:keyword dictionary="attributsemantik-noch-undefiniert" showAs="Anerkennungsbescheid" value="Anerkennungsbescheid"/>
+                <akn:keyword dictionary="" ris:domainTerm="Schlagwort" showAs="Anerkennung" value="Anerkennung"/>
+                <akn:keyword dictionary="" ris:domainTerm="Schlagwort" showAs="Anerkennungsbescheid"
+                             value="Anerkennungsbescheid"/>
             </akn:classification>
             <akn:analysis source="#rechtsinformationen-des-bundes">
                 <akn:otherReferences source="#rechtsinformationen-des-bundes">
@@ -160,6 +161,13 @@
                             <ris:titel domainTerm="Titel">Dr</ris:titel>
                         </ris:person>
                     </ris:personen>
+                    <ris:sachgebiete domainTerm="Sachgebiete">
+                        <ris:sachgebiet domainTerm="Sachgebiet" sachgebiet-id="ID-01">Sachgebiet1</ris:sachgebiet>
+                        <ris:sachgebiet domainTerm="Sachgebiet" sachgebiet-id="ID-02">Sachgebiet2</ris:sachgebiet>
+                    </ris:sachgebiete>
+                    <ris:titelAspekte domainTerm="Titelaspekte">
+                        <ris:titelAspekt domainTerm="Titelaspekt">Testdokument</ris:titelAspekt>
+                    </ris:titelAspekte>
                     <ris:urheberListe domainTerm="Urheberliste">
                         <ris:urheber domainTerm="Urheber" refersTo="#dgb-urheber-1">DGB</ris:urheber>
                     </ris:urheberListe>

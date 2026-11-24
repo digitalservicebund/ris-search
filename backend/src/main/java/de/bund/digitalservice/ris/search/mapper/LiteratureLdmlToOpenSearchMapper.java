@@ -7,9 +7,11 @@ import de.bund.digitalservice.ris.search.models.ldml.FrbrNameValueElement;
 import de.bund.digitalservice.ris.search.models.ldml.FrbrWork;
 import de.bund.digitalservice.ris.search.models.ldml.MainBody;
 import de.bund.digitalservice.ris.search.models.ldml.literature.Analysis;
+import de.bund.digitalservice.ris.search.models.ldml.literature.Classification;
 import de.bund.digitalservice.ris.search.models.ldml.literature.Gliederung;
 import de.bund.digitalservice.ris.search.models.ldml.literature.Identification;
 import de.bund.digitalservice.ris.search.models.ldml.literature.ImplicitReference;
+import de.bund.digitalservice.ris.search.models.ldml.literature.Keyword;
 import de.bund.digitalservice.ris.search.models.ldml.literature.OtherReferences;
 import de.bund.digitalservice.ris.search.models.ldml.literature.RisKongress;
 import de.bund.digitalservice.ris.search.models.ldml.literature.RisOrganisation;
@@ -31,6 +33,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.xml.transform.stream.StreamSource;
 import org.apache.commons.lang3.StringUtils;
@@ -102,6 +105,9 @@ public class LiteratureLdmlToOpenSearchMapper {
         .languages(extractLanguages(literatureLdml))
         .shortReport(extractShortReport(literatureLdml))
         .outline((extractOutline(literatureLdml)))
+        .titelAspekte(extractTitelAspekte(literatureLdml))
+        .schlagworte(extractSchlagworte(literatureLdml))
+        .sachgebiete(extractSachgebiete(literatureLdml))
         .indexedAt(Instant.now().toString())
         .build();
   }
@@ -331,5 +337,36 @@ public class LiteratureLdmlToOpenSearchMapper {
         .findFirst()
         .map(FrbrNameValueElement::getValue)
         .orElse(null);
+  }
+
+  private static List<String> extractTitelAspekte(LiteratureLdml ldml) {
+    return extractRisMeta(ldml).map(RisMeta::getTitelAspekte).orElse(List.of());
+  }
+
+  private static List<String> extractSachgebiete(LiteratureLdml ldml) {
+    return extractRisMeta(ldml).map(RisMeta::getSachgebiete).orElse(List.of()).stream()
+        .map(sachgebiet ->
+            Stream.of(sachgebiet.getSachgebieteId(), sachgebiet.getValue())
+                .filter(StringUtils::isNotBlank)
+                .map(String::trim)
+                .collect(Collectors.joining(StringUtils.SPACE)))
+        .filter(StringUtils::isNotBlank)
+        .toList();
+  }
+
+  private static List<String> extractSchlagworte(LiteratureLdml ldml) {
+    return Optional.ofNullable(ldml)
+        .map(LiteratureLdml::getDoc)
+        .map(Doc::getMeta)
+        .map(Meta::getClassifications)
+        .orElse(List.of())
+        .stream()
+        .map(Classification::getKeywords)
+        .filter(Objects::nonNull)
+        .flatMap(List::stream)
+        .filter(keyword -> "Schlagwort".equals(keyword.getDomainTerm()))
+        .map(Keyword::getValue)
+        .filter(StringUtils::isNotBlank)
+        .toList();
   }
 }
