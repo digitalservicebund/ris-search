@@ -56,4 +56,4 @@ changing this ADR.
 - A new field is only added to a response when the portal needs it.
 
 - Removing fields changes the responses. How we version these changes is
-  decided in [ADR 29](0029-no-api-versioning-until-go-live.md).
+  decided in a separate ADR.

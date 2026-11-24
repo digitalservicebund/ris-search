@@ -37,7 +37,7 @@ Fields without a matching LDML element get a German name chosen by the team.
 
 The LDML element names are only the starting point. If an element is renamed
 in the LDML later, the API field keeps its name. How we change and version the
-API is decided in [ADR 29](0029-no-api-versioning-until-go-live.md).
+API is decided in a separate ADR.
 
 ### schema.org where possible
 
@@ -63,8 +63,7 @@ responses. Where possible, we use the descriptions from the glossary.
 
 How we maintain and publish this vocabulary needs to be decided separately.
 Until then, the `ris:` IRIs don't resolve. Once published, they stay stable:
-renaming one is a breaking change and follows
-[ADR 29](0029-no-api-versioning-until-go-live.md).
+renaming one is a breaking change and follows the rules of the versioning ADR.
 
 ### One context for all document kinds
 
@@ -98,7 +97,7 @@ domain terms.
   `ris:` vocabulary is maintained separately from the glossary.
 
 - Renaming fields to German changes the responses. How we version these
-  changes is decided in [ADR 29](0029-no-api-versioning-until-go-live.md).
+  changes is decided in a separate ADR.
 
 - Which data each endpoint returns, for example which metadata a search
   result contains, is not part of this ADR. See
