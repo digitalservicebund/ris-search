@@ -125,7 +125,7 @@
                 <ris:legalDocML.de_metadaten xmlns:ris="http://rechtsinformationen.bund.de/schema/norm-metadata/0.1"
                                              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                                              xsi:schemaLocation="http://rechtsinformationen.bund.de/schema/norm-metadata/0.1 schema/norm-metadata.xsd">
-                    <ris:abkuerzung refersTo="interne-abkuerzung">RisBWahlGV</ris:abkuerzung>
+                    <ris:abkuerzung refersTo="interne-abkuerzung" domainTerm="Interne Abkürzung">RisBWahlGV</ris:abkuerzung>
                     <ris:inkraft date="2012-10-17"/>
                     <ris:ausserkraft date="2023-10-18"/>
                 </ris:legalDocML.de_metadaten>

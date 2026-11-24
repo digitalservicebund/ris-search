@@ -56,7 +56,7 @@
                 <ris:legalDocML.de_metadaten xmlns:ris="http://rechtsinformationen.bund.de/schema/norm-metadata/0.1"
                                              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                                              xsi:schemaLocation="http://rechtsinformationen.bund.de/schema/norm-metadata/0.1 schema/norm-metadata.xsd">
-                    <ris:abkuerzung refersTo="interne-abkuerzung">RisTMD</ris:abkuerzung>
+                    <ris:abkuerzung refersTo="interne-abkuerzung" domainTerm="Interne Abkürzung">RisTMD</ris:abkuerzung>
                     <ris:inkraft date="2009-02-12"/>
                 </ris:legalDocML.de_metadaten>
             </akn:proprietary>

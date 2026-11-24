@@ -104,7 +104,7 @@
                 <ris:legalDocML.de_metadaten xmlns:ris="http://rechtsinformationen.bund.de/schema/norm-metadata/0.1"
                                              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                                              xsi:schemaLocation="http://rechtsinformationen.bund.de/schema/norm-metadata/0.1 schema/norm-metadata.xsd">
-                    <ris:abkuerzung refersTo="interne-abkuerzung">ZuKuGe 2025</ris:abkuerzung>
+                    <ris:abkuerzung refersTo="interne-abkuerzung" domainTerm="Interne Abkürzung">ZuKuGe 2025</ris:abkuerzung>
                     <ris:inkraft date="2035-07-01"/>
                 </ris:legalDocML.de_metadaten>
             </akn:proprietary>
