@@ -6,7 +6,7 @@ title: Find legislation
 
 **Goal:** Find legislation by keyword or abbreviation, optionally only the ones in force today.
 
-::: info
+::: tip **Info**
 Only currently valid laws are available on Testphase.
 :::
 

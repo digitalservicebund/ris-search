@@ -6,7 +6,7 @@ title: Get a single article (§)
 
 **Goal:** Get one article, e.g. "§ 3", instead of the whole law.
 
-::: info
+::: tip **Info**
 Only currently valid laws are available on Testphase.
 :::
 

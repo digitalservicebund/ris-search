@@ -6,7 +6,7 @@ title: Get a specific version
 
 **Goal:** Get the text of a law as it was valid on a given date.
 
-::: info
+::: tip **Info**
 Only currently valid laws are available on Testphase.
 :::
 
