@@ -14,3 +14,5 @@ s3:
       versionPrefix: "V1/"
     norm:
       versionPrefix: "V1/"
+    literature:
+      versionPrefix: "V1/"
