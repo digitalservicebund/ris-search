@@ -6,23 +6,19 @@ title: Filters
 
 Learn how to filter responses to return a subset of entities.
 
-## Full-Text Search Filtering
+## Full-text search filtering
 
 List endpoints support filtering results using the `searchTerm` query parameter. This parameter enables powerful full-text searches across all relevant text fields of the entities being listed.
 
 ### Functionality
 
-- **All-Term Matching (Default Behavior):**
-  When you enter multiple words without quotation marks, the search will return documents containing all the search terms, though not necessarily in the specified order.
+- **All-term matching (default behavior):** When you enter multiple words without quotation marks, the search will return documents containing all the search terms, though not necessarily in the specified order.
 
-  **Example:** `searchTerm=trademarks protection Hannover`
-  This will match documents containing any variation of "trademarks," "protection," and "Hannover."
+  **Example:** `searchTerm=trademarks protection Hannover` This will match documents containing any variation of "trademarks," "protection," and "Hannover."
 
-- **Exact Phrase Matching:**
-  To search for an exact phrase, enclose it in double quotes (`"`). This ensures that only documents containing the exact phrase, in the specified order, are matched.
+- **Exact phrase matching:** To search for an exact phrase, enclose it in double quotes (`"`). This ensures that only documents containing the exact phrase, in the specified order, are matched.
 
-  **Example:** `searchTerm="trademarks protection"`
-  This will match documents containing the exact phrase "trademarks protection".
+  **Example:** `searchTerm="trademarks protection"` This will match documents containing the exact phrase "trademarks protection".
 
   ::: info Note
   Using quotation marks tells the search engine to look for the exact words in the exact order without any variations. This is particularly useful when searching for specific names, titles, or phrases.
@@ -55,17 +51,17 @@ List endpoints support filtering results using the `searchTerm` query parameter.
 
   :::
 
-## Date Filters
+## Date filters
 
 All date fields implement similar query parameters for filtering.
 
 - Ensure that all dates provided adhere to the [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format, as this is the only accepted format for date inputs.
 - Ranges are always inclusive — dates that match the start or end are included in the result.
 
-| Query Parameter   | Type   | Description                                                                                                                |
-| ----------------- | ------ | -------------------------------------------------------------------------------------------------------------------------- |
+| Query Parameter | Type | Description |
+| --- | --- | --- |
 | `<dateField>From` | `date` | The from (greater than or equal) operator returns all entities where `dateField` is later than, or equal to, a given date. |
-| `<dateField>To`   | `date` | The to (less than or equal) operator returns all entities where `dateField` is earlier than, or equal to, a given date.    |
+| `<dateField>To` | `date` | The to (less than or equal) operator returns all entities where `dateField` is earlier than, or equal to, a given date. |
 
 ::: code-group
 

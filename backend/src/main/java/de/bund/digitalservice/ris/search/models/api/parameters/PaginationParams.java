@@ -17,7 +17,7 @@ import lombok.Data;
  * exceed the maximum permissible value.
  *
  * <p>Attributes: - size: The number of entities per page, with constraints ensuring it falls within
- * a defined range (1 to 100). - pageIndex: The index of the page to retrieve, starting at 0.
+ * a defined range (1 to 300). - pageIndex: The index of the page to retrieve, starting at 0.
  *
  * <p>An internal validation is present to ensure the calculated result window (size * pageIndex +
  * size) does not exceed 10,000.

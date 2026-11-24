@@ -19,7 +19,7 @@ Our JSON REST API allows you to retrieve and use individual documents. For examp
 - Search and filter legal information.
 - Retrieve and display individual documents in various formats as XML, HTML or JSON and integrate your own web applications.
 
-Learn how to integrate our API → [API Reference](/guides/)
+Learn how to integrate our API → [API reference](/guides/)
 
 ## What is still to come
 

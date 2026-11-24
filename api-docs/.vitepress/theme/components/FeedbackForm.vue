@@ -64,7 +64,7 @@ const submitFeedback = async () => {
             {{ errorMessage }}
           </small>
         </div>
-        <button type="submit" class="ris-button">Send Feedback</button>
+        <button type="submit" class="ris-button">Send feedback</button>
       </form>
     </div>
   </div>
@@ -89,7 +89,7 @@ const submitFeedback = async () => {
   width: 100%;
   padding: 0.5rem;
   border: 2px solid var(--vp-c-brand-1);
-  border-radius: 4px;
+  border-radius: 0.5rem;
   font: inherit;
   font-size: calc(1rem * var(--ris-font-scale));
   resize: vertical;
@@ -97,12 +97,13 @@ const submitFeedback = async () => {
   color: var(--vp-c-text-1);
 
   &:focus {
-    outline: none;
-    border-width: 3px;
+    outline: 1px solid var(--vp-c-brand-1);
+    outline-offset: 0;
   }
 
   &:user-invalid {
     border-color: var(--vp-c-danger-1);
+    outline-color: var(--vp-c-danger-1);
   }
 }
 
