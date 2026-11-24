@@ -100,7 +100,8 @@ domain terms.
   changes is decided in a separate ADR.
 
 - Which data each endpoint returns, for example which metadata a search
-  result contains, is not part of this ADR and is decided separately.
+  result contains, is not part of this ADR. See
+  [ADR 28](0028-only-return-the-data-the-portal-needs.md).
 
 - Every new field needs an entry in a context. A test that checks all fields
   map to an IRI makes sure we don't forget it.
