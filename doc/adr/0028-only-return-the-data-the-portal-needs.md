@@ -30,20 +30,18 @@ portal shows in the search results.
 
 ### Single document endpoints
 
-A single document response only contains the fields that the portal displays
-on the document page.
+A single document response only contains the fields that the portal needs,
+for example to display them on the document page or for logic in the
+frontend.
 
-The JSON-LD fields (`@context`, `@id`, `@type`) are always included. The
-document text (e.g. Tatbestand, Gründe) comes from the HTML, not from the
-JSON response. Highlights in search results come from `textMatches`, not from
-the fields of the result.
+The JSON-LD fields (`@context`, `@id`, `@type`) are always included. As decided
+in [ADR 2 of ris-html-transformation](https://github.com/digitalservicebund/ris-html-transformation/blob/main/doc/adr/0002-common-html-structure.md),
+document text that contains markup (e.g. Tatbestand, Gründe) is provided
+through the HTML and is not included in the JSON response. Highlights in
+search results come from `textMatches`, not from the fields of the result.
 
-### Fields per document kind
-
-The fields each endpoint returns are listed in
-[response-fields.md](../readme/response-fields.md). The list changes when the
-portal needs another field or when the German names are clear, without
-changing this ADR.
+The fields each endpoint returns are documented in the OpenAPI specification
+of the API.
 
 ## Consequences
 
