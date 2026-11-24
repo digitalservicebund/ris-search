@@ -43,7 +43,7 @@ curl -G https://testphase.rechtsinformationen.bund.de/v1/rechtsprechung/changelo
 
 | Field | Meaning |
 | --- | --- |
-| `changed` | Documents that were added or changed. Get them from `contentUrl`. |
+| `changed` | Documents that were added or changed. Get them from `contentUrl`, a relative path that you append to the base URL. |
 | `deleted` | Documents that were removed. Delete them locally. |
 | `allChanged` | `true` if the whole dataset was rebuilt. Download the full dataset again. |
 
