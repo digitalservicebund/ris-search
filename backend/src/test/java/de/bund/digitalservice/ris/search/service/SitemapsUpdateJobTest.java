@@ -53,7 +53,7 @@ class SitemapsUpdateJobTest {
     for (int i = 1; i < 3; i++) {
       administrativeDirective.add("administrative-directive/KSNR000" + i + ".akn.xml");
       caseLawKeys.add("case-law/KORE12354" + i + ".xml");
-      literatureKeys.add("literature/XXLU00000" + i + ".akn.xml");
+      literatureKeys.add("literature/XXLU00000" + i + ".xml");
       normsKeys.add(
           "eli/bund/bgbl-1/1992/s101-" + i + "/1992-01-01/1/deu/1992-01-02/regelungstext-1.xml");
     }

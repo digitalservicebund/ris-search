@@ -1,6 +1,11 @@
 package de.bund.digitalservice.ris.search.models.ldml.literature.uli;
 
+import de.bund.digitalservice.ris.search.models.ldml.literature.Gliederung;
 import de.bund.digitalservice.ris.search.models.ldml.literature.LiteratureNamespaces;
+import de.bund.digitalservice.ris.search.models.ldml.literature.RisKongress;
+import de.bund.digitalservice.ris.search.models.ldml.literature.RisOrganisation;
+import de.bund.digitalservice.ris.search.models.ldml.literature.RisPerson;
+import de.bund.digitalservice.ris.search.models.ldml.literature.RisRoleItem;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlElementWrapper;
 import java.util.List;
@@ -21,14 +26,42 @@ import lombok.Getter;
  */
 @Getter
 public class RisMeta {
-  @XmlElementWrapper(
-      name = "veroeffentlichungsJahre",
-      namespace = LiteratureNamespaces.RIS_UNSELBSTSTAENDIG_NS)
-  @XmlElement(
-      name = "veroeffentlichungsJahr",
-      namespace = LiteratureNamespaces.RIS_UNSELBSTSTAENDIG_NS)
-  private List<String> yearsOfPublication;
+  @XmlElementWrapper(name = "kongresse", namespace = LiteratureNamespaces.RIS_NS)
+  @XmlElement(name = "kongress", namespace = LiteratureNamespaces.RIS_NS)
+  private List<RisKongress> kongresse;
 
-  @XmlElement(name = "gliederung", namespace = LiteratureNamespaces.RIS_UNSELBSTSTAENDIG_NS)
+  @XmlElementWrapper(name = "organisationen", namespace = LiteratureNamespaces.RIS_NS)
+  @XmlElement(name = "organisation", namespace = LiteratureNamespaces.RIS_NS)
+  private List<RisOrganisation> organisationen;
+
+  @XmlElementWrapper(name = "personen", namespace = LiteratureNamespaces.RIS_NS)
+  @XmlElement(name = "person", namespace = LiteratureNamespaces.RIS_NS)
+  private List<RisPerson> personen;
+
+  @XmlElementWrapper(name = "dokumenttypen", namespace = LiteratureNamespaces.RIS_NS)
+  @XmlElement(name = "dokumenttyp", namespace = LiteratureNamespaces.RIS_NS)
+  private List<String> dokumenttypen;
+
+  @XmlElementWrapper(name = "veroeffentlichungsJahre", namespace = LiteratureNamespaces.RIS_NS)
+  @XmlElement(name = "veroeffentlichungsJahr", namespace = LiteratureNamespaces.RIS_NS)
+  private List<String> veroeffentlichungsJahre;
+
+  @XmlElement(name = "gliederung", namespace = LiteratureNamespaces.RIS_NS)
   private Gliederung gliederung;
+
+  @XmlElementWrapper(name = "verfasserListe", namespace = LiteratureNamespaces.RIS_NS)
+  @XmlElement(name = "verfasser", namespace = LiteratureNamespaces.RIS_NS)
+  private List<RisRoleItem> verfasserListe;
+
+  @XmlElementWrapper(name = "mitarbeiterListe", namespace = LiteratureNamespaces.RIS_NS)
+  @XmlElement(name = "mitarbeiter", namespace = LiteratureNamespaces.RIS_NS)
+  private List<RisRoleItem> mitarbeiterListe;
+
+  @XmlElementWrapper(name = "urheberListe", namespace = LiteratureNamespaces.RIS_NS)
+  @XmlElement(name = "urheber", namespace = LiteratureNamespaces.RIS_NS)
+  private List<RisRoleItem> urheberListe;
+
+  @XmlElementWrapper(name = "kongressvermerke", namespace = LiteratureNamespaces.RIS_NS)
+  @XmlElement(name = "kongressvermerk", namespace = LiteratureNamespaces.RIS_NS)
+  private List<RisRoleItem> kongressvermerke;
 }

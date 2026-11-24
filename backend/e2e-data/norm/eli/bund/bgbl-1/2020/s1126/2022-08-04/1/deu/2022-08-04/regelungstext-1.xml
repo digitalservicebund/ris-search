@@ -57,7 +57,7 @@
                 <ris:legalDocML.de_metadaten xmlns:ris="http://rechtsinformationen.bund.de/schema/norm-metadata/0.1"
                                              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                                              xsi:schemaLocation="http://rechtsinformationen.bund.de/schema/norm-metadata/0.1 schema/norm-metadata.xsd">
-                    <ris:abkuerzung refersTo="interne-abkuerzung">RisFassTest</ris:abkuerzung>
+                    <ris:abkuerzung refersTo="interne-abkuerzung" domainTerm="Interne Abkürzung">RisFassTest</ris:abkuerzung>
                     <ris:inkraft date="2022-08-04"/>
                     <ris:ausserkraft date="2920-08-03"/>
                     <ris:doknr source="#einleitung-n1">DKNR0E80B0026</ris:doknr>

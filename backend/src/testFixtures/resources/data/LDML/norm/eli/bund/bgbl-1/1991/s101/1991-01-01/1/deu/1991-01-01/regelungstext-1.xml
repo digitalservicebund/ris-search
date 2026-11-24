@@ -56,7 +56,7 @@
                                        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                                        xsi:schemaLocation="http://rechtsinformationen.bund.de/schema/norm-metadata/0.1
                                              ../../../../../../../../../../../../Grammatiken/Norms/norm-metadata.xsd">
-          <ris:abkuerzung refersTo="interne-abkuerzung">RisAbbrev</ris:abkuerzung>
+          <ris:abkuerzung refersTo="interne-abkuerzung" domainTerm="Interne Abkürzung">RisAbbrev</ris:abkuerzung>
         </ris:legalDocML.de_metadaten>
       </akn:proprietary>
     </akn:meta>

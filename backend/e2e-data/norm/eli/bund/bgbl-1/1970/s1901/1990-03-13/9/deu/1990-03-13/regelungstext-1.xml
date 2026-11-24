@@ -88,7 +88,7 @@
                 <ris:legalDocML.de_metadaten xmlns:ris="http://rechtsinformationen.bund.de/schema/norm-metadata/0.1"
                                              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                                              xsi:schemaLocation="http://rechtsinformationen.bund.de/schema/norm-metadata/0.1 schema/norm-metadata.xsd">
-                    <ris:abkuerzung refersTo="interne-abkuerzung">RisHUrlV</ris:abkuerzung>
+                    <ris:abkuerzung refersTo="interne-abkuerzung" domainTerm="Interne Abkürzung">RisHUrlV</ris:abkuerzung>
                     <ris:inkraft date="1990-04-01"/>
                     <ris:ausserkraft date="1990-12-31"/>
                 </ris:legalDocML.de_metadaten>

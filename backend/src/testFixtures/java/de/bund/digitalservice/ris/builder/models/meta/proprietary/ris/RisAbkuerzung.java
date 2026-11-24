@@ -10,6 +10,8 @@ public class RisAbkuerzung {
 
   @XmlAttribute private String refersTo = "interne-abkuerzung";
 
+  @XmlAttribute private String domainTerm = "Interne Abkürzung";
+
   @XmlValue private String abbreviation = "RisAbk";
 
   public RisAbkuerzung(String abbreviation) {

@@ -66,7 +66,7 @@
                 <ris:legalDocML.de_metadaten xmlns:ris="http://rechtsinformationen.bund.de/schema/norm-metadata/0.1"
                                              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                                              xsi:schemaLocation="http://rechtsinformationen.bund.de/schema/norm-metadata/0.1 schema/norm-metadata.xsd">
-                    <ris:abkuerzung refersTo="interne-abkuerzung">GeGuGe 2025</ris:abkuerzung>
+                    <ris:abkuerzung refersTo="interne-abkuerzung" domainTerm="Interne Abkürzung">GeGuGe 2025</ris:abkuerzung>
                     <ris:inkraft date="2025-05-06"/>
                     <ris:ausserkraft date="2037-03-31"/>
                     <ris:doknr source="#art-z1">DKNR202500130BJNE00010000</ris:doknr>

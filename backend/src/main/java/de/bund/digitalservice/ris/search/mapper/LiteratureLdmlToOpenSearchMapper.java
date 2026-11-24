@@ -6,20 +6,20 @@ import de.bund.digitalservice.ris.search.models.ldml.FrbrLanguage;
 import de.bund.digitalservice.ris.search.models.ldml.FrbrNameValueElement;
 import de.bund.digitalservice.ris.search.models.ldml.FrbrWork;
 import de.bund.digitalservice.ris.search.models.ldml.MainBody;
-import de.bund.digitalservice.ris.search.models.ldml.literature.uli.Analysis;
+import de.bund.digitalservice.ris.search.models.ldml.literature.Analysis;
+import de.bund.digitalservice.ris.search.models.ldml.literature.Gliederung;
+import de.bund.digitalservice.ris.search.models.ldml.literature.Identification;
+import de.bund.digitalservice.ris.search.models.ldml.literature.ImplicitReference;
+import de.bund.digitalservice.ris.search.models.ldml.literature.OtherReferences;
+import de.bund.digitalservice.ris.search.models.ldml.literature.RisKongress;
+import de.bund.digitalservice.ris.search.models.ldml.literature.RisOrganisation;
+import de.bund.digitalservice.ris.search.models.ldml.literature.RisPerson;
+import de.bund.digitalservice.ris.search.models.ldml.literature.RisRoleItem;
 import de.bund.digitalservice.ris.search.models.ldml.literature.uli.Doc;
-import de.bund.digitalservice.ris.search.models.ldml.literature.uli.Gliederung;
-import de.bund.digitalservice.ris.search.models.ldml.literature.uli.Identification;
-import de.bund.digitalservice.ris.search.models.ldml.literature.uli.ImplicitReference;
-import de.bund.digitalservice.ris.search.models.ldml.literature.uli.Keyword;
 import de.bund.digitalservice.ris.search.models.ldml.literature.uli.LiteratureLdml;
 import de.bund.digitalservice.ris.search.models.ldml.literature.uli.Meta;
 import de.bund.digitalservice.ris.search.models.ldml.literature.uli.Proprietary;
-import de.bund.digitalservice.ris.search.models.ldml.literature.uli.References;
 import de.bund.digitalservice.ris.search.models.ldml.literature.uli.RisMeta;
-import de.bund.digitalservice.ris.search.models.ldml.literature.uli.TlcEvent;
-import de.bund.digitalservice.ris.search.models.ldml.literature.uli.TlcOrganization;
-import de.bund.digitalservice.ris.search.models.ldml.literature.uli.TlcPerson;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import jakarta.xml.bind.DataBindingException;
 import jakarta.xml.bind.JAXB;
@@ -30,9 +30,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Stream;
 import javax.xml.transform.stream.StreamSource;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.eclipse.persistence.exceptions.DescriptorException;
 
 /**
@@ -115,7 +117,7 @@ public class LiteratureLdmlToOpenSearchMapper {
             .map(FrbrWork::getFrbrAliasList)
             .orElse(Collections.emptyList())
             .stream()
-            .filter(alias -> Objects.equals(alias.getName(), "Dokumentnummer"))
+            .filter(alias -> Objects.equals(alias.getName(), "dokumentnummer"))
             .findFirst()
             .map(FrbrNameValueElement::getValue)
             .orElse(null);
@@ -135,7 +137,7 @@ public class LiteratureLdmlToOpenSearchMapper {
             .map(Doc::getMeta)
             .map(Meta::getProprietary)
             .map(Proprietary::getMeta)
-            .map(RisMeta::getYearsOfPublication)
+            .map(RisMeta::getVeroeffentlichungsJahre)
             .orElse(Collections.emptyList());
 
     if (yearsOfPublication.isEmpty()) {
@@ -151,13 +153,10 @@ public class LiteratureLdmlToOpenSearchMapper {
         Optional.ofNullable(literatureLdml)
             .map(LiteratureLdml::getDoc)
             .map(Doc::getMeta)
-            .map(Meta::getClassifications)
-            .orElse(Collections.emptyList())
-            .stream()
-            .filter(classification -> "doktyp".equals(classification.getSource()))
-            .flatMap(classification -> classification.getKeywords().stream())
-            .map(Keyword::getValue)
-            .toList();
+            .map(Meta::getProprietary)
+            .map(Proprietary::getMeta)
+            .map(RisMeta::getDokumenttypen)
+            .orElse(Collections.emptyList());
 
     if (documentTypes.isEmpty()) {
       throw new ValidationException("No document types found in LDML metadata.");
@@ -192,7 +191,7 @@ public class LiteratureLdmlToOpenSearchMapper {
   }
 
   private static String extractMainTitleAdditions(LiteratureLdml literatureLdml) {
-    return extractFrbrAlias(literatureLdml, "haupttitelZusatz");
+    return extractFrbrAlias(literatureLdml, "haupttitelzusatz");
   }
 
   private static String extractDocumentaryTitle(LiteratureLdml literatureLdml) {
@@ -200,40 +199,36 @@ public class LiteratureLdmlToOpenSearchMapper {
   }
 
   private static List<String> extractAuthors(LiteratureLdml literatureLdml) {
-    return extractPerson(literatureLdml, "#verfasser");
+    return extractPerson(literatureLdml, RisMeta::getVerfasserListe);
   }
 
   private static List<String> extractCollaborators(LiteratureLdml literatureLdml) {
-    return extractPerson(literatureLdml, "#mitarbeiter");
+    return extractPerson(literatureLdml, RisMeta::getMitarbeiterListe);
   }
 
   private static List<String> extractOriginators(LiteratureLdml literatureLdml) {
-    var originatorEids = getFrbrAuthorReferenceLinks(literatureLdml, "#urheber");
+    var originatorEids = getRoleReferences(literatureLdml, RisMeta::getUrheberListe);
 
-    return Optional.ofNullable(literatureLdml)
-        .map(LiteratureLdml::getDoc)
-        .map(Doc::getMeta)
-        .map(Meta::getReferences)
-        .map(References::getTlcOrganizations)
+    return extractRisMeta(literatureLdml)
+        .map(RisMeta::getOrganisationen)
         .orElse(Collections.emptyList())
         .stream()
         .filter(orga -> originatorEids.contains(orga.getEId()))
-        .map(TlcOrganization::getName)
+        .map(RisOrganisation::getName)
+        .filter(Objects::nonNull)
         .toList();
   }
 
   private static List<String> extractConferenceNotes(LiteratureLdml literatureLdml) {
-    var conferenceEids = getFrbrAuthorReferenceLinks(literatureLdml, "#kongress");
+    var conferenceEids = getRoleReferences(literatureLdml, RisMeta::getKongressvermerke);
 
-    return Optional.ofNullable(literatureLdml)
-        .map(LiteratureLdml::getDoc)
-        .map(Doc::getMeta)
-        .map(Meta::getReferences)
-        .map(References::getTlcEvents)
+    return extractRisMeta(literatureLdml)
+        .map(RisMeta::getKongresse)
         .orElse(Collections.emptyList())
         .stream()
-        .filter(event -> conferenceEids.contains(event.getEId()))
-        .map(TlcEvent::getShowAs)
+        .filter(kongress -> conferenceEids.contains(kongress.getEId()))
+        .map(RisKongress::getShowAs)
+        .filter(Objects::nonNull)
         .toList();
   }
 
@@ -281,46 +276,46 @@ public class LiteratureLdmlToOpenSearchMapper {
         .map(Doc::getMeta)
         .map(Meta::getAnalysis)
         .map(Analysis::getOtherReferences)
-        .orElse(Collections.emptyList())
         .stream()
-        .filter(otherReferences ->
-            otherReferences.getSource().equals("attributsemantik-noch-undefiniert"))
-        .flatMap(otherReferences -> otherReferences.getImplicitReferences().stream());
+        .flatMap(List::stream)
+        .map(OtherReferences::getImplicitReferences)
+        .filter(Objects::nonNull)
+        .flatMap(List::stream);
   }
 
-  private static List<String> getFrbrAuthorReferenceLinks(
-      LiteratureLdml literatureLdml, String type) {
+  /**
+   * Returns the eIds the entries of a role list (e.g. ris:verfasserListe) refer to, without the
+   * leading "#".
+   */
+  private static List<String> getRoleReferences(
+      LiteratureLdml literatureLdml, Function<RisMeta, List<RisRoleItem>> roleList) {
+    return extractRisMeta(literatureLdml).map(roleList).orElse(Collections.emptyList()).stream()
+        .map(RisRoleItem::getRefersTo)
+        .filter(Objects::nonNull)
+        .map(refersTo -> Strings.CS.removeStart(refersTo, "#"))
+        .toList();
+  }
 
-    return Optional.ofNullable(literatureLdml)
-        .map(LiteratureLdml::getDoc)
-        .map(Doc::getMeta)
-        .map(Meta::getIdentification)
-        .map(Identification::getFrbrWork)
-        .map(FrbrWork::getFrbrAuthors)
+  private static List<String> extractPerson(
+      LiteratureLdml literatureLdml, Function<RisMeta, List<RisRoleItem>> roleList) {
+    var personEids = getRoleReferences(literatureLdml, roleList);
+
+    return extractRisMeta(literatureLdml)
+        .map(RisMeta::getPersonen)
         .orElse(Collections.emptyList())
         .stream()
-        .filter(author -> Objects.equals(author.getAs(), type))
-        .map(author ->
-            Optional.ofNullable(author.getHref())
-                .map(href -> href.replaceFirst("#", ""))
-                .orElse(null))
+        .filter(person -> personEids.contains(person.getEId()))
+        .map(RisPerson::getName)
         .filter(Objects::nonNull)
         .toList();
   }
 
-  private static List<String> extractPerson(LiteratureLdml literatureLdml, String authorType) {
-    var personEids = getFrbrAuthorReferenceLinks(literatureLdml, authorType);
-
+  private static Optional<RisMeta> extractRisMeta(LiteratureLdml literatureLdml) {
     return Optional.ofNullable(literatureLdml)
         .map(LiteratureLdml::getDoc)
         .map(Doc::getMeta)
-        .map(Meta::getReferences)
-        .map(References::getTlcPersons)
-        .orElse(Collections.emptyList())
-        .stream()
-        .filter(person -> personEids.contains(person.getEId()))
-        .map(TlcPerson::getName)
-        .toList();
+        .map(Meta::getProprietary)
+        .map(Proprietary::getMeta);
   }
 
   private static String extractFrbrAlias(LiteratureLdml literatureLdml, String aliasType) {

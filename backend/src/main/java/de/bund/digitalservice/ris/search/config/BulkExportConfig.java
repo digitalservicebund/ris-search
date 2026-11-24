@@ -55,7 +55,7 @@ public class BulkExportConfig {
       return true;
     }
 
-    String[] parts = key.substring(0, key.lastIndexOf('.')).split("/");
+    String[] parts = key.substring(0, key.indexOf('.')).split("/");
 
     if (parts.length >= 2) {
       return !parts[parts.length - 2].equals(parts[parts.length - 1]);
@@ -83,7 +83,11 @@ public class BulkExportConfig {
   @Bean
   public BulkExportService literatureBulkExportService(
       LiteratureBucket source, PublicFilesBucket target) {
-    return new BulkExportService(source, target, DocumentKind.LITERATURE.getBulkZipPath());
+    return new BulkExportService(
+        source,
+        target,
+        DocumentKind.LITERATURE.getBulkZipPath(),
+        BulkExportConfig::includeXmlDocumentsAndAttachments);
   }
 
   /**

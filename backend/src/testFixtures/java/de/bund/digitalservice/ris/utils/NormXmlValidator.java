@@ -10,19 +10,19 @@ public class NormXmlValidator {
 
   /** The kind of norm document being validated, determining which schema to apply. */
   public enum Type {
-    REGELUNGSTEXT("Grammatiken/Norms/norm-regelungstext.xsd"),
-    ANLAGE("Grammatiken/Norms/norm-offenestruktur.xsd"),
-    RECHTSETZUNGSDOKUMENT("Grammatiken/Norms/norm-rechtsetzungsdokument.xsd"),
-    WORK_METADATA(List.of("Grammatiken/Norms/norm-work-metadata.xsd"));
+    REGELUNGSTEXT("schema/norm-regelungstext.xsd"),
+    ANLAGE("schema/norm-offenestruktur.xsd"),
+    RECHTSETZUNGSDOKUMENT("schema/norm-rechtsetzungsdokument.xsd"),
+    WORK_METADATA(List.of("schema/norm-work-metadata.xsd"));
 
     @Getter private final List<String> schemaFiles;
 
     Type(String path) {
       schemaFiles =
           List.of(
-              "Grammatiken/Norms/norm-metadata.xsd",
-              "Grammatiken/Norms/legalDocML.de-metadaten-regelungstext.xsd",
-              "Grammatiken/Norms/legalDocML.de-metadaten-rechtsetzungsdokument.xsd",
+              "schema/norm-metadata.xsd",
+              "schema/legalDocML.de/legalDocML.de-metadaten-regelungstext.xsd",
+              "schema/legalDocML.de/legalDocML.de-metadaten-rechtsetzungsdokument.xsd",
               path);
     }
 
