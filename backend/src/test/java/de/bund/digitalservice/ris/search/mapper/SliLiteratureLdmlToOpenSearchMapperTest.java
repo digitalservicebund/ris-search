@@ -5,6 +5,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import de.bund.digitalservice.ris.LoadXmlUtils;
 import de.bund.digitalservice.ris.SharedTestConstants;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
+import de.bund.digitalservice.ris.search.models.opensearch.LiteratureUnindexed;
+import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Richtung;
+import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ZitierungVerwaltungsvorschrift;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;
@@ -66,6 +69,19 @@ class SliLiteratureLdmlToOpenSearchMapperTest {
                     "paritätische Beteiligung",
                     "paritätische Mitbestimmung"))
             .sachgebiete(List.of("ID-01 Sachgebiet1", "ID-02 Sachgebiet2"))
+            .unindexed(
+                LiteratureUnindexed.builder()
+                    .zitierungenLiteraturSelbststaendig(List.of())
+                    .zitierungenLiteraturUnselbststaendig(List.of())
+                    .zitierungenRechtsprechung(List.of())
+                    .zitierungenVerwaltungsvorschriften(
+                        List.of(
+                            ZitierungVerwaltungsvorschrift.builder()
+                                .richtung(Richtung.PASSIV)
+                                .artDerZitierung("Vergleiche")
+                                .jurisAbkuerzung("NaNu")
+                                .build()))
+                    .build())
             .build();
 
     assertThat(literature).isEqualTo(expected);

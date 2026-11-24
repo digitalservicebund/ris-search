@@ -6,6 +6,14 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import de.bund.digitalservice.ris.LoadXmlUtils;
 import de.bund.digitalservice.ris.search.exception.OpenSearchMapperException;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
+import de.bund.digitalservice.ris.search.models.opensearch.LiteratureUnindexed;
+import de.bund.digitalservice.ris.search.models.opensearch.common.Gericht;
+import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Fundstelle;
+import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Richtung;
+import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ZitierungLiteraturSelbststaendig;
+import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ZitierungLiteraturUnselbststaendig;
+import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ZitierungRechtsprechung;
+import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ZitierungVerwaltungsvorschrift;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.Month;
@@ -54,6 +62,53 @@ class LiteratureLdmlToOpenSearchMapperTest {
                     "paritätische Beteiligung",
                     "paritätische Mitbestimmung"))
             .sachgebiete(List.of("ID-01 Sachgebiet1", "ID-02 Sachgebiet2"))
+            .unindexed(
+                LiteratureUnindexed.builder()
+                    .zitierungenLiteraturSelbststaendig(
+                        List.of(
+                            ZitierungLiteraturSelbststaendig.builder()
+                                .richtung(Richtung.AKTIV)
+                                .titel("Selbstständigeliterature")
+                                .veroeffentlichungsjahr("2025")
+                                .build()))
+                    .zitierungenLiteraturUnselbststaendig(
+                        List.of(
+                            ZitierungLiteraturUnselbststaendig.builder()
+                                .richtung(Richtung.PASSIV)
+                                .fundstelle(
+                                    Fundstelle.builder()
+                                        .periodikum("Unselbstständigeliterature")
+                                        .zitatstelle("2023")
+                                        .build())
+                                .build(),
+                            ZitierungLiteraturUnselbststaendig.builder()
+                                .richtung(Richtung.PASSIV)
+                                .fundstelle(
+                                    Fundstelle.builder()
+                                        .periodikum("Unselbstständigeliterature")
+                                        .zitatstelle("1989")
+                                        .build())
+                                .build()))
+                    .zitierungenRechtsprechung(
+                        List.of(
+                            ZitierungRechtsprechung.builder()
+                                .richtung(Richtung.AKTIV)
+                                .artDerZitierung("Vergleiche")
+                                .gericht(
+                                    Gericht.builder()
+                                        .gerichtstyp("FooBar")
+                                        .spruchkoerper("1. Kammer")
+                                        .build())
+                                .entscheidungsdatum(LocalDate.of(2008, Month.APRIL, 3))
+                                .build()))
+                    .zitierungenVerwaltungsvorschriften(
+                        List.of(
+                            ZitierungVerwaltungsvorschrift.builder()
+                                .richtung(Richtung.PASSIV)
+                                .artDerZitierung("Vergleiche")
+                                .jurisAbkuerzung("NaNu")
+                                .build()))
+                    .build())
             .build();
 
     assertThat(literature)
