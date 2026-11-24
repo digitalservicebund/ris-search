@@ -47,7 +47,10 @@ public class LiteratureSimpleSearchType implements SimpleSearchType {
           Map.entry(Literature.Fields.SHORT_TITLES, 1.0f),
           Map.entry(Literature.Fields.UNIVERSITY_NOTES, 1.0f),
           Map.entry(Literature.Fields.VOLUMES, 1.0f),
-          Map.entry(Literature.Fields.YEARS_OF_PUBLICATION, 1.0f));
+          Map.entry(Literature.Fields.YEARS_OF_PUBLICATION, 1.0f),
+          Map.entry(Literature.Fields.SCHLAGWORTE, 1.0f),
+          Map.entry(Literature.Fields.TITEL_ASPEKTE, 1.0f),
+          Map.entry(Literature.Fields.SACHGEBIETE, 1.0f));
   private static final List<String> LITERATURE_FETCH_EXCLUDED_FIELDS =
       List.of(Literature.Fields.OUTLINE);
 
