@@ -10,6 +10,9 @@
   --ris-font-scale: 1.125;
 
   --vp-custom-block-font-size: calc(0.875rem * var(--ris-font-scale));
+
+  --vp-code-font-size: calc(0.875em * 0.9);
+  --vp-custom-block-code-font-size: calc(0.8125rem * 0.9);
 }
 
 .vp-doc {
@@ -48,6 +51,7 @@
     color 0.25s,
     border-color 0.25s,
     background-color 0.25s;
+  border-radius: 0.5rem;
   padding: 0 calc(1.25rem * var(--ris-font-scale));
   line-height: calc(2.375rem * var(--ris-font-scale));
   font-size: calc(0.875rem * var(--ris-font-scale));

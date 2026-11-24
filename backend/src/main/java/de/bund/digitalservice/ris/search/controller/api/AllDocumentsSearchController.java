@@ -67,7 +67,7 @@ public class AllDocumentsSearchController {
       summary = "Global search / list",
       description =
           """
-          This endpoint can be used to search for documents across different document kinds. Currently we support case law, legislation and literature document kinds. The endpoint provides a paginated response with up to 10,000 results with at most 100 results per page.
+          This endpoint can be used to search for documents across different document kinds. Currently we support case law, legislation and literature document kinds. The endpoint provides a paginated response with up to 10,000 results with at most 300 results per page.
 
           The searchTerm parameter searches across multiple fields of a document at the same time. The fields searched depend on the document kind. See the filters guide for more information.
 
