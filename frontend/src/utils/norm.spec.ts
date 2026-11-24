@@ -16,6 +16,7 @@ import {
   getVersionValidityStatus,
   isNormBodyEmpty,
   legislationArticlePath,
+  rewriteNormLink,
   temporalCoverageToValidityInterval,
   type ValidityInterval,
 } from "~/utils/norm";
@@ -519,5 +520,60 @@ describe("legislationArticlePath", () => {
         "art-z%C2%A7%C2%A7%201%20bis%203",
       ),
     ).toBe("/gesetze/eli/bund/2020/art-z§§ 1 bis 3");
+  });
+});
+
+describe("rewriteNormLink", () => {
+  const path = "/gesetze/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu";
+  const url = new URL(`https://portal.example${path}?from=search`);
+
+  it.each<[string, string | null, string | undefined, string | null]>([
+    ["removes a link without an href", null, "search", null],
+    ["removes a link with an empty href", "", "search", null],
+    ["keeps a link to an anchor on the same page", "#fn-1", "search", "#fn-1"],
+    [
+      "points an article link to the single article page",
+      "regelungstext-1/art-z1.html",
+      "search",
+      `${path}/art-z1?from=search`,
+    ],
+    [
+      "points an article link to the single article page without a source",
+      "regelungstext-1/art-z1.html",
+      undefined,
+      `${path}/art-z1`,
+    ],
+    [
+      "adds the source to absolute links on the same site",
+      "https://portal.example/gesetze/foo",
+      "search",
+      "/gesetze/foo?from=search",
+    ],
+    [
+      "adds the source to relative links on the same site",
+      "/gesetze/foo",
+      "search",
+      "/gesetze/foo?from=search",
+    ],
+    [
+      "keeps the existing query and anchor of a link on the same site",
+      "/gesetze/foo?bar=1#baz",
+      "search",
+      "/gesetze/foo?bar=1&from=search#baz",
+    ],
+    [
+      "keeps links on the same site as they are without a source",
+      "/gesetze/foo?bar=1#baz",
+      undefined,
+      "/gesetze/foo?bar=1#baz",
+    ],
+    [
+      "keeps links to other sites as they are",
+      "https://example.com/foo?bar=1",
+      "search",
+      "https://example.com/foo?bar=1",
+    ],
+  ])("%s", (_, href, from, expected) => {
+    expect(rewriteNormLink(href, { path, url, from })).toBe(expected);
   });
 });

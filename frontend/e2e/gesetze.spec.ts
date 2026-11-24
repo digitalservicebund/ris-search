@@ -55,7 +55,7 @@ test.describe("view norm page", async () => {
 
   test(
     "shows detailed information in the Details tab",
-    { tag: ["@RISDEV-12108"] },
+    { tag: ["@RISDEV-12108", "@RISDEV-11107"] },
     async ({ page }) => {
       await navigate(
         page,
@@ -83,6 +83,8 @@ test.describe("view norm page", async () => {
         "Neugefasst durch Testdaten",
         "Hinweis zum Stand:",
         "Hinweis Testdaten",
+        "Besonderer Hinweis:",
+        "Dieser besondere Hinweis wurde im End-to-end-Datenbestand ergänzt.",
         "Fußnoten:",
         /\*T \(\+{3} Textnachweis ab: 27\.5\.2000 \+{3}\).*\(\+{3} Zur Anwendung vgl\. §§ 5, 12, 15 \+{3}\)/,
         "Download:",
@@ -112,6 +114,79 @@ test.describe("view norm page", async () => {
         "Download:",
         "EmptyBodyTestG als ZIP herunterladen",
       ]);
+    },
+  );
+
+  test(
+    "doesn't show the document header in the text",
+    { tag: ["@RISDEV-11107"] },
+    async ({ page }) => {
+      await navigate(
+        page,
+        "/gesetze/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu",
+      );
+
+      const text = page.getByRole("tabpanel");
+      await expect(text).toContainText(
+        "Auf Grundlage des fiktiven Lebensmittel- und Bedarfsgegenständegesetzes",
+      );
+
+      for (const headerText of [
+        "Inhaltsübersicht",
+        "Zuletzt geändert durch Testanpassungen",
+        "Hinweis Testdaten",
+        "Erfrischungsgetränkeverordnung – FrSaftErfrischV",
+        "Diese Fußnote im Titel wurde im End-to-end-Datenbestand ergänzt",
+        "Textnachweis ab: 27.5.2000",
+        "Dieser besondere Hinweis wurde im End-to-end-Datenbestand ergänzt",
+      ]) {
+        await expect(text).not.toContainText(headerText, {
+          useInnerText: true,
+        });
+      }
+    },
+  );
+
+  test(
+    "shows the title of the norm once",
+    { tag: ["@RISDEV-11107"] },
+    async ({ page }) => {
+      await navigate(
+        page,
+        "/gesetze/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu",
+      );
+
+      await expect(
+        page.getByRole("heading", {
+          name: "Fiktive Fruchtsaft- und Erfrischungsgetränkeverordnung zu Testzwecken",
+        }),
+      ).toHaveCount(1);
+    },
+  );
+
+  test(
+    "opens the single article page from a link in the text and keeps the search",
+    { tag: ["@RISDEV-11107"] },
+    async ({ page }) => {
+      await navigate(
+        page,
+        "/gesetze/eli/bund/bgbl-1/1972/s2459/1999-04-20/4/deu?from=/suche?query=example",
+      );
+
+      await page
+        .getByRole("tabpanel")
+        .getByRole("link", { name: "§ 9 Datenschutzanforderungen" })
+        .click();
+
+      await expect(page).toHaveURL(
+        /\/gesetze\/eli\/bund\/bgbl-1\/1972\/s2459\/1999-04-20\/4\/deu\/art-z3\?from=%2Fsuche%3Fquery%3Dexample$/,
+      );
+      await expect(
+        page.getByRole("heading", {
+          level: 1,
+          name: "§ 9 Datenschutzanforderungen",
+        }),
+      ).toBeVisible();
     },
   );
 

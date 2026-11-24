@@ -118,6 +118,39 @@ export function getEinzelnormEIdFromHref(href: string): string | null {
   return match?.[1] ?? null;
 }
 
+export type RewriteNormLinkContext = { path: string; from?: string; url: URL };
+
+/**
+ * Rewrites a link found in the HTML of a norm so it works in the portal.
+ *
+ * @returns The new href, or null if the link has no href
+ */
+export function rewriteNormLink(
+  href: string | null,
+  { path, from, url }: RewriteNormLinkContext,
+): string | null {
+  if (!href) return null;
+  if (href.startsWith("#")) return href;
+
+  // Einzelnorm cross-links are emitted by the backend relative to the API URL
+  // structure (`{subtype}/{eId}.html`). Rewrite them to the portal single
+  // article route, which only carries the bare eId.
+  const eId = getEinzelnormEIdFromHref(href);
+  if (eId !== null) {
+    const target = new URL(`${path}/${eId}`, url);
+    if (from) target.searchParams.set("from", from);
+    return target.pathname + target.search + target.hash;
+  }
+
+  const newLink = new URL(href, url);
+  const isSameOrigin = newLink.origin === url.origin;
+  if (!isSameOrigin) return href;
+
+  if (from) newLink.searchParams.set("from", from);
+
+  return newLink.pathname + newLink.search + newLink.hash;
+}
+
 /**
  * Some eIds are already encoded in the XML data (e.g. "art-z§§ 1 bis 3"), but
  * the router decodes route params and encodes them again when building links.

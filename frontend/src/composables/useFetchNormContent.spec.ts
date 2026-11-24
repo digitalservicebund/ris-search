@@ -52,7 +52,7 @@ describe("useFetchNormContent", () => {
     hasPart: [],
   } as Partial<LegislationExpression>;
 
-  function mockArticle(body: string) {
+  function mockHtml(body: string) {
     mockFetch.mockReturnValueOnce(mockMetadata);
     mockFetch.mockReturnValueOnce("<html><body>" + body + "</body></html>");
   }
@@ -96,11 +96,107 @@ describe("useFetchNormContent", () => {
     });
   });
 
+  it("has no parts if the norm doesn't have them", async () => {
+    mockHtml(`<div class="akn-act"><div class="akn-body">Content</div></div>`);
+
+    const { data } = await useFetchNormContent(expressionEli);
+
+    expect(data.value.htmlParts).toMatchObject({
+      heading: undefined,
+      headingAuthorialNotes: undefined,
+      headingAuthorialNotesLength: undefined,
+      headingNotes: undefined,
+      officialToc: undefined,
+      prefaceContainer: undefined,
+    });
+  });
+
+  it("gets the preface from the document header", async () => {
+    // Output of the backend XSLT for a preface container, see
+    // backend/src/test/resources/data/XsltTransformerServiceTest/container.html
+    const container = `<div class="akn-container" id="einleitung-1_dokcontainer-1">
+      <p id="einleitung-1_dokcontainer-1_text-1">Diese Verordnung dient der Umsetzung der Richtlinie 01/01/EG</p>
+    </div>`;
+    mockHtml(`<div class="akn-act">
+  <section class="dokumentenkopf" id="einleitung-1">
+    ${container}
+  </section>
+</div>`);
+
+    const { data } = await useFetchNormContent(expressionEli);
+
+    expect(data.value.htmlParts.prefaceContainer).toBe(container);
+  });
+
+  it("only uses footnotes from the document header for the heading", async () => {
+    mockHtml(`
+      <section class="dokumentenkopf"><h1 class="titel">Title</h1></section>
+      <div class="akn-body">
+        <div class="fussnoten">Footnote in the body</div>
+        <ul class="nichtamtliche-fussnoten"><li>Note in the body</li></ul>
+      </div>`);
+
+    const { data } = await useFetchNormContent(expressionEli);
+
+    expect(data.value.htmlParts.headingAuthorialNotes).toBeUndefined();
+    expect(data.value.htmlParts.headingAuthorialNotesLength).toBeUndefined();
+    expect(data.value.htmlParts.headingNotes).toBeUndefined();
+  });
+
+  it("passes every link to the link rewriter", async () => {
+    mockHtml(`
+      <section class="dokumentenkopf">
+        <ul class="nichtamtliche-fussnoten"><li><a href="/in/header">link</a></li></ul>
+      </section>
+      <div class="akn-body">
+        <a href="#anchor">anchor</a>
+        <a>no href</a>
+        <a href="regelungstext-1/art-z1.html">article</a>
+      </div>`);
+    // useAsyncData keeps the handler of the first call for a key, so tests
+    // with their own link rewriter use their own ELI
+    const rewriteLink = vi.fn((href: string | null) => href);
+
+    await useFetchNormContent("every-link-eli", { rewriteLink });
+
+    expect(rewriteLink.mock.calls).toEqual([
+      ["/in/header"],
+      ["#anchor"],
+      [null],
+      ["regelungstext-1/art-z1.html"],
+    ]);
+  });
+
+  it("rewrites links in the parts taken from the document header", async () => {
+    mockHtml(`
+      <section class="dokumentenkopf">
+        <ul class="nichtamtliche-fussnoten"><li><a href="/in/header">link</a></li></ul>
+      </section>`);
+
+    const { data } = await useFetchNormContent("header-link-eli", {
+      rewriteLink: (href) => (href ? `/rewritten${href}` : null),
+    });
+
+    expect(data.value.htmlParts.headingNotes).toContain(
+      'href="/rewritten/in/header"',
+    );
+  });
+
+  it("removes the href if the link rewriter returns nothing", async () => {
+    mockHtml(`<div class="akn-body"><a href="/somewhere">link</a></div>`);
+
+    const { data } = await useFetchNormContent("removed-link-eli", {
+      rewriteLink: () => null,
+    });
+
+    expect(data.value.htmlParts.body).toContain("<a>link</a>");
+  });
+
   describe("article", () => {
     const articleEId = "eid-1";
 
     it("should fetch JSON and HTML data for articles", async () => {
-      mockArticle(
+      mockHtml(
         `<h2 class="einzelvorschrift">§ 1 Some article</h2><div>Test HTML content</div>`,
       );
 
@@ -127,7 +223,7 @@ describe("useFetchNormContent", () => {
     });
 
     it("takes the heading out of the body", async () => {
-      mockArticle(
+      mockHtml(
         `<h2 class="einzelvorschrift">§ 1 Some article</h2><div>Test HTML content</div>`,
       );
 
@@ -140,7 +236,7 @@ describe("useFetchNormContent", () => {
     });
 
     it("keeps the content of the heading, but not the heading element", async () => {
-      mockArticle(
+      mockHtml(
         `<h2 class="einzelvorschrift"><span class="akn-num">§ 1</span> <b>Some</b> article</h2><div>Text</div>`,
       );
 
@@ -156,7 +252,7 @@ describe("useFetchNormContent", () => {
     });
 
     it("has no heading if the article doesn't have one", async () => {
-      mockArticle(`<div>Test HTML content</div>`);
+      mockHtml(`<div>Test HTML content</div>`);
 
       const { data } = await useFetchNormArticleContent(
         expressionEli,
@@ -188,7 +284,7 @@ describe("useFetchNormContent", () => {
           undefined,
         ],
       ])("%s", async (_, body, expected) => {
-        mockArticle(body);
+        mockHtml(body);
 
         const { data } = await useFetchNormArticleContent(
           expressionEli,
