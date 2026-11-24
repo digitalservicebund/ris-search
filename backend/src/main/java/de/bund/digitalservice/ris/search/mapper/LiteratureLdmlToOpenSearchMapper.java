@@ -23,6 +23,7 @@ import de.bund.digitalservice.ris.search.models.ldml.literature.uli.Meta;
 import de.bund.digitalservice.ris.search.models.ldml.literature.uli.Proprietary;
 import de.bund.digitalservice.ris.search.models.ldml.literature.uli.RisMeta;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
+import de.bund.digitalservice.ris.search.models.opensearch.LiteratureUnindexed;
 import jakarta.xml.bind.DataBindingException;
 import jakarta.xml.bind.JAXB;
 import jakarta.xml.bind.ValidationException;
@@ -109,6 +110,7 @@ public class LiteratureLdmlToOpenSearchMapper {
         .schlagworte(extractSchlagworte(literatureLdml))
         .sachgebiete(extractSachgebiete(literatureLdml))
         .indexedAt(Instant.now().toString())
+        .unindexed(extractUnindexed(literatureLdml))
         .build();
   }
 
@@ -276,17 +278,44 @@ public class LiteratureLdmlToOpenSearchMapper {
     return outline.isEmpty() ? null : outline;
   }
 
+  private static LiteratureUnindexed extractUnindexed(LiteratureLdml literatureLdml) {
+    List<ImplicitReference> references = getAllImplicitReferences(literatureLdml);
+    return LiteratureZitierungenMapper.mapUnindexed(
+        references.stream().map(ImplicitReference::getReferenzSelbststaendigeLiteratur).toList(),
+        references.stream().map(ImplicitReference::getReferenzUnselbststaendigeLiteratur).toList(),
+        references.stream().map(ImplicitReference::getReferenzRechtsprechung).toList(),
+        references.stream().map(ImplicitReference::getReferenzVerwaltungsvorschrift).toList());
+  }
+
+  /**
+   * Returns the implicit references of all otherReferences blocks, regardless of their source.
+   * Zitierungen are listed under the "active" and "passive" sources.
+   */
+  private static List<ImplicitReference> getAllImplicitReferences(LiteratureLdml literatureLdml) {
+    return Optional.ofNullable(literatureLdml)
+        .map(LiteratureLdml::getDoc)
+        .map(Doc::getMeta)
+        .map(Meta::getAnalysis)
+        .map(Analysis::getOtherReferences)
+        .orElse(Collections.emptyList())
+        .stream()
+        .filter(Objects::nonNull)
+        .map(OtherReferences::getImplicitReferences)
+        .filter(Objects::nonNull)
+        .flatMap(List::stream)
+        .filter(Objects::nonNull)
+        .toList();
+  }
+
   private static Stream<ImplicitReference> getImplicitReferences(LiteratureLdml literatureLdml) {
     return Optional.ofNullable(literatureLdml)
         .map(LiteratureLdml::getDoc)
         .map(Doc::getMeta)
         .map(Meta::getAnalysis)
         .map(Analysis::getOtherReferences)
+        .orElse(Collections.emptyList())
         .stream()
-        .flatMap(List::stream)
-        .map(OtherReferences::getImplicitReferences)
-        .filter(Objects::nonNull)
-        .flatMap(List::stream);
+        .flatMap(otherReferences -> otherReferences.getImplicitReferences().stream());
   }
 
   /**

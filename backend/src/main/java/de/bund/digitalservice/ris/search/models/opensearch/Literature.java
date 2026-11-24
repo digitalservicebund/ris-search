@@ -52,7 +52,9 @@ public record Literature(
     @Field(name = Fields.SACHGEBIETE) List<String> sachgebiete,
     @Nullable @Field(name = Fields.SHORT_REPORT) String shortReport,
     @Nullable @Field(name = Fields.OUTLINE) String outline,
-    @JsonIgnore @Field(name = Fields.INDEXED_AT) String indexedAt)
+    @JsonIgnore @Field(name = Fields.INDEXED_AT) String indexedAt,
+    @Field(name = Fields.UNINDEXED, type = FieldType.Object, enabled = false)
+        LiteratureUnindexed unindexed)
     implements AbstractSearchEntity {
 
   /**
@@ -151,6 +153,9 @@ public record Literature(
 
     /** Teilbaende */
     public static final String VOLUMES = "volumes";
+
+    /** Stored but not indexed data, e.g. Zitierungen */
+    public static final String UNINDEXED = "unindexed";
 
     public static final String YEARS_OF_PUBLICATION = "years_of_publication";
 
