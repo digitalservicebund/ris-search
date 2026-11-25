@@ -63,8 +63,3 @@ curl https://testphase.rechtsinformationen.bund.de/v1/rechtsprechung/KVRE4615425
 # XML (LegalDocML)
 curl https://testphase.rechtsinformationen.bund.de/v1/rechtsprechung/KVRE461542501.xml
 ```
-
-## Pitfalls
-
-- Not every decision has an ECLI. Use `documentNumber` to store or link decisions.
-- Search results use English field names (`documentNumber`, `fileNumbers`, `courtName`). The single document (`/v1/rechtsprechung/{documentNumber}`) uses German field names (`dokumentNummer`, `aktenzeichenListe`, `leitsatz`, `tenor`, `gruende`).

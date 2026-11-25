@@ -1,5 +1,5 @@
 ---
-title: Get a specific version
+title: Get a specific version of a law
 ---
 
 # Get a specific version of a law
@@ -7,7 +7,7 @@ title: Get a specific version
 **Goal:** Get the text of a law as it was valid on a given date.
 
 ::: tip **Info**
-Only currently valid laws are available on Testphase.
+Only currently valid laws are available on Testphase. We expect to add past and future versions of legislation in early 2028.
 :::
 
 ## How versions are identified (ELI)
@@ -66,8 +66,3 @@ curl https://testphase.rechtsinformationen.bund.de/v1/legislation/eli/bund/bgbl-
 # XML (LegalDocML.de)
 curl https://testphase.rechtsinformationen.bund.de/v1/legislation/eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu/1998-01-29/regelungstext-1.xml
 ```
-
-## Pitfalls
-
-- The date in the manifestation part of the URL can differ from the expression date. Always take the URL from `encoding`.
-- `regelungstext-1` is the main text. Some laws have further files such as attachments (`anlage-…`). The ZIP of a manifestation contains all of them, see [Choose a format](/use-cases/formats/).

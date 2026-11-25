@@ -1,8 +1,8 @@
 ---
-title: Stay up to date
+title: Keep your local data up to date
 ---
 
-# Stay up to date
+# Keep your local data up to date
 
 **Goal:** Keep a local copy in sync without downloading everything again.
 
@@ -17,7 +17,7 @@ title: Stay up to date
 
 ## Recommended workflow
 
-1. Download the full dataset once, see [Download everything](/use-cases/bulk-download/). Note the time.
+1. Download the full dataset for one document type, see [Download documents in bulk](/use-cases/bulk-download/). Note the time.
 2. On a regular basis (e.g. daily), request the changes since your last run.
 3. Download each changed document from its `contentUrl`, and delete each document listed in `deleted`.
 
@@ -46,9 +46,3 @@ curl -G https://testphase.rechtsinformationen.bund.de/v1/rechtsprechung/changelo
 | `changed` | Documents that were added or changed. Get them from `contentUrl`, a relative path that you append to the base URL. |
 | `deleted` | Documents that were removed. Delete them locally. |
 | `allChanged` | `true` if the whole dataset was rebuilt. Download the full dataset again. |
-
-## Pitfalls
-
-- Let consecutive time windows overlap a little (e.g. start a few minutes before your last `to`). Processing a document twice does no harm, missing it does.
-- Always check `allChanged` before processing the lists.
-- A time zone offset like `+01:00` must be URL-encoded (`%2B01:00`). `--data-urlencode` does this for you. Using UTC (`Z`) avoids the problem.
