@@ -48,7 +48,7 @@ export default defineConfig({
         items: [
           { text: "Find legislation", link: "/use-cases/find-legislation/" },
           {
-            text: "Get a specific version",
+            text: "Get a specific version of a law",
             link: "/use-cases/legislation-version/",
           },
           {
@@ -60,8 +60,11 @@ export default defineConfig({
             link: "/use-cases/find-court-decision/",
           },
           { text: "Choose a format", link: "/use-cases/formats/" },
-          { text: "Download everything", link: "/use-cases/bulk-download/" },
-          { text: "Stay up to date", link: "/use-cases/stay-up-to-date/" },
+          { text: "Bulk Download", link: "/use-cases/bulk-download/" },
+          {
+            text: "Keep your local data up to date",
+            link: "/use-cases/stay-up-to-date/",
+          },
         ],
       },
       {
