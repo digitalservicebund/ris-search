@@ -36,7 +36,8 @@ We will not introduce API versioning before go-live.
 - We keep the `/v1` prefix in the paths. It does not imply a versioning
   scheme, but it lets us introduce one later without changing the existing
   paths.
-- Versioning must be in place before any response is changed after go-live.
+- The JSON-LD context is not versioned either. There is one context at
+  `/v1/context.jsonld`, and we change it together with the responses.
 
 ## Consequences
 
@@ -44,7 +45,3 @@ We will not introduce API versioning before go-live.
   versions.
 - Until go-live, API users must expect breaking changes. The API documentation
   states that the API is not yet stable.
-- After go-live, any change to a response is a breaking change for API users.
-  Such changes require versioning to be introduced first.
-- Published `ris:` IRIs (ADR 27) follow the same rule: once published at
-  go-live, they do not change.
