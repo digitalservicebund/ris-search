@@ -4,55 +4,198 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import de.bund.digitalservice.ris.LoadXmlUtils;
+import de.bund.digitalservice.ris.SharedTestConstants;
 import de.bund.digitalservice.ris.search.exception.OpenSearchMapperException;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
+import de.bund.digitalservice.ris.search.models.opensearch.LiteratureUnindexed;
+import de.bund.digitalservice.ris.search.models.opensearch.common.Gericht;
+import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Fundstelle;
+import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Richtung;
+import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ZitierungLiteraturSelbststaendig;
+import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ZitierungLiteraturUnselbststaendig;
+import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ZitierungRechtsprechung;
+import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ZitierungVerwaltungsvorschrift;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
-import org.mockito.Mockito;
 
 class LiteratureLdmlToOpenSearchMapperTest {
 
-  private static final String VALID_XML =
+  private static final String ULI_XML =
       LoadXmlUtils.loadXmlAsString(Literature.class, "XXLU000000001/XXLU000000001.xml");
 
+  private static final String SLI_XML =
+      LoadXmlUtils.loadXmlAsString(Literature.class, "XXLS000000001/XXLS000000001.xml");
+
+  private static final Instant NOW = SharedTestConstants.TIMESTAMP_2024_01_01_AS_INSTANT;
+
   @Test
-  @DisplayName("Correctly maps all available fields from valid literature LDML XML")
-  void correctlyMapsAllAvailableFields() {
-    Literature literature = LiteratureLdmlToOpenSearchMapper.mapLdml(VALID_XML);
+  @DisplayName("Correctly maps all available fields from valid unselbstständige literature LDML")
+  void correctlyMapsAllAvailableFieldsOfUli() {
+    Literature literature = LiteratureLdmlToOpenSearchMapper.mapLdml(ULI_XML, NOW);
 
-    // Core identifiers
-    assertThat(literature.id()).isEqualTo("XXLU000000001");
-    assertThat(literature.documentNumber()).isEqualTo("XXLU000000001");
+    var expected =
+        Literature.builder()
+            .id("XXLU000000001")
+            .documentNumber("XXLU000000001")
+            .yearsOfPublication(List.of("2025"))
+            .firstPublicationDate(LocalDate.of(2025, Month.JANUARY, 1))
+            .documentTypes(List.of("Auf", "Foo"))
+            .dependentReferences(List.of("BB, 1979, 1298-1300"))
+            .independentReferences(List.of("Titel einer Fundstelle, 1979, 1298-1300"))
+            .normReferences(List.of("GG, Art 6 Abs 2 S 1, 1949-05-23"))
+            .mainTitle("Literatur Test Dokument")
+            .mainTitleAdditions("Titelzusatz")
+            .documentaryTitle("Dokumentarischer Titel")
+            .authors(List.of("Mustermann, Max", "Musterfrau, Susanne"))
+            .collaborators(List.of("Foo, Peter"))
+            .originators(List.of("FOO"))
+            .conferenceNotes(List.of("Internationaler Kongreß für das Recht, 1991, Athen, GRC"))
+            // selbstständige-only elements are not present in uli documents
+            .editors(List.of())
+            .founder(List.of())
+            .universityNotes(List.of())
+            .publisherInformation(List.of())
+            .publisherOrganizations(List.of())
+            .publisherPersons(List.of())
+            .shortTitles(List.of())
+            .additionalTitles(List.of())
+            .fullTitleAdditions(List.of())
+            .footnotes(List.of())
+            .internationalIdentifiers(List.of())
+            .volumes(List.of())
+            .indexedAt(NOW.toString())
+            .languages(List.of("deu"))
+            .shortReport(
+                "1. Dies ist ein literature LDML Dokument für Tests. Es werden sub und sup Elemente unterstützt. Außerdem gib es noch EM, hlj, noindex und strong.")
+            .outline("I. Äpfel. II. Birnen. III. Orangen.")
+            .titelAspekte(List.of("Testdokument"))
+            .schlagworte(
+                List.of(
+                    "betriebliche Bildung",
+                    "betriebliche Bildungsmaßnahme",
+                    "paritätische Beteiligung",
+                    "paritätische Mitbestimmung"))
+            .sachgebiete(List.of("ID-01 Sachgebiet1", "ID-02 Sachgebiet2"))
+            .unindexed(
+                LiteratureUnindexed.builder()
+                    .zitierungenLiteraturSelbststaendig(
+                        List.of(
+                            ZitierungLiteraturSelbststaendig.builder()
+                                .richtung(Richtung.AKTIV)
+                                .titel("Selbstständigeliterature")
+                                .veroeffentlichungsjahr("2025")
+                                .build()))
+                    .zitierungenLiteraturUnselbststaendig(
+                        List.of(
+                            ZitierungLiteraturUnselbststaendig.builder()
+                                .richtung(Richtung.PASSIV)
+                                .fundstelle(
+                                    Fundstelle.builder()
+                                        .periodikum("Unselbstständigeliterature")
+                                        .zitatstelle("2023")
+                                        .build())
+                                .build(),
+                            ZitierungLiteraturUnselbststaendig.builder()
+                                .richtung(Richtung.PASSIV)
+                                .fundstelle(
+                                    Fundstelle.builder()
+                                        .periodikum("Unselbstständigeliterature")
+                                        .zitatstelle("1989")
+                                        .build())
+                                .build()))
+                    .zitierungenRechtsprechung(
+                        List.of(
+                            ZitierungRechtsprechung.builder()
+                                .richtung(Richtung.AKTIV)
+                                .artDerZitierung("Vergleiche")
+                                .gericht(
+                                    Gericht.builder()
+                                        .gerichtstyp("FooBar")
+                                        .spruchkoerper("1. Kammer")
+                                        .build())
+                                .entscheidungsdatum(LocalDate.of(2008, Month.APRIL, 3))
+                                .build()))
+                    .zitierungenVerwaltungsvorschriften(
+                        List.of(
+                            ZitierungVerwaltungsvorschrift.builder()
+                                .richtung(Richtung.PASSIV)
+                                .artDerZitierung("Vergleiche")
+                                .jurisAbkuerzung("NaNu")
+                                .build()))
+                    .build())
+            .build();
 
-    // Publication info
-    assertThat(literature.yearsOfPublication()).containsExactly("2025");
-    assertThat(literature.firstPublicationDate()).isEqualTo(LocalDate.of(2025, Month.JANUARY, 1));
+    assertThat(literature).usingRecursiveComparison().isEqualTo(expected);
+  }
 
-    // Metadata
-    assertThat(literature.documentTypes()).containsExactly("Auf", "Foo");
-    assertThat(literature.dependentReferences()).containsExactly("BB, 1979, 1298-1300");
-    assertThat(literature.independentReferences())
-        .containsExactly("Titel einer Fundstelle, 1979, 1298-1300");
-    assertThat(literature.mainTitle()).isEqualTo("Literatur Test Dokument");
-    assertThat(literature.mainTitleAdditions()).isEqualTo("Titelzusatz");
-    assertThat(literature.documentaryTitle()).isEqualTo("Dokumentarischer Titel");
-    assertThat(literature.authors()).containsExactly("Mustermann, Max", "Musterfrau, Susanne");
-    assertThat(literature.collaborators()).containsExactly("Foo, Peter");
-    assertThat(literature.originators()).containsExactly("FOO");
-    assertThat(literature.conferenceNotes())
-        .containsExactly("Internationaler Kongreß für das Recht, 1991, Athen, GRC");
-    assertThat(literature.languages()).containsExactly("deu");
-    assertThat(literature.normReferences()).containsExactly("GG, Art 6 Abs 2 S 1, 1949-05-23");
+  @Test
+  @DisplayName("Correctly maps all available fields from valid selbstständige literature LDML")
+  void correctlyMapsAllAvailableFieldsOfSli() {
+    Literature literature = LiteratureLdmlToOpenSearchMapper.mapLdml(SLI_XML, NOW);
 
-    // Content
-    assertThat(literature.shortReport())
-        .isEqualTo(
-            "1. Dies ist ein literature LDML Dokument für Tests. Es werden sub und sup Elemente unterstützt. Außerdem gib es noch EM, hlj, noindex und strong.");
-    assertThat(literature.outline()).isEqualTo("I. Äpfel. II. Birnen. III. Orangen.");
+    var expected =
+        Literature.builder()
+            .id("XXLS000000001")
+            .documentNumber("XXLS000000001")
+            .yearsOfPublication(List.of("2025"))
+            .firstPublicationDate(LocalDate.of(2025, Month.JANUARY, 1))
+            .documentTypes(List.of("Auf", "Foo"))
+            .mainTitle("Literatur Test Dokument")
+            .mainTitleAdditions("Titelzusatz")
+            .documentaryTitle("Dokumentarischer Titel")
+            .authors(List.of("Mustermann, Max", "Musterfrau, Susanne"))
+            .editors(List.of("Bearbeiter, Foo"))
+            .founder(List.of("Begruender, Foo"))
+            .collaborators(List.of("Foo, Peter"))
+            .originators(List.of("FOO"))
+            .languages(List.of("deu"))
+            .universityNotes(List.of("Universität Foo"))
+            .publisherInformation(List.of("verlag, Berlin"))
+            .publisherOrganizations(List.of("herausgeber institution showAs"))
+            .publisherPersons(List.of("Titel, foo herausgeber person"))
+            .conferenceNotes(List.of("Internationaler Kongreß für das Recht, 1991, Athen, GRC"))
+            .shortTitles(List.of("titel kurzform"))
+            .additionalTitles(List.of("sonstiger titel"))
+            .fullTitleAdditions(List.of("gesamttitel, bandbezeichnung"))
+            .footnotes(List.of("1. Auflage 19XX"))
+            .shortReport(
+                "1. Dies ist ein literature LDML Dokument für Tests. Es werden sub und sup Elemente unterstützt. Außerdem gib es noch EM, hlj, noindex und strong.")
+            .outline("I. Äpfel. II. Birnen. III. Orangen.")
+            .indexedAt(NOW.toString())
+            .edition("1. Auflage")
+            .internationalIdentifiers(List.of("ISBN 3-XXXXX-XX-X", "ISSN XXXX-XXXX"))
+            .volumes(List.of("Teilband"))
+            .normReferences(List.of("GG, Art 6 Abs 2 S 1, 1949-05-23"))
+            .dependentReferences(List.of("BB, 1979, 1298-1300"))
+            .independentReferences(List.of("Titel einer Fundstelle, 1979, 1298-1300"))
+            .titelAspekte(List.of("Testdokument"))
+            .schlagworte(
+                List.of(
+                    "betriebliche Bildung",
+                    "betriebliche Bildungsmaßnahme",
+                    "paritätische Beteiligung",
+                    "paritätische Mitbestimmung"))
+            .sachgebiete(List.of("ID-01 Sachgebiet1", "ID-02 Sachgebiet2"))
+            .unindexed(
+                LiteratureUnindexed.builder()
+                    .zitierungenLiteraturSelbststaendig(List.of())
+                    .zitierungenLiteraturUnselbststaendig(List.of())
+                    .zitierungenRechtsprechung(List.of())
+                    .zitierungenVerwaltungsvorschriften(
+                        List.of(
+                            ZitierungVerwaltungsvorschrift.builder()
+                                .richtung(Richtung.PASSIV)
+                                .artDerZitierung("Vergleiche")
+                                .jurisAbkuerzung("NaNu")
+                                .build()))
+                    .build())
+            .build();
+
+    assertThat(literature).isEqualTo(expected);
   }
 
   @Test
@@ -67,22 +210,19 @@ class LiteratureLdmlToOpenSearchMapperTest {
         """
             .stripIndent();
 
-    assertThatThrownBy(() -> LiteratureLdmlToOpenSearchMapper.mapLdml(literatureLdml))
+    assertThatThrownBy(() -> LiteratureLdmlToOpenSearchMapper.mapLdml(literatureLdml, NOW))
         .isInstanceOf(OpenSearchMapperException.class)
         .hasMessageContaining("unable to parse file to Literature");
   }
 
   @Test
-  @DisplayName("Sets indexedAt to current time")
-  void setsIndexedAtToCurrentTime() {
+  @DisplayName("Sets indexedAt to the given time")
+  void setsIndexedAtToGivenTime() {
     Instant fixedInstant = Instant.parse("2025-01-01T10:00:00Z");
 
-    try (MockedStatic<Instant> mockedInstant = Mockito.mockStatic(Instant.class)) {
-      mockedInstant.when(Instant::now).thenReturn(fixedInstant);
+    Literature literature = LiteratureLdmlToOpenSearchMapper.mapLdml(ULI_XML, fixedInstant);
 
-      Literature literature = LiteratureLdmlToOpenSearchMapper.mapLdml(VALID_XML);
-      assertThat(literature.indexedAt()).isEqualTo(fixedInstant.toString());
-    }
+    assertThat(literature.indexedAt()).isEqualTo(fixedInstant.toString());
   }
 
   @Test
@@ -114,7 +254,7 @@ class LiteratureLdmlToOpenSearchMapperTest {
         """
             .stripIndent();
 
-    Literature literature = LiteratureLdmlToOpenSearchMapper.mapLdml(minimalValidLdml);
+    Literature literature = LiteratureLdmlToOpenSearchMapper.mapLdml(minimalValidLdml, NOW);
 
     assertThat(literature.dependentReferences()).isEmpty();
     assertThat(literature.independentReferences()).isEmpty();

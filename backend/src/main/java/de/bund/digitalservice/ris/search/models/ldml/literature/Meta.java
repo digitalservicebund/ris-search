@@ -1,9 +1,5 @@
-package de.bund.digitalservice.ris.search.models.ldml.literature.uli;
+package de.bund.digitalservice.ris.search.models.ldml.literature;
 
-import de.bund.digitalservice.ris.search.models.ldml.literature.Analysis;
-import de.bund.digitalservice.ris.search.models.ldml.literature.Classification;
-import de.bund.digitalservice.ris.search.models.ldml.literature.Identification;
-import de.bund.digitalservice.ris.search.models.ldml.literature.LiteratureNamespaces;
 import jakarta.xml.bind.annotation.XmlElement;
 import java.util.List;
 import lombok.Getter;
@@ -21,10 +17,9 @@ import lombok.Getter;
  * <p>- Identification: Represents the identification of the document based on the FRBR (Functional
  * Requirements for Bibliographic Records) standard, focusing on "work" and "expression" levels. -
  * Proprietary: Encapsulates proprietary metadata information relevant to RIS (Legal Information
- * System) documents, particularly for dependent publications. - Classifications: A list of
- * classification elements that categorize the document based on predefined criteria or sources. -
- * Analysis: Contains analytical metadata focusing on the references and citations within the
- * document.
+ * System) literature documents. - Classifications: A list of classification elements that
+ * categorize the document based on predefined criteria or sources. - Analysis: Contains analytical
+ * metadata focusing on the references and citations within the document.
  *
  * <p>All fields are JAXBElement annotated, ensuring proper mapping to the Akoma Ntoso namespace
  * during XML serialization and deserialization processes.

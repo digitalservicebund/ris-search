@@ -16,4 +16,7 @@ import lombok.Getter;
 public class Keyword {
 
   @XmlAttribute private String value;
+
+  @XmlAttribute(name = "domainTerm", namespace = LiteratureNamespaces.RIS_NS)
+  private String domainTerm;
 }

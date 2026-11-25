@@ -107,6 +107,22 @@
         "outline": {
           "type": "text",
           "analyzer": "custom_german_analyzer"
+        },
+        "titel_aspekte": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "schlagworte": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "sachgebiete": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "unindexed": {
+          "type": "object",
+          "enabled": false
         }
       }
     }

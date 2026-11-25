@@ -31,4 +31,16 @@ public class ImplicitReference {
 
   @XmlElement(name = "normReference", namespace = LiteratureNamespaces.RIS_NS)
   private NormReference normReference;
+
+  @XmlElement(name = "referenzRechtsprechung", namespace = LiteratureNamespaces.RIS_NS)
+  private ReferenzRechtsprechung referenzRechtsprechung;
+
+  @XmlElement(name = "referenzVerwaltungsvorschrift", namespace = LiteratureNamespaces.RIS_NS)
+  private ReferenzVerwaltungsvorschrift referenzVerwaltungsvorschrift;
+
+  @XmlElement(name = "referenzSelbststaendigeLiteratur", namespace = LiteratureNamespaces.RIS_NS)
+  private ReferenzSelbststaendigeLiteratur referenzSelbststaendigeLiteratur;
+
+  @XmlElement(name = "referenzUnselbststaendigeLiteratur", namespace = LiteratureNamespaces.RIS_NS)
+  private ReferenzUnselbststaendigeLiteratur referenzUnselbststaendigeLiteratur;
 }

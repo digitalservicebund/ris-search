@@ -47,9 +47,14 @@ public record Literature(
     @Field(name = Fields.PUBLISHER_INFORMATION) List<String> publisherInformation,
     @Field(name = Fields.INTERNATIONAL_IDENTIFIERS) List<String> internationalIdentifiers,
     @Field(name = Fields.VOLUMES) List<String> volumes,
+    @Field(name = Fields.TITEL_ASPEKTE) List<String> titelAspekte,
+    @Field(name = Fields.SCHLAGWORTE) List<String> schlagworte,
+    @Field(name = Fields.SACHGEBIETE) List<String> sachgebiete,
     @Nullable @Field(name = Fields.SHORT_REPORT) String shortReport,
     @Nullable @Field(name = Fields.OUTLINE) String outline,
-    @JsonIgnore @Field(name = Fields.INDEXED_AT) String indexedAt)
+    @JsonIgnore @Field(name = Fields.INDEXED_AT) String indexedAt,
+    @Field(name = Fields.UNINDEXED, type = FieldType.Object, enabled = false)
+        LiteratureUnindexed unindexed)
     implements AbstractSearchEntity {
 
   /**
@@ -149,6 +154,15 @@ public record Literature(
     /** Teilbaende */
     public static final String VOLUMES = "volumes";
 
+    /** Stored but not indexed data, e.g. Zitierungen */
+    public static final String UNINDEXED = "unindexed";
+
     public static final String YEARS_OF_PUBLICATION = "years_of_publication";
+
+    public static final String TITEL_ASPEKTE = "titel_aspekte";
+
+    public static final String SCHLAGWORTE = "schlagworte";
+
+    public static final String SACHGEBIETE = "sachgebiete";
   }
 }

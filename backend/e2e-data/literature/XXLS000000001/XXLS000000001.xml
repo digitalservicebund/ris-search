@@ -33,9 +33,9 @@
                     <akn:FRBRformat value="xml"/>
                 </akn:FRBRManifestation>
             </akn:identification>
-            <akn:classification source="schlagwort">
-                <akn:keyword dictionary="attributsemantik-noch-undefiniert" showAs="Anerkennung" value="Anerkennung"/>
-                <akn:keyword dictionary="attributsemantik-noch-undefiniert" showAs="Anerkennungsbescheid"
+            <akn:classification source="#ris">
+                <akn:keyword dictionary="" ris:domainTerm="Schlagwort" showAs="Anerkennung" value="Anerkennung"/>
+                <akn:keyword dictionary="" ris:domainTerm="Schlagwort" showAs="Anerkennungsbescheid"
                              value="Anerkennungsbescheid"/>
             </akn:classification>
             <akn:analysis source="#rechtsinformationen-des-bundes">
@@ -150,6 +150,10 @@
                             <ris:titel domainTerm="Titel">Mitarbeiter Herausgeber</ris:titel>
                         </ris:person>
                     </ris:personen>
+                    <ris:sachgebiete domainTerm="Sachgebiete">
+                        <ris:sachgebiet domainTerm="Sachgebiet" sachgebiet-id="ID-01">Sachgebiet1</ris:sachgebiet>
+                        <ris:sachgebiet domainTerm="Sachgebiet" sachgebiet-id="ID-02">Sachgebiet2</ris:sachgebiet>
+                    </ris:sachgebiete>
                     <ris:sonstigerSachtitelListe domainTerm="Liste der sonstigen Sachtitel">
                         <ris:sonstigerSachtitel domainTerm="Sonstiger Sachtitel">sonstiger Titel</ris:sonstigerSachtitel>
                     </ris:sonstigerSachtitelListe>
@@ -157,6 +161,9 @@
                         <ris:teilband domainTerm="Teilband">Teilband 1</ris:teilband>
                         <ris:teilband domainTerm="Teilband">Teilband 2</ris:teilband>
                     </ris:teilbaende>
+                    <ris:titelAspekte domainTerm="Titelaspekte">
+                        <ris:titelAspekt domainTerm="Titelaspekt">Testdokument</ris:titelAspekt>
+                    </ris:titelAspekte>
                     <ris:titelkurzformen domainTerm="Titelkurzformen">
                         <ris:titelkurzform domainTerm="Titelkurzform">Titel Kurzform</ris:titelkurzform>
                     </ris:titelkurzformen>
