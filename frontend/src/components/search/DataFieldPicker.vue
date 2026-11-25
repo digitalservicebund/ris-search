@@ -2,20 +2,17 @@
 import type { SkipLink } from "~";
 import IcBaselineSearch from "~icons/ic/baseline-search";
 import DataFieldList from "~/components/search/DataFieldList.vue";
-import type { DocumentKind } from "~/types/api";
+import { DocumentKind } from "~/types/api";
 import type { DataField } from "~/utils/search/dataFields";
 
 const {
   dataFields = {},
-  count,
   documentKind,
   loading = false,
   skipLinkTarget = "#search-results",
 } = defineProps<{
   /** All data fields for all supported document kinds. */
   dataFields?: Record<DocumentKind, DataField[]>;
-  /** Number of data sets that can be searched. */
-  count?: Partial<Record<DocumentKind, number>>;
   /** Kind of document that will be searched. */
   documentKind: DocumentKind;
   /** True if the component should be displayed in a loading state */
@@ -45,13 +42,18 @@ const queryInputId = useId();
 
 const dataFieldListId = useId();
 
-const formattedCount = computed(() =>
-  typeof count?.[documentKind] === "number"
-    ? formatNumberWithSeparators(count[documentKind])
-    : "",
-);
+/** Document kind names in the dative case, as used in "In … suchen". */
+const documentKindDativeLabels: Record<DocumentKind, string> = {
+  [DocumentKind.Norm]: "Gesetzen & Verordnungen",
+  [DocumentKind.CaseLaw]: "Gerichtsentscheidungen",
+  [DocumentKind.AdministrativeDirective]: "Verwaltungsvorschriften",
+  [DocumentKind.Literature]: "Literaturnachweisen",
+  [DocumentKind.All]: "Datensätzen",
+};
 
-const formattedDocumentKind = computed(() => formatDocumentKind(documentKind));
+const searchLabel = computed(
+  () => `In ${documentKindDativeLabels[documentKind]} suchen`,
+);
 
 const dataFieldsForDocumentKind = computed(
   // Need to cast explicitly because the Vue types don't seem to be working here
@@ -91,7 +93,7 @@ function submitUnlessLoading() {
 <template>
   <search class="flex flex-col">
     <p class="typo-label1-bold mb-8" aria-hidden="true">
-      In {{ formattedCount }} {{ formattedDocumentKind }} suchen
+      {{ searchLabel }}
     </p>
 
     <form

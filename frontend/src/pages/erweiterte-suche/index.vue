@@ -2,7 +2,6 @@
 import IcBaselineSwapVert from "~icons/ic/baseline-swap-vert";
 import IcOutlineFilterAlt from "~icons/ic/outline-filter-alt";
 import type { RadioTreeItem } from "~/components/ui/RadioTree.vue";
-import type { Statistics } from "~/types/api";
 import { DocumentKind } from "~/types/api";
 import { queryableDataFields } from "~/utils/search/dataFields";
 import { isStrictDateFilterValue } from "~/utils/search/dateFilterType";
@@ -47,22 +46,6 @@ useSearchSeo({
 });
 
 const searchFormId = useId();
-
-// Stats ---------------------------------------------------
-
-const { data: stats } = await useRisBackend<Statistics>("/v1/statistics");
-
-const count = computed(() =>
-  stats.value
-    ? {
-        [DocumentKind.CaseLaw]: stats.value.rechtsprechung?.count,
-        [DocumentKind.Literature]: stats.value.literature?.count,
-        [DocumentKind.Norm]: stats.value.legislation?.count,
-        [DocumentKind.AdministrativeDirective]:
-          stats.value["administrative-directive"]?.count,
-      }
-    : undefined,
-);
 
 // Date filter ---------------------------------------------
 
@@ -306,7 +289,6 @@ watch(searchStatus, async (newStatus, oldStatus) => {
           :document-kind
           :loading="isSearching"
           :form-id="searchFormId"
-          :count
           @submit="submit"
         />
       </div>
