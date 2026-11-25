@@ -1,6 +1,5 @@
 package de.bund.digitalservice.ris.search.models.ldml;
 
-import de.bund.digitalservice.ris.search.models.ldml.caselaw.CaseLawLdmlNamespaces;
 import jakarta.xml.bind.annotation.XmlElement;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,15 +9,15 @@ import lombok.Setter;
 @Setter
 public class Periodikum {
 
-  @XmlElement(name = "abkuerzung", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  @XmlElement(name = "abkuerzung", namespace = Namespaces.RIS_NS)
   private String abkuerzung;
 
-  @XmlElement(name = "periodikumTyp", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  @XmlElement(name = "periodikumTyp", namespace = Namespaces.RIS_NS)
   private String periodikumTyp;
 
-  @XmlElement(name = "titel", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  @XmlElement(name = "titel", namespace = Namespaces.RIS_NS)
   private String titel;
 
-  @XmlElement(name = "untertitel", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  @XmlElement(name = "untertitel", namespace = Namespaces.RIS_NS)
   private String untertitel;
 }
