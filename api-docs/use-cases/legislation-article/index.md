@@ -12,21 +12,21 @@ Only currently valid laws are available on Testphase. We expect to add past and 
 
 ## 1. Find the version of the law
 
-Get the expression ELI as described in [Get a specific version of a law](/use-cases/legislation-version/), for example `eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu`.
+Get the expression ELI as described in [Get a specific version of a law](/use-cases/legislation-version/), for example `eli/bund/bgbl-1/2011/s98/2026-10-14/1/deu`.
 
 ## 2. Look up the article in `hasPart`
 
 The metadata of a version lists its structure in `hasPart`. Each part has a display name (`name`, e.g. `§ 3`), a technical ID (`eId`) and its own `encoding` with links. Parts can be nested (e.g. book → section → article), so search recursively:
 
 ```bash
-curl -s https://testphase.rechtsinformationen.bund.de/v1/legislation/eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu \
+curl -s https://testphase.rechtsinformationen.bund.de/v1/legislation/eli/bund/bgbl-1/2011/s98/2026-10-14/1/deu \
   | jq '.. | objects | select(.name? == "§ 3") | {eId, headline, url: .encoding[0].contentUrl}'
 ```
 
 ## 3. Get the article as HTML
 
 ```bash
-curl https://testphase.rechtsinformationen.bund.de/v1/legislation/eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu/1998-01-29/regelungstext-1/{eId}.html
+curl https://testphase.rechtsinformationen.bund.de/v1/legislation/eli/bund/bgbl-1/2011/s98/2026-10-14/1/deu/2026-11-03/regelungstext-1/{eId}.html
 ```
 
 Replace `{eId}` with the value from step 2.
