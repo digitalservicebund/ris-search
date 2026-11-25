@@ -7,7 +7,7 @@ title: Find legislation
 **Goal:** Find legislation by keyword or abbreviation, optionally only the ones in force today.
 
 ::: tip **Info**
-Only currently valid laws are available on Testphase.
+Only currently valid laws are available on Testphase. We expect to add past and future versions of legislation in early 2028.
 :::
 
 **Endpoint:** `GET /v1/legislation`
@@ -62,4 +62,4 @@ curl -sG https://testphase.rechtsinformationen.bund.de/v1/legislation \
 
 - `dateFrom` and `dateTo` filter by “Ausfertigungsdatum”, not by validity. To filter by validity, use `temporalCoverageFrom` and `temporalCoverageTo` or `mostRelevantOn`.
 - Results are sorted by relevance. Use `sort=-date` for newest first, or `sort=temporalCoverageFrom`.
-- You can page through at most 10,000 results. To get everything, see [Download everything](/use-cases/bulk-download/).
+- You can page through at most 10,000 results. To get everything, see [Download documents in bulk](/use-cases/bulk-download/).

@@ -1,8 +1,8 @@
 ---
-title: Stay up to date
+title: Keep your local data up to date
 ---
 
-# Stay up to date
+# Keep your local data up to date
 
 **Goal:** Keep a local copy in sync without downloading everything again.
 
@@ -17,7 +17,7 @@ title: Stay up to date
 
 ## Recommended workflow
 
-1. Download the full dataset once, see [Download everything](/use-cases/bulk-download/). Note the time.
+1. Download the full dataset for one document type, see [Download documents in bulk](/use-cases/bulk-download/). Note the time.
 2. On a regular basis (e.g. daily), request the changes since your last run.
 3. Download each changed document from its `contentUrl`, and delete each document listed in `deleted`.
 

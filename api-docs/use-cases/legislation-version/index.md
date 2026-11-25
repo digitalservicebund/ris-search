@@ -1,5 +1,5 @@
 ---
-title: Get a specific version
+title: Get a specific version of a law
 ---
 
 # Get a specific version of a law
@@ -7,7 +7,7 @@ title: Get a specific version
 **Goal:** Get the text of a law as it was valid on a given date.
 
 ::: tip **Info**
-Only currently valid laws are available on Testphase.
+Only currently valid laws are available on Testphase. We expect to add past and future versions of legislation in early 2028.
 :::
 
 ## How versions are identified (ELI)

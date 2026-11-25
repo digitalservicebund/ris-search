@@ -1,8 +1,8 @@
 ---
-title: Download everything
+title: Download documents in bulk
 ---
 
-# Download everything of one document kind
+# Download documents in bulk
 
 **Goal:** Get all documents of one kind, e.g. for data analysis, research or training language models.
 
@@ -36,6 +36,6 @@ curl -o rechtsprechung.zip "$URL"
 
 ## Pitfalls
 
-- Snapshots are created at most once every 24 hours. Newer changes are only available through the API, see [Stay up to date](/use-cases/stay-up-to-date/).
+- Snapshots are created at most once every 24 hours. Newer changes are only available through the API, see [Keep your local data up to date](/use-cases/stay-up-to-date/).
 - `contentUrl` is `null` if there is no snapshot for that kind (e.g. because no documents of that kind are published yet). Shortly after documents are deleted, the ZIP is recreated and may not be available for a short time.
 - The ZIP files are large. Download them once and then use the changelog for updates.

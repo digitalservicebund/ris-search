@@ -10,11 +10,11 @@ Find step-by-step guides to help you search, retrieve, and download legislation 
 
 ---
 
-[Retrieve legislation as of a specific date](/use-cases/legislation-version/) <Badge type="info" text="LEGISLATION" /><br> Find the version of a law that was in force on a particular date.
+[Get a specific version of a law](/use-cases/legislation-version/) <Badge type="info" text="LEGISLATION" /><br> Find the version of a law that was in force on a particular date.
 
 ---
 
-[Retrieve a specific article (§)](/use-cases/legislation-article/) <Badge type="info" text="LEGISLATION" /><br> Access a single article (§) of a law without retrieving the entire document.
+[Get a single article (§)](/use-cases/legislation-article/) <Badge type="info" text="LEGISLATION" /><br> Access a single article (§) of a law without retrieving the entire document.
 
 ---
 
@@ -22,7 +22,7 @@ Find step-by-step guides to help you search, retrieve, and download legislation 
 
 ---
 
-[Choose a file format](/use-cases/formats/) <Badge type="info" text="ALL DOCUMENTS" /><br> Choose between JSON, HTML, XML, and ZIP for your use case.
+[Choose a format](/use-cases/formats/) <Badge type="info" text="ALL DOCUMENTS" /><br> Choose between JSON, HTML, XML, and ZIP for your use case.
 
 ---
 

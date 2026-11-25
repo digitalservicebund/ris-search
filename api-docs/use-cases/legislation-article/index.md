@@ -7,12 +7,12 @@ title: Get a single article (§)
 **Goal:** Get one article, e.g. "§ 3", instead of the whole law.
 
 ::: tip **Info**
-Only currently valid laws are available on Testphase.
+Only currently valid laws are available on Testphase. We expect to add past and future versions of legislation in early 2028.
 :::
 
 ## 1. Find the version of the law
 
-Get the expression ELI as described in [Get a specific version](/use-cases/legislation-version/), for example `eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu`.
+Get the expression ELI as described in [Get a specific version of a law](/use-cases/legislation-version/), for example `eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu`.
 
 ## 2. Look up the article in `hasPart`
 
